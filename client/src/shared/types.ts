@@ -20,6 +20,8 @@ export interface CardDef {
   act?: string; // spell action key
   react?: string; // trap reaction key
   star?: string; // starter kind: trash | chest | mana
+  val?: number; // generic effect magnitude
+  val2?: number; // secondary magnitude (e.g. heal+draw, atk+def buff)
 }
 
 export interface CardInst extends CardDef {

@@ -4,7 +4,7 @@
 // Faithful port of the original heuristic ordering.
 // ============================================================
 import type { Action, CardInst, FieldMon, GameState } from "./types";
-import { cardValue, effAtk, effDef, supplyPrice } from "./engine";
+import { cardValue, effAtk, effDef } from "./engine";
 
 export function botDecide(g: GameState): Action {
   const p = g.players[g.cur];
@@ -30,13 +30,13 @@ export function botDecide(g: GameState): Action {
 
   // 3) removal / direct-damage / buff / utility spells
   const spells = p.hand.map((c, i) => ({ c, i })).filter((x) => x.c.t === "spell" && x.c.cost <= p.mana);
-  const removal = spells.find((x) => x.c.act === "destroyMon" && o.field.length > 0);
+  const removal = spells.find((x) => (x.c.act === "destroyMon" || x.c.act === "weaken") && o.field.length > 0);
   if (removal) return { type: "play", idx: removal.i };
-  const direct = spells.find((x) => ["dmg3", "dmg5", "dmg8", "siphon"].includes(x.c.act || ""));
+  const direct = spells.find((x) => x.c.act === "dmg" || x.c.act === "siphon");
   if (direct) return { type: "play", idx: direct.i };
-  const buff = spells.find((x) => ["buff3", "buff_perm", "buffall"].includes(x.c.act || "") && p.field.length > 0);
+  const buff = spells.find((x) => ["buffTurn", "buffPerm", "buffAllTurn"].includes(x.c.act || "") && p.field.length > 0);
   if (buff) return { type: "play", idx: buff.i };
-  const util = spells.find((x) => ["draw1", "draw2", "seek", "crash", "exile", "blessing", "recall"].includes(x.c.act || ""));
+  const util = spells.find((x) => ["draw", "seek", "crash", "exile", "recall", "heal", "manaUp"].includes(x.c.act || ""));
   if (util) return { type: "play", idx: util.i };
 
   // 4) set a trap (max 3 face-down)
@@ -48,12 +48,9 @@ export function botDecide(g: GameState): Action {
   if (attune >= 0) return { type: "play", idx: attune };
 
   // 6) buy from supply, then common market (value-maximizing affordable)
-  const price = supplyPrice(p);
-  if (p.mana >= price) {
-    let bi = -1, bs = -1;
-    p.supply.forEach((c, i) => { if (c) { const s = cardValue(c); if (s > bs) { bs = s; bi = i; } } });
-    if (bi >= 0) return { type: "buySupply", i: bi };
-  }
+  let bi = -1, bs = -1;
+  p.supply.forEach((c, i) => { if (c && c.cost <= p.mana) { const s = cardValue(c); if (s > bs) { bs = s; bi = i; } } });
+  if (bi >= 0) return { type: "buySupply", i: bi };
   let mbi = -1, mbs = -1;
   g.market.forEach((c, i) => { if (c.cost <= p.mana) { const s = cardValue(c); if (s > mbs) { mbs = s; mbi = i; } } });
   if (mbi >= 0) return { type: "buyMarket", i: mbi };

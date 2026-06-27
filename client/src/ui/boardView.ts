@@ -4,7 +4,7 @@
 // All animation lives in anim.ts; this file only draws + binds.
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
-import { effMaxMana, supplyPrice } from "../shared/engine";
+import { effMaxMana, supplyRange } from "../shared/engine";
 import { frameFor, FRAME_BACK } from "../shared/cards";
 import { cardEl } from "./cardView";
 import { zoomCard } from "./anim";
@@ -196,8 +196,8 @@ export class GameView {
     // The 제시 (supply) on display belongs to whoever's turn it is — your own
     // on your turn, your opponent's (public) on theirs.
     const owner = g.players[g.cur];
-    const price = supplyPrice(owner);
-    const supplyMeta = myTurn ? `매 턴 갱신 · 가격 ${price}` : `<span class="dmg">상대 제시</span> · 가격 ${price}`;
+    const [lo, hi] = supplyRange(owner);
+    const supplyMeta = myTurn ? `마나 ${lo}~${hi} · 매 턴 갱신` : `<span class="dmg">상대 제시</span> · 마나 ${lo}~${hi}`;
     const mk = this.q("market");
     mk.innerHTML = `
       <div class="market-sub">
@@ -223,8 +223,8 @@ export class GameView {
     const sup = this.q("supplyMarket");
     owner.supply.forEach((c, i) => {
       if (!c) { sup.appendChild(this.slotEl("mkt", true)); return; }
-      const aff = myTurn && !g.pending && me.mana >= price;
-      const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: price });
+      const aff = myTurn && !g.pending && me.mana >= c.cost;
+      const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff });
       if (aff) card.onclick = () => this.h.onBuySupply(i);
       card.oncontextmenu = (e) => { e.preventDefault(); zoomCard(c); };
       sup.appendChild(card);
