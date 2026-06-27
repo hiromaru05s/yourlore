@@ -103,7 +103,7 @@ export abstract class BaseController implements BoardHandlers {
         if (e.type === "summon") A.summonIn(e.uid);
         else if (e.type === "damage") A.hpFeedback(e.player === this.you ? "me" : "opp", "dmg", e.amount);
         else if (e.type === "heal") A.hpFeedback(e.player === this.you ? "me" : "opp", "heal", e.amount);
-        else if (e.type === "buy") A.pileFlash(e.player === this.you ? "pile-myDisc" : "pile-oppDisc");
+        else if (e.type === "buy") A.pileFlash(e.player === this.you ? "pile-myDeck" : "pile-oppDeck");
         else if (e.type === "draw" && e.player === this.you) A.animateDraw(this.view.logEl.ownerDocument!.getElementById("hand") as HTMLElement, e.count);
         else if (e.type === "treasure" && !e.isBot && e.player === this.you) treasureModal(e.kind, e.text);
       }
@@ -126,10 +126,13 @@ export abstract class BaseController implements BoardHandlers {
   }
 
   protected showWin(): void {
-    if (this.winShown) return;
+    if (this.winShown || this.state.winner == null) return;
     this.winShown = true;
-    const name = this.state.winner != null ? this.state.players[this.state.winner].name : "?";
-    setTimeout(() => winModal(name, () => this.exits.onRematch(), () => this.exits.onHome()), 400);
+    const won = this.state.winner === this.you;
+    const meHp = Math.max(0, this.state.players[this.you].hp);
+    const oppHp = Math.max(0, this.state.players[1 - this.you].hp);
+    const detail = `내 체력 ${meHp} · 상대 체력 ${oppHp}`;
+    setTimeout(() => winModal(won, detail, () => this.exits.onRematch(), () => this.exits.onHome()), 400);
   }
 
   destroy(): void { document.removeEventListener("keydown", this.onKey); }

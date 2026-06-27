@@ -53,11 +53,17 @@
   box-shadow: inset 0 0 12px #000a, inset 0 0 0 1px #ffffff10;
   overflow: hidden;
 }
+.card-art img {
+  width: 100%; height: 100%;
+  display: block;
+  object-fit: cover;
+}
 .card-art::after { /* gem motif placeholder until real art */
   content: "◆"; position: absolute; inset: 0;
   display: grid; place-items: center;
   color: #ffffff14; font-size: 1.8em;
 }
+.card-art:has(img)::after { content: none; }
 .card-eff {
   position: absolute; left: 8%; right: 8%;
   top: 66.4%; height: 16.2%;

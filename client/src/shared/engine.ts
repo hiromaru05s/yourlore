@@ -66,7 +66,7 @@ function mkPlayer(g: GameState, id: string, name: string, isBot: boolean): Playe
   shuffle(g, deck);
   return {
     id, name, isBot,
-    hp: 100, maxHp: 100, mana: 4, maxMana: 4,
+    hp: 30, maxHp: 30, mana: 4, maxMana: 4,
     manaPenalty: 0, nextPenalty: 0,
     deck, hand: [], discard: [], exile: [],
     field: [], traps: [], supply: [],
@@ -259,8 +259,8 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     ctx.destroyMonster(p, att); ctx.dealDamage(p, 8, "천벌"); return;
   }
   if (reactTrap(o, "devour")) {
-    ctx.log(`  └ <span class="dmg">함정 영혼 포식!</span> ${att.name} 파괴 + 체력 6 회복`);
-    ctx.destroyMonster(p, att); ctx.heal(o, 6); return;
+    ctx.log(`  └ <span class="dmg">함정 영혼 포식!</span> ${att.name} 파괴 + 체력 3 회복`);
+    ctx.destroyMonster(p, att); ctx.heal(o, 3); return;
   }
   if (reactTrap(o, "counter")) {
     const refl = Math.floor(atk / 2);
@@ -336,7 +336,7 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       } else ctx.log("  └ 대상 없음");
       break;
     case "burn2": ctx.dealDamage(o, 2, "엠버 드레이크 소환"); break;
-    case "heal6": ctx.heal(p, 6); ctx.log(`  └ 체력 6 회복 (${p.hp})`); break;
+    case "heal6": ctx.heal(p, 3); ctx.log(`  └ 체력 3 회복 (${p.hp})`); break;
     case "refresh": rollSupply(g, p); ctx.log("  └ 제시를 무료 갱신"); break;
     case "breaktrap":
       if (o.traps.length) {
@@ -379,8 +379,8 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case "draw2": { const n = ctx.drawN(p, 2); ctx.log(`<span class="t">${p.name}</span> 더블 드로우 → ${n}장 드로우`); break; }
     case "crash": rollSupply(g, o); ctx.log(`<span class="t">${p.name}</span> 마켓 크래시 → 상대 제시 강제 갱신`); break;
     case "buffall": p.field.forEach((m) => (m.tempAtk = (m.tempAtk || 0) + 2)); ctx.log(`<span class="t">${p.name}</span> 오버로드 → 아군 전체 공격 +2`); break;
-    case "siphon": ctx.dealDamage(o, 4, card.name); if (!g.over) { ctx.heal(p, 4); ctx.log(`  └ 체력 4 회복 (${p.hp})`); } break;
-    case "blessing": ctx.heal(p, 12); ctx.log(`<span class="t">${p.name}</span> 대지의 축복 → 체력 12 회복`); ctx.drawN(p, 1); break;
+    case "siphon": ctx.dealDamage(o, 4, card.name); if (!g.over) { ctx.heal(p, 2); ctx.log(`  └ 체력 2 회복 (${p.hp})`); } break;
+    case "blessing": ctx.heal(p, 5); ctx.log(`<span class="t">${p.name}</span> 대지의 축복 → 체력 5 회복`); ctx.drawN(p, 1); break;
   }
 }
 
@@ -391,8 +391,8 @@ function openTreasure(g: GameState, ctx: Ctx, p: PlayerState): void {
   const roll = randInt(g, 3);
   let txt = "", kind = "";
   if (roll === 0) { p.maxMana++; txt = "최대 마나 +1"; kind = "mana"; }
-  else if (roll === 1) { ctx.heal(p, 10); txt = "체력 +10"; kind = "hp"; }
-  else { p.maxHp += 5; p.hp += 5; txt = "최대 체력 +5"; kind = "maxhp"; ctx.ev.push({ type: "heal", player: side(g, p), amount: 5 }); }
+  else if (roll === 1) { ctx.heal(p, 5); txt = "체력 +5"; kind = "hp"; }
+  else { p.maxHp += 3; p.hp += 3; txt = "최대 체력 +3"; kind = "maxhp"; ctx.ev.push({ type: "heal", player: side(g, p), amount: 3 }); }
   ctx.log(`<span class="t">${p.name}</span> 보물상자 → <span class="good">${txt}</span>`);
   ctx.ev.push({ type: "treasure", player: side(g, p), kind, text: txt, isBot: p.isBot });
 }
@@ -559,9 +559,10 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
     case "buyMarket": {
       const card = g.market[action.i];
       if (card && p.mana >= card.cost) {
-        p.mana -= card.cost; p.discard.push(inst(g, card.id));
+        // bought cards go on TOP of the deck → drawn next turn (and stay hidden)
+        p.mana -= card.cost; p.deck.push(inst(g, card.id));
         p.boughtCount++; p.taxFlag = true;
-        ctx.log(`<span class="t">${p.name}</span> 고정 마켓 ${card.name} 구매 (${card.cost}) <span class="muted">[비공개]</span>`);
+        ctx.log(`<span class="t">${p.name}</span> 고정 마켓 ${card.name} 구매 (${card.cost}) <span class="muted">[다음 턴에 패로]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "market", i: action.i });
       }
       break;
@@ -570,9 +571,9 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
       const price = supplyPrice(p);
       const card = p.supply[action.i];
       if (card && p.mana >= price) {
-        p.mana -= price; p.discard.push(inst(g, card.id));
+        p.mana -= price; p.deck.push(inst(g, card.id));
         p.supply[action.i] = null; p.boughtCount++; p.taxFlag = true;
-        ctx.log(`<span class="t">${p.name}</span> 제시 마켓 구매 (${price}) <span class="muted">[비공개]</span>`);
+        ctx.log(`<span class="t">${p.name}</span> 제시 마켓 구매 (${price}) <span class="muted">[다음 턴에 패로]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "supply", i: action.i });
       }
       break;

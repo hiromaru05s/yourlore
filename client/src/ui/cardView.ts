@@ -27,6 +27,18 @@ function el(tag: string, cls?: string, html?: string): HTMLElement {
   return e;
 }
 
+function artEl(cardId: string): HTMLElement {
+  const art = el("div", "card-art");
+  const img = document.createElement("img");
+  img.src = `/art/cards/${cardId}.webp`;
+  img.alt = "";
+  img.loading = "lazy";
+  img.decoding = "async";
+  img.onerror = () => img.remove();
+  art.appendChild(img);
+  return art;
+}
+
 export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const typeClass = c.t === "mon" ? "card--mon" : c.t === "trap" ? "card--trap" : c.t === "starter" ? "card--starter" : "card--spell";
   const sizeClass = opt.size === "mkt" ? "card--mkt" : opt.size === "hand" ? "card--hand" : "";
@@ -44,7 +56,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const cost = opt.costOverride != null ? opt.costOverride : c.cost;
   node.appendChild(el("div", "card-cost", String(cost)));
   node.appendChild(el("div", "card-name", c.name));
-  node.appendChild(el("div", "card-art"));
+  node.appendChild(artEl(c.id));
 
   if (c.t === "mon") {
     const a = opt.field && opt.owner ? effAtk(opt.owner, c as FieldMon) : c.atk!;

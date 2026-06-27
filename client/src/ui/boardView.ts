@@ -193,7 +193,11 @@ export class GameView {
   }
 
   private renderMarket(g: GameState, me: PlayerState, myTurn: boolean): void {
-    const price = supplyPrice(me);
+    // The 제시 (supply) on display belongs to whoever's turn it is — your own
+    // on your turn, your opponent's (public) on theirs.
+    const owner = g.players[g.cur];
+    const price = supplyPrice(owner);
+    const supplyMeta = myTurn ? `매 턴 갱신 · 가격 ${price}` : `<span class="dmg">상대 제시</span> · 가격 ${price}`;
     const mk = this.q("market");
     mk.innerHTML = `
       <div class="market-sub">
@@ -202,7 +206,7 @@ export class GameView {
       </div>
       <div class="market-div"></div>
       <div class="market-sub">
-        <div class="sub-head"><span class="tag">제시</span><span class="meta">매 턴 갱신 · 가격 ${price}</span>
+        <div class="sub-head"><span class="tag">제시</span><span class="meta">${supplyMeta}</span>
           <button class="refresh-btn" id="refreshBtn">⟳ 1</button></div>
         <div class="market-cards" id="supplyMarket"></div>
       </div>`;
@@ -217,7 +221,7 @@ export class GameView {
     });
 
     const sup = this.q("supplyMarket");
-    me.supply.forEach((c, i) => {
+    owner.supply.forEach((c, i) => {
       if (!c) { sup.appendChild(this.slotEl("mkt", true)); return; }
       const aff = myTurn && !g.pending && me.mana >= price;
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: price });

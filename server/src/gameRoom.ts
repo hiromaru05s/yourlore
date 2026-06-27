@@ -18,6 +18,8 @@ export class GameRoom {
   private game: GameState | null = null;
   private initEvents: GameEvent[] = [];
   private sockets = new Map<Side, WebSocket>();
+  private forfeitTimers = new Map<Side, ReturnType<typeof setTimeout>>();
+  private readied = new Set<Side>();
   private recorded = false;
 
   constructor(_state: DurableObjectState, env: Env) {
@@ -53,9 +55,12 @@ export class GameRoom {
     const pair = new WebSocketPair();
     const client = pair[0], server = pair[1];
     server.accept();
-    this.sockets.set(side as Side, server);
-    server.addEventListener("message", (e) => this.onMsg(side as Side, server, e));
-    server.addEventListener("close", () => this.onClose(side as Side));
+    const sd = side as Side;
+    const ft = this.forfeitTimers.get(sd); // a reconnect cancels a pending forfeit
+    if (ft) { clearTimeout(ft); this.forfeitTimers.delete(sd); }
+    this.sockets.set(sd, server);
+    server.addEventListener("message", (e) => this.onMsg(sd, server, e));
+    server.addEventListener("close", () => this.onClose(sd, server));
     return new Response(null, { status: 101, webSocket: client });
   }
 
@@ -68,7 +73,10 @@ export class GameRoom {
 
     if (msg.type === "ping") { this.send(ws, { type: "pong" }); return; }
     if (msg.type === "ready") {
-      this.send(ws, { type: "init", you: side, state: redactFor(this.game, side), events: this.initEvents });
+      // opening events only on the first ready; a reconnect just resyncs state
+      const events = this.readied.has(side) ? [] : this.initEvents;
+      this.readied.add(side);
+      this.send(ws, { type: "init", you: side, state: redactFor(this.game, side), events });
       return;
     }
     if (msg.type === "action") this.handleAction(side, msg.action);
@@ -95,19 +103,25 @@ export class GameRoom {
     }
   }
 
-  private onClose(side: Side): void {
+  private onClose(side: Side, ws: WebSocket): void {
+    if (this.sockets.get(side) !== ws) return; // a newer socket already replaced this one
     this.sockets.delete(side);
     const g = this.game;
     if (!g || g.over) return;
-    // opponent forfeits → remaining player wins
-    const winner = (1 - side) as Side;
-    g.over = true; g.phase = "over"; g.winner = winner;
-    const remaining = this.sockets.get(winner);
-    if (remaining) {
-      this.send(remaining, { type: "update", state: redactFor(g, winner), events: [{ type: "win", winner }] });
-      this.send(remaining, { type: "opponentLeft" });
-    }
-    void this.recordResult();
+    // grace period: wait for a reconnect before declaring a forfeit
+    const t = setTimeout(() => {
+      this.forfeitTimers.delete(side);
+      if (this.sockets.has(side) || !this.game || this.game.over) return;
+      const winner = (1 - side) as Side;
+      this.game.over = true; this.game.phase = "over"; this.game.winner = winner;
+      const remaining = this.sockets.get(winner);
+      if (remaining) {
+        this.send(remaining, { type: "update", state: redactFor(this.game, winner), events: [{ type: "win", winner }] });
+        this.send(remaining, { type: "opponentLeft" });
+      }
+      void this.recordResult();
+    }, 25000);
+    this.forfeitTimers.set(side, t);
   }
 
   private async recordResult(): Promise<void> {

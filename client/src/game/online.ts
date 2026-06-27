@@ -1,52 +1,67 @@
 // ============================================================
 // LORE — OnlineController. Authoritative server: we send Actions
 // and apply the redacted {state, events} snapshots it returns.
-// No local reduce, no bot.
+// Reconnects on transient drops (the room keeps state for a grace
+// period) rather than ending the game on every blip.
 // ============================================================
 import type { Action, Side } from "../shared/types";
 import type { GameClientMsg, GameServerMsg } from "../shared/protocol";
 import { Sock } from "../net/socket";
 import { BaseController, type ControllerExits } from "./controller";
-import { closeOverlay } from "../ui/modal";
+import { closeOverlay, noticeModal } from "../ui/modal";
+
+const MAX_RETRIES = 6;
 
 export class OnlineController extends BaseController {
-  private sock: Sock<GameServerMsg, GameClientMsg>;
+  private sock!: Sock<GameServerMsg, GameClientMsg>;
+  private roomId: string;
   private started = false;
+  private closing = false;
+  private retries = 0;
 
   constructor(root: HTMLElement, you: Side, roomId: string, exits: ControllerExits) {
     super(root, you, exits);
-    this.sock = new Sock<GameServerMsg, GameClientMsg>(`/ws/room/${roomId}`, {
-      onOpen: () => this.sock.send({ type: "ready" }),
+    this.roomId = roomId;
+    this.connect();
+  }
+
+  private connect(): void {
+    this.sock = new Sock<GameServerMsg, GameClientMsg>(`/ws/room/${this.roomId}`, {
+      onOpen: () => { this.retries = 0; this.sock.send({ type: "ready" }); },
       onMessage: (msg) => this.onServer(msg),
-      onClose: () => { if (!this.state?.over) this.opponentGone("연결이 끊어졌습니다."); },
+      onClose: () => this.onSockClose(),
     });
+  }
+
+  private onSockClose(): void {
+    if (this.closing || this.state?.over) return;
+    if (this.retries < MAX_RETRIES) {
+      this.retries++;
+      setTimeout(() => { if (!this.closing && !this.state?.over) this.connect(); }, 800 * this.retries);
+    } else {
+      noticeModal("연결 끊김", "상대 또는 서버와의 연결이 끊어졌습니다.", "홈으로", () => this.exits.onHome());
+    }
   }
 
   private onServer(msg: GameServerMsg): void {
     if (msg.type === "init") {
       this.started = true;
+      closeOverlay();
       this.applyResult({ state: msg.state, events: msg.events }, false);
     } else if (msg.type === "update") {
       this.applyResult({ state: msg.state, events: msg.events });
     } else if (msg.type === "opponentLeft") {
-      this.opponentGone("상대가 게임을 떠났습니다.");
+      // server already sent the deciding update; just make sure the result shows
+      if (this.state?.over) this.showWin();
     } else if (msg.type === "error") {
       console.warn("[server]", msg.message);
     }
   }
 
-  private opponentGone(_reason: string): void {
-    if (this.state?.over) return;
-    closeOverlay();
-    // server marks us the winner; just surface the win screen if not already
-    this.showWin();
-  }
-
   protected submit(action: Action): void {
     if (!this.started || this.state?.over) return;
     this.sock.send({ type: "action", action });
-    // optimistic UX off: server is authoritative and echoes the update
   }
 
-  destroy(): void { this.sock.close(); super.destroy(); }
+  destroy(): void { this.closing = true; this.sock?.close(); super.destroy(); }
 }

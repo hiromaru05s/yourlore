@@ -38,16 +38,29 @@ export function confirmDialog(opts: { title: string; body?: string; confirm: str
   });
 }
 
-export function winModal(name: string, onAgain: () => void, onHome: () => void): void {
+export function winModal(won: boolean, detail: string, onAgain: () => void, onHome: () => void): void {
   const m = document.createElement("div");
   m.className = "modal";
-  m.innerHTML = `<h2>승리</h2><p style="color:var(--paper);font-size:15px">${name} 의 승리</p><p>LORE · 1게임 종료</p><div class="modal-row"></div>`;
+  const title = won ? "승리" : "패배";
+  const color = won ? "var(--gold-glow)" : "var(--vermil-hi)";
+  m.innerHTML = `<h2 style="color:${color}">${title}</h2><p style="color:var(--paper);font-size:14px">${detail}</p><p>LORE · 게임 종료</p><div class="modal-row"></div>`;
   const row = m.querySelector(".modal-row")!;
   const home = document.createElement("button"); home.className = "btn btn-ghost"; home.textContent = "홈으로";
   const again = document.createElement("button"); again.className = "btn btn-gold"; again.textContent = "다시 하기";
   home.onclick = () => { closeOverlay(); onHome(); };
   again.onclick = () => { closeOverlay(); onAgain(); };
   row.append(home, again);
+  mount(m);
+}
+
+/** Simple notice with a single button (e.g. disconnect). */
+export function noticeModal(title: string, body: string, btn: string, onClick: () => void): void {
+  const m = document.createElement("div");
+  m.className = "modal";
+  m.innerHTML = `<h2>${title}</h2><p>${body}</p><div class="modal-row"></div>`;
+  const b = document.createElement("button"); b.className = "btn btn-primary"; b.textContent = btn;
+  b.onclick = () => { closeOverlay(); onClick(); };
+  m.querySelector(".modal-row")!.appendChild(b);
   mount(m);
 }
 
