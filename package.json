@@ -12,7 +12,9 @@
     "build": "npm --workspace client run build",
     "typecheck": "npm --workspace client run typecheck && npm --workspace server run typecheck",
     "server:dev": "npm --workspace server run dev",
-    "deploy:client": "npm --workspace client run build && npx wrangler pages deploy client/dist --project-name lore-tcg",
-    "deploy:server": "npm --workspace server run deploy"
+    "deploy": "npm run build && wrangler deploy -c server/wrangler.toml"
+  },
+  "devDependencies": {
+    "wrangler": "^3.95.0"
   }
 }
