@@ -28,8 +28,9 @@ export interface CardInst extends CardDef {
 
 export interface FieldMon extends CardInst {
   exhausted: boolean;
-  tempAtk: number;
-  defMod: number;
+  tempAtk: number; // temporary atk (cleared end of turn)
+  atkMod: number; // permanent atk change
+  defMod: number; // permanent def change
   summonedTurn: number;
 }
 

@@ -28,13 +28,15 @@ export function botDecide(g: GameState): Action {
     .sort((a, b) => cardValue(b.c) - cardValue(a.c));
   if (monsters.length) return { type: "play", idx: monsters[0].i };
 
-  // 3) direct-damage / buff / utility spells
+  // 3) removal / direct-damage / buff / utility spells
   const spells = p.hand.map((c, i) => ({ c, i })).filter((x) => x.c.t === "spell" && x.c.cost <= p.mana);
-  const direct = spells.find((x) => x.c.act === "dmg3" || x.c.act === "siphon");
+  const removal = spells.find((x) => x.c.act === "destroyMon" && o.field.length > 0);
+  if (removal) return { type: "play", idx: removal.i };
+  const direct = spells.find((x) => ["dmg3", "dmg5", "dmg8", "siphon"].includes(x.c.act || ""));
   if (direct) return { type: "play", idx: direct.i };
-  const buff = spells.find((x) => (x.c.act === "buff3" || x.c.act === "buffall") && p.field.length > 0);
+  const buff = spells.find((x) => ["buff3", "buff_perm", "buffall"].includes(x.c.act || "") && p.field.length > 0);
   if (buff) return { type: "play", idx: buff.i };
-  const util = spells.find((x) => ["draw2", "seek", "crash", "exile"].includes(x.c.act || ""));
+  const util = spells.find((x) => ["draw1", "draw2", "seek", "crash", "exile", "blessing", "recall"].includes(x.c.act || ""));
   if (util) return { type: "play", idx: util.i };
 
   // 4) set a trap (max 3 face-down)
@@ -81,7 +83,8 @@ function autoTarget(g: GameState): Action {
       const target = killable[0] ?? lowestDef(o.field);
       return { type: "chooseTarget", uid: target ? target.uid : null };
     }
-    const t = lowestDef(o.field);
+    // destroy / debuff → hit the most valuable enemy monster
+    const t = [...o.field].sort((a, b) => (effAtk(o, b) + b.def!) - (effAtk(o, a) + a.def!))[0];
     return { type: "chooseTarget", uid: t ? t.uid : null };
   }
   if (pending.kind === "myMon") {

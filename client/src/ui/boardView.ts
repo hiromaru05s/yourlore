@@ -51,13 +51,13 @@ export class GameView {
             <div class="prow" id="meRow"></div>
             <div class="hand-area">
               <div class="hand" id="hand"></div>
-              <div class="end-turn-wrap"><button class="btn btn-primary" id="endBtn">END TURN ▸</button></div>
+              <div class="end-turn-wrap"><button class="btn btn-primary" id="endBtn">턴 종료 ▸</button></div>
             </div>
           </div>
           <div class="panel logpanel">
-            <div class="panel-title">LOG</div>
+            <div class="panel-title">로그</div>
             <div class="log" id="log"></div>
-            <div class="log-foot"><button class="btn btn-danger btn-block" id="surrenderBtn">기권 · SURRENDER</button></div>
+            <div class="log-foot"><button class="btn btn-danger btn-block" id="surrenderBtn">기권</button></div>
           </div>
         </div>
       </div>
@@ -76,7 +76,7 @@ export class GameView {
     const myTurn = g.cur === this.you && !g.over;
     const pending = g.pending;
 
-    this.q("turnInfo").innerHTML = `TURN ${g.turn} <span class="muted">·</span> <b>${g.players[g.cur].name}</b>`;
+    this.q("turnInfo").innerHTML = `턴 ${g.turn} <span class="muted">·</span> <b>${g.players[g.cur].name}</b>`;
 
     // opponent fanned hand (face-down)
     const oh = this.q("oppHand"); oh.innerHTML = "";
@@ -112,9 +112,9 @@ export class GameView {
 
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {
     row.innerHTML = "";
-    const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, FRAME_BACK, null, "DECK");
+    const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, FRAME_BACK, null, "덱");
     const discTop = p.discard[p.discard.length - 1];
-    const discPile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, discTop ? frameFor(discTop.t) : null, discTop ?? null, "DISCARD");
+    const discPile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, discTop ? frameFor(discTop.t) : null, discTop ?? null, "버림");
 
     const block = document.createElement("div");
     block.className = "field-block" + (g.cur === g.players.indexOf(p) ? " is-turn" : "");
@@ -184,11 +184,11 @@ export class GameView {
       <span class="pname"><span class="who"></span>${p.name}
         <span class="turn-chip ${onTurn ? "on" : ""}">${onTurn ? "내 차례" : "대기"}</span></span>
       <span class="hp">
-        <span class="lbl">HP</span>
+        <span class="lbl">체력</span>
         <span class="num"><b id="hp-${isMe ? "me" : "opp"}">${Math.max(0, p.hp)}</b><span class="muted">/${p.maxHp}</span></span>
         <span class="hpbar" id="hpbar-${isMe ? "me" : "opp"}"><i style="width:${hpPct}%"></i></span>
       </span>
-      <span class="mana"><span class="lbl">MANA</span><span class="pips">${pips.join("")}</span><span class="mnum">${manaTxt}</span></span>`;
+      <span class="mana"><span class="lbl">마나</span><span class="pips">${pips.join("")}</span><span class="mnum">${manaTxt}</span></span>`;
     return bar;
   }
 
@@ -197,12 +197,12 @@ export class GameView {
     const mk = this.q("market");
     mk.innerHTML = `
       <div class="market-sub">
-        <div class="sub-head"><span class="tag">STANDARD</span><span class="meta">고정 · 1~4 mana</span></div>
+        <div class="sub-head"><span class="tag">고정</span><span class="meta">매 게임 랜덤 · 1~4 마나</span></div>
         <div class="market-cards" id="fixedMarket"></div>
       </div>
       <div class="market-div"></div>
       <div class="market-sub">
-        <div class="sub-head"><span class="tag">RANDOM</span><span class="meta">제시 · 가격 ${price}</span>
+        <div class="sub-head"><span class="tag">제시</span><span class="meta">매 턴 갱신 · 가격 ${price}</span>
           <button class="refresh-btn" id="refreshBtn">⟳ 1</button></div>
         <div class="market-cards" id="supplyMarket"></div>
       </div>`;

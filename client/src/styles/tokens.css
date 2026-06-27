@@ -34,17 +34,18 @@
   --mono: "SF Mono", ui-monospace, "Roboto Mono", Menlo, Consolas, monospace;
   --ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
 
-  /* CARD FOOTPRINT — change here, everything scales together */
-  --card-w: 78px;
-  --card-h: 125px;          /* ~0.624 ratio (matches the frame art 300:482-ish) */
-  --card-r: 7px;            /* corner radius */
-  --slot-gap: 7px;
+  /* CARD FOOTPRINT — sized off viewport HEIGHT so the whole board (incl. the
+     hand) always fits at 100% zoom. Ratio ~0.64 is shared by every variant. */
+  --card-h: clamp(66px, 9vh, 116px);
+  --card-w: calc(var(--card-h) * 0.64);
+  --card-r: 6px;
+  --slot-gap: clamp(4px, 0.5vw, 7px);
 
-  /* market cards a touch larger; hand larger still — but all share ratio */
-  --card-w-mkt: 92px;
-  --card-h-mkt: 147px;
-  --card-w-hand: 104px;
-  --card-h-hand: 166px;
+  /* market cards a touch larger; hand larger still — all share the ratio */
+  --card-h-mkt: clamp(82px, 11.6vh, 140px);
+  --card-w-mkt: calc(var(--card-h-mkt) * 0.64);
+  --card-h-hand: clamp(92px, 13.4vh, 156px);
+  --card-w-hand: calc(var(--card-h-hand) * 0.64);
 
   --radius: 10px;
   --shadow-1: 0 2px 8px #0008;

@@ -1,10 +1,10 @@
 /* ============================================================
    LORE — game board layout, header, zones, hand, log, animations
    ============================================================ */
-.game { height: 100vh; display: grid; grid-template-rows: auto 1fr; padding: 8px 14px 10px; gap: 6px; }
+.game { height: 100vh; display: grid; grid-template-rows: auto 1fr; padding: 5px 12px 6px; gap: 4px; overflow: hidden; }
 
 /* ---- header ---- */
-.topbar { display: flex; align-items: center; gap: 14px; padding: 2px 4px 8px; border-bottom: 1px solid var(--line); }
+.topbar { display: flex; align-items: center; gap: 14px; padding: 1px 4px 5px; border-bottom: 1px solid var(--line); }
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand .mark { width: 26px; height: 26px; transform: rotate(45deg); border: 2px solid var(--brass); position: relative; }
 .brand .mark::after { content: ""; position: absolute; inset: 4px; background: var(--brass); box-shadow: 0 0 10px var(--gold-glow); }
@@ -15,19 +15,19 @@
 .gear:hover { color: var(--brass); border-color: var(--brass-dim); }
 
 /* ---- stage ---- */
-.stage { display: grid; grid-template-columns: 1fr 296px; gap: 12px; min-height: 0; }
-.board-col { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 8px; min-height: 0; align-content: start; }
+.stage { display: grid; grid-template-columns: 1fr 296px; gap: 10px; min-height: 0; overflow: hidden; }
+.board-col { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 5px; min-height: 0; align-content: start; }
 
 /* opponent fanned hand (face-down), overflowing from top */
-.opp-hand { display: flex; justify-content: center; height: 30px; margin-top: -4px; }
-.opp-hand .card--back { width: 56px; height: 90px; margin: 0 -16px; transform-origin: bottom center; }
+.opp-hand { display: flex; justify-content: center; height: 22px; margin-top: -3px; }
+.opp-hand .card--back { width: 44px; height: 70px; margin: 0 -14px; transform-origin: bottom center; }
 
 /* a player row: [pile] [field] [pile] */
-.prow { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; }
-.field-block { background: linear-gradient(180deg, #ffffff04, #00000022); border: 1px solid var(--line-soft); border-radius: 12px; padding: 8px 12px; }
+.prow { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; }
+.field-block { background: linear-gradient(180deg, #ffffff04, #00000022); border: 1px solid var(--line-soft); border-radius: 10px; padding: 5px 10px; }
 .field-block.is-turn { border-color: var(--brass-dim); box-shadow: inset 0 0 22px #c79a4b14; }
 
-.pbar { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.pbar { display: flex; align-items: center; gap: 12px; margin-bottom: 5px; }
 .pbar .pname { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; color: var(--paper); display: flex; align-items: center; gap: 8px; }
 .pbar .pname .who { width: 18px; height: 18px; transform: rotate(45deg); border: 1.5px solid var(--brass-dim); }
 .pbar .turn-chip { font-size: 9px; letter-spacing: .14em; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; background: #ffffff0c; color: var(--paper-faint); }
@@ -54,15 +54,15 @@
 .mana .mnum { font-family: var(--mono); font-size: 12px; color: var(--cyan); font-weight: 700; }
 
 /* zones */
-.zone { display: flex; gap: var(--slot-gap); }
-.zone + .zone { margin-top: 7px; }
+.zone { display: flex; gap: var(--slot-gap); justify-content: center; }
+.zone + .zone { margin-top: 5px; }
 .zone-label { font-size: 8px; letter-spacing: .18em; color: var(--paper-faint); text-transform: uppercase; writing-mode: vertical-rl; align-self: stretch; display: grid; place-items: center; opacity: .7; }
 
 .trapchip-card { position: relative; }
 
 /* ---- market ---- */
-.market { display: grid; grid-template-columns: 1fr auto 1fr; gap: 18px; align-items: stretch; padding: 10px 16px 14px; }
-.market-sub .sub-head { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px; }
+.market { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: stretch; padding: 6px 14px 8px; align-self: center; }
+.market-sub .sub-head { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
 .market-sub .sub-head .tag { font-family: var(--mono); font-size: 10px; letter-spacing: .22em; color: var(--brass); text-transform: uppercase; }
 .market-sub .sub-head .meta { font-size: 10px; color: var(--paper-faint); }
 .market-cards { display: flex; gap: 12px; justify-content: center; }
@@ -72,11 +72,11 @@
 .refresh-btn:disabled { opacity: .4; cursor: not-allowed; }
 
 /* ---- hand ---- */
-.hand-area { display: flex; align-items: flex-end; justify-content: center; gap: 0; min-height: 168px; padding-top: 8px; position: relative; }
+.hand-area { display: flex; align-items: flex-end; justify-content: center; gap: 0; min-height: var(--card-h-hand); padding-top: 2px; position: relative; }
 .hand { display: flex; justify-content: center; align-items: flex-end; }
-.hand .card { margin: 0 -14px; transform-origin: bottom center; }
+.hand .card { margin: 0 -12px; transform-origin: bottom center; }
 .hand .card:hover { z-index: 50 !important; }
-.end-turn-wrap { position: absolute; right: 6px; bottom: 14px; }
+.end-turn-wrap { position: absolute; right: 6px; bottom: 10px; }
 
 /* ---- log panel ---- */
 .logpanel { display: grid; grid-template-rows: auto 1fr auto; min-height: 0; }

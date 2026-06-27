@@ -6,7 +6,7 @@
 import type {
   Action, CardInst, FieldMon, GameEvent, GameState, PlayerState, ReduceResult, Side,
 } from "./types";
-import { BUYABLE_POOL, DB, FIXED_MARKET, STARTERS, STARTER_DECK } from "./cards";
+import { BUYABLE_POOL, COSTS_FOR_STANDARD, DB, STARTERS, STARTER_DECK, idsOfCost } from "./cards";
 
 // ---------- deterministic PRNG (mulberry32) ----------
 function rand(g: GameState): number {
@@ -39,14 +39,13 @@ function starter(g: GameState, key: string): CardInst {
 
 // ---------- pure read helpers (exported; used by UI + bot) ----------
 export function effMaxMana(p: PlayerState): number {
-  // NOTE: Mana Golem aura intentionally not applied here (matches original
-  // balance). Revisit during balance pass.
-  return Math.max(1, p.maxMana - p.manaPenalty);
+  const aura = p.field.filter((m) => m.aura === "mana1").length; // Mana Golem
+  return Math.max(1, p.maxMana + aura - p.manaPenalty);
 }
 export function effAtk(p: PlayerState, m: FieldMon): number {
-  let a = m.atk! + (m.tempAtk || 0);
+  let a = m.atk! + (m.tempAtk || 0) + (m.atkMod || 0);
   if (m.condAtk === "twoPlus" && p.field.length >= 2) a += 2;
-  return a;
+  return Math.max(0, a);
 }
 export function effDef(m: FieldMon): number {
   return Math.max(0, m.def! + (m.defMod || 0));
@@ -101,14 +100,17 @@ export function createGame(opts: CreateOpts): ReduceResult {
   };
   g.players[0] = mkPlayer(g, opts.p0.id, opts.p0.name, !!opts.p0.isBot);
   g.players[1] = mkPlayer(g, opts.p1.id, opts.p1.name, !!opts.p1.isBot);
-  g.market = FIXED_MARKET.map((id) => inst(g, id));
+  // STANDARD market: one random card of each cost 1/2/3/4 from ALL types
+  g.market = COSTS_FOR_STANDARD.map((c) => {
+    const ids = idsOfCost(c);
+    return inst(g, ids[randInt(g, ids.length)]);
+  });
 
   const ev: GameEvent[] = [];
   const ctx = makeCtx(g, ev);
-  // opening: supply for both, deal 3 to the starting player only (spec: 3/turn)
   g.players.forEach((p) => rollSupply(g, p));
   ctx.drawN(g.players[g.cur], 3);
-  ctx.log('<span class="t">게임 시작.</span> 초기 덱 6장 · 3장 드로우 · mana 4.');
+  ctx.log('<span class="t">게임 시작.</span> 초기 덱 6장 · 3장 드로우 · 마나 4.');
   beginTurn(g, ctx, true);
   return { state: g, events: ev };
 }
@@ -127,6 +129,7 @@ interface Ctx {
   ev: GameEvent[];
   log(html: string): void;
   drawN(p: PlayerState, n: number): number;
+  heal(p: PlayerState, amt: number): void;
   dealDamage(target: PlayerState, amt: number, src: string): void;
   destroyMonster(owner: PlayerState, m: FieldMon): void;
 }
@@ -150,12 +153,18 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     return drawn;
   };
 
+  const heal = (p: PlayerState, amt: number): void => {
+    if (amt <= 0) return;
+    p.hp = Math.min(p.maxHp, p.hp + amt);
+    ev.push({ type: "heal", player: side(g, p), amount: amt });
+  };
+
   const dealDamage = (target: PlayerState, amt: number, src: string): void => {
     if (amt <= 0) return;
     target.hp -= amt;
     const dealer: Side = (target === g.players[0] ? 1 : 0);
     g.dmgTally[dealer] += amt;
-    log(`  └ <span class="dmg">${amt} 데미지</span> → ${target.name} (HP ${Math.max(0, target.hp)}) <span class="muted">[${src}]</span>`);
+    log(`  └ <span class="dmg">${amt} 데미지</span> → ${target.name} (체력 ${Math.max(0, target.hp)}) <span class="muted">[${src}]</span>`);
     ev.push({ type: "damage", player: side(g, target), amount: amt });
     if (target.hp <= 0) handleDefeat(g, ctx, target, dealer);
   };
@@ -164,12 +173,12 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     const i = owner.field.findIndex((x) => x.uid === m.uid);
     if (i >= 0) {
       const dead = owner.field.splice(i, 1)[0];
-      owner.discard.push(inst(g, dead.id)); // fresh copy to discard
+      owner.discard.push(inst(g, dead.id));
       ev.push({ type: "destroy", player: side(g, owner), uid: m.uid });
     }
   };
 
-  const ctx: Ctx = { ev, log, drawN, dealDamage, destroyMonster };
+  const ctx: Ctx = { ev, log, drawN, heal, dealDamage, destroyMonster };
   return ctx;
 }
 
@@ -217,12 +226,11 @@ function handleDefeat(g: GameState, ctx: Ctx, loser: PlayerState, finisher: Side
   if (g.over) return;
   const loserIdx = g.players.indexOf(loser) as Side;
   const winner = (1 - loserIdx) as Side;
-  // kill reward (multiplayer-ready, currently 2P): finisher +1, top-damage +1
   g.players[finisher].maxMana += 1;
   let topDmg: Side = winner;
   if (g.dmgTally[winner] >= g.dmgTally[finisher]) topDmg = winner;
   if (topDmg !== finisher) g.players[topDmg].maxMana += 1;
-  ctx.log(`<span class="good">격파 보상: 최대 mana +1</span>`);
+  ctx.log(`<span class="good">격파 보상: 최대 마나 +1</span>`);
   g.over = true;
   g.phase = "over";
   g.winner = winner;
@@ -245,25 +253,54 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   const o = g.players[1 - g.cur];
   let atk = effAtk(p, att);
 
-  // trap reactions: Counter Surge > Mirror Thorn > Half Guard
+  // ---- terminal reactions: resolve the whole attack and stop ----
+  if (reactTrap(o, "judgment")) {
+    ctx.log(`  └ <span class="dmg">함정 천벌!</span> ${att.name} 파괴 + 상대에게 8`);
+    ctx.destroyMonster(p, att); ctx.dealDamage(p, 8, "천벌"); return;
+  }
+  if (reactTrap(o, "devour")) {
+    ctx.log(`  └ <span class="dmg">함정 영혼 포식!</span> ${att.name} 파괴 + 체력 6 회복`);
+    ctx.destroyMonster(p, att); ctx.heal(o, 6); return;
+  }
   if (reactTrap(o, "counter")) {
     const refl = Math.floor(atk / 2);
-    ctx.log(`  └ <span class="dmg">함정 Counter Surge!</span> ${att.name} 파괴 + ${refl} 반사`);
-    ctx.dealDamage(p, refl, "Counter Surge");
-    ctx.destroyMonster(p, att);
-    if (g.over) return;
+    ctx.log(`  └ <span class="dmg">함정 카운터 서지!</span> ${att.name} 파괴 + ${refl} 반사`);
+    ctx.dealDamage(p, refl, "카운터 서지");
+    if (!g.over) ctx.destroyMonster(p, att);
     return;
   }
+  if (reactTrap(o, "bulwark")) {
+    att.defMod = (att.defMod || 0) - 3; att.exhausted = true;
+    ctx.log(`  └ <span class="dmg">함정 절대 방벽!</span> 공격 무효 + ${att.name} 방어 -3`);
+    return;
+  }
+  if (reactTrap(o, "fullguard")) {
+    att.exhausted = true;
+    ctx.log(`  └ <span class="dmg">함정 역류!</span> 공격 무효화`);
+    return;
+  }
+
+  // ---- non-terminal reactions: attack still resolves ----
+  if (reactTrap(o, "spikes")) {
+    ctx.log(`  └ <span class="dmg">함정 가시 덫!</span> 공격측에 4`);
+    ctx.dealDamage(p, 4, "가시 덫");
+    if (g.over) { att.exhausted = true; return; }
+  }
+  if (reactTrap(o, "drawtrap2")) {
+    const n = ctx.drawN(o, 2);
+    ctx.log(`  └ <span class="dmg">함정 시간 왜곡!</span> ${n}장 드로우`);
+  }
   if (reactTrap(o, "reflect")) {
-    ctx.log(`  └ <span class="dmg">함정 Mirror Thorn!</span> ${atk} 반사`);
-    ctx.dealDamage(p, atk, "Mirror Thorn");
-    if (g.over) return;
+    ctx.log(`  └ <span class="dmg">함정 미러 손!</span> ${atk} 반사`);
+    ctx.dealDamage(p, atk, "미러 손");
+    if (g.over) { att.exhausted = true; return; }
   }
   if (reactTrap(o, "half")) {
     atk = Math.floor(atk / 2);
-    ctx.log(`  └ <span class="dmg">함정 Half Guard!</span> 공격이 ${atk}로 절반`);
+    ctx.log(`  └ <span class="dmg">함정 하프 가드!</span> 공격이 ${atk}로 절반`);
   }
 
+  // ---- damage ----
   if (targetUid === null) {
     ctx.dealDamage(o, atk, `${att.name} 의 직접 공격`);
   } else {
@@ -292,14 +329,14 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
   const o = g.players[1 - g.cur];
   switch (m.onSummon) {
     case "draw1": { const n = ctx.drawN(p, 1); ctx.log(`  └ 소환 효과: ${n}장 드로우`); break; }
-    case "def1":
+    case "def2":
       if (o.field.length) {
-        g.pending = { kind: "oppMon", hint: "방어 -1 할 적 몬스터 선택", reason: "def1", allowCancel: false };
+        g.pending = { kind: "oppMon", hint: "방어 -2 할 적 몬스터 선택", reason: "def2", allowCancel: false };
         ctx.ev.push({ type: "needTarget", pending: g.pending });
       } else ctx.log("  └ 대상 없음");
       break;
-    case "burn1": ctx.dealDamage(o, 1, "Ember Drake 소환"); break;
-    case "heal5": { p.hp = Math.min(p.maxHp, p.hp + 5); ctx.log(`  └ HP 5 회복 (${p.hp})`); ctx.ev.push({ type: "heal", player: side(g, p), amount: 5 }); break; }
+    case "burn2": ctx.dealDamage(o, 2, "엠버 드레이크 소환"); break;
+    case "heal6": ctx.heal(p, 6); ctx.log(`  └ 체력 6 회복 (${p.hp})`); break;
     case "refresh": rollSupply(g, p); ctx.log("  └ 제시를 무료 갱신"); break;
     case "breaktrap":
       if (o.traps.length) {
@@ -320,7 +357,7 @@ function tryNullSpell(g: GameState, ctx: Ctx, cardName: string): boolean {
   if (i < 0) return false;
   const t = o.traps.splice(i, 1)[0];
   o.discard.push(t.card);
-  ctx.log(`  └ <span class="dmg">상대 Null Field → ${cardName} 무효화</span>`);
+  ctx.log(`  └ <span class="dmg">상대 널 필드 → ${cardName} 무효화</span>`);
   return true;
 }
 
@@ -329,17 +366,21 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
   const o = g.players[1 - g.cur];
   switch (card.act) {
     case "dmg3": ctx.dealDamage(o, 3, card.name); break;
+    case "dmg5": ctx.dealDamage(o, 5, card.name); break;
+    case "dmg8": ctx.dealDamage(o, 8, card.name); break;
     case "exile":
       if (o.hand.length) {
         const c = o.hand.splice(randInt(g, o.hand.length), 1)[0];
         o.exile.push({ card: c, turns: 2 });
-        ctx.log(`<span class="t">${p.name}</span> Mind Pluck → 상대 패 1장을 2턴 제외`);
+        ctx.log(`<span class="t">${p.name}</span> 마인드 플럭 → 상대 패 1장 2턴 제외`);
       } else ctx.log("  └ 상대 패가 없음");
       break;
-    case "draw2": { const n = ctx.drawN(p, 2); ctx.log(`<span class="t">${p.name}</span> Double Draw → ${n}장 드로우`); break; }
-    case "crash": rollSupply(g, o); ctx.log(`<span class="t">${p.name}</span> Market Crash → 상대 제시 강제 갱신`); break;
-    case "buffall": p.field.forEach((m) => (m.tempAtk = (m.tempAtk || 0) + 2)); ctx.log(`<span class="t">${p.name}</span> Overload → 아군 전체 공격 +2`); break;
-    case "siphon": ctx.dealDamage(o, 4, card.name); if (!g.over) { p.hp = Math.min(p.maxHp, p.hp + 4); ctx.log(`  └ HP 4 회복 (${p.hp})`); ctx.ev.push({ type: "heal", player: side(g, p), amount: 4 }); } break;
+    case "draw1": { const n = ctx.drawN(p, 1); ctx.log(`<span class="t">${p.name}</span> 마나 차지 → ${n}장 드로우`); break; }
+    case "draw2": { const n = ctx.drawN(p, 2); ctx.log(`<span class="t">${p.name}</span> 더블 드로우 → ${n}장 드로우`); break; }
+    case "crash": rollSupply(g, o); ctx.log(`<span class="t">${p.name}</span> 마켓 크래시 → 상대 제시 강제 갱신`); break;
+    case "buffall": p.field.forEach((m) => (m.tempAtk = (m.tempAtk || 0) + 2)); ctx.log(`<span class="t">${p.name}</span> 오버로드 → 아군 전체 공격 +2`); break;
+    case "siphon": ctx.dealDamage(o, 4, card.name); if (!g.over) { ctx.heal(p, 4); ctx.log(`  └ 체력 4 회복 (${p.hp})`); } break;
+    case "blessing": ctx.heal(p, 12); ctx.log(`<span class="t">${p.name}</span> 대지의 축복 → 체력 12 회복`); ctx.drawN(p, 1); break;
   }
 }
 
@@ -349,9 +390,9 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
 function openTreasure(g: GameState, ctx: Ctx, p: PlayerState): void {
   const roll = randInt(g, 3);
   let txt = "", kind = "";
-  if (roll === 0) { p.maxMana++; txt = "최대 mana +1"; kind = "mana"; }
-  else if (roll === 1) { p.hp = Math.min(p.maxHp, p.hp + 10); txt = "HP +10"; kind = "hp"; ctx.ev.push({ type: "heal", player: side(g, p), amount: 10 }); }
-  else { p.maxHp += 5; p.hp += 5; txt = "최대 HP +5"; kind = "maxhp"; ctx.ev.push({ type: "heal", player: side(g, p), amount: 5 }); }
+  if (roll === 0) { p.maxMana++; txt = "최대 마나 +1"; kind = "mana"; }
+  else if (roll === 1) { ctx.heal(p, 10); txt = "체력 +10"; kind = "hp"; }
+  else { p.maxHp += 5; p.hp += 5; txt = "최대 체력 +5"; kind = "maxhp"; ctx.ev.push({ type: "heal", player: side(g, p), amount: 5 }); }
   ctx.log(`<span class="t">${p.name}</span> 보물상자 → <span class="good">${txt}</span>`);
   ctx.ev.push({ type: "treasure", player: side(g, p), kind, text: txt, isBot: p.isBot });
 }
@@ -360,10 +401,17 @@ function openTreasure(g: GameState, ctx: Ctx, p: PlayerState): void {
 // play / buy
 // ============================================================
 function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): void {
-  const m: FieldMon = { ...card, exhausted: false, tempAtk: 0, defMod: 0, summonedTurn: g.turn };
+  const m: FieldMon = { ...card, exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
   p.field.push(m);
   ctx.log(`<span class="t">${p.name}</span> ${card.name} 소환 (공${card.atk}/방${card.def})`);
   ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid });
+  // Pitfall — opponent's trap destroys the summoned monster (effect doesn't resolve)
+  const o = g.players[1 - g.cur];
+  if (reactTrap(o, "pitfall")) {
+    ctx.log(`  └ <span class="dmg">함정 함정 구덩이!</span> ${card.name} 파괴`);
+    ctx.destroyMonster(p, m);
+    return;
+  }
   resolveOnSummon(g, ctx, m);
 }
 
@@ -382,7 +430,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     } else if (card.star === "mana") {
       p.mana -= card.cost; p.hand.splice(idx, 1); p.discard.push(card);
       p.maxMana++;
-      ctx.log(`<span class="t">${p.name}</span> ${card.name} → 최대 mana +1 (${p.maxMana})`);
+      ctx.log(`<span class="t">${p.name}</span> ${card.name} → 최대 마나 +1 (${p.maxMana})`);
     }
     return;
   }
@@ -394,9 +442,16 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   if (card.t === "spell") {
     p.mana -= card.cost; p.hand.splice(idx, 1); p.discard.push(card);
     if (tryNullSpell(g, ctx, card.name)) return;
-    if (card.act === "buff3") {
+    if (card.act === "buff3" || card.act === "buff_perm") {
       if (!p.field.length) { ctx.log("  └ 대상 몬스터 없음"); return; }
-      g.pending = { kind: "myMon", hint: "공격 +3 할 자신 몬스터 선택", reason: "buff3", allowCancel: false };
+      g.pending = { kind: "myMon", hint: card.act === "buff3" ? "공격 +3 할 자신 몬스터 선택" : "강화할 자신 몬스터 선택", reason: card.act, allowCancel: false };
+      ctx.ev.push({ type: "needTarget", pending: g.pending });
+      return;
+    }
+    if (card.act === "destroyMon") {
+      const o = g.players[1 - g.cur];
+      if (!o.field.length) { ctx.log("  └ 파괴할 적 몬스터 없음"); return; }
+      g.pending = { kind: "oppMon", hint: "파괴할 적 몬스터 선택", reason: "destroyMon", allowCancel: false };
       ctx.ev.push({ type: "needTarget", pending: g.pending });
       return;
     }
@@ -441,9 +496,12 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
   if (pending.kind === "oppMon") {
     const tm = o.field.find((m) => m.uid === uid);
     if (!tm) return;
-    if (pending.reason === "def1") {
-      tm.defMod = (tm.defMod || 0) - 1;
-      ctx.log(`  └ ${tm.name} 의 방어 -1`);
+    if (pending.reason === "def2") {
+      tm.defMod = (tm.defMod || 0) - 2;
+      ctx.log(`  └ ${tm.name} 의 방어 -2`);
+    } else if (pending.reason === "destroyMon") {
+      ctx.log(`<span class="t">${p.name}</span> 룬 파열 → ${tm.name} 파괴`);
+      ctx.destroyMonster(o, tm);
     } else if (pending.reason === "attack") {
       const att = p.field.find((m) => m.uid === (pending.data!.attackerUid as string));
       if (att) { ctx.ev.push({ type: "attack", player: side(g, p), uid: att.uid, targetUid: tm.uid }); resolveAttackCore(g, ctx, att, tm.uid); }
@@ -453,14 +511,18 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     if (!tm) return;
     if (pending.reason === "buff3") {
       tm.tempAtk = (tm.tempAtk || 0) + 3;
-      ctx.log(`<span class="t">${p.name}</span> Sharpen → ${tm.name} 공격 +3`);
+      ctx.log(`<span class="t">${p.name}</span> 샤픈 → ${tm.name} 공격 +3`);
+    } else if (pending.reason === "buff_perm") {
+      tm.atkMod = (tm.atkMod || 0) + 2;
+      tm.defMod = (tm.defMod || 0) + 2;
+      ctx.log(`<span class="t">${p.name}</span> 강화 주문 → ${tm.name} 공격+2 / 방어+2`);
     }
   } else if (pending.kind === "seek") {
     const i = p.deck.findIndex((c) => c.uid === uid);
-    if (i >= 0) { p.hand.push(p.deck.splice(i, 1)[0]); shuffle(g, p.deck); ctx.log(`<span class="t">${p.name}</span> Seek → 1장 서치`); }
+    if (i >= 0) { p.hand.push(p.deck.splice(i, 1)[0]); shuffle(g, p.deck); ctx.log(`<span class="t">${p.name}</span> 시크 → 1장 서치`); }
   } else if (pending.kind === "recall") {
     const i = p.discard.findIndex((c) => c.uid === uid);
-    if (i >= 0) { p.hand.push(p.discard.splice(i, 1)[0]); ctx.log(`<span class="t">${p.name}</span> Recall → 1장 회수`); }
+    if (i >= 0) { p.hand.push(p.discard.splice(i, 1)[0]); ctx.log(`<span class="t">${p.name}</span> 리콜 → 1장 회수`); }
   }
 }
 
@@ -485,11 +547,10 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
 
   const p = g.players[g.cur];
 
-  // pending resolution actions
   if (action.type === "chooseTarget") { if (g.pending) resolveTarget(g, ctx, action.uid); return { state: g, events: ev }; }
   if (action.type === "pick") { if (g.pending) resolveTarget(g, ctx, action.uid); return { state: g, events: ev }; }
 
-  if (g.pending) return { state: g, events: ev }; // must resolve pending first
+  if (g.pending) return { state: g, events: ev };
 
   switch (action.type) {
     case "play":
@@ -500,7 +561,7 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
       if (card && p.mana >= card.cost) {
         p.mana -= card.cost; p.discard.push(inst(g, card.id));
         p.boughtCount++; p.taxFlag = true;
-        ctx.log(`<span class="t">${p.name}</span> 공통 마켓 ${card.name} 구매 (${card.cost}) <span class="muted">[비공개]</span>`);
+        ctx.log(`<span class="t">${p.name}</span> 고정 마켓 ${card.name} 구매 (${card.cost}) <span class="muted">[비공개]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "market", i: action.i });
       }
       break;
@@ -517,7 +578,7 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
       break;
     }
     case "refresh":
-      if (p.mana >= 1) { p.mana -= 1; rollSupply(g, p); ctx.log(`<span class="t">${p.name}</span> 제시 갱신 (1 mana)`); }
+      if (p.mana >= 1) { p.mana -= 1; rollSupply(g, p); ctx.log(`<span class="t">${p.name}</span> 제시 갱신 (1 마나)`); }
       break;
     case "attack": {
       const m = p.field.find((x) => x.uid === action.uid);

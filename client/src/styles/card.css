@@ -41,8 +41,8 @@
 .card-name {
   position: absolute; top: 4.8%; left: 25%; right: 5%; height: 8.3%;
   display: flex; align-items: center;
-  font-weight: 700; font-size: 0.92em; letter-spacing: .01em;
-  color: #f3ead2; text-shadow: 0 1px 2px #000b; white-space: nowrap;
+  font-weight: 800; font-size: 0.92em; letter-spacing: .01em;
+  color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35); white-space: nowrap;
   overflow: hidden; text-overflow: ellipsis;
 }
 .card-art {
@@ -72,8 +72,8 @@
   display: flex; justify-content: space-between; padding: 0 16%;
   font-family: var(--mono); font-weight: 700; font-size: 1.02em;
 }
-.ad-atk { color: #ffe9d8; text-shadow: 0 1px 2px #000; }
-.ad-def { color: #e8f1ff; text-shadow: 0 1px 2px #000; }
+.ad-atk { color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35); }
+.ad-def { color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35); }
 
 /* ---- card states ---- */
 .card.is-playable, .card.is-buyable { cursor: pointer; }
