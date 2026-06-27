@@ -1,0 +1,34 @@
+name = "lore-server"
+main = "src/index.ts"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+# --- Static Assets: serve the built client from the SAME origin as the API,
+#     so cookies + relative /api and /ws calls just work (no CORS/cookie pain). ---
+[assets]
+directory = "../client/dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+# --- Durable Objects: SQLite-backed (required on the Workers FREE plan) ---
+[[durable_objects.bindings]]
+name = "MATCHMAKER"
+class_name = "Matchmaker"
+
+[[durable_objects.bindings]]
+name = "GAME_ROOM"
+class_name = "GameRoom"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Matchmaker", "GameRoom"]
+
+# --- D1: users / sessions / match records ---
+[[d1_databases]]
+binding = "DB"
+database_name = "lore-db"
+database_id = "050d409e-913f-4a07-92b8-0d150ee6ce4d"
+
+# AUTH_SECRET is set via `wrangler secret put AUTH_SECRET`
+[vars]
+APP_ORIGIN = "*"
