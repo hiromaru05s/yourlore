@@ -1,0 +1,40 @@
+/* ============================================================
+   LORE — login / home / lobby screens
+   ============================================================ */
+.screen { height: 100vh; display: grid; place-items: center; padding: 24px; position: relative; }
+.screen-brand { position: absolute; top: 26px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 12px; }
+.screen-brand .mark { width: 30px; height: 30px; transform: rotate(45deg); border: 2px solid var(--brass); position: relative; }
+.screen-brand .mark::after { content: ""; position: absolute; inset: 5px; background: var(--brass); box-shadow: 0 0 12px var(--gold-glow); }
+.screen-brand h1 { font-family: var(--mono); font-size: 26px; letter-spacing: .5em; color: var(--brass-hi); }
+
+/* ---- auth card ---- */
+.auth-card { width: 360px; max-width: 92vw; padding: 32px 30px; }
+.auth-card .sub { text-align: center; color: var(--paper-dim); margin-bottom: 22px; font-size: 12px; letter-spacing: .04em; }
+.auth-card .form-row { margin-bottom: 16px; }
+.auth-card .btn-block { margin-top: 6px; padding: 12px; }
+.auth-switch { text-align: center; margin-top: 18px; font-size: 12px; color: var(--paper-dim); }
+.auth-switch a { cursor: pointer; text-decoration: underline; }
+.auth-error { color: var(--vermil-hi); font-size: 12px; text-align: center; margin-top: 12px; min-height: 16px; }
+.auth-tabs { display: flex; gap: 4px; background: var(--ink-0); border: 1px solid var(--line); border-radius: 9px; padding: 4px; margin-bottom: 22px; }
+.auth-tabs button { flex: 1; padding: 8px; border: none; background: transparent; color: var(--paper-dim); font-family: var(--mono); font-size: 11px; letter-spacing: .12em; border-radius: 6px; text-transform: uppercase; }
+.auth-tabs button.on { background: linear-gradient(180deg, #2a3650, #18223a); color: var(--brass-hi); }
+
+/* ---- home ---- */
+.home { width: 560px; max-width: 94vw; text-align: center; }
+.home .welcome { font-family: var(--mono); color: var(--paper-dim); letter-spacing: .1em; margin-bottom: 4px; font-size: 12px; }
+.home .title { font-family: var(--mono); font-size: 22px; letter-spacing: .3em; color: var(--brass-hi); margin-bottom: 28px; }
+.home .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.mode-card { padding: 28px 20px; text-align: center; cursor: pointer; transition: .16s var(--ease); }
+.mode-card:hover { transform: translateY(-4px); border-color: var(--brass); box-shadow: 0 12px 30px #000a, inset 0 1px 0 #ffffff10; }
+.mode-card .icon { font-size: 34px; margin-bottom: 10px; }
+.mode-card h3 { font-family: var(--mono); font-size: 14px; letter-spacing: .14em; color: var(--brass-hi); text-transform: uppercase; margin-bottom: 6px; }
+.mode-card p { font-size: 12px; color: var(--paper-dim); line-height: 1.4; }
+.home .acct { margin-top: 26px; display: flex; align-items: center; justify-content: center; gap: 14px; font-size: 12px; color: var(--paper-faint); }
+.home .acct .stats { font-family: var(--mono); color: var(--brass); }
+
+/* ---- lobby (matchmaking) ---- */
+.lobby { text-align: center; }
+.lobby .spinner { width: 54px; height: 54px; margin: 0 auto 22px; border: 3px solid var(--line); border-top-color: var(--brass); border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg) } }
+.lobby h2 { font-family: var(--mono); letter-spacing: .2em; color: var(--brass-hi); margin-bottom: 8px; }
+.lobby p { color: var(--paper-dim); margin-bottom: 22px; }

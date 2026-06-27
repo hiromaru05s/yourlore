@@ -1,0 +1,18 @@
+{
+  "name": "lore-tcg",
+  "version": "0.1.0",
+  "private": true,
+  "description": "LORE — deckbuild x TCG hybrid. Cloudflare-hosted (Pages + Workers + Durable Objects + D1).",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "npm --workspace client run dev",
+    "build": "npm --workspace client run build",
+    "typecheck": "npm --workspace client run typecheck && npm --workspace server run typecheck",
+    "server:dev": "npm --workspace server run dev",
+    "deploy:client": "npm --workspace client run build && npx wrangler pages deploy client/dist --project-name lore-tcg",
+    "deploy:server": "npm --workspace server run deploy"
+  }
+}

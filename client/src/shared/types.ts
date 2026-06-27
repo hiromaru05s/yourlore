@@ -1,0 +1,121 @@
+// ============================================================
+// LORE — shared game types (no DOM, no platform deps).
+// Imported by both the client UI and the authoritative server.
+// ============================================================
+
+export type CardType = "mon" | "spell" | "trap" | "starter";
+export type Side = 0 | 1;
+
+export interface CardDef {
+  id: string;
+  t: CardType;
+  cost: number;
+  name: string;
+  text: string;
+  atk?: number;
+  def?: number;
+  onSummon?: string; // monster summon effect key
+  aura?: string; // persistent passive
+  condAtk?: string; // conditional attack bonus
+  act?: string; // spell action key
+  react?: string; // trap reaction key
+  star?: string; // starter kind: trash | chest | mana
+}
+
+export interface CardInst extends CardDef {
+  uid: string;
+}
+
+export interface FieldMon extends CardInst {
+  exhausted: boolean;
+  tempAtk: number;
+  defMod: number;
+  summonedTurn: number;
+}
+
+export interface TrapSet {
+  card: CardInst;
+}
+
+export interface ExileEntry {
+  card: CardInst;
+  turns: number;
+}
+
+export interface PlayerState {
+  id: string; // user id (online) or "bot"/"local"
+  name: string;
+  isBot: boolean;
+  hp: number;
+  maxHp: number;
+  mana: number;
+  maxMana: number;
+  manaPenalty: number;
+  nextPenalty: number;
+  deck: CardInst[];
+  hand: CardInst[];
+  discard: CardInst[];
+  exile: ExileEntry[];
+  field: FieldMon[];
+  traps: TrapSet[];
+  supply: (CardInst | null)[];
+  boughtCount: number;
+  taxFlag: boolean;
+}
+
+export interface Pending {
+  kind: "oppMon" | "myMon" | "seek" | "recall";
+  hint: string;
+  reason: string; // which effect awaits input
+  allowCancel: boolean;
+  data?: Record<string, unknown>;
+}
+
+export interface GameState {
+  players: [PlayerState, PlayerState];
+  cur: Side;
+  turn: number;
+  phase: "main" | "over";
+  pending: Pending | null;
+  over: boolean;
+  winner: Side | null;
+  market: CardInst[];
+  dmgTally: [number, number];
+  rng: number; // mutable PRNG state (mulberry32)
+  uidSeq: number;
+  mode: "bot" | "online";
+}
+
+// --- Actions: the only way to mutate a GameState ---
+export type Action =
+  | { type: "play"; idx: number }
+  | { type: "buyMarket"; i: number }
+  | { type: "buySupply"; i: number }
+  | { type: "refresh" }
+  | { type: "attack"; uid: string }
+  | { type: "chooseTarget"; uid: string | null } // null = cancel
+  | { type: "pick"; uid: string | null } // resolve seek / recall (null = cancel)
+  | { type: "endTurn" }
+  | { type: "surrender"; player: Side };
+
+// --- Events: emitted by reduce(), consumed by the UI for animation/log ---
+export type GameEvent =
+  | { type: "log"; html: string }
+  | { type: "turnHeader"; turn: number; name: string; isBot: boolean }
+  | { type: "summon"; player: Side; uid: string }
+  | { type: "attack"; player: Side; uid: string; targetUid: string | null }
+  | { type: "hit"; uid: string }
+  | { type: "damage"; player: Side; amount: number }
+  | { type: "heal"; player: Side; amount: number }
+  | { type: "destroy"; player: Side; uid: string }
+  | { type: "buy"; player: Side; from: "market" | "supply"; i: number }
+  | { type: "draw"; player: Side; count: number }
+  | { type: "treasure"; player: Side; kind: string; text: string; isBot: boolean }
+  | { type: "trap"; player: Side; name: string }
+  | { type: "win"; winner: Side }
+  | { type: "needTarget"; pending: Pending };
+
+export interface ReduceResult {
+  state: GameState;
+  events: GameEvent[];
+}
