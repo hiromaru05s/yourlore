@@ -39,7 +39,7 @@
 .card--trap .card-cost { background: radial-gradient(circle at 35% 30%, #fff5, transparent 60%), #3f8a4a; }
 
 .card-name {
-  position: absolute; top: 4.8%; left: 14%; right: 6%; height: 8.3%;
+  position: absolute; top: 4.8%; left: 25%; right: 5%; height: 8.3%;
   display: flex; align-items: center;
   font-weight: 700; font-size: 0.92em; letter-spacing: .01em;
   color: #f3ead2; text-shadow: 0 1px 2px #000b; white-space: nowrap;

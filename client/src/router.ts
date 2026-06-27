@@ -24,18 +24,20 @@ export class App {
     else this.login();
   }
 
-  private swap(s: Screen): void {
+  // Clear the root BEFORE mounting the next screen. (Passing a thunk matters:
+  // the mount fn appends to root, so it must run after innerHTML is cleared.)
+  private swap(make: () => Screen): void {
     this.current?.destroy?.();
     this.root.innerHTML = "";
-    this.current = s;
+    this.current = make();
   }
 
-  login(): void { this.swap(mountLogin(this)); }
-  home(): void { this.swap(mountHome(this)); }
-  botGame(): void { this.swap(mountGame(this, { mode: "bot" })); }
-  onlineLobby(): void { this.swap(mountLobby(this)); }
+  login(): void { this.swap(() => mountLogin(this)); }
+  home(): void { this.swap(() => mountHome(this)); }
+  botGame(): void { this.swap(() => mountGame(this, { mode: "bot" })); }
+  onlineLobby(): void { this.swap(() => mountLobby(this)); }
   onlineGame(roomId: string, you: Side, oppName: string): void {
-    this.swap(mountGame(this, { mode: "online", roomId, you, oppName }));
+    this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName }));
   }
 
   async logout(): Promise<void> {
