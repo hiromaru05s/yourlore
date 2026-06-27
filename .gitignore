@@ -6,4 +6,4 @@ dist/
 .DS_Store
 legacy/
 _render.cjs
-*.timestamp-*.mjs
+.secrets/
