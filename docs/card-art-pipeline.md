@@ -36,12 +36,14 @@ art/prompts/card-art-prompts.jsonl
 npm run art:prompts -- --all
 ```
 
-## 3. OpenAI Image API로 일괄 생성
+## 3. Replicate FLUX dev로 일괄 생성
 
 ```bash
-export OPENAI_API_KEY=...
+export REPLICATE_API_TOKEN=...
 npm run art:generate
 ```
+
+기본값은 Replicate `black-forest-labs/flux-dev`다.
 
 테스트로 2장만 확인:
 
@@ -55,10 +57,23 @@ npm run art:generate -- --dry-run --limit=2
 npm run art:generate -- --only=M1,S13,T4
 ```
 
-품질/모델/크기 변경:
+이미 있는 이미지까지 덮어쓰기:
 
 ```bash
-OPENAI_IMAGE_MODEL=gpt-image-2 OPENAI_IMAGE_SIZE=1024x1536 OPENAI_IMAGE_QUALITY=medium npm run art:generate
+npm run art:generate -- --only=M1 --force
+```
+
+Replicate 모델 변경:
+
+```bash
+npm run art:generate -- --provider=replicate --model=black-forest-labs/flux-schnell
+```
+
+OpenAI로 고급 재생성:
+
+```bash
+export OPENAI_API_KEY=...
+npm run art:generate -- --provider=openai --model=gpt-image-2 --only=M7,M13,S13 --force
 ```
 
 ## 새 카드 대량 추가할 때

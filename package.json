@@ -13,7 +13,7 @@
     "typecheck": "npm --workspace client run typecheck && npm --workspace server run typecheck",
     "art:check": "node scripts/check-card-art.mjs",
     "art:prompts": "node scripts/export-card-art-prompts.mjs",
-    "art:generate": "node scripts/generate-card-art-openai.mjs",
+    "art:generate": "node scripts/generate-card-art.mjs",
     "server:dev": "npm --workspace server run dev",
     "deploy": "npm run build && wrangler deploy -c server/wrangler.toml"
   },
