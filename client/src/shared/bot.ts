@@ -43,7 +43,10 @@ export function botDecide(g: GameState): Action {
   if (wipe) return { type: "play", idx: wipe.i };
   const direct = spells.find((x) => x.c.act === "dmg" || x.c.act === "siphon");
   if (direct) return { type: "play", idx: direct.i };
-  const buff = spells.find((x) => ["buffTurn", "buffPerm", "buffAllTurn"].includes(x.c.act || "") && p.field.length > 0);
+  const ready = p.field.some((m) => !m.exhausted);
+  const buff = spells.find((x) =>
+    (x.c.act === "buffPerm" && p.field.length > 0) ||
+    ((x.c.act === "buffTurn" || x.c.act === "buffAllTurn") && ready)); // temp buffs only with a ready attacker
   if (buff) return { type: "play", idx: buff.i };
   const util = spells.find((x) => ["draw", "seek", "crash", "exile", "recall", "heal", "manaUp", "manaDown", "manaUpGain", "chestToMana"].includes(x.c.act || ""));
   if (util) return { type: "play", idx: util.i };

@@ -82,6 +82,7 @@ export interface PlayerState {
 export interface Pending {
   kind: "oppMon" | "myMon" | "seek" | "recall";
   hint: string;
+  hintJa: string; // Japanese target hint
   reason: string; // which effect awaits input
   allowCancel: boolean;
   data?: Record<string, unknown>;
@@ -116,7 +117,7 @@ export type Action =
 
 // --- Events: emitted by reduce(), consumed by the UI for animation/log ---
 export type GameEvent =
-  | { type: "log"; html: string }
+  | { type: "log"; html: string; htmlJa: string }
   | { type: "turnHeader"; turn: number; name: string; isBot: boolean }
   | { type: "summon"; player: Side; uid: string }
   | { type: "attack"; player: Side; uid: string; targetUid: string | null }
@@ -126,7 +127,7 @@ export type GameEvent =
   | { type: "destroy"; player: Side; uid: string }
   | { type: "buy"; player: Side; from: "market" | "supply"; i: number }
   | { type: "draw"; player: Side; count: number }
-  | { type: "treasure"; player: Side; kind: string; text: string; isBot: boolean }
+  | { type: "treasure"; player: Side; kind: string; text: string; textJa: string; isBot: boolean }
   | { type: "trap"; player: Side; name: string }
   | { type: "win"; winner: Side }
   | { type: "needTarget"; pending: Pending };

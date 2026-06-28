@@ -12,7 +12,7 @@ import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog } from "../ui/log";
 import * as A from "../ui/anim";
 import { cardPicker, confirmDialog, treasureModal, winModal } from "../ui/modal";
-import { t, onLangChange } from "../i18n";
+import { t, getLang, onLangChange } from "../i18n";
 
 export interface ControllerExits {
   onHome(): void;
@@ -70,7 +70,7 @@ export abstract class BaseController implements BoardHandlers {
   private consumeLogs(events: GameEvent[]): void {
     for (const e of events) {
       if (e.type === "turnHeader") this.log.turnHeader(e.turn, e.name, e.isBot);
-      else if (e.type === "log") this.log.line(e.html);
+      else if (e.type === "log") this.log.line(e.html, e.htmlJa);
     }
   }
 
@@ -109,7 +109,7 @@ export abstract class BaseController implements BoardHandlers {
         else if (e.type === "heal") A.hpFeedback(e.player === this.you ? "me" : "opp", "heal", e.amount);
         else if (e.type === "buy") A.pileFlash(e.player === this.you ? "pile-myDisc" : "pile-oppDisc");
         else if (e.type === "draw" && e.player === this.you) A.animateDraw(this.view.logEl.ownerDocument!.getElementById("hand") as HTMLElement, e.count);
-        else if (e.type === "treasure" && !e.isBot && e.player === this.you) treasureModal(e.kind, e.text);
+        else if (e.type === "treasure" && !e.isBot && e.player === this.you) treasureModal(e.kind, getLang() === "ja" ? e.textJa : e.text);
       }
     }
     this.afterApply();
@@ -122,7 +122,7 @@ export abstract class BaseController implements BoardHandlers {
       if (g.pending.kind === "seek" || g.pending.kind === "recall") {
         const me = g.players[this.you];
         const pool = g.pending.kind === "seek" ? me.deck : me.discard;
-        cardPicker(g.pending.hint, pool, (uid) => this.submit({ type: "pick", uid }));
+        cardPicker(getLang() === "ja" ? g.pending.hintJa : g.pending.hint, pool, (uid) => this.submit({ type: "pick", uid }));
       }
       return; // oppMon/myMon resolved by board clicks
     }
@@ -139,7 +139,7 @@ export abstract class BaseController implements BoardHandlers {
     setTimeout(() => winModal(won, detail, () => this.exits.onRematch(), () => this.exits.onHome()), 400);
   }
 
-  destroy(): void { document.removeEventListener("keydown", this.onKey); this.unsubLang(); }
+  destroy(): void { document.removeEventListener("keydown", this.onKey); this.unsubLang(); this.log.dispose(); }
 }
 
 // ============================================================

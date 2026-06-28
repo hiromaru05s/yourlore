@@ -8,7 +8,7 @@ import { effMaxMana, supplyRange, playCost } from "../shared/engine";
 import { frameFor, FRAME_BACK } from "../shared/cards";
 import { cardEl } from "./cardView";
 import { zoomCard } from "./anim";
-import { t } from "../i18n";
+import { t, getLang } from "../i18n";
 
 const MON_SLOTS = 7;
 const ST_SLOTS = 5;
@@ -107,7 +107,7 @@ export class GameView {
     const hint = this.q("targetHint");
     if (pending && myTurn && (pending.kind === "oppMon" || pending.kind === "myMon")) {
       hint.style.display = "block";
-      hint.innerHTML = `▸ ${pending.hint}` + (pending.allowCancel ? ` &nbsp; <a id="cancelTarget" style="cursor:pointer">[${t("common.cancel")}]</a>` : "");
+      hint.innerHTML = `▸ ${getLang() === "ja" ? pending.hintJa : pending.hint}` + (pending.allowCancel ? ` &nbsp; <a id="cancelTarget" style="cursor:pointer">[${t("common.cancel")}]</a>` : "");
       const c = hint.querySelector("#cancelTarget") as HTMLElement | null;
       if (c) c.onclick = () => this.h.onChooseTarget(null);
     } else {
