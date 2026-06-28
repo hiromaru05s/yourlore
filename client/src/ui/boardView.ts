@@ -4,7 +4,7 @@
 // All animation lives in anim.ts; this file only draws + binds.
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
-import { effMaxMana, supplyRange } from "../shared/engine";
+import { effMaxMana, supplyRange, playCost } from "../shared/engine";
 import { frameFor, FRAME_BACK } from "../shared/cards";
 import { cardEl } from "./cardView";
 import { zoomCard } from "./anim";
@@ -240,8 +240,9 @@ export class GameView {
     handEl.innerHTML = "";
     const n = me.hand.length, mid = (n - 1) / 2;
     me.hand.forEach((c, idx) => {
-      const aff = myTurn && !g.pending && me.mana >= c.cost;
-      const card = cardEl(c, { size: "hand", playable: aff, dim: !aff });
+      const pc = playCost(c);
+      const aff = myTurn && !g.pending && me.mana >= pc;
+      const card = cardEl(c, { size: "hand", playable: aff, dim: !aff, costOverride: pc });
       const off = idx - mid;
       card.style.transform = `rotate(${off * 3.2}deg) translateY(${Math.abs(off) ** 2 * 2}px)`;
       card.style.zIndex = String(idx);

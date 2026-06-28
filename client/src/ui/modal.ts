@@ -65,7 +65,7 @@ export function noticeModal(title: string, body: string, btn: string, onClick: (
 }
 
 export function treasureModal(kind: string, text: string): void {
-  const ico = kind === "mana" ? "◆" : kind === "hp" ? "✚" : "❤";
+  const ico = kind === "mana" ? "◆" : kind === "hp" ? "✚" : kind === "mimic" ? "👹" : "❤";
   const m = document.createElement("div");
   m.className = "modal";
   m.innerHTML = `<h2>보물상자</h2><div class="chest-reward">${ico}</div><div class="treasure-roll">${text}</div><div class="modal-row"></div>`;

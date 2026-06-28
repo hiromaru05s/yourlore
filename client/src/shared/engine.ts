@@ -51,6 +51,10 @@ export function supplyRange(p: PlayerState): [number, number] {
   const hi = effMaxMana(p);
   return [Math.max(1, hi - 2), hi];
 }
+/** Cost to PLAY a card from hand (may be < its buy cost). */
+export function playCost(c: CardInst): number {
+  return c.play ?? c.cost;
+}
 export function cardValue(c: CardInst): number {
   if (c.t === "mon") return (c.atk || 0) + (c.def || 0);
   if (c.t === "spell") return 5 + (c.val || 0);
@@ -91,6 +95,10 @@ export function createGame(opts: CreateOpts): ReduceResult {
   };
   g.players[0] = mkPlayer(g, opts.p0.id, opts.p0.name, !!opts.p0.isBot);
   g.players[1] = mkPlayer(g, opts.p1.id, opts.p1.name, !!opts.p1.isBot);
+  // going-second compensation: the non-starting player begins with 35 max HP
+  const second = (1 - (opts.starting ?? 0)) as Side;
+  g.players[second].hp = 35;
+  g.players[second].maxHp = 35;
   // STANDARD market: one random card of each cost 1/2/3/4, mixed types
   g.market = [1, 2, 3, 4].map((c) => {
     const ids = idsOfCost(c);
@@ -271,6 +279,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   if ((tc = takeTrap(o, "half"))) {
     atk = Math.floor(atk / 2);
     ctx.log(`  └ <span class="dmg">함정 ${tc.name}!</span> 공격이 ${atk}로 절반`);
+    if (tc.val) { ctx.dealDamage(p, tc.val, tc.name); if (g.over) { att.exhausted = true; return; } }
   }
 
   // ---- damage ----
@@ -343,8 +352,15 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
       if (o.hand.length) { const c = o.hand.splice(randInt(g, o.hand.length), 1)[0]; o.exile.push({ card: c, turns: 2 }); ctx.log(`<span class="t">${p.name}</span> ${card.name} → 상대 패 1장 2턴 제외`); }
       else ctx.log("  └ 상대 패가 없음");
       break;
-    case "crash": rollSupply(g, o); ctx.log(`<span class="t">${p.name}</span> ${card.name} → 상대 제시 강제 갱신`); break;
+    case "crash": rollSupply(g, o); ctx.log(`<span class="t">${p.name}</span> ${card.name} → 상대 제시 강제 갱신`); if (v2 > 0) ctx.drawN(p, v2); break;
     case "manaUp": p.maxMana += v; ctx.log(`<span class="t">${p.name}</span> ${card.name} → 최대 마나 +${v}`); break;
+    case "destroyTrap": {
+      const n = v || 1; let k = 0;
+      for (let i = 0; i < n && o.traps.length; i++) { const t = o.traps.splice(randInt(g, o.traps.length), 1)[0]; o.discard.push(t.card); k++; }
+      ctx.log(`<span class="t">${p.name}</span> ${card.name} → 상대 세트 함정 ${k}장 파괴`);
+      if (v2 > 0) ctx.drawN(p, v2);
+      break;
+    }
   }
 }
 
@@ -352,11 +368,19 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
 // treasure
 // ============================================================
 function openTreasure(g: GameState, ctx: Ctx, p: PlayerState): void {
-  const roll = randInt(g, 3);
+  const roll = randInt(g, 4);
   let txt = "", kind = "";
   if (roll === 0) { p.maxMana++; txt = "최대 마나 +1"; kind = "mana"; }
-  else if (roll === 1) { ctx.heal(p, 5); txt = "체력 +5"; kind = "hp"; }
-  else { p.maxHp += 3; p.hp += 3; txt = "최대 체력 +3"; kind = "maxhp"; ctx.ev.push({ type: "heal", player: side(g, p), amount: 3 }); }
+  else if (roll === 1) { ctx.heal(p, 8); txt = "체력 +8"; kind = "hp"; }
+  else if (roll === 2) { p.maxHp += 5; p.hp += 5; txt = "최대 체력 +5"; kind = "maxhp"; ctx.ev.push({ type: "heal", player: side(g, p), amount: 5 }); }
+  else {
+    // 꽝(dud): spawn a Mimic (3/2) on the OPPONENT's field — the risk of cracking chests
+    const o = g.players[0] === p ? g.players[1] : g.players[0];
+    const m: FieldMon = { uid: newUID(g), ...structuredClone(DB.MIMIC), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
+    o.field.push(m);
+    txt = "꽝! 상대 필드에 미믹(3/2) 소환"; kind = "mimic";
+    ctx.ev.push({ type: "summon", player: side(g, o), uid: m.uid });
+  }
   ctx.log(`<span class="t">${p.name}</span> 보물상자 → <span class="good">${txt}</span>`);
   ctx.ev.push({ type: "treasure", player: side(g, p), kind, text: txt, isBot: p.isBot });
 }
@@ -378,17 +402,17 @@ function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): 
 function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   const p = g.players[g.cur];
   const card = p.hand[idx];
-  if (!card || p.mana < card.cost) return;
+  if (!card || p.mana < playCost(card)) return;
 
   if (card.t === "starter") {
-    if (card.star === "trash") { p.mana -= card.cost; p.hand.splice(idx, 1); ctx.log(`<span class="t">${p.name}</span> ${card.name} → 이 카드 폐기`); }
-    else if (card.star === "chest") { p.mana -= card.cost; p.hand.splice(idx, 1); p.discard.push(card); openTreasure(g, ctx, p); }
-    else if (card.star === "mana") { p.mana -= card.cost; p.hand.splice(idx, 1); p.discard.push(card); p.maxMana++; ctx.log(`<span class="t">${p.name}</span> ${card.name} → 최대 마나 +1 (${p.maxMana})`); }
+    if (card.star === "trash") { p.mana -= playCost(card); p.hand.splice(idx, 1); ctx.log(`<span class="t">${p.name}</span> ${card.name} → 이 카드 폐기`); }
+    else if (card.star === "chest") { p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card); openTreasure(g, ctx, p); }
+    else if (card.star === "mana") { p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card); p.maxMana++; ctx.log(`<span class="t">${p.name}</span> ${card.name} → 최대 마나 +1 (${p.maxMana})`); }
     return;
   }
-  if (card.t === "mon") { p.mana -= card.cost; p.hand.splice(idx, 1); summonMonster(g, ctx, p, card); return; }
+  if (card.t === "mon") { p.mana -= playCost(card); p.hand.splice(idx, 1); summonMonster(g, ctx, p, card); return; }
   if (card.t === "spell") {
-    p.mana -= card.cost; p.hand.splice(idx, 1); p.discard.push(card);
+    p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card);
     if (tryNullSpell(g, ctx, card.name)) return;
     const a = card.act, v = card.val || 0, v2 = card.val2 || 0;
     if (a === "buffTurn" || a === "buffPerm") {
@@ -416,7 +440,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     return;
   }
   if (card.t === "trap") {
-    p.mana -= card.cost; p.hand.splice(idx, 1); p.traps.push({ card });
+    p.mana -= playCost(card); p.hand.splice(idx, 1); p.traps.push({ card });
     ctx.log(`<span class="t">${p.name}</span> 함정을 세트 (정체는 비공개)`);
     ctx.ev.push({ type: "trap", player: side(g, p), name: card.name });
     return;
@@ -487,8 +511,8 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
     case "buyMarket": {
       const card = g.market[action.i];
       if (card && p.mana >= card.cost) {
-        p.mana -= card.cost; p.deck.push(inst(g, card.id)); p.boughtCount++; p.taxFlag = true;
-        ctx.log(`<span class="t">${p.name}</span> 고정 마켓 ${card.name} 구매 (${card.cost}) <span class="muted">[다음 턴에 패로]</span>`);
+        p.mana -= card.cost; p.discard.push(inst(g, card.id)); p.boughtCount++; p.taxFlag = true;
+        ctx.log(`<span class="t">${p.name}</span> 고정 마켓 ${card.name} 구매 (${card.cost}) <span class="muted">[묘지로]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "market", i: action.i });
       }
       break;
@@ -496,8 +520,8 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
     case "buySupply": {
       const card = p.supply[action.i];
       if (card && p.mana >= card.cost) {
-        p.mana -= card.cost; p.deck.push(inst(g, card.id)); p.supply[action.i] = null; p.boughtCount++; p.taxFlag = true;
-        ctx.log(`<span class="t">${p.name}</span> 제시 마켓 ${card.name} 구매 (${card.cost}) <span class="muted">[다음 턴에 패로]</span>`);
+        p.mana -= card.cost; p.discard.push(inst(g, card.id)); p.supply[action.i] = null; p.boughtCount++; p.taxFlag = true;
+        ctx.log(`<span class="t">${p.name}</span> 제시 마켓 ${card.name} 구매 (${card.cost}) <span class="muted">[묘지로]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "supply", i: action.i });
       }
       break;

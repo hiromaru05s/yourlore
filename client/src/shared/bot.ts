@@ -4,7 +4,7 @@
 // Faithful port of the original heuristic ordering.
 // ============================================================
 import type { Action, CardInst, FieldMon, GameState } from "./types";
-import { cardValue, effAtk, effDef } from "./engine";
+import { cardValue, effAtk, effDef, playCost } from "./engine";
 
 export function botDecide(g: GameState): Action {
   const p = g.players[g.cur];
@@ -24,14 +24,16 @@ export function botDecide(g: GameState): Action {
   // 2) summon strongest affordable monster
   const monsters = p.hand
     .map((c, i) => ({ c, i }))
-    .filter((x) => x.c.t === "mon" && x.c.cost <= p.mana)
+    .filter((x) => x.c.t === "mon" && playCost(x.c) <= p.mana)
     .sort((a, b) => cardValue(b.c) - cardValue(a.c));
   if (monsters.length) return { type: "play", idx: monsters[0].i };
 
   // 3) removal / direct-damage / buff / utility spells
-  const spells = p.hand.map((c, i) => ({ c, i })).filter((x) => x.c.t === "spell" && x.c.cost <= p.mana);
+  const spells = p.hand.map((c, i) => ({ c, i })).filter((x) => x.c.t === "spell" && playCost(x.c) <= p.mana);
   const removal = spells.find((x) => (x.c.act === "destroyMon" || x.c.act === "weaken") && o.field.length > 0);
   if (removal) return { type: "play", idx: removal.i };
+  const trapbreak = spells.find((x) => x.c.act === "destroyTrap" && o.traps.length > 0);
+  if (trapbreak) return { type: "play", idx: trapbreak.i };
   const direct = spells.find((x) => x.c.act === "dmg" || x.c.act === "siphon");
   if (direct) return { type: "play", idx: direct.i };
   const buff = spells.find((x) => ["buffTurn", "buffPerm", "buffAllTurn"].includes(x.c.act || "") && p.field.length > 0);
@@ -40,11 +42,11 @@ export function botDecide(g: GameState): Action {
   if (util) return { type: "play", idx: util.i };
 
   // 4) set a trap (max 3 face-down)
-  const trap = p.hand.map((c, i) => ({ c, i })).find((x) => x.c.t === "trap" && x.c.cost <= p.mana);
+  const trap = p.hand.map((c, i) => ({ c, i })).find((x) => x.c.t === "trap" && playCost(x.c) <= p.mana);
   if (trap && p.traps.length < 3) return { type: "play", idx: trap.i };
 
   // 5) Attune (max mana +1) — always good
-  const attune = p.hand.findIndex((c) => c.star === "mana" && c.cost <= p.mana);
+  const attune = p.hand.findIndex((c) => c.star === "mana" && playCost(c) <= p.mana);
   if (attune >= 0) return { type: "play", idx: attune };
 
   // 6) buy from supply, then common market (value-maximizing affordable)
@@ -56,11 +58,11 @@ export function botDecide(g: GameState): Action {
   if (mbi >= 0) return { type: "buyMarket", i: mbi };
 
   // 7) spare mana → Pry Chest
-  const chest = p.hand.findIndex((c) => c.star === "chest" && c.cost <= p.mana);
+  const chest = p.hand.findIndex((c) => c.star === "chest" && playCost(c) <= p.mana);
   if (chest >= 0) return { type: "play", idx: chest };
 
   // 8) spare mana → Cull (deck thinning)
-  const cull = p.hand.findIndex((c) => c.star === "trash" && c.cost <= p.mana);
+  const cull = p.hand.findIndex((c) => c.star === "trash" && playCost(c) <= p.mana);
   if (cull >= 0) return { type: "play", idx: cull };
 
   // 9) nothing left

@@ -103,7 +103,7 @@ export abstract class BaseController implements BoardHandlers {
         if (e.type === "summon") A.summonIn(e.uid);
         else if (e.type === "damage") A.hpFeedback(e.player === this.you ? "me" : "opp", "dmg", e.amount);
         else if (e.type === "heal") A.hpFeedback(e.player === this.you ? "me" : "opp", "heal", e.amount);
-        else if (e.type === "buy") A.pileFlash(e.player === this.you ? "pile-myDeck" : "pile-oppDeck");
+        else if (e.type === "buy") A.pileFlash(e.player === this.you ? "pile-myDisc" : "pile-oppDisc");
         else if (e.type === "draw" && e.player === this.you) A.animateDraw(this.view.logEl.ownerDocument!.getElementById("hand") as HTMLElement, e.count);
         else if (e.type === "treasure" && !e.isBot && e.player === this.you) treasureModal(e.kind, e.text);
       }

@@ -22,6 +22,7 @@ export interface CardDef {
   star?: string; // starter kind: trash | chest | mana
   val?: number; // generic effect magnitude
   val2?: number; // secondary magnitude (e.g. heal+draw, atk+def buff)
+  play?: number; // play/cast cost (defaults to `cost`); buy cost stays `cost`
 }
 
 export interface CardInst extends CardDef {
