@@ -8,7 +8,7 @@
 import type {
   Action, CardInst, FieldMon, GameEvent, GameState, PlayerState, ReduceResult, Side, TrapSet,
 } from "./types";
-import { ALL_IDS, DB, STARTERS, STARTER_DECK, idsOfCost } from "./cards";
+import { ALL_IDS, DB, STARTERS, STARTER_DECK } from "./cards";
 
 // ---------- deterministic PRNG (mulberry32) ----------
 function rand(g: GameState): number {
@@ -32,6 +32,8 @@ function shuffle<T>(g: GameState, a: T[]): T[] {
 function newUID(g: GameState): string { return "u" + ++g.uidSeq; }
 function inst(g: GameState, id: string): CardInst { return { uid: newUID(g), ...structuredClone(DB[id]) }; }
 function starter(g: GameState, key: string): CardInst { return { uid: newUID(g), ...structuredClone(STARTERS[key]) }; }
+// clickable card name for the battle log (UI zooms the card on click)
+function cn(c: CardInst): string { return `<b class="log-card" data-card="${c.id}">${c.name}</b>`; }
 
 // ---------- pure read helpers (exported; used by UI + bot) ----------
 export function effMaxMana(p: PlayerState): number {
@@ -101,11 +103,9 @@ export function createGame(opts: CreateOpts): ReduceResult {
   const second = (1 - start) as Side;
   g.players[start].hp = 35; g.players[start].maxHp = 35;
   g.players[second].hp = 45; g.players[second].maxHp = 45;
-  // STANDARD market: one random card of each cost 1/2/3/4, mixed types
-  g.market = [1, 2, 3, 4].map((c) => {
-    const ids = idsOfCost(c);
-    return inst(g, ids[randInt(g, ids.length)]);
-  });
+  // STANDARD market: 8 random cards of cost 1–4 (mixed types)
+  const lowPool = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 4);
+  g.market = Array.from({ length: 8 }, () => inst(g, lowPool[randInt(g, lowPool.length)]));
 
   const ev: GameEvent[] = [];
   const ctx = makeCtx(g, ev);
@@ -421,7 +421,7 @@ function openTreasure(g: GameState, ctx: Ctx, p: PlayerState): void {
 function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): void {
   const m: FieldMon = { ...card, exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
   p.field.push(m);
-  ctx.log(`<span class="t">${p.name}</span> ${card.name} 소환 (공${card.atk}/방${card.def})`);
+  ctx.log(`<span class="t">${p.name}</span> ${cn(card)} 소환 (공${card.atk}/방${card.def})`);
   ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid });
   // 1) the monster's own summon effect resolves first (draw / breaktrap / burn ...)
   resolveOnSummon(g, ctx, m);
@@ -589,7 +589,7 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
       const card = g.market[action.i];
       if (card && p.mana >= card.cost) {
         p.mana -= card.cost; p.discard.push(inst(g, card.id)); p.boughtCount++; p.taxFlag = true;
-        ctx.log(`<span class="t">${p.name}</span> 고정 마켓 ${card.name} 구매 (${card.cost}) <span class="muted">[묘지로]</span>`);
+        ctx.log(`<span class="t">${p.name}</span> 고정 마켓 ${cn(card)} 구매 (${card.cost}) <span class="muted">[묘지로]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "market", i: action.i });
       }
       break;

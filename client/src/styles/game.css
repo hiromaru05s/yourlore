@@ -65,7 +65,7 @@
 .market-sub .sub-head { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
 .market-sub .sub-head .tag { font-family: var(--mono); font-size: 10px; letter-spacing: .22em; color: var(--brass); text-transform: uppercase; }
 .market-sub .sub-head .meta { font-size: 10px; color: var(--paper-faint); }
-.market-cards { display: flex; gap: 12px; justify-content: center; }
+.market-cards { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
 .market-div { width: 1px; background: linear-gradient(180deg, transparent, var(--line), transparent); }
 .refresh-btn { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border-radius: 5px; border: 1px solid var(--brass-dim); background: #ffffff08; color: var(--brass); }
 .refresh-btn:hover:not(:disabled) { border-color: var(--brass); color: var(--brass-hi); }
@@ -84,6 +84,8 @@
 .log .turn-head { font-family: var(--mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--paper-faint); margin: 10px 0 4px; padding: 4px 8px; border-left: 2px solid var(--brass-dim); background: #ffffff06; border-radius: 0 4px 4px 0; }
 .log .turn-head.bot { border-color: var(--vermil); }
 .log .ln { padding: 2px 0; color: var(--paper-dim); line-height: 1.35; }
+.log .log-card { color: var(--brass-hi); cursor: pointer; text-decoration: underline dotted; }
+.log .log-card:hover { color: var(--gold-glow); }
 .log-foot { padding: 10px 12px; border-top: 1px solid var(--line); }
 
 /* ---- target hint banner ---- */

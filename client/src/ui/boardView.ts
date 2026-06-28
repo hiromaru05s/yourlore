@@ -224,7 +224,7 @@ export class GameView {
     const fixed = this.q("fixedMarket");
     g.market.forEach((c, i) => {
       const aff = myTurn && !g.pending && me.mana >= c.cost;
-      const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff });
+      const card = cardEl(c, { buyable: aff, dim: !aff }); // board size so 8 fit
       if (aff) card.onclick = () => this.h.onBuyMarket(i);
       card.oncontextmenu = (e) => { e.preventDefault(); zoomCard(c); };
       fixed.appendChild(card);
