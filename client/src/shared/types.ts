@@ -20,9 +20,16 @@ export interface CardDef {
   act?: string; // spell action key
   react?: string; // trap reaction key
   star?: string; // starter kind: trash | chest | mana
-  val?: number; // generic effect magnitude
-  val2?: number; // secondary magnitude (e.g. heal+draw, atk+def buff)
+  val?: number; // generic effect magnitude (also enchant duration)
+  val2?: number; // secondary magnitude (e.g. heal+draw, atk+def buff, enchant amount)
   play?: number; // play/cast cost (defaults to `cost`); buy cost stays `cost`
+  ench?: string; // persistent field-enchantment key (spell stays on field)
+  tribe?: string; // tribe key (고독/고귀/포식/귀족) for synergy monsters
+}
+
+export interface Enchant {
+  card: CardInst;
+  turns: number;
 }
 
 export interface CardInst extends CardDef {
@@ -65,6 +72,9 @@ export interface PlayerState {
   supply: (CardInst | null)[];
   boughtCount: number;
   taxFlag: boolean;
+  enchants: Enchant[]; // active persistent spells (public, on field)
+  tribesFired: string[]; // "<tribe>:<count>" synergy thresholds already used this game
+  bonusDrawPerm: number; // permanent extra draw at turn start (귀족 3 synergy)
 }
 
 export interface Pending {

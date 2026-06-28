@@ -4,6 +4,7 @@
 // ============================================================
 import type { CardInst } from "../shared/types";
 import { cardEl } from "./cardView";
+import { TRIBES } from "../shared/cards";
 
 let root: HTMLElement | null = null;
 function getRoot(): HTMLElement {
@@ -71,6 +72,19 @@ export function treasureModal(kind: string, text: string): void {
   m.innerHTML = `<h2>보물상자</h2><div class="chest-reward">${ico}</div><div class="treasure-roll">${text}</div><div class="modal-row"></div>`;
   const ok = document.createElement("button"); ok.className = "btn btn-gold"; ok.textContent = "받기";
   ok.onclick = () => closeOverlay();
+  m.querySelector(".modal-row")!.appendChild(ok);
+  mount(m);
+}
+
+/** Tribe synergy info popup (tap a tribe tag). */
+export function showTribeInfo(tribe: string): void {
+  const t = TRIBES[tribe];
+  if (!t) return;
+  const m = document.createElement("div");
+  m.className = "modal";
+  m.innerHTML = `<h2>${t.name} 종족</h2><div style="text-align:left;color:var(--paper);font-size:13px;line-height:1.8">${t.bonuses.map((b) => "• " + b).join("<br>")}</div><p style="margin-top:8px">동족을 필드에 모으면 발동 · 게임당 각 1회</p><div class="modal-row"></div>`;
+  const ok = document.createElement("button");
+  ok.className = "btn btn-gold"; ok.textContent = "확인"; ok.onclick = () => closeOverlay();
   m.querySelector(".modal-row")!.appendChild(ok);
   mount(m);
 }

@@ -81,23 +81,30 @@ async function generateWithReplicate(row, modelName) {
 
 async function createReplicatePrediction(apiToken, modelName, row) {
   for (;;) {
-    const response = await fetch(`https://api.replicate.com/v1/models/${modelName}/predictions`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiToken}`,
-        "Content-Type": "application/json",
-        "Prefer": "wait=60",
-      },
-      body: JSON.stringify({
-        input: {
-          prompt: row.prompt,
-          aspect_ratio: process.env.REPLICATE_ASPECT_RATIO ?? "2:3",
-          output_format: "webp",
-          output_quality: Number(process.env.REPLICATE_OUTPUT_QUALITY ?? 90),
-          num_outputs: 1,
+    let response;
+    try {
+      response = await fetch(`https://api.replicate.com/v1/models/${modelName}/predictions`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${apiToken}`,
+          "Content-Type": "application/json",
+          "Prefer": "wait=60",
         },
-      }),
-    });
+        body: JSON.stringify({
+          input: {
+            prompt: row.prompt,
+            aspect_ratio: process.env.REPLICATE_ASPECT_RATIO ?? "2:3",
+            output_format: "webp",
+            output_quality: Number(process.env.REPLICATE_OUTPUT_QUALITY ?? 90),
+            num_outputs: 1,
+          },
+        }),
+      });
+    } catch (error) {
+      console.log(`network retry ${row.id}: ${error instanceof Error ? error.message : String(error)}`);
+      await sleep(5000);
+      continue;
+    }
 
     if (response.ok) return response.json();
 

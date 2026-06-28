@@ -5,6 +5,7 @@
 import type { CardInst, FieldMon, PlayerState } from "../shared/types";
 import { FRAME_BACK, frameFor } from "../shared/cards";
 import { effAtk, effDef } from "../shared/engine";
+import { showTribeInfo } from "./modal";
 
 export interface CardOpts {
   size?: "board" | "mkt" | "hand";
@@ -68,6 +69,11 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   }
   if (c.text && c.text !== "—") node.appendChild(el("div", "card-eff", c.text));
   if (opt.badge) node.appendChild(el("span", "badge", opt.badge));
+  if (c.tribe) {
+    const tag = el("div", "tribe-tag", `${c.tribe} ⓘ`);
+    tag.onclick = (e) => { e.stopPropagation(); showTribeInfo(c.tribe!); };
+    node.appendChild(tag);
+  }
   return node;
 }
 

@@ -41,6 +41,7 @@ export function redactFor(state: GameState, you: Side): GameState {
   });
   opp.hand = opp.hand.map((c) => placeholder(c.uid));
   opp.deck = opp.deck.map((c) => placeholder(c.uid));
+  opp.discard = opp.discard.map((c) => placeholder(c.uid)); // purchases stay secret
   opp.traps = opp.traps.map((t) => ({ card: placeholder(t.card.uid) }));
   // opponent's offered supply is only visible on their own turn
   if (g.cur === you) opp.supply = opp.supply.map((c) => (c ? placeholder(c.uid) : null));

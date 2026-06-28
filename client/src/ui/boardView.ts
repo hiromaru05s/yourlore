@@ -113,8 +113,12 @@ export class GameView {
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {
     row.innerHTML = "";
     const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, FRAME_BACK, null, "덱");
+    // your own discard is visible (top face-up); the opponent's is hidden — what
+    // you bought stays secret (purchases go to discard).
     const discTop = p.discard[p.discard.length - 1];
-    const discPile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, discTop ? frameFor(discTop.t) : null, discTop ?? null, "버림");
+    const discPile = isMe
+      ? this.pileEl("pile-myDisc", p.discard.length, discTop ? frameFor(discTop.t) : null, discTop ?? null, "버림")
+      : this.pileEl("pile-oppDisc", p.discard.length, p.discard.length ? FRAME_BACK : null, null, "버림");
 
     const block = document.createElement("div");
     block.className = "field-block" + (g.cur === g.players.indexOf(p) ? " is-turn" : "");
@@ -152,7 +156,13 @@ export class GameView {
         sz.appendChild(cb);
       }
     });
-    for (let i = p.traps.length; i < ST_SLOTS; i++) sz.appendChild(this.slotEl());
+    // persistent enchantments (public, face-up, with remaining-turn badge)
+    p.enchants.forEach((e) => {
+      const card = cardEl(e.card, { badge: `${e.turns}T` });
+      card.oncontextmenu = (ev) => { ev.preventDefault(); zoomCard(e.card); };
+      sz.appendChild(card);
+    });
+    for (let i = p.traps.length + p.enchants.length; i < ST_SLOTS; i++) sz.appendChild(this.slotEl());
 
     const zones = document.createElement("div");
     zones.append(mz, sz);

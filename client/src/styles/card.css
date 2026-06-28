@@ -115,6 +115,15 @@
   box-shadow: var(--shadow-1);
 }
 
+/* tribe tag — tap to see synergy bonuses */
+.tribe-tag {
+  position: absolute; top: 14.5%; left: 50%; transform: translateX(-50%);
+  font-size: 0.62em; font-weight: 700; letter-spacing: .02em;
+  color: #f6e7b6; background: #2a1c44dd; border: 1px solid var(--brass-dim);
+  border-radius: 4px; padding: 1px 6px; cursor: pointer; z-index: 4; white-space: nowrap;
+}
+.tribe-tag:hover { background: var(--brass); color: #2a1d08; border-color: var(--gold-glow); }
+
 /* ============================================================
    SLOTS — empty zone cells. SAME footprint as cards (consistency).
    ============================================================ */

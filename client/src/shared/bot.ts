@@ -13,18 +13,23 @@ export function botDecide(g: GameState): Action {
   // 0) resolve a pending target/pick automatically
   if (g.pending) return autoTarget(g);
 
+  const noAtk = g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "noAttack"));
+  const oppNoLow = o.enchants.some((e) => e.card.ench === "noSummonLow"); // blocks my cost<=3 summons
+
   // 1) attack — only productive attacks (direct, or a kill)
-  for (const m of p.field) {
-    if (m.exhausted) continue;
-    if (o.field.length === 0) return { type: "attack", uid: m.uid };
-    const a = effAtk(p, m);
-    if (o.field.some((tm) => a > effDef(tm))) return { type: "attack", uid: m.uid };
+  if (!noAtk) {
+    for (const m of p.field) {
+      if (m.exhausted) continue;
+      if (o.field.length === 0) return { type: "attack", uid: m.uid };
+      const a = effAtk(p, m);
+      if (o.field.some((tm) => a > effDef(tm))) return { type: "attack", uid: m.uid };
+    }
   }
 
-  // 2) summon strongest affordable monster
+  // 2) summon strongest affordable monster (respect 봉쇄령)
   const monsters = p.hand
     .map((c, i) => ({ c, i }))
-    .filter((x) => x.c.t === "mon" && playCost(x.c) <= p.mana)
+    .filter((x) => x.c.t === "mon" && playCost(x.c) <= p.mana && !(oppNoLow && (x.c.cost ?? 0) <= 3))
     .sort((a, b) => cardValue(b.c) - cardValue(a.c));
   if (monsters.length) return { type: "play", idx: monsters[0].i };
 
@@ -40,6 +45,8 @@ export function botDecide(g: GameState): Action {
   if (buff) return { type: "play", idx: buff.i };
   const util = spells.find((x) => ["draw", "seek", "crash", "exile", "recall", "heal", "manaUp"].includes(x.c.act || ""));
   if (util) return { type: "play", idx: util.i };
+  const ench = spells.find((x) => !!x.c.ench);
+  if (ench) return { type: "play", idx: ench.i };
 
   // 4) set a trap (max 3 face-down)
   const trap = p.hand.map((c, i) => ({ c, i })).find((x) => x.c.t === "trap" && playCost(x.c) <= p.mana);

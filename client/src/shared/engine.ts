@@ -73,6 +73,7 @@ function mkPlayer(g: GameState, id: string, name: string, isBot: boolean): Playe
     deck, hand: [], discard: [], exile: [],
     field: [], traps: [], supply: [],
     boughtCount: 0, taxFlag: false,
+    enchants: [], tribesFired: [], bonusDrawPerm: 0,
   };
 }
 
@@ -95,10 +96,11 @@ export function createGame(opts: CreateOpts): ReduceResult {
   };
   g.players[0] = mkPlayer(g, opts.p0.id, opts.p0.name, !!opts.p0.isBot);
   g.players[1] = mkPlayer(g, opts.p1.id, opts.p1.name, !!opts.p1.isBot);
-  // going-second compensation: the non-starting player begins with 35 max HP
-  const second = (1 - (opts.starting ?? 0)) as Side;
-  g.players[second].hp = 35;
-  g.players[second].maxHp = 35;
+  // starting player 35 HP, the player going second 45 HP (tempo compensation)
+  const start = (opts.starting ?? 0) as Side;
+  const second = (1 - start) as Side;
+  g.players[start].hp = 35; g.players[start].maxHp = 35;
+  g.players[second].hp = 45; g.players[second].maxHp = 45;
   // STANDARD market: one random card of each cost 1/2/3/4, mixed types
   g.market = [1, 2, 3, 4].map((c) => {
     const ids = idsOfCost(c);
@@ -180,9 +182,37 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
   p.manaPenalty = p.nextPenalty || 0; p.nextPenalty = 0;
   p.mana = effMaxMana(p);
   tickExile(ctx, p);
-  if (!first) { rollSupply(g, p); ctx.drawN(p, 3); }
+  if (!first) {
+    rollSupply(g, p);
+    const enchDraw = p.enchants.filter((e) => e.card.ench === "bonusDraw").reduce((s, e) => s + (e.card.val2 || 0), 0);
+    ctx.drawN(p, 3 + p.bonusDrawPerm + enchDraw);
+  }
+  tickEnchants(g, ctx, p);
   g.phase = "main";
   ctx.ev.push({ type: "turnHeader", turn: g.turn, name: p.name, isBot: p.isBot });
+}
+
+/** Persistent-spell upkeep. noAttack ticks every turn; owner-scoped enchants tick on the owner's turn. */
+function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
+  for (const pl of g.players) {
+    pl.enchants = pl.enchants.filter((e) => {
+      const ownerTurn = pl === cur;
+      const everyTurn = e.card.ench === "noAttack";
+      if (everyTurn || ownerTurn) {
+        e.turns--;
+        if (e.turns <= 0) { pl.discard.push(e.card); ctx.log(`  └ ${e.card.name} 효과 종료`); return false; }
+      }
+      return true;
+    });
+  }
+}
+function noAttackActive(g: GameState): boolean {
+  return g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "noAttack"));
+}
+function summonBlockedLow(g: GameState, summoner: PlayerState, card: CardInst): boolean {
+  if ((card.cost ?? 0) > 3) return false;
+  const opp = g.players[0] === summoner ? g.players[1] : g.players[0];
+  return opp.enchants.some((e) => e.card.ench === "noSummonLow");
 }
 function tickExile(ctx: Ctx, p: PlayerState): void {
   const back: CardInst[] = [];
@@ -397,6 +427,37 @@ function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): 
   const pit = takeTrap(o, "pitfall");
   if (pit) { ctx.log(`  └ <span class="dmg">함정 ${pit.name}!</span> ${card.name} 파괴`); ctx.destroyMonster(p, m); return; }
   resolveOnSummon(g, ctx, m);
+  checkTribe(g, ctx, p, m);
+}
+
+// ---- tribe synergies (each threshold fires once per game per player) ----
+function strongest(field: FieldMon[]): FieldMon | undefined {
+  return [...field].sort((a, b) => (b.atk! + b.def!) - (a.atk! + a.def!))[0];
+}
+function checkTribe(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): void {
+  const tribe = m.tribe;
+  if (!tribe) return;
+  const count = p.field.filter((x) => x.tribe === tribe).length;
+  const o = g.players[0] === p ? g.players[1] : g.players[0];
+  const fire = (n: number): boolean => { const k = `${tribe}:${n}`; if (p.tribesFired.includes(k)) return false; p.tribesFired.push(k); return true; };
+  if (count >= 3 && fire(3)) applyTribe(g, ctx, p, o, tribe, 3);
+  else if (count >= 2 && fire(2)) applyTribe(g, ctx, p, o, tribe, 2);
+}
+function applyTribe(g: GameState, ctx: Ctx, p: PlayerState, o: PlayerState, tribe: string, n: number): void {
+  ctx.log(`<span class="good">[${tribe}] 동족 ${n}마리 시너지!</span>`);
+  if (tribe === "고독") {
+    const hp = n === 2 ? 10 : 30; p.maxHp += hp; p.hp += hp; ctx.ev.push({ type: "heal", player: g.players.indexOf(p) as Side, amount: hp });
+    if (n === 3) p.maxMana += 1;
+  } else if (tribe === "고귀") {
+    p.maxMana += n === 2 ? 1 : 3;
+    if (n === 3) for (let i = 0; i < 2 && o.traps.length; i++) { const t = o.traps.splice(randInt(g, o.traps.length), 1)[0]; o.discard.push(t.card); }
+  } else if (tribe === "포식") {
+    const kills = n === 2 ? 1 : 2; for (let i = 0; i < kills; i++) { const t = strongest(o.field); if (t) ctx.destroyMonster(o, t); }
+    ctx.dealDamage(o, n === 2 ? 4 : 10, "포식 시너지");
+  } else if (tribe === "귀족") {
+    if (n === 2) p.maxMana = Math.max(1, p.maxMana - 1);
+    else { p.maxMana += 5; p.bonusDrawPerm += 2; p.maxHp += 15; p.hp += 15; ctx.ev.push({ type: "heal", player: g.players.indexOf(p) as Side, amount: 15 }); }
+  }
 }
 
 function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
@@ -410,10 +471,20 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     else if (card.star === "mana") { p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card); p.maxMana++; ctx.log(`<span class="t">${p.name}</span> ${card.name} → 최대 마나 +1 (${p.maxMana})`); }
     return;
   }
-  if (card.t === "mon") { p.mana -= playCost(card); p.hand.splice(idx, 1); summonMonster(g, ctx, p, card); return; }
+  if (card.t === "mon") {
+    if (summonBlockedLow(g, p, card)) { ctx.log(`  └ <span class="dmg">봉쇄령</span>: 코스트 ${card.cost} 몬스터 소환 불가`); return; }
+    p.mana -= playCost(card); p.hand.splice(idx, 1); summonMonster(g, ctx, p, card); return;
+  }
   if (card.t === "spell") {
     p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card);
     if (tryNullSpell(g, ctx, card.name)) return;
+    if (card.ench) {
+      p.discard.pop(); // stays on the field instead of going to discard
+      p.enchants.push({ card, turns: card.val || 1 });
+      ctx.log(`<span class="t">${p.name}</span> ${card.name} 발동 (지속 ${card.val}턴)`);
+      ctx.ev.push({ type: "trap", player: side(g, p), name: card.name });
+      return;
+    }
     const a = card.act, v = card.val || 0, v2 = card.val2 || 0;
     if (a === "buffTurn" || a === "buffPerm") {
       if (!p.field.length) { ctx.log("  └ 대상 몬스터 없음"); return; }
@@ -530,6 +601,7 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
       if (p.mana >= 1) { p.mana -= 1; rollSupply(g, p); ctx.log(`<span class="t">${p.name}</span> 제시 갱신 (1 마나)`); }
       break;
     case "attack": {
+      if (noAttackActive(g)) { ctx.log(`  └ <span class="dmg">평화 협정</span>: 공격 불가`); break; }
       const m = p.field.find((x) => x.uid === action.uid);
       if (!m || m.exhausted) break;
       const o = g.players[1 - g.cur];
