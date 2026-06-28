@@ -25,6 +25,8 @@ export interface CardDef {
   play?: number; // play/cast cost (defaults to `cost`); buy cost stays `cost`
   ench?: string; // persistent field-enchantment key (spell stays on field)
   tribe?: string; // tribe key (고독/고귀/포식/귀족) for synergy monsters
+  nameJa?: string; // Japanese name (falls back to name)
+  textJa?: string; // Japanese effect text (falls back to text)
 }
 
 export interface Enchant {

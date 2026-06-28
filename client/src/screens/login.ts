@@ -1,9 +1,11 @@
 // ============================================================
 // LORE — login / register screen. Email-only registration with
-// a password (no username needed; display defaults to email).
+// a password. Language dropdown (KO/JA) in the top-right.
 // ============================================================
 import type { App, Screen } from "../router";
 import { api } from "../net/api";
+import { t, onLangChange } from "../i18n";
+import { langSelectEl } from "../ui/langSelect";
 
 export function mountLogin(app: App): Screen {
   let mode: "login" | "register" = "login";
@@ -11,19 +13,21 @@ export function mountLogin(app: App): Screen {
   const wrap = document.createElement("div");
   wrap.className = "screen";
   wrap.innerHTML = `
+    <div class="topright-lang"></div>
     <div class="screen-brand"><div class="mark"></div><h1>LORE</h1></div>
     <div class="panel auth-card">
       <div class="auth-tabs">
-        <button data-m="login" class="on">로그인</button>
-        <button data-m="register">회원가입</button>
+        <button data-m="login" class="on">${t("login.tab.login")}</button>
+        <button data-m="register">${t("login.tab.register")}</button>
       </div>
-      <div class="sub" id="authSub">이메일로 로그인하세요.</div>
-      <div class="form-row"><label class="field-label">이메일</label><input class="input" id="email" type="email" placeholder="you@example.com" autocomplete="email"></div>
-      <div class="form-row"><label class="field-label">비밀번호</label><input class="input" id="password" type="password" placeholder="••••••••" autocomplete="current-password"></div>
-      <button class="btn btn-gold btn-block" id="submit">로그인</button>
+      <div class="sub" id="authSub">${t("login.sub.login")}</div>
+      <div class="form-row"><label class="field-label">${t("login.email")}</label><input class="input" id="email" type="email" placeholder="you@example.com" autocomplete="email"></div>
+      <div class="form-row"><label class="field-label">${t("login.password")}</label><input class="input" id="password" type="password" placeholder="••••••••" autocomplete="current-password"></div>
+      <button class="btn btn-gold btn-block" id="submit">${t("login.tab.login")}</button>
       <div class="auth-error" id="err"></div>
     </div>`;
   app.root.appendChild(wrap);
+  wrap.querySelector(".topright-lang")!.appendChild(langSelectEl());
 
   const $ = (id: string) => wrap.querySelector("#" + id) as HTMLElement;
   const email = $("email") as HTMLInputElement;
@@ -34,8 +38,8 @@ export function mountLogin(app: App): Screen {
   const setMode = (m: "login" | "register") => {
     mode = m;
     wrap.querySelectorAll(".auth-tabs button").forEach((b) => b.classList.toggle("on", (b as HTMLElement).dataset.m === m));
-    $("authSub").textContent = m === "login" ? "이메일로 로그인하세요." : "이메일과 비밀번호만으로 가입할 수 있습니다.";
-    submit.textContent = m === "login" ? "로그인" : "회원가입";
+    $("authSub").textContent = m === "login" ? t("login.sub.login") : t("login.sub.register");
+    submit.textContent = m === "login" ? t("login.tab.login") : t("login.tab.register");
     err.textContent = "";
   };
   wrap.querySelectorAll(".auth-tabs button").forEach((b) => {
@@ -46,15 +50,15 @@ export function mountLogin(app: App): Screen {
     err.textContent = "";
     const e = email.value.trim();
     const p = password.value;
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) { err.textContent = "올바른 이메일을 입력하세요."; return; }
-    if (p.length < 6) { err.textContent = "비밀번호는 6자 이상이어야 합니다."; return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) { err.textContent = t("login.err.email"); return; }
+    if (p.length < 6) { err.textContent = t("login.err.pw"); return; }
     submit.disabled = true;
-    submit.textContent = "처리 중…";
+    submit.textContent = t("login.processing");
     try {
       app.user = mode === "login" ? await api.login(e, p) : await api.register(e, p);
       app.home();
     } catch (ex) {
-      err.textContent = (ex as Error).message || "오류가 발생했습니다.";
+      err.textContent = (ex as Error).message || t("login.err.generic");
       submit.disabled = false;
       setMode(mode);
     }
@@ -62,5 +66,6 @@ export function mountLogin(app: App): Screen {
   submit.onclick = go;
   password.onkeydown = (ev) => { if (ev.key === "Enter") go(); };
 
-  return {};
+  const unsub = onLangChange(() => app.login());
+  return { destroy: unsub };
 }

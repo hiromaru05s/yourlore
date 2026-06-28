@@ -12,6 +12,7 @@ import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog } from "../ui/log";
 import * as A from "../ui/anim";
 import { cardPicker, confirmDialog, treasureModal, winModal } from "../ui/modal";
+import { t, onLangChange } from "../i18n";
 
 export interface ControllerExits {
   onHome(): void;
@@ -26,6 +27,7 @@ export abstract class BaseController implements BoardHandlers {
   protected exits: ControllerExits;
   private winShown = false;
   private flyAfter: { frame: string; rect: DOMRect | null; discId: string }[] = [];
+  private unsubLang: () => void;
 
   constructor(root: HTMLElement, you: Side, exits: ControllerExits) {
     this.you = you;
@@ -33,6 +35,8 @@ export abstract class BaseController implements BoardHandlers {
     this.view = new GameView(root, you, this);
     this.log = new GameLog(this.view.logEl);
     document.addEventListener("keydown", this.onKey);
+    // re-render the board (labels + card names) when language changes
+    this.unsubLang = onLangChange(() => { if (this.state) this.view.render(this.state); });
   }
 
   private onKey = (e: KeyboardEvent) => { if (e.key === "Escape") A.closeZoom(); };
@@ -50,7 +54,7 @@ export abstract class BaseController implements BoardHandlers {
   onRefresh() { this.submit({ type: "refresh" }); }
   onEndTurn() { this.submit({ type: "endTurn" }); }
   async onSurrender() {
-    const ok = await confirmDialog({ title: "기권", body: "정말 기권하시겠습니까?", confirm: "YES", cancel: "NO", danger: true });
+    const ok = await confirmDialog({ title: t("surrender.title"), body: t("surrender.body"), confirm: t("common.yes"), cancel: t("common.no"), danger: true });
     if (ok) this.submit({ type: "surrender", player: this.you });
   }
 
@@ -131,11 +135,11 @@ export abstract class BaseController implements BoardHandlers {
     const won = this.state.winner === this.you;
     const meHp = Math.max(0, this.state.players[this.you].hp);
     const oppHp = Math.max(0, this.state.players[1 - this.you].hp);
-    const detail = `내 체력 ${meHp} · 상대 체력 ${oppHp}`;
+    const detail = `${t("modal.hp.me")} ${meHp} · ${t("modal.hp.opp")} ${oppHp}`;
     setTimeout(() => winModal(won, detail, () => this.exits.onRematch(), () => this.exits.onHome()), 400);
   }
 
-  destroy(): void { document.removeEventListener("keydown", this.onKey); }
+  destroy(): void { document.removeEventListener("keydown", this.onKey); this.unsubLang(); }
 }
 
 // ============================================================

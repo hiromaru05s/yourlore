@@ -5,6 +5,7 @@
 import type { CardInst } from "../shared/types";
 import { frameFor, TRIBES } from "../shared/cards";
 import { cardEl } from "./cardView";
+import { t, getLang } from "../i18n";
 
 export type ViewSide = "me" | "opp";
 
@@ -102,10 +103,10 @@ export function zoomCard(c: CardInst): void {
   wrap.className = "zoom-wrap";
   wrap.appendChild(cardEl(c));
   if (c.tribe && TRIBES[c.tribe]) {
-    const t = TRIBES[c.tribe];
+    const info = TRIBES[c.tribe][getLang()];
     const panel = document.createElement("div");
     panel.className = "zoom-tribe";
-    panel.innerHTML = `<h3>${t.name} 종족</h3><div class="note">${t.note}</div>` + t.bonuses.map((b) => `<div class="b">• ${b}</div>`).join("");
+    panel.innerHTML = `<h3>${info.name} ${t("tribe.suffix")}</h3><div class="note">${info.note}</div>` + info.bonuses.map((b) => `<div class="b">• ${b}</div>`).join("");
     wrap.appendChild(panel);
   }
   ov.appendChild(wrap);

@@ -3,9 +3,10 @@
 // (board / market / hand / pile / zoom) so sizing stays consistent.
 // ============================================================
 import type { CardInst, FieldMon, PlayerState } from "../shared/types";
-import { FRAME_BACK, frameFor } from "../shared/cards";
+import { FRAME_BACK, frameFor, TRIBES } from "../shared/cards";
 import { effAtk, effDef } from "../shared/engine";
 import { showTribeInfo } from "./modal";
+import { cardName, cardText, getLang } from "../i18n";
 
 export interface CardOpts {
   size?: "board" | "mkt" | "hand";
@@ -56,7 +57,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
 
   const cost = opt.costOverride != null ? opt.costOverride : c.cost;
   node.appendChild(el("div", "card-cost", String(cost)));
-  node.appendChild(el("div", "card-name", c.name));
+  node.appendChild(el("div", "card-name", cardName(c)));
   node.appendChild(artEl(c.id));
 
   if (c.t === "mon") {
@@ -67,10 +68,12 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     ad.appendChild(el("span", "ad-def", "🛡 " + d));
     node.appendChild(ad);
   }
-  if (c.text && c.text !== "—") node.appendChild(el("div", "card-eff", c.text));
+  const txt = cardText(c);
+  if (txt && txt !== "—") node.appendChild(el("div", "card-eff", txt));
   if (opt.badge) node.appendChild(el("span", "badge", opt.badge));
   if (c.tribe) {
-    const tag = el("div", "tribe-tag", `${c.tribe} ⓘ`);
+    const tn = TRIBES[c.tribe]?.[getLang()]?.name ?? c.tribe;
+    const tag = el("div", "tribe-tag", `${tn} ⓘ`);
     tag.onclick = (e) => { e.stopPropagation(); showTribeInfo(c.tribe!); };
     node.appendChild(tag);
   }

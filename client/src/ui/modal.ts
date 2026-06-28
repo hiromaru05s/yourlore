@@ -5,6 +5,7 @@
 import type { CardInst } from "../shared/types";
 import { cardEl } from "./cardView";
 import { TRIBES } from "../shared/cards";
+import { t, getLang } from "../i18n";
 
 let root: HTMLElement | null = null;
 function getRoot(): HTMLElement {
@@ -42,12 +43,12 @@ export function confirmDialog(opts: { title: string; body?: string; confirm: str
 export function winModal(won: boolean, detail: string, onAgain: () => void, onHome: () => void): void {
   const m = document.createElement("div");
   m.className = "modal";
-  const title = won ? "승리" : "패배";
+  const title = won ? t("modal.win") : t("modal.lose");
   const color = won ? "var(--gold-glow)" : "var(--vermil-hi)";
-  m.innerHTML = `<h2 style="color:${color}">${title}</h2><p style="color:var(--paper);font-size:14px">${detail}</p><p>LORE · 게임 종료</p><div class="modal-row"></div>`;
+  m.innerHTML = `<h2 style="color:${color}">${title}</h2><p style="color:var(--paper);font-size:14px">${detail}</p><p>${t("modal.gameover")}</p><div class="modal-row"></div>`;
   const row = m.querySelector(".modal-row")!;
-  const home = document.createElement("button"); home.className = "btn btn-ghost"; home.textContent = "홈으로";
-  const again = document.createElement("button"); again.className = "btn btn-gold"; again.textContent = "다시 하기";
+  const home = document.createElement("button"); home.className = "btn btn-ghost"; home.textContent = t("modal.home");
+  const again = document.createElement("button"); again.className = "btn btn-gold"; again.textContent = t("modal.again");
   home.onclick = () => { closeOverlay(); onHome(); };
   again.onclick = () => { closeOverlay(); onAgain(); };
   row.append(home, again);
@@ -69,8 +70,8 @@ export function treasureModal(kind: string, text: string): void {
   const ico = kind === "mana" ? "◆" : kind === "hp" ? "✚" : kind === "mimic" ? "👹" : "❤";
   const m = document.createElement("div");
   m.className = "modal";
-  m.innerHTML = `<h2>보물상자</h2><div class="chest-reward">${ico}</div><div class="treasure-roll">${text}</div><div class="modal-row"></div>`;
-  const ok = document.createElement("button"); ok.className = "btn btn-gold"; ok.textContent = "받기";
+  m.innerHTML = `<h2>${t("treasure.title")}</h2><div class="chest-reward">${ico}</div><div class="treasure-roll">${text}</div><div class="modal-row"></div>`;
+  const ok = document.createElement("button"); ok.className = "btn btn-gold"; ok.textContent = t("treasure.get");
   ok.onclick = () => closeOverlay();
   m.querySelector(".modal-row")!.appendChild(ok);
   mount(m);
@@ -78,13 +79,13 @@ export function treasureModal(kind: string, text: string): void {
 
 /** Tribe synergy info popup (tap a tribe tag). */
 export function showTribeInfo(tribe: string): void {
-  const t = TRIBES[tribe];
-  if (!t) return;
+  const info = TRIBES[tribe]?.[getLang()];
+  if (!info) return;
   const m = document.createElement("div");
   m.className = "modal";
-  m.innerHTML = `<h2>${t.name} 종족</h2><div style="text-align:left;color:var(--paper);font-size:13px;line-height:1.8">${t.bonuses.map((b) => "• " + b).join("<br>")}</div><p style="margin-top:8px">동족을 필드에 모으면 발동 · 게임당 각 1회</p><div class="modal-row"></div>`;
+  m.innerHTML = `<h2>${info.name} ${t("tribe.suffix")}</h2><div style="color:var(--vermil-hi);font-size:12px;margin-bottom:10px">${info.note}</div><div style="text-align:left;color:var(--paper);font-size:13px;line-height:1.8">${info.bonuses.map((b) => "• " + b).join("<br>")}</div><p style="margin-top:8px">${t("tribe.footer")}</p><div class="modal-row"></div>`;
   const ok = document.createElement("button");
-  ok.className = "btn btn-gold"; ok.textContent = "확인"; ok.onclick = () => closeOverlay();
+  ok.className = "btn btn-gold"; ok.textContent = t("common.confirm"); ok.onclick = () => closeOverlay();
   m.querySelector(".modal-row")!.appendChild(ok);
   mount(m);
 }
@@ -101,7 +102,7 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
     grid.appendChild(card);
   });
   const cancel = document.createElement("button");
-  cancel.className = "btn btn-ghost"; cancel.textContent = "취소";
+  cancel.className = "btn btn-ghost"; cancel.textContent = t("common.cancel");
   cancel.onclick = () => { closeOverlay(); onPick(null); };
   m.querySelector(".modal-row")!.appendChild(cancel);
   mount(m);

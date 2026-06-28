@@ -15,6 +15,11 @@ export default {
     const url = new URL(req.url);
     const path = url.pathname;
 
+    // ---- geo (for default language) ----
+    if (path === "/api/geo") {
+      const country = req.headers.get("CF-IPCountry") || "";
+      return new Response(JSON.stringify({ country }), { headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
+    }
     // ---- auth / REST ----
     if (path.startsWith("/api/")) {
       return handleAuth(env, req, path.slice(4)); // strip "/api"
