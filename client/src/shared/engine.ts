@@ -423,11 +423,17 @@ function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): 
   p.field.push(m);
   ctx.log(`<span class="t">${p.name}</span> ${card.name} 소환 (공${card.atk}/방${card.def})`);
   ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid });
+  // 1) the monster's own summon effect resolves first (draw / breaktrap / burn ...)
+  resolveOnSummon(g, ctx, m);
+  // 2) tribe synergy (also a summon-triggered effect)
+  checkTribe(g, ctx, p, m);
+  // 3) THEN the opponent's Pitfall reacts — so a summon effect gets its chance first
   const o = g.players[1 - g.cur];
   const pit = takeTrap(o, "pitfall");
-  if (pit) { ctx.log(`  └ <span class="dmg">함정 ${pit.name}!</span> ${card.name} 파괴`); ctx.destroyMonster(p, m); return; }
-  resolveOnSummon(g, ctx, m);
-  checkTribe(g, ctx, p, m);
+  if (pit && p.field.some((x) => x.uid === m.uid)) {
+    ctx.log(`  └ <span class="dmg">함정 ${pit.name}!</span> ${card.name} 파괴`);
+    ctx.destroyMonster(p, m);
+  }
 }
 
 // ---- tribe synergies (each threshold fires once per game per player) ----
