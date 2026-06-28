@@ -14,7 +14,8 @@ export function setLang(l: Lang): void {
   if (l === current) return;
   current = l;
   try { localStorage.setItem("lore_lang", l); } catch { /* ignore */ }
-  listeners.forEach((f) => f());
+  // snapshot: a listener may re-mount a screen (adding/removing listeners) mid-iteration
+  [...listeners].forEach((f) => f());
 }
 /** Pick saved language, else the IP-based default. */
 export function initLang(ipDefault: Lang): void {
