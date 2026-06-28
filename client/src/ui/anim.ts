@@ -3,7 +3,7 @@
 // touch game state, only the DOM.
 // ============================================================
 import type { CardInst } from "../shared/types";
-import { frameFor } from "../shared/cards";
+import { frameFor, TRIBES } from "../shared/cards";
 import { cardEl } from "./cardView";
 
 export type ViewSide = "me" | "opp";
@@ -98,7 +98,17 @@ export function zoomCard(c: CardInst): void {
   const ov = document.createElement("div");
   ov.className = "zoom-overlay";
   ov.id = "zoomOverlay";
-  ov.appendChild(cardEl(c));
+  const wrap = document.createElement("div");
+  wrap.className = "zoom-wrap";
+  wrap.appendChild(cardEl(c));
+  if (c.tribe && TRIBES[c.tribe]) {
+    const t = TRIBES[c.tribe];
+    const panel = document.createElement("div");
+    panel.className = "zoom-tribe";
+    panel.innerHTML = `<h3>${t.name} 종족</h3><div class="note">${t.note}</div>` + t.bonuses.map((b) => `<div class="b">• ${b}</div>`).join("");
+    wrap.appendChild(panel);
+  }
+  ov.appendChild(wrap);
   ov.onclick = closeZoom;
   ov.oncontextmenu = (e) => { e.preventDefault(); closeZoom(); };
   document.body.appendChild(ov);

@@ -65,10 +65,10 @@
 }
 .card-art:has(img)::after { content: none; }
 .card-eff {
-  position: absolute; left: 8%; right: 8%;
+  position: absolute; left: 7%; right: 7%;
   top: 66.4%; height: 16.2%;
-  font-size: 0.74em; line-height: 1.18; color: #2a2114;
-  text-align: center; overflow: hidden;
+  font-size: 0.45em; line-height: 1.12; color: #2a2114;
+  text-align: center; overflow: hidden; word-break: keep-all;
   display: flex; align-items: center; justify-content: center;
 }
 .card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 26.4%; }

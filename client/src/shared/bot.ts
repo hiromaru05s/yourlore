@@ -39,11 +39,13 @@ export function botDecide(g: GameState): Action {
   if (removal) return { type: "play", idx: removal.i };
   const trapbreak = spells.find((x) => x.c.act === "destroyTrap" && o.traps.length > 0);
   if (trapbreak) return { type: "play", idx: trapbreak.i };
+  const wipe = spells.find((x) => x.c.act === "wipeBack" && p.field.length === 0 && (o.traps.length + o.enchants.length) > 0);
+  if (wipe) return { type: "play", idx: wipe.i };
   const direct = spells.find((x) => x.c.act === "dmg" || x.c.act === "siphon");
   if (direct) return { type: "play", idx: direct.i };
   const buff = spells.find((x) => ["buffTurn", "buffPerm", "buffAllTurn"].includes(x.c.act || "") && p.field.length > 0);
   if (buff) return { type: "play", idx: buff.i };
-  const util = spells.find((x) => ["draw", "seek", "crash", "exile", "recall", "heal", "manaUp"].includes(x.c.act || ""));
+  const util = spells.find((x) => ["draw", "seek", "crash", "exile", "recall", "heal", "manaUp", "manaDown", "manaUpGain", "chestToMana"].includes(x.c.act || ""));
   if (util) return { type: "play", idx: util.i };
   const ench = spells.find((x) => !!x.c.ench);
   if (ench) return { type: "play", idx: ench.i };

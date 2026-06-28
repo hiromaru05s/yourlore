@@ -39,16 +39,16 @@ const CORE: Record<string, CardDef> = {
   S15: { id: "S15", t: "spell", cost: 4, name: "룬 파열", text: "적 몬스터 1체를 파괴", act: "destroyMon" },
   // Traps (vals follow the same curve as the generated traps → monotonic)
   T1: { id: "T1", t: "trap", cost: 1, name: "하프 가드", text: "공격 절반 + 공격측에 1 데미지", react: "half", val: 1 },
-  T8: { id: "T8", t: "trap", cost: 1, name: "가시 덫", text: "공격을 받으면 공격측에 2 데미지", react: "spikes", val: 2 },
+  T8: { id: "T8", t: "trap", cost: 1, name: "가시 덫", text: "공격을 받으면 공격측에 4 데미지", react: "spikes", val: 4 },
   T2: { id: "T2", t: "trap", cost: 2, name: "널 필드", text: "상대가 발동한 마법 1장을 무효화", react: "nullspell" },
   T3: { id: "T3", t: "trap", cost: 2, name: "함정 구덩이", text: "상대가 소환한 몬스터를 파괴", react: "pitfall" },
   T6: { id: "T6", t: "trap", cost: 2, name: "카운터 서지", text: "공격 몬스터 파괴 + 공격력 절반 반사", react: "counter" },
-  T9: { id: "T9", t: "trap", cost: 2, name: "역류", text: "이번 공격을 무효화한다", react: "fullguard" },
+  T9: { id: "T9", t: "trap", cost: 2, name: "역류", text: "공격 무효 + 공격측에 2 데미지", react: "fullguard", val: 2 },
   T4: { id: "T4", t: "trap", cost: 3, name: "미러 손", text: "공격해온 몬스터의 공격력만큼 반사", react: "reflect" },
-  T10: { id: "T10", t: "trap", cost: 3, name: "영혼 포식", text: "공격 몬스터 파괴 + 체력 5 회복", react: "devour", val: 5 },
+  T10: { id: "T10", t: "trap", cost: 3, name: "영혼 포식", text: "공격 몬스터 파괴 + 체력 7 회복", react: "devour", val: 7 },
   T11: { id: "T11", t: "trap", cost: 3, name: "시간 왜곡", text: "공격을 받으면 카드 3장 드로우", react: "drawtrap", val: 3 },
-  T12: { id: "T12", t: "trap", cost: 4, name: "절대 방벽", text: "이번 공격 무효 + 공격 몬스터 방어 -4(영구)", react: "bulwark", val: 4 },
-  T13: { id: "T13", t: "trap", cost: 4, name: "천벌", text: "공격 몬스터 파괴 + 상대 체력에 7 데미지", react: "judgment", val: 7 },
+  T12: { id: "T12", t: "trap", cost: 4, name: "절대 방벽", text: "이번 공격 무효 + 공격 몬스터 방어 -6(영구)", react: "bulwark", val: 6 },
+  T13: { id: "T13", t: "trap", cost: 4, name: "천벌", text: "공격 몬스터 파괴 + 상대 체력에 10 데미지", react: "judgment", val: 10 },
   // Special token (꽝 from treasure) — never appears in markets (cost 0)
   MIMIC: { id: "MIMIC", t: "mon", cost: 0, name: "미믹", atk: 3, def: 2, text: "보물상자 꽝으로 상대 필드에 소환된다" },
   // Trap-destroy spells (no art yet → ◆ placeholder)
@@ -76,14 +76,36 @@ const CORE: Record<string, CardDef> = {
   TAR2: { id: "TAR2", t: "mon", cost: 2, name: "몰락 귀족", atk: 4, def: 2, tribe: "귀족", text: "[귀족] 동족 시너지" },
   TAR5: { id: "TAR5", t: "mon", cost: 5, name: "귀족 영주", atk: 5, def: 5, tribe: "귀족", text: "[귀족] 동족 시너지" },
   TAR7: { id: "TAR7", t: "mon", cost: 7, name: "귀족 왕", atk: 7, def: 7, tribe: "귀족", text: "[귀족] 동족 시너지" },
+  // ---- draw cards (spells + monsters) ----
+  ND2: { id: "ND2", t: "spell", cost: 2, name: "예지의 룬", text: "카드 2장 드로우 (시전 1)", act: "draw", val: 2, play: 1 },
+  ND3: { id: "ND3", t: "spell", cost: 3, name: "현자의 예언", text: "카드 3장 드로우 (시전 2)", act: "draw", val: 3, play: 2 },
+  ND5: { id: "ND5", t: "spell", cost: 5, name: "고대의 지식", text: "카드 5장 드로우 (시전 3)", act: "draw", val: 5, play: 3 },
+  NMD2: { id: "NMD2", t: "mon", cost: 2, name: "탐서 정령", atk: 2, def: 2, text: "소환시: 카드 1장 드로우", onSummon: "draw", val: 1 },
+  NMD4: { id: "NMD4", t: "mon", cost: 4, name: "기록자", atk: 3, def: 4, text: "소환시: 카드 2장 드로우", onSummon: "draw", val: 2 },
+  NMD6: { id: "NMD6", t: "mon", cost: 6, name: "대현자", atk: 5, def: 5, text: "소환시: 카드 3장 드로우", onSummon: "draw", val: 3 },
+  // ---- extreme stat monsters ----
+  NGA3: { id: "NGA3", t: "mon", cost: 3, name: "유리 대포", atk: 9, def: 1, text: "공격 특화 (방어 매우 낮음)" },
+  NGA4: { id: "NGA4", t: "mon", cost: 4, name: "광폭한 검귀", atk: 13, def: 0, text: "공격 특화 (방어 0)" },
+  NWL3: { id: "NWL3", t: "mon", cost: 3, name: "바위 거북", atk: 1, def: 11, text: "방어 특화 (공격 매우 낮음)" },
+  NWL4: { id: "NWL4", t: "mon", cost: 4, name: "철벽 수문장", atk: 0, def: 15, text: "방어 특화 (공격 0)" },
+  // ---- fragile but strong effect monsters ----
+  NHEX: { id: "NHEX", t: "mon", cost: 3, name: "꼬마 주술사", atk: 0, def: 1, text: "소환시: 상대 체력에 6 데미지", onSummon: "burn", val: 6 },
+  NSPR: { id: "NSPR", t: "mon", cost: 4, name: "수정 정령", atk: 0, def: 2, text: "필드에 있는 동안 최대 마나 +1, 소환시 2장 드로우", aura: "mana1", onSummon: "draw", val: 2 },
+  // ---- Attune variants ----
+  AHEUK: { id: "AHEUK", t: "spell", cost: 6, name: "어튠 - 흑", text: "상대 최대 마나 -1. 자신 필드 몬스터 1 이하면 추가로 -1 (시전 4)", act: "manaDown", play: 4 },
+  AJIN: { id: "AJIN", t: "spell", cost: 4, name: "어튠 - 진", text: "최대 마나 +1, 묘지에 어튠 1장 추가", act: "manaUpGain" },
+  AMA: { id: "AMA", t: "spell", cost: 2, name: "어튠 - 마", text: "패의 보물상자 1장을 묘지로 → 최대 마나 +1, 1장 드로우", act: "chestToMana" },
+  // ---- persistent / conditional ----
+  NHEAL: { id: "NHEAL", t: "spell", cost: 3, name: "생명의 가호", text: "영구: 몬스터를 소환할 때마다 체력 1 회복", ench: "healSummon", val: 99, val2: 1 },
+  NWIPE: { id: "NWIPE", t: "spell", cost: 5, name: "정화의 폭발", text: "자신 필드에 몬스터가 없을 때만. 상대 함정·마법 전부 파괴 후 자신 6 데미지", act: "wipeBack" },
 };
 
 // Tribe synergy descriptions (shown when the player taps a tribe tag).
-export const TRIBES: Record<string, { name: string; bonuses: string[] }> = {
-  "고독": { name: "고독", bonuses: ["2마리 소환: 최대 체력 +10", "3마리 소환: 최대 체력 +30, 최대 마나 +1"] },
-  "고귀": { name: "고귀", bonuses: ["2마리 소환: 최대 마나 +1", "3마리 소환: 최대 마나 +3, 상대 함정 2장 파괴"] },
-  "포식": { name: "포식", bonuses: ["2마리 소환: 상대 몬스터 1체 파괴 + 상대에게 4 데미지", "3마리 소환: 상대 몬스터 2체 파괴 + 상대에게 10 데미지"] },
-  "귀족": { name: "귀족", bonuses: ["2마리 소환: 자신의 최대 마나 -1", "3마리 소환: 최대 마나 +5, 매 턴 +2 드로우(영구), 최대 체력 +15"] },
+export const TRIBES: Record<string, { name: string; note: string; bonuses: string[] }> = {
+  "고독": { name: "고독", note: "※ 서로 다른 종족 카드여야 발동 (같은 카드 2장은 X)", bonuses: ["서로 다른 2종: 최대 체력 +10", "서로 다른 3종: 최대 체력 +30, 최대 마나 +1"] },
+  "고귀": { name: "고귀", note: "※ 서로 다른 종족 카드여야 발동", bonuses: ["서로 다른 2종: 최대 마나 +1", "서로 다른 3종: 최대 마나 +3, 상대 함정 2장 파괴"] },
+  "포식": { name: "포식", note: "※ 서로 다른 종족 카드여야 발동", bonuses: ["서로 다른 2종: 상대 몬스터 1체 파괴 + 상대에게 4 데미지", "서로 다른 3종: 상대 몬스터 2체 파괴 + 상대에게 10 데미지"] },
+  "귀족": { name: "귀족", note: "※ 서로 다른 종족 카드여야 발동", bonuses: ["서로 다른 2종: 자신의 최대 마나 -1", "서로 다른 3종: 최대 마나 +5, 매 턴 +2 드로우(영구), 최대 체력 +15"] },
 };
 
 // ---------------- generated high-cost curve (cost 5–12) ----------------
@@ -130,16 +152,16 @@ const SPELL_TPL: FxTpl[] = [
 ];
 
 const TRAP_TPL: FxTpl[] = [
-  { nouns: ["방어 태세", "수비 진형"], mk: (c) => ({ react: "half", val: R(c * 0.6), text: `공격 절반 + 공격측에 ${R(c * 0.6)} 데미지` }) },
-  { nouns: ["무효화", "차단막"], mk: () => ({ react: "fullguard", text: "이번 공격을 무효화한다" }) },
+  { nouns: ["방어 태세", "수비 진형"], mk: (c) => ({ react: "half", val: R(c * 1.0), text: `공격 절반 + 공격측에 ${R(c * 1.0)} 데미지` }) },
+  { nouns: ["무효화", "차단막"], mk: (c) => ({ react: "fullguard", val: R(c * 0.9), text: `공격 무효 + 공격측에 ${R(c * 0.9)} 데미지` }) },
   { nouns: ["반사막", "거울 장막"], mk: () => ({ react: "reflect", text: "공격해온 몬스터의 공격력만큼 반사" }) },
   { nouns: ["역습", "반격"], mk: () => ({ react: "counter", text: "공격 몬스터 파괴 + 공격력 절반 반사" }) },
-  { nouns: ["포식", "집어삼킴"], mk: (c) => ({ react: "devour", val: R(c * 1.4) + 1, text: `공격 몬스터 파괴 + 체력 ${R(c * 1.4) + 1} 회복` }) },
-  { nouns: ["심판", "천벌"], mk: (c) => ({ react: "judgment", val: R(c * 1.5) + 1, text: `공격 몬스터 파괴 + 상대 체력에 ${R(c * 1.5) + 1} 데미지` }) },
-  { nouns: ["가시 함정", "철침 덫"], mk: (c) => ({ react: "spikes", val: R(c * 1.3) + 1, text: `공격을 받으면 공격측에 ${R(c * 1.3) + 1} 데미지` }) },
-  { nouns: ["시간 왜곡", "예지의 덫"], mk: (c) => ({ react: "drawtrap", val: R(c / 2) + 1, text: `공격을 받으면 ${R(c / 2) + 1}장 드로우` }) },
-  { nouns: ["방벽", "철벽"], mk: (c) => ({ react: "bulwark", val: R(c), text: `이번 공격 무효 + 공격 몬스터 방어 -${R(c)}(영구)` }) },
-  { nouns: ["가시 갑옷", "복수의 가시"], mk: (c) => ({ react: "thorns", val: R(c * 1.3), text: `공격을 받으면 ${R(c * 1.3)} 반사` }) },
+  { nouns: ["포식", "집어삼킴"], mk: (c) => ({ react: "devour", val: R(c * 1.6) + 2, text: `공격 몬스터 파괴 + 체력 ${R(c * 1.6) + 2} 회복` }) },
+  { nouns: ["심판", "천벌"], mk: (c) => ({ react: "judgment", val: R(c * 1.9) + 2, text: `공격 몬스터 파괴 + 상대 체력에 ${R(c * 1.9) + 2} 데미지` }) },
+  { nouns: ["가시 함정", "철침 덫"], mk: (c) => ({ react: "spikes", val: R(c * 1.6) + 2, text: `공격을 받으면 공격측에 ${R(c * 1.6) + 2} 데미지` }) },
+  { nouns: ["시간 왜곡", "예지의 덫"], mk: (c) => ({ react: "drawtrap", val: R(c * 0.7) + 1, text: `공격을 받으면 ${R(c * 0.7) + 1}장 드로우` }) },
+  { nouns: ["방벽", "철벽"], mk: (c) => ({ react: "bulwark", val: R(c * 1.4), text: `이번 공격 무효 + 공격 몬스터 방어 -${R(c * 1.4)}(영구)` }) },
+  { nouns: ["가시 갑옷", "복수의 가시"], mk: (c) => ({ react: "thorns", val: R(c * 1.7), text: `공격을 받으면 ${R(c * 1.7)} 반사` }) },
 ];
 
 const PLAN: Record<number, [number, number, number]> = {

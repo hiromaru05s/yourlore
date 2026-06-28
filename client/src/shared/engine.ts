@@ -48,10 +48,9 @@ export function effAtk(p: PlayerState, m: FieldMon): number {
 export function effDef(m: FieldMon): number {
   return Math.max(0, m.def! + (m.defMod || 0));
 }
-/** 제시(supply) shows cards whose cost is in [maxMana-2, maxMana]. */
+/** 제시(supply) shows cards whose cost is in [1, maxMana]. */
 export function supplyRange(p: PlayerState): [number, number] {
-  const hi = effMaxMana(p);
-  return [Math.max(1, hi - 2), hi];
+  return [1, effMaxMana(p)];
 }
 /** Cost to PLAY a card from hand (may be < its buy cost). */
 export function playCost(c: CardInst): number {
@@ -103,9 +102,10 @@ export function createGame(opts: CreateOpts): ReduceResult {
   const second = (1 - start) as Side;
   g.players[start].hp = 35; g.players[start].maxHp = 35;
   g.players[second].hp = 45; g.players[second].maxHp = 45;
-  // STANDARD market: 8 random cards of cost 1–4 (mixed types)
-  const lowPool = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 4);
-  g.market = Array.from({ length: 8 }, () => inst(g, lowPool[randInt(g, lowPool.length)]));
+  // STANDARD market: 8 DISTINCT random cards of cost 1–4 (mixed types)
+  const lowAvail = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 4);
+  g.market = [];
+  while (g.market.length < 8 && lowAvail.length) g.market.push(inst(g, lowAvail.splice(randInt(g, lowAvail.length), 1)[0]));
 
   const ev: GameEvent[] = [];
   const ctx = makeCtx(g, ev);
@@ -117,11 +117,13 @@ export function createGame(opts: CreateOpts): ReduceResult {
 }
 
 function rollSupply(g: GameState, p: PlayerState): void {
-  const [lo, hi] = supplyRange(p);
-  let pool = ALL_IDS.filter((id) => DB[id].cost >= lo && DB[id].cost <= hi);
-  if (!pool.length) pool = ALL_IDS.filter((id) => DB[id].cost <= hi);
-  if (!pool.length) pool = ALL_IDS.slice();
-  p.supply = [0, 1, 2].map(() => inst(g, pool[randInt(g, pool.length)]));
+  const hi = effMaxMana(p);
+  const pool = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= hi);
+  const avail = pool.slice();
+  const picks: CardInst[] = [];
+  while (picks.length < 3 && avail.length) picks.push(inst(g, avail.splice(randInt(g, avail.length), 1)[0])); // distinct
+  while (picks.length < 3) picks.push(inst(g, pool.length ? pool[randInt(g, pool.length)] : ALL_IDS[0]));
+  p.supply = picks;
 }
 
 // ============================================================
@@ -166,7 +168,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     const i = owner.field.findIndex((x) => x.uid === m.uid);
     if (i >= 0) {
       const dead = owner.field.splice(i, 1)[0];
-      owner.discard.push(inst(g, dead.id));
+      if (dead.id !== "MIMIC") owner.discard.push(inst(g, dead.id)); // Mimic token is exiled
       ev.push({ type: "destroy", player: side(g, owner), uid: m.uid });
     }
   };
@@ -283,7 +285,10 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     return;
   }
   if ((tc = takeTrap(o, "fullguard"))) {
-    att.exhausted = true; ctx.log(`  └ <span class="dmg">함정 ${tc.name}!</span> 공격 무효화`); return;
+    att.exhausted = true;
+    ctx.log(`  └ <span class="dmg">함정 ${tc.name}!</span> 공격 무효화`);
+    if (tc.val) ctx.dealDamage(p, tc.val, tc.name);
+    return;
   }
 
   // ---- non-terminal reactions (attack still resolves) ----
@@ -391,6 +396,33 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
       if (v2 > 0) ctx.drawN(p, v2);
       break;
     }
+    case "manaDown": {
+      o.maxMana = Math.max(1, o.maxMana - 1);
+      let extra = "";
+      if (p.field.length <= 1) { o.maxMana = Math.max(1, o.maxMana - 1); extra = " (추가 -1)"; }
+      ctx.log(`<span class="t">${p.name}</span> ${card.name} → 상대 최대 마나 감소${extra} (${o.maxMana})`);
+      break;
+    }
+    case "manaUpGain": {
+      p.maxMana += 1;
+      p.discard.push(starter(g, "STARTER_MANA"));
+      ctx.log(`<span class="t">${p.name}</span> ${card.name} → 최대 마나 +1, 묘지에 어튠 추가`);
+      break;
+    }
+    case "chestToMana": {
+      const ci = p.hand.findIndex((c) => c.star === "chest");
+      if (ci >= 0) { const ch = p.hand.splice(ci, 1)[0]; p.discard.push(ch); p.maxMana += 1; ctx.drawN(p, 1); ctx.log(`<span class="t">${p.name}</span> ${card.name} → 보물상자 1장 묘지로, 최대 마나 +1, 1장 드로우`); }
+      else ctx.log(`  └ 패에 보물상자가 없음`);
+      break;
+    }
+    case "wipeBack": {
+      let n = o.traps.length + o.enchants.length;
+      o.traps.forEach((t) => o.discard.push(t.card)); o.traps = [];
+      o.enchants.forEach((e) => o.discard.push(e.card)); o.enchants = [];
+      ctx.log(`<span class="t">${p.name}</span> ${card.name} → 상대 함정·마법 ${n}장 파괴`);
+      ctx.dealDamage(p, 6, card.name);
+      break;
+    }
   }
 }
 
@@ -423,6 +455,8 @@ function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): 
   p.field.push(m);
   ctx.log(`<span class="t">${p.name}</span> ${cn(card)} 소환 (공${card.atk}/방${card.def})`);
   ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid });
+  // persistent "heal on summon" enchant (생명의 가호)
+  p.enchants.forEach((e) => { if (e.card.ench === "healSummon") ctx.heal(p, e.card.val2 || 1); });
   // 1) the monster's own summon effect resolves first (draw / breaktrap / burn ...)
   resolveOnSummon(g, ctx, m);
   // 2) tribe synergy (also a summon-triggered effect)
@@ -443,7 +477,8 @@ function strongest(field: FieldMon[]): FieldMon | undefined {
 function checkTribe(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): void {
   const tribe = m.tribe;
   if (!tribe) return;
-  const count = p.field.filter((x) => x.tribe === tribe).length;
+  // count DISTINCT tribe cards (same card twice does not synergize)
+  const count = new Set(p.field.filter((x) => x.tribe === tribe).map((x) => x.id)).size;
   const o = g.players[0] === p ? g.players[1] : g.players[0];
   const fire = (n: number): boolean => { const k = `${tribe}:${n}`; if (p.tribesFired.includes(k)) return false; p.tribesFired.push(k); return true; };
   if (count >= 3 && fire(3)) applyTribe(g, ctx, p, o, tribe, 3);
@@ -482,6 +517,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     p.mana -= playCost(card); p.hand.splice(idx, 1); summonMonster(g, ctx, p, card); return;
   }
   if (card.t === "spell") {
+    if (card.act === "wipeBack" && p.field.length > 0) { ctx.log(`  └ 필드에 몬스터가 있어 사용 불가`); return; }
     p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card);
     if (tryNullSpell(g, ctx, card.name)) return;
     if (card.ench) {
@@ -598,7 +634,7 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
       const card = p.supply[action.i];
       if (card && p.mana >= card.cost) {
         p.mana -= card.cost; p.discard.push(inst(g, card.id)); p.supply[action.i] = null; p.boughtCount++; p.taxFlag = true;
-        ctx.log(`<span class="t">${p.name}</span> 제시 마켓 ${card.name} 구매 (${card.cost}) <span class="muted">[묘지로]</span>`);
+        ctx.log(`<span class="t">${p.name}</span> 제시 마켓 ${cn(card)} 구매 (${card.cost}) <span class="muted">[묘지로]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "supply", i: action.i });
       }
       break;

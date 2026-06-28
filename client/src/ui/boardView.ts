@@ -113,12 +113,9 @@ export class GameView {
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {
     row.innerHTML = "";
     const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, FRAME_BACK, null, "덱");
-    // your own discard is visible (top face-up); the opponent's is hidden — what
-    // you bought stays secret (purchases go to discard).
+    // both discards public (top face-up, zoomable)
     const discTop = p.discard[p.discard.length - 1];
-    const discPile = isMe
-      ? this.pileEl("pile-myDisc", p.discard.length, discTop ? frameFor(discTop.t) : null, discTop ?? null, "버림")
-      : this.pileEl("pile-oppDisc", p.discard.length, p.discard.length ? FRAME_BACK : null, null, "버림");
+    const discPile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, discTop ? frameFor(discTop.t) : null, discTop ?? null, "버림");
 
     const block = document.createElement("div");
     block.className = "field-block" + (g.cur === g.players.indexOf(p) ? " is-turn" : "");
@@ -184,11 +181,11 @@ export class GameView {
     const total = Math.max(emax, p.maxMana);
     for (let i = 0; i < total; i++) {
       let cl = "pip";
-      if (isMe) { if (i < p.mana) cl += " full"; if (i >= emax) cl += " locked"; }
-      else { cl += i < emax ? " full" : " locked"; }
+      if (i < p.mana) cl += " full"; // current mana shown live for BOTH players
+      if (i >= emax) cl += " locked";
       pips.push(`<span class="${cl}"></span>`);
     }
-    const manaTxt = isMe ? `${p.mana}/${emax}` : `${emax}`;
+    const manaTxt = `${p.mana}/${emax}`;
 
     bar.innerHTML = `
       <span class="pname"><span class="who"></span>${p.name}
