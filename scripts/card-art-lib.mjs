@@ -67,6 +67,10 @@ function subjectHint(card) {
   if (card.id === "AMA") return "object-only abstract spell icon, small treasure chest dissolving into blue mana particles and one glowing card, empty stone table";
   if (card.id === "NHEAL") return "object-only abstract spell icon, radiant life blessing aura, green-gold healing seal with small sprouting leaves and heartlike light, empty sanctuary";
   if (card.id === "NWIPE") return "object-only abstract spell icon, cleansing explosion of white-gold light destroying trap sigils and spell glyphs, empty battlefield, cracked ground";
+  if (card.id === "INFKNIGHT") return "an infinite knight in impossible looping silver armor, mirrored helm, glowing infinity symbol on the chest, timeless void battlefield, legendary fantasy warrior";
+  if (card.id === "NT_NULL3") return "object-only trap illustration, anti-magic ward absorbing a blue spell bolt, cracked black mirror seal, red recoil sparks, empty dungeon chamber, no people";
+  if (card.id === "NT_NULL5") return "object-only trap illustration, ornate magic-sealing lock closing over a glowing spell circle, blue runes being silenced, empty arcane hall, no people";
+  if (card.id === "NT_NULL6") return "object-only trap illustration, close-up anti-sorcery crystal barrier orb on an empty stone pedestal, purple lightning reflected into shattered spell glyphs, tight composition, no landscape, no people, no silhouettes, no creatures";
   if (card.id === "NMD2") return "a small book-seeking spirit made of blue light and parchment, floating beside ancient tomes, curious magical creature";
   if (card.id === "NMD4") return "a mystical record keeper construct with scrolls and ink ribbons, robed archivist spirit, ancient library background";
   if (card.id === "NMD6") return "a grand archsage spirit with floating books and luminous runes, wise powerful fantasy mage portrait";
