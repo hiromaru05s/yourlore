@@ -81,7 +81,7 @@ function mkPlayer(g: GameState, id: string, name: string, isBot: boolean): Playe
     deck, hand: [], discard: [], exile: [],
     field: [], traps: [], supply: [],
     boughtCount: 0, taxFlag: false,
-    enchants: [], tribesFired: [], bonusDrawPerm: 0,
+    enchants: [], tribesFired: [], bonusDrawPerm: 0, bleed: 0,
   };
 }
 
@@ -204,8 +204,38 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
     ctx.drawN(p, 3 + p.bonusDrawPerm + enchDraw);
   }
   tickEnchants(g, ctx, p);
+  if (!g.over) tickBleed(ctx, p);
+  if (!g.over) tickTurnFx(g, ctx, p);
   g.phase = "main";
   ctx.ev.push({ type: "turnHeader", turn: g.turn, name: p.name, isBot: p.isBot });
+}
+
+/** Persistent bleed: damage at the start of this player's turn (GM8_3). */
+function tickBleed(ctx: Ctx, p: PlayerState): void {
+  if (p.bleed > 0) ctx.dealDamage(p, p.bleed, "출혈", "出血");
+}
+
+/** Per-turn field-monster effects (growth / burn / heal / ramp), on the owner's turn. */
+function tickTurnFx(g: GameState, ctx: Ctx, p: PlayerState): void {
+  const o = g.players[0] === p ? g.players[1] : g.players[0];
+  for (const m of [...p.field]) {
+    if (g.over) return;
+    const v = m.val || 0, v2 = m.val2 || 0;
+    switch (m.turnFx) {
+      case "growAtk": m.atkMod = (m.atkMod || 0) + v; ctx.log(`  └ ${cn(m)} 공격 +${v}(영구)`, `  └ ${cn(m)} 攻撃+${v}(永続)`); break;
+      case "growDef": m.defMod = (m.defMod || 0) + v; ctx.log(`  └ ${cn(m)} 방어 +${v}(영구)`, `  └ ${cn(m)} 防御+${v}(永続)`); break;
+      case "turnBurn": ctx.log(`<span class="t">${cn(m)}</span> 매 턴 효과`, `<span class="t">${cn(m)}</span> 毎ターン効果`); ctx.dealDamage(o, v, cn(m), cn(m)); break;
+      case "turnHeal": ctx.heal(p, v); ctx.log(`  └ ${cn(m)} 체력 +${v} 회복`, `  └ ${cn(m)} 体力+${v}回復`); break;
+      case "payDefHeal":
+        if (p.mana >= 1) { p.mana -= 1; m.defMod = (m.defMod || 0) + v; ctx.heal(p, v2); ctx.log(`  └ ${cn(m)} 마나1 → 방어 +${v}, 체력 +${v2}`, `  └ ${cn(m)} マナ1 → 防御+${v}, 体力+${v2}`); }
+        break;
+      case "chestDraw": {
+        const ci = p.hand.findIndex((c) => c.star === "chest");
+        if (ci >= 0) { const ch = p.hand.splice(ci, 1)[0]; p.discard.push(ch); const n = ctx.drawN(p, v2 || 4); ctx.log(`  └ ${cn(m)} 보물상자 → 묘지, ${n}장 드로우`, `  └ ${cn(m)} 宝箱 → 墓地, ${n}枚ドロー`); }
+        break;
+      }
+    }
+  }
 }
 
 /** Persistent-spell upkeep. noAttack ticks every turn; owner-scoped enchants tick on the owner's turn. */
@@ -242,8 +272,16 @@ function tickExile(ctx: Ctx, p: PlayerState): void {
 }
 function endTurn(g: GameState, ctx: Ctx): void {
   const p = g.players[g.cur];
+  const o = g.players[1 - g.cur];
+  // GM6_2: discarding cost-3+ cards at end of turn breaks enemy traps (1 each)
+  if (p.field.some((m) => m.aura === "discardBreak")) {
+    let broke = 0;
+    const dump = p.hand.filter((c) => (c.cost ?? 0) >= 3).length;
+    for (let i = 0; i < dump && o.traps.length; i++) { const t = o.traps.splice(randInt(g, o.traps.length), 1)[0]; o.discard.push(t.card); broke++; }
+    if (broke) ctx.log(`<span class="t">${p.name}</span> 고코스트 폐기 → 상대 함정 ${broke}장 파괴`, `<span class="t">${p.name}</span> 高コスト破棄 → 相手の罠${broke}枚を破壊`);
+  }
   while (p.hand.length) p.discard.push(p.hand.pop()!);
-  p.field.forEach((m) => { m.exhausted = false; m.tempAtk = 0; });
+  p.field.forEach((m) => { m.exhausted = false; m.tempAtk = 0; m.attacksUsed = 0; });
   g.turn++; g.cur = (1 - g.cur) as Side;
   beginTurn(g, ctx, false);
 }
@@ -323,6 +361,93 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     if (tc.val) ctx.dealDamage(p, tc.val, cn(tc), cn(tc));
     return;
   }
+  if ((tc = takeTrap(o, "wardheal"))) { // T9: negate + heal + draw
+    att.exhausted = true; ctx.heal(o, tc.val || 0); ctx.drawN(o, tc.val2 || 0);
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 체력 ${tc.val} 회복 + ${tc.val2}장 드로우`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 体力${tc.val}回復 + ${tc.val2}枚ドロー`);
+    return;
+  }
+  if ((tc = takeTrap(o, "counterFull"))) { // T4: destroy attacker + reflect its full atk to its owner
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴 + ${atk} 반사`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 破壊 + ${atk} 反射`);
+    ctx.destroyMonster(p, att); ctx.dealDamage(p, atk, cn(tc), cn(tc)); return;
+  }
+  if ((tc = takeTrap(o, "guardbuff"))) { // T12 / GT8_0: negate + own field def buff (+ optional draw)
+    att.exhausted = true; const tv = tc.val || 0;
+    o.field.forEach((mm) => (mm.defMod = (mm.defMod || 0) + tv));
+    if (tc.val2) ctx.drawN(o, tc.val2);
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 자신 몬스터 전체 방어 +${tv}${tc.val2 ? ` + ${tc.val2}장 드로우` : ""}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 自分のモンスター全体の防御+${tv}${tc.val2 ? ` + ${tc.val2}枚ドロー` : ""}`);
+    return;
+  }
+  if ((tc = takeTrap(o, "guarddraw"))) { // GT5_1 / GT6_1: negate + draw
+    att.exhausted = true; const n = ctx.drawN(o, tc.val || 0);
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + ${n}장 드로우`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + ${n}枚ドロー`);
+    return;
+  }
+  if ((tc = takeTrap(o, "guardBreakDraw"))) { // GT5_0: negate + break one attacker trap + draw 1
+    att.exhausted = true; let broke = 0;
+    if (p.traps.length) { const t2 = p.traps.splice(randInt(g, p.traps.length), 1)[0]; p.discard.push(t2.card); broke = 1; }
+    ctx.drawN(o, 1);
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 공격측 함정 ${broke}장 파괴 + 1장 드로우`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 攻撃側の罠${broke}枚破壊 + 1枚ドロー`);
+    return;
+  }
+  if ((tc = takeTrap(o, "guardMana"))) { // GT8_3: negate + max mana +1
+    att.exhausted = true; o.maxMana += 1;
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 최대 마나 +1`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 最大マナ+1`);
+    return;
+  }
+  if ((tc = takeTrap(o, "guardEnemyDef"))) { // GT8_1: negate + all attacker-side def down
+    att.exhausted = true; const tv = tc.val || 0; p.field.forEach((mm) => (mm.defMod = (mm.defMod || 0) - tv));
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 상대 몬스터 전체 방어 -${tv}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 敵モンスター全体の防御-${tv}`);
+    return;
+  }
+  if ((tc = takeTrap(o, "guardWipe"))) { // GT8_2: negate + destroy attacker traps/enchants
+    att.exhausted = true; let k = 0; const lim = tc.val || 2;
+    for (let i = 0; i < lim && p.traps.length; i++) { const t2 = p.traps.splice(randInt(g, p.traps.length), 1)[0]; p.discard.push(t2.card); k++; }
+    for (let i = k; i < lim && p.enchants.length; i++) { const e2 = p.enchants.splice(randInt(g, p.enchants.length), 1)[0]; p.discard.push(e2.card); k++; }
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 상대 함정·마법 ${k}장 파괴`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 相手の罠・魔法${k}枚破壊`);
+    return;
+  }
+  if ((tc = takeTrap(o, "guardPurge"))) { // GT6_0: negate + (-1 max mana) destroy up to 3 attacker monsters
+    att.exhausted = true;
+    if (p.field.length > 0) {
+      o.maxMana = Math.max(1, o.maxMana - 1);
+      let k = 0; const lim = tc.val || 3;
+      for (const tm of [...p.field].sort((a2, b2) => (effAtk(p, b2) + b2.def!) - (effAtk(p, a2) + a2.def!))) { if (k >= lim) break; ctx.destroyMonster(p, tm); k++; }
+      ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 최대 마나 -1, 상대 몬스터 ${k}체 파괴`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 最大マナ-1, 敵モンスター${k}体破壊`);
+    } else ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効`);
+    return;
+  }
+  if ((tc = takeTrap(o, "slaughterHeal"))) { // GT5_2: destroy attacker + 30% heal its def
+    const d = effDef(att);
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 破壊`);
+    ctx.destroyMonster(p, att);
+    if (randInt(g, 100) < 30) { ctx.heal(o, d); ctx.log(`  └ 30% 성공: 체력 ${d} 회복`, `  └ 30%成功: 体力${d}回復`); }
+    return;
+  }
+  if ((tc = takeTrap(o, "slaughterRaise"))) { // GT5_3: destroy attacker + 30% steal to own field
+    if (randInt(g, 100) < 30) {
+      const i2 = p.field.findIndex((x) => x.uid === att.uid);
+      if (i2 >= 0) { const stolen = p.field.splice(i2, 1)[0]; ctx.ev.push({ type: "destroy", player: side(g, p), uid: stolen.uid }); stolen.exhausted = true; stolen.attacksUsed = 0; o.field.push(stolen); ctx.ev.push({ type: "summon", player: side(g, o), uid: stolen.uid }); }
+      ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 탈취(소생)`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 奪取(蘇生)`);
+    } else {
+      ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴(소생 실패)`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 破壊(蘇生失敗)`);
+      ctx.destroyMonster(p, att);
+    }
+    return;
+  }
+  if ((tc = takeTrap(o, "slayWeakAll"))) { // GT6_2: destroy attacker + all attacker-side atk down this turn
+    const tv = tc.val || 0;
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴 + 상대 전체 공격 -${tv}(이번 턴)`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 破壊 + 敵全体の攻撃-${tv}(このターン)`);
+    ctx.destroyMonster(p, att);
+    p.field.forEach((mm) => (mm.tempAtk = (mm.tempAtk || 0) - tv));
+    return;
+  }
+  if ((tc = takeTrap(o, "slayLowAll"))) { // GT6_3: destroy attacker + destroy all low-atk attacker monsters
+    const tv = tc.val || 0;
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴 + 공격 ${tv} 이하 상대 몬스터 전멸`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 破壊 + 攻撃${tv}以下の敵モンスター全滅`);
+    ctx.destroyMonster(p, att);
+    for (const tm of [...p.field]) if (effAtk(p, tm) <= tv) ctx.destroyMonster(p, tm);
+    return;
+  }
 
   // ---- non-terminal reactions (attack still resolves) ----
   if ((tc = takeTrap(o, "spikes"))) {
@@ -389,7 +514,10 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       }
     }
   }
-  att.exhausted = true;
+  // per-attack effect (e.g. GM8_0: lose attack permanently) + multi-attack accounting
+  if (att.attackFx === "atkDownOnAttack") { att.atkMod = (att.atkMod || 0) - (att.val || 0); ctx.log(`  └ ${cn(att)} 공격 -${att.val}(영구)`, `  └ ${cn(att)} 攻撃-${att.val}(永続)`); }
+  att.attacksUsed = (att.attacksUsed || 0) + 1;
+  if (att.attacksUsed >= (att.mult || 1)) att.exhausted = true;
 }
 
 // ============================================================
@@ -398,7 +526,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
 function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];
-  const v = m.val || 0;
+  const v = m.val || 0, v2 = m.val2 || 0;
   switch (m.onSummon) {
     case "draw": { const n = ctx.drawN(p, v); ctx.log(`  └ 소환 효과: ${n}장 드로우`, `  └ 召喚効果: ${n}枚ドロー`); break; }
     case "burn": ctx.dealDamage(o, v, `${cn(m)} 소환`, `${cn(m)} 召喚`); break;
@@ -414,20 +542,86 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       if (o.traps.length) { const t = o.traps.splice(randInt(g, o.traps.length), 1)[0]; o.discard.push(t.card); ctx.log("  └ 상대의 세트 함정 1장 파괴", "  └ 相手のセットトラップを1枚破壊"); }
       else ctx.log("  └ 파괴할 함정 없음", "  └ 破壊するトラップなし");
       break;
+    case "allEnemyAtkDown": // M12
+      o.field.forEach((tm) => (tm.atkMod = (tm.atkMod || 0) - v));
+      ctx.log(`  └ 상대 몬스터 전체 공격 -${v}(영구)`, `  └ 敵モンスター全体の攻撃-${v}(永続)`);
+      break;
+    case "maxHpMana": // GM7_2
+      p.maxHp += v; p.hp += v; p.maxMana += v2;
+      ctx.ev.push({ type: "heal", player: side(g, p), amount: v });
+      ctx.log(`  └ 최대 체력 +${v}, 최대 마나 +${v2}`, `  └ 最大体力+${v}, 最大マナ+${v2}`);
+      break;
+    case "summonKnight": // GM6_7
+      if (p.mana >= 3) { p.mana -= 3; spawnToken(g, ctx, p, "INFKNIGHT"); ctx.log("  └ 마나3 지불 → 무한의 기사(4/4) 소환", "  └ マナ3支払い → 無限の騎士(4/4)召喚"); }
+      else ctx.log("  └ 마나가 부족해 기사를 소환하지 못함", "  └ マナ不足で騎士を召喚できない");
+      break;
+    case "breaktrapDraw": // GM6_8
+      if (o.traps.length) { const t = o.traps.splice(randInt(g, o.traps.length), 1)[0]; o.discard.push(t.card); const n = ctx.drawN(p, v); ctx.log(`  └ 상대 함정 1장 파괴 + ${n}장 드로우`, `  └ 相手の罠1枚破壊 + ${n}枚ドロー`); }
+      else ctx.log("  └ 파괴할 함정 없음", "  └ 破壊するトラップなし");
+      break;
+    case "parity": // GM8_5
+      if (o.hp % 2 === 1) { ctx.log("  └ 상대 체력 홀수 → 5 데미지", "  └ 相手の体力が奇数 → 5ダメージ"); ctx.dealDamage(o, 5, cn(m), cn(m)); }
+      else { const n = ctx.drawN(p, 4); ctx.log(`  └ 상대 체력 짝수 → ${n}장 드로우`, `  └ 相手の体力が偶数 → ${n}枚ドロー`); }
+      break;
+    case "smite": // GM9_0
+      for (const tm of [...o.field]) if (effAtk(o, tm) <= v) ctx.destroyMonster(o, tm);
+      ctx.log(`  └ 공격 ${v} 이하 상대 몬스터 전멸`, `  └ 攻撃${v}以下の敵モンスターを全滅`);
+      break;
+    case "summonRandom": { // GM10_2
+      const mons = p.deck.filter((c) => c.t === "mon");
+      if (mons.length) { const pick = mons[randInt(g, mons.length)]; const di = p.deck.findIndex((c) => c.uid === pick.uid); p.deck.splice(di, 1); spawnToken(g, ctx, p, pick.id); ctx.log(`  └ 덱에서 ${cn(pick)} 무료 소환`, `  └ デッキから ${cn(pick)} を無料召喚`); }
+      else ctx.log("  └ 덱에 몬스터 없음", "  └ デッキにモンスターなし");
+      break;
+    }
+    case "burnBreak2": // GM10_3
+      ctx.dealDamage(o, v, cn(m), cn(m));
+      if (!g.over) { let k = 0; for (let i = 0; i < 2 && o.traps.length; i++) { const t = o.traps.splice(randInt(g, o.traps.length), 1)[0]; o.discard.push(t.card); k++; } if (k) ctx.log(`  └ 상대 함정 ${k}장 파괴`, `  └ 相手の罠${k}枚破壊`); }
+      break;
+    case "burnBleed": // GM8_3
+      ctx.dealDamage(o, v, cn(m), cn(m));
+      if (o.bleed < 1) { o.bleed = 1; ctx.log("  └ 상대는 이후 매 턴 1 데미지(중첩 불가)", "  └ 相手は以降毎ターン1ダメージ(重複不可)"); }
+      break;
+    case "drakeRamp": // GM9_3
+      ctx.dealDamage(o, v, cn(m), cn(m));
+      if (!g.over) { p.maxMana += 1; ctx.log("  └ 최대 마나 +1", "  └ 最大マナ+1"); }
+      break;
+    case "cloneSelf": // GM8_2
+      if (randInt(g, 2) === 0) { spawnToken(g, ctx, p, m.id); ctx.log("  └ 50% 성공 → 자신을 복제 소환", "  └ 50%成功 → 自身を複製召喚"); }
+      else ctx.log("  └ 복제 실패", "  └ 複製失敗");
+      break;
   }
+}
+
+/** Spawn a stat-only token monster (no summon effect / tribe / pitfall trigger). */
+function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string): void {
+  if (!DB[id]) return;
+  const m: FieldMon = { uid: newUID(g), ...structuredClone(DB[id]), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
+  m.onSummon = undefined; m.turnFx = undefined; // tokens don't re-trigger summon effects
+  p.field.push(m);
+  ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid });
+  applySummonBuff(ctx, p, m);
+}
+
+/** GM5_2: each monster YOU summon gains +val/+val from every summonBuff aura you control. */
+function applySummonBuff(ctx: Ctx, p: PlayerState, m: FieldMon): void {
+  const n = p.field.filter((x) => x.uid !== m.uid && x.aura === "summonBuff").reduce((s, x) => s + (x.val || 1), 0);
+  if (n > 0) { m.atkMod = (m.atkMod || 0) + n; m.defMod = (m.defMod || 0) + n; ctx.log(`  └ 소환 강화: ${cn(m)} +${n}/+${n}`, `  └ 召喚強化: ${cn(m)} +${n}/+${n}`); }
 }
 
 // ============================================================
 // spells (generalized)
 // ============================================================
 function tryNullSpell(g: GameState, ctx: Ctx, card: CardInst): boolean {
-  const o = g.players[1 - g.cur];
+  const p = g.players[g.cur];           // the caster
+  const o = g.players[1 - g.cur];        // the trap owner
   const t = takeTrap(o, "nullspell");
   if (!t) return false;
   ctx.log(
     `  └ <span class="dmg">상대 ${cn(t)} → ${cn(card)} 무효화</span>`,
     `  └ <span class="dmg">相手の ${cn(t)} → ${cn(card)} 無効化</span>`,
   );
+  if (t.val) ctx.dealDamage(o, t.val, cn(t), cn(t));    // self-damage to the trap owner
+  if (t.val2) ctx.dealDamage(p, t.val2, cn(t), cn(t));  // damage to the caster
   return true;
 }
 function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
@@ -512,6 +706,8 @@ function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): 
   p.field.push(m);
   ctx.log(`<span class="t">${p.name}</span> ${cn(card)} 소환 (공${card.atk}/방${card.def})`, `<span class="t">${p.name}</span> ${cn(card)} 召喚 (攻${card.atk}/防${card.def})`);
   ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid });
+  // GM5_2: summon-buff aura grants +1/+1 to each monster you summon
+  applySummonBuff(ctx, p, m);
   // persistent "heal on summon" enchant (생명의 가호)
   p.enchants.forEach((e) => { if (e.card.ench === "healSummon") ctx.heal(p, e.card.val2 || 1); });
   // 1) the monster's own summon effect resolves first (draw / breaktrap / burn ...)
@@ -520,8 +716,9 @@ function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): 
   checkTribe(g, ctx, p, m);
   // 3) THEN the opponent's Pitfall reacts — so a summon effect gets its chance first
   const o = g.players[1 - g.cur];
-  const pit = takeTrap(o, "pitfall");
-  if (pit && p.field.some((x) => x.uid === m.uid)) {
+  const pitIdx = o.traps.findIndex((t) => t.card.react === "pitfall");
+  if (pitIdx >= 0 && p.field.some((x) => x.uid === m.uid) && (card.cost ?? 0) <= (o.traps[pitIdx].card.val ?? 99)) {
+    const pit = o.traps.splice(pitIdx, 1)[0].card; o.discard.push(pit);
     ctx.log(`  └ <span class="dmg">함정 ${cn(pit)}!</span> ${cn(card)} 파괴`, `  └ <span class="dmg">トラップ ${cn(pit)}!</span> ${cn(card)} 破壊`);
     ctx.destroyMonster(p, m);
   }

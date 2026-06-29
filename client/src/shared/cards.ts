@@ -298,6 +298,104 @@ for (const id of Object.keys(CORE_JA)) {
   if (card) { card.nameJa = ja.name; if (ja.text) card.textJa = ja.text; }
 }
 
+// ============================================================
+// BALANCE PATCH — applied AFTER generation/JA so card art (by id) stays mapped.
+//   PATCH = stat/effect/text changes · DELETE_IDS = removed cards · NEW_CARDS = added
+// ============================================================
+const PATCH: Record<string, Partial<CardDef>> = {
+  // core monsters
+  M3: { atk: 2, def: 1 },
+  M6: { def: 2 },
+  M12: { onSummon: "allEnemyAtkDown", val: 2, text: "소환시: 적 몬스터 전체 공격 -2(영구)", textJa: "召喚時: 敵モンスター全体の攻撃-2(永続)" },
+  // tribe monsters
+  TSO2: { atk: 3, def: 2 }, TNO2: { atk: 3, def: 2 }, TPO2: { atk: 3, def: 2 }, TAR2: { atk: 3, def: 2 },
+  TSO5: { atk: 6, def: 5 }, TNO5: { atk: 6, def: 5 }, TPO5: { atk: 6, def: 5 }, TAR5: { atk: 6, def: 5 },
+  TSO7: { atk: 8, def: 6 }, TNO7: { atk: 8, def: 6 }, TPO7: { atk: 8, def: 6 }, TAR7: { atk: 8, def: 6 },
+  // generated monsters — cost 5
+  GM5_0: { turnFx: "growAtk", val: 2, text: "매 턴 시작 시 공격 +2(영구)", textJa: "毎ターン開始時 攻撃+2(永続)" },
+  GM5_1: { atk: 3, def: 9, turnFx: "growDef", val: 2, text: "매 턴 시작 시 방어 +2(영구)", textJa: "毎ターン開始時 防御+2(永続)" },
+  GM5_2: { atk: 6, def: 6, aura: "summonBuff", val: 1, text: "상시: 몬스터를 소환할 때 그 몬스터 +1/+1", textJa: "常時: モンスター召喚時、そのモンスターに+1/+1" },
+  GM5_3: { onSummon: undefined, turnFx: "turnBurn", val: 3, text: "매 턴 시작 시 상대 체력에 3 데미지", textJa: "毎ターン開始時 相手の体力に3ダメージ" },
+  // cost 6
+  GM6_0: { atk: 11 },
+  GM6_2: { aura: "discardBreak", text: "코스트3 이상 카드를 버릴 때마다 상대 함정 1장 파괴", textJa: "コスト3以上のカードを捨てるたび相手の罠1枚を破壊" },
+  GM6_3: { atk: 9 },
+  GM6_6: { def: 4 },
+  GM6_7: { atk: 6, def: 6, condAtk: undefined, onSummon: "summonKnight", text: "소환시: 마나 3 지불 → 4/4 '무한의 기사' 소환", textJa: "召喚時: マナ3支払い → 4/4「無限の騎士」召喚" },
+  GM6_8: { onSummon: "breaktrapDraw", val: 2, text: "소환시: 상대 함정 1장 파괴, 성공 시 2장 드로우", textJa: "召喚時: 相手の罠1枚破壊、成功で2枚ドロー" },
+  // cost 7
+  GM7_0: { atk: 13, def: 5 },
+  GM7_1: { def: 14 },
+  GM7_2: { onSummon: "maxHpMana", val: 4, val2: 1, text: "소환시: 최대 체력 +4, 최대 마나 +1", textJa: "召喚時: 最大体力+4, 最大マナ+1" },
+  GM7_3: { atk: 11 },
+  GM7_5: { onSummon: "draw", val: 4, text: "소환시: 4장 드로우", textJa: "召喚時: 4枚ドロー" },
+  // cost 8
+  GM8_0: { atk: 18, def: 6, attackFx: "atkDownOnAttack", val: 2, text: "공격할 때마다 자신의 공격 -2(영구)", textJa: "攻撃するたび自身の攻撃-2(永続)" },
+  GM8_1: { def: 13, turnFx: "turnHeal", val: 3, text: "매 턴 시작 시 체력 +3 회복", textJa: "毎ターン開始時 体力+3回復" },
+  GM8_2: { atk: 5, def: 3, play: 3, onSummon: "cloneSelf", text: "소환 코스트 3. 소환시 50%로 자신을 복제 소환", textJa: "召喚コスト3。召喚時50%で自身を複製召喚" },
+  GM8_3: { onSummon: "burnBleed", val: 6, text: "소환시: 상대에 6 데미지. 이후 상대는 매 턴 1 데미지(중첩 불가)", textJa: "召喚時: 相手に6ダメージ。以降 相手は毎ターン1ダメージ(重複不可)" },
+  GM8_4: { onSummon: "heal", val: 13, text: "소환시: 체력 13 회복", textJa: "召喚時: 体力13回復" },
+  GM8_5: { onSummon: "parity", text: "소환시: 상대 체력 홀수면 5 데미지, 짝수면 4장 드로우", textJa: "召喚時: 相手の体力が奇数なら5ダメージ、偶数なら4枚ドロー" },
+  GM8_7: { atk: 14, def: 9 },
+  // cost 9
+  GM9_0: { atk: 13, def: 5, onSummon: "smite", val: 6, text: "소환시: 공격 6 이하 상대 몬스터 전멸", textJa: "召喚時: 攻撃6以下の敵モンスターを全滅" },
+  GM9_1: { turnFx: "payDefHeal", val: 3, val2: 2, text: "매 턴 마나 1로 방어 +3, 체력 +2 회복", textJa: "毎ターン マナ1で防御+3, 体力+2回復" },
+  GM9_2: { mult: 2, text: "한 턴에 2번 공격할 수 있다", textJa: "1ターンに2回攻撃できる" },
+  GM9_3: { onSummon: "drakeRamp", val: 7, turnFx: "chestDraw", val2: 4, text: "소환시: 상대에 7 데미지 + 최대 마나 +1. 매 턴 패의 보물상자를 묘지로 보내면 4장 드로우", textJa: "召喚時: 相手に7ダメージ + 最大マナ+1。毎ターン手札の宝箱を墓地へ送ると4枚ドロー" },
+  GM9_4: { onSummon: "heal", val: 15, text: "소환시: 체력 15 회복", textJa: "召喚時: 体力15回復" },
+  // cost 10
+  GM10_0: { atk: 24, def: 8 },
+  GM10_1: { atk: 10, def: 25 },
+  GM10_2: { atk: 13, def: 10, onSummon: "summonRandom", text: "소환시: 덱에서 랜덤 몬스터 1체 무료 소환", textJa: "召喚時: デッキからランダムなモンスター1体を無料召喚" },
+  GM10_3: { onSummon: "burnBreak2", val: 8, text: "소환시: 상대에 8 데미지 + 상대 함정 2장 파괴", textJa: "召喚時: 相手に8ダメージ + 相手の罠2枚破壊" },
+  GM10_4: { onSummon: "heal", val: 19, text: "소환시: 체력 19 회복", textJa: "召喚時: 体力19回復" },
+  // core traps
+  T1: { cost: 2, play: 1 },
+  T2: { cost: 3, play: 3, val: 3, text: "상대가 발동한 마법 1장을 무효화. 발동 시 자신에게 3 데미지", textJa: "相手が発動した魔法1枚を無効化。発動時 自分に3ダメージ" },
+  T3: { val: 6, text: "상대가 소환한 코스트 6 이하 몬스터를 파괴", textJa: "相手が召喚したコスト6以下のモンスターを破壊" },
+  T4: { cost: 4, play: 3, react: "counterFull", text: "공격 몬스터 파괴 + 그 공격력만큼 상대에게 데미지", textJa: "攻撃モンスターを破壊 + その攻撃力分を相手に与える" },
+  T6: { cost: 3, play: 2 },
+  T9: { cost: 3, play: 1, react: "wardheal", val: 3, val2: 1, text: "공격 무효 + 체력 3 회복 + 1장 드로우", textJa: "攻撃無効 + 体力3回復 + 1枚ドロー" },
+  T11: { react: "drawtrap", val: 5, text: "공격을 받으면 카드 5장 드로우", textJa: "攻撃を受けるとカード5枚ドロー" },
+  T12: { react: "guardbuff", val: 4, text: "이번 공격 무효 + 자신 몬스터 전체 방어 +4(영구)", textJa: "この攻撃を無効 + 自分のモンスター全体の防御+4(永続)" },
+  // generated traps — cost 5 / 6
+  GT5_0: { react: "guardBreakDraw", text: "공격 무효 + 공격측 함정 1장 파괴 + 1장 드로우", textJa: "攻撃無効 + 攻撃側の罠1枚破壊 + 1枚ドロー" },
+  GT5_1: { react: "guarddraw", val: 2, text: "공격 무효 + 2장 드로우", textJa: "攻撃無効 + 2枚ドロー" },
+  GT5_2: { react: "slaughterHeal", text: "공격 몬스터 파괴 + 30%로 그 방어력만큼 회복", textJa: "攻撃モンスターを破壊 + 30%でその防御力分回復" },
+  GT5_3: { react: "slaughterRaise", text: "공격 몬스터 파괴 + 30%로 자신 필드에 소생(소유권 이동)", textJa: "攻撃モンスターを破壊 + 30%で自分の場に蘇生(所有権移動)" },
+  GT6_0: { react: "guardPurge", val: 3, text: "공격 무효 + 최대 마나 -1로 상대 몬스터 최대 3체 파괴", textJa: "攻撃無効 + 最大マナ-1で敵モンスター最大3体を破壊" },
+  GT6_1: { react: "guarddraw", val: 3, text: "공격 무효 + 3장 드로우", textJa: "攻撃無効 + 3枚ドロー" },
+  GT6_2: { react: "slayWeakAll", val: 3, text: "공격 몬스터 파괴 + 상대 전체 공격 -3(이번 턴)", textJa: "攻撃モンスターを破壊 + 敵全体の攻撃-3(このターン)" },
+  GT6_3: { react: "slayLowAll", val: 5, text: "공격 몬스터 파괴 + 공격 5 이하 상대 몬스터 전멸", textJa: "攻撃モンスターを破壊 + 攻撃5以下の敵モンスター全滅" },
+  // generated traps — cost 8 (play-cost reductions per request)
+  GT8_0: { play: 7, react: "guardbuff", val: 4, val2: 1, text: "공격 무효 + 자신 몬스터 전체 방어 +4 + 1장 드로우", textJa: "攻撃無効 + 自分のモンスター全体の防御+4 + 1枚ドロー" },
+  GT8_1: { react: "guardEnemyDef", val: 4, text: "공격 무효 + 상대 몬스터 전체 방어 -4", textJa: "攻撃無効 + 敵モンスター全体の防御-4" },
+  GT8_2: { react: "guardWipe", val: 2, text: "공격 무효 + 상대 함정·영구마법 2장 파괴", textJa: "攻撃無効 + 相手の罠・永続魔法2枚を破壊" },
+  GT8_3: { play: 4, react: "guardMana", text: "공격 무효 + 최대 마나 +1", textJa: "攻撃無効 + 最大マナ+1" },
+};
+
+const DELETE_IDS = [
+  "GM8_6", "GM11_1", "GM11_2", "GM12_0", "GM12_1", "GM12_2",
+  "GT7_0", "GT7_1", "GT7_2", "GT7_3", "GT7_4", "GT7_5", "GT8_4", "GT9_0", "GT9_1",
+];
+
+const NEW_CARDS: CardDef[] = [
+  { id: "INFKNIGHT", t: "mon", cost: 0, name: "무한의 기사", nameJa: "無限の騎士", atk: 4, def: 4, text: "—", textJa: "—" },
+  { id: "NT_NULL3", t: "trap", cost: 3, name: "마력 차단", nameJa: "魔力遮断", react: "nullspell", val: 3, text: "상대 마법 1장 무효화 + 자신에게 3 데미지", textJa: "相手の魔法1枚を無効化 + 自分に3ダメージ" },
+  { id: "NT_NULL5", t: "trap", cost: 5, name: "마법 봉인", nameJa: "魔法封印", react: "nullspell", text: "상대 마법 1장 무효화", textJa: "相手の魔法1枚を無効化" },
+  { id: "NT_NULL6", t: "trap", cost: 6, name: "반마술 결계", nameJa: "反魔術結界", react: "nullspell", val2: 2, text: "상대 마법 1장 무효화 + 상대에게 2 데미지", textJa: "相手の魔法1枚を無効化 + 相手に2ダメージ" },
+];
+
+for (const id of Object.keys(PATCH)) { if (DB[id]) Object.assign(DB[id], PATCH[id]); }
+for (const id of DELETE_IDS) { delete DB[id]; }
+for (const c of NEW_CARDS) { DB[c.id] = c; }
+
+// chest (golden treasure) outcome odds — shown when the chest card is enlarged
+export const CHEST_ODDS = {
+  ko: { title: "황금상자 확률 (각 25%)", rows: ["최대 마나 +1 — 25%", "체력 +8 — 25%", "최대 체력 +5 — 25%", "꽝: 상대 필드에 미믹(3/2) — 25%"] },
+  ja: { title: "宝箱の確率 (各25%)", rows: ["最大マナ +1 — 25%", "体力 +8 — 25%", "最大体力 +5 — 25%", "ハズレ: 相手の場にミミック(3/2) — 25%"] },
+};
+
 export const ALL_IDS = Object.keys(DB);
 // markets never offer the Mimic token (cost 0) — excluded from buyable pool
 export const BUYABLE_POOL = ALL_IDS.filter((id) => DB[id].cost > 0);

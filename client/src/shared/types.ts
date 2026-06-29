@@ -25,6 +25,9 @@ export interface CardDef {
   play?: number; // play/cast cost (defaults to `cost`); buy cost stays `cost`
   ench?: string; // persistent field-enchantment key (spell stays on field)
   tribe?: string; // tribe key (고독/고귀/포식/귀족) for synergy monsters
+  turnFx?: string; // per-turn effect while on field (fires on owner's turn start)
+  attackFx?: string; // effect that fires whenever this monster attacks
+  mult?: number; // attacks allowed per turn (default 1)
   nameJa?: string; // Japanese name (falls back to name)
   textJa?: string; // Japanese effect text (falls back to text)
 }
@@ -44,6 +47,7 @@ export interface FieldMon extends CardInst {
   atkMod: number; // permanent atk change
   defMod: number; // permanent def change
   summonedTurn: number;
+  attacksUsed?: number; // attacks made this turn (for multi-attack monsters)
 }
 
 export interface TrapSet {
@@ -77,6 +81,7 @@ export interface PlayerState {
   enchants: Enchant[]; // active persistent spells (public, on field)
   tribesFired: string[]; // "<tribe>:<count>" synergy thresholds already used this game
   bonusDrawPerm: number; // permanent extra draw at turn start (귀족 3 synergy)
+  bleed: number; // persistent damage taken at the start of each of this player's turns
 }
 
 export interface Pending {

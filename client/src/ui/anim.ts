@@ -3,7 +3,7 @@
 // touch game state, only the DOM.
 // ============================================================
 import type { CardInst } from "../shared/types";
-import { frameFor, TRIBES } from "../shared/cards";
+import { frameFor, TRIBES, CHEST_ODDS } from "../shared/cards";
 import { cardEl } from "./cardView";
 import { t, getLang } from "../i18n";
 
@@ -107,6 +107,13 @@ export function zoomCard(c: CardInst): void {
     const panel = document.createElement("div");
     panel.className = "zoom-tribe";
     panel.innerHTML = `<h3>${info.name} ${t("tribe.suffix")}</h3><div class="note">${info.note}</div>` + info.bonuses.map((b) => `<div class="b">• ${b}</div>`).join("");
+    wrap.appendChild(panel);
+  }
+  if (c.star === "chest") {
+    const odds = CHEST_ODDS[getLang()];
+    const panel = document.createElement("div");
+    panel.className = "zoom-tribe";
+    panel.innerHTML = `<h3>${odds.title}</h3>` + odds.rows.map((r) => `<div class="b">• ${r}</div>`).join("");
     wrap.appendChild(panel);
   }
   ov.appendChild(wrap);
