@@ -7,7 +7,7 @@ import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { effMaxMana, supplyRange, playCost } from "../shared/engine";
 import { frameFor, FRAME_BACK } from "../shared/cards";
 import { cardEl } from "./cardView";
-import { zoomCard } from "./anim";
+import { bindZoom } from "./anim";
 import { t, getLang } from "../i18n";
 
 const MON_SLOTS = 7;
@@ -55,17 +55,22 @@ export class GameView {
               <div class="end-turn-wrap"><button class="btn btn-primary" id="endBtn">${t("game.endturn")}</button></div>
             </div>
           </div>
-          <div class="panel logpanel">
+          <div class="panel logpanel" id="logPanel">
             <div class="panel-title" id="logTitle">${t("game.log")}</div>
             <div class="log" id="log"></div>
             <div class="log-foot"><button class="btn btn-danger btn-block" id="surrenderBtn">${t("game.surrender")}</button></div>
           </div>
         </div>
+        <button class="log-fab" id="logFab" aria-label="log">📜</button>
       </div>
       <div class="target-hint" id="targetHint" style="display:none"></div>`;
     this.logEl = this.q("log");
     (this.q("endBtn") as HTMLButtonElement).onclick = () => this.h.onEndTurn();
     (this.q("surrenderBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
+    // mobile: toggle the log drawer
+    const fab = this.q("logFab");
+    const panel = this.q("logPanel");
+    fab.onclick = () => { const open = panel.classList.toggle("open"); fab.textContent = open ? "✕" : "📜"; };
     document.addEventListener("contextmenu", (e) => e.preventDefault());
   }
 
@@ -138,7 +143,7 @@ export class GameView {
       const card = cardEl(m, { field: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
-      card.oncontextmenu = (e) => { e.preventDefault(); zoomCard(m); };
+      bindZoom(card, m);
       mz.appendChild(card);
     });
     for (let i = p.field.length; i < MON_SLOTS; i++) mz.appendChild(this.slotEl());
@@ -149,7 +154,7 @@ export class GameView {
     p.traps.forEach((t) => {
       if (isMe && t.card.id !== "HIDDEN") {
         const card = cardEl(t.card, { badge: "SET" });
-        card.oncontextmenu = (e) => { e.preventDefault(); zoomCard(t.card); };
+        bindZoom(card, t.card);
         sz.appendChild(card);
       } else {
         const cb = document.createElement("div");
@@ -161,7 +166,7 @@ export class GameView {
     // persistent enchantments (public, face-up, with remaining-turn badge)
     p.enchants.forEach((e) => {
       const card = cardEl(e.card, { badge: `${e.turns}T` });
-      card.oncontextmenu = (ev) => { ev.preventDefault(); zoomCard(e.card); };
+      bindZoom(card, e.card);
       sz.appendChild(card);
     });
     for (let i = p.traps.length + p.enchants.length; i < ST_SLOTS; i++) sz.appendChild(this.slotEl());
@@ -228,7 +233,7 @@ export class GameView {
       const aff = myTurn && !g.pending && me.mana >= c.cost;
       const card = cardEl(c, { buyable: aff, dim: !aff }); // board size so 8 fit
       if (aff) card.onclick = () => this.h.onBuyMarket(i);
-      card.oncontextmenu = (e) => { e.preventDefault(); zoomCard(c); };
+      bindZoom(card, c);
       fixed.appendChild(card);
     });
 
@@ -238,7 +243,7 @@ export class GameView {
       const aff = myTurn && !g.pending && me.mana >= c.cost;
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff });
       if (aff) card.onclick = () => this.h.onBuySupply(i);
-      card.oncontextmenu = (e) => { e.preventDefault(); zoomCard(c); };
+      bindZoom(card, c);
       sup.appendChild(card);
     });
 
@@ -259,7 +264,7 @@ export class GameView {
       card.style.transform = `rotate(${off * 3.2}deg) translateY(${Math.abs(off) ** 2 * 2}px)`;
       card.style.zIndex = String(idx);
       if (aff) card.onclick = () => this.h.onPlay(idx);
-      card.oncontextmenu = (e) => { e.preventDefault(); zoomCard(c); };
+      bindZoom(card, c);
       handEl.appendChild(card);
     });
   }
@@ -279,7 +284,7 @@ export class GameView {
     }
     const t = document.createElement("div"); t.className = "pile-tag"; t.textContent = tag; pile.appendChild(t);
     const cnt = document.createElement("div"); cnt.className = "pile-count"; cnt.textContent = String(count); pile.appendChild(cnt);
-    if (faceCard && faceCard.id !== "HIDDEN") pile.oncontextmenu = (e) => { e.preventDefault(); zoomCard(faceCard); };
+    if (faceCard && faceCard.id !== "HIDDEN") bindZoom(pile, faceCard);
     return pile;
   }
 

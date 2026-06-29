@@ -117,3 +117,29 @@ export function zoomCard(c: CardInst): void {
 export function closeZoom(): void {
   document.getElementById("zoomOverlay")?.remove();
 }
+
+/**
+ * Bind "enlarge" to an element: right-click on desktop, long-press on touch.
+ * A long-press swallows the tap so it does NOT also play/attack with the card.
+ */
+export function bindZoom(el: HTMLElement, card: CardInst): void {
+  el.oncontextmenu = (e) => { e.preventDefault(); zoomCard(card); };
+  let timer = 0, sx = 0, sy = 0, fired = false;
+  el.addEventListener("touchstart", (e) => {
+    if (e.touches.length !== 1) return;
+    fired = false;
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+    clearTimeout(timer);
+    timer = window.setTimeout(() => { fired = true; zoomCard(card); }, 380);
+  }, { passive: true });
+  const cancel = () => clearTimeout(timer);
+  el.addEventListener("touchmove", (e) => {
+    const tt = e.touches[0]; if (!tt) return;
+    if (Math.abs(tt.clientX - sx) > 12 || Math.abs(tt.clientY - sy) > 12) cancel();
+  }, { passive: true });
+  el.addEventListener("touchend", (e) => {
+    cancel();
+    if (fired) { e.preventDefault(); e.stopPropagation(); } // swallow the tap that would play/attack
+  });
+  el.addEventListener("touchcancel", cancel);
+}

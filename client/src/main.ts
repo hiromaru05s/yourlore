@@ -6,6 +6,7 @@ import "./styles/base.css";
 import "./styles/card.css";
 import "./styles/game.css";
 import "./styles/screens.css";
+import "./styles/mobile.css";
 import { App } from "./router";
 import { initLang } from "./i18n";
 
