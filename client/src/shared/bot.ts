@@ -34,7 +34,16 @@ export function botDecide(g: GameState): Action {
   if (monsters.length) return { type: "play", idx: monsters[0].i };
 
   // 3) removal / direct-damage / buff / utility spells
-  const spells = p.hand.map((c, i) => ({ c, i })).filter((x) => x.c.t === "spell" && playCost(x.c) <= p.mana);
+  //    Skip spells whose play would be REJECTED before paying (else the bot
+  //    keeps reselecting an uncastable card and never ends its turn).
+  const castable = (c: CardInst): boolean => {
+    if (c.act === "wipeBack" && p.field.length > 0) return false;
+    if (c.id === "S4" && (p.usesTurn?.["S4"] || 0) >= 1) return false;
+    if (c.id === "GS9_0" && o.hp <= 21) return false;
+    if (c.id === "GS10_0" && p.field.length > 1) return false;
+    return true;
+  };
+  const spells = p.hand.map((c, i) => ({ c, i })).filter((x) => x.c.t === "spell" && playCost(x.c) <= p.mana && castable(x.c));
   const removal = spells.find((x) => (x.c.act === "destroyMon" || x.c.act === "weaken") && o.field.length > 0);
   if (removal) return { type: "play", idx: removal.i };
   const trapbreak = spells.find((x) => x.c.act === "destroyTrap" && o.traps.length > 0);

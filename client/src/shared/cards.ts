@@ -119,6 +119,10 @@ export const TRIBES: Record<string, { ko: TribeInfo; ja: TribeInfo }> = {
     ko: { name: "귀족", note: "※ 서로 다른 종족 카드여야 발동", bonuses: ["서로 다른 2종: 자신의 최대 마나 -1", "서로 다른 3종: 최대 마나 +5, 매 턴 +2 드로우(영구), 최대 체력 +15"] },
     ja: { name: "貴族", note: "※ 異なる種族カードが必要", bonuses: ["異なる2種: 自分の最大マナ -1", "異なる3種: 最大マナ +5, 毎ターン+2ドロー(永続), 最大体力 +15"] },
   },
+  "시초": {
+    ko: { name: "시초", note: "※ 1~7코스트 각 1종 · 서로 다른 카드를 모으세요", bonuses: ["서로 다른 2종: 최대 체력 +6", "서로 다른 3종: 최대 체력 +13, 상대 최대 체력 -3", "서로 다른 4종: 최대 마나 +10, 최대 체력 +20, 4장 드로우, 상대 필드 전멸, 상대 13 데미지"] },
+    ja: { name: "始原", note: "※ 1~7コスト各1種 · 異なるカードを揃える", bonuses: ["異なる2種: 最大体力 +6", "異なる3種: 最大体力 +13, 相手の最大体力 -3", "異なる4種: 最大マナ +10, 最大体力 +20, 4枚ドロー, 相手の場を全滅, 相手に13ダメージ"] },
+  },
 };
 
 // ---------------- generated high-cost curve (cost 5–12) ----------------
@@ -389,6 +393,82 @@ const NEW_CARDS: CardDef[] = [
 for (const id of Object.keys(PATCH)) { if (DB[id]) Object.assign(DB[id], PATCH[id]); }
 for (const id of DELETE_IDS) { delete DB[id]; }
 for (const c of NEW_CARDS) { DB[c.id] = c; }
+
+// ============================================================
+// BALANCE PATCH 2 — spell reworks (bespoke effects live in engine customSpell)
+// ============================================================
+const PATCH2: Record<string, Partial<CardDef>> = {
+  // core spells
+  S1: { val: 2, text: "상대 체력에 2 데미지 · 이번 턴 3회째부터 1장 드로우", textJa: "相手の体力に2ダメージ · このターン3回目から1枚ドロー" },
+  S4: { play: 1, text: "카드 3장 드로우 (시전 1) · 이번 턴 1회만", textJa: "カード3枚ドロー (発動1) · このターン1回のみ" },
+  S5: { cost: 2, play: 2, val2: undefined, text: "다음 상대 제시를 3장 → 2장으로 축소 (시전 2)", textJa: "次の相手の提示を3枚→2枚に縮小 (発動2)" },
+  S6: { play: 2, text: "덱에서 원하는 1장을 패로 (시전 2)", textJa: "デッキから好きな1枚を手札へ (発動2)" },
+  S7: { val: 3, text: "자신 몬스터 전체 공격 +3(이번 턴) + 최대 체력 +2", textJa: "自分のモンスター全体の攻撃+3(このターン) + 最大体力+2" },
+  S8: { text: "묘지에서 원하는 1장을 패로", textJa: "墓地から好きな1枚を手札へ" },
+  S12: { val: 2, val2: 1, text: "자신 몬스터 1체에 공격+2 / 방어+1(영구)", textJa: "自分のモンスター1体に攻撃+2/防御+1(永続)" },
+  S13: { val: 9, text: "상대 체력에 9 데미지", textJa: "相手の体力に9ダメージ" },
+  E3: { play: 4, text: "자신의 4턴 동안 턴 시작시 1장 추가 드로우 · 종료 다음 턴 최대 마나 +1 (시전 4)", textJa: "自分の4ターンの間ターン開始時に1枚追加ドロー · 終了の翌ターン最大マナ+1 (発動4)" },
+  NHEAL: { play: 2, text: "영구: 몬스터를 소환할 때마다 체력 1 회복 (시전 2)", textJa: "永続: モンスターを召喚するたびに体力1回復 (発動2)" },
+  AMA: { text: "패의 보물상자 1장을 묘지로 → 최대 마나 +1", textJa: "手札の宝箱1枚を捨て札へ → 最大マナ+1" },
+  AJIN: { text: "최대 마나 +1, 50% 확률로 묘지에 어튠 1장 추가", textJa: "最大マナ+1、50%で捨て札にアチューンを1枚追加" },
+  AHEUK: { play: 5, text: "상대 최대 마나 -1. 자신 필드 몬스터가 없으면 추가로 -1 (시전 5)", textJa: "相手の最大マナ-1。自分の場のモンスターがいなければ追加で-1 (発動5)" },
+  NWIPE: { val: 5, text: "자신 필드에 몬스터가 없을 때만. 상대 함정·마법 전부 파괴 후 자신 5 데미지", textJa: "自分の場にモンスターがいない時のみ。相手の罠・魔法を全て破壊し自分に5ダメージ" },
+  ND2: { val: 2, val2: 2, play: 1, text: "카드 2장 드로우 + 체력 2 회복 (시전 1)", textJa: "カード2枚ドロー + 体力2回復 (発動1)" },
+  ND3: { val: 3, play: 2, text: "카드 3장 드로우, 30% 확률로 2장 추가 (시전 2)", textJa: "カード3枚ドロー、30%で2枚追加 (発動2)" },
+  ND5: { val: 5, play: 3, text: "카드 5장 드로우, 20% 확률로 최대 마나 +1 (시전 3)", textJa: "カード5枚ドロー、20%で最大マナ+1 (発動3)" },
+  // generated spells
+  GS5_0: { val: 10, text: "상대 체력에 10 데미지, 10% 확률로 상대 최대 마나 -1", textJa: "相手の体力に10ダメージ、10%で相手の最大マナ-1" },
+  GS5_2: { text: "체력 9 회복 · 체력 20 이상이면 최대 체력 +4", textJa: "体力9回復 · 体力20以上なら最大体力+4" },
+  GS6_0: { text: "상대 체력에 12 데미지 + 자신 체력 2 회복", textJa: "相手の体力に12ダメージ + 自分の体力2回復" },
+  GS6_2: { text: "체력 13 회복, 20% 확률로 최대 체력 +5", textJa: "体力13回復、20%で最大体力+5" },
+  GS6_3: { val: 4, play: 2, text: "카드 4장 드로우 · 최대 체력 55 이상이면 2장 추가 (시전 2)", textJa: "カード4枚ドロー · 最大体力55以上なら2枚追加 (発動2)" },
+  GS6_4: { val: 11, text: "자신 몬스터 1체 공격 +11(이번 턴)", textJa: "自分のモンスター1体の攻撃+11(このターン)" },
+  GS7_0: { text: "상대 체력에 16 데미지, 20% 확률로 자신 최대 마나 -1", textJa: "相手の体力に16ダメージ、20%で自分の最大マナ-1" },
+  GS7_2: { text: "체력 13 회복 · 이 카드 3번째 사용부터 피격 시마다 체력 +5", textJa: "体力13回復 · このカード3回目使用から被攻撃ごとに体力+5" },
+  GS7_4: { val: 13, text: "자신 몬스터 1체 공격 +13(이번 턴)", textJa: "自分のモンスター1体の攻撃+13(このターン)" },
+  GS8_0: { text: "상대 체력에 11 데미지 · 사용 시 50%로 상대 덱 맨 위 1장 제외", textJa: "相手の体力に11ダメージ · 使用時50%で相手のデッキトップ1枚を除外" },
+  GS8_1: { play: 5, text: "상대 체력에 13 데미지 (시전 5)", textJa: "相手の体力に13ダメージ (発動5)" },
+  GS8_2: { text: "체력 14 회복 · 자신 최대 마나가 10 이하면 체력 완전 회복", textJa: "体力14回復 · 自分の最大マナが10以下なら体力全回復" },
+  GS8_3: { val: 5, text: "카드 5장 드로우 · 60%로 상대 몬스터/함정/마법 1장 무작위 파괴", textJa: "カード5枚ドロー · 60%で相手のモンスター/罠/魔法1枚をランダム破壊" },
+  GS8_4: { val: 13, text: "아군 전체 공격 +13(이번 턴) · 이번 턴 종료 후 공격 +2(영구)", textJa: "味方全体の攻撃+13(このターン) · ターン終了後 攻撃+2(永続)" },
+  GS8_5: { val: 7, text: "아군 전체 공격 +7 · 20%로 6코스트 이하 몬스터 무작위 소환", textJa: "味方全体の攻撃+7 · 20%でコスト6以下のモンスターをランダム召喚" },
+  GS9_0: { text: "상대 체력에 21 데미지 (상대 체력 21 이하면 사용 불가)", textJa: "相手の体力に21ダメージ (相手の体力21以下では使用不可)" },
+  GS9_1: { val: 15, text: "상대 체력에 15 데미지 (시전 7)", textJa: "相手の体力に15ダメージ (発動7)" },
+  GS9_2: { val: 16, text: "체력 16 회복 · 패의 '생명의 빛' 1장 묘지로 보내면 최대 체력 +15", textJa: "体力16回復 · 手札の「生命の光」1枚を墓地へ送ると最大体力+15" },
+  GS10_0: { text: "상대 체력에 23 데미지 (자신 필드 몬스터 1체 이하일 때만)", textJa: "相手の体力に23ダメージ (自分の場のモンスターが1体以下の時のみ)" },
+  GS10_1: { text: "상대 체력에 17 데미지 + 카드 1장 드로우 (시전 8)", textJa: "相手の体力に17ダメージ + カード1枚ドロー (発動8)" },
+  GS10_2: { text: "체력 19 회복 · 상대 몬스터 1체 + 마법/함정 1장 파괴", textJa: "体力19回復 · 相手モンスター1体 + 魔法/罠1枚を破壊" },
+  GS10_3: { play: 2, text: "카드 5장 드로우 (시전 2)", textJa: "カード5枚ドロー (発動2)" },
+  GS11_0: { val: 25, text: "상대 체력에 25 데미지", textJa: "相手の体力に25ダメージ" },
+  GS11_1: { val: 20, text: "상대 체력에 20 데미지 (시전 9)", textJa: "相手の体力に20ダメージ (発動9)" },
+};
+const DELETE_IDS2 = ["GS12_0", "GS12_1"];
+
+const NEW_CARDS2: CardDef[] = [
+  // ---- existing tribes: a 3-cost member each (slightly under-statted, like the 2-cost) ----
+  { id: "TSO3", t: "mon", cost: 3, name: "고독한 사냥꾼", nameJa: "孤独な狩人", atk: 4, def: 2, tribe: "고독", text: "[고독] 동족 시너지", textJa: "[孤独] 同族シナジー" },
+  { id: "TNO3", t: "mon", cost: 3, name: "고귀한 종자", nameJa: "高貴な従者", atk: 4, def: 2, tribe: "고귀", text: "[고귀] 동족 시너지", textJa: "[高貴] 同族シナジー" },
+  { id: "TPO3", t: "mon", cost: 3, name: "굶주린 추격자", nameJa: "飢えた追跡者", atk: 4, def: 2, tribe: "포식", text: "[포식] 동족 시너지", textJa: "[捕食] 同族シナジー" },
+  { id: "TAR3", t: "mon", cost: 3, name: "몰락한 기사", nameJa: "没落した騎士", atk: 4, def: 2, tribe: "귀족", text: "[귀족] 동족 시너지", textJa: "[貴族] 同族シナジー" },
+  // ---- NEW tribe 시초(Genesis): cost 1~7, one each ----
+  { id: "TGE1", t: "mon", cost: 1, play: 2, name: "시초의 알", nameJa: "始原の卵", atk: 0, def: 0, tribe: "시초", text: "[시초] 동족 시너지 · 소환 코스트 2", textJa: "[始原] 同族シナジー · 召喚コスト2" },
+  { id: "TGE2", t: "mon", cost: 2, name: "시초의 불씨", nameJa: "始原の火種", atk: 1, def: 1, tribe: "시초", onSummon: "maxHpAdd", val: -2, text: "[시초] 소환시 최대 체력 -2", textJa: "[始原] 召喚時 最大体力-2" },
+  { id: "TGE3", t: "mon", cost: 3, name: "시초의 새싹", nameJa: "始原の芽", atk: 2, def: 1, tribe: "시초", onSummon: "maxHpAdd", val: -1, text: "[시초] 소환시 최대 체력 -1", textJa: "[始原] 召喚時 最大体力-1" },
+  { id: "TGE4", t: "mon", cost: 4, name: "시초의 정령", nameJa: "始原の精霊", atk: 2, def: 2, tribe: "시초", text: "[시초] 동족 시너지", textJa: "[始原] 同族シナジー" },
+  { id: "TGE5", t: "mon", cost: 5, name: "시초의 수호자", nameJa: "始原の守護者", atk: 3, def: 2, tribe: "시초", text: "[시초] 동족 시너지", textJa: "[始原] 同族シナジー" },
+  { id: "TGE6", t: "mon", cost: 6, name: "시초의 거인", nameJa: "始原の巨人", atk: 3, def: 3, tribe: "시초", onSummon: "maxHpAdd", val: 1, text: "[시초] 소환시 최대 체력 +1", textJa: "[始原] 召喚時 最大体力+1" },
+  { id: "TGE7", t: "mon", cost: 7, name: "시초의 군주", nameJa: "始原の君主", atk: 4, def: 5, tribe: "시초", onSummon: "maxHpAdd", val: 2, text: "[시초] 소환시 최대 체력 +2", textJa: "[始原] 召喚時 最大体力+2" },
+  // ---- NEW spells (bespoke effects in engine customSpell / enchant) ----
+  { id: "HANDRESET", t: "spell", cost: 3, play: 2, act: "draw", name: "핸드 리셋", nameJa: "ハンドリセット", text: "패를 모두 버리고 4장 드로우, 최대 체력 +1 (시전 2)", textJa: "手札を全て捨て4枚ドロー, 最大体力+1 (発動2)" },
+  { id: "TIMEWARP", t: "spell", cost: 13, act: "dmg", name: "시공간 조작", nameJa: "時空間操作", text: "60% 확률로 다음 상대 턴을 스킵", textJa: "60%で次の相手のターンをスキップ" },
+  { id: "INFERNO", t: "spell", cost: 5, ench: "inferno", val: 99, name: "지옥", nameJa: "地獄", text: "영구마법: 자신의 턴마다 자신 6 / 상대 5 데미지", textJa: "永続魔法: 自分のターンごとに自分6 / 相手5ダメージ" },
+  { id: "GAMBLE", t: "spell", cost: 4, act: "dmg", name: "갬블", nameJa: "ギャンブル", text: "주사위 — 1·2: 자신 8뎀 / 3·4: 상대 5뎀 / 5: 마나 골렘 / 6: 유리 대포 ×3", textJa: "ダイス — 1·2: 自分8 / 3·4: 相手5 / 5: マナゴーレム / 6: ガラスの大砲×3" },
+  { id: "DICE8", t: "spell", cost: 8, act: "dmg", name: "악마의 주사위", nameJa: "悪魔のダイス", text: "주사위 — 1·2: 자신 최대마나-4 / 3·4: 상대 마나-1·14뎀 / 5: 폭풍의 전사 / 6: 상대 마법함정 전멸·전사 2체·최대마나+2·체력+10", textJa: "ダイス — 1·2: 自分の最大マナ-4 / 3·4: 相手のマナ-1·14 / 5: 嵐の戦士 / 6: 相手の魔法罠全滅·戦士2体·最大マナ+2·体力+10" },
+];
+
+for (const id of Object.keys(PATCH2)) { if (DB[id]) Object.assign(DB[id], PATCH2[id]); }
+for (const id of DELETE_IDS2) { delete DB[id]; }
+for (const c of NEW_CARDS2) { DB[c.id] = c; }
 
 // chest (golden treasure) outcome odds — shown when the chest card is enlarged
 export const CHEST_ODDS = {

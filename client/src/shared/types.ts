@@ -82,6 +82,12 @@ export interface PlayerState {
   tribesFired: string[]; // "<tribe>:<count>" synergy thresholds already used this game
   bonusDrawPerm: number; // permanent extra draw at turn start (귀족 3 synergy)
   bleed: number; // persistent damage taken at the start of each of this player's turns
+  uses: Record<string, number>; // per-game count of how many times each card id has been played
+  usesTurn: Record<string, number>; // per-turn count (reset each turn)
+  supplyShrink: number; // if >0, this player's next 제시 roll offers 2 cards instead of 3
+  defendHeal: number; // heal this much whenever this player is attacked
+  manaGainNext: number; // max mana to gain at the start of this player's next turn
+  skipNext: boolean; // if true, this player's next turn is skipped
 }
 
 export interface Pending {
