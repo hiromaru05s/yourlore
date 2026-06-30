@@ -7,7 +7,7 @@
 import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { createGame, reduce } from "../shared/engine";
 import { botDecide } from "../shared/bot";
-import { frameFor, DB } from "../shared/cards";
+import { frameFor, DB, STARTERS } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog } from "../ui/log";
 import * as A from "../ui/anim";
@@ -115,7 +115,8 @@ export abstract class BaseController implements BoardHandlers {
           if (card) { void A.summonFromHand(card, e.uid, sideOf(e.player)); animMs = Math.max(animMs, 700); }
           else A.summonIn(e.uid);
         } else if (e.type === "playSpell") {
-          if (DB[e.id]) void A.revealSpell({ uid: "fx", ...DB[e.id] }, sideOf(e.player), e.dest);
+          const def = DB[e.id] ?? STARTERS[e.id]; // 컬/어튠/보물상자 live in STARTERS
+          if (def) void A.revealSpell({ uid: "fx", ...def }, sideOf(e.player), e.dest);
           animMs = Math.max(animMs, e.dest === "field" ? 1100 : 2300);
         } else if (e.type === "trapSet") {
           void A.trapSetAnim(sideOf(e.player)); animMs = Math.max(animMs, 650);

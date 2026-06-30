@@ -923,9 +923,9 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   if (!card || p.mana < playCost(card)) return;
 
   if (card.t === "starter") {
-    if (card.star === "trash") { p.mana -= playCost(card); p.hand.splice(idx, 1); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 이 카드 폐기`, `<span class="t">${p.name}</span> ${cn(card)} → このカードを廃棄`); }
-    else if (card.star === "chest") { p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card); openTreasure(g, ctx, p); }
-    else if (card.star === "mana") { p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card); p.maxMana++; ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 최대 마나 +1 (${p.maxMana})`, `<span class="t">${p.name}</span> ${cn(card)} → 最大マナ +1 (${p.maxMana})`); }
+    if (card.star === "trash") { p.mana -= playCost(card); p.hand.splice(idx, 1); ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "vanish" }); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 이 카드 폐기`, `<span class="t">${p.name}</span> ${cn(card)} → このカードを廃棄`); }
+    else if (card.star === "chest") { p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card); ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "discard" }); openTreasure(g, ctx, p); }
+    else if (card.star === "mana") { p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card); p.maxMana++; ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "discard" }); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 최대 마나 +1 (${p.maxMana})`, `<span class="t">${p.name}</span> ${cn(card)} → 最大マナ +1 (${p.maxMana})`); }
     return;
   }
   if (card.t === "mon") {

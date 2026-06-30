@@ -120,6 +120,13 @@
 .card--back.trap-land { animation: trapLand .25s var(--ease); box-shadow: 0 0 16px var(--good); }
 @keyframes trapLand { 0% { transform: scale(.7) } 50% { transform: scale(.78) rotate(-3deg) } 100% { transform: scale(.7) } }
 /* trap reveal: flip from back to face */
+/* single-shot card removed from play (e.g. Cull): dissolve away */
+.card.fx-dissolve { animation: fxDissolve .42s var(--ease) forwards; }
+@keyframes fxDissolve {
+  0% { transform: scale(1.25); filter: brightness(1) }
+  40% { transform: scale(1.32); filter: brightness(1.9) drop-shadow(0 0 14px var(--brass-hi)) }
+  100% { transform: scale(1.5); opacity: 0; filter: brightness(2.4) blur(3px) }
+}
 .card.trap-flip { animation: trapFlip .5s var(--ease); box-shadow: 0 0 22px var(--vermil-hi); }
 @keyframes trapFlip {
   0% { transform: rotateY(90deg) scale(1.05); filter: brightness(2) }

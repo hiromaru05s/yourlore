@@ -27,6 +27,11 @@ export function mountHome(app: App): Screen {
           <p>${t("home.bot.desc")}</p>
         </div>
       </div>
+      <div class="panel tut-card" id="cards">
+        <span class="tut-emoji">🃏</span>
+        <span class="tut-txt"><b>${t("home.cards.title")}</b><span>${t("home.cards.desc")}</span></span>
+        <span class="tut-arrow">→</span>
+      </div>
       <div class="panel tut-card" id="tutorial">
         <span class="tut-emoji">📖</span>
         <span class="tut-txt"><b>${t("home.tutorial.title")}</b><span>${t("home.tutorial.desc")}</span></span>
@@ -43,6 +48,7 @@ export function mountHome(app: App): Screen {
 
   (wrap.querySelector("#online") as HTMLElement).onclick = () => app.onlineLobby();
   (wrap.querySelector("#bot") as HTMLElement).onclick = () => app.botGame();
+  (wrap.querySelector("#cards") as HTMLElement).onclick = () => app.cards();
   (wrap.querySelector("#tutorial") as HTMLElement).onclick = () => app.tutorial();
   (wrap.querySelector("#logout") as HTMLElement).onclick = () => app.logout();
 

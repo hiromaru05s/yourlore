@@ -42,7 +42,7 @@ function backEl(): HTMLElement {
 }
 
 /** Opponent (or you) played a SPELL: reveal it from hand, hold face-up, then send to discard (or fade into field). */
-export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field"): Promise<void> {
+export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish"): Promise<void> {
   const from = handRect(side); const row = rowRect(side);
   if (!from || !row) return;
   const node = floatAt(cardEl(card, { size: "hand" }), from);
@@ -51,11 +51,14 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   await raf();
   node.style.transition = `left .38s ${EASE}, top .38s ${EASE}, transform .38s ${EASE}`;
   node.style.left = cx + "px"; node.style.top = cy + "px"; node.style.transform = "scale(1.25)";
-  await wait(side === "me" ? 650 : 1850); // opponent's spell lingers so you can read it
+  await wait(side === "me" ? 650 : 1850); // opponent's card lingers so you can read it
   if (dest === "discard") {
     const to = rectOf("#" + discId(side));
     if (to) { node.style.transition = `left .45s ${EASE}, top .45s ${EASE}, transform .45s ${EASE}, opacity .45s`; node.style.left = to.left + "px"; node.style.top = to.top + "px"; node.style.transform = "scale(.45)"; node.style.opacity = "0"; }
     await wait(460); pileFlash(discId(side));
+  } else if (dest === "vanish") {
+    node.classList.add("fx-dissolve"); // e.g. Cull: removed from the deck entirely
+    await wait(440);
   } else {
     node.style.transition = `transform .3s ${EASE}, opacity .3s`; node.style.transform = "scale(.9)"; node.style.opacity = "0";
     await wait(320);
