@@ -136,10 +136,12 @@ export type GameEvent =
   | { type: "damage"; player: Side; amount: number }
   | { type: "heal"; player: Side; amount: number }
   | { type: "destroy"; player: Side; uid: string }
-  | { type: "buy"; player: Side; from: "market" | "supply"; i: number }
+  | { type: "buy"; player: Side; from: "market" | "supply"; i: number; id: string }
   | { type: "draw"; player: Side; count: number }
   | { type: "treasure"; player: Side; kind: string; text: string; textJa: string; isBot: boolean }
-  | { type: "trap"; player: Side; name: string }
+  | { type: "playSpell"; player: Side; id: string; dest: "discard" | "field" } // spell/enchant played from hand
+  | { type: "trapSet"; player: Side } // a face-down trap was set (identity hidden)
+  | { type: "trapReveal"; player: Side; id: string } // a trap fired → reveal then discard
   | { type: "win"; winner: Side }
   | { type: "needTarget"; pending: Pending };
 

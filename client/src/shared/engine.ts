@@ -325,11 +325,12 @@ function handleDefeat(g: GameState, ctx: Ctx, loser: PlayerState, finisher: Side
 // ============================================================
 // combat + trap reactions
 // ============================================================
-function takeTrap(o: PlayerState, react: string): TrapSet["card"] | null {
+function takeTrap(g: GameState, ctx: Ctx, o: PlayerState, react: string): TrapSet["card"] | null {
   const i = o.traps.findIndex((t) => t.card.react === react);
   if (i < 0) return null;
   const t = o.traps.splice(i, 1)[0];
   o.discard.push(t.card);
+  ctx.ev.push({ type: "trapReveal", player: side(g, o), id: t.card.id }); // flip → reveal → discard (UI)
   return t.card;
 }
 
@@ -342,21 +343,21 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   if (o.defendHeal > 0) ctx.heal(o, o.defendHeal); // GS7_2: heal the defender each time they're attacked
 
   // ---- terminal reactions ----
-  if ((tc = takeTrap(o, "judgment"))) {
+  if ((tc = takeTrap(g, ctx, o, "judgment"))) {
     ctx.log(
       `  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴 + 상대에게 ${tc.val}`,
       `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 破壊 + 相手に ${tc.val}`,
     );
     ctx.destroyMonster(p, att); ctx.dealDamage(p, tc.val || 0, cn(tc), cn(tc)); return;
   }
-  if ((tc = takeTrap(o, "devour"))) {
+  if ((tc = takeTrap(g, ctx, o, "devour"))) {
     ctx.log(
       `  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴 + 체력 ${tc.val} 회복`,
       `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 破壊 + 体力 ${tc.val} 回復`,
     );
     ctx.destroyMonster(p, att); ctx.heal(o, tc.val || 0); return;
   }
-  if ((tc = takeTrap(o, "counter"))) {
+  if ((tc = takeTrap(g, ctx, o, "counter"))) {
     const refl = Math.floor(atk / 2);
     ctx.log(
       `  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴 + ${refl} 반사`,
@@ -366,7 +367,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     if (!g.over) ctx.destroyMonster(p, att);
     return;
   }
-  if ((tc = takeTrap(o, "bulwark"))) {
+  if ((tc = takeTrap(g, ctx, o, "bulwark"))) {
     att.defMod = (att.defMod || 0) - (tc.val || 0); att.exhausted = true;
     ctx.log(
       `  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + ${cn(att)} 방어 -${tc.val}`,
@@ -374,7 +375,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     );
     return;
   }
-  if ((tc = takeTrap(o, "fullguard"))) {
+  if ((tc = takeTrap(g, ctx, o, "fullguard"))) {
     att.exhausted = true;
     ctx.log(
       `  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효화`,
@@ -383,52 +384,52 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     if (tc.val) ctx.dealDamage(p, tc.val, cn(tc), cn(tc));
     return;
   }
-  if ((tc = takeTrap(o, "wardheal"))) { // T9: negate + heal + draw
+  if ((tc = takeTrap(g, ctx, o, "wardheal"))) { // T9: negate + heal + draw
     att.exhausted = true; ctx.heal(o, tc.val || 0); ctx.drawN(o, tc.val2 || 0);
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 체력 ${tc.val} 회복 + ${tc.val2}장 드로우`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 体力${tc.val}回復 + ${tc.val2}枚ドロー`);
     return;
   }
-  if ((tc = takeTrap(o, "counterFull"))) { // T4: destroy attacker + reflect its full atk to its owner
+  if ((tc = takeTrap(g, ctx, o, "counterFull"))) { // T4: destroy attacker + reflect its full atk to its owner
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴 + ${atk} 반사`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 破壊 + ${atk} 反射`);
     ctx.destroyMonster(p, att); ctx.dealDamage(p, atk, cn(tc), cn(tc)); return;
   }
-  if ((tc = takeTrap(o, "guardbuff"))) { // T12 / GT8_0: negate + own field def buff (+ optional draw)
+  if ((tc = takeTrap(g, ctx, o, "guardbuff"))) { // T12 / GT8_0: negate + own field def buff (+ optional draw)
     att.exhausted = true; const tv = tc.val || 0;
     o.field.forEach((mm) => (mm.defMod = (mm.defMod || 0) + tv));
     if (tc.val2) ctx.drawN(o, tc.val2);
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 자신 몬스터 전체 방어 +${tv}${tc.val2 ? ` + ${tc.val2}장 드로우` : ""}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 自分のモンスター全体の防御+${tv}${tc.val2 ? ` + ${tc.val2}枚ドロー` : ""}`);
     return;
   }
-  if ((tc = takeTrap(o, "guarddraw"))) { // GT5_1 / GT6_1: negate + draw
+  if ((tc = takeTrap(g, ctx, o, "guarddraw"))) { // GT5_1 / GT6_1: negate + draw
     att.exhausted = true; const n = ctx.drawN(o, tc.val || 0);
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + ${n}장 드로우`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + ${n}枚ドロー`);
     return;
   }
-  if ((tc = takeTrap(o, "guardBreakDraw"))) { // GT5_0: negate + break one attacker trap + draw 1
+  if ((tc = takeTrap(g, ctx, o, "guardBreakDraw"))) { // GT5_0: negate + break one attacker trap + draw 1
     att.exhausted = true; let broke = 0;
     if (p.traps.length) { const t2 = p.traps.splice(randInt(g, p.traps.length), 1)[0]; p.discard.push(t2.card); broke = 1; }
     ctx.drawN(o, 1);
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 공격측 함정 ${broke}장 파괴 + 1장 드로우`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 攻撃側の罠${broke}枚破壊 + 1枚ドロー`);
     return;
   }
-  if ((tc = takeTrap(o, "guardMana"))) { // GT8_3: negate + max mana +1
+  if ((tc = takeTrap(g, ctx, o, "guardMana"))) { // GT8_3: negate + max mana +1
     att.exhausted = true; o.maxMana += 1;
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 최대 마나 +1`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 最大マナ+1`);
     return;
   }
-  if ((tc = takeTrap(o, "guardEnemyDef"))) { // GT8_1: negate + all attacker-side def down
+  if ((tc = takeTrap(g, ctx, o, "guardEnemyDef"))) { // GT8_1: negate + all attacker-side def down
     att.exhausted = true; const tv = tc.val || 0; p.field.forEach((mm) => (mm.defMod = (mm.defMod || 0) - tv));
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 상대 몬스터 전체 방어 -${tv}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 敵モンスター全体の防御-${tv}`);
     return;
   }
-  if ((tc = takeTrap(o, "guardWipe"))) { // GT8_2: negate + destroy attacker traps/enchants
+  if ((tc = takeTrap(g, ctx, o, "guardWipe"))) { // GT8_2: negate + destroy attacker traps/enchants
     att.exhausted = true; let k = 0; const lim = tc.val || 2;
     for (let i = 0; i < lim && p.traps.length; i++) { const t2 = p.traps.splice(randInt(g, p.traps.length), 1)[0]; p.discard.push(t2.card); k++; }
     for (let i = k; i < lim && p.enchants.length; i++) { const e2 = p.enchants.splice(randInt(g, p.enchants.length), 1)[0]; p.discard.push(e2.card); k++; }
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 상대 함정·마법 ${k}장 파괴`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 相手の罠・魔法${k}枚破壊`);
     return;
   }
-  if ((tc = takeTrap(o, "guardPurge"))) { // GT6_0: negate + (-1 max mana) destroy up to 3 attacker monsters
+  if ((tc = takeTrap(g, ctx, o, "guardPurge"))) { // GT6_0: negate + (-1 max mana) destroy up to 3 attacker monsters
     att.exhausted = true;
     if (p.field.length > 0) {
       o.maxMana = Math.max(1, o.maxMana - 1);
@@ -438,14 +439,14 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     } else ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効`);
     return;
   }
-  if ((tc = takeTrap(o, "slaughterHeal"))) { // GT5_2: destroy attacker + 30% heal its def
+  if ((tc = takeTrap(g, ctx, o, "slaughterHeal"))) { // GT5_2: destroy attacker + 30% heal its def
     const d = effDef(att);
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 破壊`);
     ctx.destroyMonster(p, att);
     if (randInt(g, 100) < 30) { ctx.heal(o, d); ctx.log(`  └ 30% 성공: 체력 ${d} 회복`, `  └ 30%成功: 体力${d}回復`); }
     return;
   }
-  if ((tc = takeTrap(o, "slaughterRaise"))) { // GT5_3: destroy attacker + 30% steal to own field
+  if ((tc = takeTrap(g, ctx, o, "slaughterRaise"))) { // GT5_3: destroy attacker + 30% steal to own field
     if (randInt(g, 100) < 30) {
       const i2 = p.field.findIndex((x) => x.uid === att.uid);
       if (i2 >= 0) { const stolen = p.field.splice(i2, 1)[0]; ctx.ev.push({ type: "destroy", player: side(g, p), uid: stolen.uid }); stolen.exhausted = true; stolen.attacksUsed = 0; o.field.push(stolen); ctx.ev.push({ type: "summon", player: side(g, o), uid: stolen.uid }); }
@@ -456,14 +457,14 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     }
     return;
   }
-  if ((tc = takeTrap(o, "slayWeakAll"))) { // GT6_2: destroy attacker + all attacker-side atk down this turn
+  if ((tc = takeTrap(g, ctx, o, "slayWeakAll"))) { // GT6_2: destroy attacker + all attacker-side atk down this turn
     const tv = tc.val || 0;
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴 + 상대 전체 공격 -${tv}(이번 턴)`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 破壊 + 敵全体の攻撃-${tv}(このターン)`);
     ctx.destroyMonster(p, att);
     p.field.forEach((mm) => (mm.tempAtk = (mm.tempAtk || 0) - tv));
     return;
   }
-  if ((tc = takeTrap(o, "slayLowAll"))) { // GT6_3: destroy attacker + destroy all low-atk attacker monsters
+  if ((tc = takeTrap(g, ctx, o, "slayLowAll"))) { // GT6_3: destroy attacker + destroy all low-atk attacker monsters
     const tv = tc.val || 0;
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴 + 공격 ${tv} 이하 상대 몬스터 전멸`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 破壊 + 攻撃${tv}以下の敵モンスター全滅`);
     ctx.destroyMonster(p, att);
@@ -472,7 +473,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   }
 
   // ---- non-terminal reactions (attack still resolves) ----
-  if ((tc = takeTrap(o, "spikes"))) {
+  if ((tc = takeTrap(g, ctx, o, "spikes"))) {
     ctx.log(
       `  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격측에 ${tc.val}`,
       `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃側に ${tc.val}`,
@@ -480,14 +481,14 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     ctx.dealDamage(p, tc.val || 0, cn(tc), cn(tc));
     if (g.over) { att.exhausted = true; return; }
   }
-  if ((tc = takeTrap(o, "drawtrap"))) {
+  if ((tc = takeTrap(g, ctx, o, "drawtrap"))) {
     const n = ctx.drawN(o, tc.val || 0);
     ctx.log(
       `  └ <span class="dmg">함정 ${cn(tc)}!</span> ${n}장 드로우`,
       `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${n}枚ドロー`,
     );
   }
-  if ((tc = takeTrap(o, "thorns"))) {
+  if ((tc = takeTrap(g, ctx, o, "thorns"))) {
     ctx.log(
       `  └ <span class="dmg">함정 ${cn(tc)}!</span> ${tc.val} 반사`,
       `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${tc.val} 反射`,
@@ -495,7 +496,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     ctx.dealDamage(p, tc.val || 0, cn(tc), cn(tc));
     if (g.over) { att.exhausted = true; return; }
   }
-  if ((tc = takeTrap(o, "reflect"))) {
+  if ((tc = takeTrap(g, ctx, o, "reflect"))) {
     ctx.log(
       `  └ <span class="dmg">함정 ${cn(tc)}!</span> ${atk} 반사`,
       `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${atk} 反射`,
@@ -503,7 +504,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     ctx.dealDamage(p, atk, cn(tc), cn(tc));
     if (g.over) { att.exhausted = true; return; }
   }
-  if ((tc = takeTrap(o, "half"))) {
+  if ((tc = takeTrap(g, ctx, o, "half"))) {
     atk = Math.floor(atk / 2);
     ctx.log(
       `  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격이 ${atk}로 절반`,
@@ -644,7 +645,7 @@ function applySummonBuff(ctx: Ctx, p: PlayerState, m: FieldMon): void {
 function tryNullSpell(g: GameState, ctx: Ctx, card: CardInst): boolean {
   const p = g.players[g.cur];           // the caster
   const o = g.players[1 - g.cur];        // the trap owner
-  const t = takeTrap(o, "nullspell");
+  const t = takeTrap(g, ctx, o, "nullspell");
   if (!t) return false;
   ctx.log(
     `  └ <span class="dmg">상대 ${cn(t)} → ${cn(card)} 무효화</span>`,
@@ -865,6 +866,7 @@ function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): 
   const pitIdx = o.traps.findIndex((t) => t.card.react === "pitfall");
   if (pitIdx >= 0 && p.field.some((x) => x.uid === m.uid) && (card.cost ?? 0) <= (o.traps[pitIdx].card.val ?? 99)) {
     const pit = o.traps.splice(pitIdx, 1)[0].card; o.discard.push(pit);
+    ctx.ev.push({ type: "trapReveal", player: side(g, o), id: pit.id });
     ctx.log(`  └ <span class="dmg">함정 ${cn(pit)}!</span> ${cn(card)} 파괴`, `  └ <span class="dmg">トラップ ${cn(pit)}!</span> ${cn(card)} 破壊`);
     ctx.destroyMonster(p, m);
   }
@@ -947,9 +949,10 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       p.enchants.push({ card, turns: card.val || 1 });
       const perm = (card.val || 0) >= 99;
       ctx.log(`<span class="t">${p.name}</span> ${cn(card)} 발동 (지속 ${perm ? "영구" : `${card.val}턴`})`, `<span class="t">${p.name}</span> ${cn(card)} 発動 (${perm ? "永続" : `持続${card.val}ターン`})`);
-      ctx.ev.push({ type: "trap", player: side(g, p), name: card.name });
+      ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "field" });
       return;
     }
+    ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "discard" }); // reveal animation
     if (CUSTOM_SPELLS.has(card.id)) { customSpell(g, ctx, card); return; }
     const a = card.act, v = card.val || 0, v2 = card.val2 || 0;
     if (a === "buffTurn" || a === "buffPerm") {
@@ -989,7 +992,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   if (card.t === "trap") {
     p.mana -= playCost(card); p.hand.splice(idx, 1); p.traps.push({ card });
     ctx.log(`<span class="t">${p.name}</span> 함정을 세트 (정체는 비공개)`, `<span class="t">${p.name}</span> トラップをセット (正体は非公開)`);
-    ctx.ev.push({ type: "trap", player: side(g, p), name: card.name });
+    ctx.ev.push({ type: "trapSet", player: side(g, p) });
     return;
   }
 }
@@ -1060,7 +1063,7 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
       if (card && p.mana >= card.cost) {
         p.mana -= card.cost; p.discard.push(inst(g, card.id)); p.boughtCount++; p.taxFlag = true;
         ctx.log(`<span class="t">${p.name}</span> 고정 마켓 ${cn(card)} 구매 (${card.cost}) <span class="muted">[묘지로]</span>`, `<span class="t">${p.name}</span> 固定マーケット ${cn(card)} 購入 (${card.cost}) <span class="muted">[墓地へ]</span>`);
-        ev.push({ type: "buy", player: side(g, p), from: "market", i: action.i });
+        ev.push({ type: "buy", player: side(g, p), from: "market", i: action.i, id: card.id });
       }
       break;
     }
@@ -1069,7 +1072,7 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
       if (card && p.mana >= card.cost) {
         p.mana -= card.cost; p.discard.push(inst(g, card.id)); p.supply[action.i] = null; p.boughtCount++; p.taxFlag = true;
         ctx.log(`<span class="t">${p.name}</span> 제시 마켓 ${cn(card)} 구매 (${card.cost}) <span class="muted">[묘지로]</span>`, `<span class="t">${p.name}</span> 提示マーケット ${cn(card)} 購入 (${card.cost}) <span class="muted">[墓地へ]</span>`);
-        ev.push({ type: "buy", player: side(g, p), from: "supply", i: action.i });
+        ev.push({ type: "buy", player: side(g, p), from: "supply", i: action.i, id: card.id });
       }
       break;
     }

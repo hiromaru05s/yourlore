@@ -102,8 +102,30 @@
 @keyframes lungeDown { 50% { transform: translateY(46px) scale(1.06) } }
 .card.mhit { animation: mhit .4s; }
 @keyframes mhit { 0%,100% { filter: none } 30% { filter: brightness(1.8) drop-shadow(0 0 10px var(--vermil-hi)) } }
-.card.mdie { animation: mdie .3s forwards; }
-@keyframes mdie { to { transform: scale(.6) rotate(-8deg); opacity: 0 } }
+.card.mdie { animation: mdie .42s forwards; transform-origin: center; }
+@keyframes mdie {
+  0% { filter: brightness(1) }
+  30% { transform: scale(1.12) rotate(2deg); filter: brightness(2.2) drop-shadow(0 0 12px var(--vermil-hi)) }
+  100% { transform: scale(.4) rotate(-16deg); opacity: 0; filter: brightness(.4) }
+}
+/* lively summon pop (more dynamic than summon-in) */
+.card.summon-pop { animation: summonPop .56s var(--ease); z-index: 40; }
+@keyframes summonPop {
+  0% { transform: translateY(14px) scale(.7); opacity: 0; filter: brightness(1.6) }
+  45% { transform: translateY(-8px) scale(1.12); opacity: 1; filter: brightness(1.5) drop-shadow(0 0 12px var(--brass-hi)) }
+  70% { transform: translateY(2px) scale(.97) }
+  100% { transform: none; filter: none }
+}
+/* trap set: card-back thuds into the trap row */
+.card--back.trap-land { animation: trapLand .25s var(--ease); box-shadow: 0 0 16px var(--good); }
+@keyframes trapLand { 0% { transform: scale(.7) } 50% { transform: scale(.78) rotate(-3deg) } 100% { transform: scale(.7) } }
+/* trap reveal: flip from back to face */
+.card.trap-flip { animation: trapFlip .5s var(--ease); box-shadow: 0 0 22px var(--vermil-hi); }
+@keyframes trapFlip {
+  0% { transform: rotateY(90deg) scale(1.05); filter: brightness(2) }
+  55% { transform: rotateY(0deg) scale(1.12); filter: brightness(1.6) }
+  100% { transform: scale(1) }
+}
 .card.drawing { animation: drawIn .42s var(--ease); }
 @keyframes drawIn { from { transform: translateX(-60px) scale(.8); opacity: 0 } }
 

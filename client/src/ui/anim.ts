@@ -3,11 +3,119 @@
 // touch game state, only the DOM.
 // ============================================================
 import type { CardInst } from "../shared/types";
-import { frameFor, TRIBES, CHEST_ODDS } from "../shared/cards";
+import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS } from "../shared/cards";
 import { cardEl } from "./cardView";
 import { t, getLang } from "../i18n";
 
 export type ViewSide = "me" | "opp";
+
+const EASE = "cubic-bezier(.4,0,.2,1)";
+const wait = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+const raf = (): Promise<void> => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
+const handRect = (side: ViewSide): DOMRect | null => rectOf(side === "me" ? "#hand" : "#oppHand");
+const rowRect = (side: ViewSide): DOMRect | null => rectOf(side === "me" ? "#meRow" : "#oppRow");
+const discId = (side: ViewSide): string => (side === "me" ? "pile-myDisc" : "pile-oppDisc");
+function trapZoneRect(side: ViewSide): DOMRect | null {
+  const row = document.getElementById(side === "me" ? "meRow" : "oppRow");
+  const zones = row ? row.querySelectorAll(".zone") : null;
+  return zones && zones[1] ? (zones[1] as Element).getBoundingClientRect() : rowRect(side);
+}
+/** Place a node as a fixed-position floating overlay at a rect (top-left). */
+function floatAt(node: HTMLElement, rect: { left: number; top: number }): HTMLElement {
+  node.style.position = "fixed";
+  node.style.left = rect.left + "px";
+  node.style.top = rect.top + "px";
+  node.style.margin = "0";
+  node.style.zIndex = "125";
+  node.style.pointerEvents = "none";
+  node.style.transition = "none";
+  document.body.appendChild(node);
+  return node;
+}
+function backEl(): HTMLElement {
+  const d = document.createElement("div");
+  d.className = "card card--back";
+  d.style.backgroundImage = `url(${FRAME_BACK})`;
+  d.style.width = "var(--card-w-hand)";
+  d.style.height = "var(--card-h-hand)";
+  return d;
+}
+
+/** Opponent (or you) played a SPELL: reveal it from hand, hold face-up, then send to discard (or fade into field). */
+export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field"): Promise<void> {
+  const from = handRect(side); const row = rowRect(side);
+  if (!from || !row) return;
+  const node = floatAt(cardEl(card, { size: "hand" }), from);
+  const cx = row.left + row.width / 2 - 50;
+  const cy = row.top + row.height / 2 - 78;
+  await raf();
+  node.style.transition = `left .38s ${EASE}, top .38s ${EASE}, transform .38s ${EASE}`;
+  node.style.left = cx + "px"; node.style.top = cy + "px"; node.style.transform = "scale(1.25)";
+  await wait(side === "me" ? 650 : 1850); // opponent's spell lingers so you can read it
+  if (dest === "discard") {
+    const to = rectOf("#" + discId(side));
+    if (to) { node.style.transition = `left .45s ${EASE}, top .45s ${EASE}, transform .45s ${EASE}, opacity .45s`; node.style.left = to.left + "px"; node.style.top = to.top + "px"; node.style.transform = "scale(.45)"; node.style.opacity = "0"; }
+    await wait(460); pileFlash(discId(side));
+  } else {
+    node.style.transition = `transform .3s ${EASE}, opacity .3s`; node.style.transform = "scale(.9)"; node.style.opacity = "0";
+    await wait(320);
+  }
+  node.remove();
+}
+
+/** Opponent (or you) SUMMONED a monster: fly the card from hand to its field slot, then a lively pop. */
+export async function summonFromHand(card: CardInst, uid: string, side: ViewSide): Promise<void> {
+  const from = handRect(side); const node = byUid(uid); const to = rectOf(node);
+  if (!from || !to || !node) { summonIn(uid); return; }
+  node.style.visibility = "hidden";
+  const ghost = floatAt(cardEl(card, { size: "hand" }), from);
+  await raf();
+  ghost.style.transition = `left .32s ${EASE}, top .32s ${EASE}, transform .32s ${EASE}`;
+  ghost.style.left = to.left + "px"; ghost.style.top = to.top + "px"; ghost.style.transform = "scale(.82)";
+  await wait(330);
+  ghost.remove();
+  node.style.visibility = "";
+  node.classList.add("summon-pop");
+  setTimeout(() => node.classList.remove("summon-pop"), 560);
+}
+
+/** A face-down trap was set: slide a card-back from hand into the trap zone. */
+export async function trapSetAnim(side: ViewSide): Promise<void> {
+  const from = handRect(side); const to = trapZoneRect(side);
+  if (!from || !to) return;
+  const back = floatAt(backEl(), from);
+  await raf();
+  back.style.transition = `left .34s ${EASE}, top .34s ${EASE}, transform .34s ${EASE}`;
+  back.style.left = (to.left + to.width / 2 - 24) + "px"; back.style.top = to.top + "px"; back.style.transform = "scale(.7)";
+  await wait(360);
+  back.classList.add("trap-land");
+  await wait(260);
+  back.remove();
+}
+
+/** A trap fired: flip it face-up at the trap zone, hold ~2s, then send to discard. */
+export async function trapRevealAnim(card: CardInst, side: ViewSide): Promise<void> {
+  const at = trapZoneRect(side); if (!at) return;
+  const node = floatAt(cardEl(card, { size: "hand" }), { left: at.left + at.width / 2 - 50, top: at.top - 10 });
+  node.classList.add("trap-flip");
+  await wait(2000);
+  const to = rectOf("#" + discId(side));
+  if (to) { node.style.transition = `left .45s ${EASE}, top .45s ${EASE}, transform .45s ${EASE}, opacity .45s`; node.style.left = to.left + "px"; node.style.top = to.top + "px"; node.style.transform = "scale(.45)"; node.style.opacity = "0"; }
+  await wait(460); pileFlash(discId(side)); node.remove();
+}
+
+/** A card was bought: pop the card UI at the market, then fly it to that player's discard. */
+export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | null): Promise<void> {
+  const to = rectOf("#" + discId(side));
+  if (!src || !to) { pileFlash(discId(side)); return; }
+  const node = floatAt(cardEl(card, { size: "mkt" }), src);
+  await raf();
+  node.style.transition = `transform .26s ${EASE}`; node.style.transform = "scale(1.4)";
+  await wait(320);
+  node.style.transition = `left .5s ${EASE}, top .5s ${EASE}, transform .5s ${EASE}, opacity .5s`;
+  node.style.left = to.left + "px"; node.style.top = to.top + "px"; node.style.transform = "scale(.45)"; node.style.opacity = "0";
+  await wait(520); pileFlash(discId(side)); node.remove();
+}
 
 function byUid(uid: string): HTMLElement | null {
   return document.querySelector(`.card[data-uid="${uid}"]`);

@@ -4,10 +4,10 @@
 // LocalController reduces locally and drives the bot.
 // (OnlineController lives in ./online and reuses BaseController.)
 // ============================================================
-import type { Action, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
+import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { createGame, reduce } from "../shared/engine";
 import { botDecide } from "../shared/bot";
-import { frameFor } from "../shared/cards";
+import { frameFor, DB } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog } from "../ui/log";
 import * as A from "../ui/anim";
@@ -28,6 +28,7 @@ export abstract class BaseController implements BoardHandlers {
   private winShown = false;
   private flyAfter: { frame: string; rect: DOMRect | null; discId: string }[] = [];
   private unsubLang: () => void;
+  protected animMs = 250; // duration of the most recent batch's animations (paces the bot)
 
   constructor(root: HTMLElement, you: Side, exits: ControllerExits) {
     this.you = you;
@@ -95,7 +96,11 @@ export abstract class BaseController implements BoardHandlers {
 
   /** Re-render + post-render animations + follow-ups. */
   private postRender(events: GameEvent[], animate: boolean): void {
+    // capture market source rects BEFORE re-render (the slot moves/clears after)
+    const buySrc = new Map<number, DOMRect | null>();
+    for (const e of events) if (e.type === "buy") buySrc.set(e.i, this.marketCardRect(e.from, e.i));
     this.view.render(this.state);
+    let animMs = 250;
     if (animate) {
       for (const f of this.flyAfter) {
         const to = document.getElementById(f.discId);
@@ -104,15 +109,44 @@ export abstract class BaseController implements BoardHandlers {
       }
       this.flyAfter = [];
       for (const e of events) {
-        if (e.type === "summon") A.summonIn(e.uid);
-        else if (e.type === "damage") A.hpFeedback(e.player === this.you ? "me" : "opp", "dmg", e.amount);
-        else if (e.type === "heal") A.hpFeedback(e.player === this.you ? "me" : "opp", "heal", e.amount);
-        else if (e.type === "buy") A.pileFlash(e.player === this.you ? "pile-myDisc" : "pile-oppDisc");
+        const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
+        if (e.type === "summon") {
+          const card = this.findCard(e.uid);
+          if (card) { void A.summonFromHand(card, e.uid, sideOf(e.player)); animMs = Math.max(animMs, 700); }
+          else A.summonIn(e.uid);
+        } else if (e.type === "playSpell") {
+          if (DB[e.id]) void A.revealSpell({ uid: "fx", ...DB[e.id] }, sideOf(e.player), e.dest);
+          animMs = Math.max(animMs, e.dest === "field" ? 1100 : 2300);
+        } else if (e.type === "trapSet") {
+          void A.trapSetAnim(sideOf(e.player)); animMs = Math.max(animMs, 650);
+        } else if (e.type === "trapReveal") {
+          if (DB[e.id]) void A.trapRevealAnim({ uid: "fx", ...DB[e.id] }, sideOf(e.player)); animMs = Math.max(animMs, 2500);
+        } else if (e.type === "buy") {
+          if (DB[e.id]) void A.buyReveal({ uid: "fx", ...DB[e.id] }, sideOf(e.player), buySrc.get(e.i) ?? null);
+          else A.pileFlash(e.player === this.you ? "pile-myDisc" : "pile-oppDisc");
+          animMs = Math.max(animMs, 1000);
+        } else if (e.type === "damage") A.hpFeedback(sideOf(e.player), "dmg", e.amount);
+        else if (e.type === "heal") A.hpFeedback(sideOf(e.player), "heal", e.amount);
         else if (e.type === "draw" && e.player === this.you) A.animateDraw(this.view.logEl.ownerDocument!.getElementById("hand") as HTMLElement, e.count);
         else if (e.type === "treasure" && !e.isBot && e.player === this.you) treasureModal(e.kind, getLang() === "ja" ? e.textJa : e.text);
+        else if (e.type === "attack" || e.type === "destroy") animMs = Math.max(animMs, 650);
       }
     }
+    this.animMs = animMs;
     this.afterApply();
+  }
+
+  /** Find a field monster (either side) by uid, to drive its summon animation. */
+  private findCard(uid: string): CardInst | null {
+    for (const pl of this.state.players) { const m = pl.field.find((x) => x.uid === uid); if (m) return m; }
+    return null;
+  }
+
+  /** Bounding rect of a market/supply card slot at index i (post-render). */
+  private marketCardRect(from: "market" | "supply", i: number): DOMRect | null {
+    const host = document.getElementById(from === "market" ? "fixedMarket" : "supplyMarket");
+    const node = host?.children[i] as HTMLElement | undefined;
+    return node ? node.getBoundingClientRect() : null;
   }
 
   private afterApply(): void {
@@ -168,7 +202,8 @@ export class LocalController extends BaseController {
     if (g.over) return;
     if (g.players[g.cur].isBot) {
       clearTimeout(this.botTimer);
-      this.botTimer = window.setTimeout(() => this.botStep(), g.pending ? 500 : 650);
+      const delay = Math.max(this.animMs, g.pending ? 500 : 650); // let the action's animation finish first
+      this.botTimer = window.setTimeout(() => this.botStep(), delay);
     }
   }
 
