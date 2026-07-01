@@ -64,10 +64,10 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     const a = opt.field && opt.owner ? effAtk(opt.owner, c as FieldMon) : c.atk!;
     const d = opt.field && opt.owner ? effDef(opt.owner, c as FieldMon) : c.def!;
     // The monster frame already has built-in sword/shield icons — we only place the numbers.
-    const ad = el("div", "card-ad");
-    ad.appendChild(el("span", "ad-atk", String(a)));
-    ad.appendChild(el("span", "ad-def", String(d)));
-    node.appendChild(ad);
+    // Rendered as plain flex-centered divs (same as name/effect) so they never depend on a
+    // monospace font or transform being available on the viewer's machine.
+    node.appendChild(el("div", "ad-atk", String(a)));
+    node.appendChild(el("div", "ad-def", String(d)));
   }
   const txt = cardText(c);
   if (txt && txt !== "—") node.appendChild(el("div", "card-eff", txt));

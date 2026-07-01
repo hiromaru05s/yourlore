@@ -77,15 +77,15 @@
 /* spell/trap/starter text box is taller (normalized: y 68%–96.3%, no atk/def bar) */
 .card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 28.3%; }
 
-/* monster atk/def: numbers only — centered in the frame's built-in sword/shield slots */
-.card-ad {
-  position: absolute; left: 0; right: 0; top: 87.5%; height: 8.8%;
-  font-family: var(--mono); font-weight: 800; font-size: 1em; line-height: 1;
-}
+/* monster atk/def: numbers only, centered in the frame's built-in sword/shield slots.
+   Rendered exactly like .card-name / .card-eff (flex-centered absolute div, inheriting the
+   normal --ui font, no monospace font and no transform) so they render on every OS/browser.
+   (A Windows client failed to show them when they used var(--mono) + translateY.) */
 .ad-atk, .ad-def {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  width: 22%; text-align: center;
-  color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35); white-space: nowrap;
+  position: absolute; top: 87.4%; height: 9%; width: 22%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.92em; line-height: 1;
+  color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .5);
 }
 .ad-atk { left: 22%; }
 .ad-def { left: 71%; }
