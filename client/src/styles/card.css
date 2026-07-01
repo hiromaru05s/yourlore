@@ -40,7 +40,7 @@
 
 .card-name {
   /* name plate interior — starts just right of the cost gem, ends before the corner gem */
-  position: absolute; top: 4.5%; left: 25.5%; right: 16.5%; height: 8.7%;
+  position: absolute; top: 4.5%; left: 26%; right: 25%; height: 8.7%;
   display: flex; align-items: center; justify-content: flex-start;
   font-weight: 800; font-size: 0.7em; line-height: 1; letter-spacing: -.02em;
   color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35);
