@@ -39,11 +39,11 @@
 .card--trap .card-cost { background: radial-gradient(circle at 35% 30%, #fff5, transparent 60%), #3f8a4a; }
 
 .card-name {
-  position: absolute; top: 4.8%; left: 25%; right: 5%; height: 8.3%;
+  position: absolute; top: 4.6%; left: 24%; right: 4.5%; height: 9.4%;
   display: flex; align-items: center;
-  font-weight: 800; font-size: 0.92em; letter-spacing: .01em;
-  color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35); white-space: nowrap;
-  overflow: hidden; text-overflow: ellipsis;
+  font-weight: 800; font-size: 0.7em; line-height: 1.02; letter-spacing: -.01em;
+  color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35);
+  overflow: hidden; word-break: break-all;
 }
 .card-art {
   position: absolute; top: 17.6%; left: 9%; right: 9%; height: 44.4%;
@@ -74,12 +74,11 @@
 .card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 26.4%; }
 
 .card-ad {
-  position: absolute; left: 0; right: 0; top: 84.9%; height: 8%;
-  display: flex; justify-content: space-between; padding: 0 16%;
-  font-family: var(--mono); font-weight: 700; font-size: 1.02em;
+  position: absolute; left: 6%; right: 6%; top: 84%; height: 9%;
+  display: flex; align-items: center; justify-content: space-between; padding: 0 6%;
+  font-family: var(--mono); font-weight: 700; font-size: 0.9em; line-height: 1;
 }
-.ad-atk { color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35); }
-.ad-def { color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35); }
+.ad-atk, .ad-def { color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35); white-space: nowrap; }
 
 /* ---- card states ---- */
 .card.is-playable, .card.is-buyable { cursor: pointer; }

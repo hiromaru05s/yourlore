@@ -4,7 +4,7 @@
 // All animation lives in anim.ts; this file only draws + binds.
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
-import { effMaxMana, supplyRange, playCost } from "../shared/engine";
+import { effMaxMana, supplyRange, playCost, buyCost } from "../shared/engine";
 import { frameFor, FRAME_BACK } from "../shared/cards";
 import { cardEl } from "./cardView";
 import { bindZoom } from "./anim";
@@ -230,8 +230,9 @@ export class GameView {
 
     const fixed = this.q("fixedMarket");
     g.market.forEach((c, i) => {
-      const aff = myTurn && !g.pending && me.mana >= c.cost;
-      const card = cardEl(c, { buyable: aff, dim: !aff }); // board size so 8 fit
+      const bc = buyCost(owner, c);
+      const aff = myTurn && !g.pending && me.mana >= bc;
+      const card = cardEl(c, { buyable: aff, dim: !aff, costOverride: bc }); // board size so 8 fit
       if (aff) card.onclick = () => this.h.onBuyMarket(i);
       bindZoom(card, c);
       fixed.appendChild(card);
@@ -240,8 +241,9 @@ export class GameView {
     const sup = this.q("supplyMarket");
     owner.supply.forEach((c, i) => {
       if (!c) { sup.appendChild(this.slotEl("mkt", true)); return; }
-      const aff = myTurn && !g.pending && me.mana >= c.cost;
-      const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff });
+      const bc = buyCost(owner, c);
+      const aff = myTurn && !g.pending && me.mana >= bc;
+      const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc });
       if (aff) card.onclick = () => this.h.onBuySupply(i);
       bindZoom(card, c);
       sup.appendChild(card);

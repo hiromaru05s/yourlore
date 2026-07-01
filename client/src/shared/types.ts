@@ -28,6 +28,8 @@ export interface CardDef {
   turnFx?: string; // per-turn effect while on field (fires on owner's turn start)
   attackFx?: string; // effect that fires whenever this monster attacks
   mult?: number; // attacks allowed per turn (default 1)
+  directOnly?: boolean; // can ONLY attack the opponent player directly (never monsters) — 암살자
+  summonReq?: string; // summon precondition key (checked before summoning) — 암살자 상급/특급
   nameJa?: string; // Japanese name (falls back to name)
   textJa?: string; // Japanese effect text (falls back to text)
 }

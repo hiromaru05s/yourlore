@@ -62,7 +62,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
 
   if (c.t === "mon") {
     const a = opt.field && opt.owner ? effAtk(opt.owner, c as FieldMon) : c.atk!;
-    const d = opt.field ? effDef(c as FieldMon) : c.def!;
+    const d = opt.field && opt.owner ? effDef(opt.owner, c as FieldMon) : c.def!;
     const ad = el("div", "card-ad");
     ad.appendChild(el("span", "ad-atk", "⚔ " + a));
     ad.appendChild(el("span", "ad-def", "🛡 " + d));

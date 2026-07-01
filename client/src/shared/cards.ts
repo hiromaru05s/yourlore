@@ -470,6 +470,71 @@ for (const id of Object.keys(PATCH2)) { if (DB[id]) Object.assign(DB[id], PATCH2
 for (const id of DELETE_IDS2) { delete DB[id]; }
 for (const c of NEW_CARDS2) { DB[c.id] = c; }
 
+// ============================================================
+// BALANCE PATCH 3 — user rebalance + new mechanics
+// ============================================================
+const PATCH3: Record<string, Partial<CardDef>> = {
+  // 광폭한 검귀: 소환시 자신에게 2 데미지
+  NGA4: { onSummon: "selfBurn", val: 2, text: "소환시: 자신에게 2 데미지", textJa: "召喚時: 自分に2ダメージ" },
+  // 기록자: 카드 3장 드로우
+  NMD4: { onSummon: "draw", val: 3, text: "소환시: 카드 3장 드로우", textJa: "召喚時: カード3枚ドロー" },
+  // 수정 정령: 0/6 버프
+  NSPR: { def: 6 },
+  // 대현자: 카드 5장 드로우
+  NMD6: { onSummon: "draw", val: 5, text: "소환시: 카드 5장 드로우", textJa: "召喚時: カード5枚ドロー" },
+  // 흑요석 광전사: 상대 플레이어에게 데미지를 입힐 때마다 +2/+2
+  GM6_0: { attackFx: "rampFace", text: "상대 플레이어에게 데미지를 입힐 때마다 +2/+2(영구)", textJa: "相手プレイヤーにダメージを与えるたび+2/+2(永続)" },
+  // 은빛 성벽: 상시 아군 몬스터 전체 방어 +3
+  GM6_1: { aura: "wallDef", val: 3, text: "상시: 자신 필드의 아군 몬스터 방어 +3", textJa: "常時: 自分の場の味方モンスターの防御+3" },
+  // 폭풍의 광전사: 필드에 있는 한 상대 최대 마나 -3
+  GM11_0: { aura: "drainMana", val: 3, text: "이 카드가 필드에 있는 한 상대 최대 마나 -3", textJa: "このカードが場にいる限り相手の最大マナ-3" },
+  // 트윈 팽: 3/2로 너프
+  M6: { atk: 3, def: 2 },
+  // 5코스트 종족카드 → 4코스트 / 5·5 하향 (시초 제외)
+  TSO5: { cost: 4, atk: 5, def: 5 }, TNO5: { cost: 4, atk: 5, def: 5 },
+  TPO5: { cost: 4, atk: 5, def: 5 }, TAR5: { cost: 4, atk: 5, def: 5 },
+  // 어튠 - 흑: 시전6 (구매코스트와 동일 → 시전 표기 삭제)
+  AHEUK: { play: 6, text: "상대 최대 마나 -1. 자신 필드 몬스터가 없으면 추가로 -1", textJa: "相手の最大マナ-1。自分の場のモンスターがいなければ追加で-1" },
+  // 시공간 조작: 코스트14 / 시전12 / 70% 스킵
+  TIMEWARP: { cost: 14, play: 12, text: "70% 확률로 다음 상대 턴을 스킵", textJa: "70%で次の相手のターンをスキップ" },
+  // 갬블 / 악마의 주사위: 알기 쉬운 텍스트 + 소환 몬스터 명시
+  GAMBLE: { text: "주사위 1~6 — ①② 자신 8뎀 / ③④ 상대 5뎀 / ⑤ 마나 골렘(3/5) 소환 / ⑥ 유리 대포(7/1) 3체 소환", textJa: "ダイス1~6 — ①② 自分8 / ③④ 相手5 / ⑤ マナゴーレム(3/5)召喚 / ⑥ ガラス大砲(7/1)3体召喚" },
+  DICE8: { text: "주사위 1~6 — ①② 자신 최대마나-4 / ③④ 상대 마나-1·14뎀 / ⑤ 폭풍의 전사(11/9·2회공격) / ⑥ 상대 마법·함정 전멸+폭풍의 전사 2체+최대마나+2+체력+10", textJa: "ダイス1~6 — ①② 自分の最大マナ-4 / ③④ 相手マナ-1・14 / ⑤ 嵐の戦士(11/9・2回攻撃) / ⑥ 相手の魔法・罠全滅+嵐の戦士2体+最大マナ+2+体力+10" },
+};
+
+const NEW_CARDS3: CardDef[] = [
+  // ---- monsters ----
+  { id: "CREATOR", t: "mon", cost: 13, name: "창조신", nameJa: "創造神", atk: 20, def: 20, onSummon: "creator", text: "소환시: 양측 덱·묘지에서 무작위 몬스터 3체를 자신 필드에 소환", textJa: "召喚時: 両者のデッキ・墓地からランダムなモンスター3体を自分の場に召喚" },
+  { id: "ASSASSIN1", t: "mon", cost: 2, name: "초급 암살자", nameJa: "初級アサシン", atk: 4, def: 0, directOnly: true, text: "상대 플레이어만 직접 공격 가능 (몬스터 공격 불가)", textJa: "相手プレイヤーのみ直接攻撃可能 (モンスターは攻撃不可)" },
+  { id: "ASSASSIN2", t: "mon", cost: 4, name: "중급 암살자", nameJa: "中級アサシン", atk: 9, def: 0, directOnly: true, text: "상대 플레이어만 직접 공격 가능 (몬스터 공격 불가)", textJa: "相手プレイヤーのみ直接攻撃可能 (モンスターは攻撃不可)" },
+  { id: "ASSASSIN3", t: "mon", cost: 6, name: "상급 암살자", nameJa: "上級アサシン", atk: 15, def: 0, directOnly: true, summonReq: "assassinField", text: "상대 플레이어만 직접 공격 가능. 자신 필드에 '암살자'가 있어야 소환 가능", textJa: "相手プレイヤーのみ直接攻撃可能。自分の場に「アサシン」がいる時のみ召喚可能" },
+  { id: "ASSASSIN4", t: "mon", cost: 8, name: "특급 암살자 - 나이트로드", nameJa: "特級アサシン - ナイトロード", atk: 23, def: 5, mult: 2, summonReq: "assassinAll", text: "1턴에 2번 공격. 패 제외 필드·덱·묘지에 초급·중급·상급 암살자가 각 1장 이상일 때 소환 가능", textJa: "1ターンに2回攻撃。手札を除く場・デッキ・墓地に初級・中級・上級アサシンが各1枚以上で召喚可能" },
+  // ---- spells: rune ----
+  { id: "RUNE1", t: "spell", cost: 2, play: 3, act: "destroyMon", name: "룬 학문 - 초급", nameJa: "ルーン学問 - 初級", text: "코스트 5 이상 상대 몬스터 1체 파괴 (시전 3)", textJa: "コスト5以上の敵モンスター1体を破壊 (発動3)" },
+  { id: "RUNE2", t: "spell", cost: 5, act: "manaUp", name: "룬 학문 - 중급", nameJa: "ルーン学問 - 中級", text: "패의 '룬 학문 - 초급'을 버리면 최대 마나 +2", textJa: "手札の「ルーン学問 - 初級」を捨てると最大マナ+2" },
+  { id: "RUNE3", t: "spell", cost: 7, play: 8, act: "manaUp", name: "룬 학문 - 상급", nameJa: "ルーン学問 - 上級", text: "패의 초급·중급을 1장씩 버리면 최대 마나 +4 (시전 8)", textJa: "手札の初級・中級を1枚ずつ捨てると最大マナ+4 (発動8)" },
+  // ---- spells: genesis(시초) ----
+  { id: "GENESIS_SONG", t: "spell", cost: 3, play: 2, name: "시초의 노래", nameJa: "始原の歌", text: "덱·묘지의 '시초' 몬스터 1체를 무작위 소환 (시전 2)", textJa: "デッキ・墓地の「始原」モンスター1体をランダム召喚 (発動2)" },
+  { id: "GENESIS_MAGIC", t: "spell", cost: 5, play: 0, name: "시초의 마법", nameJa: "始原の魔法", text: "자신 필드의 '시초' 몬스터 모두 +4/+4", textJa: "自分の場の「始原」モンスター全てに+4/+4" },
+  // ---- spells: enchant(영구마법) ----
+  { id: "KIN_CALL", t: "spell", cost: 3, ench: "kinDiscount", val: 99, name: "동족의 부름", nameJa: "同族の呼び声", text: "영구: 자신 필드에 종족 몬스터가 있으면 마켓의 종족카드 구매코스트 -2(최소1)", textJa: "永続: 自分の場に種族モンスターがいれば、マーケットの種族カード購入コスト-2(最低1)" },
+  { id: "MULTI_CULTURE", t: "spell", cost: 3, play: 4, ench: "cultureMana", val: 99, name: "다양한 문화", nameJa: "多様な文化", text: "영구: '시초' 제외, 필드의 종족 몬스터 1체당 임시 최대 마나 +1 (시전 4)", textJa: "永続: 「始原」を除く、場の種族モンスター1体ごとに一時的に最大マナ+1 (発動4)" },
+  { id: "SLAY_ART", t: "spell", cost: 2, ench: "slayArt", val: 99, name: "살생의 극의", nameJa: "殺生の極意", text: "영구: 플레이어에게 데미지가 들어갈 때마다 추가 데미지 +2", textJa: "永続: プレイヤーにダメージが入るたび追加ダメージ+2" },
+  // ---- spells: blood magic ----
+  { id: "BLOOD1", t: "spell", cost: 2, play: 1, act: "draw", name: "피의 마법 1", nameJa: "血の魔法 1", text: "자신에게 4 데미지, 카드 3장 드로우 (시전 1)", textJa: "自分に4ダメージ、カード3枚ドロー (発動1)" },
+  { id: "BLOOD2", t: "spell", cost: 4, play: 2, act: "draw", name: "피의 마법 2", nameJa: "血の魔法 2", text: "자신에게 8 데미지, 카드 6장 드로우 (시전 2)", textJa: "自分に8ダメージ、カード6枚ドロー (発動2)" },
+  { id: "BLOOD3", t: "spell", cost: 6, play: 5, act: "dmg", name: "피의 마법 3", nameJa: "血の魔法 3", text: "자신 12 데미지 + 상대 20 데미지, 이후 1장 드로우 (시전 5)", textJa: "自分12ダメージ + 相手20ダメージ、その後1枚ドロー (発動5)" },
+  // ---- spells: disarm(장치) ----
+  { id: "DISARM1", t: "spell", cost: 2, play: 0, act: "destroyEnch", val: 1, name: "장치해제", nameJa: "装置解除", text: "상대 영구마법 1장 파괴", textJa: "相手の永続魔法1枚を破壊" },
+  { id: "DISARM2", t: "spell", cost: 3, play: 2, act: "destroyEnch", val: 2, name: "장치분석", nameJa: "装置分析", text: "상대 영구마법 2장 파괴 (시전 2)", textJa: "相手の永続魔法2枚を破壊 (発動2)" },
+  { id: "DISARM3", t: "spell", cost: 4, play: 3, name: "마법연구기관", nameJa: "魔法研究機関", text: "상대 영구마법 1장 파괴 후 게임에서 제외 (시전 3)", textJa: "相手の永続魔法1枚を破壊しゲームから除外 (発動3)" },
+  // ---- spells: forbidden ----
+  { id: "FORBIDDEN", t: "spell", cost: 3, name: "금단의 술식", nameJa: "禁断の術式", text: "자신 체력 -20, 최대 마나 -3. 주사위 4~6이면 필드의 한 종족(시초 제외)의 나머지 몬스터를 모두 소환", textJa: "自分の体力-20, 最大マナ-3。ダイス4~6なら場の一種族(始原除く)の残りモンスターを全て召喚" },
+];
+
+for (const id of Object.keys(PATCH3)) { if (DB[id]) Object.assign(DB[id], PATCH3[id]); }
+for (const c of NEW_CARDS3) { DB[c.id] = c; }
+
 // chest (golden treasure) outcome odds — shown when the chest card is enlarged
 export const CHEST_ODDS = {
   ko: { title: "황금상자 확률 (각 25%)", rows: ["최대 마나 +1 — 25%", "체력 +8 — 25%", "최대 체력 +5 — 25%", "꽝: 상대 필드에 미믹(3/2) — 25%"] },
