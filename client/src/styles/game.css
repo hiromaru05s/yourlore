@@ -19,7 +19,7 @@
 .board-col { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 5px; min-height: 0; align-content: start; }
 
 /* opponent fanned hand (face-down), overflowing from top */
-.opp-hand { display: flex; justify-content: center; height: 22px; margin-top: -3px; }
+.opp-hand { display: flex; justify-content: center; height: 22px; margin-top: -3px; position: relative; z-index: 40; }
 .opp-hand .card--back { width: 44px; height: 70px; margin: 0 -14px; transform-origin: bottom center; }
 
 /* a player row: [pile] [field] [pile] */
@@ -74,7 +74,7 @@
 .refresh-btn:disabled { opacity: .4; cursor: not-allowed; }
 
 /* ---- hand ---- */
-.hand-area { display: flex; align-items: flex-end; justify-content: center; gap: 0; min-height: var(--card-h-hand); padding-top: 2px; position: relative; }
+.hand-area { display: flex; align-items: flex-end; justify-content: center; gap: 0; min-height: var(--card-h-hand); padding-top: 2px; position: relative; z-index: 40; }
 .hand { display: flex; justify-content: center; align-items: flex-end; }
 .hand .card { margin: 0 -12px; transform-origin: bottom center; }
 .hand .card:hover { z-index: 50 !important; }

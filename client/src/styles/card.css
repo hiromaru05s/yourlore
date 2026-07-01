@@ -39,14 +39,15 @@
 .card--trap .card-cost { background: radial-gradient(circle at 35% 30%, #fff5, transparent 60%), #3f8a4a; }
 
 .card-name {
-  position: absolute; top: 4.6%; left: 24%; right: 4.5%; height: 9.4%;
-  display: flex; align-items: center;
-  font-weight: 800; font-size: 0.7em; line-height: 1.02; letter-spacing: -.01em;
+  /* sits in the frame's name plate, clearing the cost gem (left) and the corner gem (right) */
+  position: absolute; top: 4.3%; left: 27%; right: 18%; height: 8.8%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.66em; line-height: 1; letter-spacing: -.02em;
   color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35);
-  overflow: hidden; word-break: break-all;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .card-art {
-  position: absolute; top: 17.6%; left: 9%; right: 9%; height: 44.4%;
+  position: absolute; top: 17.4%; left: 9%; right: 9%; height: 42.6%;
   border-radius: 3px;
   background:
     radial-gradient(120% 90% at 50% 30%, #2c3a55, #0c1320 90%);
@@ -65,20 +66,26 @@
 }
 .card-art:has(img)::after { content: none; }
 .card-eff {
-  position: absolute; left: 7%; right: 7%;
-  top: 66.4%; height: 16.2%;
+  position: absolute; left: 8%; right: 8%;
+  top: 65.5%; height: 16.5%;
   font-size: 0.45em; line-height: 1.12; color: #2a2114;
   text-align: center; overflow: hidden; word-break: keep-all;
   display: flex; align-items: center; justify-content: center;
 }
-.card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 26.4%; }
+.card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 25.5%; }
 
+/* monster atk/def: numbers only — dropped over the frame's built-in sword/shield slots */
 .card-ad {
-  position: absolute; left: 6%; right: 6%; top: 84%; height: 9%;
-  display: flex; align-items: center; justify-content: space-between; padding: 0 6%;
-  font-family: var(--mono); font-weight: 700; font-size: 0.9em; line-height: 1;
+  position: absolute; left: 0; right: 0; top: 87.4%; height: 8.6%;
+  font-family: var(--mono); font-weight: 800; font-size: 0.95em; line-height: 1;
 }
-.ad-atk, .ad-def { color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35); white-space: nowrap; }
+.ad-atk, .ad-def {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 22%; text-align: center;
+  color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35); white-space: nowrap;
+}
+.ad-atk { left: 19%; }
+.ad-def { left: 67%; }
 
 /* ---- card states ---- */
 .card.is-playable, .card.is-buyable { cursor: pointer; }

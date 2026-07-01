@@ -63,9 +63,10 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   if (c.t === "mon") {
     const a = opt.field && opt.owner ? effAtk(opt.owner, c as FieldMon) : c.atk!;
     const d = opt.field && opt.owner ? effDef(opt.owner, c as FieldMon) : c.def!;
+    // The monster frame already has built-in sword/shield icons — we only place the numbers.
     const ad = el("div", "card-ad");
-    ad.appendChild(el("span", "ad-atk", "⚔ " + a));
-    ad.appendChild(el("span", "ad-def", "🛡 " + d));
+    ad.appendChild(el("span", "ad-atk", String(a)));
+    ad.appendChild(el("span", "ad-def", String(d)));
     node.appendChild(ad);
   }
   const txt = cardText(c);
