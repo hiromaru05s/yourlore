@@ -659,6 +659,8 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
 /** Spawn a stat-only token monster (no summon effect / tribe / pitfall trigger). */
 function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string): void {
   if (!DB[id]) return;
+  if (p.field.length >= FIELD_MAX) return; // monster zone full — cannot spawn more
+
   const m: FieldMon = { uid: newUID(g), ...structuredClone(DB[id]), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
   m.onSummon = undefined; m.turnFx = undefined; // tokens don't re-trigger summon effects
   p.field.push(m);
@@ -946,10 +948,12 @@ function openTreasure(g: GameState, ctx: Ctx, p: PlayerState): void {
   else {
     // 꽝(dud): spawn a Mimic (3/2) on the OPPONENT's field — the risk of cracking chests
     const o = g.players[0] === p ? g.players[1] : g.players[0];
-    const m: FieldMon = { uid: newUID(g), ...structuredClone(DB.MIMIC), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
-    o.field.push(m);
+    if (o.field.length < FIELD_MAX) {
+      const m: FieldMon = { uid: newUID(g), ...structuredClone(DB.MIMIC), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
+      o.field.push(m);
+      ctx.ev.push({ type: "summon", player: side(g, o), uid: m.uid });
+    }
     txt = "꽝! 상대 필드에 미믹(3/2) 소환"; txtJa = "ハズレ！相手の場にミミック(3/2)召喚"; kind = "mimic";
-    ctx.ev.push({ type: "summon", player: side(g, o), uid: m.uid });
   }
   ctx.log(`<span class="t">${p.name}</span> 보물상자 → <span class="good">${txt}</span>`, `<span class="t">${p.name}</span> 宝箱 → <span class="good">${txtJa}</span>`);
   ctx.ev.push({ type: "treasure", player: side(g, p), kind, text: txt, textJa: txtJa, isBot: p.isBot });
@@ -1036,6 +1040,9 @@ function applyTribe(g: GameState, ctx: Ctx, p: PlayerState, o: PlayerState, trib
   }
 }
 
+// Zone capacity: at most 9 monsters, and 9 spell/trap (traps + enchants) cards.
+export const FIELD_MAX = 9;
+export const ST_MAX = 9;
 const ASSASSIN_IDS = ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3"];
 /** Summon precondition check (암살자 상급/특급). */
 export function summonReqMet(p: PlayerState, card: CardInst): boolean {
@@ -1064,6 +1071,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   if (card.t === "mon") {
     if (summonBlockedLow(g, p, card)) { ctx.log(`  └ <span class="dmg">봉쇄령</span>: 코스트 ${card.cost} 몬스터 소환 불가`, `  └ <span class="dmg">封鎖令</span>: コスト ${card.cost} のモンスター召喚不可`); return; }
     if (!summonReqMet(p, card)) { ctx.log(`  └ <span class="dmg">소환 조건 미충족</span>: ${cn(card)}`, `  └ <span class="dmg">召喚条件を満たしていない</span>: ${cn(card)}`); return; }
+    if (p.field.length >= FIELD_MAX) { ctx.log(`  └ <span class="dmg">몬스터 존이 가득 찼습니다 (최대 ${FIELD_MAX})</span>`, `  └ <span class="dmg">モンスターゾーンが満杯です (最大 ${FIELD_MAX})</span>`); return; }
     p.mana -= playCost(card); p.hand.splice(idx, 1); summonMonster(g, ctx, p, card); return;
   }
   if (card.t === "spell") {
@@ -1077,6 +1085,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (card.id === "RUNE2" && !p.hand.some((c) => c.id === "RUNE1")) { ctx.log("  └ 패에 '룬 학문 - 초급'이 없습니다", "  └ 手札に「ルーン学問 - 初級」がありません"); return; }
     if (card.id === "RUNE3" && !(p.hand.some((c) => c.id === "RUNE1") && p.hand.some((c) => c.id === "RUNE2"))) { ctx.log("  └ 패에 초급·중급 룬 학문이 필요합니다", "  └ 手札に初級・中級のルーン学問が必要です"); return; }
     if ((card.id === "DISARM1" || card.id === "DISARM2" || card.id === "DISARM3") && o0.enchants.length === 0) { ctx.log("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); return; }
+    if (card.ench && p.traps.length + p.enchants.length >= ST_MAX) { ctx.log(`  └ <span class="dmg">마법·함정 존이 가득 찼습니다 (최대 ${ST_MAX})</span>`, `  └ <span class="dmg">魔法・罠ゾーンが満杯です (最大 ${ST_MAX})</span>`); return; }
 
     p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card);
     if (tryNullSpell(g, ctx, card)) return;
@@ -1128,6 +1137,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     return;
   }
   if (card.t === "trap") {
+    if (p.traps.length + p.enchants.length >= ST_MAX) { ctx.log(`  └ <span class="dmg">마법·함정 존이 가득 찼습니다 (최대 ${ST_MAX})</span>`, `  └ <span class="dmg">魔法・罠ゾーンが満杯です (最大 ${ST_MAX})</span>`); return; }
     p.mana -= playCost(card); p.hand.splice(idx, 1); p.traps.push({ card });
     ctx.log(`<span class="t">${p.name}</span> 함정을 세트 (정체는 비공개)`, `<span class="t">${p.name}</span> トラップをセット (正体は非公開)`);
     ctx.ev.push({ type: "trapSet", player: side(g, p) });

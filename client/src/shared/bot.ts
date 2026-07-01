@@ -39,8 +39,9 @@ export function botDecide(g: GameState): Action {
   };
   const spells = p.hand.map((c, i) => ({ c, i })).filter((x) => x.c.t === "spell" && playCost(x.c) <= p.mana && castable(x.c));
 
-  // summonable monsters, best value first
-  const monsters = p.hand
+  const stFull = p.traps.length + p.enchants.length >= 9;
+  // summonable monsters, best value first (respect the 9-monster zone cap)
+  const monsters = p.field.length >= 9 ? [] : p.hand
     .map((c, i) => ({ c, i }))
     .filter((x) => x.c.t === "mon" && playCost(x.c) <= p.mana && !(oppNoLow && (x.c.cost ?? 0) <= 3) && summonReqMet(p, x.c))
     .sort((a, b) => cardValue(b.c) - cardValue(a.c));
@@ -92,13 +93,13 @@ export function botDecide(g: GameState): Action {
   const util = spells.find((x) => ["draw", "seek", "crash", "exile", "recall", "heal", "manaUp", "manaDown", "manaUpGain", "chestToMana"].includes(x.c.act || ""));
   if (util) return { type: "play", idx: util.i };
 
-  // 8) persistent enchant magic
-  const ench = spells.find((x) => !!x.c.ench);
+  // 8) persistent enchant magic (respect the spell/trap zone cap)
+  const ench = stFull ? undefined : spells.find((x) => !!x.c.ench);
   if (ench) return { type: "play", idx: ench.i };
 
-  // 9) set a trap (max 3 face-down)
+  // 9) set a trap (bot keeps a light footprint; also respect the zone cap)
   const trap = p.hand.map((c, i) => ({ c, i })).find((x) => x.c.t === "trap" && playCost(x.c) <= p.mana);
-  if (trap && p.traps.length < 3) return { type: "play", idx: trap.i };
+  if (trap && p.traps.length < 3 && !stFull) return { type: "play", idx: trap.i };
 
   // 10) Attune (max mana +1) — always good
   const attune = p.hand.findIndex((c) => c.star === "mana" && playCost(c) <= p.mana);

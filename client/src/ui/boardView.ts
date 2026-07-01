@@ -10,8 +10,8 @@ import { cardEl } from "./cardView";
 import { bindZoom } from "./anim";
 import { t, getLang } from "../i18n";
 
-const MON_SLOTS = 7;
-const ST_SLOTS = 5;
+const MON_SLOTS = 9;
+const ST_SLOTS = 9;
 
 export interface BoardHandlers {
   onPlay(idx: number): void;
@@ -96,7 +96,9 @@ export class GameView {
       cb.className = "card--back";
       cb.style.backgroundImage = `url(${FRAME_BACK})`;
       cb.style.width = "56px"; cb.style.height = "90px";
-      cb.style.transform = `rotate(${(i - mid) * 4}deg) translateY(${Math.abs(i - mid) ** 2 * 1.4}px)`;
+      // Mirror the fan: the opponent holds their cards from the far side, so the
+      // arc curves the opposite way to your own hand (convex toward the top edge).
+      cb.style.transform = `rotate(${-(i - mid) * 4}deg) translateY(${-(Math.abs(i - mid) ** 2) * 1.4}px)`;
       cb.style.zIndex = String(i);
       oh.appendChild(cb);
     }
@@ -172,7 +174,10 @@ export class GameView {
     for (let i = p.traps.length + p.enchants.length; i < ST_SLOTS; i++) sz.appendChild(this.slotEl());
 
     const zones = document.createElement("div");
-    zones.append(mz, sz);
+    // Mirror the opponent's board: their monster zone sits nearest the center line
+    // (like a real TCG table facing you), spell/trap zone on the far side.
+    if (isMe) zones.append(mz, sz);
+    else zones.append(sz, mz);
     block.appendChild(zones);
 
     // layout: opponent => discard | block | deck ; me => deck | block | discard
