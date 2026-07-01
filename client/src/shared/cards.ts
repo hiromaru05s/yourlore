@@ -519,7 +519,7 @@ const NEW_CARDS3: CardDef[] = [
   // ---- spells: enchant(영구마법) ----
   { id: "KIN_CALL", t: "spell", cost: 3, ench: "kinDiscount", val: 99, name: "동족의 부름", nameJa: "同族の呼び声", text: "영구: 자신 필드에 종족 몬스터가 있으면 마켓의 종족카드 구매코스트 -2(최소1)", textJa: "永続: 自分の場に種族モンスターがいれば、マーケットの種族カード購入コスト-2(最低1)" },
   { id: "MULTI_CULTURE", t: "spell", cost: 3, play: 4, ench: "cultureMana", val: 99, name: "다양한 문화", nameJa: "多様な文化", text: "영구: '시초' 제외, 필드의 종족 몬스터 1체당 임시 최대 마나 +1 (시전 4)", textJa: "永続: 「始原」を除く、場の種族モンスター1体ごとに一時的に最大マナ+1 (発動4)" },
-  { id: "SLAY_ART", t: "spell", cost: 2, ench: "slayArt", val: 99, name: "살생의 극의", nameJa: "殺生の極意", text: "영구: 플레이어에게 데미지가 들어갈 때마다 추가 데미지 +2", textJa: "永続: プレイヤーにダメージが入るたび追加ダメージ+2" },
+  { id: "SLAY_ART", t: "spell", cost: 2, ench: "slayArt", val: 99, name: "살생의 극의", nameJa: "殺生の極意", text: "영구: 양 플레이어 중 누구든 데미지를 받을 때마다 추가 데미지 +2", textJa: "永続: どちらのプレイヤーがダメージを受けるたび追加ダメージ+2" },
   // ---- spells: blood magic ----
   { id: "BLOOD1", t: "spell", cost: 2, play: 1, act: "draw", name: "피의 마법 1", nameJa: "血の魔法 1", text: "자신에게 4 데미지, 카드 3장 드로우 (시전 1)", textJa: "自分に4ダメージ、カード3枚ドロー (発動1)" },
   { id: "BLOOD2", t: "spell", cost: 4, play: 2, act: "draw", name: "피의 마법 2", nameJa: "血の魔法 2", text: "자신에게 8 데미지, 카드 6장 드로우 (시전 2)", textJa: "自分に8ダメージ、カード6枚ドロー (発動2)" },

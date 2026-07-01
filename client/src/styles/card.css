@@ -39,16 +39,16 @@
 .card--trap .card-cost { background: radial-gradient(circle at 35% 30%, #fff5, transparent 60%), #3f8a4a; }
 
 .card-name {
-  /* name plate interior — starts just right of the cost gem, ends before the corner gem */
-  position: absolute; top: 4.5%; left: 26%; right: 25%; height: 8.7%;
+  /* name plate (normalized frame: plate y 2.9%–12%, beige to ~77%) */
+  position: absolute; top: 3%; left: 25%; right: 23%; height: 8.8%;
   display: flex; align-items: center; justify-content: flex-start;
-  font-weight: 800; font-size: 0.7em; line-height: 1; letter-spacing: -.02em;
+  font-weight: 800; font-size: 0.6em; line-height: 1; letter-spacing: -.02em;
   color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .card-art {
-  /* fills the frame's art window exactly (y 17.4%–62.1%, x 8.8%–92%) */
-  position: absolute; top: 17.4%; left: 8.8%; right: 8%; height: 44.7%;
+  /* fills the frame's art window exactly (normalized: y 16.5%–63.5%, x 7%–93%) */
+  position: absolute; top: 16.5%; left: 7.5%; right: 7.5%; height: 47%;
   border-radius: 3px;
   background:
     radial-gradient(120% 90% at 50% 30%, #2c3a55, #0c1320 90%);
@@ -67,27 +67,27 @@
 }
 .card-art:has(img)::after { content: none; }
 .card-eff {
-  /* monster text box (y 66.2%–82.9%) */
+  /* monster text box (normalized: y 68%–85.3%) */
   position: absolute; left: 9%; right: 9%;
-  top: 66.2%; height: 16.5%;
+  top: 68%; height: 17.3%;
   font-size: 0.45em; line-height: 1.12; color: #2a2114;
   text-align: center; overflow: hidden; word-break: keep-all;
   display: flex; align-items: center; justify-content: center;
 }
-/* spell/trap/starter text box is taller (y 66.2%–93.2%, no atk/def bar) */
-.card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 27%; }
+/* spell/trap/starter text box is taller (normalized: y 68%–96.3%, no atk/def bar) */
+.card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 28.3%; }
 
 /* monster atk/def: numbers only — centered in the frame's built-in sword/shield slots */
 .card-ad {
-  position: absolute; left: 0; right: 0; top: 84.5%; height: 8.8%;
+  position: absolute; left: 0; right: 0; top: 87.5%; height: 8.8%;
   font-family: var(--mono); font-weight: 800; font-size: 1em; line-height: 1;
 }
 .ad-atk, .ad-def {
   position: absolute; top: 50%; transform: translateY(-50%);
-  width: 21%; text-align: center;
+  width: 22%; text-align: center;
   color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35); white-space: nowrap;
 }
-.ad-atk { left: 24%; }
+.ad-atk { left: 22%; }
 .ad-def { left: 71%; }
 
 /* ---- card states ---- */
