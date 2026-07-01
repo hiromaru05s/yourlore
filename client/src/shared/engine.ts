@@ -126,7 +126,7 @@ export function createGame(opts: CreateOpts): ReduceResult {
   // STANDARD market: 8 DISTINCT random cards of cost 1–4 (mixed types)
   const lowAvail = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 4);
   g.market = [];
-  while (g.market.length < 8 && lowAvail.length) g.market.push(inst(g, lowAvail.splice(randInt(g, lowAvail.length), 1)[0]));
+  while (g.market.length < 10 && lowAvail.length) g.market.push(inst(g, lowAvail.splice(randInt(g, lowAvail.length), 1)[0]));
 
   const ev: GameEvent[] = [];
   const ctx = makeCtx(g, ev);

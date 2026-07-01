@@ -61,7 +61,9 @@
 .trapchip-card { position: relative; }
 
 /* ---- market ---- */
-.market { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: stretch; padding: 6px 14px 8px; align-self: center; }
+/* both markets sit together in the center (uses the empty side space) */
+.market { display: flex; justify-content: center; align-items: stretch; gap: 26px; flex-wrap: wrap; padding: 6px 14px 8px; align-self: center; }
+.market-sub { min-width: 0; }
 .market-sub .sub-head { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
 .market-sub .sub-head .tag { font-family: var(--mono); font-size: 10px; letter-spacing: .22em; color: var(--brass); text-transform: uppercase; }
 .market-sub .sub-head .meta { font-size: 10px; color: var(--paper-faint); }
@@ -76,6 +78,9 @@
 .hand { display: flex; justify-content: center; align-items: flex-end; }
 .hand .card { margin: 0 -12px; transform-origin: bottom center; }
 .hand .card:hover { z-index: 50 !important; }
+/* >10 cards: straight, readable row (no fan). Wrap if it still overflows. */
+.hand.is-flat { flex-wrap: wrap; row-gap: 4px; }
+.hand.is-flat .card { margin: 0 -6px; }
 .end-turn-wrap { position: absolute; right: 6px; bottom: 10px; }
 
 /* ---- log panel ---- */

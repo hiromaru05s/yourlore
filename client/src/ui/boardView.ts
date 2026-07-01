@@ -237,7 +237,7 @@ export class GameView {
     g.market.forEach((c, i) => {
       const bc = buyCost(owner, c);
       const aff = myTurn && !g.pending && me.mana >= bc;
-      const card = cardEl(c, { buyable: aff, dim: !aff, costOverride: bc }); // board size so 8 fit
+      const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc }); // same size as 제시
       if (aff) card.onclick = () => this.h.onBuyMarket(i);
       bindZoom(card, c);
       fixed.appendChild(card);
@@ -263,12 +263,15 @@ export class GameView {
     const handEl = this.q("hand");
     handEl.innerHTML = "";
     const n = me.hand.length, mid = (n - 1) / 2;
+    // Past 10 cards a fanned hand becomes unreadable — lay it out flat/straight instead.
+    const flat = n > 10;
+    handEl.classList.toggle("is-flat", flat);
     me.hand.forEach((c, idx) => {
       const pc = playCost(c);
       const aff = myTurn && !g.pending && me.mana >= pc;
       const card = cardEl(c, { size: "hand", playable: aff, dim: !aff, costOverride: pc });
       const off = idx - mid;
-      card.style.transform = `rotate(${off * 3.2}deg) translateY(${Math.abs(off) ** 2 * 2}px)`;
+      card.style.transform = flat ? "none" : `rotate(${off * 3.2}deg) translateY(${Math.abs(off) ** 2 * 2}px)`;
       card.style.zIndex = String(idx);
       if (aff) card.onclick = () => this.h.onPlay(idx);
       bindZoom(card, c);

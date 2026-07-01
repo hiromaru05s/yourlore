@@ -41,8 +41,8 @@
   --card-r: 6px;
   --slot-gap: clamp(4px, 0.5vw, 7px);
 
-  /* market cards a touch larger; hand larger still — all share the ratio */
-  --card-h-mkt: clamp(82px, 11.6vh, 140px);
+  /* market cards ~1.5x bigger (fixed + 제시 unified); hand larger still — all share the ratio */
+  --card-h-mkt: clamp(123px, 17.4vh, 210px);
   --card-w-mkt: calc(var(--card-h-mkt) * 0.64);
   --card-h-hand: clamp(92px, 13.4vh, 156px);
   --card-w-hand: calc(var(--card-h-hand) * 0.64);
