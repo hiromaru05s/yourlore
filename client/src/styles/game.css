@@ -61,13 +61,13 @@
 .trapchip-card { position: relative; }
 
 /* ---- market ---- */
-/* both markets sit together in the center (uses the empty side space) */
-.market { display: flex; justify-content: center; align-items: stretch; gap: 26px; flex-wrap: wrap; padding: 6px 14px 8px; align-self: center; }
+/* both markets sit together on ONE centered row (compact height, uses the empty side space) */
+.market { display: flex; justify-content: center; align-items: stretch; gap: 20px; padding: 6px 14px 8px; align-self: center; overflow-x: auto; }
 .market-sub { min-width: 0; }
 .market-sub .sub-head { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
 .market-sub .sub-head .tag { font-family: var(--mono); font-size: 10px; letter-spacing: .22em; color: var(--brass); text-transform: uppercase; }
 .market-sub .sub-head .meta { font-size: 10px; color: var(--paper-faint); }
-.market-cards { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.market-cards { display: flex; gap: 7px; justify-content: center; flex-wrap: nowrap; }
 .market-div { width: 1px; background: linear-gradient(180deg, transparent, var(--line), transparent); }
 .refresh-btn { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border-radius: 5px; border: 1px solid var(--brass-dim); background: #ffffff08; color: var(--brass); }
 .refresh-btn:hover:not(:disabled) { border-color: var(--brass); color: var(--brass-hi); }
