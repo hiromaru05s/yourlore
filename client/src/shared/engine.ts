@@ -327,15 +327,10 @@ function endTurn(g: GameState, ctx: Ctx): void {
 // ============================================================
 // defeat / win
 // ============================================================
-function handleDefeat(g: GameState, ctx: Ctx, loser: PlayerState, finisher: Side): void {
+function handleDefeat(g: GameState, ctx: Ctx, loser: PlayerState, _finisher: Side): void {
   if (g.over) return;
   const loserIdx = g.players.indexOf(loser) as Side;
   const winner = (1 - loserIdx) as Side;
-  g.players[finisher].maxMana += 1;
-  let topDmg: Side = winner;
-  if (g.dmgTally[winner] >= g.dmgTally[finisher]) topDmg = winner;
-  if (topDmg !== finisher) g.players[topDmg].maxMana += 1;
-  ctx.log(`<span class="good">격파 보상: 최대 마나 +1</span>`, `<span class="good">撃破報酬: 最大マナ +1</span>`);
   g.over = true; g.phase = "over"; g.winner = winner;
   ctx.ev.push({ type: "win", winner });
 }
