@@ -48,7 +48,8 @@ export function effMaxMana(p: PlayerState): number {
   // 다양한 문화: while active, +1 max mana per non-시초 tribe monster you control
   const culture = p.enchants.some((e) => e.card.ench === "cultureMana")
     ? p.field.filter((m) => m.tribe && m.tribe !== "시초").length : 0;
-  return Math.max(1, p.maxMana + aura + culture - p.manaPenalty);
+  const heart = p.enchants.filter((e) => e.card.ench === "growHpMana").length; // 세계수의 심장: 장당 -1
+  return Math.max(1, p.maxMana + aura + culture - heart - p.manaPenalty);
 }
 export function effAtk(p: PlayerState, m: FieldMon): number {
   let a = m.atk! + (m.tempAtk || 0) + (m.atkMod || 0);
@@ -293,6 +294,12 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
       if (e.card.ench === "seedMana" && ownerTurn && !g.over && randInt(g, 100) < (e.card.val2 ?? 25)) {
         pl.maxMana += 1;
         ctx.log(`<span class="t">${cn(e.card)}</span> 발아! 최대 마나 +1 (${pl.maxMana})`, `<span class="t">${cn(e.card)}</span> 発芽！最大マナ +1 (${pl.maxMana})`);
+      }
+      // 생명의 성소 / 세계수의 심장: 자신의 턴마다 최대 체력 +val2 (회복 포함 → 생명의 순환과 시너지)
+      if ((e.card.ench === "growHp" || e.card.ench === "growHpMana") && ownerTurn && !g.over) {
+        const amt = e.card.val2 || 0;
+        pl.maxHp += amt; ctx.heal(pl, amt);
+        ctx.log(`<span class="t">${cn(e.card)}</span> 최대 체력 +${amt} (${pl.maxHp})`, `<span class="t">${cn(e.card)}</span> 最大体力 +${amt} (${pl.maxHp})`);
       }
       if (everyTurn || ownerTurn) {
         e.turns--;

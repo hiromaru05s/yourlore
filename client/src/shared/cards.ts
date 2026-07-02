@@ -669,8 +669,22 @@ const NEW_CARDS5: CardDef[] = [
     text: "최대 마나 +2, 카드 2장 드로우", textJa: "最大マナ+2、カード2枚ドロー" },
   { id: "LIFE_CYCLE", t: "spell", cost: 3, play: 2, ench: "healMana", val: 99, name: "생명의 순환", nameJa: "生命の循環",
     text: "영구: 자신이 체력을 회복할 때마다 15% 확률로 최대 마나 +1 (시전 2)", textJa: "永続: 自分が体力を回復するたび15%で最大マナ+1 (発動2)" },
+  { id: "LIFE_SANCTUM", t: "spell", cost: 3, play: 2, ench: "growHp", val: 99, val2: 3, name: "생명의 성소", nameJa: "生命の聖域",
+    text: "영구: 자신의 턴마다 최대 체력 +3 (시전 2)", textJa: "永続: 自分のターンごとに最大体力+3 (発動2)" },
+  { id: "WORLD_HEART", t: "spell", cost: 5, play: 3, ench: "growHpMana", val: 99, val2: 8, name: "세계수의 심장", nameJa: "世界樹の心臓",
+    text: "영구: 자신의 턴마다 최대 체력 +8. 이 카드가 필드에 있는 한 자신의 최대 마나 -1 (시전 3)", textJa: "永続: 自分のターンごとに最大体力+8。このカードが場にある限り自分の最大マナ-1 (発動3)" },
 ];
 for (const c of NEW_CARDS5) { DB[c.id] = c; }
+
+// ============================================================
+// BALANCE PATCH 8
+// ============================================================
+const PATCH8: Record<string, Partial<CardDef>> = {
+  M12: { def: 4 }, // 타이탄 게이트 4/5 → 4/4
+  M7: { atk: 4 },  // 엠버 드레이크 5/0 → 4/0 (번 2 유지)
+  M8: { val: 1, text: "소환시: 체력 1 회복", textJa: "召喚時: 体力1回復" }, // 그로브 워든 회복 2 → 1
+};
+for (const id of Object.keys(PATCH8)) { if (DB[id]) Object.assign(DB[id], PATCH8[id]); }
 
 // chest (golden treasure) outcome odds — shown when the chest card is enlarged
 export const CHEST_ODDS = {
