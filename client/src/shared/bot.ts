@@ -1,14 +1,171 @@
 // ============================================================
 // LORE — bot AI. Pure: botDecide(state) -> single best Action.
 // The controller applies it, then calls again until endTurn.
-// Strategy: break traps first (they punish summons AND attacks),
-// develop board + buff BEFORE swinging, spend removal only on real
-// threats, count penetration (관통) damage, and push lethal ASAP.
+//
+// Two layers:
+//  · greedyDecide — fast heuristic policy (break traps first, develop
+//    board, count penetration damage, disciplined buys).
+//  · botDecide    — rollout search on top: enumerates candidate actions,
+//    plays each one out to the end of the opponent's reply using the
+//    greedy policy, scores the result with an evaluation function whose
+//    weights were fit by logistic regression on 2000 self-play games,
+//    and deviates from greedy only when clearly better (margin).
+//    Rollouts use a perturbed RNG so the bot can never foresee real
+//    dice / draws. A/B: ~68% vs the pure greedy bot.
 // ============================================================
-import type { Action, CardInst, FieldMon, GameState, PlayerState } from "./types";
-import { buyCost, cardValue, effAtk, effDef, playCost, summonReqMet } from "./engine";
+import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
+import { buyCost, cardValue, effAtk, effDef, playCost, reduce, summonReqMet } from "./engine";
+
+// ---------------- rollout search (the shipped bot) ----------------
+const MARGIN = 0.1;      // eval margin a deviation must beat greedy by
+const ROLLOUT_STEPS = 40;
 
 export function botDecide(g: GameState): Action {
+  try {
+    const a = searchDecide(g);
+    if (a) return a;
+  } catch { /* engine hiccup → greedy fallback */ }
+  return greedyDecide(g);
+}
+
+function searchDecide(g: GameState): Action | null {
+  const s = g.cur as Side;
+  const base = greedyDecide(g);
+  const baseKey = JSON.stringify(base);
+  const cands = candidates(g).filter((a) => JSON.stringify(a) !== baseKey);
+  if (cands.length === 0) return base;
+  let best: Action = base;
+  let bestV = rollout(g, base, s) + MARGIN;
+  for (const a of cands) {
+    const v = rollout(g, a, s);
+    if (v > bestV) { bestV = v; best = a; }
+  }
+  return best;
+}
+
+/** Apply `a`, finish my turn + the opponent's reply with the greedy policy, evaluate. */
+function rollout(g: GameState, a: Action, s: Side): number {
+  const g2 = structuredClone(g);
+  g2.rng = (g2.rng ^ 0x9e3779b9) >>> 0; // decouple from the real RNG stream (no dice clairvoyance)
+  let st = reduce(g2, a).state;
+  // no-op guard: the engine refused the action before paying → never pick it
+  if (a.type === "play" && !st.pending && !st.over &&
+      st.players[s].mana === g.players[s].mana && st.players[s].hand.length === g.players[s].hand.length) return -Infinity;
+  let steps = 0;
+  while (!st.over && st.cur === s && steps < ROLLOUT_STEPS) { st = reduce(st, greedyDecide(st)).state; steps++; }
+  steps = 0;
+  while (!st.over && st.cur !== s && steps < ROLLOUT_STEPS) { st = reduce(st, greedyDecide(st)).state; steps++; }
+  return evalState(st, s);
+}
+
+// candidate actions, deduped + trimmed so rollouts stay cheap
+function candidates(g: GameState): Action[] {
+  const p = g.players[g.cur];
+  const o = g.players[1 - g.cur];
+  const out: Action[] = [];
+
+  if (g.pending) {
+    const pend = g.pending;
+    const push = (uid: string | null) => out.push(pend.kind === "seek" || pend.kind === "recall" ? { type: "pick", uid } : { type: "chooseTarget", uid });
+    if (pend.kind === "oppMon") o.field.forEach((m) => push(m.uid));
+    else if (pend.kind === "myMon") p.field.forEach((m) => push(m.uid));
+    else if (pend.kind === "seek" || pend.kind === "recall") {
+      const pool = pend.kind === "seek" ? p.deck : p.discard;
+      const seen = new Set<string>();
+      [...pool].sort((a, b) => cardValue(b) - cardValue(a)).forEach((c) => {
+        if (!seen.has(c.id) && seen.size < 8) { seen.add(c.id); push(c.uid); }
+      });
+    }
+    if (out.length === 0) push(null);
+    return out;
+  }
+
+  // plays: unique by card id, affordable
+  const seenPlay = new Set<string>();
+  p.hand.forEach((c, idx) => {
+    if (playCost(c) > p.mana || seenPlay.has(c.id)) return;
+    seenPlay.add(c.id);
+    out.push({ type: "play", idx });
+  });
+  // attacks: only swings that can land (kill / empty field / assassin), deduped by atk
+  const noAtk = g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "noAttack"));
+  if (!noAtk) {
+    const seenAtk = new Set<string>();
+    p.field.forEach((m) => {
+      if (m.exhausted) return;
+      const a = effAtk(p, m);
+      const canLand = m.directOnly || o.field.length === 0 || o.field.some((tm) => a > effDef(o, tm));
+      if (!canLand) return;
+      const key = `${a}|${m.directOnly ? 1 : 0}`;
+      if (seenAtk.has(key)) return;
+      seenAtk.add(key);
+      out.push({ type: "attack", uid: m.uid });
+    });
+  }
+  // buys: top 4 by rough score, unique by id
+  const buys: { a: Action; s: number }[] = [];
+  const seenBuy = new Set<string>();
+  p.supply.forEach((c, i) => { if (c && buyCost(p, c) <= p.mana && !seenBuy.has(c.id)) { seenBuy.add(c.id); buys.push({ a: { type: "buySupply", i }, s: roughBuy(c) }); } });
+  g.market.forEach((c, i) => { if (buyCost(p, c) <= p.mana && !seenBuy.has(c.id)) { seenBuy.add(c.id); buys.push({ a: { type: "buyMarket", i }, s: roughBuy(c) }); } });
+  buys.sort((x, y) => y.s - x.s).slice(0, 4).forEach((b) => out.push(b.a));
+  if (out.length === 0) out.push({ type: "endTurn" });
+  return out;
+}
+
+function roughBuy(c: CardInst): number {
+  return c.t === "mon" ? (c.atk || 0) * 2.0 + (c.def || 0) * 1.2 + c.cost * 0.7 : cardValue(c);
+}
+
+// ---- evaluation: logistic-regression weights fit on 2000 greedy self-play games ----
+// features: hpD, maxManaD, atkD, defD, fieldCountD, threatIn, threatOut, deckQD, handD, trapD, enchD
+const EVAL_W: number[][] = [
+  [-0.0076, 0.0837, 0.0462, 0.0692, 0.1385, -0.0615, 0.0416, -0.0075, 0.0000, 0.0000, 0.0000],  // turns 1-6
+  [0.0075, 0.3213, 0.0118, -0.0040, 0.1905, -0.0038, 0.0728, -0.0084, 0.0000, 0.1160, -0.6052], // turns 7-12
+  [0.0533, 0.2205, -0.0007, 0.0110, -0.0701, -0.0791, 0.1841, -0.0027, 0.2964, 0.9085, -0.0948], // turns 13+
+];
+function evalState(g: GameState, s: Side): number {
+  if (g.over) return g.winner === s ? 1e6 : -1e6;
+  const p = g.players[s], o = g.players[1 - s];
+  const bAtk = (x: PlayerState) => x.field.reduce((t, m) => t + effAtk(x, m), 0);
+  const bDef = (x: PlayerState) => x.field.reduce((t, m) => t + effDef(x, m), 0);
+  const f = [
+    p.hp - o.hp,
+    p.maxMana - o.maxMana,
+    bAtk(p) - bAtk(o), bDef(p) - bDef(o),
+    p.field.length - o.field.length,
+    threatFace(o, p), threatFace(p, o),
+    deckQ(p) - deckQ(o),
+    p.hand.length - o.hand.length,
+    p.traps.length - o.traps.length,
+    p.enchants.length - o.enchants.length,
+  ];
+  const w = EVAL_W[g.turn <= 6 ? 0 : g.turn <= 12 ? 1 : 2];
+  let z = 0;
+  for (let j = 0; j < f.length; j++) z += w[j] * f[j];
+  return z;
+}
+// bomb-weighted deck quality (only above-baseline cards, so thinning isn't penalized)
+function deckQ(p: PlayerState): number {
+  let t = 0;
+  for (const pool of [p.hand, p.deck, p.discard]) for (const c of pool) t += Math.max(0, roughBuy(c) - 8);
+  return t;
+}
+// o's potential face damage next turn into p's board (penetration included)
+function threatFace(o: PlayerState, p: PlayerState): number {
+  const defs = p.field.map((m) => effDef(p, m)).sort((a, b) => b - a);
+  let total = 0;
+  for (const m of [...o.field].sort((a, b) => effAtk(o, b) - effAtk(o, a))) {
+    const a = effAtk(o, m);
+    if (a <= 0) continue;
+    if (m.directOnly || defs.length === 0) { total += a; continue; }
+    const k = defs.findIndex((d) => a > d);
+    if (k >= 0) { total += a - defs[k]; defs.splice(k, 1); }
+  }
+  return total;
+}
+
+// ---------------- greedy policy (rollout engine + fallback) ----------------
+export function greedyDecide(g: GameState): Action {
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];
 
