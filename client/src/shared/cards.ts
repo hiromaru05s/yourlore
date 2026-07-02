@@ -615,6 +615,19 @@ for (const id of Object.keys(DB)) {
   if (c.textJa && !/発動|召喚コスト/.test(c.textJa)) c.textJa += ` (発動${c.play})`;
 }
 
+// ============================================================
+// BALANCE PATCH 6 — 드로우 주문 버프: 시전 2 이상인 순수 드로우 주문만 시전 -1
+// (시전 1 이하는 유지 → 0마나 캔트립 방지. 드로우 주문은 전 구간 승률 마이너스였음)
+// ============================================================
+const DRAW_BUFF = ["ND3", "ND5", "GS5_3", "GS6_3", "GS7_3", "GS8_3", "GS9_3", "GS10_3", "BLOOD2"];
+for (const id of DRAW_BUFF) {
+  const c = DB[id];
+  if (!c || c.play === undefined || c.play < 2) continue;
+  c.play -= 1;
+  c.text = c.text.replace(/\(시전 \d+\)/, `(시전 ${c.play})`);
+  if (c.textJa) c.textJa = c.textJa.replace(/\(発動\d+\)/, `(発動${c.play})`);
+}
+
 // chest (golden treasure) outcome odds — shown when the chest card is enlarged
 export const CHEST_ODDS = {
   ko: { title: "황금상자 확률 (각 25%)", rows: ["최대 마나 +1 — 25%", "체력 +8 — 25%", "최대 체력 +5 — 25%", "꽝: 상대 필드에 미믹(3/2) — 25%"] },
