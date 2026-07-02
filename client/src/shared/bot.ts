@@ -124,10 +124,12 @@ export function botDecide(g: GameState): Action {
   // 12) buy from supply, then common market — attack-weighted scoring (races are
   //     won with face damage), and once the economy is online (maxMana>=5) stop
   //     buying chaff: weak buys dilute the deck and starve the late game.
-  //     (A/B tested vs the previous bot: ~66% win rate over 600 games.)
+  //     Early game also has a floor (11): cheap chaff bought on turns 1-4 is
+  //     what clogs the deck at turn 15. Defense weighted 1.2 — walls soak
+  //     penetration damage. (A/B: ~66% vs v1 bot, then +4% more in round 2.)
   const buyScore = (c: CardInst): number =>
-    c.t === "mon" ? (c.atk || 0) * 2.0 + (c.def || 0) * 0.6 + c.cost * 0.7 : cardValue(c);
-  const minBuy = p.maxMana >= 5 ? 13 : 0;
+    c.t === "mon" ? (c.atk || 0) * 2.0 + (c.def || 0) * 1.2 + c.cost * 0.7 : cardValue(c);
+  const minBuy = p.maxMana >= 5 ? 13 : 11;
   let bi = -1, bs = minBuy;
   p.supply.forEach((c, i) => { if (c && buyCost(p, c) <= p.mana) { const s = buyScore(c); if (s > bs) { bs = s; bi = i; } } });
   if (bi >= 0) return { type: "buySupply", i: bi };
