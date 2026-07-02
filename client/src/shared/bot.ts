@@ -81,8 +81,11 @@ function candidates(g: GameState): Action[] {
   }
 
   // plays: unique by card id, affordable
+  // (no chests before turn 7 — a turn-2 mimic on the enemy board costs more than
+  //  early mana/HP compounds; single-sample rollouts under-count the 25% risk)
   const seenPlay = new Set<string>();
   p.hand.forEach((c, idx) => {
+    if (g.turn <= 6 && c.star === "chest") return;
     if (playCost(c) > p.mana || seenPlay.has(c.id)) return;
     seenPlay.add(c.id);
     out.push({ type: "play", idx });
@@ -294,8 +297,8 @@ export function greedyDecide(g: GameState): Action {
   g.market.forEach((c, i) => { if (buyCost(p, c) <= p.mana) { const s = buyScore(c); if (s > mbs) { mbs = s; mbi = i; } } });
   if (mbi >= 0) return { type: "buyMarket", i: mbi };
 
-  // 13) spare mana → Pry Chest
-  const chest = p.hand.findIndex((c) => c.star === "chest" && playCost(c) <= p.mana);
+  // 13) spare mana → Pry Chest (not before turn 7 — early mimic risk outweighs the payout)
+  const chest = g.turn <= 6 ? -1 : p.hand.findIndex((c) => c.star === "chest" && playCost(c) <= p.mana);
   if (chest >= 0) return { type: "play", idx: chest };
 
   // 14) spare mana → Cull (deck thinning)
