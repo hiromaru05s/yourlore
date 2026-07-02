@@ -702,10 +702,10 @@ function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string): void {
   applySummonBuff(ctx, p, m);
 }
 
-/** GM5_2: each monster YOU summon gains +val/+val from every summonBuff aura you control. */
+/** GM5_2: each monster YOU summon gains +val ATK from every summonBuff aura you control. */
 function applySummonBuff(ctx: Ctx, p: PlayerState, m: FieldMon): void {
   const n = p.field.filter((x) => x.uid !== m.uid && x.aura === "summonBuff").reduce((s, x) => s + (x.val || 1), 0);
-  if (n > 0) { m.atkMod = (m.atkMod || 0) + n; m.defMod = (m.defMod || 0) + n; ctx.log(`  └ 소환 강화: ${cn(m)} +${n}/+${n}`, `  └ 召喚強化: ${cn(m)} +${n}/+${n}`); }
+  if (n > 0) { m.atkMod = (m.atkMod || 0) + n; ctx.log(`  └ 소환 강화: ${cn(m)} +${n}/+0`, `  └ 召喚強化: ${cn(m)} +${n}/+0`); }
 }
 
 // ============================================================

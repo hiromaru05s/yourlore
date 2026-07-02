@@ -668,7 +668,7 @@ const NEW_CARDS5: CardDef[] = [
     text: "자신에게 4 데미지, 최대 마나 +1", textJa: "自分に4ダメージ、最大マナ+1" },
   { id: "WORLD_SEED", t: "spell", cost: 4, ench: "seedMana", val: 99, val2: 33, name: "세계수의 씨앗", nameJa: "世界樹の種",
     text: "영구: 자신의 턴 시작마다 33% 확률로 최대 마나 +1", textJa: "永続: 自分のターン開始時、33%で最大マナ+1" },
-  { id: "MANA_GIANT", t: "mon", cost: 5, atk: 2, def: 7, aura: "mana2", name: "마나 수정 거인", nameJa: "マナ水晶の巨人",
+  { id: "MANA_GIANT", t: "mon", cost: 5, atk: 1, def: 7, aura: "mana2", name: "마나 수정 거인", nameJa: "マナ水晶の巨人",
     text: "필드에 있는 동안 최대 마나 +2", textJa: "場にいる間、最大マナ+2" },
   { id: "HOURGLASS", t: "spell", cost: 6, act: "manaUp", val: 2, val2: 2, name: "시간의 모래시계", nameJa: "時の砂時計",
     text: "최대 마나 +2, 카드 2장 드로우", textJa: "最大マナ+2、カード2枚ドロー" },
@@ -694,8 +694,8 @@ for (const c of NEW_CARDS5) { DB[c.id] = c; }
 // BALANCE PATCH 8
 // ============================================================
 const PATCH9: Record<string, Partial<CardDef>> = {
-  GM5_3: { def: 3 }, // 화염의 드레이크 7/4 → 7/3
-  GM5_2: { def: 5 }, // 강철의 전사 6/6 → 6/5
+  GM5_3: { atk: 6, def: 2, text: "매 턴 시작 시 상대 체력에 3 데미지", textJa: "毎ターン開始時 相手の体力に3ダメージ" }, // 화염의 드레이크 7/4 → 6/2
+  GM5_2: { atk: 5, def: 5, text: "상시: 몬스터를 소환할 때 그 몬스터 공격 +1", textJa: "常時: モンスター召喚時、そのモンスターの攻撃+1" }, // 강철의 전사 6/6 → 5/5, 버프 +1/+0
   GM5_0: { atk: 9, def: 2 }, // 고대의 광전사 9/3 → 9/2
   T13: { val: 4, text: "공격 몬스터 파괴 + 상대 체력에 4 데미지 (시전 3)", textJa: "攻撃モンスターを破壊 + 相手の体力に4ダメージ (発動3)" }, // 천벌 6뎀 → 4뎀
 };
