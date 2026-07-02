@@ -119,6 +119,9 @@ function candidates(g: GameState): Action[] {
   p.supply.forEach((c, i) => { if (c && buyCost(p, c) <= p.mana && !seenBuy.has(c.id)) { seenBuy.add(c.id); buys.push({ a: { type: "buySupply", i }, s: roughBuy(c) }); } });
   g.market.forEach((c, i) => { if (buyCost(p, c) <= p.mana && !seenBuy.has(c.id)) { seenBuy.add(c.id); buys.push({ a: { type: "buyMarket", i }, s: roughBuy(c) }); } });
   buys.sort((x, y) => y.s - x.s).slice(0, 4).forEach((b) => out.push(b.a));
+  // 상대 함정이 깔려 있고 공격이 가능하면 "공격 보류(턴 종료)"도 후보에 —
+  // 킬각이 있어도 함정에 꽂아주는 게 정답이 아닐 때가 있다 (A/B +5%)
+  if (o.traps.length > 0 && out.some((a) => a.type === "attack")) out.push({ type: "endTurn" });
   if (out.length === 0) out.push({ type: "endTurn" });
   return out;
 }
@@ -251,11 +254,12 @@ export function greedyDecide(g: GameState): Action {
   if (buff) return { type: "play", idx: buff.i };
 
   // 6) attack — assassins go face; otherwise attack when it kills (a blocked
-  //    swing does nothing, so never chip into a bigger defense)
+  //    swing does nothing, so never chip into a bigger defense).
+  //    Biggest attacker first: same kill, more penetration (관통) face damage.
   if (!noAtk) {
     const assassin = ready.find((m) => m.directOnly);
     if (assassin) return { type: "attack", uid: assassin.uid };
-    for (const m of ready) {
+    for (const m of [...ready].sort((a, b) => effAtk(p, b) - effAtk(p, a))) {
       if (o.field.length === 0) return { type: "attack", uid: m.uid };
       const a = effAtk(p, m);
       if (o.field.some((tm) => a > effDef(o, tm))) return { type: "attack", uid: m.uid };
