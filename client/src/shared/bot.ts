@@ -232,6 +232,8 @@ export function greedyDecide(g: GameState): Action {
     if (c.act === "heal" && p.maxHp - p.hp < Math.min(c.val || 0, 6)) return false;
     // 어튠-마: needs a chest in hand (봉인 중에도 사용 가능 — 상자를 '여는' 게 아니라 소모)
     if (c.act === "chestToMana" && !p.hand.some((h) => h.star === "chest")) return false;
+    // 길드 상자: 자해 10 리스크 — 체력 여유 필요
+    if (c.id === "GUILD_CHEST" && p.hp <= 12) return false;
     // 안식 계열: "이번 턴 다른 플레이 없음" / "필드 비어있음" 조건
     if ((c.id === "MEDITATE" || c.id === "PRAYER") && (p.playsTurn || 0) > 0) return false;
     if (c.id === "MEDITATE" && p.hp >= Math.floor(p.maxHp * 0.8)) return false;
@@ -310,8 +312,8 @@ export function greedyDecide(g: GameState): Action {
   const util = spells.find((x) => ["draw", "seek", "crash", "exile", "recall", "heal", "manaUp", "manaDown", "manaUpGain", "chestToMana"].includes(x.c.act || ""));
   if (util) return { type: "play", idx: util.i };
 
-  // 8.5) 금단의 술식 — castable() already checked HP + a tribe monster on field
-  const forb = spells.find((x) => x.c.id === "FORBIDDEN");
+  // 8.5) 금단의 술식 / 복권 상자류 — castable() 가드 통과 시 저우선순위로 사용
+  const forb = spells.find((x) => x.c.id === "FORBIDDEN" || x.c.id === "LUCKY_CHEST" || x.c.id === "GUILD_CHEST");
   if (forb) return { type: "play", idx: forb.i };
 
   // 9) persistent enchant magic (respect the spell/trap zone cap)

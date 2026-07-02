@@ -786,7 +786,7 @@ const CUSTOM_SPELLS = new Set<string>([
   "GS7_0", "GS7_2", "GS8_0", "GS8_2", "GS8_3", "GS8_4", "GS8_5", "GS9_0", "GS9_2", "GS10_0", "GS10_1", "GS10_2",
   "HANDRESET", "TIMEWARP", "GAMBLE", "DICE8",
   "RUNE1", "RUNE2", "RUNE3", "GENESIS_SONG", "GENESIS_MAGIC",
-  "BLOOD1", "BLOOD2", "BLOOD3", "DISARM3", "FORBIDDEN", "CATALYST", "MEDITATE", "PRAYER", "HERMIT",
+  "BLOOD1", "BLOOD2", "BLOOD3", "DISARM3", "FORBIDDEN", "CATALYST", "MEDITATE", "PRAYER", "HERMIT", "LUCKY_CHEST", "GUILD_CHEST",
 ]);
 const chance = (g: GameState, pct: number): boolean => randInt(g, 100) < pct;
 function tag(p: PlayerState, card: CardInst): string { return `<span class="t">${p.name}</span> ${cn(card)} →`; }
@@ -920,6 +920,30 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       if (o.enchants.length) { const e = o.enchants.splice(randInt(g, o.enchants.length), 1)[0]; ctx.log(`${tag(p, card)} ${cn(e.card)} 파괴 + 게임에서 제외`, `${tag(p, card)} ${cn(e.card)} 破壊 + ゲームから除外`); }
       break;
     }
+    case "LUCKY_CHEST": luckyChest(g, ctx, p); break; // 행운의 보물상자 복권
+    case "GUILD_CHEST": { // 암살자 길드의 보물상자
+      const r = randInt(g, 100);
+      if (r < 10) { p.maxMana += 3; ctx.log(`${tag(p, card)} 🎰 최대 마나 +3 (10%)`, `${tag(p, card)} 🎰 最大マナ +3 (10%)`); }
+      else if (r < 20) {
+        if (p.traps.length + p.enchants.length < ST_MAX) {
+          p.enchants.push({ card: inst(g, "GUILD_EYE"), turns: 99 });
+          ctx.log(`${tag(p, card)} 🎰 길드의 정보망 획득 — 턴 시작시 드로우 +1 (영구, 10%)`, `${tag(p, card)} 🎰 ギルドの情報網 — ターン開始時ドロー+1 (永続, 10%)`);
+        } else ctx.log(`  └ 마법·함정 존이 가득 차 정보망을 놓쳤다`, `  └ 魔法・罠ゾーンが満杯で情報網を逃した`);
+      }
+      else if (r < 40) { p.maxMana += 2; ctx.log(`${tag(p, card)} 최대 마나 +2 (20%)`, `${tag(p, card)} 最大マナ +2 (20%)`); }
+      else if (r < 50) { p.maxMana += 1; ctx.log(`${tag(p, card)} 최대 마나 +1 (10%)`, `${tag(p, card)} 最大マナ +1 (10%)`); }
+      else if (r < 60) { p.maxHp += 10; p.hp += 10; ctx.ev.push({ type: "heal", player: side(g, p), amount: 10 }); ctx.log(`${tag(p, card)} 최대 체력 +10 (10%)`, `${tag(p, card)} 最大体力 +10 (10%)`); }
+      else if (r < 80) {
+        spawnToken(g, ctx, o, "ASSASSIN1"); spawnToken(g, ctx, o, "ASSASSIN2");
+        ctx.log(`${tag(p, card)} <span class="dmg">경보! 상대 필드에 초급·중급 암살자 소환 (20%)</span>`, `${tag(p, card)} <span class="dmg">警報！相手の場に初級・中級アサシン召喚 (20%)</span>`);
+      }
+      else {
+        spawnToken(g, ctx, o, "ASSASSIN1"); spawnToken(g, ctx, o, "ASSASSIN2"); spawnToken(g, ctx, o, "ASSASSIN3");
+        ctx.log(`${tag(p, card)} <span class="dmg">대참사! 상대 필드에 초급·중급·상급 암살자 소환 (20%)</span>`, `${tag(p, card)} <span class="dmg">大惨事！相手の場に初級・中級・上級アサシン召喚 (20%)</span>`);
+        if (!g.over) ctx.dealDamage(p, 10, cn(card), cn(card));
+      }
+      break;
+    }
     case "MEDITATE": { // 명상: 최대체력의 80%까지 회복
       const amt = Math.floor(p.maxHp * 0.8) - p.hp;
       ctx.heal(p, amt);
@@ -989,9 +1013,9 @@ function summonRandomMon(g: GameState, ctx: Ctx, p: PlayerState, maxCost: number
 // ============================================================
 // treasure
 // ============================================================
-/** 행운의 보물상자(chestLock)가 어느 쪽 필드에든 있으면 양측 보물상자 사용 금지 */
+/** 마스터 미믹(chestLock 오라)이 어느 쪽 필드에든 있으면 양측 보물상자 사용 금지 */
 export function chestLocked(g: GameState): boolean {
-  return g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "chestLock"));
+  return g.players.some((pl) => pl.field.some((m) => m.aura === "chestLock"));
 }
 
 /** 행운의 보물상자 발동 복권 (10/40/30/5/15%) */
@@ -1184,7 +1208,6 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       const perm = (card.val || 0) >= 99;
       ctx.log(`<span class="t">${p.name}</span> ${cn(card)} 발동 (지속 ${perm ? "영구" : `${card.val}턴`})`, `<span class="t">${p.name}</span> ${cn(card)} 発動 (${perm ? "永続" : `持続${card.val}ターン`})`);
       ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "field" });
-      if (card.id === "LUCKY_CHEST") luckyChest(g, ctx, p); // 설치 시 복권 발동
       return;
     }
     ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "discard" }); // reveal animation
