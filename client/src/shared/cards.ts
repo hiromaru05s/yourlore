@@ -640,6 +640,20 @@ const NEW_CARDS4: CardDef[] = [
 ];
 for (const c of NEW_CARDS4) { DB[c.id] = c; }
 
+// ============================================================
+// BALANCE PATCH 7 — 상자 회복 너프 후 레이스 메타 상위권 조정
+// ============================================================
+const PATCH7: Record<string, Partial<CardDef>> = {
+  M11: { atk: 5, val: 1, text: "아군 몬스터 2체 이상이면 공격 +1", textJa: "味方モンスター2体以上で攻撃+1" }, // 워로드 6/2+2 → 5/2+1
+  NGA3: { atk: 5, onSummon: "selfBurn", val: 2, text: "소환시: 자신에게 2 데미지", textJa: "召喚時: 自分に2ダメージ" }, // 유리 대포 6/0 → 5/0 + 자해 2
+  M13: { atk: 3, def: 3 }, // 보이드 리버 4/4 → 3/3
+  T4: { val2: 30, text: "공격 몬스터 파괴 + 30% 확률로 그 공격력만큼 상대에게 데미지 (시전 3)", textJa: "攻撃モンスターを破壊 + 30%でその攻撃力分を相手にダメージ (発動3)" }, // 미러 손 반사 30%
+  M8: { atk: 3, def: 4, onSummon: "heal", val: 2, text: "소환시: 체력 2 회복", textJa: "召喚時: 体力2回復" }, // 그로브 워든 4/4 → 3/4 + 회복 2
+  NMD4: { val: 2, text: "소환시: 카드 2장 드로우", textJa: "召喚時: カード2枚ドロー" }, // 기록자 드로우 3 → 2
+  S9: { val: 4, text: "상대에게 4 데미지 + 자신 체력 3 회복", textJa: "相手に4ダメージ + 自分の体力3回復" }, // 사이펀 5뎀 → 4뎀
+};
+for (const id of Object.keys(PATCH7)) { if (DB[id]) Object.assign(DB[id], PATCH7[id]); }
+
 // chest (golden treasure) outcome odds — shown when the chest card is enlarged
 export const CHEST_ODDS = {
   ko: { title: "황금상자 확률 (각 25%)", rows: ["최대 마나 +1 — 25%", "체력 +3 — 25%", "최대 체력 +5 — 25%", "꽝: 상대 필드에 미믹(3/2) — 25%"] },

@@ -51,7 +51,7 @@ export function effMaxMana(p: PlayerState): number {
 }
 export function effAtk(p: PlayerState, m: FieldMon): number {
   let a = m.atk! + (m.tempAtk || 0) + (m.atkMod || 0);
-  if (m.condAtk === "twoPlus" && p.field.length >= 2) a += 2;
+  if (m.condAtk === "twoPlus" && p.field.length >= 2) a += m.val ?? 2; // 보너스량 = val (기본 2)
   return Math.max(0, a);
 }
 export function effDef(p: PlayerState, m: FieldMon): number {
@@ -402,9 +402,10 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 체력 ${tc.val} 회복${tc.val2 ? ` + ${tc.val2}장 드로우` : ""}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 体力${tc.val}回復${tc.val2 ? ` + ${tc.val2}枚ドロー` : ""}`);
     return;
   }
-  if ((tc = takeTrap(g, ctx, o, "counterFull"))) { // T4: destroy attacker + reflect its full atk to its owner
-    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴 + ${atk} 반사`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 破壊 + ${atk} 反射`);
-    ctx.destroyMonster(p, att); ctx.dealDamage(p, atk, cn(tc), cn(tc)); return;
+  if ((tc = takeTrap(g, ctx, o, "counterFull"))) { // T4: destroy attacker (+ val2% chance: reflect full atk)
+    const refl = randInt(g, 100) < (tc.val2 ?? 100);
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴${refl ? ` + ${atk} 반사` : " (반사 실패)"}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 破壊${refl ? ` + ${atk} 反射` : " (反射失敗)"}`);
+    ctx.destroyMonster(p, att); if (refl && !g.over) ctx.dealDamage(p, atk, cn(tc), cn(tc)); return;
   }
   if ((tc = takeTrap(g, ctx, o, "guardbuff"))) { // T12 / GT8_0: negate + own field def buff (+ optional draw)
     att.exhausted = true; const tv = tc.val || 0;
