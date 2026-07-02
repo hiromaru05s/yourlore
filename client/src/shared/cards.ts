@@ -630,8 +630,8 @@ for (const id of DRAW_BUFF) {
 
 // chest (golden treasure) outcome odds — shown when the chest card is enlarged
 export const CHEST_ODDS = {
-  ko: { title: "황금상자 확률 (각 25%)", rows: ["최대 마나 +1 — 25%", "체력 +8 — 25%", "최대 체력 +5 — 25%", "꽝: 상대 필드에 미믹(3/2) — 25%"] },
-  ja: { title: "宝箱の確率 (各25%)", rows: ["最大マナ +1 — 25%", "体力 +8 — 25%", "最大体力 +5 — 25%", "ハズレ: 相手の場にミミック(3/2) — 25%"] },
+  ko: { title: "황금상자 확률 (각 25%)", rows: ["최대 마나 +1 — 25%", "체력 +3 — 25%", "최대 체력 +5 — 25%", "꽝: 상대 필드에 미믹(3/2) — 25%"] },
+  ja: { title: "宝箱の確率 (各25%)", rows: ["最大マナ +1 — 25%", "体力 +3 — 25%", "最大体力 +5 — 25%", "ハズレ: 相手の場にミミック(3/2) — 25%"] },
 };
 
 export const ALL_IDS = Object.keys(DB);

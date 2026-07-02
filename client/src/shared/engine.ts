@@ -948,7 +948,7 @@ function openTreasure(g: GameState, ctx: Ctx, p: PlayerState): void {
   const roll = randInt(g, 4);
   let txt = "", txtJa = "", kind = "";
   if (roll === 0) { p.maxMana++; txt = "최대 마나 +1"; txtJa = "最大マナ +1"; kind = "mana"; }
-  else if (roll === 1) { ctx.heal(p, 8); txt = "체력 +8"; txtJa = "体力 +8"; kind = "hp"; }
+  else if (roll === 1) { ctx.heal(p, 3); txt = "체력 +3"; txtJa = "体力 +3"; kind = "hp"; }
   else if (roll === 2) { p.maxHp += 5; p.hp += 5; txt = "최대 체력 +5"; txtJa = "最大体力 +5"; kind = "maxhp"; ctx.ev.push({ type: "heal", player: side(g, p), amount: 5 }); }
   else {
     // 꽝(dud): spawn a Mimic (3/2) on the OPPONENT's field — the risk of cracking chests
