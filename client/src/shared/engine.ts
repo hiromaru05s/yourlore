@@ -1124,7 +1124,6 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (card.id === "RUNE2" && !p.hand.some((c) => c.id === "RUNE1")) { ctx.log("  └ 패에 '룬 학문 - 초급'이 없습니다", "  └ 手札に「ルーン学問 - 初級」がありません"); return; }
     if (card.id === "RUNE3" && !(p.hand.some((c) => c.id === "RUNE1") && p.hand.some((c) => c.id === "RUNE2"))) { ctx.log("  └ 패에 초급·중급 룬 학문이 필요합니다", "  └ 手札に初級・中級のルーン学問が必要です"); return; }
     if ((card.id === "DISARM1" || card.id === "DISARM2" || card.id === "DISARM3") && o0.enchants.length === 0) { ctx.log("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); return; }
-    if (card.act === "chestToMana" && chestLocked(g)) { ctx.log(`  └ <span class="dmg">행운의 보물상자</span>: 보물상자 사용 봉인 중`, `  └ <span class="dmg">幸運の宝箱</span>: 宝箱の使用は封印中`); return; }
     if (card.ench && p.traps.length + p.enchants.length >= ST_MAX) { ctx.log(`  └ <span class="dmg">마법·함정 존이 가득 찼습니다 (최대 ${ST_MAX})</span>`, `  └ <span class="dmg">魔法・罠ゾーンが満杯です (最大 ${ST_MAX})</span>`); return; }
 
     p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card);

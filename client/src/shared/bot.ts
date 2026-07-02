@@ -230,8 +230,8 @@ export function greedyDecide(g: GameState): Action {
     if ((c.id === "DISARM1" || c.id === "DISARM2" || c.id === "DISARM3") && o.enchants.length === 0) return false;
     // don't waste heals at (near) full HP
     if (c.act === "heal" && p.maxHp - p.hp < Math.min(c.val || 0, 6)) return false;
-    // 어튠-마: needs a chest in hand, and chests must not be sealed (행운의 보물상자)
-    if (c.act === "chestToMana" && (chestLocked(g) || !p.hand.some((h) => h.star === "chest"))) return false;
+    // 어튠-마: needs a chest in hand (봉인 중에도 사용 가능 — 상자를 '여는' 게 아니라 소모)
+    if (c.act === "chestToMana" && !p.hand.some((h) => h.star === "chest")) return false;
     // blood magic hurts the caster — don't suicide
     if (c.id === "BLOOD1" && p.hp <= 6) return false;
     if (c.id === "BLOOD2" && p.hp <= 10) return false;
