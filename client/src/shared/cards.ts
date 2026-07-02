@@ -673,6 +673,12 @@ const NEW_CARDS5: CardDef[] = [
     text: "영구: 자신의 턴마다 최대 체력 +3 (시전 2)", textJa: "永続: 自分のターンごとに最大体力+3 (発動2)" },
   { id: "WORLD_HEART", t: "spell", cost: 5, play: 3, ench: "growHpMana", val: 99, val2: 8, name: "세계수의 심장", nameJa: "世界樹の心臓",
     text: "영구: 자신의 턴마다 최대 체력 +8. 이 카드가 필드에 있는 한 자신의 최대 마나 -1 (시전 3)", textJa: "永続: 自分のターンごとに最大体力+8。このカードが場にある限り自分の最大マナ-1 (発動3)" },
+  { id: "MEDITATE", t: "spell", cost: 2, play: 3, act: "heal", val: 8, name: "명상", nameJa: "瞑想",
+    text: "이번 턴에 다른 카드를 플레이하지 않았을 경우에만 발동 가능. 최대 체력의 80%까지 체력 회복 (시전 3)", textJa: "このターンに他のカードをプレイしていない場合のみ発動可能。最大体力の80%まで回復 (発動3)" },
+  { id: "PRAYER", t: "spell", cost: 4, play: 5, act: "heal", val: 8, name: "성역의 기도", nameJa: "聖域の祈り",
+    text: "이번 턴에 다른 카드를 플레이하지 않았을 경우에만 발동 가능. 체력 완전 회복 + 최대 체력 +5 (시전 5)", textJa: "このターンに他のカードをプレイしていない場合のみ発動可能。体力全回復 + 最大体力+5 (発動5)" },
+  { id: "HERMIT", t: "spell", cost: 8, play: 7, act: "heal", val: 8, name: "은둔의 안식", nameJa: "隠遁の安息",
+    text: "자신의 필드에 몬스터가 없는 경우에만 발동 가능. 체력 완전 회복 + 최대 체력 +15 (시전 7)", textJa: "自分の場にモンスターがいない場合のみ発動可能。体力全回復 + 最大体力+15 (発動7)" },
 ];
 for (const c of NEW_CARDS5) { DB[c.id] = c; }
 

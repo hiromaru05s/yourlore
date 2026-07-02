@@ -232,6 +232,10 @@ export function greedyDecide(g: GameState): Action {
     if (c.act === "heal" && p.maxHp - p.hp < Math.min(c.val || 0, 6)) return false;
     // 어튠-마: needs a chest in hand (봉인 중에도 사용 가능 — 상자를 '여는' 게 아니라 소모)
     if (c.act === "chestToMana" && !p.hand.some((h) => h.star === "chest")) return false;
+    // 안식 계열: "이번 턴 다른 플레이 없음" / "필드 비어있음" 조건
+    if ((c.id === "MEDITATE" || c.id === "PRAYER") && (p.playsTurn || 0) > 0) return false;
+    if (c.id === "MEDITATE" && p.hp >= Math.floor(p.maxHp * 0.8)) return false;
+    if (c.id === "HERMIT" && p.field.length > 0) return false;
     // blood magic hurts the caster — don't suicide
     if (c.id === "CATALYST" && p.hp <= 6) return false;
     if (c.id === "BLOOD1" && p.hp <= 6) return false;
