@@ -48,7 +48,7 @@ export function effMaxMana(p: PlayerState): number {
   // 다양한 문화: while active, +1 max mana per non-시초 tribe monster you control
   const culture = p.enchants.some((e) => e.card.ench === "cultureMana")
     ? p.field.filter((m) => m.tribe && m.tribe !== "시초").length : 0;
-  const heart = p.enchants.filter((e) => e.card.ench === "growHpMana").length; // 세계수의 심장: 장당 -1
+  const heart = p.enchants.filter((e) => e.card.ench === "growHpMana").length * 2; // 세계수의 심장: 장당 -2
   return Math.max(1, p.maxMana + aura + culture - heart - p.manaPenalty);
 }
 export function effAtk(p: PlayerState, m: FieldMon): number {
@@ -79,9 +79,10 @@ export function playCost(c: CardInst): number {
 }
 export function cardValue(c: CardInst): number {
   // offense-weighted + cost factor so the bot favors bigger threats
+  // val 캡: 영구마법류는 val>=99가 '지속시간'이라 효과 크기로 오인하면 안 됨
   if (c.t === "mon") return (c.atk || 0) * 1.3 + (c.def || 0) * 0.8 + c.cost * 0.7;
-  if (c.t === "spell") return 6 + (c.val || 0) * 0.6 + c.cost * 0.6;
-  if (c.t === "trap") return 6 + (c.val || 0) * 0.5 + c.cost * 0.5;
+  if (c.t === "spell") return 6 + Math.min(c.val || 0, 10) * 0.6 + c.cost * 0.6;
+  if (c.t === "trap") return 6 + Math.min(c.val || 0, 10) * 0.5 + c.cost * 0.5;
   return 1;
 }
 
@@ -295,6 +296,15 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
       if (e.card.ench === "seedMana" && ownerTurn && !g.over && randInt(g, 100) < (e.card.val2 ?? 25)) {
         pl.maxMana += 1;
         ctx.log(`<span class="t">${cn(e.card)}</span> 발아! 최대 마나 +1 (${pl.maxMana})`, `<span class="t">${cn(e.card)}</span> 発芽！最大マナ +1 (${pl.maxMana})`);
+      }
+      // 세계수의 축복: 누구의 턴이든 시작 시 그 플레이어 최대 마나 +1, 시전자 턴이면 40%로 +2 추가
+      if (e.card.ench === "worldBless" && !g.over) {
+        cur.maxMana += 1;
+        ctx.log(`<span class="t">${cn(e.card)}</span> ${cur.name} 최대 마나 +1 (${cur.maxMana})`, `<span class="t">${cn(e.card)}</span> ${cur.name} 最大マナ +1 (${cur.maxMana})`);
+        if (ownerTurn && randInt(g, 100) < 40) {
+          cur.maxMana += 2;
+          ctx.log(`  └ 축복! 최대 마나 +2 추가 (${cur.maxMana})`, `  └ 祝福！最大マナ +2 追加 (${cur.maxMana})`);
+        }
       }
       // 생명의 성소 / 세계수의 심장: 자신의 턴마다 최대 체력 +val2 (회복 포함 → 생명의 순환과 시너지)
       if ((e.card.ench === "growHp" || e.card.ench === "growHpMana") && ownerTurn && !g.over) {

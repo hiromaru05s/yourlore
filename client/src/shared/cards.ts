@@ -676,26 +676,37 @@ const NEW_CARDS5: CardDef[] = [
     text: "영구: 자신이 체력을 회복할 때마다 15% 확률로 최대 마나 +1 (시전 2)", textJa: "永続: 自分が体力を回復するたび15%で最大マナ+1 (発動2)" },
   { id: "LIFE_SANCTUM", t: "spell", cost: 3, play: 2, ench: "growHp", val: 99, val2: 3, name: "생명의 성소", nameJa: "生命の聖域",
     text: "영구: 자신의 턴마다 최대 체력 +3 (시전 2)", textJa: "永続: 自分のターンごとに最大体力+3 (発動2)" },
-  { id: "WORLD_HEART", t: "spell", cost: 5, play: 3, ench: "growHpMana", val: 99, val2: 8, name: "세계수의 심장", nameJa: "世界樹の心臓",
-    text: "영구: 자신의 턴마다 최대 체력 +8. 이 카드가 필드에 있는 한 자신의 최대 마나 -1 (시전 3)", textJa: "永続: 自分のターンごとに最大体力+8。このカードが場にある限り自分の最大マナ-1 (発動3)" },
+  { id: "WORLD_HEART", t: "spell", cost: 5, play: 4, ench: "growHpMana", val: 99, val2: 7, name: "세계수의 심장", nameJa: "世界樹の心臓",
+    text: "영구: 자신의 턴마다 최대 체력 +7. 이 카드가 필드에 있는 한 자신의 최대 마나 -2 (시전 4)", textJa: "永続: 自分のターンごとに最大体力+7。このカードが場にある限り自分の最大マナ-2 (発動4)" },
   { id: "MEDITATE", t: "spell", cost: 2, play: 3, act: "heal", val: 8, name: "명상", nameJa: "瞑想",
     text: "이번 턴에 다른 카드를 플레이하지 않았을 경우에만 발동 가능. 최대 체력의 80%까지 체력 회복 (시전 3)", textJa: "このターンに他のカードをプレイしていない場合のみ発動可能。最大体力の80%まで回復 (発動3)" },
   { id: "PRAYER", t: "spell", cost: 4, play: 5, act: "heal", val: 8, name: "성역의 기도", nameJa: "聖域の祈り",
     text: "이번 턴에 다른 카드를 플레이하지 않았을 경우에만 발동 가능. 체력 완전 회복 + 최대 체력 +5 (시전 5)", textJa: "このターンに他のカードをプレイしていない場合のみ発動可能。体力全回復 + 最大体力+5 (発動5)" },
   { id: "HERMIT", t: "spell", cost: 8, play: 7, act: "heal", val: 8, name: "은둔의 안식", nameJa: "隠遁の安息",
     text: "자신의 필드에 몬스터가 없는 경우에만 발동 가능. 체력 완전 회복 + 최대 체력 +15 (시전 7)", textJa: "自分の場にモンスターがいない場合のみ発動可能。体力全回復 + 最大体力+15 (発動7)" },
+  { id: "WORLD_BLESS", t: "spell", cost: 7, play: 6, ench: "worldBless", val: 99, name: "세계수의 축복", nameJa: "世界樹の祝福",
+    text: "영구: 양 플레이어는 자신의 턴 시작마다 최대 마나 +1. 이 카드의 시전자는 매턴 40% 확률로 최대 마나 +2 추가 (시전 6)",
+    textJa: "永続: 両プレイヤーは自分のターン開始時に最大マナ+1。このカードの使用者は毎ターン40%で最大マナ+2追加 (発動6)" },
 ];
 for (const c of NEW_CARDS5) { DB[c.id] = c; }
 
 // ============================================================
 // BALANCE PATCH 8
 // ============================================================
+const PATCH9: Record<string, Partial<CardDef>> = {
+  GM5_3: { def: 3 }, // 화염의 드레이크 7/4 → 7/3
+  GM5_2: { def: 5 }, // 강철의 전사 6/6 → 6/5
+  GM5_0: { atk: 9, def: 2 }, // 고대의 광전사 9/3 → 9/2
+  T13: { val: 4, text: "공격 몬스터 파괴 + 상대 체력에 4 데미지 (시전 3)", textJa: "攻撃モンスターを破壊 + 相手の体力に4ダメージ (発動3)" }, // 천벌 6뎀 → 4뎀
+};
+
 const PATCH8: Record<string, Partial<CardDef>> = {
   M12: { def: 4 }, // 타이탄 게이트 4/5 → 4/4
   M7: { atk: 4 },  // 엠버 드레이크 5/0 → 4/0 (번 2 유지)
   M8: { val: 1, text: "소환시: 체력 1 회복", textJa: "召喚時: 体力1回復" }, // 그로브 워든 회복 2 → 1
 };
 for (const id of Object.keys(PATCH8)) { if (DB[id]) Object.assign(DB[id], PATCH8[id]); }
+for (const id of Object.keys(PATCH9)) { if (DB[id]) Object.assign(DB[id], PATCH9[id]); }
 
 // chest (golden treasure) outcome odds — shown when the chest card is enlarged
 export const CHEST_ODDS = {
