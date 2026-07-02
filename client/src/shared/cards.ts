@@ -539,6 +539,24 @@ for (const id of Object.keys(PATCH3)) { if (DB[id]) Object.assign(DB[id], PATCH3
 for (const id of DELETE_IDS3) { delete DB[id]; }
 for (const c of NEW_CARDS3) { DB[c.id] = c; }
 
+// ============================================================
+// BALANCE PATCH 4 — data-driven nerfs (3000-game random-buy winrate analysis)
+// ============================================================
+const PATCH4: Record<string, Partial<CardDef>> = {
+  M13: { atk: 5, def: 4 }, // 보이드 리버 7/5 → 5/4 (효과가 본체라 스탯 대폭 하향)
+  M11: { atk: 6, def: 2 }, // 워로드 8/4 → 6/2 (조건부 +2는 유지)
+  T6: { cost: 4 },  // 카운터 서지 구매 3 → 4
+  NGA3: { def: 0 }, // 유리 대포 7/1 → 7/0
+  M7: { atk: 6, def: 1, val: 2, text: "소환시: 상대 체력에 2 데미지", textJa: "召喚時: 相手の体力に2ダメージ" }, // 엠버 드레이크 7/3+번3 → 6/1+번2
+  T13: { val: 6, text: "공격 몬스터 파괴 + 상대 체력에 6 데미지", textJa: "攻撃モンスターを破壊 + 相手の体力に6ダメージ" }, // 천벌 10뎀 → 6뎀
+  M8: { def: 5, val: 2, text: "소환시: 체력 2 회복", textJa: "召喚時: 体力2回復" }, // 그로브 워든 4/6+회복5 → 4/5+회복2
+  M10: { atk: 2 }, // 마나 골렘 3/5 → 2/5
+  NGA4: { val: 3, text: "소환시: 자신에게 3 데미지", textJa: "召喚時: 自分に3ダメージ" }, // 광폭한 검귀 자해 2 → 3
+  // 종족 4코스트 몬스터 전원 5/5 → 4/5
+  TSO5: { atk: 4 }, TNO5: { atk: 4 }, TPO5: { atk: 4 }, TAR5: { atk: 4 },
+};
+for (const id of Object.keys(PATCH4)) { if (DB[id]) Object.assign(DB[id], PATCH4[id]); }
+
 // chest (golden treasure) outcome odds — shown when the chest card is enlarged
 export const CHEST_ODDS = {
   ko: { title: "황금상자 확률 (각 25%)", rows: ["최대 마나 +1 — 25%", "체력 +8 — 25%", "최대 체력 +5 — 25%", "꽝: 상대 필드에 미믹(3/2) — 25%"] },
