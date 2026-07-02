@@ -397,9 +397,9 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     if (tc.val) ctx.dealDamage(p, tc.val, cn(tc), cn(tc));
     return;
   }
-  if ((tc = takeTrap(g, ctx, o, "wardheal"))) { // T9: negate + heal + draw
+  if ((tc = takeTrap(g, ctx, o, "wardheal"))) { // T9: negate + heal (+ optional draw)
     att.exhausted = true; ctx.heal(o, tc.val || 0); ctx.drawN(o, tc.val2 || 0);
-    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 체력 ${tc.val} 회복 + ${tc.val2}장 드로우`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 体力${tc.val}回復 + ${tc.val2}枚ドロー`);
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 체력 ${tc.val} 회복${tc.val2 ? ` + ${tc.val2}장 드로우` : ""}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 体力${tc.val}回復${tc.val2 ? ` + ${tc.val2}枚ドロー` : ""}`);
     return;
   }
   if ((tc = takeTrap(g, ctx, o, "counterFull"))) { // T4: destroy attacker + reflect its full atk to its owner

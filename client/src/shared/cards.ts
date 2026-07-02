@@ -543,13 +543,13 @@ for (const c of NEW_CARDS3) { DB[c.id] = c; }
 // BALANCE PATCH 4 — data-driven nerfs (3000-game random-buy winrate analysis)
 // ============================================================
 const PATCH4: Record<string, Partial<CardDef>> = {
-  M13: { atk: 5, def: 4 }, // 보이드 리버 7/5 → 5/4 (효과가 본체라 스탯 대폭 하향)
+  M13: { atk: 4, def: 4 }, // 보이드 리버 7/5 → 4/4 (효과가 본체라 스탯 대폭 하향)
   M11: { atk: 6, def: 2 }, // 워로드 8/4 → 6/2 (조건부 +2는 유지)
   T6: { cost: 4 },  // 카운터 서지 구매 3 → 4
   NGA3: { atk: 6, def: 0 }, // 유리 대포 7/1 → 6/0
   M7: { atk: 5, def: 0, val: 2, text: "소환시: 상대 체력에 2 데미지", textJa: "召喚時: 相手の体力に2ダメージ" }, // 엠버 드레이크 7/3+번3 → 5/0+번2
   T13: { cost: 5, val: 6, text: "공격 몬스터 파괴 + 상대 체력에 6 데미지", textJa: "攻撃モンスターを破壊 + 相手の体力に6ダメージ" }, // 천벌 10뎀→6뎀, 4코→5코
-  M8: { def: 5, onSummon: undefined, val: undefined, text: "—", textJa: "—" }, // 그로브 워든 4/6+회복5 → 4/5 바닐라
+  M8: { def: 4, onSummon: undefined, val: undefined, text: "—", textJa: "—" }, // 그로브 워든 4/6+회복5 → 4/4 바닐라
   M10: { atk: 2 }, // 마나 골렘 3/5 → 2/5
   NGA4: { val: 3, text: "소환시: 자신에게 3 데미지", textJa: "召喚時: 自分に3ダメージ" }, // 광폭한 검귀 자해 2 → 3
   // 종족 4코스트 몬스터 전원 5/5 → 4/5
@@ -560,6 +560,10 @@ const PATCH4: Record<string, Partial<CardDef>> = {
   M12: { def: 5 }, // 타이탄 게이트 4/8 → 4/5
   M4: { atk: 4, def: 1 }, // 블레이드 헤어 5/2 → 4/1
   M6: { atk: 2, def: 1 }, // 트윈 팽 3/2 → 2/1 (방어-2 유지)
+  // ---- 4차 ----
+  T10: { val: 2, text: "공격 몬스터 파괴 + 체력 2 회복", textJa: "攻撃モンスターを破壊 + 体力2回復" }, // 영혼 포식 회복 7 → 2
+  T9: { val2: 0, text: "공격 무효 + 체력 3 회복", textJa: "攻撃無効 + 体力3回復" }, // 역류 드로우 삭제
+  M5: { onSummon: "selfBurn", val: 2, text: "소환시: 자신에게 2 데미지", textJa: "召喚時: 自分に2ダメージ" }, // 아이언 셸 자해 2 추가
 };
 for (const id of Object.keys(PATCH4)) { if (DB[id]) Object.assign(DB[id], PATCH4[id]); }
 
