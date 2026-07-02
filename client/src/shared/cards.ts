@@ -529,10 +529,14 @@ const NEW_CARDS3: CardDef[] = [
   { id: "DISARM2", t: "spell", cost: 3, play: 2, act: "destroyEnch", val: 2, name: "장치분석", nameJa: "装置分析", text: "상대 영구마법 2장 파괴 (시전 2)", textJa: "相手の永続魔法2枚を破壊 (発動2)" },
   { id: "DISARM3", t: "spell", cost: 4, play: 3, name: "마법연구기관", nameJa: "魔法研究機関", text: "상대 영구마법 1장 파괴 후 게임에서 제외 (시전 3)", textJa: "相手の永続魔法1枚を破壊しゲームから除外 (発動3)" },
   // ---- spells: forbidden ----
-  { id: "FORBIDDEN", t: "spell", cost: 3, name: "금단의 술식", nameJa: "禁断の術式", text: "자신 체력 -20, 최대 마나 -3. 주사위 4~6이면 필드의 한 종족(시초 제외)의 나머지 몬스터를 모두 소환", textJa: "自分の体力-20, 最大マナ-3。ダイス4~6なら場の一種族(始原除く)の残りモンスターを全て召喚" },
+  { id: "FORBIDDEN", t: "spell", cost: 3, name: "금단의 술식", nameJa: "禁断の術式", text: "자신 체력 -15, 최대 마나 -2. 주사위 4~6이면 필드의 한 종족(시초 제외)의 나머지 몬스터를 모두 소환", textJa: "自分の体力-15, 最大マナ-2。ダイス4~6なら場の一種族(始原除く)の残りモンスターを全て召喚" },
 ];
 
+// 7코스트 종족 카드 삭제 (시초 제외 각 종족은 2·3·4코스트 3종으로 유지)
+const DELETE_IDS3 = ["TSO7", "TNO7", "TPO7", "TAR7"];
+
 for (const id of Object.keys(PATCH3)) { if (DB[id]) Object.assign(DB[id], PATCH3[id]); }
+for (const id of DELETE_IDS3) { delete DB[id]; }
 for (const c of NEW_CARDS3) { DB[c.id] = c; }
 
 // chest (golden treasure) outcome odds — shown when the chest card is enlarged

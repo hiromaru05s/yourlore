@@ -889,10 +889,10 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       break;
     }
     case "FORBIDDEN": { // 금단의 술식
-      p.maxHp = Math.max(1, p.maxHp); p.hp -= 20; // pay 20 hp (may end the game)
-      ctx.ev.push({ type: "damage", player: side(g, p), amount: 20 });
-      ctx.log(`${tag(p, card)} 자신 체력 -20, 최대 마나 -3`, `${tag(p, card)} 自分の体力-20, 最大マナ-3`);
-      p.maxMana = Math.max(1, p.maxMana - 3);
+      p.maxHp = Math.max(1, p.maxHp); p.hp -= 15; // pay 15 hp (may end the game)
+      ctx.ev.push({ type: "damage", player: side(g, p), amount: 15 });
+      ctx.log(`${tag(p, card)} 자신 체력 -15, 최대 마나 -2`, `${tag(p, card)} 自分の体力-15, 最大マナ-2`);
+      p.maxMana = Math.max(1, p.maxMana - 2);
       if (p.hp <= 0) { handleDefeat(g, ctx, p, (1 - g.cur) as Side); break; }
       const r = randInt(g, 6) + 1;
       ctx.log(`  └ 🎲 ${r}`, `  └ 🎲 ${r}`);
