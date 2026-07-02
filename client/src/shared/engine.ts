@@ -43,7 +43,8 @@ function tribeName(tribe: string, lang: "ko" | "ja"): string { return TRIBES[tri
 
 // ---------- pure read helpers (exported; used by UI + bot) ----------
 export function effMaxMana(p: PlayerState): number {
-  const aura = p.field.filter((m) => m.aura === "mana1").length; // Mana Golem etc.
+  const aura = p.field.filter((m) => m.aura === "mana1").length
+    + p.field.filter((m) => m.aura === "mana2").length * 2; // 마나 골렘(+1) / 마나 수정 거인(+2)
   // 다양한 문화: while active, +1 max mana per non-시초 tribe monster you control
   const culture = p.enchants.some((e) => e.card.ench === "cultureMana")
     ? p.field.filter((m) => m.tribe && m.tribe !== "시초").length : 0;
@@ -181,6 +182,13 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     if (amt <= 0) return;
     p.hp = Math.min(p.maxHp, p.hp + amt);
     ev.push({ type: "heal", player: side(g, p), amount: amt });
+    // 생명의 순환: 회복할 때마다 (장당) 15%로 최대 마나 +1
+    for (const e of p.enchants) {
+      if (e.card.ench === "healMana" && randInt(g, 100) < 15) {
+        p.maxMana += 1;
+        log(`  └ 생명의 순환: 최대 마나 +1 (${p.maxMana})`, `  └ 生命の循環: 最大マナ +1 (${p.maxMana})`);
+      }
+    }
   };
   const dealDamage = (target: PlayerState, amt: number, srcKo: string, srcJa?: string): void => {
     if (amt <= 0) return;
@@ -280,6 +288,11 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
         ctx.log(`<span class="t">${cn(e.card)}</span> 지옥: 자신 6 / 상대 5`, `<span class="t">${cn(e.card)}</span> 地獄: 自分6 / 相手5`);
         ctx.dealDamage(pl, 6, cn(e.card), cn(e.card));
         if (!g.over) ctx.dealDamage(opp, 5, cn(e.card), cn(e.card));
+      }
+      // 세계수의 씨앗: 자신의 턴 시작마다 25%로 최대 마나 +1
+      if (e.card.ench === "seedMana" && ownerTurn && !g.over && randInt(g, 100) < 25) {
+        pl.maxMana += 1;
+        ctx.log(`<span class="t">${cn(e.card)}</span> 발아! 최대 마나 +1 (${pl.maxMana})`, `<span class="t">${cn(e.card)}</span> 発芽！最大マナ +1 (${pl.maxMana})`);
       }
       if (everyTurn || ownerTurn) {
         e.turns--;
@@ -712,7 +725,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
       else ctx.log("  └ 상대 패가 없음", "  └ 相手の手札がない");
       break;
     case "crash": rollSupply(g, o); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 상대 제시 강제 갱신`, `<span class="t">${p.name}</span> ${cn(card)} → 相手の提示を強制更新`); if (v2 > 0) ctx.drawN(p, v2); break;
-    case "manaUp": p.maxMana += v; ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 최대 마나 +${v}`, `<span class="t">${p.name}</span> ${cn(card)} → 最大マナ +${v}`); break;
+    case "manaUp": { p.maxMana += v; const dn = v2 > 0 ? ctx.drawN(p, v2) : 0; ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 최대 마나 +${v}${dn ? `, ${dn}장 드로우` : ""}`, `<span class="t">${p.name}</span> ${cn(card)} → 最大マナ +${v}${dn ? `、${dn}枚ドロー` : ""}`); break; }
     case "destroyTrap": {
       const n = v || 1; let k = 0;
       for (let i = 0; i < n && o.traps.length; i++) { const t = o.traps.splice(randInt(g, o.traps.length), 1)[0]; o.discard.push(t.card); k++; }
@@ -765,7 +778,7 @@ const CUSTOM_SPELLS = new Set<string>([
   "GS7_0", "GS7_2", "GS8_0", "GS8_2", "GS8_3", "GS8_4", "GS8_5", "GS9_0", "GS9_2", "GS10_0", "GS10_1", "GS10_2",
   "HANDRESET", "TIMEWARP", "GAMBLE", "DICE8",
   "RUNE1", "RUNE2", "RUNE3", "GENESIS_SONG", "GENESIS_MAGIC",
-  "BLOOD1", "BLOOD2", "BLOOD3", "DISARM3", "FORBIDDEN",
+  "BLOOD1", "BLOOD2", "BLOOD3", "DISARM3", "FORBIDDEN", "CATALYST",
 ]);
 const chance = (g: GameState, pct: number): boolean => randInt(g, 100) < pct;
 function tag(p: PlayerState, card: CardInst): string { return `<span class="t">${p.name}</span> ${cn(card)} →`; }
@@ -897,6 +910,11 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "DISARM3": { // 마법연구기관: 상대 영구마법 1장 파괴 + 게임에서 제외
       if (o.enchants.length) { const e = o.enchants.splice(randInt(g, o.enchants.length), 1)[0]; ctx.log(`${tag(p, card)} ${cn(e.card)} 파괴 + 게임에서 제외`, `${tag(p, card)} ${cn(e.card)} 破壊 + ゲームから除外`); }
+      break;
+    }
+    case "CATALYST": { // 균열의 촉매: 자신 4 데미지, 최대 마나 +1
+      ctx.dealDamage(p, 4, cn(card), cn(card));
+      if (!g.over) { p.maxMana += 1; ctx.log(`${tag(p, card)} 자신 4 데미지, 최대 마나 +1 (${p.maxMana})`, `${tag(p, card)} 自分に4ダメージ、最大マナ +1 (${p.maxMana})`); }
       break;
     }
     case "FORBIDDEN": { // 금단의 술식

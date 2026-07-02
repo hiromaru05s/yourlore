@@ -233,6 +233,7 @@ export function greedyDecide(g: GameState): Action {
     // 어튠-마: needs a chest in hand (봉인 중에도 사용 가능 — 상자를 '여는' 게 아니라 소모)
     if (c.act === "chestToMana" && !p.hand.some((h) => h.star === "chest")) return false;
     // blood magic hurts the caster — don't suicide
+    if (c.id === "CATALYST" && p.hp <= 6) return false;
     if (c.id === "BLOOD1" && p.hp <= 6) return false;
     if (c.id === "BLOOD2" && p.hp <= 10) return false;
     if (c.id === "BLOOD3" && p.hp <= 14) return false;

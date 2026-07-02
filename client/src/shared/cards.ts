@@ -654,6 +654,24 @@ const PATCH7: Record<string, Partial<CardDef>> = {
 };
 for (const id of Object.keys(PATCH7)) { if (DB[id]) Object.assign(DB[id], PATCH7[id]); }
 
+// ============================================================
+// NEW CARDS 5 — 마나 램프 5종 (미드~엔드게임 아키타입 개방)
+// 고코스트 카드 플레이률이 0.16~0.95회/구매로 죽어 있어, 커브 점프 수단 추가
+// ============================================================
+const NEW_CARDS5: CardDef[] = [
+  { id: "CATALYST", t: "spell", cost: 2, name: "균열의 촉매", nameJa: "亀裂の触媒",
+    text: "자신에게 4 데미지, 최대 마나 +1", textJa: "自分に4ダメージ、最大マナ+1" },
+  { id: "WORLD_SEED", t: "spell", cost: 4, ench: "seedMana", val: 99, name: "세계수의 씨앗", nameJa: "世界樹の種",
+    text: "영구: 자신의 턴 시작마다 25% 확률로 최대 마나 +1", textJa: "永続: 自分のターン開始時、25%で最大マナ+1" },
+  { id: "MANA_GIANT", t: "mon", cost: 5, atk: 2, def: 8, aura: "mana2", name: "마나 수정 거인", nameJa: "マナ水晶の巨人",
+    text: "필드에 있는 동안 최대 마나 +2", textJa: "場にいる間、最大マナ+2" },
+  { id: "HOURGLASS", t: "spell", cost: 6, act: "manaUp", val: 2, val2: 2, name: "시간의 모래시계", nameJa: "時の砂時計",
+    text: "최대 마나 +2, 카드 2장 드로우", textJa: "最大マナ+2、カード2枚ドロー" },
+  { id: "LIFE_CYCLE", t: "spell", cost: 3, play: 2, ench: "healMana", val: 99, name: "생명의 순환", nameJa: "生命の循環",
+    text: "영구: 자신이 체력을 회복할 때마다 15% 확률로 최대 마나 +1 (시전 2)", textJa: "永続: 自分が体力を回復するたび15%で最大マナ+1 (発動2)" },
+];
+for (const c of NEW_CARDS5) { DB[c.id] = c; }
+
 // chest (golden treasure) outcome odds — shown when the chest card is enlarged
 export const CHEST_ODDS = {
   ko: { title: "황금상자 확률 (각 25%)", rows: ["최대 마나 +1 — 25%", "체력 +3 — 25%", "최대 체력 +5 — 25%", "꽝: 상대 필드에 미믹(3/2) — 25%"] },
