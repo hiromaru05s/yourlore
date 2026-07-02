@@ -344,6 +344,10 @@ export function greedyDecide(g: GameState): Action {
   g.market.forEach((c, i) => { if (buyCost(p, c) <= p.mana) { const s = buyScore(c); if (s > mbs) { mbs = s; mbi = i; } } });
   if (mbi >= 0) return { type: "buyMarket", i: mbi };
 
+  // 12.5) 마나가 크게 남아도는데 살 만한 게 없으면 제시 리롤 — 마나를 카드로 환전
+  //       (램프 폭발 후반: 리롤로 폭탄을 파는 게 정답. 8마나+ 여유일 때만 → 일반 게임 영향 최소)
+  if (p.mana >= 8) return { type: "refresh" };
+
   // 13) spare mana → Pry Chest (not before turn 7 — early mimic risk outweighs the payout; not while sealed)
   const chest = (g.turn <= 6 || chestLocked(g)) ? -1 : p.hand.findIndex((c) => c.star === "chest" && playCost(c) <= p.mana);
   if (chest >= 0) return { type: "play", idx: chest };
