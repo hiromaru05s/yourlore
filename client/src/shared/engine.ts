@@ -425,9 +425,9 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 공격측 함정 ${broke}장 파괴 + 1장 드로우`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 攻撃側の罠${broke}枚破壊 + 1枚ドロー`);
     return;
   }
-  if ((tc = takeTrap(g, ctx, o, "guardMana"))) { // GT8_3: negate + max mana +1
-    att.exhausted = true; o.maxMana += 1;
-    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 최대 마나 +1`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 最大マナ+1`);
+  if ((tc = takeTrap(g, ctx, o, "guardMana"))) { // GT8_3: negate + max mana +val
+    att.exhausted = true; const gm = tc.val || 1; o.maxMana += gm;
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 최대 마나 +${gm}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 最大マナ+${gm}`);
     return;
   }
   if ((tc = takeTrap(g, ctx, o, "guardEnemyDef"))) { // GT8_1: negate + all attacker-side def down
@@ -459,8 +459,8 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     if (randInt(g, 100) < 30) { ctx.heal(o, d); ctx.log(`  └ 30% 성공: 체력 ${d} 회복`, `  └ 30%成功: 体力${d}回復`); }
     return;
   }
-  if ((tc = takeTrap(g, ctx, o, "slaughterRaise"))) { // GT5_3: destroy attacker + 30% steal to own field
-    if (randInt(g, 100) < 30) {
+  if ((tc = takeTrap(g, ctx, o, "slaughterRaise"))) { // GT5_3: destroy attacker + val% steal to own field
+    if (randInt(g, 100) < (tc.val || 30)) {
       const i2 = p.field.findIndex((x) => x.uid === att.uid);
       if (i2 >= 0) { const stolen = p.field.splice(i2, 1)[0]; ctx.ev.push({ type: "destroy", player: side(g, p), uid: stolen.uid }); stolen.exhausted = true; stolen.attacksUsed = 0; o.field.push(stolen); ctx.ev.push({ type: "summon", player: side(g, o), uid: stolen.uid }); }
       ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 탈취(소생)`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 奪取(蘇生)`);
@@ -582,9 +582,15 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       if (o.traps.length) { const t = o.traps.splice(randInt(g, o.traps.length), 1)[0]; o.discard.push(t.card); ctx.log("  └ 상대의 세트 함정 1장 파괴", "  └ 相手のセットトラップを1枚破壊"); }
       else ctx.log("  └ 파괴할 함정 없음", "  └ 破壊するトラップなし");
       break;
-    case "allEnemyAtkDown": // M12
+    case "allEnemyAtkDown": // (구 M12 — 현재 미사용)
       o.field.forEach((tm) => (tm.atkMod = (tm.atkMod || 0) - v));
       ctx.log(`  └ 상대 몬스터 전체 공격 -${v}(영구)`, `  └ 敵モンスター全体の攻撃-${v}(永続)`);
+      break;
+    case "atkDown": // M12 타이탄 게이트: 적 1체 공격 -v (영구)
+      if (o.field.length) {
+        g.pending = { kind: "oppMon", hint: `공격 -${v} 할 적 몬스터 선택`, hintJa: `攻撃 -${v} する敵モンスターを選択`, reason: "atkDown", allowCancel: false, data: { val: v } };
+        ctx.ev.push({ type: "needTarget", pending: g.pending });
+      } else ctx.log("  └ 대상 없음", "  └ 対象なし");
       break;
     case "maxHpMana": // GM7_2
       p.maxHp += v; p.hp += v; p.maxMana += v2;
@@ -676,8 +682,12 @@ function applySummonBuff(ctx: Ctx, p: PlayerState, m: FieldMon): void {
 function tryNullSpell(g: GameState, ctx: Ctx, card: CardInst): boolean {
   const p = g.players[g.cur];           // the caster
   const o = g.players[1 - g.cur];        // the trap owner
-  const t = takeTrap(g, ctx, o, "nullspell");
-  if (!t) return false;
+  // cost-capped null traps only trigger on spells they can afford to counter
+  const i = o.traps.findIndex((tr) => tr.card.react === "nullspell" && (tr.card.cap === undefined || playCost(card) <= tr.card.cap));
+  if (i < 0) return false;
+  const t = o.traps.splice(i, 1)[0].card;
+  o.discard.push(t);
+  ctx.ev.push({ type: "trapReveal", player: side(g, o), id: t.id });
   ctx.log(
     `  └ <span class="dmg">상대 ${cn(t)} → ${cn(card)} 무효화</span>`,
     `  └ <span class="dmg">相手の ${cn(t)} → ${cn(card)} 無効化</span>`,
@@ -1156,6 +1166,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     const tm = o.field.find((m) => m.uid === uid);
     if (!tm) return;
     if (pending.reason === "defDown" || pending.reason === "weaken") { tm.defMod = (tm.defMod || 0) - (d.val || 0); ctx.log(`  └ ${cn(tm)} 의 방어 -${d.val}`, `  └ ${cn(tm)} の防御 -${d.val}`); }
+    else if (pending.reason === "atkDown") { tm.atkMod = (tm.atkMod || 0) - (d.val || 0); ctx.log(`  └ ${cn(tm)} 의 공격 -${d.val}`, `  └ ${cn(tm)} の攻撃 -${d.val}`); }
     else if (pending.reason === "destroyMon") { ctx.log(`<span class="t">${p.name}</span> → ${cn(tm)} 파괴`, `<span class="t">${p.name}</span> → ${cn(tm)} 破壊`); ctx.destroyMonster(o, tm); }
     else if (pending.reason === "attack") {
       const att = p.field.find((m) => m.uid === d.attackerUid);

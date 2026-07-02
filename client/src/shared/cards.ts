@@ -576,6 +576,45 @@ const PATCH4: Record<string, Partial<CardDef>> = {
 };
 for (const id of Object.keys(PATCH4)) { if (DB[id]) Object.assign(DB[id], PATCH4[id]); }
 
+// ============================================================
+// BALANCE PATCH 5 — 타이탄 게이트 단일화 + 함정 리워크
+//   · 널계 함정: 전부 승률 마이너스 → 자해 삭제·코스트 인하
+//   · 고코스트 함정(8c+): 승률 최하위 → 구매가 유지, 시전(설치)비 대폭 할인
+//     ("비싸게 사서 싸게 깔고, 발동하면 크게" 정체성)
+// ============================================================
+const PATCH5: Record<string, Partial<CardDef>> = {
+  // 타이탄 게이트: 적 전체 -2 → 적 1체 -2 (엔진 onSummon "atkDown")
+  M12: { onSummon: "atkDown", text: "소환시: 적 몬스터 1체 공격 -2(영구)", textJa: "召喚時: 敵モンスター1体の攻撃-2(永続)" },
+  // 널(마법 무효)계 리워크 — "저코스트 마법은 싸게 카운터" (cap = 무효화 가능한 최대 시전코스트)
+  NT_NULL3: { cost: 1, cap: 2, val: 0, text: "코스트 2 이하 마법 1장을 무효화", textJa: "コスト2以下の魔法1枚を無効化" },
+  T2: { cost: 2, play: 2, cap: 4, val: 0, text: "코스트 4 이하 마법 1장을 무효화", textJa: "コスト4以下の魔法1枚を無効化" },
+  NT_NULL5: { cost: 4 }, // 전체 대응 프리미엄: 5 → 4
+  NT_NULL6: { cost: 5 }, // 전체 대응 + 상대 2뎀: 6 → 5
+  // 5~6코 조정
+  GT5_0: { play: 1 },    // 그림자 방어 태세 (최하위 -12.5%, 무효+부가라 효과 자체가 약함 → 설치 1)
+  GT5_3: { val: 60, text: "공격 몬스터 파괴 + 60%로 자신 필드에 소생(소유권 이동)", textJa: "攻撃モンスターを破壊 + 60%で自分の場に蘇生(所有権移動)" }, // 30% → 60%
+  T13: { play: 3 },      // 천벌: 구매 5 유지, 시전 3
+  GT6_0: { play: 3 }, GT6_1: { play: 3 },
+  // 8코+ 시전비 대할인
+  GT8_0: { play: 4, text: "공격 무효 + 자신 몬스터 전체 방어 +4 + 1장 드로우 (시전 4)", textJa: "攻撃無効 + 自分のモンスター全体の防御+4 + 1枚ドロー (発動4)" },
+  GT8_1: { play: 4 }, GT8_2: { play: 4 },
+  GT8_3: { play: 3, val: 2, text: "공격 무효 + 최대 마나 +2 (시전 3)", textJa: "攻撃無効 + 最大マナ+2 (発動3)" },
+  GT8_5: { play: 4 },
+  GT9_2: { play: 4 }, GT9_3: { play: 4 },
+  GT10_0: { play: 4 }, GT10_1: { play: 4 }, GT10_2: { play: 4 }, GT10_3: { play: 4 },
+  GT11_0: { play: 5 }, GT11_1: { play: 5 },
+  GT12_0: { play: 5 }, GT12_1: { play: 5 },
+};
+for (const id of Object.keys(PATCH5)) { if (DB[id]) Object.assign(DB[id], PATCH5[id]); }
+
+// 구매/시전 코스트가 다른 카드는 텍스트에 "(시전 N)" 자동 표기 (이미 표기된 카드는 건너뜀)
+for (const id of Object.keys(DB)) {
+  const c = DB[id];
+  if (c.play === undefined || c.play === c.cost) continue;
+  if (!/시전|소환 코스트/.test(c.text)) c.text += ` (시전 ${c.play})`;
+  if (c.textJa && !/発動|召喚コスト/.test(c.textJa)) c.textJa += ` (発動${c.play})`;
+}
+
 // chest (golden treasure) outcome odds — shown when the chest card is enlarged
 export const CHEST_ODDS = {
   ko: { title: "황금상자 확률 (각 25%)", rows: ["최대 마나 +1 — 25%", "체력 +8 — 25%", "최대 체력 +5 — 25%", "꽝: 상대 필드에 미믹(3/2) — 25%"] },
