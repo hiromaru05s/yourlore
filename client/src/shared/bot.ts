@@ -67,6 +67,14 @@ function candidates(g: GameState): Action[] {
   if (g.pending) {
     const pend = g.pending;
     const push = (uid: string | null) => out.push(pend.kind === "seek" || pend.kind === "recall" ? { type: "pick", uid } : { type: "chooseTarget", uid });
+    if (pend.kind === "oppMon" && pend.reason === "attack") {
+      // attack targeting: only killable targets — a blocked swing (atk<=def) does
+      // NOTHING, so it's strictly dominated; if none killable defer to greedy
+      const att = p.field.find((m) => m.uid === (pend.data?.attackerUid as string));
+      const a = att ? effAtk(p, att) : 0;
+      o.field.filter((tm) => a > effDef(o, tm)).forEach((m) => push(m.uid));
+      return out; // empty → searchDecide falls back to the greedy pick
+    }
     if (pend.kind === "oppMon") o.field.forEach((m) => push(m.uid));
     else if (pend.kind === "myMon") p.field.forEach((m) => push(m.uid));
     else if (pend.kind === "seek" || pend.kind === "recall") {
