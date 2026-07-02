@@ -14,7 +14,7 @@
 //    dice / draws. A/B: ~68% vs the pure greedy bot.
 // ============================================================
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
-import { buyCost, cardValue, effAtk, effDef, playCost, reduce, summonReqMet } from "./engine";
+import { buyCost, cardValue, chestLocked, effAtk, effDef, playCost, reduce, summonReqMet } from "./engine";
 
 // ---------------- rollout search (the shipped bot) ----------------
 const MARGIN = 0.1;      // eval margin a deviation must beat greedy by
@@ -47,6 +47,7 @@ function searchDecide(g: GameState): Action | null {
 function rollout(g: GameState, a: Action, s: Side): number {
   const g2 = structuredClone(g);
   g2.rng = (g2.rng ^ 0x9e3779b9) >>> 0; // decouple from the real RNG stream (no dice clairvoyance)
+  determinize(g2, s);                   // hide hidden info: sample it from public knowledge instead
   let st = reduce(g2, a).state;
   // no-op guard: the engine refused the action before paying → never pick it
   if (a.type === "play" && !st.pending && !st.over &&
@@ -56,6 +57,31 @@ function rollout(g: GameState, a: Action, s: Side): number {
   steps = 0;
   while (!st.over && st.cur !== s && steps < ROLLOUT_STEPS) { st = reduce(st, greedyDecide(st)).state; steps++; }
   return evalState(st, s);
+}
+
+// ---- fair play: this is an imperfect-information game, so rollouts must NOT read
+// hidden state. Before simulating, replace everything the bot couldn't legitimately
+// know with a random sample consistent with PUBLIC information:
+//  · my deck order (contents known, order unknown) → shuffled
+//  · opponent's hand + deck + face-down trap identities → pooled and re-dealt
+//    (the pool itself IS public: starter deck + their buy log)
+// So "they only ever bought one trap" naturally means the sampled set trap is that trap.
+function determinize(g: GameState, s: Side): void {
+  let seed = (g.rng ^ 0x51f15eed) >>> 0;
+  const rnd = () => { seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5; seed >>>= 0; return seed / 4294967296; };
+  const shuf = <T,>(arr: T[]): void => { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } };
+  const me = g.players[s], op = g.players[1 - s];
+  shuf(me.deck);
+  const pool = [...op.hand, ...op.deck, ...op.traps.map((t) => t.card)];
+  shuf(pool);
+  for (let i = 0; i < op.traps.length; i++) {
+    const k = pool.findIndex((c) => c.t === "trap");
+    if (k < 0) break; // shouldn't happen — the real set traps are in the pool
+    op.traps[i] = { ...op.traps[i], card: pool.splice(k, 1)[0] };
+  }
+  const handN = op.hand.length;
+  op.hand = pool.slice(0, handN);
+  op.deck = pool.slice(handN);
 }
 
 // candidate actions, deduped + trimmed so rollouts stay cheap
@@ -93,7 +119,7 @@ function candidates(g: GameState): Action[] {
   //  early mana/HP compounds; single-sample rollouts under-count the 25% risk)
   const seenPlay = new Set<string>();
   p.hand.forEach((c, idx) => {
-    if (g.turn <= 6 && c.star === "chest") return;
+    if (c.star === "chest" && (g.turn <= 6 || chestLocked(g))) return;
     if (playCost(c) > p.mana || seenPlay.has(c.id)) return;
     seenPlay.add(c.id);
     out.push({ type: "play", idx });
@@ -204,6 +230,8 @@ export function greedyDecide(g: GameState): Action {
     if ((c.id === "DISARM1" || c.id === "DISARM2" || c.id === "DISARM3") && o.enchants.length === 0) return false;
     // don't waste heals at (near) full HP
     if (c.act === "heal" && p.maxHp - p.hp < Math.min(c.val || 0, 6)) return false;
+    // 어튠-마: needs a chest in hand, and chests must not be sealed (행운의 보물상자)
+    if (c.act === "chestToMana" && (chestLocked(g) || !p.hand.some((h) => h.star === "chest"))) return false;
     // blood magic hurts the caster — don't suicide
     if (c.id === "BLOOD1" && p.hp <= 6) return false;
     if (c.id === "BLOOD2" && p.hp <= 10) return false;
@@ -309,8 +337,8 @@ export function greedyDecide(g: GameState): Action {
   g.market.forEach((c, i) => { if (buyCost(p, c) <= p.mana) { const s = buyScore(c); if (s > mbs) { mbs = s; mbi = i; } } });
   if (mbi >= 0) return { type: "buyMarket", i: mbi };
 
-  // 13) spare mana → Pry Chest (not before turn 7 — early mimic risk outweighs the payout)
-  const chest = g.turn <= 6 ? -1 : p.hand.findIndex((c) => c.star === "chest" && playCost(c) <= p.mana);
+  // 13) spare mana → Pry Chest (not before turn 7 — early mimic risk outweighs the payout; not while sealed)
+  const chest = (g.turn <= 6 || chestLocked(g)) ? -1 : p.hand.findIndex((c) => c.star === "chest" && playCost(c) <= p.mana);
   if (chest >= 0) return { type: "play", idx: chest };
 
   // 14) spare mana → Cull (deck thinning)

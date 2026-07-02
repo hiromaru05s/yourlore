@@ -944,6 +944,37 @@ function summonRandomMon(g: GameState, ctx: Ctx, p: PlayerState, maxCost: number
 // ============================================================
 // treasure
 // ============================================================
+/** 행운의 보물상자(chestLock)가 어느 쪽 필드에든 있으면 양측 보물상자 사용 금지 */
+export function chestLocked(g: GameState): boolean {
+  return g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "chestLock"));
+}
+
+/** 행운의 보물상자 발동 복권 (10/40/30/5/15%) */
+function luckyChest(g: GameState, ctx: Ctx, p: PlayerState): void {
+  const o = g.players[0] === p ? g.players[1] : g.players[0];
+  const r = randInt(g, 100);
+  if (r < 10) {
+    p.maxMana += 3; const n = ctx.drawN(p, 2);
+    ctx.log(`  └ 🎰 10%! 최대 마나 +3, ${n}장 드로우`, `  └ 🎰 10%! 最大マナ +3, ${n}枚ドロー`);
+  } else if (r < 50) {
+    p.maxMana += 1;
+    ctx.log(`  └ 최대 마나 +1 (40%)`, `  └ 最大マナ +1 (40%)`);
+  } else if (r < 80) {
+    p.maxHp += 8; p.hp += 8; ctx.ev.push({ type: "heal", player: side(g, p), amount: 8 });
+    ctx.log(`  └ 최대 체력 +8 (30%)`, `  └ 最大体力 +8 (30%)`);
+  } else if (r < 85) {
+    p.maxHp += 12; p.hp += 12; ctx.ev.push({ type: "heal", player: side(g, p), amount: 12 });
+    ctx.log(`  └ ✨ 최대 체력 +12 (5%)`, `  └ ✨ 最大体力 +12 (5%)`);
+  } else {
+    if (o.field.length < FIELD_MAX) {
+      const m: FieldMon = { uid: newUID(g), ...structuredClone(DB.MIMIC2), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
+      o.field.push(m);
+      ctx.ev.push({ type: "summon", player: side(g, o), uid: m.uid });
+    }
+    ctx.log(`  └ <span class="dmg">꽝! 상대 필드에 마스터 미믹(10/3) 소환 (15%)</span>`, `  └ <span class="dmg">ハズレ！相手の場にマスターミミック(10/3)召喚 (15%)</span>`);
+  }
+}
+
 function openTreasure(g: GameState, ctx: Ctx, p: PlayerState): void {
   const roll = randInt(g, 4);
   let txt = "", txtJa = "", kind = "";
@@ -1069,7 +1100,10 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
 
   if (card.t === "starter") {
     if (card.star === "trash") { p.mana -= playCost(card); p.hand.splice(idx, 1); ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "vanish" }); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 이 카드 폐기`, `<span class="t">${p.name}</span> ${cn(card)} → このカードを廃棄`); }
-    else if (card.star === "chest") { p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card); ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "discard" }); openTreasure(g, ctx, p); }
+    else if (card.star === "chest") {
+      if (chestLocked(g)) { ctx.log(`  └ <span class="dmg">행운의 보물상자</span>: 보물상자 사용 봉인 중`, `  └ <span class="dmg">幸運の宝箱</span>: 宝箱の使用は封印中`); return; }
+      p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card); ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "discard" }); openTreasure(g, ctx, p);
+    }
     else if (card.star === "mana") { p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card); p.maxMana++; ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "discard" }); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 최대 마나 +1 (${p.maxMana})`, `<span class="t">${p.name}</span> ${cn(card)} → 最大マナ +1 (${p.maxMana})`); }
     return;
   }
@@ -1090,6 +1124,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (card.id === "RUNE2" && !p.hand.some((c) => c.id === "RUNE1")) { ctx.log("  └ 패에 '룬 학문 - 초급'이 없습니다", "  └ 手札に「ルーン学問 - 初級」がありません"); return; }
     if (card.id === "RUNE3" && !(p.hand.some((c) => c.id === "RUNE1") && p.hand.some((c) => c.id === "RUNE2"))) { ctx.log("  └ 패에 초급·중급 룬 학문이 필요합니다", "  └ 手札に初級・中級のルーン学問が必要です"); return; }
     if ((card.id === "DISARM1" || card.id === "DISARM2" || card.id === "DISARM3") && o0.enchants.length === 0) { ctx.log("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); return; }
+    if (card.act === "chestToMana" && chestLocked(g)) { ctx.log(`  └ <span class="dmg">행운의 보물상자</span>: 보물상자 사용 봉인 중`, `  └ <span class="dmg">幸運の宝箱</span>: 宝箱の使用は封印中`); return; }
     if (card.ench && p.traps.length + p.enchants.length >= ST_MAX) { ctx.log(`  └ <span class="dmg">마법·함정 존이 가득 찼습니다 (최대 ${ST_MAX})</span>`, `  └ <span class="dmg">魔法・罠ゾーンが満杯です (最大 ${ST_MAX})</span>`); return; }
 
     p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card);
@@ -1102,6 +1137,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       const perm = (card.val || 0) >= 99;
       ctx.log(`<span class="t">${p.name}</span> ${cn(card)} 발동 (지속 ${perm ? "영구" : `${card.val}턴`})`, `<span class="t">${p.name}</span> ${cn(card)} 発動 (${perm ? "永続" : `持続${card.val}ターン`})`);
       ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "field" });
+      if (card.id === "LUCKY_CHEST") luckyChest(g, ctx, p); // 설치 시 복권 발동
       return;
     }
     ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "discard" }); // reveal animation

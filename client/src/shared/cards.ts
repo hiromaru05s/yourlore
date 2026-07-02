@@ -628,6 +628,18 @@ for (const id of DRAW_BUFF) {
   if (c.textJa) c.textJa = c.textJa.replace(/\(発動\d+\)/, `(発動${c.play})`);
 }
 
+// ============================================================
+// NEW CARDS 4 — 행운의 보물상자 (복권 + 양측 보물상자 봉인)
+// ============================================================
+const NEW_CARDS4: CardDef[] = [
+  { id: "LUCKY_CHEST", t: "spell", cost: 3, ench: "chestLock", val: 99, name: "행운의 보물상자", nameJa: "幸運の宝箱",
+    text: "발동시 — 10%: 최대 마나+3·2장 드로우 / 40%: 최대 마나+1 / 30%: 최대 체력+8 / 5%: 최대 체력+12 / 15%: 꽝(상대 필드에 마스터 미믹 10/3). 영구: 이 카드가 있는 한 양측은 보물상자를 사용할 수 없다",
+    textJa: "発動時 — 10%: 最大マナ+3・2枚ドロー / 40%: 最大マナ+1 / 30%: 最大体力+8 / 5%: 最大体力+12 / 15%: ハズレ(相手の場にマスターミミック10/3)。永続: このカードがある限り両者は宝箱を使用できない" },
+  { id: "MIMIC2", t: "mon", cost: 0, name: "마스터 미믹", nameJa: "マスターミミック", atk: 10, def: 3,
+    text: "행운의 보물상자 꽝으로 상대 필드에 소환된다", textJa: "幸運の宝箱のハズレで相手の場に召喚される" },
+];
+for (const c of NEW_CARDS4) { DB[c.id] = c; }
+
 // chest (golden treasure) outcome odds — shown when the chest card is enlarged
 export const CHEST_ODDS = {
   ko: { title: "황금상자 확률 (각 25%)", rows: ["최대 마나 +1 — 25%", "체력 +3 — 25%", "최대 체력 +5 — 25%", "꽝: 상대 필드에 미믹(3/2) — 25%"] },
