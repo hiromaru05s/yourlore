@@ -661,9 +661,9 @@ for (const id of Object.keys(PATCH7)) { if (DB[id]) Object.assign(DB[id], PATCH7
 const NEW_CARDS5: CardDef[] = [
   { id: "CATALYST", t: "spell", cost: 2, name: "균열의 촉매", nameJa: "亀裂の触媒",
     text: "자신에게 4 데미지, 최대 마나 +1", textJa: "自分に4ダメージ、最大マナ+1" },
-  { id: "WORLD_SEED", t: "spell", cost: 4, ench: "seedMana", val: 99, name: "세계수의 씨앗", nameJa: "世界樹の種",
-    text: "영구: 자신의 턴 시작마다 25% 확률로 최대 마나 +1", textJa: "永続: 自分のターン開始時、25%で最大マナ+1" },
-  { id: "MANA_GIANT", t: "mon", cost: 5, atk: 2, def: 8, aura: "mana2", name: "마나 수정 거인", nameJa: "マナ水晶の巨人",
+  { id: "WORLD_SEED", t: "spell", cost: 4, ench: "seedMana", val: 99, val2: 33, name: "세계수의 씨앗", nameJa: "世界樹の種",
+    text: "영구: 자신의 턴 시작마다 33% 확률로 최대 마나 +1", textJa: "永続: 自分のターン開始時、33%で最大マナ+1" },
+  { id: "MANA_GIANT", t: "mon", cost: 5, atk: 2, def: 7, aura: "mana2", name: "마나 수정 거인", nameJa: "マナ水晶の巨人",
     text: "필드에 있는 동안 최대 마나 +2", textJa: "場にいる間、最大マナ+2" },
   { id: "HOURGLASS", t: "spell", cost: 6, act: "manaUp", val: 2, val2: 2, name: "시간의 모래시계", nameJa: "時の砂時計",
     text: "최대 마나 +2, 카드 2장 드로우", textJa: "最大マナ+2、カード2枚ドロー" },

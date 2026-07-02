@@ -289,8 +289,8 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
         ctx.dealDamage(pl, 6, cn(e.card), cn(e.card));
         if (!g.over) ctx.dealDamage(opp, 5, cn(e.card), cn(e.card));
       }
-      // 세계수의 씨앗: 자신의 턴 시작마다 25%로 최대 마나 +1
-      if (e.card.ench === "seedMana" && ownerTurn && !g.over && randInt(g, 100) < 25) {
+      // 세계수의 씨앗: 자신의 턴 시작마다 val2%로 최대 마나 +1
+      if (e.card.ench === "seedMana" && ownerTurn && !g.over && randInt(g, 100) < (e.card.val2 ?? 25)) {
         pl.maxMana += 1;
         ctx.log(`<span class="t">${cn(e.card)}</span> 발아! 최대 마나 +1 (${pl.maxMana})`, `<span class="t">${cn(e.card)}</span> 発芽！最大マナ +1 (${pl.maxMana})`);
       }
