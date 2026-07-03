@@ -9,7 +9,8 @@ export function langSelectEl(): HTMLElement {
   const sel = document.createElement("select");
   sel.innerHTML =
     `<option value="ko"${getLang() === "ko" ? " selected" : ""}>한국어</option>` +
-    `<option value="ja"${getLang() === "ja" ? " selected" : ""}>日本語</option>`;
+    `<option value="ja"${getLang() === "ja" ? " selected" : ""}>日本語</option>` +
+    `<option value="en"${getLang() === "en" ? " selected" : ""}>English</option>`;
   sel.onchange = () => setLang(sel.value as Lang);
   wrap.appendChild(sel);
   return wrap;

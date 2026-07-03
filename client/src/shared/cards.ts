@@ -5,6 +5,7 @@
 // pre-made card art (named <id>.webp) keeps mapping.
 // ============================================================
 import type { CardDef, CardType } from "./types";
+import { applyEnglish } from "./cards.en";
 
 // ---------------- core set (cost 1–4) ----------------
 const CORE: Record<string, CardDef> = {
@@ -102,26 +103,31 @@ const CORE: Record<string, CardDef> = {
 
 // Tribe synergy descriptions (shown when the player taps a tribe tag).
 interface TribeInfo { name: string; note: string; bonuses: string[]; }
-export const TRIBES: Record<string, { ko: TribeInfo; ja: TribeInfo }> = {
+export const TRIBES: Record<string, { ko: TribeInfo; ja: TribeInfo; en: TribeInfo }> = {
   "고독": {
     ko: { name: "고독", note: "※ 서로 다른 종족 카드여야 발동 (같은 카드 2장은 X)", bonuses: ["서로 다른 2종: 최대 체력 +10", "서로 다른 3종: 최대 체력 +30, 최대 마나 +1"] },
     ja: { name: "孤独", note: "※ 異なる種族カードが必要 (同じカード2枚は不可)", bonuses: ["異なる2種: 最大体力 +10", "異なる3種: 最大体力 +30, 最大マナ +1"] },
+    en: { name: "Solitary", note: "* Requires DIFFERENT cards of the tribe (2 copies of one card don't count)", bonuses: ["2 different: max HP +10", "3 different: max HP +30, max mana +1"] },
   },
   "고귀": {
     ko: { name: "고귀", note: "※ 서로 다른 종족 카드여야 발동", bonuses: ["서로 다른 2종: 최대 마나 +1", "서로 다른 3종: 최대 마나 +3, 상대 함정 2장 파괴"] },
     ja: { name: "高貴", note: "※ 異なる種族カードが必要", bonuses: ["異なる2種: 最大マナ +1", "異なる3種: 最大マナ +3, 相手の罠2枚を破壊"] },
+    en: { name: "Noble", note: "* Requires different cards of the tribe", bonuses: ["2 different: max mana +1", "3 different: max mana +3, destroy 2 enemy traps"] },
   },
   "포식": {
     ko: { name: "포식", note: "※ 서로 다른 종족 카드여야 발동", bonuses: ["서로 다른 2종: 상대 몬스터 1체 파괴 + 상대에게 4 데미지", "서로 다른 3종: 상대 몬스터 2체 파괴 + 상대에게 10 데미지"] },
     ja: { name: "捕食", note: "※ 異なる種族カードが必要", bonuses: ["異なる2種: 相手モンスター1体破壊 + 相手に4ダメージ", "異なる3種: 相手モンスター2体破壊 + 相手に10ダメージ"] },
+    en: { name: "Devour", note: "* Requires different cards of the tribe", bonuses: ["2 different: destroy 1 enemy monster + 4 damage", "3 different: destroy 2 enemy monsters + 10 damage"] },
   },
   "귀족": {
     ko: { name: "귀족", note: "※ 서로 다른 종족 카드여야 발동", bonuses: ["서로 다른 2종: 자신의 최대 마나 -1", "서로 다른 3종: 최대 마나 +5, 매 턴 +2 드로우(영구), 최대 체력 +15"] },
     ja: { name: "貴族", note: "※ 異なる種族カードが必要", bonuses: ["異なる2種: 自分の最大マナ -1", "異なる3種: 最大マナ +5, 毎ターン+2ドロー(永続), 最大体力 +15"] },
+    en: { name: "Aristocrat", note: "* Requires different cards of the tribe", bonuses: ["2 different: YOUR max mana -1", "3 different: max mana +5, +2 draw each turn (permanent), max HP +15"] },
   },
   "시초": {
     ko: { name: "시초", note: "※ 1~7코스트 각 1종 · 서로 다른 카드를 모으세요", bonuses: ["서로 다른 2종: 최대 체력 +6", "서로 다른 3종: 최대 체력 +13, 상대 최대 체력 -3", "서로 다른 4종: 최대 마나 +10, 최대 체력 +20, 4장 드로우, 상대 필드 전멸, 상대 13 데미지"] },
     ja: { name: "始原", note: "※ 1~7コスト各1種 · 異なるカードを揃える", bonuses: ["異なる2種: 最大体力 +6", "異なる3種: 最大体力 +13, 相手の最大体力 -3", "異なる4種: 最大マナ +10, 最大体力 +20, 4枚ドロー, 相手の場を全滅, 相手に13ダメージ"] },
+    en: { name: "Origin", note: "* Collect different cards, one each of cost 1-7", bonuses: ["2 different: max HP +6", "3 different: max HP +13, enemy max HP -3", "4 different: max mana +10, max HP +20, draw 4, wipe the enemy field, 13 damage"] },
   },
 };
 
@@ -712,7 +718,11 @@ for (const id of Object.keys(PATCH9)) { if (DB[id]) Object.assign(DB[id], PATCH9
 export const CHEST_ODDS = {
   ko: { title: "황금상자 확률 (각 25%)", rows: ["최대 마나 +1 — 25%", "체력 +3 — 25%", "최대 체력 +5 — 25%", "꽝: 상대 필드에 미믹(3/2) — 25%"] },
   ja: { title: "宝箱の確率 (各25%)", rows: ["最大マナ +1 — 25%", "体力 +3 — 25%", "最大体力 +5 — 25%", "ハズレ: 相手の場にミミック(3/2) — 25%"] },
+  en: { title: "Golden chest odds (25% each)", rows: ["Max mana +1 — 25%", "HP +3 — 25%", "Max HP +5 — 25%", "Dud: Mimic (3/2) on enemy field — 25%"] },
 };
+
+// English localization (names/texts) — applied last so it reflects final balance patches
+applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 
 export const ALL_IDS = Object.keys(DB);
 // markets never offer the Mimic token (cost 0) — excluded from buyable pool

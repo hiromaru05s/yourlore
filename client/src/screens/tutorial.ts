@@ -8,7 +8,7 @@ import { langSelectEl } from "../ui/langSelect";
 
 interface Section { icon: string; h: string; body: string[]; }
 
-const SECTIONS: { ko: Section[]; ja: Section[] } = {
+const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
   ko: [
     { icon: "🎯", h: "게임 목표", body: [
       "상대의 <b>체력</b>을 0으로 만들면 승리합니다.",
@@ -58,7 +58,7 @@ const SECTIONS: { ko: Section[]; ja: Section[] } = {
     ] },
     { icon: "🎁", h: "보물상자", body: [
       "보물상자를 열면 4가지 결과 중 하나가 <b>각 25%</b>로 나옵니다:",
-      "최대 마나 +1 / 체력 +8 / 최대 체력 +5 / <b>꽝</b>(상대 필드에 미믹 3/2 소환).",
+      "최대 마나 +1 / 체력 +3 / 최대 체력 +5 / <b>꽝</b>(상대 필드에 미믹 3/2 소환).",
       "보물상자 카드를 확대하면 이 확률이 옆에 표시됩니다.",
     ] },
     { icon: "🏆", h: "승리 & 조작", body: [
@@ -125,6 +125,65 @@ const SECTIONS: { ko: Section[]; ja: Section[] } = {
       "<b>カード拡大</b>: PCは右クリック、モバイルは長押し。",
       "<b>降参</b>: 右のログパネル最下部(モバイルは📜ボタンでログを開く)。",
       "相手のターン中は相手のマナがリアルタイムで表示されます。",
+    ] },
+  ],
+  en: [
+    { icon: "🎯", h: "Goal", body: [
+      "Reduce your opponent's <b>HP</b> to 0 to win.",
+      "The first player starts at <b>35</b> HP, the second at <b>45</b>. (The extra HP offsets the first player's tempo advantage.)",
+    ] },
+    { icon: "🔄", h: "Turn Flow", body: [
+      "At the start of your turn: ① <b>mana refills to max</b> and ② you <b>draw 3 cards</b>.",
+      "Then act freely while your mana lasts — summon monsters, cast spells, set traps, attack, buy cards.",
+      "Press <b>End Turn</b> to discard your remaining hand (to the graveyard) and pass to the opponent.",
+    ] },
+    { icon: "💎", h: "Mana", body: [
+      "The resource for everything. It refills to your <b>max mana</b> each turn (starts at 4).",
+      "<b>Attune</b> and some cards raise your max mana permanently. Buying, casting and summoning all cost mana.",
+    ] },
+    { icon: "🃏", h: "Card Types", body: [
+      "<b>Monsters</b> — have ATK/DEF and fight on the field. Many have on-summon effects.",
+      "<b>Spells</b> — one-shot effects (damage, healing, draw, destruction…).",
+      "<b>Traps</b> — set face-down; trigger automatically on certain conditions.",
+      "<b>Enchantments</b> — stay on the field for a duration with ongoing effects.",
+      "<b>Starters</b> — Cull (thin your deck), Treasure Chest (open it), Attune (max mana +1).",
+    ] },
+    { icon: "🛒", h: "Markets & Deckbuilding", body: [
+      "Buy cards to grow your deck. Purchases go to your <b>graveyard</b>, then shuffle back in when your deck runs out.",
+      "<b>Fixed market</b>: 10 random cards per game (cost 1-4).",
+      "<b>Offer</b>: 3 fresh cards each turn (cost 1 up to your max mana). Reroll it for <b>1 mana</b>.",
+    ] },
+    { icon: "⚔️", h: "Combat", body: [
+      "Attack the opponent with your monsters.",
+      "When attacking a monster: if your <b>ATK > its DEF</b>, it dies and the excess hits the opponent as <b>penetration</b> damage.",
+      "If the enemy field is empty, you hit their HP <b>directly</b>.",
+      "Each monster attacks once per turn (a few cards can attack twice).",
+    ] },
+    { icon: "🪤", h: "Traps & Reactions", body: [
+      "Traps sit face-down and fire automatically on enemy <b>attacks, summons or spells</b> (revealed when triggered).",
+      "They negate attacks, reflect damage, destroy monsters, draw cards, counter spells, and more.",
+    ] },
+    { icon: "🧬", h: "Tribe Synergies", body: [
+      "There are 5 tribes: <b>Solitary, Noble, Devour, Aristocrat, Origin</b>.",
+      "Gather <b>2 or 3 different</b> cards of a tribe on your field (Origin goes up to <b>4</b>) for powerful bonuses (copies don't count; once per game each).",
+      "Enlarge a card (right-click / long-press) and tap the tribe tag's ⓘ to see the bonuses.",
+    ] },
+    { icon: "⭐", h: "Special Cards & Field", body: [
+      "The field holds up to <b>9 monsters</b> and <b>9 spells/traps</b>.",
+      "<b>Enchantments</b> persist on the field; some cards destroy or exile them.",
+      "Some monsters have <b>summon requirements</b> (e.g. specific cards in your field/deck/graveyard).",
+      "<b>Assassins</b> ignore enemy monsters and always <b>attack the player directly</b>.",
+    ] },
+    { icon: "🎁", h: "Treasure Chests", body: [
+      "Opening a chest gives one of 4 outcomes at <b>25% each</b>:",
+      "Max mana +1 / HP +3 / Max HP +5 / <b>Dud</b> (a 3/2 Mimic on the enemy field).",
+      "Enlarge the chest card to see these odds.",
+    ] },
+    { icon: "🏆", h: "Winning & Controls", body: [
+      "It's a <b>1v1 duel</b>. Drop the opponent's <b>HP to 0</b> to win instantly.",
+      "<b>Enlarge cards</b>: right-click on PC, long-press on mobile.",
+      "<b>Surrender</b>: bottom of the log panel (📜 button opens the log on mobile).",
+      "The opponent's mana is shown live during their turn.",
     ] },
   ],
 };

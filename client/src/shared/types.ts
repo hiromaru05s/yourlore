@@ -33,6 +33,8 @@ export interface CardDef {
   cap?: number; // nullspell trap: only counters spells with play cost <= cap (undefined = any)
   nameJa?: string; // Japanese name (falls back to name)
   textJa?: string; // Japanese effect text (falls back to text)
+  nameEn?: string; // English name (falls back to name)
+  textEn?: string; // English effect text (falls back to text)
 }
 
 export interface Enchant {
