@@ -242,6 +242,16 @@ export class GameView {
     dbtn.textContent = `${t("deck.view")} ${cards.length}`;
     dbtn.onclick = () => cardPicker(`${p.name} — ${t("deck.view")} (${cards.length})`, cards, () => { /* browse only */ });
     wrap.appendChild(dbtn);
+    // 게임에서 제외된 카드 (공개 존, 양쪽 각각)
+    const removed = (p.removed ?? []).slice().sort((a, b) => a.cost - b.cost);
+    if (removed.length > 0) {
+      const rbtn = document.createElement("button");
+      rbtn.className = "btn btn-ghost";
+      rbtn.style.cssText = "padding:1px 9px;font-size:11px;line-height:16px;opacity:.8";
+      rbtn.textContent = `${t("deck.removed")} ${removed.length}`;
+      rbtn.onclick = () => cardPicker(`${p.name} — ${t("deck.removed")} (${removed.length})`, removed, () => { /* browse only */ });
+      wrap.appendChild(rbtn);
+    }
     return bar;
   }
 

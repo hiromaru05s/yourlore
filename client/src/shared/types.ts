@@ -95,10 +95,11 @@ export interface PlayerState {
   manaGainNext: number; // max mana to gain at the start of this player's next turn
   skipNext: boolean; // if true, this player's next turn is skipped
   collection?: string[]; // redacted view only: sorted card-id multiset of hidden zones (public via buy log)
+  removed?: CardInst[]; // cards permanently exiled from the game (public zone)
 }
 
 export interface Pending {
-  kind: "oppMon" | "myMon" | "seek" | "recall";
+  kind: "oppMon" | "myMon" | "seek" | "recall" | "purge"; // purge: pick from deck+graveyard to exile
   hint: string;
   hintJa: string; // Japanese target hint
   reason: string; // which effect awaits input

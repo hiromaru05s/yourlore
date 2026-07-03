@@ -14,7 +14,7 @@
 //    dice / draws. A/B: ~68% vs the pure greedy bot.
 // ============================================================
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
-import { buyCost, cardValue, chestLocked, effAtk, effDef, playCost, reduce, summonReqMet } from "./engine";
+import { buyCost, cardValue, chestLocked, effAtk, effDef, glassBanActive, playCost, reduce, summonReqMet } from "./engine";
 
 // ---------------- rollout search (the shipped bot) ----------------
 const MARGIN = 0.1;      // eval margin a deviation must beat greedy by
@@ -103,6 +103,15 @@ function candidates(g: GameState): Action[] {
     }
     if (pend.kind === "oppMon") o.field.forEach((m) => push(m.uid));
     else if (pend.kind === "myMon") p.field.forEach((m) => push(m.uid));
+    else if (pend.kind === "purge") {
+      const pool = [...p.deck, ...p.discard];
+      const seen = new Set<string>();
+      [...pool].sort((a, b) => cardValue(a) - cardValue(b)).forEach((c) => {
+        if (!seen.has(c.id) && seen.size < 6) { seen.add(c.id); push(c.uid); }
+      });
+      push(null); // "그만 제외" 후보
+      return out;
+    }
     else if (pend.kind === "seek" || pend.kind === "recall") {
       const pool = pend.kind === "seek" ? p.deck : p.discard;
       const exile = pend.reason === "exilePick"; // 제외용은 저가치 우선 탐색
@@ -132,6 +141,7 @@ function candidates(g: GameState): Action[] {
     p.field.forEach((m) => {
       if (m.exhausted) return;
       const a = effAtk(p, m);
+      if (glassBanActive(g) && effDef(p, m) <= 1) return; // 유리 병기 금지령
       const canLand = m.directOnly || o.field.length === 0 || o.field.some((tm) => a > effDef(o, tm));
       if (!canLand) return;
       const key = `${a}|${m.directOnly ? 1 : 0}`;
@@ -245,6 +255,9 @@ export function greedyDecide(g: GameState): Action {
     if (c.id === "WALLBREAK2" && !o.field.some((m) => effAtk(o, m) <= 2)) return false;
     if (c.id === "SNIPE1" && !o.field.some((m) => effDef(o, m) <= 1)) return false;
     if (c.id === "SNIPE2" && !o.field.some((m) => effDef(o, m) <= 2)) return false;
+    if (c.id === "SHATTER" && p.hp <= 7) return false;
+    if (c.id === "INQUISITION" && ![...o.deck, ...o.discard, ...o.field].some((m) => m.t === "mon" && m.tribe)) return false;
+    if (c.id === "PURGE_ALL" && p.deck.length + p.discard.length === 0) return false;
     if (c.id === "SCRAPPER" && [...p.deck, ...p.discard].filter((x) => x.cost <= 1).length < 2) return false;
     // blood magic hurts the caster — don't suicide
     if (c.id === "CATALYST" && p.hp <= 6) return false;
@@ -300,9 +313,11 @@ export function greedyDecide(g: GameState): Action {
   //    swing does nothing, so never chip into a bigger defense).
   //    Biggest attacker first: same kill, more penetration (관통) face damage.
   if (!noAtk) {
-    const assassin = ready.find((m) => m.directOnly);
+    const ban = glassBanActive(g);
+    const canSwing = (m: FieldMon): boolean => !ban || effDef(p, m) > 1;
+    const assassin = ready.find((m) => m.directOnly && canSwing(m));
     if (assassin) return { type: "attack", uid: assassin.uid };
-    for (const m of [...ready].sort((a, b) => effAtk(p, b) - effAtk(p, a))) {
+    for (const m of [...ready].filter(canSwing).sort((a, b) => effAtk(p, b) - effAtk(p, a))) {
       if (o.field.length === 0) return { type: "attack", uid: m.uid };
       const a = effAtk(p, m);
       if (o.field.some((tm) => a > effDef(o, tm))) return { type: "attack", uid: m.uid };
@@ -387,10 +402,13 @@ function facePlan(p: PlayerState, o: PlayerState, ready: FieldMon[], spells: { c
   }
   let attackUid: string | null = null;
   if (!noAtk) {
+    // 유리 병기 금지령: 방어 1 이하는 공격 자체가 불가 → 리썰 계산에서 제외
+    const ban = [p, o].some((pl) => pl.enchants.some((e) => e.card.ench === "glassBan"));
     const defs = o.field.filter((m) => m.uid !== withoutUid).map((m) => effDef(o, m)).sort((a, b) => b - a); // toughest first
     for (const m of [...ready].sort((a, b) => effAtk(p, b) - effAtk(p, a))) {
       const a = effAtk(p, m);
       if (a <= 0) continue;
+      if (ban && effDef(p, m) <= 1) continue;
       if (m.directOnly || defs.length === 0) { total += a; if (!attackUid) attackUid = m.uid; continue; }
       const k = defs.findIndex((d) => a > d); // toughest blocker this attacker still kills
       if (k >= 0) { total += a - defs[k]; defs.splice(k, 1); if (!attackUid) attackUid = m.uid; }
@@ -426,6 +444,12 @@ function autoTarget(g: GameState): Action {
   if (pending.kind === "seek") {
     const best = bestOf(p.deck);
     return { type: "pick", uid: best ? best.uid : (p.deck[0]?.uid ?? null) };
+  }
+  if (pending.kind === "purge") { // 덱·묘지에서 제외: 저가치부터, 살릴 가치가 있으면 종료
+    const pool = [...p.deck, ...p.discard].sort((a, b) => cardValue(a) - cardValue(b));
+    const worst = pool[0];
+    if (worst && cardValue(worst) < 8) return { type: "pick", uid: worst.uid };
+    return { type: "pick", uid: null };
   }
   if (pending.kind === "recall") {
     if (pending.reason === "exilePick") { // 게임에서 제외 → 가장 쓸모없는 카드

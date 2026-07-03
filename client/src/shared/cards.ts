@@ -736,6 +736,61 @@ const PATCH10: Record<string, Partial<CardDef>> = {
 for (const id of Object.keys(PATCH10)) { if (DB[id]) Object.assign(DB[id], PATCH10[id]); }
 
 // ============================================================
+// BALANCE PATCH 11
+// ============================================================
+const PATCH11: Record<string, Partial<CardDef>> = {
+  M12: { atk: 3 }, // 타이탄 게이트 4/4 → 3/4
+  TSO3: { def: 1 }, TNO3: { def: 1 }, TPO3: { def: 1 }, TAR3: { def: 1 }, // 3코 종족 4/2 → 4/1
+  S12: { val: 2, val2: 0, text: "자신 몬스터 1체에 공격+2(영구)", textJa: "自分のモンスター1体に攻撃+2(永続)" }, // 강화 주문 방어 삭제
+  ELITE: { text: "소환시: 자신의 덱+묘지가 7장 이하면 공격 +3", textJa: "召喚時: 自分のデッキ+墓地が7枚以下なら攻撃+3" }, // (엔진 수치와 동기)
+  NGA4: { atk: 10, val: 4, text: "소환시: 자신에게 4 데미지", textJa: "召喚時: 自分に4ダメージ" }, // 광폭한 검귀 11/0·자해3 → 10/0·자해4
+  E2: { val: 4, text: "4턴 동안 서로 몬스터로 공격할 수 없다", textJa: "4ターンの間 互いにモンスターで攻撃できない" }, // 평화 협정 3 → 4턴
+};
+for (const id of Object.keys(PATCH11)) { if (DB[id]) Object.assign(DB[id], PATCH11[id]); }
+
+// ============================================================
+// NEW CARDS 7 — 메타/제외(Exile) 아키타입 확장
+// ============================================================
+const NEW_CARDS7: CardDef[] = [
+  { id: "GLASS_BAN", t: "spell", cost: 3, play: 2, ench: "glassBan", val: 99, name: "유리 병기 금지령", nameJa: "ガラス兵器禁止令",
+    text: "영구: 양 플레이어의 방어력 1 이하 몬스터는 공격할 수 없다 (시전 2)", textJa: "永続: 両プレイヤーの防御力1以下のモンスターは攻撃できない (発動2)" },
+  { id: "SHATTER", t: "spell", cost: 3, play: 2, name: "붕괴 진동", nameJa: "崩壊振動",
+    text: "자신에게 5 데미지. 필드 위 모든 몬스터의 방어력이 0이 된다(영구) (시전 2)", textJa: "自分に5ダメージ。場の全モンスターの防御力が0になる(永続) (発動2)" },
+  { id: "SCARECROW", t: "spell", cost: 2, name: "허수아비 소집", nameJa: "かかし召集",
+    text: "허수아비(0/0) 3체를 자신 필드에 소환", textJa: "かかし(0/0)3体を自分の場に召喚" },
+  { id: "LEVY", t: "spell", cost: 7, play: 4, name: "병력 소집", nameJa: "兵力召集",
+    text: "병사(2/2) 3체를 자신 필드에 소환 (시전 4)", textJa: "兵士(2/2)3体を自分の場に召喚 (発動4)" },
+  { id: "INQUISITION", t: "spell", cost: 3, play: 2, name: "이단 심문", nameJa: "異端審問",
+    text: "상대의 덱·묘지·필드에 있는 종족 몬스터 1장당 상대에게 4 데미지 (시전 2)", textJa: "相手のデッキ・墓地・場の種族モンスター1枚につき相手に4ダメージ (発動2)" },
+  { id: "MIMIC_LORD", t: "mon", cost: 2, atk: 0, def: 0, onSummon: "mimicLord", name: "미믹 군주", nameJa: "ミミックロード",
+    text: "소환시: 양측 필드의 '미믹' 계열 몬스터 1마리당 +3/+3", textJa: "召喚時: 両者の場の「ミミック」系1体につき+3/+3" },
+  { id: "VITAL2", t: "mon", cost: 2, atk: 2, def: 0, onSummon: "maxHpUp", val: 2, name: "활력 신도", nameJa: "活力の信徒",
+    text: "소환시: 최대 체력 +2", textJa: "召喚時: 最大体力+2" },
+  { id: "VITAL3", t: "mon", cost: 3, atk: 3, def: 0, onSummon: "maxHpUp", val: 4, name: "활력 사제", nameJa: "活力の司祭",
+    text: "소환시: 최대 체력 +4", textJa: "召喚時: 最大体力+4" },
+  { id: "VITAL4", t: "mon", cost: 4, atk: 4, def: 0, condAtk: "hp45", name: "혈기왕성한 전사", nameJa: "血気盛んな戦士",
+    text: "상시: 자신의 체력이 45 이상이면 +1/+3", textJa: "常時: 自分の体力が45以上なら+1/+3" },
+  { id: "CULL_FLOOD", t: "spell", cost: 2, name: "컬 세례", nameJa: "カルの洗礼",
+    text: "자신의 묘지에 컬 4장을 추가한 후, 덱·묘지에서 원하는 카드 3장을 게임에서 제외", textJa: "自分の墓地にカル4枚を追加し、デッキ・墓地から好きなカード3枚をゲームから除外" },
+  { id: "PAIN_HARVEST", t: "spell", cost: 3, play: 2, ench: "cullOnHit", val: 99, name: "고통 수확", nameJa: "苦痛の収穫",
+    text: "영구: 상대가 데미지를 입을 때마다 자신의 패에 컬 1장을 얻는다 (시전 2)", textJa: "永続: 相手がダメージを受けるたび手札にカル1枚を得る (発動2)" },
+  { id: "CULL_FARM", t: "spell", cost: 3, play: 2, ench: "cullTurn", val: 99, name: "컬 재배", nameJa: "カル栽培",
+    text: "영구: 자신의 턴 시작마다 패에 컬 1장을 얻는다 (시전 2)", textJa: "永続: 自分のターン開始時に手札にカル1枚を得る (発動2)" },
+  { id: "PURGE_ALL", t: "spell", cost: 5, name: "대숙청", nameJa: "大粛清",
+    text: "자신의 덱·묘지에서 원하는 카드를 원하는 만큼 게임에서 제외한다", textJa: "自分のデッキ・墓地から好きなカードを好きなだけゲームから除外する" },
+  { id: "EXILE_NUKE1", t: "spell", cost: 6, play: 10, name: "공허 포격", nameJa: "虚空砲撃",
+    text: "게임에서 제외된 자신의 카드 1장당 상대에게 2 데미지 (시전 10)", textJa: "ゲームから除外された自分のカード1枚につき相手に2ダメージ (発動10)" },
+  { id: "EXILE_NUKE2", t: "spell", cost: 8, play: 12, name: "공허 대붕괴", nameJa: "虚空大崩壊",
+    text: "게임에서 제외된 자신의 카드 1장당 상대에게 3 데미지 (시전 12)", textJa: "ゲームから除外された自分のカード1枚につき相手に3ダメージ (発動12)" },
+  { id: "CULL_TITAN", t: "mon", cost: 9, atk: 1, def: 1, onSummon: "cullTitan", name: "컬의 화신", nameJa: "カルの化身",
+    text: "소환시: 게임에서 제외된 자신의 '컬' 1장당 +1/+1", textJa: "召喚時: ゲームから除外された自分の「カル」1枚につき+1/+1" },
+  // 토큰 (구매 불가, cost 0)
+  { id: "TOKEN00", t: "mon", cost: 0, atk: 0, def: 0, name: "허수아비", nameJa: "かかし", text: "—", textJa: "—" },
+  { id: "SOLDIER2", t: "mon", cost: 0, atk: 2, def: 2, name: "병사", nameJa: "兵士", text: "—", textJa: "—" },
+];
+for (const c of NEW_CARDS7) { DB[c.id] = c; }
+
+// ============================================================
 // NEW CARDS 6 — 덱빌딩 강화: 폐기(압축) 경제 + 덱 스케일링 페이오프
 // ============================================================
 const NEW_CARDS6: CardDef[] = [

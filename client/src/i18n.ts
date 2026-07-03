@@ -110,6 +110,7 @@ const D: Record<string, Entry> = {
   "notice.disc.title": { ko: "연결 끊김", ja: "接続切断", en: "Disconnected" },
   "notice.disc.body": { ko: "상대 또는 서버와의 연결이 끊어졌습니다.", ja: "相手またはサーバーとの接続が切れました。", en: "Lost connection to the opponent or the server." },
   "deck.view": { ko: "덱 구성", ja: "デッキ構成", en: "Deck" },
+  "deck.removed": { ko: "제외", ja: "除外", en: "Exiled" },
   "net.reconnecting": { ko: "연결이 끊겨 재접속 중입니다…", ja: "接続が切れたため再接続中です…", en: "Connection lost — reconnecting…" },
   "net.oppwait": { ko: "상대의 연결이 끊겼습니다. 최대 30초간 기다립니다…", ja: "相手の接続が切れました。最大30秒待ちます…", en: "Opponent disconnected — waiting up to 30s…" },
   "tribe.suffix": { ko: "종족", ja: "種族", en: "tribe" },

@@ -155,6 +155,13 @@ export abstract class BaseController implements BoardHandlers {
     const g = this.state;
     if (g.over) { this.showWin(); return; }
     if (g.pending && g.cur === this.you) {
+      if (g.pending.kind === "purge") {
+        const me = g.players[this.you];
+        const pool = [...me.deck, ...me.discard].sort((a, b) => a.cost - b.cost);
+        const hint = getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint;
+        cardPicker(hint, pool, (uid) => this.submit({ type: "pick", uid }));
+        return;
+      }
       if (g.pending.kind === "seek" || g.pending.kind === "recall") {
         const me = g.players[this.you];
         const pool = g.pending.kind === "seek" ? me.deck : me.discard;
