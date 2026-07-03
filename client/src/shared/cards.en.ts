@@ -61,7 +61,7 @@ const TEXTS: Record<string, string> = {
   M10: "While on the field: max mana +1", M11: "ATK +1 while you control 2+ monsters",
   M12: "On summon: -2 ATK to an enemy monster (permanent)", M13: "On summon: destroy 1 enemy set trap",
   NGA3: "On summon: take 2 damage", NGA4: "On summon: take 3 damage",
-  NHEX: "On summon: deal 6 damage to the opponent", NSPR: "While on the field: max mana +1. On summon: draw 2",
+  NHEX: "On summon: deal 5 damage to the opponent", NSPR: "While on the field: max mana +1. On summon: draw 2",
   NMD2: "On summon: draw 1 card", NMD4: "On summon: draw 2 cards", NMD6: "On summon: draw 5 cards",
   MIMIC: "Summoned to the opponent's field by a failed treasure chest",
   MIMIC2: "While this card is on the field, neither player can use Treasure Chests (Attune - Arcane still works)",
