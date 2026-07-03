@@ -7,6 +7,7 @@
 import { DB } from "../shared/cards";
 import { zoomCard } from "./anim";
 import { cardName, getLang, onLangChange, t } from "../i18n";
+import { logToEn } from "../shared/logEn";
 
 type Entry =
   | { kind: "header"; turn: number; name: string; isBot: boolean }
@@ -56,7 +57,8 @@ export class GameLog {
     }
     const d = document.createElement("div");
     d.className = "ln";
-    d.innerHTML = getLang() === "ja" ? entry.ja : entry.ko;
+    const lang = getLang();
+    d.innerHTML = lang === "ja" ? entry.ja : lang === "en" ? logToEn(entry.ko) : entry.ko;
     this.localizeCards(d);
     return d;
   }

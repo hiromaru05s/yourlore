@@ -9,6 +9,7 @@ import { frameFor, FRAME_BACK } from "../shared/cards";
 import { cardEl } from "./cardView";
 import { bindZoom } from "./anim";
 import { t, getLang } from "../i18n";
+import { logToEn } from "../shared/logEn";
 
 const MON_SLOTS = 9;
 const ST_SLOTS = 9;
@@ -114,7 +115,7 @@ export class GameView {
     const hint = this.q("targetHint");
     if (pending && myTurn && (pending.kind === "oppMon" || pending.kind === "myMon")) {
       hint.style.display = "block";
-      hint.innerHTML = `▸ ${getLang() === "ja" ? pending.hintJa : pending.hint}` + (pending.allowCancel ? ` &nbsp; <a id="cancelTarget" style="cursor:pointer">[${t("common.cancel")}]</a>` : "");
+      hint.innerHTML = `▸ ${getLang() === "ja" ? pending.hintJa : getLang() === "en" ? logToEn(pending.hint) : pending.hint}` + (pending.allowCancel ? ` &nbsp; <a id="cancelTarget" style="cursor:pointer">[${t("common.cancel")}]</a>` : "");
       const c = hint.querySelector("#cancelTarget") as HTMLElement | null;
       if (c) c.onclick = () => this.h.onChooseTarget(null);
     } else {

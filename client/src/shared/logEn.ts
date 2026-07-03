@@ -1,0 +1,141 @@
+// ============================================================
+// LORE — English battle-log translator.
+// Engine logs are authored in KO/JA; for EN we translate the Korean
+// HTML at render time with ordered phrase rules. Card-name tags
+// (<b class="log-card">) are protected and re-localized separately.
+// ============================================================
+
+const R: [RegExp, string][] = [
+  // ---- full/long phrases first (order matters) ----
+  [/고정 마켓/g, "market:"],
+  [/제시 마켓/g, "offer:"],
+  [/구매 \((\d+)\)/g, "bought ($1)"],
+  [/\[묘지로\]/g, "[→ graveyard]"],
+  [/이 카드 폐기\(덱에서 제거\)|이 카드 폐기/g, "culled (removed from deck)"],
+  [/고코스트 폐기 → /g, "discarded a high-cost card → "],
+  [/함정을 세트 \(정체는 비공개\)/g, "set a trap (face-down)"],
+  [/제시를 무료 갱신/g, "refreshed the offer for free"],
+  [/제시 갱신 \((\d+) 마나\)/g, "refreshed the offer ($1 mana)"],
+  [/보물상자 사용 봉인 중/g, "Treasure Chests are sealed"],
+  [/보물상자 → 묘지, (\d+)장 드로우/g, "chest → graveyard, drew $1"],
+  [/패에 보물상자가 없음/g, "no Treasure Chest in hand"],
+  [/보물상자 →/g, "Treasure Chest →"],
+  [/꽝! 상대 필드에 마스터 미믹\((\d+)\/(\d+)\) 소환 \((\d+)%\)/g, "Dud! Master Mimic ($1/$2) summoned to the enemy field ($3%)"],
+  [/꽝! 상대 필드에 미믹\((\d+)\/(\d+)\) 소환/g, "Dud! Mimic ($1/$2) summoned to the enemy field"],
+  [/소환 반동: 자신에게 (\d+) 데미지/g, "summon recoil: $1 damage to self"],
+  [/소환 효과: (\d+)장 드로우/g, "on summon: drew $1"],
+  [/소환 강화:/g, "summon boost:"],
+  [/생명의 순환: 최대 마나/g, "Cycle of Life: max mana"],
+  [/발아! 최대 마나/g, "Sprouted! max mana"],
+  [/축복! 최대 마나 \+(\d+) 추가/g, "Blessing! max mana +$1 extra"],
+  [/길드의 정보망 획득 — 턴 시작시 드로우 \+1 \(영구, (\d+)%\)/g, "gained Guild Network — +1 draw at turn start (permanent, $1%)"],
+  [/마법·함정 존이 가득 차 정보망을 놓쳤다/g, "spell/trap zone full — the Network was lost"],
+  [/경보! 상대 필드에 초급·중급 암살자 소환 \((\d+)%\)/g, "Alarm! Novice & Adept Assassins summoned to the enemy field ($1%)"],
+  [/대참사! 상대 필드에 초급·중급·상급 암살자 소환 \((\d+)%\)/g, "Disaster! Novice, Adept & Elite Assassins summoned to the enemy field ($1%)"],
+  [/지옥: 자신 (\d+) \/ 상대 (\d+)/g, "Inferno: self $1 / enemy $2"],
+  [/\s*의 직접 공격/g, " direct attack"],
+  [/직접 공격/g, "direct attack"],
+  [/\[관통\]/g, "[pierce]"],
+  [/\[출혈\]/g, "[bleed]"],
+  [/\[포식 시너지\]/g, "[Devour synergy]"],
+  [/(\d+) 관통/g, "$1 pierce"],
+  [/통하지 않음/g, "no effect"],
+  [/공격이 (\d+)로 절반/g, "attack halved to $1"],
+  [/공격 무효화/g, "attack negated"],
+  [/공격 무효/g, "attack negated"],
+  [/무효화/g, "negated"],
+  [/\(소생 실패\)/g, "(revive failed)"],
+  [/탈취\(소생\)/g, "stolen (revived)"],
+  [/파괴 \+ 게임에서 제외/g, "destroyed + exiled from the game"],
+  [/발동 \(지속 영구\)/g, "activated (permanent)"],
+  [/발동 \(지속 (\d+)턴\)/g, "activated ($1 turns)"],
+  [/효과 종료/g, "effect ended"],
+  [/매 턴 효과/g, "turn effects"],
+  [/대상 없음/g, "no target"],
+  [/파괴할 함정 없음/g, "no trap to destroy"],
+  [/파괴할 상대 영구마법이 없습니다/g, "no enemy enchantment to destroy"],
+  [/상대 영구마법 (\d+)장 파괴/g, "destroyed $1 enemy enchantment(s)"],
+  [/상대 세트 함정 (\d+)장 파괴/g, "destroyed $1 enemy set trap(s)"],
+  [/상대의 세트 함정 (\d+)장 파괴|상대의 세트 함정을? (\d+)장 파괴/g, "destroyed $1 enemy set trap(s)"],
+  [/상대 함정 (\d+)장 파괴/g, "destroyed $1 enemy trap(s)"],
+  [/상대 몬스터 (\d+)체 \+ 마법\/함정 (\d+)장 파괴/g, "destroyed $1 enemy monster(s) + $2 spell/trap"],
+  [/상대 카드 (\d+)장 무작위 파괴/g, "destroyed $1 random enemy card(s)"],
+  [/상대 몬스터 (\d+)체 파괴/g, "destroyed $1 enemy monster(s)"],
+  [/공격 (\d+) 이하 상대 몬스터 전멸/g, "wiped enemy monsters with ATK $1 or less"],
+  [/덱에서 랜덤 몬스터 (\d+)체 무료 소환|덱에서 (\d+)체 무료 소환/g, "summoned $1 random monsters from deck for free"],
+  [/덱\/묘지에서 몬스터 (\d+)체 소환/g, "summoned $1 monster(s) from deck/graveyard"],
+  [/덱에서/g, "from deck"],
+  [/무료 소환/g, "summoned for free"],
+  [/무작위 소환/g, "randomly summoned"],
+  [/자신을 복제 소환/g, "cloned itself"],
+  [/복제 실패/g, "clone failed"],
+  [/마나(\d+) 지불 → 무한의 기사\((\d+)\/(\d+)\) 소환/g, "paid $1 mana → summoned Infinite Knight ($2/$3)"],
+  [/마나가 부족해 기사를 소환하지 못함/g, "not enough mana for the knight"],
+  [/마나(\d+) → 방어 \+(\d+), 체력 \+(\d+)/g, "mana $1 → DEF +$2, HP +$3"],
+  [/상대 체력 홀수 → (\d+) 데미지/g, "enemy HP odd → $1 damage"],
+  [/상대 체력 짝수 → (\d+)장 드로우/g, "enemy HP even → drew $1"],
+  [/(\d+)%: 상대 덱 맨 위 (\d+)장 제외/g, "$1%: exiled top $2 of the enemy deck"],
+  [/(\d+)%: 자신 최대 마나 -(\d+)/g, "$1%: your max mana -$2"],
+  [/(\d+)% 성공: 상대 최대 마나 -(\d+)/g, "$1% success: enemy max mana -$2"],
+  [/(\d+)% 성공: 최대 체력 \+(\d+)/g, "$1% success: max HP +$2"],
+  [/(\d+)% 성공 → /g, "$1% success → "],
+  [/(\d+)% 성공: /g, "$1% success: "],
+  [/(\d+)회째! 이후 피격 시마다 체력 \+(\d+)/g, "use #$1! now restores +$2 HP when hit"],
+  [/상대는 이후 매 턴 (\d+) 데미지\(중첩 불가\)/g, "opponent now takes $1 damage each turn (no stacking)"],
+  [/아군 전체 공격 \+(\d+)\(이번 턴\) \+ 공격 \+(\d+)\(영구\)/g, "all allies ATK +$1 (this turn) + ATK +$2 (permanent)"],
+  [/아군 전체 공격 \+(\d+)/g, "all allies ATK +$1"],
+  [/\(이번 턴\)/g, "(this turn)"],
+  [/\(영구\)/g, "(permanent)"],
+  [/체력 (\d+)\+ → 최대 체력 \+(\d+)/g, "HP $1+ → max HP +$2"],
+  [/체력 완전 회복/g, "fully restored HP"],
+  [/체력 (\d+) 회복/g, "restored $1 HP"],
+  [/체력 \+(\d+) 회복/g, "restored +$1 HP"],
+  [/최대 체력/g, "max HP"],
+  [/최대 마나/g, "max mana"],
+  [/\(체력 (\d+)\)/g, "(HP $1)"],
+  [/체력/g, "HP"],
+  [/(\d+)장 드로우/g, "drew $1"],
+  [/드로우/g, "draw"],
+  [/(\d+) 데미지/g, "$1 damage"],
+  [/데미지/g, "damage"],
+  [/자신에게/g, "to self:"],
+  [/상대에게/g, "to the opponent:"],
+  [/의 공격 -(\d+)/g, " ATK -$1"],
+  [/의 방어 -(\d+)/g, " DEF -$1"],
+  [/공격 \+(\d+)/g, "ATK +$1"],
+  [/방어 \+(\d+)/g, "DEF +$1"],
+  [/공격 -(\d+)/g, "ATK -$1"],
+  [/방어 -(\d+)/g, "DEF -$1"],
+  [/\(공(\d+)\/방(\d+)\)/g, "($1/$2)"],
+  [/\(공(\d+)\)/g, "(ATK $1)"],
+  [/\(방(\d+)\)/g, "(DEF $1)"],
+  [/소환 조건 미충족/g, "summon requirement not met"],
+  [/몬스터 존이 가득 찼습니다 \(최대 (\d+)\)/g, "monster zone is full (max $1)"],
+  [/마법·함정 존이 가득 찼습니다 \(최대 (\d+)\)/g, "spell/trap zone is full (max $1)"],
+  [/소환/g, "summoned"],
+  [/파괴/g, "destroyed"],
+  [/함정/g, "trap"],
+  [/기권/g, "surrendered"],
+  [/자신/g, "self"],
+  [/상대/g, "opponent"],
+  [/승리!?/g, "wins!"],
+];
+
+const TRIBE_EN: Record<string, string> = { "고독": "Solitary", "고귀": "Noble", "포식": "Devour", "귀족": "Aristocrat", "시초": "Origin" };
+
+/** Translate a Korean log/hint HTML string to English (card-name tags preserved). */
+export function logToEn(html: string): string {
+  // protect card-name tags & player-name spans
+  const keep: string[] = [];
+  let s = html.replace(/<b class="log-card"[^>]*>.*?<\/b>|<span class="t">.*?<\/span>/g, (m) => {
+    keep.push(m); return `\u0001${keep.length - 1}\u0002`;
+  });
+  // tribe synergy banner (needs name mapping)
+  s = s.replace(/\[(고독|고귀|포식|귀족|시초)\] 동족 (\d+)마리 시너지!/g, (_m, tr, n) => `[${TRIBE_EN[tr] ?? tr}] ${n}-piece tribe synergy!`);
+  for (const [re, en] of R) {
+    if (typeof en === "string") s = s.replace(re, en);
+  }
+  // restore protected tags
+  s = s.replace(/\u0001(\d+)\u0002/g, (_m, i) => keep[Number(i)]);
+  return s;
+}

@@ -5,6 +5,7 @@
 // (OnlineController lives in ./online and reuses BaseController.)
 // ============================================================
 import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
+import { logToEn } from "../shared/logEn";
 import { createGame, reduce } from "../shared/engine";
 import { botDecide } from "../shared/bot";
 import { frameFor, DB, STARTERS } from "../shared/cards";
@@ -129,7 +130,7 @@ export abstract class BaseController implements BoardHandlers {
         } else if (e.type === "damage") A.hpFeedback(sideOf(e.player), "dmg", e.amount);
         else if (e.type === "heal") A.hpFeedback(sideOf(e.player), "heal", e.amount);
         else if (e.type === "draw" && e.player === this.you) A.animateDraw(this.view.logEl.ownerDocument!.getElementById("hand") as HTMLElement, e.count);
-        else if (e.type === "treasure" && !e.isBot && e.player === this.you) treasureModal(e.kind, getLang() === "ja" ? e.textJa : e.text);
+        else if (e.type === "treasure" && !e.isBot && e.player === this.you) treasureModal(e.kind, getLang() === "ja" ? e.textJa : getLang() === "en" ? logToEn(e.text) : e.text);
         else if (e.type === "attack" || e.type === "destroy") animMs = Math.max(animMs, 650);
       }
     }
