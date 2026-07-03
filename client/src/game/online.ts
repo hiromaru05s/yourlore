@@ -9,6 +9,7 @@ import type { GameClientMsg, GameServerMsg } from "../shared/protocol";
 import { Sock } from "../net/socket";
 import { BaseController, type ControllerExits } from "./controller";
 import { closeOverlay, noticeModal } from "../ui/modal";
+import { t } from "../i18n";
 
 const MAX_RETRIES = 6;
 
@@ -39,8 +40,10 @@ export class OnlineController extends BaseController {
     if (this.closing || this.state?.over) return;
     if (this.retries < MAX_RETRIES) {
       this.retries++;
+      this.banner(t("net.reconnecting"));
       setTimeout(() => { if (!this.closing && !this.state?.over) this.connect(); }, 800 * this.retries);
     } else {
+      this.banner(null);
       noticeModal("연결 끊김", "상대 또는 서버와의 연결이 끊어졌습니다.", "홈으로", () => this.exits.onHome());
     }
   }
@@ -48,10 +51,13 @@ export class OnlineController extends BaseController {
   private onServer(msg: GameServerMsg): void {
     if (msg.type === "init") {
       this.started = true;
+      this.banner(null); // reconnected & resynced
       closeOverlay();
       this.applyResult({ state: msg.state, events: msg.events }, false);
     } else if (msg.type === "update") {
       this.applyResult({ state: msg.state, events: msg.events });
+    } else if (msg.type === "oppConn") {
+      this.banner(msg.connected ? null : t("net.oppwait"));
     } else if (msg.type === "opponentLeft") {
       // server already sent the deciding update; just make sure the result shows
       if (this.state?.over) this.showWin();
@@ -69,5 +75,18 @@ export class OnlineController extends BaseController {
   private startHb(): void { this.stopHb(); this.hb = setInterval(() => this.sock.send({ type: "ping" }), 20000); }
   private stopHb(): void { if (this.hb) clearInterval(this.hb); this.hb = undefined; }
 
-  destroy(): void { this.closing = true; this.stopHb(); this.sock?.close(); super.destroy(); }
+  /** Non-blocking connection banner at the top of the board (null hides it). */
+  private banner(text: string | null): void {
+    let el = document.getElementById("net-banner");
+    if (!text) { el?.remove(); return; }
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "net-banner";
+      el.style.cssText = "position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:999;background:#1d2735;color:#ffd166;border:1px solid #ffd16655;border-radius:8px;padding:8px 16px;font-size:14px;box-shadow:0 4px 16px rgba(0,0,0,.4)";
+      document.body.appendChild(el);
+    }
+    el.textContent = text;
+  }
+
+  destroy(): void { this.closing = true; this.stopHb(); this.banner(null); this.sock?.close(); super.destroy(); }
 }

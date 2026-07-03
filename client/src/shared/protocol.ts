@@ -25,6 +25,7 @@ export type GameServerMsg =
   | { type: "init"; you: Side; state: GameState; events: GameEvent[] }
   | { type: "update"; state: GameState; events: GameEvent[] }
   | { type: "opponentLeft" }
+  | { type: "oppConn"; connected: boolean } // opponent dropped / came back (reconnect window)
   | { type: "error"; message: string }
   | { type: "pong" };
 

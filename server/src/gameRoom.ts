@@ -75,6 +75,9 @@ export class GameRoom {
     this.sockets.set(sd, server);
     server.addEventListener("message", (e) => this.onMsg(sd, server, e));
     server.addEventListener("close", () => this.onClose(sd, server));
+    // tell the other player their opponent is (back) online
+    const other = this.sockets.get((1 - sd) as Side);
+    if (other && ft) { try { this.send(other, { type: "oppConn", connected: true }); } catch { /* dropped */ } }
     return new Response(null, { status: 101, webSocket: client });
   }
 
@@ -123,6 +126,9 @@ export class GameRoom {
     this.sockets.delete(side);
     const g = this.game;
     if (!g || g.over) return;
+    // tell the other player we're waiting for a reconnect
+    const other = this.sockets.get((1 - side) as Side);
+    if (other) { try { this.send(other, { type: "oppConn", connected: false }); } catch { /* dropped */ } }
     // grace period: wait for a reconnect before declaring a forfeit
     const t = setTimeout(() => {
       this.forfeitTimers.delete(side);
@@ -136,7 +142,7 @@ export class GameRoom {
         this.send(remaining, { type: "opponentLeft" });
       }
       void this.recordResult();
-    }, 25000);
+    }, 30000);
     this.forfeitTimers.set(side, t);
   }
 
