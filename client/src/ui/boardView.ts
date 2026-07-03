@@ -229,14 +229,19 @@ export class GameView {
         <span class="hpbar" id="hpbar-${isMe ? "me" : "opp"}"><i style="width:${hpPct}%"></i></span>
       </span>
       <span class="mana"><span class="lbl">${t("game.mana")}</span><span class="pips">${pips.join("")}</span><span class="mnum">${manaTxt}</span></span>`;
-    // 덱 구성 버튼: 내 쪽은 전체(덱+패+묘지+필드+함정+영구물), 상대는 공개 정보(집계 멀티셋+묘지+필드+영구물)
+    // 덱 구성 버튼 (마나 표시 아래): 내 쪽은 전체, 상대는 공개 정보(집계 멀티셋+묘지+필드+영구물)
+    const manaEl = bar.querySelector(".mana")!;
+    const wrap = document.createElement("span");
+    wrap.style.cssText = "display:inline-flex;flex-direction:column;align-items:flex-end;gap:3px";
+    manaEl.replaceWith(wrap);
+    wrap.appendChild(manaEl);
     const dbtn = document.createElement("button");
     dbtn.className = "btn btn-ghost";
-    dbtn.style.cssText = "margin-left:8px;padding:2px 9px;font-size:11px;line-height:16px";
+    dbtn.style.cssText = "padding:1px 9px;font-size:11px;line-height:16px";
     const cards = this.collectionOf(p, isMe);
-    dbtn.textContent = `📚 ${t("deck.view")} ${cards.length}`;
+    dbtn.textContent = `${t("deck.view")} ${cards.length}`;
     dbtn.onclick = () => cardPicker(`${p.name} — ${t("deck.view")} (${cards.length})`, cards, () => { /* browse only */ });
-    bar.querySelector(".pname")!.appendChild(dbtn);
+    wrap.appendChild(dbtn);
     return bar;
   }
 
