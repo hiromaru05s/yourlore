@@ -5,7 +5,7 @@
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { effMaxMana, supplyRange, playCost, buyCost } from "../shared/engine";
-import { frameFor, FRAME_BACK, TRIBES } from "../shared/cards";
+import { frameFor, FRAME_BACK, TRIBES, DB as DBC } from "../shared/cards";
 import { cardPicker } from "./modal";
 import { cardEl } from "./cardView";
 import { bindZoom } from "./anim";
@@ -229,7 +229,33 @@ export class GameView {
         <span class="hpbar" id="hpbar-${isMe ? "me" : "opp"}"><i style="width:${hpPct}%"></i></span>
       </span>
       <span class="mana"><span class="lbl">${t("game.mana")}</span><span class="pips">${pips.join("")}</span><span class="mnum">${manaTxt}</span></span>`;
+    // 덱 구성 버튼: 내 쪽은 전체(덱+패+묘지+필드+함정+영구물), 상대는 공개 정보(집계 멀티셋+묘지+필드+영구물)
+    const dbtn = document.createElement("button");
+    dbtn.className = "btn btn-ghost";
+    dbtn.style.cssText = "margin-left:8px;padding:2px 9px;font-size:11px;line-height:16px";
+    const cards = this.collectionOf(p, isMe);
+    dbtn.textContent = `📚 ${t("deck.view")} ${cards.length}`;
+    dbtn.onclick = () => cardPicker(`${p.name} — ${t("deck.view")} (${cards.length})`, cards, () => { /* browse only */ });
+    bar.querySelector(".pname")!.appendChild(dbtn);
     return bar;
+  }
+
+  /** Full owned-card list for the deck-view button (opponent side uses only public info). */
+  private collectionOf(p: PlayerState, isMe: boolean): CardInst[] {
+    const fieldCards = p.field as unknown as CardInst[];
+    const enchCards = p.enchants.map((e) => e.card);
+    let pool: CardInst[];
+    if (isMe) {
+      pool = [...p.deck, ...p.hand, ...p.discard, ...fieldCards, ...p.traps.map((tr) => tr.card), ...enchCards];
+    } else if (p.collection) {
+      // online: server-provided aggregate of hidden zones + visible public zones
+      const hidden = p.collection.map((id, i) => ({ uid: `v_${i}`, ...DBC[id] })).filter((c) => c.id);
+      pool = [...hidden, ...p.discard, ...fieldCards, ...enchCards];
+    } else {
+      // bot mode: full state is local; same public-info view as online
+      pool = [...p.hand, ...p.deck, ...p.traps.map((tr) => tr.card), ...p.discard, ...fieldCards, ...enchCards];
+    }
+    return pool.filter((c) => c && c.id !== "HIDDEN").sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
   }
 
   private renderMarket(g: GameState, me: PlayerState, myTurn: boolean): void {

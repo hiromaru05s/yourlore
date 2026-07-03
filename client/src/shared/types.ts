@@ -94,6 +94,7 @@ export interface PlayerState {
   defendHeal: number; // heal this much whenever this player is attacked
   manaGainNext: number; // max mana to gain at the start of this player's next turn
   skipNext: boolean; // if true, this player's next turn is skipped
+  collection?: string[]; // redacted view only: sorted card-id multiset of hidden zones (public via buy log)
 }
 
 export interface Pending {

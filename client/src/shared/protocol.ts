@@ -40,6 +40,9 @@ export function redactFor(state: GameState, you: Side): GameState {
   const placeholder = (uid: string): GameState["players"][0]["hand"][0] => ({
     uid, id: "HIDDEN", t: "mon", cost: 0, name: "", text: "",
   });
+  // the multiset of hidden cards is public knowledge (starter deck + buy log),
+  // so expose it as a sorted aggregate — no order/position information leaks
+  opp.collection = [...opp.hand, ...opp.deck, ...opp.traps.map((tr) => tr.card)].map((c) => c.id).sort();
   opp.hand = opp.hand.map((c) => placeholder(c.uid));
   opp.deck = opp.deck.map((c) => placeholder(c.uid));
   // discard is public (purchases are shown in the log too); only hand/deck/traps hidden
