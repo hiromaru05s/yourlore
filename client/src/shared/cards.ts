@@ -751,6 +751,15 @@ const NEW_CARDS6: CardDef[] = [
     text: "소환시: 자신의 덱+묘지가 8장 이하면 공격 +4", textJa: "召喚時: 自分のデッキ+墓地が8枚以下なら攻撃+4" },
   { id: "TRAPSMITH", t: "mon", cost: 4, atk: 2, def: 4, onSummon: "trapsmithBuff", name: "함정 기술자", nameJa: "罠職人",
     text: "소환시: 덱·묘지·세트한 함정 1장당 +1/+1", textJa: "召喚時: デッキ・墓地・セットした罠1枚につき+1/+1" },
+  // ---- 극단 스탯 메타 카운터 ----
+  { id: "WALLBREAK1", t: "spell", cost: 2, play: 1, act: "destroyMon", name: "성벽 파쇄", nameJa: "城壁破砕",
+    text: "공격력 1 이하의 적 몬스터 1체 파괴 (시전 1)", textJa: "攻撃力1以下の敵モンスター1体を破壊 (発動1)" },
+  { id: "WALLBREAK2", t: "spell", cost: 4, act: "destroyMon", name: "공성 붕괴", nameJa: "攻城崩壊",
+    text: "공격력 2 이하의 적 몬스터를 모두 파괴", textJa: "攻撃力2以下の敵モンスターを全て破壊" },
+  { id: "SNIPE1", t: "spell", cost: 2, play: 1, act: "destroyMon", name: "저격", nameJa: "狙撃",
+    text: "방어력 1 이하의 적 몬스터 1체 파괴 (시전 1)", textJa: "防御力1以下の敵モンスター1体を破壊 (発動1)" },
+  { id: "SNIPE2", t: "spell", cost: 4, act: "destroyMon", name: "일제 사격", nameJa: "一斉射撃",
+    text: "방어력 2 이하의 적 몬스터를 모두 파괴", textJa: "防御力2以下の敵モンスターを全て破壊" },
 ];
 for (const c of NEW_CARDS6) { DB[c.id] = c; }
 

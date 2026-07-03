@@ -241,6 +241,10 @@ export function greedyDecide(g: GameState): Action {
     if (c.id === "HERMIT" && p.field.length > 0) return false;
     // 폐기 경제 카드: 대상이 있어야 시전
     if (c.act === "exilePick" && p.discard.length === 0) return false;
+    if (c.id === "WALLBREAK1" && !o.field.some((m) => effAtk(o, m) <= 1)) return false;
+    if (c.id === "WALLBREAK2" && !o.field.some((m) => effAtk(o, m) <= 2)) return false;
+    if (c.id === "SNIPE1" && !o.field.some((m) => effDef(o, m) <= 1)) return false;
+    if (c.id === "SNIPE2" && !o.field.some((m) => effDef(o, m) <= 2)) return false;
     if (c.id === "SCRAPPER" && [...p.deck, ...p.discard].filter((x) => x.cost <= 1).length < 2) return false;
     // blood magic hurts the caster — don't suicide
     if (c.id === "CATALYST" && p.hp <= 6) return false;

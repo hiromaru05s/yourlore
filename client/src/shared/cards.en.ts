@@ -45,6 +45,7 @@ const NAMES: Record<string, string> = {
   WORLD_BLESS: "Blessing of the World Tree",
   MEDITATE: "Meditation", PRAYER: "Sanctuary Prayer", HERMIT: "Hermit's Rest",
   LUCKY_CHEST: "Lucky Treasure Chest", GUILD_CHEST: "Assassin Guild's Chest", GUILD_EYE: "Guild Network",
+  WALLBREAK1: "Wall Smash", WALLBREAK2: "Siege Collapse", SNIPE1: "Snipe", SNIPE2: "Volley Fire",
   FURNACE: "Blast Furnace", PURGE_TOUCH: "Purging Touch", SCRAPPER: "Scrap Collector",
   HORDE: "Horde Standard-Bearer", ELITE: "Elite Knight-Captain", TRAPSMITH: "Trapsmith",
   // traps
@@ -118,6 +119,10 @@ const TEXTS: Record<string, string> = {
   LUCKY_CHEST: "10%: max mana +3 & draw 2 / 40%: max mana +1 / 30%: max HP +8 / 5%: max HP +12 / 15%: dud (Master Mimic 10/3 on enemy field)",
   GUILD_CHEST: "10%: max mana +3 / 10%: +1 draw at turn start (permanent) / 20%: max mana +2 / 10%: max mana +1 / 10%: max HP +10 / 20%: Novice & Adept Assassins on enemy field / 20%: Novice, Adept & Elite Assassins + take 10 damage (Cast 3)",
   GUILD_EYE: "Permanent: draw 1 extra card at the start of your turn",
+  WALLBREAK1: "Destroy 1 enemy monster with ATK 1 or less (Cast 1)",
+  WALLBREAK2: "Destroy all enemy monsters with ATK 2 or less",
+  SNIPE1: "Destroy 1 enemy monster with DEF 1 or less (Cast 1)",
+  SNIPE2: "Destroy all enemy monsters with DEF 2 or less",
   FURNACE: "Permanent: at the start of each of your turns, exile the lowest-cost card in your graveyard from the game",
   PURGE_TOUCH: "Pick a card in your graveyard, exile it from the game + draw 1 (Cast 1)",
   SCRAPPER: "Exile 2 cards of cost 1 or less from your deck/graveyard -> max mana +1 (Cast 2)",
