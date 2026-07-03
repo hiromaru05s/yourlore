@@ -18,6 +18,7 @@ export class OnlineController extends BaseController {
   private started = false;
   private closing = false;
   private retries = 0;
+  private hb?: ReturnType<typeof setInterval>;
 
   constructor(root: HTMLElement, you: Side, roomId: string, exits: ControllerExits) {
     super(root, you, exits);
@@ -27,13 +28,14 @@ export class OnlineController extends BaseController {
 
   private connect(): void {
     this.sock = new Sock<GameServerMsg, GameClientMsg>(`/ws/room/${this.roomId}`, {
-      onOpen: () => { this.retries = 0; this.sock.send({ type: "ready" }); },
+      onOpen: () => { this.retries = 0; this.sock.send({ type: "ready" }); this.startHb(); },
       onMessage: (msg) => this.onServer(msg),
       onClose: () => this.onSockClose(),
     });
   }
 
   private onSockClose(): void {
+    this.stopHb();
     if (this.closing || this.state?.over) return;
     if (this.retries < MAX_RETRIES) {
       this.retries++;
@@ -63,5 +65,9 @@ export class OnlineController extends BaseController {
     this.sock.send({ type: "action", action });
   }
 
-  destroy(): void { this.closing = true; this.sock?.close(); super.destroy(); }
+  // heartbeat: keep the WS path warm through idle thinking time (edge/NAT timeouts kill silent sockets)
+  private startHb(): void { this.stopHb(); this.hb = setInterval(() => this.sock.send({ type: "ping" }), 20000); }
+  private stopHb(): void { if (this.hb) clearInterval(this.hb); this.hb = undefined; }
+
+  destroy(): void { this.closing = true; this.stopHb(); this.sock?.close(); super.destroy(); }
 }

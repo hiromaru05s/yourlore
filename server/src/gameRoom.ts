@@ -14,6 +14,7 @@ interface PlayerRef { id: string; name: string; }
 
 export class GameRoom {
   private env: Env;
+  private state: DurableObjectState;
   private players: [PlayerRef, PlayerRef] | null = null;
   private game: GameState | null = null;
   private initEvents: GameEvent[] = [];
@@ -22,12 +23,24 @@ export class GameRoom {
   private readied = new Set<Side>();
   private recorded = false;
 
-  constructor(_state: DurableObjectState, env: Env) {
+  constructor(state: DurableObjectState, env: Env) {
+    this.state = state;
     this.env = env;
+  }
+
+  /** Persist the room so deploys / DO evictions don't kill live games (best effort). */
+  private persist(): void {
+    void this.state.storage.put("room", { players: this.players, game: this.game, recorded: this.recorded }).catch(() => { /* best effort */ });
+  }
+  private async restore(): Promise<void> {
+    if (this.game) return;
+    const r = await this.state.storage.get<{ players: [PlayerRef, PlayerRef]; game: GameState; recorded: boolean }>("room");
+    if (r?.game) { this.players = r.players; this.game = r.game; this.recorded = r.recorded ?? false; }
   }
 
   async fetch(req: Request): Promise<Response> {
     const url = new URL(req.url);
+    await this.restore(); // recover after a deploy / eviction
 
     // provisioning call from the matchmaker
     if (url.pathname.endsWith("/setup")) {
@@ -41,6 +54,7 @@ export class GameRoom {
       });
       this.game = res.state;
       this.initEvents = res.events;
+      this.persist();
       return new Response("ok");
     }
 
@@ -93,6 +107,7 @@ export class GameRoom {
     }
     const res = reduce(g, action);
     this.game = res.state;
+    this.persist();
     this.broadcast(res.events);
     if (this.game.over) void this.recordResult();
   }
@@ -114,6 +129,7 @@ export class GameRoom {
       if (this.sockets.has(side) || !this.game || this.game.over) return;
       const winner = (1 - side) as Side;
       this.game.over = true; this.game.phase = "over"; this.game.winner = winner;
+      this.persist();
       const remaining = this.sockets.get(winner);
       if (remaining) {
         this.send(remaining, { type: "update", state: redactFor(this.game, winner), events: [{ type: "win", winner }] });
