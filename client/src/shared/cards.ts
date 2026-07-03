@@ -721,6 +721,25 @@ export const CHEST_ODDS = {
   en: { title: "Golden chest odds (25% each)", rows: ["Max mana +1 — 25%", "HP +3 — 25%", "Max HP +5 — 25%", "Dud: Mimic (3/2) on enemy field — 25%"] },
 };
 
+// ============================================================
+// NEW CARDS 6 — 덱빌딩 강화: 폐기(압축) 경제 + 덱 스케일링 페이오프
+// ============================================================
+const NEW_CARDS6: CardDef[] = [
+  { id: "FURNACE", t: "spell", cost: 3, ench: "furnace", val: 99, name: "용광로", nameJa: "溶鉱炉",
+    text: "영구: 자신의 턴 시작마다 묘지에서 가장 코스트가 낮은 카드 1장을 게임에서 제외", textJa: "永続: 自分のターン開始時、墓地から最もコストの低いカード1枚をゲームから除外" },
+  { id: "PURGE_TOUCH", t: "spell", cost: 2, play: 1, act: "exilePick", name: "정화의 손길", nameJa: "浄化の手",
+    text: "묘지에서 카드 1장을 골라 게임에서 제외 + 1장 드로우 (시전 1)", textJa: "墓地からカード1枚を選びゲームから除外 + 1枚ドロー (発動1)" },
+  { id: "SCRAPPER", t: "spell", cost: 3, play: 2, name: "고철 수집상", nameJa: "スクラップ収集家",
+    text: "덱·묘지의 코스트 1 이하 카드 2장을 게임에서 제외 → 최대 마나 +1 (시전 2)", textJa: "デッキ・墓地のコスト1以下のカード2枚をゲームから除外 → 最大マナ+1 (発動2)" },
+  { id: "HORDE", t: "mon", cost: 4, atk: 3, def: 3, onSummon: "hordeBuff", name: "군단의 기수", nameJa: "軍団の旗手",
+    text: "소환시: 자신의 덱+묘지가 20장 이상이면 +3/+3", textJa: "召喚時: 自分のデッキ+墓地が20枚以上なら+3/+3" },
+  { id: "ELITE", t: "mon", cost: 4, atk: 2, def: 4, onSummon: "eliteBuff", name: "정예 기사단장", nameJa: "精鋭騎士団長",
+    text: "소환시: 자신의 덱+묘지가 8장 이하면 공격 +4", textJa: "召喚時: 自分のデッキ+墓地が8枚以下なら攻撃+4" },
+  { id: "TRAPSMITH", t: "mon", cost: 4, atk: 2, def: 4, onSummon: "trapsmithBuff", name: "함정 기술자", nameJa: "罠職人",
+    text: "소환시: 덱·묘지·세트한 함정 1장당 +1/+1", textJa: "召喚時: デッキ・墓地・セットした罠1枚につき+1/+1" },
+];
+for (const c of NEW_CARDS6) { DB[c.id] = c; }
+
 // English localization (names/texts) — applied last so it reflects final balance patches
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 

@@ -306,6 +306,13 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
           ctx.log(`  └ 축복! 최대 마나 +2 추가 (${cur.maxMana})`, `  └ 祝福！最大マナ +2 追加 (${cur.maxMana})`);
         }
       }
+      // 용광로: 자신의 턴 시작마다 묘지의 최저 코스트 카드 1장을 게임에서 제외 (자동 덱 압축)
+      if (e.card.ench === "furnace" && ownerTurn && !g.over && pl.discard.length > 0) {
+        let mi = 0;
+        for (let i = 1; i < pl.discard.length; i++) if (pl.discard[i].cost < pl.discard[mi].cost) mi = i;
+        const fc = pl.discard.splice(mi, 1)[0];
+        ctx.log(`<span class="t">${cn(e.card)}</span> ${cn(fc)} 게임에서 제외`, `<span class="t">${cn(e.card)}</span> ${cn(fc)} をゲームから除外`);
+      }
       // 생명의 성소 / 세계수의 심장: 자신의 턴마다 최대 체력 +val2 (회복 포함 → 생명의 순환과 시너지)
       if ((e.card.ench === "growHp" || e.card.ench === "growHpMana") && ownerTurn && !g.over) {
         const amt = e.card.val2 || 0;
@@ -610,6 +617,24 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       } else ctx.log("  └ 대상 없음", "  └ 対象なし");
       break;
     case "refresh": rollSupply(g, p); ctx.log("  └ 제시를 무료 갱신", "  └ 提示を無料更新"); break;
+    case "hordeBuff": { // 군단의 기수: 덱+묘지 20장 이상이면 +3/+3
+      const hn = p.deck.length + p.discard.length;
+      if (hn >= 20) { m.atkMod = (m.atkMod || 0) + 3; m.defMod = (m.defMod || 0) + 3; ctx.log(`  └ 군단(${hn}장) 결집: +3/+3`, `  └ 軍団(${hn}枚)結集: +3/+3`); }
+      else ctx.log(`  └ 덱+묘지 ${hn}장 — 군단 미달(20장)`, `  └ デッキ+墓地${hn}枚 — 軍団未達(20枚)`);
+      break;
+    }
+    case "eliteBuff": { // 정예 기사단장: 덱+묘지 12장 이하면 공격 +4
+      const en2 = p.deck.length + p.discard.length;
+      if (en2 <= 8) { m.atkMod = (m.atkMod || 0) + 4; ctx.log(`  └ 정예(${en2}장) 편성: 공격 +4`, `  └ 精鋭(${en2}枚)編成: 攻撃+4`); }
+      else ctx.log(`  └ 덱+묘지 ${en2}장 — 정예 초과(8장)`, `  └ デッキ+墓地${en2}枚 — 精鋭超過(8枚)`);
+      break;
+    }
+    case "trapsmithBuff": { // 함정 기술자: 보유 함정 1장당 +1/+1
+      const tn = [...p.deck, ...p.discard].filter((c) => c.t === "trap").length + p.traps.length;
+      if (tn > 0) { m.atkMod = (m.atkMod || 0) + tn; m.defMod = (m.defMod || 0) + tn; ctx.log(`  └ 함정 ${tn}장 → +${tn}/+${tn}`, `  └ 罠${tn}枚 → +${tn}/+${tn}`); }
+      else ctx.log(`  └ 보유 함정 없음`, `  └ 罠なし`);
+      break;
+    }
     case "breaktrap":
       if (o.traps.length) { const t = o.traps.splice(randInt(g, o.traps.length), 1)[0]; o.discard.push(t.card); ctx.log("  └ 상대의 세트 함정 1장 파괴", "  └ 相手のセットトラップを1枚破壊"); }
       else ctx.log("  └ 파괴할 함정 없음", "  └ 破壊するトラップなし");
@@ -796,7 +821,7 @@ const CUSTOM_SPELLS = new Set<string>([
   "GS7_0", "GS7_2", "GS8_0", "GS8_2", "GS8_3", "GS8_4", "GS8_5", "GS9_0", "GS9_2", "GS10_0", "GS10_1", "GS10_2",
   "HANDRESET", "TIMEWARP", "GAMBLE", "DICE8",
   "RUNE1", "RUNE2", "RUNE3", "GENESIS_SONG", "GENESIS_MAGIC",
-  "BLOOD1", "BLOOD2", "BLOOD3", "DISARM3", "FORBIDDEN", "CATALYST", "MEDITATE", "PRAYER", "HERMIT", "LUCKY_CHEST", "GUILD_CHEST",
+  "BLOOD1", "BLOOD2", "BLOOD3", "DISARM3", "FORBIDDEN", "CATALYST", "MEDITATE", "PRAYER", "HERMIT", "LUCKY_CHEST", "GUILD_CHEST", "SCRAPPER",
 ]);
 const chance = (g: GameState, pct: number): boolean => randInt(g, 100) < pct;
 function tag(p: PlayerState, card: CardInst): string { return `<span class="t">${p.name}</span> ${cn(card)} →`; }
@@ -928,6 +953,19 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "DISARM3": { // 마법연구기관: 상대 영구마법 1장 파괴 + 게임에서 제외
       if (o.enchants.length) { const e = o.enchants.splice(randInt(g, o.enchants.length), 1)[0]; ctx.log(`${tag(p, card)} ${cn(e.card)} 파괴 + 게임에서 제외`, `${tag(p, card)} ${cn(e.card)} 破壊 + ゲームから除外`); }
+      break;
+    }
+    case "SCRAPPER": { // 고철 수집상: 코스트 1 이하 2장 제외 → 최대 마나 +1
+      let removed = 0;
+      for (const pool of [p.discard, p.deck]) {
+        while (removed < 2) {
+          const i = pool.findIndex((c) => c.cost <= 1);
+          if (i < 0) break;
+          pool.splice(i, 1); removed++;
+        }
+      }
+      p.maxMana += 1;
+      ctx.log(`${tag(p, card)} 저코스트 카드 ${removed}장 제외 → 최대 마나 +1 (${p.maxMana})`, `${tag(p, card)} 低コストカード${removed}枚を除外 → 最大マナ +1 (${p.maxMana})`);
       break;
     }
     case "LUCKY_CHEST": luckyChest(g, ctx, p); break; // 행운의 보물상자 복권
@@ -1206,6 +1244,8 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if ((card.id === "MEDITATE" || card.id === "PRAYER") && (p.playsTurn || 0) > 0) { ctx.log("  └ 이번 턴에 다른 카드를 플레이해서 사용 불가", "  └ このターンに他のカードをプレイしたため使用不可"); return; }
     if (card.id === "MEDITATE" && p.hp >= Math.floor(p.maxHp * 0.8)) { ctx.log("  └ 체력이 이미 최대치의 80% 이상입니다", "  └ 体力が既に最大値の80%以上です"); return; }
     if (card.id === "HERMIT" && p.field.length > 0) { ctx.log("  └ 필드에 몬스터가 있어 사용 불가", "  └ 場にモンスターがいるため使用不可"); return; }
+    if (card.act === "exilePick" && p.discard.length === 0) { ctx.log("  └ 묘지가 비어 있습니다", "  └ 墓地が空です"); return; }
+    if (card.id === "SCRAPPER" && [...p.deck, ...p.discard].filter((c) => c.cost <= 1).length < 2) { ctx.log("  └ 덱·묘지에 코스트 1 이하 카드가 2장 없습니다", "  └ デッキ・墓地にコスト1以下のカードが2枚ありません"); return; }
     if (card.ench && p.traps.length + p.enchants.length >= ST_MAX) { ctx.log(`  └ <span class="dmg">마법·함정 존이 가득 찼습니다 (최대 ${ST_MAX})</span>`, `  └ <span class="dmg">魔法・罠ゾーンが満杯です (最大 ${ST_MAX})</span>`); return; }
 
     p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card);
@@ -1254,6 +1294,10 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       g.pending = { kind: "recall", hint: "버린 패에서 1장 선택", hintJa: "捨て札から1枚選択", reason: "recall", allowCancel: true };
       ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
     }
+    if (a === "exilePick") {
+      g.pending = { kind: "recall", hint: "게임에서 제외할 카드 선택", hintJa: "ゲームから除外するカードを選択", reason: "exilePick", allowCancel: true };
+      ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
+    }
     applySpell(g, ctx, card);
     return;
   }
@@ -1298,7 +1342,16 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     if (i >= 0) { p.hand.push(p.deck.splice(i, 1)[0]); shuffle(g, p.deck); ctx.log(`<span class="t">${p.name}</span> 시크 → 1장 서치`, `<span class="t">${p.name}</span> シーク → 1枚サーチ`); }
   } else if (pending.kind === "recall") {
     const i = p.discard.findIndex((c) => c.uid === uid);
-    if (i >= 0) { p.hand.push(p.discard.splice(i, 1)[0]); ctx.log(`<span class="t">${p.name}</span> 리콜 → 1장 회수`, `<span class="t">${p.name}</span> リコール → 1枚回収`); }
+    if (i >= 0) {
+      if (pending.reason === "exilePick") {
+        const c = p.discard.splice(i, 1)[0];
+        const n = ctx.drawN(p, 1);
+        ctx.log(`<span class="t">${p.name}</span> ${cn(c)} 게임에서 제외 + ${n}장 드로우`, `<span class="t">${p.name}</span> ${cn(c)} をゲームから除外 + ${n}枚ドロー`);
+      } else {
+        p.hand.push(p.discard.splice(i, 1)[0]);
+        ctx.log(`<span class="t">${p.name}</span> 리콜 → 1장 회수`, `<span class="t">${p.name}</span> リコール → 1枚回収`);
+      }
+    }
   }
 }
 

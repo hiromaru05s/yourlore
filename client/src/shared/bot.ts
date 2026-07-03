@@ -105,8 +105,9 @@ function candidates(g: GameState): Action[] {
     else if (pend.kind === "myMon") p.field.forEach((m) => push(m.uid));
     else if (pend.kind === "seek" || pend.kind === "recall") {
       const pool = pend.kind === "seek" ? p.deck : p.discard;
+      const exile = pend.reason === "exilePick"; // 제외용은 저가치 우선 탐색
       const seen = new Set<string>();
-      [...pool].sort((a, b) => cardValue(b) - cardValue(a)).forEach((c) => {
+      [...pool].sort((a, b) => (exile ? cardValue(a) - cardValue(b) : cardValue(b) - cardValue(a))).forEach((c) => {
         if (!seen.has(c.id) && seen.size < 8) { seen.add(c.id); push(c.uid); }
       });
     }
@@ -238,6 +239,9 @@ export function greedyDecide(g: GameState): Action {
     if ((c.id === "MEDITATE" || c.id === "PRAYER") && (p.playsTurn || 0) > 0) return false;
     if (c.id === "MEDITATE" && p.hp >= Math.floor(p.maxHp * 0.8)) return false;
     if (c.id === "HERMIT" && p.field.length > 0) return false;
+    // 폐기 경제 카드: 대상이 있어야 시전
+    if (c.act === "exilePick" && p.discard.length === 0) return false;
+    if (c.id === "SCRAPPER" && [...p.deck, ...p.discard].filter((x) => x.cost <= 1).length < 2) return false;
     // blood magic hurts the caster — don't suicide
     if (c.id === "CATALYST" && p.hp <= 6) return false;
     if (c.id === "BLOOD1" && p.hp <= 6) return false;
@@ -420,6 +424,10 @@ function autoTarget(g: GameState): Action {
     return { type: "pick", uid: best ? best.uid : (p.deck[0]?.uid ?? null) };
   }
   if (pending.kind === "recall") {
+    if (pending.reason === "exilePick") { // 게임에서 제외 → 가장 쓸모없는 카드
+      const worst = [...p.discard].sort((a, b) => cardValue(a) - cardValue(b))[0];
+      return { type: "pick", uid: worst ? worst.uid : (p.discard[0]?.uid ?? null) };
+    }
     const best = bestOf(p.discard);
     return { type: "pick", uid: best ? best.uid : (p.discard[0]?.uid ?? null) };
   }

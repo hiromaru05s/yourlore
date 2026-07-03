@@ -5,7 +5,8 @@
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { effMaxMana, supplyRange, playCost, buyCost } from "../shared/engine";
-import { frameFor, FRAME_BACK } from "../shared/cards";
+import { frameFor, FRAME_BACK, TRIBES } from "../shared/cards";
+import { cardPicker } from "./modal";
 import { cardEl } from "./cardView";
 import { bindZoom } from "./anim";
 import { t, getLang } from "../i18n";
@@ -125,10 +126,13 @@ export class GameView {
 
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {
     row.innerHTML = "";
-    const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, FRAME_BACK, null, t("game.deck"));
-    // both discards public (top face-up, zoomable)
+    const sortByCost = (cards: CardInst[]) => [...cards].sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
+    const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, FRAME_BACK, null, t("game.deck"),
+      isMe ? () => cardPicker(`${t("game.deck")} (${p.deck.length})`, sortByCost(p.deck), () => { /* browse only */ }) : undefined);
+    // both discards public (top face-up, zoomable + click to browse)
     const discTop = p.discard[p.discard.length - 1];
-    const discPile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, discTop ? frameFor(discTop.t) : null, discTop ?? null, t("game.discard"));
+    const discPile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, discTop ? frameFor(discTop.t) : null, discTop ?? null, t("game.discard"),
+      () => cardPicker(`${isMe ? "" : t("game.supply.opp").replace(t("game.supply"), "").trim() + " "}${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => { /* browse only */ }));
 
     const block = document.createElement("div");
     block.className = "field-block" + (g.cur === g.players.indexOf(p) ? " is-turn" : "");
@@ -203,9 +207,22 @@ export class GameView {
     }
     const manaTxt = `${p.mana}/${emax}`;
 
+    // 종족 시너지 진행도 칩 (필드의 서로 다른 종족 카드 수 / 다음 임계값)
+    const tribeChips: string[] = [];
+    const byTribe = new Map<string, Set<string>>();
+    for (const m of p.field) if (m.tribe) { if (!byTribe.has(m.tribe)) byTribe.set(m.tribe, new Set()); byTribe.get(m.tribe)!.add(m.id); }
+    for (const [tr, ids] of byTribe) {
+      const ths = tr === "시초" ? [2, 3, 4] : [2, 3];
+      const fired = new Set(p.tribesFired.filter((f) => f.startsWith(tr + ":")).map((f) => Number(f.split(":")[1])));
+      const next = ths.find((th) => !fired.has(th));
+      const nm = TRIBES[tr]?.[getLang()]?.name ?? tr;
+      const done = next === undefined;
+      const ready = !done && ids.size >= (next as number);
+      tribeChips.push(`<span style="display:inline-block;margin-left:5px;padding:1px 7px;border-radius:9px;font-size:11px;line-height:16px;border:1px solid ${done ? "#5a5" : ready ? "#fd6" : "#556"};color:${done ? "#8f8" : ready ? "#ffd166" : "#9ab"}">${nm} ${done ? "✓" : `${ids.size}/${next}`}</span>`);
+    }
     bar.innerHTML = `
       <span class="pname"><span class="who"></span>${p.name}
-        <span class="turn-chip ${onTurn ? "on" : ""}">${onTurn ? t("game.myturn") : t("game.waiting")}</span></span>
+        <span class="turn-chip ${onTurn ? "on" : ""}">${onTurn ? t("game.myturn") : t("game.waiting")}</span>${tribeChips.join("")}</span>
       <span class="hp">
         <span class="lbl">${t("game.hp")}</span>
         <span class="num"><b id="hp-${isMe ? "me" : "opp"}">${Math.max(0, p.hp)}</b><span class="muted">/${p.maxHp}</span></span>
@@ -280,7 +297,7 @@ export class GameView {
     });
   }
 
-  private pileEl(id: string, count: number, frame: string | null, faceCard: CardInst | null, tag: string): HTMLElement {
+  private pileEl(id: string, count: number, frame: string | null, faceCard: CardInst | null, tag: string, onOpen?: () => void): HTMLElement {
     const pile = document.createElement("div");
     pile.className = "pile" + (count ? "" : " is-empty");
     pile.id = id;
@@ -296,6 +313,7 @@ export class GameView {
     const t = document.createElement("div"); t.className = "pile-tag"; t.textContent = tag; pile.appendChild(t);
     const cnt = document.createElement("div"); cnt.className = "pile-count"; cnt.textContent = String(count); pile.appendChild(cnt);
     if (faceCard && faceCard.id !== "HIDDEN") bindZoom(pile, faceCard);
+    if (onOpen && count > 0) { pile.style.cursor = "pointer"; pile.title = "click: browse"; pile.addEventListener("click", onOpen); }
     return pile;
   }
 
