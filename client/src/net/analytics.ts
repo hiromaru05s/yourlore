@@ -15,21 +15,24 @@ let ph: PH | null = null;
 /** Inject the PostHog snippet once, if configured. Called at boot. */
 export function initAnalytics(): void {
   if (!POSTHOG_KEY || ph) return;
-  // official PostHog loader snippet (minified), then init
-  (function (t: any, e: any) {
-    let p: any, o: any;
-    t.posthog = e; e._i = []; e.init = function (k: string, cfg: any) {
-      function g(obj: any, m: string) { obj[m] = function () { obj.push([m].concat(Array.prototype.slice.call(arguments, 0))); }; }
-      p = t.createElement("script"); p.type = "text/javascript"; p.async = true;
-      p.src = (cfg.api_host || POSTHOG_HOST) + "/static/array.js";
-      o = t.getElementsByTagName("script")[0]; o.parentNode.insertBefore(p, o);
-      const methods = "capture identify reset register people.set onFeatureFlags".split(" ");
-      for (let i = 0; i < methods.length; i++) g(e, methods[i]);
-      e._i.push([k, cfg]);
-    };
-  })(document, (window as any).posthog || []);
-  (window as any).posthog.init(POSTHOG_KEY, { api_host: POSTHOG_HOST, capture_pageview: true, persistence: "localStorage+cookie" });
-  ph = (window as any).posthog as PH;
+  // Analytics must never break the app: swallow any failure.
+  try {
+    // official PostHog loader snippet (minified), then init
+    (function (t: any, e: any) {
+      let p: any, o: any;
+      (window as any).posthog = e; e._i = []; e.init = function (k: string, cfg: any) {
+        function g(obj: any, m: string) { obj[m] = function () { obj.push([m].concat(Array.prototype.slice.call(arguments, 0))); }; }
+        p = t.createElement("script"); p.type = "text/javascript"; p.async = true;
+        p.src = (cfg.api_host || POSTHOG_HOST) + "/static/array.js";
+        o = t.getElementsByTagName("script")[0]; o.parentNode.insertBefore(p, o);
+        const methods = "capture identify reset register people.set onFeatureFlags".split(" ");
+        for (let i = 0; i < methods.length; i++) g(e, methods[i]);
+        e._i.push([k, cfg]);
+      };
+    })(document, (window as any).posthog || []);
+    (window as any).posthog.init(POSTHOG_KEY, { api_host: POSTHOG_HOST, capture_pageview: true, persistence: "localStorage+cookie" });
+    ph = (window as any).posthog as PH;
+  } catch { ph = null; /* analytics stays dormant on failure */ }
 }
 
 export function aCapture(event: string, props?: Record<string, unknown>): void {
