@@ -29,14 +29,13 @@
 .card--trap    { --cc: #38984d; --cc-lo: #67c67c; }
 .card--starter { --cc: #24a9bd; --cc-lo: #5ad6e6; }
 
-/* BUY cost — a bold colored gem centered ON the frame's built-in top-left ring
-   (card ratio 0.64 → ring center ≈ 9%, 10.75%) so it fully hides the original
-   cost art. Slight left overflow is intentional. Color = card type. */
+/* BUY cost — our own colored circle that fully COVERS the frame's built-in cost
+   ring and overflows past the top-left corner of the frame. Color = card type. */
 .card-cost {
-  position: absolute; top: 1.8%; left: -5%; right: auto;
-  width: 28%; height: auto; aspect-ratio: 1;
+  position: absolute; top: -3.5%; left: -9%; right: auto;
+  width: 35%; height: auto; aspect-ratio: 1;
   display: grid; place-items: center;
-  font-family: var(--mono); font-weight: 800; font-size: 1.18em; line-height: 1;
+  font-family: var(--mono); font-weight: 800; font-size: 1.28em; line-height: 1;
   color: #fff;
   border-radius: 50%;
   background:
@@ -60,8 +59,8 @@
   border-radius: var(--card-r);
 }
 .card-name {
-  /* name bar (right of the cost gem): measured plate y 4.3–12.2%, x 8–87% */
-  position: absolute; top: 4.3%; left: 26%; right: 15%; height: 7.9%; z-index: 2;
+  /* name plate (right of the cost circle): new frame plate y 6.4–14.5%, x →93% */
+  position: absolute; top: 6.4%; left: 28%; right: 8%; height: 7.6%; z-index: 3;
   display: flex; align-items: center; justify-content: flex-start;
   font-weight: 800; font-size: 0.52em; line-height: 1; letter-spacing: -.02em;
   color: #17120c; text-shadow: 0 1px 0 #ffffff44;
@@ -69,8 +68,9 @@
 }
 .card-name--long { font-size: 0.42em; white-space: normal; line-height: 1.02; }
 .card-art {
-  /* ON TOP of the frame bg, filling the measured art window (y 15.9–55%, x 6.8–92.8%) */
-  position: absolute; top: 15.9%; left: 6.5%; right: 6.5%; height: 39.4%; z-index: 1;
+  /* BEHIND the frame overlay, filling the new frame's art window
+     (measured x 8.5–92.5%, y 14.7–63.5%); bled ~1% under the metal border. */
+  position: absolute; top: 14%; left: 7%; right: 7%; height: 50.5%; z-index: 0;
   background: radial-gradient(120% 90% at 50% 30%, #2c3a55, #0c1320 90%);
   overflow: hidden;
 }
@@ -86,9 +86,9 @@
 }
 .card-art:has(img)::after { content: none; }
 .card-eff {
-  /* lower text plate (measured y 57.7–85.1%) */
-  position: absolute; left: 8%; right: 8%; z-index: 2;
-  top: 57.7%; height: 27%;
+  /* lower text plate — new frame: monster plate y 63.6–86.1% (atk/def below) */
+  position: absolute; left: 11%; right: 11%; z-index: 2;
+  top: 64%; height: 21%;
   font-size: 0.44em; line-height: 1.12; color: #1b1610;
   text-align: center; overflow: hidden; word-break: keep-all;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -96,8 +96,8 @@
 }
 .card-eff--small { font-size: 0.375em; line-height: 1.1; }
 .card-eff--tiny { font-size: 0.33em; line-height: 1.08; }
-/* spell/trap/starter have no stats strip → text box extends lower */
-.card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 35%; }
+/* spell/trap/starter have no stats strip → plate extends to the bottom (y 63.6–95.3%) */
+.card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 30%; }
 
 /* CAST cost — a small pill pinned at the top of the effect text. Native title
    attribute gives the on-hover explanation popup (never clipped by the card). */
@@ -129,14 +129,14 @@
    normal --ui font, no monospace font and no transform) so they render on every OS/browser.
    (A Windows client failed to show them when they used var(--mono) + translateY.) */
 .ad-atk, .ad-def {
-  /* stats strip (measured y 87.8–94.1%) */
-  position: absolute; top: 88%; height: 6.4%; width: 24%; z-index: 2;
+  /* stats strip — new frame atk/def cream boxes: y 88.7–95.3%; atk x22–48%, def x67–92.5% */
+  position: absolute; top: 88.4%; height: 6.6%; width: 26%; z-index: 3;
   display: flex; align-items: center; justify-content: center;
   font-weight: 800; font-size: 0.86em; line-height: 1;
   color: #16110c; text-shadow: 0 1px 0 #ffffff44;
 }
-.ad-atk { left: 13%; }
-.ad-def { left: 54%; }
+.ad-atk { left: 22%; }
+.ad-def { left: 67%; }
 
 /* ---- card states ---- (glows via drop-shadow so they hug the PNG shape) ---- */
 .card.is-playable, .card.is-buyable { cursor: pointer; filter: drop-shadow(0 2px 4px #0009) drop-shadow(0 0 4px #4fb4ff88); }
@@ -158,12 +158,12 @@
 
 .card--back {
   background-size: 100% 100%;
-  box-shadow: var(--shadow-1);
+  /* transparent rounded corners → rely on .card's drop-shadow (hugs the shape) */
 }
 
 /* tribe tag — tucked into the art's top-left corner so it doesn't cover the art */
 .tribe-tag {
-  position: absolute; top: 16.8%; left: 7.5%; transform: none;
+  position: absolute; top: 15.5%; left: 9%; transform: none;
   font-size: 0.48em; font-weight: 700; letter-spacing: .02em;
   color: #f6e7b6; background: #1a1230e0; border: 1px solid var(--brass-dim);
   border-radius: 4px; padding: 1px 5px; cursor: pointer; z-index: 4; white-space: nowrap;

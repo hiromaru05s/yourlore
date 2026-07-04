@@ -46,10 +46,13 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const sizeClass = opt.size === "mkt" ? "card--mkt" : opt.size === "hand" ? "card--hand" : "";
   const node = el("div", `card ${typeClass} ${sizeClass}`.trim());
   node.dataset.uid = c.uid;
-  // frame PNG as the card background (transparent outer + white content plates);
-  // art sits ON TOP inside the window; text/cost render over the plates.
-  node.style.backgroundImage = `url(${frameFor(c.t)})`;
+  // Layering: art sits BEHIND the frame (in the transparent art window), the
+  // frame PNG overlays on top (its border hugs the art edges), then text/cost
+  // render above the frame. (frame's outer + window are transparent.)
   node.appendChild(artEl(c.id));
+  const frameEl = el("div", "card-frame");
+  frameEl.style.backgroundImage = `url(${frameFor(c.t)})`;
+  node.appendChild(frameEl);
 
   if (opt.playable) node.classList.add("is-playable");
   if (opt.buyable) node.classList.add("is-buyable");
