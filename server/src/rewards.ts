@@ -57,5 +57,26 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
     return json(env, { granted, amount: granted ? amount : 0, credits: row?.credits ?? 0 });
   }
 
+  // POST /rewards/coupon { code } → redeem a coupon code (once per user; server-side caps)
+  if (path === "/rewards/coupon" && req.method === "POST") {
+    const body = (await req.json().catch(() => ({}))) as { code?: string };
+    const code = (body.code || "").trim().toUpperCase().slice(0, 32);
+    if (!code) return json(env, { error: "쿠폰 코드를 입력하세요." }, 400);
+    const c = await env.DB.prepare(`SELECT code, amount, max_uses, uses, expires_at FROM coupons WHERE code = ?`)
+      .bind(code).first<{ code: string; amount: number; max_uses: number | null; uses: number; expires_at: number | null }>();
+    if (!c) return json(env, { error: "존재하지 않는 쿠폰입니다." }, 404);
+    if (c.expires_at != null && c.expires_at < Date.now()) return json(env, { error: "만료된 쿠폰입니다." }, 410);
+    if (c.max_uses != null && c.uses >= c.max_uses) return json(env, { error: "소진된 쿠폰입니다." }, 410);
+    const ins = await env.DB.prepare(`INSERT OR IGNORE INTO coupon_claims (code, user_id, created_at) VALUES (?,?,?)`)
+      .bind(code, user.id, Date.now()).run();
+    if ((ins.meta?.changes ?? 0) === 0) return json(env, { error: "이미 사용한 쿠폰입니다." }, 409);
+    await env.DB.batch([
+      env.DB.prepare(`UPDATE coupons SET uses = uses + 1 WHERE code = ?`).bind(code),
+      env.DB.prepare(`UPDATE users SET credits = credits + ? WHERE id = ?`).bind(c.amount, user.id),
+    ]);
+    const row = await env.DB.prepare(`SELECT credits FROM users WHERE id = ?`).bind(user.id).first<{ credits: number }>();
+    return json(env, { granted: true, amount: c.amount, credits: row?.credits ?? 0 });
+  }
+
   return json(env, { error: "not found" }, 404);
 }

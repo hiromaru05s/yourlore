@@ -18,6 +18,7 @@ import { cardPicker, confirmDialog, treasureModal, winModal } from "../ui/modal"
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { t, getLang, cardName, onLangChange } from "../i18n";
+import { sfx } from "../ui/sound";
 
 export interface ControllerExits {
   onHome(): void;
@@ -227,6 +228,9 @@ export abstract class BaseController implements BoardHandlers {
         case "draw":
           if (e.player === this.you) myDraws += e.count;
           break;
+        case "matchDraw":
+          await A.eventBanner(`⏳ ${t("modal.draw")}`, t("modal.draw.body"), "info", 2000);
+          break;
         case "treasure": {
           const mine = e.player === this.you && !e.isBot;
           const text = getLang() === "ja" ? e.textJa : getLang() === "en" ? logToEn(e.text) : e.text;
@@ -256,6 +260,8 @@ export abstract class BaseController implements BoardHandlers {
     // ghosts overlap the freshly-rendered real cards — drop them next frame
     requestAnimationFrame(() => ghosts.forEach((g) => g.el.remove()));
     if (myDraws > 0) A.animateDraw(document.getElementById("hand") as HTMLElement, myDraws);
+    // your turn begins → a soft chime
+    if (!res.state.over && res.state.cur === this.you && prev.cur !== this.you) sfx("turn");
 
     // ---- death sequence: HP orb shatters + cause of death, before the result modal ----
     if (res.state.over && res.state.winner != null && !this.winShown) {
@@ -331,18 +337,20 @@ export abstract class BaseController implements BoardHandlers {
   }
 
   protected showWin(): void {
-    if (this.winShown || this.state.winner == null) return;
+    if (this.winShown || !this.state.over) return;
     this.winShown = true;
+    const draw = this.state.winner == null; // 75-turn limit
+    sfx(draw ? "drawGame" : this.state.winner === this.you ? "win" : "lose");
     // bot games are client-local — report the result for analytics (online games are recorded server-side)
-    if (this.state.mode === "bot") void api.trackBot(this.state.winner === this.you);
-    aCapture("game_end", { mode: this.state.mode, won: this.state.winner === this.you, turns: this.state.turn });
+    if (this.state.mode === "bot") void api.trackBot(draw ? null : this.state.winner === this.you);
+    aCapture("game_end", { mode: this.state.mode, won: this.state.winner === this.you, draw, turns: this.state.turn });
     this.openResult();
   }
 
   /** Result modal — reopenable from the review FAB so the log can be studied (복기). */
   private openResult(): void {
     A.removeReviewFab();
-    const won = this.state.winner === this.you;
+    const won = this.state.winner == null ? null : this.state.winner === this.you;
     const meHp = Math.max(0, this.state.players[this.you].hp);
     const oppHp = Math.max(0, this.state.players[1 - this.you].hp);
     const detail = `${t("modal.hp.me")} ${meHp} · ${t("modal.hp.opp")} ${oppHp}`;

@@ -41,11 +41,12 @@ export function confirmDialog(opts: { title: string; body?: string; confirm: str
   });
 }
 
-export function winModal(won: boolean, detail: string, onAgain: () => void, onHome: () => void, onReview?: () => void): void {
+/** won: true=victory, false=defeat, null=draw (75-turn limit). */
+export function winModal(won: boolean | null, detail: string, onAgain: () => void, onHome: () => void, onReview?: () => void): void {
   const m = document.createElement("div");
   m.className = "modal";
-  const title = won ? t("modal.win") : t("modal.lose");
-  const color = won ? "var(--gold-glow)" : "var(--vermil-hi)";
+  const title = won == null ? t("modal.draw") : won ? t("modal.win") : t("modal.lose");
+  const color = won == null ? "var(--paper)" : won ? "var(--gold-glow)" : "var(--vermil-hi)";
   m.innerHTML = `<h2 style="color:${color}">${title}</h2><p style="color:var(--paper);font-size:14px">${detail}</p><p>${t("modal.gameover")}</p><div class="modal-row"></div>`;
   const row = m.querySelector(".modal-row")!;
   const home = document.createElement("button"); home.className = "btn btn-ghost"; home.textContent = t("modal.home");

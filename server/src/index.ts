@@ -10,6 +10,7 @@ import { handleGoogleOAuth } from "./oauth";
 import { handleInvite } from "./invite";
 import { handleAdmin } from "./admin";
 import { handleRewards } from "./rewards";
+import { handleSocial } from "./social";
 import { Matchmaker } from "./matchmaker";
 import { GameRoom } from "./gameRoom";
 
@@ -51,6 +52,11 @@ export default {
       const user = await getUser(env, req);
       return handleInvite(env, req, path.slice(4), user);
     }
+    // ---- social: profile / friends / challenges ----
+    if (path.startsWith("/api/social/")) {
+      const user = await getUser(env, req);
+      return handleSocial(env, req, path.slice(4), user);
+    }
     // ---- admin dashboard ----
     if (path.startsWith("/api/admin/")) {
       return handleAdmin(env, req, path.slice(4));
@@ -59,9 +65,9 @@ export default {
     if (path === "/api/track/bot" && req.method === "POST") {
       const user = await getUser(env, req);
       if (!user) return new Response(JSON.stringify({ ok: false }), { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
-      const body = (await req.json().catch(() => ({}))) as { won?: boolean };
+      const body = (await req.json().catch(() => ({}))) as { won?: boolean; draw?: boolean };
       await env.DB.prepare(`INSERT INTO matches (id, player_a, player_b, winner, mode, created_at, ended_at) VALUES (?,?,?,?,?,?,?)`)
-        .bind(crypto.randomUUID(), user.id, "bot", body.won ? user.id : "bot", "bot", Date.now(), Date.now()).run().catch(() => { /* best effort */ });
+        .bind(crypto.randomUUID(), user.id, "bot", body.draw ? null : body.won ? user.id : "bot", "bot", Date.now(), Date.now()).run().catch(() => { /* best effort */ });
       return new Response(JSON.stringify({ ok: true }), { headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
     }
     // ---- presence heartbeat (real-time online counts; covers bot games too) ----

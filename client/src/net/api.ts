@@ -9,6 +9,8 @@ export interface User {
   wins: number;
   losses: number;
   credits: number;
+  avatar?: string | null; // preset avatar (card id)
+  badge?: string | null;  // equipped badge key
 }
 
 export interface ClaimResult {
@@ -57,7 +59,7 @@ export const api = {
   resetPassword: (token: string, password: string) => call<{ ok: true }>("/auth/reset", { token, password }),
   me: () => call<{ user: User | null }>("/auth/me", undefined, "GET").then((r) => r.user).catch(() => null),
   rankMe: () => call<{ rating: RankInfo | null }>("/rank/me", undefined, "GET").then((r) => r.rating).catch(() => null),
-  trackBot: (won: boolean) => call<{ ok: boolean }>("/track/bot", { won }).catch(() => null),
+  trackBot: (won: boolean | null) => call<{ ok: boolean }>("/track/bot", { won: won === true, draw: won === null }).catch(() => null),
   inviteMe: () => call<{ code: string; limit: number; invites: { status: string; created_at: number; display: string }[] }>("/invite/me", undefined, "GET"),
   /** Google OAuth entry URL (carries invite ref + utm source, and an optional same-origin return path). */
   googleUrl: (returnTo?: string): string => {
@@ -75,4 +77,37 @@ export const api = {
   // credit rewards (server-authoritative amounts; key e.g. "tut:1")
   claimReward: (key: string) => call<ClaimResult>("/rewards/claim", { key }),
   claimedRewards: () => call<{ keys: string[]; credits: number }>("/rewards/claimed", undefined, "GET").catch(() => ({ keys: [] as string[], credits: 0 })),
+  redeemCoupon: (code: string) => call<ClaimResult>("/rewards/coupon", { code }),
+  // ---- social: profile / friends / challenges ----
+  profile: (id?: string) => call<{ profile: Profile }>(`/social/profile${id ? `?id=${encodeURIComponent(id)}` : ""}`, undefined, "GET").then((r) => r.profile),
+  updateMe: (patch: { display?: string; avatar?: string; badge?: string; stats_public?: boolean }) =>
+    call<{ ok: true; display: string; avatar: string | null; badge: string | null; stats_public: boolean }>("/social/me", patch),
+  friends: () => call<FriendsData>("/social/friends", undefined, "GET"),
+  friendRequest: (q: string) => call<{ ok: true; display: string }>("/social/friends/request", { q }),
+  friendRespond: (user_id: string, accept: boolean) => call<{ ok: true }>("/social/friends/respond", { user_id, accept }),
+  friendRemove: (user_id: string) => call<{ ok: true }>("/social/friends/remove", { user_id }),
+  challenge: (user_id: string) => call<{ id: string }>("/social/challenge", { user_id }),
+  challengeCancel: (id: string) => call<{ ok: true }>("/social/challenge/cancel", { id }).catch(() => null),
+  challengeRespond: (id: string, accept: boolean) =>
+    call<{ ok: true; roomId?: string; you?: 0 | 1; oppName?: string }>("/social/challenge/respond", { id, accept }),
+  challengePoll: (id: string) =>
+    call<{ status: string; roomId?: string; you?: 0 | 1; oppName?: string }>(`/social/challenge/poll?id=${encodeURIComponent(id)}`, undefined, "GET"),
 };
+
+export interface Profile {
+  id: string; display: string; avatar: string | null; badge: string | null; created_at: number; self: boolean;
+  private?: boolean;
+  stats_public?: boolean;
+  wins?: number; losses?: number;
+  tier?: string | null; mmr?: number | null; rank?: number | null;
+  recent?: { mode: string; result: "win" | "loss" | "draw"; opp: string; turns: number | null; at: number }[];
+  badges?: string[]; // owned badge keys (self only)
+}
+
+export interface FriendEntry { id: string; display: string; avatar: string | null; badge: string | null; online: boolean; state: string | null; }
+export interface FriendsData {
+  friends: FriendEntry[];
+  incoming: FriendEntry[];
+  outgoing: FriendEntry[];
+  challenges: { id: string; from: string; fromId: string; at: number }[];
+}

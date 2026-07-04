@@ -13,7 +13,10 @@ CREATE TABLE IF NOT EXISTS users (
   source      TEXT,                       -- 가입 유입 소스 (utm_source/utm_medium/utm_campaign 또는 'ref:CODE')
   invite_code TEXT,                       -- 내 초대 코드 (lazy 발급, 유니크 인덱스 별도)
   invited_by  TEXT,                       -- 나를 초대한 유저 id
-  credits     INTEGER NOT NULL DEFAULT 0  -- 단일 소프트 커런시 (docs/monetization.md)
+  credits     INTEGER NOT NULL DEFAULT 0, -- 단일 소프트 커런시 (docs/monetization.md)
+  avatar      TEXT,                       -- 프리셋 아바타 (카드 id)
+  badge       TEXT,                       -- 장착 뱃지 키 (보유 여부는 서버가 계산)
+  stats_public INTEGER NOT NULL DEFAULT 1 -- 프로필 전적 공개 여부
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_users_invite_code ON users(invite_code) WHERE invite_code IS NOT NULL;
 
@@ -43,6 +46,43 @@ CREATE TABLE IF NOT EXISTS invite_rewards (
   earned_at   INTEGER
 );
 CREATE INDEX IF NOT EXISTS idx_invite_rewards_inviter ON invite_rewards(inviter_id);
+
+-- 친구: user_a = 요청자, user_b = 수신자. status 'pending' | 'accepted'
+CREATE TABLE IF NOT EXISTS friends (
+  user_a      TEXT NOT NULL REFERENCES users(id),
+  user_b      TEXT NOT NULL REFERENCES users(id),
+  status      TEXT NOT NULL DEFAULT 'pending',
+  created_at  INTEGER NOT NULL,
+  PRIMARY KEY (user_a, user_b)
+);
+CREATE INDEX IF NOT EXISTS idx_friends_b ON friends(user_b, status);
+
+-- 친구 대전 신청 (폴링 기반, 90초 내 응답 없으면 만료 취급)
+CREATE TABLE IF NOT EXISTS challenges (
+  id          TEXT PRIMARY KEY,
+  challenger  TEXT NOT NULL,
+  target      TEXT NOT NULL,
+  room_id     TEXT,
+  status      TEXT NOT NULL DEFAULT 'pending', -- pending|accepted|declined|cancelled
+  created_at  INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_challenges_target ON challenges(target, status);
+CREATE INDEX IF NOT EXISTS idx_challenges_challenger ON challenges(challenger, status);
+
+-- 쿠폰 코드 (설정 화면에서 입력 → 크레딧 지급)
+CREATE TABLE IF NOT EXISTS coupons (
+  code        TEXT PRIMARY KEY,               -- 대문자로 저장
+  amount      INTEGER NOT NULL,
+  max_uses    INTEGER,                        -- NULL = 무제한
+  uses        INTEGER NOT NULL DEFAULT 0,
+  expires_at  INTEGER                         -- NULL = 무기한
+);
+CREATE TABLE IF NOT EXISTS coupon_claims (
+  code        TEXT NOT NULL,
+  user_id     TEXT NOT NULL,
+  created_at  INTEGER NOT NULL,
+  PRIMARY KEY (code, user_id)
+);
 
 -- 실시간 접속 현황 (하트비트로 갱신, 최근 N초 내 신호만 유효)
 CREATE TABLE IF NOT EXISTS presence (

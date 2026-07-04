@@ -6,6 +6,7 @@ import type { App, Screen } from "../router";
 import type { QueueClientMsg, QueueServerMsg } from "../shared/protocol";
 import { Sock } from "../net/socket";
 import { t, onLangChange } from "../i18n";
+import { sfx } from "../ui/sound";
 
 export function mountLobby(app: App, ranked = false): Screen {
   const wrap = document.createElement("div");
@@ -28,6 +29,7 @@ export function mountLobby(app: App, ranked = false): Screen {
     onMessage: (m) => {
       if (m.type === "queued") msg.textContent = t("lobby.entered");
       else if (m.type === "matched") {
+        sfx("match");
         title.textContent = t("lobby.found");
         msg.textContent = `vs ${m.oppName}`;
         sock.close();

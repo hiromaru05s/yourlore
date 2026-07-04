@@ -10,6 +10,8 @@ import "./styles/mobile.css";
 import { App } from "./router";
 import { initLang } from "./i18n";
 import { initAnalytics } from "./net/analytics";
+import { initSound, sfx } from "./ui/sound";
+import { initCardTilt } from "./ui/tilt";
 
 /** Capture acquisition params (invite ref + UTM) before any navigation strips them. */
 function captureAcquisition(): void {
@@ -23,8 +25,19 @@ function captureAcquisition(): void {
   } catch { /* storage unavailable */ }
 }
 
+/** One delegated listener = click sounds for every button-ish element, home and in-game. */
+function bindUiSounds(): void {
+  document.addEventListener("click", (e) => {
+    const el = (e.target as HTMLElement | null)?.closest?.("button, .btn, .mode-card, .tut-card, a[id]");
+    if (el && !(el as HTMLButtonElement).disabled) sfx("click");
+  }, { capture: true });
+}
+
 async function boot(): Promise<void> {
   captureAcquisition();
+  initSound();
+  bindUiSounds();
+  initCardTilt();
   initAnalytics(); // dormant unless POSTHOG_KEY is set
   let country = "";
   try { country = ((await fetch("/api/geo").then((r) => r.json())) as { country?: string }).country || ""; } catch { /* offline / dev */ }

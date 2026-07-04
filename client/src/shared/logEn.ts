@@ -7,6 +7,7 @@
 
 const R: [RegExp, string][] = [
   // ---- full/long phrases first (order matters) ----
+  [/(\d+)턴 경과 — 무승부!/g, "$1 turns elapsed — it's a draw!"],
   [/고정 마켓/g, "market:"],
   [/제시 마켓/g, "offer:"],
   [/구매 \((\d+)\)/g, "bought ($1)"],

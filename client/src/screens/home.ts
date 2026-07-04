@@ -6,6 +6,8 @@ import { api } from "../net/api";
 import { t, onLangChange } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
 import { tierChipHtml } from "../ui/tier";
+import { avatarHtml, badgeChipHtml } from "../ui/social";
+import { watchSocial } from "./friends";
 
 export function mountHome(app: App): Screen {
   const u = app.user;
@@ -16,7 +18,11 @@ export function mountHome(app: App): Screen {
     <div class="screen-brand"><div class="mark"></div><h1>LORE</h1></div>
     <div class="home">
       <div class="welcome">${t("home.welcome")}</div>
-      <div class="title">${u?.display ?? "PLAYER"}</div>
+      <button class="home-id" id="profile" title="${t("home.profile.title")}">
+        ${avatarHtml(u?.avatar, u?.display ?? "P", 48)}
+        <span class="home-id-name">${u?.display ?? "PLAYER"}</span>
+        ${badgeChipHtml(u?.badge, true)}
+      </button>
       <div class="modes modes-3">
         <div class="panel mode-card mode-ranked" id="ranked">
           <div class="icon">🏆</div>
@@ -34,6 +40,11 @@ export function mountHome(app: App): Screen {
           <h3>${t("home.bot.title")}</h3>
           <p>${t("home.bot.desc")}</p>
         </div>
+      </div>
+      <div class="panel tut-card" id="friends">
+        <span class="tut-emoji">👥</span>
+        <span class="tut-txt"><b>${t("home.friends.title")} <span class="fr-badge" id="frBadge" style="display:none"></span></b><span>${t("home.friends.desc")}</span></span>
+        <span class="tut-arrow">→</span>
       </div>
       <div class="panel tut-card" id="lb">
         <span class="tut-emoji">📊</span>
@@ -60,6 +71,8 @@ export function mountHome(app: App): Screen {
         <span>·</span>
         <span class="stats">${t("home.record")} ${u?.wins ?? 0}${t("home.win")} ${u?.losses ?? 0}${t("home.loss")}</span>
         <span>·</span>
+        <a id="settings" style="cursor:pointer">⚙ ${t("home.settings")}</a>
+        <span>·</span>
         <a id="logout" style="cursor:pointer">${t("home.logout")}</a>
       </div>
     </div>`;
@@ -79,10 +92,21 @@ export function mountHome(app: App): Screen {
   }).catch(() => { /* not logged in / offline */ });
   (wrap.querySelector("#cards") as HTMLElement).onclick = () => app.cards();
   (wrap.querySelector("#tutorial") as HTMLElement).onclick = () => app.tutorial();
+  (wrap.querySelector("#profile") as HTMLElement).onclick = () => app.profile();
+  (wrap.querySelector("#friends") as HTMLElement).onclick = () => app.friends();
+  (wrap.querySelector("#settings") as HTMLElement).onclick = () => app.settings();
   (wrap.querySelector("#logout") as HTMLElement).onclick = () => app.logout();
 
+  // incoming friend requests badge + friendly-challenge popups while on HOME
+  const unwatch = watchSocial(app, (n) => {
+    const b = wrap.querySelector("#frBadge") as HTMLElement | null;
+    if (!b) return;
+    b.style.display = n > 0 ? "" : "none";
+    b.textContent = n > 0 ? String(n) : "";
+  });
+
   const unsub = onLangChange(() => app.home());
-  return { destroy: unsub };
+  return { destroy: () => { unsub(); unwatch(); } };
 }
 
 /** Invite-campaign modal: share link + invitee progress (max 3). */

@@ -156,6 +156,7 @@ export type GameEvent =
   | { type: "trapSet"; player: Side } // a face-down trap was set (identity hidden)
   | { type: "trapReveal"; player: Side; id: string } // a trap fired → reveal then discard
   | { type: "win"; winner: Side }
+  | { type: "matchDraw" } // 75-turn limit reached — the game ends in a draw
   | { type: "needTarget"; pending: Pending };
 
 export interface ReduceResult {

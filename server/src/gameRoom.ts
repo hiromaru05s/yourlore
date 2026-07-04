@@ -19,7 +19,7 @@ import type { GameClientMsg, GameServerMsg } from "../../client/src/shared/proto
 import { createGame, reduce } from "../../client/src/shared/engine";
 import { redactFor } from "../../client/src/shared/protocol";
 import { BALANCE_VERSION } from "../../client/src/shared/cards";
-import { applyRanked } from "./rank";
+import { applyRanked, applyRankedDraw } from "./rank";
 
 interface PlayerRef { id: string; name: string; }
 
@@ -259,20 +259,28 @@ export class GameRoom {
 
   private async recordResult(): Promise<void> {
     const room = this.room;
-    if (!room || room.recorded || room.game.winner == null) return;
+    if (!room || room.recorded || !room.game.over) return;
     room.recorded = true;
     this.persist();
-    const winner = room.players[room.game.winner];
-    const loser = room.players[(1 - room.game.winner) as Side];
     // per-player card usage (played) + buys → card analytics in the admin dashboard
     const usesOf = (s: Side) => { try { return JSON.stringify(room.game.players[s].uses ?? {}); } catch { return "{}"; } };
     const buysOf = (s: Side) => { try { return JSON.stringify(room.game.players[s].buys ?? {}); } catch { return "{}"; } };
+    const matchRow = (winnerId: string | null) =>
+      this.env.DB.prepare(`INSERT INTO matches (id, player_a, player_b, winner, mode, created_at, ended_at, cards_a, cards_b, turns, buys_a, buys_b, bver) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`)
+        .bind(crypto.randomUUID(), room.players[0].id, room.players[1].id, winnerId, room.ranked ? "ranked" : "online", Date.now(), Date.now(), usesOf(0), usesOf(1), room.game.turn ?? null, buysOf(0), buysOf(1), BALANCE_VERSION);
     try {
+      if (room.game.winner == null) {
+        // 75-turn DRAW: no win/loss counts; ranked → symmetric Elo with S=0.5
+        await matchRow(null).run();
+        if (room.ranked) await applyRankedDraw(this.env, room.players[0].id, room.players[1].id);
+        return;
+      }
+      const winner = room.players[room.game.winner];
+      const loser = room.players[(1 - room.game.winner) as Side];
       await this.env.DB.batch([
         this.env.DB.prepare(`UPDATE users SET wins = wins + 1 WHERE id = ?`).bind(winner.id),
         this.env.DB.prepare(`UPDATE users SET losses = losses + 1 WHERE id = ?`).bind(loser.id),
-        this.env.DB.prepare(`INSERT INTO matches (id, player_a, player_b, winner, mode, created_at, ended_at, cards_a, cards_b, turns, buys_a, buys_b, bver) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`)
-          .bind(crypto.randomUUID(), room.players[0].id, room.players[1].id, winner.id, room.ranked ? "ranked" : "online", Date.now(), Date.now(), usesOf(0), usesOf(1), room.game.turn ?? null, buysOf(0), buysOf(1), BALANCE_VERSION),
+        matchRow(winner.id),
       ]);
       if (room.ranked) await applyRanked(this.env, winner.id, loser.id);
     } catch { /* records are best-effort */ }

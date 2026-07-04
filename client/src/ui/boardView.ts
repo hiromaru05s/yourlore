@@ -46,6 +46,7 @@ export class GameView {
         <div class="topbar">
           <div class="brand"><div class="mark"></div><h1>LORE</h1></div>
           <div class="turn-info" id="turnInfo"></div>
+          <button class="log-toggle" id="logToggle">${t("game.log")}</button>
         </div>
         <div class="stage">
           <div class="board-col">
@@ -70,10 +71,21 @@ export class GameView {
     this.logEl = this.q("log");
     (this.q("endBtn") as HTMLButtonElement).onclick = () => this.h.onEndTurn();
     (this.q("surrenderBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
-    // mobile: toggle the log drawer
-    const fab = this.q("logFab");
-    const panel = this.q("logPanel");
-    fab.onclick = () => { const open = panel.classList.toggle("open"); fab.textContent = open ? "✕" : "📜"; };
+    // log open/close — closed by default, toggle anytime (desktop: topbar button, mobile: fab).
+    // State persists so the player's preference sticks across games.
+    const game = this.root.querySelector(".game") as HTMLElement;
+    let open = false;
+    try { open = localStorage.getItem("lore_log_open") === "1"; } catch { /* ignore */ }
+    const applyLog = () => {
+      game.classList.toggle("log-open", open);
+      this.q("logFab").textContent = open ? "✕" : "📜";
+      this.q("logFab").classList.toggle("open", open);
+      this.q("logToggle").classList.toggle("on", open);
+    };
+    const toggleLog = () => { open = !open; try { localStorage.setItem("lore_log_open", open ? "1" : "0"); } catch { /* ignore */ } applyLog(); };
+    (this.q("logFab")).onclick = toggleLog;
+    (this.q("logToggle")).onclick = toggleLog;
+    applyLog();
     document.addEventListener("contextmenu", (e) => e.preventDefault());
   }
 
@@ -96,6 +108,7 @@ export class GameView {
     this.q("endBtn").textContent = t("game.endturn");
     this.q("surrenderBtn").textContent = t("game.surrender");
     this.q("logTitle").textContent = t("game.log");
+    this.q("logToggle").textContent = t("game.log");
 
     // opponent fanned hand (face-down)
     const oh = this.q("oppHand"); oh.innerHTML = "";

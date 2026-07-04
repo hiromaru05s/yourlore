@@ -83,6 +83,23 @@ export async function applyRanked(env: Env, winnerId: string, loserId: string): 
   if (wNew >= goldMin && w.mmr < goldMin) await markInviteEarned(env, winnerId).catch(() => { /* best effort */ });
 }
 
+/** Apply a ranked DRAW (75-turn limit): Elo with S=0.5 — equal players move 0, unequal slightly. */
+export async function applyRankedDraw(env: Env, aId: string, bId: string): Promise<void> {
+  const [a, b] = await Promise.all([getRating(env, aId), getRating(env, bId)]);
+  const expA = 1 / (1 + Math.pow(10, (b.mmr - a.mmr) / 400));
+  const d = Math.round(K * (0.5 - expA)); // positive → a gains, b loses
+  const aNew = Math.max(0, a.mmr + d);
+  const bNew = Math.max(0, b.mmr - d);
+  const now = Date.now();
+  const season = seasonKey();
+  await env.DB.batch([
+    env.DB.prepare(`UPDATE ratings SET mmr = ?, peak_mmr = MAX(peak_mmr, ?), updated_at = ? WHERE user_id = ? AND season = ?`)
+      .bind(aNew, aNew, now, aId, season),
+    env.DB.prepare(`UPDATE ratings SET mmr = ?, peak_mmr = MAX(peak_mmr, ?), updated_at = ? WHERE user_id = ? AND season = ?`)
+      .bind(bNew, bNew, now, bId, season),
+  ]);
+}
+
 // ---- REST: /api/rank/* ----
 function json(env: Env, body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", ...corsHeaders(env) } });

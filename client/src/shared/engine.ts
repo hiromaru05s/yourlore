@@ -369,6 +369,9 @@ function tickExile(ctx: Ctx, p: PlayerState): void {
   back.forEach((c) => p.hand.push(c));
   if (back.length) ctx.log(`  └ 제외했던 ${back.length}장이 패로 복귀`, `  └ 除外していた${back.length}枚が手札に戻る`);
 }
+/** Hard turn cap: if a game reaches the end of turn MAX_TURNS, it's a draw. */
+export const MAX_TURNS = 75;
+
 function endTurn(g: GameState, ctx: Ctx): void {
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];
@@ -381,6 +384,13 @@ function endTurn(g: GameState, ctx: Ctx): void {
   }
   while (p.hand.length) p.discard.push(p.hand.pop()!);
   p.field.forEach((m) => { m.exhausted = false; m.tempAtk = 0; m.attacksUsed = 0; });
+  // 75-turn limit: the game ends in a DRAW before a new turn would begin
+  if (g.turn >= MAX_TURNS && !g.over) {
+    g.over = true; g.phase = "over"; g.winner = null;
+    ctx.log(`<span class="dmg">${MAX_TURNS}턴 경과 — 무승부!</span>`, `<span class="dmg">${MAX_TURNS}ターン経過 — 引き分け！</span>`);
+    ctx.ev.push({ type: "matchDraw" });
+    return;
+  }
   g.turn++; g.cur = (1 - g.cur) as Side;
   beginTurn(g, ctx, false);
 }

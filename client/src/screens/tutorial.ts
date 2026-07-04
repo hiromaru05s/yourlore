@@ -65,6 +65,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🏆", h: "승리 & 조작", body: [
       "<b>1:1 대전</b>입니다. 상대의 <b>체력을 0</b>으로 만들면 그 즉시 승리해요.",
+      "<b>75턴</b>이 지나도 승부가 나지 않으면 게임은 <b>무승부</b>로 끝납니다.",
       "<b>카드 확대</b>: PC는 우클릭, 모바일은 길게 누르기.",
       "<b>기권</b>: 우측 로그 패널 맨 아래(모바일은 📜 버튼으로 로그 열기).",
       "상대 턴에는 상대의 마나가 실시간으로 표시됩니다.",
@@ -124,6 +125,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🏆", h: "勝利 & 操作", body: [
       "<b>1対1</b>の対戦です。相手の<b>体力を0</b>にすればその時点で勝利です。",
+      "<b>75ターン</b>経っても決着がつかない場合、ゲームは<b>引き分け</b>で終了します。",
       "<b>カード拡大</b>: PCは右クリック、モバイルは長押し。",
       "<b>降参</b>: 右のログパネル最下部(モバイルは📜ボタンでログを開く)。",
       "相手のターン中は相手のマナがリアルタイムで表示されます。",
@@ -183,6 +185,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🏆", h: "Winning & Controls", body: [
       "It's a <b>1v1 duel</b>. Drop the opponent's <b>HP to 0</b> to win instantly.",
+      "If nobody has won by the end of <b>turn 75</b>, the game ends in a <b>draw</b>.",
       "<b>Enlarge cards</b>: right-click on PC, long-press on mobile.",
       "<b>Surrender</b>: bottom of the log panel (📜 button opens the log on mobile).",
       "The opponent's mana is shown live during their turn.",
