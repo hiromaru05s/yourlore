@@ -2,13 +2,16 @@
    LORE — login / home / lobby screens
    ============================================================ */
 .screen { height: 100vh; display: grid; place-items: center; padding: 24px; position: relative; }
+/* the home screen is tall (profile + modes + list) → top-align it and reserve
+   space for the absolute wordmark so they never overlap. */
+.screen:has(.home) { align-items: start; padding: 104px 24px 24px; overflow-y: auto; }
 .topright-lang { position: absolute; top: 22px; right: 26px; z-index: 5; }
 .lang-select select { background: var(--ink-2); color: var(--paper); border: 1px solid var(--line); border-radius: 7px; padding: 6px 11px; font-family: var(--ui); font-size: 13px; cursor: pointer; }
 .lang-select select:focus { outline: none; border-color: var(--brass); }
-.screen-brand { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; justify-content: center; gap: 0; }
+.screen-brand { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; justify-content: center; gap: 0; z-index: 6; }
 /* the real LORE wordmark (eye + LORE) replaces the old CSS mark + text */
 .screen-brand .mark {
-  width: 190px; height: 66px; transform: none; border: none; position: relative;
+  width: 176px; height: 60px; transform: none; border: none; position: relative;
   background: url("/art/brand/lore-wordmark.png") center/contain no-repeat;
   filter: drop-shadow(0 2px 7px #000a) drop-shadow(0 0 16px #4fb4ff55);
 }
