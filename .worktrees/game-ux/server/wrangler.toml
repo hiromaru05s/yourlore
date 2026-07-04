@@ -3,13 +3,6 @@ main = "src/index.ts"
 compatibility_date = "2024-11-01"
 compatibility_flags = ["nodejs_compat"]
 
-# --- Custom domain: yourlore.xyz (zone on the same CF account).
-#     `wrangler deploy` provisions DNS + TLS automatically. ---
-routes = [
-  { pattern = "yourlore.xyz", custom_domain = true },
-  { pattern = "www.yourlore.xyz", custom_domain = true },
-]
-
 # --- Static Assets: serve the built client from the SAME origin as the API,
 #     so cookies + relative /api and /ws calls just work (no CORS/cookie pain). ---
 [assets]
