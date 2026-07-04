@@ -3,10 +3,9 @@
 // (board / market / hand / pile / zoom) so sizing stays consistent.
 // ============================================================
 import type { CardInst, FieldMon, PlayerState } from "../shared/types";
-import { FRAME_BACK, frameFor, TRIBES } from "../shared/cards";
+import { FRAME_BACK, frameFor } from "../shared/cards";
 import { effAtk, effDef, playCost } from "../shared/engine";
-import { showTribeInfo } from "./modal";
-import { cardName, cardText, getLang, t } from "../i18n";
+import { cardName, cardText, t } from "../i18n";
 
 export interface CardOpts {
   size?: "board" | "mkt" | "hand";
@@ -100,12 +99,8 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     node.appendChild(eff);
   }
   if (opt.badge) node.appendChild(el("span", "badge", opt.badge));
-  if (c.tribe) {
-    const tn = TRIBES[c.tribe]?.[getLang()]?.name ?? c.tribe;
-    const tag = el("div", "tribe-tag", `${tn} ⓘ`);
-    tag.onclick = (e) => { e.stopPropagation(); showTribeInfo(c.tribe!); };
-    node.appendChild(tag);
-  }
+  // tribe info is shown BESIDE the card in the zoom view (see anim.zoomCard),
+  // so no on-art tribe button here (keeps the art clean).
   return node;
 }
 

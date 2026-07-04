@@ -11,6 +11,7 @@ import { cardEl } from "./cardView";
 import { bindZoom } from "./anim";
 import { t, getLang } from "../i18n";
 import { logToEn } from "../shared/logEn";
+import { getSfxVolume, setSfxVolume } from "./sound";
 
 const MON_SLOTS = 7;
 const ST_SLOTS = 7;
@@ -44,8 +45,10 @@ export class GameView {
     this.root.innerHTML = `
       <div class="game">
         <div class="topbar">
+          <button class="icon-btn mute-btn" id="muteBtn" title="${t("game.mute")}">🔊</button>
           <div class="brand"><div class="mark"></div><h1>LORE</h1></div>
           <div class="turn-info" id="turnInfo"></div>
+          <button class="btn btn-danger giveup-btn" id="giveupBtn">${t("game.surrender")}</button>
         </div>
         <div class="stage">
           <div class="board-col">
@@ -59,20 +62,23 @@ export class GameView {
             </div>
           </div>
         </div>
-        <!-- turn clock: a depleting ring OUTSIDE the field, on the right -->
-        <div class="turn-clock" id="turnClock" aria-hidden="true"></div>
         <!-- battle log: a left-edge drawer with a mid-left toggle tab -->
         <button class="log-tab" id="logTab" aria-label="log">${t("game.log")}</button>
         <div class="panel logpanel" id="logPanel">
           <div class="panel-title" id="logTitle">${t("game.log")}</div>
           <div class="log" id="log"></div>
-          <div class="log-foot"><button class="btn btn-danger btn-block" id="surrenderBtn">${t("game.surrender")}</button></div>
         </div>
       </div>
       <div class="target-hint" id="targetHint" style="display:none"></div>`;
     this.logEl = this.q("log");
     (this.q("endBtn") as HTMLButtonElement).onclick = () => this.h.onEndTurn();
-    (this.q("surrenderBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
+    (this.q("giveupBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
+    // mute toggle (top-left) — remembers the last non-zero volume
+    const muteBtn = this.q("muteBtn") as HTMLButtonElement;
+    let lastVol = getSfxVolume() || 0.7;
+    const paintMute = () => { muteBtn.textContent = getSfxVolume() <= 0 ? "🔇" : "🔊"; muteBtn.classList.toggle("muted", getSfxVolume() <= 0); };
+    muteBtn.onclick = () => { if (getSfxVolume() > 0) { lastVol = getSfxVolume(); setSfxVolume(0); } else { setSfxVolume(lastVol || 0.7); } paintMute(); };
+    paintMute();
     // battle log — CLOSED by default; a mid-left edge tab opens the drawer.
     // Once opened it stays open (state persisted in localStorage).
     const gameEl = this.root.querySelector(".game") as HTMLElement;
@@ -349,20 +355,24 @@ export class GameView {
     const allTribes = new Set<string>([...byTribe.keys(), ...firedBy.keys()]);
     const tribeChips: string[] = [];
     for (const tr of allTribes) {
-      const ths = tr === "시초" ? [2, 3, 4] : [2, 3];
-      const onField = byTribe.get(tr)?.size ?? 0;
+      const ths = tr === "시초" ? [2, 3, 4] : [2, 3];  // 시초 has a 4-count payoff; others cap at 3
+      const onField = byTribe.get(tr)?.size ?? 0;      // DISTINCT tribe cards on field (matches synergy rule)
       const fired = firedBy.get(tr) ?? new Set<number>();
-      const next = ths.find((th) => !fired.has(th));
       const nm = TRIBES[tr]?.[getLang()]?.name ?? tr;
-      const ready = next !== undefined && onField >= next;   // 달성 임박 (이번에 발동 가능)
-      const marks = ths.map((th) => fired.has(th) ? `<b>✓${th}</b>` : `<i>${th}</i>`).join("");
-      const prog = onField > 0 && next !== undefined ? ` ${onField}/${next}` : "";
-      tribeChips.push(`<span class="tribe-chip ${fired.size ? "has-syn" : ""} ${ready ? "ready" : ""}">${nm}${prog} <span class="tc-marks">${marks}</span></span>`);
+      const allDone = ths.every((th) => fired.has(th));
+      // one pip per threshold: ✓ = synergy achieved, highlighted = reached (fires next summon), dim = not yet
+      const pips = ths.map((th) => {
+        if (fired.has(th)) return `<span class="tp done">✓${th}</span>`;
+        if (onField >= th) return `<span class="tp ready">${th}</span>`;
+        return `<span class="tp">${th}</span>`;
+      }).join("");
+      tribeChips.push(`<span class="tribe-chip ${fired.size ? "has-syn" : ""} ${allDone ? "all" : ""}"><span class="tc-name">${nm}</span><span class="tc-cnt">${onField}</span>${pips}</span>`);
     }
 
     panel.innerHTML = `
       <div class="mp-top">
         <span class="mp-name"><span class="who"></span>${p.name}</span>
+        <div class="mp-clock" id="clock-${isMe ? "me" : "opp"}" aria-hidden="true"></div>
       </div>
       <div class="mp-hp">
         <span class="lbl">${t("game.hp")}</span>
@@ -419,8 +429,12 @@ export class GameView {
       </div>
       <div class="market-div"></div>
       <div class="market-sub">
-        <div class="sub-head"><span class="tag">${t("game.supply")}</span><span class="meta">${supplyMeta}</span>
-          <button class="refresh-btn" id="refreshBtn">⟳ 1</button></div>
+        <div class="sub-head">
+          <span class="tag">${t("game.supply")}</span><span class="meta">${supplyMeta}</span>
+          <button class="refresh-btn" id="refreshBtn"><span class="rf-ico">⟳</span> ${t("game.refresh")} <b>1</b>
+            <span class="refresh-tip">${t("game.refresh.tip")}</span>
+          </button>
+        </div>
         <div class="market-cards" id="supplyMarket"></div>
       </div>`;
 
@@ -434,16 +448,21 @@ export class GameView {
       fixed.appendChild(card);
     });
 
+    // 제시(supply): show sorted by type (monster → spell → trap), keeping the
+    // ORIGINAL slot index for the buy handler; bought (null) slots render last.
     const sup = this.q("supplyMarket");
-    owner.supply.forEach((c, i) => {
-      if (!c) { sup.appendChild(this.slotEl("mkt", true)); return; }
+    const rank = (ty: string) => ty === "mon" ? 0 : (ty === "spell" || ty === "starter") ? 1 : 2;
+    const filled = owner.supply.map((c, i) => ({ c, i })).filter((x) => x.c) as { c: CardInst; i: number }[];
+    filled.sort((a, b) => rank(a.c.t) - rank(b.c.t) || a.c.cost - b.c.cost);
+    for (const { c, i } of filled) {
       const bc = buyCost(owner, c);
       const aff = myTurn && !g.pending && me.mana >= bc;
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc });
       if (aff) card.onclick = () => this.h.onBuySupply(i);
       bindZoom(card, c);
       sup.appendChild(card);
-    });
+    }
+    for (let k = filled.length; k < owner.supply.length; k++) sup.appendChild(this.slotEl("mkt", true));
 
     const rb = this.q("refreshBtn") as HTMLButtonElement;
     rb.disabled = !myTurn || !!g.pending || me.mana < 1;

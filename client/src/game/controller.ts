@@ -397,11 +397,15 @@ export abstract class BaseController implements BoardHandlers {
   }
 
   private renderTimer(): void {
-    const el = document.getElementById("turnClock");
+    const active = this.state.cur === this.you ? "me" : "opp";
+    const other = active === "me" ? "opp" : "me";
+    const clr = document.getElementById(`clock-${other}`);
+    if (clr) { clr.className = "mp-clock"; clr.replaceChildren(); }
+    const el = document.getElementById(`clock-${active}`);
     if (!el) return;
     const total = BaseController.TURN_SECS;
     const s = Math.max(0, this.timerLeft);
-    const mine = this.state.cur === this.you && !this.state.over;
+    const mine = active === "me" && !this.state.over;
     const R = 26, C = 2 * Math.PI * R;
     let arc = el.querySelector(".tc-arc") as SVGCircleElement | null;
     let num = el.querySelector(".tc-num") as HTMLElement | null;
@@ -414,7 +418,7 @@ export abstract class BaseController implements BoardHandlers {
       arc = el.querySelector(".tc-arc"); num = el.querySelector(".tc-num");
       if (!arc || !num) return;
     }
-    el.className = "turn-clock show" + (mine ? " mine" : " opp") + (s <= 5 ? " warn" : "");
+    el.className = "mp-clock show" + (mine ? " mine" : " opp") + (s <= 5 ? " warn" : "");
     // fresh turn (full ring) → snap instantly; otherwise let CSS animate the drain
     arc.style.transition = s >= total ? "none" : "";
     arc.setAttribute("stroke-dashoffset", (C * (1 - s / total)).toFixed(1));
@@ -434,8 +438,10 @@ export abstract class BaseController implements BoardHandlers {
   private stopTimer(): void {
     if (this.timerInt) { clearInterval(this.timerInt); this.timerInt = null; }
     this.timerKey = "";
-    const el = document.getElementById("turnClock");
-    if (el) { el.className = "turn-clock"; el.replaceChildren(); }
+    for (const id of ["clock-me", "clock-opp"]) {
+      const el = document.getElementById(id);
+      if (el) { el.className = "mp-clock"; el.replaceChildren(); }
+    }
   }
 
   protected showWin(): void {
