@@ -3,7 +3,7 @@
 // (board / market / hand / pile / zoom) so sizing stays consistent.
 // ============================================================
 import type { CardInst, FieldMon, PlayerState } from "../shared/types";
-import { FRAME_BACK, frameFor, TRIBES } from "../shared/cards";
+import { FRAME_BACK, TRIBES } from "../shared/cards";
 import { effAtk, effDef, playCost } from "../shared/engine";
 import { showTribeInfo } from "./modal";
 import { cardName, cardText, getLang } from "../i18n";
@@ -46,12 +46,12 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const sizeClass = opt.size === "mkt" ? "card--mkt" : opt.size === "hand" ? "card--hand" : "";
   const node = el("div", `card ${typeClass} ${sizeClass}`.trim());
   node.dataset.uid = c.uid;
-  // 3-layer card: art (behind) → frame overlay with transparent art-window (middle)
-  // → text/cost/stats (front). Swap the frame PNG to restyle every card at once.
+  // 3-layer card, fully CSS-drawn (responsive, no PNG): art (behind) → frame
+  // (drawn border + name/stat plates, transparent art window) → text/cost (front).
   node.appendChild(artEl(c.id));
-  const frame = el("div", "card-frame");
-  frame.style.backgroundImage = `url(${frameFor(c.t)})`;
-  node.appendChild(frame);
+  node.appendChild(el("div", "card-frame"));
+  const tico = c.t === "mon" ? "⚔" : c.t === "trap" ? "▽" : c.t === "starter" ? "◈" : "✦";
+  node.appendChild(el("div", "card-tico", tico));
 
   if (opt.playable) node.classList.add("is-playable");
   if (opt.buyable) node.classList.add("is-buyable");
