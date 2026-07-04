@@ -154,7 +154,8 @@ export function createGame(opts: CreateOpts): ReduceResult {
 
 function rollSupply(g: GameState, p: PlayerState): void {
   const hi = effMaxMana(p);
-  const pool = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= hi && DB[id].cost > 0);
+  const inMarket = new Set(g.market.map((c) => c.id)); // 고정 마켓과 중복 금지
+  const pool = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= hi && DB[id].cost > 0 && !inMarket.has(id));
   const avail = pool.slice();
   const want = p.supplyShrink > 0 ? 2 : 3; // 마켓 크래시: shrink the opponent's next 제시 to 2
   if (p.supplyShrink > 0) p.supplyShrink--;
