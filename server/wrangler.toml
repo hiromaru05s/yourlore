@@ -42,4 +42,4 @@ database_id = "050d409e-913f-4a07-92b8-0d150ee6ce4d"
 [vars]
 APP_ORIGIN = "*"
 GOOGLE_CLIENT_ID = "955911680552-9i1tcrojam3v759dmampaga63d387gvt.apps.googleusercontent.com"
-ADMIN_EMAILS = "maruru836818@gmail.com"
+ADMIN_EMAILS = "maruru836818@gmail.com,suhwoo3@gmail.com"
