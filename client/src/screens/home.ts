@@ -51,6 +51,8 @@ export function mountHome(app: App): Screen {
         <span class="tut-arrow">→</span>
       </div>
       <div class="acct">
+        <span class="credits" title="${t("home.credits")}">💎 ${u?.credits ?? 0}</span>
+        <span>·</span>
         <span class="stats">${t("home.record")} ${u?.wins ?? 0}${t("home.win")} ${u?.losses ?? 0}${t("home.loss")}</span>
         <span>·</span>
         <a id="logout" style="cursor:pointer">${t("home.logout")}</a>

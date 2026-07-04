@@ -7,6 +7,7 @@ import type { Env } from "./env";
 import { corsHeaders, getUser, handleAuth } from "./auth";
 import { getRating, handleRank } from "./rank";
 import { handleGoogleOAuth } from "./oauth";
+import { handleRewards } from "./rewards";
 import { Matchmaker } from "./matchmaker";
 import { GameRoom } from "./gameRoom";
 
@@ -30,6 +31,10 @@ export default {
     if (path.startsWith("/api/rank/")) {
       const user = await getUser(env, req);
       return handleRank(env, req, path.slice(4), user); // strip "/api"
+    }
+    // ---- credit rewards ----
+    if (path.startsWith("/api/rewards/")) {
+      return handleRewards(env, req, path.slice(4)); // strip "/api"
     }
     // ---- auth / REST ----
     if (path.startsWith("/api/")) {

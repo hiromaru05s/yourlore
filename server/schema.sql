@@ -8,7 +8,18 @@ CREATE TABLE IF NOT EXISTS users (
   display     TEXT NOT NULL,              -- shown name (defaults to email local-part)
   created_at  INTEGER NOT NULL,
   wins        INTEGER NOT NULL DEFAULT 0,
-  losses      INTEGER NOT NULL DEFAULT 0
+  losses      INTEGER NOT NULL DEFAULT 0,
+  credits     INTEGER NOT NULL DEFAULT 0  -- 단일 소프트 커런시 (docs/monetization.md)
+);
+
+-- 1회성 보상 지급 로그 (튜토리얼 단계 보상 등). PK가 중복 지급을 막는다.
+-- 보상 금액은 서버의 REWARDS 테이블(rewards.ts)이 유일한 진실 — 클라는 key만 보낸다.
+CREATE TABLE IF NOT EXISTS rewards (
+  user_id     TEXT NOT NULL REFERENCES users(id),
+  key         TEXT NOT NULL,              -- e.g. 'tut:1'
+  amount      INTEGER NOT NULL,
+  created_at  INTEGER NOT NULL,
+  PRIMARY KEY (user_id, key)
 );
 
 CREATE TABLE IF NOT EXISTS sessions (

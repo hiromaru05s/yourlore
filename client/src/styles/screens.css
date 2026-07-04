@@ -67,6 +67,21 @@
 .tut-sec p b { color: var(--paper); font-weight: 700; }
 .tut-cta { display: flex; justify-content: center; padding: 8px 0 20px; }
 
+/* home: credit balance chip */
+.home .acct .credits { font-family: var(--mono); color: var(--cyan); letter-spacing: .04em; }
+
+/* ---- interactive tutorial panel (tutorial screen) ---- */
+.tut-inter { background: var(--ink-2); border: 1px solid var(--brass-dim); border-radius: 12px; padding: 16px 18px 4px; }
+.tut-inter > p { font-size: 13px; }
+.tut-steps { list-style: none; margin: 12px 0 4px; display: flex; flex-direction: column; gap: 6px; }
+.tut-steps li { display: flex; align-items: center; gap: 10px; background: var(--ink-1); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font-size: 13px; color: var(--paper-dim); }
+.tut-steps li.claimed { opacity: .75; border-color: var(--good); }
+.tut-step-n { font-family: var(--mono); font-size: 11px; color: var(--brass); border: 1px solid var(--brass-dim); border-radius: 50%; width: 20px; height: 20px; display: grid; place-items: center; flex: none; }
+.tut-step-t { color: var(--paper); }
+.tut-step-r { margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--cyan); white-space: nowrap; }
+.tut-steps li.claimed .tut-step-r { color: var(--good); }
+.tut-rules-h { font-family: var(--mono); font-size: 13px; letter-spacing: .14em; color: var(--paper-faint); text-transform: uppercase; margin: 22px 0 14px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+
 /* ---- lobby (matchmaking) ---- */
 .lobby { text-align: center; }
 .lobby .spinner { width: 54px; height: 54px; margin: 0 auto 22px; border: 3px solid var(--line); border-top-color: var(--brass); border-radius: 50%; animation: spin 1s linear infinite; }

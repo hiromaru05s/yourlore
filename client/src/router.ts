@@ -38,6 +38,7 @@ export class App {
   login(): void { this.swap(() => mountLogin(this)); }
   home(): void { this.swap(() => mountHome(this)); }
   tutorial(): void { this.swap(() => mountTutorial(this)); }
+  tutorialGame(): void { this.swap(() => mountGame(this, { mode: "tutorial" })); }
   cards(): void { this.swap(() => mountCards(this)); }
   botGame(): void { this.swap(() => mountGame(this, { mode: "bot" })); }
   onlineLobby(): void { this.swap(() => mountLobby(this)); }

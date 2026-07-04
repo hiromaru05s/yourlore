@@ -5,6 +5,8 @@
 import type { App, Screen } from "../router";
 import { t, getLang, onLangChange } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
+import { TUT_STEPS } from "../game/tutorial";
+import { api } from "../net/api";
 
 interface Section { icon: string; h: string; body: string[]; }
 
@@ -200,6 +202,22 @@ export function mountTutorial(app: App): Screen {
         <h2>${t("tutorial.title")}</h2>
       </div>
       <div class="tut-body">
+        <section class="tut-sec tut-inter">
+          <h3><span class="tut-ico">🎮</span>${t("tutorial.inter.title")}</h3>
+          <p>${t("tutorial.inter.desc")}</p>
+          <ol class="tut-steps">
+            ${TUT_STEPS.map((s, i) => `
+              <li data-key="${s.key}">
+                <span class="tut-step-n">${i + 1}</span>
+                <span class="tut-step-t">${t(s.titleKey)}</span>
+                <span class="tut-step-r">+${s.reward} 💎</span>
+              </li>`).join("")}
+          </ol>
+          <div class="tut-cta">
+            <button class="btn btn-primary" id="startInter">${t("tutorial.inter.start")}</button>
+          </div>
+        </section>
+        <h3 class="tut-rules-h">${t("tutorial.rules")}</h3>
         ${secs.map((s) => `
           <section class="tut-sec">
             <h3><span class="tut-ico">${s.icon}</span>${s.h}</h3>
@@ -214,6 +232,17 @@ export function mountTutorial(app: App): Screen {
   wrap.querySelector(".topright-lang")!.appendChild(langSelectEl());
   (wrap.querySelector("#back") as HTMLElement).onclick = () => app.home();
   (wrap.querySelector("#play") as HTMLElement).onclick = () => app.botGame();
+  (wrap.querySelector("#startInter") as HTMLElement).onclick = () => app.tutorialGame();
+
+  // mark steps whose reward was already claimed (server is the source of truth)
+  void api.claimedRewards().then(({ keys }) => {
+    for (const k of keys) {
+      const li = wrap.querySelector(`.tut-steps li[data-key="${k}"]`);
+      if (!li) continue;
+      li.classList.add("claimed");
+      (li.querySelector(".tut-step-r") as HTMLElement).innerHTML = `✓ ${t("tutorial.inter.done")}`;
+    }
+  });
 
   const unsub = onLangChange(() => app.tutorial());
   return { destroy: unsub };
