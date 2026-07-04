@@ -26,18 +26,19 @@
 .gear:hover { color: var(--brass); border-color: var(--brass-dim); }
 
 /* ---- stage ---- */
-.stage { display: grid; grid-template-columns: 1fr 296px; gap: 10px; min-height: 0; overflow: hidden; }
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) clamp(220px, 21vw, 300px); gap: 10px; min-height: 0; overflow: hidden; }
 .board-col { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 5px; min-height: 0; align-content: start; }
 
 /* opponent fanned hand (face-down), overflowing from top */
 .opp-hand { display: flex; justify-content: center; height: 22px; margin-top: -3px; position: relative; z-index: 40; }
 .opp-hand .card--back { width: 44px; height: 70px; margin: 0 -14px; transform-origin: bottom center; }
 
-/* a player row: the field-block fills it; block = [zones] + [meta panel] */
-.prow { display: block; }
+/* a player row: the field-block is a centered content-width cluster (zones + meta panel),
+   so the play area stays snug instead of stretching across the whole width. */
+.prow { display: flex; justify-content: center; }
 .field-block {
   position: relative;
-  display: flex; align-items: stretch; gap: 12px;
+  display: flex; align-items: stretch; gap: 12px; max-width: 100%;
   background:
     radial-gradient(130% 120% at 30% 0%, #ffffff06, transparent 55%),
     linear-gradient(180deg, #141d2e88, #080d16aa);
@@ -59,10 +60,10 @@
   box-shadow: inset 0 0 0 1px #ff7a4d3a, inset 0 0 34px #d8542f16, 0 0 26px #d8542f24, 0 6px 20px #0006;
 }
 
-/* ---- zones column (two rows: monster / spell-trap) ---- */
-.zones { display: flex; flex-direction: column; gap: var(--slot-gap); flex: 1 1 auto; min-width: 0; }
+/* ---- zones column (two rows: monster / spell-trap) — sized to their slots ---- */
+.zones { display: flex; flex-direction: column; gap: var(--slot-gap); flex: 0 1 auto; min-width: 0; }
 .zone-row { display: flex; align-items: center; gap: var(--slot-gap); }
-.zone { display: flex; gap: var(--slot-gap); flex: 1 1 auto; }
+.zone { display: flex; gap: var(--slot-gap); flex: 0 1 auto; }
 .zone-row > .inline-pile { flex: 0 0 auto; }
 
 /* ---- right-side meta panel: name/turn · HP · mana · buttons · tribe · timer ---- */
