@@ -89,6 +89,7 @@ export interface PlayerState {
   bonusDrawPerm: number; // permanent extra draw at turn start (귀족 3 synergy)
   bleed: number; // persistent damage taken at the start of each of this player's turns
   uses: Record<string, number>; // per-game count of how many times each card id has been played
+  buys: Record<string, number>; // per-game count of how many times each card id has been bought (analytics)
   usesTurn: Record<string, number>; // per-turn count (reset each turn)
   playsTurn?: number; // total cards played this turn (monsters/spells/traps/starters)
   spellSealTurn?: boolean; // cannot cast spells for the rest of this turn (침묵의 심판)

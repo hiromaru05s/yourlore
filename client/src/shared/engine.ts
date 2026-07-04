@@ -107,7 +107,7 @@ function mkPlayer(g: GameState, id: string, name: string, isBot: boolean): Playe
     field: [], traps: [], supply: [],
     boughtCount: 0, taxFlag: false,
     enchants: [], tribesFired: [], bonusDrawPerm: 0, bleed: 0,
-    uses: {}, usesTurn: {}, playsTurn: 0, removed: [], supplyShrink: 0, defendHeal: 0, manaGainNext: 0, skipNext: false,
+    uses: {}, buys: {}, usesTurn: {}, playsTurn: 0, removed: [], supplyShrink: 0, defendHeal: 0, manaGainNext: 0, skipNext: false,
   };
 }
 
@@ -1604,7 +1604,7 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
       const card = g.market[action.i];
       const bc = card ? buyCost(p, card) : 0;
       if (card && p.mana >= bc) {
-        p.mana -= bc; p.discard.push(inst(g, card.id)); p.boughtCount++; p.taxFlag = true;
+        p.mana -= bc; p.discard.push(inst(g, card.id)); p.boughtCount++; p.taxFlag = true; p.buys[card.id] = (p.buys[card.id] || 0) + 1;
         ctx.log(`<span class="t">${p.name}</span> 고정 마켓 ${cn(card)} 구매 (${bc}) <span class="muted">[묘지로]</span>`, `<span class="t">${p.name}</span> 固定マーケット ${cn(card)} 購入 (${bc}) <span class="muted">[墓地へ]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "market", i: action.i, id: card.id });
       }
@@ -1614,7 +1614,7 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
       const card = p.supply[action.i];
       const bc = card ? buyCost(p, card) : 0;
       if (card && p.mana >= bc) {
-        p.mana -= bc; p.discard.push(inst(g, card.id)); p.supply[action.i] = null; p.boughtCount++; p.taxFlag = true;
+        p.mana -= bc; p.discard.push(inst(g, card.id)); p.supply[action.i] = null; p.boughtCount++; p.taxFlag = true; p.buys[card.id] = (p.buys[card.id] || 0) + 1;
         ctx.log(`<span class="t">${p.name}</span> 제시 마켓 ${cn(card)} 구매 (${bc}) <span class="muted">[묘지로]</span>`, `<span class="t">${p.name}</span> 提示マーケット ${cn(card)} 購入 (${bc}) <span class="muted">[墓地へ]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "supply", i: action.i, id: card.id });
       }

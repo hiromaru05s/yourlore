@@ -9,6 +9,9 @@
 import type { Env, SessionUser } from "./env";
 import { corsHeaders, getUser } from "./auth";
 import { seasonKey, tierOf } from "./rank";
+import { BUYABLE_POOL } from "../../client/src/shared/cards";
+
+const BUYABLE_IDS = BUYABLE_POOL;
 
 function json(env: Env, body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
@@ -85,20 +88,27 @@ export async function handleAdmin(env: Env, req: Request, path: string): Promise
     const tierDist: Record<string, number> = {};
     for (const r of tierRows.results ?? []) { const t = tierOf(r.mmr); tierDist[t] = (tierDist[t] ?? 0) + 1; }
 
-    // card win-rates (last 1000 PvP)
+    // per-card stats over the last 2000 PvP matches: buys, plays, games-used, win-rate.
     const recent = await DB.prepare(
-      `SELECT player_a, player_b, winner, cards_a, cards_b FROM matches WHERE mode!='bot' AND cards_a IS NOT NULL ORDER BY created_at DESC LIMIT 1000`
-    ).all<{ player_a: string; player_b: string; winner: string | null; cards_a: string; cards_b: string }>();
-    const agg: Record<string, { win: number; lose: number }> = {};
+      `SELECT player_a, player_b, winner, cards_a, cards_b, buys_a, buys_b FROM matches WHERE mode!='bot' AND cards_a IS NOT NULL ORDER BY created_at DESC LIMIT 2000`
+    ).all<{ player_a: string; player_b: string; winner: string | null; cards_a: string; cards_b: string; buys_a: string | null; buys_b: string | null }>();
+    const agg: Record<string, { buys: number; plays: number; win: number; lose: number }> = {};
+    const bump = (id: string): typeof agg[string] => (agg[id] ??= { buys: 0, plays: 0, win: 0, lose: 0 });
+    const parse = (s: string | null): Record<string, number> => { try { return JSON.parse(s || "{}"); } catch { return {}; } };
     for (const m of recent.results ?? []) {
-      for (const [who, blob] of [[m.player_a, m.cards_a], [m.player_b, m.cards_b]] as [string, string][]) {
-        let uses: Record<string, number>; try { uses = JSON.parse(blob || "{}"); } catch { continue; }
+      for (const [who, useBlob, buyBlob] of [[m.player_a, m.cards_a, m.buys_a], [m.player_b, m.cards_b, m.buys_b]] as [string, string, string | null][]) {
+        const uses = parse(useBlob), buys = parse(buyBlob);
         const won = m.winner === who;
-        for (const id of Object.keys(uses)) { agg[id] ??= { win: 0, lose: 0 }; if (won) agg[id].win++; else agg[id].lose++; }
+        for (const id of Object.keys(buys)) bump(id).buys += buys[id];
+        for (const id of Object.keys(uses)) { const a = bump(id); a.plays += uses[id]; if (won) a.win++; else a.lose++; }
       }
     }
-    const cards = Object.entries(agg).map(([id, a]) => ({ id, games: a.win + a.lose, winrate: a.win / (a.win + a.lose) }))
-      .filter((c) => c.games >= 5).sort((a, b) => b.winrate - a.winrate);
+    // every buyable card, even with zero data (so the balance table is complete)
+    const cards = BUYABLE_IDS.map((id) => {
+      const a = agg[id] ?? { buys: 0, plays: 0, win: 0, lose: 0 };
+      const games = a.win + a.lose;
+      return { id, buys: a.buys, plays: a.plays, games, winrate: games > 0 ? a.win / games : null };
+    });
 
     return json(env, {
       overview: {

@@ -13,9 +13,10 @@ interface Stats {
   overview: { users: number; dauToday: number; newToday: number; gamesToday: number; wau: number; mau: number; stickiness: number; matches: Record<string, number> };
   acquisition: { signupsByDay: { d: string; n: number }[]; signupsBySource: { s: string; n: number }[]; verifiedRate: number; loginSplit: { google: number; email: number }; invitedSignups: number; invites: Record<string, number> };
   retention: { cohorts: { cohort: string; n: number; d1: number; d7: number }[]; wau: number; mau: number; stickiness: number; depth: { d0: number; d1: number; d2_5: number; d6p: number }; active7: number; activePrev7: number; rankedParticipation: number };
-  gameplay: { gamesByDay: { d: string; mode: string; n: number }[]; tierDist: Record<string, number>; cards: { id: string; games: number; winrate: number }[]; cardSample: number; firstTurnWinRate: number | null; firstTurnSample: number; avgTurns: number | null; turnsSample: number };
+  gameplay: { gamesByDay: { d: string; mode: string; n: number }[]; tierDist: Record<string, number>; cards: CardStat[]; cardSample: number; firstTurnWinRate: number | null; firstTurnSample: number; avgTurns: number | null; turnsSample: number };
   monetization: { note: string; subscriptions: number; cancellations: number; sales: number; adRevenue: number };
 }
+interface CardStat { id: string; buys: number; plays: number; games: number; winrate: number | null }
 interface AdminUser {
   id: string; email: string; display: string; created_at: number; verified: number;
   source: string | null; wins: number; losses: number; invited_by: string | null;
@@ -47,6 +48,7 @@ export function mountAdmin(app: App): Screen {
   let stats: Stats | null = null;
   let users: AdminUser[] = [];
   let tab: TabKey = "overview";
+  let cardSort: { key: keyof CardStat | "name"; dir: 1 | -1 } = { key: "winrate", dir: -1 };
 
   const gate = (loggedIn: boolean) => {
     tabsEl.style.display = "none";
@@ -136,12 +138,11 @@ export function mountAdmin(app: App): Screen {
         <div class="adm-grid">
           <section><h3>게임 수 (30일)</h3><table><tr class="hd"><td>일</td><td class="num">랭크</td><td class="num">노말</td><td class="num">봇</td></tr>${gdays.map((d) => `<tr><td>${d.slice(5)}</td><td class="num">${gAt(d, "ranked")}</td><td class="num">${gAt(d, "online")}</td><td class="num">${gAt(d, "bot")}</td></tr>`).join("") || "<tr><td>없음</td></tr>"}</table></section>
           <section><h3>티어 분포 (이번 시즌)</h3><table>${TIER_ORDER.map((tk) => `<tr><td style="color:${TIER_META[tk].color}">${tierLabel(tk)}</td><td class="num">${g.tierDist[tk] ?? 0}</td><td class="barcell">${bar(g.tierDist[tk] ?? 0, maxTier, TIER_META[tk].color)}</td></tr>`).join("")}</table></section>
-          <section class="wide"><h3>카드 승률 — OP/약체 탐지 (최근 PvP ${g.cardSample}판, 5판 이상)</h3>
-            <table><tr class="hd"><td>#</td><td>카드</td><td class="num">사용 게임</td><td class="num">승률</td></tr>
-            ${g.cards.length === 0 ? `<tr><td colspan="4">데이터 없음 — 카드 기록은 이번 배포 이후 매치부터 쌓입니다.</td></tr>`
-              : g.cards.slice(0, 60).map((c, i) => `<tr class="${c.winrate >= 0.6 ? "hot" : c.winrate <= 0.4 ? "cold" : ""}"><td>${i + 1}</td><td>${cardName(c.id)}</td><td class="num">${c.games}</td><td class="num">${pctS(c.winrate)}</td></tr>`).join("")}
-            </table><p class="adm-note">빨강 = 60%↑(OP 후보), 파랑 = 40%↓(약체). 표본 작으면 노이즈 주의.</p></section>
+          <section class="wide"><h3>카드 통계 — 전체 ${g.cards.length}장 · 구매/사용/승률 (최근 PvP ${g.cardSample}판)</h3>
+            <div id="cardTable"></div>
+            <p class="adm-note">헤더 클릭 = 정렬. 빨강 = 승률 60%↑(OP 후보), 파랑 = 40%↓(약체). 표본(게임 수) 작으면 노이즈 주의.</p></section>
         </div>`;
+      renderCardTable();
     } else if (tab === "monetization") {
       const m = s.monetization;
       body.innerHTML = `
@@ -153,10 +154,41 @@ export function mountAdmin(app: App): Screen {
         </div>
         <p class="adm-note">${m.note}. 결제(Paddle) 붙이면 여기가 실데이터로 채워집니다.</p>`;
     } else if (tab === "users") {
-      body.innerHTML = `<h3 style="font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--brass);margin-bottom:10px">유저 리스트 <input class="input adm-search" id="admUserQ" placeholder="이메일/닉네임 검색"></h3><div id="admUsers" class="adm-note">불러오는 중…</div>`;
+      body.innerHTML = `<div class="adm-sticky"><h3 style="font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--brass);margin:0">유저 리스트 <input class="input adm-search" id="admUserQ" placeholder="이메일/닉네임 검색"></h3></div><div id="admUsers" class="adm-note">불러오는 중…</div>`;
       if (users.length) renderUsers(); else void loadUsers();
       (body.querySelector("#admUserQ") as HTMLInputElement | null)?.addEventListener("input", renderUsers);
     }
+  }
+
+  function renderCardTable(): void {
+    if (!stats) return;
+    const box = body.querySelector("#cardTable") as HTMLElement | null;
+    if (!box) return;
+    const cols: { key: keyof CardStat | "name"; label: string; num?: boolean }[] = [
+      { key: "name", label: "카드" },
+      { key: "buys", label: "구매", num: true },
+      { key: "plays", label: "사용", num: true },
+      { key: "games", label: "게임", num: true },
+      { key: "winrate", label: "승률", num: true },
+    ];
+    const val = (c: CardStat, k: keyof CardStat | "name"): number | string =>
+      k === "name" ? cardName(c.id) : k === "winrate" ? (c.winrate ?? -1) : (c[k] as number);
+    const sorted = [...stats.gameplay.cards].sort((a, b) => {
+      const va = val(a, cardSort.key), vb = val(b, cardSort.key);
+      if (typeof va === "string" || typeof vb === "string") return String(va).localeCompare(String(vb)) * cardSort.dir;
+      return (va - vb) * cardSort.dir;
+    });
+    const arrow = (k: string) => cardSort.key === k ? (cardSort.dir === -1 ? " ▼" : " ▲") : "";
+    box.innerHTML = `<table class="adm-sort"><tr class="hd">
+      ${cols.map((c) => `<td class="${c.num ? "num" : ""} th" data-k="${c.key}">${c.label}${arrow(c.key)}</td>`).join("")}
+    </tr>${sorted.map((c) => `<tr class="${c.winrate != null && c.winrate >= 0.6 ? "hot" : c.winrate != null && c.winrate <= 0.4 ? "cold" : ""}">
+      <td>${cardName(c.id)}</td><td class="num">${c.buys}</td><td class="num">${c.plays}</td><td class="num">${c.games}</td><td class="num">${c.winrate == null ? "—" : pctS(c.winrate)}</td>
+    </tr>`).join("")}</table>`;
+    box.querySelectorAll(".th").forEach((th) => (th as HTMLElement).onclick = () => {
+      const k = (th as HTMLElement).dataset.k as keyof CardStat | "name";
+      cardSort = cardSort.key === k ? { key: k, dir: (cardSort.dir === -1 ? 1 : -1) } : { key: k, dir: k === "name" ? 1 : -1 };
+      renderCardTable();
+    });
   }
 
   function renderUsers(): void {
