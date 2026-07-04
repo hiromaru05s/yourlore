@@ -157,6 +157,17 @@ export async function handleAdmin(env: Env, req: Request, path: string): Promise
     });
   }
 
+  // 실시간 접속 현황 (가벼운 폴링용) — 최근 45초 내 하트비트만 유효
+  if (path === "/admin/presence") {
+    const win = Date.now() - 45_000;
+    const rows = await env.DB.prepare(`SELECT state, COUNT(*) AS n FROM presence WHERE ts > ? GROUP BY state`).bind(win).all<{ state: string; n: number }>();
+    const by = Object.fromEntries((rows.results ?? []).map((r) => [r.state, r.n]));
+    const online = by.online ?? 0, bot = by.bot ?? 0, queue = by.queue ?? 0, menu = by.menu ?? 0;
+    // 오래된 행 청소 (1시간+) — 가벼운 유지보수
+    void env.DB.prepare(`DELETE FROM presence WHERE ts < ?`).bind(Date.now() - 3600_000).run().catch(() => { /* best effort */ });
+    return json(env, { online, bot, queue, menu, playing: online + bot, total: online + bot + queue + menu, ts: Date.now() });
+  }
+
   if (path === "/admin/users") {
     const rows = await env.DB.prepare(
       `SELECT u.id, u.email, u.display, u.created_at, u.verified, u.source, u.wins, u.losses, u.invited_by,

@@ -5,6 +5,7 @@ import type { Side } from "./shared/types";
 import type { User } from "./net/api";
 import { api } from "./net/api";
 import { aIdentify, aReset, aCapture } from "./net/analytics";
+import { setPresence, stopPresence } from "./net/presence";
 import { mountLogin } from "./screens/login";
 import { mountHome } from "./screens/home";
 import { mountLobby } from "./screens/lobby";
@@ -42,14 +43,15 @@ export class App {
   }
 
   login(): void { this.swap(() => mountLogin(this)); }
-  home(): void { this.swap(() => mountHome(this)); }
-  tutorial(): void { this.swap(() => mountTutorial(this)); }
-  cards(): void { this.swap(() => mountCards(this)); }
-  botGame(): void { aCapture("game_start", { mode: "bot" }); this.swap(() => mountGame(this, { mode: "bot" })); }
-  onlineLobby(): void { this.swap(() => mountLobby(this)); }
-  rankedLobby(): void { this.swap(() => mountLobby(this, true)); }
-  leaderboard(): void { this.swap(() => mountLeaderboard(this)); }
+  home(): void { setPresence("menu"); this.swap(() => mountHome(this)); }
+  tutorial(): void { setPresence("menu"); this.swap(() => mountTutorial(this)); }
+  cards(): void { setPresence("menu"); this.swap(() => mountCards(this)); }
+  botGame(): void { setPresence("bot"); aCapture("game_start", { mode: "bot" }); this.swap(() => mountGame(this, { mode: "bot" })); }
+  onlineLobby(): void { setPresence("queue"); this.swap(() => mountLobby(this)); }
+  rankedLobby(): void { setPresence("queue"); this.swap(() => mountLobby(this, true)); }
+  leaderboard(): void { setPresence("menu"); this.swap(() => mountLeaderboard(this)); }
   onlineGame(roomId: string, you: Side, oppName: string): void {
+    setPresence("online");
     aCapture("game_start", { mode: "online" });
     this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName }));
   }
@@ -57,6 +59,7 @@ export class App {
   async logout(): Promise<void> {
     await api.logout().catch(() => {});
     aReset();
+    stopPresence();
     this.user = null;
     this.login();
   }

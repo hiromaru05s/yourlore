@@ -59,6 +59,16 @@ export default {
         .bind(crypto.randomUUID(), user.id, "bot", body.won ? user.id : "bot", "bot", Date.now(), Date.now()).run().catch(() => { /* best effort */ });
       return new Response(JSON.stringify({ ok: true }), { headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
     }
+    // ---- presence heartbeat (real-time online counts; covers bot games too) ----
+    if (path === "/api/presence" && req.method === "POST") {
+      const user = await getUser(env, req);
+      if (!user) return new Response(JSON.stringify({ ok: false }), { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
+      const body = (await req.json().catch(() => ({}))) as { state?: string };
+      const state = ["menu", "queue", "online", "bot"].includes(body.state || "") ? body.state! : "menu";
+      await env.DB.prepare(`INSERT INTO presence (user_id, state, ts) VALUES (?,?,?) ON CONFLICT(user_id) DO UPDATE SET state=excluded.state, ts=excluded.ts`)
+        .bind(user.id, state, Date.now()).run().catch(() => { /* best effort */ });
+      return new Response(JSON.stringify({ ok: true }), { headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
+    }
     // ---- auth / REST ----
     if (path.startsWith("/api/")) {
       return handleAuth(env, req, path.slice(4)); // strip "/api"

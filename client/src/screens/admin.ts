@@ -50,6 +50,7 @@ export function mountAdmin(app: App): Screen {
   let tab: TabKey = "overview";
   let cardSort: { key: keyof CardStat | "name"; dir: 1 | -1 } = { key: "winrate", dir: -1 };
   let selVer = "";
+  let presenceTimer: ReturnType<typeof setInterval> | null = null;
 
   const gate = (loggedIn: boolean) => {
     tabsEl.style.display = "none";
@@ -65,6 +66,15 @@ export function mountAdmin(app: App): Screen {
     tabsEl.querySelectorAll(".adm-tab").forEach((b) => (b as HTMLElement).onclick = () => { tab = (b as HTMLElement).dataset.k as TabKey; renderTabs(); renderTab(); });
   };
 
+  async function pollPresence(): Promise<void> {
+    if (tab !== "overview") return;
+    const r = await fetch("/api/admin/presence", { credentials: "include" }).catch(() => null);
+    if (!r?.ok) return;
+    const p = await r.json() as { online: number; bot: number; queue: number; menu: number; total: number };
+    const set = (id: string, v: number) => { const el = body.querySelector(id); if (el) el.textContent = String(v); };
+    set("#lvTotal", p.total); set("#lvOnline", p.online); set("#lvBot", p.bot); set("#lvQueue", p.queue); set("#lvMenu", p.menu);
+  }
+
   const kpi = (label: string, value: string, hint = "") => `<div class="adm-kpi"><div class="k-v">${value}</div><div class="k-l">${label}</div>${hint ? `<div class="k-h">${hint}</div>` : ""}</div>`;
 
   function renderTab(): void {
@@ -73,6 +83,14 @@ export function mountAdmin(app: App): Screen {
     if (tab === "overview") {
       const o = s.overview;
       body.innerHTML = `
+        <div class="adm-live" id="admLive">
+          <span class="live-dot"></span><b>실시간 접속</b>
+          <span class="live-stat">전체 <b id="lvTotal">…</b></span>
+          <span class="live-stat hot">대전 중 <b id="lvOnline">…</b></span>
+          <span class="live-stat hot">봇전 중 <b id="lvBot">…</b></span>
+          <span class="live-stat">매칭 대기 <b id="lvQueue">…</b></span>
+          <span class="live-stat">로비/메뉴 <b id="lvMenu">…</b></span>
+        </div>
         <div class="adm-kpis">
           ${kpi("총 유저", String(o.users))}
           ${kpi("오늘 신규", String(o.newToday))}
@@ -89,6 +107,7 @@ export function mountAdmin(app: App): Screen {
           </table></section>
         </div>
         <p class="adm-note">퍼널·세션 리플레이·정밀 코호트는 <a href="https://us.posthog.com" target="_blank" rel="noopener" style="color:var(--brass)">PostHog ↗</a>. 여기선 일일 핵심 숫자를 봅니다.</p>`;
+      void pollPresence(); // fill the live numbers now that #lv* exist
     } else if (tab === "acquisition") {
       const a = s.acquisition;
       const maxSign = Math.max(1, ...a.signupsByDay.map((r) => r.n));
@@ -230,8 +249,9 @@ export function mountAdmin(app: App): Screen {
     (sub.querySelector("#admReload") as HTMLElement).onclick = () => void load();
     renderTabs();
     renderTab();
+    if (!presenceTimer) presenceTimer = setInterval(() => void pollPresence(), 8000); // live refresh every 8s
   }
 
   void load();
-  return {};
+  return { destroy: () => { if (presenceTimer) clearInterval(presenceTimer); } };
 }

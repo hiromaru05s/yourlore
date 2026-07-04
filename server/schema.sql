@@ -33,6 +33,14 @@ CREATE TABLE IF NOT EXISTS invite_rewards (
 );
 CREATE INDEX IF NOT EXISTS idx_invite_rewards_inviter ON invite_rewards(inviter_id);
 
+-- 실시간 접속 현황 (하트비트로 갱신, 최근 N초 내 신호만 유효)
+CREATE TABLE IF NOT EXISTS presence (
+  user_id  TEXT PRIMARY KEY,
+  state    TEXT NOT NULL,               -- 'menu' | 'queue' | 'online' | 'bot'
+  ts       INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_presence_ts ON presence(ts);
+
 -- 이메일 인증/비밀번호 재설정 토큰 (유저+종류당 1개 활성)
 CREATE TABLE IF NOT EXISTS email_tokens (
   token       TEXT PRIMARY KEY,
