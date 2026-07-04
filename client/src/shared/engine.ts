@@ -897,7 +897,7 @@ const CUSTOM_SPELLS = new Set<string>([
   "GS7_0", "GS7_2", "GS8_0", "GS8_2", "GS8_3", "GS8_4", "GS8_5", "GS9_0", "GS9_2", "GS10_0", "GS10_1", "GS10_2",
   "HANDRESET", "TIMEWARP", "GAMBLE", "DICE8",
   "RUNE1", "RUNE2", "RUNE3", "GENESIS_SONG", "GENESIS_MAGIC",
-  "BLOOD1", "BLOOD2", "BLOOD3", "DISARM3", "FORBIDDEN", "CATALYST", "MEDITATE", "PRAYER", "HERMIT", "LUCKY_CHEST", "GUILD_CHEST", "SCRAPPER", "WALLBREAK1", "WALLBREAK2", "SNIPE1", "SNIPE2", "SHATTER", "INQUISITION", "SCARECROW", "LEVY", "CULL_FLOOD", "PURGE_ALL", "EXILE_NUKE1", "EXILE_NUKE2", "GREED_PRICE", "MARKET_CRISIS",
+  "BLOOD1", "BLOOD2", "BLOOD3", "DISARM3", "FORBIDDEN", "CATALYST", "MEDITATE", "PRAYER", "HERMIT", "LUCKY_CHEST", "GUILD_CHEST", "SCRAPPER", "WALLBREAK1", "WALLBREAK2", "SNIPE1", "SNIPE2", "SHATTER", "INQUISITION", "SCARECROW", "LEVY", "CULL_FLOOD", "PURGE_ALL", "EXILE_NUKE1", "EXILE_NUKE2", "GREED_PRICE", "MARKET_CRISIS", "GOLIATH_HUNT", "MASSACRE",
 ]);
 const chance = (g: GameState, pct: number): boolean => randInt(g, 100) < pct;
 function tag(p: PlayerState, card: CardInst): string { return `<span class="t">${p.name}</span> ${cn(card)} →`; }
@@ -1029,6 +1029,19 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "DISARM3": { // 마법연구기관: 상대 영구마법 1장 파괴 + 게임에서 제외
       if (o.enchants.length) { const e = o.enchants.splice(randInt(g, o.enchants.length), 1)[0]; rmz(o).push(e.card); ctx.log(`${tag(p, card)} ${cn(e.card)} 파괴 + 게임에서 제외`, `${tag(p, card)} ${cn(e.card)} 破壊 + ゲームから除外`); }
+      break;
+    }
+    case "GOLIATH_HUNT": { // 골리앗 사냥: 방어 20+ 몬스터 중 최고가치 1체 파괴
+      const gts = o.field.filter((mm) => effDef(o, mm) >= 20)
+        .sort((a2, b2) => (effAtk(o, b2) + effDef(o, b2)) - (effAtk(o, a2) + effDef(o, a2)));
+      if (gts.length) { ctx.log(`${tag(p, card)} 거벽 ${cn(gts[0])} 파괴!`, `${tag(p, card)} 巨壁 ${cn(gts[0])} を破壊！`); ctx.destroyMonster(o, gts[0]); }
+      break;
+    }
+    case "MASSACRE": { // 대학살: 상대 몬스터 전멸 + 자신 8 데미지
+      const mk2 = o.field.length;
+      for (const mm of [...o.field]) ctx.destroyMonster(o, mm);
+      ctx.log(`${tag(p, card)} 상대 몬스터 ${mk2}체 전멸`, `${tag(p, card)} 相手モンスター${mk2}体を全滅`);
+      if (!g.over) ctx.dealDamage(p, 8, cn(card), cn(card));
       break;
     }
     case "GREED_PRICE": { // 탐욕의 대가: 자해 2, 미믹 2마리 소환 + 미믹 3장 제외
@@ -1409,6 +1422,8 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (card.id === "SNIPE2" && !o0.field.some((m) => effDef(o0, m) <= 2)) { ctx.log("  └ 방어력 2 이하 적 몬스터가 없습니다", "  └ 防御力2以下の敵モンスターがいません"); return; }
     if (card.id === "INQUISITION" && ![...o0.deck, ...o0.discard, ...o0.field].some((m) => m.t === "mon" && m.tribe)) { ctx.log("  └ 상대에게 종족 몬스터가 없습니다", "  └ 相手に種族モンスターがいません"); return; }
     if (card.id === "PURGE_ALL" && p.deck.length + p.discard.length === 0) { ctx.log("  └ 덱과 묘지가 비어 있습니다", "  └ デッキと墓地が空です"); return; }
+    if (card.id === "GOLIATH_HUNT" && !o0.field.some((m) => effDef(o0, m) >= 20)) { ctx.log("  └ 방어력 20 이상 적 몬스터가 없습니다", "  └ 防御力20以上の敵モンスターがいません"); return; }
+    if (card.id === "MASSACRE" && o0.field.length === 0) { ctx.log("  └ 파괴할 적 몬스터가 없습니다", "  └ 破壊する敵モンスターがいません"); return; }
     if (card.id === "SCRAPPER" && [...p.deck, ...p.discard].filter((c) => c.cost <= 1).length < 2) { ctx.log("  └ 덱·묘지에 코스트 1 이하 카드가 2장 없습니다", "  └ デッキ・墓地にコスト1以下のカードが2枚ありません"); return; }
     if (card.ench && p.traps.length + p.enchants.length >= ST_MAX) { ctx.log(`  └ <span class="dmg">마법·함정 존이 가득 찼습니다 (최대 ${ST_MAX})</span>`, `  └ <span class="dmg">魔法・罠ゾーンが満杯です (最大 ${ST_MAX})</span>`); return; }
 
@@ -1491,7 +1506,15 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     if (!tm) return;
     if (pending.reason === "defDown" || pending.reason === "weaken") { tm.defMod = (tm.defMod || 0) - (d.val || 0); ctx.log(`  └ ${cn(tm)} 의 방어 -${d.val}`, `  └ ${cn(tm)} の防御 -${d.val}`); }
     else if (pending.reason === "atkDown") { tm.atkMod = (tm.atkMod || 0) - (d.val || 0); ctx.log(`  └ ${cn(tm)} 의 공격 -${d.val}`, `  └ ${cn(tm)} の攻撃 -${d.val}`); }
-    else if (pending.reason === "destroyMon") { ctx.log(`<span class="t">${p.name}</span> → ${cn(tm)} 파괴`, `<span class="t">${p.name}</span> → ${cn(tm)} 破壊`); ctx.destroyMonster(o, tm); }
+    else if (pending.reason === "destroyMon") {
+      ctx.log(`<span class="t">${p.name}</span> → ${cn(tm)} 파괴`, `<span class="t">${p.name}</span> → ${cn(tm)} 破壊`);
+      ctx.destroyMonster(o, tm);
+      const left = ((d.val as number) || 0) - 1;
+      if (left >= 1 && o.field.length > 0) {
+        g.pending = { kind: "oppMon", hint: `파괴할 적 몬스터 선택 (${left}체 남음)`, hintJa: `破壊する敵モンスターを選択 (残り${left}体)`, reason: "destroyMon", allowCancel: false, data: { val: left } };
+        ctx.ev.push({ type: "needTarget", pending: g.pending });
+      }
+    }
     else if (pending.reason === "attack") {
       const att = p.field.find((m) => m.uid === d.attackerUid);
       if (att) { ctx.ev.push({ type: "attack", player: side(g, p), uid: att.uid, targetUid: tm.uid }); resolveAttackCore(g, ctx, att, tm.uid); }

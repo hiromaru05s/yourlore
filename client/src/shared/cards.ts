@@ -757,6 +757,7 @@ const PATCH12: Record<string, Partial<CardDef>> = {
   HORDE: { text: "소환시: 자신의 덱+묘지가 24장 이상이면 +3/+3", textJa: "召喚時: 自分のデッキ+墓地が24枚以上なら+3/+3" }, // 20 → 24장 (엔진 동기)
   M13: { def: 2 }, // 보이드 리버 3/3 → 3/2
   M12: { val: 1, text: "소환시: 적 몬스터 1체 공격 -1(영구)", textJa: "召喚時: 敵モンスター1体の攻撃-1(永続)" }, // 타이탄 게이트 효과 -2 → -1
+  S15: { cost: 3 }, // 룬 파열 4c → 3c
 };
 for (const id of Object.keys(PATCH12)) { if (DB[id]) Object.assign(DB[id], PATCH12[id]); }
 
@@ -800,6 +801,12 @@ const NEW_CARDS7: CardDef[] = [
     text: "게임에서 제외된 자신의 카드 1장당 상대에게 3 데미지 (시전 12)", textJa: "ゲームから除外された自分のカード1枚につき相手に3ダメージ (発動12)" },
   { id: "CULL_TITAN", t: "mon", cost: 9, atk: 1, def: 1, onSummon: "cullTitan", name: "컬의 화신", nameJa: "カルの化身",
     text: "소환시: 게임에서 제외된 자신의 '컬' 1장당 +1/+1", textJa: "召喚時: ゲームから除外された自分の「カル」1枚につき+1/+1" },
+  { id: "GOLIATH_HUNT", t: "spell", cost: 3, name: "골리앗 사냥", nameJa: "ゴリアテ狩り",
+    text: "방어력 20 이상의 적 몬스터 1체를 파괴", textJa: "防御力20以上の敵モンスター1体を破壊" },
+  { id: "DOUBLE_EXEC", t: "spell", cost: 6, act: "destroyMon", val: 2, name: "이중 처형", nameJa: "二重処刑",
+    text: "적 몬스터 2체를 파괴", textJa: "敵モンスター2体を破壊" },
+  { id: "MASSACRE", t: "spell", cost: 7, name: "대학살", nameJa: "大虐殺",
+    text: "상대의 몬스터를 전부 파괴하고 자신에게 8 데미지", textJa: "相手のモンスターを全て破壊し、自分に8ダメージ" },
   { id: "MIMIC_KING2", t: "mon", cost: 7, atk: 6, def: 6, onSummon: "mimicKing2", name: "미믹 킹 2세", nameJa: "ミミックキング2世",
     text: "소환시: 자신의 필드·묘지·제외에 있는 '미믹' 계열 1장당 +1/+1 · 제외된 미믹 계열이 6장 이상이면 '마스터 미믹'을 자신 필드에 소환", textJa: "召喚時: 自分の場・墓地・除外の「ミミック」系1枚につき+1/+1 · 除外されたミミック系が6枚以上なら「マスターミミック」を召喚" },
   { id: "ORIGIN_MIMIC", t: "mon", cost: 8, atk: 3, def: 3, tribe: "시초", onSummon: "originMimic", name: "시초의 미믹", nameJa: "始原のミミック",

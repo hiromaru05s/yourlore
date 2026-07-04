@@ -258,6 +258,8 @@ export function greedyDecide(g: GameState): Action {
     if (c.id === "SNIPE2" && !o.field.some((m) => effDef(o, m) <= 2)) return false;
     if (c.id === "SHATTER" && p.hp <= 7) return false;
     if (c.id === "GREED_PRICE" && p.hp <= 4) return false;
+    if (c.id === "GOLIATH_HUNT" && !o.field.some((m) => effDef(o, m) >= 20)) return false;
+    if (c.id === "MASSACRE" && (o.field.length === 0 || p.hp <= 10)) return false;
     if (c.id === "INQUISITION" && ![...o.deck, ...o.discard, ...o.field].some((m) => m.t === "mon" && m.tribe)) return false;
     if (c.id === "PURGE_ALL" && p.deck.length + p.discard.length === 0) return false;
     if (c.id === "SCRAPPER" && [...p.deck, ...p.discard].filter((x) => x.cost <= 1).length < 2) return false;
@@ -338,7 +340,7 @@ export function greedyDecide(g: GameState): Action {
   if (util) return { type: "play", idx: util.i };
 
   // 8.5) 금단의 술식 / 복권 상자류 — castable() 가드 통과 시 저우선순위로 사용
-  const forb = spells.find((x) => x.c.id === "FORBIDDEN" || x.c.id === "LUCKY_CHEST" || x.c.id === "GUILD_CHEST" || x.c.id === "GREED_PRICE" || x.c.id === "MARKET_CRISIS");
+  const forb = spells.find((x) => x.c.id === "FORBIDDEN" || x.c.id === "LUCKY_CHEST" || x.c.id === "GUILD_CHEST" || x.c.id === "GREED_PRICE" || x.c.id === "MARKET_CRISIS" || x.c.id === "GOLIATH_HUNT" || x.c.id === "MASSACRE");
   if (forb) return { type: "play", idx: forb.i };
 
   // 9) persistent enchant magic (respect the spell/trap zone cap)
