@@ -222,31 +222,3 @@
 /* treasure modal */
 .chest-reward { font-size: 40px; margin: 10px 0; animation: pop .4s var(--ease); }
 .treasure-roll { font-family: var(--mono); font-size: 16px; color: var(--gold-glow); letter-spacing: .1em; margin-bottom: 4px; }
-
-/* ============================================================
-   interactive tutorial — coach overlay, highlights, reward toast
-   ============================================================ */
-.tut-coach { position: fixed; top: 52px; left: 50%; transform: translateX(-50%); z-index: 120; width: min(460px, 94vw); background: linear-gradient(180deg, var(--ink-3), var(--ink-1)); border: 1px solid var(--brass); border-radius: 12px; padding: 12px 16px 14px; box-shadow: 0 10px 32px #000c, inset 0 1px 0 #ffffff10; }
-.tut-coach-head { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
-.tut-coach-step { font-family: var(--mono); font-size: 11px; color: var(--ink-0); background: var(--brass); border-radius: 999px; padding: 2px 9px; letter-spacing: .06em; flex: none; }
-.tut-coach-head b { font-family: var(--mono); font-size: 13px; letter-spacing: .1em; color: var(--brass-hi); }
-.tut-coach-gem { margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--cyan); white-space: nowrap; }
-.tut-coach-exit { color: var(--paper-faint); cursor: pointer; font-size: 13px; padding: 0 2px; }
-.tut-coach-exit:hover { color: var(--vermil-hi); }
-.tut-coach-body { font-size: 13px; line-height: 1.6; color: var(--paper-dim); }
-.tut-coach-body b { color: var(--paper); }
-.tut-coach-btn { margin-top: 10px; width: 100%; padding: 9px; }
-
-.tut-glow { box-shadow: 0 0 0 2px var(--gold-glow), 0 0 16px 3px #f0d08966 !important; border-radius: 10px; animation: tutPulse 1.3s ease-in-out infinite; }
-@keyframes tutPulse {
-  50% { box-shadow: 0 0 0 3px var(--gold-glow), 0 0 26px 7px #f0d08999; }
-}
-
-.tut-toast { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 140; background: linear-gradient(180deg, #223046, #141d2f); border: 1px solid var(--good); border-radius: 10px; padding: 10px 18px; font-size: 13px; color: var(--paper); box-shadow: 0 8px 26px #000c; animation: tutToastIn .3s var(--ease); white-space: nowrap; }
-.tut-toast b { color: var(--brass-hi); }
-.tut-toast .gem { font-family: var(--mono); color: var(--cyan); margin-left: 4px; }
-.tut-toast.out { transition: opacity .45s, transform .45s; opacity: 0; transform: translateX(-50%) translateY(-12px); }
-
-@media (max-width: 700px) {
-  .tut-coach { top: auto; bottom: 118px; }
-}

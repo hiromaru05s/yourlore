@@ -78,6 +78,11 @@ export class GameView {
 
   private q(id: string): HTMLElement { return this.root.querySelector("#" + id) as HTMLElement; }
 
+  /** Lock board input while a batch of events is playing out sequentially. */
+  setPlaying(on: boolean): void {
+    (this.root.querySelector(".game") as HTMLElement | null)?.classList.toggle("fx-lock", on);
+  }
+
   render(g: GameState): void {
     const me = g.players[this.you];
     const opp = g.players[1 - this.you];
