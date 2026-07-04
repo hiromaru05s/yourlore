@@ -30,7 +30,7 @@ const RANDOM_CARDS = new Set([
   "TIMEWARP", "GAMBLE", "DICE8", "GUILD_CHEST", "LUCKY_CHEST", "FORBIDDEN", "GENESIS_SONG",
 ]);
 
-const wait = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+const wait = (ms: number): Promise<void> => A.fxWait(ms); // skippable: flushes when the player acts
 
 export abstract class BaseController implements BoardHandlers {
   protected view: GameView;
@@ -42,6 +42,8 @@ export abstract class BaseController implements BoardHandlers {
   private dead = false;
   private queue: Promise<void> = Promise.resolve();
   private unsubLang: () => void;
+  private fxGen = 0; // batches queued so far
+  private skipGen = 0; // batches up to this gen fast-forward
 
   constructor(root: HTMLElement, you: Side, exits: ControllerExits) {
     this.you = you;
@@ -59,15 +61,27 @@ export abstract class BaseController implements BoardHandlers {
   protected abstract submit(action: Action): void;
   protected maybeBot(): void {}
 
+  /** The player acted — fast-forward any still-playing batches so input never waits. */
+  protected fastForward(): void {
+    this.skipGen = this.fxGen;
+    A.setFxSkip(true);
+  }
+
   // ---- BoardHandlers ----
-  onPlay(idx: number) { this.submit({ type: "play", idx }); }
-  onAttack(uid: string) { this.submit({ type: "attack", uid }); }
-  onReorder(from: number, to: number) { this.submit({ type: "reorder", from, to }); }
-  onChooseTarget(uid: string | null) { this.submit({ type: this.state.pending?.kind === "seek" || this.state.pending?.kind === "recall" ? "pick" : "chooseTarget", uid } as Action); }
-  onBuyMarket(i: number) { this.submit({ type: "buyMarket", i }); }
-  onBuySupply(i: number) { this.submit({ type: "buySupply", i }); }
-  onRefresh() { this.submit({ type: "refresh" }); }
-  onEndTurn() { this.submit({ type: "endTurn" }); }
+  // Hand plays are looked up by uid (not index): the on-screen hand can be a
+  // batch behind the logical state, and uids stay correct where indices drift.
+  onPlay(uid: string) {
+    this.fastForward();
+    const idx = this.state.players[this.you].hand.findIndex((c) => c.uid === uid);
+    if (idx >= 0) this.submit({ type: "play", idx });
+  }
+  onAttack(uid: string) { this.fastForward(); this.submit({ type: "attack", uid }); }
+  onReorder(from: number, to: number) { this.fastForward(); this.submit({ type: "reorder", from, to }); }
+  onChooseTarget(uid: string | null) { this.fastForward(); this.submit({ type: this.state.pending?.kind === "seek" || this.state.pending?.kind === "recall" ? "pick" : "chooseTarget", uid } as Action); }
+  onBuyMarket(i: number) { this.fastForward(); this.submit({ type: "buyMarket", i }); }
+  onBuySupply(i: number) { this.fastForward(); this.submit({ type: "buySupply", i }); }
+  onRefresh() { this.fastForward(); this.submit({ type: "refresh" }); }
+  onEndTurn() { this.fastForward(); this.submit({ type: "endTurn" }); }
   async onSurrender() {
     const ok = await confirmDialog({ title: t("surrender.title"), body: t("surrender.body"), confirm: t("common.yes"), cancel: t("common.no"), danger: true });
     if (ok) this.submit({ type: "surrender", player: this.you });
@@ -77,13 +91,16 @@ export abstract class BaseController implements BoardHandlers {
   protected applyResult(res: ReduceResult, animate = true): void {
     const prev = this.state ?? res.state;
     this.state = res.state; // logical state advances immediately (input guards etc.)
+    const gen = ++this.fxGen;
     this.queue = this.queue
-      .then(() => this.playResult(prev, res, animate))
+      .then(() => this.playResult(prev, res, animate, gen))
       .catch((err) => console.error("[playback]", err));
   }
 
-  private async playResult(prev: GameState, res: ReduceResult, animate: boolean): Promise<void> {
+  private async playResult(prev: GameState, res: ReduceResult, animate: boolean, gen: number): Promise<void> {
     if (this.dead) return;
+    // batches older than the player's latest action jump-cut; fresh ones play normally
+    A.setFxSkip(gen <= this.skipGen);
     this.consumeLogs(res.events);
     if (!animate) {
       this.view.render(res.state);
@@ -222,14 +239,16 @@ export abstract class BaseController implements BoardHandlers {
       }
     }
 
-    // ---- state-diff celebrations: max mana / max HP gains (rich, 2s+) ----
+    // ---- state-diff celebrations: max mana / max HP gains ----
+    // Fire-and-forget: the surge plays OVER the re-rendered board, so the
+    // numbers/pips update immediately instead of waiting out the celebration.
     for (const pl of [0, 1] as Side[]) {
       if (this.dead) return;
       const dMana = res.state.players[pl].maxMana - prev.players[pl].maxMana;
       const dHp = res.state.players[pl].maxHp - prev.players[pl].maxHp;
-      if (dMana > 0) await A.manaSurge(sideOf(pl), dMana);
+      if (dMana > 0) void A.manaSurge(sideOf(pl), dMana);
       else if (dMana < 0) A.manaDrop(sideOf(pl), -dMana);
-      if (dHp > 0) await A.maxHpSurge(sideOf(pl), dHp);
+      if (dHp > 0) void A.maxHpSurge(sideOf(pl), dHp);
     }
 
     if (this.dead) return;
@@ -363,6 +382,9 @@ export class LocalController extends BaseController {
 
   protected submit(action: Action): void {
     if (this.state.over) return;
+    // input is never locked during playback — so out-of-turn clicks (e.g. on a
+    // stale board while the bot's turn plays out) must be rejected here
+    if (action.type !== "surrender" && this.state.cur !== this.you) return;
     this.applyResult(reduce(this.state, action));
   }
 

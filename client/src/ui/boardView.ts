@@ -16,7 +16,7 @@ const MON_SLOTS = 9;
 const ST_SLOTS = 9;
 
 export interface BoardHandlers {
-  onPlay(idx: number): void;
+  onPlay(uid: string): void;
   onAttack(uid: string): void;
   onReorder(from: number, to: number): void;
   onChooseTarget(uid: string | null): void;
@@ -79,9 +79,10 @@ export class GameView {
 
   private q(id: string): HTMLElement { return this.root.querySelector("#" + id) as HTMLElement; }
 
-  /** Lock board input while a batch of events is playing out sequentially. */
+  /** Playback marker only — input is NEVER locked (the player can always act;
+   *  acting fast-forwards whatever is still animating). */
   setPlaying(on: boolean): void {
-    (this.root.querySelector(".game") as HTMLElement | null)?.classList.toggle("fx-lock", on);
+    (this.root.querySelector(".game") as HTMLElement | null)?.classList.toggle("fx-playing", on);
   }
 
   render(g: GameState): void {
@@ -423,7 +424,7 @@ export class GameView {
       const off = idx - mid;
       card.style.transform = flat ? "none" : `rotate(${off * 3.2}deg) translateY(${Math.abs(off) ** 2 * 2}px)`;
       card.style.zIndex = String(idx);
-      if (aff) card.onclick = () => this.h.onPlay(idx);
+      if (aff) card.onclick = () => this.h.onPlay(c.uid); // uid, not index: the DOM can lag the logical state
       bindZoom(card, c);
       handEl.appendChild(card);
     });

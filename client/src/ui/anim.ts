@@ -10,8 +10,39 @@ import { t, getLang } from "../i18n";
 export type ViewSide = "me" | "opp";
 
 const EASE = "cubic-bezier(.4,0,.2,1)";
-const wait = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
-const raf = (): Promise<void> => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
+
+// ---- skippable FX time ----------------------------------------------------
+// Animations must NEVER block input. When the player acts mid-playback the
+// controller flips fast-forward on: every pending wait flushes instantly and
+// all subsequent waits resolve immediately, so the stale batch jump-cuts to
+// its end state and the player's new action plays fresh.
+let fxSkip = false;
+const fxWaiters = new Set<() => void>();
+/** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
+export function setFxSkip(on: boolean): void {
+  fxSkip = on;
+  if (on) for (const r of [...fxWaiters]) r();
+}
+/** Timeout that resolves instantly while fast-forwarding. */
+export function fxWait(ms: number): Promise<void> {
+  if (fxSkip) return Promise.resolve();
+  return new Promise((res) => {
+    const done = (): void => { fxWaiters.delete(done); clearTimeout(t); res(); };
+    const t = setTimeout(done, ms);
+    fxWaiters.add(done);
+  });
+}
+const wait = fxWait;
+// raf is also flushable: a hidden tab never fires rAF, so a pending frame
+// wait must still resolve the moment the player acts (fast-forward).
+const raf = (): Promise<void> => {
+  if (fxSkip) return Promise.resolve();
+  return new Promise((r) => {
+    const done = (): void => { fxWaiters.delete(done); r(); };
+    fxWaiters.add(done);
+    requestAnimationFrame(() => requestAnimationFrame(done));
+  });
+};
 const handRect = (side: ViewSide): DOMRect | null => rectOf(side === "me" ? "#hand" : "#oppHand");
 const rowRect = (side: ViewSide): DOMRect | null => rectOf(side === "me" ? "#meRow" : "#oppRow");
 const discId = (side: ViewSide): string => (side === "me" ? "pile-myDisc" : "pile-oppDisc");
@@ -198,7 +229,9 @@ export async function attackStrike(uid: string, targetUid: string | null, defend
   impactBurst(to.left + to.width / 2, to.top + to.height / 2, direct);
   boardShake(direct ? "hard" : "soft");
   onImpact?.();
-  await anim.finished.catch(() => { /* re-render can cancel it — fine */ });
+  // the return travel is decorative — wait skippably instead of on anim.finished
+  await wait(dur * 0.4);
+  if (fxSkip) { try { anim.finish(); } catch { /* already done */ } }
   n.classList.remove("striking");
 }
 

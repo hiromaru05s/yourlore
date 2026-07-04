@@ -227,7 +227,7 @@
    FX layer — sequential event playback
    ============================================================ */
 /* board input is locked while a batch of events is playing out */
-.game.fx-lock .board-col { pointer-events: none; }
+.game.fx-playing .board-col { /* input stays live during playback */ }
 
 /* center-screen event banner (trap activation etc.) */
 .fx-banner {
