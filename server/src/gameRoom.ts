@@ -269,8 +269,8 @@ export class GameRoom {
       await this.env.DB.batch([
         this.env.DB.prepare(`UPDATE users SET wins = wins + 1 WHERE id = ?`).bind(winner.id),
         this.env.DB.prepare(`UPDATE users SET losses = losses + 1 WHERE id = ?`).bind(loser.id),
-        this.env.DB.prepare(`INSERT INTO matches (id, player_a, player_b, winner, mode, created_at, ended_at, cards_a, cards_b) VALUES (?,?,?,?,?,?,?,?,?)`)
-          .bind(crypto.randomUUID(), room.players[0].id, room.players[1].id, winner.id, room.ranked ? "ranked" : "online", Date.now(), Date.now(), cardsOf(0), cardsOf(1)),
+        this.env.DB.prepare(`INSERT INTO matches (id, player_a, player_b, winner, mode, created_at, ended_at, cards_a, cards_b, turns) VALUES (?,?,?,?,?,?,?,?,?,?)`)
+          .bind(crypto.randomUUID(), room.players[0].id, room.players[1].id, winner.id, room.ranked ? "ranked" : "online", Date.now(), Date.now(), cardsOf(0), cardsOf(1), room.game.turn ?? null),
       ]);
       if (room.ranked) await applyRanked(this.env, winner.id, loser.id);
     } catch { /* records are best-effort */ }

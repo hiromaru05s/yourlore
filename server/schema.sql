@@ -60,7 +60,8 @@ CREATE TABLE IF NOT EXISTS matches (
   created_at  INTEGER NOT NULL,
   ended_at    INTEGER,
   cards_a     TEXT,                       -- {cardId: 플레이 횟수} JSON — OP 카드 분석용
-  cards_b     TEXT
+  cards_b     TEXT,
+  turns       INTEGER                     -- 게임 종료 시점의 턴 수 (페이싱 분석). player_a=선공(side 0)
 );
 
 -- 랭크: 월간 시즌(YYYY-MM)별 레이팅. 시즌 이월은 lazy soft-reset
