@@ -163,6 +163,74 @@ export function lunge(uid: string, dir: "up" | "down"): void {
   if (n) { const c = "lunge-" + dir; n.classList.add(c); setTimeout(() => n.classList.remove(c), 460); }
 }
 
+/**
+ * Hearthstone-style attack: the attacker card winds up, CHARGES into its
+ * target (an enemy monster, or the defending player's HP bar on a direct
+ * attack), slams with an impact burst + screen shake, then snaps back.
+ * `onImpact` fires exactly at the moment of contact (e.g. to shake the victim).
+ */
+export async function attackStrike(uid: string, targetUid: string | null, defender: ViewSide, onImpact?: () => void): Promise<void> {
+  const n = byUid(uid);
+  if (!n) return;
+  const direct = !targetUid;
+  const tEl: Element | null = targetUid ? byUid(targetUid) : document.getElementById("hpbar-" + defender);
+  const to = tEl ? tEl.getBoundingClientRect() : null;
+  const from = n.getBoundingClientRect();
+  if (!to) { lunge(uid, defender === "opp" ? "up" : "down"); await wait(460); onImpact?.(); return; }
+
+  const cx = to.left + to.width / 2 - (from.left + from.width / 2);
+  const cy = to.top + to.height / 2 - (from.top + from.height / 2);
+  // stop just short of the target center so the card's edge visually slams it
+  const k = direct ? 0.94 : 0.82;
+  const dx = cx * k, dy = cy * k;
+  const dur = direct ? 660 : 570;
+
+  n.classList.add("striking");
+  const anim = n.animate([
+    { transform: "translate(0,0) scale(1)", easing: "cubic-bezier(.5,0,.8,.4)" },
+    { transform: `translate(${-cx * 0.1}px,${-cy * 0.1}px) scale(1.09) rotate(${cx > 0 ? -3 : 3}deg)`, offset: 0.32, easing: "cubic-bezier(.7,0,.85,.4)" }, // wind-up
+    { transform: `translate(${dx}px,${dy}px) scale(1.14)`, offset: 0.6 },  // charge!
+    { transform: `translate(${dx * 0.96}px,${dy * 0.96}px) scale(1.12)`, offset: 0.7, easing: "cubic-bezier(.2,.6,.4,1)" }, // recoil hold
+    { transform: "translate(0,0) scale(1)" },                              // return
+  ], { duration: dur, easing: "linear", fill: "none" });
+
+  await wait(dur * 0.6); // ...until the moment of contact
+  impactBurst(to.left + to.width / 2, to.top + to.height / 2, direct);
+  boardShake(direct ? "hard" : "soft");
+  onImpact?.();
+  await anim.finished.catch(() => { /* re-render can cancel it — fine */ });
+  n.classList.remove("striking");
+}
+
+/** Radial flash + flying sparks at the point of impact. */
+function impactBurst(x: number, y: number, big: boolean): void {
+  const b = document.createElement("div");
+  b.className = "impact-burst" + (big ? " big" : "");
+  b.style.left = x + "px";
+  b.style.top = y + "px";
+  const shards = big ? 12 : 8;
+  for (let i = 0; i < shards; i++) {
+    const s = document.createElement("i");
+    const a = (Math.PI * 2 * i) / shards + Math.random() * 0.6;
+    const d = (big ? 64 : 42) + Math.random() * 34;
+    s.style.setProperty("--tx", Math.cos(a) * d + "px");
+    s.style.setProperty("--ty", Math.sin(a) * d + "px");
+    b.appendChild(s);
+  }
+  document.body.appendChild(b);
+  setTimeout(() => b.remove(), 520);
+}
+
+/** Shake the whole board — soft for monster trades, hard for face hits. */
+function boardShake(kind: "soft" | "hard"): void {
+  const el = document.querySelector(".game") as HTMLElement | null;
+  if (!el) return;
+  el.classList.remove("shake-soft", "shake-hard");
+  void el.offsetWidth; // restart the animation if one is mid-flight
+  el.classList.add("shake-" + kind);
+  setTimeout(() => el.classList.remove("shake-" + kind), kind === "hard" ? 450 : 340);
+}
+
 export function monHit(uid: string): void {
   const n = byUid(uid);
   if (n) { n.classList.add("mhit"); setTimeout(() => n.classList.remove("mhit"), 400); }

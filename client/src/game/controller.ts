@@ -161,11 +161,13 @@ export abstract class BaseController implements BoardHandlers {
           fieldCount[e.player] = Math.max(0, fieldCount[e.player] - 1);
           break;
         }
-        case "attack":
-          A.lunge(e.uid, e.player === this.you ? "up" : "down");
-          if (e.targetUid) { await wait(240); A.monHit(e.targetUid); }
-          await wait(460);
+        case "attack": {
+          // charge INTO the target (Hearthstone-style): enemy monster, or the
+          // defender's HP bar on a direct hit — impact shakes the victim
+          const defender = sideOf((1 - e.player) as Side);
+          await A.attackStrike(e.uid, e.targetUid, defender, () => { if (e.targetUid) A.monHit(e.targetUid); });
           break;
+        }
         case "hit":
           A.monHit(e.uid);
           await wait(260);

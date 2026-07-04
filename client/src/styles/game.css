@@ -396,3 +396,25 @@
 /* a card leaving the hand fades out the moment playback starts —
    otherwise it appears BOTH flying onto the field and still in hand */
 #hand .card.is-played { opacity: 0 !important; transition: opacity .18s ease-out; pointer-events: none; }
+
+/* ---- attack strike: 대상 향해 돌진 + 임팩트 (하스스톤식 타격감) ---- */
+.card.striking { position: relative; z-index: 60; will-change: transform; filter: drop-shadow(0 8px 20px rgba(0, 0, 0, .65)); }
+.impact-burst { position: fixed; left: 0; top: 0; width: 10px; height: 10px; margin: -5px 0 0 -5px; pointer-events: none; z-index: 70; }
+.impact-burst::before {
+  content: ""; position: absolute; inset: -30px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 240, 200, .95) 0%, rgba(255, 168, 76, .6) 35%, transparent 70%);
+  animation: burst-flash .34s ease-out forwards;
+}
+.impact-burst.big::before { inset: -52px; animation-duration: .44s; background: radial-gradient(circle, rgba(255, 244, 214, 1) 0%, rgba(255, 140, 60, .7) 38%, transparent 72%); }
+.impact-burst i {
+  position: absolute; left: 0; top: 0; width: 4px; height: 4px; border-radius: 1px;
+  background: #ffd166; box-shadow: 0 0 6px rgba(255, 209, 102, .9);
+  animation: burst-shard .44s cubic-bezier(.2, .7, .3, 1) forwards;
+}
+.impact-burst.big i { width: 6px; height: 6px; background: #ffb15e; box-shadow: 0 0 8px rgba(255, 150, 70, .95); }
+@keyframes burst-flash { from { transform: scale(.3); opacity: 1; } to { transform: scale(1.5); opacity: 0; } }
+@keyframes burst-shard { from { transform: translate(0, 0); opacity: 1; } to { transform: translate(var(--tx), var(--ty)); opacity: 0; } }
+.game.shake-soft { animation: bshake-soft .32s linear; }
+.game.shake-hard { animation: bshake-hard .44s linear; }
+@keyframes bshake-soft { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(2px, -2px); } 50% { transform: translate(-3px, 2px); } 75% { transform: translate(2px, 1px); } }
+@keyframes bshake-hard { 0%, 100% { transform: translate(0, 0); } 12% { transform: translate(-7px, 5px); } 28% { transform: translate(7px, -6px); } 44% { transform: translate(-6px, -4px); } 60% { transform: translate(5px, 5px); } 76% { transform: translate(-4px, 2px); } 90% { transform: translate(2px, -1px); } }
