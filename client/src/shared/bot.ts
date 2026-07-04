@@ -359,7 +359,7 @@ export function greedyDecide(g: GameState): Action {
   //     penetration damage. (A/B: ~66% vs v1 bot, then +4% more in round 2.)
   const buyScore = (c: CardInst): number =>
     c.t === "mon" ? (c.atk || 0) * 2.0 + (c.def || 0) * 1.2 + c.cost * 0.7 : cardValue(c);
-  const minBuy = p.maxMana >= 5 ? 13 : 11;
+  const minBuy = p.maxMana >= 5 ? 17 : 11; // 신메타 재튜닝: 카드 풀 확대로 구매 기준 상향 (13→17, 그리디 A/B 61%)
   let bi = -1, bs = minBuy;
   p.supply.forEach((c, i) => { if (c && buyCost(p, c) <= p.mana) { const s = buyScore(c); if (s > bs) { bs = s; bi = i; } } });
   if (bi >= 0) return { type: "buySupply", i: bi };
