@@ -25,22 +25,38 @@
 .gear:hover { color: var(--brass); border-color: var(--brass-dim); }
 
 /* ---- stage ---- */
-/* log CLOSED by default (single column); opening adds the side panel (desktop) */
+/* single-column board; the log is a left-edge drawer (overlay), not a column */
 .stage { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; min-height: 0; overflow: hidden; perspective: 1700px; }
-@media (min-width: 861px) {
-  .game.log-open .stage { grid-template-columns: minmax(0, 1fr) clamp(220px, 21vw, 300px); }
-  .game:not(.log-open) .logpanel { display: none; }
+
+/* log toggle — a vertical tab pinned at the mid-LEFT edge */
+.log-tab {
+  position: fixed; left: 0; top: 46%; z-index: 91;
+  writing-mode: vertical-rl; text-orientation: mixed;
+  padding: 14px 6px; font-family: var(--mono); font-size: 11px; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--paper-dim);
+  background: linear-gradient(180deg, #16203300, #0a0f1a);
+  border: 1px solid var(--line); border-left: none; border-radius: 0 9px 9px 0;
+  box-shadow: 3px 0 12px #0007; cursor: pointer; transition: left .22s var(--ease), color .15s, border-color .15s;
 }
-/* topbar log toggle + glanceable icon rail */
-.log-toggle { margin-left: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; padding: 5px 12px; border-radius: 7px; border: 1px solid var(--line); background: #ffffff05; color: var(--paper-dim); }
-.log-toggle:hover { color: var(--brass); border-color: var(--brass-dim); }
-.log-toggle.on { color: var(--brass-hi); border-color: var(--brass-dim); background: #4fb4ff14; }
-.icon-rail { flex: 1 1 auto; display: flex; align-items: center; justify-content: flex-end; gap: 4px; overflow: hidden; margin: 0 12px; cursor: pointer; min-width: 0; }
-.rail-ico { flex: 0 0 auto; font-size: 14px; line-height: 1; width: 20px; height: 20px; display: grid; place-items: center; border-radius: 5px; background: #ffffff08; border: 1px solid var(--line-soft); opacity: 0; transform: translateX(6px); transition: opacity .2s var(--ease), transform .2s var(--ease); }
-.rail-ico.in { opacity: 1; transform: none; }
-.rail-ico.dmg { background: #d8542f1f; border-color: #d8542f55; }
-.rail-ico.good { background: #6fbf731f; border-color: #6fbf7355; }
-.rail-ico.gold { background: #4fb4ff1f; border-color: #4fb4ff55; }
+.log-tab:hover { color: var(--brass-hi); border-color: var(--brass-dim); }
+.game.log-open .log-tab { left: min(320px, 82vw); color: var(--brass-hi); border-color: var(--brass-dim); }
+
+/* turn clock — a depleting ring OUTSIDE the field, on the right */
+.turn-clock {
+  position: fixed; right: clamp(8px, 1.6vw, 26px); top: 50%; transform: translateY(-50%);
+  width: clamp(52px, 6vw, 76px); aspect-ratio: 1; z-index: 70;
+  display: none; place-items: center; pointer-events: none;
+}
+.turn-clock.show { display: grid; }
+.turn-clock .tc-svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.turn-clock .tc-track { fill: #0b1120e0; stroke: #ffffff1a; stroke-width: 5; }
+.turn-clock .tc-arc { fill: none; stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+.turn-clock.mine .tc-arc { stroke: var(--blue-hi); filter: drop-shadow(0 0 5px #4fb4ff99); }
+.turn-clock.opp .tc-arc { stroke: var(--vermil-hi); filter: drop-shadow(0 0 5px #ff5b4599); }
+.turn-clock .tc-num { position: relative; font-family: var(--mono); font-weight: 800; font-size: clamp(15px, 1.7vw, 22px); color: var(--paper); }
+.turn-clock.warn .tc-num { color: var(--vermil-hi); }
+.turn-clock.warn { animation: clockPulse .55s ease-in-out infinite; }
+@keyframes clockPulse { 0%,100% { transform: translateY(-50%) scale(1) } 50% { transform: translateY(-50%) scale(1.09) } }
 /* subtle tabletop tilt — not a flat top-down view (classic TCG feel). Interactions
    are unaffected: hit-rects are computed post-transform. Log panel stays flat. */
 .board-col { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 5px; min-height: 0; align-content: start; transform: rotateX(6deg); transform-origin: center 46%; transform-style: preserve-3d; }
@@ -217,7 +233,16 @@
 .end-turn-wrap .btn:hover:not(:disabled)::after { left: 135%; }
 
 /* ---- log panel ---- */
-.logpanel { display: grid; grid-template-rows: auto 1fr auto; min-height: 0; background: linear-gradient(180deg, #141d2ecc, #0a0f1acc); backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); }
+.logpanel {
+  position: fixed; left: 0; top: 54px; bottom: 12px; width: min(320px, 82vw); z-index: 90;
+  display: grid; grid-template-rows: auto 1fr auto; min-height: 0;
+  background: linear-gradient(180deg, #141d2ef2, #0a0f1af2);
+  backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px);
+  border: 1px solid var(--line); border-left: none; border-radius: 0 12px 12px 0;
+  box-shadow: 10px 0 34px #000b;
+  transform: translateX(-100%); transition: transform .22s var(--ease);
+}
+.game.log-open .logpanel { transform: none; }
 .logpanel .panel-title { position: relative; padding-bottom: 8px; }
 .logpanel .panel-title::after {
   content: ""; position: absolute; left: 12px; right: 12px; bottom: 0; height: 1px;

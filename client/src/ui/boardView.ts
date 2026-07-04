@@ -45,9 +45,7 @@ export class GameView {
       <div class="game">
         <div class="topbar">
           <div class="brand"><div class="mark"></div><h1>LORE</h1></div>
-          <div class="icon-rail" id="iconRail" title="최근 진행"></div>
           <div class="turn-info" id="turnInfo"></div>
-          <button class="log-toggle" id="logToggle">${t("game.log")}</button>
         </div>
         <div class="stage">
           <div class="board-col">
@@ -60,38 +58,36 @@ export class GameView {
               <div class="end-turn-wrap"><button class="btn btn-primary" id="endBtn">${t("game.endturn")}</button></div>
             </div>
           </div>
-          <div class="panel logpanel" id="logPanel">
-            <div class="panel-title" id="logTitle">${t("game.log")}</div>
-            <div class="log" id="log"></div>
-            <div class="log-foot"><button class="btn btn-danger btn-block" id="surrenderBtn">${t("game.surrender")}</button></div>
-          </div>
         </div>
-        <button class="log-fab" id="logFab" aria-label="log">📜</button>
+        <!-- turn clock: a depleting ring OUTSIDE the field, on the right -->
+        <div class="turn-clock" id="turnClock" aria-hidden="true"></div>
+        <!-- battle log: a left-edge drawer with a mid-left toggle tab -->
+        <button class="log-tab" id="logTab" aria-label="log">${t("game.log")}</button>
+        <div class="panel logpanel" id="logPanel">
+          <div class="panel-title" id="logTitle">${t("game.log")}</div>
+          <div class="log" id="log"></div>
+          <div class="log-foot"><button class="btn btn-danger btn-block" id="surrenderBtn">${t("game.surrender")}</button></div>
+        </div>
       </div>
       <div class="target-hint" id="targetHint" style="display:none"></div>`;
     this.logEl = this.q("log");
     (this.q("endBtn") as HTMLButtonElement).onclick = () => this.h.onEndTurn();
     (this.q("surrenderBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
-    // log open/close — CLOSED by default; the icon rail (topbar) shows recent
-    // events at a glance, opening the panel shows the full text log. Persisted.
+    // battle log — CLOSED by default; a mid-left edge tab opens the drawer.
+    // Once opened it stays open (state persisted in localStorage).
     const gameEl = this.root.querySelector(".game") as HTMLElement;
     let logOpen = false;
     try { logOpen = localStorage.getItem("lore_log_open") === "1"; } catch { /* ignore */ }
     const applyLog = () => {
       gameEl.classList.toggle("log-open", logOpen);
-      this.q("logFab").textContent = logOpen ? "✕" : "📜";
-      this.q("logFab").classList.toggle("open", logOpen);
-      this.q("logToggle").classList.toggle("on", logOpen);
+      this.q("logTab").classList.toggle("on", logOpen);
     };
     const toggleLog = () => { logOpen = !logOpen; try { localStorage.setItem("lore_log_open", logOpen ? "1" : "0"); } catch { /* ignore */ } applyLog(); };
-    (this.q("logFab")).onclick = toggleLog;
-    (this.q("logToggle")).onclick = toggleLog;
-    (this.q("iconRail")).onclick = () => { if (!logOpen) toggleLog(); };
+    (this.q("logTab")).onclick = toggleLog;
     applyLog();
     document.addEventListener("contextmenu", (e) => e.preventDefault());
 
-    // ---- hand: always visible (no auto-tuck). Individual cards still lift on
-    // hover via .card.is-playable:hover, but the whole hand never slides away. ----
+    // ---- hand: always visible (no auto-tuck). ----
   }
 
   private q(id: string): HTMLElement { return this.root.querySelector("#" + id) as HTMLElement; }
@@ -180,8 +176,10 @@ export class GameView {
     const graveTop = p.discard[p.discard.length - 1];
     const gravePile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, graveTop ? frameFor(graveTop.t) : null, graveTop ?? null, t("game.discard"),
       () => cardPicker(`${p.name} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => { /* browse only */ }));
+    // clicking the DECK opens the full composition (own or opponent's public aggregate)
+    const collection = this.collectionOf(p, isMe);
     const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, FRAME_BACK, null, t("game.deck"),
-      isMe ? () => cardPicker(`${t("game.deck")} (${p.deck.length})`, sortByCost(p.deck), () => { /* browse only */ }) : undefined);
+      () => cardPicker(`${p.name} — ${t("deck.view")} (${collection.length})`, collection, () => { /* browse only */ }));
 
     const block = document.createElement("div");
     block.className = "field-block" + (isMe ? " is-mine" : " is-opp") + (onTurn ? " is-turn" : "");
@@ -231,7 +229,7 @@ export class GameView {
     zones.className = "zones";
     if (isMe) zones.append(monRow, stRow); else zones.append(stRow, monRow);
 
-    block.append(zones, this.metaPanel(g, p, isMe));
+    block.append(zones, this.metaPanel(p, isMe));
     row.append(block);
   }
 
@@ -327,12 +325,11 @@ export class GameView {
     });
   }
 
-  /** Right-side consolidated info panel: name/turn · HP · mana · deck/exile · tribe · timer. */
-  private metaPanel(g: GameState, p: PlayerState, isMe: boolean): HTMLElement {
+  /** Right-side consolidated info panel: name · HP · mana · exile · tribe. */
+  private metaPanel(p: PlayerState, isMe: boolean): HTMLElement {
     const panel = document.createElement("div");
     panel.className = "meta-panel";
     const emax = effMaxMana(p);
-    const onTurn = g.cur === (g.players.indexOf(p) as Side) && !g.over;
     const hpPct = Math.max(0, p.hp) / p.maxHp * 100;
 
     const pips: string[] = [];
@@ -366,8 +363,6 @@ export class GameView {
     panel.innerHTML = `
       <div class="mp-top">
         <span class="mp-name"><span class="who"></span>${p.name}</span>
-        <span class="turn-chip ${onTurn ? "on" : ""}">${onTurn ? t("game.myturn") : t("game.waiting")}</span>
-        <span class="mp-timer" id="timer-${isMe ? "me" : "opp"}"></span>
       </div>
       <div class="mp-hp">
         <span class="lbl">${t("game.hp")}</span>
@@ -378,13 +373,9 @@ export class GameView {
       <div class="mp-btns"></div>
       ${tribeChips.length ? `<div class="mp-tribes">${tribeChips.join("")}</div>` : ""}`;
 
+    // deck-view button removed — click the DECK pile to see composition. Only the
+    // 제외(exile) shortcut remains (there is no pile for exiled cards).
     const btns = panel.querySelector(".mp-btns")!;
-    const cards = this.collectionOf(p, isMe);
-    const dbtn = document.createElement("button");
-    dbtn.className = "btn btn-ghost mp-btn mp-btn--deck";
-    dbtn.innerHTML = `<span class="mp-ico">🎴</span>${t("deck.view")} <b>${cards.length}</b>`;
-    dbtn.onclick = () => cardPicker(`${p.name} — ${t("deck.view")} (${cards.length})`, cards, () => { /* browse only */ });
-    btns.appendChild(dbtn);
     const removed = (p.removed ?? []).slice().sort((a, b) => a.cost - b.cost);
     if (removed.length > 0) {
       const rbtn = document.createElement("button");
@@ -495,7 +486,7 @@ export class GameView {
     const t = document.createElement("div"); t.className = "pile-tag"; t.textContent = tag; pile.appendChild(t);
     const cnt = document.createElement("div"); cnt.className = "pile-count"; cnt.textContent = String(count); pile.appendChild(cnt);
     if (faceCard && faceCard.id !== "HIDDEN") bindZoom(pile, faceCard);
-    if (onOpen && count > 0) { pile.style.cursor = "pointer"; pile.title = "click: browse"; pile.addEventListener("click", onOpen); }
+    if (onOpen) { pile.style.cursor = "pointer"; pile.title = "click: browse"; pile.addEventListener("click", onOpen); }
     return pile;
   }
 

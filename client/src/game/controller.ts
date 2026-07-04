@@ -397,15 +397,28 @@ export abstract class BaseController implements BoardHandlers {
   }
 
   private renderTimer(): void {
-    const active = this.state.cur === this.you ? "me" : "opp";
-    const other = active === "me" ? "opp" : "me";
-    const el = document.getElementById(`timer-${active}`);
-    const clear = document.getElementById(`timer-${other}`);
-    if (clear) { clear.className = "mp-timer"; clear.textContent = ""; }
+    const el = document.getElementById("turnClock");
     if (!el) return;
+    const total = BaseController.TURN_SECS;
     const s = Math.max(0, this.timerLeft);
-    el.textContent = `${s}s`;
-    el.className = "mp-timer run" + (s <= 5 ? " warn shake" : "");
+    const mine = this.state.cur === this.you && !this.state.over;
+    const R = 26, C = 2 * Math.PI * R;
+    let arc = el.querySelector(".tc-arc") as SVGCircleElement | null;
+    let num = el.querySelector(".tc-num") as HTMLElement | null;
+    if (!arc || !num) {
+      el.innerHTML =
+        `<svg viewBox="0 0 64 64" class="tc-svg">` +
+        `<circle class="tc-track" cx="32" cy="32" r="${R}"></circle>` +
+        `<circle class="tc-arc" cx="32" cy="32" r="${R}" stroke-dasharray="${C.toFixed(1)}"></circle>` +
+        `</svg><span class="tc-num"></span>`;
+      arc = el.querySelector(".tc-arc"); num = el.querySelector(".tc-num");
+      if (!arc || !num) return;
+    }
+    el.className = "turn-clock show" + (mine ? " mine" : " opp") + (s <= 5 ? " warn" : "");
+    // fresh turn (full ring) → snap instantly; otherwise let CSS animate the drain
+    arc.style.transition = s >= total ? "none" : "";
+    arc.setAttribute("stroke-dashoffset", (C * (1 - s / total)).toFixed(1));
+    num.textContent = String(s);
   }
 
   private turnToast(text: string, size: "big" | "small", ms: number): void {
@@ -421,8 +434,8 @@ export abstract class BaseController implements BoardHandlers {
   private stopTimer(): void {
     if (this.timerInt) { clearInterval(this.timerInt); this.timerInt = null; }
     this.timerKey = "";
-    document.getElementById("timer-me")?.replaceChildren();
-    document.getElementById("timer-opp")?.replaceChildren();
+    const el = document.getElementById("turnClock");
+    if (el) { el.className = "turn-clock"; el.replaceChildren(); }
   }
 
   protected showWin(): void {
