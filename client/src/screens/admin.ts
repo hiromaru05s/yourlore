@@ -13,7 +13,7 @@ interface Stats {
   overview: { users: number; dauToday: number; newToday: number; gamesToday: number; wau: number; mau: number; stickiness: number; matches: Record<string, number> };
   acquisition: { signupsByDay: { d: string; n: number }[]; signupsBySource: { s: string; n: number }[]; verifiedRate: number; loginSplit: { google: number; email: number }; invitedSignups: number; invites: Record<string, number> };
   retention: { cohorts: { cohort: string; n: number; d1: number; d7: number }[]; wau: number; mau: number; stickiness: number; depth: { d0: number; d1: number; d2_5: number; d6p: number }; active7: number; activePrev7: number; rankedParticipation: number };
-  gameplay: { gamesByDay: { d: string; mode: string; n: number }[]; tierDist: Record<string, number>; cards: CardStat[]; cardSample: number; firstTurnWinRate: number | null; firstTurnSample: number; avgTurns: number | null; turnsSample: number };
+  gameplay: { gamesByDay: { d: string; mode: string; n: number }[]; tierDist: Record<string, number>; cards: CardStat[]; cardSample: number; firstTurnWinRate: number | null; firstTurnSample: number; avgTurns: number | null; turnsSample: number; currentVersion: string; selectedVersion: string; versions: { v: string; n: number }[] };
   monetization: { note: string; subscriptions: number; cancellations: number; sales: number; adRevenue: number };
 }
 interface CardStat { id: string; buys: number; plays: number; games: number; winrate: number | null }
@@ -49,6 +49,7 @@ export function mountAdmin(app: App): Screen {
   let users: AdminUser[] = [];
   let tab: TabKey = "overview";
   let cardSort: { key: keyof CardStat | "name"; dir: 1 | -1 } = { key: "winrate", dir: -1 };
+  let selVer = "";
 
   const gate = (loggedIn: boolean) => {
     tabsEl.style.display = "none";
@@ -138,10 +139,13 @@ export function mountAdmin(app: App): Screen {
         <div class="adm-grid">
           <section><h3>게임 수 (30일)</h3><table><tr class="hd"><td>일</td><td class="num">랭크</td><td class="num">노말</td><td class="num">봇</td></tr>${gdays.map((d) => `<tr><td>${d.slice(5)}</td><td class="num">${gAt(d, "ranked")}</td><td class="num">${gAt(d, "online")}</td><td class="num">${gAt(d, "bot")}</td></tr>`).join("") || "<tr><td>없음</td></tr>"}</table></section>
           <section><h3>티어 분포 (이번 시즌)</h3><table>${TIER_ORDER.map((tk) => `<tr><td style="color:${TIER_META[tk].color}">${tierLabel(tk)}</td><td class="num">${g.tierDist[tk] ?? 0}</td><td class="barcell">${bar(g.tierDist[tk] ?? 0, maxTier, TIER_META[tk].color)}</td></tr>`).join("")}</table></section>
-          <section class="wide"><h3>카드 통계 — 전체 ${g.cards.length}장 · 구매/사용/승률 (최근 PvP ${g.cardSample}판)</h3>
+          <section class="wide"><h3>카드 통계 — 전체 ${g.cards.length}장 · 구매/사용/승률
+            <select class="input adm-ver" id="verSel">${g.versions.map((v) => `<option value="${v.v}" ${v.v === g.selectedVersion ? "selected" : ""}>${v.v === g.currentVersion ? `${v.v} (현재)` : v.v} · ${v.n}판</option>`).join("")}</select>
+            <span class="adm-note" style="margin-left:6px">이 버전 ${g.cardSample}판</span></h3>
             <div id="cardTable"></div>
-            <p class="adm-note">헤더 클릭 = 정렬. 빨강 = 승률 60%↑(OP 후보), 파랑 = 40%↓(약체). 표본(게임 수) 작으면 노이즈 주의.</p></section>
+            <p class="adm-note">밸런스 버전별로 데이터가 분리 집계됩니다. 카드 수정 시 새 버전으로 다시 쌓이고, 옛 버전은 위 풀다운에서 다시 볼 수 있어요. 헤더 클릭 = 정렬. 빨강 = 승률 60%↑(OP), 파랑 = 40%↓(약체).</p></section>
         </div>`;
+      (body.querySelector("#verSel") as HTMLSelectElement).onchange = (e) => { selVer = (e.target as HTMLSelectElement).value; void load(); };
       renderCardTable();
     } else if (tab === "monetization") {
       const m = s.monetization;
@@ -218,7 +222,7 @@ export function mountAdmin(app: App): Screen {
   async function load(): Promise<void> {
     tabsEl.style.display = "none";
     body.innerHTML = `<div class="adm-loading">불러오는 중…</div>`;
-    const res = await fetch("/api/admin/stats", { credentials: "include" }).catch(() => null);
+    const res = await fetch(`/api/admin/stats${selVer ? `?bver=${encodeURIComponent(selVer)}` : ""}`, { credentials: "include" }).catch(() => null);
     if (!res || res.status === 401) { gate(res ? (await res.json().catch(() => ({}))).loggedIn === true : false); return; }
     stats = (await res.json()) as Stats;
     const o = stats.overview;

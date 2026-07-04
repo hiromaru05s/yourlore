@@ -866,6 +866,15 @@ export const ALL_IDS = Object.keys(DB);
 // markets never offer the Mimic token (cost 0) — excluded from buyable pool
 export const BUYABLE_POOL = ALL_IDS.filter((id) => DB[id].cost > 0);
 
+// ============================================================
+// BALANCE VERSION — bump this string EVERY time a card's numbers/
+// effects change. Matches are tagged with it, so the admin card
+// stats accumulate fresh per version and old metas stay viewable.
+// Format: "v<N>" (or a date). Only bump for gameplay-affecting
+// card edits — not art, text, or localization tweaks.
+// ============================================================
+export const BALANCE_VERSION = "v1";
+
 export function idsOfCost(cost: number): string[] {
   return BUYABLE_POOL.filter((id) => DB[id].cost === cost);
 }

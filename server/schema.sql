@@ -63,7 +63,8 @@ CREATE TABLE IF NOT EXISTS matches (
   cards_b     TEXT,
   turns       INTEGER,                    -- 게임 종료 시점의 턴 수 (페이싱 분석). player_a=선공(side 0)
   buys_a      TEXT,                       -- {cardId: 구매 횟수} JSON
-  buys_b      TEXT
+  buys_b      TEXT,
+  bver        TEXT                         -- 밸런스 버전 (카드 수정 시 bump) — 버전별 카드 통계
 );
 
 -- 랭크: 월간 시즌(YYYY-MM)별 레이팅. 시즌 이월은 lazy soft-reset

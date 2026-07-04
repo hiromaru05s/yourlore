@@ -9,7 +9,7 @@
 import type { Env, SessionUser } from "./env";
 import { corsHeaders, getUser } from "./auth";
 import { seasonKey, tierOf } from "./rank";
-import { BUYABLE_POOL } from "../../client/src/shared/cards";
+import { BUYABLE_POOL, BALANCE_VERSION } from "../../client/src/shared/cards";
 
 const BUYABLE_IDS = BUYABLE_POOL;
 
@@ -35,6 +35,11 @@ export async function handleAdmin(env: Env, req: Request, path: string): Promise
     const today = new Date().toISOString().slice(0, 10);
     const cut30 = Date.now() - 30 * 86400_000;
     const cut14 = Date.now() - 14 * 86400_000;
+    // balance-version filter (card stats + balance metrics). Default = current version.
+    const verParam = new URL(req.url).searchParams.get("bver");
+    const selVer = verParam || BALANCE_VERSION;
+    const verClause = selVer === "legacy" ? "bver IS NULL" : "bver = ?";
+    const verBind = selVer === "legacy" ? [] : [selVer];
 
     const [
       totalUsers, matchesByMode, dauToday, newToday, gamesToday, wau, mau,
@@ -67,10 +72,15 @@ export async function handleAdmin(env: Env, req: Request, path: string): Promise
       one(DB.prepare(`SELECT COUNT(DISTINCT user_id) AS n FROM user_days WHERE day >= date('now','-7 days')`).first<{ n: number }>()),
       DB.prepare(`SELECT date(created_at/1000,'unixepoch') AS d, mode, COUNT(*) AS n FROM matches WHERE created_at > ? GROUP BY d, mode ORDER BY d`).bind(cut30).all<{ d: string; mode: string; n: number }>(),
       DB.prepare(`SELECT mmr FROM ratings WHERE season = ?`).bind(seasonKey()).all<{ mmr: number }>(),
-      one(DB.prepare(`SELECT SUM(winner=player_a) AS w, COUNT(*) AS n FROM matches WHERE mode!='bot' AND winner IS NOT NULL`).first<{ w: number; n: number }>()),
-      one(DB.prepare(`SELECT AVG(turns) AS avg, COUNT(turns) AS n FROM matches WHERE turns IS NOT NULL`).first<{ avg: number; n: number }>()),
+      one(DB.prepare(`SELECT SUM(winner=player_a) AS w, COUNT(*) AS n FROM matches WHERE mode!='bot' AND winner IS NOT NULL AND ${verClause}`).bind(...verBind).first<{ w: number; n: number }>()),
+      one(DB.prepare(`SELECT AVG(turns) AS avg, COUNT(turns) AS n FROM matches WHERE turns IS NOT NULL AND ${verClause}`).bind(...verBind).first<{ avg: number; n: number }>()),
       one(DB.prepare(`SELECT COUNT(*) AS n FROM ratings WHERE season = ?`).bind(seasonKey()).first<{ n: number }>()),
     ]);
+
+    // distinct balance versions present (for the dropdown); include current even if empty
+    const verRows = await DB.prepare(`SELECT COALESCE(bver,'legacy') AS v, COUNT(*) AS n FROM matches WHERE mode!='bot' GROUP BY v ORDER BY v DESC`).all<{ v: string; n: number }>();
+    const versions = verRows.results ?? [];
+    if (!versions.some((r) => r.v === BALANCE_VERSION)) versions.unshift({ v: BALANCE_VERSION, n: 0 });
 
     const users = totalUsers?.n ?? 0;
     const matches = Object.fromEntries((matchesByMode.results ?? []).map((r) => [r.mode, r.n]));
@@ -88,10 +98,10 @@ export async function handleAdmin(env: Env, req: Request, path: string): Promise
     const tierDist: Record<string, number> = {};
     for (const r of tierRows.results ?? []) { const t = tierOf(r.mmr); tierDist[t] = (tierDist[t] ?? 0) + 1; }
 
-    // per-card stats over the last 2000 PvP matches: buys, plays, games-used, win-rate.
+    // per-card stats for the SELECTED balance version: buys, plays, games-used, win-rate.
     const recent = await DB.prepare(
-      `SELECT player_a, player_b, winner, cards_a, cards_b, buys_a, buys_b FROM matches WHERE mode!='bot' AND cards_a IS NOT NULL ORDER BY created_at DESC LIMIT 2000`
-    ).all<{ player_a: string; player_b: string; winner: string | null; cards_a: string; cards_b: string; buys_a: string | null; buys_b: string | null }>();
+      `SELECT player_a, player_b, winner, cards_a, cards_b, buys_a, buys_b FROM matches WHERE mode!='bot' AND cards_a IS NOT NULL AND ${verClause} ORDER BY created_at DESC LIMIT 4000`
+    ).bind(...verBind).all<{ player_a: string; player_b: string; winner: string | null; cards_a: string; cards_b: string; buys_a: string | null; buys_b: string | null }>();
     const agg: Record<string, { buys: number; plays: number; win: number; lose: number }> = {};
     const bump = (id: string): typeof agg[string] => (agg[id] ??= { buys: 0, plays: 0, win: 0, lose: 0 });
     const parse = (s: string | null): Record<string, number> => { try { return JSON.parse(s || "{}"); } catch { return {}; } };
@@ -141,6 +151,7 @@ export async function handleAdmin(env: Env, req: Request, path: string): Promise
         firstTurnWinRate: (firstTurn?.n ?? 0) > 0 ? (firstTurn!.w ?? 0) / firstTurn!.n : null,
         firstTurnSample: firstTurn?.n ?? 0,
         avgTurns: turnsAgg?.avg ?? null, turnsSample: turnsAgg?.n ?? 0,
+        currentVersion: BALANCE_VERSION, selectedVersion: selVer, versions,
       },
       monetization: { note: "결제(Paddle) 연동 후 표시", subscriptions: 0, cancellations: 0, sales: 0, adRevenue: 0 },
     });

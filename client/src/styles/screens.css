@@ -54,6 +54,7 @@
 /* sortable card table: clickable headers + sticky header row */
 .adm-sort .th { cursor: pointer; user-select: none; position: sticky; top: -16px; background: var(--ink-2); z-index: 4; }
 .adm-sort .th:hover { color: var(--brass-hi); }
+.adm-ver { display: inline-block; width: auto; padding: 3px 8px; font-size: 12px; margin-left: 10px; vertical-align: middle; }
 .adm-body .form-row { max-width: 340px; margin: 40px auto 14px; }
 .adm-body > button.btn-block { max-width: 340px; margin: 0 auto; display: block; }
 .adm-loading, .adm-err { text-align: center; color: var(--paper-dim); padding: 30px 0 10px; }
