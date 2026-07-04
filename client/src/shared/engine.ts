@@ -654,6 +654,14 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       else ctx.log(`  └ 제외된 컬 없음`, `  └ 除外されたカルなし`);
       break;
     }
+    case "wipeTraps": { // 나이트로드: 상대 세트 함정 전부 파괴
+      const wt = o.traps.length;
+      if (wt > 0) {
+        for (const tr of o.traps.splice(0)) o.discard.push(tr.card);
+        ctx.log(`  └ 상대 세트 함정 ${wt}장 전부 파괴`, `  └ 相手のセット罠${wt}枚を全て破壊`);
+      } else ctx.log(`  └ 파괴할 함정 없음`, `  └ 破壊するトラップなし`);
+      break;
+    }
     case "awakenMimic": { // 각성한 미믹: 미믹 2마리 소환
       spawnToken(g, ctx, p, "MIMIC"); spawnToken(g, ctx, p, "MIMIC");
       ctx.log(`  └ 미믹(3/2) 2마리 소환`, `  └ ミミック(3/2)2体召喚`);

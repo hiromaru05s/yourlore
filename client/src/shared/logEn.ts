@@ -56,6 +56,7 @@ const R: [RegExp, string][] = [
   [/덱\+묘지 (\d+)장 — 정예 초과\((\d+)장\)/g, "deck+graveyard $1 — above elite size ($2)"],
   [/함정 (\d+)장 →/g, "$1 trap(s) →"],
   [/보유 함정 없음/g, "no traps owned"],
+  [/상대 세트 함정 (\d+)장 전부 파괴/g, "destroyed all $1 enemy set traps"],
   [/공격력 (\d+) 이하 몬스터 (\d+)체 파괴/g, "destroyed $2 monster(s) with ATK $1 or less"],
   [/방어력 (\d+) 이하 몬스터 (\d+)체 파괴/g, "destroyed $2 monster(s) with DEF $1 or less"],
   [/공격력 (\d+) 이하 몬스터/g, "monster with ATK $1 or less:"],

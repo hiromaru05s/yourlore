@@ -75,7 +75,7 @@ const TEXTS: Record<string, string> = {
   ASSASSIN1: "Can only attack the opponent directly (never monsters)",
   ASSASSIN2: "Can only attack the opponent directly (never monsters)",
   ASSASSIN3: "Can only attack the opponent directly. Requires an Assassin on your field to summon",
-  ASSASSIN4: "Attacks twice per turn. Summonable when Novice/Adept/Elite Assassins are each in your field/deck/graveyard (hand excluded)",
+  ASSASSIN4: "On summon: destroy ALL enemy set traps · Attacks twice per turn · Summonable when Novice/Adept/Elite Assassins are each in your field/deck/graveyard (hand excluded)",
   S1: "Deal 2 damage to the opponent. From the 3rd use this turn: draw 1", S3: "+3 ATK to one of your monsters (this turn)",
   S4: "Draw 3 cards (Cast 1). Once per turn", S5: "Opponent's next offer shrinks 3 -> 2 (Cast 2)",
   S6: "Take any 1 card from your deck (Cast 2)", S7: "+3 ATK to all your monsters (this turn) + max HP +2",
