@@ -11,32 +11,27 @@
   width: var(--cw);
   height: var(--ch);
   flex: 0 0 auto;
-  border-radius: var(--card-r);
+  border-radius: 0;                 /* frame PNG carries its own cut-corner shape */
   background-size: 100% 100%;
   background-repeat: no-repeat;
   font-size: calc(var(--cw) * 0.135);
   color: var(--paper);
-  box-shadow: var(--shadow-1);
-  transition: transform .14s var(--ease), box-shadow .14s var(--ease), filter .14s var(--ease);
+  filter: drop-shadow(0 2px 4px #0009);
+  transition: transform .14s var(--ease), filter .14s var(--ease);
   user-select: none;
 }
 .card--mkt { --cw: var(--card-w-mkt); --ch: var(--card-h-mkt); }
 .card--hand { --cw: var(--card-w-hand); --ch: var(--card-h-hand); }
 
-/* cost gem — top-left, type-colored */
+/* cost — the number over the frame's built-in top-left ring */
 .card-cost {
-  position: absolute; top: 1%; right: 1.5%; left: auto;
-  width: 1.55em; height: 1.55em;
+  position: absolute; top: 2%; left: 0.5%; right: auto;
+  width: 16.5%; height: 13%;
   display: grid; place-items: center;
-  font-family: var(--mono); font-weight: 700; font-size: 1.05em;
-  color: #fff; border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #fff5, transparent 60%), var(--vermil);
-  border: 1.5px solid #fff8; box-shadow: 0 1px 3px #000a;
+  font-family: var(--mono); font-weight: 800; font-size: 0.98em;
+  color: #16110c; text-shadow: 0 1px 0 #ffffff55;
   z-index: 3;
 }
-.card--mon .card-cost { background: radial-gradient(circle at 35% 30%, #fff5, transparent 60%), #b8442a; }
-.card--spell .card-cost, .card--starter .card-cost { background: radial-gradient(circle at 35% 30%, #fff5, transparent 60%), #2f6ea8; }
-.card--trap .card-cost { background: radial-gradient(circle at 35% 30%, #fff5, transparent 60%), #3f8a4a; }
 
 /* frame overlay — sits ON TOP of the art, its art-window is transparent so the
    art shows through. Text/cost/stats layer above this (higher z-index). */
@@ -46,17 +41,17 @@
   border-radius: var(--card-r);
 }
 .card-name {
-  /* name plate (normalized frame: plate y 2.9%–12%, beige to ~77%) */
-  position: absolute; top: 3%; left: 8%; right: 23%; height: 8.8%; z-index: 2;
+  /* name bar (right of the cost ring): new frame plate y ~3.6–11.7% */
+  position: absolute; top: 3.4%; left: 19%; right: 5%; height: 8.4%; z-index: 2;
   display: flex; align-items: center; justify-content: flex-start;
-  font-weight: 800; font-size: 0.54em; line-height: 1; letter-spacing: -.02em;
-  color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35);
+  font-weight: 800; font-size: 0.52em; line-height: 1; letter-spacing: -.02em;
+  color: #17120c; text-shadow: 0 1px 0 #ffffff44;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .card-name--long { font-size: 0.42em; white-space: normal; line-height: 1.02; }
 .card-play {
-  position: absolute; top: 12%; right: 2%;
-  padding: 0 .45em; height: 1.3em;
+  position: absolute; top: 15%; left: 1.5%; right: auto;
+  padding: 0 .4em; height: 1.25em;
   display: grid; place-items: center;
   font-family: var(--mono); font-weight: 700; font-size: 0.72em;
   color: #fff; border-radius: 9px;
@@ -65,12 +60,9 @@
   z-index: 3;
 }
 .card-art {
-  /* BEHIND the frame; slightly overscan so the frame border overlaps its edges
-     (no hairline gap around the transparent window). */
-  position: absolute; top: 15.5%; left: 6.5%; right: 6.5%; height: 49%; z-index: 0;
-  border-radius: 3px;
-  background:
-    radial-gradient(120% 90% at 50% 30%, #2c3a55, #0c1320 90%);
+  /* ON TOP of the frame bg, filling the frame's art window (y ~15.5–56.5%) */
+  position: absolute; top: 15.7%; left: 3.5%; right: 3.5%; height: 40.8%; z-index: 1;
+  background: radial-gradient(120% 90% at 50% 30%, #2c3a55, #0c1320 90%);
   overflow: hidden;
 }
 .card-art img {
@@ -85,51 +77,40 @@
 }
 .card-art:has(img)::after { content: none; }
 .card-eff {
-  /* monster text box (normalized: y 68%–85.3%) */
-  position: absolute; left: 9%; right: 9%; z-index: 2;
-  top: 68%; height: 17.3%;
-  font-size: 0.45em; line-height: 1.12; color: #2a2114;
+  /* text box on the lower plate (new frame: y ~59–87%) */
+  position: absolute; left: 6.5%; right: 6.5%; z-index: 2;
+  top: 60%; height: 25.5%;
+  font-size: 0.44em; line-height: 1.12; color: #1b1610;
   text-align: center; overflow: hidden; word-break: keep-all;
   display: flex; align-items: center; justify-content: center;
 }
-.card-eff--small { font-size: 0.38em; line-height: 1.1; }
+.card-eff--small { font-size: 0.375em; line-height: 1.1; }
 .card-eff--tiny { font-size: 0.33em; line-height: 1.08; }
-/* spell/trap/starter text box is taller (normalized: y 68%–96.3%, no atk/def bar) */
-.card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 28.3%; }
+/* spell/trap/starter have no stats strip → text box extends lower */
+.card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 34%; }
 
 /* monster atk/def: numbers only, centered in the frame's built-in sword/shield slots.
    Rendered exactly like .card-name / .card-eff (flex-centered absolute div, inheriting the
    normal --ui font, no monospace font and no transform) so they render on every OS/browser.
    (A Windows client failed to show them when they used var(--mono) + translateY.) */
 .ad-atk, .ad-def {
-  position: absolute; top: 87.4%; height: 9%; width: 22%; z-index: 2;
+  position: absolute; top: 90%; height: 7.5%; width: 24%; z-index: 2;
   display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 0.92em; line-height: 1;
-  color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .5);
+  font-weight: 800; font-size: 0.9em; line-height: 1;
+  color: #16110c; text-shadow: 0 1px 0 #ffffff44;
 }
-.ad-atk { left: 22%; }
-.ad-def { left: 71%; }
+.ad-atk { left: 12%; }
+.ad-def { left: 55%; }
 
-/* ---- card states ---- */
-.card.is-playable, .card.is-buyable { cursor: pointer; }
-.card.is-playable:hover, .card.is-buyable:hover { transform: translateY(-6px); box-shadow: 0 10px 24px #000a; filter: brightness(1.08); }
-.card.is-playable::after, .card.is-buyable::after {
-  content: ""; position: absolute; inset: -2px; border-radius: var(--card-r);
-  box-shadow: 0 0 0 1.5px var(--brass-hi), 0 0 14px #f0d08955; pointer-events: none;
-}
+/* ---- card states ---- (glows via drop-shadow so they hug the PNG shape) ---- */
+.card.is-playable, .card.is-buyable { cursor: pointer; filter: drop-shadow(0 2px 4px #0009) drop-shadow(0 0 4px #f0d08988); }
+.card.is-playable:hover, .card.is-buyable:hover { transform: translateY(-6px); filter: drop-shadow(0 8px 14px #000c) drop-shadow(0 0 7px #f0d089) brightness(1.05); }
 .card.is-dim { filter: grayscale(.55) brightness(.62); }
-.card.is-attacker { cursor: pointer; }
-.card.is-attacker::after {
-  content: ""; position: absolute; inset: -2px; border-radius: var(--card-r);
-  box-shadow: 0 0 0 1.5px var(--vermil-hi), 0 0 14px #ff7a4d66; pointer-events: none;
-  animation: attackerPulse 1.1s infinite;
-}
-@keyframes attackerPulse { 0%,100% { opacity: .55 } 50% { opacity: 1 } }
-.card.is-targetable { cursor: crosshair; }
-.card.is-targetable::after {
-  content: ""; position: absolute; inset: -2px; border-radius: var(--card-r);
-  box-shadow: 0 0 0 2px var(--vermil-hi), 0 0 16px #ff7a4d88; pointer-events: none;
-  animation: attackerPulse .8s infinite;
+.card.is-attacker { cursor: pointer; animation: attackerPulse 1.1s infinite; }
+.card.is-targetable { cursor: crosshair; animation: attackerPulse .8s infinite; }
+@keyframes attackerPulse {
+  0%,100% { filter: drop-shadow(0 2px 4px #0009) drop-shadow(0 0 4px #ff7a4d66) }
+  50%     { filter: drop-shadow(0 2px 4px #0009) drop-shadow(0 0 9px #ff7a4d) }
 }
 .card.is-exhausted { filter: grayscale(.7) brightness(.6); }
 .card .badge {

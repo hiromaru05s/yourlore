@@ -889,6 +889,7 @@ export const STARTER_DECK = [
 export function frameFor(t: CardType): string {
   if (t === "mon") return "/frames/red.png";
   if (t === "trap") return "/frames/green.png";
-  return "/frames/blue.png"; // spell + starter
+  if (t === "starter") return "/frames/cyan.png";
+  return "/frames/blue.png"; // spell
 }
 export const FRAME_BACK = "/frames/back.png";

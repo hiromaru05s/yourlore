@@ -46,12 +46,10 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const sizeClass = opt.size === "mkt" ? "card--mkt" : opt.size === "hand" ? "card--hand" : "";
   const node = el("div", `card ${typeClass} ${sizeClass}`.trim());
   node.dataset.uid = c.uid;
-  // 3-layer card: art (behind) → frame overlay with transparent art-window (middle)
-  // → text/cost/stats (front). Swap the frame PNG to restyle every card at once.
+  // frame PNG as the card background (transparent outer + white content plates);
+  // art sits ON TOP inside the window; text/cost render over the plates.
+  node.style.backgroundImage = `url(${frameFor(c.t)})`;
   node.appendChild(artEl(c.id));
-  const frame = el("div", "card-frame");
-  frame.style.backgroundImage = `url(${frameFor(c.t)})`;
-  node.appendChild(frame);
 
   if (opt.playable) node.classList.add("is-playable");
   if (opt.buyable) node.classList.add("is-buyable");
