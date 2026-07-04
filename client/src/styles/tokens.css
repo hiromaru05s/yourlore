@@ -5,31 +5,39 @@
    deck, discard — guaranteeing visual consistency.
    ============================================================ */
 :root {
-  /* palette — deep ink-blue + brass + vermilion (dark fantasy) */
-  --ink-0: #070b12;
-  --ink-1: #0c121d;
-  --ink-2: #121a28;
-  --ink-3: #1a2336;
-  --ink-4: #25314a;
-  --line: #2c3a55;
-  --line-soft: #22304880;
+  /* palette — key-visual: near-black arena, electric blue + crimson red,
+     cyan "eye" accent, silver/steel highlights (NO gold). */
+  --ink-0: #04060c;
+  --ink-1: #080c16;
+  --ink-2: #0e1522;
+  --ink-3: #172136;
+  --ink-4: #23304c;
+  --line: #2a3a58;
+  --line-soft: #21304c80;
 
-  --brass: #c79a4b;
-  --brass-hi: #e6c982;
-  --brass-dim: #8a6f3a;
-  --gold-glow: #f0d089;
+  /* accent = silver/steel (was brass/gold). glow = electric blue. */
+  --brass: #aebfd8;      /* silver */
+  --brass-hi: #e8f0fb;   /* bright silver-white (titles / logo text) */
+  --brass-dim: #5c6c88;  /* steel dim (borders) */
+  --gold-glow: #4fb4ff;  /* electric-blue glow */
 
-  --vermil: #d8542f;
-  --vermil-hi: #ff7a4d;
+  /* electric-blue primary accent (the blue crystal side) */
+  --blue: #2f7fe0;
+  --blue-hi: #63a6ff;
+  --blue-glow: #4fb4ff;
 
-  --paper: #e9e3d4;
-  --paper-dim: #98a3b5;
-  --paper-faint: #5d6a82;
+  /* crimson (the red crystal side) — also the primary CTA */
+  --vermil: #e0432c;
+  --vermil-hi: #ff5b45;
 
-  --cyan: #6fc6e8;        /* mana */
-  --atk: #e0673a;
-  --def: #5a9bd4;
-  --good: #6fbf73;
+  --paper: #e7edf6;
+  --paper-dim: #94a2ba;
+  --paper-faint: #5a687f;
+
+  --cyan: #6fd4ee;       /* mana / the eye */
+  --atk: #ff6a44;
+  --def: #5aa6ee;
+  --good: #63c47a;
 
   --mono: "SF Mono", ui-monospace, "Roboto Mono", Menlo, Consolas, monospace;
   --ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;

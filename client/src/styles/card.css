@@ -139,8 +139,8 @@
 .ad-def { left: 54%; }
 
 /* ---- card states ---- (glows via drop-shadow so they hug the PNG shape) ---- */
-.card.is-playable, .card.is-buyable { cursor: pointer; filter: drop-shadow(0 2px 4px #0009) drop-shadow(0 0 4px #f0d08988); }
-.card.is-playable:hover, .card.is-buyable:hover { transform: translateY(-6px); filter: drop-shadow(0 8px 14px #000c) drop-shadow(0 0 7px #f0d089) brightness(1.05); }
+.card.is-playable, .card.is-buyable { cursor: pointer; filter: drop-shadow(0 2px 4px #0009) drop-shadow(0 0 4px #4fb4ff88); }
+.card.is-playable:hover, .card.is-buyable:hover { transform: translateY(-6px); filter: drop-shadow(0 8px 14px #000c) drop-shadow(0 0 7px #4fb4ff) brightness(1.05); }
 .card.is-dim { filter: grayscale(.55) brightness(.62); }
 .card.is-attacker { cursor: pointer; animation: attackerPulse 1.1s infinite; }
 .card.is-targetable { cursor: crosshair; animation: attackerPulse .8s infinite; }
@@ -191,7 +191,7 @@
   text-shadow: 0 1px 1px #000, 0 0 10px #00000080;
 }
 .slot.is-bought::after { content: "구매됨"; font-size: 0.6rem; letter-spacing: .15em; color: var(--paper-faint); }
-.slot.is-active { border-color: var(--brass-dim); box-shadow: inset 0 0 12px #c79a4b22; }
+.slot.is-active { border-color: var(--brass-dim); box-shadow: inset 0 0 12px #4fb4ff22; }
 
 /* ============================================================
    PILE — deck / discard stacks (also card-footprint sized)

@@ -5,10 +5,11 @@
 html, body { height: 100%; }
 body {
   background:
-    /* warm table spotlight (center) */
-    radial-gradient(85% 65% at 50% 40%, #c79a4b08, transparent 62%),
-    /* cool ambient key light from above */
-    radial-gradient(140% 100% at 50% -20%, #1d2c4a 0%, var(--ink-1) 55%, var(--ink-0) 100%);
+    /* red crystal ambient (right) + blue crystal ambient (left) — the key visual */
+    radial-gradient(58% 48% at 88% 32%, #e0432c14, transparent 60%),
+    radial-gradient(58% 48% at 12% 34%, #2f7fe01f, transparent 60%),
+    /* cool electric key light from above */
+    radial-gradient(150% 100% at 50% -20%, #14335e 0%, var(--ink-1) 52%, var(--ink-0) 100%);
   color: var(--paper);
   font-family: var(--ui);
   font-size: 13px;
@@ -94,7 +95,7 @@ button { font-family: var(--ui); cursor: pointer; }
   color: var(--paper); font-size: 14px; font-family: var(--ui);
   transition: .15s var(--ease);
 }
-.input:focus { outline: none; border-color: var(--brass); box-shadow: 0 0 0 3px #c79a4b22; }
+.input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px #2f7fe033; }
 .input::placeholder { color: var(--paper-faint); }
 
 /* ---- overlay / modal ---- */
