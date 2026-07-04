@@ -41,8 +41,8 @@
   border-radius: var(--card-r);
 }
 .card-name {
-  /* name bar (right of the cost ring): new frame plate y ~3.6–11.7% */
-  position: absolute; top: 3.4%; left: 19%; right: 5%; height: 8.4%; z-index: 2;
+  /* name bar (right of the cost ring): measured plate y 4.3–12.2%, x 8–87% */
+  position: absolute; top: 4.3%; left: 19%; right: 15%; height: 7.9%; z-index: 2;
   display: flex; align-items: center; justify-content: flex-start;
   font-weight: 800; font-size: 0.52em; line-height: 1; letter-spacing: -.02em;
   color: #17120c; text-shadow: 0 1px 0 #ffffff44;
@@ -60,8 +60,8 @@
   z-index: 3;
 }
 .card-art {
-  /* ON TOP of the frame bg, filling the frame's art window (y ~15.5–56.5%) */
-  position: absolute; top: 15.7%; left: 3.5%; right: 3.5%; height: 40.8%; z-index: 1;
+  /* ON TOP of the frame bg, filling the measured art window (y 15.9–55%, x 6.8–92.8%) */
+  position: absolute; top: 15.9%; left: 6.5%; right: 6.5%; height: 39.4%; z-index: 1;
   background: radial-gradient(120% 90% at 50% 30%, #2c3a55, #0c1320 90%);
   overflow: hidden;
 }
@@ -77,9 +77,9 @@
 }
 .card-art:has(img)::after { content: none; }
 .card-eff {
-  /* text box on the lower plate (new frame: y ~59–87%) */
-  position: absolute; left: 6.5%; right: 6.5%; z-index: 2;
-  top: 60%; height: 25.5%;
+  /* lower text plate (measured y 57.7–85.1%) */
+  position: absolute; left: 8%; right: 8%; z-index: 2;
+  top: 57.7%; height: 27%;
   font-size: 0.44em; line-height: 1.12; color: #1b1610;
   text-align: center; overflow: hidden; word-break: keep-all;
   display: flex; align-items: center; justify-content: center;
@@ -87,20 +87,21 @@
 .card-eff--small { font-size: 0.375em; line-height: 1.1; }
 .card-eff--tiny { font-size: 0.33em; line-height: 1.08; }
 /* spell/trap/starter have no stats strip → text box extends lower */
-.card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 34%; }
+.card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 35%; }
 
 /* monster atk/def: numbers only, centered in the frame's built-in sword/shield slots.
    Rendered exactly like .card-name / .card-eff (flex-centered absolute div, inheriting the
    normal --ui font, no monospace font and no transform) so they render on every OS/browser.
    (A Windows client failed to show them when they used var(--mono) + translateY.) */
 .ad-atk, .ad-def {
-  position: absolute; top: 90%; height: 7.5%; width: 24%; z-index: 2;
+  /* stats strip (measured y 87.8–94.1%) */
+  position: absolute; top: 88%; height: 6.4%; width: 24%; z-index: 2;
   display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 0.9em; line-height: 1;
+  font-weight: 800; font-size: 0.86em; line-height: 1;
   color: #16110c; text-shadow: 0 1px 0 #ffffff44;
 }
-.ad-atk { left: 12%; }
-.ad-def { left: 55%; }
+.ad-atk { left: 13%; }
+.ad-def { left: 54%; }
 
 /* ---- card states ---- (glows via drop-shadow so they hug the PNG shape) ---- */
 .card.is-playable, .card.is-buyable { cursor: pointer; filter: drop-shadow(0 2px 4px #0009) drop-shadow(0 0 4px #f0d08988); }
