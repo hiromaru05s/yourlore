@@ -25,7 +25,7 @@
 
 /* cost gem — top-left, type-colored */
 .card-cost {
-  position: absolute; top: 1%; left: 1.5%;
+  position: absolute; top: 1%; right: 1.5%; left: auto;
   width: 1.55em; height: 1.55em;
   display: grid; place-items: center;
   font-family: var(--mono); font-weight: 700; font-size: 1.05em;
@@ -40,11 +40,22 @@
 
 .card-name {
   /* name plate (normalized frame: plate y 2.9%–12%, beige to ~77%) */
-  position: absolute; top: 3%; left: 25%; right: 23%; height: 8.8%;
+  position: absolute; top: 3%; left: 8%; right: 23%; height: 8.8%;
   display: flex; align-items: center; justify-content: flex-start;
-  font-weight: 800; font-size: 0.6em; line-height: 1; letter-spacing: -.02em;
+  font-weight: 800; font-size: 0.54em; line-height: 1; letter-spacing: -.02em;
   color: #100c06; text-shadow: 0 1px 1px rgba(255, 255, 255, .35);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.card-name--long { font-size: 0.42em; white-space: normal; line-height: 1.02; }
+.card-play {
+  position: absolute; top: 12%; right: 2%;
+  padding: 0 .45em; height: 1.3em;
+  display: grid; place-items: center;
+  font-family: var(--mono); font-weight: 700; font-size: 0.72em;
+  color: #fff; border-radius: 9px;
+  background: linear-gradient(180deg, #7b5cc9, #4f3591);
+  border: 1px solid #fff7; box-shadow: 0 1px 3px #000a;
+  z-index: 3;
 }
 .card-art {
   /* fills the frame's art window exactly (normalized: y 16.5%–63.5%, x 7%–93%) */
@@ -74,6 +85,8 @@
   text-align: center; overflow: hidden; word-break: keep-all;
   display: flex; align-items: center; justify-content: center;
 }
+.card-eff--small { font-size: 0.38em; line-height: 1.1; }
+.card-eff--tiny { font-size: 0.33em; line-height: 1.08; }
 /* spell/trap/starter text box is taller (normalized: y 68%–96.3%, no atk/def bar) */
 .card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 28.3%; }
 

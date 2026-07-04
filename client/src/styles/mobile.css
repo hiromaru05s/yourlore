@@ -90,7 +90,7 @@
   .log-fab.open { background: var(--vermil); color: #fff; border-color: var(--vermil-hi); }
 
   /* enlarged card: fit the screen width */
-  .zoom-overlay .card { --cw: min(78vw, 320px); --ch: calc(min(78vw, 320px) * 1.6); }
+  .zoom-overlay .card { --cw: min(86vw, 360px); --ch: calc(min(86vw, 360px) * 1.6); }
   .zoom-wrap { flex-direction: column; gap: 14px; max-height: 92dvh; overflow: auto; }
   .zoom-tribe { max-width: 88vw; }
 

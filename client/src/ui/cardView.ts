@@ -4,7 +4,7 @@
 // ============================================================
 import type { CardInst, FieldMon, PlayerState } from "../shared/types";
 import { FRAME_BACK, frameFor, TRIBES } from "../shared/cards";
-import { effAtk, effDef } from "../shared/engine";
+import { effAtk, effDef, playCost } from "../shared/engine";
 import { showTribeInfo } from "./modal";
 import { cardName, cardText, getLang } from "../i18n";
 
@@ -57,7 +57,14 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
 
   const cost = opt.costOverride != null ? opt.costOverride : c.cost;
   node.appendChild(el("div", "card-cost", String(cost)));
-  node.appendChild(el("div", "card-name", cardName(c)));
+  // 시전(발동) 코스트가 구매 코스트와 다르면 보조 배지로 통일 표기
+  const pc = playCost(c);
+  if (c.t !== "starter" && pc !== c.cost && opt.costOverride == null) {
+    node.appendChild(el("div", "card-play", `⚡${pc}`));
+  }
+  const nm = cardName(c);
+  const nameEl2 = el("div", "card-name" + (nm.length >= 9 ? " card-name--long" : ""), nm);
+  node.appendChild(nameEl2);
   node.appendChild(artEl(c.id));
 
   if (c.t === "mon") {
@@ -69,8 +76,16 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     node.appendChild(el("div", "ad-atk", String(a)));
     node.appendChild(el("div", "ad-def", String(d)));
   }
-  const txt = cardText(c);
-  if (txt && txt !== "—") node.appendChild(el("div", "card-eff", txt));
+  // 효과 텍스트: "(시전 N)" 계열 표기는 배지로 대체되므로 제거하고, 구분자를 줄바꿈으로
+  let txt = cardText(c)
+    .replace(/\s*\((?:시전|Cast|発動)\s*\d+\)/g, "")
+    .replace(/ · /g, "\n")
+    .replace(/ \/ /g, "\n")
+    .trim();
+  if (txt && txt !== "—") {
+    const effCls = "card-eff" + (txt.length > 140 ? " card-eff--tiny" : txt.length > 80 ? " card-eff--small" : "");
+    node.appendChild(el("div", effCls, `<span style="white-space:pre-line">${txt}</span>`));
+  }
   if (opt.badge) node.appendChild(el("span", "badge", opt.badge));
   if (c.tribe) {
     const tn = TRIBES[c.tribe]?.[getLang()]?.name ?? c.tribe;

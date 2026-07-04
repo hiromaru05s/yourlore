@@ -12,7 +12,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
   ko: [
     { icon: "🎯", h: "게임 목표", body: [
       "상대의 <b>체력</b>을 0으로 만들면 승리합니다.",
-      "선공은 체력 <b>35</b>, 후공은 <b>45</b>로 시작해요. (후공이 조금 높은 건 선공의 템포 이점을 보정하기 위함입니다.)",
+      "선공은 체력 <b>35</b>, 후공은 <b>42</b>로 시작해요. (후공이 조금 높은 건 선공의 템포 이점을 보정하기 위함입니다.)",
     ] },
     { icon: "🔄", h: "턴의 흐름", body: [
       "내 턴이 시작되면 ① <b>마나가 최대치까지 충전</b>되고 ② 카드를 <b>3장 드로우</b>합니다.",
@@ -71,7 +71,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
   ja: [
     { icon: "🎯", h: "ゲームの目的", body: [
       "相手の<b>体力</b>を0にすれば勝利です。",
-      "先攻は体力<b>35</b>、後攻は<b>45</b>でスタート。(後攻が少し高いのは先攻のテンポ有利を補正するためです。)",
+      "先攻は体力<b>35</b>、後攻は<b>42</b>でスタート。(後攻が少し高いのは先攻のテンポ有利を補正するためです。)",
     ] },
     { icon: "🔄", h: "ターンの流れ", body: [
       "自分のターンになると ①<b>マナが最大まで回復</b>し ②カードを<b>3枚ドロー</b>します。",
@@ -130,7 +130,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
   en: [
     { icon: "🎯", h: "Goal", body: [
       "Reduce your opponent's <b>HP</b> to 0 to win.",
-      "The first player starts at <b>35</b> HP, the second at <b>45</b>. (The extra HP offsets the first player's tempo advantage.)",
+      "The first player starts at <b>35</b> HP, the second at <b>42</b>. (The extra HP offsets the first player's tempo advantage.)",
     ] },
     { icon: "🔄", h: "Turn Flow", body: [
       "At the start of your turn: ① <b>mana refills to max</b> and ② you <b>draw 3 cards</b>.",

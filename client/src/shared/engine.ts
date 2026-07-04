@@ -39,6 +39,7 @@ function inst(g: GameState, id: string): CardInst { return { uid: newUID(g), ...
 function starter(g: GameState, key: string): CardInst { return { uid: newUID(g), ...structuredClone(STARTERS[key]) }; }
 /** Permanently-exiled zone (lazy init for states persisted before this field existed). */
 function rmz(pl: PlayerState): CardInst[] { return (pl.removed ??= []); }
+const MIMIC_IDS = new Set(["MIMIC", "MIMIC2", "AWAKENED_MIMIC", "MIMIC_KING", "MIMIC_LORD"]);
 /** 유리 병기 금지령: while active (either side), monsters with DEF<=1 cannot attack. */
 export function glassBanActive(g: GameState): boolean {
   return g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "glassBan"));
@@ -133,7 +134,7 @@ export function createGame(opts: CreateOpts): ReduceResult {
   const start = (opts.starting ?? 0) as Side;
   const second = (1 - start) as Side;
   g.players[start].hp = 35; g.players[start].maxHp = 35;
-  g.players[second].hp = 45; g.players[second].maxHp = 45;
+  g.players[second].hp = 42; g.players[second].maxHp = 42;
   // STANDARD market: 8 DISTINCT random cards of cost 1–4 (mixed types)
   const lowAvail = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 4);
   g.market = [];
@@ -641,8 +642,8 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       ctx.log(`  └ 최대 체력 +${v} (${p.maxHp})`, `  └ 最大体力 +${v} (${p.maxHp})`);
       break;
     }
-    case "mimicLord": { // 미믹 군주: 양측 필드의 미믹 1마리당 +3/+3
-      const mc = g.players.reduce((t, pl) => t + pl.field.filter((x) => x.id === "MIMIC" || x.id === "MIMIC2").length, 0);
+    case "mimicLord": { // 미믹 리더: 자신을 제외한 양측 필드의 미믹 계열 1마리당 +3/+3
+      const mc = g.players.reduce((t, pl) => t + pl.field.filter((x) => MIMIC_IDS.has(x.id) && x.uid !== m.uid).length, 0);
       if (mc > 0) { m.atkMod = (m.atkMod || 0) + mc * 3; m.defMod = (m.defMod || 0) + mc * 3; ctx.log(`  └ 미믹 ${mc}마리 → +${mc * 3}/+${mc * 3}`, `  └ ミミック${mc}体 → +${mc * 3}/+${mc * 3}`); }
       else ctx.log(`  └ 필드에 미믹 없음`, `  └ 場にミミックなし`);
       break;
@@ -651,6 +652,18 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       const ct = rmz(p).filter((c) => c.star === "trash").length;
       if (ct > 0) { m.atkMod = (m.atkMod || 0) + ct; m.defMod = (m.defMod || 0) + ct; ctx.log(`  └ 제외된 컬 ${ct}장 → +${ct}/+${ct}`, `  └ 除外されたカル${ct}枚 → +${ct}/+${ct}`); }
       else ctx.log(`  └ 제외된 컬 없음`, `  └ 除外されたカルなし`);
+      break;
+    }
+    case "awakenMimic": { // 각성한 미믹: 미믹 2마리 소환
+      spawnToken(g, ctx, p, "MIMIC"); spawnToken(g, ctx, p, "MIMIC");
+      ctx.log(`  └ 미믹(3/2) 2마리 소환`, `  └ ミミック(3/2)2体召喚`);
+      break;
+    }
+    case "mimicKing": { // 미믹 킹: 제외된 미믹 계열 1장당 +1/+1, 6장+면 마스터 미믹 소환
+      const km = rmz(p).filter((c) => MIMIC_IDS.has(c.id)).length;
+      if (km > 0) { m.atkMod = (m.atkMod || 0) + km; m.defMod = (m.defMod || 0) + km; ctx.log(`  └ 제외된 미믹 ${km}장 → +${km}/+${km}`, `  └ 除外されたミミック${km}枚 → +${km}/+${km}`); }
+      else ctx.log(`  └ 제외된 미믹 없음`, `  └ 除外されたミミックなし`);
+      if (km >= 6) { spawnToken(g, ctx, p, "MIMIC2"); ctx.log(`  └ 👑 마스터 미믹(10/3) 강림!`, `  └ 👑 マスターミミック(10/3)降臨！`); }
       break;
     }
     case "hordeBuff": { // 군단의 기수: 덱+묘지 20장 이상이면 +3/+3
