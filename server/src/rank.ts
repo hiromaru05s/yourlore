@@ -11,6 +11,7 @@
 // ============================================================
 import type { Env, SessionUser } from "./env";
 import { corsHeaders } from "./auth";
+import { markInviteEarned } from "./invite";
 
 export const TIERS = [
   { key: "iron", min: 0 },
@@ -77,6 +78,9 @@ export async function applyRanked(env: Env, winnerId: string, loserId: string): 
     env.DB.prepare(`UPDATE ratings SET mmr = ?, losses = losses + 1, updated_at = ? WHERE user_id = ? AND season = ?`)
       .bind(lNew, now, loserId, season),
   ]);
+  // 초대 캠페인: 골드 도달 시 보상 장부를 'earned'로
+  const goldMin = TIERS.find((t) => t.key === "gold")!.min;
+  if (wNew >= goldMin && w.mmr < goldMin) await markInviteEarned(env, winnerId).catch(() => { /* best effort */ });
 }
 
 // ---- REST: /api/rank/* ----

@@ -9,8 +9,29 @@ CREATE TABLE IF NOT EXISTS users (
   created_at  INTEGER NOT NULL,
   wins        INTEGER NOT NULL DEFAULT 0,
   losses      INTEGER NOT NULL DEFAULT 0,
-  verified    INTEGER NOT NULL DEFAULT 0  -- 이메일 인증 여부 (OAuth 가입은 1)
+  verified    INTEGER NOT NULL DEFAULT 0, -- 이메일 인증 여부 (OAuth 가입은 1)
+  source      TEXT,                       -- 가입 유입 소스 (utm_source/utm_medium/utm_campaign 또는 'ref:CODE')
+  invite_code TEXT,                       -- 내 초대 코드 (lazy 발급, 유니크 인덱스 별도)
+  invited_by  TEXT                        -- 나를 초대한 유저 id
 );
+CREATE UNIQUE INDEX IF NOT EXISTS idx_users_invite_code ON users(invite_code) WHERE invite_code IS NOT NULL;
+
+-- 리텐션: 유저별 활동일 (앱 접속 시 upsert)
+CREATE TABLE IF NOT EXISTS user_days (
+  user_id  TEXT NOT NULL,
+  day      TEXT NOT NULL,                 -- 'YYYY-MM-DD' (UTC)
+  PRIMARY KEY (user_id, day)
+);
+
+-- 초대 캠페인 보상 장부: pending(가입) → earned(골드 도달) → paid(크레딧 지급, 크레딧 시스템 오픈 후)
+CREATE TABLE IF NOT EXISTS invite_rewards (
+  invitee_id  TEXT PRIMARY KEY,           -- 초대받은 유저 (1회만 귀속)
+  inviter_id  TEXT NOT NULL,
+  status      TEXT NOT NULL DEFAULT 'pending',
+  created_at  INTEGER NOT NULL,
+  earned_at   INTEGER
+);
+CREATE INDEX IF NOT EXISTS idx_invite_rewards_inviter ON invite_rewards(inviter_id);
 
 -- 이메일 인증/비밀번호 재설정 토큰 (유저+종류당 1개 활성)
 CREATE TABLE IF NOT EXISTS email_tokens (
@@ -33,11 +54,13 @@ CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);
 CREATE TABLE IF NOT EXISTS matches (
   id          TEXT PRIMARY KEY,
   player_a    TEXT NOT NULL,
-  player_b    TEXT NOT NULL,
+  player_b    TEXT NOT NULL,              -- 봇전은 'bot'
   winner      TEXT,
   mode        TEXT NOT NULL,              -- 'online' | 'ranked' | 'bot'
   created_at  INTEGER NOT NULL,
-  ended_at    INTEGER
+  ended_at    INTEGER,
+  cards_a     TEXT,                       -- {cardId: 플레이 횟수} JSON — OP 카드 분석용
+  cards_b     TEXT
 );
 
 -- 랭크: 월간 시즌(YYYY-MM)별 레이팅. 시즌 이월은 lazy soft-reset

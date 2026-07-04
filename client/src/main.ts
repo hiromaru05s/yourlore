@@ -10,7 +10,20 @@ import "./styles/mobile.css";
 import { App } from "./router";
 import { initLang } from "./i18n";
 
+/** Capture acquisition params (invite ref + UTM) before any navigation strips them. */
+function captureAcquisition(): void {
+  try {
+    const p = new URLSearchParams(location.search);
+    const ref = p.get("ref");
+    if (ref) localStorage.setItem("lore_ref", ref.slice(0, 16));
+    const utm = ["utm_source", "utm_medium", "utm_campaign"].map((k) => p.get(k)).filter(Boolean).join("/");
+    if (utm) localStorage.setItem("lore_src", utm.slice(0, 120));
+    else if (ref && !localStorage.getItem("lore_src")) localStorage.setItem("lore_src", `ref:${ref.slice(0, 16)}`);
+  } catch { /* storage unavailable */ }
+}
+
 async function boot(): Promise<void> {
+  captureAcquisition();
   let country = "";
   try { country = ((await fetch("/api/geo").then((r) => r.json())) as { country?: string }).country || ""; } catch { /* offline / dev */ }
   initLang(country === "JP" ? "ja" : country === "KR" ? "ko" : "en"); // JP→ja, KR→ko, elsewhere→en

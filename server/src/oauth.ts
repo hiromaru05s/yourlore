@@ -9,8 +9,10 @@
 // ============================================================
 import type { Env } from "./env";
 import { createSession, sessionCookie } from "./auth";
+import { applyInviteAtSignup } from "./invite";
 
 const STATE_COOKIE = "lore_oauth_state";
+const CTX_COOKIE = "lore_oauth_ctx"; // "ref|source" carried through the OAuth round-trip
 
 function htmlError(msg: string): Response {
   return new Response(
@@ -36,13 +38,12 @@ export async function handleGoogleOAuth(env: Env, req: Request, path: string): P
     auth.searchParams.set("scope", "openid email profile");
     auth.searchParams.set("state", state);
     auth.searchParams.set("prompt", "select_account");
-    return new Response(null, {
-      status: 302,
-      headers: {
-        Location: auth.toString(),
-        "Set-Cookie": `${STATE_COOKIE}=${state}; HttpOnly; Path=/; Max-Age=600; SameSite=Lax; Secure`,
-      },
-    });
+    const ref = (url.searchParams.get("ref") || "").slice(0, 16);
+    const source = (url.searchParams.get("source") || "").slice(0, 120);
+    const headers = new Headers({ Location: auth.toString() });
+    headers.append("Set-Cookie", `${STATE_COOKIE}=${state}; HttpOnly; Path=/; Max-Age=600; SameSite=Lax; Secure`);
+    headers.append("Set-Cookie", `${CTX_COOKIE}=${encodeURIComponent(`${ref}|${source}`)}; HttpOnly; Path=/; Max-Age=600; SameSite=Lax; Secure`);
+    return new Response(null, { status: 302, headers });
   }
 
   // step 2: Google redirects back with ?code&state
@@ -81,8 +82,11 @@ export async function handleGoogleOAuth(env: Env, req: Request, path: string): P
     if (!id) {
       id = crypto.randomUUID();
       const display = (payload.name || email.split("@")[0]).slice(0, 24);
-      await env.DB.prepare(`INSERT INTO users (id, email, password, display, created_at, verified) VALUES (?,?,?,?,?,1)`)
-        .bind(id, email, "oauth:google", display, Date.now()).run();
+      const ctxRaw = decodeURIComponent((req.headers.get("Cookie") || "").match(new RegExp(`${CTX_COOKIE}=([^;]+)`))?.[1] || "");
+      const [ref, source] = ctxRaw.split("|");
+      await env.DB.prepare(`INSERT INTO users (id, email, password, display, created_at, verified, source) VALUES (?,?,?,?,?,1,?)`)
+        .bind(id, email, "oauth:google", display, Date.now(), (source || "").slice(0, 120) || null).run();
+      if (ref) await applyInviteAtSignup(env, id, ref).catch(() => { /* best effort */ });
     } else {
       await env.DB.prepare(`UPDATE users SET verified = 1 WHERE id = ?`).bind(id).run();
     }

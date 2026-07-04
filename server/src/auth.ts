@@ -8,6 +8,7 @@
 // ============================================================
 import type { Env, SessionUser } from "./env";
 import { deleteToken, emailConfigured, issueToken, readToken, resetEmailHtml, sendEmail, verifyEmailHtml } from "./email";
+import { applyInviteAtSignup } from "./invite";
 
 const COOKIE = "lore_session";
 const SESSION_DAYS = 30;
@@ -94,6 +95,11 @@ export async function handleAuth(env: Env, req: Request, path: string): Promise<
 
   if (path === "/auth/me") {
     const user = await getUser(env, req);
+    // daily activity mark (retention analytics) — one row per user per day
+    if (user) {
+      const day = new Date().toISOString().slice(0, 10);
+      await env.DB.prepare(`INSERT OR IGNORE INTO user_days (user_id, day) VALUES (?,?)`).bind(user.id, day).run().catch(() => { /* best effort */ });
+    }
     return json(env, { user });
   }
 
@@ -104,7 +110,7 @@ export async function handleAuth(env: Env, req: Request, path: string): Promise<
   }
 
   if (path === "/auth/register" || path === "/auth/login") {
-    const body = (await req.json().catch(() => ({}))) as { email?: string; password?: string };
+    const body = (await req.json().catch(() => ({}))) as { email?: string; password?: string; ref?: string; source?: string };
     const email = (body.email || "").trim().toLowerCase();
     const password = body.password || "";
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json(env, { error: "올바른 이메일이 아닙니다." }, 400);
@@ -116,8 +122,10 @@ export async function handleAuth(env: Env, req: Request, path: string): Promise<
       const id = crypto.randomUUID();
       const display = email.split("@")[0];
       const mailOn = emailConfigured(env);
-      await env.DB.prepare(`INSERT INTO users (id, email, password, display, created_at, verified) VALUES (?,?,?,?,?,?)`)
-        .bind(id, email, await hashPassword(password), display, Date.now(), mailOn ? 0 : 1).run();
+      const source = (body.source || "").slice(0, 120) || null;
+      await env.DB.prepare(`INSERT INTO users (id, email, password, display, created_at, verified, source) VALUES (?,?,?,?,?,?,?)`)
+        .bind(id, email, await hashPassword(password), display, Date.now(), mailOn ? 0 : 1, source).run();
+      if (body.ref) await applyInviteAtSignup(env, id, body.ref).catch(() => { /* best effort */ });
       if (mailOn) {
         const vt = await issueToken(env, id, "verify");
         if (vt) await sendEmail(env, email, "LORE — 이메일 인증 / Verify your email", verifyEmailHtml(new URL(req.url).origin, vt));

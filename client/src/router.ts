@@ -11,6 +11,7 @@ import { mountGame } from "./screens/game";
 import { mountTutorial } from "./screens/tutorial";
 import { mountCards } from "./screens/cards";
 import { mountLeaderboard } from "./screens/leaderboard";
+import { mountAdmin } from "./screens/admin";
 
 export interface Screen { destroy?(): void; }
 
@@ -22,6 +23,7 @@ export class App {
   constructor(root: HTMLElement) { this.root = root; }
 
   async start(): Promise<void> {
+    if (location.pathname === "/admin") { this.swap(() => mountAdmin(this)); return; } // internal dashboard
     this.user = await api.me();
     if (this.user) this.home();
     else this.login();

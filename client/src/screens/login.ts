@@ -8,6 +8,7 @@ import type { App, Screen } from "../router";
 import { api, type ApiError } from "../net/api";
 import { t, onLangChange } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
+import { DISCORD_INVITE, SUPPORT_EMAIL } from "../config";
 
 type Mode = "login" | "register" | "forgot" | "reset";
 
@@ -49,7 +50,13 @@ export function mountLogin(app: App): Screen {
       ${mode !== "reset" ? `<div class="form-row"><label class="field-label">${t("login.email")}</label><input class="input" id="email" type="email" placeholder="you@example.com" autocomplete="email"></div>` : ""}
       ${mode !== "forgot" ? `<div class="form-row"><label class="field-label">${mode === "reset" ? t("login.reset.newpw") : t("login.password")}</label><input class="input" id="password" type="password" placeholder="••••••••" autocomplete="${mode === "login" ? "current-password" : "new-password"}"></div>` : ""}
       <button class="btn btn-gold btn-block" id="submit">${submitLabel()}</button>
-      ${mode === "login" ? `<div class="auth-links"><a id="forgotLink">${t("login.forgot")}</a></div>` : ""}
+      ${mode === "login" ? `
+      <div class="auth-links"><a id="helpLink">${t("login.help")}</a></div>
+      <div class="login-help" id="helpPanel" style="display:none">
+        <a id="helpReset">🔑 ${t("login.help.reset")}</a>
+        <a href="mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent("[LORE] login help")}">✉️ ${t("login.help.mail")}<span class="help-sub">${SUPPORT_EMAIL}</span></a>
+        ${DISCORD_INVITE ? `<a href="${DISCORD_INVITE}" target="_blank" rel="noopener">💬 ${t("login.help.discord")}</a>` : ""}
+      </div>` : ""}
       ${mode === "forgot" || mode === "reset" ? `<div class="auth-links"><a id="backLink">← ${t("login.back")}</a></div>` : ""}
       ${tabs ? `<div class="auth-or"><span>${t("login.or")}</span></div>
       <button class="btn btn-ghost btn-block google-btn" id="googleBtn">${GOOGLE_SVG}${t("login.google")}</button>` : ""}
@@ -79,10 +86,14 @@ export function mountLogin(app: App): Screen {
     card.querySelectorAll(".auth-tabs button").forEach((b) => {
       (b as HTMLElement).onclick = () => swap((b as HTMLElement).dataset.m as Mode);
     });
-    (card.querySelector("#forgotLink") as HTMLElement | null)?.addEventListener("click", () => swap("forgot"));
+    (card.querySelector("#helpLink") as HTMLElement | null)?.addEventListener("click", () => {
+      const p = card.querySelector("#helpPanel") as HTMLElement;
+      p.style.display = p.style.display === "none" ? "flex" : "none";
+    });
+    (card.querySelector("#helpReset") as HTMLElement | null)?.addEventListener("click", () => swap("forgot"));
     (card.querySelector("#backLink") as HTMLElement | null)?.addEventListener("click", () => swap("login"));
     const g = card.querySelector("#googleBtn") as HTMLButtonElement | null;
-    if (g) g.onclick = () => { location.href = "/api/auth/google"; };
+    if (g) g.onclick = () => { location.href = api.googleUrl(); };
     const em = card.querySelector("#email") as HTMLInputElement | null;
     if (em) {
       em.oninput = () => { lastEmail = em.value; };
