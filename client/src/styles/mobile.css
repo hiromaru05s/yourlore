@@ -39,16 +39,17 @@
   .opp-hand { height: 13px; margin-top: -2px; }
   .opp-hand .card--back { width: 28px; height: 45px; margin: 0 -9px; }
 
-  .field-block { padding: 3px 5px; min-width: 0; overflow: hidden; flex-direction: column; gap: 4px; }
-  .meta-panel { flex: 0 0 auto; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding-left: 0; border-left: none; border-top: 1px solid var(--line-soft); padding-top: 4px; }
-  .mp-name { font-size: 10px; letter-spacing: .06em; }
-  .turn-chip { font-size: 8px; padding: 1px 5px; }
-  .mp-hp, .mp-mana { gap: 5px; }
-  .mp-hp .num { font-size: 11px; }
-  .hpbar { min-width: 54px; }
-  .mp-mana .pips { display: none; }     /* pips eat width; numeric x/y stays */
-  .mnum { font-size: 11px; margin-left: 4px; }
-  .mp-btn { font-size: 9.5px; padding: 1px 6px; }
+  .prow { gap: 4px; }
+  .field-block { padding: 3px 5px; min-width: 0; overflow: hidden; }
+  .pbar { gap: 6px 10px; margin-bottom: 3px; flex-wrap: wrap; }
+  .pbar .pname { font-size: 10px; letter-spacing: .06em; }
+  .pbar .turn-chip { font-size: 8px; padding: 1px 5px; }
+  .hp { gap: 5px; }
+  .hp .num { min-width: 0; font-size: 11px; }
+  .hpbar { width: 64px; }
+  .mana { gap: 5px; }
+  .mana .pips { display: none; }       /* pips eat width; numeric x/y stays */
+  .mana .mnum { font-size: 11px; }
 
   /* crowded zones scroll sideways instead of overflowing the board */
   .zone { justify-content: flex-start; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
@@ -124,14 +125,14 @@
   .opp-hand { height: 9px; margin-top: -2px; }
   .opp-hand .card--back { width: 24px; height: 38px; margin: 0 -8px; }
   .field-block { padding: 2px 6px; min-width: 0; overflow: hidden; }
-  .meta-panel { flex: 0 0 clamp(120px, 22vw, 168px); padding-left: 8px; gap: 3px; }
-  .mp-name { font-size: 10px; }
-  .turn-chip { font-size: 8px; padding: 1px 5px; }
-  .mp-hp .num { font-size: 11px; }
-  .hpbar { min-width: 44px; }
-  .mp-mana .pips { display: none; }
-  .mnum { font-size: 11px; }
-  .mp-btn { font-size: 9.5px; padding: 1px 5px; }
+  .zone + .zone { margin-top: 2px; }
+  .pbar { gap: 6px 8px; margin-bottom: 2px; flex-wrap: wrap; }
+  .pbar .pname { font-size: 10px; }
+  .pbar .turn-chip { font-size: 8px; padding: 1px 5px; }
+  .hp .num { font-size: 11px; min-width: 0; }
+  .hpbar { width: 70px; }
+  .mana .pips { display: none; }
+  .mana .mnum { font-size: 11px; }
 
   .zone { justify-content: flex-start; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .zone::-webkit-scrollbar { display: none; }

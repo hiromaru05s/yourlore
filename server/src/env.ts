@@ -23,4 +23,5 @@ export interface SessionUser {
   display: string;
   wins: number;
   losses: number;
+  credits: number;
 }

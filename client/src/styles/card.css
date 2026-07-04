@@ -194,16 +194,3 @@
 }
 .pile.flash .pile-card { animation: pileFlash .5s var(--ease); }
 @keyframes pileFlash { 50% { box-shadow: 0 0 16px var(--gold-glow), var(--shadow-1); filter: brightness(1.4) } }
-
-/* inline pile (deck/graveyard cell at the leading edge of a zone row): tags sit INSIDE */
-.inline-pile { cursor: pointer; }
-.inline-pile .pile-count {
-  position: absolute; inset: 0; bottom: 0; left: 0; transform: none;
-  display: grid; place-items: center; font-size: calc(var(--card-w) * 0.28);
-  color: var(--paper); text-shadow: 0 1px 3px #000, 0 0 6px #000;
-}
-.inline-pile .pile-tag {
-  top: auto; bottom: 2px; left: 50%; transform: translateX(-50%);
-  font-size: 7px; letter-spacing: .1em; color: var(--paper-dim);
-  background: #000000aa; padding: 0 3px; border-radius: 2px; z-index: 2;
-}

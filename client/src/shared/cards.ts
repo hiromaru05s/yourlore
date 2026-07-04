@@ -873,7 +873,7 @@ export const BUYABLE_POOL = ALL_IDS.filter((id) => DB[id].cost > 0);
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v1";
+export const BALANCE_VERSION = "v2"; // v2: 존 상한 9→7 (필드/마법·함정)
 
 export function idsOfCost(cost: number): string[] {
   return BUYABLE_POOL.filter((id) => DB[id].cost === cost);

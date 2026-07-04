@@ -81,11 +81,11 @@ export async function getUser(env: Env, req: Request): Promise<SessionUser | nul
   const token = readCookie(req);
   if (!token) return null;
   const row = await env.DB.prepare(
-    `SELECT u.id, u.email, u.display, u.wins, u.losses, s.expires_at
+    `SELECT u.id, u.email, u.display, u.wins, u.losses, u.credits, s.expires_at
      FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token = ?`
-  ).bind(token).first<{ id: string; email: string; display: string; wins: number; losses: number; expires_at: number }>();
+  ).bind(token).first<{ id: string; email: string; display: string; wins: number; losses: number; credits: number; expires_at: number }>();
   if (!row || row.expires_at < Date.now()) return null;
-  return { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses };
+  return { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses, credits: row.credits };
 }
 
 export async function createSession(env: Env, userId: string): Promise<string> {
@@ -139,16 +139,16 @@ export async function handleAuth(env: Env, req: Request, path: string): Promise<
         return json(env, { needVerify: true });
       }
       const token = await createSession(env, id);
-      return json(env, { user: { id, email, display, wins: 0, losses: 0 } }, 200, { "Set-Cookie": sessionCookie(token) });
+      return json(env, { user: { id, email, display, wins: 0, losses: 0, credits: 0 } }, 200, { "Set-Cookie": sessionCookie(token) });
     }
 
     // login
-    const row = await env.DB.prepare(`SELECT id, email, password, display, wins, losses, verified FROM users WHERE email = ?`)
-      .bind(email).first<{ id: string; email: string; password: string; display: string; wins: number; losses: number; verified: number }>();
+    const row = await env.DB.prepare(`SELECT id, email, password, display, wins, losses, verified, credits FROM users WHERE email = ?`)
+      .bind(email).first<{ id: string; email: string; password: string; display: string; wins: number; losses: number; verified: number; credits: number }>();
     if (!row || !(await verifyPassword(password, row.password))) return json(env, { error: "이메일 또는 비밀번호가 올바르지 않습니다." }, 401);
     if (!row.verified && emailConfigured(env)) return json(env, { error: "이메일 인증이 필요합니다. 받은편지함을 확인하세요.", needVerify: true }, 403);
     const token = await createSession(env, row.id);
-    return json(env, { user: { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses } }, 200, { "Set-Cookie": sessionCookie(token) });
+    return json(env, { user: { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses, credits: row.credits } }, 200, { "Set-Cookie": sessionCookie(token) });
   }
 
   // 인증 링크 (메일에서 클릭) — 성공 시 홈으로 리디렉트

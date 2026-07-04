@@ -36,14 +36,13 @@
 
   /* CARD FOOTPRINT — sized off viewport HEIGHT so the whole board (incl. the
      hand) always fits at 100% zoom. Ratio ~0.64 is shared by every variant. */
-  --card-h: clamp(70px, 10.5vh, 132px);
+  --card-h: clamp(66px, 9vh, 116px);
   --card-w: calc(var(--card-h) * 0.64);
   --card-r: 6px;
-  --slot-gap: clamp(4px, 0.55vw, 8px);
+  --slot-gap: clamp(4px, 0.5vw, 7px);
 
-  /* market cards (fixed + 제시); modest so 10+3 fit one row on wide screens and
-     wrap to a 2nd tier only when the width genuinely runs out */
-  --card-h-mkt: clamp(88px, 11.5vh, 138px);
+  /* market cards a bit larger than field (fixed + 제시 unified) — must leave room for the hand */
+  --card-h-mkt: clamp(96px, 13vh, 158px);
   --card-w-mkt: calc(var(--card-h-mkt) * 0.64);
   --card-h-hand: clamp(92px, 13.4vh, 156px);
   --card-w-hand: calc(var(--card-h-hand) * 0.64);

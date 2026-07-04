@@ -12,9 +12,20 @@ CREATE TABLE IF NOT EXISTS users (
   verified    INTEGER NOT NULL DEFAULT 0, -- 이메일 인증 여부 (OAuth 가입은 1)
   source      TEXT,                       -- 가입 유입 소스 (utm_source/utm_medium/utm_campaign 또는 'ref:CODE')
   invite_code TEXT,                       -- 내 초대 코드 (lazy 발급, 유니크 인덱스 별도)
-  invited_by  TEXT                        -- 나를 초대한 유저 id
+  invited_by  TEXT,                       -- 나를 초대한 유저 id
+  credits     INTEGER NOT NULL DEFAULT 0  -- 단일 소프트 커런시 (docs/monetization.md)
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_users_invite_code ON users(invite_code) WHERE invite_code IS NOT NULL;
+
+-- 1회성 보상 지급 로그 (튜토리얼 단계 보상 등). PK가 중복 지급을 막는다.
+-- 보상 금액은 서버의 REWARDS 테이블(rewards.ts)이 유일한 진실 — 클라는 key만 보낸다.
+CREATE TABLE IF NOT EXISTS rewards (
+  user_id     TEXT NOT NULL REFERENCES users(id),
+  key         TEXT NOT NULL,              -- e.g. 'tut:1'
+  amount      INTEGER NOT NULL,
+  created_at  INTEGER NOT NULL,
+  PRIMARY KEY (user_id, key)
+);
 
 -- 리텐션: 유저별 활동일 (앱 접속 시 upsert)
 CREATE TABLE IF NOT EXISTS user_days (

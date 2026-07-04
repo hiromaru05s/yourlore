@@ -45,6 +45,7 @@ export class App {
   login(): void { this.swap(() => mountLogin(this)); }
   home(): void { setPresence("menu"); this.swap(() => mountHome(this)); }
   tutorial(): void { setPresence("menu"); this.swap(() => mountTutorial(this)); }
+  tutorialGame(): void { setPresence("bot"); aCapture("game_start", { mode: "tutorial" }); this.swap(() => mountGame(this, { mode: "tutorial" })); }
   cards(): void { setPresence("menu"); this.swap(() => mountCards(this)); }
   botGame(): void { setPresence("bot"); aCapture("game_start", { mode: "bot" }); this.swap(() => mountGame(this, { mode: "bot" })); }
   onlineLobby(): void { setPresence("queue"); this.swap(() => mountLobby(this)); }
