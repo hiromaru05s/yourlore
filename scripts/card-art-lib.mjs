@@ -1,9 +1,12 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import ts from "typescript";
 
 export const rootDir = process.cwd();
 export const cardsSourcePath = path.join(rootDir, "client/src/shared/cards.ts");
+const cardsEnglishSourcePath = path.join(rootDir, "client/src/shared/cards.en.ts");
+const cacheDir = path.join(rootDir, "art/.cache");
 export const promptOutputPath = path.join(rootDir, "art/prompts/card-art-prompts.jsonl");
 export const artDir = path.join(rootDir, "client/public/art/cards");
 
@@ -16,17 +19,32 @@ const typeLabels = {
 
 export async function loadCards({ includeStarters = false } = {}) {
   const source = await fs.readFile(cardsSourcePath, "utf8");
-  const js = ts.transpileModule(source, {
+  const englishSource = await fs.readFile(cardsEnglishSourcePath, "utf8");
+  await fs.mkdir(cacheDir, { recursive: true });
+
+  const englishJs = transpileTs(englishSource);
+  const cardsJs = transpileTs(source)
+    .replaceAll('from "./cards.en"', 'from "./cards.en.mjs"')
+    .replaceAll("from './cards.en'", 'from "./cards.en.mjs"');
+
+  const englishOut = path.join(cacheDir, "cards.en.mjs");
+  const cardsOut = path.join(cacheDir, "cards.mjs");
+  await fs.writeFile(englishOut, englishJs);
+  await fs.writeFile(cardsOut, cardsJs);
+
+  const mod = await import(`${pathToFileURL(cardsOut).href}?t=${Date.now()}`);
+  const cards = Object.values(mod.DB);
+  return includeStarters ? cards.concat(Object.values(mod.STARTERS)) : cards;
+}
+
+function transpileTs(source) {
+  return ts.transpileModule(source, {
     compilerOptions: {
       module: ts.ModuleKind.ES2022,
       target: ts.ScriptTarget.ES2022,
       verbatimModuleSyntax: false,
     },
   }).outputText;
-  const dataUrl = `data:text/javascript;base64,${Buffer.from(js).toString("base64")}`;
-  const mod = await import(dataUrl);
-  const cards = Object.values(mod.DB);
-  return includeStarters ? cards.concat(Object.values(mod.STARTERS)) : cards;
 }
 
 export function cardArtPath(card) {
@@ -95,9 +113,37 @@ function subjectHint(card) {
   if (card.id === "PRAYER") return "object-only holy spell icon, radiant sanctuary prayer seal with white-gold healing beam and heart crystal, empty chapel, no people, no hands";
   if (card.id === "HERMIT") return "object-only rest spell icon, solitary empty hermit hut lantern beside a healing spring and moonlit stones, no people, no creatures";
   if (card.id === "WORLD_BLESS") return "object-only world tree blessing icon, great tree canopy raining mana crystals on two opposing stone altars, green-gold blessing light, no people";
+  if (card.id === "GLASS_BAN") return "object-only decree spell icon, cracked glass weapons sealed behind a glowing prohibition sigil, fragile blade shards suspended, empty hall, no people";
+  if (card.id === "SHATTER") return "object-only destruction spell icon, violent tremor cracking armor plates and reducing shield stones to dust, shockwave rings, empty battlefield, no people";
+  if (card.id === "SCARECROW") return "object-only summoning spell icon, three straw scarecrow effigies rising from a golden field portal, simple wooden crosses and straw, no humans";
+  if (card.id === "LEVY") return "object-only summoning spell icon, three soldier helmets and spears emerging from a military banner portal, formation markers, no people or faces";
+  if (card.id === "INQUISITION") return "object-only judgment spell icon, burning tribunal seal scanning clan emblems in deck and graveyard card shards, holy fire, no people";
+  if (card.id === "CULL_FLOOD") return "object-only purge spell icon, flood of cursed cull dagger cards washing through a graveyard, chosen cards vanishing into black void, no people";
+  if (card.id === "PAIN_HARVEST") return "object-only pain harvest enchantment icon, red damage droplets turning into cursed cull cards above a black sickle altar, no people";
+  if (card.id === "CULL_FARM") return "object-only cull farm enchantment icon, rows of black dagger-card sprouts growing from dark soil, eerie moonlight, no people";
+  if (card.id === "PURGE_ALL") return "object-only mass purge spell icon, many deck and graveyard card shards sucked into a white void vortex, empty ritual floor, no people";
+  if (card.id === "EXILE_NUKE1") return "object-only void artillery spell icon, exiled card shards loading into a dark cannon and firing purple energy, no people";
+  if (card.id === "EXILE_NUKE2") return "object-only void cataclysm spell icon, massive black-hole blast powered by many exiled card shards, purple cosmic explosion, no people";
+  if (card.id === "FURNACE") return "object-only furnace enchantment icon, magical blast furnace burning the lowest-cost card shard into ash every dawn, molten orange light, no people";
+  if (card.id === "PURGE_TOUCH") return "object-only purge touch spell icon, one graveyard card shard cleansed by white-blue flame and replaced by a glowing draw card, no hands, no people";
+  if (card.id === "SCRAPPER") return "object-only scrap collection spell icon, two small low-cost card scraps compressed into a blue mana crystal by brass gears, no people";
+  if (card.id === "WALLBREAK1") return "object-only wall smash spell icon, one weak enemy stone wall creature silhouette shattered by a heavy hammer symbol, no people";
+  if (card.id === "WALLBREAK2") return "object-only siege collapse spell icon, multiple weak stone wall effigies crumbling under a huge shockwave, no people";
+  if (card.id === "SNIPE1") return "object-only snipe spell icon, single precise silver arrow piercing a fragile shield sigil, empty target range, no people";
+  if (card.id === "SNIPE2") return "object-only close-up volley fire spell icon, many spectral arrows piercing fragile shield sigils on an empty stone target wall, tight composition, no battlefield crowd, no people, no humanoid silhouettes";
   if (card.id === "INFKNIGHT") return "an infinite knight in impossible looping silver armor, mirrored helm, glowing infinity symbol on the chest, timeless void battlefield, legendary fantasy warrior";
   if (card.id === "MIMIC2") return "a master mimic treasure chest monster with massive teeth, ornate black-gold chest body, multiple clawed legs, guarding piles of coins, terrifying dungeon ambush";
   if (card.id === "MANA_GIANT") return "a towering mana crystal giant made of translucent blue crystals and stone, glowing mana core in chest, ancient cavern, powerful fantasy monster";
+  if (card.id === "MIMIC_LORD") return "a mimic lord treasure chest monster with a crown of gold teeth, many smaller mimic chests around it, dark dungeon throne, terrifying fantasy monster";
+  if (card.id === "VITAL2") return "a vitality devotee in green-gold robes holding a glowing heart crystal, gentle temple light, fantasy healer acolyte";
+  if (card.id === "VITAL3") return "a vitality priest with radiant staff and heart-shaped life aura, sacred garden sanctuary, fantasy healer portrait";
+  if (card.id === "VITAL4") return "a full-blooded warrior glowing with vigorous red life energy, strong armor, confident heroic fantasy fighter";
+  if (card.id === "CULL_TITAN") return "a colossal avatar of culls made of black dagger cards and void chains, towering over a dark battlefield, terrifying fantasy titan";
+  if (card.id === "TOKEN00") return "a simple straw scarecrow token with button eyes and tattered cloth, moonlit field, harmless wooden dummy";
+  if (card.id === "SOLDIER2") return "a basic soldier token with plain steel helmet, spear, and round shield, simple disciplined fantasy infantry";
+  if (card.id === "HORDE") return "a horde standard-bearer carrying a huge war banner, many blurred soldiers behind, rugged fantasy army leader";
+  if (card.id === "ELITE") return "an elite knight-captain in polished armor with blue cape and commanding sword, disciplined fantasy commander";
+  if (card.id === "TRAPSMITH") return "a trapsmith engineer with goggles, tools, and small mechanical traps on a workbench, fantasy artificer portrait";
   if (card.id === "CREATOR") return "a majestic creator god forming creatures from starlight and card shards, vast cosmic throne, divine fantasy deity";
   if (card.id === "ASSASSIN1") return "a novice assassin in dark hood with small dagger, rooftop shadows, stealthy fantasy rogue portrait";
   if (card.id === "ASSASSIN2") return "an intermediate assassin with twin daggers and smoke cloak, moonlit alley, silent fantasy killer portrait";
