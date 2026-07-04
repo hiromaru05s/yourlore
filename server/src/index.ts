@@ -5,6 +5,8 @@
 // ============================================================
 import type { Env } from "./env";
 import { corsHeaders, getUser, handleAuth } from "./auth";
+import { getRating, handleRank } from "./rank";
+import { handleGoogleOAuth } from "./oauth";
 import { Matchmaker } from "./matchmaker";
 import { GameRoom } from "./gameRoom";
 
@@ -20,6 +22,15 @@ export default {
       const country = req.headers.get("CF-IPCountry") || "";
       return new Response(JSON.stringify({ country }), { headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
     }
+    // ---- Google OAuth ----
+    if (path === "/api/auth/google" || path === "/api/auth/google/callback") {
+      return handleGoogleOAuth(env, req, path.slice(4)); // strip "/api"
+    }
+    // ---- ranked ladder REST ----
+    if (path.startsWith("/api/rank/")) {
+      const user = await getUser(env, req);
+      return handleRank(env, req, path.slice(4), user); // strip "/api"
+    }
     // ---- auth / REST ----
     if (path.startsWith("/api/")) {
       return handleAuth(env, req, path.slice(4)); // strip "/api"
@@ -30,6 +41,12 @@ export default {
       const user = await getUser(env, req);
       const fwd = new URL(req.url);
       if (user) { fwd.searchParams.set("uid", user.id); fwd.searchParams.set("name", user.display); }
+      // ranked queue: must be logged in; attach current MMR for band matching
+      if (fwd.searchParams.get("mode") === "ranked") {
+        if (!user) return new Response("unauthorized", { status: 401 });
+        const r = await getRating(env, user.id).catch(() => null);
+        fwd.searchParams.set("mmr", String(r?.mmr ?? 1000));
+      }
       const stub = env.MATCHMAKER.get(env.MATCHMAKER.idFromName("global"));
       return stub.fetch(new Request(fwd.toString(), req));
     }

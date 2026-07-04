@@ -24,6 +24,8 @@ export function mountLogin(app: App): Screen {
       <div class="form-row"><label class="field-label">${t("login.email")}</label><input class="input" id="email" type="email" placeholder="you@example.com" autocomplete="email"></div>
       <div class="form-row"><label class="field-label">${t("login.password")}</label><input class="input" id="password" type="password" placeholder="••••••••" autocomplete="current-password"></div>
       <button class="btn btn-gold btn-block" id="submit">${t("login.tab.login")}</button>
+      <div class="auth-or"><span>${t("login.or")}</span></div>
+      <button class="btn btn-ghost btn-block google-btn" id="googleBtn"><span class="g-logo">G</span>${t("login.google")}</button>
       <div class="auth-error" id="err"></div>
     </div>`;
   app.root.appendChild(wrap);
@@ -65,6 +67,7 @@ export function mountLogin(app: App): Screen {
   }
   submit.onclick = go;
   password.onkeydown = (ev) => { if (ev.key === "Enter") go(); };
+  ($("googleBtn") as HTMLButtonElement).onclick = () => { location.href = "/api/auth/google"; };
 
   const unsub = onLangChange(() => app.login());
   return { destroy: unsub };

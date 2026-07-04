@@ -7,14 +7,14 @@ import type { QueueClientMsg, QueueServerMsg } from "../shared/protocol";
 import { Sock } from "../net/socket";
 import { t, onLangChange } from "../i18n";
 
-export function mountLobby(app: App): Screen {
+export function mountLobby(app: App, ranked = false): Screen {
   const wrap = document.createElement("div");
   wrap.className = "screen";
   wrap.innerHTML = `
     <div class="screen-brand"><div class="mark"></div><h1>LORE</h1></div>
     <div class="panel auth-card lobby">
       <div class="spinner"></div>
-      <h2 id="lobbyTitle">${t("lobby.searching")}</h2>
+      <h2 id="lobbyTitle">${ranked ? t("lobby.ranked") : t("lobby.searching")}</h2>
       <p id="lobbyMsg">${t("lobby.entered")}</p>
       <button class="btn btn-ghost" id="cancel">${t("common.cancel")}</button>
     </div>`;
@@ -23,7 +23,7 @@ export function mountLobby(app: App): Screen {
   const title = wrap.querySelector("#lobbyTitle") as HTMLElement;
   const msg = wrap.querySelector("#lobbyMsg") as HTMLElement;
 
-  const sock = new Sock<QueueServerMsg, QueueClientMsg>("/ws/queue", {
+  const sock = new Sock<QueueServerMsg, QueueClientMsg>(ranked ? "/ws/queue?mode=ranked" : "/ws/queue", {
     onOpen: () => sock.send({ type: "queue" }),
     onMessage: (m) => {
       if (m.type === "queued") msg.textContent = t("lobby.entered");
@@ -42,6 +42,6 @@ export function mountLobby(app: App): Screen {
 
   (wrap.querySelector("#cancel") as HTMLElement).onclick = () => { sock.send({ type: "cancel" }); sock.close(); app.home(); };
 
-  const unsub = onLangChange(() => { sock.close(); app.onlineLobby(); });
+  const unsub = onLangChange(() => { sock.close(); ranked ? app.rankedLobby() : app.onlineLobby(); });
   return { destroy: () => { unsub(); sock.close(); } };
 }

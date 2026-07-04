@@ -2,8 +2,10 @@
 // LORE — post-login HOME. Choose Random Online or Bot match.
 // ============================================================
 import type { App, Screen } from "../router";
+import { api } from "../net/api";
 import { t, onLangChange } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
+import { tierChipHtml } from "../ui/tier";
 
 export function mountHome(app: App): Screen {
   const u = app.user;
@@ -15,7 +17,13 @@ export function mountHome(app: App): Screen {
     <div class="home">
       <div class="welcome">${t("home.welcome")}</div>
       <div class="title">${u?.display ?? "PLAYER"}</div>
-      <div class="modes">
+      <div class="modes modes-3">
+        <div class="panel mode-card mode-ranked" id="ranked">
+          <div class="icon">🏆</div>
+          <h3>${t("home.ranked.title")}</h3>
+          <p>${t("home.ranked.desc")}</p>
+          <div class="my-tier" id="myTier"></div>
+        </div>
         <div class="panel mode-card" id="online">
           <div class="icon">🌐</div>
           <h3>${t("home.online.title")}</h3>
@@ -26,6 +34,11 @@ export function mountHome(app: App): Screen {
           <h3>${t("home.bot.title")}</h3>
           <p>${t("home.bot.desc")}</p>
         </div>
+      </div>
+      <div class="panel tut-card" id="lb">
+        <span class="tut-emoji">📊</span>
+        <span class="tut-txt"><b>${t("home.lb.title")}</b><span>${t("home.lb.desc")}</span></span>
+        <span class="tut-arrow">→</span>
       </div>
       <div class="panel tut-card" id="cards">
         <span class="tut-emoji">🃏</span>
@@ -46,8 +59,16 @@ export function mountHome(app: App): Screen {
   app.root.appendChild(wrap);
   wrap.querySelector(".topright-lang")!.appendChild(langSelectEl());
 
+  (wrap.querySelector("#ranked") as HTMLElement).onclick = () => app.rankedLobby();
+  (wrap.querySelector("#lb") as HTMLElement).onclick = () => app.leaderboard();
   (wrap.querySelector("#online") as HTMLElement).onclick = () => app.onlineLobby();
   (wrap.querySelector("#bot") as HTMLElement).onclick = () => app.botGame();
+
+  // current season tier badge (async, best-effort)
+  void api.rankMe().then((r) => {
+    const el = wrap.querySelector("#myTier");
+    if (el && r) el.innerHTML = tierChipHtml(r.tier, r.mmr);
+  }).catch(() => { /* not logged in / offline */ });
   (wrap.querySelector("#cards") as HTMLElement).onclick = () => app.cards();
   (wrap.querySelector("#tutorial") as HTMLElement).onclick = () => app.tutorial();
   (wrap.querySelector("#logout") as HTMLElement).onclick = () => app.logout();

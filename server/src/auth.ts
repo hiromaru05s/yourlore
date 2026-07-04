@@ -50,7 +50,7 @@ function json(env: Env, body: unknown, status = 200, extra: Record<string, strin
     headers: { "Content-Type": "application/json", ...corsHeaders(env), ...extra },
   });
 }
-function sessionCookie(token: string): string {
+export function sessionCookie(token: string): string {
   // Same-origin (single Worker serves client + API), so Lax is correct.
   const maxAge = SESSION_DAYS * 86400;
   return `${COOKIE}=${token}; HttpOnly; Path=/; Max-Age=${maxAge}; SameSite=Lax; Secure`;
@@ -76,7 +76,7 @@ export async function getUser(env: Env, req: Request): Promise<SessionUser | nul
   return { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses };
 }
 
-async function createSession(env: Env, userId: string): Promise<string> {
+export async function createSession(env: Env, userId: string): Promise<string> {
   const token = toHex(crypto.getRandomValues(new Uint8Array(24)));
   const now = Date.now();
   await env.DB.prepare(`INSERT INTO sessions (token, user_id, created_at, expires_at) VALUES (?,?,?,?)`)

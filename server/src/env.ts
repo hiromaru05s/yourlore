@@ -8,6 +8,9 @@ export interface Env {
   ASSETS: Fetcher; // Workers Static Assets — serves the built client (SPA)
   AUTH_SECRET: string;
   APP_ORIGIN: string;
+  // Google OAuth (optional — /api/auth/google returns 501 until both are set)
+  GOOGLE_CLIENT_ID?: string;     // wrangler.toml [vars] or secret
+  GOOGLE_CLIENT_SECRET?: string; // `wrangler secret put GOOGLE_CLIENT_SECRET`
 }
 
 export interface SessionUser {

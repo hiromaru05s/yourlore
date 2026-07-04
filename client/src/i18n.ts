@@ -38,6 +38,8 @@ const D: Record<string, Entry> = {
   "login.err.email": { ko: "올바른 이메일을 입력하세요.", ja: "正しいメールアドレスを入力してください。", en: "Please enter a valid email." },
   "login.err.pw": { ko: "비밀번호는 6자 이상이어야 합니다.", ja: "パスワードは6文字以上にしてください。", en: "Password must be at least 6 characters." },
   "login.err.generic": { ko: "오류가 발생했습니다.", ja: "エラーが発生しました。", en: "Something went wrong." },
+  "login.or": { ko: "또는", ja: "または", en: "or" },
+  "login.google": { ko: "Google로 계속하기", ja: "Googleで続行", en: "Continue with Google" },
   // home
   "home.welcome": { ko: "환영합니다", ja: "ようこそ", en: "Welcome" },
   "home.online.title": { ko: "랜덤 온라인 대전", ja: "ランダムオンライン対戦", en: "Random Online Match" },
@@ -48,6 +50,10 @@ const D: Record<string, Entry> = {
   "home.tutorial.desc": { ko: "게임 방법을 한눈에 알아보세요.", ja: "ゲームの遊び方をひと目で。", en: "Learn how to play at a glance." },
   "home.cards.title": { ko: "카드 리스트", ja: "カードリスト", en: "Card Gallery" },
   "home.cards.desc": { ko: "모든 카드를 한눈에 둘러보세요.", ja: "すべてのカードを一覧で。", en: "Browse every card in the game." },
+  "home.ranked.title": { ko: "랭크 대전", ja: "ランク対戦", en: "Ranked Match" },
+  "home.ranked.desc": { ko: "티어를 걸고 시즌 래더에 도전하세요.", ja: "ティアを懸けてシーズンラダーに挑戦。", en: "Climb the seasonal ladder." },
+  "home.lb.title": { ko: "리더보드", ja: "リーダーボード", en: "Leaderboard" },
+  "home.lb.desc": { ko: "이번 시즌 상위 랭커를 확인하세요.", ja: "今シーズンの上位ランカーを確認。", en: "See this season's top players." },
   // card list / gallery
   "cards.title": { ko: "카드 리스트", ja: "カードリスト", en: "Card Gallery" },
   "cards.back": { ko: "뒤로", ja: "戻る", en: "Back" },
@@ -75,6 +81,13 @@ const D: Record<string, Entry> = {
   "lobby.fail": { ko: "매칭 실패", ja: "マッチング失敗", en: "Matchmaking failed" },
   "lobby.connerr": { ko: "연결 오류", ja: "接続エラー", en: "Connection error" },
   "lobby.connerr.desc": { ko: "서버에 연결할 수 없습니다.", ja: "サーバーに接続できません。", en: "Could not connect to the server." },
+  "lobby.ranked": { ko: "랭크 매칭 중…", ja: "ランクマッチング中…", en: "Ranked matchmaking…" },
+  // leaderboard
+  "lb.title": { ko: "시즌 리더보드", ja: "シーズンリーダーボード", en: "Season Leaderboard" },
+  "lb.season": { ko: "시즌", ja: "シーズン", en: "Season" },
+  "lb.empty": { ko: "아직 이번 시즌 랭크 기록이 없습니다.", ja: "今シーズンのランク記録はまだありません。", en: "No ranked games this season yet." },
+  "lb.myrank": { ko: "내 순위", ja: "自分の順位", en: "My rank" },
+  "common.back": { ko: "뒤로", ja: "戻る", en: "Back" },
   // game
   "game.turn": { ko: "턴", ja: "ターン", en: "Turn" },
   "game.hp": { ko: "체력", ja: "体力", en: "HP" },

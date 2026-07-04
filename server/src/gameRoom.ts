@@ -18,6 +18,7 @@ import type { Action, GameEvent, GameState, Side } from "../../client/src/shared
 import type { GameClientMsg, GameServerMsg } from "../../client/src/shared/protocol";
 import { createGame, reduce } from "../../client/src/shared/engine";
 import { redactFor } from "../../client/src/shared/protocol";
+import { applyRanked } from "./rank";
 
 interface PlayerRef { id: string; name: string; }
 
@@ -28,6 +29,8 @@ interface RoomData {
   initEvents: GameEvent[];
   readied: [boolean, boolean];
   recorded: boolean;
+  /** Ranked match — result also updates the seasonal Elo ladder. */
+  ranked: boolean;
   /** Connection generation per side — a close from an older gen is a replaced socket, not a disconnect. */
   gen: [number, number];
   /** Pending forfeit deadlines (ms epoch) per side; enforced by alarm(). */
@@ -64,6 +67,7 @@ export class GameRoom {
         initEvents: r.initEvents ?? [],
         readied: r.readied ?? [false, false],
         recorded: r.recorded ?? false,
+        ranked: r.ranked ?? false,
         gen: r.gen ?? [0, 0],
         forfeitAt: r.forfeitAt ?? [null, null],
       };
@@ -77,7 +81,7 @@ export class GameRoom {
 
     // provisioning call from the matchmaker
     if (url.pathname.endsWith("/setup")) {
-      const body = (await req.json()) as { players: [PlayerRef, PlayerRef]; seed: number };
+      const body = (await req.json()) as { players: [PlayerRef, PlayerRef]; seed: number; ranked?: boolean };
       const res = createGame({
         mode: "online",
         seed: body.seed,
@@ -90,6 +94,7 @@ export class GameRoom {
         initEvents: res.events,
         readied: [false, false],
         recorded: false,
+        ranked: body.ranked ?? false,
         gen: [0, 0],
         forfeitAt: [null, null],
       };
@@ -263,8 +268,9 @@ export class GameRoom {
         this.env.DB.prepare(`UPDATE users SET wins = wins + 1 WHERE id = ?`).bind(winner.id),
         this.env.DB.prepare(`UPDATE users SET losses = losses + 1 WHERE id = ?`).bind(loser.id),
         this.env.DB.prepare(`INSERT INTO matches (id, player_a, player_b, winner, mode, created_at, ended_at) VALUES (?,?,?,?,?,?,?)`)
-          .bind(crypto.randomUUID(), room.players[0].id, room.players[1].id, winner.id, "online", Date.now(), Date.now()),
+          .bind(crypto.randomUUID(), room.players[0].id, room.players[1].id, winner.id, room.ranked ? "ranked" : "online", Date.now(), Date.now()),
       ]);
+      if (room.ranked) await applyRanked(this.env, winner.id, loser.id);
     } catch { /* records are best-effort */ }
   }
 }

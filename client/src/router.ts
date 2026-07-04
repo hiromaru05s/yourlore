@@ -10,6 +10,7 @@ import { mountLobby } from "./screens/lobby";
 import { mountGame } from "./screens/game";
 import { mountTutorial } from "./screens/tutorial";
 import { mountCards } from "./screens/cards";
+import { mountLeaderboard } from "./screens/leaderboard";
 
 export interface Screen { destroy?(): void; }
 
@@ -40,6 +41,8 @@ export class App {
   cards(): void { this.swap(() => mountCards(this)); }
   botGame(): void { this.swap(() => mountGame(this, { mode: "bot" })); }
   onlineLobby(): void { this.swap(() => mountLobby(this)); }
+  rankedLobby(): void { this.swap(() => mountLobby(this, true)); }
+  leaderboard(): void { this.swap(() => mountLeaderboard(this)); }
   onlineGame(roomId: string, you: Side, oppName: string): void {
     this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName }));
   }
