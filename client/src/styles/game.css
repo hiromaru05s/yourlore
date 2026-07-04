@@ -392,3 +392,7 @@
   z-index: 6; pointer-events: none;
 }
 .card img { -webkit-user-drag: none; user-select: none; }
+
+/* a card leaving the hand fades out the moment playback starts —
+   otherwise it appears BOTH flying onto the field and still in hand */
+#hand .card.is-played { opacity: 0 !important; transition: opacity .18s ease-out; pointer-events: none; }

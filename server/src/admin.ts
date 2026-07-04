@@ -1,14 +1,10 @@
 // ============================================================
-// LORE server — internal GAME-HEALTH metrics only.
-//   Acquisition / retention / funnel / source now live in PostHog
-//   (product analytics), which computes them far better than SQL
-//   and scales without maintenance. This endpoint keeps ONLY what
-//   no external tool can compute: card win-rates (balance), tier
-//   distribution, invite ledger, and a support email lookup.
-//
-// Auth: Cloudflare Access (edge SSO) is the primary gate — when a
-//   request carries Cf-Access-Authenticated-User-Email it is trusted.
-//   Until Access is set up, a Bearer <AUTH_SECRET> fallback applies.
+// LORE server — all-in-one operator dashboard backend.
+// Served ONLY on the isolated admin origin (admin.yourlore.xyz);
+// index.ts 404s these paths on the game origin. Auth: the logged-in
+// session's email must be in ADMIN_EMAILS. PostHog runs in parallel
+// for deep dives (funnels, session replay), but the daily numbers
+// live here from our own D1 so it's a single pane.
 // ============================================================
 import type { Env, SessionUser } from "./env";
 import { corsHeaders, getUser } from "./auth";
@@ -31,14 +27,28 @@ export async function handleAdmin(env: Env, req: Request, path: string): Promise
   if (!isAdminUser(env, user)) return json(env, { error: "unauthorized", loggedIn: !!user }, 401);
 
   if (path === "/admin/stats") {
-    const [totalUsers, totalMatches, inviteAgg, tierRows] = await Promise.all([
+    const cutoff30 = Date.now() - 30 * 86400_000;
+    const [totalUsers, totalMatches, signupsByDay, signupsBySource, gamesByDay, dau, cohorts, inviteAgg, tierRows] = await Promise.all([
       env.DB.prepare(`SELECT COUNT(*) AS n FROM users`).first<{ n: number }>(),
       env.DB.prepare(`SELECT mode, COUNT(*) AS n FROM matches GROUP BY mode`).all<{ mode: string; n: number }>(),
+      env.DB.prepare(`SELECT date(created_at/1000,'unixepoch') AS d, COUNT(*) AS n FROM users WHERE created_at > ? GROUP BY d ORDER BY d`)
+        .bind(cutoff30).all<{ d: string; n: number }>(),
+      env.DB.prepare(`SELECT COALESCE(NULLIF(source,''),'direct') AS s, COUNT(*) AS n FROM users WHERE created_at > ? GROUP BY s ORDER BY n DESC`)
+        .bind(cutoff30).all<{ s: string; n: number }>(),
+      env.DB.prepare(`SELECT date(created_at/1000,'unixepoch') AS d, mode, COUNT(*) AS n FROM matches WHERE created_at > ? GROUP BY d, mode ORDER BY d`)
+        .bind(cutoff30).all<{ d: string; mode: string; n: number }>(),
+      env.DB.prepare(`SELECT day AS d, COUNT(*) AS n FROM user_days WHERE day >= date('now','-30 days') GROUP BY day ORDER BY day`)
+        .all<{ d: string; n: number }>(),
+      env.DB.prepare(
+        `SELECT date(u.created_at/1000,'unixepoch') AS cohort, COUNT(*) AS n,
+           SUM(EXISTS(SELECT 1 FROM user_days ud WHERE ud.user_id = u.id AND ud.day = date(u.created_at/1000,'unixepoch','+1 day'))) AS d1,
+           SUM(EXISTS(SELECT 1 FROM user_days ud WHERE ud.user_id = u.id AND ud.day = date(u.created_at/1000,'unixepoch','+7 day'))) AS d7
+         FROM users u WHERE u.created_at > ? GROUP BY cohort ORDER BY cohort DESC LIMIT 14`
+      ).bind(Date.now() - 14 * 86400_000).all<{ cohort: string; n: number; d1: number; d7: number }>(),
       env.DB.prepare(`SELECT status, COUNT(*) AS n FROM invite_rewards GROUP BY status`).all<{ status: string; n: number }>(),
       env.DB.prepare(`SELECT mmr FROM ratings WHERE season = ?`).bind(seasonKey()).all<{ mmr: number }>(),
     ]);
 
-    // tier distribution (this season) — a healthy ladder isn't all bunched at the floor
     const tierDist: Record<string, number> = {};
     for (const r of tierRows.results ?? []) { const t = tierOf(r.mmr); tierDist[t] = (tierDist[t] ?? 0) + 1; }
 
@@ -53,10 +63,7 @@ export async function handleAdmin(env: Env, req: Request, path: string): Promise
         let uses: Record<string, number>;
         try { uses = JSON.parse(blob || "{}"); } catch { continue; }
         const won = m.winner === who;
-        for (const id of Object.keys(uses)) {
-          agg[id] ??= { win: 0, lose: 0 };
-          if (won) agg[id].win++; else agg[id].lose++;
-        }
+        for (const id of Object.keys(uses)) { agg[id] ??= { win: 0, lose: 0 }; if (won) agg[id].win++; else agg[id].lose++; }
       }
     }
     const cards = Object.entries(agg)
@@ -66,6 +73,11 @@ export async function handleAdmin(env: Env, req: Request, path: string): Promise
 
     return json(env, {
       totals: { users: totalUsers?.n ?? 0, matches: Object.fromEntries((totalMatches.results ?? []).map((r) => [r.mode, r.n])) },
+      signupsByDay: signupsByDay.results ?? [],
+      signupsBySource: signupsBySource.results ?? [],
+      gamesByDay: gamesByDay.results ?? [],
+      dau: dau.results ?? [],
+      retention: cohorts.results ?? [],
       tierDist,
       invites: Object.fromEntries((inviteAgg.results ?? []).map((r) => [r.status, r.n])),
       cards,
@@ -74,18 +86,16 @@ export async function handleAdmin(env: Env, req: Request, path: string): Promise
     });
   }
 
-  // 지원용 단건 조회 — 정확한 이메일로 1명만 (문의 대응). 전체 목록은 노출하지 않음.
-  if (path === "/admin/lookup") {
-    const email = (new URL(req.url).searchParams.get("email") || "").trim().toLowerCase();
-    if (!email) return json(env, { user: null });
-    const u = await env.DB.prepare(
-      `SELECT u.id, u.email, u.display, u.created_at, u.verified, u.wins, u.losses, u.invited_by,
+  // 유저 리스트 (최신 500명)
+  if (path === "/admin/users") {
+    const rows = await env.DB.prepare(
+      `SELECT u.id, u.email, u.display, u.created_at, u.verified, u.source, u.wins, u.losses, u.invited_by,
               (SELECT r.mmr FROM ratings r WHERE r.user_id = u.id AND r.season = ?) AS mmr,
               (SELECT MAX(ud.day) FROM user_days ud WHERE ud.user_id = u.id) AS last_day,
               (u.password = 'oauth:google') AS is_google
-       FROM users u WHERE u.email = ?`
-    ).bind(seasonKey(), email).first();
-    return json(env, { user: u ?? null });
+       FROM users u ORDER BY u.created_at DESC LIMIT 500`
+    ).bind(seasonKey()).all();
+    return json(env, { users: rows.results ?? [] });
   }
 
   return json(env, { error: "not found" }, 404);

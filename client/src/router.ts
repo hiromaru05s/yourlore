@@ -24,7 +24,10 @@ export class App {
   constructor(root: HTMLElement) { this.root = root; }
 
   async start(): Promise<void> {
-    if (location.pathname === "/admin") { this.swap(() => mountAdmin(this)); return; } // internal dashboard
+    // Isolated admin origin (admin.yourlore.xyz) → dashboard only, nothing else.
+    if (location.hostname.startsWith("admin.")) { this.swap(() => mountAdmin(this)); return; }
+    // On the game origin, /admin just bounces to the isolated admin host.
+    if (location.pathname === "/admin") { location.href = `${location.protocol}//admin.${location.host.replace(/^www\./, "")}/`; return; }
     this.user = await api.me();
     if (this.user) { aIdentify(this.user.id, { verified: true }); this.home(); }
     else this.login();

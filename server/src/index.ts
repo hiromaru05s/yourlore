@@ -18,6 +18,14 @@ export default {
   async fetch(req: Request, env: Env): Promise<Response> {
     const url = new URL(req.url);
     const path = url.pathname;
+    const onAdminHost = url.hostname.startsWith("admin."); // isolated admin origin
+
+    // Admin API is ONLY reachable on the admin origin. On the game origin it
+    // does not exist (404) — so a game-site XSS can't even call it, and the
+    // admin session cookie (host-only to admin.*) is never sent to the game host.
+    if (path.startsWith("/api/admin/") && !onAdminHost) {
+      return new Response(JSON.stringify({ error: "not found" }), { status: 404, headers: { "Content-Type": "application/json" } });
+    }
 
     // ---- geo (for default language) ----
     if (path === "/api/geo") {

@@ -8,6 +8,8 @@ compatibility_flags = ["nodejs_compat"]
 routes = [
   { pattern = "yourlore.xyz", custom_domain = true },
   { pattern = "www.yourlore.xyz", custom_domain = true },
+  # isolated admin origin — separate browser origin ⇒ game-site XSS can't touch the admin session
+  { pattern = "admin.yourlore.xyz", custom_domain = true },
 ]
 
 # --- Static Assets: serve the built client from the SAME origin as the API,

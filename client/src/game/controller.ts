@@ -109,6 +109,15 @@ export abstract class BaseController implements BoardHandlers {
 
   /** Play a batch of events one at a time on the OLD board, then re-render. */
   private async playEvents(prev: GameState, res: ReduceResult): Promise<void> {
+    // Cards that left my hand must disappear from it IMMEDIATELY — seeing a
+    // card fly onto the field while its copy still sits in the hand is confusing.
+    // (The hand itself only re-renders after the whole batch has played out.)
+    const newHand = new Set(res.state.players[this.you].hand.map((c) => c.uid));
+    for (const c of prev.players[this.you].hand) {
+      if (!newHand.has(c.uid)) {
+        (document.querySelector(`#hand .card[data-uid="${c.uid}"]`) as HTMLElement | null)?.classList.add("is-played");
+      }
+    }
     const events = res.events;
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
