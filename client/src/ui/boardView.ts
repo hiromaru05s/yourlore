@@ -125,7 +125,7 @@ export class GameView {
     this.q("endBtn").textContent = t("game.endturn");
     this.q("surrenderBtn").textContent = t("game.surrender");
     this.q("logTitle").textContent = t("game.log");
-    this.q("logToggle").textContent = t("game.log");
+    this.q("logTab").textContent = t("game.log");
 
     // opponent hand (face-down). Always show the COUNT; >10 lays out flat/even
     // so you can still gauge how many cards they hold.
