@@ -394,6 +394,14 @@ const NEW_CARDS: CardDef[] = [
   { id: "NT_NULL3", t: "trap", cost: 3, name: "마력 차단", nameJa: "魔力遮断", react: "nullspell", val: 3, text: "상대 마법 1장 무효화 + 자신에게 3 데미지", textJa: "相手の魔法1枚を無効化 + 自分に3ダメージ" },
   { id: "NT_NULL5", t: "trap", cost: 5, name: "마법 봉인", nameJa: "魔法封印", react: "nullspell", text: "상대 마법 1장 무효화", textJa: "相手の魔法1枚を無効化" },
   { id: "NT_NULL6", t: "trap", cost: 6, name: "반마술 결계", nameJa: "反魔術結界", react: "nullspell", val2: 2, text: "상대 마법 1장 무효화 + 상대에게 2 데미지", textJa: "相手の魔法1枚を無効化 + 相手に2ダメージ" },
+  { id: "NT_NULL4", t: "trap", cost: 3, name: "주문 파쇄", nameJa: "呪文破砕", react: "nullspell", cap: 6,
+    text: "코스트 6 이하 마법 1장을 무효화", textJa: "コスト6以下の魔法1枚を無効化" },
+  { id: "NT_NULL8", t: "trap", cost: 8, play: 6, name: "침묵의 심판", nameJa: "沈黙の審判", react: "nullspell", lockSpell: true,
+    text: "상대 마법 1장 무효화 + 이번 상대 턴 동안 상대는 마법 카드를 사용할 수 없다 (시전 6)", textJa: "相手の魔法1枚を無効化 + このターン中、相手は魔法カードを使用できない (発動6)" },
+  { id: "NT_SEAL3", t: "mon", cost: 3, name: "침묵의 파수꾼", nameJa: "沈黙の番人", atk: 1, def: 3, aura: "sealLow",
+    text: "이 카드가 필드에 있는 한 양 플레이어는 코스트 5 이하 마법을 사용할 수 없다", textJa: "このカードが場にある限り、両プレイヤーはコスト5以下の魔法を使用できない" },
+  { id: "NT_SEAL5", t: "mon", cost: 5, name: "침묵의 거신", nameJa: "沈黙の巨神", atk: 3, def: 4, aura: "sealAll",
+    text: "이 카드가 필드에 있는 한 양 플레이어는 마법 카드를 사용할 수 없다", textJa: "このカードが場にある限り、両プレイヤーは魔法カードを使用できない" },
 ];
 
 for (const id of Object.keys(PATCH)) { if (DB[id]) Object.assign(DB[id], PATCH[id]); }
@@ -594,8 +602,8 @@ const PATCH5: Record<string, Partial<CardDef>> = {
   // 널(마법 무효)계 리워크 — "저코스트 마법은 싸게 카운터" (cap = 무효화 가능한 최대 시전코스트)
   NT_NULL3: { cost: 1, cap: 2, val: 0, text: "코스트 2 이하 마법 1장을 무효화", textJa: "コスト2以下の魔法1枚を無効化" },
   T2: { cost: 2, play: 2, cap: 4, val: 0, text: "코스트 4 이하 마법 1장을 무효화", textJa: "コスト4以下の魔法1枚を無効化" },
-  NT_NULL5: { cost: 4 }, // 전체 대응 프리미엄: 5 → 4
-  NT_NULL6: { cost: 5 }, // 전체 대응 + 상대 2뎀: 6 → 5
+  NT_NULL5: { cost: 4, val2: 4, text: "상대 마법 1장 무효화 + 상대에게 4 데미지", textJa: "相手の魔法1枚を無効化 + 相手に4ダメージ" }, // 전체 대응 프리미엄: 5 → 4, 상대 4뎀 버프
+  NT_NULL6: { cost: 6, val2: 8, text: "상대 마법 1장 무효화 + 상대에게 8 데미지", textJa: "相手の魔法1枚を無効化 + 相手に8ダメージ" }, // 6코 유지, 상대 8뎀 버프
   // 5~6코 조정
   GT5_0: { play: 1 },    // 그림자 방어 태세 (최하위 -12.5%, 무효+부가라 효과 자체가 약함 → 설치 1)
   GT5_3: { val: 60, text: "공격 몬스터 파괴 + 60%로 자신 필드에 소생(소유권 이동)", textJa: "攻撃モンスターを破壊 + 60%で自分の場に蘇生(所有権移動)" }, // 30% → 60%
@@ -801,6 +809,8 @@ const NEW_CARDS7: CardDef[] = [
     text: "게임에서 제외된 자신의 카드 1장당 상대에게 3 데미지 (시전 12)", textJa: "ゲームから除外された自分のカード1枚につき相手に3ダメージ (発動12)" },
   { id: "CULL_TITAN", t: "mon", cost: 9, atk: 1, def: 1, onSummon: "cullTitan", name: "컬의 화신", nameJa: "カルの化身",
     text: "소환시: 게임에서 제외된 자신의 '컬' 1장당 +1/+1", textJa: "召喚時: ゲームから除外された自分の「カル」1枚につき+1/+1" },
+  { id: "WORLD_GUARD", t: "mon", cost: 8, atk: 6, def: 5, onSummon: "worldGuard", name: "세계수의 수호자", nameJa: "世界樹の守護者",
+    text: "소환시: 자신의 최대 체력이 90 이상이면 최대 마나 +1, 최대 체력 +15", textJa: "召喚時: 自分の最大体力が90以上なら最大マナ+1、最大体力+15" },
   { id: "GOLIATH_HUNT", t: "spell", cost: 3, name: "골리앗 사냥", nameJa: "ゴリアテ狩り",
     text: "방어력 20 이상의 적 몬스터 1체를 파괴", textJa: "防御力20以上の敵モンスター1体を破壊" },
   { id: "DOUBLE_EXEC", t: "spell", cost: 6, act: "destroyMon", val: 2, name: "이중 처형", nameJa: "二重処刑",

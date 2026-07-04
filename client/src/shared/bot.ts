@@ -231,6 +231,12 @@ export function greedyDecide(g: GameState): Action {
   // castable(): reject spells that would be refused before paying (avoids the bot
   // re-picking an uncastable card forever) OR that would be self-defeating.
   const castable = (c: CardInst): boolean => {
+    // 침묵 오라 / 침묵의 심판: 마법 봉인 (엔진에서 거부되므로 봇도 스킵)
+    if (c.t === "spell") {
+      if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) return false;
+      if (playCost(c) <= 5 && g.players.some((pl) => pl.field.some((m) => m.aura === "sealLow"))) return false;
+      if (p.spellSealTurn) return false;
+    }
     if (c.act === "wipeBack" && p.field.length > 0) return false;
     if (c.id === "S4" && (p.usesTurn?.["S4"] || 0) >= 1) return false;
     if (c.id === "GS9_0" && o.hp <= 21) return false;

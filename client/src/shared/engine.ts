@@ -250,6 +250,7 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
   if (p.manaGainNext) { p.maxMana += p.manaGainNext; p.manaGainNext = 0; } // E3 delayed mana
   p.usesTurn = {};
   p.playsTurn = 0;
+  p.spellSealTurn = false;
   p.manaPenalty = p.nextPenalty || 0; p.nextPenalty = 0;
   p.mana = effMaxMana(p);
   tickExile(ctx, p);
@@ -693,6 +694,14 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       }
       break;
     }
+    case "worldGuard": { // 세계수의 수호자: 최대체력 90+면 최대 마나 +1, 최대 체력 +15
+      if (p.maxHp >= 90) {
+        p.maxMana += 1; p.maxHp += 15; p.hp += 15;
+        ctx.ev.push({ type: "heal", player: side(g, p), amount: 15 });
+        ctx.log(`  └ 세계수의 가호: 최대 마나 +1 (${p.maxMana}), 최대 체력 +15 (${p.maxHp})`, `  └ 世界樹の加護: 最大マナ +1 (${p.maxMana}), 最大体力 +15 (${p.maxHp})`);
+      } else ctx.log(`  └ 최대 체력 ${p.maxHp} — 조건 미달(90)`, `  └ 最大体力${p.maxHp} — 条件未達(90)`);
+      break;
+    }
     case "hordeBuff": { // 군단의 기수: 덱+묘지 20장 이상이면 +3/+3
       const hn = p.deck.length + p.discard.length;
       if (hn >= 24) { m.atkMod = (m.atkMod || 0) + 3; m.defMod = (m.defMod || 0) + 3; ctx.log(`  └ 군단(${hn}장) 결집: +3/+3`, `  └ 軍団(${hn}枚)結集: +3/+3`); }
@@ -827,6 +836,10 @@ function tryNullSpell(g: GameState, ctx: Ctx, card: CardInst): boolean {
   );
   if (t.val) ctx.dealDamage(o, t.val, cn(t), cn(t));    // self-damage to the trap owner
   if (t.val2) ctx.dealDamage(p, t.val2, cn(t), cn(t));  // damage to the caster
+  if (t.lockSpell) { // 침묵의 심판: caster cannot cast spells for the rest of this turn
+    p.spellSealTurn = true;
+    ctx.log(`  └ <span class="dmg">${p.name}은(는) 이번 턴 동안 마법을 사용할 수 없다</span>`, `  └ <span class="dmg">${p.name}はこのターン魔法を使用できない</span>`);
+  }
   return true;
 }
 function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
@@ -1402,6 +1415,10 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   }
   if (card.t === "spell") {
     const o0 = g.players[1 - g.cur];
+    // ---- spell seals (침묵 오라 / 침묵의 심판) ----
+    if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) { ctx.log(`  └ <span class="dmg">침묵의 거신</span>이 필드에 있어 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の巨神</span>が場にいるため魔法を使用できません`); return; }
+    if (playCost(card) <= 5 && g.players.some((pl) => pl.field.some((m) => m.aura === "sealLow"))) { ctx.log(`  └ <span class="dmg">침묵의 파수꾼</span>이 필드에 있어 코스트 5 이하 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の番人</span>が場にいるためコスト5以下の魔法を使用できません`); return; }
+    if (p.spellSealTurn) { ctx.log(`  └ <span class="dmg">침묵의 심판</span>: 이번 턴 동안 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の審判</span>: このターン中は魔法を使用できません`); return; }
     // ---- conditional / usage-gated preconditions (checked BEFORE paying) ----
     if (card.act === "wipeBack" && p.field.length > 0) { ctx.log(`  └ 필드에 몬스터가 있어 사용 불가`, `  └ 場にモンスターがいるため使用不可`); return; }
     if (card.id === "S4" && (p.usesTurn["S4"] || 0) >= 1) { ctx.log("  └ 이번 턴에 이미 사용했습니다", "  └ このターンは既に使用済み"); return; }

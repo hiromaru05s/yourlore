@@ -83,6 +83,8 @@ const R: [RegExp, string][] = [
   [/마스터 미믹\((\d+)\/(\d+)\) 강림!/g, "Master Mimic ($1/$2) descends!"],
   [/미믹\((\d+)\/(\d+)\) (\d+)마리 소환 \+ 미믹 (\d+)장 게임에서 제외/g, "summoned $3 Mimics ($1/$2) + exiled $4 Mimics"],
   [/경제 위기!/g, "Economic Crisis!"],
+  [/세계수의 가호:/g, "World Tree's blessing:"],
+  [/조건 미달\((\d+)\)/g, "condition not met ($1)"],
   [/거벽/g, "giant wall"],
   [/파괴할 적 몬스터 선택 \((\d+)체 남음\)/g, "pick an enemy monster to destroy ($1 left)"],
   [/상대 몬스터 (\d+)체 전멸/g, "annihilated $1 enemy monster(s)"],

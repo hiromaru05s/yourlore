@@ -31,6 +31,7 @@ export interface CardDef {
   directOnly?: boolean; // can ONLY attack the opponent player directly (never monsters) — 암살자
   summonReq?: string; // summon precondition key (checked before summoning) — 암살자 상급/특급
   cap?: number; // nullspell trap: only counters spells with play cost <= cap (undefined = any)
+  lockSpell?: boolean; // nullspell trap: caster also cannot cast spells for the rest of this turn
   nameJa?: string; // Japanese name (falls back to name)
   textJa?: string; // Japanese effect text (falls back to text)
   nameEn?: string; // English name (falls back to name)
@@ -90,6 +91,7 @@ export interface PlayerState {
   uses: Record<string, number>; // per-game count of how many times each card id has been played
   usesTurn: Record<string, number>; // per-turn count (reset each turn)
   playsTurn?: number; // total cards played this turn (monsters/spells/traps/starters)
+  spellSealTurn?: boolean; // cannot cast spells for the rest of this turn (침묵의 심판)
   supplyShrink: number; // if >0, this player's next 제시 roll offers 2 cards instead of 3
   defendHeal: number; // heal this much whenever this player is attacked
   manaGainNext: number; // max mana to gain at the start of this player's next turn
