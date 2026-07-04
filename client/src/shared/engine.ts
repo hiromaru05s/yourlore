@@ -228,7 +228,9 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       const dead = owner.field.splice(i, 1)[0];
       // 폭풍의 광전사(drainMana): restore the opponent's max mana it was draining
       if (dead.aura === "drainMana") { const opp2 = g.players[0] === owner ? g.players[1] : g.players[0]; opp2.maxMana += (dead.val || 3); }
-      if (dead.id !== "MIMIC") owner.discard.push(inst(g, dead.id)); // Mimic token is exiled
+      // tokens (and the Mimic) are EXILED on death — they never join the deck cycle
+      if (dead.token || dead.id === "MIMIC") rmz(owner).push(inst(g, dead.id));
+      else owner.discard.push(inst(g, dead.id));
       ev.push({ type: "destroy", player: side(g, owner), uid: m.uid, id: dead.id });
     }
   };
@@ -757,7 +759,7 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       break;
     case "summonRandom": { // GM10_2
       const mons = p.deck.filter((c) => c.t === "mon");
-      if (mons.length) { const pick = mons[randInt(g, mons.length)]; const di = p.deck.findIndex((c) => c.uid === pick.uid); p.deck.splice(di, 1); spawnToken(g, ctx, p, pick.id); ctx.log(`  └ 덱에서 ${cn(pick)} 무료 소환`, `  └ デッキから ${cn(pick)} を無料召喚`); }
+      if (mons.length) { const pick = mons[randInt(g, mons.length)]; const di = p.deck.findIndex((c) => c.uid === pick.uid); p.deck.splice(di, 1); spawnToken(g, ctx, p, pick.id, true); ctx.log(`  └ 덱에서 ${cn(pick)} 무료 소환`, `  └ デッキから ${cn(pick)} を無料召喚`); }
       else ctx.log("  └ 덱에 몬스터 없음", "  └ デッキにモンスターなし");
       break;
     }
@@ -799,12 +801,15 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
   }
 }
 
-/** Spawn a stat-only token monster (no summon effect / tribe / pitfall trigger). */
-function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string): void {
+/** Spawn a stat-only token monster (no summon effect / tribe / pitfall trigger).
+ *  `fromDeck`: the summon CONSUMED a real deck card (e.g. GM10_2) — that copy
+ *  still dies to the graveyard so the player keeps the card. Everything else
+ *  is a conjured token: exiled on death (see destroyMonster). */
+function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string, fromDeck = false): void {
   if (!DB[id]) return;
   if (p.field.length >= FIELD_MAX) return; // monster zone full — cannot spawn more
 
-  const m: FieldMon = { uid: newUID(g), ...structuredClone(DB[id]), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
+  const m: FieldMon = { uid: newUID(g), ...structuredClone(DB[id]), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn, token: !fromDeck };
   m.onSummon = undefined; m.turnFx = undefined; // tokens don't re-trigger summon effects
   p.field.push(m);
   ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid, id: m.id });

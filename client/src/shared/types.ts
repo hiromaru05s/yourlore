@@ -54,6 +54,7 @@ export interface FieldMon extends CardInst {
   defMod: number; // permanent def change
   summonedTurn: number;
   attacksUsed?: number; // attacks made this turn (for multi-attack monsters)
+  token?: boolean; // conjured by an effect (not a real deck card) — exiled on death, never enters the deck cycle
 }
 
 export interface TrapSet {
