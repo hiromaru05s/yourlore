@@ -23,12 +23,12 @@
 .card--mkt { --cw: var(--card-w-mkt); --ch: var(--card-h-mkt); }
 .card--hand { --cw: var(--card-w-hand); --ch: var(--card-h-hand); }
 
-/* cost — the number over the frame's built-in top-left ring */
+/* cost — the number centered in the frame's top-left ring (center ≈ 9%, 10.8%) */
 .card-cost {
-  position: absolute; top: 2%; left: 0.5%; right: auto;
-  width: 16.5%; height: 13%;
+  position: absolute; top: 4%; left: 1%; right: auto;
+  width: 16%; height: 13.5%;
   display: grid; place-items: center;
-  font-family: var(--mono); font-weight: 800; font-size: 0.98em;
+  font-family: var(--mono); font-weight: 800; font-size: 0.9em;
   color: #16110c; text-shadow: 0 1px 0 #ffffff55;
   z-index: 3;
 }
@@ -126,12 +126,12 @@
   box-shadow: var(--shadow-1);
 }
 
-/* tribe tag — tap to see synergy bonuses */
+/* tribe tag — tucked into the art's top-left corner so it doesn't cover the art */
 .tribe-tag {
-  position: absolute; top: 14.5%; left: 50%; transform: translateX(-50%);
-  font-size: 0.62em; font-weight: 700; letter-spacing: .02em;
-  color: #f6e7b6; background: #2a1c44dd; border: 1px solid var(--brass-dim);
-  border-radius: 4px; padding: 1px 6px; cursor: pointer; z-index: 4; white-space: nowrap;
+  position: absolute; top: 16.8%; left: 7.5%; transform: none;
+  font-size: 0.48em; font-weight: 700; letter-spacing: .02em;
+  color: #f6e7b6; background: #1a1230e0; border: 1px solid var(--brass-dim);
+  border-radius: 4px; padding: 1px 5px; cursor: pointer; z-index: 4; white-space: nowrap;
 }
 .tribe-tag:hover { background: var(--brass); color: #2a1d08; border-color: var(--gold-glow); }
 
