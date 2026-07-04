@@ -159,7 +159,7 @@ const TEXTS: Record<string, string> = {
   T13: "Destroy the attacking monster + 4 damage to the opponent (Cast 3)",
   NT_NULL3: "Negate 1 enemy spell of cost 2 or less", NT_NULL5: "Negate 1 enemy spell",
   NT_NULL6: "Negate 1 enemy spell + 2 damage to the opponent",
-  STARTER_TRASH: "Mana 1: destroy this card (remove from deck)", STARTER_CHEST: "Mana 1: open the treasure chest",
+  STARTER_TRASH: "Mana 1: exile this card from the game (thins your deck)", STARTER_CHEST: "Mana 1: open the treasure chest",
   STARTER_MANA: "Mana 3: max mana +1",
   TGE1: "[Origin] tribe synergy. Summon cost 2", TGE2: "[Origin] On summon: max HP -2", TGE3: "[Origin] On summon: max HP -1",
   TGE4: "[Origin] tribe synergy", TGE5: "[Origin] tribe synergy", TGE6: "[Origin] On summon: max HP +1", TGE7: "[Origin] On summon: max HP +2",

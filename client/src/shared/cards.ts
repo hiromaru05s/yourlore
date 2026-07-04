@@ -227,7 +227,7 @@ function generate(): Record<string, CardDef> {
 export const DB: Record<string, CardDef> = { ...CORE, ...generate() };
 
 export const STARTERS: Record<string, CardDef> = {
-  STARTER_TRASH: { id: "STARTER_TRASH", t: "starter", cost: 1, name: "컬", text: "마나1: 이 카드를 폐기(덱에서 제거)", star: "trash" },
+  STARTER_TRASH: { id: "STARTER_TRASH", t: "starter", cost: 1, name: "컬", text: "마나1: 이 카드를 게임에서 제외(덱 압축)", star: "trash" },
   STARTER_CHEST: { id: "STARTER_CHEST", t: "starter", cost: 1, name: "보물상자", text: "마나1: 보물상자를 연다", star: "chest" },
   STARTER_MANA: { id: "STARTER_MANA", t: "starter", cost: 3, name: "어튠", text: "마나3: 최대 마나 +1", star: "mana" },
 };
@@ -298,7 +298,7 @@ const CORE_JA: Record<string, { name: string; text?: string }> = {
   AMA: { name: "アチューン・魔", text: "手札の宝箱1枚を捨て札へ → 最大マナ+1、1枚ドロー" },
   NHEAL: { name: "生命の加護", text: "永続: モンスターを召喚するたびに体力1回復" },
   NWIPE: { name: "浄化の爆発", text: "自分の場にモンスターがいない時のみ。相手の罠・魔法を全て破壊し自分に6ダメージ" },
-  STARTER_TRASH: { name: "カル", text: "マナ1: このカードを廃棄(デッキから除去)" },
+  STARTER_TRASH: { name: "カル", text: "マナ1: このカードをゲームから除外(デッキ圧縮)" },
   STARTER_CHEST: { name: "宝箱", text: "マナ1: 宝箱を開く" },
   STARTER_MANA: { name: "アチューン", text: "マナ3: 最大マナ+1" },
 };
