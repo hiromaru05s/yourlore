@@ -16,6 +16,7 @@ import { GameLog } from "../ui/log";
 import * as A from "../ui/anim";
 import { cardPicker, confirmDialog, treasureModal, winModal } from "../ui/modal";
 import { api } from "../net/api";
+import { aCapture } from "../net/analytics";
 import { t, getLang, cardName, onLangChange } from "../i18n";
 
 export interface ControllerExits {
@@ -303,6 +304,7 @@ export abstract class BaseController implements BoardHandlers {
     this.winShown = true;
     // bot games are client-local — report the result for analytics (online games are recorded server-side)
     if (this.state.mode === "bot") void api.trackBot(this.state.winner === this.you);
+    aCapture("game_end", { mode: this.state.mode, won: this.state.winner === this.you, turns: this.state.turn });
     this.openResult();
   }
 

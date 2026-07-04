@@ -4,6 +4,7 @@
 import type { Side } from "./shared/types";
 import type { User } from "./net/api";
 import { api } from "./net/api";
+import { aIdentify, aReset, aCapture } from "./net/analytics";
 import { mountLogin } from "./screens/login";
 import { mountHome } from "./screens/home";
 import { mountLobby } from "./screens/lobby";
@@ -25,7 +26,7 @@ export class App {
   async start(): Promise<void> {
     if (location.pathname === "/admin") { this.swap(() => mountAdmin(this)); return; } // internal dashboard
     this.user = await api.me();
-    if (this.user) this.home();
+    if (this.user) { aIdentify(this.user.id, { verified: true }); this.home(); }
     else this.login();
   }
 
@@ -41,16 +42,18 @@ export class App {
   home(): void { this.swap(() => mountHome(this)); }
   tutorial(): void { this.swap(() => mountTutorial(this)); }
   cards(): void { this.swap(() => mountCards(this)); }
-  botGame(): void { this.swap(() => mountGame(this, { mode: "bot" })); }
+  botGame(): void { aCapture("game_start", { mode: "bot" }); this.swap(() => mountGame(this, { mode: "bot" })); }
   onlineLobby(): void { this.swap(() => mountLobby(this)); }
   rankedLobby(): void { this.swap(() => mountLobby(this, true)); }
   leaderboard(): void { this.swap(() => mountLeaderboard(this)); }
   onlineGame(roomId: string, you: Side, oppName: string): void {
+    aCapture("game_start", { mode: "online" });
     this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName }));
   }
 
   async logout(): Promise<void> {
     await api.logout().catch(() => {});
+    aReset();
     this.user = null;
     this.login();
   }

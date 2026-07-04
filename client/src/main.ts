@@ -9,6 +9,7 @@ import "./styles/screens.css";
 import "./styles/mobile.css";
 import { App } from "./router";
 import { initLang } from "./i18n";
+import { initAnalytics } from "./net/analytics";
 
 /** Capture acquisition params (invite ref + UTM) before any navigation strips them. */
 function captureAcquisition(): void {
@@ -24,6 +25,7 @@ function captureAcquisition(): void {
 
 async function boot(): Promise<void> {
   captureAcquisition();
+  initAnalytics(); // dormant unless POSTHOG_KEY is set
   let country = "";
   try { country = ((await fetch("/api/geo").then((r) => r.json())) as { country?: string }).country || ""; } catch { /* offline / dev */ }
   initLang(country === "JP" ? "ja" : country === "KR" ? "ko" : "en"); // JP→ja, KR→ko, elsewhere→en

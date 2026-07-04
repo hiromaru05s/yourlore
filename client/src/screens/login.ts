@@ -9,6 +9,7 @@ import { api, type ApiError } from "../net/api";
 import { t, onLangChange } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
 import { DISCORD_INVITE, SUPPORT_EMAIL } from "../config";
+import { aCapture, aIdentify } from "../net/analytics";
 
 type Mode = "login" | "register" | "forgot" | "reset";
 
@@ -116,12 +117,14 @@ export function mountLogin(app: App): Screen {
     try {
       if (mode === "login") {
         app.user = await api.login(email, password);
+        aIdentify(app.user.id); aCapture("login", { method: "password" });
         app.home();
         return;
       }
       if (mode === "register") {
         const r = await api.register(email, password);
-        if (r.user) { app.user = r.user; app.home(); return; }
+        aCapture("signup", { method: "password", needVerify: !r.user });
+        if (r.user) { app.user = r.user; aIdentify(r.user.id); app.home(); return; }
         mode = "login";
         notice = { html: t("login.verify.sent"), ok: true };
         render();

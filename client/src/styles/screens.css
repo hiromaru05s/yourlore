@@ -63,9 +63,9 @@
 .adm-grid td.barcell { width: 45%; }
 .adm-bar { display: block; height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--brass-dim), var(--brass)); }
 .adm-grid tr.hot td { color: var(--vermil-hi); }
+.adm-grid tr.cold td { color: var(--def); }
 .adm-note { font-size: 11.5px; color: var(--paper-faint); margin-top: 8px; }
-.adm-search { width: 220px; margin-left: 12px; padding: 5px 10px; font-size: 12px; display: inline-block; }
-.adm-grid h3 { display: flex; align-items: center; }
+.adm-note b { color: var(--paper-dim); }
 .auth-or { display: flex; align-items: center; gap: 12px; margin: 14px 0; color: var(--paper-faint); font-size: 11px; letter-spacing: .1em; }
 .auth-or::before, .auth-or::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--line)); }
 .auth-or::after { background: linear-gradient(90deg, var(--line), transparent); }
