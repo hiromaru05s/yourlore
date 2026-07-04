@@ -7,3 +7,4 @@ dist/
 legacy/
 _render.cjs
 .secrets/
+.worktrees/
