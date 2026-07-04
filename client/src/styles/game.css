@@ -222,3 +222,158 @@
 /* treasure modal */
 .chest-reward { font-size: 40px; margin: 10px 0; animation: pop .4s var(--ease); }
 .treasure-roll { font-family: var(--mono); font-size: 16px; color: var(--gold-glow); letter-spacing: .1em; margin-bottom: 4px; }
+
+/* ============================================================
+   FX layer — sequential event playback
+   ============================================================ */
+/* board input is locked while a batch of events is playing out */
+.game.fx-lock .board-col { pointer-events: none; }
+
+/* center-screen event banner (trap activation etc.) */
+.fx-banner {
+  position: fixed; left: 50%; top: 38%; transform: translate(-50%, -50%) scale(.85);
+  z-index: 150; pointer-events: none; text-align: center;
+  padding: 14px 42px; border-radius: 12px;
+  background: linear-gradient(180deg, #1a2233ee, #0a0f1aee);
+  border: 1px solid var(--brass-dim);
+  box-shadow: 0 10px 40px #000c, inset 0 1px 0 #ffffff10;
+  animation: fxBannerIn .3s var(--ease) forwards;
+}
+.fx-banner.trap { border-color: var(--vermil); box-shadow: 0 0 34px #d8542f44, 0 10px 40px #000c; }
+.fx-banner.danger { border-color: var(--vermil-hi); }
+.fx-banner.out { animation: fxBannerOut .26s var(--ease) forwards; }
+.fx-banner-main { font-family: var(--mono); font-weight: 800; font-size: 26px; letter-spacing: .18em; color: var(--paper); text-shadow: 0 2px 10px #000; }
+.fx-banner.trap .fx-banner-main { color: var(--vermil-hi); }
+.fx-banner-sub { margin-top: 4px; font-size: 14px; color: var(--brass-hi); letter-spacing: .06em; }
+@keyframes fxBannerIn { from { opacity: 0; transform: translate(-50%, -50%) scale(.7) } to { opacity: 1; transform: translate(-50%, -50%) scale(1) } }
+@keyframes fxBannerOut { to { opacity: 0; transform: translate(-50%, -54%) scale(.92) } }
+
+/* summon ghost pop once it lands in its slot */
+.fx-ghost-pop { animation: fxGhostPop .4s var(--ease); }
+@keyframes fxGhostPop { 0% { filter: brightness(2) drop-shadow(0 0 14px var(--brass-hi)) } 100% { filter: none } }
+
+/* random-card result popup */
+.fx-result {
+  position: fixed; left: 50%; top: 42%; transform: translate(-50%, -50%);
+  z-index: 150; cursor: pointer; text-align: center; min-width: 260px; max-width: 440px;
+  padding: 18px 30px; border-radius: 14px;
+  background: linear-gradient(180deg, #1d2333f2, #0b101cf2);
+  border: 1px solid var(--gold-glow);
+  box-shadow: 0 0 40px #c79a4b33, 0 14px 44px #000d, inset 0 1px 0 #ffffff12;
+  animation: fxResultIn .32s var(--ease) forwards;
+}
+.fx-result.opp {
+  top: 24%; min-width: 210px; padding: 11px 22px;
+  border-color: var(--brass-dim); box-shadow: 0 8px 30px #000b;
+}
+.fx-result.out { animation: fxBannerOut .26s var(--ease) forwards; }
+.fx-result-title { font-family: var(--mono); font-weight: 700; font-size: 16px; letter-spacing: .1em; color: var(--gold-glow); margin-bottom: 8px; }
+.fx-result.opp .fx-result-title { font-size: 13px; margin-bottom: 5px; color: var(--brass-hi); }
+.fx-result-line { font-size: 14px; color: var(--paper); line-height: 1.65; }
+.fx-result.opp .fx-result-line { font-size: 12px; }
+@keyframes fxResultIn { from { opacity: 0; transform: translate(-50%, -50%) scale(.8) rotate(-1.5deg) } 60% { transform: translate(-50%, -50%) scale(1.06) } to { opacity: 1; transform: translate(-50%, -50%) scale(1) } }
+
+/* mana surge (max mana up) */
+.fx-mana-aura {
+  position: fixed; z-index: 149; pointer-events: none; width: 30px; height: 30px;
+  transform: translate(-50%, -50%); border-radius: 50%;
+  box-shadow: 0 0 0 0 #6fc6e8cc;
+  animation: fxManaAura 1s var(--ease) 2;
+}
+.fx-mana-aura.out { opacity: 0; transition: opacity .3s; }
+@keyframes fxManaAura { from { box-shadow: 0 0 0 0 #6fc6e8bb } to { box-shadow: 0 0 24px 60px #6fc6e800 } }
+.fx-mana-p {
+  position: fixed; z-index: 150; pointer-events: none; width: 11px; height: 11px;
+  background: radial-gradient(circle at 40% 30%, #d8f4ff, var(--cyan));
+  border: 1px solid #bfe9ff;
+  transform: rotate(45deg);
+  box-shadow: 0 0 10px #6fc6e8;
+  animation: fxManaP 1.15s var(--ease) both;
+}
+@keyframes fxManaP {
+  0% { opacity: 0; translate: var(--sx) var(--sy); scale: .4 }
+  25% { opacity: 1; scale: 1.15 }
+  85% { opacity: 1 }
+  100% { opacity: 0; translate: 0 0; scale: .5 }
+}
+.fx-pip-wave .pip.full { animation: fxPipPulse .55s var(--ease) 3; }
+@keyframes fxPipPulse { 50% { box-shadow: 0 0 16px #9fe0ff; filter: brightness(1.9); transform: rotate(45deg) scale(1.25) } }
+
+/* max hp surge */
+.fx-hp-bloom { animation: fxHpBloom .7s var(--ease) 3; }
+@keyframes fxHpBloom { 50% { box-shadow: 0 0 22px var(--good), inset 0 2px 4px #000c } }
+.fx-hp-p {
+  position: fixed; z-index: 150; pointer-events: none;
+  color: var(--good); font-weight: 800; font-size: 15px; text-shadow: 0 0 10px var(--good);
+  animation: fxHpP 1.4s var(--ease) both;
+}
+@keyframes fxHpP {
+  0% { opacity: 0; transform: translateY(6px) scale(.6) }
+  25% { opacity: 1; transform: translateY(-8px) scale(1.1) }
+  100% { opacity: 0; transform: translateY(-46px) scale(.8) }
+}
+
+/* floating +N label for gains */
+.fx-gain-label {
+  position: fixed; z-index: 151; pointer-events: none; transform: translate(-50%, -100%);
+  font-family: var(--mono); font-weight: 800; font-size: 21px; letter-spacing: .08em;
+  padding: 6px 18px; border-radius: 10px; white-space: nowrap;
+  background: #0b101cee; border: 1px solid;
+  animation: fxGainIn .45s var(--ease) forwards;
+}
+.fx-gain-label.mana { color: #bfe9ff; border-color: var(--cyan); box-shadow: 0 0 24px #6fc6e855; }
+.fx-gain-label.hp { color: var(--good); border-color: var(--good); box-shadow: 0 0 24px #4caf7a55; }
+.fx-gain-label.out { transition: opacity .3s, transform .3s; opacity: 0; transform: translate(-50%, -140%); }
+@keyframes fxGainIn { from { opacity: 0; transform: translate(-50%, -60%) scale(.6) } 60% { transform: translate(-50%, -110%) scale(1.12) } to { opacity: 1; transform: translate(-50%, -100%) scale(1) } }
+
+/* death sequence */
+.fx-death-vignette {
+  position: fixed; inset: 0; z-index: 148; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 40%, #2a0505cc 100%);
+  animation: fxVignette .5s ease-out forwards;
+}
+.fx-death-vignette.win { background: radial-gradient(ellipse at center, transparent 45%, #3a2a05b0 100%); }
+@keyframes fxVignette { from { opacity: 0 } to { opacity: 1 } }
+.fx-shatter { animation: fxShatter .5s ease-in forwards; }
+@keyframes fxShatter {
+  0% { filter: brightness(1) }
+  40% { filter: brightness(2.4) drop-shadow(0 0 14px var(--vermil-hi)); transform: translateX(-2px) }
+  70% { transform: translateX(3px) }
+  100% { filter: brightness(.35); transform: none }
+}
+.fx-shard {
+  position: fixed; z-index: 150; pointer-events: none; width: 9px; height: 9px;
+  background: linear-gradient(135deg, #ff9a68, var(--vermil));
+  clip-path: polygon(50% 0, 100% 60%, 20% 100%);
+  box-shadow: 0 0 8px #d8542f;
+  animation: fxShard 1.15s ease-in both;
+}
+@keyframes fxShard {
+  0% { opacity: 1; translate: 0 0; rotate: 0deg }
+  100% { opacity: 0; translate: var(--dx) var(--dy); rotate: var(--rot) }
+}
+.fx-quake { animation: fxQuake .55s linear; }
+@keyframes fxQuake {
+  0%,100% { transform: none } 15% { transform: translate(-5px,3px) } 30% { transform: translate(5px,-3px) }
+  45% { transform: translate(-4px,-3px) } 60% { transform: translate(4px,2px) } 75% { transform: translate(-2px,2px) } 90% { transform: translate(2px,-1px) }
+}
+.fx-verdict {
+  position: fixed; left: 50%; top: 44%; transform: translate(-50%, -50%);
+  z-index: 152; pointer-events: none; text-align: center;
+  animation: fxVerdictIn .5s var(--ease) forwards;
+}
+.fx-verdict.out { transition: opacity .28s; opacity: 0; }
+.fx-verdict-main {
+  font-family: var(--mono); font-weight: 800; font-size: 58px; letter-spacing: .3em;
+  text-shadow: 0 4px 30px #000;
+}
+.fx-verdict.win .fx-verdict-main { color: var(--gold-glow); filter: drop-shadow(0 0 26px #c79a4b66); }
+.fx-verdict.lose .fx-verdict-main { color: var(--vermil-hi); filter: drop-shadow(0 0 26px #d8542f66); }
+.fx-verdict-sub { margin-top: 10px; font-size: 17px; color: var(--paper); letter-spacing: .08em; text-shadow: 0 2px 8px #000; }
+@keyframes fxVerdictIn { from { opacity: 0; transform: translate(-50%, -50%) scale(1.7) } to { opacity: 1; transform: translate(-50%, -50%) scale(1) } }
+
+/* floating "show result" button during post-game log review */
+.fx-review-fab {
+  position: fixed; right: 18px; bottom: 18px; z-index: 140;
+  box-shadow: 0 8px 28px #000a, 0 0 18px #c79a4b33;
+}

@@ -219,7 +219,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       `  └ <span class="dmg">${amt} 데미지</span> → ${target.name} (체력 ${hp}) <span class="muted">[${srcKo}]</span>`,
       `  └ <span class="dmg">${amt} ダメージ</span> → ${target.name} (体力 ${hp}) <span class="muted">[${srcJa ?? srcKo}]</span>`,
     );
-    ev.push({ type: "damage", player: side(g, target), amount: amt });
+    ev.push({ type: "damage", player: side(g, target), amount: amt, srcKo, srcJa: srcJa ?? srcKo });
     if (target.hp <= 0) handleDefeat(g, ctx, target, dealer);
   };
   const destroyMonster = (owner: PlayerState, m: FieldMon): void => {
@@ -229,7 +229,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       // 폭풍의 광전사(drainMana): restore the opponent's max mana it was draining
       if (dead.aura === "drainMana") { const opp2 = g.players[0] === owner ? g.players[1] : g.players[0]; opp2.maxMana += (dead.val || 3); }
       if (dead.id !== "MIMIC") owner.discard.push(inst(g, dead.id)); // Mimic token is exiled
-      ev.push({ type: "destroy", player: side(g, owner), uid: m.uid });
+      ev.push({ type: "destroy", player: side(g, owner), uid: m.uid, id: dead.id });
     }
   };
   const ctx: Ctx = { ev, log, drawN, heal, dealDamage, destroyMonster };
@@ -522,7 +522,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   if ((tc = takeTrap(g, ctx, o, "slaughterRaise"))) { // GT5_3: destroy attacker + val% steal to own field
     if (randInt(g, 100) < (tc.val || 30)) {
       const i2 = p.field.findIndex((x) => x.uid === att.uid);
-      if (i2 >= 0) { const stolen = p.field.splice(i2, 1)[0]; ctx.ev.push({ type: "destroy", player: side(g, p), uid: stolen.uid }); stolen.exhausted = true; stolen.attacksUsed = 0; o.field.push(stolen); ctx.ev.push({ type: "summon", player: side(g, o), uid: stolen.uid }); }
+      if (i2 >= 0) { const stolen = p.field.splice(i2, 1)[0]; ctx.ev.push({ type: "destroy", player: side(g, p), uid: stolen.uid, id: stolen.id }); stolen.exhausted = true; stolen.attacksUsed = 0; o.field.push(stolen); ctx.ev.push({ type: "summon", player: side(g, o), uid: stolen.uid, id: stolen.id }); }
       ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 탈취(소생)`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 奪取(蘇生)`);
     } else {
       ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴(소생 실패)`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 破壊(蘇生失敗)`);
@@ -807,7 +807,7 @@ function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string): void {
   const m: FieldMon = { uid: newUID(g), ...structuredClone(DB[id]), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
   m.onSummon = undefined; m.turnFx = undefined; // tokens don't re-trigger summon effects
   p.field.push(m);
-  ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid });
+  ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid, id: m.id });
   applyEnterAura(g, ctx, p, m);
   applySummonBuff(ctx, p, m);
 }
@@ -1200,7 +1200,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "FORBIDDEN": { // 금단의 술식
       p.maxHp = Math.max(1, p.maxHp); p.hp -= 15; // pay 15 hp (may end the game)
-      ctx.ev.push({ type: "damage", player: side(g, p), amount: 15 });
+      ctx.ev.push({ type: "damage", player: side(g, p), amount: 15, srcKo: cn(card), srcJa: cn(card) });
       ctx.log(`${tag(p, card)} 자신 체력 -15, 최대 마나 -2`, `${tag(p, card)} 自分の体力-15, 最大マナ-2`);
       p.maxMana = Math.max(1, p.maxMana - 2);
       if (p.hp <= 0) { handleDefeat(g, ctx, p, (1 - g.cur) as Side); break; }
@@ -1269,7 +1269,7 @@ function luckyChest(g: GameState, ctx: Ctx, p: PlayerState): void {
     if (o.field.length < FIELD_MAX) {
       const m: FieldMon = { uid: newUID(g), ...structuredClone(DB.MIMIC2), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
       o.field.push(m);
-      ctx.ev.push({ type: "summon", player: side(g, o), uid: m.uid });
+      ctx.ev.push({ type: "summon", player: side(g, o), uid: m.uid, id: m.id });
     }
     ctx.log(`  └ <span class="dmg">꽝! 상대 필드에 마스터 미믹(10/3) 소환 (15%)</span>`, `  └ <span class="dmg">ハズレ！相手の場にマスターミミック(10/3)召喚 (15%)</span>`);
   }
@@ -1287,7 +1287,7 @@ function openTreasure(g: GameState, ctx: Ctx, p: PlayerState): void {
     if (o.field.length < FIELD_MAX) {
       const m: FieldMon = { uid: newUID(g), ...structuredClone(DB.MIMIC), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
       o.field.push(m);
-      ctx.ev.push({ type: "summon", player: side(g, o), uid: m.uid });
+      ctx.ev.push({ type: "summon", player: side(g, o), uid: m.uid, id: m.id });
     }
     txt = "꽝! 상대 필드에 미믹(3/2) 소환"; txtJa = "ハズレ！相手の場にミミック(3/2)召喚"; kind = "mimic";
   }
@@ -1310,7 +1310,7 @@ function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): 
   const m: FieldMon = { ...card, exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
   p.field.push(m);
   ctx.log(`<span class="t">${p.name}</span> ${cn(card)} 소환 (공${card.atk}/방${card.def})`, `<span class="t">${p.name}</span> ${cn(card)} 召喚 (攻${card.atk}/防${card.def})`);
-  ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid });
+  ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid, id: m.id });
   applyEnterAura(g, ctx, p, m);
   // GM5_2: summon-buff aura grants +1/+1 to each monster you summon
   applySummonBuff(ctx, p, m);
