@@ -17,7 +17,12 @@
 .auth-card .btn-block { margin-top: 6px; padding: 12px; }
 .auth-switch { text-align: center; margin-top: 18px; font-size: 12px; color: var(--paper-dim); }
 .auth-switch a { cursor: pointer; text-decoration: underline; }
-.auth-error { color: var(--vermil-hi); font-size: 12px; text-align: center; margin-top: 12px; min-height: 16px; }
+.auth-error { color: var(--vermil-hi); font-size: 12px; text-align: center; margin-top: 12px; min-height: 16px; line-height: 1.5; }
+.auth-error.ok { color: var(--good); }
+.auth-error a { color: inherit; }
+.auth-links { text-align: center; margin-top: 12px; font-size: 12px; }
+.auth-links a { color: var(--paper-dim); cursor: pointer; text-decoration: underline dotted; }
+.auth-links a:hover { color: var(--brass); }
 .auth-or { display: flex; align-items: center; gap: 12px; margin: 14px 0; color: var(--paper-faint); font-size: 11px; letter-spacing: .1em; }
 .auth-or::before, .auth-or::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--line)); }
 .auth-or::after { background: linear-gradient(90deg, var(--line), transparent); }

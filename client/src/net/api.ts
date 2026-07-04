@@ -10,6 +10,8 @@ export interface User {
   losses: number;
 }
 
+export interface ApiError extends Error { needVerify?: boolean }
+
 async function call<T>(path: string, body?: unknown, method = "POST"): Promise<T> {
   const res = await fetch("/api" + path, {
     method,
@@ -17,8 +19,12 @@ async function call<T>(path: string, body?: unknown, method = "POST"): Promise<T
     headers: { "Content-Type": "application/json" },
     body: body ? JSON.stringify(body) : undefined,
   });
-  const data = (await res.json().catch(() => ({}))) as { error?: string } & T;
-  if (!res.ok) throw new Error(data?.error || `요청 실패 (${res.status})`);
+  const data = (await res.json().catch(() => ({}))) as { error?: string; needVerify?: boolean } & T;
+  if (!res.ok) {
+    const err = new Error(data?.error || `요청 실패 (${res.status})`) as ApiError;
+    err.needVerify = !!data?.needVerify;
+    throw err;
+  }
   return data;
 }
 
@@ -29,9 +35,13 @@ export interface RankInfo {
 export interface LbEntry { rank: number; display: string; mmr: number; wins: number; losses: number; tier: string; }
 
 export const api = {
-  register: (email: string, password: string) => call<{ user: User }>("/auth/register", { email, password }).then((r) => r.user),
+  // register: {user} (즉시 입장) 또는 {needVerify:true} (인증 메일 발송됨)
+  register: (email: string, password: string) => call<{ user?: User; needVerify?: boolean }>("/auth/register", { email, password }),
   login: (email: string, password: string) => call<{ user: User }>("/auth/login", { email, password }).then((r) => r.user),
   logout: () => call<{ ok: true }>("/auth/logout", {}),
+  resendVerify: (email: string) => call<{ ok: true }>("/auth/resend-verify", { email }),
+  forgot: (email: string) => call<{ ok: true }>("/auth/forgot", { email }),
+  resetPassword: (token: string, password: string) => call<{ ok: true }>("/auth/reset", { token, password }),
   me: () => call<{ user: User | null }>("/auth/me", undefined, "GET").then((r) => r.user).catch(() => null),
   rankMe: () => call<{ rating: RankInfo | null }>("/rank/me", undefined, "GET").then((r) => r.rating).catch(() => null),
   leaderboard: (season?: string) =>
