@@ -165,8 +165,10 @@ export abstract class BaseController implements BoardHandlers {
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
       // sound per event
-      const smap: Partial<Record<GameEvent["type"], SfxName>> = { summon: "summon", attack: "attack", hit: "impact", destroy: "death", buy: "buy", draw: "draw", playSpell: "play", trapReveal: "trap", trapSet: "trapSet" };
-      const sn = smap[e.type];
+      let sn: SfxName | undefined;
+      if (e.type === "summon") sn = e.id === "MIMIC" ? "mimic" : "summon";      // Mimic token has its own cue
+      else if (e.type === "attack") sn = e.targetUid ? "attack" : "facehit";     // no target = direct hit on a player
+      else sn = ({ hit: "impact", destroy: "death", buy: "buy", draw: "draw", playSpell: "play", trapReveal: "trap", trapSet: "trapSet" } as Partial<Record<GameEvent["type"], SfxName>>)[e.type];
       if (sn) sfx(sn);
       else if (e.type === "damage" && e.player === this.you) sfx("damage");
       else if (e.type === "heal" && e.player === this.you) sfx("heal");
@@ -271,7 +273,7 @@ export abstract class BaseController implements BoardHandlers {
       const dHp = res.state.players[pl].maxHp - prev.players[pl].maxHp;
       if (dMana > 0) void A.manaSurge(sideOf(pl), dMana);
       else if (dMana < 0) A.manaDrop(sideOf(pl), -dMana);
-      if (dHp > 0) void A.maxHpSurge(sideOf(pl), dHp);
+      if (dHp > 0) { void A.maxHpSurge(sideOf(pl), dHp); sfx("maxhp"); }
     }
 
     if (this.dead) return;
@@ -427,6 +429,7 @@ export abstract class BaseController implements BoardHandlers {
     this.stopTimer();
     if (this.winShown || this.state.winner == null) return;
     this.winShown = true;
+    sfx(this.state.winner === this.you ? "win" : "lose");
     // bot games are client-local — report the result for analytics (online games are recorded server-side)
     if (this.state.mode === "bot") void api.trackBot(this.state.winner === this.you);
     aCapture("game_end", { mode: this.state.mode, won: this.state.winner === this.you, turns: this.state.turn });
