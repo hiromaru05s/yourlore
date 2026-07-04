@@ -18,6 +18,7 @@ const ST_SLOTS = 9;
 export interface BoardHandlers {
   onPlay(idx: number): void;
   onAttack(uid: string): void;
+  onReorder(from: number, to: number): void;
   onChooseTarget(uid: string | null): void;
   onBuyMarket(i: number): void;
   onBuySupply(i: number): void;
@@ -150,12 +151,14 @@ export class GameView {
     const mz = document.createElement("div");
     mz.className = "zone";
     const targetableMon = !!pending && ((pending.kind === "oppMon" && !isMe) || (pending.kind === "myMon" && isMe)) && myTurn;
-    p.field.forEach((m) => {
+    p.field.forEach((m, idx) => {
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over;
       const card = cardEl(m, { field: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
       bindZoom(card, m);
+      // my turn: drag to rearrange my own monsters (tap still attacks)
+      if (isMe && myTurn && !pending && !g.over && p.field.length > 1) this.enableReorder(card, idx, mz);
       mz.appendChild(card);
     });
     for (let i = p.field.length; i < MON_SLOTS; i++) mz.appendChild(this.slotEl());
@@ -193,6 +196,89 @@ export class GameView {
     // layout: opponent => discard | block | deck ; me => deck | block | discard
     if (isMe) row.append(deckPile, block, discPile);
     else row.append(discPile, block, deckPile);
+  }
+
+  /**
+   * Drag & drop reordering of my own field monsters (my turn only).
+   * Pointer-based so it works with mouse AND touch; a short tap still
+   * clicks (attack), and the 380ms long-press zoom keeps working:
+   * - drag only starts past a 14px move threshold (zoom cancels at 12px)
+   * - on touch, if the long-press window already elapsed, the zoom owns
+   *   the gesture and we abort instead of dragging behind the overlay.
+   */
+  private enableReorder(card: HTMLElement, index: number, zone: HTMLElement): void {
+    card.style.touchAction = "none"; // keep pointermove alive on touch
+    // native HTML5 drag (e.g. of the card art <img>) fires pointercancel and
+    // kills our pointer stream — suppress it so drags stay pointer-based
+    card.draggable = false;
+    card.addEventListener("dragstart", (e) => e.preventDefault());
+    card.addEventListener("pointerdown", (e: PointerEvent) => {
+      if (e.button !== 0) return;
+      const isTouch = e.pointerType === "touch";
+      const sx = e.clientX, sy = e.clientY, t0 = performance.now();
+      let ghost: HTMLElement | null = null;
+      let marker: HTMLElement | null = null;
+      let to = index;
+      let done = false;
+
+      const others = (): DOMRect[] =>
+        ([...zone.children] as HTMLElement[])
+          .filter((el) => el.classList.contains("card") && el !== card)
+          .map((el) => el.getBoundingClientRect());
+
+      const place = (x: number, y: number): void => {
+        if (!ghost || !marker) return;
+        ghost.style.left = `${x}px`;
+        ghost.style.top = `${y}px`;
+        const rects = others();
+        to = rects.filter((r) => x > r.left + r.width / 2).length;
+        const zr = zone.getBoundingClientRect();
+        const mx = rects.length === 0 ? zr.left + 6 : to === 0 ? rects[0].left - 4 : rects[to - 1].right + 1;
+        marker.style.left = `${mx - zr.left}px`;
+      };
+
+      const cleanup = (): void => {
+        done = true;
+        ghost?.remove(); marker?.remove();
+        card.classList.remove("is-dragging");
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+        window.removeEventListener("pointercancel", cleanup);
+      };
+
+      const onMove = (ev: PointerEvent): void => {
+        if (done) return;
+        if (!ghost) {
+          if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 14) return;
+          if (isTouch && performance.now() - t0 > 340) { cleanup(); return; } // zoom overlay owns this gesture
+          try { card.setPointerCapture(ev.pointerId); } catch { /* ok */ }
+          ghost = card.cloneNode(true) as HTMLElement;
+          ghost.className = card.className + " drag-ghost";
+          ghost.classList.remove("is-attacker");
+          ghost.style.width = `${card.offsetWidth}px`;
+          ghost.style.height = `${card.offsetHeight}px`;
+          document.body.appendChild(ghost);
+          card.classList.add("is-dragging");
+          marker = document.createElement("div");
+          marker.className = "drop-marker";
+          zone.appendChild(marker);
+        }
+        place(ev.clientX, ev.clientY);
+      };
+
+      const onUp = (): void => {
+        const dragged = !!ghost;
+        cleanup();
+        if (!dragged) return;
+        // swallow the click that follows pointerup so it doesn't trigger an attack
+        card.addEventListener("click", (ce) => { ce.stopPropagation(); ce.preventDefault(); }, { capture: true, once: true });
+        if (to !== index) this.h.onReorder(index, to);
+      };
+
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", onUp);
+      window.addEventListener("pointercancel", cleanup);
+    });
   }
 
   private barEl(g: GameState, p: PlayerState, isMe: boolean): HTMLElement {

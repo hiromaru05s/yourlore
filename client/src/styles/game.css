@@ -377,3 +377,18 @@
   position: fixed; right: 18px; bottom: 18px; z-index: 140;
   box-shadow: 0 8px 28px #000a, 0 0 18px #c79a4b33;
 }
+
+/* ---- my-field drag reorder (자기 몬스터 순서 바꾸기) ---- */
+.zone { position: relative; }
+.card.is-dragging { opacity: .35; filter: grayscale(.5); }
+.drag-ghost {
+  position: fixed; margin: 0; z-index: 2000; pointer-events: none;
+  transform: translate(-50%, -58%) scale(1.07) rotate(2deg);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .55);
+}
+.drop-marker {
+  position: absolute; top: 2px; bottom: 2px; width: 3px; border-radius: 2px;
+  background: #ffd166; box-shadow: 0 0 9px rgba(255, 209, 102, .85);
+  z-index: 6; pointer-events: none;
+}
+.card img { -webkit-user-drag: none; user-select: none; }

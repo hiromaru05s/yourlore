@@ -1634,6 +1634,17 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
       else { g.pending = { kind: "oppMon", hint: "공격할 적 몬스터 선택", hintJa: "攻撃する敵モンスターを選択", reason: "attack", allowCancel: true, data: { attackerUid: m.uid } }; ev.push({ type: "needTarget", pending: g.pending }); }
       break;
     }
+    case "reorder": {
+      // Rearrange own field monsters — purely cosmetic (attacks target by uid),
+      // so no log/events; both clients just re-render in the new order.
+      const { from, to } = action;
+      const f = p.field;
+      if (Number.isInteger(from) && Number.isInteger(to) && from >= 0 && from < f.length && to >= 0 && to < f.length && from !== to) {
+        const [m] = f.splice(from, 1);
+        f.splice(to, 0, m);
+      }
+      break;
+    }
     case "endTurn": endTurn(g, ctx); break;
   }
   return { state: g, events: ev };

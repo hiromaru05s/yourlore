@@ -62,6 +62,7 @@ export abstract class BaseController implements BoardHandlers {
   // ---- BoardHandlers ----
   onPlay(idx: number) { this.submit({ type: "play", idx }); }
   onAttack(uid: string) { this.submit({ type: "attack", uid }); }
+  onReorder(from: number, to: number) { this.submit({ type: "reorder", from, to }); }
   onChooseTarget(uid: string | null) { this.submit({ type: this.state.pending?.kind === "seek" || this.state.pending?.kind === "recall" ? "pick" : "chooseTarget", uid } as Action); }
   onBuyMarket(i: number) { this.submit({ type: "buyMarket", i }); }
   onBuySupply(i: number) { this.submit({ type: "buySupply", i }); }

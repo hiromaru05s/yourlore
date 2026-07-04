@@ -131,6 +131,7 @@ export type Action =
   | { type: "buySupply"; i: number }
   | { type: "refresh" }
   | { type: "attack"; uid: string }
+  | { type: "reorder"; from: number; to: number } // rearrange own field monsters (cosmetic, no rules impact)
   | { type: "chooseTarget"; uid: string | null } // null = cancel
   | { type: "pick"; uid: string | null } // resolve seek / recall (null = cancel)
   | { type: "endTurn" }
