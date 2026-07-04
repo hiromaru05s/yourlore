@@ -26,7 +26,7 @@
 
 /* ---- stage ---- */
 /* single-column board; the log is a left-edge drawer (overlay), not a column */
-.stage { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; min-height: 0; overflow: hidden; perspective: 1700px; }
+.stage { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; min-height: 0; overflow: hidden; }
 
 /* log toggle — a vertical tab pinned at the mid-LEFT edge */
 .log-tab {
@@ -59,7 +59,10 @@
 @keyframes clockPulse { 0%,100% { transform: translateY(-50%) scale(1) } 50% { transform: translateY(-50%) scale(1.09) } }
 /* subtle tabletop tilt — not a flat top-down view (classic TCG feel). Interactions
    are unaffected: hit-rects are computed post-transform. Log panel stays flat. */
-.board-col { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 5px; min-height: 0; align-content: start; transform: rotateX(6deg); transform-origin: center 46%; transform-style: preserve-3d; }
+/* NOTE: no 3D tilt here. A perspective/rotateX(preserve-3d) "camera" tilt was
+   offsetting hit-testing so real clicks missed the cards (attack / target-select
+   silently failed). Keep the board flat so every click lands on the right card. */
+.board-col { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 5px; min-height: 0; align-content: start; }
 
 /* opponent fanned hand (face-down), overflowing from top */
 .opp-hand { display: flex; justify-content: center; align-items: flex-start; height: 22px; margin-top: -3px; position: relative; z-index: 40; }
