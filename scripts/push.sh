@@ -7,8 +7,10 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$ROOT/.secrets/credentials.env"
 MSG="${1:-update}"
 
-WORK="/tmp/lore-gh"
-rm -rf "$WORK"
+# fresh dir per run (stale dirs can be owned by another sandbox user and be undeletable)
+WORK="$(mktemp -d /tmp/lore-gh.XXXXXX)"
+trap 'rm -rf "$WORK"' EXIT
+rmdir "$WORK" # git clone wants a fresh path
 git clone -q "https://x-access-token:${GITHUB_TOKEN}@${GITHUB_REPO}.git" "$WORK"
 rsync -a --delete \
   --exclude node_modules --exclude dist --exclude .git --exclude legacy \

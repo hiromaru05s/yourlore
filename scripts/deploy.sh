@@ -7,8 +7,9 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # shellcheck disable=SC1091
 source "$ROOT/.secrets/credentials.env"
 
-WORK="/tmp/lore-deploy"
-rm -rf "$WORK"; mkdir -p "$WORK"
+# fresh dir per run (stale dirs can be owned by another sandbox user and be undeletable)
+WORK="$(mktemp -d /tmp/lore-deploy.XXXXXX)"
+trap 'rm -rf "$WORK"' EXIT
 rsync -a --exclude node_modules --exclude dist --exclude .git \
   --exclude legacy --exclude .secrets "$ROOT"/ "$WORK"/
 
