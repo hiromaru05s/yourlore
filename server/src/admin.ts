@@ -7,6 +7,7 @@
 // ============================================================
 import type { Env } from "./env";
 import { corsHeaders } from "./auth";
+import { seasonKey } from "./rank";
 
 function json(env: Env, body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
@@ -74,6 +75,18 @@ export async function handleAdmin(env: Env, req: Request, path: string): Promise
       cardSample: recent.results?.length ?? 0,
       revenue: { note: "결제(Paddle) 연동 후 표시", subscriptions: 0, cancellations: 0, sales: 0, adRevenue: 0 },
     });
+  }
+
+  // 유저 리스트 (최신 500명) — 이메일·인증·소스·전적·현시즌 MMR·마지막 접속일
+  if (path === "/admin/users") {
+    const rows = await env.DB.prepare(
+      `SELECT u.id, u.email, u.display, u.created_at, u.verified, u.source, u.wins, u.losses, u.invited_by,
+              (SELECT r.mmr FROM ratings r WHERE r.user_id = u.id AND r.season = ?) AS mmr,
+              (SELECT MAX(ud.day) FROM user_days ud WHERE ud.user_id = u.id) AS last_day,
+              (u.password = 'oauth:google') AS is_google
+       FROM users u ORDER BY u.created_at DESC LIMIT 500`
+    ).bind(seasonKey()).all();
+    return json(env, { users: rows.results ?? [] });
   }
 
   return json(env, { error: "not found" }, 404);

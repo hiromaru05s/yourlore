@@ -19,6 +19,12 @@ interface Stats {
   revenue: { note: string; subscriptions: number; cancellations: number; sales: number; adRevenue: number };
 }
 
+interface AdminUser {
+  id: string; email: string; display: string; created_at: number; verified: number;
+  source: string | null; wins: number; losses: number; invited_by: string | null;
+  mmr: number | null; last_day: string | null; is_google: number;
+}
+
 const KEY_LS = "lore_admin_key";
 
 export function mountAdmin(app: App): Screen {
@@ -76,9 +82,45 @@ export function mountAdmin(app: App): Screen {
           ${s.cards.slice(0, 40).map((c, i) => `<tr class="${c.winrate >= 0.6 ? "hot" : ""}"><td>${i + 1}</td><td>${cardName(c.id)}</td><td class="num">${c.games}</td><td class="num">${(c.winrate * 100).toFixed(1)}%</td></tr>`).join("") || "<tr><td>데이터 없음 (카드 기록은 이번 배포 이후 매치부터 쌓입니다)</td></tr>"}</table>
         </section>
         <section class="wide"><h3>수익 (결제 연동 전)</h3><p class="adm-note">${s.revenue.note} — 구독 ${s.revenue.subscriptions} · 해지 ${s.revenue.cancellations} · 판매 ${s.revenue.sales} · 광고수익 $${s.revenue.adRevenue}</p></section>
+        <section class="wide"><h3>유저 리스트 <input class="input adm-search" id="admUserQ" placeholder="이메일/닉네임 검색"></h3><div id="admUsers" class="adm-note">불러오는 중…</div></section>
       </div>
       <div style="text-align:center;margin-top:14px"><button class="btn btn-ghost" id="admReload">새로고침</button></div>`;
     (body.querySelector("#admReload") as HTMLButtonElement).onclick = () => void load();
+    void loadUsers();
+  }
+
+  let allUsers: AdminUser[] = [];
+  const esc = (x: string) => x.replace(/[<>&]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" }[c] as string));
+
+  function renderUsers(): void {
+    const box = body.querySelector("#admUsers") as HTMLElement | null;
+    if (!box) return;
+    const q = ((body.querySelector("#admUserQ") as HTMLInputElement | null)?.value ?? "").toLowerCase();
+    const list = allUsers.filter((u) => !q || u.email.toLowerCase().includes(q) || u.display.toLowerCase().includes(q));
+    box.className = "";
+    box.innerHTML = `<table>
+      <tr class="hd"><td>가입일</td><td>닉네임</td><td>이메일</td><td>로그인</td><td class="num">전적</td><td class="num">MMR</td><td>최근 접속</td><td>소스</td><td>초대됨</td></tr>
+      ${list.slice(0, 200).map((u) => `<tr>
+        <td>${new Date(u.created_at).toISOString().slice(0, 10)}</td>
+        <td>${esc(u.display)}</td>
+        <td>${esc(u.email)}${u.verified ? "" : ` <span style="color:var(--vermil-hi)">미인증</span>`}</td>
+        <td>${u.is_google ? "Google" : "이메일"}</td>
+        <td class="num">${u.wins}승 ${u.losses}패</td>
+        <td class="num">${u.mmr ?? "—"}</td>
+        <td>${u.last_day ?? "—"}</td>
+        <td>${esc(u.source ?? "direct")}</td>
+        <td>${u.invited_by ? "✓" : ""}</td>
+      </tr>`).join("")}
+    </table><p class="adm-note">${list.length}명${list.length > 200 ? " (상위 200명 표시)" : ""}</p>`;
+  }
+
+  async function loadUsers(): Promise<void> {
+    const key = localStorage.getItem(KEY_LS) || "";
+    const res = await fetch("/api/admin/users", { headers: { Authorization: `Bearer ${key}` } }).catch(() => null);
+    if (!res?.ok) return;
+    allUsers = ((await res.json()) as { users: AdminUser[] }).users;
+    renderUsers();
+    (body.querySelector("#admUserQ") as HTMLInputElement | null)?.addEventListener("input", renderUsers);
   }
 
   void load();
