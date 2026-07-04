@@ -260,6 +260,8 @@ const D: Record<string, Entry> = {
   "settings.billing.none": { ko: "구독 중이 아닙니다", ja: "未加入", en: "Not subscribed" },
   "settings.billing.plan": { ko: "$7/월 — 모든 광고 제거 + 매월 1,000크레딧 + 매일 가챠 5회", ja: "$7/月 — 全広告除去 + 毎月1,000クレジット + 毎日ガチャ5回", en: "$7/mo — no ads + 1,000 credits monthly + 5 daily gacha rolls" },
   "settings.billing.soon": { ko: "결제 시스템 준비 중입니다. 곧 만나요!", ja: "決済システムは準備中です。お楽しみに！", en: "Payments are coming soon — stay tuned!" },
+  "card.cast": { ko: "시전", ja: "発動", en: "Cast" },
+  "card.cast.tip": { ko: "시전 코스트 — 이 카드를 손에서 필드로 낼 때(발동) 드는 마나입니다. 왼쪽 위 숫자는 상점에서 살 때 드는 구매 코스트예요.", ja: "発動コスト — このカードを手札からフィールドに出す（発動する）際に必要なマナです。左上の数字はショップで購入する際の購入コストです。", en: "Cast cost — the mana to play this card from your hand onto the field. The top-left number is the buy cost you pay in the shop." },
 };
 
 export function t(key: string): string {

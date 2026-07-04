@@ -23,14 +23,32 @@
 .card--mkt { --cw: var(--card-w-mkt); --ch: var(--card-h-mkt); }
 .card--hand { --cw: var(--card-w-hand); --ch: var(--card-h-hand); }
 
-/* cost — the number centered in the frame's top-left ring (center ≈ 9%, 10.8%) */
+/* per-type cost-gem colors (match the frame color) */
+.card--mon     { --cc: #d1431f; --cc-lo: #f47a4a; }
+.card--spell   { --cc: #2c6bd0; --cc-lo: #5a9cf2; }
+.card--trap    { --cc: #38984d; --cc-lo: #67c67c; }
+.card--starter { --cc: #24a9bd; --cc-lo: #5ad6e6; }
+
+/* BUY cost — a bold colored gem in the top-left, deliberately overflowing the
+   frame corner (never covering the name plate to its right). Color = card type. */
 .card-cost {
-  position: absolute; top: 4%; left: 1%; right: auto;
-  width: 16%; height: 13.5%;
+  position: absolute; top: -3%; left: -7%; right: auto;
+  width: 32%; height: auto; aspect-ratio: 1;
   display: grid; place-items: center;
-  font-family: var(--mono); font-weight: 800; font-size: 0.9em;
-  color: #16110c; text-shadow: 0 1px 0 #ffffff55;
-  z-index: 3;
+  font-family: var(--mono); font-weight: 800; font-size: 1.3em; line-height: 1;
+  color: #fff;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 36% 28%, #ffffffdd, #ffffff33 26%, transparent 52%),
+    radial-gradient(circle at 50% 62%, var(--cc-lo), var(--cc) 72%);
+  border: max(1.5px, 0.1em) solid #fdf1d6;
+  box-shadow:
+    0 0.14em 0.34em #000b,
+    0 0 0.55em -0.08em var(--cc),
+    inset 0 -0.16em 0.3em #0007,
+    inset 0 0.14em 0.26em #ffffff77;
+  text-shadow: 0 0.06em 0.12em #0009, 0 0 0.14em #0008;
+  z-index: 6;
 }
 
 /* frame overlay — sits ON TOP of the art, its art-window is transparent so the
@@ -41,24 +59,14 @@
   border-radius: var(--card-r);
 }
 .card-name {
-  /* name bar (right of the cost ring): measured plate y 4.3–12.2%, x 8–87% */
-  position: absolute; top: 4.3%; left: 19%; right: 15%; height: 7.9%; z-index: 2;
+  /* name bar (right of the cost gem): measured plate y 4.3–12.2%, x 8–87% */
+  position: absolute; top: 4.3%; left: 26%; right: 15%; height: 7.9%; z-index: 2;
   display: flex; align-items: center; justify-content: flex-start;
   font-weight: 800; font-size: 0.52em; line-height: 1; letter-spacing: -.02em;
   color: #17120c; text-shadow: 0 1px 0 #ffffff44;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .card-name--long { font-size: 0.42em; white-space: normal; line-height: 1.02; }
-.card-play {
-  position: absolute; top: 15%; left: 1.5%; right: auto;
-  padding: 0 .4em; height: 1.25em;
-  display: grid; place-items: center;
-  font-family: var(--mono); font-weight: 700; font-size: 0.72em;
-  color: #fff; border-radius: 9px;
-  background: linear-gradient(180deg, #7b5cc9, #4f3591);
-  border: 1px solid #fff7; box-shadow: 0 1px 3px #000a;
-  z-index: 3;
-}
 .card-art {
   /* ON TOP of the frame bg, filling the measured art window (y 15.9–55%, x 6.8–92.8%) */
   position: absolute; top: 15.9%; left: 6.5%; right: 6.5%; height: 39.4%; z-index: 1;
@@ -82,12 +90,26 @@
   top: 57.7%; height: 27%;
   font-size: 0.44em; line-height: 1.12; color: #1b1610;
   text-align: center; overflow: hidden; word-break: keep-all;
-  display: flex; align-items: center; justify-content: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0.35em;
 }
 .card-eff--small { font-size: 0.375em; line-height: 1.1; }
 .card-eff--tiny { font-size: 0.33em; line-height: 1.08; }
 /* spell/trap/starter have no stats strip → text box extends lower */
 .card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 35%; }
+
+/* CAST cost — a small pill pinned at the top of the effect text. Native title
+   attribute gives the on-hover explanation popup (never clipped by the card). */
+.card-cast {
+  flex: 0 0 auto;
+  display: inline-flex; align-items: center; gap: 0.25em;
+  font-weight: 800; font-size: 0.94em; letter-spacing: .01em; line-height: 1;
+  color: #2b2450; background: #fffefaee;
+  border: 1px solid var(--cc, #b9a76e); border-radius: 999px;
+  padding: 0.18em 0.6em 0.2em; cursor: help;
+  box-shadow: 0 1px 2px #0003, inset 0 0 0 1px #ffffffcc;
+}
+.card-cast .cc-ico { color: #e0932a; font-size: 0.95em; }
 
 /* monster atk/def: numbers only, centered in the frame's built-in sword/shield slots.
    Rendered exactly like .card-name / .card-eff (flex-centered absolute div, inheriting the

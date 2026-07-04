@@ -6,7 +6,7 @@ import type { CardInst, FieldMon, PlayerState } from "../shared/types";
 import { FRAME_BACK, frameFor, TRIBES } from "../shared/cards";
 import { effAtk, effDef, playCost } from "../shared/engine";
 import { showTribeInfo } from "./modal";
-import { cardName, cardText, getLang } from "../i18n";
+import { cardName, cardText, getLang, t } from "../i18n";
 
 export interface CardOpts {
   size?: "board" | "mkt" | "hand";
@@ -60,11 +60,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
 
   const cost = opt.costOverride != null ? opt.costOverride : c.cost;
   node.appendChild(el("div", "card-cost", String(cost)));
-  // 시전(발동) 코스트가 구매 코스트와 다르면 보조 배지로 통일 표기
   const pc = playCost(c);
-  if (c.t !== "starter" && pc !== c.cost && opt.costOverride == null) {
-    node.appendChild(el("div", "card-play", `⚡${pc}`));
-  }
   const nm = cardName(c);
   const nameEl2 = el("div", "card-name" + (nm.length >= 9 ? " card-name--long" : ""), nm);
   node.appendChild(nameEl2);
@@ -84,9 +80,17 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     .replace(/ · /g, "\n")
     .replace(/ \/ /g, "\n")
     .trim();
-  if (txt && txt !== "—") {
+  const hasCast = c.t !== "starter" && pc !== c.cost;
+  if ((txt && txt !== "—") || hasCast) {
     const effCls = "card-eff" + (txt.length > 140 ? " card-eff--tiny" : txt.length > 80 ? " card-eff--small" : "");
-    node.appendChild(el("div", effCls, `<span style="white-space:pre-line">${txt}</span>`));
+    const eff = el("div", effCls);
+    if (hasCast) {
+      const cast = el("div", "card-cast", `<span class="cc-ico">⚡</span>${t("card.cast")} ${pc}`);
+      cast.title = t("card.cast.tip");
+      eff.appendChild(cast);
+    }
+    if (txt && txt !== "—") eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${txt}</span>`));
+    node.appendChild(eff);
   }
   if (opt.badge) node.appendChild(el("span", "badge", opt.badge));
   if (c.tribe) {
