@@ -53,7 +53,7 @@ export class GameView {
             <div class="prow" id="oppRow"></div>
             <div class="panel market" id="market"></div>
             <div class="prow" id="meRow"></div>
-            <div class="hand-area">
+            <div class="hand-area" id="handArea">
               <div class="hand" id="hand"></div>
               <div class="end-turn-wrap"><button class="btn btn-primary" id="endBtn">${t("game.endturn")}</button></div>
             </div>
@@ -75,6 +75,24 @@ export class GameView {
     const panel = this.q("logPanel");
     fab.onclick = () => { const open = panel.classList.toggle("open"); fab.textContent = open ? "✕" : "📜"; };
     document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+    // ---- hand peek: clicking the board tucks the hand down (so it never
+    // covers the field); clicking the hand raises it back up. First click on a
+    // tucked hand only RAISES it (doesn't play), so nothing plays by accident. ----
+    const game = this.root.querySelector(".game") as HTMLElement;
+    const hand = this.q("hand");
+    const boardCol = this.root.querySelector(".board-col") as HTMLElement;
+    boardCol.addEventListener("click", (e) => {
+      const el = e.target as HTMLElement;
+      if (el.closest(".hand-area") || el.closest(".market")) return; // hand + shopping keep it up
+      game.classList.add("hand-tucked");
+    });
+    hand.addEventListener("click", (e) => {
+      if (game.classList.contains("hand-tucked")) {
+        game.classList.remove("hand-tucked");
+        e.stopPropagation(); e.stopImmediatePropagation(); e.preventDefault(); // this click only raises
+      }
+    }, true);
   }
 
   private q(id: string): HTMLElement { return this.root.querySelector("#" + id) as HTMLElement; }
@@ -97,20 +115,26 @@ export class GameView {
     this.q("surrenderBtn").textContent = t("game.surrender");
     this.q("logTitle").textContent = t("game.log");
 
-    // opponent fanned hand (face-down)
+    // opponent hand (face-down). Always show the COUNT; >10 lays out flat/even
+    // so you can still gauge how many cards they hold.
     const oh = this.q("oppHand"); oh.innerHTML = "";
     const n = opp.hand.length, mid = (n - 1) / 2;
+    const flatOpp = n > 10;
+    oh.classList.toggle("is-flat", flatOpp);
     for (let i = 0; i < n; i++) {
       const cb = document.createElement("div");
       cb.className = "card--back";
       cb.style.backgroundImage = `url(${FRAME_BACK})`;
       cb.style.width = "56px"; cb.style.height = "90px";
-      // Mirror the fan: the opponent holds their cards from the far side, so the
-      // arc curves the opposite way to your own hand (convex toward the top edge).
-      cb.style.transform = `rotate(${-(i - mid) * 4}deg) translateY(${-(Math.abs(i - mid) ** 2) * 1.4}px)`;
+      // fan under 11 cards; flat even row past that (keeps every card edge visible)
+      cb.style.transform = flatOpp ? "none" : `rotate(${-(i - mid) * 4}deg) translateY(${-(Math.abs(i - mid) ** 2) * 1.4}px)`;
       cb.style.zIndex = String(i);
       oh.appendChild(cb);
     }
+    const cnt = document.createElement("div");
+    cnt.className = "opp-hand-count";
+    cnt.textContent = String(n);
+    oh.appendChild(cnt);
 
     this.renderRow(this.q("oppRow"), g, opp, false, myTurn, pending);
     this.renderRow(this.q("meRow"), g, me, true, myTurn, pending);

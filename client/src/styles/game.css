@@ -26,12 +26,17 @@
 .gear:hover { color: var(--brass); border-color: var(--brass-dim); }
 
 /* ---- stage ---- */
-.stage { display: grid; grid-template-columns: minmax(0, 1fr) clamp(220px, 21vw, 300px); gap: 10px; min-height: 0; overflow: hidden; }
-.board-col { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 5px; min-height: 0; align-content: start; }
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) clamp(220px, 21vw, 300px); gap: 10px; min-height: 0; overflow: hidden; perspective: 1700px; }
+/* subtle tabletop tilt — not a flat top-down view (classic TCG feel). Interactions
+   are unaffected: hit-rects are computed post-transform. Log panel stays flat. */
+.board-col { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 5px; min-height: 0; align-content: start; transform: rotateX(6deg); transform-origin: center 46%; transform-style: preserve-3d; }
 
 /* opponent fanned hand (face-down), overflowing from top */
-.opp-hand { display: flex; justify-content: center; height: 22px; margin-top: -3px; position: relative; z-index: 40; }
+.opp-hand { display: flex; justify-content: center; align-items: flex-start; height: 22px; margin-top: -3px; position: relative; z-index: 40; }
 .opp-hand .card--back { width: 44px; height: 70px; margin: 0 -14px; transform-origin: bottom center; }
+.opp-hand.is-flat .card--back { margin: 0 -8px; } /* >10 cards: even, countable row */
+/* how many cards the opponent holds — always visible */
+.opp-hand-count { align-self: center; margin-left: 10px; font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--paper-dim); background: #0a1220cc; border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; z-index: 41; }
 
 /* a player row: the field-block is a centered content-width cluster (zones + meta panel),
    so the play area stays snug instead of stretching across the whole width. */
@@ -159,7 +164,11 @@
 
 /* ---- hand ---- */
 .hand-area { display: flex; align-items: flex-end; justify-content: center; gap: 0; min-height: var(--card-h-hand); padding-top: 2px; position: relative; z-index: 40; }
-.hand { display: flex; justify-content: center; align-items: flex-end; }
+.hand { display: flex; justify-content: center; align-items: flex-end; transition: transform .28s var(--ease); cursor: pointer; }
+/* tucked hand: slides down so only the top edges peek — never covers the field.
+   click any card to raise it back up. */
+.game.hand-tucked .hand { transform: translateY(calc(var(--card-h-hand) * 0.66)); }
+.game.hand-tucked .hand .card:hover { transform: translateY(calc(var(--card-h-hand) * -0.1)) !important; }
 .hand .card { margin: 0 -12px; transform-origin: bottom center; }
 .hand .card:hover { z-index: 50 !important; }
 /* >10 cards: straight, readable row (no fan). Wrap if it still overflows. */
