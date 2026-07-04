@@ -129,7 +129,7 @@ export class GameView {
     this.q("turnInfo").innerHTML = `${t("game.turn")} ${g.turn} <span class="muted">·</span> <b>${g.players[g.cur].name}</b>`;
     // refresh static labels (so a live language switch updates them)
     this.q("endBtn").textContent = t("game.endturn");
-    this.q("surrenderBtn").textContent = t("game.surrender");
+    this.q("giveupBtn").textContent = t("game.surrender");
     this.q("logTitle").textContent = t("game.log");
     this.q("logTab").textContent = t("game.log");
 
