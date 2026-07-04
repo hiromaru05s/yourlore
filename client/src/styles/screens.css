@@ -2,9 +2,8 @@
    LORE — login / home / lobby screens
    ============================================================ */
 .screen { height: 100vh; display: grid; place-items: center; padding: 24px; position: relative; }
-/* the home screen is tall (profile + modes + list) → top-align it and reserve
-   space for the absolute wordmark so they never overlap. */
-.screen:has(.home) { align-items: start; padding: 104px 24px 24px; overflow-y: auto; }
+/* the home screen is tall (top bar + modes + tiles) → top-align + scroll. */
+.screen:has(.home) { align-items: start; padding: 30px 26px 26px; overflow-y: auto; }
 .topright-lang { position: absolute; top: 22px; right: 26px; z-index: 5; }
 .lang-select select { background: var(--ink-2); color: var(--paper); border: 1px solid var(--line); border-radius: 7px; padding: 6px 11px; font-family: var(--ui); font-size: 13px; cursor: pointer; }
 .lang-select select:focus { outline: none; border-color: var(--brass); }
@@ -112,26 +111,41 @@
 .auth-tabs button.on { background: linear-gradient(180deg, #2a3650, #18223a); color: var(--brass-hi); }
 
 /* ---- home ---- */
-.home { width: 560px; max-width: 94vw; text-align: center; }
-.home .welcome { font-family: var(--mono); color: var(--paper-dim); letter-spacing: .1em; margin-bottom: 4px; font-size: 12px; }
-.home .title { font-family: var(--mono); font-size: 22px; letter-spacing: .3em; color: var(--brass-hi); margin-bottom: 28px; }
+.home { width: min(760px, 94vw); text-align: center; margin: 0 auto; }
+
+/* top bar: wordmark (left) + profile & language (right) */
+.home-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.home-brand { position: static; transform: none; top: auto; left: auto; }
+.home-brand .mark { width: 148px; height: 50px; }
+.home-top-right { display: flex; align-items: center; gap: 12px; }
+.home-top-right .topright-lang { position: static; top: auto; right: auto; }
+
 .home .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .mode-card { padding: 28px 20px; text-align: center; cursor: pointer; transition: .16s var(--ease); }
 .mode-card:hover { transform: translateY(-4px); border-color: var(--brass); box-shadow: 0 12px 30px #000a, inset 0 1px 0 #ffffff10; }
 .mode-card .icon { font-size: 34px; margin-bottom: 10px; }
 .mode-card h3 { font-family: var(--mono); font-size: 14px; letter-spacing: .14em; color: var(--brass-hi); text-transform: uppercase; margin-bottom: 6px; }
 .mode-card p { font-size: 12px; color: var(--paper-dim); line-height: 1.4; }
-.home .acct { margin-top: 26px; display: flex; align-items: center; justify-content: center; gap: 14px; font-size: 12px; color: var(--paper-faint); }
+.home .acct { margin-top: 18px; display: flex; align-items: center; justify-content: center; gap: 14px; font-size: 12px; color: var(--paper-faint); }
 .home .acct .stats { font-family: var(--mono); color: var(--brass); }
 
-/* home: tutorial entry (full-width banner under the two modes) */
-.tut-card { margin-top: 16px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; cursor: pointer; text-align: left; transition: .16s var(--ease); }
+/* home secondary actions — compact icon tiles (friends / lb / invite / cards / tutorial) */
+.home-links { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 16px; }
+.tut-card { padding: 16px 20px; display: flex; align-items: center; gap: 14px; cursor: pointer; text-align: left; transition: .16s var(--ease); }
 .tut-card:hover { transform: translateY(-3px); border-color: var(--brass); box-shadow: 0 10px 26px #000a, inset 0 1px 0 #ffffff10; }
 .tut-card .tut-emoji { font-size: 26px; }
 .tut-card .tut-txt { display: flex; flex-direction: column; gap: 2px; }
 .tut-card .tut-txt b { font-family: var(--mono); font-size: 13px; letter-spacing: .12em; color: var(--brass-hi); text-transform: uppercase; }
 .tut-card .tut-txt span { font-size: 12px; color: var(--paper-dim); }
 .tut-card .tut-arrow { margin-left: auto; color: var(--brass); font-size: 18px; }
+/* compact variant inside the home tile row: stacked icon + label, no description/arrow */
+.home-links .tut-card { flex-direction: column; align-items: center; text-align: center; gap: 8px; padding: 15px 8px; }
+.home-links .tut-card .tut-emoji { font-size: 24px; }
+.home-links .tut-card .tut-txt { align-items: center; gap: 0; }
+.home-links .tut-card .tut-txt b { font-size: 11px; letter-spacing: .05em; }
+.home-links .tut-card .tut-txt > span { display: none; }
+.home-links .tut-card .tut-arrow { display: none; }
+@media (max-width: 680px) { .home-links { grid-template-columns: repeat(3, 1fr); } }
 
 /* ---- tutorial screen ---- */
 .tut-screen { align-items: stretch; }
@@ -188,7 +202,7 @@
 .cards-empty { grid-column: 1 / -1; text-align: center; color: var(--paper-faint); padding: 40px 0; font-size: 13px; }
 
 /* ---- ranked: home cards / tier chip / leaderboard ---- */
-.home:has(.modes-3) { width: 640px; }
+.home:has(.modes-3) { width: min(760px, 94vw); }
 .home .modes-3 { grid-template-columns: repeat(3, 1fr); }
 .mode-ranked { border-color: #4fb4ff55; }
 .mode-ranked:hover { border-color: var(--gold-glow); box-shadow: 0 12px 30px #000a, 0 0 22px #4fb4ff22, inset 0 1px 0 #ffffff10; }
@@ -241,10 +255,15 @@
 .badge-chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 20px; font-size: 11px; letter-spacing: .04em; color: var(--bc, var(--brass)); border: 1px solid color-mix(in srgb, var(--bc, #4fb4ff) 55%, transparent); background: color-mix(in srgb, var(--bc, #4fb4ff) 12%, transparent); white-space: nowrap; }
 .badge-chip.badge-sm { font-size: 9.5px; padding: 1.5px 7px; }
 
-/* home identity button */
-.home-id { display: inline-flex; align-items: center; gap: 12px; margin: 2px auto 14px; padding: 8px 18px 8px 10px; border-radius: 40px; border: 1px solid var(--line); background: #ffffff06; cursor: pointer; transition: border-color .2s, background .2s, transform .15s; }
-.home-id:hover { border-color: var(--brass-dim); background: #ffffff0b; transform: translateY(-1px); }
-.home-id-name { font-family: var(--mono); font-size: 20px; letter-spacing: .1em; color: var(--paper); font-weight: 700; }
+/* home identity button — reads clearly as a tappable profile card (avatar +
+   name + record + chevron), not just floating text */
+.home-id { display: inline-flex; align-items: center; gap: 11px; margin: 0; padding: 7px 12px 7px 8px; border-radius: 14px; border: 1px solid var(--line); background: linear-gradient(180deg, #ffffff0d, #ffffff03); cursor: pointer; transition: .15s var(--ease); }
+.home-id:hover { border-color: var(--blue); background: #ffffff12; transform: translateY(-1px); box-shadow: 0 6px 18px #0007, 0 0 0 1px #2f7fe033; }
+.home-id-main { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; line-height: 1.12; }
+.home-id-name { font-family: var(--mono); font-size: 15px; letter-spacing: .05em; color: var(--paper); font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.home-id-sub { font-size: 10.5px; letter-spacing: .03em; color: var(--paper-faint); }
+.home-id-go { color: var(--paper-faint); font-size: 20px; line-height: 1; margin-left: 3px; transition: color .15s var(--ease), transform .15s var(--ease); }
+.home-id:hover .home-id-go { color: var(--blue-hi); transform: translateX(2px); }
 .fr-badge { display: inline-grid; place-items: center; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 10px; background: var(--vermil); color: #fff; font-size: 10px; font-weight: 700; margin-left: 5px; vertical-align: 2px; }
 
 /* profile */

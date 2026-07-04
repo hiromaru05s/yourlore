@@ -14,15 +14,21 @@ export function mountHome(app: App): Screen {
   const wrap = document.createElement("div");
   wrap.className = "screen";
   wrap.innerHTML = `
-    <div class="topright-lang"></div>
-    <div class="screen-brand"><div class="mark"></div><h1>LORE</h1></div>
     <div class="home">
-      <div class="welcome">${t("home.welcome")}</div>
-      <button class="home-id" id="profile" title="${t("home.profile.title")}">
-        ${avatarHtml(u?.avatar, u?.display ?? "P", 48)}
-        <span class="home-id-name">${u?.display ?? "PLAYER"}</span>
-        ${badgeChipHtml(u?.badge, true)}
-      </button>
+      <div class="home-top">
+        <div class="screen-brand home-brand"><div class="mark"></div></div>
+        <div class="home-top-right">
+          <button class="home-id" id="profile" title="${t("home.profile.title")}">
+            ${avatarHtml(u?.avatar, u?.display ?? "P", 42)}
+            <span class="home-id-main">
+              <span class="home-id-name">${u?.display ?? "PLAYER"} ${badgeChipHtml(u?.badge, true)}</span>
+              <span class="home-id-sub">${t("home.record")} ${u?.wins ?? 0}${t("home.win")} ${u?.losses ?? 0}${t("home.loss")}</span>
+            </span>
+            <span class="home-id-go">›</span>
+          </button>
+          <div class="topright-lang"></div>
+        </div>
+      </div>
       <div class="modes modes-3">
         <div class="panel mode-card mode-ranked" id="ranked">
           <div class="icon">🏆</div>
@@ -41,35 +47,35 @@ export function mountHome(app: App): Screen {
           <p>${t("home.bot.desc")}</p>
         </div>
       </div>
-      <div class="panel tut-card" id="friends">
-        <span class="tut-emoji">👥</span>
-        <span class="tut-txt"><b>${t("home.friends.title")} <span class="fr-badge" id="frBadge" style="display:none"></span></b><span>${t("home.friends.desc")}</span></span>
-        <span class="tut-arrow">→</span>
-      </div>
-      <div class="panel tut-card" id="lb">
-        <span class="tut-emoji">📊</span>
-        <span class="tut-txt"><b>${t("home.lb.title")}</b><span>${t("home.lb.desc")}</span></span>
-        <span class="tut-arrow">→</span>
-      </div>
-      <div class="panel tut-card" id="invite">
-        <span class="tut-emoji">🎁</span>
-        <span class="tut-txt"><b>${t("invite.title")}</b><span>${t("invite.desc")}</span></span>
-        <span class="tut-arrow">→</span>
-      </div>
-      <div class="panel tut-card" id="cards">
-        <span class="tut-emoji">🃏</span>
-        <span class="tut-txt"><b>${t("home.cards.title")}</b><span>${t("home.cards.desc")}</span></span>
-        <span class="tut-arrow">→</span>
-      </div>
-      <div class="panel tut-card" id="tutorial">
-        <span class="tut-emoji">📖</span>
-        <span class="tut-txt"><b>${t("home.tutorial.title")}</b><span>${t("home.tutorial.desc")}</span></span>
-        <span class="tut-arrow">→</span>
+      <div class="home-links">
+        <div class="panel tut-card" id="friends">
+          <span class="tut-emoji">👥</span>
+          <span class="tut-txt"><b>${t("home.friends.title")} <span class="fr-badge" id="frBadge" style="display:none"></span></b><span>${t("home.friends.desc")}</span></span>
+          <span class="tut-arrow">→</span>
+        </div>
+        <div class="panel tut-card" id="lb">
+          <span class="tut-emoji">📊</span>
+          <span class="tut-txt"><b>${t("home.lb.title")}</b><span>${t("home.lb.desc")}</span></span>
+          <span class="tut-arrow">→</span>
+        </div>
+        <div class="panel tut-card" id="invite">
+          <span class="tut-emoji">🎁</span>
+          <span class="tut-txt"><b>${t("invite.title")}</b><span>${t("invite.desc")}</span></span>
+          <span class="tut-arrow">→</span>
+        </div>
+        <div class="panel tut-card" id="cards">
+          <span class="tut-emoji">🃏</span>
+          <span class="tut-txt"><b>${t("home.cards.title")}</b><span>${t("home.cards.desc")}</span></span>
+          <span class="tut-arrow">→</span>
+        </div>
+        <div class="panel tut-card" id="tutorial">
+          <span class="tut-emoji">📖</span>
+          <span class="tut-txt"><b>${t("home.tutorial.title")}</b><span>${t("home.tutorial.desc")}</span></span>
+          <span class="tut-arrow">→</span>
+        </div>
       </div>
       <div class="acct">
         <span class="credits" title="${t("home.credits")}">💎 ${u?.credits ?? 0}</span>
-        <span>·</span>
-        <span class="stats">${t("home.record")} ${u?.wins ?? 0}${t("home.win")} ${u?.losses ?? 0}${t("home.loss")}</span>
         <span>·</span>
         <a id="settings" style="cursor:pointer">⚙ ${t("home.settings")}</a>
         <span>·</span>
