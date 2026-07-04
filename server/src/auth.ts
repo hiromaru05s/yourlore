@@ -69,6 +69,13 @@ function readCookie(req: Request): string | null {
   return m ? m[1] : null;
 }
 
+/** Display names are rendered into innerHTML across the game UI (board, battle log),
+ *  so they MUST be sanitized at the only chokepoint: account creation. Allowlist only. */
+export function sanitizeDisplay(raw: string): string {
+  const clean = (raw || "").replace(/[^0-9A-Za-z가-힣ㄱ-ㅎぁ-んァ-ヶ一-龯ー\s._-]/g, "").replace(/\s+/g, " ").trim().slice(0, 24);
+  return clean || "Player" + Math.floor(Math.random() * 9000 + 1000);
+}
+
 // ---- session lookup ----
 export async function getUser(env: Env, req: Request): Promise<SessionUser | null> {
   const token = readCookie(req);
@@ -120,7 +127,7 @@ export async function handleAuth(env: Env, req: Request, path: string): Promise<
       const exists = await env.DB.prepare(`SELECT id FROM users WHERE email = ?`).bind(email).first();
       if (exists) return json(env, { error: "이미 가입된 이메일입니다." }, 409);
       const id = crypto.randomUUID();
-      const display = email.split("@")[0];
+      const display = sanitizeDisplay(email.split("@")[0]);
       const mailOn = emailConfigured(env);
       const source = (body.source || "").slice(0, 120) || null;
       await env.DB.prepare(`INSERT INTO users (id, email, password, display, created_at, verified, source) VALUES (?,?,?,?,?,?,?)`)

@@ -8,7 +8,7 @@
 // it can never match a PBKDF2 hash, so password login safely fails.
 // ============================================================
 import type { Env } from "./env";
-import { createSession, sessionCookie } from "./auth";
+import { createSession, sanitizeDisplay, sessionCookie } from "./auth";
 import { applyInviteAtSignup } from "./invite";
 
 const STATE_COOKIE = "lore_oauth_state";
@@ -81,7 +81,7 @@ export async function handleGoogleOAuth(env: Env, req: Request, path: string): P
     let id = row?.id;
     if (!id) {
       id = crypto.randomUUID();
-      const display = (payload.name || email.split("@")[0]).slice(0, 24);
+      const display = sanitizeDisplay(payload.name || email.split("@")[0]);
       const ctxRaw = decodeURIComponent((req.headers.get("Cookie") || "").match(new RegExp(`${CTX_COOKIE}=([^;]+)`))?.[1] || "");
       const [ref, source] = ctxRaw.split("|");
       await env.DB.prepare(`INSERT INTO users (id, email, password, display, created_at, verified, source) VALUES (?,?,?,?,?,1,?)`)
