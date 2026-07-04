@@ -45,7 +45,9 @@ export class GameView {
       <div class="game">
         <div class="topbar">
           <div class="brand"><div class="mark"></div><h1>LORE</h1></div>
+          <div class="icon-rail" id="iconRail" title="최근 진행"></div>
           <div class="turn-info" id="turnInfo"></div>
+          <button class="log-toggle" id="logToggle">${t("game.log")}</button>
         </div>
         <div class="stage">
           <div class="board-col">
@@ -70,32 +72,58 @@ export class GameView {
     this.logEl = this.q("log");
     (this.q("endBtn") as HTMLButtonElement).onclick = () => this.h.onEndTurn();
     (this.q("surrenderBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
-    // mobile: toggle the log drawer
-    const fab = this.q("logFab");
-    const panel = this.q("logPanel");
-    fab.onclick = () => { const open = panel.classList.toggle("open"); fab.textContent = open ? "✕" : "📜"; };
+    // log open/close — CLOSED by default; the icon rail (topbar) shows recent
+    // events at a glance, opening the panel shows the full text log. Persisted.
+    const gameEl = this.root.querySelector(".game") as HTMLElement;
+    let logOpen = false;
+    try { logOpen = localStorage.getItem("lore_log_open") === "1"; } catch { /* ignore */ }
+    const applyLog = () => {
+      gameEl.classList.toggle("log-open", logOpen);
+      this.q("logFab").textContent = logOpen ? "✕" : "📜";
+      this.q("logFab").classList.toggle("open", logOpen);
+      this.q("logToggle").classList.toggle("on", logOpen);
+    };
+    const toggleLog = () => { logOpen = !logOpen; try { localStorage.setItem("lore_log_open", logOpen ? "1" : "0"); } catch { /* ignore */ } applyLog(); };
+    (this.q("logFab")).onclick = toggleLog;
+    (this.q("logToggle")).onclick = toggleLog;
+    (this.q("iconRail")).onclick = () => { if (!logOpen) toggleLog(); };
+    applyLog();
     document.addEventListener("contextmenu", (e) => e.preventDefault());
 
-    // ---- hand peek: clicking the board tucks the hand down (so it never
-    // covers the field); clicking the hand raises it back up. First click on a
-    // tucked hand only RAISES it (doesn't play), so nothing plays by accident. ----
+    // ---- hand peek: the hand rests DOWN and rises when the cursor nears it,
+    // sinking again when the cursor leaves — so it never covers the field.
+    // (Touch: tapping a tucked hand raises it without playing.) ----
     const game = this.root.querySelector(".game") as HTMLElement;
     const hand = this.q("hand");
-    const boardCol = this.root.querySelector(".board-col") as HTMLElement;
-    boardCol.addEventListener("click", (e) => {
-      const el = e.target as HTMLElement;
-      if (el.closest(".hand-area") || el.closest(".market")) return; // hand + shopping keep it up
-      game.classList.add("hand-tucked");
-    });
+    const handArea = this.q("handArea");
+    game.classList.add("hand-tucked");
+    handArea.addEventListener("pointerenter", () => game.classList.remove("hand-tucked"));
+    handArea.addEventListener("pointerleave", () => game.classList.add("hand-tucked"));
     hand.addEventListener("click", (e) => {
       if (game.classList.contains("hand-tucked")) {
         game.classList.remove("hand-tucked");
-        e.stopPropagation(); e.stopImmediatePropagation(); e.preventDefault(); // this click only raises
+        e.stopPropagation(); e.stopImmediatePropagation(); e.preventDefault(); // raise-only on a tucked tap
       }
     }, true);
   }
 
   private q(id: string): HTMLElement { return this.root.querySelector("#" + id) as HTMLElement; }
+
+  /** Append a compact event icon to the topbar rail (glanceable history when the log is closed). */
+  pushIcon(kind: string): void {
+    const map: Record<string, [string, string]> = {
+      summon: ["🐾", ""], attack: ["⚔", ""], destroy: ["💥", "dmg"], buy: ["🛒", "gold"],
+      draw: ["🃏", ""], playSpell: ["✨", ""], trapReveal: ["⚡", "dmg"], heal: ["✚", "good"], hitme: ["🩸", "dmg"],
+    };
+    const m = map[kind]; if (!m) return;
+    const rail = this.root.querySelector("#iconRail"); if (!rail) return;
+    const chip = document.createElement("span");
+    chip.className = "rail-ico" + (m[1] ? " " + m[1] : "");
+    chip.textContent = m[0];
+    rail.appendChild(chip);
+    while (rail.children.length > 18) rail.removeChild(rail.firstChild as Node);
+    requestAnimationFrame(() => chip.classList.add("in"));
+  }
 
   /** Playback marker only — input is NEVER locked (the player can always act;
    *  acting fast-forwards whatever is still animating). */
@@ -114,6 +142,7 @@ export class GameView {
     this.q("endBtn").textContent = t("game.endturn");
     this.q("surrenderBtn").textContent = t("game.surrender");
     this.q("logTitle").textContent = t("game.log");
+    this.q("logToggle").textContent = t("game.log");
 
     // opponent hand (face-down). Always show the COUNT; >10 lays out flat/even
     // so you can still gauge how many cards they hold.

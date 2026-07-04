@@ -26,7 +26,22 @@
 .gear:hover { color: var(--brass); border-color: var(--brass-dim); }
 
 /* ---- stage ---- */
-.stage { display: grid; grid-template-columns: minmax(0, 1fr) clamp(220px, 21vw, 300px); gap: 10px; min-height: 0; overflow: hidden; perspective: 1700px; }
+/* log CLOSED by default (single column); opening adds the side panel (desktop) */
+.stage { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; min-height: 0; overflow: hidden; perspective: 1700px; }
+@media (min-width: 861px) {
+  .game.log-open .stage { grid-template-columns: minmax(0, 1fr) clamp(220px, 21vw, 300px); }
+  .game:not(.log-open) .logpanel { display: none; }
+}
+/* topbar log toggle + glanceable icon rail */
+.log-toggle { margin-left: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; padding: 5px 12px; border-radius: 7px; border: 1px solid var(--line); background: #ffffff05; color: var(--paper-dim); }
+.log-toggle:hover { color: var(--brass); border-color: var(--brass-dim); }
+.log-toggle.on { color: var(--brass-hi); border-color: var(--brass-dim); background: #c79a4b14; }
+.icon-rail { flex: 1 1 auto; display: flex; align-items: center; justify-content: flex-end; gap: 4px; overflow: hidden; margin: 0 12px; cursor: pointer; min-width: 0; }
+.rail-ico { flex: 0 0 auto; font-size: 14px; line-height: 1; width: 20px; height: 20px; display: grid; place-items: center; border-radius: 5px; background: #ffffff08; border: 1px solid var(--line-soft); opacity: 0; transform: translateX(6px); transition: opacity .2s var(--ease), transform .2s var(--ease); }
+.rail-ico.in { opacity: 1; transform: none; }
+.rail-ico.dmg { background: #d8542f1f; border-color: #d8542f55; }
+.rail-ico.good { background: #6fbf731f; border-color: #6fbf7355; }
+.rail-ico.gold { background: #c79a4b1f; border-color: #c79a4b55; }
 /* subtle tabletop tilt — not a flat top-down view (classic TCG feel). Interactions
    are unaffected: hit-rects are computed post-transform. Log panel stays flat. */
 .board-col { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 5px; min-height: 0; align-content: start; transform: rotateX(6deg); transform-origin: center 46%; transform-style: preserve-3d; }

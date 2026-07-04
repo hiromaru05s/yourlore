@@ -154,6 +154,10 @@ export abstract class BaseController implements BoardHandlers {
     for (let i = 0; i < events.length; i++) {
       if (this.dead) return;
       const e = events[i];
+      // glanceable icon rail (topbar): key events → small icons
+      if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
+      else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
+      else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
       switch (e.type) {
         case "summon": {
           const card = this.findCard(res.state, e.uid) ?? this.defOf(e.id, e.uid);

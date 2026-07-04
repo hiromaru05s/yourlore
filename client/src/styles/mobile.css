@@ -10,6 +10,7 @@
 
 /* the log drawer toggle is desktop-hidden by default */
 .log-fab { display: none; }
+@media (max-width: 860px) { .log-toggle, .icon-rail { display: none; } }
 
 /* kill the blue tap flash on touch */
 * { -webkit-tap-highlight-color: transparent; }
@@ -76,7 +77,7 @@
     transform: translateY(103%);
     transition: transform .26s var(--ease);
   }
-  .logpanel.open { transform: none; }
+  .game.log-open .logpanel { transform: none; }
   .log { font-size: 12px; padding: 6px 12px 12px; -webkit-overflow-scrolling: touch; }
 
   .log-fab {
