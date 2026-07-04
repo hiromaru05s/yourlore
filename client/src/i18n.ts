@@ -122,7 +122,7 @@ const D: Record<string, Entry> = {
   "game.hp": { ko: "체력", ja: "体力", en: "HP" },
   "game.mana": { ko: "마나", ja: "マナ", en: "Mana" },
   "game.deck": { ko: "덱", ja: "デッキ", en: "Deck" },
-  "game.discard": { ko: "버림", ja: "捨て札", en: "Discard" },
+  "game.discard": { ko: "묘지", ja: "墓地", en: "Graveyard" },
   "game.std": { ko: "고정", ja: "固定", en: "Market" },
   "game.std.meta": { ko: "매 게임 랜덤 · 1~4 마나", ja: "毎ゲームランダム · 1~4マナ", en: "Random each game · 1-4 mana" },
   "game.supply": { ko: "제시", ja: "提示", en: "Offer" },

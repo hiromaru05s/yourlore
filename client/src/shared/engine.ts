@@ -1382,8 +1382,8 @@ function applyTribe(g: GameState, ctx: Ctx, p: PlayerState, o: PlayerState, trib
 }
 
 // Zone capacity: at most 9 monsters, and 9 spell/trap (traps + enchants) cards.
-export const FIELD_MAX = 9;
-export const ST_MAX = 9;
+export const FIELD_MAX = 7;
+export const ST_MAX = 7;
 const ASSASSIN_IDS = ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3"];
 /** Summon precondition check (암살자 상급/특급). */
 export function summonReqMet(p: PlayerState, card: CardInst): boolean {

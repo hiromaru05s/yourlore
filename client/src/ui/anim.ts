@@ -475,7 +475,7 @@ function gainLabel(anchor: DOMRect, text: string, cls: string): HTMLElement {
 
 /** Rich "max mana increased" celebration around the mana pips (~2.2s). */
 export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
-  const bar = document.getElementById("hpbar-" + side)?.closest(".pbar") as HTMLElement | null;
+  const bar = document.getElementById("hpbar-" + side)?.closest(".meta-panel") as HTMLElement | null;
   const anchor = (bar?.querySelector(".pips") as HTMLElement | null) ?? bar;
   if (!anchor) return;
   const r = anchor.getBoundingClientRect();
@@ -532,7 +532,7 @@ export async function maxHpSurge(side: ViewSide, amount: number): Promise<void> 
 
 /** Small "-N" feedback on the mana pips when max mana DROPS. */
 export function manaDrop(side: ViewSide, amount: number): void {
-  const bar = document.getElementById("hpbar-" + side)?.closest(".pbar") as HTMLElement | null;
+  const bar = document.getElementById("hpbar-" + side)?.closest(".meta-panel") as HTMLElement | null;
   const anchor = (bar?.querySelector(".pips") as HTMLElement | null) ?? bar;
   floatNum(anchor, `-${amount} ◆`, "dmg");
 }

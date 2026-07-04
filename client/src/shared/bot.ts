@@ -280,9 +280,9 @@ export function greedyDecide(g: GameState): Action {
   };
   const spells = p.hand.map((c, i) => ({ c, i })).filter((x) => x.c.t === "spell" && playCost(x.c) <= p.mana && castable(x.c));
 
-  const stFull = p.traps.length + p.enchants.length >= 9;
+  const stFull = p.traps.length + p.enchants.length >= 7;
   // summonable monsters, best value first (respect the 9-monster zone cap)
-  const monsters = p.field.length >= 9 ? [] : p.hand
+  const monsters = p.field.length >= 7 ? [] : p.hand
     .map((c, i) => ({ c, i }))
     .filter((x) => x.c.t === "mon" && playCost(x.c) <= p.mana && !(oppNoLow && (x.c.cost ?? 0) <= 3) && summonReqMet(p, x.c))
     .sort((a, b) => cardValue(b.c) - cardValue(a.c));
