@@ -45,8 +45,13 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const typeClass = c.t === "mon" ? "card--mon" : c.t === "trap" ? "card--trap" : c.t === "starter" ? "card--starter" : "card--spell";
   const sizeClass = opt.size === "mkt" ? "card--mkt" : opt.size === "hand" ? "card--hand" : "";
   const node = el("div", `card ${typeClass} ${sizeClass}`.trim());
-  node.style.backgroundImage = `url(${frameFor(c.t)})`;
   node.dataset.uid = c.uid;
+  // 3-layer card: art (behind) → frame overlay with transparent art-window (middle)
+  // → text/cost/stats (front). Swap the frame PNG to restyle every card at once.
+  node.appendChild(artEl(c.id));
+  const frame = el("div", "card-frame");
+  frame.style.backgroundImage = `url(${frameFor(c.t)})`;
+  node.appendChild(frame);
 
   if (opt.playable) node.classList.add("is-playable");
   if (opt.buyable) node.classList.add("is-buyable");
@@ -65,7 +70,6 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const nm = cardName(c);
   const nameEl2 = el("div", "card-name" + (nm.length >= 9 ? " card-name--long" : ""), nm);
   node.appendChild(nameEl2);
-  node.appendChild(artEl(c.id));
 
   if (c.t === "mon") {
     const a = opt.field && opt.owner ? effAtk(opt.owner, c as FieldMon) : c.atk!;
