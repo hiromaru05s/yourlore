@@ -78,6 +78,8 @@ const R: [RegExp, string][] = [
   [/미믹\((\d+)\/(\d+)\) (\d+)마리 소환/g, "summoned $3 Mimics ($1/$2)"],
   [/제외된 미믹 (\d+)장 →/g, "$1 exiled Mimic(s) →"],
   [/제외된 미믹 없음/g, "no exiled Mimics"],
+  [/미믹 계열 (\d+)장 →/g, "$1 Mimic-family card(s) →"],
+  [/미믹 계열 없음/g, "no Mimic-family cards"],
   [/마스터 미믹\((\d+)\/(\d+)\) 강림!/g, "Master Mimic ($1/$2) descends!"],
   [/미믹\((\d+)\/(\d+)\) (\d+)마리 소환 \+ 미믹 (\d+)장 게임에서 제외/g, "summoned $3 Mimics ($1/$2) + exiled $4 Mimics"],
   [/경제 위기!/g, "Economic Crisis!"],

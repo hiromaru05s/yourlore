@@ -39,7 +39,7 @@ function inst(g: GameState, id: string): CardInst { return { uid: newUID(g), ...
 function starter(g: GameState, key: string): CardInst { return { uid: newUID(g), ...structuredClone(STARTERS[key]) }; }
 /** Permanently-exiled zone (lazy init for states persisted before this field existed). */
 function rmz(pl: PlayerState): CardInst[] { return (pl.removed ??= []); }
-const MIMIC_IDS = new Set(["MIMIC", "MIMIC2", "AWAKENED_MIMIC", "MIMIC_KING", "MIMIC_LORD"]);
+const MIMIC_IDS = new Set(["MIMIC", "MIMIC2", "AWAKENED_MIMIC", "MIMIC_KING", "MIMIC_KING2", "ORIGIN_MIMIC", "MIMIC_LORD"]);
 /** 유리 병기 금지령: while active (either side), monsters with DEF<=1 cannot attack. */
 export function glassBanActive(g: GameState): boolean {
   return g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "glassBan"));
@@ -675,6 +675,24 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       if (km >= 6) { spawnToken(g, ctx, p, "MIMIC2"); ctx.log(`  └ 👑 마스터 미믹(10/3) 강림!`, `  └ 👑 マスターミミック(10/3)降臨！`); }
       break;
     }
+    case "mimicKing2": { // 미믹 킹 2세: 필드/묘지/제외 미믹 1장당 +1/+1, 제외 6장+면 마스터 미믹
+      const k2 = [...p.field.filter((x) => x.uid !== m.uid), ...p.discard, ...rmz(p)].filter((c) => MIMIC_IDS.has(c.id)).length;
+      if (k2 > 0) { m.atkMod = (m.atkMod || 0) + k2; m.defMod = (m.defMod || 0) + k2; ctx.log(`  └ 미믹 계열 ${k2}장 → +${k2}/+${k2}`, `  └ ミミック系${k2}枚 → +${k2}/+${k2}`); }
+      else ctx.log(`  └ 미믹 계열 없음`, `  └ ミミック系なし`);
+      if (rmz(p).filter((c) => MIMIC_IDS.has(c.id)).length >= 6) { spawnToken(g, ctx, p, "MIMIC2"); ctx.log(`  └ 👑 마스터 미믹(10/3) 강림!`, `  └ 👑 マスターミミック(10/3)降臨！`); }
+      break;
+    }
+    case "originMimic": { // 시초의 미믹: 필드/묘지/제외 미믹 1장당 +2/+2, 제외 8장+면 상대 함정 2장 파괴
+      const ko2 = [...p.field.filter((x) => x.uid !== m.uid), ...p.discard, ...rmz(p)].filter((c) => MIMIC_IDS.has(c.id)).length;
+      if (ko2 > 0) { m.atkMod = (m.atkMod || 0) + ko2 * 2; m.defMod = (m.defMod || 0) + ko2 * 2; ctx.log(`  └ 미믹 계열 ${ko2}장 → +${ko2 * 2}/+${ko2 * 2}`, `  └ ミミック系${ko2}枚 → +${ko2 * 2}/+${ko2 * 2}`); }
+      else ctx.log(`  └ 미믹 계열 없음`, `  └ ミミック系なし`);
+      if (rmz(p).filter((c) => MIMIC_IDS.has(c.id)).length >= 8) {
+        let bt = 0;
+        for (let i2 = 0; i2 < 2 && o.traps.length; i2++) { const tr = o.traps.splice(randInt(g, o.traps.length), 1)[0]; o.discard.push(tr.card); bt++; }
+        ctx.log(`  └ 상대 세트 함정 ${bt}장 파괴`, `  └ 相手のセット罠${bt}枚を破壊`);
+      }
+      break;
+    }
     case "hordeBuff": { // 군단의 기수: 덱+묘지 20장 이상이면 +3/+3
       const hn = p.deck.length + p.discard.length;
       if (hn >= 24) { m.atkMod = (m.atkMod || 0) + 3; m.defMod = (m.defMod || 0) + 3; ctx.log(`  └ 군단(${hn}장) 결집: +3/+3`, `  └ 軍団(${hn}枚)結集: +3/+3`); }
@@ -1137,10 +1155,10 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       ctx.log(`${tag(p, card)} 체력 ${amt} 회복 (${p.hp}/${p.maxHp})`, `${tag(p, card)} 体力${amt}回復 (${p.hp}/${p.maxHp})`);
       break;
     }
-    case "PRAYER": { // 성역의 기도: 완전 회복 + 최대 체력 +5
-      const amt = p.maxHp - p.hp;
-      ctx.heal(p, amt); p.maxHp += 5;
-      ctx.log(`${tag(p, card)} 체력 ${amt} 회복 + 최대 체력 +5 (${p.hp}/${p.maxHp})`, `${tag(p, card)} 体力${amt}回復 + 最大体力+5 (${p.hp}/${p.maxHp})`);
+    case "PRAYER": { // 성역의 기도: 최대 체력의 80%까지 회복
+      const amt = Math.floor(p.maxHp * 0.8) - p.hp;
+      ctx.heal(p, amt);
+      ctx.log(`${tag(p, card)} 체력 ${amt} 회복 (${p.hp}/${p.maxHp})`, `${tag(p, card)} 体力${amt}回復 (${p.hp}/${p.maxHp})`);
       break;
     }
     case "HERMIT": { // 은둔의 안식: 완전 회복 + 최대 체력 +15
@@ -1381,7 +1399,8 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (card.id === "RUNE3" && !(p.hand.some((c) => c.id === "RUNE1") && p.hand.some((c) => c.id === "RUNE2"))) { ctx.log("  └ 패에 초급·중급 룬 학문이 필요합니다", "  └ 手札に初級・中級のルーン学問が必要です"); return; }
     if ((card.id === "DISARM1" || card.id === "DISARM2" || card.id === "DISARM3") && o0.enchants.length === 0) { ctx.log("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); return; }
     if ((card.id === "MEDITATE" || card.id === "PRAYER") && (p.playsTurn || 0) > 0) { ctx.log("  └ 이번 턴에 다른 카드를 플레이해서 사용 불가", "  └ このターンに他のカードをプレイしたため使用不可"); return; }
-    if (card.id === "MEDITATE" && p.hp >= Math.floor(p.maxHp * 0.8)) { ctx.log("  └ 체력이 이미 최대치의 80% 이상입니다", "  └ 体力が既に最大値の80%以上です"); return; }
+    if (card.id === "PRAYER" && p.maxMana > 12) { ctx.log("  └ 최대 마나가 12를 초과해 사용 불가", "  └ 最大マナが12を超えているため使用不可"); return; }
+    if ((card.id === "MEDITATE" || card.id === "PRAYER") && p.hp >= Math.floor(p.maxHp * 0.8)) { ctx.log("  └ 체력이 이미 최대치의 80% 이상입니다", "  └ 体力が既に最大値の80%以上です"); return; }
     if (card.id === "HERMIT" && p.field.length > 0) { ctx.log("  └ 필드에 몬스터가 있어 사용 불가", "  └ 場にモンスターがいるため使用不可"); return; }
     if (card.act === "exilePick" && p.discard.length === 0) { ctx.log("  └ 묘지가 비어 있습니다", "  └ 墓地が空です"); return; }
     if (card.id === "WALLBREAK1" && !o0.field.some((m) => effAtk(o0, m) <= 1)) { ctx.log("  └ 공격력 1 이하 적 몬스터가 없습니다", "  └ 攻撃力1以下の敵モンスターがいません"); return; }

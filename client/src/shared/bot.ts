@@ -247,7 +247,8 @@ export function greedyDecide(g: GameState): Action {
     if (c.id === "GUILD_CHEST" && p.hp <= 12) return false;
     // 안식 계열: "이번 턴 다른 플레이 없음" / "필드 비어있음" 조건
     if ((c.id === "MEDITATE" || c.id === "PRAYER") && (p.playsTurn || 0) > 0) return false;
-    if (c.id === "MEDITATE" && p.hp >= Math.floor(p.maxHp * 0.8)) return false;
+    if ((c.id === "MEDITATE" || c.id === "PRAYER") && p.hp >= Math.floor(p.maxHp * 0.8)) return false;
+    if (c.id === "PRAYER" && p.maxMana > 12) return false;
     if (c.id === "HERMIT" && p.field.length > 0) return false;
     // 폐기 경제 카드: 대상이 있어야 시전
     if (c.act === "exilePick" && p.discard.length === 0) return false;
