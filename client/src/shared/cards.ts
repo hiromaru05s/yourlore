@@ -800,6 +800,10 @@ const NEW_CARDS7: CardDef[] = [
     text: "게임에서 제외된 자신의 카드 1장당 상대에게 3 데미지 (시전 12)", textJa: "ゲームから除外された自分のカード1枚につき相手に3ダメージ (発動12)" },
   { id: "CULL_TITAN", t: "mon", cost: 9, atk: 1, def: 1, onSummon: "cullTitan", name: "컬의 화신", nameJa: "カルの化身",
     text: "소환시: 게임에서 제외된 자신의 '컬' 1장당 +1/+1", textJa: "召喚時: ゲームから除外された自分の「カル」1枚につき+1/+1" },
+  { id: "GREED_PRICE", t: "spell", cost: 4, name: "탐욕의 대가", nameJa: "強欲の代価",
+    text: "자신에게 2 데미지 · 자신 필드에 '미믹'(3/2) 2마리 소환 · 추가로 '미믹' 3장을 게임에서 제외", textJa: "自分に2ダメージ · 自分の場に「ミミック」(3/2)2体を召喚 · さらに「ミミック」3枚をゲームから除外" },
+  { id: "MARKET_CRISIS", t: "spell", cost: 3, name: "경제 위기", nameJa: "経済危機",
+    text: "고정 마켓 10장을 전부 갱신한다", textJa: "固定マーケット10枚を全て更新する" },
   // 토큰 (구매 불가, cost 0)
   { id: "TOKEN00", t: "mon", cost: 0, atk: 0, def: 0, name: "허수아비", nameJa: "かかし", text: "—", textJa: "—" },
   { id: "SOLDIER2", t: "mon", cost: 0, atk: 2, def: 2, name: "병사", nameJa: "兵士", text: "—", textJa: "—" },

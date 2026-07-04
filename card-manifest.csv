@@ -212,3 +212,5 @@ EXILE_NUKE2,EXILE_NUKE2.webp,마법,8,12,공허 대붕괴,,,,게임에서 제외
 CULL_TITAN,CULL_TITAN.webp,몬스터,9,9,컬의 화신,1,1,,소환시: 게임에서 제외된 자신의 '컬' 1장당 +1/+1
 AWAKENED_MIMIC,AWAKENED_MIMIC.webp,몬스터,5,5,각성한 미믹,3,4,,소환시: 자신의 필드에 '미믹'(3/2) 2마리를 소환
 MIMIC_KING,MIMIC_KING.webp,몬스터,6,6,미믹 킹,6,6,,소환시: 게임에서 제외된 자신의 '미믹' 계열 1장당 +1/+1 · 제외된 미믹 계열이 6장 이상이면 '마스터 미믹'을 자신 필드에 소환
+GREED_PRICE,GREED_PRICE.webp,마법,4,4,탐욕의 대가,,,,자신에게 2 데미지 · 자신 필드에 '미믹'(3/2) 2마리 소환 · 추가로 '미믹' 3장을 게임에서 제외
+MARKET_CRISIS,MARKET_CRISIS.webp,마법,3,3,경제 위기,,,,고정 마켓 10장을 전부 갱신한다

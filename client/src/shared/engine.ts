@@ -879,7 +879,7 @@ const CUSTOM_SPELLS = new Set<string>([
   "GS7_0", "GS7_2", "GS8_0", "GS8_2", "GS8_3", "GS8_4", "GS8_5", "GS9_0", "GS9_2", "GS10_0", "GS10_1", "GS10_2",
   "HANDRESET", "TIMEWARP", "GAMBLE", "DICE8",
   "RUNE1", "RUNE2", "RUNE3", "GENESIS_SONG", "GENESIS_MAGIC",
-  "BLOOD1", "BLOOD2", "BLOOD3", "DISARM3", "FORBIDDEN", "CATALYST", "MEDITATE", "PRAYER", "HERMIT", "LUCKY_CHEST", "GUILD_CHEST", "SCRAPPER", "WALLBREAK1", "WALLBREAK2", "SNIPE1", "SNIPE2", "SHATTER", "INQUISITION", "SCARECROW", "LEVY", "CULL_FLOOD", "PURGE_ALL", "EXILE_NUKE1", "EXILE_NUKE2",
+  "BLOOD1", "BLOOD2", "BLOOD3", "DISARM3", "FORBIDDEN", "CATALYST", "MEDITATE", "PRAYER", "HERMIT", "LUCKY_CHEST", "GUILD_CHEST", "SCRAPPER", "WALLBREAK1", "WALLBREAK2", "SNIPE1", "SNIPE2", "SHATTER", "INQUISITION", "SCARECROW", "LEVY", "CULL_FLOOD", "PURGE_ALL", "EXILE_NUKE1", "EXILE_NUKE2", "GREED_PRICE", "MARKET_CRISIS",
 ]);
 const chance = (g: GameState, pct: number): boolean => randInt(g, 100) < pct;
 function tag(p: PlayerState, card: CardInst): string { return `<span class="t">${p.name}</span> ${cn(card)} →`; }
@@ -1011,6 +1011,24 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "DISARM3": { // 마법연구기관: 상대 영구마법 1장 파괴 + 게임에서 제외
       if (o.enchants.length) { const e = o.enchants.splice(randInt(g, o.enchants.length), 1)[0]; rmz(o).push(e.card); ctx.log(`${tag(p, card)} ${cn(e.card)} 파괴 + 게임에서 제외`, `${tag(p, card)} ${cn(e.card)} 破壊 + ゲームから除外`); }
+      break;
+    }
+    case "GREED_PRICE": { // 탐욕의 대가: 자해 2, 미믹 2마리 소환 + 미믹 3장 제외
+      ctx.dealDamage(p, 2, cn(card), cn(card));
+      if (!g.over) {
+        spawnToken(g, ctx, p, "MIMIC"); spawnToken(g, ctx, p, "MIMIC");
+        for (let gi = 0; gi < 3; gi++) rmz(p).push(inst(g, "MIMIC"));
+        ctx.log(`${tag(p, card)} 미믹(3/2) 2마리 소환 + 미믹 3장 게임에서 제외`, `${tag(p, card)} ミミック(3/2)2体召喚 + ミミック3枚をゲームから除外`);
+      }
+      break;
+    }
+    case "MARKET_CRISIS": { // 경제 위기: 고정 마켓 전체 갱신
+      const lowAvail = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 4);
+      const nextMk: CardInst[] = [];
+      const availMk = lowAvail.slice();
+      while (nextMk.length < 10 && availMk.length) nextMk.push(inst(g, availMk.splice(randInt(g, availMk.length), 1)[0]));
+      g.market = nextMk;
+      ctx.log(`${tag(p, card)} <span class="dmg">경제 위기!</span> 고정 마켓 10장 전부 갱신`, `${tag(p, card)} <span class="dmg">経済危機！</span> 固定マーケット10枚を全て更新`);
       break;
     }
     case "SHATTER": { // 붕괴 진동: 자신 5뎀, 양측 모든 몬스터 방어 0(영구)
