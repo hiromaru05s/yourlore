@@ -29,13 +29,14 @@
 .card--trap    { --cc: #38984d; --cc-lo: #67c67c; }
 .card--starter { --cc: #24a9bd; --cc-lo: #5ad6e6; }
 
-/* BUY cost — a bold colored gem in the top-left, deliberately overflowing the
-   frame corner (never covering the name plate to its right). Color = card type. */
+/* BUY cost — a bold colored gem centered ON the frame's built-in top-left ring
+   (card ratio 0.64 → ring center ≈ 9%, 10.75%) so it fully hides the original
+   cost art. Slight left overflow is intentional. Color = card type. */
 .card-cost {
-  position: absolute; top: -3%; left: -7%; right: auto;
-  width: 32%; height: auto; aspect-ratio: 1;
+  position: absolute; top: 1.8%; left: -5%; right: auto;
+  width: 28%; height: auto; aspect-ratio: 1;
   display: grid; place-items: center;
-  font-family: var(--mono); font-weight: 800; font-size: 1.3em; line-height: 1;
+  font-family: var(--mono); font-weight: 800; font-size: 1.18em; line-height: 1;
   color: #fff;
   border-radius: 50%;
   background:
@@ -110,6 +111,18 @@
   box-shadow: 0 1px 2px #0003, inset 0 0 0 1px #ffffffcc;
 }
 .card-cast .cc-ico { color: #e0932a; font-size: 0.95em; }
+/* cast-cost hover explanation — child of the card, sits over the art so it is
+   never clipped by .card-eff's overflow. Instant (no native-title delay). */
+.cast-tip {
+  position: absolute; left: 7%; right: 7%; top: 22%; z-index: 40;
+  pointer-events: none; text-align: left;
+  background: #14100af7; color: #f4e8c8;
+  border: 1px solid var(--brass-dim); border-radius: 7px;
+  padding: 0.55em 0.6em; font-size: 0.4em; line-height: 1.32; font-weight: 500;
+  box-shadow: 0 0.4em 1.1em #000c;
+  opacity: 0; visibility: hidden; transition: opacity .1s;
+}
+.cast-tip.show { opacity: 1; visibility: visible; }
 
 /* monster atk/def: numbers only, centered in the frame's built-in sword/shield slots.
    Rendered exactly like .card-name / .card-eff (flex-centered absolute div, inheriting the

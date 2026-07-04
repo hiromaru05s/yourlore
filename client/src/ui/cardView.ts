@@ -86,7 +86,11 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     const eff = el("div", effCls);
     if (hasCast) {
       const cast = el("div", "card-cast", `<span class="cc-ico">⚡</span>${t("card.cast")} ${pc}`);
-      cast.title = t("card.cast.tip");
+      // instant tooltip anchored to the card (not inside the clipped .card-eff)
+      const tip = el("div", "cast-tip", t("card.cast.tip"));
+      node.appendChild(tip);
+      cast.addEventListener("pointerenter", () => tip.classList.add("show"));
+      cast.addEventListener("pointerleave", () => tip.classList.remove("show"));
       eff.appendChild(cast);
     }
     if (txt && txt !== "—") eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${txt}</span>`));
