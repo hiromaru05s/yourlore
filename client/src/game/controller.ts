@@ -17,6 +17,7 @@ import * as A from "../ui/anim";
 import { cardPicker, confirmDialog, treasureModal, winModal } from "../ui/modal";
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
+import { sfx, type SfxName } from "../ui/sound";
 import { t, getLang, cardName, onLangChange } from "../i18n";
 
 export interface ControllerExits {
@@ -50,6 +51,7 @@ export abstract class BaseController implements BoardHandlers {
   private timerInt: number | null = null;
   private warned25 = false;
   private toastEl: HTMLElement | null = null;
+  private prevMaxMana = 0;
   private static readonly TURN_SECS = 50;
 
   constructor(root: HTMLElement, you: Side, exits: ControllerExits) {
@@ -127,7 +129,11 @@ export abstract class BaseController implements BoardHandlers {
   private consumeLogs(events: GameEvent[]): void {
     for (const e of events) {
       if (e.type === "turnHeader") this.log.turnHeader(e.turn, e.name, e.isBot);
-      else if (e.type === "log") this.log.line(e.html, e.htmlJa);
+      else if (e.type === "log") {
+        this.log.line(e.html, e.htmlJa);
+        // "can't play" feedback: rejection log lines get an error blip + shake cue
+        if (/불가|사용할 수 없|없습니다|가득|できません|cannot|not allowed/i.test(e.html)) sfx("error");
+      }
     }
   }
 
@@ -158,6 +164,12 @@ export abstract class BaseController implements BoardHandlers {
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
+      // sound per event
+      const smap: Partial<Record<GameEvent["type"], SfxName>> = { summon: "summon", attack: "attack", hit: "impact", destroy: "death", buy: "buy", draw: "draw", playSpell: "play", trapReveal: "trap", trapSet: "trapSet" };
+      const sn = smap[e.type];
+      if (sn) sfx(sn);
+      else if (e.type === "damage" && e.player === this.you) sfx("damage");
+      else if (e.type === "heal" && e.player === this.you) sfx("heal");
       switch (e.type) {
         case "summon": {
           const card = this.findCard(res.state, e.uid) ?? this.defOf(e.id, e.uid);
@@ -321,6 +333,10 @@ export abstract class BaseController implements BoardHandlers {
 
   private afterApply(res: ReduceResult): void {
     this.syncTimer();
+    // max-mana growth cue (mid-turn gains too)
+    const mm = this.state?.players?.[this.you]?.maxMana ?? 0;
+    if (this.prevMaxMana && mm > this.prevMaxMana) sfx("mana");
+    this.prevMaxMana = mm;
     if (res.state !== this.state) return; // a newer batch is queued — let it drive follow-ups
     const g = this.state;
     if (g.over) { this.showWin(); return; }
@@ -353,9 +369,11 @@ export abstract class BaseController implements BoardHandlers {
     if (!g || g.over) { this.stopTimer(); return; }
     const key = `${g.turn}:${g.cur}`;
     if (key !== this.timerKey) {
+      const firstTurn = this.timerKey === "";
       this.timerKey = key;
       this.timerLeft = BaseController.TURN_SECS;
       this.warned25 = false;
+      if (!firstTurn && g.cur === this.you) sfx("turn"); // my turn begins
       if (this.timerInt) clearInterval(this.timerInt);
       this.renderTimer();
       this.timerInt = window.setInterval(() => this.tickTimer(), 1000);

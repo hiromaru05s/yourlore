@@ -357,18 +357,23 @@ export class GameView {
       pips.push(`<span class="${cl}"></span>`);
     }
 
-    // 종족 시너지 진행도 칩
-    const tribeChips: string[] = [];
+    // 종족: 현재 필드 진행도 + 이미 달성한 시너지를 함께, 시각적으로 구분해 표기
     const byTribe = new Map<string, Set<string>>();
     for (const m of p.field) if (m.tribe) { if (!byTribe.has(m.tribe)) byTribe.set(m.tribe, new Set()); byTribe.get(m.tribe)!.add(m.id); }
-    for (const [tr, ids] of byTribe) {
+    const firedBy = new Map<string, Set<number>>();
+    for (const f of p.tribesFired) { const [tr, n] = f.split(":"); if (!firedBy.has(tr)) firedBy.set(tr, new Set()); firedBy.get(tr)!.add(Number(n)); }
+    const allTribes = new Set<string>([...byTribe.keys(), ...firedBy.keys()]);
+    const tribeChips: string[] = [];
+    for (const tr of allTribes) {
       const ths = tr === "시초" ? [2, 3, 4] : [2, 3];
-      const fired = new Set(p.tribesFired.filter((f) => f.startsWith(tr + ":")).map((f) => Number(f.split(":")[1])));
+      const onField = byTribe.get(tr)?.size ?? 0;
+      const fired = firedBy.get(tr) ?? new Set<number>();
       const next = ths.find((th) => !fired.has(th));
       const nm = TRIBES[tr]?.[getLang()]?.name ?? tr;
-      const done = next === undefined;
-      const ready = !done && ids.size >= (next as number);
-      tribeChips.push(`<span class="tribe-chip ${done ? "done" : ready ? "ready" : ""}">${nm} ${done ? "✓" : `${ids.size}/${next}`}</span>`);
+      const ready = next !== undefined && onField >= next;   // 달성 임박 (이번에 발동 가능)
+      const marks = ths.map((th) => fired.has(th) ? `<b>✓${th}</b>` : `<i>${th}</i>`).join("");
+      const prog = onField > 0 && next !== undefined ? ` ${onField}/${next}` : "";
+      tribeChips.push(`<span class="tribe-chip ${fired.size ? "has-syn" : ""} ${ready ? "ready" : ""}">${nm}${prog} <span class="tc-marks">${marks}</span></span>`);
     }
 
     panel.innerHTML = `
@@ -389,16 +394,15 @@ export class GameView {
     const btns = panel.querySelector(".mp-btns")!;
     const cards = this.collectionOf(p, isMe);
     const dbtn = document.createElement("button");
-    dbtn.className = "btn btn-ghost mp-btn";
-    dbtn.textContent = `${t("deck.view")} ${cards.length}`;
+    dbtn.className = "btn btn-ghost mp-btn mp-btn--deck";
+    dbtn.innerHTML = `<span class="mp-ico">🎴</span>${t("deck.view")} <b>${cards.length}</b>`;
     dbtn.onclick = () => cardPicker(`${p.name} — ${t("deck.view")} (${cards.length})`, cards, () => { /* browse only */ });
     btns.appendChild(dbtn);
     const removed = (p.removed ?? []).slice().sort((a, b) => a.cost - b.cost);
     if (removed.length > 0) {
       const rbtn = document.createElement("button");
-      rbtn.className = "btn btn-ghost mp-btn";
-      rbtn.style.opacity = ".8";
-      rbtn.textContent = `${t("deck.removed")} ${removed.length}`;
+      rbtn.className = "btn btn-ghost mp-btn mp-btn--exile";
+      rbtn.innerHTML = `<span class="mp-ico">⛔</span>${t("deck.removed")} <b>${removed.length}</b>`;
       rbtn.onclick = () => cardPicker(`${p.name} — ${t("deck.removed")} (${removed.length})`, removed, () => { /* browse only */ });
       btns.appendChild(rbtn);
     }
