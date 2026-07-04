@@ -4,12 +4,23 @@
 CREATE TABLE IF NOT EXISTS users (
   id          TEXT PRIMARY KEY,           -- uuid
   email       TEXT NOT NULL UNIQUE,
-  password    TEXT NOT NULL,              -- PBKDF2 hash (salt:hash), never plaintext
+  password    TEXT NOT NULL,              -- PBKDF2 hash (salt:hash) / 'oauth:google', never plaintext
   display     TEXT NOT NULL,              -- shown name (defaults to email local-part)
   created_at  INTEGER NOT NULL,
   wins        INTEGER NOT NULL DEFAULT 0,
-  losses      INTEGER NOT NULL DEFAULT 0
+  losses      INTEGER NOT NULL DEFAULT 0,
+  verified    INTEGER NOT NULL DEFAULT 0  -- 이메일 인증 여부 (OAuth 가입은 1)
 );
+
+-- 이메일 인증/비밀번호 재설정 토큰 (유저+종류당 1개 활성)
+CREATE TABLE IF NOT EXISTS email_tokens (
+  token       TEXT PRIMARY KEY,
+  user_id     TEXT NOT NULL REFERENCES users(id),
+  kind        TEXT NOT NULL,              -- 'verify' | 'reset'
+  created_at  INTEGER NOT NULL,
+  expires_at  INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_email_tokens_user ON email_tokens(user_id, kind);
 
 CREATE TABLE IF NOT EXISTS sessions (
   token       TEXT PRIMARY KEY,           -- opaque random token (sent as cookie)

@@ -2,8 +2,12 @@
 // LORE server — email+password auth on D1.
 // Passwords: PBKDF2-SHA256 (salt:hash hex). Sessions: opaque
 // random token in an HttpOnly cookie, stored in D1.
+// Email verification: register creates an UNVERIFIED account and
+// mails a verify link; login is blocked until verified. If Resend
+// isn't configured yet, register auto-verifies (legacy behavior).
 // ============================================================
 import type { Env, SessionUser } from "./env";
+import { deleteToken, emailConfigured, issueToken, readToken, resetEmailHtml, sendEmail, verifyEmailHtml } from "./email";
 
 const COOKIE = "lore_session";
 const SESSION_DAYS = 30;
@@ -111,18 +115,73 @@ export async function handleAuth(env: Env, req: Request, path: string): Promise<
       if (exists) return json(env, { error: "이미 가입된 이메일입니다." }, 409);
       const id = crypto.randomUUID();
       const display = email.split("@")[0];
-      await env.DB.prepare(`INSERT INTO users (id, email, password, display, created_at) VALUES (?,?,?,?,?)`)
-        .bind(id, email, await hashPassword(password), display, Date.now()).run();
+      const mailOn = emailConfigured(env);
+      await env.DB.prepare(`INSERT INTO users (id, email, password, display, created_at, verified) VALUES (?,?,?,?,?,?)`)
+        .bind(id, email, await hashPassword(password), display, Date.now(), mailOn ? 0 : 1).run();
+      if (mailOn) {
+        const vt = await issueToken(env, id, "verify");
+        if (vt) await sendEmail(env, email, "LORE — 이메일 인증 / Verify your email", verifyEmailHtml(new URL(req.url).origin, vt));
+        return json(env, { needVerify: true });
+      }
       const token = await createSession(env, id);
       return json(env, { user: { id, email, display, wins: 0, losses: 0 } }, 200, { "Set-Cookie": sessionCookie(token) });
     }
 
     // login
-    const row = await env.DB.prepare(`SELECT id, email, password, display, wins, losses FROM users WHERE email = ?`)
-      .bind(email).first<{ id: string; email: string; password: string; display: string; wins: number; losses: number }>();
+    const row = await env.DB.prepare(`SELECT id, email, password, display, wins, losses, verified FROM users WHERE email = ?`)
+      .bind(email).first<{ id: string; email: string; password: string; display: string; wins: number; losses: number; verified: number }>();
     if (!row || !(await verifyPassword(password, row.password))) return json(env, { error: "이메일 또는 비밀번호가 올바르지 않습니다." }, 401);
+    if (!row.verified && emailConfigured(env)) return json(env, { error: "이메일 인증이 필요합니다. 받은편지함을 확인하세요.", needVerify: true }, 403);
     const token = await createSession(env, row.id);
     return json(env, { user: { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses } }, 200, { "Set-Cookie": sessionCookie(token) });
+  }
+
+  // 인증 링크 (메일에서 클릭) — 성공 시 홈으로 리디렉트
+  if (path === "/auth/verify") {
+    const token = new URL(req.url).searchParams.get("token") || "";
+    const userId = await readToken(env, token, "verify");
+    if (!userId) return new Response(`<!doctype html><meta charset="utf-8"><body style="font-family:sans-serif;background:#0c121d;color:#e9e3d4;display:grid;place-items:center;height:100vh"><div style="text-align:center"><p>링크가 만료되었거나 잘못되었습니다.<br>This link is invalid or expired.</p><a href="/" style="color:#c79a4b">← LORE</a></div>`, { status: 400, headers: { "Content-Type": "text/html;charset=utf-8" } });
+    await env.DB.prepare(`UPDATE users SET verified = 1 WHERE id = ?`).bind(userId).run();
+    await deleteToken(env, token);
+    return new Response(null, { status: 302, headers: { Location: "/?verified=1" } });
+  }
+
+  // 인증 메일 재발송
+  if (path === "/auth/resend-verify") {
+    const body = (await req.json().catch(() => ({}))) as { email?: string };
+    const email = (body.email || "").trim().toLowerCase();
+    const row = await env.DB.prepare(`SELECT id, verified FROM users WHERE email = ?`).bind(email).first<{ id: string; verified: number }>();
+    // 계정 존재 여부를 노출하지 않음 — 항상 ok
+    if (row && !row.verified && emailConfigured(env)) {
+      const vt = await issueToken(env, row.id, "verify");
+      if (vt) await sendEmail(env, email, "LORE — 이메일 인증 / Verify your email", verifyEmailHtml(new URL(req.url).origin, vt));
+    }
+    return json(env, { ok: true });
+  }
+
+  // 비밀번호 재설정 요청 (메일 발송)
+  if (path === "/auth/forgot") {
+    const body = (await req.json().catch(() => ({}))) as { email?: string };
+    const email = (body.email || "").trim().toLowerCase();
+    const row = await env.DB.prepare(`SELECT id FROM users WHERE email = ?`).bind(email).first<{ id: string }>();
+    if (row && emailConfigured(env)) {
+      const rt = await issueToken(env, row.id, "reset");
+      if (rt) await sendEmail(env, email, "LORE — 비밀번호 재설정 / Reset your password", resetEmailHtml(new URL(req.url).origin, rt));
+    }
+    return json(env, { ok: true }); // 계정 존재 여부 비노출
+  }
+
+  // 비밀번호 재설정 실행 (재설정 = 이메일 소유 증명이므로 인증도 함께 처리)
+  if (path === "/auth/reset") {
+    const body = (await req.json().catch(() => ({}))) as { token?: string; password?: string };
+    const password = body.password || "";
+    if (password.length < 6) return json(env, { error: "비밀번호는 6자 이상이어야 합니다." }, 400);
+    const userId = await readToken(env, body.token || "", "reset");
+    if (!userId) return json(env, { error: "링크가 만료되었거나 잘못되었습니다." }, 400);
+    await env.DB.prepare(`UPDATE users SET password = ?, verified = 1 WHERE id = ?`).bind(await hashPassword(password), userId).run();
+    await deleteToken(env, body.token || "");
+    await env.DB.prepare(`DELETE FROM sessions WHERE user_id = ?`).bind(userId).run(); // 기존 세션 전부 무효화
+    return json(env, { ok: true });
   }
 
   return json(env, { error: "not found" }, 404);

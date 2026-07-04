@@ -11,6 +11,8 @@ export interface Env {
   // Google OAuth (optional — /api/auth/google returns 501 until both are set)
   GOOGLE_CLIENT_ID?: string;     // wrangler.toml [vars] or secret
   GOOGLE_CLIENT_SECRET?: string; // `wrangler secret put GOOGLE_CLIENT_SECRET`
+  // Resend (optional — until set, register auto-verifies and no mail is sent)
+  RESEND_API_KEY?: string;       // `wrangler secret put RESEND_API_KEY`
 }
 
 export interface SessionUser {

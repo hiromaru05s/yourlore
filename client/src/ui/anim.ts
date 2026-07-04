@@ -96,12 +96,12 @@ export async function trapSetAnim(side: ViewSide): Promise<void> {
   back.remove();
 }
 
-/** A trap fired: flip it face-up at the trap zone, hold ~2s, then send to discard. */
-export async function trapRevealAnim(card: CardInst, side: ViewSide): Promise<void> {
+/** A trap fired: flip it face-up at the trap zone, hold, then send to discard. */
+export async function trapRevealAnim(card: CardInst, side: ViewSide, hold = 2000): Promise<void> {
   const at = trapZoneRect(side); if (!at) return;
   const node = floatAt(cardEl(card, { size: "hand" }), { left: at.left + at.width / 2 - 50, top: at.top - 10 });
   node.classList.add("trap-flip");
-  await wait(2000);
+  await wait(hold);
   const to = rectOf("#" + discId(side));
   if (to) { node.style.transition = `left .45s ${EASE}, top .45s ${EASE}, transform .45s ${EASE}, opacity .45s`; node.style.left = to.left + "px"; node.style.top = to.top + "px"; node.style.transform = "scale(.45)"; node.style.opacity = "0"; }
   await wait(460); pileFlash(discId(side)); node.remove();
@@ -260,4 +260,233 @@ export function bindZoom(el: HTMLElement, card: CardInst): void {
     if (fired) { e.preventDefault(); e.stopPropagation(); } // swallow the tap that would play/attack
   });
   el.addEventListener("touchcancel", cancel);
+}
+
+// ============================================================
+// FX layer — sequential event playback helpers.
+// Center banners, summon ghosts, random-result popups, mana/HP
+// surges and the death sequence. All awaitable, DOM-only.
+// ============================================================
+import { t as tt } from "../i18n";
+
+/** Center-screen announcement (e.g. "함정 발동!"). */
+export async function eventBanner(main: string, sub?: string, kind: "trap" | "info" | "danger" = "info", ms = 1400): Promise<void> {
+  const b = document.createElement("div");
+  b.className = "fx-banner " + kind;
+  b.innerHTML = `<div class="fx-banner-main">${main}</div>` + (sub ? `<div class="fx-banner-sub">${sub}</div>` : "");
+  document.body.appendChild(b);
+  await wait(ms);
+  b.classList.add("out");
+  await wait(260);
+  b.remove();
+}
+
+function monZoneEl(side: ViewSide): HTMLElement | null {
+  const row = document.getElementById(side === "me" ? "meRow" : "oppRow");
+  const zones = row ? row.querySelectorAll(".zone") : null;
+  if (!zones || !zones.length) return null;
+  // my monster zone renders first; the opponent's renders last (mirrored board)
+  return (side === "me" ? zones[0] : zones[zones.length - 1]) as HTMLElement;
+}
+function monSlotRect(side: ViewSide, index: number): DOMRect | null {
+  const z = monZoneEl(side);
+  if (!z) return null;
+  const kids = z.children;
+  if (!kids.length) return z.getBoundingClientRect();
+  return kids[Math.max(0, Math.min(index, kids.length - 1))].getBoundingClientRect();
+}
+
+/**
+ * Summon shown as a floating ghost card: flies from the hand into the target
+ * field slot and STAYS there (the real board re-renders later). Returns the
+ * ghost node so a same-batch destroy can kill it visibly.
+ */
+export async function ghostSummon(card: CardInst, side: ViewSide, slotIndex: number): Promise<HTMLElement | null> {
+  const from = handRect(side);
+  const slot = monSlotRect(side, slotIndex);
+  if (!from || !slot) return null;
+  const node = floatAt(cardEl(card, { size: "hand" }), from);
+  node.style.transformOrigin = "top left";
+  await raf();
+  const w = node.getBoundingClientRect().width || 100;
+  node.style.transition = `left .34s ${EASE}, top .34s ${EASE}, transform .34s ${EASE}`;
+  node.style.left = slot.left + "px";
+  node.style.top = slot.top + "px";
+  node.style.transform = `scale(${slot.width / w})`;
+  await wait(360);
+  node.classList.add("fx-ghost-pop");
+  return node;
+}
+
+/** Kill a summon ghost: death flash then fly a card frame to that side's discard. */
+export async function ghostDie(node: HTMLElement, side: ViewSide): Promise<void> {
+  const from = node.getBoundingClientRect();
+  node.classList.add("mdie");
+  await wait(320);
+  node.remove();
+  flyCardFrame(frameFor("mon"), from, rectOf("#" + discId(side)));
+  pileFlash(discId(side));
+  await wait(340);
+}
+
+/** Destroy a monster that exists on the CURRENT board (pre re-render). */
+export async function destroyAnim(uid: string, side: ViewSide): Promise<void> {
+  const n = byUid(uid);
+  if (!n) return;
+  const from = n.getBoundingClientRect();
+  n.classList.add("mdie");
+  await wait(320);
+  (n as HTMLElement).style.visibility = "hidden";
+  flyCardFrame(frameFor("mon"), from, rectOf("#" + discId(side)));
+  pileFlash(discId(side));
+  await wait(340);
+}
+
+/** Random-card outcome popup. Big center card for your plays, compact upper popup for the opponent's. */
+export async function resultPopup(title: string, lines: string[], mine: boolean, ms = 2400): Promise<void> {
+  const p = document.createElement("div");
+  p.className = "fx-result" + (mine ? "" : " opp");
+  p.innerHTML = `<div class="fx-result-title">🎲 ${title}</div>` + lines.map((l) => `<div class="fx-result-line">${l}</div>`).join("");
+  document.body.appendChild(p);
+  await Promise.race([wait(ms), new Promise<void>((r) => (p.onclick = () => r()))]); // click to skip
+  p.classList.add("out");
+  await wait(280);
+  p.remove();
+}
+
+/** Live HP readout update during sequential playback (board re-renders later). */
+export function hpBarSet(side: ViewSide, hp: number, maxHp: number): void {
+  const num = document.getElementById("hp-" + side);
+  if (num) num.textContent = String(Math.max(0, hp));
+  const fill = document.getElementById("hpbar-" + side)?.querySelector("i") as HTMLElement | null;
+  if (fill) fill.style.width = Math.max(0, Math.min(100, (Math.max(0, hp) / Math.max(1, maxHp)) * 100)) + "%";
+}
+
+function gainLabel(anchor: DOMRect, text: string, cls: string): HTMLElement {
+  const lb = document.createElement("div");
+  lb.className = "fx-gain-label " + cls;
+  lb.textContent = text;
+  lb.style.left = anchor.left + anchor.width / 2 + "px";
+  lb.style.top = anchor.top - 8 + "px";
+  document.body.appendChild(lb);
+  return lb;
+}
+
+/** Rich "max mana increased" celebration around the mana pips (~2.2s). */
+export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
+  const bar = document.getElementById("hpbar-" + side)?.closest(".pbar") as HTMLElement | null;
+  const anchor = (bar?.querySelector(".pips") as HTMLElement | null) ?? bar;
+  if (!anchor) return;
+  const r = anchor.getBoundingClientRect();
+  const aura = document.createElement("div");
+  aura.className = "fx-mana-aura";
+  aura.style.left = r.left + r.width / 2 + "px";
+  aura.style.top = r.top + r.height / 2 + "px";
+  document.body.appendChild(aura);
+  for (let i = 0; i < 16; i++) {
+    const d = document.createElement("div");
+    d.className = "fx-mana-p";
+    const ang = Math.random() * Math.PI * 2;
+    const dist = 80 + Math.random() * 120;
+    d.style.setProperty("--sx", Math.cos(ang) * dist + "px");
+    d.style.setProperty("--sy", Math.sin(ang) * dist + "px");
+    d.style.left = r.left + r.width / 2 + "px";
+    d.style.top = r.top + r.height / 2 + "px";
+    d.style.animationDelay = i * 60 + "ms";
+    document.body.appendChild(d);
+    setTimeout(() => d.remove(), 1400 + i * 60);
+  }
+  anchor.classList.add("fx-pip-wave");
+  const lb = gainLabel(r, `◆ ${tt("fx.mana")} +${amount}`, "mana");
+  await wait(2100);
+  lb.classList.add("out"); aura.classList.add("out");
+  await wait(300);
+  lb.remove(); aura.remove();
+  anchor.classList.remove("fx-pip-wave");
+}
+
+/** Rich "max HP increased" celebration around the HP bar (~2s). */
+export async function maxHpSurge(side: ViewSide, amount: number): Promise<void> {
+  const bar = document.getElementById("hpbar-" + side);
+  if (!bar) return;
+  const r = bar.getBoundingClientRect();
+  bar.classList.add("fx-hp-bloom");
+  for (let i = 0; i < 12; i++) {
+    const d = document.createElement("div");
+    d.className = "fx-hp-p";
+    d.textContent = "✚";
+    d.style.left = r.left + Math.random() * r.width + "px";
+    d.style.top = r.top + r.height / 2 + "px";
+    d.style.animationDelay = i * 90 + "ms";
+    document.body.appendChild(d);
+    setTimeout(() => d.remove(), 1600 + i * 90);
+  }
+  const lb = gainLabel(r, `✚ ${tt("fx.maxhp")} +${amount}`, "hp");
+  await wait(2000);
+  lb.classList.add("out");
+  await wait(300);
+  lb.remove();
+  bar.classList.remove("fx-hp-bloom");
+}
+
+/** Small "-N" feedback on the mana pips when max mana DROPS. */
+export function manaDrop(side: ViewSide, amount: number): void {
+  const bar = document.getElementById("hpbar-" + side)?.closest(".pbar") as HTMLElement | null;
+  const anchor = (bar?.querySelector(".pips") as HTMLElement | null) ?? bar;
+  floatNum(anchor, `-${amount} ◆`, "dmg");
+}
+
+/**
+ * Death sequence (~2.8s): vignette, the loser's HP bar cracks and shatters
+ * into shards, screen quake, then a center verdict with the killing cause.
+ */
+export async function deathShatter(loserSide: ViewSide, won: boolean, cause: string | null): Promise<void> {
+  const bar = document.getElementById("hpbar-" + loserSide);
+  const r = bar ? bar.getBoundingClientRect() : null;
+  const vg = document.createElement("div");
+  vg.className = "fx-death-vignette" + (won ? " win" : "");
+  document.body.appendChild(vg);
+  bar?.classList.add("fx-shatter");
+  await wait(420);
+  if (r) {
+    for (let i = 0; i < 20; i++) {
+      const s = document.createElement("div");
+      s.className = "fx-shard";
+      s.style.left = r.left + Math.random() * r.width + "px";
+      s.style.top = r.top + Math.random() * r.height + "px";
+      s.style.setProperty("--dx", (Math.random() - 0.5) * 260 + "px");
+      s.style.setProperty("--dy", 40 + Math.random() * 160 + "px");
+      s.style.setProperty("--rot", (Math.random() - 0.5) * 540 + "deg");
+      document.body.appendChild(s);
+      setTimeout(() => s.remove(), 1300);
+    }
+  }
+  hpBarSet(loserSide, 0, 1);
+  document.querySelector(".game")?.classList.add("fx-quake");
+  await wait(600);
+  const v = document.createElement("div");
+  v.className = "fx-verdict " + (won ? "win" : "lose");
+  v.innerHTML = `<div class="fx-verdict-main">${won ? t("modal.win") : t("modal.lose")}</div>` +
+    (cause ? `<div class="fx-verdict-sub">${won ? "⚔" : "💀"} ${cause}</div>` : "");
+  document.body.appendChild(v);
+  await wait(1800);
+  v.classList.add("out");
+  await wait(280);
+  v.remove(); vg.remove();
+  document.querySelector(".game")?.classList.remove("fx-quake");
+  bar?.classList.remove("fx-shatter");
+}
+
+/** Floating "결과 보기" button while reviewing the log after the game ends. */
+export function reviewFab(onClick: () => void): void {
+  removeReviewFab();
+  const b = document.createElement("button");
+  b.id = "reviewFab";
+  b.className = "btn btn-gold fx-review-fab";
+  b.textContent = tt("modal.result");
+  b.onclick = onClick;
+  document.body.appendChild(b);
+}
+export function removeReviewFab(): void {
+  document.getElementById("reviewFab")?.remove();
 }

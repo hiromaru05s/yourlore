@@ -3,6 +3,13 @@ main = "src/index.ts"
 compatibility_date = "2024-11-01"
 compatibility_flags = ["nodejs_compat"]
 
+# --- Custom domain: yourlore.xyz (zone on the same CF account).
+#     `wrangler deploy` provisions DNS + TLS automatically. ---
+routes = [
+  { pattern = "yourlore.xyz", custom_domain = true },
+  { pattern = "www.yourlore.xyz", custom_domain = true },
+]
+
 # --- Static Assets: serve the built client from the SAME origin as the API,
 #     so cookies + relative /api and /ws calls just work (no CORS/cookie pain). ---
 [assets]
@@ -29,6 +36,7 @@ binding = "DB"
 database_name = "lore-db"
 database_id = "050d409e-913f-4a07-92b8-0d150ee6ce4d"
 
-# AUTH_SECRET is set via `wrangler secret put AUTH_SECRET`
+# AUTH_SECRET / GOOGLE_CLIENT_SECRET are set via `wrangler secret put <NAME>`
 [vars]
 APP_ORIGIN = "*"
+GOOGLE_CLIENT_ID = "955911680552-9i1tcrojam3v759dmampaga63d387gvt.apps.googleusercontent.com"

@@ -128,6 +128,16 @@ const D: Record<string, Entry> = {
   "net.oppwait": { ko: "상대의 연결이 끊겼습니다. 최대 30초간 기다립니다…", ja: "相手の接続が切れました。最大30秒待ちます…", en: "Opponent disconnected — waiting up to 30s…" },
   "tribe.suffix": { ko: "종족", ja: "種族", en: "tribe" },
   "tribe.footer": { ko: "동족을 필드에 모으면 발동 · 게임당 각 1회", ja: "同じ種族を場に揃えると発動 · 1ゲームに各1回", en: "Triggers when tribe members share your field · once per game each" },
+  // in-game FX / event playback
+  "fx.trap": { ko: "함정 발동!", ja: "罠発動！", en: "Trap Activated!" },
+  "fx.destroyed": { ko: "파괴!", ja: "破壊！", en: "Destroyed!" },
+  "fx.mana": { ko: "최대 마나", ja: "最大マナ", en: "Max Mana" },
+  "fx.maxhp": { ko: "최대 체력", ja: "最大体力", en: "Max HP" },
+  "fx.opp": { ko: "상대", ja: "相手", en: "Opponent" },
+  "fx.roll": { ko: "결과", ja: "結果", en: "Result" },
+  "death.cause": { ko: "원인", ja: "原因", en: "Cause" },
+  "modal.review": { ko: "로그 보기 (복기)", ja: "ログを見る (振り返り)", en: "Review Log" },
+  "modal.result": { ko: "결과 보기", ja: "結果を見る", en: "Show Result" },
 };
 
 export function t(key: string): string {

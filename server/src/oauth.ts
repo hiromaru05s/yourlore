@@ -74,14 +74,17 @@ export async function handleGoogleOAuth(env: Env, req: Request, path: string): P
     if (!payload.email || payload.email_verified === false) return htmlError("이메일이 확인되지 않은 구글 계정입니다.");
     const email = payload.email.trim().toLowerCase();
 
-    // upsert: existing email (password or oauth) logs straight in; new email creates an account
+    // upsert: existing email (password or oauth) logs straight in; new email creates an account.
+    // Google has already verified the address, so the account counts as verified either way.
     let row = await env.DB.prepare(`SELECT id FROM users WHERE email = ?`).bind(email).first<{ id: string }>();
     let id = row?.id;
     if (!id) {
       id = crypto.randomUUID();
       const display = (payload.name || email.split("@")[0]).slice(0, 24);
-      await env.DB.prepare(`INSERT INTO users (id, email, password, display, created_at) VALUES (?,?,?,?,?)`)
+      await env.DB.prepare(`INSERT INTO users (id, email, password, display, created_at, verified) VALUES (?,?,?,?,?,1)`)
         .bind(id, email, "oauth:google", display, Date.now()).run();
+    } else {
+      await env.DB.prepare(`UPDATE users SET verified = 1 WHERE id = ?`).bind(id).run();
     }
     const token = await createSession(env, id);
     const headers = new Headers({ Location: "/" });

@@ -41,7 +41,7 @@ export function confirmDialog(opts: { title: string; body?: string; confirm: str
   });
 }
 
-export function winModal(won: boolean, detail: string, onAgain: () => void, onHome: () => void): void {
+export function winModal(won: boolean, detail: string, onAgain: () => void, onHome: () => void, onReview?: () => void): void {
   const m = document.createElement("div");
   m.className = "modal";
   const title = won ? t("modal.win") : t("modal.lose");
@@ -49,10 +49,16 @@ export function winModal(won: boolean, detail: string, onAgain: () => void, onHo
   m.innerHTML = `<h2 style="color:${color}">${title}</h2><p style="color:var(--paper);font-size:14px">${detail}</p><p>${t("modal.gameover")}</p><div class="modal-row"></div>`;
   const row = m.querySelector(".modal-row")!;
   const home = document.createElement("button"); home.className = "btn btn-ghost"; home.textContent = t("modal.home");
-  const again = document.createElement("button"); again.className = "btn btn-gold"; again.textContent = t("modal.again");
   home.onclick = () => { closeOverlay(); onHome(); };
+  row.append(home);
+  if (onReview) {
+    const rev = document.createElement("button"); rev.className = "btn btn-ghost"; rev.textContent = t("modal.review");
+    rev.onclick = () => { closeOverlay(); onReview(); };
+    row.append(rev);
+  }
+  const again = document.createElement("button"); again.className = "btn btn-gold"; again.textContent = t("modal.again");
   again.onclick = () => { closeOverlay(); onAgain(); };
-  row.append(home, again);
+  row.append(again);
   mount(m);
 }
 
