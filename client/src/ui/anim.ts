@@ -6,12 +6,8 @@ import type { CardInst } from "../shared/types";
 import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS } from "../shared/cards";
 import { cardEl } from "./cardView";
 import { t, getLang } from "../i18n";
-import { sfx, type SfxName } from "./sound";
 
 export type ViewSide = "me" | "opp";
-
-/** Play a sound UNLESS the batch is fast-forwarding (jump-cuts stay silent). */
-function snd(name: SfxName): void { if (!fxSkip) sfx(name); }
 
 const EASE = "cubic-bezier(.4,0,.2,1)";
 
@@ -80,7 +76,6 @@ function backEl(): HTMLElement {
 export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish"): Promise<void> {
   const from = handRect(side); const row = rowRect(side);
   if (!from || !row) return;
-  snd("play");
   const node = floatAt(cardEl(card, { size: "hand" }), from);
   const cx = row.left + row.width / 2 - 50;
   const cy = row.top + row.height / 2 - 78;
@@ -122,7 +117,6 @@ export async function summonFromHand(card: CardInst, uid: string, side: ViewSide
 export async function trapSetAnim(side: ViewSide): Promise<void> {
   const from = handRect(side); const to = trapZoneRect(side);
   if (!from || !to) return;
-  snd("trapSet");
   const back = floatAt(backEl(), from);
   await raf();
   back.style.transition = `left .34s ${EASE}, top .34s ${EASE}, transform .34s ${EASE}`;
@@ -136,7 +130,6 @@ export async function trapSetAnim(side: ViewSide): Promise<void> {
 /** A trap fired: flip it face-up at the trap zone, hold, then send to discard. */
 export async function trapRevealAnim(card: CardInst, side: ViewSide, hold = 2000): Promise<void> {
   const at = trapZoneRect(side); if (!at) return;
-  snd("trap");
   const node = floatAt(cardEl(card, { size: "hand" }), { left: at.left + at.width / 2 - 50, top: at.top - 10 });
   node.classList.add("trap-flip");
   await wait(hold);
@@ -145,30 +138,17 @@ export async function trapRevealAnim(card: CardInst, side: ViewSide, hold = 2000
   await wait(460); pileFlash(discId(side)); node.remove();
 }
 
-/** A card was bought: 3D-flip the card at the market (back → face), then fly it to that player's discard. */
+/** A card was bought: pop the card UI at the market, then fly it to that player's discard. */
 export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | null): Promise<void> {
   const to = rectOf("#" + discId(side));
   if (!src || !to) { pileFlash(discId(side)); return; }
-  snd("buy");
-  // flip wrapper: back face + front face in a preserve-3d container
-  const wrapEl = document.createElement("div");
-  wrapEl.className = "flip3d";
-  const back = backEl();
-  back.classList.add("flip3d-face", "flip3d-back");
-  back.style.width = "100%"; back.style.height = "100%";
-  const front = cardEl(card, { size: "mkt" });
-  front.classList.add("flip3d-face", "flip3d-front");
-  wrapEl.append(back, front);
-  wrapEl.style.width = src.width + "px";
-  wrapEl.style.height = src.height + "px";
-  floatAt(wrapEl, src);
+  const node = floatAt(cardEl(card, { size: "mkt" }), src);
   await raf();
-  wrapEl.classList.add("flipping"); // rotateY 180→0 + scale up (CSS)
-  await wait(560);
-  wrapEl.style.transition = `left .5s ${EASE}, top .5s ${EASE}, transform .5s ${EASE}, opacity .5s`;
-  wrapEl.classList.add("flip-away");
-  wrapEl.style.left = to.left + "px"; wrapEl.style.top = to.top + "px"; wrapEl.style.opacity = "0";
-  await wait(520); pileFlash(discId(side)); wrapEl.remove();
+  node.style.transition = `transform .26s ${EASE}`; node.style.transform = "scale(1.4)";
+  await wait(320);
+  node.style.transition = `left .5s ${EASE}, top .5s ${EASE}, transform .5s ${EASE}, opacity .5s`;
+  node.style.left = to.left + "px"; node.style.top = to.top + "px"; node.style.transform = "scale(.45)"; node.style.opacity = "0";
+  await wait(520); pileFlash(discId(side)); node.remove();
 }
 
 function byUid(uid: string): HTMLElement | null {
@@ -192,7 +172,6 @@ export function floatNum(anchor: Element | null, text: string, kind: "dmg" | "he
 }
 
 export function hpFeedback(side: ViewSide, kind: "dmg" | "heal", amount: number): void {
-  snd(kind === "dmg" ? "damage" : "heal");
   const bar = document.getElementById("hpbar-" + side);
   const num = document.getElementById("hp-" + side);
   if (bar) { bar.classList.add("shake"); setTimeout(() => bar.classList.remove("shake"), 400); }
@@ -228,8 +207,7 @@ export async function attackStrike(uid: string, targetUid: string | null, defend
   const tEl: Element | null = targetUid ? byUid(targetUid) : document.getElementById("hpbar-" + defender);
   const to = tEl ? tEl.getBoundingClientRect() : null;
   const from = n.getBoundingClientRect();
-  if (!to) { snd("attack"); lunge(uid, defender === "opp" ? "up" : "down"); await wait(460); onImpact?.(); return; }
-  snd("attack");
+  if (!to) { lunge(uid, defender === "opp" ? "up" : "down"); await wait(460); onImpact?.(); return; }
 
   const cx = to.left + to.width / 2 - (from.left + from.width / 2);
   const cy = to.top + to.height / 2 - (from.top + from.height / 2);
@@ -248,7 +226,6 @@ export async function attackStrike(uid: string, targetUid: string | null, defend
   ], { duration: dur, easing: "linear", fill: "none" });
 
   await wait(dur * 0.6); // ...until the moment of contact
-  snd("impact");
   impactBurst(to.left + to.width / 2, to.top + to.height / 2, direct);
   boardShake(direct ? "hard" : "soft");
   onImpact?.();
@@ -319,7 +296,6 @@ export function flyCardFrame(frame: string, from: DOMRect | null, to: DOMRect | 
 }
 
 export function animateDraw(handEl: HTMLElement, count: number): void {
-  snd("draw");
   const cards = handEl.querySelectorAll(".card");
   const start = Math.max(0, cards.length - count);
   for (let i = start; i < cards.length; i++) {
@@ -430,7 +406,6 @@ export async function ghostSummon(card: CardInst, side: ViewSide, slotIndex: num
   const from = handRect(side);
   const slot = monSlotRect(side, slotIndex);
   if (!from || !slot) return null;
-  snd("summon");
   const node = floatAt(cardEl(card, { size: "hand" }), from);
   node.style.transformOrigin = "top left";
   await raf();
@@ -447,7 +422,6 @@ export async function ghostSummon(card: CardInst, side: ViewSide, slotIndex: num
 /** Kill a summon ghost: death flash then fly a card frame to that side's discard. */
 export async function ghostDie(node: HTMLElement, side: ViewSide): Promise<void> {
   const from = node.getBoundingClientRect();
-  snd("death");
   node.classList.add("mdie");
   await wait(320);
   node.remove();
@@ -461,7 +435,6 @@ export async function destroyAnim(uid: string, side: ViewSide): Promise<void> {
   const n = byUid(uid);
   if (!n) return;
   const from = n.getBoundingClientRect();
-  snd("death");
   n.classList.add("mdie");
   await wait(320);
   (n as HTMLElement).style.visibility = "hidden";
@@ -472,7 +445,6 @@ export async function destroyAnim(uid: string, side: ViewSide): Promise<void> {
 
 /** Random-card outcome popup. Big center card for your plays, compact upper popup for the opponent's. */
 export async function resultPopup(title: string, lines: string[], mine: boolean, ms = 2400): Promise<void> {
-  snd("pop");
   const p = document.createElement("div");
   p.className = "fx-result" + (mine ? "" : " opp");
   p.innerHTML = `<div class="fx-result-title">🎲 ${title}</div>` + lines.map((l) => `<div class="fx-result-line">${l}</div>`).join("");
@@ -503,10 +475,9 @@ function gainLabel(anchor: DOMRect, text: string, cls: string): HTMLElement {
 
 /** Rich "max mana increased" celebration around the mana pips (~2.2s). */
 export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
-  const bar = document.getElementById("hpbar-" + side)?.closest(".pbar") as HTMLElement | null;
+  const bar = document.getElementById("hpbar-" + side)?.closest(".meta-panel") as HTMLElement | null;
   const anchor = (bar?.querySelector(".pips") as HTMLElement | null) ?? bar;
   if (!anchor) return;
-  snd("mana");
   const r = anchor.getBoundingClientRect();
   const aura = document.createElement("div");
   aura.className = "fx-mana-aura";
@@ -539,7 +510,6 @@ export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
 export async function maxHpSurge(side: ViewSide, amount: number): Promise<void> {
   const bar = document.getElementById("hpbar-" + side);
   if (!bar) return;
-  snd("maxhp");
   const r = bar.getBoundingClientRect();
   bar.classList.add("fx-hp-bloom");
   for (let i = 0; i < 12; i++) {
@@ -562,7 +532,7 @@ export async function maxHpSurge(side: ViewSide, amount: number): Promise<void> 
 
 /** Small "-N" feedback on the mana pips when max mana DROPS. */
 export function manaDrop(side: ViewSide, amount: number): void {
-  const bar = document.getElementById("hpbar-" + side)?.closest(".pbar") as HTMLElement | null;
+  const bar = document.getElementById("hpbar-" + side)?.closest(".meta-panel") as HTMLElement | null;
   const anchor = (bar?.querySelector(".pips") as HTMLElement | null) ?? bar;
   floatNum(anchor, `-${amount} ◆`, "dmg");
 }
@@ -574,7 +544,6 @@ export function manaDrop(side: ViewSide, amount: number): void {
 export async function deathShatter(loserSide: ViewSide, won: boolean, cause: string | null): Promise<void> {
   const bar = document.getElementById("hpbar-" + loserSide);
   const r = bar ? bar.getBoundingClientRect() : null;
-  snd("death");
   const vg = document.createElement("div");
   vg.className = "fx-death-vignette" + (won ? " win" : "");
   document.body.appendChild(vg);

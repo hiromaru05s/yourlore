@@ -46,7 +46,6 @@ export class GameView {
         <div class="topbar">
           <div class="brand"><div class="mark"></div><h1>LORE</h1></div>
           <div class="turn-info" id="turnInfo"></div>
-          <button class="log-toggle" id="logToggle">${t("game.log")}</button>
         </div>
         <div class="stage">
           <div class="board-col">
@@ -71,21 +70,10 @@ export class GameView {
     this.logEl = this.q("log");
     (this.q("endBtn") as HTMLButtonElement).onclick = () => this.h.onEndTurn();
     (this.q("surrenderBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
-    // log open/close — closed by default, toggle anytime (desktop: topbar button, mobile: fab).
-    // State persists so the player's preference sticks across games.
-    const game = this.root.querySelector(".game") as HTMLElement;
-    let open = false;
-    try { open = localStorage.getItem("lore_log_open") === "1"; } catch { /* ignore */ }
-    const applyLog = () => {
-      game.classList.toggle("log-open", open);
-      this.q("logFab").textContent = open ? "✕" : "📜";
-      this.q("logFab").classList.toggle("open", open);
-      this.q("logToggle").classList.toggle("on", open);
-    };
-    const toggleLog = () => { open = !open; try { localStorage.setItem("lore_log_open", open ? "1" : "0"); } catch { /* ignore */ } applyLog(); };
-    (this.q("logFab")).onclick = toggleLog;
-    (this.q("logToggle")).onclick = toggleLog;
-    applyLog();
+    // mobile: toggle the log drawer
+    const fab = this.q("logFab");
+    const panel = this.q("logPanel");
+    fab.onclick = () => { const open = panel.classList.toggle("open"); fab.textContent = open ? "✕" : "📜"; };
     document.addEventListener("contextmenu", (e) => e.preventDefault());
   }
 
@@ -108,7 +96,6 @@ export class GameView {
     this.q("endBtn").textContent = t("game.endturn");
     this.q("surrenderBtn").textContent = t("game.surrender");
     this.q("logTitle").textContent = t("game.log");
-    this.q("logToggle").textContent = t("game.log");
 
     // opponent fanned hand (face-down)
     const oh = this.q("oppHand"); oh.innerHTML = "";
@@ -147,23 +134,21 @@ export class GameView {
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {
     row.innerHTML = "";
     const sortByCost = (cards: CardInst[]) => [...cards].sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
+    const onTurn = !g.over && g.cur === (g.players.indexOf(p) as Side);
+
+    // inline pile cells (leading edge of each zone row): 묘지 on the monster row, 덱 on the spell/trap row
+    const graveTop = p.discard[p.discard.length - 1];
+    const gravePile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, graveTop ? frameFor(graveTop.t) : null, graveTop ?? null, t("game.discard"),
+      () => cardPicker(`${p.name} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => { /* browse only */ }));
     const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, FRAME_BACK, null, t("game.deck"),
       isMe ? () => cardPicker(`${t("game.deck")} (${p.deck.length})`, sortByCost(p.deck), () => { /* browse only */ }) : undefined);
-    // both discards public (top face-up, zoomable + click to browse)
-    const discTop = p.discard[p.discard.length - 1];
-    const discPile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, discTop ? frameFor(discTop.t) : null, discTop ?? null, t("game.discard"),
-      () => cardPicker(`${isMe ? "" : t("game.supply.opp").replace(t("game.supply"), "").trim() + " "}${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => { /* browse only */ }));
 
     const block = document.createElement("div");
-    block.className = "field-block" + (g.cur === g.players.indexOf(p) ? " is-turn" : "");
-    if (!g.over && g.cur === (g.players.indexOf(p) as Side)) block.classList.add("is-turn");
-
-    // player bar
-    block.appendChild(this.barEl(g, p, isMe));
+    block.className = "field-block" + (isMe ? " is-mine" : " is-opp") + (onTurn ? " is-turn" : "");
 
     // monster zone
     const mz = document.createElement("div");
-    mz.className = "zone";
+    mz.className = "zone zone-mon";
     const targetableMon = !!pending && ((pending.kind === "oppMon" && !isMe) || (pending.kind === "myMon" && isMe)) && myTurn;
     p.field.forEach((m, idx) => {
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over;
@@ -171,7 +156,6 @@ export class GameView {
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
       bindZoom(card, m);
-      // my turn: drag to rearrange my own monsters (tap still attacks)
       if (isMe && myTurn && !pending && !g.over && p.field.length > 1) this.enableReorder(card, idx, mz);
       mz.appendChild(card);
     });
@@ -179,7 +163,7 @@ export class GameView {
 
     // spell/trap zone
     const sz = document.createElement("div");
-    sz.className = "zone";
+    sz.className = "zone zone-st";
     p.traps.forEach((t) => {
       if (isMe && t.card.id !== "HIDDEN") {
         const card = cardEl(t.card, { badge: "SET" });
@@ -192,7 +176,6 @@ export class GameView {
         sz.appendChild(cb);
       }
     });
-    // persistent enchantments (public, face-up, with remaining-turn badge)
     p.enchants.forEach((e) => {
       const card = cardEl(e.card, { badge: `${e.turns}T` });
       bindZoom(card, e.card);
@@ -200,16 +183,25 @@ export class GameView {
     });
     for (let i = p.traps.length + p.enchants.length; i < ST_SLOTS; i++) sz.appendChild(this.slotEl());
 
+    // each zone row = [leading pile] + [slots] (pile on the leading edge; opp mirrors).
+    // Monster zone nearest the center line: me → mon on top, opp → mon on bottom.
+    const monRow = this.zoneRow(gravePile, mz, isMe);
+    const stRow = this.zoneRow(deckPile, sz, isMe);
     const zones = document.createElement("div");
-    // Mirror the opponent's board: their monster zone sits nearest the center line
-    // (like a real TCG table facing you), spell/trap zone on the far side.
-    if (isMe) zones.append(mz, sz);
-    else zones.append(sz, mz);
-    block.appendChild(zones);
+    zones.className = "zones";
+    if (isMe) zones.append(monRow, stRow); else zones.append(stRow, monRow);
 
-    // layout: opponent => discard | block | deck ; me => deck | block | discard
-    if (isMe) row.append(deckPile, block, discPile);
-    else row.append(discPile, block, deckPile);
+    block.append(zones, this.metaPanel(g, p, isMe));
+    row.append(block);
+  }
+
+  /** One zone line: pile cell at the leading edge (left for me, right for opp). */
+  private zoneRow(pile: HTMLElement, zone: HTMLElement, isMe: boolean): HTMLElement {
+    const rowEl = document.createElement("div");
+    rowEl.className = "zone-row";
+    pile.classList.add("inline-pile");
+    if (isMe) rowEl.append(pile, zone); else rowEl.append(zone, pile);
+    return rowEl;
   }
 
   /**
@@ -295,9 +287,10 @@ export class GameView {
     });
   }
 
-  private barEl(g: GameState, p: PlayerState, isMe: boolean): HTMLElement {
-    const bar = document.createElement("div");
-    bar.className = "pbar";
+  /** Right-side consolidated info panel: name/turn · HP · mana · deck/exile · tribe · timer. */
+  private metaPanel(g: GameState, p: PlayerState, isMe: boolean): HTMLElement {
+    const panel = document.createElement("div");
+    panel.className = "meta-panel";
     const emax = effMaxMana(p);
     const onTurn = g.cur === (g.players.indexOf(p) as Side) && !g.over;
     const hpPct = Math.max(0, p.hp) / p.maxHp * 100;
@@ -306,13 +299,12 @@ export class GameView {
     const total = Math.max(emax, p.maxMana);
     for (let i = 0; i < total; i++) {
       let cl = "pip";
-      if (i < p.mana) cl += " full"; // current mana shown live for BOTH players
+      if (i < p.mana) cl += " full";
       if (i >= emax) cl += " locked";
       pips.push(`<span class="${cl}"></span>`);
     }
-    const manaTxt = `${p.mana}/${emax}`;
 
-    // 종족 시너지 진행도 칩 (필드의 서로 다른 종족 카드 수 / 다음 임계값)
+    // 종족 시너지 진행도 칩
     const tribeChips: string[] = [];
     const byTribe = new Map<string, Set<string>>();
     for (const m of p.field) if (m.tribe) { if (!byTribe.has(m.tribe)) byTribe.set(m.tribe, new Set()); byTribe.get(m.tribe)!.add(m.id); }
@@ -323,41 +315,41 @@ export class GameView {
       const nm = TRIBES[tr]?.[getLang()]?.name ?? tr;
       const done = next === undefined;
       const ready = !done && ids.size >= (next as number);
-      tribeChips.push(`<span style="display:inline-block;margin-left:5px;padding:1px 7px;border-radius:9px;font-size:11px;line-height:16px;border:1px solid ${done ? "#5a5" : ready ? "#fd6" : "#556"};color:${done ? "#8f8" : ready ? "#ffd166" : "#9ab"}">${nm} ${done ? "✓" : `${ids.size}/${next}`}</span>`);
+      tribeChips.push(`<span class="tribe-chip ${done ? "done" : ready ? "ready" : ""}">${nm} ${done ? "✓" : `${ids.size}/${next}`}</span>`);
     }
-    bar.innerHTML = `
-      <span class="pname"><span class="who"></span>${p.name}
-        <span class="turn-chip ${onTurn ? "on" : ""}">${onTurn ? t("game.myturn") : t("game.waiting")}</span>${tribeChips.join("")}</span>
-      <span class="hp">
+
+    panel.innerHTML = `
+      <div class="mp-top">
+        <span class="mp-name"><span class="who"></span>${p.name}</span>
+        <span class="turn-chip ${onTurn ? "on" : ""}">${onTurn ? t("game.myturn") : t("game.waiting")}</span>
+        <span class="mp-timer" id="timer-${isMe ? "me" : "opp"}"></span>
+      </div>
+      <div class="mp-hp">
         <span class="lbl">${t("game.hp")}</span>
         <span class="num"><b id="hp-${isMe ? "me" : "opp"}">${Math.max(0, p.hp)}</b><span class="muted">/${p.maxHp}</span></span>
         <span class="hpbar" id="hpbar-${isMe ? "me" : "opp"}"><i style="width:${hpPct}%"></i></span>
-      </span>
-      <span class="mana"><span class="lbl">${t("game.mana")}</span><span class="pips">${pips.join("")}</span><span class="mnum">${manaTxt}</span></span>`;
-    // 덱 구성 버튼 (마나 표시 아래): 내 쪽은 전체, 상대는 공개 정보(집계 멀티셋+묘지+필드+영구물)
-    const manaEl = bar.querySelector(".mana")!;
-    const wrap = document.createElement("span");
-    wrap.style.cssText = "display:inline-flex;flex-direction:column;align-items:flex-end;gap:3px;margin-left:auto;align-self:flex-start";
-    manaEl.replaceWith(wrap);
-    wrap.appendChild(manaEl);
-    const dbtn = document.createElement("button");
-    dbtn.className = "btn btn-ghost";
-    dbtn.style.cssText = "padding:1px 9px;font-size:11px;line-height:16px";
+      </div>
+      <div class="mp-mana"><span class="lbl">${t("game.mana")}</span><span class="pips">${pips.join("")}</span><span class="mnum">${p.mana}/${emax}</span></div>
+      <div class="mp-btns"></div>
+      ${tribeChips.length ? `<div class="mp-tribes">${tribeChips.join("")}</div>` : ""}`;
+
+    const btns = panel.querySelector(".mp-btns")!;
     const cards = this.collectionOf(p, isMe);
+    const dbtn = document.createElement("button");
+    dbtn.className = "btn btn-ghost mp-btn";
     dbtn.textContent = `${t("deck.view")} ${cards.length}`;
     dbtn.onclick = () => cardPicker(`${p.name} — ${t("deck.view")} (${cards.length})`, cards, () => { /* browse only */ });
-    wrap.appendChild(dbtn);
-    // 게임에서 제외된 카드 (공개 존, 양쪽 각각)
+    btns.appendChild(dbtn);
     const removed = (p.removed ?? []).slice().sort((a, b) => a.cost - b.cost);
     if (removed.length > 0) {
       const rbtn = document.createElement("button");
-      rbtn.className = "btn btn-ghost";
-      rbtn.style.cssText = "padding:1px 9px;font-size:11px;line-height:16px;opacity:.8";
+      rbtn.className = "btn btn-ghost mp-btn";
+      rbtn.style.opacity = ".8";
       rbtn.textContent = `${t("deck.removed")} ${removed.length}`;
       rbtn.onclick = () => cardPicker(`${p.name} — ${t("deck.removed")} (${removed.length})`, removed, () => { /* browse only */ });
-      wrap.appendChild(rbtn);
+      btns.appendChild(rbtn);
     }
-    return bar;
+    return panel;
   }
 
   /** Full owned-card list for the deck-view button (opponent side uses only public info). */

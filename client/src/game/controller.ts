@@ -18,7 +18,6 @@ import { cardPicker, confirmDialog, treasureModal, winModal } from "../ui/modal"
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { t, getLang, cardName, onLangChange } from "../i18n";
-import { sfx } from "../ui/sound";
 
 export interface ControllerExits {
   onHome(): void;
@@ -45,6 +44,13 @@ export abstract class BaseController implements BoardHandlers {
   private unsubLang: () => void;
   private fxGen = 0; // batches queued so far
   private skipGen = 0; // batches up to this gen fast-forward
+  // ---- turn timer ----
+  private timerKey = "";
+  private timerLeft = 0;
+  private timerInt: number | null = null;
+  private warned25 = false;
+  private toastEl: HTMLElement | null = null;
+  private static readonly TURN_SECS = 50;
 
   constructor(root: HTMLElement, you: Side, exits: ControllerExits) {
     this.you = you;
@@ -228,9 +234,6 @@ export abstract class BaseController implements BoardHandlers {
         case "draw":
           if (e.player === this.you) myDraws += e.count;
           break;
-        case "matchDraw":
-          await A.eventBanner(`⏳ ${t("modal.draw")}`, t("modal.draw.body"), "info", 2000);
-          break;
         case "treasure": {
           const mine = e.player === this.you && !e.isBot;
           const text = getLang() === "ja" ? e.textJa : getLang() === "en" ? logToEn(e.text) : e.text;
@@ -260,8 +263,6 @@ export abstract class BaseController implements BoardHandlers {
     // ghosts overlap the freshly-rendered real cards — drop them next frame
     requestAnimationFrame(() => ghosts.forEach((g) => g.el.remove()));
     if (myDraws > 0) A.animateDraw(document.getElementById("hand") as HTMLElement, myDraws);
-    // your turn begins → a soft chime
-    if (!res.state.over && res.state.cur === this.you && prev.cur !== this.you) sfx("turn");
 
     // ---- death sequence: HP orb shatters + cause of death, before the result modal ----
     if (res.state.over && res.state.winner != null && !this.winShown) {
@@ -315,6 +316,7 @@ export abstract class BaseController implements BoardHandlers {
   }
 
   private afterApply(res: ReduceResult): void {
+    this.syncTimer();
     if (res.state !== this.state) return; // a newer batch is queued — let it drive follow-ups
     const g = this.state;
     if (g.over) { this.showWin(); return; }
@@ -336,21 +338,83 @@ export abstract class BaseController implements BoardHandlers {
     this.maybeBot();
   }
 
+  // ============================================================
+  // turn timer — 50s/turn. Popups at 25s (1.5s) and a countdown from
+  // 5s; the timer chip shakes at ≤5s; on 0 the active player's turn
+  // auto-ends (online: only my own client submits, server validates).
+  // ============================================================
+  private syncTimer(): void {
+    if (this.dead) return;
+    const g = this.state;
+    if (!g || g.over) { this.stopTimer(); return; }
+    const key = `${g.turn}:${g.cur}`;
+    if (key !== this.timerKey) {
+      this.timerKey = key;
+      this.timerLeft = BaseController.TURN_SECS;
+      this.warned25 = false;
+      if (this.timerInt) clearInterval(this.timerInt);
+      this.renderTimer();
+      this.timerInt = window.setInterval(() => this.tickTimer(), 1000);
+    }
+  }
+
+  private tickTimer(): void {
+    if (this.dead || this.state.over) { this.stopTimer(); return; }
+    this.timerLeft--;
+    this.renderTimer();
+    const s = this.timerLeft;
+    if (s === 25 && !this.warned25) { this.warned25 = true; this.turnToast("½", "small", 1500); }
+    else if (s <= 5 && s >= 1) this.turnToast(String(s), "big", 900);
+    if (s <= 0) {
+      if (this.timerInt) { clearInterval(this.timerInt); this.timerInt = null; }
+      // only the active player's own client forces the end (server validates online)
+      if (this.state.cur === this.you && !this.state.pending && !this.state.over) this.submit({ type: "endTurn" });
+    }
+  }
+
+  private renderTimer(): void {
+    const active = this.state.cur === this.you ? "me" : "opp";
+    const other = active === "me" ? "opp" : "me";
+    const el = document.getElementById(`timer-${active}`);
+    const clear = document.getElementById(`timer-${other}`);
+    if (clear) { clear.className = "mp-timer"; clear.textContent = ""; }
+    if (!el) return;
+    const s = Math.max(0, this.timerLeft);
+    el.textContent = `${s}s`;
+    el.className = "mp-timer run" + (s <= 5 ? " warn shake" : "");
+  }
+
+  private turnToast(text: string, size: "big" | "small", ms: number): void {
+    this.toastEl?.remove();
+    const el = document.createElement("div");
+    el.className = `turn-toast ${size}`;
+    el.textContent = text;
+    document.body.appendChild(el);
+    this.toastEl = el;
+    setTimeout(() => { el.classList.add("out"); setTimeout(() => el.remove(), 300); }, ms);
+  }
+
+  private stopTimer(): void {
+    if (this.timerInt) { clearInterval(this.timerInt); this.timerInt = null; }
+    this.timerKey = "";
+    document.getElementById("timer-me")?.replaceChildren();
+    document.getElementById("timer-opp")?.replaceChildren();
+  }
+
   protected showWin(): void {
-    if (this.winShown || !this.state.over) return;
+    this.stopTimer();
+    if (this.winShown || this.state.winner == null) return;
     this.winShown = true;
-    const draw = this.state.winner == null; // 75-turn limit
-    sfx(draw ? "drawGame" : this.state.winner === this.you ? "win" : "lose");
     // bot games are client-local — report the result for analytics (online games are recorded server-side)
-    if (this.state.mode === "bot") void api.trackBot(draw ? null : this.state.winner === this.you);
-    aCapture("game_end", { mode: this.state.mode, won: this.state.winner === this.you, draw, turns: this.state.turn });
+    if (this.state.mode === "bot") void api.trackBot(this.state.winner === this.you);
+    aCapture("game_end", { mode: this.state.mode, won: this.state.winner === this.you, turns: this.state.turn });
     this.openResult();
   }
 
   /** Result modal — reopenable from the review FAB so the log can be studied (복기). */
   private openResult(): void {
     A.removeReviewFab();
-    const won = this.state.winner == null ? null : this.state.winner === this.you;
+    const won = this.state.winner === this.you;
     const meHp = Math.max(0, this.state.players[this.you].hp);
     const oppHp = Math.max(0, this.state.players[1 - this.you].hp);
     const detail = `${t("modal.hp.me")} ${meHp} · ${t("modal.hp.opp")} ${oppHp}`;
@@ -365,6 +429,8 @@ export abstract class BaseController implements BoardHandlers {
 
   destroy(): void {
     this.dead = true;
+    this.stopTimer();
+    this.toastEl?.remove();
     document.removeEventListener("keydown", this.onKey);
     A.removeReviewFab();
     this.unsubLang();

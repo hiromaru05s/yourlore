@@ -26,95 +26,133 @@
 .gear:hover { color: var(--brass); border-color: var(--brass-dim); }
 
 /* ---- stage ---- */
-.stage { display: grid; grid-template-columns: 1fr 296px; gap: 10px; min-height: 0; overflow: hidden; }
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) clamp(220px, 21vw, 300px); gap: 10px; min-height: 0; overflow: hidden; }
 .board-col { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 5px; min-height: 0; align-content: start; }
 
 /* opponent fanned hand (face-down), overflowing from top */
 .opp-hand { display: flex; justify-content: center; height: 22px; margin-top: -3px; position: relative; z-index: 40; }
 .opp-hand .card--back { width: 44px; height: 70px; margin: 0 -14px; transform-origin: bottom center; }
 
-/* a player row: [pile] [field] [pile] */
-.prow { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; }
+/* a player row: the field-block is a centered content-width cluster (zones + meta panel),
+   so the play area stays snug instead of stretching across the whole width. */
+.prow { display: flex; justify-content: center; }
 .field-block {
   position: relative;
+  display: flex; align-items: stretch; gap: 12px; max-width: 100%;
   background:
-    radial-gradient(130% 120% at 50% 0%, #ffffff06, transparent 55%),
-    linear-gradient(180deg, #16203466, #090e1899);
-  border: 1px solid #31405f;
-  border-radius: 12px; padding: 5px 10px;
-  box-shadow: inset 0 1px 0 #ffffff08, inset 0 -1px 0 #00000066, inset 0 0 32px #0004, 0 6px 20px #0005;
+    radial-gradient(130% 120% at 30% 0%, #ffffff06, transparent 55%),
+    linear-gradient(180deg, #141d2e88, #080d16aa);
+  border: 1px solid #2a3548;
+  border-radius: 12px; padding: 6px 10px;
+  box-shadow: inset 0 1px 0 #ffffff08, inset 0 -1px 0 #00000066, 0 6px 20px #0005;
+  transition: background .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
 }
-.field-block::before {
-  /* engraved brass corner brackets */
-  content: ""; position: absolute; inset: 3px; border-radius: 9px; pointer-events: none; opacity: .45;
-  --ck: linear-gradient(var(--brass-dim), var(--brass-dim));
-  background:
-    var(--ck) top left    / 14px 1px no-repeat, var(--ck) top left    / 1px 14px no-repeat,
-    var(--ck) top right   / 14px 1px no-repeat, var(--ck) top right   / 1px 14px no-repeat,
-    var(--ck) bottom left / 14px 1px no-repeat, var(--ck) bottom left / 1px 14px no-repeat,
-    var(--ck) bottom right/ 14px 1px no-repeat, var(--ck) bottom right/ 1px 14px no-repeat;
-  transition: opacity .3s var(--ease);
+/* ---- BOLD turn indication: active player glows, idle player is dimmed ---- */
+.field-block:not(.is-turn) { opacity: .82; filter: saturate(.7); }
+.field-block.is-mine.is-turn {
+  border-color: #6fc6e8; opacity: 1; filter: none;
+  background: radial-gradient(130% 130% at 30% 0%, #6fc6e820, transparent 60%), linear-gradient(180deg, #14273acc, #0a1420);
+  box-shadow: inset 0 0 0 1px #6fc6e83a, inset 0 0 34px #6fc6e814, 0 0 26px #6fc6e820, 0 6px 20px #0006;
 }
-.field-block.is-turn {
-  border-color: #c79a4b55;
-  animation: turnGlow 3.4s ease-in-out infinite;
-}
-.field-block.is-turn::before { opacity: .95; --ck: linear-gradient(var(--brass), var(--brass)); filter: drop-shadow(0 0 4px #c79a4b66); }
-@keyframes turnGlow {
-  0%, 100% { box-shadow: inset 0 1px 0 #ffffff08, inset 0 0 26px #c79a4b10, 0 0 18px #c79a4b0a, 0 6px 20px #0005; }
-  50%      { box-shadow: inset 0 1px 0 #ffffff08, inset 0 0 40px #c79a4b1c, 0 0 28px #c79a4b1a, 0 6px 20px #0005; }
+.field-block.is-opp.is-turn {
+  border-color: var(--vermil-hi); opacity: 1; filter: none;
+  background: radial-gradient(130% 130% at 30% 0%, #d8542f24, transparent 60%), linear-gradient(180deg, #2a1620cc, #160b12);
+  box-shadow: inset 0 0 0 1px #ff7a4d3a, inset 0 0 34px #d8542f16, 0 0 26px #d8542f24, 0 6px 20px #0006;
 }
 
-.pbar { display: flex; align-items: center; gap: 12px; margin-bottom: 5px; }
-.pbar .pname { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; color: var(--paper); display: flex; align-items: center; gap: 8px; }
-.pbar .pname .who { width: 18px; height: 18px; transform: rotate(45deg); border: 1.5px solid var(--brass-dim); }
-.pbar .turn-chip { font-size: 9px; letter-spacing: .14em; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; background: #ffffff0c; color: var(--paper-faint); }
-.pbar .turn-chip.on { background: linear-gradient(180deg, #ff6a40, var(--vermil)); color: #fff; box-shadow: 0 0 12px #d8542f55, inset 0 1px 0 #ffffff40; text-shadow: 0 1px 2px #0008; }
+/* ---- zones column (two rows: monster / spell-trap) — sized to their slots ---- */
+.zones { display: flex; flex-direction: column; gap: var(--slot-gap); flex: 0 1 auto; min-width: 0; }
+.zone-row { display: flex; align-items: center; gap: var(--slot-gap); }
+.zone { display: flex; gap: var(--slot-gap); flex: 0 1 auto; }
+.zone-row > .inline-pile { flex: 0 0 auto; }
 
-.hp { display: flex; align-items: center; gap: 7px; }
-.hp .lbl { font-size: 9px; letter-spacing: .14em; color: var(--paper-faint); }
-.hp .num { font-family: var(--mono); font-weight: 700; font-size: 13px; min-width: 58px; }
-.hpbar { width: 150px; height: 10px; border-radius: 6px; background: linear-gradient(180deg, #04060a, #0c1119); border: 1px solid #00000090; overflow: hidden; box-shadow: inset 0 2px 4px #000c, 0 1px 0 #ffffff0a; position: relative; }
+/* ---- right-side meta panel: name/turn · HP · mana · buttons · tribe · timer ---- */
+.meta-panel {
+  flex: 0 0 clamp(150px, 15vw, 196px);
+  display: flex; flex-direction: column; gap: 5px; justify-content: center;
+  padding-left: 12px; border-left: 1px solid var(--line-soft);
+}
+.mp-top { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.mp-name { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: var(--paper); display: flex; align-items: center; gap: 7px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mp-name .who { width: 15px; height: 15px; flex: 0 0 auto; transform: rotate(45deg); border: 1.5px solid var(--brass-dim); }
+.turn-chip { font-size: 9px; letter-spacing: .12em; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; background: #ffffff0c; color: var(--paper-faint); white-space: nowrap; }
+.turn-chip.on { background: linear-gradient(180deg, #7fd0ec, var(--cyan)); color: #05202c; font-weight: 700; box-shadow: 0 0 10px #6fc6e855; }
+.field-block.is-opp .turn-chip.on { background: linear-gradient(180deg, #ff6a40, var(--vermil)); color: #fff; box-shadow: 0 0 10px #d8542f55; }
+
+.mp-hp { display: flex; align-items: center; gap: 7px; }
+.mp-hp .lbl, .mp-mana .lbl { font-size: 9px; letter-spacing: .1em; color: var(--paper-faint); flex: 0 0 auto; }
+.mp-hp .num { font-family: var(--mono); font-weight: 700; font-size: 13px; }
+.hpbar { flex: 1 1 auto; min-width: 40px; height: 10px; border-radius: 6px; background: linear-gradient(180deg, #04060a, #0c1119); border: 1px solid #00000090; overflow: hidden; box-shadow: inset 0 2px 4px #000c; position: relative; }
 .hpbar > i { display: block; height: 100%; border-radius: 5px; background: linear-gradient(180deg, #ff9a68, var(--vermil) 45%, #8a1f12); box-shadow: 0 0 8px #d8542f55, inset 0 1px 0 #ffd0abaa; transition: width .4s var(--ease); }
-.hpbar::after { /* glass highlight */ content: ""; position: absolute; left: 1px; right: 1px; top: 1px; height: 40%; border-radius: 4px; background: linear-gradient(180deg, #ffffff22, transparent); pointer-events: none; }
-.hp .num.hp-hit { animation: hpHit .45s; }
-.hp .num.hp-heal { animation: hpHeal .45s; }
+.hpbar::after { content: ""; position: absolute; left: 1px; right: 1px; top: 1px; height: 40%; border-radius: 4px; background: linear-gradient(180deg, #ffffff22, transparent); pointer-events: none; }
+.hp-hit { animation: hpHit .45s; }
+.hp-heal { animation: hpHeal .45s; }
 @keyframes hpHit { 0%,100% { color: inherit } 40% { color: var(--vermil-hi); transform: scale(1.25) } }
 @keyframes hpHeal { 0%,100% { color: inherit } 40% { color: var(--good); transform: scale(1.25) } }
 .hpbar.shake { animation: shake .4s; }
 @keyframes shake { 0%,100% { transform: translateX(0) } 25% { transform: translateX(-3px) } 75% { transform: translateX(3px) } }
 
-.mana { display: flex; align-items: center; gap: 7px; margin-left: auto; }
-.mana .lbl { font-size: 9px; letter-spacing: .14em; color: var(--paper-faint); }
-.pips { display: flex; gap: 4px; }
-.pip { width: 13px; height: 13px; transform: rotate(45deg); border: 1.5px solid #2c4a66; background: #0a1422; border-radius: 2px; }
-.pip.full { background: radial-gradient(circle at 40% 30%, #bfe9ff, var(--cyan)); border-color: #9fe0ff; box-shadow: 0 0 7px #6fc6e8aa; }
+.mp-mana { display: flex; align-items: center; gap: 6px; }
+.pips { display: flex; gap: 3px; flex-wrap: wrap; }
+.pip { width: 11px; height: 11px; transform: rotate(45deg); border: 1.5px solid #2c4a66; background: #0a1422; border-radius: 2px; }
+.pip.full { background: radial-gradient(circle at 40% 30%, #bfe9ff, var(--cyan)); border-color: #9fe0ff; box-shadow: 0 0 6px #6fc6e8aa; }
 .pip.locked { opacity: .3; }
-.mana .mnum { font-family: var(--mono); font-size: 12px; color: var(--cyan); font-weight: 700; }
+.mnum { font-family: var(--mono); font-size: 12px; color: var(--cyan); font-weight: 700; margin-left: auto; }
 
-/* zones */
-.zone { display: flex; gap: var(--slot-gap); justify-content: center; }
-.zone + .zone { margin-top: 5px; }
-.zone-label { font-size: 8px; letter-spacing: .18em; color: var(--paper-faint); text-transform: uppercase; writing-mode: vertical-rl; align-self: stretch; display: grid; place-items: center; opacity: .7; }
+.mp-btns { display: flex; gap: 5px; flex-wrap: wrap; }
+.mp-btn { padding: 2px 8px; font-size: 10.5px; line-height: 16px; letter-spacing: 0; text-transform: none; }
+.mp-tribes { display: flex; flex-wrap: wrap; gap: 4px; }
+.tribe-chip { padding: 1px 7px; border-radius: 9px; font-size: 10.5px; line-height: 15px; border: 1px solid #556; color: #9ab; white-space: nowrap; }
+.tribe-chip.ready { border-color: #fd6; color: #ffd166; }
+.tribe-chip.done { border-color: #5a5; color: #8f8; }
+
+/* ---- turn timer (in the active player's meta panel) ---- */
+.mp-timer { font-family: var(--mono); font-weight: 700; font-size: 13px; margin-left: auto; padding: 1px 8px; border-radius: 6px; min-width: 34px; text-align: center; }
+.mp-timer.run { background: #ffffff0c; color: var(--paper); border: 1px solid var(--line); }
+.mp-timer.warn { color: var(--vermil-hi); border-color: var(--vermil); box-shadow: 0 0 10px #d8542f44; }
+.mp-timer.shake { animation: shake .4s; }
+
+/* auto (non-clickable) center toast for timer warnings */
+.turn-toast {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  z-index: 140; pointer-events: none;
+  font-family: var(--mono); font-weight: 800; letter-spacing: .06em;
+  color: #fff; background: #12060699; border: 1px solid var(--vermil); border-radius: 14px;
+  padding: 14px 30px; box-shadow: 0 8px 30px #000a, 0 0 24px #d8542f44;
+  animation: toastPop .25s var(--ease);
+}
+.turn-toast.big { font-size: 42px; padding: 10px 30px; }
+.turn-toast.small { font-size: 16px; }
+@keyframes toastPop { from { opacity: 0; transform: translate(-50%,-50%) scale(.8) } to { opacity: 1; transform: translate(-50%,-50%) scale(1) } }
+.turn-toast.out { animation: toastOut .3s var(--ease) forwards; }
+@keyframes toastOut { to { opacity: 0; transform: translate(-50%,-50%) scale(1.1) } }
 
 .trapchip-card { position: relative; }
 
 /* ---- market ---- */
-/* both markets sit together on ONE centered row (compact height, uses the empty side space) */
-.market { display: flex; justify-content: center; align-items: stretch; gap: 20px; padding: 6px 14px 8px; align-self: center; overflow-x: auto; border-color: #c79a4b26; }
+/* 고정(10) + 제시(3) share one centered row on wide screens; when the width
+   runs out the fixed cards wrap to a 2nd tier automatically, and 제시 drops
+   below that — no horizontal clipping at any size. */
+.market { display: flex; flex-wrap: nowrap; justify-content: center; align-items: flex-start; gap: 8px 16px; padding: 6px 12px 8px; align-self: center; overflow: hidden; border-color: #c79a4b26; }
 .market::before { /* warm showcase spotlight over the wares */
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
   background: radial-gradient(60% 95% at 50% 30%, #c79a4b0c, transparent 70%);
 }
+/* 고정(10) and 제시(3) split the width proportionally; cards WRAP inside each sub,
+   so nothing is ever clipped no matter how narrow the board gets. */
 .market-sub { min-width: 0; }
+.market-sub:nth-child(1) { flex: 10 1 0; }
+.market-sub:nth-child(3) { flex: 3 1 0; }
 .market-sub .sub-head { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
 .market-sub .sub-head .tag { font-family: var(--mono); font-size: 10px; letter-spacing: .22em; color: var(--brass); text-transform: uppercase; display: inline-flex; align-items: center; gap: 8px; }
 .market-sub .sub-head .tag::before, .market-sub .sub-head .tag::after { content: ""; width: 20px; height: 1px; }
 .market-sub .sub-head .tag::before { background: linear-gradient(90deg, transparent, var(--brass-dim)); }
 .market-sub .sub-head .tag::after { background: linear-gradient(90deg, var(--brass-dim), transparent); }
 .market-sub .sub-head .meta { font-size: 10px; color: var(--paper-faint); }
-.market-cards { display: flex; gap: 7px; justify-content: center; flex-wrap: nowrap; }
-.market-div { width: 1px; background: linear-gradient(180deg, transparent, var(--line), transparent); }
+.market-cards { display: flex; gap: 7px 6px; justify-content: center; flex-wrap: wrap; }
+.market-div { width: 1px; align-self: stretch; background: linear-gradient(180deg, transparent, var(--line), transparent); }
+/* when the market has wrapped to multiple lines, the vertical divider looks odd — hide it narrow */
+@media (max-width: 1500px) { .market-div { display: none; } }
 .refresh-btn { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border-radius: 5px; border: 1px solid var(--brass-dim); background: #ffffff08; color: var(--brass); }
 .refresh-btn:hover:not(:disabled) { border-color: var(--brass); color: var(--brass-hi); }
 .refresh-btn:disabled { opacity: .4; cursor: not-allowed; }
@@ -200,13 +238,8 @@
   55% { transform: rotateY(0deg) scale(1.12); filter: brightness(1.6) }
   100% { transform: scale(1) }
 }
-/* draw: cards FLIP into the hand (3D, deck → face) */
-.card.drawing { animation: drawIn .5s var(--ease); backface-visibility: hidden; }
-@keyframes drawIn {
-  0%   { transform: translateX(-70px) translateY(-6px) rotateY(88deg) scale(.82); opacity: 0; filter: brightness(1.7) }
-  55%  { transform: translateX(0) rotateY(-14deg) scale(1.04); opacity: 1; filter: brightness(1.25) }
-  100% { transform: none; filter: none }
-}
+.card.drawing { animation: drawIn .42s var(--ease); }
+@keyframes drawIn { from { transform: translateX(-60px) scale(.8); opacity: 0 } }
 
 .floater { position: fixed; z-index: 120; font-family: var(--mono); font-weight: 800; font-size: 22px; pointer-events: none; animation: floatUp 1.1s var(--ease) forwards; text-shadow: 0 2px 6px #000; }
 .floater.dmg { color: var(--vermil-hi); }
@@ -423,80 +456,3 @@
 .game.shake-hard { animation: bshake-hard .44s linear; }
 @keyframes bshake-soft { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(2px, -2px); } 50% { transform: translate(-3px, 2px); } 75% { transform: translate(2px, 1px); } }
 @keyframes bshake-hard { 0%, 100% { transform: translate(0, 0); } 12% { transform: translate(-7px, 5px); } 28% { transform: translate(7px, -6px); } 44% { transform: translate(-6px, -4px); } 60% { transform: translate(5px, 5px); } 76% { transform: translate(-4px, 2px); } 90% { transform: translate(2px, -1px); } }
-
-/* ============================================================
-   interactive tutorial — coach overlay, highlights, reward toast
-   ============================================================ */
-.tut-coach { position: fixed; top: 52px; left: 50%; transform: translateX(-50%); z-index: 120; width: min(460px, 94vw); background: linear-gradient(180deg, var(--ink-3), var(--ink-1)); border: 1px solid var(--brass); border-radius: 12px; padding: 12px 16px 14px; box-shadow: 0 10px 32px #000c, inset 0 1px 0 #ffffff10; }
-.tut-coach-head { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
-.tut-coach-step { font-family: var(--mono); font-size: 11px; color: var(--ink-0); background: var(--brass); border-radius: 999px; padding: 2px 9px; letter-spacing: .06em; flex: none; }
-.tut-coach-head b { font-family: var(--mono); font-size: 13px; letter-spacing: .1em; color: var(--brass-hi); }
-.tut-coach-gem { margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--cyan); white-space: nowrap; }
-.tut-coach-exit { color: var(--paper-faint); cursor: pointer; font-size: 13px; padding: 0 2px; }
-.tut-coach-exit:hover { color: var(--vermil-hi); }
-.tut-coach-body { font-size: 13px; line-height: 1.6; color: var(--paper-dim); }
-.tut-coach-body b { color: var(--paper); }
-.tut-coach-btn { margin-top: 10px; width: 100%; padding: 9px; }
-
-.tut-glow { box-shadow: 0 0 0 2px var(--gold-glow), 0 0 16px 3px #f0d08966 !important; border-radius: 10px; animation: tutPulse 1.3s ease-in-out infinite; }
-@keyframes tutPulse {
-  50% { box-shadow: 0 0 0 3px var(--gold-glow), 0 0 26px 7px #f0d08999; }
-}
-
-.tut-toast { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 140; background: linear-gradient(180deg, #223046, #141d2f); border: 1px solid var(--good); border-radius: 10px; padding: 10px 18px; font-size: 13px; color: var(--paper); box-shadow: 0 8px 26px #000c; animation: tutToastIn .3s var(--ease); white-space: nowrap; }
-.tut-toast b { color: var(--brass-hi); }
-.tut-toast .gem { font-family: var(--mono); color: var(--cyan); margin-left: 4px; }
-.tut-toast.out { transition: opacity .45s, transform .45s; opacity: 0; transform: translateX(-50%) translateY(-12px); }
-
-@media (max-width: 700px) {
-  .tut-coach { top: auto; bottom: 118px; }
-}
-
-/* ============================================================
-   3D PRESENTATION — tabletop camera, card depth, flips, glare
-   ============================================================ */
-/* camera: the battlefield leans away slightly (not a flat top-down view) */
-.board-col { perspective: 1400px; perspective-origin: 50% 30%; }
-#oppRow .field-block, #meRow .field-block { transform: rotateX(6.5deg); }
-.board-col > .market { transform: rotateX(6.5deg); }
-#oppRow .field-block, #meRow .field-block, .board-col > .market { will-change: transform; }
-/* deepen the shadow under the leaning table edge to sell the depth */
-#meRow .field-block { box-shadow: inset 0 1px 0 #ffffff08, inset 0 -1px 0 #00000066, inset 0 0 32px #0004, 0 14px 26px #0008; }
-
-/* card depth: layered edge + ambient/key shadows (premium feel) */
-.hand .card, .market-cards .card, .zone .card {
-  box-shadow:
-    inset 0 1px 0 #ffffff14,
-    inset 0 -2px 0 #00000055,
-    0 1px 2px #000a,
-    0 7px 16px #0007;
-}
-.hand { perspective: 950px; }
-.hand .card { transform-style: preserve-3d; }
-
-/* pointer-tracked tilt + glare (desktop only; JS sets --rx/--ry/--gx/--gy) */
-@media (pointer: fine) {
-  .hand .card.is-playable:hover, .market-cards .card.is-buyable:hover {
-    transform: translateY(-12px) scale(1.06) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-    box-shadow:
-      inset 0 1px 0 #ffffff1c,
-      inset 0 -2px 0 #00000055,
-      0 3px 6px #000b,
-      0 18px 34px #000a,
-      0 0 18px #c79a4b22;
-    filter: brightness(1.1);
-  }
-  .card.tilt-live::before {
-    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 5;
-    background: radial-gradient(190px circle at var(--gx, 50%) var(--gy, 20%), #ffffff2e, #ffffff08 45%, transparent 70%);
-    mix-blend-mode: screen;
-  }
-}
-
-/* buy reveal: real 3D flip (back → face) */
-.flip3d { transform-style: preserve-3d; transform: perspective(950px) rotateY(0deg); transition: transform .55s cubic-bezier(.3, .7, .3, 1.15); }
-.flip3d.flipping { transform: perspective(950px) rotateY(180deg) scale(1.3); }
-.flip3d.flip-away { transform: perspective(950px) rotateY(180deg) scale(.45); }
-.flip3d-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.flip3d-back { position: absolute; left: 0; top: 0; }
-.flip3d-front { position: absolute; left: 0; top: 0; width: 100% !important; height: 100% !important; transform: rotateY(180deg); }
