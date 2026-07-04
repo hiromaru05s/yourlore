@@ -4,6 +4,7 @@
 // ============================================================
 import type { CardInst } from "../shared/types";
 import { cardEl } from "./cardView";
+import { bindZoom } from "./anim";
 import { TRIBES } from "../shared/cards";
 import { t, getLang } from "../i18n";
 
@@ -99,6 +100,7 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
   pool.forEach((c) => {
     const card = cardEl(c, { playable: true });
     card.onclick = () => { closeOverlay(); onPick(c.uid); };
+    bindZoom(card, c); // 우클릭 / 길게 누르면 확대
     grid.appendChild(card);
   });
   const cancel = document.createElement("button");

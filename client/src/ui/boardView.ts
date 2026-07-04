@@ -232,7 +232,7 @@ export class GameView {
     // 덱 구성 버튼 (마나 표시 아래): 내 쪽은 전체, 상대는 공개 정보(집계 멀티셋+묘지+필드+영구물)
     const manaEl = bar.querySelector(".mana")!;
     const wrap = document.createElement("span");
-    wrap.style.cssText = "display:inline-flex;flex-direction:column;align-items:flex-end;gap:3px";
+    wrap.style.cssText = "display:inline-flex;flex-direction:column;align-items:flex-end;gap:3px;margin-left:auto;align-self:flex-start";
     manaEl.replaceWith(wrap);
     wrap.appendChild(manaEl);
     const dbtn = document.createElement("button");

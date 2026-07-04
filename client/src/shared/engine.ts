@@ -655,8 +655,8 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
     }
     case "hordeBuff": { // 군단의 기수: 덱+묘지 20장 이상이면 +3/+3
       const hn = p.deck.length + p.discard.length;
-      if (hn >= 20) { m.atkMod = (m.atkMod || 0) + 3; m.defMod = (m.defMod || 0) + 3; ctx.log(`  └ 군단(${hn}장) 결집: +3/+3`, `  └ 軍団(${hn}枚)結集: +3/+3`); }
-      else ctx.log(`  └ 덱+묘지 ${hn}장 — 군단 미달(20장)`, `  └ デッキ+墓地${hn}枚 — 軍団未達(20枚)`);
+      if (hn >= 24) { m.atkMod = (m.atkMod || 0) + 3; m.defMod = (m.defMod || 0) + 3; ctx.log(`  └ 군단(${hn}장) 결집: +3/+3`, `  └ 軍団(${hn}枚)結集: +3/+3`); }
+      else ctx.log(`  └ 덱+묘지 ${hn}장 — 군단 미달(24장)`, `  └ デッキ+墓地${hn}枚 — 軍団未達(24枚)`);
       break;
     }
     case "eliteBuff": { // 정예 기사단장: 덱+묘지 12장 이하면 공격 +4

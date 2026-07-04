@@ -749,6 +749,18 @@ const PATCH11: Record<string, Partial<CardDef>> = {
 for (const id of Object.keys(PATCH11)) { if (DB[id]) Object.assign(DB[id], PATCH11[id]); }
 
 // ============================================================
+// BALANCE PATCH 12 — TOP5 소폭 조정
+// ============================================================
+const PATCH12: Record<string, Partial<CardDef>> = {
+  TRAPSMITH: { atk: 1 }, // 함정 기술자 2/4 → 1/4
+  LIFE_SANCTUM: { val2: 2, text: "영구: 자신의 턴마다 최대 체력 +2 (시전 2)", textJa: "永続: 自分のターンごとに最大体力+2 (発動2)" }, // +3 → +2
+  HORDE: { text: "소환시: 자신의 덱+묘지가 24장 이상이면 +3/+3", textJa: "召喚時: 自分のデッキ+墓地が24枚以上なら+3/+3" }, // 20 → 24장 (엔진 동기)
+  M13: { def: 2 }, // 보이드 리버 3/3 → 3/2
+  M12: { val: 1, text: "소환시: 적 몬스터 1체 공격 -1(영구)", textJa: "召喚時: 敵モンスター1体の攻撃-1(永続)" }, // 타이탄 게이트 효과 -2 → -1
+};
+for (const id of Object.keys(PATCH12)) { if (DB[id]) Object.assign(DB[id], PATCH12[id]); }
+
+// ============================================================
 // NEW CARDS 7 — 메타/제외(Exile) 아키타입 확장
 // ============================================================
 const NEW_CARDS7: CardDef[] = [
