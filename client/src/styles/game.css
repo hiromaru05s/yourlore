@@ -198,12 +198,8 @@
 
 /* ---- hand ---- */
 .hand-area { display: flex; align-items: flex-end; justify-content: center; gap: 0; min-height: var(--card-h-hand); padding-top: 2px; position: relative; z-index: 40; }
-.hand { display: flex; justify-content: center; align-items: flex-end; transition: transform .28s var(--ease); cursor: pointer; }
-/* tucked hand: slides down so only the top edges peek — never covers the field.
-   click any card to raise it back up. */
-.game.hand-tucked .hand { transform: translateY(calc(var(--card-h-hand) * 0.66)); }
-.game.hand-tucked .hand .card:hover { transform: translateY(calc(var(--card-h-hand) * -0.1)) !important; }
-.hand .card { margin: 0 -12px; transform-origin: bottom center; }
+.hand { display: flex; justify-content: center; align-items: flex-end; }
+.hand .card { margin: 0 -12px; transform-origin: bottom center; transition: transform .12s var(--ease); }
 .hand .card:hover { z-index: 50 !important; }
 /* >10 cards: straight, readable row (no fan). Wrap if it still overflows. */
 .hand.is-flat { flex-wrap: wrap; row-gap: 4px; }

@@ -90,21 +90,8 @@ export class GameView {
     applyLog();
     document.addEventListener("contextmenu", (e) => e.preventDefault());
 
-    // ---- hand peek: the hand rests DOWN and rises when the cursor nears it,
-    // sinking again when the cursor leaves — so it never covers the field.
-    // (Touch: tapping a tucked hand raises it without playing.) ----
-    const game = this.root.querySelector(".game") as HTMLElement;
-    const hand = this.q("hand");
-    const handArea = this.q("handArea");
-    game.classList.add("hand-tucked");
-    handArea.addEventListener("pointerenter", () => game.classList.remove("hand-tucked"));
-    handArea.addEventListener("pointerleave", () => game.classList.add("hand-tucked"));
-    hand.addEventListener("click", (e) => {
-      if (game.classList.contains("hand-tucked")) {
-        game.classList.remove("hand-tucked");
-        e.stopPropagation(); e.stopImmediatePropagation(); e.preventDefault(); // raise-only on a tucked tap
-      }
-    }, true);
+    // ---- hand: always visible (no auto-tuck). Individual cards still lift on
+    // hover via .card.is-playable:hover, but the whole hand never slides away. ----
   }
 
   private q(id: string): HTMLElement { return this.root.querySelector("#" + id) as HTMLElement; }
