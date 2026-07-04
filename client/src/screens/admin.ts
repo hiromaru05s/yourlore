@@ -3,10 +3,11 @@
 // Acquisition/retention/funnel live in PostHog; this view keeps
 // only what PostHog can't compute: card win-rates (balance),
 // tier distribution, invite ledger, and a support email lookup.
-// Auth: Cloudflare Access (edge SSO) once set up; a manual admin
-// key (AUTH_SECRET) is the fallback until then.
+// Auth: the logged-in session's email must be in the server-side
+// admin allowlist (ADMIN_EMAILS). No shared key, no localStorage.
 // ============================================================
 import type { App, Screen } from "../router";
+import { api } from "../net/api";
 import { DB } from "../shared/cards";
 import { TIER_META, tierLabel } from "../ui/tier";
 
@@ -24,7 +25,6 @@ interface LookupUser {
   last_day: string | null; is_google: number;
 }
 
-const KEY_LS = "lore_admin_key";
 const TIER_ORDER = ["iron", "bronze", "silver", "gold", "platinum", "diamond", "master"];
 
 export function mountAdmin(app: App): Screen {
@@ -35,32 +35,28 @@ export function mountAdmin(app: App): Screen {
   const body = wrap.querySelector("#admBody") as HTMLElement;
   const sub = wrap.querySelector("#admSub") as HTMLElement;
 
-  const authHeaders = (): Record<string, string> => {
-    const key = localStorage.getItem(KEY_LS) || "";
-    return key ? { Authorization: `Bearer ${key}` } : {};
-  };
-
-  const askKey = (msg = "") => {
+  const gate = (loggedIn: boolean) => {
     body.innerHTML = `
-      ${msg ? `<div class="adm-err">${msg}</div>` : ""}
-      <p class="adm-note" style="text-align:center;max-width:420px;margin:0 auto 6px">Cloudflare Access가 설정되면 이 입력은 필요 없어집니다. 그 전까지 임시 관리자 키로 접근합니다.</p>
-      <div class="form-row"><label class="field-label">관리자 키 (AUTH_SECRET)</label><input class="input" id="admKey" type="password"></div>
-      <button class="btn btn-gold btn-block" id="admGo">열기</button>`;
-    (body.querySelector("#admGo") as HTMLButtonElement).onclick = () => {
-      localStorage.setItem(KEY_LS, (body.querySelector("#admKey") as HTMLInputElement).value.trim());
-      void load();
-    };
+      <div class="adm-gate">
+        <p>${loggedIn ? "이 계정에는 관리자 권한이 없습니다." : "관리자 계정으로 로그인해야 합니다."}</p>
+        ${loggedIn
+          ? `<button class="btn btn-ghost" id="admLogout">다른 계정으로 로그인</button>`
+          : `<button class="btn btn-gold" id="admLogin">관리자 로그인</button>`}
+      </div>`;
+    const li = body.querySelector("#admLogin") as HTMLButtonElement | null;
+    if (li) li.onclick = () => { location.href = api.googleUrl("/admin"); }; // login → back to /admin
+    const lo = body.querySelector("#admLogout") as HTMLButtonElement | null;
+    if (lo) lo.onclick = () => void app.logout();
   };
 
   const cardName = (id: string) => DB[id]?.name ?? id;
 
   async function load(): Promise<void> {
     body.innerHTML = `<div class="adm-loading">불러오는 중…</div>`;
-    const res = await fetch("/api/admin/stats", { headers: authHeaders() }).catch(() => null);
+    const res = await fetch("/api/admin/stats", { credentials: "include" }).catch(() => null);
     if (!res || res.status === 401) {
-      // Access가 없고 키도 틀린 경우 → 키 입력. (Access가 있으면 이 401은 안 옴)
-      if (localStorage.getItem(KEY_LS)) localStorage.removeItem(KEY_LS);
-      askKey(res ? "인증 실패 — 키가 올바르지 않습니다." : "연결 오류");
+      const loggedIn = res ? (await res.json().catch(() => ({}))).loggedIn === true : false;
+      gate(loggedIn);
       return;
     }
     const s = (await res.json()) as Stats;
@@ -107,7 +103,7 @@ export function mountAdmin(app: App): Screen {
       const box = body.querySelector("#lkResult") as HTMLElement;
       if (!email) return;
       box.textContent = "조회 중…";
-      const r = await fetch(`/api/admin/lookup?email=${encodeURIComponent(email)}`, { headers: authHeaders() }).catch(() => null);
+      const r = await fetch(`/api/admin/lookup?email=${encodeURIComponent(email)}`, { credentials: "include" }).catch(() => null);
       const u = r && r.ok ? ((await r.json()) as { user: LookupUser | null }).user : null;
       if (!u) { box.textContent = "해당 이메일의 유저가 없습니다."; return; }
       box.innerHTML = `<table style="margin-top:6px">

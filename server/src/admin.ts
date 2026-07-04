@@ -10,23 +10,25 @@
 //   request carries Cf-Access-Authenticated-User-Email it is trusted.
 //   Until Access is set up, a Bearer <AUTH_SECRET> fallback applies.
 // ============================================================
-import type { Env } from "./env";
-import { corsHeaders } from "./auth";
+import type { Env, SessionUser } from "./env";
+import { corsHeaders, getUser } from "./auth";
 import { seasonKey, tierOf } from "./rank";
 
 function json(env: Env, body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
 }
 
-/** True when the request is an authenticated admin (Access SSO or the secret fallback). */
-function isAdmin(env: Env, req: Request): boolean {
-  if (req.headers.get("Cf-Access-Authenticated-User-Email")) return true; // vetted at the edge by Access
-  return (req.headers.get("Authorization") || "") === `Bearer ${env.AUTH_SECRET}`;
+/** Allowlist check: the logged-in session's email must be in ADMIN_EMAILS. */
+export function isAdminUser(env: Env, user: SessionUser | null): boolean {
+  if (!user) return false;
+  const allow = (env.ADMIN_EMAILS || "").toLowerCase().split(",").map((s) => s.trim()).filter(Boolean);
+  return allow.includes(user.email.toLowerCase());
 }
 
 export async function handleAdmin(env: Env, req: Request, path: string): Promise<Response> {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders(env) });
-  if (!isAdmin(env, req)) return json(env, { error: "unauthorized" }, 401);
+  const user = await getUser(env, req);
+  if (!isAdminUser(env, user)) return json(env, { error: "unauthorized", loggedIn: !!user }, 401);
 
   if (path === "/admin/stats") {
     const [totalUsers, totalMatches, inviteAgg, tierRows] = await Promise.all([

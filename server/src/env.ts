@@ -13,6 +13,8 @@ export interface Env {
   GOOGLE_CLIENT_SECRET?: string; // `wrangler secret put GOOGLE_CLIENT_SECRET`
   // Resend (optional — until set, register auto-verifies and no mail is sent)
   RESEND_API_KEY?: string;       // `wrangler secret put RESEND_API_KEY`
+  // Admin allowlist — comma-separated emails that may open /admin (logged-in session).
+  ADMIN_EMAILS?: string;         // wrangler.toml [vars]
 }
 
 export interface SessionUser {

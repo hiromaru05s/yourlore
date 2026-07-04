@@ -52,12 +52,13 @@ export const api = {
   rankMe: () => call<{ rating: RankInfo | null }>("/rank/me", undefined, "GET").then((r) => r.rating).catch(() => null),
   trackBot: (won: boolean) => call<{ ok: boolean }>("/track/bot", { won }).catch(() => null),
   inviteMe: () => call<{ code: string; limit: number; invites: { status: string; created_at: number; display: string }[] }>("/invite/me", undefined, "GET"),
-  /** Google OAuth entry URL (carries invite ref + utm source through the round-trip). */
-  googleUrl: (): string => {
+  /** Google OAuth entry URL (carries invite ref + utm source, and an optional same-origin return path). */
+  googleUrl: (returnTo?: string): string => {
     const a = acquisition();
     const q = new URLSearchParams();
     if (a.ref) q.set("ref", a.ref);
     if (a.source) q.set("source", a.source);
+    if (returnTo && /^\/[^/]/.test(returnTo)) q.set("return", returnTo);
     const s = q.toString();
     return "/api/auth/google" + (s ? `?${s}` : "");
   },

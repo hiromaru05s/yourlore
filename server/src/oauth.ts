@@ -40,9 +40,12 @@ export async function handleGoogleOAuth(env: Env, req: Request, path: string): P
     auth.searchParams.set("prompt", "select_account");
     const ref = (url.searchParams.get("ref") || "").slice(0, 16);
     const source = (url.searchParams.get("source") || "").slice(0, 120);
+    // return path: same-origin only ("/..."), used e.g. to bounce back to /admin after login
+    const rawRet = url.searchParams.get("return") || "";
+    const ret = /^\/[^/]/.test(rawRet) ? rawRet.slice(0, 64) : "";
     const headers = new Headers({ Location: auth.toString() });
     headers.append("Set-Cookie", `${STATE_COOKIE}=${state}; HttpOnly; Path=/; Max-Age=600; SameSite=Lax; Secure`);
-    headers.append("Set-Cookie", `${CTX_COOKIE}=${encodeURIComponent(`${ref}|${source}`)}; HttpOnly; Path=/; Max-Age=600; SameSite=Lax; Secure`);
+    headers.append("Set-Cookie", `${CTX_COOKIE}=${encodeURIComponent(`${ref}|${source}|${ret}`)}; HttpOnly; Path=/; Max-Age=600; SameSite=Lax; Secure`);
     return new Response(null, { status: 302, headers });
   }
 
@@ -50,8 +53,12 @@ export async function handleGoogleOAuth(env: Env, req: Request, path: string): P
   if (path === "/auth/google/callback") {
     const code = url.searchParams.get("code");
     const state = url.searchParams.get("state");
-    const cookieState = (req.headers.get("Cookie") || "").match(new RegExp(`${STATE_COOKIE}=([^;]+)`))?.[1];
+    const cookies = req.headers.get("Cookie") || "";
+    const cookieState = cookies.match(new RegExp(`${STATE_COOKIE}=([^;]+)`))?.[1];
     if (!code || !state || state !== cookieState) return htmlError("OAuth 상태 검증에 실패했습니다. 다시 시도해 주세요.");
+    const ctx = decodeURIComponent(cookies.match(new RegExp(`${CTX_COOKIE}=([^;]+)`))?.[1] || "");
+    const retRaw = ctx.split("|")[2] || "";
+    const returnTo = /^\/[^/]/.test(retRaw) ? retRaw : "/";
 
     const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
       method: "POST",
@@ -82,8 +89,7 @@ export async function handleGoogleOAuth(env: Env, req: Request, path: string): P
     if (!id) {
       id = crypto.randomUUID();
       const display = sanitizeDisplay(payload.name || email.split("@")[0]);
-      const ctxRaw = decodeURIComponent((req.headers.get("Cookie") || "").match(new RegExp(`${CTX_COOKIE}=([^;]+)`))?.[1] || "");
-      const [ref, source] = ctxRaw.split("|");
+      const [ref, source] = ctx.split("|");
       await env.DB.prepare(`INSERT INTO users (id, email, password, display, created_at, verified, source) VALUES (?,?,?,?,?,1,?)`)
         .bind(id, email, "oauth:google", display, Date.now(), (source || "").slice(0, 120) || null).run();
       if (ref) await applyInviteAtSignup(env, id, ref).catch(() => { /* best effort */ });
@@ -91,9 +97,10 @@ export async function handleGoogleOAuth(env: Env, req: Request, path: string): P
       await env.DB.prepare(`UPDATE users SET verified = 1 WHERE id = ?`).bind(id).run();
     }
     const token = await createSession(env, id);
-    const headers = new Headers({ Location: "/" });
+    const headers = new Headers({ Location: returnTo });
     headers.append("Set-Cookie", sessionCookie(token));
     headers.append("Set-Cookie", `${STATE_COOKIE}=; HttpOnly; Path=/; Max-Age=0; SameSite=Lax; Secure`);
+    headers.append("Set-Cookie", `${CTX_COOKIE}=; HttpOnly; Path=/; Max-Age=0; SameSite=Lax; Secure`);
     return new Response(null, { status: 302, headers });
   }
 
