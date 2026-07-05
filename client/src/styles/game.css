@@ -452,6 +452,13 @@
 .zoom-tribe h3 { font-family: var(--mono); color: var(--brass-hi); letter-spacing: .14em; margin-bottom: 8px; }
 .zoom-tribe .note { color: var(--vermil-hi); font-size: 12px; margin-bottom: 10px; }
 .zoom-tribe .b { font-size: 13px; line-height: 1.7; }
+/* other cards in the same tribe — small thumbnails so you know what to collect */
+.zoom-tribe { max-width: 300px; }
+.zoom-tribe-cards { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+.ztc-head { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; color: var(--brass); margin-bottom: 9px; text-transform: uppercase; }
+.ztc-grid { display: flex; flex-wrap: wrap; gap: 9px; max-height: 46vh; overflow-y: auto; }
+.zoom-overlay .ztc-grid .card { --cw: 82px; --ch: 131px; cursor: zoom-in; box-shadow: 0 4px 12px #0008; transition: transform .12s var(--ease); }
+.zoom-overlay .ztc-grid .card:hover { transform: translateY(-3px) scale(1.05); }
 
 /* treasure modal */
 .chest-reward { font-size: 40px; margin: 10px 0; animation: pop .4s var(--ease); }

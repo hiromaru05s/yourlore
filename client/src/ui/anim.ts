@@ -3,7 +3,7 @@
 // touch game state, only the DOM.
 // ============================================================
 import type { CardInst } from "../shared/types";
-import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS } from "../shared/cards";
+import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB } from "../shared/cards";
 import { cardEl } from "./cardView";
 import { t, getLang } from "../i18n";
 
@@ -319,6 +319,23 @@ export function zoomCard(c: CardInst): void {
     const panel = document.createElement("div");
     panel.className = "zoom-tribe";
     panel.innerHTML = `<h3>${info.name} ${t("tribe.suffix")}</h3><div class="note">${info.note}</div>` + info.bonuses.map((b) => `<div class="b">• ${b}</div>`).join("");
+    // the OTHER cards of this tribe as clickable thumbnails, so you know what to collect
+    const members = Object.values(DB).filter((x) => x.t === "mon" && x.tribe === c.tribe && x.id !== c.id);
+    if (members.length) {
+      const box = document.createElement("div");
+      box.className = "zoom-tribe-cards";
+      box.innerHTML = `<div class="ztc-head">${t("tribe.others")}</div>`;
+      const grid = document.createElement("div");
+      grid.className = "ztc-grid";
+      for (const def of members) {
+        const inst = { ...def, uid: `tm_${def.id}` } as CardInst;
+        const mini = cardEl(inst);
+        mini.onclick = (e) => { e.stopPropagation(); zoomCard(inst); }; // click → focus that card
+        grid.appendChild(mini);
+      }
+      box.appendChild(grid);
+      panel.appendChild(box);
+    }
     wrap.appendChild(panel);
   }
   if (c.star === "chest") {

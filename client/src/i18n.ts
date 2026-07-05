@@ -190,6 +190,7 @@ const D: Record<string, Entry> = {
   "net.reconnecting": { ko: "연결이 끊겨 재접속 중입니다…", ja: "接続が切れたため再接続中です…", en: "Connection lost — reconnecting…" },
   "net.oppwait": { ko: "상대의 연결이 끊겼습니다. 최대 30초간 기다립니다…", ja: "相手の接続が切れました。最大30秒待ちます…", en: "Opponent disconnected — waiting up to 30s…" },
   "tribe.suffix": { ko: "종족", ja: "種族", en: "tribe" },
+  "tribe.others": { ko: "이 종족의 다른 카드 (탭하면 확대)", ja: "この種族の他のカード (タップで拡大)", en: "Other cards in this tribe (tap to enlarge)" },
   "tribe.footer": { ko: "동족을 필드에 모으면 발동 · 게임당 각 1회", ja: "同じ種族を場に揃えると発動 · 1ゲームに各1回", en: "Triggers when tribe members share your field · once per game each" },
   // in-game FX / event playback
   "fx.trap": { ko: "함정 발동!", ja: "罠発動！", en: "Trap Activated!" },
