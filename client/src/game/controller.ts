@@ -387,7 +387,7 @@ export abstract class BaseController implements BoardHandlers {
     this.timerLeft--;
     this.renderTimer();
     const s = this.timerLeft;
-    if (s === 25 && !this.warned25) { this.warned25 = true; this.turnToast("½", "small", 1500); }
+    if (s === 25 && !this.warned25) { this.warned25 = true; this.turnToast(`${s}초`, "small", 1500); }
     else if (s <= 5 && s >= 1) this.turnToast(String(s), "big", 900);
     if (s <= 0) {
       if (this.timerInt) { clearInterval(this.timerInt); this.timerInt = null; }

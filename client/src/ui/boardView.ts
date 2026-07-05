@@ -12,6 +12,11 @@ import { bindZoom } from "./anim";
 import { t, getLang } from "../i18n";
 import { logToEn } from "../shared/logEn";
 import { getSfxVolume, setSfxVolume } from "./sound";
+import { avatarHtml } from "./social";
+
+// the local player's profile avatar (set by the game screen), shown in MY meta panel
+let MY_AVATAR: string | null | undefined;
+export function setMyAvatar(a?: string | null): void { MY_AVATAR = a; }
 
 const MON_SLOTS = 7;
 const ST_SLOTS = 7;
@@ -373,7 +378,7 @@ export class GameView {
 
     panel.innerHTML = `
       <div class="mp-top">
-        <span class="mp-name"><span class="who"></span>${p.name}</span>
+        <span class="mp-name">${isMe ? avatarHtml(MY_AVATAR, p.name, 24) : `<span class="who"></span>`}${p.name}</span>
         <div class="mp-clock" id="clock-${isMe ? "me" : "opp"}" aria-hidden="true"></div>
       </div>
       <div class="mp-hp">
@@ -424,7 +429,7 @@ export class GameView {
     const mk = this.q("market");
     mk.innerHTML = `
       <div class="market-sub">
-        <div class="sub-head"><span class="tag">${t("game.std")}</span><span class="meta">${t("game.std.meta")}</span></div>
+        <div class="sub-head"><span class="tag">${t("game.std")}</span></div>
         <div class="market-cards" id="fixedMarket"></div>
       </div>
       <div class="market-div"></div>

@@ -6,6 +6,7 @@ import type { App, Screen } from "../router";
 import { LocalController, type ControllerExits } from "../game/controller";
 import { TutorialController } from "../game/tutorial";
 import { OnlineController } from "../game/online";
+import { setMyAvatar } from "../ui/boardView";
 
 type GameOpts =
   | { mode: "bot" }
@@ -15,6 +16,7 @@ type GameOpts =
 export function mountGame(app: App, opts: GameOpts): Screen {
   const root = document.createElement("div");
   app.root.appendChild(root);
+  setMyAvatar(app.user?.avatar);  // show my profile icon in the in-game meta panel
 
   const exits: ControllerExits = {
     onHome: () => (opts.mode === "tutorial" ? app.tutorial() : app.home()),
