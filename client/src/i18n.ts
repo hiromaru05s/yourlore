@@ -191,6 +191,8 @@ const D: Record<string, Entry> = {
   "net.oppwait": { ko: "상대의 연결이 끊겼습니다. 최대 30초간 기다립니다…", ja: "相手の接続が切れました。最大30秒待ちます…", en: "Opponent disconnected — waiting up to 30s…" },
   "tribe.suffix": { ko: "종족", ja: "種族", en: "tribe" },
   "tribe.others": { ko: "이 종족의 다른 카드 (탭하면 확대)", ja: "この種族の他のカード (タップで拡大)", en: "Other cards in this tribe (tap to enlarge)" },
+  "card.related": { ko: "관련 카드", ja: "関連カード", en: "Related Cards" },
+  "card.related.sub": { ko: "이 카드가 소환·참조하는 카드 (탭하면 확대)", ja: "このカードが召喚・参照するカード (タップで拡大)", en: "Cards this one summons or references (tap to enlarge)" },
   "tribe.footer": { ko: "동족을 필드에 모으면 발동 · 게임당 각 1회", ja: "同じ種族を場に揃えると発動 · 1ゲームに各1回", en: "Triggers when tribe members share your field · once per game each" },
   // in-game FX / event playback
   "fx.trap": { ko: "함정 발동!", ja: "罠発動！", en: "Trap Activated!" },
@@ -318,6 +320,9 @@ const D: Record<string, Entry> = {
   "game.refresh.tip": { ko: "마나 1을 써서 제시 마켓을 새 카드로 갱신합니다.", ja: "マナ1を使って提示マーケットを更新します。", en: "Spend 1 mana to refresh the supply market." },
   "card.cast": { ko: "시전", ja: "発動", en: "Cast" },
   "card.cast.tip": { ko: "시전 코스트 — 이 카드를 손에서 필드로 낼 때(발동) 드는 마나입니다. 왼쪽 위 숫자는 상점에서 살 때 드는 구매 코스트예요.", ja: "発動コスト — このカードを手札からフィールドに出す（発動する）際に必要なマナです。左上の数字はショップで購入する際の購入コストです。", en: "Cast cost — the mana to play this card from your hand onto the field. The top-left number is the buy cost you pay in the shop." },
+  "card.ench": { ko: "영구마법", ja: "永続魔法", en: "Enchantment" },
+  "card.ench.tip": { ko: "영구마법 — 발동하면 필드에 남아 정해진 턴 동안 지속 효과를 줍니다. 일부 카드로 파괴·제외될 수 있어요.", ja: "永続魔法 — 発動すると場に残り、一定ターンの間 継続効果を与えます。一部のカードで破壊・除外されることがあります。", en: "Enchantment — once cast it stays on the field, giving an ongoing effect for a set number of turns. Some cards can destroy or exile it." },
+  "card.ench.tip.perm": { ko: "영구마법 (영구) — 발동하면 필드에 남아 게임 내내 지속 효과를 줍니다. 일부 카드로 파괴·제외될 수 있어요.", ja: "永続魔法 (永続) — 発動すると場に残り、ゲーム中ずっと継続効果を与えます。一部のカードで破壊・除外されることがあります。", en: "Enchantment (permanent) — once cast it stays on the field for the rest of the game. Some cards can destroy or exile it." },
 };
 
 export function t(key: string): string {

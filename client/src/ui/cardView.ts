@@ -96,6 +96,16 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
       eff.appendChild(cast);
     }
     if (txt && txt !== "—") eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${txt}</span>`));
+    // enchantment (영구마법) marker: small ∞ badge in the effect box + hover tooltip
+    if (c.ench) {
+      const perm = (c.val ?? 0) >= 99;
+      const ench = el("div", "card-ench", `<span class="ce-ico">∞</span>`);
+      const etip = el("div", "ench-tip", t(perm ? "card.ench.tip.perm" : "card.ench.tip"));
+      node.appendChild(etip);
+      ench.addEventListener("pointerenter", () => etip.classList.add("show"));
+      ench.addEventListener("pointerleave", () => etip.classList.remove("show"));
+      eff.appendChild(ench);
+    }
     node.appendChild(eff);
   }
   if (opt.badge) node.appendChild(el("span", "badge", opt.badge));

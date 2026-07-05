@@ -512,8 +512,8 @@ const PATCH3: Record<string, Partial<CardDef>> = {
   // 시공간 조작: 코스트14 / 시전12 / 70% 스킵
   TIMEWARP: { cost: 14, play: 12, text: "70% 확률로 다음 상대 턴을 스킵", textJa: "70%で次の相手のターンをスキップ" },
   // 갬블 / 악마의 주사위: 알기 쉬운 텍스트 + 소환 몬스터 명시
-  GAMBLE: { text: "주사위 1~6 — ①② 자신 8뎀 / ③④ 상대 5뎀 / ⑤ 마나 골렘(3/5) 소환 / ⑥ 유리 대포(7/1) 3체 소환", textJa: "ダイス1~6 — ①② 自分8 / ③④ 相手5 / ⑤ マナゴーレム(3/5)召喚 / ⑥ ガラス大砲(7/1)3体召喚" },
-  DICE8: { text: "주사위 1~6 — ①② 자신 최대마나-4 / ③④ 상대 마나-1·14뎀 / ⑤ 폭풍의 전사(11/9·2회공격) / ⑥ 상대 마법·함정 전멸+폭풍의 전사 2체+최대마나+2+체력+10", textJa: "ダイス1~6 — ①② 自分の最大マナ-4 / ③④ 相手マナ-1・14 / ⑤ 嵐の戦士(11/9・2回攻撃) / ⑥ 相手の魔法・罠全滅+嵐の戦士2体+最大マナ+2+体力+10" },
+  GAMBLE: { text: "주사위 1~6 — ①② 자신 8뎀 / ③④ 상대 5뎀 / ⑤ 마나 골렘 소환 / ⑥ 유리 대포 3체 소환", textJa: "ダイス1~6 — ①② 自分8 / ③④ 相手5 / ⑤ マナゴーレム召喚 / ⑥ ガラス大砲3体召喚" },
+  DICE8: { text: "주사위 1~6 — ①② 자신 최대마나-4 / ③④ 상대 마나-1·14뎀 / ⑤ 폭풍의 전사(2회공격) 소환 / ⑥ 상대 마법·함정 전멸+폭풍의 전사 2체+최대마나+2+체력+10", textJa: "ダイス1~6 — ①② 自分の最大マナ-4 / ③④ 相手マナ-1・14 / ⑤ 嵐の戦士(2回攻撃)召喚 / ⑥ 相手の魔法・罠全滅+嵐の戦士2体+最大マナ+2+体力+10" },
 };
 
 const NEW_CARDS3: CardDef[] = [
@@ -866,6 +866,33 @@ export const ALL_IDS = Object.keys(DB);
 // markets never offer the Mimic token (cost 0) — excluded from buyable pool
 export const BUYABLE_POOL = ALL_IDS.filter((id) => DB[id].cost > 0);
 
+// ---- related cards (for the zoom panel): what a card summons / references ----
+// Auto-derived by matching OTHER cards' names inside a card's text, plus a manual
+// map for abbreviated references (e.g. "초급·중급 암살자") the name-scan can't catch.
+const RELATED_MANUAL: Record<string, string[]> = {
+  ASSASSIN3: ["ASSASSIN1", "ASSASSIN2"],                 // 상급: needs an assassin on field
+  ASSASSIN4: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3"],    // 특급: needs 초/중/상급 in field·deck·grave
+  GUILD_CHEST: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3"],  // 암살자 길드 보물상자
+};
+const _relatedCache: Record<string, string[]> = {};
+export function relatedCardIds(id: string): string[] {
+  if (_relatedCache[id]) return _relatedCache[id];
+  const c = DB[id];
+  if (!c) return (_relatedCache[id] = []);
+  const out = new Set<string>(RELATED_MANUAL[id] ?? []);
+  const ko = c.text ?? "", ja = c.textJa ?? "";
+  for (const oid of ALL_IDS) {
+    if (oid === id) continue;
+    const o = DB[oid];
+    // match another card's name in this card's text (either language); skip 1-char names
+    if ((o.name && o.name.length >= 2 && ko.includes(o.name)) ||
+        (o.nameJa && o.nameJa.length >= 2 && ja.includes(o.nameJa))) out.add(oid);
+  }
+  // don't list a card's own tribe-mates here (the tribe panel already shows those)
+  if (c.tribe) for (const oid of [...out]) if (DB[oid].tribe === c.tribe) out.delete(oid);
+  return (_relatedCache[id] = [...out]);
+}
+
 // ============================================================
 // BALANCE VERSION — bump this string EVERY time a card's numbers/
 // effects change. Matches are tagged with it, so the admin card
@@ -873,7 +900,7 @@ export const BUYABLE_POOL = ALL_IDS.filter((id) => DB[id].cost > 0);
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v3"; // v3: 정예 기사단장 소환버프 코드 오류 수정(≤7/+3 → 텍스트대로 ≤8/+4)
+export const BALANCE_VERSION = "v4"; // v3: 정예 기사단장 ≤7/+3→≤8/+4 · v4: 군단의 기수 조건 24장→텍스트대로 20장
 
 export function idsOfCost(cost: number): string[] {
   return BUYABLE_POOL.filter((id) => DB[id].cost === cost);

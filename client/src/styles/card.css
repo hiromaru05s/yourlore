@@ -120,6 +120,28 @@
 }
 .cast-tip.show { opacity: 1; visibility: visible; }
 
+/* ENCHANTMENT (영구마법) marker — a small ∞ badge in the effect plate corner,
+   with a hover tooltip explaining that the card persists on the field. */
+.card-ench {
+  position: absolute; top: 0.15em; right: 0.2em; z-index: 4;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.55em; height: 1.55em; border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #8a72e8, #4a34a0 85%); color: #fff;
+  border: 1px solid #c3b4ffcc; box-shadow: 0 1px 2px #0005, inset 0 0 0 1px #ffffff30;
+  cursor: help;
+}
+.card-ench .ce-ico { font-size: 1.15em; font-weight: 800; line-height: 1; }
+.ench-tip {
+  position: absolute; left: 7%; right: 7%; top: 22%; z-index: 40;
+  pointer-events: none; text-align: left;
+  background: #120e1cf7; color: #ece3ff;
+  border: 1px solid #7c66c0; border-radius: 7px;
+  padding: 0.55em 0.6em; font-size: 0.4em; line-height: 1.32; font-weight: 500;
+  box-shadow: 0 0.4em 1.1em #000c;
+  opacity: 0; visibility: hidden; transition: opacity .1s;
+}
+.ench-tip.show { opacity: 1; visibility: visible; }
+
 /* monster atk/def: numbers only, centered in the frame's built-in sword/shield slots.
    Rendered exactly like .card-name / .card-eff (flex-centered absolute div, inheriting the
    normal --ui font, no monospace font and no transform) so they render on every OS/browser.
