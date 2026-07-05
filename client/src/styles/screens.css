@@ -3,7 +3,11 @@
    ============================================================ */
 .screen { height: 100vh; display: grid; place-items: center; padding: 24px; position: relative; }
 /* the home screen is tall (top bar + modes + tiles) → top-align + scroll. */
-.screen:has(.home) { align-items: start; padding: 30px 26px 26px; overflow-y: auto; }
+.screen:has(.home) {
+  align-items: start; padding: 30px 26px 26px; overflow-y: auto;
+  /* minimal LORE wallpaper — responsive cover; subtle darken keeps UI/text readable */
+  background: linear-gradient(#05070b66, #05070b99), url(/bg/home.jpg) center center / cover no-repeat fixed, #05070b;
+}
 .topright-lang { position: absolute; top: 22px; right: 26px; z-index: 5; }
 .lang-select select { background: var(--ink-2); color: var(--paper); border: 1px solid var(--line); border-radius: 7px; padding: 6px 11px; font-family: var(--ui); font-size: 13px; cursor: pointer; }
 .lang-select select:focus { outline: none; border-color: var(--brass); }

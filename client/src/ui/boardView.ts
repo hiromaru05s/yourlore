@@ -159,8 +159,9 @@ export class GameView {
       cb.className = "card--back";
       cb.style.backgroundImage = `url(${FRAME_BACK})`;
       cb.style.width = "56px"; cb.style.height = "90px";
-      // fan under 11 cards; flat even row past that (keeps every card edge visible)
-      cb.style.transform = flatOpp ? "none" : `rotate(${-(i - mid) * 4}deg) translateY(${-(Math.abs(i - mid) ** 2) * 1.4}px)`;
+      // fan under 11 cards; flat even row past that (keeps every card edge visible).
+      // arc DOWNWARD (edge cards lower) so the tops never cross the board's top clip edge.
+      cb.style.transform = flatOpp ? "none" : `rotate(${-(i - mid) * 4}deg) translateY(${(Math.abs(i - mid) ** 2) * 1.1}px)`;
       cb.style.zIndex = String(i);
       oh.appendChild(cb);
     }

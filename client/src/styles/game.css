@@ -44,7 +44,7 @@
 
 /* ---- stage ---- */
 /* single-column board; the log is a left-edge drawer (overlay), not a column */
-.stage { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; min-height: 0; overflow: hidden; }
+.stage { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; min-height: 0; overflow: hidden; position: relative; z-index: 1; }
 
 /* log toggle — a vertical tab pinned at the mid-LEFT edge */
 .log-tab {
@@ -83,8 +83,8 @@
 .board-col { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 5px; min-height: 0; align-content: start; }
 
 /* opponent fanned hand (face-down), overflowing from top */
-.opp-hand { display: flex; justify-content: center; align-items: flex-start; height: 14px; margin-top: -4px; position: relative; z-index: 40; }
-.opp-hand .card--back { width: 44px; height: 70px; margin: 0 -14px; transform-origin: bottom center; }
+.opp-hand { display: flex; justify-content: center; align-items: flex-start; height: 14px; margin-top: 3px; position: relative; z-index: 40; pointer-events: none; }
+.opp-hand .card--back { width: 44px; height: 70px; margin: 0 -14px; transform-origin: top center; }
 .opp-hand.is-flat .card--back { margin: 0 -8px; } /* >10 cards: even, countable row */
 /* the lone "0"/count badge — removed per request */
 .opp-hand-count { display: none; }
@@ -350,17 +350,21 @@
 .hand.is-flat .card { margin: 0 -6px; }
 /* END TURN — a round button, sitting well to the left (in the lower-right area) */
 .end-turn-wrap { position: fixed; right: clamp(80px, 16vw, 340px); top: 66%; bottom: auto; transform: translateY(-50%); z-index: 45; }
-/* matte finish — flat colour, no gloss/shine */
+/* hexagon frame image (green-screen keyed); localized text overlays the dark center so
+   the same art works for every language. idle → hover swaps to the glowing variant. */
 .end-turn-wrap .btn {
-  position: relative; overflow: hidden; letter-spacing: .02em;
-  width: clamp(74px, 8.4vh, 100px); height: clamp(74px, 8.4vh, 100px); border-radius: 50%; padding: 0;
-  display: grid; place-items: center; text-align: center; white-space: normal; line-height: 1.18;
-  font-size: clamp(13px, 1.5vh, 17px); font-weight: 700; color: #fff;
-  background: #a83c28; border: 1px solid #c25640;
-  box-shadow: 0 3px 10px #0007, inset 0 0 0 1px #00000030;
+  position: relative; letter-spacing: .04em;
+  width: clamp(132px, 17vh, 178px); height: auto; aspect-ratio: 610 / 272; padding: 0 0 2px;
+  display: grid; place-items: center; text-align: center; white-space: normal; line-height: 1.15;
+  font-size: clamp(13px, 1.65vh, 18px); font-weight: 800; color: #eaf3ff;
+  text-shadow: 0 1px 3px #000b, 0 0 8px #0009;
+  background: url(/ui/endturn_idle.png) center/100% 100% no-repeat;
+  border: none; border-radius: 0; box-shadow: none;
+  transition: color .15s var(--ease), text-shadow .15s var(--ease);
 }
-.end-turn-wrap .btn:hover:not(:disabled) { background: #bd4530; border-color: #d16148; box-shadow: 0 4px 14px #0008; }
-.end-turn-wrap .btn:active:not(:disabled) { background: #963421; }
+.end-turn-wrap .btn:hover:not(:disabled) { background-image: url(/ui/endturn_hover.png); color: #d6eeff; text-shadow: 0 1px 3px #000b, 0 0 12px #4fb4ffaa; }
+.end-turn-wrap .btn:active:not(:disabled) { transform: translateY(1px); }
+.end-turn-wrap .btn:disabled { filter: grayscale(.55) brightness(.62); opacity: .85; }
 .end-turn-wrap .btn::after { content: none; }
 
 /* ---- log panel ---- */
