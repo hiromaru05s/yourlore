@@ -893,3 +893,17 @@ export function frameFor(t: CardType): string {
   return "/frames/blue.png"; // spell
 }
 export const FRAME_BACK = "/frames/back.png";
+
+// ---- card sleeves (card backs). 'default' is free & always owned; the rest cost
+// 1 credit in the shop. Server (social.ts) is the authority on price/ownership. ----
+export interface Sleeve { id: string; url: string; ko: string; ja: string; en: string; price: number; }
+export const SLEEVES: Record<string, Sleeve> = {
+  default: { id: "default", url: "/frames/back.png",          ko: "기본",   ja: "デフォルト", en: "Default", price: 0 },
+  prism:   { id: "prism",   url: "/frames/sleeve_prism.png",   ko: "프리즘", ja: "プリズム",   en: "Prism",   price: 1 },
+  abyss:   { id: "abyss",   url: "/frames/sleeve_abyss.png",   ko: "심연",   ja: "深淵",       en: "Abyss",   price: 1 },
+  verdant: { id: "verdant", url: "/frames/sleeve_verdant.png", ko: "녹옥",   ja: "翠玉",       en: "Verdant", price: 1 },
+  ivory:   { id: "ivory",   url: "/frames/sleeve_ivory.png",   ko: "상아",   ja: "象牙",       en: "Ivory",   price: 1 },
+};
+/** ordered list for shop/picker rendering (default first). */
+export const SLEEVE_LIST: Sleeve[] = ["default", "prism", "abyss", "verdant", "ivory"].map((id) => SLEEVES[id]);
+export function sleeveUrl(id: string | null | undefined): string { return SLEEVES[id || "default"]?.url ?? FRAME_BACK; }

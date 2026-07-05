@@ -26,4 +26,5 @@ export interface SessionUser {
   credits: number;
   avatar?: string | null; // preset avatar (card id)
   badge?: string | null;  // equipped badge key
+  sleeve?: string | null; // equipped card sleeve id ('default' when none)
 }

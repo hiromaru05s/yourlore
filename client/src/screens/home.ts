@@ -4,7 +4,6 @@
 import type { App, Screen } from "../router";
 import { api } from "../net/api";
 import { t, onLangChange } from "../i18n";
-import { langSelectEl } from "../ui/langSelect";
 import { tierChipHtml } from "../ui/tier";
 import { avatarHtml, badgeChipHtml } from "../ui/social";
 import { watchSocial } from "./friends";
@@ -17,6 +16,9 @@ export function mountHome(app: App): Screen {
     <div class="home">
       <div class="home-top">
         <div class="screen-brand home-brand"><div class="mark"></div></div>
+        <button class="home-credits" id="credits" title="${t("home.shop.title")}">
+          <span class="hc-gem">💎</span><b>${u?.credits ?? 0}</b>
+        </button>
         <div class="home-top-right">
           <button class="home-id" id="profile" title="${t("home.profile.title")}">
             ${avatarHtml(u?.avatar, u?.display ?? "P", 42)}
@@ -26,7 +28,6 @@ export function mountHome(app: App): Screen {
             </span>
             <span class="home-id-go">›</span>
           </button>
-          <div class="topright-lang"></div>
         </div>
       </div>
       <div class="modes modes-3">
@@ -68,22 +69,19 @@ export function mountHome(app: App): Screen {
           <span class="tut-txt"><b>${t("home.cards.title")}</b><span>${t("home.cards.desc")}</span></span>
           <span class="tut-arrow">→</span>
         </div>
+        <div class="panel tut-card" id="shop">
+          <span class="tut-emoji">🛒</span>
+          <span class="tut-txt"><b>${t("home.shop.title")}</b><span>${t("home.shop.desc")}</span></span>
+          <span class="tut-arrow">→</span>
+        </div>
         <div class="panel tut-card" id="tutorial">
           <span class="tut-emoji">📖</span>
           <span class="tut-txt"><b>${t("home.tutorial.title")}</b><span>${t("home.tutorial.desc")}</span></span>
           <span class="tut-arrow">→</span>
         </div>
       </div>
-      <div class="acct">
-        <span class="credits" title="${t("home.credits")}">💎 ${u?.credits ?? 0}</span>
-        <span>·</span>
-        <a id="settings" style="cursor:pointer">⚙ ${t("home.settings")}</a>
-        <span>·</span>
-        <a id="logout" style="cursor:pointer">${t("home.logout")}</a>
-      </div>
     </div>`;
   app.root.appendChild(wrap);
-  wrap.querySelector(".topright-lang")!.appendChild(langSelectEl());
 
   (wrap.querySelector("#ranked") as HTMLElement).onclick = () => app.rankedLobby();
   (wrap.querySelector("#lb") as HTMLElement).onclick = () => app.leaderboard();
@@ -97,11 +95,11 @@ export function mountHome(app: App): Screen {
     if (el && r) el.innerHTML = tierChipHtml(r.tier, r.mmr);
   }).catch(() => { /* not logged in / offline */ });
   (wrap.querySelector("#cards") as HTMLElement).onclick = () => app.cards();
+  (wrap.querySelector("#shop") as HTMLElement).onclick = () => app.shop();
   (wrap.querySelector("#tutorial") as HTMLElement).onclick = () => app.tutorial();
   (wrap.querySelector("#profile") as HTMLElement).onclick = () => app.profile();
   (wrap.querySelector("#friends") as HTMLElement).onclick = () => app.friends();
-  (wrap.querySelector("#settings") as HTMLElement).onclick = () => app.settings();
-  (wrap.querySelector("#logout") as HTMLElement).onclick = () => app.logout();
+  (wrap.querySelector("#credits") as HTMLElement).onclick = () => app.shop();
 
   // incoming friend requests badge + friendly-challenge popups while on HOME
   const unwatch = watchSocial(app, (n) => {

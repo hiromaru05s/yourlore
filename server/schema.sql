@@ -16,7 +16,9 @@ CREATE TABLE IF NOT EXISTS users (
   credits     INTEGER NOT NULL DEFAULT 0, -- 단일 소프트 커런시 (docs/monetization.md)
   avatar      TEXT,                       -- 프리셋 아바타 (카드 id)
   badge       TEXT,                       -- 장착 뱃지 키 (보유 여부는 서버가 계산)
-  stats_public INTEGER NOT NULL DEFAULT 1 -- 프로필 전적 공개 여부
+  stats_public INTEGER NOT NULL DEFAULT 1, -- 프로필 전적 공개 여부
+  sleeve      TEXT,                       -- 장착 카드 슬리브 id (null = 'default')
+  sleeves     TEXT                        -- 구매 소유한 슬리브 id csv (default는 항상 무료 보유)
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_users_invite_code ON users(invite_code) WHERE invite_code IS NOT NULL;
 

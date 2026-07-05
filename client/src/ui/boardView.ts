@@ -5,7 +5,7 @@
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { effMaxMana, playCost, buyCost } from "../shared/engine";
-import { frameFor, FRAME_BACK, TRIBES, DB as DBC, STARTERS } from "../shared/cards";
+import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS } from "../shared/cards";
 import { cardPicker } from "./modal";
 import { cardEl } from "./cardView";
 import { bindZoom } from "./anim";
@@ -17,6 +17,13 @@ import { avatarHtml } from "./social";
 // the local player's profile avatar (set by the game screen), shown in MY meta panel
 let MY_AVATAR: string | null | undefined;
 export function setMyAvatar(a?: string | null): void { MY_AVATAR = a; }
+
+// the local player's equipped card-sleeve URL — used for MY deck/set-trap backs
+// (opponent's backs stay default; per-player sleeve sync isn't wired through the engine).
+let MY_SLEEVE = FRAME_BACK;
+export function setMySleeve(id?: string | null): void { MY_SLEEVE = sleeveUrl(id); }
+/** card-back image for a pile/back that belongs to `isMe`. */
+function backFor(isMe: boolean): string { return isMe ? MY_SLEEVE : FRAME_BACK; }
 
 const MON_SLOTS = 7;
 const ST_SLOTS = 7;
@@ -192,7 +199,7 @@ export class GameView {
       () => cardPicker(`${p.name} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => { /* browse only */ }));
     // clicking the DECK opens the full composition (own or opponent's public aggregate)
     const collection = this.collectionOf(p, isMe);
-    const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, FRAME_BACK, null, t("game.deck"),
+    const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, backFor(isMe), null, t("game.deck"),
       () => cardPicker(`${p.name} — ${t("deck.view")} (${collection.length})`, collection, () => { /* browse only */ }));
 
     const block = document.createElement("div");
@@ -224,7 +231,7 @@ export class GameView {
       } else {
         const cb = document.createElement("div");
         cb.className = "card card--back";
-        cb.style.backgroundImage = `url(${FRAME_BACK})`;
+        cb.style.backgroundImage = `url(${backFor(isMe)})`;
         sz.appendChild(cb);
       }
     });

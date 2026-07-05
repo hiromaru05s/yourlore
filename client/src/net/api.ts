@@ -11,6 +11,7 @@ export interface User {
   credits: number;
   avatar?: string | null; // preset avatar (card id)
   badge?: string | null;  // equipped badge key
+  sleeve?: string | null; // equipped card sleeve id ('default' when none)
 }
 
 export interface ClaimResult {
@@ -80,8 +81,9 @@ export const api = {
   redeemCoupon: (code: string) => call<ClaimResult>("/rewards/coupon", { code }),
   // ---- social: profile / friends / challenges ----
   profile: (id?: string) => call<{ profile: Profile }>(`/social/profile${id ? `?id=${encodeURIComponent(id)}` : ""}`, undefined, "GET").then((r) => r.profile),
-  updateMe: (patch: { display?: string; avatar?: string; badge?: string; stats_public?: boolean }) =>
-    call<{ ok: true; display: string; avatar: string | null; badge: string | null; stats_public: boolean }>("/social/me", patch),
+  updateMe: (patch: { display?: string; avatar?: string; badge?: string; stats_public?: boolean; sleeve?: string }) =>
+    call<{ ok: true; display: string; avatar: string | null; badge: string | null; stats_public: boolean; sleeve: string }>("/social/me", patch),
+  buySleeve: (id: string) => call<{ ok: true; credits: number; sleeves: string[] }>("/social/buy-sleeve", { id }),
   friends: () => call<FriendsData>("/social/friends", undefined, "GET"),
   friendRequest: (q: string) => call<{ ok: true; display: string }>("/social/friends/request", { q }),
   friendRespond: (user_id: string, accept: boolean) => call<{ ok: true }>("/social/friends/respond", { user_id, accept }),
@@ -102,6 +104,9 @@ export interface Profile {
   tier?: string | null; mmr?: number | null; rank?: number | null;
   recent?: { mode: string; result: "win" | "loss" | "draw"; opp: string; turns: number | null; at: number }[];
   badges?: string[]; // owned badge keys (self only)
+  credits?: number;  // self only
+  sleeve?: string;   // equipped sleeve id (self only)
+  sleeves?: string[]; // owned sleeve ids incl. 'default' (self only)
 }
 
 export interface FriendEntry { id: string; display: string; avatar: string | null; badge: string | null; online: boolean; state: string | null; }

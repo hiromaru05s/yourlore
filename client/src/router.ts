@@ -14,9 +14,9 @@ import { mountTutorial } from "./screens/tutorial";
 import { mountCards } from "./screens/cards";
 import { mountLeaderboard } from "./screens/leaderboard";
 import { mountAdmin } from "./screens/admin";
-import { mountProfile } from "./screens/profile";
+import { mountProfile, type ProfileTab } from "./screens/profile";
 import { mountFriends } from "./screens/friends";
-import { mountSettings } from "./screens/settings";
+import { mountShop } from "./screens/shop";
 
 export interface Screen { destroy?(): void; }
 
@@ -54,9 +54,10 @@ export class App {
   onlineLobby(): void { setPresence("queue"); this.swap(() => mountLobby(this)); }
   rankedLobby(): void { setPresence("queue"); this.swap(() => mountLobby(this, true)); }
   leaderboard(): void { setPresence("menu"); this.swap(() => mountLeaderboard(this)); }
-  profile(userId?: string): void { setPresence("menu"); this.swap(() => mountProfile(this, userId)); }
+  profile(userId?: string, tab?: ProfileTab): void { setPresence("menu"); this.swap(() => mountProfile(this, userId, tab)); }
   friends(): void { setPresence("menu"); this.swap(() => mountFriends(this)); }
-  settings(): void { setPresence("menu"); this.swap(() => mountSettings(this)); }
+  settings(): void { this.profile(undefined, "settings"); } // settings now lives as a profile tab
+  shop(): void { setPresence("menu"); this.swap(() => mountShop(this)); }
   onlineGame(roomId: string, you: Side, oppName: string): void {
     setPresence("online");
     aCapture("game_start", { mode: "online" });

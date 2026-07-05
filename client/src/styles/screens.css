@@ -113,12 +113,17 @@
 /* ---- home ---- */
 .home { width: min(760px, 94vw); text-align: center; margin: 0 auto; }
 
-/* top bar: wordmark (left) + profile & language (right) */
+/* top bar: wordmark (left) · credits (center) · profile (right) */
 .home-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
 .home-brand { position: static; transform: none; top: auto; left: auto; }
 .home-brand .mark { width: 148px; height: 50px; }
 .home-top-right { display: flex; align-items: center; gap: 12px; }
-.home-top-right .topright-lang { position: static; top: auto; right: auto; }
+
+/* credits chip (opens the shop) */
+.home-credits { display: inline-flex; align-items: center; gap: 7px; padding: 8px 15px; border-radius: 999px; border: 1px solid var(--line); background: linear-gradient(180deg, #4fb4ff12, #ffffff03); cursor: pointer; transition: .15s var(--ease); font-family: var(--mono); }
+.home-credits:hover { border-color: var(--blue); background: #4fb4ff1f; transform: translateY(-1px); box-shadow: 0 6px 18px #0007; }
+.home-credits .hc-gem { font-size: 15px; }
+.home-credits b { color: var(--cyan); font-size: 16px; letter-spacing: .04em; }
 
 .home .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .mode-card { padding: 28px 20px; text-align: center; cursor: pointer; transition: .16s var(--ease); }
@@ -341,3 +346,31 @@
 .bill-plan { margin-top: 10px; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--brass-dim); background: linear-gradient(160deg, #4fb4ff14, #ffffff03); }
 .bill-plan-name { font-family: var(--mono); letter-spacing: .22em; color: var(--brass-hi); font-size: 13px; margin-bottom: 6px; }
 .bill-plan-desc { font-size: 12.5px; color: var(--paper-dim); margin-bottom: 12px; line-height: 1.6; }
+
+/* ---- profile tab bar ---- */
+.pf-tabs { display: flex; gap: 6px; padding: 10px 2px 0; }
+.pf-tab { flex: 1; padding: 9px 6px; border-radius: 10px 10px 0 0; border: 1px solid transparent; border-bottom: none; background: transparent; color: var(--paper-faint); font-family: var(--mono); font-size: 12.5px; letter-spacing: .06em; cursor: pointer; transition: .14s var(--ease); }
+.pf-tab:hover { color: var(--paper-dim); background: #ffffff08; }
+.pf-tab.is-active { color: var(--brass-hi); background: linear-gradient(180deg, #4fb4ff14, #ffffff03); border-color: var(--line); }
+
+/* ---- card sleeves (profile + shop share .sl-preview) ---- */
+.sl-preview { width: 84px; height: 131px; border-radius: 8px; background-size: cover; background-position: center; border: 1px solid var(--line); box-shadow: 0 4px 12px #0007; position: relative; }
+.sl-preview-lg { width: 116px; height: 181px; border-color: var(--brass-dim); box-shadow: 0 6px 18px #000a, 0 0 0 1px #4fb4ff33; }
+.sl-current-row { display: flex; align-items: center; gap: 18px; }
+.sl-current-name { font-family: var(--mono); font-size: 16px; letter-spacing: .06em; color: var(--brass-hi); margin-bottom: 6px; }
+.sl-current-tag { font-size: 12px; color: var(--cyan); letter-spacing: .04em; }
+.sl-grid, .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 16px 12px; margin-top: 6px; }
+.sl-tile, .shop-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.sl-tile .sl-preview, .shop-item .sl-preview { transition: transform .14s var(--ease); }
+.sl-tile:hover .sl-preview, .shop-item:hover .sl-preview { transform: translateY(-3px); }
+.sl-tile.is-eq .sl-preview { border-color: var(--brass); box-shadow: 0 4px 14px #000a, 0 0 0 2px var(--cyan); }
+.sl-tile.is-locked .sl-preview { filter: grayscale(.5) brightness(.72); }
+.sl-lock { position: absolute; inset: 0; display: grid; place-items: center; font-size: 22px; }
+.sl-name { font-size: 12px; color: var(--paper-dim); text-align: center; }
+.sl-price { font-family: var(--mono); font-size: 12px; color: var(--cyan); }
+.sl-getmore { display: inline-block; margin-top: 12px; color: var(--blue-hi); font-size: 13px; cursor: pointer; }
+.sl-getmore:hover { text-decoration: underline; }
+
+/* ---- shop ---- */
+.shop-credits { margin-left: auto; font-family: var(--mono); font-size: 15px; color: var(--cyan); }
+.shop-item.is-owned .sl-preview { border-color: var(--brass-dim); }

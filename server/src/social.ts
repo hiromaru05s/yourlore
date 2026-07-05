@@ -16,6 +16,16 @@ const CHALLENGE_TTL_MS = 90_000;
 const PRESENCE_ONLINE_MS = 70_000; // presence heartbeat is 30s — 70s covers 2 missed beats
 const MAX_FRIENDS = 100;
 
+// ---- card sleeves (server = authority on price/ownership; client cards.ts mirrors ids) ----
+// 'default' is always owned & free. Buyable sleeves cost 1 credit each.
+const SLEEVE_PRICE = 1;
+const BUYABLE_SLEEVES = new Set(["prism", "abyss", "verdant", "ivory"]);
+const ALL_SLEEVES = new Set(["default", ...BUYABLE_SLEEVES]);
+/** owned buyable ids from the csv column (default is implicit, never stored). */
+function parseSleeves(csv: string | null): string[] {
+  return (csv ?? "").split(",").map((s) => s.trim()).filter((s) => BUYABLE_SLEEVES.has(s));
+}
+
 function json(env: Env, body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
 }
@@ -45,10 +55,10 @@ export async function ownedBadges(env: Env, userId: string): Promise<string[]> {
   return out;
 }
 
-interface ProfileRow { id: string; display: string; avatar: string | null; badge: string | null; stats_public: number; wins: number; losses: number; created_at: number; }
+interface ProfileRow { id: string; display: string; avatar: string | null; badge: string | null; stats_public: number; wins: number; losses: number; created_at: number; credits: number; sleeve: string | null; sleeves: string | null; }
 
 async function profileOf(env: Env, targetId: string, viewer: SessionUser | null): Promise<Response | Record<string, unknown> | null> {
-  const u = await env.DB.prepare(`SELECT id, display, avatar, badge, stats_public, wins, losses, created_at FROM users WHERE id = ?`)
+  const u = await env.DB.prepare(`SELECT id, display, avatar, badge, stats_public, wins, losses, created_at, credits, sleeve, sleeves FROM users WHERE id = ?`)
     .bind(targetId).first<ProfileRow>();
   if (!u) return null;
   const self = viewer?.id === u.id;
@@ -81,7 +91,12 @@ async function profileOf(env: Env, targetId: string, viewer: SessionUser | null)
     mmr: rating?.mmr ?? null,
     rank: above ? (above.n ?? 0) + 1 : null,
     recent,
-    ...(self ? { badges: await ownedBadges(env, u.id) } : {}),
+    ...(self ? {
+      badges: await ownedBadges(env, u.id),
+      credits: u.credits,
+      sleeve: u.sleeve || "default",
+      sleeves: ["default", ...parseSleeves(u.sleeves)],
+    } : {}),
   };
 }
 
@@ -100,7 +115,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
   }
 
   if (path === "/social/me" && req.method === "POST") {
-    const body = (await req.json().catch(() => ({}))) as { display?: string; avatar?: string; badge?: string; stats_public?: boolean };
+    const body = (await req.json().catch(() => ({}))) as { display?: string; avatar?: string; badge?: string; stats_public?: boolean; sleeve?: string };
     const sets: string[] = [];
     const args: unknown[] = [];
     if (typeof body.display === "string") {
@@ -119,11 +134,40 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
       sets.push("badge = ?"); args.push(body.badge || null);
     }
     if (typeof body.stats_public === "boolean") { sets.push("stats_public = ?"); args.push(body.stats_public ? 1 : 0); }
+    if (typeof body.sleeve === "string") {
+      const id = body.sleeve || "default";
+      if (!ALL_SLEEVES.has(id)) return json(env, { error: "잘못된 슬리브" }, 400);
+      if (id !== "default") {
+        const row = await env.DB.prepare(`SELECT sleeves FROM users WHERE id = ?`).bind(user.id).first<{ sleeves: string | null }>();
+        if (!parseSleeves(row?.sleeves ?? null).includes(id)) return json(env, { error: "보유하지 않은 슬리브입니다." }, 400);
+      }
+      sets.push("sleeve = ?"); args.push(id === "default" ? null : id);
+    }
     if (!sets.length) return json(env, { error: "no changes" }, 400);
     await env.DB.prepare(`UPDATE users SET ${sets.join(", ")} WHERE id = ?`).bind(...args, user.id).run();
-    const u = await env.DB.prepare(`SELECT display, avatar, badge, stats_public FROM users WHERE id = ?`).bind(user.id)
-      .first<{ display: string; avatar: string | null; badge: string | null; stats_public: number }>();
-    return json(env, { ok: true, display: u?.display, avatar: u?.avatar, badge: u?.badge, stats_public: !!u?.stats_public });
+    const u = await env.DB.prepare(`SELECT display, avatar, badge, stats_public, sleeve FROM users WHERE id = ?`).bind(user.id)
+      .first<{ display: string; avatar: string | null; badge: string | null; stats_public: number; sleeve: string | null }>();
+    return json(env, { ok: true, display: u?.display, avatar: u?.avatar, badge: u?.badge, stats_public: !!u?.stats_public, sleeve: u?.sleeve || "default" });
+  }
+
+  // ---- shop: buy a card sleeve (1 credit, server-authoritative price) ----
+  if (path === "/social/buy-sleeve" && req.method === "POST") {
+    const body = (await req.json().catch(() => ({}))) as { id?: string };
+    const id = String(body.id ?? "");
+    if (!BUYABLE_SLEEVES.has(id)) return json(env, { error: "잘못된 상품입니다." }, 400);
+    const row = await env.DB.prepare(`SELECT credits, sleeves FROM users WHERE id = ?`).bind(user.id)
+      .first<{ credits: number; sleeves: string | null }>();
+    if (!row) return json(env, { error: "사용자를 찾을 수 없습니다." }, 404);
+    const owned = parseSleeves(row.sleeves);
+    if (owned.includes(id)) return json(env, { error: "이미 보유한 슬리브입니다." }, 400);
+    if ((row.credits ?? 0) < SLEEVE_PRICE) return json(env, { error: "크레딧이 부족합니다." }, 400);
+    const nextSleeves = [...owned, id].join(",");
+    const nextCredits = row.credits - SLEEVE_PRICE;
+    // guarded update: credits check in WHERE prevents a double-spend race
+    const res = await env.DB.prepare(`UPDATE users SET credits = ?, sleeves = ? WHERE id = ? AND credits >= ?`)
+      .bind(nextCredits, nextSleeves, user.id, SLEEVE_PRICE).run();
+    if (!res.meta.changes) return json(env, { error: "크레딧이 부족합니다." }, 400);
+    return json(env, { ok: true, credits: nextCredits, sleeves: ["default", ...owned, id] });
   }
 
   // ---- friends ----
