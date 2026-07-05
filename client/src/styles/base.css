@@ -100,7 +100,7 @@ button { font-family: var(--ui); cursor: pointer; }
 
 /* ---- overlay / modal ---- */
 .overlay {
-  position: fixed; inset: 0; z-index: 150; /* above the zoom layer (130) */
+  position: fixed; inset: 0; z-index: 150; /* card-picker/modal layer; card zoom (250) sits ABOVE this */
   display: flex; align-items: center; justify-content: center;
   background: #04070ccc; backdrop-filter: blur(4px);
   animation: fade .2s var(--ease);

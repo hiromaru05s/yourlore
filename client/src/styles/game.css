@@ -443,7 +443,9 @@
 .flycard { position: fixed; z-index: 110; border-radius: 6px; background-size: 100% 100%; pointer-events: none; box-shadow: var(--shadow-2); }
 
 /* zoom (right-click to enlarge) */
-.zoom-overlay { position: fixed; inset: 0; z-index: 130; background: #04070cdd; backdrop-filter: blur(5px); display: grid; place-items: center; cursor: zoom-out; }
+/* z-index 250: above the card-picker/modal overlay (150) so zooming a card from inside
+   the deck-composition / graveyard browser shows ON TOP, not behind it. */
+.zoom-overlay { position: fixed; inset: 0; z-index: 250; background: #04070cdd; backdrop-filter: blur(5px); display: grid; place-items: center; cursor: zoom-out; }
 .zoom-wrap { display: flex; align-items: center; gap: 28px; }
 .zoom-overlay .card { --cw: 400px; --ch: 640px; box-shadow: var(--shadow-2); }
 .zoom-tribe { max-width: 280px; text-align: left; color: var(--paper); background: linear-gradient(180deg, var(--ink-3), var(--ink-1)); border: 1px solid var(--brass-dim); border-radius: 12px; padding: 18px 20px; box-shadow: var(--shadow-2); }
