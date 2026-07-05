@@ -133,8 +133,26 @@
 .home-credits b { color: var(--cyan); font-size: 16px; letter-spacing: .04em; }
 
 .home .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.mode-card { padding: 28px 20px; text-align: center; cursor: pointer; transition: .16s var(--ease); }
-.mode-card:hover { transform: translateY(-4px); border-color: var(--brass); box-shadow: 0 12px 30px #000a, inset 0 1px 0 #ffffff10; }
+/* sci-fi frame (9-slice webp): corners stay crisp, edges stretch at any size */
+.mode-card {
+  padding: 30px 20px 26px; text-align: center; cursor: pointer; transition: .16s var(--ease);
+  background: none; border-radius: 0; box-shadow: none;
+  border: 2px solid transparent;
+  border-image: url(/ui/panel-frame.webp) 288 fill / 34px / 0 stretch;
+}
+.mode-card::after { /* top/bottom center neon gems + soft face sheen */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    url(/ui/panel-gem.webp) top 1px center / 46px auto no-repeat,
+    url(/ui/panel-gem.webp) bottom 1px center / 46px auto no-repeat,
+    radial-gradient(120% 90% at 50% 0%, #4fb4ff08, transparent 55%);
+  opacity: .92;
+}
+.mode-card:hover, .mode-card:active {
+  transform: translateY(-4px);
+  border-image-source: url(/ui/panel-frame-lit.webp);
+  box-shadow: 0 12px 30px #000a, 0 0 26px #2aa4ff30;
+}
 .mode-card .icon { font-size: 34px; margin-bottom: 10px; }
 .mode-card .mode-ico { width: 62px; height: 62px; object-fit: contain; margin: 0 auto 8px; display: block; filter: drop-shadow(0 3px 8px #0008); transition: transform .16s var(--ease); }
 .mode-card:hover .mode-ico { transform: scale(1.06); }
@@ -221,8 +239,7 @@
 /* ---- ranked: home cards / tier chip / leaderboard ---- */
 .home:has(.modes-3) { width: min(760px, 94vw); }
 .home .modes-3 { grid-template-columns: repeat(3, 1fr); }
-.mode-ranked { border-color: #4fb4ff55; }
-.mode-ranked:hover { border-color: var(--gold-glow); box-shadow: 0 12px 30px #000a, 0 0 22px #4fb4ff22, inset 0 1px 0 #ffffff10; }
+.mode-ranked:hover { box-shadow: 0 12px 30px #000a, 0 0 30px #4fb4ff3a; }
 .mode-card .my-tier { margin-top: 10px; min-height: 22px; }
 
 .tier-chip {
