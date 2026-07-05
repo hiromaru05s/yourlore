@@ -36,7 +36,12 @@ interface RoomData {
   gen: [number, number];
   /** Pending forfeit deadlines (ms epoch) per side; enforced by alarm(). */
   forfeitAt: [number | null, number | null];
+  /** ms epoch when the CURRENT turn began — server-authoritative turn clock, so a
+      reconnecting/reopened client resumes with the correct remaining time (not a fresh 50s). */
+  turnStartAt: number;
 }
+
+const TURN_MS = 50000;
 
 /** Attached to each socket; survives hibernation. */
 interface Att { side: Side; gen: number; }
@@ -71,6 +76,7 @@ export class GameRoom {
         ranked: r.ranked ?? false,
         gen: r.gen ?? [0, 0],
         forfeitAt: r.forfeitAt ?? [null, null],
+        turnStartAt: r.turnStartAt ?? Date.now(),
       };
     }
     return this.room;
@@ -98,6 +104,7 @@ export class GameRoom {
         ranked: body.ranked ?? false,
         gen: [0, 0],
         forfeitAt: [null, null],
+        turnStartAt: Date.now(),
       };
       this.persist();
       return new Response("ok");
@@ -171,8 +178,12 @@ export class GameRoom {
       // opening events only on the first ready; a reconnect just resyncs state
       const events = room.readied[att.side] ? [] : room.initEvents;
       room.readied[att.side] = true;
+      // a reconnect cancels this side's pending forfeit and un-pauses the opponent
+      if (room.forfeitAt[att.side] != null) { room.forfeitAt[att.side] = null; this.syncAlarm(); }
+      const other = this.sockFor((1 - att.side) as Side);
+      if (other) { try { this.send(other, { type: "oppConn", connected: true }); } catch { /* dropped */ } }
       this.persist();
-      this.send(ws, { type: "init", you: att.side, state: redactFor(room.game, att.side), events });
+      this.send(ws, { type: "init", you: att.side, state: this.redact(att.side), events });
       return;
     }
     if (msg.type === "action") this.handleAction(att.side, msg.action);
@@ -241,11 +252,20 @@ export class GameRoom {
     } else if (g.cur !== side) {
       return; // not this player's turn
     }
+    const prevCur = g.cur;
     const res = reduce(g, action);
     room.game = res.state;
+    if (res.state.cur !== prevCur) room.turnStartAt = Date.now(); // a new turn began → restart the server clock
     this.persist();
     this.broadcast(res.events);
     if (room.game.over) void this.recordResult();
+  }
+
+  /** Redacted state for `side`, stamped with the turn's remaining ms (server-authoritative clock). */
+  private redact(side: Side): GameState {
+    const s = redactFor(this.room!.game, side) as GameState & { turnLeftMs?: number };
+    s.turnLeftMs = Math.max(0, TURN_MS - (Date.now() - this.room!.turnStartAt));
+    return s;
   }
 
   private broadcast(events: GameEvent[]): void {
@@ -253,7 +273,7 @@ export class GameRoom {
     for (const side of [0, 1] as Side[]) {
       const ws = this.sockFor(side);
       if (!ws) continue;
-      try { this.send(ws, { type: "update", state: redactFor(room.game, side), events }); } catch { /* dropped */ }
+      try { this.send(ws, { type: "update", state: this.redact(side), events }); } catch { /* dropped */ }
     }
   }
 

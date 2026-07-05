@@ -124,6 +124,9 @@ export interface GameState {
   rng: number; // mutable PRNG state (mulberry32)
   uidSeq: number;
   mode: "bot" | "online";
+  /** server-stamped remaining ms for the current turn (online only); lets a reconnecting
+      client resume the turn clock instead of restarting it from full. */
+  turnLeftMs?: number;
 }
 
 // --- Actions: the only way to mutate a GameState ---

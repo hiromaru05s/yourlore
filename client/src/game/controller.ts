@@ -389,8 +389,12 @@ export abstract class BaseController implements BoardHandlers {
     if (key !== this.timerKey) {
       const firstTurn = this.timerKey === "";
       this.timerKey = key;
-      this.timerLeft = BaseController.TURN_SECS;
-      this.warned25 = false;
+      // Online: trust the server's remaining-ms so a reconnecting client resumes the
+      // same clock instead of restarting the turn. Bot mode has no turnLeftMs → full turn.
+      this.timerLeft = g.turnLeftMs != null
+        ? Math.max(1, Math.ceil(g.turnLeftMs / 1000))
+        : BaseController.TURN_SECS;
+      this.warned25 = this.timerLeft <= 25; // don't re-fire the 25s popup mid-turn on reconnect
       if (!firstTurn && g.cur === this.you) sfx("turn"); // my turn begins
       if (this.timerInt) clearInterval(this.timerInt);
       this.renderTimer();
