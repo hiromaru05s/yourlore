@@ -529,14 +529,29 @@ export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
     d.style.animationDelay = i * 60 + "ms";
     document.body.appendChild(d);
     setTimeout(() => d.remove(), 1400 + i * 60);
+    // spark burst when the gem lands on the pips
+    setTimeout(() => {
+      for (let k = 0; k < 2; k++) {
+        const s = document.createElement("div");
+        s.className = "fx-mana-s";
+        const a2 = Math.random() * Math.PI * 2;
+        const d2 = 16 + Math.random() * 30;
+        s.style.setProperty("--sx", Math.cos(a2) * d2 + "px");
+        s.style.setProperty("--sy", Math.sin(a2) * d2 + "px");
+        s.style.left = r.left + r.width / 2 + (Math.random() - 0.5) * r.width * 0.6 + "px";
+        s.style.top = r.top + r.height / 2 + "px";
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 700);
+      }
+    }, 950 + i * 60);
   }
-  anchor.classList.add("fx-pip-wave");
+  anchor.classList.add("fx-pip-wave", "fx-pips-punch");
   const lb = gainLabel(r, `◆ ${tt("fx.mana")} +${amount}`, "mana");
   await wait(2100);
   lb.classList.add("out"); aura.classList.add("out");
   await wait(300);
   lb.remove(); aura.remove();
-  anchor.classList.remove("fx-pip-wave");
+  anchor.classList.remove("fx-pip-wave", "fx-pips-punch");
 }
 
 /** Rich "max HP increased" celebration around the HP bar (~2s). */
