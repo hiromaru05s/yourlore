@@ -39,6 +39,10 @@ interface RoomData {
   /** ms epoch when the CURRENT turn began — server-authoritative turn clock, so a
       reconnecting/reopened client resumes with the correct remaining time (not a fresh 50s). */
   turnStartAt: number;
+  /** Deadline for BOTH players to join (send "ready"). If it passes with a side still
+      absent, the match is VOID (no rank, no W/L) — prevents phantom-match rank loss.
+      Cleared to null once both have joined. */
+  joinBy: number | null;
 }
 
 const TURN_MS_RANKED = 50000; // ranked: tighter clock
@@ -49,6 +53,7 @@ const turnMsFor = (ranked: boolean): number => (ranked ? TURN_MS_RANKED : TURN_M
 interface Att { side: Side; gen: number; }
 
 const FORFEIT_GRACE_MS = 30000;
+const JOIN_GRACE_MS = 45000; // both players must connect within this or the match is voided
 
 export class GameRoom {
   private env: Env;
@@ -74,6 +79,7 @@ export class GameRoom {
         game: r.game as GameState,
         initEvents: r.initEvents ?? [],
         readied: r.readied ?? [false, false],
+        joinBy: r.joinBy ?? null,
         recorded: r.recorded ?? false,
         ranked: r.ranked ?? false,
         gen: r.gen ?? [0, 0],
@@ -103,6 +109,7 @@ export class GameRoom {
         game: res.state,
         initEvents: res.events,
         readied: [false, false],
+        joinBy: Date.now() + JOIN_GRACE_MS,
         recorded: false,
         ranked: body.ranked ?? false,
         gen: [0, 0],
@@ -110,6 +117,7 @@ export class GameRoom {
         turnStartAt: Date.now(),
       };
       this.persist();
+      void this.state.storage.setAlarm(this.room.joinBy!).catch(() => { /* best effort */ });
       return new Response("ok");
     }
 
@@ -181,8 +189,10 @@ export class GameRoom {
       // opening events only on the first ready; a reconnect just resyncs state
       const events = room.readied[att.side] ? [] : room.initEvents;
       room.readied[att.side] = true;
+      if (room.readied[0] && room.readied[1]) room.joinBy = null; // both joined → no join-timeout void
       // a reconnect cancels this side's pending forfeit and un-pauses the opponent
-      if (room.forfeitAt[att.side] != null) { room.forfeitAt[att.side] = null; this.syncAlarm(); }
+      if (room.forfeitAt[att.side] != null) { room.forfeitAt[att.side] = null; }
+      this.syncAlarm();
       const other = this.sockFor((1 - att.side) as Side);
       if (other) { try { this.send(other, { type: "oppConn", connected: true }); } catch { /* dropped */ } }
       this.persist();
@@ -210,11 +220,11 @@ export class GameRoom {
     this.syncAlarm();
   }
 
-  /** Keep the storage alarm pointed at the earliest pending forfeit deadline. */
+  /** Keep the storage alarm pointed at the earliest pending deadline (forfeit or join). */
   private syncAlarm(): void {
     const room = this.room;
     if (!room) return;
-    const times = room.forfeitAt.filter((t): t is number => t != null);
+    const times = [...room.forfeitAt, room.joinBy].filter((t): t is number => t != null);
     if (times.length) void this.state.storage.setAlarm(Math.min(...times)).catch(() => { /* best effort */ });
     else void this.state.storage.deleteAlarm().catch(() => { /* best effort */ });
   }
@@ -223,12 +233,30 @@ export class GameRoom {
     const room = await this.restore();
     if (!room) return;
     const now = Date.now();
+    const bothJoined = room.readied[0] && room.readied[1];
+
+    // ---- join timeout: a side never showed up → VOID the match (no rank, no W/L) ----
+    if (room.joinBy != null && room.joinBy <= now + 250 && !bothJoined && !room.game.over) {
+      room.joinBy = null;
+      room.game.over = true; room.game.phase = "over"; room.game.winner = null;
+      room.recorded = true; // no-contest — never touch the ladder
+      for (const s of [0, 1] as Side[]) {
+        const ws = this.sockFor(s);
+        if (ws) { try { this.send(ws, { type: "voided", message: "상대가 참가하지 않아 매칭이 취소되었습니다 (점수 변동 없음)" }); } catch { /* dropped */ } }
+      }
+      this.persist();
+      this.syncAlarm();
+      return;
+    }
+
     for (const s of [0, 1] as Side[]) {
       const at = room.forfeitAt[s];
       if (at == null || at > now + 250) continue; // not due yet (alarm re-armed below)
       room.forfeitAt[s] = null;
       if (room.game.over || this.sockFor(s)) continue; // already decided, or they reconnected
       const winner = (1 - s) as Side;
+      // If the "winner" never actually joined, this was never a real game → void, don't award rank.
+      if (!room.readied[winner]) { room.game.over = true; room.game.phase = "over"; room.game.winner = null; room.recorded = true; continue; }
       room.game.over = true; room.game.phase = "over"; room.game.winner = winner;
       const remaining = this.sockFor(winner);
       if (remaining) {
@@ -304,6 +332,9 @@ export class GameRoom {
     if (!room || room.recorded || !room.game.over) return;
     room.recorded = true;
     this.persist();
+    // No-contest guard: a game only counts (rank + W/L + match row) if BOTH players actually
+    // joined. If a side never connected (phantom match), leaving costs nothing.
+    if (!(room.readied[0] && room.readied[1])) return;
     // per-player card usage (played) + buys → card analytics in the admin dashboard
     const usesOf = (s: Side) => { try { return JSON.stringify(room.game.players[s].uses ?? {}); } catch { return "{}"; } };
     const buysOf = (s: Side) => { try { return JSON.stringify(room.game.players[s].buys ?? {}); } catch { return "{}"; } };

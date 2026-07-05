@@ -26,6 +26,7 @@ export type GameServerMsg =
   | { type: "update"; state: GameState; events: GameEvent[] }
   | { type: "opponentLeft" }
   | { type: "oppConn"; connected: boolean } // opponent dropped / came back (reconnect window)
+  | { type: "voided"; message?: string }    // match cancelled (opponent never joined) — no rank change
   | { type: "error"; message: string }
   | { type: "pong" };
 

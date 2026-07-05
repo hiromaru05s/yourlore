@@ -64,6 +64,11 @@ export class OnlineController extends BaseController {
     } else if (msg.type === "opponentLeft") {
       // server already sent the deciding update; just make sure the result shows
       if (this.state?.over) this.showWin();
+    } else if (msg.type === "voided") {
+      // the match never really started (opponent never joined) → no rank change, back to home
+      this.closing = true;
+      clearActiveGame();
+      noticeModal("매칭 취소", msg.message || "상대가 참가하지 않아 매칭이 취소되었습니다 (점수 변동 없음).", "홈으로", () => this.exits.onHome());
     } else if (msg.type === "error") {
       console.warn("[server]", msg.message);
     }
