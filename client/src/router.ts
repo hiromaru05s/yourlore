@@ -6,6 +6,7 @@ import type { User } from "./net/api";
 import { api } from "./net/api";
 import { aIdentify, aReset, aCapture } from "./net/analytics";
 import { setPresence, stopPresence } from "./net/presence";
+import { saveActiveGame, loadActiveGame } from "./net/resume";
 import { mountLogin } from "./screens/login";
 import { mountHome } from "./screens/home";
 import { mountLobby } from "./screens/lobby";
@@ -33,8 +34,13 @@ export class App {
     // On the game origin, /admin just bounces to the isolated admin host.
     if (location.pathname === "/admin") { location.href = `${location.protocol}//admin.${location.host.replace(/^www\./, "")}/`; return; }
     this.user = await api.me();
-    if (this.user) { aIdentify(this.user.id, { verified: true }); this.home(); }
-    else this.login();
+    if (this.user) {
+      aIdentify(this.user.id, { verified: true });
+      // crashed / closed mid-game? reconnect to the in-progress room instead of the home screen.
+      const g = loadActiveGame();
+      if (g) this.onlineGame(g.roomId, g.you, "?");
+      else this.home();
+    } else this.login();
   }
 
   // Clear the root BEFORE mounting the next screen. (Passing a thunk matters:
@@ -51,8 +57,9 @@ export class App {
   tutorialGame(): void { setPresence("bot"); aCapture("game_start", { mode: "tutorial" }); this.swap(() => mountGame(this, { mode: "tutorial" })); }
   cards(): void { setPresence("menu"); this.swap(() => mountCards(this)); }
   botGame(): void { setPresence("bot"); aCapture("game_start", { mode: "bot" }); this.swap(() => mountGame(this, { mode: "bot" })); }
-  onlineLobby(): void { setPresence("queue"); this.swap(() => mountLobby(this)); }
-  rankedLobby(): void { setPresence("queue"); this.swap(() => mountLobby(this, true)); }
+  // entering a lobby with a live game still stored → rejoin it instead of re-queuing
+  onlineLobby(): void { const g = loadActiveGame(); if (g) return this.onlineGame(g.roomId, g.you, "?"); setPresence("queue"); this.swap(() => mountLobby(this)); }
+  rankedLobby(): void { const g = loadActiveGame(); if (g) return this.onlineGame(g.roomId, g.you, "?"); setPresence("queue"); this.swap(() => mountLobby(this, true)); }
   leaderboard(): void { setPresence("menu"); this.swap(() => mountLeaderboard(this)); }
   profile(userId?: string, tab?: ProfileTab): void { setPresence("menu"); this.swap(() => mountProfile(this, userId, tab)); }
   friends(): void { setPresence("menu"); this.swap(() => mountFriends(this)); }
@@ -61,6 +68,7 @@ export class App {
   onlineGame(roomId: string, you: Side, oppName: string, oppAvatar: string | null = null): void {
     setPresence("online");
     aCapture("game_start", { mode: "online" });
+    saveActiveGame(roomId, you); // remember it so a crash/close can rejoin this exact room
     this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName, oppAvatar }));
   }
 

@@ -1414,12 +1414,18 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   if (!card || p.mana < playCost(card)) return;
 
   if (card.t === "starter") {
-    if (card.star === "trash") { p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card); p.hand.splice(idx, 1); rmz(p).push(card); ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "vanish" }); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 이 카드 폐기`, `<span class="t">${p.name}</span> ${cn(card)} → このカードを廃棄`); }
-    else if (card.star === "chest") {
-      if (chestLocked(g)) { ctx.log(`  └ <span class="dmg">행운의 보물상자</span>: 보물상자 사용 봉인 중`, `  └ <span class="dmg">幸運の宝箱</span>: 宝箱の使用は封印中`); return; }
-      p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card); ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "discard" }); openTreasure(g, ctx, p);
-    }
-    else if (card.star === "mana") { p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card); p.maxMana++; ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "discard" }); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 최대 마나 +1 (${p.maxMana})`, `<span class="t">${p.name}</span> ${cn(card)} → 最大マナ +1 (${p.maxMana})`); }
+    // Starters (컬/보물상자/어튠) are spell-type cards played from hand → they are subject to
+    // the same spell seals (침묵) and null-spell trap (마법 무효화) as regular spells.
+    if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) { ctx.log(`  └ <span class="dmg">침묵의 거신</span>이 필드에 있어 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の巨神</span>が場にいるため魔法を使用できません`); return; }
+    if (playCost(card) <= 5 && g.players.some((pl) => pl.field.some((m) => m.aura === "sealLow"))) { ctx.log(`  └ <span class="dmg">침묵의 파수꾼</span>이 필드에 있어 코스트 5 이하 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の番人</span>が場にいるためコスト5以下の魔法を使用できません`); return; }
+    if (p.spellSealTurn) { ctx.log(`  └ <span class="dmg">침묵의 심판</span>: 이번 턴 동안 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の審判</span>: このターン中は魔法を使用できません`); return; }
+    if (card.star === "chest" && chestLocked(g)) { ctx.log(`  └ <span class="dmg">행운의 보물상자</span>: 보물상자 사용 봉인 중`, `  └ <span class="dmg">幸運の宝箱</span>: 宝箱の使用は封印中`); return; }
+    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card); p.hand.splice(idx, 1);
+    ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: card.star === "trash" ? "vanish" : "discard" });
+    if (tryNullSpell(g, ctx, card)) { p.discard.push(card); return; } // negated → consumed, effect nullified
+    if (card.star === "trash") { rmz(p).push(card); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 이 카드 폐기`, `<span class="t">${p.name}</span> ${cn(card)} → このカードを廃棄`); }
+    else if (card.star === "chest") { p.discard.push(card); openTreasure(g, ctx, p); }
+    else if (card.star === "mana") { p.discard.push(card); p.maxMana++; ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 최대 마나 +1 (${p.maxMana})`, `<span class="t">${p.name}</span> ${cn(card)} → 最大マナ +1 (${p.maxMana})`); }
     return;
   }
   if (card.t === "mon") {

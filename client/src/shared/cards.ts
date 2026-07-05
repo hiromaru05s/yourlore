@@ -900,7 +900,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v4"; // v3: 정예 기사단장 ≤7/+3→≤8/+4 · v4: 군단의 기수 조건 24장→텍스트대로 20장
+export const BALANCE_VERSION = "v5"; // v3: 정예 ≤7/+3→≤8/+4 · v4: 군단 24→20장 · v5: 스타터(컬/보물상자/어튠)도 침묵·마법무효화 대상
 
 export function idsOfCost(cost: number): string[] {
   return BUYABLE_POOL.filter((id) => DB[id].cost === cost);

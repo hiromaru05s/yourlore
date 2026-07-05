@@ -9,6 +9,7 @@ import type { GameClientMsg, GameServerMsg } from "../shared/protocol";
 import { Sock } from "../net/socket";
 import { BaseController, type ControllerExits } from "./controller";
 import { closeOverlay, noticeModal } from "../ui/modal";
+import { clearActiveGame } from "../net/resume";
 import { t } from "../i18n";
 
 const MAX_RETRIES = 6;
@@ -54,8 +55,10 @@ export class OnlineController extends BaseController {
       this.banner(null); // reconnected & resynced
       closeOverlay();
       this.applyResult({ state: msg.state, events: msg.events }, false);
+      if (this.state?.over) clearActiveGame(); // rejoined a game that already finished
     } else if (msg.type === "update") {
       this.applyResult({ state: msg.state, events: msg.events });
+      if (this.state?.over) clearActiveGame(); // game ended → nothing to rejoin
     } else if (msg.type === "oppConn") {
       this.banner(msg.connected ? null : t("net.oppwait"));
     } else if (msg.type === "opponentLeft") {
