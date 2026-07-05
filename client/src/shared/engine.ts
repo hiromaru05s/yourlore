@@ -720,10 +720,10 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       else ctx.log(`  └ 덱+묘지 ${hn}장 — 군단 미달(24장)`, `  └ デッキ+墓地${hn}枚 — 軍団未達(24枚)`);
       break;
     }
-    case "eliteBuff": { // 정예 기사단장: 덱+묘지 12장 이하면 공격 +4
+    case "eliteBuff": { // 정예 기사단장: 덱+묘지 8장 이하면 공격 +4 (카드 텍스트 기준)
       const en2 = p.deck.length + p.discard.length;
-      if (en2 <= 7) { m.atkMod = (m.atkMod || 0) + 3; ctx.log(`  └ 정예(${en2}장) 편성: 공격 +3`, `  └ 精鋭(${en2}枚)編成: 攻撃+3`); }
-      else ctx.log(`  └ 덱+묘지 ${en2}장 — 정예 초과(7장)`, `  └ デッキ+墓地${en2}枚 — 精鋭超過(7枚)`);
+      if (en2 <= 8) { m.atkMod = (m.atkMod || 0) + 4; ctx.log(`  └ 정예(${en2}장) 편성: 공격 +4`, `  └ 精鋭(${en2}枚)編成: 攻撃+4`); }
+      else ctx.log(`  └ 덱+묘지 ${en2}장 — 정예 초과(8장)`, `  └ デッキ+墓地${en2}枚 — 精鋭超過(8枚)`);
       break;
     }
     case "trapsmithBuff": { // 함정 기술자: 보유 함정 1장당 +1/+1
