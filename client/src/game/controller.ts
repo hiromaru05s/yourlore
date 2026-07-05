@@ -9,7 +9,7 @@
 import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
 import { createGame, reduce } from "../shared/engine";
-import { botDecide } from "../shared/bot";
+import { botDecide, type BotDifficulty } from "../shared/bot";
 import { DB, STARTERS } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog } from "../ui/log";
@@ -465,9 +465,11 @@ export abstract class BaseController implements BoardHandlers {
 // ============================================================
 export class LocalController extends BaseController {
   private botTimer = 0;
+  private difficulty: BotDifficulty;
 
-  constructor(root: HTMLElement, exits: ControllerExits, playerName = "PLAYER 1") {
+  constructor(root: HTMLElement, exits: ControllerExits, playerName = "PLAYER 1", difficulty: BotDifficulty = "hard") {
     super(root, 0, exits);
+    this.difficulty = difficulty;
     const res = createGame({
       mode: "bot",
       p0: { id: "local", name: playerName },
@@ -497,7 +499,7 @@ export class LocalController extends BaseController {
   private botStep(): void {
     const g = this.state;
     if (g.over || !g.players[g.cur].isBot) return;
-    const action = botDecide(g);
+    const action = botDecide(g, this.difficulty);
     this.applyResult(reduce(g, action));
   }
 

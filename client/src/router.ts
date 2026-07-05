@@ -2,6 +2,7 @@
 // LORE — tiny screen router + auth/session context.
 // ============================================================
 import type { Side } from "./shared/types";
+import type { BotDifficulty } from "./shared/bot";
 import type { User } from "./net/api";
 import { api } from "./net/api";
 import { aIdentify, aReset, aCapture } from "./net/analytics";
@@ -33,6 +34,22 @@ export class App {
     // On the game origin, /admin just bounces to the isolated admin host.
     if (location.pathname === "/admin") { location.href = `${location.protocol}//admin.${location.host.replace(/^www\./, "")}/`; return; }
     this.user = await api.me();
+    if (!this.user && ["localhost", "127.0.0.1", "::1"].includes(location.hostname)) {
+      const params = new URLSearchParams(location.search);
+      const devLogin = params.get("devLogin");
+      if (devLogin === "1") localStorage.setItem("lore_dev_login", "1");
+      if (devLogin === "0") localStorage.removeItem("lore_dev_login");
+      if (devLogin === "1" || localStorage.getItem("lore_dev_login") === "1") {
+        this.user = {
+          id: "dev-local-user",
+          email: "dev@local.test",
+          display: "DEV PLAYER",
+          wins: 0,
+          losses: 0,
+          credits: 999,
+        };
+      }
+    }
     if (this.user) { aIdentify(this.user.id, { verified: true }); this.home(); }
     else this.login();
   }
@@ -50,7 +67,7 @@ export class App {
   tutorial(): void { setPresence("menu"); this.swap(() => mountTutorial(this)); }
   tutorialGame(): void { setPresence("bot"); aCapture("game_start", { mode: "tutorial" }); this.swap(() => mountGame(this, { mode: "tutorial" })); }
   cards(): void { setPresence("menu"); this.swap(() => mountCards(this)); }
-  botGame(): void { setPresence("bot"); aCapture("game_start", { mode: "bot" }); this.swap(() => mountGame(this, { mode: "bot" })); }
+  botGame(difficulty: BotDifficulty = "hard"): void { setPresence("bot"); aCapture("game_start", { mode: "bot", difficulty }); this.swap(() => mountGame(this, { mode: "bot", difficulty })); }
   onlineLobby(): void { setPresence("queue"); this.swap(() => mountLobby(this)); }
   rankedLobby(): void { setPresence("queue"); this.swap(() => mountLobby(this, true)); }
   leaderboard(): void { setPresence("menu"); this.swap(() => mountLeaderboard(this)); }

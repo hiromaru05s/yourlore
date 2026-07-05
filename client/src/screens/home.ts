@@ -2,6 +2,7 @@
 // LORE — post-login HOME. Choose Random Online or Bot match.
 // ============================================================
 import type { App, Screen } from "../router";
+import type { BotDifficulty } from "../shared/bot";
 import { api } from "../net/api";
 import { t, onLangChange } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
@@ -83,7 +84,7 @@ export function mountHome(app: App): Screen {
   (wrap.querySelector("#lb") as HTMLElement).onclick = () => app.leaderboard();
   (wrap.querySelector("#invite") as HTMLElement).onclick = () => void showInviteModal();
   (wrap.querySelector("#online") as HTMLElement).onclick = () => app.onlineLobby();
-  (wrap.querySelector("#bot") as HTMLElement).onclick = () => app.botGame();
+  (wrap.querySelector("#bot") as HTMLElement).onclick = () => showBotDifficultyModal(app);
 
   // current season tier badge (async, best-effort)
   void api.rankMe().then((r) => {
@@ -107,6 +108,39 @@ export function mountHome(app: App): Screen {
 
   const unsub = onLangChange(() => app.home());
   return { destroy: () => { unsub(); unwatch(); } };
+}
+
+/** BOT match difficulty picker. Dims + blurs HOME behind a focused center modal. */
+function showBotDifficultyModal(app: App): void {
+  const tiers: { diff: BotDifficulty; icon: string }[] = [
+    { diff: "easy", icon: "🌱" },
+    { diff: "normal", icon: "⚔️" },
+    { diff: "hard", icon: "🔥" },
+    { diff: "hell", icon: "💀" },
+  ];
+  const ov = document.createElement("div");
+  ov.className = "overlay bot-diff-ov";
+  ov.innerHTML = `
+    <div class="modal bot-diff">
+      <h2>${t("bot.diff.title")}</h2>
+      <p class="bot-diff-sub">${t("bot.diff.sub")}</p>
+      <div class="diff-grid">
+        ${tiers.map((x) => `
+          <button class="diff-card diff-${x.diff}" data-diff="${x.diff}">
+            <span class="diff-ico">${x.icon}</span>
+            <span class="diff-name">${t(`bot.diff.${x.diff}`)}</span>
+            <span class="diff-desc">${t(`bot.diff.${x.diff}.desc`)}</span>
+          </button>`).join("")}
+      </div>
+      <div class="modal-row"><button class="btn btn-ghost btn-block" id="diffCancel">${t("common.cancel")}</button></div>
+    </div>`;
+  document.body.appendChild(ov);
+  const close = () => ov.remove();
+  (ov.querySelector("#diffCancel") as HTMLElement).onclick = close;
+  ov.onclick = (e) => { if (e.target === ov) close(); };
+  ov.querySelectorAll<HTMLButtonElement>(".diff-card").forEach((b) => {
+    b.onclick = () => { close(); app.botGame(b.dataset.diff as BotDifficulty); };
+  });
 }
 
 /** Invite-campaign modal: share link + invitee progress (max 3). */
