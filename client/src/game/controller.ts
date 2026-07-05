@@ -18,12 +18,19 @@ import { cardPicker, confirmDialog, treasureModal, winModal } from "../ui/modal"
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { sfx, type SfxName } from "../ui/sound";
+import { avatarHtml } from "../ui/social";
 import { t, getLang, cardName, onLangChange } from "../i18n";
 
 export interface ControllerExits {
   onHome(): void;
   onRematch(): void;
 }
+
+// ---- coin-toss profiles (set by the game screen at mount): the two coin faces ----
+interface CoinProfile { avatar: string | null; name: string; }
+let COIN_ME: CoinProfile = { avatar: null, name: "YOU" };
+let COIN_OPP: CoinProfile = { avatar: null, name: "OPP" };
+export function setCoinProfiles(me: CoinProfile, opp: CoinProfile): void { COIN_ME = me; COIN_OPP = opp; }
 
 /** Card IDs whose outcome is a random roll — surfaced as a result popup, not just a log line. */
 const RANDOM_CARDS = new Set([
@@ -473,18 +480,20 @@ export abstract class BaseController implements BoardHandlers {
     num.textContent = String(s);
   }
 
-  /** Coin-toss reveal at game start: a flipping coin that lands on 선공/후공. */
+  /** Coin-toss reveal at game start: a two-headed coin — each face is a player's
+      profile avatar — flips and lands on the face of whoever goes first. */
   private showCoinToss(firstSide: Side): void {
     const iAmFirst = firstSide === this.you;
-    const firstName = this.state.players[firstSide].name;
-    const heads = iAmFirst; // my side = heads face
+    const firstName = firstSide === this.you ? COIN_ME.name : COIN_OPP.name;
+    const heads = iAmFirst; // heads face = ME; land on heads if I'm first, else on OPP (tails)
+    const face = (p: CoinProfile) => `<span class="ct-ava">${avatarHtml(p.avatar, p.name, 96)}</span>`;
     const ov = document.createElement("div");
     ov.className = "cointoss-ov";
     ov.innerHTML = `
       <div class="cointoss">
         <div class="ct-coin ${heads ? "to-heads" : "to-tails"}">
-          <div class="ct-face ct-heads">先</div>
-          <div class="ct-face ct-tails">後</div>
+          <div class="ct-face ct-heads">${face(COIN_ME)}</div>
+          <div class="ct-face ct-tails">${face(COIN_OPP)}</div>
         </div>
         <div class="ct-caption">
           <div class="ct-head">${t("coin.title")}</div>
@@ -494,7 +503,7 @@ export abstract class BaseController implements BoardHandlers {
     document.body.appendChild(ov);
     sfx("coin");
     setTimeout(() => sfx(iAmFirst ? "turn" : "pop"), 900);
-    setTimeout(() => { ov.classList.add("out"); setTimeout(() => ov.remove(), 350); }, 2000);
+    setTimeout(() => { ov.classList.add("out"); setTimeout(() => ov.remove(), 350); }, 2200);
   }
 
   private turnToast(text: string, size: "big" | "small", ms: number): void {

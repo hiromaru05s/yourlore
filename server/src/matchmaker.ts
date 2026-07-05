@@ -10,7 +10,7 @@
 import type { Env } from "./env";
 import type { QueueClientMsg, QueueServerMsg } from "../../client/src/shared/protocol";
 
-interface Waiter { ws: WebSocket; id: string; name: string; ranked: boolean; mmr: number; since: number; }
+interface Waiter { ws: WebSocket; id: string; name: string; avatar: string | null; ranked: boolean; mmr: number; since: number; }
 
 const SWEEP_MS = 5000;
 const BAND_START = 100;
@@ -37,6 +37,7 @@ export class Matchmaker {
       ws: server,
       id: url.searchParams.get("uid") || "anon-" + crypto.randomUUID().slice(0, 8),
       name: url.searchParams.get("name") || "Player",
+      avatar: url.searchParams.get("avatar") || null,
       ranked: url.searchParams.get("mode") === "ranked",
       mmr: Number(url.searchParams.get("mmr")) || 1000,
       since: 0,
@@ -142,8 +143,8 @@ export class Matchmaker {
         method: "POST",
         body: JSON.stringify({ players: [{ id: a.id, name: a.name }, { id: b.id, name: b.name }], seed, ranked }),
       });
-      this.send(a.ws, { type: "matched", roomId, you: 0, oppName: b.name });
-      this.send(b.ws, { type: "matched", roomId, you: 1, oppName: a.name });
+      this.send(a.ws, { type: "matched", roomId, you: 0, oppName: b.name, oppAvatar: b.avatar });
+      this.send(b.ws, { type: "matched", roomId, you: 1, oppName: a.name, oppAvatar: a.avatar });
     } catch {
       this.send(a.ws, { type: "error", message: "방 생성 실패" });
       this.send(b.ws, { type: "error", message: "방 생성 실패" });

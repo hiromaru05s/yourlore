@@ -12,7 +12,7 @@ export type QueueClientMsg =
 
 export type QueueServerMsg =
   | { type: "queued"; position: number }
-  | { type: "matched"; roomId: string; you: Side; oppName: string }
+  | { type: "matched"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null }
   | { type: "error"; message: string };
 
 // ---- in-game (GameRoom Durable Object) ----

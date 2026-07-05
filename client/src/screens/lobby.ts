@@ -33,7 +33,7 @@ export function mountLobby(app: App, ranked = false): Screen {
         title.textContent = t("lobby.found");
         msg.textContent = `vs ${m.oppName}`;
         sock.close();
-        setTimeout(() => app.onlineGame(m.roomId, m.you, m.oppName), 600);
+        setTimeout(() => app.onlineGame(m.roomId, m.you, m.oppName, m.oppAvatar ?? null), 600);
       } else if (m.type === "error") {
         title.textContent = t("lobby.fail");
         msg.textContent = m.message;

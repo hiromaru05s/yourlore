@@ -58,10 +58,10 @@ export class App {
   friends(): void { setPresence("menu"); this.swap(() => mountFriends(this)); }
   settings(): void { this.profile(undefined, "settings"); } // settings now lives as a profile tab
   shop(): void { setPresence("menu"); this.swap(() => mountShop(this)); }
-  onlineGame(roomId: string, you: Side, oppName: string): void {
+  onlineGame(roomId: string, you: Side, oppName: string, oppAvatar: string | null = null): void {
     setPresence("online");
     aCapture("game_start", { mode: "online" });
-    this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName }));
+    this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName, oppAvatar }));
   }
 
   async logout(): Promise<void> {
