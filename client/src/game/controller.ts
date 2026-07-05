@@ -63,6 +63,7 @@ export abstract class BaseController implements BoardHandlers {
   // authoritative length from the server via g.turnTotalMs (ranked 50s / casual 90s).
   private static readonly LOCAL_TURN_SECS = 90;
   private turnTotal = 90; // full length of the CURRENT turn (for the ring's full-scale)
+  private turnStartedWall = 0; // wall-clock ms when the current turn's timer started (anti instant-skip)
   protected introShown = false; // coin-toss reveal plays once at game start
 
   constructor(root: HTMLElement, you: Side, exits: ControllerExits) {
@@ -420,6 +421,7 @@ export abstract class BaseController implements BoardHandlers {
         ? Math.max(1, Math.ceil(g.turnLeftMs / 1000))
         : this.turnTotal;
       this.warned25 = this.timerLeft <= 25; // don't re-fire the 25s popup mid-turn on reconnect
+      this.turnStartedWall = Date.now();    // guard against a stale ~0 clock instantly skipping the turn
       if (!firstTurn && g.cur === this.you) sfx("turn"); // my turn begins
       if (this.timerInt) clearInterval(this.timerInt);
       this.renderTimer();
@@ -435,6 +437,9 @@ export abstract class BaseController implements BoardHandlers {
     if (s === 25 && !this.warned25) { this.warned25 = true; this.turnToast(`${s}초`, "small", 1500); }
     else if (s <= 5 && s >= 1) this.turnToast(String(s), "big", 900);
     if (s <= 0) {
+      // never auto-end within the first ~2s of a turn — a stale/near-zero clock (e.g. after a
+      // skip or a reconnect) must not instantly skip the turn; give the player real time.
+      if (Date.now() - this.turnStartedWall < 2000) return;
       // only the active player's own client forces the end (server validates online)
       if (this.state.cur === this.you && !this.state.over) {
         if (this.state.pending) {

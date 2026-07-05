@@ -256,9 +256,14 @@ export class GameRoom {
       return; // not this player's turn
     }
     const prevCur = g.cur;
+    const prevTurn = g.turn;
     const res = reduce(g, action);
     room.game = res.state;
-    if (res.state.cur !== prevCur) room.turnStartAt = Date.now(); // a new turn began → restart the server clock
+    // Restart the server clock whenever a NEW turn begins. Keying off turn NUMBER (not just
+    // cur) is essential: a skip (e.g. TIMEWARP) runs endTurn twice, so cur returns to the same
+    // player while turn advances by 2 — checking cur alone would leave a stale turnStartAt,
+    // making the resumed turn's clock read ~0 and instantly auto-end (cascading turn skips).
+    if (res.state.turn !== prevTurn || res.state.cur !== prevCur) room.turnStartAt = Date.now();
     this.persist();
     // A rejected play (condition not met, sealed, etc.) produces only "log" events and
     // no state advance. Don't broadcast it to the OPPONENT — otherwise their client logs
