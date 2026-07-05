@@ -200,7 +200,7 @@
 /* 고정(10) + 제시(3) share one centered row on wide screens; when the width
    runs out the fixed cards wrap to a 2nd tier automatically, and 제시 drops
    below that — no horizontal clipping at any size. */
-.market { display: flex; flex-wrap: nowrap; justify-content: center; align-items: flex-start; gap: 8px 18px; padding: 9px 14px 11px; align-self: center; max-width: min(1180px, 94%); margin: 0 auto; overflow: hidden; border-color: #4fb4ff26; }
+.market { display: flex; flex-wrap: nowrap; justify-content: center; align-items: flex-start; gap: 7px 16px; padding: 7px 12px 9px; align-self: center; max-width: min(1040px, 92%); margin: 0 auto; overflow: hidden; border-color: #4fb4ff26; }
 .market::before { /* warm showcase spotlight over the wares */
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
   background: radial-gradient(60% 95% at 50% 30%, #4fb4ff0c, transparent 70%);
