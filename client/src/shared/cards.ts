@@ -881,12 +881,29 @@ export function relatedCardIds(id: string): string[] {
   if (!c) return (_relatedCache[id] = []);
   const out = new Set<string>(RELATED_MANUAL[id] ?? []);
   const ko = c.text ?? "", ja = c.textJa ?? "";
+  // a name only counts if some occurrence is NOT inside a longer card name at the
+  // same spot (e.g. "마스터 미믹" in a text must not also match "미믹")
+  const koNames = ALL_IDS.map((o) => DB[o].name).filter((n): n is string => !!n);
+  const jaNames = ALL_IDS.map((o) => DB[o].nameJa).filter((n): n is string => !!n);
+  const standalone = (text: string, name: string, names: string[]) => {
+    if (!text.includes(name)) return false;
+    const longer = names.filter((n) => n.length > name.length && n.includes(name) && text.includes(n));
+    for (let i = text.indexOf(name); i !== -1; i = text.indexOf(name, i + 1)) {
+      const covered = longer.some((L) => {
+        for (let j = text.indexOf(L); j !== -1; j = text.indexOf(L, j + 1))
+          if (j <= i && i + name.length <= j + L.length) return true;
+        return false;
+      });
+      if (!covered) return true;
+    }
+    return false;
+  };
   for (const oid of ALL_IDS) {
     if (oid === id) continue;
     const o = DB[oid];
     // match another card's name in this card's text (either language); skip 1-char names
-    if ((o.name && o.name.length >= 2 && ko.includes(o.name)) ||
-        (o.nameJa && o.nameJa.length >= 2 && ja.includes(o.nameJa))) out.add(oid);
+    if ((o.name && o.name.length >= 2 && standalone(ko, o.name, koNames)) ||
+        (o.nameJa && o.nameJa.length >= 2 && standalone(ja, o.nameJa, jaNames))) out.add(oid);
   }
   // don't list a card's own tribe-mates here (the tribe panel already shows those)
   if (c.tribe) for (const oid of [...out]) if (DB[oid].tribe === c.tribe) out.delete(oid);
