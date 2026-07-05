@@ -255,8 +255,8 @@
 /* >10 cards: straight, readable row (no fan). Wrap if it still overflows. */
 .hand.is-flat { flex-wrap: wrap; row-gap: 4px; }
 .hand.is-flat .card { margin: 0 -6px; }
-/* END TURN — a round button to the RIGHT of my field UI */
-.end-turn-wrap { position: fixed; right: clamp(16px, 2.4vw, 54px); top: 66%; bottom: auto; transform: translateY(-50%); z-index: 45; }
+/* END TURN — a round button, sitting well to the left (in the lower-right area) */
+.end-turn-wrap { position: fixed; right: clamp(80px, 16vw, 340px); top: 66%; bottom: auto; transform: translateY(-50%); z-index: 45; }
 .end-turn-wrap .btn {
   position: relative; overflow: hidden; letter-spacing: .02em;
   width: clamp(74px, 8.4vh, 100px); height: clamp(74px, 8.4vh, 100px); border-radius: 50%; padding: 0;
