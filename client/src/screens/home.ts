@@ -12,6 +12,8 @@ export function mountHome(app: App): Screen {
   const u = app.user;
   const wrap = document.createElement("div");
   wrap.className = "screen";
+  // minimal LORE wallpaper (inline so vite never strips the CSS url); responsive cover
+  wrap.style.cssText = "background:#05070b url('/bg/home.jpg') center center/cover no-repeat;";
   wrap.innerHTML = `
     <div class="home">
       <div class="home-top">
