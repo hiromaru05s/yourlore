@@ -116,3 +116,47 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
   m.querySelector(".modal-row")!.appendChild(cancel);
   mount(m);
 }
+
+/**
+ * Browse-only deck viewer with two tabs: the FULL deck composition and the cards
+ * still REMAINING in the deck (undrawn). `remaining` is null for the opponent
+ * (their undrawn cards are hidden info) → only the composition tab is shown.
+ */
+export function deckViewer(title: string, composition: CardInst[], remaining: CardInst[] | null): void {
+  const m = document.createElement("div");
+  m.className = "modal"; m.style.maxWidth = "760px";
+  const two = remaining != null;
+  m.innerHTML =
+    `<h2 style="font-size:14px">${title}</h2>` +
+    (two ? `<div class="dv-tabs">
+      <button class="dv-tab is-active" data-v="all">${t("deck.tab.all")} <b>${composition.length}</b></button>
+      <button class="dv-tab" data-v="deck">${t("deck.tab.remain")} <b>${remaining!.length}</b></button>
+    </div>` : "") +
+    `<div class="dv-note" id="dvNote"></div>` +
+    `<div class="picker-grid" style="display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:12px 0;max-height:54vh;overflow:auto"></div>` +
+    `<div class="modal-row"></div>`;
+  const grid = m.querySelector(".picker-grid")!;
+  const note = m.querySelector("#dvNote") as HTMLElement;
+  const render = (pool: CardInst[], isDeck: boolean): void => {
+    grid.innerHTML = "";
+    note.textContent = isDeck ? t("deck.remain.note") : t("deck.all.note");
+    if (!pool.length) { grid.innerHTML = `<div style="color:var(--paper-faint);padding:20px">${t("deck.empty")}</div>`; return; }
+    pool.forEach((c) => { const card = cardEl(c); bindZoom(card, c); grid.appendChild(card); });
+  };
+  render(composition, false);
+  if (two) {
+    m.querySelectorAll(".dv-tab").forEach((b) => {
+      (b as HTMLElement).onclick = () => {
+        m.querySelectorAll(".dv-tab").forEach((x) => x.classList.remove("is-active"));
+        b.classList.add("is-active");
+        const deck = (b as HTMLElement).dataset.v === "deck";
+        render(deck ? remaining! : composition, deck);
+      };
+    });
+  }
+  const close = document.createElement("button");
+  close.className = "btn btn-ghost"; close.textContent = t("common.confirm");
+  close.onclick = () => closeOverlay();
+  m.querySelector(".modal-row")!.appendChild(close);
+  mount(m);
+}

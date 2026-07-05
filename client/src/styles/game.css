@@ -349,7 +349,8 @@
 .hand.is-flat { flex-wrap: wrap; row-gap: 4px; }
 .hand.is-flat .card { margin: 0 -6px; }
 /* END TURN — a round button, sitting well to the left (in the lower-right area) */
-.end-turn-wrap { position: fixed; right: clamp(80px, 16vw, 340px); top: 66%; bottom: auto; transform: translateY(-50%); z-index: 45; }
+/* bottom-right, clear of the field panel (which ends well to the left) and above the mute/giveup stack */
+.end-turn-wrap { position: fixed; right: clamp(16px, 2.4vw, 54px); bottom: clamp(140px, 22vh, 220px); top: auto; transform: none; z-index: 45; }
 /* hexagon frame image (green-screen keyed); localized text overlays the dark center so
    the same art works for every language. idle → hover swaps to the glowing variant. */
 .end-turn-wrap .btn {

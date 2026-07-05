@@ -6,7 +6,7 @@
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { effMaxMana, playCost, buyCost, effAtk, effDef } from "../shared/engine";
 import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS } from "../shared/cards";
-import { cardPicker } from "./modal";
+import { cardPicker, deckViewer } from "./modal";
 import { cardEl } from "./cardView";
 import { bindZoom } from "./anim";
 import { t, getLang } from "../i18n";
@@ -200,8 +200,10 @@ export class GameView {
       () => cardPicker(`${p.name} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => { /* browse only */ }));
     // clicking the DECK opens the full composition (own or opponent's public aggregate)
     const collection = this.collectionOf(p, isMe);
+    // my deck → also show the cards still remaining (undrawn); opponent's remaining deck is hidden
+    const remaining = isMe ? [...p.deck].sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name)) : null;
     const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, backFor(isMe), null, t("game.deck"),
-      () => cardPicker(`${p.name} — ${t("deck.view")} (${collection.length})`, collection, () => { /* browse only */ }));
+      () => deckViewer(`${p.name} — ${t("deck.view")}`, collection, remaining));
 
     const block = document.createElement("div");
     block.className = "field-block" + (isMe ? " is-mine" : " is-opp") + (onTurn ? " is-turn" : "");
