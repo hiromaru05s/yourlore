@@ -10,7 +10,7 @@
 import type { Env } from "./env";
 import type { QueueClientMsg, QueueServerMsg } from "../../client/src/shared/protocol";
 
-interface Waiter { ws: WebSocket; id: string; name: string; avatar: string | null; ranked: boolean; mmr: number; since: number; }
+interface Waiter { ws: WebSocket; id: string; name: string; avatar: string | null; sleeve: string | null; ranked: boolean; mmr: number; since: number; }
 
 const SWEEP_MS = 5000;
 const BAND_START = 100;
@@ -38,6 +38,7 @@ export class Matchmaker {
       id: url.searchParams.get("uid") || "anon-" + crypto.randomUUID().slice(0, 8),
       name: url.searchParams.get("name") || "Player",
       avatar: url.searchParams.get("avatar") || null,
+      sleeve: url.searchParams.get("sleeve") || null,
       ranked: url.searchParams.get("mode") === "ranked",
       mmr: Number(url.searchParams.get("mmr")) || 1000,
       since: 0,
@@ -156,7 +157,7 @@ export class Matchmaker {
     try {
       await stub.fetch("https://do/setup", {
         method: "POST",
-        body: JSON.stringify({ players: [{ id: a.id, name: a.name }, { id: b.id, name: b.name }], seed, ranked }),
+        body: JSON.stringify({ players: [{ id: a.id, name: a.name, sleeve: a.sleeve }, { id: b.id, name: b.name, sleeve: b.sleeve }], seed, ranked }),
       });
     } catch {
       if (a.ws.readyState === WebSocket.OPEN) try { this.send(a.ws, { type: "error", message: "방 생성 실패" }); } catch { /* dropped */ }

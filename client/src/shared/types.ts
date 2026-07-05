@@ -130,6 +130,9 @@ export interface GameState {
   /** server-stamped full turn length in ms (online only): ranked 50s / casual 90s.
       drives the timer ring's full-scale so it drains correctly regardless of mode. */
   turnTotalMs?: number;
+  /** each side's equipped card-back sleeve id (online only), so a client can render the
+      OPPONENT's card backs with their chosen sleeve. index = Side. null = default back. */
+  sleeves?: [string | null, string | null];
 }
 
 // --- Actions: the only way to mutate a GameState ---

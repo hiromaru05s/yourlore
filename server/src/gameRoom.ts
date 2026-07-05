@@ -21,7 +21,7 @@ import { redactFor } from "../../client/src/shared/protocol";
 import { BALANCE_VERSION } from "../../client/src/shared/cards";
 import { applyRanked, applyRankedDraw } from "./rank";
 
-interface PlayerRef { id: string; name: string; }
+interface PlayerRef { id: string; name: string; sleeve?: string | null; }
 
 /** Everything the room needs — persisted so deploys/evictions/hibernation can't kill a live game. */
 interface RoomData {
@@ -311,10 +311,12 @@ export class GameRoom {
 
   /** Redacted state for `side`, stamped with the turn's remaining/total ms (server-authoritative clock). */
   private redact(side: Side): GameState {
-    const s = redactFor(this.room!.game, side) as GameState & { turnLeftMs?: number; turnTotalMs?: number };
+    const s = redactFor(this.room!.game, side) as GameState & { turnLeftMs?: number; turnTotalMs?: number; sleeves?: [string | null, string | null] };
     const total = turnMsFor(this.room!.ranked);
     s.turnTotalMs = total;
     s.turnLeftMs = Math.max(0, total - (Date.now() - this.room!.turnStartAt));
+    const pl = this.room!.players;
+    s.sleeves = [pl[0].sleeve ?? null, pl[1].sleeve ?? null];
     return s;
   }
 

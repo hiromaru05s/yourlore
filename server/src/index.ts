@@ -89,7 +89,7 @@ export default {
     if (path === "/ws/queue") {
       const user = await getUser(env, req);
       const fwd = new URL(req.url);
-      if (user) { fwd.searchParams.set("uid", user.id); fwd.searchParams.set("name", user.display); fwd.searchParams.set("avatar", user.avatar ?? ""); }
+      if (user) { fwd.searchParams.set("uid", user.id); fwd.searchParams.set("name", user.display); fwd.searchParams.set("avatar", user.avatar ?? ""); fwd.searchParams.set("sleeve", user.sleeve ?? ""); }
       // ranked queue: must be logged in; attach current MMR for band matching
       if (fwd.searchParams.get("mode") === "ranked") {
         if (!user) return new Response("unauthorized", { status: 401 });

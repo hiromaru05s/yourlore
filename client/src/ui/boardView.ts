@@ -18,12 +18,14 @@ import { avatarHtml } from "./social";
 let MY_AVATAR: string | null | undefined;
 export function setMyAvatar(a?: string | null): void { MY_AVATAR = a; }
 
-// the local player's equipped card-sleeve URL — used for MY deck/set-trap backs
-// (opponent's backs stay default; per-player sleeve sync isn't wired through the engine).
+// each side's equipped card-sleeve URL — used for deck/hand/set-trap backs.
+// MY is set locally from app.user; OPP is refreshed per-render from the
+// server-synced state.sleeves, so the opponent's chosen sleeve shows too.
 let MY_SLEEVE = FRAME_BACK;
+let OPP_SLEEVE = FRAME_BACK;
 export function setMySleeve(id?: string | null): void { MY_SLEEVE = sleeveUrl(id); }
 /** card-back image for a pile/back that belongs to `isMe`. */
-function backFor(isMe: boolean): string { return isMe ? MY_SLEEVE : FRAME_BACK; }
+function backFor(isMe: boolean): string { return isMe ? MY_SLEEVE : OPP_SLEEVE; }
 
 const MON_SLOTS = 7;
 const ST_SLOTS = 7;
@@ -140,6 +142,8 @@ export class GameView {
     const opp = g.players[1 - this.you];
     const myTurn = g.cur === this.you && !g.over;
     const pending = g.pending;
+    // opponent's equipped sleeve (server-synced); falls back to default for bot/local games
+    OPP_SLEEVE = sleeveUrl(g.sleeves?.[1 - this.you]);
 
     this.q("turnInfo").innerHTML = `<span class="turn-badge"><span class="tb-label">${t("game.turn")}</span><span class="tb-num">${g.turn}</span></span><span class="turn-cur"><b>${g.players[g.cur].name}</b></span>`;
     // refresh static labels (so a live language switch updates them)
@@ -157,7 +161,7 @@ export class GameView {
     for (let i = 0; i < n; i++) {
       const cb = document.createElement("div");
       cb.className = "card--back";
-      cb.style.backgroundImage = `url(${FRAME_BACK})`;
+      cb.style.backgroundImage = `url(${OPP_SLEEVE})`;
       cb.style.width = "56px"; cb.style.height = "90px";
       // fan under 11 cards; flat even row past that (keeps every card edge visible).
       // arc DOWNWARD (edge cards lower) so the tops never cross the board's top clip edge.
