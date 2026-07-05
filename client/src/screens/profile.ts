@@ -232,18 +232,15 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
       <section class="tut-sec">
         <h3><span class="tut-ico">🎴</span>${t("sleeve.title")}</h3>
         <div class="sl-grid">
-          ${SLEEVE_LIST.map((s) => {
-            const has = owned.has(s.id);
+          ${SLEEVE_LIST.filter((s) => owned.has(s.id)).map((s) => {
             const eq = s.id === equipped;
             return `
-              <div class="sl-tile ${eq ? "is-eq" : ""} ${has ? "" : "is-locked"}">
-                <div class="sl-preview" style="background-image:url(${s.url})">${has ? "" : `<span class="sl-lock">🔒</span>`}</div>
+              <div class="sl-tile ${eq ? "is-eq" : ""}">
+                <div class="sl-preview" style="background-image:url(${s.url})"></div>
                 <div class="sl-name">${sleeveName(s.id)}</div>
                 ${eq
                   ? `<button class="btn btn-mini btn-ghost" disabled>${t("sleeve.equipped")}</button>`
-                  : has
-                    ? `<button class="btn btn-mini btn-gold" data-eq="${s.id}">${t("sleeve.equip")}</button>`
-                    : `<span class="sl-price">💎 ${s.price}</span>`}
+                  : `<button class="btn btn-mini btn-gold" data-eq="${s.id}">${t("sleeve.equip")}</button>`}
               </div>`;
           }).join("")}
         </div>

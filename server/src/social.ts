@@ -19,7 +19,7 @@ const MAX_FRIENDS = 100;
 // ---- card sleeves (server = authority on price/ownership; client cards.ts mirrors ids) ----
 // 'default' is always owned & free. Buyable sleeves cost 1 credit each.
 const SLEEVE_PRICE = 1;
-const BUYABLE_SLEEVES = new Set(["prism", "abyss", "verdant", "ivory"]);
+const BUYABLE_SLEEVES = new Set(["prism", "abyss", "verdant", "ivory", "compass"]);
 const ALL_SLEEVES = new Set(["default", ...BUYABLE_SLEEVES]);
 /** owned buyable ids from the csv column (default is implicit, never stored). */
 function parseSleeves(csv: string | null): string[] {

@@ -249,6 +249,48 @@
 .ct-result { font-family: var(--mono); font-size: 24px; font-weight: 800; letter-spacing: .04em; color: var(--brass-hi); }
 @keyframes ctCap { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
 
+/* ---- interactive tutorial: coach panel, highlight glow, step toast ---- */
+.tut-coach {
+  position: fixed; top: 74px; left: 50%; transform: translateX(-50%);
+  width: min(600px, 94vw); z-index: 300; pointer-events: auto;
+  background: linear-gradient(180deg, #0f1a2ef2, #0a1220f7);
+  border: 1px solid var(--brass-dim); border-radius: 14px;
+  box-shadow: 0 14px 40px #000b, 0 0 0 1px #4fb4ff22, inset 0 1px 0 #ffffff12;
+  animation: coachIn .3s var(--ease);
+}
+@keyframes coachIn { from { opacity: 0; transform: translate(-50%, -8px) } to { opacity: 1; transform: translate(-50%, 0) } }
+.tut-coach-head { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+.tut-coach-step { font-family: var(--mono); font-size: 12px; font-weight: 800; letter-spacing: .06em; color: #06101f; background: var(--brass); border-radius: 999px; padding: 3px 9px; }
+.tut-coach-head b { font-family: var(--mono); font-size: 14px; letter-spacing: .06em; color: var(--brass-hi); }
+.tut-coach-gem { margin-left: auto; font-family: var(--mono); font-size: 13px; color: var(--cyan); }
+.tut-coach-exit { cursor: pointer; color: var(--paper-faint); font-size: 15px; line-height: 1; padding: 2px 4px; }
+.tut-coach-exit:hover { color: var(--vermil); }
+.tut-coach-body { padding: 13px 16px; font-size: 14px; line-height: 1.65; color: var(--paper); }
+.tut-coach-body b { color: var(--brass-hi); font-weight: 700; }
+.tut-coach-btn { margin: 0 16px 15px; }
+
+/* pulsing highlight on whatever the current step wants clicked */
+.tut-glow { position: relative; border-radius: 12px; animation: tutGlow 1.15s ease-in-out infinite; z-index: 5; }
+@keyframes tutGlow {
+  0%, 100% { box-shadow: 0 0 0 2px #4fb4ffaa, 0 0 14px 2px #4fb4ff55; }
+  50%      { box-shadow: 0 0 0 3px #7fd0ffee, 0 0 30px 7px #4fb4ff99; }
+}
+
+/* step-complete toast */
+.tut-toast {
+  position: fixed; bottom: 34px; left: 50%; transform: translateX(-50%);
+  z-index: 320; pointer-events: none; display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; border-radius: 12px; font-size: 14.5px; color: var(--paper);
+  background: linear-gradient(180deg, #14361ff2, #0c2415f7);
+  border: 1px solid #3f8f5a; box-shadow: 0 10px 30px #000b, 0 0 18px #4fd88a33;
+  animation: tutToastIn .3s var(--ease);
+}
+.tut-toast b { color: var(--brass-hi); }
+.tut-toast .gem { color: var(--cyan); font-family: var(--mono); font-weight: 800; }
+.tut-toast.out { animation: tutToastOut .4s var(--ease) forwards; }
+@keyframes tutToastIn { from { opacity: 0; transform: translate(-50%, 12px) } to { opacity: 1; transform: translate(-50%, 0) } }
+@keyframes tutToastOut { to { opacity: 0; transform: translate(-50%, -8px) } }
+
 .trapchip-card { position: relative; }
 
 /* ---- market ---- */

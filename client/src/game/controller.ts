@@ -56,7 +56,7 @@ export abstract class BaseController implements BoardHandlers {
   // authoritative length from the server via g.turnTotalMs (ranked 50s / casual 90s).
   private static readonly LOCAL_TURN_SECS = 90;
   private turnTotal = 90; // full length of the CURRENT turn (for the ring's full-scale)
-  private introShown = false; // coin-toss reveal plays once at game start
+  protected introShown = false; // coin-toss reveal plays once at game start
 
   constructor(root: HTMLElement, you: Side, exits: ControllerExits) {
     this.you = you;

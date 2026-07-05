@@ -32,50 +32,50 @@ export function mountHome(app: App): Screen {
       </div>
       <div class="modes modes-3">
         <div class="panel mode-card mode-ranked" id="ranked">
-          <div class="icon">🏆</div>
+          <img class="mode-ico" src="/icons/menu_ranked.png" alt="">
           <h3>${t("home.ranked.title")}</h3>
           <p>${t("home.ranked.desc")}</p>
           <div class="my-tier" id="myTier"></div>
         </div>
         <div class="panel mode-card" id="online">
-          <div class="icon">🌐</div>
+          <img class="mode-ico" src="/icons/menu_online.png" alt="">
           <h3>${t("home.online.title")}</h3>
           <p>${t("home.online.desc")}</p>
         </div>
         <div class="panel mode-card" id="bot">
-          <div class="icon">🤖</div>
+          <img class="mode-ico" src="/icons/menu_bot.png" alt="">
           <h3>${t("home.bot.title")}</h3>
           <p>${t("home.bot.desc")}</p>
         </div>
       </div>
       <div class="home-links">
         <div class="panel tut-card" id="friends">
-          <span class="tut-emoji">👥</span>
+          <img class="tut-ico-img" src="/icons/menu_friends.png" alt="">
           <span class="tut-txt"><b>${t("home.friends.title")} <span class="fr-badge" id="frBadge" style="display:none"></span></b><span>${t("home.friends.desc")}</span></span>
           <span class="tut-arrow">→</span>
         </div>
         <div class="panel tut-card" id="lb">
-          <span class="tut-emoji">📊</span>
+          <img class="tut-ico-img" src="/icons/menu_leaderboard.png" alt="">
           <span class="tut-txt"><b>${t("home.lb.title")}</b><span>${t("home.lb.desc")}</span></span>
           <span class="tut-arrow">→</span>
         </div>
         <div class="panel tut-card" id="invite">
-          <span class="tut-emoji">🎁</span>
+          <img class="tut-ico-img" src="/icons/menu_invite.png" alt="">
           <span class="tut-txt"><b>${t("invite.title")}</b><span>${t("invite.desc")}</span></span>
           <span class="tut-arrow">→</span>
         </div>
         <div class="panel tut-card" id="cards">
-          <span class="tut-emoji">🃏</span>
+          <img class="tut-ico-img" src="/icons/menu_cards.png" alt="">
           <span class="tut-txt"><b>${t("home.cards.title")}</b><span>${t("home.cards.desc")}</span></span>
           <span class="tut-arrow">→</span>
         </div>
         <div class="panel tut-card" id="shop">
-          <span class="tut-emoji">🛒</span>
+          <img class="tut-ico-img" src="/icons/menu_shop.png" alt="">
           <span class="tut-txt"><b>${t("home.shop.title")}</b><span>${t("home.shop.desc")}</span></span>
           <span class="tut-arrow">→</span>
         </div>
         <div class="panel tut-card" id="tutorial">
-          <span class="tut-emoji">📖</span>
+          <img class="tut-ico-img" src="/icons/menu_tutorial.png" alt="">
           <span class="tut-txt"><b>${t("home.tutorial.title")}</b><span>${t("home.tutorial.desc")}</span></span>
           <span class="tut-arrow">→</span>
         </div>

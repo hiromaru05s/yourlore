@@ -903,7 +903,8 @@ export const SLEEVES: Record<string, Sleeve> = {
   abyss:   { id: "abyss",   url: "/frames/sleeve_abyss.png",   ko: "심연",   ja: "深淵",       en: "Abyss",   price: 1 },
   verdant: { id: "verdant", url: "/frames/sleeve_verdant.png", ko: "녹옥",   ja: "翠玉",       en: "Verdant", price: 1 },
   ivory:   { id: "ivory",   url: "/frames/sleeve_ivory.png",   ko: "상아",   ja: "象牙",       en: "Ivory",   price: 1 },
+  compass: { id: "compass", url: "/frames/sleeve_compass.png", ko: "성좌",   ja: "星座",       en: "Astral",  price: 1 },
 };
 /** ordered list for shop/picker rendering (default first). */
-export const SLEEVE_LIST: Sleeve[] = ["default", "prism", "abyss", "verdant", "ivory"].map((id) => SLEEVES[id]);
+export const SLEEVE_LIST: Sleeve[] = ["default", "prism", "abyss", "verdant", "ivory", "compass"].map((id) => SLEEVES[id]);
 export function sleeveUrl(id: string | null | undefined): string { return SLEEVES[id || "default"]?.url ?? FRAME_BACK; }

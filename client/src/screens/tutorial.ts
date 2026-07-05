@@ -15,6 +15,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     { icon: "🎯", h: "게임 목표", body: [
       "상대의 <b>체력</b>을 0으로 만들면 승리합니다.",
       "선공은 체력 <b>35</b>, 후공은 <b>42</b>로 시작해요. (후공이 조금 높은 건 선공의 템포 이점을 보정하기 위함입니다.)",
+      "선공/후공은 매 게임 <b>코인토스</b>로 공정하게 정해집니다.",
     ] },
     { icon: "🔄", h: "턴의 흐름", body: [
       "내 턴이 시작되면 ① <b>마나가 최대치까지 충전</b>되고 ② 카드를 <b>3장 드로우</b>합니다.",
@@ -49,11 +50,11 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🧬", h: "종족 시너지", body: [
       "<b>고독·고귀·포식·귀족·시초</b> 5종족이 있습니다.",
-      "서로 <b>다른</b> 종족 카드를 필드에 <b>2종·3종</b>(시초는 <b>4종</b>까지) 모으면 강력한 보너스가 발동합니다(같은 카드 2장은 인정 X, 게임당 각 1회).",
+      "<b>같은 종족</b>의 서로 <b>다른</b> 카드를 필드에 <b>2장·3장</b>(시초는 <b>4장</b>까지) 모으면 강력한 동족 시너지가 발동합니다(같은 카드 2장은 인정 X, 게임당 각 1회).",
       "카드를 확대하면(우클릭·길게 누르기) 종족 태그의 ⓘ에서 보너스 내용을 볼 수 있어요.",
     ] },
     { icon: "⭐", h: "특수 카드 & 필드", body: [
-      "필드에는 <b>몬스터 9장</b>, <b>마법·함정 9장</b>까지 놓을 수 있습니다.",
+      "필드에는 <b>몬스터 7장</b>, <b>마법·함정 7장</b>까지 놓을 수 있습니다.",
       "<b>영구마법</b>은 필드에 남아 지속 효과를 주며, 일부 카드로 파괴하거나 게임에서 제외할 수 있어요.",
       "<b>소환 조건</b>이 있는 몬스터도 있습니다(예: 특정 카드가 필드·덱·묘지에 있어야 소환).",
       "<b>암살자</b>류처럼 상대 몬스터를 무시하고 <b>플레이어를 직접 공격</b>하는 카드도 있습니다.",
@@ -75,6 +76,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     { icon: "🎯", h: "ゲームの目的", body: [
       "相手の<b>体力</b>を0にすれば勝利です。",
       "先攻は体力<b>35</b>、後攻は<b>42</b>でスタート。(後攻が少し高いのは先攻のテンポ有利を補正するためです。)",
+      "先攻/後攻は毎ゲーム<b>コイントス</b>で公平に決まります。",
     ] },
     { icon: "🔄", h: "ターンの流れ", body: [
       "自分のターンになると ①<b>マナが最大まで回復</b>し ②カードを<b>3枚ドロー</b>します。",
@@ -109,18 +111,18 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🧬", h: "種族シナジー", body: [
       "<b>孤独・高貴・捕食・貴族・始原</b>の5種族があります。",
-      "<b>異なる</b>種族カードを場に<b>2種・3種</b>(始原は<b>4種</b>まで)揃えると強力なボーナスが発動します(同じカード2枚は不可、1ゲームに各1回)。",
+      "<b>同じ種族</b>の<b>異なる</b>カードを場に<b>2枚・3枚</b>(始原は<b>4枚</b>まで)揃えると強力な同族シナジーが発動します(同じカード2枚は不可、1ゲームに各1回)。",
       "カードを拡大(右クリック・長押し)すると種族タグのⓘでボーナス内容を確認できます。",
     ] },
     { icon: "⭐", h: "特殊カード & 場", body: [
-      "場には<b>モンスター9枚</b>、<b>魔法・罠9枚</b>まで置けます。",
+      "場には<b>モンスター7枚</b>、<b>魔法・罠7枚</b>まで置けます。",
       "<b>永続魔法</b>は場に残って継続効果を与え、一部のカードで破壊・ゲームから除外できます。",
       "<b>召喚条件</b>を持つモンスターもいます(例: 特定カードが場・デッキ・墓地に必要)。",
       "<b>アサシン</b>系のように相手モンスターを無視して<b>プレイヤーを直接攻撃</b>するカードもあります。",
     ] },
     { icon: "🎁", h: "宝箱", body: [
       "宝箱を開けると4つの結果のいずれかが<b>各25%</b>で出ます:",
-      "最大マナ+1 / 体力+8 / 最大体力+5 / <b>ハズレ</b>(相手の場にミミック3/2を召喚)。",
+      "最大マナ+1 / 体力+3 / 最大体力+5 / <b>ハズレ</b>(相手の場にミミック3/2を召喚)。",
       "宝箱カードを拡大すると、この確率が横に表示されます。",
     ] },
     { icon: "🏆", h: "勝利 & 操作", body: [
@@ -135,6 +137,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     { icon: "🎯", h: "Goal", body: [
       "Reduce your opponent's <b>HP</b> to 0 to win.",
       "The first player starts at <b>35</b> HP, the second at <b>42</b>. (The extra HP offsets the first player's tempo advantage.)",
+      "Who goes first is decided fairly by a <b>coin toss</b> each game.",
     ] },
     { icon: "🔄", h: "Turn Flow", body: [
       "At the start of your turn: ① <b>mana refills to max</b> and ② you <b>draw 3 cards</b>.",
@@ -169,11 +172,11 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🧬", h: "Tribe Synergies", body: [
       "There are 5 tribes: <b>Solitary, Noble, Devour, Aristocrat, Origin</b>.",
-      "Gather <b>2 or 3 different</b> cards of a tribe on your field (Origin goes up to <b>4</b>) for powerful bonuses (copies don't count; once per game each).",
+      "Gather <b>2 or 3 different cards of the SAME tribe</b> on your field (Origin goes up to <b>4</b>) for powerful same-tribe synergies (copies don't count; once per game each).",
       "Enlarge a card (right-click / long-press) and tap the tribe tag's ⓘ to see the bonuses.",
     ] },
     { icon: "⭐", h: "Special Cards & Field", body: [
-      "The field holds up to <b>9 monsters</b> and <b>9 spells/traps</b>.",
+      "The field holds up to <b>7 monsters</b> and <b>7 spells/traps</b>.",
       "<b>Enchantments</b> persist on the field; some cards destroy or exile them.",
       "Some monsters have <b>summon requirements</b> (e.g. specific cards in your field/deck/graveyard).",
       "<b>Assassins</b> ignore enemy monsters and always <b>attack the player directly</b>.",

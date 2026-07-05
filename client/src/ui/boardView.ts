@@ -4,7 +4,7 @@
 // All animation lives in anim.ts; this file only draws + binds.
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
-import { effMaxMana, playCost, buyCost } from "../shared/engine";
+import { effMaxMana, playCost, buyCost, effAtk, effDef } from "../shared/engine";
 import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS } from "../shared/cards";
 import { cardPicker } from "./modal";
 import { cardEl } from "./cardView";
@@ -214,7 +214,8 @@ export class GameView {
       const card = cardEl(m, { field: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
-      bindZoom(card, m);
+      // zoom shows the monster's CURRENT atk/def (buffs/mods applied), matching the on-field card
+      bindZoom(card, { ...m, atk: effAtk(p, m), def: effDef(p, m) });
       if (isMe && myTurn && !pending && !g.over && p.field.length > 1) this.enableReorder(card, idx, mz);
       mz.appendChild(card);
     });
