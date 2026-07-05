@@ -54,8 +54,8 @@
   border-radius: var(--card-r);
 }
 .card-name {
-  /* name plate (right of the cost circle): new frame plate y 6.4–14.5%, x →93% */
-  position: absolute; top: 6.4%; left: 29%; right: 7%; height: 7.6%; z-index: 3;
+  /* name plate (normalized frame): y 5.5–13.8%, right of the cost circle */
+  position: absolute; top: 6%; left: 29%; right: 6.5%; height: 7.8%; z-index: 3;
   display: flex; align-items: center; justify-content: flex-start;
   font-weight: 800; font-size: 0.52em; line-height: 1; letter-spacing: -.02em;
   color: #17120c; text-shadow: 0 1px 0 #ffffff44;
@@ -65,7 +65,7 @@
 .card-art {
   /* BEHIND the frame overlay, filling the new frame's art window
      (measured x 8.5–92.5%, y 14.7–63.5%); bled ~1% under the metal border. */
-  position: absolute; top: 14%; left: 7%; right: 7%; height: 50.5%; z-index: 0;
+  position: absolute; top: 13.8%; left: 7%; right: 6.4%; height: 50.6%; z-index: 0;
   background: radial-gradient(120% 90% at 50% 30%, #2c3a55, #0c1320 90%);
   overflow: hidden;
 }
@@ -84,7 +84,7 @@
 .card-eff {
   /* lower text plate — new frame: monster plate y 63.6–86.1% (atk/def below) */
   position: absolute; left: 11%; right: 11%; z-index: 2;
-  top: 64%; height: 21%;
+  top: 64%; height: 22%;
   font-size: 0.44em; line-height: 1.12; color: #1b1610;
   text-align: center; overflow: hidden; word-break: keep-all;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -93,7 +93,7 @@
 .card-eff--small { font-size: 0.375em; line-height: 1.1; }
 .card-eff--tiny { font-size: 0.33em; line-height: 1.08; }
 /* spell/trap/starter have no stats strip → plate extends to the bottom (y 63.6–95.3%) */
-.card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 30%; }
+.card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 31%; }
 
 /* CAST cost — a small pill pinned at the top of the effect text. Native title
    attribute gives the on-hover explanation popup (never clipped by the card). */
@@ -126,13 +126,13 @@
    (A Windows client failed to show them when they used var(--mono) + translateY.) */
 .ad-atk, .ad-def {
   /* stats strip — new frame atk/def cream boxes: y 88.7–95.3%; atk x22–48%, def x67–92.5% */
-  position: absolute; top: 88.4%; height: 6.6%; width: 26%; z-index: 3;
+  position: absolute; top: 89.2%; height: 6.7%; width: 27%; z-index: 3;
   display: flex; align-items: center; justify-content: center;
   font-weight: 800; font-size: 0.86em; line-height: 1;
   color: #16110c; text-shadow: 0 1px 0 #ffffff44;
 }
-.ad-atk { left: 22%; }
-.ad-def { left: 67%; }
+.ad-atk { left: 21%; }
+.ad-def { left: 66.5%; }
 
 /* ---- card states ---- (no hover glow — just a clean lift for affordance) ---- */
 .card.is-playable, .card.is-buyable { cursor: pointer; }
