@@ -219,7 +219,8 @@
 .market-sub { min-width: 0; }
 .market-sub:nth-child(1) { flex: 10 1 0; }
 .market-sub:nth-child(3) { flex: 3 1 0; }
-.market-sub .sub-head { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 6px; }
+.market-sub .sub-head { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 6px; flex-wrap: nowrap; white-space: nowrap; }
+.market-sub .sub-head .sh-opp { font-size: 10px; }
 .market-sub .sub-head .tag { font-family: var(--mono); font-size: 12.5px; font-weight: 700; letter-spacing: .16em; color: var(--brass-hi); text-transform: uppercase; display: inline-flex; align-items: center; gap: 8px; }
 .market-sub .sub-head .tag::before, .market-sub .sub-head .tag::after { content: ""; width: 18px; height: 1px; }
 .market-sub .sub-head .tag::before { background: linear-gradient(90deg, transparent, var(--brass-dim)); }
@@ -230,7 +231,7 @@
 /* when the market has wrapped to multiple lines, the vertical divider looks odd — hide it narrow */
 @media (max-width: 1500px) { .market-div { display: none; } }
 /* reroll — a clear, sizeable button with an on-hover explanation popup */
-.refresh-btn { position: relative; font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .06em; padding: 5px 12px; border-radius: 8px; border: 1px solid var(--blue); background: linear-gradient(180deg, #2f7fe033, #2f7fe012); color: #cfe4ff; display: inline-flex; align-items: center; gap: 5px; }
+.refresh-btn { position: relative; flex: 0 0 auto; white-space: nowrap; font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .04em; padding: 5px 11px; border-radius: 8px; border: 1px solid var(--blue); background: linear-gradient(180deg, #2f7fe033, #2f7fe012); color: #cfe4ff; display: inline-flex; align-items: center; gap: 4px; }
 .refresh-btn .rf-ico { font-size: 14px; }
 .refresh-btn b { font-family: var(--mono); color: var(--cyan); }
 .refresh-btn:hover:not(:disabled) { border-color: var(--blue-hi); background: linear-gradient(180deg, #2f7fe055, #2f7fe022); color: #eaf6ff; box-shadow: 0 0 12px #4fb4ff44; }

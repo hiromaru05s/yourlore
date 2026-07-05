@@ -4,7 +4,7 @@
 // All animation lives in anim.ts; this file only draws + binds.
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
-import { effMaxMana, supplyRange, playCost, buyCost } from "../shared/engine";
+import { effMaxMana, playCost, buyCost } from "../shared/engine";
 import { frameFor, FRAME_BACK, TRIBES, DB as DBC } from "../shared/cards";
 import { cardPicker } from "./modal";
 import { cardEl } from "./cardView";
@@ -421,8 +421,6 @@ export class GameView {
     // The 제시 (supply) on display belongs to whoever's turn it is — your own
     // on your turn, your opponent's (public) on theirs.
     const owner = g.players[g.cur];
-    const [lo, hi] = supplyRange(owner);
-    const supplyMeta = myTurn ? `${t("game.mana")} ${lo}~${hi} · ${t("game.refresh.suffix")}` : `<span class="dmg">${t("game.supply.opp")}</span> · ${t("game.mana")} ${lo}~${hi}`;
     const mk = this.q("market");
     mk.innerHTML = `
       <div class="market-sub">
@@ -430,9 +428,9 @@ export class GameView {
         <div class="market-cards" id="fixedMarket"></div>
       </div>
       <div class="market-div"></div>
-      <div class="market-sub">
+      <div class="market-sub market-sub--supply">
         <div class="sub-head">
-          <span class="tag">${t("game.supply")}</span><span class="meta">${supplyMeta}</span>
+          <span class="tag">${t("game.supply")}${myTurn ? "" : ` <span class="dmg sh-opp">${t("game.supply.opp")}</span>`}</span>
           <button class="refresh-btn" id="refreshBtn"><span class="rf-ico">⟳</span> ${t("game.refresh")} <b>1</b>
             <span class="refresh-tip">${t("game.refresh.tip")}</span>
           </button>
