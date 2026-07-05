@@ -23,28 +23,26 @@
 .card--mkt { --cw: var(--card-w-mkt); --ch: var(--card-h-mkt); }
 .card--hand { --cw: var(--card-w-hand); --ch: var(--card-h-hand); }
 
-/* per-type cost-gem colors (match the frame color) */
-.card--mon     { --cc: #d1431f; --cc-lo: #f47a4a; }
-.card--spell   { --cc: #2c6bd0; --cc-lo: #5a9cf2; }
-.card--trap    { --cc: #38984d; --cc-lo: #67c67c; }
-.card--starter { --cc: #24a9bd; --cc-lo: #5ad6e6; }
+/* per-type cost-gem colors (match the frame color) + neon cost-button image */
+.card--mon     { --cc: #d1431f; --cc-lo: #f47a4a; --cost-img: url(/ui/cost-mon.webp); }
+.card--spell   { --cc: #2c6bd0; --cc-lo: #5a9cf2; --cost-img: url(/ui/cost-spell.webp); }
+.card--trap    { --cc: #38984d; --cc-lo: #67c67c; --cost-img: url(/ui/cost-trap.webp); }
+.card--starter { --cc: #24a9bd; --cc-lo: #5ad6e6; --cost-img: url(/ui/cost-starter.webp); }
 
-/* BUY cost — our own colored circle that fully COVERS the frame's built-in cost
-   ring and overflows past the top-left corner of the frame. Color = card type. */
+/* BUY cost — neon button icon (transparent webp) that fully COVERS the frame's
+   built-in cost ring and overflows past the top-left corner. Color = card type. */
 .card-cost {
   position: absolute; top: -1.6%; left: -4%; right: auto;
   width: 35%; height: auto; aspect-ratio: 1;
   display: grid; place-items: center;
   font-family: var(--mono); font-weight: 800; font-size: 1.4em; line-height: 1;
   color: #fff; pointer-events: none;   /* decorative — never intercept card/target clicks */
-  border-radius: 50%;
-  /* matte fill — no gloss/shine */
-  background: radial-gradient(circle at 50% 58%, var(--cc-lo), var(--cc) 80%);
-  border: max(1.5px, 0.09em) solid #fdf1d6;
-  box-shadow: 0 0.14em 0.3em #000b, 0 0 0.4em -0.1em var(--cc), inset 0 -0.14em 0.26em #0006;
+  background: var(--cost-img) center / 100% 100% no-repeat;
+  filter: drop-shadow(0 0.1em 0.22em #000b);
   text-shadow: 0 0.06em 0.12em #000a;
   z-index: 6;
 }
+.card-cost--2d { font-size: 1.15em; letter-spacing: -0.06em; } /* "10"+ fits inside the neon ring */
 
 /* frame overlay — sits ON TOP of the art, its art-window is transparent so the
    art shows through. Text/cost/stats layer above this (higher z-index). */

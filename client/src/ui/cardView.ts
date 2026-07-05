@@ -61,7 +61,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   if (opt.exhausted) node.classList.add("is-exhausted");
 
   const cost = opt.costOverride != null ? opt.costOverride : c.cost;
-  node.appendChild(el("div", "card-cost", String(cost)));
+  node.appendChild(el("div", "card-cost" + (cost >= 10 ? " card-cost--2d" : ""), String(cost)));
   const pc = playCost(c);
   const nm = cardName(c);
   const nameEl2 = el("div", "card-name" + (nm.length >= 9 ? " card-name--long" : ""), nm);
