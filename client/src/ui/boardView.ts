@@ -45,11 +45,11 @@ export class GameView {
     this.root.innerHTML = `
       <div class="game">
         <div class="topbar">
-          <button class="icon-btn mute-btn" id="muteBtn" title="${t("game.mute")}">🔊</button>
           <div class="brand"><div class="mark"></div><h1>LORE</h1></div>
           <div class="turn-info" id="turnInfo"></div>
           <button class="btn btn-danger giveup-btn" id="giveupBtn">${t("game.surrender")}</button>
         </div>
+        <button class="mute-fab" id="muteBtn" title="${t("game.mute")}" aria-label="${t("game.mute")}"></button>
         <div class="stage">
           <div class="board-col">
             <div class="opp-hand" id="oppHand"></div>
@@ -73,10 +73,12 @@ export class GameView {
     this.logEl = this.q("log");
     (this.q("endBtn") as HTMLButtonElement).onclick = () => this.h.onEndTurn();
     (this.q("giveupBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
-    // mute toggle (top-left) — remembers the last non-zero volume
+    // mute toggle (round button below the logo) — remembers the last non-zero volume
     const muteBtn = this.q("muteBtn") as HTMLButtonElement;
+    const SPK_ON = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.6a4 4 0 010 6.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+    const SPK_OFF = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
     let lastVol = getSfxVolume() || 0.7;
-    const paintMute = () => { muteBtn.textContent = getSfxVolume() <= 0 ? "🔇" : "🔊"; muteBtn.classList.toggle("muted", getSfxVolume() <= 0); };
+    const paintMute = () => { const m = getSfxVolume() <= 0; muteBtn.innerHTML = m ? SPK_OFF : SPK_ON; muteBtn.classList.toggle("muted", m); };
     muteBtn.onclick = () => { if (getSfxVolume() > 0) { lastVol = getSfxVolume(); setSfxVolume(0); } else { setSfxVolume(lastVol || 0.7); } paintMute(); };
     paintMute();
     // battle log — CLOSED by default; a mid-left edge tab opens the drawer.

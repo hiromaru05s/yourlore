@@ -21,10 +21,19 @@
 .brand h1 { display: none; }
 .topbar .turn-info { margin-left: auto; font-family: var(--mono); font-size: 12px; letter-spacing: .12em; color: var(--paper-dim); }
 .topbar .turn-info b { color: var(--vermil-hi); }
-/* top-left mute toggle */
-.icon-btn { width: 32px; height: 32px; flex: 0 0 auto; border-radius: 8px; display: grid; place-items: center; border: 1px solid var(--line); background: #ffffff06; color: var(--paper-dim); font-size: 15px; cursor: pointer; transition: .15s var(--ease); }
-.icon-btn:hover { color: var(--paper); border-color: var(--brass-dim); background: #ffffff0d; }
-.icon-btn.muted { color: var(--vermil-hi); border-color: var(--vermil); }
+/* mute toggle — a round button pinned BELOW the logo (outside the topbar) */
+.mute-fab {
+  position: fixed; top: 48px; left: 16px; z-index: 55;
+  width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1px solid var(--line); background: #0e1522cc; color: var(--paper-dim);
+  cursor: pointer; transition: .15s var(--ease);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px #0007;
+}
+.mute-fab:hover { color: var(--paper); border-color: var(--brass-dim); background: #16203ae0; }
+.mute-fab.muted { color: var(--vermil-hi); border-color: var(--vermil); }
+.mute-fab svg { display: block; }
 /* top-right surrender */
 .giveup-btn { flex: 0 0 auto; padding: 8px 16px; font-size: 11px; letter-spacing: .1em; }
 .gear { width: 30px; height: 30px; border-radius: 7px; display: grid; place-items: center; border: 1px solid var(--line); background: #ffffff05; color: var(--paper-dim); }
