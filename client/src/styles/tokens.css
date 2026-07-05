@@ -49,8 +49,9 @@
   --card-r: 6px;
   --slot-gap: clamp(4px, 0.55vw, 8px);
 
-  /* market cards (fixed + 제시) — kept modest so the whole board fits cleanly */
-  --card-h-mkt: clamp(86px, 10.8vh, 132px);
+  /* market cards (fixed + 제시) — sized so all 10 고정 cards fit in ONE row on
+     desktop (card height scales with vh; the market width scales with vw). */
+  --card-h-mkt: clamp(76px, 8vh, 116px);
   --card-w-mkt: calc(var(--card-h-mkt) * 0.64);
   --card-h-hand: clamp(92px, 13vh, 152px);
   --card-w-hand: calc(var(--card-h-hand) * 0.64);

@@ -209,7 +209,7 @@
 /* 고정(10) + 제시(3) share one centered row on wide screens; when the width
    runs out the fixed cards wrap to a 2nd tier automatically, and 제시 drops
    below that — no horizontal clipping at any size. */
-.market { display: flex; flex-wrap: nowrap; justify-content: center; align-items: flex-start; gap: 7px 16px; padding: 7px 12px 9px; align-self: center; max-width: min(1040px, 92%); margin: 0 auto; overflow: hidden; border-color: #4fb4ff26; }
+.market { display: flex; flex-wrap: nowrap; justify-content: center; align-items: flex-start; gap: 7px 16px; padding: 7px 12px 9px; align-self: center; max-width: min(1160px, 97%); margin: 0 auto; overflow: hidden; border-color: #4fb4ff26; }
 .market::before { /* warm showcase spotlight over the wares */
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
   background: radial-gradient(60% 95% at 50% 30%, #4fb4ff0c, transparent 70%);
@@ -226,7 +226,8 @@
 .market-sub .sub-head .tag::before { background: linear-gradient(90deg, transparent, var(--brass-dim)); }
 .market-sub .sub-head .tag::after { background: linear-gradient(90deg, var(--brass-dim), transparent); }
 .market-sub .sub-head .meta { font-size: 11px; color: var(--paper-dim); }
-.market-cards { display: flex; gap: 8px 7px; justify-content: center; flex-wrap: wrap; }
+/* desktop: keep every 고정/제시 card on ONE row (no wrap → no overlap with fields) */
+.market-cards { display: flex; gap: 6px; justify-content: center; flex-wrap: nowrap; }
 .market-div { width: 1px; align-self: stretch; background: linear-gradient(180deg, transparent, var(--line), transparent); }
 /* when the market has wrapped to multiple lines, the vertical divider looks odd — hide it narrow */
 @media (max-width: 1500px) { .market-div { display: none; } }
