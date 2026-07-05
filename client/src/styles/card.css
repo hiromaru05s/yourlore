@@ -123,7 +123,7 @@
 /* ENCHANTMENT (영구마법) marker — a small ∞ badge in the effect plate corner,
    with a hover tooltip explaining that the card persists on the field. */
 .card-ench {
-  position: absolute; top: 0.15em; right: 0.2em; z-index: 4;
+  position: absolute; top: 0.3em; left: 1.4em; z-index: 4;
   display: inline-flex; align-items: center; justify-content: center;
   width: 1.55em; height: 1.55em; border-radius: 50%;
   background: radial-gradient(circle at 40% 35%, #8a72e8, #4a34a0 85%); color: #fff;
