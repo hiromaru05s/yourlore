@@ -74,7 +74,7 @@ async function profileOf(env: Env, targetId: string, viewer: SessionUser | null)
             ua.display AS da, ub.display AS db
      FROM matches m LEFT JOIN users ua ON ua.id = m.player_a LEFT JOIN users ub ON ub.id = m.player_b
      WHERE (m.player_a = ?1 OR m.player_b = ?1) AND m.ended_at IS NOT NULL
-     ORDER BY m.created_at DESC LIMIT 15`
+     ORDER BY m.created_at DESC LIMIT 40`
   ).bind(u.id).all<{ player_a: string; player_b: string; winner: string | null; mode: string; turns: number | null; created_at: number; da: string | null; db: string | null }>();
   const recent = (matches.results ?? []).map((m) => ({
     mode: m.mode,
@@ -96,8 +96,52 @@ async function profileOf(env: Env, targetId: string, viewer: SessionUser | null)
       credits: u.credits,
       sleeve: u.sleeve || "default",
       sleeves: ["default", ...parseSleeves(u.sleeves)],
+      byMode: await byModeOf(env, u.id),
+      h2h: await h2hOf(env, u.id),
     } : {}),
   };
+}
+
+/** Per-mode W/L aggregates (self only) for the profile record filter. */
+async function byModeOf(env: Env, uid: string): Promise<Record<"ranked" | "online" | "bot", { w: number; l: number }>> {
+  const out = { ranked: { w: 0, l: 0 }, online: { w: 0, l: 0 }, bot: { w: 0, l: 0 } };
+  try {
+    const rows = await env.DB.prepare(
+      `SELECT mode,
+              SUM(CASE WHEN winner = ?1 THEN 1 ELSE 0 END) AS w,
+              SUM(CASE WHEN winner IS NOT NULL AND winner != ?1 THEN 1 ELSE 0 END) AS l
+       FROM matches
+       WHERE (player_a = ?1 OR player_b = ?1) AND ended_at IS NOT NULL
+       GROUP BY mode`
+    ).bind(uid).all<{ mode: string; w: number; l: number }>();
+    for (const r of rows.results ?? []) {
+      const k = r.mode === "ranked" ? "ranked" : r.mode === "bot" ? "bot" : "online";
+      out[k] = { w: r.w ?? 0, l: r.l ?? 0 };
+    }
+  } catch { /* best effort */ }
+  return out;
+}
+
+/** Head-to-head vs opponents faced 2+ times (self only; PvP modes only, bot excluded). */
+async function h2hOf(env: Env, uid: string): Promise<{ oppId: string; oppName: string; wins: number; losses: number; games: number }[]> {
+  try {
+    const rows = await env.DB.prepare(
+      `SELECT t.opp AS oppId, u.display AS oppName,
+              SUM(t.win) AS wins, SUM(t.loss) AS losses, COUNT(*) AS games
+       FROM (
+         SELECT CASE WHEN m.player_a = ?1 THEN m.player_b ELSE m.player_a END AS opp,
+                CASE WHEN m.winner = ?1 THEN 1 ELSE 0 END AS win,
+                CASE WHEN m.winner IS NOT NULL AND m.winner != ?1 THEN 1 ELSE 0 END AS loss
+         FROM matches m
+         WHERE (m.player_a = ?1 OR m.player_b = ?1) AND m.ended_at IS NOT NULL AND m.mode IN ('online','ranked')
+       ) t
+       LEFT JOIN users u ON u.id = t.opp
+       GROUP BY t.opp
+       HAVING COUNT(*) >= 2
+       ORDER BY games DESC, wins DESC LIMIT 40`
+    ).bind(uid).all<{ oppId: string; oppName: string | null; wins: number; losses: number; games: number }>();
+    return (rows.results ?? []).map((r) => ({ oppId: r.oppId, oppName: r.oppName ?? "?", wins: r.wins ?? 0, losses: r.losses ?? 0, games: r.games ?? 0 }));
+  } catch { return []; }
 }
 
 // ---- route handler: /social/* ----

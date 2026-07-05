@@ -68,7 +68,11 @@ export async function applyRanked(env: Env, winnerId: string, loserId: string): 
   const [w, l] = await Promise.all([getRating(env, winnerId), getRating(env, loserId)]);
   const expW = 1 / (1 + Math.pow(10, (l.mmr - w.mmr) / 400));
   const d = Math.max(1, Math.round(K * (1 - expW)));
-  const wNew = w.mmr + d;
+  // Slight inflation so ranked isn't strictly zero-sum: the winner gains a small flat
+  // bonus on top of the Elo exchange (the loser drops by the plain Elo delta). Keeps the
+  // ladder from bleeding points over a season; the monthly soft-reset contains drift.
+  const WIN_BONUS = 2;
+  const wNew = w.mmr + d + WIN_BONUS;
   const lNew = Math.max(0, l.mmr - d);
   const now = Date.now();
   const season = seasonKey();

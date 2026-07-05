@@ -374,3 +374,17 @@
 /* ---- shop ---- */
 .shop-credits { margin-left: auto; font-family: var(--mono); font-size: 15px; color: var(--cyan); }
 .shop-item.is-owned .sl-preview { border-color: var(--brass-dim); }
+
+/* ---- record filter + head-to-head ---- */
+.pf-stats-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.pf-stats-head h3 { margin-bottom: 0; }
+.pf-filter select { padding: 5px 9px; font-size: 12.5px; }
+.pf-h2h { display: flex; flex-direction: column; gap: 6px; }
+.h2h-row { display: grid; grid-template-columns: 1fr auto auto auto; align-items: center; gap: 14px; padding: 9px 13px; border-radius: 10px; border: 1px solid var(--line); background: linear-gradient(180deg, #ffffff08, #ffffff02); cursor: pointer; transition: .14s var(--ease); }
+.h2h-row:hover { border-color: var(--blue); background: #ffffff10; transform: translateX(2px); }
+.h2h-opp { font-weight: 700; color: var(--paper); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.h2h-rec { font-family: var(--mono); font-size: 15px; letter-spacing: .04em; color: var(--paper-dim); }
+.h2h-rec .h2h-w { color: #6fd39a; }
+.h2h-rec .h2h-l { color: #e0776a; }
+.h2h-rate { font-family: var(--mono); font-size: 13px; color: var(--brass-hi); min-width: 40px; text-align: right; }
+.h2h-games { font-size: 11.5px; color: var(--paper-faint); min-width: 44px; text-align: right; }

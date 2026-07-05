@@ -222,6 +222,33 @@
 .turn-toast.out { animation: toastOut .3s var(--ease) forwards; }
 @keyframes toastOut { to { opacity: 0; transform: translate(-50%,-50%) scale(1.1) } }
 
+/* ---- coin toss (first-turn reveal) ---- */
+.cointoss-ov {
+  position: fixed; inset: 0; z-index: 240; display: grid; place-items: center;
+  background: radial-gradient(ellipse at center, #0a0f18cc, #05070bee);
+  animation: ctFade .25s var(--ease);
+}
+.cointoss-ov.out { animation: ctFadeOut .35s var(--ease) forwards; }
+@keyframes ctFade { from { opacity: 0 } to { opacity: 1 } }
+@keyframes ctFadeOut { to { opacity: 0 } }
+.cointoss { display: flex; flex-direction: column; align-items: center; gap: 22px; }
+.ct-coin { width: 108px; height: 108px; position: relative; transform-style: preserve-3d; }
+.ct-coin.to-heads { animation: ctSpinHeads 1s cubic-bezier(.2,.7,.2,1) forwards; }
+.ct-coin.to-tails { animation: ctSpinTails 1s cubic-bezier(.2,.7,.2,1) forwards; }
+.ct-face {
+  position: absolute; inset: 0; border-radius: 50%; display: grid; place-items: center;
+  font-family: var(--mono); font-size: 46px; font-weight: 800; backface-visibility: hidden;
+  box-shadow: 0 8px 26px #000a, inset 0 0 0 3px #ffffff22;
+}
+.ct-heads { background: radial-gradient(circle at 40% 35%, #cfe0ff, #6f8fc0 78%); color: #16233b; }
+.ct-tails { background: radial-gradient(circle at 40% 35%, #f5e0b0, #b98f4a 78%); color: #3a2a12; transform: rotateY(180deg); }
+@keyframes ctSpinHeads { 0% { transform: rotateY(0) scale(.7) } 100% { transform: rotateY(1440deg) scale(1) } }
+@keyframes ctSpinTails { 0% { transform: rotateY(0) scale(.7) } 100% { transform: rotateY(1620deg) scale(1) } }
+.ct-caption { text-align: center; opacity: 0; animation: ctCap .4s var(--ease) .9s forwards; }
+.ct-head { font-family: var(--mono); letter-spacing: .28em; font-size: 12px; color: var(--paper-faint); text-transform: uppercase; margin-bottom: 7px; }
+.ct-result { font-family: var(--mono); font-size: 24px; font-weight: 800; letter-spacing: .04em; color: var(--brass-hi); }
+@keyframes ctCap { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+
 .trapchip-card { position: relative; }
 
 /* ---- market ---- */

@@ -52,7 +52,11 @@ export abstract class BaseController implements BoardHandlers {
   private warned25 = false;
   private toastEl: HTMLElement | null = null;
   private prevMaxMana = 0;
-  private static readonly TURN_SECS = 50;
+  // bot/tutorial (and casual online fallback) use a 90s turn; online games get the
+  // authoritative length from the server via g.turnTotalMs (ranked 50s / casual 90s).
+  private static readonly LOCAL_TURN_SECS = 90;
+  private turnTotal = 90; // full length of the CURRENT turn (for the ring's full-scale)
+  private introShown = false; // coin-toss reveal plays once at game start
 
   constructor(root: HTMLElement, you: Side, exits: ControllerExits) {
     this.you = you;
@@ -140,12 +144,18 @@ export abstract class BaseController implements BoardHandlers {
     for (const e of events) {
       if (e.type === "turnHeader") this.log.turnHeader(e.turn, e.name, e.isBot);
       else if (e.type === "log") {
-        this.log.line(e.html, e.htmlJa);
-        // "can't play" feedback: engine rejection lines get an error blip + a popup explaining why
+        // "can't play/attack" rejection lines are NOT written to the battle log (they'd
+        // just spam it). Only the ACTING player gets a friendly popup. Online: the server
+        // never even sends the opponent these; in bot mode this guard suppresses the bot's
+        // blocked attempts (cur !== you).
         if (/불가|사용할 수 없|없습니다|가득|できません|cannot|not allowed/i.test(e.html)) {
-          const reason = this.stripHtml(getLang() === "ja" ? e.htmlJa : getLang() === "en" ? logToEn(e.html) : e.html).replace(/^\s*[└·\-]\s*/, "").trim();
-          this.cantPlayToast(reason || t("play.block.cond"));
+          if (this.state.cur === this.you) {
+            const reason = this.stripHtml(getLang() === "ja" ? e.htmlJa : getLang() === "en" ? logToEn(e.html) : e.html).replace(/^\s*[└·\-]\s*/, "").trim();
+            this.cantPlayToast(reason || t("play.block.cond"));
+          }
+          continue;
         }
+        this.log.line(e.html, e.htmlJa);
       }
     }
   }
@@ -351,6 +361,11 @@ export abstract class BaseController implements BoardHandlers {
 
   private afterApply(res: ReduceResult): void {
     this.syncTimer();
+    // coin-toss intro: reveal who won the toss for the first turn (once, at game start)
+    if (!this.introShown && this.state && this.state.turn === 1 && !this.state.over) {
+      this.introShown = true;
+      this.showCoinToss(this.state.cur);
+    }
     // max-mana growth cue (mid-turn gains too)
     const mm = this.state?.players?.[this.you]?.maxMana ?? 0;
     if (this.prevMaxMana && mm > this.prevMaxMana) sfx("mana");
@@ -389,11 +404,14 @@ export abstract class BaseController implements BoardHandlers {
     if (key !== this.timerKey) {
       const firstTurn = this.timerKey === "";
       this.timerKey = key;
+      // full turn length for THIS turn: server-authoritative online (ranked 50 / casual 90),
+      // else the local 90s default (bot / tutorial).
+      this.turnTotal = g.turnTotalMs != null ? Math.round(g.turnTotalMs / 1000) : BaseController.LOCAL_TURN_SECS;
       // Online: trust the server's remaining-ms so a reconnecting client resumes the
       // same clock instead of restarting the turn. Bot mode has no turnLeftMs → full turn.
       this.timerLeft = g.turnLeftMs != null
         ? Math.max(1, Math.ceil(g.turnLeftMs / 1000))
-        : BaseController.TURN_SECS;
+        : this.turnTotal;
       this.warned25 = this.timerLeft <= 25; // don't re-fire the 25s popup mid-turn on reconnect
       if (!firstTurn && g.cur === this.you) sfx("turn"); // my turn begins
       if (this.timerInt) clearInterval(this.timerInt);
@@ -410,9 +428,19 @@ export abstract class BaseController implements BoardHandlers {
     if (s === 25 && !this.warned25) { this.warned25 = true; this.turnToast(`${s}초`, "small", 1500); }
     else if (s <= 5 && s >= 1) this.turnToast(String(s), "big", 900);
     if (s <= 0) {
-      if (this.timerInt) { clearInterval(this.timerInt); this.timerInt = null; }
       // only the active player's own client forces the end (server validates online)
-      if (this.state.cur === this.you && !this.state.pending && !this.state.over) this.submit({ type: "endTurn" });
+      if (this.state.cur === this.you && !this.state.over) {
+        if (this.state.pending) {
+          // A pending target choice (e.g. attacking a monster at the last second) would
+          // otherwise block auto-end and freeze the turn indefinitely. Cancel a cancelable
+          // pending now; the next tick (still ≤0) then ends the turn. Non-cancelable
+          // pendings must be resolved by the player.
+          if (this.state.pending.allowCancel) this.onChooseTarget(null);
+        } else {
+          if (this.timerInt) { clearInterval(this.timerInt); this.timerInt = null; }
+          this.submit({ type: "endTurn" });
+        }
+      } else if (this.timerInt) { clearInterval(this.timerInt); this.timerInt = null; }
     }
   }
 
@@ -423,7 +451,7 @@ export abstract class BaseController implements BoardHandlers {
     if (clr) { clr.className = "mp-clock"; clr.replaceChildren(); }
     const el = document.getElementById(`clock-${active}`);
     if (!el) return;
-    const total = BaseController.TURN_SECS;
+    const total = this.turnTotal;
     const s = Math.max(0, this.timerLeft);
     const mine = active === "me" && !this.state.over;
     const R = 26, C = 2 * Math.PI * R;
@@ -443,6 +471,30 @@ export abstract class BaseController implements BoardHandlers {
     arc.style.transition = s >= total ? "none" : "";
     arc.setAttribute("stroke-dashoffset", (C * (1 - s / total)).toFixed(1));
     num.textContent = String(s);
+  }
+
+  /** Coin-toss reveal at game start: a flipping coin that lands on 선공/후공. */
+  private showCoinToss(firstSide: Side): void {
+    const iAmFirst = firstSide === this.you;
+    const firstName = this.state.players[firstSide].name;
+    const heads = iAmFirst; // my side = heads face
+    const ov = document.createElement("div");
+    ov.className = "cointoss-ov";
+    ov.innerHTML = `
+      <div class="cointoss">
+        <div class="ct-coin ${heads ? "to-heads" : "to-tails"}">
+          <div class="ct-face ct-heads">先</div>
+          <div class="ct-face ct-tails">後</div>
+        </div>
+        <div class="ct-caption">
+          <div class="ct-head">${t("coin.title")}</div>
+          <div class="ct-result">${iAmFirst ? t("coin.youFirst") : `${firstName} ${t("coin.oppFirst")}`}</div>
+        </div>
+      </div>`;
+    document.body.appendChild(ov);
+    sfx("coin");
+    setTimeout(() => sfx(iAmFirst ? "turn" : "pop"), 900);
+    setTimeout(() => { ov.classList.add("out"); setTimeout(() => ov.remove(), 350); }, 2000);
   }
 
   private turnToast(text: string, size: "big" | "small", ms: number): void {
@@ -525,6 +577,7 @@ export class LocalController extends BaseController {
       mode: "bot",
       p0: { id: "local", name: playerName },
       p1: { id: "bot", name: "BOT", isBot: true },
+      starting: (Math.random() < 0.5 ? 0 : 1) as Side, // coin toss for first turn
     });
     this.applyResult(res, false);
   }

@@ -275,6 +275,19 @@ const D: Record<string, Entry> = {
   "settings.language.desc": { ko: "선택한 언어는 이 기기에 저장되어 유지됩니다.", ja: "選択した言語はこの端末に保存され維持されます。", en: "Your choice is saved on this device and kept." },
   "settings.account": { ko: "계정", ja: "アカウント", en: "Account" },
   "settings.logout.confirm": { ko: "로그아웃 할까요?", ja: "ログアウトしますか？", en: "Log out?" },
+  // coin toss (first-turn decision)
+  "coin.title": { ko: "코인토스", ja: "コイントス", en: "Coin Toss" },
+  "coin.youFirst": { ko: "내가 선공!", ja: "自分が先攻！", en: "You go first!" },
+  "coin.oppFirst": { ko: "선공", ja: "先攻", en: "goes first" },
+  // profile head-to-head + record filter
+  "profile.tab.h2h": { ko: "상대전적", ja: "対戦成績", en: "Rivals" },
+  "profile.h2h.title": { ko: "상대별 전적 (2판 이상)", ja: "相手別成績 (2戦以上)", en: "Head-to-Head (2+ games)" },
+  "profile.h2h.empty": { ko: "2판 이상 맞붙은 상대가 아직 없습니다.", ja: "2戦以上対戦した相手はまだいません。", en: "No opponents faced 2+ times yet." },
+  "profile.h2h.games": { ko: "판", ja: "戦", en: "games" },
+  "profile.filter.all": { ko: "전체", ja: "全体", en: "All" },
+  "profile.filter.ranked": { ko: "랭크", ja: "ランク", en: "Ranked" },
+  "profile.filter.online": { ko: "노말", ja: "ノーマル", en: "Normal" },
+  "profile.filter.bot": { ko: "봇", ja: "BOT", en: "Bot" },
   // shop
   "home.shop.title": { ko: "상점", ja: "ショップ", en: "Shop" },
   "home.shop.desc": { ko: "크레딧으로 카드 슬리브를 구매하세요.", ja: "クレジットでカードスリーブを購入。", en: "Spend credits on card sleeves." },

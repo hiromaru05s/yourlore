@@ -107,6 +107,10 @@ export interface Profile {
   credits?: number;  // self only
   sleeve?: string;   // equipped sleeve id (self only)
   sleeves?: string[]; // owned sleeve ids incl. 'default' (self only)
+  // per-mode W/L aggregates for the record filter (self only)
+  byMode?: { ranked: { w: number; l: number }; online: { w: number; l: number }; bot: { w: number; l: number } };
+  // head-to-head vs opponents faced 2+ times (self only), most-played first
+  h2h?: { oppId: string; oppName: string; wins: number; losses: number; games: number }[];
 }
 
 export interface FriendEntry { id: string; display: string; avatar: string | null; badge: string | null; online: boolean; state: string | null; }

@@ -11,7 +11,7 @@ import type { App, Screen } from "../router";
 import { api, type FriendEntry, type FriendsData } from "../net/api";
 import { t, onLangChange } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
-import { avatarHtml, badgeChipHtml } from "../ui/social";
+import { avatarHtml } from "../ui/social";
 import { showProfileModal } from "./profile";
 import { confirmDialog } from "../ui/modal";
 import { sfx } from "../ui/sound";
@@ -77,7 +77,7 @@ export function mountFriends(app: App): Screen {
     <div class="fr-row" data-id="${f.id}">
       ${avatarHtml(f.avatar, f.display, 40)}
       <span class="fr-info">
-        <span class="fr-name">${esc(f.display)} ${badgeChipHtml(f.badge, true)}</span>
+        <span class="fr-name">${esc(f.display)}</span>
         <span class="fr-state ${f.online ? "on" : ""}">${f.online ? (f.state === "online" || f.state === "bot" ? t("friends.ingame") : t("friends.online")) : t("friends.offline")}</span>
       </span>
       <span class="fr-actions">${actions}</span>

@@ -41,7 +41,9 @@ interface RoomData {
   turnStartAt: number;
 }
 
-const TURN_MS = 50000;
+const TURN_MS_RANKED = 50000; // ranked: tighter clock
+const TURN_MS_CASUAL = 90000; // everything else: 90s per turn
+const turnMsFor = (ranked: boolean): number => (ranked ? TURN_MS_RANKED : TURN_MS_CASUAL);
 
 /** Attached to each socket; survives hibernation. */
 interface Att { side: Side; gen: number; }
@@ -94,6 +96,7 @@ export class GameRoom {
         seed: body.seed,
         p0: { id: body.players[0].id, name: body.players[0].name },
         p1: { id: body.players[1].id, name: body.players[1].name },
+        starting: (body.seed & 1) as Side, // coin toss: seed parity decides who goes first (fair, server-authoritative)
       });
       this.room = {
         players: body.players,
@@ -257,14 +260,28 @@ export class GameRoom {
     room.game = res.state;
     if (res.state.cur !== prevCur) room.turnStartAt = Date.now(); // a new turn began → restart the server clock
     this.persist();
-    this.broadcast(res.events);
+    // A rejected play (condition not met, sealed, etc.) produces only "log" events and
+    // no state advance. Don't broadcast it to the OPPONENT — otherwise their client logs
+    // the blocked attempt and their timer blinks, leaking that the actor spammed a card.
+    // Send the rejection privately to the actor so they still get the friendly popup.
+    const rejected = (action.type === "play" || action.type === "attack")
+      && res.state.cur === prevCur && !res.state.over
+      && !res.events.some((e) => e.type !== "log");
+    if (rejected) {
+      const ws = this.sockFor(side);
+      if (ws) { try { this.send(ws, { type: "update", state: this.redact(side), events: res.events }); } catch { /* dropped */ } }
+    } else {
+      this.broadcast(res.events);
+    }
     if (room.game.over) void this.recordResult();
   }
 
-  /** Redacted state for `side`, stamped with the turn's remaining ms (server-authoritative clock). */
+  /** Redacted state for `side`, stamped with the turn's remaining/total ms (server-authoritative clock). */
   private redact(side: Side): GameState {
-    const s = redactFor(this.room!.game, side) as GameState & { turnLeftMs?: number };
-    s.turnLeftMs = Math.max(0, TURN_MS - (Date.now() - this.room!.turnStartAt));
+    const s = redactFor(this.room!.game, side) as GameState & { turnLeftMs?: number; turnTotalMs?: number };
+    const total = turnMsFor(this.room!.ranked);
+    s.turnTotalMs = total;
+    s.turnLeftMs = Math.max(0, total - (Date.now() - this.room!.turnStartAt));
     return s;
   }
 

@@ -5,7 +5,7 @@ import type { App, Screen } from "../router";
 import { api } from "../net/api";
 import { t, onLangChange } from "../i18n";
 import { tierChipHtml } from "../ui/tier";
-import { avatarHtml, badgeChipHtml } from "../ui/social";
+import { avatarHtml } from "../ui/social";
 import { watchSocial } from "./friends";
 
 export function mountHome(app: App): Screen {
@@ -23,7 +23,7 @@ export function mountHome(app: App): Screen {
           <button class="home-id" id="profile" title="${t("home.profile.title")}">
             ${avatarHtml(u?.avatar, u?.display ?? "P", 42)}
             <span class="home-id-main">
-              <span class="home-id-name">${u?.display ?? "PLAYER"} ${badgeChipHtml(u?.badge, true)}</span>
+              <span class="home-id-name">${u?.display ?? "PLAYER"}</span>
               <span class="home-id-sub">${t("home.record")} ${u?.wins ?? 0}${t("home.win")} ${u?.losses ?? 0}${t("home.loss")}</span>
             </span>
             <span class="home-id-go">›</span>
