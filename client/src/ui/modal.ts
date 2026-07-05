@@ -47,7 +47,7 @@ export function winModal(won: boolean | null, detail: string, onAgain: () => voi
   m.className = "modal";
   const title = won == null ? t("modal.draw") : won ? t("modal.win") : t("modal.lose");
   const color = won == null ? "var(--paper)" : won ? "var(--gold-glow)" : "var(--vermil-hi)";
-  m.innerHTML = `<h2 style="color:${color}">${title}</h2><p style="color:var(--paper);font-size:14px">${detail}</p><p>${t("modal.gameover")}</p><div class="modal-row"></div>`;
+  m.innerHTML = `<h2 style="color:${color}">${title}</h2><p style="color:var(--paper);font-size:14px">${detail}</p><div class="win-rank" id="winRankDelta" style="display:none"></div><p>${t("modal.gameover")}</p><div class="modal-row"></div>`;
   const row = m.querySelector(".modal-row")!;
   const home = document.createElement("button"); home.className = "btn btn-ghost"; home.textContent = t("modal.home");
   home.onclick = () => { closeOverlay(); onHome(); };
@@ -61,6 +61,34 @@ export function winModal(won: boolean | null, detail: string, onAgain: () => voi
   again.onclick = () => { closeOverlay(); onAgain(); };
   row.append(again);
   mount(m);
+}
+
+/** Ranked pre-game market preview: study the fixed market before the coin toss.
+    Returns handles so the caller can update the countdown (setUntil) and dismiss it (close). */
+export function marketPreview(market: CardInst[], onReady: () => void): { setUntil(u: number | null): void; close(): void } {
+  const m = document.createElement("div");
+  m.className = "modal preview-modal";
+  m.innerHTML = `<h2 style="font-size:16px">${t("preview.title")}</h2><p style="color:var(--paper-dim);font-size:13px;margin-bottom:8px">${t("preview.sub")}</p>`
+    + `<div class="picker-grid" style="display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:10px 0;max-height:52vh;overflow:auto"></div>`
+    + `<div class="pv-foot" style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:10px"><div class="pv-count" id="pvCount" style="font-family:var(--mono);color:var(--brass-hi);font-size:13px;min-width:120px;text-align:right"></div><button class="btn btn-gold" id="pvReady">${t("preview.ready")}</button></div>`;
+  const grid = m.querySelector(".picker-grid") as HTMLElement;
+  for (const c of market) { const el = cardEl(c, {}); bindZoom(el, c); grid.appendChild(el); }
+  const btn = m.querySelector("#pvReady") as HTMLButtonElement;
+  const count = m.querySelector("#pvCount") as HTMLElement;
+  let until: number | null = null;
+  const tick = (): void => {
+    if (until == null) { count.textContent = t("preview.waiting"); return; }
+    const left = Math.max(0, Math.ceil((until - Date.now()) / 1000));
+    count.textContent = left > 0 ? `${left}${t("preview.secs")}` : t("preview.starting");
+  };
+  const timer = window.setInterval(tick, 250);
+  btn.onclick = () => { btn.disabled = true; btn.textContent = t("preview.waiting"); onReady(); };
+  mount(m);
+  tick();
+  return {
+    setUntil(u: number | null): void { until = u; tick(); },
+    close(): void { clearInterval(timer); closeOverlay(); },
+  };
 }
 
 /** Simple notice with a single button (e.g. disconnect). */

@@ -37,8 +37,10 @@
 .mute-fab:hover { color: var(--paper); border-color: var(--brass-dim); background: #16203ae0; }
 .mute-fab.muted { color: var(--vermil-hi); border-color: var(--vermil); }
 .mute-fab svg { display: block; }
-/* surrender — bottom-right (where 턴 종료 used to be) */
-.giveup-btn { position: fixed; right: clamp(16px, 2.4vw, 54px); bottom: 30px; z-index: 46; flex: 0 0 auto; padding: 9px 18px; font-size: 12px; letter-spacing: .1em; }
+/* surrender — bottom-right corner, red flag icon + red-unified styling */
+.giveup-btn { position: fixed; right: clamp(16px, 2.4vw, 54px); bottom: 30px; z-index: 46; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; font-size: 12px; letter-spacing: .1em; border-color: var(--vermil); color: var(--vermil-hi); background: #2a141066; }
+.giveup-btn:hover { background: var(--vermil); color: #fff; }
+.giveup-btn .gv-flag { display: block; flex: 0 0 auto; }
 .gear { width: 30px; height: 30px; border-radius: 7px; display: grid; place-items: center; border: 1px solid var(--line); background: #ffffff05; color: var(--paper-dim); }
 .gear:hover { color: var(--brass); border-color: var(--brass-dim); }
 
@@ -348,9 +350,9 @@
 /* >10 cards: straight, readable row (no fan). Wrap if it still overflows. */
 .hand.is-flat { flex-wrap: wrap; row-gap: 4px; }
 .hand.is-flat .card { margin: 0 -6px; }
-/* END TURN — a round button, sitting well to the left (in the lower-right area) */
-/* bottom-right, clear of the field panel (which ends well to the left) and above the mute/giveup stack */
-.end-turn-wrap { position: fixed; right: clamp(16px, 2.4vw, 54px); bottom: clamp(140px, 22vh, 220px); top: auto; transform: none; z-index: 45; }
+/* END TURN — lower-right, but pulled INWARD from the screen edge so it doesn't hug the corner.
+   Sits in the right gutter beside the (centered) hand, above the giveup button, clear of the field. */
+.end-turn-wrap { position: fixed; right: clamp(40px, 9vw, 210px); bottom: clamp(84px, 15vh, 150px); top: auto; transform: none; z-index: 45; }
 /* hexagon frame image (green-screen keyed); localized text overlays the dark center so
    the same art works for every language. idle → hover swaps to the glowing variant. */
 .end-turn-wrap .btn {

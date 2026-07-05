@@ -3,7 +3,7 @@
 // The server is authoritative: clients send Actions, receive
 // redacted GameState snapshots + event streams to animate.
 // ============================================================
-import type { Action, GameEvent, GameState, Side } from "./types";
+import type { Action, CardInst, GameEvent, GameState, Side } from "./types";
 
 // ---- matchmaking (Matchmaker Durable Object) ----
 export type QueueClientMsg =
@@ -19,6 +19,7 @@ export type QueueServerMsg =
 export type GameClientMsg =
   | { type: "action"; action: Action }
   | { type: "ready" }
+  | { type: "startReady" } // ranked market-preview: this player wants to start early
   | { type: "ping" };
 
 export type GameServerMsg =
@@ -27,6 +28,8 @@ export type GameServerMsg =
   | { type: "opponentLeft" }
   | { type: "oppConn"; connected: boolean } // opponent dropped / came back (reconnect window)
   | { type: "voided"; message?: string }    // match cancelled (opponent never joined) — no rank change
+  | { type: "preview"; until: number | null; market: CardInst[] } // ranked pre-game: study the fixed market (until=null → waiting for opponent)
+  | { type: "rankResult"; before: number; after: number } // ranked game settled — this player's MMR before/after
   | { type: "error"; message: string }
   | { type: "pong" };
 

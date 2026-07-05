@@ -125,9 +125,9 @@ export const TRIBES: Record<string, { ko: TribeInfo; ja: TribeInfo; en: TribeInf
     en: { name: "Aristocrat", note: "* Requires different cards of the tribe", bonuses: ["2 different: YOUR max mana -1", "3 different: max mana +5, +2 draw each turn (permanent), max HP +15"] },
   },
   "시초": {
-    ko: { name: "시초", note: "※ 1~7코스트 각 1종 · 서로 다른 카드를 모으세요", bonuses: ["서로 다른 2종: 최대 체력 +6", "서로 다른 3종: 최대 체력 +13, 상대 최대 체력 -3", "서로 다른 4종: 최대 마나 +10, 최대 체력 +20, 4장 드로우, 상대 필드 전멸, 상대 13 데미지"] },
-    ja: { name: "始原", note: "※ 1~7コスト各1種 · 異なるカードを揃える", bonuses: ["異なる2種: 最大体力 +6", "異なる3種: 最大体力 +13, 相手の最大体力 -3", "異なる4種: 最大マナ +10, 最大体力 +20, 4枚ドロー, 相手の場を全滅, 相手に13ダメージ"] },
-    en: { name: "Origin", note: "* Collect different cards, one each of cost 1-7", bonuses: ["2 different: max HP +6", "3 different: max HP +13, enemy max HP -3", "4 different: max mana +10, max HP +20, draw 4, wipe the enemy field, 13 damage"] },
+    ko: { name: "시초", note: "※ 1~8코스트 각 1종(8코 '시초의 미믹' 포함) · 서로 다른 카드를 모으세요", bonuses: ["서로 다른 2종: 최대 체력 +6", "서로 다른 3종: 최대 체력 +13, 상대 최대 체력 -3", "서로 다른 4종: 최대 마나 +10, 최대 체력 +20, 4장 드로우, 상대 필드 전멸, 상대 13 데미지"] },
+    ja: { name: "始原", note: "※ 1~8コスト各1種(8コスト「始原のミミック」を含む) · 異なるカードを揃える", bonuses: ["異なる2種: 最大体力 +6", "異なる3種: 最大体力 +13, 相手の最大体力 -3", "異なる4種: 最大マナ +10, 最大体力 +20, 4枚ドロー, 相手の場を全滅, 相手に13ダメージ"] },
+    en: { name: "Origin", note: "* Collect different cards, one each of cost 1-8 (incl. cost-8 'Origin Mimic')", bonuses: ["2 different: max HP +6", "3 different: max HP +13, enemy max HP -3", "4 different: max mana +10, max HP +20, draw 4, wipe the enemy field, 13 damage"] },
   },
 };
 
@@ -464,7 +464,7 @@ const NEW_CARDS2: CardDef[] = [
   { id: "TNO3", t: "mon", cost: 3, name: "고귀한 종자", nameJa: "高貴な従者", atk: 4, def: 2, tribe: "고귀", text: "[고귀] 동족 시너지", textJa: "[高貴] 同族シナジー" },
   { id: "TPO3", t: "mon", cost: 3, name: "굶주린 추격자", nameJa: "飢えた追跡者", atk: 4, def: 2, tribe: "포식", text: "[포식] 동족 시너지", textJa: "[捕食] 同族シナジー" },
   { id: "TAR3", t: "mon", cost: 3, name: "몰락한 기사", nameJa: "没落した騎士", atk: 4, def: 2, tribe: "귀족", text: "[귀족] 동족 시너지", textJa: "[貴族] 同族シナジー" },
-  // ---- NEW tribe 시초(Genesis): cost 1~7, one each ----
+  // ---- NEW tribe 시초(Genesis): cost 1~8, one each (cost-8 시초의 미믹/ORIGIN_MIMIC added in a later PATCH) ----
   { id: "TGE1", t: "mon", cost: 1, play: 2, name: "시초의 알", nameJa: "始原の卵", atk: 0, def: 0, tribe: "시초", text: "[시초] 동족 시너지 · 소환 코스트 2", textJa: "[始原] 同族シナジー · 召喚コスト2" },
   { id: "TGE2", t: "mon", cost: 2, name: "시초의 불씨", nameJa: "始原の火種", atk: 1, def: 1, tribe: "시초", onSummon: "maxHpAdd", val: -2, text: "[시초] 소환시 최대 체력 -2", textJa: "[始原] 召喚時 最大体力-2" },
   { id: "TGE3", t: "mon", cost: 3, name: "시초의 새싹", nameJa: "始原の芽", atk: 2, def: 1, tribe: "시초", onSummon: "maxHpAdd", val: -1, text: "[시초] 소환시 최대 체력 -1", textJa: "[始原] 召喚時 最大体力-1" },

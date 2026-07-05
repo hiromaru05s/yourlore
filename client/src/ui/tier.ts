@@ -15,6 +15,16 @@ export const TIER_META: Record<string, { ko: string; ja: string; en: string; col
   gm:       { ko: "그랜드마스터", ja: "グランドマスター", en: "Grandmaster", color: "#ff7a4d" },
 };
 
+// tier cutoffs — must mirror server/src/rank.ts TIERS. (gm is top-25 MMR, not computable client-side.)
+const TIER_CUTS: [number, string][] = [
+  [1550, "master"], [1400, "diamond"], [1250, "platinum"], [1150, "gold"], [1090, "silver"], [1030, "bronze"], [0, "iron"],
+];
+/** tier key for a raw MMR value (local approximation; GM excluded). */
+export function tierOf(mmr: number): string {
+  for (const [min, key] of TIER_CUTS) if (mmr >= min) return key;
+  return "iron";
+}
+
 export function tierLabel(tier: string): string {
   const m = TIER_META[tier] ?? TIER_META.iron;
   const lang = getLang();

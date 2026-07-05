@@ -295,6 +295,15 @@ const D: Record<string, Entry> = {
   "coin.title": { ko: "코인토스", ja: "コイントス", en: "Coin Toss" },
   "coin.youFirst": { ko: "내가 선공!", ja: "自分が先攻！", en: "You go first!" },
   "coin.oppFirst": { ko: "선공", ja: "先攻", en: "goes first" },
+  // ranked MMR change on the result screen
+  "rank.label": { ko: "랭크", ja: "ランク", en: "Rank" },
+  // ranked pre-game market preview
+  "preview.title": { ko: "고정 마켓 미리보기", ja: "固定マーケット プレビュー", en: "Market Preview" },
+  "preview.sub": { ko: "코인토스 전에 살 수 있는 카드를 미리 살펴보세요 (랭크 전용)", ja: "コイントスの前に購入できるカードを確認 (ランク限定)", en: "Study the buyable cards before the coin toss (ranked only)" },
+  "preview.ready": { ko: "준비 완료 — 바로 시작", ja: "準備完了 — すぐ開始", en: "Ready — start now" },
+  "preview.waiting": { ko: "상대 대기 중…", ja: "相手を待っています…", en: "Waiting for opponent…" },
+  "preview.starting": { ko: "시작합니다…", ja: "開始します…", en: "Starting…" },
+  "preview.secs": { ko: "초 후 자동 시작", ja: "秒後に自動開始", en: "s until auto-start" },
   // profile head-to-head + record filter
   "profile.tab.h2h": { ko: "상대전적", ja: "対戦成績", en: "Rivals" },
   "profile.h2h.title": { ko: "상대별 전적 (2판 이상)", ja: "相手別成績 (2戦以上)", en: "Head-to-Head (2+ games)" },

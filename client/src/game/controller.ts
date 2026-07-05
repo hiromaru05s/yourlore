@@ -19,6 +19,7 @@ import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { sfx, type SfxName } from "../ui/sound";
 import { avatarHtml } from "../ui/social";
+import { tierOf, tierLabel } from "../ui/tier";
 import { t, getLang, cardName, onLangChange } from "../i18n";
 
 export interface ControllerExits {
@@ -566,6 +567,23 @@ export abstract class BaseController implements BoardHandlers {
       () => { A.removeReviewFab(); this.exits.onHome(); },
       () => A.reviewFab(() => this.openResult()),
     );
+    this.renderRankDelta(); // fill the ranked MMR line if we already have the result
+  }
+
+  /** Ranked MMR change on the result screen: "랭크 +18 · 1240 → 1258 (골드)". */
+  protected rankChange?: { before: number; after: number };
+  protected renderRankDelta(): void {
+    if (!this.rankChange) return;
+    const el = document.getElementById("winRankDelta");
+    if (!el) return;
+    const { before, after } = this.rankChange;
+    const d = after - before;
+    const sign = d > 0 ? "+" : ""; // negative already carries its own '-'
+    const cls = d > 0 ? "up" : d < 0 ? "down" : "flat";
+    const tBefore = tierOf(before), tAfter = tierOf(after);
+    const promo = tBefore !== tAfter ? ` <span class="rk-tier">${tierLabel(tAfter)}</span>` : "";
+    el.innerHTML = `<span class="rk-label">${t("rank.label")}</span> <span class="rk-delta rk-${cls}">${sign}${d}</span> <span class="rk-mmr">${before} → ${after}</span>${promo}`;
+    (el as HTMLElement).style.display = "";
   }
 
   destroy(): void {

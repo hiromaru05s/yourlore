@@ -43,6 +43,15 @@ interface RoomData {
       absent, the match is VOID (no rank, no W/L) — prevents phantom-match rank loss.
       Cleared to null once both have joined. */
   joinBy: number | null;
+  /** RANKED-only pre-game market preview: both players study the fixed market for up to
+      PREVIEW_MS before the coin toss. previewDone=true means we're past it (or non-ranked,
+      which skips it entirely). previewUntil = auto-start deadline (null until both joined).
+      startReady = each side pressed "ready to start early"; both → begin immediately.
+      initSent = whether the opening `init` (with initEvents) has gone to each side yet. */
+  previewUntil: number | null;
+  previewDone: boolean;
+  startReady: [boolean, boolean];
+  initSent: [boolean, boolean];
 }
 
 const TURN_MS_RANKED = 50000; // ranked: tighter clock
@@ -54,6 +63,7 @@ interface Att { side: Side; gen: number; }
 
 const FORFEIT_GRACE_MS = 30000;
 const JOIN_GRACE_MS = 45000; // both players must connect within this or the match is voided
+const PREVIEW_MS = 15000;    // ranked: fixed-market study window before the coin toss
 
 export class GameRoom {
   private env: Env;
@@ -85,6 +95,10 @@ export class GameRoom {
         gen: r.gen ?? [0, 0],
         forfeitAt: r.forfeitAt ?? [null, null],
         turnStartAt: r.turnStartAt ?? Date.now(),
+        previewUntil: r.previewUntil ?? null,
+        previewDone: r.previewDone ?? true, // pre-existing rooms are already in-game → no preview
+        startReady: r.startReady ?? [false, false],
+        initSent: r.initSent ?? [true, true],
       };
     }
     return this.room;
@@ -115,6 +129,10 @@ export class GameRoom {
         gen: [0, 0],
         forfeitAt: [null, null],
         turnStartAt: Date.now(),
+        previewUntil: null,
+        previewDone: !(body.ranked ?? false), // ranked → run the 15s market preview; else start on ready
+        startReady: [false, false],
+        initSent: [false, false],
       };
       this.persist();
       void this.state.storage.setAlarm(this.room.joinBy!).catch(() => { /* best effort */ });
@@ -186,8 +204,6 @@ export class GameRoom {
 
     if (msg.type === "ping") { try { this.send(ws, { type: "pong" }); } catch { /* dropped */ } return; } // autoResponse fallback
     if (msg.type === "ready") {
-      // opening events only on the first ready; a reconnect just resyncs state
-      const events = room.readied[att.side] ? [] : room.initEvents;
       room.readied[att.side] = true;
       if (room.readied[0] && room.readied[1]) room.joinBy = null; // both joined → no join-timeout void
       // a reconnect cancels this side's pending forfeit and un-pauses the opponent
@@ -195,8 +211,31 @@ export class GameRoom {
       this.syncAlarm();
       const other = this.sockFor((1 - att.side) as Side);
       if (other) { try { this.send(other, { type: "oppConn", connected: true }); } catch { /* dropped */ } }
+
+      // RANKED pre-game phase: show the fixed market (no coin toss / no board yet).
+      // Arm the 15s auto-start deadline once BOTH have joined; players may skip it via startReady.
+      if (!room.previewDone) {
+        const bothIn = room.readied[0] && room.readied[1];
+        if (bothIn && room.previewUntil == null) { room.previewUntil = Date.now() + PREVIEW_MS; this.syncAlarm(); }
+        this.persist();
+        const targets: Side[] = bothIn ? [0, 1] : [att.side];
+        for (const s of targets) {
+          const w = this.sockFor(s);
+          if (w) { try { this.send(w, { type: "preview", until: room.previewUntil, market: room.game.market }); } catch { /* dropped */ } }
+        }
+        return;
+      }
+
+      // normal start (non-ranked) or a mid-game reconnect resync
       this.persist();
-      this.send(ws, { type: "init", you: att.side, state: this.redact(att.side), events });
+      this.sendInit(att.side);
+      return;
+    }
+    if (msg.type === "startReady") {
+      if (room.previewDone) return;
+      room.startReady[att.side] = true;
+      this.persist();
+      if (room.startReady[0] && room.startReady[1]) this.endPreview(); // both agreed → begin now
       return;
     }
     if (msg.type === "action") this.handleAction(att.side, msg.action);
@@ -224,7 +263,7 @@ export class GameRoom {
   private syncAlarm(): void {
     const room = this.room;
     if (!room) return;
-    const times = [...room.forfeitAt, room.joinBy].filter((t): t is number => t != null);
+    const times = [...room.forfeitAt, room.joinBy, room.previewUntil].filter((t): t is number => t != null);
     if (times.length) void this.state.storage.setAlarm(Math.min(...times)).catch(() => { /* best effort */ });
     else void this.state.storage.deleteAlarm().catch(() => { /* best effort */ });
   }
@@ -246,6 +285,12 @@ export class GameRoom {
       }
       this.persist();
       this.syncAlarm();
+      return;
+    }
+
+    // ---- ranked preview auto-start: 15s elapsed with no mutual early-start → begin the game ----
+    if (room.previewUntil != null && room.previewUntil <= now + 250 && !room.previewDone) {
+      this.endPreview(); // persists + re-arms the alarm and sends init to both
       return;
     }
 
@@ -329,6 +374,29 @@ export class GameRoom {
     }
   }
 
+  /** Send the opening snapshot to a side; the initEvents (draw animations) ride along only once. */
+  private sendInit(side: Side): void {
+    const room = this.room!;
+    const ws = this.sockFor(side);
+    if (!ws) return;
+    const events = room.initSent[side] ? [] : room.initEvents;
+    room.initSent[side] = true;
+    this.persist();
+    try { this.send(ws, { type: "init", you: side, state: this.redact(side), events }); } catch { /* dropped */ }
+  }
+
+  /** End the ranked market-preview phase → the game truly begins (coin toss happens client-side on init). */
+  private endPreview(): void {
+    const room = this.room;
+    if (!room || room.previewDone) return;
+    room.previewDone = true;
+    room.previewUntil = null;
+    room.turnStartAt = Date.now(); // fresh turn-1 clock (don't count the preview seconds)
+    this.persist();
+    this.syncAlarm();
+    for (const s of [0, 1] as Side[]) this.sendInit(s);
+  }
+
   private async recordResult(): Promise<void> {
     const room = this.room;
     if (!room || room.recorded || !room.game.over) return;
@@ -343,11 +411,19 @@ export class GameRoom {
     const matchRow = (winnerId: string | null) =>
       this.env.DB.prepare(`INSERT INTO matches (id, player_a, player_b, winner, mode, created_at, ended_at, cards_a, cards_b, turns, buys_a, buys_b, bver) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`)
         .bind(crypto.randomUUID(), room.players[0].id, room.players[1].id, winnerId, room.ranked ? "ranked" : "online", Date.now(), Date.now(), usesOf(0), usesOf(1), room.game.turn ?? null, buysOf(0), buysOf(1), BALANCE_VERSION);
+    // push each connected player their own MMR before/after so the result screen can show ±delta
+    const sendRank = (outcome: Record<string, { before: number; after: number }>): void => {
+      for (const s of [0, 1] as Side[]) {
+        const chg = outcome[room.players[s].id];
+        const ws = this.sockFor(s);
+        if (chg && ws) { try { this.send(ws, { type: "rankResult", before: chg.before, after: chg.after }); } catch { /* dropped */ } }
+      }
+    };
     try {
       if (room.game.winner == null) {
         // 75-turn DRAW: no win/loss counts; ranked → symmetric Elo with S=0.5
         await matchRow(null).run();
-        if (room.ranked) await applyRankedDraw(this.env, room.players[0].id, room.players[1].id);
+        if (room.ranked) sendRank(await applyRankedDraw(this.env, room.players[0].id, room.players[1].id));
         return;
       }
       const winner = room.players[room.game.winner];
@@ -357,7 +433,7 @@ export class GameRoom {
         this.env.DB.prepare(`UPDATE users SET losses = losses + 1 WHERE id = ?`).bind(loser.id),
         matchRow(winner.id),
       ]);
-      if (room.ranked) await applyRanked(this.env, winner.id, loser.id);
+      if (room.ranked) sendRank(await applyRanked(this.env, winner.id, loser.id));
     } catch { /* records are best-effort */ }
   }
 }
