@@ -80,11 +80,11 @@
 .board-col { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 5px; min-height: 0; align-content: start; }
 
 /* opponent fanned hand (face-down), overflowing from top */
-.opp-hand { display: flex; justify-content: center; align-items: flex-start; height: 22px; margin-top: -3px; position: relative; z-index: 40; }
+.opp-hand { display: flex; justify-content: center; align-items: flex-start; height: 14px; margin-top: -4px; position: relative; z-index: 40; }
 .opp-hand .card--back { width: 44px; height: 70px; margin: 0 -14px; transform-origin: bottom center; }
 .opp-hand.is-flat .card--back { margin: 0 -8px; } /* >10 cards: even, countable row */
-/* how many cards the opponent holds — always visible */
-.opp-hand-count { align-self: center; margin-left: 10px; font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--paper-dim); background: #0a1220cc; border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; z-index: 41; }
+/* the lone "0"/count badge — removed per request */
+.opp-hand-count { display: none; }
 
 /* a player row: the field-block is a centered content-width cluster (zones + meta panel),
    so the play area stays snug instead of stretching across the whole width. */
@@ -209,25 +209,25 @@
 /* 고정(10) + 제시(3) share one centered row on wide screens; when the width
    runs out the fixed cards wrap to a 2nd tier automatically, and 제시 drops
    below that — no horizontal clipping at any size. */
-.market { display: flex; flex-wrap: nowrap; justify-content: center; align-items: flex-start; gap: 7px 16px; padding: 7px 12px 9px; align-self: center; max-width: min(1160px, 97%); margin: 0 auto; overflow: hidden; border-color: #4fb4ff26; }
+.market { display: flex; flex-wrap: nowrap; justify-content: center; align-items: center; gap: 6px 14px; padding: 8px 14px; align-self: center; max-width: min(1680px, 98%); margin: 0 auto; overflow: hidden; border-color: #4fb4ff26; }
 .market::before { /* warm showcase spotlight over the wares */
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
   background: radial-gradient(60% 95% at 50% 30%, #4fb4ff0c, transparent 70%);
 }
-/* 고정(10) and 제시(3) split the width proportionally; cards WRAP inside each sub,
-   so nothing is ever clipped no matter how narrow the board gets. */
-.market-sub { min-width: 0; }
-.market-sub:nth-child(1) { flex: 10 1 0; }
-.market-sub:nth-child(3) { flex: 3 1 0; }
-.market-sub .sub-head { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 6px; flex-wrap: nowrap; white-space: nowrap; }
-.market-sub .sub-head .sh-opp { font-size: 10px; }
-.market-sub .sub-head .tag { font-family: var(--mono); font-size: 12.5px; font-weight: 700; letter-spacing: .16em; color: var(--brass-hi); text-transform: uppercase; display: inline-flex; align-items: center; gap: 8px; }
-.market-sub .sub-head .tag::before, .market-sub .sub-head .tag::after { content: ""; width: 18px; height: 1px; }
-.market-sub .sub-head .tag::before { background: linear-gradient(90deg, transparent, var(--brass-dim)); }
-.market-sub .sub-head .tag::after { background: linear-gradient(90deg, var(--brass-dim), transparent); }
-.market-sub .sub-head .meta { font-size: 11px; color: var(--paper-dim); }
-/* desktop: keep every 고정/제시 card on ONE row (no wrap → no overlap with fields) */
-.market-cards { display: flex; gap: 6px; justify-content: center; flex-wrap: nowrap; }
+/* labels sit to the LEFT of each card row (not above) → the row uses the full
+   panel height, so the cards can be taller. */
+.market-sub { min-width: 0; display: flex; align-items: center; gap: 10px; }
+.market-sub:nth-child(1), .market-sub:nth-child(3) { flex: 0 1 auto; }
+.market-sub .sub-head {
+  flex: 0 0 auto; display: flex; flex-direction: column; align-items: flex-start;
+  justify-content: center; gap: 6px; margin: 0; text-align: left; width: max-content; max-width: 84px;
+}
+.market-sub .sub-head .tag { font-family: var(--mono); font-size: 14px; font-weight: 700; letter-spacing: .1em; color: var(--brass-hi); text-transform: uppercase; }
+.market-sub .sub-head .tag::before, .market-sub .sub-head .tag::after { content: none; }
+.market-sub .sub-head .meta { font-size: 10.5px; color: var(--paper-dim); line-height: 1.3; white-space: normal; }
+.market-sub .sub-head .sh-opp { font-size: 10px; display: block; }
+/* desktop: every 고정/제시 card on ONE row (no wrap) */
+.market-cards { display: flex; gap: 6px; align-items: center; flex-wrap: nowrap; }
 .market-div { width: 1px; align-self: stretch; background: linear-gradient(180deg, transparent, var(--line), transparent); }
 /* when the market has wrapped to multiple lines, the vertical divider looks odd — hide it narrow */
 @media (max-width: 1500px) { .market-div { display: none; } }
