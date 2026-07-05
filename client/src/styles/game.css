@@ -4,13 +4,7 @@
 .game { height: 100vh; display: grid; grid-template-rows: auto 1fr; padding: 5px 12px 6px; gap: 4px; overflow: hidden; }
 
 /* ---- header ---- */
-.topbar { display: flex; align-items: center; gap: 14px; padding: 1px 4px 6px; position: relative; }
-.topbar::after {
-  /* centered gold hairline instead of a flat border */
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--brass-dim) 20%, var(--gold-glow) 50%, var(--brass-dim) 80%, transparent);
-  opacity: .65;
-}
+.topbar { display: flex; align-items: center; gap: 14px; padding: 2px 4px 8px; position: relative; }
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand .mark {
   width: 104px; height: 34px; transform: none; border: none; position: relative;
@@ -19,8 +13,17 @@
 }
 .brand .mark::after { content: none; }
 .brand h1 { display: none; }
-.topbar .turn-info { margin-left: auto; font-family: var(--mono); font-size: 12px; letter-spacing: .12em; color: var(--paper-dim); }
-.topbar .turn-info b { color: var(--vermil-hi); }
+/* clean turn-count badge */
+.topbar .turn-info { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.turn-badge {
+  display: inline-flex; align-items: center; gap: 7px; padding: 4px 12px 4px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: linear-gradient(180deg, #ffffff0d, #ffffff03);
+  box-shadow: inset 0 1px 0 #ffffff10;
+}
+.turn-badge .tb-label { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--paper-faint); }
+.turn-badge .tb-num { font-family: var(--mono); font-size: 17px; font-weight: 800; line-height: 1; color: var(--brass-hi); }
+.turn-info .turn-cur { font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; color: var(--paper-dim); }
+.turn-info .turn-cur b { color: var(--vermil-hi); }
 /* mute toggle — a round button pinned BELOW the logo (outside the topbar) */
 .mute-fab {
   position: fixed; top: auto; bottom: 80px; right: clamp(16px, 2.4vw, 54px); left: auto; z-index: 55;
@@ -187,6 +190,22 @@
 .mp-timer.run { background: #ffffff0c; color: var(--paper); border: 1px solid var(--line); }
 .mp-timer.warn { color: var(--vermil-hi); border-color: var(--vermil); box-shadow: 0 0 10px #d8542f44; }
 .mp-timer.shake { animation: shake .4s; }
+
+/* "can't play" popup — why a card can't be activated (condition/mana/turn) */
+.cant-toast {
+  position: fixed; top: 26%; left: 50%; transform: translate(-50%, -50%);
+  z-index: 200; pointer-events: none; display: inline-flex; align-items: center; gap: 9px;
+  padding: 12px 22px; border-radius: 12px; max-width: 80vw;
+  background: linear-gradient(180deg, #2a1210f2, #180c0bf2);
+  border: 1px solid var(--vermil); color: #ffdcd2;
+  font-size: 15px; font-weight: 600; letter-spacing: .01em; text-align: left;
+  box-shadow: 0 10px 34px #000b, 0 0 18px #d8542f44;
+  animation: cantPop .2s var(--ease);
+}
+.cant-toast .ct-x { flex: 0 0 auto; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--vermil); color: #fff; font-size: 11px; font-weight: 800; }
+.cant-toast.out { animation: cantOut .3s var(--ease) forwards; }
+@keyframes cantPop { from { opacity: 0; transform: translate(-50%,-50%) scale(.85) } to { opacity: 1; transform: translate(-50%,-50%) scale(1) } }
+@keyframes cantOut { to { opacity: 0; transform: translate(-50%,-62%) scale(.96) } }
 
 /* auto (non-clickable) center toast for timer warnings */
 .turn-toast {

@@ -8,7 +8,7 @@
 // ============================================================
 import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
-import { createGame, reduce } from "../shared/engine";
+import { createGame, reduce, playCost } from "../shared/engine";
 import { botDecide } from "../shared/bot";
 import { DB, STARTERS } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
@@ -84,6 +84,16 @@ export abstract class BaseController implements BoardHandlers {
     const idx = this.state.players[this.you].hand.findIndex((c) => c.uid === uid);
     if (idx >= 0) this.submit({ type: "play", idx });
   }
+  onBlockedPlay(uid: string) {
+    const g = this.state; if (!g || g.over) return;
+    const me = g.players[this.you];
+    const c = me.hand.find((x) => x.uid === uid);
+    const msg = g.cur !== this.you ? t("play.block.turn")
+      : g.pending ? t("play.block.pending")
+      : (c && me.mana < playCost(c)) ? t("play.block.mana")
+      : t("play.block.cond");
+    this.cantPlayToast(msg);
+  }
   onAttack(uid: string) { this.fastForward(); this.submit({ type: "attack", uid }); }
   onReorder(from: number, to: number) { this.fastForward(); this.submit({ type: "reorder", from, to }); }
   onChooseTarget(uid: string | null) { this.fastForward(); this.submit({ type: this.state.pending?.kind === "seek" || this.state.pending?.kind === "recall" ? "pick" : "chooseTarget", uid } as Action); }
@@ -131,8 +141,11 @@ export abstract class BaseController implements BoardHandlers {
       if (e.type === "turnHeader") this.log.turnHeader(e.turn, e.name, e.isBot);
       else if (e.type === "log") {
         this.log.line(e.html, e.htmlJa);
-        // "can't play" feedback: rejection log lines get an error blip + shake cue
-        if (/불가|사용할 수 없|없습니다|가득|できません|cannot|not allowed/i.test(e.html)) sfx("error");
+        // "can't play" feedback: engine rejection lines get an error blip + a popup explaining why
+        if (/불가|사용할 수 없|없습니다|가득|できません|cannot|not allowed/i.test(e.html)) {
+          const reason = this.stripHtml(getLang() === "ja" ? e.htmlJa : getLang() === "en" ? logToEn(e.html) : e.html).replace(/^\s*[└·\-]\s*/, "").trim();
+          this.cantPlayToast(reason || t("play.block.cond"));
+        }
       }
     }
   }
@@ -436,6 +449,17 @@ export abstract class BaseController implements BoardHandlers {
     document.body.appendChild(el);
     this.toastEl = el;
     setTimeout(() => { el.classList.add("out"); setTimeout(() => el.remove(), 300); }, ms);
+  }
+
+  /** Centered popup explaining why a card can't be played (condition not met, etc.). */
+  private cantPlayToast(msg: string): void {
+    sfx("error");
+    document.querySelectorAll(".cant-toast").forEach((n) => n.remove());
+    const el = document.createElement("div");
+    el.className = "cant-toast";
+    el.innerHTML = `<span class="ct-x">✕</span>${msg}`;
+    document.body.appendChild(el);
+    setTimeout(() => { el.classList.add("out"); setTimeout(() => el.remove(), 300); }, 1700);
   }
 
   private stopTimer(): void {

@@ -23,6 +23,7 @@ const ST_SLOTS = 7;
 
 export interface BoardHandlers {
   onPlay(uid: string): void;
+  onBlockedPlay(uid: string): void;
   onAttack(uid: string): void;
   onReorder(from: number, to: number): void;
   onChooseTarget(uid: string | null): void;
@@ -133,7 +134,7 @@ export class GameView {
     const myTurn = g.cur === this.you && !g.over;
     const pending = g.pending;
 
-    this.q("turnInfo").innerHTML = `${t("game.turn")} ${g.turn} <span class="muted">·</span> <b>${g.players[g.cur].name}</b>`;
+    this.q("turnInfo").innerHTML = `<span class="turn-badge"><span class="tb-label">${t("game.turn")}</span><span class="tb-num">${g.turn}</span></span><span class="turn-cur"><b>${g.players[g.cur].name}</b></span>`;
     // refresh static labels (so a live language switch updates them)
     this.q("endBtn").textContent = t("game.endturn");
     this.q("giveupBtn").textContent = t("game.surrender");
@@ -491,6 +492,7 @@ export class GameView {
       card.style.transform = flat ? "none" : `rotate(${off * 3.2}deg) translateY(${Math.abs(off) ** 2 * 2}px)`;
       card.style.zIndex = String(idx);
       if (aff) card.onclick = () => this.h.onPlay(c.uid); // uid, not index: the DOM can lag the logical state
+      else card.onclick = () => this.h.onBlockedPlay(c.uid); // explain WHY it can't be played (popup)
       bindZoom(card, c);
       handEl.appendChild(card);
     });
