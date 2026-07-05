@@ -203,6 +203,11 @@
   box-shadow: 0 2px 8px #0009, inset 0 0 0 1px #ffffff0a;
 }
 .pile.is-empty .pile-card { background: var(--ink-1); border: 1px dashed var(--line); }
+/* subtle cyan rim + glow so the DECK pile isn't mistaken for a set trap (both are card-backs) */
+#pile-myDeck .pile-card, #pile-oppDeck .pile-card {
+  border-color: #4fb4ff66;
+  box-shadow: 0 2px 8px #0009, inset 0 0 0 1px #4fb4ff33, 0 0 9px -2px #4fb4ff70;
+}
 .pile-count {
   position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%);
   font-family: var(--mono); font-size: 11px; color: var(--brass); font-weight: 700;

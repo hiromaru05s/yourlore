@@ -329,7 +329,10 @@ export abstract class BaseController implements BoardHandlers {
   /** Bounding rect of a market/supply card slot at index i (pre re-render). */
   private marketCardRect(from: "market" | "supply", i: number): DOMRect | null {
     const host = document.getElementById(from === "market" ? "fixedMarket" : "supplyMarket");
-    const node = host?.children[i] as HTMLElement | undefined;
+    // 고정 renders in order; 제시 is displayed SORTED, so match its ORIGINAL index via data attr
+    const node = (from === "supply"
+      ? host?.querySelector(`[data-sup-idx="${i}"]`)
+      : host?.children[i]) as HTMLElement | undefined;
     return node ? node.getBoundingClientRect() : null;
   }
 

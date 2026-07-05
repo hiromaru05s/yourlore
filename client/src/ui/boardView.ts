@@ -5,7 +5,7 @@
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { effMaxMana, playCost, buyCost } from "../shared/engine";
-import { frameFor, FRAME_BACK, TRIBES, DB as DBC } from "../shared/cards";
+import { frameFor, FRAME_BACK, TRIBES, DB as DBC, STARTERS } from "../shared/cards";
 import { cardPicker } from "./modal";
 import { cardEl } from "./cardView";
 import { bindZoom } from "./anim";
@@ -412,8 +412,9 @@ export class GameView {
     if (isMe) {
       pool = [...p.deck, ...p.hand, ...p.discard, ...fieldCards, ...p.traps.map((tr) => tr.card), ...enchCards];
     } else if (p.collection) {
-      // online: server-provided aggregate of hidden zones + visible public zones
-      const hidden = p.collection.map((id, i) => ({ uid: `v_${i}`, ...DBC[id] })).filter((c) => c.id);
+      // online: server-provided aggregate of hidden zones (hand+deck+traps) + visible public zones.
+      // look ids up in BOTH the main DB and STARTERS (starters aren't in DB — they were being dropped).
+      const hidden = p.collection.map((id, i) => { const d = DBC[id] ?? STARTERS[id]; return d ? { uid: `v_${i}`, ...d } : null; }).filter((c): c is CardInst => !!c);
       pool = [...hidden, ...p.discard, ...fieldCards, ...enchCards];
     } else {
       // bot mode: full state is local; same public-info view as online
@@ -463,6 +464,7 @@ export class GameView {
       const bc = buyCost(owner, c);
       const aff = myTurn && !g.pending && me.mana >= bc;
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc });
+      card.dataset.supIdx = String(i);  // ORIGINAL supply index (display is sorted) — buy anim finds it by this
       if (aff) card.onclick = () => this.h.onBuySupply(i);
       bindZoom(card, c);
       sup.appendChild(card);
