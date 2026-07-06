@@ -46,7 +46,7 @@ export class OnlineController extends BaseController {
       setTimeout(() => { if (!this.closing && !this.state?.over) this.connect(); }, 800 * this.retries);
     } else {
       this.banner(null);
-      noticeModal("연결 끊김", "상대 또는 서버와의 연결이 끊어졌습니다.", "홈으로", () => this.exits.onHome());
+      noticeModal(t("notice.disc.title"), t("notice.disc.body"), t("modal.home"), () => this.exits.onHome());
     }
   }
 
@@ -70,7 +70,7 @@ export class OnlineController extends BaseController {
       // the match never really started (opponent never joined) → no rank change, back to home
       this.closing = true;
       clearActiveGame();
-      noticeModal("매칭 취소", msg.message || "상대가 참가하지 않아 매칭이 취소되었습니다 (점수 변동 없음).", "홈으로", () => this.exits.onHome());
+      noticeModal(t("notice.voided.title"), t("notice.voided.body"), t("modal.home"), () => this.exits.onHome());
     } else if (msg.type === "preview") {
       // ranked pre-game market study (before coin toss). until=null → still waiting for the opponent.
       if (!this.preview) this.preview = marketPreview(msg.market, () => this.sock.send({ type: "startReady" }));

@@ -393,7 +393,7 @@ export abstract class BaseController implements BoardHandlers {
       if (g.pending.kind === "seek" || g.pending.kind === "recall") {
         const me = g.players[this.you];
         const pool = g.pending.kind === "seek" ? me.deck : me.discard;
-        cardPicker(getLang() === "ja" ? g.pending.hintJa : g.pending.hint, pool, (uid) => this.submit({ type: "pick", uid }));
+        cardPicker(getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint, pool, (uid) => this.submit({ type: "pick", uid }));
       }
       return; // oppMon/myMon resolved by board clicks
     }
@@ -435,7 +435,7 @@ export abstract class BaseController implements BoardHandlers {
     this.timerLeft--;
     this.renderTimer();
     const s = this.timerLeft;
-    if (s === 25 && !this.warned25) { this.warned25 = true; this.turnToast(`${s}초`, "small", 1500); }
+    if (s === 25 && !this.warned25) { this.warned25 = true; this.turnToast(t("game.timer.sec").replace("{n}", String(s)), "small", 1500); }
     else if (s <= 5 && s >= 1) this.turnToast(String(s), "big", 900);
     if (s <= 0) {
       // never auto-end within the first ~2s of a turn — a stale/near-zero clock (e.g. after a

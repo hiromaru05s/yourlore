@@ -2,6 +2,9 @@
 // LORE — auth/API client. Talks to the Worker over /api/*.
 // Sessions are cookie-based (credentials: include).
 // ============================================================
+import { t } from "../i18n";
+import { localizeServerMsg } from "./serverMsg";
+
 export interface User {
   id: string;
   email: string;
@@ -31,7 +34,7 @@ async function call<T>(path: string, body?: unknown, method = "POST"): Promise<T
   });
   const data = (await res.json().catch(() => ({}))) as { error?: string; needVerify?: boolean } & T;
   if (!res.ok) {
-    const err = new Error(data?.error || `요청 실패 (${res.status})`) as ApiError;
+    const err = new Error(data?.error ? localizeServerMsg(data.error) : t("api.fail").replace("{n}", String(res.status))) as ApiError;
     err.needVerify = !!data?.needVerify;
     throw err;
   }
