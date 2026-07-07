@@ -718,9 +718,9 @@
 /* 상대 스펠 리빌 — 중앙 확대 시 적색 글로우로 "상대가 냈다"를 표시 */
 .fx-opp-cast { box-shadow: 0 0 0 2px #ff5b4588, 0 0 40px #ff5b4555; border-radius: 10px; }
 
-/* 알(egg) 카운터 배지: 🥚부화 / 🛡내구도 */
+/* 알(egg) 카운터 배지: 🥚부화 / 🛡내구도 — 아트 하단에 겹치게 (효과 텍스트판을 가리지 않도록) */
 .egg-cnt {
-  position: absolute; left: 50%; bottom: 26%; transform: translateX(-50%);
+  position: absolute; left: 50%; top: 52%; transform: translateX(-50%);
   display: flex; gap: 4px; z-index: 5; pointer-events: none;
 }
 .egg-cnt .ec {
@@ -743,7 +743,7 @@
 .deck-slot { width: 86px; aspect-ratio: 913/1426; border: 1px dashed var(--line); border-radius: 8px; display: grid; place-items: center; color: var(--paper-dim); font-size: 20px; opacity: .5; }
 .deck-fixed { position: relative; filter: saturate(.7); }
 .deck-fixed-tag { position: absolute; left: 50%; top: 6px; transform: translateX(-50%); background: #050a14e0; border: 1px solid var(--brass-dim); color: var(--brass-hi); font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 5px; z-index: 6; pointer-events: none; }
-.deck-owned { position: absolute; right: 5px; bottom: 5px; background: #050a14e0; border: 1px solid var(--line); color: var(--paper-dim); font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 5px; z-index: 6; pointer-events: none; }
+.deck-owned { position: absolute; right: 5px; top: 52%; background: #050a14e0; border: 1px solid var(--line); color: var(--paper-dim); font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 5px; z-index: 6; pointer-events: none; }
 .deck-owned.has { color: var(--gold-glow); border-color: #4fb4ff88; }
 .deck-msg { text-align: center; margin-top: 12px; font-size: 13px; color: var(--gold-glow); min-height: 18px; }
 .tut-card--deck { border-color: var(--gold-glow); box-shadow: 0 0 12px #4fb4ff22; }

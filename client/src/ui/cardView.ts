@@ -28,6 +28,35 @@ function el(tag: string, cls?: string, html?: string): HTMLElement {
   return e;
 }
 
+/**
+ * 실측 자동 축소: 요소가 DOM에 붙은 뒤(rAF) 내용이 박스를 넘치면 폰트를 줄여
+ * 항상 프레임 안에 들어가게 한다. 카드가 손패/마켓/줌 어느 크기로 렌더되든
+ * em 기반이라 같은 비율로 동작 — "효과 텍스트가 프레임을 벗어나는" 문제의 근본 해결.
+ * (CSS 클래스 버킷(--small/--tiny)은 1차 근사로 유지, 이 함수가 최종 보정)
+ */
+function fitToBox(box: HTMLElement, minPx = 3.5): void {
+  let tries = 0;
+  const run = (): void => {
+    // 주의: rAF는 숨겨진 탭에서 영원히 안 불린다(재접속 백그라운드 렌더 등) → setTimeout 사용.
+    // 레이아웃 측정(scrollHeight)은 백그라운드에서도 동작한다.
+    if (!box.isConnected) { if (tries++ < 8) setTimeout(run, 16 * tries); return; }
+    let guard = 0;
+    while (guard++ < 10) {
+      const overH = box.scrollHeight - box.clientHeight;
+      const overW = box.scrollWidth - box.clientWidth;
+      if (overH <= 1 && overW <= 1) break;
+      const cur = parseFloat(getComputedStyle(box).fontSize);
+      if (cur <= minPx) break;
+      const rH = box.scrollHeight > 0 ? box.clientHeight / box.scrollHeight : 1;
+      const rW = box.scrollWidth > 0 ? box.clientWidth / box.scrollWidth : 1;
+      const next = Math.max(minPx, cur * Math.min(rH, rW) * 0.97);
+      if (next >= cur) break;
+      box.style.fontSize = next.toFixed(2) + "px";
+    }
+  };
+  setTimeout(run, 0);
+}
+
 function artEl(cardId: string): HTMLElement {
   const art = el("div", "card-art");
   const img = document.createElement("img");
@@ -87,6 +116,8 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     const eggD = (c as { dur?: number }).dur ?? c.hatchDur ?? 4;
     node.appendChild(el("div", "egg-cnt", `<span class="ec ec-h">🥚${eggH}</span><span class="ec ec-d">🛡${Math.max(0, eggD)}</span>`));
   }
+  // 이름도 실측-축소: 긴 이름(EN 포함)이 프레임 이름판을 벗어나지 않게
+  fitToBox(nameEl2);
   // 효과 텍스트: "(시전 N)"/"(소환 N)" 계열 표기는 배지로 대체되므로 제거하고, 구분자를 줄바꿈으로
   let txt = cardText(c)
     .replace(/\s*\((?:시전|Cast|発動|소환|Summon|召喚)\s*\d+\)/g, "")
@@ -108,6 +139,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
       eff.appendChild(cast);
     }
     if (txt && txt !== "—") eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${txt}</span>`));
+    fitToBox(eff); // 실측 자동 축소 — 어떤 길이의 효과도 항상 프레임 텍스트판 안에
     // enchantment (영구마법) marker: small ∞ badge in the effect box + hover tooltip
     if (c.ench) {
       const perm = (c.val ?? 0) >= 99;

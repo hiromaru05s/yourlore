@@ -11,7 +11,9 @@ MSG="${1:-update}"
 WORK="$(mktemp -d /tmp/lore-gh.XXXXXX)"
 trap 'rm -rf "$WORK"' EXIT
 rmdir "$WORK" # git clone wants a fresh path
-git clone -q "https://x-access-token:${GITHUB_TOKEN}@${GITHUB_REPO}.git" "$WORK"
+# blobless partial clone — 카드 아트(수백 webp)가 히스토리에 쌓여 풀 클론이 타임아웃 나므로
+# 블롭은 필요할 때만 lazy-fetch (push는 정상 동작)
+git clone -q --filter=blob:none "https://x-access-token:${GITHUB_TOKEN}@${GITHUB_REPO}.git" "$WORK"
 rsync -a --delete \
   --exclude node_modules --exclude dist --exclude .git --exclude legacy \
   --exclude .secrets --exclude _render.cjs --exclude '*.timestamp-*.mjs' \
