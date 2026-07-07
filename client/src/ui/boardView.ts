@@ -88,13 +88,32 @@ export class GameView {
     this.logEl = this.q("log");
     (this.q("endBtn") as HTMLButtonElement).onclick = () => this.h.onEndTurn();
     (this.q("giveupBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
-    // mute toggle (round button below the logo) — remembers the last non-zero volume
+    // sound button (round button below the logo): click = volume slider popover
+    // (ON/OFF만 있던 것을 인게임 볼륨 조절로 확장 — 슬라이더 0 = 음소거)
     const muteBtn = this.q("muteBtn") as HTMLButtonElement;
     const SPK_ON = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.6a4 4 0 010 6.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
     const SPK_OFF = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
     let lastVol = getSfxVolume() || 0.7;
     const paintMute = () => { const m = getSfxVolume() <= 0; muteBtn.innerHTML = m ? SPK_OFF : SPK_ON; muteBtn.classList.toggle("muted", m); };
-    muteBtn.onclick = () => { if (getSfxVolume() > 0) { lastVol = getSfxVolume(); setSfxVolume(0); } else { setSfxVolume(lastVol || 0.7); } paintMute(); };
+    const volPop = document.createElement("div");
+    volPop.className = "vol-pop";
+    volPop.innerHTML = `<input type="range" min="0" max="100" step="5" aria-label="volume">`;
+    muteBtn.insertAdjacentElement("afterend", volPop);
+    const volRange = volPop.querySelector("input") as HTMLInputElement;
+    volRange.value = String(Math.round(getSfxVolume() * 100));
+    volRange.oninput = () => {
+      const v = Number(volRange.value) / 100;
+      if (v > 0) lastVol = v;
+      setSfxVolume(v);
+      paintMute();
+    };
+    let volOpen = false;
+    const setVolOpen = (o: boolean) => { volOpen = o; volPop.classList.toggle("open", o); };
+    muteBtn.onclick = (e) => { e.stopPropagation(); volRange.value = String(Math.round(getSfxVolume() * 100)); setVolOpen(!volOpen); };
+    volPop.onclick = (e) => e.stopPropagation();
+    // double-click the button = quick mute/unmute (기존 동작 유지)
+    muteBtn.ondblclick = () => { if (getSfxVolume() > 0) { lastVol = getSfxVolume(); setSfxVolume(0); } else { setSfxVolume(lastVol || 0.7); } volRange.value = String(Math.round(getSfxVolume() * 100)); paintMute(); };
+    document.addEventListener("click", () => { if (volOpen) setVolOpen(false); });
     paintMute();
     // battle log — CLOSED by default; a mid-left edge tab opens the drawer.
     // Once opened it stays open (state persisted in localStorage).
@@ -460,12 +479,39 @@ export class GameView {
         <div class="market-cards" id="supplyMarket"></div>
       </div>`;
 
+    // 오클릭 구매 방지: 첫 클릭 = 선택(확인 배지 표시), 같은 카드 재클릭 = 구매.
+    // 빠른 더블클릭도 그대로 구매가 된다. 다른 곳 클릭/2.5초 경과 시 해제.
+    let armedEl: HTMLElement | null = null;
+    let armedKey = "";
+    let armTimer = 0;
+    const disarm = () => {
+      clearTimeout(armTimer);
+      armedEl?.classList.remove("is-armed");
+      armedEl?.querySelector(".buy-confirm")?.remove();
+      armedEl = null; armedKey = "";
+    };
+    const armBuy = (card: HTMLElement, key: string, buy: () => void) => {
+      card.onclick = (e) => {
+        e.stopPropagation();
+        if (armedKey === key) { disarm(); buy(); return; }
+        disarm();
+        armedEl = card; armedKey = key;
+        card.classList.add("is-armed");
+        const badge = document.createElement("div");
+        badge.className = "buy-confirm";
+        badge.textContent = t("market.confirm");
+        card.appendChild(badge);
+        armTimer = window.setTimeout(disarm, 2500);
+      };
+    };
+    mk.onclick = () => disarm(); // 마켓 빈 곳 클릭 시 해제
+
     const fixed = this.q("fixedMarket");
     g.market.forEach((c, i) => {
       const bc = buyCost(owner, c);
       const aff = myTurn && !g.pending && me.mana >= bc;
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc }); // same size as 제시
-      if (aff) card.onclick = () => this.h.onBuyMarket(i);
+      if (aff) armBuy(card, "mkt" + i, () => this.h.onBuyMarket(i));
       bindZoom(card, c);
       fixed.appendChild(card);
     });
@@ -481,7 +527,7 @@ export class GameView {
       const aff = myTurn && !g.pending && me.mana >= bc;
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc });
       card.dataset.supIdx = String(i);  // ORIGINAL supply index (display is sorted) — buy anim finds it by this
-      if (aff) card.onclick = () => this.h.onBuySupply(i);
+      if (aff) armBuy(card, "sup" + i, () => this.h.onBuySupply(i));
       bindZoom(card, c);
       sup.appendChild(card);
     }

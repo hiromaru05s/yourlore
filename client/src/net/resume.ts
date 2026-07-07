@@ -11,10 +11,10 @@ import type { Side } from "../shared/types";
 const KEY = "lore_game";
 const WINDOW_MS = 10 * 60 * 1000; // don't try to rejoin games older than this
 
-export interface ActiveGame { roomId: string; you: Side; ts: number; }
+export interface ActiveGame { roomId: string; you: Side; ts: number; ranked?: boolean; }
 
-export function saveActiveGame(roomId: string, you: Side): void {
-  try { localStorage.setItem(KEY, JSON.stringify({ roomId, you, ts: Date.now() })); } catch { /* private mode */ }
+export function saveActiveGame(roomId: string, you: Side, ranked = false): void {
+  try { localStorage.setItem(KEY, JSON.stringify({ roomId, you, ranked, ts: Date.now() })); } catch { /* private mode */ }
 }
 
 export function clearActiveGame(): void {

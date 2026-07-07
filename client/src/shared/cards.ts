@@ -15,7 +15,7 @@ const CORE: Record<string, CardDef> = {
   M3: { id: "M3", t: "mon", cost: 1, name: "더스트 스카우트", atk: 2, def: 2, text: "소환시: 카드 1장 드로우", onSummon: "draw", val: 1 },
   M4: { id: "M4", t: "mon", cost: 2, name: "블레이드 헤어", atk: 5, def: 2, text: "—" },
   M5: { id: "M5", t: "mon", cost: 2, name: "아이언 셸", atk: 2, def: 5, text: "—" },
-  M6: { id: "M6", t: "mon", cost: 2, name: "트윈 팽", atk: 4, def: 3, text: "소환시: 적 몬스터 방어 -2(영구)", onSummon: "defDown", val: 2 },
+  M6: { id: "M6", t: "mon", cost: 2, name: "트윈 팽", atk: 4, def: 3, text: "소환시: 적 몬스터 방어 -2(지속)", onSummon: "defDown", val: 2 },
   M7: { id: "M7", t: "mon", cost: 3, name: "엠버 드레이크", atk: 7, def: 3, text: "소환시: 상대 체력에 3 데미지", onSummon: "burn", val: 3 },
   M8: { id: "M8", t: "mon", cost: 3, name: "그로브 워든", atk: 4, def: 6, text: "소환시: 체력 5 회복", onSummon: "heal", val: 5 },
   M9: { id: "M9", t: "mon", cost: 3, name: "렐릭 헌터", atk: 5, def: 4, text: "소환시: 자신의 제시를 무료 갱신 + 1장 드로우", onSummon: "refresh" },
@@ -34,7 +34,7 @@ const CORE: Record<string, CardDef> = {
   S6: { id: "S6", t: "spell", cost: 3, name: "시크", text: "덱에서 원하는 1장을 패로", act: "seek" },
   S7: { id: "S7", t: "spell", cost: 3, name: "오버로드", text: "자신 몬스터 전체의 공격 +3(이번 턴)", act: "buffAllTurn", val: 3 },
   S9: { id: "S9", t: "spell", cost: 3, name: "사이펀", text: "상대에게 5 데미지 + 자신 체력 5 회복", act: "siphon", val: 5, val2: 5 },
-  S12: { id: "S12", t: "spell", cost: 3, name: "강화 주문", text: "자신 몬스터 1체에 공격+2 / 방어+2(영구)", act: "buffPerm", val: 2, val2: 2 },
+  S12: { id: "S12", t: "spell", cost: 3, name: "강화 주문", text: "자신 몬스터 1체에 공격+2 / 방어+2(지속)", act: "buffPerm", val: 2, val2: 2 },
   S13: { id: "S13", t: "spell", cost: 4, name: "메테오", text: "상대 체력에 8 데미지", act: "dmg", val: 8 },
   S14: { id: "S14", t: "spell", cost: 4, name: "대지의 축복", text: "체력 10 회복 + 카드 1장 드로우", act: "heal", val: 10, val2: 1 },
   S15: { id: "S15", t: "spell", cost: 4, name: "룬 파열", text: "적 몬스터 1체를 파괴", act: "destroyMon" },
@@ -48,10 +48,10 @@ const CORE: Record<string, CardDef> = {
   T4: { id: "T4", t: "trap", cost: 3, name: "미러 손", text: "공격해온 몬스터의 공격력만큼 반사", react: "reflect" },
   T10: { id: "T10", t: "trap", cost: 3, name: "영혼 포식", text: "공격 몬스터 파괴 + 체력 7 회복", react: "devour", val: 7 },
   T11: { id: "T11", t: "trap", cost: 3, name: "시간 왜곡", text: "공격을 받으면 카드 3장 드로우", react: "drawtrap", val: 3 },
-  T12: { id: "T12", t: "trap", cost: 4, name: "절대 방벽", text: "이번 공격 무효 + 공격 몬스터 방어 -6(영구)", react: "bulwark", val: 6 },
+  T12: { id: "T12", t: "trap", cost: 4, name: "절대 방벽", text: "이번 공격 무효 + 공격 몬스터 방어 -6(지속)", react: "bulwark", val: 6 },
   T13: { id: "T13", t: "trap", cost: 4, name: "천벌", text: "공격 몬스터 파괴 + 상대 체력에 10 데미지", react: "judgment", val: 10 },
   // Special token (꽝 from treasure) — never appears in markets (cost 0)
-  MIMIC: { id: "MIMIC", t: "mon", cost: 0, name: "미믹", atk: 3, def: 2, text: "보물상자 꽝으로 상대 필드에 소환된다" },
+  MIMIC: { id: "MIMIC", t: "mon", cost: 0, name: "미믹", atk: 3, def: 2, text: "보물상자 꽝으로 상대 필드에 소환된다 · 죽으면 게임에서 제외" },
   // Trap-destroy spells (no art yet → ◆ placeholder)
   SX2: { id: "SX2", t: "spell", cost: 2, name: "파훼술", text: "상대의 세트 함정 1장 파괴", act: "destroyTrap", val: 1 },
   SX4: { id: "SX4", t: "spell", cost: 4, name: "봉인 해제", text: "상대의 세트 함정 2장 파괴", act: "destroyTrap", val: 2 },
@@ -157,7 +157,7 @@ const MON_TPL: MonTpl[] = [
   { nouns: ["드레이크", "폭격수", "화염술사"], nounsJa: ["ドレイク", "爆撃手", "火術士"], atk: (c) => R(c * 1.35), def: (c) => R(c * 0.7), mk: (c) => ({ onSummon: "burn", val: R(c * 0.8), text: `소환시: 상대 체력에 ${R(c * 0.8)} 데미지`, textJa: `召喚時: 相手の体力に${R(c * 0.8)}ダメージ` }) },
   { nouns: ["사제", "수도승", "치유사"], nounsJa: ["司祭", "修道僧", "治癒師"], atk: (c) => R(c * 0.75), def: (c) => R(c * 1.5), mk: (c) => ({ onSummon: "heal", val: R(c * 1.4), text: `소환시: 체력 ${R(c * 1.4)} 회복`, textJa: `召喚時: 体力${R(c * 1.4)}回復` }) },
   { nouns: ["정찰병", "탐색자", "사냥꾼"], nounsJa: ["斥候", "探索者", "狩人"], atk: (c) => R(c * 1.05), def: (c) => R(c * 1.0), mk: (c) => ({ onSummon: "draw", val: R(c / 3) + 1, text: `소환시: ${R(c / 3) + 1}장 드로우`, textJa: `召喚時: ${R(c / 3) + 1}枚ドロー` }) },
-  { nouns: ["주술사", "저주술사", "마녀"], nounsJa: ["呪術師", "呪詛師", "魔女"], atk: (c) => R(c * 1.2), def: (c) => R(c * 0.9), mk: (c) => ({ onSummon: "defDown", val: R(c * 0.8), text: `소환시: 적 몬스터 방어 -${R(c * 0.8)}(영구)`, textJa: `召喚時: 敵モンスターの防御-${R(c * 0.8)}(永続)` }) },
+  { nouns: ["주술사", "저주술사", "마녀"], nounsJa: ["呪術師", "呪詛師", "魔女"], atk: (c) => R(c * 1.2), def: (c) => R(c * 0.9), mk: (c) => ({ onSummon: "defDown", val: R(c * 0.8), text: `소환시: 적 몬스터 방어 -${R(c * 0.8)}(지속)`, textJa: `召喚時: 敵モンスターの防御-${R(c * 0.8)}(持続)` }) },
   { nouns: ["지휘관", "장군", "대장"], nounsJa: ["指揮官", "将軍", "隊長"], atk: (c) => R(c * 1.45), def: (c) => R(c * 0.95), mk: () => ({ condAtk: "twoPlus", text: "아군 몬스터 2체 이상이면 공격 +2", textJa: "味方モンスター2体以上で攻撃+2" }) },
   { nouns: ["파괴자", "해체자", "공성병"], nounsJa: ["破壊者", "解体者", "攻城兵"], atk: (c) => R(c * 1.3), def: (c) => R(c * 0.95), mk: () => ({ onSummon: "breaktrap", text: "소환시: 상대의 세트 함정 1장 파괴", textJa: "召喚時: 相手のセット罠1枚を破壊" }) },
 ];
@@ -170,9 +170,9 @@ const SPELL_TPL: FxTpl[] = [
   { nouns: ["통찰", "예지", "지식"], nounsJa: ["洞察", "予知", "知識"], mk: (c) => ({ act: "draw", val: R(c / 2) + 1, play: Math.max(1, R(c / 3)), text: `카드 ${R(c / 2) + 1}장 드로우 (시전 ${Math.max(1, R(c / 3))})`, textJa: `カード${R(c / 2) + 1}枚ドロー (発動${Math.max(1, R(c / 3))})` }) },
   { nouns: ["강타", "예리함", "투기"], nounsJa: ["強打", "鋭利", "闘気"], mk: (c) => ({ act: "buffTurn", val: R(c * 1.6), text: `자신 몬스터 1체 공격 +${R(c * 1.6)}(이번 턴)`, textJa: `自分のモンスター1体の攻撃+${R(c * 1.6)}(このターン)` }) },
   { nouns: ["진군", "돌격 명령", "전군 강화"], nounsJa: ["進軍", "突撃命令", "全軍強化"], mk: (c) => ({ act: "buffAllTurn", val: R(c * 0.9), text: `아군 전체 공격 +${R(c * 0.9)}(이번 턴)`, textJa: `味方全体の攻撃+${R(c * 0.9)}(このターン)` }) },
-  { nouns: ["룬 각인", "축복", "룬 강화"], nounsJa: ["ルーン刻印", "祝福", "ルーン強化"], mk: (c) => ({ act: "buffPerm", val: R(c * 0.8), val2: R(c * 0.8), text: `자신 몬스터 1체 공격+${R(c * 0.8)}/방어+${R(c * 0.8)}(영구)`, textJa: `自分のモンスター1体の攻撃+${R(c * 0.8)}/防御+${R(c * 0.8)}(永続)` }) },
+  { nouns: ["룬 각인", "축복", "룬 강화"], nounsJa: ["ルーン刻印", "祝福", "ルーン強化"], mk: (c) => ({ act: "buffPerm", val: R(c * 0.8), val2: R(c * 0.8), text: `자신 몬스터 1체 공격+${R(c * 0.8)}/방어+${R(c * 0.8)}(지속)`, textJa: `自分のモンスター1体の攻撃+${R(c * 0.8)}/防御+${R(c * 0.8)}(持続)` }) },
   { nouns: ["파멸", "소멸", "붕괴"], nounsJa: ["破滅", "消滅", "崩壊"], mk: () => ({ act: "destroyMon", text: "적 몬스터 1체를 파괴", textJa: "敵モンスター1体を破壊" }) },
-  { nouns: ["약화", "쇠약", "부식"], nounsJa: ["弱化", "衰弱", "腐食"], mk: (c) => ({ act: "weaken", val: R(c * 1.3), text: `적 몬스터 1체 방어 -${R(c * 1.3)}(영구)`, textJa: `敵モンスター1体の防御-${R(c * 1.3)}(永続)` }) },
+  { nouns: ["약화", "쇠약", "부식"], nounsJa: ["弱化", "衰弱", "腐食"], mk: (c) => ({ act: "weaken", val: R(c * 1.3), text: `적 몬스터 1체 방어 -${R(c * 1.3)}(지속)`, textJa: `敵モンスター1体の防御-${R(c * 1.3)}(持続)` }) },
   { nouns: ["생명 갈취", "착취", "흡수"], nounsJa: ["生命奪取", "搾取", "吸収"], mk: (c) => ({ act: "siphon", val: R(c * 1.4), val2: R(c * 1.1), text: `상대에게 ${R(c * 1.4)} 데미지 + 체력 ${R(c * 1.1)} 회복`, textJa: `相手に${R(c * 1.4)}ダメージ + 体力${R(c * 1.1)}回復` }) },
   { nouns: ["마나 결정", "룬 충전"], nounsJa: ["マナ結晶", "ルーン充填"], mk: (c) => ({ act: "manaUp", val: c >= 10 ? 2 : 1, play: 1, text: `최대 마나 +${c >= 10 ? 2 : 1} (시전 1)`, textJa: `最大マナ+${c >= 10 ? 2 : 1} (発動1)` }) },
   { nouns: ["시장 교란", "혼란"], nounsJa: ["市場攪乱", "混乱"], mk: (c) => ({ act: "crash", val2: R(c / 3), play: Math.max(1, c - 2), text: `상대 제시 강제 갱신 + ${R(c / 3)}장 드로우 (시전 ${Math.max(1, c - 2)})`, textJa: `相手の提示を強制更新 + ${R(c / 3)}枚ドロー (発動${Math.max(1, c - 2)})` }) },
@@ -187,7 +187,7 @@ const TRAP_TPL: FxTpl[] = [
   { nouns: ["심판", "천벌"], nounsJa: ["審判", "天罰"], mk: (c) => ({ react: "judgment", val: R(c * 1.9) + 2, text: `공격 몬스터 파괴 + 상대 체력에 ${R(c * 1.9) + 2} 데미지`, textJa: `攻撃モンスターを破壊 + 相手の体力に${R(c * 1.9) + 2}ダメージ` }) },
   { nouns: ["가시 함정", "철침 덫"], nounsJa: ["棘の罠", "鉄針の罠"], mk: (c) => ({ react: "spikes", val: R(c * 1.6) + 2, text: `공격을 받으면 공격측에 ${R(c * 1.6) + 2} 데미지`, textJa: `攻撃を受けると攻撃側に${R(c * 1.6) + 2}ダメージ` }) },
   { nouns: ["시간 왜곡", "예지의 덫"], nounsJa: ["時間歪曲", "予知の罠"], mk: (c) => ({ react: "drawtrap", val: R(c * 0.7) + 1, text: `공격을 받으면 ${R(c * 0.7) + 1}장 드로우`, textJa: `攻撃を受けると${R(c * 0.7) + 1}枚ドロー` }) },
-  { nouns: ["방벽", "철벽"], nounsJa: ["防壁", "鉄壁"], mk: (c) => ({ react: "bulwark", val: R(c * 1.4), text: `이번 공격 무효 + 공격 몬스터 방어 -${R(c * 1.4)}(영구)`, textJa: `この攻撃を無効 + 攻撃モンスターの防御-${R(c * 1.4)}(永続)` }) },
+  { nouns: ["방벽", "철벽"], nounsJa: ["防壁", "鉄壁"], mk: (c) => ({ react: "bulwark", val: R(c * 1.4), text: `이번 공격 무효 + 공격 몬스터 방어 -${R(c * 1.4)}(지속)`, textJa: `この攻撃を無効 + 攻撃モンスターの防御-${R(c * 1.4)}(持続)` }) },
   { nouns: ["가시 갑옷", "복수의 가시"], nounsJa: ["棘の鎧", "復讐の棘"], mk: (c) => ({ react: "thorns", val: R(c * 1.7), text: `공격을 받으면 ${R(c * 1.7)} 반사`, textJa: `攻撃を受けると${R(c * 1.7)}反射` }) },
 ];
 
@@ -237,7 +237,7 @@ const CORE_JA: Record<string, { name: string; text?: string }> = {
   M1: { name: "スパーク・インプ" }, M2: { name: "ストーン・パップ" },
   M3: { name: "ダスト・スカウト", text: "召喚時: カード1枚ドロー" },
   M4: { name: "ブレード・ヘア" }, M5: { name: "アイアン・シェル" },
-  M6: { name: "ツイン・ファング", text: "召喚時: 敵モンスターの防御-2(永続)" },
+  M6: { name: "ツイン・ファング", text: "召喚時: 敵モンスターの防御-2(持続)" },
   M7: { name: "エンバー・ドレイク", text: "召喚時: 相手の体力に3ダメージ" },
   M8: { name: "グローブ・ウォーデン", text: "召喚時: 体力5回復" },
   M9: { name: "レリック・ハンター", text: "召喚時: 自分の提示を無料更新 + 1枚ドロー" },
@@ -255,7 +255,7 @@ const CORE_JA: Record<string, { name: string; text?: string }> = {
   S6: { name: "シーク", text: "デッキから好きな1枚を手札へ" },
   S7: { name: "オーバーロード", text: "自分のモンスター全体の攻撃+3(このターン)" },
   S9: { name: "サイフォン", text: "相手に5ダメージ + 自分の体力5回復" },
-  S12: { name: "強化の呪文", text: "自分のモンスター1体に攻撃+2/防御+2(永続)" },
+  S12: { name: "強化の呪文", text: "自分のモンスター1体に攻撃+2/防御+2(持続)" },
   S13: { name: "メテオ", text: "相手の体力に8ダメージ" },
   S14: { name: "大地の祝福", text: "体力10回復 + カード1枚ドロー" },
   S15: { name: "ルーン爆裂", text: "敵モンスター1体を破壊" },
@@ -268,9 +268,9 @@ const CORE_JA: Record<string, { name: string; text?: string }> = {
   T4: { name: "ミラー・ソーン", text: "攻撃モンスターの攻撃力分を反射" },
   T10: { name: "魂の捕食", text: "攻撃モンスターを破壊 + 体力7回復" },
   T11: { name: "時間歪曲", text: "攻撃を受けるとカード3枚ドロー" },
-  T12: { name: "絶対防壁", text: "この攻撃を無効 + 攻撃モンスターの防御-6(永続)" },
+  T12: { name: "絶対防壁", text: "この攻撃を無効 + 攻撃モンスターの防御-6(持続)" },
   T13: { name: "天罰", text: "攻撃モンスターを破壊 + 相手の体力に10ダメージ" },
-  MIMIC: { name: "ミミック", text: "宝箱のハズレで相手の場に召喚される" },
+  MIMIC: { name: "ミミック", text: "宝箱のハズレで相手の場に召喚される · 死亡時ゲームから除外" },
   SX2: { name: "罠破り", text: "相手のセット罠1枚を破壊" },
   SX4: { name: "封印解除", text: "相手のセット罠2枚を破壊" },
   SX6: { name: "罠崩し", text: "相手のセット罠を全て破壊 + 1枚ドロー" },
@@ -316,14 +316,14 @@ const PATCH: Record<string, Partial<CardDef>> = {
   // core monsters
   M3: { atk: 2, def: 1 },
   M6: { def: 2 },
-  M12: { onSummon: "allEnemyAtkDown", val: 2, text: "소환시: 적 몬스터 전체 공격 -2(영구)", textJa: "召喚時: 敵モンスター全体の攻撃-2(永続)" },
+  M12: { onSummon: "allEnemyAtkDown", val: 2, text: "소환시: 적 몬스터 전체 공격 -2(지속)", textJa: "召喚時: 敵モンスター全体の攻撃-2(持続)" },
   // tribe monsters
   TSO2: { atk: 3, def: 2 }, TNO2: { atk: 3, def: 2 }, TPO2: { atk: 3, def: 2 }, TAR2: { atk: 3, def: 2 },
   TSO5: { atk: 6, def: 5 }, TNO5: { atk: 6, def: 5 }, TPO5: { atk: 6, def: 5 }, TAR5: { atk: 6, def: 5 },
   TSO7: { atk: 8, def: 6 }, TNO7: { atk: 8, def: 6 }, TPO7: { atk: 8, def: 6 }, TAR7: { atk: 8, def: 6 },
   // generated monsters — cost 5
-  GM5_0: { turnFx: "growAtk", val: 2, text: "매 턴 시작 시 공격 +2(영구)", textJa: "毎ターン開始時 攻撃+2(永続)" },
-  GM5_1: { atk: 3, def: 9, turnFx: "growDef", val: 2, text: "매 턴 시작 시 방어 +2(영구)", textJa: "毎ターン開始時 防御+2(永続)" },
+  GM5_0: { turnFx: "growAtk", val: 2, text: "매 턴 시작 시 공격 +2(지속)", textJa: "毎ターン開始時 攻撃+2(持続)" },
+  GM5_1: { atk: 3, def: 9, turnFx: "growDef", val: 2, text: "매 턴 시작 시 방어 +2(지속)", textJa: "毎ターン開始時 防御+2(持続)" },
   GM5_2: { atk: 6, def: 6, aura: "summonBuff", val: 1, text: "상시: 몬스터를 소환할 때 그 몬스터 +1/+1", textJa: "常時: モンスター召喚時、そのモンスターに+1/+1" },
   GM5_3: { onSummon: undefined, turnFx: "turnBurn", val: 3, text: "매 턴 시작 시 상대 체력에 3 데미지", textJa: "毎ターン開始時 相手の体力に3ダメージ" },
   // cost 6
@@ -340,9 +340,9 @@ const PATCH: Record<string, Partial<CardDef>> = {
   GM7_3: { atk: 11 },
   GM7_5: { onSummon: "draw", val: 4, text: "소환시: 4장 드로우", textJa: "召喚時: 4枚ドロー" },
   // cost 8
-  GM8_0: { atk: 18, def: 6, attackFx: "atkDownOnAttack", val: 2, text: "공격할 때마다 자신의 공격 -2(영구)", textJa: "攻撃するたび自身の攻撃-2(永続)" },
+  GM8_0: { atk: 18, def: 6, attackFx: "atkDownOnAttack", val: 2, text: "공격할 때마다 자신의 공격 -2(지속)", textJa: "攻撃するたび自身の攻撃-2(持続)" },
   GM8_1: { def: 13, turnFx: "turnHeal", val: 3, text: "매 턴 시작 시 체력 +3 회복", textJa: "毎ターン開始時 体力+3回復" },
-  GM8_2: { atk: 5, def: 3, play: 3, onSummon: "cloneSelf", text: "소환 코스트 3. 소환시 50%로 자신을 복제 소환", textJa: "召喚コスト3。召喚時50%で自身を複製召喚" },
+  GM8_2: { atk: 5, def: 3, play: 3, onSummon: "cloneSelf", text: "소환시 50%로 자신을 복제 소환", textJa: "召喚時50%で自身を複製召喚" },
   GM8_3: { onSummon: "burnBleed", val: 6, text: "소환시: 상대에 6 데미지. 이후 상대는 매 턴 1 데미지(중첩 불가)", textJa: "召喚時: 相手に6ダメージ。以降 相手は毎ターン1ダメージ(重複不可)" },
   GM8_4: { onSummon: "heal", val: 13, text: "소환시: 체력 13 회복", textJa: "召喚時: 体力13回復" },
   GM8_5: { onSummon: "parity", text: "소환시: 상대 체력 홀수면 5 데미지, 짝수면 4장 드로우", textJa: "召喚時: 相手の体力が奇数なら5ダメージ、偶数なら4枚ドロー" },
@@ -367,7 +367,7 @@ const PATCH: Record<string, Partial<CardDef>> = {
   T6: { cost: 3, play: 2 },
   T9: { cost: 3, play: 1, react: "wardheal", val: 3, val2: 1, text: "공격 무효 + 체력 3 회복 + 1장 드로우", textJa: "攻撃無効 + 体力3回復 + 1枚ドロー" },
   T11: { react: "drawtrap", val: 5, text: "공격을 받으면 카드 5장 드로우", textJa: "攻撃を受けるとカード5枚ドロー" },
-  T12: { react: "guardbuff", val: 4, text: "이번 공격 무효 + 자신 몬스터 전체 방어 +4(영구)", textJa: "この攻撃を無効 + 自分のモンスター全体の防御+4(永続)" },
+  T12: { react: "guardbuff", val: 4, text: "이번 공격 무효 + 자신 몬스터 전체 방어 +4(지속)", textJa: "この攻撃を無効 + 自分のモンスター全体の防御+4(持続)" },
   // generated traps — cost 5 / 6
   GT5_0: { react: "guardBreakDraw", text: "공격 무효 + 공격측 함정 1장 파괴 + 1장 드로우", textJa: "攻撃無効 + 攻撃側の罠1枚破壊 + 1枚ドロー" },
   GT5_1: { react: "guarddraw", val: 2, text: "공격 무효 + 2장 드로우", textJa: "攻撃無効 + 2枚ドロー" },
@@ -419,7 +419,7 @@ const PATCH2: Record<string, Partial<CardDef>> = {
   S6: { play: 2, text: "덱에서 원하는 1장을 패로 (시전 2)", textJa: "デッキから好きな1枚を手札へ (発動2)" },
   S7: { val: 3, text: "자신 몬스터 전체 공격 +3(이번 턴) + 최대 체력 +2", textJa: "自分のモンスター全体の攻撃+3(このターン) + 最大体力+2" },
   S8: { text: "묘지에서 원하는 1장을 패로", textJa: "墓地から好きな1枚を手札へ" },
-  S12: { val: 2, val2: 1, text: "자신 몬스터 1체에 공격+2 / 방어+1(영구)", textJa: "自分のモンスター1体に攻撃+2/防御+1(永続)" },
+  S12: { val: 2, val2: 1, text: "자신 몬스터 1체에 공격+2 / 방어+1(지속)", textJa: "自分のモンスター1体に攻撃+2/防御+1(持続)" },
   S13: { val: 9, text: "상대 체력에 9 데미지", textJa: "相手の体力に9ダメージ" },
   E3: { play: 4, text: "자신의 4턴 동안 턴 시작시 1장 추가 드로우 · 종료 다음 턴 최대 마나 +1 (시전 4)", textJa: "自分の4ターンの間ターン開始時に1枚追加ドロー · 終了の翌ターン最大マナ+1 (発動4)" },
   NHEAL: { play: 2, text: "영구: 몬스터를 소환할 때마다 체력 1 회복 (시전 2)", textJa: "永続: モンスターを召喚するたびに体力1回復 (発動2)" },
@@ -444,7 +444,7 @@ const PATCH2: Record<string, Partial<CardDef>> = {
   GS8_1: { play: 5, text: "상대 체력에 13 데미지 (시전 5)", textJa: "相手の体力に13ダメージ (発動5)" },
   GS8_2: { text: "체력 14 회복 · 자신 최대 마나가 10 이하면 체력 완전 회복", textJa: "体力14回復 · 自分の最大マナが10以下なら体力全回復" },
   GS8_3: { val: 5, text: "카드 5장 드로우 · 60%로 상대 몬스터/함정/마법 1장 무작위 파괴", textJa: "カード5枚ドロー · 60%で相手のモンスター/罠/魔法1枚をランダム破壊" },
-  GS8_4: { val: 13, text: "아군 전체 공격 +13(이번 턴) · 이번 턴 종료 후 공격 +2(영구)", textJa: "味方全体の攻撃+13(このターン) · ターン終了後 攻撃+2(永続)" },
+  GS8_4: { val: 13, text: "아군 전체 공격 +13(이번 턴) · 이번 턴 종료 후 공격 +2(지속)", textJa: "味方全体の攻撃+13(このターン) · ターン終了後 攻撃+2(持続)" },
   GS8_5: { val: 7, text: "아군 전체 공격 +7 · 20%로 6코스트 이하 몬스터 무작위 소환", textJa: "味方全体の攻撃+7 · 20%でコスト6以下のモンスターをランダム召喚" },
   GS9_0: { text: "상대 체력에 21 데미지 (상대 체력 21 이하면 사용 불가)", textJa: "相手の体力に21ダメージ (相手の体力21以下では使用不可)" },
   GS9_1: { val: 15, text: "상대 체력에 15 데미지 (시전 7)", textJa: "相手の体力に15ダメージ (発動7)" },
@@ -465,7 +465,7 @@ const NEW_CARDS2: CardDef[] = [
   { id: "TPO3", t: "mon", cost: 3, name: "굶주린 추격자", nameJa: "飢えた追跡者", atk: 4, def: 2, tribe: "포식", text: "[포식] 동족 시너지", textJa: "[捕食] 同族シナジー" },
   { id: "TAR3", t: "mon", cost: 3, name: "몰락한 기사", nameJa: "没落した騎士", atk: 4, def: 2, tribe: "귀족", text: "[귀족] 동족 시너지", textJa: "[貴族] 同族シナジー" },
   // ---- NEW tribe 시초(Genesis): cost 1~8, one each (cost-8 시초의 미믹/ORIGIN_MIMIC added in a later PATCH) ----
-  { id: "TGE1", t: "mon", cost: 1, play: 2, name: "시초의 알", nameJa: "始原の卵", atk: 0, def: 0, tribe: "시초", text: "[시초] 동족 시너지 · 소환 코스트 2", textJa: "[始原] 同族シナジー · 召喚コスト2" },
+  { id: "TGE1", t: "mon", cost: 1, play: 2, name: "시초의 알", nameJa: "始原の卵", atk: 0, def: 0, tribe: "시초", text: "[시초] 동족 시너지", textJa: "[始原] 同族シナジー" },
   { id: "TGE2", t: "mon", cost: 2, name: "시초의 불씨", nameJa: "始原の火種", atk: 1, def: 1, tribe: "시초", onSummon: "maxHpAdd", val: -2, text: "[시초] 소환시 최대 체력 -2", textJa: "[始原] 召喚時 最大体力-2" },
   { id: "TGE3", t: "mon", cost: 3, name: "시초의 새싹", nameJa: "始原の芽", atk: 2, def: 1, tribe: "시초", onSummon: "maxHpAdd", val: -1, text: "[시초] 소환시 최대 체력 -1", textJa: "[始原] 召喚時 最大体力-1" },
   { id: "TGE4", t: "mon", cost: 4, name: "시초의 정령", nameJa: "始原の精霊", atk: 2, def: 2, tribe: "시초", text: "[시초] 동족 시너지", textJa: "[始原] 同族シナジー" },
@@ -497,7 +497,7 @@ const PATCH3: Record<string, Partial<CardDef>> = {
   // 대현자: 카드 5장 드로우
   NMD6: { onSummon: "draw", val: 5, text: "소환시: 카드 5장 드로우", textJa: "召喚時: カード5枚ドロー" },
   // 흑요석 광전사: 상대 플레이어에게 데미지를 입힐 때마다 +2/+2
-  GM6_0: { attackFx: "rampFace", text: "상대 플레이어에게 데미지를 입힐 때마다 +2/+2(영구)", textJa: "相手プレイヤーにダメージを与えるたび+2/+2(永続)" },
+  GM6_0: { attackFx: "rampFace", text: "상대 플레이어에게 데미지를 입힐 때마다 +2/+2(지속)", textJa: "相手プレイヤーにダメージを与えるたび+2/+2(持続)" },
   // 은빛 성벽: 상시 아군 몬스터 전체 방어 +3
   GM6_1: { aura: "wallDef", val: 3, text: "상시: 자신 필드의 아군 몬스터 방어 +3", textJa: "常時: 自分の場の味方モンスターの防御+3" },
   // 폭풍의 광전사: 필드에 있는 한 상대 최대 마나 -3
@@ -598,7 +598,7 @@ for (const id of Object.keys(PATCH4)) { if (DB[id]) Object.assign(DB[id], PATCH4
 // ============================================================
 const PATCH5: Record<string, Partial<CardDef>> = {
   // 타이탄 게이트: 적 전체 -2 → 적 1체 -2 (엔진 onSummon "atkDown")
-  M12: { onSummon: "atkDown", text: "소환시: 적 몬스터 1체 공격 -2(영구)", textJa: "召喚時: 敵モンスター1体の攻撃-2(永続)" },
+  M12: { onSummon: "atkDown", text: "소환시: 적 몬스터 1체 공격 -2(지속)", textJa: "召喚時: 敵モンスター1体の攻撃-2(持続)" },
   // 널(마법 무효)계 리워크 — "저코스트 마법은 싸게 카운터" (cap = 무효화 가능한 최대 시전코스트)
   NT_NULL3: { cost: 1, cap: 2, val: 0, text: "코스트 2 이하 마법 1장을 무효화", textJa: "コスト2以下の魔法1枚を無効化" },
   T2: { cost: 2, play: 2, cap: 4, val: 0, text: "코스트 4 이하 마법 1장을 무효화", textJa: "コスト4以下の魔法1枚を無効化" },
@@ -621,12 +621,12 @@ const PATCH5: Record<string, Partial<CardDef>> = {
 };
 for (const id of Object.keys(PATCH5)) { if (DB[id]) Object.assign(DB[id], PATCH5[id]); }
 
-// 구매/시전 코스트가 다른 카드는 텍스트에 "(시전 N)" 자동 표기 (이미 표기된 카드는 건너뜀)
+// 구매/시전 코스트가 다른 카드는 텍스트에 자동 표기 — 몬스터는 "(소환 N)", 그 외 "(시전 N)"
 for (const id of Object.keys(DB)) {
   const c = DB[id];
   if (c.play === undefined || c.play === c.cost) continue;
-  if (!/시전|소환 코스트/.test(c.text)) c.text += ` (시전 ${c.play})`;
-  if (c.textJa && !/発動|召喚コスト/.test(c.textJa)) c.textJa += ` (発動${c.play})`;
+  if (!/시전|소환 코스트|\(소환 /.test(c.text)) c.text += c.t === "mon" ? ` (소환 ${c.play})` : ` (시전 ${c.play})`;
+  if (c.textJa && !/発動|召喚コスト|\(召喚/.test(c.textJa)) c.textJa += c.t === "mon" ? ` (召喚${c.play})` : ` (発動${c.play})`;
 }
 
 // ============================================================
@@ -749,7 +749,7 @@ for (const id of Object.keys(PATCH10)) { if (DB[id]) Object.assign(DB[id], PATCH
 const PATCH11: Record<string, Partial<CardDef>> = {
   M12: { atk: 3 }, // 타이탄 게이트 4/4 → 3/4
   TSO3: { def: 1 }, TNO3: { def: 1 }, TPO3: { def: 1 }, TAR3: { def: 1 }, // 3코 종족 4/2 → 4/1
-  S12: { val: 2, val2: 0, text: "자신 몬스터 1체에 공격+2(영구)", textJa: "自分のモンスター1体に攻撃+2(永続)" }, // 강화 주문 방어 삭제
+  S12: { val: 2, val2: 0, text: "자신 몬스터 1체에 공격+2(지속)", textJa: "自分のモンスター1体に攻撃+2(持続)" }, // 강화 주문 방어 삭제
   ELITE: { text: "소환시: 자신의 덱+묘지가 7장 이하면 공격 +3", textJa: "召喚時: 自分のデッキ+墓地が7枚以下なら攻撃+3" }, // (엔진 수치와 동기)
   NGA4: { atk: 10, val: 4, text: "소환시: 자신에게 4 데미지", textJa: "召喚時: 自分に4ダメージ" }, // 광폭한 검귀 11/0·자해3 → 10/0·자해4
   E2: { val: 4, text: "4턴 동안 서로 몬스터로 공격할 수 없다", textJa: "4ターンの間 互いにモンスターで攻撃できない" }, // 평화 협정 3 → 4턴
@@ -764,7 +764,7 @@ const PATCH12: Record<string, Partial<CardDef>> = {
   LIFE_SANCTUM: { val2: 2, text: "영구: 자신의 턴마다 최대 체력 +2 (시전 2)", textJa: "永続: 自分のターンごとに最大体力+2 (発動2)" }, // +3 → +2
   HORDE: { text: "소환시: 자신의 덱+묘지가 24장 이상이면 +3/+3", textJa: "召喚時: 自分のデッキ+墓地が24枚以上なら+3/+3" }, // 20 → 24장 (엔진 동기)
   M13: { def: 2 }, // 보이드 리버 3/3 → 3/2
-  M12: { val: 1, text: "소환시: 적 몬스터 1체 공격 -1(영구)", textJa: "召喚時: 敵モンスター1体の攻撃-1(永続)" }, // 타이탄 게이트 효과 -2 → -1
+  M12: { val: 1, text: "소환시: 적 몬스터 1체 공격 -1(지속)", textJa: "召喚時: 敵モンスター1体の攻撃-1(持続)" }, // 타이탄 게이트 효과 -2 → -1
   S15: { cost: 3 }, // 룬 파열 4c → 3c
 };
 for (const id of Object.keys(PATCH12)) { if (DB[id]) Object.assign(DB[id], PATCH12[id]); }
@@ -776,7 +776,7 @@ const NEW_CARDS7: CardDef[] = [
   { id: "GLASS_BAN", t: "spell", cost: 3, play: 2, ench: "glassBan", val: 99, name: "유리 병기 금지령", nameJa: "ガラス兵器禁止令",
     text: "영구: 양 플레이어의 방어력 1 이하 몬스터는 공격할 수 없다 (시전 2)", textJa: "永続: 両プレイヤーの防御力1以下のモンスターは攻撃できない (発動2)" },
   { id: "SHATTER", t: "spell", cost: 3, play: 2, name: "붕괴 진동", nameJa: "崩壊振動",
-    text: "자신에게 5 데미지. 필드 위 모든 몬스터의 방어력이 0이 된다(영구) (시전 2)", textJa: "自分に5ダメージ。場の全モンスターの防御力が0になる(永続) (発動2)" },
+    text: "자신에게 5 데미지. 필드 위 모든 몬스터의 방어력이 0이 된다(지속) (시전 2)", textJa: "自分に5ダメージ。場の全モンスターの防御力が0になる(持続) (発動2)" },
   { id: "SCARECROW", t: "spell", cost: 2, name: "허수아비 소집", nameJa: "かかし召集",
     text: "허수아비(0/0) 3체를 자신 필드에 소환", textJa: "かかし(0/0)3体を自分の場に召喚" },
   { id: "LEVY", t: "spell", cost: 7, play: 4, name: "병력 소집", nameJa: "兵力召集",
@@ -826,8 +826,8 @@ const NEW_CARDS7: CardDef[] = [
   { id: "MARKET_CRISIS", t: "spell", cost: 3, name: "경제 위기", nameJa: "経済危機",
     text: "고정 마켓 10장을 전부 갱신한다", textJa: "固定マーケット10枚を全て更新する" },
   // 토큰 (구매 불가, cost 0)
-  { id: "TOKEN00", t: "mon", cost: 0, atk: 0, def: 0, name: "허수아비", nameJa: "かかし", text: "—", textJa: "—" },
-  { id: "SOLDIER2", t: "mon", cost: 0, atk: 2, def: 2, name: "병사", nameJa: "兵士", text: "—", textJa: "—" },
+  { id: "TOKEN00", t: "mon", cost: 0, atk: 0, def: 0, name: "허수아비", nameJa: "かかし", text: "토큰 · 죽으면 게임에서 제외", textJa: "トークン · 死亡時ゲームから除外" },
+  { id: "SOLDIER2", t: "mon", cost: 0, atk: 2, def: 2, name: "병사", nameJa: "兵士", text: "토큰 · 죽으면 게임에서 제외", textJa: "トークン · 死亡時ゲームから除外" },
 ];
 for (const c of NEW_CARDS7) { DB[c.id] = c; }
 

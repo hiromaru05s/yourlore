@@ -5,7 +5,7 @@
 import type { CardInst } from "../shared/types";
 import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds } from "../shared/cards";
 import { cardEl } from "./cardView";
-import { t, getLang } from "../i18n";
+import { t, getLang, cardText } from "../i18n";
 
 export type ViewSide = "me" | "opp";
 
@@ -77,12 +77,16 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   const from = handRect(side); const row = rowRect(side);
   if (!from || !row) return;
   const node = floatAt(cardEl(card, { size: "hand" }), from);
-  const cx = row.left + row.width / 2 - 50;
-  const cy = row.top + row.height / 2 - 78;
+  // 상대가 쓴 카드는 "작게 지나가서 뭘 냈는지 모르겠다"는 피드백 → 상대 카드는
+  // 화면 정중앙으로 크게(scale 2) 줌인해 한참 머무르며 읽을 시간을 준다.
+  const opp = side !== "me";
+  const cx = opp ? window.innerWidth / 2 - 50 : row.left + row.width / 2 - 50;
+  const cy = opp ? window.innerHeight / 2 - 78 : row.top + row.height / 2 - 78;
   await raf();
   node.style.transition = `left .38s ${EASE}, top .38s ${EASE}, transform .38s ${EASE}`;
-  node.style.left = cx + "px"; node.style.top = cy + "px"; node.style.transform = "scale(1.25)";
-  await wait(side === "me" ? 650 : 1850); // opponent's card lingers so you can read it
+  node.style.left = cx + "px"; node.style.top = cy + "px"; node.style.transform = opp ? "scale(2)" : "scale(1.25)";
+  if (opp) node.classList.add("fx-opp-cast"); // glow ring so the reveal reads as "enemy played this"
+  await wait(opp ? 2600 : 650); // opponent's card lingers so you can read it
   if (dest === "discard") {
     const to = rectOf("#" + discId(side));
     if (to) { node.style.transition = `left .45s ${EASE}, top .45s ${EASE}, transform .45s ${EASE}, opacity .45s`; node.style.left = to.left + "px"; node.style.top = to.top + "px"; node.style.transform = "scale(.45)"; node.style.opacity = "0"; }
@@ -329,6 +333,13 @@ export function zoomCard(c: CardInst): void {
   const wrap = document.createElement("div");
   wrap.className = "zoom-wrap";
   wrap.appendChild(cardEl(c));
+  // "(지속)" 스탯 변화 카드: 필드에 있는 동안만 유지된다는 각주
+  if (/\((?:지속|持続|lasting)\)/.test(cardText(c))) {
+    const note = document.createElement("div");
+    note.className = "zoom-note";
+    note.textContent = t("card.dur.note");
+    wrap.appendChild(note);
+  }
   if (c.tribe && TRIBES[c.tribe]) {
     const info = TRIBES[c.tribe][getLang()];
     const panel = document.createElement("div");

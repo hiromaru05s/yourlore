@@ -388,11 +388,21 @@
   background: linear-gradient(90deg, var(--brass-dim), transparent 85%); opacity: .6;
 }
 .log { overflow-y: auto; padding: 6px 12px 10px; font-size: 11.5px; }
-.log .turn-head { font-family: var(--mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--paper-dim); margin: 10px 0 4px; padding: 4px 8px; border-left: 2px solid var(--brass); background: linear-gradient(90deg, #4fb4ff14, #ffffff03 70%); border-radius: 0 4px 4px 0; box-shadow: inset 0 1px 0 #ffffff06; }
+.log .turn-head { font-family: var(--mono); font-size: 11.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--paper); margin: 10px 0 4px; padding: 5px 8px; border-left: 3px solid var(--brass); background: linear-gradient(90deg, #4fb4ff14, #ffffff03 70%); border-radius: 0 4px 4px 0; box-shadow: inset 0 1px 0 #ffffff06; }
 .log .turn-head.bot { border-color: var(--vermil); }
-.log .ln { padding: 2px 0; color: var(--paper-dim); line-height: 1.35; }
-.log .log-card { color: var(--brass-hi); cursor: pointer; text-decoration: underline dotted; }
+/* 내 턴 = 파랑 / 상대 턴 = 붉은 톤 — 로그 블록을 턴 주인 색으로 틴트 */
+.log .turn-head.mine { border-color: var(--gold-glow); background: linear-gradient(90deg, #4fb4ff22, #ffffff03 70%); }
+.log .turn-head.opp { border-color: var(--vermil); background: linear-gradient(90deg, #ff5b4518, #ffffff03 70%); }
+.log .ln { padding: 2px 6px; color: var(--paper-dim); line-height: 1.35; }
+.log .ln.mine { background: #4fb4ff0e; border-left: 2px solid #4fb4ff2e; border-radius: 0 3px 3px 0; }
+.log .ln.opp { background: #ff5b450c; border-left: 2px solid #ff5b452e; border-radius: 0 3px 3px 0; }
+.log .log-card { color: var(--brass-hi); font-weight: 800; cursor: pointer; text-decoration: underline dotted; }
 .log .log-card:hover { color: var(--gold-glow); }
+/* 카드 타입별 색: 몬스터/마법/함정/스타터 */
+.log .log-card.lc-mon { color: #8fd48f; }
+.log .log-card.lc-spell { color: #7fb7ff; }
+.log .log-card.lc-trap { color: #ffb066; }
+.log .log-card.lc-starter { color: #cdb6ff; }
 .log-foot { padding: 10px 12px; border-top: 1px solid var(--line); }
 
 /* ---- target hint banner ---- */
@@ -679,3 +689,38 @@
 .game.shake-hard { animation: bshake-hard .44s linear; }
 @keyframes bshake-soft { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(2px, -2px); } 50% { transform: translate(-3px, 2px); } 75% { transform: translate(2px, 1px); } }
 @keyframes bshake-hard { 0%, 100% { transform: translate(0, 0); } 12% { transform: translate(-7px, 5px); } 28% { transform: translate(7px, -6px); } 44% { transform: translate(-6px, -4px); } 60% { transform: translate(5px, 5px); } 76% { transform: translate(-4px, 2px); } 90% { transform: translate(2px, -1px); } }
+
+/* ============ 2026-07-07 playtest feedback pass ============ */
+/* in-game volume slider popover (sound FAB 위) */
+.vol-pop {
+  position: fixed; bottom: 126px; right: clamp(16px, 2.4vw, 54px); z-index: 56;
+  display: flex; align-items: center; gap: 8px; padding: 9px 13px; border-radius: 999px;
+  border: 1px solid var(--line); background: #0e1522ee; box-shadow: 0 4px 14px #000a;
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  opacity: 0; pointer-events: none; transform: translateY(6px); transition: .15s var(--ease);
+}
+.vol-pop.open { opacity: 1; pointer-events: auto; transform: none; }
+.vol-pop input[type="range"] { width: 132px; accent-color: var(--gold-glow); cursor: pointer; }
+
+/* 마켓 오클릭 방지: 1클릭 = 선택(배지), 재클릭 = 구매 */
+.market-cards .card.is-armed { outline: 2px solid var(--gold-glow); box-shadow: 0 0 16px #4fb4ff66; z-index: 6; }
+.buy-confirm {
+  position: absolute; left: 50%; bottom: 7px; transform: translateX(-50%);
+  background: #050a14e6; color: var(--gold-glow); border: 1px solid #4fb4ff88;
+  font-size: 9px; font-weight: 700; letter-spacing: .04em; white-space: nowrap;
+  padding: 3px 7px; border-radius: 5px; pointer-events: none; z-index: 7;
+}
+
+/* 다중 선택 픽커 (대숙청/컬 세례) */
+.picker-grid .card.is-picked { outline: 3px solid var(--gold-glow); box-shadow: 0 0 18px #4fb4ff77; transform: translateY(-4px); }
+.picker-grid .card { transition: transform .12s var(--ease), box-shadow .12s var(--ease); }
+
+/* 상대 스펠 리빌 — 중앙 확대 시 적색 글로우로 "상대가 냈다"를 표시 */
+.fx-opp-cast { box-shadow: 0 0 0 2px #ff5b4588, 0 0 40px #ff5b4555; border-radius: 10px; }
+
+/* 카드 확대 각주: (지속) 설명 */
+.zoom-note {
+  max-width: 240px; font-size: 12.5px; line-height: 1.5; color: var(--paper-dim);
+  background: linear-gradient(180deg, var(--ink-3), var(--ink-1)); border: 1px solid var(--brass-dim);
+  border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow-2);
+}

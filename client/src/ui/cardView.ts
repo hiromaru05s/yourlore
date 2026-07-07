@@ -76,9 +76,9 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     node.appendChild(el("div", "ad-atk", String(a)));
     node.appendChild(el("div", "ad-def", String(d)));
   }
-  // 효과 텍스트: "(시전 N)" 계열 표기는 배지로 대체되므로 제거하고, 구분자를 줄바꿈으로
+  // 효과 텍스트: "(시전 N)"/"(소환 N)" 계열 표기는 배지로 대체되므로 제거하고, 구분자를 줄바꿈으로
   let txt = cardText(c)
-    .replace(/\s*\((?:시전|Cast|発動)\s*\d+\)/g, "")
+    .replace(/\s*\((?:시전|Cast|発動|소환|Summon|召喚)\s*\d+\)/g, "")
     .replace(/ · /g, "\n")
     .replace(/ \/ /g, "\n")
     .trim();
@@ -87,9 +87,10 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     const effCls = "card-eff" + (txt.length > 140 ? " card-eff--tiny" : txt.length > 80 ? " card-eff--small" : "");
     const eff = el("div", effCls);
     if (hasCast) {
-      const cast = el("div", "card-cast", `<span class="cc-ico">⚡</span>${t("card.cast")} ${pc}`);
+      // monsters are SUMMONED, spells/traps are CAST — label the play-cost badge accordingly
+      const cast = el("div", "card-cast", `<span class="cc-ico">⚡</span>${t(c.t === "mon" ? "card.summon" : "card.cast")} ${pc}`);
       // instant tooltip anchored to the card (not inside the clipped .card-eff)
-      const tip = el("div", "cast-tip", t("card.cast.tip"));
+      const tip = el("div", "cast-tip", t(c.t === "mon" ? "card.summon.tip" : "card.cast.tip"));
       node.appendChild(tip);
       cast.addEventListener("pointerenter", () => tip.classList.add("show"));
       cast.addEventListener("pointerleave", () => tip.classList.remove("show"));

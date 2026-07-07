@@ -14,7 +14,7 @@ import { DB, STARTERS } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog } from "../ui/log";
 import * as A from "../ui/anim";
-import { cardPicker, confirmDialog, treasureModal, winModal } from "../ui/modal";
+import { cardPicker, cardPickerMulti, confirmDialog, treasureModal, winModal } from "../ui/modal";
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { sfx, type SfxName } from "../ui/sound";
@@ -65,6 +65,8 @@ export abstract class BaseController implements BoardHandlers {
   private static readonly LOCAL_TURN_SECS = 90;
   private turnTotal = 90; // full length of the CURRENT turn (for the ring's full-scale)
   private turnStartedWall = 0; // wall-clock ms when the current turn's timer started (anti instant-skip)
+  private lastEndTurnAt = 0;   // 턴종료 연타 가드: 마지막 endTurn 제출 시각
+  private purgePicks: string[] | null = null; // multi-select purge: remaining queued picks
   protected introShown = false; // coin-toss reveal plays once at game start
 
   constructor(root: HTMLElement, you: Side, exits: ControllerExits) {
@@ -113,7 +115,16 @@ export abstract class BaseController implements BoardHandlers {
   onBuyMarket(i: number) { this.fastForward(); this.submit({ type: "buyMarket", i }); }
   onBuySupply(i: number) { this.fastForward(); this.submit({ type: "buySupply", i }); }
   onRefresh() { this.fastForward(); this.submit({ type: "refresh" }); }
-  onEndTurn() { this.fastForward(); this.submit({ type: "endTurn" }); }
+  onEndTurn() {
+    // 연타 가드 — 빠른 더블/트리플 클릭이 (봇 턴이 순식간에 끝난 뒤) 방금 시작된
+    // 내 새 턴까지 즉시 끝내버리는 사고 방지. 900ms 내 재클릭과 턴 시작 직후
+    // 500ms 내 클릭(이전 턴을 노린 잔여 클릭일 가능성이 높음)은 무시한다.
+    const now = Date.now();
+    if (now - this.lastEndTurnAt < 900) return;
+    if (this.state?.cur === this.you && now - this.turnStartedWall < 500 && this.state.turn > 1) return;
+    this.lastEndTurnAt = now;
+    this.fastForward(); this.submit({ type: "endTurn" });
+  }
   async onSurrender() {
     const ok = await confirmDialog({ title: t("surrender.title"), body: t("surrender.body"), confirm: t("common.yes"), cancel: t("common.no"), danger: true });
     if (ok) this.submit({ type: "surrender", player: this.you });
@@ -151,7 +162,7 @@ export abstract class BaseController implements BoardHandlers {
 
   private consumeLogs(events: GameEvent[]): void {
     for (const e of events) {
-      if (e.type === "turnHeader") this.log.turnHeader(e.turn, e.name, e.isBot);
+      if (e.type === "turnHeader") this.log.turnHeader(e.turn, e.name, e.isBot, e.player != null ? e.player === this.you : undefined);
       else if (e.type === "log") {
         // "can't play/attack" rejection lines are NOT written to the battle log (they'd
         // just spam it). Only the ACTING player gets a friendly popup. Online: the server
@@ -382,12 +393,26 @@ export abstract class BaseController implements BoardHandlers {
     if (res.state !== this.state) return; // a newer batch is queued — let it drive follow-ups
     const g = this.state;
     if (g.over) { this.showWin(); return; }
+    if (!g.pending || g.pending.kind !== "purge") this.purgePicks = null; // 제외 선택이 끝나면 큐 정리
     if (g.pending && g.cur === this.you) {
       if (g.pending.kind === "purge") {
+        // 대숙청/컬 세례: 한 장씩 N번 고르는 대신 한 번에 다중 선택 → 순차 제출.
+        // (엔진 프로토콜은 그대로 1장씩 pick — 클라가 큐로 자동 제출한다)
+        if (this.purgePicks) {
+          const next = this.purgePicks.shift();
+          if (next === undefined) { this.purgePicks = null; setTimeout(() => this.submit({ type: "pick", uid: null }), 0); } // 남은 pending 닫기
+          else setTimeout(() => this.submit({ type: "pick", uid: next }), 0);
+          return;
+        }
         const me = g.players[this.you];
         const pool = [...me.deck, ...me.discard].sort((a, b) => a.cost - b.cost);
         const hint = getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint;
-        cardPicker(hint, pool, (uid) => this.submit({ type: "pick", uid }));
+        const max = Math.min((g.pending.data?.val as number) || 1, pool.length);
+        cardPickerMulti(hint, pool, max, (uids) => {
+          if (!uids.length) { this.submit({ type: "pick", uid: null }); return; } // 아무것도 안 고름 = 취소
+          this.purgePicks = uids.slice(1);
+          this.submit({ type: "pick", uid: uids[0] });
+        });
         return;
       }
       if (g.pending.kind === "seek" || g.pending.kind === "recall") {

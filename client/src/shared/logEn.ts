@@ -49,7 +49,7 @@ const R: [RegExp, string][] = [
   [/탈취\(소생\)/g, "stolen (revived)"],
   [/파괴 \+ 게임에서 제외/g, "destroyed + exiled from the game"],
   [/게임에서 제외할 카드 선택 \(3장\)/g, "pick cards to exile (3)"],
-  [/게임에서 제외할 카드 선택 \(원하는 만큼, 취소로 종료\)/g, "pick cards to exile (any number; cancel to stop)"],
+  [/게임에서 제외할 카드 선택 \(원하는 만큼\)/g, "pick cards to exile (any number)"],
   [/게임에서 제외할 카드 선택/g, "pick a card to exile from the game"],
   [/게임에서 제외/g, "exiled from the game"],
   [/덱에서 1장 선택/g, "pick 1 card from your deck"],
@@ -141,10 +141,12 @@ const R: [RegExp, string][] = [
   [/(\d+)% 성공: /g, "$1% success: "],
   [/(\d+)회째! 이후 피격 시마다 체력 \+(\d+)/g, "use #$1! now restores +$2 HP when hit"],
   [/상대는 이후 매 턴 (\d+) 데미지\(중첩 불가\)/g, "opponent now takes $1 damage each turn (no stacking)"],
-  [/아군 전체 공격 \+(\d+)\(이번 턴\) \+ 공격 \+(\d+)\(영구\)/g, "all allies ATK +$1 (this turn) + ATK +$2 (permanent)"],
+  [/상대 몬스터 전체 공격 -(\d+)\(지속\)/g, "all enemy monsters ATK -$1 (lasting)"],
+  [/아군 전체 공격 \+(\d+)\(이번 턴\) \+ 공격 \+(\d+)\(지속\)/g, "all allies ATK +$1 (this turn) + ATK +$2 (lasting)"],
   [/아군 전체 공격 \+(\d+)/g, "all allies ATK +$1"],
   [/\(이번 턴\)/g, "(this turn)"],
   [/\(영구\)/g, "(permanent)"],
+  [/\(지속\)/g, "(lasting)"],
   [/체력 (\d+)\+ → 최대 체력 \+(\d+)/g, "HP $1+ → max HP +$2"],
   [/체력 완전 회복/g, "fully restored HP"],
   [/체력 (\d+) 회복/g, "restored $1 HP"],
@@ -178,6 +180,8 @@ const R: [RegExp, string][] = [
   [/자신/g, "self"],
   [/상대/g, "opponent"],
   [/승리!?/g, "wins!"],
+  // generic cast line ("P <card> 발동") — MUST stay after the specific 발동 rules above
+  [/발동/g, "activated"],
 ];
 
 const TRIBE_EN: Record<string, string> = { "고독": "Solitary", "고귀": "Noble", "포식": "Devour", "귀족": "Aristocrat", "시초": "Origin" };

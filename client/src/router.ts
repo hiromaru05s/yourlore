@@ -38,7 +38,7 @@ export class App {
       aIdentify(this.user.id, { verified: true });
       // crashed / closed mid-game? reconnect to the in-progress room instead of the home screen.
       const g = loadActiveGame();
-      if (g) this.onlineGame(g.roomId, g.you, "?");
+      if (g) this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked);
       else this.home();
     } else this.login();
   }
@@ -58,18 +58,18 @@ export class App {
   cards(): void { setPresence("menu"); this.swap(() => mountCards(this)); }
   botGame(): void { setPresence("bot"); aCapture("game_start", { mode: "bot" }); this.swap(() => mountGame(this, { mode: "bot" })); }
   // entering a lobby with a live game still stored → rejoin it instead of re-queuing
-  onlineLobby(): void { const g = loadActiveGame(); if (g) return this.onlineGame(g.roomId, g.you, "?"); setPresence("queue"); this.swap(() => mountLobby(this)); }
-  rankedLobby(): void { const g = loadActiveGame(); if (g) return this.onlineGame(g.roomId, g.you, "?"); setPresence("queue"); this.swap(() => mountLobby(this, true)); }
+  onlineLobby(): void { const g = loadActiveGame(); if (g) return this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked); setPresence("queue"); this.swap(() => mountLobby(this)); }
+  rankedLobby(): void { const g = loadActiveGame(); if (g) return this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked); setPresence("queue"); this.swap(() => mountLobby(this, true)); }
   leaderboard(): void { setPresence("menu"); this.swap(() => mountLeaderboard(this)); }
   profile(userId?: string, tab?: ProfileTab): void { setPresence("menu"); this.swap(() => mountProfile(this, userId, tab)); }
   friends(): void { setPresence("menu"); this.swap(() => mountFriends(this)); }
   settings(): void { this.profile(undefined, "settings"); } // settings now lives as a profile tab
   shop(): void { setPresence("menu"); this.swap(() => mountShop(this)); }
-  onlineGame(roomId: string, you: Side, oppName: string, oppAvatar: string | null = null): void {
+  onlineGame(roomId: string, you: Side, oppName: string, oppAvatar: string | null = null, ranked = false): void {
     setPresence("online");
     aCapture("game_start", { mode: "online" });
-    saveActiveGame(roomId, you); // remember it so a crash/close can rejoin this exact room
-    this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName, oppAvatar }));
+    saveActiveGame(roomId, you, ranked); // remember it so a crash/close can rejoin this exact room
+    this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName, oppAvatar, ranked }));
   }
 
   async logout(): Promise<void> {

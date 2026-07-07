@@ -62,14 +62,14 @@ const NAMES: Record<string, string> = {
 };
 
 const TEXTS: Record<string, string> = {
-  M3: "On summon: draw 1 card", M5: "On summon: take 2 damage", M6: "On summon: -2 DEF to an enemy monster (permanent)",
+  M3: "On summon: draw 1 card", M5: "On summon: take 2 damage", M6: "On summon: -2 DEF to an enemy monster (lasting)",
   M7: "On summon: deal 2 damage to the opponent", M8: "On summon: restore 1 HP", M9: "On summon: refresh your offer row for free",
   M10: "While on the field: max mana +1", M11: "ATK +1 while you control 2+ monsters",
-  M12: "On summon: -1 ATK to an enemy monster (permanent)", M13: "On summon: destroy 1 enemy set trap",
+  M12: "On summon: -1 ATK to an enemy monster (lasting)", M13: "On summon: destroy 1 enemy set trap",
   NGA3: "On summon: take 2 damage", NGA4: "On summon: take 3 damage",
   NHEX: "On summon: deal 5 damage to the opponent", NSPR: "While on the field: max mana +1. On summon: draw 2",
   NMD2: "On summon: draw 1 card", NMD4: "On summon: draw 2 cards", NMD6: "On summon: draw 5 cards",
-  MIMIC: "Summoned to the opponent's field by a failed treasure chest",
+  MIMIC: "Summoned to the opponent's field by a failed treasure chest · Exiled from the game when it dies",
   MIMIC2: "While this card is on the field, neither player can use Treasure Chests (Attune - Arcane still works)",
   CREATOR: "On summon: summon 3 random monsters from both decks/graveyards to your field",
   MANA_GIANT: "While on the field: max mana +2",
@@ -81,7 +81,7 @@ const TEXTS: Record<string, string> = {
   S4: "Draw 3 cards (Cast 1). Once per turn", S5: "Opponent's next offer shrinks 3 -> 2 (Cast 2)",
   S6: "Take any 1 card from your deck (Cast 2)", S7: "+3 ATK to all your monsters (this turn) + max HP +2",
   S8: "Take any 1 card from your graveyard", S9: "Deal 4 damage to the opponent + restore 3 HP",
-  S10: "Draw 2 cards", S11: "Deal 4 damage to the opponent", S12: "+2 ATK / +1 DEF to one of your monsters (permanent)",
+  S10: "Draw 2 cards", S11: "Deal 4 damage to the opponent", S12: "+2 ATK / +1 DEF to one of your monsters (lasting)",
   S13: "Deal 9 damage to the opponent", S14: "Restore 10 HP + draw 1 card", S15: "Destroy 1 enemy monster",
   SX2: "Destroy 1 enemy set trap", SX4: "Destroy 2 enemy set traps", SX6: "Destroy all enemy set traps + draw 1",
   E1: "For 2 turns, the opponent cannot summon monsters of cost 3 or less",
@@ -125,7 +125,7 @@ const TEXTS: Record<string, string> = {
   GUILD_CHEST: "10%: max mana +3 / 10%: +1 draw at turn start (permanent) / 20%: max mana +2 / 10%: max mana +1 / 10%: max HP +10 / 20%: Novice & Adept Assassins on enemy field / 20%: Novice, Adept & Elite Assassins + take 10 damage (Cast 3)",
   GUILD_EYE: "Enchantment: draw 1 extra card at the start of your turn",
   GLASS_BAN: "Enchantment: monsters with DEF 1 or less cannot attack (both players) (Cast 2)",
-  SHATTER: "Take 5 damage. All monsters on the field have their DEF set to 0 (permanent) (Cast 2)",
+  SHATTER: "Take 5 damage. All monsters on the field have their DEF set to 0 (lasting) (Cast 2)",
   SCARECROW: "Summon three 0/0 Scarecrows to your field",
   LEVY: "Summon three 2/2 Soldiers to your field (Cast 4)",
   INQUISITION: "Deal 4 damage per tribe monster in the opponent's deck, graveyard and field (Cast 2)",
@@ -149,7 +149,7 @@ const TEXTS: Record<string, string> = {
   WORLD_GUARD: "On summon: if your max HP is 90 or more, max mana +1 and max HP +15",
   DOUBLE_EXEC: "Destroy 2 enemy monsters",
   MASSACRE: "Destroy ALL enemy monsters, then take 8 damage",
-  TOKEN00: "—", SOLDIER2: "—",
+  TOKEN00: "Token · Exiled from the game when it dies", SOLDIER2: "Token · Exiled from the game when it dies",
   WALLBREAK1: "Destroy 1 enemy monster with ATK 1 or less (Cast 1)",
   WALLBREAK2: "Destroy all enemy monsters with ATK 2 or less",
   SNIPE1: "Destroy 1 enemy monster with DEF 1 or less (Cast 1)",
@@ -166,7 +166,7 @@ const TEXTS: Record<string, string> = {
   T6: "Destroy the attacking monster + reflect half its ATK (Cast 3)",
   T8: "When attacked: 4 damage to the attacker's owner", T9: "Negate the attack + restore 3 HP (Cast 1)",
   T10: "Destroy the attacking monster + restore 2 HP", T11: "When attacked: draw 5 cards",
-  T12: "Negate this attack + all your monsters +4 DEF (permanent)",
+  T12: "Negate this attack + all your monsters +4 DEF (lasting)",
   T13: "Destroy the attacking monster + 4 damage to the opponent (Cast 3)",
   NT_NULL3: "Negate 1 enemy spell of cost 2 or less", NT_NULL5: "Negate 1 enemy spell + 4 damage to the opponent",
   NT_NULL6: "Negate 1 enemy spell + 8 damage to the opponent",
@@ -176,7 +176,7 @@ const TEXTS: Record<string, string> = {
   NT_SEAL5: "While this card is on the field, neither player can cast spells",
   STARTER_TRASH: "Mana 1: exile this card from the game (thins your deck)", STARTER_CHEST: "Mana 1: open the treasure chest",
   STARTER_MANA: "Mana 3: max mana +1",
-  TGE1: "[Origin] tribe synergy. Summon cost 2", TGE2: "[Origin] On summon: max HP -2", TGE3: "[Origin] On summon: max HP -1",
+  TGE1: "[Origin] tribe synergy", TGE2: "[Origin] On summon: max HP -2", TGE3: "[Origin] On summon: max HP -1",
   TGE4: "[Origin] tribe synergy", TGE5: "[Origin] tribe synergy", TGE6: "[Origin] On summon: max HP +1", TGE7: "[Origin] On summon: max HP +2",
 };
 // tribe monsters share one text
@@ -227,11 +227,11 @@ const RULES: [RegExp, string][] = [
   [/^공격 무효 \+ 최대 마나 \+(\d+)$/, "Negate the attack + max mana +$1"],
   [/^공격 무효 \+ 최대 마나 -(\d+)로 상대 몬스터 최대 (\d+)체 파괴$/, "Negate the attack + max mana -$1 to destroy up to $2 enemy monsters"],
   [/^공격 절반 \+ 공격측에 (\d+) 데미지$/, "Halve the attack + $1 damage to the attacker's owner"],
-  [/^공격할 때마다 자신의 공격 -(\d+)\(영구\)$/, "Each time it attacks: its ATK -$1 (permanent)"],
+  [/^공격할 때마다 자신의 공격 -(\d+)\(지속\)$/, "Each time it attacks: its ATK -$1 (lasting)"],
   [/^공격해온 몬스터의 공격력만큼 반사$/, "Reflect the attacking monster's full ATK"],
   [/^매 턴 마나 (\d+)로 방어 \+(\d+), 체력 \+(\d+) 회복$/, "Each turn, pay $1 mana: +$2 DEF and restore $3 HP"],
-  [/^매 턴 시작 시 공격 \+(\d+)\(영구\)$/, "At the start of each turn: +$1 ATK (permanent)"],
-  [/^매 턴 시작 시 방어 \+(\d+)\(영구\)$/, "At the start of each turn: +$1 DEF (permanent)"],
+  [/^매 턴 시작 시 공격 \+(\d+)\(지속\)$/, "At the start of each turn: +$1 ATK (lasting)"],
+  [/^매 턴 시작 시 방어 \+(\d+)\(지속\)$/, "At the start of each turn: +$1 DEF (lasting)"],
   [/^매 턴 시작 시 상대 체력에 (\d+) 데미지$/, "At the start of each turn: $1 damage to the opponent"],
   [/^매 턴 시작 시 체력 \+(\d+) 회복$/, "At the start of each turn: restore $1 HP"],
   [/^상대 체력에 (\d+) 데미지 \(상대 체력 (\d+) 이하면 사용 불가\)$/, "Deal $1 damage (unusable if opponent HP <= $2)"],
@@ -242,10 +242,10 @@ const RULES: [RegExp, string][] = [
   [/^상대 체력에 (\d+) 데미지, (\d+)% 확률로 상대 최대 마나 -(\d+)$/, "Deal $1 damage, $2% chance of enemy max mana -$3"],
   [/^상대 체력에 (\d+) 데미지, (\d+)% 확률로 자신 최대 마나 -(\d+)$/, "Deal $1 damage, $2% chance of YOUR max mana -$3"],
   [/^상대 체력에 (\d+) 데미지$/, "Deal $1 damage to the opponent"],
-  [/^상대 플레이어에게 데미지를 입힐 때마다 \+(\d+)\/\+(\d+)\(영구\)$/, "Whenever it damages the opponent: +$1/+$2 (permanent)"],
+  [/^상대 플레이어에게 데미지를 입힐 때마다 \+(\d+)\/\+(\d+)\(지속\)$/, "Whenever it damages the opponent: +$1/+$2 (lasting)"],
   [/^상시: 몬스터를 소환할 때 그 몬스터 공격 \+(\d+)$/, "Aura: monsters you summon gain +$1 ATK"],
   [/^상시: 자신 필드의 아군 몬스터 방어 \+(\d+)$/, "Aura: your monsters have +$1 DEF"],
-  [/^소환 코스트 (\d+)\. 소환시 (\d+)%로 자신을 복제 소환$/, "Summon cost $1. On summon: $2% chance to clone itself"],
+  [/^소환시 (\d+)%로 자신을 복제 소환$/, "On summon: $1% chance to clone itself"],
   [/^소환시: (\d+)장 드로우$/, "On summon: draw $1"],
   [/^소환시: 공격 (\d+) 이하 상대 몬스터 전멸$/, "On summon: wipe all enemy monsters with ATK $1 or less"],
   [/^소환시: 덱에서 랜덤 몬스터 (\d+)체 무료 소환$/, "On summon: summon $1 random monsters from your deck for free"],
@@ -256,12 +256,12 @@ const RULES: [RegExp, string][] = [
   [/^소환시: 상대에 (\d+) 데미지 \+ 상대 함정 (\d+)장 파괴$/, "On summon: $1 damage + destroy $2 enemy trap"],
   [/^소환시: 상대에 (\d+) 데미지 \+ 최대 마나 \+(\d+)\. 매 턴 패의 보물상자를 묘지로 보내면 (\d+)장 드로우$/, "On summon: $1 damage + max mana +$2. Each turn, discard a chest from hand to draw $3"],
   [/^소환시: 상대에 (\d+) 데미지\. 이후 상대는 매 턴 (\d+) 데미지\(중첩 불가\)$/, "On summon: $1 damage. The opponent then takes $2 damage each turn (doesn't stack)"],
-  [/^소환시: 적 몬스터 방어 -(\d+)\(영구\)$/, "On summon: -$1 DEF to an enemy monster (permanent)"],
+  [/^소환시: 적 몬스터 방어 -(\d+)\(지속\)$/, "On summon: -$1 DEF to an enemy monster (lasting)"],
   [/^소환시: 체력 (\d+) 회복$/, "On summon: restore $1 HP"],
   [/^소환시: 최대 체력 \+(\d+), 최대 마나 \+(\d+)$/, "On summon: max HP +$1, max mana +$2"],
   [/^아군 몬스터 (\d+)체 이상이면 공격 \+(\d+)$/, "ATK +$2 while you control $1+ monsters"],
   [/^아군 전체 공격 \+(\d+) · (\d+)%로 (\d+)코스트 이하 몬스터 무작위 소환$/, "All your monsters +$1 ATK. $2% chance to summon a random monster of cost $3 or less"],
-  [/^아군 전체 공격 \+(\d+)\(이번 턴\) · 이번 턴 종료 후 공격 \+(\d+)\(영구\)$/, "All your monsters +$1 ATK (this turn), then +$2 ATK (permanent)"],
+  [/^아군 전체 공격 \+(\d+)\(이번 턴\) · 이번 턴 종료 후 공격 \+(\d+)\(지속\)$/, "All your monsters +$1 ATK (this turn), then +$2 ATK (lasting)"],
   [/^아군 전체 공격 \+(\d+)\(이번 턴\)$/, "All your monsters +$1 ATK (this turn)"],
   [/^이 카드가 필드에 있는 한 상대 최대 마나 -(\d+)$/, "While on the field: enemy max mana -$1"],
   [/^자신 몬스터 (\d+)체 공격 \+(\d+)\(이번 턴\)$/, "$1 of your monsters gain +$2 ATK (this turn)"],
@@ -292,10 +292,10 @@ function genNameEn(ko: string): string | undefined {
   return undefined;
 }
 function genTextEn(ko: string): string | undefined {
-  // split off a trailing "(시전 N)"
-  const m = ko.match(/^(.*?)\s*\(시전 (\d+)\)$/);
+  // split off a trailing "(시전 N)" / "(소환 N)"
+  const m = ko.match(/^(.*?)\s*\((시전|소환) (\d+)\)$/);
   const body = m ? m[1] : ko;
-  const cast = m ? ` (Cast ${m[2]})` : "";
+  const cast = m ? ` (${m[2] === "소환" ? "Summon" : "Cast"} ${m[3]})` : "";
   for (const [re, en] of RULES) {
     if (re.test(body)) return body.replace(re, en) + cast;
   }

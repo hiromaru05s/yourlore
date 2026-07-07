@@ -146,6 +146,49 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
 }
 
 /**
+ * Multi-select picker (대숙청/컬 세례 등): toggle up to `max` cards, then confirm once.
+ * onDone receives the selected uids in pick order ([] = cancelled) — the caller
+ * submits them to the engine one at a time (the protocol is unchanged).
+ */
+export function cardPickerMulti(title: string, pool: CardInst[], max: number, onDone: (uids: string[]) => void): void {
+  const m = document.createElement("div");
+  m.className = "modal"; m.style.maxWidth = "720px";
+  m.innerHTML =
+    `<h2 style="font-size:14px">${title}</h2>` +
+    `<div class="picker-grid" style="display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:16px 0;max-height:54vh;overflow:auto"></div>` +
+    `<div class="picker-count" style="text-align:center;font-size:12px;opacity:.8;margin-bottom:8px"></div>` +
+    `<div class="modal-row"></div>`;
+  const grid = m.querySelector(".picker-grid")!;
+  const count = m.querySelector(".picker-count") as HTMLElement;
+  const picked: string[] = [];
+  const paint = () => {
+    count.textContent = t("picker.count").replace("{n}", String(picked.length)) + (max < 99 ? ` / ${max}` : "");
+    ok.disabled = picked.length === 0;
+    ok.textContent = t("picker.confirm") + (picked.length ? ` (${picked.length})` : "");
+  };
+  pool.forEach((c) => {
+    const card = cardEl(c, { playable: true });
+    card.onclick = () => {
+      const i = picked.indexOf(c.uid);
+      if (i >= 0) { picked.splice(i, 1); card.classList.remove("is-picked"); }
+      else if (picked.length < max) { picked.push(c.uid); card.classList.add("is-picked"); }
+      paint();
+    };
+    bindZoom(card, c); // 우클릭 / 길게 누르면 확대
+    grid.appendChild(card);
+  });
+  const ok = document.createElement("button");
+  ok.className = "btn btn-gold";
+  ok.onclick = () => { closeOverlay(); onDone(picked); };
+  const cancel = document.createElement("button");
+  cancel.className = "btn btn-ghost"; cancel.textContent = t("common.cancel");
+  cancel.onclick = () => { closeOverlay(); onDone([]); };
+  m.querySelector(".modal-row")!.append(ok, cancel);
+  paint();
+  mount(m);
+}
+
+/**
  * Browse-only deck viewer with two tabs: the FULL deck composition and the cards
  * still REMAINING in the deck (undrawn). `remaining` is null for the opponent
  * (their undrawn cards are hidden info) → only the composition tab is shown.

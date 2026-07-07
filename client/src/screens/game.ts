@@ -12,7 +12,7 @@ import { setCoinProfiles } from "../game/controller";
 type GameOpts =
   | { mode: "bot" }
   | { mode: "tutorial" }
-  | { mode: "online"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null };
+  | { mode: "online"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null; ranked?: boolean };
 
 export function mountGame(app: App, opts: GameOpts): Screen {
   const root = document.createElement("div");
@@ -29,7 +29,8 @@ export function mountGame(app: App, opts: GameOpts): Screen {
 
   const exits: ControllerExits = {
     onHome: () => (opts.mode === "tutorial" ? app.tutorial() : app.home()),
-    onRematch: () => (opts.mode === "bot" ? app.botGame() : opts.mode === "tutorial" ? app.tutorialGame() : app.onlineLobby()),
+    // 랭크전 "다시하기"는 랭크 큐로 돌아가야 한다 (노말 큐로 새던 버그 수정)
+    onRematch: () => (opts.mode === "bot" ? app.botGame() : opts.mode === "tutorial" ? app.tutorialGame() : opts.ranked ? app.rankedLobby() : app.onlineLobby()),
   };
 
   const ctrl =
