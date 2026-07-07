@@ -220,8 +220,11 @@ const TEXTS: Record<string, string> = {
   NT_SEAL5: "While this card is on the field, neither player can cast spells",
   STARTER_TRASH: "Mana 1: exile this card from the game (thins your deck)", STARTER_CHEST: "Mana 1: open the treasure chest",
   STARTER_MANA: "Mana 3: max mana +1",
-  TGE1: "[Origin] tribe synergy", TGE2: "[Origin] On summon: max HP -2", TGE3: "[Origin] On summon: max HP -1",
-  TGE4: "[Origin] tribe synergy", TGE5: "[Origin] tribe synergy", TGE6: "[Origin] On summon: max HP +1", TGE7: "[Origin] On summon: max HP +2",
+  TGE1: "[Origin] tribe synergy", TGE2: "[Origin] tribe synergy", TGE3: "[Origin] tribe synergy",
+  TGE4: "[Origin] On summon: draw 2 cards",
+  TGE5: "[Origin] On summon: draw 1 — if it's a monster, set a chosen enemy monster's ATK to 2",
+  TGE6: "[Origin] On summon: draw 1 — if it's a monster, you may buy any Origin card of cost 5+ by paying its mana",
+  TGE7: "[Origin] Aura: all your 'Origin' monsters +3/+3",
 };
 // tribe monsters share one text
 for (const id of ["TSO2","TSO3","TSO5"]) TEXTS[id] = "[Solitary] tribe synergy";

@@ -421,6 +421,16 @@ export abstract class BaseController implements BoardHandlers {
         });
         return;
       }
+      if (g.pending.kind === "giantShop") {
+        // 시초의 거인: 코스트 5+ 시초 카드 구매 (지불 가능한 것만 제시)
+        const me = g.players[this.you];
+        const ids = (g.pending.data?.ids as string[] | undefined) ?? [];
+        const pool = ids.filter((id) => DB[id] && DB[id].cost <= me.mana).map((id) => ({ uid: id, ...DB[id] }));
+        const hint = getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint;
+        if (!pool.length) { this.submit({ type: "pick", uid: null }); return; }
+        cardPicker(hint, pool, (uid) => this.submit({ type: "pick", uid }));
+        return;
+      }
       if (g.pending.kind === "reroll") {
         // 운명의 수레바퀴: 결과 유지 / 다시 굴리기
         void confirmDialog({ title: t("wheel.title"), body: t("wheel.body"), confirm: t("wheel.reroll"), cancel: t("wheel.keep") })

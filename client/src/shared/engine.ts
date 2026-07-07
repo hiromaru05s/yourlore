@@ -68,13 +68,17 @@ export function effAtk(p: PlayerState, m: FieldMon): number {
   let a = m.atk! + (m.tempAtk || 0) + (m.atkMod || 0);
   if (m.condAtk === "twoPlus" && p.field.length >= 2) a += m.val ?? 2; // 보너스량 = val (기본 2)
   if (m.condAtk === "hp45" && p.hp >= 45) a += 1; // 혈기왕성: 체력 45+면 +1/+3
+  // 시초의 군주(originLord): 자신 필드의 모든 시초 몬스터 +3/+3 (군주 1장당)
+  if (m.tribe === "시초") a += 3 * p.field.filter((x) => x.aura === "originLord").length;
   return Math.max(0, a);
 }
 export function effDef(p: PlayerState, m: FieldMon): number {
   // 은빛 성벽(wallDef): +val to every friendly monster's defense while on field
   const wall = p.field.filter((x) => x.aura === "wallDef").reduce((s, x) => s + (x.val || 3), 0);
   const hpb = m.condAtk === "hp45" && p.hp >= 45 ? 3 : 0;
-  return Math.max(0, m.def! + (m.defMod || 0) + wall + hpb);
+  // 시초의 군주(originLord): 자신 필드의 모든 시초 몬스터 +3/+3 (군주 1장당)
+  const lord = m.tribe === "시초" ? 3 * p.field.filter((x) => x.aura === "originLord").length : 0;
+  return Math.max(0, m.def! + (m.defMod || 0) + wall + hpb + lord);
 }
 /** Cost to BUY a card, after 동족의 부름(kinDiscount): tribe cards cost -2 (min 1) while you control a tribe monster. */
 export function buyCost(p: PlayerState, c: CardInst): number {
@@ -916,6 +920,31 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       }
       break;
     }
+    case "guardianDraw": { // 시초의 수호자: 1장 드로우 → 몬스터면 적 1체 공격력을 2로
+      const gd = ctx.drawN(p, 1);
+      const drew = gd > 0 ? p.hand[p.hand.length - 1] : null;
+      const isMon = !!drew && drew.t === "mon";
+      ctx.log(`  └ 1장 드로우 — ${isMon ? "몬스터다!" : "몬스터가 아니다"}`, `  └ 1枚ドロー — ${isMon ? "モンスターだ！" : "モンスターではない"}`);
+      if (isMon && o.field.length && !g.pending) {
+        g.pending = { kind: "oppMon", hint: "공격력을 2로 만들 적 몬스터 선택", hintJa: "攻撃力を2にする敵モンスターを選択", reason: "setAtk2", allowCancel: false, data: {} };
+        ctx.ev.push({ type: "needTarget", pending: g.pending });
+      }
+      break;
+    }
+    case "giantDraw": { // 시초의 거인: 1장 드로우 → 몬스터면 코스트 5+ 시초 카드를 마나로 구매 가능
+      const gd = ctx.drawN(p, 1);
+      const drew = gd > 0 ? p.hand[p.hand.length - 1] : null;
+      const isMon = !!drew && drew.t === "mon";
+      ctx.log(`  └ 1장 드로우 — ${isMon ? "몬스터다!" : "몬스터가 아니다"}`, `  └ 1枚ドロー — ${isMon ? "モンスターだ！" : "モンスターではない"}`);
+      if (isMon && !g.pending) {
+        const ids = ALL_IDS.filter((id) => DB[id].tribe === "시초" && DB[id].cost >= 5);
+        if (ids.length) {
+          g.pending = { kind: "giantShop", hint: "거인의 교역 — 마나를 지불하고 구매할 코스트 5+ 시초 카드 선택", hintJa: "巨人の交易 — マナを払って購入するコスト5+の始原カードを選択", reason: "giantShop", allowCancel: true, data: { ids } };
+          ctx.ev.push({ type: "needTarget", pending: g.pending });
+        }
+      }
+      break;
+    }
     case "eggMaster": { // 부화 마스터: 자신 필드의 모든 알 내구도 +v
       let ek = 0;
       p.field.forEach((mm) => { if (mm.hatch != null) { mm.dur = (mm.dur ?? 0) + (v || 1); ek++; } });
@@ -1690,43 +1719,78 @@ function checkTribe(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): void {
   const count = new Set(p.field.filter((x) => x.tribe === tribe).map((x) => x.id)).size;
   const o = g.players[0] === p ? g.players[1] : g.players[0];
   const fire = (n: number): boolean => { const k = `${tribe}:${n}`; if (p.tribesFired.includes(k)) return false; p.tribesFired.push(k); return true; };
-  // 다종족 계약: 시너지 효과 2배 (동일 효과를 2회 적용)
-  const times = p.enchants.some((e) => e.card.ench === "tribeContract") ? 2 : 1;
-  const run = (n: number): void => {
-    if (times === 2) ctx.log(`  └ <span class="good">다종족 계약: 시너지 2배!</span>`, `  └ <span class="good">多種族契約: シナジー2倍！</span>`);
-    for (let i = 0; i < times && !g.over; i++) applyTribe(g, ctx, p, o, tribe, n);
-  };
-  if (count >= 4 && fire(4)) run(4);
-  else if (count >= 3 && fire(3)) run(3);
-  else if (count >= 2 && fire(2)) run(2);
+  // 다종족 계약: 시너지 효과 2배 — 계약이 필드에 몇 장이든 2배는 1번만 (중첩 금지)
+  const mult = p.enchants.some((e) => e.card.ench === "tribeContract") ? 2 : 1;
+  // 각 티어는 게임당 1회씩, 2종/3종(/4종) 보상을 "따로" 지급 — 티어를 건너뛰어 도달해도 낮은 티어부터 순서대로
+  for (const n of [2, 3, 4]) {
+    if (g.over) return;
+    if (count >= n && fire(n)) {
+      if (mult === 2) ctx.log(`  └ <span class="good">다종족 계약: 시너지 2배!</span>`, `  └ <span class="good">多種族契約: シナジー2倍！</span>`);
+      applyTribe(g, ctx, p, o, tribe, n, mult);
+    }
+  }
 }
-function applyTribe(g: GameState, ctx: Ctx, p: PlayerState, o: PlayerState, tribe: string, n: number): void {
+function applyTribe(g: GameState, ctx: Ctx, p: PlayerState, o: PlayerState, tribe: string, n: number, mult = 1): void {
   ctx.log(`<span class="good">[${tribeName(tribe, "ko")}] 동족 ${n}마리 시너지!</span>`, `<span class="good">[${tribeName(tribe, "ja")}] 同族 ${n}体シナジー!</span>`);
+  const gainHp = (v: number): void => { p.maxHp += v; p.hp += v; ctx.ev.push({ type: "heal", player: g.players.indexOf(p) as Side, amount: v }); ctx.log(`  └ 최대 체력 +${v} (${p.maxHp})`, `  └ 最大体力+${v} (${p.maxHp})`); };
+  const gainMana = (v: number): void => { p.maxMana += v; ctx.log(`  └ 최대 마나 +${v} (${p.maxMana})`, `  └ 最大マナ+${v} (${p.maxMana})`); };
   if (tribe === "고독") {
-    const hp = n === 2 ? 10 : 30; p.maxHp += hp; p.hp += hp; ctx.ev.push({ type: "heal", player: g.players.indexOf(p) as Side, amount: hp });
-    if (n === 3) p.maxMana += 1;
+    if (n === 2) gainHp(25 * mult);
+    else if (n === 3) { gainHp(50 * mult); gainMana(2 * mult); }
   } else if (tribe === "고귀") {
-    p.maxMana += n === 2 ? 1 : 3;
-    if (n === 3) for (let i = 0; i < 2 && o.traps.length; i++) { const t = o.traps.splice(randInt(g, o.traps.length), 1)[0]; o.discard.push(t.card); }
+    if (n === 2) {
+      p.bonusDrawPerm += 1 * mult;
+      ctx.log(`  └ 매 턴 드로우 +${1 * mult}(영구)`, `  └ 毎ターンドロー+${1 * mult}(永続)`);
+      let k = 0;
+      for (let i = 0; i < 2 * mult && o.traps.length; i++) { const t = o.traps.splice(randInt(g, o.traps.length), 1)[0]; o.discard.push(t.card); k++; }
+      if (k > 0) ctx.log(`  └ 상대 세트 함정 ${k}장 파괴`, `  └ 相手のセットトラップ${k}枚破壊`);
+    } else if (n === 3) {
+      p.bonusDrawPerm += 4 * mult;
+      ctx.log(`  └ 매 턴 드로우 +${4 * mult}(영구)`, `  └ 毎ターンドロー+${4 * mult}(永続)`);
+      if (o.traps.length) {
+        const wiped = o.traps.splice(0).map((t) => t.card);
+        const exiled = wiped.splice(randInt(g, wiped.length), 1)[0];
+        rmz(o).push(exiled);
+        wiped.forEach((c) => o.discard.push(c));
+        ctx.log(`  └ 상대 세트 함정 전부 파괴 — 그중 ${cn(exiled)} 은(는) 게임에서 제외`, `  └ 相手のセットトラップを全て破壊 — うち ${cn(exiled)} はゲームから除外`);
+      }
+    }
   } else if (tribe === "포식") {
-    const kills = n === 2 ? 1 : 2; for (let i = 0; i < kills; i++) { const t = strongest(o.field); if (t) ctx.destroyMonster(o, t); }
-    ctx.dealDamage(o, n === 2 ? 4 : 10, "포식 시너지", "捕食シナジー");
+    const kills = (n === 2 ? 1 : 2) * mult;
+    const dmg = (n === 2 ? 12 : 20) * mult;
+    if (o.field.length === 0) { ctx.dealDamage(o, dmg, "포식 시너지", "捕食シナジー"); }
+    else if (g.pending) {
+      // 이미 다른 선택이 대기 중이면(티어 연쇄 등) 자동으로 최강 몬스터부터 파괴
+      for (let i = 0; i < kills; i++) { const t = strongest(o.field); if (t) ctx.destroyMonster(o, t); }
+      if (!g.over) ctx.dealDamage(o, dmg, "포식 시너지", "捕食シナジー");
+    } else {
+      g.pending = { kind: "oppMon", hint: `포식 시너지 — 파괴할 적 몬스터 선택 (${kills}체)`, hintJa: `捕食シナジー — 破壊する敵モンスターを選択 (${kills}体)`, reason: "feastKill", allowCancel: false, data: { val: kills, val2: dmg } };
+      ctx.ev.push({ type: "needTarget", pending: g.pending });
+    }
   } else if (tribe === "귀족") {
-    if (n === 2) p.maxMana = Math.max(1, p.maxMana - 1);
-    else { p.maxMana += 5; p.bonusDrawPerm += 2; p.maxHp += 15; p.hp += 15; ctx.ev.push({ type: "heal", player: g.players.indexOf(p) as Side, amount: 15 }); }
+    if (n === 2) gainMana(2 * mult);
+    else if (n === 3) gainMana(6 * mult);
   } else if (tribe === "시초") {
-    if (n === 2) { p.maxHp += 6; p.hp += 6; ctx.ev.push({ type: "heal", player: g.players.indexOf(p) as Side, amount: 6 }); }
+    if (n === 2) gainHp(10 * mult);
     else if (n === 3) {
-      p.maxHp += 13; p.hp += 13; ctx.ev.push({ type: "heal", player: g.players.indexOf(p) as Side, amount: 13 });
-      o.maxHp = Math.max(1, o.maxHp - 3); if (o.hp > o.maxHp) o.hp = o.maxHp;
+      gainHp(15 * mult);
+      o.maxHp = Math.max(1, o.maxHp - 5 * mult); if (o.hp > o.maxHp) o.hp = o.maxHp;
+      ctx.log(`  └ 상대 최대 체력 -${5 * mult} (${o.maxHp})`, `  └ 相手の最大体力-${5 * mult} (${o.maxHp})`);
     } else { // n === 4: the payoff
-      p.maxMana += 10; p.maxHp += 20; p.hp += 20; ctx.ev.push({ type: "heal", player: g.players.indexOf(p) as Side, amount: 20 });
-      ctx.drawN(p, 4);
-      for (const tm of [...o.field]) ctx.destroyMonster(o, tm);
-      o.traps.forEach((t) => o.discard.push(t.card)); o.traps = [];
-      const wipedEnch = o.enchants.splice(0);
-      wipedEnch.forEach((e) => binEnch(g, ctx, o, e.card));
-      ctx.dealDamage(o, 13, "시초 시너지", "始原シナジー");
+      gainMana(10 * mult); gainHp(25 * mult);
+      ctx.drawN(p, 5 * mult);
+      ctx.log(`  └ ${5 * mult}장 드로우`, `  └ ${5 * mult}枚ドロー`);
+      // 상대 필드의 모든 카드를 파괴하고 게임에서 제외 (흡혈의 극의가 지키는 흡혈귀는 예외)
+      const ward = g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "vampWard"));
+      for (const tm of [...o.field]) {
+        if (ward && (tm.name || "").includes("흡혈귀")) { ctx.log(`  └ 흡혈의 극의: ${cn(tm)} 파괴되지 않음`, `  └ 吸血の極意: ${cn(tm)} は破壊されない`); continue; }
+        const fi = o.field.findIndex((x) => x.uid === tm.uid);
+        if (fi >= 0) { o.field.splice(fi, 1); rmz(o).push(inst(g, tm.id)); ctx.ev.push({ type: "destroy", player: side(g, o), uid: tm.uid, id: tm.id }); }
+      }
+      o.traps.splice(0).forEach((t) => rmz(o).push(t.card));
+      o.enchants.splice(0).forEach((e) => binEnch(g, ctx, o, e.card, true));
+      ctx.log(`  └ <span class="dmg">상대 필드의 모든 카드 파괴 + 게임에서 제외</span>`, `  └ <span class="dmg">相手の場の全カードを破壊 + ゲームから除外</span>`);
+      ctx.dealDamage(o, 10 * mult, "시초 시너지", "始原シナジー");
     }
   }
 }
@@ -1956,6 +2020,21 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
         ctx.ev.push({ type: "needTarget", pending: g.pending });
       }
     }
+    else if (pending.reason === "feastKill") { // 포식 시너지: N체 선택 파괴 후 데미지
+      ctx.log(`<span class="t">포식 시너지</span> → ${cn(tm)} 파괴`, `<span class="t">捕食シナジー</span> → ${cn(tm)} 破壊`);
+      ctx.destroyMonster(o, tm);
+      const left = ((d.val as number) || 1) - 1;
+      if (left >= 1 && o.field.length > 0 && !g.over) {
+        g.pending = { kind: "oppMon", hint: `포식 시너지 — 파괴할 적 몬스터 선택 (${left}체 남음)`, hintJa: `捕食シナジー — 破壊する敵モンスターを選択 (残り${left}体)`, reason: "feastKill", allowCancel: false, data: { val: left, val2: d.val2 } };
+        ctx.ev.push({ type: "needTarget", pending: g.pending });
+      } else if (!g.over) {
+        ctx.dealDamage(o, (d.val2 as number) || 0, "포식 시너지", "捕食シナジー");
+      }
+    }
+    else if (pending.reason === "setAtk2") { // 시초의 수호자: 대상 공격력을 2로 변경
+      tm.atk = 2; tm.atkMod = 0; tm.tempAtk = 0;
+      ctx.log(`<span class="t">${p.name}</span> → ${cn(tm)} 의 공격력이 2가 된다`, `<span class="t">${p.name}</span> → ${cn(tm)} の攻撃力が2になる`);
+    }
     else if (pending.reason === "attack") {
       const att = p.field.find((m) => m.uid === d.attackerUid);
       if (att) { ctx.ev.push({ type: "attack", player: side(g, p), uid: att.uid, targetUid: tm.uid }); resolveAttackCore(g, ctx, att, tm.uid); }
@@ -2054,6 +2133,21 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       if (remaining > 0 && o.field.length + o.traps.length + o.enchants.length > 0) {
         g.pending = { kind: "oppBoard", hint: pending.hint, hintJa: pending.hintJa, reason: pending.reason, allowCancel: true, data: { val: remaining } };
         ctx.ev.push({ type: "needTarget", pending: g.pending });
+      }
+    }
+  } else if (pending.kind === "giantShop") {
+    // 시초의 거인: 코스트 5+ 시초 카드를 마나 지불하고 구매 (uid = 카드 ID)
+    const ids = (pending.data?.ids as string[] | undefined) ?? [];
+    if (uid && ids.includes(uid) && DB[uid]) {
+      const cost = DB[uid].cost;
+      if (p.mana >= cost) {
+        p.mana -= cost;
+        p.boughtCount = (p.boughtCount || 0) + 1;
+        const bought = inst(g, uid);
+        p.discard.push(bought);
+        ctx.log(`<span class="t">${p.name}</span> 거인의 교역 → ${cn(bought)} 구매 (마나 ${cost})`, `<span class="t">${p.name}</span> 巨人の交易 → ${cn(bought)} 購入 (マナ${cost})`);
+      } else {
+        ctx.log("  └ 마나가 부족해 구매하지 못함", "  └ マナが足りず購入できない");
       }
     }
   } else if (pending.kind === "reroll") {

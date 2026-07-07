@@ -15,6 +15,7 @@
 // ============================================================
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
 import { buyCost, cardValue, chestLocked, effAtk, effDef, glassBanActive, playCost, reduce, summonReqMet } from "./engine";
+import { DB } from "./cards";
 
 // ---------------- rollout search (the shipped bot) ----------------
 const MARGIN = 0.1;      // eval margin a deviation must beat greedy by
@@ -530,6 +531,11 @@ function autoTarget(g: GameState): Action {
     return { type: "pick", uid: best ? best.uid : (p.discard[0]?.uid ?? null) };
   }
   if (pending.kind === "reroll") return { type: "pick", uid: null }; // 수레바퀴: 봇은 결과 유지
+  if (pending.kind === "giantShop") { // 시초의 거인 교역: 살 수 있는 가장 비싼 시초 카드
+    const ids = ((pending.data?.ids as string[] | undefined) ?? []).filter((id) => DB[id] && DB[id].cost <= p.mana);
+    const best = ids.sort((a, b) => DB[b].cost - DB[a].cost)[0];
+    return { type: "pick", uid: best ?? null };
+  }
   if (pending.kind === "oppRmz") { // 흑룡: 상대 묘지 오염 — 가치가 낮은 카드(컬 등)를 되돌린다
     const worst = [...(o.removed ?? [])].sort((a, b) => cardValue(a) - cardValue(b))[0];
     return { type: "pick", uid: worst ? worst.uid : null };

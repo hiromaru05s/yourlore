@@ -117,7 +117,7 @@ export interface PlayerState {
 }
 
 export interface Pending {
-  kind: "oppMon" | "myMon" | "seek" | "recall" | "purge" | "oppRmz" | "oppBoard" | "reroll"; // purge: deck+graveyard exile · oppRmz: 흑룡 · oppBoard: 신수 · reroll: 운명의 수레바퀴
+  kind: "oppMon" | "myMon" | "seek" | "recall" | "purge" | "oppRmz" | "oppBoard" | "reroll" | "giantShop"; // oppRmz: 흑룡 · oppBoard: 신수 · reroll: 수레바퀴 · giantShop: 시초의 거인 교역
   hint: string;
   hintJa: string; // Japanese target hint
   reason: string; // which effect awaits input
