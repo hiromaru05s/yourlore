@@ -88,7 +88,9 @@ export function mountCards(app: App): Screen {
     costChips.forEach((c) => c.el.classList.toggle("is-on", c.val === costF));
 
     const list = ALL.filter((c) => {
-      if (typeF !== "all" && c.t !== typeF) return false;
+      // "스타터" 탭 = 컬/보물상자/어튠 + 덱 구성 전용(noShop) 스타팅 카드 전부
+      if (typeF === "starter") { if (!(c.t === "starter" || c.noShop)) return false; }
+      else if (typeF !== "all" && c.t !== typeF) return false;
       if (costF !== -1 && c.cost !== costF) return false;
       if (q && !cardName(c).toLowerCase().includes(q) && !c.name.toLowerCase().includes(q)) return false;
       return true;
