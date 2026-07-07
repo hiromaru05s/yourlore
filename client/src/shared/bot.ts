@@ -469,6 +469,16 @@ function autoTarget(g: GameState): Action {
     const best = bestOf(p.discard);
     return { type: "pick", uid: best ? best.uid : (p.discard[0]?.uid ?? null) };
   }
+  if (pending.kind === "oppRmz") { // 흑룡: 상대 묘지 오염 — 가치가 낮은 카드(컬 등)를 되돌린다
+    const worst = [...(o.removed ?? [])].sort((a, b) => cardValue(a) - cardValue(b))[0];
+    return { type: "pick", uid: worst ? worst.uid : null };
+  }
+  if (pending.kind === "oppBoard") { // 신수: 가장 위협적인 몬스터 → 함정 → 영구마법 순으로 파괴
+    const best = [...o.field].filter((m) => m.aura !== "ward")
+      .sort((a, b) => (effAtk(o, b) + (b.def || 0)) - (effAtk(o, a) + (a.def || 0)))[0];
+    const uid = best?.uid ?? o.traps[0]?.card.uid ?? o.enchants[0]?.card.uid ?? null;
+    return { type: "pick", uid };
+  }
   return { type: "chooseTarget", uid: null };
 }
 

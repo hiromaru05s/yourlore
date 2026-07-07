@@ -859,6 +859,36 @@ const NEW_CARDS6: CardDef[] = [
 ];
 for (const c of NEW_CARDS6) { DB[c.id] = c; }
 
+// ============================================================
+// NEW CARDS 8 — 알(egg) 아키타입: 부화 카운터 + 내구도 카운터
+// 알은 공격 불가·전투 데미지 무시(내구도만 소모), 단 파괴·약화 "효과"에는 취약.
+// 부화 몬스터는 cost 0 (BUYABLE_POOL 자동 제외) + 죽으면 게임에서 제외(토큰 규칙).
+// ============================================================
+const NEW_CARDS8: CardDef[] = [
+  { id: "DRAGON_EGG", t: "mon", cost: 6, play: 4, atk: 0, def: 0, hatchTurns: 8, hatchDur: 4, hatchInto: ["D_BLACK", "D_RED", "D_BLUE"],
+    name: "드래곤의 알", nameJa: "ドラゴンの卵",
+    text: "공격 불가 · 부화 8턴(양측 턴 포함) / 내구도 4 · 상대 몬스터의 공격은 내구도만 1 소모 · 내구도가 남은 채 부화가 완료되면 흑룡·적룡·청룡 중 하나가 소환된다",
+    textJa: "攻撃不可 · 孵化8ターン(両者のターンを含む) / 耐久4 · 敵モンスターの攻撃は耐久を1消費するのみ · 耐久が残ったまま孵化が完了すると黒竜・赤竜・青竜のいずれかが召喚される" },
+  { id: "BEAST_EGG", t: "mon", cost: 8, play: 5, atk: 0, def: 0, hatchTurns: 10, hatchDur: 4, hatchInto: ["DIVINE"],
+    name: "신수의 알", nameJa: "神獣の卵",
+    text: "공격 불가 · 부화 10턴(양측 턴 포함) / 내구도 4 · 상대 몬스터의 공격은 내구도만 1 소모 · 내구도가 남은 채 부화가 완료되면 신수가 소환된다",
+    textJa: "攻撃不可 · 孵化10ターン(両者のターンを含む) / 耐久4 · 敵モンスターの攻撃は耐久を1消費するのみ · 耐久が残ったまま孵化が完了すると神獣が召喚される" },
+  // ---- 부화 몬스터 (cost 0, 구매 불가) ----
+  { id: "D_BLACK", t: "mon", cost: 0, atk: 20, def: 20, onSummon: "blackDragon", val: 3, name: "흑룡", nameJa: "黒竜",
+    text: "소환시: 상대가 제외한 카드 중 최대 8장을 선택해 상대 묘지로 보낸다 · 상대 필드 몬스터 전체 방어 -3(지속) · 죽으면 게임에서 제외",
+    textJa: "召喚時: 相手が除外したカードから最大8枚を選び相手の墓地へ送る · 敵モンスター全体の防御-3(持続) · 死亡時ゲームから除外" },
+  { id: "D_RED", t: "mon", cost: 0, atk: 20, def: 15, onSummon: "burn", val: 15, aura: "spellAmp", name: "적룡", nameJa: "赤竜",
+    text: "소환시: 상대에게 15 데미지 · 상시: 자신의 마법이 상대에게 데미지를 줄 때마다 +3 추가 데미지 · 죽으면 게임에서 제외",
+    textJa: "召喚時: 相手に15ダメージ · 常時: 自分の魔法が相手にダメージを与えるたび+3追加ダメージ · 死亡時ゲームから除外" },
+  { id: "D_BLUE", t: "mon", cost: 0, atk: 15, def: 20, onSummon: "blueDragon", val: 20, turnFx: "growMaxHp", name: "청룡", nameJa: "青竜",
+    text: "소환시: 자신의 최대 체력 +20 · 자신의 턴 시작마다 상대 필드 몬스터 수만큼 최대 체력 증가 · 죽으면 게임에서 제외",
+    textJa: "召喚時: 自分の最大体力+20 · 自分のターン開始時、敵モンスターの数だけ最大体力増加 · 死亡時ゲームから除外" },
+  { id: "DIVINE", t: "mon", cost: 0, atk: 25, def: 25, onSummon: "divine", aura: "ward", name: "신수", nameJa: "神獣",
+    text: "소환시: 최대 마나 +15 · 매 턴 드로우 +1(영구) · 상대 필드의 카드 3장 선택 파괴(몬스터·세트 함정·영구마법) · 상시: 상대의 마법·몬스터 효과의 대상이 되지 않는다 · 죽으면 게임에서 제외",
+    textJa: "召喚時: 最大マナ+15 · 毎ターンドロー+1(永続) · 相手の場のカード3枚を選んで破壊(モンスター・セットトラップ・永続魔法) · 常時: 相手の魔法・モンスター効果の対象にならない · 死亡時ゲームから除外" },
+];
+for (const c of NEW_CARDS8) { DB[c.id] = c; }
+
 // English localization (names/texts) — applied last so it reflects final balance patches
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 
@@ -917,7 +947,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v5"; // v3: 정예 ≤7/+3→≤8/+4 · v4: 군단 24→20장 · v5: 스타터(컬/보물상자/어튠)도 침묵·마법무효화 대상
+export const BALANCE_VERSION = "v6"; // v3: 정예 ≤7/+3→≤8/+4 · v4: 군단 24→20장 · v5: 스타터도 침묵·마법무효화 대상 · v6: 알 아키타입(드래곤의 알/신수의 알 + 흑룡·적룡·청룡·신수) 추가
 
 export function idsOfCost(cost: number): string[] {
   return BUYABLE_POOL.filter((id) => DB[id].cost === cost);

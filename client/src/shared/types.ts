@@ -32,6 +32,9 @@ export interface CardDef {
   summonReq?: string; // summon precondition key (checked before summoning) — 암살자 상급/특급
   cap?: number; // nullspell trap: only counters spells with play cost <= cap (undefined = any)
   lockSpell?: boolean; // nullspell trap: caster also cannot cast spells for the rest of this turn
+  hatchTurns?: number; // 알(egg): hatch counter — decrements on EVERY turn start (both players)
+  hatchDur?: number; // 알(egg): durability — enemy monster attacks consume 1; 0 = egg destroyed
+  hatchInto?: string[]; // 알(egg): card ids the egg can hatch into (random pick)
   nameJa?: string; // Japanese name (falls back to name)
   textJa?: string; // Japanese effect text (falls back to text)
   nameEn?: string; // English name (falls back to name)
@@ -55,6 +58,8 @@ export interface FieldMon extends CardInst {
   summonedTurn: number;
   attacksUsed?: number; // attacks made this turn (for multi-attack monsters)
   token?: boolean; // conjured by an effect (not a real deck card) — exiled on death, never enters the deck cycle
+  hatch?: number; // 알: remaining hatch counter (both players' turns tick it)
+  dur?: number; // 알: remaining durability (enemy attacks consume 1 instead of combat)
 }
 
 export interface TrapSet {
@@ -103,7 +108,7 @@ export interface PlayerState {
 }
 
 export interface Pending {
-  kind: "oppMon" | "myMon" | "seek" | "recall" | "purge"; // purge: pick from deck+graveyard to exile
+  kind: "oppMon" | "myMon" | "seek" | "recall" | "purge" | "oppRmz" | "oppBoard"; // purge: deck+graveyard exile · oppRmz: 흑룡(상대 제외존→묘지) · oppBoard: 신수(상대 필드 카드 파괴)
   hint: string;
   hintJa: string; // Japanese target hint
   reason: string; // which effect awaits input

@@ -344,6 +344,7 @@ const D: Record<string, Entry> = {
   "market.confirm": { ko: "한 번 더 클릭 → 구매", ja: "もう一度クリック → 購入", en: "Click again to buy" },
   "picker.confirm": { ko: "확정", ja: "確定", en: "Confirm" },
   "picker.count": { ko: "{n}장 선택됨", ja: "{n}枚選択中", en: "{n} selected" },
+  "picker.settrap": { ko: "세트 함정", ja: "セットトラップ", en: "Set Trap" },
   "card.ench": { ko: "영구마법", ja: "永続魔法", en: "Enchantment" },
   "card.ench.tip": { ko: "영구마법 — 발동하면 필드에 남아 정해진 턴 동안 지속 효과를 줍니다. 일부 카드로 파괴·제외될 수 있어요.", ja: "永続魔法 — 発動すると場に残り、一定ターンの間 継続効果を与えます。一部のカードで破壊・除外されることがあります。", en: "Enchantment — once cast it stays on the field, giving an ongoing effect for a set number of turns. Some cards can destroy or exile it." },
   "card.ench.tip.perm": { ko: "영구마법 (영구) — 발동하면 필드에 남아 게임 내내 지속 효과를 줍니다. 일부 카드로 파괴·제외될 수 있어요.", ja: "永続魔法 (永続) — 発動すると場に残り、ゲーム中ずっと継続効果を与えます。一部のカードで破壊・除外されることがあります。", en: "Enchantment (permanent) — once cast it stays on the field for the rest of the game. Some cards can destroy or exile it." },

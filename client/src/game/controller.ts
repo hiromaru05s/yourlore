@@ -393,11 +393,12 @@ export abstract class BaseController implements BoardHandlers {
     if (res.state !== this.state) return; // a newer batch is queued — let it drive follow-ups
     const g = this.state;
     if (g.over) { this.showWin(); return; }
-    if (!g.pending || g.pending.kind !== "purge") this.purgePicks = null; // 제외 선택이 끝나면 큐 정리
+    // 다중 선택 pending (대숙청 purge / 흑룡 oppRmz / 신수 oppBoard) — 모달에서 한 번에
+    // 고른 뒤 1장씩 순차 제출한다 (엔진 프로토콜은 그대로 1장씩 pick)
+    const multiKind = g.pending && (g.pending.kind === "purge" || g.pending.kind === "oppRmz" || g.pending.kind === "oppBoard");
+    if (!multiKind) this.purgePicks = null; // 선택이 끝나면 큐 정리
     if (g.pending && g.cur === this.you) {
-      if (g.pending.kind === "purge") {
-        // 대숙청/컬 세례: 한 장씩 N번 고르는 대신 한 번에 다중 선택 → 순차 제출.
-        // (엔진 프로토콜은 그대로 1장씩 pick — 클라가 큐로 자동 제출한다)
+      if (multiKind) {
         if (this.purgePicks) {
           const next = this.purgePicks.shift();
           if (next === undefined) { this.purgePicks = null; setTimeout(() => this.submit({ type: "pick", uid: null }), 0); } // 남은 pending 닫기
@@ -405,7 +406,15 @@ export abstract class BaseController implements BoardHandlers {
           return;
         }
         const me = g.players[this.you];
-        const pool = [...me.deck, ...me.discard].sort((a, b) => a.cost - b.cost);
+        const opp = g.players[1 - this.you];
+        let pool: CardInst[];
+        if (g.pending.kind === "purge") pool = [...me.deck, ...me.discard].sort((a, b) => a.cost - b.cost);
+        else if (g.pending.kind === "oppRmz") pool = [...(opp.removed ?? [])].sort((a, b) => a.cost - b.cost);
+        else pool = [ // oppBoard: 상대 몬스터(신수 제외) + 세트 함정(뒷면) + 영구마법
+          ...opp.field.filter((m) => m.aura !== "ward"),
+          ...opp.traps.map((t2) => ({ uid: t2.card.uid, id: "HIDDEN", t: "trap", cost: 0, name: t("picker.settrap"), text: "?" } as CardInst)),
+          ...opp.enchants.map((e2) => e2.card),
+        ];
         const hint = getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint;
         const max = Math.min((g.pending.data?.val as number) || 1, pool.length);
         cardPickerMulti(hint, pool, max, (uids) => {

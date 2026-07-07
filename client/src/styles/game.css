@@ -718,6 +718,19 @@
 /* 상대 스펠 리빌 — 중앙 확대 시 적색 글로우로 "상대가 냈다"를 표시 */
 .fx-opp-cast { box-shadow: 0 0 0 2px #ff5b4588, 0 0 40px #ff5b4555; border-radius: 10px; }
 
+/* 알(egg) 카운터 배지: 🥚부화 / 🛡내구도 */
+.egg-cnt {
+  position: absolute; left: 50%; bottom: 26%; transform: translateX(-50%);
+  display: flex; gap: 4px; z-index: 5; pointer-events: none;
+}
+.egg-cnt .ec {
+  background: #050a14e0; border: 1px solid var(--brass-dim); border-radius: 6px;
+  font-size: 10px; font-weight: 800; padding: 1px 5px; color: var(--paper);
+  white-space: nowrap; box-shadow: 0 1px 4px #0008;
+}
+.egg-cnt .ec-h { color: #ffd98a; }
+.egg-cnt .ec-d { color: #9fd0ff; }
+
 /* 카드 확대 각주: (지속) 설명 */
 .zoom-note {
   max-width: 240px; font-size: 12.5px; line-height: 1.5; color: var(--paper-dim);

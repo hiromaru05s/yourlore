@@ -76,6 +76,12 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     node.appendChild(el("div", "ad-atk", String(a)));
     node.appendChild(el("div", "ad-def", String(d)));
   }
+  // 알(egg): 부화/내구도 카운터 배지 — 필드에서는 실시간 값, 손패/마켓에서는 초기값
+  if (c.hatchTurns != null) {
+    const eggH = (c as { hatch?: number }).hatch ?? c.hatchTurns;
+    const eggD = (c as { dur?: number }).dur ?? c.hatchDur ?? 4;
+    node.appendChild(el("div", "egg-cnt", `<span class="ec ec-h">🥚${eggH}</span><span class="ec ec-d">🛡${Math.max(0, eggD)}</span>`));
+  }
   // 효과 텍스트: "(시전 N)"/"(소환 N)" 계열 표기는 배지로 대체되므로 제거하고, 구분자를 줄바꿈으로
   let txt = cardText(c)
     .replace(/\s*\((?:시전|Cast|発動|소환|Summon|召喚)\s*\d+\)/g, "")
