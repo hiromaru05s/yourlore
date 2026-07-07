@@ -669,9 +669,19 @@ export class LocalController extends BaseController {
     }
   }
 
+  private botTurnNo = -1;
+  private botTurnSteps = 0;
   private botStep(): void {
     const g = this.state;
     if (g.over || !g.players[g.cur].isBot) return;
+    // 안전망: 봇이 한 턴에서 비정상적으로 많은 행동을 반복하면(거부 루프 등) 강제 턴 종료.
+    // 정상 턴은 수십 액션 이내 — 200회는 버그가 아니면 도달 불가.
+    if (g.turn !== this.botTurnNo) { this.botTurnNo = g.turn; this.botTurnSteps = 0; }
+    if (++this.botTurnSteps > 200) {
+      console.warn("[bot] loop guard — forcing endTurn on turn", g.turn);
+      this.applyResult(reduce(g, g.pending?.allowCancel ? ({ type: "pick", uid: null } as Action) : ({ type: "endTurn" } as Action)));
+      return;
+    }
     const action = botDecide(g);
     this.applyResult(reduce(g, action));
   }

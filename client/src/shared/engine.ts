@@ -405,11 +405,12 @@ function binEnch(g: GameState, ctx: Ctx, owner: PlayerState, card: CardInst, for
   } else owner.discard.push(card);
 }
 
-/** 새로 필드에 등장하는 몬스터에 전역 효과 적용 (약화술식 -2, 트릭룸 반전). */
+/** 새로 필드에 등장하는 몬스터에 전역 효과 적용 (트릭룸 반전 → 약화술식 -2).
+ *  순서 중요: 약화는 "현재 공격력"에 걸려야 하므로 반전을 먼저 적용한다. */
 function applyFieldGlobals(g: GameState, m: FieldMon): void {
+  if ((g.trickLeft ?? 0) > 0) trickSwap(m);
   const weak = g.players.reduce((s, pl) => s + pl.enchants.filter((e) => e.card.ench === "weakenAll").length, 0);
   if (weak > 0) m.atkMod = (m.atkMod || 0) - 2 * weak;
-  if ((g.trickLeft ?? 0) > 0) trickSwap(m);
 }
 
 /** 흡혈귀 소환 (흡혈 계약 / 진화) — 토큰이지만 소환 효과(특급)는 발동한다. */
