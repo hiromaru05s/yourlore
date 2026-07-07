@@ -24,6 +24,9 @@ export function setMyAvatar(a?: string | null): void { MY_AVATAR = a; }
 let MY_SLEEVE = FRAME_BACK;
 let OPP_SLEEVE = FRAME_BACK;
 export function setMySleeve(id?: string | null): void { MY_SLEEVE = sleeveUrl(id); }
+// 마켓 알림이: 활성 덱 프리셋의 워치리스트 — 마켓/제시에 뜨면 은은하게 표시
+let MARKET_WATCH = new Set<string>();
+export function setMarketWatch(ids?: string[] | null): void { MARKET_WATCH = new Set(ids ?? []); }
 /** card-back image for a pile/back that belongs to `isMe`. */
 function backFor(isMe: boolean): string { return isMe ? MY_SLEEVE : OPP_SLEEVE; }
 
@@ -512,12 +515,23 @@ export class GameView {
     };
     mk.onclick = () => disarm(); // 마켓 빈 곳 클릭 시 해제
 
+    // 마켓 알림이: 덱 프리셋에 등록한 카드가 뜨면 은은한 링 + 🔔 점 표시
+    const markWatch = (card: HTMLElement, id: string): void => {
+      if (!MARKET_WATCH.has(id)) return;
+      card.classList.add("is-watch");
+      const dot = document.createElement("div");
+      dot.className = "watch-dot";
+      dot.textContent = "🔔";
+      card.appendChild(dot);
+    };
+
     const fixed = this.q("fixedMarket");
     g.market.forEach((c, i) => {
       const bc = buyCost(owner, c);
       const aff = myTurn && !g.pending && me.mana >= bc;
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc }); // same size as 제시
       if (aff) armBuy(card, "mkt" + i, () => this.h.onBuyMarket(i));
+      markWatch(card, c.id);
       bindZoom(card, c);
       fixed.appendChild(card);
     });
@@ -534,6 +548,7 @@ export class GameView {
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc });
       card.dataset.supIdx = String(i);  // ORIGINAL supply index (display is sorted) — buy anim finds it by this
       if (aff) armBuy(card, "sup" + i, () => this.h.onBuySupply(i));
+      if (myTurn) markWatch(card, c.id); // 제시는 내 턴의 내 제시만 (상대 제시엔 표시 무의미)
       bindZoom(card, c);
       sup.appendChild(card);
     }

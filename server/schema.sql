@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS users (
   stats_public INTEGER NOT NULL DEFAULT 1, -- 프로필 전적 공개 여부
   sleeve      TEXT,                       -- 장착 카드 슬리브 id (null = 'default')
   sleeves     TEXT,                       -- 구매 소유한 슬리브 id csv (default는 항상 무료 보유)
-  deck        TEXT                        -- 초기 덱 8장 카드 id csv (null = 기본덱 컬6+상자2; 어튠 1장은 항상 고정)
+  deck        TEXT,                       -- 활성 덱 8장 카드 id csv (null = 기본덱 컬6+상자2; 어튠 1장은 항상 고정)
+  decks       TEXT                        -- 덱 프리셋 5슬롯 JSON {sel, list:[{cards[8], watch[]}]} (watch = 마켓 알림이)
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_users_invite_code ON users(invite_code) WHERE invite_code IS NOT NULL;
 

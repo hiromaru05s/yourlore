@@ -998,6 +998,32 @@ export function sanitizeDeck(ids: unknown): string[] {
   return out;
 }
 
+// ---- 덱 프리셋 (5슬롯) + 덱별 "마켓 알림이" 워치리스트 ----
+export const DECK_SLOTS = 5;
+export const WATCH_MAX = 12; // 알림이 최대 — 너무 많으면 하이라이트가 의미 없어짐
+export interface DeckPreset { cards: string[]; watch: string[] }
+export interface DeckStore { sel: number; list: DeckPreset[] }
+/** 저장된 프리셋 묶음을 항상 유효한 형태(5슬롯, 각 8장, 알림이는 구매 가능 카드만)로 정규화. */
+export function sanitizeDecks(raw: unknown): DeckStore {
+  const o = (raw && typeof raw === "object" ? raw : {}) as { sel?: unknown; list?: unknown };
+  const listIn = Array.isArray(o.list) ? o.list : [];
+  const list: DeckPreset[] = [];
+  for (let i = 0; i < DECK_SLOTS; i++) {
+    const d = (listIn[i] ?? {}) as { cards?: unknown; watch?: unknown };
+    const cards = sanitizeDeck(d.cards ?? DEFAULT_DECK_8);
+    const wIn = Array.isArray(d.watch) ? d.watch : [];
+    const watch: string[] = [];
+    for (const id of wIn) {
+      if (typeof id !== "string" || !DB[id] || DB[id].cost <= 0 || DB[id].noShop) continue;
+      if (!watch.includes(id) && watch.length < WATCH_MAX) watch.push(id);
+    }
+    list.push({ cards, watch });
+  }
+  let sel = typeof o.sel === "number" && Number.isFinite(o.sel) ? Math.floor(o.sel) : 0;
+  if (sel < 0 || sel >= DECK_SLOTS) sel = 0;
+  return { sel, list };
+}
+
 // 주사위·확률 카드 (결과 팝업 + 운명의 수레바퀴 재굴림 대상)
 export const RANDOM_CARDS = new Set([
   "ND3", "ND5", "GS5_0", "GS6_2", "GS7_0", "GS8_0", "GS8_3", "GS8_5",

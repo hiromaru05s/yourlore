@@ -81,11 +81,13 @@ export async function getUser(env: Env, req: Request): Promise<SessionUser | nul
   const token = readCookie(req);
   if (!token) return null;
   const row = await env.DB.prepare(
-    `SELECT u.id, u.email, u.display, u.wins, u.losses, u.credits, u.avatar, u.badge, u.sleeve, u.deck, s.expires_at
+    `SELECT u.id, u.email, u.display, u.wins, u.losses, u.credits, u.avatar, u.badge, u.sleeve, u.deck, u.decks, s.expires_at
      FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token = ?`
-  ).bind(token).first<{ id: string; email: string; display: string; wins: number; losses: number; credits: number; avatar: string | null; badge: string | null; sleeve: string | null; deck: string | null; expires_at: number }>();
+  ).bind(token).first<{ id: string; email: string; display: string; wins: number; losses: number; credits: number; avatar: string | null; badge: string | null; sleeve: string | null; deck: string | null; decks: string | null; expires_at: number }>();
   if (!row || row.expires_at < Date.now()) return null;
-  return { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses, credits: row.credits, avatar: row.avatar, badge: row.badge, sleeve: row.sleeve || "default", deck: row.deck ? row.deck.split(",") : null };
+  let decks: unknown = null;
+  try { decks = row.decks ? JSON.parse(row.decks) : null; } catch { decks = null; }
+  return { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses, credits: row.credits, avatar: row.avatar, badge: row.badge, sleeve: row.sleeve || "default", deck: row.deck ? row.deck.split(",") : null, decks };
 }
 
 export async function createSession(env: Env, userId: string): Promise<string> {
