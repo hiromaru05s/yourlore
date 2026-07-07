@@ -240,7 +240,8 @@ export class GameView {
       // 고급 부화기(incubate): 자신의 "알"만 선택 가능
       const targetableMon = targetableZone
         && !(pending!.kind === "oppMon" && pending!.reason !== "attack" && m.aura === "ward")
-        && !(pending!.kind === "myMon" && pending!.reason === "incubate" && m.hatch == null);
+        && !(pending!.kind === "myMon" && pending!.reason === "incubate" && m.hatch == null)
+        && !(pending!.kind === "myMon" && pending!.data?.exclude === m.uid); // 지원 나팔: 같은 몬스터 중복 선택 불가
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
       const card = cardEl(m, { field: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);

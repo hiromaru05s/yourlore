@@ -279,6 +279,13 @@ export function greedyDecide(g: GameState): Action {
     if (c.id === "BLOOD_PLEASURE" && p.hp <= 16) return false;
     if (c.id === "VAMP_PACT" && (p.hp <= 8 || p.field.length >= 7)) return false;
     if (c.id === "INCUBATOR" && !p.field.some((m) => m.hatch != null && m.hatch > 0)) return false;
+    if (c.id === "INCUBATOR_S" && !p.field.some((m) => m.hatch != null && m.hatch > 0)) return false;
+    if (c.id === "FLAME" && p.hp <= 2) return false;
+    if (c.id === "AMBUSH" && (o.maxMana !== 4 || p.hp <= 4)) return false;
+    if (c.id === "COUNTERCALC" && (o.maxMana > 6 || o.enchants.length === 0)) return false;
+    if (c.id === "TRUMPET" && p.field.length === 0) return false;
+    if (c.id === "NEGOTIATE") return false; // 봇은 상대 마나를 올려주지 않는다
+    if (c.id === "FATE_WHEEL" && p.hp <= 10) return false;
     // forbidden ritual: needs HP to spare AND a non-시초 tribe monster to duplicate
     if (c.id === "FORBIDDEN" && (p.hp <= 17 || !p.field.some((m) => m.tribe && m.tribe !== "시초"))) return false;
     return true;
@@ -478,6 +485,7 @@ function autoTarget(g: GameState): Action {
     const best = bestOf(p.discard);
     return { type: "pick", uid: best ? best.uid : (p.discard[0]?.uid ?? null) };
   }
+  if (pending.kind === "reroll") return { type: "pick", uid: null }; // 수레바퀴: 봇은 결과 유지
   if (pending.kind === "oppRmz") { // 흑룡: 상대 묘지 오염 — 가치가 낮은 카드(컬 등)를 되돌린다
     const worst = [...(o.removed ?? [])].sort((a, b) => cardValue(a) - cardValue(b))[0];
     return { type: "pick", uid: worst ? worst.uid : null };

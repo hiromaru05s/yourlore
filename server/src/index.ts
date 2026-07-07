@@ -5,6 +5,7 @@
 // ============================================================
 import type { Env } from "./env";
 import { corsHeaders, getUser, handleAuth } from "./auth";
+import { sanitizeDeck } from "../../client/src/shared/cards";
 import { getRating, handleRank } from "./rank";
 import { handleGoogleOAuth } from "./oauth";
 import { handleInvite } from "./invite";
@@ -81,6 +82,17 @@ export default {
       return new Response(JSON.stringify({ ok: true }), { headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
     }
     // ---- auth / REST ----
+    // ---- 초기 덱 저장 (덱 빌더) ----
+    if (path === "/api/deck" && req.method === "POST") {
+      const user = await getUser(env, req);
+      const hdrs = { "content-type": "application/json", ...corsHeaders(env) };
+      if (!user) return new Response(JSON.stringify({ error: "로그인이 필요합니다" }), { status: 401, headers: hdrs });
+      const body = (await req.json().catch(() => ({}))) as { deck?: unknown };
+      const deck = sanitizeDeck(body.deck); // 풀 검증 + 장당 8장 제한 → 항상 유효한 8장
+      await env.DB.prepare(`UPDATE users SET deck = ? WHERE id = ?`).bind(deck.join(","), user.id).run();
+      return new Response(JSON.stringify({ ok: true, deck }), { headers: hdrs });
+    }
+
     if (path.startsWith("/api/")) {
       return handleAuth(env, req, path.slice(4)); // strip "/api"
     }
@@ -89,7 +101,7 @@ export default {
     if (path === "/ws/queue") {
       const user = await getUser(env, req);
       const fwd = new URL(req.url);
-      if (user) { fwd.searchParams.set("uid", user.id); fwd.searchParams.set("name", user.display); fwd.searchParams.set("avatar", user.avatar ?? ""); fwd.searchParams.set("sleeve", user.sleeve ?? ""); }
+      if (user) { fwd.searchParams.set("uid", user.id); fwd.searchParams.set("name", user.display); fwd.searchParams.set("avatar", user.avatar ?? ""); fwd.searchParams.set("sleeve", user.sleeve ?? ""); fwd.searchParams.set("deck", (user.deck ?? []).join(",")); }
       // ranked queue: must be logged in; attach current MMR for band matching
       if (fwd.searchParams.get("mode") === "ranked") {
         if (!user) return new Response("unauthorized", { status: 401 });

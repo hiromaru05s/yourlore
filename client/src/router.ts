@@ -18,6 +18,7 @@ import { mountAdmin } from "./screens/admin";
 import { mountProfile, type ProfileTab } from "./screens/profile";
 import { mountFriends } from "./screens/friends";
 import { mountShop } from "./screens/shop";
+import { mountDeck } from "./screens/deck";
 
 export interface Screen { destroy?(): void; }
 
@@ -65,6 +66,7 @@ export class App {
   friends(): void { setPresence("menu"); this.swap(() => mountFriends(this)); }
   settings(): void { this.profile(undefined, "settings"); } // settings now lives as a profile tab
   shop(): void { setPresence("menu"); this.swap(() => mountShop(this)); }
+  deck(): void { setPresence("menu"); this.swap(() => mountDeck(this)); }
   onlineGame(roomId: string, you: Side, oppName: string, oppAvatar: string | null = null, ranked = false): void {
     setPresence("online");
     aCapture("game_start", { mode: "online" });

@@ -21,7 +21,7 @@ import { redactFor } from "../../client/src/shared/protocol";
 import { BALANCE_VERSION } from "../../client/src/shared/cards";
 import { applyRanked, applyRankedDraw } from "./rank";
 
-interface PlayerRef { id: string; name: string; sleeve?: string | null; }
+interface PlayerRef { id: string; name: string; sleeve?: string | null; deck?: string | null; }
 
 /** Everything the room needs — persisted so deploys/evictions/hibernation can't kill a live game. */
 interface RoomData {
@@ -114,8 +114,8 @@ export class GameRoom {
       const res = createGame({
         mode: "online",
         seed: body.seed,
-        p0: { id: body.players[0].id, name: body.players[0].name },
-        p1: { id: body.players[1].id, name: body.players[1].name },
+        p0: { id: body.players[0].id, name: body.players[0].name, deck: body.players[0].deck ? body.players[0].deck.split(",") : undefined },
+        p1: { id: body.players[1].id, name: body.players[1].name, deck: body.players[1].deck ? body.players[1].deck.split(",") : undefined },
         starting: (body.seed & 1) as Side, // coin toss: seed parity decides who goes first (fair, server-authoritative)
       });
       this.room = {

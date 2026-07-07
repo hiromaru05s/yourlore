@@ -15,6 +15,7 @@ export interface User {
   avatar?: string | null; // preset avatar (card id)
   badge?: string | null;  // equipped badge key
   sleeve?: string | null; // equipped card sleeve id ('default' when none)
+  deck?: string[] | null; // 초기 덱 8장 카드 id (null = 기본덱 컬6+상자2)
 }
 
 export interface ClaimResult {
@@ -82,6 +83,8 @@ export const api = {
   claimReward: (key: string) => call<ClaimResult>("/rewards/claim", { key }),
   claimedRewards: () => call<{ keys: string[]; credits: number }>("/rewards/claimed", undefined, "GET").catch(() => ({ keys: [] as string[], credits: 0 })),
   redeemCoupon: (code: string) => call<ClaimResult>("/rewards/coupon", { code }),
+  // 초기 덱 저장 (덱 빌더)
+  saveDeck: (deck: string[]) => call<{ ok: true; deck: string[] }>("/deck", { deck }),
   // ---- social: profile / friends / challenges ----
   profile: (id?: string) => call<{ profile: Profile }>(`/social/profile${id ? `?id=${encodeURIComponent(id)}` : ""}`, undefined, "GET").then((r) => r.profile),
   updateMe: (patch: { display?: string; avatar?: string; badge?: string; stats_public?: boolean; sleeve?: string }) =>

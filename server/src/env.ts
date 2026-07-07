@@ -27,4 +27,5 @@ export interface SessionUser {
   avatar?: string | null; // preset avatar (card id)
   badge?: string | null;  // equipped badge key
   sleeve?: string | null; // equipped card sleeve id ('default' when none)
+  deck?: string[] | null; // 초기 덱 8장 카드 id (null = 기본덱)
 }

@@ -52,6 +52,11 @@ export function mountHome(app: App): Screen {
         </div>
       </div>
       <div class="home-links">
+        <div class="panel tut-card tut-card--deck" id="deck">
+          <img class="tut-ico-img" src="/icons/menu_cards.png" alt="">
+          <span class="tut-txt"><b>${t("home.deck.title")}</b><span>${t("home.deck.desc")}</span></span>
+          <span class="tut-arrow">→</span>
+        </div>
         <div class="panel tut-card" id="friends">
           <img class="tut-ico-img" src="/icons/menu_friends.png" alt="">
           <span class="tut-txt"><b>${t("home.friends.title")} <span class="fr-badge" id="frBadge" style="display:none"></span></b><span>${t("home.friends.desc")}</span></span>
@@ -87,6 +92,7 @@ export function mountHome(app: App): Screen {
   app.root.appendChild(wrap);
 
   (wrap.querySelector("#ranked") as HTMLElement).onclick = () => app.rankedLobby();
+  (wrap.querySelector("#deck") as HTMLElement).onclick = () => app.deck();
   (wrap.querySelector("#lb") as HTMLElement).onclick = () => app.leaderboard();
   (wrap.querySelector("#invite") as HTMLElement).onclick = () => void showInviteModal();
   (wrap.querySelector("#online") as HTMLElement).onclick = () => app.onlineLobby();

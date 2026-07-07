@@ -34,10 +34,7 @@ let COIN_OPP: CoinProfile = { avatar: null, name: "OPP" };
 export function setCoinProfiles(me: CoinProfile, opp: CoinProfile): void { COIN_ME = me; COIN_OPP = opp; }
 
 /** Card IDs whose outcome is a random roll — surfaced as a result popup, not just a log line. */
-const RANDOM_CARDS = new Set([
-  "ND3", "ND5", "GS5_0", "GS6_2", "GS7_0", "GS8_0", "GS8_3", "GS8_5",
-  "TIMEWARP", "GAMBLE", "DICE8", "GUILD_CHEST", "LUCKY_CHEST", "FORBIDDEN", "GENESIS_SONG",
-]);
+import { RANDOM_CARDS } from "../shared/cards"; // 주사위·확률 카드 (결과 팝업 + 수레바퀴 재굴림 대상)
 
 const wait = (ms: number): Promise<void> => A.fxWait(ms); // skippable: flushes when the player acts
 
@@ -424,6 +421,12 @@ export abstract class BaseController implements BoardHandlers {
         });
         return;
       }
+      if (g.pending.kind === "reroll") {
+        // 운명의 수레바퀴: 결과 유지 / 다시 굴리기
+        void confirmDialog({ title: t("wheel.title"), body: t("wheel.body"), confirm: t("wheel.reroll"), cancel: t("wheel.keep") })
+          .then((re) => this.submit({ type: "pick", uid: re ? "re" : null }));
+        return;
+      }
       if (g.pending.kind === "seek" || g.pending.kind === "recall") {
         const me = g.players[this.you];
         const pool = g.pending.kind === "seek" ? me.deck : me.discard;
@@ -637,11 +640,11 @@ export abstract class BaseController implements BoardHandlers {
 export class LocalController extends BaseController {
   private botTimer = 0;
 
-  constructor(root: HTMLElement, exits: ControllerExits, playerName = "PLAYER 1") {
+  constructor(root: HTMLElement, exits: ControllerExits, playerName = "PLAYER 1", deck?: string[]) {
     super(root, 0, exits);
     const res = createGame({
       mode: "bot",
-      p0: { id: "local", name: playerName },
+      p0: { id: "local", name: playerName, deck },
       p1: { id: "bot", name: "BOT", isBot: true },
       starting: (Math.random() < 0.5 ? 0 : 1) as Side, // coin toss for first turn
     });

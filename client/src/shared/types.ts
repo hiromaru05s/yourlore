@@ -36,6 +36,8 @@ export interface CardDef {
   hatchDur?: number; // 알(egg): durability — enemy monster attacks consume 1; 0 = egg destroyed
   hatchInto?: string[]; // 알(egg): card ids the egg can hatch into (random pick)
   evolveTo?: string; // 흡혈귀: card id summoned when the owner casts a 피의 마법 (once per card)
+  noShop?: boolean; // 스타팅(덱 구성) 전용 — 고정/제시 마켓에 등장하지 않음
+  exileOnDestroy?: boolean; // 영구마법: 파괴/제거 시 묘지 대신 게임에서 제외
   nameJa?: string; // Japanese name (falls back to name)
   textJa?: string; // Japanese effect text (falls back to text)
   nameEn?: string; // English name (falls back to name)
@@ -62,6 +64,8 @@ export interface FieldMon extends CardInst {
   hatch?: number; // 알: remaining hatch counter (both players' turns tick it)
   dur?: number; // 알: remaining durability (enemy attacks consume 1 instead of combat)
   evolvedUsed?: boolean; // 흡혈귀: 진화(1회) 사용됨
+  trickSwapped?: boolean; // 트릭룸: 공/방 반전 적용 중
+  gcount?: number; // 암살자 길드: 누적 카운트
 }
 
 export interface TrapSet {
@@ -101,6 +105,9 @@ export interface PlayerState {
   usesTurn: Record<string, number>; // per-turn count (reset each turn)
   playsTurn?: number; // total cards played this turn (monsters/spells/traps/starters)
   spellSealTurn?: boolean; // cannot cast spells for the rest of this turn (침묵의 심판)
+  trapBlockNext?: boolean; // 협상: 다음 턴 함정 설치 불가 (예약)
+  trapBlockTurn?: boolean; // 협상: 이번 턴 함정 설치 불가 (활성)
+  wheelUsed?: boolean; // 운명의 수레바퀴: 이번 턴 재굴림 사용됨
   supplyShrink: number; // if >0, this player's next 제시 roll offers 2 cards instead of 3
   defendHeal: number; // heal this much whenever this player is attacked
   manaGainNext: number; // max mana to gain at the start of this player's next turn
@@ -110,7 +117,7 @@ export interface PlayerState {
 }
 
 export interface Pending {
-  kind: "oppMon" | "myMon" | "seek" | "recall" | "purge" | "oppRmz" | "oppBoard"; // purge: deck+graveyard exile · oppRmz: 흑룡(상대 제외존→묘지) · oppBoard: 신수(상대 필드 카드 파괴)
+  kind: "oppMon" | "myMon" | "seek" | "recall" | "purge" | "oppRmz" | "oppBoard" | "reroll"; // purge: deck+graveyard exile · oppRmz: 흑룡 · oppBoard: 신수 · reroll: 운명의 수레바퀴
   hint: string;
   hintJa: string; // Japanese target hint
   reason: string; // which effect awaits input
@@ -131,6 +138,9 @@ export interface GameState {
   rng: number; // mutable PRNG state (mulberry32)
   uidSeq: number;
   mode: "bot" | "online";
+  trickLeft?: number; // 트릭룸: 남은 턴 수 (매 턴 시작마다 -1, 0이면 반전 해제)
+  /** 운명의 수레바퀴: 재굴림용 시전 직전 스냅샷 — redactFor가 양쪽 모두에서 제거(클라 불필요) */
+  _wheelSnap?: { state: unknown; idx: number } | null;
   /** server-stamped remaining ms for the current turn (online only); lets a reconnecting
       client resume the turn clock instead of restarting it from full. */
   turnLeftMs?: number;

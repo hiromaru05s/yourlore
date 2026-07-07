@@ -76,6 +76,11 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     node.appendChild(el("div", "ad-atk", String(a)));
     node.appendChild(el("div", "ad-def", String(d)));
   }
+  // 암살자 길드: 카운트 배지
+  if (opt.field && c.aura === "assassinGuild") {
+    const gc = (c as { gcount?: number }).gcount ?? 0;
+    node.appendChild(el("div", "egg-cnt", `<span class="ec ec-d">⚔${gc}/3</span>`));
+  }
   // 알(egg): 부화/내구도 카운터 배지 — 필드에서는 실시간 값, 손패/마켓에서는 초기값
   if (c.hatchTurns != null) {
     const eggH = (c as { hatch?: number }).hatch ?? c.hatchTurns;

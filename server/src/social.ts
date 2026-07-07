@@ -319,7 +319,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
       await env.DB.prepare(`UPDATE challenges SET status = 'declined' WHERE id = ?`).bind(ch.id).run();
       return json(env, { ok: true });
     }
-    const challenger = await env.DB.prepare(`SELECT id, display, sleeve FROM users WHERE id = ?`).bind(ch.challenger).first<{ id: string; display: string; sleeve: string | null }>();
+    const challenger = await env.DB.prepare(`SELECT id, display, sleeve, deck FROM users WHERE id = ?`).bind(ch.challenger).first<{ id: string; display: string; sleeve: string | null; deck: string | null }>();
     if (!challenger) return json(env, { error: "not found" }, 404);
     // provision a GameRoom exactly like the matchmaker does (친선전 → ranked=false)
     const roomId = crypto.randomUUID();
@@ -327,7 +327,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     const stub = env.GAME_ROOM.get(env.GAME_ROOM.idFromName(roomId));
     await stub.fetch("https://do/setup", {
       method: "POST",
-      body: JSON.stringify({ players: [{ id: challenger.id, name: challenger.display, sleeve: challenger.sleeve }, { id: user.id, name: user.display, sleeve: user.sleeve }], seed, ranked: false }),
+      body: JSON.stringify({ players: [{ id: challenger.id, name: challenger.display, sleeve: challenger.sleeve, deck: challenger.deck }, { id: user.id, name: user.display, sleeve: user.sleeve, deck: (user.deck ?? []).join(",") || null }], seed, ranked: false }),
     });
     await env.DB.prepare(`UPDATE challenges SET status = 'accepted', room_id = ? WHERE id = ?`).bind(roomId, ch.id).run();
     return json(env, { ok: true, roomId, you: 1, oppName: challenger.display });

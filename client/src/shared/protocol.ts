@@ -40,6 +40,7 @@ export type GameServerMsg =
  */
 export function redactFor(state: GameState, you: Side): GameState {
   const g: GameState = structuredClone(state);
+  g._wheelSnap = null; // 운명의 수레바퀴 스냅샷은 서버 전용 (클라 불필요 + 숨김정보 보호)
   const opp = g.players[1 - you];
   const placeholder = (uid: string): GameState["players"][0]["hand"][0] => ({
     uid, id: "HIDDEN", t: "mon", cost: 0, name: "", text: "",

@@ -731,6 +731,23 @@
 .egg-cnt .ec-h { color: #ffd98a; }
 .egg-cnt .ec-d { color: #9fd0ff; }
 
+/* ============ 덱 빌더 ============ */
+.deck-screen .deck-panel { max-width: 980px; margin: 0 auto; padding: 18px 22px; text-align: left; }
+.deck-head { display: flex; align-items: center; gap: 12px; }
+.deck-head h2 { flex: 1; text-align: center; margin: 0; }
+.deck-note { font-size: 12.5px; color: var(--paper-dim); margin: 10px 0 14px; line-height: 1.5; }
+.deck-cur-head, .deck-pool-head { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--paper-dim); margin: 12px 0 8px; }
+.deck-cur, .deck-pool { display: flex; flex-wrap: wrap; gap: 9px; }
+.deck-cur { padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: #ffffff06; }
+.deck-cur .card { cursor: pointer; }
+.deck-slot { width: 86px; aspect-ratio: 913/1426; border: 1px dashed var(--line); border-radius: 8px; display: grid; place-items: center; color: var(--paper-dim); font-size: 20px; opacity: .5; }
+.deck-fixed { position: relative; filter: saturate(.7); }
+.deck-fixed-tag { position: absolute; left: 50%; top: 6px; transform: translateX(-50%); background: #050a14e0; border: 1px solid var(--brass-dim); color: var(--brass-hi); font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 5px; z-index: 6; pointer-events: none; }
+.deck-owned { position: absolute; right: 5px; bottom: 5px; background: #050a14e0; border: 1px solid var(--line); color: var(--paper-dim); font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 5px; z-index: 6; pointer-events: none; }
+.deck-owned.has { color: var(--gold-glow); border-color: #4fb4ff88; }
+.deck-msg { text-align: center; margin-top: 12px; font-size: 13px; color: var(--gold-glow); min-height: 18px; }
+.tut-card--deck { border-color: var(--gold-glow); box-shadow: 0 0 12px #4fb4ff22; }
+
 /* 카드 확대 각주: (지속) 설명 */
 .zoom-note {
   max-width: 240px; font-size: 12.5px; line-height: 1.5; color: var(--paper-dim);

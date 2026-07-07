@@ -933,12 +933,83 @@ const NEW_CARDS9: CardDef[] = [
 ];
 for (const c of NEW_CARDS9) { DB[c.id] = c; }
 
+// ============================================================
+// NEW CARDS 10 — 스타팅(덱 구성) 전용 카드 15종. 전부 noShop:
+// 고정/제시 마켓에 나오지 않고 초기 덱 빌딩으로만 넣을 수 있다.
+// ============================================================
+const NEW_CARDS10: CardDef[] = [
+  { id: "FLAME", t: "spell", cost: 1, noShop: true, name: "불꽃", nameJa: "火花",
+    text: "상대에게 2 데미지, 자신에게 1 데미지", textJa: "相手に2ダメージ、自分に1ダメージ" },
+  { id: "GHOST", t: "mon", cost: 2, atk: 2, def: 0, directOnly: true, noShop: true, name: "유령", nameJa: "幽霊",
+    text: "상대에게만 직접 공격할 수 있다 (몬스터 공격 불가) · 상대가 최대 마나/최대 체력을 늘릴 때마다 자신은 3 데미지를 입는다",
+    textJa: "相手にのみ直接攻撃できる (モンスター攻撃不可) · 相手が最大マナ/最大体力を増やすたび自分は3ダメージを受ける" },
+  { id: "NEGOTIATE", t: "spell", cost: 1, noShop: true, name: "협상", nameJa: "交渉",
+    text: "상대의 최대 마나 +1 · 상대는 다음 턴에 함정을 설치할 수 없다", textJa: "相手の最大マナ+1 · 相手は次のターン罠を設置できない" },
+  { id: "BLOOD_RITE", t: "spell", cost: 2, ench: "spellHeal", val: 99, exileOnDestroy: true, noShop: true, name: "혈귀술", nameJa: "血鬼術",
+    text: "영구: 양 플레이어는 마법으로 인한 데미지를 받지 않고 그 수치만큼 회복한다 · 파괴되면 게임에서 제외", textJa: "永続: 両プレイヤーは魔法によるダメージを受けず、その数値だけ回復する · 破壊されたらゲームから除外" },
+  { id: "WEAKEN_ALL", t: "spell", cost: 2, ench: "weakenAll", val: 99, exileOnDestroy: true, noShop: true, name: "약화술식", nameJa: "弱化術式",
+    text: "영구: 양 필드의 모든 몬스터 공격 -2 · 파괴되면 게임에서 제외", textJa: "永続: 両方の場の全モンスター攻撃-2 · 破壊されたらゲームから除外" },
+  { id: "GUILD_HALL", t: "mon", cost: 2, atk: 0, def: 2, aura: "assassinGuild", noShop: true, name: "암살자 길드", nameJa: "暗殺者ギルド",
+    text: "상시: '암살자' 몬스터로 상대에게 데미지를 줄 때마다 카운트 +1 · 3카운트 달성 시 상대에게 14 데미지 (카운트 초기화) · 파괴되면 카운트도 사라진다",
+    textJa: "常時: 「アサシン」モンスターで相手にダメージを与えるたびカウント+1 · 3カウント達成で相手に14ダメージ (カウントリセット) · 破壊されるとカウントも消える" },
+  { id: "MIMIC_PARTY", t: "trap", cost: 1, react: "mimicParty", noShop: true, name: "미믹 파티", nameJa: "ミミックパーティー",
+    text: "함정: 상대가 보물상자를 사용하면 발동 — 상대 필드에 미믹 1마리, 자신 필드에 미믹 2마리 소환", textJa: "罠: 相手が宝箱を使うと発動 — 相手の場にミミック1体、自分の場にミミック2体召喚" },
+  { id: "FATE_WHEEL", t: "spell", cost: 4, ench: "fateWheel", val: 99, exileOnDestroy: true, noShop: true, name: "운명의 수레바퀴", nameJa: "運命の輪",
+    text: "영구: 시전 시 자신의 최대 마나 -1, 자신에게 8 데미지 · 주사위·확률 카드의 결과를 보고 나서 다시 굴릴 수 있다 (매턴 1회) · 파괴되면 게임에서 제외",
+    textJa: "永続: 発動時に自分の最大マナ-1、自分に8ダメージ · ダイス・確率カードの結果を見てから振り直せる (毎ターン1回) · 破壊されたらゲームから除外" },
+  { id: "COUNTERCALC", t: "spell", cost: 1, noShop: true, name: "역산", nameJa: "逆算",
+    text: "상대의 최대 마나가 6 이하일 때만 사용 가능 · 상대의 영구마법 1장 파괴 · 사용 후 이 카드는 게임에서 제외", textJa: "相手の最大マナが6以下の時のみ使用可能 · 相手の永続魔法1枚を破壊 · 使用後このカードはゲームから除外" },
+  { id: "AMBUSH", t: "spell", cost: 1, noShop: true, name: "기습", nameJa: "奇襲",
+    text: "상대의 최대 마나가 4일 때만 사용 가능 · 상대에게 7 데미지, 자신에게 3 데미지 · 사용 후 이 카드는 게임에서 제외", textJa: "相手の最大マナが4の時のみ使用可能 · 相手に7ダメージ、自分に3ダメージ · 使用後このカードはゲームから除外" },
+  { id: "TRUMPET", t: "spell", cost: 1, noShop: true, name: "지원 나팔", nameJa: "支援ラッパ",
+    text: "자신 몬스터 2체 공격 +1(이번 턴)", textJa: "自分のモンスター2体の攻撃+1(このターン)" },
+  { id: "FORESIGHT", t: "spell", cost: 1, ench: "foresight", val: 99, exileOnDestroy: true, noShop: true, name: "선견지명", nameJa: "先見の明",
+    text: "영구: 자신의 최대 마나가 9 이상이 되면 최대 마나 +2 후 이 카드를 파괴한다 · 필드를 떠나면 게임에서 제외", textJa: "永続: 自分の最大マナが9以上になると最大マナ+2してこのカードを破壊 · 場を離れるとゲームから除外" },
+  { id: "TRICKROOM", t: "spell", cost: 3, noShop: true, name: "트릭룸", nameJa: "トリックルーム",
+    text: "2턴 동안 필드 위 모든 몬스터의 공격력과 방어력이 반전된다 · 반전 중에는 방어력이 오르는 효과가 공격력을, 공격력이 오르는 효과가 방어력을 올린다 · 효과가 끝나면 반전 중에 오른 스탯은 계승된다",
+    textJa: "2ターンの間、場の全モンスターの攻撃力と防御力が反転する · 反転中は防御が上がる効果は攻撃を、攻撃が上がる効果は防御を上げる · 効果終了後、反転中に上がったステータスは継承される" },
+  { id: "INCUBATOR_S", t: "spell", cost: 1, act: "incubate", val: 2, noShop: true, name: "부화기", nameJa: "孵化器",
+    text: "자신의 '알' 1개의 부화 카운터를 2턴 줄인다", textJa: "自分の「卵」1つの孵化カウンターを2ターン減らす" },
+  { id: "TRIBE_PACT", t: "spell", cost: 2, ench: "tribeContract", val: 99, noShop: true, name: "다종족 계약", nameJa: "多種族契約",
+    text: "영구: 종족 시너지의 효과가 2배가 된다 · 턴 40까지 종족 시너지를 달성하지 못하면 최대 마나 -2, 자신에게 12 데미지", textJa: "永続: 種族シナジーの効果が2倍になる · ターン40までに種族シナジーを達成できないと最大マナ-2、自分に12ダメージ" },
+];
+for (const c of NEW_CARDS10) { DB[c.id] = c; }
+
+// ---- 초기 덱 빌딩 풀: 컬/보물상자 + noShop 스타팅 카드 (어튠은 1장 고정으로 별도) ----
+export const DECK_POOL: string[] = ["STARTER_TRASH", "STARTER_CHEST", ...NEW_CARDS10.map((c) => c.id)];
+export const DECK_SIZE = 8; // 어튠 제외 자유 슬롯
+export const DECK_MAX_COPIES = 8; // 카드별 보유량 = 8장씩
+export const DEFAULT_DECK_8: string[] = [...Array<string>(6).fill("STARTER_TRASH"), "STARTER_CHEST", "STARTER_CHEST"];
+/** 저장된 덱을 유효한 8장으로 정규화 (서버/클라 공용 — 불량 입력은 컬로 패딩). */
+export function sanitizeDeck(ids: unknown): string[] {
+  const pool = new Set(DECK_POOL);
+  const counts: Record<string, number> = {};
+  const out: string[] = [];
+  if (Array.isArray(ids)) {
+    for (const id of ids) {
+      if (typeof id !== "string" || !pool.has(id)) continue;
+      counts[id] = (counts[id] || 0) + 1;
+      if (counts[id] > DECK_MAX_COPIES) continue;
+      out.push(id);
+      if (out.length === DECK_SIZE) break;
+    }
+  }
+  while (out.length < DECK_SIZE) out.push("STARTER_TRASH");
+  return out;
+}
+
+// 주사위·확률 카드 (결과 팝업 + 운명의 수레바퀴 재굴림 대상)
+export const RANDOM_CARDS = new Set([
+  "ND3", "ND5", "GS5_0", "GS6_2", "GS7_0", "GS8_0", "GS8_3", "GS8_5",
+  "TIMEWARP", "GAMBLE", "DICE8", "GUILD_CHEST", "LUCKY_CHEST", "FORBIDDEN", "GENESIS_SONG",
+]);
+
 // English localization (names/texts) — applied last so it reflects final balance patches
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 
 export const ALL_IDS = Object.keys(DB);
-// markets never offer the Mimic token (cost 0) — excluded from buyable pool
-export const BUYABLE_POOL = ALL_IDS.filter((id) => DB[id].cost > 0);
+// markets never offer cost-0 tokens or noShop(스타팅 전용) cards
+export const BUYABLE_POOL = ALL_IDS.filter((id) => DB[id].cost > 0 && !DB[id].noShop);
 
 // ---- related cards (for the zoom panel): what a card summons / references ----
 // Auto-derived by matching OTHER cards' names inside a card's text, plus a manual
@@ -991,7 +1062,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v7"; // v5: 스타터도 침묵·무효화 대상 · v6: 알 아키타입 · v7: 알 대응 테크(에그헌터/부화기/부화 마스터) + 피의 마법 희로애락 + 흡혈귀 진화 체인, 피의 마법 1/2 개명·3 삭제
+export const BALANCE_VERSION = "v8"; // v6: 알 아키타입 · v7: 알 테크+피의 마법 희로애락+흡혈귀 · v8: 스타팅 카드 15종 + 초기 덱 빌딩(9장: 어튠 고정 + 자유 8장)
 
 export function idsOfCost(cost: number): string[] {
   return BUYABLE_POOL.filter((id) => DB[id].cost === cost);

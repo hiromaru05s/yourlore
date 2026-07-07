@@ -35,7 +35,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
 
   const ctrl =
     opts.mode === "bot"
-      ? new LocalController(root, exits, app.user?.display ?? "PLAYER 1")
+      ? new LocalController(root, exits, app.user?.display ?? "PLAYER 1", app.user?.deck ?? undefined)
       : opts.mode === "tutorial"
         ? new TutorialController(root, exits, app.user?.display ?? "PLAYER", {
             onCredits: (c) => { if (app.user) app.user.credits = c; },
