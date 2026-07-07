@@ -237,7 +237,10 @@ export class GameView {
     const targetableZone = !!pending && ((pending.kind === "oppMon" && !isMe) || (pending.kind === "myMon" && isMe)) && myTurn;
     p.field.forEach((m, idx) => {
       // 신수(ward): 공격 대상으로는 지정 가능하지만 마법·몬스터 "효과"의 대상은 안 됨
-      const targetableMon = targetableZone && !(pending!.kind === "oppMon" && pending!.reason !== "attack" && m.aura === "ward");
+      // 고급 부화기(incubate): 자신의 "알"만 선택 가능
+      const targetableMon = targetableZone
+        && !(pending!.kind === "oppMon" && pending!.reason !== "attack" && m.aura === "ward")
+        && !(pending!.kind === "myMon" && pending!.reason === "incubate" && m.hatch == null);
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
       const card = cardEl(m, { field: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);

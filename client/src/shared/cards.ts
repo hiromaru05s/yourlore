@@ -535,9 +535,8 @@ const NEW_CARDS3: CardDef[] = [
   { id: "MULTI_CULTURE", t: "spell", cost: 3, play: 4, ench: "cultureMana", val: 99, name: "다양한 문화", nameJa: "多様な文化", text: "영구: '시초' 제외, 필드의 종족 몬스터 1체당 임시 최대 마나 +1 (시전 4)", textJa: "永続: 「始原」を除く、場の種族モンスター1体ごとに一時的に最大マナ+1 (発動4)" },
   { id: "SLAY_ART", t: "spell", cost: 2, ench: "slayArt", val: 99, name: "살생의 극의", nameJa: "殺生の極意", text: "영구: 양 플레이어 중 누구든 데미지를 받을 때마다 추가 데미지 +2", textJa: "永続: どちらのプレイヤーがダメージを受けるたび追加ダメージ+2" },
   // ---- spells: blood magic ----
-  { id: "BLOOD1", t: "spell", cost: 2, play: 1, act: "draw", name: "피의 마법 1", nameJa: "血の魔法 1", text: "자신에게 4 데미지, 카드 3장 드로우 (시전 1)", textJa: "自分に4ダメージ、カード3枚ドロー (発動1)" },
-  { id: "BLOOD2", t: "spell", cost: 4, play: 2, act: "draw", name: "피의 마법 2", nameJa: "血の魔法 2", text: "자신에게 8 데미지, 카드 6장 드로우 (시전 2)", textJa: "自分に8ダメージ、カード6枚ドロー (発動2)" },
-  { id: "BLOOD3", t: "spell", cost: 6, play: 5, act: "dmg", name: "피의 마법 3", nameJa: "血の魔法 3", text: "자신 12 데미지 + 상대 20 데미지, 이후 1장 드로우 (시전 5)", textJa: "自分12ダメージ + 相手20ダメージ、その後1枚ドロー (発動5)" },
+  { id: "BLOOD1", t: "spell", cost: 2, play: 1, act: "draw", name: "피의 마법 - 기본", nameJa: "血の魔法 - 基本", text: "자신에게 4 데미지, 카드 3장 드로우 (시전 1)", textJa: "自分に4ダメージ、カード3枚ドロー (発動1)" },
+  { id: "BLOOD2", t: "spell", cost: 4, play: 2, act: "draw", name: "피의 마법 - 응용", nameJa: "血の魔法 - 応用", text: "자신에게 8 데미지, 카드 6장 드로우 (시전 2)", textJa: "自分に8ダメージ、カード6枚ドロー (発動2)" },
   // ---- spells: disarm(장치) ----
   { id: "DISARM1", t: "spell", cost: 2, play: 0, act: "destroyEnch", val: 1, name: "장치해제", nameJa: "装置解除", text: "상대 영구마법 1장 파괴", textJa: "相手の永続魔法1枚を破壊" },
   { id: "DISARM2", t: "spell", cost: 3, play: 2, act: "destroyEnch", val: 2, name: "장치분석", nameJa: "装置分析", text: "상대 영구마법 2장 파괴 (시전 2)", textJa: "相手の永続魔法2枚を破壊 (発動2)" },
@@ -889,6 +888,51 @@ const NEW_CARDS8: CardDef[] = [
 ];
 for (const c of NEW_CARDS8) { DB[c.id] = c; }
 
+// ============================================================
+// NEW CARDS 9 — 알 대응 테크 + 피의 마법(희로애락) + 흡혈귀 진화 아키타입
+// 흡혈귀는 cost 0 (구매 불가, 흡혈 계약/진화로만 등장) + 죽으면 게임에서 제외.
+// "피의 마법" 트리거는 카드 이름이 '피의 마법'으로 시작하는지로 판정.
+// ============================================================
+const NEW_CARDS9: CardDef[] = [
+  // ---- 알 대응 테크 ----
+  { id: "EGG_HUNTER", t: "mon", cost: 3, atk: 0, def: 4, aura: "eggHunter", name: "에그헌터", nameJa: "エッグハンター",
+    text: "이 카드가 '알'을 공격하면 내구도 카운터를 3 소모시킨다", textJa: "このカードが「卵」を攻撃すると耐久カウンターを3消費させる" },
+  { id: "INCUBATOR", t: "spell", cost: 3, act: "incubate", val: 5, name: "고급 부화기", nameJa: "高級孵化器",
+    text: "자신의 '알' 1개의 부화 카운터를 5턴 줄인다", textJa: "自分の「卵」1つの孵化カウンターを5ターン減らす" },
+  { id: "EGG_MASTER", t: "mon", cost: 3, atk: 0, def: 4, onSummon: "eggMaster", val: 1, name: "부화 마스터", nameJa: "孵化マスター",
+    text: "소환시: 자신 필드의 모든 '알'의 내구도 카운터 +1", textJa: "召喚時: 自分の場の全ての「卵」の耐久カウンター+1" },
+  // ---- 피의 마법 희로애락 ----
+  { id: "BLOOD_JOY", t: "spell", cost: 3, name: "피의 마법 - 희", nameJa: "血の魔法 - 喜",
+    text: "자신에게 6 데미지. 상대와 자신은 최대 체력을 12 얻는다", textJa: "自分に6ダメージ。相手と自分は最大体力を12得る" },
+  { id: "BLOOD_ANGER", t: "spell", cost: 2, name: "피의 마법 - 노", nameJa: "血の魔法 - 怒",
+    text: "자신에게 10 데미지. 필드 위 모든 몬스터는 공격력 +3(지속)", textJa: "自分に10ダメージ。場の全モンスターは攻撃力+3(持続)" },
+  { id: "BLOOD_SORROW", t: "spell", cost: 2, name: "피의 마법 - 애", nameJa: "血の魔法 - 哀",
+    text: "자신에게 12 데미지. 자신의 묘지에서 가장 코스트가 높은 카드 1장을 게임에서 제외한다", textJa: "自分に12ダメージ。自分の墓地から最もコストの高いカード1枚をゲームから除外する" },
+  { id: "BLOOD_PLEASURE", t: "spell", cost: 4, name: "피의 마법 - 락", nameJa: "血の魔法 - 楽",
+    text: "자신에게 14 데미지. 자신의 최대 마나 +1", textJa: "自分に14ダメージ。自分の最大マナ+1" },
+  // ---- 흡혈 지원 ----
+  { id: "VAMP_PACT", t: "spell", cost: 2, name: "흡혈 계약", nameJa: "吸血契約",
+    text: "자신에게 6 데미지. '견습 흡혈귀'를 자신 필드에 소환", textJa: "自分に6ダメージ。「見習い吸血鬼」を自分の場に召喚" },
+  { id: "BLOOD_FEST", t: "spell", cost: 3, ench: "bloodFest", val: 99, name: "피의 축제", nameJa: "血の祝祭",
+    text: "영구: '피의 마법' 카드를 사용할 때마다 최대 마나 +1", textJa: "永続: 「血の魔法」カードを使うたび最大マナ+1" },
+  { id: "BLOOD_SHIELD", t: "spell", cost: 1, ench: "bloodShield", val: 99, name: "흡혈 술식", nameJa: "吸血術式",
+    text: "영구: 자신은 '피의 마법'으로 인한 데미지를 받지 않는다", textJa: "永続: 自分は「血の魔法」によるダメージを受けない" },
+  { id: "VAMP_WARD", t: "spell", cost: 2, ench: "vampWard", val: 99, name: "흡혈의 극의", nameJa: "吸血の極意",
+    text: "영구: 이 카드가 필드에 있는 한 양 필드의 '흡혈귀' 몬스터는 파괴되지 않는다", textJa: "永続: このカードが場にある限り両者の場の「吸血鬼」モンスターは破壊されない" },
+  // ---- 흡혈귀 진화 체인 (cost 0, 구매 불가) ----
+  { id: "VAMP1", t: "mon", cost: 0, atk: 2, def: 2, evolveTo: "VAMP2", name: "견습 흡혈귀", nameJa: "見習い吸血鬼",
+    text: "'피의 마법' 발동 시: 초급 흡혈귀를 자신 필드에 소환 (1회) · 죽으면 게임에서 제외", textJa: "「血の魔法」発動時: 初級吸血鬼を自分の場に召喚 (1回) · 死亡時ゲームから除外" },
+  { id: "VAMP2", t: "mon", cost: 0, atk: 5, def: 2, evolveTo: "VAMP3", name: "초급 흡혈귀", nameJa: "初級吸血鬼",
+    text: "'피의 마법' 발동 시: 중급 흡혈귀를 자신 필드에 소환 (1회) · 죽으면 게임에서 제외", textJa: "「血の魔法」発動時: 中級吸血鬼を自分の場に召喚 (1回) · 死亡時ゲームから除外" },
+  { id: "VAMP3", t: "mon", cost: 0, atk: 9, def: 2, evolveTo: "VAMP4", name: "중급 흡혈귀", nameJa: "中級吸血鬼",
+    text: "'피의 마법' 발동 시: 상급 흡혈귀를 자신 필드에 소환 (1회) · 죽으면 게임에서 제외", textJa: "「血の魔法」発動時: 上級吸血鬼を自分の場に召喚 (1回) · 死亡時ゲームから除外" },
+  { id: "VAMP4", t: "mon", cost: 0, atk: 14, def: 3, evolveTo: "VAMP5", attackFx: "vampDrain", val: 50, name: "상급 흡혈귀", nameJa: "上級吸血鬼",
+    text: "'피의 마법' 발동 시: 특급 흡혈귀를 자신 필드에 소환 (1회) · 상대에게 입힌 데미지의 50%만큼 최대 체력 획득 · 죽으면 게임에서 제외", textJa: "「血の魔法」発動時: 特級吸血鬼を自分の場に召喚 (1回) · 相手に与えたダメージの50%だけ最大体力を得る · 死亡時ゲームから除外" },
+  { id: "VAMP5", t: "mon", cost: 0, atk: 21, def: 5, onSummon: "vampLord", attackFx: "vampDrain", val: 100, aura: "trapImmune", name: "특급 흡혈귀", nameJa: "特級吸血鬼",
+    text: "소환시: 상대에게 15 데미지, 자신의 최대 체력 +30 · 상대에게 입힌 데미지만큼 최대 체력 획득 · 함정 카드로 파괴되지 않는다 · 죽으면 게임에서 제외", textJa: "召喚時: 相手に15ダメージ、自分の最大体力+30 · 相手に与えたダメージだけ最大体力を得る · 罠カードで破壊されない · 死亡時ゲームから除外" },
+];
+for (const c of NEW_CARDS9) { DB[c.id] = c; }
+
 // English localization (names/texts) — applied last so it reflects final balance patches
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 
@@ -947,7 +991,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v6"; // v3: 정예 ≤7/+3→≤8/+4 · v4: 군단 24→20장 · v5: 스타터도 침묵·마법무효화 대상 · v6: 알 아키타입(드래곤의 알/신수의 알 + 흑룡·적룡·청룡·신수) 추가
+export const BALANCE_VERSION = "v7"; // v5: 스타터도 침묵·무효화 대상 · v6: 알 아키타입 · v7: 알 대응 테크(에그헌터/부화기/부화 마스터) + 피의 마법 희로애락 + 흡혈귀 진화 체인, 피의 마법 1/2 개명·3 삭제
 
 export function idsOfCost(cost: number): string[] {
   return BUYABLE_POOL.filter((id) => DB[id].cost === cost);

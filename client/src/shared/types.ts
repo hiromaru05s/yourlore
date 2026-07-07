@@ -35,6 +35,7 @@ export interface CardDef {
   hatchTurns?: number; // 알(egg): hatch counter — decrements on EVERY turn start (both players)
   hatchDur?: number; // 알(egg): durability — enemy monster attacks consume 1; 0 = egg destroyed
   hatchInto?: string[]; // 알(egg): card ids the egg can hatch into (random pick)
+  evolveTo?: string; // 흡혈귀: card id summoned when the owner casts a 피의 마법 (once per card)
   nameJa?: string; // Japanese name (falls back to name)
   textJa?: string; // Japanese effect text (falls back to text)
   nameEn?: string; // English name (falls back to name)
@@ -60,6 +61,7 @@ export interface FieldMon extends CardInst {
   token?: boolean; // conjured by an effect (not a real deck card) — exiled on death, never enters the deck cycle
   hatch?: number; // 알: remaining hatch counter (both players' turns tick it)
   dur?: number; // 알: remaining durability (enemy attacks consume 1 instead of combat)
+  evolvedUsed?: boolean; // 흡혈귀: 진화(1회) 사용됨
 }
 
 export interface TrapSet {

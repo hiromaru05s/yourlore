@@ -273,7 +273,12 @@ export function greedyDecide(g: GameState): Action {
     if (c.id === "CATALYST" && p.hp <= 6) return false;
     if (c.id === "BLOOD1" && p.hp <= 6) return false;
     if (c.id === "BLOOD2" && p.hp <= 10) return false;
-    if (c.id === "BLOOD3" && p.hp <= 14) return false;
+    if (c.id === "BLOOD_JOY" && p.hp <= 8) return false;
+    if (c.id === "BLOOD_ANGER" && p.hp <= 12) return false;
+    if (c.id === "BLOOD_SORROW" && (p.hp <= 14 || p.discard.length === 0)) return false;
+    if (c.id === "BLOOD_PLEASURE" && p.hp <= 16) return false;
+    if (c.id === "VAMP_PACT" && (p.hp <= 8 || p.field.length >= 7)) return false;
+    if (c.id === "INCUBATOR" && !p.field.some((m) => m.hatch != null && m.hatch > 0)) return false;
     // forbidden ritual: needs HP to spare AND a non-시초 tribe monster to duplicate
     if (c.id === "FORBIDDEN" && (p.hp <= 17 || !p.field.some((m) => m.tribe && m.tribe !== "시초"))) return false;
     return true;
@@ -448,6 +453,10 @@ function autoTarget(g: GameState): Action {
     return { type: "chooseTarget", uid: t ? t.uid : null };
   }
   if (pending.kind === "myMon") {
+    if (pending.reason === "incubate") { // 고급 부화기: 부화가 가장 임박한 알
+      const egg = [...p.field].filter((m) => m.hatch != null).sort((a, b) => (a.hatch ?? 99) - (b.hatch ?? 99))[0];
+      return { type: "chooseTarget", uid: egg ? egg.uid : null };
+    }
     const t = [...p.field].sort((x, y) => effAtk(p, y) - effAtk(p, x))[0];
     return { type: "chooseTarget", uid: t ? t.uid : null };
   }
