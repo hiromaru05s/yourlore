@@ -61,6 +61,7 @@ export class Matchmaker {
   private onMsg(me: Waiter, e: MessageEvent): void {
     let msg: QueueClientMsg;
     try { msg = JSON.parse(e.data as string); } catch { return; }
+    if (msg.type === "ping") { try { this.send(me.ws, { type: "pong" }); } catch { /* dropped */ } return; }
     if (msg.type === "cancel") { this.remove(me.ws); return; }
     if (msg.type !== "queue") return;
 

@@ -114,6 +114,7 @@ export interface PlayerState {
   skipNext: boolean; // if true, this player's next turn is skipped
   collection?: string[]; // redacted view only: sorted card-id multiset of hidden zones (public via buy log)
   removed?: CardInst[]; // cards permanently exiled from the game (public zone)
+  botTune?: { minBuy?: number; minBuyEarly?: number; chestTurn?: number }; // per-archetype bot buy discipline (see bot.ts BOT_DECKS)
 }
 
 export interface Pending {

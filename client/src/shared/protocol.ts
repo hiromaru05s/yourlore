@@ -8,9 +8,11 @@ import type { Action, CardInst, GameEvent, GameState, Side } from "./types";
 // ---- matchmaking (Matchmaker Durable Object) ----
 export type QueueClientMsg =
   | { type: "queue" }
+  | { type: "ping" }   // keepalive — idle edge/NAT timeouts kill silent queue sockets (same as game socket)
   | { type: "cancel" };
 
 export type QueueServerMsg =
+  | { type: "pong" }
   | { type: "queued"; position: number }
   | { type: "matched"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null }
   | { type: "error"; message: string };

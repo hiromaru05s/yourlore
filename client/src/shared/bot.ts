@@ -89,6 +89,7 @@ function determinize(g: GameState, s: Side): void {
 function candidates(g: GameState): Action[] {
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];
+  const T = tuneFor(p);
   const out: Action[] = [];
 
   if (g.pending) {
@@ -139,7 +140,7 @@ function candidates(g: GameState): Action[] {
   const candSealAll = g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"));
   const candSealLow = g.players.some((pl) => pl.field.some((m) => m.aura === "sealLow"));
   p.hand.forEach((c, idx) => {
-    if (c.star === "chest" && (g.turn <= TUNE.chestTurn || chestLocked(g))) return;
+    if (c.star === "chest" && (g.turn <= T.chestTurn || chestLocked(g))) return;
     if (c.t === "trap" && p.trapBlockTurn) return; // 협상: 함정 설치 금지 턴 — 엔진 거부 루프 방지
     if ((c.t === "spell" || c.t === "starter") && (candSealAll || p.spellSealTurn || (candSealLow && playCost(c) <= 5))) return; // 침묵
     if (playCost(c) > p.mana || seenPlay.has(c.id)) return;
@@ -188,6 +189,53 @@ export const TUNE = {
 
 function roughBuy(c: CardInst): number {
   return c.t === "mon" ? (c.atk || 0) * TUNE.atkW + (c.def || 0) * TUNE.defW + c.cost * TUNE.costW : cardValue(c);
+}
+
+// per-bot buy discipline: archetype overrides on top of the shared TUNE defaults.
+function tuneFor(p: PlayerState): typeof TUNE {
+  return { ...TUNE, ...(p.botTune ?? {}) };
+}
+// FLAME/AMBUSH deal face damage but the engine resolves them by id (no `act`),
+// so the lethal planner and the burn branch look their damage up here.
+// castable() already gates the self-damage; AMBUSH is only legal on the opening
+// turn (opponent still at max mana 4).
+function burnDmg(c: CardInst, o: PlayerState): number {
+  if (c.id === "FLAME") return 2;
+  if (c.id === "AMBUSH") return o.maxMana === 4 ? 7 : 0;
+  return 0;
+}
+
+// ============================================================
+// Bot deck archetypes. The bot used to always run the vanilla default
+// (6 Cull + 2 Chest) with no early plays, so it just thinned and passed —
+// which read as "weird". Each archetype below is a coherent 8-card starting
+// deck (the fixed Attune is auto-prepended by the engine) plus a small
+// buy-discipline override matching its game plan. pickBotDeck() rolls one
+// at game start; controller sets it as the bot player's deck + botTune.
+// ============================================================
+export interface BotDeck { name: string; cards: string[]; tune: PlayerState["botTune"] }
+export const BOT_DECKS: BotDeck[] = [
+  { // AGGRO — open with 기습(AMBUSH), chip with 불꽃(FLAME), race with 유령(GHOST) + 지원 나팔(TRUMPET)
+    name: "BOT · AGGRO",
+    cards: ["AMBUSH", "FLAME", "FLAME", "FLAME", "GHOST", "GHOST", "TRUMPET", "STARTER_CHEST"],
+    tune: { minBuyEarly: 8, minBuy: 12, chestTurn: 4 }, // grab cheap attackers, open chests early for tempo
+  },
+  { // RAMP — thin hard, ramp on 선견지명(FORESIGHT), then buy bombs. No 유령/GHOST: it self-damages
+    //         whenever EITHER player ramps, which is a liability in a ramp mirror.
+    name: "BOT · RAMP",
+    cards: ["STARTER_TRASH", "STARTER_TRASH", "STARTER_TRASH", "STARTER_TRASH", "FORESIGHT", "STARTER_CHEST", "STARTER_CHEST", "STARTER_CHEST"],
+    tune: { minBuyEarly: 12, minBuy: 19, chestTurn: 6 },
+  },
+  { // MIDRANGE — board tempo: 유령(GHOST) clocks, 지원 나팔(TRUMPET) pushes, 암살자 길드(GUILD_HALL)
+    //            a sticky body, light thinning + chests for value, balanced buys.
+    name: "BOT · MIDRANGE",
+    cards: ["GHOST", "GHOST", "TRUMPET", "GUILD_HALL", "FLAME", "STARTER_TRASH", "STARTER_CHEST", "STARTER_CHEST"],
+    tune: { minBuyEarly: 10, minBuy: 15, chestTurn: 5 },
+  },
+];
+/** Roll a random archetype for a new bot game (caller supplies the RNG roll in [0,1)). */
+export function pickBotDeck(rnd: number = Math.random()): BotDeck {
+  return BOT_DECKS[Math.min(BOT_DECKS.length - 1, Math.max(0, Math.floor(rnd * BOT_DECKS.length)))];
 }
 
 // ---- evaluation: logistic-regression weights fit on 2000 greedy self-play games ----
@@ -257,6 +305,7 @@ function threatFace(o: PlayerState, p: PlayerState): number {
 export function greedyDecide(g: GameState): Action {
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];
+  const T = tuneFor(p); // archetype buy discipline (defaults to shared TUNE)
 
   // 0) resolve a pending target/pick automatically
   if (g.pending) return autoTarget(g);
@@ -366,7 +415,8 @@ export function greedyDecide(g: GameState): Action {
   // 5) buffs — only when there is a ready attacker to benefit
   const buff = spells.find((x) =>
     (x.c.act === "buffPerm" && p.field.length > 0) ||
-    ((x.c.act === "buffTurn" || x.c.act === "buffAllTurn") && ready.length > 0));
+    ((x.c.act === "buffTurn" || x.c.act === "buffAllTurn") && ready.length > 0) ||
+    (x.c.id === "TRUMPET" && ready.length > 0)); // 지원 나팔: 공격 직전 몬스터 2체 +1
   if (buff) return { type: "play", idx: buff.i };
 
   // 6) attack — assassins go face; otherwise attack when it kills (a blocked
@@ -388,7 +438,11 @@ export function greedyDecide(g: GameState): Action {
   if (trapbreak) return { type: "play", idx: trapbreak.i };
   const wipe = spells.find((x) => x.c.act === "wipeBack" && p.field.length === 0 && (o.traps.length + o.enchants.length) > 0);
   if (wipe) return { type: "play", idx: wipe.i };
-  const direct = spells.find((x) => x.c.act === "dmg" || x.c.act === "siphon");
+  // 역산: 상대 영구마법 파괴 (castable가 상대 최대 마나<=6 & 영구마법 존재를 보장)
+  const disenchant = spells.find((x) => x.c.id === "COUNTERCALC");
+  if (disenchant) return { type: "play", idx: disenchant.i };
+  // 직접 데미지 마법 + 불꽃/기습 번 (castable가 자해 리스크를 게이트)
+  const direct = spells.find((x) => x.c.act === "dmg" || x.c.act === "siphon" || burnDmg(x.c, o) > 0);
   if (direct) return { type: "play", idx: direct.i };
 
   // 8) utility spells (draw / ramp / disruption)
@@ -420,7 +474,7 @@ export function greedyDecide(g: GameState): Action {
   //     penetration damage. (A/B: ~66% vs v1 bot, then +4% more in round 2.)
   const buyScore = (c: CardInst): number =>
     c.t === "mon" ? (c.atk || 0) * TUNE.atkW + (c.def || 0) * TUNE.defW + c.cost * TUNE.costW : cardValue(c);
-  const minBuy = p.maxMana >= 5 ? TUNE.minBuy : TUNE.minBuyEarly; // 구매 하한 (덱 희석 방지 — 지배적 레버)
+  const minBuy = p.maxMana >= 5 ? T.minBuy : T.minBuyEarly; // 구매 하한 (덱 희석 방지 — 지배적 레버, 아키타입별 조정)
   let bi = -1, bs = minBuy;
   p.supply.forEach((c, i) => { if (c && buyCost(p, c) <= p.mana) { const s = buyScore(c); if (s > bs) { bs = s; bi = i; } } });
   if (bi >= 0) return { type: "buySupply", i: bi };
@@ -433,7 +487,7 @@ export function greedyDecide(g: GameState): Action {
   if (p.mana >= 8) return { type: "refresh" };
 
   // 13) spare mana → Pry Chest (not before turn 7 — early mimic risk outweighs the payout; not while sealed)
-  const chest = (g.turn <= TUNE.chestTurn || chestLocked(g)) ? -1 : p.hand.findIndex((c) => c.star === "chest" && playCost(c) <= p.mana && castable(c));
+  const chest = (g.turn <= T.chestTurn || chestLocked(g)) ? -1 : p.hand.findIndex((c) => c.star === "chest" && playCost(c) <= p.mana && castable(c));
   if (chest >= 0) return { type: "play", idx: chest };
 
   // 14) spare mana → Cull (deck thinning)
@@ -455,11 +509,11 @@ function facePlan(p: PlayerState, o: PlayerState, ready: FieldMon[], spells: { c
   let spellIdx: number | null = null;
   let manaLeft = p.mana;
   const dmg = spells
-    .filter((x) => (x.c.act === "dmg" || x.c.act === "siphon") && (x.c.val || 0) > 0)
-    .sort((a, b) => (b.c.val || 0) - (a.c.val || 0));
+    .map((x) => ({ i: x.i, cost: playCost(x.c), d: (x.c.act === "dmg" || x.c.act === "siphon") ? (x.c.val || 0) : burnDmg(x.c, o) }))
+    .filter((x) => x.d > 0)
+    .sort((a, b) => b.d - a.d);
   for (const s of dmg) {
-    const cost = playCost(s.c);
-    if (cost <= manaLeft) { manaLeft -= cost; total += s.c.val || 0; if (spellIdx === null) spellIdx = s.i; }
+    if (s.cost <= manaLeft) { manaLeft -= s.cost; total += s.d; if (spellIdx === null) spellIdx = s.i; }
   }
   let attackUid: string | null = null;
   if (!noAtk) {

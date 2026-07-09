@@ -9,7 +9,7 @@
 import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
 import { createGame, reduce, playCost } from "../shared/engine";
-import { botDecide } from "../shared/bot";
+import { botDecide, pickBotDeck } from "../shared/bot";
 import { DB, STARTERS } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog } from "../ui/log";
@@ -652,12 +652,14 @@ export class LocalController extends BaseController {
 
   constructor(root: HTMLElement, exits: ControllerExits, playerName = "PLAYER 1", deck?: string[]) {
     super(root, 0, exits);
+    const bot = pickBotDeck(); // roll a random archetype (deck + buy discipline) per game
     const res = createGame({
       mode: "bot",
       p0: { id: "local", name: playerName, deck },
-      p1: { id: "bot", name: "BOT", isBot: true },
+      p1: { id: "bot", name: bot.name, isBot: true, deck: bot.cards },
       starting: (Math.random() < 0.5 ? 0 : 1) as Side, // coin toss for first turn
     });
+    res.state.players[1].botTune = bot.tune; // archetype-matched buy discipline (survives structuredClone in reduce)
     this.applyResult(res, false);
   }
 
