@@ -65,7 +65,7 @@ export interface FieldMon extends CardInst {
   dur?: number; // 알: remaining durability (enemy attacks consume 1 instead of combat)
   evolvedUsed?: boolean; // 흡혈귀: 진화(1회) 사용됨
   trickSwapped?: boolean; // 트릭룸: 공/방 반전 적용 중
-  gcount?: number; // 암살자 길드: 누적 카운트
+  gcount?: number; // 누적 카운트 (암살자 길드 / 뱀파이어 집사 흡혈 카운트)
 }
 
 export interface TrapSet {

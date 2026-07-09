@@ -14,7 +14,7 @@
 //    dice / draws. A/B: ~68% vs the pure greedy bot.
 // ============================================================
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
-import { buyCost, cardValue, chestLocked, effAtk, effDef, glassBanActive, playCost, reduce, summonReqMet } from "./engine";
+import { buyCost, cardValue, chestLocked, effAtk, effDef, glassBanActive, isVampFamily, playCost, reduce, summonReqMet } from "./engine";
 import { DB } from "./cards";
 
 // ---------------- rollout search (the shipped bot) ----------------
@@ -105,10 +105,11 @@ function candidates(g: GameState): Action[] {
     }
     if (pend.kind === "oppMon") o.field.filter((m) => !(m.aura === "ward" && pend.reason !== "attack")).forEach((m) => push(m.uid));
     else if (pend.kind === "myMon") {
-      // 지원 나팔(exclude: 이미 고른 몬스터) / 고급 부화기(알만) 제약 준수 — 아니면 재무장 무한루프
+      // 지원 나팔(exclude) / 고급 부화기(알만) / 비술(흡혈귀만) 제약 준수 — 아니면 재선택 무한루프
       p.field
         .filter((m) => m.uid !== (pend.data?.exclude as string | undefined))
         .filter((m) => !(pend.reason === "incubate" && m.hatch == null))
+        .filter((m) => !(pend.reason === "bloodSecret" && !isVampFamily(m)))
         .forEach((m) => push(m.uid));
       if (pend.allowCancel) push(null);
     }
@@ -560,6 +561,10 @@ function autoTarget(g: GameState): Action {
     if (pending.reason === "incubate") { // 고급 부화기: 부화가 가장 임박한 알
       const egg = [...p.field].filter((m) => m.hatch != null).sort((a, b) => (a.hatch ?? 99) - (b.hatch ?? 99))[0];
       return { type: "chooseTarget", uid: egg ? egg.uid : null };
+    }
+    if (pending.reason === "bloodSecret") { // 비술: 가장 약한 흡혈귀를 대가로 바친다
+      const v = [...p.field].filter((m) => isVampFamily(m)).sort((a, b) => (effAtk(p, a) + effDef(p, a)) - (effAtk(p, b) + effDef(p, b)))[0];
+      return { type: "chooseTarget", uid: v ? v.uid : null };
     }
     // 지원 나팔의 exclude(중복 선택 불가)를 지켜야 무한 재무장 루프에 안 빠진다
     const excl = pending.data?.exclude as string | undefined;

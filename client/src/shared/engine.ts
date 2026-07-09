@@ -45,6 +45,10 @@ let spellDepth = 0;
 let bloodDepth = 0;
 /** "피의 마법" 계열 판정 — 카드 이름 접두사 기준 (기본/응용/희로애락 전부 포함) */
 function isBloodMagic(c: { name: string }): boolean { return (c.name || "").startsWith("피의 마법"); }
+/** '흡혈귀' 계열 판정 — 이름 기준 + 명시적 편입 카드(뱀파이어 집사). 극의 보호/비술 파괴 대상 공용. */
+export function isVampFamily(c: { name?: string; id?: string }): boolean {
+  return (c.name || "").includes("흡혈귀") || c.id === "VAMP_BUTLER";
+}
 const MIMIC_IDS = new Set(["MIMIC", "MIMIC2", "AWAKENED_MIMIC", "MIMIC_KING", "MIMIC_KING2", "ORIGIN_MIMIC", "MIMIC_LORD"]);
 /** 유리 병기 금지령: while active (either side), monsters with DEF<=1 cannot attack. */
 export function glassBanActive(g: GameState): boolean {
@@ -252,7 +256,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
   };
   const destroyMonster = (owner: PlayerState, m: FieldMon): void => {
     // 흡혈의 극의(vampWard): 필드에 있는 한 양 필드의 '흡혈귀'는 파괴되지 않는다
-    if ((m.name || "").includes("흡혈귀") && g.players.some((pl) => pl.enchants.some((e2) => e2.card.ench === "vampWard"))) {
+    if (isVampFamily(m) && g.players.some((pl) => pl.enchants.some((e2) => e2.card.ench === "vampWard"))) {
       log(`  └ 흡혈의 극의: ${cn(m)} 파괴되지 않음`, `  └ 吸血の極意: ${cn(m)} は破壊されない`);
       return;
     }
@@ -428,6 +432,18 @@ function spawnVampire(g: GameState, ctx: Ctx, p: PlayerState, id: string): void 
   applyEnterAura(g, ctx, p, m);
   applySummonBuff(ctx, p, m);
   resolveOnSummon(g, ctx, m); // 특급 흡혈귀의 소환시 효과도 발동
+}
+
+/** 피의 마법 - 비술: 자신 흡혈귀 1체 파괴 시도 → 실제로 파괴됐을 때만 최대 마나 +3 / 최대 체력 +10.
+ *  (흡혈의 극의가 파괴를 막으면 보상 없음 — 파괴는 '대가'라서 공짜 버프 콤보 방지) */
+function bloodSecretDestroy(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): void {
+  ctx.destroyMonster(p, m);
+  if (p.field.some((x) => x.uid === m.uid)) { ctx.log("  └ 파괴 실패 — 대가 미지불로 효과 불발", "  └ 破壊失敗 — 代価未払いで効果不発"); return; }
+  p.maxMana += 3;
+  ctx.log(`  └ 최대 마나 +3 (${p.maxMana})`, `  └ 最大マナ+3 (${p.maxMana})`);
+  p.maxHp += 10; p.hp += 10;
+  ctx.ev.push({ type: "heal", player: side(g, p), amount: 10 });
+  ctx.log(`  └ 최대 체력 +10 (${p.maxHp})`, `  └ 最大体力+10 (${p.maxHp})`);
 }
 
 /** 운명의 수레바퀴: 주사위 결과 확인 후 재굴림 여부를 묻는 pending 생성. */
@@ -828,6 +844,16 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     const gain = Math.floor(dealtFace * (att.val || 100) / 100);
     if (gain > 0) { p.maxHp += gain; ctx.log(`  └ ${cn(att)} 흡혈: 최대 체력 +${gain} (${p.maxHp})`, `  └ ${cn(att)} 吸血: 最大体力+${gain} (${p.maxHp})`); }
   }
+  // 뱀파이어 집사(vampButler): 상대 '몬스터'를 공격할 때마다 흡혈 카운트 +1, 3카운트마다 견습 흡혈귀 소환
+  if (att.aura === "vampButler" && targetUid !== null && !g.over && p.field.some((x) => x.uid === att.uid)) {
+    att.gcount = (att.gcount || 0) + 1;
+    ctx.log(`  └ ${cn(att)} 카운트 ${att.gcount}/3`, `  └ ${cn(att)} カウント ${att.gcount}/3`);
+    if (att.gcount >= 3) {
+      att.gcount = 0;
+      ctx.log(`  └ <span class="good">${cn(att)} 발동! 견습 흡혈귀 소환</span>`, `  └ <span class="good">${cn(att)} 発動！見習い吸血鬼を召喚</span>`);
+      spawnVampire(g, ctx, p, "VAMP1");
+    }
+  }
   // 암살자 길드: '암살자' 몬스터가 상대에게 데미지를 줄 때마다 카운트 +1, 3카운트 → 14뎀
   if (dealtFace > 0 && !g.over && ((att.id || "").startsWith("ASSASSIN") || (att.name || "").includes("암살자"))) {
     for (const gm of p.field) {
@@ -1089,10 +1115,12 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
   }
 }
 
-/** Spawn a stat-only token monster (no summon effect / tribe / pitfall trigger).
+/** Spawn a stat-only token monster (no summon effect / pitfall trigger).
  *  `fromDeck`: the summon CONSUMED a real deck card (e.g. GM10_2) — that copy
  *  still dies to the graveyard so the player keeps the card. Everything else
- *  is a conjured token: exiled on death (see destroyMonster). */
+ *  is a conjured token: exiled on death (see destroyMonster).
+ *  종족 시너지는 발동한다 — 시초의 노래/금단의 술식처럼 토큰 소환으로 동족을
+ *  완성하는 카드가 시너지를 못 터뜨리던 버그 수정 (2026-07-09). */
 function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string, fromDeck = false): void {
   if (!DB[id]) return;
   if (p.field.length >= FIELD_MAX) return; // monster zone full — cannot spawn more
@@ -1105,6 +1133,7 @@ function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string, fromDeck
   ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid, id: m.id });
   applyEnterAura(g, ctx, p, m);
   applySummonBuff(ctx, p, m);
+  if (m.tribe && !g.over) checkTribe(g, ctx, p, m); // 동족 시너지는 소환 경로와 무관하게 판정
 }
 
 /** GM5_2: each monster YOU summon gains +val ATK from every summonBuff aura you control. */
@@ -1206,7 +1235,7 @@ const CUSTOM_SPELLS = new Set<string>([
   "GS7_0", "GS7_2", "GS8_0", "GS8_2", "GS8_3", "GS8_4", "GS8_5", "GS9_0", "GS9_2", "GS10_0", "GS10_1", "GS10_2",
   "HANDRESET", "TIMEWARP", "GAMBLE", "DICE8",
   "RUNE1", "RUNE2", "RUNE3", "GENESIS_SONG", "GENESIS_MAGIC",
-  "BLOOD1", "BLOOD2", "BLOOD_JOY", "BLOOD_ANGER", "BLOOD_SORROW", "BLOOD_PLEASURE", "VAMP_PACT",
+  "BLOOD1", "BLOOD2", "BLOOD_JOY", "BLOOD_ANGER", "BLOOD_SORROW", "BLOOD_PLEASURE", "VAMP_PACT", "VAMP_PACT2", "BLOOD_SECRET",
   "FLAME", "NEGOTIATE", "COUNTERCALC", "AMBUSH", "TRUMPET", "TRICKROOM", "DISARM3", "FORBIDDEN", "CATALYST", "MEDITATE", "PRAYER", "HERMIT", "LUCKY_CHEST", "GUILD_CHEST", "SCRAPPER", "WALLBREAK1", "WALLBREAK2", "SNIPE1", "SNIPE2", "SHATTER", "INQUISITION", "SCARECROW", "LEVY", "CULL_FLOOD", "PURGE_ALL", "EXILE_NUKE1", "EXILE_NUKE2", "GREED_PRICE", "MARKET_CRISIS", "GOLIATH_HUNT", "MASSACRE",
 ]);
 const chance = (g: GameState, pct: number): boolean => randInt(g, 100) < pct;
@@ -1364,6 +1393,23 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       ctx.log(`${tag(p, card)} 자신에게 6 데미지`, `${tag(p, card)} 自分に6ダメージ`);
       ctx.dealDamage(p, 6, cn(card), cn(card));
       if (!g.over) spawnVampire(g, ctx, p, "VAMP1");
+      break;
+    }
+    case "VAMP_PACT2": { // 흡혈 각인 계약: 자신 15뎀 + 초급 흡혈귀 소환
+      ctx.log(`${tag(p, card)} 자신에게 15 데미지`, `${tag(p, card)} 自分に15ダメージ`);
+      ctx.dealDamage(p, 15, cn(card), cn(card));
+      if (!g.over) spawnVampire(g, ctx, p, "VAMP2");
+      break;
+    }
+    case "BLOOD_SECRET": { // 피의 마법 - 비술: 자신 9뎀 + 자신 흡혈귀 1체 파괴 → 성공 시 최대 마나 +3, 최대 체력 +10
+      ctx.log(`${tag(p, card)} 자신에게 9 데미지`, `${tag(p, card)} 自分に9ダメージ`);
+      ctx.dealDamage(p, 9, cn(card), cn(card));
+      if (g.over) break;
+      const vamps = p.field.filter((m) => isVampFamily(m));
+      if (vamps.length === 0) { ctx.log("  └ 파괴할 흡혈귀가 없어 불발", "  └ 破壊する吸血鬼がおらず不発"); break; }
+      if (vamps.length === 1) { bloodSecretDestroy(g, ctx, p, vamps[0]); break; }
+      g.pending = { kind: "myMon", hint: "파괴할 자신의 '흡혈귀' 선택", hintJa: "破壊する自分の「吸血鬼」を選択", reason: "bloodSecret", allowCancel: false };
+      ctx.ev.push({ type: "needTarget", pending: g.pending });
       break;
     }
     case "FLAME": { // 불꽃: 상대 2 / 자신 1
@@ -1783,7 +1829,7 @@ function applyTribe(g: GameState, ctx: Ctx, p: PlayerState, o: PlayerState, trib
       // 상대 필드의 모든 카드를 파괴하고 게임에서 제외 (흡혈의 극의가 지키는 흡혈귀는 예외)
       const ward = g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "vampWard"));
       for (const tm of [...o.field]) {
-        if (ward && (tm.name || "").includes("흡혈귀")) { ctx.log(`  └ 흡혈의 극의: ${cn(tm)} 파괴되지 않음`, `  └ 吸血の極意: ${cn(tm)} は破壊されない`); continue; }
+        if (ward && isVampFamily(tm)) { ctx.log(`  └ 흡혈의 극의: ${cn(tm)} 파괴되지 않음`, `  └ 吸血の極意: ${cn(tm)} は破壊されない`); continue; }
         const fi = o.field.findIndex((x) => x.uid === tm.uid);
         if (fi >= 0) { o.field.splice(fi, 1); rmz(o).push(inst(g, tm.id)); ctx.ev.push({ type: "destroy", player: side(g, o), uid: tm.uid, id: tm.id }); }
       }
@@ -1873,6 +1919,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (card.id === "RUNE2" && !p.hand.some((c) => c.id === "RUNE1")) { ctx.log("  └ 패에 '룬 학문 - 초급'이 없습니다", "  └ 手札に「ルーン学問 - 初級」がありません"); return; }
     if (card.id === "RUNE3" && !(p.hand.some((c) => c.id === "RUNE1") && p.hand.some((c) => c.id === "RUNE2"))) { ctx.log("  └ 패에 초급·중급 룬 학문이 필요합니다", "  └ 手札に初級・中級のルーン学問が必要です"); return; }
     if ((card.id === "DISARM1" || card.id === "DISARM2" || card.id === "DISARM3") && o0.enchants.length === 0) { ctx.log("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); return; }
+    if (card.id === "BLOOD_SECRET" && !p.field.some((m) => isVampFamily(m))) { ctx.log("  └ 자신 필드에 '흡혈귀' 계열 몬스터가 없습니다", "  └ 自分の場に「吸血鬼」系列モンスターがいません"); return; }
     if ((card.id === "MEDITATE" || card.id === "PRAYER") && (p.playsTurn || 0) > 0) { ctx.log("  └ 이번 턴에 다른 카드를 플레이해서 사용 불가", "  └ このターンに他のカードをプレイしたため使用不可"); return; }
     if (card.id === "PRAYER" && p.maxMana > 12) { ctx.log("  └ 최대 마나가 12를 초과해 사용 불가", "  └ 最大マナが12を超えているため使用不可"); return; }
     if ((card.id === "MEDITATE" || card.id === "PRAYER") && p.hp >= Math.floor(p.maxHp * 0.8)) { ctx.log("  └ 체력이 이미 최대치의 80% 이상입니다", "  └ 体力が既に最大値の80%以上です"); return; }
@@ -2057,6 +2104,10 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       if (tm.hatch == null) { ctx.log("  └ 알이 아닙니다", "  └ 卵ではありません"); return; }
       tm.hatch = Math.max(0, tm.hatch - ((d.val as number) || 5));
       ctx.log(`<span class="t">${p.name}</span> → ${cn(tm)} 부화 카운터 -${d.val || 5} (남은 ${tm.hatch}턴)`, `<span class="t">${p.name}</span> → ${cn(tm)} 孵化カウンター-${d.val || 5} (残り${tm.hatch}ターン)`);
+    }
+    else if (pending.reason === "bloodSecret") {
+      if (!isVampFamily(tm)) { g.pending = pending; return; } // 흡혈귀만 지정 가능 — 다시 고르게
+      bloodSecretDestroy(g, ctx, p, tm);
     }
   } else if (pending.kind === "seek") {
     const i = p.deck.findIndex((c) => c.uid === uid);

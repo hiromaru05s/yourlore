@@ -919,6 +919,14 @@ const NEW_CARDS9: CardDef[] = [
     text: "영구: 자신은 '피의 마법'으로 인한 데미지를 받지 않는다", textJa: "永続: 自分は「血の魔法」によるダメージを受けない" },
   { id: "VAMP_WARD", t: "spell", cost: 2, ench: "vampWard", val: 99, name: "흡혈의 극의", nameJa: "吸血の極意",
     text: "영구: 이 카드가 필드에 있는 한 양 필드의 '흡혈귀' 몬스터는 파괴되지 않는다", textJa: "永続: このカードが場にある限り両者の場の「吸血鬼」モンスターは破壊されない" },
+  { id: "VAMP_PACT2", t: "spell", cost: 3, play: 2, name: "흡혈 각인 계약", nameJa: "吸血刻印契約",
+    text: "자신에게 15 데미지. '초급 흡혈귀'를 자신 필드에 소환 (시전 2)", textJa: "自分に15ダメージ。「初級吸血鬼」を自分の場に召喚 (発動2)" },
+  { id: "VAMP_BUTLER", t: "mon", cost: 2, atk: 1, def: 4, aura: "vampButler", name: "뱀파이어 집사", nameJa: "ヴァンパイア執事",
+    text: "상시: 이 카드가 상대 몬스터를 공격할 때마다 흡혈 카운트 +1 · 3카운트마다 '견습 흡혈귀'를 자신 필드에 소환 · 이 카드는 '흡혈귀' 계열로 취급",
+    textJa: "常時: このカードが相手モンスターを攻撃するたび吸血カウント+1 · 3カウントごとに「見習い吸血鬼」を自分の場に召喚 · このカードは「吸血鬼」系列として扱う" },
+  { id: "BLOOD_SECRET", t: "spell", cost: 2, name: "피의 마법 - 비술", nameJa: "血の魔法 - 秘術",
+    text: "자신에게 9 데미지. 자신 필드의 '흡혈귀' 계열 몬스터 1체를 파괴 — 파괴 성공 시 최대 마나 +3, 최대 체력 +10",
+    textJa: "自分に9ダメージ。自分の場の「吸血鬼」系列モンスター1体を破壊 — 破壊成功時、最大マナ+3、最大体力+10" },
   // ---- 흡혈귀 진화 체인 (cost 0, 구매 불가) ----
   { id: "VAMP1", t: "mon", cost: 0, atk: 2, def: 2, evolveTo: "VAMP2", name: "견습 흡혈귀", nameJa: "見習い吸血鬼",
     text: "'피의 마법' 발동 시: 초급 흡혈귀를 자신 필드에 소환 (1회) · 죽으면 게임에서 제외", textJa: "「血の魔法」発動時: 初級吸血鬼を自分の場に召喚 (1回) · 死亡時ゲームから除外" },
@@ -1088,7 +1096,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v9"; // v7: 알 테크+흡혈귀 · v8: 스타팅 15종+덱 빌딩 · v9: 종족 시너지 티어별 보상 개편 + 시초 몬스터 리워크(정령/수호자/거인/군주)
+export const BALANCE_VERSION = "v10"; // v8: 스타팅 15종+덱 빌딩 · v9: 종족 시너지 티어별 보상 개편 + 시초 리워크 · v10: 흡혈 지원 3종(각인 계약/집사/비술) + 토큰 소환 종족 시너지 수정
 
 export function idsOfCost(cost: number): string[] {
   return BUYABLE_POOL.filter((id) => DB[id].cost === cost);
