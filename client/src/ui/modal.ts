@@ -47,7 +47,7 @@ export function winModal(won: boolean | null, detail: string, onAgain: () => voi
   m.className = "modal";
   const title = won == null ? t("modal.draw") : won ? t("modal.win") : t("modal.lose");
   const color = won == null ? "var(--paper)" : won ? "var(--gold-glow)" : "var(--vermil-hi)";
-  m.innerHTML = `<h2 style="color:${color}">${title}</h2><p style="color:var(--paper);font-size:14px">${detail}</p><p>${t("modal.gameover")}</p><div class="modal-row"></div>`;
+  m.innerHTML = `<h2 style="color:${color}">${title}</h2><p style="color:var(--paper);font-size:14px">${detail}</p><div class="win-rank" id="winRankDelta" style="display:none"></div><p>${t("modal.gameover")}</p><div class="modal-row"></div>`;
   const row = m.querySelector(".modal-row")!;
   const home = document.createElement("button"); home.className = "btn btn-ghost"; home.textContent = t("modal.home");
   home.onclick = () => { closeOverlay(); onHome(); };
@@ -61,6 +61,34 @@ export function winModal(won: boolean | null, detail: string, onAgain: () => voi
   again.onclick = () => { closeOverlay(); onAgain(); };
   row.append(again);
   mount(m);
+}
+
+/** Ranked pre-game market preview: study the fixed market before the coin toss.
+    Returns handles so the caller can update the countdown (setUntil) and dismiss it (close). */
+export function marketPreview(market: CardInst[], onReady: () => void): { setUntil(u: number | null): void; close(): void } {
+  const m = document.createElement("div");
+  m.className = "modal preview-modal";
+  m.innerHTML = `<h2 style="font-size:16px">${t("preview.title")}</h2><p style="color:var(--paper-dim);font-size:13px;margin-bottom:8px">${t("preview.sub")}</p>`
+    + `<div class="picker-grid" style="display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:10px 0;max-height:52vh;overflow:auto"></div>`
+    + `<div class="pv-foot" style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:10px"><div class="pv-count" id="pvCount" style="font-family:var(--mono);color:var(--brass-hi);font-size:13px;min-width:120px;text-align:right"></div><button class="btn btn-gold" id="pvReady">${t("preview.ready")}</button></div>`;
+  const grid = m.querySelector(".picker-grid") as HTMLElement;
+  for (const c of market) { const el = cardEl(c, {}); bindZoom(el, c); grid.appendChild(el); }
+  const btn = m.querySelector("#pvReady") as HTMLButtonElement;
+  const count = m.querySelector("#pvCount") as HTMLElement;
+  let until: number | null = null;
+  const tick = (): void => {
+    if (until == null) { count.textContent = t("preview.waiting"); return; }
+    const left = Math.max(0, Math.ceil((until - Date.now()) / 1000));
+    count.textContent = left > 0 ? `${left}${t("preview.secs")}` : t("preview.starting");
+  };
+  const timer = window.setInterval(tick, 250);
+  btn.onclick = () => { btn.disabled = true; btn.textContent = t("preview.waiting"); onReady(); };
+  mount(m);
+  tick();
+  return {
+    setUntil(u: number | null): void { until = u; tick(); },
+    close(): void { clearInterval(timer); closeOverlay(); },
+  };
 }
 
 /** Simple notice with a single button (e.g. disconnect). */
@@ -114,5 +142,92 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
   cancel.className = "btn btn-ghost"; cancel.textContent = t("common.cancel");
   cancel.onclick = () => { closeOverlay(); onPick(null); };
   m.querySelector(".modal-row")!.appendChild(cancel);
+  mount(m);
+}
+
+/**
+ * Multi-select picker (대숙청/컬 세례 등): toggle up to `max` cards, then confirm once.
+ * onDone receives the selected uids in pick order ([] = cancelled) — the caller
+ * submits them to the engine one at a time (the protocol is unchanged).
+ */
+export function cardPickerMulti(title: string, pool: CardInst[], max: number, onDone: (uids: string[]) => void): void {
+  const m = document.createElement("div");
+  m.className = "modal"; m.style.maxWidth = "720px";
+  m.innerHTML =
+    `<h2 style="font-size:14px">${title}</h2>` +
+    `<div class="picker-grid" style="display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:16px 0;max-height:54vh;overflow:auto"></div>` +
+    `<div class="picker-count" style="text-align:center;font-size:12px;opacity:.8;margin-bottom:8px"></div>` +
+    `<div class="modal-row"></div>`;
+  const grid = m.querySelector(".picker-grid")!;
+  const count = m.querySelector(".picker-count") as HTMLElement;
+  const picked: string[] = [];
+  const paint = () => {
+    count.textContent = t("picker.count").replace("{n}", String(picked.length)) + (max < 99 ? ` / ${max}` : "");
+    ok.disabled = picked.length === 0;
+    ok.textContent = t("picker.confirm") + (picked.length ? ` (${picked.length})` : "");
+  };
+  pool.forEach((c) => {
+    const card = cardEl(c, { playable: true });
+    card.onclick = () => {
+      const i = picked.indexOf(c.uid);
+      if (i >= 0) { picked.splice(i, 1); card.classList.remove("is-picked"); }
+      else if (picked.length < max) { picked.push(c.uid); card.classList.add("is-picked"); }
+      paint();
+    };
+    bindZoom(card, c); // 우클릭 / 길게 누르면 확대
+    grid.appendChild(card);
+  });
+  const ok = document.createElement("button");
+  ok.className = "btn btn-gold";
+  ok.onclick = () => { closeOverlay(); onDone(picked); };
+  const cancel = document.createElement("button");
+  cancel.className = "btn btn-ghost"; cancel.textContent = t("common.cancel");
+  cancel.onclick = () => { closeOverlay(); onDone([]); };
+  m.querySelector(".modal-row")!.append(ok, cancel);
+  paint();
+  mount(m);
+}
+
+/**
+ * Browse-only deck viewer with two tabs: the FULL deck composition and the cards
+ * still REMAINING in the deck (undrawn). `remaining` is null for the opponent
+ * (their undrawn cards are hidden info) → only the composition tab is shown.
+ */
+export function deckViewer(title: string, composition: CardInst[], remaining: CardInst[] | null): void {
+  const m = document.createElement("div");
+  m.className = "modal"; m.style.maxWidth = "760px";
+  const two = remaining != null;
+  m.innerHTML =
+    `<h2 style="font-size:14px">${title}</h2>` +
+    (two ? `<div class="dv-tabs">
+      <button class="dv-tab is-active" data-v="all">${t("deck.tab.all")} <b>${composition.length}</b></button>
+      <button class="dv-tab" data-v="deck">${t("deck.tab.remain")} <b>${remaining!.length}</b></button>
+    </div>` : "") +
+    `<div class="dv-note" id="dvNote"></div>` +
+    `<div class="picker-grid" style="display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:12px 0;max-height:54vh;overflow:auto"></div>` +
+    `<div class="modal-row"></div>`;
+  const grid = m.querySelector(".picker-grid")!;
+  const note = m.querySelector("#dvNote") as HTMLElement;
+  const render = (pool: CardInst[], isDeck: boolean): void => {
+    grid.innerHTML = "";
+    note.textContent = isDeck ? t("deck.remain.note") : t("deck.all.note");
+    if (!pool.length) { grid.innerHTML = `<div style="color:var(--paper-faint);padding:20px">${t("deck.empty")}</div>`; return; }
+    pool.forEach((c) => { const card = cardEl(c); bindZoom(card, c); grid.appendChild(card); });
+  };
+  render(composition, false);
+  if (two) {
+    m.querySelectorAll(".dv-tab").forEach((b) => {
+      (b as HTMLElement).onclick = () => {
+        m.querySelectorAll(".dv-tab").forEach((x) => x.classList.remove("is-active"));
+        b.classList.add("is-active");
+        const deck = (b as HTMLElement).dataset.v === "deck";
+        render(deck ? remaining! : composition, deck);
+      };
+    });
+  }
+  const close = document.createElement("button");
+  close.className = "btn btn-ghost"; close.textContent = t("common.confirm");
+  close.onclick = () => closeOverlay();
+  m.querySelector(".modal-row")!.appendChild(close);
   mount(m);
 }

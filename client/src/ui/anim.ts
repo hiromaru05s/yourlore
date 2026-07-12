@@ -3,9 +3,9 @@
 // touch game state, only the DOM.
 // ============================================================
 import type { CardInst } from "../shared/types";
-import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS } from "../shared/cards";
+import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds } from "../shared/cards";
 import { cardEl } from "./cardView";
-import { t, getLang } from "../i18n";
+import { t, getLang, cardText } from "../i18n";
 
 export type ViewSide = "me" | "opp";
 
@@ -77,12 +77,16 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   const from = handRect(side); const row = rowRect(side);
   if (!from || !row) return;
   const node = floatAt(cardEl(card, { size: "hand" }), from);
-  const cx = row.left + row.width / 2 - 50;
-  const cy = row.top + row.height / 2 - 78;
+  // 상대가 쓴 카드는 "작게 지나가서 뭘 냈는지 모르겠다"는 피드백 → 상대 카드는
+  // 화면 정중앙으로 크게(scale 2) 줌인해 한참 머무르며 읽을 시간을 준다.
+  const opp = side !== "me";
+  const cx = opp ? window.innerWidth / 2 - 50 : row.left + row.width / 2 - 50;
+  const cy = opp ? window.innerHeight / 2 - 78 : row.top + row.height / 2 - 78;
   await raf();
   node.style.transition = `left .38s ${EASE}, top .38s ${EASE}, transform .38s ${EASE}`;
-  node.style.left = cx + "px"; node.style.top = cy + "px"; node.style.transform = "scale(1.25)";
-  await wait(side === "me" ? 650 : 1850); // opponent's card lingers so you can read it
+  node.style.left = cx + "px"; node.style.top = cy + "px"; node.style.transform = opp ? "scale(2)" : "scale(1.25)";
+  if (opp) node.classList.add("fx-opp-cast"); // glow ring so the reveal reads as "enemy played this"
+  await wait(opp ? 2600 : 650); // opponent's card lingers so you can read it
   if (dest === "discard") {
     const to = rectOf("#" + discId(side));
     if (to) { node.style.transition = `left .45s ${EASE}, top .45s ${EASE}, transform .45s ${EASE}, opacity .45s`; node.style.left = to.left + "px"; node.style.top = to.top + "px"; node.style.transform = "scale(.45)"; node.style.opacity = "0"; }
@@ -305,6 +309,21 @@ export function animateDraw(handEl: HTMLElement, count: number): void {
   pileFlash("pile-myDeck");
 }
 
+/** A scrollable grid of small, clickable card thumbnails (click → zoom that card). */
+function miniCardGrid(ids: string[]): HTMLElement {
+  const grid = document.createElement("div");
+  grid.className = "ztc-grid";
+  for (const id of ids) {
+    const def = DB[id];
+    if (!def) continue;
+    const inst = { ...def, uid: `rel_${id}` } as CardInst;
+    const mini = cardEl(inst);
+    mini.onclick = (e) => { e.stopPropagation(); zoomCard(inst); };
+    grid.appendChild(mini);
+  }
+  return grid;
+}
+
 // right-click to enlarge any card
 export function zoomCard(c: CardInst): void {
   closeZoom();
@@ -314,11 +333,36 @@ export function zoomCard(c: CardInst): void {
   const wrap = document.createElement("div");
   wrap.className = "zoom-wrap";
   wrap.appendChild(cardEl(c));
+  // "(지속)" 스탯 변화 카드: 필드에 있는 동안만 유지된다는 각주
+  if (/\((?:지속|持続|lasting)\)/.test(cardText(c))) {
+    const note = document.createElement("div");
+    note.className = "zoom-note";
+    note.textContent = t("card.dur.note");
+    wrap.appendChild(note);
+  }
   if (c.tribe && TRIBES[c.tribe]) {
     const info = TRIBES[c.tribe][getLang()];
     const panel = document.createElement("div");
     panel.className = "zoom-tribe";
     panel.innerHTML = `<h3>${info.name} ${t("tribe.suffix")}</h3><div class="note">${info.note}</div>` + info.bonuses.map((b) => `<div class="b">• ${b}</div>`).join("");
+    // the OTHER cards of this tribe as clickable thumbnails, so you know what to collect
+    const members = Object.values(DB).filter((x) => x.t === "mon" && x.tribe === c.tribe && x.id !== c.id).map((x) => x.id);
+    if (members.length) {
+      const box = document.createElement("div");
+      box.className = "zoom-tribe-cards";
+      box.innerHTML = `<div class="ztc-head">${t("tribe.others")}</div>`;
+      box.appendChild(miniCardGrid(members));
+      panel.appendChild(box);
+    }
+    wrap.appendChild(panel);
+  }
+  // cards that SUMMON or REFERENCE other specific cards → show those cards
+  const related = relatedCardIds(c.id);
+  if (related.length) {
+    const panel = document.createElement("div");
+    panel.className = "zoom-tribe zoom-related";
+    panel.innerHTML = `<h3>${t("card.related")}</h3><div class="ztc-head" style="margin-top:2px">${t("card.related.sub")}</div>`;
+    panel.appendChild(miniCardGrid(related));
     wrap.appendChild(panel);
   }
   if (c.star === "chest") {
@@ -496,14 +540,29 @@ export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
     d.style.animationDelay = i * 60 + "ms";
     document.body.appendChild(d);
     setTimeout(() => d.remove(), 1400 + i * 60);
+    // spark burst when the gem lands on the pips
+    setTimeout(() => {
+      for (let k = 0; k < 2; k++) {
+        const s = document.createElement("div");
+        s.className = "fx-mana-s";
+        const a2 = Math.random() * Math.PI * 2;
+        const d2 = 16 + Math.random() * 30;
+        s.style.setProperty("--sx", Math.cos(a2) * d2 + "px");
+        s.style.setProperty("--sy", Math.sin(a2) * d2 + "px");
+        s.style.left = r.left + r.width / 2 + (Math.random() - 0.5) * r.width * 0.6 + "px";
+        s.style.top = r.top + r.height / 2 + "px";
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 700);
+      }
+    }, 950 + i * 60);
   }
-  anchor.classList.add("fx-pip-wave");
+  anchor.classList.add("fx-pip-wave", "fx-pips-punch");
   const lb = gainLabel(r, `◆ ${tt("fx.mana")} +${amount}`, "mana");
   await wait(2100);
   lb.classList.add("out"); aura.classList.add("out");
   await wait(300);
   lb.remove(); aura.remove();
-  anchor.classList.remove("fx-pip-wave");
+  anchor.classList.remove("fx-pip-wave", "fx-pips-punch");
 }
 
 /** Rich "max HP increased" celebration around the HP bar (~2s). */

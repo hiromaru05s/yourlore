@@ -32,6 +32,12 @@ export interface CardDef {
   summonReq?: string; // summon precondition key (checked before summoning) — 암살자 상급/특급
   cap?: number; // nullspell trap: only counters spells with play cost <= cap (undefined = any)
   lockSpell?: boolean; // nullspell trap: caster also cannot cast spells for the rest of this turn
+  hatchTurns?: number; // 알(egg): hatch counter — decrements on EVERY turn start (both players)
+  hatchDur?: number; // 알(egg): durability — enemy monster attacks consume 1; 0 = egg destroyed
+  hatchInto?: string[]; // 알(egg): card ids the egg can hatch into (random pick)
+  evolveTo?: string; // 흡혈귀: card id summoned when the owner casts a 피의 마법 (once per card)
+  noShop?: boolean; // 스타팅(덱 구성) 전용 — 고정/제시 마켓에 등장하지 않음
+  exileOnDestroy?: boolean; // 영구마법: 파괴/제거 시 묘지 대신 게임에서 제외
   nameJa?: string; // Japanese name (falls back to name)
   textJa?: string; // Japanese effect text (falls back to text)
   nameEn?: string; // English name (falls back to name)
@@ -55,6 +61,11 @@ export interface FieldMon extends CardInst {
   summonedTurn: number;
   attacksUsed?: number; // attacks made this turn (for multi-attack monsters)
   token?: boolean; // conjured by an effect (not a real deck card) — exiled on death, never enters the deck cycle
+  hatch?: number; // 알: remaining hatch counter (both players' turns tick it)
+  dur?: number; // 알: remaining durability (enemy attacks consume 1 instead of combat)
+  evolvedUsed?: boolean; // 흡혈귀: 진화(1회) 사용됨
+  trickSwapped?: boolean; // 트릭룸: 공/방 반전 적용 중
+  gcount?: number; // 누적 카운트 (암살자 길드 / 뱀파이어 집사 흡혈 카운트)
 }
 
 export interface TrapSet {
@@ -94,16 +105,20 @@ export interface PlayerState {
   usesTurn: Record<string, number>; // per-turn count (reset each turn)
   playsTurn?: number; // total cards played this turn (monsters/spells/traps/starters)
   spellSealTurn?: boolean; // cannot cast spells for the rest of this turn (침묵의 심판)
+  trapBlockNext?: boolean; // 협상: 다음 턴 함정 설치 불가 (예약)
+  trapBlockTurn?: boolean; // 협상: 이번 턴 함정 설치 불가 (활성)
+  wheelUsed?: boolean; // 운명의 수레바퀴: 이번 턴 재굴림 사용됨
   supplyShrink: number; // if >0, this player's next 제시 roll offers 2 cards instead of 3
   defendHeal: number; // heal this much whenever this player is attacked
   manaGainNext: number; // max mana to gain at the start of this player's next turn
   skipNext: boolean; // if true, this player's next turn is skipped
   collection?: string[]; // redacted view only: sorted card-id multiset of hidden zones (public via buy log)
   removed?: CardInst[]; // cards permanently exiled from the game (public zone)
+  botTune?: { minBuy?: number; minBuyEarly?: number; chestTurn?: number }; // per-archetype bot buy discipline (see bot.ts BOT_DECKS)
 }
 
 export interface Pending {
-  kind: "oppMon" | "myMon" | "seek" | "recall" | "purge"; // purge: pick from deck+graveyard to exile
+  kind: "oppMon" | "myMon" | "seek" | "recall" | "purge" | "oppRmz" | "oppBoard" | "reroll" | "giantShop"; // oppRmz: 흑룡 · oppBoard: 신수 · reroll: 수레바퀴 · giantShop: 시초의 거인 교역
   hint: string;
   hintJa: string; // Japanese target hint
   reason: string; // which effect awaits input
@@ -124,6 +139,18 @@ export interface GameState {
   rng: number; // mutable PRNG state (mulberry32)
   uidSeq: number;
   mode: "bot" | "online";
+  trickLeft?: number; // 트릭룸: 남은 턴 수 (매 턴 시작마다 -1, 0이면 반전 해제)
+  /** 운명의 수레바퀴: 재굴림용 시전 직전 스냅샷 — redactFor가 양쪽 모두에서 제거(클라 불필요) */
+  _wheelSnap?: { state: unknown; idx: number } | null;
+  /** server-stamped remaining ms for the current turn (online only); lets a reconnecting
+      client resume the turn clock instead of restarting it from full. */
+  turnLeftMs?: number;
+  /** server-stamped full turn length in ms (online only): ranked 50s / casual 90s.
+      drives the timer ring's full-scale so it drains correctly regardless of mode. */
+  turnTotalMs?: number;
+  /** each side's equipped card-back sleeve id (online only), so a client can render the
+      OPPONENT's card backs with their chosen sleeve. index = Side. null = default back. */
+  sleeves?: [string | null, string | null];
 }
 
 // --- Actions: the only way to mutate a GameState ---
@@ -142,7 +169,7 @@ export type Action =
 // --- Events: emitted by reduce(), consumed by the UI for animation/log ---
 export type GameEvent =
   | { type: "log"; html: string; htmlJa: string }
-  | { type: "turnHeader"; turn: number; name: string; isBot: boolean }
+  | { type: "turnHeader"; turn: number; name: string; isBot: boolean; player?: Side } // player: whose turn (log tinting)
   | { type: "summon"; player: Side; uid: string; id?: string } // id: card id (drives the summon ghost when the monster dies in the same batch)
   | { type: "attack"; player: Side; uid: string; targetUid: string | null }
   | { type: "hit"; uid: string }

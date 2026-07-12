@@ -10,7 +10,7 @@
 import type { Env } from "./env";
 import type { QueueClientMsg, QueueServerMsg } from "../../client/src/shared/protocol";
 
-interface Waiter { ws: WebSocket; id: string; name: string; ranked: boolean; mmr: number; since: number; }
+interface Waiter { ws: WebSocket; id: string; name: string; avatar: string | null; sleeve: string | null; deck: string | null; ranked: boolean; mmr: number; since: number; }
 
 const SWEEP_MS = 5000;
 const BAND_START = 100;
@@ -37,6 +37,9 @@ export class Matchmaker {
       ws: server,
       id: url.searchParams.get("uid") || "anon-" + crypto.randomUUID().slice(0, 8),
       name: url.searchParams.get("name") || "Player",
+      avatar: url.searchParams.get("avatar") || null,
+      sleeve: url.searchParams.get("sleeve") || null,
+      deck: url.searchParams.get("deck") || null,
       ranked: url.searchParams.get("mode") === "ranked",
       mmr: Number(url.searchParams.get("mmr")) || 1000,
       since: 0,
@@ -58,6 +61,7 @@ export class Matchmaker {
   private onMsg(me: Waiter, e: MessageEvent): void {
     let msg: QueueClientMsg;
     try { msg = JSON.parse(e.data as string); } catch { return; }
+    if (msg.type === "ping") { try { this.send(me.ws, { type: "pong" }); } catch { /* dropped */ } return; }
     if (msg.type === "cancel") { this.remove(me.ws); return; }
     if (msg.type !== "queue") return;
 
@@ -132,7 +136,22 @@ export class Matchmaker {
     if (this.ranked.length === 0 && this.sweep) { clearInterval(this.sweep); this.sweep = null; }
   }
 
+  /** Put a still-connected waiter back in the queue (used when a pairing aborts). */
+  private requeue(w: Waiter): void {
+    if (w.ws.readyState !== WebSocket.OPEN) return;
+    if (w.ranked) { if (!this.ranked.some((x) => x.ws === w.ws)) this.ranked.push(w); }
+    else this.casual = w;
+    try { this.send(w.ws, { type: "queued", position: w.ranked ? this.ranked.length : 1 }); } catch { /* dropped */ }
+    this.syncSweep();
+  }
+
   private async pair(a: Waiter, b: Waiter): Promise<void> {
+    // Both sockets must be live at commit time. If one vanished (lag/close) between selection
+    // and now, abort and requeue the survivor — never create a phantom one-sided match.
+    if (a.ws.readyState !== WebSocket.OPEN || b.ws.readyState !== WebSocket.OPEN) {
+      this.requeue(a.ws.readyState === WebSocket.OPEN ? a : b);
+      return;
+    }
     const roomId = crypto.randomUUID();
     const seed = crypto.getRandomValues(new Uint32Array(1))[0] >>> 0;
     const ranked = a.ranked && b.ranked;
@@ -140,13 +159,15 @@ export class Matchmaker {
     try {
       await stub.fetch("https://do/setup", {
         method: "POST",
-        body: JSON.stringify({ players: [{ id: a.id, name: a.name }, { id: b.id, name: b.name }], seed, ranked }),
+        body: JSON.stringify({ players: [{ id: a.id, name: a.name, sleeve: a.sleeve, deck: a.deck }, { id: b.id, name: b.name, sleeve: b.sleeve, deck: b.deck }], seed, ranked }),
       });
-      this.send(a.ws, { type: "matched", roomId, you: 0, oppName: b.name });
-      this.send(b.ws, { type: "matched", roomId, you: 1, oppName: a.name });
     } catch {
-      this.send(a.ws, { type: "error", message: "방 생성 실패" });
-      this.send(b.ws, { type: "error", message: "방 생성 실패" });
+      if (a.ws.readyState === WebSocket.OPEN) try { this.send(a.ws, { type: "error", message: "방 생성 실패" }); } catch { /* dropped */ }
+      if (b.ws.readyState === WebSocket.OPEN) try { this.send(b.ws, { type: "error", message: "방 생성 실패" }); } catch { /* dropped */ }
+      return;
     }
+    // room exists; if a "matched" send fails the room's join-timeout voids it (no rank), so this is safe
+    try { this.send(a.ws, { type: "matched", roomId, you: 0, oppName: b.name, oppAvatar: b.avatar }); } catch { /* dropped */ }
+    try { this.send(b.ws, { type: "matched", roomId, you: 1, oppName: a.name, oppAvatar: a.avatar }); } catch { /* dropped */ }
   }
 }

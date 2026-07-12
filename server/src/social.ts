@@ -16,6 +16,16 @@ const CHALLENGE_TTL_MS = 90_000;
 const PRESENCE_ONLINE_MS = 70_000; // presence heartbeat is 30s — 70s covers 2 missed beats
 const MAX_FRIENDS = 100;
 
+// ---- card sleeves (server = authority on price/ownership; client cards.ts mirrors ids) ----
+// 'default' is always owned & free. Buyable sleeves cost 1 credit each.
+const SLEEVE_PRICE = 1;
+const BUYABLE_SLEEVES = new Set(["prism", "abyss", "verdant", "ivory", "compass"]);
+const ALL_SLEEVES = new Set(["default", ...BUYABLE_SLEEVES]);
+/** owned buyable ids from the csv column (default is implicit, never stored). */
+function parseSleeves(csv: string | null): string[] {
+  return (csv ?? "").split(",").map((s) => s.trim()).filter((s) => BUYABLE_SLEEVES.has(s));
+}
+
 function json(env: Env, body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
 }
@@ -45,10 +55,10 @@ export async function ownedBadges(env: Env, userId: string): Promise<string[]> {
   return out;
 }
 
-interface ProfileRow { id: string; display: string; avatar: string | null; badge: string | null; stats_public: number; wins: number; losses: number; created_at: number; }
+interface ProfileRow { id: string; display: string; avatar: string | null; badge: string | null; stats_public: number; wins: number; losses: number; created_at: number; credits: number; sleeve: string | null; sleeves: string | null; }
 
 async function profileOf(env: Env, targetId: string, viewer: SessionUser | null): Promise<Response | Record<string, unknown> | null> {
-  const u = await env.DB.prepare(`SELECT id, display, avatar, badge, stats_public, wins, losses, created_at FROM users WHERE id = ?`)
+  const u = await env.DB.prepare(`SELECT id, display, avatar, badge, stats_public, wins, losses, created_at, credits, sleeve, sleeves FROM users WHERE id = ?`)
     .bind(targetId).first<ProfileRow>();
   if (!u) return null;
   const self = viewer?.id === u.id;
@@ -64,7 +74,7 @@ async function profileOf(env: Env, targetId: string, viewer: SessionUser | null)
             ua.display AS da, ub.display AS db
      FROM matches m LEFT JOIN users ua ON ua.id = m.player_a LEFT JOIN users ub ON ub.id = m.player_b
      WHERE (m.player_a = ?1 OR m.player_b = ?1) AND m.ended_at IS NOT NULL
-     ORDER BY m.created_at DESC LIMIT 15`
+     ORDER BY m.created_at DESC LIMIT 40`
   ).bind(u.id).all<{ player_a: string; player_b: string; winner: string | null; mode: string; turns: number | null; created_at: number; da: string | null; db: string | null }>();
   const recent = (matches.results ?? []).map((m) => ({
     mode: m.mode,
@@ -81,8 +91,57 @@ async function profileOf(env: Env, targetId: string, viewer: SessionUser | null)
     mmr: rating?.mmr ?? null,
     rank: above ? (above.n ?? 0) + 1 : null,
     recent,
-    ...(self ? { badges: await ownedBadges(env, u.id) } : {}),
+    ...(self ? {
+      badges: await ownedBadges(env, u.id),
+      credits: u.credits,
+      sleeve: u.sleeve || "default",
+      sleeves: ["default", ...parseSleeves(u.sleeves)],
+      byMode: await byModeOf(env, u.id),
+      h2h: await h2hOf(env, u.id),
+    } : {}),
   };
+}
+
+/** Per-mode W/L aggregates (self only) for the profile record filter. */
+async function byModeOf(env: Env, uid: string): Promise<Record<"ranked" | "online" | "bot", { w: number; l: number }>> {
+  const out = { ranked: { w: 0, l: 0 }, online: { w: 0, l: 0 }, bot: { w: 0, l: 0 } };
+  try {
+    const rows = await env.DB.prepare(
+      `SELECT mode,
+              SUM(CASE WHEN winner = ?1 THEN 1 ELSE 0 END) AS w,
+              SUM(CASE WHEN winner IS NOT NULL AND winner != ?1 THEN 1 ELSE 0 END) AS l
+       FROM matches
+       WHERE (player_a = ?1 OR player_b = ?1) AND ended_at IS NOT NULL
+       GROUP BY mode`
+    ).bind(uid).all<{ mode: string; w: number; l: number }>();
+    for (const r of rows.results ?? []) {
+      const k = r.mode === "ranked" ? "ranked" : r.mode === "bot" ? "bot" : "online";
+      out[k] = { w: r.w ?? 0, l: r.l ?? 0 };
+    }
+  } catch { /* best effort */ }
+  return out;
+}
+
+/** Head-to-head vs opponents faced 2+ times (self only; PvP modes only, bot excluded). */
+async function h2hOf(env: Env, uid: string): Promise<{ oppId: string; oppName: string; wins: number; losses: number; games: number }[]> {
+  try {
+    const rows = await env.DB.prepare(
+      `SELECT t.opp AS oppId, u.display AS oppName,
+              SUM(t.win) AS wins, SUM(t.loss) AS losses, COUNT(*) AS games
+       FROM (
+         SELECT CASE WHEN m.player_a = ?1 THEN m.player_b ELSE m.player_a END AS opp,
+                CASE WHEN m.winner = ?1 THEN 1 ELSE 0 END AS win,
+                CASE WHEN m.winner IS NOT NULL AND m.winner != ?1 THEN 1 ELSE 0 END AS loss
+         FROM matches m
+         WHERE (m.player_a = ?1 OR m.player_b = ?1) AND m.ended_at IS NOT NULL AND m.mode IN ('online','ranked')
+       ) t
+       LEFT JOIN users u ON u.id = t.opp
+       GROUP BY t.opp
+       HAVING COUNT(*) >= 2
+       ORDER BY games DESC, wins DESC LIMIT 40`
+    ).bind(uid).all<{ oppId: string; oppName: string | null; wins: number; losses: number; games: number }>();
+    return (rows.results ?? []).map((r) => ({ oppId: r.oppId, oppName: r.oppName ?? "?", wins: r.wins ?? 0, losses: r.losses ?? 0, games: r.games ?? 0 }));
+  } catch { return []; }
 }
 
 // ---- route handler: /social/* ----
@@ -100,7 +159,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
   }
 
   if (path === "/social/me" && req.method === "POST") {
-    const body = (await req.json().catch(() => ({}))) as { display?: string; avatar?: string; badge?: string; stats_public?: boolean };
+    const body = (await req.json().catch(() => ({}))) as { display?: string; avatar?: string; badge?: string; stats_public?: boolean; sleeve?: string };
     const sets: string[] = [];
     const args: unknown[] = [];
     if (typeof body.display === "string") {
@@ -119,11 +178,40 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
       sets.push("badge = ?"); args.push(body.badge || null);
     }
     if (typeof body.stats_public === "boolean") { sets.push("stats_public = ?"); args.push(body.stats_public ? 1 : 0); }
+    if (typeof body.sleeve === "string") {
+      const id = body.sleeve || "default";
+      if (!ALL_SLEEVES.has(id)) return json(env, { error: "잘못된 슬리브" }, 400);
+      if (id !== "default") {
+        const row = await env.DB.prepare(`SELECT sleeves FROM users WHERE id = ?`).bind(user.id).first<{ sleeves: string | null }>();
+        if (!parseSleeves(row?.sleeves ?? null).includes(id)) return json(env, { error: "보유하지 않은 슬리브입니다." }, 400);
+      }
+      sets.push("sleeve = ?"); args.push(id === "default" ? null : id);
+    }
     if (!sets.length) return json(env, { error: "no changes" }, 400);
     await env.DB.prepare(`UPDATE users SET ${sets.join(", ")} WHERE id = ?`).bind(...args, user.id).run();
-    const u = await env.DB.prepare(`SELECT display, avatar, badge, stats_public FROM users WHERE id = ?`).bind(user.id)
-      .first<{ display: string; avatar: string | null; badge: string | null; stats_public: number }>();
-    return json(env, { ok: true, display: u?.display, avatar: u?.avatar, badge: u?.badge, stats_public: !!u?.stats_public });
+    const u = await env.DB.prepare(`SELECT display, avatar, badge, stats_public, sleeve FROM users WHERE id = ?`).bind(user.id)
+      .first<{ display: string; avatar: string | null; badge: string | null; stats_public: number; sleeve: string | null }>();
+    return json(env, { ok: true, display: u?.display, avatar: u?.avatar, badge: u?.badge, stats_public: !!u?.stats_public, sleeve: u?.sleeve || "default" });
+  }
+
+  // ---- shop: buy a card sleeve (1 credit, server-authoritative price) ----
+  if (path === "/social/buy-sleeve" && req.method === "POST") {
+    const body = (await req.json().catch(() => ({}))) as { id?: string };
+    const id = String(body.id ?? "");
+    if (!BUYABLE_SLEEVES.has(id)) return json(env, { error: "잘못된 상품입니다." }, 400);
+    const row = await env.DB.prepare(`SELECT credits, sleeves FROM users WHERE id = ?`).bind(user.id)
+      .first<{ credits: number; sleeves: string | null }>();
+    if (!row) return json(env, { error: "사용자를 찾을 수 없습니다." }, 404);
+    const owned = parseSleeves(row.sleeves);
+    if (owned.includes(id)) return json(env, { error: "이미 보유한 슬리브입니다." }, 400);
+    if ((row.credits ?? 0) < SLEEVE_PRICE) return json(env, { error: "크레딧이 부족합니다." }, 400);
+    const nextSleeves = [...owned, id].join(",");
+    const nextCredits = row.credits - SLEEVE_PRICE;
+    // guarded update: credits check in WHERE prevents a double-spend race
+    const res = await env.DB.prepare(`UPDATE users SET credits = ?, sleeves = ? WHERE id = ? AND credits >= ?`)
+      .bind(nextCredits, nextSleeves, user.id, SLEEVE_PRICE).run();
+    if (!res.meta.changes) return json(env, { error: "크레딧이 부족합니다." }, 400);
+    return json(env, { ok: true, credits: nextCredits, sleeves: ["default", ...owned, id] });
   }
 
   // ---- friends ----
@@ -231,7 +319,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
       await env.DB.prepare(`UPDATE challenges SET status = 'declined' WHERE id = ?`).bind(ch.id).run();
       return json(env, { ok: true });
     }
-    const challenger = await env.DB.prepare(`SELECT id, display FROM users WHERE id = ?`).bind(ch.challenger).first<{ id: string; display: string }>();
+    const challenger = await env.DB.prepare(`SELECT id, display, sleeve, deck FROM users WHERE id = ?`).bind(ch.challenger).first<{ id: string; display: string; sleeve: string | null; deck: string | null }>();
     if (!challenger) return json(env, { error: "not found" }, 404);
     // provision a GameRoom exactly like the matchmaker does (친선전 → ranked=false)
     const roomId = crypto.randomUUID();
@@ -239,7 +327,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     const stub = env.GAME_ROOM.get(env.GAME_ROOM.idFromName(roomId));
     await stub.fetch("https://do/setup", {
       method: "POST",
-      body: JSON.stringify({ players: [{ id: challenger.id, name: challenger.display }, { id: user.id, name: user.display }], seed, ranked: false }),
+      body: JSON.stringify({ players: [{ id: challenger.id, name: challenger.display, sleeve: challenger.sleeve, deck: challenger.deck }, { id: user.id, name: user.display, sleeve: user.sleeve, deck: (user.deck ?? []).join(",") || null }], seed, ranked: false }),
     });
     await env.DB.prepare(`UPDATE challenges SET status = 'accepted', room_id = ? WHERE id = ?`).bind(roomId, ch.id).run();
     return json(env, { ok: true, roomId, you: 1, oppName: challenger.display });

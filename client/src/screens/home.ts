@@ -5,82 +5,95 @@ import type { App, Screen } from "../router";
 import type { BotDifficulty } from "../shared/bot";
 import { api } from "../net/api";
 import { t, onLangChange } from "../i18n";
-import { langSelectEl } from "../ui/langSelect";
 import { tierChipHtml } from "../ui/tier";
-import { avatarHtml, badgeChipHtml } from "../ui/social";
+import { avatarHtml } from "../ui/social";
 import { watchSocial } from "./friends";
 
 export function mountHome(app: App): Screen {
   const u = app.user;
+  new Image().src = "/ui/panel-frame-lit.webp"; // preload hover frame (no first-hover flash)
   const wrap = document.createElement("div");
   wrap.className = "screen";
+  // minimal LORE wallpaper (inline so vite never strips the CSS url); responsive cover
+  wrap.style.cssText = "background:#05070b url('/bg/home.jpg') center center/cover no-repeat;";
   wrap.innerHTML = `
-    <div class="topright-lang"></div>
-    <div class="screen-brand"><div class="mark"></div><h1>LORE</h1></div>
     <div class="home">
-      <div class="welcome">${t("home.welcome")}</div>
-      <button class="home-id" id="profile" title="${t("home.profile.title")}">
-        ${avatarHtml(u?.avatar, u?.display ?? "P", 48)}
-        <span class="home-id-name">${u?.display ?? "PLAYER"}</span>
-        ${badgeChipHtml(u?.badge, true)}
-      </button>
+      <div class="home-top">
+        <div class="screen-brand home-brand"><div class="mark"></div></div>
+        <button class="home-credits" id="credits" title="${t("home.shop.title")}">
+          <span class="hc-gem">💎</span><b>${u?.credits ?? 0}</b>
+        </button>
+        <div class="home-top-right">
+          <button class="home-id" id="profile" title="${t("home.profile.title")}">
+            ${avatarHtml(u?.avatar, u?.display ?? "P", 42)}
+            <span class="home-id-main">
+              <span class="home-id-name">${u?.display ?? "PLAYER"}</span>
+              <span class="home-id-sub">${t("home.record")} ${u?.wins ?? 0}${t("home.win")} ${u?.losses ?? 0}${t("home.loss")}</span>
+            </span>
+            <span class="home-id-go">›</span>
+          </button>
+        </div>
+      </div>
       <div class="modes modes-3">
         <div class="panel mode-card mode-ranked" id="ranked">
-          <div class="icon">🏆</div>
+          <img class="mode-ico" src="/icons/menu_ranked.png" alt="">
           <h3>${t("home.ranked.title")}</h3>
           <p>${t("home.ranked.desc")}</p>
           <div class="my-tier" id="myTier"></div>
         </div>
         <div class="panel mode-card" id="online">
-          <div class="icon">🌐</div>
+          <img class="mode-ico" src="/icons/menu_online.png" alt="">
           <h3>${t("home.online.title")}</h3>
           <p>${t("home.online.desc")}</p>
         </div>
         <div class="panel mode-card" id="bot">
-          <div class="icon">🤖</div>
+          <img class="mode-ico" src="/icons/menu_bot.png" alt="">
           <h3>${t("home.bot.title")}</h3>
           <p>${t("home.bot.desc")}</p>
         </div>
       </div>
-      <div class="panel tut-card" id="friends">
-        <span class="tut-emoji">👥</span>
-        <span class="tut-txt"><b>${t("home.friends.title")} <span class="fr-badge" id="frBadge" style="display:none"></span></b><span>${t("home.friends.desc")}</span></span>
-        <span class="tut-arrow">→</span>
-      </div>
-      <div class="panel tut-card" id="lb">
-        <span class="tut-emoji">📊</span>
-        <span class="tut-txt"><b>${t("home.lb.title")}</b><span>${t("home.lb.desc")}</span></span>
-        <span class="tut-arrow">→</span>
-      </div>
-      <div class="panel tut-card" id="invite">
-        <span class="tut-emoji">🎁</span>
-        <span class="tut-txt"><b>${t("invite.title")}</b><span>${t("invite.desc")}</span></span>
-        <span class="tut-arrow">→</span>
-      </div>
-      <div class="panel tut-card" id="cards">
-        <span class="tut-emoji">🃏</span>
-        <span class="tut-txt"><b>${t("home.cards.title")}</b><span>${t("home.cards.desc")}</span></span>
-        <span class="tut-arrow">→</span>
-      </div>
-      <div class="panel tut-card" id="tutorial">
-        <span class="tut-emoji">📖</span>
-        <span class="tut-txt"><b>${t("home.tutorial.title")}</b><span>${t("home.tutorial.desc")}</span></span>
-        <span class="tut-arrow">→</span>
-      </div>
-      <div class="acct">
-        <span class="credits" title="${t("home.credits")}">💎 ${u?.credits ?? 0}</span>
-        <span>·</span>
-        <span class="stats">${t("home.record")} ${u?.wins ?? 0}${t("home.win")} ${u?.losses ?? 0}${t("home.loss")}</span>
-        <span>·</span>
-        <a id="settings" style="cursor:pointer">⚙ ${t("home.settings")}</a>
-        <span>·</span>
-        <a id="logout" style="cursor:pointer">${t("home.logout")}</a>
+      <div class="home-links">
+        <div class="panel tut-card tut-card--deck" id="deck">
+          <img class="tut-ico-img" src="/icons/menu_cards.png" alt="">
+          <span class="tut-txt"><b>${t("home.deck.title")}</b><span>${t("home.deck.desc")}</span></span>
+          <span class="tut-arrow">→</span>
+        </div>
+        <div class="panel tut-card" id="friends">
+          <img class="tut-ico-img" src="/icons/menu_friends.png" alt="">
+          <span class="tut-txt"><b>${t("home.friends.title")} <span class="fr-badge" id="frBadge" style="display:none"></span></b><span>${t("home.friends.desc")}</span></span>
+          <span class="tut-arrow">→</span>
+        </div>
+        <div class="panel tut-card" id="lb">
+          <img class="tut-ico-img" src="/icons/menu_leaderboard.png" alt="">
+          <span class="tut-txt"><b>${t("home.lb.title")}</b><span>${t("home.lb.desc")}</span></span>
+          <span class="tut-arrow">→</span>
+        </div>
+        <div class="panel tut-card" id="invite">
+          <img class="tut-ico-img" src="/icons/menu_invite.png" alt="">
+          <span class="tut-txt"><b>${t("invite.title")}</b><span>${t("invite.desc")}</span></span>
+          <span class="tut-arrow">→</span>
+        </div>
+        <div class="panel tut-card" id="cards">
+          <img class="tut-ico-img" src="/icons/menu_cards.png" alt="">
+          <span class="tut-txt"><b>${t("home.cards.title")}</b><span>${t("home.cards.desc")}</span></span>
+          <span class="tut-arrow">→</span>
+        </div>
+        <div class="panel tut-card" id="shop">
+          <img class="tut-ico-img" src="/icons/menu_shop.png" alt="">
+          <span class="tut-txt"><b>${t("home.shop.title")}</b><span>${t("home.shop.desc")}</span></span>
+          <span class="tut-arrow">→</span>
+        </div>
+        <div class="panel tut-card" id="tutorial">
+          <img class="tut-ico-img" src="/icons/menu_tutorial.png" alt="">
+          <span class="tut-txt"><b>${t("home.tutorial.title")}</b><span>${t("home.tutorial.desc")}</span></span>
+          <span class="tut-arrow">→</span>
+        </div>
       </div>
     </div>`;
   app.root.appendChild(wrap);
-  wrap.querySelector(".topright-lang")!.appendChild(langSelectEl());
 
   (wrap.querySelector("#ranked") as HTMLElement).onclick = () => app.rankedLobby();
+  (wrap.querySelector("#deck") as HTMLElement).onclick = () => app.deck();
   (wrap.querySelector("#lb") as HTMLElement).onclick = () => app.leaderboard();
   (wrap.querySelector("#invite") as HTMLElement).onclick = () => void showInviteModal();
   (wrap.querySelector("#online") as HTMLElement).onclick = () => app.onlineLobby();
@@ -92,11 +105,11 @@ export function mountHome(app: App): Screen {
     if (el && r) el.innerHTML = tierChipHtml(r.tier, r.mmr);
   }).catch(() => { /* not logged in / offline */ });
   (wrap.querySelector("#cards") as HTMLElement).onclick = () => app.cards();
+  (wrap.querySelector("#shop") as HTMLElement).onclick = () => app.shop();
   (wrap.querySelector("#tutorial") as HTMLElement).onclick = () => app.tutorial();
   (wrap.querySelector("#profile") as HTMLElement).onclick = () => app.profile();
   (wrap.querySelector("#friends") as HTMLElement).onclick = () => app.friends();
-  (wrap.querySelector("#settings") as HTMLElement).onclick = () => app.settings();
-  (wrap.querySelector("#logout") as HTMLElement).onclick = () => app.logout();
+  (wrap.querySelector("#credits") as HTMLElement).onclick = () => app.shop();
 
   // incoming friend requests badge + friendly-challenge popups while on HOME
   const unwatch = watchSocial(app, (n) => {

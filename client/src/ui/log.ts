@@ -10,13 +10,14 @@ import { cardName, getLang, onLangChange, t } from "../i18n";
 import { logToEn } from "../shared/logEn";
 
 type Entry =
-  | { kind: "header"; turn: number; name: string; isBot: boolean }
-  | { kind: "line"; ko: string; ja: string };
+  | { kind: "header"; turn: number; name: string; isBot: boolean; mine?: boolean }
+  | { kind: "line"; ko: string; ja: string; mine?: boolean };
 
 export class GameLog {
   private el: HTMLElement;
   private entries: Entry[] = [];
   private unsub: () => void;
+  private curMine: boolean | undefined; // 현재 턴 주인 (라인 배경 틴트용)
 
   constructor(el: HTMLElement) {
     this.el = el;
@@ -31,15 +32,17 @@ export class GameLog {
 
   clear(): void { this.entries = []; this.el.innerHTML = ""; }
 
-  turnHeader(turn: number, name: string, isBot: boolean): void {
-    const entry: Entry = { kind: "header", turn, name, isBot };
+  turnHeader(turn: number, name: string, isBot: boolean, mine?: boolean): void {
+    if (isBot) mine = false; // 봇 턴은 항상 상대
+    this.curMine = mine;
+    const entry: Entry = { kind: "header", turn, name, isBot, mine };
     this.entries.push(entry);
     this.el.appendChild(this.build(entry));
     this.scroll();
   }
 
   line(ko: string, ja?: string): void {
-    const entry: Entry = { kind: "line", ko, ja: ja ?? ko };
+    const entry: Entry = { kind: "line", ko, ja: ja ?? ko, mine: this.curMine };
     this.entries.push(entry);
     this.el.appendChild(this.build(entry));
     this.scroll();
@@ -49,25 +52,29 @@ export class GameLog {
 
   // ---- rendering ----
   private build(entry: Entry): HTMLElement {
+    const side = entry.mine === true ? " mine" : entry.mine === false ? " opp" : "";
     if (entry.kind === "header") {
       const h = document.createElement("div");
-      h.className = "turn-head" + (entry.isBot ? " bot" : "");
+      h.className = "turn-head" + (entry.isBot ? " bot" : "") + side;
       h.textContent = `${t("game.turn")} ${entry.turn} — ${entry.name}`;
       return h;
     }
     const d = document.createElement("div");
-    d.className = "ln";
+    d.className = "ln" + side;
     const lang = getLang();
     d.innerHTML = lang === "ja" ? entry.ja : lang === "en" ? logToEn(entry.ko) : entry.ko;
     this.localizeCards(d);
     return d;
   }
 
-  /** Localize each clickable card name to the current language by its card id. */
+  /** Localize each clickable card name to the current language + color it by card type. */
   private localizeCards(node: HTMLElement): void {
     node.querySelectorAll<HTMLElement>(".log-card").forEach((el) => {
       const id = el.dataset.card;
-      if (id && DB[id]) el.textContent = cardName({ uid: "", ...DB[id] });
+      if (id && DB[id]) {
+        el.textContent = cardName({ uid: "", ...DB[id] });
+        el.classList.add("lc-" + DB[id].t); // lc-mon / lc-spell / lc-trap / lc-starter
+      }
     });
   }
 

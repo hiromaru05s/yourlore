@@ -8,7 +8,8 @@ import type { Action, Side } from "../shared/types";
 import type { GameClientMsg, GameServerMsg } from "../shared/protocol";
 import { Sock } from "../net/socket";
 import { BaseController, type ControllerExits } from "./controller";
-import { closeOverlay, noticeModal } from "../ui/modal";
+import { closeOverlay, noticeModal, marketPreview } from "../ui/modal";
+import { clearActiveGame } from "../net/resume";
 import { t } from "../i18n";
 
 const MAX_RETRIES = 6;
@@ -20,6 +21,7 @@ export class OnlineController extends BaseController {
   private closing = false;
   private retries = 0;
   private hb?: ReturnType<typeof setInterval>;
+  private preview?: { setUntil(u: number | null): void; close(): void };
 
   constructor(root: HTMLElement, you: Side, roomId: string, exits: ControllerExits) {
     super(root, you, exits);
@@ -44,7 +46,7 @@ export class OnlineController extends BaseController {
       setTimeout(() => { if (!this.closing && !this.state?.over) this.connect(); }, 800 * this.retries);
     } else {
       this.banner(null);
-      noticeModal("연결 끊김", "상대 또는 서버와의 연결이 끊어졌습니다.", "홈으로", () => this.exits.onHome());
+      noticeModal(t("notice.disc.title"), t("notice.disc.body"), t("modal.home"), () => this.exits.onHome());
     }
   }
 
@@ -52,15 +54,31 @@ export class OnlineController extends BaseController {
     if (msg.type === "init") {
       this.started = true;
       this.banner(null); // reconnected & resynced
+      this.preview?.close(); this.preview = undefined; // preview phase over → game begins (coin toss shows on turn 1)
       closeOverlay();
       this.applyResult({ state: msg.state, events: msg.events }, false);
+      if (this.state?.over) clearActiveGame(); // rejoined a game that already finished
     } else if (msg.type === "update") {
       this.applyResult({ state: msg.state, events: msg.events });
+      if (this.state?.over) clearActiveGame(); // game ended → nothing to rejoin
     } else if (msg.type === "oppConn") {
       this.banner(msg.connected ? null : t("net.oppwait"));
     } else if (msg.type === "opponentLeft") {
       // server already sent the deciding update; just make sure the result shows
       if (this.state?.over) this.showWin();
+    } else if (msg.type === "voided") {
+      // the match never really started (opponent never joined) → no rank change, back to home
+      this.closing = true;
+      clearActiveGame();
+      noticeModal(t("notice.voided.title"), t("notice.voided.body"), t("modal.home"), () => this.exits.onHome());
+    } else if (msg.type === "preview") {
+      // ranked pre-game market study (before coin toss). until=null → still waiting for the opponent.
+      if (!this.preview) this.preview = marketPreview(msg.market, () => this.sock.send({ type: "startReady" }));
+      this.preview.setUntil(msg.until);
+    } else if (msg.type === "rankResult") {
+      // ranked game settled — remember my MMR change and paint it onto the (already-open) result screen
+      this.rankChange = { before: msg.before, after: msg.after };
+      this.renderRankDelta();
     } else if (msg.type === "error") {
       console.warn("[server]", msg.message);
     }
@@ -88,5 +106,5 @@ export class OnlineController extends BaseController {
     el.textContent = text;
   }
 
-  destroy(): void { this.closing = true; this.stopHb(); this.banner(null); this.sock?.close(); super.destroy(); }
+  destroy(): void { this.closing = true; this.stopHb(); this.preview?.close(); this.preview = undefined; this.banner(null); this.sock?.close(); super.destroy(); }
 }

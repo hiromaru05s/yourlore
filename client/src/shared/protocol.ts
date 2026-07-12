@@ -3,22 +3,25 @@
 // The server is authoritative: clients send Actions, receive
 // redacted GameState snapshots + event streams to animate.
 // ============================================================
-import type { Action, GameEvent, GameState, Side } from "./types";
+import type { Action, CardInst, GameEvent, GameState, Side } from "./types";
 
 // ---- matchmaking (Matchmaker Durable Object) ----
 export type QueueClientMsg =
   | { type: "queue" }
+  | { type: "ping" }   // keepalive — idle edge/NAT timeouts kill silent queue sockets (same as game socket)
   | { type: "cancel" };
 
 export type QueueServerMsg =
+  | { type: "pong" }
   | { type: "queued"; position: number }
-  | { type: "matched"; roomId: string; you: Side; oppName: string }
+  | { type: "matched"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null }
   | { type: "error"; message: string };
 
 // ---- in-game (GameRoom Durable Object) ----
 export type GameClientMsg =
   | { type: "action"; action: Action }
   | { type: "ready" }
+  | { type: "startReady" } // ranked market-preview: this player wants to start early
   | { type: "ping" };
 
 export type GameServerMsg =
@@ -26,6 +29,9 @@ export type GameServerMsg =
   | { type: "update"; state: GameState; events: GameEvent[] }
   | { type: "opponentLeft" }
   | { type: "oppConn"; connected: boolean } // opponent dropped / came back (reconnect window)
+  | { type: "voided"; message?: string }    // match cancelled (opponent never joined) — no rank change
+  | { type: "preview"; until: number | null; market: CardInst[] } // ranked pre-game: study the fixed market (until=null → waiting for opponent)
+  | { type: "rankResult"; before: number; after: number } // ranked game settled — this player's MMR before/after
   | { type: "error"; message: string }
   | { type: "pong" };
 
@@ -36,6 +42,7 @@ export type GameServerMsg =
  */
 export function redactFor(state: GameState, you: Side): GameState {
   const g: GameState = structuredClone(state);
+  g._wheelSnap = null; // 운명의 수레바퀴 스냅샷은 서버 전용 (클라 불필요 + 숨김정보 보호)
   const opp = g.players[1 - you];
   const placeholder = (uid: string): GameState["players"][0]["hand"][0] => ({
     uid, id: "HIDDEN", t: "mon", cost: 0, name: "", text: "",

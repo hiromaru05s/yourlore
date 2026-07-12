@@ -63,12 +63,20 @@ export async function getRating(env: Env, userId: string): Promise<RatingRow> {
   return { user_id: userId, season, mmr, wins: 0, losses: 0, peak_mmr: mmr };
 }
 
-/** Apply a ranked result (Elo). Best-effort; caller may fire-and-forget. */
-export async function applyRanked(env: Env, winnerId: string, loserId: string): Promise<void> {
+/** before/after MMR for one player — surfaced to the client so the result screen can show ±delta. */
+export interface RankChange { before: number; after: number; }
+export type RankOutcome = Record<string, RankChange>; // keyed by user id
+
+/** Apply a ranked result (Elo). Returns each player's before/after MMR. Best-effort. */
+export async function applyRanked(env: Env, winnerId: string, loserId: string): Promise<RankOutcome> {
   const [w, l] = await Promise.all([getRating(env, winnerId), getRating(env, loserId)]);
   const expW = 1 / (1 + Math.pow(10, (l.mmr - w.mmr) / 400));
   const d = Math.max(1, Math.round(K * (1 - expW)));
-  const wNew = w.mmr + d;
+  // Slight inflation so ranked isn't strictly zero-sum: the winner gains a small flat
+  // bonus on top of the Elo exchange (the loser drops by the plain Elo delta). Keeps the
+  // ladder from bleeding points over a season; the monthly soft-reset contains drift.
+  const WIN_BONUS = 2;
+  const wNew = w.mmr + d + WIN_BONUS;
   const lNew = Math.max(0, l.mmr - d);
   const now = Date.now();
   const season = seasonKey();
@@ -81,10 +89,11 @@ export async function applyRanked(env: Env, winnerId: string, loserId: string): 
   // 초대 캠페인: 골드 도달 시 보상 장부를 'earned'로
   const goldMin = TIERS.find((t) => t.key === "gold")!.min;
   if (wNew >= goldMin && w.mmr < goldMin) await markInviteEarned(env, winnerId).catch(() => { /* best effort */ });
+  return { [winnerId]: { before: w.mmr, after: wNew }, [loserId]: { before: l.mmr, after: lNew } };
 }
 
 /** Apply a ranked DRAW (75-turn limit): Elo with S=0.5 — equal players move 0, unequal slightly. */
-export async function applyRankedDraw(env: Env, aId: string, bId: string): Promise<void> {
+export async function applyRankedDraw(env: Env, aId: string, bId: string): Promise<RankOutcome> {
   const [a, b] = await Promise.all([getRating(env, aId), getRating(env, bId)]);
   const expA = 1 / (1 + Math.pow(10, (b.mmr - a.mmr) / 400));
   const d = Math.round(K * (0.5 - expA)); // positive → a gains, b loses
@@ -98,6 +107,7 @@ export async function applyRankedDraw(env: Env, aId: string, bId: string): Promi
     env.DB.prepare(`UPDATE ratings SET mmr = ?, peak_mmr = MAX(peak_mmr, ?), updated_at = ? WHERE user_id = ? AND season = ?`)
       .bind(bNew, bNew, now, bId, season),
   ]);
+  return { [aId]: { before: a.mmr, after: aNew }, [bId]: { before: b.mmr, after: bNew } };
 }
 
 // ---- REST: /api/rank/* ----

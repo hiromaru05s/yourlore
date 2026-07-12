@@ -2,6 +2,9 @@
 // LORE — auth/API client. Talks to the Worker over /api/*.
 // Sessions are cookie-based (credentials: include).
 // ============================================================
+import { t } from "../i18n";
+import { localizeServerMsg } from "./serverMsg";
+
 export interface User {
   id: string;
   email: string;
@@ -11,6 +14,9 @@ export interface User {
   credits: number;
   avatar?: string | null; // preset avatar (card id)
   badge?: string | null;  // equipped badge key
+  sleeve?: string | null; // equipped card sleeve id ('default' when none)
+  deck?: string[] | null; // 활성 덱 8장 카드 id (null = 기본덱 컬6+상자2)
+  decks?: { sel: number; list: { cards: string[]; watch: string[] }[] } | null; // 덱 프리셋 5슬롯 + 마켓 알림이
 }
 
 export interface ClaimResult {
@@ -30,7 +36,7 @@ async function call<T>(path: string, body?: unknown, method = "POST"): Promise<T
   });
   const data = (await res.json().catch(() => ({}))) as { error?: string; needVerify?: boolean } & T;
   if (!res.ok) {
-    const err = new Error(data?.error || `요청 실패 (${res.status})`) as ApiError;
+    const err = new Error(data?.error ? localizeServerMsg(data.error) : t("api.fail").replace("{n}", String(res.status))) as ApiError;
     err.needVerify = !!data?.needVerify;
     throw err;
   }
@@ -78,10 +84,14 @@ export const api = {
   claimReward: (key: string) => call<ClaimResult>("/rewards/claim", { key }),
   claimedRewards: () => call<{ keys: string[]; credits: number }>("/rewards/claimed", undefined, "GET").catch(() => ({ keys: [] as string[], credits: 0 })),
   redeemCoupon: (code: string) => call<ClaimResult>("/rewards/coupon", { code }),
+  // 덱 프리셋 저장 (덱 빌더: 5슬롯 + 마켓 알림이)
+  saveDecks: (decks: { sel: number; list: { cards: string[]; watch: string[] }[] }) =>
+    call<{ ok: true; decks: { sel: number; list: { cards: string[]; watch: string[] }[] }; deck: string[] }>("/deck", { decks }),
   // ---- social: profile / friends / challenges ----
   profile: (id?: string) => call<{ profile: Profile }>(`/social/profile${id ? `?id=${encodeURIComponent(id)}` : ""}`, undefined, "GET").then((r) => r.profile),
-  updateMe: (patch: { display?: string; avatar?: string; badge?: string; stats_public?: boolean }) =>
-    call<{ ok: true; display: string; avatar: string | null; badge: string | null; stats_public: boolean }>("/social/me", patch),
+  updateMe: (patch: { display?: string; avatar?: string; badge?: string; stats_public?: boolean; sleeve?: string }) =>
+    call<{ ok: true; display: string; avatar: string | null; badge: string | null; stats_public: boolean; sleeve: string }>("/social/me", patch),
+  buySleeve: (id: string) => call<{ ok: true; credits: number; sleeves: string[] }>("/social/buy-sleeve", { id }),
   friends: () => call<FriendsData>("/social/friends", undefined, "GET"),
   friendRequest: (q: string) => call<{ ok: true; display: string }>("/social/friends/request", { q }),
   friendRespond: (user_id: string, accept: boolean) => call<{ ok: true }>("/social/friends/respond", { user_id, accept }),
@@ -102,6 +112,13 @@ export interface Profile {
   tier?: string | null; mmr?: number | null; rank?: number | null;
   recent?: { mode: string; result: "win" | "loss" | "draw"; opp: string; turns: number | null; at: number }[];
   badges?: string[]; // owned badge keys (self only)
+  credits?: number;  // self only
+  sleeve?: string;   // equipped sleeve id (self only)
+  sleeves?: string[]; // owned sleeve ids incl. 'default' (self only)
+  // per-mode W/L aggregates for the record filter (self only)
+  byMode?: { ranked: { w: number; l: number }; online: { w: number; l: number }; bot: { w: number; l: number } };
+  // head-to-head vs opponents faced 2+ times (self only), most-played first
+  h2h?: { oppId: string; oppName: string; wins: number; losses: number; games: number }[];
 }
 
 export interface FriendEntry { id: string; display: string; avatar: string | null; badge: string | null; online: boolean; state: string | null; }

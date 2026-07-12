@@ -5,6 +5,7 @@
 // ============================================================
 import type { Env } from "./env";
 import { corsHeaders, getUser, handleAuth } from "./auth";
+import { sanitizeDeck, sanitizeDecks } from "../../client/src/shared/cards";
 import { getRating, handleRank } from "./rank";
 import { handleGoogleOAuth } from "./oauth";
 import { handleInvite } from "./invite";
@@ -81,6 +82,27 @@ export default {
       return new Response(JSON.stringify({ ok: true }), { headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
     }
     // ---- auth / REST ----
+    // ---- 덱 프리셋 저장 (덱 빌더: 5슬롯 + 마켓 알림이) ----
+    if (path === "/api/deck" && req.method === "POST") {
+      const user = await getUser(env, req);
+      const hdrs = { "content-type": "application/json", ...corsHeaders(env) };
+      if (!user) return new Response(JSON.stringify({ error: "로그인이 필요합니다" }), { status: 401, headers: hdrs });
+      const body = (await req.json().catch(() => ({}))) as { deck?: unknown; decks?: unknown };
+      let store;
+      if (body.decks !== undefined) {
+        store = sanitizeDecks(body.decks); // 5슬롯 전체 저장 (각 8장 + 알림이 검증)
+      } else {
+        // 레거시 단일 덱 저장 → 현재 선택 슬롯에 반영
+        store = sanitizeDecks(user.decks);
+        store.list[store.sel] = { cards: sanitizeDeck(body.deck), watch: store.list[store.sel].watch };
+      }
+      const active = store.list[store.sel].cards;
+      // deck(csv) = 활성 덱 캐시 — 매치메이커/친선전/봇전이 이 값을 그대로 사용
+      await env.DB.prepare(`UPDATE users SET decks = ?, deck = ? WHERE id = ?`)
+        .bind(JSON.stringify(store), active.join(","), user.id).run();
+      return new Response(JSON.stringify({ ok: true, decks: store, deck: active }), { headers: hdrs });
+    }
+
     if (path.startsWith("/api/")) {
       return handleAuth(env, req, path.slice(4)); // strip "/api"
     }
@@ -89,7 +111,7 @@ export default {
     if (path === "/ws/queue") {
       const user = await getUser(env, req);
       const fwd = new URL(req.url);
-      if (user) { fwd.searchParams.set("uid", user.id); fwd.searchParams.set("name", user.display); }
+      if (user) { fwd.searchParams.set("uid", user.id); fwd.searchParams.set("name", user.display); fwd.searchParams.set("avatar", user.avatar ?? ""); fwd.searchParams.set("sleeve", user.sleeve ?? ""); fwd.searchParams.set("deck", (user.deck ?? []).join(",")); }
       // ranked queue: must be logged in; attach current MMR for band matching
       if (fwd.searchParams.get("mode") === "ranked") {
         if (!user) return new Response("unauthorized", { status: 401 });

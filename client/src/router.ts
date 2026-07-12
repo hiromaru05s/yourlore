@@ -7,6 +7,7 @@ import type { User } from "./net/api";
 import { api } from "./net/api";
 import { aIdentify, aReset, aCapture } from "./net/analytics";
 import { setPresence, stopPresence } from "./net/presence";
+import { saveActiveGame, loadActiveGame } from "./net/resume";
 import { mountLogin } from "./screens/login";
 import { mountHome } from "./screens/home";
 import { mountLobby } from "./screens/lobby";
@@ -15,9 +16,10 @@ import { mountTutorial } from "./screens/tutorial";
 import { mountCards } from "./screens/cards";
 import { mountLeaderboard } from "./screens/leaderboard";
 import { mountAdmin } from "./screens/admin";
-import { mountProfile } from "./screens/profile";
+import { mountProfile, type ProfileTab } from "./screens/profile";
 import { mountFriends } from "./screens/friends";
-import { mountSettings } from "./screens/settings";
+import { mountShop } from "./screens/shop";
+import { mountDeck } from "./screens/deck";
 
 export interface Screen { destroy?(): void; }
 
@@ -50,8 +52,13 @@ export class App {
         };
       }
     }
-    if (this.user) { aIdentify(this.user.id, { verified: true }); this.home(); }
-    else this.login();
+    if (this.user) {
+      aIdentify(this.user.id, { verified: true });
+      // crashed / closed mid-game? reconnect to the in-progress room instead of the home screen.
+      const g = loadActiveGame();
+      if (g) this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked);
+      else this.home();
+    } else this.login();
   }
 
   // Clear the root BEFORE mounting the next screen. (Passing a thunk matters:
@@ -68,16 +75,21 @@ export class App {
   tutorialGame(): void { setPresence("bot"); aCapture("game_start", { mode: "tutorial" }); this.swap(() => mountGame(this, { mode: "tutorial" })); }
   cards(): void { setPresence("menu"); this.swap(() => mountCards(this)); }
   botGame(difficulty: BotDifficulty = "hard"): void { setPresence("bot"); aCapture("game_start", { mode: "bot", difficulty }); this.swap(() => mountGame(this, { mode: "bot", difficulty })); }
-  onlineLobby(): void { setPresence("queue"); this.swap(() => mountLobby(this)); }
-  rankedLobby(): void { setPresence("queue"); this.swap(() => mountLobby(this, true)); }
+  botGame(difficulty: BotDifficulty = "hard"): void { setPresence("bot"); aCapture("game_start", { mode: "bot", difficulty }); this.swap(() => mountGame(this, { mode: "bot", difficulty })); }
+  // entering a lobby with a live game still stored → rejoin it instead of re-queuing
+  onlineLobby(): void { const g = loadActiveGame(); if (g) return this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked); setPresence("queue"); this.swap(() => mountLobby(this)); }
+  rankedLobby(): void { const g = loadActiveGame(); if (g) return this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked); setPresence("queue"); this.swap(() => mountLobby(this, true)); }
   leaderboard(): void { setPresence("menu"); this.swap(() => mountLeaderboard(this)); }
-  profile(userId?: string): void { setPresence("menu"); this.swap(() => mountProfile(this, userId)); }
+  profile(userId?: string, tab?: ProfileTab): void { setPresence("menu"); this.swap(() => mountProfile(this, userId, tab)); }
   friends(): void { setPresence("menu"); this.swap(() => mountFriends(this)); }
-  settings(): void { setPresence("menu"); this.swap(() => mountSettings(this)); }
-  onlineGame(roomId: string, you: Side, oppName: string): void {
+  settings(): void { this.profile(undefined, "settings"); } // settings now lives as a profile tab
+  shop(): void { setPresence("menu"); this.swap(() => mountShop(this)); }
+  deck(): void { setPresence("menu"); this.swap(() => mountDeck(this)); }
+  onlineGame(roomId: string, you: Side, oppName: string, oppAvatar: string | null = null, ranked = false): void {
     setPresence("online");
     aCapture("game_start", { mode: "online" });
-    this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName }));
+    saveActiveGame(roomId, you, ranked); // remember it so a crash/close can rejoin this exact room
+    this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName, oppAvatar, ranked }));
   }
 
   async logout(): Promise<void> {

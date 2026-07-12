@@ -4,19 +4,38 @@
 // All animation lives in anim.ts; this file only draws + binds.
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
-import { effMaxMana, supplyRange, playCost, buyCost } from "../shared/engine";
-import { frameFor, FRAME_BACK, TRIBES, DB as DBC } from "../shared/cards";
-import { cardPicker } from "./modal";
+import { effMaxMana, playCost, buyCost, effAtk, effDef } from "../shared/engine";
+import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS } from "../shared/cards";
+import { cardPicker, deckViewer } from "./modal";
 import { cardEl } from "./cardView";
 import { bindZoom } from "./anim";
 import { t, getLang } from "../i18n";
 import { logToEn } from "../shared/logEn";
+import { getSfxVolume, setSfxVolume } from "./sound";
+import { avatarHtml } from "./social";
+
+// the local player's profile avatar (set by the game screen), shown in MY meta panel
+let MY_AVATAR: string | null | undefined;
+export function setMyAvatar(a?: string | null): void { MY_AVATAR = a; }
+
+// each side's equipped card-sleeve URL — used for deck/hand/set-trap backs.
+// MY is set locally from app.user; OPP is refreshed per-render from the
+// server-synced state.sleeves, so the opponent's chosen sleeve shows too.
+let MY_SLEEVE = FRAME_BACK;
+let OPP_SLEEVE = FRAME_BACK;
+export function setMySleeve(id?: string | null): void { MY_SLEEVE = sleeveUrl(id); }
+// 마켓 알림이: 활성 덱 프리셋의 워치리스트 — 마켓/제시에 뜨면 은은하게 표시
+let MARKET_WATCH = new Set<string>();
+export function setMarketWatch(ids?: string[] | null): void { MARKET_WATCH = new Set(ids ?? []); }
+/** card-back image for a pile/back that belongs to `isMe`. */
+function backFor(isMe: boolean): string { return isMe ? MY_SLEEVE : OPP_SLEEVE; }
 
 const MON_SLOTS = 7;
 const ST_SLOTS = 7;
 
 export interface BoardHandlers {
   onPlay(uid: string): void;
+  onBlockedPlay(uid: string): void;
   onAttack(uid: string): void;
   onReorder(from: number, to: number): void;
   onChooseTarget(uid: string | null): void;
@@ -45,10 +64,10 @@ export class GameView {
       <div class="game">
         <div class="topbar">
           <div class="brand"><div class="mark"></div><h1>LORE</h1></div>
-          <div class="icon-rail" id="iconRail" title="최근 진행"></div>
           <div class="turn-info" id="turnInfo"></div>
-          <button class="log-toggle" id="logToggle">${t("game.log")}</button>
+          <button class="btn btn-danger giveup-btn" id="giveupBtn"><svg class="gv-flag" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M6 2a1 1 0 0 1 1 1v.6h10.3a.7.7 0 0 1 .58 1.1L16.4 8l1.48 3.3a.7.7 0 0 1-.58 1.1H7V21a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1z"/></svg><span class="gv-label">${t("game.surrender")}</span></button>
         </div>
+        <button class="mute-fab" id="muteBtn" title="${t("game.mute")}" aria-label="${t("game.mute")}"></button>
         <div class="stage">
           <div class="board-col">
             <div class="opp-hand" id="oppHand"></div>
@@ -60,38 +79,60 @@ export class GameView {
               <div class="end-turn-wrap"><button class="btn btn-primary" id="endBtn">${t("game.endturn")}</button></div>
             </div>
           </div>
-          <div class="panel logpanel" id="logPanel">
-            <div class="panel-title" id="logTitle">${t("game.log")}</div>
-            <div class="log" id="log"></div>
-            <div class="log-foot"><button class="btn btn-danger btn-block" id="surrenderBtn">${t("game.surrender")}</button></div>
-          </div>
         </div>
-        <button class="log-fab" id="logFab" aria-label="log">📜</button>
+        <!-- battle log: a left-edge drawer with a mid-left toggle tab -->
+        <button class="log-tab" id="logTab" aria-label="log">${t("game.log")}</button>
+        <div class="panel logpanel" id="logPanel">
+          <div class="panel-title" id="logTitle">${t("game.log")}</div>
+          <div class="log" id="log"></div>
+        </div>
       </div>
       <div class="target-hint" id="targetHint" style="display:none"></div>`;
     this.logEl = this.q("log");
     (this.q("endBtn") as HTMLButtonElement).onclick = () => this.h.onEndTurn();
-    (this.q("surrenderBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
-    // log open/close — CLOSED by default; the icon rail (topbar) shows recent
-    // events at a glance, opening the panel shows the full text log. Persisted.
+    (this.q("giveupBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
+    // sound button (round button below the logo): click = volume slider popover
+    // (ON/OFF만 있던 것을 인게임 볼륨 조절로 확장 — 슬라이더 0 = 음소거)
+    const muteBtn = this.q("muteBtn") as HTMLButtonElement;
+    const SPK_ON = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.6a4 4 0 010 6.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+    const SPK_OFF = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+    let lastVol = getSfxVolume() || 0.7;
+    const paintMute = () => { const m = getSfxVolume() <= 0; muteBtn.innerHTML = m ? SPK_OFF : SPK_ON; muteBtn.classList.toggle("muted", m); };
+    const volPop = document.createElement("div");
+    volPop.className = "vol-pop";
+    volPop.innerHTML = `<input type="range" min="0" max="100" step="5" aria-label="volume">`;
+    muteBtn.insertAdjacentElement("afterend", volPop);
+    const volRange = volPop.querySelector("input") as HTMLInputElement;
+    volRange.value = String(Math.round(getSfxVolume() * 100));
+    volRange.oninput = () => {
+      const v = Number(volRange.value) / 100;
+      if (v > 0) lastVol = v;
+      setSfxVolume(v);
+      paintMute();
+    };
+    let volOpen = false;
+    const setVolOpen = (o: boolean) => { volOpen = o; volPop.classList.toggle("open", o); };
+    muteBtn.onclick = (e) => { e.stopPropagation(); volRange.value = String(Math.round(getSfxVolume() * 100)); setVolOpen(!volOpen); };
+    volPop.onclick = (e) => e.stopPropagation();
+    // double-click the button = quick mute/unmute (기존 동작 유지)
+    muteBtn.ondblclick = () => { if (getSfxVolume() > 0) { lastVol = getSfxVolume(); setSfxVolume(0); } else { setSfxVolume(lastVol || 0.7); } volRange.value = String(Math.round(getSfxVolume() * 100)); paintMute(); };
+    document.addEventListener("click", () => { if (volOpen) setVolOpen(false); });
+    paintMute();
+    // battle log — CLOSED by default; a mid-left edge tab opens the drawer.
+    // Once opened it stays open (state persisted in localStorage).
     const gameEl = this.root.querySelector(".game") as HTMLElement;
     let logOpen = false;
     try { logOpen = localStorage.getItem("lore_log_open") === "1"; } catch { /* ignore */ }
     const applyLog = () => {
       gameEl.classList.toggle("log-open", logOpen);
-      this.q("logFab").textContent = logOpen ? "✕" : "📜";
-      this.q("logFab").classList.toggle("open", logOpen);
-      this.q("logToggle").classList.toggle("on", logOpen);
+      this.q("logTab").classList.toggle("on", logOpen);
     };
     const toggleLog = () => { logOpen = !logOpen; try { localStorage.setItem("lore_log_open", logOpen ? "1" : "0"); } catch { /* ignore */ } applyLog(); };
-    (this.q("logFab")).onclick = toggleLog;
-    (this.q("logToggle")).onclick = toggleLog;
-    (this.q("iconRail")).onclick = () => { if (!logOpen) toggleLog(); };
+    (this.q("logTab")).onclick = toggleLog;
     applyLog();
     document.addEventListener("contextmenu", (e) => e.preventDefault());
 
-    // ---- hand: always visible (no auto-tuck). Individual cards still lift on
-    // hover via .card.is-playable:hover, but the whole hand never slides away. ----
+    // ---- hand: always visible (no auto-tuck). ----
   }
 
   private q(id: string): HTMLElement { return this.root.querySelector("#" + id) as HTMLElement; }
@@ -123,13 +164,15 @@ export class GameView {
     const opp = g.players[1 - this.you];
     const myTurn = g.cur === this.you && !g.over;
     const pending = g.pending;
+    // opponent's equipped sleeve (server-synced); falls back to default for bot/local games
+    OPP_SLEEVE = sleeveUrl(g.sleeves?.[1 - this.you]);
 
-    this.q("turnInfo").innerHTML = `${t("game.turn")} ${g.turn} <span class="muted">·</span> <b>${g.players[g.cur].name}</b>`;
+    this.q("turnInfo").innerHTML = `<span class="turn-badge"><span class="tb-label">${t("game.turn")}</span><span class="tb-num">${g.turn}</span></span><span class="turn-cur"><b>${g.players[g.cur].name}</b></span>`;
     // refresh static labels (so a live language switch updates them)
     this.q("endBtn").textContent = t("game.endturn");
-    this.q("surrenderBtn").textContent = t("game.surrender");
+    const gvl = this.q("giveupBtn").querySelector(".gv-label"); if (gvl) gvl.textContent = t("game.surrender");
     this.q("logTitle").textContent = t("game.log");
-    this.q("logToggle").textContent = t("game.log");
+    this.q("logTab").textContent = t("game.log");
 
     // opponent hand (face-down). Always show the COUNT; >10 lays out flat/even
     // so you can still gauge how many cards they hold.
@@ -140,10 +183,11 @@ export class GameView {
     for (let i = 0; i < n; i++) {
       const cb = document.createElement("div");
       cb.className = "card--back";
-      cb.style.backgroundImage = `url(${FRAME_BACK})`;
+      cb.style.backgroundImage = `url(${OPP_SLEEVE})`;
       cb.style.width = "56px"; cb.style.height = "90px";
-      // fan under 11 cards; flat even row past that (keeps every card edge visible)
-      cb.style.transform = flatOpp ? "none" : `rotate(${-(i - mid) * 4}deg) translateY(${-(Math.abs(i - mid) ** 2) * 1.4}px)`;
+      // fan under 11 cards; flat even row past that (keeps every card edge visible).
+      // arc DOWNWARD (edge cards lower) so the tops never cross the board's top clip edge.
+      cb.style.transform = flatOpp ? "none" : `rotate(${-(i - mid) * 4}deg) translateY(${(Math.abs(i - mid) ** 2) * 1.1}px)`;
       cb.style.zIndex = String(i);
       oh.appendChild(cb);
     }
@@ -180,8 +224,12 @@ export class GameView {
     const graveTop = p.discard[p.discard.length - 1];
     const gravePile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, graveTop ? frameFor(graveTop.t) : null, graveTop ?? null, t("game.discard"),
       () => cardPicker(`${p.name} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => { /* browse only */ }));
-    const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, FRAME_BACK, null, t("game.deck"),
-      isMe ? () => cardPicker(`${t("game.deck")} (${p.deck.length})`, sortByCost(p.deck), () => { /* browse only */ }) : undefined);
+    // clicking the DECK opens the full composition (own or opponent's public aggregate)
+    const collection = this.collectionOf(p, isMe);
+    // my deck → also show the cards still remaining (undrawn); opponent's remaining deck is hidden
+    const remaining = isMe ? [...p.deck].sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name)) : null;
+    const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, backFor(isMe), null, t("game.deck"),
+      () => deckViewer(`${p.name} — ${t("deck.view")}`, collection, remaining));
 
     const block = document.createElement("div");
     block.className = "field-block" + (isMe ? " is-mine" : " is-opp") + (onTurn ? " is-turn" : "");
@@ -189,13 +237,20 @@ export class GameView {
     // monster zone
     const mz = document.createElement("div");
     mz.className = "zone zone-mon";
-    const targetableMon = !!pending && ((pending.kind === "oppMon" && !isMe) || (pending.kind === "myMon" && isMe)) && myTurn;
+    const targetableZone = !!pending && ((pending.kind === "oppMon" && !isMe) || (pending.kind === "myMon" && isMe)) && myTurn;
     p.field.forEach((m, idx) => {
-      const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over;
+      // 신수(ward): 공격 대상으로는 지정 가능하지만 마법·몬스터 "효과"의 대상은 안 됨
+      // 고급 부화기(incubate): 자신의 "알"만 선택 가능
+      const targetableMon = targetableZone
+        && !(pending!.kind === "oppMon" && pending!.reason !== "attack" && m.aura === "ward")
+        && !(pending!.kind === "myMon" && pending!.reason === "incubate" && m.hatch == null)
+        && !(pending!.kind === "myMon" && pending!.data?.exclude === m.uid); // 지원 나팔: 같은 몬스터 중복 선택 불가
+      const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
       const card = cardEl(m, { field: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
-      bindZoom(card, m);
+      // zoom shows the monster's CURRENT atk/def (buffs/mods applied), matching the on-field card
+      bindZoom(card, { ...m, atk: effAtk(p, m), def: effDef(p, m) });
       if (isMe && myTurn && !pending && !g.over && p.field.length > 1) this.enableReorder(card, idx, mz);
       mz.appendChild(card);
     });
@@ -212,7 +267,7 @@ export class GameView {
       } else {
         const cb = document.createElement("div");
         cb.className = "card card--back";
-        cb.style.backgroundImage = `url(${FRAME_BACK})`;
+        cb.style.backgroundImage = `url(${backFor(isMe)})`;
         sz.appendChild(cb);
       }
     });
@@ -231,7 +286,7 @@ export class GameView {
     zones.className = "zones";
     if (isMe) zones.append(monRow, stRow); else zones.append(stRow, monRow);
 
-    block.append(zones, this.metaPanel(g, p, isMe));
+    block.append(zones, this.metaPanel(p, isMe));
     row.append(block);
   }
 
@@ -327,12 +382,11 @@ export class GameView {
     });
   }
 
-  /** Right-side consolidated info panel: name/turn · HP · mana · deck/exile · tribe · timer. */
-  private metaPanel(g: GameState, p: PlayerState, isMe: boolean): HTMLElement {
+  /** Right-side consolidated info panel: name · HP · mana · exile · tribe. */
+  private metaPanel(p: PlayerState, isMe: boolean): HTMLElement {
     const panel = document.createElement("div");
     panel.className = "meta-panel";
     const emax = effMaxMana(p);
-    const onTurn = g.cur === (g.players.indexOf(p) as Side) && !g.over;
     const hpPct = Math.max(0, p.hp) / p.maxHp * 100;
 
     const pips: string[] = [];
@@ -352,22 +406,24 @@ export class GameView {
     const allTribes = new Set<string>([...byTribe.keys(), ...firedBy.keys()]);
     const tribeChips: string[] = [];
     for (const tr of allTribes) {
-      const ths = tr === "시초" ? [2, 3, 4] : [2, 3];
-      const onField = byTribe.get(tr)?.size ?? 0;
+      const ths = tr === "시초" ? [2, 3, 4] : [2, 3];  // 시초 has a 4-count payoff; others cap at 3
+      const onField = byTribe.get(tr)?.size ?? 0;      // DISTINCT tribe cards on field (matches synergy rule)
       const fired = firedBy.get(tr) ?? new Set<number>();
-      const next = ths.find((th) => !fired.has(th));
       const nm = TRIBES[tr]?.[getLang()]?.name ?? tr;
-      const ready = next !== undefined && onField >= next;   // 달성 임박 (이번에 발동 가능)
-      const marks = ths.map((th) => fired.has(th) ? `<b>✓${th}</b>` : `<i>${th}</i>`).join("");
-      const prog = onField > 0 && next !== undefined ? ` ${onField}/${next}` : "";
-      tribeChips.push(`<span class="tribe-chip ${fired.size ? "has-syn" : ""} ${ready ? "ready" : ""}">${nm}${prog} <span class="tc-marks">${marks}</span></span>`);
+      const allDone = ths.every((th) => fired.has(th));
+      // one pip per threshold: ✓ = synergy achieved, highlighted = reached (fires next summon), dim = not yet
+      const pips = ths.map((th) => {
+        if (fired.has(th)) return `<span class="tp done">✓${th}</span>`;
+        if (onField >= th) return `<span class="tp ready">${th}</span>`;
+        return `<span class="tp">${th}</span>`;
+      }).join("");
+      tribeChips.push(`<span class="tribe-chip ${fired.size ? "has-syn" : ""} ${allDone ? "all" : ""}"><span class="tc-name">${nm}</span><span class="tc-cnt">${onField}</span>${pips}</span>`);
     }
 
     panel.innerHTML = `
       <div class="mp-top">
-        <span class="mp-name"><span class="who"></span>${p.name}</span>
-        <span class="turn-chip ${onTurn ? "on" : ""}">${onTurn ? t("game.myturn") : t("game.waiting")}</span>
-        <span class="mp-timer" id="timer-${isMe ? "me" : "opp"}"></span>
+        <span class="mp-name">${isMe ? avatarHtml(MY_AVATAR, p.name, 24) : `<span class="who"></span>`}${p.name}</span>
+        <div class="mp-clock" id="clock-${isMe ? "me" : "opp"}" aria-hidden="true"></div>
       </div>
       <div class="mp-hp">
         <span class="lbl">${t("game.hp")}</span>
@@ -378,13 +434,9 @@ export class GameView {
       <div class="mp-btns"></div>
       ${tribeChips.length ? `<div class="mp-tribes">${tribeChips.join("")}</div>` : ""}`;
 
+    // deck-view button removed — click the DECK pile to see composition. Only the
+    // 제외(exile) shortcut remains (there is no pile for exiled cards).
     const btns = panel.querySelector(".mp-btns")!;
-    const cards = this.collectionOf(p, isMe);
-    const dbtn = document.createElement("button");
-    dbtn.className = "btn btn-ghost mp-btn mp-btn--deck";
-    dbtn.innerHTML = `<span class="mp-ico">🎴</span>${t("deck.view")} <b>${cards.length}</b>`;
-    dbtn.onclick = () => cardPicker(`${p.name} — ${t("deck.view")} (${cards.length})`, cards, () => { /* browse only */ });
-    btns.appendChild(dbtn);
     const removed = (p.removed ?? []).slice().sort((a, b) => a.cost - b.cost);
     if (removed.length > 0) {
       const rbtn = document.createElement("button");
@@ -404,8 +456,9 @@ export class GameView {
     if (isMe) {
       pool = [...p.deck, ...p.hand, ...p.discard, ...fieldCards, ...p.traps.map((tr) => tr.card), ...enchCards];
     } else if (p.collection) {
-      // online: server-provided aggregate of hidden zones + visible public zones
-      const hidden = p.collection.map((id, i) => ({ uid: `v_${i}`, ...DBC[id] })).filter((c) => c.id);
+      // online: server-provided aggregate of hidden zones (hand+deck+traps) + visible public zones.
+      // look ids up in BOTH the main DB and STARTERS (starters aren't in DB — they were being dropped).
+      const hidden = p.collection.map((id, i) => { const d = DBC[id] ?? STARTERS[id]; return d ? { uid: `v_${i}`, ...d } : null; }).filter((c): c is CardInst => !!c);
       pool = [...hidden, ...p.discard, ...fieldCards, ...enchCards];
     } else {
       // bot mode: full state is local; same public-info view as online
@@ -418,41 +471,88 @@ export class GameView {
     // The 제시 (supply) on display belongs to whoever's turn it is — your own
     // on your turn, your opponent's (public) on theirs.
     const owner = g.players[g.cur];
-    const [lo, hi] = supplyRange(owner);
-    const supplyMeta = myTurn ? `${t("game.mana")} ${lo}~${hi} · ${t("game.refresh.suffix")}` : `<span class="dmg">${t("game.supply.opp")}</span> · ${t("game.mana")} ${lo}~${hi}`;
     const mk = this.q("market");
     mk.innerHTML = `
       <div class="market-sub">
-        <div class="sub-head"><span class="tag">${t("game.std")}</span><span class="meta">${t("game.std.meta")}</span></div>
+        <div class="sub-head"><span class="tag">${t("game.std")}</span></div>
         <div class="market-cards" id="fixedMarket"></div>
       </div>
       <div class="market-div"></div>
-      <div class="market-sub">
-        <div class="sub-head"><span class="tag">${t("game.supply")}</span><span class="meta">${supplyMeta}</span>
-          <button class="refresh-btn" id="refreshBtn">⟳ 1</button></div>
+      <div class="market-sub market-sub--supply">
+        <div class="sub-head">
+          <span class="tag">${t("game.supply")}${myTurn ? "" : ` <span class="dmg sh-opp">${t("game.supply.opp")}</span>`}</span>
+          <button class="refresh-btn" id="refreshBtn"><span class="rf-ico">⟳</span> ${t("game.refresh")} <b>1</b>
+            <span class="refresh-tip">${t("game.refresh.tip")}</span>
+          </button>
+        </div>
         <div class="market-cards" id="supplyMarket"></div>
       </div>`;
+
+    // 오클릭 구매 방지: 첫 클릭 = 선택(확인 배지 표시), 같은 카드 재클릭 = 구매.
+    // 빠른 더블클릭도 그대로 구매가 된다. 다른 곳 클릭/2.5초 경과 시 해제.
+    let armedEl: HTMLElement | null = null;
+    let armedKey = "";
+    let armTimer = 0;
+    const disarm = () => {
+      clearTimeout(armTimer);
+      armedEl?.classList.remove("is-armed");
+      armedEl?.querySelector(".buy-confirm")?.remove();
+      armedEl = null; armedKey = "";
+    };
+    const armBuy = (card: HTMLElement, key: string, buy: () => void) => {
+      card.onclick = (e) => {
+        e.stopPropagation();
+        if (armedKey === key) { disarm(); buy(); return; }
+        disarm();
+        armedEl = card; armedKey = key;
+        card.classList.add("is-armed");
+        const badge = document.createElement("div");
+        badge.className = "buy-confirm";
+        badge.textContent = t("market.confirm");
+        card.appendChild(badge);
+        armTimer = window.setTimeout(disarm, 2500);
+      };
+    };
+    mk.onclick = () => disarm(); // 마켓 빈 곳 클릭 시 해제
+
+    // 마켓 알림이: 덱 프리셋에 등록한 카드가 뜨면 은은한 링 + 🔔 점 표시
+    const markWatch = (card: HTMLElement, id: string): void => {
+      if (!MARKET_WATCH.has(id)) return;
+      card.classList.add("is-watch");
+      const dot = document.createElement("div");
+      dot.className = "watch-dot";
+      dot.textContent = "🔔";
+      card.appendChild(dot);
+    };
 
     const fixed = this.q("fixedMarket");
     g.market.forEach((c, i) => {
       const bc = buyCost(owner, c);
       const aff = myTurn && !g.pending && me.mana >= bc;
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc }); // same size as 제시
-      if (aff) card.onclick = () => this.h.onBuyMarket(i);
+      if (aff) armBuy(card, "mkt" + i, () => this.h.onBuyMarket(i));
+      markWatch(card, c.id);
       bindZoom(card, c);
       fixed.appendChild(card);
     });
 
+    // 제시(supply): show sorted by type (monster → spell → trap), keeping the
+    // ORIGINAL slot index for the buy handler; bought (null) slots render last.
     const sup = this.q("supplyMarket");
-    owner.supply.forEach((c, i) => {
-      if (!c) { sup.appendChild(this.slotEl("mkt", true)); return; }
+    const rank = (ty: string) => ty === "mon" ? 0 : (ty === "spell" || ty === "starter") ? 1 : 2;
+    const filled = owner.supply.map((c, i) => ({ c, i })).filter((x) => x.c) as { c: CardInst; i: number }[];
+    filled.sort((a, b) => rank(a.c.t) - rank(b.c.t) || a.c.cost - b.c.cost);
+    for (const { c, i } of filled) {
       const bc = buyCost(owner, c);
       const aff = myTurn && !g.pending && me.mana >= bc;
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc });
-      if (aff) card.onclick = () => this.h.onBuySupply(i);
+      card.dataset.supIdx = String(i);  // ORIGINAL supply index (display is sorted) — buy anim finds it by this
+      if (aff) armBuy(card, "sup" + i, () => this.h.onBuySupply(i));
+      if (myTurn) markWatch(card, c.id); // 제시는 내 턴의 내 제시만 (상대 제시엔 표시 무의미)
       bindZoom(card, c);
       sup.appendChild(card);
-    });
+    }
+    for (let k = filled.length; k < owner.supply.length; k++) sup.appendChild(this.slotEl("mkt", true));
 
     const rb = this.q("refreshBtn") as HTMLButtonElement;
     rb.disabled = !myTurn || !!g.pending || me.mana < 1;
@@ -474,6 +574,7 @@ export class GameView {
       card.style.transform = flat ? "none" : `rotate(${off * 3.2}deg) translateY(${Math.abs(off) ** 2 * 2}px)`;
       card.style.zIndex = String(idx);
       if (aff) card.onclick = () => this.h.onPlay(c.uid); // uid, not index: the DOM can lag the logical state
+      else card.onclick = () => this.h.onBlockedPlay(c.uid); // explain WHY it can't be played (popup)
       bindZoom(card, c);
       handEl.appendChild(card);
     });
@@ -495,7 +596,7 @@ export class GameView {
     const t = document.createElement("div"); t.className = "pile-tag"; t.textContent = tag; pile.appendChild(t);
     const cnt = document.createElement("div"); cnt.className = "pile-count"; cnt.textContent = String(count); pile.appendChild(cnt);
     if (faceCard && faceCard.id !== "HIDDEN") bindZoom(pile, faceCard);
-    if (onOpen && count > 0) { pile.style.cursor = "pointer"; pile.title = "click: browse"; pile.addEventListener("click", onOpen); }
+    if (onOpen) { pile.style.cursor = "pointer"; pile.title = "click: browse"; pile.addEventListener("click", onOpen); }
     return pile;
   }
 

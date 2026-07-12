@@ -9,7 +9,24 @@
 export type SfxName =
   | "click" | "play" | "summon" | "attack" | "impact" | "damage" | "heal"
   | "death" | "trapSet" | "trap" | "draw" | "buy" | "mana" | "maxhp"
-  | "turn" | "win" | "lose" | "drawGame" | "match" | "error" | "coin" | "pop";
+  | "turn" | "win" | "lose" | "drawGame" | "match" | "error" | "coin" | "pop"
+  | "facehit" | "mimic";
+
+// Real audio samples (uploaded mp3s). When a name has a sample it plays the
+// file; otherwise the synth voice below is used. Samples decode once on the
+// first gesture and route through the same master gain as the synth.
+const SAMPLES: Partial<Record<SfxName, string>> = {
+  facehit: "/sfx/facehit.mp3",  // 打撃1 — monster's direct attack on a player
+  click:   "/sfx/click.mp3",    // マウスクリック
+  mana:    "/sfx/mana.mp3",     // 決定16 — max-mana gain
+  mimic:   "/sfx/mimic.mp3",    // スクラッチ6 — Mimic token summon
+  win:     "/sfx/win.mp3",      // ゲームクリア(軽め②)
+  maxhp:   "/sfx/maxhp.mp3",    // 釣りのヒット — max-HP gain
+  buy:     "/sfx/buy.mp3",      // 選択3 — card purchase
+};
+// per-sample gain trim (uploaded samples run hotter than the synth voices)
+const SAMPLE_VOL: Partial<Record<SfxName, number>> = { facehit: 0.9, click: 0.5, mana: 0.7, mimic: 0.85, win: 0.85, maxhp: 0.85, buy: 0.7 };
+const buffers: Partial<Record<SfxName, AudioBuffer>> = {};
 
 const LS_KEY = "lore_sfx";
 let volume = 0.7;
@@ -30,12 +47,26 @@ function ac(): AudioContext | null {
   return ctx;
 }
 
+/** Fetch + decode every mp3 sample once (best-effort; failures fall back to synth). */
+function preloadSamples(): void {
+  const c = ctx; if (!c) return;
+  for (const [name, url] of Object.entries(SAMPLES) as [SfxName, string][]) {
+    if (buffers[name]) continue;
+    fetch(url)
+      .then((r) => r.arrayBuffer())
+      .then((b) => c.decodeAudioData(b))
+      .then((buf) => { buffers[name] = buf; })
+      .catch(() => { /* keep synth fallback for this name */ });
+  }
+}
+
 /** Install the one-time gesture unlock. Call once at app boot. */
 export function initSound(): void {
   const unlock = () => {
     unlocked = true;
     const c = ac();
     if (c && c.state === "suspended") void c.resume().catch(() => { /* ignore */ });
+    preloadSamples();
   };
   document.addEventListener("pointerdown", unlock, { once: true, capture: true });
   document.addEventListener("keydown", unlock, { once: true, capture: true });
@@ -120,7 +151,23 @@ const SOUNDS: Record<SfxName, () => void> = {
   lose:    () => { [392, 349, 311, 262].forEach((f, i) => tone({ f, type: "triangle", dur: i === 3 ? 0.45 : 0.16, vol: 0.14, at: i * 0.16 })); },
   drawGame: () => { tone({ f: 440, type: "triangle", dur: 0.2, vol: 0.14 }); tone({ f: 440, type: "triangle", dur: 0.3, vol: 0.12, at: 0.24 }); },
   error:   () => { tone({ f: 180, type: "square", dur: 0.14, vol: 0.1 }); tone({ f: 150, type: "square", dur: 0.16, vol: 0.1, at: 0.1 }); },
+  // synth fallbacks (used only if the mp3 sample fails to load)
+  facehit: () => { tone({ f: 130, f2: 50, type: "sine", dur: 0.2, vol: 0.6 }); noise({ dur: 0.12, vol: 0.28, lp: 2400, lp2: 300 }); },
+  mimic:   () => { noise({ dur: 0.16, vol: 0.16, hp: 1200, lp: 6000, lp2: 2000 }); tone({ f: 900, f2: 1500, type: "square", dur: 0.08, vol: 0.06 }); },
 };
+
+/** Play a decoded sample through the master gain. Returns false if not loaded. */
+function playSample(name: SfxName): boolean {
+  const buf = buffers[name];
+  if (!buf || !ctx || !master) return false;
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  const g = ctx.createGain();
+  g.gain.value = SAMPLE_VOL[name] ?? 0.9;
+  src.connect(g).connect(master);
+  src.start();
+  return true;
+}
 
 const last: Partial<Record<SfxName, number>> = {};
 
@@ -133,5 +180,5 @@ export function sfx(name: SfxName): void {
   const now = performance.now();
   if (last[name] && now - last[name]! < 45) return; // de-dupe bursts
   last[name] = now;
-  try { SOUNDS[name](); } catch { /* never let audio break the game */ }
+  try { if (!playSample(name)) SOUNDS[name](); } catch { /* never let audio break the game */ }
 }
