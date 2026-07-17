@@ -8,3 +8,4 @@ legacy/
 _render.cjs
 .secrets/
 .worktrees/
+*.timestamp-*.mjs
