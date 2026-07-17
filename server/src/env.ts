@@ -8,6 +8,13 @@ export interface Env {
   ASSETS: Fetcher; // Workers Static Assets — serves the built client (SPA)
   AUTH_SECRET: string;
   APP_ORIGIN: string;
+  // Google OAuth (optional — /api/auth/google returns 501 until both are set)
+  GOOGLE_CLIENT_ID?: string;     // wrangler.toml [vars] or secret
+  GOOGLE_CLIENT_SECRET?: string; // `wrangler secret put GOOGLE_CLIENT_SECRET`
+  // Resend (optional — until set, register auto-verifies and no mail is sent)
+  RESEND_API_KEY?: string;       // `wrangler secret put RESEND_API_KEY`
+  // Admin allowlist — comma-separated emails that may open /admin (logged-in session).
+  ADMIN_EMAILS?: string;         // wrangler.toml [vars]
 }
 
 export interface SessionUser {
@@ -16,4 +23,10 @@ export interface SessionUser {
   display: string;
   wins: number;
   losses: number;
+  credits: number;
+  avatar?: string | null; // preset avatar (card id)
+  badge?: string | null;  // equipped badge key
+  sleeve?: string | null; // equipped card sleeve id ('default' when none)
+  deck?: string[] | null; // 활성 덱 8장 카드 id (null = 기본덱)
+  decks?: unknown | null; // 덱 프리셋 5슬롯 {sel, list:[{cards, watch}]} — 클라가 사용
 }

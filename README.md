@@ -107,5 +107,4 @@ npx wrangler pages deploy dist --project-name lore-tcg
 - 数値バランス（先攻有利・スノーボール・Warlord/Void Reaver/Mirror Thorn）
 - Mana Golem のオーラ（最大mana+1）は旧仕様同様、現状テキストのみ（engine.ts に注記）
 - カード中央の絵（現状は◆プレースホルダ）
-- 4人対戦（撃破報酬ロジックは多人数対応済み）
 - タッチ操作（右クリック拡大 → 長押し）

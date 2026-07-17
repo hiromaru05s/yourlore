@@ -1,52 +1,110 @@
 // ============================================================
 // LORE — OnlineController. Authoritative server: we send Actions
 // and apply the redacted {state, events} snapshots it returns.
-// No local reduce, no bot.
+// Reconnects on transient drops (the room keeps state for a grace
+// period) rather than ending the game on every blip.
 // ============================================================
 import type { Action, Side } from "../shared/types";
 import type { GameClientMsg, GameServerMsg } from "../shared/protocol";
 import { Sock } from "../net/socket";
 import { BaseController, type ControllerExits } from "./controller";
-import { closeOverlay } from "../ui/modal";
+import { closeOverlay, noticeModal, marketPreview } from "../ui/modal";
+import { clearActiveGame } from "../net/resume";
+import { t } from "../i18n";
+
+const MAX_RETRIES = 6;
 
 export class OnlineController extends BaseController {
-  private sock: Sock<GameServerMsg, GameClientMsg>;
+  private sock!: Sock<GameServerMsg, GameClientMsg>;
+  private roomId: string;
   private started = false;
+  private closing = false;
+  private retries = 0;
+  private hb?: ReturnType<typeof setInterval>;
+  private preview?: { setUntil(u: number | null): void; close(): void };
 
   constructor(root: HTMLElement, you: Side, roomId: string, exits: ControllerExits) {
     super(root, you, exits);
-    this.sock = new Sock<GameServerMsg, GameClientMsg>(`/ws/room/${roomId}`, {
-      onOpen: () => this.sock.send({ type: "ready" }),
+    this.roomId = roomId;
+    this.connect();
+  }
+
+  private connect(): void {
+    this.sock = new Sock<GameServerMsg, GameClientMsg>(`/ws/room/${this.roomId}`, {
+      onOpen: () => { this.retries = 0; this.sock.send({ type: "ready" }); this.startHb(); },
       onMessage: (msg) => this.onServer(msg),
-      onClose: () => { if (!this.state?.over) this.opponentGone("연결이 끊어졌습니다."); },
+      onClose: () => this.onSockClose(),
     });
+  }
+
+  private onSockClose(): void {
+    this.stopHb();
+    if (this.closing || this.state?.over) return;
+    if (this.retries < MAX_RETRIES) {
+      this.retries++;
+      this.banner(t("net.reconnecting"));
+      setTimeout(() => { if (!this.closing && !this.state?.over) this.connect(); }, 800 * this.retries);
+    } else {
+      this.banner(null);
+      noticeModal(t("notice.disc.title"), t("notice.disc.body"), t("modal.home"), () => this.exits.onHome());
+    }
   }
 
   private onServer(msg: GameServerMsg): void {
     if (msg.type === "init") {
       this.started = true;
+      this.banner(null); // reconnected & resynced
+      this.preview?.close(); this.preview = undefined; // preview phase over → game begins (coin toss shows on turn 1)
+      closeOverlay();
       this.applyResult({ state: msg.state, events: msg.events }, false);
+      if (this.state?.over) clearActiveGame(); // rejoined a game that already finished
     } else if (msg.type === "update") {
       this.applyResult({ state: msg.state, events: msg.events });
+      if (this.state?.over) clearActiveGame(); // game ended → nothing to rejoin
+    } else if (msg.type === "oppConn") {
+      this.banner(msg.connected ? null : t("net.oppwait"));
     } else if (msg.type === "opponentLeft") {
-      this.opponentGone("상대가 게임을 떠났습니다.");
+      // server already sent the deciding update; just make sure the result shows
+      if (this.state?.over) this.showWin();
+    } else if (msg.type === "voided") {
+      // the match never really started (opponent never joined) → no rank change, back to home
+      this.closing = true;
+      clearActiveGame();
+      noticeModal(t("notice.voided.title"), t("notice.voided.body"), t("modal.home"), () => this.exits.onHome());
+    } else if (msg.type === "preview") {
+      // ranked pre-game market study (before coin toss). until=null → still waiting for the opponent.
+      if (!this.preview) this.preview = marketPreview(msg.market, () => this.sock.send({ type: "startReady" }));
+      this.preview.setUntil(msg.until);
+    } else if (msg.type === "rankResult") {
+      // ranked game settled — remember my MMR change and paint it onto the (already-open) result screen
+      this.rankChange = { before: msg.before, after: msg.after };
+      this.renderRankDelta();
     } else if (msg.type === "error") {
       console.warn("[server]", msg.message);
     }
   }
 
-  private opponentGone(_reason: string): void {
-    if (this.state?.over) return;
-    closeOverlay();
-    // server marks us the winner; just surface the win screen if not already
-    this.showWin();
-  }
-
   protected submit(action: Action): void {
     if (!this.started || this.state?.over) return;
     this.sock.send({ type: "action", action });
-    // optimistic UX off: server is authoritative and echoes the update
   }
 
-  destroy(): void { this.sock.close(); super.destroy(); }
+  // heartbeat: keep the WS path warm through idle thinking time (edge/NAT timeouts kill silent sockets)
+  private startHb(): void { this.stopHb(); this.hb = setInterval(() => this.sock.send({ type: "ping" }), 20000); }
+  private stopHb(): void { if (this.hb) clearInterval(this.hb); this.hb = undefined; }
+
+  /** Non-blocking connection banner at the top of the board (null hides it). */
+  private banner(text: string | null): void {
+    let el = document.getElementById("net-banner");
+    if (!text) { el?.remove(); return; }
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "net-banner";
+      el.style.cssText = "position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:999;background:#1d2735;color:#ffd166;border:1px solid #ffd16655;border-radius:8px;padding:8px 16px;font-size:14px;box-shadow:0 4px 16px rgba(0,0,0,.4)";
+      document.body.appendChild(el);
+    }
+    el.textContent = text;
+  }
+
+  destroy(): void { this.closing = true; this.stopHb(); this.preview?.close(); this.preview = undefined; this.banner(null); this.sock?.close(); super.destroy(); }
 }

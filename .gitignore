@@ -6,3 +6,6 @@ dist/
 .DS_Store
 legacy/
 _render.cjs
+.secrets/
+.worktrees/
+*.timestamp-*.mjs
