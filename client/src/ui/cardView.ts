@@ -3,9 +3,28 @@
 // (board / market / hand / pile / zoom) so sizing stays consistent.
 // ============================================================
 import type { CardInst, FieldMon, PlayerState } from "../shared/types";
-import { FRAME_BACK, frameFor } from "../shared/cards";
+import { FRAME_BACK, frameFor, PASSIVES, cardPassives } from "../shared/cards";
 import { effAtk, effDef, playCost } from "../shared/engine";
-import { cardName, cardText, t } from "../i18n";
+import { cardName, cardText, getLang, t } from "../i18n";
+
+/**
+ * 카드 효과 텍스트 안의 패시브 키워드명을 <span class="psv" data-psv="key">로 감싼다.
+ * 그 카드가 실제로 가진 패시브의 이름만 래핑 — 다른 문장 속 우연한 일치는 건드리지 않는다.
+ * (줌 화면에서 hover 시 우측 패시브 설명 패널이 하이라이트된다)
+ */
+export function decoratePassives(c: CardInst, txt: string): string {
+  const keys = cardPassives(c);
+  if (!keys.length) return txt;
+  const lang = getLang();
+  for (const k of keys) {
+    const p = PASSIVES[k];
+    if (!p) continue;
+    const name = lang === "ja" ? p.ja.name : lang === "en" ? p.en.name : p.ko.name;
+    if (!name || !txt.includes(name)) continue;
+    txt = txt.split(name).join(`<span class="psv" data-psv="${k}">${name}</span>`);
+  }
+  return txt;
+}
 
 export interface CardOpts {
   size?: "board" | "mkt" | "hand";
@@ -116,6 +135,21 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     const eggD = (c as { dur?: number }).dur ?? c.hatchDur ?? 4;
     node.appendChild(el("div", "egg-cnt", `<span class="ec ec-h">🥚${eggH}</span><span class="ec ec-d">🛡${Math.max(0, eggD)}</span>`));
   }
+  // 기합 토큰 / 부패 카운터 / 부여 패시브 배지 (필드 카드만)
+  if (opt.field && c.hatchTurns == null && c.aura !== "assassinGuild") {
+    const fm = c as FieldMon;
+    const bits: string[] = [];
+    if ((fm.guts ?? 0) > 0) bits.push(`<span class="ec ec-g">💢${fm.guts}</span>`);
+    if ((fm.decayCnt ?? 0) > 0) bits.push(`<span class="ec ec-x">☠${fm.decayCnt}/3</span>`);
+    if (fm.passivesG?.length) {
+      const lang0 = getLang();
+      for (const k of fm.passivesG) {
+        const p = PASSIVES[k];
+        if (p) bits.push(`<span class="ec ec-p">${lang0 === "ja" ? p.ja.name : lang0 === "en" ? p.en.name : p.ko.name}</span>`);
+      }
+    }
+    if (bits.length) node.appendChild(el("div", "egg-cnt", bits.join("")));
+  }
   // 이름도 실측-축소: 긴 이름(EN 포함)이 프레임 이름판을 벗어나지 않게
   fitToBox(nameEl2);
   // 효과 텍스트: "(시전 N)"/"(소환 N)" 계열 표기는 배지로 대체되므로 제거하고, 구분자를 줄바꿈으로
@@ -138,7 +172,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
       cast.addEventListener("pointerleave", () => tip.classList.remove("show"));
       eff.appendChild(cast);
     }
-    if (txt && txt !== "—") eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${txt}</span>`));
+    if (txt && txt !== "—") eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${decoratePassives(c, txt)}</span>`));
     fitToBox(eff); // 실측 자동 축소 — 어떤 길이의 효과도 항상 프레임 텍스트판 안에
     // enchantment (영구마법) marker: small ∞ badge in the effect box + hover tooltip
     if (c.ench) {

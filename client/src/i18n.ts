@@ -193,6 +193,7 @@ const D: Record<string, Entry> = {
   "deck.tab.all": { ko: "전체 구성", ja: "全体構成", en: "Full Deck" },
   "deck.tab.remain": { ko: "덱에 남음", ja: "デッキに残り", en: "In Deck" },
   "deck.all.note": { ko: "이 덱이 보유한 모든 카드 (손패·필드·묘지 포함)", ja: "このデッキの全カード (手札・場・墓地含む)", en: "Every card this deck owns (incl. hand, field, graveyard)" },
+  "deck.public.note": { ko: "이 게임에서 공개된 상대 카드", ja: "このゲーム中に公開された相手カード", en: "Opponent cards revealed during this game" },
   "deck.remain.note": { ko: "아직 뽑지 않고 덱에 남아있는 카드", ja: "まだ引いておらずデッキに残っているカード", en: "Cards still in your deck, not yet drawn" },
   "deck.empty": { ko: "카드가 없습니다.", ja: "カードがありません。", en: "No cards." },
   "deck.removed": { ko: "제외", ja: "除外", en: "Exiled" },
@@ -202,6 +203,7 @@ const D: Record<string, Entry> = {
   "tribe.others": { ko: "이 종족의 다른 카드 (탭하면 확대)", ja: "この種族の他のカード (タップで拡大)", en: "Other cards in this tribe (tap to enlarge)" },
   "card.related": { ko: "관련 카드", ja: "関連カード", en: "Related Cards" },
   "card.related.sub": { ko: "이 카드가 소환·참조하는 카드 (탭하면 확대)", ja: "このカードが召喚・参照するカード (タップで拡大)", en: "Cards this one summons or references (tap to enlarge)" },
+  "psv.title": { ko: "패시브", ja: "パッシブ", en: "Passives" },
   "tribe.footer": { ko: "동족을 필드에 모으면 발동 · 게임당 각 1회", ja: "同じ種族を場に揃えると発動 · 1ゲームに各1回", en: "Triggers when tribe members share your field · once per game each" },
   // in-game FX / event playback
   "fx.trap": { ko: "함정 발동!", ja: "罠発動！", en: "Trap Activated!" },

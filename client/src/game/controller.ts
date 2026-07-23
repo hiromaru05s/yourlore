@@ -10,7 +10,7 @@ import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from 
 import { logToEn } from "../shared/logEn";
 import { createGame, reduce, playCost } from "../shared/engine";
 import { botDecide, pickBotDeck } from "../shared/bot";
-import { DB, STARTERS } from "../shared/cards";
+import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog } from "../ui/log";
 import * as A from "../ui/anim";
@@ -405,10 +405,14 @@ export abstract class BaseController implements BoardHandlers {
         const me = g.players[this.you];
         const opp = g.players[1 - this.you];
         let pool: CardInst[];
-        if (g.pending.kind === "purge") pool = [...me.deck, ...me.discard].sort((a, b) => a.cost - b.cost);
+        if (g.pending.kind === "purge") {
+          // 시련의 영역(trialExile): 묘지에서만 제외
+          const discOnly = g.pending.data?.zone === "discard";
+          pool = (discOnly ? [...me.discard] : [...me.deck, ...me.discard]).sort((a, b) => a.cost - b.cost);
+        }
         else if (g.pending.kind === "oppRmz") pool = [...(opp.removed ?? [])].sort((a, b) => a.cost - b.cost);
-        else pool = [ // oppBoard: 상대 몬스터(신수 제외) + 세트 함정(뒷면) + 영구마법
-          ...opp.field.filter((m) => m.aura !== "ward"),
+        else pool = [ // oppBoard: 상대 몬스터(아우라 제외) + 세트 함정(뒷면) + 영구마법
+          ...opp.field.filter((m) => !hasPassive(m, "aura")),
           ...opp.traps.map((t2) => ({ uid: t2.card.uid, id: "HIDDEN", t: "trap", cost: 0, name: t("picker.settrap"), text: "?" } as CardInst)),
           ...opp.enchants.map((e2) => e2.card),
         ];
@@ -423,9 +427,11 @@ export abstract class BaseController implements BoardHandlers {
       }
       if (g.pending.kind === "giantShop") {
         // 시초의 거인: 코스트 5+ 시초 카드 구매 (지불 가능한 것만 제시)
+        // 고대 문명(civChoice): 알 2종 중 1장 무료 선택
         const me = g.players[this.you];
+        const free = g.pending.reason === "civChoice";
         const ids = (g.pending.data?.ids as string[] | undefined) ?? [];
-        const pool = ids.filter((id) => DB[id] && DB[id].cost <= me.mana).map((id) => ({ uid: id, ...DB[id] }));
+        const pool = ids.filter((id) => DB[id] && (free || DB[id].cost <= me.mana)).map((id) => ({ uid: id, ...DB[id] }));
         const hint = getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint;
         if (!pool.length) { this.submit({ type: "pick", uid: null }); return; }
         cardPicker(hint, pool, (uid) => this.submit({ type: "pick", uid }));

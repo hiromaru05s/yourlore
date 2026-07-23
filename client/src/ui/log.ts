@@ -4,7 +4,8 @@
 // both KO/JA HTML and re-renders when the language changes; card
 // names inside lines are localized by their card id.
 // ============================================================
-import { DB } from "../shared/cards";
+import { DB, STARTERS } from "../shared/cards";
+import type { CardDef } from "../shared/types";
 import { zoomCard } from "./anim";
 import { cardName, getLang, onLangChange, t } from "../i18n";
 import { logToEn } from "../shared/logEn";
@@ -25,7 +26,8 @@ export class GameLog {
     this.el.addEventListener("click", (e) => {
       const t = (e.target as HTMLElement).closest(".log-card") as HTMLElement | null;
       const id = t?.dataset.card;
-      if (id && DB[id]) zoomCard({ uid: "log_" + id, ...DB[id] });
+      const def = id ? this.cardDef(id) : undefined;
+      if (id && def) zoomCard({ uid: "log_" + id, ...def });
     });
     this.unsub = onLangChange(() => this.renderAll());
   }
@@ -71,12 +73,15 @@ export class GameLog {
   private localizeCards(node: HTMLElement): void {
     node.querySelectorAll<HTMLElement>(".log-card").forEach((el) => {
       const id = el.dataset.card;
-      if (id && DB[id]) {
-        el.textContent = cardName({ uid: "", ...DB[id] });
-        el.classList.add("lc-" + DB[id].t); // lc-mon / lc-spell / lc-trap / lc-starter
+      const def = id ? this.cardDef(id) : undefined;
+      if (def) {
+        el.textContent = cardName({ uid: "", ...def });
+        el.classList.add("lc-" + def.t); // lc-mon / lc-spell / lc-trap / lc-starter
       }
     });
   }
+
+  private cardDef(id: string): CardDef | undefined { return DB[id] ?? STARTERS[id]; }
 
   private renderAll(): void {
     this.el.innerHTML = "";
