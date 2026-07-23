@@ -7,8 +7,24 @@ import { t, getLang, onLangChange } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
 import { TUT_STEPS } from "../game/tutorial";
 import { api } from "../net/api";
+import { PASSIVES } from "../shared/cards";
 
 interface Section { icon: string; h: string; body: string[]; }
+
+/** 패시브 키워드 섹션 — PASSIVES 사전에서 자동 생성 (카드에는 키워드명만 적힌다). */
+function passiveSection(lang: "ko" | "ja" | "en"): Section {
+  const h = lang === "ja" ? "パッシブキーワード" : lang === "en" ? "Passive Keywords" : "패시브 키워드";
+  const intro = lang === "ja"
+    ? "カードには<b>キーワード名だけ</b>が書かれています。カードを拡大(右クリック・長押し)すると右側に説明パネルが表示されます。"
+    : lang === "en"
+      ? "Cards show only the <b>keyword name</b>. Enlarge a card (right-click / long-press) to see the description panel beside it."
+      : "카드에는 <b>키워드명만</b> 적혀 있습니다. 카드를 확대(우클릭·길게 누르기)하면 옆에 설명 패널이 표시돼요.";
+  const body = [intro, ...Object.keys(PASSIVES).map((k) => {
+    const loc = PASSIVES[k][lang];
+    return `<b>${loc.name}</b> — ${loc.desc}`;
+  })];
+  return { icon: "✨", h, body };
+}
 
 const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
   ko: [
@@ -201,7 +217,8 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
 export function mountTutorial(app: App): Screen {
   const wrap = document.createElement("div");
   wrap.className = "screen tut-screen";
-  const secs = SECTIONS[getLang()];
+  const lang = getLang();
+  const secs = [...SECTIONS[lang], passiveSection(lang)];
   wrap.innerHTML = `
     <div class="topright-lang"></div>
     <div class="tut">

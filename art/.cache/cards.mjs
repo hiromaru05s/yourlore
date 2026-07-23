@@ -94,29 +94,29 @@ const CORE = {
 };
 export const TRIBES = {
     "고독": {
-        ko: { name: "고독", note: "※ 서로 다른 종족 카드여야 발동 (같은 카드 2장은 X)", bonuses: ["서로 다른 2종: 최대 체력 +10", "서로 다른 3종: 최대 체력 +30, 최대 마나 +1"] },
-        ja: { name: "孤独", note: "※ 異なる種族カードが必要 (同じカード2枚は不可)", bonuses: ["異なる2種: 最大体力 +10", "異なる3種: 最大体力 +30, 最大マナ +1"] },
-        en: { name: "Solitary", note: "* Requires DIFFERENT cards of the tribe (2 copies of one card don't count)", bonuses: ["2 different: max HP +10", "3 different: max HP +30, max mana +1"] },
+        ko: { name: "고독", note: "※ 서로 다른 종족 카드여야 발동 (같은 카드 2장은 X) · 각 단계 보상은 게임당 1회씩 따로 지급", bonuses: ["서로 다른 2종: 최대 체력 +25", "서로 다른 3종: 최대 체력 +50, 최대 마나 +2"] },
+        ja: { name: "孤独", note: "※ 異なる種族カードが必要 (同じカード2枚は不可) · 各段階の報酬はゲーム中1回ずつ別々に発生", bonuses: ["異なる2種: 最大体力 +25", "異なる3種: 最大体力 +50, 最大マナ +2"] },
+        en: { name: "Solitary", note: "* Requires DIFFERENT cards of the tribe · each tier's reward fires once, separately", bonuses: ["2 different: max HP +25", "3 different: max HP +50, max mana +2"] },
     },
     "고귀": {
-        ko: { name: "고귀", note: "※ 서로 다른 종족 카드여야 발동", bonuses: ["서로 다른 2종: 최대 마나 +1", "서로 다른 3종: 최대 마나 +3, 상대 함정 2장 파괴"] },
-        ja: { name: "高貴", note: "※ 異なる種族カードが必要", bonuses: ["異なる2種: 最大マナ +1", "異なる3種: 最大マナ +3, 相手の罠2枚を破壊"] },
-        en: { name: "Noble", note: "* Requires different cards of the tribe", bonuses: ["2 different: max mana +1", "3 different: max mana +3, destroy 2 enemy traps"] },
+        ko: { name: "고귀", note: "※ 서로 다른 종족 카드여야 발동 · 각 단계 보상은 게임당 1회씩 따로 지급", bonuses: ["서로 다른 2종: 매 턴 드로우 +1(영구), 상대 세트 함정 2장 파괴", "서로 다른 3종: 매 턴 드로우 +4(영구), 상대 세트 함정 전부 파괴 후 그중 1장 게임에서 제외"] },
+        ja: { name: "高貴", note: "※ 異なる種族カードが必要 · 各段階の報酬はゲーム中1回ずつ", bonuses: ["異なる2種: 毎ターンドロー+1(永続), 相手のセットトラップ2枚破壊", "異なる3種: 毎ターンドロー+4(永続), 相手のセットトラップを全破壊し、うち1枚をゲームから除外"] },
+        en: { name: "Noble", note: "* Requires different cards of the tribe · each tier fires once, separately", bonuses: ["2 different: +1 draw each turn (permanent), destroy 2 enemy set traps", "3 different: +4 draw each turn (permanent), destroy ALL enemy set traps and exile 1 of them"] },
     },
     "포식": {
-        ko: { name: "포식", note: "※ 서로 다른 종족 카드여야 발동", bonuses: ["서로 다른 2종: 상대 몬스터 1체 파괴 + 상대에게 4 데미지", "서로 다른 3종: 상대 몬스터 2체 파괴 + 상대에게 10 데미지"] },
-        ja: { name: "捕食", note: "※ 異なる種族カードが必要", bonuses: ["異なる2種: 相手モンスター1体破壊 + 相手に4ダメージ", "異なる3種: 相手モンスター2体破壊 + 相手に10ダメージ"] },
-        en: { name: "Devour", note: "* Requires different cards of the tribe", bonuses: ["2 different: destroy 1 enemy monster + 4 damage", "3 different: destroy 2 enemy monsters + 10 damage"] },
+        ko: { name: "포식", note: "※ 서로 다른 종족 카드여야 발동 · 각 단계 보상은 게임당 1회씩 따로 지급", bonuses: ["서로 다른 2종: 선택한 상대 몬스터 1체 파괴 후 상대에게 12 데미지", "서로 다른 3종: 선택한 상대 몬스터 2체 파괴 후 상대에게 20 데미지"] },
+        ja: { name: "捕食", note: "※ 異なる種族カードが必要 · 各段階の報酬はゲーム中1回ずつ", bonuses: ["異なる2種: 選んだ敵モンスター1体を破壊し、相手に12ダメージ", "異なる3種: 選んだ敵モンスター2体を破壊し、相手に20ダメージ"] },
+        en: { name: "Devour", note: "* Requires different cards of the tribe · each tier fires once, separately", bonuses: ["2 different: destroy 1 chosen enemy monster, then 12 damage", "3 different: destroy 2 chosen enemy monsters, then 20 damage"] },
     },
     "귀족": {
-        ko: { name: "귀족", note: "※ 서로 다른 종족 카드여야 발동", bonuses: ["서로 다른 2종: 자신의 최대 마나 -1", "서로 다른 3종: 최대 마나 +5, 매 턴 +2 드로우(영구), 최대 체력 +15"] },
-        ja: { name: "貴族", note: "※ 異なる種族カードが必要", bonuses: ["異なる2種: 自分の最大マナ -1", "異なる3種: 最大マナ +5, 毎ターン+2ドロー(永続), 最大体力 +15"] },
-        en: { name: "Aristocrat", note: "* Requires different cards of the tribe", bonuses: ["2 different: YOUR max mana -1", "3 different: max mana +5, +2 draw each turn (permanent), max HP +15"] },
+        ko: { name: "귀족", note: "※ 서로 다른 종족 카드여야 발동 · 각 단계 보상은 게임당 1회씩 따로 지급", bonuses: ["서로 다른 2종: 최대 마나 +2", "서로 다른 3종: 최대 마나 +6"] },
+        ja: { name: "貴族", note: "※ 異なる種族カードが必要 · 各段階の報酬はゲーム中1回ずつ", bonuses: ["異なる2種: 最大マナ +2", "異なる3種: 最大マナ +6"] },
+        en: { name: "Aristocrat", note: "* Requires different cards of the tribe · each tier fires once, separately", bonuses: ["2 different: max mana +2", "3 different: max mana +6"] },
     },
     "시초": {
-        ko: { name: "시초", note: "※ 1~8코스트 각 1종(8코 '시초의 미믹' 포함) · 서로 다른 카드를 모으세요", bonuses: ["서로 다른 2종: 최대 체력 +6", "서로 다른 3종: 최대 체력 +13, 상대 최대 체력 -3", "서로 다른 4종: 최대 마나 +10, 최대 체력 +20, 4장 드로우, 상대 필드 전멸, 상대 13 데미지"] },
-        ja: { name: "始原", note: "※ 1~8コスト各1種(8コスト「始原のミミック」を含む) · 異なるカードを揃える", bonuses: ["異なる2種: 最大体力 +6", "異なる3種: 最大体力 +13, 相手の最大体力 -3", "異なる4種: 最大マナ +10, 最大体力 +20, 4枚ドロー, 相手の場を全滅, 相手に13ダメージ"] },
-        en: { name: "Origin", note: "* Collect different cards, one each of cost 1-8 (incl. cost-8 'Origin Mimic')", bonuses: ["2 different: max HP +6", "3 different: max HP +13, enemy max HP -3", "4 different: max mana +10, max HP +20, draw 4, wipe the enemy field, 13 damage"] },
+        ko: { name: "시초", note: "※ 1~8코스트 각 1종(8코 '시초의 미믹' 포함) · 각 단계 보상은 게임당 1회씩 따로 지급", bonuses: ["서로 다른 2종: 최대 체력 +10", "서로 다른 3종: 최대 체력 +15, 상대 최대 체력 -5", "서로 다른 4종: 최대 마나 +10, 최대 체력 +25, 5장 드로우, 상대 필드의 모든 카드 파괴+게임에서 제외, 상대에게 10 데미지"] },
+        ja: { name: "始原", note: "※ 1~8コスト各1種(8コスト「始原のミミック」を含む) · 各段階の報酬はゲーム中1回ずつ", bonuses: ["異なる2種: 最大体力 +10", "異なる3種: 最大体力 +15, 相手の最大体力 -5", "異なる4種: 最大マナ +10, 最大体力 +25, 5枚ドロー, 相手の場の全カードを破壊+ゲームから除外, 相手に10ダメージ"] },
+        en: { name: "Origin", note: "* Collect different cards, one each of cost 1-8 (incl. cost-8 'Origin Mimic') · each tier fires once, separately", bonuses: ["2 different: max HP +10", "3 different: max HP +15, enemy max HP -5", "4 different: max mana +10, max HP +25, draw 5, destroy & exile every card on the enemy field, 10 damage"] },
     },
 };
 // ---------------- generated high-cost curve (cost 5–12) ----------------
@@ -451,12 +451,12 @@ const NEW_CARDS2 = [
     { id: "TAR3", t: "mon", cost: 3, name: "몰락한 기사", nameJa: "没落した騎士", atk: 4, def: 2, tribe: "귀족", text: "[귀족] 동족 시너지", textJa: "[貴族] 同族シナジー" },
     // ---- NEW tribe 시초(Genesis): cost 1~8, one each (cost-8 시초의 미믹/ORIGIN_MIMIC added in a later PATCH) ----
     { id: "TGE1", t: "mon", cost: 1, play: 2, name: "시초의 알", nameJa: "始原の卵", atk: 0, def: 0, tribe: "시초", text: "[시초] 동족 시너지", textJa: "[始原] 同族シナジー" },
-    { id: "TGE2", t: "mon", cost: 2, name: "시초의 불씨", nameJa: "始原の火種", atk: 1, def: 1, tribe: "시초", onSummon: "maxHpAdd", val: -2, text: "[시초] 소환시 최대 체력 -2", textJa: "[始原] 召喚時 最大体力-2" },
-    { id: "TGE3", t: "mon", cost: 3, name: "시초의 새싹", nameJa: "始原の芽", atk: 2, def: 1, tribe: "시초", onSummon: "maxHpAdd", val: -1, text: "[시초] 소환시 최대 체력 -1", textJa: "[始原] 召喚時 最大体力-1" },
-    { id: "TGE4", t: "mon", cost: 4, name: "시초의 정령", nameJa: "始原の精霊", atk: 2, def: 2, tribe: "시초", text: "[시초] 동족 시너지", textJa: "[始原] 同族シナジー" },
-    { id: "TGE5", t: "mon", cost: 5, name: "시초의 수호자", nameJa: "始原の守護者", atk: 3, def: 2, tribe: "시초", text: "[시초] 동족 시너지", textJa: "[始原] 同族シナジー" },
-    { id: "TGE6", t: "mon", cost: 6, name: "시초의 거인", nameJa: "始原の巨人", atk: 3, def: 3, tribe: "시초", onSummon: "maxHpAdd", val: 1, text: "[시초] 소환시 최대 체력 +1", textJa: "[始原] 召喚時 最大体力+1" },
-    { id: "TGE7", t: "mon", cost: 7, name: "시초의 군주", nameJa: "始原の君主", atk: 4, def: 5, tribe: "시초", onSummon: "maxHpAdd", val: 2, text: "[시초] 소환시 최대 체력 +2", textJa: "[始原] 召喚時 最大体力+2" },
+    { id: "TGE2", t: "mon", cost: 2, name: "시초의 불씨", nameJa: "始原の火種", atk: 2, def: 1, tribe: "시초", text: "[시초] 동족 시너지", textJa: "[始原] 同族シナジー" },
+    { id: "TGE3", t: "mon", cost: 3, name: "시초의 새싹", nameJa: "始原の芽", atk: 1, def: 3, tribe: "시초", text: "[시초] 동족 시너지", textJa: "[始原] 同族シナジー" },
+    { id: "TGE4", t: "mon", cost: 4, name: "시초의 정령", nameJa: "始原の精霊", atk: 2, def: 3, tribe: "시초", onSummon: "draw", val: 2, text: "[시초] 소환시: 카드 2장 드로우", textJa: "[始原] 召喚時: カード2枚ドロー" },
+    { id: "TGE5", t: "mon", cost: 5, name: "시초의 수호자", nameJa: "始原の守護者", atk: 3, def: 4, tribe: "시초", onSummon: "guardianDraw", text: "[시초] 소환시: 1장 드로우 — 몬스터 카드면 선택한 적 몬스터 1체의 공격력을 2로 변경", textJa: "[始原] 召喚時: 1枚ドロー — モンスターなら選んだ敵モンスター1体の攻撃力を2にする" },
+    { id: "TGE6", t: "mon", cost: 6, name: "시초의 거인", nameJa: "始原の巨人", atk: 4, def: 5, tribe: "시초", onSummon: "giantDraw", text: "[시초] 소환시: 1장 드로우 — 몬스터 카드면 코스트 5 이상의 원하는 시초 카드를 마나를 지불해 구매할 수 있다", textJa: "[始原] 召喚時: 1枚ドロー — モンスターならコスト5以上の好きな始原カードをマナを払って購入できる" },
+    { id: "TGE7", t: "mon", cost: 7, name: "시초의 군주", nameJa: "始原の君主", atk: 4, def: 5, tribe: "시초", aura: "originLord", text: "[시초] 상시: 자신 필드의 모든 '시초' 몬스터 +3/+3", textJa: "[始原] 常時: 自分の場の全ての「始原」モンスター+3/+3" },
     // ---- NEW spells (bespoke effects in engine customSpell / enchant) ----
     { id: "HANDRESET", t: "spell", cost: 3, play: 2, act: "draw", name: "핸드 리셋", nameJa: "ハンドリセット", text: "패를 모두 버리고 4장 드로우, 최대 체력 +1 (시전 2)", textJa: "手札を全て捨て4枚ドロー, 最大体力+1 (発動2)" },
     { id: "TIMEWARP", t: "spell", cost: 13, act: "dmg", name: "시공간 조작", nameJa: "時空間操作", text: "60% 확률로 다음 상대 턴을 스킵", textJa: "60%で次の相手のターンをスキップ" },
@@ -935,6 +935,14 @@ const NEW_CARDS9 = [
         text: "영구: 자신은 '피의 마법'으로 인한 데미지를 받지 않는다", textJa: "永続: 自分は「血の魔法」によるダメージを受けない" },
     { id: "VAMP_WARD", t: "spell", cost: 2, ench: "vampWard", val: 99, name: "흡혈의 극의", nameJa: "吸血の極意",
         text: "영구: 이 카드가 필드에 있는 한 양 필드의 '흡혈귀' 몬스터는 파괴되지 않는다", textJa: "永続: このカードが場にある限り両者の場の「吸血鬼」モンスターは破壊されない" },
+    { id: "VAMP_PACT2", t: "spell", cost: 3, play: 2, name: "흡혈 각인 계약", nameJa: "吸血刻印契約",
+        text: "자신에게 15 데미지. '초급 흡혈귀'를 자신 필드에 소환 (시전 2)", textJa: "自分に15ダメージ。「初級吸血鬼」を自分の場に召喚 (発動2)" },
+    { id: "VAMP_BUTLER", t: "mon", cost: 2, atk: 1, def: 4, aura: "vampButler", name: "뱀파이어 집사", nameJa: "ヴァンパイア執事",
+        text: "상시: 이 카드가 상대 몬스터를 공격할 때마다 흡혈 카운트 +1 · 3카운트마다 '견습 흡혈귀'를 자신 필드에 소환 · 이 카드는 '흡혈귀' 계열로 취급",
+        textJa: "常時: このカードが相手モンスターを攻撃するたび吸血カウント+1 · 3カウントごとに「見習い吸血鬼」を自分の場に召喚 · このカードは「吸血鬼」系列として扱う" },
+    { id: "BLOOD_SECRET", t: "spell", cost: 2, name: "피의 마법 - 비술", nameJa: "血の魔法 - 秘術",
+        text: "자신에게 9 데미지. 자신 필드의 '흡혈귀' 계열 몬스터 1체를 파괴 — 파괴 성공 시 최대 마나 +3, 최대 체력 +10",
+        textJa: "自分に9ダメージ。自分の場の「吸血鬼」系列モンスター1体を破壊 — 破壊成功時、最大マナ+3、最大体力+10" },
     // ---- 흡혈귀 진화 체인 (cost 0, 구매 불가) ----
     { id: "VAMP1", t: "mon", cost: 0, atk: 2, def: 2, evolveTo: "VAMP2", name: "견습 흡혈귀", nameJa: "見習い吸血鬼",
         text: "'피의 마법' 발동 시: 초급 흡혈귀를 자신 필드에 소환 (1회) · 죽으면 게임에서 제외", textJa: "「血の魔法」発動時: 初級吸血鬼を自分の場に召喚 (1回) · 死亡時ゲームから除外" },
@@ -1019,6 +1027,32 @@ export function sanitizeDeck(ids) {
         out.push("STARTER_TRASH");
     return out;
 }
+// ---- 덱 프리셋 (5슬롯) + 덱별 "마켓 알림이" 워치리스트 ----
+export const DECK_SLOTS = 5;
+export const WATCH_MAX = 12; // 알림이 최대 — 너무 많으면 하이라이트가 의미 없어짐
+/** 저장된 프리셋 묶음을 항상 유효한 형태(5슬롯, 각 8장, 알림이는 구매 가능 카드만)로 정규화. */
+export function sanitizeDecks(raw) {
+    const o = (raw && typeof raw === "object" ? raw : {});
+    const listIn = Array.isArray(o.list) ? o.list : [];
+    const list = [];
+    for (let i = 0; i < DECK_SLOTS; i++) {
+        const d = (listIn[i] ?? {});
+        const cards = sanitizeDeck(d.cards ?? DEFAULT_DECK_8);
+        const wIn = Array.isArray(d.watch) ? d.watch : [];
+        const watch = [];
+        for (const id of wIn) {
+            if (typeof id !== "string" || !DB[id] || DB[id].cost <= 0 || DB[id].noShop)
+                continue;
+            if (!watch.includes(id) && watch.length < WATCH_MAX)
+                watch.push(id);
+        }
+        list.push({ cards, watch });
+    }
+    let sel = typeof o.sel === "number" && Number.isFinite(o.sel) ? Math.floor(o.sel) : 0;
+    if (sel < 0 || sel >= DECK_SLOTS)
+        sel = 0;
+    return { sel, list };
+}
 // 주사위·확률 카드 (결과 팝업 + 운명의 수레바퀴 재굴림 대상)
 export const RANDOM_CARDS = new Set([
     "ND3", "ND5", "GS5_0", "GS6_2", "GS7_0", "GS8_0", "GS8_3", "GS8_5",
@@ -1089,7 +1123,7 @@ export function relatedCardIds(id) {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v8"; // v6: 알 아키타입 · v7: 알 테크+피의 마법 희로애락+흡혈귀 · v8: 스타팅 카드 15종 + 초기 덱 빌딩(9장: 어튠 고정 + 자유 8장)
+export const BALANCE_VERSION = "v10"; // v8: 스타팅 15종+덱 빌딩 · v9: 종족 시너지 티어별 보상 개편 + 시초 리워크 · v10: 흡혈 지원 3종(각인 계약/집사/비술) + 토큰 소환 종족 시너지 수정
 export function idsOfCost(cost) {
     return BUYABLE_POOL.filter((id) => DB[id].cost === cost);
 }

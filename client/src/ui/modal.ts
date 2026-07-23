@@ -190,10 +190,10 @@ export function cardPickerMulti(title: string, pool: CardInst[], max: number, on
 
 /**
  * Browse-only deck viewer with two tabs: the FULL deck composition and the cards
- * still REMAINING in the deck (undrawn). `remaining` is null for the opponent
- * (their undrawn cards are hidden info) → only the composition tab is shown.
+ * still REMAINING in the deck (undrawn). `remaining` is null for the opponent,
+ * and `publicOnly` labels that composition as cards revealed during this game.
  */
-export function deckViewer(title: string, composition: CardInst[], remaining: CardInst[] | null): void {
+export function deckViewer(title: string, composition: CardInst[], remaining: CardInst[] | null, publicOnly = false): void {
   const m = document.createElement("div");
   m.className = "modal"; m.style.maxWidth = "760px";
   const two = remaining != null;
@@ -210,7 +210,7 @@ export function deckViewer(title: string, composition: CardInst[], remaining: Ca
   const note = m.querySelector("#dvNote") as HTMLElement;
   const render = (pool: CardInst[], isDeck: boolean): void => {
     grid.innerHTML = "";
-    note.textContent = isDeck ? t("deck.remain.note") : t("deck.all.note");
+    note.textContent = isDeck ? t("deck.remain.note") : t(publicOnly ? "deck.public.note" : "deck.all.note");
     if (!pool.length) { grid.innerHTML = `<div style="color:var(--paper-faint);padding:20px">${t("deck.empty")}</div>`; return; }
     pool.forEach((c) => { const card = cardEl(c); bindZoom(card, c); grid.appendChild(card); });
   };

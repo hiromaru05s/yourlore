@@ -5,7 +5,7 @@
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { effMaxMana, playCost, buyCost, effAtk, effDef } from "../shared/engine";
-import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS } from "../shared/cards";
+import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { cardPicker, deckViewer } from "./modal";
 import { cardEl } from "./cardView";
 import { bindZoom } from "./anim";
@@ -229,7 +229,7 @@ export class GameView {
     // my deck → also show the cards still remaining (undrawn); opponent's remaining deck is hidden
     const remaining = isMe ? [...p.deck].sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name)) : null;
     const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, backFor(isMe), null, t("game.deck"),
-      () => deckViewer(`${p.name} — ${t("deck.view")}`, collection, remaining));
+      () => deckViewer(`${p.name} — ${t("deck.view")}`, collection, remaining, !isMe));
 
     const block = document.createElement("div");
     block.className = "field-block" + (isMe ? " is-mine" : " is-opp") + (onTurn ? " is-turn" : "");
@@ -239,11 +239,15 @@ export class GameView {
     mz.className = "zone zone-mon";
     const targetableZone = !!pending && ((pending.kind === "oppMon" && !isMe) || (pending.kind === "myMon" && isMe)) && myTurn;
     p.field.forEach((m, idx) => {
-      // 신수(ward): 공격 대상으로는 지정 가능하지만 마법·몬스터 "효과"의 대상은 안 됨
+      // 아우라(ward): 공격 대상으로는 지정 가능하지만 마법·몬스터 "효과"의 대상은 안 됨
       // 고급 부화기(incubate): 자신의 "알"만 선택 가능
       const targetableMon = targetableZone
-        && !(pending!.kind === "oppMon" && pending!.reason !== "attack" && m.aura === "ward")
+        && !(pending!.kind === "oppMon" && pending!.reason !== "attack" && hasPassive(m, "aura"))
+        && !(pending!.kind === "oppMon" && pending!.reason === "decayMark" && m.hatch != null) // 부패 카운터: 알 제외
         && !(pending!.kind === "myMon" && pending!.reason === "incubate" && m.hatch == null)
+        && !(pending!.kind === "myMon" && pending!.reason === "chosenMage" && (m.id !== "CHOSEN_MAGE" || ((pending!.data?.fired as string[] | undefined) ?? []).includes(m.uid))) // 마법사만 발동 가능
+        && !(pending!.kind === "myMon" && pending!.reason === "grantDecay" && hasPassive(m, "decay")) // 이미 부패 보유
+        && !(pending!.kind === "myMon" && pending!.reason === "grantMajesty" && hasPassive(m, "majesty")) // 이미 위엄 보유
         && !(pending!.kind === "myMon" && pending!.data?.exclude === m.uid); // 지원 나팔: 같은 몬스터 중복 선택 불가
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
       const card = cardEl(m, { field: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
@@ -430,7 +434,7 @@ export class GameView {
         <span class="num"><b id="hp-${isMe ? "me" : "opp"}">${Math.max(0, p.hp)}</b><span class="muted">/${p.maxHp}</span></span>
         <span class="hpbar" id="hpbar-${isMe ? "me" : "opp"}"><i style="width:${hpPct}%"></i></span>
       </div>
-      <div class="mp-mana"><span class="lbl">${t("game.mana")}</span><span class="pips">${pips.join("")}</span><span class="mnum">${p.mana}/${emax}</span></div>
+      <div class="mp-mana"><span class="lbl">${t("game.mana")}</span><span class="pips ${total > 12 ? "is-compact" : ""}">${pips.join("")}</span><span class="mnum">${p.mana}/${emax}</span></div>
       <div class="mp-btns"></div>
       ${tribeChips.length ? `<div class="mp-tribes">${tribeChips.join("")}</div>` : ""}`;
 
@@ -456,13 +460,15 @@ export class GameView {
     if (isMe) {
       pool = [...p.deck, ...p.hand, ...p.discard, ...fieldCards, ...p.traps.map((tr) => tr.card), ...enchCards];
     } else if (p.collection) {
-      // online: server-provided aggregate of hidden zones (hand+deck+traps) + visible public zones.
-      // look ids up in BOTH the main DB and STARTERS (starters aren't in DB — they were being dropped).
-      const hidden = p.collection.map((id, i) => { const d = DBC[id] ?? STARTERS[id]; return d ? { uid: `v_${i}`, ...d } : null; }).filter((c): c is CardInst => !!c);
-      pool = [...hidden, ...p.discard, ...fieldCards, ...enchCards];
+      // Online: server-provided game-long reveal history. Current public zones are
+      // already included, so adding them again would double-count those cards.
+      pool = p.collection.map((id, i) => { const d = DBC[id] ?? STARTERS[id]; return d ? { uid: `v_${i}`, ...d } : null; }).filter((c): c is CardInst => !!c);
+    } else if (p.revealedCards) {
+      // Bot/local games keep the same information boundary without server redaction.
+      pool = p.revealedCards.map((known, i) => { const d = DBC[known.id] ?? STARTERS[known.id]; return d ? { uid: `v_${i}`, ...d } : null; }).filter((c): c is CardInst => !!c);
     } else {
-      // bot mode: full state is local; same public-info view as online
-      pool = [...p.hand, ...p.deck, ...p.traps.map((tr) => tr.card), ...p.discard, ...fieldCards, ...enchCards];
+      // Legacy state fallback: show only cards that are public right now.
+      pool = [...p.discard, ...fieldCards, ...enchCards];
     }
     return pool.filter((c) => c && c.id !== "HIDDEN").sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
   }

@@ -7,6 +7,7 @@
 
 const R: [RegExp, string][] = [
   // ---- full/long phrases first (order matters) ----
+  [/초기 덱 · (\d+)장 드로우 · 마나 (\d+)\./g, "Starting deck · drew $1 · mana $2."],
   [/(\d+)턴 경과 — 무승부!/g, "$1 turns elapsed — it's a draw!"],
   [/고정 마켓/g, "market:"],
   [/제시 마켓/g, "offer:"],
@@ -40,6 +41,37 @@ const R: [RegExp, string][] = [
   [/\[출혈\]/g, "[bleed]"],
   [/\[포식 시너지\]/g, "[Devour synergy]"],
   [/(\d+) 관통/g, "$1 pierce"],
+  // ---- v11 패시브 키워드 (generic 무효화/파괴 룰보다 먼저) ----
+  [/도발! /g, "Taunt! "],
+  [/ 이\(가\) 대신 공격을 받는다/g, " is attacked instead"],
+  [/회피 실패 🎲 (\d+)/g, "Evade failed 🎲 $1"],
+  [/회피!/g, "Evade!"],
+  [/ 이\(가\) 공격을 무효화/g, " negates the attack"],
+  [/기합!/g, "Guts!"],
+  [/파괴 무효 \(남은 기합 (\d+)\)/g, "destruction negated ($1 Guts left)"],
+  [/부패 카운터 (\d+)\/3/g, "Decay counter $1/3"],
+  [/부패 붕괴!/g, "Decay collapse!"],
+  [/부패 카운터 (\d+)개를 부여할 적 몬스터 선택/g, "pick an enemy monster to receive $1 Decay counter"],
+  [/ 이\(가\) '부패'를 얻는다/g, " gains 'Decay'"],
+  [/ 이\(가\) '위엄'을 얻는다/g, " gains 'Majesty'"],
+  [/'부패'를 부여할 자신 몬스터 선택 \((\d+)체( 남음)?\)/g, "pick your monster to grant 'Decay' ($1 left)"],
+  [/'위엄'을 부여할 자신 몬스터 선택/g, "pick your monster to grant 'Majesty'"],
+  [/위엄: 소환된 턴에는 공격할 수 없다|: 소환된 턴에는 공격할 수 없다/g, "Majesty: cannot attack on its summoning turn"],
+  [/골램 군단 결집 — 페널티 없음/g, "Golem legion assembled — no penalty"],
+  [/골램 부재/g, "no Golem backup"],
+  [/선택이 완성되었다 — 게임에서 승리한다!/g, "the Choice is complete — win the game!"],
+  [/게임에서 제외된 컬이 (\d+)장 — 20장 이상이어야 발동 가능/g, "$1 Culls exiled — need 20 or more to cast"],
+  [/선택받은 마법사 — 발동할 마법사 선택 \(제외된 컬 1장 → 묘지, 상대에게 6 데미지 · 취소 가능\)/g, "Chosen Mage — pick a mage to activate (1 exiled Cull → graveyard, 6 damage to the opponent · may cancel)"],
+  [/ — 제외된 컬 1장을 묘지로 되돌리고 상대에게 6 데미지/g, " — returns 1 exiled Cull to the graveyard and deals 6 damage to the opponent"],
+  [/시련의 영역 — 묘지에서 게임에서 제외할 카드 선택 \(2장까지\)/g, "Domain of Trials — pick cards in your graveyard to exile (up to 2)"],
+  [/고대 문명 — 패에 넣을 알 선택/g, "Ancient Civilization — pick an egg to add to your hand"],
+  [/고대 문명이 깨어난다!/g, "the Ancient Civilization awakens!"],
+  [/ 을\(를\) 패에 넣는다/g, " added to hand"],
+  [/ 은\(는\) 파괴된다/g, " is destroyed"],
+  [/계약이 다했다 — 파괴된다/g, "the pact has run its course — destroyed"],
+  [/대가: 자신에게 6 데미지/g, "price: take 6 damage"],
+  [/자신에게 7 데미지, 최대 마나 -1/g, "take 7 damage, max mana -1"],
+  [/자신 필드에 이미 '선견지명'이 있습니다/g, "you already have 'Foresight' on your field"],
   [/통하지 않음/g, "no effect"],
   [/공격이 (\d+)로 절반/g, "attack halved to $1"],
   [/공격 무효화/g, "attack negated"],
@@ -257,6 +289,11 @@ const R: [RegExp, string][] = [
   [/소환 조건 미충족/g, "summon requirement not met"],
   [/몬스터 존이 가득 찼습니다 \(최대 (\d+)\)/g, "monster zone is full (max $1)"],
   [/마법·함정 존이 가득 찼습니다 \(최대 (\d+)\)/g, "spell/trap zone is full (max $1)"],
+  [/부패/g, "Decay"],
+  [/위엄/g, "Majesty"],
+  [/도발/g, "Taunt"],
+  [/기합/g, "Guts"],
+  [/회피/g, "Evade"],
   [/소환/g, "summoned"],
   [/파괴/g, "destroyed"],
   [/함정/g, "trap"],
@@ -284,5 +321,6 @@ export function logToEn(html: string): string {
   }
   // restore protected tags
   s = s.replace(/\u0001(\d+)\u0002/g, (_m, i) => keep[Number(i)]);
+  s = s.replace(/(<span class="t">)게임 시작\.(<\/span>)/g, "$1Game started.$2");
   return s;
 }

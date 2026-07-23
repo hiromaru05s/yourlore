@@ -38,6 +38,7 @@ export interface CardDef {
   evolveTo?: string; // 흡혈귀: card id summoned when the owner casts a 피의 마법 (once per card)
   noShop?: boolean; // 스타팅(덱 구성) 전용 — 고정/제시 마켓에 등장하지 않음
   exileOnDestroy?: boolean; // 영구마법: 파괴/제거 시 묘지 대신 게임에서 제외
+  passive?: string[]; // 키워드 패시브 (cards.PASSIVES 키 — 기합/부패/위엄/도발/회피/공허/아우라 …)
   nameJa?: string; // Japanese name (falls back to name)
   textJa?: string; // Japanese effect text (falls back to text)
   nameEn?: string; // English name (falls back to name)
@@ -47,6 +48,7 @@ export interface CardDef {
 export interface Enchant {
   card: CardInst;
   turns: number;
+  bornTurn?: number; // 시전 시점의 g.turn — "N턴 경과 후" 류 효과의 기준 (혈귀술 만료 / 고대 문명)
 }
 
 export interface CardInst extends CardDef {
@@ -66,6 +68,9 @@ export interface FieldMon extends CardInst {
   evolvedUsed?: boolean; // 흡혈귀: 진화(1회) 사용됨
   trickSwapped?: boolean; // 트릭룸: 공/방 반전 적용 중
   gcount?: number; // 누적 카운트 (암살자 길드 / 뱀파이어 집사 흡혈 카운트)
+  passivesG?: string[]; // 게임 중 부여된 패시브 (암기 제작→부패, 각인 비술→위엄)
+  guts?: number; // 기합: 남은 기합 토큰 (전투 파괴를 1회 무효화)
+  decayCnt?: number; // 부패: 이 몬스터에 쌓인 부패 카운터 (3이면 파괴 + 주인 3뎀)
 }
 
 export interface TrapSet {
@@ -75,6 +80,11 @@ export interface TrapSet {
 export interface ExileEntry {
   card: CardInst;
   turns: number;
+}
+
+export interface RevealedCard {
+  uid: string;
+  id: string;
 }
 
 export interface PlayerState {
@@ -111,8 +121,10 @@ export interface PlayerState {
   supplyShrink: number; // if >0, this player's next 제시 roll offers 2 cards instead of 3
   defendHeal: number; // heal this much whenever this player is attacked
   manaGainNext: number; // max mana to gain at the start of this player's next turn
-  skipNext: boolean; // if true, this player's next turn is skipped
-  collection?: string[]; // redacted view only: sorted card-id multiset of hidden zones (public via buy log)
+  skipNext: boolean; // legacy: if true, this player's next turn is skipped
+  skipTurns?: number; // queued turn skips; stacks when 시공간 조작 succeeds more than once
+  revealedCards?: RevealedCard[]; // cards permanently known to the opponent this game (physical-card UID + card id)
+  collection?: string[]; // redacted view only: public card ids the opponent may inspect
   removed?: CardInst[]; // cards permanently exiled from the game (public zone)
   botTune?: { minBuy?: number; minBuyEarly?: number; chestTurn?: number }; // per-archetype bot buy discipline (see bot.ts BOT_DECKS)
 }

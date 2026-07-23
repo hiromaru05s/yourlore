@@ -47,9 +47,19 @@ export function redactFor(state: GameState, you: Side): GameState {
   const placeholder = (uid: string): GameState["players"][0]["hand"][0] => ({
     uid, id: "HIDDEN", t: "mon", cost: 0, name: "", text: "",
   });
-  // the multiset of hidden cards is public knowledge (starter deck + buy log),
-  // so expose it as a sorted aggregate — no order/position information leaks
-  opp.collection = [...opp.hand, ...opp.deck, ...opp.traps.map((tr) => tr.card)].map((c) => c.id).sort();
+  // The opponent deck viewer receives only identities that have become public.
+  // Once learned, a physical card remains listed even if it returns to hand/deck.
+  const known = new Map((opp.revealedCards ?? []).map((c) => [c.uid, c.id]));
+  const currentlyPublic: CardInst[] = [
+    ...opp.discard,
+    ...(opp.field as CardInst[]),
+    ...opp.enchants.map((e) => e.card),
+    ...(opp.removed ?? []),
+  ];
+  for (const card of currentlyPublic) {
+    if (!(card as CardInst & { token?: boolean }).token) known.set(card.uid, card.id);
+  }
+  opp.collection = [...known.values()];
   opp.hand = opp.hand.map((c) => placeholder(c.uid));
   opp.deck = opp.deck.map((c) => placeholder(c.uid));
   // discard is public (purchases are shown in the log too); only hand/deck/traps hidden
