@@ -967,7 +967,7 @@ const NEW_CARDS10: CardDef[] = [
     textJa: "永続: 発動時に自分の最大マナ-1、自分に8ダメージ · ダイス・確率カードの結果を見てから振り直せる (毎ターン1回) · 破壊されたらゲームから除外" },
   { id: "COUNTERCALC", t: "spell", cost: 1, noShop: true, name: "역산", nameJa: "逆算",
     text: "상대의 최대 마나가 6 이하일 때만 사용 가능 · 상대의 영구마법 1장 파괴 · 사용 후 이 카드는 게임에서 제외", textJa: "相手の最大マナが6以下の時のみ使用可能 · 相手の永続魔法1枚を破壊 · 使用後このカードはゲームから除外" },
-  { id: "AMBUSH", t: "spell", cost: 1, noShop: true, name: "기습", nameJa: "奇襲",
+  { id: "AMBUSH", t: "spell", cost: 2, noShop: true, name: "기습", nameJa: "奇襲",
     text: "상대의 최대 마나가 4일 때만 사용 가능 · 상대에게 7 데미지, 자신에게 3 데미지 · 사용 후 이 카드는 게임에서 제외", textJa: "相手の最大マナが4の時のみ使用可能 · 相手に7ダメージ、自分に3ダメージ · 使用後このカードはゲームから除外" },
   { id: "TRUMPET", t: "spell", cost: 1, noShop: true, name: "지원 나팔", nameJa: "支援ラッパ",
     text: "자신 몬스터 2체 공격 +1(이번 턴)", textJa: "自分のモンスター2体の攻撃+1(このターン)" },
@@ -1271,7 +1271,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v11"; // v11: 패시브 키워드 10종 도입 + 골렘(기합)/부패/위엄/도발/회피 + 컬 아키타입(선택받은 시리즈) + 알 아우라·내구 버프 + 선견지명/혈귀술/공허포격 너프
+export const BALANCE_VERSION = "v12"; // v12: 기습(AMBUSH) 코스트 1→2 너프
+// v11: 패시브 키워드 10종 도입 + 골렘(기합)/부패/위엄/도발/회피 + 컬 아키타입(선택받은 시리즈) + 알 아우라·내구 버프 + 선견지명/혈귀술/공허포격 너프
 
 export function idsOfCost(cost: number): string[] {
   return BUYABLE_POOL.filter((id) => DB[id].cost === cost);
