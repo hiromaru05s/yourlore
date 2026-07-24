@@ -102,7 +102,7 @@ export abstract class BaseController implements BoardHandlers {
     const c = me.hand.find((x) => x.uid === uid);
     const msg = g.cur !== this.you ? t("play.block.turn")
       : g.pending ? t("play.block.pending")
-      : (c && me.mana < playCost(c)) ? t("play.block.mana")
+      : (c && me.mana < playCost(c, me)) ? t("play.block.mana")
       : t("play.block.cond");
     this.cantPlayToast(msg);
   }
@@ -411,8 +411,8 @@ export abstract class BaseController implements BoardHandlers {
           pool = (discOnly ? [...me.discard] : [...me.deck, ...me.discard]).sort((a, b) => a.cost - b.cost);
         }
         else if (g.pending.kind === "oppRmz") pool = [...(opp.removed ?? [])].sort((a, b) => a.cost - b.cost);
-        else pool = [ // oppBoard: 상대 몬스터(아우라 제외) + 세트 함정(뒷면) + 영구마법
-          ...opp.field.filter((m) => !hasPassive(m, "aura")),
+        else pool = [ // oppBoard: 상대 몬스터(아우라 제외) + 세트 함정(뒷면) + 영구마법 · noMon(블러드 샤워)이면 함정·영구마법만
+          ...(g.pending.data?.noMon ? [] : opp.field.filter((m) => !hasPassive(m, "aura"))),
           ...opp.traps.map((t2) => ({ uid: t2.card.uid, id: "HIDDEN", t: "trap", cost: 0, name: t("picker.settrap"), text: "?" } as CardInst)),
           ...opp.enchants.map((e2) => e2.card),
         ];

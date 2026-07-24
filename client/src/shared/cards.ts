@@ -535,8 +535,8 @@ const NEW_CARDS3: CardDef[] = [
   { id: "MULTI_CULTURE", t: "spell", cost: 3, play: 4, ench: "cultureMana", val: 99, name: "다양한 문화", nameJa: "多様な文化", text: "영구: '시초' 제외, 필드의 종족 몬스터 1체당 임시 최대 마나 +1 (시전 4)", textJa: "永続: 「始原」を除く、場の種族モンスター1体ごとに一時的に最大マナ+1 (発動4)" },
   { id: "SLAY_ART", t: "spell", cost: 2, ench: "slayArt", val: 99, name: "살생의 극의", nameJa: "殺生の極意", text: "영구: 양 플레이어 중 누구든 데미지를 받을 때마다 추가 데미지 +2", textJa: "永続: どちらのプレイヤーがダメージを受けるたび追加ダメージ+2" },
   // ---- spells: blood magic ----
-  { id: "BLOOD1", t: "spell", cost: 2, play: 1, act: "draw", name: "피의 마법 - 기본", nameJa: "血の魔法 - 基本", text: "자신에게 4 데미지, 카드 3장 드로우 (시전 1)", textJa: "自分に4ダメージ、カード3枚ドロー (発動1)" },
-  { id: "BLOOD2", t: "spell", cost: 4, play: 2, act: "draw", name: "피의 마법 - 응용", nameJa: "血の魔法 - 応用", text: "자신에게 8 데미지, 카드 6장 드로우 (시전 2)", textJa: "自分に8ダメージ、カード6枚ドロー (発動2)" },
+  { id: "BLOOD1", t: "spell", cost: 2, play: 1, act: "draw", name: "피의 마법 - 블러드 드로우", nameJa: "血の魔法 - ブラッドドロー", text: "자신에게 15 데미지, 카드 6장 드로우 (시전 1)", textJa: "自分に15ダメージ、カード6枚ドロー (発動1)" },
+  { id: "BLOOD2", t: "spell", cost: 4, play: 2, name: "피의 마법 - 블러드 샤워", nameJa: "血の魔法 - ブラッドシャワー", text: "자신에게 15 데미지 · 상대의 영구마법 또는 세트 함정 2장을 선택해 파괴 (시전 2)", textJa: "自分に15ダメージ · 相手の永続魔法またはセットトラップを2枚選んで破壊 (発動2)" },
   // ---- spells: disarm(장치) ----
   { id: "DISARM1", t: "spell", cost: 2, play: 0, act: "destroyEnch", val: 1, name: "장치해제", nameJa: "装置解除", text: "상대 영구마법 1장 파괴", textJa: "相手の永続魔法1枚を破壊" },
   { id: "DISARM2", t: "spell", cost: 3, play: 2, act: "destroyEnch", val: 2, name: "장치분석", nameJa: "装置分析", text: "상대 영구마법 2장 파괴 (시전 2)", textJa: "相手の永続魔法2枚を破壊 (発動2)" },
@@ -632,7 +632,7 @@ for (const id of Object.keys(DB)) {
 // BALANCE PATCH 6 — 드로우 주문 버프: 시전 2 이상인 순수 드로우 주문만 시전 -1
 // (시전 1 이하는 유지 → 0마나 캔트립 방지. 드로우 주문은 전 구간 승률 마이너스였음)
 // ============================================================
-const DRAW_BUFF = ["ND3", "ND5", "GS5_3", "GS6_3", "GS7_3", "GS8_3", "GS9_3", "GS10_3", "BLOOD2"];
+const DRAW_BUFF = ["ND3", "ND5", "GS5_3", "GS6_3", "GS7_3", "GS8_3", "GS9_3", "GS10_3"]; // BLOOD2는 v14 리워크로 순수 드로우 주문이 아니게 되어 제외
 for (const id of DRAW_BUFF) {
   const c = DB[id];
   if (!c || c.play === undefined || c.play < 2) continue;
@@ -1143,7 +1143,7 @@ for (const c of NEW_CARDS11) { DB[c.id] = c; }
 
 // ---- 신규 스타팅(noShop) 카드 4종: 러스트 머쉬룸 / 선택받은 영역 / 시련의 영역 / 고대 문명 ----
 const NEW_STARTERS11: CardDef[] = [
-  { id: "RUST_SHROOM", t: "mon", cost: 1, atk: 1, def: 1, passive: ["decay"], noShop: true, name: "러스트 머쉬룸", nameJa: "ラストマッシュルーム", text: "부패", textJa: "腐敗" },
+  { id: "RUST_SHROOM", t: "mon", cost: 1, atk: 1, def: 0, passive: ["decay"], noShop: true, name: "러스트 머쉬룸", nameJa: "ラストマッシュルーム", text: "부패", textJa: "腐敗" },
   { id: "CHOSEN_AREA", t: "spell", cost: 7, noShop: true, name: "선택받은 영역", nameJa: "選ばれし領域",
     text: "게임에서 제외된 자신의 '컬'이 25장 이상일 때만 발동 가능 · 게임에서 즉시 승리한다",
     textJa: "ゲームから除外された自分の「カル」が25枚以上の時のみ発動可能 · ゲームに即座に勝利する" },
@@ -1156,8 +1156,44 @@ const NEW_STARTERS11: CardDef[] = [
 ];
 for (const c of NEW_STARTERS11) { DB[c.id] = c; }
 
+// ============================================================
+// v15 — 도박꾼 & 엘프 아키타입
+// ============================================================
+// ---- 신규 스타팅(noShop) 3종: 도박꾼 / 엘프의 쉼터 / 하프 엘프 ----
+const NEW_STARTERS15: CardDef[] = [
+  { id: "GAMBLER", t: "mon", cost: 3, atk: 0, def: 0, turnFx: "gambler", noShop: true, name: "도박꾼", nameJa: "ギャンブラー",
+    text: "자신의 턴 시작시: 주사위를 굴려 4·5·6이면 최대 마나 +1, 최대 체력 +5", textJa: "自分のターン開始時: ダイスを振り4・5・6なら最大マナ+1、最大体力+5" },
+  { id: "ELF_HAVEN", t: "spell", cost: 1, ench: "elfHaven", val: 99, noShop: true, name: "엘프의 쉼터", nameJa: "エルフの憩い場",
+    text: "영구: '세계수' 이름을 가진 카드의 구매/시전 코스트가 0이 된다", textJa: "永続: 「世界樹」の名を持つカードの購入/発動コストが0になる" },
+  { id: "HALF_ELF", t: "mon", cost: 2, atk: 1, def: 2, onSummon: "halfElf", noShop: true, name: "하프 엘프", nameJa: "ハーフエルフ",
+    text: "소환시: '세계수' 이름을 가진 카드가 자신 필드에 있으면 '세계수의 보살핌'을 필드에 전개", textJa: "召喚時: 「世界樹」の名を持つカードが自分の場にあれば「世界樹の慈しみ」を場に展開" },
+];
+for (const c of NEW_STARTERS15) { DB[c.id] = c; }
+
+// ---- 신규 마켓 카드 5종: 전설의 도박꾼 + 엘프 4종 ----
+const NEW_CARDS15: CardDef[] = [
+  { id: "LEGEND_GAMBLER", t: "mon", cost: 7, atk: 3, def: 4, passive: ["trapmaster", "void"], turnFx: "legendGambler", name: "전설의 도박꾼", nameJa: "伝説のギャンブラー",
+    text: "자신의 턴 시작시: 주사위를 굴려 6이면 최대 마나 +10 · 자신의 덱/묘지에 '도박꾼'이 있으면 주사위를 총 3번 굴린다 · 트랩마스터 · 공허",
+    textJa: "自分のターン開始時: ダイスを振り6なら最大マナ+10 · 自分のデッキ/墓地に「ギャンブラー」があればダイスを計3回振る · トラップマスター · 虚無" },
+  { id: "ELF", t: "mon", cost: 4, atk: 9, def: 9, summonReq: "maxHp65", name: "엘프", nameJa: "エルフ",
+    text: "자신의 최대 체력이 65 이상일 때만 소환 가능", textJa: "自分の最大体力が65以上の時のみ召喚可能" },
+  { id: "DARK_ELF", t: "mon", cost: 4, atk: 14, def: 6, directOnly: true, summonReq: "darkElf", name: "다크 엘프", nameJa: "ダークエルフ",
+    text: "암습 · 자신의 최대 체력이 65 이상이고 자신 필드에 '엘프' 계열 몬스터가 없을 때만 소환 가능",
+    textJa: "暗襲 · 自分の最大体力が65以上で自分の場に「エルフ」系列モンスターがいない時のみ召喚可能" },
+  { id: "HIGH_ELF", t: "mon", cost: 6, atk: 17, def: 15, passive: ["trapmaster", "aura"], summonReq: "maxHp99", name: "하이엘프", nameJa: "ハイエルフ",
+    text: "트랩마스터 · 아우라 · 자신의 최대 체력이 99 이상일 때만 소환 가능", textJa: "トラップマスター · オーラ · 自分の最大体力が99以上の時のみ召喚可能" },
+  { id: "ELDER_ELF_KING", t: "mon", cost: 7, atk: 2, def: 8, onSummon: "elderKing", summonReq: "elderKing", name: "엘더 하이엘프 킹", nameJa: "エルダーハイエルフキング",
+    text: "묘지에 '하이엘프'가 있고 자신의 최대 체력이 99 이상일 때만 소환 가능 · 소환시: 하이엘프 2체를 자신 필드에 소환 후, 자신 필드의 모든 '하이엘프' 공격 +15",
+    textJa: "墓地に「ハイエルフ」があり自分の最大体力が99以上の時のみ召喚可能 · 召喚時: ハイエルフ2体を自分の場に召喚し、自分の場の全ての「ハイエルフ」の攻撃+15" },
+];
+for (const c of NEW_CARDS15) { DB[c.id] = c; }
+
+// ---- 토큰: 세계수의 보살핌 (하프 엘프 전개 전용 — cost 0·noShop → 마켓/덱풀 제외) ----
+DB.WORLD_CARE = { id: "WORLD_CARE", t: "spell", cost: 0, ench: "worldCare", val: 99, noShop: true, name: "세계수의 보살핌", nameJa: "世界樹の慈しみ",
+  text: "영구: 자신의 턴 시작마다 최대 체력 +15", textJa: "永続: 自分のターン開始時に最大体力+15" };
+
 // ---- 초기 덱 빌딩 풀: 컬/보물상자 + noShop 스타팅 카드 (어튠은 1장 고정으로 별도) ----
-export const DECK_POOL: string[] = ["STARTER_TRASH", "STARTER_CHEST", ...NEW_CARDS10.map((c) => c.id), ...NEW_STARTERS11.map((c) => c.id)];
+export const DECK_POOL: string[] = ["STARTER_TRASH", "STARTER_CHEST", ...NEW_CARDS10.map((c) => c.id), ...NEW_STARTERS11.map((c) => c.id), ...NEW_STARTERS15.map((c) => c.id)];
 export const DECK_SIZE = 8; // 어튠 제외 자유 슬롯
 export const DECK_MAX_COPIES = 8; // 카드별 보유량 = 8장씩
 export const DEFAULT_DECK_8: string[] = [...Array<string>(6).fill("STARTER_TRASH"), "STARTER_CHEST", "STARTER_CHEST"];
@@ -1271,7 +1307,9 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v13"; // v13: 컬 아키타입 너프 — 선택받은 영역 20→25장, 선택받은 4종 코스트 7 + 스탯 컬 2장당(반내림)
+export const BALANCE_VERSION = "v15"; // v15: 러스트 머쉬룸 1/0 너프 + 도박꾼/전설의 도박꾼 + 엘프 아키타입(쉼터·하프/엘프/다크/하이/엘더 킹·세계수의 보살핌)
+// v14: 피의 마법 리워크 — 블러드 드로우(자해15·6드로우), 블러드 샤워(자해15·상대 영구마법/함정 2장 선택 파괴)
+// v13: 컬 아키타입 너프 — 선택받은 영역 20→25장, 선택받은 4종 코스트 7 + 스탯 컬 2장당(반내림)
 // v12: 기습(AMBUSH) 코스트 1→2 너프
 // v11: 패시브 키워드 10종 도입 + 골렘(기합)/부패/위엄/도발/회피 + 컬 아키타입(선택받은 시리즈) + 알 아우라·내구 버프 + 선견지명/혈귀술/공허포격 너프
 

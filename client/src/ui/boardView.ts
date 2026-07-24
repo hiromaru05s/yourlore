@@ -573,7 +573,7 @@ export class GameView {
     const flat = n > 10;
     handEl.classList.toggle("is-flat", flat);
     me.hand.forEach((c, idx) => {
-      const pc = playCost(c);
+      const pc = playCost(c, me);
       const aff = myTurn && !g.pending && me.mana >= pc;
       const card = cardEl(c, { size: "hand", playable: aff, dim: !aff, costOverride: pc });
       const off = idx - mid;

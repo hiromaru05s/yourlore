@@ -123,6 +123,8 @@ export function effDef(p: PlayerState, m: FieldMon): number {
 }
 /** Cost to BUY a card, after 동족의 부름(kinDiscount): tribe cards cost -2 (min 1) while you control a tribe monster. */
 export function buyCost(p: PlayerState, c: CardInst): number {
+  // 엘프의 쉼터(elfHaven): '세계수' 이름 카드는 구매 코스트 0
+  if ((c.name || "").includes("세계수") && p.enchants.some((e) => e.card.ench === "elfHaven")) return 0;
   let cost = c.cost;
   if (c.tribe && p.field.some((m) => !!m.tribe) && p.enchants.some((e) => e.card.ench === "kinDiscount")) {
     cost = Math.max(1, cost - 2);
@@ -133,8 +135,10 @@ export function buyCost(p: PlayerState, c: CardInst): number {
 export function supplyRange(p: PlayerState): [number, number] {
   return [1, effMaxMana(p)];
 }
-/** Cost to PLAY a card from hand (may be < its buy cost). */
-export function playCost(c: CardInst): number {
+/** Cost to PLAY a card from hand (may be < its buy cost).
+ *  p를 넘기면 플레이어 상태 의존 할인(엘프의 쉼터: '세계수' 카드 시전 0)을 반영한다. */
+export function playCost(c: CardInst, p?: PlayerState): number {
+  if (p && (c.name || "").includes("세계수") && p.enchants.some((e) => e.card.ench === "elfHaven")) return 0;
   return c.play ?? c.cost;
 }
 export function cardValue(c: CardInst): number {
@@ -412,6 +416,21 @@ function tickTurnFx(g: GameState, ctx: Ctx, p: PlayerState): void {
         if (gn > 0) { p.maxHp += gn; ctx.log(`  └ ${cn(m)} 최대 체력 +${gn} (${p.maxHp})`, `  └ ${cn(m)} 最大体力+${gn} (${p.maxHp})`); }
         break;
       }
+      case "gambler": { // 도박꾼: 주사위 4·5·6 → 최대 마나 +1, 최대 체력 +5
+        const r = randInt(g, 6) + 1;
+        if (r >= 4) { p.maxMana += 1; p.maxHp += 5; ctx.log(`  └ ${cn(m)} 🎲 ${r} → 최대 마나 +1 (${p.maxMana}), 최대 체력 +5 (${p.maxHp})`, `  └ ${cn(m)} 🎲 ${r} → 最大マナ+1 (${p.maxMana}), 最大体力+5 (${p.maxHp})`); }
+        else ctx.log(`  └ ${cn(m)} 🎲 ${r}`, `  └ ${cn(m)} 🎲 ${r}`);
+        break;
+      }
+      case "legendGambler": { // 전설의 도박꾼: 주사위 6 → 최대 마나 +10 · 덱/묘지에 '도박꾼'이 있으면 총 3회 굴림
+        const rolls = [...p.deck, ...p.discard].some((c) => (c.name || "").includes("도박꾼")) ? 3 : 1;
+        for (let i = 0; i < rolls; i++) {
+          const r = randInt(g, 6) + 1;
+          if (r === 6) { p.maxMana += 10; ctx.log(`  └ ${cn(m)} 🎲 ${r} → <span class="good">잭팟! 최대 마나 +10 (${p.maxMana})</span>`, `  └ ${cn(m)} 🎲 ${r} → <span class="good">ジャックポット！最大マナ+10 (${p.maxMana})</span>`); }
+          else ctx.log(`  └ ${cn(m)} 🎲 ${r}`, `  └ ${cn(m)} 🎲 ${r}`);
+        }
+        break;
+      }
     }
   }
 }
@@ -608,6 +627,11 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
         const amt = e.card.val2 || 0;
         pl.maxHp += amt; ctx.heal(pl, amt);
         ctx.log(`<span class="t">${cn(e.card)}</span> 최대 체력 +${amt} (${pl.maxHp})`, `<span class="t">${cn(e.card)}</span> 最大体力 +${amt} (${pl.maxHp})`);
+      }
+      // 세계수의 보살핌(토큰): 자신의 턴 시작마다 최대 체력 +15 (증가만 — 회복 없음)
+      if (e.card.ench === "worldCare" && ownerTurn && !g.over) {
+        pl.maxHp += 15;
+        ctx.log(`<span class="t">${cn(e.card)}</span> 최대 체력 +15 (${pl.maxHp})`, `<span class="t">${cn(e.card)}</span> 最大体力 +15 (${pl.maxHp})`);
       }
       // 선견지명: 최대 마나 9 이상이 되면 +2 후 자괴 (필드를 떠나면 게임에서 제외)
       if (e.card.ench === "foresight" && !g.over && pl.maxMana >= 9) {
@@ -1199,6 +1223,22 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       } else ctx.log(`  └ 최대 체력 ${p.maxHp} — 조건 미달(90)`, `  └ 最大体力${p.maxHp} — 条件未達(90)`);
       break;
     }
+    case "halfElf": { // 하프 엘프: 자신 필드에 '세계수' 이름 카드가 있으면 '세계수의 보살핌' 전개
+      const hasTree = p.field.some((x) => (x.name || "").includes("세계수")) || p.enchants.some((e) => (e.card.name || "").includes("세계수"));
+      if (!hasTree) { ctx.log(`  └ 필드에 '세계수' 카드 없음`, `  └ 場に「世界樹」カードなし`); break; }
+      if (p.traps.length + p.enchants.length >= ST_MAX) { ctx.log(`  └ 마법·함정 존이 가득 찼습니다 (최대 ${ST_MAX})`, `  └ 魔法・罠ゾーンが満杯です (最大${ST_MAX})`); break; }
+      p.enchants.push({ card: inst(g, "WORLD_CARE"), turns: 99, bornTurn: g.turn });
+      ctx.log(`  └ <span class="good">세계수의 보살핌 전개</span>`, `  └ <span class="good">世界樹の慈しみを展開</span>`);
+      break;
+    }
+    case "elderKing": { // 엘더 하이엘프 킹: 하이엘프 2체 소환 후 자신 필드의 모든 하이엘프 공격 +15
+      spawnToken(g, ctx, p, "HIGH_ELF");
+      spawnToken(g, ctx, p, "HIGH_ELF");
+      let ek = 0;
+      p.field.forEach((x) => { if (x.id === "HIGH_ELF") { x.atkMod = (x.atkMod || 0) + 15; ek++; } });
+      if (ek > 0) ctx.log(`  └ 하이엘프 ${ek}체 공격 +15`, `  └ ハイエルフ${ek}体の攻撃+15`);
+      break;
+    }
     case "hordeBuff": { // 군단의 기수: 덱+묘지 20장 이상이면 +3/+3 (카드 텍스트 기준)
       const hn = p.deck.length + p.discard.length;
       if (hn >= 20) { m.atkMod = (m.atkMod || 0) + 3; m.defMod = (m.defMod || 0) + 3; ctx.log(`  └ 군단(${hn}장) 결집: +3/+3`, `  └ 軍団(${hn}枚)結集: +3/+3`); }
@@ -1330,7 +1370,7 @@ function tryNullSpell(g: GameState, ctx: Ctx, card: CardInst): boolean {
   const p = g.players[g.cur];           // the caster
   const o = g.players[1 - g.cur];        // the trap owner
   // cost-capped null traps only trigger on spells they can afford to counter
-  const i = o.traps.findIndex((tr) => tr.card.react === "nullspell" && (tr.card.cap === undefined || playCost(card) <= tr.card.cap));
+  const i = o.traps.findIndex((tr) => tr.card.react === "nullspell" && (tr.card.cap === undefined || playCost(card, p) <= tr.card.cap));
   if (i < 0) return false;
   const t = o.traps.splice(i, 1)[0].card;
   o.discard.push(t);
@@ -1540,8 +1580,16 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       ctx.log(`${tag(p, card)} 시초 몬스터 ${k}체 +4/+4`, `${tag(p, card)} 始原モンスター${k}体に+4/+4`);
       break;
     }
-    case "BLOOD1": { const n = ctx.drawN(p, 3); ctx.log(`${tag(p, card)} 자신에게 4 데미지, ${n}장 드로우`, `${tag(p, card)} 自分に4ダメージ, ${n}枚ドロー`); ctx.dealDamage(p, 4, cn(card), cn(card)); break; }
-    case "BLOOD2": { const n = ctx.drawN(p, 6); ctx.log(`${tag(p, card)} 자신에게 8 데미지, ${n}장 드로우`, `${tag(p, card)} 自分に8ダメージ, ${n}枚ドロー`); ctx.dealDamage(p, 8, cn(card), cn(card)); break; }
+    case "BLOOD1": { const n = ctx.drawN(p, 6); ctx.log(`${tag(p, card)} 자신에게 15 데미지, ${n}장 드로우`, `${tag(p, card)} 自分に15ダメージ, ${n}枚ドロー`); ctx.dealDamage(p, 15, cn(card), cn(card)); break; }
+    case "BLOOD2": { // 블러드 샤워: 자신 15뎀 · 상대 영구마법·세트 함정 2장 선택 파괴
+      ctx.log(`${tag(p, card)} 자신에게 15 데미지`, `${tag(p, card)} 自分に15ダメージ`);
+      ctx.dealDamage(p, 15, cn(card), cn(card));
+      if (!g.over && o.traps.length + o.enchants.length > 0) {
+        g.pending = { kind: "oppBoard", hint: "파괴할 상대 카드 선택 (세트 함정·영구마법, 2장)", hintJa: "破壊する相手のカードを選択 (セットトラップ・永続魔法、2枚)", reason: "bloodShower", allowCancel: true, data: { val: 2, noMon: true } };
+        ctx.ev.push({ type: "needTarget", pending: g.pending });
+      }
+      break;
+    }
     case "BLOOD_JOY": { // 희: 자신 6뎀, 양측 최대 체력 +12
       ctx.log(`${tag(p, card)} 자신에게 6 데미지, 양측 최대 체력 +12`, `${tag(p, card)} 自分に6ダメージ, 両者の最大体力+12`);
       ctx.dealDamage(p, 6, cn(card), cn(card));
@@ -2067,13 +2115,18 @@ export function summonReqMet(p: PlayerState, card: CardInst): boolean {
     const pool = [...p.field, ...p.deck, ...p.discard]; // hand excluded on purpose
     return ASSASSIN_IDS.every((aid) => pool.some((c) => c.id === aid));
   }
+  // ---- v15 엘프/엘더 킹 소환 조건 ----
+  if (card.summonReq === "maxHp65") return p.maxHp >= 65;
+  if (card.summonReq === "darkElf") return p.maxHp >= 65 && !p.field.some((m) => (m.name || "").includes("엘프"));
+  if (card.summonReq === "maxHp99") return p.maxHp >= 99;
+  if (card.summonReq === "elderKing") return p.maxHp >= 99 && p.discard.some((c) => c.id === "HIGH_ELF");
   return true;
 }
 
 function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   const p = g.players[g.cur];
   const card = p.hand[idx];
-  if (!card || p.mana < playCost(card)) return;
+  if (!card || p.mana < playCost(card, p)) return;
   // 운명의 수레바퀴: 주사위·확률 카드 시전 직전 스냅샷 (재굴림용, 매턴 1회)
   if (card.t === "spell" && RANDOM_CARDS.has(card.id) && !p.wheelUsed && p.enchants.some((e) => e.card.ench === "fateWheel")) {
     const snap = structuredClone(g);
@@ -2085,10 +2138,10 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     // Starters (컬/보물상자/어튠) are spell-type cards played from hand → they are subject to
     // the same spell seals (침묵) and null-spell trap (마법 무효화) as regular spells.
     if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) { ctx.log(`  └ <span class="dmg">침묵의 거신</span>이 필드에 있어 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の巨神</span>が場にいるため魔法を使用できません`); return; }
-    if (playCost(card) <= 5 && g.players.some((pl) => pl.field.some((m) => m.aura === "sealLow"))) { ctx.log(`  └ <span class="dmg">침묵의 파수꾼</span>이 필드에 있어 코스트 5 이하 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の番人</span>が場にいるためコスト5以下の魔法を使用できません`); return; }
+    if (playCost(card, p) <= 5 && g.players.some((pl) => pl.field.some((m) => m.aura === "sealLow"))) { ctx.log(`  └ <span class="dmg">침묵의 파수꾼</span>이 필드에 있어 코스트 5 이하 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の番人</span>が場にいるためコスト5以下の魔法を使用できません`); return; }
     if (p.spellSealTurn) { ctx.log(`  └ <span class="dmg">침묵의 심판</span>: 이번 턴 동안 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の審判</span>: このターン中は魔法を使用できません`); return; }
     if (card.star === "chest" && chestLocked(g)) { ctx.log(`  └ <span class="dmg">행운의 보물상자</span>: 보물상자 사용 봉인 중`, `  └ <span class="dmg">幸運の宝箱</span>: 宝箱の使用は封印中`); return; }
-    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card); p.hand.splice(idx, 1);
+    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1);
     ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: card.star === "trash" ? "vanish" : "discard" });
     if (tryNullSpell(g, ctx, card)) { p.discard.push(card); return; } // negated → consumed, effect nullified
     if (card.star === "trash") { rmz(p).push(card); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 이 카드 폐기`, `<span class="t">${p.name}</span> ${cn(card)} → このカードを廃棄`); }
@@ -2114,13 +2167,13 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (summonBlockedLow(g, p, card)) { ctx.log(`  └ <span class="dmg">봉쇄령</span>: 코스트 ${card.cost} 몬스터 소환 불가`, `  └ <span class="dmg">封鎖令</span>: コスト ${card.cost} のモンスター召喚不可`); return; }
     if (!summonReqMet(p, card)) { ctx.log(`  └ <span class="dmg">소환 조건 미충족</span>: ${cn(card)}`, `  └ <span class="dmg">召喚条件を満たしていない</span>: ${cn(card)}`); return; }
     if (p.field.length >= FIELD_MAX) { ctx.log(`  └ <span class="dmg">몬스터 존이 가득 찼습니다 (최대 ${FIELD_MAX})</span>`, `  └ <span class="dmg">モンスターゾーンが満杯です (最大 ${FIELD_MAX})</span>`); return; }
-    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card); p.hand.splice(idx, 1); summonMonster(g, ctx, p, card); return;
+    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1); summonMonster(g, ctx, p, card); return;
   }
   if (card.t === "spell") {
     const o0 = g.players[1 - g.cur];
     // ---- spell seals (침묵 오라 / 침묵의 심판) ----
     if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) { ctx.log(`  └ <span class="dmg">침묵의 거신</span>이 필드에 있어 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の巨神</span>が場にいるため魔法を使用できません`); return; }
-    if (playCost(card) <= 5 && g.players.some((pl) => pl.field.some((m) => m.aura === "sealLow"))) { ctx.log(`  └ <span class="dmg">침묵의 파수꾼</span>이 필드에 있어 코스트 5 이하 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の番人</span>が場にいるためコスト5以下の魔法を使用できません`); return; }
+    if (playCost(card, p) <= 5 && g.players.some((pl) => pl.field.some((m) => m.aura === "sealLow"))) { ctx.log(`  └ <span class="dmg">침묵의 파수꾼</span>이 필드에 있어 코스트 5 이하 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の番人</span>が場にいるためコスト5以下の魔法を使用できません`); return; }
     if (p.spellSealTurn) { ctx.log(`  └ <span class="dmg">침묵의 심판</span>: 이번 턴 동안 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の審判</span>: このターン中は魔法を使用できません`); return; }
     // ---- conditional / usage-gated preconditions (checked BEFORE paying) ----
     if (card.act === "wipeBack" && p.field.length > 0) { ctx.log(`  └ 필드에 몬스터가 있어 사용 불가`, `  └ 場にモンスターがいるため使用不可`); return; }
@@ -2132,6 +2185,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (card.id === "RUNE3" && !(p.hand.some((c) => c.id === "RUNE1") && p.hand.some((c) => c.id === "RUNE2"))) { ctx.log("  └ 패에 초급·중급 룬 학문이 필요합니다", "  └ 手札に初級・中級のルーン学問が必要です"); return; }
     if ((card.id === "DISARM1" || card.id === "DISARM2" || card.id === "DISARM3") && o0.enchants.length === 0) { ctx.log("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); return; }
     if (card.id === "BLOOD_SECRET" && !p.field.some((m) => isVampFamily(m))) { ctx.log("  └ 자신 필드에 '흡혈귀' 계열 몬스터가 없습니다", "  └ 自分の場に「吸血鬼」系列モンスターがいません"); return; }
+    if (card.id === "BLOOD2" && o0.traps.length + o0.enchants.length === 0) { ctx.log("  └ 파괴할 상대 영구마법·세트 함정이 없습니다", "  └ 破壊する相手の永続魔法・セットトラップがありません"); return; }
     if (card.id === "CHOSEN_AREA" && cullExiled(p) < 25) { ctx.log(`  └ 게임에서 제외된 컬이 ${cullExiled(p)}장 — 25장 이상이어야 발동 가능`, `  └ ゲームから除外されたカルが${cullExiled(p)}枚 — 25枚以上で発動可能`); return; }
     if ((card.id === "DECAY_CRAFT" || card.id === "MAJESTY_RITE") && p.field.length === 0) { ctx.log("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); return; }
     if (card.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) { ctx.log("  └ 자신 필드에 이미 '선견지명'이 있습니다", "  └ 自分の場に既に「先見の明」があります"); return; }
@@ -2157,7 +2211,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (card.id === "SCRAPPER" && [...p.deck, ...p.discard].filter((c) => c.cost <= 1).length < 2) { ctx.log("  └ 덱·묘지에 코스트 1 이하 카드가 2장 없습니다", "  └ デッキ・墓地にコスト1以下のカードが2枚ありません"); return; }
     if (card.ench && p.traps.length + p.enchants.length >= ST_MAX) { ctx.log(`  └ <span class="dmg">마법·함정 존이 가득 찼습니다 (최대 ${ST_MAX})</span>`, `  └ <span class="dmg">魔法・罠ゾーンが満杯です (最大 ${ST_MAX})</span>`); return; }
 
-    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card); p.hand.splice(idx, 1); p.discard.push(card);
+    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1); p.discard.push(card);
     if (tryNullSpell(g, ctx, card)) return;
     p.uses[card.id] = (p.uses[card.id] || 0) + 1;             // game-long usage count
     p.usesTurn[card.id] = (p.usesTurn[card.id] || 0) + 1;     // per-turn usage count
@@ -2250,7 +2304,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   if (card.t === "trap") {
     if (p.trapBlockTurn) { ctx.log(`  └ <span class="dmg">협상: 이번 턴에는 함정을 설치할 수 없습니다</span>`, `  └ <span class="dmg">交渉: このターンは罠を設置できません</span>`); return; }
     if (p.traps.length + p.enchants.length >= ST_MAX) { ctx.log(`  └ <span class="dmg">마법·함정 존이 가득 찼습니다 (최대 ${ST_MAX})</span>`, `  └ <span class="dmg">魔法・罠ゾーンが満杯です (最大 ${ST_MAX})</span>`); return; }
-    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card); p.hand.splice(idx, 1); p.traps.push({ card });
+    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1); p.traps.push({ card });
     ctx.log(`<span class="t">${p.name}</span> 함정을 세트 (정체는 비공개)`, `<span class="t">${p.name}</span> トラップをセット (正体は非公開)`);
     ctx.ev.push({ type: "trapSet", player: side(g, p) });
     return;
@@ -2264,7 +2318,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
   const pending = g.pending!;
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];
-  const d = (pending.data || {}) as { val?: number; val2?: number; attackerUid?: string; count?: number; exclude?: string; sourceId?: string; zone?: string; fired?: string[] };
+  const d = (pending.data || {}) as { val?: number; val2?: number; attackerUid?: string; count?: number; exclude?: string; sourceId?: string; zone?: string; fired?: string[]; noMon?: boolean };
 
   if (uid === null) {
     if (pending.allowCancel) {
@@ -2426,9 +2480,10 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       }
     }
   } else if (pending.kind === "oppBoard") {
-    // 신수: 상대 필드의 카드(몬스터/세트 함정/영구마법) 파괴
+    // 신수: 상대 필드의 카드(몬스터/세트 함정/영구마법) 파괴 · noMon(블러드 샤워): 세트 함정·영구마법만
+    const noMon = !!d.noMon;
     let done = false;
-    const tm = o.field.find((x) => x.uid === uid);
+    const tm = noMon ? undefined : o.field.find((x) => x.uid === uid);
     if (tm) {
       if (hasPassive(tm, "aura")) { ctx.log(`  └ <span class="dmg">${cn(tm)} 은(는) 효과의 대상이 되지 않는다</span>`, `  └ <span class="dmg">${cn(tm)} は効果の対象にならない</span>`); return; }
       ctx.log(`<span class="t">${p.name}</span> → ${cn(tm)} 파괴`, `<span class="t">${p.name}</span> → ${cn(tm)} 破壊`);
@@ -2453,10 +2508,13 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     }
     if (done) {
       const remaining = ((d.val as number) ?? 1) - 1;
-      if (remaining > 0 && o.field.length + o.traps.length + o.enchants.length > 0) {
-        g.pending = { kind: "oppBoard", hint: pending.hint, hintJa: pending.hintJa, reason: pending.reason, allowCancel: true, data: { val: remaining } };
+      const left = (noMon ? 0 : o.field.length) + o.traps.length + o.enchants.length;
+      if (remaining > 0 && left > 0) {
+        g.pending = { kind: "oppBoard", hint: pending.hint, hintJa: pending.hintJa, reason: pending.reason, allowCancel: true, data: noMon ? { val: remaining, noMon: true } : { val: remaining } };
         ctx.ev.push({ type: "needTarget", pending: g.pending });
       }
+    } else {
+      g.pending = pending; // 무효 대상(noMon 중 몬스터 등) → 선택권 소모 없이 재선택
     }
   } else if (pending.kind === "giantShop") {
     const ids0 = (pending.data?.ids as string[] | undefined) ?? [];
