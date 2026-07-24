@@ -60,7 +60,7 @@ const R: [RegExp, string][] = [
   [/골램 군단 결집 — 페널티 없음/g, "Golem legion assembled — no penalty"],
   [/골램 부재/g, "no Golem backup"],
   [/선택이 완성되었다 — 게임에서 승리한다!/g, "the Choice is complete — win the game!"],
-  [/게임에서 제외된 컬이 (\d+)장 — 20장 이상이어야 발동 가능/g, "$1 Culls exiled — need 20 or more to cast"],
+  [/게임에서 제외된 컬이 (\d+)장 — 25장 이상이어야 발동 가능/g, "$1 Culls exiled — need 25 or more to cast"],
   [/선택받은 마법사 — 발동할 마법사 선택 \(제외된 컬 1장 → 묘지, 상대에게 6 데미지 · 취소 가능\)/g, "Chosen Mage — pick a mage to activate (1 exiled Cull → graveyard, 6 damage to the opponent · may cancel)"],
   [/ — 제외된 컬 1장을 묘지로 되돌리고 상대에게 6 데미지/g, " — returns 1 exiled Cull to the graveyard and deals 6 damage to the opponent"],
   [/시련의 영역 — 묘지에서 게임에서 제외할 카드 선택 \(2장까지\)/g, "Domain of Trials — pick cards in your graveyard to exile (up to 2)"],

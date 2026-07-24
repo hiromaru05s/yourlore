@@ -1128,16 +1128,16 @@ const NEW_CARDS11: CardDef[] = [
     text: "자신에게 7 데미지, 최대 마나 -1 · 자신 필드의 몬스터 1체에 '위엄'을 부여한다", textJa: "自分に7ダメージ、最大マナ-1 · 自分の場のモンスター1体に「威厳」を与える" },
   { id: "CROSSROADS", t: "spell", cost: 1, name: "선택의 기로", nameJa: "選択の岐路",
     text: "자신의 묘지에 컬 2장을 추가한다", textJa: "自分の墓地にカル2枚を追加する" },
-  { id: "CHOSEN_KNIGHT", t: "mon", cost: 4, atk: 0, def: 0, condAtk: "cullPlus", attackFx: "cullOnFace", name: "선택받은 검사", nameJa: "選ばれし剣士",
-    text: "상시: 게임에서 제외된 자신의 '컬' 1장당 +1/+1 · 상대 플레이어에게 데미지를 입힐 때마다 자신의 묘지에 컬 1장을 얻는다",
-    textJa: "常時: ゲームから除外された自分の「カル」1枚につき+1/+1 · 相手プレイヤーにダメージを与えるたび自分の墓地にカル1枚を得る" },
-  { id: "CHOSEN_MAGE", t: "mon", cost: 5, atk: 0, def: 0, condAtk: "cullPlus", name: "선택받은 마법사", nameJa: "選ばれし魔法使い",
-    text: "상시: 게임에서 제외된 자신의 '컬' 1장당 +1/+1 · (선택) 턴 시작시: 제외된 '컬' 1장을 묘지로 되돌리고 상대에게 6 데미지",
-    textJa: "常時: ゲームから除外された自分の「カル」1枚につき+1/+1 · (選択) ターン開始時: 除外された「カル」1枚を墓地に戻し相手に6ダメージ" },
-  { id: "CHOSEN_ARCHER", t: "mon", cost: 5, atk: 0, def: 0, condAtk: "cullAtk2", directOnly: true, passive: ["evade"], name: "선택받은 궁수", nameJa: "選ばれし弓手",
-    text: "상시: 게임에서 제외된 자신의 '컬' 1장당 공격 +2 · 암습 · 회피", textJa: "常時: ゲームから除外された自分の「カル」1枚につき攻撃+2 · 暗襲 · 回避" },
-  { id: "CHOSEN_ROGUE", t: "mon", cost: 3, atk: 0, def: 0, condAtk: "cullAtk1", directOnly: true, passive: ["evade"], name: "선택받은 도적", nameJa: "選ばれし盗賊",
-    text: "상시: 게임에서 제외된 자신의 '컬' 1장당 공격 +1 · 암습 · 회피", textJa: "常時: ゲームから除外された自分の「カル」1枚につき攻撃+1 · 暗襲 · 回避" },
+  { id: "CHOSEN_KNIGHT", t: "mon", cost: 7, atk: 0, def: 0, condAtk: "cullPlus", attackFx: "cullOnFace", name: "선택받은 검사", nameJa: "選ばれし剣士",
+    text: "상시: 게임에서 제외된 자신의 '컬' 2장당 +1/+1 · 상대 플레이어에게 데미지를 입힐 때마다 자신의 묘지에 컬 1장을 얻는다",
+    textJa: "常時: ゲームから除外された自分の「カル」2枚につき+1/+1 · 相手プレイヤーにダメージを与えるたび自分の墓地にカル1枚を得る" },
+  { id: "CHOSEN_MAGE", t: "mon", cost: 7, atk: 0, def: 0, condAtk: "cullPlus", name: "선택받은 마법사", nameJa: "選ばれし魔法使い",
+    text: "상시: 게임에서 제외된 자신의 '컬' 2장당 +1/+1 · (선택) 턴 시작시: 제외된 '컬' 1장을 묘지로 되돌리고 상대에게 6 데미지",
+    textJa: "常時: ゲームから除外された自分の「カル」2枚につき+1/+1 · (選択) ターン開始時: 除外された「カル」1枚を墓地に戻し相手に6ダメージ" },
+  { id: "CHOSEN_ARCHER", t: "mon", cost: 7, atk: 0, def: 0, condAtk: "cullAtk2", directOnly: true, passive: ["evade"], name: "선택받은 궁수", nameJa: "選ばれし弓手",
+    text: "상시: 게임에서 제외된 자신의 '컬' 2장당 공격 +2 · 암습 · 회피", textJa: "常時: ゲームから除外された自分の「カル」2枚につき攻撃+2 · 暗襲 · 回避" },
+  { id: "CHOSEN_ROGUE", t: "mon", cost: 7, atk: 0, def: 0, condAtk: "cullAtk1", directOnly: true, passive: ["evade"], name: "선택받은 도적", nameJa: "選ばれし盗賊",
+    text: "상시: 게임에서 제외된 자신의 '컬' 2장당 공격 +1 · 암습 · 회피", textJa: "常時: ゲームから除外された自分の「カル」2枚につき攻撃+1 · 暗襲 · 回避" },
 ];
 for (const c of NEW_CARDS11) { DB[c.id] = c; }
 
@@ -1145,8 +1145,8 @@ for (const c of NEW_CARDS11) { DB[c.id] = c; }
 const NEW_STARTERS11: CardDef[] = [
   { id: "RUST_SHROOM", t: "mon", cost: 1, atk: 1, def: 1, passive: ["decay"], noShop: true, name: "러스트 머쉬룸", nameJa: "ラストマッシュルーム", text: "부패", textJa: "腐敗" },
   { id: "CHOSEN_AREA", t: "spell", cost: 7, noShop: true, name: "선택받은 영역", nameJa: "選ばれし領域",
-    text: "게임에서 제외된 자신의 '컬'이 20장 이상일 때만 발동 가능 · 게임에서 즉시 승리한다",
-    textJa: "ゲームから除外された自分の「カル」が20枚以上の時のみ発動可能 · ゲームに即座に勝利する" },
+    text: "게임에서 제외된 자신의 '컬'이 25장 이상일 때만 발동 가능 · 게임에서 즉시 승리한다",
+    textJa: "ゲームから除外された自分の「カル」が25枚以上の時のみ発動可能 · ゲームに即座に勝利する" },
   { id: "TRIAL_AREA", t: "spell", cost: 5, ench: "trialArea", val: 99, noShop: true, name: "시련의 영역", nameJa: "試練の領域",
     text: "영구: 시전시 자신에게 6 데미지 · 자신의 턴 시작마다 묘지에 컬 1장을 얻고, 그 후 묘지에서 원하는 카드 2장을 게임에서 제외할 수 있다",
     textJa: "永続: 発動時に自分に6ダメージ · 自分のターン開始時に墓地にカル1枚を得て、その後墓地から好きなカード2枚をゲームから除外できる" },
@@ -1271,7 +1271,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v12"; // v12: 기습(AMBUSH) 코스트 1→2 너프
+export const BALANCE_VERSION = "v13"; // v13: 컬 아키타입 너프 — 선택받은 영역 20→25장, 선택받은 4종 코스트 7 + 스탯 컬 2장당(반내림)
+// v12: 기습(AMBUSH) 코스트 1→2 너프
 // v11: 패시브 키워드 10종 도입 + 골렘(기합)/부패/위엄/도발/회피 + 컬 아키타입(선택받은 시리즈) + 알 아우라·내구 버프 + 선견지명/혈귀술/공허포격 너프
 
 export function idsOfCost(cost: number): string[] {

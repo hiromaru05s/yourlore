@@ -104,10 +104,10 @@ export function effAtk(p: PlayerState, m: FieldMon): number {
   let a = m.atk! + (m.tempAtk || 0) + (m.atkMod || 0);
   if (m.condAtk === "twoPlus" && p.field.length >= 2) a += m.val ?? 2; // 보너스량 = val (기본 2)
   if (m.condAtk === "hp45" && p.hp >= 45) a += 1; // 혈기왕성: 체력 45+면 +1/+3
-  // 선택받은 시리즈: 제외된 컬 스케일링
-  if (m.condAtk === "cullPlus") a += cullExiled(p);
-  if (m.condAtk === "cullAtk1") a += cullExiled(p);
-  if (m.condAtk === "cullAtk2") a += cullExiled(p) * 2;
+  // 선택받은 시리즈: 제외된 컬 2장당 스케일링 (반내림)
+  if (m.condAtk === "cullPlus") a += Math.floor(cullExiled(p) / 2);
+  if (m.condAtk === "cullAtk1") a += Math.floor(cullExiled(p) / 2);
+  if (m.condAtk === "cullAtk2") a += Math.floor(cullExiled(p) / 2) * 2;
   // 시초의 군주(originLord): 자신 필드의 모든 시초 몬스터 +3/+3 (군주 1장당)
   if (m.tribe === "시초") a += 3 * p.field.filter((x) => x.aura === "originLord").length;
   return Math.max(0, a);
@@ -116,7 +116,7 @@ export function effDef(p: PlayerState, m: FieldMon): number {
   // 은빛 성벽(wallDef): +val to every friendly monster's defense while on field
   const wall = p.field.filter((x) => x.aura === "wallDef").reduce((s, x) => s + (x.val || 3), 0);
   const hpb = m.condAtk === "hp45" && p.hp >= 45 ? 3 : 0;
-  const cull = m.condAtk === "cullPlus" ? cullExiled(p) : 0; // 선택받은 검사/마법사: +1/+1
+  const cull = m.condAtk === "cullPlus" ? Math.floor(cullExiled(p) / 2) : 0; // 선택받은 검사/마법사: 컬 2장당 +1/+1
   // 시초의 군주(originLord): 자신 필드의 모든 시초 몬스터 +3/+3 (군주 1장당)
   const lord = m.tribe === "시초" ? 3 * p.field.filter((x) => x.aura === "originLord").length : 0;
   return Math.max(0, m.def! + (m.defMod || 0) + wall + hpb + cull + lord);
@@ -1741,7 +1741,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       ctx.log(`${tag(p, card)} 묘지에 컬 2장 추가`, `${tag(p, card)} 墓地にカル2枚追加`);
       break;
     }
-    case "CHOSEN_AREA": { // 선택받은 영역: 제외된 컬 20장+ → 즉시 승리 (조건은 시전 전 체크)
+    case "CHOSEN_AREA": { // 선택받은 영역: 제외된 컬 25장+ → 즉시 승리 (조건은 시전 전 체크)
       ctx.log(`${tag(p, card)} <span class="good">선택이 완성되었다 — 게임에서 승리한다!</span>`, `${tag(p, card)} <span class="good">選択が完成した — ゲームに勝利する！</span>`);
       g.over = true; g.phase = "over"; g.winner = g.cur;
       ctx.ev.push({ type: "win", winner: g.cur });
@@ -2132,7 +2132,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (card.id === "RUNE3" && !(p.hand.some((c) => c.id === "RUNE1") && p.hand.some((c) => c.id === "RUNE2"))) { ctx.log("  └ 패에 초급·중급 룬 학문이 필요합니다", "  └ 手札に初級・中級のルーン学問が必要です"); return; }
     if ((card.id === "DISARM1" || card.id === "DISARM2" || card.id === "DISARM3") && o0.enchants.length === 0) { ctx.log("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); return; }
     if (card.id === "BLOOD_SECRET" && !p.field.some((m) => isVampFamily(m))) { ctx.log("  └ 자신 필드에 '흡혈귀' 계열 몬스터가 없습니다", "  └ 自分の場に「吸血鬼」系列モンスターがいません"); return; }
-    if (card.id === "CHOSEN_AREA" && cullExiled(p) < 20) { ctx.log(`  └ 게임에서 제외된 컬이 ${cullExiled(p)}장 — 20장 이상이어야 발동 가능`, `  └ ゲームから除外されたカルが${cullExiled(p)}枚 — 20枚以上で発動可能`); return; }
+    if (card.id === "CHOSEN_AREA" && cullExiled(p) < 25) { ctx.log(`  └ 게임에서 제외된 컬이 ${cullExiled(p)}장 — 25장 이상이어야 발동 가능`, `  └ ゲームから除外されたカルが${cullExiled(p)}枚 — 25枚以上で発動可能`); return; }
     if ((card.id === "DECAY_CRAFT" || card.id === "MAJESTY_RITE") && p.field.length === 0) { ctx.log("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); return; }
     if (card.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) { ctx.log("  └ 자신 필드에 이미 '선견지명'이 있습니다", "  └ 自分の場に既に「先見の明」があります"); return; }
     if ((card.id === "MEDITATE" || card.id === "PRAYER") && (p.playsTurn || 0) > 0) { ctx.log("  └ 이번 턴에 다른 카드를 플레이해서 사용 불가", "  └ このターンに他のカードをプレイしたため使用不可"); return; }
