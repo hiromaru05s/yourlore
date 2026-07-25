@@ -35,6 +35,7 @@ export function mountLobby(app: App, ranked = false): Screen {
   let sock: Sock<QueueServerMsg, QueueClientMsg> | null = null;
   let hb: ReturnType<typeof setInterval> | null = null;
   let done = false; // matched / cancelled / unmounted — stop reconnecting
+  let retry = 0;    // consecutive drops without a successful "queued" ack (drives backoff)
 
   const stopHb = (): void => { if (hb) { clearInterval(hb); hb = null; } };
   const shutdown = (): void => { done = true; stopHb(); sock?.close(); };
@@ -49,6 +50,7 @@ export function mountLobby(app: App, ranked = false): Screen {
       },
       onMessage: (m) => {
         if (m.type === "queued") {
+          retry = 0; // the server actually processed us — reset the backoff
           title.textContent = ranked ? t("lobby.ranked") : t("lobby.searching");
           msg.textContent = t("lobby.entered");
         } else if (m.type === "matched") {
@@ -66,8 +68,10 @@ export function mountLobby(app: App, ranked = false): Screen {
       },
       onClose: () => {
         stopHb();
-        // dropped while waiting (idle timeout, deploy, network blip) — rejoin automatically
-        if (!done) setTimeout(() => { if (!done) connect(); }, RETRY_MS);
+        // dropped while waiting (idle timeout, deploy, network blip) — rejoin automatically,
+        // with exponential backoff (max 15s) so a rejection loop can't hammer the matchmaker DO
+        retry++;
+        if (!done) setTimeout(() => { if (!done) connect(); }, Math.min(RETRY_MS * 2 ** (retry - 1), 15_000));
       },
       onError: () => { title.textContent = t("lobby.connerr"); msg.textContent = t("lobby.connerr.desc"); },
     });

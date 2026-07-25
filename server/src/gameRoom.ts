@@ -69,6 +69,12 @@ export class GameRoom {
   private env: Env;
   private state: DurableObjectState;
   private room: RoomData | null = null;
+  // ---- flood guards (in-memory: reset on hibernation, which is fine — a flood keeps the DO awake) ----
+  /** recent join (WS upgrade) timestamps per side — two tabs of one user evict each
+   *  other in an infinite "replaced"→reconnect ping-pong; cap the join rate. */
+  private joinTimes: [number[], number[]] = [[], []];
+  /** recent message timestamps per socket — a looping client must not burn the DO request budget. */
+  private msgTimes = new Map<WebSocket, number[]>();
 
   constructor(state: DurableObjectState, env: Env) {
     this.state = state;
@@ -154,6 +160,16 @@ export class GameRoom {
       new WebSocketRequestResponsePair(JSON.stringify({ type: "ping" }), JSON.stringify({ type: "pong" })),
     );
 
+    // join-flood guard: >8 joins per side / 30s = a reconnect loop, not a human. 429 makes the
+    // client's retry counter run out (429 closes before onOpen, so retries never reset).
+    {
+      const now = Date.now();
+      const jt = this.joinTimes[sd].filter((t2) => now - t2 < 30_000);
+      jt.push(now);
+      this.joinTimes[sd] = jt;
+      if (jt.length > 8) return new Response("too many reconnects", { status: 429 });
+    }
+
     // this socket supersedes any previous one for this side; a reconnect cancels a pending forfeit
     const hadPendingForfeit = room.forfeitAt[sd] != null;
     room.forfeitAt[sd] = null;
@@ -196,6 +212,15 @@ export class GameRoom {
   // -------- hibernation handlers (wake the object from storage) --------
 
   async webSocketMessage(ws: WebSocket, message: ArrayBuffer | string): Promise<void> {
+    // message-flood guard: >60 msgs / 10s from one socket = a client-side loop → drop the socket.
+    // (normal play incl. multi-pick auto-submits stays far below; pings are auto-responded and never land here)
+    {
+      const now = Date.now();
+      const times = (this.msgTimes.get(ws) ?? []).filter((t2) => now - t2 < 10_000);
+      times.push(now);
+      this.msgTimes.set(ws, times);
+      if (times.length > 60) { try { ws.close(1011, "rate limited"); } catch { /* gone */ } return; }
+    }
     const room = await this.restore();
     const att = this.att(ws);
     if (!room || !att) return;
@@ -245,6 +270,7 @@ export class GameRoom {
   async webSocketError(ws: WebSocket): Promise<void> { await this.dropped(ws); }
 
   private async dropped(ws: WebSocket): Promise<void> {
+    this.msgTimes.delete(ws); // flood-guard bookkeeping
     const room = await this.restore();
     const att = this.att(ws);
     if (!room || !att) return;
