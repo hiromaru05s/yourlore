@@ -1163,7 +1163,7 @@ for (const c of NEW_STARTERS11) { DB[c.id] = c; }
 const NEW_STARTERS15: CardDef[] = [
   { id: "GAMBLER", t: "mon", cost: 3, atk: 0, def: 0, turnFx: "gambler", noShop: true, name: "도박꾼", nameJa: "ギャンブラー",
     text: "자신의 턴 시작시: 주사위를 굴려 4·5·6이면 최대 마나 +1, 최대 체력 +5", textJa: "自分のターン開始時: ダイスを振り4・5・6なら最大マナ+1、最大体力+5" },
-  { id: "ELF_HAVEN", t: "spell", cost: 1, ench: "elfHaven", val: 99, noShop: true, name: "엘프의 쉼터", nameJa: "エルフの憩い場",
+  { id: "ELF_HAVEN", t: "spell", cost: 3, ench: "elfHaven", val: 99, noShop: true, name: "엘프의 쉼터", nameJa: "エルフの憩い場",
     text: "영구: '세계수' 이름을 가진 카드의 구매/시전 코스트가 0이 된다", textJa: "永続: 「世界樹」の名を持つカードの購入/発動コストが0になる" },
   { id: "HALF_ELF", t: "mon", cost: 2, atk: 1, def: 2, onSummon: "halfElf", noShop: true, name: "하프 엘프", nameJa: "ハーフエルフ",
     text: "소환시: '세계수' 이름을 가진 카드가 자신 필드에 있으면 '세계수의 보살핌'을 필드에 전개", textJa: "召喚時: 「世界樹」の名を持つカードが自分の場にあれば「世界樹の慈しみ」を場に展開" },
@@ -1307,7 +1307,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v15"; // v15: 러스트 머쉬룸 1/0 너프 + 도박꾼/전설의 도박꾼 + 엘프 아키타입(쉼터·하프/엘프/다크/하이/엘더 킹·세계수의 보살핌)
+export const BALANCE_VERSION = "v16"; // v16: 엘프의 쉼터 코스트 1→3 너프
+// v15: 러스트 머쉬룸 1/0 너프 + 도박꾼/전설의 도박꾼 + 엘프 아키타입(쉼터·하프/엘프/다크/하이/엘더 킹·세계수의 보살핌)
 // v14: 피의 마법 리워크 — 블러드 드로우(자해15·6드로우), 블러드 샤워(자해15·상대 영구마법/함정 2장 선택 파괴)
 // v13: 컬 아키타입 너프 — 선택받은 영역 20→25장, 선택받은 4종 코스트 7 + 스탯 컬 2장당(반내림)
 // v12: 기습(AMBUSH) 코스트 1→2 너프
