@@ -396,7 +396,7 @@ const NEW_CARDS: CardDef[] = [
   { id: "NT_NULL6", t: "trap", cost: 6, name: "반마술 결계", nameJa: "反魔術結界", react: "nullspell", val2: 2, text: "상대 마법 1장 무효화 + 상대에게 2 데미지", textJa: "相手の魔法1枚を無効化 + 相手に2ダメージ" },
   { id: "NT_NULL4", t: "trap", cost: 3, name: "주문 파쇄", nameJa: "呪文破砕", react: "nullspell", cap: 6,
     text: "코스트 6 이하 마법 1장을 무효화", textJa: "コスト6以下の魔法1枚を無効化" },
-  { id: "NT_NULL8", t: "trap", cost: 8, play: 6, name: "침묵의 심판", nameJa: "沈黙の審判", react: "nullspell", lockSpell: true,
+  { id: "NT_NULL8", t: "trap", cost: 8, name: "침묵의 심판", nameJa: "沈黙の審判", react: "nullspell", lockSpell: true,
     text: "상대 마법 1장 무효화 + 이번 상대 턴 동안 상대는 마법 카드를 사용할 수 없다 (시전 6)", textJa: "相手の魔法1枚を無効化 + このターン中、相手は魔法カードを使用できない (発動6)" },
   { id: "NT_SEAL3", t: "mon", cost: 3, name: "침묵의 파수꾼", nameJa: "沈黙の番人", atk: 1, def: 3, aura: "sealLow",
     text: "이 카드가 필드에 있는 한 양 플레이어는 코스트 5 이하 마법을 사용할 수 없다", textJa: "このカードが場にある限り、両プレイヤーはコスト5以下の魔法を使用できない" },
@@ -1247,6 +1247,37 @@ export const RANDOM_CARDS = new Set([
   "TIMEWARP", "GAMBLE", "DICE8", "GUILD_CHEST", "LUCKY_CHEST", "FORBIDDEN", "GENESIS_SONG",
 ]);
 
+// ============================================================
+// BALANCE v17 — 함정 전면 리밸런스.
+// (a) 구매 코스트 재정렬: 같은 대역에서 "공격 무효 < 공격 절반 < 공격 몬스터 파괴"
+//     위계가 지켜지도록 — 무효/절반/반사-only 계열이 파괴 계열과 동가이거나 더
+//     비싸던 왜곡을 해소.
+// (b) 시전(세트) 코스트 전면 1 통일: 세트 시 소모 마나로 어떤 함정인지
+//     역추적되는 정보 누출을 차단. 구매 코스트만 파워 지표로 남긴다.
+// ============================================================
+const TRAP_COST17: Record<string, number> = {
+  T1: 1,      // 하프 가드(절반+1뎀): 2→1 — 절반은 무효(T9)보다 약함
+  T9: 2,      // 역류(무효+3회복): 3→2 — 파괴 시작가(3) 아래로
+  T12: 3,     // 절대 방벽(무효+전체방어+4): 4→3 — 파괴(T4/T6)와 동가였음
+  T13: 4,     // 천벌(파괴+4뎀): 5→4 — 동급 파괴+α(T4/T6)와 정렬
+  GT9_2: 6,   // 흑요석 반사막(반사만, 파괴 없음): 9→6
+  GT10_2: 7,  // 화염의 반사막 II(반사만): 10→7
+  GT10_0: 8,  // 심연의 방어 태세 II(절반+10뎀): 10→8
+  GT10_1: 9,  // 강철의 차단막 II(무효+9뎀): 10→9 — 파괴형(GT10_3)보다 싸게
+  GT11_0: 9,  // 용암의 방어 태세(절반+11뎀): 11→9
+  GT11_1: 10, // 천공의 차단막(무효+10뎀): 11→10
+  GT12_0: 10, // 여명의 방어 태세(절반+12뎀): 12→10
+  GT12_1: 11, // 심판의 차단막(무효+11뎀): 12→11
+};
+for (const tid of Object.keys(TRAP_COST17)) { if (DB[tid]) DB[tid].cost = TRAP_COST17[tid]; }
+for (const tid of Object.keys(DB)) {
+  const tc = DB[tid];
+  if (tc.t !== "trap") continue;
+  if (tc.cost > 1) tc.play = 1;
+  tc.text = tc.text.replace(/\s*\(시전 \d+\)/, "");
+  if (tc.textJa) tc.textJa = tc.textJa.replace(/\s*\(発動\d+\)/, "");
+}
+
 // English localization (names/texts) — applied last so it reflects final balance patches
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 
@@ -1307,7 +1338,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v16"; // v16: 엘프의 쉼터 코스트 1→3 너프
+export const BALANCE_VERSION = "v17"; // v17: 함정 리밸런스 — 시전코스트 전면 1(정보 누출 차단) + 구매코스트 재정렬(무효<파괴 위계)
+// v16: 엘프의 쉼터 코스트 1→3 너프
 // v15: 러스트 머쉬룸 1/0 너프 + 도박꾼/전설의 도박꾼 + 엘프 아키타입(쉼터·하프/엘프/다크/하이/엘더 킹·세계수의 보살핌)
 // v14: 피의 마법 리워크 — 블러드 드로우(자해15·6드로우), 블러드 샤워(자해15·상대 영구마법/함정 2장 선택 파괴)
 // v13: 컬 아키타입 너프 — 선택받은 영역 20→25장, 선택받은 4종 코스트 7 + 스탯 컬 2장당(반내림)

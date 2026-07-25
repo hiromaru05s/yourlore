@@ -249,7 +249,7 @@ const TEXTS: Record<string, string> = {
   NT_NULL3: "Negate 1 enemy spell of cost 2 or less", NT_NULL5: "Negate 1 enemy spell + 4 damage to the opponent",
   NT_NULL6: "Negate 1 enemy spell + 8 damage to the opponent",
   NT_NULL4: "Negate 1 enemy spell of cost 6 or less",
-  NT_NULL8: "Negate 1 enemy spell + the opponent cannot cast spells for the rest of this turn (Cast 6)",
+  NT_NULL8: "Negate 1 enemy spell + the opponent cannot cast spells for the rest of this turn",
   NT_SEAL3: "While this card is on the field, neither player can cast spells of cost 5 or less",
   NT_SEAL5: "While this card is on the field, neither player can cast spells",
   STARTER_TRASH: "Mana 1: exile this card from the game (thins your deck)", STARTER_CHEST: "Mana 1: open the treasure chest",
