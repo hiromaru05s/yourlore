@@ -118,10 +118,13 @@
 }
 .cast-tip.show { opacity: 1; visibility: visible; }
 
-/* ENCHANTMENT (영구마법) marker — a small ∞ badge in the effect plate corner,
-   with a hover tooltip explaining that the card persists on the field. */
+/* ENCHANTMENT (영구마법) marker — a small ∞ badge sitting on the effect plate's
+   top-left frame edge (child of .card, NOT of the clipped .card-eff — long effect
+   texts used to slide under it), with a hover tooltip. font-size mirrors .card-eff
+   so the badge keeps its previous visual size. */
 .card-ench {
-  position: absolute; top: 0.3em; left: 1.4em; z-index: 4;
+  position: absolute; left: 7.5%; top: 64.2%; transform: translateY(-100%); z-index: 4;
+  font-size: 0.44em;
   display: inline-flex; align-items: center; justify-content: center;
   width: 1.55em; height: 1.55em; border-radius: 50%;
   background: radial-gradient(circle at 40% 35%, #8a72e8, #4a34a0 85%); color: #fff;
