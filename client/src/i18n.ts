@@ -344,6 +344,7 @@ const D: Record<string, Entry> = {
   "card.summon.tip": { ko: "소환 코스트 — 이 몬스터를 손에서 필드로 소환할 때 드는 마나입니다. 왼쪽 위 숫자는 상점에서 살 때 드는 구매 코스트예요.", ja: "召喚コスト — このモンスターを手札からフィールドに召喚する際に必要なマナです。左上の数字はショップで購入する際の購入コストです。", en: "Summon cost — the mana to summon this monster from your hand onto the field. The top-left number is the buy cost you pay in the shop." },
   "card.dur.note": { ko: "(지속) = 몬스터가 필드에 있는 동안 유지되고, 필드를 떠나면 원래대로 돌아갑니다.", ja: "(持続) = モンスターが場にいる間だけ維持され、場を離れると元に戻ります。", en: "(lasting) = kept while the monster is on the field; it resets when the monster leaves." },
   "market.confirm": { ko: "한 번 더 클릭 → 구매", ja: "もう一度クリック → 購入", en: "Click again to buy" },
+  "market.bought": { ko: "구매됨", ja: "購入済み", en: "SOLD" },
   "picker.confirm": { ko: "확정", ja: "確定", en: "Confirm" },
   "picker.count": { ko: "{n}장 선택됨", ja: "{n}枚選択中", en: "{n} selected" },
   "picker.settrap": { ko: "세트 함정", ja: "セットトラップ", en: "Set Trap" },

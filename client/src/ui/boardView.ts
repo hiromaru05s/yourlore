@@ -610,6 +610,7 @@ export class GameView {
   private slotEl(size?: "mkt", bought?: boolean): HTMLElement {
     const s = document.createElement("div");
     s.className = "slot" + (bought ? " is-bought" : "");
+    if (bought) s.dataset.label = t("market.bought"); // CSS ::after reads attr(data-label) — 언어별 표기
     if (size === "mkt") { s.style.setProperty("--cw", "var(--card-w-mkt)"); s.style.setProperty("--ch", "var(--card-h-mkt)"); }
     return s;
   }

@@ -209,7 +209,7 @@
   content: "◆"; color: #3a4c6e3a; font-size: calc(var(--cw, var(--card-w)) * 0.34);
   text-shadow: 0 1px 1px #000, 0 0 10px #00000080;
 }
-.slot.is-bought::after { content: "구매됨"; font-size: 0.6rem; letter-spacing: .15em; color: var(--paper-faint); }
+.slot.is-bought::after { content: attr(data-label); font-size: 0.6rem; letter-spacing: .15em; color: var(--paper-faint); }
 .slot.is-active { border-color: var(--brass-dim); box-shadow: inset 0 0 12px #4fb4ff22; }
 
 /* ============================================================
