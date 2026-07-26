@@ -2145,6 +2145,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1);
     ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: card.star === "trash" ? "vanish" : "discard" });
     if (tryNullSpell(g, ctx, card)) { p.discard.push(card); return; } // negated → consumed, effect nullified
+    p.uses[card.id] = (p.uses[card.id] || 0) + 1;             // game-long usage count (card analytics)
     if (card.star === "trash") { rmz(p).push(card); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 이 카드 폐기`, `<span class="t">${p.name}</span> ${cn(card)} → このカードを廃棄`); }
     else if (card.star === "chest") {
       p.discard.push(card);
@@ -2168,7 +2169,9 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (summonBlockedLow(g, p, card)) { ctx.log(`  └ <span class="dmg">봉쇄령</span>: 코스트 ${card.cost} 몬스터 소환 불가`, `  └ <span class="dmg">封鎖令</span>: コスト ${card.cost} のモンスター召喚不可`); return; }
     if (!summonReqMet(p, card)) { ctx.log(`  └ <span class="dmg">소환 조건 미충족</span>: ${cn(card)}`, `  └ <span class="dmg">召喚条件を満たしていない</span>: ${cn(card)}`); return; }
     if (p.field.length >= FIELD_MAX) { ctx.log(`  └ <span class="dmg">몬스터 존이 가득 찼습니다 (최대 ${FIELD_MAX})</span>`, `  └ <span class="dmg">モンスターゾーンが満杯です (最大 ${FIELD_MAX})</span>`); return; }
-    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1); summonMonster(g, ctx, p, card); return;
+    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1);
+    p.uses[card.id] = (p.uses[card.id] || 0) + 1;             // game-long usage count (card analytics — monsters too)
+    summonMonster(g, ctx, p, card); return;
   }
   if (card.t === "spell") {
     const o0 = g.players[1 - g.cur];

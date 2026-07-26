@@ -104,9 +104,10 @@ export async function handleAuth(env: Env, req: Request, path: string): Promise<
 
   if (path === "/auth/me") {
     const user = await getUser(env, req);
-    // daily activity mark (retention analytics) — one row per user per day
+    // daily activity mark (retention analytics) — one row per user per KST day
+    // (operator's calendar; admin dashboard groups all days in KST too)
     if (user) {
-      const day = new Date().toISOString().slice(0, 10);
+      const day = new Date(Date.now() + 9 * 3600_000).toISOString().slice(0, 10);
       await env.DB.prepare(`INSERT OR IGNORE INTO user_days (user_id, day) VALUES (?,?)`).bind(user.id, day).run().catch(() => { /* best effort */ });
     }
     return json(env, { user });

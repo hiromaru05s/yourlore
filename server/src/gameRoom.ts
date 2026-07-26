@@ -52,6 +52,9 @@ interface RoomData {
   previewDone: boolean;
   startReady: [boolean, boolean];
   initSent: [boolean, boolean];
+  /** ms epoch when the room was provisioned — recorded as matches.created_at so
+      the admin dashboard can chart real game duration (ended_at − created_at). */
+  startedAt: number;
 }
 
 const TURN_MS_RANKED = 50000; // ranked: tighter clock
@@ -105,6 +108,7 @@ export class GameRoom {
         previewDone: r.previewDone ?? true, // pre-existing rooms are already in-game → no preview
         startReady: r.startReady ?? [false, false],
         initSent: r.initSent ?? [true, true],
+        startedAt: r.startedAt ?? Date.now(), // old blobs: degrade to duration≈0 (excluded by admin query)
       };
     }
     return this.room;
@@ -139,6 +143,7 @@ export class GameRoom {
         previewDone: !(body.ranked ?? false), // ranked → run the 15s market preview; else start on ready
         startReady: [false, false],
         initSent: [false, false],
+        startedAt: Date.now(),
       };
       this.persist();
       void this.state.storage.setAlarm(this.room.joinBy!).catch(() => { /* best effort */ });
@@ -436,7 +441,7 @@ export class GameRoom {
     const buysOf = (s: Side) => { try { return JSON.stringify(room.game.players[s].buys ?? {}); } catch { return "{}"; } };
     const matchRow = (winnerId: string | null) =>
       this.env.DB.prepare(`INSERT INTO matches (id, player_a, player_b, winner, mode, created_at, ended_at, cards_a, cards_b, turns, buys_a, buys_b, bver) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`)
-        .bind(crypto.randomUUID(), room.players[0].id, room.players[1].id, winnerId, room.ranked ? "ranked" : "online", Date.now(), Date.now(), usesOf(0), usesOf(1), room.game.turn ?? null, buysOf(0), buysOf(1), BALANCE_VERSION);
+        .bind(crypto.randomUUID(), room.players[0].id, room.players[1].id, winnerId, room.ranked ? "ranked" : "online", room.startedAt ?? Date.now(), Date.now(), usesOf(0), usesOf(1), room.game.turn ?? null, buysOf(0), buysOf(1), BALANCE_VERSION);
     // push each connected player their own MMR before/after so the result screen can show ±delta
     const sendRank = (outcome: Record<string, { before: number; after: number }>): void => {
       for (const s of [0, 1] as Side[]) {
