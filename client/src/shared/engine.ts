@@ -200,8 +200,9 @@ export function createGame(opts: CreateOpts): ReduceResult {
   const second = (1 - start) as Side;
   g.players[start].hp = 35; g.players[start].maxHp = 35;
   g.players[second].hp = 42; g.players[second].maxHp = 42;
-  // STANDARD market: 8 DISTINCT random cards of cost 1–4 (mixed types, 스타팅 전용 제외)
-  const lowAvail = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 4 && !DB[id].noShop);
+  // STANDARD market: 10 DISTINCT random cards of cost 1–6 (mixed types, 스타팅 전용 제외)
+  // v20: 1–4 → 1–6 — 저코만 나오면 구조적으로 어그로 판이 과다해져 상한 확대
+  const lowAvail = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 6 && !DB[id].noShop);
   g.market = [];
   while (g.market.length < 10 && lowAvail.length) g.market.push(inst(g, lowAvail.splice(randInt(g, lowAvail.length), 1)[0]));
 
@@ -1713,8 +1714,8 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       }
       break;
     }
-    case "MARKET_CRISIS": { // 경제 위기: 고정 마켓 전체 갱신
-      const lowAvail = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 4 && !DB[id].noShop);
+    case "MARKET_CRISIS": { // 경제 위기: 고정 마켓 전체 갱신 (v20: 1–6코)
+      const lowAvail = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 6 && !DB[id].noShop);
       const nextMk: CardInst[] = [];
       const availMk = lowAvail.slice();
       while (nextMk.length < 10 && availMk.length) nextMk.push(inst(g, availMk.splice(randInt(g, availMk.length), 1)[0]));

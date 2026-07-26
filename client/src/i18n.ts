@@ -156,7 +156,7 @@ const D: Record<string, Entry> = {
   "game.deck": { ko: "덱", ja: "デッキ", en: "Deck" },
   "game.discard": { ko: "묘지", ja: "墓地", en: "Graveyard" },
   "game.std": { ko: "고정 마켓", ja: "固定マーケット", en: "Market" },
-  "game.std.meta": { ko: "매 게임 랜덤 · 1~4 마나", ja: "毎ゲームランダム · 1~4マナ", en: "Random each game · 1-4 mana" },
+  "game.std.meta": { ko: "매 게임 랜덤 · 1~6 마나", ja: "毎ゲームランダム · 1~6マナ", en: "Random each game · 1-6 mana" },
   "game.supply": { ko: "제시 마켓", ja: "提示マーケット", en: "Offer" },
   "game.supply.opp": { ko: "상대 제시", ja: "相手の提示", en: "Opponent's offer" },
   "game.refresh.suffix": { ko: "매 턴 갱신", ja: "毎ターン更新", en: "refreshes each turn" },

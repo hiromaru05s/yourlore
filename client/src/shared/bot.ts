@@ -243,7 +243,19 @@ export const BOT_DECKS: BotDeck[] = [
     cards: ["GHOST", "GHOST", "TRUMPET", "GUILD_HALL", "FLAME", "STARTER_TRASH", "STARTER_CHEST", "STARTER_CHEST"],
     tune: { minBuyEarly: 10, minBuy: 15, chestTurn: 5 },
   },
+  { // GAMBLER RAMP (v20) — 도박꾼 3장으로 마나·최대체력을 불리고 큰 구매로 전환. 램프처럼 높은 구매 하한.
+    name: "BOT · GAMBLER",
+    cards: ["GAMBLER", "GAMBLER", "GAMBLER", "STARTER_TRASH", "STARTER_TRASH", "STARTER_TRASH", "STARTER_CHEST", "STARTER_CHEST"],
+    tune: { minBuyEarly: 12, minBuy: 17, chestTurn: 6 },
+  },
+  { // ELF TEMPO (v20) — 하프 엘프 초반 보드 + 쉼터로 세계수 코스트 0 각. 밸런스형 구매.
+    name: "BOT · ELF",
+    cards: ["ELF_HAVEN", "HALF_ELF", "HALF_ELF", "STARTER_TRASH", "STARTER_TRASH", "STARTER_TRASH", "STARTER_CHEST", "STARTER_CHEST"],
+    tune: { minBuyEarly: 10, minBuy: 15, chestTurn: 5 },
+  },
 ];
+// v20 A/B (greedy, 기존 3덱 필드 상대): GAMBLER 70% 채택 · ELF 46% 채택(아키타입 다양성)
+// 탈락: TRUMPET 더블 템포 30%(나팔 스타터 승률은 상관관계였음) · MIMIC 41% · 순정 컬덱 45%
 /** Roll a random archetype for a new bot game (caller supplies the RNG roll in [0,1)). */
 export function pickBotDeck(rnd: number = Math.random()): BotDeck {
   return BOT_DECKS[Math.min(BOT_DECKS.length - 1, Math.max(0, Math.floor(rnd * BOT_DECKS.length)))];

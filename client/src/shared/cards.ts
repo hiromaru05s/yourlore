@@ -1321,6 +1321,14 @@ const PATCH19: Record<string, Partial<CardDef>> = {
 };
 for (const id19 of Object.keys(PATCH19)) { if (DB[id19]) Object.assign(DB[id19], PATCH19[id19]); }
 
+// ============================================================
+// BALANCE v20 — 고정 마켓 1~6코 확대(engine) + 신성한 성벽 재너프
+// ============================================================
+const PATCH20: Record<string, Partial<CardDef>> = {
+  GM8_1: { atk: 4, def: 11 }, // 신성한 성벽 6/12 → 4/11 (v19 너프에도 승률 1위 유지)
+};
+for (const id20 of Object.keys(PATCH20)) { if (DB[id20]) Object.assign(DB[id20], PATCH20[id20]); }
+
 // English localization (names/texts) — applied last so it reflects final balance patches
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 
@@ -1381,7 +1389,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v19"; // v19: 데이터 기반 — 상위 몬스터 10종 스탯 너프 + 수레바퀴(자해5)/유령(2뎀) 버프 + 보살핌12/머쉬룸0공/선견지명10/중급암살자8공
+export const BALANCE_VERSION = "v20"; // v20: 고정 마켓 코스트 1~4 → 1~6 확대(어그로 편중 완화) + 신성한 성벽 4/11
+// v19: 데이터 기반 — 상위 몬스터 10종 스탯 너프 + 수레바퀴(자해5)/유령(2뎀) 버프 + 보살핌12/머쉬룸0공/선견지명10/중급암살자8공
 // v18: 마법 조정 — GS8_0 14뎀, GS10_3 6드로+최대체력3, 룬파열 코스트8캡, 명상 4/4, 흡혈술식 3코, 오버로드 라이더 제거, 예리함 -1코
 // v17: 함정 리밸런스 — 시전코스트 전면 1(정보 누출 차단) + 구매코스트 재정렬(무효<파괴 위계)
 // v16: 엘프의 쉼터 코스트 1→3 너프
