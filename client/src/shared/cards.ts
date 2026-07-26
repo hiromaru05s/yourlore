@@ -1278,6 +1278,20 @@ for (const tid of Object.keys(DB)) {
   if (tc.textJa) tc.textJa = tc.textJa.replace(/\s*\(発動\d+\)/, "");
 }
 
+// ============================================================
+// BALANCE v18 — 마법 조정 (전수 검토안 A 반영)
+// ============================================================
+const PATCH18: Record<string, Partial<CardDef>> = {
+  GS8_0: { val: 14, text: "상대 체력에 14 데미지 · 사용 시 50%로 상대 덱 맨 위 1장 제외", textJa: "相手の体力に14ダメージ · 使用時50%で相手のデッキトップ1枚を除外" }, // 8코 번 효율 최악(11뎀) → 14뎀
+  GS10_3: { val: 6, val2: 3, text: "카드 6장 드로우 + 최대 체력 +3 (시전 1)", textJa: "カード6枚ドロー + 最大体力+3 (発動1)" }, // GS7_3 하위호환 해소
+  S15: { cap: 8, text: "코스트 8 이하의 적 몬스터 1체를 파괴", textJa: "コスト8以下の敵モンスター1体を破壊" }, // 3코 만능 제거 → 대형(알·신수·킹급) 제외
+  MEDITATE: { cost: 4, play: 4, text: "이번 턴에 다른 카드를 플레이하지 않았을 경우에만 발동 가능. 최대 체력의 80%까지 체력 회복", textJa: "このターンに他のカードをプレイしていない場合のみ発動可能。最大体力の80%まで回復" }, // 구매2·시전3 → 4/4
+  BLOOD_SHIELD: { cost: 3 }, // 자해 무효 스위치가 1코 → 3코
+  S7: { text: "자신 몬스터 전체 공격 +3(이번 턴)", textJa: "自分のモンスター全体の攻撃+3(このターン)" }, // 오버로드: 최대 체력 +2 라이더 제거
+  GS5_4: { cost: 4 }, GS6_4: { cost: 5 }, GS7_4: { cost: 6 }, // 예리함(단일 1턴 버프) 라인 일괄 -1코
+};
+for (const id18 of Object.keys(PATCH18)) { if (DB[id18]) Object.assign(DB[id18], PATCH18[id18]); }
+
 // English localization (names/texts) — applied last so it reflects final balance patches
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 
@@ -1338,7 +1352,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v17"; // v17: 함정 리밸런스 — 시전코스트 전면 1(정보 누출 차단) + 구매코스트 재정렬(무효<파괴 위계)
+export const BALANCE_VERSION = "v18"; // v18: 마법 조정 — GS8_0 14뎀, GS10_3 6드로+최대체력3, 룬파열 코스트8캡, 명상 4/4, 흡혈술식 3코, 오버로드 라이더 제거, 예리함 -1코
+// v17: 함정 리밸런스 — 시전코스트 전면 1(정보 누출 차단) + 구매코스트 재정렬(무효<파괴 위계)
 // v16: 엘프의 쉼터 코스트 1→3 너프
 // v15: 러스트 머쉬룸 1/0 너프 + 도박꾼/전설의 도박꾼 + 엘프 아키타입(쉼터·하프/엘프/다크/하이/엘더 킹·세계수의 보살핌)
 // v14: 피의 마법 리워크 — 블러드 드로우(자해15·6드로우), 블러드 샤워(자해15·상대 영구마법/함정 2장 선택 파괴)

@@ -1452,7 +1452,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
 // custom (bespoke) spell effects — dispatched by card id
 // ============================================================
 const CUSTOM_SPELLS = new Set<string>([
-  "S1", "S5", "S7", "AMA_KEEP", "ND2", "ND3", "ND5", "GS5_0", "GS5_2", "GS6_0", "GS6_2", "GS6_3",
+  "S1", "S5", "S7", "AMA_KEEP", "ND2", "ND3", "ND5", "GS5_0", "GS5_2", "GS6_0", "GS6_2", "GS6_3", "GS10_3",
   "GS7_0", "GS7_2", "GS8_0", "GS8_2", "GS8_3", "GS8_4", "GS8_5", "GS9_0", "GS9_2", "GS10_0", "GS10_1", "GS10_2",
   "HANDRESET", "TIMEWARP", "GAMBLE", "DICE8",
   "RUNE1", "RUNE2", "RUNE3", "GENESIS_SONG", "GENESIS_MAGIC",
@@ -1477,10 +1477,9 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       o.supplyShrink = 1;
       ctx.log(`${tag(p, card)} 다음 상대 제시 2장으로 축소`, `${tag(p, card)} 次の相手の提示を2枚に縮小`);
       break;
-    case "S7": // 오버로드: team atk this turn + max hp +2
+    case "S7": // 오버로드: team atk this turn (v18: 최대 체력 +2 라이더 제거)
       p.field.forEach((m) => (m.tempAtk = (m.tempAtk || 0) + (v || 3)));
-      p.maxHp += 2; p.hp += 2; ctx.ev.push({ type: "heal", player: side(g, p), amount: 2 });
-      ctx.log(`${tag(p, card)} 아군 전체 공격 +${v || 3}, 최대 체력 +2`, `${tag(p, card)} 味方全体の攻撃+${v || 3}, 最大体力+2`);
+      ctx.log(`${tag(p, card)} 아군 전체 공격 +${v || 3}`, `${tag(p, card)} 味方全体の攻撃+${v || 3}`);
       break;
     case "ND2": { const n = ctx.drawN(p, v || 2); ctx.heal(p, v2 || 2); ctx.log(`${tag(p, card)} ${n}장 드로우, 체력 +${v2 || 2}`, `${tag(p, card)} ${n}枚ドロー, 体力+${v2 || 2}`); break; }
     case "ND3": { let n = ctx.drawN(p, v || 3); if (chance(g, 30)) n += ctx.drawN(p, 2); ctx.log(`${tag(p, card)} ${n}장 드로우`, `${tag(p, card)} ${n}枚ドロー`); break; }
@@ -1492,7 +1491,8 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case "GS6_3": { let n = ctx.drawN(p, v || 4); if (p.maxHp >= 55) n += ctx.drawN(p, 2); ctx.log(`${tag(p, card)} ${n}장 드로우`, `${tag(p, card)} ${n}枚ドロー`); break; }
     case "GS7_0": ctx.dealDamage(o, 16, cn(card), cn(card)); if (chance(g, 20)) { p.maxMana = Math.max(1, p.maxMana - 1); ctx.log(`  └ 20%: 자신 최대 마나 -1`, `  └ 20%: 自分の最大マナ-1`); } break;
     case "GS7_2": ctx.heal(p, 13); ctx.log(`${tag(p, card)} 체력 13 회복`, `${tag(p, card)} 体力13回復`); if ((p.uses["GS7_2"] || 0) === 3) { p.defendHeal += 5; ctx.log(`  └ 3회째! 이후 피격 시마다 체력 +5`, `  └ 3回目! 以降 被攻撃ごとに体力+5`); } break;
-    case "GS8_0": ctx.dealDamage(o, 11, cn(card), cn(card)); if (chance(g, 50) && o.deck.length) { const ex = o.deck.pop()!; o.exile.push({ card: ex, turns: 999 }); ctx.log(`  └ 50%: 상대 덱 맨 위 1장 제외`, `  └ 50%: 相手のデッキトップ1枚を除外`); } break;
+    case "GS8_0": ctx.dealDamage(o, v || 14, cn(card), cn(card)); if (chance(g, 50) && o.deck.length) { const ex = o.deck.pop()!; o.exile.push({ card: ex, turns: 999 }); ctx.log(`  └ 50%: 상대 덱 맨 위 1장 제외`, `  └ 50%: 相手のデッキトップ1枚を除外`); } break;
+    case "GS10_3": { const n = ctx.drawN(p, v || 6); p.maxHp += v2 || 3; ctx.log(`${tag(p, card)} ${n}장 드로우, 최대 체력 +${v2 || 3} (${p.maxHp})`, `${tag(p, card)} ${n}枚ドロー, 最大体力+${v2 || 3} (${p.maxHp})`); break; }
     case "GS8_2": ctx.heal(p, 14); ctx.log(`${tag(p, card)} 체력 14 회복`, `${tag(p, card)} 体力14回復`); if (p.maxMana <= 10) { const before = p.hp; p.hp = p.maxHp; if (p.hp > before) ctx.ev.push({ type: "heal", player: side(g, p), amount: p.hp - before }); ctx.log(`  └ 최대 마나 10 이하 → 체력 완전 회복`, `  └ 最大マナ10以下 → 体力全回復`); } break;
     case "GS8_3": { const n = ctx.drawN(p, v || 5); ctx.log(`${tag(p, card)} ${n}장 드로우`, `${tag(p, card)} ${n}枚ドロー`); if (chance(g, 60)) destroyRandomEnemy(g, ctx, o); break; }
     case "GS8_4": p.field.forEach((m) => { m.tempAtk = (m.tempAtk || 0) + (v || 13); m.atkMod = (m.atkMod || 0) + 2; }); ctx.log(`${tag(p, card)} 아군 전체 공격 +${v || 13}(이번 턴) + 공격 +2(지속)`, `${tag(p, card)} 味方全体の攻撃+${v || 13}(今ターン) + 攻撃+2(持続)`); break;
@@ -2186,6 +2186,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if ((card.id === "DISARM1" || card.id === "DISARM2" || card.id === "DISARM3") && o0.enchants.length === 0) { ctx.log("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); return; }
     if (card.id === "BLOOD_SECRET" && !p.field.some((m) => isVampFamily(m))) { ctx.log("  └ 자신 필드에 '흡혈귀' 계열 몬스터가 없습니다", "  └ 自分の場に「吸血鬼」系列モンスターがいません"); return; }
     if (card.id === "BLOOD2" && o0.traps.length + o0.enchants.length === 0) { ctx.log("  └ 파괴할 상대 영구마법·세트 함정이 없습니다", "  └ 破壊する相手の永続魔法・セットトラップがありません"); return; }
+    if (card.act === "destroyMon" && card.cap && !o0.field.some((m) => m.cost <= card.cap!)) { ctx.log(`  └ 코스트 ${card.cap} 이하의 대상 몬스터가 없습니다`, `  └ コスト${card.cap}以下の対象モンスターがいません`); return; }
     if (card.id === "CHOSEN_AREA" && cullExiled(p) < 25) { ctx.log(`  └ 게임에서 제외된 컬이 ${cullExiled(p)}장 — 25장 이상이어야 발동 가능`, `  └ ゲームから除外されたカルが${cullExiled(p)}枚 — 25枚以上で発動可能`); return; }
     if ((card.id === "DECAY_CRAFT" || card.id === "MAJESTY_RITE") && p.field.length === 0) { ctx.log("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); return; }
     if (card.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) { ctx.log("  └ 자신 필드에 이미 '선견지명'이 있습니다", "  └ 自分の場に既に「先見の明」があります"); return; }
@@ -2268,12 +2269,14 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     }
     if (a === "destroyMon" || a === "weaken") {
       const o = g.players[1 - g.cur];
-      if (!o.field.length) { ctx.log("  └ 대상 적 몬스터 없음", "  └ 対象の敵モンスターなし"); return; }
+      // 룬 파열(v18): cap 이하 코스트 몬스터만 대상
+      const pool = a === "destroyMon" && card.cap ? o.field.filter((m) => m.cost <= card.cap!) : o.field;
+      if (!pool.length) { ctx.log("  └ 대상 적 몬스터 없음", "  └ 対象の敵モンスターなし"); return; }
       g.pending = {
         kind: "oppMon",
-        hint: a === "destroyMon" ? "파괴할 적 몬스터 선택" : `방어 -${v} 할 적 몬스터 선택`,
-        hintJa: a === "destroyMon" ? "破壊する敵モンスターを選択" : `防御 -${v} する敵モンスターを選択`,
-        reason: a, allowCancel: false, data: { val: v, sourceId: card.id },
+        hint: a === "destroyMon" ? (card.cap ? `파괴할 적 몬스터 선택 (코스트 ${card.cap} 이하)` : "파괴할 적 몬스터 선택") : `방어 -${v} 할 적 몬스터 선택`,
+        hintJa: a === "destroyMon" ? (card.cap ? `破壊する敵モンスターを選択 (コスト${card.cap}以下)` : "破壊する敵モンスターを選択") : `防御 -${v} する敵モンスターを選択`,
+        reason: a, allowCancel: false, data: card.cap && a === "destroyMon" ? { val: v, sourceId: card.id, maxCost: card.cap } : { val: v, sourceId: card.id },
       };
       ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
     }
@@ -2341,6 +2344,8 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     if (pending.reason === "defDown" || pending.reason === "weaken") { tm.defMod = (tm.defMod || 0) - (d.val || 0); ctx.log(`  └ ${cn(tm)} 의 방어 -${d.val}`, `  └ ${cn(tm)} の防御 -${d.val}`); }
     else if (pending.reason === "atkDown") { tm.atkMod = (tm.atkMod || 0) - (d.val || 0); ctx.log(`  └ ${cn(tm)} 의 공격 -${d.val}`, `  └ ${cn(tm)} の攻撃 -${d.val}`); }
     else if (pending.reason === "destroyMon") {
+      const mc = (d as { maxCost?: number }).maxCost;
+      if (mc != null && tm.cost > mc) { g.pending = pending; ctx.log(`  └ 코스트 ${mc} 이하 몬스터만 대상 가능`, `  └ コスト${mc}以下のモンスターのみ対象可能`); return; }
       const src = d.sourceId && DB[d.sourceId] ? cn(DB[d.sourceId]) : null;
       ctx.log(
         src ? `<span class="t">${p.name}</span> ${src} → ${cn(tm)} 파괴` : `<span class="t">${p.name}</span> → ${cn(tm)} 파괴`,
@@ -2348,8 +2353,8 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       );
       ctx.destroyMonster(o, tm);
       const left = ((d.val as number) || 0) - 1;
-      if (left >= 1 && o.field.length > 0) {
-        g.pending = { kind: "oppMon", hint: `파괴할 적 몬스터 선택 (${left}체 남음)`, hintJa: `破壊する敵モンスターを選択 (残り${left}体)`, reason: "destroyMon", allowCancel: false, data: { val: left, sourceId: d.sourceId } };
+      if (left >= 1 && o.field.some((m2) => mc == null || m2.cost <= mc)) {
+        g.pending = { kind: "oppMon", hint: `파괴할 적 몬스터 선택 (${left}체 남음)`, hintJa: `破壊する敵モンスターを選択 (残り${left}体)`, reason: "destroyMon", allowCancel: false, data: mc != null ? { val: left, sourceId: d.sourceId, maxCost: mc } : { val: left, sourceId: d.sourceId } };
         ctx.ev.push({ type: "needTarget", pending: g.pending });
       }
     }

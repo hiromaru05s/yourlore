@@ -106,6 +106,7 @@ function candidates(g: GameState): Action[] {
     if (pend.kind === "oppMon") o.field
       .filter((m) => !(hasPassive(m, "aura") && pend.reason !== "attack"))
       .filter((m) => !(pend.reason === "decayMark" && m.hatch != null)) // 부패 카운터: 알 제외
+      .filter((m) => !(pend.reason === "destroyMon" && pend.data?.maxCost != null && m.cost > (pend.data.maxCost as number))) // 룬 파열: 코스트 캡
       .forEach((m) => push(m.uid));
     else if (pend.kind === "myMon") {
       // 지원 나팔(exclude) / 고급 부화기(알만) / 비술(흡혈귀만) / v11 패시브 부여 제약 준수 — 아니면 재선택 무한루프
@@ -355,6 +356,7 @@ export function greedyDecide(g: GameState): Action {
     if (c.id === "HERMIT" && p.field.length > 0) return false;
     // 폐기 경제 카드: 대상이 있어야 시전
     if (c.act === "exilePick" && p.discard.length === 0) return false;
+    if (c.act === "destroyMon" && c.cap && !o.field.some((m) => m.cost <= c.cap!)) return false; // 룬 파열: 코스트 캡 대상 필요
     if (c.id === "WALLBREAK1" && !o.field.some((m) => effAtk(o, m) <= 1)) return false;
     if (c.id === "WALLBREAK2" && !o.field.some((m) => effAtk(o, m) <= 2)) return false;
     if (c.id === "SNIPE1" && !o.field.some((m) => effDef(o, m) <= 1)) return false;
@@ -570,8 +572,9 @@ function autoTarget(g: GameState): Action {
         .sort((a, b) => (effAtk(o, b) + b.def!) - (effAtk(o, a) + a.def!))[0];
       return { type: "chooseTarget", uid: t0 ? t0.uid : null };
     }
-    // destroy / debuff → hit the most valuable enemy monster (아우라 몬스터는 대상 불가)
-    const t = [...o.field].filter((m) => !hasPassive(m, "aura")).sort((a, b) => (effAtk(o, b) + b.def!) - (effAtk(o, a) + a.def!))[0];
+    // destroy / debuff → hit the most valuable enemy monster (아우라 몬스터는 대상 불가 · 룬 파열 코스트 캡 준수)
+    const mc0 = pending.reason === "destroyMon" ? (pending.data?.maxCost as number | undefined) : undefined;
+    const t = [...o.field].filter((m) => !hasPassive(m, "aura") && (mc0 == null || m.cost <= mc0)).sort((a, b) => (effAtk(o, b) + b.def!) - (effAtk(o, a) + a.def!))[0];
     return { type: "chooseTarget", uid: t ? t.uid : null };
   }
   if (pending.kind === "myMon") {

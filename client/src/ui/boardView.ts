@@ -244,6 +244,7 @@ export class GameView {
       const targetableMon = targetableZone
         && !(pending!.kind === "oppMon" && pending!.reason !== "attack" && hasPassive(m, "aura"))
         && !(pending!.kind === "oppMon" && pending!.reason === "decayMark" && m.hatch != null) // 부패 카운터: 알 제외
+        && !(pending!.kind === "oppMon" && pending!.reason === "destroyMon" && pending!.data?.maxCost != null && m.cost > (pending!.data.maxCost as number)) // 룬 파열: 코스트 캡
         && !(pending!.kind === "myMon" && pending!.reason === "incubate" && m.hatch == null)
         && !(pending!.kind === "myMon" && pending!.reason === "chosenMage" && (m.id !== "CHOSEN_MAGE" || ((pending!.data?.fired as string[] | undefined) ?? []).includes(m.uid))) // 마법사만 발동 가능
         && !(pending!.kind === "myMon" && pending!.reason === "grantDecay" && hasPassive(m, "decay")) // 이미 부패 보유
