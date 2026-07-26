@@ -156,7 +156,7 @@ const R: [RegExp, string][] = [
   [/카운트 (\d+)\/3/g, "count $1/3"],
   [/발동! 상대에게 14 데미지/g, "triggers! 14 damage to the opponent"],
   [/미믹 파티 개최 — (.+?) 필드에 1마리, (.+?) 필드에 2마리/g, "Mimic Party! 1 Mimic on $1's field, 2 on $2's"],
-  [/대가: 최대 마나 -1 \((\d+)\), 자신에게 8 데미지/g, "price: max mana -1 ($1), take 8 damage"],
+  [/대가: 최대 마나 -1 \((\d+)\), 자신에게 (\d+) 데미지/g, "price: max mana -1 ($1), take $2 damage"],
   [/운명의 수레바퀴 — (.+?) 의 결과를 다시 굴릴 수 있다/g, "Wheel of Fate — you may reroll $1's result"],
   [/결과를 되감고 다시 굴린다…/g, "rewinding the result and rerolling…"],
   [/ 은\(는\) 게임에서 제외된다/g, " is exiled from the game"],

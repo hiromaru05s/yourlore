@@ -628,13 +628,13 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
         pl.maxHp += amt; ctx.heal(pl, amt);
         ctx.log(`<span class="t">${cn(e.card)}</span> 최대 체력 +${amt} (${pl.maxHp})`, `<span class="t">${cn(e.card)}</span> 最大体力 +${amt} (${pl.maxHp})`);
       }
-      // 세계수의 보살핌(토큰): 자신의 턴 시작마다 최대 체력 +15 (증가만 — 회복 없음)
+      // 세계수의 보살핌(토큰): 자신의 턴 시작마다 최대 체력 +12 (증가만 — 회복 없음) (v19: 15→12)
       if (e.card.ench === "worldCare" && ownerTurn && !g.over) {
-        pl.maxHp += 15;
-        ctx.log(`<span class="t">${cn(e.card)}</span> 최대 체력 +15 (${pl.maxHp})`, `<span class="t">${cn(e.card)}</span> 最大体力 +15 (${pl.maxHp})`);
+        pl.maxHp += 12;
+        ctx.log(`<span class="t">${cn(e.card)}</span> 최대 체력 +12 (${pl.maxHp})`, `<span class="t">${cn(e.card)}</span> 最大体力 +12 (${pl.maxHp})`);
       }
-      // 선견지명: 최대 마나 9 이상이 되면 +2 후 자괴 (필드를 떠나면 게임에서 제외)
-      if (e.card.ench === "foresight" && !g.over && pl.maxMana >= 9) {
+      // 선견지명: 최대 마나 10 이상이 되면 +2 후 자괴 (필드를 떠나면 게임에서 제외) (v19: 9→10)
+      if (e.card.ench === "foresight" && !g.over && pl.maxMana >= 10) {
         pl.maxMana += 2;
         ctx.log(`<span class="t">${cn(e.card)}</span> 발현! 최대 마나 +2 (${pl.maxMana}) — 이 카드는 게임에서 제외`, `<span class="t">${cn(e.card)}</span> 発現！最大マナ+2 (${pl.maxMana}) — このカードはゲームから除外`);
         rmz(pl).push(e.card);
@@ -2227,12 +2227,12 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
         g.players.forEach((pl) => pl.field.forEach((mm) => (mm.atkMod = (mm.atkMod || 0) - 2)));
         ctx.log(`  └ 양 필드의 모든 몬스터 공격 -2`, `  └ 両方の場の全モンスター攻撃-2`);
       }
-      // 운명의 수레바퀴: 시전 대가 (최대 마나 -1, 자신 8뎀 — 마법 데미지로 취급)
+      // 운명의 수레바퀴: 시전 대가 (최대 마나 -1, 자신 5뎀 — 마법 데미지로 취급) (v19: 8→5)
       if (card.ench === "fateWheel") {
         p.maxMana = Math.max(1, p.maxMana - 1);
-        ctx.log(`  └ 대가: 최대 마나 -1 (${p.maxMana}), 자신에게 8 데미지`, `  └ 代価: 最大マナ-1 (${p.maxMana}), 自分に8ダメージ`);
+        ctx.log(`  └ 대가: 최대 마나 -1 (${p.maxMana}), 자신에게 5 데미지`, `  └ 代価: 最大マナ-1 (${p.maxMana}), 自分に5ダメージ`);
         spellDepth++;
-        try { ctx.dealDamage(p, 8, cn(card), cn(card)); } finally { spellDepth--; }
+        try { ctx.dealDamage(p, 5, cn(card), cn(card)); } finally { spellDepth--; }
       }
       // 시련의 영역: 시전 대가 (자신 6뎀 — 마법 데미지로 취급)
       if (card.ench === "trialArea") {
@@ -2581,7 +2581,7 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
       if (g2.players[1 - s].maxMana > pre[1 - s].mm) hits++;
       if (g2.players[1 - s].maxHp > pre[1 - s].mh) hits++;
       if (hits > 0) {
-        const dmg = 3 * hits * ghosts;
+        const dmg = 2 * hits * ghosts; // v19: 3 → 2
         ctx2.log(`  └ <span class="dmg">유령의 원한</span>: 상대의 성장에 ${owner.name} 이(가) ${dmg} 데미지`, `  └ <span class="dmg">幽霊の怨念</span>: 相手の成長に ${owner.name} が ${dmg} ダメージ`);
         ctx2.dealDamage(owner, dmg, "유령", "幽霊");
       }
