@@ -81,6 +81,7 @@ const R: [RegExp, string][] = [
   [/자신에게 7 데미지, 최대 마나 -1/g, "take 7 damage, max mana -1"],
   [/자신 필드에 이미 '선견지명'이 있습니다/g, "you already have 'Foresight' on your field"],
   [/통하지 않음/g, "no effect"],
+  [/몬스터 (\d+)체의 체력이 1이 되었다/g, "$1 monster(s) reduced to 1 HP"],
   [/ 에 (\d+) 데미지/g, ": $1 damage"],
   [/\(체력 (\d+)\/(\d+)\)/g, "(HP $1/$2)"],
   [/\(체력 (\d+)\) 파괴/g, "(HP $1) destroyed"],

@@ -638,10 +638,10 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
         pl.maxHp += amt; ctx.heal(pl, amt);
         ctx.log(`<span class="t">${cn(e.card)}</span> 최대 체력 +${amt} (${pl.maxHp})`, `<span class="t">${cn(e.card)}</span> 最大体力 +${amt} (${pl.maxHp})`);
       }
-      // 세계수의 보살핌(토큰): 자신의 턴 시작마다 최대 체력 +12 (증가만 — 회복 없음) (v19: 15→12)
+      // 세계수의 보살핌(토큰): 자신의 턴 시작마다 최대 체력 +9 (증가만 — 회복 없음) (v19: 15→12, v26: 12→9)
       if (e.card.ench === "worldCare" && ownerTurn && !g.over) {
-        pl.maxHp += 12;
-        ctx.log(`<span class="t">${cn(e.card)}</span> 최대 체력 +12 (${pl.maxHp})`, `<span class="t">${cn(e.card)}</span> 最大体力 +12 (${pl.maxHp})`);
+        pl.maxHp += 9;
+        ctx.log(`<span class="t">${cn(e.card)}</span> 최대 체력 +9 (${pl.maxHp})`, `<span class="t">${cn(e.card)}</span> 最大体力 +9 (${pl.maxHp})`);
       }
       // 선견지명: 최대 마나 10 이상이 되면 +2 후 자괴 (필드를 떠나면 게임에서 제외) (v19: 9→10)
       if (e.card.ench === "foresight" && !g.over && pl.maxMana >= 10) {
@@ -1844,13 +1844,17 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       ctx.log(`${tag(p, card)} <span class="dmg">경제 위기!</span> 고정 마켓 10장 전부 갱신`, `${tag(p, card)} <span class="dmg">経済危機！</span> 固定マーケット10枚を全て更新`);
       break;
     }
-    case "SHATTER": { // 붕괴 진동: 자신 5뎀, 양측 모든 몬스터 방어 0(지속)
+    case "SHATTER": { // 붕괴 진동(v26): 자신 5뎀, 양측 모든 몬스터의 체력을 1로 (최대체력 1 + 누적 데미지 초기화 — 즉사 없음, 전원 유리몸)
       ctx.dealDamage(p, 5, cn(card), cn(card));
       if (!g.over) {
         let k = 0;
-        for (const pl of g.players) for (const mm of pl.field) { const d0 = effDef(pl, mm); if (d0 > 0) { mm.defMod = (mm.defMod || 0) - d0; k++; } }
-        recheckDeaths(g, ctx);
-        ctx.log(`${tag(p, card)} 몬스터 ${k}체의 방어를 0으로`, `${tag(p, card)} モンスター${k}体の防御を0に`);
+        for (const pl of g.players) for (const mm of pl.field) {
+          if (mm.hatch != null) continue; // 알은 내구도 시스템 — 제외
+          mm.defMod = (mm.defMod || 0) - (effDef(pl, mm) - 1); // effDef 플로어가 1이므로 정확히 1로
+          mm.dmg = 0;
+          k++;
+        }
+        ctx.log(`${tag(p, card)} 몬스터 ${k}체의 체력이 1이 되었다`, `${tag(p, card)} モンスター${k}体の体力が1になった`);
       }
       break;
     }
