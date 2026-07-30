@@ -2,6 +2,7 @@
 // LORE — game screen. Hosts a Local (vs bot) or Online controller.
 // ============================================================
 import type { Side } from "../shared/types";
+import type { BotDifficulty } from "../shared/bot";
 import type { App, Screen } from "../router";
 import { LocalController, type ControllerExits } from "../game/controller";
 import { TutorialController } from "../game/tutorial";
@@ -10,7 +11,7 @@ import { setMarketWatch, setMyAvatar, setMySleeve } from "../ui/boardView";
 import { setCoinProfiles } from "../game/controller";
 
 type GameOpts =
-  | { mode: "bot" }
+  | { mode: "bot"; difficulty?: BotDifficulty }
   | { mode: "tutorial" }
   | { mode: "online"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null; ranked?: boolean };
 
@@ -33,12 +34,12 @@ export function mountGame(app: App, opts: GameOpts): Screen {
   const exits: ControllerExits = {
     onHome: () => (opts.mode === "tutorial" ? app.tutorial() : app.home()),
     // 랭크전 "다시하기"는 랭크 큐로 돌아가야 한다 (노말 큐로 새던 버그 수정)
-    onRematch: () => (opts.mode === "bot" ? app.botGame() : opts.mode === "tutorial" ? app.tutorialGame() : opts.ranked ? app.rankedLobby() : app.onlineLobby()),
+    onRematch: () => (opts.mode === "bot" ? app.botGame(opts.difficulty) : opts.mode === "tutorial" ? app.tutorialGame() : opts.ranked ? app.rankedLobby() : app.onlineLobby()),
   };
 
   const ctrl =
     opts.mode === "bot"
-      ? new LocalController(root, exits, app.user?.display ?? "PLAYER 1", app.user?.deck ?? undefined)
+      ? new LocalController(root, exits, app.user?.display ?? "PLAYER 1", app.user?.deck ?? undefined, opts.difficulty ?? "hard")
       : opts.mode === "tutorial"
         ? new TutorialController(root, exits, app.user?.display ?? "PLAYER", {
             onCredits: (c) => { if (app.user) app.user.credits = c; },

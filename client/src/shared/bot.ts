@@ -1,92 +1,124 @@
 // ============================================================
-// LORE — bot AI. Pure: botDecide(state) -> single best Action.
+// LORE — bot AI. Pure: botDecide(state, difficulty) -> single best Action.
 // The controller applies it, then calls again until endTurn.
 //
-// Two layers:
-//  · greedyDecide — fast heuristic policy (break traps first, develop
-//    board, count penetration damage, disciplined buys).
-//  · botDecide    — rollout search on top: enumerates candidate actions,
-//    plays each one out to the end of the opponent's reply using the
-//    greedy policy, scores the result with an evaluation function whose
-//    weights were fit by logistic regression on 2000 self-play games,
-//    and deviates from greedy only when clearly better (margin).
-//    Rollouts use a perturbed RNG so the bot can never foresee real
-//    dice / draws. A/B: ~68% vs the pure greedy bot.
+// Layers:
+//  · greedyDecide — fast heuristic policy (break traps first, develop board,
+//    count penetration damage, disciplined buys). Strong; the ceiling for the
+//    easy/normal/hard tiers.
+//  · value-net search (HELL only) — enumerates candidate actions, plays each out
+//    to the end of the opponent's reply, and scores the resulting position with a
+//    learned value network (botNet). It deviates from greedy only when the net
+//    judges it clearly better (margin), averaged over determinized samples so it
+//    never reads hidden info. A/B vs the pure greedy (hard) bot: ~55%.
+//
+// Difficulty is otherwise a BLUNDER RATE — how often the bot throws away its best
+// move for a random legal one. Bot-vs-bot A/B (200 games/matchup, first player
+// alternated) gives a clean monotonic ladder:
+//   normal>easy 68% · hard>normal 64% · hell>hard ~55% · hell>easy 81%
+//  · easy   — blunders ~45% of moves → 초보자용
+//  · normal — blunders ~22% of moves
+//  · hard   — blunders ~8% of moves (best pure heuristic)
+//  · hell   — never blunders + value-net look-ahead search → 최강
 // ============================================================
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
 import { buyCost, cardValue, chestLocked, cullExiled, effAtk, effDef, glassBanActive, isVampFamily, playCost, reduce, summonReqMet } from "./engine";
+import { netEval, determinize } from "./botNet";
 import { DB, hasPassive } from "./cards";
 
-// ---------------- rollout search (the shipped bot) ----------------
-const MARGIN = 0.1;      // eval margin a deviation must beat greedy by
-const ROLLOUT_STEPS = 40;
+export type BotDifficulty = "easy" | "normal" | "hard" | "hell";
 
-export function botDecide(g: GameState): Action {
-  try {
-    const a = searchDecide(g);
-    if (a) return a;
-  } catch { /* engine hiccup → greedy fallback */ }
-  return greedyDecide(g);
-}
+const BLUNDER: Record<BotDifficulty, number> = { easy: 0.45, normal: 0.22, hard: 0.08, hell: 0 };
 
-function searchDecide(g: GameState): Action | null {
-  const s = g.cur as Side;
-  const base = greedyDecide(g);
-  const baseKey = JSON.stringify(base);
-  const cands = candidates(g).filter((a) => JSON.stringify(a) !== baseKey);
-  if (cands.length === 0) return base;
-  let best: Action = base;
-  let bestV = rollout(g, base, s) + MARGIN;
-  for (const a of cands) {
-    const v = rollout(g, a, s);
-    if (v > bestV) { bestV = v; best = a; }
+export function botDecide(g: GameState, diff: BotDifficulty = "hard"): Action {
+  const best = diff === "hell" ? hellDecide(g) : greedyDecide(g);
+  // blunder: with tier probability, discard the best move for a random legal one
+  const p = BLUNDER[diff];
+  if (p > 0 && Math.random() < p) {
+    const bestKey = JSON.stringify(best);
+    const cands = candidates(g).filter((a) => JSON.stringify(a) !== bestKey);
+    if (cands.length > 0) return cands[Math.floor(Math.random() * cands.length)];
   }
   return best;
 }
 
-/** Apply `a`, finish my turn + the opponent's reply with the greedy policy, evaluate. */
-function rollout(g: GameState, a: Action, s: Side): number {
+// ---------------- HELL: value-net guided rollout search ----------------
+const HELL_MARGIN = 0.02;  // net advantage a deviation must beat greedy by
+const HELL_ROLL = 40;      // max greedy steps per turn during a rollout
+const MCTS_SIMS = 16;      // root PUCT budget; enough for topK while evaluable
+const MCTS_TOPK = 8;       // complete legal actions are ranked, then narrowed
+const MCTS_CPUCT = 1.35;
+const LETHAL_DEPTH = 10;   // enough for spell/target chains + several attacks
+const LETHAL_NODES = 260;  // keep bot turns snappy even in wide late boards
+
+function hellDecide(g: GameState): Action {
+  if (g.pending) return greedyDecide(g); // let the greedy policy resolve targets/picks
+  try {
+    const s = g.cur as Side;
+    const base = greedyDecide(g);
+    const pool = rankedLegalActions(g, base).slice(0, MCTS_TOPK);
+    if (pool.length === 0) return base;
+    return rootPuct(g, s, pool, base);
+  } catch { return greedyDecide(g); } // engine hiccup → safe fallback
+}
+
+interface RootArm { a: Action; p: number; n: number; w: number }
+
+function rootPuct(g: GameState, s: Side, pool: { a: Action; prior: number }[], base: Action): Action {
+  const arms: RootArm[] = pool.map((x) => ({ a: x.a, p: x.prior, n: 0, w: 0 }));
+  const baseKey = JSON.stringify(base);
+  if (!arms.some((x) => JSON.stringify(x.a) === baseKey)) arms.unshift({ a: base, p: Math.max(1, actionPrior(g, base)), n: 0, w: 0 });
+  const psum = arms.reduce((t, x) => t + x.p, 0) || 1;
+  arms.forEach((x) => { x.p /= psum; });
+
+  for (let i = 0; i < MCTS_SIMS; i++) {
+    const totalN = arms.reduce((t, x) => t + x.n, 0);
+    let best = arms[0], bestU = -Infinity;
+    for (const arm of arms) {
+      const q = arm.n > 0 ? arm.w / arm.n : 0.5;
+      const u = q + MCTS_CPUCT * arm.p * Math.sqrt(totalN + 1) / (1 + arm.n);
+      if (u > bestU) { bestU = u; best = arm; }
+    }
+    const v = hellRollout(g, best.a, s);
+    best.n++;
+    best.w += v;
+  }
+
+  const baseArm = arms.find((x) => JSON.stringify(x.a) === baseKey);
+  const baseQ = baseArm && baseArm.n > 0 ? baseArm.w / baseArm.n : hellRollout(g, base, s);
+  let best = base, bestN = baseArm?.n ?? 0, bestQ = baseQ + HELL_MARGIN;
+  for (const arm of arms) {
+    if (arm.n === 0) continue;
+    const q = arm.w / arm.n;
+    if (arm.n > bestN || (arm.n === bestN && q > bestQ)) {
+      if (q >= baseQ + HELL_MARGIN || JSON.stringify(arm.a) === baseKey) {
+        best = arm.a; bestN = arm.n; bestQ = q;
+      }
+    }
+  }
+  return best;
+}
+
+/** Apply `a`, finish my turn + the opponent's reply greedily, score with the value net. */
+function hellRollout(g: GameState, a: Action, s: Side): number {
   const g2 = structuredClone(g);
-  g2.rng = (g2.rng ^ 0x9e3779b9) >>> 0; // decouple from the real RNG stream (no dice clairvoyance)
-  determinize(g2, s);                   // hide hidden info: sample it from public knowledge instead
+  g2.rng = (g2.rng ^ 0x9e3779b9) >>> 0; // decouple from the real RNG (no dice clairvoyance)
+  determinize(g2, s);                   // hide hidden info: sample from public knowledge
   let st = reduce(g2, a).state;
   // no-op guard: the engine refused the action before paying → never pick it
   if (a.type === "play" && !st.pending && !st.over &&
       st.players[s].mana === g.players[s].mana && st.players[s].hand.length === g.players[s].hand.length) return -Infinity;
   let steps = 0;
-  while (!st.over && st.cur === s && steps < ROLLOUT_STEPS) { st = reduce(st, greedyDecide(st)).state; steps++; }
+  while (!st.over && st.cur === s && steps < HELL_ROLL) { st = reduce(st, greedyDecide(st, false)).state; steps++; }
   steps = 0;
-  while (!st.over && st.cur !== s && steps < ROLLOUT_STEPS) { st = reduce(st, greedyDecide(st)).state; steps++; }
-  return evalState(st, s);
+  while (!st.over && st.cur !== s && steps < HELL_ROLL) { st = reduce(st, greedyDecide(st, false)).state; steps++; }
+  if (st.over) return st.winner === s ? 1 : 0;
+  return strongValueEval(st, s);
 }
 
-// ---- fair play: this is an imperfect-information game, so rollouts must NOT read
-// hidden state. Before simulating, replace everything the bot couldn't legitimately
-// know with a random sample consistent with PUBLIC information:
-//  · my deck order (contents known, order unknown) → shuffled
-//  · opponent's hand + deck + face-down trap identities → pooled and re-dealt
-//    (the pool itself IS public: starter deck + their buy log)
-// So "they only ever bought one trap" naturally means the sampled set trap is that trap.
-function determinize(g: GameState, s: Side): void {
-  let seed = (g.rng ^ 0x51f15eed) >>> 0;
-  const rnd = () => { seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5; seed >>>= 0; return seed / 4294967296; };
-  const shuf = <T,>(arr: T[]): void => { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } };
-  const me = g.players[s], op = g.players[1 - s];
-  shuf(me.deck);
-  const pool = [...op.hand, ...op.deck, ...op.traps.map((t) => t.card)];
-  shuf(pool);
-  for (let i = 0; i < op.traps.length; i++) {
-    const k = pool.findIndex((c) => c.t === "trap");
-    if (k < 0) break; // shouldn't happen — the real set traps are in the pool
-    op.traps[i] = { ...op.traps[i], card: pool.splice(k, 1)[0] };
-  }
-  const handN = op.hand.length;
-  op.hand = pool.slice(0, handN);
-  op.deck = pool.slice(handN);
-}
-
-// candidate actions, deduped + trimmed so rollouts stay cheap
-function candidates(g: GameState): Action[] {
+// candidate actions, deduped + trimmed (used to sample a random legal "blunder",
+// for value-net search, and for self-play exploration)
+export function candidates(g: GameState): Action[] {
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];
   const T = tuneFor(p);
@@ -261,61 +293,179 @@ export function pickBotDeck(rnd: number = Math.random()): BotDeck {
   return BOT_DECKS[Math.min(BOT_DECKS.length - 1, Math.max(0, Math.floor(rnd * BOT_DECKS.length)))];
 }
 
-// ---- evaluation: logistic-regression weights fit on 2000 greedy self-play games ----
-// features: hpD, maxManaD, atkD, defD, fieldCountD, threatIn, threatOut, deckQD, handD, trapD, enchD
-const EVAL_W: number[][] = [
-  [-0.0076, 0.0837, 0.0462, 0.0692, 0.1385, -0.0615, 0.0416, -0.0075, 0.0000, 0.0000, 0.0000],  // turns 1-6
-  [0.0075, 0.3213, 0.0118, -0.0040, 0.1905, -0.0038, 0.0728, -0.0084, 0.0000, 0.1160, -0.6052], // turns 7-12
-  [0.0533, 0.2205, -0.0007, 0.0110, -0.0701, -0.0791, 0.1841, -0.0027, 0.2964, 0.9085, -0.0948], // turns 13+
-];
-function evalState(g: GameState, s: Side): number {
-  if (g.over) return g.winner === s ? 1e6 : -1e6;
-  const p = g.players[s], o = g.players[1 - s];
-  const bAtk = (x: PlayerState) => x.field.reduce((t, m) => t + effAtk(x, m), 0);
-  const bDef = (x: PlayerState) => x.field.reduce((t, m) => t + effDef(x, m), 0);
-  const f = [
-    p.hp - o.hp,
-    p.maxMana - o.maxMana,
-    bAtk(p) - bAtk(o), bDef(p) - bDef(o),
-    p.field.length - o.field.length,
-    threatFace(o, p), threatFace(p, o),
-    deckQ(p) - deckQ(o),
-    p.hand.length - o.hand.length,
-    p.traps.length - o.traps.length,
-    p.enchants.length - o.enchants.length,
-  ];
-  const w = EVAL_W[g.turn <= 6 ? 0 : g.turn <= 12 ? 1 : 2];
-  let z = 0;
-  for (let j = 0; j < f.length; j++) z += w[j] * f[j];
-  // 알(egg) 위협: 회귀 평가가 모르는 신메타 항 — 부화가 임박할수록 위협이 커지고,
-  // 내구도를 깎으면 위협이 줄어든다 (→ 탐색이 "알 깨기" 라인을 평가로 발견할 수 있음)
-  z += 0.18 * (eggProg(p) - eggProg(o));
-  return z;
+function rankedLegalActions(g: GameState, base: Action): { a: Action; prior: number }[] {
+  const seen = new Set<string>();
+  const out: { a: Action; prior: number }[] = [];
+  const add = (a: Action): void => {
+    const k = JSON.stringify(a);
+    if (seen.has(k)) return;
+    seen.add(k);
+    out.push({ a, prior: Math.max(0.01, actionPrior(g, a) * policyHead(g, a)) });
+  };
+
+  add(base);
+  for (const a of legalActions(g)) add(a);
+  return out.sort((x, y) => y.prior - x.prior);
 }
-/** 알 부화 위협: 진행도(임박) × 내구도(깎을수록 감소) × 종류 가중(신수의 알 1.4). */
-function eggProg(x: PlayerState): number {
-  let t = 0;
-  for (const m of x.field) {
-    if (m.hatch == null || (m.dur ?? 0) <= 0) continue;
-    const total = m.hatchTurns ?? 8;
-    const prog = Math.max(0, total - m.hatch); // 0(방금 낳음) ~ total(부화 직전)
-    const durF = 0.2 + 0.2 * Math.min(4, Math.max(0, m.dur ?? 0)); // 내구도 1칩당 위협 -20%p
-    t += prog * durF * (m.id === "BEAST_EGG" ? 1.4 : 1);
+
+function legalActions(g: GameState): Action[] {
+  const p = g.players[g.cur];
+  const o = g.players[1 - g.cur];
+  const out: Action[] = [];
+  const add = (a: Action) => out.push(a);
+
+  if (g.pending) {
+    const pend = g.pending;
+    const pick = (uid: string | null): Action => pend.kind === "seek" || pend.kind === "recall" || pend.kind === "purge"
+      ? { type: "pick", uid }
+      : { type: "chooseTarget", uid };
+    if (pend.kind === "oppMon") o.field.forEach((m) => add(pick(m.uid)));
+    else if (pend.kind === "myMon") p.field.forEach((m) => add(pick(m.uid)));
+    else if (pend.kind === "seek") p.deck.forEach((c) => add(pick(c.uid)));
+    else if (pend.kind === "recall") p.discard.forEach((c) => add(pick(c.uid)));
+    else if (pend.kind === "purge") [...p.deck, ...p.discard].forEach((c) => add(pick(c.uid)));
+    if (pend.allowCancel) add(pick(null));
+    return out;
   }
-  return t;
+
+  p.hand.forEach((c, idx) => { if (playCost(c) <= p.mana) add({ type: "play", idx }); });
+  const noAtk = g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "noAttack"));
+  if (!noAtk) {
+    p.field.forEach((m) => {
+      if (!m.exhausted && (!glassBanActive(g) || effDef(p, m) > 1)) add({ type: "attack", uid: m.uid });
+    });
+  }
+  p.supply.forEach((c, i) => { if (c && buyCost(p, c) <= p.mana) add({ type: "buySupply", i }); });
+  g.market.forEach((c, i) => { if (buyCost(p, c) <= p.mana) add({ type: "buyMarket", i }); });
+  if (p.mana >= 1) add({ type: "refresh" });
+  add({ type: "endTurn" });
+  return out;
 }
-// bomb-weighted deck quality (only above-baseline cards, so thinning isn't penalized)
-function deckQ(p: PlayerState): number {
-  let t = 0;
-  for (const pool of [p.hand, p.deck, p.discard]) for (const c of pool) t += Math.max(0, roughBuy(c) - 8);
-  return t;
+
+function actionPrior(g: GameState, a: Action): number {
+  const p = g.players[g.cur];
+  const o = g.players[1 - g.cur];
+  const read = opponentRead(o);
+  if (a.type === "endTurn") return 0.15 + (p.mana <= 1 ? 0.25 : 0) - (p.mana > 2 && earlyCullPressure(g, p) > 0.5 ? 0.08 : 0);
+  if (a.type === "refresh") return p.mana >= 8 ? 1.2 : (p.mana >= 5 && handQualityLow(p) ? 0.35 : 0.12);
+  if (a.type === "chooseTarget" || a.type === "pick") {
+    if (a.uid === null) return 0.08;
+    const target = [...p.field, ...o.field, ...p.deck, ...p.discard, ...o.deck, ...o.discard].find((c) => c.uid === a.uid);
+    return target ? 0.4 + cardValue(target) / 20 : 0.25;
+  }
+  if (a.type === "play") {
+    const c = p.hand[a.idx];
+    if (!c) return 0.01;
+    if (c.star === "trash") return 0.35 + earlyCullPressure(g, p) * 0.75;
+    if (c.star === "mana") return 1.1 + attunePressure(g, p) * 0.65;
+    if (c.act === "chestToMana") return 1.5 + attunePressure(g, p) * 0.5 + (p.hand.some((h) => h.star === "chest") ? 0.4 : -1);
+    if (c.act === "dmg" || c.act === "siphon") return 5 + (c.val || 0) * 0.5 + (o.hp <= (c.val || 0) ? 10 : 0);
+    if (c.act === "destroyTrap" && (o.traps.length > 0 || read.trap > 0)) return 3.5 + o.traps.length * 1.15 + read.trap * 0.25;
+    if (c.act === "destroyMon" || c.act === "weaken" || c.act === "atkDown" || c.act === "defDown") return 3.5 + (o.field.length > 0 ? 1.5 : 0) + (c.val || 0) * 0.2 + read.wall * 0.12;
+    if (c.id === "INQUISITION") return 0.8 + read.tribe * 0.3;
+    if (c.ench === "noAttack") return 0.85 + read.attack * 0.25 - (potentialFace(p, o) > potentialFace(o, p) ? 0.35 : 0);
+    if (c.ench === "noSummonLow") return 0.75 + read.tribe * 0.1 + read.attack * 0.08;
+    if (c.act === "buffTurn" || c.act === "buffAllTurn" || c.act === "buffPerm") return 3 + p.field.length * 0.6 + (c.val || 0) * 0.2;
+    if (c.t === "mon") return 2.2 + (c.atk || 0) * 0.35 + (c.def || 0) * 0.18 + c.cost * 0.08;
+    if (c.act === "draw" || c.act === "seek" || c.act === "recall") return 2.0;
+    if (c.act === "manaUp" || c.act === "manaUpGain" || c.act === "chestToMana") return 1.8;
+    if (c.t === "trap") return 1.0 + (p.traps.length < 2 ? 0.4 : 0);
+    return 0.6 + cardValue(c) / 20;
+  }
+  if (a.type === "attack") {
+    const m = p.field.find((x) => x.uid === a.uid);
+    if (!m) return 0.01;
+    const atk = effAtk(p, m);
+    if (m.directOnly || o.field.length === 0) return 4 + atk * 0.45 + (atk >= o.hp ? 10 : 0) - (o.traps.length > 0 ? 0.7 + read.trap * 0.25 : 0);
+    const bestKill = o.field.filter((tm) => atk > effDef(o, tm)).sort((x, y) => (effAtk(o, y) * 2 + effDef(o, y)) - (effAtk(o, x) * 2 + effDef(o, x)))[0];
+    return bestKill ? 3 + atk * 0.25 + effAtk(o, bestKill) * 0.35 - (o.traps.length > 0 ? 0.45 + read.trap * 0.15 : 0) : 0.08;
+  }
+  if (a.type === "buySupply") {
+    const c = p.supply[a.i];
+    return c ? 0.4 + buyFit(g, p, o, c) / 8 : 0.01;
+  }
+  if (a.type === "buyMarket") {
+    const c = g.market[a.i];
+    return c ? 0.35 + buyFit(g, p, o, c) / 9 : 0.01;
+  }
+  return 0.01;
 }
-// o's potential face damage next turn into p's board (penetration included)
-function threatFace(o: PlayerState, p: PlayerState): number {
-  const defs = p.field.map((m) => effDef(p, m)).sort((a, b) => b - a);
+
+interface OpponentRead { trap: number; wall: number; spell: number; tribe: number; ramp: number; attack: number }
+
+function opponentRead(o: PlayerState): OpponentRead {
+  const r: OpponentRead = { trap: o.traps.length, wall: 0, spell: 0, tribe: 0, ramp: 0, attack: 0 };
+  for (const [id, nRaw] of Object.entries(o.buys ?? {})) {
+    const n = Math.min(4, nRaw || 0);
+    const c = DB[id];
+    if (!c) continue;
+    if (c.t === "trap") r.trap += n;
+    if (c.t === "spell") r.spell += n;
+    if (c.tribe) r.tribe += n;
+    if ((c.def || 0) >= 8 || c.aura === "wallDef") r.wall += n;
+    if (c.aura === "mana1" || c.aura === "mana2" || c.act === "manaUp" || c.act === "manaUpGain" || c.act === "chestToMana") r.ramp += n;
+    if ((c.atk || 0) >= 7 || c.directOnly || c.act === "dmg" || c.act === "siphon") r.attack += n;
+  }
+  return r;
+}
+
+function earlyCullPressure(g: GameState, p: PlayerState): number {
+  const trash = [...p.hand, ...p.deck, ...p.discard].filter((c) => c.star === "trash").length;
+  const handPlays = p.hand.filter((c) => c.star !== "trash" && playCost(c) <= p.mana).length;
+  const early = g.turn <= 8 ? 1 : g.turn <= 14 ? 0.55 : 0.2;
+  const spare = p.mana >= 1 ? Math.min(1, p.mana / 4) : 0;
+  const clutter = Math.min(1, trash / 8);
+  return Math.max(0, Math.min(1, early * clutter * spare * (handPlays <= 1 ? 1 : 0.35)));
+}
+
+function attunePressure(g: GameState, p: PlayerState): number {
+  const early = g.turn <= 10 ? 1 : g.turn <= 18 ? 0.55 : 0.15;
+  const capRoom = p.maxMana < 10 ? 1 : p.maxMana < 13 ? 0.45 : 0.1;
+  const spare = p.mana >= 3 ? 1 : p.mana / 3;
+  return Math.max(0, Math.min(1, early * capRoom * spare));
+}
+
+function handQualityLow(p: PlayerState): boolean {
+  return p.hand.filter((c) => c.star !== "trash" && roughBuy(c) >= 12).length <= 1;
+}
+
+function buyFit(g: GameState, p: PlayerState, o: PlayerState, c: CardInst): number {
+  const read = opponentRead(o);
+  let s = roughBuy(c);
+  const myIds = new Set([...p.hand, ...p.deck, ...p.discard, ...p.field].map((x) => x.id));
+  if (c.tribe) {
+    const tribeHave = new Set([...p.hand, ...p.deck, ...p.discard, ...p.field].filter((x) => x.tribe === c.tribe).map((x) => x.id));
+    if (!tribeHave.has(c.id)) s += Math.min(5, tribeHave.size * 1.8);
+  }
+  if (c.act === "destroyTrap" && read.trap > 0) s += Math.min(3, read.trap * 0.55);
+  if ((c.act === "destroyMon" || c.act === "weaken" || c.act === "atkDown" || c.act === "defDown") && (read.wall > 0 || read.attack > 0)) s += Math.min(2.5, (read.wall + read.attack) * 0.3);
+  if ((c.react === "nullspell" || c.aura === "sealAll" || c.aura === "sealLow") && read.spell > 0) s += Math.min(2.5, read.spell * 0.35);
+  if ((c.ench === "noAttack" || c.react) && read.attack > 0) s += Math.min(2, read.attack * 0.25);
+  if ((c.aura === "mana1" || c.aura === "mana2" || c.act === "manaUp" || c.act === "manaUpGain") && g.turn <= 12 && p.maxMana < 10) s += 1.4;
+  if (myIds.has(c.id) && !c.tribe) s -= 1.5;
+  return s;
+}
+
+function strongValueEval(g: GameState, s: Side): number {
+  const base = netEval(g, s);
+  const p = g.players[s], o = g.players[1 - s];
+  const myAtk = p.field.reduce((t, m) => t + effAtk(p, m), 0);
+  const opAtk = o.field.reduce((t, m) => t + effAtk(o, m), 0);
+  const myDef = p.field.reduce((t, m) => t + effDef(p, m), 0);
+  const opDef = o.field.reduce((t, m) => t + effDef(o, m), 0);
+  const pressure = (potentialFace(p, o) - potentialFace(o, p)) / 45;
+  const board = ((myAtk - opAtk) * 0.55 + (myDef - opDef) * 0.2 + (p.field.length - o.field.length) * 1.4) / 35;
+  const resources = ((p.hand.length - o.hand.length) * 0.7 + (p.maxMana - o.maxMana) * 0.9 + (p.traps.length - o.traps.length) * 0.5) / 18;
+  const hp = (p.hp - o.hp) / 90;
+  const eggPressure = (eggProg(p) - eggProg(o)) / 30;
+  return clamp01(base + 0.025 * pressure + 0.018 * board + 0.012 * resources + 0.01 * hp + 0.01 * eggPressure);
+}
+
+function potentialFace(p: PlayerState, o: PlayerState): number {
+  const defs = o.field.map((m) => effDef(o, m)).sort((a, b) => b - a);
   let total = 0;
-  for (const m of [...o.field].sort((a, b) => effAtk(o, b) - effAtk(o, a))) {
-    const a = effAtk(o, m);
+  for (const m of [...p.field].filter((x) => !x.exhausted).sort((a, b) => effAtk(p, b) - effAtk(p, a))) {
+    const a = effAtk(p, m);
     if (a <= 0) continue;
     if (m.directOnly || defs.length === 0) { total += a; continue; }
     const k = defs.findIndex((d) => a > d);
@@ -324,11 +474,104 @@ function threatFace(o: PlayerState, p: PlayerState): number {
   return total;
 }
 
-// ---------------- greedy policy (rollout engine + fallback) ----------------
-export function greedyDecide(g: GameState): Action {
+function eggProg(p: PlayerState): number {
+  let total = 0;
+  for (const m of p.field) {
+    if (m.hatch == null || (m.dur ?? 0) <= 0) continue;
+    const turns = m.hatchTurns ?? 8;
+    total += Math.max(0, turns - m.hatch) * (0.2 + 0.2 * Math.min(4, m.dur ?? 0)) * (m.id === "BEAST_EGG" ? 1.4 : 1);
+  }
+  return total;
+}
+
+const POLICY_W = [
+  1.45, 1.25, 0.95, 0.75, 0.65, 0.45,
+  -0.55, -0.4, 0.35, 0.3, 0.25, -0.25,
+  0.15, 0.12, 0.12, 0.12,
+];
+const POLICY_B = -0.15;
+
+function policyHead(g: GameState, a: Action): number {
+  const x = policyFeatures(g, a);
+  let z = POLICY_B;
+  for (let i = 0; i < POLICY_W.length; i++) z += POLICY_W[i] * x[i];
+  return 0.8 + 0.4 / (1 + Math.exp(-z));
+}
+
+function policyFeatures(g: GameState, a: Action): number[] {
+  const p = g.players[g.cur], o = g.players[1 - g.cur];
+  const greedyKey = JSON.stringify(greedyDecide(g, false));
+  const isGreedy = JSON.stringify(a) === greedyKey ? 1 : 0;
+  const canKill = actionCanWin(g, a) ? 1 : 0;
+  const read = opponentRead(o);
+  let face = 0, removes = 0, develops = 0, draw = 0, trapBreak = 0, buy = 0, weak = 0, risky = 0;
+  let cull = 0, attune = 0, counter = 0, attackOk = 0;
+  if (a.type === "play") {
+    const c = p.hand[a.idx];
+    if (c) {
+      face = (c.act === "dmg" || c.act === "siphon") ? Math.min(1, (c.val || 0) / Math.max(1, o.hp)) : 0;
+      removes = (c.act === "destroyMon" || c.act === "weaken" || c.act === "atkDown" || c.act === "defDown") && o.field.length > 0 ? 1 : 0;
+      develops = c.t === "mon" ? Math.min(1, ((c.atk || 0) + (c.def || 0)) / 18) : 0;
+      draw = c.act === "draw" || c.act === "seek" || c.act === "recall" ? 1 : 0;
+      trapBreak = c.act === "destroyTrap" && o.traps.length > 0 ? 1 : 0;
+      cull = c.star === "trash" ? earlyCullPressure(g, p) : 0;
+      attune = c.star === "mana" || c.act === "manaUp" || c.act === "manaUpGain" || c.act === "chestToMana" ? attunePressure(g, p) : 0;
+      counter = (c.act === "destroyTrap" && read.trap > 0) || ((c.act === "destroyMon" || c.act === "weaken") && read.wall > 0) || (c.id === "INQUISITION" && read.tribe > 0) ? 1 : 0;
+      risky = c.id === "SHATTER" || c.id === "MASSACRE" || c.id === "GUILD_CHEST" || c.id === "FORBIDDEN" ? 1 : 0;
+      weak = c.star === "trash" || c.star === "chest" ? 0.6 : 0;
+    }
+  } else if (a.type === "attack") {
+    const m = p.field.find((x) => x.uid === a.uid);
+    if (m) {
+      const atk = effAtk(p, m);
+      face = m.directOnly || o.field.length === 0 ? Math.min(1, atk / Math.max(1, o.hp)) : 0;
+      removes = o.field.some((tm) => atk > effDef(o, tm)) ? 0.8 : 0;
+      attackOk = face > 0 || removes > 0 ? 1 : 0;
+      risky = o.traps.length > 0 ? 0.8 : 0;
+      weak = removes === 0 && face === 0 ? 1 : 0;
+    }
+  } else if (a.type === "buySupply" || a.type === "buyMarket") {
+    const c = a.type === "buySupply" ? p.supply[a.i] : g.market[a.i];
+    buy = c ? Math.min(1, buyFit(g, p, o, c) / 32) : 0;
+    counter = c && buyFit(g, p, o, c) > roughBuy(c) + 2 ? 1 : 0;
+    weak = c && roughBuy(c) < (p.maxMana >= 5 ? 17 : 11) ? 0.7 : 0;
+  } else if (a.type === "refresh") {
+    draw = p.mana >= 8 ? 0.7 : 0;
+    weak = p.mana < 8 ? 0.8 : 0;
+  } else if (a.type === "endTurn") {
+    weak = p.mana > 2 ? 0.9 : 0.2;
+  }
+  const tempo = (p.mana - o.mana) / 15;
+  return [isGreedy, canKill, face, removes, develops, trapBreak, weak, risky, draw, buy, tempo, o.traps.length > 0 ? 1 : 0, cull, attune, counter, attackOk];
+}
+
+function actionCanWin(g: GameState, a: Action): boolean {
+  const p = g.players[g.cur], o = g.players[1 - g.cur];
+  if (a.type === "play") {
+    const c = p.hand[a.idx];
+    return !!c && (c.act === "dmg" || c.act === "siphon") && (c.val || 0) >= o.hp;
+  }
+  if (a.type === "attack") {
+    const m = p.field.find((x) => x.uid === a.uid);
+    return !!m && (m.directOnly || o.field.length === 0) && effAtk(p, m) >= o.hp;
+  }
+  return false;
+}
+
+function clamp01(x: number): number {
+  return Math.max(0, Math.min(1, x));
+}
+
+// ---------------- greedy policy (the difficulty-neutral heuristic) ----------------
+export function greedyDecide(g: GameState, useLethal = true): Action {
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];
   const T = tuneFor(p); // archetype buy discipline (defaults to shared TUNE)
+
+  if (useLethal && lethalWorthSearching(g)) {
+    const lethal = findLethalAction(g);
+    if (lethal) return lethal;
+  }
 
   // 0) resolve a pending target/pick automatically
   if (g.pending) return autoTarget(g);
@@ -377,7 +620,10 @@ export function greedyDecide(g: GameState): Action {
     if (c.id === "GREED_PRICE" && p.hp <= 4) return false;
     if (c.id === "GOLIATH_HUNT" && !o.field.some((m) => effDef(o, m) >= 20)) return false;
     if (c.id === "MASSACRE" && (o.field.length === 0 || p.hp <= 10)) return false;
-    if (c.id === "INQUISITION" && ![...o.deck, ...o.discard, ...o.field].some((m) => m.t === "mon" && m.tribe)) return false;
+    // FAIR PLAY: don't peek at the opponent's hidden deck order. Whether they own
+    // ANY tribe monster is public knowledge (starter + buy log = the collection
+    // multiset), so gate on existence across all zones rather than deck position.
+    if (c.id === "INQUISITION" && ![...o.field, ...o.discard, ...o.hand, ...o.deck, ...o.traps.map((tr) => tr.card)].some((m) => m.t === "mon" && m.tribe)) return false;
     if (c.id === "PURGE_ALL" && p.deck.length + p.discard.length === 0) return false;
     if (c.id === "SCRAPPER" && [...p.deck, ...p.discard].filter((x) => x.cost <= 1).length < 2) return false;
     // blood magic hurts the caster — don't suicide
@@ -557,6 +803,144 @@ function facePlan(p: PlayerState, o: PlayerState, ready: FieldMon[], spells: { c
     }
   }
   return { total, spellIdx, attackUid };
+}
+
+function findLethalAction(g: GameState): Action | null {
+  const side = g.cur as Side;
+  let nodes = 0;
+  const seen = new Set<string>();
+
+  const search = (st: GameState, depth: number): Action[] | null => {
+    if (st.over) return st.winner === side ? [] : null;
+    if (st.cur !== side || depth <= 0 || nodes++ >= LETHAL_NODES) return null;
+    const key = lethalKey(st);
+    if (seen.has(key)) return null;
+    seen.add(key);
+
+    for (const a of lethalActions(st)) {
+      const next = reduce(st, a).state;
+      if (!stateAdvanced(st, next, a)) continue;
+      const rest = search(next, depth - 1);
+      if (rest) return [a, ...rest];
+    }
+    return null;
+  };
+
+  return search(g, LETHAL_DEPTH)?.[0] ?? null;
+}
+
+function lethalWorthSearching(g: GameState): boolean {
+  if (g.pending) return true;
+  const p = g.players[g.cur], o = g.players[1 - g.cur];
+  let ceiling = p.mana;
+  for (const c of p.hand) {
+    if (playCost(c) <= p.mana) {
+      if (c.act === "dmg" || c.act === "siphon") ceiling += c.val || 0;
+      else if (c.act === "buffTurn" || c.act === "buffAllTurn" || c.act === "buffPerm") ceiling += (c.val || 0) * Math.max(1, p.field.length);
+      else if (c.t === "mon") ceiling += c.atk || 0;
+      else if (c.act === "destroyTrap" || c.act === "destroyMon" || c.act === "weaken" || c.act === "draw" || c.act === "seek" || c.act === "recall") ceiling += 4;
+    }
+  }
+  for (const m of p.field) if (!m.exhausted) ceiling += Math.max(0, effAtk(p, m));
+  return ceiling >= o.hp;
+}
+
+function lethalActions(g: GameState): Action[] {
+  const p = g.players[g.cur];
+  const o = g.players[1 - g.cur];
+  const out: Action[] = [];
+  const add = (a: Action) => out.push(a);
+
+  if (g.pending) {
+    const pend = g.pending;
+    const pick = (uid: string | null): Action => pend.kind === "seek" || pend.kind === "recall" || pend.kind === "purge"
+      ? { type: "pick", uid }
+      : { type: "chooseTarget", uid };
+    if (pend.kind === "oppMon") o.field.forEach((m) => add(pick(m.uid)));
+    else if (pend.kind === "myMon") p.field.forEach((m) => add(pick(m.uid)));
+    else if (pend.kind === "seek") {
+      uniqueCards(p.deck, (a, b) => cardValue(b) - cardValue(a)).forEach((c) => add(pick(c.uid)));
+      if (pend.allowCancel) add(pick(null));
+    } else if (pend.kind === "recall") {
+      uniqueCards(p.discard, (a, b) => cardValue(b) - cardValue(a)).forEach((c) => add(pick(c.uid)));
+      if (pend.allowCancel) add(pick(null));
+    } else if (pend.kind === "purge") {
+      uniqueCards([...p.deck, ...p.discard], (a, b) => cardValue(a) - cardValue(b)).forEach((c) => add(pick(c.uid)));
+      if (pend.allowCancel) add(pick(null));
+    }
+    return out.slice(0, 18);
+  }
+
+  const playable = p.hand
+    .map((c, idx) => ({ c, idx }))
+    .filter(({ c }) => playCost(c) <= p.mana)
+    .sort((a, b) => lethalPlayPriority(b.c) - lethalPlayPriority(a.c));
+  playable.forEach(({ idx }) => add({ type: "play", idx }));
+
+  const noAtk = g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "noAttack"));
+  // Set traps are hidden information. Unless the search first removes them, do
+  // not prove a lethal line by peeking at what the trap actually is.
+  if (!noAtk && o.traps.length === 0) {
+    const ban = glassBanActive(g);
+    [...p.field]
+      .filter((m) => !m.exhausted && (!ban || effDef(p, m) > 1))
+      .sort((a, b) => effAtk(p, b) - effAtk(p, a))
+      .forEach((m) => add({ type: "attack", uid: m.uid }));
+  }
+
+  return out;
+}
+
+function lethalPlayPriority(c: CardInst): number {
+  if (c.act === "dmg" || c.act === "siphon") return 100 + (c.val || 0);
+  if (c.act === "destroyTrap") return 90 + (c.val || 0);
+  if (c.act === "destroyMon" || c.act === "weaken" || c.act === "atkDown" || c.act === "defDown") return 80 + (c.val || 0);
+  if (c.act === "buffTurn" || c.act === "buffAllTurn" || c.act === "buffPerm") return 70 + (c.val || 0) + (c.val2 || 0);
+  if (c.t === "mon") return 55 + (c.atk || 0) * 2 + (c.def || 0);
+  if (c.act === "draw" || c.act === "seek" || c.act === "recall" || c.act === "chestToMana" || c.act === "manaUpGain") return 45;
+  return 10 + cardValue(c);
+}
+
+function uniqueCards(pool: CardInst[], sort: (a: CardInst, b: CardInst) => number): CardInst[] {
+  const seenIds = new Set<string>();
+  const out: CardInst[] = [];
+  for (const c of [...pool].sort(sort)) {
+    if (seenIds.has(c.id)) continue;
+    seenIds.add(c.id);
+    out.push(c);
+    if (out.length >= 12) break;
+  }
+  return out;
+}
+
+function stateAdvanced(before: GameState, after: GameState, a: Action): boolean {
+  if (after.over) return true;
+  if (a.type === "chooseTarget" || a.type === "pick") return before.pending !== after.pending;
+  const bp = before.players[before.cur], ap = after.players[before.cur];
+  const bo = before.players[1 - before.cur], ao = after.players[1 - before.cur];
+  return before.cur !== after.cur ||
+    before.pending !== after.pending ||
+    bp.hp !== ap.hp || bo.hp !== ao.hp ||
+    bp.mana !== ap.mana ||
+    bp.hand.length !== ap.hand.length ||
+    bp.field.length !== ap.field.length ||
+    bo.field.length !== ao.field.length ||
+    bp.traps.length !== ap.traps.length ||
+    bo.traps.length !== ao.traps.length ||
+    bp.enchants.length !== ap.enchants.length ||
+    bo.enchants.length !== ao.enchants.length ||
+    bp.discard.length !== ap.discard.length ||
+    bo.discard.length !== ao.discard.length;
+}
+
+function lethalKey(g: GameState): string {
+  const p = g.players[g.cur], o = g.players[1 - g.cur];
+  return JSON.stringify({
+    cur: g.cur, pending: g.pending, hp: [p.hp, o.hp], mana: p.mana, rng: g.rng,
+    hand: p.hand.map((c) => c.uid), field: p.field.map((m) => [m.uid, m.exhausted, m.atkMod, m.defMod, m.tempAtk, m.attacksUsed]),
+    ofield: o.field.map((m) => [m.uid, m.atkMod, m.defMod, m.tempAtk]), traps: [p.traps.length, o.traps.length],
+    ench: [p.enchants.length, o.enchants.length], discard: p.discard.length, deck: p.deck.length,
+  });
 }
 
 function autoTarget(g: GameState): Action {

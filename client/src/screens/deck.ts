@@ -8,6 +8,7 @@ import { DB, STARTERS, DECK_POOL, DECK_SIZE, DECK_MAX_COPIES, DECK_SLOTS, WATCH_
 import type { CardDef, CardInst } from "../shared/types";
 import { cardEl } from "../ui/cardView";
 import { bindZoom } from "../ui/anim";
+import { noticeModal } from "../ui/modal";
 import { api } from "../net/api";
 import { t, cardName } from "../i18n";
 
@@ -155,7 +156,18 @@ export function mountDeck(app: App): Screen {
     render();
   };
   saveBtn.onclick = () => { void doSave(); };
-  (q("back")).onclick = () => app.home();
+  (q("back")).onclick = () => {
+    if (deck().length < DECK_SIZE) {
+      noticeModal(
+        "덱을 완성해주세요",
+        `현재 덱은 ${deck().length + 1} / ${DECK_SIZE + 1}장입니다. 뒤로 가기 전에 덱을 9장으로 완성해주세요.`,
+        t("common.confirm"),
+        () => {},
+      );
+      return;
+    }
+    app.home();
+  };
 
   render();
   return { destroy: () => wrap.remove() };

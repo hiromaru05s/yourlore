@@ -4,6 +4,7 @@
 // ============================================================
 import { t } from "../i18n";
 import { localizeServerMsg } from "./serverMsg";
+import { buyLocalGuestSleeve, isLocalDevAccount, saveLocalDevDecks } from "../dev/localAccount";
 
 export interface User {
   id: string;
@@ -47,7 +48,18 @@ export interface RankInfo {
   season: string; mmr: number; wins: number; losses: number; peak_mmr: number;
   rank: number; tier: string; // iron..master | gm
 }
-export interface LbEntry { rank: number; display: string; mmr: number; wins: number; losses: number; tier: string; }
+export interface LbEntry {
+  rank: number;
+  display: string;
+  mmr: number;
+  wins: number;
+  losses: number;
+  tier: string;
+  /** 이전 집계 대비 순위 변동. 서버 기록 연결 전에는 비어 있을 수 있다. */
+  rankChange?: number;
+  /** 현재 연승 수. 서버 기록 연결 전에는 비어 있을 수 있다. */
+  winStreak?: number;
+}
 
 function acquisition(): { ref?: string; source?: string } {
   try {
@@ -77,21 +89,35 @@ export const api = {
     const s = q.toString();
     return "/api/auth/google" + (s ? `?${s}` : "");
   },
-  leaderboard: (season?: string) =>
-    call<{ season: string; entries: LbEntry[] }>(`/rank/leaderboard${season ? `?season=${season}` : ""}`, undefined, "GET"),
+  leaderboard: (season?: string, offset = 0, limit = 100) => {
+    const query = new URLSearchParams();
+    if (season) query.set("season", season);
+    if (offset > 0) query.set("offset", String(offset));
+    if (limit !== 100) query.set("limit", String(limit));
+    const suffix = query.size ? `?${query}` : "";
+    return call<{ season: string; total: number; entries: LbEntry[] }>(`/rank/leaderboard${suffix}`, undefined, "GET");
+  },
   rankHistory: () => call<{ seasons: (RankInfo & { season: string })[] }>("/rank/history", undefined, "GET").then((r) => r.seasons).catch(() => []),
   // credit rewards (server-authoritative amounts; key e.g. "tut:1")
   claimReward: (key: string) => call<ClaimResult>("/rewards/claim", { key }),
   claimedRewards: () => call<{ keys: string[]; credits: number }>("/rewards/claimed", undefined, "GET").catch(() => ({ keys: [] as string[], credits: 0 })),
   redeemCoupon: (code: string) => call<ClaimResult>("/rewards/coupon", { code }),
   // 덱 프리셋 저장 (덱 빌더: 5슬롯 + 마켓 알림이)
-  saveDecks: (decks: { sel: number; list: { cards: string[]; watch: string[] }[] }) =>
-    call<{ ok: true; decks: { sel: number; list: { cards: string[]; watch: string[] }[] }; deck: string[] }>("/deck", { decks }),
+  saveDecks: async (decks: { sel: number; list: { cards: string[]; watch: string[] }[] }) => {
+    if (isLocalDevAccount()) {
+      const saved = saveLocalDevDecks(decks);
+      return { ok: true as const, decks: saved, deck: saved.list[saved.sel].cards };
+    }
+    return call<{ ok: true; decks: { sel: number; list: { cards: string[]; watch: string[] }[] }; deck: string[] }>("/deck", { decks });
+  },
   // ---- social: profile / friends / challenges ----
   profile: (id?: string) => call<{ profile: Profile }>(`/social/profile${id ? `?id=${encodeURIComponent(id)}` : ""}`, undefined, "GET").then((r) => r.profile),
   updateMe: (patch: { display?: string; avatar?: string; badge?: string; stats_public?: boolean; sleeve?: string }) =>
     call<{ ok: true; display: string; avatar: string | null; badge: string | null; stats_public: boolean; sleeve: string }>("/social/me", patch),
-  buySleeve: (id: string) => call<{ ok: true; credits: number; sleeves: string[] }>("/social/buy-sleeve", { id }),
+  buySleeve: (id: string) => {
+    if (isLocalDevAccount()) return Promise.resolve({ ok: true as const, ...buyLocalGuestSleeve(id) });
+    return call<{ ok: true; credits: number; sleeves: string[] }>("/social/buy-sleeve", { id });
+  },
   friends: () => call<FriendsData>("/social/friends", undefined, "GET"),
   friendRequest: (q: string) => call<{ ok: true; display: string }>("/social/friends/request", { q }),
   friendRespond: (user_id: string, accept: boolean) => call<{ ok: true }>("/social/friends/respond", { user_id, accept }),

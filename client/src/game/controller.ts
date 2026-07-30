@@ -9,7 +9,7 @@
 import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
 import { createGame, reduce, playCost } from "../shared/engine";
-import { botDecide, pickBotDeck } from "../shared/bot";
+import { botDecide, pickBotDeck, type BotDifficulty } from "../shared/bot";
 import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog } from "../ui/log";
@@ -684,9 +684,11 @@ export abstract class BaseController implements BoardHandlers {
 // ============================================================
 export class LocalController extends BaseController {
   private botTimer = 0;
+  private difficulty: BotDifficulty;
 
-  constructor(root: HTMLElement, exits: ControllerExits, playerName = "PLAYER 1", deck?: string[]) {
+  constructor(root: HTMLElement, exits: ControllerExits, playerName = "PLAYER 1", deck?: string[], difficulty: BotDifficulty = "hard") {
     super(root, 0, exits);
+    this.difficulty = difficulty;
     const bot = pickBotDeck(); // roll a random archetype (deck + buy discipline) per game
     const res = createGame({
       mode: "bot",
@@ -729,7 +731,7 @@ export class LocalController extends BaseController {
       this.applyResult(reduce(g, g.pending?.allowCancel ? ({ type: "pick", uid: null } as Action) : ({ type: "endTurn" } as Action)));
       return;
     }
-    const action = botDecide(g);
+    const action = botDecide(g, this.difficulty);
     this.applyResult(reduce(g, action));
   }
 
