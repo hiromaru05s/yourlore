@@ -161,8 +161,10 @@
 
 .mp-mana { display: flex; align-items: center; gap: 6px; }
 .pips { display: flex; gap: 3px; flex-wrap: wrap; }
+.pips.is-compact { flex: 0 0 92px; max-width: 92px; min-height: 27px; max-height: 27px; align-content: center; gap: 2px; overflow: hidden; }
 /* mana gems (diamond webp sprites — image already carries shape/bevel/glow) */
 .pip { width: 13px; height: 13px; background: url(/ui/mana-empty.webp) center / contain no-repeat; }
+.pips.is-compact .pip { width: 7px; height: 7px; }
 .pip.full { background-image: url(/ui/mana-full.webp); filter: drop-shadow(0 0 3px #3f9dff99); }
 .pip.locked { opacity: .3; }
 .mnum { font-family: var(--mono); font-size: 12px; color: #6fb9ff; font-weight: 700; margin-left: auto; }
@@ -477,6 +479,23 @@
 .ztc-grid { display: flex; flex-wrap: wrap; gap: 9px; max-height: 46vh; overflow-y: auto; }
 .zoom-overlay .ztc-grid .card { --cw: 82px; --ch: 131px; cursor: zoom-in; box-shadow: 0 4px 12px #0008; transition: transform .12s var(--ease); }
 .zoom-overlay .ztc-grid .card:hover { transform: translateY(-3px) scale(1.05); }
+
+/* ---- passive keywords (v11) ---- */
+/* 카드 효과 텍스트 안의 키워드명: 금색 강조 + 점선 밑줄 (hover 대상) */
+.psv { color: var(--gold-glow, #e8c66a); font-weight: 700; text-decoration: underline dotted; text-underline-offset: 2px; cursor: help; }
+/* 줌 우측 패시브 설명 패널 */
+.zoom-psv .psv-item { border: 1px solid transparent; border-radius: 9px; padding: 8px 10px; margin: 4px -4px; transition: border-color .15s var(--ease), box-shadow .15s var(--ease), background .15s var(--ease); }
+.zoom-psv .psv-name { display: block; color: var(--gold-glow, #e8c66a); font-size: 13.5px; letter-spacing: .04em; margin-bottom: 2px; }
+.zoom-psv .psv-desc { font-size: 12.5px; line-height: 1.65; opacity: .92; }
+.zoom-psv .psv-item.hl { border-color: var(--gold-glow, #e8c66a); background: #e8c66a14; box-shadow: 0 0 14px #e8c66a55, inset 0 0 10px #e8c66a22; animation: psvGlow 1.1s var(--ease) infinite alternate; }
+@keyframes psvGlow {
+  from { box-shadow: 0 0 10px #e8c66a44, inset 0 0 8px #e8c66a1c; }
+  to   { box-shadow: 0 0 20px #e8c66a88, inset 0 0 14px #e8c66a33; }
+}
+/* 필드 배지: 기합 토큰(💢) / 부패 카운터(☠) / 부여 패시브명 */
+.ec-g { color: #ffd76a; }
+.ec-x { color: #b6ff7a; }
+.ec-p { color: #d7b7ff; }
 
 /* treasure modal */
 .chest-reward { font-size: 40px; margin: 10px 0; animation: pop .4s var(--ease); }

@@ -5,7 +5,8 @@
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { effMaxMana, playCost, buyCost, effAtk, effDef } from "../shared/engine";
-import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS } from "../shared/cards";
+import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
+import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer } from "./modal";
 import { cardEl } from "./cardView";
 import { bindZoom } from "./anim";
@@ -229,7 +230,7 @@ export class GameView {
     // my deck → also show the cards still remaining (undrawn); opponent's remaining deck is hidden
     const remaining = isMe ? [...p.deck].sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name)) : null;
     const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, backFor(isMe), null, t("game.deck"),
-      () => deckViewer(`${p.name} — ${t("deck.view")}`, collection, remaining));
+      () => deckViewer(`${p.name} — ${t("deck.view")}`, collection, remaining, !isMe));
 
     const block = document.createElement("div");
     block.className = "field-block" + (isMe ? " is-mine" : " is-opp") + (onTurn ? " is-turn" : "");
@@ -237,13 +238,19 @@ export class GameView {
     // monster zone
     const mz = document.createElement("div");
     mz.className = "zone zone-mon";
-    const targetableZone = !!pending && ((pending.kind === "oppMon" && !isMe) || (pending.kind === "myMon" && isMe)) && myTurn;
+    // anySide(파괴 선택, v21): oppMon pending이라도 자신 필드의 몬스터를 고를 수 있다
+    const targetableZone = !!pending && ((pending.kind === "oppMon" && (!isMe || !!(pending.data as { anySide?: boolean } | undefined)?.anySide)) || (pending.kind === "myMon" && isMe)) && myTurn;
     p.field.forEach((m, idx) => {
-      // 신수(ward): 공격 대상으로는 지정 가능하지만 마법·몬스터 "효과"의 대상은 안 됨
+      // 아우라(ward): 공격 대상으로는 지정 가능하지만 마법·몬스터 "효과"의 대상은 안 됨
       // 고급 부화기(incubate): 자신의 "알"만 선택 가능
       const targetableMon = targetableZone
-        && !(pending!.kind === "oppMon" && pending!.reason !== "attack" && m.aura === "ward")
+        && !(pending!.kind === "oppMon" && !isMe && pending!.reason !== "attack" && hasPassive(m, "aura")) // 아우라는 상대 효과만 차단 — 내 카드는 내 효과로 파괴 가능
+        && !(pending!.kind === "oppMon" && pending!.reason === "decayMark" && m.hatch != null) // 부패 카운터: 알 제외
+        && !(pending!.kind === "oppMon" && pending!.reason === "destroyMon" && pending!.data?.maxCost != null && m.cost > (pending!.data.maxCost as number)) // 룬 파열: 코스트 캡
         && !(pending!.kind === "myMon" && pending!.reason === "incubate" && m.hatch == null)
+        && !(pending!.kind === "myMon" && pending!.reason === "chosenMage" && (m.id !== "CHOSEN_MAGE" || ((pending!.data?.fired as string[] | undefined) ?? []).includes(m.uid))) // 마법사만 발동 가능
+        && !(pending!.kind === "myMon" && pending!.reason === "grantDecay" && hasPassive(m, "decay")) // 이미 부패 보유
+        && !(pending!.kind === "myMon" && pending!.reason === "grantMajesty" && hasPassive(m, "majesty")) // 이미 위엄 보유
         && !(pending!.kind === "myMon" && pending!.data?.exclude === m.uid); // 지원 나팔: 같은 몬스터 중복 선택 불가
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
       const card = cardEl(m, { field: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
@@ -272,7 +279,12 @@ export class GameView {
       }
     });
     p.enchants.forEach((e) => {
-      const card = cardEl(e.card, { badge: `${e.turns}T` });
+      // 영구(99) 영구마법은 턴 배지를 아예 표시하지 않는다 — 기한부만 남은 턴을 크게 표시 (v21 UX)
+      // 혈귀술/고대 문명처럼 turns=99지만 bornTurn 기준 N턴 후 사라지는 카드도 남은 턴을 보여준다
+      const lim = e.card.ench ? ENCH_TURN_LIMITS[e.card.ench] : undefined;
+      const rem = e.turns < 99 ? e.turns : lim != null ? Math.max(0, (e.bornTurn ?? 0) + lim - g.turn) : null;
+      const card = cardEl(e.card, rem != null ? { badge: `⏳${rem}` } : {});
+      if (rem != null) { card.classList.add("ench-timed"); if (rem <= 1) card.classList.add("ench-expiring"); }
       bindZoom(card, e.card);
       sz.appendChild(card);
     });
@@ -430,7 +442,7 @@ export class GameView {
         <span class="num"><b id="hp-${isMe ? "me" : "opp"}">${Math.max(0, p.hp)}</b><span class="muted">/${p.maxHp}</span></span>
         <span class="hpbar" id="hpbar-${isMe ? "me" : "opp"}"><i style="width:${hpPct}%"></i></span>
       </div>
-      <div class="mp-mana"><span class="lbl">${t("game.mana")}</span><span class="pips">${pips.join("")}</span><span class="mnum">${p.mana}/${emax}</span></div>
+      <div class="mp-mana"><span class="lbl">${t("game.mana")}</span><span class="pips ${total > 12 ? "is-compact" : ""}">${pips.join("")}</span><span class="mnum">${p.mana}/${emax}</span></div>
       <div class="mp-btns"></div>
       ${tribeChips.length ? `<div class="mp-tribes">${tribeChips.join("")}</div>` : ""}`;
 
@@ -456,13 +468,15 @@ export class GameView {
     if (isMe) {
       pool = [...p.deck, ...p.hand, ...p.discard, ...fieldCards, ...p.traps.map((tr) => tr.card), ...enchCards];
     } else if (p.collection) {
-      // online: server-provided aggregate of hidden zones (hand+deck+traps) + visible public zones.
-      // look ids up in BOTH the main DB and STARTERS (starters aren't in DB — they were being dropped).
-      const hidden = p.collection.map((id, i) => { const d = DBC[id] ?? STARTERS[id]; return d ? { uid: `v_${i}`, ...d } : null; }).filter((c): c is CardInst => !!c);
-      pool = [...hidden, ...p.discard, ...fieldCards, ...enchCards];
+      // Online: server-provided game-long reveal history. Current public zones are
+      // already included, so adding them again would double-count those cards.
+      pool = p.collection.map((id, i) => { const d = DBC[id] ?? STARTERS[id]; return d ? { uid: `v_${i}`, ...d } : null; }).filter((c): c is CardInst => !!c);
+    } else if (p.revealedCards) {
+      // Bot/local games keep the same information boundary without server redaction.
+      pool = p.revealedCards.map((known, i) => { const d = DBC[known.id] ?? STARTERS[known.id]; return d ? { uid: `v_${i}`, ...d } : null; }).filter((c): c is CardInst => !!c);
     } else {
-      // bot mode: full state is local; same public-info view as online
-      pool = [...p.hand, ...p.deck, ...p.traps.map((tr) => tr.card), ...p.discard, ...fieldCards, ...enchCards];
+      // Legacy state fallback: show only cards that are public right now.
+      pool = [...p.discard, ...fieldCards, ...enchCards];
     }
     return pool.filter((c) => c && c.id !== "HIDDEN").sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
   }
@@ -567,7 +581,7 @@ export class GameView {
     const flat = n > 10;
     handEl.classList.toggle("is-flat", flat);
     me.hand.forEach((c, idx) => {
-      const pc = playCost(c);
+      const pc = playCost(c, me);
       const aff = myTurn && !g.pending && me.mana >= pc;
       const card = cardEl(c, { size: "hand", playable: aff, dim: !aff, costOverride: pc });
       const off = idx - mid;
@@ -603,6 +617,7 @@ export class GameView {
   private slotEl(size?: "mkt", bought?: boolean): HTMLElement {
     const s = document.createElement("div");
     s.className = "slot" + (bought ? " is-bought" : "");
+    if (bought) s.dataset.label = t("market.bought"); // CSS ::after reads attr(data-label) — 언어별 표기
     if (size === "mkt") { s.style.setProperty("--cw", "var(--card-w-mkt)"); s.style.setProperty("--ch", "var(--card-h-mkt)"); }
     return s;
   }

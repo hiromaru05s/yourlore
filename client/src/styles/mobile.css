@@ -65,12 +65,15 @@
 
   .hand-area { min-height: var(--card-h-hand); padding-top: 0; }
   .hand .card { margin: 0 -9px; }
-  .end-turn-wrap { right: 4px; bottom: 4px; }
-  .end-turn-wrap .btn { padding: 7px 11px; font-size: 11px; }
+  .end-turn-wrap { left: 6px; right: auto; bottom: 6px; }
+  .end-turn-wrap .btn { width: 120px; padding: 7px 11px; font-size: 11px; }
+  .giveup-btn { right: 6px; bottom: 8px; padding: 7px 10px; font-size: 10px; }
+  .mute-fab { right: 8px; bottom: 57px; width: 34px; height: 34px; }
+  .vol-pop { right: 48px; bottom: 55px; }
 
   /* ---- log as a slide-up bottom drawer ---- */
   .logpanel {
-    position: fixed; left: 0; right: 0; bottom: 0;
+    position: fixed; top: auto; left: 0; right: 0; bottom: 0;
     height: 64dvh; z-index: 95;
     border-radius: 14px 14px 0 0;
     grid-template-rows: auto 1fr auto;

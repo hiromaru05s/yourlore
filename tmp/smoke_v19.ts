@@ -1,0 +1,10 @@
+import { DB, BALANCE_VERSION } from "../client/src/shared/cards";
+let pass = 0, fail = 0;
+const ok = (c: boolean, n: string, x?: unknown) => { c ? pass++ : (fail++, console.log("  ✗", n, x ?? "")); };
+ok(BALANCE_VERSION === "v19", "v19");
+const want: Record<string, [number, number]> = { RUST_SHROOM:[0,0], ASSASSIN2:[8,0], GM8_0:[16,5], GM6_3:[9,3], GM6_0:[10,3], GM6_5:[6,5], GM8_1:[6,12], GM5_2:[5,4], GM7_7:[9,7], GM8_7:[13,8], MIMIC_KING:[4,5] };
+for (const [id,[a,d]] of Object.entries(want)) ok(DB[id].atk === a && DB[id].def === d, `${id} ${a}/${d}`, `${DB[id].atk}/${DB[id].def}`);
+ok(DB.GM6_3.val === 4 && DB.GM8_3.val === 4 && DB.GM8_1.val === 2, "여명4뎀/용암4뎀/성벽회복2");
+ok(DB.FATE_WHEEL.text.includes("5 데미지") && DB.GHOST.text.includes("2 데미지") && DB.WORLD_CARE.text.includes("+12") && DB.FORESIGHT.text.includes("10 이상"), "텍스트 갱신");
+console.log(`${pass} passed, ${fail} failed`);
+process.exit(fail ? 1 : 0);

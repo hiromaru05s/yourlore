@@ -14,8 +14,8 @@
 //    dice / draws. A/B: ~68% vs the pure greedy bot.
 // ============================================================
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
-import { buyCost, cardValue, chestLocked, effAtk, effDef, glassBanActive, isVampFamily, playCost, reduce, summonReqMet } from "./engine";
-import { DB } from "./cards";
+import { buyCost, cardValue, chestLocked, cullExiled, effAtk, effDef, glassBanActive, isVampFamily, playCost, reduce, summonReqMet } from "./engine";
+import { DB, hasPassive } from "./cards";
 
 // ---------------- rollout search (the shipped bot) ----------------
 const MARGIN = 0.1;      // eval margin a deviation must beat greedy by
@@ -103,18 +103,25 @@ function candidates(g: GameState): Action[] {
       o.field.filter((tm) => a > effDef(o, tm)).forEach((m) => push(m.uid));
       return out; // empty → searchDecide falls back to the greedy pick
     }
-    if (pend.kind === "oppMon") o.field.filter((m) => !(m.aura === "ward" && pend.reason !== "attack")).forEach((m) => push(m.uid));
+    if (pend.kind === "oppMon") o.field
+      .filter((m) => !(hasPassive(m, "aura") && pend.reason !== "attack"))
+      .filter((m) => !(pend.reason === "decayMark" && m.hatch != null)) // 부패 카운터: 알 제외
+      .filter((m) => !(pend.reason === "destroyMon" && pend.data?.maxCost != null && m.cost > (pend.data.maxCost as number))) // 룬 파열: 코스트 캡
+      .forEach((m) => push(m.uid));
     else if (pend.kind === "myMon") {
-      // 지원 나팔(exclude) / 고급 부화기(알만) / 비술(흡혈귀만) 제약 준수 — 아니면 재선택 무한루프
+      // 지원 나팔(exclude) / 고급 부화기(알만) / 비술(흡혈귀만) / v11 패시브 부여 제약 준수 — 아니면 재선택 무한루프
       p.field
         .filter((m) => m.uid !== (pend.data?.exclude as string | undefined))
         .filter((m) => !(pend.reason === "incubate" && m.hatch == null))
         .filter((m) => !(pend.reason === "bloodSecret" && !isVampFamily(m)))
+        .filter((m) => !(pend.reason === "chosenMage" && (m.id !== "CHOSEN_MAGE" || ((pend.data?.fired as string[] | undefined) ?? []).includes(m.uid))))
+        .filter((m) => !(pend.reason === "grantDecay" && hasPassive(m, "decay")))
+        .filter((m) => !(pend.reason === "grantMajesty" && hasPassive(m, "majesty")))
         .forEach((m) => push(m.uid));
       if (pend.allowCancel) push(null);
     }
     else if (pend.kind === "purge") {
-      const pool = [...p.deck, ...p.discard];
+      const pool = pend.data?.zone === "discard" ? [...p.discard] : [...p.deck, ...p.discard];
       const seen = new Set<string>();
       [...pool].sort((a, b) => cardValue(a) - cardValue(b)).forEach((c) => {
         if (!seen.has(c.id) && seen.size < 6) { seen.add(c.id); push(c.uid); }
@@ -143,8 +150,11 @@ function candidates(g: GameState): Action[] {
   p.hand.forEach((c, idx) => {
     if (c.star === "chest" && (g.turn <= T.chestTurn || chestLocked(g))) return;
     if (c.t === "trap" && p.trapBlockTurn) return; // 협상: 함정 설치 금지 턴 — 엔진 거부 루프 방지
-    if ((c.t === "spell" || c.t === "starter") && (candSealAll || p.spellSealTurn || (candSealLow && playCost(c) <= 5))) return; // 침묵
-    if (playCost(c) > p.mana || seenPlay.has(c.id)) return;
+    if ((c.t === "spell" || c.t === "starter") && (candSealAll || p.spellSealTurn || (candSealLow && playCost(c, p) <= 5))) return; // 침묵
+    if (c.id === "CHOSEN_AREA" && cullExiled(p) < 25) return; // 선택받은 영역: 컬 25장 조건
+    if ((c.id === "DECAY_CRAFT" || c.id === "MAJESTY_RITE") && p.field.length === 0) return; // 대상 필요
+    if (c.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) return; // 선견지명 중복 금지
+    if (playCost(c, p) > p.mana || seenPlay.has(c.id)) return;
     seenPlay.add(c.id);
     out.push({ type: "play", idx });
   });
@@ -233,7 +243,19 @@ export const BOT_DECKS: BotDeck[] = [
     cards: ["GHOST", "GHOST", "TRUMPET", "GUILD_HALL", "FLAME", "STARTER_TRASH", "STARTER_CHEST", "STARTER_CHEST"],
     tune: { minBuyEarly: 10, minBuy: 15, chestTurn: 5 },
   },
+  { // GAMBLER RAMP (v20) — 도박꾼 3장으로 마나·최대체력을 불리고 큰 구매로 전환. 램프처럼 높은 구매 하한.
+    name: "BOT · GAMBLER",
+    cards: ["GAMBLER", "GAMBLER", "GAMBLER", "STARTER_TRASH", "STARTER_TRASH", "STARTER_TRASH", "STARTER_CHEST", "STARTER_CHEST"],
+    tune: { minBuyEarly: 12, minBuy: 17, chestTurn: 6 },
+  },
+  { // ELF TEMPO (v20) — 하프 엘프 초반 보드 + 쉼터로 세계수 코스트 0 각. 밸런스형 구매.
+    name: "BOT · ELF",
+    cards: ["ELF_HAVEN", "HALF_ELF", "HALF_ELF", "STARTER_TRASH", "STARTER_TRASH", "STARTER_TRASH", "STARTER_CHEST", "STARTER_CHEST"],
+    tune: { minBuyEarly: 10, minBuy: 15, chestTurn: 5 },
+  },
 ];
+// v20 A/B (greedy, 기존 3덱 필드 상대): GAMBLER 70% 채택 · ELF 46% 채택(아키타입 다양성)
+// 탈락: TRUMPET 더블 템포 30%(나팔 스타터 승률은 상관관계였음) · MIMIC 41% · 순정 컬덱 45%
 /** Roll a random archetype for a new bot game (caller supplies the RNG roll in [0,1)). */
 export function pickBotDeck(rnd: number = Math.random()): BotDeck {
   return BOT_DECKS[Math.min(BOT_DECKS.length - 1, Math.max(0, Math.floor(rnd * BOT_DECKS.length)))];
@@ -322,7 +344,7 @@ export function greedyDecide(g: GameState): Action {
     // 침묵 오라 / 침묵의 심판: 마법 봉인 — v5부터 스타터(컬/상자/어튠)도 대상 (엔진 거부 → 봇도 스킵)
     if (c.t === "spell" || c.t === "starter") {
       if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) return false;
-      if (playCost(c) <= 5 && g.players.some((pl) => pl.field.some((m) => m.aura === "sealLow"))) return false;
+      if (playCost(c, p) <= 5 && g.players.some((pl) => pl.field.some((m) => m.aura === "sealLow"))) return false;
       if (p.spellSealTurn) return false;
     }
     if (c.act === "wipeBack" && p.field.length > 0) return false;
@@ -346,6 +368,7 @@ export function greedyDecide(g: GameState): Action {
     if (c.id === "HERMIT" && p.field.length > 0) return false;
     // 폐기 경제 카드: 대상이 있어야 시전
     if (c.act === "exilePick" && p.discard.length === 0) return false;
+    if (c.act === "destroyMon" && c.cap && !o.field.some((m) => m.cost <= c.cap!)) return false; // 룬 파열: 코스트 캡 대상 필요
     if (c.id === "WALLBREAK1" && !o.field.some((m) => effAtk(o, m) <= 1)) return false;
     if (c.id === "WALLBREAK2" && !o.field.some((m) => effAtk(o, m) <= 2)) return false;
     if (c.id === "SNIPE1" && !o.field.some((m) => effDef(o, m) <= 1)) return false;
@@ -359,8 +382,8 @@ export function greedyDecide(g: GameState): Action {
     if (c.id === "SCRAPPER" && [...p.deck, ...p.discard].filter((x) => x.cost <= 1).length < 2) return false;
     // blood magic hurts the caster — don't suicide
     if (c.id === "CATALYST" && p.hp <= 6) return false;
-    if (c.id === "BLOOD1" && p.hp <= 6) return false;
-    if (c.id === "BLOOD2" && p.hp <= 10) return false;
+    if (c.id === "BLOOD1" && p.hp <= 16) return false;
+    if (c.id === "BLOOD2" && (p.hp <= 16 || o.traps.length + o.enchants.length === 0)) return false;
     if (c.id === "BLOOD_JOY" && p.hp <= 8) return false;
     if (c.id === "BLOOD_ANGER" && p.hp <= 12) return false;
     if (c.id === "BLOOD_SORROW" && (p.hp <= 14 || p.discard.length === 0)) return false;
@@ -378,13 +401,13 @@ export function greedyDecide(g: GameState): Action {
     if (c.id === "FORBIDDEN" && (p.hp <= 17 || !p.field.some((m) => m.tribe && m.tribe !== "시초"))) return false;
     return true;
   };
-  const spells = p.hand.map((c, i) => ({ c, i })).filter((x) => x.c.t === "spell" && playCost(x.c) <= p.mana && castable(x.c));
+  const spells = p.hand.map((c, i) => ({ c, i })).filter((x) => x.c.t === "spell" && playCost(x.c, p) <= p.mana && castable(x.c));
 
   const stFull = p.traps.length + p.enchants.length >= 7;
   // summonable monsters, best value first (respect the 9-monster zone cap)
   const monsters = p.field.length >= 7 ? [] : p.hand
     .map((c, i) => ({ c, i }))
-    .filter((x) => x.c.t === "mon" && playCost(x.c) <= p.mana && !(oppNoLow && (x.c.cost ?? 0) <= 3) && summonReqMet(p, x.c))
+    .filter((x) => x.c.t === "mon" && playCost(x.c, p) <= p.mana && !(oppNoLow && (x.c.cost ?? 0) <= 3) && summonReqMet(p, x.c))
     .sort((a, b) => cardValue(b.c) - cardValue(a.c));
 
   // 1) LETHAL: direct spells + attacks (with 관통 penetration) that kill THIS turn.
@@ -437,6 +460,9 @@ export function greedyDecide(g: GameState): Action {
 
   // 7) trap-break / wipe / direct damage
   if (trapbreak) return { type: "play", idx: trapbreak.i };
+  // 블러드 샤워: 상대 영구마법·세트 함정 제거 (castable가 대상 존재·자해 리스크를 게이트)
+  const shower = spells.find((x) => x.c.id === "BLOOD2");
+  if (shower) return { type: "play", idx: shower.i };
   const wipe = spells.find((x) => x.c.act === "wipeBack" && p.field.length === 0 && (o.traps.length + o.enchants.length) > 0);
   if (wipe) return { type: "play", idx: wipe.i };
   // 역산: 상대 영구마법 파괴 (castable가 상대 최대 마나<=6 & 영구마법 존재를 보장)
@@ -460,11 +486,11 @@ export function greedyDecide(g: GameState): Action {
 
   // 10) set a trap (bot keeps a light footprint; also respect the zone cap)
   // 협상(trapBlockTurn): 이번 턴 함정 설치가 거부되므로 시도하면 무한 재선택 루프에 빠진다
-  const trap = p.trapBlockTurn ? undefined : p.hand.map((c, i) => ({ c, i })).find((x) => x.c.t === "trap" && playCost(x.c) <= p.mana);
+  const trap = p.trapBlockTurn ? undefined : p.hand.map((c, i) => ({ c, i })).find((x) => x.c.t === "trap" && playCost(x.c, p) <= p.mana);
   if (trap && p.traps.length < 3 && !stFull) return { type: "play", idx: trap.i };
 
   // 11) Attune (max mana +1) — always good
-  const attune = p.hand.findIndex((c) => c.star === "mana" && playCost(c) <= p.mana && castable(c));
+  const attune = p.hand.findIndex((c) => c.star === "mana" && playCost(c, p) <= p.mana && castable(c));
   if (attune >= 0) return { type: "play", idx: attune };
 
   // 12) buy from supply, then common market — attack-weighted scoring (races are
@@ -488,11 +514,11 @@ export function greedyDecide(g: GameState): Action {
   if (p.mana >= 8) return { type: "refresh" };
 
   // 13) spare mana → Pry Chest (not before turn 7 — early mimic risk outweighs the payout; not while sealed)
-  const chest = (g.turn <= T.chestTurn || chestLocked(g)) ? -1 : p.hand.findIndex((c) => c.star === "chest" && playCost(c) <= p.mana && castable(c));
+  const chest = (g.turn <= T.chestTurn || chestLocked(g)) ? -1 : p.hand.findIndex((c) => c.star === "chest" && playCost(c, p) <= p.mana && castable(c));
   if (chest >= 0) return { type: "play", idx: chest };
 
   // 14) spare mana → Cull (deck thinning)
-  const cull = p.hand.findIndex((c) => c.star === "trash" && playCost(c) <= p.mana && castable(c));
+  const cull = p.hand.findIndex((c) => c.star === "trash" && playCost(c, p) <= p.mana && castable(c));
   if (cull >= 0) return { type: "play", idx: cull };
 
   // 15) nothing left
@@ -510,7 +536,7 @@ function facePlan(p: PlayerState, o: PlayerState, ready: FieldMon[], spells: { c
   let spellIdx: number | null = null;
   let manaLeft = p.mana;
   const dmg = spells
-    .map((x) => ({ i: x.i, cost: playCost(x.c), d: (x.c.act === "dmg" || x.c.act === "siphon") ? (x.c.val || 0) : burnDmg(x.c, o) }))
+    .map((x) => ({ i: x.i, cost: playCost(x.c, p), d: (x.c.act === "dmg" || x.c.act === "siphon") ? (x.c.val || 0) : burnDmg(x.c, o) }))
     .filter((x) => x.d > 0)
     .sort((a, b) => b.d - a.d);
   for (const s of dmg) {
@@ -553,9 +579,21 @@ function autoTarget(g: GameState): Action {
       const target = killable[0] ?? lowestDef(o, o.field);
       return { type: "chooseTarget", uid: target ? target.uid : null };
     }
-    // destroy / debuff → hit the most valuable enemy monster
-    const t = [...o.field].sort((a, b) => (effAtk(o, b) + b.def!) - (effAtk(o, a) + a.def!))[0];
-    return { type: "chooseTarget", uid: t ? t.uid : null };
+    if (pending.reason === "decayMark") { // 러스트캡 슬러그: 알·아우라 제외, 가장 위협적인 몬스터에 카운터
+      const t0 = [...o.field].filter((m) => m.hatch == null && !hasPassive(m, "aura"))
+        .sort((a, b) => (effAtk(o, b) + b.def!) - (effAtk(o, a) + a.def!))[0];
+      return { type: "chooseTarget", uid: t0 ? t0.uid : null };
+    }
+    // destroy / debuff → hit the most valuable enemy monster (아우라 몬스터는 대상 불가 · 룬 파열 코스트 캡 준수)
+    const mc0 = pending.reason === "destroyMon" ? (pending.data?.maxCost as number | undefined) : undefined;
+    const t = [...o.field].filter((m) => !hasPassive(m, "aura") && (mc0 == null || m.cost <= mc0)).sort((a, b) => (effAtk(o, b) + b.def!) - (effAtk(o, a) + a.def!))[0];
+    if (t) return { type: "chooseTarget", uid: t.uid };
+    // anySide 파괴에서 적 대상이 없고 취소도 불가능하면(포식 등) 자기 최저가치 몬스터로 해소 (봇 무한 pending 방지)
+    if ((pending.data?.anySide as boolean | undefined) && !pending.allowCancel) {
+      const own = [...p.field].filter((m) => mc0 == null || m.cost <= mc0).sort((a, b) => (effAtk(p, a) + (a.def || 0)) - (effAtk(p, b) + (b.def || 0)))[0];
+      if (own) return { type: "chooseTarget", uid: own.uid };
+    }
+    return { type: "chooseTarget", uid: null };
   }
   if (pending.kind === "myMon") {
     if (pending.reason === "incubate") { // 고급 부화기: 부화가 가장 임박한 알
@@ -565,6 +603,19 @@ function autoTarget(g: GameState): Action {
     if (pending.reason === "bloodSecret") { // 비술: 가장 약한 흡혈귀를 대가로 바친다
       const v = [...p.field].filter((m) => isVampFamily(m)).sort((a, b) => (effAtk(p, a) + effDef(p, a)) - (effAtk(p, b) + effDef(p, b)))[0];
       return { type: "chooseTarget", uid: v ? v.uid : null };
+    }
+    if (pending.reason === "chosenMage") { // 선택받은 마법사: 미발동 마법사가 있으면 발동 (6뎀 이득)
+      const fired = (pending.data?.fired as string[] | undefined) ?? [];
+      const mage = p.field.find((m) => m.id === "CHOSEN_MAGE" && !fired.includes(m.uid));
+      return { type: "chooseTarget", uid: mage ? mage.uid : null };
+    }
+    if (pending.reason === "grantDecay") { // 암기 제작: 부패가 없는 몬스터 중 공격력 높은 순
+      const t0 = [...p.field].filter((m) => !hasPassive(m, "decay")).sort((x, y) => effAtk(p, y) - effAtk(p, x))[0];
+      return { type: "chooseTarget", uid: t0 ? t0.uid : null };
+    }
+    if (pending.reason === "grantMajesty") { // 각인 비술: 위엄이 없는 몬스터 중 방어 높은 순 (오래 버틸 몸)
+      const t0 = [...p.field].filter((m) => !hasPassive(m, "majesty")).sort((x, y) => effDef(p, y) - effDef(p, x))[0];
+      return { type: "chooseTarget", uid: t0 ? t0.uid : null };
     }
     // 지원 나팔의 exclude(중복 선택 불가)를 지켜야 무한 재무장 루프에 안 빠진다
     const excl = pending.data?.exclude as string | undefined;
@@ -576,7 +627,12 @@ function autoTarget(g: GameState): Action {
     return { type: "pick", uid: best ? best.uid : (p.deck[0]?.uid ?? null) };
   }
   if (pending.kind === "purge") { // 덱·묘지에서 제외: 저가치부터, 살릴 가치가 있으면 종료
-    const pool = [...p.deck, ...p.discard].sort((a, b) => cardValue(a) - cardValue(b));
+    const discOnly = pending.data?.zone === "discard"; // 시련의 영역: 묘지에서만 — 컬 우선 제외 (선택받은 시리즈 연료)
+    const pool = (discOnly ? [...p.discard] : [...p.deck, ...p.discard]).sort((a, b) => cardValue(a) - cardValue(b));
+    if (discOnly) {
+      const cull = pool.find((c) => c.star === "trash");
+      if (cull) return { type: "pick", uid: cull.uid };
+    }
     const worst = pool[0];
     if (worst && cardValue(worst) < 8) return { type: "pick", uid: worst.uid };
     return { type: "pick", uid: null };
@@ -590,7 +646,12 @@ function autoTarget(g: GameState): Action {
     return { type: "pick", uid: best ? best.uid : (p.discard[0]?.uid ?? null) };
   }
   if (pending.kind === "reroll") return { type: "pick", uid: null }; // 수레바퀴: 봇은 결과 유지
-  if (pending.kind === "giantShop") { // 시초의 거인 교역: 살 수 있는 가장 비싼 시초 카드
+  if (pending.kind === "giantShop") {
+    if (pending.reason === "civChoice") { // 고대 문명: 무료 — 신수의 알(상위 페이오프) 우선
+      const ids0 = (pending.data?.ids as string[] | undefined) ?? [];
+      return { type: "pick", uid: ids0.includes("BEAST_EGG") ? "BEAST_EGG" : (ids0[0] ?? null) };
+    }
+    // 시초의 거인 교역: 살 수 있는 가장 비싼 시초 카드
     const ids = ((pending.data?.ids as string[] | undefined) ?? []).filter((id) => DB[id] && DB[id].cost <= p.mana);
     const best = ids.sort((a, b) => DB[b].cost - DB[a].cost)[0];
     return { type: "pick", uid: best ?? null };
@@ -599,10 +660,14 @@ function autoTarget(g: GameState): Action {
     const worst = [...(o.removed ?? [])].sort((a, b) => cardValue(a) - cardValue(b))[0];
     return { type: "pick", uid: worst ? worst.uid : null };
   }
-  if (pending.kind === "oppBoard") { // 신수: 가장 위협적인 몬스터 → 함정 → 영구마법 순으로 파괴
-    const best = [...o.field].filter((m) => m.aura !== "ward")
-      .sort((a, b) => (effAtk(o, b) + (b.def || 0)) - (effAtk(o, a) + (a.def || 0)))[0];
-    const uid = best?.uid ?? o.traps[0]?.card.uid ?? o.enchants[0]?.card.uid ?? null;
+  if (pending.kind === "oppBoard") { // 파괴 선택: 가장 위협적인 적 몬스터 → 적 함정 → 적 영구마법 순 (봇은 자기 카드를 부수지 않는다 — 없으면 취소)
+    const d0 = (pending.data || {}) as { noMon?: boolean; trapOnly?: boolean; enchOnly?: boolean };
+    const wantMon = !d0.noMon && !d0.trapOnly && !d0.enchOnly;
+    const wantTrap = !d0.enchOnly;
+    const wantEnch = !d0.trapOnly;
+    const best = wantMon ? [...o.field].filter((m) => !hasPassive(m, "aura"))
+      .sort((a, b) => (effAtk(o, b) + (b.def || 0)) - (effAtk(o, a) + (a.def || 0)))[0] : undefined;
+    const uid = best?.uid ?? (wantTrap ? o.traps[0]?.card.uid : undefined) ?? (wantEnch ? o.enchants[0]?.card.uid : undefined) ?? null;
     return { type: "pick", uid };
   }
   return { type: "chooseTarget", uid: null };

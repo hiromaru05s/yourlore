@@ -7,8 +7,24 @@ import { t, getLang, onLangChange } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
 import { TUT_STEPS } from "../game/tutorial";
 import { api } from "../net/api";
+import { PASSIVES } from "../shared/cards";
 
 interface Section { icon: string; h: string; body: string[]; }
+
+/** 패시브 키워드 섹션 — PASSIVES 사전에서 자동 생성 (카드에는 키워드명만 적힌다). */
+function passiveSection(lang: "ko" | "ja" | "en"): Section {
+  const h = lang === "ja" ? "パッシブキーワード" : lang === "en" ? "Passive Keywords" : "패시브 키워드";
+  const intro = lang === "ja"
+    ? "カードには<b>キーワード名だけ</b>が書かれています。カードを拡大(右クリック・長押し)すると右側に説明パネルが表示されます。"
+    : lang === "en"
+      ? "Cards show only the <b>keyword name</b>. Enlarge a card (right-click / long-press) to see the description panel beside it."
+      : "카드에는 <b>키워드명만</b> 적혀 있습니다. 카드를 확대(우클릭·길게 누르기)하면 옆에 설명 패널이 표시돼요.";
+  const body = [intro, ...Object.keys(PASSIVES).map((k) => {
+    const loc = PASSIVES[k][lang];
+    return `<b>${loc.name}</b> — ${loc.desc}`;
+  })];
+  return { icon: "✨", h, body };
+}
 
 const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
   ko: [
@@ -35,7 +51,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🛒", h: "마켓 & 덱 강화", body: [
       "상점에서 카드를 사 덱을 키웁니다. 산 카드는 <b>묘지</b>로 갔다가, 덱이 떨어지면 섞여 다시 들어옵니다.",
-      "<b>고정 마켓</b>: 매 게임 고정된 랜덤 10장(코스트 1~4).",
+      "<b>고정 마켓</b>: 매 게임 고정된 랜덤 10장(코스트 1~6).",
       "<b>제시</b>: 매 턴 새로 제시되는 3장(코스트 1~현재 최대 마나). <b>1마나</b>로 새로 갱신할 수 있어요.",
     ] },
     { icon: "⚔️", h: "전투", body: [
@@ -60,14 +76,20 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "<b>소환 조건</b>이 있는 몬스터도 있습니다(예: 특정 카드가 필드·덱·묘지에 있어야 소환).",
       "<b>암살자</b>류처럼 상대 몬스터를 무시하고 <b>플레이어를 직접 공격</b>하는 카드도 있습니다.",
     ] },
+    { icon: "🏷️", h: "효과 표기 규칙", body: [
+      "효과 앞의 <b>【태그】</b>가 발동 조건입니다: <b>【소환시】</b> 소환한 순간 1회 / <b>【피격시】</b> 함정이 공격에 반응 / <b>【마법 반응】·【소환 반응】</b> 상대의 마법·소환에 반응 / <b>【상시】</b> 필드에 있는 동안 계속 / <b>【매턴】</b> 자신 턴 시작마다 / <b>【조건】</b> 소환 조건.",
+      "<b>【영구】</b> 영구마법은 파괴되기 전까지 계속 유지됩니다. <b>【지속 N턴】</b>은 N턴 뒤 사라지며, 필드에 <b>남은 턴 배지 ⏳</b>가 표시됩니다.",
+      "태그가 없는 마법 효과는 <b>시전 즉시</b> 발동합니다.",
+      "<b>(양측)</b> 표기가 있는 파괴 효과는 <b>자신의 카드도 대상으로 선택</b>할 수 있습니다.",
+    ] },
     { icon: "🎁", h: "보물상자", body: [
-      "보물상자를 열면 4가지 결과 중 하나가 <b>각 25%</b>로 나옵니다:",
-      "최대 마나 +1 / 체력 +3 / 최대 체력 +5 / <b>꽝</b>(상대 필드에 미믹 3/2 소환).",
-      "보물상자 카드를 확대하면 이 확률이 옆에 표시됩니다.",
+      "보물상자를 열면 <b>주사위 🎲</b>를 굴려 결과가 정해집니다:",
+      "<b>1</b> 꽝(상대 필드에 미믹 3/2) / <b>2·3</b> 체력 +3 / <b>4·5</b> 최대 마나 +1 / <b>6</b> 최대 체력 +5.",
+      "보물상자 카드를 확대하면 이 주사위 표가 옆에 표시됩니다. 다른 확률 효과도 전부 주사위 판정입니다.",
     ] },
     { icon: "🏆", h: "승리 & 조작", body: [
       "<b>1:1 대전</b>입니다. 상대의 <b>체력을 0</b>으로 만들면 그 즉시 승리해요.",
-      "<b>75턴</b>이 지나도 승부가 나지 않으면 게임은 <b>무승부</b>로 끝납니다.",
+      "<b>60턴</b>이 끝날 때까지 승부가 나지 않으면 <b>남은 체력이 높은 쪽이 판정승</b>합니다. (동률이면 무승부)",
       "<b>카드 확대</b>: PC는 우클릭, 모바일은 길게 누르기.",
       "<b>기권</b>: 우측 로그 패널 맨 아래(모바일은 📜 버튼으로 로그 열기).",
       "상대 턴에는 상대의 마나가 실시간으로 표시됩니다.",
@@ -97,7 +119,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🛒", h: "マーケット & デッキ強化", body: [
       "ショップでカードを買いデッキを強化します。買ったカードは<b>墓地</b>へ行き、デッキが尽きると混ざって戻ります。",
-      "<b>固定マーケット</b>: 毎ゲーム固定のランダム10枚(コスト1~4)。",
+      "<b>固定マーケット</b>: 毎ゲーム固定のランダム10枚(コスト1~6)。",
       "<b>提示</b>: 毎ターン新たに提示される3枚(コスト1~現在の最大マナ)。<b>1マナ</b>で更新できます。",
     ] },
     { icon: "⚔️", h: "戦闘", body: [
@@ -123,13 +145,19 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "<b>アサシン</b>系のように相手モンスターを無視して<b>プレイヤーを直接攻撃</b>するカードもあります。",
     ] },
     { icon: "🎁", h: "宝箱", body: [
-      "宝箱を開けると4つの結果のいずれかが<b>各25%</b>で出ます:",
-      "最大マナ+1 / 体力+3 / 最大体力+5 / <b>ハズレ</b>(相手の場にミミック3/2を召喚)。",
-      "宝箱カードを拡大すると、この確率が横に表示されます。",
+      "宝箱を開けると<b>ダイス 🎲</b>を振って結果が決まります:",
+      "<b>1</b> ハズレ(相手の場にミミック3/2) / <b>2・3</b> 体力+3 / <b>4・5</b> 最大マナ+1 / <b>6</b> 最大体力+5。",
+      "宝箱カードを拡大すると、このダイス表が横に表示されます。他の確率効果もすべてダイス判定です。",
+    ] },
+    { icon: "🏷️", h: "効果の表記ルール", body: [
+      "効果の前の<b>【タグ】</b>が発動条件です: <b>【召喚時】</b>召喚した瞬間に1回 / <b>【攻撃された時】</b>罠が攻撃に反応 / <b>【魔法に反応】・【召喚に反応】</b>相手の魔法・召喚に反応 / <b>【常時】</b>場にいる間ずっと / <b>【毎ターン】</b>自分のターン開始ごと / <b>【条件】</b>召喚条件。",
+      "<b>【永続】</b>の永続魔法は破壊されるまで続きます。<b>【持続Nターン】</b>はNターン後に消え、場に<b>残りターンのバッジ ⏳</b>が表示されます。",
+      "タグのない魔法効果は<b>発動した瞬間</b>に適用されます。",
+      "<b>(両方の場)</b>と書かれた破壊効果は<b>自分のカードも対象に選べます</b>。",
     ] },
     { icon: "🏆", h: "勝利 & 操作", body: [
       "<b>1対1</b>の対戦です。相手の<b>体力を0</b>にすればその時点で勝利です。",
-      "<b>75ターン</b>経っても決着がつかない場合、ゲームは<b>引き分け</b>で終了します。",
+      "<b>60ターン</b>終了までに決着がつかない場合、<b>残り体力が多い方の判定勝ち</b>になります。（同点なら引き分け）",
       "<b>カード拡大</b>: PCは右クリック、モバイルは長押し。",
       "<b>降参</b>: 右のログパネル最下部(モバイルは📜ボタンでログを開く)。",
       "相手のターン中は相手のマナがリアルタイムで表示されます。",
@@ -159,7 +187,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🛒", h: "Markets & Deckbuilding", body: [
       "Buy cards to grow your deck. Purchases go to your <b>graveyard</b>, then shuffle back in when your deck runs out.",
-      "<b>Fixed market</b>: 10 random cards per game (cost 1-4).",
+      "<b>Fixed market</b>: 10 random cards per game (cost 1-6).",
       "<b>Offer</b>: 3 fresh cards each turn (cost 1 up to your max mana). Reroll it for <b>1 mana</b>.",
     ] },
     { icon: "⚔️", h: "Combat", body: [
@@ -184,13 +212,19 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "<b>Assassins</b> ignore enemy monsters and always <b>attack the player directly</b>.",
     ] },
     { icon: "🎁", h: "Treasure Chests", body: [
-      "Opening a chest gives one of 4 outcomes at <b>25% each</b>:",
-      "Max mana +1 / HP +3 / Max HP +5 / <b>Dud</b> (a 3/2 Mimic on the enemy field).",
-      "Enlarge the chest card to see these odds.",
+      "Opening a chest <b>rolls a die 🎲</b> to decide the outcome:",
+      "<b>1</b> Dud (a 3/2 Mimic on the enemy field) / <b>2·3</b> HP +3 / <b>4·5</b> Max mana +1 / <b>6</b> Max HP +5.",
+      "Enlarge the chest card to see this die table. Every chance effect in the game is a dice roll.",
+    ] },
+    { icon: "🏷️", h: "Effect Notation", body: [
+      "The <b>【tag】</b> before an effect is its trigger: <b>【On Summon】</b> once when summoned / <b>【When Attacked】</b> trap reacting to an attack / <b>【On Enemy Spell】·【On Enemy Summon】</b> trap reacting to the opponent / <b>【Passive】</b> while on the field / <b>【Each Turn】</b> at the start of your turns / <b>【Requires】</b> summon requirement.",
+      "<b>【Permanent】</b> enchantments stay until destroyed. <b>【Lasts N Turns】</b> ones expire after N turns and show a <b>remaining-turns badge ⏳</b> on the field.",
+      "A spell effect with no tag applies <b>immediately when cast</b>.",
+      "Destruction effects marked <b>(either side)</b> can also <b>target your own cards</b>.",
     ] },
     { icon: "🏆", h: "Winning & Controls", body: [
       "It's a <b>1v1 duel</b>. Drop the opponent's <b>HP to 0</b> to win instantly.",
-      "If nobody has won by the end of <b>turn 75</b>, the game ends in a <b>draw</b>.",
+      "If nobody has won by the end of <b>turn 60</b>, the player with <b>more HP remaining wins the judgment</b> (a tie is a draw).",
       "<b>Enlarge cards</b>: right-click on PC, long-press on mobile.",
       "<b>Surrender</b>: bottom of the log panel (📜 button opens the log on mobile).",
       "The opponent's mana is shown live during their turn.",
@@ -201,7 +235,8 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
 export function mountTutorial(app: App): Screen {
   const wrap = document.createElement("div");
   wrap.className = "screen tut-screen";
-  const secs = SECTIONS[getLang()];
+  const lang = getLang();
+  const secs = [...SECTIONS[lang], passiveSection(lang)];
   wrap.innerHTML = `
     <div class="topright-lang"></div>
     <div class="tut">

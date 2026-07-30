@@ -3,7 +3,7 @@
 // touch game state, only the DOM.
 // ============================================================
 import type { CardInst } from "../shared/types";
-import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds } from "../shared/cards";
+import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, cardPassives } from "../shared/cards";
 import { cardEl } from "./cardView";
 import { t, getLang, cardText } from "../i18n";
 
@@ -339,6 +339,30 @@ export function zoomCard(c: CardInst): void {
     note.className = "zoom-note";
     note.textContent = t("card.dur.note");
     wrap.appendChild(note);
+  }
+  // 패시브 키워드 패널: 카드가 가진 패시브(부여분 포함)의 이름+설명을 우측에 표시.
+  // 카드 텍스트의 키워드명을 hover(터치: 탭)하면 해당 설명이 하이라이트된다.
+  const psvKeys = [...new Set([...cardPassives(c), ...(((c as { passivesG?: string[] }).passivesG) ?? [])])];
+  if (psvKeys.length) {
+    const lang0 = getLang();
+    const panel = document.createElement("div");
+    panel.className = "zoom-tribe zoom-psv";
+    panel.innerHTML = `<h3>${t("psv.title")}</h3>` + psvKeys.map((k) => {
+      const p = PASSIVES[k];
+      if (!p) return "";
+      const loc = lang0 === "ja" ? p.ja : lang0 === "en" ? p.en : p.ko;
+      return `<div class="psv-item" data-psv="${k}"><b class="psv-name">${loc.name}</b><div class="psv-desc">${loc.desc}</div></div>`;
+    }).join("");
+    wrap.appendChild(panel);
+    // hover/탭 → 우측 설명 하이라이트 (카드 텍스트 안의 .psv 스팬과 연결)
+    wrap.querySelectorAll<HTMLElement>(".psv").forEach((sp) => {
+      const key = sp.dataset.psv!;
+      const item = panel.querySelector<HTMLElement>(`.psv-item[data-psv="${key}"]`);
+      if (!item) return;
+      sp.addEventListener("pointerenter", () => item.classList.add("hl"));
+      sp.addEventListener("pointerleave", () => item.classList.remove("hl"));
+      sp.addEventListener("click", (e) => { e.stopPropagation(); item.classList.toggle("hl"); });
+    });
   }
   if (c.tribe && TRIBES[c.tribe]) {
     const info = TRIBES[c.tribe][getLang()];

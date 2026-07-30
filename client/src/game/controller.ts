@@ -10,7 +10,7 @@ import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from 
 import { logToEn } from "../shared/logEn";
 import { createGame, reduce, playCost } from "../shared/engine";
 import { botDecide, pickBotDeck } from "../shared/bot";
-import { DB, STARTERS } from "../shared/cards";
+import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog } from "../ui/log";
 import * as A from "../ui/anim";
@@ -21,6 +21,7 @@ import { sfx, type SfxName } from "../ui/sound";
 import { avatarHtml } from "../ui/social";
 import { tierOf, tierLabel } from "../ui/tier";
 import { t, getLang, cardName, onLangChange } from "../i18n";
+import { diceRollAnim } from "../ui/dice";
 
 export interface ControllerExits {
   onHome(): void;
@@ -102,7 +103,7 @@ export abstract class BaseController implements BoardHandlers {
     const c = me.hand.find((x) => x.uid === uid);
     const msg = g.cur !== this.you ? t("play.block.turn")
       : g.pending ? t("play.block.pending")
-      : (c && me.mana < playCost(c)) ? t("play.block.mana")
+      : (c && me.mana < playCost(c, me)) ? t("play.block.mana")
       : t("play.block.cond");
     this.cantPlayToast(msg);
   }
@@ -196,6 +197,7 @@ export abstract class BaseController implements BoardHandlers {
     const hpNow: [number, number] = [prev.players[0].hp, prev.players[1].hp];
     let myDraws = 0;
     let lastKill: { srcKo?: string; srcJa?: string } | null = null;
+    const diceDone = new Set<number>(); // dice events already animated (pre-rolled ahead of a result popup)
 
     for (let i = 0; i < events.length; i++) {
       if (this.dead) return;
@@ -254,6 +256,12 @@ export abstract class BaseController implements BoardHandlers {
           A.monHit(e.uid);
           await wait(260);
           break;
+        case "dice":
+          if (!diceDone.has(i)) {
+            diceDone.add(i);
+            await diceRollAnim(e.rolls, { need: e.need, success: e.success, mine: e.player === this.you });
+          }
+          break;
         case "damage": {
           hpNow[e.player] -= e.amount;
           A.hpFeedback(sideOf(e.player), "dmg", e.amount);
@@ -272,8 +280,16 @@ export abstract class BaseController implements BoardHandlers {
         case "playSpell": {
           const def = DB[e.id] ?? STARTERS[e.id]; // 컬/어튠/보물상자 live in STARTERS
           if (def) await A.revealSpell({ uid: "fx", ...def }, sideOf(e.player), e.dest);
-          // random-roll cards: show the outcome as a popup for BOTH players
+          // random-roll cards: roll the 3D dice first, THEN show the outcome popup
           if (def && RANDOM_CARDS.has(def.id)) {
+            for (let j = i + 1; j < events.length; j++) {
+              const e2 = events[j];
+              if (e2.type === "playSpell" || e2.type === "trapSet" || e2.type === "trapReveal" || e2.type === "buy" || e2.type === "turnHeader" || e2.type === "win") break;
+              if (e2.type === "dice" && !diceDone.has(j)) {
+                diceDone.add(j);
+                await diceRollAnim(e2.rolls, { need: e2.need, success: e2.success, mine: e2.player === this.you });
+              }
+            }
             const lines = this.effectLines(events, i);
             if (lines.length) {
               const mine = e.player === this.you;
@@ -405,13 +421,29 @@ export abstract class BaseController implements BoardHandlers {
         const me = g.players[this.you];
         const opp = g.players[1 - this.you];
         let pool: CardInst[];
-        if (g.pending.kind === "purge") pool = [...me.deck, ...me.discard].sort((a, b) => a.cost - b.cost);
+        if (g.pending.kind === "purge") {
+          // 시련의 영역(trialExile): 묘지에서만 제외
+          const discOnly = g.pending.data?.zone === "discard";
+          pool = (discOnly ? [...me.discard] : [...me.deck, ...me.discard]).sort((a, b) => a.cost - b.cost);
+        }
         else if (g.pending.kind === "oppRmz") pool = [...(opp.removed ?? [])].sort((a, b) => a.cost - b.cost);
-        else pool = [ // oppBoard: 상대 몬스터(신수 제외) + 세트 함정(뒷면) + 영구마법
-          ...opp.field.filter((m) => m.aura !== "ward"),
-          ...opp.traps.map((t2) => ({ uid: t2.card.uid, id: "HIDDEN", t: "trap", cost: 0, name: t("picker.settrap"), text: "?" } as CardInst)),
-          ...opp.enchants.map((e2) => e2.card),
-        ];
+        else { // oppBoard: 상대 몬스터(아우라 제외) + 세트 함정(뒷면) + 영구마법 · 필터: noMon(함정·영구마법만) / trapOnly / enchOnly · anySide면 내 필드도 대상
+          const dd = (g.pending.data ?? {}) as { noMon?: boolean; trapOnly?: boolean; enchOnly?: boolean; anySide?: boolean };
+          const wantMon = !dd.noMon && !dd.trapOnly && !dd.enchOnly;
+          const wantTrap = !dd.enchOnly;
+          const wantEnch = !dd.trapOnly;
+          pool = [
+            ...(wantMon ? opp.field.filter((m) => !hasPassive(m, "aura")) : []),
+            ...(wantTrap ? opp.traps.map((t2) => ({ uid: t2.card.uid, id: "HIDDEN", t: "trap", cost: 0, name: t("picker.settrap"), text: "?" } as CardInst)) : []),
+            ...(wantEnch ? opp.enchants.map((e2) => e2.card) : []),
+            // 내 필드 (자기 카드도 파괴 가능 — 내 세트 함정은 정체를 그대로 보여준다)
+            ...(dd.anySide ? [
+              ...(wantMon ? me.field : []),
+              ...(wantTrap ? me.traps.map((t2) => t2.card) : []),
+              ...(wantEnch ? me.enchants.map((e2) => e2.card) : []),
+            ] : []),
+          ];
+        }
         const hint = getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint;
         const max = Math.min((g.pending.data?.val as number) || 1, pool.length);
         cardPickerMulti(hint, pool, max, (uids) => {
@@ -423,9 +455,11 @@ export abstract class BaseController implements BoardHandlers {
       }
       if (g.pending.kind === "giantShop") {
         // 시초의 거인: 코스트 5+ 시초 카드 구매 (지불 가능한 것만 제시)
+        // 고대 문명(civChoice): 알 2종 중 1장 무료 선택
         const me = g.players[this.you];
+        const free = g.pending.reason === "civChoice";
         const ids = (g.pending.data?.ids as string[] | undefined) ?? [];
-        const pool = ids.filter((id) => DB[id] && DB[id].cost <= me.mana).map((id) => ({ uid: id, ...DB[id] }));
+        const pool = ids.filter((id) => DB[id] && (free || DB[id].cost <= me.mana)).map((id) => ({ uid: id, ...DB[id] }));
         const hint = getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint;
         if (!pool.length) { this.submit({ type: "pick", uid: null }); return; }
         cardPicker(hint, pool, (uid) => this.submit({ type: "pick", uid }));
@@ -591,19 +625,20 @@ export abstract class BaseController implements BoardHandlers {
 
   protected showWin(): void {
     this.stopTimer();
-    if (this.winShown || this.state.winner == null) return;
+    if (this.winShown || !this.state.over) return;
     this.winShown = true;
-    sfx(this.state.winner === this.you ? "win" : "lose");
+    const won: boolean | null = this.state.winner == null ? null : this.state.winner === this.you;
+    if (won != null) sfx(won ? "win" : "lose");
     // bot games are client-local — report the result for analytics (online games are recorded server-side)
-    if (this.state.mode === "bot") void api.trackBot(this.state.winner === this.you);
-    aCapture("game_end", { mode: this.state.mode, won: this.state.winner === this.you, turns: this.state.turn });
+    if (this.state.mode === "bot") void api.trackBot(won);
+    aCapture("game_end", { mode: this.state.mode, won, turns: this.state.turn });
     this.openResult();
   }
 
   /** Result modal — reopenable from the review FAB so the log can be studied (복기). */
   private openResult(): void {
     A.removeReviewFab();
-    const won = this.state.winner === this.you;
+    const won: boolean | null = this.state.winner == null ? null : this.state.winner === this.you;
     const meHp = Math.max(0, this.state.players[this.you].hp);
     const oppHp = Math.max(0, this.state.players[1 - this.you].hp);
     const detail = `${t("modal.hp.me")} ${meHp} · ${t("modal.hp.opp")} ${oppHp}`;

@@ -20,6 +20,7 @@ export class OnlineController extends BaseController {
   private started = false;
   private closing = false;
   private retries = 0;
+  private openedAt = 0; // when the current socket opened; 0 = never opened
   private hb?: ReturnType<typeof setInterval>;
   private preview?: { setUntil(u: number | null): void; close(): void };
 
@@ -31,7 +32,7 @@ export class OnlineController extends BaseController {
 
   private connect(): void {
     this.sock = new Sock<GameServerMsg, GameClientMsg>(`/ws/room/${this.roomId}`, {
-      onOpen: () => { this.retries = 0; this.sock.send({ type: "ready" }); this.startHb(); },
+      onOpen: () => { this.openedAt = Date.now(); this.sock.send({ type: "ready" }); this.startHb(); },
       onMessage: (msg) => this.onServer(msg),
       onClose: () => this.onSockClose(),
     });
@@ -40,6 +41,11 @@ export class OnlineController extends BaseController {
   private onSockClose(): void {
     this.stopHb();
     if (this.closing || this.state?.over) return;
+    // only a connection that STAYED UP resets the retry budget — resetting on every
+    // successful open let two tabs evict each other ("replaced") in an infinite
+    // reconnect ping-pong that burned the DO request quota.
+    if (this.openedAt && Date.now() - this.openedAt > 15_000) this.retries = 0;
+    this.openedAt = 0;
     if (this.retries < MAX_RETRIES) {
       this.retries++;
       this.banner(t("net.reconnecting"));

@@ -156,7 +156,7 @@ const D: Record<string, Entry> = {
   "game.deck": { ko: "덱", ja: "デッキ", en: "Deck" },
   "game.discard": { ko: "묘지", ja: "墓地", en: "Graveyard" },
   "game.std": { ko: "고정 마켓", ja: "固定マーケット", en: "Market" },
-  "game.std.meta": { ko: "매 게임 랜덤 · 1~4 마나", ja: "毎ゲームランダム · 1~4マナ", en: "Random each game · 1-4 mana" },
+  "game.std.meta": { ko: "매 게임 랜덤 · 1~6 마나", ja: "毎ゲームランダム · 1~6マナ", en: "Random each game · 1-6 mana" },
   "game.supply": { ko: "제시 마켓", ja: "提示マーケット", en: "Offer" },
   "game.supply.opp": { ko: "상대 제시", ja: "相手の提示", en: "Opponent's offer" },
   "game.refresh.suffix": { ko: "매 턴 갱신", ja: "毎ターン更新", en: "refreshes each turn" },
@@ -169,7 +169,7 @@ const D: Record<string, Entry> = {
   "modal.win": { ko: "승리", ja: "勝利", en: "Victory" },
   "modal.lose": { ko: "패배", ja: "敗北", en: "Defeat" },
   "modal.draw": { ko: "무승부", ja: "引き分け", en: "Draw" },
-  "modal.draw.body": { ko: "75턴이 지나 게임이 무승부로 끝났습니다.", ja: "75ターン経過でゲームは引き分けになりました。", en: "The game reached turn 75 and ended in a draw." },
+  "modal.draw.body": { ko: "60턴 종료 시점의 체력이 동률이라 무승부입니다.", ja: "60ターン終了時点の体力が同点のため引き分けです。", en: "HP was tied when turn 60 ended, so the game is a draw." },
   "modal.gameover": { ko: "LORE · 게임 종료", ja: "LORE · ゲーム終了", en: "LORE · Game Over" },
   "modal.again": { ko: "다시 하기", ja: "もう一度", en: "Play Again" },
   "modal.home": { ko: "홈으로", ja: "ホームへ", en: "Home" },
@@ -193,6 +193,7 @@ const D: Record<string, Entry> = {
   "deck.tab.all": { ko: "전체 구성", ja: "全体構成", en: "Full Deck" },
   "deck.tab.remain": { ko: "덱에 남음", ja: "デッキに残り", en: "In Deck" },
   "deck.all.note": { ko: "이 덱이 보유한 모든 카드 (손패·필드·묘지 포함)", ja: "このデッキの全カード (手札・場・墓地含む)", en: "Every card this deck owns (incl. hand, field, graveyard)" },
+  "deck.public.note": { ko: "이 게임에서 공개된 상대 카드", ja: "このゲーム中に公開された相手カード", en: "Opponent cards revealed during this game" },
   "deck.remain.note": { ko: "아직 뽑지 않고 덱에 남아있는 카드", ja: "まだ引いておらずデッキに残っているカード", en: "Cards still in your deck, not yet drawn" },
   "deck.empty": { ko: "카드가 없습니다.", ja: "カードがありません。", en: "No cards." },
   "deck.removed": { ko: "제외", ja: "除外", en: "Exiled" },
@@ -202,6 +203,7 @@ const D: Record<string, Entry> = {
   "tribe.others": { ko: "이 종족의 다른 카드 (탭하면 확대)", ja: "この種族の他のカード (タップで拡大)", en: "Other cards in this tribe (tap to enlarge)" },
   "card.related": { ko: "관련 카드", ja: "関連カード", en: "Related Cards" },
   "card.related.sub": { ko: "이 카드가 소환·참조하는 카드 (탭하면 확대)", ja: "このカードが召喚・参照するカード (タップで拡大)", en: "Cards this one summons or references (tap to enlarge)" },
+  "psv.title": { ko: "패시브", ja: "パッシブ", en: "Passives" },
   "tribe.footer": { ko: "동족을 필드에 모으면 발동 · 게임당 각 1회", ja: "同じ種族を場に揃えると発動 · 1ゲームに各1回", en: "Triggers when tribe members share your field · once per game each" },
   // in-game FX / event playback
   "fx.trap": { ko: "함정 발동!", ja: "罠発動！", en: "Trap Activated!" },
@@ -342,6 +344,7 @@ const D: Record<string, Entry> = {
   "card.summon.tip": { ko: "소환 코스트 — 이 몬스터를 손에서 필드로 소환할 때 드는 마나입니다. 왼쪽 위 숫자는 상점에서 살 때 드는 구매 코스트예요.", ja: "召喚コスト — このモンスターを手札からフィールドに召喚する際に必要なマナです。左上の数字はショップで購入する際の購入コストです。", en: "Summon cost — the mana to summon this monster from your hand onto the field. The top-left number is the buy cost you pay in the shop." },
   "card.dur.note": { ko: "(지속) = 몬스터가 필드에 있는 동안 유지되고, 필드를 떠나면 원래대로 돌아갑니다.", ja: "(持続) = モンスターが場にいる間だけ維持され、場を離れると元に戻ります。", en: "(lasting) = kept while the monster is on the field; it resets when the monster leaves." },
   "market.confirm": { ko: "한 번 더 클릭 → 구매", ja: "もう一度クリック → 購入", en: "Click again to buy" },
+  "market.bought": { ko: "구매됨", ja: "購入済み", en: "SOLD" },
   "picker.confirm": { ko: "확정", ja: "確定", en: "Confirm" },
   "picker.count": { ko: "{n}장 선택됨", ja: "{n}枚選択中", en: "{n} selected" },
   "picker.settrap": { ko: "세트 함정", ja: "セットトラップ", en: "Set Trap" },
@@ -366,8 +369,6 @@ const D: Record<string, Entry> = {
   "deck.watch.desc": { ko: "이 덱을 쓸 때 노리는 카드를 골라두세요. 게임 중 마켓·제시에 그 카드가 나오면 은은하게 표시됩니다.", ja: "このデッキで狙うカードを選んでおくと、ゲーム中マーケット・提示に出た時にさりげなく表示されます。", en: "Pick the cards this deck hunts for — they get a subtle highlight when they appear in the market/supply." },
   "deck.watch.search": { ko: "카드 이름 검색…", ja: "カード名検索…", en: "Search cards…" },
   "card.ench": { ko: "영구마법", ja: "永続魔法", en: "Enchantment" },
-  "card.ench.tip": { ko: "영구마법 — 발동하면 필드에 남아 정해진 턴 동안 지속 효과를 줍니다. 일부 카드로 파괴·제외될 수 있어요.", ja: "永続魔法 — 発動すると場に残り、一定ターンの間 継続効果を与えます。一部のカードで破壊・除外されることがあります。", en: "Enchantment — once cast it stays on the field, giving an ongoing effect for a set number of turns. Some cards can destroy or exile it." },
-  "card.ench.tip.perm": { ko: "영구마법 (영구) — 발동하면 필드에 남아 게임 내내 지속 효과를 줍니다. 일부 카드로 파괴·제외될 수 있어요.", ja: "永続魔法 (永続) — 発動すると場に残り、ゲーム中ずっと継続効果を与えます。一部のカードで破壊・除外されることがあります。", en: "Enchantment (permanent) — once cast it stays on the field for the rest of the game. Some cards can destroy or exile it." },
 };
 
 export function t(key: string): string {

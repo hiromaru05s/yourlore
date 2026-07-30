@@ -108,6 +108,18 @@
 .adm-kpi .k-v { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--brass-hi); line-height: 1.1; }
 .adm-kpi .k-l { font-size: 11px; color: var(--paper-dim); margin-top: 4px; letter-spacing: .04em; }
 .adm-kpi .k-h { font-size: 10px; color: var(--paper-faint); margin-top: 3px; }
+/* trend sparklines (small multiples — one measure per chart) */
+.adm-spark { display: block; width: 100%; height: 76px; }
+.adm-spark .sp-dot:hover { fill: #ffffff22; }
+.sp-range { font-size: 10px; color: var(--paper-faint); font-family: var(--mono); margin-top: 4px; letter-spacing: .04em; }
+/* recent-match feed */
+.adm-grid section.wide2 { grid-column: span 2; }
+@media (max-width: 700px) { .adm-grid section.wide2 { grid-column: auto; } }
+.adm-grid td .win { color: var(--good); font-weight: 700; }
+.adm-grid td .vs { color: var(--paper-faint); font-size: 10px; }
+.adm-tag { display: inline-block; font-size: 9.5px; padding: 1px 5px; border: 1px solid var(--line); border-radius: 6px; color: var(--paper-faint); vertical-align: 1px; }
+/* funnel step conversion */
+.adm-grid td .conv { font-family: var(--mono); font-size: 11px; color: var(--cyan); white-space: nowrap; }
 .auth-or { display: flex; align-items: center; gap: 12px; margin: 14px 0; color: var(--paper-faint); font-size: 11px; letter-spacing: .1em; }
 .auth-or::before, .auth-or::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--line)); }
 .auth-or::after { background: linear-gradient(90deg, var(--line), transparent); }

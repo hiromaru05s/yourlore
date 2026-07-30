@@ -5,6 +5,7 @@ import "./styles/tokens.css";
 import "./styles/base.css";
 import "./styles/card.css";
 import "./styles/game.css";
+import "./styles/dice.css";
 import "./styles/screens.css";
 import "./styles/mobile.css";
 import { App } from "./router";
