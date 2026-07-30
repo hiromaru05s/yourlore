@@ -4787,3 +4787,76 @@ body:has(.home-archive) {
 @media (max-width: 760px) {
   .screen:has(.home-archive-exact) { background-size: cover !important; }
 }
+
+/* ============================================================
+   Archive home — small-window responsiveness (desktop, >760px).
+
+   The archive home is a fixed 100vh stage: every panel is anchored in
+   vw/vh so it tracks the stretched painting, and the page itself never
+   scrolls. On small windows the px FLOORS inside clamp() win over the
+   vh-proportional layout, so the dossier grew taller than the parchment
+   and was simply clipped (deck row cut off, start button crowding, and
+   the bottom menu items — 상점/친구초대 — unreachable).
+
+   Fix, in two layers:
+   (a) the parchment content layer and the left menu become their own
+       scroll areas whenever their content is taller than they are;
+   (b) on short windows (≤760px tall) the px floors shrink, so the
+       dossier usually fits again and scrolling is only a safety net.
+   Mobile (≤760px wide) keeps its own column layout, untouched.
+   ============================================================ */
+@media (min-width: 761px) {
+  /* parchment dossier scrolls internally instead of clipping */
+  .home-archive-exact .archive-content-layer {
+    overflow-y: auto;
+    overflow-x: hidden;
+    pointer-events: auto; /* hotspots are hidden in exact mode; needed so the wheel reaches this scroller */
+    scrollbar-width: thin;
+    scrollbar-color: #8d6740 #00000000;
+  }
+  .home-archive-exact .archive-content-layer::-webkit-scrollbar { width: 8px; }
+  .home-archive-exact .archive-content-layer::-webkit-scrollbar-thumb { background: #8d6740; border-radius: 4px; }
+  .home-archive-exact .archive-content-layer::-webkit-scrollbar-track { background: transparent; }
+
+  /* breathing room under the deck row once it becomes scrollable */
+  .home-archive-exact .archive-current-deck { padding-bottom: 28px; }
+
+  /* left menu: reachable bottom items on short windows */
+  .home-archive-exact .archive-left {
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #6e502a #00000000;
+  }
+  .home-archive-exact .archive-left::-webkit-scrollbar { width: 6px; }
+  .home-archive-exact .archive-left::-webkit-scrollbar-thumb { background: #6e502a; border-radius: 3px; }
+  .home-archive-exact .archive-menu { flex: 0 0 auto; }
+}
+
+/* short windows: compact the px floors so the dossier fits the parchment.
+   Every value below mirrors a base rule with the SAME formula, only the
+   floors lowered — keep them in sync if the base layout changes. */
+@media (min-width: 761px) and (max-height: 760px) {
+  .archive-season-rank,
+  .archive-normal-record,
+  .archive-bot-guide { height: clamp(210px, 27.4cqw, 326px); }
+  .archive-recent-matches { height: calc(clamp(210px, 27.4cqw, 326px) - clamp(34px, 3.38cqw, 40px)); }
+  .archive-current-deck { top: calc(18% + clamp(16px, 1.6cqw, 19px) + clamp(210px, 27.4cqw, 326px)); }
+  .archive-ranked-start {
+    --ranked-start-size: clamp(148px, 20.7cqw, 246px);
+    top: calc(18% + clamp(16px, 1.6cqw, 19px) + clamp(210px, 27.4cqw, 326px) - var(--ranked-start-size) - clamp(7px, .7cqw, 9px) - 45px);
+    font-size: clamp(24px, 3.52cqw, 42px);
+  }
+  .archive-content-layer .archive-season-rank-emblem { width: clamp(104px, 16.5cqw, 196px); }
+
+  /* bot dossier: same panel, taller content — tighten so it stays inside */
+  .archive-bot-guide-main > b { font-size: clamp(15px, 2.18cqw, 26px); }
+  .archive-bot-guide-main p { margin: 4px 0 8px; font-size: clamp(9px, 1.01cqw, 12px); line-height: 1.4; }
+  .archive-bot-difficulty > header { height: clamp(20px, 2.87cqw, 34px); }
+  .archive-bot-difficulty-grid { grid-template-rows: repeat(2, minmax(clamp(28px, 3.38cqw, 40px), 1fr)); gap: 5px; padding-top: 5px; }
+
+  /* menu column: shrink before scrolling */
+  .home-archive-exact .archive-sidebar-wordmark { width: min(85%, 250px); margin-bottom: clamp(8px, 1.4vh, 18px); }
+  .home-archive-exact .archive-menu-item { min-height: clamp(38px, 5.85vh, 60px); }
+  .home-archive-exact .archive-menu-item span { font-size: clamp(13px, 1.2vw, 20px); }
+}
