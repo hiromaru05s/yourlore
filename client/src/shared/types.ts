@@ -67,6 +67,7 @@ export interface FieldMon extends CardInst {
   dur?: number; // 알: remaining durability (enemy attacks consume 1 instead of combat)
   evolvedUsed?: boolean; // 흡혈귀: 진화(1회) 사용됨
   trickSwapped?: boolean; // 트릭룸: 공/방 반전 적용 중
+  dmg?: number; // v24 HP-combat: accumulated damage taken (current HP = effDef - dmg); cleared when the card leaves the field
   gcount?: number; // 누적 카운트 (암살자 길드 / 뱀파이어 집사 흡혈 카운트)
   passivesG?: string[]; // 게임 중 부여된 패시브 (암기 제작→부패, 각인 비술→위엄)
   guts?: number; // 기합: 남은 기합 토큰 (전투 파괴를 1회 무효화)

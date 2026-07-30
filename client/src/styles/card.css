@@ -258,3 +258,6 @@
 @keyframes artShimmer { from { background-position: 130% 0; } to { background-position: -70% 0; } }
 .card-art .card-art-img { opacity: 0; transition: opacity 0.28s ease; background-size: cover; background-position: center; }
 .card-art .card-art-img.art-loaded { opacity: 1; }
+
+/* ---- v24 HP-combat: damaged field monsters show current HP in red ---- */
+.ad-def--hurt { color: #ff7a5e !important; text-shadow: 0 0 6px #a3160bcc, 0 1px 2px #000c; }

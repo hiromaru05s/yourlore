@@ -22,7 +22,7 @@
 //  · hell   — never blunders + value-net look-ahead search → 최강
 // ============================================================
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
-import { buyCost, cardValue, chestLocked, cullExiled, effAtk, effDef, glassBanActive, isVampFamily, playCost, reduce, summonReqMet } from "./engine";
+import { buyCost, cardValue, chestLocked, cullExiled, curHp, effAtk, effDef, glassBanActive, isVampFamily, playCost, reduce, summonReqMet } from "./engine";
 import { netEval, determinize } from "./botNet";
 import { DB, hasPassive } from "./cards";
 
@@ -132,7 +132,7 @@ export function candidates(g: GameState): Action[] {
       // NOTHING, so it's strictly dominated; if none killable defer to greedy
       const att = p.field.find((m) => m.uid === (pend.data?.attackerUid as string));
       const a = att ? effAtk(p, att) : 0;
-      o.field.filter((tm) => a > effDef(o, tm)).forEach((m) => push(m.uid));
+      o.field.filter((tm) => a >= curHp(o, tm)).forEach((m) => push(m.uid));
       return out; // empty → searchDecide falls back to the greedy pick
     }
     if (pend.kind === "oppMon") o.field
@@ -199,7 +199,7 @@ export function candidates(g: GameState): Action[] {
       if (m.hatch != null) return; // 알은 공격 불가 (엔진이 거부 — 후보에서 제외해야 무한 재시도 안 함)
       const a = effAtk(p, m);
       if (glassBanActive(g) && effDef(p, m) <= 1) return; // 유리 병기 금지령
-      const canLand = m.directOnly || o.field.length === 0 || o.field.some((tm) => a > effDef(o, tm));
+      const canLand = true; // v24 HP-combat: every attack lands (chip damage accumulates)
       if (!canLand) return;
       const key = `${a}|${m.directOnly ? 1 : 0}`;
       if (seenAtk.has(key)) return;
@@ -377,7 +377,7 @@ function actionPrior(g: GameState, a: Action): number {
     if (!m) return 0.01;
     const atk = effAtk(p, m);
     if (m.directOnly || o.field.length === 0) return 4 + atk * 0.45 + (atk >= o.hp ? 10 : 0) - (o.traps.length > 0 ? 0.7 + read.trap * 0.25 : 0);
-    const bestKill = o.field.filter((tm) => atk > effDef(o, tm)).sort((x, y) => (effAtk(o, y) * 2 + effDef(o, y)) - (effAtk(o, x) * 2 + effDef(o, x)))[0];
+    const bestKill = o.field.filter((tm) => atk >= curHp(o, tm)).sort((x, y) => (effAtk(o, y) * 2 + effDef(o, y)) - (effAtk(o, x) * 2 + effDef(o, x)))[0];
     return bestKill ? 3 + atk * 0.25 + effAtk(o, bestKill) * 0.35 - (o.traps.length > 0 ? 0.45 + read.trap * 0.15 : 0) : 0.08;
   }
   if (a.type === "buySupply") {
@@ -451,8 +451,8 @@ function strongValueEval(g: GameState, s: Side): number {
   const p = g.players[s], o = g.players[1 - s];
   const myAtk = p.field.reduce((t, m) => t + effAtk(p, m), 0);
   const opAtk = o.field.reduce((t, m) => t + effAtk(o, m), 0);
-  const myDef = p.field.reduce((t, m) => t + effDef(p, m), 0);
-  const opDef = o.field.reduce((t, m) => t + effDef(o, m), 0);
+  const myDef = p.field.reduce((t, m) => t + curHp(p, m), 0);
+  const opDef = o.field.reduce((t, m) => t + curHp(o, m), 0);
   const pressure = (potentialFace(p, o) - potentialFace(o, p)) / 45;
   const board = ((myAtk - opAtk) * 0.55 + (myDef - opDef) * 0.2 + (p.field.length - o.field.length) * 1.4) / 35;
   const resources = ((p.hand.length - o.hand.length) * 0.7 + (p.maxMana - o.maxMana) * 0.9 + (p.traps.length - o.traps.length) * 0.5) / 18;
@@ -462,7 +462,7 @@ function strongValueEval(g: GameState, s: Side): number {
 }
 
 function potentialFace(p: PlayerState, o: PlayerState): number {
-  const defs = o.field.map((m) => effDef(o, m)).sort((a, b) => b - a);
+  const defs = o.field.map((m) => curHp(o, m)).sort((a, b) => b - a);
   let total = 0;
   for (const m of [...p.field].filter((x) => !x.exhausted).sort((a, b) => effAtk(p, b) - effAtk(p, a))) {
     const a = effAtk(p, m);
@@ -525,7 +525,7 @@ function policyFeatures(g: GameState, a: Action): number[] {
     if (m) {
       const atk = effAtk(p, m);
       face = m.directOnly || o.field.length === 0 ? Math.min(1, atk / Math.max(1, o.hp)) : 0;
-      removes = o.field.some((tm) => atk > effDef(o, tm)) ? 0.8 : 0;
+      removes = o.field.some((tm) => atk >= curHp(o, tm)) ? 0.8 : 0.3; // v24: chip damage has residual value
       attackOk = face > 0 || removes > 0 ? 1 : 0;
       risky = o.traps.length > 0 ? 0.8 : 0;
       weak = removes === 0 && face === 0 ? 1 : 0;
@@ -614,8 +614,8 @@ export function greedyDecide(g: GameState, useLethal = true): Action {
     if (c.act === "destroyMon" && c.cap && !o.field.some((m) => m.cost <= c.cap!)) return false; // 룬 파열: 코스트 캡 대상 필요
     if (c.id === "WALLBREAK1" && !o.field.some((m) => effAtk(o, m) <= 1)) return false;
     if (c.id === "WALLBREAK2" && !o.field.some((m) => effAtk(o, m) <= 2)) return false;
-    if (c.id === "SNIPE1" && !o.field.some((m) => effDef(o, m) <= 1)) return false;
-    if (c.id === "SNIPE2" && !o.field.some((m) => effDef(o, m) <= 2)) return false;
+    if (c.id === "SNIPE1" && !o.field.some((m) => curHp(o, m) <= 1)) return false;
+    if (c.id === "SNIPE2" && !o.field.some((m) => curHp(o, m) <= 2)) return false;
     if (c.id === "SHATTER" && p.hp <= 7) return false;
     if (c.id === "GREED_PRICE" && p.hp <= 4) return false;
     if (c.id === "GOLIATH_HUNT" && !o.field.some((m) => effDef(o, m) >= 20)) return false;
@@ -700,7 +700,7 @@ export function greedyDecide(g: GameState, useLethal = true): Action {
     for (const m of [...ready].filter(canSwing).sort((a, b) => effAtk(p, b) - effAtk(p, a))) {
       if (o.field.length === 0) return { type: "attack", uid: m.uid };
       const a = effAtk(p, m);
-      if (o.field.some((tm) => a > effDef(o, tm))) return { type: "attack", uid: m.uid };
+      if (o.field.some((tm) => a >= curHp(o, tm))) return { type: "attack", uid: m.uid };
     }
   }
 
@@ -792,7 +792,7 @@ function facePlan(p: PlayerState, o: PlayerState, ready: FieldMon[], spells: { c
   if (!noAtk) {
     // 유리 병기 금지령: 방어 1 이하는 공격 자체가 불가 → 리썰 계산에서 제외
     const ban = [p, o].some((pl) => pl.enchants.some((e) => e.card.ench === "glassBan"));
-    const defs = o.field.filter((m) => m.uid !== withoutUid).map((m) => effDef(o, m)).sort((a, b) => b - a); // toughest first
+    const defs = o.field.filter((m) => m.uid !== withoutUid).map((m) => curHp(o, m)).sort((a, b) => b - a); // toughest first
     for (const m of [...ready].sort((a, b) => effAtk(p, b) - effAtk(p, a))) {
       const a = effAtk(p, m);
       if (a <= 0) continue;

@@ -4,7 +4,7 @@
 // ============================================================
 import type { CardInst, FieldMon, PlayerState } from "../shared/types";
 import { FRAME_BACK, frameFor, PASSIVES, cardPassives } from "../shared/cards";
-import { effAtk, effDef, playCost } from "../shared/engine";
+import { curHp, effAtk, effDef, playCost } from "../shared/engine";
 import { cardName, cardText, getLang, t } from "../i18n";
 
 /**
@@ -129,12 +129,13 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
 
   if (c.t === "mon") {
     const a = opt.field && opt.owner ? effAtk(opt.owner, c as FieldMon) : c.atk!;
-    const d = opt.field && opt.owner ? effDef(opt.owner, c as FieldMon) : c.def!;
-    // The monster frame already has built-in sword/shield icons — we only place the numbers.
-    // Rendered as plain flex-centered divs (same as name/effect) so they never depend on a
-    // monospace font or transform being available on the viewer's machine.
+    // v24 HP-combat: on the field the shield slot shows CURRENT HP (red while damaged);
+    // in hand/market/zoom it shows the printed max HP.
+    const fm = c as FieldMon;
+    const hurt = !!(opt.field && opt.owner) && (fm.dmg || 0) > 0 && fm.hatch == null;
+    const d = opt.field && opt.owner ? (fm.hatch == null ? curHp(opt.owner, fm) : effDef(opt.owner, fm)) : c.def!;
     node.appendChild(el("div", "ad-atk", String(a)));
-    node.appendChild(el("div", "ad-def", String(d)));
+    node.appendChild(el("div", "ad-def" + (hurt ? " ad-def--hurt" : ""), String(d)));
   }
   // 암살자 길드: 카운트 배지
   if (opt.field && c.aura === "assassinGuild") {

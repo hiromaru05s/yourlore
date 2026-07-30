@@ -43,7 +43,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "<b>어튠</b>이나 일부 카드로 최대 마나를 영구히 늘릴 수 있어요. 카드 구매·마법·소환에 모두 마나를 씁니다.",
     ] },
     { icon: "🃏", h: "카드 종류", body: [
-      "<b>몬스터</b> — 공격력/방어력을 가지며 필드에 소환. 소환 시 효과가 있는 경우도 많습니다.",
+      "<b>몬스터</b> — 공격력/체력을 가지며 필드에 소환. 소환 시 효과가 있는 경우도 많습니다.",
       "<b>마법</b> — 즉시 1회 효과(데미지, 회복, 드로우, 파괴 등).",
       "<b>함정</b> — 비공개로 세트해두고 특정 조건에서 자동 발동.",
       "<b>영구마법</b> — 필드에 일정 턴 동안 남아 지속 효과를 줍니다.",
@@ -56,7 +56,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "⚔️", h: "전투", body: [
       "몬스터로 상대를 공격합니다.",
-      "상대 몬스터를 칠 때 내 <b>공격력 > 상대 방어력</b>이면 그 몬스터를 파괴하고, 초과분이 상대 체력에 <b>관통</b> 데미지로 들어갑니다.",
+      "상대 몬스터를 치면 <b>데미지가 체력에 누적</b>됩니다. 체력이 0이 되면 파괴되고, 막타의 초과분은 상대 플레이어에게 <b>관통</b> 데미지로 들어갑니다.",
       "상대 필드가 비어 있으면 체력을 <b>직접</b> 때립니다.",
       "한 번 공격한 몬스터는 그 턴엔 다시 공격할 수 없어요(일부 카드는 2회 공격 가능).",
     ] },
@@ -111,7 +111,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "<b>アチューン</b>や一部のカードで最大マナを永続的に増やせます。購入・魔法・召喚すべてにマナを使います。",
     ] },
     { icon: "🃏", h: "カードの種類", body: [
-      "<b>モンスター</b> — 攻撃力/防御力を持ち場に召喚。召喚時効果を持つものも多いです。",
+      "<b>モンスター</b> — 攻撃力/体力を持ち場に召喚。召喚時効果を持つものも多いです。",
       "<b>魔法</b> — 即時1回の効果(ダメージ・回復・ドロー・破壊など)。",
       "<b>罠</b> — 非公開でセットし、特定の条件で自動発動。",
       "<b>永続魔法</b> — 場に一定ターン残り、継続効果を与えます。",
@@ -124,7 +124,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "⚔️", h: "戦闘", body: [
       "モンスターで相手を攻撃します。",
-      "相手モンスターを攻撃する時、自分の<b>攻撃力 > 相手の防御力</b>ならそのモンスターを破壊し、超過分が相手の体力に<b>貫通</b>ダメージとして入ります。",
+      "相手モンスターを攻撃すると<b>ダメージが体力に蓄積</b>します。体力が0になると破壊され、とどめの超過分は相手プレイヤーに<b>貫通</b>ダメージとして入ります。",
       "相手の場が空なら体力を<b>直接</b>攻撃します。",
       "一度攻撃したモンスターはそのターン再攻撃できません(一部カードは2回攻撃可能)。",
     ] },
@@ -179,7 +179,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "<b>Attune</b> and some cards raise your max mana permanently. Buying, casting and summoning all cost mana.",
     ] },
     { icon: "🃏", h: "Card Types", body: [
-      "<b>Monsters</b> — have ATK/DEF and fight on the field. Many have on-summon effects.",
+      "<b>Monsters</b> — have ATK/HP and fight on the field. Many have on-summon effects.",
       "<b>Spells</b> — one-shot effects (damage, healing, draw, destruction…).",
       "<b>Traps</b> — set face-down; trigger automatically on certain conditions.",
       "<b>Enchantments</b> — stay on the field for a duration with ongoing effects.",
@@ -192,7 +192,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "⚔️", h: "Combat", body: [
       "Attack the opponent with your monsters.",
-      "When attacking a monster: if your <b>ATK > its DEF</b>, it dies and the excess hits the opponent as <b>penetration</b> damage.",
+      "Attacking a monster deals <b>damage that accumulates on its HP</b>. At 0 HP it dies, and the killing blow's excess hits the opponent as <b>penetration</b> damage.",
       "If the enemy field is empty, you hit their HP <b>directly</b>.",
       "Each monster attacks once per turn (a few cards can attack twice).",
     ] },

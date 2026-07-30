@@ -1016,9 +1016,9 @@ export const PASSIVES: Record<string, { ko: PassiveDef; ja: PassiveDef; en: Pass
     en: { name: "Void", desc: "When destroyed, it is exiled from the game instead of going to the graveyard." },
   },
   guts: {
-    ko: { name: "기합", desc: "소환시 기합 토큰 1개를 얻는다. 전투로 파괴될 상황에 토큰 1개를 소모하고 파괴를 무효화한다 (관통 데미지는 그대로 받는다)." },
-    ja: { name: "気合", desc: "召喚時に気合トークンを1個得る。戦闘で破壊される時、トークンを1個消費して破壊を無効化する (貫通ダメージはそのまま受ける)。" },
-    en: { name: "Guts", desc: "Gains 1 Guts token on summon. When it would be destroyed in battle, consume 1 token to negate the destruction (piercing damage still applies)." },
+    ko: { name: "기합", desc: "소환시 기합 토큰 1개를 얻는다. 전투로 치명 데미지를 받을 때 토큰 1개를 소모하고 체력 1로 살아남는다 (관통 데미지는 그대로 들어간다)." },
+    ja: { name: "気合", desc: "召喚時に気合トークンを1個得る。戦闘で致命ダメージを受ける時、トークンを1個消費して体力1で生き残る (貫通ダメージはそのまま入る)。" },
+    en: { name: "Guts", desc: "Gains 1 Guts token on summon. When it would take lethal combat damage, consume 1 token to survive at 1 HP (piercing damage still applies)." },
   },
   decay: {
     ko: { name: "부패", desc: "이 몬스터가 상대 몬스터를 공격할 때마다 부패 카운터 1개를 부여한다. 카운터가 3개 쌓인 몬스터는 파괴되고, 그 주인은 3 데미지를 받는다." },
@@ -1380,6 +1380,31 @@ CHEST_ODDS.ja = { title: "宝箱のダイス", rows: ["1 — ハズレ: 相手�
 CHEST_ODDS.en = { title: "Golden chest die", rows: ["1 — Dud: Mimic (3/2) on enemy field", "2·3 — HP +3", "4·5 — Max mana +1", "6 — Max HP +5"] };
 
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
+// ============================================================
+// v24 HP-combat terminology sweep — the stat once called 방어력/防御力/DEF
+// is now a monster's HP (damage accumulates; the killing blow's overflow
+// still pierces). Card texts follow the new vocabulary automatically.
+// ============================================================
+{
+  const swap = (t: string): string => t
+    .replace(/방어력/g, "체력").replace(/방어 ?\+/g, "체력 +").replace(/방어 ?-/g, "체력 -")
+    .replace(/공\/방/g, "공\/체")
+    .replace(/防御力/g, "体力").replace(/防御 ?\+/g, "体力+").replace(/防御 ?-/g, "体力-")
+    .replace(/攻\/防/g, "攻\/体")
+    .replace(/\bDEF\b/g, "HP").replace(/ATK and DEF/g, "ATK and HP");
+  for (const pool of [DB, STARTERS as unknown as Record<string, CardDef>]) {
+    for (const id of Object.keys(pool)) {
+      const c = pool[id];
+      c.text = swap(c.text);
+      if (c.textJa) c.textJa = swap(c.textJa);
+      if (c.textEn) c.textEn = swap(c.textEn);
+    }
+  }
+  // 개별 보정: 자동 치환이 놓치는 문구
+  DB.TRICKROOM.textJa = "2ターンの間、場の全モンスターの攻撃力と体力が反転する · 反転中は体力が上がる効果は攻撃力を、攻撃力が上がる効果は体力を上げる · 効果終了後、反転中に上がったステータスは継承される";
+  DB.S12.text = "자신 몬스터 1체에 공격+2 / 체력+1(지속)";
+  DB.S12.textJa = "自分のモンスター1体に攻撃+2/体力+1(持続)";
+}
 // 효과 텍스트 표준 표기(【태그】) 적용 — 규칙: docs/card-text-style.md (applyEnglish 이후 필수)
 standardizeCardTexts([DB, STARTERS as unknown as Record<string, CardDef>]);
 
@@ -1440,7 +1465,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v23"; // v23: 전 확률 카드 주사위화 — 1d6/2d6 근사(10%→2d6합11+ · 20%→⚅ · 30%→5+ · 40%→2d6합8+ · 50%→4+ · 60%→2d6합7+ · 70%→2d6합6+), 가챠 3종 주사위표化, 회피 4+로 반전(동일 50%)
+export const BALANCE_VERSION = "v24"; // v24: 전투 개편 — 방어력→체력(데미지 누적·하스스톤식, 반격 없음·관통 유지), 기합=체력1 생존, 저격=현재체력 기준, 최대체력 감소로 즉사 가능(만피 몬스터는 최소 1)
+// v23(구): // v23: 전 확률 카드 주사위화 — 1d6/2d6 근사(10%→2d6합11+ · 20%→⚅ · 30%→5+ · 40%→2d6합8+ · 50%→4+ · 60%→2d6합7+ · 70%→2d6합6+), 가챠 3종 주사위표化, 회피 4+로 반전(동일 50%)
 // v22: 철벽 수문장 0/13→0/10, 암살자 길드 카운트 명문화(본체 공격 포함)
 // v21 이전: // v21: 60턴 체력 판정승(구 75턴 무승부), 바위 거북 1/9→1/5, 선택형 파괴가 자기 필드도 대상 가능
 // v19: 데이터 기반 — 상위 몬스터 10종 스탯 너프 + 수레바퀴(자해5)/유령(2뎀) 버프 + 보살핌12/머쉬룸0공/선견지명10/중급암살자8공
