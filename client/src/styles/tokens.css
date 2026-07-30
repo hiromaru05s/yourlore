@@ -41,6 +41,15 @@
 
   --mono: "SF Mono", ui-monospace, "Roboto Mono", Menlo, Consolas, monospace;
   --ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+  --sans: var(--ui);
+
+  /* LANGUAGE-AWARE TYPE — the archive look per language. Korean keeps the
+     original system stacks; ja/en swap to webfonts (loaded in index.html)
+     so glyphs stop falling back to mismatched system fonts.
+     <html lang> is kept in sync by i18n.ts applyDocLang(). */
+  --serif: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", "Times New Roman", serif;      /* codex serif */
+  --serif-latin: Georgia, "Times New Roman", serif;                                        /* latin accents/numerals */
+  --gothic-ui: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;                          /* plain UI text */
 
   /* CARD FOOTPRINT — sized off viewport HEIGHT so the whole board (incl. the
      hand) always fits at 100% zoom. Ratio ~0.64 is shared by every variant. */
@@ -60,4 +69,20 @@
   --shadow-1: 0 2px 8px #0008;
   --shadow-2: 0 8px 30px #000a;
   --ease: cubic-bezier(.4, 0, .2, 1);
+}
+
+/* Japanese — Shippori Mincho (webfont) gives the codex/archive mincho look;
+   kana+kanji stay one family instead of Korean-font fallback soup. */
+html[lang="ja"] {
+  --serif: "Shippori Mincho", "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --serif-latin: Georgia, "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --gothic-ui: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+}
+
+/* English — Alegreya (webfont): a sturdy bookish serif; AppleMyungjo's latin
+   glyphs (and Georgia at small sizes) looked smudged. */
+html[lang="en"] {
+  --serif: "Alegreya", Georgia, "Times New Roman", serif;
+  --serif-latin: "Alegreya", Georgia, "Times New Roman", serif;
+  --gothic-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
 }

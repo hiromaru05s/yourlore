@@ -2092,7 +2092,7 @@ body:has(.home-archive) {
   position: static;
   margin: 0;
   color: #302216;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: clamp(24px, 2.93cqw, 35px);
   font-weight: 600;
   line-height: 1;
@@ -2104,7 +2104,7 @@ body:has(.home-archive) {
   width: auto;
   margin: 0;
   color: #4d3c2a;
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: var(--gothic-ui);
   font-size: clamp(9px, .9cqw, 11px);
   line-height: 1.42;
   letter-spacing: -.02em;
@@ -2166,7 +2166,7 @@ body:has(.home-archive) {
   border: 0;
   background: transparent;
   box-shadow: none;
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: var(--gothic-ui);
 }
 .archive-season-rank::before,
 .archive-season-rank::after,
@@ -2200,7 +2200,7 @@ body:has(.home-archive) {
 .archive-season-rank-head h2 {
   margin: 0;
   color: #44321e;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(16px, 1.68cqw, 20px);
   font-weight: 600;
   letter-spacing: .03em;
@@ -2233,7 +2233,7 @@ body:has(.home-archive) {
 .archive-season-rank-summary dd {
   margin: 0;
   color: #3d2c19;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(17px, 2.1cqw, 25px);
   font-weight: 600;
   line-height: 1.08;
@@ -2261,7 +2261,7 @@ body:has(.home-archive) {
 }
 .archive-season-rank-stats b {
   color: #3d2c19;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(16px, 1.68cqw, 20px);
   font-weight: 600;
 }
@@ -2276,7 +2276,7 @@ body:has(.home-archive) {
   height: clamp(258px, 27.4cqw, 326px);
   padding: clamp(15px, 1.52cqw, 18px);
   color: #493720;
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: var(--gothic-ui);
 }
 .archive-content-layer[data-section="online"] .archive-normal-record { display: block; }
 .archive-normal-record::after {
@@ -2297,7 +2297,7 @@ body:has(.home-archive) {
 .archive-normal-record-head h2 {
   margin: 0;
   color: #44321e;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(16px, 1.68cqw, 20px);
   font-weight: 600;
   letter-spacing: .03em;
@@ -2322,7 +2322,7 @@ body:has(.home-archive) {
 .archive-normal-record-profile > b {
   overflow: hidden;
   color: #3d2c19;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(17px, 2.1cqw, 25px);
   font-weight: 600;
   line-height: 1.05;
@@ -2347,7 +2347,7 @@ body:has(.home-archive) {
 .archive-normal-record-profile dd {
   margin: 0;
   color: #3d2c19;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(15px, 1.51cqw, 18px);
   font-weight: 600;
 }
@@ -2361,7 +2361,7 @@ body:has(.home-archive) {
   height: clamp(258px, 27.4cqw, 326px);
   padding: clamp(15px, 1.52cqw, 18px);
   color: #493720;
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: var(--gothic-ui);
 }
 .archive-content-layer[data-section="bot"] .archive-bot-guide { display: block; }
 .archive-bot-guide::after {
@@ -2382,7 +2382,7 @@ body:has(.home-archive) {
 .archive-bot-guide-head h2 {
   margin: 0;
   color: #44321e;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(16px, 1.68cqw, 20px);
   font-weight: 600;
   letter-spacing: .03em;
@@ -2396,7 +2396,7 @@ body:has(.home-archive) {
 }
 .archive-bot-guide-main > b {
   color: #3d2c19;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(18px, 2.18cqw, 26px);
   font-weight: 600;
 }
@@ -2415,7 +2415,7 @@ body:has(.home-archive) {
   margin-top: clamp(6px, .59cqw, 7px);
   padding: 0;
   color: #493720;
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: var(--gothic-ui);
   pointer-events: auto;
 }
 .archive-content-layer[data-section="bot"] .archive-bot-difficulty { display: block; }
@@ -2431,7 +2431,7 @@ body:has(.home-archive) {
 .archive-bot-difficulty h2 {
   margin: 0;
   color: #44321e;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(14px, 1.51cqw, 18px);
   font-weight: 600;
   letter-spacing: .03em;
@@ -2454,13 +2454,13 @@ body:has(.home-archive) {
   color: #594329;
   border: 1px solid #765c385c;
   background: #ead8ae10;
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: var(--gothic-ui);
   text-align: left;
   cursor: pointer;
 }
 .archive-bot-difficulty-button b {
   color: #493720;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(10px, 1.01cqw, 12px);
   font-weight: 600;
 }
@@ -2493,7 +2493,7 @@ body:has(.home-archive) {
   height: 82%;
   padding: clamp(4px, .34cqw, 4px) clamp(15px, 1.52cqw, 18px);
   color: #493720;
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: var(--gothic-ui);
   pointer-events: auto;
 }
 .archive-content-layer[data-section="leaderboard"] .archive-leaderboard-panel { display: grid; }
@@ -2510,7 +2510,7 @@ body:has(.home-archive) {
 .archive-leaderboard-hall-head h2 {
   display: none;
   color: #44321e;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(16px, 1.68cqw, 20px);
   font-weight: 600;
   letter-spacing: .03em;
@@ -2576,7 +2576,7 @@ body:has(.home-archive) {
   overflow: hidden;
   max-width: 100%;
   color: #493720;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(11px, 1.18cqw, 14px);
   font-weight: 600;
   text-overflow: ellipsis;
@@ -2584,7 +2584,7 @@ body:has(.home-archive) {
 }
 .archive-leaderboard-honor strong {
   color: #806848;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif-latin);
   font-size: clamp(9px, .93cqw, 11px);
   font-weight: 700;
   letter-spacing: .03em;
@@ -2617,7 +2617,7 @@ body:has(.home-archive) {
   min-height: clamp(31px, 3.04cqw, 36px);
   color: #4d3721;
   border-bottom: 1px solid #7b613f4d;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(9px, 1.01cqw, 12px);
   text-align: center;
 }
@@ -2644,7 +2644,7 @@ body:has(.home-archive) {
   height: calc(clamp(258px, 27.4cqw, 326px) - clamp(34px, 3.38cqw, 40px));
   padding: clamp(15px, 1.52cqw, 18px);
   color: #493720;
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: var(--gothic-ui);
   pointer-events: auto;
 }
 .archive-recent-matches::after {
@@ -2666,7 +2666,7 @@ body:has(.home-archive) {
 .archive-recent-matches-head h2 {
   margin: 0;
   color: #44321e;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(14px, 1.51cqw, 18px);
   font-weight: 600;
   letter-spacing: .03em;
@@ -2695,7 +2695,7 @@ body:has(.home-archive) {
   background: #ead8ae10;
 }
 .archive-recent-match b {
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(13px, 1.35cqw, 16px);
   font-weight: 600;
 }
@@ -2723,7 +2723,7 @@ body:has(.home-archive) {
   white-space: nowrap;
 }
 .archive-recent-match em {
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(9px, .93cqw, 11px);
   font-style: normal;
   font-weight: 600;
@@ -2766,7 +2766,7 @@ body:has(.home-archive) {
   border: var(--ranked-start-edge) solid transparent;
   border-image: url(/ui/ranked-start-frame.webp) 19% fill / var(--ranked-start-edge) / 0 stretch;
   box-shadow: 0 12px 24px #17070685;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(30px, 3.52cqw, 42px);
   font-weight: 700;
   line-height: 1.05;
@@ -2841,7 +2841,7 @@ body:has(.home-archive) {
   border: 0;
   background: transparent;
   box-shadow: none;
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-family: var(--gothic-ui);
   pointer-events: auto;
 }
 .archive-current-deck::before,
@@ -2882,7 +2882,7 @@ body:has(.home-archive) {
   flex: 0 0 auto;
   margin: 0;
   color: #44321e;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(16px, 1.68cqw, 20px);
   font-weight: 600;
   letter-spacing: .03em;
@@ -2899,7 +2899,7 @@ body:has(.home-archive) {
   color: #675034;
   border: 1px solid #765c388c;
   background: #f0dda516;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(8px, .85cqw, 10px);
   cursor: pointer;
 }
@@ -2921,7 +2921,7 @@ body:has(.home-archive) {
   color: #675034;
   border: 1px solid #765c388c;
   background: #f0dda516;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(9px, .93cqw, 11px);
   cursor: pointer;
 }
@@ -2939,7 +2939,7 @@ body:has(.home-archive) {
 .archive-current-deck-name {
   margin: clamp(8px, .85cqw, 10px) 0 clamp(6px, .68cqw, 8px);
   color: #594329;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-size: clamp(12px, 1.18cqw, 14px);
 }
 .archive-live-deck-row {
@@ -2996,7 +2996,7 @@ body:has(.home-archive) {
   height: 78px;
   display: flex;
   align-items: center;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif-latin);
   font-size: clamp(56px, 7vw, 96px);
   line-height: 1;
   letter-spacing: .02em;
@@ -3124,7 +3124,7 @@ body:has(.home-archive) {
 .archive-menu-item span {
   position: relative;
   z-index: 1;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif-latin);
   font-size: clamp(17px, 1.45vw, 24px);
   font-weight: 700;
   letter-spacing: .04em;
@@ -3210,7 +3210,7 @@ body:has(.home-archive) {
 .archive-top-profile-name {
   overflow: hidden;
   color: #ead6a4;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif-latin);
   font-size: clamp(12px, 1.05vw, 16px);
   font-weight: 700;
   letter-spacing: .05em;
@@ -3231,7 +3231,7 @@ body:has(.home-archive) {
 }
 .archive-top-currency b {
   color: #e6d8b2;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif-latin);
   font-size: 15px;
 }
 .archive-top-icon {
@@ -3314,7 +3314,7 @@ body:has(.home-archive) {
 }
 .archive-message-panel[hidden] { display: none; }
 .archive-message-panel-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 9px; border-bottom: 1px solid #80633a66; }
-.archive-message-panel-head b { font-family: Georgia, "Times New Roman", serif; font-size: 17px; }
+.archive-message-panel-head b { font-family: var(--serif-latin); font-size: 17px; }
 .archive-message-panel-head button { border: 0; background: transparent; color: #d9c18b; font-size: 22px; line-height: 1; cursor: pointer; }
 .archive-message-panel p { margin: 14px 0 3px; color: #c4ae7d; font-size: 13px; }
 .archive-friends-panel { width: min(330px, 30vw); }
@@ -3404,7 +3404,7 @@ body:has(.home-archive) {
 }
 .archive-paper h1 {
   margin: 0 0 10px;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif-latin);
   font-size: clamp(48px, 5vw, 70px);
   line-height: .96;
   letter-spacing: .02em;
@@ -3441,7 +3441,7 @@ body:has(.home-archive) {
 .archive-paper-panel h2,
 .archive-recent h2 {
   margin: 0 0 10px;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif-latin);
   font-size: 20px;
   color: #3b2a1a;
   font-weight: 700;
@@ -3571,7 +3571,7 @@ body:has(.home-archive) {
     linear-gradient(180deg, #8a251d, #4a120f),
     radial-gradient(circle at 50% 0, #f4d18c55, transparent 56%);
   color: #ffe7b0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif-latin);
   font-size: 28px;
   font-weight: 800;
   letter-spacing: .08em;
@@ -3629,7 +3629,7 @@ body:has(.home-archive) {
   color: #f5db9c;
 }
 .archive-page-tabs b {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif-latin);
   font-size: 30px;
   line-height: 1;
 }
@@ -3774,7 +3774,7 @@ body:has(.home-archive) {
   width: 1px;
   height: 1px;
   overflow: hidden;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: clamp(34px, 3.25vw, 50px);
   line-height: 1;
   font-weight: 600;
@@ -3785,7 +3785,7 @@ body:has(.home-archive) {
 .archive-cards-head span {
   display: inline-block;
   margin-top: 32px;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", "Times New Roman", serif;
+  font-family: var(--serif);
   letter-spacing: .02em;
   color: #6a5437c9;
   font-size: 13px;
@@ -3815,7 +3815,7 @@ body:has(.home-archive) {
   border-radius: 4px;
   background: #bfa3777a;
   color: #4a3621d8;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: 14px;
   font-weight: 600;
   letter-spacing: .02em;
@@ -3900,7 +3900,7 @@ body:has(.home-archive) {
 }
 .archive-shop-head h1 {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif-latin);
   font-size: clamp(48px, 5vw, 70px);
   line-height: .96;
   letter-spacing: .02em;
@@ -3910,7 +3910,7 @@ body:has(.home-archive) {
 .archive-shop-desc {
   margin: .6vh 0 1vh;
   color: #685036;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: clamp(11px, .9vw, 15px);
 }
 .archive-shop-head > span {
@@ -3919,7 +3919,7 @@ body:has(.home-archive) {
   border: 1px solid #8063429b;
   background: #bca27742;
   color: #4b3520;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif-latin);
   font-size: clamp(13px, 1.15vw, 19px);
 }
 .archive-shop-head b { color: #2d2118; }
@@ -3957,7 +3957,7 @@ body:has(.home-archive) {
 }
 .archive-shop-item strong {
   color: #e8d29c;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: clamp(10px, .85vw, 14px);
   font-weight: 600;
 }
@@ -3966,7 +3966,7 @@ body:has(.home-archive) {
   border: 1px solid #9b7442;
   background: linear-gradient(180deg, #7b2d21, #4d1713);
   color: #f5ddb0;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: clamp(10px, .8vw, 14px);
   cursor: pointer;
 }
@@ -4002,7 +4002,7 @@ body:has(.home-archive) {
 }
 .archive-deck-head h1 {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif-latin);
   font-size: clamp(48px, 5vw, 70px);
   line-height: .96;
   letter-spacing: .02em;
@@ -4011,7 +4011,7 @@ body:has(.home-archive) {
 .archive-deck-head p {
   margin: .55vh 0 .85vh;
   color: #685036;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: clamp(11px, .9vw, 15px);
 }
 .archive-deck-head > button,
@@ -4021,7 +4021,7 @@ body:has(.home-archive) {
   border: 1px solid #8f3025;
   background: linear-gradient(180deg, #7a2d23, #4f1713);
   color: #f5ddb0;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", "Times New Roman", serif;
+  font-family: var(--serif);
   cursor: pointer;
 }
 .archive-deck-tabs {
@@ -4036,7 +4036,7 @@ body:has(.home-archive) {
   border: 1px solid #856442a4;
   background: #bda37c55;
   color: #4d3721;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", "Times New Roman", serif;
+  font-family: var(--serif);
   cursor: pointer;
 }
 .archive-deck-tab.is-on { border-color: #8f3025; background: #7a2d23; color: #f5ddb0; }
@@ -4060,7 +4060,7 @@ body:has(.home-archive) {
     linear-gradient(180deg, #ead8ad 0%, #c7a675 100%);
   box-shadow: inset 0 1px 0 #fff0c76b, inset 0 -2px 0 #5b3c1f70, 0 1px 1px #43271066;
   color: #4a301a;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", serif;
+  font-family: var(--serif);
   font-weight: 600;
   letter-spacing: .03em;
   transition: transform .14s ease, filter .14s ease, box-shadow .14s ease;
@@ -4168,7 +4168,7 @@ body:has(.home-archive) {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: clamp(12px, 1vw, 16px);
   color: #4d3721;
 }
@@ -4211,7 +4211,7 @@ body:has(.home-archive) {
   place-items: center;
   border: 1px dashed #8063428a;
   color: #806342aa;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif-latin);
   font-size: clamp(18px, 2vw, 30px);
 }
 .archive-deck-pool-head { padding-top: .25vh; border-top: 1px solid #71533175; }
