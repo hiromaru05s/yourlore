@@ -83,9 +83,9 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "<b>(양측)</b> 표기가 있는 파괴 효과는 <b>자신의 카드도 대상으로 선택</b>할 수 있습니다.",
     ] },
     { icon: "🎁", h: "보물상자", body: [
-      "보물상자를 열면 4가지 결과 중 하나가 <b>각 25%</b>로 나옵니다:",
-      "최대 마나 +1 / 체력 +3 / 최대 체력 +5 / <b>꽝</b>(상대 필드에 미믹 3/2 소환).",
-      "보물상자 카드를 확대하면 이 확률이 옆에 표시됩니다.",
+      "보물상자를 열면 <b>주사위 🎲</b>를 굴려 결과가 정해집니다:",
+      "<b>1</b> 꽝(상대 필드에 미믹 3/2) / <b>2·3</b> 체력 +3 / <b>4·5</b> 최대 마나 +1 / <b>6</b> 최대 체력 +5.",
+      "보물상자 카드를 확대하면 이 주사위 표가 옆에 표시됩니다. 다른 확률 효과도 전부 주사위 판정입니다.",
     ] },
     { icon: "🏆", h: "승리 & 조작", body: [
       "<b>1:1 대전</b>입니다. 상대의 <b>체력을 0</b>으로 만들면 그 즉시 승리해요.",
@@ -145,9 +145,9 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "<b>アサシン</b>系のように相手モンスターを無視して<b>プレイヤーを直接攻撃</b>するカードもあります。",
     ] },
     { icon: "🎁", h: "宝箱", body: [
-      "宝箱を開けると4つの結果のいずれかが<b>各25%</b>で出ます:",
-      "最大マナ+1 / 体力+3 / 最大体力+5 / <b>ハズレ</b>(相手の場にミミック3/2を召喚)。",
-      "宝箱カードを拡大すると、この確率が横に表示されます。",
+      "宝箱を開けると<b>ダイス 🎲</b>を振って結果が決まります:",
+      "<b>1</b> ハズレ(相手の場にミミック3/2) / <b>2・3</b> 体力+3 / <b>4・5</b> 最大マナ+1 / <b>6</b> 最大体力+5。",
+      "宝箱カードを拡大すると、このダイス表が横に表示されます。他の確率効果もすべてダイス判定です。",
     ] },
     { icon: "🏷️", h: "効果の表記ルール", body: [
       "効果の前の<b>【タグ】</b>が発動条件です: <b>【召喚時】</b>召喚した瞬間に1回 / <b>【攻撃された時】</b>罠が攻撃に反応 / <b>【魔法に反応】・【召喚に反応】</b>相手の魔法・召喚に反応 / <b>【常時】</b>場にいる間ずっと / <b>【毎ターン】</b>自分のターン開始ごと / <b>【条件】</b>召喚条件。",
@@ -212,9 +212,9 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "<b>Assassins</b> ignore enemy monsters and always <b>attack the player directly</b>.",
     ] },
     { icon: "🎁", h: "Treasure Chests", body: [
-      "Opening a chest gives one of 4 outcomes at <b>25% each</b>:",
-      "Max mana +1 / HP +3 / Max HP +5 / <b>Dud</b> (a 3/2 Mimic on the enemy field).",
-      "Enlarge the chest card to see these odds.",
+      "Opening a chest <b>rolls a die 🎲</b> to decide the outcome:",
+      "<b>1</b> Dud (a 3/2 Mimic on the enemy field) / <b>2·3</b> HP +3 / <b>4·5</b> Max mana +1 / <b>6</b> Max HP +5.",
+      "Enlarge the chest card to see this die table. Every chance effect in the game is a dice roll.",
     ] },
     { icon: "🏷️", h: "Effect Notation", body: [
       "The <b>【tag】</b> before an effect is its trigger: <b>【On Summon】</b> once when summoned / <b>【When Attacked】</b> trap reacting to an attack / <b>【On Enemy Spell】·【On Enemy Summon】</b> trap reacting to the opponent / <b>【Passive】</b> while on the field / <b>【Each Turn】</b> at the start of your turns / <b>【Requires】</b> summon requirement.",

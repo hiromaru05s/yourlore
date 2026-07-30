@@ -21,6 +21,7 @@ import { sfx, type SfxName } from "../ui/sound";
 import { avatarHtml } from "../ui/social";
 import { tierOf, tierLabel } from "../ui/tier";
 import { t, getLang, cardName, onLangChange } from "../i18n";
+import { diceRollAnim } from "../ui/dice";
 
 export interface ControllerExits {
   onHome(): void;
@@ -196,6 +197,7 @@ export abstract class BaseController implements BoardHandlers {
     const hpNow: [number, number] = [prev.players[0].hp, prev.players[1].hp];
     let myDraws = 0;
     let lastKill: { srcKo?: string; srcJa?: string } | null = null;
+    const diceDone = new Set<number>(); // dice events already animated (pre-rolled ahead of a result popup)
 
     for (let i = 0; i < events.length; i++) {
       if (this.dead) return;
@@ -254,6 +256,12 @@ export abstract class BaseController implements BoardHandlers {
           A.monHit(e.uid);
           await wait(260);
           break;
+        case "dice":
+          if (!diceDone.has(i)) {
+            diceDone.add(i);
+            await diceRollAnim(e.rolls, { need: e.need, success: e.success, mine: e.player === this.you });
+          }
+          break;
         case "damage": {
           hpNow[e.player] -= e.amount;
           A.hpFeedback(sideOf(e.player), "dmg", e.amount);
@@ -272,8 +280,16 @@ export abstract class BaseController implements BoardHandlers {
         case "playSpell": {
           const def = DB[e.id] ?? STARTERS[e.id]; // 컬/어튠/보물상자 live in STARTERS
           if (def) await A.revealSpell({ uid: "fx", ...def }, sideOf(e.player), e.dest);
-          // random-roll cards: show the outcome as a popup for BOTH players
+          // random-roll cards: roll the 3D dice first, THEN show the outcome popup
           if (def && RANDOM_CARDS.has(def.id)) {
+            for (let j = i + 1; j < events.length; j++) {
+              const e2 = events[j];
+              if (e2.type === "playSpell" || e2.type === "trapSet" || e2.type === "trapReveal" || e2.type === "buy" || e2.type === "turnHeader" || e2.type === "win") break;
+              if (e2.type === "dice" && !diceDone.has(j)) {
+                diceDone.add(j);
+                await diceRollAnim(e2.rolls, { need: e2.need, success: e2.success, mine: e2.player === this.you });
+              }
+            }
             const lines = this.effectLines(events, i);
             if (lines.length) {
               const mine = e.player === this.you;

@@ -1,0 +1,104 @@
+/* ============================================================
+   3D dice roll overlay (ui/dice.ts)
+   ============================================================ */
+.d3-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 340;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, #0006 0%, #0003 55%, #0000 100%);
+  animation: d3in 0.18s ease-out;
+  cursor: pointer;
+}
+.d3-overlay.out { opacity: 0; transition: opacity 0.24s ease; }
+@keyframes d3in { from { opacity: 0; } to { opacity: 1; } }
+
+.d3-tray {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  perspective: 900px;
+  padding: 30px 44px 24px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #14261bcc, #0d1a12cc);
+  border: 1px solid #3a5c46aa;
+  box-shadow: 0 12px 60px #000b, inset 0 0 40px #0006;
+}
+.d3-overlay.opp .d3-tray { background: linear-gradient(180deg, #2a1616cc, #1a0d0dcc); border-color: #5c3a3aaa; }
+.d3-who {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #ff9d8a;
+  text-transform: uppercase;
+}
+.d3-row { display: flex; gap: 34px; }
+
+.d3-wrap { width: 68px; height: 68px; }
+.d3-cube {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.d3-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  padding: 9px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #fdfbf4, #d9d4c4);
+  border: 1px solid #b9b2a0;
+  box-shadow: inset 0 0 10px #0002;
+  backface-visibility: hidden;
+}
+.d3-pip {
+  place-self: center;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #4a4a52, #17171c 70%);
+  box-shadow: inset 0 -1px 2px #0008;
+}
+.d3-face.front  { transform: rotateY(0deg)   translateZ(34px); }
+.d3-face.back   { transform: rotateY(180deg) translateZ(34px); }
+.d3-face.right  { transform: rotateY(90deg)  translateZ(34px); }
+.d3-face.left   { transform: rotateY(-90deg) translateZ(34px); }
+.d3-face.top    { transform: rotateX(90deg)  translateZ(34px); }
+.d3-face.bottom { transform: rotateX(-90deg) translateZ(34px); }
+
+.d3-cap {
+  min-height: 24px;
+  font-size: 17px;
+  font-weight: 800;
+  color: #e8e2cf;
+  text-shadow: 0 1px 3px #000a;
+  letter-spacing: 0.03em;
+}
+.d3-cap b { color: #ffe9a8; margin-right: 6px; }
+
+.d3-overlay.win  .d3-face { box-shadow: inset 0 0 10px #0002, 0 0 22px #ffd76acc; }
+.d3-overlay.fail .d3-face { box-shadow: inset 0 0 10px #0002, 0 0 18px #ff5a3d99; }
+.d3-overlay.win  .d3-verdict { color: #ffd76a; animation: d3pop 0.32s cubic-bezier(0.2, 1.6, 0.4, 1); display: inline-block; }
+.d3-overlay.fail .d3-verdict { color: #ff8a76; animation: d3pop 0.32s cubic-bezier(0.2, 1.6, 0.4, 1); display: inline-block; }
+@keyframes d3pop { 0% { transform: scale(0.4); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+@media (max-width: 640px) {
+  .d3-wrap { width: 54px; height: 54px; }
+  .d3-face { padding: 7px; border-radius: 9px; }
+  .d3-face.front, .d3-face.back, .d3-face.right, .d3-face.left, .d3-face.top, .d3-face.bottom { transform: none; }
+  .d3-face.front  { transform: rotateY(0deg)   translateZ(27px); }
+  .d3-face.back   { transform: rotateY(180deg) translateZ(27px); }
+  .d3-face.right  { transform: rotateY(90deg)  translateZ(27px); }
+  .d3-face.left   { transform: rotateY(-90deg) translateZ(27px); }
+  .d3-face.top    { transform: rotateX(90deg)  translateZ(27px); }
+  .d3-face.bottom { transform: rotateX(-90deg) translateZ(27px); }
+  .d3-pip { width: 9px; height: 9px; }
+  .d3-tray { padding: 22px 28px 18px; }
+}

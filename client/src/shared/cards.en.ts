@@ -390,6 +390,31 @@ function genTextEn(ko: string): string | undefined {
   return undefined;
 }
 
+
+// ---- DICE CONVERSION (v22): explicit EN texts for converted cards (bypass pattern rules) ----
+Object.assign(TEXTS, {
+  GM8_2: "On summon: roll a die — on 4+, clone itself (Summon 3)",
+  GT5_2: "Destroy the attacker + roll a die: on 5+, restore HP equal to its DEF",
+  GT5_3: "Destroy the attacker + roll 2 dice: on a total of 7+, revive it on YOUR field",
+  T4: "Destroy the attacking monster + roll a die: on 5+, deal its ATK to the opponent",
+  AJIN: "Max mana +1 — roll a die: on 4+, add an Attune to your graveyard",
+  ND3: "Draw 3 cards — roll a die: on 5+, draw 2 more (Cast 1)",
+  ND5: "Draw 5 cards — roll a die: on 6, max mana +1 (Cast 2)",
+  GS5_0: "Deal 10 damage — roll 2 dice: on a total of 11+, enemy max mana -1",
+  GS6_2: "Restore 13 HP — roll a die: on 6, max HP +5",
+  GS7_0: "Deal 16 damage — roll a die: on 6, YOUR max mana -1",
+  GS8_0: "Deal 14 damage — roll a die: on 4+, exile the top card of the enemy deck",
+  GS8_3: "Draw 5 cards — roll 2 dice: on a total of 7+, destroy 1 random enemy monster/trap/spell (Cast 2)",
+  GS8_5: "All your monsters +7 ATK — roll a die: on 6, summon a random monster of cost 6 or less",
+  TIMEWARP: "Roll 2 dice — on a total of 6+, skip the opponent's next turn (Cast 12)",
+  LIFE_CYCLE: "Enchantment: whenever you restore HP, roll a die — on 6, max mana +1 (Cast 2)",
+  WORLD_SEED: "Enchantment: at the start of each of your turns, roll a die — on 5+, max mana +1",
+  WORLD_BLESS: "Enchantment: both players gain max mana +1 at the start of their turns. Each turn the caster rolls 2 dice — on a total of 8+, +2 more (Cast 6)",
+  LUCKY_CHEST: "Roll 2 dice — 2·3: max mana +3 & draw 2 / 4·5: dud (Master Mimic 10/3 on enemy field) / 6-8: max mana +1 / 9-11: max HP +8 / 12: max HP +12",
+  GUILD_CHEST: "Roll 2 dice — 2·3: max mana +3 / 4: +1 draw at turn start (permanent) / 5·6: max mana +2 / 7: max mana +1 / 8: max HP +10 / 9·10: Novice & Adept Assassins on enemy field / 11·12: Novice, Adept & Elite Assassins + take 10 damage (Cast 3)",
+  FATE_WHEEL: "Permanent: on cast, your max mana -1 and take 5 damage · After seeing a dice card's result, you may reroll it (once per turn) · Void",
+});
+
 /** Attach nameEn/textEn to every card (explicit map -> generator dictionaries -> Korean fallback). */
 export function applyEnglish(pools: Array<Record<string, CardDef>>): void {
   for (const pool of pools) {
