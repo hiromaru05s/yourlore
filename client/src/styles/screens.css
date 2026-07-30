@@ -4779,3 +4779,11 @@ body:has(.home-archive) {
 .h2h-rec .h2h-l { color: #e0776a; }
 .h2h-rate { font-family: var(--mono); font-size: 13px; color: var(--brass-hi); min-width: 40px; text-align: right; }
 .h2h-games { font-size: 11.5px; color: var(--paper-faint); min-width: 44px; text-align: right; }
+
+/* ---- aspect-ratio resilience: the archive layout anchors everything in vw/vh,
+   so the artwork must stretch in the SAME space (100% 100%) instead of cover-cropping —
+   this keeps hotspots/panels aligned with the painting at any window ratio.
+   Mobile (≤760px) switches to the scrolling column layout, where cover looks better. ---- */
+@media (max-width: 760px) {
+  .screen:has(.home-archive-exact) { background-size: cover !important; }
+}

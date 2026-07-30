@@ -31,7 +31,7 @@ export function mountHome(app: App): Screen {
   const wrap = document.createElement("div");
   wrap.className = "screen";
   // Restore the original archive shell; live content is layered over its parchment page.
-  wrap.style.cssText = "background:#050308 url('/bg/archive-library-codex-sidebar-paper-wide-clean-sidebar-v8.webp') center center/cover no-repeat;";
+  wrap.style.cssText = "background:#050308 url('/bg/archive-library-codex-sidebar-paper-wide-clean-sidebar-v8.webp') center center/100% 100% no-repeat;";
   wrap.innerHTML = `
     <div class="home home-field home-archive home-archive-exact">
       <div class="archive-centered-shell" aria-hidden="true"></div>
