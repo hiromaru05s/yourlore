@@ -31,7 +31,7 @@ export function mountHome(app: App): Screen {
   const wrap = document.createElement("div");
   wrap.className = "screen";
   // Restore the original archive shell; live content is layered over its parchment page.
-  wrap.style.cssText = "background:#050308 url('/bg/archive-library-codex-sidebar-paper-wide-clean-sidebar-v8.png') center center/cover no-repeat;";
+  wrap.style.cssText = "background:#050308 url('/bg/archive-library-codex-sidebar-paper-wide-clean-sidebar-v8.webp') center center/cover no-repeat;";
   wrap.innerHTML = `
     <div class="home home-field home-archive home-archive-exact">
       <div class="archive-centered-shell" aria-hidden="true"></div>
@@ -41,13 +41,13 @@ export function mountHome(app: App): Screen {
             <h1 id="archiveBattleHeaderTitle">랭크전</h1>
             <p class="archive-ranked-header-description" id="archiveBattleHeaderDescription">랭크전은 온라인 유저들과 매칭될 수 있는 점수제 매칭입니다.<br>여러분만의 덱을 사용하여 타 유저들과의 결투에서 승리하고 등급을 올려보세요.</p>
           </div>
-          <img class="archive-ranked-header-wordmark" src="/art/brand/lore-archive-header-wordmark.png" alt="LORE">
+          <img class="archive-ranked-header-wordmark" src="/art/brand/lore-archive-header-wordmark.webp" alt="LORE">
           <div class="archive-ranked-header-divider" aria-hidden="true"></div>
         </div>
         <section class="archive-season-rank" aria-label="시즌 랭크">
           <header class="archive-season-rank-head"><h2>시즌 랭크</h2></header>
           <div class="archive-season-rank-main">
-            <img class="archive-season-rank-emblem" id="archiveSeasonRankEmblem" src="/art/tiers/iron.png" alt="아이언 티어">
+            <img class="archive-season-rank-emblem" id="archiveSeasonRankEmblem" src="/art/tiers/iron.webp" alt="아이언 티어">
             <dl class="archive-season-rank-summary">
               <div><dt>티어</dt><dd id="archiveSeasonTier">아이언</dd></div>
               <div><dt>점수</dt><dd id="archiveSeasonPoints">0점</dd></div>
@@ -109,7 +109,7 @@ export function mountHome(app: App): Screen {
         </section>
       </div>
       <aside class="archive-left">
-        <img class="archive-sidebar-wordmark" src="/art/brand/lore-archive-header-wordmark.png" alt="LORE">
+        <img class="archive-sidebar-wordmark" src="/art/brand/lore-archive-header-wordmark.webp" alt="LORE">
         <div class="archive-menu">
           <button class="archive-menu-item is-active" id="ranked" data-mode="ranked">
             <span>랭크전</span>
@@ -150,7 +150,7 @@ export function mountHome(app: App): Screen {
           <span class="archive-top-profile-name">${u?.display ?? "기록수집가"}</span>
         </button>
         <button class="archive-top-control archive-top-currency" id="credits" title="${t("home.shop.title")}">
-          <img class="archive-top-gem" src="/ui/shop-diamond.png" alt="" aria-hidden="true"><b>${u?.credits ?? 0}</b>
+          <img class="archive-top-gem" src="/ui/shop-diamond.webp" alt="" aria-hidden="true"><b>${u?.credits ?? 0}</b>
         </button>
         <button class="archive-top-control archive-top-icon archive-top-friends" id="archiveFriendsButton" title="친구" aria-expanded="false" aria-controls="archiveFriendsPanel">
           <span class="archive-top-friends-icon" aria-hidden="true"></span><span class="archive-top-badge" id="friendBadge" hidden></span>
@@ -386,10 +386,10 @@ export function mountHome(app: App): Screen {
 
   const renderArchiveSeasonRank = (rating: RankInfo | null) => {
     const tiers = {
-      iron: { label: "아이언", asset: "/art/tiers/iron.png" },
-      bronze: { label: "브론즈", asset: "/art/tiers/bronze.png" },
-      silver: { label: "실버", asset: "/art/tiers/silver.png" },
-      gold: { label: "골드", asset: "/art/tiers/gold.png" },
+      iron: { label: "아이언", asset: "/art/tiers/iron.webp" },
+      bronze: { label: "브론즈", asset: "/art/tiers/bronze.webp" },
+      silver: { label: "실버", asset: "/art/tiers/silver.webp" },
+      gold: { label: "골드", asset: "/art/tiers/gold.webp" },
     } as const;
     const tierKey = rating?.tier?.toLowerCase();
     const tier = tierKey && tierKey in tiers ? tiers[tierKey as keyof typeof tiers] : tiers.iron;
@@ -460,9 +460,9 @@ export function mountHome(app: App): Screen {
     if (archiveLeaderboardSeason) archiveLeaderboardSeason.textContent = season === "이번 시즌" ? season : `시즌 ${season}`;
     const topThree = entries.filter((entry) => entry.rank <= 3).sort((a, b) => a.rank - b.rank);
     const trophies: Record<number, string> = {
-      1: "/ui/hall-trophy-gold.png",
-      2: "/ui/hall-trophy-silver.png",
-      3: "/ui/hall-trophy-bronze.png",
+      1: "/ui/hall-trophy-gold.webp",
+      2: "/ui/hall-trophy-silver.webp",
+      3: "/ui/hall-trophy-bronze.webp",
     };
     archiveLeaderboardHall.innerHTML = "";
     [topThree[1], topThree[0], topThree[2]].filter((entry): entry is LbEntry => !!entry).forEach((entry) => {

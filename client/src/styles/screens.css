@@ -18,7 +18,7 @@
 /* unified archive wordmark replaces the old eye mark + text */
 .screen-brand .mark {
   width: 176px; height: 60px; transform: none; border: none; position: relative;
-  background: url("/art/brand/lore-archive-header-wordmark.png") center/contain no-repeat;
+  background: url("/art/brand/lore-archive-header-wordmark.webp") center/contain no-repeat;
   filter: drop-shadow(0 2px 7px #000a) drop-shadow(0 0 16px #4fb4ff55);
 }
 .screen-brand .mark::after { content: none; }

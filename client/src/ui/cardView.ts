@@ -33,6 +33,7 @@ export function decoratePassives(c: CardInst, txt: string): string {
 
 export interface CardOpts {
   size?: "board" | "mkt" | "hand";
+  fullArt?: boolean; // zoom overlay: load the full-resolution art (default: 384px thumb)
   field?: boolean;
   owner?: PlayerState;
   playable?: boolean;
@@ -81,14 +82,20 @@ function fitToBox(box: HTMLElement, minPx = 3.5): void {
   setTimeout(run, 0);
 }
 
-function artEl(cardId: string): HTMLElement {
+function artEl(cardId: string, full = false): HTMLElement {
+  // small views load the 384px thumbnail; only the zoom overlay fetches the full-res art
   const art = el("div", "card-art");
   const img = document.createElement("img");
-  img.src = `/art/cards/${cardId}.webp`;
+  img.src = `/art/${full ? "cards" : "cards-sm"}/${cardId}.webp`;
   img.alt = "";
   img.loading = "lazy";
   img.decoding = "async";
-  img.onerror = () => img.remove();
+  img.className = "card-art-img";
+  if (full) img.style.backgroundImage = `url(/art/cards-sm/${cardId}.webp)`; // thumb as instant placeholder under the full art
+  const done = (): void => { img.classList.add("art-loaded"); art.classList.add("art-done"); };
+  if (img.complete && img.naturalWidth) done();
+  else img.onload = done;
+  img.onerror = () => { img.remove(); art.classList.add("art-done"); };
   art.appendChild(img);
   return art;
 }
@@ -101,7 +108,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   // Layering: art sits BEHIND the frame (in the transparent art window), the
   // frame PNG overlays on top (its border hugs the art edges), then text/cost
   // render above the frame. (frame's outer + window are transparent.)
-  node.appendChild(artEl(c.id));
+  node.appendChild(artEl(c.id, opt.fullArt));
   const frameEl = el("div", "card-frame");
   frameEl.style.backgroundImage = `url(${frameFor(c.t)})`;
   node.appendChild(frameEl);

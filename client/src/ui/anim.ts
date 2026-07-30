@@ -332,7 +332,7 @@ export function zoomCard(c: CardInst): void {
   ov.id = "zoomOverlay";
   const wrap = document.createElement("div");
   wrap.className = "zoom-wrap";
-  wrap.appendChild(cardEl(c));
+  wrap.appendChild(cardEl(c, { fullArt: true }));
   // "(지속)" 스탯 변화 카드: 필드에 있는 동안만 유지된다는 각주
   if (/\((?:지속|持続|lasting)\)/.test(cardText(c))) {
     const note = document.createElement("div");

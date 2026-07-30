@@ -251,3 +251,10 @@
   font-size: 7px; letter-spacing: .1em; color: var(--paper-dim);
   background: #000000aa; padding: 0 3px; border-radius: 2px; z-index: 2;
 }
+
+/* ---- art loading: shimmer skeleton until the image arrives, then fade in ---- */
+.card-art { background: linear-gradient(110deg, #1a1626 40%, #262038 50%, #1a1626 60%); background-size: 200% 100%; }
+.card-art:not(.art-done) { animation: artShimmer 1.1s linear infinite; }
+@keyframes artShimmer { from { background-position: 130% 0; } to { background-position: -70% 0; } }
+.card-art .card-art-img { opacity: 0; transition: opacity 0.28s ease; background-size: cover; background-position: center; }
+.card-art .card-art-img.art-loaded { opacity: 1; }

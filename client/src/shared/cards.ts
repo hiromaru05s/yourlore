@@ -1465,23 +1465,23 @@ export const STARTER_DECK = [
 ];
 
 export function frameFor(t: CardType): string {
-  if (t === "mon") return "/frames/red.png";
-  if (t === "trap") return "/frames/green.png";
-  if (t === "starter") return "/frames/cyan.png";
-  return "/frames/blue.png"; // spell
+  if (t === "mon") return "/frames/red.webp";
+  if (t === "trap") return "/frames/green.webp";
+  if (t === "starter") return "/frames/cyan.webp";
+  return "/frames/blue.webp"; // spell
 }
-export const FRAME_BACK = "/frames/back.png";
+export const FRAME_BACK = "/frames/back.webp";
 
 // ---- card sleeves (card backs). 'default' is free & always owned; the rest cost
 // 1 credit in the shop. Server (social.ts) is the authority on price/ownership. ----
 export interface Sleeve { id: string; url: string; ko: string; ja: string; en: string; price: number; }
 export const SLEEVES: Record<string, Sleeve> = {
-  default: { id: "default", url: "/frames/back.png",          ko: "기본",   ja: "デフォルト", en: "Default", price: 0 },
-  prism:   { id: "prism",   url: "/frames/sleeve_prism.png",   ko: "프리즘", ja: "プリズム",   en: "Prism",   price: 1 },
-  abyss:   { id: "abyss",   url: "/frames/sleeve_abyss.png",   ko: "심연",   ja: "深淵",       en: "Abyss",   price: 1 },
-  verdant: { id: "verdant", url: "/frames/sleeve_verdant.png", ko: "녹옥",   ja: "翠玉",       en: "Verdant", price: 1 },
-  ivory:   { id: "ivory",   url: "/frames/sleeve_ivory.png",   ko: "상아",   ja: "象牙",       en: "Ivory",   price: 1 },
-  compass: { id: "compass", url: "/frames/sleeve_compass.png", ko: "성좌",   ja: "星座",       en: "Astral",  price: 1 },
+  default: { id: "default", url: "/frames/back.webp",          ko: "기본",   ja: "デフォルト", en: "Default", price: 0 },
+  prism:   { id: "prism",   url: "/frames/sleeve_prism.webp",   ko: "프리즘", ja: "プリズム",   en: "Prism",   price: 1 },
+  abyss:   { id: "abyss",   url: "/frames/sleeve_abyss.webp",   ko: "심연",   ja: "深淵",       en: "Abyss",   price: 1 },
+  verdant: { id: "verdant", url: "/frames/sleeve_verdant.webp", ko: "녹옥",   ja: "翠玉",       en: "Verdant", price: 1 },
+  ivory:   { id: "ivory",   url: "/frames/sleeve_ivory.webp",   ko: "상아",   ja: "象牙",       en: "Ivory",   price: 1 },
+  compass: { id: "compass", url: "/frames/sleeve_compass.webp", ko: "성좌",   ja: "星座",       en: "Astral",  price: 1 },
 };
 /** ordered list for shop/picker rendering (default first). */
 export const SLEEVE_LIST: Sleeve[] = ["default", "prism", "abyss", "verdant", "ivory", "compass"].map((id) => SLEEVES[id]);

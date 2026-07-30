@@ -15,7 +15,7 @@
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand .mark {
   width: 104px; height: 34px; transform: none; border: none; position: relative;
-  background: url("/art/brand/lore-archive-header-wordmark.png") left center/contain no-repeat;
+  background: url("/art/brand/lore-archive-header-wordmark.webp") left center/contain no-repeat;
   filter: drop-shadow(0 1px 4px #000a) drop-shadow(0 0 10px #4fb4ff44);
 }
 .brand .mark::after { content: none; }
@@ -371,11 +371,11 @@
   display: grid; place-items: center; text-align: center; white-space: normal; line-height: 1.15;
   font-size: clamp(13px, 1.65vh, 18px); font-weight: 800; color: #eaf3ff;
   text-shadow: 0 1px 3px #000b, 0 0 8px #0009;
-  background: url(/ui/endturn_idle.png) center/100% 100% no-repeat;
+  background: url(/ui/endturn_idle.webp) center/100% 100% no-repeat;
   border: none; border-radius: 0; box-shadow: none;
   transition: color .15s var(--ease), text-shadow .15s var(--ease);
 }
-.end-turn-wrap .btn:hover:not(:disabled) { background-image: url(/ui/endturn_hover.png); color: #d6eeff; text-shadow: 0 1px 3px #000b, 0 0 12px #4fb4ffaa; }
+.end-turn-wrap .btn:hover:not(:disabled) { background-image: url(/ui/endturn_hover.webp); color: #d6eeff; text-shadow: 0 1px 3px #000b, 0 0 12px #4fb4ffaa; }
 .end-turn-wrap .btn:active:not(:disabled) { transform: translateY(1px); }
 .end-turn-wrap .btn:disabled { filter: grayscale(.55) brightness(.62); opacity: .85; }
 .end-turn-wrap .btn::after { content: none; }
