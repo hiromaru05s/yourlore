@@ -181,17 +181,6 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     fitToBox(eff); // 실측 자동 축소 — 어떤 길이의 효과도 항상 프레임 텍스트판 안에
     node.appendChild(eff);
   }
-  // enchantment (영구마법) marker: ∞ badge pinned on the effect-plate's top-left frame
-  // edge (NOT inside the clipped text box — long texts were sliding under it)
-  if (c.ench) {
-    const perm = (c.val ?? 0) >= 99;
-    const ench = el("div", "card-ench", `<span class="ce-ico">∞</span>`);
-    const etip = el("div", "ench-tip", t(perm ? "card.ench.tip.perm" : "card.ench.tip"));
-    node.appendChild(etip);
-    ench.addEventListener("pointerenter", () => etip.classList.add("show"));
-    ench.addEventListener("pointerleave", () => etip.classList.remove("show"));
-    node.appendChild(ench);
-  }
   if (opt.badge) node.appendChild(el("span", "badge", opt.badge));
   // tribe info is shown BESIDE the card in the zoom view (see anim.zoomCard),
   // so no on-art tribe button here (keeps the art clean).

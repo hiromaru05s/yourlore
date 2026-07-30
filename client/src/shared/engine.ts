@@ -1066,8 +1066,8 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       spawnVampire(g, ctx, p, "VAMP1");
     }
   }
-  // 암살자 길드: '암살자' 몬스터가 상대에게 데미지를 줄 때마다 카운트 +1, 3카운트 → 14뎀
-  if (dealtFace > 0 && !g.over && ((att.id || "").startsWith("ASSASSIN") || (att.name || "").includes("암살자"))) {
+  // 암살자 길드: '암살자' 몬스터 또는 길드 자신이 상대에게 데미지를 줄 때마다 카운트 +1, 3카운트 → 14뎀
+  if (dealtFace > 0 && !g.over && ((att.id || "").startsWith("ASSASSIN") || att.id === "GUILD_HALL" || (att.name || "").includes("암살자"))) {
     for (const gm of p.field) {
       if (g.over) break;
       if (gm.aura !== "assassinGuild") continue;

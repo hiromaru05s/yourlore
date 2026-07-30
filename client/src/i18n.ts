@@ -369,8 +369,6 @@ const D: Record<string, Entry> = {
   "deck.watch.desc": { ko: "이 덱을 쓸 때 노리는 카드를 골라두세요. 게임 중 마켓·제시에 그 카드가 나오면 은은하게 표시됩니다.", ja: "このデッキで狙うカードを選んでおくと、ゲーム中マーケット・提示に出た時にさりげなく表示されます。", en: "Pick the cards this deck hunts for — they get a subtle highlight when they appear in the market/supply." },
   "deck.watch.search": { ko: "카드 이름 검색…", ja: "カード名検索…", en: "Search cards…" },
   "card.ench": { ko: "영구마법", ja: "永続魔法", en: "Enchantment" },
-  "card.ench.tip": { ko: "영구마법 — 발동하면 필드에 남아 정해진 턴 동안 지속 효과를 줍니다. 일부 카드로 파괴·제외될 수 있어요.", ja: "永続魔法 — 発動すると場に残り、一定ターンの間 継続効果を与えます。一部のカードで破壊・除外されることがあります。", en: "Enchantment — once cast it stays on the field, giving an ongoing effect for a set number of turns. Some cards can destroy or exile it." },
-  "card.ench.tip.perm": { ko: "영구마법 (영구) — 발동하면 필드에 남아 게임 내내 지속 효과를 줍니다. 일부 카드로 파괴·제외될 수 있어요.", ja: "永続魔法 (永続) — 発動すると場に残り、ゲーム中ずっと継続効果を与えます。一部のカードで破壊・除外されることがあります。", en: "Enchantment (permanent) — once cast it stays on the field for the rest of the game. Some cards can destroy or exile it." },
 };
 
 export function t(key: string): string {

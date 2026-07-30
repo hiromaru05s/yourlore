@@ -89,7 +89,7 @@ const CORE: Record<string, CardDef> = {
   NGA3: { id: "NGA3", t: "mon", cost: 3, name: "유리 대포", atk: 7, def: 1, text: "—" },
   NGA4: { id: "NGA4", t: "mon", cost: 4, name: "광폭한 검귀", atk: 11, def: 0, text: "—" },
   NWL3: { id: "NWL3", t: "mon", cost: 3, name: "바위 거북", atk: 1, def: 5, text: "—" },
-  NWL4: { id: "NWL4", t: "mon", cost: 4, name: "철벽 수문장", atk: 0, def: 13, text: "—" },
+  NWL4: { id: "NWL4", t: "mon", cost: 4, name: "철벽 수문장", atk: 0, def: 10, text: "—" },
   // ---- fragile but strong effect monsters ----
   NHEX: { id: "NHEX", t: "mon", cost: 3, name: "꼬마 주술사", atk: 0, def: 1, text: "소환시: 상대 체력에 6 데미지", onSummon: "burn", val: 6 },
   NSPR: { id: "NSPR", t: "mon", cost: 4, name: "수정 정령", atk: 0, def: 2, text: "필드에 있는 동안 최대 마나 +1, 소환시 2장 드로우", aura: "mana1", onSummon: "draw", val: 2 },
@@ -651,7 +651,7 @@ const NEW_CARDS4: CardDef[] = [
     textJa: "10%: 最大マナ+3・2枚ドロー / 40%: 最大マナ+1 / 30%: 最大体力+8 / 5%: 最大体力+12 / 15%: ハズレ(相手の場にマスターミミック10/3)" },
   { id: "MIMIC2", t: "mon", cost: 0, aura: "chestLock", name: "마스터 미믹", nameJa: "マスターミミック", atk: 10, def: 3,
     text: "이 카드가 필드에 존재하는 한 양 플레이어는 보물상자를 사용할 수 없다 (어튠 - 마는 가능)", textJa: "このカードが場にある限り両者は宝箱を使用できない (アチューン・魔は可能)" },
-  { id: "GUILD_CHEST", t: "spell", cost: 5, play: 3, name: "암살자 길드의 보물상자", nameJa: "暗殺者ギルドの宝箱",
+  { id: "GUILD_CHEST", t: "spell", cost: 5, play: 3, name: "암살자 길드의 보물상자", nameJa: "アサシンギルドの宝箱",
     text: "10%: 최대 마나+3 / 10%: 턴 시작 드로우+1(영구) / 20%: 최대 마나+2 / 10%: 최대 마나+1 / 10%: 최대 체력+10 / 20%: 상대 필드에 초급·중급 암살자 소환 / 20%: 초급·중급·상급 암살자 소환 + 자신에게 10 데미지 (시전 3)",
     textJa: "10%: 最大マナ+3 / 10%: ターン開始ドロー+1(永続) / 20%: 最大マナ+2 / 10%: 最大マナ+1 / 10%: 最大体力+10 / 20%: 相手の場に初級・中級アサシン召喚 / 20%: 初級・中級・上級アサシン召喚 + 自分に10ダメージ (発動3)" },
   { id: "GUILD_EYE", t: "spell", cost: 0, ench: "bonusDraw", val: 99, val2: 1, name: "길드의 정보망", nameJa: "ギルドの情報網",
@@ -826,8 +826,8 @@ const NEW_CARDS7: CardDef[] = [
   { id: "MARKET_CRISIS", t: "spell", cost: 3, name: "경제 위기", nameJa: "経済危機",
     text: "고정 마켓 10장을 전부 갱신한다", textJa: "固定マーケット10枚を全て更新する" },
   // 토큰 (구매 불가, cost 0)
-  { id: "TOKEN00", t: "mon", cost: 0, atk: 0, def: 0, name: "허수아비", nameJa: "かかし", text: "토큰 · 죽으면 게임에서 제외", textJa: "トークン · 死亡時ゲームから除外" },
-  { id: "SOLDIER2", t: "mon", cost: 0, atk: 2, def: 2, name: "병사", nameJa: "兵士", text: "토큰 · 죽으면 게임에서 제외", textJa: "トークン · 死亡時ゲームから除外" },
+  { id: "TOKEN00", t: "mon", cost: 0, atk: 0, def: 0, name: "허수아비", nameJa: "かかし", text: "죽으면 게임에서 제외", textJa: "死亡時ゲームから除外" },
+  { id: "SOLDIER2", t: "mon", cost: 0, atk: 2, def: 2, name: "병사", nameJa: "兵士", text: "죽으면 게임에서 제외", textJa: "死亡時ゲームから除外" },
 ];
 for (const c of NEW_CARDS7) { DB[c.id] = c; }
 
@@ -958,9 +958,9 @@ const NEW_CARDS10: CardDef[] = [
     text: "영구: 양 플레이어는 마법으로 인한 데미지를 받지 않고 그 수치만큼 회복한다 · 파괴되면 게임에서 제외", textJa: "永続: 両プレイヤーは魔法によるダメージを受けず、その数値だけ回復する · 破壊されたらゲームから除外" },
   { id: "WEAKEN_ALL", t: "spell", cost: 2, ench: "weakenAll", val: 99, exileOnDestroy: true, noShop: true, name: "약화술식", nameJa: "弱化術式",
     text: "영구: 양 필드의 모든 몬스터 공격 -2 · 파괴되면 게임에서 제외", textJa: "永続: 両方の場の全モンスター攻撃-2 · 破壊されたらゲームから除外" },
-  { id: "GUILD_HALL", t: "mon", cost: 2, atk: 0, def: 2, aura: "assassinGuild", noShop: true, name: "암살자 길드", nameJa: "暗殺者ギルド",
-    text: "상시: '암살자' 몬스터로 상대에게 데미지를 줄 때마다 카운트 +1 · 3카운트 달성 시 상대에게 14 데미지 (카운트 초기화) · 파괴되면 카운트도 사라진다",
-    textJa: "常時: 「アサシン」モンスターで相手にダメージを与えるたびカウント+1 · 3カウント達成で相手に14ダメージ (カウントリセット) · 破壊されるとカウントも消える" },
+  { id: "GUILD_HALL", t: "mon", cost: 2, atk: 0, def: 2, aura: "assassinGuild", noShop: true, name: "암살자 길드", nameJa: "アサシンギルド",
+    text: "상시: '암살자' 몬스터 또는 이 카드로 상대에게 데미지를 줄 때마다 카운트 +1 · 3카운트 달성 시 상대에게 14 데미지 (카운트 초기화) · 파괴되면 카운트도 사라진다",
+    textJa: "常時: 「アサシン」モンスターかこのカードで相手にダメージを与えるたびカウント+1 · 3カウント達成で相手に14ダメージ (カウントリセット) · 破壊されるとカウントも消える" },
   { id: "MIMIC_PARTY", t: "trap", cost: 1, react: "mimicParty", noShop: true, name: "미믹 파티", nameJa: "ミミックパーティー",
     text: "함정: 상대가 보물상자를 사용하면 발동 — 상대 필드에 미믹 1마리, 자신 필드에 미믹 2마리 소환", textJa: "罠: 相手が宝箱を使うと発動 — 相手の場にミミック1体、自分の場にミミック2体召喚" },
   { id: "FATE_WHEEL", t: "spell", cost: 4, ench: "fateWheel", val: 99, exileOnDestroy: true, noShop: true, name: "운명의 수레바퀴", nameJa: "運命の輪",
@@ -1440,7 +1440,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v22"; // v22: 전 확률 카드 주사위화 — 1d6/2d6 근사(10%→2d6합11+ · 20%→⚅ · 30%→5+ · 40%→2d6합8+ · 50%→4+ · 60%→2d6합7+ · 70%→2d6합6+), 가챠 3종 주사위표化, 회피 4+로 반전(동일 50%)
+export const BALANCE_VERSION = "v23"; // v23: 전 확률 카드 주사위화 — 1d6/2d6 근사(10%→2d6합11+ · 20%→⚅ · 30%→5+ · 40%→2d6합8+ · 50%→4+ · 60%→2d6합7+ · 70%→2d6합6+), 가챠 3종 주사위표化, 회피 4+로 반전(동일 50%)
+// v22: 철벽 수문장 0/13→0/10, 암살자 길드 카운트 명문화(본체 공격 포함)
 // v21 이전: // v21: 60턴 체력 판정승(구 75턴 무승부), 바위 거북 1/9→1/5, 선택형 파괴가 자기 필드도 대상 가능
 // v19: 데이터 기반 — 상위 몬스터 10종 스탯 너프 + 수레바퀴(자해5)/유령(2뎀) 버프 + 보살핌12/머쉬룸0공/선견지명10/중급암살자8공
 // v18: 마법 조정 — GS8_0 14뎀, GS10_3 6드로+최대체력3, 룬파열 코스트8캡, 명상 4/4, 흡혈술식 3코, 오버로드 라이더 제거, 예리함 -1코
