@@ -88,8 +88,8 @@ const CORE: Record<string, CardDef> = {
   // ---- extreme stat monsters ----
   NGA3: { id: "NGA3", t: "mon", cost: 3, name: "유리 대포", atk: 7, def: 1, text: "—" },
   NGA4: { id: "NGA4", t: "mon", cost: 4, name: "광폭한 검귀", atk: 11, def: 0, text: "—" },
-  NWL3: { id: "NWL3", t: "mon", cost: 3, name: "바위 거북", atk: 1, def: 5, text: "—" },
-  NWL4: { id: "NWL4", t: "mon", cost: 4, name: "철벽 수문장", atk: 0, def: 10, text: "—" },
+  NWL3: { id: "NWL3", t: "mon", cost: 3, name: "바위 거북", atk: 1, def: 8, text: "—" }, // v25: 5→8 (체력 전투 보상)
+  NWL4: { id: "NWL4", t: "mon", cost: 3, name: "철벽 수문장", atk: 0, def: 13, text: "—" }, // v25: 4코 0/10 → 3코 0/13
   // ---- fragile but strong effect monsters ----
   NHEX: { id: "NHEX", t: "mon", cost: 3, name: "꼬마 주술사", atk: 0, def: 1, text: "소환시: 상대 체력에 6 데미지", onSummon: "burn", val: 6 },
   NSPR: { id: "NSPR", t: "mon", cost: 4, name: "수정 정령", atk: 0, def: 2, text: "필드에 있는 동안 최대 마나 +1, 소환시 2장 드로우", aura: "mana1", onSummon: "draw", val: 2 },
@@ -494,7 +494,7 @@ const PATCH3: Record<string, Partial<CardDef>> = {
   // 기록자: 카드 3장 드로우
   NMD4: { onSummon: "draw", val: 3, text: "소환시: 카드 3장 드로우", textJa: "召喚時: カード3枚ドロー" },
   // 수정 정령: 0/6 버프
-  NSPR: { def: 6 },
+  NSPR: { def: 9 }, // v25: 6→9 (체력 전투 보상)
   // 대현자: 카드 5장 드로우
   NMD6: { onSummon: "draw", val: 5, text: "소환시: 카드 5장 드로우", textJa: "召喚時: カード5枚ドロー" },
   // 흑요석 광전사: 상대 플레이어에게 데미지를 입힐 때마다 +2/+2
@@ -682,7 +682,7 @@ const NEW_CARDS5: CardDef[] = [
     text: "자신에게 4 데미지, 최대 마나 +1", textJa: "自分に4ダメージ、最大マナ+1" },
   { id: "WORLD_SEED", t: "spell", cost: 4, ench: "seedMana", val: 99, val2: 33, name: "세계수의 씨앗", nameJa: "世界樹の種",
     text: "영구: 자신의 턴 시작마다 33% 확률로 최대 마나 +1", textJa: "永続: 自分のターン開始時、33%で最大マナ+1" },
-  { id: "MANA_GIANT", t: "mon", cost: 5, atk: 1, def: 7, aura: "mana2", name: "마나 수정 거인", nameJa: "マナ水晶の巨人",
+  { id: "MANA_GIANT", t: "mon", cost: 5, atk: 1, def: 10, aura: "mana2", name: "마나 수정 거인", nameJa: "マナ水晶の巨人", // v25: 7→10
     text: "필드에 있는 동안 최대 마나 +2", textJa: "場にいる間、最大マナ+2" },
   { id: "HOURGLASS", t: "spell", cost: 6, act: "manaUp", val: 2, val2: 2, name: "시간의 모래시계", nameJa: "時の砂時計",
     text: "최대 마나 +2, 카드 2장 드로우", textJa: "最大マナ+2、カード2枚ドロー" },
@@ -1465,7 +1465,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v24"; // v24: 전투 개편 — 방어력→체력(데미지 누적·하스스톤식, 반격 없음·관통 유지), 기합=체력1 생존, 저격=현재체력 기준, 최대체력 감소로 즉사 가능(만피 몬스터는 최소 1)
+export const BALANCE_VERSION = "v25"; // v25: 벽 상향 — 수문장 3코 0/13, 바위거북 1/8, 마나거인 1/10, 수정정령 0/9
+// v24: 전투 개편 — 방어력→체력(데미지 누적·하스스톤식, 반격 없음·관통 유지), 기합=체력1 생존, 저격=현재체력 기준, 최대체력 감소로 즉사 가능(만피 몬스터는 최소 1)
 // v23(구): // v23: 전 확률 카드 주사위화 — 1d6/2d6 근사(10%→2d6합11+ · 20%→⚅ · 30%→5+ · 40%→2d6합8+ · 50%→4+ · 60%→2d6합7+ · 70%→2d6합6+), 가챠 3종 주사위표化, 회피 4+로 반전(동일 50%)
 // v22: 철벽 수문장 0/13→0/10, 암살자 길드 카운트 명문화(본체 공격 포함)
 // v21 이전: // v21: 60턴 체력 판정승(구 75턴 무승부), 바위 거북 1/9→1/5, 선택형 파괴가 자기 필드도 대상 가능
