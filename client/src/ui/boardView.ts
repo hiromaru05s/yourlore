@@ -6,6 +6,7 @@
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { effMaxMana, playCost, buyCost, effAtk, effDef } from "../shared/engine";
 import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
+import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer } from "./modal";
 import { cardEl } from "./cardView";
 import { bindZoom } from "./anim";
@@ -237,12 +238,13 @@ export class GameView {
     // monster zone
     const mz = document.createElement("div");
     mz.className = "zone zone-mon";
-    const targetableZone = !!pending && ((pending.kind === "oppMon" && !isMe) || (pending.kind === "myMon" && isMe)) && myTurn;
+    // anySide(파괴 선택, v21): oppMon pending이라도 자신 필드의 몬스터를 고를 수 있다
+    const targetableZone = !!pending && ((pending.kind === "oppMon" && (!isMe || !!(pending.data as { anySide?: boolean } | undefined)?.anySide)) || (pending.kind === "myMon" && isMe)) && myTurn;
     p.field.forEach((m, idx) => {
       // 아우라(ward): 공격 대상으로는 지정 가능하지만 마법·몬스터 "효과"의 대상은 안 됨
       // 고급 부화기(incubate): 자신의 "알"만 선택 가능
       const targetableMon = targetableZone
-        && !(pending!.kind === "oppMon" && pending!.reason !== "attack" && hasPassive(m, "aura"))
+        && !(pending!.kind === "oppMon" && !isMe && pending!.reason !== "attack" && hasPassive(m, "aura")) // 아우라는 상대 효과만 차단 — 내 카드는 내 효과로 파괴 가능
         && !(pending!.kind === "oppMon" && pending!.reason === "decayMark" && m.hatch != null) // 부패 카운터: 알 제외
         && !(pending!.kind === "oppMon" && pending!.reason === "destroyMon" && pending!.data?.maxCost != null && m.cost > (pending!.data.maxCost as number)) // 룬 파열: 코스트 캡
         && !(pending!.kind === "myMon" && pending!.reason === "incubate" && m.hatch == null)
@@ -277,7 +279,12 @@ export class GameView {
       }
     });
     p.enchants.forEach((e) => {
-      const card = cardEl(e.card, { badge: `${e.turns}T` });
+      // 영구(99) 영구마법은 턴 배지를 아예 표시하지 않는다 — 기한부만 남은 턴을 크게 표시 (v21 UX)
+      // 혈귀술/고대 문명처럼 turns=99지만 bornTurn 기준 N턴 후 사라지는 카드도 남은 턴을 보여준다
+      const lim = e.card.ench ? ENCH_TURN_LIMITS[e.card.ench] : undefined;
+      const rem = e.turns < 99 ? e.turns : lim != null ? Math.max(0, (e.bornTurn ?? 0) + lim - g.turn) : null;
+      const card = cardEl(e.card, rem != null ? { badge: `⏳${rem}` } : {});
+      if (rem != null) { card.classList.add("ench-timed"); if (rem <= 1) card.classList.add("ench-expiring"); }
       bindZoom(card, e.card);
       sz.appendChild(card);
     });

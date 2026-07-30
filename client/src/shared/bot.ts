@@ -587,7 +587,13 @@ function autoTarget(g: GameState): Action {
     // destroy / debuff → hit the most valuable enemy monster (아우라 몬스터는 대상 불가 · 룬 파열 코스트 캡 준수)
     const mc0 = pending.reason === "destroyMon" ? (pending.data?.maxCost as number | undefined) : undefined;
     const t = [...o.field].filter((m) => !hasPassive(m, "aura") && (mc0 == null || m.cost <= mc0)).sort((a, b) => (effAtk(o, b) + b.def!) - (effAtk(o, a) + a.def!))[0];
-    return { type: "chooseTarget", uid: t ? t.uid : null };
+    if (t) return { type: "chooseTarget", uid: t.uid };
+    // anySide 파괴에서 적 대상이 없고 취소도 불가능하면(포식 등) 자기 최저가치 몬스터로 해소 (봇 무한 pending 방지)
+    if ((pending.data?.anySide as boolean | undefined) && !pending.allowCancel) {
+      const own = [...p.field].filter((m) => mc0 == null || m.cost <= mc0).sort((a, b) => (effAtk(p, a) + (a.def || 0)) - (effAtk(p, b) + (b.def || 0)))[0];
+      if (own) return { type: "chooseTarget", uid: own.uid };
+    }
+    return { type: "chooseTarget", uid: null };
   }
   if (pending.kind === "myMon") {
     if (pending.reason === "incubate") { // 고급 부화기: 부화가 가장 임박한 알
@@ -654,10 +660,14 @@ function autoTarget(g: GameState): Action {
     const worst = [...(o.removed ?? [])].sort((a, b) => cardValue(a) - cardValue(b))[0];
     return { type: "pick", uid: worst ? worst.uid : null };
   }
-  if (pending.kind === "oppBoard") { // 신수: 가장 위협적인 몬스터 → 함정 → 영구마법 순으로 파괴 (noMon: 함정·영구마법만)
-    const best = pending.data?.noMon ? undefined : [...o.field].filter((m) => !hasPassive(m, "aura"))
-      .sort((a, b) => (effAtk(o, b) + (b.def || 0)) - (effAtk(o, a) + (a.def || 0)))[0];
-    const uid = best?.uid ?? o.traps[0]?.card.uid ?? o.enchants[0]?.card.uid ?? null;
+  if (pending.kind === "oppBoard") { // 파괴 선택: 가장 위협적인 적 몬스터 → 적 함정 → 적 영구마법 순 (봇은 자기 카드를 부수지 않는다 — 없으면 취소)
+    const d0 = (pending.data || {}) as { noMon?: boolean; trapOnly?: boolean; enchOnly?: boolean };
+    const wantMon = !d0.noMon && !d0.trapOnly && !d0.enchOnly;
+    const wantTrap = !d0.enchOnly;
+    const wantEnch = !d0.trapOnly;
+    const best = wantMon ? [...o.field].filter((m) => !hasPassive(m, "aura"))
+      .sort((a, b) => (effAtk(o, b) + (b.def || 0)) - (effAtk(o, a) + (a.def || 0)))[0] : undefined;
+    const uid = best?.uid ?? (wantTrap ? o.traps[0]?.card.uid : undefined) ?? (wantEnch ? o.enchants[0]?.card.uid : undefined) ?? null;
     return { type: "pick", uid };
   }
   return { type: "chooseTarget", uid: null };

@@ -41,7 +41,7 @@ export function confirmDialog(opts: { title: string; body?: string; confirm: str
   });
 }
 
-/** won: true=victory, false=defeat, null=draw (75-turn limit). */
+/** won: true=victory, false=defeat, null=draw (60-turn HP tie). */
 export function winModal(won: boolean | null, detail: string, onAgain: () => void, onHome: () => void, onReview?: () => void): void {
   const m = document.createElement("div");
   m.className = "modal";

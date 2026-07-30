@@ -6,6 +6,7 @@
 // ============================================================
 import type { CardDef, CardType } from "./types";
 import { applyEnglish } from "./cards.en";
+import { standardizeCardTexts } from "./cardText";
 
 // ---------------- core set (cost 1–4) ----------------
 const CORE: Record<string, CardDef> = {
@@ -87,7 +88,7 @@ const CORE: Record<string, CardDef> = {
   // ---- extreme stat monsters ----
   NGA3: { id: "NGA3", t: "mon", cost: 3, name: "유리 대포", atk: 7, def: 1, text: "—" },
   NGA4: { id: "NGA4", t: "mon", cost: 4, name: "광폭한 검귀", atk: 11, def: 0, text: "—" },
-  NWL3: { id: "NWL3", t: "mon", cost: 3, name: "바위 거북", atk: 1, def: 9, text: "—" },
+  NWL3: { id: "NWL3", t: "mon", cost: 3, name: "바위 거북", atk: 1, def: 5, text: "—" },
   NWL4: { id: "NWL4", t: "mon", cost: 4, name: "철벽 수문장", atk: 0, def: 13, text: "—" },
   // ---- fragile but strong effect monsters ----
   NHEX: { id: "NHEX", t: "mon", cost: 3, name: "꼬마 주술사", atk: 0, def: 1, text: "소환시: 상대 체력에 6 데미지", onSummon: "burn", val: 6 },
@@ -1331,6 +1332,8 @@ for (const id20 of Object.keys(PATCH20)) { if (DB[id20]) Object.assign(DB[id20],
 
 // English localization (names/texts) — applied last so it reflects final balance patches
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
+// 효과 텍스트 표준 표기(【태그】) 적용 — 규칙: docs/card-text-style.md (applyEnglish 이후 필수)
+standardizeCardTexts([DB, STARTERS as unknown as Record<string, CardDef>]);
 
 export const ALL_IDS = Object.keys(DB);
 // markets never offer cost-0 tokens or noShop(스타팅 전용) cards
@@ -1389,7 +1392,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v20"; // v20: 고정 마켓 코스트 1~4 → 1~6 확대(어그로 편중 완화) + 신성한 성벽 4/11
+export const BALANCE_VERSION = "v21"; // v21: 60턴 체력 판정승(구 75턴 무승부), 바위 거북 1/9→1/5, 선택형 파괴가 자기 필드도 대상 가능
 // v19: 데이터 기반 — 상위 몬스터 10종 스탯 너프 + 수레바퀴(자해5)/유령(2뎀) 버프 + 보살핌12/머쉬룸0공/선견지명10/중급암살자8공
 // v18: 마법 조정 — GS8_0 14뎀, GS10_3 6드로+최대체력3, 룬파열 코스트8캡, 명상 4/4, 흡혈술식 3코, 오버로드 라이더 제거, 예리함 -1코
 // v17: 함정 리밸런스 — 시전코스트 전면 1(정보 누출 차단) + 구매코스트 재정렬(무효<파괴 위계)

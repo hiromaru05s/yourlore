@@ -12,6 +12,11 @@ import { cardName, cardText, getLang, t } from "../i18n";
  * 그 카드가 실제로 가진 패시브의 이름만 래핑 — 다른 문장 속 우연한 일치는 건드리지 않는다.
  * (줌 화면에서 hover 시 우측 패시브 설명 패널이 하이라이트된다)
  */
+/** 【발동조건 태그】 → 강조 칩. 표기 규칙: docs/card-text-style.md (shared/cardText.ts) */
+export function decorateTags(txt: string): string {
+  return txt.replace(/【([^】]{1,24})】/g, '<span class="fx-tag">$1</span>');
+}
+
 export function decoratePassives(c: CardInst, txt: string): string {
   const keys = cardPassives(c);
   if (!keys.length) return txt;
@@ -172,7 +177,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
       cast.addEventListener("pointerleave", () => tip.classList.remove("show"));
       eff.appendChild(cast);
     }
-    if (txt && txt !== "—") eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${decoratePassives(c, txt)}</span>`));
+    if (txt && txt !== "—") eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${decorateTags(decoratePassives(c, txt))}</span>`));
     fitToBox(eff); // 실측 자동 축소 — 어떤 길이의 효과도 항상 프레임 텍스트판 안에
     node.appendChild(eff);
   }

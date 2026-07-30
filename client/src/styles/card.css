@@ -255,3 +255,11 @@
   font-size: 7px; letter-spacing: .1em; color: var(--paper-dim);
   background: #000000aa; padding: 0 3px; border-radius: 2px; z-index: 2;
 }
+
+/* ---- v21 recovered: effect-text trigger tag chips (【…】 → .fx-tag via cardView) ---- */
+.card .fx-tag { display: inline-block; padding: 0 4px; margin: 0 3px 1px 0; border-radius: 3px; font-weight: 800; font-size: .92em; line-height: 1.5; color: #ffd9a0; background: #6a4a1a66; border: 1px solid #c79a4b66; white-space: nowrap; }
+
+/* ---- v21 recovered: timed permanent-spell turn badge (⏳ remaining turns) ---- */
+.card.ench-timed .badge { font-size: 1em; font-weight: 700; letter-spacing: .04em; padding: 2px 9px; bottom: 4%; border-radius: 5px; background: #a8321e; border: 1px solid #ffb37e; color: #fff; box-shadow: 0 0 8px #ff5a3d66, 0 1px 3px #000a; }
+.card.ench-expiring .badge { animation: enchExpire 1.1s ease-in-out infinite; }
+@keyframes enchExpire { 0%, 100% { box-shadow: 0 0 8px #ff5a3d66, 0 1px 3px #000a; } 50% { box-shadow: 0 0 14px #ff7a4dd0, 0 1px 3px #000a; } }

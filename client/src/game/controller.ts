@@ -411,11 +411,23 @@ export abstract class BaseController implements BoardHandlers {
           pool = (discOnly ? [...me.discard] : [...me.deck, ...me.discard]).sort((a, b) => a.cost - b.cost);
         }
         else if (g.pending.kind === "oppRmz") pool = [...(opp.removed ?? [])].sort((a, b) => a.cost - b.cost);
-        else pool = [ // oppBoard: 상대 몬스터(아우라 제외) + 세트 함정(뒷면) + 영구마법 · noMon(블러드 샤워)이면 함정·영구마법만
-          ...(g.pending.data?.noMon ? [] : opp.field.filter((m) => !hasPassive(m, "aura"))),
-          ...opp.traps.map((t2) => ({ uid: t2.card.uid, id: "HIDDEN", t: "trap", cost: 0, name: t("picker.settrap"), text: "?" } as CardInst)),
-          ...opp.enchants.map((e2) => e2.card),
-        ];
+        else { // oppBoard: 상대 몬스터(아우라 제외) + 세트 함정(뒷면) + 영구마법 · 필터: noMon(함정·영구마법만) / trapOnly / enchOnly · anySide면 내 필드도 대상
+          const dd = (g.pending.data ?? {}) as { noMon?: boolean; trapOnly?: boolean; enchOnly?: boolean; anySide?: boolean };
+          const wantMon = !dd.noMon && !dd.trapOnly && !dd.enchOnly;
+          const wantTrap = !dd.enchOnly;
+          const wantEnch = !dd.trapOnly;
+          pool = [
+            ...(wantMon ? opp.field.filter((m) => !hasPassive(m, "aura")) : []),
+            ...(wantTrap ? opp.traps.map((t2) => ({ uid: t2.card.uid, id: "HIDDEN", t: "trap", cost: 0, name: t("picker.settrap"), text: "?" } as CardInst)) : []),
+            ...(wantEnch ? opp.enchants.map((e2) => e2.card) : []),
+            // 내 필드 (자기 카드도 파괴 가능 — 내 세트 함정은 정체를 그대로 보여준다)
+            ...(dd.anySide ? [
+              ...(wantMon ? me.field : []),
+              ...(wantTrap ? me.traps.map((t2) => t2.card) : []),
+              ...(wantEnch ? me.enchants.map((e2) => e2.card) : []),
+            ] : []),
+          ];
+        }
         const hint = getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint;
         const max = Math.min((g.pending.data?.val as number) || 1, pool.length);
         cardPickerMulti(hint, pool, max, (uids) => {
@@ -597,19 +609,20 @@ export abstract class BaseController implements BoardHandlers {
 
   protected showWin(): void {
     this.stopTimer();
-    if (this.winShown || this.state.winner == null) return;
+    if (this.winShown || !this.state.over) return;
     this.winShown = true;
-    sfx(this.state.winner === this.you ? "win" : "lose");
+    const won: boolean | null = this.state.winner == null ? null : this.state.winner === this.you;
+    if (won != null) sfx(won ? "win" : "lose");
     // bot games are client-local — report the result for analytics (online games are recorded server-side)
-    if (this.state.mode === "bot") void api.trackBot(this.state.winner === this.you);
-    aCapture("game_end", { mode: this.state.mode, won: this.state.winner === this.you, turns: this.state.turn });
+    if (this.state.mode === "bot") void api.trackBot(won);
+    aCapture("game_end", { mode: this.state.mode, won, turns: this.state.turn });
     this.openResult();
   }
 
   /** Result modal — reopenable from the review FAB so the log can be studied (복기). */
   private openResult(): void {
     A.removeReviewFab();
-    const won = this.state.winner === this.you;
+    const won: boolean | null = this.state.winner == null ? null : this.state.winner === this.you;
     const meHp = Math.max(0, this.state.players[this.you].hp);
     const oppHp = Math.max(0, this.state.players[1 - this.you].hp);
     const detail = `${t("modal.hp.me")} ${meHp} · ${t("modal.hp.opp")} ${oppHp}`;

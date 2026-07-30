@@ -169,7 +169,7 @@ const D: Record<string, Entry> = {
   "modal.win": { ko: "승리", ja: "勝利", en: "Victory" },
   "modal.lose": { ko: "패배", ja: "敗北", en: "Defeat" },
   "modal.draw": { ko: "무승부", ja: "引き分け", en: "Draw" },
-  "modal.draw.body": { ko: "75턴이 지나 게임이 무승부로 끝났습니다.", ja: "75ターン経過でゲームは引き分けになりました。", en: "The game reached turn 75 and ended in a draw." },
+  "modal.draw.body": { ko: "60턴 종료 시점의 체력이 동률이라 무승부입니다.", ja: "60ターン終了時点の体力が同点のため引き分けです。", en: "HP was tied when turn 60 ended, so the game is a draw." },
   "modal.gameover": { ko: "LORE · 게임 종료", ja: "LORE · ゲーム終了", en: "LORE · Game Over" },
   "modal.again": { ko: "다시 하기", ja: "もう一度", en: "Play Again" },
   "modal.home": { ko: "홈으로", ja: "ホームへ", en: "Home" },

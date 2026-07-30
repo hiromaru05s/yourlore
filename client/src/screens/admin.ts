@@ -230,7 +230,7 @@ export function mountAdmin(app: App): Screen {
           ${kpi("선공 승률", g.firstTurnWinRate == null ? "—" : pctS(g.firstTurnWinRate), `${g.firstTurnSample}판 · 50%에서 멀면 밸런스 편향`)}
           ${kpi("평균 게임 길이", g.avgTurns == null ? "—" : `${g.avgTurns.toFixed(1)}턴`, `${g.turnsSample}판 표본`)}
           ${kpi("평균 게임 시간", durS(g.avgDurMs), g.durSample > 0 ? `${g.durSample}판 · 매칭 성립~종료` : "새로 기록되는 판부터 집계")}
-          ${kpi("무승부율 (PvP)", g.drawRate == null ? "—" : pctS(g.drawRate), `${g.drawSample}판 · 75턴 제한 도달`)}
+          ${kpi("무승부율 (PvP)", g.drawRate == null ? "—" : pctS(g.drawRate), `${g.drawSample}판 · 60턴 체력 동률`)}
           ${kpi("봇전 유저 승률", botWr == null ? "—" : pctS(botWr), `${num(g.bot.n)}판 (승 ${num(g.bot.w)}/패 ${num(g.bot.l)}/무 ${num(g.bot.d)})`)}
         </div>
         <div class="adm-grid">
