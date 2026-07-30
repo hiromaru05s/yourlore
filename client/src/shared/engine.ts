@@ -406,11 +406,11 @@ function tickTurnFx(g: GameState, ctx: Ctx, p: PlayerState): void {
     const v = m.val || 0, v2 = m.val2 || 0;
     switch (m.turnFx) {
       case "growAtk": m.atkMod = (m.atkMod || 0) + v; ctx.log(`  └ ${cn(m)} 공격 +${v}(지속)`, `  └ ${cn(m)} 攻撃+${v}(持続)`); break;
-      case "growDef": m.defMod = (m.defMod || 0) + v; ctx.log(`  └ ${cn(m)} 방어 +${v}(지속)`, `  └ ${cn(m)} 防御+${v}(持続)`); break;
+      case "growDef": m.defMod = (m.defMod || 0) + v; ctx.log(`  └ ${cn(m)} 체력 +${v}(지속)`, `  └ ${cn(m)} 体力+${v}(持続)`); break;
       case "turnBurn": ctx.log(`<span class="t">${cn(m)}</span> 매 턴 효과`, `<span class="t">${cn(m)}</span> 毎ターン効果`); ctx.dealDamage(o, v, cn(m), cn(m)); break;
-      case "turnHeal": ctx.heal(p, v); ctx.log(`  └ ${cn(m)} 체력 +${v} 회복`, `  └ ${cn(m)} 体力+${v}回復`); break;
+      case "turnHeal": ctx.heal(p, v); ctx.log(`  └ ${cn(m)} 플레이어 체력 +${v} 회복`, `  └ ${cn(m)} プレイヤー体力+${v}回復`); break;
       case "payDefHeal":
-        if (p.mana >= 1) { p.mana -= 1; m.defMod = (m.defMod || 0) + v; ctx.heal(p, v2); ctx.log(`  └ ${cn(m)} 마나1 → 방어 +${v}, 체력 +${v2}`, `  └ ${cn(m)} マナ1 → 防御+${v}, 体力+${v2}`); }
+        if (p.mana >= 1) { p.mana -= 1; m.defMod = (m.defMod || 0) + v; ctx.heal(p, v2); ctx.log(`  └ ${cn(m)} 마나1 → 체력 +${v} · 플레이어 체력 +${v2} 회복`, `  └ ${cn(m)} マナ1 → 体力+${v} · プレイヤー体力+${v2}回復`); }
         break;
       case "chestDraw": {
         const ci = p.hand.findIndex((c) => c.star === "chest");
@@ -881,7 +881,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     att.exhausted = true; const tv = tc.val || 0;
     o.field.forEach((mm) => (mm.defMod = (mm.defMod || 0) + tv));
     if (tc.val2) ctx.drawN(o, tc.val2);
-    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 자신 몬스터 전체 방어 +${tv}${tc.val2 ? ` + ${tc.val2}장 드로우` : ""}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 自分のモンスター全体の防御+${tv}${tc.val2 ? ` + ${tc.val2}枚ドロー` : ""}`);
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 자신 몬스터 전체 체력 +${tv}${tc.val2 ? ` + ${tc.val2}장 드로우` : ""}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 自分のモンスター全体の体力+${tv}${tc.val2 ? ` + ${tc.val2}枚ドロー` : ""}`);
     return;
   }
   if ((tc = takeTrap(g, ctx, o, "guarddraw"))) { // GT5_1 / GT6_1: negate + draw
@@ -1118,7 +1118,7 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
     case "heal": ctx.heal(p, v); ctx.log(`  └ 체력 ${v} 회복 (${p.hp})`, `  └ 体力 ${v} 回復 (${p.hp})`); break;
     case "defDown":
       if (o.field.length) {
-        g.pending = { kind: "oppMon", hint: `방어 -${v} 할 적 몬스터 선택`, hintJa: `防御 -${v} する敵モンスターを選択`, reason: "defDown", allowCancel: false, data: { val: v } };
+        g.pending = { kind: "oppMon", hint: `체력 -${v} 할 적 몬스터 선택`, hintJa: `体力 -${v} する敵モンスターを選択`, reason: "defDown", allowCancel: false, data: { val: v } };
         ctx.ev.push({ type: "needTarget", pending: g.pending });
       } else ctx.log("  └ 대상 없음", "  └ 対象なし");
       break;
@@ -1236,7 +1236,7 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       const dv = v || 3;
       if (o.field.length) {
         o.field.forEach((tm) => (tm.defMod = (tm.defMod || 0) - dv)); recheckDeaths(g, ctx);
-        ctx.log(`  └ 흑룡의 위압: 상대 몬스터 전체 방어 -${dv}(지속)`, `  └ 黒竜の威圧: 敵モンスター全体の防御-${dv}(持続)`);
+        ctx.log(`  └ 흑룡의 위압: 상대 몬스터 전체 체력 -${dv}(지속)`, `  └ 黒竜の威圧: 敵モンスター全体の体力-${dv}(持続)`);
       }
       if ((o.removed?.length ?? 0) > 0) {
         g.pending = { kind: "oppRmz", hint: "상대 묘지로 되돌릴 카드 선택 (상대의 제외존, 최대 8장)", hintJa: "相手の墓地に戻すカードを選択 (相手の除外ゾーン、最大8枚)", reason: "blackDragon", allowCancel: true, data: { val: 8 } };
@@ -2426,8 +2426,8 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       if (!pool.length) { ctx.log("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); return; }
       g.pending = {
         kind: "oppMon",
-        hint: a === "destroyMon" ? (card.cap ? `파괴할 몬스터 선택 (양쪽 필드 · 코스트 ${card.cap} 이하)` : "파괴할 몬스터 선택 (양쪽 필드)") : `방어 -${v} 할 적 몬스터 선택`,
-        hintJa: a === "destroyMon" ? (card.cap ? `破壊するモンスターを選択 (両フィールド · コスト${card.cap}以下)` : "破壊するモンスターを選択 (両フィールド)") : `防御 -${v} する敵モンスターを選択`,
+        hint: a === "destroyMon" ? (card.cap ? `파괴할 몬스터 선택 (양쪽 필드 · 코스트 ${card.cap} 이하)` : "파괴할 몬스터 선택 (양쪽 필드)") : `체력 -${v} 할 적 몬스터 선택`,
+        hintJa: a === "destroyMon" ? (card.cap ? `破壊するモンスターを選択 (両フィールド · コスト${card.cap}以下)` : "破壊するモンスターを選択 (両フィールド)") : `体力 -${v} する敵モンスターを選択`,
         reason: a, allowCancel: a === "destroyMon", data: a === "destroyMon" ? { val: v, sourceId: card.id, anySide: true, ...(card.cap ? { maxCost: card.cap } : {}) } : { val: v, sourceId: card.id },
       };
       ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
@@ -2551,7 +2551,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
         ctx.ev.push({ type: "needTarget", pending: g.pending });
       }
     }
-    else if (pending.reason === "buffPerm") { tm.atkMod = (tm.atkMod || 0) + (d.val || 0); tm.defMod = (tm.defMod || 0) + (d.val2 || 0); ctx.log(`<span class="t">${p.name}</span> → ${cn(tm)} 공격+${d.val} / 방어+${d.val2}`, `<span class="t">${p.name}</span> → ${cn(tm)} 攻撃+${d.val} / 防御+${d.val2}`); }
+    else if (pending.reason === "buffPerm") { tm.atkMod = (tm.atkMod || 0) + (d.val || 0); tm.defMod = (tm.defMod || 0) + (d.val2 || 0); ctx.log(`<span class="t">${p.name}</span> → ${cn(tm)} 공격+${d.val} / 체력+${d.val2}`, `<span class="t">${p.name}</span> → ${cn(tm)} 攻撃+${d.val} / 体力+${d.val2}`); }
     else if (pending.reason === "incubate") {
       if (tm.hatch == null) { ctx.log("  └ 알이 아닙니다", "  └ 卵ではありません"); return; }
       tm.hatch = Math.max(0, tm.hatch - ((d.val as number) || 5));
@@ -2818,7 +2818,7 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
       const m = p.field.find((x) => x.uid === action.uid);
       if (!m || m.exhausted) break;
       if (m.hatch != null) { ctx.log(`  └ <span class="dmg">알은 공격할 수 없습니다</span>`, `  └ <span class="dmg">卵は攻撃できません</span>`); break; }
-      if (glassBanActive(g) && effDef(p, m) <= 1) { ctx.log(`  └ <span class="dmg">유리 병기 금지령</span>: 방어 1 이하는 공격 불가`, `  └ <span class="dmg">ガラス兵器禁止令</span>: 防御1以下は攻撃不可`); break; }
+      if (glassBanActive(g) && effDef(p, m) <= 1) { ctx.log(`  └ <span class="dmg">유리 병기 금지령</span>: 최대 체력 1 이하는 공격 불가`, `  └ <span class="dmg">ガラス兵器禁止令</span>: 最大体力1以下は攻撃不可`); break; }
       const o = g.players[1 - g.cur];
       // 위엄(majesty): 상대 필드에 위엄 몬스터가 있으면 소환한 턴의 몬스터로 공격 불가
       if (m.summonedTurn === g.turn && o.field.some((x) => hasPassive(x, "majesty"))) {
