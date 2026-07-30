@@ -10,6 +10,7 @@ import { t, onLangChange } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
 import { DISCORD_INVITE, SUPPORT_EMAIL } from "../config";
 import { aCapture, aIdentify } from "../net/analytics";
+import { canUseLocalGuest } from "../dev/localAccount";
 
 type Mode = "login" | "register" | "forgot" | "reset";
 
@@ -60,7 +61,8 @@ export function mountLogin(app: App): Screen {
       </div>` : ""}
       ${mode === "forgot" || mode === "reset" ? `<div class="auth-links"><a id="backLink">← ${t("login.back")}</a></div>` : ""}
       ${tabs ? `<div class="auth-or"><span>${t("login.or")}</span></div>
-      <button class="btn btn-ghost btn-block google-btn" id="googleBtn">${GOOGLE_SVG}${t("login.google")}</button>` : ""}
+      <button class="btn btn-ghost btn-block google-btn" id="googleBtn">${GOOGLE_SVG}${t("login.google")}</button>
+      ${canUseLocalGuest() ? `<button class="btn btn-ghost btn-block" id="localGuestBtn">게스트로 입장</button>` : ""}` : ""}
       <div class="auth-error" id="msg"></div>`;
     const em = card.querySelector("#email") as HTMLInputElement | null;
     if (em) em.value = lastEmail;
@@ -95,6 +97,8 @@ export function mountLogin(app: App): Screen {
     (card.querySelector("#backLink") as HTMLElement | null)?.addEventListener("click", () => swap("login"));
     const g = card.querySelector("#googleBtn") as HTMLButtonElement | null;
     if (g) g.onclick = () => { location.href = api.googleUrl(); };
+    const guest = card.querySelector("#localGuestBtn") as HTMLButtonElement | null;
+    if (guest) guest.onclick = () => app.enterLocalGuest();
     const em = card.querySelector("#email") as HTMLInputElement | null;
     if (em) {
       em.oninput = () => { lastEmail = em.value; };

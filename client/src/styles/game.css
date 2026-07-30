@@ -1,14 +1,21 @@
 /* ============================================================
    LORE — game board layout, header, zones, hand, log, animations
    ============================================================ */
-.game { height: 100vh; display: grid; grid-template-rows: auto 1fr; padding: 5px 12px 6px; gap: 4px; overflow: hidden; }
+.game {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  padding: 5px 12px 6px;
+  gap: 4px;
+  overflow: hidden;
+}
 
 /* ---- header ---- */
 .topbar { display: flex; align-items: center; gap: 14px; padding: 2px 4px 8px; position: relative; }
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand .mark {
   width: 104px; height: 34px; transform: none; border: none; position: relative;
-  background: url("/art/brand/lore-wordmark.png") left center/contain no-repeat;
+  background: url("/art/brand/lore-archive-header-wordmark.png") left center/contain no-repeat;
   filter: drop-shadow(0 1px 4px #000a) drop-shadow(0 0 10px #4fb4ff44);
 }
 .brand .mark::after { content: none; }

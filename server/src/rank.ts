@@ -28,7 +28,8 @@ const START_MMR = 1000;
 const K = 32;
 const GM_TOP = 25;        // top N Masters = Grandmaster
 const MASTER_MIN = 1550;
-const LB_LIMIT = 100;
+const LB_DEFAULT_LIMIT = 100;
+const LB_MAX_LIMIT = 100;
 
 export function seasonKey(d = new Date()): string {
   return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
@@ -122,15 +123,21 @@ export async function handleRank(env: Env, req: Request, path: string, user: Ses
   if (path === "/rank/leaderboard") {
     const url = new URL(req.url);
     const season = (url.searchParams.get("season") || seasonKey()).slice(0, 7);
+    const rawLimit = Number.parseInt(url.searchParams.get("limit") || "", 10);
+    const rawOffset = Number.parseInt(url.searchParams.get("offset") || "", 10);
+    const limit = Math.min(Math.max(Number.isFinite(rawLimit) ? rawLimit : LB_DEFAULT_LIMIT, 1), LB_MAX_LIMIT);
+    const offset = Math.max(Number.isFinite(rawOffset) ? rawOffset : 0, 0);
     const rows = await env.DB.prepare(
       `SELECT r.mmr, r.wins, r.losses, u.display FROM ratings r JOIN users u ON u.id = r.user_id
-       WHERE r.season = ? ORDER BY r.mmr DESC, r.updated_at ASC LIMIT ?`
-    ).bind(season, LB_LIMIT).all<{ mmr: number; wins: number; losses: number; display: string }>();
+       WHERE r.season = ? ORDER BY r.mmr DESC, r.updated_at ASC LIMIT ? OFFSET ?`
+    ).bind(season, limit, offset).all<{ mmr: number; wins: number; losses: number; display: string }>();
+    const totalRow = await env.DB.prepare(`SELECT COUNT(*) AS total FROM ratings WHERE season = ?`)
+      .bind(season).first<{ total: number }>();
     const entries = (rows.results ?? []).map((r, i) => ({
-      rank: i + 1, display: r.display, mmr: r.mmr, wins: r.wins, losses: r.losses,
-      tier: tierWithGm(r.mmr, i + 1),
+      rank: offset + i + 1, display: r.display, mmr: r.mmr, wins: r.wins, losses: r.losses,
+      tier: tierWithGm(r.mmr, offset + i + 1),
     }));
-    return json(env, { season, entries });
+    return json(env, { season, total: totalRow?.total ?? 0, entries });
   }
 
   // 내 현재 시즌 레이팅 + 순위

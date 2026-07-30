@@ -20,6 +20,7 @@ import { mountProfile, type ProfileTab } from "./screens/profile";
 import { mountFriends } from "./screens/friends";
 import { mountShop } from "./screens/shop";
 import { mountDeck } from "./screens/deck";
+import { LOCAL_GUEST_KEY, canUseLocalGuest, loadLocalDevDecks, loadLocalGuestProfile } from "./dev/localAccount";
 
 export interface Screen { destroy?(): void; }
 
@@ -30,27 +31,39 @@ export class App {
 
   constructor(root: HTMLElement) { this.root = root; }
 
+  enterLocalGuest(): void {
+    if (!canUseLocalGuest()) return;
+    localStorage.setItem(LOCAL_GUEST_KEY, "1");
+    const decks = loadLocalDevDecks();
+    const profile = loadLocalGuestProfile();
+    this.user = {
+      id: "local-guest-user",
+      email: "guest@local.test",
+      display: "GUEST ARCHIVIST",
+      wins: 47,
+      losses: 19,
+      credits: profile.credits,
+      avatar: "M1",
+      sleeve: profile.sleeve,
+      decks,
+      deck: decks.list[decks.sel].cards,
+    };
+    aIdentify(this.user.id, { verified: true, localGuest: true });
+    this.home();
+  }
+
   async start(): Promise<void> {
     // Isolated admin origin (admin.yourlore.xyz) → dashboard only, nothing else.
     if (location.hostname.startsWith("admin.")) { this.swap(() => mountAdmin(this)); return; }
     // On the game origin, /admin just bounces to the isolated admin host.
     if (location.pathname === "/admin") { location.href = `${location.protocol}//admin.${location.host.replace(/^www\./, "")}/`; return; }
     this.user = await api.me();
-    if (!this.user && ["localhost", "127.0.0.1", "::1"].includes(location.hostname)) {
+    if (!this.user && canUseLocalGuest()) {
       const params = new URLSearchParams(location.search);
       const devLogin = params.get("devLogin");
-      if (devLogin === "1") localStorage.setItem("lore_dev_login", "1");
-      if (devLogin === "0") localStorage.removeItem("lore_dev_login");
-      if (devLogin === "1" || localStorage.getItem("lore_dev_login") === "1") {
-        this.user = {
-          id: "dev-local-user",
-          email: "dev@local.test",
-          display: "DEV PLAYER",
-          wins: 0,
-          losses: 0,
-          credits: 999,
-        };
-      }
+      if (devLogin === "1") this.enterLocalGuest();
+      if (devLogin === "0") localStorage.removeItem(LOCAL_GUEST_KEY);
+      if (!this.user && localStorage.getItem(LOCAL_GUEST_KEY) === "1") this.enterLocalGuest();
     }
     if (this.user) {
       aIdentify(this.user.id, { verified: true });
@@ -92,6 +105,7 @@ export class App {
   }
 
   async logout(): Promise<void> {
+    if (this.user?.id === "local-guest-user") localStorage.removeItem(LOCAL_GUEST_KEY);
     await api.logout().catch(() => {});
     aReset();
     stopPresence();
