@@ -57,6 +57,9 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     { icon: "⚔️", h: "전투", body: [
       "몬스터로 상대를 공격합니다.",
       "상대 몬스터를 치면 <b>데미지가 체력에 누적</b>됩니다. 체력이 0이 되면 파괴되고, 막타의 초과분은 상대 플레이어에게 <b>관통</b> 데미지로 들어갑니다.",
+      "받은 데미지는 <b>사라지지 않습니다</b> — 필드의 몬스터는 방패 자리에 <b>남은 체력</b>이 표시되고, 다친 상태면 <b>빨간 숫자</b>로 보여요. 필드를 떠났다 돌아오면 체력이 초기화됩니다.",
+      "공격해도 <b>반격 데미지는 받지 않습니다</b>. 대신 상대의 <b>세트 함정</b>이 공격에 반응할 수 있으니 조심하세요.",
+      "체력을 깎는 효과로 <b>최대 체력이 남은 체력 이하</b>가 되면 그 몬스터는 파괴됩니다.",
       "상대 필드가 비어 있으면 체력을 <b>직접</b> 때립니다.",
       "한 번 공격한 몬스터는 그 턴엔 다시 공격할 수 없어요(일부 카드는 2회 공격 가능).",
     ] },
@@ -125,6 +128,9 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     { icon: "⚔️", h: "戦闘", body: [
       "モンスターで相手を攻撃します。",
       "相手モンスターを攻撃すると<b>ダメージが体力に蓄積</b>します。体力が0になると破壊され、とどめの超過分は相手プレイヤーに<b>貫通</b>ダメージとして入ります。",
+      "受けたダメージは<b>消えません</b> — 場のモンスターは盾の位置に<b>残り体力</b>が表示され、傷ついていると<b>赤い数字</b>になります。場を離れて戻ると体力はリセットされます。",
+      "攻撃しても<b>反撃ダメージは受けません</b>。代わりに相手の<b>セットされた罠</b>が攻撃に反応することがあるので注意。",
+      "体力を下げる効果で<b>最大体力が残り体力以下</b>になると、そのモンスターは破壊されます。",
       "相手の場が空なら体力を<b>直接</b>攻撃します。",
       "一度攻撃したモンスターはそのターン再攻撃できません(一部カードは2回攻撃可能)。",
     ] },
@@ -193,6 +199,9 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     { icon: "⚔️", h: "Combat", body: [
       "Attack the opponent with your monsters.",
       "Attacking a monster deals <b>damage that accumulates on its HP</b>. At 0 HP it dies, and the killing blow's excess hits the opponent as <b>penetration</b> damage.",
+      "Damage <b>does not wear off</b> — field monsters show their <b>remaining HP</b> in the shield slot, in <b>red</b> while wounded. HP resets if the card leaves the field.",
+      "Attackers take <b>no retaliation damage</b>. The real risk is the opponent's <b>face-down traps</b> reacting to your attack.",
+      "If an effect drops a monster's <b>max HP to its damage taken or below</b>, it is destroyed.",
       "If the enemy field is empty, you hit their HP <b>directly</b>.",
       "Each monster attacks once per turn (a few cards can attack twice).",
     ] },
