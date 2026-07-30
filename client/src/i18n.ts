@@ -14,6 +14,7 @@ export function setLang(l: Lang): void {
   if (l === current) return;
   current = l;
   try { localStorage.setItem("lore_lang", l); } catch { /* ignore */ }
+  applyDocLang();
   // snapshot: a listener may re-mount a screen (adding/removing listeners) mid-iteration
   [...listeners].forEach((f) => f());
 }
@@ -22,6 +23,14 @@ export function initLang(ipDefault: Lang): void {
   let saved: string | null = null;
   try { saved = localStorage.getItem("lore_lang"); } catch { /* ignore */ }
   current = saved === "ko" || saved === "ja" || saved === "en" ? saved : ipDefault;
+  applyDocLang();
+}
+/** Keep <html lang> and the tab title in sync with the chosen language. */
+function applyDocLang(): void {
+  try {
+    document.documentElement.lang = current;
+    document.title = t("app.title");
+  } catch { /* SSR / tests */ }
 }
 
 type Entry = { ko: string; ja: string; en: string };
@@ -380,6 +389,112 @@ const D: Record<string, Entry> = {
   "deck.watch.desc": { ko: "이 덱을 쓸 때 노리는 카드를 골라두세요. 게임 중 마켓·제시에 그 카드가 나오면 은은하게 표시됩니다.", ja: "このデッキで狙うカードを選んでおくと、ゲーム中マーケット・提示に出た時にさりげなく表示されます。", en: "Pick the cards this deck hunts for — they get a subtle highlight when they appear in the market/supply." },
   "deck.watch.search": { ko: "카드 이름 검색…", ja: "カード名検索…", en: "Search cards…" },
   "card.ench": { ko: "영구마법", ja: "永続魔法", en: "Enchantment" },
+  // document (tab title follows the language)
+  "app.title": { ko: "LORE — 덱빌드 듀얼", ja: "LORE — デッキビルド・デュエル", en: "LORE — Deckbuild Duel" },
+  // archive home (redesigned home screen)
+  "arch.mode.ranked": { ko: "랭크전", ja: "ランク戦", en: "Ranked" },
+  "arch.mode.online": { ko: "일반전", ja: "ノーマル戦", en: "Normal" },
+  "arch.mode.bot": { ko: "봇전", ja: "BOT戦", en: "Bot Match" },
+  "arch.menu.single": { ko: "싱글모드", ja: "シングルモード", en: "Single Player" },
+  "arch.menu.deckbuild": { ko: "덱 빌딩", ja: "デッキ構築", en: "Deck Building" },
+  "arch.menu.invite": { ko: "친구초대", ja: "友達招待", en: "Invite" },
+  "arch.head.ranked.desc": { ko: "랭크전은 온라인 유저들과 매칭될 수 있는 점수제 매칭입니다.<br>여러분만의 덱을 사용하여 타 유저들과의 결투에서 승리하고 등급을 올려보세요.", ja: "ランク戦はオンラインのユーザーとマッチングされるレート制マッチです。<br>自分だけのデッキで他のユーザーとの決闘に勝利し、ランクを上げましょう。", en: "Ranked pits you against online players in rated matches.<br>Bring your own deck, win duels, and climb the tiers." },
+  "arch.head.online.desc": { ko: "일반전은 랭크 점수 부담 없이 온라인 유저들과 자유롭게 대전하는 모드입니다.<br>여러분만의 덱을 시험하고 다양한 전략을 펼쳐보세요.", ja: "ノーマル戦はレートを気にせずオンラインのユーザーと自由に対戦できるモードです。<br>自分のデッキを試し、様々な戦略を繰り広げましょう。", en: "Normal is free play against online players — no rating on the line.<br>Test your deck and try out new strategies." },
+  "arch.head.bot.desc": { ko: "봇전은 다양한 난이도의 상대와 자유롭게 전략을 시험할 수 있는 연습 모드입니다.<br>현재 덱을 선택한 뒤 원하는 난이도에 도전해보세요.", ja: "BOT戦は様々な難易度の相手を選んで気軽に戦略を試せる練習モードです。<br>現在のデッキを選んで好きな難易度に挑戦しましょう。", en: "Bot matches are practice games against AI opponents of every difficulty.<br>Pick your deck and take on any challenge you like." },
+  "arch.head.deck.desc": { ko: "보유한 카드로 자신만의 덱을 구성하고, 현재 사용할 덱을 선택하세요.", ja: "所持カードで自分だけのデッキを組み、使用するデッキを選びましょう。", en: "Build decks from your collection and choose the one to play with." },
+  "arch.head.cards.title": { ko: "카드", ja: "カード", en: "Cards" },
+  "arch.head.cards.desc": { ko: "수집한 모든 카드를 살펴보고, 유형과 코스트에 따라 원하는 카드를 찾아보세요.", ja: "収集したすべてのカードを眺め、タイプやコストで目当てのカードを探しましょう。", en: "Browse every card you've collected and filter by type or cost." },
+  "arch.head.shop.desc": { ko: "카드 슬리브를 구매해 여러분만의 전장을 꾸며보세요.", ja: "カードスリーブを購入して、自分だけの戦場を彩りましょう。", en: "Buy card sleeves and dress up your battlefield." },
+  "arch.head.lb.desc": { ko: "이번 시즌 최고의 기록수집가들과 그들의 랭크를 확인하세요.", ja: "今シーズン最高の記録収集家たちのランクをチェックしましょう。", en: "See this season's top archivists and their ranks." },
+  "arch.season.title": { ko: "시즌 랭크", ja: "シーズンランク", en: "Season Rank" },
+  "arch.tier": { ko: "티어", ja: "ティア", en: "Tier" },
+  "arch.tierAlt": { ko: "{t} 티어", ja: "{t}ティア", en: "{t} Tier" },
+  "arch.points": { ko: "점수", ja: "ポイント", en: "Points" },
+  "arch.position": { ko: "순위", ja: "順位", en: "Rank" },
+  "arch.wins": { ko: "승리", ja: "勝利", en: "Wins" },
+  "arch.losses": { ko: "패배", ja: "敗北", en: "Losses" },
+  "arch.winrate": { ko: "승률", ja: "勝率", en: "Win Rate" },
+  "arch.pts": { ko: "{n}점", ja: "{n}点", en: "{n} pts" },
+  "arch.place": { ko: "{n}위", ja: "{n}位", en: "#{n}" },
+  "arch.normal.title": { ko: "일반전 전적", ja: "ノーマル戦の戦績", en: "Normal Record" },
+  "arch.normal.sub": { ko: "일반 대전 기록", ja: "ノーマル対戦の記録", en: "Casual match history" },
+  "arch.bot.practice": { ko: "연습 대전", ja: "練習対戦", en: "Practice Match" },
+  "arch.bot.desc": { ko: "다양한 난이도의 봇과 대전하며 덱의 전략을 시험해보세요.<br>승패나 랭크 점수에 부담 없이 카드 조합을 익힐 수 있습니다.", ja: "様々な難易度のBOTと対戦してデッキの戦略を試しましょう。<br>勝敗やランクを気にせずカードの組み合わせを学べます。", en: "Spar with bots of any difficulty to test your deck's strategy.<br>Learn card combos with nothing on the line." },
+  "arch.diff.easy.sub": { ko: "기본 규칙 연습", ja: "基本ルールの練習", en: "Learn the basics" },
+  "arch.diff.normal.sub": { ko: "균형 잡힌 대전", ja: "バランスの取れた対戦", en: "A balanced fight" },
+  "arch.diff.hard.sub": { ko: "고급 전략 대응", ja: "高度な戦略に対応", en: "Advanced tactics" },
+  "arch.diff.hell.sub": { ko: "최고 난이도", ja: "最高難易度", en: "The ultimate test" },
+  "arch.hall.title": { ko: "명예의 전당", ja: "名誉の殿堂", en: "Hall of Fame" },
+  "arch.hall.season": { ko: "이번 시즌", ja: "今シーズン", en: "This Season" },
+  "arch.lb.player": { ko: "플레이어", ja: "プレイヤー", en: "Player" },
+  "arch.lb.rating": { ko: "레이팅", ja: "レーティング", en: "Rating" },
+  "arch.lb.wins": { ko: "승리 수", ja: "勝利数", en: "Wins" },
+  "arch.trophyAlt": { ko: "{n}등 트로피", ja: "{n}位トロフィー", en: "Rank {n} trophy" },
+  "arch.startGame": { ko: "게임 시작", ja: "ゲーム開始", en: "Start game" },
+  "arch.start.l1": { ko: "게임", ja: "ゲーム", en: "GAME" },
+  "arch.start.l2": { ko: "시작", ja: "開始", en: "START" },
+  "arch.deck.apply": { ko: "현재 덱 적용", ja: "使用デッキに設定", en: "Set Active" },
+  "arch.deck.applied": { ko: "적용됨", ja: "設定中", en: "Active" },
+  "arch.deck.appliedTab": { ko: "현재 적용된 덱", ja: "現在使用中のデッキ", en: "currently active deck" },
+  "arch.deck.applyN": { ko: "덱 {n}을 현재 덱으로 적용", ja: "デッキ{n}を使用デッキに設定", en: "Set deck {n} as active" },
+  "arch.deck.alreadyApplied": { ko: "현재 덱이 이미 적용되어 있습니다", ja: "このデッキはすでに設定されています", en: "This deck is already active" },
+  "arch.deck.pickSaved": { ko: "저장한 덱 선택", ja: "保存したデッキを選択", en: "Choose a saved deck" },
+  "arch.deck.cardsAria": { ko: "선택한 덱 카드", ja: "選択中のデッキカード", en: "Cards in the selected deck" },
+  "arch.paper.ranked.desc": { ko: "실력을 증명하고 더 높은 랭크를 향해 나아가세요.<br>당신의 전략이 역사의 한 페이지가 됩니다.", ja: "実力を証明し、より高いランクを目指しましょう。<br>あなたの戦略が歴史の1ページになります。", en: "Prove your skill and climb toward higher ranks.<br>Your strategy becomes a page of history." },
+  "arch.paper.ranked.start": { ko: "랭크 대전 시작", ja: "ランク対戦を開始", en: "Start Ranked" },
+  "arch.paper.online.desc": { ko: "노말에서 다양한 전략을 구사하고 강화해 승리를 쟁취하세요", ja: "ノーマル戦で様々な戦略を磨き、勝利を掴みましょう", en: "Hone your strategies in Normal and seize victory" },
+  "arch.paper.online.start": { ko: "노말 대전 시작", ja: "ノーマル対戦を開始", en: "Start Normal" },
+  "arch.paper.online.head": { ko: "노말", ja: "ノーマル", en: "Normal" },
+  "arch.paper.online.rec": { ko: "노말 기록", ja: "ノーマル記録", en: "Normal History" },
+  "arch.paper.bot.desc": { ko: "봇전은 쉬움, 보통, 어려움, 헬 을 상대로 전투해 승리를 쟁취하세요.", ja: "BOT戦ではやさしい・ふつう・むずかしい・ヘルを相手に戦い、勝利を掴みましょう。", en: "Fight Easy, Normal, Hard or Hell bots and take the win." },
+  "arch.paper.bot.start": { ko: "봇전 시작", ja: "BOT戦を開始", en: "Start Bot Match" },
+  "arch.paper.bot.meta": { ko: "시작 후 난이도를 고릅니다", ja: "開始後に難易度を選びます", en: "Pick a difficulty after starting" },
+  "arch.paper.bot.practice": { ko: "연습 모드", ja: "練習モード", en: "Practice Mode" },
+  "arch.paper.bot.rec": { ko: "봇전 기록", ja: "BOT戦記録", en: "Bot History" },
+  "arch.paper.seasonEnd": { ko: "시즌 종료까지 18일 남음", ja: "シーズン終了まで残り18日", en: "Season ends in 18 days" },
+  "arch.paper.seasonRec": { ko: "시즌 기록", ja: "シーズン記録", en: "Season History" },
+  "arch.paper.rankedRec": { ko: "랭크 매치 기록", ja: "ランクマッチ記録", en: "Ranked match history" },
+  "arch.paper.rankMock": { ko: "다이아몬드 IV", ja: "ダイヤモンド IV", en: "Diamond IV" },
+  "arch.paper.rankNextMock": { ko: "다음 랭크 : 다이아몬드 III", ja: "次のランク : ダイヤモンド III", en: "Next rank: Diamond III" },
+  "arch.deckname.oblivion": { ko: "망각의 서약", ja: "忘却の誓約", en: "Oath of Oblivion" },
+  "arch.deckname.training": { ko: "수련용 서약", ja: "修練の誓約", en: "Oath of Training" },
+  "arch.cardCount": { ko: "카드 수", ja: "カード数", en: "Cards" },
+  "arch.recent": { ko: "최근 전적", ja: "最近の戦績", en: "Recent Matches" },
+  "arch.vsGame": { ko: "일반 대전", ja: "ノーマル対戦", en: "Casual match" },
+  "arch.openProfile": { ko: "내 프로필 열기", ja: "マイプロフィールを開く", en: "Open my profile" },
+  "arch.defaultName": { ko: "기록수집가", ja: "記録収集家", en: "Archivist" },
+  "arch.npc.darkknight": { ko: "어둠의 기사", ja: "闇の騎士", en: "Dark Knight" },
+  "arch.npc.shadowmage": { ko: "그림자 마도사", ja: "影の魔導士", en: "Shadow Mage" },
+  "arch.npc.paladin": { ko: "성전사", ja: "聖戦士", en: "Paladin" },
+  "arch.npc.oracle": { ko: "예언술사", ja: "預言術士", en: "Oracle" },
+  "arch.npc.ruinlord": { ko: "파멸의 군주", ja: "破滅の君主", en: "Lord of Ruin" },
+  "arch.npc.shadowhunter": { ko: "그림자 사냥꾼", ja: "影の狩人", en: "Shadow Hunter" },
+  "arch.npc.moonpaladin": { ko: "달빛 성기사", ja: "月光の聖騎士", en: "Moonlight Paladin" },
+  "arch.npc.silentmage": { ko: "침묵의 마도사", ja: "沈黙の魔導士", en: "Silent Mage" },
+  "arch.npc.arcana": { ko: "아르카나", ja: "アルカナ", en: "Arcana" },
+  "arch.npc.nova": { ko: "노바", ja: "ノヴァ", en: "Nova" },
+  "arch.time.minAgo": { ko: "{n}분 전", ja: "{n}分前", en: "{n}m ago" },
+  "arch.time.hourAgo": { ko: "{n}시간 전", ja: "{n}時間前", en: "{n}h ago" },
+  "arch.cardZoom": { ko: "카드 상세 보기", ja: "カード詳細を見る", en: "View card details" },
+  "arch.shop.desc": { ko: "카드 뒷면을 꾸밀 슬리브를 구매하세요.", ja: "カード裏面を飾るスリーブを購入しましょう。", en: "Buy sleeves to dress up your card backs." },
+  "arch.shop.confirm": { ko: "{name} 슬리브를 💎 {n}에 구매할까요?", ja: "{name}スリーブを💎{n}で購入しますか？", en: "Buy the {name} sleeve for 💎 {n}?" },
+  "arch.shop.fail": { ko: "구매에 실패했습니다.", ja: "購入に失敗しました。", en: "Purchase failed." },
+  "arch.deck.h1": { ko: "덱", ja: "デッキ", en: "Deck" },
+  "arch.deck.builder": { ko: "덱 빌더", ja: "デッキビルダー", en: "Deck Builder" },
+  "arch.deck.save": { ko: "덱 저장", ja: "デッキを保存", en: "Save Deck" },
+  "arch.deck.pool": { ko: "카드 풀", ja: "カードプール", en: "Card Pool" },
+  "arch.deck.poolHint": { ko: "카드를 눌러 덱에 추가", ja: "カードを押してデッキに追加", en: "Tap a card to add it" },
+  "arch.saving": { ko: "저장 중...", ja: "保存中…", en: "Saving…" },
+  "arch.saved": { ko: "저장되었습니다.", ja: "保存しました。", en: "Saved." },
+  "arch.saveFail": { ko: "저장에 실패했습니다.", ja: "保存に失敗しました。", en: "Save failed." },
+  "arch.deckIncomplete.title": { ko: "덱을 완성해주세요", ja: "デッキを完成させてください", en: "Finish Your Deck" },
+  "arch.deckIncomplete.body": { ko: "현재 덱은 {a}/{b}장입니다. 다른 메뉴로 이동하기 전에 덱을 {b}장으로 완성해주세요.", ja: "現在のデッキは{a}/{b}枚です。他のメニューへ移動する前にデッキを{b}枚に揃えてください。", en: "Your deck has {a}/{b} cards. Complete all {b} before moving on." },
+  "arch.soon.title": { ko: "준비 중입니다", ja: "準備中です", en: "Coming Soon" },
+  "arch.soon.body": { ko: "최대한 빠르게 구현해서 돌아오겠습니다. 조금만 기다려 주십시오.", ja: "できるだけ早く実装して戻ってきます。もう少しお待ちください。", en: "We're building this as fast as we can — please check back soon!" },
+  "arch.friends.loading": { ko: "친구 목록을 불러오는 중...", ja: "フレンドリストを読み込み中…", en: "Loading friends…" },
+  "arch.friends.none": { ko: "아직 등록된 친구가 없습니다.", ja: "まだ登録されたフレンドがいません。", en: "No friends yet." },
+  "arch.friends.fail": { ko: "친구 목록을 불러오지 못했습니다.", ja: "フレンドリストを読み込めませんでした。", en: "Couldn't load friends." },
+  "arch.close": { ko: "닫기", ja: "閉じる", en: "Close" },
 };
 
 export function t(key: string): string {

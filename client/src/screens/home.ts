@@ -6,7 +6,7 @@ import type { BotDifficulty } from "../shared/bot";
 import type { CardInst, CardType } from "../shared/types";
 import { api, type FriendEntry, type LbEntry, type RankInfo } from "../net/api";
 import { t, getLang, onLangChange } from "../i18n";
-import { tierChipHtml } from "../ui/tier";
+import { tierChipHtml, tierLabel } from "../ui/tier";
 import { avatarHtml } from "../ui/social";
 import { watchSocial } from "./friends";
 import { DB, DECK_MAX_COPIES, DECK_POOL, DECK_SIZE, DECK_SLOTS, SLEEVE_LIST, SLEEVES, STARTERS, sanitizeDecks } from "../shared/cards";
@@ -35,111 +35,111 @@ export function mountHome(app: App): Screen {
   wrap.innerHTML = `
     <div class="home home-field home-archive home-archive-exact">
       <div class="archive-centered-shell" aria-hidden="true"></div>
-      <div class="archive-content-layer" data-section="ranked" aria-label="랭크전 정보">
+      <div class="archive-content-layer" data-section="ranked" aria-label="${t("arch.mode.ranked")}">
         <div class="archive-ranked-header-slot">
           <div class="archive-ranked-header-copy">
-            <h1 id="archiveBattleHeaderTitle">랭크전</h1>
-            <p class="archive-ranked-header-description" id="archiveBattleHeaderDescription">랭크전은 온라인 유저들과 매칭될 수 있는 점수제 매칭입니다.<br>여러분만의 덱을 사용하여 타 유저들과의 결투에서 승리하고 등급을 올려보세요.</p>
+            <h1 id="archiveBattleHeaderTitle">${t("arch.mode.ranked")}</h1>
+            <p class="archive-ranked-header-description" id="archiveBattleHeaderDescription">${t("arch.head.ranked.desc")}</p>
           </div>
           <img class="archive-ranked-header-wordmark" src="/art/brand/lore-archive-header-wordmark.webp" alt="LORE">
           <div class="archive-ranked-header-divider" aria-hidden="true"></div>
         </div>
-        <section class="archive-season-rank" aria-label="시즌 랭크">
-          <header class="archive-season-rank-head"><h2>시즌 랭크</h2></header>
+        <section class="archive-season-rank" aria-label="${t("arch.season.title")}">
+          <header class="archive-season-rank-head"><h2>${t("arch.season.title")}</h2></header>
           <div class="archive-season-rank-main">
-            <img class="archive-season-rank-emblem" id="archiveSeasonRankEmblem" src="/art/tiers/iron.webp" alt="아이언 티어">
+            <img class="archive-season-rank-emblem" id="archiveSeasonRankEmblem" src="/art/tiers/iron.webp" alt="${t("arch.tierAlt").replace("{t}", tierLabel("iron"))}">
             <dl class="archive-season-rank-summary">
-              <div><dt>티어</dt><dd id="archiveSeasonTier">아이언</dd></div>
-              <div><dt>점수</dt><dd id="archiveSeasonPoints">0점</dd></div>
-              <div><dt>순위</dt><dd id="archiveSeasonPosition">-</dd></div>
+              <div><dt>${t("arch.tier")}</dt><dd id="archiveSeasonTier">${tierLabel("iron")}</dd></div>
+              <div><dt>${t("arch.points")}</dt><dd id="archiveSeasonPoints">${t("arch.pts").replace("{n}", "0")}</dd></div>
+              <div><dt>${t("arch.position")}</dt><dd id="archiveSeasonPosition">-</dd></div>
             </dl>
           </div>
           <footer class="archive-season-rank-stats">
-            <div><span>승리</span><b id="archiveSeasonWins">0</b></div>
-            <div><span>패배</span><b id="archiveSeasonLosses">0</b></div>
-            <div><span>승률</span><b id="archiveSeasonWinRate">0%</b></div>
+            <div><span>${t("arch.wins")}</span><b id="archiveSeasonWins">0</b></div>
+            <div><span>${t("arch.losses")}</span><b id="archiveSeasonLosses">0</b></div>
+            <div><span>${t("arch.winrate")}</span><b id="archiveSeasonWinRate">0%</b></div>
           </footer>
         </section>
-        <section class="archive-normal-record" aria-label="일반전 전적">
-          <header class="archive-normal-record-head"><h2>일반전 전적</h2></header>
+        <section class="archive-normal-record" aria-label="${t("arch.normal.title")}">
+          <header class="archive-normal-record-head"><h2>${t("arch.normal.title")}</h2></header>
           <div class="archive-normal-record-main">
             ${avatarHtml(u?.avatar, u?.display ?? "G", 74)}
             <div class="archive-normal-record-profile">
-              <b>${u?.display ?? "GUEST ARCHIVIST"}</b>
-              <span>일반 대전 기록</span>
+              <b>${u?.display ?? t("arch.defaultName")}</b>
+              <span>${t("arch.normal.sub")}</span>
               <dl>
-                <div><dt>승리</dt><dd id="archiveNormalWins">0</dd></div>
-                <div><dt>패배</dt><dd id="archiveNormalLosses">0</dd></div>
-                <div><dt>승률</dt><dd id="archiveNormalWinRate">0%</dd></div>
+                <div><dt>${t("arch.wins")}</dt><dd id="archiveNormalWins">0</dd></div>
+                <div><dt>${t("arch.losses")}</dt><dd id="archiveNormalLosses">0</dd></div>
+                <div><dt>${t("arch.winrate")}</dt><dd id="archiveNormalWinRate">0%</dd></div>
               </dl>
             </div>
           </div>
         </section>
-        <section class="archive-bot-guide" aria-label="봇전 안내">
-          <header class="archive-bot-guide-head"><h2>봇전</h2></header>
+        <section class="archive-bot-guide" aria-label="${t("arch.mode.bot")}">
+          <header class="archive-bot-guide-head"><h2>${t("arch.mode.bot")}</h2></header>
           <div class="archive-bot-guide-main">
-            <b>연습 대전</b>
-            <p>다양한 난이도의 봇과 대전하며 덱의 전략을 시험해보세요.<br>승패나 랭크 점수에 부담 없이 카드 조합을 익힐 수 있습니다.</p>
-            <section class="archive-bot-difficulty" aria-label="봇 난이도 선택">
-              <header><h2>난이도 선택</h2></header>
+            <b>${t("arch.bot.practice")}</b>
+            <p>${t("arch.bot.desc")}</p>
+            <section class="archive-bot-difficulty" aria-label="${t("bot.diff.title")}">
+              <header><h2>${t("bot.diff.title")}</h2></header>
               <div class="archive-bot-difficulty-grid">
-                <button type="button" class="archive-bot-difficulty-button" data-difficulty="easy"><b>쉬움</b><span>기본 규칙 연습</span></button>
-                <button type="button" class="archive-bot-difficulty-button is-selected" data-difficulty="normal"><b>보통</b><span>균형 잡힌 대전</span></button>
-                <button type="button" class="archive-bot-difficulty-button" data-difficulty="hard"><b>어려움</b><span>고급 전략 대응</span></button>
-                <button type="button" class="archive-bot-difficulty-button" data-difficulty="hell"><b>헬</b><span>최고 난이도</span></button>
+                <button type="button" class="archive-bot-difficulty-button" data-difficulty="easy"><b>${t("bot.diff.easy")}</b><span>${t("arch.diff.easy.sub")}</span></button>
+                <button type="button" class="archive-bot-difficulty-button is-selected" data-difficulty="normal"><b>${t("bot.diff.normal")}</b><span>${t("arch.diff.normal.sub")}</span></button>
+                <button type="button" class="archive-bot-difficulty-button" data-difficulty="hard"><b>${t("bot.diff.hard")}</b><span>${t("arch.diff.hard.sub")}</span></button>
+                <button type="button" class="archive-bot-difficulty-button" data-difficulty="hell"><b>${t("bot.diff.hell")}</b><span>${t("arch.diff.hell.sub")}</span></button>
               </div>
             </section>
           </div>
         </section>
-        <section class="archive-leaderboard-panel" aria-label="리더보드">
-          <header class="archive-leaderboard-hall-head"><h2>명예의 전당</h2><span id="archiveLeaderboardSeason">이번 시즌</span></header>
+        <section class="archive-leaderboard-panel" aria-label="${t("home.lb.title")}">
+          <header class="archive-leaderboard-hall-head"><h2>${t("arch.hall.title")}</h2><span id="archiveLeaderboardSeason">${t("arch.hall.season")}</span></header>
           <div class="archive-leaderboard-hall" id="archiveLeaderboardHall"></div>
-          <header class="archive-leaderboard-table-head"><span>순위</span><span>플레이어</span><span>티어</span><span>레이팅</span><span>승리 수</span></header>
+          <header class="archive-leaderboard-table-head"><span>${t("arch.position")}</span><span>${t("arch.lb.player")}</span><span>${t("arch.tier")}</span><span>${t("arch.lb.rating")}</span><span>${t("arch.lb.wins")}</span></header>
           <div class="archive-leaderboard-table" id="archiveLeaderboardTable"></div>
         </section>
-        <button class="archive-ranked-start" id="archiveMatchStart" type="button" aria-label="게임 시작"><span>게임</span><span>시작</span></button>
-        <section class="archive-current-deck" aria-label="현재 덱">
+        <button class="archive-ranked-start" id="archiveMatchStart" type="button" aria-label="${t("arch.startGame")}"><span>${t("arch.start.l1")}</span><span>${t("arch.start.l2")}</span></button>
+        <section class="archive-current-deck" aria-label="${t("deck.current")}">
           <header class="archive-current-deck-head">
-            <h2>현재 덱</h2>
-            <div class="archive-current-deck-tabs" id="archiveRankDeckTabs" aria-label="저장한 덱 선택"></div>
-            <button class="archive-current-deck-change" id="archiveChangeDeck" type="button">현재 덱 적용</button>
+            <h2>${t("deck.current")}</h2>
+            <div class="archive-current-deck-tabs" id="archiveRankDeckTabs" aria-label="${t("arch.deck.pickSaved")}"></div>
+            <button class="archive-current-deck-change" id="archiveChangeDeck" type="button">${t("arch.deck.apply")}</button>
           </header>
-          <p class="archive-current-deck-name" id="archiveRankDeckName">덱 1</p>
-          <div class="archive-live-deck-row" id="archiveLiveDeck" aria-label="선택한 덱 카드"></div>
+          <p class="archive-current-deck-name" id="archiveRankDeckName">${t("deck.slot").replace("{n}", "1")}</p>
+          <div class="archive-live-deck-row" id="archiveLiveDeck" aria-label="${t("arch.deck.cardsAria")}"></div>
         </section>
       </div>
       <aside class="archive-left">
         <img class="archive-sidebar-wordmark" src="/art/brand/lore-archive-header-wordmark.webp" alt="LORE">
         <div class="archive-menu">
           <button class="archive-menu-item is-active" id="ranked" data-mode="ranked">
-            <span>랭크전</span>
+            <span>${t("arch.mode.ranked")}</span>
           </button>
           <button class="archive-menu-item" id="online" data-mode="online">
-            <span>일반전</span>
+            <span>${t("arch.mode.online")}</span>
           </button>
           <button class="archive-menu-item" id="bot" data-mode="bot">
-            <span>봇전</span>
+            <span>${t("arch.mode.bot")}</span>
           </button>
           <button class="archive-menu-item" id="single">
-            <span>싱글모드</span>
+            <span>${t("arch.menu.single")}</span>
           </button>
           <button class="archive-menu-item" id="deck">
-            <span>덱 빌딩</span>
+            <span>${t("arch.menu.deckbuild")}</span>
           </button>
           <button class="archive-menu-item" id="cards">
-            <span>카드 리스트</span>
+            <span>${t("cards.title")}</span>
           </button>
           <button class="archive-menu-item" id="lb">
-            <span>리더보드</span>
+            <span>${t("home.lb.title")}</span>
           </button>
           <button class="archive-menu-item" id="tutorial">
-            <span>튜토리얼</span>
+            <span>${t("home.tutorial.title")}</span>
           </button>
           <button class="archive-menu-item" id="shop">
-            <span>상점</span>
+            <span>${t("shop.title")}</span>
           </button>
           <button class="archive-menu-item" id="invite">
-            <span>친구초대</span>
+            <span>${t("arch.menu.invite")}</span>
           </button>
         </div>
       </aside>
@@ -147,21 +147,21 @@ export function mountHome(app: App): Screen {
       <header class="archive-top">
         <button class="archive-top-control archive-top-profile" id="profile" title="${t("home.profile.title")}">
           ${avatarHtml(u?.avatar, u?.display ?? "P", 42)}
-          <span class="archive-top-profile-name">${u?.display ?? "기록수집가"}</span>
+          <span class="archive-top-profile-name">${u?.display ?? t("arch.defaultName")}</span>
         </button>
         <button class="archive-top-control archive-top-currency" id="credits" title="${t("home.shop.title")}">
           <img class="archive-top-gem" src="/ui/shop-diamond.webp" alt="" aria-hidden="true"><b>${u?.credits ?? 0}</b>
         </button>
-        <button class="archive-top-control archive-top-icon archive-top-friends" id="archiveFriendsButton" title="친구" aria-expanded="false" aria-controls="archiveFriendsPanel">
+        <button class="archive-top-control archive-top-icon archive-top-friends" id="archiveFriendsButton" title="${t("friends.title")}" aria-expanded="false" aria-controls="archiveFriendsPanel">
           <span class="archive-top-friends-icon" aria-hidden="true"></span><span class="archive-top-badge" id="friendBadge" hidden></span>
         </button>
         <button class="archive-top-control archive-top-icon archive-top-settings" id="settings" title="${t("settings.title")}">
           <span aria-hidden="true">⚙</span>
         </button>
       </header>
-      <aside class="archive-message-panel archive-friends-panel" id="archiveFriendsPanel" hidden aria-label="친구">
-        <div class="archive-message-panel-head"><b>친구</b><button id="archiveFriendsClose" aria-label="친구 닫기">×</button></div>
-        <div class="archive-friends-list" id="archiveFriendsList"><p>친구 목록을 불러오는 중...</p></div>
+      <aside class="archive-message-panel archive-friends-panel" id="archiveFriendsPanel" hidden aria-label="${t("friends.title")}">
+        <div class="archive-message-panel-head"><b>${t("friends.title")}</b><button id="archiveFriendsClose" aria-label="${t("arch.close")}">×</button></div>
+        <div class="archive-friends-list" id="archiveFriendsList"><p>${t("arch.friends.loading")}</p></div>
       </aside>
 
       <main class="archive-book" aria-label="ranked archive dossier">
@@ -176,54 +176,54 @@ export function mountHome(app: App): Screen {
           <div class="archive-paper-head">
             <div class="archive-stamp"><img id="archiveModeIcon" src="/icons/menu_ranked.png" alt=""></div>
             <div>
-              <h1 id="archiveModeTitle">랭크 대전</h1>
-              <p id="archiveModeDesc">실력을 증명하고 더 높은 랭크를 향해 나아가세요.<br>당신의 전략이 역사의 한 페이지가 됩니다.</p>
+              <h1 id="archiveModeTitle">${t("home.ranked.title")}</h1>
+              <p id="archiveModeDesc">${t("arch.paper.ranked.desc")}</p>
             </div>
             <div class="archive-compass" aria-hidden="true"></div>
           </div>
 
           <div class="archive-paper-grid">
             <section class="archive-paper-panel archive-rank-panel">
-              <h2><span id="archiveRankHeading">시즌 랭크</span> <small id="archiveRankSubhead">시즌 종료까지 18일 남음</small></h2>
+              <h2><span id="archiveRankHeading">${t("arch.season.title")}</span> <small id="archiveRankSubhead">${t("arch.paper.seasonEnd")}</small></h2>
               <div class="archive-rank-body">
                 <img src="/icons/menu_ranked.png" alt="">
                 <div class="archive-rank-details">
-                  <b>다이아몬드 IV</b>
+                  <b>${t("arch.paper.rankMock")}</b>
                   <span id="myTier"></span>
                   <div class="archive-progress"><i style="width:41%"></i></div>
-                  <small>다음 랭크 : 다이아몬드 III</small>
+                  <small>${t("arch.paper.rankNextMock")}</small>
                 </div>
               </div>
               <div class="archive-stats">
-                <span><b id="archiveWins">${u?.wins ?? 0}</b><small>승리</small></span>
-                <span><b id="archiveLosses">${u?.losses ?? 0}</b><small>패배</small></span>
-                <span><b id="archiveWinRate">0%</b><small>승률</small></span>
+                <span><b id="archiveWins">${u?.wins ?? 0}</b><small>${t("arch.wins")}</small></span>
+                <span><b id="archiveLosses">${u?.losses ?? 0}</b><small>${t("arch.losses")}</small></span>
+                <span><b id="archiveWinRate">0%</b><small>${t("arch.winrate")}</small></span>
               </div>
             </section>
 
             <section class="archive-paper-panel archive-deck-panel">
-              <h2>현재 덱</h2>
-              <div class="archive-deck-title">망각의 서약</div>
+              <h2>${t("deck.current")}</h2>
+              <div class="archive-deck-title">${t("arch.deckname.oblivion")}</div>
               <div class="archive-card-strip">
                 <img src="/icons/menu_cards.png" alt="">
                 <span></span><span></span><span></span><span></span>
               </div>
               <div class="archive-deck-meta">
-                <span>카드 수 <b>40 / 40</b></span>
+                <span>${t("arch.cardCount")} <b>40 / 40</b></span>
                 <button id="archiveDeck">${t("home.deck.title")}</button>
               </div>
-              <button class="archive-start" id="archiveStart">랭크 대전 시작</button>
+              <button class="archive-start" id="archiveStart">${t("arch.paper.ranked.start")}</button>
             </section>
           </div>
 
           <section class="archive-recent">
-            <h2><span id="archiveRecordHeading">시즌 기록</span> <small id="archiveRecordSubhead">랭크 매치 기록</small></h2>
+            <h2><span id="archiveRecordHeading">${t("arch.paper.seasonRec")}</span> <small id="archiveRecordSubhead">${t("arch.paper.rankedRec")}</small></h2>
             <div class="archive-result-list">
-              <span><b>승리</b><small>VS 어둠의 기사<br>2분 전</small></span>
-              <span><b>승리</b><small>VS 그림자 마도사<br>12분 전</small></span>
-              <span class="loss"><b>패배</b><small>VS 성전사<br>25분 전</small></span>
-              <span><b>승리</b><small>VS 예언술사<br>1시간 전</small></span>
-              <span><b>승리</b><small>VS 파멸의 군주<br>2시간 전</small></span>
+              <span><b>${t("modal.win")}</b><small>VS ${t("arch.npc.darkknight")}<br>${t("arch.time.minAgo").replace("{n}", "2")}</small></span>
+              <span><b>${t("modal.win")}</b><small>VS ${t("arch.npc.shadowmage")}<br>${t("arch.time.minAgo").replace("{n}", "12")}</small></span>
+              <span class="loss"><b>${t("modal.lose")}</b><small>VS ${t("arch.npc.paladin")}<br>${t("arch.time.minAgo").replace("{n}", "25")}</small></span>
+              <span><b>${t("modal.win")}</b><small>VS ${t("arch.npc.oracle")}<br>${t("arch.time.hourAgo").replace("{n}", "1")}</small></span>
+              <span><b>${t("modal.win")}</b><small>VS ${t("arch.npc.ruinlord")}<br>${t("arch.time.hourAgo").replace("{n}", "2")}</small></span>
             </div>
           </section>
         </section>
@@ -232,7 +232,7 @@ export function mountHome(app: App): Screen {
       <section class="archive-cards-panel" aria-label="card archive">
         <header class="archive-cards-head">
           <div>
-            <h1 aria-label="카드 리스트"></h1>
+            <h1 aria-label="${t("cards.title")}"></h1>
             <span id="archiveCardCount"></span>
           </div>
         </header>
@@ -244,41 +244,41 @@ export function mountHome(app: App): Screen {
         <div class="archive-cards-grid" id="archiveCardsGrid"></div>
       </section>
 
-      <section class="archive-shop-panel" id="archiveLiveShop" aria-label="슬리브 상점">
+      <section class="archive-shop-panel" id="archiveLiveShop" aria-label="${t("shop.title")}">
         <header class="archive-shop-head">
-          <div><h1>상점</h1><p>카드 슬리브</p></div>
+          <div><h1>${t("shop.title")}</h1><p>${t("shop.sleeves")}</p></div>
           <span>💎 <b id="archiveShopCredits">${u?.credits ?? 0}</b></span>
         </header>
-        <p class="archive-shop-desc">카드 뒷면을 꾸밀 슬리브를 구매하세요.</p>
+        <p class="archive-shop-desc">${t("arch.shop.desc")}</p>
         <div class="archive-shop-grid" id="archiveShopGrid"></div>
       </section>
 
-      <section class="archive-deck-panel" id="archiveDeckPanel" aria-label="덱 빌더">
+      <section class="archive-deck-panel" id="archiveDeckPanel" aria-label="${t("arch.deck.builder")}">
         <header class="archive-deck-head">
-          <div><h1>덱</h1><p>덱 빌더</p></div>
+          <div><h1>${t("arch.deck.h1")}</h1><p>${t("arch.deck.builder")}</p></div>
         </header>
         <div class="archive-deck-tabs" id="archiveDeckTabs"></div>
         <div class="archive-deck-current-head">
-          <span>현재 덱 <b id="archiveDeckCount"></b></span>
+          <span>${t("deck.current")} <b id="archiveDeckCount"></b></span>
           <div class="archive-deck-current-actions">
-            <button id="archiveDeckSave">덱 저장</button>
+            <button id="archiveDeckSave">${t("arch.deck.save")}</button>
             <button id="archiveDeckUse"></button>
           </div>
         </div>
         <div class="archive-deck-current" id="archiveDeckCurrent"></div>
-        <div class="archive-deck-pool-head">카드 풀 <small>카드를 눌러 덱에 추가</small></div>
+        <div class="archive-deck-pool-head">${t("arch.deck.pool")} <small>${t("arch.deck.poolHint")}</small></div>
         <div class="archive-deck-pool" id="archiveDeckPool"></div>
         <p class="archive-deck-message" id="archiveDeckMessage"></p>
       </section>
 
       <div class="archive-hotspots" aria-label="archive controls">
-        <button class="archive-hotspot archive-hotspot-mode" data-mode="ranked" aria-label="랭크전"></button>
-        <button class="archive-hotspot archive-hotspot-mode" data-mode="online" aria-label="일반전"></button>
-        <button class="archive-hotspot archive-hotspot-mode" data-mode="bot" aria-label="봇전"></button>
-        <button class="archive-hotspot archive-hotspot-menu" data-action="deck" aria-label="덱"></button>
-        <button class="archive-hotspot archive-hotspot-menu" data-action="cards" aria-label="카드"></button>
-        <button class="archive-hotspot archive-hotspot-menu" data-action="shop" aria-label="상점"></button>
-        <button class="archive-hotspot archive-hotspot-menu" data-action="leaderboard" aria-label="리더보드"></button>
+        <button class="archive-hotspot archive-hotspot-mode" data-mode="ranked" aria-label="${t("arch.mode.ranked")}"></button>
+        <button class="archive-hotspot archive-hotspot-mode" data-mode="online" aria-label="${t("arch.mode.online")}"></button>
+        <button class="archive-hotspot archive-hotspot-mode" data-mode="bot" aria-label="${t("arch.mode.bot")}"></button>
+        <button class="archive-hotspot archive-hotspot-menu" data-action="deck" aria-label="${t("arch.deck.h1")}"></button>
+        <button class="archive-hotspot archive-hotspot-menu" data-action="cards" aria-label="${t("arch.head.cards.title")}"></button>
+        <button class="archive-hotspot archive-hotspot-menu" data-action="shop" aria-label="${t("shop.title")}"></button>
+        <button class="archive-hotspot archive-hotspot-menu" data-action="leaderboard" aria-label="${t("home.lb.title")}"></button>
       </div>
     </div>`;
   app.root.appendChild(wrap);
@@ -327,47 +327,47 @@ export function mountHome(app: App): Screen {
   let ownedSleeves = new Set<string>(["default"]);
   const modeCopy: Record<ArchiveMode, { title: string; desc: string; icon: string; start: string; deck: string; rank: string; meta: string; progress: string; rankHeading: string; rankSubhead: string; recordHeading: string; recordSubhead: string; logoOnly?: boolean }> = {
     ranked: {
-      title: "랭크 대전",
-      desc: "실력을 증명하고 더 높은 랭크를 향해 나아가세요.<br>당신의 전략이 역사의 한 페이지가 됩니다.",
+      title: t("home.ranked.title"),
+      desc: t("arch.paper.ranked.desc"),
       icon: "/icons/menu_ranked.png",
-      start: "랭크 대전 시작",
-      deck: "망각의 서약",
-      rank: "다이아몬드 IV",
-      meta: "다음 랭크 : 다이아몬드 III",
+      start: t("arch.paper.ranked.start"),
+      deck: t("arch.deckname.oblivion"),
+      rank: t("arch.paper.rankMock"),
+      meta: t("arch.paper.rankNextMock"),
       progress: "41%",
-      rankHeading: "시즌 랭크",
-      rankSubhead: "시즌 종료까지 18일 남음",
-      recordHeading: "시즌 기록",
-      recordSubhead: "랭크 매치 기록",
+      rankHeading: t("arch.season.title"),
+      rankSubhead: t("arch.paper.seasonEnd"),
+      recordHeading: t("arch.paper.seasonRec"),
+      recordSubhead: t("arch.paper.rankedRec"),
     },
     online: {
-      title: "노말 대전",
-      desc: "노말에서 다양할 전략을 구사하고 강화해 승리를 쟁취하세요",
+      title: t("home.online.title"),
+      desc: t("arch.paper.online.desc"),
       icon: "/icons/menu_online.png",
-      start: "노말 대전 시작",
-      deck: "망각의 서약",
+      start: t("arch.paper.online.start"),
+      deck: t("arch.deckname.oblivion"),
       rank: "",
       meta: "",
       progress: "0%",
-      rankHeading: "노말",
+      rankHeading: t("arch.paper.online.head"),
       rankSubhead: "",
-      recordHeading: "노말 기록",
-      recordSubhead: "노말 대전 기록",
+      recordHeading: t("arch.paper.online.rec"),
+      recordSubhead: t("arch.normal.sub"),
       logoOnly: true,
     },
     bot: {
-      title: "봇전",
-      desc: "봇전은 쉬움, 보통, 어려움, 헬 을 상대로 전투해 승리를 쟁취하세요.",
+      title: t("arch.mode.bot"),
+      desc: t("arch.paper.bot.desc"),
       icon: "/icons/menu_bot.png",
-      start: "봇전 시작",
-      deck: "수련용 서약",
-      rank: "난이도 선택",
-      meta: "시작 후 난이도를 고릅니다",
+      start: t("arch.paper.bot.start"),
+      deck: t("arch.deckname.training"),
+      rank: t("bot.diff.title"),
+      meta: t("arch.paper.bot.meta"),
       progress: "58%",
-      rankHeading: "봇전",
-      rankSubhead: "연습 모드",
-      recordHeading: "봇전 기록",
-      recordSubhead: "봇전 기록",
+      rankHeading: t("arch.mode.bot"),
+      rankSubhead: t("arch.paper.bot.practice"),
+      recordHeading: t("arch.paper.bot.rec"),
+      recordSubhead: t("arch.paper.bot.rec"),
     },
   };
 
@@ -386,10 +386,10 @@ export function mountHome(app: App): Screen {
 
   const renderArchiveSeasonRank = (rating: RankInfo | null) => {
     const tiers = {
-      iron: { label: "아이언", asset: "/art/tiers/iron.webp" },
-      bronze: { label: "브론즈", asset: "/art/tiers/bronze.webp" },
-      silver: { label: "실버", asset: "/art/tiers/silver.webp" },
-      gold: { label: "골드", asset: "/art/tiers/gold.webp" },
+      iron: { label: tierLabel("iron"), asset: "/art/tiers/iron.webp" },
+      bronze: { label: tierLabel("bronze"), asset: "/art/tiers/bronze.webp" },
+      silver: { label: tierLabel("silver"), asset: "/art/tiers/silver.webp" },
+      gold: { label: tierLabel("gold"), asset: "/art/tiers/gold.webp" },
     } as const;
     const tierKey = rating?.tier?.toLowerCase();
     const tier = tierKey && tierKey in tiers ? tiers[tierKey as keyof typeof tiers] : tiers.iron;
@@ -404,11 +404,11 @@ export function mountHome(app: App): Screen {
     const emblem = wrap.querySelector<HTMLImageElement>("#archiveSeasonRankEmblem");
     if (emblem) {
       emblem.src = tier.asset;
-      emblem.alt = `${tier.label} 티어`;
+      emblem.alt = t("arch.tierAlt").replace("{t}", tier.label);
     }
     set("archiveSeasonTier", tier.label);
-    set("archiveSeasonPoints", `${rating?.mmr ?? 0}점`);
-    set("archiveSeasonPosition", rating?.rank ? `${rating.rank}위` : "-");
+    set("archiveSeasonPoints", t("arch.pts").replace("{n}", String(rating?.mmr ?? 0)));
+    set("archiveSeasonPosition", rating?.rank ? t("arch.place").replace("{n}", String(rating.rank)) : "-");
     set("archiveSeasonWins", String(wins));
     set("archiveSeasonLosses", String(losses));
     set("archiveSeasonWinRate", `${total ? Math.round(wins / total * 100) : 0}%`);
@@ -427,13 +427,13 @@ export function mountHome(app: App): Screen {
   };
 
   const leaderboardFallback: LbEntry[] = [
-    { rank: 1, rankChange: 2, display: "기록수집가", tier: "gold", winStreak: 8, mmr: 3842, wins: 128, losses: 24 },
-    { rank: 2, rankChange: -1, display: "그림자 사냥꾼", tier: "silver", winStreak: 3, mmr: 3671, wins: 112, losses: 31 },
-    { rank: 3, rankChange: 0, display: "달빛 성기사", tier: "bronze", winStreak: 5, mmr: 3512, wins: 97, losses: 36 },
-    { rank: 4, rankChange: 4, display: "침묵의 마도사", tier: "silver", winStreak: 2, mmr: 3386, wins: 89, losses: 40 },
-    { rank: 5, rankChange: -2, display: "파멸의 군주", tier: "bronze", winStreak: 1, mmr: 3241, wins: 76, losses: 44 },
+    { rank: 1, rankChange: 2, display: t("arch.defaultName"), tier: "gold", winStreak: 8, mmr: 3842, wins: 128, losses: 24 },
+    { rank: 2, rankChange: -1, display: t("arch.npc.shadowhunter"), tier: "silver", winStreak: 3, mmr: 3671, wins: 112, losses: 31 },
+    { rank: 3, rankChange: 0, display: t("arch.npc.moonpaladin"), tier: "bronze", winStreak: 5, mmr: 3512, wins: 97, losses: 36 },
+    { rank: 4, rankChange: 4, display: t("arch.npc.silentmage"), tier: "silver", winStreak: 2, mmr: 3386, wins: 89, losses: 40 },
+    { rank: 5, rankChange: -2, display: t("arch.npc.ruinlord"), tier: "bronze", winStreak: 1, mmr: 3241, wins: 76, losses: 44 },
   ];
-  const tierName = (tier: string): string => ({ iron: "아이언", bronze: "브론즈", silver: "실버", gold: "골드", platinum: "플래티넘", diamond: "다이아몬드", master: "마스터", gm: "그랜드마스터" }[tier.toLowerCase()] ?? tier);
+  const tierName = (tier: string): string => tierLabel(tier.toLowerCase());
   const appendArchiveLeaderboardRows = (entries: LbEntry[]): void => {
     if (!archiveLeaderboardTable) return;
     entries.forEach((entry) => {
@@ -455,9 +455,9 @@ export function mountHome(app: App): Screen {
       archiveLeaderboardTable.appendChild(row);
     });
   };
-  const renderArchiveLeaderboard = (entries: LbEntry[] = leaderboardFallback, season = "이번 시즌"): void => {
+  const renderArchiveLeaderboard = (entries: LbEntry[] = leaderboardFallback, season = ""): void => {
     if (!archiveLeaderboardHall || !archiveLeaderboardTable) return;
-    if (archiveLeaderboardSeason) archiveLeaderboardSeason.textContent = season === "이번 시즌" ? season : `시즌 ${season}`;
+    if (archiveLeaderboardSeason) archiveLeaderboardSeason.textContent = season ? `${t("lb.season")} ${season}` : t("arch.hall.season");
     const topThree = entries.filter((entry) => entry.rank <= 3).sort((a, b) => a.rank - b.rank);
     const trophies: Record<number, string> = {
       1: "/ui/hall-trophy-gold.webp",
@@ -471,7 +471,7 @@ export function mountHome(app: App): Screen {
       const trophy = document.createElement("img");
       trophy.className = "archive-leaderboard-trophy";
       trophy.src = trophies[entry.rank];
-      trophy.alt = `${entry.rank}등 트로피`;
+      trophy.alt = t("arch.trophyAlt").replace("{n}", String(entry.rank));
       const player = document.createElement("div");
       player.className = "archive-leaderboard-honor-player";
       player.innerHTML = avatarHtml(entry.display === u?.display ? u?.avatar : null, entry.display, 22);
@@ -479,7 +479,7 @@ export function mountHome(app: App): Screen {
       name.textContent = entry.display;
       player.appendChild(name);
       const score = document.createElement("strong");
-      score.textContent = `${entry.mmr.toLocaleString()}점`;
+      score.textContent = t("arch.pts").replace("{n}", entry.mmr.toLocaleString());
       score.title = tierName(entry.tier);
       card.append(trophy, player, score);
       archiveLeaderboardHall.appendChild(card);
@@ -514,14 +514,14 @@ export function mountHome(app: App): Screen {
   const previewRankMatch: RecentRankMatch = {
     result: "win",
     deck: 1,
-    opponent: "아르카나",
+    opponent: t("arch.npc.arcana"),
     ratingBefore: 1218,
     ratingChange: 18,
   };
   const previewOnlineMatch: RecentRankMatch = {
     result: "win",
     deck: 2,
-    opponent: "노바",
+    opponent: t("arch.npc.nova"),
     ratingBefore: 0,
     ratingChange: 0,
   };
@@ -536,19 +536,19 @@ export function mountHome(app: App): Screen {
       row.className = `archive-recent-match is-${match.result} is-profile-link`;
       row.tabIndex = 0;
       row.setAttribute("role", "button");
-      row.setAttribute("aria-label", "내 프로필 열기");
+      row.setAttribute("aria-label", t("arch.openProfile"));
       const result = document.createElement("b");
-      result.textContent = match.result === "win" ? "승" : "패";
+      result.textContent = match.result === "win" ? t("home.win") : t("home.loss");
       const detail = document.createElement("div");
       detail.className = "archive-recent-match-detail";
       const name = document.createElement("span");
-      name.textContent = `덱 ${match.deck} · VS ${match.opponent}`;
+      name.textContent = `${t("deck.slot").replace("{n}", String(match.deck))} · VS ${match.opponent}`;
       const before = document.createElement("small");
       const ratingAfter = match.ratingBefore + match.ratingChange;
-      before.textContent = mode === "ranked" ? `${match.ratingBefore.toLocaleString()}점 → ${ratingAfter.toLocaleString()}점` : "일반 대전";
+      before.textContent = mode === "ranked" ? `${t("arch.pts").replace("{n}", match.ratingBefore.toLocaleString())} → ${t("arch.pts").replace("{n}", ratingAfter.toLocaleString())}` : t("arch.vsGame");
       detail.append(name, before);
       const change = document.createElement("em");
-      change.textContent = mode === "ranked" ? `${match.ratingChange > 0 ? "+" : ""}${match.ratingChange}점` : "";
+      change.textContent = mode === "ranked" ? t("arch.pts").replace("{n}", `${match.ratingChange > 0 ? "+" : ""}${match.ratingChange}`) : "";
       if (mode === "online") change.hidden = true;
       row.append(result, detail, change);
       row.onclick = () => app.profile();
@@ -571,7 +571,7 @@ export function mountHome(app: App): Screen {
       if (!def) return;
       const card: CardInst = { ...structuredClone(def), uid: `archive_deck_${index}_${id}` };
       const element = cardEl(card, { size: "mkt" });
-      element.title = "카드 상세 보기";
+      element.title = t("arch.cardZoom");
       element.onclick = () => zoomCard(card);
       archiveLiveDeck.appendChild(element);
     });
@@ -585,9 +585,9 @@ export function mountHome(app: App): Screen {
       const isPreview = index === rankDeckPreview;
       const isApplied = index === deckStore.sel;
       tab.className = "archive-current-deck-tab" + (isPreview ? " is-selected" : "") + (isApplied ? " is-active" : "");
-      tab.textContent = `덱 ${index + 1}`;
+      tab.textContent = t("deck.slot").replace("{n}", String(index + 1));
       tab.setAttribute("aria-pressed", String(isPreview));
-      tab.setAttribute("aria-label", `덱 ${index + 1}${isApplied ? ", 현재 적용된 덱" : ""}`);
+      tab.setAttribute("aria-label", `${t("deck.slot").replace("{n}", String(index + 1))}${isApplied ? `, ${t("arch.deck.appliedTab")}` : ""}`);
       tab.onclick = () => {
         rankDeckPreview = index;
         renderArchiveRankDeck();
@@ -595,10 +595,10 @@ export function mountHome(app: App): Screen {
       };
       archiveRankDeckTabs.appendChild(tab);
     }
-    archiveRankDeckName.textContent = `덱 ${rankDeckPreview + 1}${rankDeckPreview === deckStore.sel ? " · 적용됨" : ""}`;
+    archiveRankDeckName.textContent = `${t("deck.slot").replace("{n}", String(rankDeckPreview + 1))}${rankDeckPreview === deckStore.sel ? ` · ${t("arch.deck.applied")}` : ""}`;
     if (archiveChangeDeck) {
       archiveChangeDeck.disabled = rankDeckPreview === deckStore.sel;
-      archiveChangeDeck.setAttribute("aria-label", rankDeckPreview === deckStore.sel ? "현재 덱이 이미 적용되어 있습니다" : `덱 ${rankDeckPreview + 1}을 현재 덱으로 적용`);
+      archiveChangeDeck.setAttribute("aria-label", rankDeckPreview === deckStore.sel ? t("arch.deck.alreadyApplied") : t("arch.deck.applyN").replace("{n}", String(rankDeckPreview + 1)));
     }
   };
 
@@ -610,16 +610,16 @@ export function mountHome(app: App): Screen {
     for (let index = 0; index < DECK_SLOTS; index++) {
       const tab = document.createElement("button");
       tab.className = "archive-deck-tab" + (index === editingDeck ? " is-on" : "") + (index === deckStore.sel ? " is-active" : "");
-      tab.textContent = `덱 ${index + 1}`;
-      tab.setAttribute("aria-label", `덱 ${index + 1}${index === deckStore.sel ? ", 현재 적용된 덱" : ""}`);
+      tab.textContent = t("deck.slot").replace("{n}", String(index + 1));
+      tab.setAttribute("aria-label", `${t("deck.slot").replace("{n}", String(index + 1))}${index === deckStore.sel ? `, ${t("arch.deck.appliedTab")}` : ""}`);
       tab.onclick = () => { editingDeck = index; renderArchiveDeck(); };
       archiveDeckTabs.appendChild(tab);
     }
     archiveDeckCount.textContent = `${deck.length + 1} / ${DECK_SIZE + 1}`;
     // 덱 탭의 금색 구체가 적용 상태를 표시한다. 이 버튼은 적용 후에도
     // 같은 실행 버튼 모양을 유지해, 회색의 "적용됨" 상태로 고정되지 않는다.
-    archiveDeckUse.textContent = "현재 덱 적용";
-    archiveDeckUse.setAttribute("aria-label", `덱 ${editingDeck + 1}을 현재 덱으로 적용`);
+    archiveDeckUse.textContent = t("arch.deck.apply");
+    archiveDeckUse.setAttribute("aria-label", t("arch.deck.applyN").replace("{n}", String(editingDeck + 1)));
     archiveDeckUse.disabled = false;
     archiveDeckCurrent.innerHTML = "";
     const fixed = STARTERS.STARTER_MANA;
@@ -632,7 +632,7 @@ export function mountHome(app: App): Screen {
       const def = STARTERS[id] ?? DB[id];
       if (!def) return;
       const card = cardEl({ ...structuredClone(def), uid: `archive-deck-${index}-${id}` }, { size: "mkt" });
-      card.title = "덱에서 제거";
+      card.title = t("deck.remove");
       card.onclick = () => { deck.splice(index, 1); renderArchiveDeck(); renderArchiveLiveDeck(); };
       archiveDeckCurrent.appendChild(card);
     });
@@ -659,16 +659,16 @@ export function mountHome(app: App): Screen {
   };
 
   const saveArchiveDeck = async (): Promise<void> => {
-    if (archiveDeckMessage) archiveDeckMessage.textContent = "저장 중...";
+    if (archiveDeckMessage) archiveDeckMessage.textContent = t("arch.saving");
     try {
       const result = await api.saveDecks(deckStore);
       Object.assign(deckStore, result.decks);
       if (app.user) { app.user.decks = result.decks; app.user.deck = result.deck; }
-      if (archiveDeckMessage) archiveDeckMessage.textContent = "저장되었습니다.";
+      if (archiveDeckMessage) archiveDeckMessage.textContent = t("arch.saved");
       renderArchiveDeck();
       renderArchiveLiveDeck();
     } catch (error) {
-      if (archiveDeckMessage) archiveDeckMessage.textContent = (error as Error).message || "저장에 실패했습니다.";
+      if (archiveDeckMessage) archiveDeckMessage.textContent = (error as Error).message || t("arch.saveFail");
     }
   };
 
@@ -702,16 +702,16 @@ export function mountHome(app: App): Screen {
         <div class="archive-sleeve-preview" style="background-image:url('${sleeve.url}')"></div>
         <strong>${sleeveName(sleeve.id)}</strong>
         ${owned
-          ? `<button disabled>보유 중</button>`
-          : `<button data-buy-sleeve="${sleeve.id}">구매 <span>💎 ${sleeve.price}</span></button>`}
+          ? `<button disabled>${t("shop.owned")}</button>`
+          : `<button data-buy-sleeve="${sleeve.id}">${t("shop.buy")} <span>💎 ${sleeve.price}</span></button>`}
       </article>`;
     }).join("");
     archiveShopGrid.querySelectorAll<HTMLButtonElement>("[data-buy-sleeve]").forEach((button) => {
       button.onclick = () => {
         const id = button.dataset.buySleeve!;
         const sleeve = SLEEVES[id];
-        if (!sleeve || shopCredits < sleeve.price) { alert("크리스탈이 부족합니다."); return; }
-        if (!confirm(`${sleeveName(id)} 슬리브를 💎 ${sleeve.price}에 구매할까요?`)) return;
+        if (!sleeve || shopCredits < sleeve.price) { alert(t("shop.nocredit")); return; }
+        if (!confirm(t("arch.shop.confirm").replace("{name}", sleeveName(id)).replace("{n}", String(sleeve.price)))) return;
         button.disabled = true;
         void api.buySleeve(id).then((result) => {
           shopCredits = result.credits;
@@ -722,7 +722,7 @@ export function mountHome(app: App): Screen {
           renderArchiveShop();
         }).catch((error) => {
           button.disabled = false;
-          alert((error as Error).message || "구매에 실패했습니다.");
+          alert((error as Error).message || t("arch.shop.fail"));
         });
       };
     });
@@ -740,7 +740,7 @@ export function mountHome(app: App): Screen {
       }
       return cardCostFilter === -1 || card.cost === cardCostFilter;
     });
-    if (archiveCardCount) archiveCardCount.textContent = `${list.length}장`;
+    if (archiveCardCount) archiveCardCount.textContent = `${list.length}${t("cards.count")}`;
     archiveCardsGrid.innerHTML = "";
     const frag = document.createDocumentFragment();
     list.forEach((card) => {
@@ -777,12 +777,12 @@ export function mountHome(app: App): Screen {
     cardCostChips.push({ key, el: button });
   };
 
-  addCardTypeFilter("all", "전체");
-  addCardTypeFilter("mon", "몬스터");
-  addCardTypeFilter("spell", "마법");
-  addCardTypeFilter("trap", "함정");
-  addCardTypeFilter("starter", "스타트카드");
-  addCardCostFilter(-1, "코스트 전체");
+  addCardTypeFilter("all", t("cards.f.all"));
+  addCardTypeFilter("mon", t("cards.f.mon"));
+  addCardTypeFilter("spell", t("cards.f.spell"));
+  addCardTypeFilter("trap", t("cards.f.trap"));
+  addCardTypeFilter("starter", t("cards.f.starter"));
+  addCardCostFilter(-1, t("cards.cost.all"));
   for (let cost = 0; cost <= 14; cost++) addCardCostFilter(cost, String(cost));
   renderArchiveCards();
   renderArchiveRankDeck();
@@ -807,9 +807,11 @@ export function mountHome(app: App): Screen {
   const allowDeckExit = (): boolean => {
     if (!isEditingIncompleteDeck()) return true;
     noticeModal(
-      "덱을 완성해주세요",
-      `현재 덱은 ${deckStore.list[editingDeck].cards.length + 1}/${DECK_SIZE + 1}장입니다. 다른 메뉴로 이동하기 전에 덱을 9장으로 완성해주세요.`,
-      "확인",
+      t("arch.deckIncomplete.title"),
+      t("arch.deckIncomplete.body")
+        .replace("{a}", String(deckStore.list[editingDeck].cards.length + 1))
+        .replaceAll("{b}", String(DECK_SIZE + 1)),
+      t("common.confirm"),
       () => {},
     );
     return false;
@@ -873,21 +875,21 @@ export function mountHome(app: App): Screen {
     if (recordHeading) recordHeading.textContent = copy.recordHeading;
     if (recordSubhead) recordSubhead.textContent = copy.recordSubhead;
     const archiveHeaderCopy: Record<ArchiveSection, { icon: string; title: string; description: string }> = {
-      ranked: { icon: "/icons/menu_ranked.png", title: "랭크전", description: "랭크전은 온라인 유저들과 매칭될 수 있는 점수제 매칭입니다.<br>여러분만의 덱을 사용하여 타 유저들과의 결투에서 승리하고 등급을 올려보세요." },
-      online: { icon: "/icons/menu_online.png", title: "일반전", description: "일반전은 랭크 점수 부담 없이 온라인 유저들과 자유롭게 대전하는 모드입니다.<br>여러분만의 덱을 시험하고 다양한 전략을 펼쳐보세요." },
-      bot: { icon: "/icons/menu_bot.png", title: "봇전", description: "봇전은 다양한 난이도의 상대와 자유롭게 전략을 시험할 수 있는 연습 모드입니다.<br>현재 덱을 선택한 뒤 원하는 난이도에 도전해보세요." },
-      deck: { icon: "/icons/menu_cards.png", title: "덱 빌딩", description: "보유한 카드로 자신만의 덱을 구성하고, 현재 사용할 덱을 선택하세요." },
-      cards: { icon: "/icons/menu_cards.png", title: "카드", description: "수집한 모든 카드를 살펴보고, 유형과 코스트에 따라 원하는 카드를 찾아보세요." },
-      shop: { icon: "/icons/menu_shop.png", title: "상점", description: "카드 슬리브를 구매해 여러분만의 전장을 꾸며보세요." },
-      leaderboard: { icon: "/icons/menu_leaderboard.png", title: "리더보드", description: "이번 시즌 최고의 기록수집가들과 그들의 랭크를 확인하세요." },
+      ranked: { icon: "/icons/menu_ranked.png", title: t("arch.mode.ranked"), description: t("arch.head.ranked.desc") },
+      online: { icon: "/icons/menu_online.png", title: t("arch.mode.online"), description: t("arch.head.online.desc") },
+      bot: { icon: "/icons/menu_bot.png", title: t("arch.mode.bot"), description: t("arch.head.bot.desc") },
+      deck: { icon: "/icons/menu_cards.png", title: t("arch.menu.deckbuild"), description: t("arch.head.deck.desc") },
+      cards: { icon: "/icons/menu_cards.png", title: t("arch.head.cards.title"), description: t("arch.head.cards.desc") },
+      shop: { icon: "/icons/menu_shop.png", title: t("shop.title"), description: t("arch.head.shop.desc") },
+      leaderboard: { icon: "/icons/menu_leaderboard.png", title: t("home.lb.title"), description: t("arch.head.lb.desc") },
     };
     const archiveHeader = archiveHeaderCopy[section];
     if (battleHeaderTitle) battleHeaderTitle.textContent = archiveHeader.title;
     if (battleHeaderDescription) battleHeaderDescription.innerHTML = archiveHeader.description;
     if (section === "ranked" || section === "online" || section === "bot") {
       const isOnline = section === "online";
-      if (recentMatchesTitle) recentMatchesTitle.textContent = "최근 전적";
-      if (matchStart) matchStart.innerHTML = "<span>게임</span><span>시작</span>";
+      if (recentMatchesTitle) recentMatchesTitle.textContent = t("arch.recent");
+      if (matchStart) matchStart.innerHTML = `<span>${t("arch.start.l1")}</span><span>${t("arch.start.l2")}</span>`;
       if (section === "ranked" || section === "online") renderArchiveRecentMatches(section);
       if (isOnline) renderArchiveNormalRecord();
     }
@@ -900,9 +902,9 @@ export function mountHome(app: App): Screen {
   (wrap.querySelector("#online") as HTMLElement).onclick = () => selectSection("online");
   (wrap.querySelector("#bot") as HTMLElement).onclick = () => selectSection("bot");
   const showComingSoon = (): void => noticeModal(
-    "준비 중입니다",
-    "최대한 빠르게 구현해서 돌아오겠습니다. 조금만 기다려 주십시오.",
-    "확인",
+    t("arch.soon.title"),
+    t("arch.soon.body"),
+    t("common.confirm"),
     () => {},
   );
   (wrap.querySelector("#tutorial") as HTMLElement).onclick = showComingSoon;
@@ -937,7 +939,7 @@ export function mountHome(app: App): Screen {
     friendsList.replaceChildren();
     if (!friends.length) {
       const empty = document.createElement("p");
-      empty.textContent = "아직 등록된 친구가 없습니다.";
+      empty.textContent = t("arch.friends.none");
       friendsList.append(empty);
       return;
     }
@@ -951,7 +953,7 @@ export function mountHome(app: App): Screen {
       name.textContent = friend.display;
       const state = document.createElement("small");
       state.className = friend.online ? "is-online" : "";
-      state.textContent = friend.online ? (friend.state === "online" || friend.state === "bot" ? "게임 중" : "온라인") : "오프라인";
+      state.textContent = friend.online ? (friend.state === "online" || friend.state === "bot" ? t("friends.ingame") : t("friends.online")) : t("friends.offline");
       info.append(name, state);
       row.append(info);
       friendsList.append(row);
@@ -962,9 +964,9 @@ export function mountHome(app: App): Screen {
     friendsPanel.hidden = !open;
     friendsButton.setAttribute("aria-expanded", String(open));
     if (!open) return;
-    if (friendsList) friendsList.innerHTML = "<p>친구 목록을 불러오는 중...</p>";
+    if (friendsList) friendsList.innerHTML = `<p>${t("arch.friends.loading")}</p>`;
     void api.friends().then((data) => renderFriendsPopup(data.friends)).catch(() => {
-      if (friendsList) friendsList.innerHTML = "<p>친구 목록을 불러오지 못했습니다.</p>";
+      if (friendsList) friendsList.innerHTML = `<p>${t("arch.friends.fail")}</p>`;
     });
   };
   friendsButton?.addEventListener("click", () => setFriendsPanel(friendsPanel?.hidden ?? true));
