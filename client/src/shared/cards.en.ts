@@ -175,7 +175,7 @@ const TEXTS: Record<string, string> = {
   GUILD_EYE: "Enchantment: draw 1 extra card at the start of your turn",
   GLASS_BAN: "Enchantment: monsters with max HP 1 or less cannot attack (both players) (Cast 2)",
   SHATTER: "Take 5 damage. Every monster on both fields has its HP set to 1 (lasting) (Cast 2)",
-  SCARECROW: "Summon three 0/0 Scarecrows to your field",
+  SCARECROW: "Summon three 0/1 Scarecrows to your field",
   LEVY: "Summon three 2/2 Soldiers to your field (Cast 4)",
   INQUISITION: "Deal 4 damage per tribe monster in the opponent's deck, graveyard and field (Cast 2)",
   MIMIC_LORD: "On summon: +3/+3 per 'Mimic'-family monster on either field (excluding itself)",

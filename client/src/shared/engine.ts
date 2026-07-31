@@ -1864,9 +1864,9 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       ctx.dealDamage(o, tn2 * 4, cn(card), cn(card));
       break;
     }
-    case "SCARECROW": { // 허수아비 소집: 0/0 x3
+    case "SCARECROW": { // 허수아비 소집: 0/1 x3
       for (let i2 = 0; i2 < 3; i2++) spawnToken(g, ctx, p, "TOKEN00");
-      ctx.log(`${tag(p, card)} 허수아비(0/0) 3체 소환`, `${tag(p, card)} かかし(0/0)3体召喚`);
+      ctx.log(`${tag(p, card)} 허수아비(0/1) 3체 소환`, `${tag(p, card)} かかし(0/1)3体召喚`);
       break;
     }
     case "LEVY": { // 병력 소집: 2/2 x3
