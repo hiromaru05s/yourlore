@@ -563,7 +563,29 @@ function clamp01(x: number): number {
 }
 
 // ---------------- greedy policy (the difficulty-neutral heuristic) ----------------
+/** SAFETY NET (2026-07-31): the engine refuses some plays *before* paying, leaving the
+ *  state untouched. If castable() below ever misses one of those conditions the bot
+ *  re-picks the same card forever (this class of bug has shipped 5 times: 침묵/나팔/알/
+ *  봉인된 스타터/선견지명). castable() stays the fast path — this wrapper is the backstop:
+ *  a "play" that provably changes nothing is retried with that card excluded, so a future
+ *  card with a new engine-side condition degrades into a slightly worse move, never a hang. */
 export function greedyDecide(g: GameState, useLethal = true): Action {
+  const blocked = new Set<string>();
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const a = greedyDecideRaw(g, useLethal, blocked);
+    if (a.type !== "play") return a;
+    const side = g.cur;
+    const card = g.players[side].hand[(a as { idx: number }).idx];
+    if (!card) return a;
+    // every successful play path splices the card out of hand; a refusal leaves it there
+    const after = reduce(g, a).state;
+    if (!after.players[side].hand.some((h) => h.uid === card.uid)) return a;
+    blocked.add(card.uid);
+  }
+  return { type: "endTurn" };
+}
+
+function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>): Action {
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];
   const T = tuneFor(p); // archetype buy discipline (defaults to shared TUNE)
@@ -590,6 +612,15 @@ export function greedyDecide(g: GameState, useLethal = true): Action {
       if (playCost(c, p) <= 5 && g.players.some((pl) => pl.field.some((m) => m.aura === "sealLow"))) return false;
       if (p.spellSealTurn) return false;
     }
+    if (blocked?.has(c.uid)) return false; // proven no-op this decision (safety-net retry)
+    // 영구마법 중복/존 제약 — 엔진이 지불 전에 거부하는 조건들 (누락 시 무한 재시도)
+    if (c.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) return false;
+    if (c.ench && p.traps.length + p.enchants.length >= 7) return false;
+    if (c.id === "BLOOD_SECRET" && !p.field.some((m) => isVampFamily(m))) return false;
+    if (c.id === "CHOSEN_AREA" && cullExiled(p) < 25) return false;
+    if ((c.id === "DECAY_CRAFT" || c.id === "MAJESTY_RITE") && p.field.length === 0) return false;
+    if (c.id === "VAMP_PACT" && p.field.length >= 7) return false;
+    if (c.star === "chest" && chestLocked(g)) return false;
     if (c.act === "wipeBack" && p.field.length > 0) return false;
     if (c.id === "S4" && (p.usesTurn?.["S4"] || 0) >= 1) return false;
     if (c.id === "GS9_0" && o.hp <= 21) return false;
