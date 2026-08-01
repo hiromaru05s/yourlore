@@ -90,6 +90,11 @@ export class GameView {
             </div>
           </div>
         </div>
+        <!-- side rail: turn timers + tribe/exile info, OUTSIDE the field (right edge) -->
+        <div class="side-rail" id="sideRail">
+          <div class="rail-group rail-group--opp" id="railOpp"></div>
+          <div class="rail-group rail-group--me" id="railMe"></div>
+        </div>
         <!-- battle log: a left-edge drawer with a mid-left toggle tab -->
         <button class="log-tab" id="logTab" aria-label="log">${t("game.log")}</button>
         <div class="panel logpanel" id="logPanel">
@@ -227,6 +232,8 @@ export class GameView {
       oh.appendChild(cnt);
     }
 
+    this.renderRail(this.q("railOpp"), opp, false);
+    this.renderRail(this.q("railMe"), me, true);
     this.renderRow(this.q("oppRow"), g, opp, false, myTurn, pending);
     this.renderRow(this.q("meRow"), g, me, true, myTurn, pending);
     this.renderMarket(g, me, myTurn);
@@ -283,7 +290,7 @@ export class GameView {
         && !(pending!.kind === "myMon" && pending!.reason === "grantMajesty" && hasPassive(m, "majesty")) // 이미 위엄 보유
         && !(pending!.kind === "myMon" && pending!.data?.exclude === m.uid); // 지원 나팔: 같은 몬스터 중복 선택 불가
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
-      const card = cardEl(m, { field: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
+      const card = cardEl(m, { field: true, compactField: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
       // zoom shows the monster's CURRENT atk/def (buffs/mods applied), matching the on-field card
@@ -296,24 +303,20 @@ export class GameView {
     // spell/trap zone
     const sz = document.createElement("div");
     sz.className = "zone zone-st";
-    p.traps.forEach((t) => {
-      if (isMe && t.card.id !== "HIDDEN") {
-        const card = cardEl(t.card, { badge: "SET" });
-        bindZoom(card, t.card);
-        sz.appendChild(card);
-      } else {
-        const cb = document.createElement("div");
-        cb.className = "card card--back";
-        cb.style.backgroundImage = `url(${backFor(isMe)})`;
-        sz.appendChild(cb);
-      }
+    p.traps.forEach(() => {
+      // Set traps stay face-down for BOTH players (square back tile) — identity is
+      // revealed only by the activation/reveal flow, never by the field renderer.
+      const cb = document.createElement("div");
+      cb.className = "card card--back card--field card--field-back";
+      cb.style.backgroundImage = `url(${backFor(isMe)})`;
+      sz.appendChild(cb);
     });
     p.enchants.forEach((e) => {
       // 영구(99) 영구마법은 턴 배지를 아예 표시하지 않는다 — 기한부만 남은 턴을 크게 표시 (v21 UX)
       // 혈귀술/고대 문명처럼 turns=99지만 bornTurn 기준 N턴 후 사라지는 카드도 남은 턴을 보여준다
       const lim = e.card.ench ? ENCH_TURN_LIMITS[e.card.ench] : undefined;
       const rem = e.turns < 99 ? e.turns : lim != null ? Math.max(0, (e.bornTurn ?? 0) + lim - g.turn) : null;
-      const card = cardEl(e.card, rem != null ? { badge: `⏳${rem}` } : {});
+      const card = cardEl(e.card, rem != null ? { compactField: true, badge: `⏳${rem}` } : { compactField: true });
       if (rem != null) { card.classList.add("ench-timed"); if (rem <= 1) card.classList.add("ench-expiring"); }
       bindZoom(card, e.card);
       sz.appendChild(card);
@@ -328,7 +331,7 @@ export class GameView {
     zones.className = "zones";
     if (isMe) zones.append(monRow, stRow); else zones.append(stRow, monRow);
 
-    block.append(zones, this.metaPanel(p, isMe));
+    block.append(zones);
     row.append(block);
   }
 
@@ -424,22 +427,8 @@ export class GameView {
     });
   }
 
-  /** Right-side consolidated info panel: name · HP · mana · exile · tribe. */
-  private metaPanel(p: PlayerState, isMe: boolean): HTMLElement {
-    const panel = document.createElement("div");
-    panel.className = "meta-panel";
-    const emax = effMaxMana(p);
-    const hpPct = Math.max(0, p.hp) / p.maxHp * 100;
-
-    const pips: string[] = [];
-    const total = Math.max(emax, p.maxMana);
-    for (let i = 0; i < total; i++) {
-      let cl = "pip";
-      if (i < p.mana) cl += " full";
-      if (i >= emax) cl += " locked";
-      pips.push(`<span class="${cl}"></span>`);
-    }
-
+  /** Right side-rail group (OUTSIDE the field): turn timer + tribe chips + exile. */
+  private renderRail(panel: HTMLElement, p: PlayerState, isMe: boolean): void {
     // 종족: 현재 필드 진행도 + 이미 달성한 시너지를 함께, 시각적으로 구분해 표기
     const byTribe = new Map<string, Set<string>>();
     for (const m of p.field) if (m.tribe) { if (!byTribe.has(m.tribe)) byTribe.set(m.tribe, new Set()); byTribe.get(m.tribe)!.add(m.id); }
@@ -453,7 +442,6 @@ export class GameView {
       const fired = firedBy.get(tr) ?? new Set<number>();
       const nm = TRIBES[tr]?.[getLang()]?.name ?? tr;
       const allDone = ths.every((th) => fired.has(th));
-      // one pip per threshold: ✓ = synergy achieved, highlighted = reached (fires next summon), dim = not yet
       const pips = ths.map((th) => {
         if (fired.has(th)) return `<span class="tp done">✓${th}</span>`;
         if (onField >= th) return `<span class="tp ready">${th}</span>`;
@@ -463,21 +451,10 @@ export class GameView {
     }
 
     panel.innerHTML = `
-      <div class="mp-top">
-        <span class="mp-name">${p.name}</span>
-        <div class="mp-clock" id="clock-${isMe ? "me" : "opp"}" aria-hidden="true"></div>
-      </div>
-      <div class="mp-hp">
-        <span class="lbl">${t("game.hp")}</span>
-        <span class="num"><b id="hp-${isMe ? "me" : "opp"}">${Math.max(0, p.hp)}</b><span class="muted">/${p.maxHp}</span></span>
-        <span class="hpbar" id="hpbar-${isMe ? "me" : "opp"}"><i style="width:${hpPct}%"></i></span>
-      </div>
-      <div class="mp-mana"><span class="lbl">${t("game.mana")}</span><span class="pips ${total > 12 ? "is-compact" : ""}">${pips.join("")}</span><span class="mnum">${p.mana}/${emax}</span></div>
+      <div class="rail-head"><span class="rail-name">${p.name}</span><div class="mp-clock" id="clock-${isMe ? "me" : "opp"}" aria-hidden="true"></div></div>
       <div class="mp-btns"></div>
       ${tribeChips.length ? `<div class="mp-tribes">${tribeChips.join("")}</div>` : ""}`;
 
-    // deck-view button removed — click the DECK pile to see composition. Only the
-    // 제외(exile) shortcut remains (there is no pile for exiled cards).
     const btns = panel.querySelector(".mp-btns")!;
     const removed = (p.removed ?? []).slice().sort((a, b) => a.cost - b.cost);
     if (removed.length > 0) {
@@ -487,7 +464,6 @@ export class GameView {
       rbtn.onclick = () => cardPicker(`${p.name} — ${t("deck.removed")} (${removed.length})`, removed, () => { /* browse only */ });
       btns.appendChild(rbtn);
     }
-    return panel;
   }
 
   /** Full owned-card list for the deck-view button (opponent side uses only public info). */
@@ -603,12 +579,18 @@ export class GameView {
     rb.onclick = () => this.h.onRefresh();
   }
 
-  /** Hearthstone-style center portrait: avatar ring + name + HP gem. */
+  /** Hearthstone-style center portrait (FIXED at true center): avatar ring + HP gem
+   *  (carries the hp/hpbar element ids the FX target) + mana crystals to its LEFT. */
   private renderPortrait(el: HTMLElement, p: PlayerState, isMe: boolean): void {
+    const sd = isMe ? "me" : "opp";
+    const emax = effMaxMana(p);
+    const hpPct = Math.max(0, p.hp) / p.maxHp * 100;
     el.innerHTML = `
       ${avatarHtml(isMe ? MY_AVATAR : OPP_AVATAR, p.name, 58)}
-      <span class="pt-hp"><b>${Math.max(0, p.hp)}</b></span>
-      <span class="pt-name">${p.name}</span>`;
+      <span class="pt-hp" title="${Math.max(0, p.hp)}/${p.maxHp}"><b id="hp-${sd}">${Math.max(0, p.hp)}</b></span>
+      <span class="pt-hpbar hpbar" id="hpbar-${sd}"><i style="width:${hpPct}%"></i></span>
+      <span class="pt-name">${p.name}</span>
+      <span class="pt-mana pips" title="${t("game.mana")}"><span class="pt-mana-gem">◈</span><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span>`;
   }
 
   /** MY hand — straight upright cards (no fan) in two states:

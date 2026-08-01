@@ -10,6 +10,18 @@
   overflow: hidden;
 }
 
+/* ---- side rail: timers + tribe/exile info OUTSIDE the battlefield (right edge) ---- */
+.side-rail {
+  position: fixed; right: clamp(10px, 1.6vw, 30px); top: 50%; transform: translateY(-58%);
+  display: flex; flex-direction: column; gap: 18px; z-index: 44;
+  width: clamp(120px, 13vw, 190px); pointer-events: none;
+}
+.side-rail .rail-group { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; pointer-events: auto; }
+.rail-head { display: flex; align-items: center; gap: 8px; }
+.rail-name { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--paper-faint); max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.side-rail .mp-tribes { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+.side-rail .mp-btns:empty { display: none; }
+
 /* ---- header ---- */
 .topbar { display: flex; align-items: center; gap: 14px; padding: 2px 4px 8px; position: relative; }
 .brand { display: flex; align-items: center; gap: 10px; }
@@ -93,17 +105,21 @@
 
 /* ---- Hearthstone-style portrait clusters: opp top-center, me bottom-center.
    The hand is "held" upright to the RIGHT of the portrait. ---- */
-.pcluster { position: relative; display: flex; justify-content: center; align-items: center; z-index: 40; }
-.pcluster--opp { height: 46px; margin-top: 2px; gap: 14px; }
+.pcluster { position: relative; width: 100%; z-index: 40; }
+.pcluster--opp { height: 48px; margin-top: 2px; }
+/* the portrait is pinned to the TRUE horizontal center — hand size never moves it */
+.pcluster .portrait { position: absolute; left: 50%; transform: translateX(-50%); }
+.pcluster--opp .portrait { top: 8px; }
+.pcluster--me .portrait { bottom: 6px; }
 .portrait {
-  position: relative; width: 62px; height: 62px; flex: 0 0 auto;
+  width: 62px; height: 62px; flex: 0 0 auto;
   border-radius: 50%; border: 2px solid var(--brass-dim);
   background: radial-gradient(circle at 35% 30%, #223250, #0b101c);
   box-shadow: 0 3px 14px #000b, inset 0 1px 0 #ffffff18, 0 0 0 3px #0a0f1a;
   display: grid; place-items: center;
 }
 .portrait .avatar { width: 54px !important; height: 54px !important; border-radius: 50%; }
-.portrait--opp { margin-top: 14px; }
+
 .pt-hp {
   position: absolute; right: -7px; bottom: -4px; min-width: 26px; height: 26px; padding: 0 5px;
   display: grid; place-items: center; border-radius: 9px;
@@ -116,11 +132,28 @@
   font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em; color: var(--paper-dim);
   text-shadow: 0 1px 3px #000d; pointer-events: none;
 }
-.portrait--opp .pt-name { top: calc(100% + 2px); }
-.portrait--me .pt-name { bottom: calc(100% + 2px); }
+.pt-mana {
+  position: absolute; right: calc(100% + 10px); top: 50%; transform: translateY(-50%);
+  display: inline-flex; align-items: baseline; gap: 3px; white-space: nowrap;
+  padding: 3px 9px; border-radius: 999px;
+  background: #0d1526e6; border: 1px solid #3d5f9a88; box-shadow: 0 2px 8px #000a;
+  font-family: var(--mono);
+}
+.pt-mana-gem { color: var(--cyan); font-size: 13px; filter: drop-shadow(0 0 4px #6fd4ee88); }
+.pt-mana b { font-size: 15px; font-weight: 800; color: #cfeaff; }
+.pt-mana-max { font-size: 10.5px; color: var(--paper-faint); }
+/* thin HP strip under the portrait — carries the hpbar-* id the FX target */
+.pt-hpbar {
+  position: absolute; left: 50%; transform: translateX(-50%); bottom: -8px;
+  width: 54px; height: 4px; border-radius: 3px; overflow: hidden;
+  background: #200e0ecc; border: 1px solid #00000066;
+}
+.pt-hpbar i { display: block; height: 100%; background: linear-gradient(90deg, #ff8a5f, #d8342a); }
+.portrait--opp .pt-name { top: calc(100% + 6px); }
+.portrait--me .pt-name { bottom: calc(100% + 3px); }
 
-/* opp hand: straight upright backs, right of their portrait, right-edge anchored */
-.opp-hand { position: relative; height: 46px; pointer-events: none; }
+/* opp hand: straight upright backs, right of their (centered) portrait */
+.opp-hand { position: absolute; left: calc(50% + 44px); top: 6px; height: 46px; pointer-events: none; }
 .opp-hand .card--back {
   position: absolute; top: 0; width: 34px; height: 54px;
   border-radius: 4px; box-shadow: 0 2px 6px #000a; transform: none;
@@ -390,13 +423,13 @@
 /* ---- MY hand: two states, both straight/upright (no fan). ----
    compact (default): small stack right of my portrait, right-edge-capped
    open (.game.hand-open): large, fixed at bottom-center; drag a card UP to play */
-.hand-area { display: flex; align-items: flex-end; justify-content: center; min-height: 84px; padding-top: 2px; position: relative; z-index: 40; }
-.pcluster--me { align-items: flex-end; gap: 16px; padding-bottom: 4px; }
-.portrait--me { margin-bottom: 4px; }
-.hand { position: relative; height: var(--card-h-hand); width: var(--h-w-open); cursor: pointer; }
+.hand-area { min-height: 86px; padding-top: 2px; position: relative; z-index: 40; }
+.pcluster--me { height: 84px; }
+.hand { height: var(--card-h-hand); width: var(--h-w-open); cursor: pointer; }
 .hand .card { position: absolute; bottom: 0; left: calc(var(--hi) * var(--h-step-open)); transition: left .18s var(--ease), transform .15s var(--ease); }
 /* compact: same cards, container scaled down + tighter per-card step */
 .game:not(.hand-open) .hand {
+  position: absolute; left: calc(50% + 46px); bottom: 8px;
   width: calc(var(--h-w-compact) * .42); height: calc(var(--card-h-hand) * .42);
 }
 .game:not(.hand-open) .hand .card {
@@ -408,7 +441,7 @@
 }
 /* open: lift the hand out of the cluster to true bottom-center, above everything */
 .game.hand-open .hand {
-  position: fixed; left: 50%; bottom: 8px; transform: translateX(-50%);
+  position: fixed !important; left: 50%; bottom: 8px; transform: translateX(-50%);
   z-index: 120; cursor: default;
   filter: drop-shadow(0 10px 30px #000c);
 }

@@ -58,6 +58,9 @@
   --card-r: 6px;
   --slot-gap: clamp(4px, 0.55vw, 8px);
 
+  /* FIELD cards render as SQUARE art tiles (Codex local work, merged) */
+  --field-card-size: var(--card-w);
+
   /* market cards (fixed + 제시) — sized so all 10 고정 cards fit in ONE row on
      desktop (card height scales with vh; the market width scales with vw). */
   --card-h-mkt: clamp(90px, min(13.2vh, 9vw), 172px);

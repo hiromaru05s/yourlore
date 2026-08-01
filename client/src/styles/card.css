@@ -261,3 +261,50 @@
 
 /* ---- v24 HP-combat: damaged field monsters show current HP in red ---- */
 .ad-def--hurt { color: #ff7a5e !important; text-shadow: 0 0 6px #a3160bcc, 0 1px 2px #000c; }
+
+/* ---- SQUARE field tiles (merged from the local "정사각형" work) ----
+   On the FIELD a card is clipped to its square art section; hand, market
+   and zoom keep the full card. */
+.card--field {
+  --cw: var(--field-card-size);
+  --ch: var(--field-card-size);
+  overflow: hidden;
+  border-radius: 7%;
+  font-size: calc(var(--cw) * .16);
+}
+.card--field .card-frame { background-size: 100% auto; background-position: center top; }
+.card--field .card-art { top: 21%; left: 6.5%; right: 6.5%; height: 76%; border-radius: 2%; }
+.card--field .card-name { top: 6.5%; left: 33%; right: 5%; height: 10%; font-size: .48em; }
+.card--field .card-eff,
+.card--field .cast-tip { display: none; }
+.card--field .card-cost { top: -2%; left: -4%; width: 34%; }
+.card--field .ad-atk,
+.card--field .ad-def {
+  top: auto; bottom: 3%; width: 31%; height: 23%;
+  border: 1px solid #ffffff70; border-radius: 999px;
+  color: #fff; font-size: .92em; text-shadow: 0 1px 3px #000;
+  box-shadow: 0 2px 6px #000b, inset 0 1px #ffffff38;
+  backdrop-filter: blur(2px);
+}
+.card--field .ad-atk { left: 4%; background: #641d16e8; }
+.card--field .ad-def { left: auto; right: 4%; background: #173d68e8; }
+.card--field .ad-atk::before { content: "⚔"; margin-right: .18em; font-size: .72em; }
+.card--field .ad-def::before { content: "◆"; margin-right: .18em; font-size: .62em; }
+.card--field .egg-cnt { top: 48%; max-width: 92%; }
+.card--field .egg-cnt .ec { font-size: max(6px, calc(var(--cw) * .09)); padding: 1px 3px; }
+.card--field .badge { bottom: 4%; font-size: .62em; }
+.card--field-back {
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #5c6c88;
+  box-shadow: inset 0 0 0 2px #050811, 0 2px 7px #000b;
+}
+.zone .slot {
+  --cw: var(--field-card-size);
+  --ch: var(--field-card-size);
+}
+.zone-row > .inline-pile {
+  width: var(--field-card-size);
+  height: var(--field-card-size);
+}
+.zone-row > .inline-pile .pile-card { background-size: cover; background-position: center; }

@@ -35,6 +35,7 @@ export interface CardOpts {
   size?: "board" | "mkt" | "hand";
   fullArt?: boolean; // zoom overlay: load the full-resolution art (default: 384px thumb)
   field?: boolean;
+  compactField?: boolean;
   owner?: PlayerState;
   playable?: boolean;
   buyable?: boolean;
@@ -105,6 +106,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const sizeClass = opt.size === "mkt" ? "card--mkt" : opt.size === "hand" ? "card--hand" : "";
   const node = el("div", `card ${typeClass} ${sizeClass}`.trim());
   node.dataset.uid = c.uid;
+  if (opt.compactField) node.classList.add("card--field");
   // Layering: art sits BEHIND the frame (in the transparent art window), the
   // frame PNG overlays on top (its border hugs the art edges), then text/cost
   // render above the frame. (frame's outer + window are transparent.)
