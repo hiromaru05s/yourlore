@@ -260,7 +260,8 @@ export class GameView {
 
     // inline pile cells (leading edge of each zone row): 묘지 on the monster row, 덱 on the spell/trap row
     const graveTop = p.discard[p.discard.length - 1];
-    const gravePile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, graveTop ? frameFor(graveTop.t) : null, graveTop ?? null, t("game.discard"),
+    const graveArt = graveTop && graveTop.id !== "HIDDEN" ? `/art/cards/${graveTop.id}.webp` : graveTop ? frameFor(graveTop.t) : null;
+    const gravePile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, graveArt, graveTop ?? null, t("game.discard"),
       () => cardPicker(`${p.name} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => { /* browse only */ }));
     // clicking the DECK opens the full composition (own or opponent's public aggregate)
     const collection = this.collectionOf(p, isMe);
@@ -335,12 +336,12 @@ export class GameView {
     row.append(block);
   }
 
-  /** One zone line: pile cell at the leading edge (left for me, right for opp). */
-  private zoneRow(pile: HTMLElement, zone: HTMLElement, isMe: boolean): HTMLElement {
+  /** One zone line: zone slots + the deck/grave pile standing at the FAR RIGHT (both sides). */
+  private zoneRow(pile: HTMLElement, zone: HTMLElement, _isMe: boolean): HTMLElement {
     const rowEl = document.createElement("div");
     rowEl.className = "zone-row";
     pile.classList.add("inline-pile");
-    if (isMe) rowEl.append(pile, zone); else rowEl.append(zone, pile);
+    rowEl.append(zone, pile);
     return rowEl;
   }
 
@@ -692,12 +693,14 @@ export class GameView {
     const pile = document.createElement("div");
     pile.className = "pile" + (count ? "" : " is-empty");
     pile.id = id;
-    const layers = Math.min(3, Math.max(1, Math.ceil(count / 8)));
+    // Hearthstone-style: the pile STANDS upright in a recessed well; extra layers
+    // fake the stack's thickness (positioning/tilt handled in CSS via --pi).
+    const layers = Math.min(4, Math.max(1, Math.ceil(count / 6)));
     for (let i = layers - 1; i >= 0; i--) {
       const pc = document.createElement("div");
-      pc.className = "pile-card";
+      pc.className = "pile-card" + (id.includes("Disc") ? " pile-card--art" : "");
       if (frame && count) pc.style.backgroundImage = `url(${frame})`;
-      pc.style.transform = `translate(${i * 1.5}px, ${i * 1.5}px)`;
+      pc.style.setProperty("--pi", String(i));
       pc.style.zIndex = String(-i);
       pile.appendChild(pc);
     }

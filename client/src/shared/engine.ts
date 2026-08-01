@@ -204,11 +204,11 @@ export function createGame(opts: CreateOpts): ReduceResult {
   const second = (1 - start) as Side;
   g.players[start].hp = 35; g.players[start].maxHp = 35;
   g.players[second].hp = 42; g.players[second].maxHp = 42;
-  // STANDARD market: 10 DISTINCT random cards of cost 1–6 (mixed types, 스타팅 전용 제외)
+  // STANDARD market: 8 DISTINCT random cards of cost 1–6 (mixed types, 스타팅 전용 제외)
   // v20: 1–4 → 1–6 — 저코만 나오면 구조적으로 어그로 판이 과다해져 상한 확대
   const lowAvail = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 6 && !DB[id].noShop);
   g.market = [];
-  while (g.market.length < 10 && lowAvail.length) g.market.push(inst(g, lowAvail.splice(randInt(g, lowAvail.length), 1)[0]));
+  while (g.market.length < 8 && lowAvail.length) g.market.push(inst(g, lowAvail.splice(randInt(g, lowAvail.length), 1)[0]));
 
   const ev: GameEvent[] = [];
   const ctx = makeCtx(g, ev);
@@ -229,12 +229,12 @@ function rollSupply(g: GameState, p: PlayerState): void {
   const inMarket = new Set(g.market.map((c) => c.id)); // 고정 마켓과 중복 금지
   const pool = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= hi && DB[id].cost > 0 && !DB[id].noShop && !inMarket.has(id));
   const avail = pool.slice();
-  const want = p.supplyShrink > 0 ? 2 : 3; // 마켓 크래시: shrink the opponent's next 제시 to 2
+  const want = p.supplyShrink > 0 ? 3 : 4; // 마켓 크래시: shrink the opponent's next 제시 by one
   if (p.supplyShrink > 0) p.supplyShrink--;
   const picks: (CardInst | null)[] = [];
   while (picks.length < want && avail.length) picks.push(inst(g, avail.splice(randInt(g, avail.length), 1)[0])); // distinct
   while (picks.length < want) picks.push(pool.length ? inst(g, pool[randInt(g, pool.length)]) : null);
-  while (picks.length < 3) picks.push(null); // keep 3 slots; shrunk rolls leave an empty slot
+  while (picks.length < 4) picks.push(null); // keep 4 slots; shrunk rolls leave an empty slot
   p.supply = picks;
 }
 

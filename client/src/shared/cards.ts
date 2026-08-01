@@ -824,7 +824,7 @@ const NEW_CARDS7: CardDef[] = [
   { id: "GREED_PRICE", t: "spell", cost: 4, name: "탐욕의 대가", nameJa: "強欲の代価",
     text: "자신에게 2 데미지 · 자신 필드에 '미믹'(3/2) 2마리 소환 · 추가로 '미믹' 3장을 게임에서 제외", textJa: "自分に2ダメージ · 自分の場に「ミミック」(3/2)2体を召喚 · さらに「ミミック」3枚をゲームから除外" },
   { id: "MARKET_CRISIS", t: "spell", cost: 3, name: "경제 위기", nameJa: "経済危機",
-    text: "고정 마켓 10장을 전부 갱신한다", textJa: "固定マーケット10枚を全て更新する" },
+    text: "고정 마켓 8장을 전부 갱신한다", textJa: "固定マーケット8枚を全て更新する" },
   // 토큰 (구매 불가, cost 0)
   { id: "TOKEN00", t: "mon", cost: 0, atk: 0, def: 1, name: "허수아비", nameJa: "かかし", text: "죽으면 게임에서 제외", textJa: "死亡時ゲームから除外" },
   { id: "SOLDIER2", t: "mon", cost: 0, atk: 2, def: 2, name: "병사", nameJa: "兵士", text: "죽으면 게임에서 제외", textJa: "死亡時ゲームから除外" },
@@ -1446,7 +1446,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v27"; // v27: 인쇄 체력 0 폐지 — 전 몬스터 최저 체력 1 (엔진 effDef 플로어와 표기 일치; 실전 수치 변화 없음)
+export const BALANCE_VERSION = "v28"; // v28: 고정 마켓 10→8장, 제시 마켓 3→4장 (크래시 축소 -1 유지)
+// // v27: 인쇄 체력 0 폐지 — 전 몬스터 최저 체력 1 (엔진 effDef 플로어와 표기 일치; 실전 수치 변화 없음)
 // v26: 붕괴 진동 재정의(전원 체력 1로·즉사 제거), 세계수의 보살핌 +12→+9
 // v25: 벽 상향 — 수문장 3코 0/13, 바위거북 1/8, 마나거인 1/10, 수정정령 0/9
 // v24: 전투 개편 — 방어력→체력(데미지 누적·하스스톤식, 반격 없음·관통 유지), 기합=체력1 생존, 저격=현재체력 기준, 최대체력 감소로 즉사 가능(만피 몬스터는 최소 1)

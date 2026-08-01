@@ -303,8 +303,45 @@
   --cw: var(--field-card-size);
   --ch: var(--field-card-size);
 }
+/* deck/grave: NOT square — a full-ratio card standing upright in a recessed well
+   (Hearthstone deck-tray feel). Sits at the far right of each zone row. */
 .zone-row > .inline-pile {
-  width: var(--field-card-size);
+  width: calc(var(--field-card-size) * .92);
   height: var(--field-card-size);
+  position: relative;
+  margin-left: 12px;
+  overflow: visible;
 }
-.zone-row > .inline-pile .pile-card { background-size: cover; background-position: center; }
+.zone-row > .inline-pile::before { /* the hole the deck stands in */
+  content: ""; position: absolute; left: 2%; right: 2%; bottom: -2px; height: 34%;
+  border-radius: 50% / 42%;
+  background: radial-gradient(ellipse at 50% 42%, #01030788 0%, #050a14e6 55%, #0d1524 78%, #1b2740 100%);
+  border: 1px solid #ffffff14;
+  box-shadow: inset 0 5px 10px #000e, inset 0 -1px 0 #ffffff10, 0 1px 0 #ffffff0a;
+}
+.zone-row > .inline-pile .pile-card {
+  position: absolute; left: 50%; bottom: 7%;
+  width: 74%; aspect-ratio: 0.64; height: auto;
+  border-radius: 6px;
+  background-size: 100% 100%; background-position: center;
+  background-color: #101826;
+  border: 1px solid #ffffff26;
+  box-shadow: 0 3px 8px #000c, inset 0 1px 0 #ffffff20;
+  transform: translateX(calc(-50% + var(--pi, 0) * 2.2px)) translateY(calc(var(--pi, 0) * 1.4px))
+             perspective(320px) rotateX(9deg) rotateZ(calc(var(--pi, 0) * -1deg));
+  transform-origin: bottom center;
+  filter: brightness(calc(1 - var(--pi, 0) * 0.13));
+}
+.zone-row > .inline-pile .pile-tag {
+  position: absolute; left: 50%; transform: translateX(-50%); bottom: -13px; top: auto;
+  font-size: 8.5px; letter-spacing: .14em; color: var(--paper-faint); text-shadow: 0 1px 2px #000;
+}
+.zone-row > .inline-pile .pile-count {
+  position: absolute; right: -7px; top: -12px; left: auto; bottom: auto; z-index: 5;
+  min-width: 21px; height: 21px; padding: 0 5px; display: grid; place-items: center;
+  border-radius: 999px; background: #0e1522f2; border: 1px solid var(--brass-dim);
+  font-family: var(--mono); font-size: 11px; font-weight: 800; color: var(--brass-hi);
+  box-shadow: 0 2px 6px #000b;
+}
+.zone-row > .inline-pile .pile-card--art { background-size: cover; background-position: center 22%; }
+.zone-row > .inline-pile.is-empty .pile-card { opacity: 0; }

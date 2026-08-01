@@ -51,8 +51,8 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🛒", h: "마켓 & 덱 강화", body: [
       "상점에서 카드를 사 덱을 키웁니다. 산 카드는 <b>묘지</b>로 갔다가, 덱이 떨어지면 섞여 다시 들어옵니다.",
-      "<b>고정 마켓</b>: 매 게임 고정된 랜덤 10장(코스트 1~6).",
-      "<b>제시</b>: 매 턴 새로 제시되는 3장(코스트 1~현재 최대 마나). <b>1마나</b>로 새로 갱신할 수 있어요.",
+      "<b>고정 마켓</b>: 매 게임 고정된 랜덤 8장(코스트 1~6).",
+      "<b>제시</b>: 매 턴 새로 제시되는 4장(코스트 1~현재 최대 마나). <b>1마나</b>로 새로 갱신할 수 있어요.",
     ] },
     { icon: "⚔️", h: "전투", body: [
       "몬스터로 상대를 공격합니다.",
@@ -122,8 +122,8 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🛒", h: "マーケット & デッキ強化", body: [
       "ショップでカードを買いデッキを強化します。買ったカードは<b>墓地</b>へ行き、デッキが尽きると混ざって戻ります。",
-      "<b>固定マーケット</b>: 毎ゲーム固定のランダム10枚(コスト1~6)。",
-      "<b>提示</b>: 毎ターン新たに提示される3枚(コスト1~現在の最大マナ)。<b>1マナ</b>で更新できます。",
+      "<b>固定マーケット</b>: 毎ゲーム固定のランダム8枚(コスト1~6)。",
+      "<b>提示</b>: 毎ターン新たに提示される4枚(コスト1~現在の最大マナ)。<b>1マナ</b>で更新できます。",
     ] },
     { icon: "⚔️", h: "戦闘", body: [
       "モンスターで相手を攻撃します。",
@@ -193,8 +193,8 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🛒", h: "Markets & Deckbuilding", body: [
       "Buy cards to grow your deck. Purchases go to your <b>graveyard</b>, then shuffle back in when your deck runs out.",
-      "<b>Fixed market</b>: 10 random cards per game (cost 1-6).",
-      "<b>Offer</b>: 3 fresh cards each turn (cost 1 up to your max mana). Reroll it for <b>1 mana</b>.",
+      "<b>Fixed market</b>: 8 random cards per game (cost 1-6).",
+      "<b>Offer</b>: 4 fresh cards each turn (cost 1 up to your max mana). Reroll it for <b>1 mana</b>.",
     ] },
     { icon: "⚔️", h: "Combat", body: [
       "Attack the opponent with your monsters.",

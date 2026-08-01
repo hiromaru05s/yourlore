@@ -63,7 +63,7 @@
 
   /* market cards (fixed + 제시) — sized so all 10 고정 cards fit in ONE row on
      desktop (card height scales with vh; the market width scales with vw). */
-  --card-h-mkt: clamp(90px, min(13.2vh, 9vw), 172px);
+  --card-h-mkt: clamp(76px, min(10.4vh, 7.4vw), 150px); /* v28: two-row market */
   --card-w-mkt: calc(var(--card-h-mkt) * 0.64);
   --card-h-hand: clamp(106px, 15vh, 174px);
   --card-w-hand: calc(var(--card-h-hand) * 0.64);

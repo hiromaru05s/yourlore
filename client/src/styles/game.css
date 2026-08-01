@@ -401,7 +401,10 @@
 /* 제시 마켓 column: label + reroll centered (to the right of the divider) */
 .market-sub--supply .sub-head { align-items: center; text-align: center; }
 /* desktop: every 고정/제시 card on ONE row (no wrap) */
-.market-cards { display: flex; gap: 6px; align-items: center; flex-wrap: nowrap; }
+/* v28 two-row market: fixed = 4×2 grid, supply = 2×2 grid */
+.market-cards { display: grid; gap: 6px; justify-content: start; align-items: center; }
+#fixedMarket { grid-template-columns: repeat(4, var(--card-w-mkt)); }
+#supplyMarket { grid-template-columns: repeat(2, var(--card-w-mkt)); }
 /* light divider between 고정 and 제시 (left of the 제시 label + reroll) */
 .market-div { width: 1px; align-self: stretch; margin: 4px 2px; background: linear-gradient(180deg, transparent, var(--line) 15%, var(--line) 85%, transparent); }
 /* reroll — a clear, sizeable button with an on-hover explanation popup */

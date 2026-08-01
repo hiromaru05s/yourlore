@@ -193,7 +193,7 @@ const TEXTS: Record<string, string> = {
   GREED_PRICE: "Take 2 damage · Summon two Mimics (3/2) to your field · Exile 3 more Mimics from the game",
   MIMIC_KING2: "On summon: +1/+1 per 'Mimic'-family card in your field/graveyard/exile · If 6+ Mimics are exiled: summon a Master Mimic",
   ORIGIN_MIMIC: "On summon: +2/+2 per 'Mimic'-family card in your field/graveyard/exile · If 8+ Mimics are exiled: destroy up to 2 enemy traps",
-  MARKET_CRISIS: "Refresh all 10 cards of the fixed market",
+  MARKET_CRISIS: "Refresh all 8 cards of the fixed market",
   GOLIATH_HUNT: "Destroy 1 enemy monster with max HP 20 or more",
   WORLD_GUARD: "On summon: if your max HP is 90 or more, max mana +1 and your max HP +15",
   DOUBLE_EXEC: "Destroy 2 enemy monsters",
