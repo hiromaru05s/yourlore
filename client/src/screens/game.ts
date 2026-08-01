@@ -7,7 +7,7 @@ import type { App, Screen } from "../router";
 import { LocalController, type ControllerExits } from "../game/controller";
 import { TutorialController } from "../game/tutorial";
 import { OnlineController } from "../game/online";
-import { setMarketWatch, setMyAvatar, setMySleeve } from "../ui/boardView";
+import { setMarketWatch, setMyAvatar, setMySleeve, setOppAvatar } from "../ui/boardView";
 import { setCoinProfiles } from "../game/controller";
 
 type GameOpts =
@@ -18,7 +18,8 @@ type GameOpts =
 export function mountGame(app: App, opts: GameOpts): Screen {
   const root = document.createElement("div");
   app.root.appendChild(root);
-  setMyAvatar(app.user?.avatar);  // show my profile icon in the in-game meta panel
+  setMyAvatar(app.user?.avatar);  // my profile icon on the center-bottom portrait
+  setOppAvatar(opts.mode === "online" ? opts.oppAvatar ?? null : null); // opp portrait (bot → initial)
   setMySleeve(app.user?.sleeve);  // apply my equipped card sleeve to my deck/set-trap backs
   // 마켓 알림이: 활성 덱 프리셋의 워치리스트를 인게임 마켓 하이라이트에 연결
   const dks = app.user?.decks;

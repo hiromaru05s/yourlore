@@ -9,15 +9,18 @@ import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassiv
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer } from "./modal";
 import { cardEl } from "./cardView";
-import { bindZoom } from "./anim";
+import { bindZoom, zoomCard } from "./anim";
 import { t, getLang } from "../i18n";
 import { logToEn } from "../shared/logEn";
 import { getSfxVolume, setSfxVolume } from "./sound";
 import { avatarHtml } from "./social";
 
-// the local player's profile avatar (set by the game screen), shown in MY meta panel
+// the local player's profile avatar (set by the game screen), shown on MY portrait
 let MY_AVATAR: string | null | undefined;
 export function setMyAvatar(a?: string | null): void { MY_AVATAR = a; }
+// the opponent's avatar (online games pass it in; bot games fall back to initial)
+let OPP_AVATAR: string | null | undefined;
+export function setOppAvatar(a?: string | null): void { OPP_AVATAR = a; }
 
 // each side's equipped card-sleeve URL — used for deck/hand/set-trap backs.
 // MY is set locally from app.user; OPP is refreshed per-render from the
@@ -71,12 +74,18 @@ export class GameView {
         <button class="mute-fab" id="muteBtn" title="${t("game.mute")}" aria-label="${t("game.mute")}"></button>
         <div class="stage">
           <div class="board-col">
-            <div class="opp-hand" id="oppHand"></div>
+            <div class="pcluster pcluster--opp">
+              <div class="portrait portrait--opp" id="portraitOpp"></div>
+              <div class="opp-hand" id="oppHand"></div>
+            </div>
             <div class="prow" id="oppRow"></div>
             <div class="panel market" id="market"></div>
             <div class="prow" id="meRow"></div>
             <div class="hand-area" id="handArea">
-              <div class="hand" id="hand"></div>
+              <div class="pcluster pcluster--me">
+                <div class="portrait portrait--me" id="portraitMe"></div>
+                <div class="hand" id="hand"></div>
+              </div>
               <div class="end-turn-wrap"><button class="btn btn-primary" id="endBtn">${t("game.endturn")}</button></div>
             </div>
           </div>
@@ -133,7 +142,24 @@ export class GameView {
     applyLog();
     document.addEventListener("contextmenu", (e) => e.preventDefault());
 
-    // ---- hand: always visible (no auto-tuck). ----
+    // ---- hand: Hearthstone-style two states. Default = COMPACT stack held to the
+    // right of my portrait; clicking it EXPANDS the hand large at bottom-center.
+    // Clicking anywhere outside the expanded hand collapses it back. ----
+    const collapse = (e: PointerEvent) => {
+      if (!document.body.contains(this.root)) return;      // screen was swapped
+      if (!this.handOpen) return;
+      const el = e.target as HTMLElement | null;
+      if (el?.closest("#hand") || el?.closest(".zoom-overlay")) return; // zoom close ≠ hand close
+      this.setHandOpen(false);
+    };
+    document.addEventListener("pointerdown", collapse, { capture: true });
+  }
+
+  private handOpen = false;
+  setHandOpen(open: boolean): void {
+    if (this.handOpen === open) return;
+    this.handOpen = open;
+    (this.root.querySelector(".game") as HTMLElement | null)?.classList.toggle("hand-open", open);
   }
 
   private q(id: string): HTMLElement { return this.root.querySelector("#" + id) as HTMLElement; }
@@ -175,27 +201,31 @@ export class GameView {
     this.q("logTitle").textContent = t("game.log");
     this.q("logTab").textContent = t("game.log");
 
-    // opponent hand (face-down). Always show the COUNT; >10 lays out flat/even
-    // so you can still gauge how many cards they hold.
+    // Hearthstone-style center portraits (opp top / me bottom)
+    this.renderPortrait(this.q("portraitOpp"), opp, false);
+    this.renderPortrait(this.q("portraitMe"), me, true);
+
+    // opponent hand (face-down): straight upright stack held to the right of their
+    // portrait. Overlap tightens as the count grows so the RIGHT edge stays put.
     const oh = this.q("oppHand"); oh.innerHTML = "";
-    const n = opp.hand.length, mid = (n - 1) / 2;
-    const flatOpp = n > 10;
-    oh.classList.toggle("is-flat", flatOpp);
+    const n = opp.hand.length;
+    const obw = 34; // back width (px)
+    const ostep = n <= 1 ? 0 : Math.min(obw * 0.62, Math.max(8, (150 - obw) / (n - 1)));
     for (let i = 0; i < n; i++) {
       const cb = document.createElement("div");
       cb.className = "card--back";
       cb.style.backgroundImage = `url(${OPP_SLEEVE})`;
-      cb.style.width = "56px"; cb.style.height = "90px";
-      // fan under 11 cards; flat even row past that (keeps every card edge visible).
-      // arc DOWNWARD (edge cards lower) so the tops never cross the board's top clip edge.
-      cb.style.transform = flatOpp ? "none" : `rotate(${-(i - mid) * 4}deg) translateY(${(Math.abs(i - mid) ** 2) * 1.1}px)`;
+      cb.style.left = `${i * ostep}px`;
       cb.style.zIndex = String(i);
       oh.appendChild(cb);
     }
-    const cnt = document.createElement("div");
-    cnt.className = "opp-hand-count";
-    cnt.textContent = String(n);
-    oh.appendChild(cnt);
+    oh.style.width = `${n ? obw + (n - 1) * ostep : 0}px`;
+    if (n > 0) {
+      const cnt = document.createElement("div");
+      cnt.className = "opp-hand-count";
+      cnt.textContent = String(n);
+      oh.appendChild(cnt);
+    }
 
     this.renderRow(this.q("oppRow"), g, opp, false, myTurn, pending);
     this.renderRow(this.q("meRow"), g, me, true, myTurn, pending);
@@ -434,7 +464,7 @@ export class GameView {
 
     panel.innerHTML = `
       <div class="mp-top">
-        <span class="mp-name">${isMe ? avatarHtml(MY_AVATAR, p.name, 24) : `<span class="who"></span>`}${p.name}</span>
+        <span class="mp-name">${p.name}</span>
         <div class="mp-clock" id="clock-${isMe ? "me" : "opp"}" aria-hidden="true"></div>
       </div>
       <div class="mp-hp">
@@ -573,25 +603,107 @@ export class GameView {
     rb.onclick = () => this.h.onRefresh();
   }
 
+  /** Hearthstone-style center portrait: avatar ring + name + HP gem. */
+  private renderPortrait(el: HTMLElement, p: PlayerState, isMe: boolean): void {
+    el.innerHTML = `
+      ${avatarHtml(isMe ? MY_AVATAR : OPP_AVATAR, p.name, 58)}
+      <span class="pt-hp"><b>${Math.max(0, p.hp)}</b></span>
+      <span class="pt-name">${p.name}</span>`;
+  }
+
+  /** MY hand — straight upright cards (no fan) in two states:
+   *  - compact (default): small stack right of my portrait; overlap tightens with
+   *    the card count so the RIGHT edge stays anchored ("completes to the right").
+   *    Any press on it just expands the hand.
+   *  - open: large, bottom-center. Click a card = zoom preview; DRAG it up = play. */
   private renderHand(g: GameState, me: PlayerState, myTurn: boolean): void {
     const handEl = this.q("hand");
     handEl.innerHTML = "";
-    const n = me.hand.length, mid = (n - 1) / 2;
-    // Past 10 cards a fanned hand becomes unreadable — lay it out flat/straight instead.
-    const flat = n > 10;
-    handEl.classList.toggle("is-flat", flat);
+    const n = me.hand.length;
     me.hand.forEach((c, idx) => {
       const pc = playCost(c, me);
       const aff = myTurn && !g.pending && me.mana >= pc;
       const card = cardEl(c, { size: "hand", playable: aff, dim: !aff, costOverride: pc });
-      const off = idx - mid;
-      card.style.transform = flat ? "none" : `rotate(${off * 3.2}deg) translateY(${Math.abs(off) ** 2 * 2}px)`;
+      card.style.setProperty("--hi", String(idx));
       card.style.zIndex = String(idx);
-      if (aff) card.onclick = () => this.h.onPlay(c.uid); // uid, not index: the DOM can lag the logical state
-      else card.onclick = () => this.h.onBlockedPlay(c.uid); // explain WHY it can't be played (popup)
-      bindZoom(card, c);
+      this.bindHandCard(card, c, aff);
       handEl.appendChild(card);
     });
+    // per-state overlap steps (CSS picks the var by .hand-open on .game).
+    // Measure the real card width so the caps hold at every viewport size.
+    const cw = (handEl.querySelector(".card") as HTMLElement | null)?.offsetWidth || 100;
+    const openStep = n <= 1 ? cw : Math.min(cw + 8, Math.max(cw * 0.42, (Math.min(window.innerWidth * 0.86, 960) - cw) / (n - 1)));
+    const compactStep = n <= 1 ? cw : Math.min(cw * 0.6, Math.max(16, (300 - cw) / (n - 1)));
+    handEl.style.setProperty("--h-step-open", `${openStep}px`);
+    handEl.style.setProperty("--h-step-compact", `${compactStep}px`);
+    handEl.style.setProperty("--h-w-open", `${n ? cw + (n - 1) * openStep : 0}px`);
+    handEl.style.setProperty("--h-w-compact", `${n ? cw + (n - 1) * compactStep : 0}px`);
+  }
+
+  /** Compact press = expand. Open: click = zoom preview, drag up past the hand = play. */
+  private bindHandCard(card: HTMLElement, c: CardInst, aff: boolean): void {
+    card.style.touchAction = "none";
+    card.draggable = false;
+    card.addEventListener("dragstart", (e) => e.preventDefault());
+    card.addEventListener("pointerdown", (e: PointerEvent) => {
+      if (e.button !== 0) return;
+      if (!this.handOpen) {
+        // a press anywhere on the compact stack just opens the hand
+        e.stopPropagation();
+        this.setHandOpen(true);
+        card.addEventListener("click", (ce) => { ce.stopPropagation(); ce.preventDefault(); }, { capture: true, once: true });
+        return;
+      }
+      const sx = e.clientX, sy = e.clientY;
+      let ghost: HTMLElement | null = null;
+      let done = false;
+      const game = this.root.querySelector(".game") as HTMLElement | null;
+
+      const cleanup = (): void => {
+        done = true;
+        ghost?.remove();
+        card.classList.remove("is-dragging");
+        game?.classList.remove("drag-play");
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+        window.removeEventListener("pointercancel", cleanup);
+      };
+      const onMove = (ev: PointerEvent): void => {
+        if (done) return;
+        if (!ghost) {
+          if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 12) return;
+          try { card.setPointerCapture(ev.pointerId); } catch { /* ok */ }
+          ghost = card.cloneNode(true) as HTMLElement;
+          ghost.className = card.className + " drag-ghost";
+          ghost.style.width = `${card.offsetWidth}px`;
+          ghost.style.height = `${card.offsetHeight}px`;
+          document.body.appendChild(ghost);
+          card.classList.add("is-dragging");
+          if (aff) game?.classList.add("drag-play");
+        }
+        ghost.style.left = `${ev.clientX}px`;
+        ghost.style.top = `${ev.clientY}px`;
+      };
+      const onUp = (ev: PointerEvent): void => {
+        const dragged = !!ghost;
+        cleanup();
+        if (!dragged) return; // plain click → the click handler zooms
+        card.addEventListener("click", (ce) => { ce.stopPropagation(); ce.preventDefault(); }, { capture: true, once: true });
+        // released above the hand region = play it (drop back onto the hand = cancel)
+        const handTop = this.q("hand").getBoundingClientRect().top;
+        if (ev.clientY < handTop - 24) {
+          if (aff) this.h.onPlay(c.uid); // uid, not index: the DOM can lag the logical state
+          else this.h.onBlockedPlay(c.uid); // explain WHY it can't be played (popup)
+        }
+      };
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", onUp);
+      window.addEventListener("pointercancel", cleanup);
+    });
+    card.onclick = (e) => {
+      e.stopPropagation();
+      if (this.handOpen) zoomCard(c); // tap = enlarge preview; playing is drag-only now
+    };
   }
 
   private pileEl(id: string, count: number, frame: string | null, faceCard: CardInst | null, tag: string, onOpen?: () => void): HTMLElement {

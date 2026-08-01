@@ -91,12 +91,46 @@
    silently failed). Keep the board flat so every click lands on the right card. */
 .board-col { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 5px; min-height: 0; align-content: start; }
 
-/* opponent fanned hand (face-down), overflowing from top */
-.opp-hand { display: flex; justify-content: center; align-items: flex-start; height: 14px; margin-top: 3px; position: relative; z-index: 40; pointer-events: none; }
-.opp-hand .card--back { width: 44px; height: 70px; margin: 0 -14px; transform-origin: top center; }
-.opp-hand.is-flat .card--back { margin: 0 -8px; } /* >10 cards: even, countable row */
-/* the lone "0"/count badge — removed per request */
-.opp-hand-count { display: none; }
+/* ---- Hearthstone-style portrait clusters: opp top-center, me bottom-center.
+   The hand is "held" upright to the RIGHT of the portrait. ---- */
+.pcluster { position: relative; display: flex; justify-content: center; align-items: center; z-index: 40; }
+.pcluster--opp { height: 46px; margin-top: 2px; gap: 14px; }
+.portrait {
+  position: relative; width: 62px; height: 62px; flex: 0 0 auto;
+  border-radius: 50%; border: 2px solid var(--brass-dim);
+  background: radial-gradient(circle at 35% 30%, #223250, #0b101c);
+  box-shadow: 0 3px 14px #000b, inset 0 1px 0 #ffffff18, 0 0 0 3px #0a0f1a;
+  display: grid; place-items: center;
+}
+.portrait .avatar { width: 54px !important; height: 54px !important; border-radius: 50%; }
+.portrait--opp { margin-top: 14px; }
+.pt-hp {
+  position: absolute; right: -7px; bottom: -4px; min-width: 26px; height: 26px; padding: 0 5px;
+  display: grid; place-items: center; border-radius: 9px;
+  background: linear-gradient(180deg, #ff5b45, #a52815); border: 1px solid #ffd9cf55;
+  box-shadow: 0 2px 6px #000c; z-index: 2;
+}
+.pt-hp b { font-family: var(--mono); font-size: 14px; font-weight: 800; color: #fff; text-shadow: 0 1px 2px #000c; }
+.pt-name {
+  position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em; color: var(--paper-dim);
+  text-shadow: 0 1px 3px #000d; pointer-events: none;
+}
+.portrait--opp .pt-name { top: calc(100% + 2px); }
+.portrait--me .pt-name { bottom: calc(100% + 2px); }
+
+/* opp hand: straight upright backs, right of their portrait, right-edge anchored */
+.opp-hand { position: relative; height: 46px; pointer-events: none; }
+.opp-hand .card--back {
+  position: absolute; top: 0; width: 34px; height: 54px;
+  border-radius: 4px; box-shadow: 0 2px 6px #000a; transform: none;
+}
+.opp-hand-count {
+  display: grid; place-items: center; position: absolute; right: -12px; top: -9px; z-index: 30;
+  min-width: 20px; height: 20px; padding: 0 4px; border-radius: 999px;
+  background: #0e1522ee; border: 1px solid var(--line);
+  font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--brass-hi);
+}
 
 /* a player row: the field-block is a centered content-width cluster (zones + meta panel),
    so the play area stays snug instead of stretching across the whole width. */
@@ -353,13 +387,35 @@
 .refresh-btn:hover .refresh-tip { opacity: 1; visibility: visible; }
 
 /* ---- hand ---- */
-.hand-area { display: flex; align-items: flex-end; justify-content: center; gap: 0; min-height: var(--card-h-hand); padding-top: 2px; position: relative; z-index: 40; }
-.hand { display: flex; justify-content: center; align-items: flex-end; }
-.hand .card { margin: 0 -12px; transform-origin: bottom center; transition: transform .12s var(--ease); }
-.hand .card:hover { z-index: 50 !important; }
-/* >10 cards: straight, readable row (no fan). Wrap if it still overflows. */
-.hand.is-flat { flex-wrap: wrap; row-gap: 4px; }
-.hand.is-flat .card { margin: 0 -6px; }
+/* ---- MY hand: two states, both straight/upright (no fan). ----
+   compact (default): small stack right of my portrait, right-edge-capped
+   open (.game.hand-open): large, fixed at bottom-center; drag a card UP to play */
+.hand-area { display: flex; align-items: flex-end; justify-content: center; min-height: 84px; padding-top: 2px; position: relative; z-index: 40; }
+.pcluster--me { align-items: flex-end; gap: 16px; padding-bottom: 4px; }
+.portrait--me { margin-bottom: 4px; }
+.hand { position: relative; height: var(--card-h-hand); width: var(--h-w-open); cursor: pointer; }
+.hand .card { position: absolute; bottom: 0; left: calc(var(--hi) * var(--h-step-open)); transition: left .18s var(--ease), transform .15s var(--ease); }
+/* compact: same cards, container scaled down + tighter per-card step */
+.game:not(.hand-open) .hand {
+  width: calc(var(--h-w-compact) * .42); height: calc(var(--card-h-hand) * .42);
+}
+.game:not(.hand-open) .hand .card {
+  left: calc(var(--hi) * var(--h-step-compact) * .42);
+  transform: scale(.42); transform-origin: bottom left;
+}
+.game:not(.hand-open) .hand::after { /* invisible hit-pad so the tiny stack is easy to press */
+  content: ""; position: absolute; inset: -14px -10px -6px -10px;
+}
+/* open: lift the hand out of the cluster to true bottom-center, above everything */
+.game.hand-open .hand {
+  position: fixed; left: 50%; bottom: 8px; transform: translateX(-50%);
+  z-index: 120; cursor: default;
+  filter: drop-shadow(0 10px 30px #000c);
+}
+.game.hand-open .hand .card:hover { z-index: 60 !important; transform: translateY(-16px); }
+.game.hand-open .hand .card.is-dragging { opacity: .35; }
+/* while dragging a playable card, glow the field center as the drop target */
+.game.drag-play .prow#meRow .field-block { box-shadow: 0 0 0 1px #4fb4ff66, 0 0 26px #4fb4ff33; }
 /* END TURN — lower-right, but pulled INWARD from the screen edge so it doesn't hug the corner.
    Sits in the right gutter beside the (centered) hand, above the giveup button, clear of the field. */
 .end-turn-wrap { position: fixed; right: clamp(40px, 9vw, 210px); bottom: clamp(84px, 15vh, 150px); top: auto; transform: none; z-index: 45; }

@@ -37,8 +37,11 @@
   .stage { grid-template-columns: 1fr; gap: 4px; }
 
   .board-col { gap: 3px; }
-  .opp-hand { height: 13px; margin-top: -2px; }
-  .opp-hand .card--back { width: 28px; height: 45px; margin: 0 -9px; }
+  .pcluster--opp { height: 38px; gap: 10px; }
+  .portrait { width: 48px; height: 48px; }
+  .portrait .avatar { width: 40px !important; height: 40px !important; }
+  .opp-hand { height: 38px; }
+  .opp-hand .card--back { width: 26px; height: 41px; }
 
   .field-block { padding: 3px 5px; min-width: 0; overflow: hidden; flex-direction: column; gap: 4px; }
   .meta-panel { flex: 0 0 auto; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding-left: 0; border-left: none; border-top: 1px solid var(--line-soft); padding-top: 4px; }
@@ -63,8 +66,7 @@
   .market-cards::-webkit-scrollbar { display: none; }
   .market-sub .sub-head { gap: 7px; margin-bottom: 3px; }
 
-  .hand-area { min-height: var(--card-h-hand); padding-top: 0; }
-  .hand .card { margin: 0 -9px; }
+  .hand-area { min-height: 64px; padding-top: 0; }
   .end-turn-wrap { left: 6px; right: auto; bottom: 6px; }
   .end-turn-wrap .btn { width: 120px; padding: 7px 11px; font-size: 11px; }
   .giveup-btn { right: 6px; bottom: 8px; padding: 7px 10px; font-size: 10px; }
@@ -126,8 +128,9 @@
   .stage { grid-template-columns: 1fr 188px; gap: 6px; }
 
   .board-col { gap: 2px; }
-  .opp-hand { height: 9px; margin-top: -2px; }
-  .opp-hand .card--back { width: 24px; height: 38px; margin: 0 -8px; }
+  .pcluster--opp { height: 32px; }
+  .opp-hand { height: 32px; }
+  .opp-hand .card--back { width: 22px; height: 35px; }
   .field-block { padding: 2px 6px; min-width: 0; overflow: hidden; }
   .meta-panel { flex: 0 0 clamp(120px, 22vw, 168px); padding-left: 8px; gap: 3px; }
   .mp-name { font-size: 10px; }
@@ -143,7 +146,7 @@
 
   .market { padding: 2px 8px; }
   .market-sub .sub-head { margin-bottom: 2px; }
-  .hand-area { min-height: var(--card-h-hand); padding-top: 0; }
+  .hand-area { min-height: 56px; padding-top: 0; }
   .end-turn-wrap { bottom: 4px; }
   .log { font-size: 10.5px; padding: 5px 9px 8px; }
   .panel-title { font-size: 9px; padding: 4px 9px 3px; }
