@@ -19,9 +19,7 @@ import { avatarHtml } from "./social";
 let MY_AVATAR: string | null | undefined;
 export function setMyAvatar(a?: string | null): void { MY_AVATAR = a; }
 
-// each side's equipped card-sleeve URL — used for deck/hand/set-trap backs.
-// MY is set locally from app.user; OPP is refreshed per-render from the
-// server-synced state.sleeves, so the opponent's chosen sleeve shows too.
+// One universal card back is used by every player and every hidden card.
 let MY_SLEEVE = FRAME_BACK;
 let OPP_SLEEVE = FRAME_BACK;
 export function setMySleeve(id?: string | null): void { MY_SLEEVE = sleeveUrl(id); }
@@ -253,7 +251,7 @@ export class GameView {
         && !(pending!.kind === "myMon" && pending!.reason === "grantMajesty" && hasPassive(m, "majesty")) // 이미 위엄 보유
         && !(pending!.kind === "myMon" && pending!.data?.exclude === m.uid); // 지원 나팔: 같은 몬스터 중복 선택 불가
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
-      const card = cardEl(m, { field: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
+      const card = cardEl(m, { field: true, compactField: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
       // zoom shows the monster's CURRENT atk/def (buffs/mods applied), matching the on-field card
@@ -266,24 +264,20 @@ export class GameView {
     // spell/trap zone
     const sz = document.createElement("div");
     sz.className = "zone zone-st";
-    p.traps.forEach((t) => {
-      if (isMe && t.card.id !== "HIDDEN") {
-        const card = cardEl(t.card, { badge: "SET" });
-        bindZoom(card, t.card);
-        sz.appendChild(card);
-      } else {
-        const cb = document.createElement("div");
-        cb.className = "card card--back";
-        cb.style.backgroundImage = `url(${backFor(isMe)})`;
-        sz.appendChild(cb);
-      }
+    p.traps.forEach(() => {
+      // Set traps stay face-down for both players. Their identity is revealed only
+      // by the existing activation/reveal flow, never by the field renderer.
+      const cb = document.createElement("div");
+      cb.className = "card card--back card--field card--field-back";
+      cb.style.backgroundImage = `url(${backFor(isMe)})`;
+      sz.appendChild(cb);
     });
     p.enchants.forEach((e) => {
       // 영구(99) 영구마법은 턴 배지를 아예 표시하지 않는다 — 기한부만 남은 턴을 크게 표시 (v21 UX)
       // 혈귀술/고대 문명처럼 turns=99지만 bornTurn 기준 N턴 후 사라지는 카드도 남은 턴을 보여준다
       const lim = e.card.ench ? ENCH_TURN_LIMITS[e.card.ench] : undefined;
       const rem = e.turns < 99 ? e.turns : lim != null ? Math.max(0, (e.bornTurn ?? 0) + lim - g.turn) : null;
-      const card = cardEl(e.card, rem != null ? { badge: `⏳${rem}` } : {});
+      const card = cardEl(e.card, rem != null ? { compactField: true, badge: `⏳${rem}` } : { compactField: true });
       if (rem != null) { card.classList.add("ench-timed"); if (rem <= 1) card.classList.add("ench-expiring"); }
       bindZoom(card, e.card);
       sz.appendChild(card);

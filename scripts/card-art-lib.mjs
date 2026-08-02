@@ -6,9 +6,14 @@ import ts from "typescript";
 export const rootDir = process.cwd();
 export const cardsSourcePath = path.join(rootDir, "client/src/shared/cards.ts");
 const cardsEnglishSourcePath = path.join(rootDir, "client/src/shared/cards.en.ts");
+const cardTextSourcePath = path.join(rootDir, "client/src/shared/cardText.ts");
+const flavorNamesSourcePath = path.join(rootDir, "client/src/shared/cardNames.flavor.ts");
 const cacheDir = path.join(rootDir, "art/.cache");
 export const promptOutputPath = path.join(rootDir, "art/prompts/card-art-prompts.jsonl");
 export const artDir = path.join(rootDir, "client/public/art/cards");
+export const cardArtWidth = 1472;
+export const cardArtHeight = 1344;
+export const cardArtSize = `${cardArtWidth}x${cardArtHeight}`;
 
 const typeLabels = {
   mon: "monster creature",
@@ -20,16 +25,28 @@ const typeLabels = {
 export async function loadCards({ includeStarters = false } = {}) {
   const source = await fs.readFile(cardsSourcePath, "utf8");
   const englishSource = await fs.readFile(cardsEnglishSourcePath, "utf8");
+  const cardTextSource = await fs.readFile(cardTextSourcePath, "utf8");
+  const flavorNamesSource = await fs.readFile(flavorNamesSourcePath, "utf8");
   await fs.mkdir(cacheDir, { recursive: true });
 
   const englishJs = transpileTs(englishSource);
+  const cardTextJs = transpileTs(cardTextSource);
+  const flavorNamesJs = transpileTs(flavorNamesSource);
   const cardsJs = transpileTs(source)
     .replaceAll('from "./cards.en"', 'from "./cards.en.mjs"')
-    .replaceAll("from './cards.en'", 'from "./cards.en.mjs"');
+    .replaceAll("from './cards.en'", 'from "./cards.en.mjs"')
+    .replaceAll('from "./cardNames.flavor"', 'from "./cardNames.flavor.mjs"')
+    .replaceAll("from './cardNames.flavor'", 'from "./cardNames.flavor.mjs"')
+    .replaceAll('from "./cardText"', 'from "./cardText.mjs"')
+    .replaceAll("from './cardText'", 'from "./cardText.mjs"');
 
   const englishOut = path.join(cacheDir, "cards.en.mjs");
+  const cardTextOut = path.join(cacheDir, "cardText.mjs");
+  const flavorNamesOut = path.join(cacheDir, "cardNames.flavor.mjs");
   const cardsOut = path.join(cacheDir, "cards.mjs");
   await fs.writeFile(englishOut, englishJs);
+  await fs.writeFile(cardTextOut, cardTextJs);
+  await fs.writeFile(flavorNamesOut, flavorNamesJs);
   await fs.writeFile(cardsOut, cardsJs);
 
   const mod = await import(`${pathToFileURL(cardsOut).href}?t=${Date.now()}`);
@@ -53,20 +70,36 @@ export function cardArtPath(card) {
 
 export function cardArtPrompt(card) {
   const type = typeLabels[card.t] ?? "fantasy trading card subject";
-  const subject = subjectHint(card);
+  const subject = subjectHint(card).replaceAll(" icon", " illustration");
   const stats = card.t === "mon" ? ` Attack ${card.atk}, defense ${card.def}.` : "";
-  const effect = card.text && card.text !== "-" && card.text !== "—" ? ` Effect concept: ${card.text}.` : "";
-  const composition = card.t === "spell"
-    ? "Vertical portrait composition, centered magical object or abstract spell effect only, no living beings, no people, no humanoid silhouettes, no faces, no hands."
-    : "Vertical portrait composition, centered readable silhouette, dramatic lighting.";
+  const effectText = card.textEn ?? card.text;
+  const effect = effectText && effectText !== "-" && effectText !== "—" ? ` Gameplay idea to visualize: ${effectText}.` : "";
+  const displayName = card.nameEn ?? card.name;
   return [
-    "High-quality fantasy trading card inner artwork only.",
-    "No card border, no frame, no UI, no text, no logo, no watermark.",
-    composition,
-    "Painterly game art with crisp focal subject, rich color contrast, detailed background.",
-    `Subject: ${subject}, a ${type}. Cost tier ${card.cost}.${stats}${effect}`,
-    "Fit the art inside a small TCG illustration window; avoid tiny unreadable details.",
+    `Create one finished LORE TCG inner-art illustration on an exact ${cardArtSize} pixel landscape canvas (aspect ratio 1.095:1).`,
+    "This is the artwork inside the card frame, not a full card mockup.",
+    "World art bible: an original, timeworn royal archive in a dark-fantasy world; blackened oak, weathered black stone, aged brass, parchment ivory, candle amber, oxblood red, and restrained cobalt or malachite magical accents.",
+    "Rendering: premium hand-painted late-2000s dark-fantasy PC game concept art, confident brush texture, strong silhouette, dramatic chiaroscuro, grounded materials, restrained ornament, readable at thumbnail size.",
+    "Avoid glossy mobile-game 3D, plastic surfaces, anime styling, modern objects, photorealistic photography, and recognizable characters or logos from existing franchises.",
+    typeDirection(card),
+    `Card identity: ${displayName} (${card.id}), ${type}, cost tier ${card.cost}.${stats}${effect}`,
+    `Visual brief: ${subject}.`,
+    "Composition: one dominant focal idea in the central 80% of the canvas, medium-close or close framing, controlled depth, strong value separation, and no essential detail in the outer 8% where the card frame overlaps.",
+    "No card border, no frame, no UI, no mana gems, no stat badges, no written words, no letters, no numbers, no logo, no watermark.",
   ].join(" ");
+}
+
+function typeDirection(card) {
+  if (card.t === "mon") {
+    return "Monster direction: show one primary creature or character with a clear three-quarter silhouette occupying roughly 55-72% of the image. A group is allowed only when the card's identity explicitly summons or represents a troop. Do not duplicate the main subject.";
+  }
+  if (card.t === "spell") {
+    return "Spell direction: visualize the magical mechanism, relic, environment, or phenomenon itself. No person, no caster, no humanoid silhouette, no face, and no hands unless the card's named identity explicitly requires a living character. Never default to a robed mage.";
+  }
+  if (card.t === "trap") {
+    return "Trap direction: show the physical or arcane mechanism at the exact instant it triggers, with a readable cause-and-effect path. Close-up environmental storytelling only: no person, no humanoid silhouette, no face, no body, no hands, and no generic warrior victim. The trap must be visually distinct from a spell.";
+  }
+  return "Starter direction: present one iconic, frequently handled utility relic on a catalogued archive pedestal or worn campaign table. No person, no face, no hands, and no extra duplicate objects.";
 }
 
 function subjectHint(card) {
@@ -242,7 +275,80 @@ function subjectHint(card) {
   if (card.id === "STARTER_TRASH") return "a cursed culling dagger cutting through black smoke and broken card fragments";
   if (card.id === "STARTER_CHEST") return "an ornate glowing treasure chest overflowing with gold coins and magical light";
   if (card.id === "STARTER_MANA") return "a floating blue mana crystal altar with circular runes and rising energy";
-  return card.name;
+  return generatedSubjectHint(card) ?? effectSubjectHint(card);
+}
+
+function generatedSubjectHint(card) {
+  const spellMatch = card.id.match(/^GS(\d+)_(\d+)$/);
+  if (spellMatch) {
+    const tier = Number(spellMatch[1]);
+    const variant = Number(spellMatch[2]);
+    const spellSubjects = [
+      "a concentrated elemental detonation striking a cracked enemy life reliquary, no victim shown",
+      "a sealed frost vault bursting open as a blade of supernatural cold crosses an empty archive chamber",
+      "an ancient life reliquary overflowing with luminous restorative sap, roots, and heartlike crystal light",
+      "a forbidden archive mechanism revealing several blank glowing folios and sealed prophetic tablets",
+      "a single ceremonial weapon sigil being sharpened and overcharged by luminous runic lines",
+      "a battle-standard mechanism releasing a wave of power through several empty weapon emblems, no soldiers",
+    ];
+    return `${card.nameEn ?? card.name}: ${spellSubjects[variant] ?? "a unique arcane phenomenon tied directly to the card effect"}, escalating tier-${tier} power without using written numbers`;
+  }
+
+  const trapMatch = card.id.match(/^GT(\d+)_(\d+)$/);
+  if (trapMatch) {
+    const tier = Number(trapMatch[1]);
+    const variant = Number(trapMatch[2]);
+    const trapSubjects = [
+      "a layered defensive floor array snapping shut around an incoming spectral weapon trail, visibly halving its force",
+      "a heavy gate-like barrier slamming closed and throwing the incoming energy back through hidden vents",
+      "an angled black mirror mechanism catching an attack trail and reflecting it along a bright return path",
+      "a concealed counterweight execution device springing upward as a red return-line arcs toward the attacker mark",
+      "a monstrous architectural maw hidden in the floor closing around an empty armored target marker, restorative green light siphoned into a reliquary",
+      "a judicial trap seal dropping an iron brand and a violent punishment bolt onto an empty target sigil",
+    ];
+    return `${card.nameEn ?? card.name}: ${trapSubjects[variant] ?? "a unique concealed mechanism caught at the instant of activation"}, escalating tier-${tier} craftsmanship without using written numbers`;
+  }
+  return null;
+}
+
+function effectSubjectHint(card) {
+  const englishName = card.nameEn ?? card.name;
+  if (card.t === "trap") {
+    const trapSubjects = {
+      half: "a crescent defense array splitting an incoming spectral attack trail into two weaker streams",
+      spikes: "concealed iron thorns erupting from cracked flagstones toward an empty target marker",
+      nullspell: "a brass anti-magic lock crushing an incoming spell glyph before it crosses the ward line",
+      pitfall: "an ornate royal-tomb floor collapsing into a rune-lined abyss beneath an empty summoning seal",
+      counter: "a spring-loaded arcane counterweight destroying an attacker effigy and reflecting its stored force",
+      fullguard: "a tidal barrier swallowing an incoming weapon trail and converting it into restorative light",
+      reflect: "a thorn-rimmed mirror returning an incoming attack beam along the exact same path",
+      devour: "a hidden soul-furnace maw consuming an attacker effigy and feeding green light into a heart reliquary",
+      drawtrap: "a stopped clock mechanism stealing one instant and releasing several blank illuminated folios",
+      bulwark: "seven nested bronze ramparts unfolding from the floor around allied shield emblems",
+      judgment: "a sacred branded seal striking an attacker effigy with a descending punishment bolt",
+    };
+    return `${englishName}: ${trapSubjects[card.react] ?? "a bespoke concealed arcane mechanism triggering in an empty archive battlefield"}`;
+  }
+
+  if (card.t === "spell") {
+    const spellSubjects = {
+      dmg: "a compact destructive phenomenon striking a cracked enemy life reliquary, no victim shown",
+      draw: "an archive device releasing blank luminous folios and sealed knowledge shards",
+      buffTurn: "one weapon relic temporarily overcharged by a precise runic edge",
+      buffAllTurn: "a war-standard relic sending power into several empty weapon emblems",
+      buffPerm: "a permanent metal-and-rune inscription fusing into one weapon-and-shield crest",
+      crash: "an arcane market ledger and brass price mechanism collapsing into disorder",
+      recall: "one discarded relic-card shard returning from a stone grave archive",
+      seek: "an index needle selecting one sealed folio from a vast dark archive",
+      siphon: "a two-way conduit draining a red life crystal into a green-gold reliquary",
+      heal: "a grounded life reliquary overflowing with restorative light and living roots",
+      destroyMon: "a rune fracture splitting a stone monster effigy at its structural weakness",
+      destroyTrap: "a hidden trap network being exposed and mechanically dismantled",
+    };
+    return `${englishName}: ${spellSubjects[card.act] ?? "a singular object-led magical phenomenon that directly explains the card effect"}`;
+  }
+
+  return `${englishName}: one unmistakable fantasy subject whose materials, posture, and surroundings express the card's effect`;
 }
 
 export async function ensureDirs() {

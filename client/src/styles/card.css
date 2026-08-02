@@ -23,6 +23,54 @@
 .card--mkt { --cw: var(--card-w-mkt); --ch: var(--card-h-mkt); }
 .card--hand { --cw: var(--card-w-hand); --ch: var(--card-h-hand); }
 
+/* Field-only thumbnail. The supplied red/blue/green PNG is used directly and
+   clipped at its square art section; hand, market and zoom keep the full card. */
+.card--field {
+  --cw: var(--field-card-size);
+  --ch: var(--field-card-size);
+  overflow: hidden;
+  border-radius: 7%;
+  font-size: calc(var(--cw) * .16);
+}
+.card--field .card-frame {
+  background-size: 100% auto;
+  background-position: center top;
+}
+.card--field .card-art {
+  top: 21%; left: 6.5%; right: 6.5%; height: 76%;
+  border-radius: 2%;
+}
+.card--field .card-name {
+  top: 6.5%; left: 33%; right: 5%; height: 10%;
+  font-size: .48em;
+}
+.card--field .card-eff,
+.card--field .cast-tip { display: none; }
+.card--field .card-cost {
+  top: -2%; left: -4%; width: 34%;
+}
+.card--field .ad-atk,
+.card--field .ad-def {
+  top: auto; bottom: 3%; width: 31%; height: 23%;
+  border: 1px solid #ffffff70; border-radius: 999px;
+  color: #fff; font-size: .92em; text-shadow: 0 1px 3px #000;
+  box-shadow: 0 2px 6px #000b, inset 0 1px #ffffff38;
+  backdrop-filter: blur(2px);
+}
+.card--field .ad-atk { left: 4%; background: #641d16e8; }
+.card--field .ad-def { left: auto; right: 4%; background: #173d68e8; }
+.card--field .ad-atk::before { content: "⚔"; margin-right: .18em; font-size: .72em; }
+.card--field .ad-def::before { content: "◆"; margin-right: .18em; font-size: .62em; }
+.card--field .egg-cnt { top: 48%; max-width: 92%; }
+.card--field .egg-cnt .ec { font-size: max(6px, calc(var(--cw) * .09)); padding: 1px 3px; }
+.card--field .badge { bottom: 4%; font-size: .62em; }
+.card--field-back {
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #5c6c88;
+  box-shadow: inset 0 0 0 2px #050811, 0 2px 7px #000b;
+}
+
 /* per-type cost-gem colors (match the frame color) + neon cost-button image */
 .card--mon     { --cc: #d1431f; --cc-lo: #f47a4a; --cost-img: url(/ui/cost-mon.webp); }
 .card--spell   { --cc: #2c6bd0; --cc-lo: #5a9cf2; --cost-img: url(/ui/cost-spell.webp); }
@@ -201,6 +249,10 @@
   box-shadow: inset 0 2px 7px #000a, inset 0 0 0 1px #00000070, 0 1px 0 #ffffff05;
   position: relative;
 }
+.zone .slot {
+  --cw: var(--field-card-size);
+  --ch: var(--field-card-size);
+}
 .slot::after {
   content: "◆"; color: #3a4c6e3a; font-size: calc(var(--cw, var(--card-w)) * 0.34);
   text-shadow: 0 1px 1px #000, 0 0 10px #00000080;
@@ -241,6 +293,14 @@
 
 /* inline pile (deck/graveyard cell at the leading edge of a zone row): tags sit INSIDE */
 .inline-pile { cursor: pointer; }
+.zone-row > .inline-pile {
+  width: var(--field-card-size);
+  height: var(--field-card-size);
+}
+.zone-row > .inline-pile .pile-card {
+  background-size: cover;
+  background-position: center;
+}
 .inline-pile .pile-count {
   position: absolute; inset: 0; bottom: 0; left: 0; transform: none;
   display: grid; place-items: center; font-size: calc(var(--card-w) * 0.28);

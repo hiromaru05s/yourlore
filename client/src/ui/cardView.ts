@@ -34,6 +34,7 @@ export function decoratePassives(c: CardInst, txt: string): string {
 export interface CardOpts {
   size?: "board" | "mkt" | "hand";
   field?: boolean;
+  compactField?: boolean;
   owner?: PlayerState;
   playable?: boolean;
   buyable?: boolean;
@@ -97,6 +98,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const typeClass = c.t === "mon" ? "card--mon" : c.t === "trap" ? "card--trap" : c.t === "starter" ? "card--starter" : "card--spell";
   const sizeClass = opt.size === "mkt" ? "card--mkt" : opt.size === "hand" ? "card--hand" : "";
   const node = el("div", `card ${typeClass} ${sizeClass}`.trim());
+  if (opt.compactField) node.classList.add("card--field");
   node.dataset.uid = c.uid;
   // Layering: art sits BEHIND the frame (in the transparent art window), the
   // frame PNG overlays on top (its border hugs the art edges), then text/cost

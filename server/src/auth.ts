@@ -87,7 +87,7 @@ export async function getUser(env: Env, req: Request): Promise<SessionUser | nul
   if (!row || row.expires_at < Date.now()) return null;
   let decks: unknown = null;
   try { decks = row.decks ? JSON.parse(row.decks) : null; } catch { decks = null; }
-  return { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses, credits: row.credits, avatar: row.avatar, badge: row.badge, sleeve: row.sleeve || "default", deck: row.deck ? row.deck.split(",") : null, decks };
+  return { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses, credits: row.credits, avatar: row.avatar, badge: row.badge, sleeve: "default", deck: row.deck ? row.deck.split(",") : null, decks };
 }
 
 export async function createSession(env: Env, userId: string): Promise<string> {

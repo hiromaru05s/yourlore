@@ -428,3 +428,9 @@
 .h2h-rec .h2h-l { color: #e0776a; }
 .h2h-rate { font-family: var(--mono); font-size: 13px; color: var(--brass-hi); min-width: 40px; text-align: right; }
 .h2h-games { font-size: 11.5px; color: var(--paper-faint); min-width: 44px; text-align: right; }
+.shop-empty {
+  grid-column: 1 / -1;
+  margin: 24px 0;
+  color: var(--paper-dim);
+  text-align: center;
+}
