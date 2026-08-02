@@ -319,18 +319,46 @@
   border: 1px solid #ffffff14;
   box-shadow: inset 0 5px 10px #000e, inset 0 -1px 0 #ffffff10, 0 1px 0 #ffffff0a;
 }
-.zone-row > .inline-pile .pile-card {
-  position: absolute; left: 50%; bottom: 7%;
-  width: 74%; aspect-ratio: 0.64; height: auto;
-  border-radius: 6px;
+/* true 3D standing deck: perspective on the cell, preserve-3d box inside.
+   Front face = sleeve (deck) / top-card art (grave); edge faces = paper stack
+   whose thickness (--thick, set from count in pileEl) is the card pile depth. */
+.zone-row > .inline-pile { perspective: 620px; perspective-origin: 50% 24%; }
+.zone-row > .inline-pile .deck3d {
+  position: absolute; left: 50%; bottom: 9%;
+  width: 70%; aspect-ratio: 0.64; height: auto;
+  transform-style: preserve-3d;
+  transform: translateX(-50%) rotateX(-17deg) rotateY(13deg);
+  transform-origin: 50% 100%;
+}
+.zone-row > .inline-pile .d-front {
+  position: absolute; inset: 0; border-radius: 5px;
   background-size: 100% 100%; background-position: center;
   background-color: #101826;
-  border: 1px solid #ffffff26;
-  box-shadow: 0 3px 8px #000c, inset 0 1px 0 #ffffff20;
-  transform: translateX(calc(-50% + var(--pi, 0) * 2.2px)) translateY(calc(var(--pi, 0) * 1.4px))
-             perspective(320px) rotateX(9deg) rotateZ(calc(var(--pi, 0) * -1deg));
-  transform-origin: bottom center;
-  filter: brightness(calc(1 - var(--pi, 0) * 0.13));
+  border: 1px solid #ffffff2e;
+  transform: translateZ(var(--thick, 6px));
+  box-shadow: inset 0 1px 0 #ffffff24;
+}
+.zone-row > .inline-pile .d-back {
+  position: absolute; inset: 0; border-radius: 5px;
+  background: #0a0f1a;
+  box-shadow: 0 12px 14px -7px #000e; /* ground shadow the box casts into the well */
+}
+.zone-row > .inline-pile .d-edge { position: absolute; backface-visibility: hidden; }
+.zone-row > .inline-pile .d-edge--l {
+  left: 0; top: 1px; bottom: 1px; width: var(--thick, 6px);
+  transform-origin: left center; transform: rotateY(-90deg);
+  background: repeating-linear-gradient(90deg, #cfc4ae 0 1.1px, #978c77 1.1px 1.9px);
+  border-radius: 2px 0 0 2px;
+}
+.zone-row > .inline-pile .d-edge--t {
+  top: 0; left: 1px; right: 1px; height: var(--thick, 6px);
+  transform-origin: center top; transform: rotateX(90deg);
+  background: repeating-linear-gradient(180deg, #ddd2bc 0 1.1px, #a89d86 1.1px 1.9px);
+}
+.zone-row > .inline-pile .d-edge--b {
+  bottom: 0; left: 1px; right: 1px; height: var(--thick, 6px);
+  transform-origin: center bottom; transform: rotateX(-90deg);
+  background: repeating-linear-gradient(180deg, #a99e89 0 1.1px, #776e5c 1.1px 1.9px);
 }
 .zone-row > .inline-pile .pile-tag {
   position: absolute; left: 50%; transform: translateX(-50%); bottom: -13px; top: auto;
@@ -344,4 +372,4 @@
   box-shadow: 0 2px 6px #000b;
 }
 .zone-row > .inline-pile .pile-card--art { background-size: cover; background-position: center 22%; }
-.zone-row > .inline-pile.is-empty .pile-card { opacity: 0; }
+.zone-row > .inline-pile.is-empty .deck3d { opacity: 0; }

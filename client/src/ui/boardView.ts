@@ -693,17 +693,22 @@ export class GameView {
     const pile = document.createElement("div");
     pile.className = "pile" + (count ? "" : " is-empty");
     pile.id = id;
-    // Hearthstone-style: the pile STANDS upright in a recessed well; extra layers
-    // fake the stack's thickness (positioning/tilt handled in CSS via --pi).
-    const layers = Math.min(4, Math.max(1, Math.ceil(count / 6)));
-    for (let i = layers - 1; i >= 0; i--) {
-      const pc = document.createElement("div");
-      pc.className = "pile-card" + (id.includes("Disc") ? " pile-card--art" : "");
-      if (frame && count) pc.style.backgroundImage = `url(${frame})`;
-      pc.style.setProperty("--pi", String(i));
-      pc.style.zIndex = String(-i);
-      pile.appendChild(pc);
-    }
+    // Hearthstone-style: a TRUE CSS-3D box standing in the recessed well —
+    // sleeve/art front face + paper-edge side faces; thickness scales with count.
+    // (No three.js needed: same technique as the CSS dice cubes.)
+    const thick = count ? Math.min(15, 3 + count * 0.45) : 0;
+    pile.style.setProperty("--thick", `${thick.toFixed(1)}px`);
+    const box = document.createElement("div");
+    box.className = "deck3d";
+    const front = document.createElement("div");
+    front.className = "d-front pile-card" + (id.includes("Disc") ? " pile-card--art" : "");
+    if (frame && count) front.style.backgroundImage = `url(${frame})`;
+    const back = document.createElement("div"); back.className = "d-back";
+    const eL = document.createElement("div"); eL.className = "d-edge d-edge--l";
+    const eT = document.createElement("div"); eT.className = "d-edge d-edge--t";
+    const eB = document.createElement("div"); eB.className = "d-edge d-edge--b";
+    box.append(back, eL, eT, eB, front);
+    pile.appendChild(box);
     const t = document.createElement("div"); t.className = "pile-tag"; t.textContent = tag; pile.appendChild(t);
     const cnt = document.createElement("div"); cnt.className = "pile-count"; cnt.textContent = String(count); pile.appendChild(cnt);
     if (faceCard && faceCard.id !== "HIDDEN") bindZoom(pile, faceCard);
