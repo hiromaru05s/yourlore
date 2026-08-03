@@ -269,12 +269,24 @@
   --cw: var(--field-card-size);
   --ch: var(--field-card-size);
   overflow: hidden;
-  border-radius: 7%;
+  /* the square frame PNG carries its own ~3.5% rounded corners — keep the CSS
+     clip radius BELOW that so the frame is never cut */
+  border-radius: 3%;
   font-size: calc(var(--cw) * .16);
 }
-.card--field .card-frame { background-size: 100% auto; background-position: center top; }
-.card--field .card-art { top: 21%; left: 6.5%; right: 6.5%; height: 76%; border-radius: 2%; }
-.card--field .card-name { top: 6.5%; left: 33%; right: 5%; height: 10%; font-size: .48em; }
+/* FIELD frames are the dedicated 1254×1254 square assets (center-transparent
+   webp, set per-type in cardView) — fill the tile 1:1, NEVER crop a vertical
+   frame here. Art sits behind the frame's transparent window (inset ~7%),
+   bled ~1.5% under the border band. */
+.card--field .card-frame { background-size: 100% 100%; background-position: center; border-radius: 0; }
+.card--field .card-art { top: 5.5%; left: 5.5%; right: 5.5%; height: 89%; border-radius: 4%; }
+.card--field .card-name {
+  top: 8%; left: 30%; right: 8.5%; height: 11.5%; font-size: .48em;
+  justify-content: center;
+  color: #f2ead6; text-shadow: 0 1px 2px #000e, 0 0 6px #000c;
+  background: linear-gradient(90deg, #0000, #0007 22%, #0007 78%, #0000);
+  border-radius: 999px;
+}
 .card--field .card-eff,
 .card--field .cast-tip { display: none; }
 .card--field .card-cost { top: -2%; left: -4%; width: 34%; }
@@ -293,11 +305,20 @@
 .card--field .egg-cnt { top: 48%; max-width: 92%; }
 .card--field .egg-cnt .ec { font-size: max(6px, calc(var(--cw) * .09)); padding: 1px 3px; }
 .card--field .badge { bottom: 4%; font-size: .62em; }
-.card--field-back {
+.card--field-back { /* (no longer used for set traps — kept for safety) */
   background-size: cover;
   background-position: center;
   border: 1px solid #5c6c88;
   box-shadow: inset 0 0 0 2px #050811, 0 2px 7px #000b;
+}
+/* SET traps: owner-coloured trap-jaw icon tile (mine = blue / opponent = red).
+   The icon PNG has its own built-in dark bevel frame — no card back, no green
+   field frame, no identity leak. */
+.card--field-trap {
+  background-size: cover;
+  background-position: center;
+  border-radius: 5%;
+  box-shadow: 0 2px 7px #000b;
 }
 .zone .slot {
   --cw: var(--field-card-size);
