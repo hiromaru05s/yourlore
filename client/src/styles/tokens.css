@@ -61,6 +61,14 @@
   /* FIELD cards render as SQUARE art tiles (Codex local work, merged) */
   --field-card-size: var(--card-w);
 
+  /* in-game chrome reserved by the fit-to-viewport solver (ui/layout.ts).
+     These are only the pre-JS fallback — layout.ts overwrites them inline
+     on <html>, so they must live at :root (a .game-scoped copy would win
+     over the inline value in descendants and desync the board). */
+  --rail-w: 152px;
+  --log-w: 26px;
+  --pt: 58px;
+
   /* market cards (fixed + 제시) — sized so all 10 고정 cards fit in ONE row on
      desktop (card height scales with vh; the market width scales with vw). */
   --card-h-mkt: clamp(76px, min(10.4vh, 7.4vw), 150px); /* v28: two-row market */

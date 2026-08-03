@@ -8,6 +8,7 @@ import { LocalController, type ControllerExits } from "../game/controller";
 import { TutorialController } from "../game/tutorial";
 import { OnlineController } from "../game/online";
 import { setMarketWatch, setMyAvatar, setMySleeve, setOppAvatar } from "../ui/boardView";
+import { startBoardLayout } from "../ui/layout";
 import { setCoinProfiles } from "../game/controller";
 
 type GameOpts =
@@ -47,5 +48,9 @@ export function mountGame(app: App, opts: GameOpts): Screen {
           })
         : new OnlineController(root, opts.you, opts.roomId, exits);
 
-  return { destroy: () => ctrl.destroy() };
+  // fit-to-viewport board sizing — started AFTER the controller built the board
+  // skeleton, because the solver measures the real rows (see ui/layout.ts).
+  const stopLayout = startBoardLayout();
+
+  return { destroy: () => { stopLayout(); ctrl.destroy(); } };
 }
