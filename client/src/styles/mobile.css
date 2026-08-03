@@ -210,7 +210,7 @@
 /* TALL portrait phones only: the market stacks 4-wide (고정 4×2, 제시 4×1).
    The min-height MUST match `stackMkt` in ui/layout.ts — on a short phone
    those three card rows cost more height than the field can spare. */
-@media (orientation: portrait) and (max-width: 700px) and (min-height: 700px) {
+@media (orientation: portrait) and (max-width: 860px) and (min-height: 700px) {
   .market { flex-direction: column; align-items: center; gap: 5px; }
   .market-div { display: none; }
   #fixedMarket { grid-template-columns: repeat(4, var(--card-w-mkt)); }

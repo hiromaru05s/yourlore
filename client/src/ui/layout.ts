@@ -24,6 +24,7 @@ export interface BoardMetrics {
   compact: boolean;   // narrow layout (icon-only rail, tucked chrome)
   tiny: boolean;      // very small viewport — drop non-essential chrome
   flatMkt: boolean;   // short + wide → market collapses to ONE row (8 | 4)
+  stackMkt: boolean;  // tall portrait → market stacks 4-wide over three rows
   phone: boolean;     // portrait phone/tablet → market stacks 4-wide, hand is always open
   capH: number;       // hard ceiling on cardH imposed by the WIDTH budget
   capMkt: number;     // hard ceiling on mktH imposed by the WIDTH budget
@@ -47,7 +48,10 @@ export function solveBoard(w: number, h: number): BoardMetrics {
   // phone and a disaster on a short one (it halved the field tiles), so below
   // 700px tall the market keeps the compact 6-col two-row form. The CSS query
   // gating .market's column direction carries the SAME min-height.
-  const stackMkt = phone && h >= 700;
+  // Portrait TABLETS get the stacked market too: with the 묘지+덱 pile column
+  // the field is width-bound there as well, so extra market rows cost the
+  // battlefield nothing and soak up height that was otherwise dead air.
+  const stackMkt = h > w && w <= 860 && h >= 700 && !flatMkt;
 
   // reserved gutters: the side rail (right) and the log tab (left) must never
   // sit ON TOP of the board — the board width is what's left between them.
@@ -95,9 +99,14 @@ export function solveBoard(w: number, h: number): BoardMetrics {
   const mktCap = (availH - asideW - (mktCols - 1) * gap - (stackMkt ? 26 : 52)) / (mktCols * 0.64);
   // on phones the market is NOT tied to the (width-bound) field tile — letting
   // it grow past 0.9·cardH is what fills the height the field can't use.
-  const mktH = clamp(tiny ? 38 : 46, Math.min(stackMkt ? cardH * 1.9 : cardH * 1.0, mktCap), 150);
+  // Start CONSERVATIVE and let the (revert-guarded) grow pass push these up.
+  // Over-allocating here forces the shrink pass to claw height back out of the
+  // battlefield — 768x1024 lost 13% of its tile size that way.
+  // The ceiling is higher in the stacked regime: there the market is the thing
+  // that turns leftover height into readable cards.
+  const mktH = clamp(tiny ? 38 : 46, Math.min(stackMkt ? cardH * 1.15 : cardH * 1.0, mktCap), stackMkt ? 190 : 150);
 
-  const handH = clamp(tiny ? 58 : 70, Math.min(cardH * (phone ? 2.1 : 1.3), h * (phone ? (h < 720 ? 0.155 : 0.2) : 0.19)), phone ? 196 : 176);
+  const handH = clamp(tiny ? 58 : 70, Math.min(cardH * (phone ? 1.6 : 1.3), h * (phone ? (h < 720 ? 0.155 : 0.22) : 0.19)), phone ? 220 : 176);
 
   return {
     cardH: Math.round(cardH),
@@ -111,6 +120,7 @@ export function solveBoard(w: number, h: number): BoardMetrics {
     compact,
     tiny,
     flatMkt,
+    stackMkt,
     phone,
     capH: Math.max(44, Math.floor(fieldCap)),
     capMkt: Math.max(46, Math.floor(mktCap)),
@@ -120,8 +130,8 @@ export function solveBoard(w: number, h: number): BoardMetrics {
 /** Scale the three card sizes by `r`, respecting the width ceilings. */
 function scaled(m: BoardMetrics, r: number): BoardMetrics {
   const cardH = clamp(m.tiny ? 34 : 40, Math.round(m.cardH * r), Math.min(150, m.capH));
-  const mktH = clamp(m.tiny ? 34 : 42, Math.round(m.mktH * r), Math.min(150, m.capMkt));
-  const handH = clamp(m.tiny ? 52 : 62, Math.round(m.handH * r), m.phone ? 196 : 176);
+  const mktH = clamp(m.tiny ? 34 : 42, Math.round(m.mktH * r), Math.min(m.stackMkt ? 190 : 150, m.capMkt));
+  const handH = clamp(m.tiny ? 52 : 62, Math.round(m.handH * r), m.phone ? 220 : 176);
   return { ...m, cardH, mktH, handH, tile: Math.round(cardH * 0.64) };
 }
 
@@ -186,16 +196,23 @@ export function startBoardLayout(): () => void {
     // SAFE = a few px of slack; absolutely-positioned decorations (name plates,
     // HP strips, count badges) hang outside their row box and aren't measured.
     const SAFE = 8;
-    // phase 1 — GROW into leftover height (tall/narrow windows), capped by width
-    for (let i = 0; i < 6; i++) {
+    // phase 1 — GROW into leftover height (tall/narrow windows), capped by width.
+    // Steps are small and each one is REVERTED if it overshoots, so the shrink
+    // pass below never has to claw height back out of the battlefield — the
+    // field keeps the size its width budget allows.
+    for (let i = 0; i < 10; i++) {
       const avail = stage.clientHeight, want = need(col, m.gap);
       if (!avail || !want || avail - want <= 26 + SAFE) break;
       // stop only when EVERY axis is maxed — the hand has no width ceiling, so
       // on a tall phone it keeps absorbing height the field/market can't use.
-      if (m.cardH >= m.capH && m.mktH >= m.capMkt && m.handH >= (m.phone ? 196 : 176)) break;
-      const next = scaled(m, Math.min(1.1, (avail - 14 - SAFE) / want));
-      if (next.cardH === m.cardH && next.mktH === m.mktH) break;
+      if (m.cardH >= m.capH && m.mktH >= m.capMkt && m.handH >= (m.phone ? 220 : 176)) break;
+      const prev = m;
+      const next = scaled(m, Math.min(1.06, (avail - 14 - SAFE) / want));
+      // handH must be in the equality check: once the field and market sit on
+      // their width ceilings, the hand is the only thing left that can grow.
+      if (next.cardH === prev.cardH && next.mktH === prev.mktH && next.handH === prev.handH) break;
       m = next; apply(m);
+      if (need(col, m.gap) + SAFE > stage.clientHeight) { m = prev; apply(m); break; }
     }
     // phase 2 — SHRINK until it genuinely fits (monotone, so it always settles)
     for (let i = 0; i < 10; i++) {
