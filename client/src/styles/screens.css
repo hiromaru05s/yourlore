@@ -193,6 +193,44 @@
 .home-links .tut-card .tut-arrow { display: none; }
 @media (max-width: 680px) { .home-links { grid-template-columns: repeat(3, 1fr); } }
 
+/* ---- 문의 tile: 다른 타일보다 눈에 띄는 강조 + 떠 있는 말풍선 ---- */
+.tut-card--inquiry { position: relative; border-color: var(--gold-glow); box-shadow: 0 0 14px #4fb4ff2e, inset 0 1px 0 #ffffff10; }
+.tut-card--inquiry .tut-txt b { color: #bfe4ff; }
+.tut-card--inquiry:hover { border-color: #8fd0ff; box-shadow: 0 10px 26px #000a, 0 0 18px #4fb4ff44; }
+/* 말풍선: 타일 오른쪽의 빈 그리드 칸에 떠서 다른 요소를 가리지 않음 (마지막 타일 전용) */
+.inq-bubble {
+  position: absolute; left: calc(100% + 16px); top: 50%;
+  background: linear-gradient(180deg, #9fd8ff, #4fb4ff);
+  color: #06121f; font-size: 12px; font-weight: 700; line-height: 1.35;
+  padding: 8px 12px; border-radius: 10px; white-space: nowrap;
+  pointer-events: none; z-index: 6;
+  box-shadow: 0 6px 18px #0009, 0 0 14px #4fb4ff55;
+  animation: inqBobX 2.2s ease-in-out infinite;
+}
+.inq-bubble::before {
+  content: ""; position: absolute; right: 100%; top: 50%; margin-top: -6px;
+  border: 6px solid transparent; border-right-color: #4fb4ff;
+}
+@keyframes inqBobX { 0%, 100% { transform: translateY(-50%) translateX(0); } 50% { transform: translateY(-50%) translateX(6px); } }
+@keyframes inqBobY { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(5px); } }
+@media (max-width: 680px) {
+  /* 모바일: 마지막 줄 타일 아래(빈 공간)로 이동 */
+  .inq-bubble {
+    left: 50%; top: calc(100% + 10px);
+    white-space: normal; width: max-content; max-width: 210px; text-align: center;
+    animation: inqBobY 2.2s ease-in-out infinite;
+  }
+  .inq-bubble::before {
+    right: auto; left: 50%; top: auto; bottom: 100%; margin-top: 0; margin-left: -6px;
+    border: 6px solid transparent; border-bottom-color: #9fd8ff;
+  }
+}
+/* 문의 모달 */
+.inq-textarea { resize: vertical; min-height: 120px; font-family: inherit; line-height: 1.5; }
+.inq-msg { min-height: 16px; font-size: 12px; margin-top: 6px; }
+.inq-msg.err { color: var(--vermil-hi); }
+.inq-done { margin: 14px 0 4px; font-size: 14px; color: var(--paper); line-height: 1.5; }
+
 
 /* ---- home v3: Arcane Battle Board ---- */
 .screen:has(.home-field) {

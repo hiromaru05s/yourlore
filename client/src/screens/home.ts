@@ -88,6 +88,12 @@ export function mountHome(app: App): Screen {
           <span class="tut-txt"><b>${t("home.tutorial.title")}</b><span>${t("home.tutorial.desc")}</span></span>
           <span class="tut-arrow">→</span>
         </div>
+        <div class="panel tut-card tut-card--inquiry" id="inquiry">
+          <span class="tut-emoji">💬</span>
+          <span class="tut-txt"><b>${t("home.inquiry.title")}</b><span>${t("home.inquiry.desc")}</span></span>
+          <span class="tut-arrow">→</span>
+          <span class="inq-bubble" aria-hidden="true">${t("inquiry.bubble")}</span>
+        </div>
       </div>
     </div>`;
   app.root.appendChild(wrap);
@@ -107,6 +113,7 @@ export function mountHome(app: App): Screen {
   (wrap.querySelector("#cards") as HTMLElement).onclick = () => app.cards();
   (wrap.querySelector("#shop") as HTMLElement).onclick = () => app.shop();
   (wrap.querySelector("#tutorial") as HTMLElement).onclick = () => app.tutorial();
+  (wrap.querySelector("#inquiry") as HTMLElement).onclick = () => showInquiryModal();
   (wrap.querySelector("#profile") as HTMLElement).onclick = () => app.profile();
   (wrap.querySelector("#friends") as HTMLElement).onclick = () => app.friends();
   (wrap.querySelector("#credits") as HTMLElement).onclick = () => app.shop();
@@ -154,6 +161,54 @@ function showBotDifficultyModal(app: App): void {
   ov.querySelectorAll<HTMLButtonElement>(".diff-card").forEach((b) => {
     b.onclick = () => { close(); app.botGame(b.dataset.diff as BotDifficulty); };
   });
+}
+
+/** 문의 모달: 제목+본문 → /api/inquiry → 어드민 대시보드 '문의' 탭. */
+function showInquiryModal(): void {
+  const ov = document.createElement("div");
+  ov.className = "overlay";
+  ov.innerHTML = `
+    <div class="modal inquiry-box" style="min-width:340px;max-width:460px">
+      <h2>💬 ${t("inquiry.modal.title")}</h2>
+      <label class="field-label">${t("inquiry.field.title")}</label>
+      <input class="input" id="inqTitle" maxlength="100" placeholder="${t("inquiry.ph.title")}">
+      <label class="field-label">${t("inquiry.field.body")}</label>
+      <textarea class="input inq-textarea" id="inqBody" maxlength="2000" rows="6" placeholder="${t("inquiry.ph.body")}"></textarea>
+      <div class="inq-msg" id="inqMsg"></div>
+      <div class="modal-row">
+        <button class="btn btn-ghost" id="inqCancel">${t("common.cancel")}</button>
+        <button class="btn btn-gold" id="inqSend">${t("inquiry.send")}</button>
+      </div>
+    </div>`;
+  document.body.appendChild(ov);
+  const close = () => ov.remove();
+  const titleEl = ov.querySelector("#inqTitle") as HTMLInputElement;
+  const bodyEl = ov.querySelector("#inqBody") as HTMLTextAreaElement;
+  const msgEl = ov.querySelector("#inqMsg") as HTMLElement;
+  const sendBtn = ov.querySelector("#inqSend") as HTMLButtonElement;
+  (ov.querySelector("#inqCancel") as HTMLElement).onclick = close;
+  ov.onclick = (e) => { if (e.target === ov) close(); };
+  titleEl.focus();
+  sendBtn.onclick = () => {
+    const title = titleEl.value.trim();
+    const body = bodyEl.value.trim();
+    if (!title || !body) { msgEl.className = "inq-msg err"; msgEl.textContent = t("inquiry.need"); return; }
+    sendBtn.disabled = true;
+    sendBtn.textContent = t("inquiry.sending");
+    void api.sendInquiry(title, body).then(() => {
+      const box = ov.querySelector(".inquiry-box") as HTMLElement;
+      box.innerHTML = `
+        <h2>💬 ${t("inquiry.modal.title")}</h2>
+        <div class="inq-done">✅ ${t("inquiry.sent")}</div>
+        <div class="modal-row"><button class="btn btn-gold btn-block" id="inqOk">${t("common.confirm")}</button></div>`;
+      (box.querySelector("#inqOk") as HTMLElement).onclick = close;
+    }).catch(() => {
+      sendBtn.disabled = false;
+      sendBtn.textContent = t("inquiry.send");
+      msgEl.className = "inq-msg err";
+      msgEl.textContent = t("inquiry.fail");
+    });
+  };
 }
 
 /** Invite-campaign modal: share link + invitee progress (max 3). */
