@@ -55,14 +55,9 @@
 @media (orientation: portrait) and (max-width: 860px) {
   body, #app, .game, .screen { height: 100dvh; }
 
-  /* market: the two sub-markets stack, each scrolls horizontally if needed */
-  .market { flex-direction: column; align-items: center; gap: 5px; }
-  .market-div { display: none; }
   .market-sub { max-width: 100%; }
   .market-cards { overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .market-cards::-webkit-scrollbar { display: none; }
-  #fixedMarket { grid-template-columns: repeat(4, var(--card-w-mkt)); }
-  #supplyMarket { grid-template-columns: repeat(4, var(--card-w-mkt)); }
 
   /* timer + END TURN keep the market's right cell, just tighter */
   .mid-aside { margin-left: 6px; gap: 4px; }
@@ -169,6 +164,58 @@
   .diff-card:active { transform: scale(.97); }
 }
 
+
+/* ---------------- PORTRAIT PHONES ONLY (≤700px wide) ----------------
+   Wider portrait tablets keep the desktop regime — see `phone` in layout.ts. */
+@media (orientation: portrait) and (max-width: 700px) {
+  /* ---- battlefield gets the width back ---- */
+  /* the rail moved beside each player (below), so the field can run edge to edge */
+  .field-block { padding: 4px 4px; }
+  .zone-row > .inline-pile { margin-left: 5px; }
+  .zone-row > .inline-pile .pile-count { right: -3px; top: -6px; min-width: 16px; height: 16px; font-size: 9.5px; }
+
+  /* ---- 묘지 / 제외: each player's own chips, on their own half ----
+     `display: contents` dissolves the rail container so each group can be
+     placed independently; top row = opponent, bottom row = me, and the tint
+     matches the existing turn colours so ownership is never ambiguous. */
+  .side-rail { display: contents; }
+  .side-rail .rail-group {
+    position: absolute; z-index: 46;
+    flex-direction: row; align-items: center; gap: 5px; width: auto;
+  }
+  .side-rail .rail-group--opp { top: calc(var(--pt) * 0.16 + 26px); right: 7px; }
+  .side-rail .rail-group--me { bottom: 8px; left: 7px; }
+  .side-rail .rail-head { display: none; }
+  .side-rail .mp-btns { flex-direction: row; gap: 5px; }
+  .side-rail .mp-tribes { flex-direction: row; flex-wrap: wrap; max-width: 46vw; }
+  .rail-group--opp .mp-btn { border-color: #7a3a3a; color: #ffcabb; background: #2a141066; }
+  .rail-group--me .mp-btn { border-color: #35597f; color: #cfe4ff; background: #10243a88; }
+  .rail-group--opp .mp-tribes { justify-content: flex-end; }
+
+  /* ---- hand: ALWAYS open, a real row at the bottom (no 0.42 mini stack) ----
+     the cluster becomes two rows so the hand drops BELOW the portrait
+     instead of being held beside it at full size. */
+  .pcluster--me { grid-template-rows: auto auto; row-gap: 3px; }
+  .pcluster--me .pc-side--l { grid-row: 1; grid-column: 1; }
+  .pcluster--me .portrait { grid-row: 1; grid-column: 2; }
+  .pcluster--me .pc-side--r { grid-row: 2; grid-column: 1 / -1; justify-content: center; }
+  .game.hand-open .hand {
+    position: relative !important; left: auto; bottom: auto; transform: none;
+    z-index: 40; filter: drop-shadow(0 6px 18px #000a);
+  }
+  .game.hand-open .hand .card:hover { transform: none; }
+
+}
+
+/* TALL portrait phones only: the market stacks 4-wide (고정 4×2, 제시 4×1).
+   The min-height MUST match `stackMkt` in ui/layout.ts — on a short phone
+   those three card rows cost more height than the field can spare. */
+@media (orientation: portrait) and (max-width: 700px) and (min-height: 700px) {
+  .market { flex-direction: column; align-items: center; gap: 5px; }
+  .market-div { display: none; }
+  #fixedMarket { grid-template-columns: repeat(4, var(--card-w-mkt)); }
+  #supplyMarket { grid-template-columns: repeat(4, var(--card-w-mkt)); }
+}
 
 /* ---------------- SHORT viewports (landscape phones, split-screen, short desktop windows) ---------------- */
 @media (max-height: 560px) {

@@ -197,10 +197,22 @@ export class GameView {
       this.setHandOpen(true);
       handEl.addEventListener("click", (ce) => { ce.stopPropagation(); ce.preventDefault(); }, { capture: true, once: true });
     }, { capture: true });
+    // phones start (and stay) with the hand open; re-assert it on rotation
+    const syncPhoneHand = (): void => { if (GameView.isPhone()) this.setHandOpen(true); };
+    syncPhoneHand();
+    GameView.phoneMq?.addEventListener?.("change", syncPhoneHand);
   }
+
+  // On a portrait phone the 0.42-scale compact stack is unreadable, so the hand
+  // is PERMANENTLY open there: a real in-flow row at the bottom, full size.
+  // (Matches the CSS portrait media query — keep the two in sync.)
+  private static phoneMq: MediaQueryList | null =
+    typeof matchMedia === "function" ? matchMedia("(orientation: portrait) and (max-width: 860px)") : null;
+  private static isPhone(): boolean { return !!GameView.phoneMq?.matches; }
 
   private handOpen = false;
   setHandOpen(open: boolean): void {
+    if (!open && GameView.isPhone()) return;   // never collapse on phones
     if (this.handOpen === open) return;
     this.handOpen = open;
     (this.root.querySelector(".game") as HTMLElement | null)?.classList.toggle("hand-open", open);
