@@ -5,7 +5,7 @@
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { effMaxMana, playCost, buyCost, effAtk, effDef, curHp } from "../shared/engine";
-import { FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
+import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer } from "./modal";
 import { cardEl } from "./cardView";
@@ -274,8 +274,8 @@ export class GameView {
       oh.appendChild(cnt);
     }
 
-    this.renderRail(this.q("railOpp"), opp, false);
-    this.renderRail(this.q("railMe"), me, true);
+    this.renderRail(this.q("railOpp"), opp);
+    this.renderRail(this.q("railMe"), me);
     this.renderRow(this.q("oppRow"), g, opp, false, myTurn, pending);
     this.renderRow(this.q("meRow"), g, me, true, myTurn, pending);
     this.renderMarket(g, me, myTurn);
@@ -299,8 +299,13 @@ export class GameView {
     row.innerHTML = "";
     const onTurn = !g.over && g.cur === (g.players.indexOf(p) as Side);
 
-    // 묘지는 필드에서 빠지고 사이드레일 아이콘(제외와 동일한 형태)으로 이동했다.
-    // 필드에 남는 유일한 더미 = 덱 — 카드 정상 비율(높이 = 타일, 폭 = 0.64배)로 눕히지 않고 그대로.
+    // 필드 오른쪽 더미 열: [묘지][덱] — 둘 다 정사각 타일과 "같은 폭", 높이는 카드 정상 비율
+    // (폭을 타일에 맞추면 카드 비율상 한 줄보다 높아지므로 두 줄에 걸쳐 세운다.)
+    const sortByCost = (cards: CardInst[]) => [...cards].sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
+    const graveTop = p.discard[p.discard.length - 1];
+    const graveArt = graveTop && graveTop.id !== "HIDDEN" ? `/art/cards/${graveTop.id}.webp` : graveTop ? frameFor(graveTop.t) : null;
+    const gravePile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, graveArt, graveTop ?? null, t("game.discard"),
+      () => { if (p.discard.length) cardPicker(`${p.name} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => { /* browse only */ }); });
     // clicking the DECK opens the full composition (own or opponent's public aggregate)
     const collection = this.collectionOf(p, isMe);
     // my deck → also show the cards still remaining (undrawn); opponent's remaining deck is hidden
@@ -365,28 +370,27 @@ export class GameView {
     });
     for (let i = p.traps.length + p.enchants.length; i < ST_SLOTS; i++) sz.appendChild(this.slotEl());
 
-    // each zone row = [slots] + [deck pile at the far right]. Only the spell/trap
-    // row carries the deck; the monster row gets a same-width spacer so both rows
-    // stay flush (묘지는 사이드레일 아이콘으로 이동).
     // Monster zone nearest the center line: me → mon on top, opp → mon on bottom.
-    const spacer = document.createElement("div");
-    spacer.className = "inline-pile pile-spacer";
-    const monRow = this.zoneRow(spacer, mz, isMe);
-    const stRow = this.zoneRow(deckPile, sz, isMe);
+    const monRow = this.zoneRow(mz);
+    const stRow = this.zoneRow(sz);
     const zones = document.createElement("div");
     zones.className = "zones";
     if (isMe) zones.append(monRow, stRow); else zones.append(stRow, monRow);
 
-    block.append(zones);
+    // 더미 열은 두 줄 전체 높이를 쓰며 필드 오른쪽에 붙는다 (묘지 → 덱 순, 바깥쪽이 덱)
+    const piles = document.createElement("div");
+    piles.className = "pile-col";
+    piles.append(gravePile, deckPile);
+
+    block.append(zones, piles);
     row.append(block);
   }
 
-  /** One zone line: zone slots + the deck/grave pile standing at the FAR RIGHT (both sides). */
-  private zoneRow(pile: HTMLElement, zone: HTMLElement, _isMe: boolean): HTMLElement {
+  /** One zone line (slots only — 덱/묘지 더미는 field-block 오른쪽의 pile-col로 빠졌다). */
+  private zoneRow(zone: HTMLElement): HTMLElement {
     const rowEl = document.createElement("div");
     rowEl.className = "zone-row";
-    pile.classList.add("inline-pile");
-    rowEl.append(zone, pile);
+    rowEl.append(zone);
     return rowEl;
   }
 
@@ -473,9 +477,9 @@ export class GameView {
     });
   }
 
-  /** Right side-rail group (OUTSIDE the field): 묘지 / 제외 browsers + tribe chips.
-   *  (The turn clock moved out to the market aside; it lives in the static skeleton.) */
-  private renderRail(panel: HTMLElement, p: PlayerState, isMe: boolean): void {
+  /** Right side-rail group (OUTSIDE the field): 제외(exile) browser + tribe chips.
+   *  (묘지는 필드 오른쪽 더미 열로 이동 · the turn clock lives in the market aside.) */
+  private renderRail(panel: HTMLElement, p: PlayerState): void {
     // 종족: 현재 필드 진행도 + 이미 달성한 시너지를 함께, 시각적으로 구분해 표기
     const byTribe = new Map<string, Set<string>>();
     for (const m of p.field) if (m.tribe) { if (!byTribe.has(m.tribe)) byTribe.set(m.tribe, new Set()); byTribe.get(m.tribe)!.add(m.id); }
@@ -503,19 +507,8 @@ export class GameView {
       ${tribeChips.length ? `<div class="mp-tribes">${tribeChips.join("")}</div>` : ""}`;
 
     const btns = panel.querySelector(".mp-btns")!;
-    const byCost = (cards: CardInst[]) => [...cards].sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
 
-    // 묘지 — 제외와 같은 아이콘 버튼. id는 anim.ts(pileFlash / 카드 날아가는 목적지)가 쓰므로 유지.
-    const disc = p.discard;
-    const gbtn = document.createElement("button");
-    gbtn.className = "btn btn-ghost mp-btn mp-btn--grave" + (disc.length ? "" : " is-empty");
-    gbtn.id = isMe ? "pile-myDisc" : "pile-oppDisc";
-    gbtn.innerHTML = `<span class="mp-ico">🪦</span><span class="mp-lb">${t("game.discard")}</span><b>${disc.length}</b>`;
-    gbtn.disabled = disc.length === 0;
-    gbtn.title = t("game.discard");
-    gbtn.onclick = () => { if (disc.length) cardPicker(`${p.name} — ${t("game.discard")} (${disc.length})`, byCost(disc), () => { /* browse only */ }); };
-    btns.appendChild(gbtn);
-
+    // 묘지는 필드 오른쪽 더미 열(덱 옆)로 돌아갔다 — 레일에는 제외/종족만 남는다.
     const removed = (p.removed ?? []).slice().sort((a, b) => a.cost - b.cost);
     if (removed.length > 0) {
       const rbtn = document.createElement("button");
@@ -648,7 +641,7 @@ export class GameView {
     const hpPct = Math.max(0, p.hp) / p.maxHp * 100;
     el.innerHTML = `
       ${avatarHtml(isMe ? MY_AVATAR : OPP_AVATAR, p.name, 58)}
-      <span class="pt-hp" title="${Math.max(0, p.hp)}/${p.maxHp}"><b id="hp-${sd}">${Math.max(0, p.hp)}</b><span class="pt-hp-max">/${p.maxHp}</span></span>
+      <span class="pt-hp" title="${Math.max(0, p.hp)}/${p.maxHp}"><b id="hp-${sd}">${Math.max(0, p.hp)}</b></span>
       <span class="pt-hpbar hpbar" id="hpbar-${sd}"><i style="width:${hpPct}%"></i></span>
       <span class="pt-name">${p.name}</span>
       <span class="pt-mana pips" title="${t("game.mana")}"><span class="pt-mana-gem">◈</span><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span>`;

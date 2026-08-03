@@ -62,8 +62,8 @@ export function solveBoard(w: number, h: number): BoardMetrics {
 
   // ---- horizontal budget -----------------------------------------------
   const availH = w - railW - logW - 14;
-  // field row: 7 tiles + 6 gaps + deck pile (0.64 tile) + its margin + block padding
-  const fieldCap = (availH - gap * 6 - 34) / (7 * 0.64 + 0.64 * 0.64 + 0.4);
+  // field row: 7 tiles + 6 gaps + the pile column (묘지+덱 = 2 tiles wide, 1 gap) + margin + block padding
+  const fieldCap = (availH - gap * 7 - 34) / (9 * 0.64 + 0.4);
   cardH = Math.min(cardH, fieldCap);
   cardH = clamp(portraitPhone ? 50 : 44, cardH, 150);
 

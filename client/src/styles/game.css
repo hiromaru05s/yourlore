@@ -33,9 +33,6 @@
 .side-rail .mp-btns { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
 .side-rail .mp-btns:empty { display: none; }
 /* 묘지 = 제외와 같은 아이콘 버튼 (필드에서 빠진 자리) */
-.mp-btn--grave { border-color: #4a5566; color: #cbd6e6; background: #4a556622; }
-.mp-btn--grave:hover:not(:disabled) { border-color: var(--brass); color: #fff; background: #4a556644; }
-.mp-btn--grave:disabled { opacity: .42; cursor: default; }
 .mp-btn.flash { animation: railPileFlash .5s var(--ease); }
 @keyframes railPileFlash {
   0%, 100% { box-shadow: none }
@@ -283,7 +280,6 @@
 .zones { display: flex; flex-direction: column; gap: var(--slot-gap); flex: 0 1 auto; min-width: 0; }
 .zone-row { display: flex; align-items: center; gap: var(--slot-gap); }
 .zone { display: flex; gap: var(--slot-gap); flex: 0 1 auto; }
-.zone-row > .inline-pile { flex: 0 0 auto; }
 
 /* ---- right-side meta panel: name/turn · HP · mana · buttons · tribe · timer ---- */
 .meta-panel {
