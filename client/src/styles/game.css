@@ -1,12 +1,15 @@
 /* ============================================================
    LORE — game board layout, header, zones, hand, log, animations
    ============================================================ */
+/* --rail-w / --log-w / --pt and every card size are solved per-viewport by
+   ui/layout.ts; the values below are only the pre-JS fallback. */
 .game {
-  height: 100vh;
+  height: 100dvh;
+  position: relative;
   display: grid;
-  grid-template-rows: auto 1fr;
-  padding: 5px 12px 6px;
-  gap: 4px;
+  grid-template-rows: auto minmax(0, 1fr);
+  padding: 4px 8px 5px;
+  gap: 3px;
   overflow: hidden;
   /* battlefield art (picked once per match in GameView) + a THIN dark overlay so
      cards/panels/log stay readable even on the bright heaven art. center/cover
@@ -16,25 +19,46 @@
     var(--battlefield-bg, none) center / cover no-repeat;
 }
 
-/* ---- side rail: timers + tribe/exile info OUTSIDE the battlefield (right edge) ---- */
+/* ---- side rail: 묘지/제외 열람 + 종족 시너지, OUTSIDE the battlefield.
+   The board reserves --rail-w on the right so the rail NEVER overlaps it. ---- */
 .side-rail {
-  position: fixed; right: clamp(10px, 1.6vw, 30px); top: 50%; transform: translateY(-58%);
-  display: flex; flex-direction: column; gap: 18px; z-index: 44;
-  width: clamp(120px, 13vw, 190px); pointer-events: none;
+  position: absolute; right: 5px; top: 50%; transform: translateY(-52%);
+  display: flex; flex-direction: column; gap: clamp(10px, 3vh, 26px); z-index: 44;
+  width: calc(var(--rail-w) - 10px); pointer-events: none;
 }
-.side-rail .rail-group { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; pointer-events: auto; }
-.rail-head { display: flex; align-items: center; gap: 8px; }
-.rail-name { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--paper-faint); max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.side-rail .mp-tribes { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+.side-rail .rail-group { display: flex; flex-direction: column; gap: 5px; align-items: flex-end; pointer-events: auto; min-width: 0; }
+.rail-head { display: flex; align-items: center; gap: 8px; max-width: 100%; }
+.rail-name { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--paper-dim); text-shadow: 0 1px 3px #000, 0 0 7px #000c; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.side-rail .mp-tribes { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; max-width: 100%; }
+.side-rail .mp-btns { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
 .side-rail .mp-btns:empty { display: none; }
+/* 묘지 = 제외와 같은 아이콘 버튼 (필드에서 빠진 자리) */
+.mp-btn--grave { border-color: #4a5566; color: #cbd6e6; background: #4a556622; }
+.mp-btn--grave:hover:not(:disabled) { border-color: var(--brass); color: #fff; background: #4a556644; }
+.mp-btn--grave:disabled { opacity: .42; cursor: default; }
+.mp-btn.flash { animation: railPileFlash .5s var(--ease); }
+@keyframes railPileFlash {
+  0%, 100% { box-shadow: none }
+  50% { box-shadow: 0 0 0 2px var(--gold-glow), 0 0 16px var(--gold-glow); filter: brightness(1.5) }
+}
+/* narrow viewports → icon-only rail (labels drop, counts stay) */
+.board-compact .rail-name,
+.board-compact .mp-btn .mp-lb { display: none; }
+.board-compact .mp-btn { padding: 3px 6px; gap: 3px; }
+.board-compact .tribe-chip { padding: 1px 4px; font-size: 9.5px; gap: 2px; }
+.board-compact .tribe-chip .tc-name { max-width: 46px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.board-tiny .tribe-chip .tp { display: none; }
+.board-tiny .side-rail { gap: 8px; }
 
 /* ---- header ---- */
-.topbar { display: flex; align-items: center; gap: 14px; padding: 2px 4px 8px; position: relative; }
+.topbar { display: flex; align-items: center; gap: 14px; padding: 1px 4px 4px; position: relative; }
 .brand { display: flex; align-items: center; gap: 10px; }
+/* the CLASSIC LORE wordmark (the archive-era header art is retired) */
 .brand .mark {
-  width: 104px; height: 34px; transform: none; border: none; position: relative;
-  background: url("/art/brand/lore-archive-header-wordmark.webp") left center/contain no-repeat;
-  filter: drop-shadow(0 1px 4px #000a) drop-shadow(0 0 10px #4fb4ff44);
+  width: clamp(58px, min(8vw, 12vh), 104px); aspect-ratio: 915 / 320; height: auto;
+  transform: none; border: none; position: relative;
+  background: url("/art/brand/lore-wordmark.png") left center/contain no-repeat;
+  filter: drop-shadow(0 1px 4px #000a) drop-shadow(0 0 10px #4fb4ff33);
 }
 .brand .mark::after { content: none; }
 .brand h1 { display: none; }
@@ -49,10 +73,10 @@
 .turn-badge .tb-num { font-family: var(--mono); font-size: 17px; font-weight: 800; line-height: 1; color: var(--brass-hi); }
 .turn-info .turn-cur { font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; color: var(--paper-dim); }
 .turn-info .turn-cur b { color: var(--vermil-hi); }
-/* mute toggle — a round button pinned BELOW the logo (outside the topbar) */
+/* mute toggle — round button pinned TOP-LEFT, directly under the logo */
 .mute-fab {
-  position: fixed; top: auto; bottom: 80px; right: clamp(16px, 2.4vw, 54px); left: auto; z-index: 55;
-  width: 37px; height: 37px; border-radius: 50%;
+  position: fixed; left: 10px; top: clamp(34px, 5.2vh, 52px); right: auto; bottom: auto; z-index: 55;
+  width: clamp(29px, 4.6vh, 37px); height: clamp(29px, 4.6vh, 37px); border-radius: 50%;
   display: grid; place-items: center;
   border: 1px solid var(--line); background: #0e1522cc; color: var(--paper-dim);
   cursor: pointer; transition: .15s var(--ease);
@@ -62,16 +86,24 @@
 .mute-fab:hover { color: var(--paper); border-color: var(--brass-dim); background: #16203ae0; }
 .mute-fab.muted { color: var(--vermil-hi); border-color: var(--vermil); }
 .mute-fab svg { display: block; }
-/* surrender — bottom-right corner, red flag icon + red-unified styling */
-.giveup-btn { position: fixed; right: clamp(16px, 2.4vw, 54px); bottom: 30px; z-index: 46; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; font-size: 12px; letter-spacing: .1em; border-color: var(--vermil); color: var(--vermil-hi); background: #2a141066; }
+/* surrender — bottom-right corner, red flag icon + red-unified styling (위치 유지) */
+.giveup-btn { position: fixed; right: clamp(8px, 1.4vw, 30px); bottom: clamp(8px, 3vh, 30px); z-index: 46; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 12px; letter-spacing: .1em; border-color: var(--vermil); color: var(--vermil-hi); background: #2a141066; }
+.board-tiny .giveup-btn { padding: 6px 9px; font-size: 10px; }
+.board-tiny .giveup-btn .gv-label { display: none; }
 .giveup-btn:hover { background: var(--vermil); color: #fff; }
 .giveup-btn .gv-flag { display: block; flex: 0 0 auto; }
 .gear { width: 30px; height: 30px; border-radius: 7px; display: grid; place-items: center; border: 1px solid var(--line); background: #ffffff05; color: var(--paper-dim); }
 .gear:hover { color: var(--brass); border-color: var(--brass-dim); }
 
 /* ---- stage ---- */
-/* single-column board; the log is a left-edge drawer (overlay), not a column */
-.stage { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; min-height: 0; overflow: hidden; position: relative; z-index: 1; }
+/* single-column board; the log is a left-edge drawer (overlay), not a column.
+   The left/right gutters are RESERVED for the log tab + side rail so no fixed
+   chrome ever lands on top of the playfield at any window size. */
+.stage {
+  display: grid; grid-template-columns: minmax(0, 1fr); min-height: 0;
+  overflow: hidden; position: relative; z-index: 1;
+  padding-left: var(--log-w); padding-right: var(--rail-w);
+}
 
 /* log toggle — a vertical tab pinned at the mid-LEFT edge */
 .log-tab {
@@ -86,10 +118,10 @@
 .log-tab:hover { color: var(--brass-hi); border-color: var(--brass-dim); }
 .game.log-open .log-tab { left: min(320px, 82vw); color: var(--brass-hi); border-color: var(--brass-dim); }
 
-/* turn clock — a depleting ring that lives in the ACTIVE player's meta panel
-   (top-right, beside their name), so it sits next to that player's field UI. */
+/* turn clock — a depleting ring parked just right of the MARKET (with a gap),
+   with END TURN directly beneath it. Only the active player's ring is shown. */
 .mp-clock {
-  margin-left: auto; width: 44px; height: 44px; flex: 0 0 auto;
+  width: clamp(34px, 5.4vh, 46px); height: clamp(34px, 5.4vh, 46px); flex: 0 0 auto;
   display: none; place-items: center; position: relative;
 }
 .mp-clock.show { display: grid; }
@@ -107,27 +139,41 @@
 /* NOTE: no 3D tilt here. A perspective/rotateX(preserve-3d) "camera" tilt was
    offsetting hit-testing so real clicks missed the cards (attack / target-select
    silently failed). Keep the board flat so every click lands on the right card. */
-.board-col { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 5px; min-height: 0; align-content: start; }
+.board-col {
+  display: grid;
+  grid-template-rows: auto auto auto auto auto;
+  gap: var(--slot-gap, 5px); min-height: 0; align-content: space-evenly;
+}
 
 /* ---- Hearthstone-style portrait clusters: opp top-center, me bottom-center.
-   The hand is "held" upright to the RIGHT of the portrait. ---- */
-.pcluster { position: relative; width: 100%; z-index: 40; }
-.pcluster--opp { height: 48px; margin-top: 2px; }
-/* the portrait is pinned to the TRUE horizontal center — hand size never moves it */
-.pcluster .portrait { position: absolute; left: 50%; transform: translateX(-50%); }
-.pcluster--opp .portrait { top: 8px; }
-.pcluster--me .portrait { bottom: 6px; }
+   A 3-column grid (1fr | portrait | 1fr) keeps the portrait on the TRUE center
+   whatever the hand does — and, unlike the old absolute pinning, the cluster
+   now OWNS its vertical space so it can never overlap the field below. ---- */
+.pcluster {
+  position: relative; width: 100%; z-index: 40;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center; column-gap: clamp(8px, 1.4vw, 18px);
+}
+.pcluster .pc-side { min-width: 0; display: flex; align-items: center; }
+.pcluster .pc-side--l { justify-content: flex-end; }
+.pcluster .pc-side--r { justify-content: flex-start; }
+/* the name plate + HP strip hang OUTSIDE the portrait circle, so the cluster
+   reserves room for them — otherwise the bottom row gets clipped by the viewport */
+.pcluster--opp { min-height: calc(var(--pt) + 24px); align-items: start; padding: 2px 0 18px; }
+.pcluster--me { min-height: calc(var(--pt) + 26px); align-items: end; padding: 15px 0 10px; }
 .portrait {
-  width: 62px; height: 62px; flex: 0 0 auto;
+  width: var(--pt); height: var(--pt); flex: 0 0 auto;
   border-radius: 50%; border: 2px solid var(--brass-dim);
   background: radial-gradient(circle at 35% 30%, #223250, #0b101c);
   box-shadow: 0 3px 14px #000b, inset 0 1px 0 #ffffff18, 0 0 0 3px #0a0f1a;
-  display: grid; place-items: center;
+  display: grid; place-items: center; position: relative;
 }
-.portrait .avatar { width: 54px !important; height: 54px !important; border-radius: 50%; }
+.portrait .avatar { width: calc(var(--pt) - 8px) !important; height: calc(var(--pt) - 8px) !important; border-radius: 50%; }
 
+/* HP gem hugs the portrait's bottom-right INSIDE its silhouette, so the name
+   plate underneath stays readable */
 .pt-hp {
-  position: absolute; right: -7px; bottom: -4px; min-width: 26px; height: 26px; padding: 0 5px;
+  position: absolute; right: -6px; bottom: 1px; min-width: 24px; height: 24px; padding: 0 5px;
   display: inline-flex; align-items: baseline; justify-content: center; gap: 1px; border-radius: 9px;
   background: linear-gradient(180deg, #ff5b45, #a52815); border: 1px solid #ffd9cf55;
   box-shadow: 0 2px 6px #000c; z-index: 2;
@@ -138,12 +184,16 @@
 .pt-hp-max { font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: #ffe3dc; opacity: .85; }
 .pt-name {
   position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap;
+  max-width: calc(var(--pt) * 2.1); overflow: hidden; text-overflow: ellipsis;
   font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em; color: var(--paper-dim);
   text-shadow: 0 1px 3px #000d; pointer-events: none;
 }
 .pt-mana {
   position: absolute; right: calc(100% + 10px); top: 50%; transform: translateY(-50%);
-  display: inline-flex; align-items: baseline; gap: 3px; white-space: nowrap;
+  /* the portrait is the containing block, so without an explicit intrinsic
+     width the capsule collapses to min-content and stacks vertically */
+  width: max-content;
+  display: inline-flex; align-items: baseline; gap: 3px; white-space: nowrap; flex-wrap: nowrap;
   padding: 3px 9px; border-radius: 999px;
   background: #0d1526e6; border: 1px solid #3d5f9a88; box-shadow: 0 2px 8px #000a;
   font-family: var(--mono);
@@ -153,18 +203,18 @@
 .pt-mana-max { font-size: 10.5px; color: var(--paper-faint); }
 /* thin HP strip under the portrait — carries the hpbar-* id the FX target */
 .pt-hpbar {
-  position: absolute; left: 50%; transform: translateX(-50%); bottom: -8px;
-  width: 54px; height: 4px; border-radius: 3px; overflow: hidden;
+  position: absolute; left: 50%; transform: translateX(-50%); bottom: -7px;
+  width: calc(var(--pt) - 8px); height: 4px; border-radius: 3px; overflow: hidden;
   background: #200e0ecc; border: 1px solid #00000066;
 }
 .pt-hpbar i { display: block; height: 100%; background: linear-gradient(90deg, #ff8a5f, #d8342a); }
-.portrait--opp .pt-name { top: calc(100% + 6px); }
+.portrait--opp .pt-name { top: calc(100% + 5px); }
 .portrait--me .pt-name { bottom: calc(100% + 3px); }
 
-/* opp hand: straight upright backs, right of their (centered) portrait */
-.opp-hand { position: absolute; left: calc(50% + 44px); top: 6px; height: 46px; pointer-events: none; }
+/* opp hand: straight upright backs, in the cluster cell right of the portrait */
+.opp-hand { position: relative; height: calc(var(--pt) * .82); pointer-events: none; flex: 0 0 auto; }
 .opp-hand .card--back {
-  position: absolute; top: 0; width: 34px; height: 54px;
+  position: absolute; top: 0; width: calc(var(--pt) * .82 * .64); height: calc(var(--pt) * .82);
   border-radius: 4px; box-shadow: 0 2px 6px #000a; transform: none;
 }
 .opp-hand-count {
@@ -174,9 +224,28 @@
   font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--brass-hi);
 }
 
+/* ---- middle row: MARKET dead-center, timer + END TURN in the right cell ----
+   grid 1fr | market | 1fr keeps the market centered no matter how wide the
+   aside gets, and the aside can never overlap it. */
+.mid-row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center; min-width: 0;
+}
+/* NOTE: .market carries `margin: 0 auto` for its old flex parent — inside a
+   grid that auto-margin makes it shrink-to-fit and collapse on narrow screens. */
+.mid-row > .market { grid-column: 2; margin: 0; justify-self: stretch; }
+.mid-aside {
+  grid-column: 3; justify-self: start; align-self: center;
+  margin-left: clamp(10px, 1.7vw, 34px);
+  display: flex; flex-direction: column; align-items: center; gap: clamp(5px, 1.1vh, 12px);
+}
+/* narrow: let the market use the whole width, aside hugs the right edge */
+.board-compact .mid-row { grid-template-columns: 0 minmax(0, auto) auto; justify-content: center; }
+.board-compact .mid-aside { margin-left: 8px; }
+
 /* a player row: the field-block is a centered content-width cluster (zones + meta panel),
    so the play area stays snug instead of stretching across the whole width. */
-.prow { display: flex; justify-content: center; }
+.prow { display: flex; justify-content: center; min-width: 0; }
 .field-block {
   position: relative;
   display: flex; align-items: stretch; gap: 12px; max-width: 100%;
@@ -409,7 +478,7 @@
 /* 고정(10) + 제시(3) share one centered row on wide screens; when the width
    runs out the fixed cards wrap to a 2nd tier automatically, and 제시 drops
    below that — no horizontal clipping at any size. */
-.market { display: flex; flex-wrap: nowrap; justify-content: center; align-items: center; gap: 6px 14px; padding: 8px 14px; align-self: center; max-width: min(1800px, 99%); margin: 0 auto; overflow: hidden; border-color: #4fb4ff26; }
+.market { display: flex; flex-wrap: nowrap; justify-content: center; align-items: center; gap: 6px 14px; padding: 8px 14px; align-self: center; max-width: 100%; margin: 0 auto; overflow: hidden; border-color: #4fb4ff26; }
 .market::before { /* warm showcase spotlight over the wares */
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
   background: radial-gradient(60% 95% at 50% 30%, #4fb4ff0c, transparent 70%);
@@ -433,6 +502,9 @@
 .market-cards { display: grid; gap: 6px; justify-content: start; align-items: center; }
 #fixedMarket { grid-template-columns: repeat(4, var(--card-w-mkt)); }
 #supplyMarket { grid-template-columns: repeat(2, var(--card-w-mkt)); }
+/* short + wide windows: one flat line (8 | 4) so six card rows still fit */
+.board-flatmkt #fixedMarket { grid-template-columns: repeat(8, var(--card-w-mkt)); }
+.board-flatmkt #supplyMarket { grid-template-columns: repeat(4, var(--card-w-mkt)); }
 /* light divider between 고정 and 제시 (left of the 제시 label + reroll) */
 .market-div { width: 1px; align-self: stretch; margin: 4px 2px; background: linear-gradient(180deg, transparent, var(--line) 15%, var(--line) 85%, transparent); }
 /* reroll — a clear, sizeable button with an on-hover explanation popup */
@@ -455,13 +527,11 @@
 /* ---- MY hand: two states, both straight/upright (no fan). ----
    compact (default): small stack right of my portrait, right-edge-capped
    open (.game.hand-open): large, fixed at bottom-center; drag a card UP to play */
-.hand-area { min-height: 86px; padding-top: 2px; position: relative; z-index: 40; }
-.pcluster--me { height: 84px; }
-.hand { height: var(--card-h-hand); width: var(--h-w-open); cursor: pointer; }
+.hand-area { padding-top: 2px; position: relative; z-index: 40; }
+.hand { position: relative; height: var(--card-h-hand); width: var(--h-w-open); cursor: pointer; flex: 0 0 auto; }
 .hand .card { position: absolute; bottom: 0; left: calc(var(--hi) * var(--h-step-open)); transition: left .18s var(--ease), transform .15s var(--ease); }
 /* compact: same cards, container scaled down + tighter per-card step */
 .game:not(.hand-open) .hand {
-  position: absolute; left: calc(50% + 46px); bottom: 8px;
   width: calc(var(--h-w-compact) * .42); height: calc(var(--card-h-hand) * .42);
 }
 .game:not(.hand-open) .hand .card {
@@ -481,16 +551,15 @@
 .game.hand-open .hand .card.is-dragging { opacity: .35; }
 /* while dragging a playable card, glow the field center as the drop target */
 .game.drag-play .prow#meRow .field-block { box-shadow: 0 0 0 1px #4fb4ff66, 0 0 26px #4fb4ff33; }
-/* END TURN — lower-right, but pulled INWARD from the screen edge so it doesn't hug the corner.
-   Sits in the right gutter beside the (centered) hand, above the giveup button, clear of the field. */
-.end-turn-wrap { position: fixed; right: clamp(40px, 9vw, 210px); bottom: clamp(84px, 15vh, 150px); top: auto; transform: none; z-index: 45; }
+/* END TURN — directly BELOW the turn timer, in the market's right-hand aside. */
+.end-turn-wrap { position: static; z-index: 45; }
 /* hexagon frame image (green-screen keyed); localized text overlays the dark center so
    the same art works for every language. idle → hover swaps to the glowing variant. */
 .end-turn-wrap .btn {
   position: relative; letter-spacing: .04em;
-  width: clamp(132px, 17vh, 178px); height: auto; aspect-ratio: 610 / 272; padding: 0 0 2px;
+  width: clamp(84px, 13vh, 168px); height: auto; aspect-ratio: 610 / 272; padding: 0 0 2px;
   display: grid; place-items: center; text-align: center; white-space: normal; line-height: 1.15;
-  font-size: clamp(13px, 1.65vh, 18px); font-weight: 800; color: #eaf3ff;
+  font-size: clamp(10px, 1.5vh, 17px); font-weight: 800; color: #eaf3ff;
   text-shadow: 0 1px 3px #000b, 0 0 8px #0009;
   background: url(/ui/endturn_idle.webp) center/100% 100% no-repeat;
   border: none; border-radius: 0; box-shadow: none;
@@ -840,7 +909,7 @@
 /* ============ 2026-07-07 playtest feedback pass ============ */
 /* in-game volume slider popover (sound FAB 위) */
 .vol-pop {
-  position: fixed; bottom: 126px; right: clamp(16px, 2.4vw, 54px); z-index: 56;
+  position: fixed; left: 52px; top: clamp(34px, 5.2vh, 52px); z-index: 56;
   display: flex; align-items: center; gap: 8px; padding: 9px 13px; border-radius: 999px;
   border: 1px solid var(--line); background: #0e1522ee; box-shadow: 0 4px 14px #000a;
   -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);

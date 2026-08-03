@@ -274,7 +274,10 @@
 .card--field {
   --cw: var(--field-card-size);
   --ch: var(--field-card-size);
-  overflow: hidden;
+  /* NOT clipped: the cost gem is its own layer and is MEANT to break out of
+     the square corner, exactly as it overhangs on a full card. The frame PNG
+     and the art each clip themselves, so nothing else leaks out. */
+  overflow: visible;
   /* the square frame PNG carries its own ~3.5% rounded corners — keep the CSS
      clip radius BELOW that so the frame is never cut */
   border-radius: 3%;
@@ -285,17 +288,13 @@
    frame here. Art sits behind the frame's transparent window (inset ~7%),
    bled ~1.5% under the border band. */
 .card--field .card-frame { background-size: 100% 100%; background-position: center; border-radius: 0; }
-.card--field .card-art { top: 5.5%; left: 5.5%; right: 5.5%; height: 89%; border-radius: 4%; }
-.card--field .card-name {
-  top: 8%; left: 30%; right: 8.5%; height: 11.5%; font-size: .48em;
-  justify-content: center;
-  color: #f2ead6; text-shadow: 0 1px 2px #000e, 0 0 6px #000c;
-  background: linear-gradient(90deg, #0000, #0007 22%, #0007 78%, #0000);
-  border-radius: 999px;
-}
+.card--field .card-art { top: 5.5%; left: 5.5%; right: 5.5%; height: 89%; border-radius: 4%; overflow: hidden; }
+/* NO card name inside the square tile — the art window gets the whole square */
+.card--field .card-name { display: none; }
 .card--field .card-eff,
 .card--field .cast-tip { display: none; }
-.card--field .card-cost { top: -2%; left: -4%; width: 34%; }
+/* the cost gem rides on top of everything and overhangs the tile corner */
+.card--field .card-cost { top: -5%; left: -6%; width: 35%; z-index: 12; }
 .card--field .ad-atk,
 .card--field .ad-def {
   top: auto; bottom: 3%; width: 31%; height: 23%;
@@ -308,6 +307,7 @@
 .card--field .ad-def { left: auto; right: 4%; background: #173d68e8; }
 .card--field .ad-atk::before { content: "⚔"; margin-right: .18em; font-size: .72em; }
 .card--field .ad-def::before { content: "◆"; margin-right: .18em; font-size: .62em; }
+.card--field .tribe-tag { top: 9%; left: 8%; z-index: 5; }
 .card--field .egg-cnt { top: 48%; max-width: 92%; }
 .card--field .egg-cnt .ec { font-size: max(6px, calc(var(--cw) * .09)); padding: 1px 3px; }
 .card--field .badge { bottom: 4%; font-size: .62em; }
@@ -330,73 +330,44 @@
   --cw: var(--field-card-size);
   --ch: var(--field-card-size);
 }
-/* deck/grave: NOT square — a full-ratio card standing upright in a recessed well
-   (Hearthstone deck-tray feel). Sits at the far right of each zone row. */
+/* deck pile at the far right of a zone row — a FLAT card at the normal 0.64
+   proportion (the old CSS-3D "standing box" squashed the art and read as a
+   different aspect ratio from every other card, so it's gone).
+   Height = the zone row's tile; width follows the card ratio. */
 .zone-row > .inline-pile {
-  width: calc(var(--field-card-size) * .92);
+  width: calc(var(--field-card-size) * 0.64);
   height: var(--field-card-size);
   position: relative;
-  margin-left: 12px;
+  margin-left: clamp(6px, 0.9vw, 14px);
   overflow: visible;
 }
-.zone-row > .inline-pile::before { /* the hole the deck stands in */
-  content: ""; position: absolute; left: 2%; right: 2%; bottom: -2px; height: 34%;
-  border-radius: 50% / 42%;
-  background: radial-gradient(ellipse at 50% 42%, #01030788 0%, #050a14e6 55%, #0d1524 78%, #1b2740 100%);
-  border: 1px solid #ffffff14;
-  box-shadow: inset 0 5px 10px #000e, inset 0 -1px 0 #ffffff10, 0 1px 0 #ffffff0a;
-}
-/* true 3D standing deck: perspective on the cell, preserve-3d box inside.
-   Front face = sleeve (deck) / top-card art (grave); edge faces = paper stack
-   whose thickness (--thick, set from count in pileEl) is the card pile depth. */
-.zone-row > .inline-pile { perspective: 620px; perspective-origin: 50% 24%; }
-.zone-row > .inline-pile .deck3d {
-  position: absolute; left: 50%; bottom: 9%;
-  width: 70%; aspect-ratio: 0.64; height: auto;
-  transform-style: preserve-3d;
-  transform: translateX(-50%) rotateX(-17deg) rotateY(13deg);
-  transform-origin: 50% 100%;
-}
-.zone-row > .inline-pile .d-front {
-  position: absolute; inset: 0; border-radius: 5px;
+/* the monster row's placeholder keeps both rows flush without drawing anything */
+.zone-row > .inline-pile.pile-spacer { pointer-events: none; }
+.zone-row > .inline-pile .pile-card {
+  position: absolute; inset: 0; border-radius: var(--card-r);
   background-size: 100% 100%; background-position: center;
   background-color: #101826;
   border: 1px solid #ffffff2e;
-  transform: translateZ(var(--thick, 6px));
-  box-shadow: inset 0 1px 0 #ffffff24;
+  box-shadow: 0 2px 9px #000b, inset 0 1px 0 #ffffff1e;
 }
-.zone-row > .inline-pile .d-back {
-  position: absolute; inset: 0; border-radius: 5px;
-  background: #0a0f1a;
-  box-shadow: 0 12px 14px -7px #000e; /* ground shadow the box casts into the well */
+/* two thin offset layers behind the top card = "this is a stack", no distortion */
+.zone-row > .inline-pile .pile-under {
+  position: absolute; inset: 0; border-radius: var(--card-r);
+  background: #0b1220; border: 1px solid #ffffff14;
+  transform: translate(3px, 3px);
+  box-shadow: 5px 5px 0 -1px #0a1120, 6px 6px 0 0 #ffffff10, 0 6px 14px -6px #000d;
 }
-.zone-row > .inline-pile .d-edge { position: absolute; backface-visibility: hidden; }
-.zone-row > .inline-pile .d-edge--l {
-  left: 0; top: 1px; bottom: 1px; width: var(--thick, 6px);
-  transform-origin: left center; transform: rotateY(-90deg);
-  background: repeating-linear-gradient(90deg, #cfc4ae 0 1.1px, #978c77 1.1px 1.9px);
-  border-radius: 2px 0 0 2px;
-}
-.zone-row > .inline-pile .d-edge--t {
-  top: 0; left: 1px; right: 1px; height: var(--thick, 6px);
-  transform-origin: center top; transform: rotateX(90deg);
-  background: repeating-linear-gradient(180deg, #ddd2bc 0 1.1px, #a89d86 1.1px 1.9px);
-}
-.zone-row > .inline-pile .d-edge--b {
-  bottom: 0; left: 1px; right: 1px; height: var(--thick, 6px);
-  transform-origin: center bottom; transform: rotateX(-90deg);
-  background: repeating-linear-gradient(180deg, #a99e89 0 1.1px, #776e5c 1.1px 1.9px);
-}
+.zone-row > .inline-pile.is-empty .pile-under { display: none; }
+.zone-row > .inline-pile.is-empty .pile-card { background: #0a0f1a; border: 1px dashed var(--line); box-shadow: inset 0 2px 8px #000a; }
 .zone-row > .inline-pile .pile-tag {
-  position: absolute; left: 50%; transform: translateX(-50%); bottom: -13px; top: auto;
-  font-size: 8.5px; letter-spacing: .14em; color: var(--paper-faint); text-shadow: 0 1px 2px #000;
+  position: absolute; left: 50%; transform: translateX(-50%); bottom: -12px; top: auto;
+  font-size: 8px; letter-spacing: .12em; color: var(--paper-faint); text-shadow: 0 1px 2px #000;
 }
 .zone-row > .inline-pile .pile-count {
-  position: absolute; right: -7px; top: -12px; left: auto; bottom: auto; z-index: 5;
-  min-width: 21px; height: 21px; padding: 0 5px; display: grid; place-items: center;
+  position: absolute; right: -7px; top: -9px; left: auto; bottom: auto; z-index: 5;
+  min-width: 19px; height: 19px; padding: 0 5px; display: grid; place-items: center;
   border-radius: 999px; background: #0e1522f2; border: 1px solid var(--brass-dim);
-  font-family: var(--mono); font-size: 11px; font-weight: 800; color: var(--brass-hi);
+  font-family: var(--mono); font-size: 10.5px; font-weight: 800; color: var(--brass-hi);
   box-shadow: 0 2px 6px #000b;
 }
 .zone-row > .inline-pile .pile-card--art { background-size: cover; background-position: center 22%; }
-.zone-row > .inline-pile.is-empty .deck3d { opacity: 0; }

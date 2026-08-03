@@ -5,7 +5,7 @@
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { effMaxMana, playCost, buyCost, effAtk, effDef, curHp } from "../shared/engine";
-import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
+import { FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer } from "./modal";
 import { cardEl } from "./cardView";
@@ -90,22 +90,32 @@ export class GameView {
         <div class="stage">
           <div class="board-col">
             <div class="pcluster pcluster--opp">
+              <div class="pc-side pc-side--l"></div>
               <div class="portrait portrait--opp" id="portraitOpp"></div>
-              <div class="opp-hand" id="oppHand"></div>
+              <div class="pc-side pc-side--r"><div class="opp-hand" id="oppHand"></div></div>
             </div>
             <div class="prow" id="oppRow"></div>
-            <div class="panel market" id="market"></div>
+            <div class="mid-row">
+              <div class="mid-spacer"></div>
+              <div class="panel market" id="market"></div>
+              <!-- turn timer + END TURN live just right of the market (with a gap) -->
+              <div class="mid-aside">
+                <div class="mp-clock" id="clock-opp" aria-hidden="true"></div>
+                <div class="mp-clock" id="clock-me" aria-hidden="true"></div>
+                <div class="end-turn-wrap"><button class="btn btn-primary" id="endBtn">${t("game.endturn")}</button></div>
+              </div>
+            </div>
             <div class="prow" id="meRow"></div>
             <div class="hand-area" id="handArea">
               <div class="pcluster pcluster--me">
+                <div class="pc-side pc-side--l"></div>
                 <div class="portrait portrait--me" id="portraitMe"></div>
-                <div class="hand" id="hand"></div>
+                <div class="pc-side pc-side--r"><div class="hand" id="hand"></div></div>
               </div>
-              <div class="end-turn-wrap"><button class="btn btn-primary" id="endBtn">${t("game.endturn")}</button></div>
             </div>
           </div>
         </div>
-        <!-- side rail: turn timers + tribe/exile info, OUTSIDE the field (right edge) -->
+        <!-- side rail: graveyard / exile browsers + tribe info, OUTSIDE the field (right edge) -->
         <div class="side-rail" id="sideRail">
           <div class="rail-group rail-group--opp" id="railOpp"></div>
           <div class="rail-group rail-group--me" id="railMe"></div>
@@ -176,6 +186,17 @@ export class GameView {
       this.setHandOpen(false);
     };
     document.addEventListener("pointerdown", collapse, { capture: true });
+
+    // A press ANYWHERE on the compact stack expands it. This lives on the
+    // container (not just the cards) because the invisible hit-pad — and the
+    // lowest card's own stacking order — used to swallow the press on card #0.
+    const handEl = this.q("hand");
+    handEl.addEventListener("pointerdown", (e) => {
+      if (this.handOpen) return;
+      e.stopPropagation();
+      this.setHandOpen(true);
+      handEl.addEventListener("click", (ce) => { ce.stopPropagation(); ce.preventDefault(); }, { capture: true, once: true });
+    }, { capture: true });
   }
 
   private handOpen = false;
@@ -232,8 +253,11 @@ export class GameView {
     // portrait. Overlap tightens as the count grows so the RIGHT edge stays put.
     const oh = this.q("oppHand"); oh.innerHTML = "";
     const n = opp.hand.length;
-    const obw = 34; // back width (px)
-    const ostep = n <= 1 ? 0 : Math.min(obw * 0.62, Math.max(8, (150 - obw) / (n - 1)));
+    // back size follows the solved portrait size (--pt) so it scales with the viewport
+    const pt = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--pt")) || 58;
+    const obw = Math.max(18, Math.round(pt * 0.82 * 0.64)); // back width (px)
+    const spread = obw * 4.4;
+    const ostep = n <= 1 ? 0 : Math.min(obw * 0.62, Math.max(6, (spread - obw) / (n - 1)));
     for (let i = 0; i < n; i++) {
       const cb = document.createElement("div");
       cb.className = "card--back";
@@ -273,14 +297,10 @@ export class GameView {
 
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {
     row.innerHTML = "";
-    const sortByCost = (cards: CardInst[]) => [...cards].sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
     const onTurn = !g.over && g.cur === (g.players.indexOf(p) as Side);
 
-    // inline pile cells (leading edge of each zone row): 묘지 on the monster row, 덱 on the spell/trap row
-    const graveTop = p.discard[p.discard.length - 1];
-    const graveArt = graveTop && graveTop.id !== "HIDDEN" ? `/art/cards/${graveTop.id}.webp` : graveTop ? frameFor(graveTop.t) : null;
-    const gravePile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, graveArt, graveTop ?? null, t("game.discard"),
-      () => cardPicker(`${p.name} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => { /* browse only */ }));
+    // 묘지는 필드에서 빠지고 사이드레일 아이콘(제외와 동일한 형태)으로 이동했다.
+    // 필드에 남는 유일한 더미 = 덱 — 카드 정상 비율(높이 = 타일, 폭 = 0.64배)로 눕히지 않고 그대로.
     // clicking the DECK opens the full composition (own or opponent's public aggregate)
     const collection = this.collectionOf(p, isMe);
     // my deck → also show the cards still remaining (undrawn); opponent's remaining deck is hidden
@@ -345,9 +365,13 @@ export class GameView {
     });
     for (let i = p.traps.length + p.enchants.length; i < ST_SLOTS; i++) sz.appendChild(this.slotEl());
 
-    // each zone row = [leading pile] + [slots] (pile on the leading edge; opp mirrors).
+    // each zone row = [slots] + [deck pile at the far right]. Only the spell/trap
+    // row carries the deck; the monster row gets a same-width spacer so both rows
+    // stay flush (묘지는 사이드레일 아이콘으로 이동).
     // Monster zone nearest the center line: me → mon on top, opp → mon on bottom.
-    const monRow = this.zoneRow(gravePile, mz, isMe);
+    const spacer = document.createElement("div");
+    spacer.className = "inline-pile pile-spacer";
+    const monRow = this.zoneRow(spacer, mz, isMe);
     const stRow = this.zoneRow(deckPile, sz, isMe);
     const zones = document.createElement("div");
     zones.className = "zones";
@@ -449,7 +473,8 @@ export class GameView {
     });
   }
 
-  /** Right side-rail group (OUTSIDE the field): turn timer + tribe chips + exile. */
+  /** Right side-rail group (OUTSIDE the field): 묘지 / 제외 browsers + tribe chips.
+   *  (The turn clock moved out to the market aside; it lives in the static skeleton.) */
   private renderRail(panel: HTMLElement, p: PlayerState, isMe: boolean): void {
     // 종족: 현재 필드 진행도 + 이미 달성한 시너지를 함께, 시각적으로 구분해 표기
     const byTribe = new Map<string, Set<string>>();
@@ -473,16 +498,30 @@ export class GameView {
     }
 
     panel.innerHTML = `
-      <div class="rail-head"><span class="rail-name">${p.name}</span><div class="mp-clock" id="clock-${isMe ? "me" : "opp"}" aria-hidden="true"></div></div>
+      <div class="rail-head"><span class="rail-name">${p.name}</span></div>
       <div class="mp-btns"></div>
       ${tribeChips.length ? `<div class="mp-tribes">${tribeChips.join("")}</div>` : ""}`;
 
     const btns = panel.querySelector(".mp-btns")!;
+    const byCost = (cards: CardInst[]) => [...cards].sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
+
+    // 묘지 — 제외와 같은 아이콘 버튼. id는 anim.ts(pileFlash / 카드 날아가는 목적지)가 쓰므로 유지.
+    const disc = p.discard;
+    const gbtn = document.createElement("button");
+    gbtn.className = "btn btn-ghost mp-btn mp-btn--grave" + (disc.length ? "" : " is-empty");
+    gbtn.id = isMe ? "pile-myDisc" : "pile-oppDisc";
+    gbtn.innerHTML = `<span class="mp-ico">🪦</span><span class="mp-lb">${t("game.discard")}</span><b>${disc.length}</b>`;
+    gbtn.disabled = disc.length === 0;
+    gbtn.title = t("game.discard");
+    gbtn.onclick = () => { if (disc.length) cardPicker(`${p.name} — ${t("game.discard")} (${disc.length})`, byCost(disc), () => { /* browse only */ }); };
+    btns.appendChild(gbtn);
+
     const removed = (p.removed ?? []).slice().sort((a, b) => a.cost - b.cost);
     if (removed.length > 0) {
       const rbtn = document.createElement("button");
       rbtn.className = "btn btn-ghost mp-btn mp-btn--exile";
-      rbtn.innerHTML = `<span class="mp-ico">⛔</span>${t("deck.removed")} <b>${removed.length}</b>`;
+      rbtn.innerHTML = `<span class="mp-ico">⛔</span><span class="mp-lb">${t("deck.removed")}</span><b>${removed.length}</b>`;
+      rbtn.title = t("deck.removed");
       rbtn.onclick = () => cardPicker(`${p.name} — ${t("deck.removed")} (${removed.length})`, removed, () => { /* browse only */ });
       btns.appendChild(rbtn);
     }
@@ -710,27 +749,19 @@ export class GameView {
     };
   }
 
+  /** A flat, NORMAL-RATIO card pile (0.64 w/h — same proportions as every other
+   *  card). The old CSS-3D "standing box" is gone: it distorted the card art. */
   private pileEl(id: string, count: number, frame: string | null, faceCard: CardInst | null, tag: string, onOpen?: () => void): HTMLElement {
     const pile = document.createElement("div");
     pile.className = "pile" + (count ? "" : " is-empty");
     pile.id = id;
-    // Hearthstone-style: a TRUE CSS-3D box standing in the recessed well —
-    // sleeve/art front face + paper-edge side faces; thickness scales with count.
-    // (No three.js needed: same technique as the CSS dice cubes.)
-    const thick = count ? Math.min(15, 3 + count * 0.45) : 0;
-    pile.style.setProperty("--thick", `${thick.toFixed(1)}px`);
-    const box = document.createElement("div");
-    box.className = "deck3d";
+    // stacked-paper depth: a couple of offset shadow layers behind the top card
+    const under = document.createElement("div"); under.className = "pile-under";
     const front = document.createElement("div");
-    front.className = "d-front pile-card" + (id.includes("Disc") ? " pile-card--art" : "");
+    front.className = "pile-card" + (id.includes("Disc") ? " pile-card--art" : "");
     if (frame && count) front.style.backgroundImage = `url(${frame})`;
-    const back = document.createElement("div"); back.className = "d-back";
-    const eL = document.createElement("div"); eL.className = "d-edge d-edge--l";
-    const eT = document.createElement("div"); eT.className = "d-edge d-edge--t";
-    const eB = document.createElement("div"); eB.className = "d-edge d-edge--b";
-    box.append(back, eL, eT, eB, front);
-    pile.appendChild(box);
-    const t = document.createElement("div"); t.className = "pile-tag"; t.textContent = tag; pile.appendChild(t);
+    pile.append(under, front);
+    const tg = document.createElement("div"); tg.className = "pile-tag"; tg.textContent = tag; pile.appendChild(tg);
     const cnt = document.createElement("div"); cnt.className = "pile-count"; cnt.textContent = String(count); pile.appendChild(cnt);
     if (faceCard && faceCard.id !== "HIDDEN") bindZoom(pile, faceCard);
     if (onOpen) { pile.style.cursor = "pointer"; pile.title = "click: browse"; pile.addEventListener("click", onOpen); }
