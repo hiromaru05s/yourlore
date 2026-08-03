@@ -135,28 +135,24 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
 
   if (c.t === "mon") {
     const a = opt.field && opt.owner ? effAtk(opt.owner, c as FieldMon) : c.atk!;
-    // v24 HP-combat: the shield slot shows CURRENT HP on the field (and in zoom),
-    // hand/market show the printed max HP. v29: while damaged we print "현재/최대"
-    // so a 4/20 monster is never mistaken for a printed-4 body (colour alone was
-    // the only cue before, unreadable at field-tile size).
+    // v24 HP-combat: the shield slot shows CURRENT HP — on the field AND in zoom
+    // (v29: zoom used to show max HP, so a damaged monster read as healthy there).
+    // 최대 체력은 몬스터 칩에 표시하지 않는다 (숫자 하나 + 손상 시 빨간색만).
     const fm = c as FieldMon;
     const onField = !!(opt.field && opt.owner);
     const isEgg = fm.hatch != null;
-    let d: number, dMax: number | null = null;
+    let d: number, hurt = false;
     if (onField) {
       d = isEgg ? effDef(opt.owner!, fm) : curHp(opt.owner!, fm);
-      if (!isEgg) { const mx = effDef(opt.owner!, fm); if (mx > d) dMax = mx; }
+      hurt = !isEgg && (fm.dmg || 0) > 0;
     } else if (opt.hpNow != null) {
       d = opt.hpNow;
-      if (opt.hpMax != null && opt.hpMax > d) dMax = opt.hpMax;
+      hurt = opt.hpMax != null && opt.hpMax > d;
     } else d = c.def!;
-    const hurt = dMax != null;
     node.appendChild(el("div", "ad-atk" + (String(a).length >= 3 ? " ad-num--3d" : ""), String(a)));
     // 알은 체력 대신 부화/내구도 배지가 실질 정보 → 체력 칩을 감춘다(장식 숫자 제거)
     if (!(onField && isEgg)) {
-      const hpTxt = dMax != null ? `${d}<span class="hp-max">/${dMax}</span>` : String(d);
-      const long = (dMax != null ? String(d).length + String(dMax).length + 1 : String(d).length) >= 4;
-      node.appendChild(el("div", "ad-def" + (hurt ? " ad-def--hurt" : "") + (long ? " ad-num--3d" : ""), hpTxt));
+      node.appendChild(el("div", "ad-def" + (hurt ? " ad-def--hurt" : "") + (String(d).length >= 3 ? " ad-num--3d" : ""), String(d)));
     }
   }
   // 암살자 길드: 카운트 배지

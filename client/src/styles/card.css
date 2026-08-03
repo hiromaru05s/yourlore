@@ -239,18 +239,6 @@
 .pile.flash .pile-card { animation: pileFlash .5s var(--ease); }
 @keyframes pileFlash { 50% { box-shadow: 0 0 16px var(--gold-glow), var(--shadow-1); filter: brightness(1.4) } }
 
-/* inline pile (deck/graveyard cell at the leading edge of a zone row): tags sit INSIDE */
-.inline-pile { cursor: pointer; }
-.inline-pile .pile-count {
-  position: absolute; inset: 0; bottom: 0; left: 0; transform: none;
-  display: grid; place-items: center; font-size: calc(var(--card-w) * 0.28);
-  color: var(--paper); text-shadow: 0 1px 3px #000, 0 0 6px #000;
-}
-.inline-pile .pile-tag {
-  top: auto; bottom: 2px; left: 50%; transform: translateX(-50%);
-  font-size: 7px; letter-spacing: .1em; color: var(--paper-dim);
-  background: #000000aa; padding: 0 3px; border-radius: 2px; z-index: 2;
-}
 
 /* ---- art loading: shimmer skeleton until the image arrives, then fade in ---- */
 .card-art { background: linear-gradient(110deg, #1a1626 40%, #262038 50%, #1a1626 60%); background-size: 200% 100%; }
@@ -261,9 +249,6 @@
 
 /* ---- v24 HP-combat: damaged field monsters show current HP in red ---- */
 .ad-def--hurt { color: #ff7a5e !important; text-shadow: 0 0 6px #a3160bcc, 0 1px 2px #000c; }
-/* v29: "현재/최대" 표기 — 최대치는 작고 흐리게 (숫자 하나로만 읽히면 인쇄 체력과 혼동) */
-.ad-def .hp-max { font-size: .72em; opacity: .78; margin-left: .04em; font-weight: 700; }
-.card--field .ad-def .hp-max { color: #ffe6df; opacity: .82; }
 /* 3자리 이상(대형 버프·전체 강화 누적)일 때 칩 밖으로 넘치지 않게 축소 */
 .ad-num--3d { font-size: .66em; letter-spacing: -.03em; }
 .card--field .ad-num--3d { font-size: .72em; letter-spacing: -.03em; }
@@ -330,44 +315,55 @@
   --cw: var(--field-card-size);
   --ch: var(--field-card-size);
 }
-/* deck pile at the far right of a zone row — a FLAT card at the normal 0.64
-   proportion (the old CSS-3D "standing box" squashed the art and read as a
-   different aspect ratio from every other card, so it's gone).
-   Height = the zone row's tile; width follows the card ratio. */
-.zone-row > .inline-pile {
-  width: calc(var(--field-card-size) * 0.64);
-  height: var(--field-card-size);
-  position: relative;
+/* ---- 필드 오른쪽 더미 열: [묘지][덱] ----
+   폭은 정사각 필드 타일과 동일(--field-card-size)하고, 카드 뒷면/아트는 정상 카드
+   비율(0.64)이라 높이가 타일보다 커진다 → 두 줄(몬스터/마법·함정) 높이를 함께 쓴다.
+   (예전엔 한 줄 높이에 맞추느라 폭이 타일의 0.64배로 좁아져 그리드와 어긋나 보였다.) */
+.pile-col {
+  display: flex; align-items: center; gap: var(--slot-gap);
   margin-left: clamp(6px, 0.9vw, 14px);
-  overflow: visible;
+  flex: 0 0 auto;
 }
-/* the monster row's placeholder keeps both rows flush without drawing anything */
-.zone-row > .inline-pile.pile-spacer { pointer-events: none; }
-.zone-row > .inline-pile .pile-card {
+.pile-col > .pile {
+  width: var(--field-card-size);
+  height: calc(var(--field-card-size) / 0.64);
+  max-height: calc(var(--field-card-size) * 2 + var(--slot-gap));
+  position: relative; cursor: pointer; overflow: visible;
+}
+.pile-col > .pile .pile-card {
   position: absolute; inset: 0; border-radius: var(--card-r);
   background-size: 100% 100%; background-position: center;
   background-color: #101826;
   border: 1px solid #ffffff2e;
   box-shadow: 0 2px 9px #000b, inset 0 1px 0 #ffffff1e;
 }
-/* two thin offset layers behind the top card = "this is a stack", no distortion */
-.zone-row > .inline-pile .pile-under {
+/* 두 겹 오프셋 = "쌓여 있음" 표현 (카드 자체를 찌그러뜨리지 않는다) */
+.pile-col > .pile .pile-under {
   position: absolute; inset: 0; border-radius: var(--card-r);
   background: #0b1220; border: 1px solid #ffffff14;
   transform: translate(3px, 3px);
   box-shadow: 5px 5px 0 -1px #0a1120, 6px 6px 0 0 #ffffff10, 0 6px 14px -6px #000d;
 }
-.zone-row > .inline-pile.is-empty .pile-under { display: none; }
-.zone-row > .inline-pile.is-empty .pile-card { background: #0a0f1a; border: 1px dashed var(--line); box-shadow: inset 0 2px 8px #000a; }
-.zone-row > .inline-pile .pile-tag {
-  position: absolute; left: 50%; transform: translateX(-50%); bottom: -12px; top: auto;
-  font-size: 8px; letter-spacing: .12em; color: var(--paper-faint); text-shadow: 0 1px 2px #000;
+.pile-col > .pile.is-empty .pile-under { display: none; }
+.pile-col > .pile.is-empty .pile-card { background: #0a0f1a; border: 1px dashed var(--line); box-shadow: inset 0 2px 8px #000a; }
+.pile-col > .pile.is-empty { cursor: default; }
+.pile-col > .pile.is-empty .pile-count { opacity: .45; }
+.pile-col > .pile .pile-tag {
+  position: absolute; left: 50%; transform: translateX(-50%); bottom: 4px; top: auto;
+  font-size: 8px; letter-spacing: .12em; color: var(--paper);
+  background: #000000b0; padding: 1px 5px; border-radius: 3px; z-index: 3;
+  text-shadow: 0 1px 2px #000;
 }
-.zone-row > .inline-pile .pile-count {
+.pile-col > .pile .pile-count {
   position: absolute; right: -7px; top: -9px; left: auto; bottom: auto; z-index: 5;
   min-width: 19px; height: 19px; padding: 0 5px; display: grid; place-items: center;
   border-radius: 999px; background: #0e1522f2; border: 1px solid var(--brass-dim);
   font-family: var(--mono); font-size: 10.5px; font-weight: 800; color: var(--brass-hi);
   box-shadow: 0 2px 6px #000b;
 }
-.zone-row > .inline-pile .pile-card--art { background-size: cover; background-position: center 22%; }
+.pile-col > .pile .pile-card--art { background-size: cover; background-position: center 22%; }
+/* 묘지: 덱(청록 림)과 구분되는 회록색 림 */
+#pile-myDisc .pile-card, #pile-oppDisc .pile-card {
+  border-color: #8d9bb066;
+  box-shadow: 0 2px 9px #000b, inset 0 0 0 1px #ffffff12;
+}

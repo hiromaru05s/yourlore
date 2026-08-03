@@ -33,9 +33,6 @@
 .side-rail .mp-btns { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
 .side-rail .mp-btns:empty { display: none; }
 /* 묘지 = 제외와 같은 아이콘 버튼 (필드에서 빠진 자리) */
-.mp-btn--grave { border-color: #4a5566; color: #cbd6e6; background: #4a556622; }
-.mp-btn--grave:hover:not(:disabled) { border-color: var(--brass); color: #fff; background: #4a556644; }
-.mp-btn--grave:disabled { opacity: .42; cursor: default; }
 .mp-btn.flash { animation: railPileFlash .5s var(--ease); }
 @keyframes railPileFlash {
   0%, 100% { box-shadow: none }
@@ -179,9 +176,6 @@
   box-shadow: 0 2px 6px #000c; z-index: 2;
 }
 .pt-hp b { font-family: var(--mono); font-size: 14px; font-weight: 800; color: #fff; text-shadow: 0 1px 2px #000c; }
-/* v29: 최대 체력은 툴팁에만 있어 터치 기기에서 볼 수 없었다 — 마나 칩처럼 "현재/최대"로 노출
-   (엘프/하이엘프 등 최대 체력 조건 카드가 있어 상시 확인이 필요한 값) */
-.pt-hp-max { font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: #ffe3dc; opacity: .85; }
 .pt-name {
   position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap;
   max-width: calc(var(--pt) * 2.1); overflow: hidden; text-overflow: ellipsis;
@@ -283,7 +277,6 @@
 .zones { display: flex; flex-direction: column; gap: var(--slot-gap); flex: 0 1 auto; min-width: 0; }
 .zone-row { display: flex; align-items: center; gap: var(--slot-gap); }
 .zone { display: flex; gap: var(--slot-gap); flex: 0 1 auto; }
-.zone-row > .inline-pile { flex: 0 0 auto; }
 
 /* ---- right-side meta panel: name/turn · HP · mana · buttons · tribe · timer ---- */
 .meta-panel {
