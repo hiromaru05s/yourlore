@@ -47,6 +47,11 @@ export function mountShop(app: App): Screen {
   const renderGrid = (): void => {
     const grid = wrap.querySelector("#grid") as HTMLElement;
     const buyable = SLEEVE_LIST.filter((s) => s.price > 0);
+    if (!buyable.length) {
+      const lang = getLang();
+      grid.innerHTML = `<p class="shop-empty">${lang === "ja" ? "現在販売中の商品はありません。" : lang === "en" ? "There are currently no items for sale." : "현재 판매 중인 상품이 없습니다."}</p>`;
+      return;
+    }
     grid.innerHTML = buyable.map((s) => {
       const has = owned.has(s.id);
       return `

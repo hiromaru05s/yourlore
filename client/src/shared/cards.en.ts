@@ -252,6 +252,7 @@ const TEXTS: Record<string, string> = {
   NT_NULL8: "Negate 1 enemy spell + the opponent cannot cast spells for the rest of this turn",
   NT_SEAL3: "While this card is on the field, neither player can cast spells of cost 5 or less",
   NT_SEAL5: "While this card is on the field, neither player can cast spells",
+  GS9_2: "Restore 16 of your HP. Discard 1 life-aspect spell from your hand: your max HP +15",
   STARTER_TRASH: "Mana 1: exile this card from the game (thins your deck)", STARTER_CHEST: "Mana 1: open the treasure chest",
   STARTER_MANA: "Mana 3: max mana +1",
   TGE1: "[Origin] tribe synergy", TGE2: "[Origin] tribe synergy", TGE3: "[Origin] tribe synergy",

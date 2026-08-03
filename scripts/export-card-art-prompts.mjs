@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import fs from "node:fs/promises";
-import { cardArtPath, cardArtPrompt, ensureDirs, loadCards, promptOutputPath } from "./card-art-lib.mjs";
+import { cardArtPath, cardArtPrompt, cardArtSize, ensureDirs, loadCards, promptOutputPath } from "./card-art-lib.mjs";
 
 const args = new Set(process.argv.slice(2));
 const includeStarters = args.has("--include-starters");
@@ -20,6 +20,8 @@ for (const card of cards) {
     name: card.name,
     type: card.t,
     cost: card.cost,
+    size: cardArtSize,
+    artDirection: "lore-archive-v2",
     target,
     prompt: cardArtPrompt(card),
   });
