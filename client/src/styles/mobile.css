@@ -106,6 +106,71 @@
   .home .title { font-size: 18px; }
 }
 
+/* ============================================================
+   HOME on phones (narrow viewports) — one-thumb flow:
+   compact 2-row header → full-width mode banners (primary
+   actions above the fold) → 4-up menu tile grid.
+   ============================================================ */
+@media (max-width: 700px) {
+  .screen:has(.home) {
+    padding: max(10px, env(safe-area-inset-top)) 13px calc(18px + env(safe-area-inset-bottom));
+  }
+
+  /* ---- header: row 1 = wordmark · credits, row 2 = full-width profile chip ---- */
+  .home-top { flex-wrap: wrap; row-gap: 9px; margin-bottom: 13px; }
+  .home-brand { order: 1; }
+  .home-brand .mark { width: 106px; height: 37px; }
+  .home-credits { order: 2; margin-left: auto; padding: 7px 14px; }
+  .home-credits b { font-size: 15px; }
+  .home-top-right { order: 3; width: 100%; }
+  .home-id { width: 100%; padding: 7px 13px 7px 8px; }
+  .home-id-name { font-size: 14px; }
+  .home-id-go { margin-left: auto; }
+
+  /* ---- mode cards → banner rows (icon | title/desc | tier), all visible at once ---- */
+  .home .modes, .home .modes-3 { grid-template-columns: 1fr; gap: 10px; }
+  .mode-card {
+    display: grid;
+    grid-template-columns: 52px 1fr auto;
+    grid-template-areas: "ico h3 aux" "ico p aux";
+    column-gap: 13px; row-gap: 1px; align-items: center;
+    text-align: left; padding: 13px 15px; min-height: 76px;
+    border-image-width: 24px;
+  }
+  .mode-card::after { /* smaller gems on the short banner */
+    background:
+      url(/ui/panel-gem.webp) top 1px center / 32px auto no-repeat,
+      url(/ui/panel-gem.webp) bottom 1px center / 32px auto no-repeat,
+      radial-gradient(120% 90% at 50% 0%, #4fb4ff08, transparent 55%);
+  }
+  .mode-card .mode-ico { grid-area: ico; width: 52px; height: 52px; margin: 0; }
+  .mode-card h3 { grid-area: h3; align-self: end; margin: 0; font-size: 13px; letter-spacing: .1em; }
+  .mode-card p { grid-area: p; align-self: start; font-size: 11.5px; }
+  .mode-card .my-tier { grid-area: aux; margin: 0; min-height: 0; }
+  /* touch: press-down feedback instead of hover-lift (sticky :hover on touch) */
+  .mode-card:hover { transform: none; }
+  .mode-card:active { transform: scale(.985); }
+  .mode-card:hover .mode-ico, .mode-card:active .mode-ico { transform: none; }
+
+  /* ---- menu tiles: 4-up, comfortable touch targets ---- */
+  .home-links { grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+  .home-links .tut-card { padding: 11px 3px 9px; gap: 6px; min-height: 72px; justify-content: center; }
+  .home-links .tut-card .tut-ico-img { width: 33px; height: 33px; }
+  .home-links .tut-card .tut-txt b { font-size: 10px; letter-spacing: .01em; }
+  .tut-card:hover { transform: none; }
+  .tut-card:active { transform: scale(.97); }
+
+  /* ---- bot difficulty modal: keep the 2×2 grid, fit small screens ---- */
+  .modal.bot-diff { min-width: 0; width: min(92vw, 560px); max-height: 88dvh; overflow-y: auto; }
+  .diff-grid { grid-template-columns: 1fr 1fr; gap: 9px; }
+  .diff-card { padding: 13px 8px; gap: 4px; }
+  .diff-card .diff-ico { font-size: 26px; }
+  .diff-card .diff-name { font-size: 12.5px; letter-spacing: .1em; }
+  .diff-card .diff-desc { font-size: 10.5px; }
+  .diff-card:hover { transform: none; }
+  .diff-card:active { transform: scale(.97); }
+}
+
 /* ---------------- LANDSCAPE phones (short height) ---------------- */
 @media (orientation: landscape) and (max-height: 560px) {
   body, #app, .game, .screen { height: 100dvh; }
@@ -155,8 +220,11 @@
   .zoom-overlay .card { --cw: min(32vh, 220px); --ch: calc(min(32vh, 220px) * 1.6); }
   .zoom-wrap { gap: 14px; }
 
-  /* short landscape: the top brand logo would overlap the centered content */
+  /* short landscape: the top brand logo would overlap the centered content
+     (the home header's inline brand is flow-positioned — keep that one) */
   .screen-brand { display: none; }
+  .screen-brand.home-brand { display: flex; }
+  .screen-brand.home-brand .mark { width: 96px; height: 33px; }
   .screen { padding: 12px; }
   .topright-lang { top: 10px; right: 12px; }
 }
