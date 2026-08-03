@@ -34,6 +34,19 @@ export function setMarketWatch(ids?: string[] | null): void { MARKET_WATCH = new
 /** card-back image for a pile/back that belongs to `isMe`. */
 function backFor(isMe: boolean): string { return isMe ? MY_SLEEVE : OPP_SLEEVE; }
 
+// ---- battlefield backgrounds (client-only cosmetics; NEVER part of game state) ----
+// One of these is rolled ONCE per GameView construction (= per match entry), so the
+// background stays fixed for the whole match and re-rolls on the next match/rematch.
+// Add more entries here to expand the pool — the picker stays 1/N uniform.
+const BATTLEFIELD_BACKGROUNDS = [
+  "/art/battlefields/simple-topdown-v1/02_heaven.webp",
+  "/art/battlefields/simple-topdown-v1/03_abyssal-ice.webp",
+];
+/** 50:50 (uniform) pick. Called only from the GameView constructor — never from render(). */
+function pickBattlefieldBg(): string {
+  return BATTLEFIELD_BACKGROUNDS[Math.floor(Math.random() * BATTLEFIELD_BACKGROUNDS.length)];
+}
+
 const MON_SLOTS = 7;
 const ST_SLOTS = 7;
 
@@ -55,6 +68,8 @@ export class GameView {
   you: Side;
   h: BoardHandlers;
   logEl!: HTMLElement;
+  /** battlefield art for THIS match — rolled once at construction (see pickBattlefieldBg) */
+  private readonly battlefieldBg = pickBattlefieldBg();
 
   constructor(root: HTMLElement, you: Side, h: BoardHandlers) {
     this.root = root;
@@ -146,6 +161,9 @@ export class GameView {
     // battle log — CLOSED by default; a mid-left edge tab opens the drawer.
     // Once opened it stays open (state persisted in localStorage).
     const gameEl = this.root.querySelector(".game") as HTMLElement;
+    // hand the pre-rolled battlefield to CSS (the .game background renders it
+    // full-viewport under a thin dark readability overlay — see game.css)
+    gameEl.style.setProperty("--battlefield-bg", `url("${this.battlefieldBg}")`);
     let logOpen = false;
     try { logOpen = localStorage.getItem("lore_log_open") === "1"; } catch { /* ignore */ }
     const applyLog = () => {
@@ -325,12 +343,13 @@ export class GameView {
     const sz = document.createElement("div");
     sz.className = "zone zone-st";
     p.traps.forEach(() => {
-      // Set traps stay face-down for BOTH players (square back tile) — identity is
-      // revealed only by the activation/reveal flow, never by the field renderer.
-      const cb = document.createElement("div");
-      cb.className = "card card--back card--field card--field-back";
-      cb.style.backgroundImage = `url(${backFor(isMe)})`;
-      sz.appendChild(cb);
+      // Set traps stay face-down for BOTH players — but NOT as a card back or a
+      // green frame: a dedicated owner-coloured trap-jaw icon tile (mine = blue,
+      // opponent = red). Identity is still revealed only by the reveal flow.
+      const tile = document.createElement("div");
+      tile.className = "card card--field card--field-trap";
+      tile.style.backgroundImage = `url(${isMe ? "/ui/trap-set-icons/set-trap-mine.png" : "/ui/trap-set-icons/set-trap-opponent.png"})`;
+      sz.appendChild(tile);
     });
     p.enchants.forEach((e) => {
       // 영구(99) 영구마법은 턴 배지를 아예 표시하지 않는다 — 기한부만 남은 턴을 크게 표시 (v21 UX)

@@ -71,6 +71,24 @@ export default {
         .bind(crypto.randomUUID(), user.id, "bot", body.draw ? null : body.won ? user.id : "bot", "bot", Date.now(), Date.now()).run().catch(() => { /* best effort */ });
       return new Response(JSON.stringify({ ok: true }), { headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
     }
+    // ---- 문의 접수 (요청사항/버그) — 로그인 없이도 허용(게스트 계정 대비) ----
+    if (path === "/api/inquiry" && req.method === "POST") {
+      const hdrs = { "Content-Type": "application/json", ...corsHeaders(env) };
+      const user = await getUser(env, req);
+      const b = (await req.json().catch(() => ({}))) as { title?: unknown; body?: unknown };
+      const title = String(typeof b.title === "string" ? b.title : "").trim().slice(0, 100);
+      const bodyTxt = String(typeof b.body === "string" ? b.body : "").trim().slice(0, 2000);
+      if (!title || !bodyTxt) return new Response(JSON.stringify({ error: "제목과 내용을 입력해주세요" }), { status: 400, headers: hdrs });
+      // 가벼운 남용 가드: 유저당 1시간 10건 (비로그인은 길이 캡만)
+      if (user) {
+        const cnt = await env.DB.prepare(`SELECT COUNT(*) AS n FROM inquiries WHERE user_id = ? AND created_at > ?`)
+          .bind(user.id, Date.now() - 3600_000).first<{ n: number }>().catch(() => null);
+        if ((cnt?.n ?? 0) >= 10) return new Response(JSON.stringify({ error: "잠시 후 다시 시도해주세요" }), { status: 429, headers: hdrs });
+      }
+      await env.DB.prepare(`INSERT INTO inquiries (id, user_id, title, body, created_at) VALUES (?,?,?,?,?)`)
+        .bind(crypto.randomUUID(), user?.id ?? null, title, bodyTxt, Date.now()).run();
+      return new Response(JSON.stringify({ ok: true }), { headers: hdrs });
+    }
     // ---- presence heartbeat (real-time online counts; covers bot games too) ----
     if (path === "/api/presence" && req.method === "POST") {
       const user = await getUser(env, req);

@@ -573,14 +573,18 @@ export abstract class BaseController implements BoardHandlers {
     const iAmFirst = firstSide === this.you;
     const firstName = firstSide === this.you ? COIN_ME.name : COIN_OPP.name;
     const heads = iAmFirst; // heads face = ME; land on heads if I'm first, else on OPP (tails)
-    const face = (p: CoinProfile) => `<span class="ct-ava">${avatarHtml(p.avatar, p.name, 96)}</span>`;
+    // "Celestial Eye Compass" coin: the avatar sits in a circular mask UNDER a
+    // transparent ring-frame PNG (front = my face, back = opponent's face), so
+    // the compass ornaments wrap around the portrait.
+    const face = (p: CoinProfile, frame: string) =>
+      `<span class="ct-avatar-mask">${avatarHtml(p.avatar, p.name, 96)}</span><img class="ct-frame" src="${frame}" alt="" draggable="false">`;
     const ov = document.createElement("div");
     ov.className = "cointoss-ov";
     ov.innerHTML = `
       <div class="cointoss">
         <div class="ct-coin ${heads ? "to-heads" : "to-tails"}">
-          <div class="ct-face ct-heads">${face(COIN_ME)}</div>
-          <div class="ct-face ct-tails">${face(COIN_OPP)}</div>
+          <div class="ct-face ct-heads">${face(COIN_ME, "/ui/coin-toss/coin-option-1-front.png")}</div>
+          <div class="ct-face ct-tails">${face(COIN_OPP, "/ui/coin-toss/coin-option-1-back.png")}</div>
         </div>
         <div class="ct-caption">
           <div class="ct-head">${t("coin.title")}</div>

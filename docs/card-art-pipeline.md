@@ -5,6 +5,8 @@
 - 카드 DB: `client/src/shared/cards.ts`
 - 이미지 위치: `client/public/art/cards/{CARD_ID}.webp`
 - 예시: `M1` 카드는 `client/public/art/cards/M1.webp`가 있으면 자동으로 표시된다.
+- 아트 디렉션과 정확한 규격: `docs/card-art-direction.md`
+- 최종 아트 규격: `1472x1344` WebP (quality 92)
 
 ## 1. 누락 이미지 확인
 
@@ -36,14 +38,14 @@ art/prompts/card-art-prompts.jsonl
 npm run art:prompts -- --all
 ```
 
-## 3. Replicate FLUX dev로 일괄 생성
+## 3. OpenAI ImageGen으로 일괄 생성
 
 ```bash
-export REPLICATE_API_TOKEN=...
+export OPENAI_API_KEY=...
 npm run art:generate
 ```
 
-기본값은 Replicate `black-forest-labs/flux-dev`다.
+기본값은 OpenAI `gpt-image-2`, `1472x1344`, `high`다.
 
 테스트로 2장만 확인:
 
@@ -63,13 +65,14 @@ npm run art:generate -- --only=M1,S13,T4
 npm run art:generate -- --only=M1 --force
 ```
 
-Replicate 모델 변경:
+Replicate를 명시적으로 사용할 때:
 
 ```bash
+export REPLICATE_API_TOKEN=...
 npm run art:generate -- --provider=replicate --model=black-forest-labs/flux-schnell
 ```
 
-OpenAI로 고급 재생성:
+OpenAI 모델을 명시해서 재생성:
 
 ```bash
 export OPENAI_API_KEY=...
