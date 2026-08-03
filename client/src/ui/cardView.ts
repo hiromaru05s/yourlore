@@ -3,7 +3,7 @@
 // (board / market / hand / pile / zoom) so sizing stays consistent.
 // ============================================================
 import type { CardInst, FieldMon, PlayerState } from "../shared/types";
-import { FRAME_BACK, frameFor, PASSIVES, cardPassives } from "../shared/cards";
+import { FRAME_BACK, frameFor, fieldFrameFor, PASSIVES, cardPassives } from "../shared/cards";
 import { curHp, effAtk, effDef, playCost } from "../shared/engine";
 import { cardName, cardText, getLang, t } from "../i18n";
 
@@ -112,7 +112,9 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   // render above the frame. (frame's outer + window are transparent.)
   node.appendChild(artEl(c.id, opt.fullArt));
   const frameEl = el("div", "card-frame");
-  frameEl.style.backgroundImage = `url(${frameFor(c.t)})`;
+  // square field tiles use the dedicated 1254 square frames; everything else
+  // (hand / market / zoom / deck-builder) keeps the vertical card frames
+  frameEl.style.backgroundImage = `url(${opt.compactField ? fieldFrameFor(c.t) : frameFor(c.t)})`;
   node.appendChild(frameEl);
 
   if (opt.playable) node.classList.add("is-playable");

@@ -1484,6 +1484,15 @@ export function frameFor(t: CardType): string {
   if (t === "starter") return "/frames/cyan.webp";
   return "/frames/blue.webp"; // spell
 }
+/** FIELD-ONLY square frames (field: true tiles). Web assets are center-transparent
+    512px webp cut from the 1254×1254 originals kept in assets/field-frames/.
+    The 462×748 vertical frames above are for hand/market/zoom ONLY — never
+    crop them onto square field tiles. */
+export function fieldFrameFor(t: CardType): string {
+  if (t === "mon") return "/frames/field/red.webp";
+  if (t === "trap") return "/frames/field/green.webp";
+  return "/frames/field/blue.webp"; // spell / starter / enchant
+}
 export const FRAME_BACK = "/frames/sleeve_default.webp";
 
 // ---- card sleeves (card backs). The game now uses one universal sleeve.
