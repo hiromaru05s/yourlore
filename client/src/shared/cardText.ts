@@ -39,7 +39,13 @@ const OVERRIDE: Record<string, { ko?: string; ja?: string; en?: string }> = {
 // boardView가 남은 턴 배지 표시에도 사용한다.
 export const ENCH_TURN_LIMITS: Record<string, number> = { spellHeal: 14, ancientCiv: 13 };
 
-const hasTag = (s: string): boolean => s.startsWith("【");
+// 태그는 문장 어디에 있어도 "이미 태그가 붙은 것"으로 본다
+// ([시초] 처럼 종족 접두가 먼저 오는 카드에서 태그가 두 번 붙던 버그 방지)
+const hasTag = (s: string): boolean => s.includes("【");
+
+/** act:"destroyMon" 이지만 엔진이 '적 필드에서 자동 선정'하는 카드 — (양측) 마커 대상 아님 */
+const AUTO_PICK_DESTROY = new Set(["SNIPE1", "SNIPE2", "WALLBREAK1", "WALLBREAK2", "RUNE1"]);
+const twoSidedDestroy = (c: CardDef): boolean => c.act === "destroyMon" && !AUTO_PICK_DESTROY.has(c.id);
 
 /** 마커를 문미(단, 뒤따르는 "(시전 N)"류 앞)에 붙인다 */
 function mark(s: string, marker: string): string {
@@ -57,7 +63,7 @@ function stdKo(c: CardDef, s0: string): string {
     .replace(/소환시[:：]\s*/g, "【소환시】")
     .replace(/(^|\s|·)소환시\s*(?=[-\d])/g, "$1【소환시】"); // "소환시 30%로 …" / "소환시 -4/-4"
   // ---- 파괴 선택 = 양쪽 필드 ----
-  if (c.act === "destroyMon") s = mark(s.replace(/적 몬스터/g, "몬스터"), "(양측)");
+  if (twoSidedDestroy(c)) s = mark(s.replace(/적 몬스터/g, "몬스터"), "(양측)");
   if ((c.act === "destroyTrap" && (c.val ?? 1) < 99) || c.onSummon === "breaktrap")
     s = mark(s.replace(/상대의 세트 함정/g, "세트 함정"), "(양측)");
   if (c.act === "destroyEnch") s = mark(s.replace(/상대(의)? 영구마법/g, "영구마법"), "(양측)");
@@ -103,7 +109,7 @@ function stdJa(c: CardDef, s0: string): string {
     .replace(/常時[:：]\s*/g, "【常時】")
     .replace(/召喚時[:：]\s*/g, "【召喚時】")
     .replace(/召喚時(?=[-\d])/g, "【召喚時】");
-  if (c.act === "destroyMon") s = mark(s.replace(/敵モンスター/g, "モンスター"), "(両方の場)");
+  if (twoSidedDestroy(c)) s = mark(s.replace(/敵モンスター/g, "モンスター"), "(両方の場)");
   if ((c.act === "destroyTrap" && (c.val ?? 1) < 99) || c.onSummon === "breaktrap")
     s = mark(s.replace(/相手のセット(トラップ|罠)/g, "セット$1"), "(両方の場)");
   if (c.act === "destroyEnch") s = mark(s.replace(/相手の永続魔法/g, "永続魔法"), "(両方の場)");
@@ -138,15 +144,17 @@ function stdJa(c: CardDef, s0: string): string {
 
 function stdEn(c: CardDef, s0: string): string {
   let s = s0;
+  // v17: 함정 시전(세트) 코스트는 전부 1로 통일 → ko/ja처럼 EN에서도 (Cast N) 표기를 제거
+  if (c.t === "trap") s = s.replace(/\s*\(Cast \d+\)/, "");
   s = s.replace(/On summon[:：]\s*/gi, "【On Summon】")
     .replace(/Enchantment[:：]\s*/g, "【Permanent】")
     .replace(/Permanent[:：]\s*/g, "【Permanent】")
     .replace(/Aura[:：]\s*/g, "【Passive】")
     .replace(/Passive[:：]\s*/g, "【Passive】");
-  if (c.act === "destroyMon") s = mark(s.replace(/enemy monsters?/g, "monster"), " (either side)");
+  if (twoSidedDestroy(c)) s = mark(s.replace(/enemy (monsters?)/g, "$1"), " (either side)");
   if ((c.act === "destroyTrap" && (c.val ?? 1) < 99) || c.onSummon === "breaktrap")
-    s = mark(s.replace(/enemy set traps?/g, "set trap"), " (either side)");
-  if (c.act === "destroyEnch") s = mark(s.replace(/enemy enchantments?/g, "enchantment"), " (either side)");
+    s = mark(s.replace(/enemy (set traps?)/g, "$1"), " (either side)");
+  if (c.act === "destroyEnch") s = mark(s.replace(/enemy (enchantments?)/g, "$1"), " (either side)");
   if (c.id === "DIVINE") s = s.replace("Choose and destroy 3 of the opponent's cards (monsters, set traps, enchantments)", "Choose and destroy 3 cards (either side; monsters, set traps, enchantments)");
   if (c.id === "BLOOD2") s = s.replace("Choose and destroy 2 of your opponent's enchantments or set traps", "Choose and destroy 2 enchantments/set traps (either side)");
   if (c.t === "trap" && c.react) {

@@ -45,6 +45,8 @@ export interface CardOpts {
   exhausted?: boolean;
   costOverride?: number;
   badge?: string;
+  hpNow?: number; // 확대(줌)용 — 필드 몬스터의 현재 체력 (hpMax와 함께 넘기면 "현재/최대"로 표시)
+  hpMax?: number;
 }
 
 function el(tag: string, cls?: string, html?: string): HTMLElement {
@@ -133,13 +135,29 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
 
   if (c.t === "mon") {
     const a = opt.field && opt.owner ? effAtk(opt.owner, c as FieldMon) : c.atk!;
-    // v24 HP-combat: on the field the shield slot shows CURRENT HP (red while damaged);
-    // in hand/market/zoom it shows the printed max HP.
+    // v24 HP-combat: the shield slot shows CURRENT HP on the field (and in zoom),
+    // hand/market show the printed max HP. v29: while damaged we print "현재/최대"
+    // so a 4/20 monster is never mistaken for a printed-4 body (colour alone was
+    // the only cue before, unreadable at field-tile size).
     const fm = c as FieldMon;
-    const hurt = !!(opt.field && opt.owner) && (fm.dmg || 0) > 0 && fm.hatch == null;
-    const d = opt.field && opt.owner ? (fm.hatch == null ? curHp(opt.owner, fm) : effDef(opt.owner, fm)) : c.def!;
-    node.appendChild(el("div", "ad-atk", String(a)));
-    node.appendChild(el("div", "ad-def" + (hurt ? " ad-def--hurt" : ""), String(d)));
+    const onField = !!(opt.field && opt.owner);
+    const isEgg = fm.hatch != null;
+    let d: number, dMax: number | null = null;
+    if (onField) {
+      d = isEgg ? effDef(opt.owner!, fm) : curHp(opt.owner!, fm);
+      if (!isEgg) { const mx = effDef(opt.owner!, fm); if (mx > d) dMax = mx; }
+    } else if (opt.hpNow != null) {
+      d = opt.hpNow;
+      if (opt.hpMax != null && opt.hpMax > d) dMax = opt.hpMax;
+    } else d = c.def!;
+    const hurt = dMax != null;
+    node.appendChild(el("div", "ad-atk" + (String(a).length >= 3 ? " ad-num--3d" : ""), String(a)));
+    // 알은 체력 대신 부화/내구도 배지가 실질 정보 → 체력 칩을 감춘다(장식 숫자 제거)
+    if (!(onField && isEgg)) {
+      const hpTxt = dMax != null ? `${d}<span class="hp-max">/${dMax}</span>` : String(d);
+      const long = (dMax != null ? String(d).length + String(dMax).length + 1 : String(d).length) >= 4;
+      node.appendChild(el("div", "ad-def" + (hurt ? " ad-def--hurt" : "") + (long ? " ad-num--3d" : ""), hpTxt));
+    }
   }
   // 암살자 길드: 카운트 배지
   if (opt.field && c.aura === "assassinGuild") {

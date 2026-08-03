@@ -118,6 +118,18 @@ function hellRollout(g: GameState, a: Action, s: Side): number {
 
 // candidate actions, deduped + trimmed (used to sample a random legal "blunder",
 // for value-net search, and for self-play exploration)
+/** 봇 무한루프 가드: 구매 코스트 0인 카드는 게임당 3장까지만 산다.
+ *  (엘프의 쉼터로 '세계수' 카드가 0코가 되면 고정 마켓은 소모되지 않으므로
+ *   "마나가 남지 않아도 계속 살 수 있는" 상태 → 턴이 영원히 끝나지 않았다.
+ *   덱 희석 관점에서도 무한 구매는 이득이 아니다.) */
+const FREE_BUY_CAP = 3;
+export function buyableByBot(p: PlayerState, c: CardInst): boolean {
+  const bc = buyCost(p, c);
+  if (bc > p.mana) return false;
+  if (bc === 0 && (p.buys[c.id] || 0) >= FREE_BUY_CAP) return false;
+  return true;
+}
+
 export function candidates(g: GameState): Action[] {
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];
@@ -211,7 +223,7 @@ export function candidates(g: GameState): Action[] {
   const buys: { a: Action; s: number }[] = [];
   const seenBuy = new Set<string>();
   p.supply.forEach((c, i) => { if (c && buyCost(p, c) <= p.mana && !seenBuy.has(c.id)) { seenBuy.add(c.id); buys.push({ a: { type: "buySupply", i }, s: roughBuy(c) }); } });
-  g.market.forEach((c, i) => { if (buyCost(p, c) <= p.mana && !seenBuy.has(c.id)) { seenBuy.add(c.id); buys.push({ a: { type: "buyMarket", i }, s: roughBuy(c) }); } });
+  g.market.forEach((c, i) => { if (buyableByBot(p, c) && !seenBuy.has(c.id)) { seenBuy.add(c.id); buys.push({ a: { type: "buyMarket", i }, s: roughBuy(c) }); } });
   buys.sort((x, y) => y.s - x.s).slice(0, 4).forEach((b) => out.push(b.a));
   // 상대 함정이 깔려 있고 공격이 가능하면 "공격 보류(턴 종료)"도 후보에 —
   // 킬각이 있어도 함정에 꽂아주는 게 정답이 아닐 때가 있다 (A/B +5%)
@@ -336,7 +348,7 @@ function legalActions(g: GameState): Action[] {
     });
   }
   p.supply.forEach((c, i) => { if (c && buyCost(p, c) <= p.mana) add({ type: "buySupply", i }); });
-  g.market.forEach((c, i) => { if (buyCost(p, c) <= p.mana) add({ type: "buyMarket", i }); });
+  g.market.forEach((c, i) => { if (buyableByBot(p, c)) add({ type: "buyMarket", i }); });
   if (p.mana >= 1) add({ type: "refresh" });
   add({ type: "endTurn" });
   return out;
@@ -365,7 +377,7 @@ function actionPrior(g: GameState, a: Action): number {
     if (c.id === "INQUISITION") return 0.8 + read.tribe * 0.3;
     if (c.ench === "noAttack") return 0.85 + read.attack * 0.25 - (potentialFace(p, o) > potentialFace(o, p) ? 0.35 : 0);
     if (c.ench === "noSummonLow") return 0.75 + read.tribe * 0.1 + read.attack * 0.08;
-    if (c.act === "buffTurn" || c.act === "buffAllTurn" || c.act === "buffPerm") return 3 + p.field.length * 0.6 + (c.val || 0) * 0.2;
+    if (c.act === "buffTurn" || c.act === "buffAllTurn" || c.act === "buffPerm" || c.act === "buffAllDef") return 3 + p.field.length * 0.6 + Math.max(c.val || 0, c.val2 || 0) * 0.2;
     if (c.t === "mon") return 2.2 + (c.atk || 0) * 0.35 + (c.def || 0) * 0.18 + c.cost * 0.08;
     if (c.act === "draw" || c.act === "seek" || c.act === "recall") return 2.0;
     if (c.act === "manaUp" || c.act === "manaUpGain" || c.act === "chestToMana") return 1.8;
@@ -619,6 +631,8 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.id === "BLOOD_SECRET" && !p.field.some((m) => isVampFamily(m))) return false;
     if (c.id === "CHOSEN_AREA" && cullExiled(p) < 25) return false;
     if ((c.id === "DECAY_CRAFT" || c.id === "MAJESTY_RITE") && p.field.length === 0) return false;
+    // 버프/체력 강화 마법은 대상이 없으면 낭비 (엔진은 마나만 소모하고 "대상 없음")
+    if ((c.act === "buffPerm" || c.act === "buffAllDef" || c.act === "buffTurn" || c.act === "buffAllTurn") && p.field.length === 0) return false;
     if (c.id === "VAMP_PACT" && p.field.length >= 7) return false;
     if (c.star === "chest" && chestLocked(g)) return false;
     if (c.act === "wipeBack" && p.field.length > 0) return false;
@@ -715,7 +729,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
 
   // 5) buffs — only when there is a ready attacker to benefit
   const buff = spells.find((x) =>
-    (x.c.act === "buffPerm" && p.field.length > 0) ||
+    ((x.c.act === "buffPerm" || x.c.act === "buffAllDef") && p.field.length > 0) ||
     ((x.c.act === "buffTurn" || x.c.act === "buffAllTurn") && ready.length > 0) ||
     (x.c.id === "TRUMPET" && ready.length > 0)); // 지원 나팔: 공격 직전 몬스터 2체 +1
   if (buff) return { type: "play", idx: buff.i };
@@ -780,10 +794,10 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     c.t === "mon" ? (c.atk || 0) * TUNE.atkW + (c.def || 0) * TUNE.defW + c.cost * TUNE.costW : cardValue(c);
   const minBuy = p.maxMana >= 5 ? T.minBuy : T.minBuyEarly; // 구매 하한 (덱 희석 방지 — 지배적 레버, 아키타입별 조정)
   let bi = -1, bs = minBuy;
-  p.supply.forEach((c, i) => { if (c && buyCost(p, c) <= p.mana) { const s = buyScore(c); if (s > bs) { bs = s; bi = i; } } });
+  p.supply.forEach((c, i) => { if (c && buyableByBot(p, c)) { const s = buyScore(c); if (s > bs) { bs = s; bi = i; } } });
   if (bi >= 0) return { type: "buySupply", i: bi };
   let mbi = -1, mbs = minBuy;
-  g.market.forEach((c, i) => { if (buyCost(p, c) <= p.mana) { const s = buyScore(c); if (s > mbs) { mbs = s; mbi = i; } } });
+  g.market.forEach((c, i) => { if (buyableByBot(p, c)) { const s = buyScore(c); if (s > mbs) { mbs = s; mbi = i; } } });
   if (mbi >= 0) return { type: "buyMarket", i: mbi };
 
   // 12.5) 마나가 크게 남아도는데 살 만한 게 없으면 제시 리롤 — 마나를 카드로 환전
@@ -927,6 +941,7 @@ function lethalPlayPriority(c: CardInst): number {
   if (c.act === "destroyTrap") return 90 + (c.val || 0);
   if (c.act === "destroyMon" || c.act === "weaken" || c.act === "atkDown" || c.act === "defDown") return 80 + (c.val || 0);
   if (c.act === "buffTurn" || c.act === "buffAllTurn" || c.act === "buffPerm") return 70 + (c.val || 0) + (c.val2 || 0);
+  if (c.act === "buffAllDef") return 20;
   if (c.t === "mon") return 55 + (c.atk || 0) * 2 + (c.def || 0);
   if (c.act === "draw" || c.act === "seek" || c.act === "recall" || c.act === "chestToMana" || c.act === "manaUpGain") return 45;
   return 10 + cardValue(c);

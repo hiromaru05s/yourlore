@@ -4,7 +4,7 @@
 // All animation lives in anim.ts; this file only draws + binds.
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
-import { effMaxMana, playCost, buyCost, effAtk, effDef } from "../shared/engine";
+import { effMaxMana, playCost, buyCost, effAtk, effDef, curHp } from "../shared/engine";
 import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer } from "./modal";
@@ -312,8 +312,10 @@ export class GameView {
       const card = cardEl(m, { field: true, compactField: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
-      // zoom shows the monster's CURRENT atk/def (buffs/mods applied), matching the on-field card
-      bindZoom(card, { ...m, atk: effAtk(p, m), def: effDef(p, m) });
+      // zoom shows the monster's CURRENT atk/hp (buffs/mods applied) — and, when damaged,
+      // "현재/최대" exactly like the field tile (v29: the zoom used to show max HP only,
+      // so a 4/20 monster read as a healthy 20 in the view players trade off).
+      bindZoom(card, { ...m, atk: effAtk(p, m), def: effDef(p, m) }, { now: curHp(p, m), max: effDef(p, m) });
       if (isMe && myTurn && !pending && !g.over && p.field.length > 1) this.enableReorder(card, idx, mz);
       mz.appendChild(card);
     });
@@ -607,7 +609,7 @@ export class GameView {
     const hpPct = Math.max(0, p.hp) / p.maxHp * 100;
     el.innerHTML = `
       ${avatarHtml(isMe ? MY_AVATAR : OPP_AVATAR, p.name, 58)}
-      <span class="pt-hp" title="${Math.max(0, p.hp)}/${p.maxHp}"><b id="hp-${sd}">${Math.max(0, p.hp)}</b></span>
+      <span class="pt-hp" title="${Math.max(0, p.hp)}/${p.maxHp}"><b id="hp-${sd}">${Math.max(0, p.hp)}</b><span class="pt-hp-max">/${p.maxHp}</span></span>
       <span class="pt-hpbar hpbar" id="hpbar-${sd}"><i style="width:${hpPct}%"></i></span>
       <span class="pt-name">${p.name}</span>
       <span class="pt-mana pips" title="${t("game.mana")}"><span class="pt-mana-gem">◈</span><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span>`;

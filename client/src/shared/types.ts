@@ -39,6 +39,7 @@ export interface CardDef {
   noShop?: boolean; // 스타팅(덱 구성) 전용 — 고정/제시 마켓에 등장하지 않음
   exileOnDestroy?: boolean; // 영구마법: 파괴/제거 시 묘지 대신 게임에서 제외
   passive?: string[]; // 키워드 패시브 (cards.PASSIVES 키 — 기합/부패/위엄/도발/회피/공허/아우라 …)
+  grantPassive?: string; // 마법(buffPerm): 강화 대상 몬스터에게 부여하는 패시브 키워드 (거암의 가호 → 도발)
   nameJa?: string; // Japanese name (falls back to name)
   textJa?: string; // Japanese effect text (falls back to text)
   nameEn?: string; // English name (falls back to name)

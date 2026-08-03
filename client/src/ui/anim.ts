@@ -325,14 +325,14 @@ function miniCardGrid(ids: string[]): HTMLElement {
 }
 
 // right-click to enlarge any card
-export function zoomCard(c: CardInst): void {
+export function zoomCard(c: CardInst, hp?: { now: number; max: number }): void {
   closeZoom();
   const ov = document.createElement("div");
   ov.className = "zoom-overlay";
   ov.id = "zoomOverlay";
   const wrap = document.createElement("div");
   wrap.className = "zoom-wrap";
-  wrap.appendChild(cardEl(c, { fullArt: true }));
+  wrap.appendChild(cardEl(c, { fullArt: true, ...(hp ? { hpNow: hp.now, hpMax: hp.max } : {}) }));
   // "(지속)" 스탯 변화 카드: 필드에 있는 동안만 유지된다는 각주
   if (/\((?:지속|持続|lasting)\)/.test(cardText(c))) {
     const note = document.createElement("div");
@@ -409,15 +409,15 @@ export function closeZoom(): void {
  * Bind "enlarge" to an element: right-click on desktop, long-press on touch.
  * A long-press swallows the tap so it does NOT also play/attack with the card.
  */
-export function bindZoom(el: HTMLElement, card: CardInst): void {
-  el.oncontextmenu = (e) => { e.preventDefault(); zoomCard(card); };
+export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; max: number }): void {
+  el.oncontextmenu = (e) => { e.preventDefault(); zoomCard(card, hp); };
   let timer = 0, sx = 0, sy = 0, fired = false;
   el.addEventListener("touchstart", (e) => {
     if (e.touches.length !== 1) return;
     fired = false;
     sx = e.touches[0].clientX; sy = e.touches[0].clientY;
     clearTimeout(timer);
-    timer = window.setTimeout(() => { fired = true; zoomCard(card); }, 380);
+    timer = window.setTimeout(() => { fired = true; zoomCard(card, hp); }, 380);
   }, { passive: true });
   const cancel = () => clearTimeout(timer);
   el.addEventListener("touchmove", (e) => {
