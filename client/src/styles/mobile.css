@@ -160,6 +160,16 @@
   .tut-card:hover { transform: none; }
   .tut-card:active { transform: scale(.97); }
 
+  /* ---- 문의 speech bubble: the tile sits in the LAST (rightmost) grid column
+     here, so a centered bubble runs off-screen — pin it to the right edge ---- */
+  .inq-bubble {
+    left: auto; right: 0;
+    max-width: min(210px, 60vw);
+    animation-name: inqBobYr;
+  }
+  .inq-bubble::before { left: auto; right: 24px; margin-left: 0; }
+  @keyframes inqBobYr { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+
   /* ---- bot difficulty modal: keep the 2×2 grid, fit small screens ---- */
   .modal.bot-diff { min-width: 0; width: min(92vw, 560px); max-height: 88dvh; overflow-y: auto; }
   .diff-grid { grid-template-columns: 1fr 1fr; gap: 9px; }
