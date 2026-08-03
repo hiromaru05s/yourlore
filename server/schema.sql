@@ -88,6 +88,16 @@ CREATE TABLE IF NOT EXISTS coupon_claims (
   PRIMARY KEY (code, user_id)
 );
 
+-- 문의 (요청사항/버그 접수) — 홈 '문의' 모달 → 어드민 대시보드 '문의' 탭
+CREATE TABLE IF NOT EXISTS inquiries (
+  id          TEXT PRIMARY KEY,
+  user_id     TEXT,                        -- NULL = 비로그인/게스트
+  title       TEXT NOT NULL,
+  body        TEXT NOT NULL,
+  created_at  INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_inquiries_created ON inquiries(created_at DESC);
+
 -- 실시간 접속 현황 (하트비트로 갱신, 최근 N초 내 신호만 유효)
 CREATE TABLE IF NOT EXISTS presence (
   user_id  TEXT PRIMARY KEY,

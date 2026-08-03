@@ -79,6 +79,8 @@ export const api = {
   rankMe: () => call<{ rating: RankInfo | null }>("/rank/me", undefined, "GET").then((r) => r.rating).catch(() => null),
   trackBot: (won: boolean | null) => call<{ ok: boolean }>("/track/bot", { won: won === true, draw: won === null }).catch(() => null),
   inviteMe: () => call<{ code: string; limit: number; invites: { status: string; created_at: number; display: string }[] }>("/invite/me", undefined, "GET"),
+  // 문의 접수 (홈 '문의' 모달 → 어드민 '문의' 탭). 게스트도 전송 가능(서버가 user_id NULL 저장).
+  sendInquiry: (title: string, body: string) => call<{ ok: true }>("/inquiry", { title, body }),
   /** Google OAuth entry URL (carries invite ref + utm source, and an optional same-origin return path). */
   googleUrl: (returnTo?: string): string => {
     const a = acquisition();
