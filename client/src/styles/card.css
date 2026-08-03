@@ -261,9 +261,6 @@
 
 /* ---- v24 HP-combat: damaged field monsters show current HP in red ---- */
 .ad-def--hurt { color: #ff7a5e !important; text-shadow: 0 0 6px #a3160bcc, 0 1px 2px #000c; }
-/* v29: "현재/최대" 표기 — 최대치는 작고 흐리게 (숫자 하나로만 읽히면 인쇄 체력과 혼동) */
-.ad-def .hp-max { font-size: .72em; opacity: .78; margin-left: .04em; font-weight: 700; }
-.card--field .ad-def .hp-max { color: #ffe6df; opacity: .82; }
 /* 3자리 이상(대형 버프·전체 강화 누적)일 때 칩 밖으로 넘치지 않게 축소 */
 .ad-num--3d { font-size: .66em; letter-spacing: -.03em; }
 .card--field .ad-num--3d { font-size: .72em; letter-spacing: -.03em; }
