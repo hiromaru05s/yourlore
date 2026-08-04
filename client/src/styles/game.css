@@ -574,7 +574,16 @@
   transform: translateX(-100%); transition: transform .22s var(--ease);
 }
 .game.log-open .logpanel { transform: none; }
-.logpanel .panel-title { position: relative; padding-bottom: 8px; }
+/* always-available way out of the log (the mobile bottom sheet hides its tab) */
+.log-close {
+  position: absolute; top: 6px; right: 8px; z-index: 3;
+  width: 30px; height: 30px; border-radius: 8px;
+  display: grid; place-items: center; cursor: pointer;
+  border: 1px solid var(--line); background: #0e1522cc; color: var(--paper-dim);
+  font-size: 13px; line-height: 1; transition: .15s var(--ease);
+}
+.log-close:hover { color: var(--paper); border-color: var(--brass-dim); background: #16203ae0; }
+.logpanel .panel-title { position: relative; padding-bottom: 8px; padding-right: 44px; }
 .logpanel .panel-title::after {
   content: ""; position: absolute; left: 12px; right: 12px; bottom: 0; height: 1px;
   background: linear-gradient(90deg, var(--brass-dim), transparent 85%); opacity: .6;

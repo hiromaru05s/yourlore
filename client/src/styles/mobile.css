@@ -75,7 +75,10 @@
     transition: transform .26s var(--ease);
   }
   .game.log-open .logpanel { transform: none; }
-  .game.log-open .log-tab { left: 0; }
+  /* keep the tab ON TOP of the sheet it opened, otherwise the only affordance
+     for closing the log is buried underneath it */
+  .game.log-open .log-tab { left: 0; top: auto; bottom: calc(62dvh + 6px); z-index: 96; }
+  .log-close { width: 36px; height: 36px; font-size: 15px; }
   .log { font-size: 12px; padding: 6px 12px 12px; -webkit-overflow-scrolling: touch; }
 
   /* enlarged card: fit the screen width */

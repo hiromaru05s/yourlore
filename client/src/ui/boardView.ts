@@ -170,8 +170,33 @@ export class GameView {
       gameEl.classList.toggle("log-open", logOpen);
       this.q("logTab").classList.toggle("on", logOpen);
     };
-    const toggleLog = () => { logOpen = !logOpen; try { localStorage.setItem("lore_log_open", logOpen ? "1" : "0"); } catch { /* ignore */ } applyLog(); };
+    const setLog = (open: boolean) => {
+      if (logOpen === open) return;
+      logOpen = open;
+      try { localStorage.setItem("lore_log_open", logOpen ? "1" : "0"); } catch { /* ignore */ }
+      applyLog();
+    };
+    const toggleLog = () => setLog(!logOpen);
     (this.q("logTab")).onclick = toggleLog;
+    // explicit ✕ inside the panel — on a phone the drawer is a bottom sheet that
+    // COVERS its own edge tab, so the tab alone left no way back out.
+    const logClose = document.createElement("button");
+    logClose.className = "log-close";
+    logClose.id = "logClose";
+    logClose.setAttribute("aria-label", "close");
+    logClose.textContent = "✕";
+    logClose.onclick = (e) => { e.stopPropagation(); setLog(false); };
+    this.q("logPanel").appendChild(logClose);
+    // tap anywhere outside the drawer closes it (phones/tablets only — on
+    // desktop the log is a persistent side panel and every board click would
+    // dismiss it).
+    document.addEventListener("pointerdown", (e) => {
+      if (!document.body.contains(this.root)) return;   // screen was swapped
+      if (!logOpen || !GameView.isDrawerLog()) return;
+      const el = e.target as HTMLElement | null;
+      if (el?.closest("#logPanel") || el?.closest("#logTab")) return;
+      setLog(false);
+    }, { capture: true });
     applyLog();
     document.addEventListener("contextmenu", (e) => e.preventDefault());
 
@@ -209,6 +234,10 @@ export class GameView {
   private static phoneMq: MediaQueryList | null =
     typeof matchMedia === "function" ? matchMedia("(orientation: portrait) and (max-width: 860px)") : null;
   private static isPhone(): boolean { return !!GameView.phoneMq?.matches; }
+  /** The log is an overlay drawer (not a persistent side panel) below 860px. */
+  private static drawerMq: MediaQueryList | null =
+    typeof matchMedia === "function" ? matchMedia("(max-width: 860px), (pointer: coarse)") : null;
+  private static isDrawerLog(): boolean { return !!GameView.drawerMq?.matches; }
 
   private handOpen = false;
   setHandOpen(open: boolean): void {

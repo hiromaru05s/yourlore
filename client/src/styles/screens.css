@@ -1,9 +1,22 @@
 /* ============================================================
    LORE — login / home / lobby screens
    ============================================================ */
-.screen { height: 100vh; display: grid; place-items: center; padding: 24px; position: relative; }
-/* the home screen is tall (top bar + modes + tiles) → top-align + scroll. */
-.screen:has(.home) { align-items: start; padding: 30px 26px 26px; overflow-y: auto; }
+/* Every screen scrolls when its content is taller than the window.
+   `align-content: safe center` keeps short content (login card, lobby) visually
+   centred but falls back to top-aligned the moment it overflows — plain
+   `place-items: center` centred the overflow too, so the top AND bottom were
+   cut off with no way to reach them (덱 편집의 마켓 알림이가 그래서 안 보였다). */
+.screen {
+  height: 100vh; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  display: grid; justify-items: center; align-content: safe center;
+  padding: 24px; position: relative;
+}
+/* screens with the absolute wordmark reserve room for it — once the content
+   top-aligns (because it overflows) it would otherwise run under the logo. */
+.screen:has(> .screen-brand) { padding-top: 96px; }
+/* the home screen is tall (top bar + modes + tiles) → always top-align.
+   its brand is in flow (.home-brand{position:static}) so no reserve needed. */
+.screen:has(.home) { align-content: start; padding: 30px 26px 26px; }
 /* home wallpaper is set inline in mountHome (vite strips CSS url() for public assets);
    this overlay darkens it slightly for text readability. */
 .screen:has(.home)::before {
