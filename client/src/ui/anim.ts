@@ -43,6 +43,40 @@ const raf = (): Promise<void> => {
     requestAnimationFrame(() => requestAnimationFrame(done));
   });
 };
+// ---- drag-play origin -----------------------------------------------------
+// When YOU play a card by dragging it, the play FX used to start at the LEFT
+// EDGE of the whole #hand element — so dragging the right-most card made the
+// card "appear" from the far left and fly back. The hand card's own release
+// rect (plus the drag vector) is stashed here on pointerup and consumed by the
+// next play animation, so the FX continues exactly where your finger let go
+// and keeps travelling in the direction you dragged.
+export interface PlayOrigin {
+  left: number; top: number; width: number; height: number;
+  dx: number; dy: number; // drag vector (press → release)
+}
+let playOrigin: (PlayOrigin & { at: number }) | null = null;
+export function setPlayOrigin(o: PlayOrigin | null): void {
+  playOrigin = o ? { ...o, at: Date.now() } : null;
+}
+/** Consume the stashed drag origin (own side only, one-shot, 5s TTL). */
+function takeOrigin(side: ViewSide): (PlayOrigin & { at: number }) | null {
+  if (side !== "me") return null;
+  const o = playOrigin;
+  playOrigin = null;
+  return o && Date.now() - o.at < 12000 ? o : null;
+}
+/** Origin rect for a hand-played card: the dragged card if we have it, else the hand. */
+function fromRect(side: ViewSide, org: PlayOrigin | null): DOMRect | null {
+  if (org) return new DOMRect(org.left, org.top, org.width, org.height);
+  return handRect(side);
+}
+/** Slight lean matching the horizontal drag direction (deg), so the card keeps
+ *  the momentum of the flick instead of snapping to a neutral upright pose. */
+function dragTilt(org: PlayOrigin | null): number {
+  if (!org) return 0;
+  const d = Math.max(-16, Math.min(16, (org.dx / 90) * 16));
+  return Math.abs(d) < 1 ? 0 : d;
+}
 const handRect = (side: ViewSide): DOMRect | null => rectOf(side === "me" ? "#hand" : "#oppHand");
 const rowRect = (side: ViewSide): DOMRect | null => rectOf(side === "me" ? "#meRow" : "#oppRow");
 const discId = (side: ViewSide): string => (side === "me" ? "pile-myDisc" : "pile-oppDisc");
@@ -74,9 +108,12 @@ function backEl(): HTMLElement {
 
 /** Opponent (or you) played a SPELL: reveal it from hand, hold face-up, then send to discard (or fade into field). */
 export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish"): Promise<void> {
-  const from = handRect(side); const row = rowRect(side);
+  const org = takeOrigin(side);
+  const from = fromRect(side, org); const row = rowRect(side);
   if (!from || !row) return;
   const node = floatAt(cardEl(card, { size: "hand" }), from);
+  const tilt = dragTilt(org);
+  if (tilt) node.style.transform = `rotate(${tilt}deg)`;
   // 상대가 쓴 카드는 "작게 지나가서 뭘 냈는지 모르겠다"는 피드백 → 상대 카드는
   // 화면 정중앙으로 크게(scale 2) 줌인해 한참 머무르며 읽을 시간을 준다.
   const opp = side !== "me";
@@ -84,7 +121,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   const cy = opp ? window.innerHeight / 2 - 78 : row.top + row.height / 2 - 78;
   await raf();
   node.style.transition = `left .38s ${EASE}, top .38s ${EASE}, transform .38s ${EASE}`;
-  node.style.left = cx + "px"; node.style.top = cy + "px"; node.style.transform = opp ? "scale(2)" : "scale(1.25)";
+  node.style.left = cx + "px"; node.style.top = cy + "px"; node.style.transform = opp ? "scale(2)" : "scale(1.25)"; // settles upright from the drag lean
   if (opp) node.classList.add("fx-opp-cast"); // glow ring so the reveal reads as "enemy played this"
   await wait(opp ? 2600 : 650); // opponent's card lingers so you can read it
   if (dest === "discard") {
@@ -103,10 +140,13 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
 
 /** Opponent (or you) SUMMONED a monster: fly the card from hand to its field slot, then a lively pop. */
 export async function summonFromHand(card: CardInst, uid: string, side: ViewSide): Promise<void> {
-  const from = handRect(side); const node = byUid(uid); const to = rectOf(node);
+  const org = takeOrigin(side);
+  const from = fromRect(side, org); const node = byUid(uid); const to = rectOf(node);
   if (!from || !to || !node) { summonIn(uid); return; }
   node.style.visibility = "hidden";
   const ghost = floatAt(cardEl(card, { size: "hand" }), from);
+  const tilt = dragTilt(org);
+  if (tilt) ghost.style.transform = `rotate(${tilt}deg)`;
   await raf();
   ghost.style.transition = `left .32s ${EASE}, top .32s ${EASE}, transform .32s ${EASE}`;
   ghost.style.left = to.left + "px"; ghost.style.top = to.top + "px"; ghost.style.transform = "scale(.82)";
@@ -119,9 +159,12 @@ export async function summonFromHand(card: CardInst, uid: string, side: ViewSide
 
 /** A face-down trap was set: slide a card-back from hand into the trap zone. */
 export async function trapSetAnim(side: ViewSide): Promise<void> {
-  const from = handRect(side); const to = trapZoneRect(side);
+  const org = takeOrigin(side);
+  const from = fromRect(side, org); const to = trapZoneRect(side);
   if (!from || !to) return;
   const back = floatAt(backEl(), from);
+  const tilt = dragTilt(org);
+  if (tilt) back.style.transform = `rotate(${tilt}deg)`;
   await raf();
   back.style.transition = `left .34s ${EASE}, top .34s ${EASE}, transform .34s ${EASE}`;
   back.style.left = (to.left + to.width / 2 - 24) + "px"; back.style.top = to.top + "px"; back.style.transform = "scale(.7)";

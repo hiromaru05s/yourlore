@@ -9,7 +9,7 @@ import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassiv
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer } from "./modal";
 import { cardEl } from "./cardView";
-import { bindZoom, zoomCard } from "./anim";
+import { bindZoom, zoomCard, setPlayOrigin } from "./anim";
 import { t, getLang } from "../i18n";
 import { logToEn } from "../shared/logEn";
 import { getSfxVolume, setSfxVolume } from "./sound";
@@ -805,15 +805,24 @@ export class GameView {
       };
       const onUp = (ev: PointerEvent): void => {
         const dragged = !!ghost;
+        // Where the card actually IS when you let go — the play FX continues from
+        // here (and leans with the drag) instead of restarting at the hand's left
+        // edge. Derived from the pointer + the ghost's own anchor (CSS .drag-ghost
+        // = translate(-50%,-58%)) rather than getBoundingClientRect(), which would
+        // include the ghost's scale/rotate and land a few px off.
+        const gw = ghost ? ghost.offsetWidth : 0, gh = ghost ? ghost.offsetHeight : 0;
+        const rel = ghost ? { left: ev.clientX - gw / 2, top: ev.clientY - gh * 0.58, width: gw, height: gh } : null;
         cleanup();
         if (!dragged) return; // plain click → the click handler zooms
         card.addEventListener("click", (ce) => { ce.stopPropagation(); ce.preventDefault(); }, { capture: true, once: true });
         // released above the hand region = play it (drop back onto the hand = cancel)
         const handTop = this.q("hand").getBoundingClientRect().top;
         if (ev.clientY < handTop - 24) {
-          if (aff) this.h.onPlay(c.uid); // uid, not index: the DOM can lag the logical state
-          else this.h.onBlockedPlay(c.uid); // explain WHY it can't be played (popup)
-        }
+          if (aff) {
+            setPlayOrigin(rel ? { left: rel.left, top: rel.top, width: rel.width, height: rel.height, dx: ev.clientX - sx, dy: ev.clientY - sy } : null);
+            this.h.onPlay(c.uid); // uid, not index: the DOM can lag the logical state
+          } else this.h.onBlockedPlay(c.uid); // explain WHY it can't be played (popup)
+        } else setPlayOrigin(null); // dropped back on the hand — don't leak a stale origin
       };
       window.addEventListener("pointermove", onMove);
       window.addEventListener("pointerup", onUp);
@@ -834,8 +843,17 @@ export class GameView {
     // stacked-paper depth: a couple of offset shadow layers behind the top card
     const under = document.createElement("div"); under.className = "pile-under";
     const front = document.createElement("div");
-    front.className = "pile-card" + (id.includes("Disc") ? " pile-card--art" : "");
-    if (frame && count) front.style.backgroundImage = `url(${frame})`;
+    front.className = "pile-card";
+    // 묘지(discard)는 공개 정보 → 맨 위 카드를 "카드 프레임까지 포함한 온전한 앞면"으로
+    // 렌더한다. 예전엔 아트만 background-image로 깔아서 프레임·이름·코스트가 사라졌다.
+    const faceUp = !!count && !!faceCard && faceCard.id !== "HIDDEN";
+    if (faceUp) {
+      const face = cardEl(faceCard!, {});
+      face.classList.add("pile-face");
+      front.appendChild(face);
+    } else if (frame && count) {
+      front.style.backgroundImage = `url(${frame})`;
+    }
     pile.append(under, front);
     const tg = document.createElement("div"); tg.className = "pile-tag"; tg.textContent = tag; pile.appendChild(tg);
     const cnt = document.createElement("div"); cnt.className = "pile-count"; cnt.textContent = String(count); pile.appendChild(cnt);

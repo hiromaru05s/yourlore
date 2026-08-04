@@ -31,12 +31,14 @@ export function mountCards(app: App): Screen {
   const wrap = document.createElement("div");
   wrap.className = "screen cards-screen";
   wrap.innerHTML = `
-    <div class="topright-lang"></div>
     <div class="cards">
       <div class="cards-head">
         <button class="btn btn-ghost" id="back">← ${t("cards.back")}</button>
         <h2>${t("cards.title")} <span class="cards-count" id="count"></span></h2>
-        <input class="cards-search" id="search" type="text" placeholder="${t("cards.search")}" />
+        <div class="cards-head-r">
+          <input class="cards-search" id="search" type="text" placeholder="${t("cards.search")}" />
+          <div class="cards-lang"></div>
+        </div>
       </div>
       <div class="cards-filters">
         <div class="chip-row" id="typeRow"></div>
@@ -46,7 +48,7 @@ export function mountCards(app: App): Screen {
       <div class="cards-grid" id="grid"></div>
     </div>`;
   app.root.appendChild(wrap);
-  wrap.querySelector(".topright-lang")!.appendChild(langSelectEl());
+  wrap.querySelector(".cards-lang")!.appendChild(langSelectEl());
 
   const grid = wrap.querySelector("#grid") as HTMLElement;
   const count = wrap.querySelector("#count") as HTMLElement;
