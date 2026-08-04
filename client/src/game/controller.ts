@@ -675,6 +675,7 @@ export abstract class BaseController implements BoardHandlers {
   destroy(): void {
     this.dead = true;
     this.stopTimer();
+    this.view.destroy();
     this.toastEl?.remove();
     document.removeEventListener("keydown", this.onKey);
     A.removeReviewFab();

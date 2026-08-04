@@ -324,6 +324,22 @@
   margin-left: clamp(6px, 0.9vw, 14px);
   flex: 0 0 auto;
 }
+/* narrow boards: the piles drop BELOW the two 7-slot rows instead of eating
+   field width beside them — 7칸 두 줄이 온전히 남고 아래에 덱·묘지가 깔린다 */
+.board-underpile .field-block { flex-direction: column; align-items: center; gap: 0; }
+.board-underpile .pile-col {
+  margin: calc(var(--slot-gap) + 2px) 0 0; align-self: center;
+  gap: clamp(10px, 2vw, 24px);
+}
+.board-underpile .pile-col > .pile {
+  width: calc(var(--field-card-size) * 0.64);
+  height: var(--field-card-size);
+  max-height: none;
+}
+.board-underpile .pile-col > .pile .pile-tag { font-size: 7px; bottom: 2px; }
+/* my side reads top-down (zones → piles); the opponent's mirrors it */
+.board-underpile .field-block.is-opp { flex-direction: column-reverse; }
+.board-underpile .field-block.is-opp .pile-col { margin: 0 0 calc(var(--slot-gap) + 2px); }
 .pile-col > .pile {
   width: var(--field-card-size);
   height: calc(var(--field-card-size) / 0.64);

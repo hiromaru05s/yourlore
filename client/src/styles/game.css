@@ -158,52 +158,85 @@
    reserves room for them — otherwise the bottom row gets clipped by the viewport */
 .pcluster--opp { min-height: calc(var(--pt) + 24px); align-items: start; padding: 2px 0 18px; }
 .pcluster--me { min-height: calc(var(--pt) + 26px); align-items: end; padding: 15px 0 10px; }
+/* the portrait is a ROW: [mana] [avatar ring] [HP]. The two pills share a
+   min-width so the ring stays on the cluster's true centre line. */
 .portrait {
+  position: relative; flex: 0 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  gap: clamp(4px, 0.6vw, 9px);
+  border: none; background: none; box-shadow: none; border-radius: 0;
+  width: auto; height: auto;
+}
+.pt-ring {
   width: var(--pt); height: var(--pt); flex: 0 0 auto;
   border-radius: 50%; border: 2px solid var(--brass-dim);
   background: radial-gradient(circle at 35% 30%, #223250, #0b101c);
   box-shadow: 0 3px 14px #000b, inset 0 1px 0 #ffffff18, 0 0 0 3px #0a0f1a;
-  display: grid; place-items: center; position: relative;
+  display: grid; place-items: center; overflow: hidden;
 }
-.portrait .avatar { width: calc(var(--pt) - 8px) !important; height: calc(var(--pt) - 8px) !important; border-radius: 50%; }
+/* --avs drives the fallback initial's font-size, so it must track --pt too */
+.pt-ring .avatar {
+  --avs: calc(var(--pt) - 8px) !important;
+  width: calc(var(--pt) - 8px) !important; height: calc(var(--pt) - 8px) !important;
+  border-radius: 50%; border: none; box-shadow: none;
+}
 
 /* HP gem hugs the portrait's bottom-right INSIDE its silhouette, so the name
    plate underneath stays readable */
-.pt-hp {
-  position: absolute; right: -6px; bottom: 1px; min-width: 24px; height: 24px; padding: 0 5px;
-  display: inline-flex; align-items: baseline; justify-content: center; gap: 1px; border-radius: 9px;
-  background: linear-gradient(180deg, #ff5b45, #a52815); border: 1px solid #ffd9cf55;
-  box-shadow: 0 2px 6px #000c; z-index: 2;
+/* HP pill — a flow sibling to the RIGHT of the ring. It used to be pinned on
+   top of the avatar, where it covered both the art and the name plate. */
+.portrait .pt-hp {
+  position: static; flex: 0 0 auto;
+  min-width: calc(var(--pt) * 0.94); height: calc(var(--pt) * 0.44);
+  padding: 0 clamp(5px, 0.7vw, 9px);
+  display: inline-flex; align-items: center; justify-content: center; gap: 2px;
+  white-space: nowrap; border-radius: 999px;
+  background: linear-gradient(180deg, #ff5b4530, #a5281530); border: 1px solid #ff8a7355;
+  box-shadow: 0 2px 6px #0009, inset 0 1px 0 #ffffff14;
+  font-family: var(--mono);
 }
-.pt-hp b { font-family: var(--mono); font-size: 14px; font-weight: 800; color: #fff; text-shadow: 0 1px 2px #000c; }
+.pt-hp-ico { color: #ff7a63; font-size: calc(var(--pt) * 0.2); filter: drop-shadow(0 0 4px #ff5b4577); }
+.pt-hp b { font-family: var(--mono); font-size: calc(var(--pt) * 0.3); font-weight: 800; color: #ffdad1; text-shadow: 0 1px 2px #000c; }
+.pt-hp-max { font-size: calc(var(--pt) * 0.19); color: #dd9184; }
 .pt-name {
   position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap;
-  max-width: calc(var(--pt) * 2.1); overflow: hidden; text-overflow: ellipsis;
+  max-width: calc(var(--pt) * 3.4); overflow: hidden; text-overflow: ellipsis;
   font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em; color: var(--paper-dim);
   text-shadow: 0 1px 3px #000d; pointer-events: none;
 }
-.pt-mana {
-  position: absolute; right: calc(100% + 10px); top: 50%; transform: translateY(-50%);
-  /* the portrait is the containing block, so without an explicit intrinsic
-     width the capsule collapses to min-content and stacks vertically */
-  width: max-content;
-  display: inline-flex; align-items: baseline; gap: 3px; white-space: nowrap; flex-wrap: nowrap;
-  padding: 3px 9px; border-radius: 999px;
+.portrait .pt-mana {
+  position: static; flex: 0 0 auto;
+  min-width: calc(var(--pt) * 0.94); height: calc(var(--pt) * 0.44);
+  padding: 0 clamp(5px, 0.7vw, 9px);
+  display: inline-flex; align-items: center; justify-content: center; gap: 2px;
+  white-space: nowrap; flex-wrap: nowrap; border-radius: 999px;
   background: #0d1526e6; border: 1px solid #3d5f9a88; box-shadow: 0 2px 8px #000a;
   font-family: var(--mono);
 }
-.pt-mana-gem { color: var(--cyan); font-size: 13px; filter: drop-shadow(0 0 4px #6fd4ee88); }
-.pt-mana b { font-size: 15px; font-weight: 800; color: #cfeaff; }
-.pt-mana-max { font-size: 10.5px; color: var(--paper-faint); }
+.portrait .pt-mana-gem { color: var(--cyan); font-size: calc(var(--pt) * 0.22); filter: drop-shadow(0 0 4px #6fd4ee88); }
+.portrait .pt-mana b { font-size: calc(var(--pt) * 0.3); font-weight: 800; color: #cfeaff; }
+.portrait .pt-mana-max { font-size: calc(var(--pt) * 0.19); color: var(--paper-faint); }
 /* thin HP strip under the portrait — carries the hpbar-* id the FX target */
-.pt-hpbar {
-  position: absolute; left: 50%; transform: translateX(-50%); bottom: -7px;
-  width: calc(var(--pt) - 8px); height: 4px; border-radius: 3px; overflow: hidden;
-  background: #200e0ecc; border: 1px solid #00000066;
+/* NOTE: the generic .hpbar / .pips rules are declared LATER in this file with
+   the same specificity, so they used to win — the HP strip escaped the portrait
+   as a stretched flex item. Scope these with .portrait to settle it. */
+.portrait .pt-hpbar {
+  position: absolute; left: 50%; transform: translateX(-50%); bottom: -6px;
+  width: var(--pt); min-width: 0; height: 3px; flex: none;
+  border-radius: 3px; overflow: hidden;
+  background: #200e0ecc; border: 1px solid #00000066; box-shadow: none;
 }
-.pt-hpbar i { display: block; height: 100%; background: linear-gradient(90deg, #ff8a5f, #d8342a); }
-.portrait--opp .pt-name { top: calc(100% + 5px); }
-.portrait--me .pt-name { bottom: calc(100% + 3px); }
+.portrait .pt-hpbar > i { display: block; height: 100%; border-radius: 3px; box-shadow: none; background: linear-gradient(90deg, #ff8a5f, #d8342a); }
+.portrait .pt-hpbar::after { content: none; }
+/* the shared shake keyframe resets transform and would un-centre the strip */
+.portrait .pt-hpbar.shake { animation: ptShake .4s; }
+@keyframes ptShake {
+  0%, 100% { transform: translateX(-50%) }
+  25% { transform: translateX(calc(-50% - 3px)) }
+  75% { transform: translateX(calc(-50% + 3px)) }
+}
+.portrait--opp .pt-name { top: calc(100% + 6px); }
+.portrait--me .pt-name { bottom: calc(100% + 4px); }
 
 /* opp hand: straight upright backs, in the cluster cell right of the portrait */
 .opp-hand { position: relative; height: calc(var(--pt) * .82); pointer-events: none; flex: 0 0 auto; }
@@ -239,7 +272,25 @@
 
 /* a player row: the field-block is a centered content-width cluster (zones + meta panel),
    so the play area stays snug instead of stretching across the whole width. */
-.prow { display: flex; justify-content: center; min-width: 0; }
+/* a player row = [field block] [row aside: 제외]. The aside is absolutely
+   parked at the block's right edge so it can never push the field off-centre. */
+.prow { display: flex; justify-content: center; min-width: 0; position: relative; }
+.row-aside {
+  position: absolute; left: 100%; top: 50%; transform: translateY(-50%);
+  margin-left: clamp(5px, 0.7vw, 12px);
+  display: flex; flex-direction: column; gap: 4px; align-items: flex-start;
+  pointer-events: none;
+}
+.row-aside > * { pointer-events: auto; }
+.row-aside:empty { display: none; }
+/* narrow boards: the field block fills the row, so there is no "outside right"
+   to sit in — pin the chip to the row's right edge instead of off-screen */
+.board-underpile .row-aside { left: auto; right: 0; margin-left: 0; }
+.row-aside .mp-btn--exile { white-space: nowrap; }
+
+/* END TURN parked under my own field on narrow boards (moved there by JS) */
+.under-row { display: flex; justify-content: center; align-items: center; }
+.under-row:empty { display: none; }
 .field-block {
   position: relative;
   display: flex; align-items: stretch; gap: 12px; max-width: 100%;
@@ -574,6 +625,12 @@
   transform: translateX(-100%); transition: transform .22s var(--ease);
 }
 .game.log-open .logpanel { transform: none; }
+/* full-screen catcher behind the drawer: guarantees a tap anywhere outside it
+   closes the log, whatever element happens to sit under the finger */
+.log-backdrop { position: fixed; inset: 0; z-index: 88; display: none; background: #04070c55; }
+.game.log-open .log-backdrop { display: block; }
+@media (min-width: 861px) and (pointer: fine) { .game.log-open .log-backdrop { display: none; } }
+
 /* always-available way out of the log (the mobile bottom sheet hides its tab) */
 .log-close {
   position: absolute; top: 6px; right: 8px; z-index: 3;

@@ -25,13 +25,14 @@ export interface BoardMetrics {
   tiny: boolean;      // very small viewport — drop non-essential chrome
   flatMkt: boolean;   // short + wide → market collapses to ONE row (8 | 4)
   stackMkt: boolean;  // tall portrait → market stacks 4-wide over three rows
+  underPile: boolean; // narrow board → 덱/묘지 drop under the zones, END TURN under my field
   phone: boolean;     // portrait phone/tablet → market stacks 4-wide, hand is always open
   capH: number;       // hard ceiling on cardH imposed by the WIDTH budget
   capMkt: number;     // hard ceiling on mktH imposed by the WIDTH budget
 }
 
 /** Solve the board sizing for the current viewport. */
-export function solveBoard(w: number, h: number): BoardMetrics {
+export function solveBoard(w: number, h: number, underPile: boolean): BoardMetrics {
   const compact = w < 1000;
   const tiny = w < 560 || h < 480;
   // A short window can't afford six card rows. When it's also wide enough, the
@@ -57,7 +58,7 @@ export function solveBoard(w: number, h: number): BoardMetrics {
   // sit ON TOP of the board — the board width is what's left between them.
   // On phones the rail chips move beside each player, so the gutter goes away
   // and every reclaimed pixel widens the battlefield.
-  const railW = phone ? 8 : w < 620 ? 40 : w < 760 ? 52 : w < 1000 ? 80 : w < 1280 ? 116 : 152;
+  const railW = phone ? 8 : w < 620 ? 40 : w < 760 ? 48 : w < 1000 ? 72 : w < 1280 ? 100 : 130;
   const logW = phone ? 12 : w < 700 ? 16 : 26;
 
   const gap = h < 620 || w < 700 ? 3 : w < 1100 ? 4 : 6;
@@ -72,21 +73,28 @@ export function solveBoard(w: number, h: number): BoardMetrics {
   const pad = 12;
 
   const availV = h - topbarH - clusterOpp - clusterMe - mktHead - rowGaps - pad;
-  // rows: 2 sides × (2 field tiles + gap) + the market rows (+ the hand row,
-  // which on phones is a real in-flow row because the hand is always open)
-  //   = 4 × 0.64·cardH + 2 gaps  +  N × 0.9·cardH  [+ 1.35 × cardH]
   const mktRows = flatMkt ? 0.9 : stackMkt ? 2.7 : 1.8;
   // the always-open phone hand is a real row; on short phones it gets a
   // smaller share so the battlefield keeps priority (the user's call).
   const handRows = phone ? (h < 720 ? 1.0 : 1.35) : 0;
-  let cardH = (availV - gap * 3) / (2.56 + mktRows + handRows);
 
   // ---- horizontal budget -----------------------------------------------
   const availH = w - railW - logW - 14;
-  // field row: 7 tiles + 6 gaps + the pile column (묘지+덱 = 2 tiles wide, 1 gap) + margin + block padding
-  const fieldCap = (availH - gap * 7 - 34) / (9 * 0.64 + 0.4);
-  cardH = Math.min(cardH, fieldCap);
-  cardH = clamp(portraitPhone ? 50 : 44, cardH, 150);
+
+  // The deck/graveyard piles either stand BESIDE the zones (costing two tiles of
+  // field WIDTH) or sit UNDER them (costing a tile of HEIGHT per side plus the
+  // END TURN row that moves down with them). Which wins depends on the binding
+  // axis, so the CALLER solves both arrangements, measures each, and keeps the
+  // one that actually yields a bigger battlefield — the analytic model alone
+  // mis-picked (it under-counts the stacked rows by ~20% on a 768x1024 tablet).
+  const endRow = underPile ? 40 : 0;
+  const byH = (availV - gap * 3 - endRow) / (2.56 + mktRows + handRows + (underPile ? 1.28 : 0));
+  const byW = underPile
+    ? (availH - gap * 6 - 30) / (7 * 0.64)                    // 7 tiles only
+    : (availH - gap * 7 - 34) / (9 * 0.64 + 0.4);             // 7 tiles + pile column
+
+  let cardH = clamp(portraitPhone ? 50 : 44, Math.min(byH, byW), 150);
+  const fieldCap = byW;
 
   // market columns: 4 + 2 side by side (desktop), 8 + 4 in one line (flat),
   // or 4 wide stacked in three rows (phone). Solved separately so a
@@ -95,7 +103,9 @@ export function solveBoard(w: number, h: number): BoardMetrics {
   // On compact layouts the timer + END TURN aside shares the market's row and
   // eats real width — leaving it out of the budget pushed the 4th market
   // column past the panel edge on a 390px phone.
-  const asideW = compact ? Math.round(clamp(70, w * 0.2, 116)) + 12 : 0;
+  // the aside beside the market holds the clock, and END TURN too until the
+  // board narrows enough to move it under my field.
+  const asideW = !compact ? 0 : underPile ? 58 : Math.round(clamp(70, w * 0.2, 116)) + 12;
   const mktCap = (availH - asideW - (mktCols - 1) * gap - (stackMkt ? 26 : 52)) / (mktCols * 0.64);
   // on phones the market is NOT tied to the (width-bound) field tile — letting
   // it grow past 0.9·cardH is what fills the height the field can't use.
@@ -121,6 +131,7 @@ export function solveBoard(w: number, h: number): BoardMetrics {
     tiny,
     flatMkt,
     stackMkt,
+    underPile,
     phone,
     capH: Math.max(44, Math.floor(fieldCap)),
     capMkt: Math.max(46, Math.floor(mktCap)),
@@ -150,12 +161,16 @@ function apply(m: BoardMetrics): void {
   r.classList.toggle("board-tiny", m.tiny);
   r.classList.toggle("board-flatmkt", m.flatMkt);
   r.classList.toggle("board-phone", m.phone);
+  r.classList.toggle("board-underpile", m.underPile);
+  // the END TURN button has to be REPARENTED for the under-pile arrangement and
+  // CSS can't do that — tell the board view which arrangement won.
+  window.dispatchEvent(new CustomEvent("lore:layout", { detail: m }));
 }
 
 function clear(): void {
   const s = document.documentElement.style;
   for (const p of ["--card-h", "--card-h-mkt", "--card-h-hand", "--field-card-size", "--slot-gap", "--pt", "--rail-w", "--log-w"]) s.removeProperty(p);
-  document.documentElement.classList.remove("board-compact", "board-tiny", "board-flatmkt", "board-phone");
+  document.documentElement.classList.remove("board-compact", "board-tiny", "board-flatmkt", "board-phone", "board-underpile");
 }
 
 /**
@@ -174,42 +189,21 @@ export function startBoardLayout(): () => void {
     return s;
   };
 
-  const run = (): void => {
-    raf = 0;
-    const vv = window.visualViewport;
-    // visualViewport tracks the mobile URL bar / on-screen keyboard; fall back
-    // to innerWidth/Height where it's missing.
-    const w = Math.round(vv?.width ?? window.innerWidth);
-    const h = Math.round(vv?.height ?? window.innerHeight);
-    if (w < 200 || h < 200) return;
+  const SAFE = 8;
 
-    let m = solveBoard(w, h);
+  /** Apply `m`, then grow/shrink against MEASURED row heights until it fits. */
+  const fitOnce = (m0: BoardMetrics, stage: HTMLElement, col: HTMLElement): BoardMetrics => {
+    let m = m0;
     apply(m);
-
-    // ---- measure & correct ------------------------------------------------
-    // Panel padding, borders, label heights and font metrics can't be modelled
-    // from the outside, and a 20px miss is the difference between a snug board
-    // and a hand clipped off the bottom edge. So: apply, MEASURE, converge.
-    const stage = document.querySelector(".stage") as HTMLElement | null;
-    const col = document.querySelector(".board-col") as HTMLElement | null;
-    if (!stage || !col) return;
-    // SAFE = a few px of slack; absolutely-positioned decorations (name plates,
-    // HP strips, count badges) hang outside their row box and aren't measured.
-    const SAFE = 8;
-    // phase 1 — GROW into leftover height (tall/narrow windows), capped by width.
-    // Steps are small and each one is REVERTED if it overshoots, so the shrink
-    // pass below never has to claw height back out of the battlefield — the
-    // field keeps the size its width budget allows.
+    // phase 1 — GROW into leftover height, capped by width. Steps are small and
+    // each is REVERTED if it overshoots, so the shrink pass below never has to
+    // claw height back out of the battlefield.
     for (let i = 0; i < 10; i++) {
       const avail = stage.clientHeight, want = need(col, m.gap);
       if (!avail || !want || avail - want <= 26 + SAFE) break;
-      // stop only when EVERY axis is maxed — the hand has no width ceiling, so
-      // on a tall phone it keeps absorbing height the field/market can't use.
       if (m.cardH >= m.capH && m.mktH >= m.capMkt && m.handH >= (m.phone ? 220 : 176)) break;
       const prev = m;
       const next = scaled(m, Math.min(1.06, (avail - 14 - SAFE) / want));
-      // handH must be in the equality check: once the field and market sit on
-      // their width ceilings, the hand is the only thing left that can grow.
       if (next.cardH === prev.cardH && next.mktH === prev.mktH && next.handH === prev.handH) break;
       m = next; apply(m);
       if (need(col, m.gap) + SAFE > stage.clientHeight) { m = prev; apply(m); break; }
@@ -222,7 +216,30 @@ export function startBoardLayout(): () => void {
       if (next.cardH === m.cardH && next.mktH === m.mktH) break;
       m = next; apply(m);
     }
+    return m;
   };
+
+  const run = (): void => {
+    raf = 0;
+    const vv = window.visualViewport;
+    // visualViewport tracks the mobile URL bar / on-screen keyboard; fall back
+    // to innerWidth/Height where it's missing.
+    const w = Math.round(vv?.width ?? window.innerWidth);
+    const h = Math.round(vv?.height ?? window.innerHeight);
+    if (w < 200 || h < 200) return;
+
+    const stage = document.querySelector(".stage") as HTMLElement | null;
+    const col = document.querySelector(".board-col") as HTMLElement | null;
+    if (!stage || !col) { apply(solveBoard(w, h, false)); return; }
+
+    // Try BOTH pile arrangements for real and keep the bigger battlefield.
+    const beside = fitOnce(solveBoard(w, h, false), stage, col);
+    const under = fitOnce(solveBoard(w, h, true), stage, col);
+    const best = under.cardH > beside.cardH || (under.cardH === beside.cardH && under.phone)
+      ? under : beside;
+    apply(best);
+  };
+
   const schedule = (): void => { if (!raf) raf = requestAnimationFrame(run); };
   run();
   // settle passes: the board is still growing when we first measure (webfonts,

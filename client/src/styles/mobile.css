@@ -26,6 +26,10 @@
 .board-compact .market { padding: 5px 8px; gap: 4px 8px; }
 .board-compact .market-sub .sub-head .tag { font-size: 11px; }
 .board-compact .refresh-btn { font-size: 10.5px; padding: 3px 7px; }
+/* phones: the 갱신 button only needs to be tappable, not prominent */
+.board-phone .refresh-btn { font-size: 9.5px; padding: 2px 6px; gap: 2px; border-radius: 6px; }
+.board-phone .refresh-btn .rf-ico { font-size: 11px; }
+.board-phone .market-sub .sub-head { gap: 6px; }
 .board-compact .pt-mana { padding: 2px 6px; }
 .board-compact .pt-mana b { font-size: 12px; }
 .board-compact .pt-name { font-size: 8.5px; }
@@ -68,7 +72,7 @@
   /* ---- log as a slide-up bottom drawer ---- */
   .logpanel {
     position: fixed; top: auto; left: 0; right: 0; bottom: 0;
-    height: 62dvh; width: auto; z-index: 95;
+    height: 46dvh; width: auto; z-index: 95;
     border-radius: 14px 14px 0 0; border-left: 1px solid var(--line);
     grid-template-rows: auto 1fr auto;
     transform: translateY(103%);
@@ -77,8 +81,16 @@
   .game.log-open .logpanel { transform: none; }
   /* keep the tab ON TOP of the sheet it opened, otherwise the only affordance
      for closing the log is buried underneath it */
-  .game.log-open .log-tab { left: 0; top: auto; bottom: calc(62dvh + 6px); z-index: 96; }
-  .log-close { width: 36px; height: 36px; font-size: 15px; }
+  .game.log-open .log-tab { left: 0; top: auto; bottom: calc(46dvh + 6px); z-index: 96; }
+  /* the sheet used to cover 62% of the screen, so almost everything a thumb
+     could reach WAS the sheet — there was hardly any "outside" left to tap.
+     46dvh keeps the top half of the board tappable, and the close button is
+     sized to be unmissable. */
+  .log-close {
+    width: 40px; height: 40px; font-size: 17px; top: 7px; right: 9px;
+    background: #1b2740ee; color: var(--paper); border-color: var(--brass-dim);
+  }
+  .logpanel .panel-title { padding-right: 56px; font-size: 12px; }
   .log { font-size: 12px; padding: 6px 12px 12px; -webkit-overflow-scrolling: touch; }
 
   /* enlarged card: fit the screen width */

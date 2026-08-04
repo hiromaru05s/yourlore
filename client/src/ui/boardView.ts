@@ -106,6 +106,8 @@ export class GameView {
               </div>
             </div>
             <div class="prow" id="meRow"></div>
+            <!-- narrow layouts park END TURN here, under my own field -->
+            <div class="under-row" id="underMe"></div>
             <div class="hand-area" id="handArea">
               <div class="pcluster pcluster--me">
                 <div class="pc-side pc-side--l"></div>
@@ -120,7 +122,10 @@ export class GameView {
           <div class="rail-group rail-group--opp" id="railOpp"></div>
           <div class="rail-group rail-group--me" id="railMe"></div>
         </div>
-        <!-- battle log: a left-edge drawer with a mid-left toggle tab -->
+        <!-- battle log: a left-edge drawer with a mid-left toggle tab.
+             The backdrop guarantees a tap anywhere outside the drawer closes it,
+             whatever is (or isn't) under the finger. -->
+        <div class="log-backdrop" id="logBackdrop"></div>
         <button class="log-tab" id="logTab" aria-label="log">${t("game.log")}</button>
         <div class="panel logpanel" id="logPanel">
           <div class="panel-title" id="logTitle">${t("game.log")}</div>
@@ -189,14 +194,20 @@ export class GameView {
     this.q("logPanel").appendChild(logClose);
     // tap anywhere outside the drawer closes it (phones/tablets only — on
     // desktop the log is a persistent side panel and every board click would
-    // dismiss it).
-    document.addEventListener("pointerdown", (e) => {
+    // dismiss it). Two belts: a real backdrop element that swallows the tap,
+    // plus a capture-phase listener for anything that renders above it.
+    const backdrop = this.q("logBackdrop");
+    const eatOutside = (e: Event): void => {
       if (!document.body.contains(this.root)) return;   // screen was swapped
       if (!logOpen || !GameView.isDrawerLog()) return;
       const el = e.target as HTMLElement | null;
       if (el?.closest("#logPanel") || el?.closest("#logTab")) return;
+      e.preventDefault(); e.stopPropagation();
       setLog(false);
-    }, { capture: true });
+    };
+    backdrop.addEventListener("pointerdown", eatOutside);
+    backdrop.addEventListener("click", (e) => e.stopPropagation());
+    document.addEventListener("pointerdown", eatOutside, { capture: true });
     applyLog();
     document.addEventListener("contextmenu", (e) => e.preventDefault());
 
@@ -226,6 +237,22 @@ export class GameView {
     const syncPhoneHand = (): void => { if (GameView.isPhone()) this.setHandOpen(true); };
     syncPhoneHand();
     GameView.phoneMq?.addEventListener?.("change", syncPhoneHand);
+
+    // END TURN lives beside the market on wide screens, and under MY OWN field
+    // once the board narrows (reaching across to the market is a stretch on a
+    // phone, and the aside was squeezing the market's width). CSS can't
+    // reparent, so the node is moved.
+    const endWrap = this.root.querySelector(".end-turn-wrap") as HTMLElement;
+    const asideSlot = this.root.querySelector(".mid-aside") as HTMLElement;
+    const underSlot = this.q("underMe");
+    const placeEnd = (under: boolean): void => {
+      const target = under ? underSlot : asideSlot;
+      if (endWrap.parentElement !== target) target.appendChild(endWrap);
+    };
+    placeEnd(document.documentElement.classList.contains("board-underpile"));
+    // the solver decides the arrangement (it compares both), so follow its call
+    this.onLayout = (e: Event) => placeEnd(!!(e as CustomEvent).detail?.underPile);
+    window.addEventListener("lore:layout", this.onLayout);
   }
 
   // On a portrait phone the 0.42-scale compact stack is unreadable, so the hand
@@ -238,6 +265,10 @@ export class GameView {
   private static drawerMq: MediaQueryList | null =
     typeof matchMedia === "function" ? matchMedia("(max-width: 860px), (pointer: coarse)") : null;
   private static isDrawerLog(): boolean { return !!GameView.drawerMq?.matches; }
+
+  private onLayout: ((e: Event) => void) | null = null;
+  /** Detach the window-level listeners this view installed. */
+  destroy(): void { if (this.onLayout) window.removeEventListener("lore:layout", this.onLayout); }
 
   private handOpen = false;
   setHandOpen(open: boolean): void {
@@ -418,13 +449,28 @@ export class GameView {
     zones.className = "zones";
     if (isMe) zones.append(monRow, stRow); else zones.append(stRow, monRow);
 
-    // 더미 열은 두 줄 전체 높이를 쓰며 필드 오른쪽에 붙는다 (묘지 → 덱 순, 바깥쪽이 덱)
+    // 더미 열: 덱 → 묘지 순(바깥쪽이 묘지). 넓은 화면에선 필드 오른쪽에 세로로,
+    // 좁은 화면(.board-underpile)에선 7칸 두 줄 ARABE 아래에 가로로 깔린다 — CSS만으로 전환.
     const piles = document.createElement("div");
     piles.className = "pile-col";
-    piles.append(gravePile, deckPile);
+    piles.append(deckPile, gravePile);
 
     block.append(zones, piles);
-    row.append(block);
+
+    // 제외는 자기 필드 블록 바로 오른쪽 (레일이 아니라 본인 필드 옆)
+    const aside = document.createElement("div");
+    aside.className = "row-aside";
+    const removed = (p.removed ?? []).slice().sort((a, b) => a.cost - b.cost);
+    if (removed.length > 0) {
+      const rbtn = document.createElement("button");
+      rbtn.className = "btn btn-ghost mp-btn mp-btn--exile";
+      rbtn.innerHTML = `<span class="mp-ico">⛔</span><span class="mp-lb">${t("deck.removed")}</span><b>${removed.length}</b>`;
+      rbtn.title = `${t("deck.removed")} ${removed.length}`;
+      rbtn.onclick = () => cardPicker(`${p.name} — ${t("deck.removed")} (${removed.length})`, removed, () => { /* browse only */ });
+      aside.appendChild(rbtn);
+    }
+
+    row.append(block, aside);
   }
 
   /** One zone line (slots only — 덱/묘지 더미는 field-block 오른쪽의 pile-col로 빠졌다). */
@@ -542,23 +588,14 @@ export class GameView {
       tribeChips.push(`<span class="tribe-chip ${fired.size ? "has-syn" : ""} ${allDone ? "all" : ""}"><span class="tc-name">${nm}</span><span class="tc-cnt">${onField}</span>${pips}</span>`);
     }
 
-    panel.innerHTML = `
-      <div class="rail-head"><span class="rail-name">${p.name}</span></div>
-      <div class="mp-btns"></div>
-      ${tribeChips.length ? `<div class="mp-tribes">${tribeChips.join("")}</div>` : ""}`;
-
-    const btns = panel.querySelector(".mp-btns")!;
-
-    // 묘지는 필드 오른쪽 더미 열(덱 옆)로 돌아갔다 — 레일에는 제외/종족만 남는다.
-    const removed = (p.removed ?? []).slice().sort((a, b) => a.cost - b.cost);
-    if (removed.length > 0) {
-      const rbtn = document.createElement("button");
-      rbtn.className = "btn btn-ghost mp-btn mp-btn--exile";
-      rbtn.innerHTML = `<span class="mp-ico">⛔</span><span class="mp-lb">${t("deck.removed")}</span><b>${removed.length}</b>`;
-      rbtn.title = t("deck.removed");
-      rbtn.onclick = () => cardPicker(`${p.name} — ${t("deck.removed")} (${removed.length})`, removed, () => { /* browse only */ });
-      btns.appendChild(rbtn);
-    }
+    // 묘지·덱 = 필드 오른쪽 더미 열, 제외 = 필드 바로 오른쪽(renderRow).
+    // 레일에는 이름 + 종족 시너지만 남는다.
+    // nothing but tribe synergy lives here now — with no chips the rail would
+    // just be two player names floating in the gutter, so render nothing.
+    panel.innerHTML = tribeChips.length
+      ? `<div class="rail-head"><span class="rail-name">${p.name}</span></div>
+         <div class="mp-tribes">${tribeChips.join("")}</div>`
+      : "";
   }
 
   /** Full owned-card list for the deck-view button (opponent side uses only public info). */
@@ -676,16 +713,21 @@ export class GameView {
 
   /** Hearthstone-style center portrait (FIXED at true center): avatar ring + HP gem
    *  (carries the hp/hpbar element ids the FX target) + mana crystals to its LEFT. */
+  /** Center portrait: a real ROW — [mana] [avatar ring] [HP] — with the name and
+   *  the thin FX hp-bar under it. Everything used to be absolutely pinned INSIDE
+   *  the 60px circle, so on小 viewports the HP gem sat on the avatar and on the
+   *  name at once; as flow items they simply can't collide. */
   private renderPortrait(el: HTMLElement, p: PlayerState, isMe: boolean): void {
     const sd = isMe ? "me" : "opp";
     const emax = effMaxMana(p);
-    const hpPct = Math.max(0, p.hp) / p.maxHp * 100;
+    const hp = Math.max(0, p.hp);
+    const hpPct = hp / p.maxHp * 100;
     el.innerHTML = `
-      ${avatarHtml(isMe ? MY_AVATAR : OPP_AVATAR, p.name, 58)}
-      <span class="pt-hp" title="${Math.max(0, p.hp)}/${p.maxHp}"><b id="hp-${sd}">${Math.max(0, p.hp)}</b></span>
+      <span class="pt-mana pips" title="${t("game.mana")}"><span class="pt-mana-gem">◈</span><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span>
+      <span class="pt-ring">${avatarHtml(isMe ? MY_AVATAR : OPP_AVATAR, p.name, 58)}</span>
+      <span class="pt-hp" title="${hp}/${p.maxHp}"><span class="pt-hp-ico">❤</span><b id="hp-${sd}">${hp}</b><span class="pt-hp-max">/${p.maxHp}</span></span>
       <span class="pt-hpbar hpbar" id="hpbar-${sd}"><i style="width:${hpPct}%"></i></span>
-      <span class="pt-name">${p.name}</span>
-      <span class="pt-mana pips" title="${t("game.mana")}"><span class="pt-mana-gem">◈</span><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span>`;
+      <span class="pt-name">${p.name}</span>`;
   }
 
   /** MY hand — straight upright cards (no fan) in two states:
