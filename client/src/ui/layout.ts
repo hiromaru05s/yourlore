@@ -106,7 +106,9 @@ export function solveBoard(w: number, h: number, underPile: boolean): BoardMetri
   // the aside beside the market holds the clock, and END TURN too until the
   // board narrows enough to move it under my field.
   const asideW = !compact ? 0 : underPile ? 58 : Math.round(clamp(70, w * 0.2, 116)) + 12;
-  const mktCap = (availH - asideW - (mktCols - 1) * gap - (stackMkt ? 26 : 52)) / (mktCols * 0.64);
+  // the market is CENTRED on screen with the aside beside it, so it must leave
+  // room for the aside on BOTH sides — budgeting one side pushed it off-centre.
+  const mktCap = (availH - asideW * 2 - (mktCols - 1) * gap - (stackMkt ? 26 : 52)) / (mktCols * 0.64);
   // on phones the market is NOT tied to the (width-bound) field tile — letting
   // it grow past 0.9·cardH is what fills the height the field can't use.
   // Start CONSERVATIVE and let the (revert-guarded) grow pass push these up.
@@ -208,11 +210,53 @@ export function startBoardLayout(): () => void {
       m = next; apply(m);
       if (need(col, m.gap) + SAFE > stage.clientHeight) { m = prev; apply(m); break; }
     }
-    // phase 2 — SHRINK until it genuinely fits (monotone, so it always settles)
-    for (let i = 0; i < 10; i++) {
+    // phase 1.5 — FIELD FIRST. The battlefield is what the player reads and taps,
+    // so while it sits below its WIDTH ceiling — leftover margins beside the two
+    // 7-slot rows mean the field was height-starved, exactly what the user
+    // reported — buy tiles back by giving height up from the market and hand.
+    // One tile step costs ~4x its own height (two zone rows + a pile row per
+    // side), so the payment has to be taken repeatedly until it fits; a single
+    // fixed deduction never covered a step and the trade silently no-opped.
+    // Floors are proportional to cardH, so the trade self-limits rather than
+    // grinding the market down to nothing.
+    for (let i = 0; i < 12; i++) {
+      if (m.cardH >= m.capH) break;
+      const prev = m;
+      const step = Math.min(4, m.capH - m.cardH);
+      let cand: BoardMetrics = { ...m, cardH: m.cardH + step, tile: Math.round((m.cardH + step) * 0.64) };
+      apply(cand);
+      let fits = need(col, cand.gap) + SAFE <= stage.clientHeight;
+      for (let j = 0; j < 8 && !fits; j++) {
+        const mktFloor = Math.max(cand.tiny ? 42 : 46, Math.round(cand.cardH * 0.78));
+        const handFloor = Math.max(cand.tiny ? 56 : 62, Math.round(cand.cardH * 1.15));
+        if (cand.mktH <= mktFloor && cand.handH <= handFloor) break;
+        cand = {
+          ...cand,
+          mktH: Math.max(mktFloor, cand.mktH - 3),
+          handH: Math.max(handFloor, cand.handH - 3),
+        };
+        apply(cand);
+        fits = need(col, cand.gap) + SAFE <= stage.clientHeight;
+      }
+      if (!fits) { m = prev; apply(m); break; }
+      m = cand;
+    }
+    // phase 2 — SHRINK until it genuinely fits. The battlefield is paid for
+    // LAST: the market and the hand give up height down to floors that track
+    // cardH, and only when those bottom out does the field itself scale. The
+    // old proportional shrink pulled the field straight back off its width
+    // ceiling — which is why 7-slot rows sat in the middle of empty margins.
+    for (let i = 0; i < 22; i++) {
       const avail = stage.clientHeight, want = need(col, m.gap);
       if (!avail || !want || want + SAFE <= avail) break;
-      const next = scaled(m, Math.max(0.72, (avail - SAFE) / want));
+      const mktFloor = Math.max(m.tiny ? 42 : 46, Math.round(m.cardH * 0.78));
+      const handFloor = Math.max(m.tiny ? 56 : 62, Math.round(m.cardH * 1.15));
+      if (m.mktH > mktFloor || m.handH > handFloor) {
+        m = { ...m, mktH: Math.max(mktFloor, m.mktH - 5), handH: Math.max(handFloor, m.handH - 5) };
+        apply(m);
+        continue;
+      }
+      const next = scaled(m, Math.max(0.8, (avail - SAFE) / want));
       if (next.cardH === m.cardH && next.mktH === m.mktH) break;
       m = next; apply(m);
     }

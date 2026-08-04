@@ -267,8 +267,12 @@
   display: flex; flex-direction: column; align-items: center; gap: clamp(5px, 1.1vh, 12px);
 }
 /* narrow: let the market use the whole width, aside hugs the right edge */
-.board-compact .mid-row { grid-template-columns: 0 minmax(0, auto) auto; justify-content: center; }
-.board-compact .mid-aside { margin-left: 8px; }
+/* The market stays on the SCREEN's centre line at every size — the aside lives
+   in the right 1fr column beside it. (It used to centre market+aside together,
+   which pushed the market visibly left of centre.) The solver keeps the market
+   narrow enough that the aside fits in the leftover half. */
+.board-compact .mid-aside { margin-left: clamp(8px, 2vw, 18px); }
+.board-compact .mid-row > .market { justify-self: center; }
 
 /* a player row: the field-block is a centered content-width cluster (zones + meta panel),
    so the play area stays snug instead of stretching across the whole width. */
