@@ -88,6 +88,16 @@
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 0.35em;
 }
+/* 최소 폰트로도 안 들어가는 경우(마켓 등 초소형 카드): 가운데 정렬이면 첫 줄이
+   위에서 반쯤 잘려 보인다 → 위 정렬로 바꾸고 아래를 페이드시켜 "문장이 이어진다"로
+   읽히게 한다. (cardView.fitToBox가 실측 후 붙이는 클래스) */
+.card-eff.is-clipped {
+  justify-content: flex-start;
+  overflow-wrap: anywhere; word-break: normal;
+  -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 72%, transparent 100%);
+}
+.card-name.is-clipped { align-items: flex-start; }
 .card-eff--small { font-size: 0.375em; line-height: 1.1; }
 .card-eff--tiny { font-size: 0.33em; line-height: 1.08; }
 /* spell/trap/starter have no stats strip → plate extends to the bottom (y 63.6–95.3%) */

@@ -624,6 +624,8 @@ export class GameView {
     // on your turn, your opponent's (public) on theirs.
     const owner = g.players[g.cur];
     const mk = this.q("market");
+    // 재렌더로 카드 노드가 갈리면 body에 떠 있던 확인 배지는 가리킬 대상을 잃는다
+    document.querySelectorAll(".buy-confirm").forEach((b) => b.remove());
     mk.innerHTML = `
       <div class="market-sub">
         <div class="sub-head"><span class="tag">${t("game.std")}</span></div>
@@ -645,10 +647,15 @@ export class GameView {
     let armedEl: HTMLElement | null = null;
     let armedKey = "";
     let armTimer = 0;
+    // 확인 배지는 카드의 자식이 아니라 body 직속 고정 레이어다: 배지 문구가 카드
+    // 폭보다 훨씬 넓어서(카드 65px vs 배지 113px) 카드 안에 두면 .market의
+    // overflow:hidden에 잘리고, 카드 스태킹 컨텍스트에 갇혀 옆 카드 사이에 끼어
+    // 보였다. body에 띄우면 항상 맨 앞, 절대 안 잘린다.
+    const dropBadge = () => document.querySelectorAll(".buy-confirm").forEach((b) => b.remove());
     const disarm = () => {
       clearTimeout(armTimer);
       armedEl?.classList.remove("is-armed");
-      armedEl?.querySelector(".buy-confirm")?.remove();
+      dropBadge();
       armedEl = null; armedKey = "";
     };
     const armBuy = (card: HTMLElement, key: string, buy: () => void) => {
@@ -661,7 +668,18 @@ export class GameView {
         const badge = document.createElement("div");
         badge.className = "buy-confirm";
         badge.textContent = t("market.confirm");
-        card.appendChild(badge);
+        document.body.appendChild(badge);
+        const place = (): void => {
+          const r = card.getBoundingClientRect();
+          const bw = badge.offsetWidth;
+          // 카드 위에 붙이되, 화면 좌우로는 절대 안 넘치게 클램프
+          const x = Math.min(Math.max(r.left + r.width / 2, bw / 2 + 6), window.innerWidth - bw / 2 - 6);
+          const above = r.top - 8 > badge.offsetHeight;
+          badge.style.left = x + "px";
+          badge.style.top = (above ? r.top - 6 : r.bottom + 6) + "px";
+          badge.classList.toggle("below", !above);
+        };
+        place();
         armTimer = window.setTimeout(disarm, 2500);
       };
     };

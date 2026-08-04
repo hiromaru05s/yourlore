@@ -57,32 +57,74 @@ function el(tag: string, cls?: string, html?: string): HTMLElement {
 }
 
 /**
- * 실측 자동 축소: 요소가 DOM에 붙은 뒤(rAF) 내용이 박스를 넘치면 폰트를 줄여
- * 항상 프레임 안에 들어가게 한다. 카드가 손패/마켓/줌 어느 크기로 렌더되든
- * em 기반이라 같은 비율로 동작 — "효과 텍스트가 프레임을 벗어나는" 문제의 근본 해결.
+ * 실측 자동 축소: 요소가 DOM에 붙은 뒤 내용이 박스를 넘치면 폰트를 줄여 항상
+ * 프레임 안에 들어가게 한다. 카드가 손패/마켓/줌 어느 크기로 렌더되든 em 기반이라
+ * 같은 비율로 동작 — "효과 텍스트가 프레임을 벗어나는" 문제의 근본 해결.
  * (CSS 클래스 버킷(--small/--tiny)은 1차 근사로 유지, 이 함수가 최종 보정)
+ *
+ * ⚠ scrollWidth/scrollHeight로는 못 잰다: .card-name/.card-eff는 내용을 flex로
+ * 가운데 정렬하므로 넘친 내용이 위/아래(좌/우)로 "반씩" 삐져나가는데, scroll*는
+ * 시작 모서리 방향 넘침을 세지 않는다 → 절반만 보고 "맞았다"고 판단해 글자가
+ * 잘린 채로 남았다(마켓 카드에서 카드명·효과문 상단이 잘리던 원인).
+ * 그래서 Range + 자식 rect의 합집합으로 내용의 실제 바운딩 박스를 잰다.
  */
+function contentSize(box: HTMLElement): { w: number; h: number } {
+  let top = Infinity, bottom = -Infinity, left = Infinity, right = -Infinity;
+  const push = (r: DOMRect): void => {
+    if (!r.width && !r.height) return;
+    top = Math.min(top, r.top); bottom = Math.max(bottom, r.bottom);
+    left = Math.min(left, r.left); right = Math.max(right, r.right);
+  };
+  const rng = document.createRange();
+  rng.selectNodeContents(box);
+  push(rng.getBoundingClientRect());
+  for (const c of Array.from(box.children)) push((c as HTMLElement).getBoundingClientRect());
+  if (top === Infinity) return { w: 0, h: 0 };
+  return { w: right - left, h: bottom - top };
+}
+
 function fitToBox(box: HTMLElement, minPx = 3.5): void {
-  let tries = 0;
+  let tries = 0, lastW = -1, lastH = -1;
   const run = (): void => {
     // 주의: rAF는 숨겨진 탭에서 영원히 안 불린다(재접속 백그라운드 렌더 등) → setTimeout 사용.
-    // 레이아웃 측정(scrollHeight)은 백그라운드에서도 동작한다.
+    // 레이아웃 측정은 백그라운드에서도 동작한다.
     if (!box.isConnected) { if (tries++ < 8) setTimeout(run, 16 * tries); return; }
+    // 카드 크기가 바뀌면(레이아웃 솔버·창 회전·리사이즈) 이전에 맞춰둔 폰트는 무효다.
+    // 같은 크기면 재계산 생략, 달라졌으면 CSS 기본값에서 다시 맞춘다(커질 때도 복구).
+    const b0 = box.getBoundingClientRect();
+    if (Math.abs(b0.width - lastW) < 0.5 && Math.abs(b0.height - lastH) < 0.5) return;
+    lastW = b0.width; lastH = b0.height;
+    box.style.fontSize = "";
     let guard = 0;
-    while (guard++ < 10) {
-      const overH = box.scrollHeight - box.clientHeight;
-      const overW = box.scrollWidth - box.clientWidth;
-      if (overH <= 1 && overW <= 1) break;
+    while (guard++ < 14) {
+      // 박스도 rect로 재야 한다(줌 등 ancestor transform이 있으면 client*와 단위가 어긋남)
+      const b = box.getBoundingClientRect();
+      if (!b.width || !b.height) break;
+      const c = contentSize(box);
+      // 0.5px 여유를 두고 맞춘다: 딱 맞게 재면 글리프의 어센더/디센더가 반 픽셀씩
+      // 삐져나와 overflow:hidden에 첫 줄 윗부분이 잘린다(카드명 2줄에서 특히).
+      const availH = b.height - 0.5, availW = b.width - 0.5;
+      const overH = c.h - availH, overW = c.w - availW;
+      if (overH <= 0 && overW <= 0) break;
       const cur = parseFloat(getComputedStyle(box).fontSize);
       if (cur <= minPx) break;
-      const rH = box.scrollHeight > 0 ? box.clientHeight / box.scrollHeight : 1;
-      const rW = box.scrollWidth > 0 ? box.clientWidth / box.scrollWidth : 1;
+      const rH = c.h > 0 ? availH / c.h : 1;
+      const rW = c.w > 0 ? availW / c.w : 1;
       const next = Math.max(minPx, cur * Math.min(rH, rW) * 0.97);
       if (next >= cur) break;
       box.style.fontSize = next.toFixed(2) + "px";
     }
+    // 마켓/필드처럼 카드가 아주 작을 땐 최소 폰트로도 안 들어가는 카드가 있다.
+    // 그때 내용이 가운데 정렬이면 첫 줄이 "위쪽에서 반쯤 잘려" 나가 아주 어색하다
+    // → is-clipped: 위 정렬 + 아래쪽 페이드. 잘림이 항상 문장 끝에서만 일어난다.
+    const b2 = box.getBoundingClientRect();
+    const c2 = contentSize(box);
+    box.classList.toggle("is-clipped", c2.h > b2.height - 0.5 || c2.w > b2.width - 0.5);
   };
   setTimeout(run, 0);
+  // 카드가 리사이즈되면 다시 맞춘다 (한 번만 맞추면 리사이즈 후 글자가 잘린 채 남는다).
+  // 폰트 크기는 박스 크기를 바꾸지 않으므로(높이는 카드 대비 %) 되먹임 루프가 없다.
+  if (typeof ResizeObserver !== "undefined") new ResizeObserver(() => run()).observe(box);
 }
 
 function artEl(cardId: string, full = false): HTMLElement {

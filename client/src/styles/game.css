@@ -983,12 +983,20 @@
 
 /* 마켓 오클릭 방지: 1클릭 = 선택(배지), 재클릭 = 구매 */
 .market-cards .card.is-armed { outline: 2px solid var(--gold-glow); box-shadow: 0 0 16px #4fb4ff66; z-index: 6; }
+/* body 직속 고정 레이어 — 마켓 패널(overflow:hidden)이나 카드 스태킹 컨텍스트에
+   갇히지 않도록. 기본은 카드 "위", 위에 자리가 없으면 아래로 뒤집는다. */
 .buy-confirm {
-  position: absolute; left: 50%; bottom: 7px; transform: translateX(-50%);
-  background: #050a14e6; color: var(--gold-glow); border: 1px solid #4fb4ff88;
-  font-size: 9px; font-weight: 700; letter-spacing: .04em; white-space: nowrap;
-  padding: 3px 7px; border-radius: 5px; pointer-events: none; z-index: 7;
+  position: fixed; transform: translate(-50%, -100%);
+  background: #050a14f2; color: var(--gold-glow); border: 1px solid #4fb4ff88;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .04em; white-space: nowrap;
+  padding: 4px 9px; border-radius: 6px; pointer-events: none; z-index: 245;
+  box-shadow: 0 6px 18px #000b, 0 0 14px #4fb4ff33;
+  animation: buyConfirmIn .14s var(--ease);
 }
+.buy-confirm.below { transform: translate(-50%, 0); }
+@keyframes buyConfirmIn { from { opacity: 0; transform: translate(-50%, -100%) scale(.9) } }
+@keyframes buyConfirmInB { from { opacity: 0; transform: translate(-50%, 0) scale(.9) } }
+.buy-confirm.below { animation-name: buyConfirmInB; }
 
 /* 다중 선택 픽커 (대숙청/컬 세례) */
 .picker-grid .card.is-picked { outline: 3px solid var(--gold-glow); box-shadow: 0 0 18px #4fb4ff77; transform: translateY(-4px); }
