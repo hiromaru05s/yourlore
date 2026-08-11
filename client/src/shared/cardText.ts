@@ -25,6 +25,7 @@
 //   단, 새 "트리거 문구"를 발명하지 말고 관용 표기를 그대로 쓸 것.
 // ============================================================
 import type { CardDef } from "./types";
+import { PASSIVES, cardPassives } from "./cards";
 
 // 카드별 완전 수동 오버라이드 (자동 규칙이 어색한 소수 카드)
 const OVERRIDE: Record<string, { ko?: string; ja?: string; en?: string }> = {
@@ -183,6 +184,30 @@ function stdEn(c: CardDef, s0: string): string {
   return s;
 }
 
+/**
+ * 패시브 키워드는 효과 문장에서 빼내 카드 하단의 키워드 칩 행으로 보낸다.
+ * (`【소환시】상대에게 15 데미지 · 아우라 · 공허` 처럼 효과와 키워드가 한 줄에 섞여
+ *  "어디까지가 효과인지" 안 읽히던 문제 — 룰 R3)
+ * 안전장치: 그 카드의 cardPassives()에 실제로 들어있는 키워드만 제거한다.
+ * 칩으로 반드시 다시 표시되므로 정보가 사라지지 않는다.
+ */
+/** 시전/소환 코스트는 배지로 표시된다 — 본문에 중복해 쓰지 않는다 (룰 R9).
+ *  (렌더 시점에 어차피 지워지고 있었지만, 원문에 남아 길이 예산만 잡아먹었다) */
+function stripCastCost(s: string): string {
+  return s.replace(/\s*[（(]\s*(?:시전|발동|発動|Cast|소환|召喚|Summon)\s*\d+\s*[）)]/g, "").trim();
+}
+
+function stripKeywords(c: CardDef, s: string, lang: "ko" | "ja" | "en"): string {
+  const keys = cardPassives(c);
+  if (!keys.length || !s) return s;
+  const names = new Set(keys.map((k) => PASSIVES[k]?.[lang]?.name).filter(Boolean) as string[]);
+  if (!names.size) return s;
+  const parts = s.split(/\s*·\s*/);
+  const kept = parts.filter((p) => !names.has(p.trim()));
+  // 전부 키워드뿐이면 빈 문자열 → 칩 행만 남는다
+  return kept.join(" · ").trim();
+}
+
 /** 전 카드의 text/textJa/textEn을 표준 표기로 변환 (applyEnglish 이후 1회 실행) */
 export function standardizeCardTexts(pools: Array<Record<string, CardDef>>): void {
   for (const pool of pools) {
@@ -190,9 +215,9 @@ export function standardizeCardTexts(pools: Array<Record<string, CardDef>>): voi
       const c = pool[id];
       const ov = OVERRIDE[id];
       const ko0 = c.text; // EN 폴백(=한국어 원문) 감지용
-      if (c.text && c.text !== "—") c.text = ov?.ko ?? stdKo(c, c.text);
-      if (c.textJa && c.textJa !== "—") c.textJa = ov?.ja ?? stdJa(c, c.textJa);
-      if (c.textEn && c.textEn !== "—") c.textEn = c.textEn === ko0 ? c.text : ov?.en ?? stdEn(c, c.textEn);
+      if (c.text && c.text !== "—") c.text = stripCastCost(stripKeywords(c, ov?.ko ?? stdKo(c, c.text), "ko"));
+      if (c.textJa && c.textJa !== "—") c.textJa = stripCastCost(stripKeywords(c, ov?.ja ?? stdJa(c, c.textJa), "ja"));
+      if (c.textEn && c.textEn !== "—") c.textEn = stripCastCost(stripKeywords(c, c.textEn === ko0 ? c.text : ov?.en ?? stdEn(c, c.textEn), "en"));
     }
   }
 }

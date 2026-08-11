@@ -79,15 +79,15 @@ const NAMES: Record<string, string> = {
 };
 
 const TEXTS: Record<string, string> = {
-  M3: "On summon: draw 1 card", M5: "On summon: take 2 damage", M6: "On summon: -2 HP to an enemy monster (lasting)",
+  M3: "On summon: draw 1 card", M5: "On summon: take 2 damage", M6: "On summon: 1 enemy monster -2 HP (lasting)",
   M7: "On summon: deal 2 damage to the opponent", M8: "On summon: restore 1 of your HP", M9: "On summon: refresh your offer row for free",
   M10: "While on the field: max mana +1", M11: "ATK +1 while you control 2+ monsters",
-  M12: "On summon: -1 ATK to an enemy monster (lasting)", M13: "On summon: destroy 1 enemy set trap",
+  M12: "On summon: 1 enemy monster -1 ATK (lasting)", M13: "On summon: destroy 1 enemy set trap",
   NGA3: "On summon: take 2 damage", NGA4: "On summon: take 4 damage",
   NHEX: "On summon: deal 5 damage to the opponent", NSPR: "While on the field: max mana +1. On summon: draw 2",
   NMD2: "On summon: draw 1 card", NMD4: "On summon: draw 2 cards", NMD6: "On summon: draw 5 cards",
   MIMIC: "Summoned to the opponent's field by a failed treasure chest · Void",
-  MIMIC2: "While this card is on the field, neither player can use Treasure Chests (Attune - Arcane still works)",
+  MIMIC2: "While this monster is on the field, neither player can use Treasure Chests (Attune - Arcane still works)",
   CREATOR: "On summon: summon 3 random monsters from both decks/graveyards to your field",
   MANA_GIANT: "While on the field: max mana +2",
   ASSASSIN1: "Infiltrate",
@@ -123,15 +123,15 @@ const TEXTS: Record<string, string> = {
   BLOOD_ANGER: "Take 10 damage. All monsters on the field gain +3 ATK (lasting)",
   BLOOD_SORROW: "Take 12 damage. Exile the highest-cost card in your graveyard from the game",
   BLOOD_PLEASURE: "Take 14 damage. Your max mana +1",
-  EGG_HUNTER: "When this card attacks an 'Egg', it consumes 4 durability counters",
+  EGG_HUNTER: "When this monster attacks an 'Egg', it consumes 4 durability counters",
   INCUBATOR: "Reduce the hatch counter of one of your 'Eggs' by 5 turns",
   EGG_MASTER: "On summon: all 'Eggs' on your field gain +3 durability",
   VAMP_PACT: "Take 6 damage. Summon an 'Apprentice Vampire' to your field",
   BLOOD_FEST: "Permanent: whenever you use a 'Blood Magic' card, max mana +1",
   BLOOD_SHIELD: "Permanent: you take no damage from 'Blood Magic'",
-  VAMP_WARD: "Permanent: while this card is on the field, 'Vampire' monsters on both fields cannot be destroyed",
+  VAMP_WARD: "Permanent: while this monster is on the field, 'Vampire' monsters on both fields cannot be destroyed",
   VAMP_PACT2: "Take 15 damage. Summon a 'Novice Vampire' to your field (Cast 2)",
-  VAMP_BUTLER: "Passive: gains 1 blood count whenever this card attacks an enemy monster · Every 3 counts, summon an 'Apprentice Vampire' to your field · This card counts as a 'Vampire'",
+  VAMP_BUTLER: "Passive: gains 1 blood count whenever this monster attacks an enemy monster · Every 3 counts, summon an 'Apprentice Vampire' to your field · This card counts as a 'Vampire'",
   BLOOD_SECRET: "Take 9 damage. Destroy 1 'Vampire' monster on your field — if destroyed, gain +3 max mana and +10 your max HP",
   VAMP1: "When you cast a 'Blood Magic': summon a Novice Vampire (once) · Void",
   VAMP2: "When you cast a 'Blood Magic': summon an Adept Vampire (once) · Void",
@@ -143,13 +143,13 @@ const TEXTS: Record<string, string> = {
   NEGOTIATE: "Opponent's max mana +1 · The opponent cannot set traps next turn",
   BLOOD_RITE: "Permanent: both players take no spell damage and heal that amount instead · Destroyed 14 turns after activation · Void",
   WEAKEN_ALL: "Permanent: all monsters on both fields have -2 ATK · Void",
-  GUILD_HALL: "Aura: gain a count whenever your 'Assassin' monsters or this card damage the opponent · At 3 counts: deal 14 damage (count resets) · The count is lost if this card is destroyed",
+  GUILD_HALL: "Aura: gain a count whenever your 'Assassin' monsters or this monster damage the opponent · At 3 counts: deal 14 damage (count resets) · The count is lost if this monster is destroyed",
   MIMIC_PARTY: "Trap: when the opponent uses a Treasure Chest — summon 1 Mimic to their field and 2 Mimics to yours",
   FATE_WHEEL: "Permanent: on cast, your max mana -1 and take 5 damage · After seeing a dice/chance card's result, you may reroll it (once per turn) · Void",
   COUNTERCALC: "Usable only while the opponent's max mana is 6 or less · Destroy 1 enemy enchantment · Exiled from the game after use",
   AMBUSH: "Usable only while the opponent's max mana is exactly 4 · Deal 7 damage, take 3 damage · Exiled from the game after use",
   TRUMPET: "Give +1 ATK to 2 of your monsters (this turn)",
-  FORESIGHT: "Permanent: when your max mana reaches 10+, gain +2 max mana and destroy this card · Castable only while you have no 'Foresight' on your field · Void",
+  FORESIGHT: "Permanent: when your max mana reaches 10+, gain +2 max mana and destroy this monster · Castable only while you have no 'Foresight' on your field · Void",
   TRICKROOM: "For 2 turns, all monsters' ATK and MAX HP are swapped (accumulated damage stays — a monster dies if its max HP drops to or below the damage it has taken) · While swapped, HP gains raise ATK and vice versa · When it ends, stats gained while swapped are kept",
   INCUBATOR_S: "Reduce the hatch counter of one of your 'Eggs' by 2 turns",
   TRIBE_PACT: "Permanent: tribe synergy effects are doubled · If you have no tribe synergy by turn 40: max mana -2 and take 12 damage",
@@ -222,7 +222,7 @@ const TEXTS: Record<string, string> = {
   DARK_ELF: "Infiltrate · Summonable only while your max HP is 65+ and you control no 'Elf' monsters",
   HIGH_ELF: "Trap Master · Aura · Summonable only while your max HP is 99 or higher",
   ELDER_ELF_KING: "Summonable only while a 'High Elf' is in your graveyard and your max HP is 99+ · On summon: summon 2 High Elves to your field, then all 'High Elves' on your field gain +15 ATK",
-  ANCIENT_CIV: "Permanent: 13 turns after activation, your max mana -1 and add a 'Dragon Egg' or 'Divine Beast Egg' of your choice to your hand · Then this card is destroyed",
+  ANCIENT_CIV: "Permanent: 13 turns after activation, your max mana -1 and add a 'Dragon Egg' or 'Divine Beast Egg' of your choice to your hand · Then this monster is destroyed",
   DRAGON_EGG: "Cannot attack · Aura · Hatches in 8 turns (both players' turns) / Durability 6 · Enemy monster attacks only consume 1 durability · If hatching completes with durability left, one of Black/Red/Blue Dragon is summoned (Summon 4)",
   BEAST_EGG: "Cannot attack · Aura · Hatches in 10 turns (both players' turns) / Durability 7 · Enemy monster attacks only consume 1 durability · If hatching completes with durability left, the Divine Beast is summoned (Summon 5)",
   D_BLACK: "On summon: choose up to 8 of the opponent's exiled cards and send them to their graveyard · All enemy monsters -3 HP (lasting) · Aura · Void",
@@ -258,11 +258,11 @@ const TEXTS: Record<string, string> = {
   NT_NULL6: "Negate 1 enemy spell + 8 damage to the opponent",
   NT_NULL4: "Negate 1 enemy spell of cast cost 6 or less",
   NT_NULL8: "Negate 1 enemy spell + the opponent cannot cast spells for the rest of this turn",
-  NT_SEAL3: "While this card is on the field, neither player can cast spells of cast cost 5 or less",
-  NT_SEAL5: "While this card is on the field, neither player can cast spells",
+  NT_SEAL3: "While this monster is on the field, neither player can cast spells of cast cost 5 or less",
+  NT_SEAL5: "While this monster is on the field, neither player can cast spells",
   GS8_4: "All your monsters +13 ATK (this turn) · +2 ATK (lasting)",
   GS9_2: "Restore 16 of your HP. Discard 1 life-aspect spell from your hand: your max HP +15",
-  STARTER_TRASH: "Mana 1: exile this card from the game (thins your deck)", STARTER_CHEST: "Mana 1: open the treasure chest",
+  STARTER_TRASH: "Mana 1: exile this monster from the game (thins your deck)", STARTER_CHEST: "Mana 1: open the treasure chest",
   STARTER_MANA: "Mana 3: max mana +1",
   TGE1: "[Origin] tribe synergy (Summon 2)", TGE2: "[Origin] tribe synergy", TGE3: "[Origin] tribe synergy",
   TGE4: "[Origin] On summon: draw 2 cards",
@@ -354,7 +354,7 @@ const RULES: [RegExp, string][] = [
   [/^소환시: 상대에 (\d+) 데미지 \+ 상대 함정 (\d+)장 파괴$/, "On summon: $1 damage + destroy $2 enemy trap(s)"],
   [/^소환시: 상대에 (\d+) 데미지 \+ 최대 마나 \+(\d+)\. 매 턴 패의 보물상자를 묘지로 보내면 (\d+)장 드로우$/, "On summon: $1 damage + max mana +$2. Each turn, discard a chest from hand to draw $3"],
   [/^소환시: 상대에 (\d+) 데미지\. 이후 상대는 매 턴 (\d+) 데미지\(중첩 불가\)$/, "On summon: $1 damage. The opponent then takes $2 damage each turn (doesn't stack)"],
-  [/^소환시: 적 몬스터 체력 -(\d+)\(지속\)$/, "On summon: -$1 HP to an enemy monster (lasting)"],
+  [/^소환시: 적 몬스터 1체의 체력 -(\d+)\(지속\)$/, "On summon: 1 enemy monster -$1 HP (lasting)"],
   [/^소환시: 자신 체력 (\d+) 회복$/, "On summon: restore $1 of your HP"],
   [/^소환시: 자신 최대 체력 \+(\d+), 최대 마나 \+(\d+)$/, "On summon: your max HP +$1, max mana +$2"],
   [/^아군 몬스터 (\d+)체 이상이면 공격 \+(\d+)$/, "ATK +$2 while you control $1+ monsters"],
@@ -364,7 +364,7 @@ const RULES: [RegExp, string][] = [
   [/^이 카드가 필드에 있는 한 상대 최대 마나 -(\d+)$/, "While on the field: enemy max mana -$1"],
   [/^자신 몬스터 (\d+)체 공격 \+(\d+)\(이번 턴\)$/, "Give +$2 ATK to $1 of your monsters (this turn)"],
   [/^자신 체력 (\d+) 회복 · 상대 몬스터 (\d+)체 \+ 마법\/함정 (\d+)장 파괴$/, "Restore $1 of your HP. Destroy $2 enemy monster + $3 spell/trap"],
-  [/^자신 체력 (\d+) 회복 · 이 카드 (\d+)번째 사용부터 피격 시마다 자신 체력 \+(\d+)$/, "Restore $1 of your HP. From use #$2 of this card: restore $3 of your HP whenever you're hit"],
+  [/^자신 체력 (\d+) 회복 · 이 카드 (\d+)번째 사용부터 피격 시마다 자신 체력 \+(\d+)$/, "Restore $1 of your HP. From use #$2 of this monster: restore $3 of your HP whenever you're hit"],
   [/^자신 체력 (\d+) 회복 · 자신 최대 마나가 (\d+) 이하면 자신 체력 완전 회복$/, "Restore $1 of your HP. If your max mana is $2 or less: fully restore your HP"],
   [/^자신 체력 (\d+) 회복 · 자신 체력 (\d+) 이상이면 자신 최대 체력 \+(\d+)$/, "Restore $1 of your HP. If your HP is $2+: your max HP +$3"],
   [/^자신 체력 (\d+) 회복 · 패의 '생명의 빛' (\d+)장 묘지로 보내면 자신 최대 체력 \+(\d+)$/, "Restore $1 of your HP. Discard $2 'Light of Life' from hand: your max HP +$3"],
@@ -403,6 +403,22 @@ function genTextEn(ko: string): string | undefined {
 
 // ---- DICE CONVERSION (v22): explicit EN texts for converted cards (bypass pattern rules) ----
 Object.assign(TEXTS, {
+  TRICKROOM: "For 2 turns, every monster's ATK and MAX HP swap · Damage taken stays — a monster dies if its max HP falls to or below it · While swapped, HP buffs raise ATK and ATK buffs raise HP · Stats gained while swapped carry over",
+  GUILD_HALL: "【Passive】+1 count each time your 'Assassin' monsters or this monster damage the opponent · 3 counts: deal 14 damage, reset · Destroyed: counts are lost",
+  ELDER_ELF_KING: "【Requires】a 'High Elf' in your graveyard and your max HP 99+ · 【On Summon】summon 2 High Elves, then all your 'High Elf' +15 ATK (lasting)",
+  VAMP_BUTLER: "【Passive】+1 blood count each time this monster attacks an enemy monster · Every 3 counts: summon an 'Apprentice Vampire' · Counts as a 'Vampire'",
+  ANCIENT_CIV: "【Lasts 13 Turns】After 13 turns: your max mana -1 and add a 'Dragon Egg' or 'Divine Beast Egg' of your choice to hand · Then this card is exiled",
+  ASSASSIN4: "【On Summon】destroy ALL enemy set traps · 【Requires】Novice, Adept and Elite Assassins each in your field/deck/graveyard (not hand)",
+  PRAYER: "【Requires】your max mana 12-, your HP below 80% of max, no other card played this turn · Your HP restored up to 80% of max",
+  MEDITATE: "【Requires】your HP below 80% of max and no other card played this turn · Your HP restored up to 80% of max",
+  CHOSEN_MAGE: "【Passive】+1/+1 per 2 of your 'Culls' exiled · (Optional) each turn: return 1 exiled 'Cull' to your graveyard",
+  FORESIGHT: "【Permanent】at max mana 10+: max mana +2 and destroy this monster · 【Requires】no other 'Foresight' of yours in play",
+  DIVINE: "【On Summon】max mana +15 · +1 draw each turn (permanent) · Destroy 3 chosen cards (either side; monsters, set traps, enchantments)",
+  WORLD_BLESS: "【Permanent】both players: max mana +1 each turn · The caster also rolls 2 dice each turn — on 8+, +2 more",
+  VAMP4: "When you cast a 'Blood Magic': summon a Supreme Vampire (once) · Your max HP +50% of the damage it deals",
+  TRIAL_AREA: "【Permanent】take 6 damage on cast · Each turn: add a Cull to your graveyard, then you may exile up to 2 cards from your graveyard",
+  DRAGON_EGG: "Cannot attack · Hatches in 8 turns (both turns) / Durability 6 · Enemy attacks consume 1 durability only · Hatch with durability left → summon a Black, Red or Blue Dragon",
+  BEAST_EGG: "Cannot attack · Hatches in 10 turns (both turns) / Durability 7 · Enemy attacks consume 1 durability only · Hatch with durability left → summon the Divine Beast",
   GM8_2: "On summon: roll a die — on 4+, clone itself (Summon 3)",
   GT5_2: "Destroy the attacker + roll a die: on 5+, restore your HP equal to its max HP",
   GT5_3: "Destroy the attacker + roll 2 dice: on a total of 7+, revive it on YOUR field",
@@ -420,11 +436,44 @@ Object.assign(TEXTS, {
   TIMEWARP: "Roll 2 dice — on a total of 6+, skip the opponent's next turn (Cast 12)",
   LIFE_CYCLE: "Enchantment: whenever you restore HP, roll a die — on 6, max mana +1 (Cast 2)",
   WORLD_SEED: "Enchantment: at the start of each of your turns, roll a die — on 5+, max mana +1",
-  WORLD_BLESS: "Enchantment: both players gain max mana +1 at the start of their turns. Each turn the caster rolls 2 dice — on a total of 8+, +2 more (Cast 6)",
   LUCKY_CHEST: "Roll 2 dice — 2·3: max mana +3 & draw 2 / 4·5: dud (Master Mimic 10/3 on enemy field) / 6-8: max mana +1 / 9-11: your max HP +8 / 12: your max HP +12",
   GUILD_CHEST: "Roll 2 dice — 2·3: max mana +3 / 4: +1 draw at turn start (permanent; fails if your spell/trap zone is full) / 5·6: max mana +2 / 7: max mana +1 / 8: your max HP +10 / 9·10: Novice & Adept Assassins on enemy field / 11·12: Novice, Adept & Elite Assassins on enemy field + take 10 damage (Cast 3)",
   FATE_WHEEL: "Permanent: on cast, your max mana -1 and take 5 damage · After seeing a dice card's result, you may reroll it (once per turn) · Void",
 });
+
+/**
+ * English house style (rule R8): TCG shorthand, not prose. English ran ~40% longer
+ * than Korean/Japanese because it spelled conditions out with relative clauses, so
+ * it was the language that got shrunk and clipped on small cards.
+ *   - sentences become ` · ` separated clauses
+ *   - "deal N damage to the opponent" -> "deal N damage" (the opponent is the default)
+ *   - "restore N of your HP" -> "your HP +N"
+ * Meaning-preserving only — nothing here drops information.
+ */
+const EN_SHORTEN: Array<[RegExp, string | ((...a: string[]) => string)]> = [
+  [/\.\s+/g, " · "],
+  [/(deal|Deal)\s+(\d+)\s+damage\s+to\s+the\s+opponent/g, "$1 $2 damage"],
+  [/(restore|Restore)\s+(\d+)\s+of\s+your\s+HP/g, (_m: string, r: string, n: string) => (r === "Restore" ? "Your" : "your") + ` HP +${n}`],
+  [/\bat the start of each (?:of your )?turns?\b/gi, "each turn"],
+  [/\bAt the start of each (?:of your )?turns?:\s*/g, ""],
+  [/\bthe attacking monster\b/g, "the attacker"],
+  [/\bthe opponent's field\b/g, "the enemy field"],
+  [/\byour own field\b/g, "your field"],
+  [/\bof cast cost (\d+) or less\b/g, "of cast cost $1-"],
+  [/\bwith ATK (\d+) or less\b/g, "with ATK $1-"],
+  [/\bmonsters? of cost (\d+) or less\b/g, "monster of cost $1-"],
+  [/\bwhile you control (\d+)\+ monsters\b/g, "with $1+ monsters"],
+  [/\bboth players' turns\b/g, "both turns"],
+  [/\bEnemy monster attacks only consume 1 durability\b/g, "Enemy attacks consume only 1 durability"],
+  [/\bIf hatching completes with durability left,?\s*/g, "Hatches with durability left → "],
+  [/\s+·\s+·\s+/g, " · "],
+  [/\s{2,}/g, " "],
+];
+function shortenEn(s: string): string {
+  let out = s;
+  for (const [re, rep] of EN_SHORTEN) out = typeof rep === "string" ? out.replace(re, rep) : out.replace(re, rep as (s: string, ...a: string[]) => string);
+  return out.replace(/\s*·\s*$/, "").trim();
+}
 
 /** Attach nameEn/textEn to every card (explicit map -> generator dictionaries -> Korean fallback). */
 export function applyEnglish(pools: Array<Record<string, CardDef>>): void {
@@ -432,7 +481,8 @@ export function applyEnglish(pools: Array<Record<string, CardDef>>): void {
     for (const id of Object.keys(pool)) {
       const c = pool[id];
       c.nameEn = NAMES[id] ?? genNameEn(c.name) ?? c.name;
-      c.textEn = TEXTS[id] ?? genTextEn(c.text) ?? c.text;
+      const en = TEXTS[id] ?? genTextEn(c.text);
+      c.textEn = en ? shortenEn(en) : c.text;
     }
   }
 }

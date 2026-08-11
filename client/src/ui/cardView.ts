@@ -118,9 +118,13 @@ function normalizeFitGroups(): void {
     }
     if (!live.length) { fitGroups.delete(key); continue; }
     if (!isFinite(need)) continue;
-    const px = Math.max(need, base * GROUP_FLOOR);
+    // ONE size for the whole group. Cards that would need less than the floor are
+    // NOT shrunk below it — they render at the group size and lose their tail to
+    // the .is-clipped fade instead. Shrinking them further was what made the sizes
+    // look random, and those cards were unreadable at that size anyway.
+    const px = Math.min(Math.max(need, base * GROUP_FLOOR), base);
     for (const b of live) {
-      b.style.fontSize = Math.min(px, ownFit.get(b) ?? px, baseFit.get(b) ?? px).toFixed(2) + "px";
+      b.style.fontSize = px.toFixed(2) + "px";
       const r = b.getBoundingClientRect(), c = contentSize(b);
       b.classList.toggle("is-clipped", c.h > r.height - 0.5 || c.w > r.width - 0.5);
     }
@@ -284,8 +288,17 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     .replace(/ \/ /g, "\n")
     .trim();
   const hasCast = c.t !== "starter" && pc !== c.cost;
-  if ((txt && txt !== "—") || hasCast) {
-    const effCls = "card-eff" + (txt.length > 140 ? " card-eff--tiny" : txt.length > 80 ? " card-eff--small" : "");
+  // Passive keywords live on their own chip row instead of being buried in the
+  // sentence (rule R3). The row is a CHILD of .card-eff on purpose: that box is
+  // already clipped to the frame's text plate and already auto-fitted, so adding
+  // keywords can never push anything outside the card art.
+  const keyChips = cardPassives(c);
+  if ((txt && txt !== "—") || hasCast || keyChips.length) {
+    // No length buckets: every effect plate starts at the SAME CSS size and
+    // fitToBox + the size-group pass decide the final one. The old --small/--tiny
+    // buckets gave cards different starting sizes, so the "one size per screen"
+    // pass could never actually land on one size.
+    const effCls = "card-eff";
     const eff = el("div", effCls);
     if (hasCast) {
       // monsters are SUMMONED, spells/traps are CAST — label the play-cost badge accordingly
@@ -297,6 +310,19 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
       cast.addEventListener("pointerleave", () => tip.classList.remove("show"));
       eff.appendChild(cast);
     }
+    if (keyChips.length) {
+      const lang2 = getLang();
+      const row = el("div", "card-keys" + (txt && txt !== "—" ? "" : " card-keys--only"));
+      for (const k of keyChips) {
+        const pd = PASSIVES[k];
+        if (!pd) continue;
+        // data-psv keeps the zoom view's keyword panel highlight working
+        row.appendChild(el("span", "kw psv", lang2 === "ja" ? pd.ja.name : lang2 === "en" ? pd.en.name : pd.ko.name)).setAttribute("data-psv", k);
+      }
+      if (row.childElementCount) eff.appendChild(row);
+    }
+    // effect text LAST: keywords are labels and must survive the .is-clipped fade,
+    // which always eats the tail of the plate
     if (txt && txt !== "—") eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${decorateTags(decoratePassives(c, txt))}</span>`));
     fitToBox(eff); // 실측 자동 축소 — 어떤 길이의 효과도 항상 프레임 텍스트판 안에
     node.appendChild(eff);

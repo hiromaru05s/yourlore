@@ -98,6 +98,21 @@
   mask-image: linear-gradient(180deg, #000 72%, transparent 100%);
 }
 .card-name.is-clipped { align-items: flex-start; }
+/* ---- keyword chip row (rule R3) --------------------------------------------
+   Sits INSIDE .card-eff, so it shares the plate's clipping and auto-fit and can
+   never spill onto the art. Keywords read as labels, not as sentence text. */
+.card-keys {
+  flex: 0 0 auto; display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 0.18em 0.3em; margin-bottom: 0.22em; max-width: 100%;
+}
+.card-keys .kw {
+  display: inline-block; padding: 0.06em 0.38em; border-radius: 999px;
+  background: #2b245012; border: 1px solid #2b245038;
+  font-size: 0.86em; font-weight: 800; letter-spacing: .01em; line-height: 1.25;
+  color: #3a3358; white-space: nowrap;
+}
+/* keyword-only cards: nothing follows, so no gap needed */
+.card-keys--only { margin-bottom: 0; }
 .card-eff--small { font-size: 0.375em; line-height: 1.1; }
 .card-eff--tiny { font-size: 0.33em; line-height: 1.08; }
 /* spell/trap/starter have no stats strip → plate extends to the bottom (y 63.6–95.3%) */
