@@ -1544,6 +1544,15 @@ export const STARTER_DECK = [
   "STARTER_MANA",
 ];
 
+/** 보물상자 "계열" 전체 — 마스터 미믹(chestLock)이 봉인하는 대상.
+ *  star:"chest"(스타터 보물상자) 외에 복권형 보물상자 스펠도 반드시 포함한다.
+ *  (예전엔 star==="chest"만 봤기 때문에 행운/길드의 보물상자가 봉인을 통과했다.)
+ *  어튠 - 마(AMA)는 "패의 보물상자를 버리는" 카드라 봉인 대상이 아니다 — 카드 텍스트 명시. */
+export const CHEST_CARD_IDS = new Set(["STARTER_CHEST", "LUCKY_CHEST", "GUILD_CHEST"]);
+export function isChestCard(c: { id: string; star?: string }): boolean {
+  return c.star === "chest" || CHEST_CARD_IDS.has(c.id);
+}
+
 export function frameFor(t: CardType): string {
   if (t === "mon") return "/frames/red.webp";
   if (t === "trap") return "/frames/green.webp";

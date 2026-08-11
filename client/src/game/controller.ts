@@ -12,7 +12,7 @@ import { createGame, reduce, playCost } from "../shared/engine";
 import { botDecide, pickBotDeck, type BotDifficulty } from "../shared/bot";
 import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
-import { GameLog } from "../ui/log";
+import { GameLog, logToText } from "../ui/log";
 import * as A from "../ui/anim";
 import { cardPicker, cardPickerMulti, confirmDialog, treasureModal, winModal } from "../ui/modal";
 import { api } from "../net/api";
@@ -364,11 +364,11 @@ export abstract class BaseController implements BoardHandlers {
     return lines;
   }
 
-  private stripHtml(html: string): string {
-    const d = document.createElement("div");
-    d.innerHTML = html;
-    return (d.textContent ?? "").trim();
-  }
+  /** Log HTML → plain text. MUST localize the <b class="log-card"> anchors first:
+   *  the engine writes Korean card names inside them and the battle log swaps them
+   *  at render time, so naive textContent leaked Korean names into the Japanese
+   *  effect-result popup / blocked-play toast / defeat cause. */
+  private stripHtml(html: string): string { return logToText(html); }
 
   private defOf(id: string | undefined, uid: string): CardInst | null {
     if (!id) return null;
@@ -473,7 +473,9 @@ export abstract class BaseController implements BoardHandlers {
       }
       if (g.pending.kind === "seek" || g.pending.kind === "recall") {
         const me = g.players[this.you];
-        const pool = g.pending.kind === "seek" ? me.deck : me.discard;
+        // 리콜: 방금 사용한 리콜 카드 자신은 이미 묘지에 들어가 있다 → 선택지에서 제외
+        const ex = (g.pending.data as { exclude?: string } | undefined)?.exclude;
+        const pool = g.pending.kind === "seek" ? me.deck : me.discard.filter((c) => c.uid !== ex);
         cardPicker(getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint, pool, (uid) => this.submit({ type: "pick", uid }));
       }
       return; // oppMon/myMon resolved by board clicks

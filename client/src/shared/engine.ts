@@ -13,7 +13,7 @@
 import type {
   Action, CardInst, FieldMon, GameEvent, GameState, PlayerState, ReduceResult, Side, TrapSet,
 } from "./types";
-import { ALL_IDS, DB, STARTERS, TRIBES, DEFAULT_DECK_8, RANDOM_CARDS, sanitizeDeck, hasPassive, PASSIVES } from "./cards";
+import { ALL_IDS, DB, STARTERS, TRIBES, DEFAULT_DECK_8, RANDOM_CARDS, sanitizeDeck, hasPassive, PASSIVES , isChestCard } from "./cards";
 
 // ---------- deterministic PRNG (mulberry32) ----------
 function rand(g: GameState): number {
@@ -577,7 +577,7 @@ function bloodSecretDestroy(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon)
 function offerReroll(g: GameState, ctx: Ctx, card: CardInst): void {
   if (!g._wheelSnap) return;
   if (g.over || g.pending) { g._wheelSnap = null; return; } // 스펠이 자체 pending을 열었으면 재굴림 생략
-  g.pending = { kind: "reroll", hint: `운명의 수레바퀴 — ${card.name} 의 결과를 다시 굴릴 수 있다`, hintJa: `運命の輪 — ${card.name} の結果を振り直せる`, reason: "reroll", allowCancel: true };
+  g.pending = { kind: "reroll", hint: `운명의 수레바퀴 — ${cn(card)} 의 결과를 다시 굴릴 수 있다`, hintJa: `運命の輪 — ${cn(card)} の結果を振り直せる`, reason: "reroll", allowCancel: true };
   ctx.ev.push({ type: "needTarget", pending: g.pending });
 }
 
@@ -2082,11 +2082,9 @@ function luckyChest(g: GameState, ctx: Ctx, p: PlayerState): void {
     p.maxMana += 3; const n = ctx.drawN(p, 2);
     ctx.log(`  └ 🎰 잭팟! 최대 마나 +3, ${n}장 드로우`, `  └ 🎰 ジャックポット！最大マナ +3, ${n}枚ドロー`);
   } else if (sum <= 5) {
-    if (o.field.length < FIELD_MAX) {
-      const m: FieldMon = { uid: newUID(g), ...structuredClone(DB.MIMIC2), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn, token: true };
-      o.field.push(m);
-      ctx.ev.push({ type: "summon", player: side(g, o), uid: m.uid, id: m.id });
-    }
+    // spawnToken 경유 필수: 인라인으로 field.push 하면 약화술식·트릭룸(applyFieldGlobals)과
+    // 등장 오라(applyEnterAura)가 통째로 빠진다 — 마스터 미믹에 弱化術式이 안 걸리던 원인.
+    spawnToken(g, ctx, o, "MIMIC2");
     ctx.log(`  └ <span class="dmg">꽝! 상대 필드에 마스터 미믹(10/3) 소환</span>`, `  └ <span class="dmg">ハズレ！相手の場にマスターミミック(10/3)召喚</span>`);
   } else if (sum <= 8) {
     p.maxMana += 1;
@@ -2110,11 +2108,7 @@ function openTreasure(g: GameState, ctx: Ctx, p: PlayerState): void {
   else {
     // 꽝(dud): spawn a Mimic (3/2) on the OPPONENT's field — the risk of cracking chests
     const o = g.players[0] === p ? g.players[1] : g.players[0];
-    if (o.field.length < FIELD_MAX) {
-      const m: FieldMon = { uid: newUID(g), ...structuredClone(DB.MIMIC), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn, token: true };
-      o.field.push(m);
-      ctx.ev.push({ type: "summon", player: side(g, o), uid: m.uid, id: m.id });
-    }
+    spawnToken(g, ctx, o, "MIMIC"); // 위와 동일 — 전역 효과/오라를 타야 한다
     txt = "🎲 1 → 꽝! 상대 필드에 미믹(3/2) 소환"; txtJa = "🎲 1 → ハズレ！相手の場にミミック(3/2)召喚"; kind = "mimic";
   }
   ctx.log(`<span class="t">${p.name}</span> 보물상자 → <span class="good">${txt}</span>`, `<span class="t">${p.name}</span> 宝箱 → <span class="good">${txtJa}</span>`);
@@ -2299,7 +2293,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) { ctx.log(`  └ <span class="dmg">침묵의 거신</span>이 필드에 있어 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の巨神</span>が場にいるため魔法を使用できません`); return; }
     if (playCost(card, p) <= 5 && g.players.some((pl) => pl.field.some((m) => m.aura === "sealLow"))) { ctx.log(`  └ <span class="dmg">침묵의 파수꾼</span>이 필드에 있어 코스트 5 이하 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の番人</span>が場にいるためコスト5以下の魔法を使用できません`); return; }
     if (p.spellSealTurn) { ctx.log(`  └ <span class="dmg">침묵의 심판</span>: 이번 턴 동안 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の審判</span>: このターン中は魔法を使用できません`); return; }
-    if (card.star === "chest" && chestLocked(g)) { ctx.log(`  └ <span class="dmg">행운의 보물상자</span>: 보물상자 사용 봉인 중`, `  └ <span class="dmg">幸運の宝箱</span>: 宝箱の使用は封印中`); return; }
+    if (isChestCard(card) && chestLocked(g)) { ctx.log(`  └ <span class="dmg">${cn(DB.MIMIC2)}</span>: 보물상자 사용 봉인 중`, `  └ <span class="dmg">${cn(DB.MIMIC2)}</span>: 宝箱の使用は封印中`); return; }
     p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1);
     ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: card.star === "trash" ? "vanish" : "discard" });
     if (tryNullSpell(g, ctx, card)) { p.discard.push(card); return; } // negated → consumed, effect nullified
@@ -2373,6 +2367,9 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (card.id === "MASSACRE" && o0.field.length === 0) { ctx.log("  └ 파괴할 적 몬스터가 없습니다", "  └ 破壊する敵モンスターがいません"); return; }
     if (card.id === "SCRAPPER" && [...p.deck, ...p.discard].filter((c) => c.cost <= 1).length < 2) { ctx.log("  └ 덱·묘지에 코스트 1 이하 카드가 2장 없습니다", "  └ デッキ・墓地にコスト1以下のカードが2枚ありません"); return; }
     if (card.ench && p.traps.length + p.enchants.length >= ST_MAX) { ctx.log(`  └ <span class="dmg">마법·함정 존이 가득 찼습니다 (최대 ${ST_MAX})</span>`, `  └ <span class="dmg">魔法・罠ゾーンが満杯です (最大 ${ST_MAX})</span>`); return; }
+    // 마스터 미믹(chestLock): 보물상자 "계열" 전부 봉인. 행운/길드의 보물상자는 스타터가 아니라
+    // 스펠이라 star==="chest" 검사만 있던 예전 가드를 통째로 빠져나갔다.
+    if (isChestCard(card) && chestLocked(g)) { ctx.log(`  └ <span class="dmg">${cn(DB.MIMIC2)}</span>: 보물상자 사용 봉인 중`, `  └ <span class="dmg">${cn(DB.MIMIC2)}</span>: 宝箱の使用は封印中`); return; }
 
     p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1); p.discard.push(card);
     if (tryNullSpell(g, ctx, card)) return;
@@ -2459,13 +2456,15 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
     }
     if (a === "seek") {
-      if (!p.deck.length && !p.discard.length) { ctx.log("  └ 덱이 비어있음", "  └ デッキが空"); return; }
+      if (!p.deck.length) { ctx.log("  └ 덱이 비어있음", "  └ デッキが空"); return; } // 시크는 덱에서만 고른다
       g.pending = { kind: "seek", hint: "덱에서 1장 선택", hintJa: "デッキから1枚選択", reason: "seek", allowCancel: true };
       ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
     }
     if (a === "recall") {
-      if (!p.discard.length) { ctx.log("  └ 버린 패가 없음", "  └ 捨て札がない"); return; }
-      g.pending = { kind: "recall", hint: "버린 패에서 1장 선택", hintJa: "捨て札から1枚選択", reason: "recall", allowCancel: true };
+      // 주의: 이 시점에 리콜 카드 자신이 이미 p.discard 에 들어가 있다(플레이 시 push).
+      // 그래서 예전엔 묘지가 "비어 있어도" length>=1 이라 발동됐고, 자기 자신을 회수할 수도 있었다.
+      if (!p.discard.some((c) => c.uid !== card.uid)) { ctx.log("  └ 묘지가 비어 있습니다", "  └ 墓地が空です"); return; }
+      g.pending = { kind: "recall", hint: "버린 패에서 1장 선택", hintJa: "捨て札から1枚選択", reason: "recall", allowCancel: true, data: { exclude: card.uid } };
       ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
     }
     if (a === "exilePick") {
@@ -2638,6 +2637,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     const i = p.deck.findIndex((c) => c.uid === uid);
     if (i >= 0) { p.hand.push(p.deck.splice(i, 1)[0]); shuffle(g, p.deck); ctx.log(`<span class="t">${p.name}</span> 시크 → 1장 서치`, `<span class="t">${p.name}</span> シーク → 1枚サーチ`); }
   } else if (pending.kind === "recall") {
+    if (pending.reason === "recall" && d.exclude && uid === d.exclude) return; // 리콜 카드 자신은 회수 대상이 아니다
     const i = p.discard.findIndex((c) => c.uid === uid);
     if (i >= 0) {
       if (pending.reason === "exilePick") {

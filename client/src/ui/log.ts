@@ -14,6 +14,27 @@ type Entry =
   | { kind: "header"; turn: number; name: string; isBot: boolean; mine?: boolean }
   | { kind: "line"; ko: string; ja: string; mine?: boolean };
 
+/** Replace every <b class="log-card" data-card="ID"> in a log fragment with the
+ *  card's name in the CURRENT language. The engine emits Korean names inside
+ *  those tags on purpose (they are language-neutral anchors) — anything that
+ *  turns log HTML into plain text MUST run this first, or Korean names leak
+ *  into JA/EN (효과 결과 팝업·차단 토스트가 그랬다). */
+export function localizeLogCards(node: HTMLElement): void {
+  node.querySelectorAll<HTMLElement>(".log-card").forEach((el) => {
+    const id = el.dataset.card;
+    const def = id ? (DB[id] ?? STARTERS[id]) : undefined;
+    if (def) el.textContent = cardName({ uid: "", ...def });
+  });
+}
+
+/** Log HTML → plain text, with card names localized. */
+export function logToText(html: string): string {
+  const d = document.createElement("div");
+  d.innerHTML = html;
+  localizeLogCards(d);
+  return (d.textContent ?? "").trim();
+}
+
 export class GameLog {
   private el: HTMLElement;
   private entries: Entry[] = [];
@@ -71,13 +92,10 @@ export class GameLog {
 
   /** Localize each clickable card name to the current language + color it by card type. */
   private localizeCards(node: HTMLElement): void {
+    localizeLogCards(node);
     node.querySelectorAll<HTMLElement>(".log-card").forEach((el) => {
-      const id = el.dataset.card;
-      const def = id ? this.cardDef(id) : undefined;
-      if (def) {
-        el.textContent = cardName({ uid: "", ...def });
-        el.classList.add("lc-" + def.t); // lc-mon / lc-spell / lc-trap / lc-starter
-      }
+      const def = el.dataset.card ? this.cardDef(el.dataset.card) : undefined;
+      if (def) el.classList.add("lc-" + def.t); // lc-mon / lc-spell / lc-trap / lc-starter
     });
   }
 
