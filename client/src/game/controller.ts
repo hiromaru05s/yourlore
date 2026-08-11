@@ -65,6 +65,7 @@ export abstract class BaseController implements BoardHandlers {
   private turnStartedWall = 0; // wall-clock ms when the current turn's timer started (anti instant-skip)
   private lastEndTurnAt = 0;   // 턴종료 연타 가드: 마지막 endTurn 제출 시각
   private purgePicks: string[] | null = null; // multi-select purge: remaining queued picks
+  private autoTarget: string | null = null; // drag-to-attack: defender chosen before the pending exists
   protected introShown = false; // coin-toss reveal plays once at game start
 
   constructor(root: HTMLElement, you: Side, exits: ControllerExits) {
@@ -107,7 +108,14 @@ export abstract class BaseController implements BoardHandlers {
       : t("play.block.cond");
     this.cantPlayToast(msg);
   }
-  onAttack(uid: string) { this.fastForward(); this.submit({ type: "attack", uid }); }
+  onAttack(uid: string, targetUid?: string | null) {
+    this.fastForward();
+    // drag-to-attack already knows the defender: stash it so the "choose a target"
+    // pending the engine raises right after is answered automatically.
+    this.autoTarget = targetUid ?? null;
+    this.submit({ type: "attack", uid });
+  }
+  onBlockedAttack() { this.cantPlayToast(t("attack.block.guarded")); }
   onReorder(from: number, to: number) { this.fastForward(); this.submit({ type: "reorder", from, to }); }
   onChooseTarget(uid: string | null) { this.fastForward(); this.submit({ type: this.state.pending?.kind === "seek" || this.state.pending?.kind === "recall" ? "pick" : "chooseTarget", uid } as Action); }
   onBuyMarket(i: number) { this.fastForward(); this.submit({ type: "buyMarket", i }); }
@@ -470,6 +478,14 @@ export abstract class BaseController implements BoardHandlers {
         void confirmDialog({ title: t("wheel.title"), body: t("wheel.body"), confirm: t("wheel.reroll"), cancel: t("wheel.keep") })
           .then((re) => this.submit({ type: "pick", uid: re ? "re" : null }));
         return;
+      }
+      // drag-to-attack: the defender was picked during the drag → answer immediately
+      if (g.pending.kind === "oppMon" && g.pending.reason === "attack" && this.autoTarget) {
+        const want = this.autoTarget; this.autoTarget = null;
+        if (g.players[1 - this.you].field.some((m) => m.uid === want)) {
+          setTimeout(() => this.submit({ type: "chooseTarget", uid: want }), 0);
+          return;
+        }
       }
       if (g.pending.kind === "seek" || g.pending.kind === "recall") {
         const me = g.players[this.you];

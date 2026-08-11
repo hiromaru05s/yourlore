@@ -83,6 +83,50 @@ function contentSize(box: HTMLElement): { w: number; h: number } {
   return { w: right - left, h: bottom - top };
 }
 
+// ---- one text size per screen -------------------------------------------------
+// Fitting each card on its own made every card a different size ("テキストサイズが
+// バラバラ"). Boxes of the SAME role and the SAME rendered width now form a group
+// and all adopt the group's smallest fit, so a whole hand / market / gallery row
+// reads at one size. A relative floor keeps one wordy card from crushing the rest —
+// those get .is-clipped (top-aligned + bottom fade) instead.
+const GROUP_FLOOR = 0.62;                                   // never below 62% of the group's design size
+const fitGroups = new Map<string, Set<HTMLElement>>();
+const ownFit = new WeakMap<HTMLElement, number>();          // px this box needs on its own
+const baseFit = new WeakMap<HTMLElement, number>();         // px the CSS asks for (unshrunk)
+let normQueued = false;
+
+function groupKey(box: HTMLElement, w: number): string {
+  const role = box.classList.contains("card-name") ? "name" : "eff";
+  return `${role}:${Math.round(w)}`;
+}
+function queueNormalize(): void {
+  if (normQueued) return;
+  normQueued = true;
+  setTimeout(() => { normQueued = false; normalizeFitGroups(); }, 0);
+}
+function normalizeFitGroups(): void {
+  for (const [key, set] of fitGroups) {
+    const live: HTMLElement[] = [];
+    let need = Infinity, base = 0;
+    for (const b of set) {
+      if (!b.isConnected) { set.delete(b); continue; }
+      const f = ownFit.get(b);
+      if (f == null) continue;
+      live.push(b);
+      if (f < need) need = f;
+      base = Math.max(base, baseFit.get(b) ?? 0);
+    }
+    if (!live.length) { fitGroups.delete(key); continue; }
+    if (!isFinite(need)) continue;
+    const px = Math.max(need, base * GROUP_FLOOR);
+    for (const b of live) {
+      b.style.fontSize = Math.min(px, ownFit.get(b) ?? px, baseFit.get(b) ?? px).toFixed(2) + "px";
+      const r = b.getBoundingClientRect(), c = contentSize(b);
+      b.classList.toggle("is-clipped", c.h > r.height - 0.5 || c.w > r.width - 0.5);
+    }
+  }
+}
+
 function fitToBox(box: HTMLElement, minPx = 3.5): void {
   let tries = 0, lastW = -1, lastH = -1;
   const run = (): void => {
@@ -95,6 +139,7 @@ function fitToBox(box: HTMLElement, minPx = 3.5): void {
     if (Math.abs(b0.width - lastW) < 0.5 && Math.abs(b0.height - lastH) < 0.5) return;
     lastW = b0.width; lastH = b0.height;
     box.style.fontSize = "";
+    baseFit.set(box, parseFloat(getComputedStyle(box).fontSize));
     let guard = 0;
     while (guard++ < 14) {
       // 박스도 rect로 재야 한다(줌 등 ancestor transform이 있으면 client*와 단위가 어긋남)
@@ -120,6 +165,13 @@ function fitToBox(box: HTMLElement, minPx = 3.5): void {
     const b2 = box.getBoundingClientRect();
     const c2 = contentSize(box);
     box.classList.toggle("is-clipped", c2.h > b2.height - 0.5 || c2.w > b2.width - 0.5);
+    // join (or move to) the size group and let the group settle on one size
+    ownFit.set(box, parseFloat(getComputedStyle(box).fontSize));
+    const key = groupKey(box, b2.width);
+    for (const [k, set] of fitGroups) if (k !== key) set.delete(box);
+    if (!fitGroups.has(key)) fitGroups.set(key, new Set());
+    fitGroups.get(key)!.add(box);
+    queueNormalize();
   };
   setTimeout(run, 0);
   // 카드가 리사이즈되면 다시 맞춘다 (한 번만 맞추면 리사이즈 후 글자가 잘린 채 남는다).

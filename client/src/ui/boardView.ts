@@ -7,7 +7,7 @@ import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { effMaxMana, playCost, buyCost, effAtk, effDef, curHp } from "../shared/engine";
 import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
-import { cardPicker, deckViewer } from "./modal";
+import { cardPicker, deckViewer , showControlsHelp } from "./modal";
 import { cardEl } from "./cardView";
 import { bindZoom, zoomCard, setPlayOrigin } from "./anim";
 import { t, getLang } from "../i18n";
@@ -53,7 +53,10 @@ const ST_SLOTS = 7;
 export interface BoardHandlers {
   onPlay(uid: string): void;
   onBlockedPlay(uid: string): void;
-  onAttack(uid: string): void;
+  /** targetUid: drag-to-attack picked the defender up front (undefined = let the engine ask). */
+  onAttack(uid: string, targetUid?: string | null): void;
+  /** Tried to hit the player directly while enemy monsters are still standing. */
+  onBlockedAttack(): void;
   onReorder(from: number, to: number): void;
   onChooseTarget(uid: string | null): void;
   onBuyMarket(i: number): void;
@@ -87,6 +90,7 @@ export class GameView {
           <button class="btn btn-danger giveup-btn" id="giveupBtn"><svg class="gv-flag" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M6 2a1 1 0 0 1 1 1v.6h10.3a.7.7 0 0 1 .58 1.1L16.4 8l1.48 3.3a.7.7 0 0 1-.58 1.1H7V21a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1z"/></svg><span class="gv-label">${t("game.surrender")}</span></button>
         </div>
         <button class="mute-fab" id="muteBtn" title="${t("game.mute")}" aria-label="${t("game.mute")}"></button>
+        <button class="help-fab" id="helpBtn" title="${t("help.title")}" aria-label="${t("help.title")}"><span class="hf-ico">?</span><span class="hf-label">${t("help.open")}</span></button>
         <div class="stage">
           <div class="board-col">
             <div class="pcluster pcluster--opp">
@@ -138,6 +142,7 @@ export class GameView {
     (this.q("giveupBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
     // sound button (round button below the logo): click = volume slider popover
     // (ON/OFF만 있던 것을 인게임 볼륨 조절로 확장 — 슬라이더 0 = 음소거)
+    (this.q("helpBtn") as HTMLButtonElement).onclick = () => showControlsHelp();
     const muteBtn = this.q("muteBtn") as HTMLButtonElement;
     const SPK_ON = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.6a4 4 0 010 6.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
     const SPK_OFF = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
@@ -413,7 +418,18 @@ export class GameView {
       // "현재/최대" exactly like the field tile (v29: the zoom used to show max HP only,
       // so a 4/20 monster read as a healthy 20 in the view players trade off).
       bindZoom(card, { ...m, atk: effAtk(p, m), def: effDef(p, m) }, { now: curHp(p, m), max: effDef(p, m) });
-      if (isMe && myTurn && !pending && !g.over && p.field.length > 1) this.enableReorder(card, idx, mz);
+      // 드래그 = 공격(상대 몬스터/초상화로) + 내 필드 안에서는 순서 변경.
+      // 예전엔 몬스터가 2체 이상일 때만 드래그가 붙어서 1체일 땐 공격 드래그가 아예 없었다.
+      if (isMe && myTurn && !pending && !g.over && (canAttack || p.field.length > 1)) {
+        const opp = g.players[1 - (g.players.indexOf(p) as Side)];
+        this.enableMonsterDrag(card, idx, mz, {
+          uid: m.uid,
+          canReorder: p.field.length > 1,
+          canAttack,
+          oppHasMon: opp.field.length > 0,
+          directOnly: !!m.directOnly,
+        });
+      }
       mz.appendChild(card);
     });
     for (let i = p.field.length; i < MON_SLOTS; i++) mz.appendChild(this.slotEl());
@@ -489,7 +505,16 @@ export class GameView {
    * - on touch, if the long-press window already elapsed, the zoom owns
    *   the gesture and we abort instead of dragging behind the overlay.
    */
-  private enableReorder(card: HTMLElement, index: number, zone: HTMLElement): void {
+  /** Pointer drag on one of MY monsters:
+   *   - sideways inside my own monster zone  → reorder (drop marker)
+   *   - up toward the opponent               → ATTACK (drop on a monster, or on the
+   *     enemy portrait for a direct attack)
+   *  Playing a card is already a drag, so attacking had to become one too. Tap still
+   *  attacks (desktop habit) and a long press still zooms. */
+  private enableMonsterDrag(
+    card: HTMLElement, index: number, zone: HTMLElement,
+    o: { uid: string; canReorder: boolean; canAttack: boolean; oppHasMon: boolean; directOnly: boolean },
+  ): void {
     card.style.touchAction = "none"; // keep pointermove alive on touch
     // native HTML5 drag (e.g. of the card art <img>) fires pointercancel and
     // kills our pointer stream — suppress it so drags stay pointer-based
@@ -503,19 +528,49 @@ export class GameView {
       let marker: HTMLElement | null = null;
       let to = index;
       let done = false;
+      let mode: "reorder" | "attack" = "reorder";
+      let hot: HTMLElement | null = null; // currently highlighted attack target
 
       const others = (): DOMRect[] =>
         ([...zone.children] as HTMLElement[])
           .filter((el) => el.classList.contains("card") && el !== card)
           .map((el) => el.getBoundingClientRect());
 
+      const setHot = (el: HTMLElement | null): void => {
+        if (hot === el) return;
+        hot?.classList.remove("is-atk-target");
+        hot = el;
+        hot?.classList.add("is-atk-target");
+      };
+
+      /** What is under the pointer? (the ghost is pointer-events:none so it never blocks) */
+      const targetAt = (x: number, y: number): { mon: HTMLElement | null; portrait: HTMLElement | null } => {
+        const el = document.elementFromPoint(x, y) as HTMLElement | null;
+        return {
+          mon: (el?.closest("#oppRow .zone-mon .card") as HTMLElement | null) ?? null,
+          portrait: (el?.closest("#portraitOpp") as HTMLElement | null) ?? null,
+        };
+      };
+
       const place = (x: number, y: number): void => {
-        if (!ghost || !marker) return;
+        if (!ghost) return;
         ghost.style.left = `${x}px`;
         ghost.style.top = `${y}px`;
+        const zr = zone.getBoundingClientRect();
+        const t = o.canAttack ? targetAt(x, y) : { mon: null, portrait: null };
+        // above my own monster row = aiming at the opponent
+        mode = o.canAttack && (!!t.mon || !!t.portrait || y < zr.top - 10) ? "attack" : "reorder";
+        ghost.classList.toggle("drag-attack", mode === "attack");
+        if (mode === "attack") {
+          if (marker) marker.style.display = "none";
+          setHot(t.mon ?? t.portrait);
+          return;
+        }
+        setHot(null);
+        if (!marker) return;
+        marker.style.display = "";
         const rects = others();
         to = rects.filter((r) => x > r.left + r.width / 2).length;
-        const zr = zone.getBoundingClientRect();
         const mx = rects.length === 0 ? zr.left + 6 : to === 0 ? rects[0].left - 4 : rects[to - 1].right + 1;
         marker.style.left = `${mx - zr.left}px`;
       };
@@ -523,6 +578,7 @@ export class GameView {
       const cleanup = (): void => {
         done = true;
         ghost?.remove(); marker?.remove();
+        setHot(null);
         card.classList.remove("is-dragging");
         window.removeEventListener("pointermove", onMove);
         window.removeEventListener("pointerup", onUp);
@@ -542,20 +598,33 @@ export class GameView {
           ghost.style.height = `${card.offsetHeight}px`;
           document.body.appendChild(ghost);
           card.classList.add("is-dragging");
-          marker = document.createElement("div");
-          marker.className = "drop-marker";
-          zone.appendChild(marker);
+          if (o.canReorder) {
+            marker = document.createElement("div");
+            marker.className = "drop-marker";
+            zone.appendChild(marker);
+          }
         }
         place(ev.clientX, ev.clientY);
       };
 
-      const onUp = (): void => {
+      const onUp = (ev: PointerEvent): void => {
         const dragged = !!ghost;
+        const t = dragged && o.canAttack ? targetAt(ev.clientX, ev.clientY) : { mon: null, portrait: null };
+        const aimed = mode === "attack";
         cleanup();
         if (!dragged) return;
-        // swallow the click that follows pointerup so it doesn't trigger an attack
+        // swallow the click that follows pointerup so it doesn't ALSO trigger an attack
         card.addEventListener("click", (ce) => { ce.stopPropagation(); ce.preventDefault(); }, { capture: true, once: true });
-        if (to !== index) this.h.onReorder(index, to);
+        if (aimed && o.canAttack) {
+          const tUid = t.mon?.dataset.uid;
+          if (tUid) { this.h.onAttack(o.uid, tUid); return; }               // dropped on a monster
+          if (t.portrait || !o.oppHasMon) {                                  // dropped on the face (or the board is clear)
+            if (o.oppHasMon && !o.directOnly) { this.h.onBlockedAttack(); return; }
+            this.h.onAttack(o.uid); return;
+          }
+          this.h.onAttack(o.uid); return;                                    // aimed forward, no precise target → engine asks
+        }
+        if (o.canReorder && to !== index) this.h.onReorder(index, to);
       };
 
       window.addEventListener("pointermove", onMove);
@@ -658,19 +727,27 @@ export class GameView {
       dropBadge();
       armedEl = null; armedKey = "";
     };
-    const armBuy = (card: HTMLElement, key: string, buy: () => void) => {
+    // 마켓 카드 조작 = 손패와 동일하게 "탭 = 확대". 구매는 더블탭으로 무장(확인 배지) →
+    // 한 번 더 탭하면 구매. (예전엔 첫 탭이 곧 구매 무장이라 손패와 규칙이 어긋났다.)
+    const TAP_MS = 260;
+    let tapTimer = 0;
+    const armBuy = (card: HTMLElement, key: string, buy: () => void, inst: CardInst) => {
       card.onclick = (e) => {
         e.stopPropagation();
-        if (armedKey === key) { disarm(); buy(); return; }
+        if (armedKey === key) { clearTimeout(tapTimer); tapTimer = 0; disarm(); buy(); return; } // 무장 상태에서 탭 = 구매
+        if (tapTimer) { clearTimeout(tapTimer); tapTimer = 0; arm(card, key); return; }          // 더블탭 = 무장
+        tapTimer = window.setTimeout(() => { tapTimer = 0; disarm(); zoomCard(inst); }, TAP_MS); // 단일 탭 = 확대
+      };
+      const arm = (c2: HTMLElement, k: string): void => {
         disarm();
-        armedEl = card; armedKey = key;
-        card.classList.add("is-armed");
+        armedEl = c2; armedKey = k;
+        c2.classList.add("is-armed");
         const badge = document.createElement("div");
         badge.className = "buy-confirm";
         badge.textContent = t("market.confirm");
         document.body.appendChild(badge);
         const place = (): void => {
-          const r = card.getBoundingClientRect();
+          const r = c2.getBoundingClientRect();
           const bw = badge.offsetWidth;
           // 카드 위에 붙이되, 화면 좌우로는 절대 안 넘치게 클램프
           const x = Math.min(Math.max(r.left + r.width / 2, bw / 2 + 6), window.innerWidth - bw / 2 - 6);
@@ -683,6 +760,8 @@ export class GameView {
         armTimer = window.setTimeout(disarm, 2500);
       };
     };
+    // 살 수 없는 카드도 탭하면 확대는 된다(손패와 동일)
+    const zoomOnTap = (card: HTMLElement, inst: CardInst) => { card.onclick = (e) => { e.stopPropagation(); zoomCard(inst); }; };
     mk.onclick = () => disarm(); // 마켓 빈 곳 클릭 시 해제
 
     // 마켓 알림이: 덱 프리셋에 등록한 카드가 뜨면 은은한 링 + 🔔 점 표시
@@ -700,7 +779,7 @@ export class GameView {
       const bc = buyCost(owner, c);
       const aff = myTurn && !g.pending && me.mana >= bc;
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc }); // same size as 제시
-      if (aff) armBuy(card, "mkt" + i, () => this.h.onBuyMarket(i));
+      if (aff) armBuy(card, "mkt" + i, () => this.h.onBuyMarket(i), c); else zoomOnTap(card, c);
       markWatch(card, c.id);
       bindZoom(card, c);
       fixed.appendChild(card);
@@ -717,7 +796,7 @@ export class GameView {
       const aff = myTurn && !g.pending && me.mana >= bc;
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc });
       card.dataset.supIdx = String(i);  // ORIGINAL supply index (display is sorted) — buy anim finds it by this
-      if (aff) armBuy(card, "sup" + i, () => this.h.onBuySupply(i));
+      if (aff) armBuy(card, "sup" + i, () => this.h.onBuySupply(i), c); else zoomOnTap(card, c);
       if (myTurn) markWatch(card, c.id); // 제시는 내 턴의 내 제시만 (상대 제시엔 표시 무의미)
       bindZoom(card, c);
       sup.appendChild(card);

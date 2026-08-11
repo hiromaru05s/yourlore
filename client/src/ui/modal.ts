@@ -126,6 +126,42 @@ export function showTribeInfo(tribe: string): void {
   mount(m);
 }
 
+/** Is this session driven by touch? Decides WHICH control scheme the help panel
+ *  describes — a phone gets the tap/drag wording, a desktop gets click/right-click.
+ *  (pointer:coarse is the input device, not the window size, so a narrow desktop
+ *  window still reads as desktop.) */
+export function isTouchInput(): boolean {
+  return typeof matchMedia === "function" && matchMedia("(pointer: coarse)").matches;
+}
+
+/** In-game "controls" panel. Opened from the ? button parked in a bottom corner. */
+export function showControlsHelp(): void {
+  const touch = isTouchInput();
+  const rows: [string, string[]][] = touch
+    ? [
+        ["help.h.cards", ["help.t.zoom", "help.t.hand"]],
+        ["help.h.play", ["help.t.play"]],
+        ["help.h.attack", ["help.t.attack", "help.t.reorder"]],
+        ["help.h.market", ["help.t.market"]],
+      ]
+    : [
+        ["help.h.cards", ["help.d.zoom"]],
+        ["help.h.play", ["help.d.play"]],
+        ["help.h.attack", ["help.d.attack", "help.d.reorder"]],
+        ["help.h.market", ["help.d.market"]],
+      ];
+  const m = document.createElement("div");
+  m.className = "modal help-modal";
+  m.innerHTML = `<h2>${t("help.title")}</h2>
+    <div class="help-body">${rows.map(([h, ks]) => `
+      <section><h3>${t(h)}</h3>${ks.map((k) => `<p>${t(k)}</p>`).join("")}</section>`).join("")}
+    </div><div class="modal-row"></div>`;
+  const ok = document.createElement("button");
+  ok.className = "btn btn-gold"; ok.textContent = t("help.close"); ok.onclick = () => closeOverlay();
+  m.querySelector(".modal-row")!.appendChild(ok);
+  mount(m);
+}
+
 /** Seek/Recall picker. Calls onPick with chosen uid (or null on cancel). */
 export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string | null) => void): void {
   const m = document.createElement("div");
