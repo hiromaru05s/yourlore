@@ -283,9 +283,16 @@
    grid 1fr | market | 1fr keeps the market centered no matter how wide the
    aside gets, and the aside can never overlap it. */
 .mid-row {
-  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  /* The side tracks keep a floor (--aside-min) so the turn clock can NEVER be
+     pushed off-screen, and the market track may shrink below its content
+     (.market-cards scrolls on phones). On the opponent's turn the supply header
+     grows by the "(opponent's offer)" label, which used to widen the market and
+     shove the clock past the right edge. */
+  display: grid;
+  grid-template-columns: minmax(var(--aside-min, 0px), 1fr) minmax(0, auto) minmax(var(--aside-min, 0px), 1fr);
   align-items: center; min-width: 0;
 }
+.mid-aside { min-width: 0; }
 /* NOTE: .market carries `margin: 0 auto` for its old flex parent — inside a
    grid that auto-margin makes it shrink-to-fit and collapse on narrow screens. */
 .mid-row > .market { grid-column: 2; margin: 0; justify-self: stretch; }

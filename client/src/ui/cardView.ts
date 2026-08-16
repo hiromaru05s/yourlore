@@ -201,6 +201,34 @@ function artEl(cardId: string, full = false): HTMLElement {
   return art;
 }
 
+/**
+ * Dice/chest cards list "roll → outcome" pairs. Written as one ` / `-joined line
+ * they read as a wall of text (rules doc R6), so they render as ROWS instead.
+ * Returns null when the text is not a table, so ordinary cards are untouched.
+ */
+function diceTable(txt: string): { head: string; rows: [string, string][] } | null {
+  // split on " / " with real spaces — a bare "10/3" (a monster's stats) is NOT a separator
+  const parts = txt.split(/\s+\/\s+/);
+  if (parts.length < 3) return null;
+  // "2·3: effect" / "6~8: effect" / "①② effect" (circled digits need no colon)
+  const ROW = /^\s*([0-9０-９]+(?:\s*[·・,、~〜\-]\s*[0-9０-９]+)*)\s*[:：]\s*(.+?)\s*$/;
+  const ROW_CIRCLE = /^\s*([\u2460-\u2473]+)\s*[:：]?\s*(.+?)\s*$/;
+  let head = "";
+  const rows: [string, string][] = [];
+  for (let i = 0; i < parts.length; i++) {
+    let seg = parts[i];
+    if (i === 0) {
+      // the first segment may carry a lead-in: "주사위 2개 합계 — 2·3: …"
+      const dash = seg.search(/[—–]/);
+      if (dash >= 0) { head = seg.slice(0, dash).trim(); seg = seg.slice(dash + 1).trim(); }
+    }
+    const r = seg.match(ROW) ?? seg.match(ROW_CIRCLE);
+    if (!r) return null;                       // any non-row segment → not a table
+    rows.push([r[1].replace(/\s+/g, ""), r[2]]);
+  }
+  return rows.length >= 3 ? { head, rows } : null;
+}
+
 export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const typeClass = c.t === "mon" ? "card--mon" : c.t === "trap" ? "card--trap" : c.t === "starter" ? "card--starter" : "card--spell";
   const sizeClass = opt.size === "mkt" ? "card--mkt" : opt.size === "hand" ? "card--hand" : "";
@@ -282,8 +310,11 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   // 이름도 실측-축소: 긴 이름(EN 포함)이 프레임 이름판을 벗어나지 않게
   fitToBox(nameEl2);
   // 효과 텍스트: "(시전 N)"/"(소환 N)" 계열 표기는 배지로 대체되므로 제거하고, 구분자를 줄바꿈으로
-  let txt = cardText(c)
-    .replace(/\s*\((?:시전|Cast|発動|소환|Summon|召喚)\s*\d+\)/g, "")
+  const rawTxt = cardText(c).replace(/\s*\((?:시전|Cast|発動|소환|Summon|召喚)\s*\d+\)/g, "").trim();
+  // dice/chest cards are detected on the RAW text — the separators become newlines
+  // just below, which would destroy the " / " that delimits the outcome rows
+  const table = rawTxt && rawTxt !== "—" ? diceTable(rawTxt) : null;
+  let txt = rawTxt
     .replace(/ · /g, "\n")
     .replace(/ \/ /g, "\n")
     .trim();
@@ -323,7 +354,19 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     }
     // effect text LAST: keywords are labels and must survive the .is-clipped fade,
     // which always eats the tail of the plate
-    if (txt && txt !== "—") eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${decorateTags(decoratePassives(c, txt))}</span>`));
+    if (table) {
+      if (table.head) eff.appendChild(el("div", "card-dice-head", decorateTags(table.head)));
+      const tb = el("div", "card-dice");
+      for (const [roll, fx] of table.rows) {
+        const row = el("div", "dr");
+        row.appendChild(el("span", "dr-roll", roll));
+        row.appendChild(el("span", "dr-fx", decorateTags(fx)));
+        tb.appendChild(row);
+      }
+      eff.appendChild(tb);
+    } else if (txt && txt !== "—") {
+      eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${decorateTags(decoratePassives(c, txt))}</span>`));
+    }
     fitToBox(eff); // 실측 자동 축소 — 어떤 길이의 효과도 항상 프레임 텍스트판 안에
     node.appendChild(eff);
   }

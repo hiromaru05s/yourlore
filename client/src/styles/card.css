@@ -113,6 +113,17 @@
 }
 /* keyword-only cards: nothing follows, so no gap needed */
 .card-keys--only { margin-bottom: 0; }
+/* ---- dice / chest outcome table (rule R6) ---------------------------------- */
+.card-dice-head { flex: 0 0 auto; font-weight: 800; opacity: .8; margin-bottom: 0.12em; }
+.card-dice { flex: 0 0 auto; display: flex; flex-direction: column; gap: 0.06em; width: 100%; text-align: left; }
+.card-dice .dr { display: flex; align-items: baseline; gap: 0.35em; line-height: 1.14; }
+.card-dice .dr-roll {
+  flex: 0 0 auto; min-width: 2.1em; text-align: center;
+  font-weight: 800; color: #2b2450;
+  background: #2b245014; border: 1px solid #2b245030; border-radius: 0.4em;
+  padding: 0 0.22em;
+}
+.card-dice .dr-fx { flex: 1 1 auto; min-width: 0; }
 .card-eff--small { font-size: 0.375em; line-height: 1.1; }
 .card-eff--tiny { font-size: 0.33em; line-height: 1.08; }
 /* spell/trap/starter have no stats strip → plate extends to the bottom (y 63.6–95.3%) */

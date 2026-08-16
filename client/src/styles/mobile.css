@@ -65,6 +65,11 @@
 
   /* timer + END TURN keep the market's right cell, just tighter */
   .mid-aside { margin-left: 6px; gap: 4px; }
+  /* reserve the clock's width on both sides of the market so it stays on screen */
+  .mid-row { --aside-min: 52px; }
+  /* the "(opponent's offer)" note wraps under the title instead of widening the panel */
+  .market-sub .sub-head .sh-opp { display: block; margin-left: 0; }
+  .market-sub--supply .sub-head { min-width: 0; max-width: 100%; }
   .end-turn-wrap .btn { width: clamp(70px, 20vw, 116px); font-size: 11px; }
 
   .opp-hand { max-width: 34vw; overflow: hidden; }
