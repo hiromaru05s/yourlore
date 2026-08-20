@@ -7,11 +7,14 @@ import { DB } from "../shared/cards";
 import { TIER_META, tierLabel } from "./tier";
 import { getLang } from "../i18n";
 
-// ---- avatars: preset = a card id, art served from /art/cards/<id>.webp ----
+// ---- avatars: preset = a card id ----
+// 아바타는 22~74px로만 그려진다 — 원본(~165KB) 대신 cards-sm(384px, ~15KB)을 쓰고,
+// 썸네일이 없을 때만 원본으로 한 번 폴백한다.
 export function avatarHtml(avatar: string | null | undefined, display: string, size = 40): string {
   const initial = (display || "?").trim().charAt(0).toUpperCase();
   const img = avatar && /^[A-Za-z0-9_]+$/.test(avatar)
-    ? `<img src="/art/cards/${avatar}.webp" alt="" loading="lazy" onerror="this.remove()">`
+    ? `<img src="/art/cards-sm/${avatar}.webp" alt="" loading="lazy" decoding="async"`
+      + ` onerror="if(this.dataset.fb){this.remove()}else{this.dataset.fb='1';this.src='/art/cards/${avatar}.webp'}">`
     : "";
   return `<span class="avatar" style="--avs:${size}px">${img}<span class="avatar-fb">${initial}</span></span>`;
 }

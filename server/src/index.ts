@@ -17,6 +17,13 @@ import { GameRoom } from "./gameRoom";
 
 export { Matchmaker, GameRoom };
 
+// A path whose last segment carries a file extension is a static file request,
+// never an SPA route. (".html" stays excluded — that IS a document.)
+const ASSET_EXT = /\.(?:webp|png|jpe?g|gif|svg|avif|ico|mp3|ogg|wav|m4a|woff2?|ttf|otf|json|txt|xml|map|css|js|mjs)$/i;
+function isAssetPath(path: string): boolean {
+  return ASSET_EXT.test(path);
+}
+
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
     const url = new URL(req.url);
@@ -155,6 +162,15 @@ export default {
     if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders(env) });
 
     // everything else → the static client (SPA fallback handled by [assets])
-    return env.ASSETS.fetch(req);
+    const res = await env.ASSETS.fetch(req);
+    // not_found_handling = "single-page-application" answers EVERY unknown path
+    // with index.html + 200 — including /art/cards/FOO.webp. A browser then
+    // downloads the HTML shell for each missing image, fails to decode it, and
+    // the art silently never appears. Assets with a file extension are not
+    // routes: give them an honest 404 so failures are visible in devtools.
+    if (isAssetPath(path) && res.headers.get("Content-Type")?.startsWith("text/html")) {
+      return new Response("not found", { status: 404, headers: { "Content-Type": "text/plain" } });
+    }
+    return res;
   },
 };

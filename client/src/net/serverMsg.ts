@@ -35,6 +35,8 @@ const M: Record<string, { ja: string; en: string }> = {
   "친구는 최대 100명까지입니다.": { ja: "フレンドは最大100人までです。", en: "Friends are capped at 100." },
   "친구에게만 대전을 신청할 수 있습니다.": { ja: "対戦申請はフレンドにのみ送れます。", en: "You can only challenge friends." },
   "이미 만료된 신청입니다.": { ja: "この申請は既に期限切れです。", en: "That challenge has already expired." },
+  // daily missions
+  "아직 달성하지 못한 임무입니다.": { ja: "まだ達成していないミッションです。", en: "You haven't completed that mission yet." },
   // coupons
   "쿠폰 코드를 입력하세요.": { ja: "クーポンコードを入力してください。", en: "Enter a coupon code." },
   "존재하지 않는 쿠폰입니다.": { ja: "存在しないクーポンです。", en: "That coupon doesn't exist." },
