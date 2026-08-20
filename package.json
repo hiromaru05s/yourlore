@@ -14,10 +14,11 @@
     "art:check": "node scripts/check-card-art.mjs",
     "art:prompts": "node scripts/export-card-art-prompts.mjs",
     "art:generate": "node scripts/generate-card-art.mjs",
+    "art:optimize": "node scripts/optimize-card-art.mjs",
     "server:dev": "npm --workspace server run dev",
     "deploy": "npm run build && wrangler deploy -c server/wrangler.toml"
   },
   "devDependencies": {
-    "wrangler": "^3.95.0"
+    "wrangler": "^4.115.0"
   }
 }

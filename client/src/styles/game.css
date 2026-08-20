@@ -127,11 +127,19 @@
   box-shadow: inset 0 0 0 1px #ff7a4d3a, inset 0 0 34px #d8542f16, 0 0 26px #d8542f24, 0 6px 20px #0006;
 }
 
-/* ---- zones column (two rows: monster / spell-trap) — sized to their slots ---- */
-.zones { display: flex; flex-direction: column; gap: var(--slot-gap); flex: 0 1 auto; min-width: 0; }
+/* ---- two field rows + a shared deck/graveyard dock on their far right ---- */
+.zones { display: flex; align-items: stretch; gap: var(--slot-gap); flex: 0 1 auto; min-width: 0; }
+.zone-lines { display: flex; flex-direction: column; gap: var(--slot-gap); min-width: 0; }
 .zone-row { display: flex; align-items: center; gap: var(--slot-gap); }
 .zone { display: flex; gap: var(--slot-gap); flex: 0 1 auto; }
-.zone-row > .inline-pile { flex: 0 0 auto; }
+.pile-dock {
+  width: var(--field-card-size);
+  height: calc(var(--field-card-size) * 2 + var(--slot-gap));
+  display: flex;
+  flex-direction: column;
+  gap: var(--slot-gap);
+  flex: 0 0 var(--field-card-size);
+}
 
 /* ---- right-side meta panel: name/turn · HP · mana · buttons · tribe · timer ---- */
 .meta-panel {
@@ -806,3 +814,153 @@
   background: linear-gradient(180deg, var(--ink-3), var(--ink-1)); border: 1px solid var(--brass-dim);
   border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow-2);
 }
+
+/* ============================================================
+   UX pass (2026-08): turn banner · event rail · target arrow ·
+   summon slam · passive flash · ambient motes · market sparkle ·
+   drag-to-play · timer urgency · result-screen polish
+   ============================================================ */
+
+/* ---- topbar event rail: mini visual timeline (card thumbs are clickable) ---- */
+.icon-rail { display: flex; align-items: center; gap: 3px; overflow: hidden; max-width: 34vw; margin-left: 10px; }
+.rail-ico, .rail-card {
+  flex: 0 0 auto; opacity: 0; transform: translateY(-6px) scale(.7);
+  transition: opacity .25s var(--ease), transform .25s var(--ease);
+}
+.rail-ico.in, .rail-card.in { opacity: .85; transform: none; }
+.rail-ico { font-size: 12px; }
+.rail-card {
+  position: relative; width: 22px; height: 22px; border-radius: 5px; overflow: hidden;
+  border: 1px solid #ffffff2e; box-shadow: 0 1px 3px #0009; cursor: zoom-in;
+}
+.rail-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rail-card i { position: absolute; right: -1px; bottom: -2px; font-style: normal; font-size: 9px; text-shadow: 0 1px 2px #000; }
+.rail-card.dmg { border-color: #ff7a4d88; }
+.rail-card.gold { border-color: var(--gold-glow); }
+.rail-card:hover { opacity: 1; transform: scale(1.25); z-index: 5; }
+
+/* ---- turn-start ribbon ---- */
+.fx-turnbanner {
+  position: fixed; left: 0; right: 0; top: 42%; z-index: 118; pointer-events: none;
+  display: flex; justify-content: center;
+  animation: tbIn .3s var(--ease);
+}
+.fx-turnbanner span {
+  font-family: var(--mono); font-weight: 800; letter-spacing: .3em; text-indent: .3em;
+  font-size: 25px; padding: 8px 46px; color: #fff;
+  background: linear-gradient(90deg, transparent, #000c 18%, #000c 82%, transparent);
+  border-top: 1px solid #ffffff2c; border-bottom: 1px solid #ffffff2c;
+}
+.fx-turnbanner.mine span { color: var(--gold-glow); text-shadow: 0 0 18px #e8c25a66; }
+.fx-turnbanner.opp span { color: var(--paper-dim); font-size: 19px; }
+.fx-turnbanner.out { animation: tbOut .3s var(--ease) forwards; }
+@keyframes tbIn { 0% { opacity: 0; transform: scaleX(.6); } 100% { opacity: 1; transform: none; } }
+@keyframes tbOut { to { opacity: 0; transform: scaleX(1.15); } }
+
+/* ---- attack targeting arrow ---- */
+.fx-arrow { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 119; pointer-events: none; }
+.fx-arrow-line {
+  fill: none; stroke: var(--vermil-hi); stroke-width: 4; stroke-linecap: round;
+  stroke-dasharray: 10 8; filter: drop-shadow(0 0 6px #ff5a3d88);
+  animation: arrowFlow .5s linear infinite;
+}
+.fx-arrow-head { fill: var(--vermil-hi); filter: drop-shadow(0 0 6px #ff5a3d88); }
+@keyframes arrowFlow { to { stroke-dashoffset: -18; } }
+
+/* ---- heavy summon slam ---- */
+.fx-slam-ring {
+  position: fixed; z-index: 116; width: 16px; height: 8px; pointer-events: none;
+  transform: translate(-50%, -50%); border-radius: 50%;
+  border: 2px solid #d8c9a866; box-shadow: 0 0 12px #d8c9a833;
+  animation: slamRing .5s var(--ease) forwards;
+}
+@keyframes slamRing { to { width: 130px; height: 44px; opacity: 0; border-width: 1px; } }
+.fx-slam-dust {
+  position: fixed; z-index: 116; width: 7px; height: 7px; border-radius: 50%;
+  background: #c9b89066; pointer-events: none; transform: translate(-50%, -50%);
+  animation: slamDust .6s var(--ease) forwards;
+}
+@keyframes slamDust { to { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(.3); opacity: 0; } }
+
+/* ---- passive-trigger flash on a field monster ---- */
+.fx-psv-flash {
+  position: fixed; z-index: 122; transform: translate(-50%, 0); pointer-events: none;
+  font-size: 12px; font-weight: 800; white-space: nowrap; padding: 3px 10px; border-radius: 999px;
+  color: #fff; text-shadow: 0 1px 2px #000; box-shadow: 0 2px 8px #000b;
+  animation: psvFlash 1.15s var(--ease) forwards;
+}
+.fx-psv-flash.good { background: #2a5a8ae8; border: 1px solid #7fb6e8aa; }
+.fx-psv-flash.bad { background: #6a2a2ae8; border: 1px solid #e87f7faa; }
+@keyframes psvFlash {
+  0% { opacity: 0; transform: translate(-50%, 8px) scale(.7); }
+  18% { opacity: 1; transform: translate(-50%, -6px) scale(1.06); }
+  80% { opacity: 1; transform: translate(-50%, -14px) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -24px) scale(.94); }
+}
+
+/* ---- ambient battlefield motes (pure CSS, GPU-cheap) ---- */
+.ambient-fx { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.ambient-fx i {
+  position: absolute; bottom: -12px; width: 5px; height: 5px; border-radius: 50%;
+  background: radial-gradient(circle, #ffe9b8cc, #ffe9b800 70%);
+  animation: moteRise linear infinite; opacity: 0;
+}
+.ambient-fx i:nth-child(1) { left: 8%;  animation-duration: 17s; animation-delay: 0s; }
+.ambient-fx i:nth-child(2) { left: 21%; animation-duration: 23s; animation-delay: 4s; width: 3px; height: 3px; }
+.ambient-fx i:nth-child(3) { left: 33%; animation-duration: 19s; animation-delay: 9s; }
+.ambient-fx i:nth-child(4) { left: 46%; animation-duration: 26s; animation-delay: 2s; width: 4px; height: 4px; }
+.ambient-fx i:nth-child(5) { left: 58%; animation-duration: 18s; animation-delay: 12s; }
+.ambient-fx i:nth-child(6) { left: 69%; animation-duration: 24s; animation-delay: 6s; width: 3px; height: 3px; }
+.ambient-fx i:nth-child(7) { left: 79%; animation-duration: 21s; animation-delay: 14s; }
+.ambient-fx i:nth-child(8) { left: 88%; animation-duration: 27s; animation-delay: 8s; width: 4px; height: 4px; }
+.ambient-fx i:nth-child(9) { left: 95%; animation-duration: 20s; animation-delay: 11s; }
+@keyframes moteRise {
+  0% { transform: translateY(0); opacity: 0; }
+  8% { opacity: .55; }
+  85% { opacity: .3; }
+  100% { transform: translateY(-105vh); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .ambient-fx { display: none; } }
+
+/* ---- market: "just became affordable" one-shot shimmer ---- */
+.now-buyable::before {
+  content: ""; position: absolute; inset: 0; z-index: 7; pointer-events: none;
+  background: linear-gradient(115deg, transparent 32%, #ffe9b855 47%, #fff2 53%, transparent 68%);
+  background-size: 240% 100%;
+  animation: buyShimmer 1s var(--ease) .1s 2;
+}
+@keyframes buyShimmer { 0% { background-position: 120% 0; } 100% { background-position: -120% 0; } }
+
+/* ---- drag-to-play ---- */
+.drag-ghost.can-drop { filter: drop-shadow(0 0 14px #7fd6a8cc) drop-shadow(0 6px 18px #000c); }
+.game.drop-ready #meRow .field-block.is-mine {
+  border-color: #7fd6a8aa; box-shadow: inset 0 1px #fff2, 0 0 22px #7fd6a83a;
+}
+.hand .card.is-dragging { opacity: .35; }
+
+/* ---- desktop hand hover: raise the card for a proper read ---- */
+@media (hover: hover) and (pointer: fine) {
+  .hand .card.is-playable:hover, .hand .card:hover {
+    transform: translateY(-30px) scale(1.32) !important;
+    filter: drop-shadow(0 10px 24px #000c);
+  }
+}
+
+/* ---- timer urgency: amber pulse from 10s (red shake ≤5s already exists) ---- */
+.mp-clock.urgent .tc-arc { stroke: #ffb14e; }
+.mp-clock.urgent .tc-num { color: #ffb14e; animation: clockPulse 1s var(--ease) infinite; }
+
+/* ---- result screen: confetti · MMR count-up pop · loss hint ---- */
+.fx-confetti {
+  position: fixed; top: -12px; z-index: 350; height: 10px; pointer-events: none; border-radius: 2px;
+  animation: confettiFall 2.3s cubic-bezier(.3,0,.7,1) forwards;
+}
+@keyframes confettiFall {
+  0% { transform: translate(0, 0) rotate(0); opacity: 1; }
+  100% { transform: translate(var(--dx), 105vh) rotate(var(--rot)); opacity: .5; }
+}
+.rk-now.rk-pop { display: inline-block; animation: rkPop .35s var(--ease); }
+@keyframes rkPop { 40% { transform: scale(1.35); } }
+.rk-tier.rk-promo { animation: rkPromo 1.2s var(--ease) infinite alternate; }
+@keyframes rkPromo { from { text-shadow: 0 0 4px #e8c25a44; } to { text-shadow: 0 0 14px #e8c25acc; } }
+.loss-hint { display: inline-block; margin-top: 7px; font-size: 12px; color: var(--paper-dim); }

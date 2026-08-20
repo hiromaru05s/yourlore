@@ -6,6 +6,7 @@
 // ============================================================
 import type { CardDef, CardType } from "./types";
 import { applyEnglish } from "./cards.en";
+import { applyFlavorCardNames } from "./cardNames.flavor";
 import { standardizeCardTexts } from "./cardText";
 
 // ---------------- core set (cost 1–4) ----------------
@@ -449,7 +450,7 @@ const PATCH2: Record<string, Partial<CardDef>> = {
   GS8_5: { val: 7, text: "아군 전체 공격 +7 · 20%로 6코스트 이하 몬스터 무작위 소환", textJa: "味方全体の攻撃+7 · 20%でコスト6以下のモンスターをランダム召喚" },
   GS9_0: { text: "상대 체력에 21 데미지 (상대 체력 21 이하면 사용 불가)", textJa: "相手の体力に21ダメージ (相手の体力21以下では使用不可)" },
   GS9_1: { val: 15, text: "상대 체력에 15 데미지 (시전 7)", textJa: "相手の体力に15ダメージ (発動7)" },
-  GS9_2: { val: 16, text: "체력 16 회복 · 패의 '생명의 빛' 1장 묘지로 보내면 최대 체력 +15", textJa: "体力16回復 · 手札の「生命の光」1枚を墓地へ送ると最大体力+15" },
+  GS9_2: { val: 16, text: "체력 16 회복 · 패의 생명 계열 주문 1장을 묘지로 보내면 최대 체력 +15", textJa: "体力16回復 · 手札の生命系呪文1枚を墓地へ送ると最大体力+15" },
   GS10_0: { text: "상대 체력에 23 데미지 (자신 필드 몬스터 1체 이하일 때만)", textJa: "相手の体力に23ダメージ (自分の場のモンスターが1体以下の時のみ)" },
   GS10_1: { text: "상대 체력에 17 데미지 + 카드 1장 드로우 (시전 8)", textJa: "相手の体力に17ダメージ + カード1枚ドロー (発動8)" },
   GS10_2: { text: "체력 19 회복 · 상대 몬스터 1체 + 마법/함정 1장 파괴", textJa: "体力19回復 · 相手モンスター1体 + 魔法/罠1枚を破壊" },
@@ -1380,6 +1381,7 @@ CHEST_ODDS.ja = { title: "宝箱のダイス", rows: ["1 — ハズレ: 相手�
 CHEST_ODDS.en = { title: "Golden chest die", rows: ["1 — Dud: Mimic (3/2) on enemy field", "2·3 — HP +3", "4·5 — Max mana +1", "6 — Max HP +5"] };
 
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
+applyFlavorCardNames([DB, STARTERS as unknown as Record<string, CardDef>]);
 // 효과 텍스트 표준 표기(【태그】) 적용 — 규칙: docs/card-text-style.md (applyEnglish 이후 필수)
 standardizeCardTexts([DB, STARTERS as unknown as Record<string, CardDef>]);
 
@@ -1470,19 +1472,24 @@ export function frameFor(t: CardType): string {
   if (t === "starter") return "/frames/cyan.png";
   return "/frames/blue.png"; // spell
 }
-export const FRAME_BACK = "/frames/back.png";
+// 카드 뒷면은 /frames/sleeves/<id>.webp (512w 최적화본 — 원본 PNG는 장당 ~1.8MB였다)
+export const FRAME_BACK = "/frames/sleeves/default.webp";
 
-// ---- card sleeves (card backs). 'default' is free & always owned; the rest cost
-// 1 credit in the shop. Server (social.ts) is the authority on price/ownership. ----
+// ---- card sleeves (card backs) — 상점에서 구매, 프로필에서 장착 ----
+// 서버(social.ts)의 가격표와 반드시 일치해야 한다 (구매 검증은 서버가 한다).
 export interface Sleeve { id: string; url: string; ko: string; ja: string; en: string; price: number; }
+const SL = (id: string, ko: string, ja: string, en: string, price: number): Sleeve =>
+  ({ id, url: `/frames/sleeves/${id}.webp`, ko, ja, en, price });
 export const SLEEVES: Record<string, Sleeve> = {
-  default: { id: "default", url: "/frames/back.png",          ko: "기본",   ja: "デフォルト", en: "Default", price: 0 },
-  prism:   { id: "prism",   url: "/frames/sleeve_prism.png",   ko: "프리즘", ja: "プリズム",   en: "Prism",   price: 1 },
-  abyss:   { id: "abyss",   url: "/frames/sleeve_abyss.png",   ko: "심연",   ja: "深淵",       en: "Abyss",   price: 1 },
-  verdant: { id: "verdant", url: "/frames/sleeve_verdant.png", ko: "녹옥",   ja: "翠玉",       en: "Verdant", price: 1 },
-  ivory:   { id: "ivory",   url: "/frames/sleeve_ivory.png",   ko: "상아",   ja: "象牙",       en: "Ivory",   price: 1 },
-  compass: { id: "compass", url: "/frames/sleeve_compass.png", ko: "성좌",   ja: "星座",       en: "Astral",  price: 1 },
+  default: SL("default", "기본", "デフォルト", "Default", 0),
+  ivory:   SL("ivory",   "아이보리 문장", "アイボリーの紋章", "Ivory Crest", 200),
+  verdant: SL("verdant", "신록의 인장", "新緑の印章", "Verdant Seal", 200),
+  compass: SL("compass", "탐구자의 나침반", "探究者の羅針盤", "Seeker's Compass", 300),
+  prism:   SL("prism",   "프리즘 결정", "プリズム結晶", "Prism Core", 400),
+  abyss:   SL("abyss",   "심연의 서약", "深淵の誓約", "Abyssal Oath", 400),
 };
 /** ordered list for shop/picker rendering (default first). */
-export const SLEEVE_LIST: Sleeve[] = ["default", "prism", "abyss", "verdant", "ivory", "compass"].map((id) => SLEEVES[id]);
-export function sleeveUrl(id: string | null | undefined): string { return SLEEVES[id || "default"]?.url ?? FRAME_BACK; }
+export const SLEEVE_LIST: Sleeve[] = Object.values(SLEEVES);
+export function sleeveUrl(id: string | null | undefined): string {
+  return (id && SLEEVES[id]?.url) || FRAME_BACK;
+}

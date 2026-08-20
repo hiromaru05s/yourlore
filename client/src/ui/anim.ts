@@ -332,7 +332,7 @@ export function zoomCard(c: CardInst): void {
   ov.id = "zoomOverlay";
   const wrap = document.createElement("div");
   wrap.className = "zoom-wrap";
-  wrap.appendChild(cardEl(c));
+  wrap.appendChild(cardEl(c, { zoom: true })); // 400px 카드 — 여기서만 원본 해상도 아트
   // "(지속)" 스탯 변화 카드: 필드에 있는 동안만 유지된다는 각주
   if (/\((?:지속|持続|lasting)\)/.test(cardText(c))) {
     const note = document.createElement("div");
@@ -659,6 +659,116 @@ export async function deathShatter(loserSide: ViewSide, won: boolean, cause: str
   v.remove(); vg.remove();
   document.querySelector(".game")?.classList.remove("fx-quake");
   bar?.classList.remove("fx-shatter");
+}
+
+/** Turn-start banner: a slim ribbon sweeping across mid-screen ("내 턴" / "상대 턴"). */
+export function turnBanner(mine: boolean): void {
+  document.querySelectorAll(".fx-turnbanner").forEach((n) => n.remove());
+  const b = document.createElement("div");
+  b.className = "fx-turnbanner" + (mine ? " mine" : " opp");
+  b.innerHTML = `<span>${mine ? tt("fx.yourturn") : tt("fx.oppturn")}</span>`;
+  document.body.appendChild(b);
+  setTimeout(() => { b.classList.add("out"); setTimeout(() => b.remove(), 320); }, mine ? 1250 : 950);
+}
+
+/** Heavy summon landing: dust ring + soft board shake (cost 6+ monsters feel BIG). */
+export function summonSlam(rect: DOMRect | null): void {
+  if (!rect) return;
+  const x = rect.left + rect.width / 2, y = rect.top + rect.height * 0.7;
+  const ring = document.createElement("div");
+  ring.className = "fx-slam-ring";
+  ring.style.left = x + "px"; ring.style.top = y + "px";
+  document.body.appendChild(ring);
+  for (let i = 0; i < 8; i++) {
+    const d = document.createElement("i");
+    d.className = "fx-slam-dust";
+    const a = Math.PI + (Math.PI * i) / 7; // fan along the ground line
+    const dist = 26 + Math.random() * 36;
+    d.style.setProperty("--tx", Math.cos(a) * dist * 1.6 + "px");
+    d.style.setProperty("--ty", Math.abs(Math.sin(a)) * -dist * 0.5 + "px");
+    d.style.left = x + "px"; d.style.top = y + "px";
+    document.body.appendChild(d);
+    setTimeout(() => d.remove(), 620);
+  }
+  boardShake("soft");
+  setTimeout(() => ring.remove(), 560);
+}
+
+/** Floating damage number on a field monster (combat hits). */
+export function monDamage(uid: string, amount: number): void {
+  if (amount <= 0) return;
+  floatNum(byUid(uid), `-${amount}`, "dmg");
+}
+
+/** Passive-trigger callout on a field monster (기합 소모, 부패 적립, 패시브 부여 …). */
+export function flashBadge(uid: string, text: string, kind: "good" | "bad" = "good"): void {
+  const n = byUid(uid);
+  if (!n) return;
+  const r = n.getBoundingClientRect();
+  const b = document.createElement("div");
+  b.className = "fx-psv-flash " + kind;
+  b.textContent = text;
+  b.style.left = r.left + r.width / 2 + "px";
+  b.style.top = r.top + 4 + "px";
+  document.body.appendChild(b);
+  setTimeout(() => b.remove(), 1150);
+}
+
+// ---- attack targeting arrow --------------------------------------------------
+// While the engine waits for an attack target, a curved arrow follows the
+// pointer from the attacker card. Board view drives show/hide on render.
+let arrowSvg: SVGSVGElement | null = null;
+let arrowFrom: HTMLElement | null = null;
+let arrowMove: ((e: PointerEvent) => void) | null = null;
+
+export function showTargetArrow(from: HTMLElement): void {
+  hideTargetArrow();
+  arrowFrom = from;
+  const ns = "http://www.w3.org/2000/svg";
+  arrowSvg = document.createElementNS(ns, "svg");
+  arrowSvg.setAttribute("class", "fx-arrow");
+  arrowSvg.innerHTML = `<path class="fx-arrow-line" d=""/><path class="fx-arrow-head" d=""/>`;
+  document.body.appendChild(arrowSvg);
+  const draw = (x: number, y: number): void => {
+    if (!arrowSvg || !arrowFrom || !arrowFrom.isConnected) return;
+    const r = arrowFrom.getBoundingClientRect();
+    const sx = r.left + r.width / 2, sy = r.top + r.height / 2;
+    const mx = (sx + x) / 2, my = Math.min(sy, y) - Math.hypot(x - sx, y - sy) * 0.18;
+    (arrowSvg.querySelector(".fx-arrow-line") as SVGPathElement).setAttribute("d", `M${sx},${sy} Q${mx},${my} ${x},${y}`);
+    // arrow head oriented along the curve's end tangent
+    const ang = Math.atan2(y - my, x - mx);
+    const s = 11;
+    const p1 = [x - Math.cos(ang - 0.45) * s, y - Math.sin(ang - 0.45) * s];
+    const p2 = [x - Math.cos(ang + 0.45) * s, y - Math.sin(ang + 0.45) * s];
+    (arrowSvg.querySelector(".fx-arrow-head") as SVGPathElement).setAttribute("d", `M${x},${y} L${p1[0]},${p1[1]} L${p2[0]},${p2[1]} Z`);
+  };
+  arrowMove = (e: PointerEvent) => draw(e.clientX, e.clientY);
+  window.addEventListener("pointermove", arrowMove);
+  // seed at the attacker so the arrow doesn't flash at 0,0 before the first move
+  const r0 = from.getBoundingClientRect();
+  draw(r0.left + r0.width / 2, r0.top - 30);
+}
+
+export function hideTargetArrow(): void {
+  if (arrowMove) { window.removeEventListener("pointermove", arrowMove); arrowMove = null; }
+  arrowSvg?.remove(); arrowSvg = null; arrowFrom = null;
+}
+
+/** Victory confetti burst (result screen). */
+export function confettiBurst(): void {
+  const COLORS = ["#e8c25a", "#f0a87f", "#7fd6c2", "#5a9cf2", "#f47a7a"];
+  for (let i = 0; i < 46; i++) {
+    const c = document.createElement("i");
+    c.className = "fx-confetti";
+    c.style.left = 20 + Math.random() * 60 + "vw";
+    c.style.background = COLORS[i % COLORS.length];
+    c.style.setProperty("--dx", (Math.random() - 0.5) * 240 + "px");
+    c.style.setProperty("--rot", (Math.random() - 0.5) * 900 + "deg");
+    c.style.animationDelay = Math.random() * 350 + "ms";
+    c.style.width = 5 + Math.random() * 5 + "px";
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 2600);
+  }
 }
 
 /** Floating "결과 보기" button while reviewing the log after the game ends. */

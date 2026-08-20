@@ -26,6 +26,10 @@ const M: Record<string, { ja: string; en: string }> = {
   "사용자를 찾을 수 없습니다.": { ja: "ユーザーが見つかりません。", en: "User not found." },
   "이미 보유한 슬리브입니다.": { ja: "既に所持しているスリーブです。", en: "You already own this sleeve." },
   "크레딧이 부족합니다.": { ja: "クレジットが不足しています。", en: "Not enough credits." },
+  "존재하지 않는 상품입니다.": { ja: "存在しない商品です。", en: "That item doesn't exist." },
+  "크리스탈이 부족합니다.": { ja: "クリスタルが足りません。", en: "Not enough crystals." },
+  // daily missions
+  "아직 달성하지 못한 임무입니다.": { ja: "まだ達成していないミッションです。", en: "You haven't completed that mission yet." },
   // friends / challenges
   "이름 또는 이메일을 입력하세요.": { ja: "名前またはメールアドレスを入力してください。", en: "Enter a nickname or email." },
   "해당 유저를 찾을 수 없습니다.": { ja: "該当するユーザーが見つかりません。", en: "Couldn't find that player." },

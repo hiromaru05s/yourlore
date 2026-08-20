@@ -10,6 +10,7 @@ import { cardEl } from "../ui/cardView";
 import { zoomCard } from "../ui/anim";
 import { t, cardName, onLangChange } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
+import { isSeen, markSeen, seenCount } from "../ui/discover";
 
 // Build a stable, sorted list of every card as instances (uid = id).
 const ALL: CardInst[] = [...Object.values(DB), ...Object.values(STARTERS)]
@@ -81,7 +82,13 @@ export function mountCards(app: App): Screen {
   costs.forEach((c) => addCost(c, String(c)));
 
   const search = wrap.querySelector("#search") as HTMLInputElement;
-  search.oninput = () => { q = search.value.trim().toLowerCase(); render(); };
+  // render()는 카드 DOM 전체(수백 장)를 다시 만든다 — 키 입력마다 돌리면 그만큼의
+  // <img>가 매번 버려지고 다시 붙는다. 입력이 멈춘 뒤 한 번만.
+  let searchTimer = 0;
+  search.oninput = () => {
+    clearTimeout(searchTimer);
+    searchTimer = window.setTimeout(() => { q = search.value.trim().toLowerCase(); render(); }, 140);
+  };
 
   function render(): void {
     typeChips.forEach((c) => c.el.classList.toggle("is-on", c.key === typeF));
@@ -96,7 +103,8 @@ export function mountCards(app: App): Screen {
       return true;
     });
 
-    count.textContent = `${list.length}${t("cards.count")}`;
+    // 도감 진행도: 게임에서 실제로 접한(구매/플레이) 카드 수
+    count.innerHTML = `${list.length}${t("cards.count")} <span class="discover-cnt">· ${t("cards.discovered")} ${Math.min(seenCount(), ALL.length)}/${ALL.length}</span>`;
     grid.innerHTML = "";
     if (!list.length) {
       grid.innerHTML = `<div class="cards-empty">${t("cards.empty")}</div>`;
@@ -106,7 +114,14 @@ export function mountCards(app: App): Screen {
     for (const c of list) {
       const node = cardEl(c, { size: "mkt" });
       node.style.cursor = "pointer";
-      node.onclick = () => zoomCard(c);
+      // 미발견 카드: NEW 리본 — 줌으로 살펴보면 발견 처리
+      if (!isSeen(c.id)) {
+        const badge = document.createElement("span");
+        badge.className = "card-new";
+        badge.textContent = t("cards.new");
+        node.appendChild(badge);
+      }
+      node.onclick = () => { if (!isSeen(c.id)) { markSeen(c.id); node.querySelector(".card-new")?.remove(); } zoomCard(c); };
       frag.appendChild(node);
     }
     grid.appendChild(frag);

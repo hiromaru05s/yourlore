@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "mode": "codex-imagegen-on-demand",
+  "selection": "user-specified card IDs or exact card names only",
+  "batchSize": null,
+  "queueEnabled": false,
+  "promptSha256": "1ba6520ffedb509a08ead2a590c25127bfdeb0048bf59969425619f76dab87f0",
+  "completedIds": [],
+  "failedIds": [],
+  "lastCompletedAt": null
+}

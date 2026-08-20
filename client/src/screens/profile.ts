@@ -215,9 +215,9 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   // ============================================================
   // TAB: sleeves
   // ============================================================
-  const renderSleeves = (p: Profile): void => {
-    const owned = new Set(p.sleeves ?? ["default"]);
-    const equipped = p.sleeve ?? "default";
+  const renderSleeves = (_p: Profile): void => {
+    const owned = new Set(["default"]);
+    const equipped = "default";
     body().innerHTML = `
       <section class="tut-sec sl-current">
         <h3><span class="tut-ico">🃏</span>${t("sleeve.current")}</h3>
@@ -244,7 +244,6 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
               </div>`;
           }).join("")}
         </div>
-        <a class="sl-getmore" id="toShop">${t("sleeve.getmore")}</a>
       </section>`;
 
     body().querySelectorAll("[data-eq]").forEach((btn) => {
@@ -258,7 +257,6 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         }).catch((e) => alert((e as Error).message));
       };
     });
-    (body().querySelector("#toShop") as HTMLElement).onclick = () => app.shop();
   };
 
   // ============================================================

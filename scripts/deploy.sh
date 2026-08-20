@@ -1,3 +1,10 @@
+#!/bin/bash
+# 🚫 BLOCKED 2026-08-03: 이 로컬 폴더는 GitHub main보다 한참 뒤처진 스테일 트리입니다.
+# 여기서 배포하면 프로덕션이 롤백됩니다 (0802, 0803 새벽 두 번 발생).
+# 배포는 클라우드 세션에서 main 클론으로만. (Codex 포함 — 절대 실행 금지)
+echo "BLOCKED: stale local tree. Deploy from cloud main clone only. See comment in this script."
+exit 1
+
 #!/usr/bin/env bash
 # Build the client and deploy the single Cloudflare Worker (serves client + /api + /ws).
 # Runs from a non-mounted copy because the mounted workspace FS blocks file unlink,

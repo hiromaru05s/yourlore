@@ -1,0 +1,18 @@
+# Cloudflare Workers static-assets headers.
+# Vite does NOT fingerprint anything under public/, so these files keep the same
+# URL across deploys — without an explicit max-age every card image revalidates
+# on each navigation (hundreds of conditional round-trips per screen).
+# A week of hard caching + background revalidation; to force a refresh sooner,
+# rename the file or bump a version segment in the path.
+/art/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/frames/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/ui/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/icons/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/bg/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/sfx/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400

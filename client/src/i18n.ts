@@ -211,6 +211,25 @@ const D: Record<string, Entry> = {
   "fx.mana": { ko: "최대 마나", ja: "最大マナ", en: "Max Mana" },
   "fx.maxhp": { ko: "최대 체력", ja: "最大体力", en: "Max HP" },
   "fx.opp": { ko: "상대", ja: "相手", en: "Opponent" },
+  "fx.yourturn": { ko: "내 턴", ja: "自分のターン", en: "YOUR TURN" },
+  "fx.oppturn": { ko: "상대 턴", ja: "相手のターン", en: "OPPONENT'S TURN" },
+  "fx.resume": { ko: "대전에 복귀했습니다", ja: "対戦に復帰しました", en: "Rejoined the match" },
+  "fx.guts": { ko: "기합 발동!", ja: "気合発動！", en: "Guts!" },
+  // 패배 힌트 (결과 화면 1줄 조언)
+  "hint.mana": { ko: "턴마다 평균 {n} 마나가 남았습니다 — 마나를 모두 쓰면 더 강해집니다", ja: "毎ターン平均{n}マナが残っていました — マナを使い切るともっと強くなれます", en: "You left ~{n} mana unspent per turn — spending it all makes you stronger" },
+  "hint.buys": { ko: "이번 게임 카드 구매 {n}회 — 마켓에서 덱을 키우는 것이 승리의 핵심입니다", ja: "このゲームのカード購入は{n}回 — マーケットでデッキを育てるのが勝利の鍵です", en: "Only {n} cards bought this game — growing your deck at the market is key" },
+  // 오늘의 임무
+  "missions.title": { ko: "오늘의 임무", ja: "今日のミッション", en: "Daily Missions" },
+  "missions.claim": { ko: "받기", ja: "受け取る", en: "Claim" },
+  "missions.claimed": { ko: "완료", ja: "完了", en: "Done" },
+  "missions.play3": { ko: "3판 플레이", ja: "3回プレイ", en: "Play 3 games" },
+  "missions.win1": { ko: "1승 달성", ja: "1勝する", en: "Win 1 game" },
+  "missions.ranked1": { ko: "랭크전 1판", ja: "ランク戦1回", en: "Play 1 ranked game" },
+  // 카드 도감 (발견)
+  "cards.discovered": { ko: "발견", ja: "発見", en: "Discovered" },
+  "cards.new": { ko: "NEW", ja: "NEW", en: "NEW" },
+  // 첫 승리 안내
+  "home.firstwin": { ko: "🎯 봇전에서 첫 승리에 도전!", ja: "🎯 ボット戦で初勝利に挑戦！", en: "🎯 Go for your first win vs the bot!" },
   "fx.roll": { ko: "결과", ja: "結果", en: "Result" },
   "death.cause": { ko: "원인", ja: "原因", en: "Cause" },
   "modal.review": { ko: "로그 보기 (복기)", ja: "ログを見る (振り返り)", en: "Review Log" },

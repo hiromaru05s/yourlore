@@ -6,11 +6,12 @@
 // LocalController reduces locally and drives the bot.
 // (OnlineController lives in ./online and reuses BaseController.)
 // ============================================================
-import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
+import type { Action, CardInst, FieldMon, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
-import { createGame, reduce, playCost } from "../shared/engine";
+import { createGame, reduce, playCost, effAtk } from "../shared/engine";
+import { markSeen } from "../ui/discover";
 import { botDecide, pickBotDeck } from "../shared/bot";
-import { DB, STARTERS, hasPassive } from "../shared/cards";
+import { DB, STARTERS, hasPassive, PASSIVES } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog } from "../ui/log";
 import * as A from "../ui/anim";
@@ -66,6 +67,7 @@ export abstract class BaseController implements BoardHandlers {
   private lastEndTurnAt = 0;   // 턴종료 연타 가드: 마지막 endTurn 제출 시각
   private purgePicks: string[] | null = null; // multi-select purge: remaining queued picks
   protected introShown = false; // coin-toss reveal plays once at game start
+  private manaLeftLog: number[] = []; // 내 턴 종료 시 남긴 마나 — 패배 힌트용
 
   constructor(root: HTMLElement, you: Side, exits: ControllerExits) {
     this.you = you;
@@ -107,7 +109,7 @@ export abstract class BaseController implements BoardHandlers {
       : t("play.block.cond");
     this.cantPlayToast(msg);
   }
-  onAttack(uid: string) { this.fastForward(); this.submit({ type: "attack", uid }); }
+  onAttack(uid: string) { this.fastForward(); this.view.armAttackArrow(uid); this.submit({ type: "attack", uid }); }
   onReorder(from: number, to: number) { this.fastForward(); this.submit({ type: "reorder", from, to }); }
   onChooseTarget(uid: string | null) { this.fastForward(); this.submit({ type: this.state.pending?.kind === "seek" || this.state.pending?.kind === "recall" ? "pick" : "chooseTarget", uid } as Action); }
   onBuyMarket(i: number) { this.fastForward(); this.submit({ type: "buyMarket", i }); }
@@ -121,6 +123,8 @@ export abstract class BaseController implements BoardHandlers {
     if (now - this.lastEndTurnAt < 900) return;
     if (this.state?.cur === this.you && now - this.turnStartedWall < 500 && this.state.turn > 1) return;
     this.lastEndTurnAt = now;
+    // 패배 힌트용: 이 턴에 남기고 끝낸 마나 기록
+    if (this.state?.cur === this.you) this.manaLeftLog.push(this.state.players[this.you].mana);
     this.fastForward(); this.submit({ type: "endTurn" });
   }
   async onSurrender() {
@@ -202,10 +206,14 @@ export abstract class BaseController implements BoardHandlers {
     for (let i = 0; i < events.length; i++) {
       if (this.dead) return;
       const e = events[i];
-      // glanceable icon rail (topbar): key events → small icons
-      if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
+      // glanceable icon rail (topbar): card-backed events carry the card id so the
+      // rail can show a clickable art thumbnail (mini visual timeline)
+      if (e.type === "summon" || e.type === "playSpell" || e.type === "buy" || e.type === "trapReveal") this.view.pushIcon(e.type, e.id);
+      else if (e.type === "attack" || e.type === "destroy" || e.type === "draw") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
+      // 카드 도감: 내가 실제로 접한 카드를 기록 (아카이브의 발견 진행도/NEW 배지)
+      if ((e.type === "summon" || e.type === "playSpell" || e.type === "buy" || e.type === "trapReveal") && e.player === this.you) markSeen(e.id);
       // sound per event
       let sn: SfxName | undefined;
       if (e.type === "summon") sn = e.id === "MIMIC" ? "mimic" : "summon";      // Mimic token has its own cue
@@ -220,6 +228,8 @@ export abstract class BaseController implements BoardHandlers {
           if (card) {
             const g = await A.ghostSummon(card, sideOf(e.player), fieldCount[e.player]);
             if (g) ghosts.set(e.uid, { el: g, side: sideOf(e.player) });
+            // 대형 몬스터(6+)의 착지: 흙먼지 링 + 보드 흔들림 — "큰 놈" 체감
+            if (g && card.cost >= 6) { A.summonSlam(g.getBoundingClientRect()); sfx("impact"); }
           }
           fieldCount[e.player]++;
           await wait(160);
@@ -249,7 +259,13 @@ export abstract class BaseController implements BoardHandlers {
           // charge INTO the target (Hearthstone-style): enemy monster, or the
           // defender's HP bar on a direct hit — impact shakes the victim
           const defender = sideOf((1 - e.player) as Side);
-          await A.attackStrike(e.uid, e.targetUid, defender, () => { if (e.targetUid) A.monHit(e.targetUid); });
+          // 몬스터 대상: 충돌 순간 공격자의 실효 공격력을 "-N"으로 띄운다 (전투 수치 가시화)
+          const atkOwner = prev.players[e.player];
+          const atkMon = atkOwner.field.find((m) => m.uid === e.uid);
+          const dmg = atkMon ? effAtk(atkOwner, atkMon) : 0;
+          await A.attackStrike(e.uid, e.targetUid, defender, () => {
+            if (e.targetUid) { A.monHit(e.targetUid); if (dmg > 0) A.monDamage(e.targetUid, dmg); }
+          });
           break;
         }
         case "hit":
@@ -337,6 +353,7 @@ export abstract class BaseController implements BoardHandlers {
     // ghosts overlap the freshly-rendered real cards — drop them next frame
     requestAnimationFrame(() => ghosts.forEach((g) => g.el.remove()));
     if (myDraws > 0) A.animateDraw(document.getElementById("hand") as HTMLElement, myDraws);
+    this.flashPassiveDiffs(prev, res.state);
 
     // ---- death sequence: HP orb shatters + cause of death, before the result modal ----
     if (res.state.over && res.state.winner != null && !this.winShown) {
@@ -345,6 +362,30 @@ export abstract class BaseController implements BoardHandlers {
       const cause = lastKill ? (getLang() === "ja" ? lastKill.srcJa ?? lastKill.srcKo : getLang() === "en" ? logToEn(lastKill.srcKo ?? "") : lastKill.srcKo) : null;
       await wait(250);
       await A.deathShatter(sideOf(loser), won, this.stripHtml(cause ?? "") || null);
+    }
+  }
+
+  /**
+   * 패시브가 "실제로 일어난 순간"의 필드 배지 플래시. 엔진은 패시브 발동
+   * 이벤트를 따로 내보내지 않으므로 상태 diff로 감지한다:
+   * 기합 토큰 소모 / 부패 카운터 적립 / 게임 중 패시브 부여.
+   */
+  private flashPassiveDiffs(prev: GameState, next: GameState): void {
+    const lang = getLang();
+    const psvName = (k: string): string => {
+      const p = PASSIVES[k];
+      return p ? (lang === "ja" ? p.ja.name : lang === "en" ? p.en.name : p.ko.name) : k;
+    };
+    for (const pl of [0, 1] as Side[]) {
+      const before = new Map<string, FieldMon>(prev.players[pl].field.map((m) => [m.uid, m]));
+      for (const m of next.players[pl].field) {
+        const b = before.get(m.uid);
+        if (!b) continue;
+        if ((b.guts ?? 0) > (m.guts ?? 0)) A.flashBadge(m.uid, `💢 ${t("fx.guts")}`, "good");
+        if ((m.decayCnt ?? 0) > (b.decayCnt ?? 0)) A.flashBadge(m.uid, `☠ ${psvName("decay")} ${m.decayCnt}/3`, "bad");
+        const added = (m.passivesG ?? []).filter((k) => !(b.passivesG ?? []).includes(k));
+        for (const k of added) A.flashBadge(m.uid, `✨ ${psvName(k)}`, "good");
+      }
     }
   }
 
@@ -505,6 +546,7 @@ export abstract class BaseController implements BoardHandlers {
       this.warned25 = this.timerLeft <= 25; // don't re-fire the 25s popup mid-turn on reconnect
       this.turnStartedWall = Date.now();    // guard against a stale ~0 clock instantly skipping the turn
       if (!firstTurn && g.cur === this.you) sfx("turn"); // my turn begins
+      if (!firstTurn) A.turnBanner(g.cur === this.you); // 턴 전환 리본 — 턴의 경계를 몸으로 알게
       if (this.timerInt) clearInterval(this.timerInt);
       this.renderTimer();
       this.timerInt = window.setInterval(() => this.tickTimer(), 1000);
@@ -560,7 +602,7 @@ export abstract class BaseController implements BoardHandlers {
       arc = el.querySelector(".tc-arc"); num = el.querySelector(".tc-num");
       if (!arc || !num) return;
     }
-    el.className = "mp-clock show" + (mine ? " mine" : " opp") + (s <= 5 ? " warn" : "");
+    el.className = "mp-clock show" + (mine ? " mine" : " opp") + (s <= 5 ? " warn" : s <= 10 ? " urgent" : "");
     // fresh turn (full ring) → snap instantly; otherwise let CSS animate the drain
     arc.style.transition = s >= total ? "none" : "";
     arc.setAttribute("stroke-dashoffset", (C * (1 - s / total)).toFixed(1));
@@ -635,13 +677,29 @@ export abstract class BaseController implements BoardHandlers {
     this.openResult();
   }
 
+  /** 패배 시 1줄 조언: 데이터가 뚜렷하게 가리키는 것만 (없으면 침묵). */
+  private lossHint(): string | null {
+    const turns = this.manaLeftLog.length;
+    if (turns >= 4) {
+      const avg = this.manaLeftLog.reduce((a, b) => a + b, 0) / turns;
+      if (avg >= 2) return t("hint.mana").replace("{n}", avg.toFixed(1));
+    }
+    const buys = Object.values(this.state.players[this.you].buys ?? {}).reduce((a, b) => a + b, 0);
+    if (turns >= 5 && buys <= 2) return t("hint.buys").replace("{n}", String(buys));
+    return null;
+  }
+
   /** Result modal — reopenable from the review FAB so the log can be studied (복기). */
   private openResult(): void {
     A.removeReviewFab();
     const won: boolean | null = this.state.winner == null ? null : this.state.winner === this.you;
     const meHp = Math.max(0, this.state.players[this.you].hp);
     const oppHp = Math.max(0, this.state.players[1 - this.you].hp);
-    const detail = `${t("modal.hp.me")} ${meHp} · ${t("modal.hp.opp")} ${oppHp}`;
+    let detail = `${t("modal.hp.me")} ${meHp} · ${t("modal.hp.opp")} ${oppHp}`;
+    if (won === false) {
+      const hint = this.lossHint();
+      if (hint) detail += `<br><span class="loss-hint">💡 ${hint}</span>`;
+    }
     winModal(
       won,
       detail,
@@ -652,7 +710,8 @@ export abstract class BaseController implements BoardHandlers {
     this.renderRankDelta(); // fill the ranked MMR line if we already have the result
   }
 
-  /** Ranked MMR change on the result screen: "랭크 +18 · 1240 → 1258 (골드)". */
+  /** Ranked MMR change on the result screen: "랭크 +18 · 1240 → 1258 (골드)".
+      숫자는 before→after로 카운트업(rAF) — 점수가 "움직이는" 것이 보상감의 핵심. */
   protected rankChange?: { before: number; after: number };
   protected renderRankDelta(): void {
     if (!this.rankChange) return;
@@ -663,9 +722,21 @@ export abstract class BaseController implements BoardHandlers {
     const sign = d > 0 ? "+" : ""; // negative already carries its own '-'
     const cls = d > 0 ? "up" : d < 0 ? "down" : "flat";
     const tBefore = tierOf(before), tAfter = tierOf(after);
-    const promo = tBefore !== tAfter ? ` <span class="rk-tier">${tierLabel(tAfter)}</span>` : "";
-    el.innerHTML = `<span class="rk-label">${t("rank.label")}</span> <span class="rk-delta rk-${cls}">${sign}${d}</span> <span class="rk-mmr">${before} → ${after}</span>${promo}`;
+    const promo = tBefore !== tAfter ? ` <span class="rk-tier ${d > 0 ? "rk-promo" : ""}">${tierLabel(tAfter)}</span>` : "";
+    el.innerHTML = `<span class="rk-label">${t("rank.label")}</span> <span class="rk-delta rk-${cls}">${sign}${d}</span> <span class="rk-mmr">${before} → <b class="rk-now">${before}</b></span>${promo}`;
     (el as HTMLElement).style.display = "";
+    const now = el.querySelector(".rk-now") as HTMLElement | null;
+    if (!now || d === 0) { if (now) now.textContent = String(after); return; }
+    const t0 = performance.now(), dur = 900;
+    const step = (ts: number): void => {
+      if (!now.isConnected) return; // 모달이 닫혔으면 중단
+      const p = Math.min(1, (ts - t0) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      now.textContent = String(Math.round(before + d * eased));
+      if (p < 1) requestAnimationFrame(step);
+      else now.classList.add("rk-pop");
+    };
+    requestAnimationFrame(step);
   }
 
   destroy(): void {

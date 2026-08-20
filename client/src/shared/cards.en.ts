@@ -252,6 +252,7 @@ const TEXTS: Record<string, string> = {
   NT_NULL8: "Negate 1 enemy spell + the opponent cannot cast spells for the rest of this turn",
   NT_SEAL3: "While this card is on the field, neither player can cast spells of cost 5 or less",
   NT_SEAL5: "While this card is on the field, neither player can cast spells",
+  GS9_2: "Restore 16 HP. Discard 1 life-aspect spell from your hand: max HP +15",
   STARTER_TRASH: "Mana 1: exile this card from the game (thins your deck)", STARTER_CHEST: "Mana 1: open the treasure chest",
   STARTER_MANA: "Mana 3: max mana +1",
   TGE1: "[Origin] tribe synergy", TGE2: "[Origin] tribe synergy", TGE3: "[Origin] tribe synergy",
@@ -404,6 +405,7 @@ Object.assign(TEXTS, {
   GS6_2: "Restore 13 HP — roll a die: on 6, max HP +5",
   GS7_0: "Deal 16 damage — roll a die: on 6, YOUR max mana -1",
   GS8_0: "Deal 14 damage — roll a die: on 4+, exile the top card of the enemy deck",
+  GS10_3: "Draw 6 cards + Max HP +3 (Cast 1)", // v18 patch: pattern rules can't parse the new ko text
   GS8_3: "Draw 5 cards — roll 2 dice: on a total of 7+, destroy 1 random enemy monster/trap/spell (Cast 2)",
   GS8_5: "All your monsters +7 ATK — roll a die: on 6, summon a random monster of cost 6 or less",
   TIMEWARP: "Roll 2 dice — on a total of 6+, skip the opponent's next turn (Cast 12)",

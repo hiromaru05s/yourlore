@@ -428,3 +428,76 @@
 .h2h-rec .h2h-l { color: #e0776a; }
 .h2h-rate { font-family: var(--mono); font-size: 13px; color: var(--brass-hi); min-width: 40px; text-align: right; }
 .h2h-games { font-size: 11.5px; color: var(--paper-faint); min-width: 44px; text-align: right; }
+.shop-empty {
+  grid-column: 1 / -1;
+  margin: 24px 0;
+  color: var(--paper-dim);
+  text-align: center;
+}
+
+/* ============================================================
+   UX pass (2026-08): daily missions · card discovery (도감) ·
+   first-win chip
+   ============================================================ */
+
+/* ---- 오늘의 임무: 데스크톱 아카이브 우하단의 양피지 카드 (고정) ----
+   아카이브 스킨(.archive-paper)은 opacity:0 레거시 층이라 그 안에 넣으면
+   안 보인다 — 별도 고정 카드로 띄운다. 전체화면 패널(z:7)이 열리면 덮인다. */
+.archive-missions {
+  position: fixed; right: 16px; bottom: 14px; z-index: 5; width: 252px;
+  padding: 12px 14px; border-radius: 12px;
+  color: #2d2116;
+  background: radial-gradient(circle at 50% 0%, #fff4cf66, transparent 45%), linear-gradient(180deg, #d7c099, #bda179);
+  border: 1px solid #82643d; box-shadow: 0 10px 30px #000c, inset 0 0 22px #6b482130;
+}
+.archive-missions h2 { display: flex; align-items: baseline; gap: 8px; margin: 0 0 4px; font-size: 14px; color: #44321e; }
+.archive-missions h2 small { font-size: 10px; color: #806848; font-weight: 400; }
+.archive-mission-list { display: flex; flex-direction: column; gap: 7px; margin-top: 6px; }
+.archive-mission {
+  display: flex; align-items: center; gap: 10px; padding: 7px 10px;
+  border: 1px solid #82643d55; border-radius: 9px; background: #fff7e330;
+}
+.archive-missions h2 { cursor: pointer; user-select: none; }
+.archive-missions.is-min { width: auto; padding: 8px 14px; }
+.archive-missions.is-min .archive-mission-list { display: none; }
+.archive-missions.is-min h2 { margin: 0; }
+@media (max-width: 860px) { .archive-missions { display: none; } }
+
+/* 모바일 홈: 시작 버튼 아래 인라인 섹션 (고정 카드가 아니라 문서 흐름 안) */
+.mobile-archive-missions { display: grid; gap: 6px; padding-top: 4px; }
+.mobile-archive-missions h2 { margin: 0; color: #44321e; font-size: 13px; }
+.mobile-archive-missions .archive-mission { background: #fff7e34d; border-color: #82643d44; }
+.mobile-archive-missions .am-info b { color: #44321e; }
+.mobile-archive-missions .am-info small { color: #806848; }
+.archive-mission.is-done { border-color: #b98c3e; box-shadow: 0 0 10px #e8c25a3e; }
+.archive-mission.is-claimed { opacity: .55; }
+.archive-mission .am-info { flex: 1; min-width: 0; }
+.archive-mission .am-info b { font-size: 12px; color: #44321e; }
+.archive-mission .am-info small { font-family: var(--mono); font-size: 9px; color: #806848; }
+.am-bar { height: 4px; border-radius: 999px; background: #00000022; margin: 4px 0 2px; overflow: hidden; }
+.am-bar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #b98c3e, #e8c25a); transition: width .4s var(--ease); }
+.am-claim {
+  flex: 0 0 auto; font-size: 12px; font-weight: 700; padding: 6px 13px; border-radius: 8px;
+  border: 1px solid var(--gold-glow); background: linear-gradient(180deg, #e8c25a, #b98c3e); color: #241a06;
+  cursor: pointer; transition: transform .12s var(--ease), filter .12s var(--ease);
+}
+.am-claim:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.08); }
+.am-claim:disabled { filter: grayscale(.8) brightness(.75); cursor: default; }
+.am-claimed { flex: 0 0 auto; font-size: 11px; color: #6b8a4e; font-weight: 700; }
+
+/* ---- 카드 도감: 발견 진행도 + NEW 리본 ---- */
+.discover-cnt { font-size: 11px; color: var(--paper-faint); font-weight: 400; }
+.card-new {
+  position: absolute; top: -6px; right: -6px; z-index: 8; pointer-events: none;
+  font-family: var(--mono); font-size: 9px; font-weight: 800; letter-spacing: .06em;
+  padding: 2px 6px; border-radius: 999px; color: #241a06;
+  background: linear-gradient(180deg, #ffe9a8, #e8c25a);
+  border: 1px solid #fff8; box-shadow: 0 2px 6px #000a;
+}
+
+/* ---- 첫 승리 유도 칩 (봇전 메뉴) ---- */
+.firstwin-chip {
+  display: block; margin-top: 3px; font-style: normal; font-size: 10px;
+  color: var(--gold-glow); animation: firstwinPulse 1.6s ease-in-out infinite alternate;
+}
+@keyframes firstwinPulse { from { opacity: .65; } to { opacity: 1; } }

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import fs from "node:fs/promises";
 import path from "node:path";
-import { ensureDirs, promptOutputPath } from "./card-art-lib.mjs";
+import sharp from "sharp";
+import { cardArtHeight, cardArtSize, cardArtWidth, ensureDirs, promptOutputPath } from "./card-art-lib.mjs";
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
@@ -11,7 +12,7 @@ const providerArg = args.find((arg) => arg.startsWith("--provider="));
 const modelArg = args.find((arg) => arg.startsWith("--model="));
 const force = args.includes("--force");
 
-const provider = providerArg?.split("=")[1] ?? process.env.ART_PROVIDER ?? "replicate";
+const provider = providerArg?.split("=")[1] ?? process.env.ART_PROVIDER ?? "openai";
 const model = modelArg?.split("=")[1] ?? process.env.ART_MODEL ?? defaultModel(provider);
 const limit = limitArg ? Number(limitArg.split("=")[1]) : Infinity;
 const only = onlyArg ? new Set(onlyArg.split("=")[1].split(",").map((id) => id.trim()).filter(Boolean)) : null;
@@ -49,6 +50,7 @@ for (const row of queue) {
   } else {
     throw new Error(`Unknown provider: ${provider}`);
   }
+  await normalizeArtwork(row.target);
 }
 
 console.log("Done.");
@@ -93,7 +95,7 @@ async function createReplicatePrediction(apiToken, modelName, row) {
         body: JSON.stringify({
           input: {
             prompt: row.prompt,
-            aspect_ratio: process.env.REPLICATE_ASPECT_RATIO ?? "2:3",
+            aspect_ratio: process.env.REPLICATE_ASPECT_RATIO ?? "1:1",
             output_format: "webp",
             output_quality: Number(process.env.REPLICATE_OUTPUT_QUALITY ?? 90),
             num_outputs: 1,
@@ -159,8 +161,8 @@ async function generateWithOpenAI(row, modelName) {
       model: modelName,
       prompt: row.prompt,
       n: 1,
-      size: process.env.OPENAI_IMAGE_SIZE ?? "1024x1536",
-      quality: process.env.OPENAI_IMAGE_QUALITY ?? "low",
+      size: process.env.OPENAI_IMAGE_SIZE ?? cardArtSize,
+      quality: process.env.OPENAI_IMAGE_QUALITY ?? "high",
       output_format: "webp",
     }),
   });
@@ -187,6 +189,15 @@ async function downloadImage(url, target) {
     throw new Error(`Image download failed for ${target}: ${imageResponse.status}`);
   }
   await fs.writeFile(target, Buffer.from(await imageResponse.arrayBuffer()));
+}
+
+async function normalizeArtwork(target) {
+  const tempTarget = `${target}.normalized.webp`;
+  await sharp(target)
+    .resize(cardArtWidth, cardArtHeight, { fit: "cover", position: "centre" })
+    .webp({ quality: 92 })
+    .toFile(tempTarget);
+  await fs.rename(tempTarget, target);
 }
 
 function sleep(ms) {

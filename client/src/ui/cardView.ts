@@ -34,6 +34,7 @@ export function decoratePassives(c: CardInst, txt: string): string {
 export interface CardOpts {
   size?: "board" | "mkt" | "hand";
   field?: boolean;
+  compactField?: boolean;
   owner?: PlayerState;
   playable?: boolean;
   buyable?: boolean;
@@ -43,6 +44,8 @@ export interface CardOpts {
   exhausted?: boolean;
   costOverride?: number;
   badge?: string;
+  /** 줌 오버레이(카드 폭 400px)에서만 true — 이때만 원본 해상도 아트를 받는다. */
+  zoom?: boolean;
 }
 
 function el(tag: string, cls?: string, html?: string): HTMLElement {
@@ -52,43 +55,138 @@ function el(tag: string, cls?: string, html?: string): HTMLElement {
   return e;
 }
 
+// ---- 부여 패시브 칩의 즉석 툴팁 (하나를 재사용, body에 fixed로 띄운다) ----
+let psvTipEl: HTMLElement | null = null;
+function attachPsvTip(chip: HTMLElement): void {
+  const show = (): void => {
+    const key = chip.dataset.psv!;
+    const p = PASSIVES[key];
+    if (!p) return;
+    const lang = getLang();
+    const loc = lang === "ja" ? p.ja : lang === "en" ? p.en : p.ko;
+    if (!psvTipEl) { psvTipEl = el("div", "psv-tip"); document.body.appendChild(psvTipEl); }
+    psvTipEl.innerHTML = `<b>${loc.name}</b>${loc.desc}`;
+    const r = chip.getBoundingClientRect();
+    psvTipEl.style.left = Math.max(8, Math.min(window.innerWidth - 228, r.left + r.width / 2 - 110)) + "px";
+    psvTipEl.style.top = Math.max(8, r.top - 8) + "px";
+    psvTipEl.classList.add("show");
+  };
+  const hide = (): void => psvTipEl?.classList.remove("show");
+  chip.addEventListener("pointerenter", show);
+  chip.addEventListener("pointerleave", hide);
+  chip.addEventListener("click", (e) => { e.stopPropagation(); psvTipEl?.classList.contains("show") ? hide() : show(); });
+}
+
 /**
  * 실측 자동 축소: 요소가 DOM에 붙은 뒤(rAF) 내용이 박스를 넘치면 폰트를 줄여
  * 항상 프레임 안에 들어가게 한다. 카드가 손패/마켓/줌 어느 크기로 렌더되든
  * em 기반이라 같은 비율로 동작 — "효과 텍스트가 프레임을 벗어나는" 문제의 근본 해결.
  * (CSS 클래스 버킷(--small/--tiny)은 1차 근사로 유지, 이 함수가 최종 보정)
  */
-function fitToBox(box: HTMLElement, minPx = 3.5): void {
-  let tries = 0;
-  const run = (): void => {
-    // 주의: rAF는 숨겨진 탭에서 영원히 안 불린다(재접속 백그라운드 렌더 등) → setTimeout 사용.
-    // 레이아웃 측정(scrollHeight)은 백그라운드에서도 동작한다.
-    if (!box.isConnected) { if (tries++ < 8) setTimeout(run, 16 * tries); return; }
-    let guard = 0;
-    while (guard++ < 10) {
-      const overH = box.scrollHeight - box.clientHeight;
-      const overW = box.scrollWidth - box.clientWidth;
-      if (overH <= 1 && overW <= 1) break;
+const FIT_MIN_PX = 3.5;
+const FIT_PASSES = 5;   // ratio-based shrink converges in 2–3; 5 is slack
+const FIT_MAX_WAIT = 8; // frames to wait for a box that isn't in the DOM yet
+
+const fitQueue = new Set<HTMLElement>();
+let fitScheduled = false;
+
+/**
+ * 한 프레임에 모아서 처리: 대기 중인 모든 박스를 "읽기 패스 → 쓰기 패스" 순서로
+ * 처리한다. 예전 구현은 박스마다 setTimeout을 하나씩 잡고 그 안에서 읽기
+ * (scrollHeight)와 쓰기(style.fontSize)를 최대 10번 번갈아 했다 — 카드 아카이브
+ * 화면이면 354장 × 2박스 × 10회 = 7000번의 강제 동기 레이아웃이라 메인 스레드가
+ * 수 초간 멈추고, 그동안 이미지 디코드/표시가 밀려 "이미지가 느리게 뜨는" 것처럼
+ * 보였다. 이제 배치 전체가 최대 FIT_PASSES번의 레이아웃으로 끝난다.
+ */
+function flushFits(): void {
+  fitScheduled = false;
+  let live: HTMLElement[] = [];
+  const waiting: HTMLElement[] = [];
+  for (const box of fitQueue) {
+    if (box.isConnected) { live.push(box); continue; }
+    // 아직 fragment 안에 있는 카드 — 다음 프레임에 다시. (영원히 안 붙는 카드
+    // 때문에 큐가 계속 도는 일이 없도록 횟수 제한)
+    const n = (Number(box.dataset.fitWait) || 0) + 1;
+    if (n <= FIT_MAX_WAIT) { box.dataset.fitWait = String(n); waiting.push(box); }
+  }
+  fitQueue.clear();
+
+  for (let pass = 0; pass < FIT_PASSES && live.length; pass++) {
+    // ---- 읽기 패스: 쓰기가 섞이지 않으므로 배치 전체가 레이아웃 1회로 끝난다
+    const todo: { box: HTMLElement; size: number }[] = [];
+    for (const box of live) {
+      const ch = box.clientHeight, cw = box.clientWidth;
+      if (!ch || !cw) continue; // display:none 등 — 측정 불가, 건드리지 않는다
+      const sh = box.scrollHeight, sw = box.scrollWidth;
+      if (sh - ch <= 1 && sw - cw <= 1) continue; // 이미 들어간다
       const cur = parseFloat(getComputedStyle(box).fontSize);
-      if (cur <= minPx) break;
-      const rH = box.scrollHeight > 0 ? box.clientHeight / box.scrollHeight : 1;
-      const rW = box.scrollWidth > 0 ? box.clientWidth / box.scrollWidth : 1;
-      const next = Math.max(minPx, cur * Math.min(rH, rW) * 0.97);
-      if (next >= cur) break;
-      box.style.fontSize = next.toFixed(2) + "px";
+      if (!(cur > FIT_MIN_PX)) continue;
+      const next = Math.max(FIT_MIN_PX, cur * Math.min(sh > 0 ? ch / sh : 1, sw > 0 ? cw / sw : 1) * 0.97);
+      if (next >= cur) continue;
+      todo.push({ box, size: next });
     }
-  };
-  setTimeout(run, 0);
+    // ---- 쓰기 패스
+    for (const { box, size } of todo) box.style.fontSize = size.toFixed(2) + "px";
+    live = todo.map((x) => x.box);
+  }
+
+  if (waiting.length) {
+    for (const box of waiting) fitQueue.add(box);
+    fitScheduled = true;
+    setTimeout(flushFits, 16);
+  }
 }
 
-function artEl(cardId: string): HTMLElement {
+/**
+ * 실측 자동 축소: 요소가 DOM에 붙은 뒤 내용이 박스를 넘치면 폰트를 줄여
+ * 항상 프레임 안에 들어가게 한다. 카드가 손패/마켓/줌 어느 크기로 렌더되든
+ * em 기반이라 같은 비율로 동작 — "효과 텍스트가 프레임을 벗어나는" 문제의 근본 해결.
+ * (CSS 클래스 버킷(--small/--tiny)은 1차 근사로 유지, 이 함수가 최종 보정)
+ */
+function fitToBox(box: HTMLElement): void {
+  // 주의: rAF는 숨겨진 탭에서 영원히 안 불린다(재접속 백그라운드 렌더 등) → setTimeout 사용.
+  // 레이아웃 측정(scrollHeight)은 백그라운드에서도 동작한다.
+  fitQueue.add(box);
+  if (fitScheduled) return;
+  fitScheduled = true;
+  setTimeout(flushFits, 0);
+}
+
+/** 줌 오버레이만 원본이 필요하다. 나머지는 전부 축소본. */
+export type CardArtSize = "thumb" | "avatar" | "full";
+
+/**
+ * 카드 아트는 3종. 작은 두 개는 `npm run art:optimize`(scripts/optimize-card-art.mjs)가
+ * 원본에서 생성한다.
+ *   full  = 원본 832x1216 (~165KB) — 줌(카드 폭 400px)에서만 필요
+ *   thumb = w384 (~17KB)  — 아카이브/덱/마켓/손패/필드. 아트 창이 최대 150 CSS px라
+ *                            2배 DPR에서도 384px면 충분하다
+ *   avatar= w128 (~3KB)   — 22~74px 아바타
+ * 아카이브 화면 기준 57MB → 6MB.
+ */
+export function cardArtSrc(cardId: string, size: CardArtSize = "thumb"): string {
+  if (size === "full") return `/art/cards/${cardId}.webp`;
+  return `/art/cards/${size === "avatar" ? "w128" : "w384"}/${cardId}.webp`;
+}
+
+function artEl(cardId: string, size: CardArtSize): HTMLElement {
   const art = el("div", "card-art");
   const img = document.createElement("img");
-  img.src = `/art/cards/${cardId}.webp`;
-  img.alt = "";
+  // loading/decoding은 src보다 "먼저" 설정해야 한다 — 로드는 src 대입이 예약하고,
+  // 그 뒤에 붙인 속성은 그 로드에 반영된다는 보장이 없다(= lazy가 무시될 수 있다).
   img.loading = "lazy";
   img.decoding = "async";
-  img.onerror = () => img.remove();
+  img.alt = "";
+  // 축소본이 없으면 원본으로 한 번만 폴백하고, 그것도 없으면 ◆ 플레이스홀더를 남긴다.
+  img.onerror = () => {
+    if (size !== "full" && !img.dataset.fellBack) {
+      img.dataset.fellBack = "1";
+      img.src = cardArtSrc(cardId, "full");
+      return;
+    }
+    img.remove();
+  };
+  img.src = cardArtSrc(cardId, size);
   art.appendChild(img);
   return art;
 }
@@ -97,11 +195,14 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const typeClass = c.t === "mon" ? "card--mon" : c.t === "trap" ? "card--trap" : c.t === "starter" ? "card--starter" : "card--spell";
   const sizeClass = opt.size === "mkt" ? "card--mkt" : opt.size === "hand" ? "card--hand" : "";
   const node = el("div", `card ${typeClass} ${sizeClass}`.trim());
+  if (opt.compactField) node.classList.add("card--field");
+  // 고코스트(8+) 카드: 홀로그래픽 시머 — 손패/마켓/줌에서만 (필드 썸네일은 성능상 제외)
+  if (c.cost >= 8 && !opt.compactField && !opt.field) node.classList.add("card--legend");
   node.dataset.uid = c.uid;
   // Layering: art sits BEHIND the frame (in the transparent art window), the
   // frame PNG overlays on top (its border hugs the art edges), then text/cost
   // render above the frame. (frame's outer + window are transparent.)
-  node.appendChild(artEl(c.id));
+  node.appendChild(artEl(c.id, opt.zoom ? "full" : "thumb"));
   const frameEl = el("div", "card-frame");
   frameEl.style.backgroundImage = `url(${frameFor(c.t)})`;
   node.appendChild(frameEl);
@@ -139,6 +240,8 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     const eggH = (c as { hatch?: number }).hatch ?? c.hatchTurns;
     const eggD = (c as { dur?: number }).dur ?? c.hatchDur ?? 4;
     node.appendChild(el("div", "egg-cnt", `<span class="ec ec-h">🥚${eggH}</span><span class="ec ec-d">🛡${Math.max(0, eggD)}</span>`));
+    // 부화 직전(다음 턴 시작에 부화): 흔들림 + 균열 글로우 예고
+    if (opt.field && eggH <= 1) node.classList.add("egg-soon");
   }
   // 기합 토큰 / 부패 카운터 / 부여 패시브 배지 (필드 카드만)
   if (opt.field && c.hatchTurns == null && c.aura !== "assassinGuild") {
@@ -150,10 +253,15 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
       const lang0 = getLang();
       for (const k of fm.passivesG) {
         const p = PASSIVES[k];
-        if (p) bits.push(`<span class="ec ec-p">${lang0 === "ja" ? p.ja.name : lang0 === "en" ? p.en.name : p.ko.name}</span>`);
+        if (p) bits.push(`<span class="ec ec-p" data-psv="${k}">${lang0 === "ja" ? p.ja.name : lang0 === "en" ? p.en.name : p.ko.name}</span>`);
       }
     }
-    if (bits.length) node.appendChild(el("div", "egg-cnt", bits.join("")));
+    if (bits.length) {
+      const badges = el("div", "egg-cnt", bits.join(""));
+      // 부여 패시브 칩: hover/탭 → 즉석 설명 툴팁 (줌까지 안 열어도 뜻을 알 수 있게)
+      badges.querySelectorAll<HTMLElement>(".ec-p[data-psv]").forEach((chip) => attachPsvTip(chip));
+      node.appendChild(badges);
+    }
   }
   // 이름도 실측-축소: 긴 이름(EN 포함)이 프레임 이름판을 벗어나지 않게
   fitToBox(nameEl2);

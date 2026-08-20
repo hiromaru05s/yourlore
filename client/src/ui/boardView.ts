@@ -8,8 +8,8 @@ import { effMaxMana, playCost, buyCost, effAtk, effDef } from "../shared/engine"
 import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer } from "./modal";
-import { cardEl } from "./cardView";
-import { bindZoom } from "./anim";
+import { cardEl, cardArtSrc } from "./cardView";
+import { bindZoom, zoomCard, showTargetArrow, hideTargetArrow } from "./anim";
 import { t, getLang } from "../i18n";
 import { logToEn } from "../shared/logEn";
 import { getSfxVolume, setSfxVolume } from "./sound";
@@ -19,9 +19,7 @@ import { avatarHtml } from "./social";
 let MY_AVATAR: string | null | undefined;
 export function setMyAvatar(a?: string | null): void { MY_AVATAR = a; }
 
-// each side's equipped card-sleeve URL — used for deck/hand/set-trap backs.
-// MY is set locally from app.user; OPP is refreshed per-render from the
-// server-synced state.sleeves, so the opponent's chosen sleeve shows too.
+// One universal card back is used by every player and every hidden card.
 let MY_SLEEVE = FRAME_BACK;
 let OPP_SLEEVE = FRAME_BACK;
 export function setMySleeve(id?: string | null): void { MY_SLEEVE = sleeveUrl(id); }
@@ -30,6 +28,11 @@ let MARKET_WATCH = new Set<string>();
 export function setMarketWatch(ids?: string[] | null): void { MARKET_WATCH = new Set(ids ?? []); }
 /** card-back image for a pile/back that belongs to `isMe`. */
 function backFor(isMe: boolean): string { return isMe ? MY_SLEEVE : OPP_SLEEVE; }
+function setTrapIconFor(isMe: boolean): string {
+  return isMe
+    ? "/ui/trap-set-icons/set-trap-mine.png"
+    : "/ui/trap-set-icons/set-trap-opponent.png";
+}
 
 const MON_SLOTS = 7;
 const ST_SLOTS = 7;
@@ -52,6 +55,10 @@ export class GameView {
   you: Side;
   h: BoardHandlers;
   logEl!: HTMLElement;
+  /** 마지막으로 공격을 시작한 내 몬스터 uid — 대상 선택 화살표의 시작점 */
+  private lastAttacker: string | null = null;
+  /** 직전 렌더에서 구매 가능했던 마켓 슬롯 키 — "이제 살 수 있다" 반짝임 감지용 */
+  private prevAffordable: Set<string> | null = null;
 
   constructor(root: HTMLElement, you: Side, h: BoardHandlers) {
     this.root = root;
@@ -65,11 +72,13 @@ export class GameView {
       <div class="game">
         <div class="topbar">
           <div class="brand"><div class="mark"></div><h1>LORE</h1></div>
+          <div class="icon-rail" id="iconRail" aria-hidden="true"></div>
           <div class="turn-info" id="turnInfo"></div>
           <button class="btn btn-danger giveup-btn" id="giveupBtn"><svg class="gv-flag" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M6 2a1 1 0 0 1 1 1v.6h10.3a.7.7 0 0 1 .58 1.1L16.4 8l1.48 3.3a.7.7 0 0 1-.58 1.1H7V21a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1z"/></svg><span class="gv-label">${t("game.surrender")}</span></button>
         </div>
         <button class="mute-fab" id="muteBtn" title="${t("game.mute")}" aria-label="${t("game.mute")}"></button>
         <div class="stage">
+          <div class="ambient-fx" aria-hidden="true">${'<i></i>'.repeat(9)}</div>
           <div class="board-col">
             <div class="opp-hand" id="oppHand"></div>
             <div class="prow" id="oppRow"></div>
@@ -138,8 +147,12 @@ export class GameView {
 
   private q(id: string): HTMLElement { return this.root.querySelector("#" + id) as HTMLElement; }
 
-  /** Append a compact event icon to the topbar rail (glanceable history when the log is closed). */
-  pushIcon(kind: string): void {
+  /**
+   * Append a compact event chip to the topbar rail (glanceable history when the
+   * log is closed). Card-backed events (summon/spell/buy/trap) render the card's
+   * ART thumbnail; clicking it zooms the card — a mini visual timeline of the game.
+   */
+  pushIcon(kind: string, cardId?: string): void {
     const map: Record<string, [string, string]> = {
       summon: ["🐾", ""], attack: ["⚔", ""], destroy: ["💥", "dmg"], buy: ["🛒", "gold"],
       draw: ["🃏", ""], playSpell: ["✨", ""], trapReveal: ["⚡", "dmg"], heal: ["✚", "good"], hitme: ["🩸", "dmg"],
@@ -147,10 +160,17 @@ export class GameView {
     const m = map[kind]; if (!m) return;
     const rail = this.root.querySelector("#iconRail"); if (!rail) return;
     const chip = document.createElement("span");
-    chip.className = "rail-ico" + (m[1] ? " " + m[1] : "");
-    chip.textContent = m[0];
+    const def = cardId ? (DBC[cardId] ?? STARTERS[cardId]) : undefined;
+    if (def) {
+      chip.className = "rail-card" + (m[1] ? " " + m[1] : "");
+      chip.innerHTML = `<img src="${cardArtSrc(def.id, "avatar")}" alt="" loading="lazy" onerror="this.remove()"><i>${m[0]}</i>`;
+      chip.onclick = () => zoomCard({ uid: "rail", ...def });
+    } else {
+      chip.className = "rail-ico" + (m[1] ? " " + m[1] : "");
+      chip.textContent = m[0];
+    }
     rail.appendChild(chip);
-    while (rail.children.length > 18) rail.removeChild(rail.firstChild as Node);
+    while (rail.children.length > 14) rail.removeChild(rail.firstChild as Node);
     requestAnimationFrame(() => chip.classList.add("in"));
   }
 
@@ -214,16 +234,28 @@ export class GameView {
     } else {
       hint.style.display = "none";
     }
+
+    // 공격 대상 선택 중: 공격자 카드 → 포인터로 향하는 곡선 화살표
+    if (pending && myTurn && pending.kind === "oppMon" && pending.reason === "attack" && this.lastAttacker) {
+      const from = this.root.querySelector(`.card[data-uid="${this.lastAttacker}"]`) as HTMLElement | null;
+      if (from) showTargetArrow(from); else hideTargetArrow();
+    } else {
+      hideTargetArrow();
+      if (!pending) this.lastAttacker = null;
+    }
   }
+
+  /** Called by the controller the moment an attack is submitted (before the pending arrives). */
+  armAttackArrow(uid: string): void { this.lastAttacker = uid; }
 
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {
     row.innerHTML = "";
     const sortByCost = (cards: CardInst[]) => [...cards].sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
     const onTurn = !g.over && g.cur === (g.players.indexOf(p) as Side);
 
-    // inline pile cells (leading edge of each zone row): 묘지 on the monster row, 덱 on the spell/trap row
-    const graveTop = p.discard[p.discard.length - 1];
-    const gravePile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, graveTop ? frameFor(graveTop.t) : null, graveTop ?? null, t("game.discard"),
+    // Deck + graveyard share a compact dock on the far right of the two field rows.
+    // The deck keeps the real card-sleeve ratio; the remaining strip is count-only graveyard UI.
+    const gravePile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, null, null, t("game.discard"),
       () => cardPicker(`${p.name} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => { /* browse only */ }));
     // clicking the DECK opens the full composition (own or opponent's public aggregate)
     const collection = this.collectionOf(p, isMe);
@@ -231,6 +263,8 @@ export class GameView {
     const remaining = isMe ? [...p.deck].sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name)) : null;
     const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, backFor(isMe), null, t("game.deck"),
       () => deckViewer(`${p.name} — ${t("deck.view")}`, collection, remaining, !isMe));
+    gravePile.classList.add("inline-pile", "inline-grave");
+    deckPile.classList.add("inline-pile", "inline-deck");
 
     const block = document.createElement("div");
     block.className = "field-block" + (isMe ? " is-mine" : " is-opp") + (onTurn ? " is-turn" : "");
@@ -253,7 +287,7 @@ export class GameView {
         && !(pending!.kind === "myMon" && pending!.reason === "grantMajesty" && hasPassive(m, "majesty")) // 이미 위엄 보유
         && !(pending!.kind === "myMon" && pending!.data?.exclude === m.uid); // 지원 나팔: 같은 몬스터 중복 선택 불가
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
-      const card = cardEl(m, { field: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
+      const card = cardEl(m, { field: true, compactField: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
       // zoom shows the monster's CURRENT atk/def (buffs/mods applied), matching the on-field card
@@ -266,48 +300,59 @@ export class GameView {
     // spell/trap zone
     const sz = document.createElement("div");
     sz.className = "zone zone-st";
-    p.traps.forEach((t) => {
-      if (isMe && t.card.id !== "HIDDEN") {
-        const card = cardEl(t.card, { badge: "SET" });
-        bindZoom(card, t.card);
-        sz.appendChild(card);
-      } else {
-        const cb = document.createElement("div");
-        cb.className = "card card--back";
-        cb.style.backgroundImage = `url(${backFor(isMe)})`;
-        sz.appendChild(cb);
-      }
+    p.traps.forEach(() => {
+      // Set traps keep their identity hidden, but use a dedicated owner-coloured
+      // field icon inside the same green square field frame as other trap cards.
+      const trap = document.createElement("div");
+      trap.className = "card card--trap card--field card--field-trap";
+      const art = document.createElement("div");
+      art.className = "card-art card-art--set-trap";
+      const icon = document.createElement("img");
+      icon.src = setTrapIconFor(isMe);
+      icon.alt = "";
+      art.appendChild(icon);
+      const frame = document.createElement("div");
+      frame.className = "card-frame";
+      frame.style.backgroundImage = `url(${frameFor("trap")})`;
+      trap.append(art, frame);
+      sz.appendChild(trap);
     });
     p.enchants.forEach((e) => {
       // 영구(99) 영구마법은 턴 배지를 아예 표시하지 않는다 — 기한부만 남은 턴을 크게 표시 (v21 UX)
       // 혈귀술/고대 문명처럼 turns=99지만 bornTurn 기준 N턴 후 사라지는 카드도 남은 턴을 보여준다
       const lim = e.card.ench ? ENCH_TURN_LIMITS[e.card.ench] : undefined;
       const rem = e.turns < 99 ? e.turns : lim != null ? Math.max(0, (e.bornTurn ?? 0) + lim - g.turn) : null;
-      const card = cardEl(e.card, rem != null ? { badge: `⏳${rem}` } : {});
+      const card = cardEl(e.card, rem != null ? { compactField: true, badge: `⏳${rem}` } : { compactField: true });
       if (rem != null) { card.classList.add("ench-timed"); if (rem <= 1) card.classList.add("ench-expiring"); }
       bindZoom(card, e.card);
       sz.appendChild(card);
     });
     for (let i = p.traps.length + p.enchants.length; i < ST_SLOTS; i++) sz.appendChild(this.slotEl());
 
-    // each zone row = [leading pile] + [slots] (pile on the leading edge; opp mirrors).
     // Monster zone nearest the center line: me → mon on top, opp → mon on bottom.
-    const monRow = this.zoneRow(gravePile, mz, isMe);
-    const stRow = this.zoneRow(deckPile, sz, isMe);
+    const monRow = this.zoneRow(mz);
+    const stRow = this.zoneRow(sz);
+    const zoneLines = document.createElement("div");
+    zoneLines.className = "zone-lines";
+    if (isMe) zoneLines.append(monRow, stRow); else zoneLines.append(stRow, monRow);
+
+    const pileDock = document.createElement("div");
+    pileDock.className = "pile-dock" + (isMe ? " is-mine" : " is-opp");
+    if (isMe) pileDock.append(gravePile, deckPile); else pileDock.append(deckPile, gravePile);
+
     const zones = document.createElement("div");
     zones.className = "zones";
-    if (isMe) zones.append(monRow, stRow); else zones.append(stRow, monRow);
+    zones.append(zoneLines, pileDock);
 
     block.append(zones, this.metaPanel(p, isMe));
     row.append(block);
   }
 
-  /** One zone line: pile cell at the leading edge (left for me, right for opp). */
-  private zoneRow(pile: HTMLElement, zone: HTMLElement, isMe: boolean): HTMLElement {
+  /** One field line; the shared deck/graveyard dock is rendered to its right. */
+  private zoneRow(zone: HTMLElement): HTMLElement {
     const rowEl = document.createElement("div");
     rowEl.className = "zone-row";
-    pile.classList.add("inline-pile");
-    if (isMe) rowEl.append(pile, zone); else rowEl.append(zone, pile);
+    rowEl.append(zone);
     return rowEl;
   }
 
@@ -539,12 +584,24 @@ export class GameView {
       card.appendChild(dot);
     };
 
+    // "이제 살 수 있다" 반짝임: 직전 렌더에 못 사던 카드가 살 수 있게 되면 1회 시머.
+    // 첫 렌더에서는 기준만 잡고 반짝이지 않는다.
+    const wasAff = this.prevAffordable;
+    const nowAff = new Set<string>();
+    const sparkle = (card: HTMLElement, key: string, aff: boolean): void => {
+      if (aff) {
+        nowAff.add(key);
+        if (wasAff && !wasAff.has(key)) card.classList.add("now-buyable");
+      }
+    };
+
     const fixed = this.q("fixedMarket");
     g.market.forEach((c, i) => {
       const bc = buyCost(owner, c);
       const aff = myTurn && !g.pending && me.mana >= bc;
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc }); // same size as 제시
       if (aff) armBuy(card, "mkt" + i, () => this.h.onBuyMarket(i));
+      sparkle(card, "m:" + c.uid, aff);
       markWatch(card, c.id);
       bindZoom(card, c);
       fixed.appendChild(card);
@@ -562,11 +619,13 @@ export class GameView {
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc });
       card.dataset.supIdx = String(i);  // ORIGINAL supply index (display is sorted) — buy anim finds it by this
       if (aff) armBuy(card, "sup" + i, () => this.h.onBuySupply(i));
+      sparkle(card, "s:" + c.uid, aff);
       if (myTurn) markWatch(card, c.id); // 제시는 내 턴의 내 제시만 (상대 제시엔 표시 무의미)
       bindZoom(card, c);
       sup.appendChild(card);
     }
     for (let k = filled.length; k < owner.supply.length; k++) sup.appendChild(this.slotEl("mkt", true));
+    this.prevAffordable = nowAff;
 
     const rb = this.q("refreshBtn") as HTMLButtonElement;
     rb.disabled = !myTurn || !!g.pending || me.mana < 1;
@@ -589,8 +648,72 @@ export class GameView {
       card.style.zIndex = String(idx);
       if (aff) card.onclick = () => this.h.onPlay(c.uid); // uid, not index: the DOM can lag the logical state
       else card.onclick = () => this.h.onBlockedPlay(c.uid); // explain WHY it can't be played (popup)
+      if (aff) this.enableDragPlay(card, c.uid);
       bindZoom(card, c);
       handEl.appendChild(card);
+    });
+  }
+
+  /**
+   * Drag-to-play: pull a playable hand card up onto the board to play it
+   * (tap/click still works). Pointer-based like enableReorder — a 14px move
+   * starts the drag; the 380ms touch long-press zoom keeps priority; the
+   * board glows while the card is over the valid drop region.
+   */
+  private enableDragPlay(card: HTMLElement, uid: string): void {
+    card.style.touchAction = "none";
+    card.draggable = false;
+    card.addEventListener("dragstart", (e) => e.preventDefault());
+    card.addEventListener("pointerdown", (e: PointerEvent) => {
+      if (e.button !== 0) return;
+      const isTouch = e.pointerType === "touch";
+      const sx = e.clientX, sy = e.clientY, t0 = performance.now();
+      let ghost: HTMLElement | null = null;
+      let over = false;
+      let done = false;
+      const handTop = (): number => {
+        const r = (this.root.querySelector("#handArea") as HTMLElement | null)?.getBoundingClientRect();
+        return r ? r.top : window.innerHeight * 0.78;
+      };
+      const cleanup = (): void => {
+        done = true;
+        ghost?.remove();
+        card.classList.remove("is-dragging");
+        this.root.querySelector(".game")?.classList.remove("drop-ready");
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+        window.removeEventListener("pointercancel", cleanup);
+      };
+      const onMove = (ev: PointerEvent): void => {
+        if (done) return;
+        if (!ghost) {
+          if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 14) return;
+          if (isTouch && performance.now() - t0 > 340) { cleanup(); return; } // 줌 오버레이가 이 제스처의 주인
+          try { card.setPointerCapture(ev.pointerId); } catch { /* ok */ }
+          ghost = card.cloneNode(true) as HTMLElement;
+          ghost.className = card.className + " drag-ghost";
+          ghost.style.width = `${card.offsetWidth}px`;
+          ghost.style.height = `${card.offsetHeight}px`;
+          document.body.appendChild(ghost);
+          card.classList.add("is-dragging");
+        }
+        ghost.style.left = `${ev.clientX - card.offsetWidth / 2}px`;
+        ghost.style.top = `${ev.clientY - card.offsetHeight * 0.55}px`;
+        over = ev.clientY < handTop() - 8; // 손패 영역 위로 끌어올리면 = 플레이
+        ghost.classList.toggle("can-drop", over);
+        this.root.querySelector(".game")?.classList.toggle("drop-ready", over);
+      };
+      const onUp = (): void => {
+        const dragged = !!ghost, drop = over;
+        cleanup();
+        if (!dragged) return; // 그냥 탭 — click 핸들러가 처리
+        // 드래그 후의 클릭이 중복 플레이를 일으키지 않게 삼킨다
+        card.addEventListener("click", (ce) => { ce.stopPropagation(); ce.preventDefault(); }, { capture: true, once: true });
+        if (drop) this.h.onPlay(uid);
+      };
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", onUp);
+      window.addEventListener("pointercancel", cleanup);
     });
   }
 

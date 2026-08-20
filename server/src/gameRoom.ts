@@ -392,7 +392,7 @@ export class GameRoom {
     s.turnTotalMs = total;
     s.turnLeftMs = Math.max(0, total - (Date.now() - this.room!.turnStartAt));
     const pl = this.room!.players;
-    s.sleeves = [pl[0].sleeve ?? null, pl[1].sleeve ?? null];
+    s.sleeves = [pl[0]?.sleeve ?? "default", pl[1]?.sleeve ?? "default"];
     return s;
   }
 

@@ -1,0 +1,625 @@
+/* ============================================================
+   LORE archive home — compact-screen composition.
+
+   The desktop archive remains untouched. Under 760px we switch to
+   a separate DOM composition made from reusable layers:
+   generated atmosphere, generated paper material, existing brand/
+   rank/card/icon assets, and live HTML controls.
+   ============================================================ */
+
+.mobile-archive-home { display: none; }
+
+@media (max-width: 760px) {
+  body:has(.mobile-archive-home) {
+    min-height: 100dvh;
+    overflow: hidden;
+    background: #050403;
+  }
+
+  .screen:has(.home-archive-exact) {
+    display: block;
+    width: 100%;
+    height: 100dvh;
+    min-height: 100dvh;
+    padding: 0 !important;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    background:
+      linear-gradient(180deg, #0705031f, #0504038a 72%, #030201e8),
+      url("/bg/archive-mobile-library.webp") center top / cover no-repeat fixed !important;
+    scrollbar-width: none;
+  }
+
+  .screen:has(.home-archive-exact)::-webkit-scrollbar { display: none; }
+  .screen:has(.home-archive-exact)::before,
+  .screen:has(.home-archive-exact)::after { content: none !important; }
+
+  .home-archive-exact {
+    display: block !important;
+    width: 100%;
+    min-height: 100dvh;
+    color: #e9d6a8;
+    text-align: left;
+    background: transparent;
+  }
+
+  .home-archive-exact > :not(.mobile-archive-home) { display: none !important; }
+
+  .mobile-archive-home {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    width: min(100%, 560px);
+    min-height: 100dvh;
+    margin: 0 auto;
+    padding:
+      max(14px, env(safe-area-inset-top))
+      max(14px, env(safe-area-inset-right))
+      max(24px, env(safe-area-inset-bottom))
+      max(14px, env(safe-area-inset-left));
+    flex-direction: column;
+    gap: 12px;
+    isolation: isolate;
+  }
+
+  .mobile-archive-home::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    content: "";
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 50% 12%, #c9a25b14, transparent 28%),
+      linear-gradient(180deg, #05040326, #0504038f 82%, #050403e8);
+  }
+
+  .mobile-archive-header {
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .mobile-archive-wordmark {
+    display: block;
+    width: clamp(118px, 34vw, 154px);
+    height: auto;
+    filter: drop-shadow(0 4px 5px #000) drop-shadow(0 0 10px #b58a4538);
+  }
+
+  .mobile-archive-header-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .mobile-archive-header-actions button,
+  .mobile-archive-currency {
+    position: relative;
+    display: grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    padding: 0;
+    border: 1px solid #8c6b3c;
+    border-radius: 8px;
+    color: #e8d09a;
+    background: linear-gradient(145deg, #21170ee8, #090705f2);
+    box-shadow: inset 0 1px #f4d89b1c, 0 6px 18px #0009;
+    font-size: 20px;
+  }
+
+  .mobile-archive-friends-icon {
+    position: relative;
+    width: 22px;
+    height: 18px;
+  }
+
+  .mobile-archive-friends-icon::before {
+    position: absolute;
+    top: 1px;
+    left: 3px;
+    width: 7px;
+    height: 7px;
+    content: "";
+    border: 1px solid #624920;
+    border-radius: 50%;
+    background: #e5c47f;
+    box-shadow: 9px 2px 0 -1px #d5b46e, 9px 2px #624920;
+  }
+
+  .mobile-archive-friends-icon::after {
+    position: absolute;
+    bottom: 1px;
+    left: 1px;
+    width: 12px;
+    height: 7px;
+    content: "";
+    border: 1px solid #624920;
+    border-radius: 8px 8px 2px 2px;
+    background: #d9b974;
+    box-shadow: 8px 2px 0 -1px #c5a563, 8px 2px #624920;
+  }
+
+  .mobile-archive-notice {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    display: grid;
+    min-width: 18px;
+    height: 18px;
+    place-items: center;
+    padding: 0 4px;
+    border: 1px solid #e8bd78;
+    border-radius: 999px;
+    color: #fff2cf;
+    background: #8d251e;
+    font: 700 10px/1 var(--mono);
+  }
+
+  .mobile-archive-userbar {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .mobile-archive-profile {
+    display: flex;
+    min-width: 0;
+    min-height: 54px;
+    flex: 1;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px 6px 7px;
+    border: 1px solid #80613a;
+    border-radius: 10px;
+    color: #ecd9ad;
+    background: linear-gradient(100deg, #171009ec, #090705d9);
+    box-shadow: inset 0 1px #f4d89b17, 0 8px 20px #0008;
+    text-align: left;
+  }
+
+  .mobile-archive-profile .avatar {
+    --avs: 40px !important;
+    border-color: #aa8750;
+  }
+
+  .mobile-archive-profile > span:last-child {
+    display: grid;
+    min-width: 0;
+    gap: 2px;
+  }
+
+  .mobile-archive-profile b {
+    overflow: hidden;
+    font: 700 14px/1.15 Georgia, "Times New Roman", serif;
+    letter-spacing: .04em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-archive-profile small {
+    overflow: hidden;
+    color: #9f8d69;
+    font-size: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-archive-currency {
+    width: 70px;
+    grid-template-columns: auto auto;
+    gap: 5px;
+  }
+
+  .mobile-archive-currency img {
+    width: 25px;
+    height: 19px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 5px #32c9ff99);
+  }
+
+  .mobile-archive-currency b {
+    color: #eadbb7;
+    font: 700 14px/1 Georgia, "Times New Roman", serif;
+  }
+
+  .mobile-archive-modes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding: 5px;
+    border: 1px solid #5e462b;
+    border-radius: 12px;
+    background: #070503d9;
+    box-shadow: inset 0 0 18px #000, 0 8px 20px #0008;
+  }
+
+  .mobile-archive-modes button {
+    display: flex;
+    min-width: 0;
+    min-height: 54px;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 7px 5px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: #9c8966;
+    background: transparent;
+  }
+
+  .mobile-archive-modes button.is-active {
+    border-color: #b28a4e;
+    color: #f1dfb2;
+    background:
+      linear-gradient(180deg, #6a2017e6, #280d09ec),
+      radial-gradient(circle at 50% 0, #ffb24c28, transparent 62%);
+    box-shadow: inset 0 0 0 1px #e0b96a2d, 0 3px 10px #000b;
+  }
+
+  .mobile-archive-modes img {
+    width: 27px;
+    height: 27px;
+    object-fit: contain;
+    filter: sepia(.24) drop-shadow(0 2px 3px #000);
+  }
+
+  .mobile-archive-modes span {
+    display: grid;
+    min-width: 0;
+    gap: 1px;
+    text-align: left;
+  }
+
+  .mobile-archive-modes b {
+    overflow: hidden;
+    font: 700 11px/1.1 "Apple SD Gothic Neo", sans-serif;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-archive-modes small {
+    color: #907b58;
+    font: 700 7px/1 var(--mono);
+    letter-spacing: .12em;
+  }
+
+  .mobile-archive-modes button.is-active small { color: #d5b474; }
+
+  .mobile-archive-dossier {
+    position: relative;
+    display: grid;
+    gap: 12px;
+    padding: 18px 16px 16px;
+    overflow: hidden;
+    border: 1px solid #8b6d43;
+    border-radius: 3px 14px 14px 3px;
+    color: #352618;
+    background:
+      linear-gradient(90deg, #5f432323 0 2px, transparent 3px 100%),
+      url("/bg/archive-mobile-parchment.webp") center / 480px auto repeat;
+    box-shadow:
+      inset 0 0 0 4px #4e351a24,
+      inset -16px 0 22px #5b3c1b1f,
+      0 16px 34px #000c;
+  }
+
+  .mobile-archive-dossier::before,
+  .mobile-archive-dossier::after {
+    position: absolute;
+    left: 13px;
+    right: 13px;
+    height: 1px;
+    content: "";
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, #725c3b8f 8%, #725c3b8f 92%, transparent);
+  }
+
+  .mobile-archive-dossier::before { top: 9px; }
+  .mobile-archive-dossier::after { bottom: 8px; }
+
+  .mobile-archive-dossier-head {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #745b3970;
+  }
+
+  .mobile-archive-kicker {
+    display: block;
+    margin-bottom: 8px;
+    color: #7b6340;
+    font: 700 8px/1 var(--mono);
+    letter-spacing: .16em;
+  }
+
+  .mobile-archive-mode-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .mobile-archive-mode-title > img {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 auto;
+    object-fit: contain;
+    filter: sepia(.55) saturate(.62) brightness(.72) drop-shadow(0 2px 1px #3d291640);
+  }
+
+  .mobile-archive-mode-title h1 {
+    margin: 0 0 4px;
+    color: #2f2115;
+    font: 700 clamp(23px, 7vw, 30px)/1 "AppleMyungjo", Batang, Georgia, serif;
+    letter-spacing: .04em;
+  }
+
+  .mobile-archive-mode-title p {
+    max-width: 30ch;
+    color: #5a4630;
+    font-size: 10.5px;
+    line-height: 1.45;
+    word-break: keep-all;
+  }
+
+  .mobile-archive-rankcard {
+    display: grid;
+    grid-template-columns: 82px minmax(0, 1fr);
+    gap: 10px 12px;
+    align-items: center;
+    padding: 11px;
+    border: 1px solid #785d3980;
+    background: #f3dfb02b;
+    box-shadow: inset 0 1px #fff5d44a;
+  }
+
+  .mobile-archive-rank-emblem {
+    width: 78px;
+    height: 78px;
+    grid-row: 1;
+    object-fit: contain;
+    filter: drop-shadow(0 3px 2px #3d29162e);
+  }
+
+  .mobile-archive-rank-copy {
+    display: grid;
+    min-width: 0;
+    gap: 2px;
+  }
+
+  .mobile-archive-rank-copy small {
+    color: #816947;
+    font: 700 9px/1 var(--mono);
+    letter-spacing: .1em;
+  }
+
+  .mobile-archive-rank-copy strong {
+    color: #3b2919;
+    font: 700 22px/1.15 "AppleMyungjo", Batang, Georgia, serif;
+  }
+
+  .mobile-archive-rank-copy span {
+    color: #6c5538;
+    font: 700 10px/1.3 var(--mono);
+  }
+
+  .mobile-archive-record {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid #795e3b70;
+  }
+
+  .mobile-archive-record > div {
+    display: grid;
+    gap: 2px;
+    padding-top: 8px;
+    text-align: center;
+  }
+
+  .mobile-archive-record > div + div { border-left: 1px solid #795e3b55; }
+  .mobile-archive-record dt { color: #806a49; font-size: 9px; }
+  .mobile-archive-record dd { color: #3a2818; font: 700 15px/1 Georgia, serif; }
+
+  .mobile-archive-bot-levels {
+    display: none;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+  }
+
+  .mobile-archive-home[data-mobile-mode="bot"] .mobile-archive-bot-levels { display: grid; }
+
+  .mobile-archive-bot-levels button {
+    min-height: 36px;
+    border: 1px solid #8065428f;
+    border-radius: 4px;
+    color: #5a452e;
+    background: #f3e2ba5c;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .mobile-archive-bot-levels button.is-active {
+    border-color: #7c281f;
+    color: #fff0ca;
+    background: linear-gradient(#7e2d23, #48140e);
+  }
+
+  .mobile-archive-home:not([data-mobile-mode="ranked"]) .mobile-archive-rank-emblem {
+    padding: 8px;
+    filter: sepia(.5) saturate(.6) brightness(.72);
+  }
+
+  .mobile-archive-deck {
+    display: grid;
+    gap: 8px;
+    padding-top: 2px;
+  }
+
+  .mobile-archive-deck header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .mobile-archive-deck header small {
+    display: block;
+    color: #816947;
+    font: 700 8px/1 var(--mono);
+    letter-spacing: .13em;
+  }
+
+  .mobile-archive-deck h2 {
+    margin-top: 3px;
+    color: #392719;
+    font: 700 17px/1.15 "AppleMyungjo", Batang, Georgia, serif;
+  }
+
+  .mobile-archive-deck header button {
+    min-height: 32px;
+    padding: 5px 9px;
+    border: 1px solid #7c613d;
+    border-radius: 4px;
+    color: #4c3824;
+    background: #f2dfb16b;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .mobile-archive-deck-cards {
+    display: flex;
+    min-height: 82px;
+    align-items: end;
+    gap: 5px;
+    overflow: hidden;
+  }
+
+  .mobile-archive-deck-cards .card {
+    --cw: clamp(46px, 14vw, 62px);
+    --ch: calc(var(--cw) / .64);
+    flex: 0 0 auto;
+    box-shadow: 0 5px 10px #432c1970;
+  }
+
+  .mobile-archive-deck-cards .card:nth-child(n+6) { display: none; }
+
+  .mobile-archive-start {
+    position: relative;
+    display: grid;
+    min-height: 74px;
+    place-items: center;
+    gap: 1px;
+    padding: 9px 18px;
+    border: 16px solid transparent;
+    border-image: url("/ui/ranked-start-frame.webp") 19% fill / 16px / 0 stretch;
+    color: #fff0be;
+    background: none;
+    filter: drop-shadow(0 8px 8px #3b1c0b7a);
+    text-align: center;
+  }
+
+  .mobile-archive-start span {
+    background: linear-gradient(180deg, #fffde0, #fff36a, #ffd21f 68%, #fff58a);
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 2px 0 #2a0d07) drop-shadow(0 4px 2px #1003029c);
+    font: 700 20px/1.05 "AppleMyungjo", Batang, Georgia, serif;
+    -webkit-background-clip: text;
+    -webkit-text-stroke: .5px #a87512;
+  }
+
+  .mobile-archive-start small {
+    color: #cda95f;
+    font: 700 7px/1 var(--mono);
+    letter-spacing: .18em;
+  }
+
+  .mobile-archive-quick {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+    padding-bottom: 4px;
+  }
+
+  .mobile-archive-quick button {
+    display: grid;
+    min-width: 0;
+    min-height: 62px;
+    place-items: center;
+    align-content: center;
+    gap: 4px;
+    padding: 7px 4px;
+    border: 1px solid #765936;
+    border-radius: 8px;
+    color: #d7bd84;
+    background:
+      radial-gradient(circle at 50% 0, #c89d5320, transparent 58%),
+      linear-gradient(180deg, #181009ed, #080604f2);
+    box-shadow: inset 0 1px #f4d89b17, 0 6px 15px #0008;
+  }
+
+  .mobile-archive-quick img {
+    width: 27px;
+    height: 27px;
+    object-fit: contain;
+    filter: sepia(.3) drop-shadow(0 2px 3px #000);
+  }
+
+  .mobile-archive-quick span {
+    overflow: hidden;
+    max-width: 100%;
+    font-size: 10px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-archive-home button:active { transform: translateY(1px); filter: brightness(.92); }
+  .mobile-archive-home button:focus-visible { outline: 2px solid #e3bd73; outline-offset: 2px; }
+}
+
+@media (max-width: 340px) {
+  .mobile-archive-home { padding-right: 10px; padding-left: 10px; gap: 9px; }
+  .mobile-archive-wordmark { width: 112px; }
+  .mobile-archive-modes button { min-height: 50px; }
+  .mobile-archive-modes img { width: 23px; height: 23px; }
+  .mobile-archive-modes b { font-size: 10px; }
+  .mobile-archive-dossier { padding-right: 13px; padding-left: 13px; }
+  .mobile-archive-mode-title > img { width: 42px; height: 42px; }
+  .mobile-archive-rankcard { grid-template-columns: 70px minmax(0, 1fr); }
+  .mobile-archive-rank-emblem { width: 66px; height: 66px; }
+  .mobile-archive-deck-cards .card { --cw: 43px; }
+}
+
+@media (max-width: 760px) and (orientation: landscape) and (max-height: 560px) {
+  .mobile-archive-home {
+    width: min(100%, 760px);
+    display: grid;
+    grid-template-columns: minmax(220px, .78fr) minmax(340px, 1.22fr);
+    grid-template-areas:
+      "header header"
+      "user modes"
+      "quick dossier";
+    align-items: start;
+    gap: 8px 12px;
+  }
+
+  .mobile-archive-header { grid-area: header; min-height: 40px; }
+  .mobile-archive-userbar { grid-area: user; }
+  .mobile-archive-modes { grid-area: modes; }
+  .mobile-archive-dossier { grid-area: dossier; }
+  .mobile-archive-quick { grid-area: quick; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-archive-home *,
+  .mobile-archive-home *::before,
+  .mobile-archive-home *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

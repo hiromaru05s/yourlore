@@ -4,7 +4,7 @@
 // ============================================================
 import type { CardInst } from "../shared/types";
 import { cardEl } from "./cardView";
-import { bindZoom } from "./anim";
+import { bindZoom, confettiBurst } from "./anim";
 import { TRIBES } from "../shared/cards";
 import { t, getLang } from "../i18n";
 
@@ -61,6 +61,7 @@ export function winModal(won: boolean | null, detail: string, onAgain: () => voi
   again.onclick = () => { closeOverlay(); onAgain(); };
   row.append(again);
   mount(m);
+  if (won === true) confettiBurst(); // 승리: 금빛 색종이
 }
 
 /** Ranked pre-game market preview: study the fixed market before the coin toss.

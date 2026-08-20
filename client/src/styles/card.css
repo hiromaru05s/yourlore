@@ -23,6 +23,59 @@
 .card--mkt { --cw: var(--card-w-mkt); --ch: var(--card-h-mkt); }
 .card--hand { --cw: var(--card-w-hand); --ch: var(--card-h-hand); }
 
+/* Field-only thumbnail. The supplied red/blue/green PNG is used directly and
+   clipped at its square art section; hand, market and zoom keep the full card. */
+.card--field {
+  --cw: var(--field-card-size);
+  --ch: var(--field-card-size);
+  overflow: hidden;
+  border-radius: 7%;
+  font-size: calc(var(--cw) * .16);
+}
+.card--field .card-frame {
+  background-size: 100% auto;
+  background-position: center top;
+}
+.card--field .card-art {
+  top: 21%; left: 6.5%; right: 6.5%; height: 76%;
+  border-radius: 2%;
+}
+.card--field .card-name {
+  top: 6.5%; left: 33%; right: 5%; height: 10%;
+  font-size: .48em;
+}
+.card--field .card-eff,
+.card--field .cast-tip { display: none; }
+.card--field .card-cost {
+  top: -2%; left: -4%; width: 34%;
+}
+.card--field .ad-atk,
+.card--field .ad-def {
+  top: auto; bottom: 3%; width: 31%; height: 23%;
+  border: 1px solid #ffffff70; border-radius: 999px;
+  color: #fff; font-size: .92em; text-shadow: 0 1px 3px #000;
+  box-shadow: 0 2px 6px #000b, inset 0 1px #ffffff38;
+  backdrop-filter: blur(2px);
+}
+.card--field .ad-atk { left: 4%; background: #641d16e8; }
+.card--field .ad-def { left: auto; right: 4%; background: #173d68e8; }
+.card--field .ad-atk::before { content: "⚔"; margin-right: .18em; font-size: .72em; }
+.card--field .ad-def::before { content: "◆"; margin-right: .18em; font-size: .62em; }
+.card--field .egg-cnt { top: 48%; max-width: 92%; }
+.card--field .egg-cnt .ec { font-size: max(6px, calc(var(--cw) * .09)); padding: 1px 3px; }
+.card--field .badge { bottom: 4%; font-size: .62em; }
+.card--field-back {
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #5c6c88;
+  box-shadow: inset 0 0 0 2px #050811, 0 2px 7px #000b;
+}
+.card--field-trap {
+  box-shadow: 0 2px 7px #000b;
+}
+.card--field-trap .card-art--set-trap { top: 14%; height: 83%; }
+.card--field-trap .card-art--set-trap img { object-position: center; }
+
 /* per-type cost-gem colors (match the frame color) + neon cost-button image */
 .card--mon     { --cc: #d1431f; --cc-lo: #f47a4a; --cost-img: url(/ui/cost-mon.webp); }
 .card--spell   { --cc: #2c6bd0; --cc-lo: #5a9cf2; --cost-img: url(/ui/cost-spell.webp); }
@@ -201,6 +254,10 @@
   box-shadow: inset 0 2px 7px #000a, inset 0 0 0 1px #00000070, 0 1px 0 #ffffff05;
   position: relative;
 }
+.zone .slot {
+  --cw: var(--field-card-size);
+  --ch: var(--field-card-size);
+}
 .slot::after {
   content: "◆"; color: #3a4c6e3a; font-size: calc(var(--cw, var(--card-w)) * 0.34);
   text-shadow: 0 1px 1px #000, 0 0 10px #00000080;
@@ -239,15 +296,90 @@
 .pile.flash .pile-card { animation: pileFlash .5s var(--ease); }
 @keyframes pileFlash { 50% { box-shadow: 0 0 16px var(--gold-glow), var(--shadow-1); filter: brightness(1.4) } }
 
-/* inline pile (deck/graveyard cell at the leading edge of a zone row): tags sit INSIDE */
+/* Right-side deck/graveyard dock. The sleeve keeps the normal portrait card
+   ratio; the short leftover strip is a count-only graveyard control. */
 .inline-pile { cursor: pointer; }
-.inline-pile .pile-count {
+.pile-dock .inline-pile { width: 100%; }
+.pile-dock .inline-deck {
+  height: calc(var(--field-card-size) * 1.5625);
+  flex: 0 0 auto;
+}
+.pile-dock .inline-deck .pile-card {
+  background-size: 100% 100%;
+  background-position: center;
+}
+.pile-dock .inline-grave {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.pile-dock .inline-grave .pile-card {
+  background: linear-gradient(180deg, #111a2a, #080d16);
+  border: 1px dashed #5c6c8870;
+  transform: none !important;
+}
+.pile-dock .inline-pile .pile-count {
   position: absolute; inset: 0; bottom: 0; left: 0; transform: none;
-  display: grid; place-items: center; font-size: calc(var(--card-w) * 0.28);
+  display: grid; place-items: center; font-size: calc(var(--field-card-size) * 0.28);
   color: var(--paper); text-shadow: 0 1px 3px #000, 0 0 6px #000;
 }
-.inline-pile .pile-tag {
+.pile-dock .inline-deck .pile-tag {
   top: auto; bottom: 2px; left: 50%; transform: translateX(-50%);
   font-size: 7px; letter-spacing: .1em; color: var(--paper-dim);
   background: #000000aa; padding: 0 3px; border-radius: 2px; z-index: 2;
 }
+.pile-dock .inline-grave .pile-tag { display: none; }
+.pile-dock .inline-grave .pile-count {
+  font-size: max(9px, calc(var(--field-card-size) * .24));
+  color: var(--paper-dim);
+}
+
+/* ============================================================
+   UX pass (2026-08): egg hatch warning · legendary shimmer ·
+   passive-chip instant tooltip
+   ============================================================ */
+
+/* 부화 직전(🥚1) 알: 흔들리며 균열 글로우 — "다음 턴에 나온다" 예고 */
+.card.egg-soon { animation: eggWobble 1.6s ease-in-out infinite; }
+.card.egg-soon .card-art::before {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: radial-gradient(60% 50% at 50% 55%, #ffd97a33, transparent 75%);
+  animation: eggGlow 1.6s ease-in-out infinite alternate;
+}
+@keyframes eggWobble {
+  0%, 100% { transform: rotate(0); }
+  12% { transform: rotate(-2.4deg); }
+  24% { transform: rotate(2deg); }
+  36% { transform: rotate(-1.2deg); }
+  46% { transform: rotate(0); }
+}
+@keyframes eggGlow { from { opacity: .25; } to { opacity: .8; } }
+
+/* 고코스트(8+): 홀로그래픽 포일 시머 — 아트 위를 주기적으로 쓸고 지나간다 */
+.card--legend .card-art::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(115deg,
+    transparent 30%, #ffe9b826 44%, #b8e2ff33 50%, #ffc9f026 56%, transparent 70%);
+  background-size: 260% 100%;
+  animation: legendShimmer 4.4s ease-in-out infinite;
+}
+@keyframes legendShimmer {
+  0%, 55% { background-position: 130% 0; }
+  100% { background-position: -130% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card.egg-soon { animation: none; }
+  .card--legend .card-art::before { animation: none; }
+}
+
+/* 부여 패시브 칩의 즉석 설명 툴팁 (body 직속, 카드 clip에 안 잘림) */
+.ec-p[data-psv] { cursor: help; }
+.psv-tip {
+  position: fixed; z-index: 260; width: 220px; transform: translateY(-100%);
+  background: linear-gradient(180deg, var(--ink-3), var(--ink-1));
+  border: 1px solid var(--brass-dim); border-radius: 9px; padding: 8px 11px;
+  font-size: 11.5px; line-height: 1.5; color: var(--paper);
+  box-shadow: 0 6px 20px #000c; pointer-events: none;
+  opacity: 0; transition: opacity .12s var(--ease);
+}
+.psv-tip.show { opacity: 1; }
+.psv-tip b { display: block; color: var(--brass-hi); margin-bottom: 2px; }

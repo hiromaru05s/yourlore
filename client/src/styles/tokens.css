@@ -46,6 +46,7 @@
      hand) always fits at 100% zoom. Ratio ~0.64 is shared by every variant. */
   --card-h: clamp(78px, 12vh, 146px);
   --card-w: calc(var(--card-h) * 0.64);
+  --field-card-size: var(--card-w);
   --card-r: 6px;
   --slot-gap: clamp(4px, 0.55vw, 8px);
 
