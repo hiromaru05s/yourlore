@@ -9,6 +9,7 @@ import type { GameClientMsg, GameServerMsg } from "../shared/protocol";
 import { Sock } from "../net/socket";
 import { BaseController, type ControllerExits } from "./controller";
 import { closeOverlay, noticeModal, marketPreview } from "../ui/modal";
+import { eventBanner } from "../ui/anim";
 import { clearActiveGame } from "../net/resume";
 import { t } from "../i18n";
 
@@ -58,12 +59,17 @@ export class OnlineController extends BaseController {
 
   private onServer(msg: GameServerMsg): void {
     if (msg.type === "init") {
+      const firstInit = !this.started;
       this.started = true;
       this.banner(null); // reconnected & resynced
       this.preview?.close(); this.preview = undefined; // preview phase over → game begins (coin toss shows on turn 1)
       closeOverlay();
       this.applyResult({ state: msg.state, events: msg.events }, false);
       if (this.state?.over) clearActiveGame(); // rejoined a game that already finished
+      // 진행 중인 게임에 처음 합류(=크래시/탭 종료 후 복귀): 안심 배너 + 현황 파악 시간
+      else if (firstInit && this.state && this.state.turn > 1) {
+        void eventBanner(`↩ ${t("fx.resume")}`, `${t("game.turn")} ${this.state.turn}`, "info", 1700);
+      }
     } else if (msg.type === "update") {
       this.applyResult({ state: msg.state, events: msg.events });
       if (this.state?.over) clearActiveGame(); // game ended → nothing to rejoin

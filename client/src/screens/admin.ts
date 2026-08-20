@@ -29,10 +29,6 @@ interface EconStats {
 }
 interface CardStat { id: string; buys: number; plays: number; games: number; winrate: number | null }
 interface StarterStat { id: string; decks: number; plays: number; games: number; winrate: number | null }
-interface InquiryRow {
-  id: string; title: string; body: string; created_at: number;
-  user_id: string | null; display: string | null; email: string | null;
-}
 interface AdminUser {
   id: string; email: string; display: string; created_at: number; verified: number;
   source: string | null; wins: number; losses: number; invited_by: string | null; credits: number;
@@ -40,7 +36,7 @@ interface AdminUser {
 }
 
 const TIER_ORDER = ["iron", "bronze", "silver", "gold", "platinum", "diamond", "master"];
-const TABS = [["overview", "개요"], ["acquisition", "유입·퍼널"], ["retention", "리텐션"], ["gameplay", "게임·밸런스"], ["economy", "이코노미·수익"], ["users", "유저"], ["inquiries", "문의"]] as const;
+const TABS = [["overview", "개요"], ["acquisition", "유입·퍼널"], ["retention", "리텐션"], ["gameplay", "게임·밸런스"], ["economy", "이코노미·수익"], ["users", "유저"]] as const;
 type TabKey = typeof TABS[number][0];
 
 const esc = (s: string) => (s || "").replace(/[<>&]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" }[c] as string));
@@ -91,7 +87,6 @@ export function mountAdmin(app: App): Screen {
 
   let stats: Stats | null = null;
   let users: AdminUser[] = [];
-  let inquiries: InquiryRow[] | null = null;
   let tab: TabKey = "overview";
   let cardSort: { key: keyof CardStat | "name"; dir: 1 | -1 } = { key: "winrate", dir: -1 };
   let starterSort: { key: keyof StarterStat | "name"; dir: 1 | -1 } = { key: "decks", dir: -1 };
@@ -288,10 +283,6 @@ export function mountAdmin(app: App): Screen {
           ${kpi("광고 수익", `$${m.adRevenue}`)}
         </div>
         <p class="adm-note">${m.note}. 확정 수익구조는 docs/monetization.md ($7 단일 구독 · 파워 판매 금지).</p>`;
-    } else if (tab === "inquiries") {
-      body.innerHTML = `<div class="adm-sticky"><h3 style="font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--brass);margin:0">문의 리스트 <span class="adm-note" style="margin-left:6px">홈 '문의' 모달로 접수된 요청사항·버그</span> <button class="btn btn-mini btn-ghost" id="admInqReload">↻ 새로고침</button></h3></div><div id="admInq" class="adm-note">불러오는 중…</div>`;
-      (body.querySelector("#admInqReload") as HTMLButtonElement | null)?.addEventListener("click", () => { inquiries = null; void loadInquiries(); });
-      if (inquiries) renderInquiries(); else void loadInquiries();
     } else if (tab === "users") {
       body.innerHTML = `<div class="adm-sticky"><h3 style="font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--brass);margin:0">유저 리스트 <input class="input adm-search" id="admUserQ" placeholder="이메일/닉네임 검색"> <button class="btn btn-mini btn-ghost" id="admCsv">CSV ↓</button></h3></div><div id="admUsers" class="adm-note">불러오는 중…</div>`;
       if (users.length) renderUsers(); else void loadUsers();
@@ -377,38 +368,6 @@ export function mountAdmin(app: App): Screen {
     a.href = url; a.download = `lore-users-${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-  }
-
-  /** 문의 탭: 접수일·유저·제목 리스트, 행 클릭으로 본문 펼치기. */
-  function renderInquiries(): void {
-    const box = body.querySelector("#admInq") as HTMLElement | null;
-    if (!box) return;
-    const list = inquiries ?? [];
-    const kst = (t: number) => new Date(t + 32400_000).toISOString().slice(0, 16).replace("T", " ");
-    box.className = "";
-    box.innerHTML = `<table class="adm-inq">
-      <tr class="hd"><td style="width:150px">접수 (KST)</td><td style="width:200px">유저</td><td>제목</td></tr>
-      ${list.map((r, i) => `
-        <tr class="inq-row" data-i="${i}" style="cursor:pointer">
-          <td>${kst(r.created_at)}<div class="adm-note" style="margin:0">${ago(r.created_at)}</div></td>
-          <td>${r.display != null ? `${esc(r.display)}<div class="adm-note" style="margin:0">${esc(r.email ?? "")}</div>` : `<span style="color:var(--paper-faint)">게스트/비로그인</span>`}</td>
-          <td>${esc(r.title)} <span class="adm-note" style="margin:0">▾</span></td>
-        </tr>
-        <tr data-b="${i}" style="display:none"><td colspan="3" style="white-space:pre-wrap;line-height:1.6;color:var(--paper-dim);padding:10px 14px;background:#00000033">${esc(r.body)}</td></tr>`).join("") || `<tr><td colspan="3">아직 접수된 문의가 없습니다</td></tr>`}
-    </table><p class="adm-note">${list.length}건 · 최신순 (최대 300건 표시). 행 클릭 = 본문 펼치기/접기.</p>`;
-    box.querySelectorAll(".inq-row").forEach((tr) => (tr as HTMLElement).onclick = () => {
-      const b = box.querySelector(`[data-b="${(tr as HTMLElement).dataset.i}"]`) as HTMLElement | null;
-      if (b) b.style.display = b.style.display === "none" ? "" : "none";
-    });
-  }
-
-  async function loadInquiries(): Promise<void> {
-    const box = body.querySelector("#admInq") as HTMLElement | null;
-    if (box) { box.className = "adm-note"; box.textContent = "불러오는 중…"; }
-    const res = await fetch("/api/admin/inquiries", { credentials: "include" }).catch(() => null);
-    if (!res?.ok) { if (box) box.textContent = "불러오기에 실패했습니다"; return; }
-    inquiries = ((await res.json()) as { inquiries: InquiryRow[] }).inquiries;
-    renderInquiries();
   }
 
   async function loadUsers(): Promise<void> {

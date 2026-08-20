@@ -39,7 +39,6 @@ export interface CardDef {
   noShop?: boolean; // 스타팅(덱 구성) 전용 — 고정/제시 마켓에 등장하지 않음
   exileOnDestroy?: boolean; // 영구마법: 파괴/제거 시 묘지 대신 게임에서 제외
   passive?: string[]; // 키워드 패시브 (cards.PASSIVES 키 — 기합/부패/위엄/도발/회피/공허/아우라 …)
-  grantPassive?: string; // 마법(buffPerm): 강화 대상 몬스터에게 부여하는 패시브 키워드 (거암의 가호 → 도발)
   nameJa?: string; // Japanese name (falls back to name)
   textJa?: string; // Japanese effect text (falls back to text)
   nameEn?: string; // English name (falls back to name)
@@ -68,7 +67,6 @@ export interface FieldMon extends CardInst {
   dur?: number; // 알: remaining durability (enemy attacks consume 1 instead of combat)
   evolvedUsed?: boolean; // 흡혈귀: 진화(1회) 사용됨
   trickSwapped?: boolean; // 트릭룸: 공/방 반전 적용 중
-  dmg?: number; // v24 HP-combat: accumulated damage taken (current HP = effDef - dmg); cleared when the card leaves the field
   gcount?: number; // 누적 카운트 (암살자 길드 / 뱀파이어 집사 흡혈 카운트)
   passivesG?: string[]; // 게임 중 부여된 패시브 (암기 제작→부패, 각인 비술→위엄)
   guts?: number; // 기합: 남은 기합 토큰 (전투 파괴를 1회 무효화)

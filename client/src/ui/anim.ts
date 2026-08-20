@@ -43,40 +43,6 @@ const raf = (): Promise<void> => {
     requestAnimationFrame(() => requestAnimationFrame(done));
   });
 };
-// ---- drag-play origin -----------------------------------------------------
-// When YOU play a card by dragging it, the play FX used to start at the LEFT
-// EDGE of the whole #hand element — so dragging the right-most card made the
-// card "appear" from the far left and fly back. The hand card's own release
-// rect (plus the drag vector) is stashed here on pointerup and consumed by the
-// next play animation, so the FX continues exactly where your finger let go
-// and keeps travelling in the direction you dragged.
-export interface PlayOrigin {
-  left: number; top: number; width: number; height: number;
-  dx: number; dy: number; // drag vector (press → release)
-}
-let playOrigin: (PlayOrigin & { at: number }) | null = null;
-export function setPlayOrigin(o: PlayOrigin | null): void {
-  playOrigin = o ? { ...o, at: Date.now() } : null;
-}
-/** Consume the stashed drag origin (own side only, one-shot, 5s TTL). */
-function takeOrigin(side: ViewSide): (PlayOrigin & { at: number }) | null {
-  if (side !== "me") return null;
-  const o = playOrigin;
-  playOrigin = null;
-  return o && Date.now() - o.at < 12000 ? o : null;
-}
-/** Origin rect for a hand-played card: the dragged card if we have it, else the hand. */
-function fromRect(side: ViewSide, org: PlayOrigin | null): DOMRect | null {
-  if (org) return new DOMRect(org.left, org.top, org.width, org.height);
-  return handRect(side);
-}
-/** Slight lean matching the horizontal drag direction (deg), so the card keeps
- *  the momentum of the flick instead of snapping to a neutral upright pose. */
-function dragTilt(org: PlayOrigin | null): number {
-  if (!org) return 0;
-  const d = Math.max(-16, Math.min(16, (org.dx / 90) * 16));
-  return Math.abs(d) < 1 ? 0 : d;
-}
 const handRect = (side: ViewSide): DOMRect | null => rectOf(side === "me" ? "#hand" : "#oppHand");
 const rowRect = (side: ViewSide): DOMRect | null => rectOf(side === "me" ? "#meRow" : "#oppRow");
 const discId = (side: ViewSide): string => (side === "me" ? "pile-myDisc" : "pile-oppDisc");
@@ -108,12 +74,9 @@ function backEl(): HTMLElement {
 
 /** Opponent (or you) played a SPELL: reveal it from hand, hold face-up, then send to discard (or fade into field). */
 export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish"): Promise<void> {
-  const org = takeOrigin(side);
-  const from = fromRect(side, org); const row = rowRect(side);
+  const from = handRect(side); const row = rowRect(side);
   if (!from || !row) return;
   const node = floatAt(cardEl(card, { size: "hand" }), from);
-  const tilt = dragTilt(org);
-  if (tilt) node.style.transform = `rotate(${tilt}deg)`;
   // 상대가 쓴 카드는 "작게 지나가서 뭘 냈는지 모르겠다"는 피드백 → 상대 카드는
   // 화면 정중앙으로 크게(scale 2) 줌인해 한참 머무르며 읽을 시간을 준다.
   const opp = side !== "me";
@@ -121,7 +84,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   const cy = opp ? window.innerHeight / 2 - 78 : row.top + row.height / 2 - 78;
   await raf();
   node.style.transition = `left .38s ${EASE}, top .38s ${EASE}, transform .38s ${EASE}`;
-  node.style.left = cx + "px"; node.style.top = cy + "px"; node.style.transform = opp ? "scale(2)" : "scale(1.25)"; // settles upright from the drag lean
+  node.style.left = cx + "px"; node.style.top = cy + "px"; node.style.transform = opp ? "scale(2)" : "scale(1.25)";
   if (opp) node.classList.add("fx-opp-cast"); // glow ring so the reveal reads as "enemy played this"
   await wait(opp ? 2600 : 650); // opponent's card lingers so you can read it
   if (dest === "discard") {
@@ -140,13 +103,10 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
 
 /** Opponent (or you) SUMMONED a monster: fly the card from hand to its field slot, then a lively pop. */
 export async function summonFromHand(card: CardInst, uid: string, side: ViewSide): Promise<void> {
-  const org = takeOrigin(side);
-  const from = fromRect(side, org); const node = byUid(uid); const to = rectOf(node);
+  const from = handRect(side); const node = byUid(uid); const to = rectOf(node);
   if (!from || !to || !node) { summonIn(uid); return; }
   node.style.visibility = "hidden";
   const ghost = floatAt(cardEl(card, { size: "hand" }), from);
-  const tilt = dragTilt(org);
-  if (tilt) ghost.style.transform = `rotate(${tilt}deg)`;
   await raf();
   ghost.style.transition = `left .32s ${EASE}, top .32s ${EASE}, transform .32s ${EASE}`;
   ghost.style.left = to.left + "px"; ghost.style.top = to.top + "px"; ghost.style.transform = "scale(.82)";
@@ -159,12 +119,9 @@ export async function summonFromHand(card: CardInst, uid: string, side: ViewSide
 
 /** A face-down trap was set: slide a card-back from hand into the trap zone. */
 export async function trapSetAnim(side: ViewSide): Promise<void> {
-  const org = takeOrigin(side);
-  const from = fromRect(side, org); const to = trapZoneRect(side);
+  const from = handRect(side); const to = trapZoneRect(side);
   if (!from || !to) return;
   const back = floatAt(backEl(), from);
-  const tilt = dragTilt(org);
-  if (tilt) back.style.transform = `rotate(${tilt}deg)`;
   await raf();
   back.style.transition = `left .34s ${EASE}, top .34s ${EASE}, transform .34s ${EASE}`;
   back.style.left = (to.left + to.width / 2 - 24) + "px"; back.style.top = to.top + "px"; back.style.transform = "scale(.7)";
@@ -368,14 +325,14 @@ function miniCardGrid(ids: string[]): HTMLElement {
 }
 
 // right-click to enlarge any card
-export function zoomCard(c: CardInst, hp?: { now: number; max: number }): void {
+export function zoomCard(c: CardInst): void {
   closeZoom();
   const ov = document.createElement("div");
   ov.className = "zoom-overlay";
   ov.id = "zoomOverlay";
   const wrap = document.createElement("div");
   wrap.className = "zoom-wrap";
-  wrap.appendChild(cardEl(c, { fullArt: true, ...(hp ? { hpNow: hp.now, hpMax: hp.max } : {}) }));
+  wrap.appendChild(cardEl(c, { zoom: true })); // 400px 카드 — 여기서만 원본 해상도 아트
   // "(지속)" 스탯 변화 카드: 필드에 있는 동안만 유지된다는 각주
   if (/\((?:지속|持続|lasting)\)/.test(cardText(c))) {
     const note = document.createElement("div");
@@ -452,15 +409,15 @@ export function closeZoom(): void {
  * Bind "enlarge" to an element: right-click on desktop, long-press on touch.
  * A long-press swallows the tap so it does NOT also play/attack with the card.
  */
-export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; max: number }): void {
-  el.oncontextmenu = (e) => { e.preventDefault(); zoomCard(card, hp); };
+export function bindZoom(el: HTMLElement, card: CardInst): void {
+  el.oncontextmenu = (e) => { e.preventDefault(); zoomCard(card); };
   let timer = 0, sx = 0, sy = 0, fired = false;
   el.addEventListener("touchstart", (e) => {
     if (e.touches.length !== 1) return;
     fired = false;
     sx = e.touches[0].clientX; sy = e.touches[0].clientY;
     clearTimeout(timer);
-    timer = window.setTimeout(() => { fired = true; zoomCard(card, hp); }, 380);
+    timer = window.setTimeout(() => { fired = true; zoomCard(card); }, 380);
   }, { passive: true });
   const cancel = () => clearTimeout(timer);
   el.addEventListener("touchmove", (e) => {
@@ -586,7 +543,7 @@ function gainLabel(anchor: DOMRect, text: string, cls: string): HTMLElement {
 
 /** Rich "max mana increased" celebration around the mana pips (~2.2s). */
 export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
-  const bar = document.getElementById("hpbar-" + side)?.closest(".pcluster") as HTMLElement | null;
+  const bar = document.getElementById("hpbar-" + side)?.closest(".meta-panel") as HTMLElement | null;
   const anchor = (bar?.querySelector(".pips") as HTMLElement | null) ?? bar;
   if (!anchor) return;
   const r = anchor.getBoundingClientRect();
@@ -658,7 +615,7 @@ export async function maxHpSurge(side: ViewSide, amount: number): Promise<void> 
 
 /** Small "-N" feedback on the mana pips when max mana DROPS. */
 export function manaDrop(side: ViewSide, amount: number): void {
-  const bar = document.getElementById("hpbar-" + side)?.closest(".pcluster") as HTMLElement | null;
+  const bar = document.getElementById("hpbar-" + side)?.closest(".meta-panel") as HTMLElement | null;
   const anchor = (bar?.querySelector(".pips") as HTMLElement | null) ?? bar;
   floatNum(anchor, `-${amount} ◆`, "dmg");
 }
@@ -702,6 +659,116 @@ export async function deathShatter(loserSide: ViewSide, won: boolean, cause: str
   v.remove(); vg.remove();
   document.querySelector(".game")?.classList.remove("fx-quake");
   bar?.classList.remove("fx-shatter");
+}
+
+/** Turn-start banner: a slim ribbon sweeping across mid-screen ("내 턴" / "상대 턴"). */
+export function turnBanner(mine: boolean): void {
+  document.querySelectorAll(".fx-turnbanner").forEach((n) => n.remove());
+  const b = document.createElement("div");
+  b.className = "fx-turnbanner" + (mine ? " mine" : " opp");
+  b.innerHTML = `<span>${mine ? tt("fx.yourturn") : tt("fx.oppturn")}</span>`;
+  document.body.appendChild(b);
+  setTimeout(() => { b.classList.add("out"); setTimeout(() => b.remove(), 320); }, mine ? 1250 : 950);
+}
+
+/** Heavy summon landing: dust ring + soft board shake (cost 6+ monsters feel BIG). */
+export function summonSlam(rect: DOMRect | null): void {
+  if (!rect) return;
+  const x = rect.left + rect.width / 2, y = rect.top + rect.height * 0.7;
+  const ring = document.createElement("div");
+  ring.className = "fx-slam-ring";
+  ring.style.left = x + "px"; ring.style.top = y + "px";
+  document.body.appendChild(ring);
+  for (let i = 0; i < 8; i++) {
+    const d = document.createElement("i");
+    d.className = "fx-slam-dust";
+    const a = Math.PI + (Math.PI * i) / 7; // fan along the ground line
+    const dist = 26 + Math.random() * 36;
+    d.style.setProperty("--tx", Math.cos(a) * dist * 1.6 + "px");
+    d.style.setProperty("--ty", Math.abs(Math.sin(a)) * -dist * 0.5 + "px");
+    d.style.left = x + "px"; d.style.top = y + "px";
+    document.body.appendChild(d);
+    setTimeout(() => d.remove(), 620);
+  }
+  boardShake("soft");
+  setTimeout(() => ring.remove(), 560);
+}
+
+/** Floating damage number on a field monster (combat hits). */
+export function monDamage(uid: string, amount: number): void {
+  if (amount <= 0) return;
+  floatNum(byUid(uid), `-${amount}`, "dmg");
+}
+
+/** Passive-trigger callout on a field monster (기합 소모, 부패 적립, 패시브 부여 …). */
+export function flashBadge(uid: string, text: string, kind: "good" | "bad" = "good"): void {
+  const n = byUid(uid);
+  if (!n) return;
+  const r = n.getBoundingClientRect();
+  const b = document.createElement("div");
+  b.className = "fx-psv-flash " + kind;
+  b.textContent = text;
+  b.style.left = r.left + r.width / 2 + "px";
+  b.style.top = r.top + 4 + "px";
+  document.body.appendChild(b);
+  setTimeout(() => b.remove(), 1150);
+}
+
+// ---- attack targeting arrow --------------------------------------------------
+// While the engine waits for an attack target, a curved arrow follows the
+// pointer from the attacker card. Board view drives show/hide on render.
+let arrowSvg: SVGSVGElement | null = null;
+let arrowFrom: HTMLElement | null = null;
+let arrowMove: ((e: PointerEvent) => void) | null = null;
+
+export function showTargetArrow(from: HTMLElement): void {
+  hideTargetArrow();
+  arrowFrom = from;
+  const ns = "http://www.w3.org/2000/svg";
+  arrowSvg = document.createElementNS(ns, "svg");
+  arrowSvg.setAttribute("class", "fx-arrow");
+  arrowSvg.innerHTML = `<path class="fx-arrow-line" d=""/><path class="fx-arrow-head" d=""/>`;
+  document.body.appendChild(arrowSvg);
+  const draw = (x: number, y: number): void => {
+    if (!arrowSvg || !arrowFrom || !arrowFrom.isConnected) return;
+    const r = arrowFrom.getBoundingClientRect();
+    const sx = r.left + r.width / 2, sy = r.top + r.height / 2;
+    const mx = (sx + x) / 2, my = Math.min(sy, y) - Math.hypot(x - sx, y - sy) * 0.18;
+    (arrowSvg.querySelector(".fx-arrow-line") as SVGPathElement).setAttribute("d", `M${sx},${sy} Q${mx},${my} ${x},${y}`);
+    // arrow head oriented along the curve's end tangent
+    const ang = Math.atan2(y - my, x - mx);
+    const s = 11;
+    const p1 = [x - Math.cos(ang - 0.45) * s, y - Math.sin(ang - 0.45) * s];
+    const p2 = [x - Math.cos(ang + 0.45) * s, y - Math.sin(ang + 0.45) * s];
+    (arrowSvg.querySelector(".fx-arrow-head") as SVGPathElement).setAttribute("d", `M${x},${y} L${p1[0]},${p1[1]} L${p2[0]},${p2[1]} Z`);
+  };
+  arrowMove = (e: PointerEvent) => draw(e.clientX, e.clientY);
+  window.addEventListener("pointermove", arrowMove);
+  // seed at the attacker so the arrow doesn't flash at 0,0 before the first move
+  const r0 = from.getBoundingClientRect();
+  draw(r0.left + r0.width / 2, r0.top - 30);
+}
+
+export function hideTargetArrow(): void {
+  if (arrowMove) { window.removeEventListener("pointermove", arrowMove); arrowMove = null; }
+  arrowSvg?.remove(); arrowSvg = null; arrowFrom = null;
+}
+
+/** Victory confetti burst (result screen). */
+export function confettiBurst(): void {
+  const COLORS = ["#e8c25a", "#f0a87f", "#7fd6c2", "#5a9cf2", "#f47a7a"];
+  for (let i = 0; i < 46; i++) {
+    const c = document.createElement("i");
+    c.className = "fx-confetti";
+    c.style.left = 20 + Math.random() * 60 + "vw";
+    c.style.background = COLORS[i % COLORS.length];
+    c.style.setProperty("--dx", (Math.random() - 0.5) * 240 + "px");
+    c.style.setProperty("--rot", (Math.random() - 0.5) * 900 + "deg");
+    c.style.animationDelay = Math.random() * 350 + "ms";
+    c.style.width = 5 + Math.random() * 5 + "px";
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 2600);
+  }
 }
 
 /** Floating "결과 보기" button while reviewing the log after the game ends. */

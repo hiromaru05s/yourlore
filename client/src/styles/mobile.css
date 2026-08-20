@@ -1,11 +1,10 @@
 /* ============================================================
    LORE — mobile / responsive layer (loaded last, overrides only).
-
-   Card + gutter SIZING is solved per-viewport in JS (ui/layout.ts) and
-   written back as CSS vars, so this file only handles STRUCTURAL changes:
-   what moves, what stacks, what hides. That split is what keeps awkward
-   aspect ratios (split-screen, tall-narrow, short-wide) from collapsing.
-
+   Two regimes:
+     • PORTRAIT phones  → board full-width, log becomes a bottom
+       drawer toggled by a floating button; cards scale with WIDTH.
+     • LANDSCAPE phones → keep the side log but narrower; cards
+       scale with HEIGHT but smaller.
    Tap = play/attack, long-press = enlarge (see anim.ts bindZoom).
    ============================================================ */
 
@@ -16,91 +15,87 @@
 /* kill the blue tap flash on touch */
 * { -webkit-tap-highlight-color: transparent; }
 
-/* ---------------- any viewport the solver flagged as narrow ---------------- */
-.board-compact .game { padding: 3px 4px 4px; }
-.board-compact .topbar { gap: 8px; padding: 0 2px 2px; }
-.board-compact .turn-badge { padding: 2px 8px; gap: 5px; }
-.board-compact .turn-badge .tb-num { font-size: 14px; }
-.board-compact .turn-info .turn-cur { font-size: 10px; max-width: 22vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.board-compact .field-block { padding: 4px 6px; border-radius: 10px; }
-.board-compact .market { padding: 5px 8px; gap: 4px 8px; }
-.board-compact .market-sub .sub-head .tag { font-size: 11px; }
-.board-compact .refresh-btn { font-size: 10.5px; padding: 3px 7px; }
-/* phones: the 갱신 button only needs to be tappable, not prominent */
-.board-phone .refresh-btn { font-size: 9.5px; padding: 2px 6px; gap: 2px; border-radius: 6px; }
-.board-phone .refresh-btn .rf-ico { font-size: 11px; }
-.board-phone .market-sub .sub-head { gap: 6px; }
-.board-compact .pt-mana { padding: 2px 6px; }
-.board-compact .pt-mana b { font-size: 12px; }
-.board-compact .pt-name { font-size: 8.5px; }
-
-/* very small: strip the last non-essential chrome */
-.board-tiny .brand .mark { width: 56px; }
-.board-tiny .market-sub .sub-head { gap: 6px; }
-.board-tiny .market-sub .sub-head .tag { font-size: 10px; letter-spacing: .05em; }
-.board-tiny .pile-tag { display: none; }
-.board-tiny .turn-info .turn-cur { display: none; }
-
-/* crowded zones scroll sideways instead of bursting the board.
-   The deck pile is a SIBLING of .zone, so it stays put while the slots scroll. */
-@media (max-width: 1000px) {
-  /* padding + matching negative margin = the scroll box keeps its visual
-     position but leaves room for the cost gem that overhangs each tile,
-     which overflow:auto would otherwise shear off. */
-  .zone {
-    justify-content: flex-start; overflow-x: auto; overflow-y: hidden;
-    scrollbar-width: none; -webkit-overflow-scrolling: touch;
-    padding: 8px 8px 0; margin: -8px -8px 0;
-  }
-  .zone::-webkit-scrollbar { display: none; }
-}
-
-/* ---------------- PORTRAIT phones / small tablets ---------------- */
+/* ---------------- PORTRAIT (phones / small tablets) ---------------- */
 @media (orientation: portrait) and (max-width: 860px) {
   body, #app, .game, .screen { height: 100dvh; }
 
-  .market-sub { max-width: 100%; }
-  .market-cards { overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  :root {
+    /* card footprint scales with viewport WIDTH so a row fits */
+    --card-h: clamp(50px, 13.2vw, 104px);
+    --card-h-mkt: clamp(56px, 15vw, 120px);
+    --card-h-hand: clamp(70px, 18.5vw, 138px);
+    --slot-gap: 3px;
+  }
+
+  .game { padding: 4px 5px 6px; gap: 3px; }
+  .topbar { gap: 8px; padding: 1px 2px 4px; }
+  .brand .mark { width: 20px; height: 20px; }
+  .brand h1 { font-size: 15px; letter-spacing: .25em; }
+  .topbar .turn-info { font-size: 10px; }
+
+  /* board takes the whole width; log is a drawer (below) */
+  .stage { grid-template-columns: 1fr; gap: 4px; }
+
+  .board-col { gap: 3px; }
+  .opp-hand { height: 13px; margin-top: -2px; }
+  .opp-hand .card--back { width: 28px; height: 45px; margin: 0 -9px; }
+
+  .field-block { padding: 3px 5px; min-width: 0; overflow: hidden; flex-direction: column; gap: 4px; }
+  .meta-panel { flex: 0 0 auto; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding-left: 0; border-left: none; border-top: 1px solid var(--line-soft); padding-top: 4px; }
+  .mp-name { font-size: 10px; letter-spacing: .06em; }
+  .turn-chip { font-size: 8px; padding: 1px 5px; }
+  .mp-hp, .mp-mana { gap: 5px; }
+  .mp-hp .num { font-size: 11px; }
+  .hpbar { min-width: 54px; }
+  .mp-mana .pips { display: none; }     /* pips eat width; numeric x/y stays */
+  .mnum { font-size: 11px; margin-left: 4px; }
+  .mp-btn { font-size: 9.5px; padding: 1px 6px; }
+
+  /* crowded zones scroll sideways instead of overflowing the board */
+  .zone { justify-content: flex-start; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .zone::-webkit-scrollbar { display: none; }
+
+  /* market: stack the two sub-markets, each scrolls horizontally */
+  .market { flex-direction: column; align-items: stretch; gap: 5px; padding: 4px 6px; }
+  .market-sub:nth-child(1), .market-sub:nth-child(3) { flex: 0 0 auto; }
+  .market-div { display: none; }
+  .market-cards { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .market-cards::-webkit-scrollbar { display: none; }
+  .market-sub .sub-head { gap: 7px; margin-bottom: 3px; }
 
-  /* timer + END TURN keep the market's right cell, just tighter */
-  .mid-aside { margin-left: 6px; gap: 4px; }
-  /* reserve the clock's width on both sides of the market so it stays on screen */
-  .mid-row { --aside-min: 52px; }
-  /* the "(opponent's offer)" note wraps under the title instead of widening the panel */
-  .market-sub .sub-head .sh-opp { display: block; margin-left: 0; }
-  .market-sub--supply .sub-head { min-width: 0; max-width: 100%; }
-  .end-turn-wrap .btn { width: clamp(70px, 20vw, 116px); font-size: 11px; }
-
-  .opp-hand { max-width: 34vw; overflow: hidden; }
+  .hand-area { min-height: var(--card-h-hand); padding-top: 0; }
+  .hand .card { margin: 0 -9px; }
+  .end-turn-wrap { left: 6px; right: auto; bottom: 6px; }
+  .end-turn-wrap .btn { width: 120px; padding: 7px 11px; font-size: 11px; }
+  .giveup-btn { right: 6px; bottom: 8px; padding: 7px 10px; font-size: 10px; }
+  .mute-fab { right: 8px; bottom: 57px; width: 34px; height: 34px; }
+  .vol-pop { right: 48px; bottom: 55px; }
 
   /* ---- log as a slide-up bottom drawer ---- */
   .logpanel {
     position: fixed; top: auto; left: 0; right: 0; bottom: 0;
-    height: 46dvh; width: auto; z-index: 95;
-    border-radius: 14px 14px 0 0; border-left: 1px solid var(--line);
+    height: 64dvh; z-index: 95;
+    border-radius: 14px 14px 0 0;
     grid-template-rows: auto 1fr auto;
     transform: translateY(103%);
     transition: transform .26s var(--ease);
   }
   .game.log-open .logpanel { transform: none; }
-  /* keep the tab ON TOP of the sheet it opened, otherwise the only affordance
-     for closing the log is buried underneath it */
-  .game.log-open .log-tab { left: 0; top: auto; bottom: calc(46dvh + 6px); z-index: 96; }
-  /* the sheet used to cover 62% of the screen, so almost everything a thumb
-     could reach WAS the sheet — there was hardly any "outside" left to tap.
-     46dvh keeps the top half of the board tappable, and the close button is
-     sized to be unmissable. */
-  .log-close {
-    width: 40px; height: 40px; font-size: 17px; top: 7px; right: 9px;
-    background: #1b2740ee; color: var(--paper); border-color: var(--brass-dim);
-  }
-  .logpanel .panel-title { padding-right: 56px; font-size: 12px; }
   .log { font-size: 12px; padding: 6px 12px 12px; -webkit-overflow-scrolling: touch; }
 
+  .log-fab {
+    display: grid; place-items: center;
+    position: fixed; right: 12px; bottom: 12px; z-index: 96;
+    width: 46px; height: 46px; border-radius: 50%;
+    background: linear-gradient(180deg, #2a3650, #18223a);
+    border: 1px solid var(--brass-dim); color: var(--brass-hi);
+    font-size: 19px; box-shadow: var(--shadow-2);
+  }
+  .log-fab.open { background: var(--vermil); color: #fff; border-color: var(--vermil-hi); }
+
   /* enlarged card: fit the screen width */
-  .zoom-overlay .card { --cw: min(84vw, 340px); --ch: calc(min(84vw, 340px) * 1.6); }
-  .zoom-wrap { flex-direction: column; gap: 12px; max-height: 92dvh; overflow: auto; }
+  .zoom-overlay .card { --cw: min(86vw, 360px); --ch: calc(min(86vw, 360px) * 1.6); }
+  .zoom-wrap { flex-direction: column; gap: 14px; max-height: 92dvh; overflow: auto; }
   .zoom-tribe { max-width: 88vw; }
 
   /* screens: single-column modes, tighter brand */
@@ -109,165 +104,56 @@
   .home .title { font-size: 18px; }
 }
 
-/* ============================================================
-   HOME on phones (narrow viewports) — one-thumb flow:
-   compact 2-row header → full-width mode banners (primary
-   actions above the fold) → 4-up menu tile grid.
-   ============================================================ */
-@media (max-width: 700px) {
-  .screen:has(.home) {
-    padding: max(10px, env(safe-area-inset-top)) 13px calc(18px + env(safe-area-inset-bottom));
-  }
-
-  /* ---- header: row 1 = wordmark · credits, row 2 = full-width profile chip ---- */
-  .home-top { flex-wrap: wrap; row-gap: 9px; margin-bottom: 13px; }
-  .home-brand { order: 1; }
-  .home-brand .mark { width: 106px; height: 37px; }
-  .home-credits { order: 2; margin-left: auto; padding: 7px 14px; }
-  .home-credits b { font-size: 15px; }
-  .home-top-right { order: 3; width: 100%; }
-  .home-id { width: 100%; padding: 7px 13px 7px 8px; }
-  .home-id-name { font-size: 14px; }
-  .home-id-go { margin-left: auto; }
-
-  /* ---- mode cards → banner rows (icon | title/desc | tier), all visible at once ---- */
-  .home .modes, .home .modes-3 { grid-template-columns: 1fr; gap: 10px; }
-  .mode-card {
-    display: grid;
-    grid-template-columns: 52px 1fr auto;
-    grid-template-areas: "ico h3 aux" "ico p aux";
-    column-gap: 13px; row-gap: 1px; align-items: center;
-    text-align: left; padding: 13px 15px; min-height: 76px;
-    border-image-width: 24px;
-  }
-  .mode-card::after { /* smaller gems on the short banner */
-    background:
-      url(/ui/panel-gem.webp) top 1px center / 32px auto no-repeat,
-      url(/ui/panel-gem.webp) bottom 1px center / 32px auto no-repeat,
-      radial-gradient(120% 90% at 50% 0%, #4fb4ff08, transparent 55%);
-  }
-  .mode-card .mode-ico { grid-area: ico; width: 52px; height: 52px; margin: 0; }
-  .mode-card h3 { grid-area: h3; align-self: end; margin: 0; font-size: 13px; letter-spacing: .1em; }
-  .mode-card p { grid-area: p; align-self: start; font-size: 11.5px; }
-  .mode-card .my-tier { grid-area: aux; margin: 0; min-height: 0; }
-  /* touch: press-down feedback instead of hover-lift (sticky :hover on touch) */
-  .mode-card:hover { transform: none; }
-  .mode-card:active { transform: scale(.985); }
-  .mode-card:hover .mode-ico, .mode-card:active .mode-ico { transform: none; }
-
-  /* ---- menu tiles: 4-up, comfortable touch targets ---- */
-  .home-links { grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
-  .home-links .tut-card { padding: 11px 3px 9px; gap: 6px; min-height: 72px; justify-content: center; }
-  .home-links .tut-card .tut-ico-img { width: 33px; height: 33px; }
-  .home-links .tut-card .tut-txt b { font-size: 10px; letter-spacing: .01em; }
-  .tut-card:hover { transform: none; }
-  .tut-card:active { transform: scale(.97); }
-
-  /* ---- 문의 speech bubble: the tile sits in the LAST (rightmost) grid column
-     here, so a centered bubble runs off-screen — pin it to the right edge ---- */
-  .inq-bubble {
-    left: auto; right: 0;
-    max-width: min(210px, 60vw);
-    animation-name: inqBobYr;
-  }
-  .inq-bubble::before { left: auto; right: 24px; margin-left: 0; }
-  @keyframes inqBobYr { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
-
-  /* ---- bot difficulty modal: keep the 2×2 grid, fit small screens ---- */
-  .modal.bot-diff { min-width: 0; width: min(92vw, 560px); max-height: 88dvh; overflow-y: auto; }
-  .diff-grid { grid-template-columns: 1fr 1fr; gap: 9px; }
-  .diff-card { padding: 13px 8px; gap: 4px; }
-  .diff-card .diff-ico { font-size: 26px; }
-  .diff-card .diff-name { font-size: 12.5px; letter-spacing: .1em; }
-  .diff-card .diff-desc { font-size: 10.5px; }
-  .diff-card:hover { transform: none; }
-  .diff-card:active { transform: scale(.97); }
-}
-
-
-/* ---------------- PORTRAIT PHONES ONLY (≤700px wide) ----------------
-   Wider portrait tablets keep the desktop regime — see `phone` in layout.ts. */
-@media (orientation: portrait) and (max-width: 700px) {
-  /* ---- battlefield gets the width back ---- */
-  /* the rail moved beside each player (below), so the field can run edge to edge */
-  .field-block { padding: 4px 4px; }
-  .zone-row > .inline-pile { margin-left: 5px; }
-  .zone-row > .inline-pile .pile-count { right: -3px; top: -6px; min-width: 16px; height: 16px; font-size: 9.5px; }
-
-  /* ---- 묘지 / 제외: each player's own chips, on their own half ----
-     `display: contents` dissolves the rail container so each group can be
-     placed independently; top row = opponent, bottom row = me, and the tint
-     matches the existing turn colours so ownership is never ambiguous. */
-  .side-rail { display: contents; }
-  .side-rail .rail-group {
-    position: absolute; z-index: 46;
-    flex-direction: row; align-items: center; gap: 5px; width: auto;
-  }
-  .side-rail .rail-group--opp { top: calc(var(--pt) * 0.16 + 26px); right: 7px; }
-  .side-rail .rail-group--me { bottom: 8px; left: 7px; }
-  .side-rail .rail-head { display: none; }
-  .side-rail .mp-btns { flex-direction: row; gap: 5px; }
-  .side-rail .mp-tribes { flex-direction: row; flex-wrap: wrap; max-width: 46vw; }
-  .rail-group--opp .mp-btn { border-color: #7a3a3a; color: #ffcabb; background: #2a141066; }
-  .rail-group--me .mp-btn { border-color: #35597f; color: #cfe4ff; background: #10243a88; }
-  .rail-group--opp .mp-tribes { justify-content: flex-end; }
-
-  /* ---- hand: ALWAYS open, a real row at the bottom (no 0.42 mini stack) ----
-     the cluster becomes two rows so the hand drops BELOW the portrait
-     instead of being held beside it at full size. */
-  .pcluster--me { grid-template-rows: auto auto; row-gap: 3px; }
-  .pcluster--me .pc-side--l { grid-row: 1; grid-column: 1; }
-  .pcluster--me .portrait { grid-row: 1; grid-column: 2; }
-  .pcluster--me .pc-side--r { grid-row: 2; grid-column: 1 / -1; justify-content: center; }
-  .game.hand-open .hand {
-    position: relative !important; left: auto; bottom: auto; transform: none;
-    z-index: 40; filter: drop-shadow(0 6px 18px #000a);
-  }
-  .game.hand-open .hand .card:hover { transform: none; }
-
-}
-
-/* TALL portrait phones only: the market stacks 4-wide (고정 4×2, 제시 4×1).
-   The min-height MUST match `stackMkt` in ui/layout.ts — on a short phone
-   those three card rows cost more height than the field can spare. */
-@media (orientation: portrait) and (max-width: 860px) and (min-height: 700px) {
-  .market { flex-direction: column; align-items: center; gap: 5px; }
-  .market-div { display: none; }
-  #fixedMarket { grid-template-columns: repeat(4, var(--card-w-mkt)); }
-  #supplyMarket { grid-template-columns: repeat(4, var(--card-w-mkt)); }
-}
-
-/* ---------------- SHORT viewports (landscape phones, split-screen, short desktop windows) ---------------- */
-@media (max-height: 560px) {
+/* ---------------- LANDSCAPE phones (short height) ---------------- */
+@media (orientation: landscape) and (max-height: 560px) {
   body, #app, .game, .screen { height: 100dvh; }
 
-  .game { padding: 2px 5px 3px; }
-  .topbar { padding: 0 2px 1px; }
-  .mute-fab { top: 30px; left: 6px; }
-  .vol-pop { top: 30px; left: 44px; }
-  .vol-pop input[type="range"] { width: 92px; }
-  .giveup-btn { bottom: 5px; }
-  .mid-aside { gap: 4px; }
+  :root {
+    /* short height → compact cards so all five board rows + hand fit */
+    --card-h: clamp(30px, 8.4vh, 76px);
+    --card-h-mkt: clamp(36px, 9.8vh, 88px);
+    --card-h-hand: clamp(42px, 11.2vh, 96px);
+    --slot-gap: 3px;
+  }
+
+  .game { padding: 2px 6px 3px; gap: 2px; }
+  .topbar { padding: 0 2px 2px; gap: 8px; }
+  .brand .mark { width: 16px; height: 16px; }
+  .brand h1 { font-size: 13px; letter-spacing: .22em; }
+  .topbar .turn-info { font-size: 9px; }
+
+  /* keep the side log, but slimmer */
+  .stage { grid-template-columns: 1fr 188px; gap: 6px; }
+
+  .board-col { gap: 2px; }
+  .opp-hand { height: 9px; margin-top: -2px; }
+  .opp-hand .card--back { width: 24px; height: 38px; margin: 0 -8px; }
+  .field-block { padding: 2px 6px; min-width: 0; overflow: hidden; }
+  .meta-panel { flex: 0 0 clamp(120px, 22vw, 168px); padding-left: 8px; gap: 3px; }
+  .mp-name { font-size: 10px; }
+  .turn-chip { font-size: 8px; padding: 1px 5px; }
+  .mp-hp .num { font-size: 11px; }
+  .hpbar { min-width: 44px; }
+  .mp-mana .pips { display: none; }
+  .mnum { font-size: 11px; }
+  .mp-btn { font-size: 9.5px; padding: 1px 5px; }
+
+  .zone { justify-content: flex-start; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .zone::-webkit-scrollbar { display: none; }
+
+  .market { padding: 2px 8px; }
+  .market-sub .sub-head { margin-bottom: 2px; }
+  .hand-area { min-height: var(--card-h-hand); padding-top: 0; }
+  .end-turn-wrap { bottom: 4px; }
   .log { font-size: 10.5px; padding: 5px 9px 8px; }
   .panel-title { font-size: 9px; padding: 4px 9px 3px; }
   .log-foot { padding: 5px 9px; }
-  .logpanel { top: 40px; bottom: 6px; }
 
-  .zoom-overlay .card { --cw: min(30vh, 210px); --ch: calc(min(30vh, 210px) * 1.6); }
-  .zoom-wrap { gap: 12px; }
+  .zoom-overlay .card { --cw: min(32vh, 220px); --ch: calc(min(32vh, 220px) * 1.6); }
+  .zoom-wrap { gap: 14px; }
 
-  /* short landscape: the top brand logo would overlap the centered content
-     (the home header's inline brand is flow-positioned — keep that one) */
+  /* short landscape: the top brand logo would overlap the centered content */
   .screen-brand { display: none; }
-  .screen-brand.home-brand { display: flex; }
-  .screen-brand.home-brand .mark { width: 96px; height: 33px; }
   .screen { padding: 12px; }
   .topright-lang { top: 10px; right: 12px; }
-}
-
-/* ---------------- coarse pointers: bigger touch targets ---------------- */
-@media (pointer: coarse) {
-  .mp-btn { min-height: 26px; }
-  .refresh-btn { min-height: 28px; }
-  .log-tab { padding: 18px 7px; }
 }

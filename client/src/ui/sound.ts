@@ -171,6 +171,17 @@ function playSample(name: SfxName): boolean {
 
 const last: Partial<Record<SfxName, number>> = {};
 
+// ---- haptics (모바일): 타격감 있는 순간에만 아주 짧게. 소리를 끄면 진동도 꺼진다. ----
+const HAPTICS: Partial<Record<SfxName, number | number[]>> = {
+  impact: 25, facehit: 40, damage: 20, death: 30, trap: 25,
+  turn: 12, win: [30, 60, 40], lose: 60, error: 15, coin: 12,
+};
+function haptic(name: SfxName): void {
+  const pat = HAPTICS[name];
+  if (pat == null) return;
+  try { navigator.vibrate?.(pat); } catch { /* unsupported */ }
+}
+
 /** Fire-and-forget. Safe before unlock / with volume 0 (no-ops). */
 export function sfx(name: SfxName): void {
   if (volume <= 0 || !unlocked) return;
@@ -180,5 +191,6 @@ export function sfx(name: SfxName): void {
   const now = performance.now();
   if (last[name] && now - last[name]! < 45) return; // de-dupe bursts
   last[name] = now;
+  haptic(name);
   try { if (!playSample(name)) SOUNDS[name](); } catch { /* never let audio break the game */ }
 }

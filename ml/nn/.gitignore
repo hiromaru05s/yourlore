@@ -1,4 +1,0 @@
-# training artifacts (regenerate via the pipeline in ml/README.md)
-*.bin
-weights.json
-gen.cjs

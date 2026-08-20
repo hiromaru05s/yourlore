@@ -273,16 +273,6 @@ export async function handleAdmin(env: Env, req: Request, path: string): Promise
     return json(env, { online, bot, queue, menu, playing: online + bot, total: online + bot + queue + menu, ts: Date.now() });
   }
 
-  // 문의 리스트 (홈 문의 모달로 접수된 요청사항/버그) — 최신순
-  if (path === "/admin/inquiries") {
-    const rows = await env.DB.prepare(
-      `SELECT i.id, i.title, i.body, i.created_at, i.user_id, u.display, u.email
-       FROM inquiries i LEFT JOIN users u ON u.id = i.user_id
-       ORDER BY i.created_at DESC LIMIT 300`
-    ).all<{ id: string; title: string; body: string; created_at: number; user_id: string | null; display: string | null; email: string | null }>();
-    return json(env, { inquiries: rows.results ?? [] });
-  }
-
   if (path === "/admin/users") {
     const rows = await env.DB.prepare(
       `SELECT u.id, u.email, u.display, u.created_at, u.verified, u.source, u.wins, u.losses, u.invited_by, u.credits,

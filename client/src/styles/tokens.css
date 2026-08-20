@@ -41,37 +41,18 @@
 
   --mono: "SF Mono", ui-monospace, "Roboto Mono", Menlo, Consolas, monospace;
   --ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
-  --sans: var(--ui);
-
-  /* LANGUAGE-AWARE TYPE — the archive look per language. Korean keeps the
-     original system stacks; ja/en swap to webfonts (loaded in index.html)
-     so glyphs stop falling back to mismatched system fonts.
-     <html lang> is kept in sync by i18n.ts applyDocLang(). */
-  --serif: "AppleMyungjo", "Apple SD Gothic Neo", "Batang", "Times New Roman", serif;      /* codex serif */
-  --serif-latin: Georgia, "Times New Roman", serif;                                        /* latin accents/numerals */
-  --gothic-ui: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;                          /* plain UI text */
 
   /* CARD FOOTPRINT — sized off viewport HEIGHT so the whole board (incl. the
      hand) always fits at 100% zoom. Ratio ~0.64 is shared by every variant. */
   --card-h: clamp(78px, 12vh, 146px);
   --card-w: calc(var(--card-h) * 0.64);
+  --field-card-size: var(--card-w);
   --card-r: 6px;
   --slot-gap: clamp(4px, 0.55vw, 8px);
 
-  /* FIELD cards render as SQUARE art tiles (Codex local work, merged) */
-  --field-card-size: var(--card-w);
-
-  /* in-game chrome reserved by the fit-to-viewport solver (ui/layout.ts).
-     These are only the pre-JS fallback — layout.ts overwrites them inline
-     on <html>, so they must live at :root (a .game-scoped copy would win
-     over the inline value in descendants and desync the board). */
-  --rail-w: 152px;
-  --log-w: 26px;
-  --pt: 58px;
-
   /* market cards (fixed + 제시) — sized so all 10 고정 cards fit in ONE row on
      desktop (card height scales with vh; the market width scales with vw). */
-  --card-h-mkt: clamp(76px, min(10.4vh, 7.4vw), 150px); /* v28: two-row market */
+  --card-h-mkt: clamp(90px, min(13.2vh, 9vw), 172px);
   --card-w-mkt: calc(var(--card-h-mkt) * 0.64);
   --card-h-hand: clamp(106px, 15vh, 174px);
   --card-w-hand: calc(var(--card-h-hand) * 0.64);
@@ -80,20 +61,4 @@
   --shadow-1: 0 2px 8px #0008;
   --shadow-2: 0 8px 30px #000a;
   --ease: cubic-bezier(.4, 0, .2, 1);
-}
-
-/* Japanese — Shippori Mincho (webfont) gives the codex/archive mincho look;
-   kana+kanji stay one family instead of Korean-font fallback soup. */
-html[lang="ja"] {
-  --serif: "Shippori Mincho", "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
-  --serif-latin: Georgia, "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
-  --gothic-ui: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
-}
-
-/* English — Alegreya (webfont): a sturdy bookish serif; AppleMyungjo's latin
-   glyphs (and Georgia at small sizes) looked smudged. */
-html[lang="en"] {
-  --serif: "Alegreya", Georgia, "Times New Roman", serif;
-  --serif-latin: "Alegreya", Georgia, "Times New Roman", serif;
-  --gothic-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
 }

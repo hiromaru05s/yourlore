@@ -26,21 +26,6 @@ export async function handleGoogleOAuth(env: Env, req: Request, path: string): P
     return htmlError("Google 로그인이 아직 설정되지 않았습니다. (GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET)");
   }
   const url = new URL(req.url);
-
-  // ---- canonical host --------------------------------------------------
-  // redirect_uri used to be built from whatever host the request arrived on,
-  // so anyone reaching the site as www.* (phone address-bar autocomplete does
-  // this constantly) got Google's "Error 400: redirect_uri_mismatch" — only
-  // the apex callback is registered in the Cloud Console.
-  //
-  // Bouncing the WHOLE flow to the apex before it starts is the fix: the state
-  // cookie is host-scoped, so simply hard-coding the apex redirect_uri while
-  // the user sat on www would break state validation on the way back instead.
-  if (url.hostname.startsWith("www.")) {
-    const to = new URL(url.toString());
-    to.hostname = url.hostname.slice(4);
-    return new Response(null, { status: 302, headers: { Location: to.toString() } });
-  }
   const redirectUri = `${url.origin}/api/auth/google/callback`;
 
   // step 1: send the user to Google's consent screen

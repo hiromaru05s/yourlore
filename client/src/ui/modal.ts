@@ -4,7 +4,7 @@
 // ============================================================
 import type { CardInst } from "../shared/types";
 import { cardEl } from "./cardView";
-import { bindZoom } from "./anim";
+import { bindZoom, confettiBurst } from "./anim";
 import { TRIBES } from "../shared/cards";
 import { t, getLang } from "../i18n";
 
@@ -61,6 +61,7 @@ export function winModal(won: boolean | null, detail: string, onAgain: () => voi
   again.onclick = () => { closeOverlay(); onAgain(); };
   row.append(again);
   mount(m);
+  if (won === true) confettiBurst(); // 승리: 금빛 색종이
 }
 
 /** Ranked pre-game market preview: study the fixed market before the coin toss.
@@ -122,42 +123,6 @@ export function showTribeInfo(tribe: string): void {
   m.innerHTML = `<h2>${info.name} ${t("tribe.suffix")}</h2><div style="color:var(--vermil-hi);font-size:12px;margin-bottom:10px">${info.note}</div><div style="text-align:left;color:var(--paper);font-size:13px;line-height:1.8">${info.bonuses.map((b) => "• " + b).join("<br>")}</div><p style="margin-top:8px">${t("tribe.footer")}</p><div class="modal-row"></div>`;
   const ok = document.createElement("button");
   ok.className = "btn btn-gold"; ok.textContent = t("common.confirm"); ok.onclick = () => closeOverlay();
-  m.querySelector(".modal-row")!.appendChild(ok);
-  mount(m);
-}
-
-/** Is this session driven by touch? Decides WHICH control scheme the help panel
- *  describes — a phone gets the tap/drag wording, a desktop gets click/right-click.
- *  (pointer:coarse is the input device, not the window size, so a narrow desktop
- *  window still reads as desktop.) */
-export function isTouchInput(): boolean {
-  return typeof matchMedia === "function" && matchMedia("(pointer: coarse)").matches;
-}
-
-/** In-game "controls" panel. Opened from the ? button parked in a bottom corner. */
-export function showControlsHelp(): void {
-  const touch = isTouchInput();
-  const rows: [string, string[]][] = touch
-    ? [
-        ["help.h.cards", ["help.t.zoom", "help.t.hand"]],
-        ["help.h.play", ["help.t.play"]],
-        ["help.h.attack", ["help.t.attack", "help.t.reorder"]],
-        ["help.h.market", ["help.t.market"]],
-      ]
-    : [
-        ["help.h.cards", ["help.d.zoom"]],
-        ["help.h.play", ["help.d.play"]],
-        ["help.h.attack", ["help.d.attack", "help.d.reorder"]],
-        ["help.h.market", ["help.d.market"]],
-      ];
-  const m = document.createElement("div");
-  m.className = "modal help-modal";
-  m.innerHTML = `<h2>${t("help.title")}</h2>
-    <div class="help-body">${rows.map(([h, ks]) => `
-      <section><h3>${t(h)}</h3>${ks.map((k) => `<p>${t(k)}</p>`).join("")}</section>`).join("")}
-    </div><div class="modal-row"></div>`;
-  const ok = document.createElement("button");
-  ok.className = "btn btn-gold"; ok.textContent = t("help.close"); ok.onclick = () => closeOverlay();
   m.querySelector(".modal-row")!.appendChild(ok);
   mount(m);
 }

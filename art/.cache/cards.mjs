@@ -1,4 +1,6 @@
 import { applyEnglish } from "./cards.en.mjs";
+import { applyFlavorCardNames } from "./cardNames.flavor.mjs";
+import { standardizeCardTexts } from "./cardText.mjs";
 // ---------------- core set (cost 1–4) ----------------
 const CORE = {
     // Monsters
@@ -79,8 +81,8 @@ const CORE = {
     // ---- extreme stat monsters ----
     NGA3: { id: "NGA3", t: "mon", cost: 3, name: "유리 대포", atk: 7, def: 1, text: "—" },
     NGA4: { id: "NGA4", t: "mon", cost: 4, name: "광폭한 검귀", atk: 11, def: 0, text: "—" },
-    NWL3: { id: "NWL3", t: "mon", cost: 3, name: "바위 거북", atk: 1, def: 9, text: "—" },
-    NWL4: { id: "NWL4", t: "mon", cost: 4, name: "철벽 수문장", atk: 0, def: 13, text: "—" },
+    NWL3: { id: "NWL3", t: "mon", cost: 3, name: "바위 거북", atk: 1, def: 5, text: "—" },
+    NWL4: { id: "NWL4", t: "mon", cost: 4, name: "철벽 수문장", atk: 0, def: 10, text: "—" },
     // ---- fragile but strong effect monsters ----
     NHEX: { id: "NHEX", t: "mon", cost: 3, name: "꼬마 주술사", atk: 0, def: 1, text: "소환시: 상대 체력에 6 데미지", onSummon: "burn", val: 6 },
     NSPR: { id: "NSPR", t: "mon", cost: 4, name: "수정 정령", atk: 0, def: 2, text: "필드에 있는 동안 최대 마나 +1, 소환시 2장 드로우", aura: "mana1", onSummon: "draw", val: 2 },
@@ -377,7 +379,7 @@ const NEW_CARDS = [
     { id: "NT_NULL6", t: "trap", cost: 6, name: "반마술 결계", nameJa: "反魔術結界", react: "nullspell", val2: 2, text: "상대 마법 1장 무효화 + 상대에게 2 데미지", textJa: "相手の魔法1枚を無効化 + 相手に2ダメージ" },
     { id: "NT_NULL4", t: "trap", cost: 3, name: "주문 파쇄", nameJa: "呪文破砕", react: "nullspell", cap: 6,
         text: "코스트 6 이하 마법 1장을 무효화", textJa: "コスト6以下の魔法1枚を無効化" },
-    { id: "NT_NULL8", t: "trap", cost: 8, play: 6, name: "침묵의 심판", nameJa: "沈黙の審判", react: "nullspell", lockSpell: true,
+    { id: "NT_NULL8", t: "trap", cost: 8, name: "침묵의 심판", nameJa: "沈黙の審判", react: "nullspell", lockSpell: true,
         text: "상대 마법 1장 무효화 + 이번 상대 턴 동안 상대는 마법 카드를 사용할 수 없다 (시전 6)", textJa: "相手の魔法1枚を無効化 + このターン中、相手は魔法カードを使用できない (発動6)" },
     { id: "NT_SEAL3", t: "mon", cost: 3, name: "침묵의 파수꾼", nameJa: "沈黙の番人", atk: 1, def: 3, aura: "sealLow",
         text: "이 카드가 필드에 있는 한 양 플레이어는 코스트 5 이하 마법을 사용할 수 없다", textJa: "このカードが場にある限り、両プレイヤーはコスト5以下の魔法を使用できない" },
@@ -434,7 +436,7 @@ const PATCH2 = {
     GS8_5: { val: 7, text: "아군 전체 공격 +7 · 20%로 6코스트 이하 몬스터 무작위 소환", textJa: "味方全体の攻撃+7 · 20%でコスト6以下のモンスターをランダム召喚" },
     GS9_0: { text: "상대 체력에 21 데미지 (상대 체력 21 이하면 사용 불가)", textJa: "相手の体力に21ダメージ (相手の体力21以下では使用不可)" },
     GS9_1: { val: 15, text: "상대 체력에 15 데미지 (시전 7)", textJa: "相手の体力に15ダメージ (発動7)" },
-    GS9_2: { val: 16, text: "체력 16 회복 · 패의 '생명의 빛' 1장 묘지로 보내면 최대 체력 +15", textJa: "体力16回復 · 手札の「生命の光」1枚を墓地へ送ると最大体力+15" },
+    GS9_2: { val: 16, text: "체력 16 회복 · 패의 생명 계열 주문 1장을 묘지로 보내면 최대 체력 +15", textJa: "体力16回復 · 手札の生命系呪文1枚を墓地へ送ると最大体力+15" },
     GS10_0: { text: "상대 체력에 23 데미지 (자신 필드 몬스터 1체 이하일 때만)", textJa: "相手の体力に23ダメージ (自分の場のモンスターが1体以下の時のみ)" },
     GS10_1: { text: "상대 체력에 17 데미지 + 카드 1장 드로우 (시전 8)", textJa: "相手の体力に17ダメージ + カード1枚ドロー (発動8)" },
     GS10_2: { text: "체력 19 회복 · 상대 몬스터 1체 + 마법/함정 1장 파괴", textJa: "体力19回復 · 相手モンスター1体 + 魔法/罠1枚を破壊" },
@@ -650,7 +652,7 @@ const NEW_CARDS4 = [
         textJa: "10%: 最大マナ+3・2枚ドロー / 40%: 最大マナ+1 / 30%: 最大体力+8 / 5%: 最大体力+12 / 15%: ハズレ(相手の場にマスターミミック10/3)" },
     { id: "MIMIC2", t: "mon", cost: 0, aura: "chestLock", name: "마스터 미믹", nameJa: "マスターミミック", atk: 10, def: 3,
         text: "이 카드가 필드에 존재하는 한 양 플레이어는 보물상자를 사용할 수 없다 (어튠 - 마는 가능)", textJa: "このカードが場にある限り両者は宝箱を使用できない (アチューン・魔は可能)" },
-    { id: "GUILD_CHEST", t: "spell", cost: 5, play: 3, name: "암살자 길드의 보물상자", nameJa: "暗殺者ギルドの宝箱",
+    { id: "GUILD_CHEST", t: "spell", cost: 5, play: 3, name: "암살자 길드의 보물상자", nameJa: "アサシンギルドの宝箱",
         text: "10%: 최대 마나+3 / 10%: 턴 시작 드로우+1(영구) / 20%: 최대 마나+2 / 10%: 최대 마나+1 / 10%: 최대 체력+10 / 20%: 상대 필드에 초급·중급 암살자 소환 / 20%: 초급·중급·상급 암살자 소환 + 자신에게 10 데미지 (시전 3)",
         textJa: "10%: 最大マナ+3 / 10%: ターン開始ドロー+1(永続) / 20%: 最大マナ+2 / 10%: 最大マナ+1 / 10%: 最大体力+10 / 20%: 相手の場に初級・中級アサシン召喚 / 20%: 初級・中級・上級アサシン召喚 + 自分に10ダメージ (発動3)" },
     { id: "GUILD_EYE", t: "spell", cost: 0, ench: "bonusDraw", val: 99, val2: 1, name: "길드의 정보망", nameJa: "ギルドの情報網",
@@ -838,8 +840,8 @@ const NEW_CARDS7 = [
     { id: "MARKET_CRISIS", t: "spell", cost: 3, name: "경제 위기", nameJa: "経済危機",
         text: "고정 마켓 10장을 전부 갱신한다", textJa: "固定マーケット10枚を全て更新する" },
     // 토큰 (구매 불가, cost 0)
-    { id: "TOKEN00", t: "mon", cost: 0, atk: 0, def: 0, name: "허수아비", nameJa: "かかし", text: "토큰 · 죽으면 게임에서 제외", textJa: "トークン · 死亡時ゲームから除外" },
-    { id: "SOLDIER2", t: "mon", cost: 0, atk: 2, def: 2, name: "병사", nameJa: "兵士", text: "토큰 · 죽으면 게임에서 제외", textJa: "トークン · 死亡時ゲームから除外" },
+    { id: "TOKEN00", t: "mon", cost: 0, atk: 0, def: 0, name: "허수아비", nameJa: "かかし", text: "죽으면 게임에서 제외", textJa: "死亡時ゲームから除外" },
+    { id: "SOLDIER2", t: "mon", cost: 0, atk: 2, def: 2, name: "병사", nameJa: "兵士", text: "죽으면 게임에서 제외", textJa: "死亡時ゲームから除外" },
 ];
 for (const c of NEW_CARDS7) {
     DB[c.id] = c;
@@ -974,9 +976,9 @@ const NEW_CARDS10 = [
         text: "영구: 양 플레이어는 마법으로 인한 데미지를 받지 않고 그 수치만큼 회복한다 · 파괴되면 게임에서 제외", textJa: "永続: 両プレイヤーは魔法によるダメージを受けず、その数値だけ回復する · 破壊されたらゲームから除外" },
     { id: "WEAKEN_ALL", t: "spell", cost: 2, ench: "weakenAll", val: 99, exileOnDestroy: true, noShop: true, name: "약화술식", nameJa: "弱化術式",
         text: "영구: 양 필드의 모든 몬스터 공격 -2 · 파괴되면 게임에서 제외", textJa: "永続: 両方の場の全モンスター攻撃-2 · 破壊されたらゲームから除外" },
-    { id: "GUILD_HALL", t: "mon", cost: 2, atk: 0, def: 2, aura: "assassinGuild", noShop: true, name: "암살자 길드", nameJa: "暗殺者ギルド",
-        text: "상시: '암살자' 몬스터로 상대에게 데미지를 줄 때마다 카운트 +1 · 3카운트 달성 시 상대에게 14 데미지 (카운트 초기화) · 파괴되면 카운트도 사라진다",
-        textJa: "常時: 「アサシン」モンスターで相手にダメージを与えるたびカウント+1 · 3カウント達成で相手に14ダメージ (カウントリセット) · 破壊されるとカウントも消える" },
+    { id: "GUILD_HALL", t: "mon", cost: 2, atk: 0, def: 2, aura: "assassinGuild", noShop: true, name: "암살자 길드", nameJa: "アサシンギルド",
+        text: "상시: '암살자' 몬스터 또는 이 카드로 상대에게 데미지를 줄 때마다 카운트 +1 · 3카운트 달성 시 상대에게 14 데미지 (카운트 초기화) · 파괴되면 카운트도 사라진다",
+        textJa: "常時: 「アサシン」モンスターかこのカードで相手にダメージを与えるたびカウント+1 · 3カウント達成で相手に14ダメージ (カウントリセット) · 破壊されるとカウントも消える" },
     { id: "MIMIC_PARTY", t: "trap", cost: 1, react: "mimicParty", noShop: true, name: "미믹 파티", nameJa: "ミミックパーティー",
         text: "함정: 상대가 보물상자를 사용하면 발동 — 상대 필드에 미믹 1마리, 자신 필드에 미믹 2마리 소환", textJa: "罠: 相手が宝箱を使うと発動 — 相手の場にミミック1体、自分の場にミミック2体召喚" },
     { id: "FATE_WHEEL", t: "spell", cost: 4, ench: "fateWheel", val: 99, exileOnDestroy: true, noShop: true, name: "운명의 수레바퀴", nameJa: "運命の輪",
@@ -1186,7 +1188,7 @@ for (const c of NEW_STARTERS11) {
 const NEW_STARTERS15 = [
     { id: "GAMBLER", t: "mon", cost: 3, atk: 0, def: 0, turnFx: "gambler", noShop: true, name: "도박꾼", nameJa: "ギャンブラー",
         text: "자신의 턴 시작시: 주사위를 굴려 4·5·6이면 최대 마나 +1, 최대 체력 +5", textJa: "自分のターン開始時: ダイスを振り4・5・6なら最大マナ+1、最大体力+5" },
-    { id: "ELF_HAVEN", t: "spell", cost: 1, ench: "elfHaven", val: 99, noShop: true, name: "엘프의 쉼터", nameJa: "エルフの憩い場",
+    { id: "ELF_HAVEN", t: "spell", cost: 3, ench: "elfHaven", val: 99, noShop: true, name: "엘프의 쉼터", nameJa: "エルフの憩い場",
         text: "영구: '세계수' 이름을 가진 카드의 구매/시전 코스트가 0이 된다", textJa: "永続: 「世界樹」の名を持つカードの購入/発動コストが0になる" },
     { id: "HALF_ELF", t: "mon", cost: 2, atk: 1, def: 2, onSummon: "halfElf", noShop: true, name: "하프 엘프", nameJa: "ハーフエルフ",
         text: "소환시: '세계수' 이름을 가진 카드가 자신 필드에 있으면 '세계수의 보살핌'을 필드에 전개", textJa: "召喚時: 「世界樹」の名を持つカードが自分の場にあれば「世界樹の慈しみ」を場に展開" },
@@ -1273,8 +1275,156 @@ export const RANDOM_CARDS = new Set([
     "ND3", "ND5", "GS5_0", "GS6_2", "GS7_0", "GS8_0", "GS8_3", "GS8_5",
     "TIMEWARP", "GAMBLE", "DICE8", "GUILD_CHEST", "LUCKY_CHEST", "FORBIDDEN", "GENESIS_SONG",
 ]);
+// ============================================================
+// BALANCE v17 — 함정 전면 리밸런스.
+// (a) 구매 코스트 재정렬: 같은 대역에서 "공격 무효 < 공격 절반 < 공격 몬스터 파괴"
+//     위계가 지켜지도록 — 무효/절반/반사-only 계열이 파괴 계열과 동가이거나 더
+//     비싸던 왜곡을 해소.
+// (b) 시전(세트) 코스트 전면 1 통일: 세트 시 소모 마나로 어떤 함정인지
+//     역추적되는 정보 누출을 차단. 구매 코스트만 파워 지표로 남긴다.
+// ============================================================
+const TRAP_COST17 = {
+    T1: 1, // 하프 가드(절반+1뎀): 2→1 — 절반은 무효(T9)보다 약함
+    T9: 2, // 역류(무효+3회복): 3→2 — 파괴 시작가(3) 아래로
+    T12: 3, // 절대 방벽(무효+전체방어+4): 4→3 — 파괴(T4/T6)와 동가였음
+    T13: 4, // 천벌(파괴+4뎀): 5→4 — 동급 파괴+α(T4/T6)와 정렬
+    GT9_2: 6, // 흑요석 반사막(반사만, 파괴 없음): 9→6
+    GT10_2: 7, // 화염의 반사막 II(반사만): 10→7
+    GT10_0: 8, // 심연의 방어 태세 II(절반+10뎀): 10→8
+    GT10_1: 9, // 강철의 차단막 II(무효+9뎀): 10→9 — 파괴형(GT10_3)보다 싸게
+    GT11_0: 9, // 용암의 방어 태세(절반+11뎀): 11→9
+    GT11_1: 10, // 천공의 차단막(무효+10뎀): 11→10
+    GT12_0: 10, // 여명의 방어 태세(절반+12뎀): 12→10
+    GT12_1: 11, // 심판의 차단막(무효+11뎀): 12→11
+};
+for (const tid of Object.keys(TRAP_COST17)) {
+    if (DB[tid])
+        DB[tid].cost = TRAP_COST17[tid];
+}
+for (const tid of Object.keys(DB)) {
+    const tc = DB[tid];
+    if (tc.t !== "trap")
+        continue;
+    if (tc.cost > 1)
+        tc.play = 1;
+    tc.text = tc.text.replace(/\s*\(시전 \d+\)/, "");
+    if (tc.textJa)
+        tc.textJa = tc.textJa.replace(/\s*\(発動\d+\)/, "");
+}
+// ============================================================
+// BALANCE v18 — 마법 조정 (전수 검토안 A 반영)
+// ============================================================
+const PATCH18 = {
+    GS8_0: { val: 14, text: "상대 체력에 14 데미지 · 사용 시 50%로 상대 덱 맨 위 1장 제외", textJa: "相手の体力に14ダメージ · 使用時50%で相手のデッキトップ1枚を除外" }, // 8코 번 효율 최악(11뎀) → 14뎀
+    GS10_3: { val: 6, val2: 3, text: "카드 6장 드로우 + 최대 체력 +3 (시전 1)", textJa: "カード6枚ドロー + 最大体力+3 (発動1)" }, // GS7_3 하위호환 해소
+    S15: { cap: 8, text: "코스트 8 이하의 적 몬스터 1체를 파괴", textJa: "コスト8以下の敵モンスター1体を破壊" }, // 3코 만능 제거 → 대형(알·신수·킹급) 제외
+    MEDITATE: { cost: 4, play: 4, text: "이번 턴에 다른 카드를 플레이하지 않았을 경우에만 발동 가능. 최대 체력의 80%까지 체력 회복", textJa: "このターンに他のカードをプレイしていない場合のみ発動可能。最大体力の80%まで回復" }, // 구매2·시전3 → 4/4
+    BLOOD_SHIELD: { cost: 3 }, // 자해 무효 스위치가 1코 → 3코
+    S7: { text: "자신 몬스터 전체 공격 +3(이번 턴)", textJa: "自分のモンスター全体の攻撃+3(このターン)" }, // 오버로드: 최대 체력 +2 라이더 제거
+    GS5_4: { cost: 4 }, GS6_4: { cost: 5 }, GS7_4: { cost: 6 }, // 예리함(단일 1턴 버프) 라인 일괄 -1코
+};
+for (const id18 of Object.keys(PATCH18)) {
+    if (DB[id18])
+        Object.assign(DB[id18], PATCH18[id18]);
+}
+// ============================================================
+// BALANCE v19 — 셀프플레이 2,950판 승률 데이터 기반 조정
+// 상위권 스탯볼 몬스터 일괄 너프 + 최하위 스타터(수레바퀴/유령) 버프
+// ============================================================
+const PATCH19 = {
+    // ---- 버프 (스타터 최하위) ----
+    FATE_WHEEL: { text: "영구: 시전 시 자신의 최대 마나 -1, 자신에게 5 데미지 · 주사위·확률 카드의 결과를 보고 나서 다시 굴릴 수 있다 (매턴 1회) · 공허",
+        textJa: "永続: 発動時に自分の最大マナ-1、自分に5ダメージ · ダイス・確率カードの結果を見てから振り直せる (毎ターン1回) · 虚無" }, // 자해 8→5
+    GHOST: { text: "암습 · 상대가 최대 마나/최대 체력을 늘릴 때마다 자신은 2 데미지를 입는다",
+        textJa: "暗襲 · 相手が最大マナ/最大体力を増やすたび自分は2ダメージを受ける" }, // 3→2
+    // ---- 너프 ----
+    WORLD_CARE: { text: "영구: 자신의 턴 시작마다 최대 체력 +12", textJa: "永続: 自分のターン開始時に最大体力+12" }, // +15→+12
+    RUST_SHROOM: { atk: 0 }, // 1/0 → 0/0
+    FORESIGHT: { text: "영구: 자신의 최대 마나가 10 이상이 되면 최대 마나 +2 후 이 카드를 파괴한다 · 자신 필드에 '선견지명'이 없을 때만 발동 가능 · 공허",
+        textJa: "永続: 自分の最大マナが10以上になると最大マナ+2後このカードを破壊する · 自分の場に「先見の明」がない時のみ発動可能 · 虚無" }, // 발현 9→10
+    ASSASSIN2: { atk: 8 }, // 9/0 → 8/0
+    GM8_0: { atk: 16, def: 5 }, // 저주받은 광전사 18/6 → 16/5
+    GM6_3: { def: 3, val: 4, text: "소환시: 상대 체력에 4 데미지", textJa: "召喚時: 相手の体力に4ダメージ" }, // 여명의 드레이크 9/4·5뎀 → 9/3·4뎀
+    GM6_0: { atk: 10, def: 3 }, // 흑요석 광전사 11/4 → 10/3 (효과 유지)
+    GM8_3: { val: 4, text: "소환시: 상대에 4 데미지. 이후 상대는 매 턴 1 데미지(중첩 불가)", textJa: "召喚時: 相手に4ダメージ。以降 相手は毎ターン1ダメージ(重複不可)" }, // 용암의 드레이크 6뎀→4뎀
+    GM6_5: { def: 5 }, // 광휘의 사냥꾼 6/6 → 6/5
+    GM8_1: { def: 12, val: 2, text: "매 턴 시작 시 체력 +2 회복 · 도발", textJa: "毎ターン開始時 体力+2回復 · 挑発" }, // 신성한 성벽 13→12, 회복 3→2
+    GM5_2: { def: 4 }, // 강철의 전사 5/5 → 5/4
+    GM7_7: { atk: 9 }, // 심판의 장군 10/7 → 9/7
+    GM8_7: { atk: 13, def: 8 }, // 흑요석 장군 14/9 → 13/8
+    MIMIC_KING: { atk: 4, def: 5 }, // 미믹 킹 6/6 → 4/5
+};
+for (const id19 of Object.keys(PATCH19)) {
+    if (DB[id19])
+        Object.assign(DB[id19], PATCH19[id19]);
+}
+// ============================================================
+// BALANCE v20 — 고정 마켓 1~6코 확대(engine) + 신성한 성벽 재너프
+// ============================================================
+const PATCH20 = {
+    GM8_1: { atk: 4, def: 11 }, // 신성한 성벽 6/12 → 4/11 (v19 너프에도 승률 1위 유지)
+};
+for (const id20 of Object.keys(PATCH20)) {
+    if (DB[id20])
+        Object.assign(DB[id20], PATCH20[id20]);
+}
 // English localization (names/texts) — applied last so it reflects final balance patches
+// ============================================================
+// DICE CONVERSION (v22) — 모든 확률 카드를 주사위 판정으로 통일.
+// 근사표: 10%→2d6합11+(8.3) / 15·20%→⚅(16.7) / 30·33%→5+(33.3)
+//        40%→2d6합8+(41.7) / 50%→4+(50) / 60%→2d6합7+(58.3) / 70%→2d6합6+(72.2)
+// 가챠: 보물상자=1d6표, 행운/길드의 보물상자=2d6 합계표.
+// (엔진 diceSpecFor와 반드시 일치할 것)
+// ============================================================
+const DICE_TEXTS = {
+    GM8_2: { ko: "소환시: 주사위 4 이상이면 자신을 복제 소환 (소환 3)", ja: "召喚時: ダイス4以上で自身を複製召喚 (召喚3)" },
+    GT5_2: { ko: "공격 몬스터 파괴 + 주사위 5 이상이면 그 방어력만큼 회복", ja: "攻撃モンスターを破壊 + ダイス5以上でその防御力分回復" },
+    GT5_3: { ko: "공격 몬스터 파괴 + 주사위 2개 합계 7 이상이면 자신 필드에 소생(소유권 이동)", ja: "攻撃モンスターを破壊 + ダイス2個の合計7以上で自分の場に蘇生(所有権移動)" },
+    T4: { ko: "공격 몬스터 파괴 + 주사위 5 이상이면 그 공격력만큼 상대에게 데미지", ja: "攻撃モンスターを破壊 + ダイス5以上でその攻撃力分を相手にダメージ" },
+    AJIN: { ko: "최대 마나 +1, 주사위 4 이상이면 묘지에 어튠 1장 추가", ja: "最大マナ+1、ダイス4以上で捨て札にアチューンを1枚追加" },
+    ND3: { ko: "카드 3장 드로우, 주사위 5 이상이면 2장 추가 (시전 1)", ja: "カード3枚ドロー、ダイス5以上で2枚追加 (発動1)" },
+    ND5: { ko: "카드 5장 드로우, 주사위 6이면 최대 마나 +1 (시전 2)", ja: "カード5枚ドロー、ダイス6で最大マナ+1 (発動2)" },
+    GS5_0: { ko: "상대 체력에 10 데미지, 주사위 2개 합계 11 이상이면 상대 최대 마나 -1", ja: "相手の体力に10ダメージ、ダイス2個の合計11以上で相手の最大マナ-1" },
+    GS6_2: { ko: "체력 13 회복, 주사위 6이면 최대 체력 +5", ja: "体力13回復、ダイス6で最大体力+5" },
+    GS7_0: { ko: "상대 체력에 16 데미지, 주사위 6이면 자신 최대 마나 -1", ja: "相手の体力に16ダメージ、ダイス6で自分の最大マナ-1" },
+    GS8_0: { ko: "상대 체력에 14 데미지 · 주사위 4 이상이면 상대 덱 맨 위 1장 제외", ja: "相手の体力に14ダメージ · ダイス4以上で相手のデッキトップ1枚を除外" },
+    GS8_3: { ko: "카드 5장 드로우 · 주사위 2개 합계 7 이상이면 상대 몬스터/함정/마법 1장 무작위 파괴 (시전 2)", ja: "カード5枚ドロー · ダイス2個の合計7以上で相手のモンスター/罠/魔法1枚をランダム破壊 (発動2)" },
+    GS8_5: { ko: "아군 전체 공격 +7 · 주사위 6이면 코스트 6 이하 몬스터 무작위 소환", ja: "味方全体の攻撃+7 · ダイス6でコスト6以下のモンスターをランダム召喚" },
+    TIMEWARP: { ko: "주사위 2개 합계 6 이상이면 다음 상대 턴을 스킵 (시전 12)", ja: "ダイス2個の合計6以上で次の相手のターンをスキップ (発動12)" },
+    LIFE_CYCLE: { ko: "영구: 자신이 체력을 회복할 때마다 주사위 6이면 최대 마나 +1 (시전 2)", ja: "永続: 自分が体力を回復するたびダイス6で最大マナ+1 (発動2)" },
+    WORLD_SEED: { ko: "영구: 자신의 턴 시작마다 주사위 5 이상이면 최대 마나 +1", ja: "永続: 自分のターン開始時、ダイス5以上で最大マナ+1" },
+    WORLD_BLESS: { ko: "영구: 양 플레이어는 자신의 턴 시작마다 최대 마나 +1. 이 카드의 시전자는 매턴 주사위 2개 합계 8 이상이면 최대 마나 +2 추가 (시전 6)", ja: "永続: 両プレイヤーは自分のターン開始時に最大マナ+1。このカードの使用者は毎ターン、ダイス2個の合計8以上で最大マナ+2追加 (発動6)" },
+    LUCKY_CHEST: { ko: "주사위 2개 합계 — 2·3: 최대 마나+3·2장 드로우 / 4·5: 꽝(상대 필드에 마스터 미믹 10/3) / 6~8: 최대 마나+1 / 9~11: 최대 체력+8 / 12: 최대 체력+12",
+        ja: "ダイス2個の合計 — 2·3: 最大マナ+3・2枚ドロー / 4·5: ハズレ(相手の場にマスターミミック10/3) / 6~8: 最大マナ+1 / 9~11: 最大体力+8 / 12: 最大体力+12" },
+    GUILD_CHEST: { ko: "주사위 2개 합계 — 2·3: 최대 마나+3 / 4: 턴 시작 드로우+1(영구) / 5·6: 최대 마나+2 / 7: 최대 마나+1 / 8: 최대 체력+10 / 9·10: 상대 필드에 초급·중급 암살자 소환 / 11·12: 초·중·상급 암살자 소환 + 자신에게 10 데미지 (시전 3)",
+        ja: "ダイス2個の合計 — 2·3: 最大マナ+3 / 4: ターン開始ドロー+1(永続) / 5·6: 最大マナ+2 / 7: 最大マナ+1 / 8: 最大体力+10 / 9·10: 相手の場に初級・中級アサシン召喚 / 11·12: 初・中・上級アサシン召喚 + 自分に10ダメージ (発動3)" },
+};
+for (const id of Object.keys(DICE_TEXTS)) {
+    if (DB[id]) {
+        DB[id].text = DICE_TEXTS[id].ko;
+        DB[id].textJa = DICE_TEXTS[id].ja;
+    }
+}
+// 운명의 수레바퀴: 이제 전 랜덤 카드가 주사위이므로 문구 단순화
+if (DB.FATE_WHEEL) {
+    DB.FATE_WHEEL.text = DB.FATE_WHEEL.text.replace("주사위·확률 카드", "주사위 카드");
+    DB.FATE_WHEEL.textJa = (DB.FATE_WHEEL.textJa ?? DB.FATE_WHEEL.text).replace("ダイス・確率カード", "ダイスカード");
+}
+// 패시브: 도발 50%→주사위 4+, 회피 1~3 무효→4+ 무효 (동일 50%)
+PASSIVES.taunt.ko.desc = "상대가 다른 아군 몬스터를 공격할 때 주사위 4 이상이면 이 몬스터가 대신 공격받는다.";
+PASSIVES.taunt.ja.desc = "相手が他の味方モンスターを攻撃する時、ダイス4以上でこのモンスターが代わりに攻撃を受ける。";
+PASSIVES.taunt.en.desc = "When the opponent attacks another allied monster, roll a die — on 4+, this monster is attacked instead.";
+PASSIVES.evade.ko.desc = "이 몬스터가 공격받을 때 주사위 4 이상이면 그 공격을 무효화한다.";
+PASSIVES.evade.ja.desc = "このモンスターが攻撃される時、ダイス4以上でその攻撃を無効化する。";
+PASSIVES.evade.en.desc = "When this monster is attacked, roll a die — on 4+, the attack is negated.";
+// 황금상자: 1d6 표
+CHEST_ODDS.ko = { title: "황금상자 주사위", rows: ["1 — 꽝: 상대 필드에 미믹(3/2)", "2·3 — 체력 +3", "4·5 — 최대 마나 +1", "6 — 최대 체력 +5"] };
+CHEST_ODDS.ja = { title: "宝箱のダイス", rows: ["1 — ハズレ: 相手の場にミミック(3/2)", "2·3 — 体力 +3", "4·5 — 最大マナ +1", "6 — 最大体力 +5"] };
+CHEST_ODDS.en = { title: "Golden chest die", rows: ["1 — Dud: Mimic (3/2) on enemy field", "2·3 — HP +3", "4·5 — Max mana +1", "6 — Max HP +5"] };
 applyEnglish([DB, STARTERS]);
+applyFlavorCardNames([DB, STARTERS]);
+// 효과 텍스트 표준 표기(【태그】) 적용 — 규칙: docs/card-text-style.md (applyEnglish 이후 필수)
+standardizeCardTexts([DB, STARTERS]);
 export const ALL_IDS = Object.keys(DB);
 // markets never offer cost-0 tokens or noShop(스타팅 전용) cards
 export const BUYABLE_POOL = ALL_IDS.filter((id) => DB[id].cost > 0 && !DB[id].noShop);
@@ -1340,7 +1490,14 @@ export function relatedCardIds(id) {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v15"; // v15: 러스트 머쉬룸 1/0 너프 + 도박꾼/전설의 도박꾼 + 엘프 아키타입(쉼터·하프/엘프/다크/하이/엘더 킹·세계수의 보살핌)
+export const BALANCE_VERSION = "v23"; // v23: 전 확률 카드 주사위화 — 1d6/2d6 근사(10%→2d6합11+ · 20%→⚅ · 30%→5+ · 40%→2d6합8+ · 50%→4+ · 60%→2d6합7+ · 70%→2d6합6+), 가챠 3종 주사위표化, 회피 4+로 반전(동일 50%)
+// v22: 철벽 수문장 0/13→0/10, 암살자 길드 카운트 명문화(본체 공격 포함)
+// v21 이전: // v21: 60턴 체력 판정승(구 75턴 무승부), 바위 거북 1/9→1/5, 선택형 파괴가 자기 필드도 대상 가능
+// v19: 데이터 기반 — 상위 몬스터 10종 스탯 너프 + 수레바퀴(자해5)/유령(2뎀) 버프 + 보살핌12/머쉬룸0공/선견지명10/중급암살자8공
+// v18: 마법 조정 — GS8_0 14뎀, GS10_3 6드로+최대체력3, 룬파열 코스트8캡, 명상 4/4, 흡혈술식 3코, 오버로드 라이더 제거, 예리함 -1코
+// v17: 함정 리밸런스 — 시전코스트 전면 1(정보 누출 차단) + 구매코스트 재정렬(무효<파괴 위계)
+// v16: 엘프의 쉼터 코스트 1→3 너프
+// v15: 러스트 머쉬룸 1/0 너프 + 도박꾼/전설의 도박꾼 + 엘프 아키타입(쉼터·하프/엘프/다크/하이/엘더 킹·세계수의 보살핌)
 // v14: 피의 마법 리워크 — 블러드 드로우(자해15·6드로우), 블러드 샤워(자해15·상대 영구마법/함정 2장 선택 파괴)
 // v13: 컬 아키타입 너프 — 선택받은 영역 20→25장, 선택받은 4종 코스트 7 + 스탯 컬 2장당(반내림)
 // v12: 기습(AMBUSH) 코스트 1→2 너프
@@ -1363,15 +1520,19 @@ export function frameFor(t) {
         return "/frames/cyan.png";
     return "/frames/blue.png"; // spell
 }
-export const FRAME_BACK = "/frames/back.png";
+// 카드 뒷면은 /frames/sleeves/<id>.webp (512w 최적화본 — 원본 PNG는 장당 ~1.8MB였다)
+export const FRAME_BACK = "/frames/sleeves/default.webp";
+const SL = (id, ko, ja, en, price) => ({ id, url: `/frames/sleeves/${id}.webp`, ko, ja, en, price });
 export const SLEEVES = {
-    default: { id: "default", url: "/frames/back.png", ko: "기본", ja: "デフォルト", en: "Default", price: 0 },
-    prism: { id: "prism", url: "/frames/sleeve_prism.png", ko: "프리즘", ja: "プリズム", en: "Prism", price: 1 },
-    abyss: { id: "abyss", url: "/frames/sleeve_abyss.png", ko: "심연", ja: "深淵", en: "Abyss", price: 1 },
-    verdant: { id: "verdant", url: "/frames/sleeve_verdant.png", ko: "녹옥", ja: "翠玉", en: "Verdant", price: 1 },
-    ivory: { id: "ivory", url: "/frames/sleeve_ivory.png", ko: "상아", ja: "象牙", en: "Ivory", price: 1 },
-    compass: { id: "compass", url: "/frames/sleeve_compass.png", ko: "성좌", ja: "星座", en: "Astral", price: 1 },
+    default: SL("default", "기본", "デフォルト", "Default", 0),
+    ivory: SL("ivory", "아이보리 문장", "アイボリーの紋章", "Ivory Crest", 200),
+    verdant: SL("verdant", "신록의 인장", "新緑の印章", "Verdant Seal", 200),
+    compass: SL("compass", "탐구자의 나침반", "探究者の羅針盤", "Seeker's Compass", 300),
+    prism: SL("prism", "프리즘 결정", "プリズム結晶", "Prism Core", 400),
+    abyss: SL("abyss", "심연의 서약", "深淵の誓約", "Abyssal Oath", 400),
 };
 /** ordered list for shop/picker rendering (default first). */
-export const SLEEVE_LIST = ["default", "prism", "abyss", "verdant", "ivory", "compass"].map((id) => SLEEVES[id]);
-export function sleeveUrl(id) { return SLEEVES[id || "default"]?.url ?? FRAME_BACK; }
+export const SLEEVE_LIST = Object.values(SLEEVES);
+export function sleeveUrl(id) {
+    return (id && SLEEVES[id]?.url) || FRAME_BACK;
+}

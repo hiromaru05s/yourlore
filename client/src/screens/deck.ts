@@ -8,7 +8,6 @@ import { DB, STARTERS, DECK_POOL, DECK_SIZE, DECK_MAX_COPIES, DECK_SLOTS, WATCH_
 import type { CardDef, CardInst } from "../shared/types";
 import { cardEl } from "../ui/cardView";
 import { bindZoom } from "../ui/anim";
-import { noticeModal } from "../ui/modal";
 import { api } from "../net/api";
 import { t, cardName } from "../i18n";
 
@@ -138,7 +137,14 @@ export function mountDeck(app: App): Screen {
     saveBtn.disabled = false;
   };
 
-  searchEl.oninput = () => { watchQ = searchEl.value.trim(); render(); };
+  // 알림 픽커 검색: render()는 마켓 풀(BUYABLE_POOL, 수백 장) 카드 DOM을 통째로
+  // 다시 만든다 — 키 입력마다 돌리면 수백 개의 <img>가 매번 버려지고 다시 붙어
+  // 디코드가 되풀이된다. 입력이 멈춘 뒤 한 번만 그린다.
+  let searchTimer = 0;
+  searchEl.oninput = () => {
+    clearTimeout(searchTimer);
+    searchTimer = window.setTimeout(() => { watchQ = searchEl.value.trim(); render(); }, 140);
+  };
   useBtn.onclick = () => { store.sel = cur; render(); void doSave(); };
 
   const doSave = async (): Promise<void> => {
@@ -156,18 +162,7 @@ export function mountDeck(app: App): Screen {
     render();
   };
   saveBtn.onclick = () => { void doSave(); };
-  (q("back")).onclick = () => {
-    if (deck().length < DECK_SIZE) {
-      noticeModal(
-        "덱을 완성해주세요",
-        `현재 덱은 ${deck().length + 1} / ${DECK_SIZE + 1}장입니다. 뒤로 가기 전에 덱을 9장으로 완성해주세요.`,
-        t("common.confirm"),
-        () => {},
-      );
-      return;
-    }
-    app.home();
-  };
+  (q("back")).onclick = () => app.home();
 
   render();
   return { destroy: () => wrap.remove() };
