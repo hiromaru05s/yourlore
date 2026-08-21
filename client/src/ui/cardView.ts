@@ -35,6 +35,10 @@ export function decoratePassives(c: CardInst, txt: string): string {
 export interface CardOpts {
   size?: "board" | "mkt" | "hand";
   fullArt?: boolean; // zoom overlay: load the full-resolution art (default: 384px thumb)
+  /** Gallery grids (card list / deck pool / pickers) render hundreds of cards —
+   *  those defer their art. Screens with a bounded, all-visible set (board,
+   *  hand, market, zoom) must NOT: see artEl(). */
+  lazyArt?: boolean;
   field?: boolean;
   compactField?: boolean;
   owner?: PlayerState;
@@ -208,20 +212,44 @@ function fitToBox(box: HTMLElement, { solo = false } = {}): void {
   if (typeof ResizeObserver !== "undefined") new ResizeObserver(() => run()).observe(box);
 }
 
-function artEl(cardId: string, full = false): HTMLElement {
+function artEl(cardId: string, full = false, lazy = false): HTMLElement {
   // small views load the 384px thumbnail; only the zoom overlay fetches the full-res art
   const art = el("div", "card-art");
   const img = document.createElement("img");
-  img.src = `/art/${full ? "cards" : "cards-sm"}/${cardId}.webp`;
+  const src = `/art/${full ? "cards" : "cards-sm"}/${cardId}.webp`;
   img.alt = "";
-  img.loading = "lazy";
-  img.decoding = "async";
   img.className = "card-art-img";
+  // ⚠ Attributes MUST be set before `src`. Assigning src is what queues the
+  // fetch, and the loading/priority hints have to be in place by then.
+  img.decoding = "async";
+  if (lazy) {
+    // Only for galleries that render hundreds of cards at once (card list,
+    // deck pool, pickers). Everywhere else lazy is actively harmful: the board
+    // shows ~17 cards that are ALL on screen and are the point of the screen,
+    // yet lazy images are Low priority AND are not fetched until the browser
+    // decides they are near the viewport. Measured: 20 lazy images in a
+    // backgrounded tab issued ZERO requests in 3s, while the same 20 without
+    // it finished in well under a second. That is the "art loads slowly / some
+    // cards stay blank" report — the requests were never being made.
+    img.loading = "lazy";
+  } else {
+    img.loading = "eager";
+    img.setAttribute("fetchpriority", full ? "high" : "auto");
+  }
   if (full) img.style.backgroundImage = `url(/art/cards-sm/${cardId}.webp)`; // thumb as instant placeholder under the full art
   const done = (): void => { img.classList.add("art-loaded"); art.classList.add("art-done"); };
   if (img.complete && img.naturalWidth) done();
   else img.onload = done;
-  img.onerror = () => { img.remove(); art.classList.add("art-done"); };
+  // One retry before giving up. The old handler removed the <img> on the first
+  // error, so a single transient failure blanked that card for the rest of the
+  // session with no way back.
+  let tries = 0;
+  img.onerror = () => {
+    if (tries++ === 0) { setTimeout(() => { img.src = `${src}?retry=1`; }, 500); return; }
+    img.remove();
+    art.classList.add("art-done");
+  };
+  img.src = src;
   art.appendChild(img);
   return art;
 }
@@ -235,7 +263,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   // Layering: art sits BEHIND the frame (in the transparent art window), the
   // frame PNG overlays on top (its border hugs the art edges), then text/cost
   // render above the frame. (frame's outer + window are transparent.)
-  node.appendChild(artEl(c.id, opt.fullArt));
+  node.appendChild(artEl(c.id, opt.fullArt, opt.lazyArt));
   const frameEl = el("div", "card-frame");
   // square field tiles use the dedicated 1254 square frames; everything else
   // (hand / market / zoom / deck-builder) keeps the vertical card frames

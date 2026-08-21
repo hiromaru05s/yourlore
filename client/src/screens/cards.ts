@@ -106,7 +106,7 @@ export function mountCards(app: App): Screen {
     }
     const frag = document.createDocumentFragment();
     for (const c of list) {
-      const node = cardEl(c, { size: "mkt" });
+      const node = cardEl(c, { size: "mkt" , lazyArt: true });
       node.style.cursor = "pointer";
       node.onclick = () => zoomCard(c);
       frag.appendChild(node);
