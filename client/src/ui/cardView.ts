@@ -349,6 +349,70 @@ function artStatus(key: string): "ok" | "fail" | "unknown" {
   return "unknown";
 }
 
+// ---- zoom art prefetch -------------------------------------------------------
+// Tapping a card used to be the FIRST time its full-resolution art was ever
+// requested, so the player watched it arrive. Two things fix that: the 384px
+// thumbnail (already on screen) is painted underneath immediately, and the full
+// art is fetched before the tap wherever we can see the tap coming.
+export const artUrl = {
+  xs: (id: string) => `/art/cards-xs/${id}.webp`,
+  sm: (id: string) => `/art/cards-sm/${id}.webp`,
+  full: (id: string) => `/art/cards/${id}.webp`,
+};
+
+const prefetched = new Set<string>();
+let inFlight = 0;
+const prefetchQueue: string[] = [];
+const PREFETCH_PARALLEL = 2;
+
+/** Skip speculative loading when the player is paying for it or barely connected.
+ *  Only genuinely bad links are excluded — effectiveType is a rough estimate and
+ *  reports plenty of healthy connections as "3g", so gating on "4g" would turn
+ *  prefetching off for a large share of real players. */
+function prefetchAllowed(): boolean {
+  const c = (navigator as unknown as { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+  if (!c) return true;                                    // no information — assume it is fine
+  if (c.saveData) return false;
+  return c.effectiveType !== "slow-2g" && c.effectiveType !== "2g";
+}
+
+// setTimeout, not requestIdleCallback: idle callbacks are not run at all while
+// the tab is hidden, and a board rendered in a background tab (waiting out
+// matchmaking) is exactly when there is time to spare. The delay keeps the
+// prefetch behind the art that is actually on screen.
+const idle = (cb: () => void): void => { setTimeout(cb, 400); };
+
+function pumpPrefetch(): void {
+  while (inFlight < PREFETCH_PARALLEL) {
+    const id = prefetchQueue.shift();
+    if (!id) return;
+    const url = artUrl.full(id);
+    inFlight++;
+    const img = new Image();
+    const fin = (): void => { inFlight--; pumpPrefetch(); };
+    img.onload = fin;
+    img.onerror = fin;
+    // decoded off the critical path; the browser caches it either way
+    img.decoding = "async";
+    img.setAttribute("fetchpriority", "low");
+    img.src = url;
+  }
+}
+
+/**
+ * Warm the full-resolution art for a card the player is likely to enlarge.
+ * `now` jumps the queue — used when a pointer is already on the card, where the
+ * tap is at most a few hundred ms away.
+ */
+export function prefetchZoomArt(cardId: string, now = false): void {
+  if (prefetched.has(cardId)) return;
+  if (!now && !prefetchAllowed()) return;                 // speculative work only on a good link
+  prefetched.add(cardId);
+  if (now) { prefetchQueue.unshift(cardId); pumpPrefetch(); return; }
+  prefetchQueue.push(cardId);
+  idle(pumpPrefetch);
+}
+
 // ---- art sizes ----------------------------------------------------------------
 // Every card view except the zoom overlay renders art far smaller than the 384px
 // thumbnail: the gallery grid shows it at ~92 CSS px on a desktop. Decoding and
@@ -360,6 +424,9 @@ function artStatus(key: string): "ok" | "fail" | "unknown" {
 // `sizes` mirrors the .cards-grid breakpoints in screens.css (art window is
 // ~86% of the card, card width = (min(1040px,96vw) - 8px - 8px*(cols-1)) / cols),
 // so a 3x phone still picks the 384px file and stays sharp.
+// Zoom art window ≈ 86.6% of the card: 346px at the 400px desktop size, 84vw*0.866
+// on phones.
+const ZOOM_SIZES = "(max-width: 860px) 73vw, 346px";
 const GALLERY_SIZES = [
   "(max-width: 340px) 39vw",
   "(max-width: 480px) 26vw",
@@ -406,7 +473,19 @@ function artEl(cardId: string, full = false, lazy = false, gallery = false): HTM
     img.loading = "eager";
     img.setAttribute("fetchpriority", full ? "high" : "auto");
   }
-  if (full) img.style.backgroundImage = `url(/art/cards-sm/${cardId}.webp)`; // thumb as instant placeholder under the full art
+  if (full) {
+    // The thumbnail is already decoded (the card was on screen a moment ago), so
+    // paint it behind the full art straight away — the zoom opens filled in
+    // instead of empty. It goes on the CONTAINER: the <img> itself starts at
+    // opacity 0 for the cross-fade, which used to hide this placeholder too, so
+    // it never actually showed.
+    art.style.backgroundImage = `url(${artUrl.sm(cardId)})`;
+    art.classList.add("has-thumb");
+    // 1x screens need ~346px for a 400px card — the 384px thumb already covers
+    // that, so they never fetch the master at all.
+    img.sizes = ZOOM_SIZES;
+    img.srcset = `${artUrl.sm(cardId)} 384w, ${artUrl.full(cardId)} 832w`;
+  }
   const done = (): void => {
     artOk.add(key);
     img.classList.add("art-loaded");

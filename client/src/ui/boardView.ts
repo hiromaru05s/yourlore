@@ -8,7 +8,7 @@ import { effMaxMana, playCost, buyCost, effAtk, effDef, curHp } from "../shared/
 import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
-import { cardEl } from "./cardView";
+import { cardEl, prefetchZoomArt } from "./cardView";
 import { bindZoom, zoomCard, setPlayOrigin } from "./anim";
 import { t, getLang } from "../i18n";
 import { logToEn } from "../shared/logEn";
@@ -359,6 +359,15 @@ export class GameView {
     this.renderHand(g, me, myTurn);
 
     (this.q("endBtn") as HTMLButtonElement).disabled = !myTurn || !!pending;
+
+    // Warm the full-resolution art for everything enlargeable on this board, at
+    // idle. A tap on a phone has no hover to hint from, so without this the
+    // player waits for the master to download the first time they enlarge a
+    // card. Bounded by what is actually on screen (~30 cards), de-duped for the
+    // session, and skipped entirely on a metered or slow connection.
+    for (const c of [...me.hand, ...me.field, ...opp.field, ...g.market, ...(g.players[g.cur].supply.filter(Boolean) as CardInst[])]) {
+      if (c && c.id !== "HIDDEN") prefetchZoomArt(c.id);
+    }
 
     // target hint banner
     const hint = this.q("targetHint");

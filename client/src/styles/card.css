@@ -291,6 +291,13 @@
 
 /* ---- art loading: shimmer skeleton until the image arrives, then fade in ---- */
 .card-art { background: linear-gradient(110deg, #1a1626 40%, #262038 50%, #1a1626 60%); background-size: 200% 100%; }
+/* Zoom only: the already-decoded 384px thumbnail painted behind the full art so
+   the overlay opens filled in. Same crop as .card-art img (object-position) or
+   the picture would jump when the full art fades in. */
+.card-art.has-thumb { background-size: cover; background-position: center 22%; }
+/* the ◆ motif is for cards with no art at all — never over a real thumbnail */
+.card-art.has-thumb::after { content: none; }
+.card-art.has-thumb:not(.art-done) { animation: none; }
 .card-art:not(.art-done) { animation: artShimmer 1.1s linear infinite; }
 @keyframes artShimmer { from { background-position: 130% 0; } to { background-position: -70% 0; } }
 .card-art .card-art-img { opacity: 0; transition: opacity 0.28s ease; background-size: cover; background-position: center; }

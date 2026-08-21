@@ -4,7 +4,7 @@
 // ============================================================
 import type { CardInst } from "../shared/types";
 import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, cardPassives } from "../shared/cards";
-import { cardEl } from "./cardView";
+import { cardEl, prefetchZoomArt } from "./cardView";
 import { t, getLang, cardText } from "../i18n";
 
 export type ViewSide = "me" | "opp";
@@ -454,9 +454,16 @@ export function closeZoom(): void {
  */
 export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; max: number }): void {
   el.oncontextmenu = (e) => { e.preventDefault(); zoomCard(card, hp); };
+  // Intent, not speculation: by the time a pointer is resting on a card, a
+  // right-click or a 380ms long-press is at most a few hundred ms away. Start
+  // the full-resolution art then, so the overlay has it by the time it opens.
+  // (`prefetchZoomArt` de-dupes, so the repeated hovers cost nothing.)
+  const warm = (): void => prefetchZoomArt(card.id, true);
+  el.addEventListener("pointerenter", warm);
   let timer = 0, sx = 0, sy = 0, fired = false;
   el.addEventListener("touchstart", (e) => {
     if (e.touches.length !== 1) return;
+    warm();                       // 380ms of head start before the long-press fires
     fired = false;
     sx = e.touches[0].clientX; sy = e.touches[0].clientY;
     clearTimeout(timer);
