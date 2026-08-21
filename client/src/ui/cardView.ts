@@ -6,6 +6,7 @@ import type { CardInst, FieldMon, PlayerState } from "../shared/types";
 import { FRAME_BACK, frameFor, fieldFrameFor, PASSIVES, cardPassives } from "../shared/cards";
 import { curHp, effAtk, effDef, playCost } from "../shared/engine";
 import { cardName, cardText, getLang, t } from "../i18n";
+import { parseDiceTable } from "../shared/cardText";
 
 /**
  * 카드 효과 텍스트 안의 패시브 키워드명을 <span class="psv" data-psv="key">로 감싼다.
@@ -90,6 +91,14 @@ function contentSize(box: HTMLElement): { w: number; h: number } {
 // reads at one size. A relative floor keeps one wordy card from crushing the rest —
 // those get .is-clipped (top-aligned + bottom fade) instead.
 const GROUP_FLOOR = 0.62;                                   // never below 62% of the group's design size
+// Absolute readability floor. The relative floor alone let hand cards land at
+// ~3.5px — text that nobody can read, which is worse than showing less of it.
+// Below this we stop shrinking and let .is-clipped fade the tail instead; the
+// full text is one tap away in the zoom view.
+const MIN_READABLE_PX = 6.5;
+// The zoom overlay is the "read the whole card" view, so it is allowed to go
+// smaller than the on-board floor rather than hide its tail behind the fade.
+const ZOOM_MIN_PX = 9;
 const fitGroups = new Map<string, Set<HTMLElement>>();
 const ownFit = new WeakMap<HTMLElement, number>();          // px this box needs on its own
 const baseFit = new WeakMap<HTMLElement, number>();         // px the CSS asks for (unshrunk)
@@ -122,16 +131,26 @@ function normalizeFitGroups(): void {
     // NOT shrunk below it — they render at the group size and lose their tail to
     // the .is-clipped fade instead. Shrinking them further was what made the sizes
     // look random, and those cards were unreadable at that size anyway.
-    const px = Math.min(Math.max(need, base * GROUP_FLOOR), base);
+    // Readability wins over completeness. `base` (the CSS design size) is itself
+    // under ~5px on market/hand cards, so capping at it guaranteed unreadable
+    // text; the floor is allowed to exceed it and the overflow becomes the
+    // .is-clipped fade — the full text is one tap away in the zoom view.
+    const px = Math.max(Math.min(Math.max(need, base * GROUP_FLOOR), base), MIN_READABLE_PX);
     for (const b of live) {
       b.style.fontSize = px.toFixed(2) + "px";
       const r = b.getBoundingClientRect(), c = contentSize(b);
-      b.classList.toggle("is-clipped", c.h > r.height - 0.5 || c.w > r.width - 0.5);
+      b.classList.toggle("is-clipped", c.h > r.height + 0.5 || c.w > r.width + 1);
     }
   }
 }
 
-function fitToBox(box: HTMLElement, minPx = 3.5): void {
+/**
+ * @param solo  the zoom overlay — one card, alone, whose whole job is to be read.
+ *              It never joins a size group (there is nothing to be consistent
+ *              WITH) and never gets clipped: it shrinks until everything fits.
+ */
+function fitToBox(box: HTMLElement, { solo = false } = {}): void {
+  const minPx = solo ? ZOOM_MIN_PX : MIN_READABLE_PX;
   let tries = 0, lastW = -1, lastH = -1;
   const run = (): void => {
     // 주의: rAF는 숨겨진 탭에서 영원히 안 불린다(재접속 백그라운드 렌더 등) → setTimeout 사용.
@@ -152,7 +171,11 @@ function fitToBox(box: HTMLElement, minPx = 3.5): void {
       const c = contentSize(box);
       // 0.5px 여유를 두고 맞춘다: 딱 맞게 재면 글리프의 어센더/디센더가 반 픽셀씩
       // 삐져나와 overflow:hidden에 첫 줄 윗부분이 잘린다(카드명 2줄에서 특히).
-      const availH = b.height - 0.5, availW = b.width - 0.5;
+      // Height keeps the 0.5px slack (glyph ascenders/descenders). Width must NOT:
+      // a full-width child — the dice table is width:100% — measures exactly the
+      // box width, and a negative slack read that as overflow forever, shrinking
+      // the text and flagging it clipped when it actually fit.
+      const availH = b.height - 0.5, availW = b.width + 0.5;
       const overH = c.h - availH, overW = c.w - availW;
       if (overH <= 0 && overW <= 0) break;
       const cur = parseFloat(getComputedStyle(box).fontSize);
@@ -168,7 +191,9 @@ function fitToBox(box: HTMLElement, minPx = 3.5): void {
     // → is-clipped: 위 정렬 + 아래쪽 페이드. 잘림이 항상 문장 끝에서만 일어난다.
     const b2 = box.getBoundingClientRect();
     const c2 = contentSize(box);
-    box.classList.toggle("is-clipped", c2.h > b2.height - 0.5 || c2.w > b2.width - 0.5);
+    box.classList.toggle("is-clipped", c2.h > b2.height + 0.5 || c2.w > b2.width + 1);
+    // the zoom card is alone on screen — keep its own fitted size
+    if (solo) return;
     // join (or move to) the size group and let the group settle on one size
     ownFit.set(box, parseFloat(getComputedStyle(box).fontSize));
     const key = groupKey(box, b2.width);
@@ -199,34 +224,6 @@ function artEl(cardId: string, full = false): HTMLElement {
   img.onerror = () => { img.remove(); art.classList.add("art-done"); };
   art.appendChild(img);
   return art;
-}
-
-/**
- * Dice/chest cards list "roll → outcome" pairs. Written as one ` / `-joined line
- * they read as a wall of text (rules doc R6), so they render as ROWS instead.
- * Returns null when the text is not a table, so ordinary cards are untouched.
- */
-function diceTable(txt: string): { head: string; rows: [string, string][] } | null {
-  // split on " / " with real spaces — a bare "10/3" (a monster's stats) is NOT a separator
-  const parts = txt.split(/\s+\/\s+/);
-  if (parts.length < 3) return null;
-  // "2·3: effect" / "6~8: effect" / "①② effect" (circled digits need no colon)
-  const ROW = /^\s*([0-9０-９]+(?:\s*[·・,、~〜\-]\s*[0-9０-９]+)*)\s*[:：]\s*(.+?)\s*$/;
-  const ROW_CIRCLE = /^\s*([\u2460-\u2473]+)\s*[:：]?\s*(.+?)\s*$/;
-  let head = "";
-  const rows: [string, string][] = [];
-  for (let i = 0; i < parts.length; i++) {
-    let seg = parts[i];
-    if (i === 0) {
-      // the first segment may carry a lead-in: "주사위 2개 합계 — 2·3: …"
-      const dash = seg.search(/[—–]/);
-      if (dash >= 0) { head = seg.slice(0, dash).trim(); seg = seg.slice(dash + 1).trim(); }
-    }
-    const r = seg.match(ROW) ?? seg.match(ROW_CIRCLE);
-    if (!r) return null;                       // any non-row segment → not a table
-    rows.push([r[1].replace(/\s+/g, ""), r[2]]);
-  }
-  return rows.length >= 3 ? { head, rows } : null;
 }
 
 export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
@@ -275,45 +272,67 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
       d = opt.hpNow;
       hurt = opt.hpMax != null && opt.hpMax > d;
     } else d = c.def!;
-    node.appendChild(el("div", "ad-atk" + (String(a).length >= 3 ? " ad-num--3d" : ""), String(a)));
-    // 알은 체력 대신 부화/내구도 배지가 실질 정보 → 체력 칩을 감춘다(장식 숫자 제거)
+    // 알은 공격도 체력도 하지 않는다 — 부화/내구도 배지가 그 자리의 실질 정보다.
+    // (0/0 칩이 남아 있으면 "약한 몬스터"로 잘못 읽힌다)
+    if (!(onField && isEgg)) node.appendChild(el("div", "ad-atk" + (String(a).length >= 3 ? " ad-num--3d" : ""), String(a)));
     if (!(onField && isEgg)) {
       node.appendChild(el("div", "ad-def" + (hurt ? " ad-def--hurt" : "") + (String(d).length >= 3 ? " ad-num--3d" : ""), String(d)));
     }
   }
-  // 암살자 길드: 카운트 배지
-  if (opt.field && c.aura === "assassinGuild") {
-    const gc = (c as { gcount?: number }).gcount ?? 0;
-    node.appendChild(el("div", "egg-cnt", `<span class="ec ec-d">⚔${gc}/3</span>`));
-  }
-  // 알(egg): 부화/내구도 카운터 배지 — 필드에서는 실시간 값, 손패/마켓에서는 초기값
-  if (c.hatchTurns != null) {
-    const eggH = (c as { hatch?: number }).hatch ?? c.hatchTurns;
-    const eggD = (c as { dur?: number }).dur ?? c.hatchDur ?? 4;
-    node.appendChild(el("div", "egg-cnt", `<span class="ec ec-h">🥚${eggH}</span><span class="ec ec-d">🛡${Math.max(0, eggD)}</span>`));
-  }
-  // 기합 토큰 / 부패 카운터 / 부여 패시브 배지 (필드 카드만)
-  if (opt.field && c.hatchTurns == null && c.aura !== "assassinGuild") {
+  // ---- 상태 띠 (필드 타일 / 알) ------------------------------------------
+  // 예전에는 카운터가 타일 한가운데(top:48%)에 떠서 일러스트를 가리고, 게다가
+  // 키워드는 확대해야만 보였다 — 같은 카드인데 필드와 확대에서 읽히는 정보가
+  // 달랐다. 이제 키워드 칩과 카운터를 하나의 띠로 묶어 공격/체력 칩 바로 위,
+  // 항상 같은 자리에 둔다. 칩 모양은 확대 화면의 키워드 칩과 동일하다.
+  {
+    const lang0 = getLang();
+    const psvName = (k: string): string | null => {
+      const pd = PASSIVES[k];
+      return pd ? (lang0 === "ja" ? pd.ja.name : lang0 === "en" ? pd.en.name : pd.ko.name) : null;
+    };
+    const band = el("div", "card-status");
     const fm = c as FieldMon;
-    const bits: string[] = [];
-    if ((fm.guts ?? 0) > 0) bits.push(`<span class="ec ec-g">💢${fm.guts}</span>`);
-    if ((fm.decayCnt ?? 0) > 0) bits.push(`<span class="ec ec-x">☠${fm.decayCnt}/3</span>`);
-    if (fm.passivesG?.length) {
-      const lang0 = getLang();
+    // 1) 키워드 — 카드가 원래 가진 것 + 게임 중 부여된 것 (필드 타일에서만;
+    //    손패/마켓/확대는 효과판의 키워드 칩 행이 같은 정보를 이미 보여준다)
+    if (opt.compactField) {
+      const innate = cardPassives(c);
+      const granted = fm.passivesG ?? [];
+      for (const k of [...innate, ...granted.filter((g) => !innate.includes(g))]) {
+        const nm = psvName(k);
+        if (!nm) continue;
+        const chip = el("span", "kw" + (granted.includes(k) ? " kw--granted" : ""), nm);
+        chip.dataset.psv = k;
+        band.appendChild(chip);
+      }
+    } else if (opt.field && fm.passivesG?.length) {
       for (const k of fm.passivesG) {
-        const p = PASSIVES[k];
-        if (p) bits.push(`<span class="ec ec-p">${lang0 === "ja" ? p.ja.name : lang0 === "en" ? p.en.name : p.ko.name}</span>`);
+        const nm = psvName(k);
+        if (nm) band.appendChild(el("span", "ec ec-p", nm));
       }
     }
-    if (bits.length) node.appendChild(el("div", "egg-cnt", bits.join("")));
+    // 2) 카운터
+    if (opt.field && c.aura === "assassinGuild") {
+      band.appendChild(el("span", "ec ec-d", `⚔${(c as { gcount?: number }).gcount ?? 0}/3`));
+    }
+    if (c.hatchTurns != null) {
+      // 알: 필드에서는 실시간 값, 손패/마켓에서는 초기값
+      const eggH = (c as { hatch?: number }).hatch ?? c.hatchTurns;
+      const eggD = (c as { dur?: number }).dur ?? c.hatchDur ?? 4;
+      band.appendChild(el("span", "ec ec-h", `🥚${eggH}`));
+      band.appendChild(el("span", "ec ec-d", `🛡${Math.max(0, eggD)}`));
+    } else if (opt.field && c.aura !== "assassinGuild") {
+      if ((fm.guts ?? 0) > 0) band.appendChild(el("span", "ec ec-g", `💢${fm.guts}`));
+      if ((fm.decayCnt ?? 0) > 0) band.appendChild(el("span", "ec ec-x", `☠${fm.decayCnt}/3`));
+    }
+    if (band.childElementCount) node.appendChild(band);
   }
   // 이름도 실측-축소: 긴 이름(EN 포함)이 프레임 이름판을 벗어나지 않게
-  fitToBox(nameEl2);
+  fitToBox(nameEl2, { solo: !!opt.fullArt });
   // 효과 텍스트: "(시전 N)"/"(소환 N)" 계열 표기는 배지로 대체되므로 제거하고, 구분자를 줄바꿈으로
   const rawTxt = cardText(c).replace(/\s*\((?:시전|Cast|発動|소환|Summon|召喚)\s*\d+\)/g, "").trim();
   // dice/chest cards are detected on the RAW text — the separators become newlines
   // just below, which would destroy the " / " that delimits the outcome rows
-  const table = rawTxt && rawTxt !== "—" ? diceTable(rawTxt) : null;
+  const table = rawTxt && rawTxt !== "—" ? parseDiceTable(rawTxt) : null;
   let txt = rawTxt
     .replace(/ · /g, "\n")
     .replace(/ \/ /g, "\n")
@@ -324,7 +343,10 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   // already clipped to the frame's text plate and already auto-fitted, so adding
   // keywords can never push anything outside the card art.
   const keyChips = cardPassives(c);
-  if ((txt && txt !== "—") || hasCast || keyChips.length) {
+  // The square field tile has no text plate (CSS hides it) — building one anyway
+  // put zero-sized boxes into the shared size groups and skewed the group size
+  // for every real card on screen.
+  if (!opt.compactField && ((txt && txt !== "—") || hasCast || keyChips.length)) {
     // No length buckets: every effect plate starts at the SAME CSS size and
     // fitToBox + the size-group pass decide the final one. The old --small/--tiny
     // buckets gave cards different starting sizes, so the "one size per screen"
@@ -367,7 +389,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     } else if (txt && txt !== "—") {
       eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${decorateTags(decoratePassives(c, txt))}</span>`));
     }
-    fitToBox(eff); // 실측 자동 축소 — 어떤 길이의 효과도 항상 프레임 텍스트판 안에
+    fitToBox(eff, { solo: !!opt.fullArt }); // 실측 자동 축소 — 어떤 길이의 효과도 항상 프레임 텍스트판 안에
     node.appendChild(eff);
   }
   if (opt.badge) node.appendChild(el("span", "badge", opt.badge));

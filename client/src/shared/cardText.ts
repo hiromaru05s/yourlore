@@ -25,7 +25,12 @@
 //   단, 새 "트리거 문구"를 발명하지 말고 관용 표기를 그대로 쓸 것.
 // ============================================================
 import type { CardDef } from "./types";
-import { PASSIVES, cardPassives } from "./cards";
+// NOTE: never import from "./cards" here. cards.ts imports THIS module and calls
+// standardizeCardTexts() at module scope, so a back-import is a cycle: the emitted
+// ESM evaluates cardText before its own consts exist ("Cannot access 'OVERRIDE'
+// before initialization" — it broke `npm run art:check`). The keyword names this
+// module needs are passed in by the caller instead.
+export type KeywordNamesOf = (c: CardDef, lang: "ko" | "ja" | "en") => string[];
 
 // 카드별 완전 수동 오버라이드 (자동 규칙이 어색한 소수 카드)
 const OVERRIDE: Record<string, { ko?: string; ja?: string; en?: string }> = {
@@ -53,6 +58,11 @@ function mark(s: string, marker: string): string {
   const m = s.match(/^(.*?)(\s*\((?:시전|発動|Cast|소환|召喚|Summon)\s*\d+\))$/);
   if (m) return m[1] + marker + m[2];
   return s + marker;
+}
+
+/** 조건절("…일 때만 발동 가능")에 조건 태그를 붙인다 — 이미 태그가 있으면 그대로. */
+function tagRequires(s: string, cond: RegExp, tag: string): string {
+  return s.split(" · ").map((seg) => (cond.test(seg) && !seg.includes("【") ? tag + seg : seg)).join(" · ");
 }
 
 function stdKo(c: CardDef, s0: string): string {
@@ -100,6 +110,9 @@ function stdKo(c: CardDef, s0: string): string {
   // ---- 소환 조건: 해당 절 앞에 【조건】 ----
   s = s.replace(/】[:：]\s*/g, "】");
   if (c.summonReq) s = s.split(" · ").map((seg) => (seg.includes("소환 가능") && !seg.startsWith("【") ? "【조건】" + seg : seg)).join(" · ");
+  // 마법·함정의 "…할 때만 발동/사용 가능" 절도 같은 조건 태그를 붙인다
+  // (en은 이미 【Requires】를 쓰고 있어 ko/ja만 태그가 없던 카드들)
+  s = tagRequires(s, /(?:때|경우)만\s*(?:발동|사용|시전)?\s*가능/, "【조건】");
   return s;
 }
 
@@ -140,6 +153,7 @@ function stdJa(c: CardDef, s0: string): string {
   }
   s = s.replace(/】[:：]\s*/g, "】");
   if (c.summonReq) s = s.split(" · ").map((seg) => (/召喚可能/.test(seg) && !seg.startsWith("【") ? "【条件】" + seg : seg)).join(" · ");
+  s = tagRequires(s, /(?:場合|時)のみ\s*(?:発動|使用)?\s*可能/, "【条件】");
   return s;
 }
 
@@ -197,27 +211,104 @@ function stripCastCost(s: string): string {
   return s.replace(/\s*[（(]\s*(?:시전|발동|発動|Cast|소환|召喚|Summon)\s*\d+\s*[）)]/g, "").trim();
 }
 
-function stripKeywords(c: CardDef, s: string, lang: "ko" | "ja" | "en"): string {
-  const keys = cardPassives(c);
-  if (!keys.length || !s) return s;
-  const names = new Set(keys.map((k) => PASSIVES[k]?.[lang]?.name).filter(Boolean) as string[]);
+/**
+ * 구분자 통일 (룰 R1).
+ *
+ * 지금까지 한 카드 안에서 마침표 · 엠대시 · 슬래시 · 쉼표가 뒤섞여 "어디서
+ * 한 효과가 끝나는지"가 언어마다 달랐다(ko는 마침표, en은 엠대시 …).
+ * 절 구분자는 " · " 하나로 고정한다.
+ *
+ *   " · "  절(문장) 구분 — 위에서부터 순서대로 해결
+ *   "·"    (공백 없음) 절 안의 나열 — 초급·중급·상급
+ *   " / "  주사위 표의 행 구분 (표 안에서만)
+ *
+ * 주사위 표(parseDiceTable가 인식하는 카드)는 건드리지 않는다 — 거기서
+ * " / "와 리드인 "—"는 표 구조 그 자체다.
+ */
+function unifySeparators(s: string): string {
+  if (parseDiceTable(s)) return s;
+  return s
+    // "roll a die — on 4+, …" 의 대시는 절 구분이 아니라 결과 도입부다.
+    // (그대로 두면 아래 규칙이 절로 쪼개 ko의 한 문장과 개수가 어긋난다)
+    .replace(/\broll (a die|\d+ dice)\s*[—–]\s*/gi, "roll $1: ")
+    // ko/ja: 주사위 조건절 앞의 쉼표는 절 경계다
+    //   "카드 3장 드로우, 주사위 5 이상이면 2장 추가"
+    .replace(/\s*,\s*(?=주사위|ダイス)/g, " · ")
+    .replace(/\s*、\s*(?=ダイス)/g, " · ")
+    // 절을 잇는 엠대시/앤대시 → · (주사위 표가 아닌 카드에만 온다)
+    .replace(/\s+[—–]\s+/g, " · ")
+    // 표가 아닌 곳의 슬래시 → · ("10/3", "+1/+1" 같은 스탯 표기는 공백이 없어 안전)
+    .replace(/\s+\/\s+/g, " · ")
+    // 문장 마침표로 절을 잇던 표기 → · (소수점 "1.5"는 앞뒤가 숫자라 제외)
+    .replace(/[.。](?!\d)\s+(?=\S)/g, " · ")
+    // 태그 바로 앞의 쉼표는 절 경계다: "최대 마나 +1, 【소환시】…"
+    .replace(/\s*,\s*(?=【)/g, " · ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
+/** 룰 R9: "마나1: …" 같은 코스트 접두도 금지 — 코스트 젬이 이미 같은 숫자를 보여준다. */
+function stripCostPrefix(s: string): string {
+  return s.replace(/^\s*(?:마나|マナ|Mana)\s*\d+\s*[:：]\s*/i, "").trim();
+}
+
+function stripKeywords(c: CardDef, s: string, lang: "ko" | "ja" | "en", keywordNames: KeywordNamesOf): string {
+  if (!s) return s;
+  const names = new Set(keywordNames(c, lang).filter(Boolean));
   if (!names.size) return s;
-  const parts = s.split(/\s*·\s*/);
+  // 절 구분자는 "공백 있는 ·" 뿐이다. 공백 없는 ·는 절 안의 나열(초급·중급·상급)이라
+  // 여기서 쪼개면 안 된다 — 예전 구현은 /\s*·\s*/로 쪼갠 뒤 " · "로 다시 이어 붙여
+  // 나열을 절 구분자로 바꿔놨다(ASSASSIN4가 6절, GOLEM3가 4절로 세지던 원인).
+  const parts = s.split(/\s+·\s+/);
   const kept = parts.filter((p) => !names.has(p.trim()));
   // 전부 키워드뿐이면 빈 문자열 → 칩 행만 남는다
   return kept.join(" · ").trim();
 }
 
+/**
+ * 주사위·보물상자 카드의 "눈 → 결과" 목록을 표로 파싱한다 (룰 R6).
+ * 한 줄로 이어 쓰면 글자 벽이 되므로 cardView가 행으로 렌더한다.
+ * 표가 아니면 null — 일반 카드는 손대지 않는다.
+ *
+ * 렌더러와 검사 스크립트(scripts/check-card-text.mjs)가 "무엇이 표인가"를
+ * 같은 함수로 판단하도록 여기(shared)에 둔다. 두 곳이 갈라지면 길이 예산이
+ * 표에 잘못 적용된다.
+ */
+export function parseDiceTable(txt: string): { head: string; rows: [string, string][] } | null {
+  // " / " (양옆 공백)만 구분자 — 몬스터 스탯의 "10/3"은 구분자가 아니다
+  const parts = txt.split(/\s+\/\s+/);
+  if (parts.length < 3) return null;
+  // "2·3: 효과" / "6~8: 효과" / "①② 효과"(원문자는 콜론 없이도 인정)
+  const ROW = /^\s*([0-9\uff10-\uff19]+(?:\s*[\u00b7\u30fb,\u3001~\uff5e-]\s*[0-9\uff10-\uff19]+)*)\s*[:\uff1a]\s*(.+?)\s*$/;
+  const ROW_CIRCLE = /^\s*([\u2460-\u2473]+)\s*[:\uff1a]?\s*(.+?)\s*$/;
+  let head = "";
+  const rows: [string, string][] = [];
+  for (let i = 0; i < parts.length; i++) {
+    let seg = parts[i];
+    if (i === 0) {
+      // 첫 조각엔 리드인이 붙을 수 있다: "주사위 2개 합계 — 2·3: …"
+      const dash = seg.search(/[\u2014\u2013]/);
+      if (dash >= 0) { head = seg.slice(0, dash).trim(); seg = seg.slice(dash + 1).trim(); }
+    }
+    const r = seg.match(ROW) ?? seg.match(ROW_CIRCLE);
+    if (!r) return null;                       // 행이 아닌 조각이 하나라도 있으면 표가 아니다
+    rows.push([r[1].replace(/\s+/g, ""), r[2]]);
+  }
+  return rows.length >= 3 ? { head, rows } : null;
+}
+
 /** 전 카드의 text/textJa/textEn을 표준 표기로 변환 (applyEnglish 이후 1회 실행) */
-export function standardizeCardTexts(pools: Array<Record<string, CardDef>>): void {
+export function standardizeCardTexts(pools: Array<Record<string, CardDef>>, keywordNames: KeywordNamesOf): void {
   for (const pool of pools) {
     for (const id of Object.keys(pool)) {
       const c = pool[id];
       const ov = OVERRIDE[id];
       const ko0 = c.text; // EN 폴백(=한국어 원문) 감지용
-      if (c.text && c.text !== "—") c.text = stripCastCost(stripKeywords(c, ov?.ko ?? stdKo(c, c.text), "ko"));
-      if (c.textJa && c.textJa !== "—") c.textJa = stripCastCost(stripKeywords(c, ov?.ja ?? stdJa(c, c.textJa), "ja"));
-      if (c.textEn && c.textEn !== "—") c.textEn = stripCastCost(stripKeywords(c, c.textEn === ko0 ? c.text : ov?.en ?? stdEn(c, c.textEn), "en"));
+      const fin = (txt: string, lang: "ko" | "ja" | "en"): string =>
+        unifySeparators(stripCostPrefix(stripCastCost(stripKeywords(c, txt, lang, keywordNames))));
+      if (c.text && c.text !== "—") c.text = fin(ov?.ko ?? stdKo(c, c.text), "ko");
+      if (c.textJa && c.textJa !== "—") c.textJa = fin(ov?.ja ?? stdJa(c, c.textJa), "ja");
+      if (c.textEn && c.textEn !== "—") c.textEn = fin(c.textEn === ko0 ? c.text : ov?.en ?? stdEn(c, c.textEn), "en");
     }
   }
 }

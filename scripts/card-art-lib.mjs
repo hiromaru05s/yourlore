@@ -22,6 +22,13 @@ const typeLabels = {
   starter: "starter utility item",
 };
 
+let lastCardTextModule = null;
+/** The transpiled shared/cardText module from the last loadCards() call. */
+export async function loadCardText() {
+  if (!lastCardTextModule) throw new Error("loadCardText(): call loadCards() first");
+  return import(lastCardTextModule);
+}
+
 export async function loadCards({ includeStarters = false } = {}) {
   const source = await fs.readFile(cardsSourcePath, "utf8");
   const englishSource = await fs.readFile(cardsEnglishSourcePath, "utf8");
@@ -30,7 +37,11 @@ export async function loadCards({ includeStarters = false } = {}) {
   await fs.mkdir(cacheDir, { recursive: true });
 
   const englishJs = transpileTs(englishSource);
-  const cardTextJs = transpileTs(cardTextSource);
+  // cardText imports PASSIVES from "./cards" (keyword-chip rule) — the emitted
+  // .mjs must point at the emitted cards.mjs, or the import resolves to nothing.
+  const cardTextJs = transpileTs(cardTextSource)
+    .replaceAll('from "./cards"', 'from "./cards.mjs"')
+    .replaceAll("from './cards'", 'from "./cards.mjs"');
   const flavorNamesJs = transpileTs(flavorNamesSource);
   const cardsJs = transpileTs(source)
     .replaceAll('from "./cards.en"', 'from "./cards.en.mjs"')
@@ -49,6 +60,7 @@ export async function loadCards({ includeStarters = false } = {}) {
   await fs.writeFile(flavorNamesOut, flavorNamesJs);
   await fs.writeFile(cardsOut, cardsJs);
 
+  lastCardTextModule = `${pathToFileURL(cardTextOut).href}?t=${Date.now()}`;
   const mod = await import(`${pathToFileURL(cardsOut).href}?t=${Date.now()}`);
   const cards = Object.values(mod.DB);
   return includeStarters ? cards.concat(Object.values(mod.STARTERS)) : cards;

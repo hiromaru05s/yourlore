@@ -79,6 +79,19 @@
   color: #ffffff14; font-size: 1.8em;
 }
 .card-art:has(img)::after { content: none; }
+/* Non-field cards (hand / market / zoom) show the same band for GRANTED passives
+   and egg counters; innate keywords live in the effect plate's chip row there. */
+.card-status {
+  position: absolute; left: 6%; right: 6%; top: 56%; z-index: 6;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 0.14em 0.2em; pointer-events: none;
+}
+.card-status .ec, .card-status .kw {
+  font-size: 0.34em; font-weight: 800; line-height: 1.35; padding: 0 0.35em; border-radius: 0.4em;
+  background: #050a14e0; border: 1px solid var(--brass-dim); color: var(--paper);
+  white-space: nowrap; box-shadow: 0 1px 3px #0008;
+}
+.card-status .ec-h { color: #ffd98a; }
+.card-status .ec-d { color: #9fd0ff; }
 .card-eff {
   /* lower text plate — new frame: monster plate y 63.6–86.1% (atk/def below) */
   position: absolute; left: 11%; right: 11%; z-index: 2;
@@ -329,8 +342,34 @@
 .card--field .ad-atk::before { content: "⚔"; margin-right: .18em; font-size: .72em; }
 .card--field .ad-def::before { content: "◆"; margin-right: .18em; font-size: .62em; }
 .card--field .tribe-tag { top: 9%; left: 8%; z-index: 5; }
-.card--field .egg-cnt { top: 48%; max-width: 92%; }
-.card--field .egg-cnt .ec { font-size: max(6px, calc(var(--cw) * .09)); padding: 1px 3px; }
+/* ---- status band: keyword chips + counters -------------------------------
+   One row, always in the same place: directly above the ATK/HP chips. It used
+   to float at the vertical middle of the tile, on top of the artwork's focal
+   point, which is what made 부패/기합 hard to read. Keyword chips use the same
+   shape as the zoom view's .card-keys chips, so a monster reads the same way
+   on the board as it does enlarged. */
+.card--field .card-status {
+  position: absolute; left: 3%; right: 3%; bottom: 27.5%; z-index: 6;
+  display: flex; flex-wrap: wrap-reverse; justify-content: center; align-items: center;
+  gap: 2px; pointer-events: none;
+}
+.card--field .card-status .kw,
+.card--field .card-status .ec {
+  font-size: max(6.5px, calc(var(--cw) * .095));
+  line-height: 1.3; padding: 0 3px; border-radius: 4px;
+  white-space: nowrap; font-weight: 800;
+  /* a dark plate so the chip stays legible over any artwork */
+  background: #050a14e0; border: 1px solid #ffffff30; color: var(--paper);
+  box-shadow: 0 1px 3px #000a; text-shadow: none;
+}
+.card--field .card-status .kw { background: #1a1636e6; border-color: #b9a7ff5c; color: #d9d0ff; }
+.card--field .card-status .kw--granted { background: #103028e6; border-color: #7fd6c26b; color: #b6ecdf; }
+.card--field .card-status .ec-g { color: #ffd98a; }
+.card--field .card-status .ec-x { color: #ff9a9a; }
+.card--field .card-status .ec-h { color: #ffd98a; }
+.card--field .card-status .ec-d { color: #9fd0ff; }
+/* eggs have no ATK/HP chips (the counters ARE the stats) → the band owns that row */
+.card--field:has(.ec-h) .card-status { bottom: 5%; }
 .card--field .badge { bottom: 4%; font-size: .62em; }
 .card--field-back { /* (no longer used for set traps — kept for safety) */
   background-size: cover;
