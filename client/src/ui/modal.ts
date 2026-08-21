@@ -168,8 +168,8 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
   m.className = "modal"; m.style.maxWidth = "720px";
   m.innerHTML = `<h2 style="font-size:14px">${title}</h2><div class="picker-grid" style="display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:16px 0;max-height:54vh;overflow:auto"></div><div class="modal-row"></div>`;
   const grid = m.querySelector(".picker-grid")!;
-  pool.forEach((c) => {
-    const card = cardEl(c, { playable: true , lazyArt: true });
+  pool.forEach((c, i) => {
+    const card = cardEl(c, { playable: true, lazyArt: i });
     card.onclick = () => { closeOverlay(); onPick(c.uid); };
     bindZoom(card, c); // 우클릭 / 길게 누르면 확대
     grid.appendChild(card);
@@ -202,8 +202,8 @@ export function cardPickerMulti(title: string, pool: CardInst[], max: number, on
     ok.disabled = picked.length === 0;
     ok.textContent = t("picker.confirm") + (picked.length ? ` (${picked.length})` : "");
   };
-  pool.forEach((c) => {
-    const card = cardEl(c, { playable: true , lazyArt: true });
+  pool.forEach((c, i) => {
+    const card = cardEl(c, { playable: true, lazyArt: i });
     card.onclick = () => {
       const i = picked.indexOf(c.uid);
       if (i >= 0) { picked.splice(i, 1); card.classList.remove("is-picked"); }
@@ -248,7 +248,7 @@ export function deckViewer(title: string, composition: CardInst[], remaining: Ca
     grid.innerHTML = "";
     note.textContent = isDeck ? t("deck.remain.note") : t(publicOnly ? "deck.public.note" : "deck.all.note");
     if (!pool.length) { grid.innerHTML = `<div style="color:var(--paper-faint);padding:20px">${t("deck.empty")}</div>`; return; }
-    pool.forEach((c) => { const card = cardEl(c, { lazyArt: true }); bindZoom(card, c); grid.appendChild(card); });
+    pool.forEach((c, i) => { const card = cardEl(c, { lazyArt: i }); bindZoom(card, c); grid.appendChild(card); });
   };
   render(composition, false);
   if (two) {

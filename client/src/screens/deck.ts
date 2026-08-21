@@ -81,7 +81,7 @@ export function mountDeck(app: App): Screen {
     curEl.appendChild(attune);
     deck().forEach((id, i) => {
       const c = inst(id, "dk" + i);
-      const el = cardEl(c, { size: "mkt", playable: true , lazyArt: true });
+      const el = cardEl(c, { size: "mkt", playable: true });
       el.title = t("deck.remove");
       el.onclick = () => { deck().splice(i, 1); render(); };
       bindZoom(el, c);
@@ -95,11 +95,12 @@ export function mountDeck(app: App): Screen {
     }
     // ---- 스타팅 풀 ----
     poolEl.innerHTML = "";
+    let poolIdx = 0;
     for (const id of DECK_POOL) {
       const c = inst(id, "pool_" + id);
       const n = countOf(id);
       const full = deck().length >= DECK_SIZE || n >= DECK_MAX_COPIES;
-      const el = cardEl(c, { size: "mkt", playable: !full, dim: full , lazyArt: true });
+      const el = cardEl(c, { size: "mkt", playable: !full, dim: full, lazyArt: poolIdx++ });
       const cnt = document.createElement("div");
       cnt.className = "deck-owned" + (n > 0 ? " has" : "");
       cnt.textContent = `${n}/${DECK_MAX_COPIES}`;
@@ -111,13 +112,14 @@ export function mountDeck(app: App): Screen {
     // ---- 마켓 알림이 픽커 ----
     watchCountEl.textContent = `${watch().length}/${WATCH_MAX}`;
     watchEl.innerHTML = "";
+    let watchIdx = 0;
     const ql = watchQ.toLowerCase();
     const picked = WATCHABLE.filter((id) => watch().includes(id));
     const rest = WATCHABLE.filter((id) => !watch().includes(id) && (!ql || cardName({ uid: "", ...DB[id] }).toLowerCase().includes(ql) || DB[id].name.toLowerCase().includes(ql)));
     for (const id of [...picked, ...rest]) {
       const on = watch().includes(id);
       const c = inst(id, "w_" + id);
-      const el = cardEl(c, { size: "mkt", playable: true, dim: !on && watch().length >= WATCH_MAX , lazyArt: true });
+      const el = cardEl(c, { size: "mkt", playable: true, dim: !on && watch().length >= WATCH_MAX, lazyArt: watchIdx++ });
       if (on) {
         el.classList.add("is-watch-pick");
         const bell = document.createElement("div");

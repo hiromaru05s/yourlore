@@ -37,8 +37,11 @@ export interface CardOpts {
   fullArt?: boolean; // zoom overlay: load the full-resolution art (default: 384px thumb)
   /** Gallery grids (card list / deck pool / pickers) render hundreds of cards —
    *  those defer their art. Screens with a bounded, all-visible set (board,
-   *  hand, market, zoom) must NOT: see artEl(). */
-  lazyArt?: boolean;
+   *  hand, market, zoom) must NOT: see artEl().
+   *  Pass the card's index instead of `true` and the first screenful stays
+   *  eager — those cards are what the player is looking at right now, and
+   *  deferring them is the whole "the art shows up a second later" complaint. */
+  lazyArt?: boolean | number;
   field?: boolean;
   compactField?: boolean;
   owner?: PlayerState;
@@ -322,40 +325,81 @@ function fitToBox(box: HTMLElement, { solo = false } = {}): void {
   observeBox(box);
 }
 
+// ---- art state memo -----------------------------------------------------------
+// Galleries rebuild every card on every tab switch, so the same <img> src is
+// created again and again. Two things follow from that:
+//   · art that ALREADY loaded is sitting in the browser cache, but a fresh
+//     loading="lazy" image is still deferred behind a layout + intersection
+//     pass — which is why re-entering a tab took about a second to show art it
+//     had already fetched. Known-good art is created eager.
+//   · art that has no file (a card whose illustration was never generated)
+//     otherwise costs a request AND the retry delay on every single render.
+//     Known-bad art renders the placeholder immediately, no request at all.
+// The bad memo expires so a transient failure heals itself.
+const ART_FAIL_TTL = 60_000;
+const artOk = new Set<string>();
+const artFail = new Map<string, number>();
+function artStatus(src: string): "ok" | "fail" | "unknown" {
+  if (artOk.has(src)) return "ok";
+  const at = artFail.get(src);
+  if (at == null) return "unknown";
+  if (Date.now() - at < ART_FAIL_TTL) return "fail";
+  artFail.delete(src);            // give it another chance
+  return "unknown";
+}
+
+/** Cards past this index in a gallery grid defer their art; the ones before it
+ *  are (roughly) the first screenful and load immediately. */
+const EAGER_HEAD = 40;
+function lazyFor(v: boolean | number | undefined): boolean {
+  return typeof v === "number" ? v >= EAGER_HEAD : !!v;
+}
+
 function artEl(cardId: string, full = false, lazy = false): HTMLElement {
   // small views load the 384px thumbnail; only the zoom overlay fetches the full-res art
   const art = el("div", "card-art");
-  const img = document.createElement("img");
   const src = `/art/${full ? "cards" : "cards-sm"}/${cardId}.webp`;
+  const known = artStatus(src);
+  if (known === "fail") {
+    // no <img> at all — the ◆ placeholder is the final answer for this card
+    art.classList.add("art-done");
+    return art;
+  }
+  const img = document.createElement("img");
   img.alt = "";
   img.className = "card-art-img";
   // ⚠ Attributes MUST be set before `src`. Assigning src is what queues the
   // fetch, and the loading/priority hints have to be in place by then.
   img.decoding = "async";
-  if (lazy) {
+  if (lazy && known !== "ok") {
     // Only for galleries that render hundreds of cards at once (card list,
-    // deck pool, pickers). Everywhere else lazy is actively harmful: the board
-    // shows ~17 cards that are ALL on screen and are the point of the screen,
-    // yet lazy images are Low priority AND are not fetched until the browser
-    // decides they are near the viewport. Measured: 20 lazy images in a
-    // backgrounded tab issued ZERO requests in 3s, while the same 20 without
-    // it finished in well under a second. That is the "art loads slowly / some
-    // cards stay blank" report — the requests were never being made.
+    // deck pool, pickers), and only for art we have not already fetched.
+    // Everywhere else lazy is actively harmful: the board shows ~17 cards that
+    // are ALL on screen and are the point of the screen, yet lazy images are
+    // Low priority AND are not fetched until the browser decides they are near
+    // the viewport. Measured: 20 lazy images in a backgrounded tab issued ZERO
+    // requests in 3s, while the same 20 without it finished in well under a
+    // second.
     img.loading = "lazy";
   } else {
     img.loading = "eager";
     img.setAttribute("fetchpriority", full ? "high" : "auto");
   }
   if (full) img.style.backgroundImage = `url(/art/cards-sm/${cardId}.webp)`; // thumb as instant placeholder under the full art
-  const done = (): void => { img.classList.add("art-loaded"); art.classList.add("art-done"); };
+  const done = (): void => {
+    artOk.add(src);
+    img.classList.add("art-loaded");
+    art.classList.add("art-done");
+  };
   if (img.complete && img.naturalWidth) done();
   else img.onload = done;
-  // One retry before giving up. The old handler removed the <img> on the first
-  // error, so a single transient failure blanked that card for the rest of the
-  // session with no way back.
+  // One quick retry before giving up. The old handler removed the <img> on the
+  // first error, so a single transient failure blanked that card for the rest of
+  // the session with no way back.
   let tries = 0;
   img.onerror = () => {
-    if (tries++ === 0) { setTimeout(() => { img.src = `${src}?retry=1`; }, 500); return; }
+    if (tries++ === 0) { setTimeout(() => { img.src = `${src}?retry=1`; }, 150); return; }
+    artFail.set(src, Date.now());
     img.remove();
     art.classList.add("art-done");
   };
@@ -373,7 +417,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   // Layering: art sits BEHIND the frame (in the transparent art window), the
   // frame PNG overlays on top (its border hugs the art edges), then text/cost
   // render above the frame. (frame's outer + window are transparent.)
-  node.appendChild(artEl(c.id, opt.fullArt, opt.lazyArt));
+  node.appendChild(artEl(c.id, opt.fullArt, lazyFor(opt.lazyArt)));
   const frameEl = el("div", "card-frame");
   // square field tiles use the dedicated 1254 square frames; everything else
   // (hand / market / zoom / deck-builder) keeps the vertical card frames

@@ -105,12 +105,14 @@ export function mountCards(app: App): Screen {
       return;
     }
     const frag = document.createDocumentFragment();
-    for (const c of list) {
-      const node = cardEl(c, { size: "mkt" , lazyArt: true });
+    // lazyArt takes the index: the first screenful loads immediately (it is what
+    // the player is looking at the moment they switch tabs), the rest defer.
+    list.forEach((c, i) => {
+      const node = cardEl(c, { size: "mkt", lazyArt: i });
       node.style.cursor = "pointer";
       node.onclick = () => zoomCard(c);
       frag.appendChild(node);
-    }
+    });
     grid.appendChild(frag);
   }
 
