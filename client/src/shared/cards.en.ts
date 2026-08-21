@@ -78,11 +78,12 @@ const NAMES: Record<string, string> = {
 };
 
 const TEXTS: Record<string, string> = {
+  GT6_5: "[On being attacked] Roll a die — on 5+, destroy the attacking monster and exile it from the game",
   M3: "On summon: draw 1 card", M5: "On summon: take 2 damage", M6: "On summon: -2 DEF to an enemy monster (lasting)",
   M7: "On summon: deal 2 damage to the opponent", M8: "On summon: restore 1 HP", M9: "On summon: refresh your offer row for free",
   M10: "While on the field: max mana +1", M11: "ATK +1 while you control 2+ monsters",
   M12: "On summon: -1 ATK to an enemy monster (lasting)", M13: "On summon: destroy 1 enemy set trap",
-  NGA3: "On summon: take 2 damage", NGA4: "On summon: take 4 damage",
+  NGA3: "On summon: take 2 damage", NGA4: "On summon: take 6 damage",
   NHEX: "On summon: deal 5 damage to the opponent", NSPR: "While on the field: max mana +1. On summon: draw 2",
   NMD2: "On summon: draw 1 card", NMD4: "On summon: draw 2 cards", NMD6: "On summon: draw 5 cards",
   MIMIC: "Summoned to the opponent's field by a failed treasure chest · Void",
@@ -144,10 +145,10 @@ const TEXTS: Record<string, string> = {
   WEAKEN_ALL: "Permanent: all monsters on both fields have -2 ATK · Void",
   GUILD_HALL: "Aura: gain a count whenever your 'Assassin' monsters or this card damage the opponent · At 3 counts: deal 14 damage (count resets) · The count is lost if this card is destroyed",
   MIMIC_PARTY: "Trap: when the opponent uses a Treasure Chest — summon 1 Mimic to their field and 2 Mimics to yours",
-  FATE_WHEEL: "Permanent: on cast, your max mana -1 and take 5 damage · After seeing a dice/chance card's result, you may reroll it (once per turn) · Void",
+  FATE_WHEEL: "Permanent: on cast, your max mana -1 · After seeing a dice/chance card's result, you may reroll it (once per turn) · Void",
   COUNTERCALC: "Usable only while the opponent's max mana is 6 or less · Destroy 1 enemy enchantment · Exiled from the game after use",
   AMBUSH: "Usable only while the opponent's max mana is exactly 4 · Deal 7 damage, take 3 damage · Exiled from the game after use",
-  TRUMPET: "Give +1 ATK to 2 of your monsters (this turn)",
+  TRUMPET: "Give +1 ATK to up to 3 of your monsters (this turn)",
   FORESIGHT: "Permanent: when your max mana reaches 10+, gain +2 max mana and destroy this card · Castable only while you have no 'Foresight' on your field · Void",
   TRICKROOM: "For 2 turns, all monsters' ATK and DEF are swapped · While swapped, DEF gains raise ATK and vice versa · When it ends, stats gained while swapped are kept",
   INCUBATOR_S: "Reduce the hatch counter of one of your 'Eggs' by 2 turns",
@@ -212,9 +213,9 @@ const TEXTS: Record<string, string> = {
   CHOSEN_ROGUE: "Passive: +1 ATK per 2 'Culls' of yours exiled from the game · Infiltrate · Evade",
   CHOSEN_AREA: "Castable only while 25+ of your 'Culls' are exiled from the game · Win the game immediately",
   TRIAL_AREA: "Permanent: take 6 damage on cast · At the start of each of your turns, add a Cull to your graveyard, then you may exile up to 2 cards from your graveyard",
-  GAMBLER: "At the start of your turn: roll a die — on 4/5/6, max mana +1 and max HP +5",
+  GAMBLER: "At the start of your turn: roll a die — on 4/5/6, max mana +1",
   LEGEND_GAMBLER: "At the start of your turn: roll a die — on 6, max mana +10 · If a 'Gambler' is in your deck/graveyard, roll 3 dice in total · Trap Master · Void",
-  ELF_HAVEN: "Enchantment: cards with 'World Tree' in their name cost 0 to buy and cast",
+  ELF_HAVEN: "Enchantment: cards with 'World Tree' in their name cost 0 to buy and cast (max 3 free buys per turn)",
   HALF_ELF: "On summon: if a card with 'World Tree' in its name is on your field, deploy 'World Tree's Care'",
   WORLD_CARE: "Enchantment: at the start of each of your turns, max HP +12",
   ELF: "Summonable only while your max HP is 65 or higher",
@@ -414,7 +415,7 @@ Object.assign(TEXTS, {
   WORLD_BLESS: "Enchantment: both players gain max mana +1 at the start of their turns. Each turn the caster rolls 2 dice — on a total of 8+, +2 more (Cast 6)",
   LUCKY_CHEST: "Roll 2 dice — 2·3: max mana +3 & draw 2 / 4·5: dud (Master Mimic 10/3 on enemy field) / 6-8: max mana +1 / 9-11: max HP +8 / 12: max HP +12",
   GUILD_CHEST: "Roll 2 dice — 2·3: max mana +3 / 4: +1 draw at turn start (permanent) / 5·6: max mana +2 / 7: max mana +1 / 8: max HP +10 / 9·10: Novice & Adept Assassins on enemy field / 11·12: Novice, Adept & Elite Assassins + take 10 damage (Cast 3)",
-  FATE_WHEEL: "Permanent: on cast, your max mana -1 and take 5 damage · After seeing a dice card's result, you may reroll it (once per turn) · Void",
+  FATE_WHEEL: "Permanent: on cast, your max mana -1 · After seeing a dice card's result, you may reroll it (once per turn) · Void",
 });
 
 /** Attach nameEn/textEn to every card (explicit map -> generator dictionaries -> Korean fallback). */

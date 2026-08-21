@@ -725,9 +725,9 @@ for (const id of Object.keys(PATCH9)) { if (DB[id]) Object.assign(DB[id], PATCH9
 
 // chest (golden treasure) outcome odds — shown when the chest card is enlarged
 export const CHEST_ODDS = {
-  ko: { title: "황금상자 확률 (각 25%)", rows: ["최대 마나 +1 — 25%", "체력 +3 — 25%", "최대 체력 +5 — 25%", "꽝: 상대 필드에 미믹(3/2) — 25%"] },
-  ja: { title: "宝箱の確率 (各25%)", rows: ["最大マナ +1 — 25%", "体力 +3 — 25%", "最大体力 +5 — 25%", "ハズレ: 相手の場にミミック(3/2) — 25%"] },
-  en: { title: "Golden chest odds (25% each)", rows: ["Max mana +1 — 25%", "HP +3 — 25%", "Max HP +5 — 25%", "Dud: Mimic (3/2) on enemy field — 25%"] },
+  ko: { title: "황금상자 주사위", rows: ["5·6 — 최대 마나 +1", "3·4 — 최대 체력 +7", "1·2 — 꽝: 상대 필드에 미믹(3/2)"] },
+  ja: { title: "宝箱のダイス", rows: ["5·6 — 最大マナ +1", "3·4 — 最大体力 +7", "1·2 — ハズレ: 相手の場にミミック(3/2)"] },
+  en: { title: "Golden chest die", rows: ["5·6 — Max mana +1", "3·4 — Max HP +7", "1·2 — Dud: Mimic (3/2) on enemy field"] },
 };
 
 // ============================================================
@@ -971,8 +971,8 @@ const NEW_CARDS10: CardDef[] = [
     text: "상대의 최대 마나가 6 이하일 때만 사용 가능 · 상대의 영구마법 1장 파괴 · 사용 후 이 카드는 게임에서 제외", textJa: "相手の最大マナが6以下の時のみ使用可能 · 相手の永続魔法1枚を破壊 · 使用後このカードはゲームから除外" },
   { id: "AMBUSH", t: "spell", cost: 2, noShop: true, name: "기습", nameJa: "奇襲",
     text: "상대의 최대 마나가 4일 때만 사용 가능 · 상대에게 7 데미지, 자신에게 3 데미지 · 사용 후 이 카드는 게임에서 제외", textJa: "相手の最大マナが4の時のみ使用可能 · 相手に7ダメージ、自分に3ダメージ · 使用後このカードはゲームから除外" },
-  { id: "TRUMPET", t: "spell", cost: 1, noShop: true, name: "지원 나팔", nameJa: "支援ラッパ",
-    text: "자신 몬스터 2체 공격 +1(이번 턴)", textJa: "自分のモンスター2体の攻撃+1(このターン)" },
+  { id: "TRUMPET", t: "spell", cost: 2, noShop: true, name: "지원 나팔", nameJa: "支援ラッパ",
+    text: "자신 몬스터 최대 3체 공격 +1(이번 턴)", textJa: "自分のモンスター最大3体の攻撃+1(このターン)" },
   { id: "FORESIGHT", t: "spell", cost: 1, ench: "foresight", val: 99, exileOnDestroy: true, noShop: true, name: "선견지명", nameJa: "先見の明",
     text: "영구: 자신의 최대 마나가 9 이상이 되면 최대 마나 +2 후 이 카드를 파괴한다 · 필드를 떠나면 게임에서 제외", textJa: "永続: 自分の最大マナが9以上になると最大マナ+2してこのカードを破壊 · 場を離れるとゲームから除外" },
   { id: "TRICKROOM", t: "spell", cost: 3, noShop: true, name: "트릭룸", nameJa: "トリックルーム",
@@ -1108,7 +1108,7 @@ const PATCH13: Record<string, Partial<CardDef>> = {
   // ---- 영구마법 정리: 공허 표기 + 선견지명/혈귀술 너프 ----
   BLOOD_RITE: { text: "영구: 양 플레이어는 마법으로 인한 데미지를 받지 않고 그 수치만큼 회복한다 · 발동 14턴 후 이 카드는 파괴된다 · 공허", textJa: "永続: 両プレイヤーは魔法によるダメージを受けず、その数値だけ回復する · 発動14ターン後にこのカードは破壊される · 虚無" },
   WEAKEN_ALL: { text: "영구: 양 필드의 모든 몬스터 공격 -2 · 공허", textJa: "永続: 両方の場の全モンスター攻撃-2 · 虚無" },
-  FATE_WHEEL: { text: "영구: 시전 시 자신의 최대 마나 -1, 자신에게 8 데미지 · 주사위·확률 카드의 결과를 보고 나서 다시 굴릴 수 있다 (매턴 1회) · 공허", textJa: "永続: 発動時に自分の最大マナ-1、自分に8ダメージ · ダイス・確率カードの結果を見てから振り直せる (毎ターン1回) · 虚無" },
+  FATE_WHEEL: { text: "영구: 시전 시 자신의 최대 마나 -1 · 주사위·확률 카드의 결과를 보고 나서 다시 굴릴 수 있다 (매턴 1회) · 공허", textJa: "永続: 発動時に自分の最大マナ-1 · ダイス・確率カードの結果を見てから振り直せる (毎ターン1回) · 虚無" },
   FORESIGHT: { cost: 3, text: "영구: 자신의 최대 마나가 9 이상이 되면 최대 마나 +2 후 이 카드를 파괴한다 · 자신 필드에 '선견지명'이 없을 때만 발동 가능 · 공허", textJa: "永続: 自分の最大マナが9以上になると最大マナ+2してこのカードを破壊 · 自分の場に「先見の明」がない時のみ発動可能 · 虚無" },
   // ---- 공허 포격/대붕괴 너프: 시전비 인하 + 제외당 데미지 하향 ----
   EXILE_NUKE1: { play: 4, text: "게임에서 제외된 자신의 카드 1장당 상대에게 1 데미지 (시전 4)", textJa: "ゲームから除外された自分のカード1枚につき相手に1ダメージ (発動4)" },
@@ -1164,10 +1164,10 @@ for (const c of NEW_STARTERS11) { DB[c.id] = c; }
 // ---- 신규 스타팅(noShop) 3종: 도박꾼 / 엘프의 쉼터 / 하프 엘프 ----
 const NEW_STARTERS15: CardDef[] = [
   { id: "GAMBLER", t: "mon", cost: 3, atk: 0, def: 0, turnFx: "gambler", noShop: true, name: "도박꾼", nameJa: "ギャンブラー",
-    text: "자신의 턴 시작시: 주사위를 굴려 4·5·6이면 최대 마나 +1, 최대 체력 +5", textJa: "自分のターン開始時: ダイスを振り4・5・6なら最大マナ+1、最大体力+5" },
+    text: "자신의 턴 시작시: 주사위를 굴려 4·5·6이면 최대 마나 +1", textJa: "自分のターン開始時: ダイスを振り4・5・6なら最大マナ+1" },
   { id: "ELF_HAVEN", t: "spell", cost: 3, ench: "elfHaven", val: 99, noShop: true, name: "엘프의 쉼터", nameJa: "エルフの憩い場",
-    text: "영구: '세계수' 이름을 가진 카드의 구매/시전 코스트가 0이 된다", textJa: "永続: 「世界樹」の名を持つカードの購入/発動コストが0になる" },
-  { id: "HALF_ELF", t: "mon", cost: 2, atk: 1, def: 2, onSummon: "halfElf", noShop: true, name: "하프 엘프", nameJa: "ハーフエルフ",
+    text: "영구: '세계수' 이름을 가진 카드의 구매/시전 코스트가 0이 된다 (0코스트 구매는 턴당 3장까지)", textJa: "永続: 「世界樹」の名を持つカードの購入/発動コストが0になる (0コスト購入は1ターン3枚まで)" },
+  { id: "HALF_ELF", t: "mon", cost: 2, atk: 1, def: 1, onSummon: "halfElf", noShop: true, name: "하프 엘프", nameJa: "ハーフエルフ",
     text: "소환시: '세계수' 이름을 가진 카드가 자신 필드에 있으면 '세계수의 보살핌'을 필드에 전개", textJa: "召喚時: 「世界樹」の名を持つカードが自分の場にあれば「世界樹の慈しみ」を場に展開" },
 ];
 for (const c of NEW_STARTERS15) { DB[c.id] = c; }
@@ -1300,8 +1300,8 @@ for (const id18 of Object.keys(PATCH18)) { if (DB[id18]) Object.assign(DB[id18],
 // ============================================================
 const PATCH19: Record<string, Partial<CardDef>> = {
   // ---- 버프 (스타터 최하위) ----
-  FATE_WHEEL: { text: "영구: 시전 시 자신의 최대 마나 -1, 자신에게 5 데미지 · 주사위·확률 카드의 결과를 보고 나서 다시 굴릴 수 있다 (매턴 1회) · 공허",
-    textJa: "永続: 発動時に自分の最大マナ-1、自分に5ダメージ · ダイス・確率カードの結果を見てから振り直せる (毎ターン1回) · 虚無" }, // 자해 8→5
+  FATE_WHEEL: { text: "영구: 시전 시 자신의 최대 마나 -1 · 주사위·확률 카드의 결과를 보고 나서 다시 굴릴 수 있다 (매턴 1회) · 공허",
+    textJa: "永続: 発動時に自分の最大マナ-1 · ダイス・確率カードの結果を見てから振り直せる (毎ターン1回) · 虚無" }, // v24: 자해 5 삭제
   GHOST: { text: "암습 · 상대가 최대 마나/최대 체력을 늘릴 때마다 자신은 2 데미지를 입는다",
     textJa: "暗襲 · 相手が最大マナ/最大体力を増やすたび自分は2ダメージを受ける" }, // 3→2
   // ---- 너프 ----
@@ -1376,9 +1376,24 @@ PASSIVES.evade.ko.desc = "이 몬스터가 공격받을 때 주사위 4 이상�
 PASSIVES.evade.ja.desc = "このモンスターが攻撃される時、ダイス4以上でその攻撃を無効化する。";
 PASSIVES.evade.en.desc = "When this monster is attacked, roll a die — on 4+, the attack is negated.";
 // 황금상자: 1d6 표
-CHEST_ODDS.ko = { title: "황금상자 주사위", rows: ["1 — 꽝: 상대 필드에 미믹(3/2)", "2·3 — 체력 +3", "4·5 — 최대 마나 +1", "6 — 최대 체력 +5"] };
-CHEST_ODDS.ja = { title: "宝箱のダイス", rows: ["1 — ハズレ: 相手の場にミミック(3/2)", "2·3 — 体力 +3", "4·5 — 最大マナ +1", "6 — 最大体力 +5"] };
-CHEST_ODDS.en = { title: "Golden chest die", rows: ["1 — Dud: Mimic (3/2) on enemy field", "2·3 — HP +3", "4·5 — Max mana +1", "6 — Max HP +5"] };
+CHEST_ODDS.ko = { title: "황금상자 주사위", rows: ["5·6 — 최대 마나 +1", "3·4 — 최대 체력 +7", "1·2 — 꽝: 상대 필드에 미믹(3/2)"] };
+CHEST_ODDS.ja = { title: "宝箱のダイス", rows: ["5·6 — 最大マナ +1", "3·4 — 最大体力 +7", "1·2 — ハズレ: 相手の場にミミック(3/2)"] };
+CHEST_ODDS.en = { title: "Golden chest die", rows: ["5·6 — Max mana +1", "3·4 — Max HP +7", "1·2 — Dud: Mimic (3/2) on enemy field"] };
+
+// ============================================================
+// BALANCE PATCH 24 — 유저 지정 조정
+// ============================================================
+const PATCH24: Record<string, Partial<CardDef>> = {
+  // 광폭한 검귀: 10/0·자해4 → 9/1·자해6
+  NGA4: { atk: 9, def: 1, val: 6, text: "소환시: 자신에게 6 데미지", textJa: "召喚時: 自分に6ダメージ" },
+  // 용암재판: 상대 13 데미지 삭제 → 주사위 5 이상이면 공격 몬스터를 파괴 후 게임에서 제외
+  GT6_5: {
+    react: "magmaTrial", val: 5,
+    text: "【피격시】주사위를 굴려 5 이상이면 공격 몬스터를 파괴 후 게임에서 제외",
+    textJa: "【攻撃された時】ダイスを振り5以上なら攻撃モンスターを破壊後ゲームから除外",
+  },
+};
+for (const id of Object.keys(PATCH24)) { if (DB[id]) Object.assign(DB[id], PATCH24[id]); }
 
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 applyFlavorCardNames([DB, STARTERS as unknown as Record<string, CardDef>]);

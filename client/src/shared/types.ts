@@ -118,6 +118,7 @@ export interface PlayerState {
   trapBlockNext?: boolean; // 협상: 다음 턴 함정 설치 불가 (예약)
   trapBlockTurn?: boolean; // 협상: 이번 턴 함정 설치 불가 (활성)
   wheelUsed?: boolean; // 운명의 수레바퀴: 이번 턴 재굴림 사용됨
+  freeBuysTurn?: number; // 이번 턴에 0코스트로 구매한 장수 (엘프의 쉼터 무한 구매 방지 — FREE_BUY_MAX)
   supplyShrink: number; // if >0, this player's next 제시 roll offers 2 cards instead of 3
   defendHeal: number; // heal this much whenever this player is attacked
   manaGainNext: number; // max mana to gain at the start of this player's next turn
