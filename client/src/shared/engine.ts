@@ -135,6 +135,14 @@ export function buyCost(p: PlayerState, c: CardInst): number {
   }
   return cost;
 }
+/** 0코스트 구매는 턴당 이 장수까지. 고정 마켓은 재고가 줄지 않으므로 상한이 없으면
+ *  엘프의 쉼터(구매 코스트 0)로 한 턴에 무한 구매가 성립한다.
+ *  bot.ts 의 buyableByBot 은 봇 전용 가드였고, 사람 플레이어에겐 상한이 없었다. */
+export const FREE_BUY_MAX = 3;
+/** 이번 턴 0코스트 구매 한도를 이미 소진했는가 (구매가 0일 때만 적용). */
+export function freeBuyBlocked(p: PlayerState, c: CardInst): boolean {
+  return buyCost(p, c) === 0 && (p.freeBuysTurn ?? 0) >= FREE_BUY_MAX;
+}
 /** 제시(supply) shows cards whose cost is in [1, maxMana]. */
 export function supplyRange(p: PlayerState): [number, number] {
   return [1, effMaxMana(p)];
@@ -168,7 +176,7 @@ function mkPlayer(g: GameState, id: string, name: string, isBot: boolean, deckId
     field: [], traps: [], supply: [],
     boughtCount: 0, taxFlag: false,
     enchants: [], tribesFired: [], bonusDrawPerm: 0, bleed: 0,
-    uses: {}, buys: {}, usesTurn: {}, playsTurn: 0, removed: [], revealedCards: [], supplyShrink: 0, defendHeal: 0, manaGainNext: 0, skipNext: false, skipTurns: 0,
+    uses: {}, buys: {}, usesTurn: {}, playsTurn: 0, freeBuysTurn: 0, removed: [], revealedCards: [], supplyShrink: 0, defendHeal: 0, manaGainNext: 0, skipNext: false, skipTurns: 0,
   };
 }
 
@@ -354,6 +362,7 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
   if (p.manaGainNext) { p.maxMana += p.manaGainNext; p.manaGainNext = 0; } // E3 delayed mana
   p.usesTurn = {};
   p.playsTurn = 0;
+  p.freeBuysTurn = 0;
   recheckDeaths(g, ctx); // v29: 조건부 최대 체력(활력·아우라)이 빠져 생긴 "체력 0 좀비" 정리
   p.spellSealTurn = false;
   p.wheelUsed = false; // 운명의 수레바퀴: 재굴림 매턴 1회
@@ -428,10 +437,10 @@ function tickTurnFx(g: GameState, ctx: Ctx, p: PlayerState): void {
         if (gn > 0) { p.maxHp += gn; ctx.log(`  └ ${cn(m)} 최대 체력 +${gn} (${p.maxHp})`, `  └ ${cn(m)} 最大体力+${gn} (${p.maxHp})`); }
         break;
       }
-      case "gambler": { // 도박꾼: 주사위 4·5·6 → 최대 마나 +1, 최대 체력 +5
+      case "gambler": { // 도박꾼: 주사위 4·5·6 → 최대 마나 +1 (v24: 최대 체력 +5 삭제)
         const { rolls: gr } = diceRoll(g, ctx.ev, side(g, p), 1, 4);
         const r = gr[0];
-        if (r >= 4) { p.maxMana += 1; p.maxHp += 5; ctx.log(`  └ ${cn(m)} 🎲 ${r} → 최대 마나 +1 (${p.maxMana}), 최대 체력 +5 (${p.maxHp})`, `  └ ${cn(m)} 🎲 ${r} → 最大マナ+1 (${p.maxMana}), 最大体力+5 (${p.maxHp})`); }
+        if (r >= 4) { p.maxMana += 1; ctx.log(`  └ ${cn(m)} 🎲 ${r} → 최대 마나 +1 (${p.maxMana})`, `  └ ${cn(m)} 🎲 ${r} → 最大マナ+1 (${p.maxMana})`); }
         else ctx.log(`  └ ${cn(m)} 🎲 ${r}`, `  └ ${cn(m)} 🎲 ${r}`);
         break;
       }
@@ -831,6 +840,32 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   }
 
   // ---- terminal reactions ----
+  // 용암재판(magmaTrial): 주사위 5 이상이면 공격 몬스터를 파괴 후 게임에서 제외 (묘지로 가지 않음).
+  // 실패하면 함정은 소모되고 아무 일도 일어나지 않는다.
+  if ((tc = takeTrap(g, ctx, o, "magmaTrial"))) {
+    const { rolls: mr } = diceRoll(g, ctx.ev, side(g, o), 1, 5);
+    const roll = mr[0];
+    if (roll < 5) {
+      ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 🎲 ${roll} → 실패`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 🎲 ${roll} → 失敗`);
+      return;
+    }
+    ctx.log(
+      `  └ <span class="dmg">함정 ${cn(tc)}!</span> 🎲 ${roll} → ${cn(att)} 파괴 후 게임에서 제외`,
+      `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 🎲 ${roll} → ${cn(att)} を破壊後ゲームから除外`,
+    );
+    if (hasPassive(att, "trapmaster")) {
+      ctx.log(`  └ ${cn(att)} 은(는) 함정으로 파괴되지 않는다`, `  └ ${cn(att)} は罠では破壊されない`);
+      return;
+    }
+    const ai = p.field.findIndex((x) => x.uid === att.uid);
+    if (ai >= 0) {
+      const dead = p.field.splice(ai, 1)[0];
+      if (dead.aura === "drainMana") o.maxMana += (dead.val || 3);
+      if (!dead.token) rmz(p).push(resetInst(dead)); // 파괴가 아니라 제외 — 덱 순환에서 영구히 빠진다
+      ctx.ev.push({ type: "destroy", player: side(g, p), uid: dead.uid, id: dead.id });
+    }
+    return;
+  }
   if ((tc = takeTrap(g, ctx, o, "judgment"))) {
     ctx.log(
       `  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴 + 상대에게 ${tc.val}`,
@@ -1811,7 +1846,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "TRUMPET": { // 지원 나팔: 자신 몬스터 2체 공격 +1 (이번 턴)
       ctx.log(`${tag(p, card)} 발동`, `${tag(p, card)} 発動`);
-      g.pending = { kind: "myMon", hint: "공격 +1 할 자신 몬스터 선택 (2체)", hintJa: "攻撃+1する自分のモンスターを選択 (2体)", reason: "buffTurn", allowCancel: true, data: { val: 1, count: 2 } };
+      g.pending = { kind: "myMon", hint: "공격 +1 할 자신 몬스터 선택 (최대 3체)", hintJa: "攻撃+1する自分のモンスターを選択 (最大3体)", reason: "buffTurn", allowCancel: true, data: { val: 1, count: 3, excl: [] } };
       ctx.ev.push({ type: "needTarget", pending: g.pending });
       break;
     }
@@ -2100,16 +2135,15 @@ function luckyChest(g: GameState, ctx: Ctx, p: PlayerState): void {
 
 function openTreasure(g: GameState, ctx: Ctx, p: PlayerState): void {
   const { rolls: tr } = diceRoll(g, ctx.ev, side(g, p), 1);
-  const roll = tr[0]; // 1: 꽝 / 2·3: 체력+3 / 4·5: 최대 마나+1 / 6: 최대 체력+5
+  const roll = tr[0]; // v24: 1·2 꽝 / 3·4 최대 체력+7 / 5·6 최대 마나+1
   let txt = "", txtJa = "", kind = "";
-  if (roll === 4 || roll === 5) { p.maxMana++; txt = "🎲 " + roll + " → 최대 마나 +1"; txtJa = "🎲 " + roll + " → 最大マナ +1"; kind = "mana"; }
-  else if (roll === 2 || roll === 3) { ctx.heal(p, 3); txt = "🎲 " + roll + " → 체력 +3"; txtJa = "🎲 " + roll + " → 体力 +3"; kind = "hp"; }
-  else if (roll === 6) { p.maxHp += 5; p.hp += 5; txt = "🎲 6 → 최대 체력 +5"; txtJa = "🎲 6 → 最大体力 +5"; kind = "maxhp"; ctx.ev.push({ type: "heal", player: side(g, p), amount: 5 }); }
+  if (roll >= 5) { p.maxMana++; txt = "🎲 " + roll + " → 최대 마나 +1"; txtJa = "🎲 " + roll + " → 最大マナ +1"; kind = "mana"; }
+  else if (roll >= 3) { p.maxHp += 7; p.hp += 7; txt = "🎲 " + roll + " → 최대 체력 +7"; txtJa = "🎲 " + roll + " → 最大体力 +7"; kind = "maxhp"; ctx.ev.push({ type: "heal", player: side(g, p), amount: 7 }); }
   else {
     // 꽝(dud): spawn a Mimic (3/2) on the OPPONENT's field — the risk of cracking chests
     const o = g.players[0] === p ? g.players[1] : g.players[0];
     spawnToken(g, ctx, o, "MIMIC"); // 위와 동일 — 전역 효과/오라를 타야 한다
-    txt = "🎲 1 → 꽝! 상대 필드에 미믹(3/2) 소환"; txtJa = "🎲 1 → ハズレ！相手の場にミミック(3/2)召喚"; kind = "mimic";
+    txt = "🎲 " + roll + " → 꽝! 상대 필드에 미믹(3/2) 소환"; txtJa = "🎲 " + roll + " → ハズレ！相手の場にミミック(3/2)召喚"; kind = "mimic";
   }
   ctx.log(`<span class="t">${p.name}</span> 보물상자 → <span class="good">${txt}</span>`, `<span class="t">${p.name}</span> 宝箱 → <span class="good">${txtJa}</span>`);
   ctx.ev.push({ type: "treasure", player: side(g, p), kind, text: txt, textJa: txtJa, isBot: p.isBot });
@@ -2386,12 +2420,10 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
         g.players.forEach((pl) => pl.field.forEach((mm) => (mm.atkMod = (mm.atkMod || 0) - 2)));
         ctx.log(`  └ 양 필드의 모든 몬스터 공격 -2`, `  └ 両方の場の全モンスター攻撃-2`);
       }
-      // 운명의 수레바퀴: 시전 대가 (최대 마나 -1, 자신 5뎀 — 마법 데미지로 취급) (v19: 8→5)
+      // 운명의 수레바퀴: 시전 대가 (최대 마나 -1) — v24: 자해 5 삭제
       if (card.ench === "fateWheel") {
         p.maxMana = Math.max(1, p.maxMana - 1);
-        ctx.log(`  └ 대가: 최대 마나 -1 (${p.maxMana}), 자신에게 5 데미지`, `  └ 代価: 最大マナ-1 (${p.maxMana}), 自分に5ダメージ`);
-        spellDepth++;
-        try { ctx.dealDamage(p, 5, cn(card), cn(card)); } finally { spellDepth--; }
+        ctx.log(`  └ 대가: 최대 마나 -1 (${p.maxMana})`, `  └ 代価: 最大マナ-1 (${p.maxMana})`);
       }
       // 시련의 영역: 시전 대가 (자신 6뎀 — 마법 데미지로 취급)
       if (card.ench === "trialArea") {
@@ -2498,7 +2530,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
   const pending = g.pending!;
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];
-  const d = (pending.data || {}) as { val?: number; val2?: number; attackerUid?: string; count?: number; exclude?: string; sourceId?: string; zone?: string; fired?: string[]; noMon?: boolean; anySide?: boolean; trapOnly?: boolean; enchOnly?: boolean; grant?: string };
+  const d = (pending.data || {}) as { val?: number; val2?: number; attackerUid?: string; count?: number; exclude?: string; excl?: string[]; sourceId?: string; zone?: string; fired?: string[]; noMon?: boolean; anySide?: boolean; trapOnly?: boolean; enchOnly?: boolean; grant?: string };
 
   if (uid === null) {
     if (pending.allowCancel) {
@@ -2567,12 +2599,14 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     const tm = p.field.find((m) => m.uid === uid);
     if (!tm) return;
     if (pending.reason === "buffTurn") {
-      if (d.exclude === tm.uid) { g.pending = pending; return; } // 지원 나팔: 같은 몬스터 중복 선택 불가 — 다시 고르게
+      const picked = d.excl ?? [];
+      if (picked.includes(tm.uid)) { g.pending = pending; return; } // 지원 나팔: 이미 고른 몬스터는 중복 선택 불가 — 다시 고르게
       tm.tempAtk = (tm.tempAtk || 0) + (d.val || 0);
       ctx.log(`<span class="t">${p.name}</span> → ${cn(tm)} 공격 +${d.val}`, `<span class="t">${p.name}</span> → ${cn(tm)} 攻撃 +${d.val}`);
       const left = ((d.count as number) || 1) - 1;
-      if (left > 0 && p.field.some((x) => x.uid !== tm.uid)) {
-        g.pending = { kind: "myMon", hint: `공격 +${d.val} 할 자신 몬스터 선택 (${left}체 남음)`, hintJa: `攻撃+${d.val}する自分のモンスターを選択 (残り${left}体)`, reason: "buffTurn", allowCancel: true, data: { val: d.val, count: left, exclude: tm.uid } };
+      const nextExcl = [...picked, tm.uid];
+      if (left > 0 && p.field.some((x) => !nextExcl.includes(x.uid))) {
+        g.pending = { kind: "myMon", hint: `공격 +${d.val} 할 자신 몬스터 선택 (${left}체 남음)`, hintJa: `攻撃+${d.val}する自分のモンスターを選択 (残り${left}体)`, reason: "buffTurn", allowCancel: true, data: { val: d.val, count: left, excl: nextExcl } };
         ctx.ev.push({ type: "needTarget", pending: g.pending });
       }
     }
@@ -2834,7 +2868,12 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
     case "buyMarket": {
       const card = g.market[action.i];
       const bc = card ? buyCost(p, card) : 0;
+      if (card && freeBuyBlocked(p, card)) {
+        ctx.log(`  └ <span class="dmg">0코스트 구매는 턴당 ${FREE_BUY_MAX}장까지</span>`, `  └ <span class="dmg">0コスト購入は1ターン${FREE_BUY_MAX}枚まで</span>`);
+        break;
+      }
       if (card && p.mana >= bc) {
+        if (bc === 0) p.freeBuysTurn = (p.freeBuysTurn ?? 0) + 1;
         p.mana -= bc; p.discard.push(inst(g, card.id)); p.boughtCount++; p.taxFlag = true; p.buys[card.id] = (p.buys[card.id] || 0) + 1;
         ctx.log(`<span class="t">${p.name}</span> 고정 마켓 ${cn(card)} 구매 (${bc}) <span class="muted">[묘지로]</span>`, `<span class="t">${p.name}</span> 固定マーケット ${cn(card)} 購入 (${bc}) <span class="muted">[墓地へ]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "market", i: action.i, id: card.id });
@@ -2844,7 +2883,12 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
     case "buySupply": {
       const card = p.supply[action.i];
       const bc = card ? buyCost(p, card) : 0;
+      if (card && freeBuyBlocked(p, card)) {
+        ctx.log(`  └ <span class="dmg">0코스트 구매는 턴당 ${FREE_BUY_MAX}장까지</span>`, `  └ <span class="dmg">0コスト購入は1ターン${FREE_BUY_MAX}枚まで</span>`);
+        break;
+      }
       if (card && p.mana >= bc) {
+        if (bc === 0) p.freeBuysTurn = (p.freeBuysTurn ?? 0) + 1;
         p.mana -= bc; p.discard.push(inst(g, card.id)); p.supply[action.i] = null; p.boughtCount++; p.taxFlag = true; p.buys[card.id] = (p.buys[card.id] || 0) + 1;
         ctx.log(`<span class="t">${p.name}</span> 제시 마켓 ${cn(card)} 구매 (${bc}) <span class="muted">[묘지로]</span>`, `<span class="t">${p.name}</span> 提示マーケット ${cn(card)} 購入 (${bc}) <span class="muted">[墓地へ]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "supply", i: action.i, id: card.id });

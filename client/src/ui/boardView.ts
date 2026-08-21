@@ -409,7 +409,7 @@ export class GameView {
         && !(pending!.kind === "myMon" && pending!.reason === "chosenMage" && (m.id !== "CHOSEN_MAGE" || ((pending!.data?.fired as string[] | undefined) ?? []).includes(m.uid))) // 마법사만 발동 가능
         && !(pending!.kind === "myMon" && pending!.reason === "grantDecay" && hasPassive(m, "decay")) // 이미 부패 보유
         && !(pending!.kind === "myMon" && pending!.reason === "grantMajesty" && hasPassive(m, "majesty")) // 이미 위엄 보유
-        && !(pending!.kind === "myMon" && pending!.data?.exclude === m.uid); // 지원 나팔: 같은 몬스터 중복 선택 불가
+        && !(pending!.kind === "myMon" && (((pending!.data?.excl as string[] | undefined) ?? []).includes(m.uid))); // 지원 나팔: 이미 고른 몬스터는 중복 선택 불가
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
       const card = cardEl(m, { field: true, compactField: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
