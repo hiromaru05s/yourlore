@@ -73,6 +73,10 @@ function el(tag: string, cls?: string, html?: string): HTMLElement {
  * 잘린 채로 남았다(마켓 카드에서 카드명·효과문 상단이 잘리던 원인).
  * 그래서 Range + 자식 rect의 합집합으로 내용의 실제 바운딩 박스를 잰다.
  */
+// One reused Range: creating one per measurement was itself measurable when a
+// gallery measures hundreds of boxes in a single pass.
+const measureRange = document.createRange();
+
 function contentSize(box: HTMLElement): { w: number; h: number } {
   let top = Infinity, bottom = -Infinity, left = Infinity, right = -Infinity;
   const push = (r: DOMRect): void => {
@@ -80,9 +84,8 @@ function contentSize(box: HTMLElement): { w: number; h: number } {
     top = Math.min(top, r.top); bottom = Math.max(bottom, r.bottom);
     left = Math.min(left, r.left); right = Math.max(right, r.right);
   };
-  const rng = document.createRange();
-  rng.selectNodeContents(box);
-  push(rng.getBoundingClientRect());
+  measureRange.selectNodeContents(box);
+  push(measureRange.getBoundingClientRect());
   for (const c of Array.from(box.children)) push((c as HTMLElement).getBoundingClientRect());
   if (top === Infinity) return { w: 0, h: 0 };
   return { w: right - left, h: bottom - top };
@@ -118,6 +121,9 @@ function queueNormalize(): void {
   setTimeout(() => { normQueued = false; normalizeFitGroups(); }, 0);
 }
 function normalizeFitGroups(): void {
+  // Collect every write first, apply them together, and only then read back —
+  // interleaving a write and a read per box forced one layout per box.
+  const writes: { box: HTMLElement; px: string }[] = [];
   for (const [key, set] of fitGroups) {
     const live: HTMLElement[] = [];
     let need = Infinity, base = 0;
@@ -140,76 +146,180 @@ function normalizeFitGroups(): void {
     // text; the floor is allowed to exceed it and the overflow becomes the
     // .is-clipped fade — the full text is one tap away in the zoom view.
     const px = Math.max(Math.min(Math.max(need, base * GROUP_FLOOR), base), MIN_READABLE_PX);
-    for (const b of live) {
-      b.style.fontSize = px.toFixed(2) + "px";
-      const r = b.getBoundingClientRect(), c = contentSize(b);
-      b.classList.toggle("is-clipped", c.h > r.height + 0.5 || c.w > r.width + 1);
+    const val = px.toFixed(2) + "px";
+    // A box already at the group size needs neither the write nor the re-measure;
+    // its .is-clipped flag is still the right one. (Reading an inline style costs
+    // no layout, unlike getComputedStyle.)
+    for (const b of live) if (b.style.fontSize !== val) writes.push({ box: b, px: val });
+  }
+  if (!writes.length) return;
+  for (const w of writes) w.box.style.fontSize = w.px;          // all writes
+  // Decide first, apply after. Toggling .is-clipped changes justify-content,
+  // word-break and the mask, so it INVALIDATES LAYOUT — doing it inside the
+  // read loop forced a fresh layout for every single box (660 of them in the
+  // card gallery, measured at ~330ms).
+  const clip: boolean[] = [];
+  for (const w of writes) {                                     // then all reads
+    const r = w.box.getBoundingClientRect(), c = contentSize(w.box);
+    clip.push(c.h > r.height + 0.5 || c.w > r.width + 1);
+  }
+  writes.forEach((w, i) => w.box.classList.toggle("is-clipped", clip[i]));
+}
+
+// ---- batched fitting ----------------------------------------------------------
+// This used to run per box: each box looped up to 14 times, and every iteration
+// read a rect and then wrote a font size, so the next read forced a fresh layout.
+// The 330-card gallery is 660 boxes — thousands of forced layouts, measured as
+// ~4s of blocked main thread. Now every pending box is measured in ONE read pass
+// and updated in ONE write pass, so a screen costs a handful of layouts however
+// many cards it holds. Each box still converges to the same size as before.
+const FIT_PASSES = 8;   // ratio-based shrink converges in 2–3; 8 is slack
+const FIT_MAX_WAIT = 8; // flushes to wait for a box that isn't in the DOM yet
+interface FitState { solo: boolean; minPx: number; lastW: number; lastH: number; waits: number; }
+const fitState = new WeakMap<HTMLElement, FitState>();
+const fitPending = new Set<HTMLElement>();
+let fitQueued = false;
+
+// One shared observer instead of one per box: the gallery was allocating ~660
+// ResizeObserver instances, which cost more than the measuring did.
+let sharedRO: ResizeObserver | null = null;
+function observeBox(box: HTMLElement): void {
+  if (typeof ResizeObserver === "undefined") return;
+  if (!sharedRO) {
+    sharedRO = new ResizeObserver((entries) => {
+      let any = false;
+      for (const e of entries) {
+        const st = fitState.get(e.target as HTMLElement);
+        if (!st) continue;
+        st.lastW = -1; st.lastH = -1;   // size changed → refit from the CSS default
+        fitPending.add(e.target as HTMLElement);
+        any = true;
+      }
+      if (any) queueFit();
+    });
+  }
+  sharedRO.observe(box);
+}
+
+function queueFit(): void {
+  if (fitQueued) return;
+  fitQueued = true;
+  // 주의: rAF는 숨겨진 탭에서 영원히 안 불린다(재접속 백그라운드 렌더 등) → setTimeout.
+  // 레이아웃 측정은 백그라운드에서도 동작한다.
+  setTimeout(flushFits, 0);
+}
+
+function flushFits(): void {
+  fitQueued = false;
+  const boxes: HTMLElement[] = [];
+  const waiting: HTMLElement[] = [];
+  for (const box of fitPending) {
+    const st = fitState.get(box);
+    if (!st) continue;
+    if (box.isConnected) boxes.push(box);
+    else if (st.waits++ < FIT_MAX_WAIT) waiting.push(box);   // still in a fragment
+  }
+  fitPending.clear();
+
+  if (boxes.length) {
+    // ---- read: which boxes actually changed size since we last fitted them? ----
+    const rects = boxes.map((b) => b.getBoundingClientRect());
+    const changed: HTMLElement[] = [];
+    boxes.forEach((b, i) => {
+      const st = fitState.get(b)!;
+      const r = rects[i];
+      // 같은 크기면 재계산 생략, 달라졌으면 CSS 기본값에서 다시 맞춘다(커질 때도 복구).
+      if (Math.abs(r.width - st.lastW) < 0.5 && Math.abs(r.height - st.lastH) < 0.5) return;
+      st.lastW = r.width; st.lastH = r.height;
+      changed.push(b);
+    });
+
+    if (changed.length) {
+      for (const b of changed) b.style.fontSize = "";                                  // write
+      for (const b of changed) baseFit.set(b, parseFloat(getComputedStyle(b).fontSize)); // read
+
+      let live = changed;
+      for (let pass = 0; pass < FIT_PASSES && live.length; pass++) {
+        const next: { box: HTMLElement; px: number }[] = [];
+        for (const b of live) {                                   // ---- read pass ----
+          const st = fitState.get(b)!;
+          // 박스도 rect로 재야 한다(줌 등 ancestor transform이 있으면 client*와 단위가 어긋남)
+          const r = b.getBoundingClientRect();
+          if (!r.width || !r.height) continue;
+          const c = contentSize(b);
+          // 0.5px 여유: 딱 맞게 재면 글리프의 어센더/디센더가 반 픽셀씩 삐져나와
+          // overflow:hidden에 첫 줄 윗부분이 잘린다(카드명 2줄에서 특히).
+          // Width must NOT get a negative slack: a full-width child — the dice
+          // table is width:100% — measures exactly the box width, and that read
+          // as overflow forever, shrinking text that actually fit.
+          const availH = r.height - 0.5, availW = r.width + 0.5;
+          if (c.h - availH <= 0 && c.w - availW <= 0) continue;
+          const cur = parseFloat(getComputedStyle(b).fontSize);
+          if (cur <= st.minPx) continue;
+          const rH = c.h > 0 ? availH / c.h : 1;
+          const rW = c.w > 0 ? availW / c.w : 1;
+          const px = Math.max(st.minPx, cur * Math.min(rH, rW) * 0.97);
+          if (px >= cur) continue;
+          next.push({ box: b, px });
+        }
+        for (const n of next) n.box.style.fontSize = n.px.toFixed(2) + "px";  // ---- write pass ----
+        live = next.map((n) => n.box);
+      }
+
+      // ---- final read pass: clip flag, own fit, group membership ----
+      // 최소 폰트로도 안 들어가는 카드는 위 정렬 + 아래 페이드로 "문장이 이어진다"고
+      // 읽히게 한다 — 잘림이 항상 문장 끝에서만 일어난다.
+      const joins: { box: HTMLElement; key: string }[] = [];
+      const clips: { box: HTMLElement; on: boolean }[] = [];
+      for (const b of changed) {                                 // read only
+        const st = fitState.get(b)!;
+        const r = b.getBoundingClientRect();
+        const c = contentSize(b);
+        clips.push({ box: b, on: c.h > r.height + 0.5 || c.w > r.width + 1 });
+        if (st.solo) continue;   // the zoom card is alone on screen — keep its own size
+        ownFit.set(b, parseFloat(getComputedStyle(b).fontSize));
+        joins.push({ box: b, key: groupKey(b, r.width) });
+      }
+      for (const cl of clips) cl.box.classList.toggle("is-clipped", cl.on);  // write after
+      if (joins.length) {
+        for (const j of joins) {
+          for (const [k, set] of fitGroups) if (k !== j.key) set.delete(j.box);
+          if (!fitGroups.has(j.key)) fitGroups.set(j.key, new Set());
+          fitGroups.get(j.key)!.add(j.box);
+        }
+        queueNormalize();
+      }
     }
+  }
+
+  if (waiting.length) {
+    for (const b of waiting) fitPending.add(b);
+    fitQueued = true;
+    setTimeout(flushFits, 16);
   }
 }
 
 /**
+ * 실측 자동 축소: 요소가 DOM에 붙은 뒤 내용이 박스를 넘치면 폰트를 줄여 항상
+ * 프레임 안에 들어가게 한다. 카드가 손패/마켓/줌 어느 크기로 렌더되든 em 기반이라
+ * 같은 비율로 동작 — "효과 텍스트가 프레임을 벗어나는" 문제의 근본 해결.
+ *
+ * ⚠ scrollWidth/scrollHeight로는 못 잰다: .card-name/.card-eff는 내용을 flex로
+ * 가운데 정렬하므로 넘친 내용이 위/아래(좌/우)로 "반씩" 삐져나가는데, scroll*는
+ * 시작 모서리 방향 넘침을 세지 않는다 → 절반만 보고 "맞았다"고 판단해 글자가
+ * 잘린 채로 남았다. 그래서 contentSize()가 Range + 자식 rect로 실제 바운딩을 잰다.
+ *
  * @param solo  the zoom overlay — one card, alone, whose whole job is to be read.
  *              It never joins a size group (there is nothing to be consistent
  *              WITH) and never gets clipped: it shrinks until everything fits.
  */
 function fitToBox(box: HTMLElement, { solo = false } = {}): void {
-  const minPx = solo ? ZOOM_MIN_PX : MIN_READABLE_PX;
-  let tries = 0, lastW = -1, lastH = -1;
-  const run = (): void => {
-    // 주의: rAF는 숨겨진 탭에서 영원히 안 불린다(재접속 백그라운드 렌더 등) → setTimeout 사용.
-    // 레이아웃 측정은 백그라운드에서도 동작한다.
-    if (!box.isConnected) { if (tries++ < 8) setTimeout(run, 16 * tries); return; }
-    // 카드 크기가 바뀌면(레이아웃 솔버·창 회전·리사이즈) 이전에 맞춰둔 폰트는 무효다.
-    // 같은 크기면 재계산 생략, 달라졌으면 CSS 기본값에서 다시 맞춘다(커질 때도 복구).
-    const b0 = box.getBoundingClientRect();
-    if (Math.abs(b0.width - lastW) < 0.5 && Math.abs(b0.height - lastH) < 0.5) return;
-    lastW = b0.width; lastH = b0.height;
-    box.style.fontSize = "";
-    baseFit.set(box, parseFloat(getComputedStyle(box).fontSize));
-    let guard = 0;
-    while (guard++ < 14) {
-      // 박스도 rect로 재야 한다(줌 등 ancestor transform이 있으면 client*와 단위가 어긋남)
-      const b = box.getBoundingClientRect();
-      if (!b.width || !b.height) break;
-      const c = contentSize(box);
-      // 0.5px 여유를 두고 맞춘다: 딱 맞게 재면 글리프의 어센더/디센더가 반 픽셀씩
-      // 삐져나와 overflow:hidden에 첫 줄 윗부분이 잘린다(카드명 2줄에서 특히).
-      // Height keeps the 0.5px slack (glyph ascenders/descenders). Width must NOT:
-      // a full-width child — the dice table is width:100% — measures exactly the
-      // box width, and a negative slack read that as overflow forever, shrinking
-      // the text and flagging it clipped when it actually fit.
-      const availH = b.height - 0.5, availW = b.width + 0.5;
-      const overH = c.h - availH, overW = c.w - availW;
-      if (overH <= 0 && overW <= 0) break;
-      const cur = parseFloat(getComputedStyle(box).fontSize);
-      if (cur <= minPx) break;
-      const rH = c.h > 0 ? availH / c.h : 1;
-      const rW = c.w > 0 ? availW / c.w : 1;
-      const next = Math.max(minPx, cur * Math.min(rH, rW) * 0.97);
-      if (next >= cur) break;
-      box.style.fontSize = next.toFixed(2) + "px";
-    }
-    // 마켓/필드처럼 카드가 아주 작을 땐 최소 폰트로도 안 들어가는 카드가 있다.
-    // 그때 내용이 가운데 정렬이면 첫 줄이 "위쪽에서 반쯤 잘려" 나가 아주 어색하다
-    // → is-clipped: 위 정렬 + 아래쪽 페이드. 잘림이 항상 문장 끝에서만 일어난다.
-    const b2 = box.getBoundingClientRect();
-    const c2 = contentSize(box);
-    box.classList.toggle("is-clipped", c2.h > b2.height + 0.5 || c2.w > b2.width + 1);
-    // the zoom card is alone on screen — keep its own fitted size
-    if (solo) return;
-    // join (or move to) the size group and let the group settle on one size
-    ownFit.set(box, parseFloat(getComputedStyle(box).fontSize));
-    const key = groupKey(box, b2.width);
-    for (const [k, set] of fitGroups) if (k !== key) set.delete(box);
-    if (!fitGroups.has(key)) fitGroups.set(key, new Set());
-    fitGroups.get(key)!.add(box);
-    queueNormalize();
-  };
-  setTimeout(run, 0);
+  fitState.set(box, { solo, minPx: solo ? ZOOM_MIN_PX : MIN_READABLE_PX, lastW: -1, lastH: -1, waits: 0 });
+  fitPending.add(box);
+  queueFit();
   // 카드가 리사이즈되면 다시 맞춘다 (한 번만 맞추면 리사이즈 후 글자가 잘린 채 남는다).
   // 폰트 크기는 박스 크기를 바꾸지 않으므로(높이는 카드 대비 %) 되먹임 루프가 없다.
-  if (typeof ResizeObserver !== "undefined") new ResizeObserver(() => run()).observe(box);
+  observeBox(box);
 }
 
 function artEl(cardId: string, full = false, lazy = false): HTMLElement {
