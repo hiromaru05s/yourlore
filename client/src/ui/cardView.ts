@@ -326,8 +326,8 @@ function fitToBox(box: HTMLElement, { solo = false } = {}): void {
 }
 
 // ---- art state memo -----------------------------------------------------------
-// Galleries rebuild every card on every tab switch, so the same <img> src is
-// created again and again. Two things follow from that:
+// Galleries rebuild every card on every tab switch, so the same art is created
+// again and again. Two things follow from that:
 //   · art that ALREADY loaded is sitting in the browser cache, but a fresh
 //     loading="lazy" image is still deferred behind a layout + intersection
 //     pass — which is why re-entering a tab took about a second to show art it
@@ -335,18 +335,39 @@ function fitToBox(box: HTMLElement, { solo = false } = {}): void {
 //   · art that has no file (a card whose illustration was never generated)
 //     otherwise costs a request AND the retry delay on every single render.
 //     Known-bad art renders the placeholder immediately, no request at all.
-// The bad memo expires so a transient failure heals itself.
+// The bad memo expires so a transient failure heals itself. Keys are
+// "<id>:<variant>" rather than a URL because a srcset image picks its own.
 const ART_FAIL_TTL = 60_000;
 const artOk = new Set<string>();
 const artFail = new Map<string, number>();
-function artStatus(src: string): "ok" | "fail" | "unknown" {
-  if (artOk.has(src)) return "ok";
-  const at = artFail.get(src);
+function artStatus(key: string): "ok" | "fail" | "unknown" {
+  if (artOk.has(key)) return "ok";
+  const at = artFail.get(key);
   if (at == null) return "unknown";
   if (Date.now() - at < ART_FAIL_TTL) return "fail";
-  artFail.delete(src);            // give it another chance
+  artFail.delete(key);            // give it another chance
   return "unknown";
 }
+
+// ---- art sizes ----------------------------------------------------------------
+// Every card view except the zoom overlay renders art far smaller than the 384px
+// thumbnail: the gallery grid shows it at ~92 CSS px on a desktop. Decoding and
+// rasterising 384x561 for a 92px box costs about four times what it needs to,
+// and the browser does that work one image at a time — which is why the LAST
+// cards in a grid appeared a few hundred ms after the first ones. Measured over
+// 336 warm images: p90 504ms -> 175ms when the source is 192px.
+//
+// `sizes` mirrors the .cards-grid breakpoints in screens.css (art window is
+// ~86% of the card, card width = (min(1040px,96vw) - 8px - 8px*(cols-1)) / cols),
+// so a 3x phone still picks the 384px file and stays sharp.
+const GALLERY_SIZES = [
+  "(max-width: 340px) 39vw",
+  "(max-width: 480px) 26vw",
+  "(max-width: 700px) 20vw",
+  "(max-width: 820px) 13vw",
+  "(max-width: 1000px) 11vw",
+  "92px",
+].join(", ");
 
 /** Cards past this index in a gallery grid defer their art; the ones before it
  *  are (roughly) the first screenful and load immediately. */
@@ -355,31 +376,31 @@ function lazyFor(v: boolean | number | undefined): boolean {
   return typeof v === "number" ? v >= EAGER_HEAD : !!v;
 }
 
-function artEl(cardId: string, full = false, lazy = false): HTMLElement {
-  // small views load the 384px thumbnail; only the zoom overlay fetches the full-res art
+function artEl(cardId: string, full = false, lazy = false, gallery = false): HTMLElement {
   const art = el("div", "card-art");
-  const src = `/art/${full ? "cards" : "cards-sm"}/${cardId}.webp`;
-  const known = artStatus(src);
+  const variant = full ? "full" : gallery ? "gal" : "sm";
+  const key = `${cardId}:${variant}`;
+  const known = artStatus(key);
   if (known === "fail") {
     // no <img> at all — the ◆ placeholder is the final answer for this card
     art.classList.add("art-done");
     return art;
   }
+  const src = `/art/${full ? "cards" : "cards-sm"}/${cardId}.webp`;
   const img = document.createElement("img");
   img.alt = "";
   img.className = "card-art-img";
-  // ⚠ Attributes MUST be set before `src`. Assigning src is what queues the
-  // fetch, and the loading/priority hints have to be in place by then.
+  // ⚠ Attributes MUST be set before `src`/`srcset`. Assigning them is what queues
+  // the fetch, and the loading/priority hints have to be in place by then.
   img.decoding = "async";
   if (lazy && known !== "ok") {
-    // Only for galleries that render hundreds of cards at once (card list,
-    // deck pool, pickers), and only for art we have not already fetched.
-    // Everywhere else lazy is actively harmful: the board shows ~17 cards that
-    // are ALL on screen and are the point of the screen, yet lazy images are
-    // Low priority AND are not fetched until the browser decides they are near
-    // the viewport. Measured: 20 lazy images in a backgrounded tab issued ZERO
-    // requests in 3s, while the same 20 without it finished in well under a
-    // second.
+    // Only for galleries that render hundreds of cards at once, and only for art
+    // we have not already fetched. Everywhere else lazy is actively harmful: the
+    // board shows ~17 cards that are ALL on screen and are the point of the
+    // screen, yet lazy images are Low priority AND are not fetched until the
+    // browser decides they are near the viewport. Measured: 20 lazy images in a
+    // backgrounded tab issued ZERO requests in 3s, while the same 20 without it
+    // finished in well under a second.
     img.loading = "lazy";
   } else {
     img.loading = "eager";
@@ -387,7 +408,7 @@ function artEl(cardId: string, full = false, lazy = false): HTMLElement {
   }
   if (full) img.style.backgroundImage = `url(/art/cards-sm/${cardId}.webp)`; // thumb as instant placeholder under the full art
   const done = (): void => {
-    artOk.add(src);
+    artOk.add(key);
     img.classList.add("art-loaded");
     art.classList.add("art-done");
   };
@@ -398,11 +419,19 @@ function artEl(cardId: string, full = false, lazy = false): HTMLElement {
   // the session with no way back.
   let tries = 0;
   img.onerror = () => {
-    if (tries++ === 0) { setTimeout(() => { img.src = `${src}?retry=1`; }, 150); return; }
-    artFail.set(src, Date.now());
+    if (tries++ === 0) {
+      setTimeout(() => { img.removeAttribute("srcset"); img.src = `${src}?retry=1`; }, 150);
+      return;
+    }
+    artFail.set(key, Date.now());
     img.remove();
     art.classList.add("art-done");
   };
+  if (gallery) {
+    // let the browser pick 192px or 384px by its own pixel density
+    img.sizes = GALLERY_SIZES;
+    img.srcset = `/art/cards-xs/${cardId}.webp 192w, /art/cards-sm/${cardId}.webp 384w`;
+  }
   img.src = src;
   art.appendChild(img);
   return art;
@@ -417,7 +446,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   // Layering: art sits BEHIND the frame (in the transparent art window), the
   // frame PNG overlays on top (its border hugs the art edges), then text/cost
   // render above the frame. (frame's outer + window are transparent.)
-  node.appendChild(artEl(c.id, opt.fullArt, lazyFor(opt.lazyArt)));
+  node.appendChild(artEl(c.id, opt.fullArt, lazyFor(opt.lazyArt), opt.lazyArt !== undefined));
   const frameEl = el("div", "card-frame");
   // square field tiles use the dedicated 1254 square frames; everything else
   // (hand / market / zoom / deck-builder) keeps the vertical card frames
