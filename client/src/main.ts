@@ -8,6 +8,8 @@ import "./styles/game.css";
 import "./styles/dice.css";
 import "./styles/screens.css";
 import "./styles/mobile.css";
+import "./styles/archive-desktop.css";
+import "./styles/archive-mobile.css";
 import { App } from "./router";
 import { initLang } from "./i18n";
 import { initAnalytics } from "./net/analytics";

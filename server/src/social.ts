@@ -16,8 +16,16 @@ const CHALLENGE_TTL_MS = 90_000;
 const PRESENCE_ONLINE_MS = 70_000; // presence heartbeat is 30s — 70s covers 2 missed beats
 const MAX_FRIENDS = 100;
 
-// One universal card sleeve. Legacy ownership/equipment columns are retained
-// for schema compatibility but are no longer exposed or accepted by the game.
+// ---- card sleeves: 가격표(서버가 유일한 진실). client/src/shared/cards.ts SLEEVES와 일치 유지 ----
+const SLEEVE_PRICES: Record<string, number> = { ivory: 200, verdant: 200, compass: 300, prism: 400, abyss: 400 };
+
+/** users.sleeves = JSON 배열(레거시 컬럼 재사용). 'default'는 항상 포함. */
+async function ownedSleeves(env: Env, userId: string): Promise<string[]> {
+  const row = await env.DB.prepare(`SELECT sleeves FROM users WHERE id = ?`).bind(userId).first<{ sleeves: string | null }>();
+  let list: string[] = [];
+  try { const p = JSON.parse(row?.sleeves ?? "[]"); if (Array.isArray(p)) list = p.filter((x): x is string => typeof x === "string"); } catch { /* legacy junk */ }
+  return list.includes("default") ? list : ["default", ...list];
+}
 
 function json(env: Env, body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
@@ -87,8 +95,8 @@ async function profileOf(env: Env, targetId: string, viewer: SessionUser | null)
     ...(self ? {
       badges: await ownedBadges(env, u.id),
       credits: u.credits,
-      sleeve: "default",
-      sleeves: ["default"],
+      sleeve: u.sleeve ?? "default",
+      sleeves: await ownedSleeves(env, u.id),
       byMode: await byModeOf(env, u.id),
       h2h: await h2hOf(env, u.id),
     } : {}),
@@ -173,19 +181,36 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     if (typeof body.stats_public === "boolean") { sets.push("stats_public = ?"); args.push(body.stats_public ? 1 : 0); }
     if (typeof body.sleeve === "string") {
       const id = body.sleeve || "default";
-      if (id !== "default") return json(env, { error: "잘못된 슬리브" }, 400);
-      sets.push("sleeve = ?"); args.push(null);
+      if (id !== "default") {
+        if (!(id in SLEEVE_PRICES)) return json(env, { error: "잘못된 슬리브" }, 400);
+        const owned = await ownedSleeves(env, user.id);
+        if (!owned.includes(id)) return json(env, { error: "보유하지 않은 슬리브입니다." }, 400);
+      }
+      sets.push("sleeve = ?"); args.push(id === "default" ? null : id);
     }
     if (!sets.length) return json(env, { error: "no changes" }, 400);
     await env.DB.prepare(`UPDATE users SET ${sets.join(", ")} WHERE id = ?`).bind(...args, user.id).run();
     const u = await env.DB.prepare(`SELECT display, avatar, badge, stats_public, sleeve FROM users WHERE id = ?`).bind(user.id)
       .first<{ display: string; avatar: string | null; badge: string | null; stats_public: number; sleeve: string | null }>();
-    return json(env, { ok: true, display: u?.display, avatar: u?.avatar, badge: u?.badge, stats_public: !!u?.stats_public, sleeve: "default" });
+    return json(env, { ok: true, display: u?.display, avatar: u?.avatar, badge: u?.badge, stats_public: !!u?.stats_public, sleeve: u?.sleeve ?? "default" });
   }
 
-  // ---- legacy sleeve shop endpoint: no sleeves are sold anymore ----
+  // ---- sleeve shop: buy with credits (price table here is authoritative) ----
   if (path === "/social/buy-sleeve" && req.method === "POST") {
-    return json(env, { error: "판매가 종료된 상품입니다." }, 410);
+    const body = (await req.json().catch(() => ({}))) as { id?: string };
+    const id = body.id || "";
+    const price = SLEEVE_PRICES[id];
+    if (!price) return json(env, { error: "존재하지 않는 상품입니다." }, 404);
+    const owned = await ownedSleeves(env, user.id);
+    if (owned.includes(id)) return json(env, { error: "이미 보유한 슬리브입니다." }, 409);
+    // 크레딧 차감은 조건부 UPDATE 한 방 — 잔액 부족이면 changes=0 (동시 요청에도 안전)
+    const upd = await env.DB.prepare(`UPDATE users SET credits = credits - ? WHERE id = ? AND credits >= ?`)
+      .bind(price, user.id, price).run();
+    if ((upd.meta?.changes ?? 0) === 0) return json(env, { error: "크리스탈이 부족합니다." }, 402);
+    const next = [...owned, id];
+    await env.DB.prepare(`UPDATE users SET sleeves = ? WHERE id = ?`).bind(JSON.stringify(next), user.id).run();
+    const row = await env.DB.prepare(`SELECT credits FROM users WHERE id = ?`).bind(user.id).first<{ credits: number }>();
+    return json(env, { ok: true, credits: row?.credits ?? 0, sleeves: next });
   }
 
   // ---- friends ----
