@@ -489,6 +489,30 @@ export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; ma
 import { t as tt } from "../i18n";
 
 /** Center-screen announcement (e.g. "함정 발동!"). */
+/** Turn-start banner: a slim ribbon sweeping across mid-screen ("자신의 턴" / "상대 턴"). */
+export function turnBanner(mine: boolean): void {
+  document.querySelectorAll(".fx-turnbanner").forEach((n) => n.remove());
+  const b = document.createElement("div");
+  b.className = "fx-turnbanner" + (mine ? " mine" : " opp");
+  b.innerHTML = `<span>${mine ? t("fx.yourturn") : t("fx.oppturn")}</span>`;
+  document.body.appendChild(b);
+  setTimeout(() => { b.classList.add("out"); setTimeout(() => b.remove(), 320); }, mine ? 1250 : 950);
+}
+
+/** One-shot pill above a field monster ("💢 기합 발동!") — state changes the board can't show. */
+export function flashBadge(uid: string, text: string, kind: "good" | "bad" = "good"): void {
+  const n = byUid(uid);
+  if (!n) return;
+  const r = n.getBoundingClientRect();
+  const b = document.createElement("div");
+  b.className = "fx-psv-flash " + kind;
+  b.textContent = text;
+  b.style.left = r.left + r.width / 2 + "px";
+  b.style.top = r.top + 4 + "px";
+  document.body.appendChild(b);
+  setTimeout(() => b.remove(), 1150);
+}
+
 export async function eventBanner(main: string, sub?: string, kind: "trap" | "info" | "danger" = "info", ms = 1400): Promise<void> {
   const b = document.createElement("div");
   b.className = "fx-banner " + kind;

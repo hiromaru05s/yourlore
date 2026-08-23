@@ -142,8 +142,8 @@
   }
   .mode-card::after { /* smaller gems on the short banner */
     background:
-      url(/ui/panel-gem.webp) top 1px center / 32px auto no-repeat,
-      url(/ui/panel-gem.webp) bottom 1px center / 32px auto no-repeat,
+      url(/ui/panel-gem.webp?v=2) top 1px center / 32px auto no-repeat,
+      url(/ui/panel-gem.webp?v=2) bottom 1px center / 32px auto no-repeat,
       radial-gradient(120% 90% at 50% 0%, #4fb4ff08, transparent 55%);
   }
   .mode-card .mode-ico { grid-area: ico; width: 52px; height: 52px; margin: 0; }

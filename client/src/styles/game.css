@@ -398,9 +398,9 @@
 .pips { display: flex; gap: 3px; flex-wrap: wrap; }
 .pips.is-compact { flex: 0 0 92px; max-width: 92px; min-height: 27px; max-height: 27px; align-content: center; gap: 2px; overflow: hidden; }
 /* mana gems (diamond webp sprites — image already carries shape/bevel/glow) */
-.pip { width: 13px; height: 13px; background: url(/ui/mana-empty.webp) center / contain no-repeat; }
+.pip { width: 13px; height: 13px; background: url(/ui/mana-empty.webp?v=2) center / contain no-repeat; }
 .pips.is-compact .pip { width: 7px; height: 7px; }
-.pip.full { background-image: url(/ui/mana-full.webp); filter: drop-shadow(0 0 3px #3f9dff99); }
+.pip.full { background-image: url(/ui/mana-full.webp?v=2); filter: drop-shadow(0 0 3px #3f9dff99); }
 .pip.locked { opacity: .3; }
 .mnum { font-family: var(--mono); font-size: 12px; color: #6fb9ff; font-weight: 700; margin-left: auto; }
 
@@ -644,11 +644,11 @@
   display: grid; place-items: center; text-align: center; white-space: normal; line-height: 1.15;
   font-size: clamp(10px, 1.5vh, 17px); font-weight: 800; color: #eaf3ff;
   text-shadow: 0 1px 3px #000b, 0 0 8px #0009;
-  background: url(/ui/endturn_idle.webp) center/100% 100% no-repeat;
+  background: url(/ui/endturn_idle.webp?v=2) center/100% 100% no-repeat;
   border: none; border-radius: 0; box-shadow: none;
   transition: color .15s var(--ease), text-shadow .15s var(--ease);
 }
-.end-turn-wrap .btn:hover:not(:disabled) { background-image: url(/ui/endturn_hover.webp); color: #d6eeff; text-shadow: 0 1px 3px #000b, 0 0 12px #4fb4ffaa; }
+.end-turn-wrap .btn:hover:not(:disabled) { background-image: url(/ui/endturn_hover.webp?v=2); color: #d6eeff; text-shadow: 0 1px 3px #000b, 0 0 12px #4fb4ffaa; }
 .end-turn-wrap .btn:active:not(:disabled) { transform: translateY(1px); }
 .end-turn-wrap .btn:disabled { filter: grayscale(.55) brightness(.62); opacity: .85; }
 .end-turn-wrap .btn::after { content: none; }
@@ -859,7 +859,7 @@
 }
 .fx-mana-p { /* mana gem flying INTO the pips */
   position: fixed; z-index: 150; pointer-events: none; width: 15px; height: 15px;
-  background: url(/ui/mana-full.webp) center / contain no-repeat;
+  background: url(/ui/mana-full.webp?v=2) center / contain no-repeat;
   filter: drop-shadow(0 0 6px #3f9dff);
   animation: fxManaP 1.1s var(--ease) both;
 }
@@ -1121,4 +1121,38 @@
   max-width: 240px; font-size: 12.5px; line-height: 1.5; color: var(--paper-dim);
   background: linear-gradient(180deg, var(--ink-3), var(--ink-1)); border: 1px solid var(--brass-dim);
   border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow-2);
+}
+
+/* ---- turn-start ribbon ---- */
+.fx-turnbanner {
+  position: fixed; left: 0; right: 0; top: 42%; z-index: 118; pointer-events: none;
+  display: flex; justify-content: center;
+  animation: tbIn .3s var(--ease);
+}
+.fx-turnbanner span {
+  font-family: var(--mono); font-weight: 800; letter-spacing: .3em; text-indent: .3em;
+  font-size: 25px; padding: 8px 46px; color: #fff;
+  background: linear-gradient(90deg, transparent, #000c 18%, #000c 82%, transparent);
+  border-top: 1px solid #ffffff2c; border-bottom: 1px solid #ffffff2c;
+}
+.fx-turnbanner.mine span { color: var(--gold-glow); text-shadow: 0 0 18px #e8c25a66; }
+.fx-turnbanner.opp span { color: var(--paper-dim); font-size: 19px; }
+.fx-turnbanner.out { animation: tbOut .3s var(--ease) forwards; }
+@keyframes tbIn { 0% { opacity: 0; transform: scaleX(.6); } 100% { opacity: 1; transform: none; } }
+@keyframes tbOut { to { opacity: 0; transform: scaleX(1.15); } }
+
+/* ---- one-shot monster badge (guts etc.) ---- */
+.fx-psv-flash {
+  position: fixed; z-index: 122; transform: translate(-50%, 0); pointer-events: none;
+  font-size: 12px; font-weight: 800; white-space: nowrap; padding: 3px 10px; border-radius: 999px;
+  color: #fff; text-shadow: 0 1px 2px #000; box-shadow: 0 2px 8px #000b;
+  animation: psvFlash 1.15s var(--ease) forwards;
+}
+.fx-psv-flash.good { background: #2a5a8ae8; border: 1px solid #7fb6e8aa; }
+.fx-psv-flash.bad { background: #6a2a2ae8; border: 1px solid #e87f7faa; }
+@keyframes psvFlash {
+  0% { opacity: 0; transform: translate(-50%, 8px) scale(.7); }
+  18% { opacity: 1; transform: translate(-50%, -6px) scale(1.06); }
+  80% { opacity: 1; transform: translate(-50%, -14px) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -24px) scale(.94); }
 }

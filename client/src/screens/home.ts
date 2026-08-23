@@ -11,7 +11,7 @@ import { watchSocial } from "./friends";
 
 export function mountHome(app: App): Screen {
   const u = app.user;
-  new Image().src = "/ui/panel-frame-lit.webp"; // preload hover frame (no first-hover flash)
+  new Image().src = "/ui/panel-frame-lit.webp?v=2"; // preload hover frame (no first-hover flash)
   const wrap = document.createElement("div");
   wrap.className = "screen";
   // minimal LORE wallpaper (inline so vite never strips the CSS url); responsive cover
