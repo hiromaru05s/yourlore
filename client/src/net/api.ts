@@ -20,8 +20,6 @@ export interface User {
   decks?: { sel: number; list: { cards: string[]; watch: string[] }[] } | null; // 덱 프리셋 5슬롯 + 마켓 알림이
 }
 
-export interface DailyMission { id: string; goal: number; amount: number; progress: number; claimed: boolean; }
-
 export interface ClaimResult {
   granted: boolean; // false = already claimed before (no credits added)
   amount: number;
@@ -106,9 +104,6 @@ export const api = {
   claimReward: (key: string) => call<ClaimResult>("/rewards/claim", { key }),
   claimedRewards: () => call<{ keys: string[]; credits: number }>("/rewards/claimed", undefined, "GET").catch(() => ({ keys: [] as string[], credits: 0 })),
   redeemCoupon: (code: string) => call<ClaimResult>("/rewards/coupon", { code }),
-  // 오늘의 임무 — 진행도는 서버가 matches 테이블에서 계산 (조작 불가)
-  dailyMissions: () => call<{ day: string; missions: DailyMission[]; credits: number }>("/rewards/daily", undefined, "GET"),
-  claimDaily: (id: string) => call<ClaimResult>("/rewards/daily/claim", { id }),
   // 덱 프리셋 저장 (덱 빌더: 5슬롯 + 마켓 알림이)
   saveDecks: async (decks: { sel: number; list: { cards: string[]; watch: string[] }[] }) => {
     if (isLocalDevAccount()) {
