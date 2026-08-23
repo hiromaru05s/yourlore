@@ -530,6 +530,18 @@ const D: Record<string, Entry> = {
   "arch.friends.none": { ko: "아직 등록된 친구가 없습니다.", ja: "まだ登録されたフレンドがいません。", en: "No friends yet." },
   "arch.friends.fail": { ko: "친구 목록을 불러오지 못했습니다.", ja: "フレンドリストを読み込めませんでした。", en: "Couldn't load friends." },
   "arch.close": { ko: "닫기", ja: "閉じる", en: "Close" },
+  // 오늘의 임무 (아카이브 홈)
+  "missions.title": { ko: "오늘의 임무", ja: "今日のミッション", en: "Daily Missions" },
+  "missions.claim": { ko: "받기", ja: "受け取る", en: "Claim" },
+  "missions.claimed": { ko: "완료", ja: "完了", en: "Done" },
+  "missions.play3": { ko: "3판 플레이", ja: "3回プレイ", en: "Play 3 games" },
+  "missions.win1": { ko: "1승 달성", ja: "1勝する", en: "Win 1 game" },
+  "missions.ranked1": { ko: "랭크전 1판", ja: "ランク戦1回", en: "Play 1 ranked game" },
+  // 카드 도감 (발견)
+  "cards.discovered": { ko: "발견", ja: "発見", en: "Discovered" },
+  "cards.new": { ko: "NEW", ja: "NEW", en: "NEW" },
+  // 첫 승리 안내
+  "home.firstwin": { ko: "🎯 봇전에서 첫 승리에 도전!", ja: "🎯 ボット戦で初勝利に挑戦！", en: "🎯 Go for your first win vs the bot!" },
 };
 
 export function t(key: string): string {
