@@ -1593,17 +1593,9 @@ export const FRAME_BACK = "/frames/sleeve_default.webp";
 // ---- card sleeves (card backs). The game now uses one universal sleeve.
 // Legacy multi-sleeve shop/ownership was retired (backup/local-0801 merge). ----
 export interface Sleeve { id: string; url: string; ko: string; ja: string; en: string; price: number; }
-const SL = (id: string, ko: string, ja: string, en: string, price: number): Sleeve =>
-  ({ id, url: `/frames/sleeves/${id}.webp`, ko, ja, en, price });
 export const SLEEVES: Record<string, Sleeve> = {
   default: { id: "default", url: FRAME_BACK, ko: "기본", ja: "デフォルト", en: "Default", price: 0 },
-  ivory:   SL("ivory",   "아이보리 문장", "アイボリーの紋章", "Ivory Crest", 200),
-  verdant: SL("verdant", "신록의 인장", "新緑の印章", "Verdant Seal", 200),
-  compass: SL("compass", "탐구자의 나침반", "探究者の羅針盤", "Seeker's Compass", 300),
-  prism:   SL("prism",   "프리즘 결정", "プリズム結晶", "Prism Core", 400),
-  abyss:   SL("abyss",   "심연의 서약", "深淵の誓約", "Abyssal Oath", 400),
 };
 /** ordered list for shop/picker rendering (default first). */
-/** ordered list for shop/picker rendering (default first). */
-export const SLEEVE_LIST: Sleeve[] = Object.values(SLEEVES);
-export function sleeveUrl(id: string | null | undefined): string { return (id && SLEEVES[id]?.url) || FRAME_BACK; }
+export const SLEEVE_LIST: Sleeve[] = [SLEEVES.default];
+export function sleeveUrl(_id: string | null | undefined): string { return FRAME_BACK; }

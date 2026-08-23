@@ -36,7 +36,6 @@ export function setCoinProfiles(me: CoinProfile, opp: CoinProfile): void { COIN_
 
 /** Card IDs whose outcome is a random roll — surfaced as a result popup, not just a log line. */
 import { RANDOM_CARDS } from "../shared/cards"; // 주사위·확률 카드 (결과 팝업 + 수레바퀴 재굴림 대상)
-import { markSeen } from "../ui/discover";
 
 const wait = (ms: number): Promise<void> => A.fxWait(ms); // skippable: flushes when the player acts
 
@@ -169,8 +168,6 @@ export abstract class BaseController implements BoardHandlers {
 
   private consumeLogs(events: GameEvent[]): void {
     for (const e of events) {
-      // 카드 도감(발견): 내가 실제로 접한 카드를 기록 — 아카이브 홈의 진행도/NEW 배지용
-      if ((e.type === "summon" || e.type === "playSpell" || e.type === "buy" || e.type === "trapReveal") && e.player === this.you && "id" in e && e.id) markSeen(e.id);
       if (e.type === "turnHeader") this.log.turnHeader(e.turn, e.name, e.isBot, e.player != null ? e.player === this.you : undefined);
       else if (e.type === "log") {
         // "can't play/attack" rejection lines are NOT written to the battle log (they'd
