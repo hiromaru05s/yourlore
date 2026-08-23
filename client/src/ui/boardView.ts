@@ -460,8 +460,10 @@ export class GameView {
       // 혈귀술/고대 문명처럼 turns=99지만 bornTurn 기준 N턴 후 사라지는 카드도 남은 턴을 보여준다
       const lim = e.card.ench ? ENCH_TURN_LIMITS[e.card.ench] : undefined;
       const rem = e.turns < 99 ? e.turns : lim != null ? Math.max(0, (e.bornTurn ?? 0) + lim - g.turn) : null;
-      const card = cardEl(e.card, rem != null ? { compactField: true, badge: `⏳${rem}` } : { compactField: true });
+      // 완전 영구는 ∞ 배지 — "언제 사라지나?"를 보드에서 바로 답한다. 기한부는 남은 턴 카운트다운.
+      const card = cardEl(e.card, { compactField: true, badge: rem != null ? `⏳${rem}` : "∞" });
       if (rem != null) { card.classList.add("ench-timed"); if (rem <= 1) card.classList.add("ench-expiring"); }
+      else card.classList.add("ench-perm");
       bindZoom(card, e.card);
       sz.appendChild(card);
     });

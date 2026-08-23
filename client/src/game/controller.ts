@@ -162,6 +162,16 @@ export abstract class BaseController implements BoardHandlers {
     } finally {
       if (!this.dead) this.view.setPlaying(false);
     }
+    // 기합(guts): 전투 파괴를 토큰으로 버틴 순간은 보드만 봐서는 모른다 — 배지로 명시
+    if (!this.dead) {
+      for (const pl of [0, 1] as const) {
+        const before = new Map(prev.players[pl].field.map((m) => [m.uid, m]));
+        for (const m of res.state.players[pl].field) {
+          const b = before.get(m.uid);
+          if (b && (b.guts ?? 0) > (m.guts ?? 0)) A.flashBadge(m.uid, `💢 ${t("fx.guts")}`, "good");
+        }
+      }
+    }
     if (this.dead) return;
     this.afterApply(res);
   }
@@ -523,6 +533,7 @@ export abstract class BaseController implements BoardHandlers {
       this.warned25 = this.timerLeft <= 25; // don't re-fire the 25s popup mid-turn on reconnect
       this.turnStartedWall = Date.now();    // guard against a stale ~0 clock instantly skipping the turn
       if (!firstTurn && g.cur === this.you) sfx("turn"); // my turn begins
+      if (!firstTurn) A.turnBanner(g.cur === this.you); // 턴 전환 리본 — 턴의 경계를 몸으로 알게
       if (this.timerInt) clearInterval(this.timerInt);
       this.renderTimer();
       this.timerInt = window.setInterval(() => this.tickTimer(), 1000);

@@ -49,7 +49,7 @@ const MAG_PATTERNS = [
   ["dmg", /(\d+)\s*데미지/g, /(\d+)\s*ダメージ/g, /(\d+)\s+damage/gi],
   // English puts the sign first as often as last ("HP +3" / "+3 HP"), so both
   // orders are accepted; ko/ja always put the quantity first.
-  ["hp", /체력\s*(?:([+\-−]\d+)|(\d+)\s*회복)/g, /体力\s*(?:([+\-−]\d+)|(\d+)\s*回復)/g, /(?:\b(?:max\s+)?HP\s*([+\-−]\d+)|([+\-−]\d+)\s*(?:max\s+)?HP)/gi],
+  ["hp", /체력\s*(?:([+\-−]\d+)|(\d+)\s*회복)/g, /体力\s*(?:([+\-−]\d+)|(\d+)\s*回復)/g, /(?:\b(?:max\s+)?HP\s*([+\-−]\d+)|([+\-−]\d+)\s*(?:max\s+)?HP|\brestore\s+(\d+)\s+(?:of\s+your\s+)?HP)/gi],
   ["mana", /마나\s*([+\-−]\d+)/g, /マナ\s*([+\-−]\d+)/g, /(?:\bmana\s*([+\-−]\d+)|([+\-−]\d+)\s*(?:\w+\s+){0,2}?mana)/gi],
   ["atk", /공격(?:력)?\s*([+\-−]\d+)/g, /攻撃(?:力)?\s*([+\-−]\d+)/g, /(?:\bATK\s*([+\-−]\d+)|([+\-−]\d+)\s*ATK)/gi],
   ["pair", /([+\-−]\d+)\/([+\-−]\d+)/g, /([+\-−]\d+)\/([+\-−]\d+)/g, /([+\-−]\d+)\/([+\-−]\d+)/g],
@@ -109,6 +109,14 @@ for (const c of cards) {
     // R1c — an em dash joining clauses. Reserved for the dice-table lead-in.
     if (!isDiceTable(s) && /\s[—–]\s/.test(s)) bad("R1-emdash-as-clause", c.id, lang, s);
 
+    // R10 — canonical vocabulary: the losing variants must never reappear.
+    const R10 = {
+      ko: [/체력에 \d+ 데미지/, /(?<!카드 )\b\d+장 드로우/, /적 몬스터/, /\d+마리/, /전멸/, /랜덤/, /->/, /주사위 \d+ 이상이면/],
+      ja: [/体力に\d+ダメージ/, /(?<!カード)\d+枚ドロー/, /敵モンスター/, /全滅/, /->/, /ダイス\d+以上で/],
+      en: [/\bdeal \d+ damage(?! to)/i, /\bmons\b/, /\(s\)/, /->/, /≤/, /\bwipe all\b/i, /\byour HP \+\d+/i],
+    }[lang] ?? [];
+    for (const re of R10) if (re.test(bare(s))) bad("R10-canon", c.id, lang, `${re} — ${s}`);
+
     // R4 — HP always carries an owner/subject. A naked "체력 5 회복" is ambiguous
     // between the player and a monster. An owner word anywhere in the same clause
     // (before OR after — "체력 1 이하의 적 몬스터") satisfies the rule.
@@ -148,7 +156,7 @@ for (const c of cards) {
 }
 
 // ------------------------------------------------------------------ reporting
-const order = ["R9-cost-prefix", "R9-cast-in-text", "R5-self-ref", "R1-mixed-separator",
+const order = ["R9-cost-prefix", "R9-cast-in-text", "R5-self-ref", "R10-canon", "R1-mixed-separator",
   "R1-period-as-clause", "R1-emdash-as-clause", "R4-unowned-hp",
   "X-numbers", "X-target-count", "X-tag-count", "X-clause-count",
   "X-table-shape", "R8-too-long"];
