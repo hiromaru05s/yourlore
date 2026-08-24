@@ -17,8 +17,8 @@ const OVERRIDE = {
         en: "【Passive】Attacks a monster: +1 counter · Every 3: summon an 'Apprentice Vampire' · Counts as 'Vampire'",
     },
     TGE5: {
-        ko: "[시초] 【소환시】카드 1장 드로우 · 그 카드가 몬스터면 선택한 상대 몬스터 1체의 공격을 2로 한다",
-        ja: "[始原] 【召喚時】カード1枚ドロー · そのカードがモンスターなら選んだ相手モンスター1体の攻撃を2にする",
+        ko: "[시초] 【소환시】카드 1장 드로우 · 그 카드가 몬스터면 선택한 상대 몬스터 1체의 공격력을 2로 한다",
+        ja: "[始原] 【召喚時】カード1枚ドロー · そのカードがモンスターなら選んだ相手モンスター1体の攻撃力を2にする",
         en: "[Origin] 【On Summon】draw 1 card · if it is a monster, set 1 chosen enemy monster's ATK to 2",
     },
     TGE6: {
@@ -57,8 +57,8 @@ const OVERRIDE = {
         en: "【Requires】opponent's max mana exactly 4 · 7 damage to the opponent, you take 3 damage · Exiled after use",
     },
     TRICKROOM: {
-        ko: "【지속 2턴】양 필드 전 몬스터의 공격과 최대 체력 교환(데미지 유지) · 반전 중 상승은 반대 스탯에 적용, 종료 후 유지",
-        ja: "【持続2ターン】両方の場の全モンスターの攻撃と最大体力を入れ替える(ダメージ維持) · 反転中の上昇は逆のステータスに適用、終了後も維持",
+        ko: "【지속 2턴】양 필드 전 몬스터의 공격력·최대 체력 교환(데미지 유지) · 반전 중 상승은 반대 스탯에 적용, 종료 후 유지",
+        ja: "【持続2ターン】両方の場の全モンスターの攻撃力と最大体力を入れ替える(ダメージ維持) · 反転中の上昇は逆のステータスに適用、終了後も維持",
         en: "【Lasts 2 Turns】Both fields: swap ATK and max HP (damage kept) · Buffs apply to the swapped stat and remain",
     },
     CHOSEN_MAGE: {
