@@ -274,6 +274,13 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     if (amt <= 0) return;
     p.hp = Math.min(p.maxHp, p.hp + amt);
     ev.push({ type: "heal", player: side(g, p), amount: amt });
+    // 유령 — v25: 상대가 체력을 회복할 때마다 필드의 모든 유령 공격 +1 (지속)
+    {
+      const foe = g.players[1 - side(g, p)];
+      let gh = 0;
+      for (const m of foe.field) if (m.id === "GHOST") { m.atkMod = (m.atkMod || 0) + 1; gh++; }
+      if (gh > 0) log(`  └ 유령의 원한: 유령 ${gh}체 공격 +1`, `  └ 幽霊の怨念: 幽霊${gh}体の攻撃+1`);
+    }
     // 생명의 순환: 회복할 때마다 (장당) 주사위 6이면 최대 마나 +1
     for (const e of p.enchants) {
       if (e.card.ench === "healMana" && diceChanceRaw(g, ev, log, side(g, p), 15)) {
@@ -553,7 +560,15 @@ function addDecay(g: GameState, ctx: Ctx, owner: PlayerState, tm: FieldMon, n: n
   if (tm.decayCnt >= 3) {
     ctx.log(`  └ <span class="dmg">부패 붕괴!</span> ${cn(tm)} 파괴`, `  └ <span class="dmg">腐敗崩壊！</span> ${cn(tm)} 破壊`);
     ctx.destroyMonster(owner, tm);
-    if (!g.over && !owner.field.some((x) => x.uid === tm.uid)) ctx.dealDamage(owner, 3, "부패", "腐敗");
+    if (!g.over && !owner.field.some((x) => x.uid === tm.uid)) {
+      ctx.dealDamage(owner, 3, "부패", "腐敗");
+      // 러스트 머쉬룸 — v25: 부패로 상대 몬스터가 파괴되면 자신의 최대 마나 +1
+      const foe = g.players[1 - side(g, owner)];
+      if (!g.over && foe.field.some((m) => m.id === "RUST_SHROOM")) {
+        foe.maxMana = Math.min(MAX_MANA, foe.maxMana + 1);
+        ctx.log(`  └ 러스트 머쉬룸: 최대 마나 +1 (${foe.maxMana})`, `  └ ラストマッシュルーム: 最大マナ+1 (${foe.maxMana})`);
+      }
+    }
   }
 }
 
@@ -1828,13 +1843,12 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       ctx.log(`${tag(p, card)} 상대 최대 마나 +1 (${o.maxMana}) · 상대는 다음 턴 함정 설치 불가`, `${tag(p, card)} 相手の最大マナ+1 (${o.maxMana}) · 相手は次のターン罠設置不可`);
       break;
     }
-    case "COUNTERCALC": { // 역산: 상대 영구마법 1장 파괴 + 자기 제외
+    case "COUNTERCALC": { // 역산: 상대 영구마법 1장 파괴 — v25: '사용 후 제외' 삭제 (묘지로)
       if (o.enchants.length) {
         const e = o.enchants.splice(randInt(g, o.enchants.length), 1)[0];
         ctx.log(`${tag(p, card)} 상대의 영구마법 ${cn(e.card)} 파괴`, `${tag(p, card)} 相手の永続魔法 ${cn(e.card)} 破壊`);
         binEnch(g, ctx, o, e.card);
       }
-      selfExile(ctx, p, card);
       break;
     }
     case "AMBUSH": { // 기습: 상대 7 / 자신 3 + 자기 제외
@@ -2420,11 +2434,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
         g.players.forEach((pl) => pl.field.forEach((mm) => (mm.atkMod = (mm.atkMod || 0) - 2)));
         ctx.log(`  └ 양 필드의 모든 몬스터 공격 -2`, `  └ 両方の場の全モンスター攻撃-2`);
       }
-      // 운명의 수레바퀴: 시전 대가 (최대 마나 -1) — v24: 자해 5 삭제
-      if (card.ench === "fateWheel") {
-        p.maxMana = Math.max(1, p.maxMana - 1);
-        ctx.log(`  └ 대가: 최대 마나 -1 (${p.maxMana})`, `  └ 代価: 最大マナ-1 (${p.maxMana})`);
-      }
+      // 운명의 수레바퀴 — v25: 시전 대가 없음 (최대 마나 -1 삭제, cost 4→5)
       // 시련의 영역: 시전 대가 (자신 6뎀 — 마법 데미지로 취급)
       if (card.ench === "trialArea") {
         ctx.log(`  └ 대가: 자신에게 6 데미지`, `  └ 代価: 自分に6ダメージ`);
@@ -2892,6 +2902,11 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
         p.mana -= bc; p.discard.push(inst(g, card.id)); p.supply[action.i] = null; p.boughtCount++; p.taxFlag = true; p.buys[card.id] = (p.buys[card.id] || 0) + 1;
         ctx.log(`<span class="t">${p.name}</span> 제시 마켓 ${cn(card)} 구매 (${bc}) <span class="muted">[묘지로]</span>`, `<span class="t">${p.name}</span> 提示マーケット ${cn(card)} 購入 (${bc}) <span class="muted">[墓地へ]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "supply", i: action.i, id: card.id });
+        // 엘프의 쉼터 — v25: 제시 마켓에서 '세계수' 카드를 구매하면 자신 최대 체력 +10
+        if ((card.name || "").includes("세계수") && p.enchants.some((e) => e.card.ench === "elfHaven")) {
+          p.maxHp += 10;
+          ctx.log(`  └ 엘프의 쉼터: 최대 체력 +10 (${p.maxHp})`, `  └ エルフの憩い場: 最大体力+10 (${p.maxHp})`);
+        }
       }
       break;
     }

@@ -687,7 +687,6 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.id === "COUNTERCALC" && (o.maxMana > 6 || o.enchants.length === 0)) return false;
     if (c.id === "TRUMPET" && p.field.length === 0) return false;
     if (c.id === "NEGOTIATE") return false; // 봇은 상대 마나를 올려주지 않는다
-    if (c.id === "FATE_WHEEL" && p.hp <= 10) return false;
     // forbidden ritual: needs HP to spare AND a non-시초 tribe monster to duplicate
     if (c.id === "FORBIDDEN" && (p.hp <= 17 || !p.field.some((m) => m.tribe && m.tribe !== "시초"))) return false;
     return true;

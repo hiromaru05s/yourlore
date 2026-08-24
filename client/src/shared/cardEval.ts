@@ -200,12 +200,12 @@ function enchValue(c: CardDef): number {
     case "vampWard": return 4;
     case "spellHeal": return 5;
     case "weakenAll": return 6;
-    case "fateWheel": return -MANA - 5 + 0.8 * ENCH_TURNS; // -1 mana, -5 HP, rerolls
+    case "fateWheel": return 0.8 * ENCH_TURNS; // v25: no cast cost, rerolls only
     case "foresight": return MANA * 2 * 0.5;       // only pays out at 10+ max mana
     case "tribeContract": return 3;
     case "trialArea": return -6 * HEAL + 4;        // 6 self-damage up front
     case "ancientCiv": return 3;
-    case "elfHaven": return 3;
+    case "elfHaven": return 4; // v25: +10 max HP per World Tree offer buy
     default: return 4;
   }
 }
