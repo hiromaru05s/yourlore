@@ -231,6 +231,10 @@ const D: Record<string, Entry> = {
   "deck.removed": { ko: "제외", ja: "除外", en: "Exiled" },
   "net.reconnecting": { ko: "연결이 끊겨 재접속 중입니다…", ja: "接続が切れたため再接続中です…", en: "Connection lost — reconnecting…" },
   "net.oppwait": { ko: "상대의 연결이 끊겼습니다. 최대 30초간 기다립니다…", ja: "相手の接続が切れました。最大30秒待ちます…", en: "Opponent disconnected — waiting up to 30s…" },
+  "net.oppwait.cd": { ko: "상대의 연결이 끊겼습니다 — {s}초 안에 돌아오지 않으면 승리합니다", ja: "相手の接続が切れました — あと{s}秒で自動的に勝利します", en: "Opponent disconnected — you win in {s}s unless they return" },
+  "net.oppwait.judge": { ko: "상대가 돌아오지 않았습니다 — 승리를 확정하는 중…", ja: "相手が戻りませんでした — 勝利を確定しています…", en: "Opponent didn't return — confirming your win…" },
+  "net.oppback": { ko: "상대가 재접속했습니다", ja: "相手が再接続しました", en: "Opponent reconnected" },
+  "result.oppdc": { ko: "상대의 접속 종료로 인한 승리", ja: "相手の接続切断による勝利", en: "Won by opponent disconnect" },
   "tribe.suffix": { ko: "종족", ja: "種族", en: "tribe" },
   "tribe.others": { ko: "이 종족의 다른 카드 (탭하면 확대)", ja: "この種族の他のカード (タップで拡大)", en: "Other cards in this tribe (tap to enlarge)" },
   "card.related": { ko: "관련 카드", ja: "関連カード", en: "Related Cards" },
@@ -536,6 +540,13 @@ const D: Record<string, Entry> = {
   "fx.resume": { ko: "대전에 복귀했습니다", ja: "対戦に復帰しました", en: "Rejoined the match" },
   "fx.guts": { ko: "기합 발동!", ja: "気合発動！", en: "Guts!" },
 };
+
+/** Escape a user-controlled string for interpolation into innerHTML.
+ *  Display names are server-sanitized, but every sink stays safe even if a
+ *  name path ever bypasses that (defense in depth). */
+export function esc(s: string): string {
+  return String(s).replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch] as string));
+}
 
 export function t(key: string): string {
   const e = D[key];

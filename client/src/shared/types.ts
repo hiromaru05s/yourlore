@@ -72,6 +72,7 @@ export interface FieldMon extends CardInst {
   gcount?: number; // 누적 카운트 (암살자 길드 / 뱀파이어 집사 흡혈 카운트)
   passivesG?: string[]; // 게임 중 부여된 패시브 (암기 제작→부패, 각인 비술→위엄)
   guts?: number; // 기합: 남은 기합 토큰 (전투 파괴를 1회 무효화)
+  drained?: number; // drainMana 아우라가 실제로 깎은 상대 최대 마나 (사망 시 이만큼만 복원 — 바닥 클램프 비대칭 방지)
   decayCnt?: number; // 부패: 이 몬스터에 쌓인 부패 카운터 (3이면 파괴 + 주인 3뎀)
 }
 

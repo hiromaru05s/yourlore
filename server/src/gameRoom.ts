@@ -60,6 +60,10 @@ interface RoomData {
 const TURN_MS_RANKED = 50000; // ranked: tighter clock
 const TURN_MS_CASUAL = 90000; // everything else: 90s per turn
 const turnMsFor = (ranked: boolean): number => (ranked ? TURN_MS_RANKED : TURN_MS_CASUAL);
+/** Server-side slack past the client's clock before the room force-ends a turn.
+ *  Honest clients auto-end themselves at 0 — this only catches stalled/modified
+ *  ones, so the opponent can never be frozen indefinitely. */
+const TURN_ENFORCE_GRACE_MS = 7000;
 
 /** Attached to each socket; survives hibernation. */
 interface Att { side: Side; gen: number; }
@@ -268,7 +272,7 @@ export class GameRoom {
       if (room.startReady[0] && room.startReady[1]) this.endPreview(); // both agreed → begin now
       return;
     }
-    if (msg.type === "action") this.handleAction(att.side, msg.action);
+    if (msg.type === "action") await this.handleAction(att.side, msg.action);
   }
 
   async webSocketClose(ws: WebSocket): Promise<void> { await this.dropped(ws); }
@@ -281,11 +285,12 @@ export class GameRoom {
     if (!room || !att) return;
     if (att.gen !== room.gen[att.side]) return; // an older socket that was already replaced
     if (room.game.over || room.forfeitAt[att.side] != null) return;
-    // tell the other player we're waiting for a reconnect
-    const other = this.sockFor((1 - att.side) as Side);
-    if (other) { try { this.send(other, { type: "oppConn", connected: false }); } catch { /* dropped */ } }
     // grace period: the alarm declares the forfeit unless a reconnect clears it first
     room.forfeitAt[att.side] = Date.now() + FORFEIT_GRACE_MS;
+    // tell the other player we're waiting for a reconnect — with the forfeit
+    // deadline so their client can show a live countdown instead of a vague wait
+    const other = this.sockFor((1 - att.side) as Side);
+    if (other) { try { this.send(other, { type: "oppConn", connected: false, deadline: room.forfeitAt[att.side]! }); } catch { /* dropped */ } }
     this.persist();
     this.syncAlarm();
   }
@@ -295,6 +300,10 @@ export class GameRoom {
     const room = this.room;
     if (!room) return;
     const times = [...room.forfeitAt, room.joinBy, room.previewUntil].filter((t): t is number => t != null);
+    // authoritative turn clock: arm the force-end deadline for the running turn
+    if (!room.game.over && room.previewDone && room.readied[0] && room.readied[1]) {
+      times.push(room.turnStartAt + turnMsFor(room.ranked) + TURN_ENFORCE_GRACE_MS);
+    }
     if (times.length) void this.state.storage.setAlarm(Math.min(...times)).catch(() => { /* best effort */ });
     else void this.state.storage.deleteAlarm().catch(() => { /* best effort */ });
   }
@@ -325,7 +334,10 @@ export class GameRoom {
       return;
     }
 
-    for (const s of [0, 1] as Side[]) {
+    // process due forfeits in DEADLINE order: if both sides are due in one (late)
+    // alarm firing, the side that disconnected FIRST forfeits — not side 0 by index.
+    const forfeitOrder = ([0, 1] as Side[]).sort((a, b) => (room.forfeitAt[a] ?? Infinity) - (room.forfeitAt[b] ?? Infinity));
+    for (const s of forfeitOrder) {
       const at = room.forfeitAt[s];
       if (at == null || at > now + 250) continue; // not due yet (alarm re-armed below)
       room.forfeitAt[s] = null;
@@ -343,13 +355,42 @@ export class GameRoom {
       }
       await this.recordResult();
     }
+
+    // ---- server-side turn timeout: force-end a turn the active client never ended.
+    // The clock was previously display-only — a stalled or modified client on its
+    // turn could freeze the opponent forever (no action → no forfeit, no end).
+    if (!room.game.over && room.previewDone && bothJoined) {
+      const dl = room.turnStartAt + turnMsFor(room.ranked) + TURN_ENFORCE_GRACE_MS;
+      if (dl <= now + 250) {
+        const prevTurn = room.game.turn, prevCur = room.game.cur;
+        let st = room.game;
+        const evs: GameEvent[] = [];
+        // cancel any pending choice first so endTurn is accepted (try both verbs)
+        for (const verb of ["pick", "chooseTarget"] as const) {
+          if (!st.pending) break;
+          const r = reduce(st, { type: verb, uid: null } as Action);
+          if (r.state !== st) { evs.push(...r.events); st = r.state; }
+        }
+        if (!st.over) { const r = reduce(st, { type: "endTurn" }); evs.push(...r.events); st = r.state; }
+        room.game = st;
+        if (st.turn !== prevTurn || st.cur !== prevCur) {
+          room.turnStartAt = Date.now();
+          this.broadcast(evs);
+        } else {
+          // engine refused (unclearable pending) — retry in 10s instead of hot-looping
+          room.turnStartAt += 10_000;
+        }
+        if (room.game.over) await this.recordResult();
+      }
+    }
+
     this.persist();
     this.syncAlarm();
   }
 
   // -------- game logic (unchanged) --------
 
-  private handleAction(side: Side, action: Action): void {
+  private async handleAction(side: Side, action: Action): Promise<void> {
     const room = this.room!;
     const g = room.game;
     if (g.over) return;
@@ -367,7 +408,7 @@ export class GameRoom {
     // cur) is essential: a skip (e.g. TIMEWARP) runs endTurn twice, so cur returns to the same
     // player while turn advances by 2 — checking cur alone would leave a stale turnStartAt,
     // making the resumed turn's clock read ~0 and instantly auto-end (cascading turn skips).
-    if (res.state.turn !== prevTurn || res.state.cur !== prevCur) room.turnStartAt = Date.now();
+    if (res.state.turn !== prevTurn || res.state.cur !== prevCur) { room.turnStartAt = Date.now(); this.syncAlarm(); } // re-arm the turn-timeout alarm
     this.persist();
     // A rejected play (condition not met, sealed, etc.) produces only "log" events and
     // no state advance. Don't broadcast it to the OPPONENT — otherwise their client logs
@@ -382,7 +423,10 @@ export class GameRoom {
     } else {
       this.broadcast(res.events);
     }
-    if (room.game.over) void this.recordResult();
+    // AWAITED: fire-and-forget let the DO hibernate mid-write after `recorded=true`
+    // persisted, permanently dropping the W/L + Elo + match row for the common
+    // in-game ending (lethal/surrender). Awaiting keeps the object alive.
+    if (room.game.over) await this.recordResult();
   }
 
   /** Redacted state for `side`, stamped with the turn's remaining/total ms (server-authoritative clock). */

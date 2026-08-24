@@ -34,10 +34,18 @@ export function confirmDialog(opts: { title: string; body?: string; confirm: str
     no.className = "btn btn-ghost"; no.textContent = opts.cancel;
     const yes = document.createElement("button");
     yes.className = "btn " + (opts.danger ? "btn-danger" : "btn-primary"); yes.textContent = opts.confirm;
-    no.onclick = () => { closeOverlay(); resolve(false); };
-    yes.onclick = () => { closeOverlay(); resolve(true); };
+    let obs: MutationObserver | undefined;
+    let done = false;
+    const settle = (v: boolean): void => { if (done) return; done = true; obs?.disconnect(); resolve(v); };
+    no.onclick = () => { settle(false); closeOverlay(); };
+    yes.onclick = () => { settle(true); closeOverlay(); };
     row.append(no, yes);
     mount(m);
+    // Another modal can EVICT this one (mount() wipes the overlay root — e.g. the
+    // win modal appears while the surrender confirm is open). Resolve as
+    // "cancelled" instead of leaving the awaiting caller hung forever.
+    obs = new MutationObserver(() => { if (!m.isConnected) settle(false); });
+    obs.observe(getRoot(), { childList: true });
   });
 }
 
@@ -47,7 +55,7 @@ export function winModal(won: boolean | null, detail: string, onAgain: () => voi
   m.className = "modal";
   const title = won == null ? t("modal.draw") : won ? t("modal.win") : t("modal.lose");
   const color = won == null ? "var(--paper)" : won ? "var(--gold-glow)" : "var(--vermil-hi)";
-  m.innerHTML = `<h2 style="color:${color}">${title}</h2><p style="color:var(--paper);font-size:14px">${detail}</p><div class="win-rank" id="winRankDelta" style="display:none"></div><p>${t("modal.gameover")}</p><div class="modal-row"></div>`;
+  m.innerHTML = `<h2 style="color:${color}">${title}</h2><p id="winDetail" style="color:var(--paper);font-size:14px">${detail}</p><div class="win-rank" id="winRankDelta" style="display:none"></div><p>${t("modal.gameover")}</p><div class="modal-row"></div>`;
   const row = m.querySelector(".modal-row")!;
   const home = document.createElement("button"); home.className = "btn btn-ghost"; home.textContent = t("modal.home");
   home.onclick = () => { closeOverlay(); onHome(); };
@@ -165,7 +173,7 @@ export function showControlsHelp(): void {
 /** Seek/Recall picker. Calls onPick with chosen uid (or null on cancel). */
 export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string | null) => void): void {
   const m = document.createElement("div");
-  m.className = "modal"; m.style.maxWidth = "720px";
+  m.className = "modal picker-modal"; m.style.maxWidth = "720px";
   m.innerHTML = `<h2 style="font-size:14px">${title}</h2><div class="picker-grid" style="display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:16px 0;max-height:54vh;overflow:auto"></div><div class="modal-row"></div>`;
   const grid = m.querySelector(".picker-grid")!;
   pool.forEach((c, i) => {
@@ -188,7 +196,7 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
  */
 export function cardPickerMulti(title: string, pool: CardInst[], max: number, onDone: (uids: string[]) => void): void {
   const m = document.createElement("div");
-  m.className = "modal"; m.style.maxWidth = "720px";
+  m.className = "modal picker-modal"; m.style.maxWidth = "720px";
   m.innerHTML =
     `<h2 style="font-size:14px">${title}</h2>` +
     `<div class="picker-grid" style="display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:16px 0;max-height:54vh;overflow:auto"></div>` +

@@ -21,6 +21,20 @@ export function clearActiveGame(): void {
   try { localStorage.removeItem(KEY); } catch { /* noop */ }
 }
 
+/** Refresh the record's timestamp while the game is LIVE. Without this, `ts`
+ *  was stamped once at match start, so any game running past WINDOW_MS lost its
+ *  crash/refresh rejoin — loadActiveGame would judge it stale and delete it. */
+export function touchActiveGame(): void {
+  try {
+    const s = localStorage.getItem(KEY);
+    if (!s) return;
+    const g = JSON.parse(s) as ActiveGame;
+    if (!g?.roomId) return;
+    g.ts = Date.now();
+    localStorage.setItem(KEY, JSON.stringify(g));
+  } catch { /* private mode */ }
+}
+
 /** The stored in-progress game if recent enough to rejoin, else null (stale ones are cleared). */
 export function loadActiveGame(): ActiveGame | null {
   try {

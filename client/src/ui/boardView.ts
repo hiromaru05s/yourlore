@@ -10,7 +10,7 @@ import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
 import { cardEl, prefetchZoomArt } from "./cardView";
 import { bindZoom, zoomCard, setPlayOrigin } from "./anim";
-import { t, getLang } from "../i18n";
+import { t, getLang, esc } from "../i18n";
 import { logToEn } from "../shared/logEn";
 import { getSfxVolume, setSfxVolume } from "./sound";
 import { avatarHtml } from "./social";
@@ -45,6 +45,15 @@ const BATTLEFIELD_BACKGROUNDS = [
 /** 50:50 (uniform) pick. Called only from the GameView constructor — never from render(). */
 function pickBattlefieldBg(): string {
   return BATTLEFIELD_BACKGROUNDS[Math.floor(Math.random() * BATTLEFIELD_BACKGROUNDS.length)];
+}
+
+/** Eat the click that follows THIS press (capture, once) — but self-expire: a
+ *  cancelled touch (scroll/palm rejection) never fires the click, and a stale
+ *  swallower would silently eat the user's NEXT legitimate tap. */
+function swallowNextClick(el: HTMLElement): void {
+  const swallow = (ce: Event): void => { ce.stopPropagation(); ce.preventDefault(); };
+  el.addEventListener("click", swallow, { capture: true, once: true });
+  setTimeout(() => el.removeEventListener("click", swallow, { capture: true }), 500);
 }
 
 const MON_SLOTS = 7;
@@ -188,7 +197,9 @@ export class GameView {
     volPop.onclick = (e) => e.stopPropagation();
     // double-click the button = quick mute/unmute (기존 동작 유지)
     muteBtn.ondblclick = () => { if (getSfxVolume() > 0) { lastVol = getSfxVolume(); setSfxVolume(0); } else { setSfxVolume(lastVol || 0.7); } volRange.value = String(Math.round(getSfxVolume() * 100)); paintMute(); };
-    document.addEventListener("click", () => { if (volOpen) setVolOpen(false); });
+    const closeVolPop = (): void => { if (volOpen) setVolOpen(false); };
+    document.addEventListener("click", closeVolPop);
+    this.cleanups.push(() => document.removeEventListener("click", closeVolPop));
     paintMute();
     // battle log — CLOSED by default; a mid-left edge tab opens the drawer.
     // Once opened it stays open (state persisted in localStorage).
@@ -235,8 +246,11 @@ export class GameView {
     backdrop.addEventListener("pointerdown", eatOutside);
     backdrop.addEventListener("click", (e) => e.stopPropagation());
     document.addEventListener("pointerdown", eatOutside, { capture: true });
+    this.cleanups.push(() => document.removeEventListener("pointerdown", eatOutside, { capture: true }));
     applyLog();
-    document.addEventListener("contextmenu", (e) => e.preventDefault());
+    const noCtx = (e: Event): void => e.preventDefault();
+    document.addEventListener("contextmenu", noCtx);
+    this.cleanups.push(() => document.removeEventListener("contextmenu", noCtx));
 
     // ---- hand: Hearthstone-style two states. Default = COMPACT stack held to the
     // right of my portrait; clicking it EXPANDS the hand large at bottom-center.
@@ -249,6 +263,7 @@ export class GameView {
       this.setHandOpen(false);
     };
     document.addEventListener("pointerdown", collapse, { capture: true });
+    this.cleanups.push(() => document.removeEventListener("pointerdown", collapse, { capture: true }));
 
     // A press ANYWHERE on the compact stack expands it. This lives on the
     // container (not just the cards) because the invisible hit-pad — and the
@@ -258,12 +273,13 @@ export class GameView {
       if (this.handOpen) return;
       e.stopPropagation();
       this.setHandOpen(true);
-      handEl.addEventListener("click", (ce) => { ce.stopPropagation(); ce.preventDefault(); }, { capture: true, once: true });
+      swallowNextClick(handEl);
     }, { capture: true });
     // phones start (and stay) with the hand open; re-assert it on rotation
     const syncPhoneHand = (): void => { if (GameView.isPhone()) this.setHandOpen(true); };
     syncPhoneHand();
     GameView.phoneMq?.addEventListener?.("change", syncPhoneHand);
+    this.cleanups.push(() => GameView.phoneMq?.removeEventListener?.("change", syncPhoneHand));
 
     // END TURN lives beside the market on wide screens, and under MY OWN field
     // once the board narrows (reaching across to the market is a stretch on a
@@ -297,8 +313,15 @@ export class GameView {
   private static isDrawerLog(): boolean { return !!GameView.drawerMq?.matches; }
 
   private onLayout: ((e: Event) => void) | null = null;
-  /** Detach the window-level listeners this view installed. */
-  destroy(): void { if (this.onLayout) window.removeEventListener("lore:layout", this.onLayout); }
+  /** document/mediaQuery listeners installed by buildSkeleton — the SPA swaps
+   *  screens by replacing innerHTML, so anything global MUST be detached here
+   *  or it stacks per match (and retains the whole board DOM via closures). */
+  private cleanups: Array<() => void> = [];
+  /** Detach the window/document-level listeners this view installed. */
+  destroy(): void {
+    if (this.onLayout) window.removeEventListener("lore:layout", this.onLayout);
+    for (const fn of this.cleanups.splice(0)) { try { fn(); } catch { /* already gone */ } }
+  }
 
   private handOpen = false;
   setHandOpen(open: boolean): void {
@@ -340,7 +363,7 @@ export class GameView {
     // opponent's equipped sleeve (server-synced); falls back to default for bot/local games
     OPP_SLEEVE = sleeveUrl(g.sleeves?.[1 - this.you]);
 
-    this.q("turnInfo").innerHTML = `<span class="turn-badge"><span class="tb-label">${t("game.turn")}</span><span class="tb-num">${g.turn}</span></span><span class="turn-cur"><b>${g.players[g.cur].name}</b></span>`;
+    this.q("turnInfo").innerHTML = `<span class="turn-badge"><span class="tb-label">${t("game.turn")}</span><span class="tb-num">${g.turn}</span></span><span class="turn-cur"><b>${esc(g.players[g.cur].name)}</b></span>`;
     // refresh static labels (so a live language switch updates them)
     this.q("endBtn").textContent = t("game.endturn");
     const gvl = this.q("giveupBtn").querySelector(".gv-label"); if (gvl) gvl.textContent = t("game.surrender");
@@ -416,13 +439,13 @@ export class GameView {
     const graveTop = p.discard[p.discard.length - 1];
     const graveArt = graveTop && graveTop.id !== "HIDDEN" ? `/art/cards/${graveTop.id}.webp` : graveTop ? frameFor(graveTop.t) : null;
     const gravePile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, graveArt, graveTop ?? null, t("game.discard"),
-      () => { if (p.discard.length) cardPicker(`${p.name} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => { /* browse only */ }); });
+      () => { if (p.discard.length) cardPicker(`${esc(p.name)} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => { /* browse only */ }); });
     // clicking the DECK opens the full composition (own or opponent's public aggregate)
     const collection = this.collectionOf(p, isMe);
     // my deck → also show the cards still remaining (undrawn); opponent's remaining deck is hidden
     const remaining = isMe ? [...p.deck].sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name)) : null;
     const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, backFor(isMe), null, t("game.deck"),
-      () => deckViewer(`${p.name} — ${t("deck.view")}`, collection, remaining, !isMe));
+      () => deckViewer(`${esc(p.name)} — ${t("deck.view")}`, collection, remaining, !isMe));
 
     const block = document.createElement("div");
     block.className = "field-block" + (isMe ? " is-mine" : " is-opp") + (onTurn ? " is-turn" : "");
@@ -518,7 +541,7 @@ export class GameView {
       rbtn.className = "btn btn-ghost mp-btn mp-btn--exile";
       rbtn.innerHTML = `<span class="mp-ico">⛔</span><span class="mp-lb">${t("deck.removed")}</span><b>${removed.length}</b>`;
       rbtn.title = `${t("deck.removed")} ${removed.length}`;
-      rbtn.onclick = () => cardPicker(`${p.name} — ${t("deck.removed")} (${removed.length})`, removed, () => { /* browse only */ });
+      rbtn.onclick = () => cardPicker(`${esc(p.name)} — ${t("deck.removed")} (${removed.length})`, removed, () => { /* browse only */ });
       aside.appendChild(rbtn);
     }
 
@@ -650,7 +673,7 @@ export class GameView {
         cleanup();
         if (!dragged) return;
         // swallow the click that follows pointerup so it doesn't ALSO trigger an attack
-        card.addEventListener("click", (ce) => { ce.stopPropagation(); ce.preventDefault(); }, { capture: true, once: true });
+        swallowNextClick(card);
         if (aimed && o.canAttack) {
           const tUid = t.mon?.dataset.uid;
           if (tUid) { this.h.onAttack(o.uid, tUid); return; }               // dropped on a monster
@@ -698,7 +721,7 @@ export class GameView {
     // nothing but tribe synergy lives here now — with no chips the rail would
     // just be two player names floating in the gutter, so render nothing.
     panel.innerHTML = tribeChips.length
-      ? `<div class="rail-head"><span class="rail-name">${p.name}</span></div>
+      ? `<div class="rail-head"><span class="rail-name">${esc(p.name)}</span></div>
          <div class="mp-tribes">${tribeChips.join("")}</div>`
       : "";
   }
@@ -860,7 +883,7 @@ export class GameView {
       <span class="pt-ring">${avatarHtml(isMe ? MY_AVATAR : OPP_AVATAR, p.name, 58)}</span>
       <span class="pt-hp" title="${hp}/${p.maxHp}"><span class="pt-hp-ico">❤</span><b id="hp-${sd}">${hp}</b><span class="pt-hp-max">/${p.maxHp}</span></span>
       <span class="pt-hpbar hpbar" id="hpbar-${sd}"><i style="width:${hpPct}%"></i></span>
-      <span class="pt-name">${p.name}</span>`;
+      <span class="pt-name">${esc(p.name)}</span>`;
   }
 
   /** MY hand — straight upright cards (no fan) in two states:
@@ -911,7 +934,7 @@ export class GameView {
         // a press anywhere on the compact stack just opens the hand
         e.stopPropagation();
         this.setHandOpen(true);
-        card.addEventListener("click", (ce) => { ce.stopPropagation(); ce.preventDefault(); }, { capture: true, once: true });
+        swallowNextClick(card);
         return;
       }
       const sx = e.clientX, sy = e.clientY;
@@ -955,7 +978,7 @@ export class GameView {
         const rel = ghost ? { left: ev.clientX - gw / 2, top: ev.clientY - gh * 0.58, width: gw, height: gh } : null;
         cleanup();
         if (!dragged) return; // plain click → the click handler zooms
-        card.addEventListener("click", (ce) => { ce.stopPropagation(); ce.preventDefault(); }, { capture: true, once: true });
+        swallowNextClick(card);
         // released above the hand region = play it (drop back onto the hand = cancel)
         const handTop = this.q("hand").getBoundingClientRect().top;
         if (ev.clientY < handTop - 24) {

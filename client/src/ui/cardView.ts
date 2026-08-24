@@ -109,7 +109,7 @@ const MIN_READABLE_PX = 6.5;
 // 모바일(폰 폭)에선 카드 자체가 훨씬 작아서 6.5px 플로어가 카드에 비해 커 보이고
 // 프레임을 침범한다 — 고DPI 화면이라 한 단계 낮춰도 읽힌다. ("ちょいでかい" 리포트)
 const phoneMq: MediaQueryList | null = typeof matchMedia === "function" ? matchMedia("(max-width: 700px)") : null;
-const minReadablePx = (): number => (phoneMq?.matches ? 5.5 : MIN_READABLE_PX);
+const minReadablePx = (): number => (phoneMq?.matches ? 4.5 : MIN_READABLE_PX);
 // The zoom overlay is the "read the whole card" view, so it is allowed to go
 // smaller than the on-board floor rather than hide its tail behind the fade.
 const ZOOM_MIN_PX = 9;

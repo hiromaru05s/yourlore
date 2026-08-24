@@ -28,7 +28,7 @@ export type GameServerMsg =
   | { type: "init"; you: Side; state: GameState; events: GameEvent[] }
   | { type: "update"; state: GameState; events: GameEvent[] }
   | { type: "opponentLeft" }
-  | { type: "oppConn"; connected: boolean } // opponent dropped / came back (reconnect window)
+  | { type: "oppConn"; connected: boolean; deadline?: number } // opponent dropped / came back; deadline = epoch ms when the forfeit fires
   | { type: "voided"; message?: string }    // match cancelled (opponent never joined) — no rank change
   | { type: "preview"; until: number | null; market: CardInst[] } // ranked pre-game: study the fixed market (until=null → waiting for opponent)
   | { type: "rankResult"; before: number; after: number } // ranked game settled — this player's MMR before/after
@@ -43,6 +43,11 @@ export type GameServerMsg =
 export function redactFor(state: GameState, you: Side): GameState {
   const g: GameState = structuredClone(state);
   g._wheelSnap = null; // 운명의 수레바퀴 스냅샷은 서버 전용 (클라 불필요 + 숨김정보 보호)
+  g.rng = 0; // PRNG state is server-only — leaking it lets a client replay mulberry32 and predict every future roll/shuffle
+  // your own deck CONTENTS are yours to see, but its ORDER is hidden information
+  // (you don't know your next draw) — ship it in canonical order instead.
+  const me = g.players[you];
+  me.deck = [...me.deck].sort((a, b) => a.cost - b.cost || a.id.localeCompare(b.id) || a.uid.localeCompare(b.uid));
   const opp = g.players[1 - you];
   const placeholder = (uid: string): GameState["players"][0]["hand"][0] => ({
     uid, id: "HIDDEN", t: "mon", cost: 0, name: "", text: "",

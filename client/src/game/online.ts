@@ -9,7 +9,7 @@ import type { GameClientMsg, GameServerMsg } from "../shared/protocol";
 import { Sock } from "../net/socket";
 import { BaseController, type ControllerExits } from "./controller";
 import { closeOverlay, noticeModal, marketPreview } from "../ui/modal";
-import { clearActiveGame } from "../net/resume";
+import { clearActiveGame, touchActiveGame } from "../net/resume";
 import { eventBanner } from "../ui/anim";
 import { t } from "../i18n";
 
@@ -29,9 +29,10 @@ export class OnlineController extends BaseController {
     // back from a background tab (mobile app switch): timers were throttled, so
     // the socket may have died silently. Probe it NOW instead of waiting a tick.
     if (document.visibilityState !== "visible" || this.closing || this.state?.over) return;
-    this.sock?.send({ type: "ping" });
+    const probed = this.sock; // close only the socket we probed — never a NEWER
+    probed?.send({ type: "ping" }); // reconnect attempt that is still CONNECTING
     setTimeout(() => {
-      if (!this.closing && !this.state?.over && Date.now() - this.lastMsgAt > 4_500) this.sock?.close();
+      if (this.sock === probed && !this.closing && !this.state?.over && Date.now() - this.lastMsgAt > 4_500) probed?.close();
     }, 5_000);
   };
 
@@ -69,6 +70,7 @@ export class OnlineController extends BaseController {
   }
 
   private onServer(msg: GameServerMsg): void {
+    if (msg.type === "init" || msg.type === "update") this.echoLockAt = 0; // server echoed — next action may go
     if (msg.type === "init") {
       const firstInit = !this.started; // 이 클라이언트가 처음 받는 init (새로고침/크래시 복귀 포함)
       this.started = true;
@@ -83,11 +85,22 @@ export class OnlineController extends BaseController {
       }
     } else if (msg.type === "update") {
       this.applyResult({ state: msg.state, events: msg.events });
-      if (this.state?.over) clearActiveGame(); // game ended → nothing to rejoin
+      if (this.state?.over) { this.stopOppTicker(); this.banner(null); clearActiveGame(); } // game ended → nothing to rejoin
+      else touchActiveGame(); // keep the rejoin record alive for games longer than its TTL
     } else if (msg.type === "oppConn") {
-      this.banner(msg.connected ? null : t("net.oppwait"));
+      if (msg.connected) {
+        this.stopOppTicker();
+        this.banner(null);
+        void eventBanner(`↩ ${t("net.oppback")}`, "", "info", 1500);
+      } else if (msg.deadline) {
+        this.startOppTicker(msg.deadline);
+      } else {
+        this.banner(t("net.oppwait")); // older server without a deadline
+      }
     } else if (msg.type === "opponentLeft") {
       // server already sent the deciding update; just make sure the result shows
+      this.stopOppTicker();
+      this.setResultNote(t("result.oppdc")); // patches the modal even if the win update already opened it
       if (this.state?.over) this.showWin();
     } else if (msg.type === "voided") {
       // the match never really started (opponent never joined) → no rank change, back to home
@@ -107,10 +120,36 @@ export class OnlineController extends BaseController {
     }
   }
 
+  // one INDEX-BASED mutating action per server round-trip: a double-tap resolved
+  // the same hand/market index twice, and after the first play shifted the array
+  // the second played/bought whichever card slid into that slot. Cleared on every
+  // init/update; the 2.5s failsafe covers a lost echo.
+  private echoLockAt = 0;
   protected submit(action: Action): void {
     if (!this.started || this.state?.over) return;
+    const locking = action.type === "play" || action.type === "buyMarket" || action.type === "buySupply"
+      || action.type === "attack" || action.type === "refresh" || action.type === "endTurn";
+    if (locking) {
+      const now = Date.now();
+      if (now - this.echoLockAt < 2_500) return;
+      this.echoLockAt = now;
+    }
     this.sock.send({ type: "action", action });
   }
+
+  // 상대 이탈 카운트다운: 서버가 준 몰수 데드라인까지 남은 초를 배너에 실시간 표시.
+  // "언제까지 기다리는지 모른 채 방치"가 아니라 승리 확정까지의 여정이 보이게 한다.
+  private oppTicker?: ReturnType<typeof setInterval>;
+  private startOppTicker(deadline: number): void {
+    this.stopOppTicker();
+    const paint = (): void => {
+      const s = Math.ceil((deadline - Date.now()) / 1000);
+      this.banner(s > 0 ? t("net.oppwait.cd").replace("{s}", String(s)) : t("net.oppwait.judge"));
+    };
+    paint();
+    this.oppTicker = setInterval(paint, 500);
+  }
+  private stopOppTicker(): void { if (this.oppTicker) clearInterval(this.oppTicker); this.oppTicker = undefined; }
 
   // heartbeat: keep the WS path warm through idle thinking time (edge/NAT timeouts kill silent sockets).
   // Doubles as a DEAD-SOCKET WATCHDOG: pings are answered (auto-response pairs), so a
@@ -139,5 +178,5 @@ export class OnlineController extends BaseController {
     el.textContent = text;
   }
 
-  destroy(): void { this.closing = true; document.removeEventListener("visibilitychange", this.onVisible); this.stopHb(); this.preview?.close(); this.preview = undefined; this.banner(null); this.sock?.close(); super.destroy(); }
+  destroy(): void { this.closing = true; document.removeEventListener("visibilitychange", this.onVisible); this.stopHb(); this.stopOppTicker(); this.preview?.close(); this.preview = undefined; this.banner(null); this.sock?.close(); super.destroy(); }
 }

@@ -38,7 +38,8 @@ export function mountLobby(app: App, ranked = false): Screen {
   let retry = 0;    // consecutive drops without a successful "queued" ack (drives backoff)
 
   const stopHb = (): void => { if (hb) { clearInterval(hb); hb = null; } };
-  const shutdown = (): void => { done = true; stopHb(); sock?.close(); };
+  let matchTimer = 0; // the 600ms "matched → enter game" delay; must die with the screen
+  const shutdown = (): void => { done = true; stopHb(); clearTimeout(matchTimer); sock?.close(); };
 
   const connect = (): void => {
     sock = new Sock<QueueServerMsg, QueueClientMsg>(ranked ? "/ws/queue?mode=ranked" : "/ws/queue", {
@@ -60,7 +61,7 @@ export function mountLobby(app: App, ranked = false): Screen {
           title.textContent = t("lobby.found");
           msg.textContent = `vs ${m.oppName}`;
           sock?.close();
-          setTimeout(() => app.onlineGame(m.roomId, m.you, m.oppName, m.oppAvatar ?? null, ranked), 600);
+          matchTimer = window.setTimeout(() => app.onlineGame(m.roomId, m.you, m.oppName, m.oppAvatar ?? null, ranked), 600);
         } else if (m.type === "error") {
           title.textContent = t("lobby.fail");
           msg.textContent = m.message;

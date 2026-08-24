@@ -14,7 +14,7 @@ import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog, logToText } from "../ui/log";
 import * as A from "../ui/anim";
-import { cardPicker, cardPickerMulti, confirmDialog, treasureModal, winModal } from "../ui/modal";
+import { cardPicker, cardPickerMulti, confirmDialog, treasureModal, winModal, closeOverlay } from "../ui/modal";
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { sfx, type SfxName } from "../ui/sound";
@@ -143,7 +143,15 @@ export abstract class BaseController implements BoardHandlers {
     const gen = ++this.fxGen;
     this.queue = this.queue
       .then(() => this.playResult(prev, res, animate, gen))
-      .catch((err) => console.error("[playback]", err));
+      .catch((err) => {
+        console.error("[playback]", err);
+        // A playback exception must not strand the game: afterApply is what
+        // re-arms the bot (LocalController) and pending pickers. Skipping it for
+        // this batch permanently froze bot games on one animation error.
+        if (!this.dead && res.state === this.state) {
+          try { this.afterApply(res); } catch { this.maybeBot(); }
+        }
+      });
   }
 
   private async playResult(prev: GameState, res: ReduceResult, animate: boolean, gen: number): Promise<void> {
@@ -506,6 +514,11 @@ export abstract class BaseController implements BoardHandlers {
       }
       return; // oppMon/myMon resolved by board clicks
     }
+    // Server force-ended my turn (or the pending resolved elsewhere) while a
+    // picker modal was still open — it would cover the board through the whole
+    // opponent turn and any pick it submits is stale. Close pickers only; the
+    // win/notice modals must survive this sweep.
+    if (document.querySelector("#overlayRoot .picker-modal")) closeOverlay();
     this.maybeBot();
   }
 
@@ -537,6 +550,18 @@ export abstract class BaseController implements BoardHandlers {
       if (this.timerInt) clearInterval(this.timerInt);
       this.renderTimer();
       this.timerInt = window.setInterval(() => this.tickTimer(), 1000);
+    } else if (g.turnLeftMs != null) {
+      // SAME turn, fresh server snapshot (reconnect init / any update): adopt the
+      // authoritative remaining time when the local countdown has drifted — a
+      // background-throttled tab could otherwise show ~40s while the server had ~3s.
+      // only the DOWNWARD correction: the snapshot can itself be a few seconds
+      // stale after long event playback, so a higher server value proves nothing.
+      const serverLeft = Math.max(1, Math.ceil(g.turnLeftMs / 1000));
+      if (serverLeft < this.timerLeft - 3) {
+        this.timerLeft = serverLeft;
+        this.warned25 = this.warned25 || serverLeft <= 25;
+        this.renderTimer();
+      }
     }
   }
 
@@ -674,7 +699,8 @@ export abstract class BaseController implements BoardHandlers {
     const won: boolean | null = this.state.winner == null ? null : this.state.winner === this.you;
     const meHp = Math.max(0, this.state.players[this.you].hp);
     const oppHp = Math.max(0, this.state.players[1 - this.you].hp);
-    const detail = `${t("modal.hp.me")} ${meHp} · ${t("modal.hp.opp")} ${oppHp}`;
+    const detail = `${t("modal.hp.me")} ${meHp} · ${t("modal.hp.opp")} ${oppHp}`
+      + (this.resultNote ? `<br><span class="muted">${this.resultNote}</span>` : "");
     winModal(
       won,
       detail,
@@ -683,6 +709,16 @@ export abstract class BaseController implements BoardHandlers {
       () => A.reviewFab(() => this.openResult()),
     );
     this.renderRankDelta(); // fill the ranked MMR line if we already have the result
+  }
+
+  /** One-line reason under the result HP line (e.g. "won by opponent disconnect").
+   *  Set it BEFORE the modal opens when possible; setResultNote also patches an
+   *  ALREADY-OPEN modal — the server's opponentLeft arrives after the win update. */
+  protected resultNote?: string;
+  protected setResultNote(note: string): void {
+    this.resultNote = note;
+    const el = document.getElementById("winDetail");
+    if (el && !el.textContent?.includes(note)) el.innerHTML += `<br><span class="muted">${note}</span>`;
   }
 
   /** Ranked MMR change on the result screen: "랭크 +18 · 1240 → 1258 (골드)". */
@@ -706,6 +742,7 @@ export abstract class BaseController implements BoardHandlers {
     this.stopTimer();
     this.view.destroy();
     this.toastEl?.remove();
+    A.closeZoom(); // a zoom left open would sit over the NEXT screen (its Esc handler dies below)
     document.removeEventListener("keydown", this.onKey);
     A.removeReviewFab();
     this.unsubLang();

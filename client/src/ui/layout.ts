@@ -181,6 +181,7 @@ function clear(): void {
  */
 export function startBoardLayout(): () => void {
   let raf = 0;
+  let torn = false; // fonts.ready can resolve AFTER teardown — don't re-stamp vars then
 
   /** Height the five board rows actually want, measured (not guessed). */
   const need = (col: HTMLElement, gap: number): number => {
@@ -265,6 +266,7 @@ export function startBoardLayout(): () => void {
 
   const run = (): void => {
     raf = 0;
+    if (torn) return;
     const vv = window.visualViewport;
     // visualViewport tracks the mobile URL bar / on-screen keyboard; fall back
     // to innerWidth/Height where it's missing.
@@ -294,6 +296,7 @@ export function startBoardLayout(): () => void {
   window.visualViewport?.addEventListener("resize", schedule);
   document.fonts?.ready?.then(run).catch(() => { /* ignore */ });
   return () => {
+    torn = true;
     if (raf) cancelAnimationFrame(raf);
     for (const t of timers) clearTimeout(t);
     window.removeEventListener("resize", schedule);

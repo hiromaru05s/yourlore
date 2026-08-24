@@ -340,7 +340,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     if (i >= 0) {
       const dead = owner.field.splice(i, 1)[0];
       // 폭풍의 광전사(drainMana): restore the opponent's max mana it was draining
-      if (dead.aura === "drainMana") { const opp2 = g.players[0] === owner ? g.players[1] : g.players[0]; opp2.maxMana += (dead.val || 3); }
+      if (dead.aura === "drainMana") { const opp2 = g.players[0] === owner ? g.players[1] : g.players[0]; opp2.maxMana += (dead.drained ?? (dead.val || 3)); }
       // 공허(void): 토큰·공허 패시브 몬스터는 죽으면 게임에서 제외 — 덱 순환에 들어가지 않는다
       if (dead.token || hasPassive(dead, "void")) rmz(owner).push(resetInst(dead));
       else owner.discard.push(resetInst(dead));
@@ -875,7 +875,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     const ai = p.field.findIndex((x) => x.uid === att.uid);
     if (ai >= 0) {
       const dead = p.field.splice(ai, 1)[0];
-      if (dead.aura === "drainMana") o.maxMana += (dead.val || 3);
+      if (dead.aura === "drainMana") o.maxMana += (dead.drained ?? (dead.val || 3));
       if (!dead.token) rmz(p).push(resetInst(dead)); // 파괴가 아니라 제외 — 덱 순환에서 영구히 빠진다
       ctx.ev.push({ type: "destroy", player: side(g, p), uid: dead.uid, id: dead.id });
     }
@@ -1174,8 +1174,14 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
     case "heal": ctx.heal(p, v); ctx.log(`  └ 체력 ${v} 회복 (${p.hp})`, `  └ 体力 ${v} 回復 (${p.hp})`); break;
     case "defDown":
       if (o.field.length) {
-        g.pending = { kind: "oppMon", hint: `체력 -${v} 할 적 몬스터 선택`, hintJa: `体力 -${v} する敵モンスターを選択`, reason: "defDown", allowCancel: false, data: { val: v } };
-        ctx.ev.push({ type: "needTarget", pending: g.pending });
+        // 이미 다른 선택이 대기 중이면 그 pending을 덮어쓰지(=유실) 않고 무작위 대상에 즉시 적용
+        if (g.pending) {
+          const tm = o.field[randInt(g, o.field.length)];
+          tm.defMod = (tm.defMod || 0) - v; ctx.log(`  └ ${cn(tm)} 체력 -${v} (무작위)`, `  └ ${cn(tm)} 体力 -${v} (ランダム)`); recheckDeaths(g, ctx);
+        } else {
+          g.pending = { kind: "oppMon", hint: `체력 -${v} 할 적 몬스터 선택`, hintJa: `体力 -${v} する敵モンスターを選択`, reason: "defDown", allowCancel: false, data: { val: v } };
+          ctx.ev.push({ type: "needTarget", pending: g.pending });
+        }
       } else ctx.log("  └ 대상 없음", "  └ 対象なし");
       break;
     case "refresh": rollSupply(g, p); ctx.log("  └ 제시를 무료 갱신", "  └ 提示を無料更新"); break;
@@ -1208,8 +1214,13 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
     }
     case "decayMark": { // 러스트캡 슬러그: 상대 몬스터 1체에 부패 카운터 1개 (알 제외)
       if (o.field.some((x) => x.hatch == null)) {
-        g.pending = { kind: "oppMon", hint: "부패 카운터 1개를 부여할 적 몬스터 선택", hintJa: "腐敗カウンターを1個与える敵モンスターを選択", reason: "decayMark", allowCancel: false, data: { val: 1 } };
-        ctx.ev.push({ type: "needTarget", pending: g.pending });
+        if (g.pending) { // 대기 중 pending 보호 — 무작위 대상(알 제외)에 즉시 적용
+          const pool = o.field.filter((x) => x.hatch == null);
+          addDecay(g, ctx, o, pool[randInt(g, pool.length)], 1);
+        } else {
+          g.pending = { kind: "oppMon", hint: "부패 카운터 1개를 부여할 적 몬스터 선택", hintJa: "腐敗カウンターを1個与える敵モンスターを選択", reason: "decayMark", allowCancel: false, data: { val: 1 } };
+          ctx.ev.push({ type: "needTarget", pending: g.pending });
+        }
       } else ctx.log("  └ 대상 없음", "  └ 対象なし");
       break;
     }
@@ -1294,7 +1305,7 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
         o.field.forEach((tm) => (tm.defMod = (tm.defMod || 0) - dv)); recheckDeaths(g, ctx);
         ctx.log(`  └ 흑룡의 위압: 상대 몬스터 전체 체력 -${dv}(지속)`, `  └ 黒竜の威圧: 敵モンスター全体の体力-${dv}(持続)`);
       }
-      if ((o.removed?.length ?? 0) > 0) {
+      if ((o.removed?.length ?? 0) > 0 && !g.pending) { // 대기 중 pending이 있으면 이 선택은 생략 (취소 가능 효과)
         g.pending = { kind: "oppRmz", hint: "상대 묘지로 되돌릴 카드 선택 (상대의 제외존, 최대 8장)", hintJa: "相手の墓地に戻すカードを選択 (相手の除外ゾーン、最大8枚)", reason: "blackDragon", allowCancel: true, data: { val: 8 } };
         ctx.ev.push({ type: "needTarget", pending: g.pending });
       } else ctx.log("  └ 상대의 제외된 카드가 없음", "  └ 相手の除外カードがない");
@@ -1309,7 +1320,8 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       p.maxMana += 15;
       p.bonusDrawPerm += 1;
       ctx.log(`  └ 신수 강림: 최대 마나 +15 (${p.maxMana}), 매 턴 드로우 +1(영구)`, `  └ 神獣降臨: 最大マナ+15 (${p.maxMana}), 毎ターンドロー+1(永続)`);
-      if (o.field.length + o.traps.length + o.enchants.length + p.field.length + p.traps.length + p.enchants.length > 0) {
+      if (o.field.length + o.traps.length + o.enchants.length + p.field.length + p.traps.length + p.enchants.length > 0 && !g.pending) {
+        // 대기 중 pending이 있으면 파괴 선택은 생략 (취소 가능 효과 — 덮어쓰면 앞의 선택이 유실된다)
         g.pending = { kind: "oppBoard", hint: "파괴할 카드 선택 (양쪽 필드 · 몬스터·세트 함정·영구마법, 3장)", hintJa: "破壊するカードを選択 (両フィールド · モンスター・セットトラップ・永続魔法、3枚)", reason: "divine", allowCancel: true, data: { val: 3, anySide: true } };
         ctx.ev.push({ type: "needTarget", pending: g.pending });
       }
@@ -1373,8 +1385,13 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       break;
     case "atkDown": // M12 타이탄 게이트: 적 1체 공격 -v (지속)
       if (o.field.length) {
-        g.pending = { kind: "oppMon", hint: `공격력 -${v} 할 적 몬스터 선택`, hintJa: `攻撃 -${v} する敵モンスターを選択`, reason: "atkDown", allowCancel: false, data: { val: v } };
-        ctx.ev.push({ type: "needTarget", pending: g.pending });
+        if (g.pending) { // 대기 중 pending 보호 — 무작위 대상에 즉시 적용
+          const tm = o.field[randInt(g, o.field.length)];
+          tm.atkMod = (tm.atkMod || 0) - v; ctx.log(`  └ ${cn(tm)} 공격력 -${v} (무작위)`, `  └ ${cn(tm)} 攻撃 -${v} (ランダム)`);
+        } else {
+          g.pending = { kind: "oppMon", hint: `공격력 -${v} 할 적 몬스터 선택`, hintJa: `攻撃 -${v} する敵モンスターを選択`, reason: "atkDown", allowCancel: false, data: { val: v } };
+          ctx.ev.push({ type: "needTarget", pending: g.pending });
+        }
       } else ctx.log("  └ 대상 없음", "  └ 対象なし");
       break;
     case "maxHpMana": // GM7_2
@@ -1726,7 +1743,10 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       else if (r === 5) spawnToken(g, ctx, p, "GM9_2");
       else {
         o.traps.forEach((t) => o.discard.push(t.card)); o.traps = [];
-        o.enchants.forEach((e) => o.discard.push(e.card)); o.enchants = [];
+        // binEnch: 약화술식(unWeaken)·제외 대상(exileOnDestroy) 처리 — 맨손 discard.push는
+        // 전체 -2 공격 디버프를 영구히 남기고 공허 카드를 덱 순환에 되돌렸다
+        const wiped = o.enchants; o.enchants = [];
+        wiped.forEach((e) => binEnch(g, ctx, o, e.card));
         spawnToken(g, ctx, p, "GM9_2"); spawnToken(g, ctx, p, "GM9_2");
         p.maxMana += 2; ctx.heal(p, 10);
         ctx.log(`  └ 대성공! 상대 마법/함정 전멸, 폭풍의 전사 2체, 최대 마나 +2, 체력 +10`, `  └ 大成功! 相手の魔法/罠全滅, 嵐の戦士2体, 最大マナ+2, 体力+10`);
@@ -2170,7 +2190,9 @@ function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): vo
   // 폭풍의 광전사(drainMana): while on field, opponent's max mana -val
   if (m.aura === "drainMana") {
     const o = g.players[0] === p ? g.players[1] : g.players[0];
+    const before = o.maxMana;
     o.maxMana = Math.max(1, o.maxMana - (m.val || 3));
+    m.drained = before - o.maxMana; // 바닥(1) 클램프로 덜 깎였으면 그만큼만 복원해야 한다
     ctx.log(`  └ ${cn(m)}: 상대 최대 마나 -${m.val || 3}`, `  └ ${cn(m)}: 相手の最大マナ-${m.val || 3}`);
   }
 }
@@ -2393,6 +2415,9 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (card.act === "destroyMon" && card.cap && ![...o0.field, ...p.field].some((m) => m.cost <= card.cap!)) { ctx.log(`  └ 코스트 ${card.cap} 이하의 대상 몬스터가 없습니다`, `  └ コスト${card.cap}以下の対象モンスターがいません`); return; }
     if (card.id === "CHOSEN_AREA" && cullExiled(p) < 25) { ctx.log(`  └ 게임에서 제외된 컬이 ${cullExiled(p)}장 — 25장 이상이어야 발동 가능`, `  └ ゲームから除外されたカルが${cullExiled(p)}枚 — 25枚以上で発動可能`); return; }
     if ((card.id === "DECAY_CRAFT" || card.id === "MAJESTY_RITE") && p.field.length === 0) { ctx.log("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); return; }
+    // 각인 비술: 위엄 미보유 몬스터가 하나도 없으면 발동 불가 — 전원 보유 상태에서
+    // 발동되면 allowCancel:false pending이 영원히 해소 불가(모든 픽이 재선택) = 소프트락
+    if (card.id === "MAJESTY_RITE" && !p.field.some((m) => !hasPassive(m, "majesty"))) { ctx.log("  └ '위엄'을 부여할 수 있는 몬스터가 없습니다", "  └ 「威厳」を与えられるモンスターがいません"); return; }
     if (card.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) { ctx.log("  └ 자신 필드에 이미 '선견지명'이 있습니다", "  └ 自分の場に既に「先見の明」があります"); return; }
     if ((card.id === "MEDITATE" || card.id === "PRAYER") && (p.playsTurn || 0) > 0) { ctx.log("  └ 이번 턴에 다른 카드를 플레이해서 사용 불가", "  └ このターンに他のカードをプレイしたため使用不可"); return; }
     if (card.id === "PRAYER" && p.maxMana > 12) { ctx.log("  └ 최대 마나가 12를 초과해 사용 불가", "  └ 最大マナが12を超えているため使用不可"); return; }
@@ -2557,10 +2582,16 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     let owner = o;
     let tm = o.field.find((m) => m.uid === uid);
     if (!tm && d.anySide) { const own = p.field.find((m) => m.uid === uid); if (own) { owner = p; tm = own; } }
-    if (!tm) return;
+    // 무효 대상(존재하지 않는 uid)·아우라 대상: pending을 COMPLETE로 소모하지 않고 재선택.
+    // (이전에는 여기서 그냥 return → 강제 선택(allowCancel:false)마저 통째로 증발했고,
+    //  악성 클라이언트는 임의 uid 전송으로 어떤 필수 선택이든 "취소"할 수 있었다)
+    if (!tm) { g.pending = pending; return; }
     // 아우라(ward): "상대의" 마법·몬스터 효과의 대상이 되지 않는다 — 공격 대상 지정과 자기 효과는 허용
     if (owner !== p && hasPassive(tm, "aura") && pending.reason !== "attack") {
       ctx.log(`  └ <span class="dmg">${cn(tm)} 은(는) 효과의 대상이 되지 않는다</span>`, `  └ <span class="dmg">${cn(tm)} は効果の対象にならない</span>`);
+      // 아우라가 아닌 대상이 남아 있으면 재선택; 전부 아우라뿐이면 효과 불발 (재선택 강제 시 소프트락)
+      const legal = [...o.field.filter((m2) => !hasPassive(m2, "aura")), ...(d.anySide ? p.field : [])];
+      if (legal.length) { g.pending = pending; ctx.ev.push({ type: "needTarget", pending: g.pending }); }
       return;
     }
     if (pending.reason === "defDown" || pending.reason === "weaken") { tm.defMod = (tm.defMod || 0) - (d.val || 0); ctx.log(`  └ ${cn(tm)} 체력 -${d.val}`, `  └ ${cn(tm)} 体力 -${d.val}`); recheckDeaths(g, ctx); }
