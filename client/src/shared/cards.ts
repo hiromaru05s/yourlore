@@ -1460,6 +1460,42 @@ const PATCH24: Record<string, Partial<CardDef>> = {
 };
 for (const id of Object.keys(PATCH24)) { if (DB[id]) Object.assign(DB[id], PATCH24[id]); }
 
+// ============================================================
+// BALANCE PATCH 25 — 스타터 하위 버프 (유저 지정)
+// ============================================================
+const PATCH25: Record<string, Partial<CardDef>> = {
+  // 역산: '사용 후 제외' 삭제 → 묘지로 (압축 효과 제거)
+  COUNTERCALC: {
+    text: "상대 최대 마나 6 이하일 때만 사용 가능 · 상대 영구마법 1장 파괴",
+    textJa: "相手の最大マナが6以下の時のみ使用可能 · 相手の永続魔法1枚を破壊",
+  },
+  // 운명의 수레바퀴: 최대 마나 -1 삭제 · cost 4→5
+  FATE_WHEEL: {
+    cost: 5,
+    text: "영구: 주사위 결과를 본 뒤 다시 굴릴 수 있다 (매턴 1회) · 공허",
+    textJa: "永続: ダイスカードの結果を見てから振り直せる (毎ターン1回) · 虚無",
+  },
+  // 시련의 영역: cost 5→3
+  TRIAL_AREA: { cost: 3 },
+  // 엘프의 쉼터: 제시 마켓에서 '세계수' 카드를 구매할 때마다 자신 최대 체력 +10
+  ELF_HAVEN: {
+    text: "영구: '세계수' 카드의 구매/시전 코스트 0 (턴당 3장) · 제시에서 '세계수' 구매 시 자신 최대 체력 +10",
+    textJa: "永続: 「世界樹」カードの購入/発動コスト0 (購入はターン3枚) · 提示で「世界樹」購入時、自分の最大体力+10",
+  },
+  // 유령: 상대가 체력을 회복할 때마다 필드의 모든 유령 공격 +1 (지속)
+  GHOST: {
+    text: "암습 · 상대가 최대 마나/최대 체력을 늘리면 자신에게 2 데미지 · 상대가 회복하면 '유령' 전체 공격 +1(지속)",
+    textJa: "暗襲 · 相手が最大マナ/最大体力を増やすと自分に2ダメージ · 相手が回復すると「幽霊」全体の攻撃+1(持続)",
+  },
+  // 러스트 머쉬룸: 공격 0→1 · 부패로 상대 몬스터 파괴 시 최대 마나 +1
+  RUST_SHROOM: {
+    atk: 1,
+    text: "부패 · 이 몬스터가 필드에 있을 때 부패로 적 몬스터가 파괴되면 자신 최대 마나 +1",
+    textJa: "腐敗 · このモンスターが場にいる時、腐敗で敵モンスターが破壊されると自分の最大マナ+1",
+  },
+};
+for (const id of Object.keys(PATCH25)) { if (DB[id]) Object.assign(DB[id], PATCH25[id]); }
+
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 // 플레이버 카드명(ko/ja/en 3개 국어) 적용 — applyEnglish 이후, standardizeCardTexts 이전
 applyFlavorCardNames([DB, STARTERS as unknown as Record<string, CardDef>]);
