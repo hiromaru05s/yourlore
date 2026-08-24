@@ -142,7 +142,29 @@ export class GameView {
     (this.q("giveupBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
     // sound button (round button below the logo): click = volume slider popover
     // (ON/OFF만 있던 것을 인게임 볼륨 조절로 확장 — 슬라이더 0 = 음소거)
-    (this.q("helpBtn") as HTMLButtonElement).onclick = () => showControlsHelp();
+    // 조작 방법 안내: 버튼을 은은히 빛내고, 하루 1회 말풍선으로 위치를 알려준다.
+    // ❌로 닫거나 도움말을 실제로 열면 그날은 다시 보이지 않는다 (localStorage 날짜 도장).
+    const helpBtn = this.q("helpBtn") as HTMLButtonElement;
+    const CALLOUT_KEY = "lore_help_callout_seen";
+    const today = new Date().toISOString().slice(0, 10);
+    let seenDay = "";
+    try { seenDay = localStorage.getItem(CALLOUT_KEY) ?? ""; } catch { /* private mode */ }
+    let callout: HTMLElement | null = null;
+    const dismissCallout = (remember: boolean): void => {
+      callout?.remove(); callout = null;
+      helpBtn.classList.remove("is-callout");
+      if (remember) { try { localStorage.setItem(CALLOUT_KEY, today); } catch { /* ignore */ } }
+    };
+    if (seenDay !== today) {
+      helpBtn.classList.add("is-callout");
+      callout = document.createElement("div");
+      callout.className = "help-callout";
+      callout.innerHTML = `<span class="hc-text">${t("help.callout")}</span><button class="hc-close" aria-label="${t("common.cancel")}">✕</button>`;
+      (this.root.querySelector(".game") as HTMLElement).appendChild(callout);
+      (callout.querySelector(".hc-close") as HTMLButtonElement).onclick = (e) => { e.stopPropagation(); dismissCallout(true); };
+      callout.onclick = () => { dismissCallout(true); showControlsHelp(); };
+    }
+    helpBtn.onclick = () => { dismissCallout(true); showControlsHelp(); };
     const muteBtn = this.q("muteBtn") as HTMLButtonElement;
     const SPK_ON = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.6a4 4 0 010 6.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
     const SPK_OFF = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
@@ -255,8 +277,11 @@ export class GameView {
       if (endWrap.parentElement !== target) target.appendChild(endWrap);
     };
     placeEnd(document.documentElement.classList.contains("board-underpile"));
-    // the solver decides the arrangement (it compares both), so follow its call
-    this.onLayout = (e: Event) => placeEnd(!!(e as CustomEvent).detail?.underPile);
+    // the solver decides the arrangement (it compares both), so follow its call.
+    // The hand overlap steps were measured against the PRE-solve card size, so
+    // re-measure them on every solve — otherwise the very first render (your
+    // own turn 1 going first) keeps oversized steps and the hand looks spread.
+    this.onLayout = (e: Event) => { placeEnd(!!(e as CustomEvent).detail?.underPile); this.layoutHand(); };
     window.addEventListener("lore:layout", this.onLayout);
   }
 
@@ -714,7 +739,7 @@ export class GameView {
       <div class="market-div"></div>
       <div class="market-sub market-sub--supply">
         <div class="sub-head">
-          <span class="tag">${t("game.supply")}${myTurn ? "" : ` <span class="dmg sh-opp">${t("game.supply.opp")}</span>`}</span>
+          <span class="tag">${t("game.supply")}</span>
           <button class="refresh-btn" id="refreshBtn"><span class="rf-ico">⟳</span> ${t("game.refresh")} <b>1</b>
             <span class="refresh-tip">${t("game.refresh.tip")}</span>
           </button>
@@ -846,7 +871,6 @@ export class GameView {
   private renderHand(g: GameState, me: PlayerState, myTurn: boolean): void {
     const handEl = this.q("hand");
     handEl.innerHTML = "";
-    const n = me.hand.length;
     me.hand.forEach((c, idx) => {
       const pc = playCost(c, me);
       const aff = myTurn && !g.pending && me.mana >= pc;
@@ -856,10 +880,19 @@ export class GameView {
       this.bindHandCard(card, c, aff);
       handEl.appendChild(card);
     });
-    // per-state overlap steps (CSS picks the var by .hand-open on .game).
-    // Measure the real card width so the caps hold at every viewport size.
+    this.layoutHand();
+  }
+
+  /** Per-state overlap steps (CSS picks the var by .hand-open on .game).
+   *  Measured against the REAL card width, and re-run on every layout solve —
+   *  the solver's settle passes resize cards after the first render. */
+  private layoutHand(): void {
+    const handEl = this.root.querySelector("#hand") as HTMLElement | null;
+    if (!handEl) return;
+    const n = handEl.children.length;
     const cw = (handEl.querySelector(".card") as HTMLElement | null)?.offsetWidth || 100;
-    const openStep = n <= 1 ? cw : Math.min(cw + 8, Math.max(cw * 0.42, (Math.min(window.innerWidth * 0.86, 960) - cw) / (n - 1)));
+    const vw = Math.round(window.visualViewport?.width || window.innerWidth) || 960; // hidden tabs report 0
+    const openStep = n <= 1 ? cw : Math.min(cw + 8, Math.max(cw * 0.42, (Math.min(vw * 0.86, 960) - cw) / (n - 1)));
     const compactStep = n <= 1 ? cw : Math.min(cw * 0.6, Math.max(16, (300 - cw) / (n - 1)));
     handEl.style.setProperty("--h-step-open", `${openStep}px`);
     handEl.style.setProperty("--h-step-compact", `${compactStep}px`);

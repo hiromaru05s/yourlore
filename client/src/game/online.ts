@@ -24,17 +24,28 @@ export class OnlineController extends BaseController {
   private openedAt = 0; // when the current socket opened; 0 = never opened
   private hb?: ReturnType<typeof setInterval>;
   private preview?: { setUntil(u: number | null): void; close(): void };
+  private lastMsgAt = 0; // last time ANY server message (incl. pong) arrived
+  private onVisible = (): void => {
+    // back from a background tab (mobile app switch): timers were throttled, so
+    // the socket may have died silently. Probe it NOW instead of waiting a tick.
+    if (document.visibilityState !== "visible" || this.closing || this.state?.over) return;
+    this.sock?.send({ type: "ping" });
+    setTimeout(() => {
+      if (!this.closing && !this.state?.over && Date.now() - this.lastMsgAt > 4_500) this.sock?.close();
+    }, 5_000);
+  };
 
   constructor(root: HTMLElement, you: Side, roomId: string, exits: ControllerExits) {
     super(root, you, exits);
     this.roomId = roomId;
+    document.addEventListener("visibilitychange", this.onVisible);
     this.connect();
   }
 
   private connect(): void {
     this.sock = new Sock<GameServerMsg, GameClientMsg>(`/ws/room/${this.roomId}`, {
-      onOpen: () => { this.openedAt = Date.now(); this.sock.send({ type: "ready" }); this.startHb(); },
-      onMessage: (msg) => this.onServer(msg),
+      onOpen: () => { this.openedAt = Date.now(); this.lastMsgAt = Date.now(); this.sock.send({ type: "ready" }); this.startHb(); },
+      onMessage: (msg) => { this.lastMsgAt = Date.now(); this.onServer(msg); },
       onClose: () => this.onSockClose(),
     });
   }
@@ -101,8 +112,18 @@ export class OnlineController extends BaseController {
     this.sock.send({ type: "action", action });
   }
 
-  // heartbeat: keep the WS path warm through idle thinking time (edge/NAT timeouts kill silent sockets)
-  private startHb(): void { this.stopHb(); this.hb = setInterval(() => this.sock.send({ type: "ping" }), 20000); }
+  // heartbeat: keep the WS path warm through idle thinking time (edge/NAT timeouts kill silent sockets).
+  // Doubles as a DEAD-SOCKET WATCHDOG: pings are answered (auto-response pairs), so a
+  // connection with no message for 2+ intervals is half-dead even if readyState still
+  // says OPEN — force-close it so the reconnect path (and the server's 30s forfeit
+  // resync) takes over instead of leaving a zombie "still playing" board.
+  private startHb(): void {
+    this.stopHb();
+    this.hb = setInterval(() => {
+      if (this.lastMsgAt && Date.now() - this.lastMsgAt > 45_000) { this.sock.close(); return; }
+      this.sock.send({ type: "ping" });
+    }, 20000);
+  }
   private stopHb(): void { if (this.hb) clearInterval(this.hb); this.hb = undefined; }
 
   /** Non-blocking connection banner at the top of the board (null hides it). */
@@ -118,5 +139,5 @@ export class OnlineController extends BaseController {
     el.textContent = text;
   }
 
-  destroy(): void { this.closing = true; this.stopHb(); this.preview?.close(); this.preview = undefined; this.banner(null); this.sock?.close(); super.destroy(); }
+  destroy(): void { this.closing = true; document.removeEventListener("visibilitychange", this.onVisible); this.stopHb(); this.preview?.close(); this.preview = undefined; this.banner(null); this.sock?.close(); super.destroy(); }
 }

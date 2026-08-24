@@ -102,6 +102,38 @@
   .help-fab { padding: 7px; gap: 0; }
   .help-fab .hf-label { display: none; }
 }
+/* first-visit-of-the-day highlight: gentle brass pulse until seen/dismissed */
+.help-fab.is-callout {
+  border-color: var(--brass-dim); color: var(--paper);
+  animation: helpGlow 1.7s ease-in-out infinite;
+}
+.help-fab.is-callout .hf-ico { color: var(--brass-hi); border-color: var(--brass-hi); }
+@keyframes helpGlow {
+  0%, 100% { box-shadow: 0 2px 8px #0007, 0 0 0 0 rgba(216, 185, 106, 0); }
+  50% { box-shadow: 0 2px 10px #0009, 0 0 16px 3px rgba(216, 185, 106, .45); }
+}
+/* speech bubble pointing at the controls chip; ✕ hides it for the day */
+.help-callout {
+  position: fixed; left: 12px; bottom: 48px; z-index: 56;
+  max-width: 250px; padding: 9px 30px 9px 12px; border-radius: 10px;
+  background: #1a2436; border: 1px solid var(--brass-dim); color: var(--paper);
+  font-family: var(--ui); font-size: 12.5px; font-weight: 600; line-height: 1.45;
+  box-shadow: 0 8px 24px #000a; cursor: pointer;
+  animation: helpPop .25s var(--ease);
+}
+.help-callout::after { /* tail toward the chip below */
+  content: ""; position: absolute; left: 18px; bottom: -6px; width: 10px; height: 10px;
+  background: #1a2436;
+  border-right: 1px solid var(--brass-dim); border-bottom: 1px solid var(--brass-dim);
+  transform: rotate(45deg);
+}
+.help-callout .hc-close {
+  position: absolute; top: 3px; right: 3px; width: 20px; height: 20px;
+  display: grid; place-items: center; padding: 0; border: none; border-radius: 50%;
+  background: transparent; color: var(--paper-dim); font-size: 11px; cursor: pointer;
+}
+.help-callout .hc-close:hover { color: var(--paper); background: #ffffff14; }
+@keyframes helpPop { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 .help-modal { max-width: 520px; text-align: left; }
 .help-modal .help-body { display: flex; flex-direction: column; gap: 12px; margin: 6px 0 4px; }
 .help-modal .help-body h3 {
