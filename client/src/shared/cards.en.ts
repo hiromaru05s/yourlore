@@ -544,6 +544,23 @@ Object.assign(TEXTS, {
   GT6_2: "【When Attacked】Destroy the attacking monster; the opponent draws 2 fewer cards next turn",
 });
 
+// ---- MARKET COUNTER + WINE (v31): names & explicit EN texts ----
+Object.assign(NAMES, {
+  GUILD_CO: "Trade Guild", SLUM: "Slums", MERCH1: "Apprentice Merchant", MERCH2: "Royal Merchant",
+  GRAPE: "Grape", GRAPE2: "Fine Grape", BREWING: "Brewing", WINE: "Wine", DARK_MERCHANT: "Black Market Dealer",
+});
+Object.assign(TEXTS, {
+  GUILD_CO: "1 Market counter per your turn · At 20, add a Black Market Dealer to hand · No duplicates",
+  SLUM: "Roll a die and put that many Market counters on your Trade Guild",
+  MERCH1: "【On Summon】Put 3 Market counters on your Trade Guild",
+  MERCH2: "【On Summon】Put 8 Market counters on your Trade Guild",
+  GRAPE: "Your max HP +3",
+  GRAPE2: "Your max HP +8",
+  BREWING: "Permanent: Each turn, grapes in hand become Wine counters (Grape 1, Fine 3) · Expires: gain that many Wine",
+  WINE: "Your max HP +18 · Draw 2 cards",
+  DARK_MERCHANT: "Buy any 1 card from the entire card pool by paying its cost",
+});
+
 /** Attach nameEn/textEn to every card (explicit map -> generator dictionaries -> Korean fallback). */
 export function applyEnglish(pools: Array<Record<string, CardDef>>): void {
   for (const pool of pools) {

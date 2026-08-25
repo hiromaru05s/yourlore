@@ -50,6 +50,7 @@ export interface Enchant {
   card: CardInst;
   turns: number;
   bornTurn?: number; // 시전 시점의 g.turn — "N턴 경과 후" 류 효과의 기준 (혈귀술 만료 / 고대 문명)
+  cnt?: number; // 범용 카운터 — 상회(마켓 카운터) / 양조(와인 카운터)
 }
 
 export interface CardInst extends CardDef {

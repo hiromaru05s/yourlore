@@ -195,6 +195,8 @@ export function candidates(g: GameState): Action[] {
     if (c.id === "CHOSEN_AREA" && cullExiled(p) < 25) return; // 선택받은 영역: 컬 25장 조건
     if ((c.id === "DECAY_CRAFT" || c.id === "MAJESTY_RITE") && p.field.length === 0) return; // 대상 필요
     if (c.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) return; // 선견지명 중복 금지
+    if (c.ench === "guild" && p.enchants.some((e) => e.card.ench === "guild")) return; // 상회 중복 금지
+    if (c.id === "SLUM" && !p.enchants.some((e) => e.card.ench === "guild")) return; // 슬럼가: 상회 필요
     if (playCost(c, p) > p.mana || seenPlay.has(c.id)) return;
     seenPlay.add(c.id);
     out.push({ type: "play", idx });
@@ -629,6 +631,8 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (blocked?.has(c.uid)) return false; // proven no-op this decision (safety-net retry)
     // 영구마법 중복/존 제약 — 엔진이 지불 전에 거부하는 조건들 (누락 시 무한 재시도)
     if (c.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) return false;
+    if (c.ench === "guild" && p.enchants.some((e) => e.card.ench === "guild")) return false; // 상회 중복
+    if (c.id === "SLUM" && !p.enchants.some((e) => e.card.ench === "guild")) return false; // 슬럼가: 상회 필요
     if (c.ench && p.traps.length + p.enchants.length >= 7) return false;
     if (c.id === "BLOOD_SECRET" && !p.field.some((m) => isVampFamily(m))) return false;
     if (c.id === "CHOSEN_AREA" && cullExiled(p) < 25) return false;

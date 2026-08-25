@@ -54,12 +54,14 @@ function actValue(c: CardDef): number {
     case "chestToMana": return MANA * 0.6;
     case "incubate": return v * 1.6;
     case "wipeBack": return 8;
+    case "maxHpUp": return v * 0.9 + v2 * DRAW;   // 최대 체력은 회복 겸 성장
     default: return c.act ? 5 : 0;
   }
 }
 
 // ---- summon-triggered effects (onSummon) — one shot ----
 const SUMMON_FLAT: Record<string, number> = {
+  guildCnt: 5, // 상회 카운터 가속 (상회가 없으면 불발이지만 봇 덱 시너지 기준)
   refresh: 3, breaktrap: 4, parity: 4, cullTitan: 5, worldGuard: 6, halfElf: 6,
   eggMaster: 6, decayMark: 6, hordeBuff: 6, eliteBuff: 6, trapsmithBuff: 6,
   summonKnight: 8, summonRandom: 8, cloneSelf: 8, golemKing: 8,
@@ -198,6 +200,8 @@ function enchValue(c: CardDef): number {
   const v = n(c.val), v2 = n(c.val2);
   switch (c.ench) {
     case undefined: return 0;
+    case "guild": return 7;    // 20턴 주기로 전 풀 구매권 — 느리지만 확정 가치
+    case "brewing": return 6;  // 포도 → 와인(최대 체력+18·2드로우) 변환
     case "bonusDraw": return v * v2 * DRAW + MANA; // val = duration in turns
     case "noAttack": return 6;
     case "noSummonLow": return 5;

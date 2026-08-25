@@ -11,9 +11,9 @@
 // localizes the displayed name, so cn() is reused in both languages.
 // ============================================================
 import type {
-  Action, CardInst, FieldMon, GameEvent, GameState, PlayerState, ReduceResult, Side, TrapSet,
+  Action, CardInst, Enchant, FieldMon, GameEvent, GameState, PlayerState, ReduceResult, Side, TrapSet,
 } from "./types";
-import { ALL_IDS, DB, STARTERS, TRIBES, DEFAULT_DECK_8, RANDOM_CARDS, sanitizeDeck, hasPassive, PASSIVES , isChestCard } from "./cards";
+import { ALL_IDS, BUYABLE_POOL, DB, STARTERS, TRIBES, DEFAULT_DECK_8, RANDOM_CARDS, sanitizeDeck, hasPassive, PASSIVES , isChestCard } from "./cards";
 
 // ---------- deterministic PRNG (mulberry32) ----------
 function rand(g: GameState): number {
@@ -685,6 +685,15 @@ function bloodTriggers(g: GameState, ctx: Ctx, p: PlayerState): void {
 }
 
 /** Persistent-spell upkeep. noAttack ticks every turn; owner-scoped enchants tick on the owner's turn. */
+/** 상회: 마켓 카운터 20개마다 '암상인'을 패에 지급 (초과분은 이월). */
+function guildPayout(g: GameState, ctx: Ctx, pl: PlayerState, e: Enchant): void {
+  while ((e.cnt ?? 0) >= 20) {
+    e.cnt = (e.cnt ?? 0) - 20;
+    pl.hand.push(inst(g, "DARK_MERCHANT"));
+    ctx.log(`  └ <span class="good">마켓 카운터 20개 달성!</span> '암상인'을 패에 넣는다 (이월 ${e.cnt})`, `  └ <span class="good">マーケットカウンター20個達成！</span>「闇商人」を手札に加える (繰越${e.cnt})`);
+  }
+}
+
 function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
   for (const pl of g.players) {
     const opp = g.players[0] === pl ? g.players[1] : g.players[0];
@@ -709,6 +718,34 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
         if (ownerTurn && diceChance(g, ctx, cur, 40)) {
           cur.maxMana += 2;
           ctx.log(`  └ 축복! 최대 마나 +2 추가 (${cur.maxMana})`, `  └ 祝福！最大マナ +2 追加 (${cur.maxMana})`);
+        }
+      }
+      // 상회(guild): 자신의 턴마다 마켓 카운터 +1 — 20개마다 '암상인' 지급
+      if (e.card.ench === "guild" && ownerTurn && !g.over) {
+        e.cnt = (e.cnt || 0) + 1;
+        ctx.log(`<span class="t">${cn(e.card)}</span> 마켓 카운터 +1 (${e.cnt}/20)`, `<span class="t">${cn(e.card)}</span> マーケットカウンター+1 (${e.cnt}/20)`);
+        guildPayout(g, ctx, pl, e);
+      }
+      // 양조(brewing): 자신의 턴 시작시 패의 포도류 → 와인 카운터 · 만료(6턴)시 카운터만큼 '와인' 지급 후 종료
+      if (e.card.ench === "brewing" && ownerTurn && !g.over) {
+        let added = 0;
+        for (let i = pl.hand.length - 1; i >= 0; i--) {
+          const hc = pl.hand[i];
+          if (hc.id === "GRAPE" || hc.id === "GRAPE2") {
+            pl.hand.splice(i, 1); pl.discard.push(hc);
+            added += hc.id === "GRAPE2" ? 3 : 1;
+          }
+        }
+        if (added > 0) {
+          e.cnt = (e.cnt || 0) + added;
+          ctx.log(`<span class="t">${cn(e.card)}</span> 패의 포도를 담근다 — 와인 카운터 +${added} (${e.cnt})`, `<span class="t">${cn(e.card)}</span> 手札のぶどうを仕込む — ワインカウンター+${added} (${e.cnt})`);
+        }
+        if (g.turn >= (e.bornTurn ?? 0) + 6) {
+          const nWine = e.cnt ?? 0;
+          for (let i = 0; i < nWine; i++) pl.hand.push(inst(g, "WINE"));
+          ctx.log(`<span class="t">${cn(e.card)}</span> <span class="good">숙성 완료!</span> '와인' ${nWine}장을 패에 넣는다 — 효과 종료`, `<span class="t">${cn(e.card)}</span> <span class="good">熟成完了！</span>「ワイン」${nWine}枚を手札に加える — 効果終了`);
+          pl.discard.push(e.card);
+          return false;
         }
       }
       // 컬 재배: 자신의 턴 시작마다 패에 컬 1장
@@ -1455,6 +1492,15 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
     case "draw": { const n = ctx.drawN(p, v); ctx.log(`  └ 소환 효과: ${n}장 드로우`, `  └ 召喚効果: ${n}枚ドロー`); break; }
     case "burn": ctx.dealDamage(o, v, `${cn(m)} 소환`, `${cn(m)} 召喚`); break;
     case "heal": ctx.heal(p, v); ctx.log(`  └ 체력 ${v} 회복 (${p.hp})`, `  └ 体力 ${v} 回復 (${p.hp})`); break;
+    case "guildCnt": { // 견습/왕도 상인: 자신의 '상회'에 마켓 카운터 +v
+      const ge = p.enchants.find((e) => e.card.ench === "guild");
+      if (ge) {
+        ge.cnt = (ge.cnt || 0) + v;
+        ctx.log(`  └ 상회에 마켓 카운터 +${v} (${ge.cnt}/20)`, `  └ 商会にマーケットカウンター+${v} (${ge.cnt}/20)`);
+        guildPayout(g, ctx, p, ge);
+      } else ctx.log("  └ 자신 필드에 '상회'가 없음", "  └ 自分の場に「商会」がない");
+      break;
+    }
     case "defDown":
       if (o.field.length) {
         // 이미 다른 선택이 대기 중이면 그 pending을 덮어쓰지(=유실) 않고 무작위 대상에 즉시 적용
@@ -1874,6 +1920,13 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
   switch (card.act) {
     case "dmg": ctx.dealDamage(o, v, cn(card), cn(card)); break;
     case "heal": ctx.heal(p, v); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 체력 ${v} 회복`, `<span class="t">${p.name}</span> ${cn(card)} → 体力 ${v} 回復`); if (v2 > 0) ctx.drawN(p, v2); break;
+    case "maxHpUp": { // 포도/고급 포도/와인: 자신 최대 체력 +v (+v2 드로우)
+      p.maxHp += v; p.hp += v;
+      ctx.ev.push({ type: "heal", player: side(g, p), amount: v });
+      const mhDn = v2 > 0 ? ctx.drawN(p, v2) : 0;
+      ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 최대 체력 +${v}${mhDn ? `, ${mhDn}장 드로우` : ""} (${p.maxHp})`, `<span class="t">${p.name}</span> ${cn(card)} → 最大体力+${v}${mhDn ? `、${mhDn}枚ドロー` : ""} (${p.maxHp})`);
+      break;
+    }
     case "draw": { const n = ctx.drawN(p, v); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → ${n}장 드로우`, `<span class="t">${p.name}</span> ${cn(card)} → ${n}枚ドロー`); break; }
     case "buffAllDef": { // 수호의 맹세: 자신 몬스터 전체 체력 +v(지속)
       if (!p.field.length) { ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 대상 몬스터 없음`, `<span class="t">${p.name}</span> ${cn(card)} → 対象モンスターなし`); break; }
@@ -1945,7 +1998,7 @@ const CUSTOM_SPELLS = new Set<string>([
   "HANDRESET", "TIMEWARP", "GAMBLE", "DICE8",
   "RUNE1", "RUNE2", "RUNE3", "GENESIS_SONG", "GENESIS_MAGIC",
   "BLOOD1", "BLOOD2", "BLOOD_JOY", "BLOOD_ANGER", "BLOOD_SORROW", "BLOOD_PLEASURE", "VAMP_PACT", "VAMP_PACT2", "BLOOD_SECRET",
-  "FLAME", "NEGOTIATE", "COUNTERCALC", "AMBUSH", "TRUMPET", "TRICKROOM", "DISARM3", "FORBIDDEN", "CATALYST", "MEDITATE", "PRAYER", "HERMIT", "LUCKY_CHEST", "GUILD_CHEST", "SCRAPPER", "WALLBREAK1", "WALLBREAK2", "SNIPE1", "SNIPE2", "SHATTER", "INQUISITION", "SCARECROW", "LEVY", "CULL_FLOOD", "PURGE_ALL", "EXILE_NUKE1", "EXILE_NUKE2", "GREED_PRICE", "MARKET_CRISIS", "GOLIATH_HUNT", "MASSACRE",
+  "FLAME", "NEGOTIATE", "COUNTERCALC", "AMBUSH", "TRUMPET", "TRICKROOM", "SLUM", "DARK_MERCHANT", "DISARM3", "FORBIDDEN", "CATALYST", "MEDITATE", "PRAYER", "HERMIT", "LUCKY_CHEST", "GUILD_CHEST", "SCRAPPER", "WALLBREAK1", "WALLBREAK2", "SNIPE1", "SNIPE2", "SHATTER", "INQUISITION", "SCARECROW", "LEVY", "CULL_FLOOD", "PURGE_ALL", "EXILE_NUKE1", "EXILE_NUKE2", "GREED_PRICE", "MARKET_CRISIS", "GOLIATH_HUNT", "MASSACRE",
   "DECAY_CRAFT", "MAJESTY_RITE", "CROSSROADS", "CHOSEN_AREA",
 ]);
 // ============================================================
@@ -2229,6 +2282,22 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
         ctx.log(`${tag(p, card)} 상대의 영구마법 ${cn(e.card)} 파괴`, `${tag(p, card)} 相手の永続魔法 ${cn(e.card)} 破壊`);
         binEnch(g, ctx, o, e.card);
       }
+      break;
+    }
+    case "SLUM": { // 슬럼가: 주사위 눈만큼 상회에 마켓 카운터 (상회 존재는 시전 전 검사됨)
+      const ge = p.enchants.find((e) => e.card.ench === "guild");
+      const { rolls: sr } = diceRoll(g, ctx.ev, side(g, p), 1);
+      if (ge) {
+        ge.cnt = (ge.cnt || 0) + sr[0];
+        ctx.log(`${tag(p, card)} 🎲 ${sr[0]} → 상회에 마켓 카운터 +${sr[0]} (${ge.cnt}/20)`, `${tag(p, card)} 🎲 ${sr[0]} → 商会にマーケットカウンター+${sr[0]} (${ge.cnt}/20)`);
+        guildPayout(g, ctx, p, ge);
+      }
+      break;
+    }
+    case "DARK_MERCHANT": { // 암상인: 전 카드 풀에서 1장 구매 (마나 지불)
+      const ids = BUYABLE_POOL.slice().sort((a, b) => DB[a].cost - DB[b].cost || a.localeCompare(b));
+      g.pending = { kind: "giantShop", hint: "암상인 — 마나를 지불하고 구매할 카드 선택", hintJa: "闇商人 — マナを払って購入するカードを選択", reason: "darkMarket", allowCancel: true, data: { ids } };
+      ctx.ev.push({ type: "needTarget", pending: g.pending });
       break;
     }
     case "AMBUSH": { // 기습: 상대 7 / 자신 3 + 자기 제외
@@ -2783,6 +2852,8 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     // 발동되면 allowCancel:false pending이 영원히 해소 불가(모든 픽이 재선택) = 소프트락
     if (card.id === "MAJESTY_RITE" && !p.field.some((m) => !hasPassive(m, "majesty"))) { ctx.log("  └ '위엄'을 부여할 수 있는 몬스터가 없습니다", "  └ 「威厳」を与えられるモンスターがいません"); return; }
     if (card.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) { ctx.log("  └ 자신 필드에 이미 '선견지명'이 있습니다", "  └ 自分の場に既に「先見の明」があります"); return; }
+    if (card.ench === "guild" && p.enchants.some((e) => e.card.ench === "guild")) { ctx.log("  └ 자신 필드에 이미 '상회'가 있습니다", "  └ 自分の場に既に「商会」があります"); return; }
+    if (card.id === "SLUM" && !p.enchants.some((e) => e.card.ench === "guild")) { ctx.log("  └ 자신 필드에 '상회'가 없습니다", "  └ 自分の場に「商会」がありません"); return; }
     if ((card.id === "MEDITATE" || card.id === "PRAYER") && (p.playsTurn || 0) > 0) { ctx.log("  └ 이번 턴에 다른 카드를 플레이해서 사용 불가", "  └ このターンに他のカードをプレイしたため使用不可"); return; }
     if (card.id === "PRAYER" && p.maxMana > 12) { ctx.log("  └ 최대 마나가 12를 초과해 사용 불가", "  └ 最大マナが12を超えているため使用不可"); return; }
     if ((card.id === "MEDITATE" || card.id === "PRAYER") && p.hp >= Math.floor(p.maxHp * 0.8)) { ctx.log("  └ 체력이 이미 최대치의 80% 이상입니다", "  └ 体力が既に最大値の80%以上です"); return; }
@@ -2814,6 +2885,11 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (tryNullSpell(g, ctx, card)) return;
     if (trySpellSteal(g, ctx, card)) return; // 주문 파쇄: 무효 + 복제 강탈
     if (trySecondNull(g, ctx, card)) return;
+    // 공허(void) 마법 토큰(와인/암상인): 사용 후 묘지 대신 게임에서 제외 — 영구마법(선견지명류)은 제외
+    if (!card.ench && hasPassive(card, "void")) {
+      const vi = p.discard.lastIndexOf(card);
+      if (vi >= 0) { p.discard.splice(vi, 1); rmz(p).push(card); }
+    }
     p.uses[card.id] = (p.uses[card.id] || 0) + 1;             // game-long usage count
     p.usesTurn[card.id] = (p.usesTurn[card.id] || 0) + 1;     // per-turn usage count
     if (card.ench) {
@@ -3207,7 +3283,9 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
         p.boughtCount = (p.boughtCount || 0) + 1;
         const bought = inst(g, uid);
         p.discard.push(bought);
-        ctx.log(`<span class="t">${p.name}</span> 거인의 교역 → ${cn(bought)} 구매 (마나 ${cost})`, `<span class="t">${p.name}</span> 巨人の交易 → ${cn(bought)} 購入 (マナ${cost})`);
+        const shopKo = pending.reason === "darkMarket" ? "암상인" : "거인의 교역";
+        const shopJa = pending.reason === "darkMarket" ? "闇商人" : "巨人の交易";
+        ctx.log(`<span class="t">${p.name}</span> ${shopKo} → ${cn(bought)} 구매 (마나 ${cost})`, `<span class="t">${p.name}</span> ${shopJa} → ${cn(bought)} 購入 (マナ${cost})`);
       } else {
         ctx.log("  └ 마나가 부족해 구매하지 못함", "  └ マナが足りず購入できない");
       }

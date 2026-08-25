@@ -517,7 +517,10 @@ export class GameView {
       const lim = e.card.ench ? ENCH_TURN_LIMITS[e.card.ench] : undefined;
       const rem = e.turns < 99 ? e.turns : lim != null ? Math.max(0, (e.bornTurn ?? 0) + lim - g.turn) : null;
       // 완전 영구는 ∞ 배지 — "언제 사라지나?"를 보드에서 바로 답한다. 기한부는 남은 턴 카운트다운.
-      const card = cardEl(e.card, { compactField: true, badge: rem != null ? `⏳${rem}` : "∞" });
+      // 카운터 보유 영구마법(상회/양조)은 카운터 수를 병기한다.
+      const bits: string[] = [rem != null ? `⏳${rem}` : "∞"];
+      if (e.cnt != null && e.cnt > 0) bits.push(`×${e.cnt}`);
+      const card = cardEl(e.card, { compactField: true, badge: bits.join(" ") });
       if (rem != null) { card.classList.add("ench-timed"); if (rem <= 1) card.classList.add("ench-expiring"); }
       else card.classList.add("ench-perm");
       bindZoom(card, e.card);

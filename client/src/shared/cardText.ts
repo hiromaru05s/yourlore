@@ -115,7 +115,7 @@ const OVERRIDE: Record<string, { ko?: string; ja?: string; en?: string }> = {
 
 // 발동 후 N턴이 지나면 사라지는 "기한부" 영구마법 (turns=99지만 bornTurn 기준 만료)
 // boardView가 남은 턴 배지 표시에도 사용한다.
-export const ENCH_TURN_LIMITS: Record<string, number> = { spellHeal: 14, ancientCiv: 13 };
+export const ENCH_TURN_LIMITS: Record<string, number> = { spellHeal: 14, ancientCiv: 13, brewing: 6 };
 
 // 태그는 문장 어디에 있어도 "이미 태그가 붙은 것"으로 본다
 // ([시초] 처럼 종족 접두가 먼저 오는 카드에서 태그가 두 번 붙던 버그 방지)

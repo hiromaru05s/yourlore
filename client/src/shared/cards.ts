@@ -1580,6 +1580,41 @@ const PATCH31: Record<string, Partial<CardDef>> = {
 };
 for (const id of Object.keys(PATCH31)) { if (DB[id]) Object.assign(DB[id], PATCH31[id]); }
 
+// ============================================================
+// NEW CARDS 13 (v31) — 마켓 카운터(상회) + 와인 아키타입
+// 상회: 자신의 턴마다 카운터 적립, 20개마다 '암상인'(전 카드 풀 구매권) 지급.
+// 양조: 패의 포도를 와인 카운터로 바꾸고, 6턴 뒤 카운터만큼 '와인' 토큰 지급.
+// ============================================================
+const NEW_STARTERS31: CardDef[] = [
+  { id: "GUILD_CO", t: "spell", cost: 2, ench: "guild", val: 99, noShop: true, name: "상회", nameJa: "商会",
+    text: "자신의 턴마다 마켓 카운터 +1 · 20개가 모이면 '암상인'을 패에 넣는다 · 중복 발동 불가",
+    textJa: "自分のターンごとにマーケットカウンター+1 · 20個で「闇商人」を手札に加える · 重複発動不可" },
+  { id: "SLUM", t: "spell", cost: 2, noShop: true, name: "슬럼가", nameJa: "スラム街",
+    text: "주사위를 굴려 나온 수만큼 자신의 '상회'에 마켓 카운터 부여",
+    textJa: "ダイスを振り、出た目だけ自分の「商会」にマーケットカウンターを付与" },
+  { id: "GRAPE", t: "spell", cost: 1, act: "maxHpUp", val: 3, noShop: true, name: "포도", nameJa: "ぶどう",
+    text: "자신 최대 체력 +3", textJa: "自分の最大体力+3" },
+  { id: "BREWING", t: "spell", cost: 3, ench: "brewing", val: 99, noShop: true, name: "양조", nameJa: "醸造",
+    text: "영구: 자신의 턴 시작시 패의 포도류가 와인 카운터로(포도 1·고급 3) · 만료시 카운터만큼 '와인'을 패에 넣는다",
+    textJa: "永続: 自分のターン開始時、手札のぶどうがワインカウンターに(ぶどう1·高級3) · 満了時カウンターの数だけ「ワイン」を手札に" },
+];
+const NEW_CARDS13: CardDef[] = [
+  { id: "MERCH1", t: "mon", cost: 1, atk: 1, def: 2, onSummon: "guildCnt", val: 3, name: "견습 상인", nameJa: "見習い商人",
+    text: "소환시: 자신의 '상회'에 마켓 카운터 3개 부여", textJa: "召喚時: 自分の「商会」にマーケットカウンターを3個付与" },
+  { id: "MERCH2", t: "mon", cost: 3, atk: 1, def: 5, onSummon: "guildCnt", val: 8, name: "왕도의 상인", nameJa: "王都の商売人",
+    text: "소환시: 자신의 '상회'에 마켓 카운터 8개 부여", textJa: "召喚時: 自分の「商会」にマーケットカウンターを8個付与" },
+  { id: "GRAPE2", t: "spell", cost: 2, act: "maxHpUp", val: 8, name: "고급 포도", nameJa: "高品質ぶどう",
+    text: "자신 최대 체력 +8", textJa: "自分の最大体力+8" },
+  // ---- 토큰 (cost 0 · noShop — 마켓/덱풀 제외) ----
+  { id: "WINE", t: "spell", cost: 0, act: "maxHpUp", val: 18, val2: 2, passive: ["void"], noShop: true, name: "와인", nameJa: "ワイン",
+    text: "자신 최대 체력 +18 · 카드 2장 드로우", textJa: "自分の最大体力+18 · カード2枚ドロー" },
+  { id: "DARK_MERCHANT", t: "spell", cost: 0, passive: ["void"], noShop: true, name: "암상인", nameJa: "闇商人",
+    text: "카드 풀 전체에서 원하는 카드 1장을 마나를 지불해 구매", textJa: "カードプール全体から好きなカード1枚をマナを払って購入" },
+];
+for (const c of [...NEW_STARTERS31, ...NEW_CARDS13]) { DB[c.id] = c; }
+DECK_POOL.push(...NEW_STARTERS31.map((c) => c.id)); // 스타팅 덱 빌딩 풀에 추가
+RANDOM_CARDS.add("SLUM"); // 주사위 카드 (결과 팝업 + 수레바퀴 재굴림 대상)
+
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 // 플레이버 카드명(ko/ja/en 3개 국어) 적용 — applyEnglish 이후, standardizeCardTexts 이전
 applyFlavorCardNames([DB, STARTERS as unknown as Record<string, CardDef>]);
@@ -1654,7 +1689,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v30"; // v30: 함정 리워크 — 클론 함정 10종을 신규 기믹으로 교체(soulSwap/counterOrder/lastBastion/devourGuard/brandMagic/toll/gateClose/doomsday/infoDealer/secondNull) + 덫 속의 덫(snare) 추가 + 클론 5종 삭제(GT10_2/GT10_3/GT6_4/NT_NULL5/GT8_0) + 베이직 6종 기믹화(T8 부패·T9 바운스·T6 코스트뎀·GT5_1 전체봉쇄·NT_NULL4 복제강탈·GT6_2 드로우-2) + T10 회복4·GT10_1 5코·GT9_2 5코
+export const BALANCE_VERSION = "v31"; // v31: 마켓 카운터(상회/슬럼가/견습·왕도 상인/암상인) + 와인 아키타입(포도/고급 포도/양조/와인)
+// v30(구): // v30: 함정 리워크 — 클론 함정 10종을 신규 기믹으로 교체(soulSwap/counterOrder/lastBastion/devourGuard/brandMagic/toll/gateClose/doomsday/infoDealer/secondNull) + 덫 속의 덫(snare) 추가 + 클론 5종 삭제(GT10_2/GT10_3/GT6_4/NT_NULL5/GT8_0) + 베이직 6종 기믹화(T8 부패·T9 바운스·T6 코스트뎀·GT5_1 전체봉쇄·NT_NULL4 복제강탈·GT6_2 드로우-2) + T10 회복4·GT10_1 5코·GT9_2 5코
 // v29(구): v29: 표기 정합성 감사(텍스트↔엔진 드리프트) + 몬스터 체력 강화 마법 5종 + 함정 기술자 1/4 + 경제 위기 마켓 8장 고정 + 은둔의 안식 순서 수정
 // v28: 고정 마켓 10→8장, 제시 마켓 3→4장 (크래시 축소 -1 유지)
 // // v27: 인쇄 체력 0 폐지 — 전 몬스터 최저 체력 1 (엔진 effDef 플로어와 표기 일치; 실전 수치 변화 없음)
