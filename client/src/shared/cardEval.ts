@@ -164,6 +164,25 @@ const REACT: Record<string, (c: CardDef) => number> = {
   nullspell: () => 6,
   magmaTrial: () => KILL * (2 / 6) + 3,   // 5+ 에서만 발동하지만 파괴가 아니라 영구 제외
   mimicParty: () => 3,
+  // ---- v25 리워크 함정 ----
+  soulSwap: () => KILL + 8,               // 공격 몬스터 탈취 (최저 코스트 반납)
+  counterOrder: () => 10,                 // 절반 + 아군 일제 반격 (필드 의존)
+  lastBastion: () => NEGATE + 12,         // 치명타 무효 + 턴 종료 + 대회복 (조건부지만 게임을 살린다)
+  devourGuard: () => NEGATE + KILL,       // 무효 + 파괴 (50%로 제외)
+  brandMagic: () => 10,                   // 낙인: 영구 주사위 자해 (기대 3.5/턴)
+  toll: () => 7,                          // 구매 반응 (50% 발동)
+  gateClose: () => NEGATE + 3,            // 직접 공격 전용 무효 + 턴 봉쇄
+  doomsday: () => 8,                      // 3턴 후 전체 필드 청소 (자해 5 포함)
+  infoDealer: () => NEGATE * 2.5,         // 다회용 무효 (기대 4.5회)
+  secondNull: () => 5,                    // 조건부(2번째 마법) 무효 + 마나 -1
+  snare: () => 8,                         // 함정 파괴 억제 + 10뎀 (재세트)
+  // ---- v26 리워크 함정 ----
+  decaytrap: () => 6,                     // 부패 2개 (3개째면 파괴 + 3뎀)
+  undertow: () => NEGATE + 5,             // 무효 + 바운스 (템포 + 재소환 비용 강요)
+  boltcost: () => KILL + 4,               // 파괴 + 평균 코스트만큼 데미지
+  gateLockAll: () => NEGATE + 8,          // 무효 + 이번 턴 전체 공격 봉쇄
+  spellSteal: () => 9,                    // 저코스트 마법 무효 + 복제 강탈 (2:1 교환)
+  omen: () => KILL + 4,                   // 파괴 + 드로우 -2
 };
 // Traps proved far stronger in measurement than a naive tempo count suggests:
 // a set trap also *deters* attacks, and the attacker pays full cost to find out.

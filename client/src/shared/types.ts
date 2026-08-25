@@ -78,6 +78,8 @@ export interface FieldMon extends CardInst {
 
 export interface TrapSet {
   card: CardInst;
+  /** 다회용/시한 함정의 상태 카운터 — 정보상(남은 사용 횟수) · 심판의 카운트다운(남은 턴) */
+  cnt?: number;
 }
 
 export interface ExileEntry {
@@ -122,6 +124,12 @@ export interface PlayerState {
   trapBlockTurn?: boolean; // 협상: 이번 턴 함정 설치 불가 (활성)
   freeBuysTurn?: number; // 이번 턴에 0코스트로 구매한 장수 (엘프의 쉼터 무한 구매 방지 — FREE_BUY_MAX)
   wheelUsed?: boolean; // 운명의 수레바퀴: 이번 턴 재굴림 사용됨
+  brand?: number; // 낙인: 쌓인 낙인 카운터 — 1개당 매 턴 시작시 주사위 1개를 굴려 그 수만큼 자해
+  bastionUses?: number; // 최후의 보루: 이 게임에서 발동한 횟수 (4회째부터 회복 없음)
+  bastionDraw?: number; // 최후의 보루: 다음 자기 턴 시작시 추가 드로우 수 (1회성)
+  noDirectTurn?: boolean; // 천궁의 폐문: 이번 턴 동안 직접 공격 불가 (공격측에 걸린다)
+  spellsCastTurn?: number; // 이번 턴에 사용한 마법(t==="spell") 수 — 마나 역류 판정용
+  drawPenaltyNext?: number; // 흉조(omen): 다음 턴 시작 드로우에서 차감할 장수 (1회성)
   supplyShrink: number; // if >0, this player's next 제시 roll offers 2 cards instead of 3
   defendHeal: number; // heal this much whenever this player is attacked
   manaGainNext: number; // max mana to gain at the start of this player's next turn

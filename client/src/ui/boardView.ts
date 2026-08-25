@@ -494,13 +494,21 @@ export class GameView {
     // spell/trap zone
     const sz = document.createElement("div");
     sz.className = "zone zone-st";
-    p.traps.forEach(() => {
+    p.traps.forEach((t) => {
       // Set traps stay face-down for BOTH players — but NOT as a card back or a
       // green frame: a dedicated owner-coloured trap-jaw icon tile (mine = blue,
       // opponent = red). Identity is still revealed only by the reveal flow.
       const tile = document.createElement("div");
       tile.className = "card card--field card--field-trap";
       tile.style.backgroundImage = `url(${isMe ? "/ui/trap-set-icons/set-trap-mine.png" : "/ui/trap-set-icons/set-trap-opponent.png"})`;
+      // v30 카운터 배지 — 카운트다운(⏳남은 턴) / 정보상(×남은 사용 횟수).
+      // 자신의 함정은 항상, 상대 함정은 발동으로 정체가 공개된 정보상만 (카운트다운은 비공개 유지)
+      if (t.cnt != null && (isMe || t.card.react === "infoDealer")) {
+        const b = document.createElement("span");
+        b.className = "badge trap-cnt";
+        b.textContent = t.card.react === "doomsday" ? `⏳${t.cnt}` : `×${t.cnt}`;
+        tile.appendChild(b);
+      }
       sz.appendChild(tile);
     });
     p.enchants.forEach((e) => {

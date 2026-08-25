@@ -67,8 +67,12 @@ export function redactFor(state: GameState, you: Side): GameState {
   opp.collection = [...known.values()];
   opp.hand = opp.hand.map((c) => placeholder(c.uid));
   opp.deck = opp.deck.map((c) => placeholder(c.uid));
-  // discard is public (purchases are shown in the log too); only hand/deck/traps hidden
-  opp.traps = opp.traps.map((t) => ({ card: placeholder(t.card.uid) }));
+  // discard is public (purchases are shown in the log too); only hand/deck/traps hidden.
+  // 정보상(infoDealer)은 첫 발동으로 정체가 공개된 채 필드에 남는 다회용 함정 — 정체와 남은
+  // 카운터를 그대로 노출한다. 카운트다운(doomsday) 등 미발동 함정의 cnt는 정체가 새므로 숨긴다.
+  opp.traps = opp.traps.map((t) => (t.card.react === "infoDealer" && t.cnt != null
+    ? { card: structuredClone(t.card), cnt: t.cnt }
+    : { card: placeholder(t.card.uid) }));
   // opponent's offered supply is only visible on their own turn
   if (g.cur === you) opp.supply = opp.supply.map((c) => (c ? placeholder(c.uid) : null));
   return g;

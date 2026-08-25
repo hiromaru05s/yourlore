@@ -514,6 +514,36 @@ function shortenEn(s: string): string {
   return out.replace(/\s*·\s*$/, "").trim();
 }
 
+// ---- TRAP REWORK (v30): explicit EN texts for the new gimmick traps ----
+Object.assign(NAMES, {
+  NT_NULL6: "Mana Backflow",
+  NT_SNARE: "Trap Within a Trap",
+});
+Object.assign(TEXTS, {
+  T10: "Destroy the attacking monster + restore 4 HP",
+  GT9_3: "【When Attacked】Needs monsters on your field · Steal the attacker; give away your cheapest monster (cannot act)",
+  GT10_0: "【When Attacked】Halve the attack; all your monsters strike the attacker for their total ATK (piercing)",
+  GT12_0: "【When Attacked】Only vs lethal damage · Negate + end enemy turn · Heal half max HP (3 uses) + draw +4 next turn",
+  GT5_4: "【When Attacked】Negate the attack and destroy the attacker · Roll a die: on 4+, exile it",
+  GT8_5: "【On Enemy Spell】Brand the opponent · Each turn they roll a die per Brand and take that much damage",
+  GT6_1: "【On Enemy Buy】Roll a die: on 4+, exile the bought card, deal its cost as damage and gain that much max HP",
+  GT11_1: "【On Direct Attack】Negate the attack · The opponent cannot attack you directly this turn",
+  GT12_1: "【Countdown 3】Fires 3 turns after set · Take 5 damage, their max mana +1, destroy every card on the field",
+  GT11_0: "【When Attacked】Negate the attack; take 1 damage · A first-trigger die roll sets how many more uses it has",
+  NT_NULL6: "【On Enemy Spell】Negate the 2nd spell the opponent casts in one turn; their max mana -1",
+  NT_SNARE: "【On Trap Destruction】Negate an enemy effect that destroys your set traps; 10 damage · Re-sets itself",
+});
+
+// ---- TRAP REWORK (v30, part 2): baseline traps turned into gimmicks ----
+Object.assign(TEXTS, {
+  T8: "【When Attacked】Put 2 Decay counters on the attacking monster",
+  T9: "【When Attacked】Negate the attack and return the attacker to its owner's hand",
+  T6: "【When Attacked】Destroy the attacking monster and deal damage equal to its cost",
+  GT5_1: "【When Attacked】Negate the attack · Enemy monsters cannot attack for the rest of this turn",
+  NT_NULL4: "【On Enemy Spell】Negate a spell of cost 4 or less and add a copy of it to your hand",
+  GT6_2: "【When Attacked】Destroy the attacking monster; the opponent draws 2 fewer cards next turn",
+});
+
 /** Attach nameEn/textEn to every card (explicit map -> generator dictionaries -> Korean fallback). */
 export function applyEnglish(pools: Array<Record<string, CardDef>>): void {
   for (const pool of pools) {

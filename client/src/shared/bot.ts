@@ -208,6 +208,8 @@ export function candidates(g: GameState): Action[] {
       if (m.hatch != null) return; // 알은 공격 불가 (엔진이 거부 — 후보에서 제외해야 무한 재시도 안 함)
       const a = effAtk(p, m);
       if (glassBanActive(g) && effDef(p, m) <= 1) return; // 유리 병기 금지령
+      const direct = m.directOnly || o.field.length === 0;
+      if (direct && p.noDirectTurn) return; // 천궁의 폐문: 직접 공격 봉쇄 (엔진이 거부 — 후보 제외해야 무한 재시도 안 함)
       const canLand = true; // v24 HP-combat: every attack lands (chip damage accumulates)
       if (!canLand) return;
       const key = `${a}|${m.directOnly ? 1 : 0}`;
@@ -739,10 +741,10 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   if (!noAtk) {
     const ban = glassBanActive(g);
     const canSwing = (m: FieldMon): boolean => !ban || effDef(p, m) > 1;
-    const assassin = ready.find((m) => m.directOnly && canSwing(m));
+    const assassin = ready.find((m) => m.directOnly && canSwing(m) && !p.noDirectTurn);
     if (assassin) return { type: "attack", uid: assassin.uid };
-    for (const m of [...ready].filter(canSwing).sort((a, b) => effAtk(p, b) - effAtk(p, a))) {
-      if (o.field.length === 0) return { type: "attack", uid: m.uid };
+    for (const m of [...ready].filter((m2) => canSwing(m2) && !m2.directOnly).sort((a, b) => effAtk(p, b) - effAtk(p, a))) {
+      if (o.field.length === 0) { if (p.noDirectTurn) break; return { type: "attack", uid: m.uid }; } // 천궁의 폐문
       const a = effAtk(p, m);
       if (o.field.some((tm) => a >= curHp(o, tm))) return { type: "attack", uid: m.uid };
     }
@@ -845,7 +847,10 @@ function facePlan(p: PlayerState, o: PlayerState, ready: FieldMon[], spells: { c
       const a = effAtk(p, m);
       if (a <= 0) continue;
       if (ban && effDef(p, m) <= 1) continue;
-      if (m.directOnly || defs.length === 0) { total += a; if (!attackUid) attackUid = m.uid; continue; }
+      if (m.directOnly || defs.length === 0) {
+        if (p.noDirectTurn) continue; // 천궁의 폐문: 직접 공격 봉쇄 — 리썰 계산에서 제외 (엔진이 거부 → 무한 루프 방지)
+        total += a; if (!attackUid) attackUid = m.uid; continue;
+      }
       const k = defs.findIndex((d) => a > d); // toughest blocker this attacker still kills
       if (k >= 0) { total += a - defs[k]; defs.splice(k, 1); if (!attackUid) attackUid = m.uid; }
     }

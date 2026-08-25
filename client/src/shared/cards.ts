@@ -1496,6 +1496,90 @@ const PATCH25: Record<string, Partial<CardDef>> = {
 };
 for (const id of Object.keys(PATCH25)) { if (DB[id]) Object.assign(DB[id], PATCH25[id]); }
 
+// ============================================================
+// BALANCE PATCH 30 (v30) — 함정 리워크 1차:
+// 코피페 클론 함정을 신규 기믹 10종으로 교체 + 잔여 클론 5종 삭제.
+// 신규 트리거: 구매 반응 / 직접공격 반응 / 카운트다운(자동 발동) /
+// 함정 파괴 반응 / 2번째 마법 반응 / 다회용 함정(카운터).
+// 함정 시전(세트) 코스트는 v17 원칙대로 전부 1 유지 (정보 누출 차단).
+// ============================================================
+const PATCH30: Record<string, Partial<CardDef>> = {
+  // ---- 유지 카드 수치 조정 ----
+  T10: { val: 4, text: "공격 몬스터 파괴 + 체력 4 회복", textJa: "攻撃モンスターを破壊 + 体力4回復" }, // 회복 2 → 4 (너프 과다 복구)
+  GT10_1: { cost: 5, val: 6, text: "공격 무효 + 공격측에 6 데미지", textJa: "攻撃無効 + 攻撃側に6ダメージ" }, // fullguard 대표: 9코 → 5코
+  GT9_2: { cost: 5 }, // reflect 대표: 6코 → 5코
+  // ---- 리워크 (유저 스펙 v25) ----
+  GT9_3: { cost: 6, react: "soulSwap", val: undefined,
+    text: "자신 필드에 몬스터가 있으면 발동 · 공격 몬스터를 빼앗고 자신의 최저 코스트 몬스터를 넘긴다(행동 불가)",
+    textJa: "自分の場にモンスターがいれば発動 · 攻撃モンスターを奪い、自分の最低コストのモンスターを渡す(行動不可)" },
+  GT10_0: { cost: 5, react: "counterOrder", val: undefined,
+    text: "공격을 절반으로 줄이고 자신 필드 전원이 공격 몬스터에 공격력만큼 일제 반격(관통)",
+    textJa: "攻撃を半減し、自分の場の全員が攻撃モンスターに攻撃力分の一斉反撃(貫通あり)" },
+  GT12_0: { cost: 7, react: "lastBastion", val: undefined, exileOnDestroy: true,
+    text: "치명타에만 발동 · 공격 무효 + 상대 턴 종료 · 자신 최대 체력 절반 회복(3회) + 다음 턴 드로우 +4",
+    textJa: "致命打にのみ発動 · 攻撃無効 + 相手ターン終了 · 自分の最大体力の半分回復(3回まで) + 次のターンドロー+4" },
+  GT5_4: { cost: 5, react: "devourGuard", val: undefined,
+    text: "공격을 무효화하고 공격 몬스터를 파괴 · 주사위를 굴려 4 이상이면 게임에서 제외",
+    textJa: "攻撃を無効化し攻撃モンスターを破壊 · ダイスを振り4以上ならゲームから除外" },
+  GT8_5: { cost: 6, react: "brandMagic", val: undefined,
+    text: "【마법 반응】상대에게 낙인 1개 부여 · 상대는 매 턴 시작시 낙인당 주사위 눈만큼 데미지",
+    textJa: "【魔法に反応】相手に烙印を1個付与 · 相手は毎ターン開始時、烙印ごとにダイスの目のダメージ" },
+  GT6_1: { cost: 3, react: "toll", val: undefined,
+    text: "【구매 반응】주사위를 굴려 4 이상이면 구매한 카드를 제외하고 그 코스트만큼 상대에게 데미지 + 자신 최대 체력 증가",
+    textJa: "【購入に反応】ダイスを振り4以上なら購入カードを除外し、そのコスト分のダメージ + 自分の最大体力増加" },
+  GT11_1: { cost: 4, react: "gateClose", val: undefined,
+    text: "【직접공격 반응】공격을 무효화한다 · 이번 턴 동안 상대는 직접 공격할 수 없다",
+    textJa: "【直接攻撃に反応】攻撃を無効化する · このターン中、相手は直接攻撃できない" },
+  GT12_1: { cost: 7, react: "doomsday", val: undefined,
+    text: "【카운트다운 3】세트 3턴 후 턴 시작시 자동 발동 · 자신에게 5 데미지, 상대 최대 마나 +1, 필드의 모든 카드 파괴",
+    textJa: "【カウントダウン3】セット3ターン後のターン開始時に自動発動 · 自分に5ダメージ、相手の最大マナ+1、場の全カードを破壊" },
+  GT11_0: { cost: 5, react: "infoDealer", val: undefined,
+    text: "공격 무효 + 자신에게 1 데미지 · 첫 발동시 주사위를 굴려 나온 수만큼 재사용 카운터를 얻고 필드에 남는다",
+    textJa: "攻撃無効 + 自分に1ダメージ · 初回発動時のダイスの目だけ再使用カウンターを得て場に残る" },
+  NT_NULL6: { cost: 5, react: "secondNull", val: undefined, val2: undefined, name: "마나 역류", nameJa: "マナ逆流",
+    text: "【마법 반응】상대가 이번 턴 사용한 2번째 마법을 무효화하고 상대 최대 마나 -1",
+    textJa: "【魔法に反応】相手がこのターン使用した2番目の魔法を無効化し、相手の最大マナ-1" },
+};
+for (const id of Object.keys(PATCH30)) { if (DB[id]) Object.assign(DB[id], PATCH30[id]); }
+
+// 잔여 클론 함정 삭제 (개성 없는 수치 스케일 복제 — 아트는 ID 봉인으로 보존)
+const DELETE_IDS30 = ["GT10_2", "GT10_3", "GT6_4", "NT_NULL5", "GT8_0"];
+for (const id of DELETE_IDS30) { delete DB[id]; }
+
+// 신규 함정: 함정 파괴 반응 (no art yet → ◆ placeholder)
+const NEW_CARDS30: CardDef[] = [
+  { id: "NT_SNARE", t: "trap", cost: 3, play: 1, react: "snare", name: "덫 속의 덫", nameJa: "罠の中の罠",
+    text: "【함정 파괴 반응】자신의 세트 함정을 파괴하는 상대 효과를 무효화하고 상대에게 10 데미지 · 이 함정은 다시 세트된다",
+    textJa: "【罠破壊に反応】自分のセットトラップを破壊する相手の効果を無効化し、相手に10ダメージ · このトラップは再びセットされる" },
+];
+for (const c of NEW_CARDS30) { DB[c.id] = c; }
+
+// ============================================================
+// BALANCE PATCH 31 (v30) — 함정 리워크 2차: 밋밋한 베이직 6종을 기믹화.
+// 부패 부여 / 바운스 / 코스트 스케일 처벌 / 전체 공격 봉쇄 / 마법 복제 강탈 / 드로우 부정.
+// ============================================================
+const PATCH31: Record<string, Partial<CardDef>> = {
+  T8: { react: "decaytrap", val: undefined,
+    text: "공격 몬스터에게 부패 카운터 2개를 부여한다",
+    textJa: "攻撃モンスターに腐敗カウンターを2個与える" },
+  T9: { react: "undertow", val: undefined, val2: undefined,
+    text: "공격을 무효화하고 공격 몬스터를 소유자의 패로 되돌린다",
+    textJa: "攻撃を無効化し、攻撃モンスターを持ち主の手札に戻す" },
+  T6: { react: "boltcost", val: undefined,
+    text: "공격 몬스터를 파괴하고, 그 코스트만큼 상대에게 데미지",
+    textJa: "攻撃モンスターを破壊し、そのコスト分のダメージを相手に与える" },
+  GT5_1: { react: "gateLockAll", val: undefined,
+    text: "공격을 무효화한다 · 이번 턴 동안 상대 필드의 모든 몬스터는 공격할 수 없다",
+    textJa: "攻撃を無効化する · このターン中、相手の場の全モンスターは攻撃できない" },
+  NT_NULL4: { react: "spellSteal", cap: 4,
+    text: "【마법 반응】코스트 4 이하 마법 1장을 무효화하고, 그 카드의 복제를 자신의 패에 넣는다",
+    textJa: "【魔法に反応】コスト4以下の魔法1枚を無効化し、そのカードの複製を自分の手札に加える" },
+  GT6_2: { react: "omen", val: undefined,
+    text: "공격 몬스터 파괴 + 상대는 다음 턴 드로우 -2",
+    textJa: "攻撃モンスターを破壊 + 相手は次のターンのドロー-2" },
+};
+for (const id of Object.keys(PATCH31)) { if (DB[id]) Object.assign(DB[id], PATCH31[id]); }
+
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 // 플레이버 카드명(ko/ja/en 3개 국어) 적용 — applyEnglish 이후, standardizeCardTexts 이전
 applyFlavorCardNames([DB, STARTERS as unknown as Record<string, CardDef>]);
@@ -1570,7 +1654,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v29"; // v29: 표기 정합성 감사(텍스트↔엔진 드리프트) + 몬스터 체력 강화 마법 5종 + 함정 기술자 1/4 + 경제 위기 마켓 8장 고정 + 은둔의 안식 순서 수정
+export const BALANCE_VERSION = "v30"; // v30: 함정 리워크 — 클론 함정 10종을 신규 기믹으로 교체(soulSwap/counterOrder/lastBastion/devourGuard/brandMagic/toll/gateClose/doomsday/infoDealer/secondNull) + 덫 속의 덫(snare) 추가 + 클론 5종 삭제(GT10_2/GT10_3/GT6_4/NT_NULL5/GT8_0) + 베이직 6종 기믹화(T8 부패·T9 바운스·T6 코스트뎀·GT5_1 전체봉쇄·NT_NULL4 복제강탈·GT6_2 드로우-2) + T10 회복4·GT10_1 5코·GT9_2 5코
+// v29(구): v29: 표기 정합성 감사(텍스트↔엔진 드리프트) + 몬스터 체력 강화 마법 5종 + 함정 기술자 1/4 + 경제 위기 마켓 8장 고정 + 은둔의 안식 순서 수정
 // v28: 고정 마켓 10→8장, 제시 마켓 3→4장 (크래시 축소 -1 유지)
 // // v27: 인쇄 체력 0 폐지 — 전 몬스터 최저 체력 1 (엔진 effDef 플로어와 표기 일치; 실전 수치 변화 없음)
 // v26: 붕괴 진동 재정의(전원 체력 1로·즉사 제거), 세계수의 보살핌 +12→+9
