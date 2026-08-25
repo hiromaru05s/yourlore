@@ -1615,6 +1615,98 @@ for (const c of [...NEW_STARTERS31, ...NEW_CARDS13]) { DB[c.id] = c; }
 DECK_POOL.push(...NEW_STARTERS31.map((c) => c.id)); // 스타팅 덱 빌딩 풀에 추가
 RANDOM_CARDS.add("SLUM"); // 주사위 카드 (결과 팝업 + 수레바퀴 재굴림 대상)
 
+// ============================================================
+// TRIBE REWORK (v32) — 고귀 삭제(귀족과 컨셉 중복) · 고독/포식/귀족을 1~4코
+// 4인 구성 + 고유 효과로 리워크 · 신규 종족 '마족' 추가 · 종족 수호 함정 '담합'.
+// 시너지: 고독/포식/귀족 = 4종 단일 티어 · 마족 = 2/3/4종 · 시초 = 기존 유지.
+// ============================================================
+const DELETE_IDS32 = ["TNO2", "TNO3", "TNO5"];
+for (const id of DELETE_IDS32) { delete DB[id]; }
+delete TRIBES["고귀"];
+
+const NEW_TRIBES32: CardDef[] = [
+  // ---- 포식 (1~4코) ----
+  { id: "TPO1", t: "mon", cost: 1, atk: 0, def: 1, tribe: "포식", summonReq: "preyLow2", onSummon: "preyBounce", name: "굶주린 새끼짐승", nameJa: "飢えた仔獣",
+    text: "소환시: 코스트 2 이하 상대 몬스터 1체를 패로 되돌린다 · 상대 필드에 코스트 2 이하 몬스터가 있어야 소환 가능",
+    textJa: "召喚時: コスト2以下の相手モンスター1体を手札に戻す · 相手の場にコスト2以下のモンスターがいる時のみ召喚可能" },
+  { id: "TPO2", t: "mon", cost: 2, atk: 2, def: 1, tribe: "포식", aura: "devourGrow", name: "굶주린 짐승", nameJa: "飢えた獣",
+    text: "상시: 이 몬스터가 파괴한 몬스터의 코스트 1당 +1/+1",
+    textJa: "常時: このモンスターが破壊したモンスターのコスト1につき+1/+1" },
+  { id: "TPO3", t: "mon", cost: 3, atk: 3, def: 2, tribe: "포식", aura: "scavenger", name: "굶주린 추격자", nameJa: "飢えた追跡者",
+    text: "상시: 상대 몬스터가 파괴될 때마다 주사위를 굴려 5 이상이면 그 복제를 자신 필드에 소환",
+    textJa: "常時: 相手のモンスターが破壊されるたびダイスを振り5以上ならその複製を自分の場に召喚" },
+  { id: "TPO5", t: "mon", cost: 4, atk: 5, def: 2, tribe: "포식", onSummon: "preyExec", name: "포식자", nameJa: "捕食者",
+    text: "소환시: 상대의 코스트 3~4 몬스터 1체를 파괴 · 파괴에 성공하면 최대 마나 +1",
+    textJa: "召喚時: 相手のコスト3~4のモンスター1体を破壊 · 破壊に成功すると最大マナ+1" },
+  // ---- 고독 (1~4코) ----
+  { id: "TSO1", t: "mon", cost: 1, atk: 2, def: 3, tribe: "고독", onSummon: "soloLock", name: "은둔자", nameJa: "隠遁者",
+    text: "소환 후 자신의 3턴 동안 다른 몬스터를 소환할 수 없다",
+    textJa: "召喚後、自分の3ターンの間 他のモンスターを召喚できない" },
+  { id: "TSO2", t: "mon", cost: 2, atk: 1, def: 1, tribe: "고독", onSummon: "hermitBuff", name: "외로운 늑대", nameJa: "孤独な狼",
+    text: "소환시: 이 몬스터 외 자신 필드의 카드(몬스터·마법·함정)가 1장 이하면 +3/+3",
+    textJa: "召喚時: このモンスター以外の自分の場のカード(モンスター·魔法·罠)が1枚以下なら+3/+3" },
+  { id: "TSO3", t: "mon", cost: 3, atk: 2, def: 2, tribe: "고독", onSummon: "gravePure", name: "고독한 사냥꾼", nameJa: "孤独な狩人",
+    text: "소환시: 자신의 묘지에 몬스터 카드가 없으면 카드 4장 드로우",
+    textJa: "召喚時: 自分の墓地にモンスターカードがなければカード4枚ドロー" },
+  { id: "TSO5", t: "mon", cost: 4, atk: 5, def: 7, tribe: "고독", summonReq: "soloOnly", name: "고독한 방랑자", nameJa: "孤独な放浪者",
+    text: "자신 필드에 고독 종족 외의 몬스터가 없을 때만 소환 가능",
+    textJa: "自分の場に孤独種族以外のモンスターがいない時のみ召喚可能" },
+  // ---- 귀족 (1~4코) ----
+  { id: "TAR1", t: "mon", cost: 1, atk: 0, def: 1, tribe: "귀족", aura: "pageDraw", name: "귀족의 집사", nameJa: "貴族の執事",
+    text: "상시: 자신의 턴 시작시 드로우 +1",
+    textJa: "常時: 自分のターン開始時ドロー+1" },
+  { id: "TAR2", t: "mon", cost: 2, atk: 1, def: 2, tribe: "귀족", aura: "lowAtkBan", name: "몰락 귀족", nameJa: "没落貴族",
+    text: "상시: 상대의 코스트 2 이하 몬스터는 공격할 수 없다",
+    textJa: "常時: 相手のコスト2以下のモンスターは攻撃できない" },
+  { id: "TAR3", t: "mon", cost: 3, atk: 2, def: 3, tribe: "귀족", aura: "trapBan", name: "몰락한 기사", nameJa: "没落した騎士",
+    text: "상시: 상대는 함정 카드를 세트할 수 없다",
+    textJa: "常時: 相手は罠カードをセットできない" },
+  { id: "TAR5", t: "mon", cost: 4, atk: 3, def: 4, tribe: "귀족", aura: "eliteGuard", name: "귀족 영주", nameJa: "貴族領主",
+    text: "상시: 코스트 6 이하의 상대 몬스터는 이 몬스터를 공격할 수 없고, 이 몬스터가 있는 한 직접 공격도 불가",
+    textJa: "常時: コスト6以下の相手モンスターはこのモンスターを攻撃できず、このモンスターがいる限り直接攻撃も不可" },
+  // ---- 마족 (신규, 1~4코) — 강한 몸집 + 마나 대가 ----
+  { id: "TDE1", t: "mon", cost: 1, atk: 3, def: 6, tribe: "마족", summonReq: "mm5", onSummon: "manaDebt5", name: "마족 척후", nameJa: "魔族の斥候",
+    text: "자신의 5턴 동안 최대 마나 -1 · 최대 마나 5 이상일 때만 소환 가능",
+    textJa: "自分の5ターンの間 最大マナ-1 · 最大マナ5以上の時のみ召喚可能" },
+  { id: "TDE2", t: "mon", cost: 2, atk: 6, def: 9, tribe: "마족", aura: "demonTax2", name: "마족 전사", nameJa: "魔族の戦士",
+    text: "상시: 자신의 최대 마나 -2(3 밑으로는 내려가지 않음)",
+    textJa: "常時: 自分の最大マナ-2(3未満にはならない)" },
+  { id: "TDE3", t: "mon", cost: 3, atk: 9, def: 12, tribe: "마족", turnFx: "demonRoll", name: "마족 광전사", nameJa: "魔族の狂戦士",
+    text: "자신의 턴 시작시 주사위를 굴려 1~3이면 최대 마나 -1, 4~6이면 -2(3 밑 불가)",
+    textJa: "自分のターン開始時 ダイスを振り1~3なら最大マナ-1、4~6なら-2(3未満不可)" },
+  { id: "TDE4", t: "mon", cost: 4, atk: 14, def: 15, tribe: "마족", onSummon: "manaSet4", name: "마왕", nameJa: "魔王",
+    text: "소환시: 자신의 최대 마나가 4가 된다",
+    textJa: "召喚時: 自分の最大マナが4になる" },
+  // ---- 종족 수호 함정 (스타터) ----
+  { id: "COLLUSION", t: "trap", cost: 3, play: 1, react: "collusion", noShop: true, name: "담합", nameJa: "談合",
+    text: "종족 몬스터가 받는 공격 무효 + 공격 몬스터 파괴 · 최대 마나 -1로 그 종족의 다른 카드 1장 획득",
+    textJa: "種族モンスターへの攻撃を無効化 + 攻撃モンスターを破壊 · 最大マナ-1でその種族の別カード1枚を獲得" },
+];
+for (const c of NEW_TRIBES32) { DB[c.id] = c; }
+DECK_POOL.push("COLLUSION");
+
+// ---- 종족 시너지 설명 갱신 (고독/포식/귀족 = 4종 단일 · 마족 = 2/3/4종) ----
+TRIBES["고독"] = {
+  ko: { name: "고독", note: "※ 서로 다른 종족 카드여야 발동 · 게임당 1회", bonuses: ["서로 다른 4종: 이 게임 동안 상대는 매 턴 시작시 주사위를 굴려 5 이상일 때만 자신의 턴을 진행할 수 있다"] },
+  ja: { name: "孤独", note: "※ 異なる種族カードが必要 · ゲーム中1回", bonuses: ["異なる4種: このゲームの間、相手は毎ターン開始時にダイスを振り5以上の時のみ自分のターンをプレイできる"] },
+  en: { name: "Solitary", note: "* Requires different cards of the tribe · once per game", bonuses: ["4 different: for the rest of the game the opponent rolls a die at turn start and only plays their turn on 5+"] },
+};
+TRIBES["포식"] = {
+  ko: { name: "포식", note: "※ 서로 다른 종족 카드여야 발동 · 게임당 1회", bonuses: ["서로 다른 4종: 상대 필드의 모든 카드를 파괴하고 상대에게 30 데미지"] },
+  ja: { name: "捕食", note: "※ 異なる種族カードが必要 · ゲーム中1回", bonuses: ["異なる4種: 相手の場の全カードを破壊し、相手に30ダメージ"] },
+  en: { name: "Devour", note: "* Requires different cards of the tribe · once per game", bonuses: ["4 different: destroy every card on the enemy field and deal 30 damage"] },
+};
+TRIBES["귀족"] = {
+  ko: { name: "귀족", note: "※ 서로 다른 종족 카드여야 발동 · 게임당 1회", bonuses: ["서로 다른 4종: 상대의 최대 마나가 5가 된다"] },
+  ja: { name: "貴族", note: "※ 異なる種族カードが必要 · ゲーム中1回", bonuses: ["異なる4種: 相手の最大マナが5になる"] },
+  en: { name: "Aristocrat", note: "* Requires different cards of the tribe · once per game", bonuses: ["4 different: the opponent's max mana becomes 5"] },
+};
+TRIBES["마족"] = {
+  ko: { name: "마족", note: "※ 서로 다른 종족 카드여야 발동 · 각 단계 보상은 게임당 1회씩 따로 지급", bonuses: ["서로 다른 2종: 이 게임 동안 상대는 자신의 턴에 마법을 2장까지만 사용할 수 있다", "서로 다른 3종: 이 게임 동안 상대는 자신의 턴에 마법을 사용할 수 없다", "서로 다른 4종: 이 게임 동안 상대가 소모하는 모든 마나가 3배가 된다"] },
+  ja: { name: "魔族", note: "※ 異なる種族カードが必要 · 各段階の報酬はゲーム中1回ずつ", bonuses: ["異なる2種: このゲームの間、相手は自分のターンに魔法を2枚までしか使えない", "異なる3種: このゲームの間、相手は自分のターンに魔法を使えない", "異なる4種: このゲームの間、相手が消費する全てのマナが3倍になる"] },
+  en: { name: "Demonkin", note: "* Requires different cards of the tribe · each tier fires once, separately", bonuses: ["2 different: the opponent can cast at most 2 spells per turn", "3 different: the opponent cannot cast spells on their turn", "4 different: all mana the opponent spends is tripled"] },
+};
+
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 // 플레이버 카드명(ko/ja/en 3개 국어) 적용 — applyEnglish 이후, standardizeCardTexts 이전
 applyFlavorCardNames([DB, STARTERS as unknown as Record<string, CardDef>]);
@@ -1689,7 +1781,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v31"; // v31: 마켓 카운터(상회/슬럼가/견습·왕도 상인/암상인) + 와인 아키타입(포도/고급 포도/양조/와인)
+export const BALANCE_VERSION = "v32"; // v32: 종족 리워크 — 고귀 삭제 · 고독/포식/귀족 1~4코 고유효과 구성 · 신규 종족 마족(2/3/4종 시너지) · 종족 수호 함정 담합
+// v31(구): // v31: 마켓 카운터(상회/슬럼가/견습·왕도 상인/암상인) + 와인 아키타입(포도/고급 포도/양조/와인)
 // v30(구): // v30: 함정 리워크 — 클론 함정 10종을 신규 기믹으로 교체(soulSwap/counterOrder/lastBastion/devourGuard/brandMagic/toll/gateClose/doomsday/infoDealer/secondNull) + 덫 속의 덫(snare) 추가 + 클론 5종 삭제(GT10_2/GT10_3/GT6_4/NT_NULL5/GT8_0) + 베이직 6종 기믹화(T8 부패·T9 바운스·T6 코스트뎀·GT5_1 전체봉쇄·NT_NULL4 복제강탈·GT6_2 드로우-2) + T10 회복4·GT10_1 5코·GT9_2 5코
 // v29(구): v29: 표기 정합성 감사(텍스트↔엔진 드리프트) + 몬스터 체력 강화 마법 5종 + 함정 기술자 1/4 + 경제 위기 마켓 8장 고정 + 은둔의 안식 순서 수정
 // v28: 고정 마켓 10→8장, 제시 마켓 3→4장 (크래시 축소 -1 유지)

@@ -141,11 +141,14 @@ export function candidates(g: GameState): Action[] {
       // NOTHING, so it's strictly dominated; if none killable defer to greedy
       const att = p.field.find((m) => m.uid === (pend.data?.attackerUid as string));
       const a = att ? effAtk(p, att) : 0;
-      o.field.filter((tm) => a >= curHp(o, tm)).forEach((m) => push(m.uid));
+      o.field.filter((tm) => a >= curHp(o, tm))
+        .filter((tm) => !(tm.aura === "eliteGuard" && (att?.cost ?? 0) <= 6)) // 귀족 영주
+        .forEach((m) => push(m.uid));
       return out; // empty → searchDecide falls back to the greedy pick
     }
     if (pend.kind === "oppMon") o.field
       .filter((m) => !(hasPassive(m, "aura") && pend.reason !== "attack"))
+      .filter((m) => !(pend.data?.maxCost != null && m.cost > (pend.data.maxCost as number) && pend.reason !== "attack")) // bounceLow 등 코스트 캡 공통
       .filter((m) => !(pend.reason === "decayMark" && m.hatch != null)) // 부패 카운터: 알 제외
       .filter((m) => !(pend.reason === "destroyMon" && pend.data?.maxCost != null && m.cost > (pend.data.maxCost as number))) // 룬 파열: 코스트 캡
       .forEach((m) => push(m.uid));
@@ -190,7 +193,9 @@ export function candidates(g: GameState): Action[] {
   const candSealLow = g.players.some((pl) => pl.field.some((m) => m.aura === "sealLow"));
   p.hand.forEach((c, idx) => {
     if (c.star === "chest" && (g.turn <= T.chestTurn || chestLocked(g))) return;
-    if (c.t === "trap" && p.trapBlockTurn) return; // 협상: 함정 설치 금지 턴 — 엔진 거부 루프 방지
+    if (c.t === "trap" && (p.trapBlockTurn || o.field.some((tm) => tm.aura === "trapBan"))) return; // 협상/몰락한 기사 — 엔진 거부 루프 방지
+    if (c.t === "mon" && ((p.summonLockUntil ?? 0) > g.turn || !summonReqMet(p, c, o))) return; // 은둔자 잠금 / 소환 조건
+    if (c.t === "spell" && p.spellCastCap != null && (p.spellsCastTurn || 0) >= p.spellCastCap) return; // 마족 시너지 한도
     if ((c.t === "spell" || c.t === "starter") && (candSealAll || p.spellSealTurn || (candSealLow && playCost(c, p) <= 5))) return; // 침묵
     if (c.id === "CHOSEN_AREA" && cullExiled(p) < 25) return; // 선택받은 영역: 컬 25장 조건
     if ((c.id === "DECAY_CRAFT" || c.id === "MAJESTY_RITE") && p.field.length === 0) return; // 대상 필요
@@ -210,8 +215,10 @@ export function candidates(g: GameState): Action[] {
       if (m.hatch != null) return; // 알은 공격 불가 (엔진이 거부 — 후보에서 제외해야 무한 재시도 안 함)
       const a = effAtk(p, m);
       if (glassBanActive(g) && effDef(p, m) <= 1) return; // 유리 병기 금지령
+      if (o.field.some((tm) => tm.aura === "lowAtkBan") && (m.cost ?? 0) <= 2) return; // 몰락 귀족
       const direct = m.directOnly || o.field.length === 0;
-      if (direct && p.noDirectTurn) return; // 천궁의 폐문: 직접 공격 봉쇄 (엔진이 거부 — 후보 제외해야 무한 재시도 안 함)
+      if (direct && (p.noDirectTurn || o.field.some((tm) => tm.aura === "eliteGuard"))) return; // 천궁의 폐문 / 귀족 영주
+      if (!direct && !o.field.some((tm) => !(tm.aura === "eliteGuard" && (m.cost ?? 0) <= 6))) return; // 공격 가능한 대상이 전무
       const canLand = true; // v24 HP-combat: every attack lands (chip damage accumulates)
       if (!canLand) return;
       const key = `${a}|${m.directOnly ? 1 : 0}`;
@@ -628,6 +635,8 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
       if (playCost(c, p) <= 5 && g.players.some((pl) => pl.field.some((m) => m.aura === "sealLow"))) return false;
       if (p.spellSealTurn) return false;
     }
+    if (c.t === "spell" && p.spellCastCap != null && (p.spellsCastTurn || 0) >= p.spellCastCap) return false; // 마족 시너지
+    if (c.t === "trap" && o.field.some((tm) => tm.aura === "trapBan")) return false; // 몰락한 기사
     if (blocked?.has(c.uid)) return false; // proven no-op this decision (safety-net retry)
     // 영구마법 중복/존 제약 — 엔진이 지불 전에 거부하는 조건들 (누락 시 무한 재시도)
     if (c.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) return false;
@@ -703,7 +712,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   // summonable monsters, best value first (respect the 9-monster zone cap)
   const monsters = p.field.length >= 7 ? [] : p.hand
     .map((c, i) => ({ c, i }))
-    .filter((x) => x.c.t === "mon" && playCost(x.c, p) <= p.mana && !(oppNoLow && (x.c.cost ?? 0) <= 3) && summonReqMet(p, x.c))
+    .filter((x) => x.c.t === "mon" && playCost(x.c, p) <= p.mana && !(oppNoLow && (x.c.cost ?? 0) <= 3) && summonReqMet(p, x.c, o) && (p.summonLockUntil ?? 0) <= g.turn)
     .sort((a, b) => cardPower(b.c) - cardPower(a.c));
 
   // 1) LETHAL: direct spells + attacks (with 관통 penetration) that kill THIS turn.
@@ -744,13 +753,15 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   //    Biggest attacker first: same kill, more penetration (관통) face damage.
   if (!noAtk) {
     const ban = glassBanActive(g);
-    const canSwing = (m: FieldMon): boolean => !ban || effDef(p, m) > 1;
-    const assassin = ready.find((m) => m.directOnly && canSwing(m) && !p.noDirectTurn);
+    const lowBan = o.field.some((tm) => tm.aura === "lowAtkBan");
+    const canSwing = (m: FieldMon): boolean => (!ban || effDef(p, m) > 1) && !(lowBan && (m.cost ?? 0) <= 2);
+    const eliteWall = o.field.some((tm) => tm.aura === "eliteGuard");
+    const assassin = ready.find((m) => m.directOnly && canSwing(m) && !p.noDirectTurn && !eliteWall);
     if (assassin) return { type: "attack", uid: assassin.uid };
     for (const m of [...ready].filter((m2) => canSwing(m2) && !m2.directOnly).sort((a, b) => effAtk(p, b) - effAtk(p, a))) {
-      if (o.field.length === 0) { if (p.noDirectTurn) break; return { type: "attack", uid: m.uid }; } // 천궁의 폐문
+      if (o.field.length === 0) { if (p.noDirectTurn || eliteWall) break; return { type: "attack", uid: m.uid }; } // 천궁의 폐문 / 귀족 영주
       const a = effAtk(p, m);
-      if (o.field.some((tm) => a >= curHp(o, tm))) return { type: "attack", uid: m.uid };
+      if (o.field.some((tm) => a >= curHp(o, tm) && !(tm.aura === "eliteGuard" && (m.cost ?? 0) <= 6))) return { type: "attack", uid: m.uid };
     }
   }
 
@@ -852,7 +863,7 @@ function facePlan(p: PlayerState, o: PlayerState, ready: FieldMon[], spells: { c
       if (a <= 0) continue;
       if (ban && effDef(p, m) <= 1) continue;
       if (m.directOnly || defs.length === 0) {
-        if (p.noDirectTurn) continue; // 천궁의 폐문: 직접 공격 봉쇄 — 리썰 계산에서 제외 (엔진이 거부 → 무한 루프 방지)
+        if (p.noDirectTurn || o.field.some((tm) => tm.aura === "eliteGuard")) continue; // 폐문/귀족 영주 — 리썰 계산 제외
         total += a; if (!attackUid) attackUid = m.uid; continue;
       }
       const k = defs.findIndex((d) => a > d); // toughest blocker this attacker still kills
@@ -1015,10 +1026,12 @@ function autoTarget(g: GameState): Action {
       const threat = (tm: FieldMon): number =>
         tm.hatch != null ? Math.max(0, (tm.hatchTurns ?? 8) - tm.hatch) * 4 * (tm.id === "BEAST_EGG" ? 1.4 : 1)
         : effAtk(o, tm) * 2 + effDef(o, tm);
+      const legal = (tm: FieldMon): boolean => !(tm.aura === "eliteGuard" && (att?.cost ?? 0) <= 6); // 귀족 영주
       const killable = o.field
+        .filter(legal)
         .filter((tm) => a > effDef(o, tm) || tm.hatch != null)
         .sort((x, y) => threat(y) - threat(x));
-      const target = killable[0] ?? lowestDef(o, o.field);
+      const target = killable[0] ?? lowestDef(o, o.field.filter(legal));
       return { type: "chooseTarget", uid: target ? target.uid : null };
     }
     if (pending.reason === "decayMark") { // 러스트캡 슬러그: 알·아우라 제외, 가장 위협적인 몬스터에 카운터
@@ -1027,7 +1040,7 @@ function autoTarget(g: GameState): Action {
       return { type: "chooseTarget", uid: t0 ? t0.uid : null };
     }
     // destroy / debuff → hit the most valuable enemy monster (아우라 몬스터는 대상 불가 · 룬 파열 코스트 캡 준수)
-    const mc0 = pending.reason === "destroyMon" ? (pending.data?.maxCost as number | undefined) : undefined;
+    const mc0 = pending.data?.maxCost as number | undefined; // destroyMon/bounceLow 등 코스트 캡 공통
     const t = [...o.field].filter((m) => !hasPassive(m, "aura") && (mc0 == null || m.cost <= mc0)).sort((a, b) => (effAtk(o, b) + b.def!) - (effAtk(o, a) + a.def!))[0];
     if (t) return { type: "chooseTarget", uid: t.uid };
     // anySide 파괴에서 적 대상이 없고 취소도 불가능하면(포식 등) 자기 최저가치 몬스터로 해소 (봇 무한 pending 방지)

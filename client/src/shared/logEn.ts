@@ -351,7 +351,7 @@ const R: [RegExp, string][] = [
   [/발동/g, "activated"],
 ];
 
-const TRIBE_EN: Record<string, string> = { "고독": "Solitary", "고귀": "Noble", "포식": "Devour", "귀족": "Aristocrat", "시초": "Origin" };
+const TRIBE_EN: Record<string, string> = { "고독": "Solitary", "마족": "Demonkin", "포식": "Devour", "귀족": "Aristocrat", "시초": "Origin" };
 
 /** Translate a Korean log/hint HTML string to English (card-name tags preserved). */
 export function logToEn(html: string): string {
@@ -361,7 +361,7 @@ export function logToEn(html: string): string {
     keep.push(m); return `\u0001${keep.length - 1}\u0002`;
   });
   // tribe synergy banner (needs name mapping)
-  s = s.replace(/\[(고독|고귀|포식|귀족|시초)\] 동족 (\d+)마리 시너지!/g, (_m, tr, n) => `[${TRIBE_EN[tr] ?? tr}] ${n}-piece tribe synergy!`);
+  s = s.replace(/\[(고독|마족|포식|귀족|시초)\] 동족 (\d+)마리 시너지!/g, (_m, tr, n) => `[${TRIBE_EN[tr] ?? tr}] ${n}-piece tribe synergy!`);
   for (const [re, en] of R) {
     if (typeof en === "string") s = s.replace(re, en);
   }

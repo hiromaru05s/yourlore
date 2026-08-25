@@ -131,6 +131,11 @@ export interface PlayerState {
   noDirectTurn?: boolean; // 천궁의 폐문: 이번 턴 동안 직접 공격 불가 (공격측에 걸린다)
   spellsCastTurn?: number; // 이번 턴에 사용한 마법(t==="spell") 수 — 마나 역류 판정용
   drawPenaltyNext?: number; // 흉조(omen): 다음 턴 시작 드로우에서 차감할 장수 (1회성)
+  soloCurse?: boolean; // 고독 4종 시너지: 매 턴 시작시 주사위 5+ 여야만 턴 진행 (걸린 쪽에 표시)
+  spellCastCap?: number; // 마족 2/3종 시너지: 자기 턴당 마법 사용 한도 (2 → 0)
+  manaCostMult?: number; // 마족 4종 시너지: 소모 마나 배수 (3)
+  summonLockUntil?: number; // 고독1(은둔자): g.turn이 이 값 미만인 동안 몬스터 소환 불가
+  manaRegain?: { at: number; amt: number }[]; // 마족1: 임시 최대 마나 차감의 복구 예약 (g.turn 기준)
   supplyShrink: number; // if >0, this player's next 제시 roll offers 2 cards instead of 3
   defendHeal: number; // heal this much whenever this player is attacked
   manaGainNext: number; // max mana to gain at the start of this player's next turn

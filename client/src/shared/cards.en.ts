@@ -19,7 +19,6 @@ const NAMES: Record<string, string> = {
   ASSASSIN1: "Novice Assassin", ASSASSIN2: "Adept Assassin", ASSASSIN3: "Elite Assassin", ASSASSIN4: "Master Assassin - Nightlord",
   // tribes
   TSO2: "Lone Wolf", TSO3: "Solitary Hunter", TSO5: "Solitary Wanderer",
-  TNO2: "Noble Knight", TNO3: "Noble Squire", TNO5: "Noble Paladin",
   TPO2: "Starving Beast", TPO3: "Starving Stalker", TPO5: "Predator",
   TAR2: "Fallen Aristocrat", TAR3: "Fallen Knight", TAR5: "Aristocrat Lord",
   TGE1: "Origin Egg", TGE2: "Origin Ember", TGE3: "Origin Sprout", TGE4: "Origin Spirit",
@@ -273,7 +272,6 @@ const TEXTS: Record<string, string> = {
 };
 // tribe monsters share one text
 for (const id of ["TSO2","TSO3","TSO5"]) TEXTS[id] = "[Solitary] tribe synergy";
-for (const id of ["TNO2","TNO3","TNO5"]) TEXTS[id] = "[Noble] tribe synergy";
 for (const id of ["TPO2","TPO3","TPO5"]) TEXTS[id] = "[Devour] tribe synergy";
 for (const id of ["TAR2","TAR3","TAR5"]) TEXTS[id] = "[Aristocrat] tribe synergy";
 
@@ -559,6 +557,32 @@ Object.assign(TEXTS, {
   BREWING: "For your next 6 turns, grapes in hand become Wine counters (Grape 1, Fine 3) · Expires: gain that many Wine",
   WINE: "Your max HP +18 · Draw 2 cards",
   DARK_MERCHANT: "Buy any 1 card from the entire card pool by paying its cost",
+});
+
+// ---- TRIBE REWORK (v32): names & explicit EN texts ----
+Object.assign(NAMES, {
+  TPO1: "Starving Whelp", TSO1: "The Recluse", TAR1: "Aristocrat's Butler",
+  TDE1: "Demon Scout", TDE2: "Demon Warrior", TDE3: "Demon Berserker", TDE4: "Demon King",
+  COLLUSION: "Collusion",
+});
+Object.assign(TEXTS, {
+  TPO1: "【On Summon】Return 1 enemy monster of cost 2 or less to hand · 【Requires】Enemy monsters of cost 2 or less in play",
+  TPO2: "【Passive】+1/+1 per cost of each monster this one destroys",
+  TPO3: "【Passive】Roll a die whenever enemy monsters die: on 5+, summon a copy to your field",
+  TPO5: "【On Summon】Destroy 1 enemy monster of cost 3-4 · If it dies, max mana +1",
+  TSO1: "After summoning, you cannot summon other monsters for your next 3 turns",
+  TSO2: "【On Summon】If you have 1 card or less on the field besides this (monsters, spells, traps), +3/+3",
+  TSO3: "【On Summon】If your graveyard holds no monsters, draw 4 cards",
+  TSO5: "【Requires】No non-Solitary monsters on your field",
+  TAR1: "【Passive】+1 draw at the start of your turns",
+  TAR2: "【Passive】Enemy monsters of cost 2 or less cannot attack",
+  TAR3: "【Passive】The opponent cannot set trap cards",
+  TAR5: "【Passive】Enemy monsters of cost 6 or less cannot attack this one; while it lives, no direct attacks",
+  TDE1: "Your max mana -1 for your next 5 turns · 【Requires】Max mana 5 or more",
+  TDE2: "【Passive】Your max mana -2 (never below 3)",
+  TDE3: "【Each Turn】Roll a die: on 1-3, your max mana -1; on 4-6, -2 (never below 3)",
+  TDE4: "【On Summon】Your max mana becomes 4",
+  COLLUSION: "Negate attacks on your tribe monsters; kill the attacker · Max mana -1: gain 1 card of the tribe",
 });
 
 /** Attach nameEn/textEn to every card (explicit map -> generator dictionaries -> Korean fallback). */

@@ -61,6 +61,7 @@ function actValue(c: CardDef): number {
 
 // ---- summon-triggered effects (onSummon) — one shot ----
 const SUMMON_FLAT: Record<string, number> = {
+  preyBounce: 4, preyExec: 6, soloLock: -3, hermitBuff: 3, gravePure: 4, manaDebt5: -2, manaSet4: -5,
   guildCnt: 5, // 상회 카운터 가속 (상회가 없으면 불발이지만 봇 덱 시너지 기준)
   refresh: 3, breaktrap: 4, parity: 4, cullTitan: 5, worldGuard: 6, halfElf: 6,
   eggMaster: 6, decayMark: 6, hordeBuff: 6, eliteBuff: 6, trapsmithBuff: 6,
@@ -125,6 +126,14 @@ function auraValue(c: CardDef): number {
     case "eggHunter": return 3;
     case "vampButler": return 6;
     case "assassinGuild": return 8;
+    // ---- v32 종족 리워크 ----
+    case "devourGrow": return 5;   // 전투 킬마다 영구 성장
+    case "scavenger": return 7;    // 상대 몬스터 사망시 33%로 복제
+    case "pageDraw": return DRAW * 2.2; // 매턴 +1 드로우
+    case "lowAtkBan": return 4;
+    case "trapBan": return 4;
+    case "eliteGuard": return 8;   // 직접 공격 봉쇄 + 6코 이하 도발 벽
+    case "demonTax2": return -MANA * 1.6; // 몸집 대가: 최대 마나 -2
     default: return 4;
   }
 }
@@ -178,6 +187,7 @@ const REACT: Record<string, (c: CardDef) => number> = {
   infoDealer: () => NEGATE * 2.5,         // 다회용 무효 (기대 4.5회)
   secondNull: () => 5,                    // 조건부(2번째 마법) 무효 + 마나 -1
   snare: () => 8,                         // 함정 파괴 억제 + 10뎀 (재세트)
+  collusion: () => KILL + 4,              // 종족 보호: 무효+파괴 (+동족 카드 획득)
   // ---- v26 리워크 함정 ----
   decaytrap: () => 6,                     // 부패 2개 (3개째면 파괴 + 3뎀)
   undertow: () => NEGATE + 5,             // 무효 + 바운스 (템포 + 재소환 비용 강요)
