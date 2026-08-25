@@ -740,12 +740,11 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
           e.cnt = (e.cnt || 0) + added;
           ctx.log(`<span class="t">${cn(e.card)}</span> 패의 포도를 담근다 — 와인 카운터 +${added} (${e.cnt})`, `<span class="t">${cn(e.card)}</span> 手札のぶどうを仕込む — ワインカウンター+${added} (${e.cnt})`);
         }
-        if (g.turn >= (e.bornTurn ?? 0) + 6) {
+        // 만료(자신의 6턴째 = e.turns 마지막 틱)에 와인 지급 — 카드 정리는 아래 공용 만료 처리가 담당
+        if (e.turns <= 1) {
           const nWine = e.cnt ?? 0;
           for (let i = 0; i < nWine; i++) pl.hand.push(inst(g, "WINE"));
-          ctx.log(`<span class="t">${cn(e.card)}</span> <span class="good">숙성 완료!</span> '와인' ${nWine}장을 패에 넣는다 — 효과 종료`, `<span class="t">${cn(e.card)}</span> <span class="good">熟成完了！</span>「ワイン」${nWine}枚を手札に加える — 効果終了`);
-          pl.discard.push(e.card);
-          return false;
+          ctx.log(`<span class="t">${cn(e.card)}</span> <span class="good">숙성 완료!</span> '와인' ${nWine}장을 패에 넣는다`, `<span class="t">${cn(e.card)}</span> <span class="good">熟成完了！</span>「ワイン」${nWine}枚を手札に加える`);
         }
       }
       // 컬 재배: 자신의 턴 시작마다 패에 컬 1장

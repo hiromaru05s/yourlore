@@ -556,7 +556,7 @@ Object.assign(TEXTS, {
   MERCH2: "【On Summon】Put 8 Market counters on your Trade Guild",
   GRAPE: "Your max HP +3",
   GRAPE2: "Your max HP +8",
-  BREWING: "Permanent: Each turn, grapes in hand become Wine counters (Grape 1, Fine 3) · Expires: gain that many Wine",
+  BREWING: "For your next 6 turns, grapes in hand become Wine counters (Grape 1, Fine 3) · Expires: gain that many Wine",
   WINE: "Your max HP +18 · Draw 2 cards",
   DARK_MERCHANT: "Buy any 1 card from the entire card pool by paying its cost",
 });

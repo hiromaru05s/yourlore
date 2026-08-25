@@ -100,7 +100,7 @@ const play0 = (g: GameState, id: string): GameState => {
   // 턴 종료 시 패는 전부 버려지므로, 포도는 덱 맨 위에 심어 다음 자기 턴에 드로우시킨다
   g.players[0].deck.push(card("GRAPE"), card("GRAPE2"));
   let wineAt = -1;
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 16; i++) {
     g = reduce(g, { type: "endTurn" }).state;
     if (g.players[0].hand.some((c) => c.id === "WINE") && wineAt < 0) wineAt = g.turn;
     if (!g.players[0].enchants.some((e) => e.card.ench === "brewing")) break;

@@ -1594,9 +1594,9 @@ const NEW_STARTERS31: CardDef[] = [
     textJa: "ダイスを振り、出た目だけ自分の「商会」にマーケットカウンターを付与" },
   { id: "GRAPE", t: "spell", cost: 1, act: "maxHpUp", val: 3, noShop: true, name: "포도", nameJa: "ぶどう",
     text: "자신 최대 체력 +3", textJa: "自分の最大体力+3" },
-  { id: "BREWING", t: "spell", cost: 3, ench: "brewing", val: 99, noShop: true, name: "양조", nameJa: "醸造",
-    text: "영구: 자신의 턴 시작시 패의 포도류가 와인 카운터로(포도 1·고급 3) · 만료시 카운터만큼 '와인'을 패에 넣는다",
-    textJa: "永続: 自分のターン開始時、手札のぶどうがワインカウンターに(ぶどう1·高級3) · 満了時カウンターの数だけ「ワイン」を手札に" },
+  { id: "BREWING", t: "spell", cost: 3, ench: "brewing", val: 6, noShop: true, name: "양조", nameJa: "醸造",
+    text: "자신의 6턴 동안 턴 시작시 패의 포도류가 와인 카운터로(포도 1·고급 3) · 종료시 카운터만큼 '와인'을 패에 넣는다",
+    textJa: "自分の6ターンの間 ターン開始時に手札のぶどうがワインカウンターに(ぶどう1·高級3) · 終了時カウンターの数だけ「ワイン」を手札に" },
 ];
 const NEW_CARDS13: CardDef[] = [
   { id: "MERCH1", t: "mon", cost: 1, atk: 1, def: 2, onSummon: "guildCnt", val: 3, name: "견습 상인", nameJa: "見習い商人",
