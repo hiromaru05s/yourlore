@@ -12,6 +12,7 @@ export interface DiceOpts {
   need?: number; // min total for success (undefined = outcome-table roll)
   success?: boolean;
   mine: boolean;
+  casino?: boolean; // 카지노 전용 주사위 — 골드 연출
 }
 
 // cube orientation that brings face N to the front
@@ -67,7 +68,7 @@ const wait = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms)
 export async function diceRollAnim(rolls: number[], opts: DiceOpts): Promise<void> {
   if (!rolls.length) return;
   const ov = document.createElement("div");
-  ov.className = "d3-overlay" + (opts.mine ? "" : " opp");
+  ov.className = "d3-overlay" + (opts.mine ? "" : " opp") + (opts.casino ? " casino" : "");
   let skipped = false;
   const skip = new Promise<void>((r) => (ov.onclick = () => { skipped = true; r(); }));
 
@@ -87,6 +88,7 @@ export async function diceRollAnim(rolls: number[], opts: DiceOpts): Promise<voi
   const cap = document.createElement("div");
   cap.className = "d3-cap";
   if (opts.need != null) cap.textContent = `🎲 ${opts.need}+`;
+  if (opts.casino) cap.textContent = "✦ CASINO ✦";
   tray.appendChild(cap);
 
   const cubes: HTMLElement[] = [];

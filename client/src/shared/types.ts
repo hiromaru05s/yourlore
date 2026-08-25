@@ -136,6 +136,11 @@ export interface PlayerState {
   manaCostMult?: number; // 마족 4종 시너지: 소모 마나 배수 (3)
   summonLockUntil?: number; // 고독1(은둔자): g.turn이 이 값 미만인 동안 몬스터 소환 불가
   manaRegain?: { at: number; amt: number }[]; // 마족1: 임시 최대 마나 차감의 복구 예약 (g.turn 기준)
+  trapBlockTurns?: number; // 협상(v34): 남은 함정 설치 금지 턴 수 (자신 턴 시작마다 -1)
+  lowSummonBanNext?: boolean; // 삼격의 불씨 ⑤⑥: 다음 턴 코스트 3 이하 소환 불가 (예약)
+  lowSummonBanTurn?: boolean; // 〃 (활성)
+  refreshBlockNext?: boolean; // 마켓 크래시(v34): 다음 턴 제시 갱신 불가 (예약)
+  refreshBlockTurn?: boolean; // 〃 (활성)
   supplyShrink: number; // if >0, this player's next 제시 roll offers 2 cards instead of 3
   defendHeal: number; // heal this much whenever this player is attacked
   manaGainNext: number; // max mana to gain at the start of this player's next turn
@@ -209,7 +214,7 @@ export type GameEvent =
   | { type: "buy"; player: Side; from: "market" | "supply"; i: number; id: string }
   | { type: "draw"; player: Side; count: number }
   | { type: "treasure"; player: Side; kind: string; text: string; textJa: string; isBot: boolean }
-  | { type: "dice"; player: Side; rolls: number[]; need?: number; success?: boolean } // dice roll (need = min TOTAL for success; undefined = outcome-table roll)
+  | { type: "dice"; player: Side; rolls: number[]; need?: number; success?: boolean; variant?: "casino" } // dice roll (need = min TOTAL for success; undefined = outcome-table roll · variant "casino" = 카지노 전용 연출)
   | { type: "playSpell"; player: Side; id: string; dest: "discard" | "field" | "vanish" } // spell/starter/enchant played from hand
   | { type: "trapSet"; player: Side } // a face-down trap was set (identity hidden)
   | { type: "trapReveal"; player: Side; id: string } // a trap fired → reveal then discard

@@ -22,7 +22,7 @@
 //  · hell   — never blunders + value-net look-ahead search → 최강
 // ============================================================
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
-import { buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, effMaxMana, freeBuyBlocked, glassBanActive, isVampFamily, playCost, reduce, summonReqMet } from "./engine";
+import { buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, effMaxMana, freeBuyBlocked, glassBanActive, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet } from "./engine";
 import { avgPower, cardPower } from "./cardEval";
 import { netEval, determinize } from "./botNet";
 import { DB, hasPassive } from "./cards";
@@ -195,6 +195,7 @@ export function candidates(g: GameState): Action[] {
     if (c.star === "chest" && (g.turn <= T.chestTurn || chestLocked(g))) return;
     if (c.t === "trap" && (p.trapBlockTurn || o.field.some((tm) => tm.aura === "trapBan"))) return; // 협상/몰락한 기사 — 엔진 거부 루프 방지
     if (c.t === "mon" && ((p.summonLockUntil ?? 0) > g.turn || !summonReqMet(p, c, o))) return; // 은둔자 잠금 / 소환 조건
+    if (c.t === "mon" && p.lowSummonBanTurn && (c.cost ?? 0) <= 3) return; // 삼격의 불씨: 3코 이하 봉쇄
     if (c.t === "spell" && p.spellCastCap != null && (p.spellsCastTurn || 0) >= p.spellCastCap) return; // 마족 시너지 한도
     if ((c.t === "spell" || c.t === "starter") && (candSealAll || p.spellSealTurn || (candSealLow && playCost(c, p) <= 5))) return; // 침묵
     if (c.id === "CHOSEN_AREA" && cullExiled(p) < 25) return; // 선택받은 영역: 컬 25장 조건
@@ -215,7 +216,7 @@ export function candidates(g: GameState): Action[] {
       if (m.exhausted) return;
       if (m.hatch != null) return; // 알은 공격 불가 (엔진이 거부 — 후보에서 제외해야 무한 재시도 안 함)
       const a = effAtk(p, m);
-      if (glassBanActive(g) && effDef(p, m) <= 1) return; // 유리 병기 금지령
+      if (glassBanActive(g) && Math.abs(effAtk(p, m) - effDef(p, m)) >= 4) return; // 전략 변경(v34)
       if (o.field.some((tm) => tm.aura === "lowAtkBan") && (m.cost ?? 0) <= 2) return; // 몰락 귀족
       const direct = m.directOnly || o.field.length === 0;
       if (direct && (p.noDirectTurn || o.field.some((tm) => tm.aura === "eliteGuard"))) return; // 천궁의 폐문 / 귀족 영주
@@ -356,12 +357,12 @@ function legalActions(g: GameState): Action[] {
   const noAtk = g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "noAttack"));
   if (!noAtk) {
     p.field.forEach((m) => {
-      if (!m.exhausted && (!glassBanActive(g) || effDef(p, m) > 1)) add({ type: "attack", uid: m.uid });
+      if (!m.exhausted && (!glassBanActive(g) || Math.abs(effAtk(p, m) - effDef(p, m)) < 4)) add({ type: "attack", uid: m.uid });
     });
   }
   p.supply.forEach((c, i) => { if (c && buyCost(p, c) <= p.mana) add({ type: "buySupply", i }); });
   g.market.forEach((c, i) => { if (buyableByBot(p, c)) add({ type: "buyMarket", i }); });
-  if (p.mana >= 1) add({ type: "refresh" });
+  if (p.mana >= 1 && !p.refreshBlockTurn) add({ type: "refresh" });
   add({ type: "endTurn" });
   return out;
 }
@@ -657,8 +658,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.id === "GS9_0" && o.hp <= 21) return false;
     if (c.id === "GS10_0" && p.field.length > 1) return false;
     if (c.id === "RUNE1" && !o.field.some((m) => (m.cost ?? 0) >= 5)) return false;
-    if (c.id === "RUNE2" && !p.hand.some((h) => h.id === "RUNE1")) return false;
-    if (c.id === "RUNE3" && !(p.hand.some((h) => h.id === "RUNE1") && p.hand.some((h) => h.id === "RUNE2"))) return false;
+    if ((c.id === "RUNE2" || c.id === "RUNE3") && !spellDeckHalf(p)) return false; // v34: 덱 절반 마법 조건
     if ((c.id === "DISARM1" || c.id === "DISARM2" || c.id === "DISARM3") && o.enchants.length === 0) return false;
     // don't waste heals at (near) full HP
     if (c.act === "heal" && p.maxHp - p.hp < Math.min(c.val || 0, 6)) return false;
@@ -667,20 +667,21 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     // 길드 상자: 자해 10 리스크 — 체력 여유 필요
     if (c.id === "GUILD_CHEST" && p.hp <= 12) return false;
     // 안식 계열: "이번 턴 다른 플레이 없음" / "필드 비어있음" 조건
-    if ((c.id === "MEDITATE" || c.id === "PRAYER") && (p.playsTurn || 0) > 0) return false;
-    if ((c.id === "MEDITATE" || c.id === "PRAYER") && p.hp >= Math.floor(p.maxHp * 0.8)) return false;
-    if (c.id === "PRAYER" && p.maxMana > 12) return false;
-    if (c.id === "HERMIT" && p.field.length > 0) return false;
+    if (c.id === "MEDITATE" && (p.maxMana > 11 || p.hp >= p.maxHp)) return false; // v34
+    if (c.id === "HERMIT" && (p.field.length > 0 || (p.uses["HERMIT"] || 0) >= 5)) return false;
+    if (c.id === "MULTI_CULTURE" && new Set(p.field.filter((m) => m.tribe).map((m) => m.tribe)).size < 2) return false; // v34
+    if (c.id === "GS6_4" && !(o.brand ?? 0)) return false; // 화맥 점화: 상대 낙인 필요
+    if (c.id === "S3" && !p.field.some((m) => !m.tribe)) return false; // 칼날의 속삭임: 비종족 대상 필요
     // 폐기 경제 카드: 대상이 있어야 시전
     if (c.act === "exilePick" && p.discard.length === 0) return false;
     if (c.act === "destroyMon" && c.cap && !o.field.some((m) => m.cost <= c.cap!)) return false; // 룬 파열: 코스트 캡 대상 필요
-    if (c.id === "WALLBREAK1" && !o.field.some((m) => effAtk(o, m) <= 1)) return false;
+    if (c.id === "WALLBREAK1" && ![...o.field, ...p.field].some((m) => effAtk(o, m) <= 2)) return false;
     if (c.id === "WALLBREAK2" && !o.field.some((m) => effAtk(o, m) <= 2)) return false;
-    if (c.id === "SNIPE1" && !o.field.some((m) => curHp(o, m) <= 1)) return false;
+    if (c.id === "SNIPE1" && ![...o.field, ...p.field].some((m) => curHp(o, m) <= 3)) return false;
     if (c.id === "SNIPE2" && !o.field.some((m) => curHp(o, m) <= 2)) return false;
     if (c.id === "SHATTER" && p.hp <= 7) return false;
     if (c.id === "GREED_PRICE" && p.hp <= 4) return false;
-    if (c.id === "GOLIATH_HUNT" && !o.field.some((m) => effDef(o, m) >= 20)) return false;
+    if (c.id === "GOLIATH_HUNT" && !o.field.some((m) => effDef(o, m) >= 10)) return false;
     if (c.id === "MASSACRE" && (o.field.length === 0 || p.hp <= 10)) return false;
     // FAIR PLAY: don't peek at the opponent's hidden deck order. Whether they own
     // ANY tribe monster is public knowledge (starter + buy log = the collection
@@ -714,7 +715,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   // summonable monsters, best value first (respect the 9-monster zone cap)
   const monsters = p.field.length >= 7 ? [] : p.hand
     .map((c, i) => ({ c, i }))
-    .filter((x) => x.c.t === "mon" && playCost(x.c, p) <= p.mana && !(oppNoLow && (x.c.cost ?? 0) <= 3) && summonReqMet(p, x.c, o) && (p.summonLockUntil ?? 0) <= g.turn)
+    .filter((x) => x.c.t === "mon" && playCost(x.c, p) <= p.mana && !(oppNoLow && (x.c.cost ?? 0) <= 3) && !(p.lowSummonBanTurn && (x.c.cost ?? 0) <= 3) && summonReqMet(p, x.c, o) && (p.summonLockUntil ?? 0) <= g.turn)
     .sort((a, b) => cardPower(b.c) - cardPower(a.c));
 
   // 1) LETHAL: direct spells + attacks (with 관통 penetration) that kill THIS turn.
@@ -756,7 +757,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   if (!noAtk) {
     const ban = glassBanActive(g);
     const lowBan = o.field.some((tm) => tm.aura === "lowAtkBan");
-    const canSwing = (m: FieldMon): boolean => (!ban || effDef(p, m) > 1) && !(lowBan && (m.cost ?? 0) <= 2);
+    const canSwing = (m: FieldMon): boolean => (!ban || Math.abs(effAtk(p, m) - effDef(p, m)) < 4) && !(lowBan && (m.cost ?? 0) <= 2);
     const eliteWall = o.field.some((tm) => tm.aura === "eliteGuard");
     const assassin = ready.find((m) => m.directOnly && canSwing(m) && !p.noDirectTurn && !eliteWall);
     if (assassin) return { type: "attack", uid: assassin.uid };
@@ -824,7 +825,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   // 12.5) 마나가 크게 남아도는데 살 만한 게 없으면 제시 리롤 — 마나를 카드로 환전
   //       (램프 폭발 후반: 리롤로 폭탄을 파는 게 정답. 8마나+ 여유일 때만 → 일반 게임 영향 최소)
   // 턴당 리롤 횟수 상한: 정책이 무상태라 "이번 턴에 쓴 마나"로 간접 제한한다.
-  if (p.mana >= 8 && p.mana > effMaxMana(p) - TUNE.maxRerolls) return { type: "refresh" };
+  if (p.mana >= 8 && p.mana > effMaxMana(p) - TUNE.maxRerolls && !p.refreshBlockTurn) return { type: "refresh" };
 
   // 13) spare mana → Pry Chest (not before turn 7 — early mimic risk outweighs the payout; not while sealed)
   const chest = (g.turn <= T.chestTurn || chestLocked(g)) ? -1 : p.hand.findIndex((c) => c.star === "chest" && playCost(c, p) <= p.mana && castable(c));
@@ -865,7 +866,7 @@ function facePlan(p: PlayerState, o: PlayerState, ready: FieldMon[], spells: { c
     for (const m of [...ready].sort((a, b) => effAtk(p, b) - effAtk(p, a))) {
       const a = effAtk(p, m);
       if (a <= 0) continue;
-      if (ban && effDef(p, m) <= 1) continue;
+      if (ban && Math.abs(effAtk(p, m) - effDef(p, m)) >= 4) continue;
       if (m.directOnly || defs.length === 0) {
         if (p.noDirectTurn || o.field.some((tm) => tm.aura === "eliteGuard")) continue; // 폐문/귀족 영주 — 리썰 계산 제외
         total += a; if (!attackUid) attackUid = m.uid; continue;
@@ -956,7 +957,7 @@ function lethalActions(g: GameState): Action[] {
   if (!noAtk && o.traps.length === 0) {
     const ban = glassBanActive(g);
     [...p.field]
-      .filter((m) => !m.exhausted && (!ban || effDef(p, m) > 1))
+      .filter((m) => !m.exhausted && (!ban || Math.abs(effAtk(p, m) - effDef(p, m)) < 4))
       .sort((a, b) => effAtk(p, b) - effAtk(p, a))
       .forEach((m) => add({ type: "attack", uid: m.uid }));
   }
@@ -1110,6 +1111,11 @@ function autoTarget(g: GameState): Action {
     if (pending.reason === "civChoice") { // 고대 문명: 무료 — 신수의 알(상위 페이오프) 우선
       const ids0 = (pending.data?.ids as string[] | undefined) ?? [];
       return { type: "pick", uid: ids0.includes("BEAST_EGG") ? "BEAST_EGG" : (ids0[0] ?? null) };
+    }
+    if (pending.reason === "exileOppDeck") { // 은월포: 상대 덱에서 가장 비싼 카드를 제외
+      const ids0 = (pending.data?.ids as string[] | undefined) ?? [];
+      const best0 = [...ids0].sort((a, b) => ((DB[b]?.cost ?? 0) - (DB[a]?.cost ?? 0)))[0];
+      return { type: "pick", uid: best0 ?? null };
     }
     // 시초의 거인 교역: 살 수 있는 가장 비싼 시초 카드
     const ids = ((pending.data?.ids as string[] | undefined) ?? []).filter((id) => DB[id] && DB[id].cost <= p.mana);

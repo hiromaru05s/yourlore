@@ -102,3 +102,23 @@
   .d3-pip { width: 9px; height: 9px; }
   .d3-tray { padding: 22px 28px 18px; }
 }
+
+/* ---- 카지노 주사위 (v34): 전용 골드 연출 ---- */
+.d3-overlay.casino .d3-tray {
+  background: linear-gradient(180deg, #2a2010ee, #14100488);
+  border: 1px solid #d4a53a;
+  box-shadow: 0 0 46px #d4a53a55, 0 12px 60px #000c, inset 0 0 40px #3a2a0888;
+}
+.d3-overlay.casino .d3-cap {
+  color: #ffd76a;
+  font-weight: 900;
+  letter-spacing: 0.3em;
+  text-shadow: 0 0 12px #ffb02f88;
+}
+.d3-overlay.casino .d3-face {
+  background: linear-gradient(160deg, #3d2f10, #1d1604);
+  border: 1px solid #e9c76a;
+  color: #ffd76a;
+  box-shadow: inset 0 0 10px #ffb02f44;
+}
+.d3-overlay.casino .d3-pip { background: #ffd76a; box-shadow: 0 0 6px #ffb02fcc; }

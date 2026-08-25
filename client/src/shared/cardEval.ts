@@ -61,6 +61,7 @@ function actValue(c: CardDef): number {
 
 // ---- summon-triggered effects (onSummon) — one shot ----
 const SUMMON_FLAT: Record<string, number> = {
+  casino: 0,
   voidApostle: 3, // 자해 13 대가 포함 (제외 덱에서 대형)
   preyBounce: 4, preyExec: 6, soloLock: -3, hermitBuff: 3, gravePure: 4, manaDebt5: -2, manaSet4: -5,
   guildCnt: 5, // 상회 카운터 가속 (상회가 없으면 불발이지만 봇 덱 시너지 기준)
@@ -216,6 +217,8 @@ function enchValue(c: CardDef): number {
     case "brewing": return 6;  // 포도 → 와인(최대 체력+18·2드로우) 변환
     case "gemRain": return 5;   // 미믹 전체 공격력 +3
     case "voidFruit": return 6; // 제외 수 비례 최대 체력 성장
+    case "runeEcho": return 10;  // 마법 2회 발동 (덱 절반 마법 조건)
+    case "sanctumField": return 5; // 매턴 아군 전체 체력 +2
     case "bonusDraw": return v * v2 * DRAW + MANA; // val = duration in turns
     case "noAttack": return 6;
     case "noSummonLow": return 5;

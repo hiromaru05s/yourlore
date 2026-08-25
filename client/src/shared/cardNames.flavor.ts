@@ -14,7 +14,7 @@ export const FLAVOR_CARD_NAMES: Record<string, LocalizedCardName> = {
   S10: { ko: "청람 서고", ja: "青藍の書庫", en: "Cobalt Archive" },
   S3: { ko: "칼날의 속삭임", ja: "刃の囁き", en: "Whisper to the Blade" },
   S4: { ko: "쌍월의 계시", ja: "双月の啓示", en: "Twin-Moon Revelation" },
-  S6: { ko: "운명색인", ja: "運命索引", en: "Index of Fate" },
+  S6: { ko: "운명의 실", ja: "運命の糸", en: "Thread of Fate" },
   S7: { ko: "전장의 맥동", ja: "戦場の脈動", en: "Pulse of the Battlefield" },
   S11: { ko: "잿빛 혜성", ja: "灰色彗星", en: "Ashen Comet" },
   S12: { ko: "강철맥 각인", ja: "鋼脈刻印", en: "Steelvein Inscription" },

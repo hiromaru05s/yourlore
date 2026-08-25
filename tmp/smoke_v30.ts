@@ -128,7 +128,7 @@ const ATK = (id: string): number => DB[id].atk || 0;
   let g = fresh();
   g.players[1].traps.push(trap("GT8_5") as never);
   g.players[0].mana = 10;
-  g.players[0].hand.unshift({ uid: "sp1", ...structuredClone(DB.S11) } as CardInst);
+  g.players[0].hand.unshift({ uid: "sp1", ...structuredClone(DB.S13) } as CardInst);
   g = reduce(g, { type: "play", idx: 0 }).state;
   ok(g.players[0].brand === 1, "brandMagic: 낙인 1");
   const hpB = g.players[0].hp;
@@ -141,9 +141,9 @@ const ATK = (id: string): number => DB[id].atk || 0;
   let g = fresh();
   g.players[1].traps.push(trap("NT_NULL6") as never);
   g.players[0].mana = 10;
-  const mm0 = g.players[0].maxMana, hp1 = g.players[1].hp, v = DB.S11.val || 0;
-  g.players[0].hand.unshift({ uid: "sp2", ...structuredClone(DB.S11) } as CardInst);
-  g.players[0].hand.unshift({ uid: "sp3", ...structuredClone(DB.S11) } as CardInst);
+  const mm0 = g.players[0].maxMana, hp1 = g.players[1].hp, v = DB.S13.val || 0;
+  g.players[0].hand.unshift({ uid: "sp2", ...structuredClone(DB.S13) } as CardInst);
+  g.players[0].hand.unshift({ uid: "sp3", ...structuredClone(DB.S13) } as CardInst);
   g = reduce(g, { type: "play", idx: 0 }).state;
   ok(g.players[1].hp === hp1 - v, "secondNull: 1번째 통과");
   g = reduce(g, { type: "play", idx: 0 }).state;
@@ -239,9 +239,9 @@ const ATK = (id: string): number => DB[id].atk || 0;
   g.players[1].traps.push(trap("NT_NULL4") as never);
   g.players[0].mana = 20;
   const hp1 = g.players[1].hp, oh = g.players[1].hand.length;
-  g.players[0].hand.unshift({ uid: "sp4", ...structuredClone(DB.S11) } as CardInst);
+  g.players[0].hand.unshift({ uid: "sp4", ...structuredClone(DB.S13) } as CardInst);
   g = reduce(g, { type: "play", idx: 0 }).state;
-  ok(g.players[1].hp === hp1 && g.players[1].hand.some((c) => c.id === "S11") && g.players[1].hand.length === oh + 1, "spellSteal: 무효 + 복제 강탈");
+  ok(g.players[1].hp === hp1 && g.players[1].hand.some((c) => c.id === "S13") && g.players[1].hand.length === oh + 1, "spellSteal: 무효 + 복제 강탈");
 }
 // omen
 {

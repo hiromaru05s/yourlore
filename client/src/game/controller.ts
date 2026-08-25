@@ -285,7 +285,7 @@ export abstract class BaseController implements BoardHandlers {
         case "dice":
           if (!diceDone.has(i)) {
             diceDone.add(i);
-            await diceRollAnim(e.rolls, { need: e.need, success: e.success, mine: e.player === this.you });
+            await diceRollAnim(e.rolls, { need: e.need, success: e.success, mine: e.player === this.you, casino: e.variant === "casino" });
           }
           break;
         case "damage": {
@@ -483,9 +483,10 @@ export abstract class BaseController implements BoardHandlers {
         // 시초의 거인: 코스트 5+ 시초 카드 구매 (지불 가능한 것만 제시)
         // 고대 문명(civChoice): 알 2종 중 1장 무료 선택
         const me = g.players[this.you];
-        const free = g.pending.reason === "civChoice";
+        const free = g.pending.reason === "civChoice" || g.pending.reason === "exileOppDeck"; // 은월포(v34)는 무료 지명
+        const defOf = (id: string) => DB[id] ?? STARTERS[id];
         const ids = (g.pending.data?.ids as string[] | undefined) ?? [];
-        const pool = ids.filter((id) => DB[id] && (free || DB[id].cost <= me.mana)).map((id) => ({ uid: id, ...DB[id] }));
+        const pool = ids.filter((id) => defOf(id) && (free || defOf(id).cost <= me.mana)).map((id) => ({ uid: id, ...defOf(id) }));
         const hint = getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint;
         if (!pool.length) { this.submit({ type: "pick", uid: null }); return; }
         cardPicker(hint, pool, (uid) => this.submit({ type: "pick", uid }));

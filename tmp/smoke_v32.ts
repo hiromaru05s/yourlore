@@ -157,11 +157,11 @@ const play0 = (g: GameState, id: string): GameState => {
   ok(g.players[1].spellCastCap === 0, "마족 3종: 상대 마법 봉인");
   g = play0(g, "TDE4");
   ok(g.players[1].manaCostMult === 3, "마족 4종: 마나 3배");
-  ok(playCost(card("S11"), g.players[1]) === DB.S11.cost * 3, "마나 3배: playCost 반영");
+  ok(playCost(card("S13"), g.players[1]) === DB.S13.cost * 3, "마나 3배: playCost 반영");
   // 상대가 마법을 못 쓰는지
   g = reduce(g, { type: "endTurn" }).state; // → B
   g.players[1].mana = 30;
-  g.players[1].hand.unshift(card("S11"));
+  g.players[1].hand.unshift(card("S13"));
   const hpA = g.players[0].hp;
   g = reduce(g, { type: "play", idx: 0 }).state;
   ok(g.players[0].hp === hpA, "마족 3종: 상대 마법 불발");
