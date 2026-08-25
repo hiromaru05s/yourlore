@@ -202,6 +202,7 @@ export function candidates(g: GameState): Action[] {
     if (c.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) return; // 선견지명 중복 금지
     if (c.ench === "guild" && p.enchants.some((e) => e.card.ench === "guild")) return; // 상회 중복 금지
     if (c.id === "SLUM" && !p.enchants.some((e) => e.card.ench === "guild")) return; // 슬럼가: 상회 필요
+    if (c.id === "DUNGEON_FLOOR" && o.maxMana < 7) return; // 던전 최하층: 상대 최대 마나 7+ 필요
     if (playCost(c, p) > p.mana || seenPlay.has(c.id)) return;
     seenPlay.add(c.id);
     out.push({ type: "play", idx });
@@ -642,6 +643,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) return false;
     if (c.ench === "guild" && p.enchants.some((e) => e.card.ench === "guild")) return false; // 상회 중복
     if (c.id === "SLUM" && !p.enchants.some((e) => e.card.ench === "guild")) return false; // 슬럼가: 상회 필요
+    if (c.id === "DUNGEON_FLOOR" && o.maxMana < 7) return false; // 던전 최하층: 상대 최대 마나 7+ 필요
     if (c.ench && p.traps.length + p.enchants.length >= 7) return false;
     if (c.id === "BLOOD_SECRET" && !p.field.some((m) => isVampFamily(m))) return false;
     if (c.id === "CHOSEN_AREA" && cullExiled(p) < 25) return false;
@@ -857,7 +859,9 @@ function facePlan(p: PlayerState, o: PlayerState, ready: FieldMon[], spells: { c
   if (!noAtk) {
     // 유리 병기 금지령: 방어 1 이하는 공격 자체가 불가 → 리썰 계산에서 제외
     const ban = [p, o].some((pl) => pl.enchants.some((e) => e.card.ench === "glassBan"));
-    const defs = o.field.filter((m) => m.uid !== withoutUid).map((m) => curHp(o, m)).sort((a, b) => b - a); // toughest first
+    const defs = o.field.filter((m) => m.uid !== withoutUid)
+      .map((m) => ({ hp: curHp(o, m), elite: m.aura === "eliteGuard" }))
+      .sort((a, b) => b.hp - a.hp); // toughest first
     for (const m of [...ready].sort((a, b) => effAtk(p, b) - effAtk(p, a))) {
       const a = effAtk(p, m);
       if (a <= 0) continue;
@@ -866,8 +870,9 @@ function facePlan(p: PlayerState, o: PlayerState, ready: FieldMon[], spells: { c
         if (p.noDirectTurn || o.field.some((tm) => tm.aura === "eliteGuard")) continue; // 폐문/귀족 영주 — 리썰 계산 제외
         total += a; if (!attackUid) attackUid = m.uid; continue;
       }
-      const k = defs.findIndex((d) => a > d); // toughest blocker this attacker still kills
-      if (k >= 0) { total += a - defs[k]; defs.splice(k, 1); if (!attackUid) attackUid = m.uid; }
+      // 귀족 영주(eliteGuard)는 코스트 6 이하 공격자가 칠 수 없다 — 리썰 후보에서 제외
+      const k = defs.findIndex((d) => a > d.hp && !(d.elite && (m.cost ?? 0) <= 6));
+      if (k >= 0) { total += a - defs[k].hp; defs.splice(k, 1); if (!attackUid) attackUid = m.uid; }
     }
   }
   return { total, spellIdx, attackUid };

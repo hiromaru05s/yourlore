@@ -349,6 +349,19 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       if (dead.token || hasPassive(dead, "void")) rmz(owner).push(resetInst(dead));
       else owner.discard.push(resetInst(dead));
       ev.push({ type: "destroy", player: side(g, owner), uid: m.uid, id: dead.id });
+      // 미믹의 은신처(mimicLair): 자신의 미믹 계열이 파괴되면 — 제외된 미믹 계열 ×2 데미지
+      if (!g.over && MIMIC_IDS.has(dead.id)) {
+        const li = owner.traps.findIndex((t) => t.card.react === "mimicLair");
+        if (li >= 0) {
+          const lt = owner.traps.splice(li, 1)[0].card;
+          owner.discard.push(lt);
+          ev.push({ type: "trapReveal", player: side(g, owner), id: lt.id });
+          const oppL = g.players[0] === owner ? g.players[1] : g.players[0];
+          const dmgL = rmz(owner).filter((c) => MIMIC_IDS.has(c.id)).length * 2;
+          log(`  └ <span class="dmg">함정 ${cn(lt)}!</span> 제외된 미믹 계열 ×2 = ${dmgL} 데미지`, `  └ <span class="dmg">トラップ ${cn(lt)}!</span> 除外ミミック系×2 = ${dmgL}ダメージ`);
+          if (dmgL > 0) dealDamage(oppL, dmgL, cn(lt), cn(lt));
+        }
+      }
       // 굶주린 추격자(scavenger): 상대 몬스터가 파괴될 때마다 🎲 5+면 그 복제를 자신 필드에 소환
       if (!g.over) {
         for (const pl of g.players) {
@@ -545,6 +558,15 @@ function tickTurnFx(g: GameState, ctx: Ctx, p: PlayerState): void {
         if (gn > 0) { p.maxHp += gn; ctx.log(`  └ ${cn(m)} 최대 체력 +${gn} (${p.maxHp})`, `  └ ${cn(m)} 最大体力+${gn} (${p.maxHp})`); }
         break;
       }
+      case "voidRoll": { // 허무공간의 사도: 🎲 1이면 자신 10뎀 + 자괴
+        const { rolls: vr } = diceRoll(g, ctx.ev, side(g, p), 1);
+        if (vr[0] === 1) {
+          ctx.log(`<span class="t">${cn(m)}</span> 🎲 1 — <span class="dmg">허무가 삼킨다</span>`, `<span class="t">${cn(m)}</span> 🎲 1 — <span class="dmg">虚無に呑まれる</span>`);
+          ctx.dealDamage(p, 10, cn(m), cn(m));
+          if (!g.over) ctx.destroyMonster(p, m);
+        } else ctx.log(`<span class="t">${cn(m)}</span> 🎲 ${vr[0]} — 버틴다`, `<span class="t">${cn(m)}</span> 🎲 ${vr[0]} — 持ちこたえる`);
+        break;
+      }
       case "demonRoll": { // 마족 광전사: 🎲 1~3 → 최대 마나 -1, 4~6 → -2 (바닥 3)
         const { rolls: dr9 } = diceRoll(g, ctx.ev, side(g, p), 1);
         const cut = dr9[0] <= 3 ? 1 : 2;
@@ -645,6 +667,10 @@ function unWeaken(g: GameState, ctx: Ctx): void {
 /** 영구마법 파괴/제거의 공용 처리: 약화술식 복구 + exileOnDestroy(혈귀술 등)는 제외존으로. */
 function binEnch(g: GameState, ctx: Ctx, owner: PlayerState, card: CardInst, forceExile = false): void {
   if (card.ench === "weakenAll") unWeaken(g, ctx);
+  if (card.ench === "gemRain") { // 보석의 비 해제: 미믹 계열 공격력 +3 회수
+    g.players.forEach((pl) => pl.field.forEach((mm) => { if (MIMIC_IDS.has(mm.id)) mm.atkMod = (mm.atkMod || 0) - 3; }));
+    ctx.log(`  └ 보석의 비 해제: 미믹 계열 공격력 -3`, `  └ 宝石の雨解除: ミミック系の攻撃力-3`);
+  }
   if (forceExile || card.exileOnDestroy) {
     rmz(owner).push(card);
     if (card.exileOnDestroy) ctx.log(`  └ ${cn(card)} 은(는) 게임에서 제외된다`, `  └ ${cn(card)} はゲームから除外される`);
@@ -657,6 +683,11 @@ function applyFieldGlobals(g: GameState, m: FieldMon): void {
   if ((g.trickLeft ?? 0) > 0) trickSwap(m);
   const weak = weakenAllCount(g);
   if (weak > 0) m.atkMod = (m.atkMod || 0) - 2 * weak;
+  // 보석의 비(gemRain): 미믹 계열은 활성 장수 × +3
+  if (MIMIC_IDS.has(m.id)) {
+    const gems = g.players.reduce((n2, pl) => n2 + pl.enchants.filter((e) => e.card.ench === "gemRain").length, 0);
+    if (gems > 0) m.atkMod = (m.atkMod || 0) + 3 * gems;
+  }
   // 기합(guts): 소환시 기합 토큰 1개 (소환 경로 무관 — summonMonster/spawnToken/spawnVampire/hatchEgg 전부 여기를 지난다)
   if (hasPassive(m, "guts") && m.guts == null) m.guts = 1;
 }
@@ -792,6 +823,11 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
           for (let i = 0; i < nWine; i++) pl.hand.push(inst(g, "WINE"));
           ctx.log(`<span class="t">${cn(e.card)}</span> <span class="good">숙성 완료!</span> '와인' ${nWine}장을 패에 넣는다`, `<span class="t">${cn(e.card)}</span> <span class="good">熟成完了！</span>「ワイン」${nWine}枚を手札に加える`);
         }
+      }
+      // 허무의 과실(voidFruit): 자신의 턴 시작마다 제외 카드 수만큼 최대 체력 증가 (증가만 — 회복 없음)
+      if (e.card.ench === "voidFruit" && ownerTurn && !g.over) {
+        const nv = rmz(pl).length;
+        if (nv > 0) { pl.maxHp += nv; ctx.log(`<span class="t">${cn(e.card)}</span> 최대 체력 +${nv} (${pl.maxHp})`, `<span class="t">${cn(e.card)}</span> 最大体力+${nv} (${pl.maxHp})`); }
       }
       // 컬 재배: 자신의 턴 시작마다 패에 컬 1장
       if (e.card.ench === "cullTurn" && ownerTurn && !g.over) {
@@ -1614,6 +1650,15 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       ctx.log(`  └ 대가: 자신의 5턴 동안 최대 마나 -1 (${p.maxMana})`, `  └ 代価: 自分の5ターンの間 最大マナ-1 (${p.maxMana})`);
       break;
     }
+    case "voidApostle": { // 허무공간의 사도: 자해 13 + 제외 카드당 +1/+1
+      ctx.dealDamage(p, 13, cn(m), cn(m));
+      if (!g.over) {
+        const nv = rmz(p).length;
+        if (nv > 0) { m.atkMod = (m.atkMod || 0) + nv; m.defMod = (m.defMod || 0) + nv; ctx.log(`  └ 제외 카드 ${nv}장 → +${nv}/+${nv}`, `  └ 除外カード${nv}枚 → +${nv}/+${nv}`); }
+        else ctx.log("  └ 제외된 카드 없음", "  └ 除外されたカードなし");
+      }
+      break;
+    }
     case "manaSet4": { // 마왕: 최대 마나가 4가 된다
       p.maxMana = 4;
       ctx.log(`  └ 마왕의 계약 — 최대 마나가 4가 된다`, `  └ 魔王の契約 — 最大マナが4になる`);
@@ -2116,7 +2161,7 @@ const CUSTOM_SPELLS = new Set<string>([
   "HANDRESET", "TIMEWARP", "GAMBLE", "DICE8",
   "RUNE1", "RUNE2", "RUNE3", "GENESIS_SONG", "GENESIS_MAGIC",
   "BLOOD1", "BLOOD2", "BLOOD_JOY", "BLOOD_ANGER", "BLOOD_SORROW", "BLOOD_PLEASURE", "VAMP_PACT", "VAMP_PACT2", "BLOOD_SECRET",
-  "FLAME", "NEGOTIATE", "COUNTERCALC", "AMBUSH", "TRUMPET", "TRICKROOM", "SLUM", "DARK_MERCHANT", "DISARM3", "FORBIDDEN", "CATALYST", "MEDITATE", "PRAYER", "HERMIT", "LUCKY_CHEST", "GUILD_CHEST", "SCRAPPER", "WALLBREAK1", "WALLBREAK2", "SNIPE1", "SNIPE2", "SHATTER", "INQUISITION", "SCARECROW", "LEVY", "CULL_FLOOD", "PURGE_ALL", "EXILE_NUKE1", "EXILE_NUKE2", "GREED_PRICE", "MARKET_CRISIS", "GOLIATH_HUNT", "MASSACRE",
+  "FLAME", "NEGOTIATE", "COUNTERCALC", "AMBUSH", "TRUMPET", "TRICKROOM", "SLUM", "DARK_MERCHANT", "DUNGEON_FLOOR", "DISARM3", "FORBIDDEN", "CATALYST", "MEDITATE", "PRAYER", "HERMIT", "LUCKY_CHEST", "GUILD_CHEST", "SCRAPPER", "WALLBREAK1", "WALLBREAK2", "SNIPE1", "SNIPE2", "SHATTER", "INQUISITION", "SCARECROW", "LEVY", "CULL_FLOOD", "PURGE_ALL", "EXILE_NUKE1", "EXILE_NUKE2", "GREED_PRICE", "MARKET_CRISIS", "GOLIATH_HUNT", "MASSACRE",
   "DECAY_CRAFT", "MAJESTY_RITE", "CROSSROADS", "CHOSEN_AREA",
 ]);
 // ============================================================
@@ -2400,6 +2445,14 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
         ctx.log(`${tag(p, card)} 상대의 영구마법 ${cn(e.card)} 파괴`, `${tag(p, card)} 相手の永続魔法 ${cn(e.card)} 破壊`);
         binEnch(g, ctx, o, e.card);
       }
+      break;
+    }
+    case "DUNGEON_FLOOR": { // 던전 최하층: 최대 마나 -1(바닥 3) + 🎲 눈만큼 미믹 소환
+      if (p.maxMana > 3) { p.maxMana -= 1; ctx.log(`  └ 대가: 최대 마나 -1 (${p.maxMana})`, `  └ 代価: 最大マナ-1 (${p.maxMana})`); }
+      const { rolls: df } = diceRoll(g, ctx.ev, side(g, p), 1);
+      let dn = 0;
+      for (let i = 0; i < df[0] && p.field.length < FIELD_MAX; i++) { spawnToken(g, ctx, p, "MIMIC"); dn++; }
+      ctx.log(`${tag(p, card)} 🎲 ${df[0]} → 미믹 ${dn}마리 소환`, `${tag(p, card)} 🎲 ${df[0]} → ミミック${dn}体召喚`);
       break;
     }
     case "SLUM": { // 슬럼가: 주사위 눈만큼 상회에 마켓 카운터 (상회 존재는 시전 전 검사됨)
@@ -2970,6 +3023,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (card.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) { ctx.log("  └ 자신 필드에 이미 '선견지명'이 있습니다", "  └ 自分の場に既に「先見の明」があります"); return; }
     if (card.ench === "guild" && p.enchants.some((e) => e.card.ench === "guild")) { ctx.log("  └ 자신 필드에 이미 '상회'가 있습니다", "  └ 自分の場に既に「商会」があります"); return; }
     if (card.id === "SLUM" && !p.enchants.some((e) => e.card.ench === "guild")) { ctx.log("  └ 자신 필드에 '상회'가 없습니다", "  └ 自分の場に「商会」がありません"); return; }
+    if (card.id === "DUNGEON_FLOOR" && o0.maxMana < 7) { ctx.log("  └ 상대 최대 마나가 7 미만이라 사용 불가", "  └ 相手の最大マナが7未満のため使用不可"); return; }
     if ((card.id === "MEDITATE" || card.id === "PRAYER") && (p.playsTurn || 0) > 0) { ctx.log("  └ 이번 턴에 다른 카드를 플레이해서 사용 불가", "  └ このターンに他のカードをプレイしたため使用不可"); return; }
     if (card.id === "PRAYER" && p.maxMana > 12) { ctx.log("  └ 최대 마나가 12를 초과해 사용 불가", "  └ 最大マナが12を超えているため使用不可"); return; }
     if ((card.id === "MEDITATE" || card.id === "PRAYER") && p.hp >= Math.floor(p.maxHp * 0.8)) { ctx.log("  └ 체력이 이미 최대치의 80% 이상입니다", "  └ 体力が既に最大値の80%以上です"); return; }
@@ -3014,6 +3068,11 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       const perm = (card.val || 0) >= 99;
       ctx.log(`<span class="t">${p.name}</span> ${cn(card)} 발동 (지속 ${perm ? "영구" : `${card.val}턴`})`, `<span class="t">${p.name}</span> ${cn(card)} 発動 (${perm ? "永続" : `持続${card.val}ターン`})`);
       ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "field" });
+      // 보석의 비: 시전 시 현재 필드의 모든 미믹 계열 공격력 +3 (신규 소환은 applyFieldGlobals가 처리)
+      if (card.ench === "gemRain") {
+        g.players.forEach((pl) => pl.field.forEach((mm) => { if (MIMIC_IDS.has(mm.id)) mm.atkMod = (mm.atkMod || 0) + 3; }));
+        ctx.log(`  └ 필드의 모든 미믹 계열 공격력 +3`, `  └ 場の全ミミック系の攻撃力+3`);
+      }
       // 약화술식: 시전 시 현재 필드의 모든 몬스터 공격력 -2 (신규 소환은 applyFieldGlobals가 처리)
       if (card.ench === "weakenAll") {
         g.players.forEach((pl) => pl.field.forEach((mm) => (mm.atkMod = (mm.atkMod || 0) - 2)));

@@ -1707,6 +1707,30 @@ TRIBES["마족"] = {
   en: { name: "Demonkin", note: "* Requires different cards of the tribe · each tier fires once, separately", bonuses: ["2 different: the opponent can cast at most 2 spells per turn", "3 different: the opponent cannot cast spells on their turn", "4 different: all mana the opponent spends is tripled"] },
 };
 
+// ============================================================
+// NEW CARDS 14 (v33) — 던전 최하층(미믹 소환) + 미믹/제외 아키타입 지원 4종
+// ============================================================
+const NEW_CARDS14: CardDef[] = [
+  { id: "DUNGEON_FLOOR", t: "spell", cost: 4, noShop: true, name: "던전 최하층", nameJa: "ダンジョン最下層",
+    text: "최대 마나 -1(3 밑 불가) · 주사위 눈만큼 미믹을 자신 필드에 소환 · 상대 최대 마나 7 이상 필요",
+    textJa: "最大マナ-1(3未満不可) · ダイスの目だけミミックを自分の場に召喚 · 相手の最大マナ7以上が必要" },
+  { id: "GEM_RAIN", t: "spell", cost: 1, ench: "gemRain", val: 99, name: "보석의 비", nameJa: "宝石の雨",
+    text: "영구: 필드 위 모든 '미믹' 계열 몬스터의 공격력 +3",
+    textJa: "永続: 場の全ての「ミミック」系モンスターの攻撃力+3" },
+  { id: "MIMIC_LAIR", t: "trap", cost: 2, play: 1, react: "mimicLair", name: "미믹의 은신처", nameJa: "ミミックの隠れ家",
+    text: "【미믹 파괴 반응】제외된 자신의 미믹 계열 카드당 상대에게 2 데미지",
+    textJa: "【ミミック破壊に反応】除外された自分のミミック系カードごとに相手に2ダメージ" },
+  { id: "VOID_FRUIT", t: "spell", cost: 3, ench: "voidFruit", val: 99, name: "허무의 과실", nameJa: "虚無の果実",
+    text: "영구: 자신의 턴 시작마다 제외된 자신의 카드 수만큼 최대 체력을 얻는다",
+    textJa: "永続: 自分のターン開始時、除外された自分のカードの数だけ最大体力を得る" },
+  { id: "VOID_APOSTLE", t: "mon", cost: 4, atk: 0, def: 1, onSummon: "voidApostle", turnFx: "voidRoll", name: "허무공간의 사도", nameJa: "虚無空間の使徒",
+    text: "소환시: 자신에게 13 데미지, 제외 카드당 +1/+1 · 매턴 주사위 1이면 자신에게 10 데미지, 이 몬스터 파괴",
+    textJa: "召喚時: 自分に13ダメージ、除外カードごとに+1/+1 · 自分のターンごとにダイス1なら自分に10ダメージ、このモンスターを破壊" },
+];
+for (const c of NEW_CARDS14) { DB[c.id] = c; }
+DECK_POOL.push("DUNGEON_FLOOR");
+RANDOM_CARDS.add("DUNGEON_FLOOR");
+
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 // 플레이버 카드명(ko/ja/en 3개 국어) 적용 — applyEnglish 이후, standardizeCardTexts 이전
 applyFlavorCardNames([DB, STARTERS as unknown as Record<string, CardDef>]);
@@ -1781,7 +1805,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v32"; // v32: 종족 리워크 — 고귀 삭제 · 고독/포식/귀족 1~4코 고유효과 구성 · 신규 종족 마족(2/3/4종 시너지) · 종족 수호 함정 담합
+export const BALANCE_VERSION = "v33"; // v33: 던전 최하층(스타터) + 보석의 비/미믹의 은신처/허무의 과실/허무공간의 사도 — 미믹·제외 아키타입 확장
+// v32(구): // v32: 종족 리워크 — 고귀 삭제 · 고독/포식/귀족 1~4코 고유효과 구성 · 신규 종족 마족(2/3/4종 시너지) · 종족 수호 함정 담합
 // v31(구): // v31: 마켓 카운터(상회/슬럼가/견습·왕도 상인/암상인) + 와인 아키타입(포도/고급 포도/양조/와인)
 // v30(구): // v30: 함정 리워크 — 클론 함정 10종을 신규 기믹으로 교체(soulSwap/counterOrder/lastBastion/devourGuard/brandMagic/toll/gateClose/doomsday/infoDealer/secondNull) + 덫 속의 덫(snare) 추가 + 클론 5종 삭제(GT10_2/GT10_3/GT6_4/NT_NULL5/GT8_0) + 베이직 6종 기믹화(T8 부패·T9 바운스·T6 코스트뎀·GT5_1 전체봉쇄·NT_NULL4 복제강탈·GT6_2 드로우-2) + T10 회복4·GT10_1 5코·GT9_2 5코
 // v29(구): v29: 표기 정합성 감사(텍스트↔엔진 드리프트) + 몬스터 체력 강화 마법 5종 + 함정 기술자 1/4 + 경제 위기 마켓 8장 고정 + 은둔의 안식 순서 수정

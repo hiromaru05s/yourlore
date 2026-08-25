@@ -585,6 +585,19 @@ Object.assign(TEXTS, {
   COLLUSION: "Negate attacks on your tribe monsters; kill the attacker · Max mana -1: gain 1 card of the tribe",
 });
 
+// ---- MIMIC/VOID EXPANSION (v33) ----
+Object.assign(NAMES, {
+  DUNGEON_FLOOR: "Dungeon Depths", GEM_RAIN: "Gem Rain", MIMIC_LAIR: "Mimic Hideout",
+  VOID_FRUIT: "Fruit of the Void", VOID_APOSTLE: "Apostle of the Void",
+});
+Object.assign(TEXTS, {
+  DUNGEON_FLOOR: "Max mana -1 (floor 3) · Summon Mimics equal to a die roll · Needs enemy max mana 7+",
+  GEM_RAIN: "Permanent: All Mimic-family monsters on the field get ATK +3",
+  MIMIC_LAIR: "【On Your Mimic's Death】2 damage per your exiled Mimic-family card",
+  VOID_FRUIT: "Permanent: At the start of your turns, gain max HP equal to your exiled card count",
+  VOID_APOSTLE: "【On Summon】Take 13 damage; +1/+1 per exiled card · Each turn: die 1 deals you 10 damage and kills it",
+});
+
 /** Attach nameEn/textEn to every card (explicit map -> generator dictionaries -> Korean fallback). */
 export function applyEnglish(pools: Array<Record<string, CardDef>>): void {
   for (const pool of pools) {

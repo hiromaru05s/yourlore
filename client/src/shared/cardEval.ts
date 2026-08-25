@@ -61,6 +61,7 @@ function actValue(c: CardDef): number {
 
 // ---- summon-triggered effects (onSummon) — one shot ----
 const SUMMON_FLAT: Record<string, number> = {
+  voidApostle: 3, // 자해 13 대가 포함 (제외 덱에서 대형)
   preyBounce: 4, preyExec: 6, soloLock: -3, hermitBuff: 3, gravePure: 4, manaDebt5: -2, manaSet4: -5,
   guildCnt: 5, // 상회 카운터 가속 (상회가 없으면 불발이지만 봇 덱 시너지 기준)
   refresh: 3, breaktrap: 4, parity: 4, cullTitan: 5, worldGuard: 6, halfElf: 6,
@@ -188,6 +189,7 @@ const REACT: Record<string, (c: CardDef) => number> = {
   secondNull: () => 5,                    // 조건부(2번째 마법) 무효 + 마나 -1
   snare: () => 8,                         // 함정 파괴 억제 + 10뎀 (재세트)
   collusion: () => KILL + 4,              // 종족 보호: 무효+파괴 (+동족 카드 획득)
+  mimicLair: () => 6,                     // 미믹 사망 반응: 제외 미믹 ×2 번
   // ---- v26 리워크 함정 ----
   decaytrap: () => 6,                     // 부패 2개 (3개째면 파괴 + 3뎀)
   undertow: () => NEGATE + 5,             // 무효 + 바운스 (템포 + 재소환 비용 강요)
@@ -212,6 +214,8 @@ function enchValue(c: CardDef): number {
     case undefined: return 0;
     case "guild": return 7;    // 20턴 주기로 전 풀 구매권 — 느리지만 확정 가치
     case "brewing": return 6;  // 포도 → 와인(최대 체력+18·2드로우) 변환
+    case "gemRain": return 5;   // 미믹 전체 공격력 +3
+    case "voidFruit": return 6; // 제외 수 비례 최대 체력 성장
     case "bonusDraw": return v * v2 * DRAW + MANA; // val = duration in turns
     case "noAttack": return 6;
     case "noSummonLow": return 5;
