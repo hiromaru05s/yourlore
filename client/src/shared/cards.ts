@@ -1836,6 +1836,20 @@ const NEW_CARDS15B: CardDef[] = [
 for (const c of NEW_CARDS15B) { DB[c.id] = c; }
 DECK_POOL.push("CASINO");
 
+// ============================================================
+// NEW CARDS 16 (v35) — 덱 압축 스타터 2종: 리프레시 / 선택과 집중
+// ============================================================
+const NEW_CARDS16: CardDef[] = [
+  { id: "REFRESH_HAND", t: "spell", cost: 1, noShop: true, name: "리프레시", nameJa: "リフレッシュ",
+    text: "카드 1장 드로우 · 패에서 카드 2장까지 골라 게임에서 제외",
+    textJa: "カード1枚ドロー · 手札からカード2枚まで選んでゲームから除外" },
+  { id: "FOCUS", t: "spell", cost: 2, noShop: true, name: "선택과 집중", nameJa: "選択と集中",
+    text: "덱과 묘지에서 카드 3장까지 골라 게임에서 제외",
+    textJa: "デッキと墓地からカード3枚まで選んでゲームから除外" },
+];
+for (const c of NEW_CARDS16) { DB[c.id] = c; }
+DECK_POOL.push("REFRESH_HAND", "FOCUS");
+
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 // 플레이버 카드명(ko/ja/en 3개 국어) 적용 — applyEnglish 이후, standardizeCardTexts 이전
 applyFlavorCardNames([DB, STARTERS as unknown as Record<string, CardDef>]);
@@ -1910,7 +1924,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v34"; // v34: 마법 대개편 — 버프/리워크 45종(아튠·마 1코, S1 주사위표, 마켓 크래시 제시봉쇄, 룬학문 리워크, 대지의 축복 전체회복, 명상/금단/대학살 리워크 등) + 34종 삭제(9코+ 마법 전멸, 시공간 조작 제외) + 스타터 카지노
+export const BALANCE_VERSION = "v35"; // v35: 덱 압축 스타터 — 리프레시(1드로우 + 패 2장까지 제외) / 선택과 집중(덱·묘지 3장까지 제외)
+// v34(구): // v34: 마법 대개편 — 버프/리워크 45종(아튠·마 1코, S1 주사위표, 마켓 크래시 제시봉쇄, 룬학문 리워크, 대지의 축복 전체회복, 명상/금단/대학살 리워크 등) + 34종 삭제(9코+ 마법 전멸, 시공간 조작 제외) + 스타터 카지노
 // v33(구): // v33: 던전 최하층(스타터) + 보석의 비/미믹의 은신처/허무의 과실/허무공간의 사도 — 미믹·제외 아키타입 확장
 // v32(구): // v32: 종족 리워크 — 고귀 삭제 · 고독/포식/귀족 1~4코 고유효과 구성 · 신규 종족 마족(2/3/4종 시너지) · 종족 수호 함정 담합
 // v31(구): // v31: 마켓 카운터(상회/슬럼가/견습·왕도 상인/암상인) + 와인 아키타입(포도/고급 포도/양조/와인)

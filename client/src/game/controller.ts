@@ -448,9 +448,9 @@ export abstract class BaseController implements BoardHandlers {
         const opp = g.players[1 - this.you];
         let pool: CardInst[];
         if (g.pending.kind === "purge") {
-          // 시련의 영역(trialExile): 묘지에서만 제외
-          const discOnly = g.pending.data?.zone === "discard";
-          pool = (discOnly ? [...me.discard] : [...me.deck, ...me.discard]).sort((a, b) => a.cost - b.cost);
+          // 시련의 영역(trialExile): 묘지에서만 · 리프레시: 패에서만
+          const zone = g.pending.data?.zone;
+          pool = (zone === "hand" ? [...me.hand] : zone === "discard" ? [...me.discard] : [...me.deck, ...me.discard]).sort((a, b) => a.cost - b.cost);
         }
         else if (g.pending.kind === "oppRmz") pool = [...(opp.removed ?? [])].sort((a, b) => a.cost - b.cost);
         else { // oppBoard: 상대 몬스터(아우라 제외) + 세트 함정(뒷면) + 영구마법 · 필터: noMon(함정·영구마법만) / trapOnly / enchOnly · anySide면 내 필드도 대상

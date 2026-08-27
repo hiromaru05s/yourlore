@@ -669,6 +669,13 @@ Object.assign(TEXTS, {
   CASINO: "Each die roll adds a Dice counter; at 12, roll the Casino die — 1-2: take 10 / 3-4: deal 30 / 5-6: enemy max mana becomes 3",
 });
 
+// ---- DECK-THINNING STARTERS (v35) ----
+Object.assign(NAMES, { REFRESH_HAND: "Refresh", FOCUS: "Selective Focus" });
+Object.assign(TEXTS, {
+  REFRESH_HAND: "Draw 1 card · Exile up to 2 cards from your hand",
+  FOCUS: "Exile up to 3 cards from your deck and graveyard",
+});
+
 /** Attach nameEn/textEn to every card (explicit map -> generator dictionaries -> Korean fallback). */
 export function applyEnglish(pools: Array<Record<string, CardDef>>): void {
   for (const pool of pools) {

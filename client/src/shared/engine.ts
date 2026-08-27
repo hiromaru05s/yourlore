@@ -2168,7 +2168,7 @@ const CUSTOM_SPELLS = new Set<string>([
   "HANDRESET", "TIMEWARP", "GAMBLE", "DICE8",
   "RUNE1", "RUNE2", "RUNE3", "GENESIS_SONG", "GENESIS_MAGIC",
   "BLOOD1", "BLOOD2", "BLOOD_JOY", "BLOOD_ANGER", "BLOOD_SORROW", "BLOOD_PLEASURE", "VAMP_PACT", "VAMP_PACT2", "BLOOD_SECRET",
-  "FLAME", "NEGOTIATE", "COUNTERCALC", "AMBUSH", "TRUMPET", "TRICKROOM", "SLUM", "DARK_MERCHANT", "DUNGEON_FLOOR", "DISARM3", "FORBIDDEN", "S12", "S14", "MULTI_CULTURE", "GS5_3", "GS6_4", "CATALYST", "MEDITATE", "PRAYER", "HERMIT", "LUCKY_CHEST", "GUILD_CHEST", "SCRAPPER", "WALLBREAK1", "WALLBREAK2", "SNIPE1", "SNIPE2", "SHATTER", "INQUISITION", "SCARECROW", "LEVY", "CULL_FLOOD", "PURGE_ALL", "EXILE_NUKE1", "EXILE_NUKE2", "GREED_PRICE", "MARKET_CRISIS", "GOLIATH_HUNT", "MASSACRE",
+  "FLAME", "NEGOTIATE", "COUNTERCALC", "AMBUSH", "TRUMPET", "TRICKROOM", "SLUM", "DARK_MERCHANT", "DUNGEON_FLOOR", "DISARM3", "FORBIDDEN", "S12", "S14", "MULTI_CULTURE", "GS5_3", "GS6_4", "REFRESH_HAND", "FOCUS", "CATALYST", "MEDITATE", "PRAYER", "HERMIT", "LUCKY_CHEST", "GUILD_CHEST", "SCRAPPER", "WALLBREAK1", "WALLBREAK2", "SNIPE1", "SNIPE2", "SHATTER", "INQUISITION", "SCARECROW", "LEVY", "CULL_FLOOD", "PURGE_ALL", "EXILE_NUKE1", "EXILE_NUKE2", "GREED_PRICE", "MARKET_CRISIS", "GOLIATH_HUNT", "MASSACRE",
   "DECAY_CRAFT", "MAJESTY_RITE", "CROSSROADS", "CHOSEN_AREA",
 ]);
 // ============================================================
@@ -2496,6 +2496,21 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       let dn = 0;
       for (let i = 0; i < df[0] && p.field.length < FIELD_MAX; i++) { spawnToken(g, ctx, p, "MIMIC"); dn++; }
       ctx.log(`${tag(p, card)} 🎲 ${df[0]} → 미믹 ${dn}마리 소환`, `${tag(p, card)} 🎲 ${df[0]} → ミミック${dn}体召喚`);
+      break;
+    }
+    case "REFRESH_HAND": { // 리프레시(v35): 1드로우 → 패에서 2장까지 제외 (선택)
+      const rn = ctx.drawN(p, 1);
+      ctx.log(`${tag(p, card)} ${rn}장 드로우`, `${tag(p, card)} ${rn}枚ドロー`);
+      if (p.hand.length) {
+        g.pending = { kind: "purge", hint: "리프레시 — 패에서 게임에서 제외할 카드 선택 (2장까지)", hintJa: "リフレッシュ — 手札からゲームから除外するカードを選択 (2枚まで)", reason: "purge", allowCancel: true, data: { val: 2, zone: "hand" } };
+        ctx.ev.push({ type: "needTarget", pending: g.pending });
+      }
+      break;
+    }
+    case "FOCUS": { // 선택과 집중(v35): 덱·묘지에서 3장까지 제외 (선택)
+      ctx.log(`${tag(p, card)} 발동`, `${tag(p, card)} 発動`);
+      g.pending = { kind: "purge", hint: "선택과 집중 — 게임에서 제외할 카드 선택 (3장까지)", hintJa: "選択と集中 — ゲームから除外するカードを選択 (3枚まで)", reason: "purge", allowCancel: true, data: { val: 3 } };
+      ctx.ev.push({ type: "needTarget", pending: g.pending });
       break;
     }
     case "SLUM": { // 슬럼가: 주사위 눈만큼 상회에 마켓 카운터 (상회 존재는 시전 전 검사됨)
@@ -3473,15 +3488,20 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     }
   } else if (pending.kind === "purge") {
     let c: CardInst | undefined;
-    const discOnly = d.zone === "discard"; // 시련의 영역: 묘지에서만 제외
-    const di = discOnly ? -1 : p.deck.findIndex((x) => x.uid === uid);
-    if (di >= 0) c = p.deck.splice(di, 1)[0];
-    else { const gi = p.discard.findIndex((x) => x.uid === uid); if (gi >= 0) c = p.discard.splice(gi, 1)[0]; }
+    const zone = d.zone as string | undefined; // "discard" = 묘지만 · "hand" = 패만(리프레시) · 기본 = 덱+묘지
+    const discOnly = zone === "discard";
+    const handOnly = zone === "hand";
+    if (handOnly) { const hi = p.hand.findIndex((x) => x.uid === uid); if (hi >= 0) c = p.hand.splice(hi, 1)[0]; }
+    else {
+      const di = discOnly ? -1 : p.deck.findIndex((x) => x.uid === uid);
+      if (di >= 0) c = p.deck.splice(di, 1)[0];
+      else { const gi = p.discard.findIndex((x) => x.uid === uid); if (gi >= 0) c = p.discard.splice(gi, 1)[0]; }
+    }
     if (c) {
       rmz(p).push(c);
       ctx.log(`<span class="t">${p.name}</span> ${cn(c)} 게임에서 제외`, `<span class="t">${p.name}</span> ${cn(c)} をゲームから除外`);
       const remaining = ((d.val as number) ?? 1) - 1;
-      const poolLeft = discOnly ? p.discard.length : p.deck.length + p.discard.length;
+      const poolLeft = handOnly ? p.hand.length : discOnly ? p.discard.length : p.deck.length + p.discard.length;
       if (remaining > 0 && poolLeft > 0) {
         g.pending = { kind: "purge", hint: pending.hint, hintJa: pending.hintJa, reason: pending.reason, allowCancel: true, data: { val: remaining, zone: d.zone } };
         ctx.ev.push({ type: "needTarget", pending: g.pending });

@@ -165,7 +165,7 @@ export function candidates(g: GameState): Action[] {
       if (pend.allowCancel) push(null);
     }
     else if (pend.kind === "purge") {
-      const pool = pend.data?.zone === "discard" ? [...p.discard] : [...p.deck, ...p.discard];
+      const pool = pend.data?.zone === "hand" ? [...p.hand] : pend.data?.zone === "discard" ? [...p.discard] : [...p.deck, ...p.discard];
       const seen = new Set<string>();
       [...pool].sort((a, b) => cardPower(a) - cardPower(b)).forEach((c) => {
         if (!seen.has(c.id) && seen.size < 6) { seen.add(c.id); push(c.uid); }
@@ -348,7 +348,7 @@ function legalActions(g: GameState): Action[] {
     else if (pend.kind === "myMon") p.field.forEach((m) => add(pick(m.uid)));
     else if (pend.kind === "seek") p.deck.forEach((c) => add(pick(c.uid)));
     else if (pend.kind === "recall") p.discard.forEach((c) => add(pick(c.uid)));
-    else if (pend.kind === "purge") [...p.deck, ...p.discard].forEach((c) => add(pick(c.uid)));
+    else if (pend.kind === "purge") (pend.data?.zone === "hand" ? [...p.hand] : pend.data?.zone === "discard" ? [...p.discard] : [...p.deck, ...p.discard]).forEach((c) => add(pick(c.uid)));
     if (pend.allowCancel) add(pick(null));
     return out;
   }
@@ -939,7 +939,8 @@ function lethalActions(g: GameState): Action[] {
       uniqueCards(p.discard, (a, b) => cardPower(b) - cardPower(a)).forEach((c) => add(pick(c.uid)));
       if (pend.allowCancel) add(pick(null));
     } else if (pend.kind === "purge") {
-      uniqueCards([...p.deck, ...p.discard], (a, b) => cardPower(a) - cardPower(b)).forEach((c) => add(pick(c.uid)));
+      const zpool = pend.data?.zone === "hand" ? [...p.hand] : pend.data?.zone === "discard" ? [...p.discard] : [...p.deck, ...p.discard];
+      uniqueCards(zpool, (a, b) => cardPower(a) - cardPower(b)).forEach((c) => add(pick(c.uid)));
       if (pend.allowCancel) add(pick(null));
     }
     return out.slice(0, 18);
@@ -1087,9 +1088,10 @@ function autoTarget(g: GameState): Action {
     const best = bestOf(p.deck);
     return { type: "pick", uid: best ? best.uid : (p.deck[0]?.uid ?? null) };
   }
-  if (pending.kind === "purge") { // 덱·묘지에서 제외: 저가치부터, 살릴 가치가 있으면 종료
+  if (pending.kind === "purge") { // 덱·묘지(또는 패)에서 제외: 저가치부터, 살릴 가치가 있으면 종료
     const discOnly = pending.data?.zone === "discard"; // 시련의 영역: 묘지에서만 — 컬 우선 제외 (선택받은 시리즈 연료)
-    const pool = (discOnly ? [...p.discard] : [...p.deck, ...p.discard]).sort((a, b) => cardPower(a) - cardPower(b));
+    const handOnly = pending.data?.zone === "hand"; // 리프레시(v35): 패에서만
+    const pool = (handOnly ? [...p.hand] : discOnly ? [...p.discard] : [...p.deck, ...p.discard]).sort((a, b) => cardPower(a) - cardPower(b));
     if (discOnly) {
       const cull = pool.find((c) => c.star === "trash");
       if (cull) return { type: "pick", uid: cull.uid };
