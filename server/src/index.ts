@@ -154,7 +154,15 @@ export default {
 
     if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders(env) });
 
-    // everything else → the static client (SPA fallback handled by [assets])
-    return env.ASSETS.fetch(req);
+    // everything else → the static client (SPA fallback handled by [assets]).
+    // 단, 파일 확장자가 있는 경로(아트/사운드 등)가 SPA 셸로 폴백되면 200 text/html이
+    // /art/* 의 max-age=604800과 함께 브라우저·CDN에 7일간 박제된다(2026-08-21 장애 재발).
+    // 그런 미스는 정직한 404 + no-store로 돌려보낸다.
+    const res = await env.ASSETS.fetch(req);
+    const looksLikeFile = /\.[a-z0-9]{2,5}$/i.test(path) && !path.endsWith(".html");
+    if (looksLikeFile && (res.headers.get("Content-Type") || "").includes("text/html")) {
+      return new Response("not found", { status: 404, headers: { "Cache-Control": "no-store", "Content-Type": "text/plain" } });
+    }
+    return res;
   },
 };

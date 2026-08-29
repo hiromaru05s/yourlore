@@ -358,10 +358,13 @@ function artStatus(key: string): "ok" | "fail" | "unknown" {
 // requested, so the player watched it arrive. Two things fix that: the 384px
 // thumbnail (already on screen) is painted underneath immediately, and the full
 // art is fetched before the tap wherever we can see the tap coming.
+// 아트 캐시 버전 — 미스가 SPA 셸(200 HTML)로 7일 캐시되는 사고가 있어, 대량 아트 추가 시
+// 이 값을 올리면 모든 클라이언트가 오염된 캐시를 우회해 새로 받는다.
+export const ART_V = "2";
 export const artUrl = {
-  xs: (id: string) => `/art/cards-xs/${id}.webp`,
-  sm: (id: string) => `/art/cards-sm/${id}.webp`,
-  full: (id: string) => `/art/cards/${id}.webp`,
+  xs: (id: string) => `/art/cards-xs/${id}.webp?v=${ART_V}`,
+  sm: (id: string) => `/art/cards-sm/${id}.webp?v=${ART_V}`,
+  full: (id: string) => `/art/cards/${id}.webp?v=${ART_V}`,
 };
 
 const prefetched = new Set<string>();
@@ -457,7 +460,7 @@ function artEl(cardId: string, full = false, lazy = false, gallery = false): HTM
     art.classList.add("art-done");
     return art;
   }
-  const src = `/art/${full ? "cards" : "cards-sm"}/${cardId}.webp`;
+  const src = `/art/${full ? "cards" : "cards-sm"}/${cardId}.webp?v=${ART_V}`;
   const img = document.createElement("img");
   img.alt = "";
   img.className = "card-art-img";
@@ -513,7 +516,7 @@ function artEl(cardId: string, full = false, lazy = false, gallery = false): HTM
   if (gallery) {
     // let the browser pick 192px or 384px by its own pixel density
     img.sizes = GALLERY_SIZES;
-    img.srcset = `/art/cards-xs/${cardId}.webp 192w, /art/cards-sm/${cardId}.webp 384w`;
+    img.srcset = `/art/cards-xs/${cardId}.webp?v=${ART_V} 192w, /art/cards-sm/${cardId}.webp?v=${ART_V} 384w`;
   }
   img.src = src;
   art.appendChild(img);

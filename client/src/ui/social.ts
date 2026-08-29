@@ -11,7 +11,7 @@ import { getLang } from "../i18n";
 export function avatarHtml(avatar: string | null | undefined, display: string, size = 40): string {
   const initial = (display || "?").trim().charAt(0).toUpperCase().replace(/[&<>"\']/g, "?");
   const img = avatar && /^[A-Za-z0-9_]+$/.test(avatar)
-    ? `<img src="/art/cards/${avatar}.webp" alt="" loading="lazy" onerror="this.remove()">`
+    ? `<img src="/art/cards/${avatar}.webp?v=2" alt="" loading="lazy" onerror="this.remove()">`
     : "";
   return `<span class="avatar" style="--avs:${size}px">${img}<span class="avatar-fb">${initial}</span></span>`;
 }

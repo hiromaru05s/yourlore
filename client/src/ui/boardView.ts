@@ -8,7 +8,7 @@ import { effMaxMana, playCost, buyCost, effAtk, effDef, curHp } from "../shared/
 import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
-import { cardEl, prefetchZoomArt } from "./cardView";
+import { artUrl, cardEl, prefetchZoomArt } from "./cardView";
 import { bindZoom, zoomCard, setPlayOrigin } from "./anim";
 import { t, getLang, esc } from "../i18n";
 import { logToEn } from "../shared/logEn";
@@ -437,7 +437,7 @@ export class GameView {
     // (폭을 타일에 맞추면 카드 비율상 한 줄보다 높아지므로 두 줄에 걸쳐 세운다.)
     const sortByCost = (cards: CardInst[]) => [...cards].sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
     const graveTop = p.discard[p.discard.length - 1];
-    const graveArt = graveTop && graveTop.id !== "HIDDEN" ? `/art/cards/${graveTop.id}.webp` : graveTop ? frameFor(graveTop.t) : null;
+    const graveArt = graveTop && graveTop.id !== "HIDDEN" ? artUrl.full(graveTop.id) : graveTop ? frameFor(graveTop.t) : null;
     const gravePile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, graveArt, graveTop ?? null, t("game.discard"),
       () => { if (p.discard.length) cardPicker(`${esc(p.name)} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => { /* browse only */ }); });
     // clicking the DECK opens the full composition (own or opponent's public aggregate)
