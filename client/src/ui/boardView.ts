@@ -768,11 +768,6 @@ export class GameView {
     // 재렌더로 카드 노드가 갈리면 body에 떠 있던 확인 배지는 가리킬 대상을 잃는다
     document.querySelectorAll(".buy-confirm").forEach((b) => b.remove());
     mk.innerHTML = `
-      <div class="market-sub">
-        <div class="sub-head"><span class="tag">${t("game.std")}</span></div>
-        <div class="market-cards" id="fixedMarket"></div>
-      </div>
-      <div class="market-div"></div>
       <div class="market-sub market-sub--supply">
         <div class="sub-head">
           <span class="tag">${t("game.supply")}</span>
@@ -781,6 +776,11 @@ export class GameView {
           </button>
         </div>
         <div class="market-cards" id="supplyMarket"></div>
+      </div>
+      <div class="market-div"></div>
+      <div class="market-sub">
+        <div class="sub-head"><span class="tag">${t("game.std")}</span></div>
+        <div class="market-cards" id="fixedMarket"></div>
       </div>`;
 
     // 오클릭 구매 방지: 첫 클릭 = 선택(확인 배지 표시), 같은 카드 재클릭 = 구매.
