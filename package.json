@@ -16,6 +16,7 @@
     "art:generate": "node scripts/generate-card-art.mjs",
     "server:dev": "npm --workspace server run dev",
     "deploy": "npm run build && wrangler deploy -c server/wrangler.toml",
+    "deploy:staging": "npm run build && wrangler deploy -c server/wrangler.toml --env staging",
     "text:check": "node scripts/check-card-text.mjs",
     "art:thumbs": "node scripts/build-card-thumbs.mjs"
   },

@@ -43,3 +43,41 @@ database_id = "050d409e-913f-4a07-92b8-0d150ee6ce4d"
 APP_ORIGIN = "*"
 GOOGLE_CLIENT_ID = "955911680552-9i1tcrojam3v759dmampaga63d387gvt.apps.googleusercontent.com"
 ADMIN_EMAILS = "maruru836818@gmail.com,suhwoo3@gmail.com"
+
+# ============================================================================
+# STAGING — test.yourlore.xyz. Fully isolated from prod: its own worker,
+# its own Durable Objects, its own D1 (lore-db-staging). Deploy with:
+#   npm run deploy:staging   (= wrangler deploy -c server/wrangler.toml --env staging)
+# ============================================================================
+[env.staging]
+name = "lore-server-staging"
+routes = [
+  { pattern = "test.yourlore.xyz", custom_domain = true },
+]
+
+[env.staging.assets]
+directory = "../client/dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+[[env.staging.durable_objects.bindings]]
+name = "MATCHMAKER"
+class_name = "Matchmaker"
+
+[[env.staging.durable_objects.bindings]]
+name = "GAME_ROOM"
+class_name = "GameRoom"
+
+[[env.staging.migrations]]
+tag = "v1"
+new_sqlite_classes = ["Matchmaker", "GameRoom"]
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "lore-db-staging"
+database_id = "a7dfa4cf-2d90-4a9e-a9e1-2e69dcc4ddea"
+
+[env.staging.vars]
+APP_ORIGIN = "*"
+GOOGLE_CLIENT_ID = "955911680552-9i1tcrojam3v759dmampaga63d387gvt.apps.googleusercontent.com"
+ADMIN_EMAILS = "maruru836818@gmail.com,suhwoo3@gmail.com"
