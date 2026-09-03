@@ -13,21 +13,21 @@ const fresh = (seed = 7): GameState => createGame({ seed, mode: "bot", starting:
 const play = (g: GameState, id: string): GameState => { const p = g.players[g.cur]; const c = card(id); p.hand.push(c); p.maxMana = 30; p.mana = 30; return reduce(g, { type: "play", idx: p.hand.length - 1 }).state; };
 const atkTo = (g: GameState, att: FieldMon, tgt: FieldMon | null): GameState => { g = reduce(g, { type: "attack", uid: att.uid }).state; if (g.pending?.reason === "attack") g = reduce(g, { type: "chooseTarget", uid: tgt!.uid }).state; return g; };
 
-ok(BALANCE_VERSION === "v37", "version", BALANCE_VERSION);
+ok(BALANCE_VERSION === "v38c", "version", BALANCE_VERSION);
 for (const id of ["GT5_2", "GT5_3", "GT6_0", "GT6_2", "GT6_3", "GT6_5", "GT8_1", "GT8_2", "GT8_3", "GT8_5", "GT9_3", "GT10_1", "GT12_1", "NT_NULL8", "GM9_2"]) ok(!DB[id], `deleted ${id}`);
 ok(DECK_POOL.includes("CASTLE") && DECK_POOL.includes("ACID_RAIN"), "starters in pool");
 ok(DB.T1.nameJa === "アチューン無効装置" && DB.T3.nameJa === "落とし穴" && DB.NT_NULL3.nameJa === "初級魔力遮断" && DB.LEVY.nameJa === "召集" && DB.LEVY.cost === 6 && DB.LEVY.play === 1, "renames");
 ok(DB.NMD6.onSummon === undefined && DB.NGA4.onSummon === undefined, "sage/blade fiend effects removed");
-ok(DB.GRAPE2.val === 6 && DB.WINE.val === 9, "grape/wine");
+ok(DB.GRAPE2.val === 4 && DB.WINE.val === 6 && DB.WINE.val2 === 1 && DB.GRAPE.val === 2, "grape/wine");
 // 성: 카운터 3 → 공격 흡수 → 병사 소환 +1 → 5코 소환 불가
-{ let g = fresh(); g = play(g, "CASTLE"); const cs = g.players[0].field.find((m) => m.id === "CASTLE")!; ok(cs.gcount === 3, "castle init 3", cs.gcount);
-  g = play(g, "BUDGET"); const cs2 = g.players[0].field.find((m) => m.id === "CASTLE")!; const sold = g.players[0].field.filter((m) => m.id === "SOLDIER2").length; ok(sold === 0 || cs2.gcount === 4, "castle +1 on soldier", [sold, cs2.gcount]);
+{ let g = fresh(); g = play(g, "CASTLE"); const cs = g.players[0].field.find((m) => m.id === "CASTLE")!; ok(cs.gcount === 2, "castle init 2", cs.gcount);
+  g = play(g, "BUDGET"); const cs2 = g.players[0].field.find((m) => m.id === "CASTLE")!; const sold = g.players[0].field.filter((m) => m.id === "SOLDIER2").length; ok(sold === 0 || cs2.gcount === 3, "castle +1 on soldier", [sold, cs2.gcount]);
   const before = g.players[0].hand.length; g = play(g, "NMD6"); ok(g.players[0].hand.length === before + 1, "castle blocks cost>=5 summon");
   g.players[1].field.push(mk("M1", { atkMod: 10 })); g.cur = 1; const att = g.players[1].field[0]; const c0 = g.players[0].field.find((m) => m.id === "CASTLE")!.gcount!;
   g = atkTo(g, att, g.players[0].field.find((m) => m.id === "CASTLE")!); const cs3 = g.players[0].field.find((m) => m.id === "CASTLE"); ok(!!cs3 && cs3.gcount === c0 - 1 && (cs3.dmg || 0) === 0, "castle absorbs", [c0, cs3?.gcount]); }
 // 선전포고 + 증축 + 반역죄
 { let g = fresh(); g = play(g, "CASTLE"); g.players[0].traps.push(trap("WAR_DECL") as never); g.players[1].field.push(mk("M1")); g.cur = 1; const att = g.players[1].field[0];
-  g = atkTo(g, att, g.players[0].field.find((m) => m.id === "CASTLE")!); ok(g.players[0].field.filter((m) => m.id === "INFKNIGHT").length === 3, "war decl 3 knights"); ok(g.players[0].field.find((m) => m.id === "CASTLE")!.gcount! >= 5, "castle +1 per knight", g.players[0].field.find((m) => m.id === "CASTLE")!.gcount);
+  g = atkTo(g, att, g.players[0].field.find((m) => m.id === "CASTLE")!); ok(g.players[0].field.filter((m) => m.id === "INFKNIGHT").length === 3, "war decl 3 knights"); ok(g.players[0].field.find((m) => m.id === "CASTLE")!.gcount! === 4, "castle +1 per knight (2 + 3 knights - 1 absorbed)", g.players[0].field.find((m) => m.id === "CASTLE")!.gcount);
   g.cur = 0; const gc = g.players[0].field.find((m) => m.id === "CASTLE")!.gcount!; g = play(g, "EXPANSION"); ok(g.players[0].field.find((m) => m.id === "CASTLE")!.gcount === gc + 5, "expansion +5");
   g.cur = 1; g = play(g, "TREASON"); ok(g.players[0].field.length === 0 && g.players[0].brand === 3, "treason wipes + brand 3", [g.players[0].field.length, g.players[0].brand]); }
 // 영토 하사
