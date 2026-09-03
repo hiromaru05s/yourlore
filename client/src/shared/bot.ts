@@ -196,6 +196,7 @@ export function candidates(g: GameState): Action[] {
     if (c.star === "chest" && (g.turn <= T.chestTurn || chestLocked(g))) return;
     if (c.t === "trap" && (p.trapBlockTurn || o.field.some((tm) => tm.aura === "trapBan"))) return; // 협상/몰락한 기사 — 엔진 거부 루프 방지
     if (c.t === "mon" && ((p.summonLockUntil ?? 0) > g.turn || !summonReqMet(p, c, o))) return; // 은둔자 잠금 / 소환 조건
+    if (c.t === "mon" && (c.cost ?? 0) >= 5 && p.field.some((m) => m.id === "CASTLE")) return; // 성: 5코 이상 소환 불가
     if (c.t === "mon" && p.lowSummonBanTurn && (c.cost ?? 0) <= 3) return; // 삼격의 불씨: 3코 이하 봉쇄
     if (c.t === "spell" && p.spellCastCap != null && (p.spellsCastTurn || 0) >= p.spellCastCap) return; // 마족 시너지 한도
     if ((c.t === "spell" || c.t === "starter") && (candSealAll || p.spellSealTurn || sealLowBlocks(g, playCost(c, p)))) return; // 침묵
@@ -703,7 +704,9 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.id === "INCUBATOR_S" && !p.field.some((m) => m.hatch != null && m.hatch > 0)) return false;
     if (c.id === "FLAME" && p.hp <= 2) return false;
     if (c.id === "AMBUSH" && (o.maxMana !== 4 || p.hp <= 4)) return false;
-    if (c.id === "COUNTERCALC" && (o.maxMana > 6 || o.enchants.length === 0)) return false;
+    if (c.id === "COUNTERCALC" && (o.maxMana > 7 || o.enchants.length === 0)) return false;
+    if ((c.id === "EXPANSION" || c.id === "LAND_GRANT") && !p.field.some((m) => m.id === "CASTLE")) return false; // 성 필요
+    if (c.id === "TREASON" && !o.field.some((m) => m.id === "CASTLE")) return false;
     if (c.id === "TRUMPET" && p.field.length === 0) return false;
     if (c.id === "NEGOTIATE") return false; // 봇은 상대 마나를 올려주지 않는다
     // forbidden ritual: needs HP to spare AND a non-시초 tribe monster to duplicate
@@ -717,6 +720,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   const monsters = p.field.length >= 7 ? [] : p.hand
     .map((c, i) => ({ c, i }))
     .filter((x) => x.c.t === "mon" && playCost(x.c, p) <= p.mana && !(oppNoLow && (x.c.cost ?? 0) <= 3) && !(p.lowSummonBanTurn && (x.c.cost ?? 0) <= 3) && summonReqMet(p, x.c, o) && (p.summonLockUntil ?? 0) <= g.turn)
+    .filter((x) => !((x.c.cost ?? 0) >= 5 && p.field.some((m2) => m2.id === "CASTLE"))) // 성: 5코 이상 소환 불가
     .sort((a, b) => cardPower(b.c) - cardPower(a.c));
 
   // 1) LETHAL: direct spells + attacks (with 관통 penetration) that kill THIS turn.
@@ -1130,6 +1134,17 @@ function autoTarget(g: GameState): Action {
     if (pending.reason === "civChoice") { // 고대 문명: 무료 — 신수의 알(상위 페이오프) 우선
       const ids0 = (pending.data?.ids as string[] | undefined) ?? [];
       return { type: "pick", uid: ids0.includes("BEAST_EGG") ? "BEAST_EGG" : (ids0[0] ?? null) };
+    }
+    if (pending.reason === "gamblerGuess") return { type: "pick", uid: String(1 + Math.floor(((g.rng >>> 0) % 6))) }; // 도박꾼 예측: 결정적 유사난수
+    if (pending.reason === "gamblerPick") { // 도박꾼 효과: 상대 카드 2장+ → ③, 최대 마나 12 미만 → ①, 그 외 ②
+      const oc = o.field.length + o.traps.length + o.enchants.length;
+      return { type: "pick", uid: oc >= 2 ? "3" : p.maxMana < 12 ? "1" : "2" };
+    }
+    if (pending.reason === "dragonFuse") return { type: "pick", uid: "ANTIQUE_DK" };
+    if (pending.reason === "landGrant") { // 영토 하사: 가장 비싼 귀족 카드
+      const ids0 = (pending.data?.ids as string[] | undefined) ?? [];
+      const best0 = [...ids0].sort((a, b) => ((DB[b]?.cost ?? 0) - (DB[a]?.cost ?? 0)))[0];
+      return { type: "pick", uid: best0 ?? null };
     }
     if (pending.reason === "exileOppDeck") { // 은월포: 상대 덱에서 가장 비싼 카드를 제외
       const ids0 = (pending.data?.ids as string[] | undefined) ?? [];

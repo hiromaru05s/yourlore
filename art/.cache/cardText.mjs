@@ -1,9 +1,9 @@
 // 카드별 완전 수동 오버라이드 (자동 규칙이 어색한 소수 카드)
 const OVERRIDE = {
     MIMIC_PARTY: {
-        ko: "【보물상자 반응】상대 필드에 미믹 1체, 자신 필드에 미믹 2체 소환",
-        ja: "【宝箱に反応】相手の場にミミック1体、自分の場にミミック2体召喚",
-        en: "【On Enemy Chest】Summon 1 Mimic to their field and 2 Mimics to yours",
+        ko: "【보물상자 반응】상대 필드에 미믹 2체, 자신 필드에 미믹 3체 소환",
+        ja: "【宝箱に反応】相手の場にミミック2体、自分の場にミミック3体召喚",
+        en: "【On Enemy Chest】Summon 2 Mimics to their field and 3 Mimics to yours",
     },
     // ---- 복잡한 카드는 세 언어를 손으로 쓴다: "누가·무엇을·언제"가 한 번에 읽히는 순서로 ----
     GUILD_HALL: {

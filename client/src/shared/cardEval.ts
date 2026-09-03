@@ -154,6 +154,7 @@ function auraValue(c: CardDef): number {
     case "sageDiscount": return 3;
     case "general": return 8;
     case "assassinHQ": return 6;
+    case "castle": return 6;
     default: return 4;
   }
 }
@@ -222,6 +223,11 @@ const REACT: Record<string, (c: CardDef) => number> = {
   gateLockAll: () => NEGATE + 8,          // 무효 + 이번 턴 전체 공격 봉쇄
   spellSteal: () => 9,                    // 저코스트 마법 무효 + 복제 강탈 (2:1 교환)
   omen: () => KILL + 4,                   // 파괴 + 드로우 -2
+  // ---- v37 리워크 함정 ----
+  attuneJam: () => 5, caltrops: () => 8, preyGuard: () => KILL + 4, spiky: () => NEGATE + 3, plunder: () => NEGATE + 2,
+  rampart: () => NEGATE + 6, conscript: () => 9, magicCounter: () => NEGATE + 4, mindGame: () => NEGATE + 4, lightning: () => NEGATE + 12,
+  gateShut: () => NEGATE + 4, decoy: () => 9, lavaPit: () => NEGATE + KILL, gluttony: () => NEGATE + 6, vengeance: () => KILL * 2 - 4,
+  rallyKnights: () => NEGATE + 6, informant: () => NEGATE + DRAW * 2, warDecl: () => 12,
 };
 // Traps proved far stronger in measurement than a naive tempo count suggests:
 // a set trap also *deters* attacks, and the attacker pays full cost to find out.
@@ -243,6 +249,7 @@ function enchValue(c: CardDef): number {
     case "voidFruit": return 6; // 제외 수 비례 최대 체력 성장
     case "runeEcho": return 10;  // 마법 2회 발동 (덱 절반 마법 조건)
     case "sanctumField": return 5; // 매턴 아군 전체 체력 +2
+    case "acidRain": return 4; case "strongAcid": return 12; case "rottenGround": return 3;
     case "bonusDraw": return v * v2 * DRAW + MANA; // val = duration in turns
     case "noAttack": return 6;
     case "noSummonLow": return 5;
@@ -310,6 +317,7 @@ const ID_PTS: Record<string, number> = {
   FLAME: 1.5, NEGOTIATE: -2.5, COUNTERCALC: 4, AMBUSH: 4,
   TRUMPET: 3.4, TRICKROOM: 4, RUST_SHROOM: 4, CHOSEN_AREA: 6,
   CURSE: -3, ORIGIN_RITE: 6, GUILD_HQ: 4, WORLD_TREE: 6,
+  CASTLE: 8, BUDGET: 4, EXPANSION: 4, LAND_GRANT: 6, TREASON: 8, UNBRAND: 3, GAMBLE: 5,
 };
 
 /** Monster body value: attack clocks, defense soaks penetration. */

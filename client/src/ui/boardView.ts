@@ -471,7 +471,7 @@ export class GameView {
         && !(pending!.kind === "myMon" && (((pending!.data?.excl as string[] | undefined) ?? []).includes(m.uid))); // 지원 나팔: 이미 고른 몬스터는 중복 선택 불가
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
       // 카지노(v34): 다이스 카운터 배지 (12개마다 카지노 주사위)
-      const casinoBadge = m.aura === "casino" ? { badge: `🎲${m.gcount || 0}/12` } : {};
+      const casinoBadge = m.aura === "casino" ? { badge: `🎲${m.gcount || 0}/12` } : m.id === "CASTLE" ? { badge: `🏰${m.gcount || 0}` } : {};
       const card = cardEl(m, { field: true, compactField: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted, ...casinoBadge });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);

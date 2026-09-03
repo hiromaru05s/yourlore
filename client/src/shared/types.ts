@@ -129,6 +129,7 @@ export interface PlayerState {
   bastionUses?: number; // 최후의 보루: 이 게임에서 발동한 횟수 (4회째부터 회복 없음)
   bastionDraw?: number; // 최후의 보루: 다음 자기 턴 시작시 추가 드로우 수 (1회성)
   noDirectTurn?: boolean; // 천궁의 폐문: 이번 턴 동안 직접 공격 불가 (공격측에 걸린다)
+  noHighAtkTurn?: boolean; // 폐문(v37): 이번 턴 동안 코스트 4 이상 몬스터로 공격 불가 (공격측에 걸린다)
   spellsCastTurn?: number; // 이번 턴에 사용한 마법(t==="spell") 수 — 마나 역류 판정용
   drawPenaltyNext?: number; // 흉조(omen): 다음 턴 시작 드로우에서 차감할 장수 (1회성)
   soloCurse?: boolean; // 고독 4종 시너지: 매 턴 시작시 주사위 5+ 여야만 턴 진행 (걸린 쪽에 표시)

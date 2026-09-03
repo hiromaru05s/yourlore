@@ -2060,6 +2060,87 @@ const NEW_CARDS36 = [
 for (const c of NEW_CARDS36) {
     DB[c.id] = c;
 }
+// ============================================================
+// BALANCE PATCH 37 (v37) — 성(城) 아키타입 + 함정 전면 리워크 + 마법 조정 (유저 스펙, 2026-09-04)
+// ============================================================
+const PATCH37 = {
+    // ---- v36 후속 조정 ----
+    NMD6: { onSummon: undefined, val: undefined, text: "상시: 덱 구성에 마법이 13장 이상이면 마법의 시전 코스트 -1", textJa: "常時: デッキ構成に魔法が13枚以上なら魔法の発動コスト-1" },
+    NGA4: { onSummon: undefined, val: undefined, text: "공격 대상을 고를 수 없고 자신 필드의 몬스터도 대상에 포함", textJa: "攻撃対象を選べず、自分の場のモンスターも対象に含まれる" },
+    ELITE: { text: "소환시: 덱 구성이 10장 이하면 병사(2/2) 2체를 소환", textJa: "召喚時: デッキ構成が10枚以下なら兵士(2/2)2体を召喚" },
+    GM6_0: { text: "소환시: 병사와 함께 묘지로 가면 '드래곤 라이더', 기사와 함께면 '앤티크 드래곤 나이트' 소환 · 둘 다 있으면 선택",
+        textJa: "召喚時: 兵士と共に墓地へ行けば「ドラゴンライダー」、騎士と共になら「アンティークドラゴンナイト」召喚 · 両方いれば選択" },
+    // ---- 마법 조정 ----
+    GAMBLE: { text: "주사위를 10번 굴려 합계가 40 이상이면 최대 마나 +3", textJa: "ダイスを10回振り合計が40以上なら最大マナ+3" },
+    LEVY: { name: "소집", nameJa: "召集", cost: 6, play: 1, text: "병사(2/2) 3체를 자신 필드에 소환", textJa: "兵士(2/2)3体を自分の場に召喚" },
+    GRAPE2: { val: 6, text: "자신 최대 체력 +6", textJa: "自分の最大体力+6" },
+    WINE: { val: 9, text: "자신 최대 체력 +9 · 카드 2장 드로우", textJa: "自分の最大体力+9 · カード2枚ドロー" },
+    COUNTERCALC: { text: "상대 최대 마나 7 이하일 때만 사용 가능 · 상대 영구마법 1장 파괴", textJa: "相手の最大マナが7以下の時のみ使用可能 · 相手の永続魔法1枚を破壊" },
+    TRIBE_PACT: { text: "영구: 종족 몬스터의 구매 코스트 -1(최소 1) · 45턴까지 종족 시너지를 발동하지 못하면 자신은 패배",
+        textJa: "永続: 種族モンスターの購入コスト-1(最低1) · 45ターンまでに種族シナジーを発動できなければ自分は敗北" },
+    // ---- 함정 리워크 ----
+    T1: { react: "attuneJam", val: undefined, text: "【어튠 반응】주사위를 굴려 3 이상이면 상대의 '어튠'을 무효화, 상대 최대 체력 +5", textJa: "【アチューンに反応】ダイスを振り3以上なら相手の「アチューン」を無効化、相手の最大体力+5" },
+    T8: { react: "caltrops", text: "공격 몬스터를 포함한 상대 몬스터 최대 3체에 부패 카운터 2개씩", textJa: "攻撃モンスターを含む相手モンスター最大3体に腐敗カウンター2個ずつ" },
+    NT_NULL3: { name: "초급 마력 차단", nameJa: "初級魔力遮断" },
+    T2: { text: "시전 코스트 4 이하 마법 1장 무효화(보물상자·어튠 제외) · 덱에 '초급 마력 차단'이 있으면 5 이하",
+        textJa: "発動コスト4以下の魔法1枚を無効化(宝箱・アチューン除く) · デッキに「初級魔力遮断」があれば5以下" },
+    T3: { val: 5, val2: 10, text: "상대가 소환한 코스트 5 이하, 체력 10 이하 몬스터를 파괴", textJa: "相手が召喚したコスト5以下、体力10以下のモンスターを破壊" },
+    T9: { react: "spiky", text: "공격 무효 · 공격 몬스터에 3 데미지", textJa: "攻撃無効 · 攻撃モンスターに3ダメージ" },
+    T10: { react: "preyGuard", val: undefined, text: "자신의 '포식' 종족이 공격받으면 발동 · 공격 무효 + 공격 몬스터 파괴, 코스트 5 이하면 게임에서 제외",
+        textJa: "自分の「捕食」種族が攻撃されたら発動 · 攻撃無効 + 攻撃モンスターを破壊、コスト5以下ならゲームから除外" },
+    T11: { react: "plunder", val: undefined, text: "공격 무효 · 상대 묘지의 코스트 2 이하 카드 1장을 자신의 묘지로", textJa: "攻撃無効 · 相手の墓地のコスト2以下のカード1枚を自分の墓地へ" },
+    T12: { react: "rampart", val: undefined, text: "코스트 5 이하 몬스터의 공격에만 발동 · 공격 무효 + 그 몬스터를 패로 · 자신 '성'에 성 카운터 5개",
+        textJa: "コスト5以下のモンスターの攻撃にのみ発動 · 攻撃無効 + そのモンスターを手札に戻す · 自分の「城」に城カウンター5個" },
+    NT_NULL4: { name: "징병", nameJa: "徴兵", react: "conscript", cap: undefined, text: "공격 몬스터의 코스트만큼 병사(2/2)를 자신 필드에 소환", textJa: "攻撃モンスターのコスト分の兵士(2/2)を自分の場に召喚" },
+    T4: { react: "magicCounter", val: undefined, val2: undefined, text: "공격 무효 · 상대에게 낙인 카운터 1개", textJa: "攻撃無効 · 相手に烙印カウンター1個" },
+    T6: { react: "mindGame", text: "공격 무효 · 양측이 눈을 예상해 주사위 1개 · 상대 적중이면 자신 낙인 1개, 자신 적중이면 상대 낙인 3개",
+        textJa: "攻撃無効 · 互いに出目を予想しダイス1個 · 相手が的中なら自分に烙印1個、自分が的中なら相手に烙印3個" },
+    T13: { react: "lightning", val: undefined, text: "공격 무효 · 상대·상대 몬스터·자신 몬스터 중 무작위 3회 선출, 각 12 데미지(관통 없음)",
+        textJa: "攻撃無効 · 相手・相手モンスター・自分のモンスターから無作為に3回選出、各12ダメージ(貫通なし)" },
+    GT11_1: { react: "gateShut", text: "공격 무효 · 이번 턴 상대는 코스트 4 이상 몬스터로 더 이상 공격할 수 없다", textJa: "攻撃無効 · このターン相手はこれ以上コスト4以上のモンスターで攻撃できない" },
+    GT5_0: { react: "decoy", text: "공격을 다른 상대 몬스터에게 돌린다(관통 적용)", textJa: "攻撃を別の相手モンスターに向ける(貫通あり)" },
+    GT5_1: { react: "lavaPit", text: "공격 무효 + 공격 몬스터 파괴 · 그 공격력이 4 이상이면 상대에게 낙인 카운터 1개", textJa: "攻撃無効 + 攻撃モンスターを破壊 · その攻撃力が4以上なら相手に烙印カウンター1個" },
+    GT5_4: { react: "gluttony", text: "공격 무효 · 자신 몬스터 1체의 체력 +12(지속)", textJa: "攻撃無効 · 自分のモンスター1体の体力+12(持続)" },
+    GT9_2: { react: "vengeance", text: "공격받은 자신 몬스터를 파괴하고 상대 몬스터 2체를 파괴", textJa: "攻撃された自分のモンスターを破壊し、相手モンスター2体を破壊" },
+    GT10_0: { react: "rallyKnights", text: "공격 무효 · 자신 필드에 '성'이 있으면 가능한 한 기사(4/4)를 소환", textJa: "攻撃無効 · 自分の場に「城」があれば可能な限り騎士(4/4)を召喚" },
+    GT11_0: { react: "informant", text: "공격 무효 · '길드의 정보망' 1장을 자신 필드에 전개", textJa: "攻撃無効 · 「ギルドの情報網」1枚を自分の場に展開" },
+    GT6_1: { text: "【구매 반응】주사위를 굴려 5 이상이면 구매한 카드를 게임에서 제외 · 자신 필드에 '성'이 있으면 3 이상", textJa: "【購入に反応】ダイスを振り5以上なら購入カードをゲームから除外 · 自分の場に「城」があれば3以上" },
+};
+for (const id of Object.keys(PATCH37)) {
+    if (DB[id])
+        Object.assign(DB[id], PATCH37[id]);
+}
+const DELETE_IDS37 = ["GT5_2", "GT5_3", "GT6_0", "GT6_2", "GT6_3", "GT6_5", "GT8_1", "GT8_2", "GT8_3", "GT8_5", "GT9_3", "GT10_1", "GT12_1", "NT_NULL8"];
+for (const id of DELETE_IDS37) {
+    delete DB[id];
+    RANDOM_CARDS.delete(id);
+}
+const NEW_STARTERS37 = [
+    { id: "CASTLE", t: "mon", cost: 2, atk: 0, def: 3, passive: ["taunt"], onSummon: "castleInit", aura: "castle", noShop: true, name: "성", nameJa: "城",
+        text: "【소환시】성 카운터 3개 · 【상시】카운터 1개로 공격 무효 · 코스트 5 이상 소환 불가 · 병사·기사 소환 시 카운터 +1",
+        textJa: "【召喚時】城カウンター3個 · 【常時】カウンター1個で攻撃を無効化 · コスト5以上は召喚不可 · 兵士・騎士召喚時にカウンター+1" },
+    { id: "ACID_RAIN", t: "spell", cost: 2, ench: "acidRain", val: 99, noShop: true, name: "산성비", nameJa: "酸性雨",
+        text: "영구: 상대 몬스터가 부패로 파괴될 때마다 상대에게 낙인 카운터 1개", textJa: "永続: 相手モンスターが腐敗で破壊されるたび相手に烙印カウンター1個" },
+];
+const NEW_CARDS37 = [
+    { id: "BUDGET", t: "spell", cost: 2, name: "운영 예산", nameJa: "運営予算", text: "주사위를 굴려 2 이상이면 병사(2/2) 1체를 자신 필드에 소환", textJa: "ダイスを振り2以上なら兵士(2/2)1体を自分の場に召喚" },
+    { id: "EXPANSION", t: "spell", cost: 3, name: "증축", nameJa: "増設", text: "자신 필드에 '성'이 있을 때만 · 자신의 '성'에 성 카운터 5개", textJa: "自分の場に「城」がある時のみ · 自分の「城」に城カウンター5個" },
+    { id: "LAND_GRANT", t: "spell", cost: 2, name: "영토 하사", nameJa: "領土付与", text: "자신 필드에 '성'이 있을 때만 · 코스트 3 이하 '귀족' 종족 카드 1장을 자신 필드에 소환", textJa: "自分の場に「城」がある時のみ · コスト3以下の「貴族」種族カード1枚を自分の場に召喚" },
+    { id: "TREASON", t: "spell", cost: 1, name: "반역죄", nameJa: "反逆罪", text: "상대 필드에 '성'이 있을 때만 · 상대 필드의 카드 전부 파괴, 상대에게 낙인 카운터 3개", textJa: "相手の場に「城」がある時のみ · 相手の場のカードを全て破壊、相手に烙印カウンター3個" },
+    { id: "STRONG_ACID", t: "spell", cost: 4, ench: "strongAcid", val: 99, name: "강산성비", nameJa: "強酸性雨",
+        text: "영구: 발동 시 상대 몬스터 전체에 부패 카운터 2개 · 상대 몬스터가 부패로 파괴되면 상대에게 7 데미지, 낙인 1개",
+        textJa: "永続: 発動時に相手モンスター全体に腐敗カウンター2個 · 相手モンスターが腐敗で破壊されると相手に7ダメージ、烙印1個" },
+    { id: "ROTTEN_GROUND", t: "spell", cost: 2, ench: "rottenGround", val: 99, name: "부패한 땅", nameJa: "腐敗した土地",
+        text: "영구: 필드에 소환되는 모든 몬스터에 부패 카운터 2개", textJa: "永続: 場に召喚される全てのモンスターに腐敗カウンター2個" },
+    { id: "UNBRAND", t: "spell", cost: 1, name: "제인", nameJa: "徐印", text: "상대와 자신의 낙인 카운터를 모두 제거", textJa: "相手と自分の烙印カウンターを全て取り除く" },
+    { id: "WAR_DECL", t: "trap", cost: 4, play: 1, react: "warDecl", name: "선전포고", nameJa: "宣戦布告",
+        text: "자신의 '성'이 공격받으면 발동 · 기사(4/4) 3체를 자신 필드에 소환", textJa: "自分の「城」が攻撃されたら発動 · 騎士(4/4)3体を自分の場に召喚" },
+];
+for (const c of [...NEW_STARTERS37, ...NEW_CARDS37]) {
+    DB[c.id] = c;
+}
+DECK_POOL.push(...NEW_STARTERS37.map((c) => c.id));
+RANDOM_CARDS.add("BUDGET");
 applyEnglish([DB, STARTERS]);
 // 플레이버 카드명(ko/ja/en 3개 국어) 적용 — applyEnglish 이후, standardizeCardTexts 이전
 applyFlavorCardNames([DB, STARTERS]);
@@ -2094,6 +2175,10 @@ const RELATED_MANUAL = {
     NHEX: ["CURSE"],
     TGE1: ["TGE2", "TGE3", "TGE4", "TGE5", "TGE6", "TGE7"],
     CHOSEN_AREA: ["EXILE_NUKE1", "EXILE_NUKE2"], // 컬 제외 아키타입 페이오프
+    CASTLE: ["EXPANSION", "LAND_GRANT", "WAR_DECL", "T12", "GT10_0", "GT6_1", "TREASON", "SOLDIER2", "INFKNIGHT"],
+    LAND_GRANT: ["CASTLE", "TAR1", "TAR2", "TAR3"],
+    T2: ["NT_NULL3"],
+    T10: ["TPO1", "TPO2", "TPO3", "TPO5"],
 };
 const _relatedCache = {};
 export function relatedCardIds(id) {
@@ -2147,7 +2232,8 @@ export function relatedCardIds(id) {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v36"; // v36: 몬스터 대개편 — 골램 아키타입(마나 골렘 manaGolem/가디언 gutsOnHit/자이언트 giantGolem/특공부대 golemSquad/리더 leaderGolem/골램 킹 golemKin) · 시초의 알 부화(4턴/내구2→시초 1체) · 병사/기사 군단(워로드/기수/정예/장군/고무왕/드래곤 융합→라이더·앤티크) · 세계수 3종(신도/파수꾼/세계수) · 암살자 본부(나이트 마켓+낙인) · 선택받은 4종 리워크 · 엘프 상향 · 카지노 표 변경 · 제네릭 고코스트 몬스터 36종 삭제
+export const BALANCE_VERSION = "v37"; // v37: 성 아키타입(성/증축/영토 하사/반역죄/선전포고/운영 예산/소집) + 함정 전면 리워크(어튠 무효 장치·마름쇠·중급 차단·낙인계·낙뢰·폐문·대역·복수…) + 14종 삭제 + 산성비/강산성비/부패한 땅/제인 + 도박꾼 예측 선택 + 다종족 계약 리워크
+// v36(구): // v36: 몬스터 대개편 — 골램 아키타입(마나 골렘 manaGolem/가디언 gutsOnHit/자이언트 giantGolem/특공부대 golemSquad/리더 leaderGolem/골램 킹 golemKin) · 시초의 알 부화(4턴/내구2→시초 1체) · 병사/기사 군단(워로드/기수/정예/장군/고무왕/드래곤 융합→라이더·앤티크) · 세계수 3종(신도/파수꾼/세계수) · 암살자 본부(나이트 마켓+낙인) · 선택받은 4종 리워크 · 엘프 상향 · 카지노 표 변경 · 제네릭 고코스트 몬스터 36종 삭제
 // v35(구): // v35: 덱 압축 스타터 — 리프레시(1드로우 + 패 2장까지 제외) / 선택과 집중(덱·묘지 3장까지 제외)
 // v34(구): // v34: 마법 대개편 — 버프/리워크 45종(아튠·마 1코, S1 주사위표, 마켓 크래시 제시봉쇄, 룬학문 리워크, 대지의 축복 전체회복, 명상/금단/대학살 리워크 등) + 34종 삭제(9코+ 마법 전멸, 시공간 조작 제외) + 스타터 카지노
 // v33(구): // v33: 던전 최하층(스타터) + 보석의 비/미믹의 은신처/허무의 과실/허무공간의 사도 — 미믹·제외 아키타입 확장
