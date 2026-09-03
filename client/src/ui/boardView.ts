@@ -285,6 +285,8 @@ export class GameView {
         && !(pending!.kind === "myMon" && pending!.reason === "chosenMage" && (m.id !== "CHOSEN_MAGE" || ((pending!.data?.fired as string[] | undefined) ?? []).includes(m.uid))) // 마법사만 발동 가능
         && !(pending!.kind === "myMon" && pending!.reason === "grantDecay" && hasPassive(m, "decay")) // 이미 부패 보유
         && !(pending!.kind === "myMon" && pending!.reason === "grantMajesty" && hasPassive(m, "majesty")) // 이미 위엄 보유
+        && !(pending!.kind === "myMon" && pending!.reason === "emberBuff" && m.tribe !== "시초") // 시초의 불씨: 시초만
+        && !(pending!.kind === "myMon" && pending!.reason === "worldTree" && (m.id !== "WORLD_TREE" || (m.gcount || 0) <= 0)) // 세계수: 카운터 있는 세계수만
         && !(pending!.kind === "myMon" && (((pending!.data?.excl as string[] | undefined) ?? []).includes(m.uid))); // 지원 나팔: 이미 고른 몬스터는 중복 선택 불가
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
       const card = cardEl(m, { field: true, compactField: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted });
@@ -300,7 +302,7 @@ export class GameView {
     // spell/trap zone
     const sz = document.createElement("div");
     sz.className = "zone zone-st";
-    p.traps.forEach(() => {
+    p.traps.forEach((t) => {
       // Set traps keep their identity hidden, but use a dedicated owner-coloured
       // field icon inside the same green square field frame as other trap cards.
       const trap = document.createElement("div");
@@ -312,9 +314,17 @@ export class GameView {
       icon.alt = "";
       art.appendChild(icon);
       const frame = document.createElement("div");
-      frame.className = "card-frame";
       frame.style.backgroundImage = `url(${frameFor("trap")})`;
+      frame.className = "card-frame";
       trap.append(art, frame);
+      // v25 카운터 배지 — 카운트다운(⏳남은 턴) / 정보상(×남은 사용 횟수).
+      // 자신의 함정은 항상, 상대 함정은 발동으로 정체가 공개된 정보상만 (카운트다운은 비공개 유지)
+      if (t.cnt != null && (isMe || t.card.react === "infoDealer")) {
+        const b = document.createElement("span");
+        b.className = "badge trap-cnt";
+        b.textContent = t.card.react === "doomsday" ? `⏳${t.cnt}` : `×${t.cnt}`;
+        trap.appendChild(b);
+      }
       sz.appendChild(trap);
     });
     p.enchants.forEach((e) => {
@@ -628,7 +638,9 @@ export class GameView {
     this.prevAffordable = nowAff;
 
     const rb = this.q("refreshBtn") as HTMLButtonElement;
-    rb.disabled = !myTurn || !!g.pending || me.mana < 1;
+    const rtok = me.refreshTokens || 0; // 렐릭 헌터: 제시 카운터가 있으면 무료 갱신
+    rb.disabled = !myTurn || !!g.pending || (me.mana < 1 && rtok <= 0);
+    const rbCost = rb.querySelector("b"); if (rbCost) rbCost.textContent = rtok > 0 ? `0 (${rtok})` : "1";
     rb.onclick = () => this.h.onRefresh();
   }
 

@@ -16,7 +16,9 @@
     "art:generate": "node scripts/generate-card-art.mjs",
     "art:optimize": "node scripts/optimize-card-art.mjs",
     "server:dev": "npm --workspace server run dev",
-    "deploy": "npm run build && wrangler deploy -c server/wrangler.toml"
+    "deploy": "node scripts/blocked-stale-fork.mjs",
+    "deploy:staging": "node scripts/blocked-stale-fork.mjs",
+    "deploy:prod": "node scripts/blocked-stale-fork.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.115.0"

@@ -1395,6 +1395,229 @@ const PATCH24: Record<string, Partial<CardDef>> = {
 };
 for (const id of Object.keys(PATCH24)) { if (DB[id]) Object.assign(DB[id], PATCH24[id]); }
 
+// ============================================================
+// BALANCE PATCH 25 (v25) — 함정 리워크 1차:
+// 코피페 클론 함정을 신규 기믹 10종으로 교체 + 잔여 클론 5종 삭제.
+// 신규 트리거: 구매 반응 / 직접공격 반응 / 카운트다운(자동 발동) /
+// 함정 파괴 반응 / 2번째 마법 반응 / 다회용 함정(카운터).
+// 함정 시전(세트) 코스트는 v17 원칙대로 전부 1 유지 (정보 누출 차단).
+// ============================================================
+const PATCH25: Record<string, Partial<CardDef>> = {
+  // ---- 유지 카드 수치 조정 ----
+  T10: { val: 4, text: "공격 몬스터 파괴 + 체력 4 회복", textJa: "攻撃モンスターを破壊 + 体力4回復" }, // 회복 2 → 4 (너프 과다 복구)
+  GT10_1: { cost: 5, val: 6, text: "공격 무효 + 공격측에 6 데미지", textJa: "攻撃無効 + 攻撃側に6ダメージ" }, // fullguard 대표: 9코 → 5코
+  GT9_2: { cost: 5 }, // reflect 대표: 6코 → 5코
+  // ---- 리워크 (유저 스펙 v25) ----
+  GT9_3: { cost: 6, react: "soulSwap", val: undefined,
+    text: "자신의 필드에 몬스터가 있을 때만 발동 가능. 공격 몬스터를 빼앗고, 자신 필드에서 코스트가 가장 낮은 몬스터 1체를 상대 필드로 보낸다(이번 턴 행동 불가)",
+    textJa: "自分の場にモンスターがいる場合のみ発動可能。攻撃モンスターを奪い、自分の場のコストが最も低いモンスター1体を相手の場に送る(このターン行動不可)" },
+  GT10_0: { cost: 5, react: "counterOrder", val: undefined,
+    text: "공격을 절반으로 줄이고, 자신 필드의 모든 몬스터가 공격 몬스터에게 각자의 공격력만큼 일제히 반격한다(관통 적용)",
+    textJa: "攻撃を半減し、自分の場の全モンスターが攻撃モンスターに各自の攻撃力分を一斉に反撃する(貫通あり)" },
+  GT12_0: { cost: 7, react: "lastBastion", val: undefined, exileOnDestroy: true,
+    text: "이 공격으로 체력이 0이 될 때만 발동 가능. 공격을 무효화하고 상대 턴을 종료한다. 최대 체력의 절반을 회복하고, 다음 턴 시작시 4장 추가 드로우. 이 게임에서 이미 3회 이상 사용했다면 회복은 발동하지 않는다 · 공허",
+    textJa: "この攻撃で体力が0になる場合のみ発動可能。攻撃を無効化し相手のターンを終了する。最大体力の半分を回復し、次のターン開始時に4枚追加ドロー。このゲームで既に3回以上使用していた場合、回復は発動しない · 虚無" },
+  GT5_4: { cost: 5, react: "devourGuard", val: undefined,
+    text: "공격을 무효화하고 공격 몬스터를 파괴한다. 주사위 4 이상이면 그 몬스터를 게임에서 제외한다",
+    textJa: "攻撃を無効化し攻撃モンスターを破壊する。ダイス4以上ならそのモンスターをゲームから除外する" },
+  GT8_5: { cost: 6, react: "brandMagic", val: undefined,
+    text: "【마법 반응】상대에게 낙인 카운터 1개를 부여한다. 상대는 낙인 카운터 1개당 매 턴 시작시 주사위를 굴려 나온 수만큼 데미지를 받는다",
+    textJa: "【魔法に反応】相手に烙印カウンターを1個与える。相手は烙印カウンター1個につき毎ターン開始時にダイスを振り、出た目のダメージを受ける" },
+  GT6_1: { cost: 3, react: "toll", val: undefined,
+    text: "【구매 반응】주사위 4 이상이면 상대가 구매한 카드를 게임에서 제외하고, 그 코스트만큼 상대에게 데미지 + 자신의 최대 체력 증가",
+    textJa: "【購入に反応】ダイス4以上なら相手が購入したカードをゲームから除外し、そのコスト分のダメージを与え、自分はそのコスト分の最大体力を得る" },
+  GT11_1: { cost: 4, react: "gateClose", val: undefined,
+    text: "【직접공격 반응】공격을 무효화한다. 이번 턴 동안 상대는 직접 공격할 수 없다",
+    textJa: "【直接攻撃に反応】攻撃を無効化する。このターン中、相手は直接攻撃できない" },
+  GT12_1: { cost: 7, react: "doomsday", val: undefined,
+    text: "【카운트다운 3】세트 3턴 후 자신의 턴 시작시 자동 발동 — 자신에게 5 데미지, 상대 최대 마나 +1, 필드 위의 모든 카드를 파괴한다",
+    textJa: "【カウントダウン3】セットから3ターン後の自分のターン開始時に自動発動 — 自分に5ダメージ、相手の最大マナ+1、フィールド上の全てのカードを破壊する" },
+  GT11_0: { cost: 5, react: "infoDealer", val: undefined,
+    text: "공격을 무효화하고 자신에게 1 데미지. 첫 발동시 주사위를 굴려 나온 수만큼 카운터를 얻고, 카운터 수만큼 필드에 남아 재사용할 수 있다",
+    textJa: "攻撃を無効化し自分に1ダメージ。初回発動時にダイスを振り、出た目の数だけカウンターを得て、その回数だけ場に残り再使用できる" },
+  NT_NULL6: { cost: 5, react: "secondNull", val: undefined, val2: undefined, name: "마나 역류", nameJa: "マナ逆流",
+    text: "【마법 반응】상대가 이번 턴 사용한 2번째 마법을 무효화하고, 상대 최대 마나 -1",
+    textJa: "【魔法に反応】相手がこのターン使用した2枚目の魔法を無効化し、相手の最大マナ-1" },
+};
+for (const id of Object.keys(PATCH25)) { if (DB[id]) Object.assign(DB[id], PATCH25[id]); }
+
+// 잔여 클론 함정 삭제 (개성 없는 수치 스케일 복제 — 아트는 ID 봉인으로 보존)
+const DELETE_IDS25 = ["GT10_2", "GT10_3", "GT6_4", "NT_NULL5", "GT8_0"];
+for (const id of DELETE_IDS25) { delete DB[id]; }
+
+// 신규 함정: 함정 파괴 반응 (no art yet → ◆ placeholder)
+const NEW_CARDS25: CardDef[] = [
+  { id: "NT_SNARE", t: "trap", cost: 3, play: 1, react: "snare", name: "덫 속의 덫", nameJa: "罠の中の罠",
+    text: "【함정 파괴 반응】자신의 세트 함정이 상대의 효과로 파괴될 때 그 파괴를 무효화하고 상대에게 10 데미지. 발동 후 이 함정은 다시 세트된다",
+    textJa: "【罠破壊に反応】自分のセットトラップが相手の効果で破壊される時、その破壊を無効化し相手に10ダメージ。発動後このトラップは再びセットされる" },
+];
+for (const c of NEW_CARDS25) { DB[c.id] = c; }
+
+// ============================================================
+// BALANCE PATCH 26 (v26) — 함정 리워크 2차: 밋밋한 베이직 6종을 기믹화.
+// 부패 부여 / 바운스 / 코스트 스케일 처벌 / 전체 공격 봉쇄 / 마법 복제 강탈 / 드로우 부정.
+// ============================================================
+const PATCH26: Record<string, Partial<CardDef>> = {
+  T8: { react: "decaytrap", val: undefined,
+    text: "공격 몬스터에게 부패 카운터 2개를 부여한다",
+    textJa: "攻撃モンスターに腐敗カウンターを2個与える" },
+  T9: { react: "undertow", val: undefined, val2: undefined,
+    text: "공격을 무효화하고 공격 몬스터를 소유자의 패로 되돌린다",
+    textJa: "攻撃を無効化し、攻撃モンスターを持ち主の手札に戻す" },
+  T6: { react: "boltcost", val: undefined,
+    text: "공격 몬스터를 파괴하고, 그 코스트만큼 상대에게 데미지",
+    textJa: "攻撃モンスターを破壊し、そのコスト分のダメージを相手に与える" },
+  GT5_1: { react: "gateLockAll", val: undefined,
+    text: "공격을 무효화한다. 이번 턴 동안 상대 필드의 모든 몬스터는 공격할 수 없다",
+    textJa: "攻撃を無効化する。このターン中、相手の場の全モンスターは攻撃できない" },
+  NT_NULL4: { react: "spellSteal", cap: 4,
+    text: "【마법 반응】코스트 4 이하 마법 1장을 무효화하고, 그 카드의 복제를 자신의 패에 넣는다",
+    textJa: "【魔法に反応】コスト4以下の魔法1枚を無効化し、そのカードの複製を自分の手札に加える" },
+  GT6_2: { react: "omen", val: undefined,
+    text: "공격 몬스터 파괴 + 상대는 다음 턴 드로우 -2",
+    textJa: "攻撃モンスターを破壊 + 相手は次のターンのドロー-2" },
+};
+for (const id of Object.keys(PATCH26)) { if (DB[id]) Object.assign(DB[id], PATCH26[id]); }
+
+// ============================================================
+// BALANCE PATCH 27 (v27) — 몬스터 대개편 (유저 스펙, 2026-09-04)
+// 골램 아키타입(마나 골렘/가디언/자이언트/특공부대/리더) · 시초의 알 부화화 ·
+// 병사/기사 군단(워로드/기수/정예/장군/고무왕/드래곤 융합) · 세계수(신도/파수꾼/세계수) ·
+// 암살자 본부(나이트 마켓·낙인) · 선택받은 시리즈 리워크 · 제네릭 고코스트 몬스터 대량 삭제.
+// ============================================================
+const PATCH27: Record<string, Partial<CardDef>> = {
+  GOLEM1: { atk: 1 },
+  TGE1: { play: 1, hatchTurns: 4, hatchDur: 2, hatchInto: ["TGE2", "TGE3", "TGE4", "TGE5", "TGE6", "TGE7"],
+    text: "공격 불가 · 부화 4턴(양측 턴 포함) / 내구도 2 · 상대 몬스터의 공격은 내구도만 1 소모 · 내구도가 남은 채 부화가 완료되면 '시초의 알'을 제외한 코스트 7 이하의 시초 몬스터 1체가 소환된다",
+    textJa: "攻撃不可 · 孵化4ターン(両者のターンを含む) / 耐久2 · 敵モンスターの攻撃は耐久を1消費するのみ · 耐久が残ったまま孵化が完了すると「始原の卵」を除くコスト7以下の始原モンスター1体が召喚される" },
+  M4: { def: 2 },
+  M6: { atk: 2, def: 2 },
+  NMD2: { atk: 1, def: 3, val: 2, text: "소환시: 카드 2장 드로우", textJa: "召喚時: カード2枚ドロー" },
+  TGE2: { atk: 2, def: 3, onSummon: "originEmber", text: "[시초] 소환시: 자신 필드의 다른 시초 몬스터 1체 공격 +2(지속)", textJa: "[始原] 召喚時: 自分の場の他の始原モンスター1体の攻撃+2(持続)" },
+  VAMP_BUTLER: { text: "상시: 이 카드가 공격할 때마다(몬스터·상대 플레이어 모두) 흡혈 카운트 +1 · 3카운트마다 '견습 흡혈귀'를 자신 필드에 소환 · 이 카드는 '흡혈귀' 계열로 취급",
+    textJa: "常時: このカードが攻撃するたび(モンスター・相手プレイヤーどちらでも)吸血カウント+1 · 3カウントごとに「見習い吸血鬼」を自分の場に召喚 · このカードは「吸血鬼」系列として扱う" },
+  VITAL2: { name: "세계수의 신도", nameJa: "世界樹の信徒", atk: 1, def: 4, val: 4, text: "소환시: 최대 체력 +4", textJa: "召喚時: 最大体力+4" },
+  EGG_HUNTER: { atk: 2, def: 3, val: 6, text: "이 카드가 '알'을 공격하면 내구도 카운터를 6 소모시킨다", textJa: "このカードが「卵」を攻撃すると耐久カウンターを6消費させる" },
+  EGG_MASTER: { atk: 0, def: 6, val: 5, text: "소환시: 자신 필드의 모든 '알'의 내구도 카운터 +5", textJa: "召喚時: 自分の場の全ての「卵」の耐久カウンター+5" },
+  GOLEM2: { atk: 2, def: 6, aura: "leaderGolem", text: "기합 · 상시: 자신 필드의 몬스터가 쓰러질 때마다 이 몬스터에 기합 카운터 1개", textJa: "気合 · 常時: 自分の場のモンスターが倒れるたびこのモンスターに気合カウンター1個" },
+  M10: { atk: 1, def: 4, aura: "manaGolem", passive: ["guts"], text: "기합 · 상시: 자신 필드의 이 카드를 제외한 '골램' 계열 몬스터 1체당 최대 마나 +1", textJa: "気合 · 常時: 自分の場のこのカードを除く「ゴーレム」系統モンスター1体につき最大マナ+1" },
+  M7: { onSummon: undefined, val: undefined, attackFx: "chainKill", text: "이 몬스터의 공격으로 상대 몬스터가 파괴되면 그 턴에 한 번 더 공격할 수 있다 (최대 7회)", textJa: "このモンスターの攻撃で相手モンスターが破壊された場合、そのターンにもう一度攻撃できる (最大7回)" },
+  M8: { atk: 3, def: 5 },
+  M9: { onSummon: "refreshToken", text: "소환시: 제시 카운터 1개 · 자신의 턴 중 카운터를 소모해 마나 없이 제시 마켓을 갱신할 수 있다", textJa: "召喚時: 提示カウンター1個 · 自分のターン中カウンターを消費してマナなしで提示マーケットを更新できる" },
+  NGA3: { name: "골램 특공부대", nameJa: "ゴーレム特攻部隊", atk: 4, def: 1, passive: ["guts"], onSummon: "golemSquad", val: undefined,
+    text: "기합 · 소환시: 자신 필드에 다른 '골램' 계열 몬스터가 있으면 이 몬스터에 기합 카운터 3개", textJa: "気合 · 召喚時: 自分の場に他の「ゴーレム」系統モンスターがいればこのモンスターに気合カウンター3個" },
+  NHEX: { atk: 1, def: 3, onSummon: undefined, val: undefined, turnFx: "hexCurse",
+    text: "매 턴 시작 시 자신의 덱 구성에 마법이 10장 이상이면 주사위를 굴려 5 이상일 때 상대 묘지에 '저주' 3장 추가", textJa: "毎ターン開始時 自分のデッキ構成に魔法が10枚以上ならダイスを振り、5以上で相手の墓地に「呪い」3枚追加" },
+  NT_SEAL3: { atk: 1, def: 4, val: 4, text: "이 카드가 필드에 있는 한 양 플레이어는 코스트 4 이하 마법을 사용할 수 없다", textJa: "このカードが場にある限り、両プレイヤーはコスト4以下の魔法を使用できない" },
+  NWL3: { name: "가디언 골램", nameJa: "ガーディアンゴーレム", atk: 1, def: 9, aura: "gutsOnHit", text: "상시: 이 카드는 공격을 받을 때마다 기합 카운터 1개를 얻는다", textJa: "常時: このカードは攻撃を受けるたび気合カウンター1個を得る" },
+  TGE3: { name: "시초의 수호자", nameJa: "始原の守護者", atk: 1, def: 11, onSummon: "selfBurn", val: 3, text: "[시초] 소환시: 자신에게 3 데미지", textJa: "[始原] 召喚時: 自分に3ダメージ" },
+  RUST_SLUG: { atk: 1, def: 4, onSummon: "decayAll", text: "부패 · 소환시: 상대 몬스터 전체에 부패 카운터 1개씩 · 부패로 상대 몬스터를 파괴하면 최대 마나 +1, 최대 체력 +5",
+    textJa: "腐敗 · 召喚時: 相手モンスター全てに腐敗カウンターを1個ずつ · 腐敗で相手モンスターを破壊した場合、最大マナ+1、最大体力+5" },
+  TAR3: { passive: ["aura", "majesty"], text: "[귀족] 동족 시너지 · 아우라 · 위엄", textJa: "[貴族] 同族シナジー · オーラ · 威厳" },
+  TAR2: { passive: ["aura"], text: "[귀족] 동족 시너지 · 아우라", textJa: "[貴族] 同族シナジー · オーラ" },
+  TSO3: { onSummon: "draw", val: 6, text: "[고독] 소환시: 카드 6장 드로우", textJa: "[孤独] 召喚時: カード6枚ドロー" },
+  VITAL3: { name: "세계수의 파수꾼", nameJa: "世界樹の守り人", atk: 2, def: 4, val: 6, aura: "treeKeeper",
+    text: "소환시: 최대 체력 +6 · 상시: '세계수'·'엘프' 계열 카드를 사용할 때마다 최대 체력 +5", textJa: "召喚時: 最大体力+6 · 常時: 「世界樹」「エルフ」系統のカードを使用するたび最大体力+5" },
+  DARK_ELF: { atk: 18, def: 10 },
+  ELF: { atk: 12, def: 12 },
+  ELITE: { atk: 3, def: 5, onSummon: "eliteSoldiers", text: "소환시: 자신의 덱+묘지가 10장 이하면 병사(2/2) 2체를 자신 필드에 소환", textJa: "召喚時: 自分のデッキ+墓地が10枚以下なら兵士(2/2)2体を自分の場に召喚" },
+  HORDE: { onSummon: "hordeRally", text: "소환시: 자신 필드의 모든 '병사'·'기사' 공격 +4(지속)", textJa: "召喚時: 自分の場の全ての「兵士」「騎士」の攻撃+4(持続)" },
+  M11: { atk: 5, def: 3, condAtk: undefined, val: undefined, onSummon: "warlordKnight", text: "소환시: 아군 몬스터 2체 이상이면 기사(4/4) 1체를 자신 필드에 소환", textJa: "召喚時: 味方モンスター2体以上なら騎士(4/4)1体を自分の場に召喚" },
+  NGA4: { name: "검귀", nameJa: "剣鬼", atk: 10, def: 1, mult: 2, attackFx: "berserk",
+    text: "소환시: 자신에게 6 데미지 · 이도류 · 공격 대상을 고를 수 없고, 자신 필드의 몬스터도 공격 대상에 포함된다", textJa: "召喚時: 自分に6ダメージ · 二刀流 · 攻撃対象を選べず、自分の場のモンスターも攻撃対象に含まれる" },
+  NMD4: { atk: 1, def: 4, onSummon: "chronicler", val: undefined, text: "소환시: 자신의 최근 5턴 동안 나온 제시 마켓(갱신분 포함)에서 원하는 카드 1장을 마나를 지불해 구매할 수 있다",
+    textJa: "召喚時: 自身の過去5ターンの間に出た提示マーケット(更新分を含む)から任意のカード1枚をマナを払って購入できる" },
+  TAR5: { atk: 2, def: 3, passive: ["aura", "majesty"], text: "[귀족] 동족 시너지 · 아우라 · 위엄", textJa: "[貴族] 同族シナジー · オーラ · 威厳" },
+  TGE4: { name: "시초의 재판관", nameJa: "始原の裁判官", atk: 3, def: 4, onSummon: "originArbiter", val: undefined,
+    text: "[시초] 소환시: 게임 중 1회만 — 자신의 덱 구성에 포함된 '시초' 카드 1장당 상대에게 낙인 카운터 1개", textJa: "[始原] 召喚時: このゲーム中1度のみ — 自身のデッキ構成に含まれる「始原」カード1枚につき相手に烙印カウンター1個" },
+  TRAPSMITH: { aura: "trapDiscount", text: "소환시: 덱·묘지·세트한 함정 1장당 +2/+2 · 상시: 이 카드가 필드에 있는 한 함정 카드의 구매 코스트 -1",
+    textJa: "召喚時: デッキ・墓地・セットした罠1枚につき+2/+2 · 常時: このカードが場にある限り罠カードの購入コスト-1" },
+  TSO5: { atk: 6, def: 7 },
+  VITAL4: { name: "고무왕", nameJa: "鼓舞王", atk: 2, def: 3, condAtk: undefined, aura: "rallyGuts", text: "상시: 자신 필드의 '병사'·'기사'에 '기합'을 부여한다", textJa: "常時: 自分の場の「兵士」「騎士」に「気合」を与える" },
+  AWAKENED_MIMIC: { atk: 4, def: 4 },
+  GM5_2: { atk: 5, def: 6, val: 2, text: "상시: 몬스터를 소환할 때 그 몬스터 체력 +2", textJa: "常時: モンスター召喚時、そのモンスターの体力+2" },
+  GOLEM3: { atk: 7, def: 10, onSummon: undefined, summonReq: "golemKin", text: "기합 · 자신의 필드·덱·패·묘지에 '골램 킹'을 제외한 다른 '골램' 계열 몬스터가 있을 때만 소환 가능",
+    textJa: "気合 · 自分の場・デッキ・手札・墓地に「ゴーレムキング」を除く他の「ゴーレム」系モンスターがいる時のみ召喚可能" },
+  MANA_GIANT: { name: "자이언트 골램", nameJa: "ジャイアントゴーレム", atk: 2, def: 13, aura: undefined, turnFx: "giantGolem",
+    text: "매 턴 시작 시 자신의 덱 구성에 '자이언트 골램'을 제외한 골램 2종 이상이 있으면 최대 체력 +10", textJa: "毎ターン開始時 自身のデッキ構成に「ジャイアントゴーレム」を除く2種類以上のゴーレムが存在する場合、最大体力+10" },
+  NT_SEAL5: { aura: "sealLow", val: 6, text: "이 카드가 필드에 있는 한 양 플레이어는 코스트 6 이하 마법을 사용할 수 없다", textJa: "このカードが場にある限り、両プレイヤーはコスト6以下の魔法を使用できない" },
+  TGE5: { name: "시초의 정령", nameJa: "始原の精霊", onSummon: "originRite", text: "[시초] 소환시: '시초의 술식'을 자신 필드에 전개", textJa: "[始原] 召喚時: 「始原の術式」を自分の場に展開" },
+  ASSASSIN3: { atk: 17, def: 4, summonReq: "assassinKin", text: "암습 · 자신의 덱 구성에 '상급 암살자'를 제외한 '암살자' 계열 카드가 있을 때만 소환 가능", textJa: "暗襲 · 自身のデッキ構成に「上級アサシン」を除く「アサシン」系統カードが存在する場合のみ召喚可能" },
+  GM6_0: { name: "드래곤", nameJa: "ドラゴン", atk: 6, def: 3, attackFx: undefined, onSummon: "dragonFuse",
+    text: "소환시: ① 자신 필드에 '병사'가 있으면 이 카드와 병사 1체를 묘지로 보내고 '드래곤 라이더' 소환 · ② 자신 필드에 '기사'가 있으면 이 카드와 기사를 묘지로 보내고 '앤티크 드래곤 나이트' 소환",
+    textJa: "召喚時: ① 自分の場に「兵士」がいる場合、このカードと兵士1体を墓地に送り「ドラゴンライダー」を召喚 · ② 自分の場に「騎士」がいる場合、このカードと騎士を墓地に送り「アンティークドラゴンナイト」を召喚" },
+  INFKNIGHT: { name: "기사", nameJa: "騎士" },
+  GM6_1: { name: "차원 유폐자", nameJa: "次元幽閉者", atk: 1, def: 3, aura: undefined, val: undefined, onSummon: "jailer",
+    text: "소환시: 상대의 제외된 카드 중 최대 8장을 선택해 자신의 제외존으로 옮긴다", textJa: "召喚時: 相手の除外されているカードから任意の8枚まで選択し、自身の除外ゾーンに移動させる" },
+  GUILD_HALL: { name: "암살자 길드 지부", nameJa: "アサシンギルド支部" },
+  GM6_7: { name: "장군", nameJa: "将軍", atk: 7, def: 9, onSummon: "generalKnight", aura: "general",
+    text: "소환시: 기사(4/4) 1체를 자신 필드에 소환 · 상시: 상대가 몬스터를 소환할 때마다 주사위를 굴려 4 이상이면 기사 1체를 자신 필드에 소환",
+    textJa: "召喚時: 騎士(4/4)1体を自分の場に召喚 · 常時: 相手がモンスターを召喚するたびダイスを振り、4以上なら騎士1体を自分の場に召喚" },
+  GM6_8: { atk: 14, def: 1, onSummon: "siegeBreak2", val: undefined,
+    text: "소환시: 상대 함정 2장 파괴 · 2장 파괴에 실패하면 자신의 묘지에서 무작위 1장을 게임에서 제외 · 이 카드가 파괴되면 자신 필드에 병사(2/2) 1체 소환",
+    textJa: "召喚時: 相手の罠を2枚破壊 · 2枚破壊に失敗した場合、自身の墓地からランダムなカード1枚を除外 · このカードが破壊された場合、自身の場に兵士(2/2)1体を召喚" },
+  HIGH_ELF: { atk: 25, def: 25, passive: ["trapmaster", "aura", "majesty", "evade"], text: "트랩마스터 · 아우라 · 위엄 · 회피 · 자신의 최대 체력이 99 이상일 때만 소환 가능", textJa: "トラップマスター · オーラ · 威厳 · 回避 · 自分の最大体力が99以上の時のみ召喚可能" },
+  NMD6: { atk: 8, def: 5, passive: ["trapmaster"], aura: "sageDiscount",
+    text: "트랩마스터 · 소환시: 카드 5장 드로우 · 상시: 자신의 덱 구성에 마법 카드가 13장 이상이면 마법의 시전 코스트 -1", textJa: "トラップマスター · 召喚時: カード5枚ドロー · 常時: 自身のデッキ構成に魔法カードが13枚以上含まれる場合、魔法の発動コスト-1" },
+  TGE6: { atk: 3, def: 12, passive: ["aura"], text: "[시초] 아우라 · 소환시: 1장 드로우 — 몬스터 카드면 코스트 5 이상의 원하는 시초 카드를 마나를 지불해 구매할 수 있다",
+    textJa: "[始原] オーラ · 召喚時: 1枚ドロー — モンスターならコスト5以上の好きな始原カードをマナを払って購入できる" },
+  CHOSEN_ARCHER: { atk: 0, def: 5, directOnly: undefined, passive: ["aura", "evade"], attackFx: "giantSlayer",
+    text: "상시: 게임에서 제외된 자신의 '컬' 2장당 공격 +2 · 아우라 · 회피 · 이 카드가 공격하는 상대 몬스터의 체력이 15 이상이면 그 몬스터를 무조건 파괴한다",
+    textJa: "常時: ゲームから除外された自分の「カル」2枚につき攻撃+2 · オーラ · 回避 · このカードが攻撃する相手モンスターの体力が15以上ならその相手モンスターを無条件に破壊する" },
+  CHOSEN_KNIGHT: { atk: 0, def: 5, passive: ["guts"], attackFx: "cullExile2",
+    text: "상시: 게임에서 제외된 자신의 '컬' 2장당 +1/+1 · 기합 · 이 카드가 공격할 때마다 '컬' 2장을 게임에서 제외한다",
+    textJa: "常時: ゲームから除外された自分の「カル」2枚につき+1/+1 · 気合 · このカードが攻撃するたび「カル」を2枚除外する" },
+  CHOSEN_ROGUE: { atk: 0, def: 4, condAtk: "cullAtk2", passive: ["evade", "trapmaster"], attackFx: "rogueTrap",
+    text: "상시: 게임에서 제외된 자신의 '컬' 2장당 공격 +2 · 암습 · 회피 · 트랩마스터 · 상대 플레이어에게 직접 공격을 성공시키면 덱·묘지의 함정 1장을 코스트 없이 세트할 수 있다",
+    textJa: "常時: ゲームから除外された自分の「カル」2枚につき攻撃+2 · 暗襲 · 回避 · トラップマスター · 相手プレイヤーへの直接攻撃を成功させた場合、デッキ・墓地から任意の罠カード1枚を場にコストなしでセットできる" },
+  CHOSEN_MAGE: { atk: 0, def: 4, passive: ["aura"],
+    text: "상시: 게임에서 제외된 자신의 '컬' 2장당 +1/+1 · 아우라 · (선택) 턴 시작시: 제외된 '컬' 1장을 묘지로 되돌리고 상대에게 8 데미지",
+    textJa: "常時: ゲームから除外された自分の「カル」2枚につき+1/+1 · オーラ · (選択) ターン開始時: 除外された「カル」1枚を墓地に戻し相手に8ダメージ" },
+  ELDER_ELF_KING: { atk: 8, def: 16, passive: ["majesty", "aura"], onSummon: "elderWipe",
+    text: "위엄 · 아우라 · 자신의 덱 구성에 '엘프'·'하이엘프'·'다크 엘프' 중 1장 이상이 있고 최대 체력이 99 이상일 때만 소환 가능 · 소환시: 상대 필드의 카드를 모두 파괴",
+    textJa: "威厳 · オーラ · デッキ構成に「エルフ」「ハイエルフ」「ダークエルフ」のいずれかが含まれ、自身の最大体力が99以上の時のみ召喚可能 · 召喚時: 相手フィールド上のカードを全て破壊する" },
+  LEGEND_GAMBLER: { atk: 3, def: 9, passive: ["trapmaster", "void", "aura"],
+    text: "매 턴 시작 시 주사위 눈 1개를 예측하고 주사위 3개를 굴린다 · 적중하면 ① 최대 마나 +4 / ② 최대 체력 +35 / ③ 상대 필드 카드 2장 파괴 중 1개 (덱 구성에 '도박꾼'이 있으면 전부) · 트랩마스터 · 공허 · 아우라",
+    textJa: "毎ターン開始時 ダイスの出目を1つ予測しダイスを3回振る · 当たれば ① 最大マナ+4 / ② 最大体力+35 / ③ 相手フィールド上のカード2枚破壊 のうち1つ (デッキ構成に「ギャンブラー」があれば全て) · トラップマスター · 虚無 · オーラ" },
+  TGE7: { atk: 5, def: 13, val: 4, text: "[시초] 상시: 자신 필드의 모든 '시초' 몬스터 +4/+4", textJa: "[始原] 常時: 自分の場の全ての「始原」モンスター+4/+4" },
+  ASSASSIN4: { atk: 23, def: 20, passive: ["majesty", "aura", "trapmaster"], summonReq: "assassinTrio", onSummon: "nightlord",
+    text: "위엄 · 아우라 · 트랩마스터 · 이도류 · 자신의 덱 구성에 '특급 암살자'를 제외한 서로 다른 '암살자' 계열 카드가 3장 이상일 때만 소환 가능 · 소환시: 상대에게 낙인 카운터 3개, 상대의 세트 함정을 모두 파괴",
+    textJa: "威厳 · オーラ · トラップマスター · 二刀流 · デッキ構成に「特級アサシン - ナイトロード」を除く、それぞれ異なる「アサシン」系統カードを3枚以上含む時のみ召喚可能 · 召喚時: 相手に烙印カウンター3個、相手の場の罠カードを全て破壊" },
+  GM9_2: { cost: 0, noShop: true }, // 폭풍의 전사: 마켓 삭제 — 악마의 주사위 토큰으로만 등장
+  GAMBLE: { text: "주사위 1~6 — ①② 자신 8뎀 / ③④ 상대 5뎀 / ⑤ 마나 골렘 소환 / ⑥ 골램 특공부대 3체 소환", textJa: "ダイス1~6 — ①② 自分8 / ③④ 相手5 / ⑤ マナ・ゴーレム召喚 / ⑥ ゴーレム特攻部隊3体召喚" },
+};
+for (const id of Object.keys(PATCH27)) { if (DB[id]) Object.assign(DB[id], PATCH27[id]); }
+
+// 삭제: 제네릭 고코스트 몬스터 + 수정 정령/철벽 수문장/세계수의 수호자/컬의 화신/창조신 (아트는 ID 봉인으로 보존)
+const DELETE_IDS27 = [
+  "NWL4", "NSPR", "GM5_1", "GM6_2", "GM6_3", "GM6_4", "GM6_5", "GM6_6",
+  "GM7_0", "GM7_1", "GM7_2", "GM7_3", "GM7_4", "GM7_5", "GM7_6", "GM7_7",
+  "GM8_0", "GM8_1", "GM8_2", "GM8_3", "GM8_4", "GM8_5", "GM8_7",
+  "WORLD_GUARD", "CULL_TITAN", "GM9_0", "GM9_1", "GM9_3", "GM9_4",
+  "GM10_0", "GM10_1", "GM10_2", "GM10_3", "GM10_4", "GM11_0", "CREATOR",
+];
+for (const id of DELETE_IDS27) { delete DB[id]; }
+
+const NEW_CARDS27: CardDef[] = [
+  { id: "GUILD_HQ", t: "mon", cost: 6, atk: 0, def: 12, aura: "assassinHQ", turnFx: "nightMarket", name: "암살자 길드 본부", nameJa: "アサシンギルド本部",
+    text: "상시: '암살자' 계열 몬스터가 상대 플레이어에게 데미지를 줄 때마다 상대에게 낙인 카운터 1개 · 매 턴 시작 시 원하는 '암살자' 계열 카드를 구매할 수 있는 나이트 마켓이 열린다",
+    textJa: "常時: 「アサシン」系統モンスターが相手プレイヤーにダメージを与えるたび、相手プレイヤーに烙印カウンター1個 · 毎ターン開始時、任意の「アサシン」系統カードを購入できるナイトマーケットが開かれる" },
+  { id: "WORLD_TREE", t: "mon", cost: 10, atk: 0, def: 25, passive: ["aura", "guts"], turnFx: "worldTree", name: "세계수", nameJa: "世界樹",
+    text: "아우라 · 기합 · 상시: 자신의 최대 체력이 늘어날 때마다 이 카드에 세계수 카운터 1개 · 매 턴 시작 시 (선택 · 매턴 1회) 세계수 카운터 1개를 소모해 자신 필드의 모든 몬스터의 체력을 전회복하고 자신의 체력을 80%까지 회복",
+    textJa: "オーラ · 気合 · 常時: 自身の最大体力が増えるたびこのカードに世界樹カウンター1個 · 毎ターン開始時 (選択 · 毎ターン1度のみ) 世界樹カウンターを1個消費して自身の場の全モンスターの体力を全回復し、プレイヤー自身の体力を80%になるまで回復" },
+  // ---- 토큰 (구매 불가) ----
+  { id: "CURSE", t: "spell", cost: 1, noShop: true, exileOnDestroy: true, name: "저주", nameJa: "呪い",
+    text: "자신에게 1 데미지 · 공허", textJa: "自分に1ダメージ · 虚無" },
+  { id: "ORIGIN_RITE", t: "spell", cost: 0, noShop: true, ench: "originRite", val: 99, exileOnDestroy: true, name: "시초의 술식", nameJa: "始原の術式",
+    text: "영구: '시초의 수호자'를 제외한 '시초' 몬스터를 자신이 소환할 때마다 상대 필드의 카드 1장을 파괴한다 · 파괴할 카드가 없으면 상대에게 낙인 카운터 1개 · 공허",
+    textJa: "永続: 「始原の守護者」を除く「始原」系統のモンスターを自身が召喚するたび、相手フィールド上のカード1枚を破壊する · 破壊するカードが存在しない場合、相手に烙印カウンター1個 · 虚無" },
+  { id: "DRAGON_RIDER", t: "mon", cost: 0, atk: 14, def: 7, mult: 2, passive: ["evade", "void"], attackFx: "halfSecond", name: "드래곤 라이더", nameJa: "ドラゴンライダー",
+    text: "회피 · 공허 · 이 카드는 2회 공격할 수 있다 — 1회째는 공격력 그대로, 2회째는 공격력 절반(내림)", textJa: "回避 · 虚無 · このカードは2回攻撃できる — 1回目は攻撃力そのまま、2回目は攻撃力の半分(切り下げ)" },
+  { id: "ANTIQUE_DK", t: "mon", cost: 0, atk: 18, def: 12, mult: 2, passive: ["evade", "aura", "majesty", "void"], name: "앤티크 드래곤 나이트", nameJa: "アンティークドラゴンナイト",
+    text: "회피 · 아우라 · 위엄 · 공허 · 이도류", textJa: "回避 · オーラ · 威厳 · 虚無 · 二刀流" },
+];
+for (const c of NEW_CARDS27) { DB[c.id] = c; }
+
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 applyFlavorCardNames([DB, STARTERS as unknown as Record<string, CardDef>]);
 // 효과 텍스트 표준 표기(【태그】) 적용 — 규칙: docs/card-text-style.md (applyEnglish 이후 필수)
@@ -1408,11 +1631,19 @@ export const BUYABLE_POOL = ALL_IDS.filter((id) => DB[id].cost > 0 && !DB[id].no
 // Auto-derived by matching OTHER cards' names inside a card's text, plus a manual
 // map for abbreviated references (e.g. "초급·중급 암살자") the name-scan can't catch.
 const RELATED_MANUAL: Record<string, string[]> = {
-  ASSASSIN3: ["ASSASSIN1", "ASSASSIN2"],                 // 상급: needs an assassin on field
   ASSASSIN4: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3"],    // 특급: needs 초/중/상급 in field·deck·grave
   GUILD_CHEST: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3"],  // 암살자 길드 보물상자
-  GOLEM3: ["GOLEM1", "GOLEM2"],                          // 골램 킹: '골램' 계열 체크
-  CHOSEN_AREA: ["EXILE_NUKE1", "EXILE_NUKE2", "CULL_TITAN"], // 컬 제외 아키타입 페이오프
+  GOLEM3: ["GOLEM1", "GOLEM2", "M10", "NGA3", "NWL3", "MANA_GIANT"], // 골램 킹: '골램' 계열 체크
+  M10: ["GOLEM1", "GOLEM2", "GOLEM3", "NGA3", "NWL3", "MANA_GIANT"],
+  MANA_GIANT: ["GOLEM1", "GOLEM2", "GOLEM3", "M10", "NGA3", "NWL3"],
+  NGA3: ["GOLEM1", "GOLEM2", "GOLEM3", "M10", "NWL3", "MANA_GIANT"],
+  CHOSEN_AREA: ["EXILE_NUKE1", "EXILE_NUKE2"],          // 컬 제외 아키타입 페이오프
+  GUILD_HQ: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3", "ASSASSIN4", "GUILD_HALL"],
+  ASSASSIN3: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN4", "GUILD_HALL", "GUILD_HQ"],
+  HORDE: ["SOLDIER2", "INFKNIGHT", "GOLEM1"],
+  VITAL4: ["SOLDIER2", "INFKNIGHT", "GOLEM1"],
+  NHEX: ["CURSE"],
+  TGE1: ["TGE2", "TGE3", "TGE4", "TGE5", "TGE6", "TGE7"],
 };
 const _relatedCache: Record<string, string[]> = {};
 export function relatedCardIds(id: string): string[] {
@@ -1457,7 +1688,10 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v23"; // v23: 전 확률 카드 주사위화 — 1d6/2d6 근사(10%→2d6합11+ · 20%→⚅ · 30%→5+ · 40%→2d6합8+ · 50%→4+ · 60%→2d6합7+ · 70%→2d6합6+), 가챠 3종 주사위표化, 회피 4+로 반전(동일 50%)
+export const BALANCE_VERSION = "v27"; // v27: 몬스터 대개편 — 골램 아키타입(마나 골렘 manaGolem/가디언 gutsOnHit/자이언트 giantGolem/특공부대 golemSquad/리더 leaderGolem/골램 킹 golemKin) · 시초의 알 부화(4턴/내구2→시초 1체) · 병사/기사 군단(워로드/기수/정예/장군/고무왕/드래곤 융합→라이더·앤티크) · 세계수 3종 · 암살자 본부(나이트 마켓+낙인) · 선택받은 4종 리워크 · 엘프 상향 · 제네릭 고코스트 몬스터 36종 삭제
+// v26: 함정 리워크 2차 — T8 부패 부여(decaytrap) · T9 바운스(undertow) · T6 코스트 데미지(boltcost) · GT5_1 전체 공격 봉쇄(gateLockAll) · NT_NULL4 마법 복제 강탈(spellSteal, cap4) · GT6_2 드로우 -2(omen)
+// v25: 함정 리워크 1차 — 클론 함정 10종을 신규 기믹으로 교체(soulSwap/counterOrder/lastBastion/devourGuard/brandMagic/toll/gateClose/doomsday/infoDealer/secondNull) + 덫 속의 덫(snare) 추가 + 잔여 클론 5종 삭제(GT10_2/GT10_3/GT6_4/NT_NULL5/GT8_0) + T10 회복4·GT10_1 5코·GT9_2 5코
+// v23: 전 확률 카드 주사위화 — 1d6/2d6 근사(10%→2d6합11+ · 20%→⚅ · 30%→5+ · 40%→2d6합8+ · 50%→4+ · 60%→2d6합7+ · 70%→2d6합6+), 가챠 3종 주사위표化, 회피 4+로 반전(동일 50%)
 // v22: 철벽 수문장 0/13→0/10, 암살자 길드 카운트 명문화(본체 공격 포함)
 // v21 이전: // v21: 60턴 체력 판정승(구 75턴 무승부), 바위 거북 1/9→1/5, 선택형 파괴가 자기 필드도 대상 가능
 // v19: 데이터 기반 — 상위 몬스터 10종 스탯 너프 + 수레바퀴(자해5)/유령(2뎀) 버프 + 보살핌12/머쉬룸0공/선견지명10/중급암살자8공

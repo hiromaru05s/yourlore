@@ -418,6 +418,107 @@ Object.assign(TEXTS, {
   FATE_WHEEL: "Permanent: on cast, your max mana -1 · After seeing a dice card's result, you may reroll it (once per turn) · Void",
 });
 
+// ---- TRAP REWORK (v25): explicit EN texts for the new gimmick traps ----
+Object.assign(NAMES, {
+  NT_NULL6: "Mana Backflow",
+  NT_SNARE: "Trap Within a Trap",
+});
+Object.assign(TEXTS, {
+  T10: "Destroy the attacking monster + restore 4 HP",
+  GT9_3: "【When Attacked】Only if you control a monster. Steal the attacker; send your lowest-cost monster to the enemy field (it cannot act this turn)",
+  GT10_0: "【When Attacked】Halve the attack; all your monsters strike back at the attacker for their combined ATK (piercing applies)",
+  GT12_0: "【When Attacked】Only if this attack would reduce you to 0 HP. Negate it and end the opponent's turn. Restore half your max HP and draw 4 extra cards at your next turn start. If already used 3+ times this game, the heal no longer fires · Void",
+  GT5_4: "【When Attacked】Negate the attack and destroy the attacker — roll a die: on 4+, exile it from the game",
+  GT8_5: "【On Enemy Spell】Brand the opponent with 1 counter. At the start of each of their turns they roll a die per Brand counter and take that much damage",
+  GT6_1: "【On Enemy Buy】Roll a die — on 4+, exile the card they bought, deal damage equal to its cost, and gain that much max HP",
+  GT11_1: "【On Direct Attack】Negate the attack. The opponent cannot attack you directly for the rest of this turn",
+  GT12_1: "【Countdown 3】Fires automatically at the start of your 3rd turn after setting — take 5 damage, enemy max mana +1, destroy every card on the field",
+  GT11_0: "【When Attacked】Negate the attack; take 1 damage. On its first trigger, roll a die — this trap stays set for that many more uses",
+  NT_NULL6: "【On Enemy Spell】Negate the 2nd spell the opponent casts in one turn; their max mana -1",
+  NT_SNARE: "【On Trap Destruction】When an enemy effect would destroy your set traps, negate it and deal 10 damage. This trap re-sets itself",
+});
+
+// ---- TRAP REWORK (v26): baseline traps turned into gimmicks ----
+Object.assign(TEXTS, {
+  T8: "【When Attacked】Put 2 Decay counters on the attacking monster",
+  T9: "【When Attacked】Negate the attack and return the attacker to its owner's hand",
+  T6: "【When Attacked】Destroy the attacking monster and deal damage equal to its cost",
+  GT5_1: "【When Attacked】Negate the attack. Enemy monsters cannot attack for the rest of this turn",
+  NT_NULL4: "【On Enemy Spell】Negate a spell of cost 4 or less and add a copy of it to your hand",
+  GT6_2: "【When Attacked】Destroy the attacking monster; the opponent draws 2 fewer cards next turn",
+});
+
+// ---- v27 MONSTER OVERHAUL: explicit EN names/texts ----
+Object.assign(NAMES, {
+  VITAL2: "World Tree Devotee", VITAL3: "World Tree Keeper", VITAL4: "Rally King",
+  NGA3: "Golem Strike Squad", NGA4: "Blade Fiend", NWL3: "Guardian Golem", MANA_GIANT: "Giant Golem",
+  TGE3: "Origin Guardian", TGE4: "Origin Arbiter", TGE5: "Origin Spirit",
+  GM6_0: "Dragon", GM6_1: "Dimensional Jailer", GM6_7: "General", INFKNIGHT: "Knight",
+  GUILD_HALL: "Assassins' Guild Branch", GUILD_HQ: "Assassins' Guild Headquarters",
+  WORLD_TREE: "World Tree", CURSE: "Curse", ORIGIN_RITE: "Origin Rite",
+  DRAGON_RIDER: "Dragon Rider", ANTIQUE_DK: "Antique Dragon Knight",
+});
+Object.assign(TEXTS, {
+  TGE1: "Cannot attack · Hatches in 4 turns (both players' turns) / Durability 2 · Enemy monster attacks only consume 1 durability · If hatching completes with durability left, one Origin monster of cost 7 or less (except Origin Egg) is summoned",
+  NMD2: "On summon: draw 2 cards",
+  TGE2: "[Origin] On summon: +2 ATK (lasting) to another Origin monster on your field",
+  VAMP_BUTLER: "Passive: gains 1 blood count whenever this card attacks (a monster or the opponent) · Every 3 counts, summon an 'Apprentice Vampire' to your field · This card counts as a 'Vampire'",
+  VITAL2: "On summon: max HP +4",
+  EGG_HUNTER: "When this card attacks an 'Egg', it consumes 6 durability counters",
+  EGG_MASTER: "On summon: all 'Eggs' on your field gain +5 durability",
+  GOLEM2: "Guts · Passive: whenever a monster on your field is destroyed, this monster gains 1 Guts counter",
+  M10: "Guts · Passive: max mana +1 per other 'Golem' monster on your field",
+  M7: "When this monster's attack destroys an enemy monster, it may attack once more this turn (up to 7 times)",
+  M9: "On summon: gain 1 Offer counter · During your turn, spend a counter to refresh the offer market without paying mana",
+  NGA3: "Guts · On summon: if another 'Golem' monster is on your field, this monster gains 3 Guts counters",
+  NHEX: "At the start of your turn: if your deck has 10+ spells, roll a die — on 5+, add 3 'Curse' cards to the opponent's graveyard",
+  NT_SEAL3: "While this card is on the field, neither player can cast spells of cost 4 or less",
+  NWL3: "Passive: whenever this card is attacked, it gains 1 Guts counter",
+  TGE3: "[Origin] On summon: take 3 damage",
+  RUST_SLUG: "Decay · On summon: put 1 Decay counter on every enemy monster · Whenever Decay destroys an enemy monster: max mana +1, max HP +5",
+  TAR3: "[Aristocrat] tribe synergy · Aura · Majesty",
+  TAR2: "[Aristocrat] tribe synergy · Aura",
+  TSO3: "[Solitary] On summon: draw 6 cards",
+  VITAL3: "On summon: max HP +6 · Passive: whenever you play a 'World Tree' or 'Elf' card, max HP +5",
+  ELITE: "On summon: if your deck+graveyard is 10 or fewer cards, summon two Soldiers (2/2) to your field",
+  HORDE: "On summon: all 'Soldiers' and 'Knights' on your field gain +4 ATK (lasting)",
+  M11: "On summon: if you control 2+ monsters, summon a Knight (4/4) to your field",
+  NGA4: "On summon: take 6 damage · Dual Wield · Cannot choose its target — monsters on your own field are possible targets too",
+  NMD4: "On summon: buy any card from the offer markets shown to you in the last 5 turns (refreshed offers included) by paying its mana",
+  TAR5: "[Aristocrat] tribe synergy · Aura · Majesty",
+  TGE4: "[Origin] On summon: once per game — brand the opponent with 1 counter per 'Origin' card in your deck",
+  TRAPSMITH: "On summon: +2/+2 per trap in your deck, graveyard and set zone · Passive: while this card is on the field, traps cost 1 less to buy",
+  VITAL4: "Passive: 'Soldiers' and 'Knights' on your field gain 'Guts'",
+  GM5_2: "Aura: monsters you summon gain +2 HP",
+  GOLEM3: "Guts · Summonable only while another 'Golem' monster (other than Golem King) is in your field/deck/hand/graveyard",
+  MANA_GIANT: "At the start of your turn: if your deck holds 2+ kinds of Golem other than Giant Golem, max HP +10",
+  NT_SEAL5: "While this card is on the field, neither player can cast spells of cost 6 or less",
+  TGE5: "[Origin] On summon: deploy 'Origin Rite' on your field",
+  ASSASSIN3: "Infiltrate · Summonable only while another 'Assassin' card (other than Elite Assassin) is in your deck",
+  GM6_0: "On summon: ① if a 'Soldier' is on your field, send this card and 1 Soldier to the graveyard and summon a 'Dragon Rider' · ② if a 'Knight' is on your field, send this card and the Knight to the graveyard and summon an 'Antique Dragon Knight'",
+  GM6_1: "On summon: choose up to 8 of the opponent's exiled cards and move them to your exile zone",
+  GM6_7: "On summon: summon a Knight (4/4) to your field · Passive: whenever the opponent summons a monster, roll a die — on 4+, summon a Knight to your field",
+  GM6_8: "On summon: destroy 2 enemy traps · If fewer than 2 were destroyed, exile 1 random card from your graveyard · When this card is destroyed, summon a Soldier (2/2) to your field",
+  HIGH_ELF: "Trap Master · Aura · Majesty · Evade · Summonable only while your max HP is 99 or higher",
+  NMD6: "Trap Master · On summon: draw 5 cards · Passive: if your deck holds 13+ spells, your spells cost 1 less to cast",
+  TGE6: "[Origin] Aura · On summon: draw 1 — if it's a monster, you may buy any Origin card of cost 5+ by paying its mana",
+  CHOSEN_ARCHER: "Passive: +2 ATK per 2 'Culls' of yours exiled from the game · Aura · Evade · When this card attacks an enemy monster with 15+ HP, that monster is destroyed unconditionally",
+  CHOSEN_KNIGHT: "Passive: +1/+1 per 2 'Culls' of yours exiled from the game · Guts · Whenever this card attacks, exile 2 'Culls' from the game",
+  CHOSEN_ROGUE: "Passive: +2 ATK per 2 'Culls' of yours exiled from the game · Infiltrate · Evade · Trap Master · When it lands a direct attack on the opponent, you may set 1 trap from your deck/graveyard for free",
+  CHOSEN_MAGE: "Passive: +1/+1 per 2 'Culls' of yours exiled from the game · Aura · (Optional) At turn start: return 1 exiled 'Cull' to your graveyard and deal 8 damage",
+  ELDER_ELF_KING: "Majesty · Aura · Summonable only while your deck holds an Elf, High Elf or Dark Elf and your max HP is 99+ · On summon: destroy every card on the opponent's field",
+  LEGEND_GAMBLER: "At the start of your turn: predict a face and roll 3 dice · On a hit, gain one of ① max mana +4 / ② max HP +35 / ③ destroy 2 cards on the enemy field (all three if a 'Gambler' is in your deck) · Trap Master · Void · Aura",
+  TGE7: "[Origin] Aura: all your 'Origin' monsters +4/+4",
+  ASSASSIN4: "Majesty · Aura · Trap Master · Dual Wield · Summonable only while your deck holds 3+ different 'Assassin' cards (other than this one) · On summon: brand the opponent with 3 counters and destroy all their set traps",
+  GAMBLE: "Die 1-6 - 1/2: 8 dmg to you / 3/4: 5 dmg to opponent / 5: summon Mana Golem / 6: summon 3 Golem Strike Squads",
+  GUILD_HQ: "Passive: whenever an 'Assassin' monster damages the opponent, brand them with 1 counter · At the start of your turn, a night market opens where you may buy any 'Assassin' card",
+  WORLD_TREE: "Aura · Guts · Passive: whenever your max HP rises, this card gains 1 World Tree counter · At the start of your turn (optional, once per turn): spend 1 counter to fully restore all your monsters' HP and restore your HP to 80%",
+  CURSE: "Take 1 damage · Void",
+  ORIGIN_RITE: "Permanent: whenever you summon an 'Origin' monster other than Origin Guardian, destroy 1 card on the opponent's field · If there is none, brand the opponent with 1 counter · Void",
+  DRAGON_RIDER: "Evade · Void · Attacks twice — the 1st at full ATK, the 2nd at half ATK (rounded down)",
+  ANTIQUE_DK: "Evade · Aura · Majesty · Void · Dual Wield",
+});
+
 /** Attach nameEn/textEn to every card (explicit map -> generator dictionaries -> Korean fallback). */
 export function applyEnglish(pools: Array<Record<string, CardDef>>): void {
   for (const pool of pools) {

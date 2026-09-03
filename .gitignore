@@ -9,3 +9,5 @@ _render.cjs
 .secrets/
 .worktrees/
 *.timestamp-*.mjs
+.claude/settings.local.json
+_to_delete/

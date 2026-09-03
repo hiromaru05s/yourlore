@@ -514,7 +514,7 @@ export abstract class BaseController implements BoardHandlers {
       }
       if (g.pending.kind === "seek" || g.pending.kind === "recall") {
         const me = g.players[this.you];
-        const pool = g.pending.kind === "seek" ? me.deck : me.discard;
+        const pool = g.pending.reason === "rogueTrap" ? [...me.deck, ...me.discard].filter((c) => c.t === "trap") : g.pending.kind === "seek" ? me.deck : me.discard;
         cardPicker(getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint, pool, (uid) => this.submit({ type: "pick", uid }));
       }
       return; // oppMon/myMon resolved by board clicks

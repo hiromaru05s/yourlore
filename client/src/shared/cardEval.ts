@@ -65,6 +65,10 @@ const SUMMON_FLAT: Record<string, number> = {
   summonKnight: 8, summonRandom: 8, cloneSelf: 8, golemKing: 8,
   mimicLord: 8, mimicKing: 8, mimicKing2: 8, awakenMimic: 8, originMimic: 8,
   wipeTraps: 6, elderKing: 10, creator: 15,
+  // v27
+  originEmber: 4, refreshToken: 2, golemSquad: 5, decayAll: 8, eliteSoldiers: 6, hordeRally: 6, warlordKnight: 6,
+  chronicler: 4, jailer: 3, originArbiter: 8, originRite: 8, dragonFuse: 12, generalKnight: 7, siegeBreak2: 6,
+  elderWipe: 18, nightlord: 12,
 };
 function summonValue(c: CardDef): number {
   const v = n(c.val);
@@ -99,7 +103,11 @@ function turnFxValue(c: CardDef): number {
     case "payDefHeal": perTurn = v * 0.5 + v2 * HEAL; break;
     case "chestDraw": perTurn = v2 * DRAW * 0.5; break; // needs a chest in hand
     case "gambler": perTurn = 0.5 * (MANA + 5 * MAXHP); break;
-    case "legendGambler": perTurn = 2.0 * MANA; break;
+    case "legendGambler": perTurn = 0.42 * (MANA * 4 + 35 * MAXHP + 8) / 2; break;
+    case "hexCurse": perTurn = 2; break;
+    case "giantGolem": perTurn = 10 * MAXHP * 0.6; break;
+    case "nightMarket": perTurn = 2; break;
+    case "worldTree": perTurn = 4; break;
     default: perTurn = 2; break;
   }
   return perTurn * FIELD_TURNS;
@@ -123,6 +131,15 @@ function auraValue(c: CardDef): number {
     case "eggHunter": return 3;
     case "vampButler": return 6;
     case "assassinGuild": return 8;
+    case "manaGolem": return MANA * 0.8;
+    case "leaderGolem": return 4;
+    case "gutsOnHit": return 8;
+    case "trapDiscount": return 2;
+    case "rallyGuts": return 3;
+    case "treeKeeper": return 4;
+    case "sageDiscount": return 3;
+    case "general": return 8;
+    case "assassinHQ": return 6;
     default: return 4;
   }
 }
@@ -134,6 +151,12 @@ function attackFxValue(c: CardDef): number {
     case "rampFace": return 2 * 1.7 * 2.5;       // +2/+2 per face hit, compounding
     case "cullOnFace": return 3;
     case "atkDownOnAttack": return -n(c.val) * 1.7; // self-debuff: a real cost
+    case "chainKill": return 6;
+    case "berserk": return -3;                   // 아군도 때린다
+    case "giantSlayer": return 6;
+    case "cullExile2": return 2;
+    case "rogueTrap": return 4;
+    case "halfSecond": return 0;                 // mult로 이미 반영 (2회째 절반)
     default: return 3;
   }
 }
@@ -164,6 +187,25 @@ const REACT: Record<string, (c: CardDef) => number> = {
   nullspell: () => 6,
   magmaTrial: () => KILL * (2 / 6) + 3,   // 5+ 에서만 발동하지만 파괴가 아니라 영구 제외
   mimicParty: () => 3,
+  // ---- v25 리워크 함정 ----
+  soulSwap: () => KILL + 8,               // 공격 몬스터 탈취 (최저 코스트 반납)
+  counterOrder: () => 10,                 // 절반 + 아군 일제 반격 (필드 의존)
+  lastBastion: () => NEGATE + 12,         // 치명타 무효 + 턴 종료 + 대회복 (조건부지만 게임을 살린다)
+  devourGuard: () => NEGATE + KILL,       // 무효 + 파괴 (50%로 제외)
+  brandMagic: () => 10,                   // 낙인: 영구 주사위 자해 (기대 3.5/턴)
+  toll: () => 7,                          // 구매 반응 (50% 발동)
+  gateClose: () => NEGATE + 3,            // 직접 공격 전용 무효 + 턴 봉쇄
+  doomsday: () => 8,                      // 3턴 후 전체 필드 청소 (자해 5 포함)
+  infoDealer: () => NEGATE * 2.5,         // 다회용 무효 (기대 4.5회)
+  secondNull: () => 5,                    // 조건부(2번째 마법) 무효 + 마나 -1
+  snare: () => 8,                         // 함정 파괴 억제 + 10뎀 (재세트)
+  // ---- v26 리워크 함정 ----
+  decaytrap: () => 6,                     // 부패 2개 (3개째면 파괴 + 3뎀)
+  undertow: () => NEGATE + 5,             // 무효 + 바운스 (템포 + 재소환 비용 강요)
+  boltcost: () => KILL + 4,               // 파괴 + 평균 코스트만큼 데미지
+  gateLockAll: () => NEGATE + 8,          // 무효 + 이번 턴 전체 공격 봉쇄
+  spellSteal: () => 9,                    // 저코스트 마법 무효 + 복제 강탈 (2:1 교환)
+  omen: () => KILL + 4,                   // 파괴 + 드로우 -2
 };
 // Traps proved far stronger in measurement than a naive tempo count suggests:
 // a set trap also *deters* attacks, and the attacker pays full cost to find out.
@@ -245,6 +287,7 @@ const ID_PTS: Record<string, number> = {
   CHOSEN_MAGE: 12, CHOSEN_ARCHER: 12, CHOSEN_ROGUE: 12,
   FLAME: 1.5, NEGOTIATE: -2.5, COUNTERCALC: 4, AMBUSH: 4,
   TRUMPET: 3.4, TRICKROOM: 4, RUST_SHROOM: 4, CHOSEN_AREA: 6,
+  CURSE: -3, ORIGIN_RITE: 6, GUILD_HQ: 4, WORLD_TREE: 6,
 };
 
 /** Monster body value: attack clocks, defense soaks penetration. */
