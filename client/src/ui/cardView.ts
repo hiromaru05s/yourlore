@@ -360,7 +360,7 @@ function artStatus(key: string): "ok" | "fail" | "unknown" {
 // art is fetched before the tap wherever we can see the tap coming.
 // 아트 캐시 버전 — 미스가 SPA 셸(200 HTML)로 7일 캐시되는 사고가 있어, 대량 아트 추가 시
 // 이 값을 올리면 모든 클라이언트가 오염된 캐시를 우회해 새로 받는다.
-export const ART_V = "2";
+export const ART_V = "3"; // v38b: 아트 삭제(28종) 반영 — CDN/브라우저 캐시(1주) 우회
 export const artUrl = {
   xs: (id: string) => `/art/cards-xs/${id}.webp?v=${ART_V}`,
   sm: (id: string) => `/art/cards-sm/${id}.webp?v=${ART_V}`,
