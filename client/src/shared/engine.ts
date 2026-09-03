@@ -2265,9 +2265,9 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       for (const tm of ts) { if (g.over) break; if (o.field.some((x) => x.uid === tm.uid)) addDecay(g, ctx, o, tm, 1); }
       break;
     }
-    case "castleInit": { // 성(v37): 성 카운터 3개
-      m.gcount = (m.gcount || 0) + 3;
-      ctx.log(`  └ 성 카운터 +3 (${m.gcount})`, `  └ 城カウンター+3 (${m.gcount})`);
+    case "castleInit": { // 성(v37): 성 카운터 +val (v38c: 2)
+      m.gcount = (m.gcount || 0) + (v || 2);
+      ctx.log(`  └ 성 카운터 +${v || 2} (${m.gcount})`, `  └ 城カウンター+${v || 2} (${m.gcount})`);
       break;
     }
     case "eliteSoldiers": { // 정예 기사단장: 덱 구성 10장 이하면 병사 2체 (v37: 덱 구성 = 덱·패·묘지·필드)
