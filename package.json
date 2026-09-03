@@ -9,7 +9,8 @@
   ],
   "scripts": {
     "dev": "npm --workspace client run dev",
-    "build": "npm --workspace client run build",
+    "build": "node scripts/guard-design.mjs && npm --workspace client run build",
+    "guard:design": "node scripts/guard-design.mjs",
     "typecheck": "npm --workspace client run typecheck && npm --workspace server run typecheck",
     "art:check": "node scripts/check-card-art.mjs",
     "art:prompts": "node scripts/export-card-art-prompts.mjs",

@@ -466,6 +466,8 @@ export class GameView {
         && !(pending!.kind === "myMon" && pending!.reason === "chosenMage" && (m.id !== "CHOSEN_MAGE" || ((pending!.data?.fired as string[] | undefined) ?? []).includes(m.uid))) // 마법사만 발동 가능
         && !(pending!.kind === "myMon" && pending!.reason === "grantDecay" && hasPassive(m, "decay")) // 이미 부패 보유
         && !(pending!.kind === "myMon" && pending!.reason === "grantMajesty" && hasPassive(m, "majesty")) // 이미 위엄 보유
+        && !(pending!.kind === "myMon" && pending!.reason === "emberBuff" && m.tribe !== "시초") // 시초의 불씨: 시초만
+        && !(pending!.kind === "myMon" && pending!.reason === "worldTree" && (m.id !== "WORLD_TREE" || (m.gcount || 0) <= 0)) // 세계수: 카운터 있는 세계수만
         && !(pending!.kind === "myMon" && (((pending!.data?.excl as string[] | undefined) ?? []).includes(m.uid))); // 지원 나팔: 이미 고른 몬스터는 중복 선택 불가
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
       // 카지노(v34): 다이스 카운터 배지 (12개마다 카지노 주사위)
@@ -876,7 +878,9 @@ export class GameView {
     for (let k = filled.length; k < owner.supply.length; k++) sup.appendChild(this.slotEl("mkt", true));
 
     const rb = this.q("refreshBtn") as HTMLButtonElement;
-    rb.disabled = !myTurn || !!g.pending || me.mana < 1;
+    const rtok = me.refreshTokens || 0; // 렐릭 헌터(v36): 제시 카운터가 있으면 무료 갱신
+    rb.disabled = !myTurn || !!g.pending || (me.mana < 1 && rtok <= 0);
+    const rbCost = rb.querySelector("b"); if (rbCost) rbCost.textContent = rtok > 0 ? `0 (${rtok})` : "1";
     rb.onclick = () => this.h.onRefresh();
   }
 

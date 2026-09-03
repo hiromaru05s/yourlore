@@ -510,7 +510,7 @@ export abstract class BaseController implements BoardHandlers {
         const me = g.players[this.you];
         // 리콜: 방금 사용한 리콜 카드 자신은 이미 묘지에 들어가 있다 → 선택지에서 제외
         const ex = (g.pending.data as { exclude?: string } | undefined)?.exclude;
-        const pool = g.pending.kind === "seek" ? me.deck : me.discard.filter((c) => c.uid !== ex);
+        const pool = g.pending.reason === "rogueTrap" ? [...me.deck, ...me.discard].filter((c) => c.t === "trap") : g.pending.kind === "seek" ? me.deck : me.discard.filter((c) => c.uid !== ex);
         cardPicker(getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint, pool, (uid) => this.submit({ type: "pick", uid }));
       }
       return; // oppMon/myMon resolved by board clicks

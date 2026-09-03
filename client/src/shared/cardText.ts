@@ -45,15 +45,10 @@ const OVERRIDE: Record<string, { ko?: string; ja?: string; en?: string }> = {
     ja: "【常時】「アサシン」かこのモンスターが相手を叩くとカウンター+1 · 3個ごとに相手に14ダメージ · 破壊で消滅",
     en: "【Passive】'Assassin' or this hits the opponent: +1 counter · Every 3: 14 damage · Lost if destroyed",
   },
-  VAMP_BUTLER: {
-    ko: "【상시】상대 몬스터를 공격하면 카운터 +1 · 3개마다 '견습 흡혈귀' 1체 소환 · '흡혈귀' 계열로 취급",
-    ja: "【常時】相手モンスターを攻撃するとカウンター+1 · 3個ごとに「見習い吸血鬼」1体を召喚 · 「吸血鬼」系列として扱う",
-    en: "【Passive】Attacks a monster: +1 counter · Every 3: summon an 'Apprentice Vampire' · Counts as 'Vampire'",
-  },
-  TGE5: {
-    ko: "[시초] 【소환시】카드 1장 드로우 · 그 카드가 몬스터면 선택한 상대 몬스터 1체의 공격력을 2로 한다",
-    ja: "[始原] 【召喚時】カード1枚ドロー · そのカードがモンスターなら選んだ相手モンスター1体の攻撃力を2にする",
-    en: "[Origin] 【On Summon】draw 1 card · if it is a monster, set 1 chosen enemy monster's ATK to 2",
+  VAMP_BUTLER: { // v36: 직접 공격도 카운트
+    ko: "【상시】이 몬스터가 공격하면 카운터 +1 · 3개마다 '견습 흡혈귀' 1체 소환 · '흡혈귀' 계열로 취급",
+    ja: "【常時】このモンスターが攻撃するとカウンター+1 · 3個ごとに「見習い吸血鬼」1体を召喚 · 「吸血鬼」系列として扱う",
+    en: "【Passive】This monster attacks: +1 counter · Every 3: summon an 'Apprentice Vampire' · Counts as 'Vampire'",
   },
   TGE6: {
     ko: "[시초] 【소환시】카드 1장 드로우 · 몬스터면 코스트 5 이상 '시초' 카드 1장을 마나를 내고 구매 가능",
@@ -96,9 +91,9 @@ const OVERRIDE: Record<string, { ko?: string; ja?: string; en?: string }> = {
     en: "【Lasts 2 Turns】Both fields: swap ATK and max HP (damage kept) · Buffs apply to the swapped stat and remain",
   },
   CHOSEN_MAGE: {
-    ko: "【상시】제외된 자신의 '컬' 2장당 +1/+1 · 【매턴】(선택) 제외된 '컬' 1장을 묘지로 되돌리고 상대에게 6 데미지",
-    ja: "【常時】ゲームから除外された自分の「カル」2枚につき+1/+1 · 【毎ターン】(選択) 除外された「カル」1枚を墓地に戻し相手に6ダメージ",
-    en: "【Passive】+1/+1 per 2 exiled 'Culls' · 【Each Turn】(optional) return 1 to the graveyard: 6 damage to the opponent",
+    ko: "【상시】제외된 자신의 '컬' 2장당 +1/+1 · 【매턴】(선택) 제외된 '컬' 1장을 묘지로 되돌리고 상대에게 8 데미지",
+    ja: "【常時】ゲームから除外された自分の「カル」2枚につき+1/+1 · 【毎ターン】(選択) 除外された「カル」1枚を墓地に戻し相手に8ダメージ",
+    en: "【Passive】+1/+1 per 2 exiled 'Culls' · 【Each Turn】(optional) return 1 to the graveyard: 8 damage to the opponent",
   },
   TRIAL_AREA: {
     ko: "【영구】시전 시 자신에게 6 데미지 · 【매턴】자신 묘지에 컬 1장을 넣고, 묘지에서 최대 2장을 게임에서 제외할 수 있다",

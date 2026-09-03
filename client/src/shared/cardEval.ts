@@ -70,6 +70,10 @@ const SUMMON_FLAT: Record<string, number> = {
   summonKnight: 8, summonRandom: 8, cloneSelf: 8, golemKing: 8,
   mimicLord: 8, mimicKing: 8, mimicKing2: 8, awakenMimic: 8, originMimic: 8,
   wipeTraps: 6, elderKing: 10, creator: 15,
+  // v36
+  originEmber: 4, refreshToken: 2, golemSquad: 5, decayAll: 8, eliteSoldiers: 6, hordeRally: 6, warlordKnight: 6,
+  chronicler: 4, jailer: 3, originArbiter: 8, originRite: 8, dragonFuse: 12, generalKnight: 7, siegeBreak2: 6,
+  elderWipe: 18, nightlord: 12,
 };
 function summonValue(c: CardDef): number {
   const v = n(c.val);
@@ -104,7 +108,11 @@ function turnFxValue(c: CardDef): number {
     case "payDefHeal": perTurn = v * 0.5 + v2 * HEAL; break;
     case "chestDraw": perTurn = v2 * DRAW * 0.5; break; // needs a chest in hand
     case "gambler": perTurn = 0.5 * (MANA + 5 * MAXHP); break;
-    case "legendGambler": perTurn = 2.0 * MANA; break;
+    case "legendGambler": perTurn = 0.42 * (MANA * 4 + 35 * MAXHP + 8) / 2; break;
+    case "hexCurse": perTurn = 2; break;
+    case "giantGolem": perTurn = 10 * MAXHP * 0.6; break;
+    case "nightMarket": perTurn = 2; break;
+    case "worldTree": perTurn = 4; break;
     default: perTurn = 2; break;
   }
   return perTurn * FIELD_TURNS;
@@ -136,6 +144,16 @@ function auraValue(c: CardDef): number {
     case "trapBan": return 4;
     case "eliteGuard": return 8;   // 직접 공격 봉쇄 + 6코 이하 도발 벽
     case "demonTax2": return -MANA * 1.6; // 몸집 대가: 최대 마나 -2
+    // ---- v36 몬스터 대개편 ----
+    case "manaGolem": return MANA * 0.8;
+    case "leaderGolem": return 4;
+    case "gutsOnHit": return 8;
+    case "trapDiscount": return 2;
+    case "rallyGuts": return 3;
+    case "treeKeeper": return 4;
+    case "sageDiscount": return 3;
+    case "general": return 8;
+    case "assassinHQ": return 6;
     default: return 4;
   }
 }
@@ -147,6 +165,12 @@ function attackFxValue(c: CardDef): number {
     case "rampFace": return 2 * 1.7 * 2.5;       // +2/+2 per face hit, compounding
     case "cullOnFace": return 3;
     case "atkDownOnAttack": return -n(c.val) * 1.7; // self-debuff: a real cost
+    case "chainKill": return 6;
+    case "berserk": return -3;                   // 아군도 때린다
+    case "giantSlayer": return 6;
+    case "cullExile2": return 2;
+    case "rogueTrap": return 4;
+    case "halfSecond": return 0;                 // mult로 이미 반영 (2회째 절반)
     default: return 3;
   }
 }
@@ -285,6 +309,7 @@ const ID_PTS: Record<string, number> = {
   CHOSEN_MAGE: 12, CHOSEN_ARCHER: 12, CHOSEN_ROGUE: 12,
   FLAME: 1.5, NEGOTIATE: -2.5, COUNTERCALC: 4, AMBUSH: 4,
   TRUMPET: 3.4, TRICKROOM: 4, RUST_SHROOM: 4, CHOSEN_AREA: 6,
+  CURSE: -3, ORIGIN_RITE: 6, GUILD_HQ: 4, WORLD_TREE: 6,
 };
 
 /** Monster body value: attack clocks, defense soaks penetration. */

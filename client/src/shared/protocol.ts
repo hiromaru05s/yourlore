@@ -75,5 +75,6 @@ export function redactFor(state: GameState, you: Side): GameState {
     : { card: placeholder(t.card.uid) }));
   // opponent's offered supply is only visible on their own turn
   if (g.cur === you) opp.supply = opp.supply.map((c) => (c ? placeholder(c.uid) : null));
+  opp.supplyHist = []; // 기록자(v36) 이력은 본인 전용
   return g;
 }

@@ -150,6 +150,9 @@ export interface PlayerState {
   collection?: string[]; // redacted view only: public card ids the opponent may inspect
   removed?: CardInst[]; // cards permanently exiled from the game (public zone)
   botTune?: { minBuy?: number; minBuyEarly?: number; chestTurn?: number }; // per-archetype bot buy discipline (see bot.ts BOT_DECKS)
+  refreshTokens?: number; // 렐릭 헌터(v36): 제시 마켓 무료 갱신 카운터 — 갱신 시 마나 대신 소모
+  supplyHist?: { turn: number; ids: string[] }[]; // 기록자(v36): 최근 제시 마켓 이력 (갱신분 포함)
+  onceUsed?: string[]; // 게임당 1회 효과의 사용 기록 (시초의 재판관 등)
 }
 
 export interface Pending {

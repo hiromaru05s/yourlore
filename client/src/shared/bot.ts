@@ -22,7 +22,7 @@
 //  · hell   — never blunders + value-net look-ahead search → 최강
 // ============================================================
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
-import { buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, effMaxMana, freeBuyBlocked, glassBanActive, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet } from "./engine";
+import { buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, effMaxMana, freeBuyBlocked, glassBanActive, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet, sealLowBlocks } from "./engine";
 import { avgPower, cardPower } from "./cardEval";
 import { netEval, determinize } from "./botNet";
 import { DB, hasPassive } from "./cards";
@@ -161,6 +161,8 @@ export function candidates(g: GameState): Action[] {
         .filter((m) => !(pend.reason === "chosenMage" && (m.id !== "CHOSEN_MAGE" || ((pend.data?.fired as string[] | undefined) ?? []).includes(m.uid))))
         .filter((m) => !(pend.reason === "grantDecay" && hasPassive(m, "decay")))
         .filter((m) => !(pend.reason === "grantMajesty" && hasPassive(m, "majesty")))
+        .filter((m) => !(pend.reason === "emberBuff" && m.tribe !== "시초")) // 시초의 불씨: 시초만
+        .filter((m) => !(pend.reason === "worldTree" && (m.id !== "WORLD_TREE" || (m.gcount || 0) <= 0))) // 세계수: 카운터 있는 세계수만
         .forEach((m) => push(m.uid));
       if (pend.allowCancel) push(null);
     }
@@ -174,7 +176,7 @@ export function candidates(g: GameState): Action[] {
       return out;
     }
     else if (pend.kind === "seek" || pend.kind === "recall") {
-      const pool = pend.kind === "seek" ? p.deck : p.discard;
+      const pool = pend.reason === "rogueTrap" ? [...p.deck, ...p.discard].filter((c) => c.t === "trap") : pend.kind === "seek" ? p.deck : p.discard;
       const exile = pend.reason === "exilePick"; // 제외용은 저가치 우선 탐색
       const seen = new Set<string>();
       [...pool].sort((a, b) => (exile ? cardPower(a) - cardPower(b) : cardPower(b) - cardPower(a))).forEach((c) => {
@@ -190,14 +192,13 @@ export function candidates(g: GameState): Action[] {
   //  early mana/HP compounds; single-sample rollouts under-count the 25% risk)
   const seenPlay = new Set<string>();
   const candSealAll = g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"));
-  const candSealLow = g.players.some((pl) => pl.field.some((m) => m.aura === "sealLow"));
   p.hand.forEach((c, idx) => {
     if (c.star === "chest" && (g.turn <= T.chestTurn || chestLocked(g))) return;
     if (c.t === "trap" && (p.trapBlockTurn || o.field.some((tm) => tm.aura === "trapBan"))) return; // 협상/몰락한 기사 — 엔진 거부 루프 방지
     if (c.t === "mon" && ((p.summonLockUntil ?? 0) > g.turn || !summonReqMet(p, c, o))) return; // 은둔자 잠금 / 소환 조건
     if (c.t === "mon" && p.lowSummonBanTurn && (c.cost ?? 0) <= 3) return; // 삼격의 불씨: 3코 이하 봉쇄
     if (c.t === "spell" && p.spellCastCap != null && (p.spellsCastTurn || 0) >= p.spellCastCap) return; // 마족 시너지 한도
-    if ((c.t === "spell" || c.t === "starter") && (candSealAll || p.spellSealTurn || (candSealLow && playCost(c, p) <= 5))) return; // 침묵
+    if ((c.t === "spell" || c.t === "starter") && (candSealAll || p.spellSealTurn || sealLowBlocks(g, playCost(c, p)))) return; // 침묵
     if (c.id === "CHOSEN_AREA" && cullExiled(p) < 25) return; // 선택받은 영역: 컬 25장 조건
     if ((c.id === "DECAY_CRAFT" || c.id === "MAJESTY_RITE") && p.field.length === 0) return; // 대상 필요
     if (c.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) return; // 선견지명 중복 금지
@@ -347,7 +348,7 @@ function legalActions(g: GameState): Action[] {
     if (pend.kind === "oppMon") o.field.forEach((m) => add(pick(m.uid)));
     else if (pend.kind === "myMon") p.field.forEach((m) => add(pick(m.uid)));
     else if (pend.kind === "seek") p.deck.forEach((c) => add(pick(c.uid)));
-    else if (pend.kind === "recall") p.discard.forEach((c) => add(pick(c.uid)));
+    else if (pend.kind === "recall") (pend.reason === "rogueTrap" ? [...p.deck, ...p.discard].filter((c) => c.t === "trap") : p.discard).forEach((c) => add(pick(c.uid)));
     else if (pend.kind === "purge") (pend.data?.zone === "hand" ? [...p.hand] : pend.data?.zone === "discard" ? [...p.discard] : [...p.deck, ...p.discard]).forEach((c) => add(pick(c.uid)));
     if (pend.allowCancel) add(pick(null));
     return out;
@@ -362,7 +363,7 @@ function legalActions(g: GameState): Action[] {
   }
   p.supply.forEach((c, i) => { if (c && buyCost(p, c) <= p.mana) add({ type: "buySupply", i }); });
   g.market.forEach((c, i) => { if (buyableByBot(p, c)) add({ type: "buyMarket", i }); });
-  if (p.mana >= 1 && !p.refreshBlockTurn) add({ type: "refresh" });
+  if ((p.mana >= 1 || (p.refreshTokens || 0) > 0) && !p.refreshBlockTurn) add({ type: "refresh" });
   add({ type: "endTurn" });
   return out;
 }
@@ -634,7 +635,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     // 침묵 오라 / 침묵의 심판: 마법 봉인 — v5부터 스타터(컬/상자/어튠)도 대상 (엔진 거부 → 봇도 스킵)
     if (c.t === "spell" || c.t === "starter") {
       if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) return false;
-      if (playCost(c, p) <= 5 && g.players.some((pl) => pl.field.some((m) => m.aura === "sealLow"))) return false;
+      if (sealLowBlocks(g, playCost(c, p))) return false;
       if (p.spellSealTurn) return false;
     }
     if (c.t === "spell" && p.spellCastCap != null && (p.spellsCastTurn || 0) >= p.spellCastCap) return false; // 마족 시너지
@@ -826,6 +827,8 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   //       (램프 폭발 후반: 리롤로 폭탄을 파는 게 정답. 8마나+ 여유일 때만 → 일반 게임 영향 최소)
   // 턴당 리롤 횟수 상한: 정책이 무상태라 "이번 턴에 쓴 마나"로 간접 제한한다.
   if (p.mana >= 8 && p.mana > effMaxMana(p) - TUNE.maxRerolls && !p.refreshBlockTurn) return { type: "refresh" };
+  // 12.6) 렐릭 헌터 제시 카운터: 살 게 없으면 무료 갱신
+  if ((p.refreshTokens || 0) > 0 && !p.refreshBlockTurn) return { type: "refresh" };
 
   // 13) spare mana → Pry Chest (not before turn 7 — early mimic risk outweighs the payout; not while sealed)
   const chest = (g.turn <= T.chestTurn || chestLocked(g)) ? -1 : p.hand.findIndex((c) => c.star === "chest" && playCost(c, p) <= p.mana && castable(c));
@@ -936,7 +939,7 @@ function lethalActions(g: GameState): Action[] {
       uniqueCards(p.deck, (a, b) => cardPower(b) - cardPower(a)).forEach((c) => add(pick(c.uid)));
       if (pend.allowCancel) add(pick(null));
     } else if (pend.kind === "recall") {
-      uniqueCards(p.discard, (a, b) => cardPower(b) - cardPower(a)).forEach((c) => add(pick(c.uid)));
+      uniqueCards(pend.reason === "rogueTrap" ? [...p.deck, ...p.discard].filter((c) => c.t === "trap") : p.discard, (a, b) => cardPower(b) - cardPower(a)).forEach((c) => add(pick(c.uid)));
       if (pend.allowCancel) add(pick(null));
     } else if (pend.kind === "purge") {
       const zpool = pend.data?.zone === "hand" ? [...p.hand] : pend.data?.zone === "discard" ? [...p.discard] : [...p.deck, ...p.discard];
@@ -1079,6 +1082,16 @@ function autoTarget(g: GameState): Action {
       const t0 = [...p.field].filter((m) => !hasPassive(m, "majesty")).sort((x, y) => effDef(p, y) - effDef(p, x))[0];
       return { type: "chooseTarget", uid: t0 ? t0.uid : null };
     }
+    if (pending.reason === "emberBuff") { // 시초의 불씨: 다른 시초 몬스터 중 공격력 높은 순
+      const excl = (pending.data?.excl as string[] | undefined) ?? [];
+      const t0 = [...p.field].filter((m) => m.tribe === "시초" && !excl.includes(m.uid)).sort((x, y) => effAtk(p, y) - effAtk(p, x))[0];
+      return { type: "chooseTarget", uid: t0 ? t0.uid : null };
+    }
+    if (pending.reason === "worldTree") { // 세계수: 체력이 80% 미만이거나 다친 몬스터가 있을 때만 발동
+      const tree = p.field.find((m) => m.id === "WORLD_TREE" && (m.gcount || 0) > 0);
+      const worth = p.hp < Math.floor(p.maxHp * 0.8) || p.field.some((m) => (m.dmg || 0) > 0);
+      return { type: "chooseTarget", uid: tree && worth ? tree.uid : null };
+    }
     // 지원 나팔의 exclude(중복 선택 불가)를 지켜야 무한 재무장 루프에 안 빠진다
     const excl = (pending.data?.excl as string[] | undefined) ?? [];
     const t = [...p.field].filter((x) => !excl.includes(x.uid)).sort((x, y) => effAtk(p, y) - effAtk(p, x))[0];
@@ -1101,6 +1114,10 @@ function autoTarget(g: GameState): Action {
     return { type: "pick", uid: null };
   }
   if (pending.kind === "recall") {
+    if (pending.reason === "rogueTrap") { // 선택받은 도적: 덱·묘지의 가장 강한 함정을 무료 세트
+      const best = bestOf([...p.deck, ...p.discard].filter((c) => c.t === "trap"));
+      return { type: "pick", uid: best ? best.uid : null };
+    }
     if (pending.reason === "exilePick") { // 게임에서 제외 → 가장 쓸모없는 카드
       const worst = [...p.discard].sort((a, b) => cardPower(a) - cardPower(b))[0];
       return { type: "pick", uid: worst ? worst.uid : (p.discard[0]?.uid ?? null) };
@@ -1119,13 +1136,16 @@ function autoTarget(g: GameState): Action {
       const best0 = [...ids0].sort((a, b) => ((DB[b]?.cost ?? 0) - (DB[a]?.cost ?? 0)))[0];
       return { type: "pick", uid: best0 ?? null };
     }
-    // 시초의 거인 교역: 살 수 있는 가장 비싼 시초 카드
+    // 시초의 거인 교역 / 기록자 / 나이트 마켓: 살 수 있는 카드 중 가장 가치 높은 것 (구매 하한 미달이면 취소)
     const ids = ((pending.data?.ids as string[] | undefined) ?? []).filter((id) => DB[id] && DB[id].cost <= p.mana);
-    const best = ids.sort((a, b) => DB[b].cost - DB[a].cost)[0];
+    const best = ids.sort((a, b) => (cardPower(DB[b]) - DB[b].cost) - (cardPower(DB[a]) - DB[a].cost))[0];
+    if (best && pending.reason !== "giantShop" && pending.reason !== "darkMarket" && cardPower(DB[best]) - DB[best].cost < TUNE.minBuy) return { type: "pick", uid: null };
     return { type: "pick", uid: best ?? null };
   }
-  if (pending.kind === "oppRmz") { // 흑룡: 상대 묘지 오염 — 가치가 낮은 카드(컬 등)를 되돌린다
-    const worst = [...(o.removed ?? [])].sort((a, b) => cardPower(a) - cardPower(b))[0];
+  if (pending.kind === "oppRmz") { // 흑룡: 상대 묘지 오염 — 가치가 낮은 카드(컬 등)를 되돌린다 · 유폐자: 컬(선택받은 연료) 우선
+    const pool = [...(o.removed ?? [])];
+    if (pending.reason === "jailer") { const cull = pool.find((c) => c.star === "trash"); const pick = cull ?? pool.sort((a, b) => cardPower(b) - cardPower(a))[0]; return { type: "pick", uid: pick ? pick.uid : null }; }
+    const worst = pool.sort((a, b) => cardPower(a) - cardPower(b))[0];
     return { type: "pick", uid: worst ? worst.uid : null };
   }
   if (pending.kind === "oppBoard") { // 파괴 선택: 가장 위협적인 적 몬스터 → 적 함정 → 적 영구마법 순 (봇은 자기 카드를 부수지 않는다 — 없으면 취소)
