@@ -795,7 +795,7 @@ Object.assign(TEXTS, {
 });
 
 // ---- v38 ----
-Object.assign(NAMES, { NGA3: "Warrior Golem", DEMON_REALM: "Demon Realm", AEM: "Antique Enhance Magic", KNIGHT_TEACH: "Knight's Teaching", DUNGEON: "Living Dungeon", NL_SECRET: "Nightlord's Secret Art" });
+Object.assign(NAMES, { NGA3: "Warrior Golem", DEMON_REALM: "Demon Realm", AEM: "Antique Enhance Magic", KNIGHT_TEACH: "Golem King's Teaching", DUNGEON: "Living Dungeon", NL_SECRET: "Nightlord's Secret Art" });
 Object.assign(TEXTS, {
   DEMON_REALM: "Permanent: the effects of Demonkin monsters you summon are all negated",
   AEM: "Only with 2 different Golem cards in your deck · 2 Golem monsters on your field ATK +7 (lasting)",
