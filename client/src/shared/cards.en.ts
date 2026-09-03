@@ -794,6 +794,16 @@ Object.assign(TEXTS, {
   WAR_DECL: "【When Attacked】When your Castle is attacked · Summon three Knights (4/4) to your field",
 });
 
+// ---- v38 ----
+Object.assign(NAMES, { NGA3: "Warrior Golem", DEMON_REALM: "Demon Realm", AEM: "Antique Enhance Magic", KNIGHT_TEACH: "Knight's Teaching", DUNGEON: "Living Dungeon", NL_SECRET: "Nightlord's Secret Art" });
+Object.assign(TEXTS, {
+  DEMON_REALM: "Permanent: the effects of Demonkin monsters you summon are all negated",
+  AEM: "Only with 2 different Golem cards in your deck · 2 Golem monsters on your field ATK +7 (lasting)",
+  KNIGHT_TEACH: "All your monsters gain Guts · Those that already have it gain 3 Guts counters",
+  DUNGEON: "Passive: monsters without Guts or Evade attack with ATK 1",
+  NL_SECRET: "Give Trap Master, Infiltrate or Evade to 1 monster · 2 of your Assassins ATK +3 (lasting)",
+});
+
 export function applyEnglish(pools: Array<Record<string, CardDef>>): void {
   for (const pool of pools) {
     for (const id of Object.keys(pool)) {

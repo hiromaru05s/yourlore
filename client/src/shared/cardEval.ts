@@ -155,6 +155,7 @@ function auraValue(c: CardDef): number {
     case "general": return 8;
     case "assassinHQ": return 6;
     case "castle": return 6;
+    case "dungeon": return 5;
     default: return 4;
   }
 }
@@ -250,6 +251,7 @@ function enchValue(c: CardDef): number {
     case "runeEcho": return 10;  // 마법 2회 발동 (덱 절반 마법 조건)
     case "sanctumField": return 5; // 매턴 아군 전체 체력 +2
     case "acidRain": return 4; case "strongAcid": return 12; case "rottenGround": return 3;
+    case "demonRealm": return 6;
     case "bonusDraw": return v * v2 * DRAW + MANA; // val = duration in turns
     case "noAttack": return 6;
     case "noSummonLow": return 5;
@@ -318,6 +320,7 @@ const ID_PTS: Record<string, number> = {
   TRUMPET: 3.4, TRICKROOM: 4, RUST_SHROOM: 4, CHOSEN_AREA: 6,
   CURSE: -3, ORIGIN_RITE: 6, GUILD_HQ: 4, WORLD_TREE: 6,
   CASTLE: 8, BUDGET: 4, EXPANSION: 4, LAND_GRANT: 6, TREASON: 8, UNBRAND: 3, GAMBLE: 5,
+  AEM: 10, KNIGHT_TEACH: 8, NL_SECRET: 8,
 };
 
 /** Monster body value: attack clocks, defense soaks penetration. */

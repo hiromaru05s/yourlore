@@ -2066,6 +2066,50 @@ for (const c of [...NEW_STARTERS37, ...NEW_CARDS37]) { DB[c.id] = c; }
 DECK_POOL.push(...NEW_STARTERS37.map((c) => c.id));
 RANDOM_CARDS.add("BUDGET");
 
+// ============================================================
+// BALANCE PATCH 38 (v38) — 종족 시너지 개정 + 마계/골램·암살자 지원 마법 + 살아있는 던전
+// ============================================================
+const PATCH38: Record<string, Partial<CardDef>> = {
+  NGA3: { name: "전사 골램", nameJa: "戦士ゴーレム" },
+  NWL3: { passive: ["guts"] },
+  ASSASSIN4: { passive: ["majesty", "aura", "trapmaster", "evade"] },
+};
+for (const id of Object.keys(PATCH38)) { if (DB[id]) Object.assign(DB[id], PATCH38[id]); }
+const NEW_CARDS38: CardDef[] = [
+  { id: "DEMON_REALM", t: "spell", cost: 3, ench: "demonRealm", val: 99, name: "마계", nameJa: "魔界",
+    text: "영구: 자신이 소환하는 '마족' 몬스터의 효과를 모두 무효화", textJa: "永続: 自分が召喚する「魔族」モンスターの効果を全て無効化" },
+  { id: "AEM", t: "spell", cost: 3, name: "앤티크 인핸스 매직", nameJa: "アンティークエンハンスマジック",
+    text: "덱 구성에 서로 다른 '골램' 2장이 있을 때만 · 자신 필드의 '골램' 몬스터 2체의 공격력 +7(지속)", textJa: "デッキ構成に異なる「ゴーレム」2枚がある時のみ · 自分の場の「ゴーレム」モンスター2体の攻撃力+7(持続)" },
+  { id: "KNIGHT_TEACH", t: "spell", cost: 3, name: "기사의 가르침", nameJa: "騎士の教え",
+    text: "자신 필드의 모든 몬스터에 '기합' 부여 · 이미 기합이 있으면 기합 카운터 3개", textJa: "自分の場の全モンスターに「気合」を付与 · 既に気合があれば気合カウンター3個" },
+  { id: "DUNGEON", t: "mon", cost: 2, atk: 0, def: 3, aura: "dungeon", name: "살아있는 던전", nameJa: "生きているダンジョン",
+    text: "상시: '기합'·'회피'가 없는 몬스터는 공격 시 공격력이 1이 된다", textJa: "常時: 「気合」「回避」を持たないモンスターは攻撃時に攻撃力が1になる" },
+    { id: "NL_SECRET", t: "spell", cost: 3, name: "나이트로드의 비기", nameJa: "ナイトロードの秘技",
+    text: "자신 몬스터 1체에 트랩마스터·암습·회피 중 1개 부여 · 자신의 '암살자' 2체의 공격력 +3(지속)", textJa: "自分のモンスター1体にトラップマスター・暗襲・回避の1つを付与 · 自分の「アサシン」2体の攻撃力+3(持続)" },
+];
+for (const c of NEW_CARDS38) { DB[c.id] = c; }
+// ---- 종족 시너지 설명 갱신 (v38) ----
+TRIBES["고독"] = {
+  ko: { name: "고독", note: "※ 서로 다른 종족 카드여야 발동 · 게임당 1회", bonuses: ["서로 다른 2종: 이 게임 동안 상대는 몬스터를 3체 이상 소환할 수 없다"] },
+  ja: { name: "孤独", note: "※ 異なる種族カードが必要 · ゲーム中1回", bonuses: ["異なる2種: このゲームの間、相手はモンスターを3体以上召喚できない"] },
+  en: { name: "Solitary", note: "* Requires different cards of the tribe · once per game", bonuses: ["2 different: for the rest of the game the opponent cannot summon a 3rd monster"] },
+};
+TRIBES["포식"] = {
+  ko: { name: "포식", note: "※ 서로 다른 종족 카드여야 발동 · 게임당 1회", bonuses: ["서로 다른 2종: 상대에게 18 데미지"] },
+  ja: { name: "捕食", note: "※ 異なる種族カードが必要 · ゲーム中1回", bonuses: ["異なる2種: 相手に18ダメージ"] },
+  en: { name: "Devour", note: "* Requires different cards of the tribe · once per game", bonuses: ["2 different: 18 damage to the opponent"] },
+};
+TRIBES["귀족"] = {
+  ko: { name: "귀족", note: "※ 서로 다른 종족 카드여야 발동 · 게임당 1회", bonuses: ["서로 다른 2종: 상대의 최대 마나 -2"] },
+  ja: { name: "貴族", note: "※ 異なる種族カードが必要 · ゲーム中1回", bonuses: ["異なる2種: 相手の最大マナ-2"] },
+  en: { name: "Aristocrat", note: "* Requires different cards of the tribe · once per game", bonuses: ["2 different: the opponent's max mana -2"] },
+};
+TRIBES["시초"] = {
+  ko: { name: "시초", note: "※ 1~8코스트 각 1종(8코 '시초의 미믹' 포함) · 각 단계 보상은 게임당 1회씩 따로 지급", bonuses: ["서로 다른 2종: 최대 체력 +15", "서로 다른 3종: 최대 체력 +40", "서로 다른 4종: 최대 체력 +70", "서로 다른 6종: 이 게임에서 승리"] },
+  ja: { name: "始原", note: "※ 1~8コスト各1種(8コスト「始原のミミック」を含む) · 各段階の報酬はゲーム中1回ずつ", bonuses: ["異なる2種: 最大体力+15", "異なる3種: 最大体力+40", "異なる4種: 最大体力+70", "異なる6種: このゲームに勝利"] },
+  en: { name: "Origin", note: "* Collect different cards, one each of cost 1-8 (incl. cost-8 'Origin Mimic') · each tier fires once, separately", bonuses: ["2 different: max HP +15", "3 different: max HP +40", "4 different: max HP +70", "6 different: you win the game"] },
+};
+
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 // 플레이버 카드명(ko/ja/en 3개 국어) 적용 — applyEnglish 이후, standardizeCardTexts 이전
 applyFlavorCardNames([DB, STARTERS as unknown as Record<string, CardDef>]);
@@ -2108,6 +2152,9 @@ const RELATED_MANUAL: Record<string, string[]> = {
   LAND_GRANT: ["CASTLE", "TAR1", "TAR2", "TAR3"],
   T2: ["NT_NULL3"],
   T10: ["TPO1", "TPO2", "TPO3", "TPO5"],
+  AEM: ["GOLEM1", "GOLEM2", "GOLEM3", "M10", "NGA3", "NWL3", "MANA_GIANT"],
+  DEMON_REALM: ["TDE1", "TDE2", "TDE3", "TDE4"],
+  NL_SECRET: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3", "ASSASSIN4"],
 };
 const _relatedCache: Record<string, string[]> = {};
 export function relatedCardIds(id: string): string[] {
@@ -2152,7 +2199,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v37"; // v37: 성 아키타입(성/증축/영토 하사/반역죄/선전포고/운영 예산/소집) + 함정 전면 리워크(어튠 무효 장치·마름쇠·중급 차단·낙인계·낙뢰·폐문·대역·복수…) + 14종 삭제 + 산성비/강산성비/부패한 땅/제인 + 도박꾼 예측 선택 + 다종족 계약 리워크
+export const BALANCE_VERSION = "v38"; // v38: 종족 시너지 개정(귀족 2종 마나-2 · 포식 2종 18뎀 · 고독 2종 소환 상한 2 · 시초 2/3/4/6종 +15/+40/+70/승리) + 마계 + 앤티크 인핸스 매직/기사의 가르침/나이트로드의 비기 + 살아있는 던전 + 전사 골램 개명/가디언 기합/나이트로드 회피
+// v37(구): // v37: 성 아키타입(성/증축/영토 하사/반역죄/선전포고/운영 예산/소집) + 함정 전면 리워크(어튠 무효 장치·마름쇠·중급 차단·낙인계·낙뢰·폐문·대역·복수…) + 14종 삭제 + 산성비/강산성비/부패한 땅/제인 + 도박꾼 예측 선택 + 다종족 계약 리워크
 // v36(구): // v36: 몬스터 대개편 — 골램 아키타입(마나 골렘 manaGolem/가디언 gutsOnHit/자이언트 giantGolem/특공부대 golemSquad/리더 leaderGolem/골램 킹 golemKin) · 시초의 알 부화(4턴/내구2→시초 1체) · 병사/기사 군단(워로드/기수/정예/장군/고무왕/드래곤 융합→라이더·앤티크) · 세계수 3종(신도/파수꾼/세계수) · 암살자 본부(나이트 마켓+낙인) · 선택받은 4종 리워크 · 엘프 상향 · 카지노 표 변경 · 제네릭 고코스트 몬스터 36종 삭제
 // v35(구): // v35: 덱 압축 스타터 — 리프레시(1드로우 + 패 2장까지 제외) / 선택과 집중(덱·묘지 3장까지 제외)
 // v34(구): // v34: 마법 대개편 — 버프/리워크 45종(아튠·마 1코, S1 주사위표, 마켓 크래시 제시봉쇄, 룬학문 리워크, 대지의 축복 전체회복, 명상/금단/대학살 리워크 등) + 34종 삭제(9코+ 마법 전멸, 시공간 조작 제외) + 스타터 카지노

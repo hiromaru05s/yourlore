@@ -1088,6 +1088,8 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   let atk = effAtk(p, att);
   // 드래곤 라이더(v36 halfSecond): 2회째 공격은 공격력 절반(내림)
   if (att.attackFx === "halfSecond" && (att.attacksUsed || 0) >= 1) { atk = Math.floor(atk / 2); ctx.log(`  └ ${cn(att)} 2회째 공격 — 공격력 절반(${atk})`, `  └ ${cn(att)} 2回目の攻撃 — 攻撃力半分(${atk})`); }
+  // 살아있는 던전(v38 dungeon): 기합·회피가 없는 몬스터는 공격 시 공격력 1
+  if (atk > 1 && !hasPassive(att, "guts") && !hasPassive(att, "evade") && g.players.some((pl) => pl.field.some((x) => x.aura === "dungeon"))) { atk = 1; ctx.log(`  └ 살아있는 던전: ${cn(att)} 의 공격력이 1이 된다`, `  └ 生きているダンジョン: ${cn(att)} の攻撃力が1になる`); }
   let killed = false; // 이 공격으로 상대 몬스터를 파괴했는가 (엠버 드레이크 연속 공격)
   let tc: CardInst | null;
   // 특급 흡혈귀(trapImmune): 함정 반응에 의한 파괴만 무효 — 아래 함정 브랜치의 파괴는 전부 이 헬퍼를 거친다
@@ -2611,7 +2613,7 @@ const CUSTOM_SPELLS = new Set<string>([
   "BLOOD1", "BLOOD2", "BLOOD_JOY", "BLOOD_ANGER", "BLOOD_SORROW", "BLOOD_PLEASURE", "VAMP_PACT", "VAMP_PACT2", "BLOOD_SECRET",
   "FLAME", "NEGOTIATE", "COUNTERCALC", "AMBUSH", "TRUMPET", "TRICKROOM", "SLUM", "DARK_MERCHANT", "DUNGEON_FLOOR", "DISARM3", "FORBIDDEN", "S12", "S14", "MULTI_CULTURE", "GS5_3", "GS6_4", "REFRESH_HAND", "FOCUS", "CATALYST", "MEDITATE", "PRAYER", "HERMIT", "LUCKY_CHEST", "GUILD_CHEST", "SCRAPPER", "WALLBREAK1", "WALLBREAK2", "SNIPE1", "SNIPE2", "SHATTER", "INQUISITION", "SCARECROW", "LEVY", "CULL_FLOOD", "PURGE_ALL", "EXILE_NUKE1", "EXILE_NUKE2", "GREED_PRICE", "MARKET_CRISIS", "GOLIATH_HUNT", "MASSACRE",
   "DECAY_CRAFT", "MAJESTY_RITE", "CROSSROADS", "CHOSEN_AREA",
-  "CURSE", "EXPANSION", "LAND_GRANT", "TREASON", "UNBRAND", "BUDGET",
+  "CURSE", "EXPANSION", "LAND_GRANT", "TREASON", "UNBRAND", "BUDGET", "AEM", "KNIGHT_TEACH", "NL_SECRET",
 ]);
 // ============================================================
 // dice — every former %-chance is now a visible die roll.
@@ -2818,6 +2820,23 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case "UNBRAND": { // 제인(v37): 양측 낙인 카운터 전부 제거
       ctx.log(`${tag(p, card)} 낙인 카운터 전부 제거 (${p.name} ${p.brand || 0} / ${o.name} ${o.brand || 0})`, `${tag(p, card)} 烙印カウンターを全て除去 (${p.name} ${p.brand || 0} / ${o.name} ${o.brand || 0})`);
       p.brand = 0; o.brand = 0;
+      break;
+    }
+    case "AEM": { // 앤티크 인핸스 매직(v38): 필드의 골램 2체 공격력 +7(지속) — 선택
+      g.pending = { kind: "myMon", reason: "golemBuff", allowCancel: false, data: { val: 7, count: 2, excl: [] }, hint: "공격력 +7 할 자신의 골램 선택 (2체)", hintJa: "攻撃力+7する自分のゴーレムを選択 (2体)" };
+      ctx.ev.push({ type: "needTarget", pending: g.pending });
+      break;
+    }
+    case "KNIGHT_TEACH": { // 기사의 가르침(v38): 전 아군 기합 부여 / 이미 있으면 기합 카운터 +3
+      for (const km of p.field) {
+        if (hasPassive(km, "guts")) { km.guts = (km.guts || 0) + 3; ctx.log(`  └ ${cn(km)} 기합 카운터 +3 (${km.guts})`, `  └ ${cn(km)} 気合カウンター+3 (${km.guts})`); }
+        else { (km.passivesG ??= []).push("guts"); km.guts = (km.guts || 0) + 1; ctx.log(`  └ ${cn(km)} 이(가) '기합'을 얻는다`, `  └ ${cn(km)} が「気合」を得る`); }
+      }
+      break;
+    }
+    case "NL_SECRET": { // 나이트로드의 비기(v38): 아군 1체에 패시브 1개 부여 + 암살자 2체 공격력 +3
+      g.pending = { kind: "myMon", reason: "nlTarget", allowCancel: false, data: {}, hint: "나이트로드의 비기 — 패시브를 부여할 자신 몬스터 선택", hintJa: "ナイトロードの秘技 — パッシブを与える自分のモンスターを選択" };
+      ctx.ev.push({ type: "needTarget", pending: g.pending });
       break;
     }
     case "BUDGET": { // 운영 예산(v37): 주사위 2+면 병사 1체
@@ -3359,6 +3378,11 @@ function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): vo
   const grantGuts = (x: FieldMon): void => { if (hasPassive(x, "guts")) return; (x.passivesG ??= []).push("guts"); x.guts = (x.guts || 0) + 1; ctx.log(`  └ 고무왕: ${cn(x)} 이(가) '기합'을 얻는다`, `  └ 鼓舞王: ${cn(x)} が「気合」を得る`); };
   if (m.aura === "rallyGuts") p.field.forEach((x) => { if (x.uid !== m.uid && (isSoldier(x) || isKnight(x))) grantGuts(x); });
   else if ((isSoldier(m) || isKnight(m)) && p.field.some((x) => x.uid !== m.uid && x.aura === "rallyGuts")) grantGuts(m);
+  // 마계(v38 demonRealm): 자신이 소환하는 '마족' 몬스터의 효과를 전부 무효화
+  if (m.tribe === "마족" && p.enchants.some((e) => e.card.ench === "demonRealm") && (m.onSummon || m.turnFx || m.aura)) {
+    m.onSummon = undefined; m.turnFx = undefined; m.aura = undefined;
+    ctx.log(`  └ 마계: ${cn(m)} 의 효과 무효화`, `  └ 魔界: ${cn(m)} の効果を無効化`);
+  }
   // 성(v37): 자신 필드에 병사·기사가 소환될 때마다 성 카운터 +1
   if (isSoldier(m) || isKnight(m)) for (const cs of p.field) if (cs.id === "CASTLE" && cs.uid !== m.uid) { cs.gcount = (cs.gcount || 0) + 1; ctx.log(`  └ ${cn(cs)} 성 카운터 +1 (${cs.gcount})`, `  └ ${cn(cs)} 城カウンター+1 (${cs.gcount})`); }
   // 부패한 땅(v37 rottenGround): 필드에 소환되는 모든 몬스터에 부패 카운터 2개 (알 제외)
@@ -3439,7 +3463,7 @@ function checkTribe(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): void {
   // 다종족 계약: 시너지 효과 2배 — 계약이 필드에 몇 장이든 2배는 1번만 (중첩 금지)
   const mult = 1; // v37: 다종족 계약은 더 이상 시너지를 2배로 하지 않는다
   // 각 티어는 게임당 1회씩, 2종/3종(/4종) 보상을 "따로" 지급 — 티어를 건너뛰어 도달해도 낮은 티어부터 순서대로
-  const thresholds = tribe === "시초" || tribe === "마족" ? [2, 3, 4] : [4]; // v32: 고독/포식/귀족은 4종 단일 티어
+  const thresholds = tribe === "시초" ? [2, 3, 4, 6] : tribe === "마족" ? [2, 3, 4] : [2]; // v38: 시초 2/3/4/6 · 마족 2/3/4 · 고독/포식/귀족 2종
   for (const n of thresholds) {
     if (g.over) return;
     if (count >= n && fire(n)) {
@@ -3452,24 +3476,16 @@ function applyTribe(g: GameState, ctx: Ctx, p: PlayerState, o: PlayerState, trib
   const gainHp = (v: number): void => { p.maxHp += v; p.hp += v; ctx.ev.push({ type: "heal", player: g.players.indexOf(p) as Side, amount: v }); ctx.log(`  └ 최대 체력 +${v} (${p.maxHp})`, `  └ 最大体力+${v} (${p.maxHp})`); };
   const gainMana = (v: number): void => { p.maxMana += v; ctx.log(`  └ 최대 마나 +${v} (${p.maxMana})`, `  └ 最大マナ+${v} (${p.maxMana})`); };
   if (tribe === "고독") {
-    // 4종: 이 게임 동안 상대는 매 턴 시작시 🎲 5+ 여야만 턴 진행
-    o.soloCurse = true;
-    ctx.log(`  └ <span class="dmg">고독의 저주</span>: ${o.name} 은(는) 매 턴 시작시 🎲 5 이상이어야 턴을 진행할 수 있다`, `  └ <span class="dmg">孤独の呪い</span>: ${o.name} は毎ターン開始時🎲5以上でなければターンをプレイできない`);
+    // v38 2종: 이 게임 동안 상대는 몬스터를 3체 이상 소환할 수 없다
+    o.summonCap = 2;
+    ctx.log(`  └ <span class="dmg">고독의 저주</span>: ${o.name} 은(는) 이 게임 동안 몬스터를 3체 이상 소환할 수 없다`, `  └ <span class="dmg">孤独の呪い</span>: ${o.name} はこのゲームの間モンスターを3体以上召喚できない`);
   } else if (tribe === "포식") {
-    // 4종: 상대 필드의 모든 카드 파괴 + 30 데미지
-    for (const tm of [...o.field]) ctx.destroyMonster(o, tm);
-    if (o.traps.length && trySnare(g, ctx, o)) { /* 덫 속의 덫: 함정 파괴만 무효 */ }
-    else o.traps.splice(0).forEach((t) => o.discard.push(t.card));
-    o.enchants.splice(0).forEach((e) => binEnch(g, ctx, o, e.card));
-    if ((g.pending?.kind === "oppMon" || g.pending?.kind === "oppBoard")
-      && o.field.length + o.traps.length + o.enchants.length === 0
-      && !(g.pending?.data as { anySide?: boolean } | undefined)?.anySide) g.pending = null;
-    ctx.log(`  └ <span class="dmg">상대 필드의 모든 카드 파괴</span>`, `  └ <span class="dmg">相手の場の全カードを破壊</span>`);
-    if (!g.over) ctx.dealDamage(o, 30 * mult, "포식 시너지", "捕食シナジー");
+    // v38 2종: 상대에게 18 데미지
+    ctx.dealDamage(o, 18 * mult, "포식 시너지", "捕食シナジー");
   } else if (tribe === "귀족") {
-    // 4종: 상대의 최대 마나가 5가 된다
-    o.maxMana = 5;
-    ctx.log(`  └ <span class="dmg">귀족의 명령</span>: ${o.name} 의 최대 마나가 5가 된다`, `  └ <span class="dmg">貴族の命令</span>: ${o.name} の最大マナが5になる`);
+    // v38 2종: 상대 최대 마나 -2
+    o.maxMana = Math.max(1, o.maxMana - 2);
+    ctx.log(`  └ <span class="dmg">귀족의 명령</span>: ${o.name} 의 최대 마나 -2 (${o.maxMana})`, `  └ <span class="dmg">貴族の命令</span>: ${o.name} の最大マナ-2 (${o.maxMana})`);
   } else if (tribe === "마족") {
     if (n === 2) {
       o.spellCastCap = Math.min(o.spellCastCap ?? 99, 2);
@@ -3482,12 +3498,14 @@ function applyTribe(g: GameState, ctx: Ctx, p: PlayerState, o: PlayerState, trib
       ctx.log(`  └ <span class="dmg">마왕의 지배</span>: ${o.name} 이(가) 소모하는 모든 마나가 3배가 된다`, `  └ <span class="dmg">魔王の支配</span>: ${o.name} が消費する全てのマナが3倍になる`);
     }
   } else if (tribe === "시초") {
-    if (n === 2) gainHp(10 * mult);
-    else if (n === 3) {
-      gainHp(15 * mult);
-      o.maxHp = Math.max(1, o.maxHp - 5 * mult); if (o.hp > o.maxHp) o.hp = o.maxHp;
-      ctx.log(`  └ 상대 최대 체력 -${5 * mult} (${o.maxHp})`, `  └ 相手の最大体力-${5 * mult} (${o.maxHp})`);
-    } else { // n === 4: the payoff
+    // v38: 2종 +15 · 3종 +40 · 4종 +70 · 6종 승리
+    if (n === 2) gainHp(15 * mult);
+    else if (n === 3) gainHp(40 * mult);
+    else if (n === 4) gainHp(70 * mult);
+    else if (n === 6) {
+      ctx.log(`  └ <span class="good">시초 6종 집결 — ${p.name} 승리!</span>`, `  └ <span class="good">始原6種集結 — ${p.name} の勝利！</span>`);
+      handleDefeat(g, ctx, o, side(g, p));
+    } else { // (구 4종 페이오프 — v38부터 미사용)
       gainMana(10 * mult); gainHp(25 * mult);
       ctx.drawN(p, 5 * mult);
       ctx.log(`  └ ${5 * mult}장 드로우`, `  └ ${5 * mult}枚ドロー`);
@@ -3607,6 +3625,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   if (card.t === "mon") {
     if (summonBlockedLow(g, p, card)) { ctx.log(`  └ <span class="dmg">봉쇄령</span>: 코스트 ${card.cost} 몬스터 소환 불가`, `  └ <span class="dmg">封鎖令</span>: コスト ${card.cost} のモンスター召喚不可`); return; }
     if ((p.summonLockUntil ?? 0) > g.turn) { ctx.log(`  └ <span class="dmg">은둔자</span>: 다른 몬스터를 소환할 수 없다`, `  └ <span class="dmg">隠遁者</span>: 他のモンスターを召喚できない`); return; }
+    if (p.summonCap != null && p.field.length >= p.summonCap) { ctx.log(`  └ <span class="dmg">고독의 저주</span>: 몬스터를 ${p.summonCap + 1}체 이상 소환할 수 없다`, `  └ <span class="dmg">孤独の呪い</span>: モンスターを${p.summonCap + 1}体以上召喚できない`); return; }
     if (p.lowSummonBanTurn && (card.cost ?? 0) <= 3) { ctx.log(`  └ <span class="dmg">삼격의 불씨</span>: 이번 턴 코스트 3 이하 소환 불가`, `  └ <span class="dmg">三撃の火種</span>: このターン コスト3以下は召喚不可`); return; }
     if (!summonReqMet(p, card, g.players[1 - g.cur])) { ctx.log(`  └ <span class="dmg">소환 조건 미충족</span>: ${cn(card)}`, `  └ <span class="dmg">召喚条件を満たしていない</span>: ${cn(card)}`); return; }
     if ((card.cost ?? 0) >= 5 && castleOf(p)) { ctx.log(`  └ <span class="dmg">성</span>: 코스트 5 이상 몬스터를 소환할 수 없다`, `  └ <span class="dmg">城</span>: コスト5以上のモンスターは召喚できない`); return; }
@@ -3658,6 +3677,8 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (card.id === "COUNTERCALC" && o0.maxMana > 7) { ctx.log("  └ 상대 최대 마나가 7을 초과해 사용 불가", "  └ 相手の最大マナが7を超えているため使用不可"); return; }
     if ((card.id === "EXPANSION" || card.id === "LAND_GRANT") && !castleOf(p)) { ctx.log("  └ 자신 필드에 '성'이 없습니다", "  └ 自分の場に「城」がありません"); return; }
     if (card.id === "TREASON" && !castleOf(o0)) { ctx.log("  └ 상대 필드에 '성'이 없습니다", "  └ 相手の場に「城」がありません"); return; }
+    if (card.id === "AEM" && (new Set(deckComp(p).filter((c) => c.t === "mon" && isGolem(c)).map((c) => c.id)).size < 2 || !p.field.some((m) => isGolem(m)))) { ctx.log("  └ 덱 구성에 서로 다른 골램 2장과 필드의 골램이 필요합니다", "  └ デッキ構成に異なるゴーレム2枚と場のゴーレムが必要です"); return; }
+    if ((card.id === "KNIGHT_TEACH" || card.id === "NL_SECRET") && p.field.length === 0) { ctx.log("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); return; }
     if (card.id === "COUNTERCALC" && o0.enchants.length === 0) { ctx.log("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); return; }
     if (card.id === "AMBUSH" && o0.maxMana !== 4) { ctx.log("  └ 상대 최대 마나가 4가 아니라 사용 불가", "  └ 相手の最大マナが4ではないため使用不可"); return; }
     if (card.id === "TRUMPET" && p.field.length === 0) { ctx.log("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); return; }
@@ -3700,6 +3721,10 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       if (card.ench === "gemRain") {
         g.players.forEach((pl) => pl.field.forEach((mm) => { if (MIMIC_IDS.has(mm.id)) mm.atkMod = (mm.atkMod || 0) + 3; }));
         ctx.log(`  └ 필드의 모든 미믹 계열 공격력 +3`, `  └ 場の全ミミック系の攻撃力+3`);
+      }
+      // 마계(v38): 발동 시 자신 필드의 마족 몬스터 효과도 무효화
+      if (card.ench === "demonRealm") {
+        for (const dm of p.field) if (dm.tribe === "마족" && (dm.onSummon || dm.turnFx || dm.aura)) { dm.onSummon = undefined; dm.turnFx = undefined; dm.aura = undefined; ctx.log(`  └ 마계: ${cn(dm)} 의 효과 무효화`, `  └ 魔界: ${cn(dm)} の効果を無効化`); }
       }
       // 강산성비(v37): 발동 시 상대 몬스터 전체에 부패 카운터 2개
       if (card.ench === "strongAcid") {
@@ -3988,6 +4013,21 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       (tm.passivesG ??= []).push("majesty");
       ctx.log(`<span class="t">${p.name}</span> → ${cn(tm)} 이(가) '위엄'을 얻는다`, `<span class="t">${p.name}</span> → ${cn(tm)} が「威厳」を得る`);
     }
+    else if (pending.reason === "golemBuff") { // 앤티크 인핸스 매직(v38): 골램 2체 공격력 +7
+      if (!isGolem(tm) || (d.excl ?? []).includes(tm.uid)) { g.pending = pending; return; }
+      tm.atkMod = (tm.atkMod || 0) + (d.val || 7);
+      ctx.log(`<span class="t">${p.name}</span> → ${cn(tm)} 공격력 +${d.val || 7}(지속)`, `<span class="t">${p.name}</span> → ${cn(tm)} 攻撃力+${d.val || 7}(持続)`);
+      const left = ((d.count as number) || 1) - 1; const nextExcl = [...(d.excl ?? []), tm.uid];
+      if (left > 0 && p.field.some((x) => isGolem(x) && !nextExcl.includes(x.uid))) {
+        g.pending = { kind: "myMon", reason: "golemBuff", allowCancel: false, data: { val: d.val, count: left, excl: nextExcl }, hint: pending.hint, hintJa: pending.hintJa };
+        ctx.ev.push({ type: "needTarget", pending: g.pending });
+      }
+    }
+    else if (pending.reason === "nlTarget") { // 나이트로드의 비기(v38): 부여할 패시브 선택으로
+      g.pending = { kind: "giantShop", reason: "nlGrant", allowCancel: false, hint: "나이트로드의 비기 — 부여할 패시브 선택", hintJa: "ナイトロードの秘技 — 与えるパッシブを選択",
+        data: { ids: ["trapmaster", "ambush", "evade"], free: true, uid: tm.uid, opts: [{ id: "trapmaster", ko: "트랩마스터", ja: "トラップマスター", en: "Trap Master" }, { id: "ambush", ko: "암습", ja: "暗襲", en: "Infiltrate" }, { id: "evade", ko: "회피", ja: "回避", en: "Evade" }] } };
+      ctx.ev.push({ type: "needTarget", pending: g.pending });
+    }
     else if (pending.reason === "emberBuff") { // 시초의 불씨(v36): 다른 시초 몬스터 공격력 +2(지속)
       if (tm.tribe !== "시초" || (d.excl ?? []).includes(tm.uid)) { g.pending = pending; return; }
       tm.atkMod = (tm.atkMod || 0) + (d.val || 2);
@@ -4170,6 +4210,18 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     if (pending.reason === "gamblerPick") {
       if (!uid || !["1", "2", "3"].includes(uid)) { g.pending = pending; return; }
       gamblerEffect(g, ctx, p, uid);
+      return;
+    }
+    // 나이트로드의 비기(v38): 패시브 부여 + 암살자 2체 공격력 +3
+    if (pending.reason === "nlGrant") {
+      if (!uid || !["trapmaster", "ambush", "evade"].includes(uid)) { g.pending = pending; return; }
+      const tm = p.field.find((x) => x.uid === (pending.data?.uid as string));
+      if (tm) {
+        if (uid === "ambush") tm.directOnly = true; else if (!hasPassive(tm, uid)) (tm.passivesG ??= []).push(uid);
+        ctx.log(`<span class="t">${p.name}</span> 나이트로드의 비기 → ${cn(tm)} 이(가) '${PASSIVES[uid]?.ko.name ?? uid}'을(를) 얻는다`, `<span class="t">${p.name}</span> ナイトロードの秘技 → ${cn(tm)} が「${PASSIVES[uid]?.ja.name ?? uid}」を得る`);
+      }
+      const ass = [...p.field].filter((x) => isAssassinCard(x)).sort((a2, b2) => effAtk(p, b2) - effAtk(p, a2)).slice(0, 2);
+      for (const a3 of ass) { a3.atkMod = (a3.atkMod || 0) + 3; ctx.log(`  └ ${cn(a3)} 공격력 +3(지속)`, `  └ ${cn(a3)} 攻撃力+3(持続)`); }
       return;
     }
     // 드래곤(v37): 융합 결과 선택

@@ -136,6 +136,7 @@ export interface PlayerState {
   spellCastCap?: number; // 마족 2/3종 시너지: 자기 턴당 마법 사용 한도 (2 → 0)
   manaCostMult?: number; // 마족 4종 시너지: 소모 마나 배수 (3)
   summonLockUntil?: number; // 고독1(은둔자): g.turn이 이 값 미만인 동안 몬스터 소환 불가
+  summonCap?: number; // 고독 2종 시너지(v38): 필드 몬스터가 이 수 이상이면 더 소환할 수 없다
   manaRegain?: { at: number; amt: number }[]; // 마족1: 임시 최대 마나 차감의 복구 예약 (g.turn 기준)
   trapBlockTurns?: number; // 협상(v34): 남은 함정 설치 금지 턴 수 (자신 턴 시작마다 -1)
   lowSummonBanNext?: boolean; // 삼격의 불씨 ⑤⑥: 다음 턴 코스트 3 이하 소환 불가 (예약)

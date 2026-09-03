@@ -22,7 +22,7 @@
 //  · hell   — never blunders + value-net look-ahead search → 최강
 // ============================================================
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
-import { buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, effMaxMana, freeBuyBlocked, glassBanActive, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet, sealLowBlocks } from "./engine";
+import { buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, effMaxMana, freeBuyBlocked, glassBanActive, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
 import { avgPower, cardPower } from "./cardEval";
 import { netEval, determinize } from "./botNet";
 import { DB, hasPassive } from "./cards";
@@ -162,6 +162,7 @@ export function candidates(g: GameState): Action[] {
         .filter((m) => !(pend.reason === "grantDecay" && hasPassive(m, "decay")))
         .filter((m) => !(pend.reason === "grantMajesty" && hasPassive(m, "majesty")))
         .filter((m) => !(pend.reason === "emberBuff" && m.tribe !== "시초")) // 시초의 불씨: 시초만
+        .filter((m) => !(pend.reason === "golemBuff" && !isGolem(m))) // 앤티크 인핸스 매직: 골램만
         .filter((m) => !(pend.reason === "worldTree" && (m.id !== "WORLD_TREE" || (m.gcount || 0) <= 0))) // 세계수: 카운터 있는 세계수만
         .forEach((m) => push(m.uid));
       if (pend.allowCancel) push(null);
@@ -197,6 +198,7 @@ export function candidates(g: GameState): Action[] {
     if (c.t === "trap" && (p.trapBlockTurn || o.field.some((tm) => tm.aura === "trapBan"))) return; // 협상/몰락한 기사 — 엔진 거부 루프 방지
     if (c.t === "mon" && ((p.summonLockUntil ?? 0) > g.turn || !summonReqMet(p, c, o))) return; // 은둔자 잠금 / 소환 조건
     if (c.t === "mon" && (c.cost ?? 0) >= 5 && p.field.some((m) => m.id === "CASTLE")) return; // 성: 5코 이상 소환 불가
+    if (c.t === "mon" && p.summonCap != null && p.field.length >= p.summonCap) return; // 고독의 저주(v38)
     if (c.t === "mon" && p.lowSummonBanTurn && (c.cost ?? 0) <= 3) return; // 삼격의 불씨: 3코 이하 봉쇄
     if (c.t === "spell" && p.spellCastCap != null && (p.spellsCastTurn || 0) >= p.spellCastCap) return; // 마족 시너지 한도
     if ((c.t === "spell" || c.t === "starter") && (candSealAll || p.spellSealTurn || sealLowBlocks(g, playCost(c, p)))) return; // 침묵
@@ -707,6 +709,8 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.id === "COUNTERCALC" && (o.maxMana > 7 || o.enchants.length === 0)) return false;
     if ((c.id === "EXPANSION" || c.id === "LAND_GRANT") && !p.field.some((m) => m.id === "CASTLE")) return false; // 성 필요
     if (c.id === "TREASON" && !o.field.some((m) => m.id === "CASTLE")) return false;
+    if (c.id === "AEM" && (!p.field.some((m) => isGolem(m)) || new Set([...p.deck, ...p.hand, ...p.discard, ...p.field].filter((x) => x.t === "mon" && isGolem(x)).map((x) => x.id)).size < 2)) return false;
+    if ((c.id === "KNIGHT_TEACH" || c.id === "NL_SECRET") && p.field.length === 0) return false;
     if (c.id === "TRUMPET" && p.field.length === 0) return false;
     if (c.id === "NEGOTIATE") return false; // 봇은 상대 마나를 올려주지 않는다
     // forbidden ritual: needs HP to spare AND a non-시초 tribe monster to duplicate
@@ -721,6 +725,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     .map((c, i) => ({ c, i }))
     .filter((x) => x.c.t === "mon" && playCost(x.c, p) <= p.mana && !(oppNoLow && (x.c.cost ?? 0) <= 3) && !(p.lowSummonBanTurn && (x.c.cost ?? 0) <= 3) && summonReqMet(p, x.c, o) && (p.summonLockUntil ?? 0) <= g.turn)
     .filter((x) => !((x.c.cost ?? 0) >= 5 && p.field.some((m2) => m2.id === "CASTLE"))) // 성: 5코 이상 소환 불가
+    .filter(() => !(p.summonCap != null && p.field.length >= p.summonCap)) // 고독의 저주(v38)
     .sort((a, b) => cardPower(b.c) - cardPower(a.c));
 
   // 1) LETHAL: direct spells + attacks (with 관통 penetration) that kill THIS turn.
@@ -1086,6 +1091,15 @@ function autoTarget(g: GameState): Action {
       const t0 = [...p.field].filter((m) => !hasPassive(m, "majesty")).sort((x, y) => effDef(p, y) - effDef(p, x))[0];
       return { type: "chooseTarget", uid: t0 ? t0.uid : null };
     }
+    if (pending.reason === "golemBuff") { // 앤티크 인핸스 매직: 공격력 높은 골램부터
+      const excl = (pending.data?.excl as string[] | undefined) ?? [];
+      const t0 = [...p.field].filter((m) => isGolem(m) && !excl.includes(m.uid)).sort((x, y) => effAtk(p, y) - effAtk(p, x))[0];
+      return { type: "chooseTarget", uid: t0 ? t0.uid : null };
+    }
+    if (pending.reason === "nlTarget") { // 나이트로드의 비기: 가장 강한 암살자(없으면 최강 몬스터)
+      const t0 = ([...p.field].filter((m) => isAssassinCard(m)).sort((x, y) => effAtk(p, y) - effAtk(p, x))[0]) ?? [...p.field].sort((x, y) => effAtk(p, y) - effAtk(p, x))[0];
+      return { type: "chooseTarget", uid: t0 ? t0.uid : null };
+    }
     if (pending.reason === "emberBuff") { // 시초의 불씨: 다른 시초 몬스터 중 공격력 높은 순
       const excl = (pending.data?.excl as string[] | undefined) ?? [];
       const t0 = [...p.field].filter((m) => m.tribe === "시초" && !excl.includes(m.uid)).sort((x, y) => effAtk(p, y) - effAtk(p, x))[0];
@@ -1141,6 +1155,7 @@ function autoTarget(g: GameState): Action {
       return { type: "pick", uid: oc >= 2 ? "3" : p.maxMana < 12 ? "1" : "2" };
     }
     if (pending.reason === "dragonFuse") return { type: "pick", uid: "ANTIQUE_DK" };
+    if (pending.reason === "nlGrant") return { type: "pick", uid: "evade" };
     if (pending.reason === "landGrant") { // 영토 하사: 가장 비싼 귀족 카드
       const ids0 = (pending.data?.ids as string[] | undefined) ?? [];
       const best0 = [...ids0].sort((a, b) => ((DB[b]?.cost ?? 0) - (DB[a]?.cost ?? 0)))[0];

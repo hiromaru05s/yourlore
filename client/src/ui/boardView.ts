@@ -4,7 +4,7 @@
 // All animation lives in anim.ts; this file only draws + binds.
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
-import { effMaxMana, playCost, buyCost, effAtk, effDef, curHp } from "../shared/engine";
+import { effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem } from "../shared/engine";
 import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
@@ -467,6 +467,7 @@ export class GameView {
         && !(pending!.kind === "myMon" && pending!.reason === "grantDecay" && hasPassive(m, "decay")) // 이미 부패 보유
         && !(pending!.kind === "myMon" && pending!.reason === "grantMajesty" && hasPassive(m, "majesty")) // 이미 위엄 보유
         && !(pending!.kind === "myMon" && pending!.reason === "emberBuff" && m.tribe !== "시초") // 시초의 불씨: 시초만
+        && !(pending!.kind === "myMon" && pending!.reason === "golemBuff" && !isGolem(m)) // 앤티크 인핸스 매직: 골램만
         && !(pending!.kind === "myMon" && pending!.reason === "worldTree" && (m.id !== "WORLD_TREE" || (m.gcount || 0) <= 0)) // 세계수: 카운터 있는 세계수만
         && !(pending!.kind === "myMon" && (((pending!.data?.excl as string[] | undefined) ?? []).includes(m.uid))); // 지원 나팔: 이미 고른 몬스터는 중복 선택 불가
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
