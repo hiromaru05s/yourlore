@@ -89,6 +89,8 @@ export function castleOf(p: PlayerState): FieldMon | undefined { return p.field.
 export function isKnight(c: { id?: string }): boolean { return c.id === "INFKNIGHT"; }
 /** '암살자' 계열 — 이름 기준 (암살자 4종 + 길드 지부/본부 + 길드 보물상자) */
 export function isAssassinCard(c: { name?: string }): boolean { return (c.name || "").includes("암살자"); }
+/** '주술사' 계열 (v39: 견습/초급/중급/상급/특급 주술사) — 특급 주술사 켈로이드(hexBoss) 공격력 +5 대상 */
+export function isHexer(c: { name?: string }): boolean { return (c.name || "").includes("주술사"); }
 /** 덱 구성(덱·패·묘지·필드) — "デッキ構成" 판정 공용 */
 export function deckComp(p: PlayerState): CardInst[] { return [...p.deck, ...p.hand, ...p.discard, ...(p.field as CardInst[])]; }
 const MIMIC_IDS = new Set(["MIMIC", "MIMIC2", "AWAKENED_MIMIC", "MIMIC_KING", "MIMIC_KING2", "ORIGIN_MIMIC", "MIMIC_LORD"]);
@@ -131,6 +133,8 @@ export function effAtk(p: PlayerState, m: FieldMon): number {
   if (m.condAtk === "cullAtk2") a += Math.floor(cullExiled(p) / 2) * 2;
   // 시초의 군주(originLord): 자신 필드의 모든 시초 몬스터 +3/+3 (군주 1장당)
   if (m.tribe === "시초") a += p.field.filter((x) => x.aura === "originLord").reduce((s2, x) => s2 + (x.val || 3), 0);
+  // 특급 주술사 켈로이드(v39 hexBoss): 자신 필드의 '주술사' 계열 전체 공격력 +5 (켈로이드 1체당)
+  if (isHexer(m)) a += p.field.filter((x) => x.aura === "hexBoss").reduce((s2, x) => s2 + (x.val || 5), 0);
   return Math.max(0, a);
 }
 export function effDef(p: PlayerState, m: FieldMon): number {
@@ -1886,6 +1890,8 @@ function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: Fiel
 // ============================================================
 // summon effects (generalized)
 // ============================================================
+/** 주술사(v39 hexSummon) 주사위 성공 눈: 초급 5+ / 중급 4+ / 상급 3+ */
+const HEX_SUMMON_NEED: Record<string, number> = { HEXER1: 5, HEXER2: 4, HEXER3: 3 };
 function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];
@@ -2265,6 +2271,15 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       for (const tm of ts) { if (g.over) break; if (o.field.some((x) => x.uid === tm.uid)) addDecay(g, ctx, o, tm, 1); }
       break;
     }
+    case "hexSummon": { // 초급/중급/상급 주술사(v39): 덱 구성에 마법 val장+ → 주사위 need+면 상대 묘지에 '저주' val2장
+      const need = HEX_SUMMON_NEED[m.id] ?? 5;
+      const spells = deckComp(p).filter((c) => c.t === "spell").length;
+      if (spells < v) { ctx.log(`  └ 마법 ${spells}장 — 조건 미달(${v}장)`, `  └ 魔法${spells}枚 — 条件未達(${v}枚)`); break; }
+      const { rolls: hr, ok: hok } = diceRoll(g, ctx.ev, side(g, p), 1, need);
+      if (hok) { for (let i = 0; i < v2; i++) o.discard.push(inst(g, "CURSE")); ctx.log(`  └ 🎲 ${hr[0]} → <span class="dmg">상대 묘지에 저주 ${v2}장</span>`, `  └ 🎲 ${hr[0]} → <span class="dmg">相手の墓地に呪い${v2}枚</span>`); }
+      else ctx.log(`  └ 🎲 ${hr[0]} → 실패`, `  └ 🎲 ${hr[0]} → 失敗`);
+      break;
+    }
     case "castleInit": { // 성(v37): 성 카운터 +val (v38c: 2)
       m.gcount = (m.gcount || 0) + (v || 2);
       ctx.log(`  └ 성 카운터 +${v || 2} (${m.gcount})`, `  └ 城カウンター+${v || 2} (${m.gcount})`);
@@ -2490,6 +2505,26 @@ function tryBrandMagic(g: GameState, ctx: Ctx): void {
   );
 }
 
+/** 상급 주술사(v39 hexCurseOnSpell): 상대가 마법(t==="spell")을 사용하면 상급 주술사 1체당 상대(시전자) 묘지에 '저주' 1장. */
+function tryHexCurseOnSpell(g: GameState, ctx: Ctx): void {
+  const p = g.players[g.cur];
+  const o = g.players[1 - g.cur];
+  const n = o.field.filter((m) => m.aura === "hexCurseOnSpell").length;
+  if (!n) return;
+  for (let i = 0; i < n; i++) p.discard.push(inst(g, "CURSE"));
+  ctx.log(`  └ ${cn(DB.HEXER3)}: <span class="dmg">${p.name} 묘지에 저주 ${n}장</span>`, `  └ ${cn(DB.HEXER3)}: <span class="dmg">${p.name} の墓地に呪い${n}枚</span>`);
+}
+/** 특급 주술사 켈로이드(v39 hexBoss): 상대가 마법을 발동하면 주사위 1개 — 3 이상이면 무효화 (켈로이드 1체당 1회). */
+function tryHexBossNull(g: GameState, ctx: Ctx, card: CardInst): boolean {
+  const o = g.players[1 - g.cur];
+  for (const m of o.field) {
+    if (m.aura !== "hexBoss") continue;
+    const { rolls, ok } = diceRoll(g, ctx.ev, side(g, o), 1, 3);
+    if (ok) { ctx.log(`  └ ${cn(m)} 🎲 ${rolls[0]} → <span class="dmg">${cn(card)} 무효화</span>`, `  └ ${cn(m)} 🎲 ${rolls[0]} → <span class="dmg">${cn(card)} 無効化</span>`); return true; }
+    ctx.log(`  └ ${cn(m)} 🎲 ${rolls[0]} → 실패`, `  └ ${cn(m)} 🎲 ${rolls[0]} → 失敗`);
+  }
+  return false;
+}
 /** 마나 역류(secondNull): 이번 턴 2번째로 사용된 마법을 무효화 + 시전자 최대 마나 -1. */
 function trySecondNull(g: GameState, ctx: Ctx, card: CardInst): boolean {
   const p = g.players[g.cur];
@@ -3577,6 +3612,8 @@ export function summonReqMet(p: PlayerState, card: CardInst, o?: PlayerState): b
   if (card.summonReq === "assassinKin") return deckComp(p).some((c) => c.id !== card.id && isAssassinCard(c));
   // v36: 특급 암살자 — 덱 구성에 자신 외 서로 다른 '암살자' 카드 3종 이상
   if (card.summonReq === "assassinTrio") return new Set(deckComp(p).filter((c) => c.id !== card.id && isAssassinCard(c)).map((c) => c.id)).size >= 3;
+  // v39: 특급 주술사 켈로이드 — 덱 구성의 반 이상이 마법이고 마법이 15장 이상
+  if (card.summonReq === "hexBoss") { const dc = deckComp(p); const sp = dc.filter((c) => c.t === "spell").length; return sp >= 15 && sp * 2 >= dc.length; }
   return true;
 }
 
@@ -3700,10 +3737,12 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     p.spellsCastTurn = (p.spellsCastTurn || 0) + 1; // 마나 역류: 마법(t==="spell")만 카운트 (스타터 제외)
     treeKeeperTrigger(g, ctx, p, card); // 세계수의 파수꾼: '사용'에 반응 (무효화 여부와 무관)
     tryBrandMagic(g, ctx); // 낙인: 마법 "사용" 자체에 반응 — 무효화 여부와 무관
+    tryHexCurseOnSpell(g, ctx); // 상급 주술사(v39): 상대 마법 "사용"마다 상대 묘지에 저주 1장 — 무효화 여부와 무관
     if (tryNullSpell(g, ctx, card)) return;
     if (trySpellSteal(g, ctx, card)) return; // 주문 파쇄: 무효 + 복제 강탈
     if (trySecondNull(g, ctx, card)) return;
     if (tryAttuneJam(g, ctx, card)) return; // 어튠 무효 장치(v37): 어튠 - 흑/진/마
+    if (tryHexBossNull(g, ctx, card)) return; // 특급 주술사 켈로이드(v39): 주사위 3+면 상대 마법 무효
     // 공허(void) 마법 토큰(와인/암상인): 사용 후 묘지 대신 게임에서 제외 — 영구마법(선견지명류)은 제외
     if (!card.ench && hasPassive(card, "void")) {
       const vi = p.discard.lastIndexOf(card);

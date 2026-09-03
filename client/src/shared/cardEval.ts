@@ -72,6 +72,7 @@ const SUMMON_FLAT: Record<string, number> = {
   wipeTraps: 6, elderKing: 10, creator: 15,
   // v36
   originEmber: 4, refreshToken: 2, golemSquad: 5, decayAll: 8, eliteSoldiers: 6, hordeRally: 6, warlordKnight: 6,
+  hexSummon: 5, // v39
   chronicler: 4, jailer: 3, originArbiter: 8, originRite: 8, dragonFuse: 12, generalKnight: 7, siegeBreak2: 6,
   elderWipe: 18, nightlord: 12,
 };
@@ -156,6 +157,8 @@ function auraValue(c: CardDef): number {
     case "assassinHQ": return 6;
     case "castle": return 6;
     case "dungeon": return 5;
+    case "hexCurseOnSpell": return 5; // v39
+    case "hexBoss": return 12;
     default: return 4;
   }
 }

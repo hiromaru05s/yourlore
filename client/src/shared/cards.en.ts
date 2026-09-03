@@ -804,6 +804,15 @@ Object.assign(TEXTS, {
   NL_SECRET: "Give Trap Master, Infiltrate or Evade to 1 monster · 2 of your Assassins ATK +3 (lasting)",
 });
 
+// ---- v39 주술사 계열 ----
+Object.assign(NAMES, { NHEX: "Apprentice Hexer", HEXER1: "Novice Hexer", HEXER2: "Adept Hexer", HEXER3: "Master Hexer", HEXER4: "Grand Hexer - Keloid" });
+Object.assign(TEXTS, {
+  HEXER1: "On summon: with 8+ spells in your deck, roll a die: on 5+, add 3 Curses to the enemy graveyard",
+  HEXER2: "On summon: with 10+ spells in your deck, roll a die: on 4+, add 4 Curses to the enemy graveyard",
+  HEXER3: "On summon: 13+ spells: die 3+ adds 5 Curses to their graveyard · Passive: enemy spell: +1 Curse to their graveyard",
+  HEXER4: "Passive: enemy spell: die 3+ negates it · Your Hexers ATK +5 · 【Requires】15+ spells, at least half your deck",
+});
+
 export function applyEnglish(pools: Array<Record<string, CardDef>>): void {
   for (const pool of pools) {
     for (const id of Object.keys(pool)) {

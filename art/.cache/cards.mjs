@@ -2174,6 +2174,25 @@ Object.assign(DB.GRAPE, { val: 2, text: "자신 최대 체력 +2", textJa: "自�
 Object.assign(DB.GRAPE2, { val: 4, text: "자신 최대 체력 +4", textJa: "自分の最大体力+4" });
 Object.assign(DB.CASTLE, { def: 2, val: 2, text: "【소환시】성 카운터 2개 · 【상시】카운터 1개로 공격 무효 · 코스트 5 이상 소환 불가 · 병사·기사 소환 시 카운터 +1",
     textJa: "【召喚時】城カウンター2個 · 【常時】カウンター1個で攻撃を無効化 · コスト5以上は召喚不可 · 兵士・騎士召喚時にカウンター+1" });
+// ---- v39: 주술사 계열 — 꼬마 주술사 → 견습 주술사(2코) + 초급/중급/상급/특급 주술사 ----
+Object.assign(DB.NHEX, { cost: 2, name: "견습 주술사", nameJa: "見習い呪術師" });
+const NEW_CARDS39 = [
+    { id: "HEXER1", t: "mon", cost: 3, atk: 2, def: 3, onSummon: "hexSummon", val: 8, val2: 3, name: "초급 주술사", nameJa: "初級呪術師",
+        text: "소환시: 덱 구성에 마법이 8장 이상이면 주사위를 굴려 5 이상일 때 상대 묘지에 '저주' 3장",
+        textJa: "召喚時: デッキ構成に魔法が8枚以上ならダイスを振り5以上で相手の墓地に「呪い」3枚" },
+    { id: "HEXER2", t: "mon", cost: 4, atk: 3, def: 5, onSummon: "hexSummon", val: 10, val2: 4, name: "중급 주술사", nameJa: "中級呪術師",
+        text: "소환시: 덱 구성에 마법이 10장 이상이면 주사위를 굴려 4 이상일 때 상대 묘지에 '저주' 4장",
+        textJa: "召喚時: デッキ構成に魔法が10枚以上ならダイスを振り4以上で相手の墓地に「呪い」4枚" },
+    { id: "HEXER3", t: "mon", cost: 5, atk: 3, def: 6, passive: ["aura"], onSummon: "hexSummon", val: 13, val2: 5, aura: "hexCurseOnSpell", name: "상급 주술사", nameJa: "上級呪術師",
+        text: "소환시: 마법 13장 이상·주사위 3 이상 시 상대 묘지에 '저주' 5장 · 상시: 상대 마법마다 상대 묘지에 '저주' 1장",
+        textJa: "召喚時: 魔法13枚以上·ダイス3以上なら相手の墓地に「呪い」5枚 · 常時: 相手の魔法ごとに相手の墓地に「呪い」1枚" },
+    { id: "HEXER4", t: "mon", cost: 6, atk: 4, def: 10, passive: ["aura", "majesty", "evade"], summonReq: "hexBoss", aura: "hexBoss", val: 5, name: "특급 주술사 - 켈로이드", nameJa: "特級呪術師 - ケロイド",
+        text: "상시: 상대 마법마다 주사위 3 이상이면 무효 · '주술사' 전체 공격력 +5 · 【조건】마법이 덱의 반·15장 이상",
+        textJa: "常時: 相手の魔法ごとにダイス3以上なら無効 · 「呪術師」全体の攻撃力+5 · 【条件】魔法がデッキの半分以上·15枚以上" },
+];
+for (const c of NEW_CARDS39) {
+    DB[c.id] = c;
+}
 // ---- 종족 시너지 설명 갱신 (v38) ----
 TRIBES["고독"] = {
     ko: { name: "고독", note: "※ 서로 다른 종족 카드여야 발동 · 게임당 1회", bonuses: ["서로 다른 2종: 이 게임 동안 상대는 몬스터를 3체 이상 소환할 수 없다"] },
@@ -2226,7 +2245,11 @@ const RELATED_MANUAL = {
     NGA3: ["GOLEM1", "GOLEM2", "GOLEM3", "M10", "NWL3", "MANA_GIANT"],
     HORDE: ["SOLDIER2", "INFKNIGHT", "GOLEM1"],
     VITAL4: ["SOLDIER2", "INFKNIGHT", "GOLEM1"],
-    NHEX: ["CURSE"],
+    NHEX: ["CURSE", "HEXER1", "HEXER2", "HEXER3", "HEXER4"],
+    HEXER1: ["CURSE", "NHEX", "HEXER2", "HEXER3", "HEXER4"],
+    HEXER2: ["CURSE", "NHEX", "HEXER1", "HEXER3", "HEXER4"],
+    HEXER3: ["CURSE", "NHEX", "HEXER1", "HEXER2", "HEXER4"],
+    HEXER4: ["NHEX", "HEXER1", "HEXER2", "HEXER3"],
     TGE1: ["TGE2", "TGE3", "TGE4", "TGE5", "TGE6", "TGE7"],
     CHOSEN_AREA: ["EXILE_NUKE1", "EXILE_NUKE2"], // 컬 제외 아키타입 페이오프
     CASTLE: ["EXPANSION", "LAND_GRANT", "WAR_DECL", "T12", "GT10_0", "GT6_1", "TREASON", "SOLDIER2", "INFKNIGHT"],
@@ -2289,7 +2312,8 @@ export function relatedCardIds(id) {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v38c"; // v38c: 와인 1드로우·최대 체력+6, 포도 +2, 고급 포도 +4, 성 0/2·초기 카운터 2
+export const BALANCE_VERSION = "v39"; // v39: 주술사 계열 — 견습 주술사(구 꼬마, 2코) + 초급(3코 2/3 마법8장·5+·저주3)/중급(4코 3/5 마법10장·4+·저주4)/상급(5코 3/6 아우라 마법13장·3+·저주5 + 상대 마법마다 저주1)/특급 켈로이드(6코 4/10 아우라·위엄·회피 · 마법 반 이상&15장 · 상대 마법 3+ 무효 · 주술사 공격 +5)
+// v38c(구): // v38c: 와인 1드로우·최대 체력+6, 포도 +2, 고급 포도 +4, 성 0/2·초기 카운터 2
 // v38: // v38: 종족 시너지 개정(귀족 2종 마나-2 · 포식 2종 18뎀 · 고독 2종 소환 상한 2 · 시초 2/3/4/6종 +15/+40/+70/승리) + 마계 + 앤티크 인핸스 매직/기사의 가르침/나이트로드의 비기 + 살아있는 던전 + 전사 골램 개명/가디언 기합/나이트로드 회피
 // v37(구): // v37: 성 아키타입(성/증축/영토 하사/반역죄/선전포고/운영 예산/소집) + 함정 전면 리워크(어튠 무효 장치·마름쇠·중급 차단·낙인계·낙뢰·폐문·대역·복수…) + 14종 삭제 + 산성비/강산성비/부패한 땅/제인 + 도박꾼 예측 선택 + 다종족 계약 리워크
 // v36(구): // v36: 몬스터 대개편 — 골램 아키타입(마나 골렘 manaGolem/가디언 gutsOnHit/자이언트 giantGolem/특공부대 golemSquad/리더 leaderGolem/골램 킹 golemKin) · 시초의 알 부화(4턴/내구2→시초 1체) · 병사/기사 군단(워로드/기수/정예/장군/고무왕/드래곤 융합→라이더·앤티크) · 세계수 3종(신도/파수꾼/세계수) · 암살자 본부(나이트 마켓+낙인) · 선택받은 4종 리워크 · 엘프 상향 · 카지노 표 변경 · 제네릭 고코스트 몬스터 36종 삭제
