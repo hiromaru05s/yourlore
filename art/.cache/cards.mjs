@@ -210,9 +210,9 @@ function generate() {
 }
 export const DB = { ...CORE, ...generate() };
 export const STARTERS = {
-    STARTER_TRASH: { id: "STARTER_TRASH", t: "starter", cost: 1, name: "컬", text: "마나1: 이 카드를 게임에서 제외(덱 압축)", star: "trash" },
+    STARTER_TRASH: { id: "STARTER_TRASH", t: "starter", cost: 0, name: "컬", text: "이 카드를 게임에서 제외(덱 압축)", star: "trash" }, // v41: 시전 코스트 1 → 0
     STARTER_CHEST: { id: "STARTER_CHEST", t: "starter", cost: 1, name: "보물상자", text: "마나1: 보물상자를 연다", star: "chest" },
-    STARTER_MANA: { id: "STARTER_MANA", t: "starter", cost: 3, name: "어튠", text: "마나3: 최대 마나 +1", star: "mana" },
+    STARTER_MANA: { id: "STARTER_MANA", t: "starter", cost: 3, name: "어튠", text: "마나3: 최대 마나 +1", star: "mana", passive: ["relic"] }, // v40: 신기 — 어떤 경우에도 게임에서 제외되지 않는다
 };
 // ---- Japanese names/texts for the hand-written cards + starters ----
 const CORE_JA = {
@@ -280,7 +280,7 @@ const CORE_JA = {
     AMA: { name: "アチューン・魔", text: "手札の宝箱1枚を捨て札へ → 最大マナ+1、1枚ドロー" },
     NHEAL: { name: "生命の加護", text: "永続: モンスターを召喚するたびに自分の体力1回復" },
     NWIPE: { name: "浄化の爆発", text: "自分の場にモンスターがいない時のみ。相手の罠・魔法を全て破壊し自分に6ダメージ" },
-    STARTER_TRASH: { name: "カル", text: "マナ1: このカードをゲームから除外(デッキ圧縮)" },
+    STARTER_TRASH: { name: "カル", text: "このカードをゲームから除外(デッキ圧縮)" },
     STARTER_CHEST: { name: "宝箱", text: "マナ1: 宝箱を開く" },
     STARTER_MANA: { name: "アチューン", text: "マナ3: 最大マナ+1" },
 };
@@ -1054,6 +1054,11 @@ export const PASSIVES = {
         ja: { name: "回避", desc: "このモンスターが攻撃される時、ダイスを振って4・5・6以外ならその攻撃を無効化する。" },
         en: { name: "Evade", desc: "When this monster is attacked, roll a die — on anything but 4/5/6 the attack is negated." },
     },
+    relic: {
+        ko: { name: "신기", desc: "이 카드는 어떤 경우에도 게임에서 제외되지 않는다 (제외 대신 묘지로 간다)." },
+        ja: { name: "神器", desc: "このカードはいかなる場合においてもゲームから除外されない (除外の代わりに墓地へ行く)。" },
+        en: { name: "Relic", desc: "This card can never be exiled from the game (it goes to the graveyard instead)." },
+    },
 };
 export const PASSIVE_KEYS = Object.keys(PASSIVES);
 /** 카드가 가진 패시브 키 목록 — 명시(passive 배열) + 기존 필드에서 유도(mult/directOnly/ward/trapImmune/exileOnDestroy). */
@@ -1068,7 +1073,7 @@ export function cardPassives(c) {
         out.push("aura");
     if (c.aura === "trapImmune" || has("trapmaster"))
         out.push("trapmaster");
-    for (const k of ["taunt", "evade", "guts", "decay", "majesty"])
+    for (const k of ["taunt", "evade", "guts", "decay", "majesty", "relic"])
         if (has(k))
             out.push(k);
     if (c.exileOnDestroy || has("void"))
@@ -2193,6 +2198,39 @@ const NEW_CARDS39 = [
 for (const c of NEW_CARDS39) {
     DB[c.id] = c;
 }
+// ---- v41: 컬 제외 아키타입 확장(선별자/콜로세움) + 낙인·부패 대응 + 무법지대 + 스타터 차원의 균열 ----
+const NEW_CARDS41 = [
+    { id: "WASH_DEVICE", t: "trap", cost: 3, play: 1, react: "washDevice", name: "세척 장치", nameJa: "洗浄装置",
+        text: "상대 필드의 '부패'를 가진 몬스터를 모두 파괴 · 파괴한 수만큼 상대에게 낙인 카운터",
+        textJa: "相手の場の「腐敗」を持つモンスターを全て破壊 · 破壊した数だけ相手に烙印カウンター" },
+    { id: "SORTER", t: "mon", cost: 2, atk: 1, def: 2, onSummon: "sorterSummon", val: 3, aura: "sorter", name: "선별자", nameJa: "選別者",
+        text: "소환시: '컬' 3장을 게임에서 제외 · 상시: 자신이 '컬'을 제외할 때마다 '컬' 1장을 추가로 제외",
+        textJa: "召喚時: 「カル」3枚をゲームから除外 · 常時: 自分が「カル」を除外するたび「カル」1枚を追加で除外" },
+    { id: "COLOSSEUM_REST", t: "spell", cost: 3, ench: "colosseumRest", val: 99, name: "콜로세움 휴게소", nameJa: "コロシアムの休憩場",
+        text: "영구: 자신의 턴 시작마다 게임에서 제외된 자신의 '컬' 1장당 최대 체력 +1",
+        textJa: "永続: 自分のターン開始時にゲームから除外された自分の「カル」1枚につき最大体力+1" },
+    { id: "COLOSSEUM", t: "spell", cost: 6, play: 3, ench: "colosseum", val: 99, name: "콜로세움", nameJa: "コロシアム",
+        text: "영구: 자신의 턴 시작시 제외된 자신의 '컬'이 8장 이상이면 '선택받은' 몬스터 1체를 골라 소환",
+        textJa: "永続: 自分のターン開始時に除外された自分の「カル」が8枚以上なら「選ばれし」モンスター1体を選んで召喚" },
+    { id: "UNBRANDER", t: "mon", cost: 3, atk: 1, def: 3, onSummon: "unbrand", name: "제인사", nameJa: "除印師",
+        text: "소환시: 자신에게 낙인 카운터가 있으면 자신의 낙인 카운터 1개를 제거",
+        textJa: "召喚時: 自分に烙印カウンターがあれば自分の烙印カウンターを1個取り除く" },
+    { id: "STRATAGEM", t: "trap", cost: 3, play: 1, react: "stratagem", name: "책략", nameJa: "策略",
+        text: "자신 필드의 몬스터가 6체 이상일 때만 · 공격 무효 · 코스트 6 이하 상대 몬스터 최대 3체 파괴",
+        textJa: "自分の場のモンスターが6体以上の時のみ · 攻撃無効 · コスト6以下の相手モンスター最大3体を破壊" },
+    { id: "LAWLESS", t: "spell", cost: 4, ench: "lawless", val: 99, name: "무법지대", nameJa: "不法地帯",
+        text: "영구: 발동 시 필드의 모든 몬스터의 체력을 1로 · 소환되는 모든 몬스터의 체력이 1이 된다",
+        textJa: "永続: 発動時に場の全モンスターの体力を1にする · 召喚される全てのモンスターの体力が1になる" },
+];
+const NEW_STARTERS41 = [
+    { id: "RIFT", t: "spell", cost: 4, ench: "rift", val: 99, noShop: true, name: "차원의 균열", nameJa: "次元の裂け目",
+        text: "영구: 자신의 제외존에 카드가 추가될 때마다 자신 최대 체력 +5",
+        textJa: "永続: 自分の除外ゾーンにカードが追加されるたび自分の最大体力+5" },
+];
+for (const c of [...NEW_CARDS41, ...NEW_STARTERS41]) {
+    DB[c.id] = c;
+}
+DECK_POOL.push(...NEW_STARTERS41.map((c) => c.id));
 // ---- 종족 시너지 설명 갱신 (v38) ----
 TRIBES["고독"] = {
     ko: { name: "고독", note: "※ 서로 다른 종족 카드여야 발동 · 게임당 1회", bonuses: ["서로 다른 2종: 이 게임 동안 상대는 몬스터를 3체 이상 소환할 수 없다"] },
@@ -2259,6 +2297,13 @@ const RELATED_MANUAL = {
     AEM: ["GOLEM1", "GOLEM2", "GOLEM3", "M10", "NGA3", "NWL3", "MANA_GIANT"],
     DEMON_REALM: ["TDE1", "TDE2", "TDE3", "TDE4"],
     NL_SECRET: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3", "ASSASSIN4"],
+    // v41
+    SORTER: ["CHOSEN_KNIGHT", "CHOSEN_MAGE", "CHOSEN_ARCHER", "CHOSEN_ROGUE", "CHOSEN_AREA", "COLOSSEUM", "COLOSSEUM_REST"],
+    COLOSSEUM: ["CHOSEN_KNIGHT", "CHOSEN_MAGE", "CHOSEN_ARCHER", "CHOSEN_ROGUE", "SORTER", "COLOSSEUM_REST"],
+    COLOSSEUM_REST: ["SORTER", "COLOSSEUM", "CHOSEN_AREA"],
+    WASH_DEVICE: ["RUST_SHROOM", "RUST_SLUG", "DECAY_CRAFT", "ROTTEN_GROUND", "STRONG_ACID"],
+    UNBRANDER: ["UNBRAND", "T4", "TREASON", "ACID_RAIN"],
+    RIFT: ["SORTER", "CHOSEN_AREA", "EXILE_NUKE1", "EXILE_NUKE2"],
 };
 const _relatedCache = {};
 export function relatedCardIds(id) {
@@ -2312,7 +2357,9 @@ export function relatedCardIds(id) {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v39"; // v39: 주술사 계열 — 견습 주술사(구 꼬마, 2코) + 초급(3코 2/3 마법8장·5+·저주3)/중급(4코 3/5 마법10장·4+·저주4)/상급(5코 3/6 아우라 마법13장·3+·저주5 + 상대 마법마다 저주1)/특급 켈로이드(6코 4/10 아우라·위엄·회피 · 마법 반 이상&15장 · 상대 마법 3+ 무효 · 주술사 공격 +5)
+export const BALANCE_VERSION = "v41"; // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 낙인 카운터 UI 표시
+// v40; // v40: 룰 개정 — 선공 40/후공 45 · 첫 손패 3장 이후 매턴 1장 드로우 + 손패 유지(상한 8) · 최대 마나 하한 3 · 어튠에 신기(제외 불가) · 고정 마켓 슬롯 재고 3(매진 시 새 카드 교체)
+// v39: 주술사 계열 — 견습 주술사(구 꼬마, 2코) + 초급(3코 2/3 마법8장·5+·저주3)/중급(4코 3/5 마법10장·4+·저주4)/상급(5코 3/6 아우라 마법13장·3+·저주5 + 상대 마법마다 저주1)/특급 켈로이드(6코 4/10 아우라·위엄·회피 · 마법 반 이상&15장 · 상대 마법 3+ 무효 · 주술사 공격 +5)
 // v38c(구): // v38c: 와인 1드로우·최대 체력+6, 포도 +2, 고급 포도 +4, 성 0/2·초기 카운터 2
 // v38: // v38: 종족 시너지 개정(귀족 2종 마나-2 · 포식 2종 18뎀 · 고독 2종 소환 상한 2 · 시초 2/3/4/6종 +15/+40/+70/승리) + 마계 + 앤티크 인핸스 매직/기사의 가르침/나이트로드의 비기 + 살아있는 던전 + 전사 골램 개명/가디언 기합/나이트로드 회피
 // v37(구): // v37: 성 아키타입(성/증축/영토 하사/반역죄/선전포고/운영 예산/소집) + 함정 전면 리워크(어튠 무효 장치·마름쇠·중급 차단·낙인계·낙뢰·폐문·대역·복수…) + 14종 삭제 + 산성비/강산성비/부패한 땅/제인 + 도박꾼 예측 선택 + 다종족 계약 리워크

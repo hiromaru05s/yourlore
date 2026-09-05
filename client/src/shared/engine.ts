@@ -95,6 +95,12 @@ export function isHexer(c: { name?: string }): boolean { return (c.name || "").i
 export function deckComp(p: PlayerState): CardInst[] { return [...p.deck, ...p.hand, ...p.discard, ...(p.field as CardInst[])]; }
 const MIMIC_IDS = new Set(["MIMIC", "MIMIC2", "AWAKENED_MIMIC", "MIMIC_KING", "MIMIC_KING2", "ORIGIN_MIMIC", "MIMIC_LORD"]);
 export const MAX_MANA = 30;
+/** v40: 최대 마나 하한 — 어떤 효과(마족·경제 위기·카지노 ⑥ 등)로도 3 아래로 내려가지 않는다. */
+export const MIN_MANA = 3;
+/** v40: 손패 상한 — 손패는 턴 종료에 버리지 않고 유지되므로 초과 드로우는 묘지로 간다. */
+export const HAND_MAX = 8;
+/** v40: 고정 마켓 슬롯당 재고 — 다 팔리면 그 슬롯은 새 무작위 카드(1~6코)로 교체된다. */
+export const MARKET_STOCK = 3;
 /** 유리 병기 금지령: while active (either side), monsters with DEF<=1 cannot attack. */
 export function glassBanActive(g: GameState): boolean {
   return g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "glassBan"));
@@ -117,11 +123,31 @@ export function effMaxMana(p: PlayerState): number {
   // 마족 전사(demonTax2): 필드에 있는 동안 -2/장 — 단 이 차감으로 3 밑으로는 내려가지 않는다
   const demonTax = p.field.filter((m) => m.aura === "demonTax2").length * 2;
   if (demonTax > 0) total = Math.max(Math.min(total, 3), total - demonTax);
-  return Math.min(MAX_MANA, Math.max(1, total));
+  return Math.min(MAX_MANA, Math.max(MIN_MANA, total));
 }
+/** 콜로세움(v41)이 소환할 수 있는 '선택받은' 시리즈. */
+const CHOSEN_IDS = ["CHOSEN_KNIGHT", "CHOSEN_MAGE", "CHOSEN_ARCHER", "CHOSEN_ROGUE"];
 /** 게임에서 제외된 자신의 '컬' 수 — 선택받은 시리즈/선택받은 영역 공용. */
 export function cullExiled(p: PlayerState): number {
   return (p.removed ?? []).filter((c) => c.star === "trash").length;
+}
+/** '컬' n장을 게임에서 제외 (묘지 → 덱 → 패 순). 실제로 제외한 장수를 돌려준다. */
+function exileCulls(p: PlayerState, n: number): number {
+  let ex = 0;
+  for (let i = 0; i < n; i++) {
+    let done = false;
+    for (const z of [p.discard, p.deck, p.hand]) { const ci = z.findIndex((c) => c.star === "trash"); if (ci >= 0) { rmz(p).push(z.splice(ci, 1)[0]); ex++; done = true; break; } }
+    if (!done) break;
+  }
+  return ex;
+}
+/** 무법지대(v41 lawless): 몬스터의 체력(최대)을 1로 만든다 — 누적 데미지도 초기화. */
+function setHpOne(p: PlayerState, m: FieldMon): void {
+  m.defMod = (m.defMod || 0) - (effDef(p, m) - 1);
+  m.dmg = 0;
+}
+function lawlessActive(g: GameState): boolean {
+  return g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "lawless"));
 }
 export function effAtk(p: PlayerState, m: FieldMon): number {
   let a = m.atk! + (m.tempAtk || 0) + (m.atkMod || 0);
@@ -214,7 +240,7 @@ function mkPlayer(g: GameState, id: string, name: string, isBot: boolean, deckId
 
 function normalizeManaCaps(g: GameState): void {
   for (const p of g.players) {
-    p.maxMana = Math.min(MAX_MANA, Math.max(1, p.maxMana));
+    p.maxMana = Math.min(MAX_MANA, Math.max(MIN_MANA, p.maxMana));
     p.mana = Math.min(p.mana, effMaxMana(p));
     if ((p.skipTurns ?? 0) < 0) p.skipTurns = 0;
   }
@@ -239,16 +265,17 @@ export function createGame(opts: CreateOpts): ReduceResult {
   };
   g.players[0] = mkPlayer(g, opts.p0.id, opts.p0.name, !!opts.p0.isBot, opts.p0.deck);
   g.players[1] = mkPlayer(g, opts.p1.id, opts.p1.name, !!opts.p1.isBot, opts.p1.deck);
-  // starting player 35 HP, the player going second 45 HP (tempo compensation)
+  // v40: starting player 40 HP, the player going second 45 HP (tempo compensation; was 35/42)
   const start = (opts.starting ?? 0) as Side;
   const second = (1 - start) as Side;
-  g.players[start].hp = 35; g.players[start].maxHp = 35;
-  g.players[second].hp = 42; g.players[second].maxHp = 42;
+  g.players[start].hp = 40; g.players[start].maxHp = 40;
+  g.players[second].hp = 45; g.players[second].maxHp = 45;
   // STANDARD market: 8 DISTINCT random cards of cost 1–6 (mixed types, 스타팅 전용 제외)
   // v20: 1–4 → 1–6 — 저코만 나오면 구조적으로 어그로 판이 과다해져 상한 확대
   const lowAvail = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 6 && !DB[id].noShop);
   g.market = [];
   while (g.market.length < MARKET_SIZE && lowAvail.length) g.market.push(inst(g, lowAvail.splice(randInt(g, lowAvail.length), 1)[0]));
+  g.marketStock = g.market.map(() => MARKET_STOCK); // v40: 슬롯당 재고 3
 
   const ev: GameEvent[] = [];
   const ctx = makeCtx(g, ev);
@@ -285,6 +312,40 @@ function rollSupply(g: GameState, p: PlayerState): void {
 // ============================================================
 // mutation context
 // ============================================================
+/** v40: 고정 마켓 슬롯 i의 남은 재고 (구 저장 상태 호환 — 필드가 없으면 기본 재고). */
+export function marketStockOf(g: GameState, i: number): number {
+  return g.marketStock?.[i] ?? MARKET_STOCK;
+}
+/** v40: 고정 마켓 구매 → 재고 -1. 0이 되면 그 슬롯을 현재 마켓에 없는 새 무작위 카드(1~6코, 스타팅 전용 제외)로 교체하고 재고를 채운다. */
+function consumeMarketStock(g: GameState, ctx: Ctx, i: number): void {
+  if (!g.marketStock || g.marketStock.length !== g.market.length) g.marketStock = g.market.map((_, k) => g.marketStock?.[k] ?? MARKET_STOCK);
+  g.marketStock[i] = marketStockOf(g, i) - 1;
+  if (g.marketStock[i] > 0) return;
+  const inMarket = new Set(g.market.map((c) => c.id));
+  const pool = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 6 && !DB[id].noShop && !inMarket.has(id));
+  const old = g.market[i];
+  if (!pool.length) { g.marketStock[i] = MARKET_STOCK; return; }
+  const next = inst(g, pool[randInt(g, pool.length)]);
+  g.market[i] = next;
+  g.marketStock[i] = MARKET_STOCK;
+  ctx.log(`  └ 고정 마켓 ${cn(old)} 매진 → ${cn(next)} 입고 (재고 ${MARKET_STOCK})`, `  └ 固定マーケット ${cn(old)} 売り切れ → ${cn(next)} 入荷 (在庫${MARKET_STOCK})`);
+  ctx.ev.push({ type: "marketRestock", i, id: next.id });
+}
+/** v40 신기(relic): 어떤 경로로 게임에서 제외되어도 제외 존에 머물지 않고 주인의 묘지로 돌아온다 (어튠). */
+function sweepRelics(g: GameState, ctx: Ctx): void {
+  for (const pl of g.players) {
+    const rz = pl.removed;
+    if (!rz?.length) continue;
+    for (let k = rz.length - 1; k >= 0; k--) {
+      const c = rz[k];
+      if (!hasPassive(c, "relic")) continue;
+      rz.splice(k, 1);
+      pl.discard.push(c);
+      ctx.log(`  └ <span class="good">신기</span>: ${cn(c)} 은(는) 게임에서 제외되지 않는다 — 묘지로`, `  └ <span class="good">神器</span>: ${cn(c)} はゲームから除外されない — 墓地へ`);
+    }
+  }
+}
+
 interface Ctx {
   ev: GameEvent[];
   log(ko: string, ja?: string): void;
@@ -301,7 +362,13 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     for (let i = 0; i < n; i++) {
       if (!p.deck.length) { if (!p.discard.length) break; p.deck = shuffle(g, p.discard.splice(0)); }
       const c = p.deck.pop();
-      if (c) { p.hand.push(c); drawn++; }
+      if (!c) continue;
+      if (p.hand.length >= HAND_MAX) { // v40: 손패 상한 — 초과분은 묘지로
+        p.discard.push(c);
+        log(`  └ <span class="muted">손패 상한(${HAND_MAX}) — ${cn(c)} 은(는) 묘지로</span>`, `  └ <span class="muted">手札上限(${HAND_MAX}) — ${cn(c)} は墓地へ</span>`);
+        continue;
+      }
+      p.hand.push(c); drawn++;
     }
     if (drawn > 0) ev.push({ type: "draw", player: side(g, p), count: drawn });
     return drawn;
@@ -476,7 +543,9 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
     const dp = p.drawPenaltyNext || 0; p.drawPenaltyNext = 0; // 흉조: 이번 턴 드로우 차감 (1회성)
     if (dp > 0) ctx.log(`  └ <span class="dmg">흉조</span>: 드로우 -${dp}`, `  └ <span class="dmg">凶兆</span>: ドロー-${dp}`);
     const pageDraw = p.field.filter((m) => m.aura === "pageDraw").length; // 귀족의 집사
-    ctx.drawN(p, Math.max(0, 3 + p.bonusDrawPerm + enchDraw + pageDraw - dp));
+    // v40: 첫 손패만 3장(선공은 createGame에서, 후공은 자신의 첫 턴에), 이후 매 턴 1장. 손패는 턴 종료에 버리지 않는다.
+    const baseDraw = g.turn <= 2 ? 3 : 1;
+    ctx.drawN(p, Math.max(0, baseDraw + p.bonusDrawPerm + enchDraw + pageDraw - dp));
     if (p.bastionDraw) { // 최후의 보루: 다음 턴 시작시 1회성 추가 드로우
       const bn = ctx.drawN(p, p.bastionDraw);
       p.bastionDraw = 0;
@@ -910,6 +979,16 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
         const nv = rmz(pl).length;
         if (nv > 0) { pl.maxHp += nv; ctx.log(`<span class="t">${cn(e.card)}</span> 최대 체력 +${nv} (${pl.maxHp})`, `<span class="t">${cn(e.card)}</span> 最大体力+${nv} (${pl.maxHp})`); }
       }
+      // 콜로세움 휴게소(v41 colosseumRest): 자신의 턴 시작마다 제외된 컬 1장당 최대 체력 +1
+      if (e.card.ench === "colosseumRest" && ownerTurn && !g.over) {
+        const nc = cullExiled(pl);
+        if (nc > 0) { pl.maxHp += nc; ctx.log(`<span class="t">${cn(e.card)}</span> 제외된 컬 ${nc}장 → 최대 체력 +${nc} (${pl.maxHp})`, `<span class="t">${cn(e.card)}</span> 除外されたカル${nc}枚 → 最大体力+${nc} (${pl.maxHp})`); }
+      }
+      // 콜로세움(v41 colosseum): 자신의 턴 시작시 제외된 컬 8장 이상이면 '선택받은' 몬스터 1체 선택 소환
+      if (e.card.ench === "colosseum" && ownerTurn && !g.over && !g.pending && cullExiled(pl) >= 8 && pl.field.length < FIELD_MAX) {
+        g.pending = { kind: "giantShop", hint: "콜로세움 — 소환할 '선택받은' 몬스터 선택 (취소 가능)", hintJa: "コロシアム — 召喚する「選ばれし」モンスターを選択 (キャンセル可)", reason: "colosseumPick", allowCancel: true, data: { ids: [...CHOSEN_IDS], free: true } };
+        ctx.ev.push({ type: "needTarget", pending: g.pending });
+      }
       // 컬 재배: 자신의 턴 시작마다 패에 컬 1장
       if (e.card.ench === "cullTurn" && ownerTurn && !g.over) {
         pl.hand.push(starter(g, "STARTER_TRASH"));
@@ -1015,7 +1094,7 @@ function endTurn(g: GameState, ctx: Ctx): void {
       if (broke) ctx.log(`<span class="t">${p.name}</span> 고코스트 폐기 → 상대 함정 ${broke}장 파괴`, `<span class="t">${p.name}</span> 高コスト破棄 → 相手の罠${broke}枚を破壊`);
     }
   }
-  while (p.hand.length) p.discard.push(p.hand.pop()!);
+  // v40: 손패는 유지된다 (구: 턴 종료시 전부 묘지로). 상한은 드로우 시점에 HAND_MAX로 관리.
   p.field.forEach((m) => { m.exhausted = false; m.tempAtk = 0; m.attacksUsed = 0; });
   p.noDirectTurn = false; // 천궁의 폐문: 턴 종료로 해제
   p.noHighAtkTurn = false; // 폐문(v37): 턴 종료로 해제
@@ -1199,6 +1278,15 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     const cs = castleOf(o);
     if (cs) cs.gcount = (cs.gcount || 0) + 5;
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + ${cn(att)} 을(를) 패로${cs ? ` + 성 카운터 +5 (${cs.gcount})` : ""}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + ${cn(att)} を手札へ${cs ? ` + 城カウンター+5 (${cs.gcount})` : ""}`);
+    return;
+  }
+  // 책략(v41 stratagem): 자신 필드 몬스터 6체 이상일 때 — 무효 + 코스트 6 이하 공격측 몬스터 최대 3체 파괴
+  if (o.field.length >= 6 && o.traps.some((t) => t.card.react === "stratagem") && (tc = takeTrap(g, ctx, o, "stratagem"))) {
+    att.exhausted = true;
+    const picks = p.field.filter((x) => (x.cost ?? 0) <= 6 && x.hatch == null)
+      .sort((a2, b2) => (effAtk(p, b2) + effDef(p, b2)) - (effAtk(p, a2) + effDef(p, a2))).slice(0, 3);
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 코스트 6 이하 상대 몬스터 ${picks.length}체 파괴`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + コスト6以下の相手モンスター${picks.length}体を破壊`);
+    for (const x of picks) { if (g.over) break; if (p.field.some((y) => y.uid === x.uid)) trapKill(p, x); }
     return;
   }
   // 매직 카운터(magicCounter): 무효 + 상대 낙인 +1
@@ -1622,6 +1710,16 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 병사(2/2) ${sn}체 소환`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 兵士(2/2)${sn}体を召喚`);
     if (g.over) { att.exhausted = true; return; }
   }
+  // 세척 장치(v41 washDevice): 공격측 필드의 '부패' 몬스터 전부 파괴 + 그 수만큼 공격측에 낙인 (공격 몬스터가 살아남으면 공격은 계속)
+  if (p.field.some((x) => hasPassive(x, "decay") && x.hatch == null) && o.traps.some((t) => t.card.react === "washDevice") && (tc = takeTrap(g, ctx, o, "washDevice"))) {
+    const rot = p.field.filter((x) => hasPassive(x, "decay") && x.hatch == null);
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 상대의 '부패' 몬스터 ${rot.length}체 파괴`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 相手の「腐敗」モンスター${rot.length}体を破壊`);
+    let nk = 0;
+    for (const x of rot) { if (g.over) break; if (!p.field.some((y) => y.uid === x.uid)) continue; trapKill(p, x); if (!p.field.some((y) => y.uid === x.uid)) nk++; }
+    if (nk > 0 && !g.over) { p.brand = (p.brand || 0) + nk; ctx.log(`  └ ${p.name} 에게 낙인 카운터 +${nk} (합계 ${p.brand})`, `  └ ${p.name} に烙印カウンター+${nk} (計${p.brand})`); }
+    if (g.over) { att.exhausted = true; return; }
+    if (!p.field.some((x) => x.uid === att.uid)) return; // 공격 몬스터가 파괴됨 — 공격 종료
+  }
   // 독가시 마름쇠(caltrops, v37): 공격 몬스터 포함 상대 몬스터 최대 3체에 부패 2개씩
   if ((tc = takeTrap(g, ctx, o, "caltrops"))) {
     const others = [...p.field].filter((x) => x.uid !== att.uid && x.hatch == null).sort((a2, b2) => effAtk(p, b2) - effAtk(p, a2)).slice(0, 2);
@@ -1813,12 +1911,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   }
   // 선택받은 검사(v36 cullExile2): 공격할 때마다 컬 2장을 게임에서 제외 (묘지 → 덱 → 패 순)
   if (att.attackFx === "cullExile2" && !g.over) {
-    let ex = 0;
-    for (let i = 0; i < 2; i++) {
-      let done = false;
-      for (const z of [p.discard, p.deck, p.hand]) { const ci = z.findIndex((c) => c.star === "trash"); if (ci >= 0) { rmz(p).push(z.splice(ci, 1)[0]); ex++; done = true; break; } }
-      if (!done) break;
-    }
+    const ex = exileCulls(p, 2);
     if (ex > 0) ctx.log(`  └ ${cn(att)} 컬 ${ex}장 게임에서 제외 (누적 ${cullExiled(p)})`, `  └ ${cn(att)} カル${ex}枚をゲームから除外 (累計${cullExiled(p)})`);
   }
   // 선택받은 도적(v36 rogueTrap): 직접 공격 성공 시 덱·묘지의 함정 1장을 코스트 없이 세트
@@ -1899,6 +1992,17 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
   switch (m.onSummon) {
     case "draw": { const n = ctx.drawN(p, v); ctx.log(`  └ 소환 효과: ${n}장 드로우`, `  └ 召喚効果: ${n}枚ドロー`); break; }
     case "burn": ctx.dealDamage(o, v, `${cn(m)} 소환`, `${cn(m)} 召喚`); break;
+    case "sorterSummon": { // 선별자(v41): 컬 3장 제외 (상시 효과의 추가 제외는 reduce() 후처리)
+      const ex = exileCulls(p, v || 3);
+      if (ex > 0) ctx.log(`  └ 컬 ${ex}장 게임에서 제외 (누적 ${cullExiled(p)})`, `  └ カル${ex}枚をゲームから除外 (累計${cullExiled(p)})`);
+      else ctx.log("  └ 제외할 컬이 없음", "  └ 除外するカルがない");
+      break;
+    }
+    case "unbrand": { // 제인사(v41): 자신의 낙인 카운터 1개 제거
+      if ((p.brand ?? 0) > 0) { p.brand = (p.brand ?? 0) - 1; ctx.log(`  └ 자신의 낙인 카운터 1개 제거 (남은 ${p.brand})`, `  └ 自分の烙印カウンター1個を取り除く (残り${p.brand})`); }
+      else ctx.log("  └ 자신에게 낙인 카운터가 없음", "  └ 自分に烙印カウンターがない");
+      break;
+    }
     case "heal": ctx.heal(p, v); ctx.log(`  └ 체력 ${v} 회복 (${p.hp})`, `  └ 体力 ${v} 回復 (${p.hp})`); break;
     case "guildCnt": { // 견습/왕도 상인: 자신의 '상회'에 마켓 카운터 +v
       const ge = p.enchants.find((e) => e.card.ench === "guild");
@@ -3111,6 +3215,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       const availMk = lowAvail.slice();
       while (nextMk.length < MARKET_SIZE && availMk.length) nextMk.push(inst(g, availMk.splice(randInt(g, availMk.length), 1)[0]));
       g.market = nextMk;
+      g.marketStock = nextMk.map(() => MARKET_STOCK); // v40: 재고도 초기화
       ctx.log(`${tag(p, card)} <span class="dmg">경제 위기!</span> 고정 마켓 8장 전부 갱신`, `${tag(p, card)} <span class="dmg">経済危機！</span> 固定マーケット8枚を全て更新`);
       break;
     }
@@ -3420,6 +3525,8 @@ function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): vo
   }
   // 성(v37): 자신 필드에 병사·기사가 소환될 때마다 성 카운터 +1
   if (isSoldier(m) || isKnight(m)) for (const cs of p.field) if (cs.id === "CASTLE" && cs.uid !== m.uid) { cs.gcount = (cs.gcount || 0) + 1; ctx.log(`  └ ${cn(cs)} 성 카운터 +1 (${cs.gcount})`, `  └ ${cn(cs)} 城カウンター+1 (${cs.gcount})`); }
+  // 무법지대(v41 lawless): 필드에 소환되는 모든 몬스터의 체력이 1 (알 제외)
+  if (m.hatch == null && lawlessActive(g) && p.field.some((x) => x.uid === m.uid) && effDef(p, m) > 1) { setHpOne(p, m); ctx.log(`  └ 무법지대: ${cn(m)} 의 체력이 1이 된다`, `  └ 不法地帯: ${cn(m)} の体力が1になる`); }
   // 부패한 땅(v37 rottenGround): 필드에 소환되는 모든 몬스터에 부패 카운터 2개 (알 제외)
   if (m.hatch == null && !g.over && g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "rottenGround")) && p.field.some((x) => x.uid === m.uid)) addDecay(g, ctx, p, m, 2);
   // 시초의 술식(v36 originRite): '시초의 수호자'를 제외한 시초 몬스터를 소환할 때마다 상대 필드 카드 1장 파괴 (없으면 낙인 +1)
@@ -3764,6 +3871,12 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       // 마계(v38): 발동 시 자신 필드의 마족 몬스터 효과도 무효화
       if (card.ench === "demonRealm") {
         for (const dm of p.field) if (dm.tribe === "마족" && (dm.onSummon || dm.turnFx || dm.aura)) { dm.onSummon = undefined; dm.turnFx = undefined; dm.aura = undefined; ctx.log(`  └ 마계: ${cn(dm)} 의 효과 무효화`, `  └ 魔界: ${cn(dm)} の効果を無効化`); }
+      }
+      // 무법지대(v41): 발동 시 필드의 모든 몬스터(알 제외)의 체력을 1로
+      if (card.ench === "lawless") {
+        let nl = 0;
+        for (const pl of g.players) for (const mm of pl.field) { if (mm.hatch != null) continue; setHpOne(pl, mm); nl++; }
+        ctx.log(`  └ 필드의 모든 몬스터 ${nl}체의 체력이 1이 된다`, `  └ 場の全モンスター${nl}体の体力が1になる`);
       }
       // 강산성비(v37): 발동 시 상대 몬스터 전체에 부패 카운터 2개
       if (card.ench === "strongAcid") {
@@ -4278,6 +4391,15 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       return;
     }
     // 고대 문명(civChoice): 알 1장을 무료로 패에 넣는다
+    // 콜로세움(v41 colosseumPick): '선택받은' 몬스터 1체를 자신 필드에 소환 (취소 가능)
+    if (pending.reason === "colosseumPick") {
+      if (uid === null) { ctx.log("  └ 콜로세움: 소환 취소", "  └ コロシアム: 召喚をキャンセル"); return; }
+      if (!ids0.includes(uid) || !DB[uid]) { g.pending = pending; return; }
+      if (p.field.length >= FIELD_MAX) { ctx.log("  └ 몬스터 존이 가득 차 소환 실패", "  └ モンスターゾーンが満杯で召喚失敗"); return; }
+      ctx.log(`<span class="t">${p.name}</span> 콜로세움 → ${cn(DB[uid])} 소환`, `<span class="t">${p.name}</span> コロシアム → ${cn(DB[uid])} 召喚`);
+      spawnToken(g, ctx, p, uid);
+      return;
+    }
     if (pending.reason === "civChoice") {
       if (uid && ids0.includes(uid) && DB[uid]) {
         const egg = inst(g, uid);
@@ -4336,9 +4458,30 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
 // ============================================================
 export function reduce(prev: GameState, action: Action): ReduceResult {
   // 유령(GHOST) 트리거용: 액션 전 양측 최대 마나/체력 기록 → 액션 후 diff 검사
-  const pre = prev.players.map((pl) => ({ mm: pl.maxMana, mh: pl.maxHp }));
+  const pre = prev.players.map((pl) => ({ mm: pl.maxMana, mh: pl.maxHp, rm: (pl.removed ?? []).length, cull: cullExiled(pl) }));
   const res = reduceCore(prev, action);
   const g2 = res.state;
+  // v41: 선별자 — 이 액션으로 컬이 제외될 때마다(장당) 선별자 1체당 컬 1장 추가 제외 (추가 제외는 다시 발동하지 않는다)
+  //      차원의 균열 — 이 액션으로 자신의 제외존에 카드가 추가될 때마다(장당) 균열 1장당 최대 체력 +5 (선별자의 추가 제외 포함)
+  if (!g2.over) {
+    const ctxX = makeCtx(g2, res.events as GameEvent[]);
+    for (const sx of [0, 1] as Side[]) {
+      const plx = g2.players[sx];
+      const sorters = plx.field.filter((m) => m.aura === "sorter").length;
+      const gained = cullExiled(plx) - pre[sx].cull;
+      if (sorters > 0 && gained > 0) {
+        const extra = exileCulls(plx, gained * sorters);
+        if (extra > 0) ctxX.log(`  └ <span class="t">선별자</span>: 컬 ${extra}장 추가 제외 (누적 ${cullExiled(plx)})`, `  └ <span class="t">選別者</span>: カル${extra}枚を追加で除外 (累計${cullExiled(plx)})`);
+      }
+      const rifts = plx.enchants.filter((e) => e.card.ench === "rift").length;
+      const added = (plx.removed ?? []).length - pre[sx].rm;
+      if (rifts > 0 && added > 0) {
+        const gain = 5 * added * rifts;
+        plx.maxHp += gain;
+        ctxX.log(`  └ <span class="t">차원의 균열</span>: 제외존에 ${added}장 추가 → 최대 체력 +${gain} (${plx.maxHp})`, `  └ <span class="t">次元の裂け目</span>: 除外ゾーンに${added}枚追加 → 最大体力+${gain} (${plx.maxHp})`);
+      }
+    }
+  }
   if (!g2.over) {
     const ctx2 = makeCtx(g2, res.events as GameEvent[]);
     for (const s of [0, 1] as Side[]) {
@@ -4392,6 +4535,7 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
       }
     }
   }
+  sweepRelics(g2, makeCtx(g2, res.events as GameEvent[])); // v40: 신기는 제외되지 않는다
   normalizeManaCaps(g2);
   rememberPublicCards(g2);
   return res;
@@ -4435,6 +4579,7 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
         p.mana -= bc; p.discard.push(bought); p.boughtCount++; p.taxFlag = true; p.buys[card.id] = (p.buys[card.id] || 0) + 1;
         ctx.log(`<span class="t">${p.name}</span> 고정 마켓 ${cn(card)} 구매 (${bc}) <span class="muted">[묘지로]</span>`, `<span class="t">${p.name}</span> 固定マーケット ${cn(card)} 購入 (${bc}) <span class="muted">[墓地へ]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "market", i: action.i, id: card.id });
+        consumeMarketStock(g, ctx, action.i); // v40: 재고 -1, 소진 시 슬롯 교체
         tryToll(g, ctx, p, bought); // 통행세: 구매 반응
       }
       break;

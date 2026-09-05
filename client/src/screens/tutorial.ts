@@ -30,13 +30,13 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
   ko: [
     { icon: "🎯", h: "게임 목표", body: [
       "상대의 <b>체력</b>을 0으로 만들면 승리합니다.",
-      "선공은 체력 <b>35</b>, 후공은 <b>42</b>로 시작해요. (후공이 조금 높은 건 선공의 템포 이점을 보정하기 위함입니다.)",
+      "선공은 체력 <b>40</b>, 후공은 <b>45</b>로 시작해요. (후공이 조금 높은 건 선공의 템포 이점을 보정하기 위함입니다.)",
       "선공/후공은 매 게임 <b>코인토스</b>로 공정하게 정해집니다.",
     ] },
     { icon: "🔄", h: "턴의 흐름", body: [
-      "내 턴이 시작되면 ① <b>마나가 최대치까지 충전</b>되고 ② 카드를 <b>3장 드로우</b>합니다.",
+      "내 턴이 시작되면 ① <b>마나가 최대치까지 충전</b>되고 ② 카드를 <b>1장 드로우</b>합니다. (첫 손패만 3장 · 손패 상한 8장, 넘치면 묘지로)",
       "그다음 마나가 닿는 한 자유롭게 행동합니다 — 몬스터 소환, 마법 시전, 함정 세트, 공격, 카드 구매.",
-      "<b>턴 종료</b>를 누르면 손에 남은 카드는 버려지고(묘지로) 상대 턴으로 넘어갑니다.",
+      "<b>턴 종료</b>를 누르면 상대 턴으로 넘어갑니다. 손에 남은 카드는 <b>그대로 유지</b>되어 다음 턴에도 쓸 수 있어요.",
     ] },
     { icon: "💎", h: "마나", body: [
       "모든 행동의 자원입니다. 매 턴 <b>최대 마나만큼</b> 다시 채워집니다(시작 4).",
@@ -101,13 +101,13 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
   ja: [
     { icon: "🎯", h: "ゲームの目的", body: [
       "相手の<b>体力</b>を0にすれば勝利です。",
-      "先攻は体力<b>35</b>、後攻は<b>42</b>でスタート。(後攻が少し高いのは先攻のテンポ有利を補正するためです。)",
+      "先攻は体力<b>40</b>、後攻は<b>45</b>でスタート。(後攻が少し高いのは先攻のテンポ有利を補正するためです。)",
       "先攻/後攻は毎ゲーム<b>コイントス</b>で公平に決まります。",
     ] },
     { icon: "🔄", h: "ターンの流れ", body: [
-      "自分のターンになると ①<b>マナが最大まで回復</b>し ②カードを<b>3枚ドロー</b>します。",
+      "自分のターンになると ①<b>マナが最大まで回復</b>し ②カードを<b>1枚ドロー</b>します。(最初の手札のみ3枚 · 手札上限8枚、超過分は墓地へ)",
       "その後はマナの続く限り自由に行動 — モンスター召喚、魔法発動、罠セット、攻撃、カード購入。",
-      "<b>ターン終了</b>を押すと手札の残りは捨てられ(墓地へ)、相手のターンになります。",
+      "<b>ターン終了</b>を押すと相手のターンになります。手札の残りは<b>そのまま持ち越し</b>、次のターンも使えます。",
     ] },
     { icon: "💎", h: "マナ", body: [
       "すべての行動の資源です。毎ターン<b>最大マナ分</b>まで回復します(初期4)。",
@@ -172,13 +172,13 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
   en: [
     { icon: "🎯", h: "Goal", body: [
       "Reduce your opponent's <b>HP</b> to 0 to win.",
-      "The first player starts at <b>35</b> HP, the second at <b>42</b>. (The extra HP offsets the first player's tempo advantage.)",
+      "The first player starts at <b>40</b> HP, the second at <b>45</b>. (The extra HP offsets the first player's tempo advantage.)",
       "Who goes first is decided fairly by a <b>coin toss</b> each game.",
     ] },
     { icon: "🔄", h: "Turn Flow", body: [
-      "At the start of your turn: ① <b>mana refills to max</b> and ② you <b>draw 3 cards</b>.",
+      "At the start of your turn: ① <b>mana refills to max</b> and ② you <b>draw 1 card</b>. (Only your opening hand is 3 · hand limit 8, overflow goes to the graveyard)",
       "Then act freely while your mana lasts — summon monsters, cast spells, set traps, attack, buy cards.",
-      "Press <b>End Turn</b> to discard your remaining hand (to the graveyard) and pass to the opponent.",
+      "Press <b>End Turn</b> to pass to the opponent. Cards left in your hand <b>stay</b> for your next turn.",
     ] },
     { icon: "💎", h: "Mana", body: [
       "The resource for everything. It refills to your <b>max mana</b> each turn (starts at 4).",

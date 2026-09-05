@@ -253,7 +253,7 @@ const TEXTS = {
     NT_SEAL5: "While this monster is on the field, neither player can cast spells",
     GS8_4: "All your monsters +13 ATK (this turn) · +2 ATK (lasting)",
     GS9_2: "Restore 16 of your HP. Discard 1 life-aspect spell from your hand: your max HP +15",
-    STARTER_TRASH: "Mana 1: exile this monster from the game (thins your deck)", STARTER_CHEST: "Mana 1: open the treasure chest",
+    STARTER_TRASH: "Exile this card from the game (thins your deck)", STARTER_CHEST: "Mana 1: open the treasure chest",
     STARTER_MANA: "Mana 3: max mana +1",
     TGE1: "[Origin] tribe synergy (Summon 2)", TGE2: "[Origin] tribe synergy", TGE3: "[Origin] tribe synergy",
     TGE4: "[Origin] On summon: draw 2 cards",
@@ -796,6 +796,18 @@ Object.assign(TEXTS, {
     HEXER2: "On summon: with 10+ spells in your deck, roll a die: on 4+, add 4 Curses to the enemy graveyard",
     HEXER3: "On summon: 13+ spells: die 3+ adds 5 Curses to their graveyard · Passive: enemy spell: +1 Curse to their graveyard",
     HEXER4: "Passive: enemy spell: die 3+ negates it · Your Hexers ATK +5 · 【Requires】15+ spells, at least half your deck",
+});
+// ---- v41 ----
+Object.assign(NAMES, { WASH_DEVICE: "Purge Unit", SORTER: "Sorter", COLOSSEUM_REST: "Colosseum Lounge", COLOSSEUM: "Colosseum", UNBRANDER: "Unbrander", STRATAGEM: "Stratagem", LAWLESS: "Lawless Zone", RIFT: "Dimensional Rift" });
+Object.assign(TEXTS, {
+    WASH_DEVICE: "Destroy every enemy monster with Decay · The enemy gains that many Brand counters",
+    SORTER: "On summon: exile 3 Culls from the game · Passive: whenever you exile a Cull, exile 1 more Cull",
+    COLOSSEUM_REST: "Permanent: at the start of your turn, max HP +1 per Cull you have exiled from the game",
+    COLOSSEUM: "Permanent: at the start of your turn, with 8+ of your Culls exiled, summon 1 Chosen monster of your choice",
+    UNBRANDER: "On summon: if you have a Brand counter, remove 1 of your Brand counters",
+    STRATAGEM: "Only with 6+ of your monsters · Negate the attack · Destroy up to 3 enemy monsters of cost 6-",
+    LAWLESS: "Permanent: on cast, every monster on the field has its HP set to 1 · Every summoned monster's HP becomes 1",
+    RIFT: "Permanent: whenever a card is added to your exile zone, your max HP +5",
 });
 export function applyEnglish(pools) {
     for (const pool of pools) {

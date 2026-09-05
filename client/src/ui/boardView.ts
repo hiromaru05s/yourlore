@@ -4,7 +4,7 @@
 // All animation lives in anim.ts; this file only draws + binds.
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
-import { effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem } from "../shared/engine";
+import { effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem, marketStockOf } from "../shared/engine";
 import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
@@ -855,6 +855,13 @@ export class GameView {
       const aff = myTurn && !g.pending && me.mana >= bc;
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc }); // same size as 제시
       if (aff) armBuy(card, "mkt" + i, () => this.h.onBuyMarket(i), c); else zoomOnTap(card, c);
+      // v40: 슬롯 재고 — 다 팔리면 새 카드로 교체되므로 남은 수를 보여준다
+      const stock = marketStockOf(g, i);
+      const st = document.createElement("div");
+      st.className = "mkt-stock" + (stock <= 1 ? " mkt-stock--last" : "");
+      st.textContent = `×${stock}`;
+      st.title = `${t("market.stock")} ${stock}`;
+      card.appendChild(st);
       markWatch(card, c.id);
       bindZoom(card, c);
       fixed.appendChild(card);
@@ -900,6 +907,7 @@ export class GameView {
       <span class="pt-mana pips" title="${t("game.mana")}"><span class="pt-mana-gem">◈</span><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span>
       <span class="pt-ring">${avatarHtml(isMe ? MY_AVATAR : OPP_AVATAR, p.name, 58)}</span>
       <span class="pt-hp" title="${hp}/${p.maxHp}"><span class="pt-hp-ico">❤</span><b id="hp-${sd}">${hp}</b><span class="pt-hp-max">/${p.maxHp}</span></span>
+      ${(p.brand ?? 0) > 0 ? `<span class="pt-brand" title="${esc(t("game.brandTip").replace("{n}", String(p.brand)))}"><span class="pt-brand-ico">🔥</span><b>${p.brand}</b><span class="pt-brand-lb">${t("game.brand")}</span></span>` : ""}
       <span class="pt-hpbar hpbar" id="hpbar-${sd}"><i style="width:${hpPct}%"></i></span>
       <span class="pt-name">${esc(p.name)}</span>`;
   }

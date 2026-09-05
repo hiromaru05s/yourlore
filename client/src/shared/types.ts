@@ -175,6 +175,7 @@ export interface GameState {
   over: boolean;
   winner: Side | null;
   market: CardInst[];
+  marketStock?: number[]; // v40: 고정 마켓 슬롯별 남은 재고 (없으면 MARKET_STOCK 기본) — 0이 되면 슬롯이 새 카드로 교체
   dmgTally: [number, number];
   rng: number; // mutable PRNG state (mulberry32)
   uidSeq: number;
@@ -217,6 +218,7 @@ export type GameEvent =
   | { type: "heal"; player: Side; amount: number }
   | { type: "destroy"; player: Side; uid: string; id?: string }
   | { type: "buy"; player: Side; from: "market" | "supply"; i: number; id: string }
+  | { type: "marketRestock"; i: number; id: string } // v40: 고정 마켓 슬롯 매진 → 새 카드 입고
   | { type: "draw"; player: Side; count: number }
   | { type: "treasure"; player: Side; kind: string; text: string; textJa: string; isBot: boolean }
   | { type: "dice"; player: Side; rolls: number[]; need?: number; success?: boolean; variant?: "casino" } // dice roll (need = min TOTAL for success; undefined = outcome-table roll · variant "casino" = 카지노 전용 연출)

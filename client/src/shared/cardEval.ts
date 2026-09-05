@@ -73,6 +73,7 @@ const SUMMON_FLAT: Record<string, number> = {
   // v36
   originEmber: 4, refreshToken: 2, golemSquad: 5, decayAll: 8, eliteSoldiers: 6, hordeRally: 6, warlordKnight: 6,
   hexSummon: 5, // v39
+  sorterSummon: 4, unbrand: 2, // v41
   chronicler: 4, jailer: 3, originArbiter: 8, originRite: 8, dragonFuse: 12, generalKnight: 7, siegeBreak2: 6,
   elderWipe: 18, nightlord: 12,
 };
@@ -230,6 +231,7 @@ const REACT: Record<string, (c: CardDef) => number> = {
   // ---- v37 리워크 함정 ----
   attuneJam: () => 5, caltrops: () => 8, preyGuard: () => KILL + 4, spiky: () => NEGATE + 3, plunder: () => NEGATE + 2,
   rampart: () => NEGATE + 6, conscript: () => 9, magicCounter: () => NEGATE + 4, mindGame: () => NEGATE + 4, lightning: () => NEGATE + 12,
+  washDevice: () => 8, stratagem: () => NEGATE + KILL * 2, // v41
   gateShut: () => NEGATE + 4, decoy: () => 9, lavaPit: () => NEGATE + KILL, gluttony: () => NEGATE + 6, vengeance: () => KILL * 2 - 4,
   rallyKnights: () => NEGATE + 6, informant: () => NEGATE + DRAW * 2, warDecl: () => 12,
 };
@@ -282,6 +284,7 @@ function enchValue(c: CardDef): number {
     case "trialArea": return -6 * HEAL + 4;        // 6 self-damage up front
     case "ancientCiv": return 3;
     case "elfHaven": return 4; // v25: +10 max HP per World Tree offer buy
+    case "colosseumRest": return 6; case "colosseum": return 8; case "lawless": return 4; case "rift": return 6; // v41
     default: return 4;
   }
 }

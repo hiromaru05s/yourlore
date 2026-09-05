@@ -1155,6 +1155,10 @@ function autoTarget(g: GameState): Action {
       return { type: "pick", uid: oc >= 2 ? "3" : p.maxMana < 12 ? "1" : "2" };
     }
     if (pending.reason === "dragonFuse") return { type: "pick", uid: "ANTIQUE_DK" };
+    if (pending.reason === "colosseumPick") { // 콜로세움(v41): 컬 2장당 공격력 +2 → 궁수(암습·회피) 우선
+      const ids0 = (pending.data?.ids as string[] | undefined) ?? [];
+      return { type: "pick", uid: ids0.includes("CHOSEN_ARCHER") ? "CHOSEN_ARCHER" : (ids0[0] ?? null) };
+    }
     if (pending.reason === "nlGrant") return { type: "pick", uid: "evade" };
     if (pending.reason === "landGrant") { // 영토 하사: 가장 비싼 귀족 카드
       const ids0 = (pending.data?.ids as string[] | undefined) ?? [];
