@@ -36,6 +36,8 @@ function actValue(c: CardDef): number {
   switch (c.act) {
     case "dmg": return v + v2 * DRAW;
     case "draw": return v * DRAW;
+    case "originQuest": return 2 * DRAW; case "beginnerMind": return 4 * DRAW - 2; case "voidAll": return 3; case "buyout": return MANA;
+    case "penance": return MANA * 2; case "packInstinct": return 6; case "mindBurst": return 6; // v41b
     case "heal": return v * HEAL + v2 * DRAW;
     case "siphon": return v + v2 * HEAL;
     case "destroyMon": return KILL;
@@ -232,6 +234,7 @@ const REACT: Record<string, (c: CardDef) => number> = {
   attuneJam: () => 5, caltrops: () => 8, preyGuard: () => KILL + 4, spiky: () => NEGATE + 3, plunder: () => NEGATE + 2,
   rampart: () => NEGATE + 6, conscript: () => 9, magicCounter: () => NEGATE + 4, mindGame: () => NEGATE + 4, lightning: () => NEGATE + 12,
   washDevice: () => 8, stratagem: () => NEGATE + KILL * 2, // v41
+  sorterLaw: () => NEGATE + KILL + 4, samsara: () => 7, // v41b
   gateShut: () => NEGATE + 4, decoy: () => 9, lavaPit: () => NEGATE + KILL, gluttony: () => NEGATE + 6, vengeance: () => KILL * 2 - 4,
   rallyKnights: () => NEGATE + 6, informant: () => NEGATE + DRAW * 2, warDecl: () => 12,
 };
@@ -285,6 +288,7 @@ function enchValue(c: CardDef): number {
     case "ancientCiv": return 3;
     case "elfHaven": return 4; // v25: +10 max HP per World Tree offer buy
     case "colosseumRest": return 6; case "colosseum": return 8; case "lawless": return 4; case "rift": return 6; // v41
+    case "freeReward": return 4; case "painGain": return 5; case "spaceLock": return 12; case "luckyEcho": return 5; case "richHabit": return 6; // v41b
     default: return 4;
   }
 }

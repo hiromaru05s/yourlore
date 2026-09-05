@@ -652,6 +652,16 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.ench && p.traps.length + p.enchants.length >= 7) return false;
     if (c.id === "BLOOD_SECRET" && !p.field.some((m) => isVampFamily(m))) return false;
     if (c.id === "CHOSEN_AREA" && cullExiled(p) < 25) return false;
+    // v41b 조건부 마법 (엔진이 지불 전에 거부) + 낭비 방지
+    if (c.t === "mon" && o.enchants.some((e) => e.card.ench === "spaceLock")) return false;
+    if ((c.t === "spell" || c.t === "starter") && o.enchants.some((e) => e.card.ench === "spaceLock")) return false;
+    if (c.id === "BEGINNER_MIND" && p.hand.length !== 1) return false;
+    if (c.id === "SPACE_RITE" && o.field.length + o.traps.length + o.enchants.length < 6) return false;
+    if (c.id === "BUYOUT" && !Object.values(p.buysTurn ?? {}).some((n2) => n2 >= 2)) return false;
+    if (c.id === "PACK_INSTINCT" && !p.field.some((m) => p.field.filter((x) => x.id === m.id).length >= 2)) return false;
+    if (c.id === "MIND_BURST" && !p.field.some((m) => (m.guts || 0) > 0)) return false;
+    if (c.id === "PENANCE" && !(p.brand ?? 0)) return false;
+    if (c.id === "ORIGIN_QUEST" && !g.players.some((pl) => pl.field.some((m) => (m.cost ?? 0) === 0) || pl.enchants.some((e) => (e.card.cost ?? 0) === 0))) return false;
     if ((c.id === "DECAY_CRAFT" || c.id === "MAJESTY_RITE") && p.field.length === 0) return false;
     // 버프/체력 강화 마법은 대상이 없으면 낭비 (엔진은 마나만 소모하고 "대상 없음")
     if ((c.act === "buffPerm" || c.act === "buffAllDef" || c.act === "buffTurn" || c.act === "buffAllTurn") && p.field.length === 0) return false;
@@ -1155,6 +1165,11 @@ function autoTarget(g: GameState): Action {
       return { type: "pick", uid: oc >= 2 ? "3" : p.maxMana < 12 ? "1" : "2" };
     }
     if (pending.reason === "dragonFuse") return { type: "pick", uid: "ANTIQUE_DK" };
+    if (pending.reason === "samsaraPick") { // 윤회(v41b): 가장 가치 높은 몬스터
+      const ids0 = (pending.data?.ids as string[] | undefined) ?? [];
+      const best0 = [...ids0].sort((a, b) => cardPower(DB[b]) - cardPower(DB[a]))[0];
+      return { type: "pick", uid: best0 ?? null };
+    }
     if (pending.reason === "colosseumPick") { // 콜로세움(v41): 컬 2장당 공격력 +2 → 궁수(암습·회피) 우선
       const ids0 = (pending.data?.ids as string[] | undefined) ?? [];
       return { type: "pick", uid: ids0.includes("CHOSEN_ARCHER") ? "CHOSEN_ARCHER" : (ids0[0] ?? null) };

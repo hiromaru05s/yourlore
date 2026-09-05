@@ -825,6 +825,24 @@ Object.assign(TEXTS, {
   LAWLESS: "Permanent: on cast, every monster on the field has its HP set to 1 · Every summoned monster's HP becomes 1",
   RIFT: "Permanent: whenever a card is added to your exile zone, your max HP +5",
 });
+// ---- v41b ----
+Object.assign(NAMES, { FREE_REWARD: "Price of Nothing", NO_PAIN: "No Pain No Gain", ORIGIN_QUEST: "Quest for Origins", BEGINNER_MIND: "Beginner's Mind", VOID_RITE: "Dimensional Rite", SPACE_RITE: "Spatial Rite", LUCKY_ECHO: "Echo of Fortune", SORTER_LAW: "Law of Selection", BUYOUT: "Buyout", SAMSARA: "Samsara", PENANCE: "Price of Penance", PACK_INSTINCT: "Pack Instinct", MIND_BURST: "Mind Burst", RICH_HABIT: "Habit of the Rich" });
+Object.assign(TEXTS, {
+  FREE_REWARD: "Permanent: whenever you play a cost-0 card, draw a card",
+  NO_PAIN: "Permanent: whenever you take damage, roll a die: on a 6, max mana +1",
+  ORIGIN_QUEST: "Draw a card per cost-0 card on the field",
+  BEGINNER_MIND: "【Requires】An empty hand · Draw 4 cards",
+  VOID_RITE: "Give Void to every monster on the field",
+  SPACE_RITE: "Only with 6+ enemy field cards · For 3 turns the enemy cannot summon monsters or cast spells",
+  LUCKY_ECHO: "Permanent: whenever a die you roll shows a 6, 6 damage to the opponent",
+  SORTER_LAW: "Only with a deck of 8 cards or fewer · Negate the attack · Destroy 2 cards on the enemy field",
+  BUYOUT: "Only if you bought 2 copies of the same card this turn · Max mana +1",
+  SAMSARA: "【Turn Start】If your monster died last turn, summon one of them to your field",
+  PENANCE: "Per Brand counter you have: max mana +2, max HP +10",
+  PACK_INSTINCT: "Only with 2+ monsters of the same name on your field · Those monsters get +2/+2 (lasting)",
+  MIND_BURST: "Remove all Guts counters from your field · The opponent takes 4 damage per counter",
+  RICH_HABIT: "Permanent: at your turn start with 4+ cards in hand, max HP +6 · with 6+, also max mana +1",
+});
 
 export function applyEnglish(pools: Array<Record<string, CardDef>>): void {
   for (const pool of pools) {

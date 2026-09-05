@@ -2231,6 +2231,41 @@ for (const c of [...NEW_CARDS41, ...NEW_STARTERS41]) {
     DB[c.id] = c;
 }
 DECK_POOL.push(...NEW_STARTERS41.map((c) => c.id));
+// ---- v41b: 마법/함정 14종 — 코스트 0·주사위·낙인·기합·손패 시너지 ----
+const NEW_CARDS41B = [
+    { id: "FREE_REWARD", t: "spell", cost: 2, ench: "freeReward", val: 99, name: "무상의 대가", nameJa: "無償の対価",
+        text: "영구: 자신이 코스트 0 카드를 플레이할 때마다 카드 1장 드로우", textJa: "永続: 自分がコスト0のカードをプレイするたびカード1枚ドロー" },
+    { id: "NO_PAIN", t: "spell", cost: 3, ench: "painGain", val: 99, name: "노 페인 노 게인", nameJa: "ノーペインノーゲイン",
+        text: "영구: 자신이 데미지를 받을 때마다 주사위를 굴려 6이면 최대 마나 +1", textJa: "永続: 自分がダメージを受けるたびダイスを振り6なら最大マナ+1" },
+    { id: "ORIGIN_QUEST", t: "spell", cost: 1, act: "originQuest", name: "기원의 탐구", nameJa: "起源の探究",
+        text: "필드의 코스트 0 카드 1장당 카드 1장 드로우", textJa: "場のコスト0カード1枚につきカード1枚ドロー" },
+    { id: "BEGINNER_MIND", t: "spell", cost: 1, act: "beginnerMind", val: 4, name: "초심", nameJa: "初心",
+        text: "패가 0장일 때만 발동 가능 · 카드 4장 드로우", textJa: "手札が0枚の時のみ発動可能 · カード4枚ドロー" },
+    { id: "VOID_RITE", t: "spell", cost: 3, act: "voidAll", name: "차원 술식", nameJa: "次元術式",
+        text: "필드의 모든 몬스터에 '공허'를 부여", textJa: "場の全てのモンスターに「虚無」を付与" },
+    { id: "SPACE_RITE", t: "spell", cost: 2, ench: "spaceLock", val: 3, name: "공간 술식", nameJa: "空間術式",
+        text: "상대 필드의 카드가 6장 이상일 때만 · 상대는 3턴 동안 몬스터 소환과 마법 사용이 불가", textJa: "相手の場のカードが6枚以上の時のみ · 相手は3ターンの間モンスターを召喚できず魔法も使用できない" },
+    { id: "LUCKY_ECHO", t: "spell", cost: 1, ench: "luckyEcho", val: 99, name: "행운의 잔향", nameJa: "幸運の残響",
+        text: "영구: 자신이 굴린 주사위가 6일 때마다 상대에게 6 데미지", textJa: "永続: 自分が振ったダイスの出目が6のたび相手に6ダメージ" },
+    { id: "SORTER_LAW", t: "trap", cost: 2, play: 1, react: "sorterLaw", name: "선별의 규율", nameJa: "選別の掟",
+        text: "덱 구성이 8장 이하일 때만 · 공격 무효 · 상대 필드의 카드 2장 파괴", textJa: "デッキ構成が8枚以下の時のみ · 攻撃無効 · 相手の場のカード2枚を破壊" },
+    { id: "BUYOUT", t: "spell", cost: 1, act: "buyout", name: "매점", nameJa: "買い占め",
+        text: "이번 턴 같은 카드를 2장 구매했을 때만 · 최대 마나 +1", textJa: "このターン同じカードを2枚購入した時のみ · 最大マナ+1" },
+    { id: "SAMSARA", t: "trap", cost: 2, play: 1, react: "samsara", name: "윤회", nameJa: "輪廻",
+        text: "【턴 시작시】직전 턴에 자신의 몬스터가 파괴되었다면 그중 1체를 골라 자신 필드에 소환", textJa: "【ターン開始時】直前のターンに自分のモンスターが破壊されていればその中の1体を選んで自分の場に召喚" },
+    { id: "PENANCE", t: "spell", cost: 2, act: "penance", name: "고행의 대가", nameJa: "苦行の対価",
+        text: "자신의 낙인 카운터 1개당 최대 마나 +2, 최대 체력 +10", textJa: "自分の烙印カウンター1個につき最大マナ+2、最大体力+10" },
+    { id: "PACK_INSTINCT", t: "spell", cost: 2, act: "packInstinct", name: "무리의 본능", nameJa: "群れの本能",
+        text: "자신 필드에 같은 이름의 몬스터가 2체 이상일 때만 · 그 몬스터들에 +2/+2(지속)", textJa: "自分の場に同名モンスターが2体以上いる時のみ · そのモンスターに+2/+2(持続)" },
+    { id: "MIND_BURST", t: "spell", cost: 2, act: "mindBurst", name: "정신 방출술", nameJa: "精神放出術",
+        text: "자신 필드의 기합 카운터를 모두 제거 · 그 수 ×4 데미지를 상대에게", textJa: "自分の場の気合カウンターを全て取り除く · その数×4ダメージを相手に" },
+    { id: "RICH_HABIT", t: "spell", cost: 3, ench: "richHabit", val: 99, name: "부호의 습관", nameJa: "富豪の習慣",
+        text: "영구: 자신의 턴 시작시 패가 4장 이상이면 최대 체력 +6 · 6장 이상이면 최대 마나 +1도", textJa: "永続: 自分のターン開始時に手札が4枚以上なら最大体力+6 · 6枚以上なら最大マナ+1も" },
+];
+for (const c of NEW_CARDS41B) {
+    DB[c.id] = c;
+}
+RANDOM_CARDS.add("NO_PAIN");
 // ---- 종족 시너지 설명 갱신 (v38) ----
 TRIBES["고독"] = {
     ko: { name: "고독", note: "※ 서로 다른 종족 카드여야 발동 · 게임당 1회", bonuses: ["서로 다른 2종: 이 게임 동안 상대는 몬스터를 3체 이상 소환할 수 없다"] },
@@ -2304,6 +2339,13 @@ const RELATED_MANUAL = {
     WASH_DEVICE: ["RUST_SHROOM", "RUST_SLUG", "DECAY_CRAFT", "ROTTEN_GROUND", "STRONG_ACID"],
     UNBRANDER: ["UNBRAND", "T4", "TREASON", "ACID_RAIN"],
     RIFT: ["SORTER", "CHOSEN_AREA", "EXILE_NUKE1", "EXILE_NUKE2"],
+    FREE_REWARD: ["STARTER_TRASH", "ORIGIN_QUEST"],
+    ORIGIN_QUEST: ["FREE_REWARD", "SOLDIER2", "INFKNIGHT", "WORLD_CARE"],
+    PENANCE: ["UNBRANDER", "UNBRAND", "T4"],
+    MIND_BURST: ["GOLEM1", "GOLEM2", "GOLEM3", "KNIGHT_TEACH"],
+    SORTER_LAW: ["SORTER", "STARTER_TRASH"],
+    LUCKY_ECHO: ["GAMBLER", "LEGEND_GAMBLER", "NO_PAIN"],
+    NO_PAIN: ["LUCKY_ECHO"],
 };
 const _relatedCache = {};
 export function relatedCardIds(id) {
@@ -2357,7 +2399,7 @@ export function relatedCardIds(id) {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v41"; // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 낙인 카운터 UI 표시
+export const BALANCE_VERSION = "v41"; // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 낙인 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관
 // v40; // v40: 룰 개정 — 선공 40/후공 45 · 첫 손패 3장 이후 매턴 1장 드로우 + 손패 유지(상한 8) · 최대 마나 하한 3 · 어튠에 신기(제외 불가) · 고정 마켓 슬롯 재고 3(매진 시 새 카드 교체)
 // v39: 주술사 계열 — 견습 주술사(구 꼬마, 2코) + 초급(3코 2/3 마법8장·5+·저주3)/중급(4코 3/5 마법10장·4+·저주4)/상급(5코 3/6 아우라 마법13장·3+·저주5 + 상대 마법마다 저주1)/특급 켈로이드(6코 4/10 아우라·위엄·회피 · 마법 반 이상&15장 · 상대 마법 3+ 무효 · 주술사 공격 +5)
 // v38c(구): // v38c: 와인 1드로우·최대 체력+6, 포도 +2, 고급 포도 +4, 성 0/2·초기 카운터 2

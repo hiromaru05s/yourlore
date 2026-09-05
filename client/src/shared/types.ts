@@ -155,6 +155,8 @@ export interface PlayerState {
   refreshTokens?: number; // 렐릭 헌터(v36): 제시 마켓 무료 갱신 카운터 — 갱신 시 마나 대신 소모
   supplyHist?: { turn: number; ids: string[] }[]; // 기록자(v36): 최근 제시 마켓 이력 (갱신분 포함)
   onceUsed?: string[]; // 게임당 1회 효과의 사용 기록 (시초의 재판관 등)
+  buysTurn?: Record<string, number>; // v41b 매점: 이번 턴 카드별 구매 수 (턴 시작마다 리셋)
+  destroyedLog?: { id: string; turn: number }[]; // v41b 윤회: 자신의 몬스터가 파괴된 기록 (최근 20건)
 }
 
 export interface Pending {
