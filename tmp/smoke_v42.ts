@@ -40,12 +40,20 @@ ok(HAND_CARRY === 5 && TURN_DRAW === 3, "constants", [HAND_CARRY, TURN_DRAW]);
 { let g = fresh(); const p = g.players[0]; p.hand.push(card("GUILD_CO")); p.maxMana = 30; p.mana = 30; g = reduce(g, { type: "play", idx: p.hand.length - 1 }).state;
   const e = g.players[0].enchants.find((x) => x.card.ench === "guild")!; e.cnt = 19; const hb = g.players[0].hand.length; g = end(g); g.players[1].hand.length = 0; g = end(g);
   ok(g.players[0].hand.some((c) => c.id === "DARK_MERCHANT") && (g.players[0].enchants.find((x) => x.card.ench === "guild")?.cnt ?? -1) === 0, "guild pays at 20", [e.cnt]); }
-// 카운터 명칭 통일: 카드 텍스트·패시브 설명에 '〇〇 카운터' 없음
+// 카운터 명칭 통일: 카드 텍스트·패시브 설명에 '〇〇 카운터' 없음 — 단 '낙인 카운터'는 별개 개념으로 반드시 명시
 { const bad: string[] = [];
-  const KO = /(낙인|부패|기합|성|마켓|와인|세계수|다이스|주사위|제시|재사용|내구도|부화) 카운터/, JA = /(烙印|腐敗|気合|城|マーケット|ワイン|世界樹|ダイス|提示|再使用|耐久|孵化)カウンター/, EN = /\b(Brand|Decay|Guts|Castle|Market|Wine|Dice|Offer|Durability|Hatch) counters?\b/i;
+  const KO = /(부패|기합|성|마켓|와인|세계수|다이스|주사위|제시|재사용|내구도|부화) 카운터/, JA = /(腐敗|気合|城|マーケット|ワイン|世界樹|ダイス|提示|再使用|耐久|孵化)カウンター/, EN = /\b(Decay|Guts|Castle|Market|Wine|Dice|Offer|Durability|Hatch) counters?\b/i;
   for (const c of Object.values(DB)) { for (const t of [c.text, c.textJa, c.textEn]) if (t && (KO.test(t) || JA.test(t) || EN.test(t))) bad.push(c.id + ": " + t); }
   for (const [k, v] of Object.entries(PASSIVES)) for (const l of ["ko", "ja", "en"] as const) if (KO.test(v[l].desc) || JA.test(v[l].desc) || EN.test(v[l].desc)) bad.push("passive " + k);
   ok(bad.length === 0, "no prefixed counter names in card texts", bad.slice(0, 5)); }
+{ // 낙인을 다루는 카드는 세 언어 모두 '낙인 카운터/烙印カウンター/Brand counter'를 명시한다 (낙인 1개·낙인당·brand the opponent 금지)
+  const BRAND_IDS = ["T4", "T6", "GT5_1", "ACID_RAIN", "STRONG_ACID", "TREASON", "UNBRAND", "S12", "GS6_4", "MEDITATE", "PURGE_TOUCH", "ORIGIN_RITE", "TGE4", "ASSASSIN4", "GUILD_HQ", "WASH_DEVICE", "UNBRANDER", "PENANCE"];
+  const bad: string[] = [];
+  for (const id of BRAND_IDS) { const c = DB[id]; if (!c) { bad.push(id + " missing"); continue; }
+    if (!/낙인 카운터/.test(c.text) || /낙인(?! 카운터)/.test(c.text.replace(/'낙인'|「낙인」/g, ""))) bad.push(id + " ko: " + c.text);
+    if (!/烙印カウンター/.test(c.textJa ?? "") || /烙印(?!カウンター)/.test(c.textJa ?? "")) bad.push(id + " ja: " + c.textJa);
+    if (!/Brand counter/i.test(c.textEn ?? "") || /\bbrand(?!\s*counter)/i.test((c.textEn ?? "").replace(/Unbrand\w*/gi, ""))) bad.push(id + " en: " + c.textEn); }
+  ok(bad.length === 0, "brand cards say 'Brand counter' explicitly in ko/ja/en", bad.slice(0, 6)); }
 let games = 0, errs = 0;
 for (let seed = 1; seed <= 80; seed++) { let g = createGame({ seed, mode: "bot", starting: (seed % 2) as 0 | 1, p0: { id: "a", name: "A", isBot: true }, p1: { id: "b", name: "B", isBot: true } } as never).state; let steps = 0, last = "", rep = 0;
   try { while (!g.over && steps < 4000) { const a = seed % 3 === 0 ? botDecide(g, "hard") : greedyDecide(g); const k = JSON.stringify(a); if (k === last) rep++; else { rep = 0; last = k; } g = reduce(g, rep > 20 ? { type: "endTurn" } : a).state; steps++; } if (!g.over) { errs++; console.log("  ✗ hang", seed, last); } games++; } catch (e) { errs++; console.log("  ✗ crash", seed, e); } }

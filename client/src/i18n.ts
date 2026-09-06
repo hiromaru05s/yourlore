@@ -187,7 +187,7 @@ const D: Record<string, Entry> = {
   "game.hp": { ko: "체력", ja: "体力", en: "HP" },
   "game.mana": { ko: "마나", ja: "マナ", en: "Mana" },
   "game.brand": { ko: "낙인", ja: "烙印", en: "Brand" },
-  "game.brandTip": { ko: "카운터 {n}개 — 매 턴 시작시 카운터당 주사위 1개만큼 자해", ja: "カウンター{n}個 — 毎ターン開始時にカウンターごとにダイス1個分の自傷", en: "{n} counter(s) — at each turn start, take 1 die of damage per counter" },
+  "game.brandTip": { ko: "낙인 카운터 {n}개 — 매 턴 시작시 낙인 카운터당 주사위 1개만큼 자해", ja: "烙印カウンター{n}個 — 毎ターン開始時に烙印カウンターごとにダイス1個分の自傷", en: "{n} Brand counter(s) — at each turn start, take 1 die of damage per Brand counter" },
   "game.deck": { ko: "덱", ja: "デッキ", en: "Deck" },
   "game.discard": { ko: "묘지", ja: "墓地", en: "Graveyard" },
   "game.std": { ko: "고정 마켓", ja: "固定マーケット", en: "Market" },
