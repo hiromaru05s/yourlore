@@ -149,7 +149,7 @@ export function candidates(g: GameState): Action[] {
     if (pend.kind === "oppMon") o.field
       .filter((m) => !(hasPassive(m, "aura") && pend.reason !== "attack"))
       .filter((m) => !(pend.data?.maxCost != null && m.cost > (pend.data.maxCost as number) && pend.reason !== "attack")) // bounceLow 등 코스트 캡 공통
-      .filter((m) => !(pend.reason === "decayMark" && m.hatch != null)) // 부패 카운터: 알 제외
+      .filter((m) => !(pend.reason === "decayMark" && m.hatch != null)) // 카운터: 알 제외
       .filter((m) => !(pend.reason === "destroyMon" && pend.data?.maxCost != null && m.cost > (pend.data.maxCost as number))) // 룬 파열: 코스트 캡
       .forEach((m) => push(m.uid));
     else if (pend.kind === "myMon") {
@@ -173,7 +173,7 @@ export function candidates(g: GameState): Action[] {
       [...pool].sort((a, b) => cardPower(a) - cardPower(b)).forEach((c) => {
         if (!seen.has(c.id) && seen.size < 6) { seen.add(c.id); push(c.uid); }
       });
-      push(null); // "그만 제외" 후보
+      if (pend.allowCancel) push(null); // "그만 제외" 후보 (handCap은 취소 불가)
       return out;
     }
     else if (pend.kind === "seek" || pend.kind === "recall") {
@@ -846,7 +846,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   //       (램프 폭발 후반: 리롤로 폭탄을 파는 게 정답. 8마나+ 여유일 때만 → 일반 게임 영향 최소)
   // 턴당 리롤 횟수 상한: 정책이 무상태라 "이번 턴에 쓴 마나"로 간접 제한한다.
   if (p.mana >= 8 && p.mana > effMaxMana(p) - TUNE.maxRerolls && !p.refreshBlockTurn) return { type: "refresh" };
-  // 12.6) 렐릭 헌터 제시 카운터: 살 게 없으면 무료 갱신
+  // 12.6) 렐릭 헌터 카운터: 살 게 없으면 무료 갱신
   if ((p.refreshTokens || 0) > 0 && !p.refreshBlockTurn) return { type: "refresh" };
 
   // 13) spare mana → Pry Chest (not before turn 7 — early mimic risk outweighs the payout; not while sealed)
@@ -1133,6 +1133,10 @@ function autoTarget(g: GameState): Action {
     const discOnly = pending.data?.zone === "discard"; // 시련의 영역: 묘지에서만 — 컬 우선 제외 (선택받은 시리즈 연료)
     const handOnly = pending.data?.zone === "hand"; // 리프레시(v35): 패에서만
     const pool = (handOnly ? [...p.hand] : discOnly ? [...p.discard] : [...p.deck, ...p.discard]).sort((a, b) => cardPower(a) - cardPower(b));
+    if (pending.reason === "handCap") { // v42: 턴 종료 손패 이월 — 반드시 val장 버린다: 가장 가치 낮은 카드부터
+      const worst0 = pool[0] ?? p.hand[p.hand.length - 1];
+      return { type: "pick", uid: worst0 ? worst0.uid : null };
+    }
     if (discOnly) {
       const cull = pool.find((c) => c.star === "trash");
       if (cull) return { type: "pick", uid: cull.uid };

@@ -39,6 +39,9 @@ interface RoomData {
   /** ms epoch when the CURRENT turn began — server-authoritative turn clock, so a
       reconnecting/reopened client resumes with the correct remaining time (not a fresh 50s). */
   turnStartAt: number;
+  /** v42: extra ms granted to the CURRENT turn once the end-turn hand-discard choice (pending
+      handCap) appears — the player gets +10s to pick; on expiry the engine discards from the right. */
+  turnBonusMs: number;
   /** Deadline for BOTH players to join (send "ready"). If it passes with a side still
       absent, the match is VOID (no rank, no W/L) — prevents phantom-match rank loss.
       Cleared to null once both have joined. */
@@ -60,6 +63,7 @@ interface RoomData {
 const TURN_MS_RANKED = 50000; // ranked: tighter clock
 const TURN_MS_CASUAL = 90000; // everything else: 90s per turn
 const turnMsFor = (ranked: boolean): number => (ranked ? TURN_MS_RANKED : TURN_MS_CASUAL);
+const HAND_CAP_BONUS_MS = 10000; // v42: end-turn hand-discard choice grants +10s
 /** Server-side slack past the client's clock before the room force-ends a turn.
  *  Honest clients auto-end themselves at 0 — this only catches stalled/modified
  *  ones, so the opponent can never be frozen indefinitely. */
@@ -108,6 +112,7 @@ export class GameRoom {
         gen: r.gen ?? [0, 0],
         forfeitAt: r.forfeitAt ?? [null, null],
         turnStartAt: r.turnStartAt ?? Date.now(),
+        turnBonusMs: r.turnBonusMs ?? 0,
         previewUntil: r.previewUntil ?? null,
         previewDone: r.previewDone ?? true, // pre-existing rooms are already in-game → no preview
         startReady: r.startReady ?? [false, false],
@@ -143,6 +148,7 @@ export class GameRoom {
         gen: [0, 0],
         forfeitAt: [null, null],
         turnStartAt: Date.now(),
+        turnBonusMs: 0,
         previewUntil: null,
         previewDone: !(body.ranked ?? false), // ranked → run the 15s market preview; else start on ready
         startReady: [false, false],
@@ -302,7 +308,7 @@ export class GameRoom {
     const times = [...room.forfeitAt, room.joinBy, room.previewUntil].filter((t): t is number => t != null);
     // authoritative turn clock: arm the force-end deadline for the running turn
     if (!room.game.over && room.previewDone && room.readied[0] && room.readied[1]) {
-      times.push(room.turnStartAt + turnMsFor(room.ranked) + TURN_ENFORCE_GRACE_MS);
+      times.push(room.turnStartAt + turnMsFor(room.ranked) + (room.turnBonusMs || 0) + TURN_ENFORCE_GRACE_MS);
     }
     if (times.length) void this.state.storage.setAlarm(Math.min(...times)).catch(() => { /* best effort */ });
     else void this.state.storage.deleteAlarm().catch(() => { /* best effort */ });
@@ -360,7 +366,7 @@ export class GameRoom {
     // The clock was previously display-only — a stalled or modified client on its
     // turn could freeze the opponent forever (no action → no forfeit, no end).
     if (!room.game.over && room.previewDone && bothJoined) {
-      const dl = room.turnStartAt + turnMsFor(room.ranked) + TURN_ENFORCE_GRACE_MS;
+      const dl = room.turnStartAt + turnMsFor(room.ranked) + (room.turnBonusMs || 0) + TURN_ENFORCE_GRACE_MS;
       if (dl <= now + 250) {
         const prevTurn = room.game.turn, prevCur = room.game.cur;
         let st = room.game;
@@ -374,7 +380,7 @@ export class GameRoom {
         if (!st.over) { const r = reduce(st, { type: "endTurn" }); evs.push(...r.events); st = r.state; }
         room.game = st;
         if (st.turn !== prevTurn || st.cur !== prevCur) {
-          room.turnStartAt = Date.now();
+          room.turnStartAt = Date.now(); room.turnBonusMs = 0;
           this.broadcast(evs);
         } else {
           // engine refused (unclearable pending) — retry in 10s instead of hot-looping
@@ -408,7 +414,8 @@ export class GameRoom {
     // cur) is essential: a skip (e.g. TIMEWARP) runs endTurn twice, so cur returns to the same
     // player while turn advances by 2 — checking cur alone would leave a stale turnStartAt,
     // making the resumed turn's clock read ~0 and instantly auto-end (cascading turn skips).
-    if (res.state.turn !== prevTurn || res.state.cur !== prevCur) { room.turnStartAt = Date.now(); this.syncAlarm(); } // re-arm the turn-timeout alarm
+    if (res.state.turn !== prevTurn || res.state.cur !== prevCur) { room.turnStartAt = Date.now(); room.turnBonusMs = 0; this.syncAlarm(); } // re-arm the turn-timeout alarm
+    else if (res.state.pending?.reason === "handCap" && !room.turnBonusMs) { room.turnBonusMs = HAND_CAP_BONUS_MS; this.syncAlarm(); } // v42: +10s to choose the discards
     this.persist();
     // A rejected play (condition not met, sealed, etc.) produces only "log" events and
     // no state advance. Don't broadcast it to the OPPONENT — otherwise their client logs
@@ -432,7 +439,7 @@ export class GameRoom {
   /** Redacted state for `side`, stamped with the turn's remaining/total ms (server-authoritative clock). */
   private redact(side: Side): GameState {
     const s = redactFor(this.room!.game, side) as GameState & { turnLeftMs?: number; turnTotalMs?: number; sleeves?: [string | null, string | null] };
-    const total = turnMsFor(this.room!.ranked);
+    const total = turnMsFor(this.room!.ranked) + (this.room!.turnBonusMs || 0);
     s.turnTotalMs = total;
     s.turnLeftMs = Math.max(0, total - (Date.now() - this.room!.turnStartAt));
     const pl = this.room!.players;
@@ -466,7 +473,7 @@ export class GameRoom {
     if (!room || room.previewDone) return;
     room.previewDone = true;
     room.previewUntil = null;
-    room.turnStartAt = Date.now(); // fresh turn-1 clock (don't count the preview seconds)
+    room.turnStartAt = Date.now(); room.turnBonusMs = 0; // fresh turn-1 clock (don't count the preview seconds)
     this.persist();
     this.syncAlarm();
     for (const s of [0, 1] as Side[]) this.sendInit(s);

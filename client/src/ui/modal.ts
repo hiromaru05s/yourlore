@@ -194,7 +194,8 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
  * onDone receives the selected uids in pick order ([] = cancelled) — the caller
  * submits them to the engine one at a time (the protocol is unchanged).
  */
-export function cardPickerMulti(title: string, pool: CardInst[], max: number, onDone: (uids: string[]) => void): void {
+/** opts.exact (v42 손패 이월): 정확히 max장 골라야 확정 가능 · 취소 버튼 없음 */
+export function cardPickerMulti(title: string, pool: CardInst[], max: number, onDone: (uids: string[]) => void, opts: { exact?: boolean } = {}): void {
   const m = document.createElement("div");
   m.className = "modal picker-modal"; m.style.maxWidth = "720px";
   m.innerHTML =
@@ -207,7 +208,7 @@ export function cardPickerMulti(title: string, pool: CardInst[], max: number, on
   const picked: string[] = [];
   const paint = () => {
     count.textContent = t("picker.count").replace("{n}", String(picked.length)) + (max < 99 ? ` / ${max}` : "");
-    ok.disabled = picked.length === 0;
+    ok.disabled = opts.exact ? picked.length < max : picked.length === 0;
     ok.textContent = t("picker.confirm") + (picked.length ? ` (${picked.length})` : "");
   };
   pool.forEach((c, i) => {
@@ -227,7 +228,7 @@ export function cardPickerMulti(title: string, pool: CardInst[], max: number, on
   const cancel = document.createElement("button");
   cancel.className = "btn btn-ghost"; cancel.textContent = t("common.cancel");
   cancel.onclick = () => { closeOverlay(); onDone([]); };
-  m.querySelector(".modal-row")!.append(ok, cancel);
+  if (opts.exact) m.querySelector(".modal-row")!.append(ok); else m.querySelector(".modal-row")!.append(ok, cancel);
   paint();
   mount(m);
 }

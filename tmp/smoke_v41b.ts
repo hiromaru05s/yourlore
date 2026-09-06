@@ -13,7 +13,8 @@ const play = (g: GameState, id: string): GameState => { const p = g.players[g.cu
 const attack = (g: GameState, uid: string, target: string | null = null): GameState => { let r = reduce(g, { type: "attack", uid }); if (r.state.pending?.reason === "attack") r = reduce(r.state, { type: "chooseTarget", uid: target }); return r.state; };
 const ench = (g: GameState, s: 0 | 1, id: string) => { g.players[s].enchants.push({ card: card(id), turns: DB[id].val || 1, bornTurn: g.turn }); };
 const inHand = (g: GameState, s: 0 | 1, id: string) => g.players[s].hand.some((c) => c.id === id);
-const cycle = (g: GameState): GameState => { g = reduce(g, { type: "endTurn" }).state; g = reduce(g, { type: "endTurn" }).state; return g; };
+const et = (g: GameState): GameState => { const hp = g.players[g.cur].hand; if (hp.length > 5) hp.length = 5; return reduce(g, { type: "endTurn" }).state; }; // v42: 손패 이월 상한 프롬프트 회피 (테스트 편의)
+const cycle = (g: GameState): GameState => { g = et(g); g = et(g); return g; };
 
 ok(["FREE_REWARD", "NO_PAIN", "ORIGIN_QUEST", "BEGINNER_MIND", "VOID_RITE", "SPACE_RITE", "LUCKY_ECHO", "SORTER_LAW", "BUYOUT", "SAMSARA", "PENANCE", "PACK_INSTINCT", "MIND_BURST", "RICH_HABIT"].every((id) => DB[id] && DB[id].nameEn && DB[id].textEn && DB[id].nameJa), "all v41b cards defined");
 ok(DB.FREE_REWARD.cost === 2 && DB.NO_PAIN.cost === 3 && DB.ORIGIN_QUEST.cost === 1 && DB.BEGINNER_MIND.cost === 1 && DB.VOID_RITE.cost === 3 && DB.SPACE_RITE.cost === 2 && DB.LUCKY_ECHO.cost === 1 && DB.SORTER_LAW.cost === 2 && DB.SORTER_LAW.play === 1 && DB.BUYOUT.cost === 1 && DB.SAMSARA.cost === 2 && DB.SAMSARA.play === 1 && DB.PENANCE.cost === 2 && DB.PACK_INSTINCT.cost === 2 && DB.MIND_BURST.cost === 2 && DB.RICH_HABIT.cost === 3, "costs");
@@ -26,7 +27,7 @@ ok(DB.FREE_REWARD.cost === 2 && DB.NO_PAIN.cost === 3 && DB.ORIGIN_QUEST.cost ==
 
 // ---- 노 페인 노 게인: 피해마다 주사위, 6이면 최대 마나 +1 ----
 { let hit = 0, roll = 0;
-  for (let seed = 1; seed <= 40; seed++) { let g = fresh(seed); ench(g, 0, "NO_PAIN"); g = reduce(g, { type: "endTurn" }).state; const mm = g.players[0].maxMana; const att = mk("M1"); g.players[1].field.push(att); const r = reduce(g, { type: "attack", uid: att.uid }); if (r.events.some((e) => e.type === "dice" && e.player === 0)) roll++; if (r.state.players[0].maxMana === mm + 1) hit++; }
+  for (let seed = 1; seed <= 40; seed++) { let g = fresh(seed); ench(g, 0, "NO_PAIN"); g = et(g); const mm = g.players[0].maxMana; const att = mk("M1"); g.players[1].field.push(att); const r = reduce(g, { type: "attack", uid: att.uid }); if (r.events.some((e) => e.type === "dice" && e.player === 0)) roll++; if (r.state.players[0].maxMana === mm + 1) hit++; }
   ok(roll === 40 && hit > 0 && hit < 40, "no pain no gain: rolls on damage, 6 → +1 mana", [roll, hit]); }
 
 // ---- 기원의 탐구: 필드의 코스트 0 카드 1장당 1드로우 ----
@@ -42,7 +43,7 @@ ok(DB.FREE_REWARD.cost === 2 && DB.NO_PAIN.cost === 3 && DB.ORIGIN_QUEST.cost ==
   ok(hasPassive(g.players[0].field[0], "void") && hasPassive(g.players[1].field[0], "void"), "void rite: both sides gain Void");
   g = play(g, "S13"); // 메테오는 플레이어 대상 — 대신 직접 파괴로 확인
   g = attack(g, a.uid, b.uid); // M1(3) vs M5(5hp) → M5 survives; 대신 파괴 헬퍼로 확인
-  const g2 = structuredClone(g); const m5 = g2.players[1].field[0]; m5.dmg = 99; const r = reduce(g2, { type: "endTurn" }).state;
+  const g2 = structuredClone(g); const m5 = g2.players[1].field[0]; m5.dmg = 99; const r = et(g2);
   ok((r.players[1].removed ?? []).some((c) => c.id === "M5") && !r.players[1].discard.some((c) => c.id === "M5"), "void rite: destroyed monster is exiled", [(r.players[1].removed ?? []).map((c) => c.id)]); }
 
 // ---- 공간 술식: 상대 필드 6장 이상일 때만 · 상대 3턴 소환/마법 불가 ----
@@ -50,7 +51,7 @@ ok(DB.FREE_REWARD.cost === 2 && DB.NO_PAIN.cost === 3 && DB.ORIGIN_QUEST.cost ==
 { let g = fresh(); for (let i = 0; i < 4; i++) g.players[1].field.push(mk("M2")); ench(g, 1, "WORLD_CARE"); g.players[1].traps.push({ card: card("T4") }); g = play(g, "SPACE_RITE");
   ok(g.players[0].enchants.some((e) => e.card.ench === "spaceLock"), "space rite: cast with 6 enemy cards");
   const blocked: boolean[] = [];
-  for (let t = 0; t < 4; t++) { g = reduce(g, { type: "endTurn" }).state; /* opp turn */ g.players[1].hand = []; const g1 = play(g, "M1"); const g2 = play(g1, "GRAPE"); blocked.push(g2.players[1].hand.length === 2); g = reduce(g2, { type: "endTurn" }).state; }
+  for (let t = 0; t < 4; t++) { g = et(g); /* opp turn */ g.players[1].hand = []; const g1 = play(g, "M1"); const g2 = play(g1, "GRAPE"); blocked.push(g2.players[1].hand.length === 2); g = et(g2); }
   ok(blocked[0] && blocked[1] && blocked[2] && !blocked[3], "space rite: enemy locked for exactly 3 turns", blocked);
   ok(!g.players[0].enchants.some((e) => e.card.ench === "spaceLock"), "space rite: expired"); }
 { let g = fresh(); ench(g, 1, "SPACE_RITE"); const g2 = play(g, "M1"); ok(inHand(g2, 0, "M1"), "space lock blocks summon"); const g3 = play(g, "STARTER_CHEST"); ok(inHand(g3, 0, "STARTER_CHEST"), "space lock blocks starters");
@@ -78,8 +79,8 @@ ok(DB.FREE_REWARD.cost === 2 && DB.NO_PAIN.cost === 3 && DB.ORIGIN_QUEST.cost ==
 
 // ---- 윤회: 직전 턴에 파괴된 자신 몬스터 1체를 턴 시작시 소환 ----
 { let g = fresh(); const p = g.players[0], o = g.players[1]; const m1 = mk("M1"); p.field.push(m1); p.traps.push({ card: card("SAMSARA") }); const big = mk("M12"); o.field.push(big);
-  g = reduce(g, { type: "endTurn" }).state; g = attack(g, big.uid, m1.uid); ok(g.players[0].field.length === 0 && g.players[0].discard.some((c) => c.id === "M1"), "samsara setup: M1 destroyed on enemy turn");
-  g = reduce(g, { type: "endTurn" }).state;
+  g = et(g); g = attack(g, big.uid, m1.uid); ok(g.players[0].field.length === 0 && g.players[0].discard.some((c) => c.id === "M1"), "samsara setup: M1 destroyed on enemy turn");
+  g = et(g);
   ok(g.pending?.reason === "samsaraPick" && g.cur === 0 && g.players[0].traps.length === 0, "samsara: fires at own turn start", g.pending);
   const a = greedyDecide(g); ok(a.type === "pick" && (a as { uid: string }).uid === "M1", "bot picks", a);
   g = reduce(g, { type: "pick", uid: "M1" }).state;
@@ -101,11 +102,11 @@ ok(DB.FREE_REWARD.cost === 2 && DB.NO_PAIN.cost === 3 && DB.ORIGIN_QUEST.cost ==
 { let g = fresh(); g.players[0].field.push(mk("M1")); g = play(g, "MIND_BURST"); ok(inHand(g, 0, "MIND_BURST"), "mind burst: refused without guts counters"); }
 
 // ---- 부호의 습관 ----
-{ let g = fresh(); ench(g, 0, "RICH_HABIT"); g.players[0].hand = [card("M1"), card("M1"), card("M1")]; const mh = g.players[0].maxHp, mm = g.players[0].maxMana; g = cycle(g); // 드로우 1 → 4장
+{ let g = fresh(); ench(g, 0, "RICH_HABIT"); g.players[0].hand = [card("M1")]; const mh = g.players[0].maxHp, mm = g.players[0].maxMana; g = cycle(g); // 드로우 3 → 4장
   ok(g.players[0].maxHp === mh + 6 && g.players[0].maxMana === mm, "rich habit: 4 cards → +6 hp only", [g.players[0].hand.length, g.players[0].maxHp - mh, g.players[0].maxMana - mm]); }
-{ let g = fresh(); ench(g, 0, "RICH_HABIT"); g.players[0].hand = Array.from({ length: 5 }, () => card("M1")); const mh = g.players[0].maxHp, mm = g.players[0].maxMana; g = cycle(g); // → 6장
+{ let g = fresh(); ench(g, 0, "RICH_HABIT"); g.players[0].hand = Array.from({ length: 3 }, () => card("M1")); const mh = g.players[0].maxHp, mm = g.players[0].maxMana; g = cycle(g); // 드로우 3 → 6장
   ok(g.players[0].maxHp === mh + 6 && g.players[0].maxMana === mm + 1, "rich habit: 6 cards → +6 hp +1 mana", [g.players[0].hand.length, g.players[0].maxHp - mh, g.players[0].maxMana - mm]); }
-{ let g = fresh(); ench(g, 0, "RICH_HABIT"); g.players[0].hand = [card("M1")]; const mh = g.players[0].maxHp; g = cycle(g); ok(g.players[0].maxHp === mh, "rich habit: 2 cards → nothing"); }
+{ let g = fresh(); ench(g, 0, "RICH_HABIT"); g.players[0].hand = []; const mh = g.players[0].maxHp; g = cycle(g); ok(g.players[0].maxHp === mh, "rich habit: 3 cards → nothing"); }
 
 // ---- self-play ----
 let games = 0, errs = 0;

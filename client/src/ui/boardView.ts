@@ -460,7 +460,7 @@ export class GameView {
       // 고급 부화기(incubate): 자신의 "알"만 선택 가능
       const targetableMon = targetableZone
         && !(pending!.kind === "oppMon" && !isMe && pending!.reason !== "attack" && hasPassive(m, "aura")) // 아우라는 상대 효과만 차단 — 내 카드는 내 효과로 파괴 가능
-        && !(pending!.kind === "oppMon" && pending!.reason === "decayMark" && m.hatch != null) // 부패 카운터: 알 제외
+        && !(pending!.kind === "oppMon" && pending!.reason === "decayMark" && m.hatch != null) // 카운터: 알 제외
         && !(pending!.kind === "oppMon" && pending!.reason === "destroyMon" && pending!.data?.maxCost != null && m.cost > (pending!.data.maxCost as number)) // 룬 파열: 코스트 캡
         && !(pending!.kind === "myMon" && pending!.reason === "incubate" && m.hatch == null)
         && !(pending!.kind === "myMon" && pending!.reason === "chosenMage" && (m.id !== "CHOSEN_MAGE" || ((pending!.data?.fired as string[] | undefined) ?? []).includes(m.uid))) // 마법사만 발동 가능
@@ -471,7 +471,7 @@ export class GameView {
         && !(pending!.kind === "myMon" && pending!.reason === "worldTree" && (m.id !== "WORLD_TREE" || (m.gcount || 0) <= 0)) // 세계수: 카운터 있는 세계수만
         && !(pending!.kind === "myMon" && (((pending!.data?.excl as string[] | undefined) ?? []).includes(m.uid))); // 지원 나팔: 이미 고른 몬스터는 중복 선택 불가
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
-      // 카지노(v34): 다이스 카운터 배지 (12개마다 카지노 주사위)
+      // 카지노(v34): 카운터 배지 (12개마다 카지노 주사위)
       const casinoBadge = m.aura === "casino" ? { badge: `🎲${m.gcount || 0}/12` } : m.id === "CASTLE" ? { badge: `🏰${m.gcount || 0}` } : {};
       const card = cardEl(m, { field: true, compactField: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted, ...casinoBadge });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
@@ -886,7 +886,7 @@ export class GameView {
     for (let k = filled.length; k < owner.supply.length; k++) sup.appendChild(this.slotEl("mkt", true));
 
     const rb = this.q("refreshBtn") as HTMLButtonElement;
-    const rtok = me.refreshTokens || 0; // 렐릭 헌터(v36): 제시 카운터가 있으면 무료 갱신
+    const rtok = me.refreshTokens || 0; // 렐릭 헌터(v36): 카운터가 있으면 무료 갱신
     rb.disabled = !myTurn || !!g.pending || (me.mana < 1 && rtok <= 0);
     const rbCost = rb.querySelector("b"); if (rbCost) rbCost.textContent = rtok > 0 ? `0 (${rtok})` : "1";
     rb.onclick = () => this.h.onRefresh();

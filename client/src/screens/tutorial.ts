@@ -34,7 +34,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "선공/후공은 매 게임 <b>코인토스</b>로 공정하게 정해집니다.",
     ] },
     { icon: "🔄", h: "턴의 흐름", body: [
-      "내 턴이 시작되면 ① <b>마나가 최대치까지 충전</b>되고 ② 카드를 <b>1장 드로우</b>합니다. (첫 손패만 3장 · 손패 상한 8장, 넘치면 묘지로)",
+      "내 턴이 시작되면 ① <b>마나가 최대치까지 충전</b>되고 ② 카드를 <b>3장 드로우</b>합니다. (턴 종료 시 손패는 5장까지 이월 · 6장 이상이면 버릴 카드를 고릅니다, 시간 초과 시 오른쪽부터 폐기)",
       "그다음 마나가 닿는 한 자유롭게 행동합니다 — 몬스터 소환, 마법 시전, 함정 세트, 공격, 카드 구매.",
       "<b>턴 종료</b>를 누르면 상대 턴으로 넘어갑니다. 손에 남은 카드는 <b>그대로 유지</b>되어 다음 턴에도 쓸 수 있어요.",
     ] },
@@ -105,7 +105,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "先攻/後攻は毎ゲーム<b>コイントス</b>で公平に決まります。",
     ] },
     { icon: "🔄", h: "ターンの流れ", body: [
-      "自分のターンになると ①<b>マナが最大まで回復</b>し ②カードを<b>1枚ドロー</b>します。(最初の手札のみ3枚 · 手札上限8枚、超過分は墓地へ)",
+      "自分のターンになると ①<b>マナが最大まで回復</b>し ②カードを<b>3枚ドロー</b>します。(ターン終了時に持ち越せる手札は5枚まで · 6枚以上なら捨てるカードを選択、時間切れは右から破棄)",
       "その後はマナの続く限り自由に行動 — モンスター召喚、魔法発動、罠セット、攻撃、カード購入。",
       "<b>ターン終了</b>を押すと相手のターンになります。手札の残りは<b>そのまま持ち越し</b>、次のターンも使えます。",
     ] },
@@ -176,7 +176,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "Who goes first is decided fairly by a <b>coin toss</b> each game.",
     ] },
     { icon: "🔄", h: "Turn Flow", body: [
-      "At the start of your turn: ① <b>mana refills to max</b> and ② you <b>draw 1 card</b>. (Only your opening hand is 3 · hand limit 8, overflow goes to the graveyard)",
+      "At the start of your turn: ① <b>mana refills to max</b> and ② you <b>draw 3 cards</b>. (You may carry over 5 cards at end of turn · with 6+ you choose what to discard; on timeout the rightmost go)",
       "Then act freely while your mana lasts — summon monsters, cast spells, set traps, attack, buy cards.",
       "Press <b>End Turn</b> to pass to the opponent. Cards left in your hand <b>stay</b> for your next turn.",
     ] },

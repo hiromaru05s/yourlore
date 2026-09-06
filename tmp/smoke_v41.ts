@@ -15,7 +15,8 @@ const clearHandCulls = (g: GameState, s: 0 | 1) => { const p = g.players[s]; p.h
 const addCulls = (g: GameState, s: 0 | 1, n: number, zone: "hand" | "deck" | "discard" = "deck") => { for (let i = 0; i < n; i++) g.players[s][zone].push(card("STARTER_TRASH")); };
 const exiledCulls = (g: GameState, s: 0 | 1, n: number) => { for (let i = 0; i < n; i++) (g.players[s].removed ??= []).push(card("STARTER_TRASH")); };
 /** 양쪽이 endTurn → 다시 0번 플레이어의 턴 시작 (턴 시작 효과 관측용) */
-const cycle = (g: GameState): GameState => { g = reduce(g, { type: "endTurn" }).state; if (g.pending) g = reduce(g, { type: "pick", uid: null }).state; g = reduce(g, { type: "endTurn" }).state; return g; };
+const et = (g: GameState): GameState => { const hp = g.players[g.cur].hand; if (hp.length > 5) hp.length = 5; return reduce(g, { type: "endTurn" }).state; }; // v42: 손패 이월 상한 프롬프트 회피 (테스트 편의)
+const cycle = (g: GameState): GameState => { g = et(g); if (g.pending) g = reduce(g, { type: "pick", uid: null }).state; g = et(g); return g; };
 
 ok(BALANCE_VERSION === "v41", "version", BALANCE_VERSION);
 ok(DECK_POOL.includes("RIFT") && DB.RIFT.noShop === true, "RIFT in deck pool / noShop");
@@ -41,7 +42,7 @@ ok(DB.COLOSSEUM.cost === 6 && DB.COLOSSEUM.play === 3 && DB.STRATAGEM.cost === 3
 // 제외할 컬이 없으면 아무 일도 없음(크래시 없음)
 { let g = fresh(); clearHandCulls(g, 0); g = play(g, "SORTER"); ok(g.players[0].field.some((m) => m.id === "SORTER") && cullExiled(g.players[0]) === 0, "sorter with no culls: no-op"); }
 // 상대의 컬 제외는 발동하지 않음
-{ let g = fresh(); clearHandCulls(g, 1); addCulls(g, 1, 5, "discard"); g.players[1].field.push(mk("SORTER")); g = reduce(g, { type: "endTurn" }).state; /* now cur=1 */ addCulls(g, 1, 1, "hand"); const p1 = g.players[1]; p1.mana = 5; const idx = p1.hand.findIndex((c) => c.star === "trash"); g = reduce(g, { type: "play", idx }).state;
+{ let g = fresh(); clearHandCulls(g, 1); addCulls(g, 1, 5, "discard"); g.players[1].field.push(mk("SORTER")); g = et(g); /* now cur=1 */ addCulls(g, 1, 1, "hand"); const p1 = g.players[1]; p1.mana = 5; const idx = p1.hand.findIndex((c) => c.star === "trash"); g = reduce(g, { type: "play", idx }).state;
   ok(cullExiled(g.players[1]) === 2 && cullExiled(g.players[0]) === 0, "sorter only triggers for its owner", [cullExiled(g.players[1]), cullExiled(g.players[0])]); }
 
 // ---- 콜로세움 휴게소: 자신 턴 시작마다 제외된 컬 1장당 최대 체력 +1 ----
@@ -49,16 +50,16 @@ ok(DB.COLOSSEUM.cost === 6 && DB.COLOSSEUM.play === 3 && DB.STRATAGEM.cost === 3
   ok(g.players[0].maxHp >= mh + 5 && g.players[0].enchants.some((e) => e.card.id === "COLOSSEUM_REST"), "colosseum rest +5 at own turn start", g.players[0].maxHp - mh); }
 
 // ---- 콜로세움: 제외된 컬 8장 이상이면 턴 시작시 선택받은 몬스터 선택 소환 ----
-{ let g = fresh(); exiledCulls(g, 0, 7); g = play(g, "COLOSSEUM"); g = reduce(g, { type: "endTurn" }).state; g = reduce(g, { type: "endTurn" }).state;
+{ let g = fresh(); exiledCulls(g, 0, 7); g = play(g, "COLOSSEUM"); g = et(g); g = et(g);
   ok(!g.pending, "colosseum: 7 culls → no offer");
-  exiledCulls(g, 0, 1); g = reduce(g, { type: "endTurn" }).state; g = reduce(g, { type: "endTurn" }).state;
+  exiledCulls(g, 0, 1); g = et(g); g = et(g);
   ok(g.pending?.reason === "colosseumPick" && g.cur === 0, "colosseum: 8 culls → offer at own turn start", g.pending);
   const g2 = reduce(g, { type: "pick", uid: "CHOSEN_ARCHER" }).state;
   ok(!g2.pending && g2.players[0].field.some((m) => m.id === "CHOSEN_ARCHER" && m.token), "colosseum: pick archer → token on field");
   const g3 = reduce(g, { type: "pick", uid: "M1" }).state; ok(g3.pending?.reason === "colosseumPick", "colosseum: invalid pick re-asks");
   const g4 = reduce(g, { type: "pick", uid: null }).state; ok(!g4.pending && !g4.players[0].field.some((m) => m.id.startsWith("CHOSEN")), "colosseum: cancel"); }
 // 봇도 선택함
-{ let g = fresh(); exiledCulls(g, 0, 8); g = play(g, "COLOSSEUM"); g = reduce(g, { type: "endTurn" }).state; g = reduce(g, { type: "endTurn" }).state;
+{ let g = fresh(); exiledCulls(g, 0, 8); g = play(g, "COLOSSEUM"); g = et(g); g = et(g);
   const a = greedyDecide(g); ok(a.type === "pick" && (a as { uid: string | null }).uid === "CHOSEN_ARCHER", "bot picks archer", [a, g.pending, g.cur, g.turn]); }
 
 // ---- 제인사 ----
@@ -104,7 +105,7 @@ ok(DB.COLOSSEUM.cost === 6 && DB.COLOSSEUM.play === 3 && DB.STRATAGEM.cost === 3
   g = play(g, "M5"); const m12 = g.players[0].field.find((m) => m.id === "M5")!; // M5(2/5): 소환 효과 없음 (M12는 v3x 패치로 atkDown 선택이 붙어 pending이 생긴다)
   ok(!!m12 && effDef(g.players[0], m12) === 1 && !g.pending, "lawless: summoned monster HP → 1", m12 && effDef(g.players[0], m12));
   // 상대가 소환해도 1
-  g = reduce(g, { type: "endTurn" }).state; g = play(g, "M5"); const m5 = g.players[1].field.find((m) => m.id === "M5" && m.uid !== b.uid)!;
+  g = et(g); g = play(g, "M5"); const m5 = g.players[1].field.find((m) => m.id === "M5" && m.uid !== b.uid)!;
   ok(!!m5 && effDef(g.players[1], m5) === 1, "lawless: opponent's summon HP → 1", [g.cur, g.players[1].field.map((m) => [m.id, effDef(g.players[1], m)]), g.players[1].hand.map((c) => c.id)]); }
 
 // ---- 차원의 균열 ----
@@ -114,7 +115,7 @@ ok(DB.COLOSSEUM.cost === 6 && DB.COLOSSEUM.play === 3 && DB.STRATAGEM.cost === 3
   addCulls(g, 0, 3, "discard"); g.players[0].field.push(mk("SORTER")); const mh2 = g.players[0].maxHp; g = play(g, "STARTER_TRASH");
   ok(g.players[0].maxHp === mh2 + 10, "rift + sorter: 2 exiled → +10", g.players[0].maxHp - mh2);
   // 상대의 제외는 무관
-  g = reduce(g, { type: "endTurn" }).state; const mh3 = g.players[0].maxHp; addCulls(g, 1, 1, "hand"); const p1 = g.players[1]; p1.mana = 5; g = reduce(g, { type: "play", idx: p1.hand.findIndex((c) => c.star === "trash") }).state;
+  g = et(g); const mh3 = g.players[0].maxHp; addCulls(g, 1, 1, "hand"); const p1 = g.players[1]; p1.mana = 5; g = reduce(g, { type: "play", idx: p1.hand.findIndex((c) => c.star === "trash") }).state;
   ok(g.players[0].maxHp === mh3, "rift: opponent exile does not trigger"); }
 
 // ---- self-play ----

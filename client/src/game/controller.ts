@@ -61,8 +61,11 @@ export abstract class BaseController implements BoardHandlers {
   // bot/tutorial (and casual online fallback) use a 90s turn; online games get the
   // authoritative length from the server via g.turnTotalMs (ranked 50s / casual 90s).
   private static readonly LOCAL_TURN_SECS = 90;
+  private static readonly HAND_CAP_BONUS_SECS = 10; // v42: end-turn hand-discard choice
   private turnTotal = 90; // full length of the CURRENT turn (for the ring's full-scale)
   private turnStartedWall = 0; // wall-clock ms when the current turn's timer started (anti instant-skip)
+  private handCapBonusKey = ""; // v42: turn key that already received the +10s hand-discard bonus
+  private multiPickerOpen = false; // a cardPickerMulti modal is showing (closed when its pending vanishes)
   private lastEndTurnAt = 0;   // 턴종료 연타 가드: 마지막 endTurn 제출 시각
   private purgePicks: string[] | null = null; // multi-select purge: remaining queued picks
   private autoTarget: string | null = null; // drag-to-attack: defender chosen before the pending exists
@@ -435,14 +438,19 @@ export abstract class BaseController implements BoardHandlers {
     // 다중 선택 pending (대숙청 purge / 흑룡 oppRmz / 신수 oppBoard) — 모달에서 한 번에
     // 고른 뒤 1장씩 순차 제출한다 (엔진 프로토콜은 그대로 1장씩 pick)
     const multiKind = g.pending && (g.pending.kind === "purge" || g.pending.kind === "oppRmz" || g.pending.kind === "oppBoard");
-    if (!multiKind) this.purgePicks = null; // 선택이 끝나면 큐 정리
+    if (!multiKind) {
+      this.purgePicks = null; // 선택이 끝나면 큐 정리
+      if (this.multiPickerOpen) { this.multiPickerOpen = false; closeOverlay(); } // v42: 시간 초과 자동 폐기 등으로 선택이 끝나면 모달도 닫는다
+    }
     if (g.pending && g.cur === this.you) {
       if (multiKind) {
+        const handCap = g.pending.reason === "handCap"; // v42: 턴 종료 손패 이월 — 취소 불가, 정확히 n장
         if (this.purgePicks) {
           const next = this.purgePicks.shift();
-          if (next === undefined) { this.purgePicks = null; setTimeout(() => this.submit({ type: "pick", uid: null }), 0); } // 남은 pending 닫기
-          else setTimeout(() => this.submit({ type: "pick", uid: next }), 0);
-          return;
+          if (next !== undefined) { setTimeout(() => this.submit({ type: "pick", uid: next }), 0); return; }
+          this.purgePicks = null;
+          if (!handCap) { setTimeout(() => this.submit({ type: "pick", uid: null }), 0); return; } // 남은 pending 닫기
+          // handCap: 아직 남은 장수가 있으면 아래로 진행해 다시 고르게 한다
         }
         const me = g.players[this.you];
         const opp = g.players[1 - this.you];
@@ -472,11 +480,13 @@ export abstract class BaseController implements BoardHandlers {
         }
         const hint = getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint;
         const max = Math.min((g.pending.data?.val as number) || 1, pool.length);
+        this.multiPickerOpen = true;
         cardPickerMulti(hint, pool, max, (uids) => {
-          if (!uids.length) { this.submit({ type: "pick", uid: null }); return; } // 아무것도 안 고름 = 취소
+          this.multiPickerOpen = false;
+          if (!uids.length) { if (!handCap) this.submit({ type: "pick", uid: null }); else this.afterApply({ state: this.state, events: [] }); return; } // 아무것도 안 고름 = 취소 (handCap은 다시 묻는다)
           this.purgePicks = uids.slice(1);
           this.submit({ type: "pick", uid: uids[0] });
-        });
+        }, { exact: handCap });
         return;
       }
       if (g.pending.kind === "giantShop") {
@@ -549,11 +559,20 @@ export abstract class BaseController implements BoardHandlers {
         : this.turnTotal;
       this.warned25 = this.timerLeft <= 25; // don't re-fire the 25s popup mid-turn on reconnect
       this.turnStartedWall = Date.now();    // guard against a stale ~0 clock instantly skipping the turn
+      // a reconnect straight into the discard choice: the server clock already includes the bonus
+      this.handCapBonusKey = g.pending?.reason === "handCap" ? key : "";
       if (!firstTurn && g.cur === this.you) sfx("turn"); // my turn begins
       if (!firstTurn) A.turnBanner(g.cur === this.you); // 턴 전환 리본 — 턴의 경계를 몸으로 알게
       if (this.timerInt) clearInterval(this.timerInt);
       this.renderTimer();
       this.timerInt = window.setInterval(() => this.tickTimer(), 1000);
+    } else if (g.pending?.reason === "handCap" && this.handCapBonusKey !== key) {
+      // v42: the end-turn hand-discard choice appeared → +10s to pick (server adds the same bonus online)
+      this.handCapBonusKey = key;
+      this.timerLeft += BaseController.HAND_CAP_BONUS_SECS;
+      this.turnTotal += BaseController.HAND_CAP_BONUS_SECS;
+      this.turnStartedWall = Date.now();
+      this.renderTimer();
     } else if (g.turnLeftMs != null) {
       // SAME turn, fresh server snapshot (reconnect init / any update): adopt the
       // authoritative remaining time when the local countdown has drifted — a
@@ -588,6 +607,10 @@ export abstract class BaseController implements BoardHandlers {
           // pending now; the next tick (still ≤0) then ends the turn. Non-cancelable
           // pendings must be resolved by the player.
           if (this.state.pending.allowCancel) this.onChooseTarget(null);
+          else if (this.state.pending.reason === "handCap") { // v42: time's up → engine discards from the right
+            if (this.timerInt) { clearInterval(this.timerInt); this.timerInt = null; }
+            this.submit({ type: "endTurn" });
+          }
         } else {
           if (this.timerInt) { clearInterval(this.timerInt); this.timerInt = null; }
           this.submit({ type: "endTurn" });
