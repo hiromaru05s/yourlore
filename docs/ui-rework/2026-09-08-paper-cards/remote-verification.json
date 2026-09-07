@@ -1,0 +1,108 @@
+{
+  "checkedAt": "2026-09-07T21:31:59.597Z",
+  "results": [
+    {
+      "url": "/",
+      "status": 200,
+      "bytes": 1101,
+      "sha256": "7d8d2fa0935a4af925e4673b1dbeb0de40acd1d68fea39ab94102e126eb61a8d",
+      "match": true
+    },
+    {
+      "url": "/assets/duelScene-1OTFg2jC.js",
+      "status": 200,
+      "bytes": 9673,
+      "sha256": "e8064691bf9ffe0539158d2566e3cb367735814f884051f47574ff2fc48c8ce0",
+      "match": true
+    },
+    {
+      "url": "/assets/index-BQLd1a6v.css",
+      "status": 200,
+      "bytes": 134025,
+      "sha256": "81d775d25a975fb0a6625d82fa43022ff8d7e25723453abfdb4257a62258d850",
+      "match": true
+    },
+    {
+      "url": "/assets/index-DO566T0g.js",
+      "status": 200,
+      "bytes": 997797,
+      "sha256": "ecb288aa0d76a0fa8a8a9cfc35e34b55e44afc8495717c25402de365df8d9a11",
+      "match": true
+    },
+    {
+      "url": "/assets/paperDraw-CZQY10-P.js",
+      "status": 200,
+      "bytes": 8774,
+      "sha256": "66cdcedcbd1b4966088d79ce40278272875631f8ed66b3dab88d368a2ab85941",
+      "match": true
+    },
+    {
+      "url": "/assets/three.module-CTXHiJFq.js",
+      "status": 200,
+      "bytes": 529230,
+      "sha256": "c08fbc1ed0daebc076f8966d3d7be4dad4753a66d757574c19aea3a073a245b1",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/modular/base-mon.png",
+      "status": 200,
+      "bytes": 1817892,
+      "sha256": "c35c03edede377527f414e8afd5b0c98acbbc4ff4947eb25a3aa1bee64789be1",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/modular/base-spell.png",
+      "status": 200,
+      "bytes": 1830510,
+      "sha256": "d682c2cfda42bc024bc2297b6d24ef11d3e0992d062e72c72212273267e17237",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/modular/base-trap.png",
+      "status": 200,
+      "bytes": 1713270,
+      "sha256": "dc6d00acf275ca51b6eae2ee8745433a8f7487bd3b12d9651511244bb328023b",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/modular/cost.png",
+      "status": 200,
+      "bytes": 1801208,
+      "sha256": "6a09eb84f3f6b8a44d05ed83d84f0bcae5663ad856e8239a832d1cb8450fc6ed",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/modular/attack.png",
+      "status": 200,
+      "bytes": 1841095,
+      "sha256": "9566dd25dfccb213af69d12cd39b3990ecd91fa0f2f4b7c7a8de640a468adb25",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/modular/health.png",
+      "status": 200,
+      "bytes": 1781819,
+      "sha256": "6914ca7d54cfc6cc0ca12a456acc56be9e9177402d5af2faf4152f0c6f6acfba",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/modular/plaque.png",
+      "status": 200,
+      "bytes": 1147799,
+      "sha256": "c1c9e4f52b1b07a4ecf4c07f61849db9631a2496b014a2be453695c1c6538227",
+      "match": true
+    },
+    {
+      "url": "/frames/sleeve_default.webp",
+      "status": 200,
+      "bytes": 99362,
+      "sha256": "4a64147f435f3d89cfb7cbdd26d7380fd999e304b00735dd430486c1b08b6bff",
+      "match": true
+    }
+  ],
+  "browser": {
+    "title": "LORE — 덱빌드 듀얼",
+    "errors": [],
+    "scope": "unauthenticated staging boot; gameplay verified through LocalController locally"
+  }
+}

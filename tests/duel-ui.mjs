@@ -149,25 +149,13 @@ assert(!permanent.querySelector('.buff-duration'));assert(!permanent.getAttribut
 const statusCard=cardEl({...mon,uid:'status-check',guts:2,decayCnt:1},{field:true,compactField:true,owner:g.players[0]});
 assert(!/\p{Extended_Pictographic}/u.test(statusCard.querySelector('.card-status').textContent));
 assert(statusCard.querySelector('.card-status').textContent.includes('気合 2'));
-// Flights must travel from the deck, restore cards on cancellation, and never reveal opponent identities.
-const originalRect=dom.window.HTMLElement.prototype.getBoundingClientRect;
-dom.window.HTMLElement.prototype.getBoundingClientRect=function(){return new DOMRect(this.closest('.pile')?900:750,this.closest('.pile')?400:650,45,70);};
-const motions=[];
-dom.window.HTMLElement.prototype.animate=function(frames,options){motions.push({frames,options});return {cancel(){}};};
+// Without WebGL, draws must never hide cards or create a blocking overlay.
 const hand=document.getElementById('hand');
-const drawing=animateDraw(hand,2);
-await new Promise(r=>setTimeout(r,20));
-assert(document.querySelector('.draw-flight .draw-back'));
-assert(document.querySelector('.draw-flight .draw-face'));
-assert(motions[0].frames.at(-1).transform.includes('translate3d(-150px,250px,0)'));
-setFxSkip(true);await drawing;setFxSkip(false);
-assert(!document.querySelector('.draw-flight'));
-assert([...hand.querySelectorAll('.card')].every(n=>n.style.visibility!== 'hidden'));
-const opponentDraw=animateDraw(document.getElementById('oppHand'),2,'opp');
-await new Promise(r=>setTimeout(r,20));
-assert(!document.querySelector('.draw-flight .draw-face'));
-setFxSkip(true);await opponentDraw;setFxSkip(false);
-dom.window.HTMLElement.prototype.getBoundingClientRect=originalRect;
+await animateDraw(hand,2);
+assert(!document.querySelector('.paper-draw-canvas'));
+assert([...hand.querySelectorAll('.card')].every(n=>n.style.visibility!=='hidden'));
+await animateDraw(document.getElementById('oppHand'),2,'opp');
+assert(!document.querySelector('.paper-draw-canvas'));
 // An interrupted reveal must release its overlay, preserve the destination and never trap input.
 const reveal=revealSpell({...spell,uid:'fx-cancel'},'me','discard');
 await new Promise(r=>setTimeout(r,35));
