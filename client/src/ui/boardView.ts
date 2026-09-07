@@ -5,7 +5,7 @@
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem, marketStockOf } from "../shared/engine";
-import { fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
+import { enchantHasTurnCountdown, fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
 import { artUrl, cardEl, ensureCardCompositing, prefetchZoomArt } from "./cardView";
@@ -440,7 +440,8 @@ export class GameView {
         && !(pending!.kind === "myMon" && (((pending!.data?.excl as string[] | undefined) ?? []).includes(m.uid))); // 지원 나팔: 이미 고른 몬스터는 중복 선택 불가
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
       // 카지노(v34): 카운터 배지 (12개마다 카지노 주사위)
-      const casinoBadge = m.aura === "casino" ? { badge: `🎲${m.gcount || 0}/12` } : m.id === "CASTLE" ? { badge: `🏰${m.gcount || 0}` } : {};
+      const countLabel = getLang() === 'ja' ? 'カウント' : getLang() === 'en' ? 'Count' : '카운트';
+      const casinoBadge = m.aura === "casino" ? { badge: `${countLabel} ${m.gcount || 0}/12` } : m.id === "CASTLE" ? { badge: `${countLabel} ${m.gcount || 0}` } : {};
       const card = cardEl(m, { field: true, compactField: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted, ...casinoBadge });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
@@ -473,7 +474,7 @@ export class GameView {
       // Generic trap icon and unknown cost preserve hidden identity for both players.
       const tile = document.createElement("div");
       tile.className = "buff-icon buff-icon--trap";
-      tile.innerHTML = `<span class="buff-frame" style="background-image:url(${fieldFrameFor('trap')})"></span><span class="buff-art" style="background-image:url(${refinedArt('trap-seal')})"></span><span class="buff-cost" aria-hidden="true">?</span>`;
+      tile.innerHTML = `<span class="buff-frame" style="background-image:url(${fieldFrameFor('trap')})"></span><span class="buff-art" style="background-image:url(${refinedArt('trap-seal')})"></span><span class="buff-cost" aria-hidden="true"><span>?</span></span>`;
       tile.title = trapLabel;
       tile.setAttribute("aria-label", trapLabel);
       // v30 카운터 배지 — 카운트다운(⏳남은 턴) / 정보상(×남은 사용 횟수).
@@ -489,8 +490,8 @@ export class GameView {
     p.enchants.forEach((e) => {
       const lim = e.card.ench ? ENCH_TURN_LIMITS[e.card.ench] : undefined;
       const elapsed = lim != null ? Math.max(0, g.turn - (e.bornTurn ?? 0)) : null;
-      const rem = e.turns < 99 ? e.turns : lim != null ? Math.max(0, lim - elapsed!) : null;
-      const bits = [elapsed != null ? `${Math.min(elapsed,lim!)}/${lim}` : rem != null ? `⏳${rem}` : '∞'];
+      const rem = lim != null ? Math.max(0, lim - elapsed!) : enchantHasTurnCountdown(e.card) ? Math.max(0, e.turns) : null;
+      const bits = [elapsed != null ? `${Math.min(elapsed,lim!)}/${lim}` : rem != null ? `${getLang() === 'ja' ? '残り' : getLang() === 'en' ? '' : '남은 '}${rem}` : ''];
       if (e.cnt != null && e.cnt > 0) bits.push(`×${e.cnt}`);
       const lang = getLang();
       const state = elapsed != null
@@ -498,6 +499,9 @@ export class GameView {
         : rem != null ? (lang === 'ja' ? `残り ${rem}ターン` : lang === 'en' ? `${rem} turns remaining` : `남은 ${rem}턴`)
         : (lang === 'ja' ? '永続魔法' : lang === 'en' ? 'Permanent spell' : '지속 마법');
       const stateText = state + (e.cnt ? ` · ×${e.cnt}` : '');
+      const durationUi = rem == null
+        ? `<img class="buff-infinity" src="/art/biblion/modular/infinity.png" alt="${lang === 'ja' ? '無期限' : lang === 'en' ? 'Permanent' : '무기한'}">${e.cnt ? `<span class="buff-counter">×${e.cnt}</span>` : ''}`
+        : `<span class="buff-duration" aria-label="${stateText}"><span>${bits.join(' ')}</span></span>`;
       const card = document.createElement('div');
       card.className = 'buff-icon buff-icon--spell';
       card.dataset.uid = e.card.uid;
@@ -505,7 +509,7 @@ export class GameView {
       card.setAttribute('role', 'button');
       card.setAttribute('aria-label', `${cardName(e.card)} ${stateText}`);
       card.title = `${cardName(e.card)} · ${stateText}`;
-      card.innerHTML = `<span class="buff-frame" style="background-image:url(${fieldFrameFor('spell')})"></span><span class="buff-art" style="background-image:url(${artUrl.full(e.card.id)})"></span><span class="buff-cost" aria-hidden="true">${e.card.cost}</span><span class="buff-duration">${bits.join(' ')}</span>`;
+      card.innerHTML = `<span class="buff-frame" style="background-image:url(${fieldFrameFor('spell')})"></span><span class="buff-art" style="background-image:url(${artUrl.full(e.card.id)})"></span><span class="buff-cost" aria-hidden="true"><span>${e.card.cost}</span></span>${durationUi}`;
       card.onclick = () => zoomCard(e.card, undefined, stateText);
       card.onkeydown = ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); zoomCard(e.card, undefined, stateText); } };
       if (rem != null) { card.classList.add("ench-timed"); if (rem <= 1) card.classList.add("ench-expiring"); }

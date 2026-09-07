@@ -28,6 +28,23 @@ assert.equal(clock.dataset.total,'50');assert.equal(clock.getAttribute('role'),'
 paintDuelClock(clock,-4,90,false);assert.equal(clock.dataset.remaining,'0');assert(clock.classList.contains('warn'));assert(clock.classList.contains('opp'));
 paintDuelClock(clock,100,100,true);assert(!clock.classList.contains('warn'));assert.equal(clock.querySelectorAll('.hourglass-anchor').length,1);
 
+// Legacy indefinite enchantments must never count down, including persisted reduced counters.
+let eternal=createGame({mode:'bot',seed:37,starting:0,p0:{id:'p',name:'P'},p1:{id:'q',name:'Q'}}).state;
+eternal.pending=null;
+eternal.players[0].enchants=[{card:{...DB.NHEAL,uid:'eternal'},turns:1},{card:{...DB.E1,uid:'finite-owner'},turns:2},{card:{...DB.E2,uid:'finite-both'},turns:3}];
+for(let i=0;i<6;i++) {
+ eternal.pending=null;eternal.players.forEach(p=>{p.hand=[];p.hp=1000;p.maxHp=1000;});
+ eternal=reduce(eternal,{type:'endTurn'}).state;
+ assert(eternal.players[0].enchants.some(e=>e.card.uid==='eternal'&&e.turns===1));
+}
+assert(!eternal.players[0].enchants.some(e=>e.card.uid.startsWith('finite')));
+// Born-turn expiration remains active even without a numeric duration countdown.
+const contract=Object.values(DB).find(c=>c.ench==='spellHeal');
+eternal.turn=13;eternal.cur=1;eternal.pending=null;
+eternal.players[0].enchants.push({card:{...contract,uid:'contract-expiry'},turns:98,bornTurn:0});
+eternal=reduce(eternal,{type:'endTurn'}).state;
+assert(!eternal.players[0].enchants.some(e=>e.card.uid==='contract-expiry'));
+assert(eternal.players[0].removed.some(c=>c.uid==='contract-expiry'));
 // Shared engine capacity applies to both browser and staging worker reducers.
 const boundary=createGame({mode:'bot',seed:7,starting:0,p0:{id:'x',name:'X'},p1:{id:'y',name:'Y'}}).state;
 const trapDef=Object.values(DB).find(c=>c.t==='trap' && !c.req);
@@ -67,7 +84,7 @@ for(const id of ['meRow','oppRow']) {
 }
 assert.equal(ST_MAX,14); assert.equal(FIELD_MAX,7);
 assert.deepEqual([0,1,2,3,4,5,9,10,14,15,30].map(deckBucket),[0,1,1,3,3,5,5,10,10,15,15]);
-assert.equal(document.querySelectorAll('#market .card-type').length,12);
+assert.equal(document.querySelectorAll('#market .card-type').length,0);
 assert.equal(document.querySelectorAll('#oppRow .buff-icon--trap').length,7);
 assert(!document.querySelector('#rift-me').classList.contains('is-absorbing'));
 g.players[0].removed=[{...mon,uid:'removed-new'}];v.render(g);
@@ -99,7 +116,7 @@ for(const [w,h] of [[1920,1080],[1280,720],[1024,768],[390,844],[320,568],[844,3
 for (const card of document.querySelectorAll('.card[data-card-type]')) {
   const compact = card.matches('.card--field');
   assert(card.querySelector('.card-frame').style.backgroundImage.includes(`${compact?'field':'base'}-${card.dataset.cardType}.png`));
-  for (const seal of card.querySelectorAll('.card-cost,.ad-atk,.ad-def')) assert(seal.querySelector('.seal-value'));
+  for (const seal of card.querySelectorAll('.card-cost,.ad-atk,.ad-def')) { assert(seal.querySelector('.seal-value')); assert(seal.querySelector('.seal-face')); }
 }
 // New basic and nameless faces never embed rules; the inspector always does.
 for(const def of [mon,trap,spell]) {
@@ -124,6 +141,14 @@ assert(timedBuff.getAttribute('aria-label').includes('残り 10ターン'));
 click(timedBuff);assert(document.querySelector('.inspect-state').textContent.includes('経過 3/13ターン'));
 closeZoom();
 assert([...document.querySelectorAll('.buff-icon--trap .buff-cost')].every(e=>e.textContent==='?'));
+// UI classifies by definition, not a persisted 98/1-turn legacy value.
+g.players[0].enchants=[{card:{...DB.NHEAL,uid:'permanent-ui'},turns:98}];v.render(g);
+const permanent=document.querySelector('[data-uid="permanent-ui"]');
+assert(permanent.querySelector('.buff-infinity').src.endsWith('/modular/infinity.png'));
+assert(!permanent.querySelector('.buff-duration'));assert(!permanent.getAttribute('aria-label').includes('98'));
+const statusCard=cardEl({...mon,uid:'status-check',guts:2,decayCnt:1},{field:true,compactField:true,owner:g.players[0]});
+assert(!/\p{Extended_Pictographic}/u.test(statusCard.querySelector('.card-status').textContent));
+assert(statusCard.querySelector('.card-status').textContent.includes('気合 2'));
 // Flights must travel from the deck, restore cards on cancellation, and never reveal opponent identities.
 const originalRect=dom.window.HTMLElement.prototype.getBoundingClientRect;
 dom.window.HTMLElement.prototype.getBoundingClientRect=function(){return new DOMRect(this.closest('.pile')?900:750,this.closest('.pile')?400:650,45,70);};

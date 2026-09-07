@@ -2363,11 +2363,11 @@ export function isChestCard(c: { id: string; star?: string }): boolean {
 }
 
 export function frameFor(t: CardType): string {
-  return `/art/biblion/celestial/base-${t === "mon" ? "mon" : t === "trap" ? "trap" : "spell"}.png`;
+  return `/art/biblion/modular/base-${t === "mon" ? "mon" : t === "trap" ? "trap" : "spell"}.png`;
 }
 /** Compact complete face, shared by field tiles and market thumbnails. */
 export function fieldFrameFor(t: CardType): string {
-  return `/art/biblion/celestial/field-${t === "mon" ? "mon" : t === "trap" ? "trap" : "spell"}.png`;
+  return `/art/biblion/modular/field-${t === "mon" ? "mon" : t === "trap" ? "trap" : "spell"}.png`;
 }
 export const FRAME_BACK = "/frames/sleeve_default.webp";
 
@@ -2380,3 +2380,9 @@ export const SLEEVES: Record<string, Sleeve> = {
 /** ordered list for shop/picker rendering (default first). */
 export const SLEEVE_LIST: Sleeve[] = [SLEEVES.default];
 export function sleeveUrl(_id: string | null | undefined): string { return FRAME_BACK; }
+
+/** 99 is the legacy no-countdown sentinel in card definitions, not a duration.
+ * Read the definition rather than a possibly already-decremented saved counter. */
+export function enchantHasTurnCountdown(card: CardDef): boolean {
+  return !!card.ench && (card.val ?? 1) < 99;
+}

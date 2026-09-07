@@ -363,29 +363,38 @@
   --cw: var(--field-card-size);
   --ch: calc(var(--field-card-size) * 1.25);
 }
-/* Celestial: original generated six-face PNG system, live content only. */
+/* Modular celestial PNGs: independently adjustable name, cost, attack and HP. */
 .card { background:none; border:0; box-shadow:none; }
 .card-frame { z-index:0; border-radius:0; filter:url(#celestial-matte); }
 .card .card-art { z-index:1; inset:0; width:100%; height:100%; border-radius:0; clip-path:url(#celestial-base-spell); }
-.card--mon .card-art { clip-path:url(#celestial-base-mon); }
 .card--field .card-art { clip-path:url(#celestial-field-spell); }
-.card--field.card--mon .card-art { clip-path:url(#celestial-field-mon); }
-.card .card-name { top:8.6%; left:22%; right:22%; height:4.9%; justify-content:center; text-align:center; font-size:.56em; background:none; color:#f7f0e1; text-shadow:0 1px 2px #000; padding:0; white-space:nowrap; }
-.card .card-name--long { font-size:.48em; }
-.card .card-type { position:absolute; z-index:4; top:auto; bottom:12%; left:28%; right:28%; text-align:center; padding:0; color:#fff4df; font-size:.46em; line-height:1; background:none; border:0; white-space:nowrap; text-shadow:0 1px 3px #000,0 0 5px #000; }
-.card .card-cost,.card .ad-atk,.card .ad-def { position:absolute; background:none; border:0; box-shadow:none; border-radius:0; backdrop-filter:none; width:18%; height:12%; aspect-ratio:auto; color:#fff5df; text-shadow:0 1px 3px #000; font-size:1.1em; display:block; padding:0; }
-.card .card-cost { left:3%; top:5.1%; }
-.card .ad-atk { left:5.2%; top:81.8%; bottom:auto; }
-.card .ad-def { left:76.3%; right:auto; top:81.5%; bottom:auto; }
+.card .card-name { top:9%; left:15%; right:11%; height:8.8%; justify-content:center; text-align:center; font-size:.72em; background:none; color:#f7f0e1; text-shadow:0 1px 2px #000; padding:0; white-space:nowrap; }
+.card .card-name--long { font-size:.67em; }
+.card .card-cost,.card .ad-atk,.card .ad-def { position:absolute; z-index:5; background:none; border:0; box-shadow:none; border-radius:0; backdrop-filter:none; height:auto; aspect-ratio:1; color:#fff5df; text-shadow:0 1px 3px #000; font-size:1.25em; display:block; padding:0; }
+.card .card-cost { width:var(--card-cost-size,25%); left:-9%; top:-1%; }
+.card .ad-atk { width:var(--card-attack-size,27%); left:-4%; top:auto; bottom:-2%; }
+.card .ad-def { width:var(--card-health-size,27%); left:auto; right:-4%; top:auto; bottom:-2%; }
 .card .ad-atk::before,.card .ad-def::before { content:none; }
-.seal-value { position:absolute; inset:0; display:grid; place-items:center; line-height:1; font-variant-numeric:tabular-nums; font-family:Georgia,serif; letter-spacing:0; text-indent:0; }
-.card .ad-num--3d { font-size:.62em; }
-.card .card-cost--2d { font-size:.83em; }
-.card--field .card-cost { width:15%; height:12%; left:3.4%; top:4.4%; font-size:.93em; }
-.card--field .ad-atk { width:15%; height:12%; left:4.7%; top:84.2%; font-size:.94em; }
-.card--field .ad-def { width:15%; height:12%; left:80.5%; top:84.0%; font-size:.94em; }
-.card--field .card-type { bottom:12%; font-size:.43em; }
-.card--field .card-status { bottom:22%; }
-.card .tribe-tag,.card .card-status .kw,.card .card-status .ec,.card .badge { background:url(/art/biblion/refined/button-idle.png) center/100% 100%; border:0; border-radius:0; box-shadow:none; }
+.seal-face { position:absolute; inset:0; background:center/100% 100% no-repeat; filter:url(#celestial-matte); }
+.card-cost .seal-face { background-image:url(/art/biblion/modular/cost.png); }
+.ad-atk .seal-face { background-image:url(/art/biblion/modular/attack.png); }
+.ad-def .seal-face { background-image:url(/art/biblion/modular/health.png); }
+.seal-value { position:absolute; inset:15% 13% 19%; display:grid; place-items:center; line-height:1; font-variant-numeric:tabular-nums; font-family:Georgia,serif; letter-spacing:0; text-indent:0; }
+.ad-def .seal-value { inset:18% 18% 27%; }
+.card .ad-num--3d { font-size:.80em; }
+.card .card-cost--2d { font-size:1em; }
+.card--field .card-cost { width:var(--field-cost-size,26%); left:-7%; top:-3%; font-size:1.12em; }
+.card--field .ad-atk,.card--field .ad-def { width:var(--field-combat-size,28%); bottom:-3%; font-size:1.15em; }
+.card--field .card-status { bottom:22%; gap:1px; }
+.card--field .ad-num--3d { font-size:.74em; }
+.card .card-status .kw,.card .card-status .ec,.card .badge { position:relative; background:none; border:0; border-radius:0; box-shadow:none; isolation:isolate; color:#eae1ca; padding:2px 6px; line-height:1.35; text-shadow:0 1px 2px #000; }
+.card .card-status .kw::before,.card .card-status .ec::before,.card .badge::before { content:''; position:absolute; inset:0; z-index:-1; background:url(/art/biblion/modular/plaque.png) center/100% 100%; filter:url(#celestial-matte); }
+.card .badge { position:absolute; }
 
-.card--field .ad-num--3d { font-size:.50em; }
+/* Fit illustration to the art aperture, so the larger title does not crop faces. */
+.card .card-art img { position:absolute; left:7.5%; top:18%; width:85%; height:77%; }
+.card .card-art.has-thumb { background-size:85% 77%; background-position:50% 78%; background-repeat:no-repeat; }
+.card--field .card-art img { top:4.5%; height:91%; }
+.card--field .card-art.has-thumb { background-size:85% 91%; background-position:50% 50%; }
+.card--field .card-status .kw,.card--field .card-status .ec { font-size:max(8px,calc(var(--cw) * .11)); }
+.card .card-status .kw::before,.card .card-status .ec::before,.card .badge::before { background-size:100% 180%; background-position:center 45%; }

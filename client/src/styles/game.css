@@ -409,3 +409,13 @@
 .buff-duration { z-index:3; right:2%; bottom:1%; border:1px solid #b9c7d76b; }
 .buff-icon:focus-visible { outline:1px solid #e7dcbf; outline-offset:3px; }
 @media(min-width:1000px) { .board-col { row-gap:10px; } }
+
+/* Permanent and finite enchantment indicators have distinct generated skins. */
+.buff-cost { width:26%; height:auto; aspect-ratio:1; top:-2%; left:-6%; font-size:10px; }
+.buff-cost::before { content:''; position:absolute; inset:0; background:url(/art/biblion/modular/cost.png) center/100% 100%; filter:url(#celestial-matte); }
+.buff-cost > span { position:relative; z-index:1; }
+.buff-infinity { position:absolute; z-index:4; width:55%; height:55%; object-fit:contain; bottom:-13%; right:-4%; filter:url(#celestial-matte) drop-shadow(0 1px 2px #000); pointer-events:none; }
+.buff-duration,.buff-counter { position:absolute; bottom:-5%; right:-7%; min-width:72%; height:25%; padding:0 4px; z-index:4; border:0; border-radius:0; background:none; display:grid; place-items:center; color:#fff0cd; font-size:clamp(9px,.72vw,12px); font-variant-numeric:tabular-nums; }
+.buff-duration::before,.buff-counter::before { content:''; position:absolute; inset:-15% 0; z-index:-1; background:url(/art/biblion/modular/plaque.png) center/100% 100%; filter:url(#celestial-matte); }
+.buff-counter { right:auto; left:-5%; bottom:15%; min-width:48%; }
+.buff-duration::before,.buff-counter::before { background-size:100% 180%; background-position:center 45%; }

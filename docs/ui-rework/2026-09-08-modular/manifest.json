@@ -1,0 +1,180 @@
+{
+  "date": "2026-09-08",
+  "assets": [
+    {
+      "name": "base-mon",
+      "file": "client/public/art/biblion/modular/base-mon.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-9aee5c2b-7d20-4464-95d1-b26a2cd1344c.png",
+      "prompt": "Keep this exact enlarged-name-plaque frame, all geometry unchanged. Replace ONLY the checkerboard exterior with PERFECT PURE BLACK #000000, including top and bottom corners. Never render a transparency checkerboard. Keep navy art window intact. This is an RGB asset on a pure black matte. No transparency needed. No text, no numbers, no medallions.",
+      "reference": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-34075e73-f7f8-420d-a2eb-623960c28385.png",
+      "sha256": "c35c03edede377527f414e8afd5b0c98acbbc4ff4947eb25a3aa1bee64789be1",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "pngColorType": 2
+    },
+    {
+      "name": "base-spell",
+      "file": "client/public/art/biblion/modular/base-spell.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-3f076163-06e9-4f69-a838-224324d36fd9.png",
+      "prompt": "Keep this exact frame layout and geometry: large wide thick name plaque, no medallions or stat sockets. Change garnet red name plaque and narrow side ribbons to muted sapphire BLUE. Keep ivory/champagne fine metal. Replace exterior checkerboard with solid pure black #000000. Navy art window stays blank and uninterrupted. No symbols, no words, no numbers. Exactly same 1024x1536 composition.",
+      "reference": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-34075e73-f7f8-420d-a2eb-623960c28385.png",
+      "sha256": "d682c2cfda42bc024bc2297b6d24ef11d3e0992d062e72c72212273267e17237",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "pngColorType": 2
+    },
+    {
+      "name": "base-trap",
+      "file": "client/public/art/biblion/modular/base-trap.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-627d8838-e654-452c-b7ef-4500ea72cd46.png",
+      "prompt": "Keep this exact frame layout and geometry: large wide thick name plaque, no medallions or stat sockets. Change garnet red name plaque and narrow side ribbons to restrained deep jade GREEN. Keep ivory/champagne fine metal. Replace exterior checkerboard with solid pure black #000000. Navy art window stays blank and uninterrupted. No symbols, no words, no numbers. Exactly same 1024x1536 composition.",
+      "reference": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-34075e73-f7f8-420d-a2eb-623960c28385.png",
+      "sha256": "dc6d00acf275ca51b6eae2ee8745433a8f7487bd3b12d9651511244bb328023b",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "pngColorType": 2
+    },
+    {
+      "name": "field-mon",
+      "file": "client/public/art/biblion/modular/field-mon.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-24dc9e00-9118-4291-8bff-4002e514326d.png",
+      "prompt": "Edit this nameless field frame. Keep its exact ivory porcelain champagne-metal compass style, garnet side ribbons and 4:5 aspect. REMOVE top left cost circle entirely, REMOVE bottom left attack circle entirely, REMOVE bottom right shield entirely. Replace their occupied regions with smooth continuous thin frame. Huge uninterrupted navy blank art window. No title plaque, no text, no numbers, no sockets, no insignia except tiny compass finials at center top and bottom. Thin beautiful original silhouette. Transparent outside or pure black matte. One frame only, 1120x1400 portrait.",
+      "reference": "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/biblion/celestial/field-mon.png",
+      "sha256": "c45b49828a7b663bd7358b7058d0005647c582695156598baf1dfcd6b994ce0d",
+      "dimensions": [
+        1122,
+        1402
+      ],
+      "pngColorType": 2
+    },
+    {
+      "name": "field-spell",
+      "file": "client/public/art/biblion/modular/field-spell.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-777821a4-dc6f-4ffc-a0f3-5247b74f51bc.png",
+      "prompt": "Keep this exact nameless 4:5 field frame: no name plaque, no medallions or stat sockets. Change only garnet red side ribbons to muted sapphire BLUE. Keep ivory/champagne fine metal and exact geometric silhouette. Pure black #000000 exterior, navy blank art window. No text or symbols added.",
+      "reference": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-24dc9e00-9118-4291-8bff-4002e514326d.png",
+      "sha256": "9e5aed39ff327fac00ef53ffcf66e5804bc82a69de37123743f0e12a1945204e",
+      "dimensions": [
+        1122,
+        1402
+      ],
+      "pngColorType": 2
+    },
+    {
+      "name": "field-trap",
+      "file": "client/public/art/biblion/modular/field-trap.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-1c260f2d-ff9e-4be6-b3b4-ed7f39fcdd3d.png",
+      "prompt": "Keep this exact nameless 4:5 field frame: no name plaque, no medallions or stat sockets. Change only garnet red side ribbons to restrained jade GREEN. Keep ivory/champagne fine metal and exact geometric silhouette. Pure black #000000 exterior, navy blank art window. No text or symbols added.",
+      "reference": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-24dc9e00-9118-4291-8bff-4002e514326d.png",
+      "sha256": "472d7726adca9f17e45f390b21c7c7e64c78efa8bff79a008572c27918660d43",
+      "dimensions": [
+        1122,
+        1402
+      ],
+      "pngColorType": 2
+    },
+    {
+      "name": "cost",
+      "file": "client/public/art/biblion/modular/cost.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-1f7c75fb-5320-4146-baeb-090869dabe18.png",
+      "prompt": "Create one separate COST medallion PNG UI asset matching the reference's ivory porcelain champagne-silver constellation style. A clean round dark navy disc surrounded by a thin ivory and fine champagne metallic ring, minimal tiny compass points at top and bottom. Blank large dark navy center reserved for variable number. No number no text. Orthographic flat frontal game UI, pristine sophisticated anime fantasy craft, subdued, not lavish. Square canvas, disc occupies 90% canvas centered. Transparent background, if impossible pure black exterior. Only one cost medallion, no card frame.",
+      "reference": "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/biblion/celestial/base-mon.png",
+      "sha256": "6a09eb84f3f6b8a44d05ed83d84f0bcae5663ad856e8239a832d1cb8450fc6ed",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pngColorType": 6
+    },
+    {
+      "name": "attack",
+      "file": "client/public/art/biblion/modular/attack.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-8ab31b6c-8b8a-4c98-a5d7-28e569164425.png",
+      "prompt": "Create one separate ATTACK medallion PNG UI asset matching the reference's ivory porcelain champagne-silver constellation style. Blue round medallion with tiny geometric compass diamond tips, ivory and fine champagne metal rim. Blank large softly textured royal blue center reserved for variable number. No number, no text, no weapon icon. Orthographic frontal game UI, pristine restrained elegant anime fantasy. Square canvas centered medallion occupies90%. Transparent background or pure black exterior. ONE standalone attack seal, no card.",
+      "reference": "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/biblion/celestial/base-mon.png",
+      "sha256": "9566dd25dfccb213af69d12cd39b3990ecd91fa0f2f4b7c7a8de640a468adb25",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pngColorType": 6
+    },
+    {
+      "name": "health",
+      "file": "client/public/art/biblion/modular/health.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-6bd3f518-52c2-40c5-b5a7-152ab35a7384.png",
+      "prompt": "Create one separate HP shield medallion PNG UI asset matching reference ivory porcelain champagne-silver constellation style. Restrained garnet red shield with thin ivory porcelain rim and delicate champagne metallic outlines. Blank large garnet red face reserved for variable number, tiny pointed bottom. No number, no text, no symbols. Orthographic frontal game UI, pristine sophisticated restrained anime fantasy, no elaborate wings. Square canvas centered shield90%. Transparent background or pure black exterior. ONE standalone HP seal, no card.",
+      "reference": "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/biblion/celestial/base-mon.png",
+      "sha256": "6914ca7d54cfc6cc0ca12a456acc56be9e9177402d5af2faf4152f0c6f6acfba",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pngColorType": 6
+    },
+    {
+      "name": "infinity",
+      "file": "client/public/art/biblion/modular/infinity.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-e5a7b608-a561-4c1e-86fc-39c576d7935a.png",
+      "prompt": "Keep this exact ivory infinity symbol. REMOVE ALL GLOW AND ALL BROWN GRADIENT BACKGROUND. Every pixel outside the solid ivory/metal symbol, INCLUDING BOTH HOLES INSIDE LOOPS, must be perfectly pure black #000000. Black flat matte only, not transparent, not checkerboard. No drop shadow, no halo, no texture outside the solid symbol. Same frontal single infinity symbol, landscape 1536x1024.",
+      "reference": "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/biblion/celestial/base-mon.png",
+      "sha256": "a179cd5f5ac26db0c102bfc22fe7d278bc21a20146a860acef5e8bae9343fd2f",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "pngColorType": 2
+    },
+    {
+      "name": "plaque",
+      "file": "client/public/art/biblion/modular/plaque.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-21c283e2-e555-4e2d-b398-5bd985842b68.png",
+      "prompt": "One standalone game UI label plaque matching the attached ivory porcelain, fine champagne metal constellation card frame. Very restrained horizontal tablet 3:1 aspect ratio, navy blue flat interior with large empty writing area, thin ivory and silver-champagne outline, tiny elegant geometric end notches, no ornate wings. For duration counters and passive keyword labels: must be highly legible at small size. Absolutely NO letters, no symbols, no numbers. Front orthographic. Plaque fills 95% width, 70% height, centered. Transparent background or pure black outside. Only one tablet, no card, no medallions.",
+      "sha256": "c1c9e4f52b1b07a4ecf4c07f61849db9631a2496b014a2be453695c1c6538227",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "pngColorType": 6
+    }
+  ],
+  "originalDesignPrompts": [
+    {
+      "name": "base-mon",
+      "prompt": "Edit reference frame into a modular production card frame. Preserve exactly its beautiful ivory porcelain and delicate champagne silver constellation metalwork, garnet red side ribbons. REMOVE the top-left cost disc completely and BOTH bottom attack circle and HP shield completely: smooth continuous frame takes their place, zero integrated medallions. Dramatically enlarge the blank garnet NAME PLAQUE across almost the entire width: from x 10% to 90%, with a comfortably thick 10% of image height (y 8% to 18%). Its blank flat writing area must be huge, 75% width. Small restrained top compass finial. Art window starts below name plaque y20% and fills to bottom y94%, navy blank fill. No text no numbers no icons in window. Single portrait frame, 1024x1536, front orthographic, same thin aesthetic. Transparent exterior background; if alpha impossible exterior perfectly pure black. Frame fills canvas except 3% margin. NO cost/stat sockets anywhere.",
+      "reference": "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/biblion/celestial/base-mon.png"
+    },
+    {
+      "name": "field-mon",
+      "prompt": "Edit this nameless field frame. Keep its exact ivory porcelain champagne-metal compass style, garnet side ribbons and 4:5 aspect. REMOVE top left cost circle entirely, REMOVE bottom left attack circle entirely, REMOVE bottom right shield entirely. Replace their occupied regions with smooth continuous thin frame. Huge uninterrupted navy blank art window. No title plaque, no text, no numbers, no sockets, no insignia except tiny compass finials at center top and bottom. Thin beautiful original silhouette. Transparent outside or pure black matte. One frame only, 1120x1400 portrait.",
+      "reference": "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/biblion/celestial/field-mon.png"
+    },
+    {
+      "name": "cost",
+      "prompt": "Create one separate COST medallion PNG UI asset matching the reference's ivory porcelain champagne-silver constellation style. A clean round dark navy disc surrounded by a thin ivory and fine champagne metallic ring, minimal tiny compass points at top and bottom. Blank large dark navy center reserved for variable number. No number no text. Orthographic flat frontal game UI, pristine sophisticated anime fantasy craft, subdued, not lavish. Square canvas, disc occupies 90% canvas centered. Transparent background, if impossible pure black exterior. Only one cost medallion, no card frame.",
+      "reference": "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/biblion/celestial/base-mon.png"
+    },
+    {
+      "name": "attack",
+      "prompt": "Create one separate ATTACK medallion PNG UI asset matching the reference's ivory porcelain champagne-silver constellation style. Blue round medallion with tiny geometric compass diamond tips, ivory and fine champagne metal rim. Blank large softly textured royal blue center reserved for variable number. No number, no text, no weapon icon. Orthographic frontal game UI, pristine restrained elegant anime fantasy. Square canvas centered medallion occupies90%. Transparent background or pure black exterior. ONE standalone attack seal, no card.",
+      "reference": "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/biblion/celestial/base-mon.png"
+    },
+    {
+      "name": "health",
+      "prompt": "Create one separate HP shield medallion PNG UI asset matching reference ivory porcelain champagne-silver constellation style. Restrained garnet red shield with thin ivory porcelain rim and delicate champagne metallic outlines. Blank large garnet red face reserved for variable number, tiny pointed bottom. No number, no text, no symbols. Orthographic frontal game UI, pristine sophisticated restrained anime fantasy, no elaborate wings. Square canvas centered shield90%. Transparent background or pure black exterior. ONE standalone HP seal, no card.",
+      "reference": "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/biblion/celestial/base-mon.png"
+    },
+    {
+      "name": "infinity",
+      "prompt": "Create one separate INFINITY SYMBOL PNG game UI asset matching reference's delicate ivory porcelain and champagne-silver constellation craft. A clean clearly legible horizontal infinity symbol ∞ formed from two looping polished ivory ribbons with a tiny champagne metallic inner edge. Symmetrical, delicate but readable at 20px. No surrounding circle, no panel, no text, no numerals, no additional symbols. Centered on square canvas, symbol width85% height38%. Transparent background or pure black exterior. One original restrained elegant anime fantasy icon.",
+      "reference": "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/biblion/celestial/base-mon.png"
+    }
+  ],
+  "composition": "Original PNGs preserved without pixel edits. Mixed RGBA/RGB sources; generated alpha preserved. Runtime matte filter removes pure black exterior where needed. Artwork/text and 3 numeric seals composed as separate layers."
+}

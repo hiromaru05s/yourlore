@@ -542,7 +542,7 @@ export function cardRulesEl(c: CardInst): HTMLElement {
     const eff = el("div", effCls);
     if (hasCast) {
       // monsters are SUMMONED, spells/traps are CAST — label the play-cost badge accordingly
-      const cast = el("div", "card-cast", `<span class="cc-ico">⚡</span>${t(c.t === "mon" ? "card.summon" : "card.cast")} ${pc}`);
+      const cast = el("div", "card-cast", `${t(c.t === "mon" ? "card.summon" : "card.cast")} ${pc}`);
       cast.title = t(c.t === "mon" ? "card.summon.tip" : "card.cast.tip");
       eff.appendChild(cast);
     }
@@ -584,17 +584,12 @@ export function ensureCardCompositing(): void {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.id = 'celestial-compositing'; svg.setAttribute('aria-hidden','true'); svg.setAttribute('width','0'); svg.setAttribute('height','0');
   svg.style.position = 'absolute'; svg.style.pointerEvents = 'none';
-  const baseTop = 'M .091 .174 Q .16 .17 .215 .147 Q .51 .116 .766 .147 Q .906 .109 .911 .182';
-  const fieldTop = 'M .083 .162 L .18 .152 L .18 .092 Q .55 -.01 .86 .112 Q .922 .14 .922 .187';
-  const baseBottom = 'L .911 .81 Q .874 .817 .85 .796 Q .798 .829 .75 .818 L .75 .901 Q .574 .946 .50 .877 Q .424 .951 .249 .904 Q .256 .87 .215 .838 L .143 .794 L .091 .822 Z';
-  const fieldBottom = 'L .922 .851 L .879 .837 Q .849 .862 .813 .862 L .813 .93 Q .60 .976 .50 .90 Q .43 .966 .192 .93 L .192 .901 L .122 .843 L .083 .875 Z';
-  const plainBottom = 'L .922 .877 Q .927 .931 .87 .937 Q .59 .965 .50 .916 Q .42 .964 .13 .937 Q .083 .93 .083 .88 Z';
+  const baseWindow = 'M .082 .221 Q .082 .177 .134 .202 L .486 .202 L .5 .214 L .514 .202 L .868 .202 Q .925 .177 .922 .221 L .922 .89 Q .928 .932 .878 .94 Q .58 .966 .50 .934 Q .445 .965 .13 .94 Q .077 .933 .082 .887 Z';
+  const fieldWindow = 'M .09 .158 Q .085 .088 .47 .054 L .50 .075 L .53 .054 Q .916 .088 .91 .158 L .91 .88 Q .916 .935 .87 .941 Q .59 .968 .50 .941 Q .42 .967 .13 .941 Q .087 .935 .09 .88 Z';
   svg.innerHTML = `<defs>
     <filter id="celestial-matte" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 10 10 10 0 -0.1" result="matte"/><feComposite in="SourceGraphic" in2="matte" operator="in"/></filter>
-    <clipPath id="celestial-base-mon" clipPathUnits="objectBoundingBox"><path d="${baseTop + baseBottom}"/></clipPath>
-    <clipPath id="celestial-base-spell" clipPathUnits="objectBoundingBox"><path d="${baseTop + plainBottom}"/></clipPath>
-    <clipPath id="celestial-field-mon" clipPathUnits="objectBoundingBox"><path d="${fieldTop + fieldBottom}"/></clipPath>
-    <clipPath id="celestial-field-spell" clipPathUnits="objectBoundingBox"><path d="${fieldTop + plainBottom}"/></clipPath>
+    <clipPath id="celestial-base-spell" clipPathUnits="objectBoundingBox"><path d="${baseWindow}"/></clipPath>
+    <clipPath id="celestial-field-spell" clipPathUnits="objectBoundingBox"><path d="${fieldWindow}"/></clipPath>
   </defs>`;
   document.body.appendChild(svg);
 }
@@ -608,12 +603,10 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   node.dataset.cardType = c.t === "mon" ? "mon" : c.t === "trap" ? "trap" : "spell";
   const labels = getLang() === "ja" ? ["モンスター", "魔法", "罠"] : getLang() === "en" ? ["Monster", "Spell", "Trap"] : ["몬스터", "마법", "함정"];
   const typeIndex = c.t === "mon" ? 0 : c.t === "trap" ? 2 : 1;
-  const typeBadge = el("div", "card-type", `${["⚔", "✦", "◇"][typeIndex]} ${labels[typeIndex]}`);
-  typeBadge.title = labels[typeIndex]; node.appendChild(typeBadge);
 
   if (opt.compactField) node.classList.add("card--field");
   // Complete raster face underneath the illustration and live typography.
-  // The name plaque, cost and combat seals are painted into the PNG; rules live in the inspector.
+  // The frame has its name plaque; cost and combat seals are separate raster layers.
   node.appendChild(artEl(c.id, opt.fullArt, lazyFor(opt.lazyArt), opt.lazyArt !== undefined));
   const frameEl = el("div", "card-frame");
   frameEl.style.backgroundImage = `url(${opt.compactField ? fieldFrameFor(c.t) : frameFor(c.t)})`;
@@ -629,7 +622,11 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const cost = opt.costOverride != null ? opt.costOverride : c.cost;
   const numericSeal = (cls: string, value: number): HTMLElement => {
     const seal = el("div", cls);
-    seal.appendChild(el("span", "seal-value", String(value)));
+    const face = el('span','seal-face'); face.setAttribute('aria-hidden','true');
+    seal.appendChild(face);
+    const label = el('span','seal-value',String(value));
+    if (String(value).length > 3) label.style.fontSize = `${300 / String(value).length}%`;
+    seal.appendChild(label);
     return seal;
   };
   node.appendChild(numericSeal("card-cost" + (cost >= 10 ? " card-cost--2d" : ""), cost));
@@ -668,6 +665,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   // 항상 같은 자리에 둔다. 칩 모양은 확대 화면의 키워드 칩과 동일하다.
   {
     const lang0 = getLang();
+    const label = (ja:string, en:string, ko:string):string => lang0 === 'ja' ? ja : lang0 === 'en' ? en : ko;
     const psvName = (k: string): string | null => {
       const pd = PASSIVES[k];
       return pd ? (lang0 === "ja" ? pd.ja.name : lang0 === "en" ? pd.en.name : pd.ko.name) : null;
@@ -694,17 +692,17 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     }
     // 2) 카운터
     if (opt.field && c.aura === "assassinGuild") {
-      band.appendChild(el("span", "ec ec-d", `⚔${(c as { gcount?: number }).gcount ?? 0}/3`));
+      band.appendChild(el("span", "ec ec-d", `${label('カウント','Count','카운트')} ${(c as { gcount?: number }).gcount ?? 0}/3`));
     }
     if (c.hatchTurns != null) {
       // 알: 필드에서는 실시간 값, 손패/마켓에서는 초기값
       const eggH = (c as { hatch?: number }).hatch ?? c.hatchTurns;
       const eggD = (c as { dur?: number }).dur ?? c.hatchDur ?? 4;
-      band.appendChild(el("span", "ec ec-h", `🥚${eggH}`));
-      band.appendChild(el("span", "ec ec-d", `🛡${Math.max(0, eggD)}`));
+      band.appendChild(el("span", "ec ec-h", `${label('孵化','Hatch','부화')} ${eggH}`));
+      band.appendChild(el("span", "ec ec-d", `${label('耐久','Durability','내구')} ${Math.max(0, eggD)}`));
     } else if (opt.field && c.aura !== "assassinGuild") {
-      if ((fm.guts ?? 0) > 0) band.appendChild(el("span", "ec ec-g", `💢${fm.guts}`));
-      if ((fm.decayCnt ?? 0) > 0) band.appendChild(el("span", "ec ec-x", `☠${fm.decayCnt}/3`));
+      if ((fm.guts ?? 0) > 0) band.appendChild(el("span", "ec ec-g", `${label('気合','Guts','기합')} ${fm.guts}`));
+      if ((fm.decayCnt ?? 0) > 0) band.appendChild(el("span", "ec ec-x", `${label('腐敗','Decay','부패')} ${fm.decayCnt}/3`));
     }
     if (band.childElementCount) node.appendChild(band);
   }

@@ -673,16 +673,16 @@
 
 /* PC card inspection: one art card, one readable translucent rules surface. */
 .zoom-overlay { background:#080e1ebd; backdrop-filter:blur(8px); }
-.zoom-wrap { --inspect-h:min(78vh,780px); width:min(1380px,92vw); height:calc(var(--inspect-h) + 74px); display:grid; grid-template-columns:calc(var(--inspect-h) * .64) minmax(0,1fr); grid-template-rows:58px minmax(0,1fr); gap:16px 32px; align-items:stretch; cursor:default; }
+.zoom-wrap { --inspect-h:min(65vh,640px); width:min(1120px,82vw); height:calc(var(--inspect-h) + 78px); display:grid; grid-template-columns:calc(var(--inspect-h) * .64) minmax(0,1fr); grid-template-rows:58px minmax(0,1fr); gap:20px 42px; align-items:stretch; cursor:default; }
 .inspect-heading { grid-column:1/-1; display:flex; align-items:center; gap:24px; border-bottom:1px solid #c8b99688; padding:0 6px 12px; }
 .inspect-heading h1 { font-family:var(--serif); font-weight:500; font-size:clamp(24px,2.4vw,38px); color:#f5eedf; margin:0; flex:1; }
 .inspect-type { color:#d5cbb5; font-size:15px; letter-spacing:.12em; }
 .inspect-close { width:40px; height:40px; background:transparent; border:1px solid #c8b99666; color:#eee6d5; font-size:26px; cursor:pointer; }
 .inspect-close:hover,.inspect-close:focus-visible { background:#c8b99622; outline:1px solid #e3d7b8; }
 .zoom-wrap > .card { --cw:calc(var(--inspect-h) * .64); --ch:var(--inspect-h); box-shadow:none; align-self:center; }
-.zoom-details { overflow:auto; min-height:0; background:#273144a8; border:1px solid #a4adbb75; outline:1px solid #a4adbb28; outline-offset:-6px; padding:30px 34px; color:#ede8dc; scrollbar-color:#aea38d #172032; }
+.zoom-details { overflow:auto; min-height:0; background:#17213294; border:1px solid #a4adbb75; outline:1px solid #a4adbb28; outline-offset:-6px; padding:28px 32px; color:#ede8dc; scrollbar-color:#aea38d #172032; }
 .zoom-details > * + * { margin-top:24px; padding-top:20px; border-top:1px solid #b9c0cd36; }
-.zoom-details .card-rules { font-size:clamp(16px,1.3vw,20px); line-height:1.9; }
+.zoom-details .card-rules { font-size:clamp(16px,1.15vw,19px); line-height:1.9; }
 .zoom-details .card-cast,.zoom-details .card-keys { position:static; display:flex; flex-wrap:wrap; gap:10px; color:#e2d3aa; background:none; border:0; border-radius:0; box-shadow:none; padding:0; margin:0 0 12px; font-size:inherit; }
 .zoom-details .card-eff-txt { display:block; font-size:inherit; }
 .zoom-details .fx-tag,.zoom-details .kw { background:none; border:0; padding:0; color:#e4d19c; font-size:inherit; }
@@ -693,3 +693,5 @@
 .zoom-details .zoom-tribe .b,.zoom-details .zoom-psv .psv-desc { font-size:14px; line-height:1.8; }
 .zoom-details .zoom-note { position:static; font-size:14px; color:#d9c59b; }
 .inspect-state { color:#d6e8f4; font-size:15px; line-height:1.8; }
+
+.zoom-details .ztc-grid { padding:12px 9px 8px; max-height:none; overflow:visible; }

@@ -13,7 +13,7 @@
 import type {
   Action, CardDef, CardInst, Enchant, FieldMon, GameEvent, GameState, PlayerState, ReduceResult, Side, TrapSet,
 } from "./types";
-import { ALL_IDS, BUYABLE_POOL, DB, STARTERS, TRIBES, DEFAULT_DECK_8, RANDOM_CARDS, sanitizeDeck, hasPassive, PASSIVES , isChestCard } from "./cards";
+import { ALL_IDS, BUYABLE_POOL, DB, STARTERS, TRIBES, DEFAULT_DECK_8, RANDOM_CARDS, sanitizeDeck, hasPassive, PASSIVES , isChestCard, enchantHasTurnCountdown } from "./cards";
 
 // ---------- deterministic PRNG (mulberry32) ----------
 function rand(g: GameState): number {
@@ -1092,7 +1092,7 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
         ctx.log(`<span class="t">${cn(e.card)}</span> <span class="dmg">계약 불이행! ${pl.name} 패배</span>`, `<span class="t">${cn(e.card)}</span> <span class="dmg">契約不履行！ ${pl.name} の敗北</span>`);
         handleDefeat(g, ctx, pl, side(g, opp));
       }
-      if (everyTurn || ownerTurn) {
+      if (enchantHasTurnCountdown(e.card) && (everyTurn || ownerTurn)) {
         e.turns--;
         if (e.turns <= 0) {
           pl.discard.push(e.card);

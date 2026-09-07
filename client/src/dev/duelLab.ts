@@ -36,7 +36,7 @@ if (import.meta.env.DEV) {
   const inst = (id:string):CardInst => ({...(DB[id] || STARTERS[id]),uid:`fixture-${++uid}`});
   for (const [side,p] of g.players.entries()) {
     p.field = mons.slice(side*3, side*3+(dense?7:3)).map(c=>({...inst(c.id),exhausted:side===1,tempAtk:0,atkMod:0,defMod:0,summonedTurn:0}) as FieldMon);
-    p.enchants = spells.slice(0,dense?7:1).map(c=>({card:inst(c.id),turns:99}));
+    p.enchants = [DB.NHEAL,...spells.filter(c=>c.id!=='NHEAL')].slice(0,dense?7:1).map(c=>({card:inst(c.id),turns:c.val||1}));
     p.traps = traps.slice(0,dense?7:1).map(c=>({card:inst(c.id)}));
     p.discard = [...mons.slice(0,5),...spells.slice(0,2)].map(c=>inst(c.id));
     p.removed = [inst(mons[9].id)];
@@ -48,9 +48,10 @@ if (import.meta.env.DEV) {
     const timed=spells.find(c=>c.ench==='ancientCiv')!;
     g.players[0].enchants=[{card:inst(timed.id),turns:99,bornTurn:3},{card:inst(spells[0].id),turns:2}];
     g.players[0].field[0].atk=123;g.players[0].field[0].def=123;
+    g.players[0].field[1].guts=2;g.players[0].field[1].decayCnt=1;
   }
   setMyAvatar('SEEKER_BLUE');setOppAvatar('SEEKER_RED');startBoardLayout();
-  const handlers = {onPlay:async(uid:string)=>{const card=g.players[0].hand.find(c=>c.uid===uid);if(!card)return;if(card.t==='mon'){const ghost=await ghostSummon(card,'me',Math.min(6,g.players[0].field.length));setTimeout(()=>ghost?.remove(),300);}else { await revealSpell(card,'me',card.ench?'field':'discard'); if(card.ench){g.players[0].enchants.push({card,turns:99});render();} }},onBlockedPlay:()=>{},onAttack:()=>{hpFeedback('opp','dmg',4);},onBlockedAttack:()=>{},onReorder:(a:number,b:number)=>{const f=g.players[0].field;f.splice(b,0,f.splice(a,1)[0]);render();},onChooseTarget:()=>{},onBuyMarket:()=>{},onBuySupply:()=>{},onRefresh:()=>{(g.players[0].removed ??= []).push(inst(mons[10].id));render();hpFeedback('me','dmg',3);},onEndTurn:()=>{turnBanner(true,++g.turn);},onSurrender:()=>{location.href='/duel-lab.html'+(dense?'':'?dense=1');}};
+  const handlers = {onPlay:async(uid:string)=>{const card=g.players[0].hand.find(c=>c.uid===uid);if(!card)return;if(card.t==='mon'){const ghost=await ghostSummon(card,'me',Math.min(6,g.players[0].field.length));setTimeout(()=>ghost?.remove(),300);}else { await revealSpell(card,'me',card.ench?'field':'discard'); if(card.ench){g.players[0].enchants.push({card,turns:card.val||1,bornTurn:g.turn});render();} }},onBlockedPlay:()=>{},onAttack:()=>{hpFeedback('opp','dmg',4);},onBlockedAttack:()=>{},onReorder:(a:number,b:number)=>{const f=g.players[0].field;f.splice(b,0,f.splice(a,1)[0]);render();},onChooseTarget:()=>{},onBuyMarket:()=>{},onBuySupply:()=>{},onRefresh:()=>{(g.players[0].removed ??= []).push(inst(mons[10].id));render();hpFeedback('me','dmg',3);},onEndTurn:()=>{turnBanner(true,++g.turn);},onSurrender:()=>{location.href='/duel-lab.html'+(dense?'':'?dense=1');}};
   const view = new GameView(document.getElementById('app')!,0,handlers);
   function render(){view.render(g);}
   render();
