@@ -1,3 +1,4 @@
+import { paintDuelClock } from '../ui/duelClock';
 // ============================================================
 // LORE — game controllers.
 // BaseController turns engine events into log + animation + render.
@@ -623,29 +624,13 @@ export abstract class BaseController implements BoardHandlers {
     const active = this.state.cur === this.you ? "me" : "opp";
     const other = active === "me" ? "opp" : "me";
     const clr = document.getElementById(`clock-${other}`);
-    if (clr) { clr.className = "mp-clock"; clr.replaceChildren(); }
+    if (clr) { clr.className = "mp-clock"; clr.setAttribute("aria-hidden", "true"); clr.replaceChildren(); }
     const el = document.getElementById(`clock-${active}`);
     if (!el) return;
     const total = this.turnTotal;
     const s = Math.max(0, this.timerLeft);
     const mine = active === "me" && !this.state.over;
-    const R = 26, C = 2 * Math.PI * R;
-    let arc = el.querySelector(".tc-arc") as SVGCircleElement | null;
-    let num = el.querySelector(".tc-num") as HTMLElement | null;
-    if (!arc || !num) {
-      el.innerHTML =
-        `<svg viewBox="0 0 64 64" class="tc-svg">` +
-        `<circle class="tc-track" cx="32" cy="32" r="${R}"></circle>` +
-        `<circle class="tc-arc" cx="32" cy="32" r="${R}" stroke-dasharray="${C.toFixed(1)}"></circle>` +
-        `</svg><span class="tc-num"></span>`;
-      arc = el.querySelector(".tc-arc"); num = el.querySelector(".tc-num");
-      if (!arc || !num) return;
-    }
-    el.className = "mp-clock show" + (mine ? " mine" : " opp") + (s <= 5 ? " warn" : "");
-    // fresh turn (full ring) → snap instantly; otherwise let CSS animate the drain
-    arc.style.transition = s >= total ? "none" : "";
-    arc.setAttribute("stroke-dashoffset", (C * (1 - s / total)).toFixed(1));
-    num.textContent = String(s);
+    paintDuelClock(el, s, total, mine);
   }
 
   /** Coin-toss reveal at game start: a two-headed coin — each face is a player's

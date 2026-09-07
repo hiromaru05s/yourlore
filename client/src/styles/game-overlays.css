@@ -636,11 +636,6 @@
   display: none; place-items: center; position: relative;
 }
 .mp-clock.show { display: grid; }
-.mp-clock .tc-svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
-.mp-clock .tc-track { fill: #0b1120cc; stroke: #ffffff1a; stroke-width: 6; }
-.mp-clock .tc-arc { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
-.mp-clock.mine .tc-arc { stroke: var(--blue-hi); filter: drop-shadow(0 0 4px #4fb4ff); }
-.mp-clock.opp .tc-arc { stroke: var(--vermil-hi); filter: drop-shadow(0 0 4px #ff5b45); }
 .mp-clock .tc-num { position: relative; font-family: var(--mono); font-weight: 800; font-size: 15px; color: var(--paper); }
 .mp-clock.warn .tc-num { color: var(--vermil-hi); }
 .mp-clock.warn { animation: clockPulse .55s ease-in-out infinite; }

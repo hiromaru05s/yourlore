@@ -6,6 +6,8 @@ import '../styles/card.css';
 import '../styles/game-overlays.css';
 import '../styles/game.css';
 import '../styles/screens.css';
+import { LocalController } from '../game/controller';
+import { paintDuelClock } from '../ui/duelClock';
 import { createGame } from '../shared/engine';
 import { DB, STARTERS } from '../shared/cards';
 import { GameView, setMyAvatar, setOppAvatar } from '../ui/boardView';
@@ -17,6 +19,12 @@ import type { CardInst, FieldMon } from '../shared/types';
 if (import.meta.env.DEV) {
   setLang('ja');
   localStorage.setItem('lore_help_callout_seen',new Date().toISOString().slice(0,10));
+  if (new URLSearchParams(location.search).has('live')) {
+    setMyAvatar('SEEKER_BLUE');setOppAvatar('SEEKER_RED');
+    const controller=new LocalController(document.getElementById('app')!,{onHome:()=>location.reload(),onRematch:()=>location.reload()},'シーカー',undefined,'easy');
+    const stop=startBoardLayout();
+    window.addEventListener('pagehide',()=>{stop();controller.destroy();},{once:true});
+  } else {
   const dense = new URLSearchParams(location.search).has('dense');
   const g = createGame({mode:'bot',seed:207,starting:0,p0:{id:'fixture-me',name:'シーカー'},p1:{id:'fixture-opp',name:'シーカー'}}).state;
   const mons = Object.values(DB).filter(c=>c.t==='mon' && c.atk && c.def);
@@ -38,4 +46,8 @@ if (import.meta.env.DEV) {
   const view = new GameView(document.getElementById('app')!,0,handlers);
   function render(){view.render(g);}
   render();
+  let remaining=90;
+  const tick=()=>paintDuelClock(document.getElementById('clock-me')!, remaining,90,true);
+  tick(); setInterval(()=>{remaining=remaining>0?remaining-1:90;tick();},1000);
+  }
 }

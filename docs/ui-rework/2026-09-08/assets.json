@@ -1,0 +1,47 @@
+{
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "name": "card-frame",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-a09e4071-ea0c-4c32-bdb4-1661ce00739c.png",
+      "prompt": "Use case: stylized-concept. Production PNG UI asset for LORE Biblion magical library TCG. Generate a single FRONT ORTHOGRAPHIC portrait rectangular card border, aspect 2:3, filling canvas to edges. Exquisitely rendered antique champagne gold with ivory inlay, midnight navy enamel, tiny sapphire highlights, delicate architectural corner filigree and a small eye/compass insignia at bottom. Rich tactile polished metal, restrained premium Japanese fantasy TCG finish, NOT flat vector. CRITICAL entire interior is a single genuinely transparent alpha window from x7% to93%, y5% to95%. Border occupies ONLY outer7% of width and outer5% height, no interior panels or dividers. Outside rounded corners transparent. No card art, no text, no digits, no badges, no cost circles, no other objects, no checkerboard painted into pixels. It must layer over arbitrary card artwork and UI text. Asset only, not mockup.",
+      "installed": "client/public/art/biblion/ui/card-frame.png"
+    },
+    {
+      "name": "portrait-frame",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-a1062947-fa2b-45c9-be79-45f2bd263b44.png",
+      "prompt": "Use case: stylized-concept. Generate a single premium character portrait FRAME UI asset for Biblion magical library fantasy TCG on TRUE TRANSPARENT PNG alpha background. Square canvas. Straight-on, symmetrical ornate antique champagne gold and ivory circular metal bezel with navy enamel and tiny sapphire settings. Outer silhouette includes elegant elongated compass-point tips at top bottom sides, carved architectural flourishes curling beside the ring, small abstract eye crest at bottom. High-end painterly 3D-rendered materials and beautiful directional highlights; rich like flagship fantasy card game UI, not a plain circle. Frame almost fills square canvas (95%). Central circular opening diameter70% canvas MUST be fully transparent alpha. Exterior also transparent, no background, no portrait, no text, no symbols that look like text, no checkerboard image. Keep central aperture completely empty.",
+      "installed": "client/public/art/biblion/ui/portrait-frame.png"
+    },
+    {
+      "name": "mana-filled",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-daf71485-86e6-4e02-80b5-cb83e33d2748.png",
+      "prompt": "Use case: stylized-concept. Single game UI icon, genuine transparent background PNG. Biblion magical library mana crystal FILLED state. Tall faceted luminous sapphire crystal, six sided pointed top and bottom, aspect body about0.6width to1height. Delicate champagne gold tiny base prongs hugging bottom tip only. Vivid cyan luminous core, crisp blue facets, brilliant icy white edge highlights, rich dimensional gem lit fromupperleft. Occupies90% of square image height, centered, clean silhouette legible at18px. No words, digits, backdrop, panel or painted checkerboard. Isolated asset with real alpha.",
+      "installed": "client/public/art/biblion/ui/mana-filled.png"
+    },
+    {
+      "name": "mana-empty",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-4f5bb173-ac74-4b5d-bb6c-62ce95531264.png",
+      "prompt": "Use case: stylized-concept. Single game UI icon, genuine transparent background PNG. Biblion magical library mana crystal EMPTY state. Tall faceted dormant sapphire crystal, six sided pointed top and bottom, aspect body about0.6width to1height. Delicate champagne gold tiny base prongs hugging bottom tip only. Dark translucent navy smoky glass core, crisp desaturated slate blue facets and silver edge highlights; absolutely no emitted light. Rich dimensional gem lit fromupperleft. Occupies90% of square image height, centered, clean silhouette legible at18px. No words, digits, backdrop, panel or painted checkerboard. Isolated asset with real alpha.",
+      "installed": "client/public/art/biblion/ui/mana-empty.png"
+    },
+    {
+      "name": "blink-red",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-8f48cb66-4c90-4b19-972c-1de9a2c07b84.png",
+      "prompt": "Use case: identity-preserve precise expression edit. Input is a two-panel portrait sprite sheet. Output same two square panels side-by-side, exact same dimensions and crop and identity. LEFT panel: preserve the entire input LEFT neutral portrait exactly. RIGHT panel: copy that same LEFT neutral portrait pixel-aligned, changing ONLY eyelids to gently CLOSED for a natural relaxed blink, keep mouth completely identical neutral closed mouth, eyebrows relaxed identical, no pain, no grimace. Both panels identical hair, face position, clothes, lighting, background, camera. This is animation spritesheet, avoid any movement of face silhouette or body or hair between panels. Don't use input right hurt expression. The input LEFT is sole pose reference. Output PNG no labels or frames.",
+      "installed": "client/public/art/biblion/ui/blink-red.png"
+    },
+    {
+      "name": "blink-blue",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-c6278127-d8ef-4670-be50-0f979a1ba75b.png",
+      "prompt": "Use case: identity-preserve precise expression edit. Input is a two-panel portrait sprite sheet. Output same two square panels side-by-side, exact same dimensions and crop and identity. LEFT panel: preserve the entire input LEFT neutral portrait exactly. RIGHT panel: copy that same LEFT neutral portrait pixel-aligned, changing ONLY eyelids to gently CLOSED for a natural relaxed blink, keep mouth completely identical neutral closed mouth, eyebrows relaxed identical, no pain, no grimace. Both panels identical hair, face position, clothes, lighting, background, camera. This is animation spritesheet, avoid any movement of face silhouette or body or hair between panels. Don't use input right hurt expression. The input LEFT is sole pose reference. Output PNG no labels or frames.",
+      "installed": "client/public/art/biblion/ui/blink-blue.png"
+    },
+    {
+      "name": "field-frame",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-441c9818-f3f1-477d-b6f4-22134fd92390.png",
+      "prompt": "Use case: stylized-concept. Create a compact battlefield card frame matching this reference frame's gold, ivory and navy materials, ornate corners and tiny sapphire compass decorations. Reference is style only. Output a SQUARE, front orthographic frame, outer edges fill entire square canvas. Border extremely thin, only outer6% of canvas on each side; transparent inner92% area, no inset panel, no cloudy shadow in aperture. Four small symmetric ornate corners. No center top crest. Tiny bottom eye emblem stays within border. Genuine transparent PNG alpha interior and rounded exterior corners. No text numbers cost circles or art. Rich sculpted fantasy TCG UI border asset, not mockup.",
+      "installed": "client/public/art/biblion/ui/field-frame.png"
+    }
+  ]
+}

@@ -111,35 +111,26 @@ async function focusCard(node: HTMLElement, side: ViewSide): Promise<void> {
   const scale = Math.min(innerHeight * .62 / h, innerWidth * .58 / w, 3.4);
   node.style.transformOrigin = "top left";
   node.classList.add("cast-reveal");
-  const back = backEl(side); back.className = "cast-card-back";
-  back.style.removeProperty("width"); back.style.removeProperty("height");
-  node.appendChild(back);
+  node.style.transform = reduced ? "none" : "perspective(1400px) rotateX(12deg) rotateY(-18deg) scale(.9)";
   node.classList.toggle("fx-opp-cast", side === "opp");
   try {
     await raf();
-    node.style.transition = reduced ? "none" : `left .48s ${EASE}, top .48s ${EASE}, transform .48s ${EASE}`;
+    node.style.transition = reduced ? "none" : `left .42s cubic-bezier(.16,1,.3,1), top .42s cubic-bezier(.16,1,.3,1), transform .5s cubic-bezier(.16,1,.3,1)`;
     node.style.left = `${(innerWidth - w * scale) / 2}px`;
     node.style.top = `${(innerHeight - h * scale) / 2}px`;
-    node.style.transform = `perspective(1100px) rotateY(${reduced ? 0 : 360}deg) scale(${scale})`;
-    await wait(reduced ? 120 : side === "opp" ? 1150 : 850);
-  } finally { veil.remove(); back.remove(); node.classList.remove("cast-reveal"); }
+    node.style.transform = `perspective(1400px) rotateX(0deg) rotateY(0deg) scale(${scale})`;
+    await wait(reduced ? 120 : side === "opp" ? 1050 : 780);
+  } finally { veil.remove(); node.classList.remove("cast-reveal"); }
 }
 function summonDust(rect: DOMRect): void {
   if (fxSkip || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const dust = document.createElement("div"); dust.className = "summon-dust";
-  dust.style.left = `${rect.left + rect.width / 2}px`; dust.style.top = `${rect.bottom - 7}px`;
-  for (let i = 0; i < 7; i++) {
-    const p = document.createElement("i");
-    p.style.setProperty("--dx", `${(i - 3) * 18}px`); p.style.setProperty("--dy", `${-8 - (i % 3) * 7}px`);
-    dust.appendChild(p);
-  }
-  document.body.appendChild(dust); setTimeout(() => dust.remove(), 750);
+  window.dispatchEvent(new CustomEvent("lore:summon-dust", { detail: rect }));
 }
 async function landCard(node: HTMLElement, to: DOMRect, fade = false): Promise<void> {
   const scale = to.width / (node.offsetWidth || 100);
   node.style.transition = `left .3s ${EASE}, top .3s ${EASE}, transform .3s ${EASE}, opacity .3s`;
   node.style.left = `${to.left}px`; node.style.top = `${to.top}px`;
-  node.style.transform = `perspective(1100px) rotateY(360deg) scale(${scale})`;
+  node.style.transform = `perspective(1400px) rotateX(8deg) rotateY(0deg) scale(${scale})`;
   if (fade) node.style.opacity = "0";
   await wait(310);
 }

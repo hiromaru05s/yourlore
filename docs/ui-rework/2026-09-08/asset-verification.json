@@ -1,0 +1,90 @@
+[
+  {
+    "file": "client/public/art/biblion/ui/portrait-frame.png",
+    "mode": "RGBA",
+    "size": [
+      1254,
+      1254
+    ],
+    "bytes": 1654657,
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "centerAlpha": 0
+  },
+  {
+    "file": "client/public/art/biblion/ui/card-frame.png",
+    "mode": "RGBA",
+    "size": [
+      1024,
+      1536
+    ],
+    "bytes": 1525398,
+    "alphaExtrema": [
+      0,
+      254
+    ],
+    "centerAlpha": 0
+  },
+  {
+    "file": "client/public/art/biblion/ui/field-frame.png",
+    "mode": "RGBA",
+    "size": [
+      1254,
+      1254
+    ],
+    "bytes": 788136,
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "centerAlpha": 0
+  },
+  {
+    "file": "client/public/art/biblion/ui/mana-filled.png",
+    "mode": "RGBA",
+    "size": [
+      1254,
+      1254
+    ],
+    "bytes": 809369,
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "centerAlpha": 252
+  },
+  {
+    "file": "client/public/art/biblion/ui/mana-empty.png",
+    "mode": "RGBA",
+    "size": [
+      1254,
+      1254
+    ],
+    "bytes": 951719,
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "centerAlpha": 253
+  },
+  {
+    "file": "client/public/art/biblion/ui/blink-red.png",
+    "mode": "RGB",
+    "size": [
+      1774,
+      887
+    ],
+    "bytes": 2228985
+  },
+  {
+    "file": "client/public/art/biblion/ui/blink-blue.png",
+    "mode": "RGB",
+    "size": [
+      1774,
+      887
+    ],
+    "bytes": 2094045
+  }
+]

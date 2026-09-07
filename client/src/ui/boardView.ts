@@ -70,6 +70,8 @@ export class GameView {
   h: BoardHandlers;
   logEl!: HTMLElement;
   /** battlefield art for THIS match — rolled once at construction (see pickBattlefieldBg) */
+  private disposed = false;
+  private disposeScene?: () => void;
   private readonly battlefieldBg = pickBattlefieldBg();
 
   constructor(root: HTMLElement, you: Side, h: BoardHandlers) {
@@ -77,6 +79,11 @@ export class GameView {
     this.you = you;
     this.h = h;
     this.buildSkeleton();
+    if (typeof WebGL2RenderingContext !== 'undefined') {
+      void import('./duelScene').then(({ mountDuelScene }) => {
+        if (!this.disposed) this.disposeScene = mountDuelScene(this.root);
+      }).catch(() => { /* DOM controls and time remain available without WebGL. */ });
+    }
   }
 
   private buildSkeleton(): void {
@@ -273,6 +280,8 @@ export class GameView {
   private cleanups: Array<() => void> = [];
   /** Detach the window/document-level listeners this view installed. */
   destroy(): void {
+    this.disposed = true;
+    this.disposeScene?.();
     if (this.onLayout) window.removeEventListener("lore:layout", this.onLayout);
     for (const fn of this.cleanups.splice(0)) { try { fn(); } catch { /* already gone */ } }
   }
@@ -969,8 +978,10 @@ export class GameView {
     pile.setAttribute("aria-label", `${tag} ${count}`);
     pile.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpen?.(); } };
     pile.id = id;
-    // stacked-paper depth: a couple of offset shadow layers behind the top card
-    const under = document.createElement("div"); under.className = "pile-under";
+    pile.dataset.count = String(count);
+    pile.dataset.texture = frame || FRAME_BACK;
+    pile.dataset.sleeve = backFor(id.startsWith('pile-my'));
+    // Flat accessible fallback; the scene renders the actual stack/rack when WebGL is available.
     const front = document.createElement("div");
     front.className = "pile-card";
     // 묘지(discard)는 공개 정보 → 맨 위 카드를 "카드 프레임까지 포함한 온전한 앞면"으로
@@ -983,12 +994,7 @@ export class GameView {
     } else if (frame && count) {
       front.style.backgroundImage = `url(${frame})`;
     }
-    pile.append(under, front);
-    if (id.endsWith("Disc")) {
-      const rack = document.createElement("span"); rack.className = "shelf-rack";
-      rack.innerHTML = Array.from({length: Math.min(5, count)}, (_, i) => `<i style="--shelf-i:${i}"></i>`).join("");
-      pile.prepend(rack);
-    }
+    pile.append(front);
     const tg = document.createElement("div"); tg.className = "pile-tag"; tg.textContent = tag; pile.appendChild(tg);
     const cnt = document.createElement("div"); cnt.className = "pile-count"; cnt.textContent = String(count); pile.appendChild(cnt);
     if (faceCard && faceCard.id !== "HIDDEN") bindZoom(pile, faceCard);

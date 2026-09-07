@@ -7,16 +7,27 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 const dom = new JSDOM('<div id="app"></div>',{url:'http://localhost',pretendToBeVisual:true});
 for(const k of ['window','document','HTMLElement','Element','Node','localStorage','navigator','DOMRect','CustomEvent','Event','Image']) Object.defineProperty(globalThis,k,{value:dom.window[k],configurable:true});
+dom.window.Range.prototype.getBoundingClientRect=()=>new dom.window.DOMRect();
+dom.window.Range.prototype.getClientRects=()=>[];
 globalThis.getComputedStyle=dom.window.getComputedStyle.bind(dom.window);
-globalThis.requestAnimationFrame=()=>0;
+globalThis.requestAnimationFrame=cb=>setTimeout(()=>cb(performance.now()),0);
+globalThis.innerWidth=1280;globalThis.innerHeight=720;
 globalThis.cancelAnimationFrame=()=>{};
 globalThis.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
 globalThis.ResizeObserver=class{observe(){} unobserve(){} disconnect(){}};
 const temp=await mkdtemp(path.join(tmpdir(),'lore-ui-'));
-const entry=`export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { createGame } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
+const entry=`export { revealSpell, setFxSkip } from './client/src/ui/anim'; export { paintDuelClock } from './client/src/ui/duelClock'; export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { createGame } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
 await build({stdin:{contents:entry,resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:path.join(temp,'ui.mjs')});
-const {GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
+const {revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
 setLang('ja');
+// Clock values and accessibility survive the absence of a GPU, reconnect totals and expiry.
+const clock=document.createElement('div');clock.setAttribute('aria-hidden','true');
+paintDuelClock(clock,38.1,50,true);
+assert.equal(clock.querySelector('.tc-num').textContent,'39');
+assert.equal(clock.dataset.total,'50');assert.equal(clock.getAttribute('role'),'timer');assert(!clock.hasAttribute('aria-hidden'));
+paintDuelClock(clock,-4,90,false);assert.equal(clock.dataset.remaining,'0');assert(clock.classList.contains('warn'));assert(clock.classList.contains('opp'));
+paintDuelClock(clock,100,100,true);assert(!clock.classList.contains('warn'));assert.equal(clock.querySelectorAll('.hourglass-anchor').length,1);
+
 const g=createGame({mode:'bot',seed:42,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;
 const mon=Object.values(DB).find(c=>c.t==='mon');
 const trap=Object.values(DB).find(c=>c.t==='trap');
@@ -57,6 +68,13 @@ g.cur=1;v.render(g);assert(document.querySelector('#refreshBtn').disabled);asser
 g.cur=0;g.players[0].supply[1]=null;v.render(g);assert.equal(document.querySelectorAll('#supplyMarket > *').length,4);assert.equal(document.querySelectorAll('#supplyMarket > .is-bought').length,1);
 assert.deepEqual(avatarPresets(),['SEEKER_RED','SEEKER_BLUE']);assert(avatarHtml('SEEKER_RED','A').includes('seeker-red'));
 for(const [w,h] of [[1920,1080],[1280,720],[1024,768],[390,844],[320,568],[844,390]]) {const m=solveBoard(w,h);assert(m.tile>=20&&m.mktH>=38);assert.equal(m.underPile,false);}
+// An interrupted reveal must release its overlay, preserve the destination and never trap input.
+const reveal=revealSpell({...spell,uid:'fx-cancel'},'me','discard');
+await new Promise(r=>setTimeout(r,35));
+assert(document.querySelector('.cast-reveal'));assert(document.querySelector('.cast-veil'));
+setFxSkip(true);await reveal;setFxSkip(false);
+assert(!document.querySelector('.cast-reveal'));assert(!document.querySelector('.cast-veil'));
+assert(document.getElementById('pile-myDisc'));
 v.destroy();
 document.getElementById('app').innerHTML='';
 let savedAvatar='SEEKER_BLUE';
