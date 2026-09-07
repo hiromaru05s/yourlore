@@ -398,3 +398,14 @@
  .game .help-fab { left:auto; right:56px; width:30px; }
  .pcluster--opp .pc-side--r { bottom:-21px; }
 }
+
+/* Nameless spell/trap faces retain the smaller 14-slot buff lane. */
+.zone-st .slot,.buff-icon { aspect-ratio:4/5; }
+.buff-icon { background:none; border:0; border-radius:0; box-shadow:none; }
+.buff-frame,.buff-art { position:absolute; inset:0; background-size:100% 100%; background-position:center; pointer-events:none; }
+.buff-frame { filter:url(#celestial-matte); }
+.buff-art { background-size:cover; clip-path:url(#celestial-field-spell); }
+.buff-cost { position:absolute; left:3.4%; top:4.4%; width:15%; height:12%; display:grid; place-items:center; color:#fff6de; font:10px Georgia,serif; line-height:1; z-index:2; }
+.buff-duration { z-index:3; right:2%; bottom:1%; border:1px solid #b9c7d76b; }
+.buff-icon:focus-visible { outline:1px solid #e7dcbf; outline-offset:3px; }
+@media(min-width:1000px) { .board-col { row-gap:10px; } }

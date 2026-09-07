@@ -43,6 +43,12 @@ if (import.meta.env.DEV) {
     p.hp = side?28:32; p.maxMana = dense?30:8; p.mana = dense?23:6;
     p.hand = [inst(mons[0].id),inst(mons[1].id),inst(spells[0].id),...Object.keys(STARTERS).slice(0,3).map(inst)];
   }
+  if (new URLSearchParams(location.search).has('timed')) {
+    g.turn=6;
+    const timed=spells.find(c=>c.ench==='ancientCiv')!;
+    g.players[0].enchants=[{card:inst(timed.id),turns:99,bornTurn:3},{card:inst(spells[0].id),turns:2}];
+    g.players[0].field[0].atk=123;g.players[0].field[0].def=123;
+  }
   setMyAvatar('SEEKER_BLUE');setOppAvatar('SEEKER_RED');startBoardLayout();
   const handlers = {onPlay:async(uid:string)=>{const card=g.players[0].hand.find(c=>c.uid===uid);if(!card)return;if(card.t==='mon'){const ghost=await ghostSummon(card,'me',Math.min(6,g.players[0].field.length));setTimeout(()=>ghost?.remove(),300);}else { await revealSpell(card,'me',card.ench?'field':'discard'); if(card.ench){g.players[0].enchants.push({card,turns:99});render();} }},onBlockedPlay:()=>{},onAttack:()=>{hpFeedback('opp','dmg',4);},onBlockedAttack:()=>{},onReorder:(a:number,b:number)=>{const f=g.players[0].field;f.splice(b,0,f.splice(a,1)[0]);render();},onChooseTarget:()=>{},onBuyMarket:()=>{},onBuySupply:()=>{},onRefresh:()=>{(g.players[0].removed ??= []).push(inst(mons[10].id));render();hpFeedback('me','dmg',3);},onEndTurn:()=>{turnBanner(true,++g.turn);},onSurrender:()=>{location.href='/duel-lab.html'+(dense?'':'?dense=1');}};
   const view = new GameView(document.getElementById('app')!,0,handlers);

@@ -1,0 +1,8 @@
+{
+  "environment": "staging",
+  "domain": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "version": "5cec6127-dbea-4334-bd93-68372a3b5663",
+  "previousVersion": "22dc9c64-52d5-41a9-aba3-a1fe3fe77f43",
+  "allMatched": true
+}

@@ -523,7 +523,84 @@ function artEl(cardId: string, full = false, lazy = false, gallery = false): HTM
   return art;
 }
 
+/** Complete rules, including costs, keyword names and dice tables. Never fitted to card pixels. */
+export function cardRulesEl(c: CardInst): HTMLElement {
+  const pc = playCost(c);
+  // 효과 텍스트: "(시전 N)"/"(소환 N)" 계열 표기는 배지로 대체되므로 제거하고, 구분자를 줄바꿈으로
+  const rawTxt = cardText(c).replace(/\s*\((?:시전|Cast|発動|소환|Summon|召喚)\s*\d+\)/g, "").trim();
+  // dice/chest cards are detected on the RAW text — the separators become newlines
+  // just below, which would destroy the " / " that delimits the outcome rows
+  const table = rawTxt && rawTxt !== "—" ? parseDiceTable(rawTxt) : null;
+  let txt = rawTxt
+    .replace(/ · /g, "\n")
+    .replace(/ \/ /g, "\n")
+    .trim();
+  const hasCast = c.t !== "starter" && pc !== c.cost;
+  const keyChips = cardPassives(c);
+  if ((txt && txt !== "—") || hasCast || keyChips.length) {
+    const effCls = "card-rules";
+    const eff = el("div", effCls);
+    if (hasCast) {
+      // monsters are SUMMONED, spells/traps are CAST — label the play-cost badge accordingly
+      const cast = el("div", "card-cast", `<span class="cc-ico">⚡</span>${t(c.t === "mon" ? "card.summon" : "card.cast")} ${pc}`);
+      cast.title = t(c.t === "mon" ? "card.summon.tip" : "card.cast.tip");
+      eff.appendChild(cast);
+    }
+    if (keyChips.length) {
+      const lang2 = getLang();
+      const row = el("div", "card-keys" + (txt && txt !== "—" ? "" : " card-keys--only"));
+      for (const k of keyChips) {
+        const pd = PASSIVES[k];
+        if (!pd) continue;
+        // data-psv keeps the zoom view's keyword panel highlight working
+        row.appendChild(el("span", "kw psv", lang2 === "ja" ? pd.ja.name : lang2 === "en" ? pd.en.name : pd.ko.name)).setAttribute("data-psv", k);
+      }
+      if (row.childElementCount) eff.appendChild(row);
+    }
+    // Effect body follows the keyword labels.
+    if (table) {
+      if (table.head) eff.appendChild(el("div", "card-dice-head", decorateTags(table.head)));
+      const tb = el("div", "card-dice");
+      for (const [roll, fx] of table.rows) {
+        const row = el("div", "dr");
+        row.appendChild(el("span", "dr-roll", roll));
+        row.appendChild(el("span", "dr-fx", decorateTags(fx)));
+        tb.appendChild(row);
+      }
+      eff.appendChild(tb);
+    } else if (txt && txt !== "—") {
+      eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${decorateTags(decoratePassives(c, txt))}</span>`));
+    }
+    return eff;
+  }
+  const empty = el("div", "card-rules card-rules--empty");
+  empty.textContent = getLang() === 'ja' ? '追加効果なし' : getLang() === 'en' ? 'No additional effect' : '추가 효과 없음';
+  return empty;
+}
+
+/** Only compositing geometry: the frame, plaque and seals are generated PNG art. */
+export function ensureCardCompositing(): void {
+  if (document.getElementById('celestial-compositing')) return;
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.id = 'celestial-compositing'; svg.setAttribute('aria-hidden','true'); svg.setAttribute('width','0'); svg.setAttribute('height','0');
+  svg.style.position = 'absolute'; svg.style.pointerEvents = 'none';
+  const baseTop = 'M .091 .174 Q .16 .17 .215 .147 Q .51 .116 .766 .147 Q .906 .109 .911 .182';
+  const fieldTop = 'M .083 .162 L .18 .152 L .18 .092 Q .55 -.01 .86 .112 Q .922 .14 .922 .187';
+  const baseBottom = 'L .911 .81 Q .874 .817 .85 .796 Q .798 .829 .75 .818 L .75 .901 Q .574 .946 .50 .877 Q .424 .951 .249 .904 Q .256 .87 .215 .838 L .143 .794 L .091 .822 Z';
+  const fieldBottom = 'L .922 .851 L .879 .837 Q .849 .862 .813 .862 L .813 .93 Q .60 .976 .50 .90 Q .43 .966 .192 .93 L .192 .901 L .122 .843 L .083 .875 Z';
+  const plainBottom = 'L .922 .877 Q .927 .931 .87 .937 Q .59 .965 .50 .916 Q .42 .964 .13 .937 Q .083 .93 .083 .88 Z';
+  svg.innerHTML = `<defs>
+    <filter id="celestial-matte" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 10 10 10 0 -0.1" result="matte"/><feComposite in="SourceGraphic" in2="matte" operator="in"/></filter>
+    <clipPath id="celestial-base-mon" clipPathUnits="objectBoundingBox"><path d="${baseTop + baseBottom}"/></clipPath>
+    <clipPath id="celestial-base-spell" clipPathUnits="objectBoundingBox"><path d="${baseTop + plainBottom}"/></clipPath>
+    <clipPath id="celestial-field-mon" clipPathUnits="objectBoundingBox"><path d="${fieldTop + fieldBottom}"/></clipPath>
+    <clipPath id="celestial-field-spell" clipPathUnits="objectBoundingBox"><path d="${fieldTop + plainBottom}"/></clipPath>
+  </defs>`;
+  document.body.appendChild(svg);
+}
+
 export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
+  ensureCardCompositing();
   const typeClass = c.t === "mon" ? "card--mon" : c.t === "trap" ? "card--trap" : c.t === "starter" ? "card--starter" : "card--spell";
   const sizeClass = opt.size === "mkt" ? "card--mkt" : opt.size === "hand" ? "card--hand" : "";
   const node = el("div", `card ${typeClass} ${sizeClass}`.trim());
@@ -536,10 +613,10 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
 
   if (opt.compactField) node.classList.add("card--field");
   // Complete raster face underneath the illustration and live typography.
-  // Name/effect plates and all frame geometry are painted into the PNG.
+  // The name plaque, cost and combat seals are painted into the PNG; rules live in the inspector.
   node.appendChild(artEl(c.id, opt.fullArt, lazyFor(opt.lazyArt), opt.lazyArt !== undefined));
   const frameEl = el("div", "card-frame");
-  frameEl.style.backgroundImage = `url(${opt.compactField || opt.size === "mkt" ? fieldFrameFor(c.t) : frameFor(c.t)})`;
+  frameEl.style.backgroundImage = `url(${opt.compactField ? fieldFrameFor(c.t) : frameFor(c.t)})`;
   node.appendChild(frameEl);
 
   if (opt.playable) node.classList.add("is-playable");
@@ -556,10 +633,10 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     return seal;
   };
   node.appendChild(numericSeal("card-cost" + (cost >= 10 ? " card-cost--2d" : ""), cost));
-  const pc = playCost(c);
   const nm = cardName(c);
   const nameEl2 = el("div", "card-name" + (nm.length >= 9 ? " card-name--long" : ""), nm);
-  node.appendChild(nameEl2);
+  if (!opt.compactField) node.appendChild(nameEl2);
+  node.setAttribute("aria-label", `${nm} · ${labels[typeIndex]} · ${cost}`);
 
   if (c.t === "mon") {
     const a = opt.field && opt.owner ? effAtk(opt.owner, c as FieldMon) : c.atk!;
@@ -632,71 +709,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     if (band.childElementCount) node.appendChild(band);
   }
   // 이름도 실측-축소: 긴 이름(EN 포함)이 프레임 이름판을 벗어나지 않게
-  fitToBox(nameEl2, { solo: !!opt.fullArt });
-  // 효과 텍스트: "(시전 N)"/"(소환 N)" 계열 표기는 배지로 대체되므로 제거하고, 구분자를 줄바꿈으로
-  const rawTxt = cardText(c).replace(/\s*\((?:시전|Cast|発動|소환|Summon|召喚)\s*\d+\)/g, "").trim();
-  // dice/chest cards are detected on the RAW text — the separators become newlines
-  // just below, which would destroy the " / " that delimits the outcome rows
-  const table = rawTxt && rawTxt !== "—" ? parseDiceTable(rawTxt) : null;
-  let txt = rawTxt
-    .replace(/ · /g, "\n")
-    .replace(/ \/ /g, "\n")
-    .trim();
-  const hasCast = c.t !== "starter" && pc !== c.cost;
-  // Passive keywords live on their own chip row instead of being buried in the
-  // sentence (rule R3). The row is a CHILD of .card-eff on purpose: that box is
-  // already clipped to the frame's text plate and already auto-fitted, so adding
-  // keywords can never push anything outside the card art.
-  const keyChips = cardPassives(c);
-  // The square field tile has no text plate (CSS hides it) — building one anyway
-  // put zero-sized boxes into the shared size groups and skewed the group size
-  // for every real card on screen.
-  if (!opt.compactField && ((txt && txt !== "—") || hasCast || keyChips.length)) {
-    // No length buckets: every effect plate starts at the SAME CSS size and
-    // fitToBox + the size-group pass decide the final one. The old --small/--tiny
-    // buckets gave cards different starting sizes, so the "one size per screen"
-    // pass could never actually land on one size.
-    const effCls = "card-eff";
-    const eff = el("div", effCls);
-    if (hasCast) {
-      // monsters are SUMMONED, spells/traps are CAST — label the play-cost badge accordingly
-      const cast = el("div", "card-cast", `<span class="cc-ico">⚡</span>${t(c.t === "mon" ? "card.summon" : "card.cast")} ${pc}`);
-      // instant tooltip anchored to the card (not inside the clipped .card-eff)
-      const tip = el("div", "cast-tip", t(c.t === "mon" ? "card.summon.tip" : "card.cast.tip"));
-      node.appendChild(tip);
-      cast.addEventListener("pointerenter", () => tip.classList.add("show"));
-      cast.addEventListener("pointerleave", () => tip.classList.remove("show"));
-      eff.appendChild(cast);
-    }
-    if (keyChips.length) {
-      const lang2 = getLang();
-      const row = el("div", "card-keys" + (txt && txt !== "—" ? "" : " card-keys--only"));
-      for (const k of keyChips) {
-        const pd = PASSIVES[k];
-        if (!pd) continue;
-        // data-psv keeps the zoom view's keyword panel highlight working
-        row.appendChild(el("span", "kw psv", lang2 === "ja" ? pd.ja.name : lang2 === "en" ? pd.en.name : pd.ko.name)).setAttribute("data-psv", k);
-      }
-      if (row.childElementCount) eff.appendChild(row);
-    }
-    // effect text LAST: keywords are labels and must survive the .is-clipped fade,
-    // which always eats the tail of the plate
-    if (table) {
-      if (table.head) eff.appendChild(el("div", "card-dice-head", decorateTags(table.head)));
-      const tb = el("div", "card-dice");
-      for (const [roll, fx] of table.rows) {
-        const row = el("div", "dr");
-        row.appendChild(el("span", "dr-roll", roll));
-        row.appendChild(el("span", "dr-fx", decorateTags(fx)));
-        tb.appendChild(row);
-      }
-      eff.appendChild(tb);
-    } else if (txt && txt !== "—") {
-      eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${decorateTags(decoratePassives(c, txt))}</span>`));
-    }
-    fitToBox(eff, { solo: !!opt.fullArt }); // 실측 자동 축소 — 어떤 길이의 효과도 항상 프레임 텍스트판 안에
-    node.appendChild(eff);
-  }
+  if (!opt.compactField) fitToBox(nameEl2, { solo: !!opt.fullArt });
   if (opt.badge) node.appendChild(el("span", "badge", opt.badge));
   // tribe info is shown BESIDE the card in the zoom view (see anim.zoomCard),
   // so no on-art tribe button here (keeps the art clean).

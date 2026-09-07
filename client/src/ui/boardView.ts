@@ -5,10 +5,10 @@
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem, marketStockOf } from "../shared/engine";
-import { frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
+import { fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
-import { artUrl, cardEl, prefetchZoomArt } from "./cardView";
+import { artUrl, cardEl, ensureCardCompositing, prefetchZoomArt } from "./cardView";
 import { bindZoom, zoomCard, setPlayOrigin } from "./anim";
 import { t, getLang, esc, cardName } from "../i18n";
 import { logToEn } from "../shared/logEn";
@@ -467,14 +467,13 @@ export class GameView {
     // spell/trap zone
     const sz = document.createElement("div");
     sz.className = "zone zone-st";
+    ensureCardCompositing();
     const trapLabel = t("duel.setTrap");
     p.traps.forEach((t) => {
-      // Set traps stay face-down for BOTH players — but NOT as a card back or a
-      // green frame: a dedicated owner-coloured trap-jaw icon tile (mine = blue,
-      // opponent = red). Identity is still revealed only by the reveal flow.
+      // Generic trap icon and unknown cost preserve hidden identity for both players.
       const tile = document.createElement("div");
       tile.className = "buff-icon buff-icon--trap";
-      tile.style.backgroundImage = `url(${refinedArt("trap-seal")})`;
+      tile.innerHTML = `<span class="buff-frame" style="background-image:url(${fieldFrameFor('trap')})"></span><span class="buff-art" style="background-image:url(${refinedArt('trap-seal')})"></span><span class="buff-cost" aria-hidden="true">?</span>`;
       tile.title = trapLabel;
       tile.setAttribute("aria-label", trapLabel);
       // v30 카운터 배지 — 카운트다운(⏳남은 턴) / 정보상(×남은 사용 횟수).
@@ -488,27 +487,30 @@ export class GameView {
       sz.appendChild(tile);
     });
     p.enchants.forEach((e) => {
-      // 영구(99) 영구마법은 턴 배지를 아예 표시하지 않는다 — 기한부만 남은 턴을 크게 표시 (v21 UX)
-      // 혈귀술/고대 문명처럼 turns=99지만 bornTurn 기준 N턴 후 사라지는 카드도 남은 턴을 보여준다
       const lim = e.card.ench ? ENCH_TURN_LIMITS[e.card.ench] : undefined;
-      const rem = e.turns < 99 ? e.turns : lim != null ? Math.max(0, (e.bornTurn ?? 0) + lim - g.turn) : null;
-      // 완전 영구는 ∞ 배지 — "언제 사라지나?"를 보드에서 바로 답한다. 기한부는 남은 턴 카운트다운.
-      // 카운터 보유 영구마법(상회/양조)은 카운터 수를 병기한다.
-      const bits: string[] = [rem != null ? `⏳${rem}` : "∞"];
+      const elapsed = lim != null ? Math.max(0, g.turn - (e.bornTurn ?? 0)) : null;
+      const rem = e.turns < 99 ? e.turns : lim != null ? Math.max(0, lim - elapsed!) : null;
+      const bits = [elapsed != null ? `${Math.min(elapsed,lim!)}/${lim}` : rem != null ? `⏳${rem}` : '∞'];
       if (e.cnt != null && e.cnt > 0) bits.push(`×${e.cnt}`);
-      const card = document.createElement("div");
-      card.className = "buff-icon buff-icon--spell";
+      const lang = getLang();
+      const state = elapsed != null
+        ? (lang === 'ja' ? `経過 ${elapsed}/${lim}ターン · 残り ${rem}ターン` : lang === 'en' ? `Elapsed ${elapsed}/${lim} turns · ${rem} remaining` : `경과 ${elapsed}/${lim}턴 · 남은 ${rem}턴`)
+        : rem != null ? (lang === 'ja' ? `残り ${rem}ターン` : lang === 'en' ? `${rem} turns remaining` : `남은 ${rem}턴`)
+        : (lang === 'ja' ? '永続魔法' : lang === 'en' ? 'Permanent spell' : '지속 마법');
+      const stateText = state + (e.cnt ? ` · ×${e.cnt}` : '');
+      const card = document.createElement('div');
+      card.className = 'buff-icon buff-icon--spell';
       card.dataset.uid = e.card.uid;
-      card.style.backgroundImage = `url(${artUrl.full(e.card.id)})`;
       card.tabIndex = 0;
-      card.setAttribute("role", "button");
-      card.setAttribute("aria-label", `${cardName(e.card)} ${bits.join(" ")}`);
-      card.innerHTML = `<span class="buff-duration">${bits.join(" ")}</span><span class="buff-kind" aria-hidden="true">✦</span>`;
-      card.onclick = () => zoomCard(e.card);
-      card.onkeydown = ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); zoomCard(e.card); } };
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', `${cardName(e.card)} ${stateText}`);
+      card.title = `${cardName(e.card)} · ${stateText}`;
+      card.innerHTML = `<span class="buff-frame" style="background-image:url(${fieldFrameFor('spell')})"></span><span class="buff-art" style="background-image:url(${artUrl.full(e.card.id)})"></span><span class="buff-cost" aria-hidden="true">${e.card.cost}</span><span class="buff-duration">${bits.join(' ')}</span>`;
+      card.onclick = () => zoomCard(e.card, undefined, stateText);
+      card.onkeydown = ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); zoomCard(e.card, undefined, stateText); } };
       if (rem != null) { card.classList.add("ench-timed"); if (rem <= 1) card.classList.add("ench-expiring"); }
       else card.classList.add("ench-perm");
-      bindZoom(card, e.card);
+      bindZoom(card, e.card, undefined, stateText);
       sz.appendChild(card);
     });
     for (let i = p.traps.length + p.enchants.length; i < ST_SLOTS; i++) sz.appendChild(this.slotEl());

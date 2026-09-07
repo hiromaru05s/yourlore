@@ -4,8 +4,8 @@
 // ============================================================
 import type { CardInst } from "../shared/types";
 import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, cardPassives } from "../shared/cards";
-import { cardEl, prefetchZoomArt } from "./cardView";
-import { t, getLang, cardText } from "../i18n";
+import { cardEl, cardRulesEl, prefetchZoomArt } from "./cardView";
+import { t, getLang, cardText, cardName } from "../i18n";
 
 export type ViewSide = "me" | "opp";
 
@@ -405,20 +405,36 @@ function miniCardGrid(ids: string[]): HTMLElement {
 }
 
 // right-click to enlarge any card
-export function zoomCard(c: CardInst, hp?: { now: number; max: number }): void {
+export function zoomCard(c: CardInst, hp?: { now: number; max: number }, stateText?: string): void {
   closeZoom();
   const ov = document.createElement("div");
   ov.className = "zoom-overlay";
   ov.id = "zoomOverlay";
   const wrap = document.createElement("div");
   wrap.className = "zoom-wrap";
+  ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
+  ov.setAttribute('aria-label', cardName(c));
+  const heading = document.createElement('header'); heading.className = 'inspect-heading';
+  const title = document.createElement('h1'); title.textContent = cardName(c);
+  const type = document.createElement('span'); type.className = 'inspect-type';
+  const labels = getLang() === 'ja' ? ['モンスター','魔法','罠'] : getLang() === 'en' ? ['Monster','Spell','Trap'] : ['몬스터','마법','함정'];
+  type.textContent = labels[c.t === 'mon' ? 0 : c.t === 'trap' ? 2 : 1];
+  const close = document.createElement('button'); close.className = 'inspect-close'; close.textContent = '×';
+  close.setAttribute('aria-label', getLang() === 'ja' ? '閉じる' : getLang() === 'en' ? 'Close' : '닫기');
+  close.onclick = closeZoom;
+  heading.append(title, type, close); wrap.append(heading);
+  const details = document.createElement('section'); details.className = 'zoom-details'; details.tabIndex = 0;
+  details.setAttribute('aria-label', getLang() === 'ja' ? 'カード効果と関連情報' : getLang() === 'en' ? 'Card rules and related information' : '카드 효과와 관련 정보');
+  if (stateText) { const state = document.createElement('div'); state.className = 'inspect-state'; state.textContent = stateText; details.append(state); }
+  details.append(cardRulesEl(c));
+  details.onclick = e => e.stopPropagation();
   wrap.appendChild(cardEl(c, { fullArt: true, ...(hp ? { hpNow: hp.now, hpMax: hp.max } : {}) }));
   // "(지속)" 스탯 변화 카드: 필드에 있는 동안만 유지된다는 각주
   if (/\((?:지속|持続|lasting)\)/.test(cardText(c))) {
     const note = document.createElement("div");
     note.className = "zoom-note";
     note.textContent = t("card.dur.note");
-    wrap.appendChild(note);
+    details.appendChild(note);
   }
   // 패시브 키워드 패널: 카드가 가진 패시브(부여분 포함)의 이름+설명을 우측에 표시.
   // 카드 텍스트의 키워드명을 hover(터치: 탭)하면 해당 설명이 하이라이트된다.
@@ -433,9 +449,9 @@ export function zoomCard(c: CardInst, hp?: { now: number; max: number }): void {
       const loc = lang0 === "ja" ? p.ja : lang0 === "en" ? p.en : p.ko;
       return `<div class="psv-item" data-psv="${k}"><b class="psv-name">${loc.name}</b><div class="psv-desc">${loc.desc}</div></div>`;
     }).join("");
-    wrap.appendChild(panel);
+    details.appendChild(panel);
     // hover/탭 → 우측 설명 하이라이트 (카드 텍스트 안의 .psv 스팬과 연결)
-    wrap.querySelectorAll<HTMLElement>(".psv").forEach((sp) => {
+    details.querySelectorAll<HTMLElement>(".psv").forEach((sp) => {
       const key = sp.dataset.psv!;
       const item = panel.querySelector<HTMLElement>(`.psv-item[data-psv="${key}"]`);
       if (!item) return;
@@ -458,7 +474,7 @@ export function zoomCard(c: CardInst, hp?: { now: number; max: number }): void {
       box.appendChild(miniCardGrid(members));
       panel.appendChild(box);
     }
-    wrap.appendChild(panel);
+    details.appendChild(panel);
   }
   // cards that SUMMON or REFERENCE other specific cards → show those cards
   const related = relatedCardIds(c.id);
@@ -467,19 +483,30 @@ export function zoomCard(c: CardInst, hp?: { now: number; max: number }): void {
     panel.className = "zoom-tribe zoom-related";
     panel.innerHTML = `<h3>${t("card.related")}</h3><div class="ztc-head" style="margin-top:2px">${t("card.related.sub")}</div>`;
     panel.appendChild(miniCardGrid(related));
-    wrap.appendChild(panel);
+    details.appendChild(panel);
   }
   if (c.star === "chest") {
     const odds = CHEST_ODDS[getLang()];
     const panel = document.createElement("div");
     panel.className = "zoom-tribe";
     panel.innerHTML = `<h3>${odds.title}</h3>` + odds.rows.map((r) => `<div class="b">• ${r}</div>`).join("");
-    wrap.appendChild(panel);
+    details.appendChild(panel);
   }
+  wrap.append(details);
   ov.appendChild(wrap);
   ov.onclick = closeZoom;
   ov.oncontextmenu = (e) => { e.preventDefault(); closeZoom(); };
   document.body.appendChild(ov);
+  ov.onkeydown = e => {
+    if (e.key === 'Escape') { e.stopPropagation(); closeZoom(); }
+    if (e.key === 'Tab') {
+      const focusable = Array.from(ov.querySelectorAll<HTMLElement>('button,[tabindex="0"]'));
+      const first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+    }
+  };
+  close.focus({ preventScroll: true });
 }
 export function closeZoom(): void {
   document.getElementById("zoomOverlay")?.remove();
@@ -489,8 +516,8 @@ export function closeZoom(): void {
  * Bind "enlarge" to an element: right-click on desktop, long-press on touch.
  * A long-press swallows the tap so it does NOT also play/attack with the card.
  */
-export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; max: number }): void {
-  el.oncontextmenu = (e) => { e.preventDefault(); zoomCard(card, hp); };
+export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; max: number }, stateText?: string): void {
+  el.oncontextmenu = (e) => { e.preventDefault(); zoomCard(card, hp, stateText); };
   // Intent, not speculation: by the time a pointer is resting on a card, a
   // right-click or a 380ms long-press is at most a few hundred ms away. Start
   // the full-resolution art then, so the overlay has it by the time it opens.
@@ -504,7 +531,7 @@ export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; ma
     fired = false;
     sx = e.touches[0].clientX; sy = e.touches[0].clientY;
     clearTimeout(timer);
-    timer = window.setTimeout(() => { fired = true; zoomCard(card, hp); }, 380);
+    timer = window.setTimeout(() => { fired = true; zoomCard(card, hp, stateText); }, 380);
   }, { passive: true });
   const cancel = () => clearTimeout(timer);
   el.addEventListener("touchmove", (e) => {

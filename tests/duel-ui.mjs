@@ -16,9 +16,9 @@ globalThis.cancelAnimationFrame=()=>{};
 globalThis.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
 globalThis.ResizeObserver=class{observe(){} unobserve(){} disconnect(){}};
 const temp=await mkdtemp(path.join(tmpdir(),'lore-ui-'));
-const entry=`export { BaseController } from './client/src/game/controller'; export { revealSpell, setFxSkip, animateDraw } from './client/src/ui/anim'; export { paintDuelClock } from './client/src/ui/duelClock'; export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { cardPickerMulti, closeOverlay } from './client/src/ui/modal'; export { deckBucket } from './client/src/ui/duelMaterials'; export { createGame, reduce, ST_MAX, FIELD_MAX } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
+const entry=`export { BaseController } from './client/src/game/controller'; export { cardEl, cardRulesEl } from './client/src/ui/cardView'; export { zoomCard, closeZoom, revealSpell, setFxSkip, animateDraw } from './client/src/ui/anim'; export { paintDuelClock } from './client/src/ui/duelClock'; export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { cardPickerMulti, closeOverlay } from './client/src/ui/modal'; export { deckBucket } from './client/src/ui/duelMaterials'; export { createGame, reduce, ST_MAX, FIELD_MAX } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
 await build({stdin:{contents:entry,resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:path.join(temp,'ui.mjs')});
-const {BaseController,animateDraw,cardPickerMulti,closeOverlay,deckBucket,reduce,ST_MAX,FIELD_MAX,revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
+const {cardEl,cardRulesEl,zoomCard,closeZoom,BaseController,animateDraw,cardPickerMulti,closeOverlay,deckBucket,reduce,ST_MAX,FIELD_MAX,revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
 setLang('ja');
 // Clock values and accessibility survive the absence of a GPU, reconnect totals and expiry.
 const clock=document.createElement('div');clock.setAttribute('aria-hidden','true');
@@ -97,10 +97,33 @@ assert.deepEqual(avatarPresets(),['SEEKER_RED','SEEKER_BLUE']);assert(avatarHtml
 for(const [w,h] of [[1920,1080],[1280,720],[1024,768],[390,844],[320,568],[844,390]]) {const m=solveBoard(w,h);assert(m.tile>=20&&m.mktH>=38);assert.equal(m.underPile,false);}
 // Complete type-specific PNG faces and live numeric overlays survive rendering.
 for (const card of document.querySelectorAll('.card[data-card-type]')) {
-  const compact = card.matches('.card--field,.card--mkt');
-  assert(card.querySelector('.card-frame').style.backgroundImage.includes(`${compact?'compact':'frame'}-${card.dataset.cardType}.png`));
+  const compact = card.matches('.card--field');
+  assert(card.querySelector('.card-frame').style.backgroundImage.includes(`${compact?'field':'base'}-${card.dataset.cardType}.png`));
   for (const seal of card.querySelectorAll('.card-cost,.ad-atk,.ad-def')) assert(seal.querySelector('.seal-value'));
 }
+// New basic and nameless faces never embed rules; the inspector always does.
+for(const def of [mon,trap,spell]) {
+ const inst={...def,uid:'inspect-'+def.id};
+ const basic=cardEl(inst), field=cardEl(inst,{compactField:true});
+ assert(basic.querySelector('.card-name'));assert(!field.querySelector('.card-name'));
+ assert(!basic.querySelector('.card-eff'));assert(!field.querySelector('.card-eff'));
+ zoomCard(inst);
+ assert(document.querySelector('.zoom-wrap > .card .card-name'));
+ assert(document.querySelector('.zoom-details .card-rules'));
+ assert.equal(document.querySelectorAll('.zoom-details').length,1);
+ document.querySelector('.inspect-close').dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
+ assert(!document.getElementById('zoomOverlay'));
+}
+const timed=Object.values(DB).find(c=>c.ench==='ancientCiv');
+assert(timed);
+g.turn=6;g.players[0].enchants=[{card:{...timed,uid:'elapsed-test'},turns:99,bornTurn:3}];
+v.render(g);
+const timedBuff=document.querySelector('[data-uid="elapsed-test"]');
+assert.equal(timedBuff.querySelector('.buff-duration').textContent,'3/13');
+assert(timedBuff.getAttribute('aria-label').includes('残り 10ターン'));
+click(timedBuff);assert(document.querySelector('.inspect-state').textContent.includes('経過 3/13ターン'));
+closeZoom();
+assert([...document.querySelectorAll('.buff-icon--trap .buff-cost')].every(e=>e.textContent==='?'));
 // Flights must travel from the deck, restore cards on cancellation, and never reveal opponent identities.
 const originalRect=dom.window.HTMLElement.prototype.getBoundingClientRect;
 dom.window.HTMLElement.prototype.getBoundingClientRect=function(){return new DOMRect(this.closest('.pile')?900:750,this.closest('.pile')?400:650,45,70);};

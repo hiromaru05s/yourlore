@@ -2363,11 +2363,11 @@ export function isChestCard(c: { id: string; star?: string }): boolean {
 }
 
 export function frameFor(t: CardType): string {
-  return `/art/biblion/card-polish/frame-${t === "mon" ? "mon" : t === "trap" ? "trap" : "spell"}.png`;
+  return `/art/biblion/celestial/base-${t === "mon" ? "mon" : t === "trap" ? "trap" : "spell"}.png`;
 }
 /** Compact complete face, shared by field tiles and market thumbnails. */
 export function fieldFrameFor(t: CardType): string {
-  return `/art/biblion/card-polish/compact-${t === "mon" ? "mon" : t === "trap" ? "trap" : "spell"}.png`;
+  return `/art/biblion/celestial/field-${t === "mon" ? "mon" : t === "trap" ? "trap" : "spell"}.png`;
 }
 export const FRAME_BACK = "/frames/sleeve_default.webp";
 
