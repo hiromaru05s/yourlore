@@ -70,20 +70,12 @@ function fromRect(side: ViewSide, org: PlayOrigin | null): DOMRect | null {
   if (org) return new DOMRect(org.left, org.top, org.width, org.height);
   return handRect(side);
 }
-/** Slight lean matching the horizontal drag direction (deg), so the card keeps
- *  the momentum of the flick instead of snapping to a neutral upright pose. */
-function dragTilt(org: PlayOrigin | null): number {
-  if (!org) return 0;
-  const d = Math.max(-16, Math.min(16, (org.dx / 90) * 16));
-  return Math.abs(d) < 1 ? 0 : d;
-}
 const handRect = (side: ViewSide): DOMRect | null => rectOf(side === "me" ? "#hand" : "#oppHand");
 const rowRect = (side: ViewSide): DOMRect | null => rectOf(side === "me" ? "#meRow" : "#oppRow");
 const discId = (side: ViewSide): string => (side === "me" ? "pile-myDisc" : "pile-oppDisc");
 function trapZoneRect(side: ViewSide): DOMRect | null {
   const row = document.getElementById(side === "me" ? "meRow" : "oppRow");
-  const zones = row ? row.querySelectorAll(".zone") : null;
-  return zones && zones[1] ? (zones[1] as Element).getBoundingClientRect() : rowRect(side);
+  return row?.querySelector(".zone-st")?.getBoundingClientRect() ?? rowRect(side);
 }
 /** Place a node as a fixed-position floating overlay at a rect (top-left). */
 function floatAt(node: HTMLElement, rect: { left: number; top: number }): HTMLElement {
@@ -97,81 +89,89 @@ function floatAt(node: HTMLElement, rect: { left: number; top: number }): HTMLEl
   document.body.appendChild(node);
   return node;
 }
-function backEl(): HTMLElement {
+function backEl(side: ViewSide = "me"): HTMLElement {
   const d = document.createElement("div");
   d.className = "card card--back";
-  d.style.backgroundImage = `url(${FRAME_BACK})`;
+  const pile = document.querySelector(side === "me" ? "#pile-myDeck .pile-card" : "#pile-oppDeck .pile-card");
+  d.style.backgroundImage = pile ? getComputedStyle(pile).backgroundImage : `url(${FRAME_BACK})`;
   d.style.width = "var(--card-w-hand)";
   d.style.height = "var(--card-h-hand)";
   return d;
 }
 
-/** Opponent (or you) played a SPELL: reveal it from hand, hold face-up, then send to discard (or fade into field). */
-export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish"): Promise<void> {
-  const org = takeOrigin(side);
-  const from = fromRect(side, org); const row = rowRect(side);
-  if (!from || !row) return;
-  const node = floatAt(cardEl(card, { size: "hand" }), from);
-  const tilt = dragTilt(org);
-  if (tilt) node.style.transform = `rotate(${tilt}deg)`;
-  // 상대가 쓴 카드는 "작게 지나가서 뭘 냈는지 모르겠다"는 피드백 → 상대 카드는
-  // 화면 정중앙으로 크게(scale 2) 줌인해 한참 머무르며 읽을 시간을 준다.
-  const opp = side !== "me";
-  const cx = opp ? window.innerWidth / 2 - 50 : row.left + row.width / 2 - 50;
-  const cy = opp ? window.innerHeight / 2 - 78 : row.top + row.height / 2 - 78;
-  await raf();
-  node.style.transition = `left .38s ${EASE}, top .38s ${EASE}, transform .38s ${EASE}`;
-  node.style.left = cx + "px"; node.style.top = cy + "px"; node.style.transform = opp ? "scale(2)" : "scale(1.25)"; // settles upright from the drag lean
-  if (opp) node.classList.add("fx-opp-cast"); // glow ring so the reveal reads as "enemy played this"
-  await wait(opp ? 2600 : 650); // opponent's card lingers so you can read it
-  if (dest === "discard") {
-    const to = rectOf("#" + discId(side));
-    if (to) { node.style.transition = `left .45s ${EASE}, top .45s ${EASE}, transform .45s ${EASE}, opacity .45s`; node.style.left = to.left + "px"; node.style.top = to.top + "px"; node.style.transform = "scale(.45)"; node.style.opacity = "0"; }
-    await wait(460); pileFlash(discId(side));
-  } else if (dest === "vanish") {
-    node.classList.add("fx-dissolve"); // e.g. Cull: removed from the deck entirely
-    await wait(440);
-  } else {
-    node.style.transition = `transform .3s ${EASE}, opacity .3s`; node.style.transform = "scale(.9)"; node.style.opacity = "0";
-    await wait(320);
+/** The card takes focus across the screen, then returns to its destination.
+ * All waits use the existing fast-forward mechanism; the overlay never takes input. */
+async function focusCard(node: HTMLElement, side: ViewSide): Promise<void> {
+  if (fxSkip) return;
+  const veil = document.createElement("div"); veil.className = "cast-veil";
+  document.body.appendChild(veil);
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const w = node.offsetWidth || 100;
+  const h = node.offsetHeight || 156;
+  const scale = Math.min(innerHeight * .62 / h, innerWidth * .58 / w, 3.4);
+  node.style.transformOrigin = "top left";
+  node.classList.add("cast-reveal");
+  const back = backEl(side); back.className = "cast-card-back";
+  back.style.removeProperty("width"); back.style.removeProperty("height");
+  node.appendChild(back);
+  node.classList.toggle("fx-opp-cast", side === "opp");
+  try {
+    await raf();
+    node.style.transition = reduced ? "none" : `left .48s ${EASE}, top .48s ${EASE}, transform .48s ${EASE}`;
+    node.style.left = `${(innerWidth - w * scale) / 2}px`;
+    node.style.top = `${(innerHeight - h * scale) / 2}px`;
+    node.style.transform = `perspective(1100px) rotateY(${reduced ? 0 : 360}deg) scale(${scale})`;
+    await wait(reduced ? 120 : side === "opp" ? 1150 : 850);
+  } finally { veil.remove(); back.remove(); node.classList.remove("cast-reveal"); }
+}
+function summonDust(rect: DOMRect): void {
+  if (fxSkip || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const dust = document.createElement("div"); dust.className = "summon-dust";
+  dust.style.left = `${rect.left + rect.width / 2}px`; dust.style.top = `${rect.bottom - 7}px`;
+  for (let i = 0; i < 7; i++) {
+    const p = document.createElement("i");
+    p.style.setProperty("--dx", `${(i - 3) * 18}px`); p.style.setProperty("--dy", `${-8 - (i % 3) * 7}px`);
+    dust.appendChild(p);
   }
-  node.remove();
+  document.body.appendChild(dust); setTimeout(() => dust.remove(), 750);
 }
-
-/** Opponent (or you) SUMMONED a monster: fly the card from hand to its field slot, then a lively pop. */
+async function landCard(node: HTMLElement, to: DOMRect, fade = false): Promise<void> {
+  const scale = to.width / (node.offsetWidth || 100);
+  node.style.transition = `left .3s ${EASE}, top .3s ${EASE}, transform .3s ${EASE}, opacity .3s`;
+  node.style.left = `${to.left}px`; node.style.top = `${to.top}px`;
+  node.style.transform = `perspective(1100px) rotateY(360deg) scale(${scale})`;
+  if (fade) node.style.opacity = "0";
+  await wait(310);
+}
+export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish"): Promise<void> {
+  const from = fromRect(side, takeOrigin(side)); if (!from) return;
+  const node = floatAt(cardEl(card, {size:"hand"}), from);
+  try {
+    await focusCard(node, side);
+    const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
+    if (to) await landCard(node, to, true);
+    if (dest === "discard") pileFlash(discId(side));
+  } finally { node.remove(); }
+}
 export async function summonFromHand(card: CardInst, uid: string, side: ViewSide): Promise<void> {
-  const org = takeOrigin(side);
-  const from = fromRect(side, org); const node = byUid(uid); const to = rectOf(node);
-  if (!from || !to || !node) { summonIn(uid); return; }
-  node.style.visibility = "hidden";
-  const ghost = floatAt(cardEl(card, { size: "hand" }), from);
-  const tilt = dragTilt(org);
-  if (tilt) ghost.style.transform = `rotate(${tilt}deg)`;
-  await raf();
-  ghost.style.transition = `left .32s ${EASE}, top .32s ${EASE}, transform .32s ${EASE}`;
-  ghost.style.left = to.left + "px"; ghost.style.top = to.top + "px"; ghost.style.transform = "scale(.82)";
-  await wait(330);
-  ghost.remove();
-  node.style.visibility = "";
-  node.classList.add("summon-pop");
-  setTimeout(() => node.classList.remove("summon-pop"), 560);
+  const from = fromRect(side, takeOrigin(side)); const target = byUid(uid); const to = rectOf(target);
+  if (!from || !to || !target) { summonIn(uid); return; }
+  const ghost = floatAt(cardEl(card, {size:"hand"}), from); target.style.visibility = "hidden";
+  try { await focusCard(ghost, side); await landCard(ghost, to); summonDust(to); }
+  finally { ghost.remove(); target.style.visibility = ""; }
 }
-
-/** A face-down trap was set: slide a card-back from hand into the trap zone. */
+/** Face-down plays reveal only the sleeve, never a trap's identity. */
 export async function trapSetAnim(side: ViewSide): Promise<void> {
-  const org = takeOrigin(side);
-  const from = fromRect(side, org); const to = trapZoneRect(side);
+  const from = fromRect(side, takeOrigin(side));
+  const zone = document.querySelector(side === "me" ? "#meRow .zone-st" : "#oppRow .zone-st");
+  const to = zone?.querySelector(".slot")?.getBoundingClientRect() ?? trapZoneRect(side);
   if (!from || !to) return;
-  const back = floatAt(backEl(), from);
-  const tilt = dragTilt(org);
-  if (tilt) back.style.transform = `rotate(${tilt}deg)`;
-  await raf();
-  back.style.transition = `left .34s ${EASE}, top .34s ${EASE}, transform .34s ${EASE}`;
-  back.style.left = (to.left + to.width / 2 - 24) + "px"; back.style.top = to.top + "px"; back.style.transform = "scale(.7)";
-  await wait(360);
-  back.classList.add("trap-land");
-  await wait(260);
-  back.remove();
+  const node = floatAt(backEl(side), from);
+  try {
+    await focusCard(node, side);
+    const size = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--field-card-size")) || 60;
+    await landCard(node, new DOMRect(to.left, to.top, size, size * .7), true);
+  } finally { node.remove(); }
 }
 
 /** A trap fired: flip it face-up at the trap zone, hold, then send to discard. */
@@ -219,6 +219,11 @@ export function floatNum(anchor: Element | null, text: string, kind: "dmg" | "he
 }
 
 export function hpFeedback(side: ViewSide, kind: "dmg" | "heal", amount: number): void {
+  if (kind === "dmg" && amount > 0) {
+    const portrait = document.getElementById(side === "me" ? "portraitMe" : "portraitOpp");
+    portrait?.classList.remove("is-hurt");
+    if (portrait) { void portrait.offsetWidth; portrait.classList.add("is-hurt"); setTimeout(() => portrait.classList.remove("is-hurt"), 680); }
+  }
   const bar = document.getElementById("hpbar-" + side);
   const num = document.getElementById("hp-" + side);
   if (bar) { bar.classList.add("shake"); setTimeout(() => bar.classList.remove("shake"), 400); }
@@ -545,20 +550,16 @@ function monSlotRect(side: ViewSide, index: number): DOMRect | null {
  * ghost node so a same-batch destroy can kill it visibly.
  */
 export async function ghostSummon(card: CardInst, side: ViewSide, slotIndex: number): Promise<HTMLElement | null> {
-  const from = handRect(side);
-  const slot = monSlotRect(side, slotIndex);
+  const from = fromRect(side, takeOrigin(side)); const slot = monSlotRect(side, slotIndex);
   if (!from || !slot) return null;
   const node = floatAt(cardEl(card, { size: "hand" }), from);
-  node.style.transformOrigin = "top left";
-  await raf();
-  const w = node.getBoundingClientRect().width || 100;
-  node.style.transition = `left .34s ${EASE}, top .34s ${EASE}, transform .34s ${EASE}`;
-  node.style.left = slot.left + "px";
-  node.style.top = slot.top + "px";
-  node.style.transform = `scale(${slot.width / w})`;
-  await wait(360);
-  node.classList.add("fx-ghost-pop");
-  return node;
+  await focusCard(node, side);
+  await landCard(node, slot);
+  summonDust(slot);
+  // Replace the reveal face with a field-sized tile until the state re-render.
+  const tile = floatAt(cardEl(card, {compactField:true}), slot);
+  node.remove(); tile.classList.add("fx-ghost-pop");
+  return tile;
 }
 
 /** Kill a summon ghost: death flash then fly a card frame to that side's discard. */
@@ -601,7 +602,12 @@ export async function resultPopup(title: string, lines: string[], mine: boolean,
 export function hpBarSet(side: ViewSide, hp: number, maxHp: number): void {
   const num = document.getElementById("hp-" + side);
   if (num) num.textContent = String(Math.max(0, hp));
-  const fill = document.getElementById("hpbar-" + side)?.querySelector("i") as HTMLElement | null;
+  const meter = document.getElementById("hpbar-" + side);
+  meter?.setAttribute("aria-valuenow", String(Math.max(0, hp)));
+  meter?.setAttribute("aria-valuemax", String(maxHp));
+  const max = document.querySelector(`#portrait${side === "me" ? "Me" : "Opp"} .pt-hp-max`);
+  if (max) max.textContent = `/${maxHp}`;
+  const fill = meter?.querySelector("i") as HTMLElement | null;
   if (fill) fill.style.width = Math.max(0, Math.min(100, (Math.max(0, hp) / Math.max(1, maxHp)) * 100)) + "%";
 }
 

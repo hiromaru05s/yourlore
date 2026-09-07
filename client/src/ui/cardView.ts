@@ -3,7 +3,7 @@
 // (board / market / hand / pile / zoom) so sizing stays consistent.
 // ============================================================
 import type { CardInst, FieldMon, PlayerState } from "../shared/types";
-import { FRAME_BACK, frameFor, fieldFrameFor, PASSIVES, cardPassives } from "../shared/cards";
+import { FRAME_BACK, PASSIVES, cardPassives } from "../shared/cards";
 import { curHp, effAtk, effDef, playCost } from "../shared/engine";
 import { cardName, cardText, getLang, t } from "../i18n";
 import { parseDiceTable } from "../shared/cardText";
@@ -536,7 +536,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const frameEl = el("div", "card-frame");
   // square field tiles use the dedicated 1254 square frames; everything else
   // (hand / market / zoom / deck-builder) keeps the vertical card frames
-  frameEl.style.backgroundImage = `url(${opt.compactField ? fieldFrameFor(c.t) : frameFor(c.t)})`;
+  // Biblion frame is resolution-independent CSS; artwork remains a separate layer.
   node.appendChild(frameEl);
 
   if (opt.playable) node.classList.add("is-playable");

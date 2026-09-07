@@ -26,11 +26,12 @@ export function mountGame(app: App, opts: GameOpts): Screen {
   const dks = app.user?.decks;
   setMarketWatch(dks?.list?.[dks.sel]?.watch ?? null);
   // coin-toss faces = the two players' profile avatars (opponent falls back to initial)
+  const ownSeeker = app.user?.avatar === "SEEKER_RED" ? "SEEKER_RED" : "SEEKER_BLUE";
   setCoinProfiles(
-    { avatar: app.user?.avatar ?? null, name: app.user?.display ?? "YOU" },
+    { avatar: ownSeeker, name: app.user?.display ?? "YOU" },
     opts.mode === "online"
-      ? { avatar: opts.oppAvatar ?? null, name: opts.oppName }
-      : { avatar: null, name: opts.mode === "tutorial" ? "TUTOR" : "BOT" },
+      ? { avatar: opts.oppAvatar === "SEEKER_BLUE" ? "SEEKER_BLUE" : "SEEKER_RED", name: opts.oppName }
+      : { avatar: "SEEKER_RED", name: opts.mode === "tutorial" ? "TUTOR" : "BOT" },
   );
 
   const exits: ControllerExits = {

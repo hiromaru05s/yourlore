@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-09-07T14:56:34.499Z",
+  "host": "https://test.yourlore.xyz",
+  "entryMatches": true,
+  "results": [
+    {
+      "url": "/assets/index-CxCgxYVZ.js",
+      "status": 200,
+      "bytes": 988520,
+      "hashMatches": true
+    },
+    {
+      "url": "/assets/index-YWF7P6uA.css",
+      "status": 200,
+      "bytes": 115141,
+      "hashMatches": true
+    },
+    {
+      "url": "/art/biblion/duel-table.png",
+      "status": 200,
+      "bytes": 2100390,
+      "hashMatches": true
+    },
+    {
+      "url": "/art/biblion/seeker-red.png",
+      "status": 200,
+      "bytes": 2247659,
+      "hashMatches": true
+    },
+    {
+      "url": "/art/biblion/seeker-blue.png",
+      "status": 200,
+      "bytes": 2148692,
+      "hashMatches": true
+    }
+  ],
+  "ok": true
+}

@@ -1,0 +1,78 @@
+// DOM regressions for the Biblion redesign; no network or account required.
+import assert from 'node:assert/strict';
+import { build } from 'esbuild';
+import { JSDOM } from 'jsdom';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+const dom = new JSDOM('<div id="app"></div>',{url:'http://localhost',pretendToBeVisual:true});
+for(const k of ['window','document','HTMLElement','Element','Node','localStorage','navigator','DOMRect','CustomEvent','Event','Image']) Object.defineProperty(globalThis,k,{value:dom.window[k],configurable:true});
+globalThis.getComputedStyle=dom.window.getComputedStyle.bind(dom.window);
+globalThis.requestAnimationFrame=()=>0;
+globalThis.cancelAnimationFrame=()=>{};
+globalThis.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
+globalThis.ResizeObserver=class{observe(){} unobserve(){} disconnect(){}};
+const temp=await mkdtemp(path.join(tmpdir(),'lore-ui-'));
+const entry=`export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { createGame } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
+await build({stdin:{contents:entry,resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:path.join(temp,'ui.mjs')});
+const {GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
+setLang('ja');
+const g=createGame({mode:'bot',seed:42,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;
+const mon=Object.values(DB).find(c=>c.t==='mon');
+const trap=Object.values(DB).find(c=>c.t==='trap');
+const spell=Object.values(DB).find(c=>c.ench);
+for(const [i,p] of g.players.entries()){
+ p.maxMana=30;p.mana=23;p.hp=20;
+ p.field=Array.from({length:7},(_,n)=>({...mon,uid:`mon-${i}-${n}`,exhausted:false,tempAtk:0,atkMod:0,defMod:0,summonedTurn:0}));
+ p.traps=Array.from({length:3},(_,n)=>({card:{...trap,uid:`secret-${i}-${n}`}}));
+ p.enchants=Array.from({length:4},(_,n)=>({card:{...spell,uid:`spell-${i}-${n}`},turns:99}));
+ p.discard=[{...mon,uid:`discard-${i}`}];
+}
+setMyAvatar('SEEKER_RED');setOppAvatar('SEEKER_BLUE');
+let boughtFixed=-1,boughtSupply=-1,rerolls=0;
+const noop=()=>{};
+const v=new GameView(document.getElementById('app'),0,{onPlay:noop,onBlockedPlay:noop,onAttack:noop,onBlockedAttack:noop,onReorder:noop,onChooseTarget:noop,onBuyMarket:i=>boughtFixed=i,onBuySupply:i=>boughtSupply=i,onRefresh:()=>rerolls++,onEndTurn:noop,onSurrender:noop});
+v.render(g);
+for(const id of ['meRow','oppRow']) {
+ assert.equal(document.querySelectorAll(`#${id} .zone-mon > .card`).length,7);
+ assert.equal(document.querySelectorAll(`#${id} .zone-st > .card`).length,7);
+ assert.equal(document.querySelector(`#${id} .pile-col`).children[0].classList.contains('pile--deck'),true);
+ assert.equal(document.querySelector(`#${id} .pile-col`).children[1].classList.contains('pile--shelf'),true);
+}
+assert.equal(document.querySelectorAll('.mana-crystal').length,60);
+assert.equal(document.querySelectorAll('#portraitMe .mana-crystal.is-lit').length,23);
+assert.equal(document.querySelector('#hpbar-me').getAttribute('aria-valuenow'),'20');
+assert.equal(document.querySelector('#hpbar-me i').style.width,'50%');
+assert.equal(document.querySelectorAll('#fixedMarket > .card').length,8);
+assert.equal(document.querySelectorAll('#supplyMarket > .card').length,4);
+assert.deepEqual([...document.querySelectorAll('#supplyMarket .mkt-stock')].map(e=>e.textContent),['×1','×1','×1','×1']);
+assert.equal(document.querySelectorAll('.side-rail').length,0);
+assert.equal(document.querySelector('#oppRow [data-uid^="secret"]'),null,'hidden trap identity stays private');
+const click=el=>el.dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true}));
+const fixed=document.querySelector('#fixedMarket > .card');click(fixed);click(fixed);click(fixed);assert.equal(boughtFixed,0);
+const sup=document.querySelector('#supplyMarket > .card');const original=Number(sup.dataset.supIdx);click(sup);click(sup);click(sup);assert.equal(boughtSupply,original,'sorting keeps original supply index');
+click(document.querySelector('#refreshBtn'));assert.equal(rerolls,1);
+v.setHandOpen(true);assert(document.querySelector('.game.hand-open'));v.setHandOpen(false);assert(!document.querySelector('.game.hand-open'));
+g.cur=1;v.render(g);assert(document.querySelector('#refreshBtn').disabled);assert(document.querySelector('#endBtn').disabled);
+g.cur=0;g.players[0].supply[1]=null;v.render(g);assert.equal(document.querySelectorAll('#supplyMarket > *').length,4);assert.equal(document.querySelectorAll('#supplyMarket > .is-bought').length,1);
+assert.deepEqual(avatarPresets(),['SEEKER_RED','SEEKER_BLUE']);assert(avatarHtml('SEEKER_RED','A').includes('seeker-red'));
+for(const [w,h] of [[1920,1080],[1280,720],[1024,768],[390,844],[320,568],[844,390]]) {const m=solveBoard(w,h);assert(m.tile>=20&&m.mktH>=38);assert.equal(m.underPile,false);}
+v.destroy();
+document.getElementById('app').innerHTML='';
+let savedAvatar='SEEKER_BLUE';
+const profile={self:true,id:'test',display:'Seeker',avatar:savedAvatar,created_at:Date.now(),wins:0,losses:0,recent:[],ranked_wins:0,ranked_losses:0,bot_wins:0,bot_losses:0};
+api.profile=async()=>({...profile,avatar:savedAvatar});
+api.updateMe=async(patch)=>{savedAvatar=patch.avatar;return {ok:true,display:'Seeker',avatar:savedAvatar,stats_public:true,sleeve:'default'};};
+const app={root:document.getElementById('app'),user:{avatar:savedAvatar},home:noop};
+const screen=mountProfile(app);
+await new Promise(r=>setTimeout(r,10));
+click(document.querySelector('#avaBtn'));
+assert.equal(document.querySelectorAll('.seeker-picker .ava-opt').length,2);
+click(document.querySelector('[data-id="SEEKER_RED"]'));
+await new Promise(r=>setTimeout(r,10));
+assert.equal(savedAvatar,'SEEKER_RED');assert.equal(app.user.avatar,'SEEKER_RED');
+assert(document.querySelector('#avaBtn .seeker-red'),'profile re-renders persisted selection');
+screen.destroy?.();
+dom.window.close();await rm(temp,{recursive:true,force:true});
+console.log('PASS: zones, secret traps, market stock/index/confirmation, turn restrictions, 30 mana, HP, avatars, hand states, viewport sizes');
+process.exit(0);

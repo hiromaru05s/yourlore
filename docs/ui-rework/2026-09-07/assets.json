@@ -1,0 +1,35 @@
+{
+  "date": "2026-09-07",
+  "purpose": "Biblion staging duel redesign production assets",
+  "references": [
+    "user reference: Codex Image Sep 7, 2026, 10_01_02 PM.png",
+    "docs/characters/2026-09-07-approved/red-reader.png",
+    "docs/characters/2026-09-07-approved/blue-reader.png"
+  ],
+  "generation": {
+    "tool": "built-in image_gen",
+    "table": "Empty shallow-perspective ivory marble table, navy Biblion library perimeter, antique gold, no baked UI/cards/text/characters.",
+    "portraits": "Two equal square portraits in a 2:1 sheet; left neutral, right pained; match approved character identity and clothing. Dark navy library backdrop; no labels or frames."
+  },
+  "files": [
+    {
+      "file": "client/public/art/biblion/duel-table.png",
+      "width": 1672,
+      "height": 941,
+      "sha256": "fdc997bc036c20eb6d582ae2dea398ccd062a4828942400dae1aab1ea701c62d"
+    },
+    {
+      "file": "client/public/art/biblion/seeker-blue.png",
+      "width": 1774,
+      "height": 887,
+      "sha256": "4b7aa38df5d1ac37c9a1737bf38bedcd6c2f8ea5d5a921d81ebf9b6e3ee0736a"
+    },
+    {
+      "file": "client/public/art/biblion/seeker-red.png",
+      "width": 1774,
+      "height": 887,
+      "sha256": "c8a9b7f6517bd561f0ef55d27ac9cd11b3712db3177857561338cb0ca96595d7"
+    }
+  ],
+  "rendering": "Sprite backgrounds use 200% 100%; left neutral / right hurt. All UI labels, prices, stats, stocks, frames and resources are live DOM/CSS."
+}

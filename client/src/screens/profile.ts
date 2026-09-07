@@ -368,8 +368,8 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     ov.innerHTML = `
       <div class="modal ava-modal">
         <h2>${t("profile.avatar.pick")}</h2>
-        <div class="ava-grid">
-          ${ids.map((id) => `<button class="ava-opt ${p.avatar === id ? "sel" : ""}" data-id="${id}">${avatarHtml(id, "", 56)}</button>`).join("")}
+        <div class="ava-grid seeker-picker">
+          ${ids.map((id) => `<button class="ava-opt ${p.avatar === id ? "sel" : ""}" data-id="${id}">${avatarHtml(id, "", 128)}<span>${id === "SEEKER_RED" ? "RED" : "BLUE"}</span></button>`).join("")}
         </div>
         <div class="modal-row"><button class="btn btn-ghost btn-block" id="avaClose">${t("common.cancel")}</button></div>
       </div>`;
