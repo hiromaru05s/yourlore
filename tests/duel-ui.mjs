@@ -16,9 +16,9 @@ globalThis.cancelAnimationFrame=()=>{};
 globalThis.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
 globalThis.ResizeObserver=class{observe(){} unobserve(){} disconnect(){}};
 const temp=await mkdtemp(path.join(tmpdir(),'lore-ui-'));
-const entry=`export { revealSpell, setFxSkip } from './client/src/ui/anim'; export { paintDuelClock } from './client/src/ui/duelClock'; export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { cardPickerMulti, closeOverlay } from './client/src/ui/modal'; export { deckBucket } from './client/src/ui/duelMaterials'; export { createGame, reduce, ST_MAX, FIELD_MAX } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
+const entry=`export { BaseController } from './client/src/game/controller'; export { revealSpell, setFxSkip, animateDraw } from './client/src/ui/anim'; export { paintDuelClock } from './client/src/ui/duelClock'; export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { cardPickerMulti, closeOverlay } from './client/src/ui/modal'; export { deckBucket } from './client/src/ui/duelMaterials'; export { createGame, reduce, ST_MAX, FIELD_MAX } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
 await build({stdin:{contents:entry,resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:path.join(temp,'ui.mjs')});
-const {cardPickerMulti,closeOverlay,deckBucket,reduce,ST_MAX,FIELD_MAX,revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
+const {BaseController,animateDraw,cardPickerMulti,closeOverlay,deckBucket,reduce,ST_MAX,FIELD_MAX,revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
 setLang('ja');
 // Clock values and accessibility survive the absence of a GPU, reconnect totals and expiry.
 const clock=document.createElement('div');clock.setAttribute('aria-hidden','true');
@@ -95,6 +95,31 @@ g.cur=1;v.render(g);assert(document.querySelector('#refreshBtn').disabled);asser
 g.cur=0;g.players[0].supply[1]=null;v.render(g);assert.equal(document.querySelectorAll('#supplyMarket > *').length,4);assert.equal(document.querySelectorAll('#supplyMarket > .is-bought').length,1);
 assert.deepEqual(avatarPresets(),['SEEKER_RED','SEEKER_BLUE']);assert(avatarHtml('SEEKER_RED','A').includes('seeker-red'));
 for(const [w,h] of [[1920,1080],[1280,720],[1024,768],[390,844],[320,568],[844,390]]) {const m=solveBoard(w,h);assert(m.tile>=20&&m.mktH>=38);assert.equal(m.underPile,false);}
+// Complete type-specific PNG faces and live numeric overlays survive rendering.
+for (const card of document.querySelectorAll('.card[data-card-type]')) {
+  const compact = card.matches('.card--field,.card--mkt');
+  assert(card.querySelector('.card-frame').style.backgroundImage.includes(`${compact?'compact':'frame'}-${card.dataset.cardType}.png`));
+  for (const seal of card.querySelectorAll('.card-cost,.ad-atk,.ad-def')) assert(seal.querySelector('.seal-value'));
+}
+// Flights must travel from the deck, restore cards on cancellation, and never reveal opponent identities.
+const originalRect=dom.window.HTMLElement.prototype.getBoundingClientRect;
+dom.window.HTMLElement.prototype.getBoundingClientRect=function(){return new DOMRect(this.closest('.pile')?900:750,this.closest('.pile')?400:650,45,70);};
+const motions=[];
+dom.window.HTMLElement.prototype.animate=function(frames,options){motions.push({frames,options});return {cancel(){}};};
+const hand=document.getElementById('hand');
+const drawing=animateDraw(hand,2);
+await new Promise(r=>setTimeout(r,20));
+assert(document.querySelector('.draw-flight .draw-back'));
+assert(document.querySelector('.draw-flight .draw-face'));
+assert(motions[0].frames.at(-1).transform.includes('translate3d(-150px,250px,0)'));
+setFxSkip(true);await drawing;setFxSkip(false);
+assert(!document.querySelector('.draw-flight'));
+assert([...hand.querySelectorAll('.card')].every(n=>n.style.visibility!== 'hidden'));
+const opponentDraw=animateDraw(document.getElementById('oppHand'),2,'opp');
+await new Promise(r=>setTimeout(r,20));
+assert(!document.querySelector('.draw-flight .draw-face'));
+setFxSkip(true);await opponentDraw;setFxSkip(false);
+dom.window.HTMLElement.prototype.getBoundingClientRect=originalRect;
 // An interrupted reveal must release its overlay, preserve the destination and never trap input.
 const reveal=revealSpell({...spell,uid:'fx-cancel'},'me','discard');
 await new Promise(r=>setTimeout(r,35));
@@ -103,6 +128,26 @@ setFxSkip(true);await reveal;setFxSkip(false);
 assert(!document.querySelector('.cast-reveal'));assert(!document.querySelector('.cast-veil'));
 assert(document.getElementById('pile-myDisc'));
 v.destroy();
+document.getElementById('app').innerHTML='';
+// Regression through the real controller: first banner follows the coin; next turn announces once.
+class TestController extends BaseController { submit(){} feed(res,animate=false){this.applyResult(res,animate);} }
+const control=new TestController(document.getElementById('app'),0,{onHome:noop,onRematch:noop});
+const opening=createGame({mode:'bot',seed:29,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}});
+control.feed(opening);
+await new Promise(r=>setTimeout(r,20));
+assert(document.querySelector('.cointoss-ov'));
+assert(!document.querySelector('.fx-turnbanner'),'opening banner must not be obscured by coin');
+await new Promise(r=>setTimeout(r,2600));
+assert.equal(document.querySelector('.fx-turnbanner span')?.textContent,'あなたのターンです');
+const next=structuredClone(opening.state);next.cur=1;next.turn=2;next.pending=null;
+control.feed({state:next,events:[]});
+await new Promise(r=>setTimeout(r,20));
+assert.equal(document.querySelector('.fx-turnbanner span')?.textContent,'相手のターンです');
+const banner=document.querySelector('.fx-turnbanner');
+control.feed({state:structuredClone(next),events:[]});
+await new Promise(r=>setTimeout(r,20));
+assert.equal(document.querySelector('.fx-turnbanner'),banner,'same-turn updates do not replay banner');
+control.destroy();assert(!document.querySelector('.fx-turnbanner'));
 document.getElementById('app').innerHTML='';
 let savedAvatar='SEEKER_BLUE';
 const profile={self:true,id:'test',display:'Seeker',avatar:savedAvatar,created_at:Date.now(),wins:0,losses:0,recent:[],ranked_wins:0,ranked_losses:0,bot_wins:0,bot_losses:0};

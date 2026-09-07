@@ -49,14 +49,12 @@
 }
 .card-cost--2d { font-size: 1.15em; letter-spacing: -0.06em; } /* "10"+ fits inside the neon ring */
 
-/* frame overlay — sits ON TOP of the art, its art-window is transparent so the
-   art shows through. Text/cost/stats layer above this (higher z-index). */
+/* Complete face asset; illustrations and live values are positioned above it. */
 .card-frame {
   position:absolute; inset:0; z-index:1; pointer-events:none;
-  background:url(/art/biblion/refined/card-frame.png) center/100% 100% no-repeat;
+  background-position:center; background-size:100% 100%; background-repeat:no-repeat;
   border:0; box-shadow:none; border-radius:0;
 }
-.card--field .card-frame { background-image:url(/art/biblion/refined/field-frame.png); }
 
 .card-name {
   /* name plate (normalized frame): y 5.5–13.8%, right of the cost circle */
@@ -103,8 +101,7 @@
   /* lower text plate — new frame: monster plate y 63.6–86.1% (atk/def below) */
   position: absolute; left: 11%; right: 11%; z-index: 2;
   top: 64%; height: 22%;
-  background: linear-gradient(#f0e8d7, #d6c9b1);
-  border-radius: 3%; padding: 2%;
+  background:none; padding:2%;
   font-size: 0.44em; line-height: 1.12; color: #1b1610;
   text-align: center; overflow: hidden; word-break: keep-all;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -366,10 +363,33 @@
   --cw: var(--field-card-size);
   --ch: calc(var(--field-card-size) * 1.12);
 }
-/* Full faces use readable metal stat seals; vanilla records let the art extend. */
-.card-name { font-size:.62em; }
-.card-name--long { font-size:.52em; }
-.card:not(.card--field):not(.card--mkt) .ad-atk,.card:not(.card--field):not(.card--mkt) .ad-def { top:auto; bottom:4%; height:10%; width:25%; border:1px solid #c4ad83; border-radius:6px; background:#213b58; color:#fff1d9; font-size:1.15em; }
-.card:not(.card--field):not(.card--mkt) .ad-atk { left:10%; }
-.card:not(.card--field):not(.card--mkt) .ad-def { left:auto; right:10%; background:#6b2e3c; }
-.card--mon:not(.card--field):not(.card--mkt):not(:has(.card-eff)) .card-art { height:70%; }
+/* Complete generated card faces. CSS only positions live content and state feedback. */
+.card { background:none; border:0; box-shadow:none; }
+.card-frame { z-index:0; border-radius:4%; }
+.card .card-art { z-index:1; top:13.4%; left:6.2%; right:6.2%; height:48.8%; border-radius:0; clip-path:polygon(4.5% 0,95.5% 0,100% 5.5%,100% 94.5%,95.5% 100%,4.5% 100%,0 94.5%,0 5.5%); }
+.card .card-name { top:3.8%; left:24%; right:8%; height:7.3%; font-size:.60em; background:none; color:#25253a; text-shadow:none; padding:0; }
+.card .card-name--long { font-size:.50em; }
+.card .card-eff { left:9%; right:9%; top:65.6%; height:26%; padding:1%; background:none; border:0; border-radius:0; box-shadow:none; }
+.card .card-keys .kw,.card .card-cast,.card .card-dice .dr-roll { background:none; border:0; border-radius:0; box-shadow:none; padding:0 .15em; }
+.card .card-type { position:absolute; z-index:4; top:auto; bottom:2.8%; left:28%; right:28%; text-align:center; padding:0; color:#ffefd9; font-size:.46em; line-height:1; background:none; border:0; white-space:nowrap; text-shadow:0 1px 2px #000; }
+.card .card-cost { background:url(/art/biblion/refined/stat-cost.png) center/100% 100% no-repeat; border:0; box-shadow:none; width:27%; aspect-ratio:1; height:auto; left:-3%; top:-3%; color:#fff4dd; }
+.card .ad-atk,.card .ad-def { background:url(/art/biblion/refined/stat-attack.png) center/100% 100% no-repeat; border:0; box-shadow:none; border-radius:0; width:24%; height:auto; aspect-ratio:1; bottom:-4.5%; top:auto; left:0; font-size:1.15em; backdrop-filter:none; }
+.card .ad-def { background-image:url(/art/biblion/refined/stat-defense.png); left:auto; right:0; }
+.card .ad-atk::before,.card .ad-def::before { content:none; }
+.seal-value { position:absolute; display:grid; place-items:center; line-height:1; font-variant-numeric:tabular-nums; font-family:Georgia,serif; letter-spacing:0; text-indent:0; }
+.card-cost .seal-value { inset:13% 12% 18%; }
+.ad-atk .seal-value { inset:18% 6% 18% 22%; }
+.ad-def .seal-value { inset:17% 14% 29%; }
+.card .ad-num--3d { font-size:.82em; }
+.card--field .card-art,.card--mkt .card-art { top:7.3%; left:7.3%; right:7.3%; height:68.6%; clip-path:polygon(4% 0,96% 0,100% 5%,100% 95%,96% 100%,4% 100%,0 95%,0 5%); }
+.card--field .card-name,.card--mkt .card-name { display:flex; top:79%; height:9%; left:12%; right:12%; font-size:.5em; justify-content:center; text-align:center; white-space:nowrap; }
+.card--field .card-name { left:23%; right:23%; font-size:.42em; }
+.card--field .card-eff,.card--mkt .card-eff,.card--mkt .cast-tip,.card--mkt .tribe-tag { display:none; }
+.card--field .card-type,.card--mkt .card-type { bottom:auto; top:9%; left:26%; right:9%; font-size:.43em; text-align:right; }
+.card--field .ad-atk,.card--field .ad-def { width:28%; bottom:-7%; font-size:1.2em; }
+.card--mkt .ad-atk,.card--mkt .ad-def { width:29%; bottom:-5%; font-size:1.2em; }
+.card--field .card-status { bottom:29%; }
+.card--mkt .card-name { font-size:max(6px,.58em); top:78.5%; height:10%; }
+.card--field .card-name { font-size:max(6px,.48em); }
+.card .card-eff .fx-tag { background:none; border:0; border-radius:0; padding:0; color:#55432b; }
+.card .tribe-tag,.card .card-status .kw,.card .card-status .ec,.card .badge { background:url(/art/biblion/refined/button-idle.png) center/100% 100%; border:0; border-radius:0; box-shadow:none; }

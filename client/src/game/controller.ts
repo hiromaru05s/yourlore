@@ -225,7 +225,7 @@ export abstract class BaseController implements BoardHandlers {
     // running counters for ghost slot placement + live HP readout
     const fieldCount: [number, number] = [prev.players[0].field.length, prev.players[1].field.length];
     const hpNow: [number, number] = [prev.players[0].hp, prev.players[1].hp];
-    let myDraws = 0;
+    const draws = [0, 0];
     let lastKill: { srcKo?: string; srcJa?: string } | null = null;
     const diceDone = new Set<number>(); // dice events already animated (pre-rolled ahead of a result popup)
 
@@ -336,7 +336,7 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "draw":
-          if (e.player === this.you) myDraws += e.count;
+          draws[e.player] += e.count;
           break;
         case "treasure": {
           const mine = e.player === this.you && !e.isBot;
@@ -366,7 +366,9 @@ export abstract class BaseController implements BoardHandlers {
     this.view.render(res.state);
     // ghosts overlap the freshly-rendered real cards — drop them next frame
     requestAnimationFrame(() => ghosts.forEach((g) => g.el.remove()));
-    if (myDraws > 0) A.animateDraw(document.getElementById("hand") as HTMLElement, myDraws);
+    await Promise.all(([0, 1] as Side[]).map(player => draws[player] > 0
+      ? A.animateDraw(document.getElementById(player === this.you ? "hand" : "oppHand"), draws[player], sideOf(player))
+      : Promise.resolve()));
 
     // ---- death sequence: HP orb shatters + cause of death, before the result modal ----
     if (res.state.over && res.state.winner != null && !this.winShown) {
@@ -428,7 +430,9 @@ export abstract class BaseController implements BoardHandlers {
     if (!this.introShown && this.state && this.state.turn === 1 && !this.state.over) {
       this.introShown = true;
       this.showCoinToss(this.state.cur);
+      return;
     }
+    if (document.querySelector('.cointoss-ov') && !this.state.over) return;
     // max-mana growth cue (mid-turn gains too)
     const mm = this.state?.players?.[this.you]?.maxMana ?? 0;
     if (this.prevMaxMana && mm > this.prevMaxMana) sfx("mana");
@@ -563,7 +567,9 @@ export abstract class BaseController implements BoardHandlers {
       // a reconnect straight into the discard choice: the server clock already includes the bonus
       this.handCapBonusKey = g.pending?.reason === "handCap" ? key : "";
       if (!firstTurn && g.cur === this.you) sfx("turn"); // my turn begins
-      if (!firstTurn) A.turnBanner(g.cur === this.you, g.turn); // 턴 전환 리본 — 턴의 경계를 몸으로 알게
+      // The opening announcement belongs AFTER the coin, never underneath it.
+      // Reconnected games beyond turn 1 still announce their current turn.
+      if (!(firstTurn && g.turn === 1) && !document.querySelector(".cointoss-ov")) A.turnBanner(g.cur === this.you, g.turn);
       if (this.timerInt) clearInterval(this.timerInt);
       this.renderTimer();
       this.timerInt = window.setInterval(() => this.tickTimer(), 1000);
@@ -660,7 +666,15 @@ export abstract class BaseController implements BoardHandlers {
     document.body.appendChild(ov);
     sfx("coin");
     setTimeout(() => sfx(iAmFirst ? "turn" : "pop"), 900);
-    setTimeout(() => { ov.classList.add("out"); setTimeout(() => ov.remove(), 350); }, 2200);
+    setTimeout(() => { ov.classList.add("out"); setTimeout(async () => {
+      ov.remove();
+      if (this.dead || this.state.over) return;
+      A.turnBanner(this.state.cur === this.you, this.state.turn);
+      try {
+        if (this.state.turn === 1) await A.animateDraw(document.getElementById(firstSide === this.you ? 'hand' : 'oppHand'), 3, firstSide === this.you ? 'me' : 'opp');
+      } catch (error) { console.error('[opening draw]', error); }
+      if (!this.dead) this.afterApply({ state: this.state, events: [] });
+    }, 350); }, 2200);
   }
 
   private turnToast(text: string, size: "big" | "small", ms: number): void {
@@ -751,6 +765,8 @@ export abstract class BaseController implements BoardHandlers {
 
   destroy(): void {
     this.dead = true;
+    A.setFxSkip(true);
+    document.querySelectorAll(".fx-turnbanner,.cointoss-ov").forEach(n => n.remove());
     this.stopTimer();
     this.view.destroy();
     this.toastEl?.remove();

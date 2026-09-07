@@ -1,0 +1,62 @@
+[
+  {
+    "file": "client/public/art/biblion/card-polish/frame-mon.png",
+    "mode": "RGB",
+    "size": [
+      1024,
+      1536
+    ],
+    "bytes": 1776656,
+    "sha256": "f1f4b159b58eb34409a4fcd1a163bae48e0842066efbbaa2c38fa52f4152e510"
+  },
+  {
+    "file": "client/public/art/biblion/card-polish/compact-mon.png",
+    "mode": "RGB",
+    "size": [
+      1254,
+      1254
+    ],
+    "bytes": 1493282,
+    "sha256": "09bbfa2a317d463b60bae94d47d90cfef78a1d04cbc53d5d666402e1263ff53b"
+  },
+  {
+    "file": "client/public/art/biblion/card-polish/compact-spell.png",
+    "mode": "RGB",
+    "size": [
+      1254,
+      1254
+    ],
+    "bytes": 1287083,
+    "sha256": "e602f4f28c7780d9a13516d392773dea2eee66c7f7fe645d3848fbafe4d83a0c"
+  },
+  {
+    "file": "client/public/art/biblion/card-polish/compact-trap.png",
+    "mode": "RGB",
+    "size": [
+      1254,
+      1254
+    ],
+    "bytes": 1459608,
+    "sha256": "1a05e0f7a358dfd688844c517157fb342b8fbeb8b66601039b701da9e355bf76"
+  },
+  {
+    "file": "client/public/art/biblion/card-polish/frame-spell.png",
+    "mode": "RGB",
+    "size": [
+      1024,
+      1536
+    ],
+    "bytes": 1619738,
+    "sha256": "0b6939a721853b20406f24b02865d0dbbc0b35c39cae86edfb0000a7eab08ad7"
+  },
+  {
+    "file": "client/public/art/biblion/card-polish/frame-trap.png",
+    "mode": "RGB",
+    "size": [
+      1024,
+      1536
+    ],
+    "bytes": 2002474,
+    "sha256": "f4df177049881825b0e0fdafe138ec11bc598ce51285227acfbeab38d0e2e80c"
+  }
+]

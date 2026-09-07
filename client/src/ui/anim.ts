@@ -343,14 +343,50 @@ export function flyCardFrame(frame: string, from: DOMRect | null, to: DOMRect | 
   setTimeout(() => fly.remove(), dur + 40);
 }
 
-export function animateDraw(handEl: HTMLElement, count: number): void {
-  const cards = handEl.querySelectorAll(".card");
-  const start = Math.max(0, cards.length - count);
-  for (let i = start; i < cards.length; i++) {
-    const node = cards[i] as HTMLElement;
-    setTimeout(() => { node.classList.add("drawing"); setTimeout(() => node.classList.remove("drawing"), 430); }, (i - start) * 110);
-  }
-  pileFlash("pile-myDeck");
+export async function animateDraw(handEl: HTMLElement | null, count: number, side: ViewSide = "me"): Promise<void> {
+  const deck = document.getElementById(side === "me" ? "pile-myDeck" : "pile-oppDeck");
+  if (!handEl || !deck || count <= 0 || fxSkip || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cards = Array.from(handEl.querySelectorAll<HTMLElement>(side === "me" ? ".card" : ".card--back"));
+  // Very large draws are represented by six consecutive flights, without holding up input.
+  const incoming = cards.slice(-Math.min(count, 6));
+  const origin = (deck.querySelector('.pile-card') || deck).getBoundingClientRect();
+  if (!origin.width) return;
+  pileFlash(deck.id);
+  await Promise.all(incoming.map(async (node, index) => {
+    const target = node.getBoundingClientRect();
+    if (!target.width) return;
+    const fly = document.createElement('div');
+    fly.className = 'draw-flight'; fly.setAttribute('aria-hidden', 'true');
+    const width = Math.max(32, Math.min(84, target.width));
+    fly.style.cssText = `left:${origin.left}px;top:${origin.top}px;width:${width}px;height:${width / .64}px`;
+    const back = document.createElement('div'); back.className = 'draw-back';
+    back.style.backgroundImage = `url(${deck.dataset.sleeve || FRAME_BACK})`;
+    fly.append(back);
+    if (side === 'me') {
+      const face = node.cloneNode(true) as HTMLElement;
+      face.classList.remove('drawing', 'is-playable', 'is-attacker');
+      face.classList.add('draw-face'); face.removeAttribute('data-uid');
+      face.style.cssText = `--cw:${width}px;--ch:${width / .64}px`;
+      fly.append(face);
+    }
+    const visibility = node.style.visibility;
+    node.style.visibility = 'hidden';
+    let motion: Animation | undefined;
+    try {
+      await wait(index * 90);
+      if (fxSkip || !node.isConnected) return;
+      document.body.append(fly);
+      const dx = target.left - origin.left, dy = target.top - origin.top;
+      motion = fly.animate([
+        {transform:'perspective(700px) translate3d(0,0,0) rotateY(0deg) rotateZ(-7deg)',opacity:1},
+        {transform:`perspective(700px) translate3d(${dx * .46}px,${dy * .46 - 38}px,75px) rotateY(${side === 'me' ? 85 : 0}deg) rotateZ(-3deg)`,offset:.46,opacity:1},
+        {transform:`perspective(700px) translate3d(${dx}px,${dy}px,0) rotateY(${side === 'me' ? 180 : 0}deg) scale(${target.width / width})`,opacity:1},
+      ], {duration:620,easing:'cubic-bezier(.22,.7,.25,1)',fill:'both'});
+      await wait(620);
+    } finally {
+      motion?.cancel(); fly.remove(); node.style.visibility = visibility;
+    }
+  }));
 }
 
 /** A scrollable grid of small, clickable card thumbnails (click → zoom that card). */
@@ -495,9 +531,10 @@ export function turnBanner(mine: boolean, turn?: number): void {
   document.querySelectorAll(".fx-turnbanner").forEach((n) => n.remove());
   const b = document.createElement("div");
   b.className = "fx-turnbanner" + (mine ? " mine" : " opp");
+  b.setAttribute('role', 'status'); b.setAttribute('aria-live', 'polite');
   b.innerHTML = `<span>${mine ? t("fx.yourturn") : t("fx.oppturn")}</span>${turn == null ? "" : `<small>TURN ${turn}</small>`}`;
   document.body.appendChild(b);
-  setTimeout(() => { b.classList.add("out"); setTimeout(() => b.remove(), 320); }, mine ? 1250 : 950);
+  setTimeout(() => { b.classList.add("out"); setTimeout(() => b.remove(), 320); }, mine ? 1900 : 1500);
 }
 
 /** One-shot pill above a field monster ("💢 기합 발동!") — state changes the board can't show. */

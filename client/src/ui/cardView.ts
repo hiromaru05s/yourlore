@@ -3,7 +3,7 @@
 // (board / market / hand / pile / zoom) so sizing stays consistent.
 // ============================================================
 import type { CardInst, FieldMon, PlayerState } from "../shared/types";
-import { FRAME_BACK, PASSIVES, cardPassives } from "../shared/cards";
+import { FRAME_BACK, PASSIVES, cardPassives, frameFor, fieldFrameFor } from "../shared/cards";
 import { curHp, effAtk, effDef, playCost } from "../shared/engine";
 import { cardName, cardText, getLang, t } from "../i18n";
 import { parseDiceTable } from "../shared/cardText";
@@ -535,14 +535,11 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   typeBadge.title = labels[typeIndex]; node.appendChild(typeBadge);
 
   if (opt.compactField) node.classList.add("card--field");
-  // Layering: art sits BEHIND the frame (in the transparent art window), the
-  // frame PNG overlays on top (its border hugs the art edges), then text/cost
-  // render above the frame. (frame's outer + window are transparent.)
+  // Complete raster face underneath the illustration and live typography.
+  // Name/effect plates and all frame geometry are painted into the PNG.
   node.appendChild(artEl(c.id, opt.fullArt, lazyFor(opt.lazyArt), opt.lazyArt !== undefined));
   const frameEl = el("div", "card-frame");
-  // square field tiles use the dedicated 1254 square frames; everything else
-  // (hand / market / zoom / deck-builder) keeps the vertical card frames
-  // Biblion frame is resolution-independent CSS; artwork remains a separate layer.
+  frameEl.style.backgroundImage = `url(${opt.compactField || opt.size === "mkt" ? fieldFrameFor(c.t) : frameFor(c.t)})`;
   node.appendChild(frameEl);
 
   if (opt.playable) node.classList.add("is-playable");
@@ -553,7 +550,12 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   if (opt.exhausted) node.classList.add("is-exhausted");
 
   const cost = opt.costOverride != null ? opt.costOverride : c.cost;
-  node.appendChild(el("div", "card-cost" + (cost >= 10 ? " card-cost--2d" : ""), String(cost)));
+  const numericSeal = (cls: string, value: number): HTMLElement => {
+    const seal = el("div", cls);
+    seal.appendChild(el("span", "seal-value", String(value)));
+    return seal;
+  };
+  node.appendChild(numericSeal("card-cost" + (cost >= 10 ? " card-cost--2d" : ""), cost));
   const pc = playCost(c);
   const nm = cardName(c);
   const nameEl2 = el("div", "card-name" + (nm.length >= 9 ? " card-name--long" : ""), nm);
@@ -577,9 +579,9 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     } else d = c.def!;
     // 알은 공격도 체력도 하지 않는다 — 부화/내구도 배지가 그 자리의 실질 정보다.
     // (0/0 칩이 남아 있으면 "약한 몬스터"로 잘못 읽힌다)
-    if (!(onField && isEgg)) node.appendChild(el("div", "ad-atk" + (String(a).length >= 3 ? " ad-num--3d" : ""), String(a)));
+    if (!(onField && isEgg)) node.appendChild(numericSeal("ad-atk" + (String(a).length >= 3 ? " ad-num--3d" : ""), a));
     if (!(onField && isEgg)) {
-      node.appendChild(el("div", "ad-def" + (hurt ? " ad-def--hurt" : "") + (String(d).length >= 3 ? " ad-num--3d" : ""), String(d)));
+      node.appendChild(numericSeal("ad-def" + (hurt ? " ad-def--hurt" : "") + (String(d).length >= 3 ? " ad-num--3d" : ""), d));
     }
   }
   // ---- 상태 띠 (필드 타일 / 알) ------------------------------------------
