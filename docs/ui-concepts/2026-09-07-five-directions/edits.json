@@ -1,0 +1,34 @@
+[
+  {
+    "n": 0,
+    "prompt": "Edit this in-game UI screenshot with exactly ONE functional correction. Move the existing 更新 1 refresh button from the far right end of the market to the header space directly beside 提示マーケット · あなた, above its four offered cards. Compact it into a small horizontal button '⟳ 更新 1' so it fits entirely within the left offered-market header. Remove its old right-end version completely, leave that area empty. Keep the offered four cards, fixed eight cards, all stock badges, units, both hands, both player stats, utility labels and end-turn exactly unchanged. Do not redraw the whole layout or alter numbers. This refresh applies only to the offered market, never fixed. Preserve the original 16:9 framing."
+  },
+  {
+    "n": 1,
+    "prompt": "Edit this LORE UI concept precisely. Preserve the warm reading-desk design, parchment play mats, all 6 creatures and both players' resources/piles. Correct the fixed market: currently NINE cards under 固定マーケット. Remove the SECOND-TO-LAST card (the second cost-5 card), leaving exactly EIGHT cards. Re-space these EIGHT evenly within existing fixed-market tray. Cost row must be 1,2,2,3,3,4,5,6; stock badges must be ×3 ×2 ×3 ×1 ×3 ×2 ×3 ×3. Offered market stays exactly FOUR cards. Also change the fourth of the five bottom hand cards from a giant monster into the existing game's アチューン: an isolated blue mana crystal illustration, name アチューン, no monster attack/health stats, NO fabricated effect text. Remove effect text from the two open enchantment pages and use simple rich magical illustration instead, preserving opponent duration 2 and self infinity. Preserve five-card hand total. Add a compact 'ターン 8 · あなたのターン' above existing turn-end stamp, which retains 38 seconds. Do not add any controls, cards or decorative elements. Keep everything else unchanged."
+  },
+  {
+    "n": 1,
+    "prompt": "Make one tiny correction to this UI image: restore FOUR small utility controls in the EMPTY dark bottom-left corner below the blue player's synergy plaque. Text: ログ, 音量, 操作, 投了. A small quiet 2 by 2 set of four labels, matching the brass/wood style. These controls must be inside the frame, left of the hand, no overlap. Everything else stays EXACTLY unchanged, especially exactly EIGHT fixed market cards and FOUR offered market cards, six monsters, five own hand cards, four opponent backs, all HP, mana, stock badges, both enchanted pages and both trap bookmarks. No extra UI.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-74969d81-dfda-4bb9-98f7-a019c524588e.png"
+  },
+  {
+    "n": 2,
+    "prompt": "Edit only tiny incorrect rule text in the five cards of the bottom-left hand. Remove ALL small effect sentences from these five cards, keep their artwork, frames, mana costs and character stat numbers. Change blue crystal hand card's name to アチューン. Below that crystal illustration use only アチューン and no effect claims. Replace tiny text areas with quiet darker art continuation. Do not alter anything else. Preserve exactly FOUR offered and EIGHT fixed cards in the central vertical panel, both side fields, all 3/7 and 2/7 labels, both player resources/piles, four enemy backs, five own hand cards and utility buttons. No new cards or rules.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-ae2b08e4-c89b-40fb-a08f-c6b609d6f4a5.png"
+  },
+  {
+    "n": 3,
+    "prompt": "Edit only mispositioned zone labels in this screenshot. For each of the TWO players, move the label モンスター 3/7 from below the persistent-spell plaque to just ABOVE its THREE creature busts (a small text line centered over the trio). At each player's TWO support plaques (one face-up persistent spell, one sealed trap), show only ONE shared label 魔法・罠 2/7 centered across the two plaques. Keep the spell duration 2 and infinity unchanged and traps hidden. This corrects grouping; do not move the actual cards or alter counts. Everything else exactly unchanged, including central FOUR offered cards, EIGHT fixed cards, HP/mana, hand, piles, utility controls, turn8 and end turn38.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-f833425d-acd0-469f-bbab-f8c634c690aa.png"
+  },
+  {
+    "n": 4,
+    "prompt": "Precise correction to this bright white TCG UI. Fixed market currently has only SEVEN fully rendered cards plus a floating cost6 number occluded by the turn-end button. Make EXACTLY EIGHT COMPLETE fixed market cards visibly fit to the RIGHT of the center market divider, each with full art and stock badge. Reduce their width slightly and space evenly in x=35% to 87% of the image. The eight cost values left to right: 1,2,2,3,3,4,5,6. Stock values ×3 ×2 ×3 ×1 ×3 ×2 ×3 ×3. Eighth card is a dark dragon art, cost6, stock×3. Keep turn-end circle completely outside card area at x=93%. Offered FOUR cards on left stay unchanged. All four battlefield slot rows must remain EXACTLY seven cells each, with 3 monsters/4empty and 2 spell-trap/5empty per player. Preserve both avatars/stats, piles, five own hand, four enemy backs, all labels and utilities. Do not add mechanics, extra rows or extra controls. Remove tiny extra plus symbol after 更新 1 so button reads only 更新 1. Keep white visual design.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-3b07f75b-b92f-4f8c-bf85-156e27e16c6a.png"
+  },
+  {
+    "n": 3,
+    "prompt": "Only add the missing own-monster capacity label, change nothing else. In the dark empty space DIRECTLY BELOW the lower-left player's MP 6/8 and ABOVE the lower-left 種族 synergy strip, add the small ivory text 'モンスター 3/7'. It must clearly belong to the blue player's three monsters. This is the only edit. Preserve all existing market cards (4+8), portraits, hands, plaques, all other labels, stats, counters, utility controls and 16:9 frame pixel composition. Do not remove or move anything."
+  }
+]

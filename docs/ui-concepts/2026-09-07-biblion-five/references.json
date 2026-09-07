@@ -1,0 +1,21 @@
+{
+  "date": "2026-09-07",
+  "authority": "user supplied canon and local docs/world-bible.md",
+  "references": [
+    {
+      "path": "/Users/hiromaru05s/Downloads/Codex Image Sep 7, 2026, 03_39_26 AM.png",
+      "role": "visual atmosphere and characters; not edit target",
+      "sha256": "f44d993c2c4cbaccbe398642c0899ac3c7fa4d6a67020802cc6e8ff68930e583"
+    },
+    {
+      "path": "/Users/hiromaru05s/Downloads/Codex Image Sep 7, 2026, 03_39_33 AM.png",
+      "role": "visual atmosphere and characters; not edit target",
+      "sha256": "12700397ad1c8fea94b2866a5d91c9edf171f6a57d5c21b52b6b10f6b4a43278"
+    }
+  ],
+  "world_bible": {
+    "path": "/Users/hiromaru05s/Desktop/LORE_TCG/docs/world-bible.md",
+    "sha256": "6b48ba3a847556cc5ae5e217cfa8a8de41ce476673062a462f5f64edf1920044"
+  },
+  "code_changes": false
+}

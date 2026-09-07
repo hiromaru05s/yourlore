@@ -1,0 +1,50 @@
+[
+  {
+    "file": "f01-crimson-bookmark.png",
+    "title": "女の子① 赤い栞の記録士",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2129354,
+    "sha256": "f384ef634b7582879cdbe5b8d1f618a6aabc2cb23f2c8e1b97ad6fc466dca314"
+  },
+  {
+    "file": "f02-zero-archive-keeper.png",
+    "title": "女の子② 第零書庫の封印官",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2118866,
+    "sha256": "9eb7706ec8f5e872602400b4a5550ae9ad228da53aab0da39b5dccb2209693e1"
+  },
+  {
+    "file": "f03-circulation-dealer.png",
+    "title": "女の子③ 回覧車の交渉人",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2247764,
+    "sha256": "40c2e48175135418e39693c033030f940546df44925093e7719f772a282121ec"
+  },
+  {
+    "file": "m01-cobalt-tactician.png",
+    "title": "男の子① 蒼の対読士",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2087000,
+    "sha256": "26df8fef11a1d96058e92563533b5829c8dab9f7a4729f11984989d6df666332"
+  },
+  {
+    "file": "m02-crimson-seal-curator.png",
+    "title": "男の子② 紅の封緘士",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2100539,
+    "sha256": "549747eff14e00dc72ac7fc349bc26c94a945add73965020abcf6438d9f6ef12"
+  },
+  {
+    "file": "m03-attune-maintainer.png",
+    "title": "男の子③ アチューンの調律師",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 2194450,
+    "sha256": "2a00aa9ce580ca0417fdf15d5f36abbcbd8507c284a0e3f09c8d13bd00636380"
+  }
+]

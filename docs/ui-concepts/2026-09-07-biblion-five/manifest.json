@@ -1,0 +1,56 @@
+{
+  "date": "2026-09-07",
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "index": 1,
+      "title": "白亜のデュエルテーブル",
+      "filename": "01-marble-duel-table.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-d2db8cda-65bd-474f-9564-38e1173f8c2b.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2845710,
+      "sha256": "50c223aabd895a6d655d06c8ca7b338d4d976b952fc7e00e2d09f32ad8264c0f"
+    },
+    {
+      "index": 2,
+      "title": "アチューンのインレイ",
+      "filename": "02-inlaid-attune-console.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-d643fa42-d782-4690-9033-43867b124870.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2785878,
+      "sha256": "dd00f6f5c1db5b60aa4cfafb6c23928ea2bd2c49c4287c00044174df1ff32697"
+    },
+    {
+      "index": 3,
+      "title": "マーケットのカードケース",
+      "filename": "03-open-card-cases.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-11777a64-0f02-4c70-83c2-d6b839f0a455.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2626658,
+      "sha256": "27370a32d5707eeae4ba1062d5a2e05514e9c168b9867a070164c968071b05b8"
+    },
+    {
+      "index": 4,
+      "title": "アチューンのプロジェクション",
+      "filename": "04-attune-projection.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-e67b3823-0c2c-41d3-924d-2a6663d48470.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2700016,
+      "sha256": "3f878ffbbcdc94e74cd768f24783e9746f0909a0039e356209656bb89d8a1fad"
+    },
+    {
+      "index": 5,
+      "title": "NPCのマーケットカウンター",
+      "filename": "05-npc-market-counter.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-d5e49114-b064-4cd1-9a80-b5cd084fe954.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2768558,
+      "sha256": "cf6f492118184e0484ae5fc014714f6b72aeeaeabbbfa266aa812885ccc87e04"
+    }
+  ]
+}

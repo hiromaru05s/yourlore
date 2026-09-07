@@ -1,0 +1,30 @@
+[
+  {
+    "file": "01-fixed-duo-reading-duel.png",
+    "title": "改訂KV：赤と青の対読",
+    "width": 1672,
+    "height": 941,
+    "sha256": "ee7377b7e41c94f290258338a7afbd9ff023809890012a7cfd6cb411cf7b5021"
+  },
+  {
+    "file": "02-over-shoulder-challenge.png",
+    "title": "別角度①：彼女の肩越し",
+    "width": 1672,
+    "height": 941,
+    "sha256": "f44d993c2c4cbaccbe398642c0899ac3c7fa4d6a67020802cc6e8ff68930e583"
+  },
+  {
+    "file": "03-gallery-overlook.png",
+    "title": "別角度②：上階からの対読",
+    "width": 1672,
+    "height": 941,
+    "sha256": "12700397ad1c8fea94b2866a5d91c9edf171f6a57d5c21b52b6b10f6b4a43278"
+  },
+  {
+    "file": "04-between-the-shelves.png",
+    "title": "別角度③：書架の間の二人",
+    "width": 1672,
+    "height": 941,
+    "sha256": "6c4de070e3dd93c326b54bba16eb70a8dd2954c8c443ef888ab09db613d2946e"
+  }
+]

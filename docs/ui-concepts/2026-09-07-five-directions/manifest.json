@@ -1,0 +1,57 @@
+{
+  "date": "2026-09-07",
+  "tool": "built-in image_gen",
+  "sourceCommit": "3846c65",
+  "assets": [
+    {
+      "index": 1,
+      "title": "競技盤 — 判断の速さ",
+      "filename": "01-competitive-horizontal.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-829fdfdb-7590-4c63-b910-deec380f30f9.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2290778,
+      "sha256": "6a1eb5637b383b5b62cf72c6594dba9db35bacde18d1b865f73cd6712c3068bc"
+    },
+    {
+      "index": 2,
+      "title": "閲覧机 — 触って理解する",
+      "filename": "02-tactile-reading-table.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-09b55e9e-973f-48e6-a6f1-f9dc16b55e42.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2773497,
+      "sha256": "4d72181337c6f5b4583da0d76f5d87d996addaa7485b8ec0d114a62e639b697c"
+    },
+    {
+      "index": 3,
+      "title": "中央書架 — 市場を軸に対戦",
+      "filename": "03-central-market-spine.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-7ba592cb-3c67-481c-9c01-6f46905db8cb.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2564906,
+      "sha256": "22198bcee8c1cb1e4e20b076fd8712b775578040686b640e1e0a3c7cf82bea7e"
+    },
+    {
+      "index": 4,
+      "title": "召喚舞台 — カードの存在感",
+      "filename": "04-summoning-stage.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-bc4a1693-3a33-4dcb-8575-a2456b2e56f3.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2485828,
+      "sha256": "39d0699a8463ce7106e337f6ad3e10916aebed44cfc3468b1297048789a2c397"
+    },
+    {
+      "index": 5,
+      "title": "白い整理盤 — ルールの見通し",
+      "filename": "05-explicit-white-grid.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-dedf2e84-f93d-4b6d-b183-fac312716b72.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2290525,
+      "sha256": "d24d552f7c6a115aa02a0ce9e5f8fc989802ded4a290883b49b3ac4b594c9bfc"
+    }
+  ]
+}

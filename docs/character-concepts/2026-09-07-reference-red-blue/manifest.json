@@ -1,0 +1,44 @@
+[
+  {
+    "file": "m01-blue-page-cape.png",
+    "title": "青の男の子① 頁のショートケープ",
+    "width": 1024,
+    "height": 1536,
+    "sha256": "c53710002624c238b860f180edd38133ffeec3e6c5e1848729635026f1109abe"
+  },
+  {
+    "file": "m02-blue-lantern-reader.png",
+    "title": "青の男の子② 読書灯の対読士",
+    "width": 1024,
+    "height": 1536,
+    "sha256": "386a37f2edf035c817af7c41e37b1319573fcd12b481dd952abfacbc0e2122f4"
+  },
+  {
+    "file": "m03-blue-chronicle-vest.png",
+    "title": "青の男の子③ 年代記の軽装",
+    "width": 1024,
+    "height": 1536,
+    "sha256": "954074d92390e81735fd069e5294a767e5b3bfaf8889ba03593654baeb5e5142"
+  },
+  {
+    "file": "f01-red-bookmark-cape.png",
+    "title": "赤の女の子① 紅い栞の対読士",
+    "width": 1024,
+    "height": 1536,
+    "sha256": "f59c3181ac96989ed8b1e69f1d8290686ca2f3086843897eac8c91ab4e913faa"
+  },
+  {
+    "file": "f02-red-seal-tailcoat.png",
+    "title": "赤の女の子② 紅封の書庫番",
+    "width": 1024,
+    "height": 1536,
+    "sha256": "f169ec2d5bd61ce5b7b97f681942b4046b59d4ef24cdcb0fe8462e031a11c17b"
+  },
+  {
+    "file": "f03-red-circulation-ribbons.png",
+    "title": "赤の女の子③ 回覧のリボン",
+    "width": 1024,
+    "height": 1536,
+    "sha256": "df6370ca8f0684ea619e714345637a03b9d82cc57c206299eeb5ef2c2dd91c53"
+  }
+]

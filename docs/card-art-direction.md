@@ -21,7 +21,8 @@ Create one finished LORE TCG inner-art illustration on an exact 1472x1344 pixel
 landscape canvas (aspect ratio 1.095:1). This is the artwork inside the card
 frame, not a full card mockup.
 
-World art bible: an original, timeworn royal archive in a dark-fantasy world;
+World art bible: every card is a record held in the Biblion, an original grand
+magic library (see docs/world-bible.md); the illustration shows the record itself;
 blackened oak, weathered black stone, aged brass, parchment ivory, candle amber,
 oxblood red, and restrained cobalt or malachite magical accents.
 
@@ -63,7 +64,7 @@ franchises.
 
 ### 스타터
 
-- 반복해서 사용하는 대표 도구 한 개를 기록 보관소의 받침대나 낡은 작전
+- 반복해서 사용하는 대표 도구 한 개를 비블리온의 받침대나 낡은 열람
   테이블 위에 둔다.
 - 사람과 손은 넣지 않는다.
 - `컬`, `보물상자`, `어튠`은 서로 다른 재질과 실루엣으로 즉시 구분한다.
