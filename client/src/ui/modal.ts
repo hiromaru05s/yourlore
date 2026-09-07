@@ -3,6 +3,7 @@
 // treasure reveal, and the seek/recall card picker.
 // ============================================================
 import type { CardInst } from "../shared/types";
+import { attachDuelClock } from "./duelClock";
 import { cardEl } from "./cardView";
 import { bindZoom } from "./anim";
 import { TRIBES } from "../shared/cards";
@@ -18,6 +19,7 @@ export function closeOverlay(): void { getRoot().innerHTML = ""; }
 function mount(node: HTMLElement): void {
   const ov = document.createElement("div");
   ov.className = "overlay";
+  if (document.querySelector(".game .mp-clock.show")) { node.classList.add("duel-dialog"); attachDuelClock(node); }
   ov.appendChild(node);
   getRoot().innerHTML = "";
   getRoot().appendChild(ov);

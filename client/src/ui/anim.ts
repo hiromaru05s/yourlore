@@ -75,7 +75,7 @@ const rowRect = (side: ViewSide): DOMRect | null => rectOf(side === "me" ? "#meR
 const discId = (side: ViewSide): string => (side === "me" ? "pile-myDisc" : "pile-oppDisc");
 function trapZoneRect(side: ViewSide): DOMRect | null {
   const row = document.getElementById(side === "me" ? "meRow" : "oppRow");
-  return row?.querySelector(".zone-st")?.getBoundingClientRect() ?? rowRect(side);
+  return (row?.querySelector(".zone-st .slot") ?? row?.querySelector(".zone-st .buff-icon"))?.getBoundingClientRect() ?? rowRect(side);
 }
 /** Place a node as a fixed-position floating overlay at a rect (top-left). */
 function floatAt(node: HTMLElement, rect: { left: number; top: number }): HTMLElement {
@@ -140,7 +140,12 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   try {
     await focusCard(node, side);
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
-    if (to) await landCard(node, to, true);
+    if (to && dest === "field" && card.ench && !fxSkip) {
+      window.dispatchEvent(new CustomEvent("lore:buff-flow", {detail: {from: node.getBoundingClientRect(), to}}));
+      node.style.transition = "opacity .4s, filter .4s, transform .6s";
+      node.style.filter = "brightness(4) blur(8px)"; node.style.opacity = "0";
+      await wait(700);
+    } else if (to) await landCard(node, to, true);
     if (dest === "discard") pileFlash(discId(side));
   } finally { node.remove(); }
 }
@@ -486,11 +491,11 @@ import { t as tt } from "../i18n";
 
 /** Center-screen announcement (e.g. "함정 발동!"). */
 /** Turn-start banner: a slim ribbon sweeping across mid-screen ("자신의 턴" / "상대 턴"). */
-export function turnBanner(mine: boolean): void {
+export function turnBanner(mine: boolean, turn?: number): void {
   document.querySelectorAll(".fx-turnbanner").forEach((n) => n.remove());
   const b = document.createElement("div");
   b.className = "fx-turnbanner" + (mine ? " mine" : " opp");
-  b.innerHTML = `<span>${mine ? t("fx.yourturn") : t("fx.oppturn")}</span>`;
+  b.innerHTML = `<span>${mine ? t("fx.yourturn") : t("fx.oppturn")}</span>${turn == null ? "" : `<small>TURN ${turn}</small>`}`;
   document.body.appendChild(b);
   setTimeout(() => { b.classList.add("out"); setTimeout(() => b.remove(), 320); }, mine ? 1250 : 950);
 }

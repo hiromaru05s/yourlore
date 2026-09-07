@@ -528,6 +528,12 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const sizeClass = opt.size === "mkt" ? "card--mkt" : opt.size === "hand" ? "card--hand" : "";
   const node = el("div", `card ${typeClass} ${sizeClass}`.trim());
   node.dataset.uid = c.uid;
+  node.dataset.cardType = c.t === "mon" ? "mon" : c.t === "trap" ? "trap" : "spell";
+  const labels = getLang() === "ja" ? ["モンスター", "魔法", "罠"] : getLang() === "en" ? ["Monster", "Spell", "Trap"] : ["몬스터", "마법", "함정"];
+  const typeIndex = c.t === "mon" ? 0 : c.t === "trap" ? 2 : 1;
+  const typeBadge = el("div", "card-type", `${["⚔", "✦", "◇"][typeIndex]} ${labels[typeIndex]}`);
+  typeBadge.title = labels[typeIndex]; node.appendChild(typeBadge);
+
   if (opt.compactField) node.classList.add("card--field");
   // Layering: art sits BEHIND the frame (in the transparent art window), the
   // frame PNG overlays on top (its border hugs the art edges), then text/cost

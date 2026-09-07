@@ -563,7 +563,7 @@ export abstract class BaseController implements BoardHandlers {
       // a reconnect straight into the discard choice: the server clock already includes the bonus
       this.handCapBonusKey = g.pending?.reason === "handCap" ? key : "";
       if (!firstTurn && g.cur === this.you) sfx("turn"); // my turn begins
-      if (!firstTurn) A.turnBanner(g.cur === this.you); // 턴 전환 리본 — 턴의 경계를 몸으로 알게
+      if (!firstTurn) A.turnBanner(g.cur === this.you, g.turn); // 턴 전환 리본 — 턴의 경계를 몸으로 알게
       if (this.timerInt) clearInterval(this.timerInt);
       this.renderTimer();
       this.timerInt = window.setInterval(() => this.tickTimer(), 1000);

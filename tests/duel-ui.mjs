@@ -16,9 +16,9 @@ globalThis.cancelAnimationFrame=()=>{};
 globalThis.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
 globalThis.ResizeObserver=class{observe(){} unobserve(){} disconnect(){}};
 const temp=await mkdtemp(path.join(tmpdir(),'lore-ui-'));
-const entry=`export { revealSpell, setFxSkip } from './client/src/ui/anim'; export { paintDuelClock } from './client/src/ui/duelClock'; export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { createGame } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
+const entry=`export { revealSpell, setFxSkip } from './client/src/ui/anim'; export { paintDuelClock } from './client/src/ui/duelClock'; export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { cardPickerMulti, closeOverlay } from './client/src/ui/modal'; export { deckBucket } from './client/src/ui/duelMaterials'; export { createGame, reduce, ST_MAX, FIELD_MAX } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
 await build({stdin:{contents:entry,resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:path.join(temp,'ui.mjs')});
-const {revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
+const {cardPickerMulti,closeOverlay,deckBucket,reduce,ST_MAX,FIELD_MAX,revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
 setLang('ja');
 // Clock values and accessibility survive the absence of a GPU, reconnect totals and expiry.
 const clock=document.createElement('div');clock.setAttribute('aria-hidden','true');
@@ -28,6 +28,16 @@ assert.equal(clock.dataset.total,'50');assert.equal(clock.getAttribute('role'),'
 paintDuelClock(clock,-4,90,false);assert.equal(clock.dataset.remaining,'0');assert(clock.classList.contains('warn'));assert(clock.classList.contains('opp'));
 paintDuelClock(clock,100,100,true);assert(!clock.classList.contains('warn'));assert.equal(clock.querySelectorAll('.hourglass-anchor').length,1);
 
+// Shared engine capacity applies to both browser and staging worker reducers.
+const boundary=createGame({mode:'bot',seed:7,starting:0,p0:{id:'x',name:'X'},p1:{id:'y',name:'Y'}}).state;
+const trapDef=Object.values(DB).find(c=>c.t==='trap' && !c.req);
+boundary.pending=null;boundary.players[0].mana=30;
+boundary.players[0].traps=Array.from({length:13},(_,i)=>({card:{...trapDef,uid:'b-'+i}}));
+boundary.players[0].hand=[{...trapDef,uid:'fourteenth'},{...trapDef,uid:'fifteenth'}];
+let cap=reduce(boundary,{type:'play',idx:0,player:0}).state;
+assert.equal(cap.players[0].traps.length,14);
+cap=reduce(cap,{type:'play',idx:0,player:0}).state;
+assert.equal(cap.players[0].traps.length,14);assert(cap.players[0].hand.some(c=>c.uid==='fifteenth'));
 const g=createGame({mode:'bot',seed:42,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;
 const mon=Object.values(DB).find(c=>c.t==='mon');
 const trap=Object.values(DB).find(c=>c.t==='trap');
@@ -35,10 +45,15 @@ const spell=Object.values(DB).find(c=>c.ench);
 for(const [i,p] of g.players.entries()){
  p.maxMana=30;p.mana=23;p.hp=20;
  p.field=Array.from({length:7},(_,n)=>({...mon,uid:`mon-${i}-${n}`,exhausted:false,tempAtk:0,atkMod:0,defMod:0,summonedTurn:0}));
- p.traps=Array.from({length:3},(_,n)=>({card:{...trap,uid:`secret-${i}-${n}`}}));
- p.enchants=Array.from({length:4},(_,n)=>({card:{...spell,uid:`spell-${i}-${n}`},turns:99}));
+ p.traps=Array.from({length:7},(_,n)=>({card:{...trap,uid:`secret-${i}-${n}`}}));
+ p.enchants=Array.from({length:7},(_,n)=>({card:{...spell,uid:`spell-${i}-${n}`},turns:99}));
  p.discard=[{...mon,uid:`discard-${i}`}];
 }
+const monCap=structuredClone(g);monCap.pending=null;
+monCap.players.forEach(p=>{p.traps=[];p.enchants=[];});
+monCap.players[0].hand=[{...mon,uid:'eighth-mon'}];monCap.players[0].mana=30;
+const rejected=reduce(monCap,{type:'play',idx:0,player:0}).state;
+assert.equal(rejected.players[0].field.length,7);assert.equal(rejected.players[0].hand[0].uid,'eighth-mon');
 setMyAvatar('SEEKER_RED');setOppAvatar('SEEKER_BLUE');
 let boughtFixed=-1,boughtSupply=-1,rerolls=0;
 const noop=()=>{};
@@ -46,10 +61,22 @@ const v=new GameView(document.getElementById('app'),0,{onPlay:noop,onBlockedPlay
 v.render(g);
 for(const id of ['meRow','oppRow']) {
  assert.equal(document.querySelectorAll(`#${id} .zone-mon > .card`).length,7);
- assert.equal(document.querySelectorAll(`#${id} .zone-st > .card`).length,7);
+ assert.equal(document.querySelectorAll(`#${id} .zone-st > .buff-icon`).length,14);
  assert.equal(document.querySelector(`#${id} .pile-col`).children[0].classList.contains('pile--deck'),true);
  assert.equal(document.querySelector(`#${id} .pile-col`).children[1].classList.contains('pile--shelf'),true);
 }
+assert.equal(ST_MAX,14); assert.equal(FIELD_MAX,7);
+assert.deepEqual([0,1,2,3,4,5,9,10,14,15,30].map(deckBucket),[0,1,1,3,3,5,5,10,10,15,15]);
+assert.equal(document.querySelectorAll('#market .card-type').length,12);
+assert.equal(document.querySelectorAll('#oppRow .buff-icon--trap').length,7);
+assert(!document.querySelector('#rift-me').classList.contains('is-absorbing'));
+g.players[0].removed=[{...mon,uid:'removed-new'}];v.render(g);
+assert(document.querySelector('#rift-me').classList.contains('is-absorbing'));
+const clockMe=document.getElementById('clock-me');paintDuelClock(clockMe,41,90,true);
+cardPickerMulti('捨てるカード',g.players[0].hand,2,()=>{},{exact:true});
+assert.equal(document.querySelector('.dialog-clock').textContent,'41秒');
+paintDuelClock(clockMe,39,90,true);assert.equal(document.querySelector('.dialog-clock').textContent,'39秒');
+closeOverlay();assert(!document.querySelector('.dialog-clock'));
 assert.equal(document.querySelectorAll('.mana-crystal').length,60);
 assert.equal(document.querySelectorAll('#portraitMe .mana-crystal.is-lit').length,23);
 assert.equal(document.querySelector('#hpbar-me').getAttribute('aria-valuenow'),'20');

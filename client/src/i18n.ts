@@ -544,8 +544,8 @@ const D: Record<string, Entry> = {
   "arch.friends.fail": { ko: "친구 목록을 불러오지 못했습니다.", ja: "フレンドリストを読み込めませんでした。", en: "Couldn't load friends." },
   "arch.close": { ko: "닫기", ja: "閉じる", en: "Close" },
   // 대전 연출 (턴 리본 / 복귀 / 기합)
-  "fx.yourturn": { ko: "내 턴", ja: "自分のターン", en: "YOUR TURN" },
-  "fx.oppturn": { ko: "상대 턴", ja: "相手のターン", en: "OPPONENT'S TURN" },
+  "fx.yourturn": { ko: "내 턴", ja: "あなたのターンです", en: "YOUR TURN" },
+  "fx.oppturn": { ko: "상대 턴", ja: "相手のターンです", en: "OPPONENT'S TURN" },
   "fx.resume": { ko: "대전에 복귀했습니다", ja: "対戦に復帰しました", en: "Rejoined the match" },
   "fx.guts": { ko: "기합 발동!", ja: "気合発動！", en: "Guts!" },
 };

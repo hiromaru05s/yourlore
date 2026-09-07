@@ -3781,11 +3781,11 @@ function applyTribe(g: GameState, ctx: Ctx, p: PlayerState, o: PlayerState, trib
   }
 }
 
-// Zone capacity: at most 9 monsters, and 9 spell/trap (traps + enchants) cards.
+// Zone capacity: 7 monsters and 14 shared spell/trap slots.
 export const FIELD_MAX = 7;
 export /** 고정 마켓 슬롯 수 (v28: 10 → 8). 경제 위기(MARKET_CRISIS)의 재구성도 이 값을 쓴다. */
 const MARKET_SIZE = 8;
-const ST_MAX = 7;
+export const ST_MAX = 14;
 const ASSASSIN_IDS = ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3"];
 /** 침묵의 파수꾼/거신(sealLow, v36): 필드의 봉인 몬스터 중 가장 높은 코스트 상한 (없으면 -1). */
 export function sealLowCap(g: GameState): number {

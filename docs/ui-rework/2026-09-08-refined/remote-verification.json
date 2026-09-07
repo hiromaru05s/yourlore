@@ -1,0 +1,208 @@
+{
+  "checkedAt": "2026-09-07T16:53:28.333Z",
+  "results": [
+    {
+      "url": "/",
+      "status": 200,
+      "match": true,
+      "sha256": "1551e3f045536e39f96440b0ac177246e1565f2d6ae2a0de8b60af731a8df7d7",
+      "bytes": 1101
+    },
+    {
+      "url": "/assets/index-qzQobQpJ.js",
+      "status": 200,
+      "match": true,
+      "sha256": "643e1736ad765f79c353e22061c1138eb1c316ae121eaa83594cbff486a3cd34",
+      "bytes": 991620
+    },
+    {
+      "url": "/assets/index-DN3UpS_l.css",
+      "status": 200,
+      "match": true,
+      "sha256": "abfd92c7ef7c19139573c4fe5c1ea2db11a84a1b43ee54a0fc6e6b44d39b5859",
+      "bytes": 128200
+    },
+    {
+      "url": "/assets/duelScene-DxKPf5z3.js",
+      "status": 200,
+      "match": true,
+      "sha256": "f55147e39561e75d1fad7a2fb593f8c970c3526880a44b18baed867312c2dee4",
+      "bytes": 538093
+    },
+    {
+      "url": "/art/biblion/refined/button-hover.png",
+      "status": 200,
+      "match": true,
+      "sha256": "4b6a623e09b2d1fab8bc00fffea95643e4b21a0e5b789e38171cc3a23a1bc393",
+      "bytes": 978289
+    },
+    {
+      "url": "/art/biblion/refined/button-idle.png",
+      "status": 200,
+      "match": true,
+      "sha256": "f581341c1a45cd46fa27abd58bbe8db872a76e40590ed12cae984c0ddbf496f7",
+      "bytes": 1004990
+    },
+    {
+      "url": "/art/biblion/refined/button-pressed.png",
+      "status": 200,
+      "match": true,
+      "sha256": "6812bfffb5bd2d5c94316e7367ec4e1bb12b0b05bb367b99412f271eea41f2f7",
+      "bytes": 739461
+    },
+    {
+      "url": "/art/biblion/refined/card-frame.png",
+      "status": 200,
+      "match": true,
+      "sha256": "4738fb9fa60651a0c83affca84066c5cd13b021e0e5e08237c989961b60b1e00",
+      "bytes": 885214
+    },
+    {
+      "url": "/art/biblion/refined/deck-1.png",
+      "status": 200,
+      "match": true,
+      "sha256": "f09518b327bfdd43de5559489be3e88fea17b13718c1e6ac9521777527524559",
+      "bytes": 1109595
+    },
+    {
+      "url": "/art/biblion/refined/deck-10.png",
+      "status": 200,
+      "match": true,
+      "sha256": "e7dc3564e09dcd5837fe96f5920f56494ceec9c4716f13253b4b07b3f7e45d62",
+      "bytes": 1929867
+    },
+    {
+      "url": "/art/biblion/refined/deck-15.png",
+      "status": 200,
+      "match": true,
+      "sha256": "7d215b5b4938cefbc740894ce03317683d9d5a3b4f802217fc1f3357c6705d1d",
+      "bytes": 1226827
+    },
+    {
+      "url": "/art/biblion/refined/deck-3.png",
+      "status": 200,
+      "match": true,
+      "sha256": "49ba35a48b6e4d3c28a24602e403be4b803fc67ff3d6c7f0a07d7c3135900955",
+      "bytes": 1138288
+    },
+    {
+      "url": "/art/biblion/refined/deck-5.png",
+      "status": 200,
+      "match": true,
+      "sha256": "d2c2cae0b96618492f62186ea7137d73e3376266ec66973fcb79fa3b493e7419",
+      "bytes": 1409146
+    },
+    {
+      "url": "/art/biblion/refined/field-frame.png",
+      "status": 200,
+      "match": true,
+      "sha256": "f44c670fe25ee2157ccff6d09030f5ecc681f82a82cbcaadb8a0e306f252a862",
+      "bytes": 382729
+    },
+    {
+      "url": "/art/biblion/refined/mana-empty.png",
+      "status": 200,
+      "match": true,
+      "sha256": "2017a7d721397f6c399e1134e778d5ddd72a78014d0cb7785903b792b49a5112",
+      "bytes": 663404
+    },
+    {
+      "url": "/art/biblion/refined/mana-filled.png",
+      "status": 200,
+      "match": true,
+      "sha256": "72838fb0944bccbc2af1040593cd32dcee0c0da2296f5fb8bbc07bab139bd2c7",
+      "bytes": 709350
+    },
+    {
+      "url": "/art/biblion/refined/panel-frame.png",
+      "status": 200,
+      "match": true,
+      "sha256": "fd6a28a427131eea90b63a01f55c737432d35563cafc2864fbbc8f619169cd31",
+      "bytes": 1487685
+    },
+    {
+      "url": "/art/biblion/refined/portrait-opp.png",
+      "status": 200,
+      "match": true,
+      "sha256": "6ef069be837bf9b3a7391f4199a4c7c8874a5d405502f4b2f6340299d4f14991",
+      "bytes": 692936
+    },
+    {
+      "url": "/art/biblion/refined/portrait-self.png",
+      "status": 200,
+      "match": true,
+      "sha256": "b44074522dae08bb2a06c68545be1a139d073f04f082abe337e1f470f5a98699",
+      "bytes": 584472
+    },
+    {
+      "url": "/art/biblion/refined/reroll.png",
+      "status": 200,
+      "match": true,
+      "sha256": "35f3988351bfad75850103ee740f5b8dc3df5253457b38a7727597a0083c894e",
+      "bytes": 961476
+    },
+    {
+      "url": "/art/biblion/refined/rift-absorb.png",
+      "status": 200,
+      "match": true,
+      "sha256": "6c028d944cd635e733b64e347c75b41b5953c2fce5d548e32c17892387996bd6",
+      "bytes": 2488351
+    },
+    {
+      "url": "/art/biblion/refined/rift-hover.png",
+      "status": 200,
+      "match": true,
+      "sha256": "590831fdc830dcc6add4add639c37df6ef8ad7c4334e6e8ddc34879e4fe75431",
+      "bytes": 2871404
+    },
+    {
+      "url": "/art/biblion/refined/rift-idle.png",
+      "status": 200,
+      "match": true,
+      "sha256": "5d66cfc671c867fc773260a15629644f9ee070ef6213e634b53cc50fdb77758f",
+      "bytes": 2935136
+    },
+    {
+      "url": "/art/biblion/refined/shelf-case.png",
+      "status": 200,
+      "match": true,
+      "sha256": "990fa4001225fbe1499be6da48ec1a46b4c76e8fb6acc6c9f3792d8b403249f0",
+      "bytes": 1654651
+    },
+    {
+      "url": "/art/biblion/refined/stat-attack.png",
+      "status": 200,
+      "match": true,
+      "sha256": "ac874d0d177096d38a3160681640324cd8800af67807353d1099a9006b297c79",
+      "bytes": 1519314
+    },
+    {
+      "url": "/art/biblion/refined/stat-cost.png",
+      "status": 200,
+      "match": true,
+      "sha256": "2d952d36926c0e9ad495b3975c9825f95a99476528004de4f1b116fb3224f646",
+      "bytes": 1398002
+    },
+    {
+      "url": "/art/biblion/refined/stat-defense.png",
+      "status": 200,
+      "match": true,
+      "sha256": "dda4c2978c648058dfb9172029f2576835d8de83e8bf166313a5ffc0f845688a",
+      "bytes": 1411692
+    },
+    {
+      "url": "/art/biblion/refined/trap-seal.png",
+      "status": 200,
+      "match": true,
+      "sha256": "72c4237218f2c073e462f842e0ac2df39148e0de9c1c5d7963d0a1ca9f9a7789",
+      "bytes": 3313456
+    },
+    {
+      "url": "/art/biblion/refined/turn-flare.png",
+      "status": 200,
+      "match": true,
+      "sha256": "0de430da76e9ef57b08adbe9df7cf8023026b25f8e4a2a7291e3b90084c43101",
+      "bytes": 1132254
+    }
+  ]
+}

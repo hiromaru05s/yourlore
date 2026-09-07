@@ -5,9 +5,9 @@ export function solveBoard(w: number, h: number, _underPile = false) {
   const short = h <= 550;
   const gap = w < 700 ? 3 : 8;
   const portrait = Math.max(42, Math.min(108, h * .118, w * .16));
-  const mktH = Math.max(38, Math.min(146, (w * .91 - 11 * gap - 36) / (phone ? 6 : 12) / .64, h * (phone ? .108 : short ? .13 : .164)));
+  const mktH = Math.max(38, Math.min(146, (w * .94 - 11 * gap - (phone ? 87 : 180)) / (phone ? 6 : 12) / .64, h * (phone ? .108 : short ? .13 : .164)));
   const verticalTile = (h * (phone ? .91 : short ? .88 : .935) - portrait * 2 - mktH * (phone ? 2 : 1) - (phone ? 176 : short ? 94 : 166)) / 3.64;
-  const tile = Math.max(20, Math.min(100, (w * .86 - 9 * gap) / 10, verticalTile));
+  const tile = Math.max(20, Math.min(100, (w * .94 - 12 * gap) / 10.5, verticalTile));
   const handH = Math.min(270, h * .32, w * .44);
   return { cardH: tile / .64, mktH, handH, tile, gap, portrait, railW: 0, logW: 0,
     compact: w < 1000, tiny: w < 560 || h < 480, flatMkt: !phone, stackMkt: phone,

@@ -4,15 +4,16 @@
 // All animation lives in anim.ts; this file only draws + binds.
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
-import { MAX_MANA, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem, marketStockOf } from "../shared/engine";
+import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem, marketStockOf } from "../shared/engine";
 import { frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
 import { artUrl, cardEl, prefetchZoomArt } from "./cardView";
 import { bindZoom, zoomCard, setPlayOrigin } from "./anim";
-import { t, getLang, esc } from "../i18n";
+import { t, getLang, esc, cardName } from "../i18n";
 import { logToEn } from "../shared/logEn";
 import { getSfxVolume, setSfxVolume } from "./sound";
+import { deckBucket, refinedArt } from "./duelMaterials";
 import { avatarHtml } from "./social";
 
 // the local player's profile avatar (set by the game screen), shown on MY portrait
@@ -45,8 +46,8 @@ function swallowNextClick(el: HTMLElement): void {
   setTimeout(() => el.removeEventListener("click", swallow, { capture: true }), 500);
 }
 
-const MON_SLOTS = 7;
-const ST_SLOTS = 7;
+const MON_SLOTS = FIELD_MAX;
+const ST_SLOTS = ST_MAX;
 
 export interface BoardHandlers {
   onPlay(uid: string): void;
@@ -65,6 +66,7 @@ export interface BoardHandlers {
 }
 
 export class GameView {
+  private riftCounts = new Map<string, number>();
   root: HTMLElement;
   you: Side;
   h: BoardHandlers;
@@ -135,6 +137,7 @@ export class GameView {
       </div>
       <div class="target-hint" id="targetHint" style="display:none"></div>`;
     this.logEl = this.q("log");
+    this.root.querySelector(".mid-aside")!.prepend(this.q("turnInfo"));
     (this.q("endBtn") as HTMLButtonElement).onclick = () => this.h.onEndTurn();
     (this.q("giveupBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
     // sound button (round button below the logo): click = volume slider popover
@@ -470,8 +473,9 @@ export class GameView {
       // green frame: a dedicated owner-coloured trap-jaw icon tile (mine = blue,
       // opponent = red). Identity is still revealed only by the reveal flow.
       const tile = document.createElement("div");
-      tile.className = "card card--field card--field-trap";
-      tile.style.backgroundImage = `url(${backFor(isMe)})`;
+      tile.className = "buff-icon buff-icon--trap";
+      tile.style.backgroundImage = `url(${refinedArt("trap-seal")})`;
+      tile.title = trapLabel;
       tile.setAttribute("aria-label", trapLabel);
       // v30 카운터 배지 — 카운트다운(⏳남은 턴) / 정보상(×남은 사용 횟수).
       // 자신의 함정은 항상, 상대 함정은 발동으로 정체가 공개된 정보상만 (카운트다운은 비공개 유지)
@@ -492,7 +496,16 @@ export class GameView {
       // 카운터 보유 영구마법(상회/양조)은 카운터 수를 병기한다.
       const bits: string[] = [rem != null ? `⏳${rem}` : "∞"];
       if (e.cnt != null && e.cnt > 0) bits.push(`×${e.cnt}`);
-      const card = cardEl(e.card, { compactField: true, badge: bits.join(" ") });
+      const card = document.createElement("div");
+      card.className = "buff-icon buff-icon--spell";
+      card.dataset.uid = e.card.uid;
+      card.style.backgroundImage = `url(${artUrl.full(e.card.id)})`;
+      card.tabIndex = 0;
+      card.setAttribute("role", "button");
+      card.setAttribute("aria-label", `${cardName(e.card)} ${bits.join(" ")}`);
+      card.innerHTML = `<span class="buff-duration">${bits.join(" ")}</span><span class="buff-kind" aria-hidden="true">✦</span>`;
+      card.onclick = () => zoomCard(e.card);
+      card.onkeydown = ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); zoomCard(e.card); } };
       if (rem != null) { card.classList.add("ench-timed"); if (rem <= 1) card.classList.add("ench-expiring"); }
       else card.classList.add("ench-perm");
       bindZoom(card, e.card);
@@ -503,8 +516,8 @@ export class GameView {
     // Monster zone nearest the center line: me → mon on top, opp → mon on bottom.
     const monRow = this.zoneRow(mz);
     const stRow = this.zoneRow(sz);
-    monRow.dataset.label = `${t("duel.monsters")} ${p.field.length}/7`;
-    stRow.dataset.label = `${t("duel.spellsTraps")} ${p.traps.length + p.enchants.length}/7`;
+    monRow.dataset.label = `${t("duel.monsters")} ${p.field.length}/${MON_SLOTS}`;
+    stRow.dataset.label = `${t("duel.spellsTraps")} ${p.traps.length + p.enchants.length}/${ST_SLOTS}`;
     mz.setAttribute("aria-label", monRow.dataset.label);
     sz.setAttribute("aria-label", stRow.dataset.label);
     const zones = document.createElement("div");
@@ -523,13 +536,18 @@ export class GameView {
     const aside = document.createElement("div");
     aside.className = "row-aside";
     const removed = (p.removed ?? []).slice().sort((a, b) => a.cost - b.cost);
-    if (removed.length > 0) {
+    {
       const rbtn = document.createElement("button");
-      rbtn.className = "btn btn-ghost mp-btn mp-btn--exile";
-      rbtn.innerHTML = `<span class="mp-ico">⛔</span><span class="mp-lb">${t("deck.removed")}</span><b>${removed.length}</b>`;
+      rbtn.className = "rift-button";
+      rbtn.id = isMe ? "rift-me" : "rift-opp";
+      const previous = this.riftCounts.get(rbtn.id);
+      if (previous != null && removed.length > previous) rbtn.classList.add("is-absorbing");
+      this.riftCounts.set(rbtn.id, removed.length);
+      rbtn.addEventListener("animationend", () => rbtn.classList.remove("is-absorbing"));
+      rbtn.innerHTML = `<span class="rift-sprite" aria-hidden="true"></span><span class="rift-label">${t("deck.removed")} <b>${removed.length}</b></span>`;
       rbtn.title = `${t("deck.removed")} ${removed.length}`;
       rbtn.onclick = () => cardPicker(`${esc(p.name)} — ${t("deck.removed")} (${removed.length})`, removed, () => { /* browse only */ });
-      aside.appendChild(rbtn);
+      piles.appendChild(rbtn);
     }
 
     row.append(block, aside);
@@ -981,20 +999,18 @@ export class GameView {
     pile.dataset.count = String(count);
     pile.dataset.texture = frame || FRAME_BACK;
     pile.dataset.sleeve = backFor(id.startsWith('pile-my'));
-    // Flat accessible fallback; the scene renders the actual stack/rack when WebGL is available.
+    const body = document.createElement("div");
+    body.className = "pile-body";
+    const shelf = id.endsWith("Disc");
+    const bucket = deckBucket(count);
+    pile.dataset.bucket = String(bucket);
+    body.style.backgroundImage = `url(${refinedArt(shelf ? "shelf-case" : `deck-${bucket || 1}`)})`;
+    if (!shelf && !count) body.style.opacity = "0.18";
     const front = document.createElement("div");
     front.className = "pile-card";
-    // 묘지(discard)는 공개 정보 → 맨 위 카드를 "카드 프레임까지 포함한 온전한 앞면"으로
-    // 렌더한다. 예전엔 아트만 background-image로 깔아서 프레임·이름·코스트가 사라졌다.
-    const faceUp = !!count && !!faceCard && faceCard.id !== "HIDDEN";
-    if (faceUp) {
-      const face = cardEl(faceCard!, {});
-      face.classList.add("pile-face");
-      front.appendChild(face);
-    } else if (frame && count) {
-      front.style.backgroundImage = `url(${frame})`;
-    }
-    pile.append(front);
+    if (count) front.style.backgroundImage = `url(${shelf && faceCard ? artUrl.full(faceCard.id) : backFor(id.startsWith('pile-my'))})`;
+    else front.hidden = true;
+    body.append(front); pile.append(body);
     const tg = document.createElement("div"); tg.className = "pile-tag"; tg.textContent = tag; pile.appendChild(tg);
     const cnt = document.createElement("div"); cnt.className = "pile-count"; cnt.textContent = String(count); pile.appendChild(cnt);
     if (faceCard && faceCard.id !== "HIDDEN") bindZoom(pile, faceCard);

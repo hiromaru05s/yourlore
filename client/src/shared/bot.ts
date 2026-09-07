@@ -22,7 +22,7 @@
 //  · hell   — never blunders + value-net look-ahead search → 최강
 // ============================================================
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
-import { buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, effMaxMana, freeBuyBlocked, glassBanActive, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
+import { ST_MAX, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, effMaxMana, freeBuyBlocked, glassBanActive, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
 import { avgPower, cardPower } from "./cardEval";
 import { netEval, determinize } from "./botNet";
 import { DB, hasPassive } from "./cards";
@@ -649,7 +649,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.ench === "guild" && p.enchants.some((e) => e.card.ench === "guild")) return false; // 상회 중복
     if (c.id === "SLUM" && !p.enchants.some((e) => e.card.ench === "guild")) return false; // 슬럼가: 상회 필요
     if (c.id === "DUNGEON_FLOOR" && o.maxMana < 7) return false; // 던전 최하층: 상대 최대 마나 7+ 필요
-    if (c.ench && p.traps.length + p.enchants.length >= 7) return false;
+    if (c.ench && p.traps.length + p.enchants.length >= ST_MAX) return false;
     if (c.id === "BLOOD_SECRET" && !p.field.some((m) => isVampFamily(m))) return false;
     if (c.id === "CHOSEN_AREA" && cullExiled(p) < 25) return false;
     // v41b 조건부 마법 (엔진이 지불 전에 거부) + 낭비 방지
@@ -729,7 +729,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   };
   const spells = p.hand.map((c, i) => ({ c, i })).filter((x) => x.c.t === "spell" && playCost(x.c, p) <= p.mana && castable(x.c));
 
-  const stFull = p.traps.length + p.enchants.length >= 7;
+  const stFull = p.traps.length + p.enchants.length >= ST_MAX;
   // summonable monsters, best value first (respect the 9-monster zone cap)
   const monsters = p.field.length >= 7 ? [] : p.hand
     .map((c, i) => ({ c, i }))

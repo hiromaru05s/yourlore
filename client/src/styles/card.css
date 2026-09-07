@@ -53,10 +53,10 @@
    art shows through. Text/cost/stats layer above this (higher z-index). */
 .card-frame {
   position:absolute; inset:0; z-index:1; pointer-events:none;
-  background:url(/art/biblion/ui/card-frame.png) center/100% 100% no-repeat;
+  background:url(/art/biblion/refined/card-frame.png) center/100% 100% no-repeat;
   border:0; box-shadow:none; border-radius:0;
 }
-.card--field .card-frame { background-image:url(/art/biblion/ui/field-frame.png); }
+.card--field .card-frame { background-image:url(/art/biblion/refined/field-frame.png); }
 
 .card-name {
   /* name plate (normalized frame): y 5.5–13.8%, right of the cost circle */
