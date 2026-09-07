@@ -416,3 +416,14 @@
 .buff-duration::before,.buff-counter::before { content:''; position:absolute; inset:-15% 0; z-index:-1; background:url(/art/biblion/modular/plaque.png) center/100% 100%; filter:url(#celestial-matte); }
 .buff-counter { right:auto; left:-5%; bottom:15%; min-width:48%; }
 .buff-duration::before,.buff-counter::before { background-size:100% 180%; background-position:center 45%; }
+
+/* Open hand: 65% of its previous presentation; compact hand stays unchanged. */
+.game.hand-open .hand { transform:translateX(-50%) scale(.65); transform-origin:bottom center; }
+/* Empty positions remain layout/drop targets without painting ghost rectangles. */
+.game .zone .slot { border-color:transparent; background:transparent; box-shadow:none; }
+.game .zone .slot::after { content:none; }
+.card.drag-ghost--hand { transform:translate(-50%,-58%) rotate(2deg); box-shadow:none; filter:drop-shadow(0 8px 10px #0008); }
+.pile.pile--3d-ready .pile-body { visibility:hidden; }
+.pile.pile--3d-ready .pile-card { visibility:hidden; }
+.pile-draw-anchor { position:absolute; pointer-events:none; visibility:hidden; }
+.pile.is-shuffling .pile-body { visibility:hidden; }

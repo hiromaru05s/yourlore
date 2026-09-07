@@ -47,18 +47,22 @@ async function matte(url: string): Promise<HTMLCanvasElement> {
 }
 
 export interface CardSurface { face: HTMLCanvasElement | null; back: HTMLCanvasElement; }
+/** Identity-free sleeve surface shared by draw and library reshuffle meshes. */
+export async function captureCardBack(sleeve:string,ratio=1/.64):Promise<CardSurface> {
+  const w=RESOLUTION,h=w*ratio,pad=w*CARD_PADDING;
+  const back=canvas(w+pad*2,h+pad*2);
+  back.getContext('2d')!.drawImage(await image(sleeve),pad,pad,w,h);
+  return {face:null,back};
+}
 export async function captureCardSurface(node: HTMLElement, sleeve: string, reveal: boolean): Promise<CardSurface> {
   const r = node.getBoundingClientRect();
   const ratio = r.height / r.width;
+  // Opponent path never reads, copies or requests a face or card identity.
+  if (!reveal) return captureCardBack(sleeve,ratio);
   const w = RESOLUTION, h = w * ratio, pad = w * CARD_PADDING;
   const back = canvas(w + pad*2, h + pad*2);
   const backCtx = back.getContext('2d')!;
   const backImage = image(sleeve);
-  // Opponent path never reads, copies or requests a face or card identity.
-  if (!reveal) {
-    backCtx.drawImage(await backImage, pad, pad, w, h);
-    return { face: null, back };
-  }
   const face = canvas(w + pad*2, h + pad*2), ctx = face.getContext('2d')!;
   const box = (el: Element) => {
     const b = el.getBoundingClientRect();

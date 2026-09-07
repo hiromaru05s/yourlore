@@ -335,6 +335,9 @@ export abstract class BaseController implements BoardHandlers {
           else A.pileFlash(e.player === this.you ? "pile-myDisc" : "pile-oppDisc");
           break;
         }
+        case "reshuffle":
+          await A.animateReshuffle(sideOf(e.player), e.count);
+          break;
         case "draw":
           draws[e.player] += e.count;
           break;

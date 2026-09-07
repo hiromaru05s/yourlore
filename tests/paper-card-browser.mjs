@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const origin=process.env.LORE_TEST_ORIGIN || 'http://localhost:5173';
-const output='docs/ui-rework/2026-09-08-paper-cards';
+const output=process.env.LORE_TEST_OUTPUT || 'docs/ui-rework/2026-09-08-paper-cards';
 await fs.mkdir(output,{recursive:true});
 const browser=await chromium.launch({headless:true,channel:'chrome',args:['--disable-features=LocalNetworkAccessChecks']});
 const context=await browser.newContext({viewport:{width:1280,height:800},deviceScaleFactor:1});
@@ -65,6 +65,9 @@ await page.evaluate(()=>qa.A.setFxSkip(true));await clean();await page.evaluate(
 await start();await page.waitForSelector('.paper-draw-canvas');
 await page.setViewportSize({width:900,height:700});await clean();
 await page.setViewportSize({width:1280,height:800});
+// Let the resize event/layout settle before starting a fresh animation; a
+// pending resize intentionally cancels in-flight cards in production.
+await page.waitForTimeout(250);
 // Opponent capture never accesses any front card nodes, even if one were attached.
 assert(await page.evaluate(async()=>{
   const {captureCardSurface}=await import('/src/ui/cardSurface.ts');

@@ -343,6 +343,30 @@ export function flyCardFrame(frame: string, from: DOMRect | null, to: DOMRect | 
   setTimeout(() => fly.remove(), dur + 40);
 }
 
+/** Public reshuffle event drives the rack-to-deck flight, before draw playback. */
+export async function animateReshuffle(side:ViewSide,count:number):Promise<void> {
+  const prefix=side==='me'?'pile-my':'pile-opp';
+  const shelf=document.getElementById(prefix+'Disc'),deck=document.getElementById(prefix+'Deck');
+  if(!shelf||!deck||count<=0||fxSkip||document.hidden||typeof WebGL2RenderingContext==='undefined'||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const abort=new AbortController(),cancel=()=>abort.abort();
+  const cancelled=new Promise<void>(resolve=>abort.signal.addEventListener('abort',()=>resolve(),{once:true}));
+  fxWaiters.add(cancel);window.addEventListener('resize',cancel,{once:true});document.addEventListener('visibilitychange',cancel,{once:true});
+  const deadline=setTimeout(cancel,4300);
+  try {
+    await Promise.race([cancelled,import('./paperShuffle').then(async({shufflePaperCards})=>{
+      if(!abort.signal.aborted&&!fxSkip)await shufflePaperCards(shelf,deck,count,abort.signal);
+    })]);
+  } catch { /* Keep the state pipeline alive on an unavailable GPU/module. */ }
+  finally {
+    clearTimeout(deadline);cancel();fxWaiters.delete(cancel);
+    window.removeEventListener('resize',cancel);document.removeEventListener('visibilitychange',cancel);
+    // Presentation only. The authoritative post-action snapshot follows next.
+    deck.dataset.count=String(count);shelf.dataset.count='0';
+    const dc=deck.querySelector('.pile-count'),sc=shelf.querySelector('.pile-count');
+    if(dc)dc.textContent=String(count);if(sc)sc.textContent='0';
+  }
+}
+
 /** Real paper geometry during travel; DOM remains the accessible resting card. */
 export async function animateDraw(handEl: HTMLElement | null, count: number, side: ViewSide = "me"): Promise<void> {
   const deck = document.getElementById(side === "me" ? "pile-myDeck" : "pile-oppDeck");
@@ -350,7 +374,7 @@ export async function animateDraw(handEl: HTMLElement | null, count: number, sid
       typeof WebGL2RenderingContext === 'undefined' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const cards = Array.from(handEl.querySelectorAll<HTMLElement>(side === "me" ? ".card" : ".card--back"));
   const incoming = cards.slice(-Math.min(count, 6)).filter(n => n.getBoundingClientRect().width > 0);
-  const origin = (deck.querySelector('.pile-card') || deck).getBoundingClientRect();
+  const origin = (deck.querySelector('.pile-draw-anchor') || deck.querySelector('.pile-card') || deck).getBoundingClientRect();
   if (!origin.width || !incoming.length) return;
   const abort = new AbortController();
   const cancel = (): void => abort.abort();

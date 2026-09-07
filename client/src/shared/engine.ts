@@ -376,7 +376,11 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
   const drawN = (p: PlayerState, n: number): number => {
     let drawn = 0;
     for (let i = 0; i < n; i++) {
-      if (!p.deck.length) { if (!p.discard.length) break; p.deck = shuffle(g, p.discard.splice(0)); }
+      if (!p.deck.length) {
+        if (!p.discard.length) break;
+        ev.push({ type: "reshuffle", player: side(g, p), count: p.discard.length });
+        p.deck = shuffle(g, p.discard.splice(0));
+      }
       const c = p.deck.pop();
       if (!c) continue;
       p.hand.push(c); drawn++;

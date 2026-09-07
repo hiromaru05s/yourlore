@@ -1,9 +1,10 @@
-/** One WebGL context for the hourglass and perspective particle effects.
- * Raster deck/shelf skins and all input remain in the DOM. */
+/** One WebGL context for library furniture, card stacks and the hourglass.
+ * Semantic controls/count labels stay in the DOM, with raster GPU fallback. */
 import * as T from 'three';
+import { makePile, type PileModel } from './pileModels';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
-type Item = { scene: T.Scene; camera: T.PerspectiveCamera; group: T.Group; key: string; element: HTMLElement; upper?: T.Mesh; lower?: T.Mesh; stream?: T.Points; fraction?: number };
+type Item = { scene: T.Scene; camera: T.PerspectiveCamera; group: T.Group; key: string; element: HTMLElement; upper?: T.Mesh; lower?: T.Mesh; stream?: T.Points; fraction?: number; pile?:PileModel; count?:number; entered?:number };
 const clamp = (n: number) => Math.min(1, Math.max(0, n));
 export function mountDuelScene(root: HTMLElement): () => void {
   let renderer: T.WebGLRenderer;
@@ -25,6 +26,13 @@ export function mountDuelScene(root: HTMLElement): () => void {
   room.dispose(); pmrem.dispose();
   let dead = false, dirty = true, frame = 0, last = 0, width = 0, height = 0;
   const items = new Map<string, Item>();
+  const textures=new Map<string,T.Texture>();
+  const textureLoader=new T.TextureLoader();
+  function texture(url:string):T.Texture {
+    let map=textures.get(url);
+    if(!map){map=textureLoader.load(url);map.colorSpace=T.SRGBColorSpace;map.anisotropy=4;textures.set(url,map);}
+    return map;
+  }
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const metal = () => new T.MeshStandardMaterial({ color: 0xd2c7a6, metalness: .7, roughness: .23 });
   const enamel = () => new T.MeshStandardMaterial({ color: 0x122943, metalness: .42, roughness: .3 });
@@ -33,7 +41,7 @@ export function mountDuelScene(root: HTMLElement): () => void {
   }
   function disposeObject(object: T.Object3D):void {
     const geometries=new Set<T.BufferGeometry>(), materials=new Set<T.Material>();
-    object.traverse(o=>{const a=o as T.Mesh; if(a.geometry)geometries.add(a.geometry); if(a.material)(Array.isArray(a.material)?a.material:[a.material]).forEach(m=>materials.add(m));});
+    object.traverse(o=>{if(o instanceof T.DirectionalLight)o.shadow.dispose();const a=o as T.Mesh; if(a.geometry)geometries.add(a.geometry); if(a.material)(Array.isArray(a.material)?a.material:[a.material]).forEach(m=>materials.add(m));});
     geometries.forEach(g=>g.dispose()); materials.forEach(m=>m.dispose());
   }
   function base(el:HTMLElement, clock:boolean):Item {
@@ -75,23 +83,34 @@ export function mountDuelScene(root: HTMLElement): () => void {
     item.stream=new T.Points(geometry,new T.PointsMaterial({color:0xffdb92,size:.023}));item.group.add(item.stream);
   }
   function refresh():void {
-    const elements=[...root.querySelectorAll<HTMLElement>('.mp-clock.show')];
+    const elements=[...root.querySelectorAll<HTMLElement>('.mp-clock.show, .pile--deck, .pile--shelf')];
     const ids=new Set(elements.map(el=>el.id));
     for(const [id,item] of items)if(!ids.has(id)){disposeObject(item.scene);items.delete(id);}
     for(const el of elements) {
       const clock=el.classList.contains('mp-clock');
-      const key=clock?'clock':`${el.dataset.count}:${el.dataset.texture}:${el.dataset.sleeve}`;
+      const key=clock?'clock':`${el.dataset.count}:${el.dataset.face}:${el.dataset.sleeve}`;
       let item=items.get(el.id);
       if(item?.key===key){item.element=el;continue;}
+      const previousCount=item?.count;
       if(item)disposeObject(item.scene);
       item=base(el,clock);item.key=key;items.set(el.id,item);
       if(clock)hourglass(item);
-
+      else {
+        const shelf=el.classList.contains('pile--shelf'),count=Number(el.dataset.count)||0;
+        item.count=count;
+        item.pile=makePile(count,shelf,texture(el.dataset.sleeve!),shelf&&el.dataset.face?texture(el.dataset.face):undefined);
+        item.group.add(item.pile.group);
+        if(shelf&&previousCount!=null&&count>previousCount&&!reduced.matches)item.entered=performance.now();
+        item.camera.position.set(shelf?2.3:1.7,shelf?2.2:3.5,shelf?5.3:4.9);
+        item.camera.lookAt(0,shelf?.65:.1,0);item.camera.zoom=shelf?1.12:1.6;
+      }
     }
 
+    const used=new Set(elements.flatMap(el=>[el.dataset.sleeve,el.dataset.face]).filter(Boolean));
+    for(const [url,map] of textures)if(!used.has(url)){map.dispose();textures.delete(url);}
   }
   const observer=new MutationObserver(()=>{dirty=true;});
-  observer.observe(root,{childList:true,subtree:true,attributes:true,attributeFilter:['class','data-count','data-texture','data-sleeve']});
+  observer.observe(root,{childList:true,subtree:true,attributes:true,attributeFilter:['class','data-count','data-texture','data-sleeve','data-face']});
   const dustScene=new T.Scene(), dustCamera=new T.PerspectiveCamera(45,1,1,4000);
   const dusts:Array<{group:T.Group;start:number;rect:DOMRect}>=[];
   const onDust=(event:Event):void=>{
@@ -139,7 +158,24 @@ export function mountDuelScene(root: HTMLElement): () => void {
       // Each view has its own perspective camera and real self-occlusion, not CSS transforms.
       item.camera.aspect=r.width/r.height;item.camera.updateProjectionMatrix();
       renderer.setViewport(r.left,height-r.bottom,r.width,r.height);renderer.setScissor(r.left,height-r.bottom,r.width,r.height);
+      if(item.pile){
+        item.pile.cards.visible=!item.element.classList.contains('is-shuffling');
+        if(item.entered){
+          const t=clamp((now-item.entered)/480);
+          item.pile.top.position.y=.83+.4*Math.pow(1-t,3);
+          if(t===1)item.entered=undefined;
+        }
+      }
       renderer.render(item.scene,item.camera);
+      if(item.pile){
+        // Project the actual top-card centre into a DOM anchor for draw/shuffle.
+        const centre=item.pile.top.getWorldPosition(new T.Vector3()).project(item.camera);
+        let anchor=item.element.querySelector<HTMLElement>('.pile-draw-anchor');
+        if(!anchor){anchor=document.createElement('span');anchor.className='pile-draw-anchor';item.element.append(anchor);}
+        const cardWidth=r.width*(item.element.classList.contains('pile--shelf')?.69:.7);
+        anchor.style.cssText=`left:${(centre.x+1)*r.width/2-cardWidth/2}px;top:${(1-centre.y)*r.height/2-cardWidth/.64/2}px;width:${cardWidth}px;height:${cardWidth/.64}px`;
+        if(!item.element.classList.contains('pile--3d-ready'))item.element.classList.add('pile--3d-ready');
+      }
     }
     if(dusts.length || flows.length){
       renderer.setViewport(0,0,width,height);renderer.setScissor(0,0,width,height);renderer.clearDepth();
@@ -166,7 +202,9 @@ export function mountDuelScene(root: HTMLElement): () => void {
   const lost=(e:Event):void=>{e.preventDefault();dispose();};canvas.addEventListener('webglcontextlost',lost);
   function dispose():void {
     if(dead)return;dead=true;cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);
-    items.forEach(item=>disposeObject(item.scene));disposeObject(dustScene);environment.dispose();renderer.dispose();canvas.remove();root.classList.remove('duel-webgl');
+    items.forEach(item=>disposeObject(item.scene));textures.forEach(t=>t.dispose());
+    root.querySelectorAll('.pile--3d-ready').forEach(el=>{el.classList.remove('pile--3d-ready');el.querySelector('.pile-draw-anchor')?.remove();});
+    disposeObject(dustScene);environment.dispose();renderer.dispose();canvas.remove();root.classList.remove('duel-webgl');
   }
   frame=requestAnimationFrame(render);
   return dispose;

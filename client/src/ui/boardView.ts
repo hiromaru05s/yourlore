@@ -951,9 +951,21 @@ export class GameView {
           if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 12) return;
           try { card.setPointerCapture(ev.pointerId); } catch { /* ok */ }
           ghost = card.cloneNode(true) as HTMLElement;
-          ghost.className = card.className + " drag-ghost";
-          ghost.style.width = `${card.offsetWidth}px`;
-          ghost.style.height = `${card.offsetHeight}px`;
+          ghost.className = card.className + " drag-ghost drag-ghost--hand";
+          // Field-sized silhouette, with hand aspect ratio and proportional seals.
+          const field = this.root.querySelector<HTMLElement>("#meRow .zone-mon .card, #meRow .zone-mon .slot");
+          const fieldWidth = field?.getBoundingClientRect().width || 64;
+          const width = Math.min(card.getBoundingClientRect().width * .72, fieldWidth);
+          const height = width * card.offsetHeight / card.offsetWidth;
+          ghost.style.setProperty("--cw", `${width}px`);
+          ghost.style.setProperty("--ch", `${height}px`);
+          ghost.style.width = `${width}px`;
+          ghost.style.height = `${height}px`;
+          // Text fitting stores pixel sizes on the source. Scale those too,
+          // otherwise the smaller drag card inherits an oversized clipped title.
+          for (const label of ghost.querySelectorAll<HTMLElement>("[style]")) {
+            if (label.style.fontSize.endsWith("px")) label.style.fontSize = `${parseFloat(label.style.fontSize) * width / card.offsetWidth}px`;
+          }
           document.body.appendChild(ghost);
           card.classList.add("is-dragging");
           if (aff) game?.classList.add("drag-play");
@@ -1005,6 +1017,8 @@ export class GameView {
     pile.dataset.count = String(count);
     pile.dataset.texture = frame || FRAME_BACK;
     pile.dataset.sleeve = backFor(id.startsWith('pile-my'));
+    // Only the public discard top gets a face texture. Decks use sleeve only.
+    if (id.endsWith('Disc') && faceCard && faceCard.id !== 'HIDDEN') pile.dataset.face = artUrl.full(faceCard.id);
     const body = document.createElement("div");
     body.className = "pile-body";
     const shelf = id.endsWith("Disc");
