@@ -1,0 +1,119 @@
+[
+  {
+    "id": 1,
+    "description": "LORE_TCG. [共通視点修正の検証記録](../../ui-rework/2026-09-09-shared-perspective/README.md)、[ブラウザ測定](../../ui-rework/2026-09-09-shared-perspective/browser-checks.json)、[配信記録](../../ui-rework/2026-09-09-shared-perspective/deployment.json)、[公開先BOT検証](../../ui-rework/2026-09-09-shared-perspective/staging-browser-checks.json)。2026-09-09。ローカルの実装・測定記録。寸法、着地、配信、検証範囲に使用。",
+    "urls": [
+      "../../ui-rework/2026-09-09-shared-perspective/README.md",
+      "../../ui-rework/2026-09-09-shared-perspective/browser-checks.json",
+      "../../ui-rework/2026-09-09-shared-perspective/deployment.json",
+      "../../ui-rework/2026-09-09-shared-perspective/staging-browser-checks.json"
+    ],
+    "accessed": "2026-09-09"
+  },
+  {
+    "id": 2,
+    "description": "Blizzard Entertainment. [Introducing Hearthstone Battlegrounds](https://hearthstone.blizzard.com/en-us/news/23156373/hearthstone-battlegrounds). 2019年。市場の購入・売却操作の歴史的な参考。通常対戦の仕様とは区別。",
+    "urls": [
+      "https://hearthstone.blizzard.com/en-us/news/23156373/hearthstone-battlegrounds"
+    ],
+    "accessed": "2026-09-09"
+  },
+  {
+    "id": 3,
+    "description": "Cygames. [Shadowverse — Play Guide](https://shadowverse.com/gameguide/playguide.php). 更新日不明、旧作。対戦画面、手札の発光、詳細確認に使用。[公式対戦図版](https://shadowverse.com/assets/images/gameguide_playguide-base-01.jpg?rel20240701=)も参照。",
+    "urls": [
+      "https://shadowverse.com/gameguide/playguide.php",
+      "https://shadowverse.com/assets/images/gameguide_playguide-base-01.jpg?rel20240701="
+    ],
+    "accessed": "2026-09-09"
+  },
+  {
+    "id": 4,
+    "description": "Cygames. [Shadowverse: Worlds Beyond — 対戦する](https://shadowverse-wb.com/ja/system/cardbattle/battle/). 更新日不明。場の上限、状態アイコン、終了操作と時間、学習支援の存在に使用。公式画面を閲覧。",
+    "urls": [
+      "https://shadowverse-wb.com/ja/system/cardbattle/battle/"
+    ],
+    "accessed": "2026-09-09"
+  },
+  {
+    "id": 5,
+    "description": "Blizzard Entertainment / Hadidjah Chamberlin. [Developer Insights: The Art Behind THE SCIENCE](https://hearthstone.blizzard.com/en-us/news/22552047). 2018-10-26。情報伝達を優先するVFXとMagneticの操作表現に使用。[掲載GIF](https://bnetcmsus-a.akamaihd.net/cms/gallery/9c/9CFRDO0LQVJ01538087188621.gif)も参照。",
+    "urls": [
+      "https://hearthstone.blizzard.com/en-us/news/22552047",
+      "https://bnetcmsus-a.akamaihd.net/cms/gallery/9c/9CFRDO0LQVJ01538087188621.gif"
+    ],
+    "accessed": "2026-09-09"
+  },
+  {
+    "id": 6,
+    "description": "Blizzard Entertainment. [30.4 Patch Notes](https://hearthstone.blizzard.com/en-gb/news/24135706/informacje-o-aktualizacji-30-4/). 2024年。盤面図版と継続的な不具合修正の例に使用。[掲載盤面図版](https://bnetcmsus-a.akamaihd.net/cms/content_folder_media/GF66YQCXAY041655754752874.jpg)も参照。",
+    "urls": [
+      "https://hearthstone.blizzard.com/en-gb/news/24135706/informacje-o-aktualizacji-30-4/",
+      "https://bnetcmsus-a.akamaihd.net/cms/content_folder_media/GF66YQCXAY041655754752874.jpg"
+    ],
+    "accessed": "2026-09-09"
+  },
+  {
+    "id": 7,
+    "description": "LORE_TCG. [boardView.ts](../../../client/src/ui/boardView.ts)、[layout.ts](../../../client/src/ui/layout.ts)、[boardProjection.ts](../../../client/src/ui/boardProjection.ts)、[duelScene.ts](../../../client/src/ui/duelScene.ts)。コミットa1e8e8a。枠数、購入操作、寸法、投影方式に使用。修正前は親コミット03b135dと比較。",
+    "urls": [
+      "../../../client/src/ui/boardView.ts",
+      "../../../client/src/ui/layout.ts",
+      "../../../client/src/ui/boardProjection.ts",
+      "../../../client/src/ui/duelScene.ts"
+    ],
+    "accessed": "2026-09-09"
+  },
+  {
+    "id": 8,
+    "description": "LORE_TCG. [家具GLB検証](../../3d-assets/2026-09-09-library-furniture/gltf-validation.json)、[寸法テスト](../../../tests/library-furniture-model.mjs)、[コスメティック寸法規約](../../cosmetics/v1/README.md)。2026-09-09確認。モデル規模とカード規格に使用。",
+    "urls": [
+      "../../3d-assets/2026-09-09-library-furniture/gltf-validation.json",
+      "../../../tests/library-furniture-model.mjs",
+      "../../cosmetics/v1/README.md"
+    ],
+    "accessed": "2026-09-09"
+  },
+  {
+    "id": 9,
+    "description": "LORE_TCG. [controller.ts](../../../client/src/game/controller.ts)、[anim.ts](../../../client/src/ui/anim.ts)。コミットa1e8e8a。演出キュー、状態更新、着地方式に使用。",
+    "urls": [
+      "../../../client/src/game/controller.ts",
+      "../../../client/src/ui/anim.ts"
+    ],
+    "accessed": "2026-09-09"
+  },
+  {
+    "id": 10,
+    "description": "LORE_TCG. [sound.ts](../../../client/src/ui/sound.ts)。コミットa1e8e8a。録音素材7種の割り当て、共通合成音、初回操作と音量制御に使用。",
+    "urls": [
+      "../../../client/src/ui/sound.ts"
+    ],
+    "accessed": "2026-09-09"
+  },
+  {
+    "id": 11,
+    "description": "Battle.net / Andy Brock, Brian Farr, Dan Johnson. [Inside Battle.net: Meet the sound team behind Hearthstone’s harmonic design](https://hearthstone.blizzard.com/en-us/news/23964694). 2023-06-09。カード動作のリズムと発動・命中に合わせた音の設計に使用。",
+    "urls": [
+      "https://hearthstone.blizzard.com/en-us/news/23964694"
+    ],
+    "accessed": "2026-09-09"
+  },
+  {
+    "id": 12,
+    "description": "LORE_TCG. [game/tutorial.ts](../../../client/src/game/tutorial.ts)、[screens/tutorial.ts](../../../client/src/screens/tutorial.ts)。コミットa1e8e8a。既存の10段階チュートリアルと説明機能に使用。今回の利用者完遂検証はなし。",
+    "urls": [
+      "../../../client/src/game/tutorial.ts",
+      "../../../client/src/screens/tutorial.ts"
+    ],
+    "accessed": "2026-09-09"
+  },
+  {
+    "id": 13,
+    "description": "Blizzard Entertainment. [Launch into Heroes of StarCraft](https://hearthstone.blizzard.com/en-us/news/24166335). 2025-01-21。段階的な新規プレイヤー導線の設計例に使用。報酬・配布デッキの現在の内容を保証する出典としては使用しない。",
+    "urls": [
+      "https://hearthstone.blizzard.com/en-us/news/24166335"
+    ],
+    "accessed": "2026-09-09"
+  }
+]
