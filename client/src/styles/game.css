@@ -427,3 +427,103 @@
 .pile.pile--3d-ready .pile-card { visibility:hidden; }
 .pile-draw-anchor { position:absolute; pointer-events:none; visibility:hidden; }
 .pile.is-shuffling .pile-body { visibility:hidden; }
+
+/* Arcana refinement: tight market, aligned resources and crafted turn controls. */
+.game:not(.hand-open) .hand::after { pointer-events:none; }
+.card.drag-ghost--hand { z-index:2000!important; visibility:visible!important; opacity:1!important; transition:none; }
+.market-counter { padding:4px 6px; gap:10px; border-color:#b3a88b99; background:linear-gradient(115deg,#1b293bed,#263549ed); box-shadow:inset 0 1px #e2dab81a,0 3px 7px #07152444; }
+.market-sub--supply { padding:22px 5px 13px; border-color:#a5beca88; background:#506c7d21; box-shadow:none; }
+.market-sub--fixed { padding:4px 0; }
+.game .refresh-btn { min-height:18px; padding:1px 7px; font-size:9px; }
+.sub-head { top:1px; }
+.reroll-hint { bottom:0; font-size:6px; line-height:1.2; }
+.mkt-stock { bottom:-6px; font-size:10px; }
+.pile--deck { width:calc(var(--field-card-size) * .98); height:calc(var(--field-card-size) * 1.24); }
+.pile--shelf { width:calc(var(--field-card-size) * 1.08); height:calc(var(--field-card-size) * 1.24); }
+.pile-tag { font-family:Georgia,serif; letter-spacing:.06em; font-size:9px; color:#26354a; }
+.pile-count { filter:drop-shadow(0 2px 2px #0b162855); }
+.portrait .pt-vitals,.portrait .pt-mana {
+ top:50%; bottom:auto; transform:translateY(-50%); height:51px; width:clamp(92px,11.5vw,156px);
+ display:grid; grid-template-rows:32px 12px; gap:5px;
+}
+.portrait .pt-hp,.portrait .mana-readout {
+ height:32px; padding:0 7px; display:flex; align-items:baseline; gap:3px;
+ line-height:32px; font-size:9px; border-radius:2px; border-bottom:1px solid #c9b89144;
+ background:linear-gradient(90deg,#15253bd9,#101c2ccb);
+}
+.portrait .pt-hp b,.portrait .mana-readout b { font-family:Georgia,serif; font-size:26px; font-weight:500; line-height:32px; margin:0; }
+.portrait .pt-hp b { margin-left:auto; }
+.portrait .mana-readout b { margin-left:auto; }
+.portrait .pt-hp-max,.portrait .pt-mana-max { font-size:12px; color:#ded8c9; }
+.portrait .pt-hpbar { height:7px; align-self:center; border-color:#b9aa895e; background:#081321; }
+.portrait .mana-crystals { height:12px; align-items:center; }
+.portrait .mana-crystal { height:12px; }
+.mid-aside { width:100px; flex-basis:100px; gap:5px; }
+.mp-clock.show { width:94px; height:65px; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:0; }
+.hourglass-anchor { width:36px; height:62px; flex:0 0 36px; }
+.tc-dial { width:53px; height:53px; position:relative; display:block; border-radius:50%; background:radial-gradient(circle at 40% 30%,#20384ee6,#0d1b2cf0 70%); box-shadow:inset 0 0 0 1px #a997724a,0 3px 7px #07122244; }
+.tc-dial svg { position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg); fill:none; stroke-width:1.5; }
+.tc-track { stroke:#cfbd8840; }
+.tc-progress { stroke:#bcdbe2; stroke-width:2; stroke-linecap:round; stroke-dasharray:var(--remaining,1) 1; transition:stroke-dasharray .25s linear; }
+.mp-clock .tc-num { position:absolute; inset:0; width:auto; min-width:0; display:grid; place-items:center; padding:0; border:0; background:none; font:25px/1 Georgia,serif; color:#f3ead6; font-variant-numeric:tabular-nums; }
+.mp-clock.warn .tc-progress { stroke:#efa582; }
+.mp-clock.warn .tc-num { color:#ffc7a5; }
+.game #endBtn {
+ position:relative; width:100px; min-height:42px; padding:10px 9px; border:1px solid #c2ae7c;
+ border-radius:9px 3px 9px 3px; color:#fcf1d0; font-size:11px; font-weight:700; letter-spacing:.025em;
+ background:linear-gradient(150deg,#34506a,#152a41 65%,#253a4b);
+ box-shadow:inset 0 0 0 2px #152234,inset 0 0 0 3px #c3b07b66,0 3px 0 #0b1728,0 5px 9px #07122255;
+ text-shadow:0 1px 2px #000a; transition:filter .15s,transform .15s;
+}
+.game #endBtn::before { content:''; position:absolute; left:calc(50% - 3px); top:-4px; width:6px; height:6px; transform:rotate(45deg); background:#d0ba80; border:1px solid #f5e5b4; }
+.game #endBtn:hover:not(:disabled) { background:linear-gradient(150deg,#48667a,#203d52 65%,#304d5c); filter:brightness(1.1); }
+.game #endBtn:active:not(:disabled) { transform:translateY(2px); box-shadow:inset 0 0 0 2px #152234,inset 0 0 0 3px #c3b07b66,0 1px 0 #0b1728; }
+.game #endBtn:disabled { opacity:.65; color:#bac3c8; border-color:#7c8589; background:linear-gradient(145deg,#293a48,#172430); }
+.game #endBtn:disabled::before { background:#8195a3; border-color:#bec8cc; }
+@media(max-width:700px) and (orientation:portrait) {
+ .market-counter { padding:3px; gap:4px; }
+ .market-sub--supply { padding:20px 3px 12px; }
+ .market-sub--fixed { padding:3px 0; }
+ .game .refresh-btn { min-height:17px; font-size:7px; padding:1px 3px; }
+ .market-heading { font-size:10px; }
+ .portrait .pt-vitals,.portrait .pt-mana { height:41px; grid-template-rows:26px 10px; gap:4px; width:clamp(80px,24vw,110px); }
+ .portrait .pt-hp,.portrait .mana-readout { height:26px; line-height:26px; padding:0 4px; font-size:8px; }
+ .portrait .pt-hp b,.portrait .mana-readout b { font-size:21px; line-height:26px; }
+ .portrait .pt-hp-max,.portrait .pt-mana-max { font-size:10px; }
+ .portrait .mana-crystals,.portrait .mana-crystal { height:10px; }
+ .pcluster--me .pc-side--r { bottom:calc(var(--pt) + 8px); }
+ .pcluster--opp .pc-side--r { bottom:-27px; }
+ .mid-aside { width:56px; flex-basis:56px; }
+ .mp-clock.show { width:54px; height:83px; flex-direction:column; gap:0; }
+ .hourglass-anchor { width:30px; height:39px; flex:0 0 39px; }
+ .tc-dial { width:43px; height:43px; }
+ .mp-clock .tc-num { font-size:21px; }
+ .game #endBtn { width:56px; min-height:40px; padding:8px 4px; font-size:9px; }
+ .game .mid-aside .turn-info { font-size:7px; }
+}
+@media(max-height:550px) {
+ .market-counter { padding:3px 5px; }
+ .market-sub--supply { padding:19px 4px 11px; }
+ .market-sub--fixed { padding:3px 0; }
+ .portrait .pt-vitals,.portrait .pt-mana { height:35px; grid-template-rows:23px 8px; gap:3px; }
+ .portrait .pt-hp,.portrait .mana-readout { height:23px; line-height:23px; }
+ .portrait .pt-hp b,.portrait .mana-readout b { font-size:20px; line-height:23px; }
+ .portrait .mana-crystal,.portrait .mana-crystals { height:8px; }
+ .mp-clock.show { height:52px; } .hourglass-anchor { height:50px; }
+}
+
+.pile-print { position:fixed; left:-500px; top:-500px; visibility:hidden; pointer-events:none; width:128px; height:200px; }
+.pile-print .card { --cw:128px; --ch:200px; width:128px; height:200px; transform:none; }
+
+/* The full 30-mana state fits the same resource band without falling offscreen. */
+.portrait .pt-vitals,.portrait .pt-mana { height:55px; grid-template-rows:32px 18px; }
+.portrait .mana-crystals { height:18px; grid-template-rows:repeat(var(--mana-rows,1),minmax(0,1fr)); row-gap:0; }
+.portrait .mana-crystal { height:min(12px,calc(18px / var(--mana-rows,1))); }
+@media(max-width:700px) and (orientation:portrait) {
+ .portrait .pt-vitals,.portrait .pt-mana { height:48px; grid-template-rows:26px 18px; }
+}
+@media(max-height:550px) {
+ .portrait .pt-vitals,.portrait .pt-mana { height:38px; grid-template-rows:23px 12px; }
+ .portrait .mana-crystals { height:12px; }
+ .portrait .mana-crystal { height:min(8px,calc(12px / var(--mana-rows,1))); }
+}

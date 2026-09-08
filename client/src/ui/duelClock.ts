@@ -11,7 +11,8 @@ export function paintDuelClock(el: HTMLElement, seconds: number, total: number, 
   el.setAttribute('aria-label', t('game.timer.sec').replace('{n}', String(left)));
   el.dataset.remaining = String(left);
   el.dataset.total = String(Math.max(1, total));
-  if (!el.querySelector('.tc-num')) el.innerHTML = '<span class="hourglass-anchor" aria-hidden="true"></span><span class="tc-num"></span>';
+  el.style.setProperty('--remaining', String(Math.min(1, left / Math.max(1,total))));
+  if (!el.querySelector('.tc-num')) el.innerHTML = '<span class="hourglass-anchor" aria-hidden="true"></span><span class="tc-dial"><svg viewBox="0 0 60 60" aria-hidden="true"><circle class="tc-track" cx="30" cy="30" r="26"/><circle class="tc-progress" cx="30" cy="30" r="26" pathLength="1"/></svg><span class="tc-num"></span></span>';
   el.querySelector('.tc-num')!.textContent = `${left}`;
 }
 

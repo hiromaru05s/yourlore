@@ -2,9 +2,10 @@
  * Semantic controls/count labels stay in the DOM, with raster GPU fallback. */
 import * as T from 'three';
 import { makePile, type PileModel } from './pileModels';
+import { captureCardSurface, CARD_PADDING } from './cardSurface';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
-type Item = { scene: T.Scene; camera: T.PerspectiveCamera; group: T.Group; key: string; element: HTMLElement; upper?: T.Mesh; lower?: T.Mesh; stream?: T.Points; fraction?: number; pile?:PileModel; count?:number; entered?:number };
+type Item = { scene: T.Scene; camera: T.PerspectiveCamera; group: T.Group; key: string; element: HTMLElement; upper?: T.Mesh; lower?: T.Mesh; stream?: T.Points; fraction?: number; pile?:PileModel; count?:number; entered?:number; surface?:T.Texture };
 const clamp = (n: number) => Math.min(1, Math.max(0, n));
 export function mountDuelScene(root: HTMLElement): () => void {
   let renderer: T.WebGLRenderer;
@@ -85,14 +86,14 @@ export function mountDuelScene(root: HTMLElement): () => void {
   function refresh():void {
     const elements=[...root.querySelectorAll<HTMLElement>('.mp-clock.show, .pile--deck, .pile--shelf')];
     const ids=new Set(elements.map(el=>el.id));
-    for(const [id,item] of items)if(!ids.has(id)){disposeObject(item.scene);items.delete(id);}
+    for(const [id,item] of items)if(!ids.has(id)){disposeObject(item.scene);item.surface?.dispose();items.delete(id);}
     for(const el of elements) {
       const clock=el.classList.contains('mp-clock');
       const key=clock?'clock':`${el.dataset.count}:${el.dataset.face}:${el.dataset.sleeve}`;
       let item=items.get(el.id);
       if(item?.key===key){item.element=el;continue;}
       const previousCount=item?.count;
-      if(item)disposeObject(item.scene);
+      if(item){disposeObject(item.scene);item.surface?.dispose();}
       item=base(el,clock);item.key=key;items.set(el.id,item);
       if(clock)hourglass(item);
       else {
@@ -103,6 +104,19 @@ export function mountDuelScene(root: HTMLElement): () => void {
         if(shelf&&previousCount!=null&&count>previousCount&&!reduced.matches)item.entered=performance.now();
         item.camera.position.set(shelf?2.3:1.7,shelf?2.2:3.5,shelf?5.3:4.9);
         item.camera.lookAt(0,shelf?.65:.1,0);item.camera.zoom=shelf?1.12:1.6;
+        const print=el.querySelector<HTMLElement>('.pile-print .card');
+        if(shelf&&count&&print){
+          const owner=item;
+          void captureCardSurface(print,el.dataset.sleeve!,true).then(surface=>{
+            if(dead||items.get(el.id)!==owner||!surface.face)return;
+            const map=new T.CanvasTexture(surface.face);map.colorSpace=T.SRGBColorSpace;map.anisotropy=4;
+            map.offset.set(CARD_PADDING/(1+2*CARD_PADDING),CARD_PADDING/(1/.64+2*CARD_PADDING));
+            map.repeat.set(1/(1+2*CARD_PADDING),(1/.64)/(1/.64+2*CARD_PADDING));
+            owner.surface=map;
+            const front=owner.pile!.top.getObjectByName('stock-front') as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>;
+            if(front){front.material.map=map;front.material.emissiveMap=map;front.material.transparent=true;front.material.alphaTest=.025;front.material.needsUpdate=true;}
+          }).catch(()=>{});
+        }
       }
     }
 
@@ -202,7 +216,7 @@ export function mountDuelScene(root: HTMLElement): () => void {
   const lost=(e:Event):void=>{e.preventDefault();dispose();};canvas.addEventListener('webglcontextlost',lost);
   function dispose():void {
     if(dead)return;dead=true;cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);
-    items.forEach(item=>disposeObject(item.scene));textures.forEach(t=>t.dispose());
+    items.forEach(item=>{disposeObject(item.scene);item.surface?.dispose();});textures.forEach(t=>t.dispose());
     root.querySelectorAll('.pile--3d-ready').forEach(el=>{el.classList.remove('pile--3d-ready');el.querySelector('.pile-draw-anchor')?.remove();});
     disposeObject(dustScene);environment.dispose();renderer.dispose();canvas.remove();root.classList.remove('duel-webgl');
   }

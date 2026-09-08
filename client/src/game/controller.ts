@@ -22,7 +22,7 @@ import { sfx, type SfxName } from "../ui/sound";
 import { avatarHtml } from "../ui/social";
 import { tierOf, tierLabel } from "../ui/tier";
 import { t, getLang, cardName, onLangChange } from "../i18n";
-import { diceRollAnim } from "../ui/dice";
+import { diceRollAnim, cancelDiceAnimations } from "../ui/dice";
 
 export interface ControllerExits {
   onHome(): void;
@@ -92,6 +92,7 @@ export abstract class BaseController implements BoardHandlers {
   protected fastForward(): void {
     this.skipGen = this.fxGen;
     A.setFxSkip(true);
+    cancelDiceAnimations();
   }
 
   // ---- BoardHandlers ----
@@ -769,6 +770,7 @@ export abstract class BaseController implements BoardHandlers {
   destroy(): void {
     this.dead = true;
     A.setFxSkip(true);
+    cancelDiceAnimations();
     document.querySelectorAll(".fx-turnbanner,.cointoss-ov").forEach(n => n.remove());
     this.stopTimer();
     this.view.destroy();

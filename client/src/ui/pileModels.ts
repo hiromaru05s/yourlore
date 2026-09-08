@@ -21,51 +21,78 @@ export function cardStock(map:T.Texture, face?:T.Texture):T.Group {
     const geo=new T.ShapeGeometry(shape,4),p=geo.getAttribute('position'),uv=geo.getAttribute('uv');
     for(let i=0;i<p.count;i++)uv.setXY(i,p.getX(i)+.5,p.getY(i)/RATIO+.5);
     const mesh=new T.Mesh(geo,new T.MeshStandardMaterial({map:texture,roughness:.56,metalness:.035,emissive:0xffffff,emissiveMap:texture,emissiveIntensity:.12}));
+    mesh.name=back?'stock-back':'stock-front';
     mesh.position.z=back?-.0045:.0045;if(back)mesh.rotation.y=Math.PI;
     mesh.castShadow=true;mesh.receiveShadow=true;g.add(mesh);
   };
   skin(face||map,false);skin(map,true);return g;
 }
+/** Sculpted archive tray: broad silhouette first, bevels catch the table light. */
 export function makePile(count:number,shelf:boolean,sleeve:T.Texture,face?:T.Texture):PileModel {
   const group=new T.Group(),cards=new T.Group();group.add(cards);
   let top:T.Object3D=new T.Object3D();group.add(top);
+  const navy=new T.MeshPhysicalMaterial({color:0x162c43,roughness:.34,metalness:.3,clearcoat:.6,clearcoatRoughness:.3});
+  const dark=new T.MeshStandardMaterial({color:0x0a1522,roughness:.72});
+  const brass=new T.MeshStandardMaterial({color:0xc3aa76,roughness:.36,metalness:.76});
+  const ivory=new T.MeshStandardMaterial({color:0xd0cab8,roughness:.65,metalness:.1});
+  const add=(geo:T.BufferGeometry,mat:T.Material,x=0,y=0,z=0)=>{
+    const mesh=new T.Mesh(geo,mat);mesh.position.set(x,y,z);mesh.castShadow=true;mesh.receiveShadow=true;group.add(mesh);return mesh;
+  };
+  const plate=(w:number,d:number,h:number,y:number,mat:T.Material,r=.13)=>{
+    const geo=new T.ExtrudeGeometry(rounded(w,d,r),{depth:h,bevelEnabled:true,bevelSize:.025,bevelThickness:.016,bevelSegments:3,curveSegments:6});
+    const m=add(geo,mat,0,y,0);m.rotation.x=-Math.PI/2;return m;
+  };
+  const bead=(x:number,y:number,z:number)=>{
+    const m=add(new T.IcosahedronGeometry(.065,1),brass,x,y,z);m.scale.y=.5;
+  };
   if(!shelf) {
-    const n=Math.min(count,20),height=Math.min(count,50)*.011;
+    // A recessed draw well like a bound folio, with a visible layered stock edge.
+    plate(1.28,1.92,.065,.035,dark);
+    plate(1.25,1.89,.035,.1,brass);
+    plate(1.17,1.81,.06,.14,navy);
+    plate(1.035,1.65,.015,.205,dark,.06);
+    for(const x of [-.53,.53])for(const z of [-.82,.82])bead(x,.23,z);
+    const n=Math.min(count,20),height=Math.min(count,40)*.019;
     for(let i=0;i<n;i++) {
-      const card=cardStock(sleeve);card.rotation.set(-Math.PI/2,0,Math.sin(i*7)*.013);
-      card.position.set(Math.sin(i*5)*.009,.016+(n<=1?0:i/(n-1)*height),Math.cos(i*3)*.009);
+      const card=cardStock(sleeve);card.rotation.set(-Math.PI/2,0,Math.sin(i*7)*.007);
+      card.position.set(Math.sin(i*5)*.005,.23+(n<=1?0:i/(n-1)*height),Math.cos(i*3)*.005);
       cards.add(card);top=card;
     }
+    if(!n)top.position.y=.23;
     return {group,cards,top};
   }
-  // Low white-stone plinth, navy enamel cradle, brass rails and finials.
-  const stone=new T.MeshStandardMaterial({color:0xcac5b5,roughness:.73,metalness:.06});
-  const navy=new T.MeshStandardMaterial({color:0x152943,roughness:.34,metalness:.35});
-  const brass=new T.MeshStandardMaterial({color:0xb79a5f,roughness:.3,metalness:.72});
-  const box=(w:number,h:number,d:number,x:number,y:number,z:number,mat:T.Material)=>{
-    const m=new T.Mesh(new T.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;group.add(m);return m;
-  };
-  box(1.94,.13,1.24,0,.065,0,stone);
-  box(1.82,.04,1.12,0,.15,0,brass);
-  box(1.73,.12,1.04,0,.21,0,navy);
-  box(1.64,.035,.96,0,.285,0,stone);
-  for(const x of [-.87,.87]) {
-    box(.12,.64,.98,x,.56,0,navy);
-    box(.16,.05,1.05,x,.9,0,brass);
-    for(const z of [-.48,.48]) {
-      const post=new T.Mesh(new T.CylinderGeometry(.035,.048,.66,8),brass);post.position.set(x,.56,z);group.add(post);
-      const gem=new T.Mesh(new T.OctahedronGeometry(.067),brass);gem.position.set(x,.94,z);group.add(gem);
-    }
+  // Carved sweeping bookends replace the rectangular cage. Cards remain the
+  // main silhouette; ornament lives on the cradle, never over their artwork.
+  plate(1.93,1.35,.075,.03,dark);
+  plate(1.91,1.32,.035,.11,brass);
+  plate(1.81,1.23,.1,.15,navy);
+  plate(1.64,1.08,.025,.26,dark);
+  const wing=new T.Shape();
+  wing.moveTo(-.6,.2);wing.lineTo(.58,.2);wing.lineTo(.58,.42);
+  wing.bezierCurveTo(.4,.39,.2,.42,.1,.67);
+  wing.bezierCurveTo(-.08,1.02,-.3,1.16,-.53,1.08);
+  wing.quadraticCurveTo(-.64,.72,-.6,.2);
+  for(const x of [-.88,.88]) {
+    const geo=new T.ExtrudeGeometry(wing,{depth:.08,bevelEnabled:true,bevelSize:.035,bevelThickness:.03,bevelSegments:3,curveSegments:12});
+    const m=add(geo,navy,x,0,0);m.rotation.y=Math.PI/2;
+    // Inlaid graceful brass line follows the sculpted wing, with a pale finial.
+    const path=new T.CatmullRomCurve3([new T.Vector3(x,.31,.55),new T.Vector3(x,.43,.25),new T.Vector3(x,.82,-.16),new T.Vector3(x,1.05,-.46)]);
+    add(new T.TubeGeometry(path,24,.019,6,false),brass);
+    const stone=add(new T.OctahedronGeometry(.1),ivory,x,1.085,-.47);stone.scale.set(.65,1,.65);
   }
-  box(1.64,.16,.055,0,.39,.51,navy);
-  box(1.69,.025,.065,0,.48,.52,brass);
-  // Landscape cards stand in parallel grooves, faces toward the player.
+  // Low curved front rail, layered brass edging and a small celestial clasp.
+  const rail=new T.Shape();rail.moveTo(-.85,.28);rail.lineTo(.85,.28);rail.lineTo(.85,.43);
+  rail.quadraticCurveTo(0,.29,-.85,.43);rail.closePath();
+  add(new T.ExtrudeGeometry(rail,{depth:.055,bevelEnabled:true,bevelThickness:.018,bevelSize:.015,bevelSegments:3}),brass,0,0,.56);
+  const clasp=add(new T.OctahedronGeometry(.115),brass,0,.36,.64);clasp.scale.set(1,.8,.35);
+  const inset=add(new T.OctahedronGeometry(.064),new T.MeshPhysicalMaterial({color:0x9ed3e0,metalness:.25,roughness:.23,clearcoat:1}),0,.36,.69);inset.scale.z=.25;
   const n=Math.min(count,12);
   for(let i=0;i<n;i++) {
     const card=cardStock(sleeve,i===n-1?face:undefined);
-    card.rotation.set(-.13,0,Math.PI/2);
-    card.position.set(Math.sin(i*2)*.014,.83,-.39+i*.071);
+    card.rotation.set(-.18,0,Math.PI/2);
+    card.position.set((i-(n-1)/2)*.009,.83+(n-1-i)*.012,-.38+i*.071);
     cards.add(card);top=card;
   }
+  if(!n)top.position.set(0,.83,.2);
   return {group,cards,top};
 }

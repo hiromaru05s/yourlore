@@ -122,3 +122,21 @@
   box-shadow: inset 0 0 10px #ffb02f44;
 }
 .d3-overlay.casino .d3-pip { background: #ffd76a; box-shadow: 0 0 6px #ffb02fcc; }
+
+/* Generated lapis enamel on actual geometry; exact pips are always code-owned. */
+.d3-overlay .d3-tray { padding:18px 12px; gap:4px; border:0; box-shadow:none; background:none; border-radius:0; }
+.d3-overlay.opp .d3-tray,.d3-overlay.casino .d3-tray { background:none; border:0; box-shadow:none; }
+.d3-overlay { background:radial-gradient(ellipse,#081523b3, #09152570 48%,transparent 80%); }
+.d3-row { position:relative; width:min(82vw,620px); height:220px; display:flex; align-items:center; justify-content:center; gap:22px; }
+.d3-canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.d3-fallback { width:74px; height:74px; display:grid; grid-template:repeat(3,1fr)/repeat(3,1fr); padding:14px; flex:0 0 auto; background:url(/art/biblion/arcana/dice-enamel.webp) center/cover; border:2px solid #c0ab7b; border-radius:9px; box-shadow:inset 0 0 0 2px #102037,0 6px 12px #0007; }
+.d3-fallback .d3-pip { width:9px; height:9px; background:#edf5e5; box-shadow:0 0 0 1px #baa273; }
+.d3-gpu .d3-fallback { visibility:hidden; }
+.d3-who { color:#dfd1a5; font:11px Georgia,serif; letter-spacing:.22em; }
+.d3-overlay.opp .d3-who { color:#ebc5bb; }
+.d3-cap { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:12px; min-width:130px; max-width:85vw; padding:10px 22px; border-top:1px solid #b9a67888; border-bottom:1px solid #b9a67844; background:linear-gradient(90deg,transparent,#13263ace,transparent); font:24px/1.2 Georgia,serif; color:#f7ecd0; }
+.d3-verdict { font-size:16px; }
+@media(max-width:640px) { .d3-row { height:180px; gap:12px; } .d3-fallback { width:58px; height:58px; padding:10px; } .d3-cap { font-size:21px; } }
+@media(prefers-reduced-motion:reduce) { .d3-overlay,.d3-verdict { animation:none!important; transition:none!important; } }
+
+.d3-row.is-loading .d3-fallback { visibility:hidden; }

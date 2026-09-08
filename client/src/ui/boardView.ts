@@ -261,7 +261,9 @@ export class GameView {
     // lowest card's own stacking order — used to swallow the press on card #0.
     const handEl = this.q("hand");
     handEl.addEventListener("pointerdown", (e) => {
-      if (this.handOpen) return;
+      // Card presses must reach bindHandCard: the same gesture can expand AND
+      // drag. Only empty hit-pad presses are handled by the container.
+      if (this.handOpen || (e.target as Element)?.closest('.card')) return;
       e.stopPropagation();
       this.setHandOpen(true);
       swallowNextClick(handEl);
@@ -284,12 +286,14 @@ export class GameView {
   /** Detach the window/document-level listeners this view installed. */
   destroy(): void {
     this.disposed = true;
+    this.cancelHandDrag?.();
     this.disposeScene?.();
     if (this.onLayout) window.removeEventListener("lore:layout", this.onLayout);
     for (const fn of this.cleanups.splice(0)) { try { fn(); } catch { /* already gone */ } }
   }
 
   private handOpen = false;
+  private cancelHandDrag: (() => void) | null = null;
   setHandOpen(open: boolean): void {
     if (this.handOpen === open) return;
     this.handOpen = open;
@@ -656,7 +660,7 @@ export class GameView {
       };
 
       const onMove = (ev: PointerEvent): void => {
-        if (done) return;
+        if (done || ev.pointerId !== e.pointerId) return;
         if (!ghost) {
           if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 14) return;
           if (isTouch && performance.now() - t0 > 340) { cleanup(); return; } // zoom overlay owns this gesture
@@ -678,6 +682,7 @@ export class GameView {
       };
 
       const onUp = (ev: PointerEvent): void => {
+        if (done || ev.pointerId !== e.pointerId) return;
         const dragged = !!ghost;
         const t = dragged && o.canAttack ? targetAt(ev.clientX, ev.clientY) : { mon: null, portrait: null };
         const aimed = mode === "attack";
@@ -857,12 +862,7 @@ export class GameView {
     rb.onclick = () => this.h.onRefresh();
   }
 
-  /** Hearthstone-style center portrait (FIXED at true center): avatar ring + HP gem
-   *  (carries the hp/hpbar element ids the FX target) + mana crystals to its LEFT. */
-  /** Center portrait: a real ROW — [mana] [avatar ring] [HP] — with the name and
-   *  the thin FX hp-bar under it. Everything used to be absolutely pinned INSIDE
-   *  the 60px circle, so on小 viewports the HP gem sat on the avatar and on the
-   *  name at once; as flow items they simply can't collide. */
+  /** Shared portrait row: aligned HP on the left and mana on the right. */
   private renderPortrait(el: HTMLElement, p: PlayerState, isMe: boolean): void {
     const sd = isMe ? "me" : "opp";
     const emax = effMaxMana(p);
@@ -875,7 +875,7 @@ export class GameView {
       <span class="pt-vitals"><span class="pt-hp" title="HP ${hp}/${p.maxHp}"><span class="pt-hp-ico">HP</span><b id="hp-${sd}">${hp}</b><span class="pt-hp-max">/${p.maxHp}</span></span>
       <span class="pt-hpbar hpbar" id="hpbar-${sd}" role="meter" aria-label="HP" aria-valuemin="0" aria-valuemax="${p.maxHp}" aria-valuenow="${hp}"><i style="width:${Math.min(100, hpPct)}%"></i></span></span>
       <span class="pt-ring">${avatarHtml(seeker, p.name, 100)}</span>
-      <span class="pt-mana pips" aria-label="${t("game.mana")} ${p.mana}/${emax}"><span class="mana-readout">${t("game.mana")} <b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span><span class="mana-crystals">${crystals}</span></span>
+      <span class="pt-mana pips" aria-label="${t("game.mana")} ${p.mana}/${emax}"><span class="mana-readout">${t("game.mana")} <b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span><span class="mana-crystals" style="--mana-rows:${Math.max(1,Math.ceil(Math.min(MAX_MANA,emax)/10))}">${crystals}</span></span>
       ${(p.brand ?? 0) > 0 ? `<span class="pt-brand" title="${esc(t("game.brandTip").replace("{n}", String(p.brand)))}">${t("game.brand")} <b>${p.brand}</b></span>` : ""}
       <span class="pt-name">${esc(p.name)}</span>`;
   }
@@ -886,6 +886,7 @@ export class GameView {
    *    Any press on it just expands the hand.
    *  - open: large, bottom-center. Click a card = zoom preview; DRAG it up = play. */
   private renderHand(g: GameState, me: PlayerState, myTurn: boolean): void {
+    this.cancelHandDrag?.();
     const handEl = this.q("hand");
     handEl.innerHTML = "";
     me.hand.forEach((c, idx) => {
@@ -924,38 +925,48 @@ export class GameView {
     card.addEventListener("dragstart", (e) => e.preventDefault());
     card.addEventListener("pointerdown", (e: PointerEvent) => {
       if (e.button !== 0) return;
-      if (!this.handOpen) {
-        // a press anywhere on the compact stack just opens the hand
-        e.stopPropagation();
-        this.setHandOpen(true);
-        swallowNextClick(card);
-        return;
-      }
+      this.cancelHandDrag?.();
+      const wasOpen = this.handOpen;
+      if (!wasOpen) { this.setHandOpen(true); swallowNextClick(card); }
+      e.preventDefault();
+      // Capture before the expansion moves the original card away from the
+      // pointer. Mouse, pen and touch then follow one uninterrupted gesture.
+      try { card.setPointerCapture(e.pointerId); } catch { /* detached/legacy */ }
       const sx = e.clientX, sy = e.clientY;
       let ghost: HTMLElement | null = null;
       let done = false;
       const game = this.root.querySelector(".game") as HTMLElement | null;
 
       const cleanup = (): void => {
+        if (done) return;
         done = true;
         ghost?.remove();
         card.classList.remove("is-dragging");
         game?.classList.remove("drag-play");
+        this.cancelHandDrag = null;
+        try { card.releasePointerCapture(e.pointerId); } catch { /* already released */ }
+        card.removeEventListener("lostpointercapture", cleanup);
         window.removeEventListener("pointermove", onMove);
         window.removeEventListener("pointerup", onUp);
         window.removeEventListener("pointercancel", cleanup);
       };
       const onMove = (ev: PointerEvent): void => {
-        if (done) return;
+        if (done || ev.pointerId !== e.pointerId) return;
         if (!ghost) {
-          if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 12) return;
+          if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < (e.pointerType === 'touch' ? 10 : 6)) return;
           try { card.setPointerCapture(ev.pointerId); } catch { /* ok */ }
           ghost = card.cloneNode(true) as HTMLElement;
           ghost.className = card.className + " drag-ghost drag-ghost--hand";
+          ghost.classList.remove('is-played', 'is-dragging', 'tilt-live');
+          // A hand card has inline z-index 0..N. That must never override the
+          // drag layer: low-index cards otherwise disappear behind the board.
+          ghost.style.zIndex = '2000';
+          ghost.style.visibility = 'visible';
+          ghost.style.opacity = '1';
           // Field-sized silhouette, with hand aspect ratio and proportional seals.
           const field = this.root.querySelector<HTMLElement>("#meRow .zone-mon .card, #meRow .zone-mon .slot");
           const fieldWidth = field?.getBoundingClientRect().width || 64;
-          const width = Math.min(card.getBoundingClientRect().width * .72, fieldWidth);
+          const width = Math.min(card.offsetWidth * .65 * .72, fieldWidth);
           const height = width * card.offsetHeight / card.offsetWidth;
           ghost.style.setProperty("--cw", `${width}px`);
           ghost.style.setProperty("--ch", `${height}px`);
@@ -974,6 +985,7 @@ export class GameView {
         ghost.style.top = `${ev.clientY}px`;
       };
       const onUp = (ev: PointerEvent): void => {
+        if (done || ev.pointerId !== e.pointerId) return;
         const dragged = !!ghost;
         // Where the card actually IS when you let go — the play FX continues from
         // here (and leans with the drag) instead of restarting at the hand's left
@@ -994,6 +1006,8 @@ export class GameView {
           } else this.h.onBlockedPlay(c.uid); // explain WHY it can't be played (popup)
         } else setPlayOrigin(null); // dropped back on the hand — don't leak a stale origin
       };
+      this.cancelHandDrag = cleanup;
+      card.addEventListener("lostpointercapture", cleanup);
       window.addEventListener("pointermove", onMove);
       window.addEventListener("pointerup", onUp);
       window.addEventListener("pointercancel", cleanup);
@@ -1004,8 +1018,7 @@ export class GameView {
     };
   }
 
-  /** A flat, NORMAL-RATIO card pile (0.64 w/h — same proportions as every other
-   *  card). The old CSS-3D "standing box" is gone: it distorted the card art. */
+  /** Semantic pile controls and GPU fallback; duelScene supplies the 3D skin. */
   private pileEl(id: string, count: number, frame: string | null, faceCard: CardInst | null, tag: string, onOpen?: () => void): HTMLElement {
     const pile = document.createElement("div");
     pile.className = "pile" + (id.endsWith("Disc") ? " pile--shelf" : " pile--deck") + (count ? "" : " is-empty");
@@ -1031,6 +1044,12 @@ export class GameView {
     if (count) front.style.backgroundImage = `url(${shelf && faceCard ? artUrl.full(faceCard.id) : backFor(id.startsWith('pile-my'))})`;
     else front.hidden = true;
     body.append(front); pile.append(body);
+    if (shelf && faceCard && faceCard.id !== 'HIDDEN') {
+      // Public discard face rendered by the same component as every real card.
+      // Offscreen print feeds the mesh; it never receives input or accessibility focus.
+      const print=document.createElement('div'); print.className='pile-print'; print.setAttribute('aria-hidden','true');
+      print.append(cardEl(faceCard,{size:'hand'})); pile.append(print);
+    }
     const tg = document.createElement("div"); tg.className = "pile-tag"; tg.textContent = tag; pile.appendChild(tg);
     const cnt = document.createElement("div"); cnt.className = "pile-count"; cnt.textContent = String(count); pile.appendChild(cnt);
     if (faceCard && faceCard.id !== "HIDDEN") bindZoom(pile, faceCard);
