@@ -1,0 +1,178 @@
+{
+  "checkedAt": "2026-09-08T09:15:15.735Z",
+  "results": [
+    {
+      "url": "/",
+      "status": 200,
+      "bytes": 1101,
+      "sha256": "d31278e6d48ae1b64012b1cfdecc7d2478959b2467656b84e76dc211c5394754",
+      "match": true
+    },
+    {
+      "url": "/assets/RoomEnvironment-DCnRvlqC.js",
+      "status": 200,
+      "bytes": 2116,
+      "sha256": "29d2dcbe3ed3ee722a950836a4efe96b87ac92c7cad43ac80696c3aca1b2c6f7",
+      "match": true
+    },
+    {
+      "url": "/assets/cardSurface-DVHbEgkz.js",
+      "status": 200,
+      "bytes": 3285,
+      "sha256": "7e06ab49a1f6cc2c5572a600fbdfba0a8860bc0dc3720d637ce8c4061363ad38",
+      "match": true
+    },
+    {
+      "url": "/assets/diceScene-7Kl_tM6H.js",
+      "status": 200,
+      "bytes": 5877,
+      "sha256": "5daf081e0c9baac42fb51227d3800504115105e1baa67851ca92cb4a6a05f4af",
+      "match": true
+    },
+    {
+      "url": "/assets/duelScene-DeDSwiVv.js",
+      "status": 200,
+      "bytes": 13314,
+      "sha256": "fb3413d818811e3d45907b3284221e8cb56ad0d2bb8d69c29ab64a0c6e1dc47a",
+      "match": true
+    },
+    {
+      "url": "/assets/index-BDdA84gR.css",
+      "status": 200,
+      "bytes": 153504,
+      "sha256": "d65238b16ebfd9ddaa11c90dd54d7fcd67589519cb77f10cfe7cac83354ce81a",
+      "match": true
+    },
+    {
+      "url": "/assets/index-Cn29xLW3.js",
+      "status": 200,
+      "bytes": 1004915,
+      "sha256": "b4457904d0256b8b12e5b43e4df4ff80cf69a4fa5178436c29c4fd16cb7cdb07",
+      "match": true
+    },
+    {
+      "url": "/assets/paperCard-Kz8yIxUv.js",
+      "status": 200,
+      "bytes": 2676,
+      "sha256": "ef01ca9ccdaa52a80e82d69c74f5d4a68ec6cbe14a1eab263168df634cab56d4",
+      "match": true
+    },
+    {
+      "url": "/assets/paperDraw-BJrHQm0c.js",
+      "status": 200,
+      "bytes": 3223,
+      "sha256": "0e70200465799bce8f8df07d08318bd8729a31f66f441ccb19dcc93e9af747eb",
+      "match": true
+    },
+    {
+      "url": "/assets/paperShuffle-BwziUqI1.js",
+      "status": 200,
+      "bytes": 2986,
+      "sha256": "39c17963da1cf8d5fc7d00ef5928c03dcec82b1c6f3314edccd1fa1ce05520da",
+      "match": true
+    },
+    {
+      "url": "/assets/three.module-C1IZbMjX.js",
+      "status": 200,
+      "bytes": 564766,
+      "sha256": "7d71c01149b591472519052b761c590e943fc16455974aee32d0e4cca45575ed",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/modular/base-mon.png",
+      "status": 200,
+      "bytes": 1817892,
+      "sha256": "c35c03edede377527f414e8afd5b0c98acbbc4ff4947eb25a3aa1bee64789be1",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/modular/base-spell.png",
+      "status": 200,
+      "bytes": 1830510,
+      "sha256": "d682c2cfda42bc024bc2297b6d24ef11d3e0992d062e72c72212273267e17237",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/modular/base-trap.png",
+      "status": 200,
+      "bytes": 1713270,
+      "sha256": "dc6d00acf275ca51b6eae2ee8745433a8f7487bd3b12d9651511244bb328023b",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/modular/cost.png",
+      "status": 200,
+      "bytes": 1801208,
+      "sha256": "6a09eb84f3f6b8a44d05ed83d84f0bcae5663ad856e8239a832d1cb8450fc6ed",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/modular/attack.png",
+      "status": 200,
+      "bytes": 1841095,
+      "sha256": "9566dd25dfccb213af69d12cd39b3990ecd91fa0f2f4b7c7a8de640a468adb25",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/modular/health.png",
+      "status": 200,
+      "bytes": 1781819,
+      "sha256": "6914ca7d54cfc6cc0ca12a456acc56be9e9177402d5af2faf4152f0c6f6acfba",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/modular/plaque.png",
+      "status": 200,
+      "bytes": 1147799,
+      "sha256": "c1c9e4f52b1b07a4ecf4c07f61849db9631a2496b014a2be453695c1c6538227",
+      "match": true
+    },
+    {
+      "url": "/frames/sleeve_default.webp",
+      "status": 200,
+      "bytes": 99362,
+      "sha256": "4a64147f435f3d89cfb7cbdd26d7380fd999e304b00735dd430486c1b08b6bff",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/arcana/dice-enamel.webp",
+      "status": 200,
+      "bytes": 533420,
+      "sha256": "26de5a8cf964500316bd8b6266126109f2f09f2f5888da53ebdd750c2fba02fe",
+      "match": true
+    },
+    {
+      "url": "/art/brand/lore-logo-transparent.png",
+      "status": 200,
+      "bytes": 419188,
+      "sha256": "20da5aa5d90a1b616500e39eea5ad79069fe3c40fba993ec72ed2c86899672f5",
+      "match": true
+    },
+    {
+      "url": "/bg/home.jpg",
+      "status": 200,
+      "bytes": 234262,
+      "sha256": "3d2aad5224e21d65d7ff0107f8a0303f5680a3ff823f0fff9c63301568409dd0",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/refined/portrait-self.png",
+      "status": 200,
+      "bytes": 584472,
+      "sha256": "b44074522dae08bb2a06c68545be1a139d073f04f082abe337e1f470f5a98699",
+      "match": true
+    },
+    {
+      "url": "/art/biblion/refined/portrait-opp.png",
+      "status": 200,
+      "bytes": 692936,
+      "sha256": "6ef069be837bf9b3a7391f4199a4c7c8874a5d405502f4b2f6340299d4f14991",
+      "match": true
+    }
+  ],
+  "browser": {
+    "title": "LORE — 덱빌드 듀얼",
+    "errors": [],
+    "scope": "unauthenticated staging boot; HOME tested with API fixtures; gameplay verified through real BaseController and reducer locally"
+  }
+}
