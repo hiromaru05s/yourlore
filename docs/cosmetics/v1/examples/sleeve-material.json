@@ -1,0 +1,33 @@
+{
+  "specVersion": 1,
+  "assetId": "sleeve_biblion_ivory_material",
+  "version": 1,
+  "status": "draft",
+  "category": "sleeve",
+  "grade": "material",
+  "collectionId": "biblion_ivory",
+  "modelKey": "card_standard_v1",
+  "anchor": "sleeve_back",
+  "files": {
+    "preview": {
+      "path": "preview.webp"
+    },
+    "back": {
+      "path": "back.webp"
+    },
+    "backLow": {
+      "path": "back-low.webp"
+    },
+    "emissive": {
+      "path": "emissive.png"
+    }
+  },
+  "preset": {
+    "id": "emissive_pulse",
+    "periodSeconds": 6,
+    "strength": 0.4,
+    "color": "#82baff"
+  },
+  "clips": [],
+  "sourceNote": "記入例のみ。参照ファイルとmodelKeyは未制作・未登録。出荷時に原本・権利・生成来歴を記録し、検査完了後にreadyへ変更。"
+}

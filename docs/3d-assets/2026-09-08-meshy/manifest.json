@@ -36,8 +36,19 @@
         "client/public/frames/sleeve_default.webp"
       ],
       "promptFile": "deck-holder-v2-prompt.md",
-      "status": "current deck holder reference",
+      "status": "superseded: user requested a flat pedestal instead of a tray; use deck-holder-v3-pedestal.png",
       "sha256": "963675cf6c87669d0af1051e3936358ed430d750a2f427fcbf57557eb0f9533b"
+    },
+    {
+      "file": "deck-holder-v3-pedestal.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a07d3e-98fa-7173-8805-5cd1f5ccdf7a/exec-8cde91e7-63fc-406e-8dd7-63dea39ce094.png",
+      "references": [
+        "docs/3d-assets/2026-09-08-meshy/flat-field-options/01-ivory-inner-border.png",
+        "docs/3d-assets/2026-09-08-meshy/deck-holder-v2-rectangular.png"
+      ],
+      "promptFile": "deck-holder-v3-pedestal.prompt.md",
+      "status": "current visual concept: solid low pedestal; generated image only, dimensions and flat top require mesh authoring",
+      "sha256": "cef51aa370031fcc40a9a8de57507270f7ca68825d27c8f3a168d1e72ffce191"
     }
   ],
   "flatFieldOptions": "flat-field-options/manifest.json"

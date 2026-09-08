@@ -1,0 +1,38 @@
+{
+  "specVersion": 1,
+  "assetId": "shelf_biblion_ivory_sculpted",
+  "version": 1,
+  "status": "draft",
+  "category": "shelf",
+  "grade": "sculpted",
+  "collectionId": "biblion_ivory",
+  "modelKey": "shelf_ivory_arcade_v1",
+  "anchor": "shelf_mount",
+  "files": {
+    "preview": {
+      "path": "preview.webp"
+    },
+    "fallbackSelf": {
+      "path": "fallback-self.webp"
+    },
+    "fallbackOpponent": {
+      "path": "fallback-opponent.webp"
+    },
+    "model": {
+      "path": "model.glb"
+    },
+    "modelLow": {
+      "path": "model-low.glb"
+    }
+  },
+  "preset": {
+    "id": "none",
+    "periodSeconds": 6,
+    "strength": 0,
+    "color": "#82baff"
+  },
+  "clips": [
+    "focus"
+  ],
+  "sourceNote": "記入例のみ。参照ファイルとmodelKeyは未制作・未登録。出荷時に原本・権利・生成来歴を記録し、検査完了後にreadyへ変更。"
+}
