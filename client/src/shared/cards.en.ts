@@ -448,7 +448,7 @@ Object.assign(TEXTS, {
   LIFE_CYCLE: "Enchantment: whenever you restore HP, roll a die — on 6, max mana +1 (Cast 2)",
   WORLD_SEED: "Enchantment: at the start of each of your turns, roll a die — on 5+, max mana +1",
   LUCKY_CHEST: "Roll 2 dice — 2·3: max mana +3 & draw 2 / 4·5: dud (Master Mimic 10/3 on enemy field) / 6-8: max mana +1 / 9-11: your max HP +8 / 12: your max HP +12",
-  GUILD_CHEST: "Roll 2 dice — 2·3: max mana +3 / 4: +1 draw at turn start (permanent; fails if your spell/trap zone is full) / 5·6: max mana +2 / 7: max mana +1 / 8: your max HP +10 / 9·10: Novice & Adept Assassins on enemy field / 11·12: Novice, Adept & Elite Assassins on enemy field + take 10 damage (Cast 3)",
+  GUILD_CHEST: "Roll 2 dice — 2·3: max mana +3 / 4: +1 draw at turn start (permanent; fails if your spell zone is full) / 5·6: max mana +2 / 7: max mana +1 / 8: your max HP +10 / 9·10: Novice & Adept Assassins on enemy field / 11·12: Novice, Adept & Elite Assassins on enemy field + take 10 damage (Cast 3)",
   // ---- v30 text unification: cards whose English had fallen back to Korean, or had drifted ----
   GS7_2: "Your HP +13 · From the 3rd cast: your HP +5 whenever you are attacked",
   GT8_0: "Negate the attack + all your monsters +4 HP (lasting) + draw 1 card",
@@ -571,7 +571,7 @@ Object.assign(TEXTS, {
   TPO3: "【Passive】Roll a die whenever enemy monsters die: on 5+, summon a copy to your field",
   TPO5: "【On Summon】Destroy 1 enemy monster of cost 3-4 · If it dies, max mana +1",
   TSO1: "After summoning, you cannot summon other monsters for your next 3 turns",
-  TSO2: "【On Summon】If you have 1 card or less on the field besides this (monsters, spells, traps), +3/+3",
+  TSO2: "【On Summon】If you have at most 1 other card on the field (monsters or spells), +3/+3",
   TSO3: "【On Summon】If your graveyard holds no monsters, draw 4 cards",
   TSO5: "【Requires】No non-Solitary monsters on your field",
   TAR1: "【Passive】+1 draw at the start of your turns",

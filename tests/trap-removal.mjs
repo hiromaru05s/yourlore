@@ -18,6 +18,22 @@ try {
   const retired = JSON.parse(await readFile(new URL('../docs/card-rework/2026-09-09-trap-removal/removed-traps.json', import.meta.url), 'utf8')).cards;
   assert.equal(retired.length, 32);
   assert(!Object.values(DB).some(c => c.t === 'trap'));
+  // Scan the final evaluated catalog, including generated cards and starters.
+  // Historical source patches may mention traps; live text/effects must not.
+  const trapTerms = /trap|罠|トラップ|함정|트랩/i;
+  const retiredEffects = new Set(['discardBreak', 'wipeTraps', 'burnBreak2', 'breaktrapDraw',
+    'breaktrap', 'trapsmithBuff', 'destroyTrap', 'trapDiscount', 'trapBan', 'trapImmune',
+    'trapmaster', 'siegeBreak2', 'rogueTrap', 'wipeBack']);
+  for (const c of [...Object.values(DB), ...Object.values(STARTERS)]) {
+    assert.equal(c.react, undefined, `${c.id}: trap reaction in live catalog`);
+    for (const key of ['name', 'nameJa', 'nameEn', 'text', 'textJa', 'textEn']) {
+      assert(!trapTerms.test(c[key] || ''), `${c.id}.${key}: stale trap wording`);
+    }
+    for (const key of ['onSummon', 'act', 'aura', 'attackFx', 'turnFx', 'ench', 'condAtk', 'condDef', 'summonReq']) {
+      assert(!retiredEffects.has(c[key]), `${c.id}.${key}: retired trap effect`);
+    }
+    assert(!c.passive?.some(k => retiredEffects.has(k)), `${c.id}: retired trap passive`);
+  }
   for (const { id } of retired) {
     assert(!DB[id], `${id} is retired, not merely hidden from the shop`);
     for (const pool of [ALL_IDS, BUYABLE_POOL, DECK_POOL, [...RANDOM_CARDS]]) assert(!pool.includes(id), `${id} escaped a derived pool`);
@@ -111,7 +127,7 @@ try {
     }
     assert(g.over, `seed ${seed} failed to finish: ${JSON.stringify({turn:g.turn, cur:g.cur, pending:g.pending, action:greedyDecide(g,false)})}`);
   }
-  console.log(`PASS: 32 retired traps, saved decks/watchlists/markets, related links, 40 market seeds, 2 reworked monsters, 10 completed bot games (${actions} actions)`);
+  console.log(`PASS: 32 retired traps, catalog text/effects/reactions, saved decks/watchlists/markets, related links, 40 market seeds, 2 reworked monsters, 10 completed bot games (${actions} actions)`);
 } finally {
   await rm(dir, { recursive: true, force: true });
 }
