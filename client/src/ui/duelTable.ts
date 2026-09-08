@@ -6,9 +6,12 @@ export function createDuelTable(root: HTMLElement, environment: T.Texture) {
   const scene = new T.Scene();
   scene.environment = environment;
   scene.environmentIntensity = .65;
-  const camera = new T.OrthographicCamera(-1, 1, 1, -1, .01, 20);
-  camera.position.set(0, 2, 2);
-  camera.lookAt(0, -.022, 0);
+  // Match the field cards' CSS tilt. A long lens adds gentle convergence without
+  // shrinking the opponent's cards enough to hurt readability.
+  const tilt = 32;
+  const radians = T.MathUtils.degToRad(tilt);
+  const camera = new T.PerspectiveCamera(20, 1, .01, 50);
+  root.style.setProperty('--duel-table-tilt', `${tilt}deg`);
   scene.add(new T.HemisphereLight(0xfffcf3, 0x667184, 1.3));
   const key = new T.DirectionalLight(0xfff5e5, 2.1);
   key.position.set(-1.4, 2.8, 1.6); scene.add(key);
@@ -63,12 +66,16 @@ export function createDuelTable(root: HTMLElement, environment: T.Texture) {
     render(renderer: T.WebGLRenderer, width: number, height: number): void {
       if (dead || !model || width <= 0 || height <= 0) return;
       const aspect = width / height;
+      const spanX = aspect < 1 ? 1.45 : 1.62;
       // Preserve card sizes and the physical edge thickness. Only the empty field's
       // depth follows the responsive play area; cosmetics retain their own geometry.
-      model.scale.z = (16 / 9) / aspect;
-      const spanX = 1.56;
-      camera.left = -spanX / 2; camera.right = spanX / 2;
-      camera.top = spanX / aspect / 2; camera.bottom = -camera.top;
+      model.scale.z = (16 / 9) / aspect * Math.SQRT1_2 / Math.cos(radians) * 1.1 * spanX / 1.62;
+      const focalPixels = height * 3;
+      const distance = focalPixels * spanX / width;
+      camera.fov = T.MathUtils.radToDeg(2 * Math.atan(height / (2 * focalPixels)));
+      camera.aspect = aspect;
+      camera.position.set(0, distance * Math.cos(radians) - .022, distance * Math.sin(radians) + .02);
+      camera.lookAt(0, -.022, .02);
       camera.updateProjectionMatrix();
       renderer.setViewport(0, 0, width, height);
       renderer.setScissor(0, 0, width, height);
@@ -83,6 +90,7 @@ export function createDuelTable(root: HTMLElement, environment: T.Texture) {
       if (model) { scene.remove(model); release(model); model = undefined; }
       root.classList.remove('duel-table-ready');
       delete root.dataset.tableState;
+      root.style.removeProperty('--duel-table-tilt');
     },
   };
 }
