@@ -26,7 +26,7 @@ paintDuelClock(clock,38.1,50,true);
 assert.equal(clock.querySelector('.tc-num').textContent,'39');
 assert.equal(clock.dataset.total,'50');assert.equal(clock.getAttribute('role'),'timer');assert(!clock.hasAttribute('aria-hidden'));
 paintDuelClock(clock,-4,90,false);assert.equal(clock.dataset.remaining,'0');assert(clock.classList.contains('warn'));assert(clock.classList.contains('opp'));
-paintDuelClock(clock,100,100,true);assert(!clock.classList.contains('warn'));assert.equal(clock.querySelectorAll('.hourglass-anchor').length,1);
+paintDuelClock(clock,100,100,true);assert(!clock.classList.contains('warn'));assert.equal(clock.querySelectorAll('.hourglass-anchor').length,0);
 
 // Legacy indefinite enchantments must never count down, including persisted reduced counters.
 let eternal=createGame({mode:'bot',seed:37,starting:0,p0:{id:'p',name:'P'},p1:{id:'q',name:'Q'}}).state;

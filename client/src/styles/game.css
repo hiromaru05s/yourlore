@@ -556,3 +556,60 @@
 .portrait--opp .pt-ring .avatar { inset:10% 9% 12%; height:78%; border-radius:28% 28% 35% 35%; }
 .portrait .pt-name,.pcluster--me .pt-name { top:auto; bottom:0; width:124%; max-width:160px; height:16%; padding:0 5px; display:block; line-height:calc(var(--pt) * .16); font-size:clamp(8px,calc(var(--pt) * .095),12px); z-index:3; border-radius:0; background:linear-gradient(90deg,transparent,#0c1b30e8 18%,#0c1b30e8 82%,transparent); text-align:center; }
 @media(max-height:500px) { .play-drop-guide { font-size:10px; padding:3px; } }
+
+/* A shared physical card unit and one world-space perspective for the whole table. */
+.game .stage { inset:0 4%; }
+.game .board-col { grid-template-rows:var(--pt-reserve) minmax(0,1fr) auto minmax(0,1fr) var(--pt-reserve); row-gap:8px; }
+.game .pcluster--opp { align-self:start; }
+.game .hand-area { height:var(--pt-reserve); position:relative; }
+.game .pcluster--me { position:absolute; bottom:0; }
+.game .pcluster { z-index:12; }
+.game .zone { transform:none!important; }
+.game .field-block { gap:calc(var(--slot-gap) * 2); padding:4px; }
+.game .zones { gap:16px; }
+.game .zone-mon .card,.game .zone-mon .slot { --cw:var(--card-w); --ch:var(--card-h); width:var(--card-w); height:var(--card-h); }
+.game .zone-mon { width:calc(7 * var(--card-w) + 6 * var(--slot-gap)); }
+.game .zone-st { display:grid; grid-template-columns:repeat(14,minmax(0,1fr)); width:calc(7 * var(--card-w) + 6 * var(--slot-gap)); gap:3px; }
+.game .zone-st .slot,.game .zone-st .buff-icon { width:100%; height:auto; aspect-ratio:4/5; justify-self:stretch; }
+.game .pile-col { gap:var(--slot-gap); align-items:center; }
+.game .pile--deck { width:calc(var(--card-w) * 1.3); height:calc(var(--card-w) * 1.95); }
+.game .pile--shelf { width:calc(var(--card-w) * 2); height:calc(var(--card-w) * 1.4); }
+.game .pile--shelf::before { content:''; position:absolute; inset:calc(var(--card-w) * -.65) 0 0; }
+.game .pile-tag { bottom:-17px; font-size:clamp(8px,.75vw,12px); }
+.game .pile-count { bottom:-4px; }
+.game .rift-button { width:calc(var(--card-w) * .7); height:calc(var(--card-w) * .9); }
+.game .market-counter { transform:none; padding:8px 10px; gap:var(--slot-gap); }
+.game .market-sub--supply { padding:22px 5px 14px; }
+.game .market-sub--fixed { padding:4px 0; }
+.game .mid-row { gap:22px; }
+.game .mid-aside { width:calc(var(--card-w) * 1.6); flex-basis:calc(var(--card-w) * 1.6); gap:7px; }
+.game .mp-clock.show { width:var(--card-w); height:var(--card-w); }
+.game .tc-dial { width:var(--card-w); height:var(--card-w); }
+.game #endBtn { width:calc(var(--card-w) * 1.6); min-height:calc(var(--card-w) * .64); }
+.game .hourglass-anchor { display:none; }
+.board-projected .stage { z-index:6; }
+.board-projected .zone-row { transform-origin:0 0; }
+.board-projected .field-block.is-turn .zone-mon { filter:none; }
+.game .zone-row::before { font-size:clamp(8px,.75vw,12px); letter-spacing:.08em; }
+.game .zone-row::after { content:''; position:absolute; inset:-6px -7px; z-index:-1; border:1px solid #8e7f5b2b; background:linear-gradient(90deg,#9caec00a,#f8f4e40e); border-radius:7px; pointer-events:none; }
+@media(max-width:700px) and (orientation:portrait){
+ .game .stage { inset:0 4%; }
+ .game .board-col { row-gap:7px; }
+ .game .field-block { display:flex; flex-direction:column; gap:9px; padding:0; }
+ .game #oppRow .field-block { flex-direction:column-reverse; }
+ .game .pile-col { height:calc(var(--card-w) * 1.7); width:100%; justify-content:flex-end; gap:10px; }
+ .game .zone-st { grid-template-columns:repeat(14,minmax(0,1fr)); gap:2px; }
+ .game .zone-row::before { font-size:7px; top:-11px; }
+ .game .zones { gap:13px; }
+ .game .mid-row { gap:12px; }
+ .game .market-counter { padding:4px 5px; gap:5px; }
+ .game .market-sub--supply { padding:22px 3px 13px; }
+ .game .market-sub--fixed { padding:4px 0; }
+ .game .mid-aside { width:46px; flex-basis:46px; }
+ .game #endBtn { width:50px; min-height:34px; padding:4px; font-size:8px; }
+ .game .mp-clock.show,.game .tc-dial { width:42px; height:42px; }
+ .game .pile-tag { bottom:-12px; font-size:7px; }
+ .game .portrait .pt-vitals,.game .portrait .pt-mana { width:clamp(75px,22vw,96px); }
+ .game .portrait .pt-hp b,.game .portrait .mana-readout b { font-size:21px; }
+ .game .pcluster--me .pc-side--r { bottom:20px; left:calc(50% + var(--pt)/2 + 8px); }
+}

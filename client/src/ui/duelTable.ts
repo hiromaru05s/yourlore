@@ -1,23 +1,9 @@
 /** The real Blender table, drawn behind the DOM with the existing duel renderer. */
 import * as T from 'three';
+import { BOARD_TILT } from './boardProjection';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-export function createDuelTable(root: HTMLElement, environment: T.Texture) {
-  const scene = new T.Scene();
-  scene.environment = environment;
-  scene.environmentIntensity = .65;
-  // Match the field cards' CSS tilt. A long lens adds gentle convergence without
-  // shrinking the opponent's cards enough to hurt readability.
-  const tilt = 32;
-  const radians = T.MathUtils.degToRad(tilt);
-  const camera = new T.PerspectiveCamera(20, 1, .01, 50);
-  root.style.setProperty('--duel-table-tilt', `${tilt}deg`);
-  root.style.setProperty('--duel-card-stretch', String(1 / Math.cos(radians)));
-  scene.add(new T.HemisphereLight(0xfffcf3, 0x667184, 1.3));
-  const key = new T.DirectionalLight(0xfff5e5, 2.1);
-  key.position.set(-1.4, 2.8, 1.6); scene.add(key);
-  const fill = new T.DirectionalLight(0xf1f5ff, .8);
-  fill.position.set(2, 1, -2); scene.add(fill);
+export function createDuelTable(root: HTMLElement, scene: T.Scene) {
   let model: T.Group | undefined;
   let dead = false;
   const low = matchMedia('(max-width: 700px)').matches;
@@ -52,6 +38,7 @@ export function createDuelTable(root: HTMLElement, environment: T.Texture) {
     model = gltf.scene;
     model.traverse(node => {
       if (!(node instanceof T.Mesh)) return;
+      node.receiveShadow=true;
       const materials = Array.isArray(node.material) ? node.material : [node.material];
       for (const material of materials) if (material instanceof T.MeshStandardMaterial) {
         for (const map of [material.map, material.metalnessMap, material.roughnessMap]) if (map) map.anisotropy = 4;
@@ -64,35 +51,17 @@ export function createDuelTable(root: HTMLElement, environment: T.Texture) {
   });
 
   return {
-    render(renderer: T.WebGLRenderer, width: number, height: number): void {
-      if (dead || !model || width <= 0 || height <= 0) return;
-      const aspect = width / height;
-      const spanX = aspect < 1 ? 1.45 : 1.62;
-      // Preserve card sizes and the physical edge thickness. Only the empty field's
-      // depth follows the responsive play area; cosmetics retain their own geometry.
-      model.scale.z = (16 / 9) / aspect * Math.SQRT1_2 / Math.cos(radians) * 1.1 * spanX / 1.62;
-      const focalPixels = height * 3;
-      const distance = focalPixels * spanX / width;
-      camera.fov = T.MathUtils.radToDeg(2 * Math.atan(height / (2 * focalPixels)));
-      camera.aspect = aspect;
-      camera.position.set(0, distance * Math.cos(radians) - .022, distance * Math.sin(radians) + .02);
-      camera.lookAt(0, -.022, .02);
-      camera.updateProjectionMatrix();
-      renderer.setViewport(0, 0, width, height);
-      renderer.setScissor(0, 0, width, height);
-      renderer.render(scene, camera);
-      if (!root.classList.contains('duel-table-ready')) {
-        root.classList.add('duel-table-ready');
-        root.dataset.tableState = low ? 'ready-low' : 'ready';
-      }
+    resize(width:number,height:number,unit:number):void {
+      if(dead||!model)return;
+      model.scale.set(width*.92/1.6,unit*.42/.075,height*.90/Math.cos(BOARD_TILT*Math.PI/180)/1.02);
+      if(!root.classList.contains('duel-table-ready')){root.classList.add('duel-table-ready');root.dataset.tableState=low?'ready-low':'ready';}
     },
     dispose(): void {
       dead = true;
       if (model) { scene.remove(model); release(model); model = undefined; }
       root.classList.remove('duel-table-ready');
       delete root.dataset.tableState;
-      root.style.removeProperty('--duel-table-tilt');
-      root.style.removeProperty('--duel-card-stretch');
+
     },
   };
 }

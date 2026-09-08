@@ -7,6 +7,8 @@ import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES,
 import { cardEl, cardRulesEl, prefetchZoomArt, enchantmentTile } from "./cardView";
 import { t, getLang, cardText, cardName } from "../i18n";
 
+import { projectedPlacement } from "./boardProjection";
+
 export type ViewSide = "me" | "opp";
 
 const EASE = "cubic-bezier(.4,0,.2,1)";
@@ -137,16 +139,7 @@ async function landCard(node: HTMLElement, to: DOMRect, fade = false): Promise<v
 }
 /** Exact transformed slot in screen coordinates, including the row's perspective
  * and frame aspect correction. No bounding-box-only approximation at landing. */
-export function fieldPlacement(target:HTMLElement,width:number,height:number):DOMMatrix {
-  const zone=target.closest<HTMLElement>('.zone');
-  if(!zone || !zone.parentElement){const r=target.getBoundingClientRect();return new DOMMatrix().translate(r.left,r.top).scale(r.width/width,r.height/height);}
-  const r=zone.parentElement.getBoundingClientRect(),style=getComputedStyle(zone);
-  const [ox,oy]=style.transformOrigin.split(' ').map(parseFloat);
-  const matrix=new DOMMatrix(style.transform==='none'?undefined:style.transform);
-  return new DOMMatrix().translate(r.left+zone.offsetLeft+ox,r.top+zone.offsetTop+oy)
-    .multiply(matrix).translate(target.offsetLeft-ox,target.offsetTop-oy)
-    .scale(target.offsetWidth/width,target.offsetHeight/height);
-}
+export const fieldPlacement = projectedPlacement;
 /** Morph the reveal into its actual field face during one continuous flight.
  * The landing face stays until the controller replaces it with the same DOM. */
 async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElement):Promise<HTMLElement> {
@@ -668,7 +661,7 @@ export async function ghostSummon(card: CardInst, side: ViewSide, slotIndex: num
   const node = floatAt(cardEl(card, { size: "hand" }), from);
   try {
     await focusCard(node, side);
-    return await flyIntoSlot(node,target,cardEl(card,{compactField:true}));
+    return await flyIntoSlot(node,target,cardEl(card,{field:true}));
   } finally { node.remove(); }
 }
 

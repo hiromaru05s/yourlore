@@ -682,7 +682,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     const fm = c as FieldMon;
     // 1) 키워드 — 카드가 원래 가진 것 + 게임 중 부여된 것 (필드 타일에서만;
     //    손패/마켓/확대는 효과판의 키워드 칩 행이 같은 정보를 이미 보여준다)
-    if (opt.compactField) {
+    if (opt.compactField || opt.field) {
       const innate = cardPassives(c);
       const granted = fm.passivesG ?? [];
       for (const k of [...innate, ...granted.filter((g) => !innate.includes(g))]) {

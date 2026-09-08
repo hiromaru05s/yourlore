@@ -447,7 +447,7 @@ export class GameView {
       // 카지노(v34): 카운터 배지 (12개마다 카지노 주사위)
       const countLabel = getLang() === 'ja' ? 'カウント' : getLang() === 'en' ? 'Count' : '카운트';
       const casinoBadge = m.aura === "casino" ? { badge: `${countLabel} ${m.gcount || 0}/12` } : m.id === "CASTLE" ? { badge: `${countLabel} ${m.gcount || 0}` } : {};
-      const card = cardEl(m, { field: true, compactField: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted, ...casinoBadge });
+      const card = cardEl(m, { field: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted, ...casinoBadge });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
       // zoom shows the monster's CURRENT atk/hp (buffs/mods applied) — and, when damaged,
