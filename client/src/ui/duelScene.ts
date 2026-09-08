@@ -4,6 +4,7 @@ import * as T from 'three';
 import { makePile, type PileModel } from './pileModels';
 import { captureCardSurface, CARD_PADDING } from './cardSurface';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+import { createDuelTable } from './duelTable';
 
 type Item = { scene: T.Scene; camera: T.PerspectiveCamera; group: T.Group; key: string; element: HTMLElement; upper?: T.Mesh; lower?: T.Mesh; stream?: T.Points; fraction?: number; pile?:PileModel; count?:number; entered?:number; surface?:T.Texture };
 const clamp = (n: number) => Math.min(1, Math.max(0, n));
@@ -17,7 +18,7 @@ export function mountDuelScene(root: HTMLElement): () => void {
   renderer.toneMapping = T.ACESFilmicToneMapping;
   renderer.toneMappingExposure = .82;
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = T.PCFSoftShadowMap;
+  renderer.shadowMap.type = T.PCFShadowMap;
   const canvas = renderer.domElement;
   canvas.className = 'duel-objects-3d'; canvas.setAttribute('aria-hidden', 'true');
   root.appendChild(canvas);
@@ -25,6 +26,7 @@ export function mountDuelScene(root: HTMLElement): () => void {
   const room = new RoomEnvironment();
   const environment = pmrem.fromScene(room, .04);
   room.dispose(); pmrem.dispose();
+  const table = createDuelTable(root, environment.texture);
   let dead = false, dirty = true, frame = 0, last = 0, width = 0, height = 0;
   const items = new Map<string, Item>();
   const textures=new Map<string,T.Texture>();
@@ -153,6 +155,9 @@ export function mountDuelScene(root: HTMLElement): () => void {
     if(width!==innerWidth||height!==innerHeight){width=innerWidth;height=innerHeight;renderer.setSize(width,height);dirty=true;}
     if(dirty){refresh();dirty=false;}
     renderer.setScissorTest(false);renderer.clear();renderer.setScissorTest(true);
+    table.render(renderer,width,height);
+    // The table and individual props use independent cameras but share one context.
+    renderer.clearDepth();
     for(const item of items.values()) {
       const clock=!!item.upper;
       const el=clock?item.element.querySelector<HTMLElement>('.hourglass-anchor'):item.element;
@@ -218,7 +223,7 @@ export function mountDuelScene(root: HTMLElement): () => void {
     if(dead)return;dead=true;cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);
     items.forEach(item=>{disposeObject(item.scene);item.surface?.dispose();});textures.forEach(t=>t.dispose());
     root.querySelectorAll('.pile--3d-ready').forEach(el=>{el.classList.remove('pile--3d-ready');el.querySelector('.pile-draw-anchor')?.remove();});
-    disposeObject(dustScene);environment.dispose();renderer.dispose();canvas.remove();root.classList.remove('duel-webgl');
+    table.dispose();disposeObject(dustScene);environment.dispose();renderer.dispose();canvas.remove();root.classList.remove('duel-webgl');
   }
   frame=requestAnimationFrame(render);
   return dispose;

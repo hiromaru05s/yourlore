@@ -1,0 +1,38 @@
+{
+  "standard": {
+    "passed": true,
+    "bytes": 218004,
+    "triangles": 3168,
+    "flat_top_triangles": 132,
+    "bounds_min": [
+      -0.800000011920929,
+      -0.07500000298023224,
+      -0.5099999904632568
+    ],
+    "bounds_max": [
+      0.800000011920929,
+      0.0,
+      0.5099999904632568
+    ],
+    "external_resources": 0,
+    "materials": 3
+  },
+  "low": {
+    "passed": true,
+    "bytes": 88284,
+    "triangles": 1248,
+    "flat_top_triangles": 52,
+    "bounds_min": [
+      -0.800000011920929,
+      -0.07500000298023224,
+      -0.5099999904632568
+    ],
+    "bounds_max": [
+      0.800000011920929,
+      0.0,
+      0.5099999904632568
+    ],
+    "external_resources": 0,
+    "materials": 3
+  }
+}

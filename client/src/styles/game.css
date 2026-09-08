@@ -208,6 +208,11 @@
 .mana-crystal { display:block; height:18px; background:url(/art/biblion/ui/mana-empty.png) center/auto 100% no-repeat; clip-path:none; }
 .mana-crystal.is-lit { background-image:url(/art/biblion/ui/mana-filled.png); filter:drop-shadow(0 0 2px #5ac5fb80); }
 .duel-objects-3d { position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:5; }
+/* The table occupies the same WebGL canvas as the piles. Keep every field card,
+   market control and label above its opaque surface; the canvas never takes input. */
+.duel-table-ready .game { background:radial-gradient(ellipse at 50% 38%,#334054,#131e30 75%,#0a1220); }
+.duel-table-ready .game::before { background:none; }
+.duel-table-ready .stage { z-index:6; }
 
 .pile-tag,.pile-count { z-index:6; }
 .pile-col { gap:calc(var(--slot-gap) + 9px); }
