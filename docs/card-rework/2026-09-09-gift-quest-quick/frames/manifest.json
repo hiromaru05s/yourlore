@@ -1,0 +1,31 @@
+{
+  "created": "2026-09-09",
+  "status": "design-candidates-not-integrated",
+  "tool": "image_gen.imagegen built-in edit",
+  "constraints": "Recolor only forest-green enamel to muted amethyst purple; preserve existing ivory/gold/navy frame and silhouette.",
+  "validation": "Both image dimensions match source. Visually inspected: same major frame structure and placement; pixel-identical preservation outside recolor region not established.",
+  "assets": [
+    {
+      "name": "base-quest-candidate",
+      "input": "client/public/art/biblion/modular/base-trap.png",
+      "output": "frames/base-quest-candidate.png",
+      "generatedSource": "/Users/hiromaru05s/.codex/generated_images/01a07dc1-214c-7b33-a227-80d8a6137a70/exec-2dde9624-189b-4e4b-b5c6-b5c44a08fcc8.png",
+      "width": 1024,
+      "height": 1536,
+      "prompt": "Use case: precise-object-edit. Edit target: the attached LORE base-trap card frame PNG. Create its purple QUEST variant by changing ONLY the existing forest-green enamel areas (large blank top name panel and slim side enamel strips) to a rich muted amethyst purple, approx #633E86. Preserve exactly the same silhouette, canvas size/aspect, all ivory ceramic, gold star filigree, outlines, textures, positions, corner shapes and navy central artwork window and black exterior matte. Do not redesign, redraw or add any geometry. Do not add text, numbers, icons, badges or new patterns. Do not change the navy central window or ivory border colors. Identical front-on card frame, color replacement only. Match source dimensions 1024x1536.",
+      "sourceSha256": "dc6d00acf275ca51b6eae2ee8745433a8f7487bd3b12d9651511244bb328023b",
+      "sha256": "9374a4abe21dd11e21906e9cc23f63c1035eea9a991df1b551366a27f5efcf33"
+    },
+    {
+      "name": "field-quest-candidate",
+      "input": "client/public/art/biblion/modular/field-trap.png",
+      "output": "frames/field-quest-candidate.png",
+      "generatedSource": "/Users/hiromaru05s/.codex/generated_images/01a07dc1-214c-7b33-a227-80d8a6137a70/exec-62be37e0-2678-427b-bb97-babcb4ce1fef.png",
+      "width": 1122,
+      "height": 1402,
+      "prompt": "Use case: precise-object-edit. Edit target: attached LORE field-trap compact battlefield card frame. Create matching purple QUEST variant. ONLY recolor the forest-green narrow enamel ribbons on the two side edges to muted amethyst purple #633E86. Every other pixel region should retain its original color and structure: ivory frame, pale gold stars, navy central artwork area, black outer matte. Preserve source proportions, dimensions, silhouette, all decorative lines and pointed star finials, no resizing/cropping/recomposition. No new text, numbers, icons or shapes. This is purely a green-to-purple enamel recolor of the existing asset, not a redesign.",
+      "sourceSha256": "472d7726adca9f17e45f390b21c7c7e64c78efa8bff79a008572c27918660d43",
+      "sha256": "629c040ab300300b8ded921807971a5e12ae1f1860a9a1d4a16ce7936b5d4046"
+    }
+  ]
+}
