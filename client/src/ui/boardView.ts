@@ -918,7 +918,7 @@ export class GameView {
     handEl.style.setProperty("--h-w-compact", `${n ? cw + (n - 1) * compactStep : 0}px`);
   }
 
-  /** Compact press = expand. Open: click = zoom preview, drag up past the hand = play. */
+  /** Drag onto the visible board to play; return to the hand to cancel. */
   private bindHandCard(card: HTMLElement, c: CardInst, aff: boolean): void {
     card.style.touchAction = "none";
     card.draggable = false;
@@ -935,12 +935,26 @@ export class GameView {
       const sx = e.clientX, sy = e.clientY;
       let ghost: HTMLElement | null = null;
       let done = false;
+      let guide: HTMLElement | null = null;
+      const destination = this.root.querySelector<HTMLElement>(c.t === "mon" ? "#meRow .zone-mon" : "#meRow .zone-st");
+      const dropBounds = () => {
+        const top = this.q("oppRow").getBoundingClientRect();
+        const bottom = this.q("meRow").getBoundingClientRect();
+        return { left: bottom.left, right: bottom.right, top: top.top - 12, bottom: bottom.bottom + 16 };
+      };
+      const canDropAt = (x: number, y: number) => {
+        const r = dropBounds(), hand = this.q("hand").getBoundingClientRect();
+        const overHand = x >= hand.left && x <= hand.right && y >= hand.top && y <= hand.bottom;
+        return !overHand && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+      };
       const game = this.root.querySelector(".game") as HTMLElement | null;
 
       const cleanup = (): void => {
         if (done) return;
         done = true;
         ghost?.remove();
+        guide?.remove();
+        destination?.classList.remove("drop-destination", "drop-ready");
         card.classList.remove("is-dragging");
         game?.classList.remove("drag-play");
         this.cancelHandDrag = null;
@@ -980,13 +994,32 @@ export class GameView {
           document.body.appendChild(ghost);
           card.classList.add("is-dragging");
           if (aff) game?.classList.add("drag-play");
+          guide = document.createElement("div");
+          guide.className = "play-drop-guide";
+          guide.setAttribute("role", "status");
+          guide.setAttribute("aria-live", "polite");
+          document.body.appendChild(guide);
+          if (aff) destination?.classList.add("drop-destination");
         }
         ghost.style.left = `${ev.clientX}px`;
         ghost.style.top = `${ev.clientY}px`;
+        const ready = canDropAt(ev.clientX, ev.clientY);
+        destination?.classList.toggle("drop-ready", ready && aff);
+        ghost.classList.toggle("drop-ready", ready && aff);
+        if (guide) {
+          const r = dropBounds();
+          guide.style.left = `${r.left}px`; guide.style.top = `${r.top}px`;
+          guide.style.width = `${r.right - r.left}px`; guide.style.height = `${r.bottom - r.top}px`;
+          guide.classList.toggle("is-ready", ready && aff);
+          guide.classList.toggle("is-blocked", !aff);
+          const label = !aff ? t("play.drop.blocked") : ready ? t("play.drop.release") : t("play.drop.guide");
+          if (guide.textContent !== label) guide.textContent = label;
+        }
       };
       const onUp = (ev: PointerEvent): void => {
         if (done || ev.pointerId !== e.pointerId) return;
         const dragged = !!ghost;
+        const inPlayArea = canDropAt(ev.clientX, ev.clientY);
         // Where the card actually IS when you let go — the play FX continues from
         // here (and leans with the drag) instead of restarting at the hand's left
         // edge. Derived from the pointer + the ghost's own anchor (CSS .drag-ghost
@@ -997,9 +1030,8 @@ export class GameView {
         cleanup();
         if (!dragged) return; // plain click → the click handler zooms
         swallowNextClick(card);
-        // released above the hand region = play it (drop back onto the hand = cancel)
-        const handTop = this.q("hand").getBoundingClientRect().top;
-        if (ev.clientY < handTop - 24) {
+        // The highlight and submission use the same board bounds.
+        if (inPlayArea) {
           if (aff) {
             setPlayOrigin(rel ? { left: rel.left, top: rel.top, width: rel.width, height: rel.height, dx: ev.clientX - sx, dy: ev.clientY - sy } : null);
             this.h.onPlay(c.uid); // uid, not index: the DOM can lag the logical state

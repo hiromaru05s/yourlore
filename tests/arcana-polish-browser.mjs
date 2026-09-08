@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5176';
-const output='docs/ui-rework/2026-09-08-arcana-polish';await fs.mkdir(output,{recursive:true});
+const output=process.env.LORE_TEST_OUTPUT||'docs/ui-rework/2026-09-08-arcana-polish';await fs.mkdir(output,{recursive:true});
 const browser=await chromium.launch({headless:true,channel:'chrome',args:['--disable-features=LocalNetworkAccessChecks']});
 const page=await browser.newPage({viewport:{width:1280,height:800}}),errors=[];
 page.on('pageerror',e=>errors.push(e.message));
