@@ -183,7 +183,7 @@ export function mountAdmin(app: App): Screen {
           ${kpi("이메일 인증율", pctS(a.verifiedRate), "가입→인증 완료 비율")}
           ${kpi("Google 로그인", `${num(a.loginSplit.google)}`, `이메일 ${num(a.loginSplit.email)}`)}
           ${kpi("초대 유입", num(a.invitedSignups), "친구 초대로 가입")}
-          ${kpi("튜토리얼 완주", num(f.tutorial), `가입의 ${pctRow(f.tutorial, f.signup)} · 10단계 클리어`)}
+          ${kpi("튜토리얼 완주", num(f.tutorial), `가입의 ${pctRow(f.tutorial, f.signup)} · 튜토리얼 완료`)}
         </div>
         <div class="adm-grid">
           <section class="wide"><h3>퍼널 — 가입부터 랭크까지 (전체 기간)</h3><table>

@@ -4711,6 +4711,9 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
     case "play": playFromHand(g, ctx, action.idx); break;
     case "buyMarket": {
       const card = g.market[action.i];
+      // Resumed pre-v43 games can retain retired cards in their market snapshot.
+      // Never charge for (or instantiate) a card absent from the current catalog.
+      if (card && !DB[card.id]) break;
       const bc = card ? buyCost(p, card) : 0;
       if (card && freeBuyBlocked(p, card)) {
         ctx.log(`  └ <span class="dmg">0코스트 구매는 턴당 ${FREE_BUY_MAX}장까지</span>`, `  └ <span class="dmg">0コスト購入は1ターン${FREE_BUY_MAX}枚まで</span>`);
@@ -4729,6 +4732,7 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
     }
     case "buySupply": {
       const card = p.supply[action.i];
+      if (card && !DB[card.id]) break;
       const bc = card ? buyCost(p, card) : 0;
       if (card && freeBuyBlocked(p, card)) {
         ctx.log(`  └ <span class="dmg">0코스트 구매는 턴당 ${FREE_BUY_MAX}장까지</span>`, `  └ <span class="dmg">0コスト購入は1ターン${FREE_BUY_MAX}枚まで</span>`);

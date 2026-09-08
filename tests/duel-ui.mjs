@@ -45,9 +45,12 @@ eternal.players[0].enchants.push({card:{...contract,uid:'contract-expiry'},turns
 eternal=reduce(eternal,{type:'endTurn'}).state;
 assert(!eternal.players[0].enchants.some(e=>e.card.uid==='contract-expiry'));
 assert(eternal.players[0].removed.some(c=>c.uid==='contract-expiry'));
+// Legacy persisted games still render/resolve traps, even though v43 removes
+// every trap from DB. Use an explicit fixture, never a live catalog lookup.
+const legacyTrap={id:'T9',t:'trap',cost:2,play:1,react:'thornShield',val:3,name:'Legacy trap',nameJa:'旧罠',text:'Attack response'};
 // Shared engine capacity applies to both browser and staging worker reducers.
 const boundary=createGame({mode:'bot',seed:7,starting:0,p0:{id:'x',name:'X'},p1:{id:'y',name:'Y'}}).state;
-const trapDef=Object.values(DB).find(c=>c.t==='trap' && !c.req);
+const trapDef=legacyTrap;
 boundary.pending=null;boundary.players[0].mana=30;
 boundary.players[0].traps=Array.from({length:13},(_,i)=>({card:{...trapDef,uid:'b-'+i}}));
 boundary.players[0].hand=[{...trapDef,uid:'fourteenth'},{...trapDef,uid:'fifteenth'}];
@@ -57,7 +60,7 @@ cap=reduce(cap,{type:'play',idx:0,player:0}).state;
 assert.equal(cap.players[0].traps.length,14);assert(cap.players[0].hand.some(c=>c.uid==='fifteenth'));
 const g=createGame({mode:'bot',seed:42,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;
 const mon=Object.values(DB).find(c=>c.t==='mon');
-const trap=Object.values(DB).find(c=>c.t==='trap');
+const trap=legacyTrap;
 const spell=Object.values(DB).find(c=>c.ench);
 for(const [i,p] of g.players.entries()){
  p.maxMana=30;p.mana=23;p.hp=20;

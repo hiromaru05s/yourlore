@@ -58,7 +58,7 @@ export function mountCards(app: App): Screen {
   // ---- type chips ----
   const typeDefs: [TypeFilter, string][] = [
     ["all", t("cards.f.all")], ["mon", t("cards.f.mon")],
-    ["spell", t("cards.f.spell")], ["trap", t("cards.f.trap")],
+    ["spell", t("cards.f.spell")],
     ["starter", t("cards.f.starter")],
   ];
   const typeChips = typeDefs.map(([key, label]) => {

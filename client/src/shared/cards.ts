@@ -2202,6 +2202,20 @@ TRIBES["시초"] = {
   en: { name: "Origin", note: "* Collect different cards, one each of cost 1-8 (incl. cost-8 'Origin Mimic') · each tier fires once, separately", bonuses: ["2 different: max HP +15", "3 different: max HP +40", "4 different: max HP +70", "6 different: you win the game"] },
 };
 
+// ---- v43: retire every trap from the playable card catalog ----
+// Keep the historical patches above and the legacy trap state/rendering schema:
+// the parallel design rework still uses those shapes. Related monsters/spells
+// remain unchanged pending the decisions in docs/card-rework/2026-09-09-trap-removal/.
+// Run after ALL additions/patches, before localization and derived card pools.
+for (const [id, card] of Object.entries(DB)) {
+  if (card.t !== "trap") continue;
+  delete DB[id];
+  RANDOM_CARDS.delete(id);
+}
+for (let i = DECK_POOL.length - 1; i >= 0; i--) {
+  if (!DB[DECK_POOL[i]] && !STARTERS[DECK_POOL[i]]) DECK_POOL.splice(i, 1);
+}
+
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 // 플레이버 카드명(ko/ja/en 3개 국어) 적용 — applyEnglish 이후, standardizeCardTexts 이전
 applyFlavorCardNames([DB, STARTERS as unknown as Record<string, CardDef>]);
@@ -2271,7 +2285,7 @@ export function relatedCardIds(id: string): string[] {
   if (_relatedCache[id]) return _relatedCache[id];
   const c = DB[id];
   if (!c) return (_relatedCache[id] = []);
-  const out = new Set<string>(RELATED_MANUAL[id] ?? []);
+  const out = new Set<string>((RELATED_MANUAL[id] ?? []).filter((relatedId) => !!DB[relatedId]));
   const ko = c.text ?? "", ja = c.textJa ?? "";
   // a name only counts if some occurrence is NOT inside a longer card name at the
   // same spot (e.g. "마스터 미믹" in a text must not also match "미믹")
@@ -2309,7 +2323,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v42"; // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
+export const BALANCE_VERSION = "v43"; // v43: all trap cards retired; related monsters/spells await rework decisions
+// v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관
 // v40; // v40: 룰 개정 — 선공 40/후공 45 · 첫 손패 3장 이후 매턴 1장 드로우 + 손패 유지(상한 8) · 최대 마나 하한 3 · 어튠에 신기(제외 불가) · 고정 마켓 슬롯 재고 3(매진 시 새 카드 교체)
 // v39: 주술사 계열 — 견습 주술사(구 꼬마, 2코) + 초급(3코 2/3 마법8장·5+·저주3)/중급(4코 3/5 마법10장·4+·저주4)/상급(5코 3/6 아우라 마법13장·3+·저주5 + 상대 마법마다 저주1)/특급 켈로이드(6코 4/10 아우라·위엄·회피 · 마법 반 이상&15장 · 상대 마법 3+ 무효 · 주술사 공격 +5)
