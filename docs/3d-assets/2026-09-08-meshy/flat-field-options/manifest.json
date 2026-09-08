@@ -36,6 +36,15 @@
       "promptFile": "01-ivory-inner-border-prompt.md",
       "status": "appearance proposal with flat printed border; use unmarked version for mesh generation",
       "sha256": "bc163442fadc92228b28e209373c6821f2c3bf40ebd88f872a9347a928fb4f2d"
+    },
+    {
+      "file": "01-ivory-single-view-v2.png",
+      "title": "白磁フィールド・形状と側面色を読み取りやすい単一斜視",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a07d3e-98fa-7173-8805-5cd1f5ccdf7a/exec-f8419932-4eb1-4abb-9e71-662a8e34e67c.png",
+      "reference": "01-ivory-inner-border.png",
+      "promptFile": "01-ivory-single-view-v2.prompt.md",
+      "status": "single-view reconstruction reference; Meshy result not tested; flat border graphics must not become raised geometry",
+      "sha256": "bf68242b7378dc75498890362df5ac5f719e2ce0e607e047e64cfec30ecf8664"
     }
   ]
 }
