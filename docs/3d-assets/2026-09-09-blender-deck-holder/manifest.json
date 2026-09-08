@@ -1,0 +1,53 @@
+{
+  "assetId": "deck_holder_biblion_ivory",
+  "specVersion": 1,
+  "blenderVersion": "5.2.1 LTS",
+  "generator": "scripts/blender/build_lore_deck_holder.py",
+  "reference": "docs/3d-assets/2026-09-08-blender-table/preview.png",
+  "topSizeMeters": [
+    0.0768,
+    0.1184
+  ],
+  "topRadiusMeters": 0.00256,
+  "heightMeters": 0.008960000000000001,
+  "topY": 0,
+  "materials": 1,
+  "variants": {
+    "standard": {
+      "file": "client/public/models/cosmetics/deck_holder_biblion_ivory/v1/model.glb",
+      "triangles": 1688,
+      "drawCalls": 1,
+      "bytes": 92912,
+      "sha256": "d8d9bd9b7ca4b9b2f79033a70dac763d07ad4d5166aab2c5ef55fdfb4704b5e9",
+      "textureSizes": [
+        [
+          1024,
+          1024
+        ],
+        [
+          512,
+          512
+        ]
+      ],
+      "gpuMiBWithMipmaps": 6.666666666666667
+    },
+    "low": {
+      "file": "client/public/models/cosmetics/deck_holder_biblion_ivory/v1/model-low.glb",
+      "triangles": 448,
+      "drawCalls": 1,
+      "bytes": 31600,
+      "sha256": "3a45ab899b2dd272149bf1cc177d3f8b8e0ff35e839e3dc8a12b9fc65633b213",
+      "textureSizes": [
+        [
+          512,
+          512
+        ],
+        [
+          256,
+          256
+        ]
+      ],
+      "gpuMiBWithMipmaps": 1.6666666666666667
+    }
+  }
+}
