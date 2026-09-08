@@ -12,6 +12,7 @@ export function createDuelTable(root: HTMLElement, environment: T.Texture) {
   const radians = T.MathUtils.degToRad(tilt);
   const camera = new T.PerspectiveCamera(20, 1, .01, 50);
   root.style.setProperty('--duel-table-tilt', `${tilt}deg`);
+  root.style.setProperty('--duel-card-stretch', String(1 / Math.cos(radians)));
   scene.add(new T.HemisphereLight(0xfffcf3, 0x667184, 1.3));
   const key = new T.DirectionalLight(0xfff5e5, 2.1);
   key.position.set(-1.4, 2.8, 1.6); scene.add(key);
@@ -91,6 +92,7 @@ export function createDuelTable(root: HTMLElement, environment: T.Texture) {
       root.classList.remove('duel-table-ready');
       delete root.dataset.tableState;
       root.style.removeProperty('--duel-table-tilt');
+      root.style.removeProperty('--duel-card-stretch');
     },
   };
 }

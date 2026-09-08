@@ -484,8 +484,23 @@
 .impact-burst.big i { width: 6px; height: 6px; background: #ffb15e; box-shadow: 0 0 8px rgba(255, 150, 70, .95); }
 @keyframes burst-flash { from { transform: scale(.3); opacity: 1; } to { transform: scale(1.5); opacity: 0; } }
 @keyframes burst-shard { from { transform: translate(0, 0); opacity: 1; } to { transform: translate(var(--tx), var(--ty)); opacity: 0; } }
-.game.shake-soft { animation: bshake-soft .32s linear; }
-.game.shake-hard { animation: bshake-hard .44s linear; }
+.shake-soft { animation: bshake-soft .32s linear; }
+.shake-hard { animation: bshake-hard .44s linear; }
+.attack-aim { position:fixed; inset:0; width:100vw; height:100vh; z-index:140; pointer-events:none; overflow:visible; }
+.attack-aim path { stroke-linecap:round; stroke-linejoin:round; }
+.aim-halo { fill:none; stroke:#102d50; stroke-width:13; opacity:.62; filter:drop-shadow(0 2px 6px #0d243b); }
+.aim-ribbon { fill:none; stroke:url(#attack-ribbon); stroke-width:6; }
+.aim-flow { fill:none; stroke:#fcf0c8; stroke-width:1.5; stroke-dasharray:3 13; animation:aimFlow .8s linear infinite; }
+.aim-head { fill:#f4d594; stroke:#684f2c; stroke-width:1.2; }
+.aim-source,.aim-lock { fill:#1e395855; stroke:#e8ca84; stroke-width:1.5; }
+.aim-lock { opacity:0; stroke-dasharray:3 4; }
+.is-locked .aim-lock { opacity:1; }
+.is-locked .aim-ribbon { stroke:#ffe0a0; filter:drop-shadow(0 0 4px #ffe0a088); }
+.is-blocked .aim-ribbon,.is-blocked .aim-head { stroke:#cb7f79; }
+.is-blocked .aim-head { fill:#cb7f79; }
+.card.is-aiming { filter:drop-shadow(0 0 6px #eac777); }
+@keyframes aimFlow { to { stroke-dashoffset:-32; } }
+@media(prefers-reduced-motion:reduce){.aim-flow{animation:none;}}
 @keyframes bshake-soft { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(2px, -2px); } 50% { transform: translate(-3px, 2px); } 75% { transform: translate(2px, 1px); } }
 @keyframes bshake-hard { 0%, 100% { transform: translate(0, 0); } 12% { transform: translate(-7px, 5px); } 28% { transform: translate(7px, -6px); } 44% { transform: translate(-6px, -4px); } 60% { transform: translate(5px, 5px); } 76% { transform: translate(-4px, 2px); } 90% { transform: translate(2px, -1px); } }
 

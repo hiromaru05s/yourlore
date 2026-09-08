@@ -223,6 +223,8 @@ export abstract class BaseController implements BoardHandlers {
     const events = res.events;
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
+    const spellGhosts:HTMLElement[]=[];
+    const buffCount=[prev.players[0].traps.length+prev.players[0].enchants.length,prev.players[1].traps.length+prev.players[1].enchants.length];
     // running counters for ghost slot placement + live HP readout
     const fieldCount: [number, number] = [prev.players[0].field.length, prev.players[1].field.length];
     const hpNow: [number, number] = [prev.players[0].hp, prev.players[1].hp];
@@ -258,6 +260,7 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "trapSet":
           await A.trapSetAnim(sideOf(e.player));
+          buffCount[e.player]++;
           break;
         case "trapReveal": {
           const def = DB[e.id];
@@ -310,7 +313,10 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "playSpell": {
           const def = DB[e.id] ?? STARTERS[e.id]; // 컬/어튠/보물상자 live in STARTERS
-          if (def) await A.revealSpell({ uid: "fx", ...def }, sideOf(e.player), e.dest);
+          if (def) {
+            const face=await A.revealSpell({ uid: "fx", ...def }, sideOf(e.player), e.dest,buffCount[e.player]);
+            if(face){spellGhosts.push(face);buffCount[e.player]++;}
+          }
           // random-roll cards: roll the 3D dice first, THEN show the outcome popup
           if (def && RANDOM_CARDS.has(def.id)) {
             for (let j = i + 1; j < events.length; j++) {
@@ -369,7 +375,7 @@ export abstract class BaseController implements BoardHandlers {
     if (this.dead) return;
     this.view.render(res.state);
     // ghosts overlap the freshly-rendered real cards — drop them next frame
-    requestAnimationFrame(() => ghosts.forEach((g) => g.el.remove()));
+    requestAnimationFrame(() => {ghosts.forEach((g) => g.el.remove());spellGhosts.forEach(g=>g.remove());});
     await Promise.all(([0, 1] as Side[]).map(player => draws[player] > 0
       ? A.animateDraw(document.getElementById(player === this.you ? "hand" : "oppHand"), draws[player], sideOf(player))
       : Promise.resolve()));
@@ -771,7 +777,7 @@ export abstract class BaseController implements BoardHandlers {
     this.dead = true;
     A.setFxSkip(true);
     cancelDiceAnimations();
-    document.querySelectorAll(".fx-turnbanner,.cointoss-ov").forEach(n => n.remove());
+    document.querySelectorAll(".fx-turnbanner,.cointoss-ov,.fx-card-flight,.cast-veil").forEach(n => n.remove());
     this.stopTimer();
     this.view.destroy();
     this.toastEl?.remove();

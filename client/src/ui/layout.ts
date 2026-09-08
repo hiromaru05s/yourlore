@@ -4,7 +4,7 @@ export function solveBoard(w: number, h: number, _underPile = false) {
   const phone = w < 700 && h > w;
   const short = h <= 550;
   const gap = w < 700 ? 3 : 8;
-  const portrait = Math.max(42, Math.min(108, h * .118, w * .16));
+  const portrait = Math.max(48, Math.min(142, h * .158, w * .205));
   const mktH = Math.max(34, Math.min(120, (w * .94 - 11 * gap - (phone ? 87 : 180)) / (phone ? 6 : 12) / .64, h * (phone ? .082 : short ? .105 : .123)));
   const verticalTile = (h * (phone ? .94 : short ? .91 : .955) - portrait * 2 - mktH * (phone ? 2 : 1) - (phone ? 146 : short ? 76 : 132)) / 3.5;
   const tile = Math.max(20, Math.min(100, (w * .94 - 12 * gap) / (phone ? 9.9 : 10.8), verticalTile));

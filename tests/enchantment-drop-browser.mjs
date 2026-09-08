@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5178';
-const output='docs/ui-rework/2026-09-08-home-and-drop';await fs.mkdir(output,{recursive:true});
+const output=process.env.LORE_TEST_OUTPUT||'docs/ui-rework/2026-09-08-home-and-drop';await fs.mkdir(output,{recursive:true});
 const browser=await chromium.launch({headless:true,channel:'chrome'});
 const page=await browser.newPage({viewport:{width:1280,height:720}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
 await page.route('**/drop-fixture',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="app"></div></body></html>'}));

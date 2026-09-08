@@ -213,11 +213,12 @@
 .duel-table-ready .game { background:radial-gradient(ellipse at 50% 38%,#334054,#131e30 75%,#0a1220); }
 .duel-table-ready .game::before { background:none; }
 .duel-table-ready .stage { z-index:6; }
+.market-model-ready .market-counter { background:none!important; border-color:transparent!important; box-shadow:none!important; }
 /* Both players' field cards lie in the same direction on the tabletop. Keep
    hands, portraits and inspector overlays upright, with DOM hit testing intact. */
 .duel-table-ready .zone,
 .duel-table-ready .market-counter {
-  transform:perspective(300vh) rotateX(var(--duel-table-tilt));
+  transform:perspective(300vh) rotateX(var(--duel-table-tilt)) scaleY(var(--duel-card-stretch));
   transform-origin:center;
 }
 

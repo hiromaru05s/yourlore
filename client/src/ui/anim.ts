@@ -3,8 +3,8 @@
 // touch game state, only the DOM.
 // ============================================================
 import type { CardInst } from "../shared/types";
-import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, cardPassives } from "../shared/cards";
-import { cardEl, cardRulesEl, prefetchZoomArt } from "./cardView";
+import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, cardPassives, enchantHasTurnCountdown } from "../shared/cards";
+import { cardEl, cardRulesEl, prefetchZoomArt, enchantmentTile } from "./cardView";
 import { t, getLang, cardText, cardName } from "../i18n";
 
 export type ViewSide = "me" | "opp";
@@ -79,6 +79,7 @@ function trapZoneRect(side: ViewSide): DOMRect | null {
 }
 /** Place a node as a fixed-position floating overlay at a rect (top-left). */
 function floatAt(node: HTMLElement, rect: { left: number; top: number }): HTMLElement {
+  node.classList.add("fx-card-flight");
   node.style.position = "fixed";
   node.style.left = rect.left + "px";
   node.style.top = rect.top + "px";
@@ -134,27 +135,70 @@ async function landCard(node: HTMLElement, to: DOMRect, fade = false): Promise<v
   if (fade) node.style.opacity = "0";
   await wait(310);
 }
-export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish"): Promise<void> {
-  const from = fromRect(side, takeOrigin(side)); if (!from) return;
+/** Exact transformed slot in screen coordinates, including the row's perspective
+ * and frame aspect correction. No bounding-box-only approximation at landing. */
+export function fieldPlacement(target:HTMLElement,width:number,height:number):DOMMatrix {
+  const zone=target.closest<HTMLElement>('.zone');
+  if(!zone || !zone.parentElement){const r=target.getBoundingClientRect();return new DOMMatrix().translate(r.left,r.top).scale(r.width/width,r.height/height);}
+  const r=zone.parentElement.getBoundingClientRect(),style=getComputedStyle(zone);
+  const [ox,oy]=style.transformOrigin.split(' ').map(parseFloat);
+  const matrix=new DOMMatrix(style.transform==='none'?undefined:style.transform);
+  return new DOMMatrix().translate(r.left+zone.offsetLeft+ox,r.top+zone.offsetTop+oy)
+    .multiply(matrix).translate(target.offsetLeft-ox,target.offsetTop-oy)
+    .scale(target.offsetWidth/width,target.offsetHeight/height);
+}
+/** Morph the reveal into its actual field face during one continuous flight.
+ * The landing face stays until the controller replaces it with the same DOM. */
+async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElement):Promise<HTMLElement> {
+  if(!target.isConnected || !reveal.isConnected)return face;
+  const from=reveal.getBoundingClientRect();
+  const w=target.offsetWidth,h=target.offsetHeight;
+  floatAt(face,{left:0,top:0});face.classList.add('fx-field-ghost');
+  face.style.visibility='visible';
+  face.style.width=`${w}px`;face.style.height=`${h}px`;face.style.setProperty('--cw',`${w}px`);face.style.setProperty('--ch',`${h}px`);
+  face.style.transformOrigin='0 0';
+  const start=new DOMMatrix().translate(from.left,from.top).scale(from.width/w,from.height/h);
+  const end=fieldPlacement(target,w,h);
+  const rw=reveal.offsetWidth,rh=reveal.offsetHeight;
+  reveal.getAnimations().forEach(a=>a.cancel());reveal.style.transition='none';reveal.style.left='0';reveal.style.top='0';reveal.style.transformOrigin='0 0';
+  const oldStart=new DOMMatrix().translate(from.left,from.top).scale(from.width/rw,from.height/rh);
+  const oldEnd=fieldPlacement(target,rw,rh);
+  face.style.transform=end.toString();face.style.opacity='1';
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const duration=reduced?120:620;
+  const options:KeyframeAnimationOptions={duration,easing:'cubic-bezier(.22,.65,.25,1)',fill:'both'};
+  const moving=face.animate([{transform:start.toString(),opacity:0},{opacity:0,offset:.25},{opacity:1,offset:.8},{transform:end.toString(),opacity:1}],options);
+  const old=reveal.animate([{transform:oldStart.toString(),opacity:1},{opacity:1,offset:.25},{opacity:0,offset:.8},{transform:oldEnd.toString(),opacity:0}],options);
+  await wait(duration);
+  moving.cancel();old.cancel();reveal.remove();face.style.transform=fieldPlacement(target,w,h).toString();
+  if(!fxSkip)summonDust(face.getBoundingClientRect());
+  return face;
+}
+export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish",slotIndex?:number): Promise<HTMLElement|null> {
+  const from = fromRect(side, takeOrigin(side)); if (!from) return null;
   const node = floatAt(cardEl(card, {size:"hand"}), from);
   try {
     await focusCard(node, side);
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
-    if (to && dest === "field" && card.ench && !fxSkip) {
-      window.dispatchEvent(new CustomEvent("lore:buff-flow", {detail: {from: node.getBoundingClientRect(), to}}));
-      node.style.transition = "opacity .4s, filter .4s, transform .6s";
-      node.style.filter = "brightness(4) blur(8px)"; node.style.opacity = "0";
-      await wait(700);
+    if (to && dest === "field" && card.ench) {
+      const zone=document.querySelector(side==='me'?'#meRow .zone-st':'#oppRow .zone-st');
+      const target=(slotIndex==null?zone?.querySelector('.slot'):zone?.children[Math.min(slotIndex,zone.children.length-1)]) as HTMLElement|null;
+      if(target){
+        const duration=enchantHasTurnCountdown(card)?`<span class="buff-duration"><span>${getLang()==='ja'?'残り':''}${card.val??1}</span></span>`:'<img class="buff-infinity" src="/art/biblion/modular/infinity.png" alt="">';
+        return await flyIntoSlot(node,target,enchantmentTile(card,duration));
+      }
     } else if (to) await landCard(node, to, true);
     if (dest === "discard") pileFlash(discId(side));
   } finally { node.remove(); }
+  return null;
 }
 export async function summonFromHand(card: CardInst, uid: string, side: ViewSide): Promise<void> {
   const from = fromRect(side, takeOrigin(side)); const target = byUid(uid); const to = rectOf(target);
   if (!from || !to || !target) { summonIn(uid); return; }
   const ghost = floatAt(cardEl(card, {size:"hand"}), from); target.style.visibility = "hidden";
-  try { await focusCard(ghost, side); await landCard(ghost, to); summonDust(to); }
-  finally { ghost.remove(); target.style.visibility = ""; }
+  let face:HTMLElement|undefined;
+  try { await focusCard(ghost, side); face=await flyIntoSlot(ghost,target,target.cloneNode(true) as HTMLElement); }
+  finally { ghost.remove(); face?.remove(); target.style.visibility = ""; }
 }
 /** Face-down plays reveal only the sleeve, never a trap's identity. */
 export async function trapSetAnim(side: ViewSide): Promise<void> {
@@ -304,7 +348,9 @@ function impactBurst(x: number, y: number, big: boolean): void {
 
 /** Shake the whole board — soft for monster trades, hard for face hits. */
 function boardShake(kind: "soft" | "hard"): void {
-  const el = document.querySelector(".game") as HTMLElement | null;
+  // Shake the common parent of the DOM board and WebGL canvas. Transforming
+  // only .game creates a stacking context below the opaque table canvas.
+  const el = document.querySelector(".game")?.parentElement;
   if (!el) return;
   el.classList.remove("shake-soft", "shake-hard");
   void el.offsetWidth; // restart the animation if one is mid-flight
@@ -609,13 +655,6 @@ function monZoneEl(side: ViewSide): HTMLElement | null {
   // my monster zone renders first; the opponent's renders last (mirrored board)
   return (side === "me" ? zones[0] : zones[zones.length - 1]) as HTMLElement;
 }
-function monSlotRect(side: ViewSide, index: number): DOMRect | null {
-  const z = monZoneEl(side);
-  if (!z) return null;
-  const kids = z.children;
-  if (!kids.length) return z.getBoundingClientRect();
-  return kids[Math.max(0, Math.min(index, kids.length - 1))].getBoundingClientRect();
-}
 
 /**
  * Summon shown as a floating ghost card: flies from the hand into the target
@@ -623,16 +662,14 @@ function monSlotRect(side: ViewSide, index: number): DOMRect | null {
  * ghost node so a same-batch destroy can kill it visibly.
  */
 export async function ghostSummon(card: CardInst, side: ViewSide, slotIndex: number): Promise<HTMLElement | null> {
-  const from = fromRect(side, takeOrigin(side)); const slot = monSlotRect(side, slotIndex);
-  if (!from || !slot) return null;
+  const from = fromRect(side, takeOrigin(side)); const zone=monZoneEl(side);
+  const target=zone?.children[Math.max(0,Math.min(slotIndex,zone.children.length-1))] as HTMLElement|undefined;
+  if (!from || !target) return null;
   const node = floatAt(cardEl(card, { size: "hand" }), from);
-  await focusCard(node, side);
-  await landCard(node, slot);
-  summonDust(slot);
-  // Replace the reveal face with a field-sized tile until the state re-render.
-  const tile = floatAt(cardEl(card, {compactField:true}), slot);
-  node.remove(); tile.classList.add("fx-ghost-pop");
-  return tile;
+  try {
+    await focusCard(node, side);
+    return await flyIntoSlot(node,target,cardEl(card,{compactField:true}));
+  } finally { node.remove(); }
 }
 
 /** Kill a summon ghost: death flash then fly a card frame to that side's discard. */
@@ -799,7 +836,7 @@ export async function deathShatter(loserSide: ViewSide, won: boolean, cause: str
     }
   }
   hpBarSet(loserSide, 0, 1);
-  document.querySelector(".game")?.classList.add("fx-quake");
+  document.querySelector(".game")?.parentElement?.classList.add("fx-quake");
   await wait(600);
   const v = document.createElement("div");
   v.className = "fx-verdict " + (won ? "win" : "lose");
@@ -810,7 +847,7 @@ export async function deathShatter(loserSide: ViewSide, won: boolean, cause: str
   v.classList.add("out");
   await wait(280);
   v.remove(); vg.remove();
-  document.querySelector(".game")?.classList.remove("fx-quake");
+  document.querySelector(".game")?.parentElement?.classList.remove("fx-quake");
   bar?.classList.remove("fx-shatter");
 }
 

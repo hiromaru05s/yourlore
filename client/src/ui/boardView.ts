@@ -8,13 +8,14 @@ import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, eff
 import { enchantHasTurnCountdown, fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
-import { artUrl, cardEl, ensureCardCompositing, prefetchZoomArt } from "./cardView";
+import { artUrl, cardEl, ensureCardCompositing, prefetchZoomArt, enchantmentTile } from "./cardView";
 import { bindZoom, zoomCard, setPlayOrigin } from "./anim";
 import { t, getLang, esc, cardName } from "../i18n";
 import { logToEn } from "../shared/logEn";
 import { getSfxVolume, setSfxVolume } from "./sound";
 import { deckBucket, refinedArt } from "./duelMaterials";
 import { avatarHtml } from "./social";
+import { createAttackAim } from './attackAim';
 
 // the local player's profile avatar (set by the game screen), shown on MY portrait
 let MY_AVATAR: string | null | undefined;
@@ -506,14 +507,11 @@ export class GameView {
       const durationUi = rem == null
         ? `<img class="buff-infinity" src="/art/biblion/modular/infinity.png" alt="${lang === 'ja' ? '無期限' : lang === 'en' ? 'Permanent' : '무기한'}">${e.cnt ? `<span class="buff-counter">×${e.cnt}</span>` : ''}`
         : `<span class="buff-duration" aria-label="${stateText}"><span>${bits.join(' ')}</span></span>`;
-      const card = document.createElement('div');
-      card.className = 'buff-icon buff-icon--spell';
-      card.dataset.uid = e.card.uid;
+      const card = enchantmentTile(e.card,durationUi);
       card.tabIndex = 0;
       card.setAttribute('role', 'button');
       card.setAttribute('aria-label', `${cardName(e.card)} ${stateText}`);
       card.title = `${cardName(e.card)} · ${stateText}`;
-      card.innerHTML = `<span class="buff-frame" style="background-image:url(${fieldFrameFor('spell')})"></span><span class="buff-art" style="background-image:url(${artUrl.full(e.card.id)})"></span><span class="buff-cost" aria-hidden="true"><span>${e.card.cost}</span></span>${durationUi}`;
       card.onclick = () => zoomCard(e.card, undefined, stateText);
       card.onkeydown = ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); zoomCard(e.card, undefined, stateText); } };
       if (rem != null) { card.classList.add("ench-timed"); if (rem <= 1) card.classList.add("ench-expiring"); }
@@ -600,6 +598,8 @@ export class GameView {
       const sx = e.clientX, sy = e.clientY, t0 = performance.now();
       let ghost: HTMLElement | null = null;
       let marker: HTMLElement | null = null;
+      let aim: ReturnType<typeof createAttackAim> | null = null;
+      let started = false;
       let to = index;
       let done = false;
       let mode: "reorder" | "attack" = "reorder";
@@ -627,19 +627,26 @@ export class GameView {
       };
 
       const place = (x: number, y: number): void => {
-        if (!ghost) return;
-        ghost.style.left = `${x}px`;
-        ghost.style.top = `${y}px`;
+        if (!started) return;
         const zr = zone.getBoundingClientRect();
         const t = o.canAttack ? targetAt(x, y) : { mon: null, portrait: null };
         // above my own monster row = aiming at the opponent
-        mode = o.canAttack && (!!t.mon || !!t.portrait || y < zr.top - 10) ? "attack" : "reorder";
-        ghost.classList.toggle("drag-attack", mode === "attack");
+        mode = o.canAttack && (!!t.mon || !!t.portrait || y < zr.top - 10 || (y < sy-12 && Math.abs(y-sy)>Math.abs(x-sx)*.65)) ? "attack" : "reorder";
+        card.classList.toggle('is-aiming',mode==='attack');
+        card.classList.toggle('is-dragging',mode==='reorder');
         if (mode === "attack") {
+          if(ghost)ghost.style.display='none';
+          if(!aim)aim=createAttackAim();
           if (marker) marker.style.display = "none";
-          setHot(t.mon ?? t.portrait);
+          const valid=!!t.mon || (!!t.portrait && (!o.oppHasMon || o.directOnly));
+          setHot(valid ? t.mon ?? t.portrait : null);
+          const a=card.getBoundingClientRect(),b=hot?.getBoundingClientRect();
+          aim.update(a.left+a.width/2,a.top+a.height*.4,b?b.left+b.width/2:x,b?b.top+b.height/2:y,valid,!!t.portrait&&!valid);
           return;
         }
+        aim?.remove();aim=null;
+        if(!ghost){ghost=card.cloneNode(true) as HTMLElement;ghost.className=card.className+' drag-ghost';ghost.classList.remove('is-attacker','is-aiming','is-dragging');ghost.style.width=`${card.offsetWidth}px`;ghost.style.height=`${card.offsetHeight}px`;document.body.append(ghost);}
+        ghost.style.display='';ghost.style.left=`${x}px`;ghost.style.top=`${y}px`;
         setHot(null);
         if (!marker) return;
         marker.style.display = "";
@@ -650,28 +657,28 @@ export class GameView {
       };
 
       const cleanup = (): void => {
+        if(done)return;
         done = true;
-        ghost?.remove(); marker?.remove();
+        ghost?.remove(); marker?.remove(); aim?.remove();
         setHot(null);
-        card.classList.remove("is-dragging");
+        card.classList.remove("is-dragging", "is-aiming");
+        try { if(card.hasPointerCapture(e.pointerId))card.releasePointerCapture(e.pointerId); } catch { /* detached */ }
         window.removeEventListener("pointermove", onMove);
         window.removeEventListener("pointerup", onUp);
         window.removeEventListener("pointercancel", cleanup);
+        window.removeEventListener("blur", cleanup);
+        window.removeEventListener("keydown", onKey);
+        const idx=this.cleanups.indexOf(cleanup);if(idx>=0)this.cleanups.splice(idx,1);
       };
 
+      const onKey=(ev:KeyboardEvent):void=>{if(ev.key==="Escape")cleanup();};
       const onMove = (ev: PointerEvent): void => {
         if (done || ev.pointerId !== e.pointerId) return;
-        if (!ghost) {
+        if (!started) {
           if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 14) return;
           if (isTouch && performance.now() - t0 > 340) { cleanup(); return; } // zoom overlay owns this gesture
           try { card.setPointerCapture(ev.pointerId); } catch { /* ok */ }
-          ghost = card.cloneNode(true) as HTMLElement;
-          ghost.className = card.className + " drag-ghost";
-          ghost.classList.remove("is-attacker");
-          ghost.style.width = `${card.offsetWidth}px`;
-          ghost.style.height = `${card.offsetHeight}px`;
-          document.body.appendChild(ghost);
-          card.classList.add("is-dragging");
+          started=true;
           if (o.canReorder) {
             marker = document.createElement("div");
             marker.className = "drop-marker";
@@ -683,7 +690,7 @@ export class GameView {
 
       const onUp = (ev: PointerEvent): void => {
         if (done || ev.pointerId !== e.pointerId) return;
-        const dragged = !!ghost;
+        const dragged = started;
         const t = dragged && o.canAttack ? targetAt(ev.clientX, ev.clientY) : { mon: null, portrait: null };
         const aimed = mode === "attack";
         cleanup();
@@ -705,6 +712,9 @@ export class GameView {
       window.addEventListener("pointermove", onMove);
       window.addEventListener("pointerup", onUp);
       window.addEventListener("pointercancel", cleanup);
+      window.addEventListener("blur", cleanup);
+      window.addEventListener("keydown", onKey);
+      this.cleanups.push(cleanup);
     });
   }
 

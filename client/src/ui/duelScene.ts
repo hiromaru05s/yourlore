@@ -5,8 +5,9 @@ import { makePile, type PileModel } from './pileModels';
 import { captureCardSurface, CARD_PADDING } from './cardSurface';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { createDuelTable } from './duelTable';
+import { loadLibraryAssets } from './libraryAssets';
 
-type Item = { scene: T.Scene; camera: T.PerspectiveCamera; group: T.Group; key: string; element: HTMLElement; upper?: T.Mesh; lower?: T.Mesh; stream?: T.Points; fraction?: number; pile?:PileModel; count?:number; entered?:number; surface?:T.Texture };
+type Item = { scene: T.Scene; camera: T.PerspectiveCamera|T.OrthographicCamera; group: T.Group; key: string; element: HTMLElement; market?:boolean; upper?: T.Mesh; lower?: T.Mesh; stream?: T.Points; fraction?: number; pile?:PileModel; count?:number; entered?:number; surface?:T.Texture };
 const clamp = (n: number) => Math.min(1, Math.max(0, n));
 export function mountDuelScene(root: HTMLElement): () => void {
   let renderer: T.WebGLRenderer;
@@ -28,6 +29,7 @@ export function mountDuelScene(root: HTMLElement): () => void {
   room.dispose(); pmrem.dispose();
   const table = createDuelTable(root, environment.texture);
   let dead = false, dirty = true, frame = 0, last = 0, width = 0, height = 0;
+  const furniture=loadLibraryAssets(()=>{dirty=true;});
   const items = new Map<string, Item>();
   const textures=new Map<string,T.Texture>();
   const textureLoader=new T.TextureLoader();
@@ -54,7 +56,9 @@ export function mountDuelScene(root: HTMLElement): () => void {
     scene.add(new T.HemisphereLight(0xd4ebff,0x493423,1.3));
     const light=new T.DirectionalLight(0xffe6bc,1.8); light.position.set(-3,7,5);light.castShadow=true;light.shadow.autoUpdate=false;light.shadow.needsUpdate=true;light.shadow.mapSize.set(512,512);light.shadow.camera.left=-3;light.shadow.camera.right=3;light.shadow.camera.top=3;light.shadow.camera.bottom=-3;light.shadow.bias=-.002;scene.add(light);
     const rim=new T.DirectionalLight(0x75bfff,.9);rim.position.set(3,2,-2);scene.add(rim);
-    const ground=mesh(new T.PlaneGeometry(6,6),new T.ShadowMaterial({opacity:.24}),scene,0,clock?-1.46:-.03,0);ground.rotation.x=-Math.PI/2;ground.castShadow=false;
+    if(!el.classList.contains('market-counter')){
+      const ground=mesh(new T.PlaneGeometry(6,6),new T.ShadowMaterial({opacity:.24}),scene,0,clock?-1.46:0,0);ground.rotation.x=-Math.PI/2;ground.castShadow=false;
+    }
     const group=new T.Group();scene.add(group);
     return {scene,camera,group,key:'',element:el};
   }
@@ -86,26 +90,34 @@ export function mountDuelScene(root: HTMLElement): () => void {
     item.stream=new T.Points(geometry,new T.PointsMaterial({color:0xffdb92,size:.023}));item.group.add(item.stream);
   }
   function refresh():void {
-    const elements=[...root.querySelectorAll<HTMLElement>('.mp-clock.show, .pile--deck, .pile--shelf')];
-    const ids=new Set(elements.map(el=>el.id));
+    const elements=[...root.querySelectorAll<HTMLElement>('.mp-clock.show, .pile--deck, .pile--shelf, .market-counter')];
+    const itemId=(el:HTMLElement)=>el.classList.contains('market-counter')?'market-base':el.id;
+    const ids=new Set(elements.map(itemId));
     for(const [id,item] of items)if(!ids.has(id)){disposeObject(item.scene);item.surface?.dispose();items.delete(id);}
     for(const el of elements) {
+      const id=itemId(el),market=id==='market-base';
+      if(market&&!furniture.has('market'))continue;
       const clock=el.classList.contains('mp-clock');
-      const key=clock?'clock':`${el.dataset.count}:${el.dataset.face}:${el.dataset.sleeve}`;
-      let item=items.get(el.id);
+      const key=clock?'clock':`${el.dataset.count}:${el.dataset.face}:${el.dataset.sleeve}:${furniture.revision}`;
+      let item=items.get(id);
       if(item?.key===key){item.element=el;continue;}
       const previousCount=item?.count;
       if(item){disposeObject(item.scene);item.surface?.dispose();}
-      item=base(el,clock);item.key=key;items.set(el.id,item);
-      if(clock)hourglass(item);
+      item=base(el,clock);item.key=key;items.set(id,item);
+      if(market){
+        item.market=true;item.group.add(furniture.clone('market')!);
+        item.camera=new T.OrthographicCamera(-3.05,3.05,1,-1,.01,50);
+        item.camera.position.set(0,Math.cos(32*Math.PI/180)*8,Math.sin(32*Math.PI/180)*8);item.camera.lookAt(0,-.04,0);
+      } else if(clock)hourglass(item);
       else {
         const shelf=el.classList.contains('pile--shelf'),count=Number(el.dataset.count)||0;
         item.count=count;
-        item.pile=makePile(count,shelf,texture(el.dataset.sleeve!),shelf&&el.dataset.face?texture(el.dataset.face):undefined);
+        item.pile=makePile(count,shelf,texture(el.dataset.sleeve!),shelf&&el.dataset.face?texture(el.dataset.face):undefined,furniture.clone(shelf?'shelf':'deck'));
         item.group.add(item.pile.group);
         if(shelf&&previousCount!=null&&count>previousCount&&!reduced.matches)item.entered=performance.now();
-        item.camera.position.set(shelf?2.3:1.7,shelf?2.2:3.5,shelf?5.3:4.9);
-        item.camera.lookAt(0,shelf?.65:.1,0);item.camera.zoom=shelf?1.12:1.6;
+        item.camera.position.set(0,shelf?2.8:4.7,shelf?5.8:3.3);
+        item.camera.lookAt(0,shelf?.55:.12,0);item.camera.zoom=shelf?1.18:1.7;
+        el.dataset.furniture=furniture.has(shelf?'shelf':'deck')?'blender':'fallback';
         const print=el.querySelector<HTMLElement>('.pile-print .card');
         if(shelf&&count&&print){
           const owner=item;
@@ -162,7 +174,11 @@ export function mountDuelScene(root: HTMLElement): () => void {
       const clock=!!item.upper;
       const el=clock?item.element.querySelector<HTMLElement>('.hourglass-anchor'):item.element;
       if(!el)continue;
-      const r=el.getBoundingClientRect();if(r.width<1||r.height<1)continue;
+      let r=el.getBoundingClientRect();if(r.width<1||r.height<1)continue;
+      if(item.market){
+        const model=item.group.children[0];model.scale.z=(1/.064)*(r.height/r.width)*6/Math.cos(32*Math.PI/180)/1.1;
+        r=new DOMRect(r.left-12,r.top-6,r.width+24,r.height+26);
+      }
       if(clock){
         const target=clamp(Number(item.element.dataset.remaining)/Math.max(1,Number(item.element.dataset.total)));
         item.fraction=item.fraction==null?target:T.MathUtils.damp(item.fraction,target,7,delta);
@@ -175,17 +191,20 @@ export function mountDuelScene(root: HTMLElement): () => void {
         pos.needsUpdate=true;
       }
       // Each view has its own perspective camera and real self-occlusion, not CSS transforms.
-      item.camera.aspect=r.width/r.height;item.camera.updateProjectionMatrix();
+      if(item.camera instanceof T.PerspectiveCamera)item.camera.aspect=r.width/r.height;
+      else {item.camera.top=3.05*r.height/r.width;item.camera.bottom=-item.camera.top;}
+      item.camera.updateProjectionMatrix();
       renderer.setViewport(r.left,height-r.bottom,r.width,r.height);renderer.setScissor(r.left,height-r.bottom,r.width,r.height);
       if(item.pile){
         item.pile.cards.visible=!item.element.classList.contains('is-shuffling');
         if(item.entered){
           const t=clamp((now-item.entered)/480);
-          item.pile.top.position.y=.83+.4*Math.pow(1-t,3);
+          item.pile.top.position.y=item.pile.top.userData.restY+.3*Math.pow(1-t,3);
           if(t===1)item.entered=undefined;
         }
       }
       renderer.render(item.scene,item.camera);
+      if(item.market&&!root.classList.contains('market-model-ready'))root.classList.add('market-model-ready');
       if(item.pile){
         // Project the actual top-card centre into a DOM anchor for draw/shuffle.
         const centre=item.pile.top.getWorldPosition(new T.Vector3()).project(item.camera);
@@ -223,7 +242,7 @@ export function mountDuelScene(root: HTMLElement): () => void {
     if(dead)return;dead=true;cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);
     items.forEach(item=>{disposeObject(item.scene);item.surface?.dispose();});textures.forEach(t=>t.dispose());
     root.querySelectorAll('.pile--3d-ready').forEach(el=>{el.classList.remove('pile--3d-ready');el.querySelector('.pile-draw-anchor')?.remove();});
-    table.dispose();disposeObject(dustScene);environment.dispose();renderer.dispose();canvas.remove();root.classList.remove('duel-webgl');
+    table.dispose();furniture.dispose();disposeObject(dustScene);environment.dispose();renderer.dispose();canvas.remove();root.classList.remove('duel-webgl','market-model-ready');
   }
   frame=requestAnimationFrame(render);
   return dispose;

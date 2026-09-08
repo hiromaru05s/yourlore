@@ -8,6 +8,14 @@ import { curHp, effAtk, effDef, playCost } from "../shared/engine";
 import { cardName, cardText, getLang, t } from "../i18n";
 import { parseDiceTable } from "../shared/cardText";
 
+/** Shared resting/flight face: switching from a cast to its spell slot must not
+ * replace the artwork or frame at touchdown. Interaction is bound by GameView. */
+export function enchantmentTile(c:CardInst,durationUi:string):HTMLDivElement {
+  const tile=document.createElement('div');tile.className='buff-icon buff-icon--spell';tile.dataset.uid=c.uid;
+  tile.innerHTML=`<span class="buff-frame" style="background-image:url(${fieldFrameFor('spell')})"></span><span class="buff-art" style="background-image:url(${artUrl.full(c.id)})"></span><span class="buff-cost" aria-hidden="true"><span>${c.cost}</span></span>${durationUi}`;
+  return tile;
+}
+
 /**
  * 카드 효과 텍스트 안의 패시브 키워드명을 <span class="psv" data-psv="key">로 감싼다.
  * 그 카드가 실제로 가진 패시브의 이름만 래핑 — 다른 문장 속 우연한 일치는 건드리지 않는다.

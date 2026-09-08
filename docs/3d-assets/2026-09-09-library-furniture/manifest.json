@@ -1,0 +1,40 @@
+{
+  "created": "2026-09-09",
+  "concept": {
+    "tool": "image_gen.imagegen",
+    "path": "docs/3d-assets/2026-09-09-library-furniture/market-concept.png",
+    "prompt": "docs/3d-assets/2026-09-09-library-furniture/market-prompt.txt"
+  },
+  "shelfReference": "docs/3d-assets/2026-09-08-meshy/shelf-case.png",
+  "deckReused": "client/public/models/cosmetics/deck_holder_biblion_ivory/v1/model.glb",
+  "blenderVersion": "5.2.1 LTS",
+  "generator": "scripts/blender/build_lore_library_furniture.py",
+  "sources": [
+    "docs/3d-assets/2026-09-09-library-furniture/market.blend",
+    "docs/3d-assets/2026-09-09-library-furniture/shelf.blend"
+  ],
+  "units": "meters; +Y up; +Z front; 1U=0.064m",
+  "textures": "none; vertex colors with PBR body/trim/accent; low uses one material",
+  "models": [
+    {
+      "path": "client/public/models/library-furniture/market-low.glb",
+      "bytes": 43864,
+      "sha256": "53467b4b1a184e0f844de266616d1ca5c7815e624f24f3021a12307cb561b5f8"
+    },
+    {
+      "path": "client/public/models/library-furniture/market.glb",
+      "bytes": 96872,
+      "sha256": "421d378ae17154209c05abe8d09a2b6aa3d0a2cf68103b6bb63f039d6d11de56"
+    },
+    {
+      "path": "client/public/models/library-furniture/shelf-low.glb",
+      "bytes": 54272,
+      "sha256": "b987427ef758df58fab602c51b12eaecae7b99a8bda44852a8ea287aa5ea57d6"
+    },
+    {
+      "path": "client/public/models/library-furniture/shelf.glb",
+      "bytes": 115852,
+      "sha256": "ebb40407e598b9f08ed1528cffaf524beb6fd3dcdf6d5c479c7d7f2f3673b9d8"
+    }
+  ]
+}
