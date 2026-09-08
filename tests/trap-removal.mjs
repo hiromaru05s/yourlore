@@ -1,4 +1,4 @@
-// v43 catalog retirement: real startup, saved decks, markets and bot matches.
+// v43–v44 catalog retirement: real startup, saved decks, markets and bot matches.
 import assert from 'node:assert/strict';
 import { build } from 'esbuild';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
@@ -87,13 +87,13 @@ try {
     }
   }
 
-  // Trap-dependent monsters remain playable and must not open an empty target picker.
-  for (const id of ['M13', 'TRAPSMITH', 'GM6_8', 'TAR3']) {
+  // Reworked monsters remain playable and must not open an empty target picker.
+  for (const id of ['GM6_8', 'TAR3']) {
     let g = createGame({ mode: 'bot', seed: 42, starting: 0, p0: { id: 'p', name: 'P' }, p1: { id: 'q', name: 'Q' } }).state;
     g.players[0].mana = 30;
     g.players[0].hand = [{ ...DB[id], uid: 'related-mon' }];
     g = reduce(g, { type: 'play', idx: 0 }).state;
-    assert(g.players[0].field.some(c => c.id === id), `${id} remains summonable pending rework`);
+    assert(g.players[0].field.some(c => c.id === id), `${id} remains summonable after rework`);
     assert.equal(g.pending, null, `${id} must not wait for nonexistent traps`);
     assertNoTraps(g);
   }
@@ -109,9 +109,9 @@ try {
       actions++;
       assertNoTraps(g);
     }
-    assert(g.over, `seed ${seed} failed to finish`);
+    assert(g.over, `seed ${seed} failed to finish: ${JSON.stringify({turn:g.turn, cur:g.cur, pending:g.pending, action:greedyDecide(g,false)})}`);
   }
-  console.log(`PASS: 32 retired traps, saved decks/watchlists/markets, related links, 40 market seeds, 4 related monsters, 10 completed bot games (${actions} actions)`);
+  console.log(`PASS: 32 retired traps, saved decks/watchlists/markets, related links, 40 market seeds, 2 reworked monsters, 10 completed bot games (${actions} actions)`);
 } finally {
   await rm(dir, { recursive: true, force: true });
 }

@@ -667,7 +667,6 @@ function tickDoomsday(g: GameState, ctx: Ctx, p: PlayerState): void {
     ctx.log(`  └ 상대 최대 마나 +1 (${o.maxMana})`, `  └ 相手の最大マナ+1 (${o.maxMana})`);
     for (const pl of g.players) {
       for (const m of [...pl.field]) {
-        if (hasPassive(m, "trapmaster")) { ctx.log(`  └ ${cn(m)} 은(는) 함정으로 파괴되지 않는다`, `  └ ${cn(m)} は罠では破壊されない`); continue; }
         ctx.destroyMonster(pl, m);
       }
       for (const e of pl.enchants.splice(0)) binEnch(g, ctx, pl, e.card);
@@ -1236,9 +1235,8 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   if (atk > 1 && !hasPassive(att, "guts") && !hasPassive(att, "evade") && g.players.some((pl) => pl.field.some((x) => x.aura === "dungeon"))) { atk = 1; ctx.log(`  └ 살아있는 던전: ${cn(att)} 의 공격력이 1이 된다`, `  └ 生きているダンジョン: ${cn(att)} の攻撃力が1になる`); }
   let killed = false; // 이 공격으로 상대 몬스터를 파괴했는가 (엠버 드레이크 연속 공격)
   let tc: CardInst | null;
-  // 특급 흡혈귀(trapImmune): 함정 반응에 의한 파괴만 무효 — 아래 함정 브랜치의 파괴는 전부 이 헬퍼를 거친다
+  // Legacy trap destruction still respects general monster protections.
   const trapKill = (owner: PlayerState, mm: FieldMon): void => {
-    if (hasPassive(mm, "trapmaster")) { ctx.log(`  └ ${cn(mm)} 은(는) 함정으로 파괴되지 않는다`, `  └ ${cn(mm)} は罠では破壊されない`); return; }
     ctx.destroyMonster(owner, mm);
   };
 
@@ -1306,8 +1304,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   if (tgt0?.tribe === "포식" && o.traps.some((t) => t.card.react === "preyGuard") && (tc = takeTrap(g, ctx, o, "preyGuard"))) {
     att.exhausted = true;
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + ${cn(att)} ${(att.cost ?? 0) <= 5 ? "파괴 후 게임에서 제외" : "파괴"}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + ${cn(att)} ${(att.cost ?? 0) <= 5 ? "を破壊後ゲームから除外" : "を破壊"}`);
-    if (hasPassive(att, "trapmaster")) ctx.log(`  └ ${cn(att)} 은(는) 함정으로 파괴되지 않는다`, `  └ ${cn(att)} は罠では破壊されない`);
-    else if ((att.cost ?? 0) <= 5) { const ai = p.field.findIndex((x) => x.uid === att.uid); if (ai >= 0) { const dead = p.field.splice(ai, 1)[0]; if (!dead.token) rmz(p).push(resetInst(dead)); ctx.ev.push({ type: "destroy", player: side(g, p), uid: dead.uid, id: dead.id }); } }
+    if ((att.cost ?? 0) <= 5) { const ai = p.field.findIndex((x) => x.uid === att.uid); if (ai >= 0) { const dead = p.field.splice(ai, 1)[0]; if (!dead.token) rmz(p).push(resetInst(dead)); ctx.ev.push({ type: "destroy", player: side(g, p), uid: dead.uid, id: dead.id }); } }
     else trapKill(p, att);
     return;
   }
@@ -1347,7 +1344,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 상대 필드의 카드 2장 파괴`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 相手の場のカード2枚を破壊`);
     let left = 2;
     const mons = [...p.field].filter((x) => x.hatch == null).sort((a2, b2) => (effAtk(p, b2) + effDef(p, b2)) - (effAtk(p, a2) + effDef(p, a2)));
-    for (const x of mons) { if (left <= 0 || g.over) break; if (!p.field.some((y) => y.uid === x.uid)) continue; if (hasPassive(x, "trapmaster")) continue; trapKill(p, x); left--; }
+    for (const x of mons) { if (left <= 0 || g.over) break; if (!p.field.some((y) => y.uid === x.uid)) continue; trapKill(p, x); left--; }
     while (left > 0 && !g.over && p.enchants.length > 0) { const ec = p.enchants.shift()!.card; ctx.log(`  └ 영구마법 ${cn(ec)} 파괴`, `  └ 永続魔法 ${cn(ec)} 破壊`); binEnch(g, ctx, p, ec); left--; }
     while (left > 0 && !g.over && p.traps.length > 0) { if (trySnare(g, ctx, p)) break; const tr = p.traps.shift()!; if (tr.card.exileOnDestroy) rmz(p).push(tr.card); else p.discard.push(tr.card); ctx.log(`  └ 세트 함정 파괴 (정체: ${cn(tr.card)})`, `  └ セットトラップ破壊 (正体: ${cn(tr.card)})`); left--; }
     return;
@@ -1491,7 +1488,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     }
   }
   // 영혼 교환(soulSwap): 자신 필드에 몬스터가 있을 때만 — 공격 몬스터 탈취 + 최저 코스트 몬스터 반납
-  if (o.field.length > 0 && !hasPassive(att, "trapmaster")
+  if (o.field.length > 0
     && o.traps.some((t) => t.card.react === "soulSwap") && (tc = takeTrap(g, ctx, o, "soulSwap"))) {
     const give = [...o.field].sort((a2, b2) => (a2.cost ?? 0) - (b2.cost ?? 0))[0];
     const gi = o.field.findIndex((x) => x.uid === give.uid);
@@ -1527,10 +1524,6 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       `  └ <span class="dmg">함정 ${cn(tc)}!</span> 🎲 ${roll} → ${cn(att)} 파괴 후 게임에서 제외`,
       `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 🎲 ${roll} → ${cn(att)} を破壊後ゲームから除外`,
     );
-    if (hasPassive(att, "trapmaster")) {
-      ctx.log(`  └ ${cn(att)} 은(는) 함정으로 파괴되지 않는다`, `  └ ${cn(att)} は罠では破壊されない`);
-      return;
-    }
     const ai = p.field.findIndex((x) => x.uid === att.uid);
     if (ai >= 0) {
       const dead = p.field.splice(ai, 1)[0];
@@ -1545,9 +1538,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     att.exhausted = true;
     const { rolls: dgr } = diceRoll(g, ctx.ev, side(g, o), 1, 4);
     const dr = dgr[0];
-    if (hasPassive(att, "trapmaster")) {
-      ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 — ${cn(att)} 은(는) 함정으로 파괴되지 않는다`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 — ${cn(att)} は罠では破壊されない`);
-    } else if (dr >= 4) {
+    if (dr >= 4) {
       ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 🎲 ${dr} → ${cn(att)} 파괴 후 게임에서 제외`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 🎲 ${dr} → ${cn(att)} を破壊後ゲームから除外`);
       const di = p.field.findIndex((x) => x.uid === att.uid);
       if (di >= 0) {
@@ -1717,7 +1708,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     return;
   }
   if ((tc = takeTrap(g, ctx, o, "slaughterRaise"))) { // GT5_3: destroy attacker + val% steal to own field
-    const canRaise = o.field.length < FIELD_MAX && !hasPassive(att, "trapmaster");
+    const canRaise = o.field.length < FIELD_MAX;
     if (canRaise && diceChance(g, ctx, o, tc.val || 30)) {
       const i2 = p.field.findIndex((x) => x.uid === att.uid);
       if (i2 >= 0) { const stolen = p.field.splice(i2, 1)[0]; ctx.ev.push({ type: "destroy", player: side(g, p), uid: stolen.uid, id: stolen.id }); stolen.exhausted = true; stolen.attacksUsed = 0; o.field.push(stolen); ctx.ev.push({ type: "summon", player: side(g, o), uid: stolen.uid, id: stolen.id }); }
@@ -1857,7 +1848,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       const before2 = Math.max(0, maxHp2 - (att.dmg || 0));
       if (volley >= before2) {
         const over2 = volley - before2;
-        if ((att.guts || 0) > 0 && !hasPassive(att, "trapmaster")) {
+        if ((att.guts || 0) > 0) {
           att.guts = (att.guts || 1) - 1;
           att.dmg = maxHp2 - 1;
           ctx.log(`  └ 반격 합계 ${volley} → ${cn(att)} — <span class="good">기합!</span> 체력 1로 버팀`, `  └ 反撃合計 ${volley} → ${cn(att)} — <span class="good">気合！</span> 体力1で耐えた`);
@@ -1985,12 +1976,6 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   if (att.attackFx === "cullExile2" && !g.over) {
     const ex = exileCulls(p, 2);
     if (ex > 0) ctx.log(`  └ ${cn(att)} 컬 ${ex}장 게임에서 제외 (누적 ${cullExiled(p)})`, `  └ ${cn(att)} カル${ex}枚をゲームから除外 (累計${cullExiled(p)})`);
-  }
-  // 선택받은 도적(v36 rogueTrap): 직접 공격 성공 시 덱·묘지의 함정 1장을 코스트 없이 세트
-  if (att.attackFx === "rogueTrap" && dealtFace > 0 && !g.over && !g.pending
-    && p.traps.length + p.enchants.length < ST_MAX && [...p.deck, ...p.discard].some((c) => c.t === "trap")) {
-    g.pending = { kind: "recall", reason: "rogueTrap", allowCancel: true, hint: "선택받은 도적 — 덱·묘지에서 세트할 함정 선택 (취소 가능)", hintJa: "選ばれし盗賊 — デッキ・墓地からセットする罠を選択 (キャンセル可)" };
-    ctx.ev.push({ type: "needTarget", pending: g.pending });
   }
   // 뱀파이어 집사(vampButler · v36: 직접 공격도 포함): 공격할 때마다 흡혈 카운트 +1, 3카운트마다 견습 흡혈귀 소환
   if (att.aura === "vampButler" && !g.over && p.field.some((x) => x.uid === att.uid)) {
@@ -2221,18 +2206,10 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       if (rmz(p).filter((c) => MIMIC_IDS.has(c.id)).length >= 6) { spawnToken(g, ctx, p, "MIMIC2"); ctx.log(`  └ 👑 마스터 미믹(10/3) 강림!`, `  └ 👑 マスターミミック(10/3)降臨！`); }
       break;
     }
-    case "originMimic": { // 시초의 미믹: 필드/묘지/제외 미믹 1장당 +2/+2, 제외 8장+면 상대 함정 2장 파괴
+    case "originMimic": { // 시초의 미믹: 필드/묘지/제외 미믹 1장당 +2/+2
       const ko2 = [...p.field.filter((x) => x.uid !== m.uid), ...p.discard, ...rmz(p)].filter((c) => MIMIC_IDS.has(c.id)).length;
       if (ko2 > 0) { m.atkMod = (m.atkMod || 0) + ko2 * 2; m.defMod = (m.defMod || 0) + ko2 * 2; ctx.log(`  └ 미믹 계열 ${ko2}장 → +${ko2 * 2}/+${ko2 * 2}`, `  └ ミミック系${ko2}枚 → +${ko2 * 2}/+${ko2 * 2}`); }
       else ctx.log(`  └ 미믹 계열 없음`, `  └ ミミック系なし`);
-      if (rmz(p).filter((c) => MIMIC_IDS.has(c.id)).length >= 8) {
-        if (o.traps.length && trySnare(g, ctx, o)) { /* 덫 속의 덫: 파괴 무효 */ }
-        else {
-          let bt = 0;
-          for (let i2 = 0; i2 < 2 && o.traps.length; i2++) { const tr = o.traps.splice(randInt(g, o.traps.length), 1)[0]; o.discard.push(tr.card); bt++; }
-          ctx.log(`  └ 상대 세트 함정 ${bt}장 파괴`, `  └ 相手のセット罠${bt}枚を破壊`);
-        }
-      }
       break;
     }
     case "guardianDraw": { // 시초의 수호자: 1장 드로우 → 몬스터면 적 1체 공격력을 2로
@@ -2525,14 +2502,6 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       spawnToken(g, ctx, p, "INFKNIGHT"); ctx.log("  └ 기사(4/4) 소환", "  └ 騎士(4/4)召喚");
       break;
     }
-    case "siegeBreak2": { // 공허의 공성병: 상대 함정 2장 파괴, 2장 미만이면 자신 묘지 무작위 1장 제외
-      let k = 0;
-      if (o.traps.length && trySnare(g, ctx, o)) { /* 덫 속의 덫: 파괴 무효 */ }
-      else for (let i = 0; i < 2 && o.traps.length; i++) { const t = o.traps.splice(randInt(g, o.traps.length), 1)[0]; o.discard.push(t.card); k++; }
-      ctx.log(`  └ 상대 함정 ${k}장 파괴`, `  └ 相手の罠${k}枚破壊`);
-      if (k < 2 && p.discard.length && !g.over) { const ex = p.discard.splice(randInt(g, p.discard.length), 1)[0]; rmz(p).push(ex); ctx.log(`  └ 2장 파괴 실패 — 묘지의 ${cn(ex)} 게임에서 제외`, `  └ 2枚破壊失敗 — 墓地の ${cn(ex)} をゲームから除外`); }
-      break;
-    }
     case "elderWipe": { // 엘더 하이엘프 킹: 상대 필드의 카드 전부 파괴
       for (const tm of [...o.field]) ctx.destroyMonster(o, tm);
       if (o.traps.length && trySnare(g, ctx, o)) { /* 덫 속의 덫 */ }
@@ -2541,12 +2510,9 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       ctx.log(`  └ <span class="dmg">상대 필드의 모든 카드 파괴</span>`, `  └ <span class="dmg">相手の場の全カードを破壊</span>`);
       break;
     }
-    case "nightlord": { // 특급 암살자: 상대 낙인 +3 + 세트 함정 전부 파괴
+    case "nightlord": { // 특급 암살자: 상대 낙인 +3
       o.brand = (o.brand || 0) + 3;
       ctx.log(`  └ ${o.name} 에게 낙인 카운터 +3 (합계 ${o.brand})`, `  └ ${o.name} に烙印カウンター+3 (計${o.brand})`);
-      const wt = o.traps.length;
-      if (wt > 0 && trySnare(g, ctx, o)) { /* 덫 속의 덫 */ }
-      else if (wt > 0) { for (const tr of o.traps.splice(0)) { if (tr.card.exileOnDestroy) rmz(o).push(tr.card); else o.discard.push(tr.card); } ctx.log(`  └ 상대 세트 함정 ${wt}장 전부 파괴`, `  └ 相手のセット罠${wt}枚を全て破壊`); }
       break;
     }
     case "creator": { // 창조신: 양측 덱/묘지에서 무작위 몬스터 3체를 자신 필드에 소환
@@ -4126,7 +4092,6 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   }
   if (card.t === "trap") {
     if (p.trapBlockTurn) { ctx.log(`  └ <span class="dmg">협상: 이번 턴에는 함정을 설치할 수 없습니다</span>`, `  └ <span class="dmg">交渉: このターンは罠を設置できません</span>`); return; }
-    if (g.players[1 - g.cur].field.some((m) => m.aura === "trapBan")) { ctx.log(`  └ <span class="dmg">몰락한 기사</span>: 함정을 세트할 수 없습니다`, `  └ <span class="dmg">没落した騎士</span>: 罠をセットできません`); return; }
     if (p.traps.length + p.enchants.length >= ST_MAX) { ctx.log(`  └ <span class="dmg">마법·함정 존이 가득 찼습니다 (최대 ${ST_MAX})</span>`, `  └ <span class="dmg">魔法・罠ゾーンが満杯です (最大 ${ST_MAX})</span>`); return; }
     p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1);
     afterPlay(g, ctx, p, card);
@@ -4306,7 +4271,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     }
     else if (pending.reason === "nlTarget") { // 나이트로드의 비기(v38): 부여할 패시브 선택으로
       g.pending = { kind: "giantShop", reason: "nlGrant", allowCancel: false, hint: "나이트로드의 비기 — 부여할 패시브 선택", hintJa: "ナイトロードの秘技 — 与えるパッシブを選択",
-        data: { ids: ["trapmaster", "ambush", "evade"], free: true, uid: tm.uid, opts: [{ id: "trapmaster", ko: "트랩마스터", ja: "トラップマスター", en: "Trap Master" }, { id: "ambush", ko: "암습", ja: "暗襲", en: "Infiltrate" }, { id: "evade", ko: "회피", ja: "回避", en: "Evade" }] } };
+        data: { ids: ["ambush", "evade"], free: true, uid: tm.uid, opts: [{ id: "ambush", ko: "암습", ja: "暗襲", en: "Infiltrate" }, { id: "evade", ko: "회피", ja: "回避", en: "Evade" }] } };
       ctx.ev.push({ type: "needTarget", pending: g.pending });
     }
     else if (pending.reason === "emberBuff") { // 시초의 불씨(v36): 다른 시초 몬스터 공격력 +2(지속)
@@ -4345,19 +4310,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     const i = p.deck.findIndex((c) => c.uid === uid);
     if (i >= 0) { p.hand.push(p.deck.splice(i, 1)[0]); shuffle(g, p.deck); ctx.log(`<span class="t">${p.name}</span> 시크 → 1장 서치`, `<span class="t">${p.name}</span> シーク → 1枚サーチ`); }
   } else if (pending.kind === "recall") {
-    if (pending.reason === "rogueTrap") { // 선택받은 도적(v36): 덱·묘지의 함정 1장을 코스트 없이 세트
-      const di = p.deck.findIndex((c) => c.uid === uid && c.t === "trap");
-      const gi = p.discard.findIndex((c) => c.uid === uid && c.t === "trap");
-      const c = di >= 0 ? p.deck.splice(di, 1)[0] : gi >= 0 ? p.discard.splice(gi, 1)[0] : null;
-      if (!c) { g.pending = pending; return; }
-      if (di >= 0) shuffle(g, p.deck);
-      const set: TrapSet = { card: c };
-      if (c.react === "doomsday") set.cnt = 3;
-      p.traps.push(set);
-      ctx.log(`<span class="t">${p.name}</span> 선택받은 도적 → 함정을 세트 (정체는 비공개)`, `<span class="t">${p.name}</span> 選ばれし盗賊 → トラップをセット (正体は非公開)`);
-      ctx.ev.push({ type: "trapSet", player: side(g, p) });
-      return;
-    }
+    if (pending.reason !== "recall" && pending.reason !== "exilePick") return;
     if (pending.reason === "recall" && d.exclude && uid === d.exclude) return; // 리콜 카드 자신은 회수 대상이 아니다
     const i = p.discard.findIndex((c) => c.uid === uid);
     if (i >= 0) {
@@ -4498,7 +4451,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     }
     // 나이트로드의 비기(v38): 패시브 부여 + 암살자 2체 공격력 +3
     if (pending.reason === "nlGrant") {
-      if (!uid || !["trapmaster", "ambush", "evade"].includes(uid)) { g.pending = pending; return; }
+      if (!uid || !["ambush", "evade"].includes(uid)) { g.pending = pending; return; }
       const tm = p.field.find((x) => x.uid === (pending.data?.uid as string));
       if (tm) {
         if (uid === "ambush") tm.directOnly = true; else if (!hasPassive(tm, uid)) (tm.passivesG ??= []).push(uid);

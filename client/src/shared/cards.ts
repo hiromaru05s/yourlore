@@ -938,7 +938,7 @@ const NEW_CARDS9: CardDef[] = [
     text: "'피의 마법' 발동 시: 상급 흡혈귀를 자신 필드에 소환 (1회) · 죽으면 게임에서 제외", textJa: "「血の魔法」発動時: 上級吸血鬼を自分の場に召喚 (1回) · 死亡時ゲームから除外" },
   { id: "VAMP4", t: "mon", cost: 0, atk: 14, def: 3, evolveTo: "VAMP5", attackFx: "vampDrain", val: 50, name: "상급 흡혈귀", nameJa: "上級吸血鬼",
     text: "'피의 마법' 발동 시: 특급 흡혈귀를 자신 필드에 소환 (1회) · 상대에게 입힌 데미지의 50%만큼 자신 최대 체력 획득 · 죽으면 게임에서 제외", textJa: "「血の魔法」発動時: 特級吸血鬼を自分の場に召喚 (1回) · 相手に与えたダメージの50%だけ自分の最大体力を得る · 死亡時ゲームから除外" },
-  { id: "VAMP5", t: "mon", cost: 0, atk: 21, def: 5, onSummon: "vampLord", attackFx: "vampDrain", val: 100, aura: "trapImmune", name: "특급 흡혈귀", nameJa: "特級吸血鬼",
+  { id: "VAMP5", t: "mon", cost: 0, atk: 21, def: 5, onSummon: "vampLord", attackFx: "vampDrain", val: 100, name: "특급 흡혈귀", nameJa: "特級吸血鬼",
     text: "소환시: 상대에게 15 데미지, 자신의 최대 체력 +30 · 상대에게 입힌 데미지만큼 자신 최대 체력 획득 · 함정 카드로 파괴되지 않는다 · 죽으면 게임에서 제외", textJa: "召喚時: 相手に15ダメージ、自分の最大体力+30 · 相手に与えたダメージだけ自分の最大体力を得る · 罠カードで破壊されない · 死亡時ゲームから除外" },
 ];
 for (const c of NEW_CARDS9) { DB[c.id] = c; }
@@ -1006,11 +1006,6 @@ export const PASSIVES: Record<string, { ko: PassiveDef; ja: PassiveDef; en: Pass
     ja: { name: "オーラ", desc: "相手の魔法・モンスター効果の対象にならない (攻撃対象には指定できる)。" },
     en: { name: "Aura", desc: "Cannot be targeted by the opponent's spell/monster effects (can still be attacked)." },
   },
-  trapmaster: {
-    ko: { name: "트랩마스터", desc: "함정 카드에 의해 파괴되지 않는다." },
-    ja: { name: "トラップマスター", desc: "罠カードでは破壊されない。" },
-    en: { name: "Trap Master", desc: "Cannot be destroyed by trap cards." },
-  },
   void: {
     ko: { name: "공허", desc: "파괴되면 묘지 대신 게임에서 제외된다 (덱 순환에 들어가지 않는다)." },
     ja: { name: "虚無", desc: "破壊されると墓地の代わりにゲームから除外される (デッキ循環に入らない)。" },
@@ -1049,20 +1044,21 @@ export const PASSIVES: Record<string, { ko: PassiveDef; ja: PassiveDef; en: Pass
 };
 export const PASSIVE_KEYS = Object.keys(PASSIVES);
 
-/** 카드가 가진 패시브 키 목록 — 명시(passive 배열) + 기존 필드에서 유도(mult/directOnly/ward/trapImmune/exileOnDestroy). */
+/** 카드가 가진 패시브 키 목록 — 명시(passive 배열) + 기존 필드에서 유도(mult/directOnly/ward/exileOnDestroy). */
 export function cardPassives(c: Partial<CardDef>): string[] {
   const out: string[] = [];
   const has = (k: string): boolean => !!c.passive?.includes(k);
   if ((c.mult ?? 1) >= 2 || has("dual")) out.push("dual");
   if (c.directOnly || has("ambush")) out.push("ambush");
   if (c.aura === "ward" || has("aura")) out.push("aura");
-  if (c.aura === "trapImmune" || has("trapmaster")) out.push("trapmaster");
   for (const k of ["taunt", "evade", "guts", "decay", "majesty", "relic"]) if (has(k)) out.push(k);
   if (c.exileOnDestroy || has("void")) out.push("void");
   return out;
 }
 /** 런타임 패시브 판정 — 카드 자체 + 게임 중 부여된 패시브(passivesG)까지 포함. */
 export function hasPassive(c: Partial<CardDef> & { passivesG?: string[] }, key: string): boolean {
+  // Persisted grants of retired keywords no longer confer an ability.
+  if (!Object.hasOwn(PASSIVES, key)) return false;
   if (c.passivesG?.includes(key)) return true;
   return cardPassives(c).includes(key);
 }
@@ -1085,7 +1081,7 @@ const PATCH13: Record<string, Partial<CardDef>> = {
   VAMP2: { passive: ["void"], text: "'피의 마법' 발동 시: 중급 흡혈귀를 자신 필드에 소환 (1회) · 공허", textJa: "「血の魔法」発動時: 中級吸血鬼を自分の場に召喚 (1回) · 虚無" },
   VAMP3: { passive: ["void"], text: "'피의 마법' 발동 시: 상급 흡혈귀를 자신 필드에 소환 (1회) · 공허", textJa: "「血の魔法」発動時: 上級吸血鬼を自分の場に召喚 (1回) · 虚無" },
   VAMP4: { passive: ["void"], text: "'피의 마법' 발동 시: 특급 흡혈귀 소환 (1회) · 상대에게 입힌 데미지의 50%만큼 자신 최대 체력 획득 · 공허", textJa: "「血の魔法」発動時: 特級吸血鬼を召喚 (1回) · 相手に与えたダメージの50%だけ自分の最大体力を得る · 虚無" },
-  VAMP5: { passive: ["void"], text: "소환시: 상대에게 15 데미지, 자신의 최대 체력 +30 · 상대에게 입힌 데미지만큼 자신 최대 체력 획득 · 트랩마스터 · 공허", textJa: "召喚時: 相手に15ダメージ、自分の最大体力+30 · 相手に与えたダメージだけ自分の最大体力を得る · トラップマスター · 虚無" },
+  VAMP5: { passive: ["void"], text: "소환시: 상대에게 15 데미지, 자신의 최대 체력 +30 · 상대에게 입힌 데미지만큼 자신 최대 체력 획득 · 공허", textJa: "召喚時: 相手に15ダメージ、自分の最大体力+30 · 相手に与えたダメージだけ自分の最大体力を得る · 虚無" },
   // ---- 도발: 피의 성벽 / 신성한 성벽 ----
   GM7_1: { passive: ["taunt"], text: "도발", textJa: "挑発" },
   GM8_1: { passive: ["taunt"], text: "매 턴 시작 시 자신 체력 +3 회복 · 도발", textJa: "毎ターン開始時 自分の体力+3回復 · 挑発" },
@@ -1179,16 +1175,16 @@ for (const c of NEW_STARTERS15) { DB[c.id] = c; }
 
 // ---- 신규 마켓 카드 5종: 전설의 도박꾼 + 엘프 4종 ----
 const NEW_CARDS15: CardDef[] = [
-  { id: "LEGEND_GAMBLER", t: "mon", cost: 7, atk: 3, def: 4, passive: ["trapmaster", "void"], turnFx: "legendGambler", name: "전설의 도박꾼", nameJa: "伝説のギャンブラー",
-    text: "자신의 턴 시작시: 주사위를 굴려 6이면 최대 마나 +10 · 자신의 덱/묘지에 '도박꾼'이 있으면 주사위를 총 3번 굴린다 · 트랩마스터 · 공허",
-    textJa: "自分のターン開始時: ダイスを振り6なら最大マナ+10 · 自分のデッキ/墓地に「ギャンブラー」があればダイスを計3回振る · トラップマスター · 虚無" },
+  { id: "LEGEND_GAMBLER", t: "mon", cost: 7, atk: 3, def: 4, passive: ["void"], turnFx: "legendGambler", name: "전설의 도박꾼", nameJa: "伝説のギャンブラー",
+    text: "자신의 턴 시작시: 주사위를 굴려 6이면 최대 마나 +10 · 자신의 덱/묘지에 '도박꾼'이 있으면 주사위를 총 3번 굴린다 · 공허",
+    textJa: "自分のターン開始時: ダイスを振り6なら最大マナ+10 · 自分のデッキ/墓地に「ギャンブラー」があればダイスを計3回振る · 虚無" },
   { id: "ELF", t: "mon", cost: 4, atk: 9, def: 9, summonReq: "maxHp65", name: "엘프", nameJa: "エルフ",
     text: "자신의 최대 체력이 65 이상일 때만 소환 가능", textJa: "自分の最大体力が65以上の時のみ召喚可能" },
   { id: "DARK_ELF", t: "mon", cost: 4, atk: 14, def: 6, directOnly: true, summonReq: "darkElf", name: "다크 엘프", nameJa: "ダークエルフ",
     text: "암습 · 자신의 최대 체력이 65 이상이고 자신 필드에 '엘프' 계열 몬스터가 없을 때만 소환 가능",
     textJa: "暗襲 · 自分の最大体力が65以上で自分の場に「エルフ」系列モンスターがいない時のみ召喚可能" },
-  { id: "HIGH_ELF", t: "mon", cost: 6, atk: 17, def: 15, passive: ["trapmaster", "aura"], summonReq: "maxHp99", name: "하이엘프", nameJa: "ハイエルフ",
-    text: "트랩마스터 · 아우라 · 자신의 최대 체력이 99 이상일 때만 소환 가능", textJa: "トラップマスター · オーラ · 自分の最大体力が99以上の時のみ召喚可能" },
+  { id: "HIGH_ELF", t: "mon", cost: 6, atk: 17, def: 15, passive: ["aura"], summonReq: "maxHp99", name: "하이엘프", nameJa: "ハイエルフ",
+    text: "아우라 · 자신의 최대 체력이 99 이상일 때만 소환 가능", textJa: "オーラ · 自分の最大体力が99以上の時のみ召喚可能" },
   { id: "ELDER_ELF_KING", t: "mon", cost: 7, atk: 2, def: 8, onSummon: "elderKing", summonReq: "elderKing", name: "엘더 하이엘프 킹", nameJa: "エルダーハイエルフキング",
     text: "【조건】묘지에 '하이엘프', 자신 최대 체력 99 이상 · 【소환시】하이엘프 2체 소환, '하이엘프' 전체 공격력 +15(지속)",
     textJa: "【条件】墓地に「ハイエルフ」、自分の最大体力99以上 · 【召喚時】ハイエルフ2体を召喚後、「ハイエルフ」全体の攻撃力+15(持続)" },
@@ -1934,8 +1930,8 @@ const PATCH36: Record<string, Partial<CardDef>> = {
   GM6_8: { atk: 14, def: 1, onSummon: "siegeBreak2", val: undefined,
     text: "소환시: 상대 함정 2장 파괴, 미달이면 자신 묘지 무작위 1장 제외 · 파괴되면 병사(2/2) 1체 소환",
     textJa: "召喚時: 相手の罠2枚破壊、未達なら自分の墓地のランダム1枚を除外 · 破壊されたら兵士(2/2)1体を召喚" },
-  HIGH_ELF: { atk: 25, def: 25, passive: ["trapmaster", "aura", "majesty", "evade"] },
-  NMD6: { atk: 8, def: 5, passive: ["trapmaster"], aura: "sageDiscount",
+  HIGH_ELF: { atk: 25, def: 25, passive: ["aura", "majesty", "evade"] },
+  NMD6: { atk: 8, def: 5, passive: [], aura: "sageDiscount",
     text: "소환시: 카드 5장 드로우 · 상시: 덱 구성에 마법이 13장 이상이면 마법의 시전 코스트 -1", textJa: "召喚時: カード5枚ドロー · 常時: デッキ構成に魔法が13枚以上なら魔法の発動コスト-1" },
   TGE6: { atk: 3, def: 12, passive: ["aura"] },
   CHOSEN_ARCHER: { atk: 0, def: 5, directOnly: undefined, passive: ["aura", "evade"], attackFx: "giantSlayer",
@@ -1944,7 +1940,7 @@ const PATCH36: Record<string, Partial<CardDef>> = {
   CHOSEN_KNIGHT: { atk: 0, def: 5, passive: ["guts"], attackFx: "cullExile2",
     text: "상시: 제외된 자신의 '컬' 2장당 +1/+1 · 이 몬스터가 공격할 때마다 '컬' 2장을 게임에서 제외",
     textJa: "常時: 除外された自分の「カル」2枚につき+1/+1 · このモンスターが攻撃するたび「カル」2枚をゲームから除外" },
-  CHOSEN_ROGUE: { atk: 0, def: 4, condAtk: "cullAtk2", passive: ["evade", "trapmaster"], attackFx: "rogueTrap",
+  CHOSEN_ROGUE: { atk: 0, def: 4, condAtk: "cullAtk2", passive: ["evade"], attackFx: "rogueTrap",
     text: "상시: 제외된 자신의 '컬' 2장당 공격력 +2 · 직접 공격 성공 시 덱·묘지의 함정 1장을 코스트 없이 세트",
     textJa: "常時: 除外された自分の「カル」2枚につき攻撃力+2 · 直接攻撃成功時、デッキ・墓地の罠1枚をコストなしでセット" },
   CHOSEN_MAGE: { atk: 0, def: 4, passive: ["aura"],
@@ -1953,11 +1949,11 @@ const PATCH36: Record<string, Partial<CardDef>> = {
   ELDER_ELF_KING: { atk: 8, def: 16, passive: ["majesty", "aura"], onSummon: "elderWipe",
     text: "【조건】덱에 엘프·하이엘프·다크 엘프 중 하나, 자신 최대 체력 99 이상 · 【소환시】상대 필드의 카드 전부 파괴",
     textJa: "【条件】デッキにエルフ・ハイエルフ・ダークエルフのいずれか、自分の最大体力99以上 · 【召喚時】相手の場のカードを全て破壊" },
-  LEGEND_GAMBLER: { atk: 3, def: 9, passive: ["trapmaster", "void", "aura"],
+  LEGEND_GAMBLER: { atk: 3, def: 9, passive: ["void", "aura"],
     text: "매 턴 시작 시 눈 예측 후 주사위 3개 · 맞히면 최대 마나 +4·최대 체력 +35·상대 카드 2장 파괴 택1(도박꾼:전부)",
     textJa: "毎ターン開始時 出目を予測しダイス3個 · 的中で最大マナ+4·最大体力+35·相手カード2枚破壊から1つ(ギャンブラー:全て)" },
   TGE7: { atk: 5, def: 13, val: 4, text: "[시초] 상시: 자신 필드의 모든 '시초' 몬스터 +4/+4", textJa: "[始原] 常時: 自分の場の全ての「始原」モンスター+4/+4" },
-  ASSASSIN4: { atk: 23, def: 20, passive: ["majesty", "aura", "trapmaster"], summonReq: "assassinTrio", onSummon: "nightlord",
+  ASSASSIN4: { atk: 23, def: 20, passive: ["majesty", "aura"], summonReq: "assassinTrio", onSummon: "nightlord",
     text: "【조건】덱 구성에 이 몬스터 외 '암살자' 3종 이상 · 【소환시】상대에게 낙인 카운터 3개, 상대 세트 함정 전부 파괴",
     textJa: "【条件】デッキ構成にこのモンスター以外の「アサシン」3種以上 · 【召喚時】相手に烙印カウンター3個、相手のセット罠を全て破壊" },
   GAMBLE: { text: "주사위 10회 — ①② 자신 8뎀 / ③④ 상대 5뎀 / ⑤ 마나 골렘 소환 / ⑥ 골램 특공부대 3체 소환",
@@ -2077,7 +2073,7 @@ RANDOM_CARDS.add("BUDGET");
 const PATCH38: Record<string, Partial<CardDef>> = {
   NGA3: { name: "전사 골램", nameJa: "戦士ゴーレム" },
   NWL3: { passive: ["guts"] },
-  ASSASSIN4: { passive: ["majesty", "aura", "trapmaster", "evade"] },
+  ASSASSIN4: { passive: ["majesty", "aura", "evade"] },
 };
 for (const id of Object.keys(PATCH38)) { if (DB[id]) Object.assign(DB[id], PATCH38[id]); }
 const NEW_CARDS38: CardDef[] = [
@@ -2090,7 +2086,7 @@ const NEW_CARDS38: CardDef[] = [
   { id: "DUNGEON", t: "mon", cost: 2, atk: 0, def: 3, aura: "dungeon", name: "살아있는 던전", nameJa: "生きているダンジョン",
     text: "상시: '기합'·'회피'가 없는 몬스터는 공격 시 공격력이 1이 된다", textJa: "常時: 「気合」「回避」を持たないモンスターは攻撃時に攻撃力が1になる" },
     { id: "NL_SECRET", t: "spell", cost: 3, name: "나이트로드의 비기", nameJa: "ナイトロードの秘技",
-    text: "자신 몬스터 1체에 트랩마스터·암습·회피 중 1개 부여 · 자신의 '암살자' 2체의 공격력 +3(지속)", textJa: "自分のモンスター1体にトラップマスター・暗襲・回避の1つを付与 · 自分の「アサシン」2体の攻撃力+3(持続)" },
+    text: "자신 몬스터 1체에 암습·회피 중 1개 부여 · 자신의 '암살자' 2체의 공격력 +3(지속)", textJa: "自分のモンスター1体に暗襲・回避の1つを付与 · 自分の「アサシン」2体の攻撃力+3(持続)" },
 ];
 for (const c of NEW_CARDS38) { DB[c.id] = c; }
 // ---- v38c 너프: 와인/포도/고급 포도/성 ----
@@ -2204,14 +2200,31 @@ TRIBES["시초"] = {
 
 // ---- v43: retire every trap from the playable card catalog ----
 // Keep the historical patches above and the legacy trap state/rendering schema:
-// the parallel design rework still uses those shapes. Related monsters/spells
-// remain unchanged pending the decisions in docs/card-rework/2026-09-09-trap-removal/.
+// the parallel design rework still uses those shapes. Related-card decisions
+// are applied below and recorded in docs/card-rework/2026-09-09-trap-removal/.
 // Run after ALL additions/patches, before localization and derived card pools.
 for (const [id, card] of Object.entries(DB)) {
   if (card.t !== "trap") continue;
   delete DB[id];
   RANDOM_CARDS.delete(id);
 }
+// ---- v44: approved trap-related card deletions and reworks ----
+for (const id of ["M13", "TRAPSMITH", "SX2", "SX4", "NWIPE", "BLOOD2", "NEGOTIATE"]) {
+  delete DB[id];
+  RANDOM_CARDS.delete(id);
+}
+Object.assign(DB.TAR3, { aura: undefined, passive: [], text: "—", textJa: "—" });
+Object.assign(DB.GM6_8, { onSummon: undefined,
+  text: "파괴되면 병사(2/2) 1체 소환", textJa: "破壊されたら兵士(2/2)1体を召喚" });
+Object.assign(DB.ORIGIN_MIMIC, {
+  text: "소환시: 자신 필드·묘지·제외의 '미믹' 계열 1장당 +2/+2",
+  textJa: "召喚時: 自分の場・墓地・除外の「ミミック」系1枚につき+2/+2" });
+Object.assign(DB.ASSASSIN4, {
+  text: "【조건】덱 구성에 이 몬스터 외 '암살자' 3종 이상 · 【소환시】상대에게 낙인 카운터 3개",
+  textJa: "【条件】デッキ構成にこのモンスター以外の「アサシン」3種以上 · 【召喚時】相手に烙印カウンター3個" });
+Object.assign(DB.CHOSEN_ROGUE, { attackFx: undefined,
+  text: "상시: 제외된 자신의 '컬' 2장당 공격력 +2",
+  textJa: "常時: 除外された自分の「カル」2枚につき攻撃力+2" });
 for (let i = DECK_POOL.length - 1; i >= 0; i--) {
   if (!DB[DECK_POOL[i]] && !STARTERS[DECK_POOL[i]]) DECK_POOL.splice(i, 1);
 }
@@ -2323,7 +2336,8 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v43"; // v43: all trap cards retired; related monsters/spells await rework decisions
+export const BALANCE_VERSION = "v44"; // v44: approved related-card deletions/reworks and retired trap immunity keyword
+// v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관
 // v40; // v40: 룰 개정 — 선공 40/후공 45 · 첫 손패 3장 이후 매턴 1장 드로우 + 손패 유지(상한 8) · 최대 마나 하한 3 · 어튠에 신기(제외 불가) · 고정 마켓 슬롯 재고 3(매진 시 새 카드 교체)

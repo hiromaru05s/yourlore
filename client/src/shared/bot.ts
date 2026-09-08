@@ -177,7 +177,7 @@ export function candidates(g: GameState): Action[] {
       return out;
     }
     else if (pend.kind === "seek" || pend.kind === "recall") {
-      const pool = pend.reason === "rogueTrap" ? [...p.deck, ...p.discard].filter((c) => c.t === "trap") : pend.kind === "seek" ? p.deck : p.discard;
+      const pool = pend.kind === "seek" ? p.deck : p.discard;
       const exile = pend.reason === "exilePick"; // 제외용은 저가치 우선 탐색
       const seen = new Set<string>();
       [...pool].sort((a, b) => (exile ? cardPower(a) - cardPower(b) : cardPower(b) - cardPower(a))).forEach((c) => {
@@ -195,7 +195,7 @@ export function candidates(g: GameState): Action[] {
   const candSealAll = g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"));
   p.hand.forEach((c, idx) => {
     if (c.star === "chest" && (g.turn <= T.chestTurn || chestLocked(g))) return;
-    if (c.t === "trap" && (p.trapBlockTurn || o.field.some((tm) => tm.aura === "trapBan"))) return; // 협상/몰락한 기사 — 엔진 거부 루프 방지
+    if (c.t === "trap" && p.trapBlockTurn) return; // Legacy set restriction — avoid rejected-play loops
     if (c.t === "mon" && ((p.summonLockUntil ?? 0) > g.turn || !summonReqMet(p, c, o))) return; // 은둔자 잠금 / 소환 조건
     if (c.t === "mon" && (c.cost ?? 0) >= 5 && p.field.some((m) => m.id === "CASTLE")) return; // 성: 5코 이상 소환 불가
     if (c.t === "mon" && p.summonCap != null && p.field.length >= p.summonCap) return; // 고독의 저주(v38)
@@ -219,6 +219,7 @@ export function candidates(g: GameState): Action[] {
     p.field.forEach((m) => {
       if (m.exhausted) return;
       if (m.hatch != null) return; // 알은 공격 불가 (엔진이 거부 — 후보에서 제외해야 무한 재시도 안 함)
+      if (m.summonedTurn === g.turn && o.field.some((tm) => hasPassive(tm, "majesty"))) return;
       const a = effAtk(p, m);
       if (glassBanActive(g) && Math.abs(effAtk(p, m) - effDef(p, m)) >= 4) return; // 전략 변경(v34)
       if (o.field.some((tm) => tm.aura === "lowAtkBan") && (m.cost ?? 0) <= 2) return; // 몰락 귀족
@@ -351,7 +352,7 @@ function legalActions(g: GameState): Action[] {
     if (pend.kind === "oppMon") o.field.forEach((m) => add(pick(m.uid)));
     else if (pend.kind === "myMon") p.field.forEach((m) => add(pick(m.uid)));
     else if (pend.kind === "seek") p.deck.forEach((c) => add(pick(c.uid)));
-    else if (pend.kind === "recall") (pend.reason === "rogueTrap" ? [...p.deck, ...p.discard].filter((c) => c.t === "trap") : p.discard).forEach((c) => add(pick(c.uid)));
+    else if (pend.kind === "recall") p.discard.forEach((c) => add(pick(c.uid)));
     else if (pend.kind === "purge") (pend.data?.zone === "hand" ? [...p.hand] : pend.data?.zone === "discard" ? [...p.discard] : [...p.deck, ...p.discard]).forEach((c) => add(pick(c.uid)));
     if (pend.allowCancel) add(pick(null));
     return out;
@@ -630,7 +631,8 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   const noAtk = g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "noAttack"));
   const oppNoLow = o.enchants.some((e) => e.card.ench === "noSummonLow"); // blocks my cost<=3 summons
 
-  const ready = p.field.filter((m) => !m.exhausted && m.hatch == null); // 알은 공격 불가
+  const majesty = o.field.some((m) => hasPassive(m, "majesty"));
+  const ready = p.field.filter((m) => !m.exhausted && m.hatch == null && !(majesty && m.summonedTurn === g.turn));
 
   // castable(): reject spells that would be refused before paying (avoids the bot
   // re-picking an uncastable card forever) OR that would be self-defeating.
@@ -642,7 +644,6 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
       if (p.spellSealTurn) return false;
     }
     if (c.t === "spell" && p.spellCastCap != null && (p.spellsCastTurn || 0) >= p.spellCastCap) return false; // 마족 시너지
-    if (c.t === "trap" && o.field.some((tm) => tm.aura === "trapBan")) return false; // 몰락한 기사
     if (blocked?.has(c.uid)) return false; // proven no-op this decision (safety-net retry)
     // 영구마법 중복/존 제약 — 엔진이 지불 전에 거부하는 조건들 (누락 시 무한 재시도)
     if (c.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) return false;
@@ -958,7 +959,7 @@ function lethalActions(g: GameState): Action[] {
       uniqueCards(p.deck, (a, b) => cardPower(b) - cardPower(a)).forEach((c) => add(pick(c.uid)));
       if (pend.allowCancel) add(pick(null));
     } else if (pend.kind === "recall") {
-      uniqueCards(pend.reason === "rogueTrap" ? [...p.deck, ...p.discard].filter((c) => c.t === "trap") : p.discard, (a, b) => cardPower(b) - cardPower(a)).forEach((c) => add(pick(c.uid)));
+      uniqueCards(p.discard, (a, b) => cardPower(b) - cardPower(a)).forEach((c) => add(pick(c.uid)));
       if (pend.allowCancel) add(pick(null));
     } else if (pend.kind === "purge") {
       const zpool = pend.data?.zone === "hand" ? [...p.hand] : pend.data?.zone === "discard" ? [...p.discard] : [...p.deck, ...p.discard];
@@ -1146,10 +1147,6 @@ function autoTarget(g: GameState): Action {
     return { type: "pick", uid: null };
   }
   if (pending.kind === "recall") {
-    if (pending.reason === "rogueTrap") { // 선택받은 도적: 덱·묘지의 가장 강한 함정을 무료 세트
-      const best = bestOf([...p.deck, ...p.discard].filter((c) => c.t === "trap"));
-      return { type: "pick", uid: best ? best.uid : null };
-    }
     if (pending.reason === "exilePick") { // 게임에서 제외 → 가장 쓸모없는 카드
       const worst = [...p.discard].sort((a, b) => cardPower(a) - cardPower(b))[0];
       return { type: "pick", uid: worst ? worst.uid : (p.discard[0]?.uid ?? null) };
