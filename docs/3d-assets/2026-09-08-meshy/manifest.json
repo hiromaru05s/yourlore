@@ -17,7 +17,8 @@
     {
       "file": "deck-holder.png",
       "source": "/Users/hiromaru05s/.codex/generated_images/01a07d3e-98fa-7173-8805-5cd1f5ccdf7a/exec-60fa9c60-cfd2-4323-9fe9-2ed681ab938a.png",
-      "prompt": "Use case: stylized-concept. Generate a single isolated premium 3D game prop for image-to-3D reconstruction: an EMPTY deck holder / deck placement base for LORE card duel, from Biblion magic library. Image 1 is the matching battlefield material reference. A compact low rectangular tray sized for one face-down stack of portrait playing cards lying FLAT. Plan proportions width:depth approximately 0.67:1; very low height about 0.10 of depth, not a box. Empty uninterrupted flat recessed dark cobalt felt central bed, two low side rails and backstop, front short edge open with shallow thumb recess to pull cards outward. Sculpted blackened oak body, fine aged brass edge inlays, small warm ivory stone panels at the corner shoulders with tasteful cobalt enamel details. Restrained premium architectural craft matching the reference, cohesive readable shape, no floating pieces, no tall walls. Entire one connected object isolated on warm light gray seamless studio background, three-quarter view from above 50 degrees, clear view into empty tray, generous margins, soft neutral light and grounded shadows. No cards at all, no books, no labels, no text, no logos, no environment, no UI, no glows, no collage or multiple views. Physical believable solid geometry for reconstruction."
+      "prompt": "Use case: stylized-concept. Generate a single isolated premium 3D game prop for image-to-3D reconstruction: an EMPTY deck holder / deck placement base for LORE card duel, from Biblion magic library. Image 1 is the matching battlefield material reference. A compact low rectangular tray sized for one face-down stack of portrait playing cards lying FLAT. Plan proportions width:depth approximately 0.67:1; very low height about 0.10 of depth, not a box. Empty uninterrupted flat recessed dark cobalt felt central bed, two low side rails and backstop, front short edge open with shallow thumb recess to pull cards outward. Sculpted blackened oak body, fine aged brass edge inlays, small warm ivory stone panels at the corner shoulders with tasteful cobalt enamel details. Restrained premium architectural craft matching the reference, cohesive readable shape, no floating pieces, no tall walls. Entire one connected object isolated on warm light gray seamless studio background, three-quarter view from above 50 degrees, clear view into empty tray, generous margins, soft neutral light and grounded shadows. No cards at all, no books, no labels, no text, no logos, no environment, no UI, no glows, no collage or multiple views. Physical believable solid geometry for reconstruction.",
+      "status": "superseded: corner shoulders intrude into card storage; use deck-holder-v2-rectangular.png"
     },
     {
       "file": "field-base-v2-from-current-board.png",
@@ -26,6 +27,17 @@
       "promptFile": "field-base-v2-prompt.md",
       "status": "current field reference",
       "sha256": "74a57090b030eb04fbbfc1e5add9ccc5f21b35697d2e6b74f9e7b4eea7fbc0ce"
+    },
+    {
+      "file": "deck-holder-v2-rectangular.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a07d3e-98fa-7173-8805-5cd1f5ccdf7a/exec-3022f130-f564-4d6d-a602-c8aceb0cb7d2.png",
+      "references": [
+        "docs/3d-assets/2026-09-08-meshy/deck-holder.png",
+        "client/public/frames/sleeve_default.webp"
+      ],
+      "promptFile": "deck-holder-v2-prompt.md",
+      "status": "current deck holder reference",
+      "sha256": "963675cf6c87669d0af1051e3936358ed430d750a2f427fcbf57557eb0f9533b"
     }
   ]
 }
