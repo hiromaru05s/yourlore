@@ -6,7 +6,8 @@
     {
       "file": "field-base.png",
       "source": "/Users/hiromaru05s/.codex/generated_images/01a07d3e-98fa-7173-8805-5cd1f5ccdf7a/exec-ec59ff60-8d05-4f9b-8350-e3bb91d9855a.png",
-      "prompt": "Use case: stylized-concept. Produce a single premium 3D game prop concept for image-to-3D reconstruction in Meshy: the empty battlefield base for LORE, an original card duel game set in Biblion magic library. One continuous low broad rectangular tabletop with gently clipped rounded corners, width to depth approximately 1.65:1, very shallow thickness, no legs. Large completely unobstructed flat warm ivory stone playing surface occupying 85 percent of top, subtle wear, restrained fine central compass engraving with no lettering. Sculpted blackened oak perimeter with slim aged brass inlay, small tasteful cobalt details only at corners, sophisticated architectural craftsmanship. Keep rim low and even, usable for virtual cards and matching deck holders placed separately later. Neutral warm light gray seamless background, single isolated complete object, three quarter view from above approximately 55 degrees, every edge visible with generous margin. Clean high detail solid geometry, physical grounded materials, soft studio shadows, no bloom or glowing effects. No cards, no characters, no UI, no labels, no logos, no other furniture, no surrounding room, no loose props, no multi-view collage. This image must show the full object clearly for reconstruction rather than a game screen."
+      "prompt": "Use case: stylized-concept. Produce a single premium 3D game prop concept for image-to-3D reconstruction in Meshy: the empty battlefield base for LORE, an original card duel game set in Biblion magic library. One continuous low broad rectangular tabletop with gently clipped rounded corners, width to depth approximately 1.65:1, very shallow thickness, no legs. Large completely unobstructed flat warm ivory stone playing surface occupying 85 percent of top, subtle wear, restrained fine central compass engraving with no lettering. Sculpted blackened oak perimeter with slim aged brass inlay, small tasteful cobalt details only at corners, sophisticated architectural craftsmanship. Keep rim low and even, usable for virtual cards and matching deck holders placed separately later. Neutral warm light gray seamless background, single isolated complete object, three quarter view from above approximately 55 degrees, every edge visible with generous margin. Clean high detail solid geometry, physical grounded materials, soft studio shadows, no bloom or glowing effects. No cards, no characters, no UI, no labels, no logos, no other furniture, no surrounding room, no loose props, no multi-view collage. This image must show the full object clearly for reconstruction rather than a game screen.",
+      "status": "superseded: did not match existing battlefield; use field-base-v2-from-current-board.png"
     },
     {
       "file": "shelf-case.png",
@@ -17,6 +18,14 @@
       "file": "deck-holder.png",
       "source": "/Users/hiromaru05s/.codex/generated_images/01a07d3e-98fa-7173-8805-5cd1f5ccdf7a/exec-60fa9c60-cfd2-4323-9fe9-2ed681ab938a.png",
       "prompt": "Use case: stylized-concept. Generate a single isolated premium 3D game prop for image-to-3D reconstruction: an EMPTY deck holder / deck placement base for LORE card duel, from Biblion magic library. Image 1 is the matching battlefield material reference. A compact low rectangular tray sized for one face-down stack of portrait playing cards lying FLAT. Plan proportions width:depth approximately 0.67:1; very low height about 0.10 of depth, not a box. Empty uninterrupted flat recessed dark cobalt felt central bed, two low side rails and backstop, front short edge open with shallow thumb recess to pull cards outward. Sculpted blackened oak body, fine aged brass edge inlays, small warm ivory stone panels at the corner shoulders with tasteful cobalt enamel details. Restrained premium architectural craft matching the reference, cohesive readable shape, no floating pieces, no tall walls. Entire one connected object isolated on warm light gray seamless studio background, three-quarter view from above 50 degrees, clear view into empty tray, generous margins, soft neutral light and grounded shadows. No cards at all, no books, no labels, no text, no logos, no environment, no UI, no glows, no collage or multiple views. Physical believable solid geometry for reconstruction."
+    },
+    {
+      "file": "field-base-v2-from-current-board.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a07d3e-98fa-7173-8805-5cd1f5ccdf7a/exec-d0ced814-99e6-461d-8b6e-dc64845973e0.png",
+      "reference": "client/public/art/biblion/duel-table.png",
+      "promptFile": "field-base-v2-prompt.md",
+      "status": "current field reference",
+      "sha256": "74a57090b030eb04fbbfc1e5add9ccc5f21b35697d2e6b74f9e7b4eea7fbc0ce"
     }
   ]
 }
