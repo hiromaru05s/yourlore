@@ -25,7 +25,7 @@
       "source": "/Users/hiromaru05s/.codex/generated_images/01a07d3e-98fa-7173-8805-5cd1f5ccdf7a/exec-d0ced814-99e6-461d-8b6e-dc64845973e0.png",
       "reference": "client/public/art/biblion/duel-table.png",
       "promptFile": "field-base-v2-prompt.md",
-      "status": "current field reference",
+      "status": "shape reference; user reports bumpy top after Meshy conversion; see flat-field-options for three texture-free alternatives",
       "sha256": "74a57090b030eb04fbbfc1e5add9ccc5f21b35697d2e6b74f9e7b4eea7fbc0ce"
     },
     {
@@ -39,5 +39,6 @@
       "status": "current deck holder reference",
       "sha256": "963675cf6c87669d0af1051e3936358ed430d750a2f427fcbf57557eb0f9533b"
     }
-  ]
+  ],
+  "flatFieldOptions": "flat-field-options/manifest.json"
 }
