@@ -23,8 +23,16 @@
 - `npm run typecheck` / `npm run build` / `git diff --check`
 - `node tests/duel-ui.mjs` / `node tests/dice-model.mjs` / `node tests/library-furniture-model.mjs`
 - `tests/duel-polish-browser.mjs`: 実際のUI・コントローラー・エンジンを用い、攻撃時の描画層、矢印と元カードの固定、両側の召喚/永続魔法の着地、PC/スマホ、ダイス、Escape取消・演出途中の画面破棄を検証。[結果](browser-checks.json)
-- `tests/enchantment-drop-browser.mjs`: 永続魔法のドロップ領域・状態反映・キャンセル・ネイティブタッチ入力。[結果](spell-regression/browser-checks.json)
+- `tests/enchantment-drop-browser.mjs`: 永続魔法のドロップ領域・状態反映・キャンセル・ネイティブタッチ入力。[結果](spell-regression/drop-checks.json)
 - `tests/library-piles-browser.mjs`: 4つの3D山札/シェルフ、手札拡大、シャッフル→ドロー、空デッキ、縮小モーション、リサイズ、スマホ当たり判定、GPU喪失時の復帰。[結果](library-regression/browser-checks.json)
 - Khronos glTF Validator: 新規4モデルでエラー・警告0。
 
 ブラウザーの詳細試験はローカルの固定対戦状態を利用した。認証付きオンライン対人戦のマッチング・完走とは別の検証。ステージング配信結果は `deployment.json` と `remote-verification.json` に記録する。
+
+## ステージング反映
+
+`https://test.yourlore.xyz` / `lore-server-staging` に反映。Version `2097b48b-8907-419f-936f-760653984a69`、実装コミット `97ccfe0`。配信HTML・JS・CSS・GLB **23/23件**のSHA-256が一致。
+
+[反映情報](deployment.json) / [配信照合](remote-verification.json) / [ログイン済みBOT確認](staging-browser-checks.json) / [実配信の対戦画面](staging-bot.png)。
+
+実配信のBOT戦では宝箱、モンスター召喚、ドラッグ攻撃、被攻撃後の進行、両側の永続魔法配置まで確認。ブラウザーのエラー記録は0。オンライン対人戦のマッチング・完走は未検証。

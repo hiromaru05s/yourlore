@@ -1,0 +1,171 @@
+{
+  "checkedAt": "2026-09-08T20:52:53.739405+00:00",
+  "origin": "https://test.yourlore.xyz",
+  "version": "2097b48b-8907-419f-936f-760653984a69",
+  "checked": 23,
+  "allMatched": true,
+  "files": [
+    {
+      "path": "index.html",
+      "canonicalRedirectFollowed": true,
+      "httpSuccess": true,
+      "bytes": 1192,
+      "sha256": "fe72f0892dabc8e853b97963a7aef769e5a2b35a68991243d32cdf980d372f78",
+      "matches": true
+    },
+    {
+      "path": "assets/GLTFLoader-CEWUdCSd.js",
+      "httpSuccess": true,
+      "bytes": 44846,
+      "sha256": "a8fe544752c4e4ed4a1400becc6d4ff35272b5d1758e7c2f8a424d53644f8ea4",
+      "matches": true
+    },
+    {
+      "path": "assets/RoomEnvironment-DkrBssZ0.js",
+      "httpSuccess": true,
+      "bytes": 2120,
+      "sha256": "a13c940aaa2bc52c4bd969dfc65444bf45fbfd582293e6c5d370b5e2b68d5d7e",
+      "matches": true
+    },
+    {
+      "path": "assets/cardSurface-DVHbEgkz.js",
+      "httpSuccess": true,
+      "bytes": 3285,
+      "sha256": "7e06ab49a1f6cc2c5572a600fbdfba0a8860bc0dc3720d637ce8c4061363ad38",
+      "matches": true
+    },
+    {
+      "path": "assets/diceScene-CXq27f8X.js",
+      "httpSuccess": true,
+      "bytes": 6944,
+      "sha256": "58a1c26e35daec9a7e4fce068190912cd14d002e75b2699c1f1354e2e48e7763",
+      "matches": true
+    },
+    {
+      "path": "assets/duelScene-tsYJAF-V.js",
+      "httpSuccess": true,
+      "bytes": 15967,
+      "sha256": "ff0307ca611ce2b111f119787247fe456c3385dfcad60cfa6f9ab359450759e3",
+      "matches": true
+    },
+    {
+      "path": "assets/main-jLehmney.js",
+      "httpSuccess": true,
+      "bytes": 1008502,
+      "sha256": "7b2cd56776ca0a35d31be070177d684ff5be93810f6fe3ae40d42dcf23c3d9b0",
+      "matches": true
+    },
+    {
+      "path": "assets/modulepreload-polyfill-B5Qt9EMX.js",
+      "httpSuccess": true,
+      "bytes": 771,
+      "sha256": "607112fb81d7899ceedf89cdb1b3540a53eb96ad5e4202fb1e22f873281de839",
+      "matches": true
+    },
+    {
+      "path": "assets/paperCard-B-_4qORy.js",
+      "httpSuccess": true,
+      "bytes": 2695,
+      "sha256": "b27c4b45c7339ace8360615d30da05f4952cff7731b64df270e695a4271dd234",
+      "matches": true
+    },
+    {
+      "path": "assets/paperDraw-BK42Ib90.js",
+      "httpSuccess": true,
+      "bytes": 3225,
+      "sha256": "869cc9733c4c599ef0b43fa0834e8d02e0178529d54a6d47eae0ee41a6166c49",
+      "matches": true
+    },
+    {
+      "path": "assets/paperShuffle-CGKDIBa_.js",
+      "httpSuccess": true,
+      "bytes": 2987,
+      "sha256": "f66d47e9d7f7dacd9a493b680b32886db4a627f46194bbc932b40009fc38e72f",
+      "matches": true
+    },
+    {
+      "path": "assets/tablePreview-IpsLcvq-.js",
+      "httpSuccess": true,
+      "bytes": 25340,
+      "sha256": "3a6ea813c920b6bb0c734a0959b517adcfaefba0b01e07c8b1f1ffddf3c3c575",
+      "matches": true
+    },
+    {
+      "path": "assets/three.module-pVpfRbwk.js",
+      "httpSuccess": true,
+      "bytes": 604690,
+      "sha256": "1e1b28db5b4ecec8f63d64b9d3d54d6ef0f265e2d82712f941189a7430833f7b",
+      "matches": true
+    },
+    {
+      "path": "assets/main-4PUQb5Fl.css",
+      "httpSuccess": true,
+      "bytes": 154950,
+      "sha256": "974d740e7d716bba105c89f62eac416ae2de521f1b5513d21be19865783951ef",
+      "matches": true
+    },
+    {
+      "path": "assets/tablePreview-2Rkra2Ey.css",
+      "httpSuccess": true,
+      "bytes": 1870,
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+      "matches": true
+    },
+    {
+      "path": "models/library-furniture/market-low.glb",
+      "httpSuccess": true,
+      "bytes": 43864,
+      "sha256": "53467b4b1a184e0f844de266616d1ca5c7815e624f24f3021a12307cb561b5f8",
+      "matches": true
+    },
+    {
+      "path": "models/library-furniture/market.glb",
+      "httpSuccess": true,
+      "bytes": 96872,
+      "sha256": "421d378ae17154209c05abe8d09a2b6aa3d0a2cf68103b6bb63f039d6d11de56",
+      "matches": true
+    },
+    {
+      "path": "models/library-furniture/shelf-low.glb",
+      "httpSuccess": true,
+      "bytes": 54272,
+      "sha256": "b987427ef758df58fab602c51b12eaecae7b99a8bda44852a8ea287aa5ea57d6",
+      "matches": true
+    },
+    {
+      "path": "models/library-furniture/shelf.glb",
+      "httpSuccess": true,
+      "bytes": 115852,
+      "sha256": "ebb40407e598b9f08ed1528cffaf524beb6fd3dcdf6d5c479c7d7f2f3673b9d8",
+      "matches": true
+    },
+    {
+      "path": "models/cosmetics/deck_holder_biblion_ivory/v1/model-low.glb",
+      "httpSuccess": true,
+      "bytes": 31600,
+      "sha256": "3a45ab899b2dd272149bf1cc177d3f8b8e0ff35e839e3dc8a12b9fc65633b213",
+      "matches": true
+    },
+    {
+      "path": "models/cosmetics/deck_holder_biblion_ivory/v1/model.glb",
+      "httpSuccess": true,
+      "bytes": 92912,
+      "sha256": "d8d9bd9b7ca4b9b2f79033a70dac763d07ad4d5166aab2c5ef55fdfb4704b5e9",
+      "matches": true
+    },
+    {
+      "path": "models/lore-table/table-low.glb",
+      "httpSuccess": true,
+      "bytes": 88284,
+      "sha256": "0d5999df197531ebb90be09ba2c73bc1c394ce31083507e886111e7b2abe88b2",
+      "matches": true
+    },
+    {
+      "path": "models/lore-table/table.glb",
+      "httpSuccess": true,
+      "bytes": 218004,
+      "sha256": "eb8a42dd6a2d53127ffc30a2b2f7490a5a947191f07c1c914ed64c9d20263c9b",
+      "matches": true
+    }
+  ]
+}

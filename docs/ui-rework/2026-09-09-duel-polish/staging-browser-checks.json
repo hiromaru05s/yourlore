@@ -1,0 +1,39 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "version": "2097b48b-8907-419f-936f-760653984a69",
+  "browser": "Chrome, existing signed-in session",
+  "viewports": [
+    {
+      "width": 611,
+      "height": 714,
+      "note": "initial browser size"
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "note": "temporary PC verification override; reset afterwards"
+    }
+  ],
+  "checked": [
+    "BOT normal difficulty opened",
+    "four GPU piles and one shared board WebGL context",
+    "market-model-ready class and furniture visible",
+    "opponent direct damage and subsequent UI usable",
+    "treasure card dragged and result accepted; HP cap changed from 45 to 52",
+    "own monster summoned into angled field",
+    "own monster dragged onto opponent and attack resolved in log",
+    "opponent attack destroyed own monster and game continued",
+    "opponent permanent spell placed",
+    "own permanent spell dragged into exposed magic slot and rendered with infinity indicator",
+    "no remaining attack arrows after resolution",
+    "empty deck pedestal and populated shelf visible",
+    "no browser console errors observed"
+  ],
+  "consoleErrors": [],
+  "screenshot": "staging-bot.png",
+  "limitations": [
+    "Detailed animation timing and pointer cancellation assertions were run in local browser fixtures.",
+    "Online PvP matchmaking and full match completion were not tested."
+  ],
+  "cleanup": "Viewport override reset; agent-created BOT tab closed."
+}
