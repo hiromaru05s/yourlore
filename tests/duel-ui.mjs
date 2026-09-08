@@ -166,6 +166,22 @@ assert(document.querySelector('.cast-reveal'));assert(document.querySelector('.c
 setFxSkip(true);await reveal;setFxSkip(false);
 assert(!document.querySelector('.cast-reveal'));assert(!document.querySelector('.cast-veil'));
 assert(document.getElementById('pile-myDisc'));
+// Public quest progress and conditional quick-buy affordances survive both PC layouts.
+const qstate=structuredClone(g);qstate.cur=0;qstate.pending=null;
+for (const [s,p] of qstate.players.entries()) {
+ p.traps=[];p.enchants=[];p.quests=[{card:{...DB.Q_WINTER,uid:`quest-${s}`},progress:17,startedTurn:1}];
+}
+qstate.players[0].hp=16;qstate.market[0]={...DB.QUICK_SURVIVAL,uid:'quick-market'};
+for (const [width,height] of [[1280,720],[1920,1080]]) {
+ globalThis.innerWidth=width;globalThis.innerHeight=height;v.render(qstate);
+ assert.equal(document.querySelectorAll('.buff-icon--quest').length,2);
+ assert([...document.querySelectorAll('.buff-icon--quest')].every(n=>n.getAttribute('aria-label').includes('17/30')));
+ assert(!document.querySelector('#fixedMarket .card[data-uid="quick-market"]').classList.contains('is-buyable'));
+}
+qstate.players[0].hp=15;v.render(qstate);
+assert(document.querySelector('#fixedMarket .card[data-uid="quick-market"]').classList.contains('is-buyable'));
+const questFace=cardEl({...DB.Q_WINTER,uid:'quest-face'});
+assert(questFace.classList.contains('card--quest'));assert(questFace.querySelector('.card-frame').style.backgroundImage.includes('base-quest.png'));
 v.destroy();
 document.getElementById('app').innerHTML='';
 // Regression through the real controller: first banner follows the coin; next turn announces once.

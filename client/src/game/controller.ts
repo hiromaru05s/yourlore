@@ -9,7 +9,7 @@ import { paintDuelClock } from '../ui/duelClock';
 // ============================================================
 import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
-import { createGame, reduce, playCost } from "../shared/engine";
+import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed } from "../shared/engine";
 import { botDecide, pickBotDeck, type BotDifficulty } from "../shared/bot";
 import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
@@ -451,7 +451,11 @@ export abstract class BaseController implements BoardHandlers {
       this.purgePicks = null; // 선택이 끝나면 큐 정리
       if (this.multiPickerOpen) { this.multiPickerOpen = false; closeOverlay(); } // v42: 시간 초과 자동 폐기 등으로 선택이 끝나면 모달도 닫는다
     }
-    if (g.pending && g.cur === this.you) {
+    if (g.pending && actingSide(g) === this.you) {
+      if (g.pending.kind === "cardChoice") {
+        cardPicker(g.pending.hintJa, effectChoices(g), uid => this.submit({ type: "pick", uid }));
+        return;
+      }
       if (multiKind) {
         const handCap = g.pending.reason === "handCap"; // v42: 턴 종료 손패 이월 — 취소 불가, 정확히 n장
         if (this.purgePicks) {
@@ -508,7 +512,7 @@ export abstract class BaseController implements BoardHandlers {
         const ids = (g.pending.data?.ids as string[] | undefined) ?? [];
         const pool = opts
           ? opts.map((op) => ({ uid: op.id, id: "OPT", t: "spell", cost: 0, name: getLang() === "ja" ? op.ja : getLang() === "en" ? op.en : op.ko, text: "" } as CardInst))
-          : ids.filter((id) => defOf(id) && (free || defOf(id).cost <= me.mana)).map((id) => ({ uid: id, ...defOf(id) }));
+          : ids.filter((id) => defOf(id) && (free || (defOf(id).cost <= me.mana && purchaseAllowed(g, me, { ...defOf(id), uid: id })))).map((id) => ({ uid: id, ...defOf(id) }));
         const hint = getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint;
         if (!pool.length) { this.submit({ type: "pick", uid: null }); return; }
         cardPicker(hint, pool, (uid) => this.submit({ type: "pick", uid }));
@@ -815,7 +819,7 @@ export class LocalController extends BaseController {
   protected maybeBot(): void {
     const g = this.state;
     if (g.over) return;
-    if (g.players[g.cur].isBot) {
+    if (g.players[actingSide(g)].isBot) {
       clearTimeout(this.botTimer);
       // playback has already finished by the time afterApply runs — a short beat is enough
       this.botTimer = window.setTimeout(() => this.botStep(), g.pending ? 380 : 600);
@@ -826,7 +830,7 @@ export class LocalController extends BaseController {
   private botTurnSteps = 0;
   private botStep(): void {
     const g = this.state;
-    if (g.over || !g.players[g.cur].isBot) return;
+    if (g.over || !g.players[actingSide(g)].isBot) return;
     // 안전망: 봇이 한 턴에서 비정상적으로 많은 행동을 반복하면(거부 루프 등) 강제 턴 종료.
     // 정상 턴은 수십 액션 이내 — 200회는 버그가 아니면 도달 불가.
     if (g.turn !== this.botTurnNo) { this.botTurnNo = g.turn; this.botTurnSteps = 0; }

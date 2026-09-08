@@ -185,7 +185,7 @@ const D: Record<string, Entry> = {
   "duel.rerollFour": { ko: "4장 리롤", ja: "4枚をリロール", en: "Reroll 4" },
   "duel.rerollHint": { ko: "이 4장만 교체", ja: "この4枚だけ入れ替え", en: "Only these 4 change" },
   "duel.monsters": { ko: "몬스터", ja: "モンスター", en: "Monsters" },
-  "duel.spellsTraps": { ko: "스펠 · 트랩", ja: "スペル・トラップ", en: "Spells · Traps" },
+  "duel.spellsTraps": { ko: "마법 · 퀘스트", ja: "魔法・クエスト", en: "Spells · Quests" },
   "duel.setTrap": { ko: "세트된 트랩", ja: "セットされたトラップ", en: "Set trap" },
   "game.hp": { ko: "HP", ja: "HP", en: "HP" },
   "game.mana": { ko: "마나", ja: "マナ", en: "Mana" },

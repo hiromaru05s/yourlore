@@ -1,3 +1,4 @@
+import { QUEST_QUICK_CARDS } from "./questQuickCards";
 // ============================================================
 // LORE — card database. Names + text in Korean.
 // Effects generalized (effect key + val/val2 [+ play cost]); see engine.ts.
@@ -2229,6 +2230,12 @@ for (let i = DECK_POOL.length - 1; i >= 0; i--) {
   if (!DB[DECK_POOL[i]] && !STARTERS[DECK_POOL[i]]) DECK_POOL.splice(i, 1);
 }
 
+for (const card of QUEST_QUICK_CARDS) {
+  // The requested Brand reward has no quantity yet. Keep its draft out of live pools.
+  if (card.id === "Q_BRAND" && card.val == null) continue;
+  DB[card.id] = card;
+}
+
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 // 플레이버 카드명(ko/ja/en 3개 국어) 적용 — applyEnglish 이후, standardizeCardTexts 이전
 applyFlavorCardNames([DB, STARTERS as unknown as Record<string, CardDef>]);
@@ -2336,7 +2343,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v44"; // v44: approved related-card deletions/reworks and retired trap immunity keyword
+export const BALANCE_VERSION = "v45"; // v45: public quests and one-shot purchase spells (Brand reward pending)
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관
@@ -2392,11 +2399,11 @@ export function isChestCard(c: { id: string; star?: string }): boolean {
 }
 
 export function frameFor(t: CardType): string {
-  return `/art/biblion/modular/base-${t === "mon" ? "mon" : t === "trap" ? "trap" : "spell"}.png`;
+  return `/art/biblion/modular/base-${t === "mon" ? "mon" : t === "trap" ? "trap" : t === "quest" ? "quest" : "spell"}.png`;
 }
 /** Compact complete face, shared by field tiles and market thumbnails. */
 export function fieldFrameFor(t: CardType): string {
-  return `/art/biblion/modular/field-${t === "mon" ? "mon" : t === "trap" ? "trap" : "spell"}.png`;
+  return `/art/biblion/modular/field-${t === "mon" ? "mon" : t === "trap" ? "trap" : t === "quest" ? "quest" : "spell"}.png`;
 }
 export const FRAME_BACK = "/frames/sleeve_default.webp";
 

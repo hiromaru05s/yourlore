@@ -352,6 +352,9 @@ function bodyValue(c: CardDef): number {
  * Used for buy decisions, deck-quality measurement, and pick ordering.
  */
 export function cardPower(c: CardDef): number {
+  // Initial estimates for the new classes; these are bot priorities, not measured balance scores.
+  if (c.quest) return ({ Q_RIFT: 15, Q_BRAND: 15, Q_TORI: 14, Q_WINTER: 14, Q_TRIBE: 17, Q_CASTLE: 18, Q_DECAY: 18, Q_ASSASSIN: 16, Q_MANA: 17 } as Record<string, number>)[c.id] ?? 12;
+  if (c.quick) return ({ QUICK_MIMIC: 13, QUICK_SURVIVAL: 14, QUICK_POISON: 7, QUICK_WORLD: 20, QUICK_MUSTER: 17, QUICK_SORT: 13, QUICK_REBIRTH: 17, QUICK_ATTUNE: MANA + 2 * MAXHP, QUICK_GRIMOIRE: 6, QUICK_ASSAULT: 5 } as Record<string, number>)[c.id] ?? 6;
   // starters (cull / chest / attune) have no effect keys — value them by hand
   if (c.t === "starter") {
     if (c.star === "mana") return MANA;

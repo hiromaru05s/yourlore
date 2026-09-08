@@ -857,6 +857,7 @@ export function applyEnglish(pools: Array<Record<string, CardDef>>): void {
   for (const pool of pools) {
     for (const id of Object.keys(pool)) {
       const c = pool[id];
+      if (c.quest || c.quick) continue; // v45 cards carry authored translations
       c.nameEn = NAMES[id] ?? genNameEn(c.name) ?? c.name;
       const en = TEXTS[id] ?? genTextEn(c.text);
       c.textEn = en ? shortenEn(en) : c.text;

@@ -81,14 +81,15 @@ try {
     screen.destroy(); root.innerHTML = '';
     const gallery = mountCards({ root, home: noop, cards: noop });
     const chips = [...root.querySelectorAll('#typeRow .chip')];
-    assert.deepEqual(chips.map(el => el.textContent), ['all', 'mon', 'spell', 'starter'].map(key => t(`cards.f.${key}`)));
+    assert.equal(chips.length, 6);
+    assert(!chips.some(el => /罠|함정|Trap/.test(el.textContent)));
     const definitions = [...Object.values(DB), ...Object.values(STARTERS)];
     const rendered = () => [...root.querySelectorAll('#grid > .card')];
     assert.equal(rendered().length, definitions.length);
     assert(rendered().every(el => el.dataset.cardType !== 'trap'));
-    for (const [index, type] of ['all', 'mon', 'spell', 'starter'].entries()) {
+    for (const [index, type] of ['all', 'mon', 'spell', 'quick', 'quest', 'starter'].entries()) {
       chips[index].click();
-      const expected = definitions.filter(c => type === 'all' || (type === 'starter' ? c.t === 'starter' || c.noShop : c.t === type));
+      const expected = definitions.filter(c => type === 'all' || (type === 'quick' ? c.quick : type === 'starter' ? c.t === 'starter' || c.noShop : c.t === type));
       assert.equal(rendered().length, expected.length, `${lang}: ${type} filter retains its cards`);
     }
     gallery.destroy(); root.innerHTML = '';

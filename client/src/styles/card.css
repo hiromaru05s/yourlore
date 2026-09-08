@@ -29,6 +29,7 @@
 /* per-type cost-gem colors (match the frame color) + neon cost-button image */
 .card--mon     { --cc: #d1431f; --cc-lo: #f47a4a; --cost-img: url(/ui/cost-mon.webp?v=2); }
 .card--spell   { --cc: #2c6bd0; --cc-lo: #5a9cf2; --cost-img: url(/ui/cost-spell.webp?v=2); }
+.card--quest   { --cc: #633e86; --cc-lo: #be9ddb; --cost-img: url(/ui/cost-spell.webp?v=2); }
 .card--trap    { --cc: #38984d; --cc-lo: #67c67c; --cost-img: url(/ui/cost-trap.webp?v=2); }
 .card--starter { --cc: #24a9bd; --cc-lo: #5ad6e6; --cost-img: url(/ui/cost-starter.webp?v=2); }
 
@@ -146,7 +147,7 @@
 .card-eff--small { font-size: 0.375em; line-height: 1.1; }
 .card-eff--tiny { font-size: 0.33em; line-height: 1.08; }
 /* spell/trap/starter have no stats strip → plate extends to the bottom (y 63.6–95.3%) */
-.card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 31%; }
+.card--quest .card-eff, .card--spell .card-eff, .card--trap .card-eff, .card--starter .card-eff { height: 31%; }
 
 /* CAST cost — a small pill pinned at the top of the effect text. Native title
    attribute gives the on-hover explanation popup (never clipped by the card). */
@@ -398,3 +399,7 @@
 .card--field .card-art.has-thumb { background-size:85% 91%; background-position:50% 50%; }
 .card--field .card-status .kw,.card--field .card-status .ec { font-size:max(8px,calc(var(--cw) * .11)); }
 .card .card-status .kw::before,.card .card-status .ec::before,.card .badge::before { background-size:100% 180%; background-position:center 45%; }
+
+/* Public quest progress shares the existing persistent-card rail. */
+.buff-icon.buff-icon--quest { color: #f0ddff; border: 1px solid #9671bb; background: #20152e; cursor: pointer; }
+.quest-progress { position: absolute; inset: 35% 0 auto; text-align: center; font-weight: 800; font-size: 12px; text-shadow: 0 1px 3px #000; z-index: 3; }

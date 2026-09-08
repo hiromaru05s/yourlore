@@ -22,6 +22,7 @@
 //  · hell   — never blunders + value-net look-ahead search → 최강
 // ============================================================
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
+import { effectChoices, purchaseAllowed } from "./engine";
 import { ST_MAX, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, effMaxMana, freeBuyBlocked, glassBanActive, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
 import { avgPower, cardPower } from "./cardEval";
 import { netEval, determinize } from "./botNet";
@@ -122,7 +123,8 @@ function hellRollout(g: GameState, a: Action, s: Side): number {
 /** 구매 가능 여부. 0코스트 무한 구매 상한은 이제 엔진 규칙(FREE_BUY_MAX, 턴당 3장)이
  *  담당한다 — 예전의 봇 전용 게임당 상한은 사람 플레이어를 막지 못했다.
  *  엔진이 거부하는 수를 후보에 남기면 봇이 같은 수를 계속 골라 무한 재선택에 빠진다. */
-export function buyableByBot(p: PlayerState, c: CardInst): boolean {
+export function buyableByBot(p: PlayerState, c: CardInst, g?: GameState): boolean {
+  if (g && !purchaseAllowed(g, p, c)) return false;
   if (buyCost(p, c) > p.mana) return false;
   return !freeBuyBlocked(p, c);
 }
@@ -134,6 +136,7 @@ export function candidates(g: GameState): Action[] {
   const out: Action[] = [];
 
   if (g.pending) {
+    if (g.pending.kind === "cardChoice") return effectChoices(g).map(c => ({ type: "pick", uid: c.uid }));
     const pend = g.pending;
     const push = (uid: string | null) => out.push(pend.kind === "seek" || pend.kind === "recall" ? { type: "pick", uid } : { type: "chooseTarget", uid });
     if (pend.kind === "oppMon" && pend.reason === "attack") {
@@ -194,6 +197,7 @@ export function candidates(g: GameState): Action[] {
   const seenPlay = new Set<string>();
   const candSealAll = g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"));
   p.hand.forEach((c, idx) => {
+    if (c.quick) return;
     if (c.star === "chest" && (g.turn <= T.chestTurn || chestLocked(g))) return;
     if (c.t === "trap" && p.trapBlockTurn) return; // Legacy set restriction — avoid rejected-play loops
     if (c.t === "mon" && ((p.summonLockUntil ?? 0) > g.turn || !summonReqMet(p, c, o))) return; // 은둔자 잠금 / 소환 조건
@@ -237,8 +241,8 @@ export function candidates(g: GameState): Action[] {
   // buys: top 4 by rough score, unique by id
   const buys: { a: Action; s: number }[] = [];
   const seenBuy = new Set<string>();
-  p.supply.forEach((c, i) => { if (c && buyCost(p, c) <= p.mana && !seenBuy.has(c.id)) { seenBuy.add(c.id); buys.push({ a: { type: "buySupply", i }, s: roughBuy(c) }); } });
-  g.market.forEach((c, i) => { if (buyableByBot(p, c) && !seenBuy.has(c.id)) { seenBuy.add(c.id); buys.push({ a: { type: "buyMarket", i }, s: roughBuy(c) }); } });
+  p.supply.forEach((c, i) => { if (c && buyableByBot(p, c, g) && !seenBuy.has(c.id)) { seenBuy.add(c.id); buys.push({ a: { type: "buySupply", i }, s: roughBuy(c) }); } });
+  g.market.forEach((c, i) => { if (buyableByBot(p, c, g) && !seenBuy.has(c.id)) { seenBuy.add(c.id); buys.push({ a: { type: "buyMarket", i }, s: roughBuy(c) }); } });
   buys.sort((x, y) => y.s - x.s).slice(0, 4).forEach((b) => out.push(b.a));
   // 상대 함정이 깔려 있고 공격이 가능하면 "공격 보류(턴 종료)"도 후보에 —
   // 킬각이 있어도 함정에 꽂아주는 게 정답이 아닐 때가 있다 (A/B +5%)
@@ -345,6 +349,7 @@ function legalActions(g: GameState): Action[] {
   const add = (a: Action) => out.push(a);
 
   if (g.pending) {
+    if (g.pending.kind === "cardChoice") return effectChoices(g).map(c => ({ type: "pick", uid: c.uid }));
     const pend = g.pending;
     const pick = (uid: string | null): Action => pend.kind === "seek" || pend.kind === "recall" || pend.kind === "purge"
       ? { type: "pick", uid }
@@ -358,15 +363,16 @@ function legalActions(g: GameState): Action[] {
     return out;
   }
 
-  p.hand.forEach((c, idx) => { if (playCost(c) <= p.mana) add({ type: "play", idx }); });
+  p.hand.forEach((c, idx) => {
+    if (c.quick) return; if (playCost(c) <= p.mana) add({ type: "play", idx }); });
   const noAtk = g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "noAttack"));
   if (!noAtk) {
     p.field.forEach((m) => {
       if (!m.exhausted && (!glassBanActive(g) || Math.abs(effAtk(p, m) - effDef(p, m)) < 4)) add({ type: "attack", uid: m.uid });
     });
   }
-  p.supply.forEach((c, i) => { if (c && buyCost(p, c) <= p.mana) add({ type: "buySupply", i }); });
-  g.market.forEach((c, i) => { if (buyableByBot(p, c)) add({ type: "buyMarket", i }); });
+  p.supply.forEach((c, i) => { if (c && buyableByBot(p, c, g)) add({ type: "buySupply", i }); });
+  g.market.forEach((c, i) => { if (buyableByBot(p, c, g)) add({ type: "buyMarket", i }); });
   if ((p.mana >= 1 || (p.refreshTokens || 0) > 0) && !p.refreshBlockTurn) add({ type: "refresh" });
   add({ type: "endTurn" });
   return out;
@@ -600,6 +606,11 @@ function clamp01(x: number): number {
  *  a "play" that provably changes nothing is retried with that card excluded, so a future
  *  card with a new engine-side condition degrades into a slightly worse move, never a hang. */
 export function greedyDecide(g: GameState, useLethal = true): Action {
+  if (g.pending?.kind === "cardChoice") {
+    const pool = effectChoices(g).filter(c => g.pending?.reason !== "QUICK_REBIRTH" || c.cost <= 7);
+    const best = [...pool].sort((a, b) => cardPower(b) - cardPower(a))[0] ?? effectChoices(g)[0];
+    return { type: "pick", uid: best?.uid ?? null };
+  }
   const blocked = new Set<string>();
   for (let attempt = 0; attempt < 4; attempt++) {
     const a = greedyDecideRaw(g, useLethal, blocked);
@@ -625,6 +636,9 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (lethal) return lethal;
   }
 
+  const quest = p.hand.findIndex(c => c.t === "quest" && playCost(c, p) <= p.mana && p.traps.length + p.enchants.length + (p.quests?.length ?? 0) < 14);
+  if (!g.pending && quest >= 0) return { type: "play", idx: quest };
+
   // 0) resolve a pending target/pick automatically
   if (g.pending) return autoTarget(g);
 
@@ -637,6 +651,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   // castable(): reject spells that would be refused before paying (avoids the bot
   // re-picking an uncastable card forever) OR that would be self-defeating.
   const castable = (c: CardInst): boolean => {
+    if (c.quick) return false;
     // 침묵 오라 / 침묵의 심판: 마법 봉인 — v5부터 스타터(컬/상자/어튠)도 대상 (엔진 거부 → 봇도 스킵)
     if (c.t === "spell" || c.t === "starter") {
       if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) return false;
@@ -830,17 +845,22 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   //     Early game also has a floor (11): cheap chaff bought on turns 1-4 is
   //     what clogs the deck at turn 15. Defense weighted 1.2 — walls soak
   //     penetration damage. (A/B: ~66% vs v1 bot, then +4% more in round 2.)
-  const buyScore = (c: CardInst): number => cardPower(c) - buyCost(p, c) * TUNE.costW;
+  const buyScore = (c: CardInst): number => {
+    if (c.quest && [...p.hand, ...p.deck, ...p.discard, ...(p.quests ?? []).map(q => q.card)].some(x => x.id === c.id)) return -Infinity;
+    const score = cardPower(c) - buyCost(p, c) * TUNE.costW;
+    // Quick spells do not dilute the deck, so compare their immediate value without the deck-quality floor.
+    return c.quick ? (score > 0 ? minBuy + score : -Infinity) : score;
+  };
   // 구매 하한: 고정 하한과 "현재 덱 평균의 배수" 중 높은 쪽.
   // 고정값만 쓰면 후반에 덱이 좋아져도 같은 쓰레기를 계속 사서 덱이 희석되고,
   // 덱 평균만 쓰면 초반(컬 뿐인 덱)에 아무거나 사버린다.
   const deckAvg = avgPower([...p.deck, ...p.hand, ...p.discard]);
   const minBuy = Math.max(p.maxMana >= 5 ? T.minBuy : T.minBuyEarly, TUNE.floorK * deckAvg);
   let bi = -1, bs = minBuy;
-  p.supply.forEach((c, i) => { if (c && buyableByBot(p, c)) { const s = buyScore(c); if (s > bs) { bs = s; bi = i; } } });
+  p.supply.forEach((c, i) => { if (c && buyableByBot(p, c, g)) { const s = buyScore(c); if (s > bs) { bs = s; bi = i; } } });
   if (bi >= 0) return { type: "buySupply", i: bi };
   let mbi = -1, mbs = minBuy;
-  g.market.forEach((c, i) => { if (buyableByBot(p, c)) { const s = buyScore(c); if (s > mbs) { mbs = s; mbi = i; } } });
+  g.market.forEach((c, i) => { if (buyableByBot(p, c, g)) { const s = buyScore(c); if (s > mbs) { mbs = s; mbi = i; } } });
   if (mbi >= 0) return { type: "buyMarket", i: mbi };
 
   // 12.5) 마나가 크게 남아도는데 살 만한 게 없으면 제시 리롤 — 마나를 카드로 환전
@@ -949,6 +969,7 @@ function lethalActions(g: GameState): Action[] {
   const add = (a: Action) => out.push(a);
 
   if (g.pending) {
+    if (g.pending.kind === "cardChoice") return effectChoices(g).map(c => ({ type: "pick", uid: c.uid }));
     const pend = g.pending;
     const pick = (uid: string | null): Action => pend.kind === "seek" || pend.kind === "recall" || pend.kind === "purge"
       ? { type: "pick", uid }
@@ -1187,7 +1208,7 @@ function autoTarget(g: GameState): Action {
       return { type: "pick", uid: best0 ?? null };
     }
     // 시초의 거인 교역 / 기록자 / 나이트 마켓: 살 수 있는 카드 중 가장 가치 높은 것 (구매 하한 미달이면 취소)
-    const ids = ((pending.data?.ids as string[] | undefined) ?? []).filter((id) => DB[id] && DB[id].cost <= p.mana);
+    const ids = ((pending.data?.ids as string[] | undefined) ?? []).filter((id) => DB[id] && DB[id].cost <= p.mana && purchaseAllowed(g, p, { ...DB[id], uid: id }));
     const best = ids.sort((a, b) => (cardPower(DB[b]) - DB[b].cost) - (cardPower(DB[a]) - DB[a].cost))[0];
     if (best && pending.reason !== "giantShop" && pending.reason !== "darkMarket" && cardPower(DB[best]) - DB[best].cost < TUNE.minBuy) return { type: "pick", uid: null };
     return { type: "pick", uid: best ?? null };

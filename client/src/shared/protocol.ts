@@ -59,6 +59,7 @@ export function redactFor(state: GameState, you: Side): GameState {
     ...opp.discard,
     ...(opp.field as CardInst[]),
     ...opp.enchants.map((e) => e.card),
+    ...(opp.quests ?? []).map(q => q.card),
     ...(opp.removed ?? []),
   ];
   for (const card of currentlyPublic) {

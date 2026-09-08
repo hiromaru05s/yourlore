@@ -183,15 +183,16 @@ export async function trapRevealAnim(card: CardInst, side: ViewSide, hold = 2000
 
 /** A card was bought: pop the card UI at the market, then fly it to that player's discard. */
 export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | null): Promise<void> {
-  const to = rectOf("#" + discId(side));
-  if (!src || !to) { pileFlash(discId(side)); return; }
+  const destination = card.quick ? (side === "me" ? "rift-me" : "rift-opp") : discId(side);
+  const to = rectOf("#" + destination);
+  if (!src || !to) { pileFlash(destination); return; }
   const node = floatAt(cardEl(card, { size: "mkt" }), src);
   await raf();
   node.style.transition = `transform .26s ${EASE}`; node.style.transform = "scale(1.4)";
   await wait(320);
   node.style.transition = `left .5s ${EASE}, top .5s ${EASE}, transform .5s ${EASE}, opacity .5s`;
   node.style.left = to.left + "px"; node.style.top = to.top + "px"; node.style.transform = "scale(.45)"; node.style.opacity = "0";
-  await wait(520); pileFlash(discId(side)); node.remove();
+  await wait(520); pileFlash(destination); node.remove();
 }
 
 function byUid(uid: string): HTMLElement | null {

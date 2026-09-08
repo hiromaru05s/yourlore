@@ -72,7 +72,7 @@ try {
     const cards = [...g.market];
     for (const p of g.players) {
       assert.equal(p.traps.length, 0, 'no traps are created or set in new games');
-      cards.push(...p.deck, ...p.hand, ...p.discard, ...p.field, ...p.enchants.map(e => e.card),
+      cards.push(...p.deck, ...p.hand, ...p.discard, ...p.field, ...p.enchants.map(e => e.card), ...(p.quests ?? []).map(q => q.card),
         ...p.supply.filter(Boolean), ...(p.removed || []), ...p.exile.map(e => e.card));
     }
     for (const c of cards) {
@@ -87,6 +87,9 @@ try {
     assertNoTraps(g);
     assert.equal(g.market.length, 8);
     for (let cycle = 0; cycle < 8; cycle++) {
+      // Stock mechanics use an unconditional, non-targeted fixture; quick purchase rules have their own suite.
+      if (g.market[cycle].quick) g.market[cycle] = { ...DB.S1, uid: `stock-${seed}-${cycle}` };
+      g.pending = null;
       for (let stock = 0; stock < MARKET_STOCK; stock++) {
         g.players[0].mana = 30;
         g = reduce(g, { type: 'buyMarket', i: cycle }).state;
