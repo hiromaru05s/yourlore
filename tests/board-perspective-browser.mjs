@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5173';
-const output='docs/ui-rework/2026-09-09-shared-perspective';await fs.mkdir(output,{recursive:true});
+const output=process.env.LORE_TEST_OUTPUT||'docs/ui-rework/2026-09-09-release';await fs.mkdir(output,{recursive:true});
 const browser=await chromium.launch({headless:true,channel:'chrome'});
 const page=await browser.newPage({viewport:{width:1280,height:720}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
 try {
@@ -22,7 +22,7 @@ await page.evaluate(async()=>{
    g.players.forEach((p,i)=>{p.field=[];p.enchants=[];p.traps=[];p.hand=[];p.maxMana=30;p.mana=30;p.hp=40;p.maxHp=40;p.discard=mons.slice(0,8).map((c,j)=>({...c,uid:`disc-${i}-${j}`}));});
    for(const [i,p] of g.players.entries())p.field=mons.slice(0,kind==='dense'?7:kind==='attack'?1:0).map((c,j)=>({...c,uid:i===0?`self-${j}`:`opp-${j}`,exhausted:false,summonedTurn:0,tempAtk:0,atkMod:0,defMod:0}));
    if(kind==='dense')for(const [i,p] of g.players.entries()){
-    p.traps=Object.values(DB).filter(c=>c.t==='trap').slice(0,7).map((c,j)=>({card:{...c,uid:`trap-${i}-${j}`}}));
+    p.quests=Object.values(DB).filter(c=>c.t==='quest').slice(0,7).map((c,j)=>({card:{...c,uid:`quest-${i}-${j}`},progress:Math.min(j,c.quest.target-1)}));
     p.enchants=Object.values(DB).filter(c=>c.ench).slice(0,7).map((c,j)=>({card:{...c,uid:`ench-${i}-${j}`},turns:c.val||1}));
    }
    g.players[0].hand=[{...mons[0],uid:'summon-test'},{...DB.NHEAL,uid:'permanent-test'}];
@@ -35,7 +35,7 @@ await page.waitForSelector('.market-model-ready');await page.waitForFunction(()=
 await page.evaluate(async()=>{(await import('/src/ui/duelClock.ts')).paintDuelClock(document.getElementById('clock-me'),75,90,true);});await page.waitForSelector('.mp-clock.show .tc-dial');await page.waitForTimeout(200);
 await page.screenshot({path:output+'/desktop-1280.png'});
 const dimensions=await page.evaluate(()=>({portrait:document.querySelector('#portraitMe').getBoundingClientRect().width,ratio:(()=>{const e=document.querySelector('#meRow .zone-mon .card'),w=e.offsetWidth,h=e.offsetHeight,m=qa.A.fieldPlacement(e,w,h);const p=(x,y)=>{const q=m.transformPoint(new DOMPoint(x,y));return {x:q.x/q.w,y:q.y/q.w};};const a=p(0,h/2),b=p(w,h/2),c=p(w/2,0),d=p(w/2,h);return Math.hypot(a.x-b.x,a.y-b.y)/Math.hypot(c.x-d.x,c.y-d.y);})(),canvas:document.querySelectorAll('canvas').length}));
-console.log('dimensions',JSON.stringify(dimensions));assert(dimensions.portrait>=165);const units=await page.evaluate(()=>{const m=document.querySelector('#meRow .zone-mon .card'),k=document.querySelector('#market .card'),d=document.querySelector('#pile-myDeck'),s=document.querySelector('#pile-myDisc');return {monster:[m.offsetWidth,m.offsetHeight],market:[k.offsetWidth,k.offsetHeight],deck:d.offsetWidth,shelf:s.offsetWidth};});assert.deepEqual(units.monster,units.market,'market and monsters share the physical card footprint');assert(Math.abs(units.deck/units.monster[0]-1.3)<.025);assert(Math.abs(units.shelf/units.monster[0]-2)<.025);assert.equal(await page.locator('.hourglass-anchor').count(),0);console.log('physical units',JSON.stringify(units));assert.equal(dimensions.canvas,1);
+console.log('dimensions',JSON.stringify(dimensions));assert(dimensions.portrait>=165);const units=await page.evaluate(()=>{const m=document.querySelector('#meRow .zone-mon .card'),k=document.querySelector('#market .card'),d=document.querySelector('#pile-myDeck'),s=document.querySelector('#pile-myDisc');return {monster:[m.offsetWidth,m.offsetHeight],market:[k.offsetWidth,k.offsetHeight],deck:d.offsetWidth,shelf:s.offsetWidth};});assert.deepEqual(units.monster,units.market,'market and monsters share the physical card footprint');assert(Math.abs(units.deck/units.monster[0]-1.3)<.025);assert(Math.abs(units.shelf/units.monster[0]-1.52)<.025);assert.equal(await page.locator('.hourglass-anchor').count(),0);console.log('physical units',JSON.stringify(units));assert.equal(dimensions.canvas,1);
 // Independent WebGL projection versus actual browser DOM bounds across the board.
 const projection=await page.evaluate(async()=>{
  const T=await import('/node_modules/.vite/deps/three.js');
@@ -43,7 +43,7 @@ const projection=await page.evaluate(async()=>{
  const w=innerWidth,h=innerHeight,F=h*2.2,a=32*Math.PI/180;
  const camera=new T.PerspectiveCamera(2*Math.atan(h/(2*F))*180/Math.PI,w/h,F*.25,F*3);
  camera.position.set(0,F*Math.cos(a),F*Math.sin(a));camera.lookAt(0,0,0);camera.updateMatrixWorld();
- return ['#meRow .zone-mon','#oppRow .zone-mon','.market-counter','#pile-myDeck','#pile-oppDeck','.mid-aside'].map(selector=>{
+ return ['#meRow .zone-mon','#oppRow .zone-mon','.market-counter','.market-sub--supply','#pile-myDeck','#pile-oppDeck','.mid-aside'].map(selector=>{
   const e=document.querySelector(selector),r=layoutRect(e),plane=e.closest('[data-board-plane]'),y=Number(plane.dataset.boardPlane),actual=e.getBoundingClientRect();
   const points=[[0,0],[r.width,0],[r.width,r.height],[0,r.height]].map(([x,z])=>{const p=new T.Vector3(r.left+x-w/2,y,r.top+z-h/2).project(camera);return [(p.x+1)*w/2,(1-p.y)*h/2];});
   const xs=points.map(p=>p[0]),ys=points.map(p=>p[1]);const expected={x:Math.min(...xs),y:Math.min(...ys),width:Math.max(...xs)-Math.min(...xs),height:Math.max(...ys)-Math.min(...ys)};
@@ -82,6 +82,50 @@ for(const [type,selector] of [['monster','#oppRow .zone-mon .card'],['spell','#o
  const landed=await page.locator(selector).boundingBox();for(const key of ['x','y','width','height'])assert(Math.abs(ghost[key]-landed[key])<3,'opponent '+type+' handoff '+key);
  await page.evaluate(()=>qa.opponentGhost.remove());landings.push({uid:'opponent-'+type,ghost,landed});
 }
+// Integration boundary: quests keep the same public face throughout landing;
+// enchantments insert before existing quests, while new quests append after them.
+for(const kind of ['quest','spell']){
+ await reset('play');
+ await page.evaluate(async kind=>{
+  const {DB}=await import('/src/shared/cards.ts');const p=qa.c.state.players[0];
+  p.quests=[{card:{...DB.Q_RIFT,uid:'prior-quest'},progress:2,startedTurn:1}];
+  p.enchants=[{card:{...DB.E1,uid:'prior-enchant'},turns:2}];
+  p.hand=[{...DB[kind==='quest'?'Q_BRAND':'NHEAL'],uid:'integrated-'+kind}];
+  qa.c.view.render(qa.c.state);qa.landingRect=null;
+  window.addEventListener('lore:summon-dust',e=>{qa.landingRect=e.detail.toJSON();},{once:true});
+ },kind);
+ await page.waitForTimeout(180);await page.evaluate(kind=>{void qa.c.onPlay('integrated-'+kind);},kind);
+ await page.waitForSelector('.fx-field-ghost');await page.evaluate(()=>qa.c.queue);await page.evaluate(()=>new Promise(requestAnimationFrame));
+ const ghost=await page.evaluate(()=>qa.landingRect),landed=await page.locator(`#meRow .buff-icon[data-uid="integrated-${kind}"]`).boundingBox();
+ assert(ghost&&landed,'merged '+kind+' has uninterrupted landing');
+ for(const key of ['x','y','width','height'])assert(Math.abs(ghost[key]-landed[key])<3,'merged '+kind+' landing '+key+' '+JSON.stringify({ghost,landed}));
+ assert.equal(await page.locator('#meRow .buff-icon--quest .buff-art').count(),kind==='quest'?2:1);
+ await page.locator('#meRow .buff-icon--quest').first().focus();await page.keyboard.press('Enter');await page.waitForSelector('.zoom-overlay');
+ await page.evaluate(()=>qa.A.closeZoom());
+}
+// Reward notices never capture focus, cover hit targets, or evict a required choice.
+await page.evaluate(async()=>{
+ const M=await import('/src/ui/modal.ts');qa.modal=M;
+ qa.confirm=M.confirmDialog({title:'Meaningful choice',body:'Keep this choice',confirm:'Continue',cancel:'Cancel'});
+ M.treasureModal('mimic','ミミックが現れた');
+});
+assert.equal(await page.locator('#overlayRoot .modal h2').textContent(),'Meaningful choice');
+assert.equal(await page.locator('.treasure-notice button').count(),0);
+assert.equal(await page.locator('.treasure-notice').evaluate(e=>getComputedStyle(e).pointerEvents),'none');
+await page.waitForTimeout(300);await page.screenshot({path:output+'/nonblocking-notice.png'});
+await page.waitForTimeout(2250);assert.equal(await page.locator('.treasure-notice').count(),0);
+await page.getByRole('button',{name:'Continue',exact:true}).click();assert.equal(await page.evaluate(()=>qa.confirm),true);
+await reset('dense');
+const rift=page.locator('#rift-me');
+assert.equal(await rift.locator('.rift-sprite').evaluate(e=>getComputedStyle(e).animationDuration),'16s');
+await rift.hover();const idle=await rift.locator('.rift-sprite').evaluate(e=>({animation:getComputedStyle(e).animationName,position:getComputedStyle(e).backgroundPosition,transform:getComputedStyle(e).transform}));
+await page.waitForTimeout(650);assert.deepEqual(await rift.locator('.rift-sprite').evaluate(e=>({animation:getComputedStyle(e).animationName,position:getComputedStyle(e).backgroundPosition,transform:getComputedStyle(e).transform})),idle);assert.equal(idle.animation,'none');
+await page.mouse.move(5,5);
+const frames=await page.locator('.portrait .pt-ring').evaluateAll(es=>es.map(e=>{const s=getComputedStyle(e,'::after');return {width:parseFloat(s.width),height:parseFloat(s.height),size:s.backgroundSize};}));
+for(const f of frames){assert(Math.abs(f.width-f.height)<1);assert.equal(f.size,'contain');}
+assert.equal(await page.locator('.market-sub--supply').getAttribute('data-furniture'),'blender');
+assert.equal(await page.locator('.market-sub--supply').evaluate(e=>getComputedStyle(e).backgroundColor),'rgba(0, 0, 0, 0)');
+
 await reset('dense');await page.setViewportSize({width:1920,height:1080});await page.waitForTimeout(300);await page.screenshot({path:output+'/desktop-1920.png'});
 await page.setViewportSize({width:390,height:844});await page.waitForTimeout(300);await page.screenshot({path:output+'/phone.png'});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),390);
 await page.setViewportSize({width:1280,height:720});

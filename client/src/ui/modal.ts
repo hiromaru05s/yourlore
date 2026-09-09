@@ -14,6 +14,8 @@ function getRoot(): HTMLElement {
   if (!root) { root = document.createElement("div"); root.id = "overlayRoot"; document.body.appendChild(root); }
   return root;
 }
+const notices=new Map<HTMLElement,ReturnType<typeof setTimeout>>();
+export function closeTreasureNotices():void {notices.forEach((timer,node)=>{clearTimeout(timer);node.remove();});notices.clear();}
 export function closeOverlay(): void { getRoot().innerHTML = ""; }
 
 function mount(node: HTMLElement): void {
@@ -112,15 +114,17 @@ export function noticeModal(title: string, body: string, btn: string, onClick: (
   mount(m);
 }
 
+/** Informational reward toast: never takes focus, blocks play, or evicts a choice. */
 export function treasureModal(kind: string, text: string): void {
-  const ico = kind === "mana" ? "◆" : kind === "hp" ? "✚" : kind === "mimic" ? "👹" : "❤";
-  const m = document.createElement("div");
-  m.className = "modal";
-  m.innerHTML = `<h2>${t("treasure.title")}</h2><div class="chest-reward">${ico}</div><div class="treasure-roll">${text}</div><div class="modal-row"></div>`;
-  const ok = document.createElement("button"); ok.className = "btn btn-gold"; ok.textContent = t("treasure.get");
-  ok.onclick = () => closeOverlay();
-  m.querySelector(".modal-row")!.appendChild(ok);
-  mount(m);
+  const m=document.createElement('div');m.className='treasure-notice';
+  m.setAttribute('role','status');m.setAttribute('aria-live','polite');
+  const icon=document.createElement('span');icon.className='treasure-notice-icon';icon.setAttribute('aria-hidden','true');
+  icon.textContent=kind==='mana'?'◆':kind==='hp'?'✚':kind==='mimic'?'◇':'♡';
+  const body=document.createElement('div'),title=document.createElement('small'),detail=document.createElement('strong');
+  title.textContent=t('treasure.title');detail.textContent=text;body.append(title,detail);m.append(icon,body);
+  // A later reward replaces the previous visual but does not touch overlayRoot.
+  closeTreasureNotices();document.body.append(m);
+  notices.set(m,setTimeout(()=>{m.remove();notices.delete(m);},2200));
 }
 
 /** Tribe synergy info popup (tap a tribe tag). */

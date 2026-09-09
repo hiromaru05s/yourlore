@@ -289,9 +289,9 @@
 .pile-tag { bottom:-12px; }
 .row-aside { display:none; }
 .game .rift-button { flex:none; position:relative; width:calc(var(--field-card-size) * .68); height:calc(var(--field-card-size) * .9); padding:0; background:none; border:0; box-shadow:none; align-self:center; }
-.rift-sprite { position:absolute; top:0; left:0; width:100%; aspect-ratio:1; background-image:url(/art/biblion/refined/rift-idle.png); background-size:400% 400%; animation:riftFrames 1.8s steps(1,end) infinite; }
-.rift-button:hover .rift-sprite,.rift-button:focus-visible .rift-sprite { background-image:url(/art/biblion/refined/rift-hover.png); animation-duration:1.2s; }
-.rift-button.is-absorbing .rift-sprite { background-image:url(/art/biblion/refined/rift-absorb.png); animation:riftFrames .96s steps(1,end) 1; }
+.rift-sprite { position:absolute; top:0; left:0; width:100%; aspect-ratio:1; background-image:url(/art/biblion/release/rift-slit-16.png); background-size:400% 400%; animation:riftFrames 16s steps(1,end) infinite; }
+.rift-button:hover .rift-sprite,.rift-button:focus-visible .rift-sprite { animation:none; background-position:0 0; transform:scaleX(1.035); filter:brightness(1.2) drop-shadow(0 0 2px #b7dbe6); transition:none; }
+.rift-button.is-absorbing .rift-sprite { filter:brightness(1.15); background-position:0 0; animation:none; }
 .rift-label { position:absolute; bottom:0; left:50%; transform:translateX(-50%); white-space:nowrap; font-size:9px; color:#23354d; text-shadow:0 1px #d4e2ef; }
 @keyframes riftFrames { 0%{background-position:0 0} 6.25%{background-position:33.333% 0} 12.5%{background-position:66.667% 0} 18.75%{background-position:100% 0} 25%{background-position:0 33.333%} 31.25%{background-position:33.333% 33.333%} 37.5%{background-position:66.667% 33.333%} 43.75%{background-position:100% 33.333%} 50%{background-position:0 66.667%} 56.25%{background-position:33.333% 66.667%} 62.5%{background-position:66.667% 66.667%} 68.75%{background-position:100% 66.667%} 75%{background-position:0 100%} 81.25%{background-position:33.333% 100%} 87.5%{background-position:66.667% 100%} 93.75%,100%{background-position:100% 100%} }
 .mid-row { gap:12px; }
@@ -549,20 +549,20 @@
 .zone.drop-ready { outline-style:solid; box-shadow:0 0 22px #95cfff70; background:#a7d8ff35; }
 .drag-ghost--hand.drop-ready { filter:drop-shadow(0 0 5px #a4dbff); }
 /* Frame and portrait share one coordinate box; names have their own baseline. */
-.portrait .pt-ring { position:absolute; top:0; left:0; width:100%; height:84%; }
-.portrait .pt-ring::after { inset:0 -20%; background-size:100% 100%; }
-.portrait .pt-ring .avatar { inset:6% 9% 12%; width:82%; height:82%; border-radius:48% 48% 30% 30%; background:#101e33; }
+.portrait .pt-ring { position:absolute; top:0; left:0; width:100%; height:100%; }
+.portrait .pt-ring::after { inset:0; background-size:contain; }
+.portrait .pt-ring .avatar { inset:8% 22% 14%; width:56%; height:78%; border-radius:48% 48% 30% 30%; background:#101e33; }
 .portrait--opp .pt-ring::after { inset:0; }
-.portrait--opp .pt-ring .avatar { inset:10% 9% 12%; height:78%; border-radius:28% 28% 35% 35%; }
-.portrait .pt-name,.pcluster--me .pt-name { top:auto; bottom:0; width:124%; max-width:160px; height:16%; padding:0 5px; display:block; line-height:calc(var(--pt) * .16); font-size:clamp(8px,calc(var(--pt) * .095),12px); z-index:3; border-radius:0; background:linear-gradient(90deg,transparent,#0c1b30e8 18%,#0c1b30e8 82%,transparent); text-align:center; }
+.portrait--opp .pt-ring .avatar { inset:10% 12% 14%; width:76%; height:76%; border-radius:28% 28% 35% 35%; }
+.portrait .pt-name,.pcluster--me .pt-name { top:auto; bottom:2%; width:78%; max-width:160px; height:11%; padding:0 5px; display:block; line-height:calc(var(--pt) * .11); font-size:clamp(8px,calc(var(--pt) * .095),12px); z-index:3; border-radius:0; background:linear-gradient(90deg,transparent,#0c1b30e8 18%,#0c1b30e8 82%,transparent); text-align:center; }
 @media(max-height:500px) { .play-drop-guide { font-size:10px; padding:3px; } }
 
 /* A shared physical card unit and one world-space perspective for the whole table. */
 .game .stage { inset:0 4%; }
 .game .board-col { grid-template-rows:var(--pt-reserve) minmax(0,1fr) auto minmax(0,1fr) var(--pt-reserve); row-gap:8px; }
-.game .pcluster--opp { align-self:start; }
+.game .pcluster--opp { align-self:start; transform:translateY(calc(var(--pt) * -.045)); }
 .game .hand-area { height:var(--pt-reserve); position:relative; }
-.game .pcluster--me { position:absolute; bottom:0; }
+.game .pcluster--me { position:absolute; bottom:calc(var(--pt) * -.025); }
 .game .pcluster { z-index:12; }
 .game .zone { transform:none!important; }
 .game .field-block { gap:calc(var(--slot-gap) * 2); padding:4px; }
@@ -573,8 +573,8 @@
 .game .zone-st .slot,.game .zone-st .buff-icon { width:100%; height:auto; aspect-ratio:4/5; justify-self:stretch; }
 .game .pile-col { gap:var(--slot-gap); align-items:center; }
 .game .pile--deck { width:calc(var(--card-w) * 1.3); height:calc(var(--card-w) * 1.95); }
-.game .pile--shelf { width:calc(var(--card-w) * 2); height:calc(var(--card-w) * 1.4); }
-.game .pile--shelf::before { content:''; position:absolute; inset:calc(var(--card-w) * -.65) 0 0; }
+.game .pile--shelf { width:calc(var(--card-w) * 1.52); height:calc(var(--card-w) * 2.08); }
+.game .pile--shelf::before { content:''; position:absolute; inset:0; }
 .game .pile-tag { bottom:-17px; font-size:clamp(8px,.75vw,12px); }
 .game .pile-count { bottom:-4px; }
 .game .rift-button { width:calc(var(--card-w) * .7); height:calc(var(--card-w) * .9); }
@@ -585,7 +585,7 @@
 .game .mid-aside { width:calc(var(--card-w) * 1.6); flex-basis:calc(var(--card-w) * 1.6); gap:7px; }
 .game .mp-clock.show { width:var(--card-w); height:var(--card-w); }
 .game .tc-dial { width:var(--card-w); height:var(--card-w); }
-.game #endBtn { width:calc(var(--card-w) * 1.6); min-height:calc(var(--card-w) * .64); }
+.game #endBtn { width:calc(var(--card-w) * 1.6); min-height:calc(var(--card-w) * .64); padding:4px 6px; font-size:clamp(9px,.8vw,12px); white-space:nowrap; }
 .game .hourglass-anchor { display:none; }
 .board-projected .stage { z-index:6; }
 .board-projected .zone-row { transform-origin:0 0; }
@@ -613,3 +613,33 @@
  .game .portrait .pt-hp b,.game .portrait .mana-readout b { font-size:21px; }
  .game .pcluster--me .pc-side--r { bottom:20px; left:calc(50% + var(--pt)/2 + 8px); }
 }
+
+/* Physical upper market insert; the flat treatment remains only as GPU fallback. */
+.board-projected .market-counter { transform-style:preserve-3d; }
+.supply-model-ready .market-sub--supply { border-color:transparent; background:transparent; box-shadow:none; }
+.supply-model-ready.reroll-focus .market-sub--supply { box-shadow:none; }
+@media(max-width:700px) and (orientation:portrait) { .game .pile-col { height:calc(var(--card-w) * 2.08); } }
+/* Dialog actions have an enamel face, fine brass edge and cut corners. No black backing. */
+.modal .btn,.duel-dialog .btn {
+  min-height:42px; padding:10px 24px; border:1px solid #ad9470; border-radius:12px 3px;
+  background:linear-gradient(165deg,#30485c,#16283c); background-image:linear-gradient(165deg,#30485c,#16283c);
+  color:#f2ead9; font-family:var(--ui); letter-spacing:.035em; text-transform:none;
+  box-shadow:inset 0 1px 0 #eff2e033,0 3px 9px #07142538;
+}
+.modal .btn:hover:not(:disabled),.duel-dialog .btn:hover:not(:disabled) { background-image:linear-gradient(165deg,#45677c,#263e53); border-color:#ead3a5; color:#fff6e1; }
+.modal .btn:active:not(:disabled),.duel-dialog .btn:active:not(:disabled) { background-image:linear-gradient(165deg,#1d3245,#16283c); box-shadow:inset 0 2px 5px #06102066; }
+.modal .btn-gold,.modal .btn-primary { background-image:linear-gradient(165deg,#e8d4a8,#bda077); color:#182638; border-color:#f0dfb9; }
+.modal .btn-danger { border-color:#bc7c74; color:#ffccc3; }
+.modal .btn:focus-visible { outline:2px solid #b6e5f4; outline-offset:4px; }
+.treasure-notice { position:fixed; z-index:210; left:50%; top:27%; transform:translateX(-50%); display:flex; align-items:center; gap:14px; max-width:min(420px,90vw); padding:15px 26px; border:1px solid #c4ab7899; border-radius:18px 4px; background:linear-gradient(120deg,#192d42f5,#293e50f5); box-shadow:0 12px 32px #04112545,inset 0 1px 0 #f8e6b31c; color:#f9edce; pointer-events:none; animation:rewardNotice 2.2s ease both; }
+.treasure-notice small { display:block; font-size:10px; color:#bfcbd0; letter-spacing:.13em; margin-bottom:4px; }
+.treasure-notice strong { display:block; font-size:17px; line-height:1.5; font-weight:600; }
+.treasure-notice-icon { font-size:30px; color:#dbbb78; }
+@keyframes rewardNotice { 0% { opacity:0; translate:0 6px; } 9%,84% { opacity:1; translate:0 0; } 100% { opacity:0; translate:0 -5px; } }
+@media(prefers-reduced-motion:reduce) { .rift-sprite,.treasure-notice { animation:none!important; } }
+
+.game .buff-icon--quest { border:0; background:none; box-shadow:none; padding:0; }
+.game .buff-icon--quest .buff-frame { filter:url(#celestial-matte); }
+.game .buff-icon--quest .quest-progress { inset:auto 6% 3%; padding:1px 0; border-top:1px solid #c6a8df88; background:linear-gradient(90deg,#231330dd,#38214bef,#231330dd); color:#f7e7ff; font-size:clamp(7px,.72vw,11px); line-height:1.1; }
+.game .portrait:not(.portrait--opp) .pt-ring { width:117%; height:117%; left:-8.5%; top:-4%; }
+.game .rift-sprite { width:140%; left:-20%; top:-12%; }

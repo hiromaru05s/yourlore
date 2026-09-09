@@ -1,0 +1,18 @@
+{
+  "asset": "client/public/art/biblion/release/rift-slit-16.png",
+  "source": "image_gen",
+  "frames": 16,
+  "grid": [
+    4,
+    4
+  ],
+  "cycleSeconds": 16,
+  "hover": "static frame 0, 1.035 horizontal scale, restrained highlight; no animation or transition",
+  "prompt": "Transparent RGBA 4 by 4 sheet of 16 centered vertical dimensional slits. Midnight narrow interior, pearl-blue thin edges, no vortex, rings, particles or text. Almost still, minimal edge breathing, final frame loops to first.",
+  "returnedSize": [
+    1254,
+    1254
+  ],
+  "reference": "newly generated PNG; user requested restrained spatial tear",
+  "sha256": "b1b981d78428edf348e3f1d20c5a87c361972003c76eb3a4a6647e5186e71b1c"
+}

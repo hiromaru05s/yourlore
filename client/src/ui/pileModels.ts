@@ -34,7 +34,7 @@ export function makePile(count:number,shelf:boolean,sleeve:T.Texture,face?:T.Tex
   const mount=shelf?.12:.14;
   if(furniture){furniture.position.y=mount;group.add(furniture);}
   else {
-    const fallback=new T.Mesh(new T.BoxGeometry(shelf?2:1.26,mount,shelf?1.4:1.91),new T.MeshStandardMaterial({color:0xd7cbb0,roughness:.7}));
+    const fallback=new T.Mesh(new T.BoxGeometry(shelf?1.52:1.26,mount,shelf?2.08:1.91),new T.MeshStandardMaterial({color:0xd7cbb0,roughness:.7}));
     fallback.position.y=mount/2;fallback.receiveShadow=true;group.add(fallback);
   }
   if(!shelf){
@@ -45,13 +45,13 @@ export function makePile(count:number,shelf:boolean,sleeve:T.Texture,face?:T.Tex
     }
     if(!n)top.position.y=mount+.004;
   }else{
-    const n=Math.min(count,12),tilt=8*Math.PI/180;
-    for(let j=n-1;j>=0;j--){
-      const card=cardStock(sleeve,j===0?face:undefined);card.rotation.set(-tilt,0,Math.PI/2);
-      card.position.set(0,mount+.001+.5*Math.cos(tilt),.55-j*.09-.5*Math.sin(tilt));
-      cards.add(card);if(j===0)top=card;
+    const n=Math.min(count,12),height=Math.min(count,40)*.004;
+    for(let j=0;j<n;j++){
+      const card=cardStock(sleeve,j===n-1?face:undefined);card.rotation.x=-Math.PI/2;
+      card.position.set(0,mount+.006+(n<=1?0:j/(n-1)*height),0);
+      cards.add(card);top=card;
     }
-    if(!n)top.position.set(0,mount+.5,.48);
+    if(!n)top.position.set(0,mount+.006,0);
   }
   top.userData.restY=top.position.y;
   return {group,cards,top};

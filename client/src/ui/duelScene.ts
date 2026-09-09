@@ -6,7 +6,7 @@ import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.j
 import {createDuelTable} from './duelTable';
 import {loadLibraryAssets} from './libraryAssets';
 import {boardLens,cardUnit,layoutRect,projectBoardDOM,clearBoardProjection,screenToBoard} from './boardProjection';
-type Item={group:T.Group;key:string;element:HTMLElement;market:boolean;pile?:PileModel;count?:number;entered?:number;surface?:T.Texture};
+type Item={group:T.Group;key:string;element:HTMLElement;market:boolean;supply:boolean;pile?:PileModel;count?:number;entered?:number;surface?:T.Texture};
 const clamp=(n:number)=>Math.min(1,Math.max(0,n));
 export function mountDuelScene(root:HTMLElement):()=>void {
   let renderer:T.WebGLRenderer;
@@ -30,18 +30,18 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   function disposeObject(object:T.Object3D){const geos=new Set<T.BufferGeometry>(),mats=new Set<T.Material>();object.traverse(o=>{if(o instanceof T.Mesh){geos.add(o.geometry);(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>mats.add(m));}});geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());}
   function removeItem(item:Item){scene.remove(item.group);disposeObject(item.group);item.surface?.dispose();}
   function refresh(){
-    const elements=[...root.querySelectorAll<HTMLElement>('.pile--deck,.pile--shelf,.market-counter')];
-    const ids=new Set(elements.map(el=>el.classList.contains('market-counter')?'market-base':el.id));
+    const elements=[...root.querySelectorAll<HTMLElement>('.pile--deck,.pile--shelf,.market-counter,.market-sub--supply')];
+    const ids=new Set(elements.map(el=>el.classList.contains('market-counter')?'market-base':el.classList.contains('market-sub--supply')?'supply-base':el.id));
     for(const [id,item] of items)if(!ids.has(id)){removeItem(item);items.delete(id);}
     for(const el of elements){
-      const market=el.classList.contains('market-counter'),id=market?'market-base':el.id,shelf=el.classList.contains('pile--shelf');
-      if(market&&!furniture.has('market'))continue;
+      const supply=el.classList.contains('market-sub--supply'),market=el.classList.contains('market-counter'),id=market?'market-base':supply?'supply-base':el.id,shelf=el.classList.contains('pile--shelf');
+      if((market&&!furniture.has('market'))||(supply&&!furniture.has('supply')))continue;
       const key=`${el.dataset.count}:${el.dataset.face}:${el.dataset.sleeve}:${furniture.revision}`;
-      el.dataset.furniture=furniture.has(market?'market':shelf?'shelf':'deck')?'blender':'fallback';
+      el.dataset.furniture=furniture.has(supply?'supply':market?'market':shelf?'shelf':'deck')?'blender':'fallback';
       let item=items.get(id);if(item?.key===key){item.element=el;continue;}
       const previous=item?.count;if(item)removeItem(item);
-      const group=new T.Group();scene.add(group);item={group,key,element:el,market};items.set(id,item);
-      if(market)group.add(furniture.clone('market')!);
+      const group=new T.Group();scene.add(group);item={group,key,element:el,market,supply};items.set(id,item);
+      if(market||supply)group.add(furniture.clone(supply?'supply':'market')!);
       else{
         const count=Number(el.dataset.count)||0;item.count=count;
         item.pile=makePile(count,shelf,texture(el.dataset.sleeve!),shelf&&el.dataset.face?texture(el.dataset.face):undefined,furniture.clone(shelf?'shelf':'deck'));group.add(item.pile.group);
@@ -93,7 +93,10 @@ export function mountDuelScene(root:HTMLElement):()=>void {
     table.resize(width,height,unit);
     for(const item of items.values()){
       const r=layoutRect(item.element);item.group.position.set(r.left+r.width/2-cx,0,r.top+r.height/2-cy);item.group.scale.setScalar(unit);
-      if(item.market){
+      if(item.supply){
+        item.group.position.y=unit*.30;
+        item.group.scale.set(r.width/4.5,unit,r.height/1.94);
+      }else if(item.market){
         item.group.position.y=unit*.22;
         // Resize the pedestal around the market cards, never fit cards to furniture.
         item.group.scale.set((r.width+12)/6,unit,(r.height+8)/1.1);
@@ -110,6 +113,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
     }
     renderer.setScissorTest(false);renderer.setViewport(0,0,width,height);renderer.clear();renderer.render(scene,camera);
     if(furniture.has('market')&&!root.classList.contains('market-model-ready'))root.classList.add('market-model-ready');
+    if(furniture.has('supply')&&!root.classList.contains('supply-model-ready'))root.classList.add('supply-model-ready');
     if(dusts.length || flows.length){
       renderer.setViewport(0,0,width,height);renderer.setScissor(0,0,width,height);renderer.clearDepth();
       dustCamera.aspect=width/height;dustCamera.position.z=height/(2*Math.tan(Math.PI/8));dustCamera.updateProjectionMatrix();
@@ -136,7 +140,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   function dispose(){
     if(dead)return;dead=true;cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);
     items.forEach(removeItem);textures.forEach(t=>t.dispose());table.dispose();furniture.dispose();keyLight.shadow.dispose();disposeObject(dustScene);environment.dispose();renderer.dispose();canvas.remove();
-    root.querySelectorAll<HTMLElement>('.pile').forEach(el=>{el.classList.remove('pile--3d-ready');delete el.dataset.furniture;el.querySelector('.pile-draw-anchor')?.remove();});clearBoardProjection(root);root.classList.remove('duel-webgl','market-model-ready');
+    root.querySelectorAll<HTMLElement>('.pile').forEach(el=>{el.classList.remove('pile--3d-ready');delete el.dataset.furniture;el.querySelector('.pile-draw-anchor')?.remove();});clearBoardProjection(root);root.classList.remove('duel-webgl','market-model-ready','supply-model-ready');
   }
   frame=requestAnimationFrame(render);return dispose;
 }

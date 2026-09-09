@@ -37,6 +37,7 @@ export async function diceRollAnim(rolls:number[],opts:DiceOpts):Promise<void>{
       else if(!abort.signal.aborted)await pause(350);
     }
     if(abort.signal.aborted)return;
+    ov.classList.add('is-settled');
     sfx('pop');
     const sum=rolls.reduce((a,b)=>a+b,0),lang=getLang();
     cap.textContent=rolls.length>1?`${rolls.join(' + ')} = ${sum}`:String(sum);

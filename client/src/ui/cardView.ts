@@ -2,6 +2,7 @@
 // LORE — card DOM builder. One renderer for every card everywhere
 // (board / market / hand / pile / zoom) so sizing stays consistent.
 // ============================================================
+import { CARD_ART_ALIASES } from "./cardArtAliases";
 import type { CardInst, FieldMon, PlayerState } from "../shared/types";
 import { FRAME_BACK, PASSIVES, cardPassives, frameFor, fieldFrameFor } from "../shared/cards";
 import { curHp, effAtk, effDef, playCost } from "../shared/engine";
@@ -13,6 +14,14 @@ import { parseDiceTable } from "../shared/cardText";
 export function enchantmentTile(c:CardInst,durationUi:string):HTMLDivElement {
   const tile=document.createElement('div');tile.className='buff-icon buff-icon--spell';tile.dataset.uid=c.uid;
   tile.innerHTML=`<span class="buff-frame" style="background-image:url(${fieldFrameFor('spell')})"></span><span class="buff-art" style="background-image:url(${artUrl.full(c.id)})"></span><span class="buff-cost" aria-hidden="true"><span>${c.cost}</span></span>${durationUi}`;
+  return tile;
+}
+
+/** Same purple quest face in the public rail and its landing animation. */
+export function questTile(c:CardInst,progress=0):HTMLDivElement {
+  const tile=enchantmentTile(c,'');tile.className='buff-icon buff-icon--quest';
+  tile.querySelector<HTMLElement>('.buff-frame')!.style.backgroundImage=`url(${fieldFrameFor('quest')})`;
+  const label=document.createElement('span');label.className='quest-progress';label.textContent=`${progress}/${c.quest?.target??0}`;tile.append(label);
   return tile;
 }
 
@@ -370,9 +379,9 @@ function artStatus(key: string): "ok" | "fail" | "unknown" {
 // 이 값을 올리면 모든 클라이언트가 오염된 캐시를 우회해 새로 받는다.
 export const ART_V = "12"; // Codex full-art batch 2026-09-07 (CDN/browser cache bust)
 export const artUrl = {
-  xs: (id: string) => `/art/cards-xs/${id}.webp?v=${ART_V}`,
-  sm: (id: string) => `/art/cards-sm/${id}.webp?v=${ART_V}`,
-  full: (id: string) => `/art/cards/${id}.webp?v=${ART_V}`,
+  xs: (id: string) => `/art/cards-xs/${CARD_ART_ALIASES[id]??id}.webp?v=${ART_V}`,
+  sm: (id: string) => `/art/cards-sm/${CARD_ART_ALIASES[id]??id}.webp?v=${ART_V}`,
+  full: (id: string) => `/art/cards/${CARD_ART_ALIASES[id]??id}.webp?v=${ART_V}`,
 };
 
 const prefetched = new Set<string>();
@@ -468,7 +477,7 @@ function artEl(cardId: string, full = false, lazy = false, gallery = false): HTM
     art.classList.add("art-done");
     return art;
   }
-  const src = `/art/${full ? "cards" : "cards-sm"}/${cardId}.webp?v=${ART_V}`;
+  const src = full ? artUrl.full(cardId) : artUrl.sm(cardId);
   const img = document.createElement("img");
   img.alt = "";
   img.className = "card-art-img";
@@ -524,7 +533,7 @@ function artEl(cardId: string, full = false, lazy = false, gallery = false): HTM
   if (gallery) {
     // let the browser pick 192px or 384px by its own pixel density
     img.sizes = GALLERY_SIZES;
-    img.srcset = `/art/cards-xs/${cardId}.webp?v=${ART_V} 192w, /art/cards-sm/${cardId}.webp?v=${ART_V} 384w`;
+    img.srcset = `${artUrl.xs(cardId)} 192w, ${artUrl.sm(cardId)} 384w`;
   }
   img.src = src;
   art.appendChild(img);

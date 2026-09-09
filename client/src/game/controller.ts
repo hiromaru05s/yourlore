@@ -15,7 +15,7 @@ import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog, logToText } from "../ui/log";
 import * as A from "../ui/anim";
-import { cardPicker, cardPickerMulti, confirmDialog, treasureModal, winModal, closeOverlay } from "../ui/modal";
+import { cardPicker, cardPickerMulti, confirmDialog, treasureModal, winModal, closeOverlay, closeTreasureNotices } from "../ui/modal";
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { sfx, type SfxName } from "../ui/sound";
@@ -93,6 +93,7 @@ export abstract class BaseController implements BoardHandlers {
     this.skipGen = this.fxGen;
     A.setFxSkip(true);
     cancelDiceAnimations();
+    closeTreasureNotices();
   }
 
   // ---- BoardHandlers ----
@@ -224,6 +225,7 @@ export abstract class BaseController implements BoardHandlers {
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
     const spellGhosts:HTMLElement[]=[];
+    const questCount=prev.players.map(p=>p.quests?.length??0);
     const buffCount=[prev.players[0].traps.length+prev.players[0].enchants.length,prev.players[1].traps.length+prev.players[1].enchants.length];
     // running counters for ghost slot placement + live HP readout
     const fieldCount: [number, number] = [prev.players[0].field.length, prev.players[1].field.length];
@@ -314,8 +316,8 @@ export abstract class BaseController implements BoardHandlers {
         case "playSpell": {
           const def = DB[e.id] ?? STARTERS[e.id]; // 컬/어튠/보물상자 live in STARTERS
           if (def) {
-            const face=await A.revealSpell({ uid: "fx", ...def }, sideOf(e.player), e.dest,buffCount[e.player]);
-            if(face){spellGhosts.push(face);buffCount[e.player]++;}
+            const face=await A.revealSpell({ uid: "fx", ...def }, sideOf(e.player), e.dest,buffCount[e.player]+(def.t==='quest'?questCount[e.player]:0));
+            if(face){spellGhosts.push(face);if(def.t==='quest')questCount[e.player]++;else buffCount[e.player]++;}
           }
           // random-roll cards: roll the 3D dice first, THEN show the outcome popup
           if (def && RANDOM_CARDS.has(def.id)) {
@@ -351,8 +353,7 @@ export abstract class BaseController implements BoardHandlers {
         case "treasure": {
           const mine = e.player === this.you && !e.isBot;
           const text = getLang() === "ja" ? e.textJa : getLang() === "en" ? logToEn(e.text) : e.text;
-          if (mine) treasureModal(e.kind, text); // modal with a Claim button (not awaited)
-          else await A.resultPopup(`${t("fx.opp")} · ${t("treasure.title")}`, [text], false);
+          treasureModal(e.kind, (mine ? "" : `${t("fx.opp")} · `) + text);
           break;
         }
         default:
@@ -781,6 +782,7 @@ export abstract class BaseController implements BoardHandlers {
     this.dead = true;
     A.setFxSkip(true);
     cancelDiceAnimations();
+    closeTreasureNotices();
     document.querySelectorAll(".fx-turnbanner,.cointoss-ov,.fx-card-flight,.cast-veil").forEach(n => n.remove());
     this.stopTimer();
     this.view.destroy();

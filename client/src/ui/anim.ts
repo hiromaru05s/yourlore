@@ -4,7 +4,7 @@
 // ============================================================
 import type { CardInst } from "../shared/types";
 import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, cardPassives, enchantHasTurnCountdown } from "../shared/cards";
-import { cardEl, cardRulesEl, prefetchZoomArt, enchantmentTile } from "./cardView";
+import { cardEl, cardRulesEl, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
 import { t, getLang, cardText, cardName } from "../i18n";
 
 import { projectedPlacement } from "./boardProjection";
@@ -173,12 +173,12 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   try {
     await focusCard(node, side);
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
-    if (to && dest === "field" && card.ench) {
+    if (to && dest === "field" && (card.ench || card.t === "quest")) {
       const zone=document.querySelector(side==='me'?'#meRow .zone-st':'#oppRow .zone-st');
       const target=(slotIndex==null?zone?.querySelector('.slot'):zone?.children[Math.min(slotIndex,zone.children.length-1)]) as HTMLElement|null;
       if(target){
         const duration=enchantHasTurnCountdown(card)?`<span class="buff-duration"><span>${getLang()==='ja'?'残り':''}${card.val??1}</span></span>`:'<img class="buff-infinity" src="/art/biblion/modular/infinity.png" alt="">';
-        return await flyIntoSlot(node,target,enchantmentTile(card,duration));
+        return await flyIntoSlot(node,target,card.t==='quest'?questTile(card):enchantmentTile(card,duration));
       }
     } else if (to) await landCard(node, to, true);
     if (dest === "discard") pileFlash(discId(side));

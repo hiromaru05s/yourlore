@@ -9,7 +9,7 @@ import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, eff
 import { enchantHasTurnCountdown, fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
-import { artUrl, cardEl, ensureCardCompositing, prefetchZoomArt, enchantmentTile } from "./cardView";
+import { artUrl, cardEl, ensureCardCompositing, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
 import { bindZoom, zoomCard, setPlayOrigin } from "./anim";
 import { t, getLang, esc, cardName } from "../i18n";
 import { logToEn } from "../shared/logEn";
@@ -521,14 +521,14 @@ export class GameView {
       sz.appendChild(card);
     });
     for (const q of p.quests ?? []) {
-      const tile = document.createElement("button");
-      tile.className = "buff-icon buff-icon--quest";
+      const tile = questTile(q.card,q.progress);
+      tile.tabIndex=0;tile.setAttribute("role","button");
       tile.dataset.uid = q.card.uid;
       const progress = `${q.progress}/${q.card.quest?.target ?? 0}`;
       tile.title = `${cardName(q.card)} · ${progress} · ${q.card.textJa ?? q.card.text}`;
       tile.setAttribute("aria-label", `${cardName(q.card)} クエスト進捗 ${progress}`);
-      tile.innerHTML = `<span class="buff-frame" style="background-image:url(${fieldFrameFor('quest')})"></span><span class="quest-progress">${progress}</span>`;
       tile.onclick = () => zoomCard(q.card, undefined, `クエスト進捗 ${progress}`);
+      tile.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();tile.click();}};
       sz.appendChild(tile);
     }
     for (let i = p.traps.length + p.enchants.length + (p.quests?.length ?? 0); i < ST_SLOTS; i++) sz.appendChild(this.slotEl());
@@ -736,7 +736,7 @@ export class GameView {
     const enchCards = p.enchants.map((e) => e.card);
     let pool: CardInst[];
     if (isMe) {
-      pool = [...p.deck, ...p.hand, ...p.discard, ...fieldCards, ...p.traps.map((tr) => tr.card), ...enchCards];
+      pool = [...p.deck, ...p.hand, ...p.discard, ...fieldCards, ...p.traps.map((tr) => tr.card), ...(p.quests ?? []).map(q=>q.card), ...enchCards];
     } else if (p.collection) {
       // Online: server-provided game-long reveal history. Current public zones are
       // already included, so adding them again would double-count those cards.
@@ -746,7 +746,7 @@ export class GameView {
       pool = p.revealedCards.map((known, i) => { const d = DBC[known.id] ?? STARTERS[known.id]; return d ? { uid: `v_${i}`, ...d } : null; }).filter((c): c is CardInst => !!c);
     } else {
       // Legacy state fallback: show only cards that are public right now.
-      pool = [...p.discard, ...fieldCards, ...enchCards];
+      pool = [...p.discard, ...fieldCards, ...(p.quests ?? []).map(q=>q.card), ...enchCards];
     }
     return pool.filter((c) => c && c.id !== "HIDDEN").sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
   }

@@ -1,11 +1,11 @@
 import * as T from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-export type FurnitureKind='deck'|'shelf'|'market';
+export type FurnitureKind='deck'|'shelf'|'market'|'supply';
 /** Cached GLBs own textures; scene instances own their cloned meshes/materials. */
 export function loadLibraryAssets(onReady:()=>void) {
   const cache=new Map<FurnitureKind,T.Group>();let dead=false,revision=0;
   const low=matchMedia('(max-width:700px)').matches;
-  const paths:Record<FurnitureKind,string>={deck:`/models/cosmetics/deck_holder_biblion_ivory/v1/model${low?'-low':''}.glb`,shelf:`/models/library-furniture/shelf${low?'-low':''}.glb`,market:`/models/library-furniture/market${low?'-low':''}.glb`};
+  const paths:Record<FurnitureKind,string>={deck:`/models/cosmetics/deck_holder_biblion_ivory/v1/model${low?'-low':''}.glb`,shelf:`/models/library-furniture/v2/shelf${low?'-low':''}.glb`,market:`/models/library-furniture/market${low?'-low':''}.glb`,supply:`/models/library-furniture/v2/supply${low?'-low':''}.glb`};
   function release(root:T.Object3D){
     const geos=new Set<T.BufferGeometry>(),mats=new Set<T.Material>(),maps=new Set<T.Texture>();
     root.traverse(o=>{if(o instanceof T.Mesh){geos.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:[o.material]){mats.add(m);for(const v of Object.values(m))if(v instanceof T.Texture)maps.add(v);}}});

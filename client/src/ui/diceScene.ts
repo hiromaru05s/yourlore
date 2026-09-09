@@ -91,6 +91,11 @@ export async function mountDiceScene(host:HTMLElement,rolls:number[],casino:bool
     const tick=(now:number)=>{
       if(dead)return;
       if(!host.isConnected||document.hidden||innerWidth!==vw||innerHeight!==vh){dispose();return;}
+      // The dice keep resting on the ground. The view rises during the final
+      // two small bounces, then holds the authoritative upper faces in view.
+      const progress=T.MathUtils.clamp((now-start-850)/(600+Math.max(0,rolls.length-1)*85),0,1);
+      const ease=progress*progress*(3-2*progress),angle=T.MathUtils.lerp(Math.atan2(.62,.78),.035,ease);
+      camera.position.set(0,distance*Math.cos(angle),distance*Math.sin(angle));camera.lookAt(0,.35,0);
       let settled=true;
       dice.forEach(({die,value,shadow},i)=>{
         const t=Math.max(0,Math.min(1,(now-start-i*85)/1450));if(t<1)settled=false;
