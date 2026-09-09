@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-09-09T22:45:33.343161+00:00",
+  "environment": "staging",
+  "url": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "sourceCommit": "920e96009c99fd58a77a35dd8e44984e429c7319",
+  "branch": "codex/rift-fold-20260910",
+  "versionId": "85c14aa9-7545-483b-8f82-4aa3e5a9d890",
+  "assetHashesMatched": 52,
+  "assetHashesChecked": 52,
+  "productionDeployed": false,
+  "mainMerged": false,
+  "databaseMigrations": false,
+  "gameRulesChanged": false,
+  "onlineMatchRechecked": false,
+  "checks": [
+    "client/server typecheck",
+    "client build and design guard",
+    "rift fold geometry",
+    "rift browser with fixed-time frame captures and cancellation",
+    "paper card deformation regression",
+    "git diff whitespace check",
+    "deployed asset SHA256 equality"
+  ]
+}
