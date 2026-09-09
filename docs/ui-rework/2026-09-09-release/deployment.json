@@ -11,11 +11,17 @@
     "origin": "https://yourlore.xyz",
     "worker": "lore-server",
     "previousVersion": "d98ac879-17a0-467d-a7d7-f119398cc912",
-    "status": "pending"
+    "status": "verified",
+    "version": "4de58e67-23a5-49e3-8fcf-6b9c05363a30",
+    "sourceCommit": "efb88bc035cbd510b55c476b0e1e626b11cb7e6a",
+    "mergeUrl": "https://github.com/hiromaru05s/yourlore/commit/efb88bc035cbd510b55c476b0e1e626b11cb7e6a",
+    "verifiedAssetHashes": 28,
+    "browserVerified": true
   },
   "cardRework": "292099cb27aaad86a007193f881d2ef91033dd56",
   "designBase": "e842adb",
   "integrationMerge": "6430057",
   "wrangler": "4.130.0",
-  "databaseMigrations": false
+  "databaseMigrations": false,
+  "mergeMethod": "History-preserving Git merge; PR API unavailable for current token"
 }

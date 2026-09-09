@@ -33,3 +33,5 @@ The filename-only `art:check` inventory reports 37 missing dedicated images: 19 
 ## Deployment
 
 Staging and production identifiers and remote content hashes are recorded in the adjacent JSON files. Production uses the same verified build. Existing D1 / Durable Object bindings are retained; this release requires no database schema migration. The production version preceding this release was `d98ac879-17a0-467d-a7d7-f119398cc912`.
+
+Production version `4de58e67-23a5-49e3-8fcf-6b9c05363a30` was deployed from main merge `efb88bc035cbd510b55c476b0e1e626b11cb7e6a`. All 28 deployed asset SHA256 hashes match the verified build. The production browser shows ten quick cards and nine quests, with all nineteen illustrated thumbnails loaded. Online staging completed 134 actions across 26 turns, including reconnection, with no reported errors; the two isolated QA accounts were removed afterward. Production itself received a read-only browser smoke check, not another full match.

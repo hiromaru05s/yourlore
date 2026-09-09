@@ -1,0 +1,14 @@
+{
+  "origin": "https://yourlore.xyz",
+  "method": "Chrome CUA, visible card-list filters and read-only DOM inspection",
+  "checks": {
+    "homeLoaded": true,
+    "quickFilterCount": 10,
+    "quickImagesLoaded": 10,
+    "questFilterCount": 9,
+    "questImagesLoaded": 9,
+    "trapFilterAbsent": true,
+    "returnedHome": true
+  },
+  "boundaries": "Production smoke check only. Full online duel and reconnect verified on isolated staging; all 28 production asset hashes match the tested build."
+}
