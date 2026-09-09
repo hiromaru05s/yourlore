@@ -11,7 +11,7 @@ type Item={group:T.Group;key:string;element:HTMLElement;market:boolean;supply:bo
 const clamp=(n:number)=>Math.min(1,Math.max(0,n));
 export function mountDuelScene(root:HTMLElement):()=>void {
   let renderer:T.WebGLRenderer;
-  try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return ()=>{};}
+  try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{root.dataset.tableState='fallback';return ()=>{};}
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));renderer.setClearColor(0,0);renderer.autoClear=false;
   renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.9;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
@@ -72,15 +72,16 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   const dustCanvas=document.createElement('canvas');dustCanvas.width=dustCanvas.height=64;
   const dc=dustCanvas.getContext('2d')!,dg=dc.createRadialGradient(32,32,2,32,32,32);dg.addColorStop(0,'#ffffffaa');dg.addColorStop(.35,'#ffffff65');dg.addColorStop(1,'#ffffff00');dc.fillStyle=dg;dc.fillRect(0,0,64,64);
   const dustMap=new T.CanvasTexture(dustCanvas);
-  const dusts:Array<{group:T.Group;start:number;rect:DOMRect}>=[];
+  const dusts:Array<{group:T.Group;start:number;rect:DOMRect;heavy:boolean}>=[];
   const onDust=(event:Event):void=>{
     if(reduced.matches)return;
     const rect=(event as CustomEvent<DOMRect>).detail;
+    const heavy=event.type==='lore:summon-impact';
     const group=new T.Group();dustScene.add(group);
-    for(let i=0;i<22;i++)mesh(new T.PlaneGeometry(12+(i%4)*4,12+(i%4)*4),new T.MeshBasicMaterial({map:dustMap,color:0xcbbda5,transparent:true,opacity:.22,depthWrite:false}),group);
-    dusts.push({group,start:performance.now(),rect});
+    for(let i=0;i<(heavy?52:22);i++)mesh(new T.PlaneGeometry(12+(i%4)*4,12+(i%4)*4),new T.MeshBasicMaterial({map:dustMap,color:heavy?0x9b8c77:0xcbbda5,transparent:true,opacity:.22,depthWrite:false}),group);
+    dusts.push({group,start:performance.now(),rect,heavy});
   };
-  window.addEventListener('lore:summon-dust',onDust);
+  window.addEventListener('lore:summon-dust',onDust);window.addEventListener('lore:summon-impact',onDust);
   const flows:Array<{group:T.Group;start:number;from:DOMRect;to:DOMRect}>=[];
   const onFlow=(event:Event):void=>{
     if(reduced.matches)return;
@@ -131,10 +132,10 @@ export function mountDuelScene(root:HTMLElement):()=>void {
     if(dusts.length || flows.length){
       renderer.setViewport(0,0,width,height);renderer.setScissor(0,0,width,height);renderer.clearDepth();
       dustCamera.aspect=width/height;dustCamera.position.z=height/(2*Math.tan(Math.PI/8));dustCamera.updateProjectionMatrix();
-      for(let j=dusts.length-1;j>=0;j--){const d=dusts[j],age=(now-d.start)/800;
+      for(let j=dusts.length-1;j>=0;j--){const d=dusts[j],age=(now-d.start)/(d.heavy?1050:800);
         if(age>=1){dustScene.remove(d.group);disposeObject(d.group);dusts.splice(j,1);continue;}
         d.group.position.set(d.rect.left+d.rect.width/2-width/2,height/2-d.rect.bottom,0);
-        d.group.children.forEach((o,i)=>{const m=o as T.Mesh;const angle=i*2.399;m.position.set(Math.cos(angle)*age*70,Math.sin(angle)*age*12+Math.sin(age*Math.PI)*16,Math.sin(angle)*age*38);m.rotation.z=age*i;m.scale.setScalar(.5+age*2);(m.material as T.MeshBasicMaterial).opacity=(1-age)*.25;});
+        d.group.children.forEach((o,i)=>{const m=o as T.Mesh;const angle=i*2.399,spread=d.heavy?1-(1-age)**3:age;m.position.set(Math.cos(angle)*spread*(d.heavy?125:70),Math.sin(angle)*spread*12+Math.sin(age*Math.PI)*(d.heavy?30:16),Math.sin(angle)*age*38);m.rotation.z=age*i;m.scale.setScalar((.5+age*2)*(d.heavy?1.45:1));(m.material as T.MeshBasicMaterial).opacity=(1-age)*(d.heavy?.42:.25);});
       }
       for(let j=flows.length-1;j>=0;j--){
         const f=flows[j],age=(now-f.start)/700;
@@ -152,7 +153,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   }
   const lost=(event:Event)=>{event.preventDefault();dispose();};canvas.addEventListener('webglcontextlost',lost);
   function dispose(){
-    if(dead)return;dead=true;motion.dispose();cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);
+    if(dead)return;dead=true;motion.dispose();cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:summon-impact',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);
     items.forEach(removeItem);surfaces.forEach(t=>t.dispose());textures.forEach(t=>t.dispose());table.dispose();furniture.dispose();keyLight.shadow.dispose();disposeObject(dustScene);dustMap.dispose();environment.dispose();renderer.dispose();canvas.remove();
     root.querySelectorAll<HTMLElement>('.pile').forEach(el=>{el.classList.remove('pile--3d-ready');delete el.dataset.furniture;el.querySelector('.pile-draw-anchor')?.remove();});clearBoardProjection(root);root.classList.remove('duel-webgl','market-model-ready','supply-model-ready');
   }

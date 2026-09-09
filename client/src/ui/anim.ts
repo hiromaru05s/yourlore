@@ -7,6 +7,7 @@ import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES,
 import { cardEl, cardRulesEl, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
 import { t, getLang, cardText, cardName } from "../i18n";
 
+import { sfx } from "./sound";
 import { moveOnBoard } from "./boardMotion";
 import { projectedPlacement } from "./boardProjection";
 
@@ -143,7 +144,7 @@ async function landCard(node: HTMLElement, to: DOMRect, fade = false): Promise<v
 export const fieldPlacement = projectedPlacement;
 /** Morph the reveal into its actual field face during one continuous flight.
  * The landing face stays until the controller replaces it with the same DOM. */
-async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElement):Promise<HTMLElement> {
+async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElement,heavy=false):Promise<HTMLElement> {
   if(!target.isConnected || !reveal.isConnected)return face;
   const from=reveal.getBoundingClientRect();
   const w=target.offsetWidth,h=target.offsetHeight;
@@ -159,13 +160,19 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const duration=reduced?120:620;
-  const options:KeyframeAnimationOptions={duration,easing:'cubic-bezier(.22,.65,.25,1)',fill:'both'};
+  const duration=reduced?120:heavy?560:620;
+  const options:KeyframeAnimationOptions={duration,easing:heavy?'cubic-bezier(.72,0,.94,.35)':'cubic-bezier(.22,.65,.25,1)',fill:'both'};
   const moving=face.animate([{transform:start.toString(),opacity:0},{opacity:0,offset:.25},{opacity:1,offset:.8},{transform:end.toString(),opacity:1}],options);
   const old=reveal.animate([{transform:oldStart.toString(),opacity:1},{opacity:1,offset:.25},{opacity:0,offset:.8},{transform:oldEnd.toString(),opacity:0}],options);
   await wait(duration);
   moving.cancel();old.cancel();reveal.remove();face.style.transform=fieldPlacement(target,w,h).toString();
-  if(!fxSkip)summonDust(face.getBoundingClientRect());
+  if(!fxSkip){
+    if(heavy&&!reduced){sfx('impact');window.dispatchEvent(new CustomEvent('lore:summon-impact',{detail:face.getBoundingClientRect()}));
+      const objects=[document.querySelector('.duel-objects-3d'),document.querySelector('.stage'),face].filter(Boolean) as HTMLElement[];
+      const shakes=objects.map(el=>el.animate([{translate:'0 0'},{translate:'0 3px',offset:.12},{translate:'-1px -2px',offset:.3},{translate:'1px 1px',offset:.55},{translate:'0 0'}],{duration:240,easing:'ease-out'}));
+      await wait(240);shakes.forEach(a=>a.cancel());
+    }else summonDust(face.getBoundingClientRect());
+  }
   return face;
 }
 export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish",slotIndex?:number): Promise<HTMLElement|null> {
@@ -193,7 +200,7 @@ export async function summonFromHand(card: CardInst, uid: string, side: ViewSide
   if (!from || !to || !target) { summonIn(uid); return; }
   const ghost = floatAt(cardEl(card, {size:"hand"}), from); target.style.visibility = "hidden";
   let face:HTMLElement|undefined;
-  try { await focusCard(ghost, side); face=await flyIntoSlot(ghost,target,target.cloneNode(true) as HTMLElement); }
+  try { await focusCard(ghost, side); face=await flyIntoSlot(ghost,target,target.cloneNode(true) as HTMLElement,true); }
   finally { ghost.remove(); face?.remove(); target.style.visibility = ""; }
 }
 /** Face-down plays reveal only the sleeve, never a trap's identity. */
@@ -222,13 +229,29 @@ export async function trapRevealAnim(card: CardInst, side: ViewSide, hold = 2000
 }
 
 /** A card was bought: pop the card UI at the market, then fly it to that player's discard. */
-export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | null): Promise<void> {
+export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | null, source?:HTMLElement|null, remaining=0): Promise<void> {
+  if(fxSkip)return;
   const destination = card.quick ? (side === "me" ? "rift-me" : "rift-opp") : discId(side);
   const to = rectOf("#" + destination);
   if (!src || !to) { pileFlash(destination); return; }
+  if(source){
+    // Remove the last-stock face before any texture work or lift. Keep its slot
+    // geometry stable until the authoritative board render replaces the market.
+    source.classList.remove('is-armed');source.dataset.purchaseSource='true';
+    if(remaining<=0){source.style.visibility='hidden';source.style.pointerEvents='none';source.setAttribute('aria-hidden','true');}
+    else {const stock=source.querySelector('.mkt-stock');if(stock)stock.textContent=`×${remaining}`;}
+    if(!card.quick){
+      const target=document.getElementById(destination),print=cardEl(card,{size:'mkt'});
+      try {if(target&&await boardMotionScope(signal=>moveOnBoard({kind:'purchase',source,target,card:print,signal}),3500))return;}
+      catch { /* The projected fallback keeps the purchase pipeline alive. */ }
+      if(fxSkip)return;
+    }
+  }
   const node = floatAt(cardEl(card, { size: "mkt" }), src);
+  const pose=source?fieldPlacement(source,node.offsetWidth,node.offsetHeight):new DOMMatrix().translate(src.left,src.top);
+  node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transform=pose.toString();
   await raf();
-  node.style.transition = `transform .26s ${EASE}`; node.style.transform = "scale(1.4)";
+  node.style.transition = `transform .26s ${EASE}`; node.style.transform = new DOMMatrix().translate(0,-22).multiply(pose).scale(1.08).toString();
   await wait(320);
   try { if(card.quick)await absorbIntoRift(node,side);else await landOnShelf(node,side); }
   finally {node.remove();}
@@ -668,7 +691,7 @@ export async function ghostSummon(card: CardInst, side: ViewSide, slotIndex: num
   const node = floatAt(cardEl(card, { size: "hand" }), from);
   try {
     await focusCard(node, side);
-    return await flyIntoSlot(node,target,cardEl(card,{field:true}));
+    return await flyIntoSlot(node,target,cardEl(card,{field:true}),true);
   } finally { node.remove(); }
 }
 

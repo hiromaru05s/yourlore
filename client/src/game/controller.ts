@@ -342,7 +342,11 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "buy": {
           const def = DB[e.id];
-          if (def) await A.buyReveal({ uid: "fx", ...def }, sideOf(e.player), this.marketCardRect(e.from, e.i));
+          if (def) {
+            const source=this.marketCardNode(e.from,e.i);
+            const stock=Number(source?.querySelector('.mkt-stock')?.textContent?.replace('×',''))||1;
+            await A.buyReveal({uid:"fx",...def},sideOf(e.player),source?.getBoundingClientRect()??null,source,e.from==='supply'?0:Math.max(0,stock-1));
+          }
           else A.pileFlash(e.player === this.you ? "pile-myDisc" : "pile-oppDisc");
           break;
         }
@@ -441,13 +445,13 @@ export abstract class BaseController implements BoardHandlers {
   }
 
   /** Bounding rect of a market/supply card slot at index i (pre re-render). */
-  private marketCardRect(from: "market" | "supply", i: number): DOMRect | null {
+  private marketCardNode(from: "market" | "supply", i: number): HTMLElement | null {
     const host = document.getElementById(from === "market" ? "fixedMarket" : "supplyMarket");
     // 고정 renders in order; 제시 is displayed SORTED, so match its ORIGINAL index via data attr
     const node = (from === "supply"
       ? host?.querySelector(`[data-sup-idx="${i}"]`)
       : host?.children[i]) as HTMLElement | undefined;
-    return node ? node.getBoundingClientRect() : null;
+    return node??null;
   }
 
   private afterApply(res: ReduceResult): void {
@@ -685,7 +689,7 @@ export abstract class BaseController implements BoardHandlers {
     const face = (p: CoinProfile, frame: string) =>
       `<span class="ct-avatar-mask">${avatarHtml(p.avatar || (p===COIN_ME?"SEEKER_BLUE":"SEEKER_RED"), p.name, 96)}</span><img class="ct-frame" src="${frame}" alt="" draggable="false">`;
     const ov = document.createElement("div");
-    ov.className = "cointoss-ov";
+    ov.className = "cointoss-ov coin-loading";
     ov.innerHTML = `
       <div class="cointoss">
         <div class="ct-coin ${heads ? "to-heads" : "to-tails"}">
@@ -698,7 +702,7 @@ export abstract class BaseController implements BoardHandlers {
         </div>
       </div>`;
     document.body.appendChild(ov);
-    try { const {mountCoinScene}=await import('../ui/coinScene');await mountCoinScene(ov.querySelector<HTMLElement>('.ct-coin')!,heads); } catch { /* CSS coin remains available without GPU. */ }
+    try { const {mountCoinScene}=await import('../ui/coinScene');await mountCoinScene(ov.querySelector<HTMLElement>('.ct-coin')!,heads); } catch { /* CSS coin remains available without GPU. */ } finally {ov.classList.remove("coin-loading");}
     if(this.dead){ov.remove();return;}
     sfx("coin");
     setTimeout(() => sfx(iAmFirst ? "turn" : "pop"), 1700);

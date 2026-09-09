@@ -83,12 +83,13 @@ export class GameView {
     this.root = root;
     this.you = you;
     this.h = h;
+    this.root.dataset.tableState=typeof WebGL2RenderingContext!=='undefined'?'loading':'fallback';
     this.buildSkeleton();
     this.cleanups.push(installGameCursor(this.root));
     if (typeof WebGL2RenderingContext !== 'undefined') {
       void import('./duelScene').then(({ mountDuelScene }) => {
         if (!this.disposed) this.disposeScene = mountDuelScene(this.root);
-      }).catch(() => { /* DOM controls and time remain available without WebGL. */ });
+      }).catch(() => { this.root.dataset.tableState='fallback'; });
     }
   }
 

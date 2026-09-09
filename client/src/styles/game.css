@@ -731,3 +731,10 @@ body:has(.opening-hands) *,body:has(.game) [aria-busy=true] { cursor:url(/ui/cur
 body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!important; }
 
 @media(min-width:900px) and (max-aspect-ratio:3/2){.game #oppRow{align-self:start;}.game #meRow{align-self:end;}}
+
+/* No raster-to-model flash while the shared board is loading. */
+[data-table-state="loading"] .game { background:#152036; }
+.awaiting-board .pile-tag,.awaiting-board .pile-count { visibility:hidden; }
+.cointoss-ov.coin-loading .ct-coin { visibility:hidden; }
+/* Keep depleted supply slots empty, including mouse/focus effects, until commit. */
+.market-cards .card[data-purchase-source][aria-hidden="true"] { visibility:hidden!important;pointer-events:none!important; }

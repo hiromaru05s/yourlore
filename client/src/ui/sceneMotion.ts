@@ -22,21 +22,23 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
     if(disposed||!root.isConnected||req.signal.aborted)return false;
     refresh();const unit=cardUnit(root),{cx,cy,angle,focal}=boardLens();
     const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
-    if(req.kind==='arrival'){
+    if(req.kind==='arrival'||req.kind==='purchase'){
       const item=items.get(req.target.id);if(!item?.pile)return false;
       const count=Number(req.target.dataset.count)||0;
       const capture=await capturePileSurface(req.card,req.target.dataset.sleeve!);if(req.signal.aborted)return false;
       const map=new T.CanvasTexture(capture.face!);map.colorSpace=T.SRGBColorSpace;map.anisotropy=4;
       const moving=cardStock(texture(req.target.dataset.sleeve!),map);scene.add(moving);
       const from=req.card.getBoundingClientRect(),r=layoutRect(req.target),height=unit*(.126+Math.min(count+1,40)*.004);
-      const elevation=unit*4,start=screenToBoard(from.left+from.width/2,from.top+from.height/2,elevation);
+      const purchase=req.kind==='purchase',origin=purchase?layoutRect(req.source):null;
+      const elevation=purchase?unit*(req.source.closest('#supplyMarket')?.30:.22)+unit*.0075:unit*4;
+      const start=origin?{x:origin.left+origin.width/2,y:origin.top+origin.height/2}:screenToBoard(from.left+from.width/2,from.top+from.height/2,elevation);
       const depth=focal-Math.sin(angle)*(start.y-cy)-Math.cos(angle)*elevation;
-      const size=from.width*depth/focal;
+      const size=purchase?unit:from.width*depth/focal;
       req.card.style.visibility='hidden';req.target.dataset.motion='arrival';
-      try{await timeline(reduced?100:620,req.signal,t=>{
-        const p=smooth(t),lift=Math.sin(Math.PI*t)*unit*.65;
+      try{await timeline(reduced?100:purchase?960:620,req.signal,t=>{
+        const p=purchase?smooth(sat((t-.18)/.82)):smooth(t),lift=Math.sin(Math.PI*t)*unit*(purchase?1.15:.65);
         moving.position.set(start.x-cx+(r.left+r.width/2-start.x)*p,elevation+(height-elevation)*p+lift,start.y-cy+(r.top+r.height/2-start.y)*p);
-        moving.scale.setScalar(size+(unit-size)*p);moving.rotation.set(-Math.PI/2+angle*(1-p),0,0);
+        moving.scale.setScalar(size+(unit-size)*p);moving.rotation.set(-Math.PI/2+(purchase?Math.sin(Math.PI*t)*.07:angle*(1-p)),0,0);
       });
       if(disposed||req.signal.aborted||!req.target.isConnected){map.dispose();return false;}
       const print=document.createElement('div');print.className='pile-print';print.setAttribute('aria-hidden','true');
@@ -54,11 +56,14 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       // Reuse the exact resting stock, sleeve, lights and table camera throughout.
       for(let i=0;i<n;i++){const m=cardStock(texture(req.target.dataset.sleeve!));scene.add(m);cards.push(m);}
       req.source.classList.add('is-shuffling');req.target.classList.add('is-shuffling');root.dataset.shufflePhase='lift';
-      try{await timeline(reduced?100:1950,req.signal,t=>{
-        root.dataset.shufflePhase=t<.22?'lift':t<.46?'split':t<.73?'interleave':t<.9?'square':'land';
+      try{await timeline(reduced?100:2450,req.signal,t=>{
+        const cycle=sat((t-.15)/.65)*8,round=Math.min(7,Math.floor(cycle)),phase=cycle-round;
+        root.dataset.shufflePhase=t<.15?'lift':t<.8?(phase<.45?'split':'interleave'):t<.93?'square':'land';
+        root.dataset.shuffleRound=String(round+1);
         cards.forEach((m,i)=>{
-          const lift=smooth(t/.2),travel=smooth((t-.1)/.65),land=smooth((t-.78)/.22),merge=smooth((t-.38-i*.004)/.31);
-          const split=smooth((t-.18)/.17)*(1-merge),side=i%2?1:-1;
+          const lift=smooth(t/.15),travel=smooth((t-.08)/.77),land=smooth((t-.8)/.2);
+          const local=sat((phase-(i%4)*.025)/.9),split=t>=.15&&t<.8?Math.sin(local*Math.PI)**.7:0;
+          const side=(i+round)%2?1:-1;
           const x=a.left+a.width/2+(b.left+b.width/2-a.left-a.width/2)*travel;
           const z=a.top+a.height/2+(b.top+b.height/2-a.top-a.height/2)*travel;
           const rest=unit*(.144+(n<=1?0:i/(n-1))*Math.min(req.count,40)*.005);
@@ -71,7 +76,7 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       req.target.dataset.count=String(req.count);req.source.dataset.count='0';
       for(const e of [req.source,req.target]){const c=e.querySelector('.pile-count');if(c)c.textContent=e.dataset.count!;}
       refresh();dust(req.target);
-      }finally{cards.forEach(dispose);req.source.classList.remove('is-shuffling');req.target.classList.remove('is-shuffling');delete root.dataset.shufflePhase;}
+      }finally{cards.forEach(dispose);req.source.classList.remove('is-shuffling');req.target.classList.remove('is-shuffling');delete root.dataset.shufflePhase;delete root.dataset.shuffleRound;}
       return true;
     }
     const openingDecks=[...root.querySelectorAll<HTMLElement>('.pile--deck')].map(el=>({el,count:Number(el.dataset.count)||0}));
@@ -114,13 +119,14 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
         });
       }
       for(const card of movingCards){
-        const start=700+(card.supply?card.index*160+80:card.index*80),v=sat((ms-start)/650),p=v*v;
+        const start=700+(card.supply?card.index*160+80:card.index*80),v=sat((ms-start)/650),p=v*v*v*v;
         const r=layoutRect(card.element),h=unit*(card.supply?.30:.22),sx=card.supply?-unit*2:innerWidth+unit*2;
         const from=screenToBoard(sx,-innerHeight*.2,flightHeight),x=r.left+r.width/2,z=r.top+r.height/2;
-        card.mesh.visible=ms>=start&&!card.landed;card.mesh.scale.setScalar(unit);
+        card.mesh.visible=ms>=start&&ms<1960;card.mesh.scale.setScalar(unit);
         card.mesh.position.set(from.x-cx+(x-from.x)*p,flightHeight+(h-flightHeight)*p,from.y-cy+(z-from.y)*p);
         card.mesh.rotation.set(-Math.PI/2+(1-v)*.25,0,(card.supply?1:-1)*(1-v)*.16);
-        if(v===1&&!card.landed){card.landed=true;card.element.style.visibility='';card.mesh.visible=false;card.element.dataset.introLanded='true';dust(card.element);}
+        if(v===1&&!card.landed){card.landed=true;card.element.dataset.introLanded='true';dust(card.element);}
+        if(ms>=1960)card.element.style.visibility='';
       }
       const market=root.querySelector<HTMLElement>('.market-counter');if(market){
         // Empty furniture falls first; DOM controls are revealed after it lands.
