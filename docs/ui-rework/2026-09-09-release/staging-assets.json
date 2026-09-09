@@ -1,0 +1,173 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 1192,
+      "sha256": "33c44e7785ef63ba241b2de1eb626b213d25b38a8aa28ec6d9d5f0399ce863b1",
+      "match": true
+    },
+    {
+      "path": "assets/paperCard-CicCINSi.js",
+      "bytes": 2692,
+      "sha256": "c5b636b3381b6c8b0ea9ad3a0f64888f62dc8cfea26cefda2cc3c44138849181",
+      "match": true
+    },
+    {
+      "path": "assets/three.module-BgJ404qw.js",
+      "bytes": 601283,
+      "sha256": "037438c5c2a299de97b4ebc238e5475e90fd86a7b994ec5ebdcce9f33b26cb4f",
+      "match": true
+    },
+    {
+      "path": "assets/main-D0fdHxzN.js",
+      "bytes": 1023950,
+      "sha256": "01c9e5a78c3a733d41e194bfed1bf5e87731584a649bd67efbc2d11d6f1bd9a3",
+      "match": true
+    },
+    {
+      "path": "assets/GLTFLoader-xThsSWrz.js",
+      "bytes": 44842,
+      "sha256": "bb33f2710bdca27cb2f1504ce1c6fe94dd6342efbc2c1c1386a89138dee9be1f",
+      "match": true
+    },
+    {
+      "path": "assets/diceScene-B2VlbYGf.js",
+      "bytes": 7129,
+      "sha256": "2959cf66fea7e05e6941cd8c87b9ced201e81feb5ec1cea49fb089a1a29bf8a2",
+      "match": true
+    },
+    {
+      "path": "assets/paperShuffle-lCLSR-YZ.js",
+      "bytes": 2987,
+      "sha256": "81116a12da4bfd690c628f8a430aeab84376da487388e1eab5ebdba07350730b",
+      "match": true
+    },
+    {
+      "path": "assets/RoomEnvironment-fvoh5mwJ.js",
+      "bytes": 2118,
+      "sha256": "060f40f55b3c3da5d5fb121b86aee7212e99612e9aa70392d6feb84adf05df11",
+      "match": true
+    },
+    {
+      "path": "assets/paperDraw-D9vfI9-K.js",
+      "bytes": 3225,
+      "sha256": "a56851f3e60af59640c561096693af9356386c70a9f482e95bb65fcc0024660a",
+      "match": true
+    },
+    {
+      "path": "assets/tablePreview-2Rkra2Ey.css",
+      "bytes": 1870,
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+      "match": true
+    },
+    {
+      "path": "assets/modulepreload-polyfill-B5Qt9EMX.js",
+      "bytes": 771,
+      "sha256": "607112fb81d7899ceedf89cdb1b3540a53eb96ad5e4202fb1e22f873281de839",
+      "match": true
+    },
+    {
+      "path": "assets/main-DhQyVc6n.css",
+      "bytes": 161371,
+      "sha256": "6c371a44df320154af72f5cebcd6e8b6abb3a3e8ddd0509d51564423e4eecef4",
+      "match": true
+    },
+    {
+      "path": "assets/cardSurface-DVHbEgkz.js",
+      "bytes": 3285,
+      "sha256": "7e06ab49a1f6cc2c5572a600fbdfba0a8860bc0dc3720d637ce8c4061363ad38",
+      "match": true
+    },
+    {
+      "path": "assets/tablePreview-GFpLb3f0.js",
+      "bytes": 25340,
+      "sha256": "02c232f613bd53a11bababc5a36efa75cd9034933dc05f3448e96c7e5c8c504a",
+      "match": true
+    },
+    {
+      "path": "assets/duelScene-C-9HSxNV.js",
+      "bytes": 12791,
+      "sha256": "4a5f35a541c946862f144f25f6b70c1613415a18a39ab69df36cacfbb9e0e732",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/shelf-low.glb",
+      "bytes": 54272,
+      "sha256": "b987427ef758df58fab602c51b12eaecae7b99a8bda44852a8ea287aa5ea57d6",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/market-low.glb",
+      "bytes": 43864,
+      "sha256": "53467b4b1a184e0f844de266616d1ca5c7815e624f24f3021a12307cb561b5f8",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/market.glb",
+      "bytes": 96872,
+      "sha256": "421d378ae17154209c05abe8d09a2b6aa3d0a2cf68103b6bb63f039d6d11de56",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/shelf.glb",
+      "bytes": 115852,
+      "sha256": "ebb40407e598b9f08ed1528cffaf524beb6fd3dcdf6d5c479c7d7f2f3673b9d8",
+      "match": true
+    },
+    {
+      "path": "models/lore-table/table-low.glb",
+      "bytes": 88284,
+      "sha256": "0d5999df197531ebb90be09ba2c73bc1c394ce31083507e886111e7b2abe88b2",
+      "match": true
+    },
+    {
+      "path": "models/lore-table/table.glb",
+      "bytes": 218004,
+      "sha256": "eb8a42dd6a2d53127ffc30a2b2f7490a5a947191f07c1c914ed64c9d20263c9b",
+      "match": true
+    },
+    {
+      "path": "models/cosmetics/deck_holder_biblion_ivory/v1/model-low.glb",
+      "bytes": 31600,
+      "sha256": "3a45ab899b2dd272149bf1cc177d3f8b8e0ff35e839e3dc8a12b9fc65633b213",
+      "match": true
+    },
+    {
+      "path": "models/cosmetics/deck_holder_biblion_ivory/v1/model.glb",
+      "bytes": 92912,
+      "sha256": "d8d9bd9b7ca4b9b2f79033a70dac763d07ad4d5166aab2c5ef55fdfb4704b5e9",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/v2/shelf-low.glb",
+      "bytes": 116228,
+      "sha256": "1dff51240baa0b16c050ac0069100e28cb9e72db6ce13c8cacc70697cf4927fc",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/v2/supply.glb",
+      "bytes": 35544,
+      "sha256": "ad7dba676ca6cf3b7c3ee813ffb4059ec3c0372b6cc2023569034010ba8fbaa1",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/v2/supply-low.glb",
+      "bytes": 16832,
+      "sha256": "38fab62cd0837fdb99c33253cf6305085b0847c38d411ff6a65e4bb2c405349d",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/v2/shelf.glb",
+      "bytes": 541128,
+      "sha256": "96c7d57746c8c1df5a80fc3de65d7c4588edc37139ca7c8b6697f0846916cac4",
+      "match": true
+    },
+    {
+      "path": "art/biblion/release/rift-slit-16.png",
+      "bytes": 380874,
+      "sha256": "b1b981d78428edf348e3f1d20c5a87c361972003c76eb3a4a6647e5186e71b1c",
+      "match": true
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "environment": "staging",
+  "domain": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "version": "03ca8e4a-bba5-452c-8782-f0ca88fbfb32",
+  "previousVersion": "7b063a10-ac81-44a5-97f8-02efdf3e19e8",
+  "baseCommit": "c2cd0cf",
+  "branch": "codex/biblion-ingame-rework",
+  "tag": "blender-table-20260909",
+  "wrangler": "4.130.0",
+  "productionDeployed": false,
+  "authenticatedStagingDuelVerified": false
+}

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>LORE — 白磁の対戦台 / 3D Preview</title>
+  </head>
+  <body>
+    <main id="table-stage" aria-label="白磁の対戦台の3Dプレビュー"></main>
+    <header class="preview-header">
+      <div><p class="eyebrow">LORE / OBJECT STUDY 01</p><h1>白磁の対戦台</h1></div>
+      <nav aria-label="カメラの角度">
+        <button data-view="reference" aria-pressed="true">参照角度</button>
+        <button data-view="quarter" aria-pressed="false">斜め</button>
+        <button data-view="top" aria-pressed="false">真上</button>
+      </nav>
+    </header>
+    <footer class="preview-footer">
+      <div><p id="status" role="status">モデルを読み込み中…</p><p class="hint">ドラッグで回転 · スクロールで拡大</p></div>
+      <div class="options">
+        <label><input type="checkbox" id="low-detail" /> 軽量モデル</label>
+        <a id="download" href="/models/lore-table/table.glb" download>GLBを保存 <span aria-hidden="true">↗</span></a>
+      </div>
+    </footer>
+    <script type="module" src="/src/dev/tablePreview.ts"></script>
+  </body>
+</html>

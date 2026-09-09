@@ -1,0 +1,21 @@
+{
+  "capturedAt": "2026-09-07T14:50:04.518Z",
+  "worker": "lore-server-staging",
+  "host": "test.yourlore.xyz",
+  "previousDeployment": {
+    "id": "89baa40d-d6c7-4eb9-991c-c0b6400b8881",
+    "created_on": "2026-09-07T13:59:26.974257Z",
+    "versions": [
+      {
+        "version_id": "2e8fd1d2-e025-42cf-9f94-b207df1da084",
+        "percentage": 100
+      }
+    ]
+  },
+  "baseCommit": "dfa553d",
+  "branch": "codex/biblion-ingame-rework",
+  "deployedVersion": "f98cee2a-4458-4812-ae21-1f9d7471cfc1",
+  "verifiedAt": "2026-09-07T14:56:34.499Z",
+  "wranglerVersion": "4.129.0",
+  "rollbackCommand": "wrangler rollback 2e8fd1d2-e025-42cf-9f94-b207df1da084 -c server/wrangler.toml --env staging"
+}

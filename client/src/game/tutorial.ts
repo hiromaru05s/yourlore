@@ -1,21 +1,20 @@
 // ============================================================
 // LORE — interactive tutorial controller.
 // A real local game (fixed seed, scripted docile opponent) with a
-// coach overlay. 10 hands-on steps teaching every core mechanic,
+// coach overlay. 9 hands-on steps teaching every core mechanic,
 // each detected from engine events/actions/state and rewarded with
 // credits via /api/rewards/claim (server dedupes → replays never
-// double-pay). Full curriculum totals 1000💎.
+// double-pay). Full curriculum totals 890💎.
 //
 //   1. 화면 이해     (coach confirm)                 +50
 //   2. 카드 구매     (buy)                           +70
 //   3. 제시 리롤     (refresh)                        +80
 //   4. 몬스터 소환   (summon)                         +90   ← M4 injected
-//   5. 마법 시전     (cast a spell)                  +100   ← S11 injected
+//   5. 마법 시전     (cast a spell)                  +100   ← S13 injected
 //   6. 공격          (attack)                         +90
-//   7. 함정          (trapSet → 봇 공격 → trapReveal) +110   ← T6 injected
-//   8. 종족 시너지   (2 same-tribe monsters)         +130   ← TSO2+TSO5, mana staged
-//   9. 어튠          (max mana +1)                    +80   ← STARTER_MANA injected
-//  10. 승리          (win)                           +200   ← bot HP lowered
+//   7. 종족 시너지   (2 same-tribe monsters)         +130   ← TSO2+TSO3, mana staged
+//   8. 어튠          (max mana +1)                    +80   ← STARTER_MANA injected
+//   9. 승리          (win)                           +200   ← bot HP lowered
 // ============================================================
 import type { Action, FieldMon, GameEvent, PlayerState } from "../shared/types";
 import { createGame, effAtk, reduce } from "../shared/engine";
@@ -32,7 +31,10 @@ export interface TutorialHooks {
 
 export interface TutStepMeta { key: string; reward: number; titleKey: string; }
 
-/** Step metadata — shared with the tutorial screen (list + claimed marks). Sum = 1000. */
+/** Step metadata — shared with the tutorial screen (list + claimed marks). Sum = 890.
+ * Keep the existing reward/translation keys: previously claimed progress must not shift.
+ * tuto:7 is retired; it is never requested by this curriculum.
+ */
 export const TUT_STEPS: TutStepMeta[] = [
   { key: "tuto:1",  reward: 50,  titleKey: "tut.s1.title" },
   { key: "tuto:2",  reward: 70,  titleKey: "tut.s2.title" },
@@ -40,14 +42,12 @@ export const TUT_STEPS: TutStepMeta[] = [
   { key: "tuto:4",  reward: 90,  titleKey: "tut.s4.title" },
   { key: "tuto:5",  reward: 100, titleKey: "tut.s5.title" },
   { key: "tuto:6",  reward: 90,  titleKey: "tut.s6.title" },
-  { key: "tuto:7",  reward: 110, titleKey: "tut.s7.title" },
   { key: "tuto:8",  reward: 130, titleKey: "tut.s8.title" },
   { key: "tuto:9",  reward: 80,  titleKey: "tut.s9.title" },
   { key: "tuto:10", reward: 200, titleKey: "tut.s10.title" },
 ];
 
 const SEED = 20260705; // deterministic market/draws for a reproducible lesson
-const TRAP_STEP = 6;   // 0-based index of the 함정 step (has 2 phases)
 
 /** true if any single tribe has ≥2 DISTINCT cards on this field (a synergy has formed). */
 function hasTribeSynergy(p: PlayerState): boolean {
@@ -63,13 +63,13 @@ function hasTribeSynergy(p: PlayerState): boolean {
 
 export class TutorialController extends BaseController {
   private step = 0;   // 0-based index into TUT_STEPS
-  private phase = 0;  // trap step sub-phase: 0 = set it, 1 = end turn & watch
   private earned = 0;
   private tutDone = false;
   private tutWinShown = false;
-  private botAttacked = false;
   private botTimer = 0;
   private glowTimer = 0;
+  private winTimer = 0;
+  private winDetail: HTMLElement | null = null;
   private coach!: HTMLElement;
   private hooks: TutorialHooks;
 
@@ -85,7 +85,7 @@ export class TutorialController extends BaseController {
       p1: { id: "bot", name: "TUTOR", isBot: true },
     });
     // bot is unkillable until the victory step, so earlier attacks/spells can't end
-    // the lesson early; activateStep(9) drops its HP to a single finishing blow.
+    // the lesson early; activateStep(8) drops its HP to a single finishing blow.
     res.state.players[1].hp = res.state.players[1].maxHp = 999;
     this.applyResult(res, false);
     this.buildCoach(root);
@@ -122,15 +122,11 @@ export class TutorialController extends BaseController {
         if (events.some((e) => e.type === "playSpell" && e.player === 0 && DB[e.id]?.t === "spell")) return this.completeStep();
         break;
       case 5: if (ev("attack")) return this.completeStep(); break;                               // attack
-      case TRAP_STEP:                                                                            // trap (2 phases)
-        if (this.phase === 0 && ev("trapSet")) { this.phase = 1; this.renderCoach(); return; }
-        if (this.phase === 1 && ev("trapReveal")) return this.completeStep();
-        break;
-      case 7: if (ev("summon") && hasTribeSynergy(me)) return this.completeStep(); break;        // tribe synergy
-      case 8: // attune: max mana went up (STARTER_MANA / attune played)
+      case 6: if (ev("summon") && hasTribeSynergy(me)) return this.completeStep(); break;        // tribe synergy
+      case 7: // attune: max mana went up (STARTER_MANA / attune played)
         if (events.some((e) => e.type === "playSpell" && e.player === 0) && me.maxMana > this.preAttuneMax) return this.completeStep();
         break;
-      case 9: if (events.some((e) => e.type === "win" && e.winner === 0)) return this.completeStep(); break; // victory
+      case 8: if (events.some((e) => e.type === "win" && e.winner === 0)) return this.completeStep(); break; // victory
     }
   }
 
@@ -144,6 +140,7 @@ export class TutorialController extends BaseController {
     void api.claimReward(meta.key)
       .then((r) => {
         this.earned += r.amount;
+        if (this.winDetail) this.winDetail.textContent = t("tut.complete.detail").replace("{n}", String(this.earned));
         this.hooks.onCredits?.(r.credits);
         this.toast(idx, r.amount);
       })
@@ -153,8 +150,6 @@ export class TutorialController extends BaseController {
   /** Enter step `i`, staging whatever the lesson needs (mana / cards / HP). */
   private activateStep(i: number): void {
     this.step = i;
-    this.phase = 0;
-    this.botAttacked = false;
     const g = this.state;
     const me = g.players[0];
     // give the player their turn with full mana for most lessons
@@ -162,19 +157,18 @@ export class TutorialController extends BaseController {
     if (i === 1) me.mana = me.maxMana;                        // buy
     if (i === 2) { me.mana = Math.max(me.mana, 1); }           // reroll (needs 1 mana)
     if (i === 3) { me.mana = me.maxMana; this.ensureHand("M4", (c) => c.t === "mon"); }       // summon
-    if (i === 4) { me.mana = me.maxMana; this.ensureHand("S11", (c) => c.t === "spell"); }    // cast spell (파이어볼 4dmg, no target)
+    if (i === 4) { me.mana = me.maxMana; this.giveOnce("S13"); }    // cast a current, target-free damage spell
     if (i === 5) { me.mana = me.maxMana; this.ensureAttacker(); }                             // attack
-    if (i === TRAP_STEP) { me.mana = me.maxMana; this.ensureHand("T6", (c) => c.t === "trap"); } // trap
-    if (i === 7) {                                            // tribe synergy: two SAME-tribe monsters
+    if (i === 6) {                                            // tribe synergy: two SAME-tribe monsters
       me.maxMana = Math.max(me.maxMana, 7); me.mana = me.maxMana;
-      this.giveOnce("TSO2"); this.giveOnce("TSO5"); // 외로운 늑대(고독 4/2) + 고독한 방랑자(고독 5/5)
+      this.giveOnce("TSO2"); this.giveOnce("TSO3"); // neither requires a tribe-only field
     }
-    if (i === 8) {                                            // attune
+    if (i === 7) {                                            // attune
       me.mana = Math.max(me.mana, 3);
       this.preAttuneMax = me.maxMana;
       this.giveOnce("STARTER_MANA");
     }
-    if (i === 9) {                                            // victory: one clean hit finishes it
+    if (i === 8) {                                            // victory: one clean hit finishes it
       this.ensureAttacker();
       const bot = g.players[1];
       const best = Math.max(1, ...me.field.map((m) => effAtk(me, m)));
@@ -206,7 +200,7 @@ export class TutorialController extends BaseController {
     this.state.players[0].hand.push({ ...structuredClone(def), uid: `tut${++this.state.uidSeq}` });
   }
 
-  // ---- scripted opponent: passes every turn, except the one trap demo ----
+  // ---- scripted opponent: passes every turn ----
   protected maybeBot(): void {
     const g = this.state;
     if (g.over || !g.players[g.cur].isBot) return;
@@ -217,18 +211,6 @@ export class TutorialController extends BaseController {
   private botStep(): void {
     const g = this.state;
     if (g.over || !g.players[g.cur].isBot) return;
-    if (this.step === TRAP_STEP && this.phase === 1 && !this.botAttacked) {
-      // summon a scripted assassin (direct-attacker → no target pending),
-      // then attack into the player's freshly set counter trap
-      this.botAttacked = true;
-      const def = structuredClone(DB.ASSASSIN1); // 초급 암살자 4/0, directOnly
-      const uid = `tut${++this.state.uidSeq}`;
-      const m: FieldMon = { ...def, uid, exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
-      g.players[1].field.push(m);
-      this.view.render(this.state);
-      this.botTimer = window.setTimeout(() => this.apply({ type: "attack", uid }), 1100);
-      return; // maybeBot() re-fires after the attack resolves → falls through to endTurn
-    }
     this.apply({ type: "endTurn" });
   }
 
@@ -242,11 +224,12 @@ export class TutorialController extends BaseController {
 
   private renderCoach(): void {
     const n = this.step + 1;
-    const body = this.step === TRAP_STEP ? t(`tut.s${n}.p${this.phase}`) : t(`tut.s${n}.body`);
+    const meta = TUT_STEPS[this.step];
+    const body = t(meta.titleKey.replace(".title", ".body"));
     this.coach.innerHTML = `
       <div class="tut-coach-head">
         <span class="tut-coach-step">${n}/${TUT_STEPS.length}</span>
-        <b>${t(`tut.s${n}.title`)}</b>
+        <b>${t(meta.titleKey)}</b>
         <span class="tut-coach-gem">+${TUT_STEPS[this.step].reward} 💎</span>
         <a class="tut-coach-exit" title="${t("tut.exit")}">✕</a>
       </div>
@@ -267,10 +250,9 @@ export class TutorialController extends BaseController {
       case 3: return ["#hand"];
       case 4: return ["#hand"];
       case 5: return ["#meRow .card"];
-      case TRAP_STEP: return this.phase === 0 ? ["#hand"] : ["#endBtn"];
+      case 6: return ["#hand"];
       case 7: return ["#hand"];
-      case 8: return ["#hand"];
-      case 9: return ["#meRow .card"];
+      case 8: return ["#meRow .card"];
       default: return [];
     }
   }
@@ -296,13 +278,18 @@ export class TutorialController extends BaseController {
     if (this.tutWinShown || this.state.winner == null) return;
     this.tutWinShown = true;
     const won = this.state.winner === 0;
-    const detail = won ? t("tut.complete.detail").replace("{n}", String(this.earned)) : "";
-    setTimeout(() => winModal(won, detail, () => this.exits.onRematch(), () => this.exits.onHome()), 600);
+    this.winTimer = window.setTimeout(() => {
+      const detail = won ? t("tut.complete.detail").replace("{n}", String(this.earned)) : "";
+      winModal(won, detail, () => this.exits.onRematch(), () => this.exits.onHome());
+      if (won) this.winDetail = document.getElementById("winDetail");
+    }, 600);
   }
 
   destroy(): void {
     clearTimeout(this.botTimer);
     clearInterval(this.glowTimer);
+    clearTimeout(this.winTimer);
+    this.winDetail = null;
     document.querySelectorAll(".tut-glow").forEach((el) => el.classList.remove("tut-glow"));
     this.coach.remove();
     super.destroy();

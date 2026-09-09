@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "target": "#meRow .zone-st",
+      "submissionMs": 16
+    },
+    {
+      "target": "#meRow .zone-mon",
+      "submissionMs": 3
+    },
+    {
+      "target": "#market",
+      "submissionMs": 3
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "real BaseController and reducer",
+    "spell lane / monster lane / market",
+    "immediate state commit",
+    "drop back and outside cancel",
+    "mana failure feedback",
+    "pointercancel cleanup",
+    "native touch permanent spell"
+  ]
+}

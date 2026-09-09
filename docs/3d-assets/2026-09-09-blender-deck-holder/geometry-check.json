@@ -1,0 +1,87 @@
+{
+  "standard": {
+    "passed": true,
+    "triangles": 1688,
+    "drawCalls": 1,
+    "materials": 1,
+    "bytes": 92912,
+    "boundsMeters": {
+      "min": [
+        -0.04032000154256821,
+        -0.008960000239312649,
+        -0.06111999973654747
+      ],
+      "max": [
+        0.04032000154256821,
+        0.0,
+        0.06111999973654747
+      ]
+    },
+    "topAreaMeters2": 0.009087468634930596,
+    "topHeightDeviationMeters": 0.0,
+    "topNormalError": 0,
+    "bilateralSymmetry": true,
+    "anchorIdentity": true,
+    "embeddedTextureSizes": [
+      [
+        1024,
+        1024
+      ],
+      [
+        512,
+        512
+      ]
+    ],
+    "gpuMiBIncludingMipmaps": 6.666666666666666,
+    "externalURIs": 0
+  },
+  "low": {
+    "passed": true,
+    "triangles": 448,
+    "drawCalls": 1,
+    "materials": 1,
+    "bytes": 31600,
+    "boundsMeters": {
+      "min": [
+        -0.04032000154256821,
+        -0.008960000239312649,
+        -0.06111999973654747
+      ],
+      "max": [
+        0.04032000154256821,
+        0.0,
+        0.06111999973654747
+      ]
+    },
+    "topAreaMeters2": 0.009087157753033176,
+    "topHeightDeviationMeters": 0.0,
+    "topNormalError": 0,
+    "bilateralSymmetry": true,
+    "anchorIdentity": true,
+    "embeddedTextureSizes": [
+      [
+        512,
+        512
+      ],
+      [
+        256,
+        256
+      ]
+    ],
+    "gpuMiBIncludingMipmaps": 1.6666666666666665,
+    "externalURIs": 0
+  },
+  "referenceFit": {
+    "cardMillimeters": [
+      64,
+      100,
+      0.32
+    ],
+    "count": 40,
+    "stackHeightMillimeters": 12.8,
+    "centeredEdgeClearanceMillimeters": [
+      6.4,
+      9.2
+    ]
+  }
+}

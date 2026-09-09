@@ -1,0 +1,168 @@
+{
+  "verifiedAt": "2026-09-08T19:36:25.769546+00:00",
+  "origin": "https://test.yourlore.xyz",
+  "checked": 20,
+  "allMatched": true,
+  "files": [
+    {
+      "path": "index.html",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 1192,
+      "sha256": "9e9d1db7e62268a4105fa5df07f55efd713b60951e710567d710517b841ad244",
+      "matched": true
+    },
+    {
+      "path": "table-preview.html",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 1752,
+      "sha256": "11816ab86c7075dda70798bbe2f461abce2f830dc83c9e649737d10f33b27d1a",
+      "matched": true
+    },
+    {
+      "path": "assets/three.module-BuP3yvE1.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 606119,
+      "sha256": "8a19ee3158c041be1a4a0212278c2207da60dd7e1785340e00aafa8d012911df",
+      "matched": true
+    },
+    {
+      "path": "assets/paperDraw-EsEdIBGm.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 3225,
+      "sha256": "85cbc738ccb98b2227e5a157934962c74ba8a6421a0a30433ad6244e1d279a18",
+      "matched": true
+    },
+    {
+      "path": "assets/GLTFLoader-CiIcz1wl.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 44847,
+      "sha256": "c226df09a7376b158f0b6a7caf0c4c2a4781a3f809af6476c098fa265dba24e8",
+      "matched": true
+    },
+    {
+      "path": "assets/main-B5BXrAg8.css",
+      "status": 200,
+      "contentType": "text/css",
+      "bytes": 153675,
+      "sha256": "e62b897853efee36d532ebcf94a883f698ba4c8a96684bb11384e5968fed0219",
+      "matched": true
+    },
+    {
+      "path": "assets/paperCard-C56gfBV8.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 2695,
+      "sha256": "f0a6fd6e72e878e5097b2fb206df7a97754332eae0c76d240b2b237272c27c0e",
+      "matched": true
+    },
+    {
+      "path": "assets/paperShuffle-CCeDhnft.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 2987,
+      "sha256": "61e88677fda6311a6d78d079c6d505d46deaa0b0e12a682b679b6b3c617753a9",
+      "matched": true
+    },
+    {
+      "path": "assets/tablePreview-BraIzYCM.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 25340,
+      "sha256": "638a0a2a2b01d371adda082d6b6b194931aaa24363fdd13f5594cac4581f4e10",
+      "matched": true
+    },
+    {
+      "path": "assets/diceScene-CDPIwmkO.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 5879,
+      "sha256": "b83a3a7ae470d3cca28cec937e60cb7258370ecc4a12c6ebea4d0cf87d5c34c1",
+      "matched": true
+    },
+    {
+      "path": "assets/tablePreview-2Rkra2Ey.css",
+      "status": 200,
+      "contentType": "text/css",
+      "bytes": 1870,
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+      "matched": true
+    },
+    {
+      "path": "assets/modulepreload-polyfill-B5Qt9EMX.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 771,
+      "sha256": "607112fb81d7899ceedf89cdb1b3540a53eb96ad5e4202fb1e22f873281de839",
+      "matched": true
+    },
+    {
+      "path": "assets/cardSurface-DVHbEgkz.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 3285,
+      "sha256": "7e06ab49a1f6cc2c5572a600fbdfba0a8860bc0dc3720d637ce8c4061363ad38",
+      "matched": true
+    },
+    {
+      "path": "assets/duelScene-aZbdl-lC.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 15152,
+      "sha256": "3895c2212314cc62a53e96b90f1843c863fb4fbf9581f7373a9da29c6f5ec9a3",
+      "matched": true
+    },
+    {
+      "path": "assets/main-Co_PDyvf.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 1004283,
+      "sha256": "d0ffa655d2b06450c96844d32a3df7e7f1db77366b07b2baf2b9183dff0cb1cc",
+      "matched": true
+    },
+    {
+      "path": "assets/RoomEnvironment-B55AfmGJ.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 2121,
+      "sha256": "7beae5a5f671a8dc6ad8c6ec2d62b4f37779cc9778b883b8cc698a3e1fc1cead",
+      "matched": true
+    },
+    {
+      "path": "models/lore-table/preview.webp",
+      "status": 200,
+      "contentType": "image/webp",
+      "bytes": 18570,
+      "sha256": "a77ff220e5b6fcb16e7a89645d1f04b1f4220963736d135ab28cef18eb2ec964",
+      "matched": true
+    },
+    {
+      "path": "models/lore-table/table-low.glb",
+      "status": 200,
+      "contentType": "model/gltf-binary",
+      "bytes": 88284,
+      "sha256": "0d5999df197531ebb90be09ba2c73bc1c394ce31083507e886111e7b2abe88b2",
+      "matched": true
+    },
+    {
+      "path": "models/lore-table/table.glb",
+      "status": 200,
+      "contentType": "model/gltf-binary",
+      "bytes": 218004,
+      "sha256": "eb8a42dd6a2d53127ffc30a2b2f7490a5a947191f07c1c914ed64c9d20263c9b",
+      "matched": true
+    },
+    {
+      "path": "models/lore-table/manifest.json",
+      "status": 200,
+      "contentType": "application/json",
+      "bytes": 1152,
+      "sha256": "0644fa4d95969b01d99caf492ae38fb47bae74c0d95435d4f9ce7887b7097ee3",
+      "matched": true
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "staging": {
+    "origin": "https://test.yourlore.xyz",
+    "worker": "lore-server-staging",
+    "version": "eda9583e-7e37-4c84-abb3-d35b151fce95",
+    "initialVerifiedVersion": "2e934903-62c9-482f-9349-41a1ea82f49f",
+    "qaAccountsCleaned": true,
+    "verifiedAssetHashes": 28
+  },
+  "production": {
+    "origin": "https://yourlore.xyz",
+    "worker": "lore-server",
+    "previousVersion": "d98ac879-17a0-467d-a7d7-f119398cc912",
+    "status": "pending"
+  },
+  "cardRework": "292099cb27aaad86a007193f881d2ef91033dd56",
+  "designBase": "e842adb",
+  "integrationMerge": "6430057",
+  "wrangler": "4.130.0",
+  "databaseMigrations": false
+}

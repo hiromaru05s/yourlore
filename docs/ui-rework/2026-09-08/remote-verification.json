@@ -1,0 +1,72 @@
+{
+  "verifiedAt": "2026-09-07T15:40:58.156Z",
+  "origin": "https://test.yourlore.xyz",
+  "results": [
+    {
+      "path": "index.html",
+      "status": 200,
+      "sha256": "725847c1c3ce438a78681d0fbae2afe110b717ba5d4d9d518e2f951e18da73e4",
+      "matches": true
+    },
+    {
+      "path": "assets/duelScene-QpiENH7k.js",
+      "status": 200,
+      "sha256": "a983f875a71d1e73d4ff18b4b0dd586f00674a354916c3de4cdc5182ece61359",
+      "matches": true
+    },
+    {
+      "path": "assets/index-C3PfPPpB.js",
+      "status": 200,
+      "sha256": "f8db0c37db3d4f0778b5d5bc4e4a242218674d8cb668e15364a4c51f04af4184",
+      "matches": true
+    },
+    {
+      "path": "assets/index-jqXXIup9.css",
+      "status": 200,
+      "sha256": "2654f2d1a15fa2bec8dbae5e5a9e14b3853387132d4d78e51f606bffb627f004",
+      "matches": true
+    },
+    {
+      "path": "art/biblion/ui/blink-blue.png",
+      "status": 200,
+      "sha256": "ab01f34469e51e88ad0e3864bcfa03333626262b4a2db1e74ae6259275964a42",
+      "matches": true
+    },
+    {
+      "path": "art/biblion/ui/blink-red.png",
+      "status": 200,
+      "sha256": "6532c5fa457d854233a96e6ec2d459f4431cf44a09c7f7a7aa24ef16a371029f",
+      "matches": true
+    },
+    {
+      "path": "art/biblion/ui/card-frame.png",
+      "status": 200,
+      "sha256": "8ae8cb25e5171af8e1b82f711fab4dd51b053b0ae01a08e23efc34f4c72ec7d2",
+      "matches": true
+    },
+    {
+      "path": "art/biblion/ui/field-frame.png",
+      "status": 200,
+      "sha256": "41459f2b42dcef706176ab3bd96214b8d7ab0d63d693d96ab95de64831ba2a36",
+      "matches": true
+    },
+    {
+      "path": "art/biblion/ui/mana-empty.png",
+      "status": 200,
+      "sha256": "1dbc65960b6087da8a6b585ae73dda24e218d83acbb2fe44c9c13f6dc141fb39",
+      "matches": true
+    },
+    {
+      "path": "art/biblion/ui/mana-filled.png",
+      "status": 200,
+      "sha256": "540f3a2a23b86495675e8b7b205b7206c86f4b304ab3296c8e322680865138e7",
+      "matches": true
+    },
+    {
+      "path": "art/biblion/ui/portrait-frame.png",
+      "status": 200,
+      "sha256": "4b91d6ccad4d5578f48fdd1057971e360cbfa32a6665671ebe21357695d70115",
+      "matches": true
+    }
+  ]
+}

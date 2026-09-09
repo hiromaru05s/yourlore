@@ -4,6 +4,7 @@
 import "./styles/tokens.css";
 import "./styles/base.css";
 import "./styles/card.css";
+import "./styles/game-overlays.css";
 import "./styles/game.css";
 import "./styles/dice.css";
 import "./styles/screens.css";

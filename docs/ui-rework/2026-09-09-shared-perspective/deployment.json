@@ -1,0 +1,16 @@
+{
+  "environment": "staging",
+  "domain": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "version": "a15dff4d-9ba0-4757-9782-f992eb64f0e0",
+  "previousVersion": "2097b48b-8907-419f-936f-760653984a69",
+  "sourceCommit": "a1e8e8a",
+  "branch": "codex/biblion-ingame-rework",
+  "tag": "shared-perspective-20260909",
+  "wrangler": "4.130.0",
+  "productionDeployed": false,
+  "checkedAt": "2026-09-08T21:58:02.993326+00:00",
+  "remoteFilesMatched": 23,
+  "onlinePvpVerified": false,
+  "authenticatedStagingBotVerified": true
+}

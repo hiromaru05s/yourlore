@@ -1,0 +1,127 @@
+[
+  {
+    "name": "card-frame",
+    "prompt": "Production game UI asset for LORE's Biblion magical library. Sophisticated restrained anime fantasy UI, Genshin-like simplicity: ivory porcelain, midnight navy, extremely thin pale champagne metal, tiny cyan accents. Clean smooth silhouette, generous negative space, subtle tactile depth, NO baroque filigree, NO jewels clusters, NO rococo scrollwork. True transparent PNG alpha background, no painted checkerboard, no text/digits/letters/watermark.\nSingle portrait rectangle border aspect2:3 aligned exactly to canvas edges. Only outer3% thin double-line ivory and champagne border, tiny simple compass corner cuts. Entire interior transparent. No panels, badges or decorations projecting into interior.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-e7bda817-a81a-45d9-9d79-94489daca6f8.png"
+  },
+  {
+    "name": "field-frame",
+    "prompt": "Production game UI asset for LORE's Biblion magical library. Sophisticated restrained anime fantasy UI, Genshin-like simplicity: ivory porcelain, midnight navy, extremely thin pale champagne metal, tiny cyan accents. Clean smooth silhouette, generous negative space, subtle tactile depth, NO baroque filigree, NO jewels clusters, NO rococo scrollwork. True transparent PNG alpha background, no painted checkerboard, no text/digits/letters/watermark.\nSingle square border aligned to canvas edges. Only outer3% thin ivory/champagne rim with gently arched top edge and clipped lower corners, understated cyan accent at bottom. Entire center transparent. No text, no stats, no art.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-dc814ef2-688b-4b1b-af67-f994bf06225b.png"
+  },
+  {
+    "name": "portrait-self",
+    "prompt": "Production game UI asset for LORE's Biblion magical library. Sophisticated restrained anime fantasy UI, Genshin-like simplicity: ivory porcelain, midnight navy, extremely thin pale champagne metal, tiny cyan accents. Clean smooth silhouette, generous negative space, subtle tactile depth, NO baroque filigree, NO jewels clusters, NO rococo scrollwork. True transparent PNG alpha background, no painted checkerboard, no text/digits/letters/watermark.\nSingle broad shield-shaped character portrait frame: rounded arch at top and clean tapered U-shaped base, squarecanvas. Thin ivory and champagne perimeter, tiny blue compass notch at bottom center. Interior opening covers80% canvas, transparent. Refined simple identity frame; outer frame fills95%canvas. No portrait, no heavy ornament.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-696a2bd5-5de5-4c9e-9130-1bb339b3df07.png"
+  },
+  {
+    "name": "portrait-opp",
+    "prompt": "Production game UI asset for LORE's Biblion magical library. Sophisticated restrained anime fantasy UI, Genshin-like simplicity: ivory porcelain, midnight navy, extremely thin pale champagne metal, tiny cyan accents. Clean smooth silhouette, generous negative space, subtle tactile depth, NO baroque filigree, NO jewels clusters, NO rococo scrollwork. True transparent PNG alpha background, no painted checkerboard, no text/digits/letters/watermark.\nSingle character portrait frame on square canvas. Top opens toward sky, thin arch top rim and broad gently curved lower edge, understated ivory champagne perimeter, small muted red compass accent onlowercenter. Interior80%transparent. Framefills95%canvas. Visually related to a clean shield frame but asymmetric top/bottom profile for opponent anchored to topofscreen. No portrait no heavyornament.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-5e0a63cf-5911-4437-844d-b80b4cbbb65c.png"
+  },
+  {
+    "name": "mana-filled",
+    "prompt": "Production game UI asset for LORE's Biblion magical library. Sophisticated restrained anime fantasy UI, Genshin-like simplicity: ivory porcelain, midnight navy, extremely thin pale champagne metal, tiny cyan accents. Clean smooth silhouette, generous negative space, subtle tactile depth, NO baroque filigree, NO jewels clusters, NO rococo scrollwork. True transparent PNG alpha background, no painted checkerboard, no text/digits/letters/watermark.\nSingle compact symmetrical diamond crystal filled with soft skyblue light. Squarecanvas, crystal occupies85%height 55%width. Four clean facets with milky ivory highlights, tiny palegold tiponly. Restrained elegant translucency, no glowcloud or particles. Readable at14pixels.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-c43eaf6f-4bad-4ccd-b786-ba70ad6b3663.png"
+  },
+  {
+    "name": "mana-empty",
+    "prompt": "Production game UI asset for LORE's Biblion magical library. Sophisticated restrained anime fantasy UI, Genshin-like simplicity: ivory porcelain, midnight navy, extremely thin pale champagne metal, tiny cyan accents. Clean smooth silhouette, generous negative space, subtle tactile depth, NO baroque filigree, NO jewels clusters, NO rococo scrollwork. True transparent PNG alpha background, no painted checkerboard, no text/digits/letters/watermark.\nSingle compact symmetrical diamond crystal unlit empty state. Squarecanvas, crystal occupies85%height 55%width. Four clean smokyblueglass facets with ivory outline, tiny palegoldtiponly. Restrained no emittedlight. Readable at14pixels.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-16a57131-d215-4bae-b9b8-79fd3d446f63.png"
+  },
+  {
+    "name": "stat-cost",
+    "prompt": "Production game UI asset for LORE's Biblion magical library. Sophisticated restrained anime fantasy UI, Genshin-like simplicity: ivory porcelain, midnight navy, extremely thin pale champagne metal, tiny cyan accents. Clean smooth silhouette, generous negative space, subtle tactile depth, NO baroque filigree, NO jewels clusters, NO rococo scrollwork. True transparent PNG alpha background, no painted checkerboard, no text/digits/letters/watermark.\nSingle circular numerical badge. Squarecanvas, centered circleoccupies90%canvas, thin paleivory metallic rim, flat midnightnavy center withslight illuminatedupperedge, simplecompasscut bottom. Empty spacious center for live numbers. No glyph, no digits.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-54624f5b-565b-4439-a80e-e3e2e99adf97.png"
+  },
+  {
+    "name": "stat-attack",
+    "prompt": "Production game UI asset for LORE's Biblion magical library. Sophisticated restrained anime fantasy UI, Genshin-like simplicity: ivory porcelain, midnight navy, extremely thin pale champagne metal, tiny cyan accents. Clean smooth silhouette, generous negative space, subtle tactile depth, NO baroque filigree, NO jewels clusters, NO rococo scrollwork. True transparent PNG alpha background, no painted checkerboard, no text/digits/letters/watermark.\nSingle attack numerical badge. Squarecanvas, blue roundedshield with a subtleleftpoint extending outline. Thin ivory/palechampagne bevel and mutedblue enamelcenter, verylighttopedge. Badgeoccupies90%canvas; empty spacious center for variable numbers. No weapons glyph, no digits.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-babb9b5d-306b-45b6-b32f-97d89dba0e24.png"
+  },
+  {
+    "name": "stat-defense",
+    "prompt": "Production game UI asset for LORE's Biblion magical library. Sophisticated restrained anime fantasy UI, Genshin-like simplicity: ivory porcelain, midnight navy, extremely thin pale champagne metal, tiny cyan accents. Clean smooth silhouette, generous negative space, subtle tactile depth, NO baroque filigree, NO jewels clusters, NO rococo scrollwork. True transparent PNG alpha background, no painted checkerboard, no text/digits/letters/watermark.\nSingle defense numerical badge. Squarecanvas, mutedcrimson shield pointing down, thin ivory/palechampagne bevel, cleandarkred enamelcenter, verylighttopedge. Badgeoccupies90%canvas; empty spaciouscenter for variable numbers. No glyph, no digits.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-3f4b9f9c-779b-439f-8eda-af8a9d5e4ded.png"
+  },
+  {
+    "name": "button-idle",
+    "prompt": "undefined\nSingle wide horizontal button skin, 3:1 canvas. Button fills96%width80%height, centered. Smooth darknavy porcelain center, very thin ivory edge, tiny diamond cornercuts. Empty center for text. NORMAL state, calm muted highlights.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-2535a75d-6e65-4787-9844-eb8517abbb5a.png"
+  },
+  {
+    "name": "button-hover",
+    "prompt": "undefined\nSingle wide horizontal button skin, 3:1 canvas. Button fills96%width80%height centered. Smooth darknavy porcelain center, very thin ivory edge, tiny diamond cornercuts. Empty center for text. HOVER state, softly luminous pale blue rim and slightly brighter center.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-9f3d11d1-0d9b-4e2a-a0f5-00871f41e501.png"
+  },
+  {
+    "name": "button-pressed",
+    "prompt": "undefined\nSingle wide horizontal button skin, 3:1 canvas. Button fills96%width80%height centered. Smooth darknavy porcelain center, very thin ivory edge, tiny diamond cornercuts. Empty center for text. PRESSED state, recessed darkblue center, small inner cyan highlight.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-9b444e01-3d9e-4153-95da-48e51b72d1cc.png"
+  },
+  {
+    "name": "reroll",
+    "prompt": "undefined\nSquare game action icon: two thin ivory curved arrows chasing around one tiny cyan fourpointstar, inside thin ivory circular outline. Symbol only. Restrained painterly UI finish, readable20px. Not a button rectangle.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-d5afffd6-d1ae-4a7e-af73-f634b244f970.png"
+  },
+  {
+    "name": "trap-seal",
+    "prompt": "undefined\nSquare game icon: a stylized CLOSED magical beartrap jaw made from two clean opposing silver crescent blades on mutedplum enamel diamond plate. Tinycenterlockeddiamond, no monster image or letters. Readable at28px. Clear trap hazard symbol. Simple polished fantasy UI, not horror.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-76a0e652-353e-4335-a5e7-b71822bd1301.png"
+  },
+  {
+    "name": "shelf-case",
+    "prompt": "undefined\nSingle open shallow temporary card holding case, almost top-down camera tilted only10degrees. Squarecanvas. Exterior ivory shell with very thin palegold edge, midnightnavy felt interior. Landscape rectangular case occupies88%width65%height. Empty recessed cavity, small frontal lip, no uprightcardrack, no cards, no lid, no count. Elegant restrained fantasy library object, nearorthographic, soft shadow contained on alpha.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-919204ea-ef31-414e-979c-21b47b3b7a9f.png"
+  },
+  {
+    "name": "panel-frame",
+    "prompt": "undefined\nSingle wide rectangular modal panel skin aspect3:2. Soft matte midnightnavy center fully opaque, thin ivory/palegold rim only1%width, tinycompasscornernotches. No divided compartments, no text. Elegant verysimple Genshin-like dialogue panel. Transparent exterior corners.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-be229d3b-8f8e-4360-9dff-d77e8fe3365a.png"
+  },
+  {
+    "name": "turn-flare",
+    "prompt": "undefined\nSingle verywide horizontal magical light ribbon aspect3:1. Transparentbackground. Thin paleiceblue luminous line throughhorizontalcenter, soft airy sapphire haze concentrated center and fading allfour edges, two tiny geometric compass motes. Largeemptyspace for overlaytext, no letters. Restrainedcinematicturntransition element.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-a4161f71-585e-423b-8c1d-e03e2da56bd3.png"
+  },
+  {
+    "name": "deck-1",
+    "prompt": "undefined\nSingle deck stack thickness asset for exactly 1 cards. Square canvas, almost straight TOP DOWN view only8degrees tilt, verticalportrait cards perfectly aligned, no diagonal rotation. Fixed top card occupies x20%..80%,y10%..82% and is a completely empty midnight navy rectangular face, roundedcorners. Thin ivory paper edge stack visible below toward bottom; ONE very thin single edge. Singlecardbase reaches83%height. No printing, no artwork on the upper card because a replaceable sleeve texture will be composited at runtime. Keep upper face plain and completely undetailed. Soft contained contactshadow, otherwise transparent. No case or decorative stand.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-ec2b6693-a1ae-4b57-bc10-b1095c849264.png"
+  },
+  {
+    "name": "deck-3",
+    "prompt": "undefined\nSingle deck stack thickness asset for exactly 3 cards. Square canvas, almost straight TOP DOWN view only8degrees tilt, verticalportrait cards perfectly aligned, no diagonal rotation. Fixed top card occupies x20%..80%,y10%..82% and is a completely empty midnight navy rectangular face, roundedcorners. Thin ivory paper edge stack visible below toward bottom; 3 distinct fine paper layers visible, increasing stack thickness. Stackbase reaches86%height. No printing, no artwork on the upper card because a replaceable sleeve texture will be composited at runtime. Keep upper face plain and completely undetailed. Soft contained contactshadow, otherwise transparent. No case or decorative stand.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-2f783232-2843-4837-a979-3dfaea2cd01a.png"
+  },
+  {
+    "name": "deck-5",
+    "prompt": "undefined\nSingle deck stack thickness asset for exactly 5 cards. Square canvas, almost straight TOP DOWN view only8degrees tilt, verticalportrait cards perfectly aligned, no diagonal rotation. Fixed top card occupies x20%..80%,y10%..82% and is a completely empty midnight navy rectangular face, roundedcorners. Thin ivory paper edge stack visible below toward bottom; 5 distinct fine paper layers visible, increasing stack thickness. Stackbase reaches89%height. No printing, no artwork on the upper card because a replaceable sleeve texture will be composited at runtime. Keep upper face plain and completely undetailed. Soft contained contactshadow, otherwise transparent. No case or decorative stand.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-c9d6d57f-bfd6-46dd-b925-a8ab5d2c3297.png"
+  },
+  {
+    "name": "deck-10",
+    "prompt": "undefined\nSingle deck stack thickness asset for exactly 10 cards. Square canvas, almost straight TOP DOWN view only8degrees tilt, verticalportrait cards perfectly aligned, no diagonal rotation. Fixed top card occupies x20%..80%,y10%..82% and is a completely empty midnight navy rectangular face, roundedcorners. Thin ivory paper edge stack visible below toward bottom; 10 distinct fine paper layers visible, increasing stack thickness. Stackbase reaches92%height. No printing, no artwork on the upper card because a replaceable sleeve texture will be composited at runtime. Keep upper face plain and completely undetailed. Soft contained contactshadow, otherwise transparent. No case or decorative stand.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-ddc01a3c-8871-4263-8e7d-a75ff841962e.png"
+  },
+  {
+    "name": "deck-15",
+    "prompt": "undefined\nSingle deck stack thickness asset for exactly 15 cards. Square canvas, almost straight TOP DOWN view only8degrees tilt, verticalportrait cards perfectly aligned, no diagonal rotation. Fixed top card occupies x20%..80%,y10%..82% and is a completely empty midnight navy rectangular face, roundedcorners. Thin ivory paper edge stack visible below toward bottom; 15 distinct fine paper layers visible, increasing stack thickness. Stack base reaches94%canvasheight. No printing, no artwork on the upper card because a replaceable sleeve texture will be composited at runtime. Keep upper face plain and completely undetailed. Soft contained contactshadow, otherwise transparent. No case or decorative stand.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-9b05a7ec-cd53-477e-815a-90b271d8f616.png"
+  },
+  {
+    "name": "rift-idle",
+    "prompt": "Production animation SPRITE SHEET, a uniform 4 by 4 grid of exactly16 equally sized square frames, NO gutters, NO labels, no grid lines. Entire image square1024x1024, eachcell256x256, realtransparent PNGalpha exterior. Same centered circular dimensional RIFT in every cell, diameter76% of eachcell, completely contained. Biblion magic, elegant navy/violet miniature blackhole with inkblackcenter and icy ivory/cyan fine accretion ribbon, painterly polished fantasy game asset. Each frame is successive animation time lefttoright thennextrow. IDLE seamlessloop: fine ribbons of blue light and wisps visibly circulate and continuously change organic shape, centerbreathes onlyslightly, finalframeflowsintofirst. All16frames have same center and scale reference, do NOT move wholeportal location betweenframes. Motion must be the internal illustration changing, not sliding icons. No stars scattered outsidecells, no UItext.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-370c1795-ff03-4a32-8a0c-a9eae5a8632b.png"
+  },
+  {
+    "name": "rift-hover",
+    "prompt": "Production animation SPRITE SHEET, a uniform 4 by 4 grid of exactly16 equally sized square frames, NO gutters, NO labels, no grid lines. Entire image square1024x1024, eachcell256x256, realtransparent PNGalpha exterior. Same centered circular dimensional RIFT in every cell, diameter76% of eachcell, completely contained. Biblion magic, elegant navy/violet miniature blackhole with inkblackcenter and icy ivory/cyan fine accretion ribbon, painterly polished fantasy game asset. Each frame is successive animation time lefttoright thennextrow. HOVER seamlessloop: portal opens slightly wider, brighticyblue/violet ribbons visibly twist aroundeventhorizon; tiny runic motes rotate internally; finalframeflowsintofirst. All16frames have same center and scale reference, do NOT move wholeportal location betweenframes. Motion must be the internal illustration changing, not sliding icons. No stars scattered outsidecells, no UItext.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-b9752af9-14a7-4c9c-a285-1b52a0b1e084.png"
+  },
+  {
+    "name": "rift-absorb",
+    "prompt": "Production animation SPRITE SHEET, a uniform 4 by 4 grid of exactly16 equally sized square frames, NO gutters, NO labels, no grid lines. Entire image square1024x1024, eachcell256x256, realtransparent PNGalpha exterior. Same centered circular dimensional RIFT in every cell, diameter76% of eachcell, completely contained. Biblion magic, elegant navy/violet miniature blackhole with inkblackcenter and icy ivory/cyan fine accretion ribbon, painterly polished fantasy game asset. Each frame is successive animation time lefttoright thennextrow. ABSORB one-shot: firstfourframes spiralnarrows, nextfour brightwhite lightshards spiral inward towardblackcenter, nextfour portalcontracts andradiant ringripples, lastfourreturns tocalm blueportal. No card painted in, onlylight beingabsorbed. All16frames have same center and scale reference, do NOT move wholeportal location betweenframes. Motion must be the internal illustration changing, not sliding icons. No stars scattered outsidecells, no UItext.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-66817551-34f2-4867-817d-e8ca9db63aa6.png"
+  }
+]

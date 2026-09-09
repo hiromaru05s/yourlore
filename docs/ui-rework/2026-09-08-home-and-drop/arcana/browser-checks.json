@@ -1,0 +1,131 @@
+{
+  "baseline": {
+    "market": 145.390625,
+    "pairs": [
+      {
+        "hp": 19.6875,
+        "mana": 19.6875
+      },
+      {
+        "hp": 725.296875,
+        "mana": 725.296875
+      }
+    ]
+  },
+  "ghostState": {
+    "top": true,
+    "oldHidden": true,
+    "z": "2000",
+    "uid": "hand-0-0"
+  },
+  "viewports": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "metrics": {
+        "pairs": [
+          {
+            "hp": 7.1875,
+            "mp": 7.1875,
+            "right": 325.78125,
+            "left": 64.203125
+          },
+          {
+            "hp": 788.796875,
+            "mp": 788.796875,
+            "right": 325.78125,
+            "left": 64.203125
+          }
+        ],
+        "piles": [
+          {
+            "left": 275.125,
+            "right": 307.84375
+          },
+          {
+            "left": 310.84375,
+            "right": 346.90625
+          },
+          {
+            "left": 349.90625,
+            "right": 372.609375
+          },
+          {
+            "left": 275.125,
+            "right": 307.84375
+          },
+          {
+            "left": 310.84375,
+            "right": 346.90625
+          },
+          {
+            "left": 349.90625,
+            "right": 372.609375
+          }
+        ]
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "metrics": {
+        "pairs": [
+          {
+            "hp": 4,
+            "mp": 4,
+            "right": 552.046875,
+            "left": 291.9375
+          },
+          {
+            "hp": 347.984375,
+            "mp": 347.984375,
+            "right": 552.046875,
+            "left": 291.9375
+          }
+        ],
+        "piles": [
+          {
+            "left": 539.796875,
+            "right": 580.640625
+          },
+          {
+            "left": 583.640625,
+            "right": 628.65625
+          },
+          {
+            "left": 631.65625,
+            "right": 660
+          },
+          {
+            "left": 539.796875,
+            "right": 580.640625
+          },
+          {
+            "left": 583.640625,
+            "right": 628.65625
+          },
+          {
+            "left": 631.65625,
+            "right": 660
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "index zero spell visible above market",
+    "old z-index bug reproduced",
+    "one-gesture compact drag",
+    "cancel/drop-back",
+    "HP mana aligned",
+    "reduced market",
+    "actual beveled dice with authoritative results",
+    "dice skip / reduced motion / GPU loss",
+    "mobile and landscape bounds"
+  ]
+}

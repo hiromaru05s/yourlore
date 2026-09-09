@@ -1,0 +1,36 @@
+{
+  "sizes": {
+    "native": 164,
+    "open": 106.48828125,
+    "compact": 68.80780029296875
+  },
+  "drag": {
+    "width": 77,
+    "field": 99.81101989746094,
+    "hand": 106.48828125
+  },
+  "engine": [
+    {
+      "type": "reshuffle",
+      "player": 0,
+      "count": 12
+    },
+    {
+      "type": "draw",
+      "player": 0,
+      "count": 3
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "4 GPU piles / one context",
+    "65% hand",
+    "field-fit drag",
+    "in-air interleave",
+    "empty and partial deck events",
+    "cancel / resize / reduced motion",
+    "mobile bounds",
+    "GPU fallback",
+    "actual controller refill then draw"
+  ]
+}

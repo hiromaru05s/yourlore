@@ -1,0 +1,16 @@
+{
+  "environment": "staging",
+  "domain": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "version": "2097b48b-8907-419f-936f-760653984a69",
+  "previousVersion": "c0a4f67b-bfe7-4593-b547-889a17ab973e",
+  "sourceCommit": "97ccfe0",
+  "branch": "codex/biblion-ingame-rework",
+  "tag": "duel-polish-20260909",
+  "wrangler": "4.130.0",
+  "productionDeployed": false,
+  "checkedAt": "2026-09-08T20:58:17.941621+00:00",
+  "remoteFilesMatched": 23,
+  "authenticatedStagingBotVerified": true,
+  "onlinePvpVerified": false
+}

@@ -1,0 +1,497 @@
+{
+  "levels": [
+    {
+      "level": 1,
+      "progress": 0,
+      "required": 5,
+      "matches": 0
+    },
+    {
+      "level": 1,
+      "progress": 4,
+      "required": 5,
+      "matches": 4
+    },
+    {
+      "level": 2,
+      "progress": 0,
+      "required": 5,
+      "matches": 5
+    },
+    {
+      "level": 1,
+      "progress": 0,
+      "required": 5,
+      "matches": 0
+    },
+    {
+      "level": 14,
+      "progress": 1,
+      "required": 5,
+      "matches": 66
+    }
+  ],
+  "layouts": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "bounds": [
+        {
+          "id": "profile",
+          "left": 44.796875,
+          "top": 26,
+          "right": 349.421875,
+          "bottom": 110
+        },
+        {
+          "id": "credits",
+          "left": 991.3125,
+          "top": 26,
+          "right": 1181.203125,
+          "bottom": 89
+        },
+        {
+          "id": "settings",
+          "left": 1201.203125,
+          "top": 27.5,
+          "right": 1235.203125,
+          "bottom": 87.5
+        },
+        {
+          "id": "invite",
+          "left": 1143.703125,
+          "top": 158.390625,
+          "right": 1235.203125,
+          "bottom": 240.390625
+        },
+        {
+          "id": "inquiry",
+          "left": 1143.703125,
+          "top": 270.390625,
+          "right": 1235.203125,
+          "bottom": 352.390625
+        },
+        {
+          "id": "ranked",
+          "left": 780.8125,
+          "top": 184.828125,
+          "right": 1100.8125,
+          "bottom": 494.609375
+        },
+        {
+          "id": "online",
+          "left": 780.8125,
+          "top": 518.609375,
+          "right": 931.8125,
+          "bottom": 561.609375
+        },
+        {
+          "id": "bot",
+          "left": 949.8125,
+          "top": 518.609375,
+          "right": 1100.8125,
+          "bottom": 561.609375
+        },
+        {
+          "id": "tutorial",
+          "left": 102.390625,
+          "top": 611.203125,
+          "right": 255.984375,
+          "bottom": 698
+        },
+        {
+          "id": "deck",
+          "left": 255.984375,
+          "top": 611.203125,
+          "right": 409.59375,
+          "bottom": 698
+        },
+        {
+          "id": "cards",
+          "left": 409.59375,
+          "top": 611.203125,
+          "right": 563.1875,
+          "bottom": 698
+        },
+        {
+          "id": "homeCurrent",
+          "left": 563.1875,
+          "top": 611.203125,
+          "right": 716.796875,
+          "bottom": 698
+        },
+        {
+          "id": "lb",
+          "left": 716.796875,
+          "top": 611.203125,
+          "right": 870.390625,
+          "bottom": 698
+        },
+        {
+          "id": "shop",
+          "left": 870.390625,
+          "top": 611.203125,
+          "right": 1024,
+          "bottom": 698
+        },
+        {
+          "id": "friends",
+          "left": 1024,
+          "top": 611.203125,
+          "right": 1177.59375,
+          "bottom": 698
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "bounds": [
+        {
+          "id": "profile",
+          "left": 67.1875,
+          "top": 26,
+          "right": 371.8125,
+          "bottom": 110
+        },
+        {
+          "id": "credits",
+          "left": 1608.921875,
+          "top": 26,
+          "right": 1798.8125,
+          "bottom": 89
+        },
+        {
+          "id": "settings",
+          "left": 1818.8125,
+          "top": 27.5,
+          "right": 1852.8125,
+          "bottom": 87.5
+        },
+        {
+          "id": "invite",
+          "left": 1761.3125,
+          "top": 237.59375,
+          "right": 1852.8125,
+          "bottom": 319.59375
+        },
+        {
+          "id": "inquiry",
+          "left": 1761.3125,
+          "top": 349.59375,
+          "right": 1852.8125,
+          "bottom": 431.59375
+        },
+        {
+          "id": "ranked",
+          "left": 1261.203125,
+          "top": 424.828125,
+          "right": 1651.203125,
+          "bottom": 764.609375
+        },
+        {
+          "id": "online",
+          "left": 1261.203125,
+          "top": 788.609375,
+          "right": 1447.203125,
+          "bottom": 831.609375
+        },
+        {
+          "id": "bot",
+          "left": 1465.203125,
+          "top": 788.609375,
+          "right": 1651.203125,
+          "bottom": 831.609375
+        },
+        {
+          "id": "tutorial",
+          "left": 288,
+          "top": 952.40625,
+          "right": 480,
+          "bottom": 1050
+        },
+        {
+          "id": "deck",
+          "left": 480,
+          "top": 952.40625,
+          "right": 672,
+          "bottom": 1050
+        },
+        {
+          "id": "cards",
+          "left": 672,
+          "top": 952.40625,
+          "right": 864,
+          "bottom": 1050
+        },
+        {
+          "id": "homeCurrent",
+          "left": 864,
+          "top": 952.40625,
+          "right": 1056,
+          "bottom": 1050
+        },
+        {
+          "id": "lb",
+          "left": 1056,
+          "top": 952.40625,
+          "right": 1248,
+          "bottom": 1050
+        },
+        {
+          "id": "shop",
+          "left": 1248,
+          "top": 952.40625,
+          "right": 1440,
+          "bottom": 1050
+        },
+        {
+          "id": "friends",
+          "left": 1440,
+          "top": 952.40625,
+          "right": 1632,
+          "bottom": 1050
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bounds": [
+        {
+          "id": "profile",
+          "left": 16,
+          "top": 18,
+          "right": 161,
+          "bottom": 83.59375
+        },
+        {
+          "id": "credits",
+          "left": 274.21875,
+          "top": 22.40625,
+          "right": 347,
+          "bottom": 63.59375
+        },
+        {
+          "id": "settings",
+          "left": 352,
+          "top": 18,
+          "right": 374,
+          "bottom": 68
+        },
+        {
+          "id": "invite",
+          "left": 298.640625,
+          "top": 160.359375,
+          "right": 378,
+          "bottom": 213.953125
+        },
+        {
+          "id": "inquiry",
+          "left": 298.640625,
+          "top": 230.953125,
+          "right": 378,
+          "bottom": 284.546875
+        },
+        {
+          "id": "ranked",
+          "left": 46.8125,
+          "top": 320.828125,
+          "right": 343.203125,
+          "bottom": 578
+        },
+        {
+          "id": "online",
+          "left": 46.8125,
+          "top": 590,
+          "right": 186,
+          "bottom": 633
+        },
+        {
+          "id": "bot",
+          "left": 204,
+          "top": 590,
+          "right": 343.203125,
+          "bottom": 633
+        },
+        {
+          "id": "tutorial",
+          "left": 10,
+          "top": 755,
+          "right": 62.84375,
+          "bottom": 829
+        },
+        {
+          "id": "deck",
+          "left": 62.84375,
+          "top": 755,
+          "right": 115.703125,
+          "bottom": 829
+        },
+        {
+          "id": "cards",
+          "left": 115.703125,
+          "top": 755,
+          "right": 168.5625,
+          "bottom": 829
+        },
+        {
+          "id": "homeCurrent",
+          "left": 168.5625,
+          "top": 755,
+          "right": 221.421875,
+          "bottom": 829
+        },
+        {
+          "id": "lb",
+          "left": 221.421875,
+          "top": 755,
+          "right": 274.28125,
+          "bottom": 829
+        },
+        {
+          "id": "shop",
+          "left": 274.28125,
+          "top": 755,
+          "right": 327.140625,
+          "bottom": 829
+        },
+        {
+          "id": "friends",
+          "left": 327.140625,
+          "top": 755,
+          "right": 380,
+          "bottom": 829
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "bounds": [
+        {
+          "id": "profile",
+          "left": 29.53125,
+          "top": 12,
+          "right": 300.15625,
+          "bottom": 75.59375
+        },
+        {
+          "id": "credits",
+          "left": 570.578125,
+          "top": 12,
+          "right": 760.46875,
+          "bottom": 75
+        },
+        {
+          "id": "settings",
+          "left": 780.46875,
+          "top": 13.5,
+          "right": 814.46875,
+          "bottom": 73.5
+        },
+        {
+          "id": "invite",
+          "left": 740.46875,
+          "top": 109.1875,
+          "right": 814.46875,
+          "bottom": 151.78125
+        },
+        {
+          "id": "inquiry",
+          "left": 740.46875,
+          "top": 163.78125,
+          "right": 814.46875,
+          "bottom": 206.375
+        },
+        {
+          "id": "ranked",
+          "left": 455.84375,
+          "top": 134.3125,
+          "right": 725.84375,
+          "bottom": 245.5
+        },
+        {
+          "id": "online",
+          "left": 455.84375,
+          "top": 249.5,
+          "right": 581.84375,
+          "bottom": 292.5
+        },
+        {
+          "id": "bot",
+          "left": 599.84375,
+          "top": 249.5,
+          "right": 725.84375,
+          "bottom": 292.5
+        },
+        {
+          "id": "tutorial",
+          "left": 67.515625,
+          "top": 329,
+          "right": 168.796875,
+          "bottom": 380
+        },
+        {
+          "id": "deck",
+          "left": 168.796875,
+          "top": 329,
+          "right": 270.078125,
+          "bottom": 380
+        },
+        {
+          "id": "cards",
+          "left": 270.078125,
+          "top": 329,
+          "right": 371.359375,
+          "bottom": 380
+        },
+        {
+          "id": "homeCurrent",
+          "left": 371.359375,
+          "top": 329,
+          "right": 472.640625,
+          "bottom": 380
+        },
+        {
+          "id": "lb",
+          "left": 472.640625,
+          "top": 329,
+          "right": 573.921875,
+          "bottom": 380
+        },
+        {
+          "id": "shop",
+          "left": 573.921875,
+          "top": 329,
+          "right": 675.203125,
+          "bottom": 380
+        },
+        {
+          "id": "friends",
+          "left": 675.203125,
+          "top": 329,
+          "right": 776.484375,
+          "bottom": 380
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "server refresh and level boundaries",
+    "all existing destinations",
+    "inquiry draft and invite dialog",
+    "all buttons hit-testable",
+    "three languages",
+    "four responsive sizes"
+  ]
+}

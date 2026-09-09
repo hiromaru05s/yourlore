@@ -1,0 +1,37 @@
+{
+  "created": "2026-09-08",
+  "style": "New ivory ceramic and constellation-metalwork master; no previous frame referenced.",
+  "composition": "Original generated PNGs preserved. RGB black matte removed at rendering; artwork and variable text composed separately.",
+  "assets": [
+    {
+      "name": "base-mon",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-a98d238e-fb1b-420c-9500-de9b9468bb4a.png",
+      "prompt": "Use case: ui-mockup. Create ONE completely original production card-frame asset for LORE, an elegant anime fantasy magical library game. Brand-new design, NOT a recolor or adaptation of a conventional heavy gold TCG frame. Visual language like refined Genshin Impact interface craftsmanship: airy ivory ceramic, matte pearl silver, very thin pale champagne accents, delicate celestial compass geometry, generous art, restrained dusty garnet red identifying MONSTER. No ornate double/triple gold rectangular borders, no wood, no parchment.\nPortrait PNG 1024x1536, front-on flat UI. Frame fills canvas x2..98 y1..99. Silhouette with gently arched top edge, tiny diamond compass finial top center and tapered bottom corners. Main border is slim ivory/silver with a clearly readable garnet-red enamel ribbon along side edges. Upper blank name plaque x25..91 y4..12 is dark muted garnet, simple refined shape. Blank cost disc x1..24 y1..16, navy blue with a thin ivory rim, NO NUMBER. Huge uninterrupted solid midnight-navy art placeholder window x7..93 y16..88; this navy will be covered by runtime artwork. At bottom corners integrated EMPTY attack emblem (cool blue circular/diamond shape) x1..25 y83..99 and EMPTY HP emblem (muted red shield) x75..99 y83..99, restrained elegant inset surfaces for live digits. NO effect box, NO text panel below artwork. Tiny silver compass mark bottom center. No text, no digits, no card illustration, no logos, no extra icons. All decorative artwork fully raster painted. Outside the silhouette solid black; no checkerboard. Pristine premium simple craftsmanship, subtle dimensional light on ceramic edges, ultra crisp."
+    },
+    {
+      "name": "base-spell",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-94280ede-5465-4ed1-a97e-974228ee140b.png",
+      "prompt": "Create SPELL type variant of this NEW ivory celestial card frame. Keep EXACT silhouette, ivory ceramic edges, tiny champagne compass detailing, navy COST disc at top left, and blank top NAME plaque geometry. Change the garnet enamel name plaque and side ribbons to dusty sapphire BLUE. REMOVE both lower attack/HP medallions entirely because this type has no combat stats; replace them with the same thin ivory sweep as the bottom edge, with navy art window continuing inside. No effect panel, no labels, no digits, no extra icons. Keep 1024x1536 portrait and huge art window. Solid black outside frame, flat midnight-navy inside."
+    },
+    {
+      "name": "base-trap",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-0d0e18bd-ea8d-4afd-a327-2188c89dd255.png",
+      "prompt": "Create TRAP type variant of this NEW ivory celestial card frame. Keep EXACT silhouette, ivory ceramic edges, tiny champagne compass detailing, navy COST disc at top left, and blank top NAME plaque geometry. Change the garnet enamel name plaque and side ribbons to muted jade GREEN. REMOVE both lower attack/HP medallions entirely because this type has no combat stats; replace them with the same thin ivory sweep as the bottom edge, with navy art window continuing inside. No effect panel, no labels, no digits, no extra icons. Keep 1024x1536 portrait and huge art window. Solid black outside frame, flat midnight-navy inside."
+    },
+    {
+      "name": "field-mon",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-2f3e37d0-f56a-46a7-8b7f-d567255f1cdd.png",
+      "prompt": "Adapt this newly designed ivory celestial MONSTER frame into its NAMELESS FIELD variant. One PNG 1024x1280 (width:height=4:5), slightly taller than square, strictly flat front UI. REMOVE the name plaque entirely, replace the whole top with a delicate uninterrupted ivory arch and small compass point; art window extends upward to y8%. Preserve restrained garnet red side ribbons, thin champagne linework and ivory ceramic. Keep empty navy COST disc at upper left, and empty blue attack medallion lower left and muted red HP shield lower right, slightly smaller than reference to maximize art. NO TEXT, NUMBERS or art. No effect panel. Midnight navy art window x8..92 y8..91, black outside silhouette. This is the same card system, shorter silhouette only, no chunky gold rectangular borders."
+    },
+    {
+      "name": "field-spell",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-11c11466-7825-45e2-b8f5-f90376c98d19.png",
+      "prompt": "Create the SPELL variant of this NAMELESS field card frame. Keep EXACT width:height4:5, same delicate arched top, ivory ceramic/silver edges and tiny champagne compass details. No name plaque. Change red enamel side ribbons to dusty sapphire BLUE. Keep empty navy cost disc at top left. REMOVE both bottom attack and HP medallions; continue thin ivory bottom sweep and midnight navy art window in their place. No text, digits, effect plate or artwork. One PNG with black outside silhouette."
+    },
+    {
+      "name": "field-trap",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-e5c55260-ce47-422f-a9f7-f2e38aa9d39a.png",
+      "prompt": "Create the TRAP variant of this NAMELESS field card frame. Keep EXACT width:height4:5, same delicate arched top, ivory ceramic/silver edges and tiny champagne compass details. No name plaque. Change red enamel side ribbons to muted jade GREEN. Keep empty navy cost disc at top left. REMOVE both bottom attack and HP medallions; continue thin ivory bottom sweep and midnight navy art window in their place. No text, digits, effect plate or artwork. One PNG with black outside silhouette."
+    }
+  ]
+}

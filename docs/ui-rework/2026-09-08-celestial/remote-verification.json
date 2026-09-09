@@ -1,0 +1,75 @@
+{
+  "checkedAt": "2026-09-07T18:46:21.776Z",
+  "results": [
+    {
+      "url": "/",
+      "status": 200,
+      "match": true,
+      "sha256": "a0063e46c31c2bd7d43508dda0dc1fd8034d813ffef2420dabc6e7b0987f34f2",
+      "bytes": 1101
+    },
+    {
+      "url": "/assets/index-DmlIn8jN.js",
+      "status": 200,
+      "match": true,
+      "sha256": "fd6720ceab9ccce9a23fe9ff0f84131175405168af681839ad0fcec60d9a888d",
+      "bytes": 997761
+    },
+    {
+      "url": "/assets/index-cWQ4IOBv.css",
+      "status": 200,
+      "match": true,
+      "sha256": "277895cf30c09d7a0e2e4b1e90d249a384df416c76c0607b6cc822f5c9683052",
+      "bytes": 132293
+    },
+    {
+      "url": "/assets/duelScene-DxKPf5z3.js",
+      "status": 200,
+      "match": true,
+      "sha256": "f55147e39561e75d1fad7a2fb593f8c970c3526880a44b18baed867312c2dee4",
+      "bytes": 538093
+    },
+    {
+      "url": "/art/biblion/celestial/base-mon.png",
+      "status": 200,
+      "match": true,
+      "sha256": "3e2d67e294470314eec483aabca3f34e252f6a093dff56264412a9a1c49656d2",
+      "bytes": 1506901
+    },
+    {
+      "url": "/art/biblion/celestial/base-spell.png",
+      "status": 200,
+      "match": true,
+      "sha256": "1de60da0d37d18c0bd2209d8433ef61358eac5791688d02e250c578da9175cf0",
+      "bytes": 1669219
+    },
+    {
+      "url": "/art/biblion/celestial/base-trap.png",
+      "status": 200,
+      "match": true,
+      "sha256": "f764d12c5c4b8a031e01d2360503fc7bb28952fed7e5d9175d767da38a64aae0",
+      "bytes": 1432876
+    },
+    {
+      "url": "/art/biblion/celestial/field-mon.png",
+      "status": 200,
+      "match": true,
+      "sha256": "c2c2226a85d606d070c1f73dbe940926a89cdecc6b3096afa5960e63b9863d2d",
+      "bytes": 1211481
+    },
+    {
+      "url": "/art/biblion/celestial/field-spell.png",
+      "status": 200,
+      "match": true,
+      "sha256": "60f7b8f91f814b050b3589ddc3f0adc5380cb725990b69110b70344e66145f93",
+      "bytes": 1310531
+    },
+    {
+      "url": "/art/biblion/celestial/field-trap.png",
+      "status": 200,
+      "match": true,
+      "sha256": "9bdf8c483c8b3e30a177aae21c2d64c577f6a86de0388b956768323b26f3716c",
+      "bytes": 1355852
+    }
+  ]
+}

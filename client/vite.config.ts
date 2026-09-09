@@ -14,5 +14,11 @@ export default defineConfig({
     target: "es2022",
     outDir: "dist",
     sourcemap: true,
+    rollupOptions: {
+      input: {
+        main: new URL('./index.html', import.meta.url).pathname,
+        tablePreview: new URL('./table-preview.html', import.meta.url).pathname,
+      },
+    },
   },
 });

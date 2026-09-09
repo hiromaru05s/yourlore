@@ -1,0 +1,21 @@
+{
+  "tool": "built-in image_gen",
+  "prompt": "imagegen-prompt.md",
+  "encoding": "cwebp -q 90 -m 6; unchanged dimensions and composition",
+  "assets": [
+    {
+      "path": "docs/ui-rework/2026-09-08-arcana-polish/dice-enamel-source.png",
+      "bytes": 3126532,
+      "width": 1254,
+      "height": 1254,
+      "sha256": "81e65b074b01342790adb472aad888fb2094859bbaac34673bbb2a1477b71216"
+    },
+    {
+      "path": "client/public/art/biblion/arcana/dice-enamel.webp",
+      "bytes": 533420,
+      "width": 1254,
+      "height": 1254,
+      "sha256": "26de5a8cf964500316bd8b6266126109f2f09f2f5888da53ebdd750c2fba02fe"
+    }
+  ]
+}

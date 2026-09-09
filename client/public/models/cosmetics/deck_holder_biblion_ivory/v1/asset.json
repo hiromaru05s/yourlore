@@ -1,0 +1,46 @@
+{
+  "specVersion": 1,
+  "assetId": "deck_holder_biblion_ivory",
+  "version": 1,
+  "status": "draft",
+  "category": "deck_holder",
+  "grade": "sculpted",
+  "collectionId": "biblion_ivory",
+  "modelKey": "deck_ivory_plinth_v1",
+  "anchor": "deck_mount",
+  "files": {
+    "preview": {
+      "path": "preview.webp",
+      "sha256": "dd2ead0d10e4f0de6701d87691297fdbb35c174df0384ffb80210afa9cc6ee72",
+      "bytes": 7190
+    },
+    "fallbackSelf": {
+      "path": "fallback-self.webp",
+      "sha256": "18d890536241e840162a96efc0b04364fab6f6327767516b6038ead8fbfc9613",
+      "bytes": 4050
+    },
+    "fallbackOpponent": {
+      "path": "fallback-opponent.webp",
+      "sha256": "95482b6f6e00b7e148b5a8b9f13e579844577b35345bfd5b5817f586b53095d9",
+      "bytes": 4028
+    },
+    "model": {
+      "path": "model.glb",
+      "sha256": "d8d9bd9b7ca4b9b2f79033a70dac763d07ad4d5166aab2c5ef55fdfb4704b5e9",
+      "bytes": 92912
+    },
+    "modelLow": {
+      "path": "model-low.glb",
+      "sha256": "3a45ab899b2dd272149bf1cc177d3f8b8e0ff35e839e3dc8a12b9fc65633b213",
+      "bytes": 31600
+    }
+  },
+  "preset": {
+    "id": "none",
+    "periodSeconds": 6,
+    "strength": 0,
+    "color": "#ffffff"
+  },
+  "clips": [],
+  "sourceNote": "Original procedural Blender geometry and texture graphics, matching the local LORE ivory field palette. Source: docs/3d-assets/2026-09-09-blender-deck-holder. No external purchased mesh. Reference cards use existing LORE sleeve art and are not exported. Geometry and export validated; runtime/shop/device QA pending."
+}

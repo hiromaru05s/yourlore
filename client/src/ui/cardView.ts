@@ -2,11 +2,28 @@
 // LORE — card DOM builder. One renderer for every card everywhere
 // (board / market / hand / pile / zoom) so sizing stays consistent.
 // ============================================================
+import { CARD_ART_ALIASES } from "./cardArtAliases";
 import type { CardInst, FieldMon, PlayerState } from "../shared/types";
-import { FRAME_BACK, frameFor, fieldFrameFor, PASSIVES, cardPassives } from "../shared/cards";
+import { FRAME_BACK, PASSIVES, cardPassives, frameFor, fieldFrameFor } from "../shared/cards";
 import { curHp, effAtk, effDef, playCost } from "../shared/engine";
 import { cardName, cardText, getLang, t } from "../i18n";
 import { parseDiceTable } from "../shared/cardText";
+
+/** Shared resting/flight face: switching from a cast to its spell slot must not
+ * replace the artwork or frame at touchdown. Interaction is bound by GameView. */
+export function enchantmentTile(c:CardInst,durationUi:string):HTMLDivElement {
+  const tile=document.createElement('div');tile.className='buff-icon buff-icon--spell';tile.dataset.uid=c.uid;
+  tile.innerHTML=`<span class="buff-frame" style="background-image:url(${fieldFrameFor('spell')})"></span><span class="buff-art" style="background-image:url(${artUrl.full(c.id)})"></span><span class="buff-cost" aria-hidden="true"><span>${c.cost}</span></span>${durationUi}`;
+  return tile;
+}
+
+/** Same purple quest face in the public rail and its landing animation. */
+export function questTile(c:CardInst,progress=0):HTMLDivElement {
+  const tile=enchantmentTile(c,'');tile.className='buff-icon buff-icon--quest';
+  tile.querySelector<HTMLElement>('.buff-frame')!.style.backgroundImage=`url(${fieldFrameFor('quest')})`;
+  const label=document.createElement('span');label.className='quest-progress';label.textContent=`${progress}/${c.quest?.target??0}`;tile.append(label);
+  return tile;
+}
 
 /**
  * 카드 효과 텍스트 안의 패시브 키워드명을 <span class="psv" data-psv="key">로 감싼다.
@@ -362,9 +379,9 @@ function artStatus(key: string): "ok" | "fail" | "unknown" {
 // 이 값을 올리면 모든 클라이언트가 오염된 캐시를 우회해 새로 받는다.
 export const ART_V = "12"; // Codex full-art batch 2026-09-07 (CDN/browser cache bust)
 export const artUrl = {
-  xs: (id: string) => `/art/cards-xs/${id}.webp?v=${ART_V}`,
-  sm: (id: string) => `/art/cards-sm/${id}.webp?v=${ART_V}`,
-  full: (id: string) => `/art/cards/${id}.webp?v=${ART_V}`,
+  xs: (id: string) => `/art/cards-xs/${CARD_ART_ALIASES[id]??id}.webp?v=${ART_V}`,
+  sm: (id: string) => `/art/cards-sm/${CARD_ART_ALIASES[id]??id}.webp?v=${ART_V}`,
+  full: (id: string) => `/art/cards/${CARD_ART_ALIASES[id]??id}.webp?v=${ART_V}`,
 };
 
 const prefetched = new Set<string>();
@@ -460,7 +477,7 @@ function artEl(cardId: string, full = false, lazy = false, gallery = false): HTM
     art.classList.add("art-done");
     return art;
   }
-  const src = `/art/${full ? "cards" : "cards-sm"}/${cardId}.webp?v=${ART_V}`;
+  const src = full ? artUrl.full(cardId) : artUrl.sm(cardId);
   const img = document.createElement("img");
   img.alt = "";
   img.className = "card-art-img";
@@ -516,26 +533,99 @@ function artEl(cardId: string, full = false, lazy = false, gallery = false): HTM
   if (gallery) {
     // let the browser pick 192px or 384px by its own pixel density
     img.sizes = GALLERY_SIZES;
-    img.srcset = `/art/cards-xs/${cardId}.webp?v=${ART_V} 192w, /art/cards-sm/${cardId}.webp?v=${ART_V} 384w`;
+    img.srcset = `${artUrl.xs(cardId)} 192w, ${artUrl.sm(cardId)} 384w`;
   }
   img.src = src;
   art.appendChild(img);
   return art;
 }
 
+/** Complete rules, including costs, keyword names and dice tables. Never fitted to card pixels. */
+export function cardRulesEl(c: CardInst): HTMLElement {
+  const pc = playCost(c);
+  // 효과 텍스트: "(시전 N)"/"(소환 N)" 계열 표기는 배지로 대체되므로 제거하고, 구분자를 줄바꿈으로
+  const rawTxt = cardText(c).replace(/\s*\((?:시전|Cast|発動|소환|Summon|召喚)\s*\d+\)/g, "").trim();
+  // dice/chest cards are detected on the RAW text — the separators become newlines
+  // just below, which would destroy the " / " that delimits the outcome rows
+  const table = rawTxt && rawTxt !== "—" ? parseDiceTable(rawTxt) : null;
+  let txt = rawTxt
+    .replace(/ · /g, "\n")
+    .replace(/ \/ /g, "\n")
+    .trim();
+  const hasCast = c.t !== "starter" && pc !== c.cost;
+  const keyChips = cardPassives(c);
+  if ((txt && txt !== "—") || hasCast || keyChips.length) {
+    const effCls = "card-rules";
+    const eff = el("div", effCls);
+    if (hasCast) {
+      // monsters are SUMMONED, spells/traps are CAST — label the play-cost badge accordingly
+      const cast = el("div", "card-cast", `${t(c.t === "mon" ? "card.summon" : "card.cast")} ${pc}`);
+      cast.title = t(c.t === "mon" ? "card.summon.tip" : "card.cast.tip");
+      eff.appendChild(cast);
+    }
+    if (keyChips.length) {
+      const lang2 = getLang();
+      const row = el("div", "card-keys" + (txt && txt !== "—" ? "" : " card-keys--only"));
+      for (const k of keyChips) {
+        const pd = PASSIVES[k];
+        if (!pd) continue;
+        // data-psv keeps the zoom view's keyword panel highlight working
+        row.appendChild(el("span", "kw psv", lang2 === "ja" ? pd.ja.name : lang2 === "en" ? pd.en.name : pd.ko.name)).setAttribute("data-psv", k);
+      }
+      if (row.childElementCount) eff.appendChild(row);
+    }
+    // Effect body follows the keyword labels.
+    if (table) {
+      if (table.head) eff.appendChild(el("div", "card-dice-head", decorateTags(table.head)));
+      const tb = el("div", "card-dice");
+      for (const [roll, fx] of table.rows) {
+        const row = el("div", "dr");
+        row.appendChild(el("span", "dr-roll", roll));
+        row.appendChild(el("span", "dr-fx", decorateTags(fx)));
+        tb.appendChild(row);
+      }
+      eff.appendChild(tb);
+    } else if (txt && txt !== "—") {
+      eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${decorateTags(decoratePassives(c, txt))}</span>`));
+    }
+    return eff;
+  }
+  const empty = el("div", "card-rules card-rules--empty");
+  empty.textContent = getLang() === 'ja' ? '追加効果なし' : getLang() === 'en' ? 'No additional effect' : '추가 효과 없음';
+  return empty;
+}
+
+/** Only compositing geometry: the frame, plaque and seals are generated PNG art. */
+export function ensureCardCompositing(): void {
+  if (document.getElementById('celestial-compositing')) return;
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.id = 'celestial-compositing'; svg.setAttribute('aria-hidden','true'); svg.setAttribute('width','0'); svg.setAttribute('height','0');
+  svg.style.position = 'absolute'; svg.style.pointerEvents = 'none';
+  const baseWindow = 'M .082 .221 Q .082 .177 .134 .202 L .486 .202 L .5 .214 L .514 .202 L .868 .202 Q .925 .177 .922 .221 L .922 .89 Q .928 .932 .878 .94 Q .58 .966 .50 .934 Q .445 .965 .13 .94 Q .077 .933 .082 .887 Z';
+  const fieldWindow = 'M .09 .158 Q .085 .088 .47 .054 L .50 .075 L .53 .054 Q .916 .088 .91 .158 L .91 .88 Q .916 .935 .87 .941 Q .59 .968 .50 .941 Q .42 .967 .13 .941 Q .087 .935 .09 .88 Z';
+  svg.innerHTML = `<defs>
+    <filter id="celestial-matte" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 10 10 10 0 -0.1" result="matte"/><feComposite in="SourceGraphic" in2="matte" operator="in"/></filter>
+    <clipPath id="celestial-base-spell" clipPathUnits="objectBoundingBox"><path d="${baseWindow}"/></clipPath>
+    <clipPath id="celestial-field-spell" clipPathUnits="objectBoundingBox"><path d="${fieldWindow}"/></clipPath>
+  </defs>`;
+  document.body.appendChild(svg);
+}
+
 export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
-  const typeClass = c.t === "mon" ? "card--mon" : c.t === "trap" ? "card--trap" : c.t === "starter" ? "card--starter" : "card--spell";
+  ensureCardCompositing();
+  const typeClass = c.t === "mon" ? "card--mon" : c.t === "trap" ? "card--trap" : c.t === "starter" ? "card--starter" : c.t === "quest" ? "card--quest" : "card--spell";
   const sizeClass = opt.size === "mkt" ? "card--mkt" : opt.size === "hand" ? "card--hand" : "";
   const node = el("div", `card ${typeClass} ${sizeClass}`.trim());
   node.dataset.uid = c.uid;
+  node.dataset.cardType = c.t === "mon" ? "mon" : c.t === "trap" ? "trap" : c.t === "quest" ? "quest" : "spell";
+  const labels = getLang() === "ja" ? ["モンスター", "魔法", "罠", "クエスト", "クイック魔法"] : getLang() === "en" ? ["Monster", "Spell", "Trap", "Quest", "Quick spell"] : ["몬스터", "마법", "함정", "퀘스트", "퀵 마법"];
+  const typeIndex = c.t === "mon" ? 0 : c.t === "trap" ? 2 : c.t === "quest" ? 3 : c.quick ? 4 : 1;
+
   if (opt.compactField) node.classList.add("card--field");
-  // Layering: art sits BEHIND the frame (in the transparent art window), the
-  // frame PNG overlays on top (its border hugs the art edges), then text/cost
-  // render above the frame. (frame's outer + window are transparent.)
+  // Complete raster face underneath the illustration and live typography.
+  // The frame has its name plaque; cost and combat seals are separate raster layers.
   node.appendChild(artEl(c.id, opt.fullArt, lazyFor(opt.lazyArt), opt.lazyArt !== undefined));
   const frameEl = el("div", "card-frame");
-  // square field tiles use the dedicated 1254 square frames; everything else
-  // (hand / market / zoom / deck-builder) keeps the vertical card frames
   frameEl.style.backgroundImage = `url(${opt.compactField ? fieldFrameFor(c.t) : frameFor(c.t)})`;
   node.appendChild(frameEl);
 
@@ -547,11 +637,20 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   if (opt.exhausted) node.classList.add("is-exhausted");
 
   const cost = opt.costOverride != null ? opt.costOverride : c.cost;
-  node.appendChild(el("div", "card-cost" + (cost >= 10 ? " card-cost--2d" : ""), String(cost)));
-  const pc = playCost(c);
+  const numericSeal = (cls: string, value: number): HTMLElement => {
+    const seal = el("div", cls);
+    const face = el('span','seal-face'); face.setAttribute('aria-hidden','true');
+    seal.appendChild(face);
+    const label = el('span','seal-value',String(value));
+    if (String(value).length > 3) label.style.fontSize = `${300 / String(value).length}%`;
+    seal.appendChild(label);
+    return seal;
+  };
+  node.appendChild(numericSeal("card-cost" + (cost >= 10 ? " card-cost--2d" : ""), cost));
   const nm = cardName(c);
   const nameEl2 = el("div", "card-name" + (nm.length >= 9 ? " card-name--long" : ""), nm);
-  node.appendChild(nameEl2);
+  if (!opt.compactField) node.appendChild(nameEl2);
+  node.setAttribute("aria-label", `${nm} · ${labels[typeIndex]} · ${cost}`);
 
   if (c.t === "mon") {
     const a = opt.field && opt.owner ? effAtk(opt.owner, c as FieldMon) : c.atk!;
@@ -571,9 +670,9 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     } else d = c.def!;
     // 알은 공격도 체력도 하지 않는다 — 부화/내구도 배지가 그 자리의 실질 정보다.
     // (0/0 칩이 남아 있으면 "약한 몬스터"로 잘못 읽힌다)
-    if (!(onField && isEgg)) node.appendChild(el("div", "ad-atk" + (String(a).length >= 3 ? " ad-num--3d" : ""), String(a)));
+    if (!(onField && isEgg)) node.appendChild(numericSeal("ad-atk" + (String(a).length >= 3 ? " ad-num--3d" : ""), a));
     if (!(onField && isEgg)) {
-      node.appendChild(el("div", "ad-def" + (hurt ? " ad-def--hurt" : "") + (String(d).length >= 3 ? " ad-num--3d" : ""), String(d)));
+      node.appendChild(numericSeal("ad-def" + (hurt ? " ad-def--hurt" : "") + (String(d).length >= 3 ? " ad-num--3d" : ""), d));
     }
   }
   // ---- 상태 띠 (필드 타일 / 알) ------------------------------------------
@@ -583,15 +682,21 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   // 항상 같은 자리에 둔다. 칩 모양은 확대 화면의 키워드 칩과 동일하다.
   {
     const lang0 = getLang();
+    const label = (ja:string, en:string, ko:string):string => lang0 === 'ja' ? ja : lang0 === 'en' ? en : ko;
     const psvName = (k: string): string | null => {
       const pd = PASSIVES[k];
       return pd ? (lang0 === "ja" ? pd.ja.name : lang0 === "en" ? pd.en.name : pd.ko.name) : null;
     };
     const band = el("div", "card-status");
+    if (c.quick || c.t === "quest") {
+      const chip = el("span", "kw", labels[typeIndex]);
+      chip.title = c.quick ? label("購入時に1回だけ発動し、ゲームから除外", "Resolves once on purchase, then leaves the game", "구매시 1회 발동 후 게임에서 제외") : label("発動後から条件を数え、達成時に報酬を1回獲得", "Counts progress after activation; earn the reward once", "발동 후 조건을 세고 달성시 보상 1회 획득");
+      band.appendChild(chip);
+    }
     const fm = c as FieldMon;
     // 1) 키워드 — 카드가 원래 가진 것 + 게임 중 부여된 것 (필드 타일에서만;
     //    손패/마켓/확대는 효과판의 키워드 칩 행이 같은 정보를 이미 보여준다)
-    if (opt.compactField) {
+    if (opt.compactField || opt.field) {
       const innate = cardPassives(c);
       const granted = fm.passivesG ?? [];
       for (const k of [...innate, ...granted.filter((g) => !innate.includes(g))]) {
@@ -609,86 +714,22 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     }
     // 2) 카운터
     if (opt.field && c.aura === "assassinGuild") {
-      band.appendChild(el("span", "ec ec-d", `⚔${(c as { gcount?: number }).gcount ?? 0}/3`));
+      band.appendChild(el("span", "ec ec-d", `${label('カウント','Count','카운트')} ${(c as { gcount?: number }).gcount ?? 0}/3`));
     }
     if (c.hatchTurns != null) {
       // 알: 필드에서는 실시간 값, 손패/마켓에서는 초기값
       const eggH = (c as { hatch?: number }).hatch ?? c.hatchTurns;
       const eggD = (c as { dur?: number }).dur ?? c.hatchDur ?? 4;
-      band.appendChild(el("span", "ec ec-h", `🥚${eggH}`));
-      band.appendChild(el("span", "ec ec-d", `🛡${Math.max(0, eggD)}`));
+      band.appendChild(el("span", "ec ec-h", `${label('孵化','Hatch','부화')} ${eggH}`));
+      band.appendChild(el("span", "ec ec-d", `${label('耐久','Durability','내구')} ${Math.max(0, eggD)}`));
     } else if (opt.field && c.aura !== "assassinGuild") {
-      if ((fm.guts ?? 0) > 0) band.appendChild(el("span", "ec ec-g", `💢${fm.guts}`));
-      if ((fm.decayCnt ?? 0) > 0) band.appendChild(el("span", "ec ec-x", `☠${fm.decayCnt}/3`));
+      if ((fm.guts ?? 0) > 0) band.appendChild(el("span", "ec ec-g", `${label('気合','Guts','기합')} ${fm.guts}`));
+      if ((fm.decayCnt ?? 0) > 0) band.appendChild(el("span", "ec ec-x", `${label('腐敗','Decay','부패')} ${fm.decayCnt}/3`));
     }
     if (band.childElementCount) node.appendChild(band);
   }
   // 이름도 실측-축소: 긴 이름(EN 포함)이 프레임 이름판을 벗어나지 않게
-  fitToBox(nameEl2, { solo: !!opt.fullArt });
-  // 효과 텍스트: "(시전 N)"/"(소환 N)" 계열 표기는 배지로 대체되므로 제거하고, 구분자를 줄바꿈으로
-  const rawTxt = cardText(c).replace(/\s*\((?:시전|Cast|発動|소환|Summon|召喚)\s*\d+\)/g, "").trim();
-  // dice/chest cards are detected on the RAW text — the separators become newlines
-  // just below, which would destroy the " / " that delimits the outcome rows
-  const table = rawTxt && rawTxt !== "—" ? parseDiceTable(rawTxt) : null;
-  let txt = rawTxt
-    .replace(/ · /g, "\n")
-    .replace(/ \/ /g, "\n")
-    .trim();
-  const hasCast = c.t !== "starter" && pc !== c.cost;
-  // Passive keywords live on their own chip row instead of being buried in the
-  // sentence (rule R3). The row is a CHILD of .card-eff on purpose: that box is
-  // already clipped to the frame's text plate and already auto-fitted, so adding
-  // keywords can never push anything outside the card art.
-  const keyChips = cardPassives(c);
-  // The square field tile has no text plate (CSS hides it) — building one anyway
-  // put zero-sized boxes into the shared size groups and skewed the group size
-  // for every real card on screen.
-  if (!opt.compactField && ((txt && txt !== "—") || hasCast || keyChips.length)) {
-    // No length buckets: every effect plate starts at the SAME CSS size and
-    // fitToBox + the size-group pass decide the final one. The old --small/--tiny
-    // buckets gave cards different starting sizes, so the "one size per screen"
-    // pass could never actually land on one size.
-    const effCls = "card-eff";
-    const eff = el("div", effCls);
-    if (hasCast) {
-      // monsters are SUMMONED, spells/traps are CAST — label the play-cost badge accordingly
-      const cast = el("div", "card-cast", `<span class="cc-ico">⚡</span>${t(c.t === "mon" ? "card.summon" : "card.cast")} ${pc}`);
-      // instant tooltip anchored to the card (not inside the clipped .card-eff)
-      const tip = el("div", "cast-tip", t(c.t === "mon" ? "card.summon.tip" : "card.cast.tip"));
-      node.appendChild(tip);
-      cast.addEventListener("pointerenter", () => tip.classList.add("show"));
-      cast.addEventListener("pointerleave", () => tip.classList.remove("show"));
-      eff.appendChild(cast);
-    }
-    if (keyChips.length) {
-      const lang2 = getLang();
-      const row = el("div", "card-keys" + (txt && txt !== "—" ? "" : " card-keys--only"));
-      for (const k of keyChips) {
-        const pd = PASSIVES[k];
-        if (!pd) continue;
-        // data-psv keeps the zoom view's keyword panel highlight working
-        row.appendChild(el("span", "kw psv", lang2 === "ja" ? pd.ja.name : lang2 === "en" ? pd.en.name : pd.ko.name)).setAttribute("data-psv", k);
-      }
-      if (row.childElementCount) eff.appendChild(row);
-    }
-    // effect text LAST: keywords are labels and must survive the .is-clipped fade,
-    // which always eats the tail of the plate
-    if (table) {
-      if (table.head) eff.appendChild(el("div", "card-dice-head", decorateTags(table.head)));
-      const tb = el("div", "card-dice");
-      for (const [roll, fx] of table.rows) {
-        const row = el("div", "dr");
-        row.appendChild(el("span", "dr-roll", roll));
-        row.appendChild(el("span", "dr-fx", decorateTags(fx)));
-        tb.appendChild(row);
-      }
-      eff.appendChild(tb);
-    } else if (txt && txt !== "—") {
-      eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${decorateTags(decoratePassives(c, txt))}</span>`));
-    }
-    fitToBox(eff, { solo: !!opt.fullArt }); // 실측 자동 축소 — 어떤 길이의 효과도 항상 프레임 텍스트판 안에
-    node.appendChild(eff);
-  }
+  if (!opt.compactField) fitToBox(nameEl2, { solo: !!opt.fullArt });
   if (opt.badge) node.appendChild(el("span", "badge", opt.badge));
   // tribe info is shown BESIDE the card in the zoom view (see anim.zoomCard),
   // so no on-art tribe button here (keeps the art clean).

@@ -1,0 +1,168 @@
+{
+  "checkedAt": "2026-09-08T21:58:02.993326+00:00",
+  "domain": "https://test.yourlore.xyz",
+  "allMatched": true,
+  "files": [
+    {
+      "file": "index.html",
+      "bytes": 1192,
+      "localSha256": "d08749c4bfdc963b86799e8c24abc35ae69edf3692732a7cae8f3ea5be53f4e4",
+      "remoteSha256": "d08749c4bfdc963b86799e8c24abc35ae69edf3692732a7cae8f3ea5be53f4e4",
+      "matched": true
+    },
+    {
+      "file": "assets/GLTFLoader-xThsSWrz.js",
+      "bytes": 44842,
+      "localSha256": "bb33f2710bdca27cb2f1504ce1c6fe94dd6342efbc2c1c1386a89138dee9be1f",
+      "remoteSha256": "bb33f2710bdca27cb2f1504ce1c6fe94dd6342efbc2c1c1386a89138dee9be1f",
+      "matched": true
+    },
+    {
+      "file": "assets/RoomEnvironment-fvoh5mwJ.js",
+      "bytes": 2118,
+      "localSha256": "060f40f55b3c3da5d5fb121b86aee7212e99612e9aa70392d6feb84adf05df11",
+      "remoteSha256": "060f40f55b3c3da5d5fb121b86aee7212e99612e9aa70392d6feb84adf05df11",
+      "matched": true
+    },
+    {
+      "file": "assets/cardSurface-DVHbEgkz.js",
+      "bytes": 3285,
+      "localSha256": "7e06ab49a1f6cc2c5572a600fbdfba0a8860bc0dc3720d637ce8c4061363ad38",
+      "remoteSha256": "7e06ab49a1f6cc2c5572a600fbdfba0a8860bc0dc3720d637ce8c4061363ad38",
+      "matched": true
+    },
+    {
+      "file": "assets/diceScene-DNrz92Om.js",
+      "bytes": 6945,
+      "localSha256": "431e0ae0f959138e8246d267e07c7c2b23b3d245d45b22468c33db3c52217fd4",
+      "remoteSha256": "431e0ae0f959138e8246d267e07c7c2b23b3d245d45b22468c33db3c52217fd4",
+      "matched": true
+    },
+    {
+      "file": "assets/duelScene-ByzoFC_z.js",
+      "bytes": 12348,
+      "localSha256": "328abb72fd1df4a4dfc403dba4432bdcff736b26c756bcf2b39056c029701ae1",
+      "remoteSha256": "328abb72fd1df4a4dfc403dba4432bdcff736b26c756bcf2b39056c029701ae1",
+      "matched": true
+    },
+    {
+      "file": "assets/main-C0hvT3O2.js",
+      "bytes": 1009778,
+      "localSha256": "772011208d28373d479447c7ded0bbca0a9a578688c4acaf2f543ccdd1acdd6b",
+      "remoteSha256": "772011208d28373d479447c7ded0bbca0a9a578688c4acaf2f543ccdd1acdd6b",
+      "matched": true
+    },
+    {
+      "file": "assets/modulepreload-polyfill-B5Qt9EMX.js",
+      "bytes": 771,
+      "localSha256": "607112fb81d7899ceedf89cdb1b3540a53eb96ad5e4202fb1e22f873281de839",
+      "remoteSha256": "607112fb81d7899ceedf89cdb1b3540a53eb96ad5e4202fb1e22f873281de839",
+      "matched": true
+    },
+    {
+      "file": "assets/paperCard-CicCINSi.js",
+      "bytes": 2692,
+      "localSha256": "c5b636b3381b6c8b0ea9ad3a0f64888f62dc8cfea26cefda2cc3c44138849181",
+      "remoteSha256": "c5b636b3381b6c8b0ea9ad3a0f64888f62dc8cfea26cefda2cc3c44138849181",
+      "matched": true
+    },
+    {
+      "file": "assets/paperDraw-D9vfI9-K.js",
+      "bytes": 3225,
+      "localSha256": "a56851f3e60af59640c561096693af9356386c70a9f482e95bb65fcc0024660a",
+      "remoteSha256": "a56851f3e60af59640c561096693af9356386c70a9f482e95bb65fcc0024660a",
+      "matched": true
+    },
+    {
+      "file": "assets/paperShuffle-lCLSR-YZ.js",
+      "bytes": 2987,
+      "localSha256": "81116a12da4bfd690c628f8a430aeab84376da487388e1eab5ebdba07350730b",
+      "remoteSha256": "81116a12da4bfd690c628f8a430aeab84376da487388e1eab5ebdba07350730b",
+      "matched": true
+    },
+    {
+      "file": "assets/tablePreview-GFpLb3f0.js",
+      "bytes": 25340,
+      "localSha256": "02c232f613bd53a11bababc5a36efa75cd9034933dc05f3448e96c7e5c8c504a",
+      "remoteSha256": "02c232f613bd53a11bababc5a36efa75cd9034933dc05f3448e96c7e5c8c504a",
+      "matched": true
+    },
+    {
+      "file": "assets/three.module-BgJ404qw.js",
+      "bytes": 601283,
+      "localSha256": "037438c5c2a299de97b4ebc238e5475e90fd86a7b994ec5ebdcce9f33b26cb4f",
+      "remoteSha256": "037438c5c2a299de97b4ebc238e5475e90fd86a7b994ec5ebdcce9f33b26cb4f",
+      "matched": true
+    },
+    {
+      "file": "assets/main-BI_-5388.css",
+      "bytes": 158263,
+      "localSha256": "be3fa4910ed4c7f7129a05d70e5b635a98be601cdcb1760440bdd135a3b7b396",
+      "remoteSha256": "be3fa4910ed4c7f7129a05d70e5b635a98be601cdcb1760440bdd135a3b7b396",
+      "matched": true
+    },
+    {
+      "file": "assets/tablePreview-2Rkra2Ey.css",
+      "bytes": 1870,
+      "localSha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+      "remoteSha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+      "matched": true
+    },
+    {
+      "file": "models/cosmetics/deck_holder_biblion_ivory/v1/model-low.glb",
+      "bytes": 31600,
+      "localSha256": "3a45ab899b2dd272149bf1cc177d3f8b8e0ff35e839e3dc8a12b9fc65633b213",
+      "remoteSha256": "3a45ab899b2dd272149bf1cc177d3f8b8e0ff35e839e3dc8a12b9fc65633b213",
+      "matched": true
+    },
+    {
+      "file": "models/cosmetics/deck_holder_biblion_ivory/v1/model.glb",
+      "bytes": 92912,
+      "localSha256": "d8d9bd9b7ca4b9b2f79033a70dac763d07ad4d5166aab2c5ef55fdfb4704b5e9",
+      "remoteSha256": "d8d9bd9b7ca4b9b2f79033a70dac763d07ad4d5166aab2c5ef55fdfb4704b5e9",
+      "matched": true
+    },
+    {
+      "file": "models/library-furniture/market-low.glb",
+      "bytes": 43864,
+      "localSha256": "53467b4b1a184e0f844de266616d1ca5c7815e624f24f3021a12307cb561b5f8",
+      "remoteSha256": "53467b4b1a184e0f844de266616d1ca5c7815e624f24f3021a12307cb561b5f8",
+      "matched": true
+    },
+    {
+      "file": "models/library-furniture/market.glb",
+      "bytes": 96872,
+      "localSha256": "421d378ae17154209c05abe8d09a2b6aa3d0a2cf68103b6bb63f039d6d11de56",
+      "remoteSha256": "421d378ae17154209c05abe8d09a2b6aa3d0a2cf68103b6bb63f039d6d11de56",
+      "matched": true
+    },
+    {
+      "file": "models/library-furniture/shelf-low.glb",
+      "bytes": 54272,
+      "localSha256": "b987427ef758df58fab602c51b12eaecae7b99a8bda44852a8ea287aa5ea57d6",
+      "remoteSha256": "b987427ef758df58fab602c51b12eaecae7b99a8bda44852a8ea287aa5ea57d6",
+      "matched": true
+    },
+    {
+      "file": "models/library-furniture/shelf.glb",
+      "bytes": 115852,
+      "localSha256": "ebb40407e598b9f08ed1528cffaf524beb6fd3dcdf6d5c479c7d7f2f3673b9d8",
+      "remoteSha256": "ebb40407e598b9f08ed1528cffaf524beb6fd3dcdf6d5c479c7d7f2f3673b9d8",
+      "matched": true
+    },
+    {
+      "file": "models/lore-table/table-low.glb",
+      "bytes": 88284,
+      "localSha256": "0d5999df197531ebb90be09ba2c73bc1c394ce31083507e886111e7b2abe88b2",
+      "remoteSha256": "0d5999df197531ebb90be09ba2c73bc1c394ce31083507e886111e7b2abe88b2",
+      "matched": true
+    },
+    {
+      "file": "models/lore-table/table.glb",
+      "bytes": 218004,
+      "localSha256": "eb8a42dd6a2d53127ffc30a2b2f7490a5a947191f07c1c914ed64c9d20263c9b",
+      "remoteSha256": "eb8a42dd6a2d53127ffc30a2b2f7490a5a947191f07c1c914ed64c9d20263c9b",
+      "matched": true
+    }
+  ]
+}

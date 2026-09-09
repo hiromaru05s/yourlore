@@ -1,0 +1,112 @@
+{
+  "verifiedAt": "2026-09-08T19:45:32.525899+00:00",
+  "version": "c0a4f67b-bfe7-4593-b547-889a17ab973e",
+  "previousVersion": "03ca8e4a-bba5-452c-8782-f0ca88fbfb32",
+  "origin": "https://test.yourlore.xyz",
+  "checked": 17,
+  "allMatched": true,
+  "files": [
+    {
+      "path": "index.html",
+      "status": 200,
+      "sha256": "a89e842cd55ba32a6f6eaad5ec3e9c89b87a65a875a9f67f64cb09691783c886",
+      "matched": true
+    },
+    {
+      "path": "assets/RoomEnvironment-Dk_hX7JT.js",
+      "status": 200,
+      "sha256": "31fc2fb95c9f3c35bcbb15b92339f5aae2856bf35da02284e6f1bb4dd440df26",
+      "matched": true
+    },
+    {
+      "path": "assets/main-B-H1UuYh.js",
+      "status": 200,
+      "sha256": "a4353f7350770d14e5d1701aac8c42eed9dfcbc2f340fcdd09090286169cc768",
+      "matched": true
+    },
+    {
+      "path": "assets/main-TcMLY9pS.css",
+      "status": 200,
+      "sha256": "1aaaebe8d36904771bf11d644397d4558012c9971eb2e4ace124fbc047b6e97a",
+      "matched": true
+    },
+    {
+      "path": "assets/paperShuffle-BxUbuAnQ.js",
+      "status": 200,
+      "sha256": "fcb78b9588ce9fadda68d4510b929da184f4909b75c308c08af7320e888561b7",
+      "matched": true
+    },
+    {
+      "path": "assets/paperDraw-2bnamYTt.js",
+      "status": 200,
+      "sha256": "0cea52bdc08a8ec6ae8c957383b7b4503b834bbf3464b539d0a59f8e6e231e58",
+      "matched": true
+    },
+    {
+      "path": "assets/GLTFLoader-CaxBhfRO.js",
+      "status": 200,
+      "sha256": "f03445de6ebd2f1f99365e488f052680149dad7f90665f27aa9bc86d63e935d1",
+      "matched": true
+    },
+    {
+      "path": "assets/three.module-GyoWmXP4.js",
+      "status": 200,
+      "sha256": "5682afbb14a5252323e6ba04a8f115d3446929764e9471c367303ba119d8bb8e",
+      "matched": true
+    },
+    {
+      "path": "assets/paperCard-DUjA9H7Y.js",
+      "status": 200,
+      "sha256": "3e8c005fb836ae8e3fbebc66ead9163dc84951bc62926887afe81158884649e8",
+      "matched": true
+    },
+    {
+      "path": "assets/diceScene-BWrTZeRr.js",
+      "status": 200,
+      "sha256": "2f07de6c8ee2dfbbc201734d96e99802f8ab5bd139220532006cca39e0e55da0",
+      "matched": true
+    },
+    {
+      "path": "assets/tablePreview-DSriEK_h.js",
+      "status": 200,
+      "sha256": "89891748d12dcef220750d80480238813a94872f963fdf45e005d424c271e17c",
+      "matched": true
+    },
+    {
+      "path": "assets/duelScene-C0sdexyc.js",
+      "status": 200,
+      "sha256": "b8a207528b932c666f73614af96a126b70e4b1b5d7cb4120534f4f5873430def",
+      "matched": true
+    },
+    {
+      "path": "assets/tablePreview-2Rkra2Ey.css",
+      "status": 200,
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+      "matched": true
+    },
+    {
+      "path": "assets/modulepreload-polyfill-B5Qt9EMX.js",
+      "status": 200,
+      "sha256": "607112fb81d7899ceedf89cdb1b3540a53eb96ad5e4202fb1e22f873281de839",
+      "matched": true
+    },
+    {
+      "path": "assets/cardSurface-DVHbEgkz.js",
+      "status": 200,
+      "sha256": "7e06ab49a1f6cc2c5572a600fbdfba0a8860bc0dc3720d637ce8c4061363ad38",
+      "matched": true
+    },
+    {
+      "path": "models/lore-table/table.glb",
+      "status": 200,
+      "sha256": "eb8a42dd6a2d53127ffc30a2b2f7490a5a947191f07c1c914ed64c9d20263c9b",
+      "matched": true
+    },
+    {
+      "path": "models/lore-table/table-low.glb",
+      "status": 200,
+      "sha256": "0d5999df197531ebb90be09ba2c73bc1c394ce31083507e886111e7b2abe88b2",
+      "matched": true
+    }
+  ]
+}

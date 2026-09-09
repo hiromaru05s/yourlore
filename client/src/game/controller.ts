@@ -1,3 +1,4 @@
+import { paintDuelClock } from '../ui/duelClock';
 // ============================================================
 // LORE — game controllers.
 // BaseController turns engine events into log + animation + render.
@@ -8,20 +9,20 @@
 // ============================================================
 import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
-import { createGame, reduce, playCost } from "../shared/engine";
+import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed } from "../shared/engine";
 import { botDecide, pickBotDeck, type BotDifficulty } from "../shared/bot";
 import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog, logToText } from "../ui/log";
 import * as A from "../ui/anim";
-import { cardPicker, cardPickerMulti, confirmDialog, treasureModal, winModal, closeOverlay } from "../ui/modal";
+import { cardPicker, cardPickerMulti, confirmDialog, treasureModal, winModal, closeOverlay, closeTreasureNotices } from "../ui/modal";
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { sfx, type SfxName } from "../ui/sound";
 import { avatarHtml } from "../ui/social";
 import { tierOf, tierLabel } from "../ui/tier";
 import { t, getLang, cardName, onLangChange } from "../i18n";
-import { diceRollAnim } from "../ui/dice";
+import { diceRollAnim, cancelDiceAnimations } from "../ui/dice";
 
 export interface ControllerExits {
   onHome(): void;
@@ -91,6 +92,8 @@ export abstract class BaseController implements BoardHandlers {
   protected fastForward(): void {
     this.skipGen = this.fxGen;
     A.setFxSkip(true);
+    cancelDiceAnimations();
+    closeTreasureNotices();
   }
 
   // ---- BoardHandlers ----
@@ -221,10 +224,13 @@ export abstract class BaseController implements BoardHandlers {
     const events = res.events;
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
+    const spellGhosts:HTMLElement[]=[];
+    const questCount=prev.players.map(p=>p.quests?.length??0);
+    const buffCount=[prev.players[0].traps.length+prev.players[0].enchants.length,prev.players[1].traps.length+prev.players[1].enchants.length];
     // running counters for ghost slot placement + live HP readout
     const fieldCount: [number, number] = [prev.players[0].field.length, prev.players[1].field.length];
     const hpNow: [number, number] = [prev.players[0].hp, prev.players[1].hp];
-    let myDraws = 0;
+    const draws = [0, 0];
     let lastKill: { srcKo?: string; srcJa?: string } | null = null;
     const diceDone = new Set<number>(); // dice events already animated (pre-rolled ahead of a result popup)
 
@@ -256,6 +262,7 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "trapSet":
           await A.trapSetAnim(sideOf(e.player));
+          buffCount[e.player]++;
           break;
         case "trapReveal": {
           const def = DB[e.id];
@@ -308,7 +315,10 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "playSpell": {
           const def = DB[e.id] ?? STARTERS[e.id]; // 컬/어튠/보물상자 live in STARTERS
-          if (def) await A.revealSpell({ uid: "fx", ...def }, sideOf(e.player), e.dest);
+          if (def) {
+            const face=await A.revealSpell({ uid: "fx", ...def }, sideOf(e.player), e.dest,buffCount[e.player]+(def.t==='quest'?questCount[e.player]:0));
+            if(face){spellGhosts.push(face);if(def.t==='quest')questCount[e.player]++;else buffCount[e.player]++;}
+          }
           // random-roll cards: roll the 3D dice first, THEN show the outcome popup
           if (def && RANDOM_CARDS.has(def.id)) {
             for (let j = i + 1; j < events.length; j++) {
@@ -334,14 +344,16 @@ export abstract class BaseController implements BoardHandlers {
           else A.pileFlash(e.player === this.you ? "pile-myDisc" : "pile-oppDisc");
           break;
         }
+        case "reshuffle":
+          await A.animateReshuffle(sideOf(e.player), e.count);
+          break;
         case "draw":
-          if (e.player === this.you) myDraws += e.count;
+          draws[e.player] += e.count;
           break;
         case "treasure": {
           const mine = e.player === this.you && !e.isBot;
           const text = getLang() === "ja" ? e.textJa : getLang() === "en" ? logToEn(e.text) : e.text;
-          if (mine) treasureModal(e.kind, text); // modal with a Claim button (not awaited)
-          else await A.resultPopup(`${t("fx.opp")} · ${t("treasure.title")}`, [text], false);
+          treasureModal(e.kind, (mine ? "" : `${t("fx.opp")} · `) + text);
           break;
         }
         default:
@@ -364,8 +376,10 @@ export abstract class BaseController implements BoardHandlers {
     if (this.dead) return;
     this.view.render(res.state);
     // ghosts overlap the freshly-rendered real cards — drop them next frame
-    requestAnimationFrame(() => ghosts.forEach((g) => g.el.remove()));
-    if (myDraws > 0) A.animateDraw(document.getElementById("hand") as HTMLElement, myDraws);
+    requestAnimationFrame(() => {ghosts.forEach((g) => g.el.remove());spellGhosts.forEach(g=>g.remove());});
+    await Promise.all(([0, 1] as Side[]).map(player => draws[player] > 0
+      ? A.animateDraw(document.getElementById(player === this.you ? "hand" : "oppHand"), draws[player], sideOf(player))
+      : Promise.resolve()));
 
     // ---- death sequence: HP orb shatters + cause of death, before the result modal ----
     if (res.state.over && res.state.winner != null && !this.winShown) {
@@ -427,7 +441,9 @@ export abstract class BaseController implements BoardHandlers {
     if (!this.introShown && this.state && this.state.turn === 1 && !this.state.over) {
       this.introShown = true;
       this.showCoinToss(this.state.cur);
+      return;
     }
+    if (document.querySelector('.cointoss-ov') && !this.state.over) return;
     // max-mana growth cue (mid-turn gains too)
     const mm = this.state?.players?.[this.you]?.maxMana ?? 0;
     if (this.prevMaxMana && mm > this.prevMaxMana) sfx("mana");
@@ -442,7 +458,11 @@ export abstract class BaseController implements BoardHandlers {
       this.purgePicks = null; // 선택이 끝나면 큐 정리
       if (this.multiPickerOpen) { this.multiPickerOpen = false; closeOverlay(); } // v42: 시간 초과 자동 폐기 등으로 선택이 끝나면 모달도 닫는다
     }
-    if (g.pending && g.cur === this.you) {
+    if (g.pending && actingSide(g) === this.you) {
+      if (g.pending.kind === "cardChoice") {
+        cardPicker(g.pending.hintJa, effectChoices(g), uid => this.submit({ type: "pick", uid }));
+        return;
+      }
       if (multiKind) {
         const handCap = g.pending.reason === "handCap"; // v42: 턴 종료 손패 이월 — 취소 불가, 정확히 n장
         if (this.purgePicks) {
@@ -499,7 +519,7 @@ export abstract class BaseController implements BoardHandlers {
         const ids = (g.pending.data?.ids as string[] | undefined) ?? [];
         const pool = opts
           ? opts.map((op) => ({ uid: op.id, id: "OPT", t: "spell", cost: 0, name: getLang() === "ja" ? op.ja : getLang() === "en" ? op.en : op.ko, text: "" } as CardInst))
-          : ids.filter((id) => defOf(id) && (free || defOf(id).cost <= me.mana)).map((id) => ({ uid: id, ...defOf(id) }));
+          : ids.filter((id) => defOf(id) && (free || (defOf(id).cost <= me.mana && purchaseAllowed(g, me, { ...defOf(id), uid: id })))).map((id) => ({ uid: id, ...defOf(id) }));
         const hint = getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint;
         if (!pool.length) { this.submit({ type: "pick", uid: null }); return; }
         cardPicker(hint, pool, (uid) => this.submit({ type: "pick", uid }));
@@ -523,7 +543,7 @@ export abstract class BaseController implements BoardHandlers {
         const me = g.players[this.you];
         // 리콜: 방금 사용한 리콜 카드 자신은 이미 묘지에 들어가 있다 → 선택지에서 제외
         const ex = (g.pending.data as { exclude?: string } | undefined)?.exclude;
-        const pool = g.pending.reason === "rogueTrap" ? [...me.deck, ...me.discard].filter((c) => c.t === "trap") : g.pending.kind === "seek" ? me.deck : me.discard.filter((c) => c.uid !== ex);
+        const pool = g.pending.kind === "seek" ? me.deck : me.discard.filter((c) => c.uid !== ex);
         cardPicker(getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint, pool, (uid) => this.submit({ type: "pick", uid }));
       }
       return; // oppMon/myMon resolved by board clicks
@@ -562,7 +582,9 @@ export abstract class BaseController implements BoardHandlers {
       // a reconnect straight into the discard choice: the server clock already includes the bonus
       this.handCapBonusKey = g.pending?.reason === "handCap" ? key : "";
       if (!firstTurn && g.cur === this.you) sfx("turn"); // my turn begins
-      if (!firstTurn) A.turnBanner(g.cur === this.you); // 턴 전환 리본 — 턴의 경계를 몸으로 알게
+      // The opening announcement belongs AFTER the coin, never underneath it.
+      // Reconnected games beyond turn 1 still announce their current turn.
+      if (!(firstTurn && g.turn === 1) && !document.querySelector(".cointoss-ov")) A.turnBanner(g.cur === this.you, g.turn);
       if (this.timerInt) clearInterval(this.timerInt);
       this.renderTimer();
       this.timerInt = window.setInterval(() => this.tickTimer(), 1000);
@@ -623,29 +645,13 @@ export abstract class BaseController implements BoardHandlers {
     const active = this.state.cur === this.you ? "me" : "opp";
     const other = active === "me" ? "opp" : "me";
     const clr = document.getElementById(`clock-${other}`);
-    if (clr) { clr.className = "mp-clock"; clr.replaceChildren(); }
+    if (clr) { clr.className = "mp-clock"; clr.setAttribute("aria-hidden", "true"); clr.replaceChildren(); }
     const el = document.getElementById(`clock-${active}`);
     if (!el) return;
     const total = this.turnTotal;
     const s = Math.max(0, this.timerLeft);
     const mine = active === "me" && !this.state.over;
-    const R = 26, C = 2 * Math.PI * R;
-    let arc = el.querySelector(".tc-arc") as SVGCircleElement | null;
-    let num = el.querySelector(".tc-num") as HTMLElement | null;
-    if (!arc || !num) {
-      el.innerHTML =
-        `<svg viewBox="0 0 64 64" class="tc-svg">` +
-        `<circle class="tc-track" cx="32" cy="32" r="${R}"></circle>` +
-        `<circle class="tc-arc" cx="32" cy="32" r="${R}" stroke-dasharray="${C.toFixed(1)}"></circle>` +
-        `</svg><span class="tc-num"></span>`;
-      arc = el.querySelector(".tc-arc"); num = el.querySelector(".tc-num");
-      if (!arc || !num) return;
-    }
-    el.className = "mp-clock show" + (mine ? " mine" : " opp") + (s <= 5 ? " warn" : "");
-    // fresh turn (full ring) → snap instantly; otherwise let CSS animate the drain
-    arc.style.transition = s >= total ? "none" : "";
-    arc.setAttribute("stroke-dashoffset", (C * (1 - s / total)).toFixed(1));
-    num.textContent = String(s);
+    paintDuelClock(el, s, total, mine);
   }
 
   /** Coin-toss reveal at game start: a two-headed coin — each face is a player's
@@ -675,7 +681,15 @@ export abstract class BaseController implements BoardHandlers {
     document.body.appendChild(ov);
     sfx("coin");
     setTimeout(() => sfx(iAmFirst ? "turn" : "pop"), 900);
-    setTimeout(() => { ov.classList.add("out"); setTimeout(() => ov.remove(), 350); }, 2200);
+    setTimeout(() => { ov.classList.add("out"); setTimeout(async () => {
+      ov.remove();
+      if (this.dead || this.state.over) return;
+      A.turnBanner(this.state.cur === this.you, this.state.turn);
+      try {
+        if (this.state.turn === 1) await A.animateDraw(document.getElementById(firstSide === this.you ? 'hand' : 'oppHand'), 3, firstSide === this.you ? 'me' : 'opp');
+      } catch (error) { console.error('[opening draw]', error); }
+      if (!this.dead) this.afterApply({ state: this.state, events: [] });
+    }, 350); }, 2200);
   }
 
   private turnToast(text: string, size: "big" | "small", ms: number): void {
@@ -766,6 +780,10 @@ export abstract class BaseController implements BoardHandlers {
 
   destroy(): void {
     this.dead = true;
+    A.setFxSkip(true);
+    cancelDiceAnimations();
+    closeTreasureNotices();
+    document.querySelectorAll(".fx-turnbanner,.cointoss-ov,.fx-card-flight,.cast-veil").forEach(n => n.remove());
     this.stopTimer();
     this.view.destroy();
     this.toastEl?.remove();
@@ -809,7 +827,7 @@ export class LocalController extends BaseController {
   protected maybeBot(): void {
     const g = this.state;
     if (g.over) return;
-    if (g.players[g.cur].isBot) {
+    if (g.players[actingSide(g)].isBot) {
       clearTimeout(this.botTimer);
       // playback has already finished by the time afterApply runs — a short beat is enough
       this.botTimer = window.setTimeout(() => this.botStep(), g.pending ? 380 : 600);
@@ -820,7 +838,7 @@ export class LocalController extends BaseController {
   private botTurnSteps = 0;
   private botStep(): void {
     const g = this.state;
-    if (g.over || !g.players[g.cur].isBot) return;
+    if (g.over || !g.players[actingSide(g)].isBot) return;
     // 안전망: 봇이 한 턴에서 비정상적으로 많은 행동을 반복하면(거부 루프 등) 강제 턴 종료.
     // 정상 턴은 수십 액션 이내 — 200회는 버그가 아니면 도달 불가.
     if (g.turn !== this.botTurnNo) { this.botTurnNo = g.turn; this.botTurnSteps = 0; }

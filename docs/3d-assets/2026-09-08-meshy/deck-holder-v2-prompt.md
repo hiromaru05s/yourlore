@@ -1,0 +1,13 @@
+# デッキホルダー v2 — 四隅の収納スペースを確保
+
+内蔵ImageGenで生成。編集対象: `deck-holder.png`。カード外形参照: `client/public/frames/sleeve_default.webp`（リポジトリルート基準）。
+収納面を四隅まで連続した長方形に訂正。内側に張り出す角の装飾を除き、外側の柱・壁へ移す。寸法比は生成の構図指定であり、Meshy後のメッシュ寸法検証とは別。
+
+```text
+Use case: precise-object-edit.
+Image 1 is the DECK HOLDER TO CORRECT. Image 2 is the actual LORE card back, supplied ONLY as a reference for the outer rectangular card silhouette and portrait proportions, NOT for printing its art on the holder.
+Regenerate this empty deck holder as a physically plausible receiver for a stack of these exact cards lying flat. The critical correction is the STORAGE CAVITY: it must be one clear uninterrupted true rectangle, with four square inside corners and straight parallel inside walls. A rectangular card stack must fit with visible clearance on all four sides INCLUDING every corner. The current image's large curved corner shoulders intrude diagonally into the storage space and are WRONG. Remove all of those inward intrusions. No quarter-circle corner caps, no diagonal corner braces, no concave corner cutouts, no scallops, no pinched corners, no bevel or ornament occupying the storage footprint.
+Geometry spec: card footprint nominal 64 wide by 100 long units; the empty flat storage bed should be approximately 70 wide by 106 long units. This full rectangular footprint remains clear from floor to open sky. Shallow straight perimeter rails sit entirely OUTSIDE this rectangle. Rail thickness constant. Four square interior corners. Keep external edges finely beveled. Low front rail, continuous and straight, no thumb notch needed. The large circular ornaments from the old holder must be removed or relocated entirely onto the OUTER VERTICAL wall; they may not overhang any part of the interior. Prioritize functional clean geometry.
+Keep the original restrained premium LORE craftsmanship: dark navy felt bed, dark blackened body, slim aged gold/brass trim, tasteful subtle blue enamel on outward-facing surfaces. No bulky corner blocks. A thin gold rectangular outline can trace the bed boundary without crossing it. Elegance from fine material detail and crisp construction, not bulky decoration.
+Single empty holder, no card inside and no loose cards outside. No reproduction of the card artwork or its eye symbol anywhere. No typography, logos, rulers, dimensions, arrows, diagrams or multiple views. Isolated fully visible object on neutral light grey studio background. Elevated three-quarter view at about 60 degrees showing the ENTIRE rectangular floor and ALL four inside corners unobscured, with generous margins. Soft neutral studio lighting, plausible materials and clear solid surfaces for Meshy image-to-3D reconstruction. Output one high quality landscape image.
+```

@@ -3,13 +3,16 @@
 // and badge metadata. Badge OWNERSHIP is computed server-side;
 // this file only knows how to draw them.
 // ============================================================
-import { DB } from "../shared/cards";
 import { TIER_META, tierLabel } from "./tier";
 import { getLang } from "../i18n";
 
 // ---- avatars: preset = a card id, art served from /art/cards/<id>.webp ----
 export function avatarHtml(avatar: string | null | undefined, display: string, size = 40): string {
   const initial = (display || "?").trim().charAt(0).toUpperCase().replace(/[&<>"\']/g, "?");
+  if (avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE") {
+    const color = avatar === "SEEKER_RED" ? "red" : "blue";
+    return `<span class="avatar avatar-seeker" style="--avs:${size}px"><span class="seeker-sprite seeker-${color}" role="img" aria-label="${color === "red" ? "Red Seeker" : "Blue Seeker"}"></span></span>`;
+  }
   const img = avatar && /^[A-Za-z0-9_]+$/.test(avatar)
     ? `<img src="/art/cards/${avatar}.webp?v=2" alt="" loading="lazy" onerror="this.remove()">`
     : "";
@@ -18,7 +21,7 @@ export function avatarHtml(avatar: string | null | undefined, display: string, s
 
 /** All monster cards double as avatar presets (they all have art). */
 export function avatarPresets(): string[] {
-  return Object.values(DB).filter((c) => c.t === "mon").map((c) => c.id);
+  return ["SEEKER_RED", "SEEKER_BLUE"];
 }
 
 // ---- badges ----

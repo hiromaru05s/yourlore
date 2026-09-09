@@ -8,6 +8,7 @@ export const cardsSourcePath = path.join(rootDir, "client/src/shared/cards.ts");
 const cardsEnglishSourcePath = path.join(rootDir, "client/src/shared/cards.en.ts");
 const cardTextSourcePath = path.join(rootDir, "client/src/shared/cardText.ts");
 const flavorNamesSourcePath = path.join(rootDir, "client/src/shared/cardNames.flavor.ts");
+const questQuickSourcePath = path.join(rootDir, "client/src/shared/questQuickCards.ts");
 const cacheDir = path.join(rootDir, "art/.cache");
 export const promptOutputPath = path.join(rootDir, "art/prompts/card-art-prompts.jsonl");
 export const artDir = path.join(rootDir, "client/public/art/cards");
@@ -19,6 +20,7 @@ const typeLabels = {
   mon: "monster creature",
   spell: "magic spell phenomenon",
   trap: "trap or defensive relic",
+  quest: "quest objective or magical contract",
   starter: "starter utility item",
 };
 
@@ -34,6 +36,7 @@ export async function loadCards({ includeStarters = false } = {}) {
   const englishSource = await fs.readFile(cardsEnglishSourcePath, "utf8");
   const cardTextSource = await fs.readFile(cardTextSourcePath, "utf8");
   const flavorNamesSource = await fs.readFile(flavorNamesSourcePath, "utf8");
+  const questQuickSource = await fs.readFile(questQuickSourcePath, "utf8");
   await fs.mkdir(cacheDir, { recursive: true });
 
   const englishJs = transpileTs(englishSource);
@@ -44,6 +47,7 @@ export async function loadCards({ includeStarters = false } = {}) {
     .replaceAll("from './cards'", 'from "./cards.mjs"');
   const flavorNamesJs = transpileTs(flavorNamesSource);
   const cardsJs = transpileTs(source)
+    .replaceAll('from "./questQuickCards"', 'from "./questQuickCards.mjs"')
     .replaceAll('from "./cards.en"', 'from "./cards.en.mjs"')
     .replaceAll("from './cards.en'", 'from "./cards.en.mjs"')
     .replaceAll('from "./cardNames.flavor"', 'from "./cardNames.flavor.mjs"')
@@ -55,6 +59,7 @@ export async function loadCards({ includeStarters = false } = {}) {
   const cardTextOut = path.join(cacheDir, "cardText.mjs");
   const flavorNamesOut = path.join(cacheDir, "cardNames.flavor.mjs");
   const cardsOut = path.join(cacheDir, "cards.mjs");
+  await fs.writeFile(path.join(cacheDir, "questQuickCards.mjs"), transpileTs(questQuickSource));
   await fs.writeFile(englishOut, englishJs);
   await fs.writeFile(cardTextOut, cardTextJs);
   await fs.writeFile(flavorNamesOut, flavorNamesJs);

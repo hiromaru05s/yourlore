@@ -11,14 +11,14 @@ import { corsHeaders, getUser } from "./auth";
 export const REWARDS: Record<string, number> = {
   // legacy 6-step tutorial (kept so old grads' claims stay valid) — total 150
   "tut:1": 10, "tut:2": 20, "tut:3": 25, "tut:4": 25, "tut:5": 30, "tut:6": 40,
-  // interactive tutorial v2 — 10 hands-on steps, total 1000
+  // Active interactive tutorial — 9 steps, total 890; existing keys stay stable.
   "tuto:1": 50,   // 화면 이해
   "tuto:2": 70,   // 카드 구매
   "tuto:3": 80,   // 제시 리롤
   "tuto:4": 90,   // 몬스터 소환
   "tuto:5": 100,  // 마법 시전
   "tuto:6": 90,   // 공격
-  "tuto:7": 110,  // 함정
+  "tuto:7": 110,  // retired trap lesson; retained for legacy clients/claims only
   "tuto:8": 130,  // 종족 시너지
   "tuto:9": 80,   // 어튠
   "tuto:10": 200, // 승리

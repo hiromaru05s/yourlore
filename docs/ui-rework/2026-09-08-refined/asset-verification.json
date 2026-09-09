@@ -1,0 +1,293 @@
+[
+  {
+    "name": "turn-flare",
+    "size": [
+      2172,
+      724
+    ],
+    "alpha": [
+      0,
+      253
+    ],
+    "bytes": 1132254
+  },
+  {
+    "name": "deck-5",
+    "size": [
+      1145,
+      1374
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 1409146
+  },
+  {
+    "name": "deck-1",
+    "size": [
+      1239,
+      1269
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 1109595
+  },
+  {
+    "name": "card-frame",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "bytes": 885214
+  },
+  {
+    "name": "stat-cost",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 1398002
+  },
+  {
+    "name": "stat-defense",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 1411692
+  },
+  {
+    "name": "deck-3",
+    "size": [
+      1182,
+      1330
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 1138288
+  },
+  {
+    "name": "reroll",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 961476
+  },
+  {
+    "name": "rift-absorb",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 2488351
+  },
+  {
+    "name": "deck-10",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "bytes": 1929867
+  },
+  {
+    "name": "deck-15",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 1226827
+  },
+  {
+    "name": "portrait-opp",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 692936
+  },
+  {
+    "name": "portrait-self",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 584472
+  },
+  {
+    "name": "field-frame",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 382729
+  },
+  {
+    "name": "stat-attack",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 1519314
+  },
+  {
+    "name": "panel-frame",
+    "size": [
+      1536,
+      1024
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "bytes": 1487685
+  },
+  {
+    "name": "rift-idle",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      253
+    ],
+    "bytes": 2935136
+  },
+  {
+    "name": "rift-hover",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 2871404
+  },
+  {
+    "name": "mana-filled",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 709350
+  },
+  {
+    "name": "button-idle",
+    "size": [
+      1774,
+      887
+    ],
+    "alpha": null,
+    "bytes": 1004990
+  },
+  {
+    "name": "mana-empty",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 663404
+  },
+  {
+    "name": "button-pressed",
+    "size": [
+      2138,
+      736
+    ],
+    "alpha": null,
+    "bytes": 739461
+  },
+  {
+    "name": "button-hover",
+    "size": [
+      2172,
+      724
+    ],
+    "alpha": null,
+    "bytes": 978289
+  },
+  {
+    "name": "trap-seal",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 3313456
+  },
+  {
+    "name": "shelf-case",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "bytes": 1654651
+  }
+]

@@ -1,0 +1,64 @@
+{
+  "mode": "built-in imagegen",
+  "assets": [
+    {
+      "name": "frame-mon",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-8d788190-4e83-4b3e-83fe-564035c92157.png"
+    },
+    {
+      "name": "frame-spell",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-5a0046dd-9bb4-4bfe-9273-2b0ab3350346.png"
+    },
+    {
+      "name": "frame-trap",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-9d9dd039-3dad-4d74-a4c6-4a6525acd654.png"
+    },
+    {
+      "name": "compact-mon",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-824474bd-a901-4966-afc4-d2fb6d00c146.png"
+    },
+    {
+      "name": "compact-spell",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-8a6b90af-9dd6-41c1-99b5-bee6a48903a7.png"
+    },
+    {
+      "name": "compact-trap",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a077e8-a1e1-7453-89c6-70ac1e1dc68a/exec-25c5568d-f72c-4657-95f0-bcdfb4190521.png"
+    }
+  ],
+  "prompts": [
+    {
+      "name": "frame-mon",
+      "prompt": "Use case: ui-mockup. Production transparent PNG asset for LORE Biblion magical-library TCG. Generate ONE COMPLETE blank MONSTER card face frame, portrait 1024x1536, strictly front facing with no perspective. Refined anime fantasy materials: lacquered burgundy-red enamel perimeter with thin champagne-gold edges, ivory porcelain name and effect plates, restrained small compass-corner engraving, polished craftsmanship, not baroque. The red perimeter must clearly identify monster type even small.\nGeometry in percent of canvas: frame outer edges x2..98 y1..99; slim blank ivory name plate x26..94 y3..11; genuinely TRANSPARENT rectangular illustration window x7..93 y14..61; full opaque pale ivory blank effect panel x7..93 y65..92 with fine inset gold edge and subtle satin paper texture, integrated seamlessly into frame, not a separate floating rectangle. Thin red divider from y61..65. At y92..98 narrow red footer. NO circular sockets, NO numbers, NO lettering, NO attack or HP badges, no sword icons (separate overlay assets will supply these). Outer corners and entire illustration window real alpha transparency. Absolutely no illustration or scenery. All panels and structural borders painted in raster, finished game-ready frame with crisp edges and visual hierarchy. Reference is original frame only for its complete name/art/effect construction; improve its finesse and follow given layout, omit its bottom stats strip."
+    },
+    {
+      "name": "frame-mon-alpha",
+      "prompt": "Edit target: this blank red card frame. Keep the frame, ivory name plate, ivory effect plate, exact layout and palette unchanged. Remove the fake checkerboard inside the art window and the black outside the rounded frame. They must become REAL PNG ALPHA TRANSPARENCY, not white, black, grey or checker pattern pixels. Deliver RGBA transparent PNG. The complete ivory panels remain opaque. No other changes."
+    },
+    {
+      "name": "frame-spell",
+      "prompt": "Precise-object-edit of reference frame. Create the SPELL version. Replace every burgundy RED enamel area with rich sapphire BLUE enamel, keeping gold/ivory, geometry, panel locations, edge widths and blank panels exactly identical. No text, digits, icons, card art. The illustration window must be uniform flat dark navy (not checkerboard), because runtime card illustration will fill this exact window. Outer background plain black. Portrait1024x1536. Entire name/effect panels stay fully painted ivory. Restrained refined Biblion magical-library materials."
+    },
+    {
+      "name": "frame-mon",
+      "prompt": "Precise color variant of the supplied complete card frame. Change ONLY sapphire blue enamel perimeter and footer to rich garnet RED enamel. Exact same layout and geometry, gold edges, ivory blank name/effect plates, navy empty illustration window, and black outer background. 1024x1536. No text or numbers, no symbols. Everything except the colored enamel remains identical."
+    },
+    {
+      "name": "frame-trap",
+      "prompt": "Precise color variant of the supplied complete card frame. Change ONLY sapphire blue enamel perimeter and footer to rich emerald GREEN enamel. Exact same layout and geometry, gold edges, ivory blank name/effect plates, navy empty illustration window, and black outer background. 1024x1536. No text or numbers, no symbols. Everything except the colored enamel remains identical."
+    },
+    {
+      "name": "compact-mon",
+      "prompt": "Use case ui-mockup. Adapt reference red LORE card frame into ONE SQUARE COMPACT board/market frame, 1024x1024, straight-on. Preserve identical rich garnet red enamel, restrained champagne gold trim, ivory accents. Geometry: outer frame at1..99%; main art window x6..94 y6..77, filled flat dark navy; narrow blank ivory NAME plate x8..92 y80..91; red footer y93..98. Thin elegant red rim clearly visible, not chunky decorations. No top name plate, no effect panel, no badges, no circles, no text, numbers, symbols or artwork. All structural surfaces fully painted raster. Plain black outside corners."
+    },
+    {
+      "name": "compact-spell",
+      "prompt": "Precise color variant: change ONLY the RED enamel perimeter and footer of this square card frame to rich sapphire BLUE. Preserve EXACT geometry, ivory nameplate, gold edges, navy art window, black outer corners. No added text, badges or symbols. Square PNG."
+    },
+    {
+      "name": "compact-trap",
+      "prompt": "Precise color variant: change ONLY the RED enamel perimeter and footer of this square card frame to rich emerald GREEN. Preserve EXACT geometry, ivory nameplate, gold edges, navy art window, black outer corners. No added text, badges or symbols. Square PNG."
+    }
+  ],
+  "composition": "Original RGB PNGs preserved. Runtime illustration is composited over the navy art window; plates and structural frame geometry are entirely raster."
+}

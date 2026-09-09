@@ -35,7 +35,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🔄", h: "턴의 흐름", body: [
       "내 턴이 시작되면 ① <b>마나가 최대치까지 충전</b>되고 ② 카드를 <b>3장 드로우</b>합니다. (턴 종료 시 손패는 5장까지 이월 · 6장 이상이면 버릴 카드를 고릅니다, 시간 초과 시 오른쪽부터 폐기)",
-      "그다음 마나가 닿는 한 자유롭게 행동합니다 — 몬스터 소환, 마법 시전, 함정 세트, 공격, 카드 구매.",
+      "그다음 마나가 닿는 한 자유롭게 행동합니다 — 몬스터 소환, 마법 시전, 공격, 카드 구매.",
       "<b>턴 종료</b>를 누르면 상대 턴으로 넘어갑니다. 손에 남은 카드는 <b>그대로 유지</b>되어 다음 턴에도 쓸 수 있어요.",
     ] },
     { icon: "💎", h: "마나", body: [
@@ -45,7 +45,6 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     { icon: "🃏", h: "카드 종류", body: [
       "<b>몬스터</b> — 공격력/체력을 가지며 필드에 소환. 소환 시 효과가 있는 경우도 많습니다.",
       "<b>마법</b> — 즉시 1회 효과(데미지, 회복, 드로우, 파괴 등).",
-      "<b>함정</b> — 비공개로 세트해두고 특정 조건에서 자동 발동.",
       "<b>영구마법</b> — 필드에 일정 턴 동안 남아 지속 효과를 줍니다.",
       "<b>스타터</b> — 컬(폐기로 덱 압축), 보물상자(개봉), 어튠(최대 마나+1).",
     ] },
@@ -58,14 +57,10 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "몬스터로 상대를 공격합니다.",
       "상대 몬스터를 치면 <b>데미지가 체력에 누적</b>됩니다. 체력이 0이 되면 파괴되고, 막타의 초과분은 상대 플레이어에게 <b>관통</b> 데미지로 들어갑니다.",
       "받은 데미지는 <b>사라지지 않습니다</b> — 필드의 몬스터는 방패 자리에 <b>남은 체력</b>이 표시되고, 다친 상태면 <b>빨간 숫자</b>로 보여요. 필드를 떠났다 돌아오면 체력이 초기화됩니다.",
-      "공격해도 <b>반격 데미지는 받지 않습니다</b>. 대신 상대의 <b>세트 함정</b>이 공격에 반응할 수 있으니 조심하세요.",
+      "공격해도 <b>반격 데미지는 받지 않습니다</b>.",
       "체력을 깎는 효과로 <b>최대 체력이 남은 체력 이하</b>가 되면 그 몬스터는 파괴됩니다.",
       "상대 필드가 비어 있으면 체력을 <b>직접</b> 때립니다.",
       "한 번 공격한 몬스터는 그 턴엔 다시 공격할 수 없어요(일부 카드는 2회 공격 가능).",
-    ] },
-    { icon: "🪤", h: "함정 & 반응", body: [
-      "함정은 비공개로 깔아두고 상대의 <b>공격·소환·마법</b> 같은 행동에 반응해 자동으로 터집니다(발동 시 공개).",
-      "공격 무효화, 반사, 몬스터 파괴, 드로우, 마법 무효화 등 종류가 다양합니다.",
     ] },
     { icon: "🧬", h: "종족 시너지", body: [
       "<b>고독·고귀·포식·귀족·시초</b> 5종족이 있습니다.",
@@ -74,13 +69,13 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "카드를 확대하면(우클릭·길게 누르기) 종족 태그의 ⓘ에서 보너스 내용을 볼 수 있어요.",
     ] },
     { icon: "⭐", h: "특수 카드 & 필드", body: [
-      "필드에는 <b>몬스터 7장</b>, <b>마법·함정 7장</b>까지 놓을 수 있습니다.",
+      "필드에는 <b>몬스터 7장</b>, <b>마법 14장</b>까지 놓을 수 있습니다.",
       "<b>영구마법</b>은 필드에 남아 지속 효과를 주며, 일부 카드로 파괴하거나 게임에서 제외할 수 있어요.",
       "<b>소환 조건</b>이 있는 몬스터도 있습니다(예: 특정 카드가 필드·덱·묘지에 있어야 소환).",
       "<b>암살자</b>류처럼 상대 몬스터를 무시하고 <b>플레이어를 직접 공격</b>하는 카드도 있습니다.",
     ] },
     { icon: "🏷️", h: "효과 표기 규칙", body: [
-      "효과 앞의 <b>【태그】</b>가 발동 조건입니다: <b>【소환시】</b> 소환한 순간 1회 / <b>【피격시】</b> 함정이 공격에 반응 / <b>【마법 반응】·【소환 반응】</b> 상대의 마법·소환에 반응 / <b>【상시】</b> 필드에 있는 동안 계속 / <b>【매턴】</b> 자신 턴 시작마다 / <b>【조건】</b> 소환 조건.",
+      "효과 앞의 <b>【태그】</b>가 발동 조건입니다: <b>【소환시】</b> 소환한 순간 1회 / <b>【상시】</b> 필드에 있는 동안 계속 / <b>【매턴】</b> 자신 턴 시작마다 / <b>【조건】</b> 소환 조건.",
       "<b>【영구】</b> 영구마법은 파괴되기 전까지 계속 유지됩니다. <b>【지속 N턴】</b>은 N턴 뒤 사라지며, 필드에 <b>남은 턴 배지 ⏳</b>가 표시됩니다.",
       "태그가 없는 마법 효과는 <b>시전 즉시</b> 발동합니다.",
       "<b>(양측)</b> 표기가 있는 파괴 효과는 <b>자신의 카드도 대상으로 선택</b>할 수 있습니다.",
@@ -106,7 +101,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🔄", h: "ターンの流れ", body: [
       "自分のターンになると ①<b>マナが最大まで回復</b>し ②カードを<b>3枚ドロー</b>します。(ターン終了時に持ち越せる手札は5枚まで · 6枚以上なら捨てるカードを選択、時間切れは右から破棄)",
-      "その後はマナの続く限り自由に行動 — モンスター召喚、魔法発動、罠セット、攻撃、カード購入。",
+      "その後はマナの続く限り自由に行動 — モンスター召喚、魔法発動、攻撃、カード購入。",
       "<b>ターン終了</b>を押すと相手のターンになります。手札の残りは<b>そのまま持ち越し</b>、次のターンも使えます。",
     ] },
     { icon: "💎", h: "マナ", body: [
@@ -116,7 +111,6 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     { icon: "🃏", h: "カードの種類", body: [
       "<b>モンスター</b> — 攻撃力/体力を持ち場に召喚。召喚時効果を持つものも多いです。",
       "<b>魔法</b> — 即時1回の効果(ダメージ・回復・ドロー・破壊など)。",
-      "<b>罠</b> — 非公開でセットし、特定の条件で自動発動。",
       "<b>永続魔法</b> — 場に一定ターン残り、継続効果を与えます。",
       "<b>スターター</b> — カル(廃棄でデッキ圧縮)、宝箱(開封)、アチューン(最大マナ+1)。",
     ] },
@@ -129,14 +123,10 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "モンスターで相手を攻撃します。",
       "相手モンスターを攻撃すると<b>ダメージが体力に蓄積</b>します。体力が0になると破壊され、とどめの超過分は相手プレイヤーに<b>貫通</b>ダメージとして入ります。",
       "受けたダメージは<b>消えません</b> — 場のモンスターは盾の位置に<b>残り体力</b>が表示され、傷ついていると<b>赤い数字</b>になります。場を離れて戻ると体力はリセットされます。",
-      "攻撃しても<b>反撃ダメージは受けません</b>。代わりに相手の<b>セットされた罠</b>が攻撃に反応することがあるので注意。",
+      "攻撃しても<b>反撃ダメージは受けません</b>。",
       "体力を下げる効果で<b>最大体力が残り体力以下</b>になると、そのモンスターは破壊されます。",
       "相手の場が空なら体力を<b>直接</b>攻撃します。",
       "一度攻撃したモンスターはそのターン再攻撃できません(一部カードは2回攻撃可能)。",
-    ] },
-    { icon: "🪤", h: "罠 & リアクション", body: [
-      "罠は非公開でセットし、相手の<b>攻撃・召喚・魔法</b>などの行動に反応して自動で発動します(発動時に公開)。",
-      "攻撃無効、反射、モンスター破壊、ドロー、魔法無効化など種類は様々です。",
     ] },
     { icon: "🧬", h: "種族シナジー", body: [
       "<b>孤独・高貴・捕食・貴族・始原</b>の5種族があります。",
@@ -145,7 +135,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "カードを拡大(右クリック・長押し)すると種族タグのⓘでボーナス内容を確認できます。",
     ] },
     { icon: "⭐", h: "特殊カード & 場", body: [
-      "場には<b>モンスター7枚</b>、<b>魔法・罠7枚</b>まで置けます。",
+      "場には<b>モンスター7枚</b>、<b>魔法14枚</b>まで置けます。",
       "<b>永続魔法</b>は場に残って継続効果を与え、一部のカードで破壊・ゲームから除外できます。",
       "<b>召喚条件</b>を持つモンスターもいます(例: 特定カードが場・デッキ・墓地に必要)。",
       "<b>アサシン</b>系のように相手モンスターを無視して<b>プレイヤーを直接攻撃</b>するカードもあります。",
@@ -156,7 +146,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "宝箱カードを拡大すると、このダイス表が横に表示されます。他の確率効果もすべてダイス判定です。",
     ] },
     { icon: "🏷️", h: "効果の表記ルール", body: [
-      "効果の前の<b>【タグ】</b>が発動条件です: <b>【召喚時】</b>召喚した瞬間に1回 / <b>【攻撃された時】</b>罠が攻撃に反応 / <b>【魔法に反応】・【召喚に反応】</b>相手の魔法・召喚に反応 / <b>【常時】</b>場にいる間ずっと / <b>【毎ターン】</b>自分のターン開始ごと / <b>【条件】</b>召喚条件。",
+      "効果の前の<b>【タグ】</b>が発動条件です: <b>【召喚時】</b>召喚した瞬間に1回 / <b>【常時】</b>場にいる間ずっと / <b>【毎ターン】</b>自分のターン開始ごと / <b>【条件】</b>召喚条件。",
       "<b>【永続】</b>の永続魔法は破壊されるまで続きます。<b>【持続Nターン】</b>はNターン後に消え、場に<b>残りターンのバッジ ⏳</b>が表示されます。",
       "タグのない魔法効果は<b>発動した瞬間</b>に適用されます。",
       "<b>(両方の場)</b>と書かれた破壊効果は<b>自分のカードも対象に選べます</b>。",
@@ -177,7 +167,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🔄", h: "Turn Flow", body: [
       "At the start of your turn: ① <b>mana refills to max</b> and ② you <b>draw 3 cards</b>. (You may carry over 5 cards at end of turn · with 6+ you choose what to discard; on timeout the rightmost go)",
-      "Then act freely while your mana lasts — summon monsters, cast spells, set traps, attack, buy cards.",
+      "Then act freely while your mana lasts — summon monsters, cast spells, attack, buy cards.",
       "Press <b>End Turn</b> to pass to the opponent. Cards left in your hand <b>stay</b> for your next turn.",
     ] },
     { icon: "💎", h: "Mana", body: [
@@ -187,7 +177,6 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     { icon: "🃏", h: "Card Types", body: [
       "<b>Monsters</b> — have ATK/HP and fight on the field. Many have on-summon effects.",
       "<b>Spells</b> — one-shot effects (damage, healing, draw, destruction…).",
-      "<b>Traps</b> — set face-down; trigger automatically on certain conditions.",
       "<b>Enchantments</b> — stay on the field for a duration with ongoing effects.",
       "<b>Starters</b> — Cull (thin your deck), Treasure Chest (open it), Attune (max mana +1).",
     ] },
@@ -200,14 +189,10 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "Attack the opponent with your monsters.",
       "Attacking a monster deals <b>damage that accumulates on its HP</b>. At 0 HP it dies, and the killing blow's excess hits the opponent as <b>penetration</b> damage.",
       "Damage <b>does not wear off</b> — field monsters show their <b>remaining HP</b> in the shield slot, in <b>red</b> while wounded. HP resets if the card leaves the field.",
-      "Attackers take <b>no retaliation damage</b>. The real risk is the opponent's <b>face-down traps</b> reacting to your attack.",
+      "Attackers take <b>no retaliation damage</b>.",
       "If an effect drops a monster's <b>max HP to its damage taken or below</b>, it is destroyed.",
       "If the enemy field is empty, you hit their HP <b>directly</b>.",
       "Each monster attacks once per turn (a few cards can attack twice).",
-    ] },
-    { icon: "🪤", h: "Traps & Reactions", body: [
-      "Traps sit face-down and fire automatically on enemy <b>attacks, summons or spells</b> (revealed when triggered).",
-      "They negate attacks, reflect damage, destroy monsters, draw cards, counter spells, and more.",
     ] },
     { icon: "🧬", h: "Tribe Synergies", body: [
       "There are 5 tribes: <b>Solitary, Noble, Devour, Aristocrat, Origin</b>.",
@@ -215,7 +200,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "Enlarge a card (right-click / long-press) and tap the tribe tag's ⓘ to see the bonuses.",
     ] },
     { icon: "⭐", h: "Special Cards & Field", body: [
-      "The field holds up to <b>7 monsters</b> and <b>7 spells/traps</b>.",
+      "The field holds up to <b>7 monsters</b> and <b>14 spells</b>.",
       "<b>Enchantments</b> persist on the field; some cards destroy or exile them.",
       "Some monsters have <b>summon requirements</b> (e.g. specific cards in your field/deck/graveyard).",
       "<b>Assassins</b> ignore enemy monsters and always <b>attack the player directly</b>.",
@@ -226,7 +211,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "Enlarge the chest card to see this die table. Every chance effect in the game is a dice roll.",
     ] },
     { icon: "🏷️", h: "Effect Notation", body: [
-      "The <b>【tag】</b> before an effect is its trigger: <b>【On Summon】</b> once when summoned / <b>【When Attacked】</b> trap reacting to an attack / <b>【On Enemy Spell】·【On Enemy Summon】</b> trap reacting to the opponent / <b>【Passive】</b> while on the field / <b>【Each Turn】</b> at the start of your turns / <b>【Requires】</b> summon requirement.",
+      "The <b>【tag】</b> before an effect is its trigger: <b>【On Summon】</b> once when summoned / <b>【Passive】</b> while on the field / <b>【Each Turn】</b> at the start of your turns / <b>【Requires】</b> summon requirement.",
       "<b>【Permanent】</b> enchantments stay until destroyed. <b>【Lasts N Turns】</b> ones expire after N turns and show a <b>remaining-turns badge ⏳</b> on the field.",
       "A spell effect with no tag applies <b>immediately when cast</b>.",
       "Destruction effects marked <b>(either side)</b> can also <b>target your own cards</b>.",

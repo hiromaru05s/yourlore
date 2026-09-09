@@ -76,7 +76,7 @@ const SUMMON_FLAT: Record<string, number> = {
   originEmber: 4, refreshToken: 2, golemSquad: 5, decayAll: 8, eliteSoldiers: 6, hordeRally: 6, warlordKnight: 6,
   hexSummon: 5, // v39
   sorterSummon: 4, unbrand: 2, // v41
-  chronicler: 4, jailer: 3, originArbiter: 8, originRite: 8, dragonFuse: 12, generalKnight: 7, siegeBreak2: 6,
+  chronicler: 4, jailer: 3, originArbiter: 8, originRite: 8, dragonFuse: 12, generalKnight: 7,
   elderWipe: 18, nightlord: 12,
 };
 function summonValue(c: CardDef): number {
@@ -145,7 +145,6 @@ function auraValue(c: CardDef): number {
     case "scavenger": return 7;    // 상대 몬스터 사망시 33%로 복제
     case "pageDraw": return DRAW * 2.2; // 매턴 +1 드로우
     case "lowAtkBan": return 4;
-    case "trapBan": return 4;
     case "eliteGuard": return 8;   // 직접 공격 봉쇄 + 6코 이하 도발 벽
     case "demonTax2": return -MANA * 1.6; // 몸집 대가: 최대 마나 -2
     // ---- v36 몬스터 대개편 ----
@@ -177,7 +176,6 @@ function attackFxValue(c: CardDef): number {
     case "berserk": return -3;                   // 아군도 때린다
     case "giantSlayer": return 6;
     case "cullExile2": return 2;
-    case "rogueTrap": return 4;
     case "halfSecond": return 0;                 // mult로 이미 반영 (2회째 절반)
     default: return 3;
   }
@@ -298,7 +296,6 @@ const PASSIVE_PTS: Record<string, number> = {
   dual: 0,        // already priced via `mult` on the body
   ambush: 0,      // already priced via `directOnly` on the body
   aura: 5,        // untargetable by spells / monster effects
-  trapmaster: 3,
   void: -1,       // leaves the deck cycle on death
   guts: 4,        // eats one combat destruction
   decay: 5,       // 3 hits kills anything + 3 face damage
@@ -355,6 +352,9 @@ function bodyValue(c: CardDef): number {
  * Used for buy decisions, deck-quality measurement, and pick ordering.
  */
 export function cardPower(c: CardDef): number {
+  // Initial estimates for the new classes; these are bot priorities, not measured balance scores.
+  if (c.quest) return ({ Q_RIFT: 15, Q_BRAND: 15, Q_TORI: 14, Q_WINTER: 14, Q_TRIBE: 17, Q_CASTLE: 18, Q_DECAY: 18, Q_ASSASSIN: 16, Q_MANA: 17 } as Record<string, number>)[c.id] ?? 12;
+  if (c.quick) return ({ QUICK_MIMIC: 13, QUICK_SURVIVAL: 14, QUICK_POISON: 7, QUICK_WORLD: 20, QUICK_MUSTER: 17, QUICK_SORT: 13, QUICK_REBIRTH: 17, QUICK_ATTUNE: MANA + 2 * MAXHP, QUICK_GRIMOIRE: 6, QUICK_ASSAULT: 5 } as Record<string, number>)[c.id] ?? 6;
   // starters (cull / chest / attune) have no effect keys — value them by hand
   if (c.t === "starter") {
     if (c.star === "mana") return MANA;

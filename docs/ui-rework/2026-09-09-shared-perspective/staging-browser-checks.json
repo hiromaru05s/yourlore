@@ -1,0 +1,54 @@
+{
+  "furniture": [
+    {
+      "id": "pile-oppDeck",
+      "type": "blender"
+    },
+    {
+      "id": "pile-oppDisc",
+      "type": "blender"
+    },
+    {
+      "id": "",
+      "type": "blender"
+    },
+    {
+      "id": "pile-myDeck",
+      "type": "blender"
+    },
+    {
+      "id": "pile-myDisc",
+      "type": "blender"
+    }
+  ],
+  "hourglasses": 0,
+  "market": [
+    [
+      54,
+      84
+    ]
+  ],
+  "monster": [
+    [
+      54,
+      84
+    ]
+  ],
+  "permanentSpell": "エルフの憩い場 永続魔法",
+  "portrait": 176.5625,
+  "projected": 12,
+  "script": "https://test.yourlore.xyz/assets/main-C0hvT3O2.js",
+  "viewport": {
+    "height": 745,
+    "width": 1470
+  },
+  "endTurnButtonVerified": true,
+  "checks": [
+    "new main bundle confirmed after reload",
+    "opponent summon and direct damage",
+    "own permanent spell drag and placement",
+    "five Blender furniture instances",
+    "no hourglass",
+    "angled end turn advances turn"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "worker": "lore-server-staging",
+  "host": "test.yourlore.xyz",
+  "version": "13fb1ebe-552f-47c0-a45c-d6bd9fa08a4d",
+  "previousVersion": "f98cee2a-4458-4812-ae21-1f9d7471cfc1",
+  "verifiedAt": "2026-09-07T15:40:58.157Z",
+  "baseCommit": "d97926f",
+  "branch": "codex/biblion-ingame-rework",
+  "productionChanged": false
+}

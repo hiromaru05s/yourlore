@@ -16,7 +16,7 @@
 import type { Env } from "./env";
 import type { Action, GameEvent, GameState, Side } from "../../client/src/shared/types";
 import type { GameClientMsg, GameServerMsg } from "../../client/src/shared/protocol";
-import { createGame, reduce } from "../../client/src/shared/engine";
+import { createGame, reduce, actingSide, effectChoices } from "../../client/src/shared/engine";
 import { redactFor } from "../../client/src/shared/protocol";
 import { BALANCE_VERSION } from "../../client/src/shared/cards";
 import { applyRanked, applyRankedDraw } from "./rank";
@@ -371,6 +371,11 @@ export class GameRoom {
         const prevTurn = room.game.turn, prevCur = room.game.cur;
         let st = room.game;
         const evs: GameEvent[] = [];
+        // Resolve mandatory public quest/quick choices on timeout before ending the turn.
+        for (let i = 0; i < 64 && st.pending?.kind === "cardChoice"; i++) {
+          const r = reduce(st, { type: "pick", uid: effectChoices(st)[0]?.uid ?? null });
+          evs.push(...r.events); st = r.state;
+        }
         // cancel any pending choice first so endTurn is accepted (try both verbs)
         for (const verb of ["pick", "chooseTarget"] as const) {
           if (!st.pending) break;
@@ -403,7 +408,7 @@ export class GameRoom {
     // authorization
     if (action.type === "surrender") {
       if (action.player !== side) return;
-    } else if (g.cur !== side) {
+    } else if (actingSide(g) !== side) {
       return; // not this player's turn
     }
     const prevCur = g.cur;

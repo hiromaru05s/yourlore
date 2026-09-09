@@ -4,16 +4,19 @@
 // All animation lives in anim.ts; this file only draws + binds.
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
-import { effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem, marketStockOf } from "../shared/engine";
-import { frameFor, FRAME_BACK, sleeveUrl, TRIBES, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
+import { purchaseAllowed, freeBuyBlocked } from "../shared/engine";
+import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem, marketStockOf } from "../shared/engine";
+import { enchantHasTurnCountdown, fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
-import { artUrl, cardEl, prefetchZoomArt } from "./cardView";
+import { artUrl, cardEl, ensureCardCompositing, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
 import { bindZoom, zoomCard, setPlayOrigin } from "./anim";
-import { t, getLang, esc } from "../i18n";
+import { t, getLang, esc, cardName } from "../i18n";
 import { logToEn } from "../shared/logEn";
 import { getSfxVolume, setSfxVolume } from "./sound";
+import { deckBucket, refinedArt } from "./duelMaterials";
 import { avatarHtml } from "./social";
+import { createAttackAim } from './attackAim';
 
 // the local player's profile avatar (set by the game screen), shown on MY portrait
 let MY_AVATAR: string | null | undefined;
@@ -34,18 +37,7 @@ export function setMarketWatch(ids?: string[] | null): void { MARKET_WATCH = new
 /** card-back image for a pile/back that belongs to `isMe`. */
 function backFor(isMe: boolean): string { return isMe ? MY_SLEEVE : OPP_SLEEVE; }
 
-// ---- battlefield backgrounds (client-only cosmetics; NEVER part of game state) ----
-// One of these is rolled ONCE per GameView construction (= per match entry), so the
-// background stays fixed for the whole match and re-rolls on the next match/rematch.
-// Add more entries here to expand the pool — the picker stays 1/N uniform.
-const BATTLEFIELD_BACKGROUNDS = [
-  "/art/battlefields/simple-topdown-v1/02_heaven.webp",
-  "/art/battlefields/simple-topdown-v1/03_abyssal-ice.webp",
-];
-/** 50:50 (uniform) pick. Called only from the GameView constructor — never from render(). */
-function pickBattlefieldBg(): string {
-  return BATTLEFIELD_BACKGROUNDS[Math.floor(Math.random() * BATTLEFIELD_BACKGROUNDS.length)];
-}
+const pickBattlefieldBg = (): string => "/art/biblion/duel-table.png";
 
 /** Eat the click that follows THIS press (capture, once) — but self-expire: a
  *  cancelled touch (scroll/palm rejection) never fires the click, and a stale
@@ -56,8 +48,8 @@ function swallowNextClick(el: HTMLElement): void {
   setTimeout(() => el.removeEventListener("click", swallow, { capture: true }), 500);
 }
 
-const MON_SLOTS = 7;
-const ST_SLOTS = 7;
+const MON_SLOTS = FIELD_MAX;
+const ST_SLOTS = ST_MAX;
 
 export interface BoardHandlers {
   onPlay(uid: string): void;
@@ -76,11 +68,14 @@ export interface BoardHandlers {
 }
 
 export class GameView {
+  private riftCounts = new Map<string, number>();
   root: HTMLElement;
   you: Side;
   h: BoardHandlers;
   logEl!: HTMLElement;
   /** battlefield art for THIS match — rolled once at construction (see pickBattlefieldBg) */
+  private disposed = false;
+  private disposeScene?: () => void;
   private readonly battlefieldBg = pickBattlefieldBg();
 
   constructor(root: HTMLElement, you: Side, h: BoardHandlers) {
@@ -88,6 +83,11 @@ export class GameView {
     this.you = you;
     this.h = h;
     this.buildSkeleton();
+    if (typeof WebGL2RenderingContext !== 'undefined') {
+      void import('./duelScene').then(({ mountDuelScene }) => {
+        if (!this.disposed) this.disposeScene = mountDuelScene(this.root);
+      }).catch(() => { /* DOM controls and time remain available without WebGL. */ });
+    }
   }
 
   private buildSkeleton(): void {
@@ -109,7 +109,6 @@ export class GameView {
             </div>
             <div class="prow" id="oppRow"></div>
             <div class="mid-row">
-              <div class="mid-spacer"></div>
               <div class="panel market" id="market"></div>
               <!-- turn timer + END TURN live just right of the market (with a gap) -->
               <div class="mid-aside">
@@ -119,8 +118,6 @@ export class GameView {
               </div>
             </div>
             <div class="prow" id="meRow"></div>
-            <!-- narrow layouts park END TURN here, under my own field -->
-            <div class="under-row" id="underMe"></div>
             <div class="hand-area" id="handArea">
               <div class="pcluster pcluster--me">
                 <div class="pc-side pc-side--l"></div>
@@ -129,11 +126,6 @@ export class GameView {
               </div>
             </div>
           </div>
-        </div>
-        <!-- side rail: graveyard / exile browsers + tribe info, OUTSIDE the field (right edge) -->
-        <div class="side-rail" id="sideRail">
-          <div class="rail-group rail-group--opp" id="railOpp"></div>
-          <div class="rail-group rail-group--me" id="railMe"></div>
         </div>
         <!-- battle log: a left-edge drawer with a mid-left toggle tab.
              The backdrop guarantees a tap anywhere outside the drawer closes it,
@@ -147,6 +139,7 @@ export class GameView {
       </div>
       <div class="target-hint" id="targetHint" style="display:none"></div>`;
     this.logEl = this.q("log");
+    this.root.querySelector(".mid-aside")!.prepend(this.q("turnInfo"));
     (this.q("endBtn") as HTMLButtonElement).onclick = () => this.h.onEndTurn();
     (this.q("giveupBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
     // sound button (round button below the logo): click = volume slider popover
@@ -270,43 +263,18 @@ export class GameView {
     // lowest card's own stacking order — used to swallow the press on card #0.
     const handEl = this.q("hand");
     handEl.addEventListener("pointerdown", (e) => {
-      if (this.handOpen) return;
+      // Card presses must reach bindHandCard: the same gesture can expand AND
+      // drag. Only empty hit-pad presses are handled by the container.
+      if (this.handOpen || (e.target as Element)?.closest('.card')) return;
       e.stopPropagation();
       this.setHandOpen(true);
       swallowNextClick(handEl);
     }, { capture: true });
-    // phones start (and stay) with the hand open; re-assert it on rotation
-    const syncPhoneHand = (): void => { if (GameView.isPhone()) this.setHandOpen(true); };
-    syncPhoneHand();
-    GameView.phoneMq?.addEventListener?.("change", syncPhoneHand);
-    this.cleanups.push(() => GameView.phoneMq?.removeEventListener?.("change", syncPhoneHand));
-
-    // END TURN lives beside the market on wide screens, and under MY OWN field
-    // once the board narrows (reaching across to the market is a stretch on a
-    // phone, and the aside was squeezing the market's width). CSS can't
-    // reparent, so the node is moved.
-    const endWrap = this.root.querySelector(".end-turn-wrap") as HTMLElement;
-    const asideSlot = this.root.querySelector(".mid-aside") as HTMLElement;
-    const underSlot = this.q("underMe");
-    const placeEnd = (under: boolean): void => {
-      const target = under ? underSlot : asideSlot;
-      if (endWrap.parentElement !== target) target.appendChild(endWrap);
-    };
-    placeEnd(document.documentElement.classList.contains("board-underpile"));
-    // the solver decides the arrangement (it compares both), so follow its call.
-    // The hand overlap steps were measured against the PRE-solve card size, so
-    // re-measure them on every solve — otherwise the very first render (your
-    // own turn 1 going first) keeps oversized steps and the hand looks spread.
-    this.onLayout = (e: Event) => { placeEnd(!!(e as CustomEvent).detail?.underPile); this.layoutHand(); };
+    // Re-measure compact and expanded hand steps after responsive sizing.
+    this.onLayout = () => this.layoutHand();
     window.addEventListener("lore:layout", this.onLayout);
   }
 
-  // On a portrait phone the 0.42-scale compact stack is unreadable, so the hand
-  // is PERMANENTLY open there: a real in-flow row at the bottom, full size.
-  // (Matches the CSS portrait media query — keep the two in sync.)
-  private static phoneMq: MediaQueryList | null =
-    typeof matchMedia === "function" ? matchMedia("(orientation: portrait) and (max-width: 860px)") : null;
-  private static isPhone(): boolean { return !!GameView.phoneMq?.matches; }
   /** The log is an overlay drawer (not a persistent side panel) below 860px. */
   private static drawerMq: MediaQueryList | null =
     typeof matchMedia === "function" ? matchMedia("(max-width: 860px), (pointer: coarse)") : null;
@@ -319,13 +287,16 @@ export class GameView {
   private cleanups: Array<() => void> = [];
   /** Detach the window/document-level listeners this view installed. */
   destroy(): void {
+    this.disposed = true;
+    this.cancelHandDrag?.();
+    this.disposeScene?.();
     if (this.onLayout) window.removeEventListener("lore:layout", this.onLayout);
     for (const fn of this.cleanups.splice(0)) { try { fn(); } catch { /* already gone */ } }
   }
 
   private handOpen = false;
+  private cancelHandDrag: (() => void) | null = null;
   setHandOpen(open: boolean): void {
-    if (!open && GameView.isPhone()) return;   // never collapse on phones
     if (this.handOpen === open) return;
     this.handOpen = open;
     (this.root.querySelector(".game") as HTMLElement | null)?.classList.toggle("hand-open", open);
@@ -363,7 +334,7 @@ export class GameView {
     // opponent's equipped sleeve (server-synced); falls back to default for bot/local games
     OPP_SLEEVE = sleeveUrl(g.sleeves?.[1 - this.you]);
 
-    this.q("turnInfo").innerHTML = `<span class="turn-badge"><span class="tb-label">${t("game.turn")}</span><span class="tb-num">${g.turn}</span></span><span class="turn-cur"><b>${esc(g.players[g.cur].name)}</b></span>`;
+    this.q("turnInfo").innerHTML = `<span class="turn-badge"><span class="tb-label">${t("game.turn")}</span><span class="tb-num">${g.turn}</span></span><span class="turn-cur"><b>${t(myTurn ? "fx.yourturn" : "fx.oppturn")}</b></span>`;
     // refresh static labels (so a live language switch updates them)
     this.q("endBtn").textContent = t("game.endturn");
     const gvl = this.q("giveupBtn").querySelector(".gv-label"); if (gvl) gvl.textContent = t("game.surrender");
@@ -373,6 +344,8 @@ export class GameView {
     // Hearthstone-style center portraits (opp top / me bottom)
     this.renderPortrait(this.q("portraitOpp"), opp, false);
     this.renderPortrait(this.q("portraitMe"), me, true);
+    this.q("portraitMe").classList.toggle("is-active", myTurn);
+    this.q("portraitOpp").classList.toggle("is-active", !myTurn && !g.over);
 
     // opponent hand (face-down): straight upright stack held to the right of their
     // portrait. Overlap tightens as the count grows so the RIGHT edge stays put.
@@ -386,6 +359,8 @@ export class GameView {
     for (let i = 0; i < n; i++) {
       const cb = document.createElement("div");
       cb.className = "card--back";
+      cb.style.width = `${obw}px`;
+      cb.style.height = `${obw / .64}px`;
       cb.style.backgroundImage = `url(${OPP_SLEEVE})`;
       cb.style.left = `${i * ostep}px`;
       cb.style.zIndex = String(i);
@@ -399,8 +374,7 @@ export class GameView {
       oh.appendChild(cnt);
     }
 
-    this.renderRail(this.q("railOpp"), opp);
-    this.renderRail(this.q("railMe"), me);
+
     this.renderRow(this.q("oppRow"), g, opp, false, myTurn, pending);
     this.renderRow(this.q("meRow"), g, me, true, myTurn, pending);
     this.renderMarket(g, me, myTurn);
@@ -472,8 +446,9 @@ export class GameView {
         && !(pending!.kind === "myMon" && (((pending!.data?.excl as string[] | undefined) ?? []).includes(m.uid))); // 지원 나팔: 이미 고른 몬스터는 중복 선택 불가
       const canAttack = isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
       // 카지노(v34): 카운터 배지 (12개마다 카지노 주사위)
-      const casinoBadge = m.aura === "casino" ? { badge: `🎲${m.gcount || 0}/12` } : m.id === "CASTLE" ? { badge: `🏰${m.gcount || 0}` } : {};
-      const card = cardEl(m, { field: true, compactField: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted, ...casinoBadge });
+      const countLabel = getLang() === 'ja' ? 'カウント' : getLang() === 'en' ? 'Count' : '카운트';
+      const casinoBadge = m.aura === "casino" ? { badge: `${countLabel} ${m.gcount || 0}/12` } : m.id === "CASTLE" ? { badge: `${countLabel} ${m.gcount || 0}` } : {};
+      const card = cardEl(m, { field: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted, ...casinoBadge });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
       // zoom shows the monster's CURRENT atk/hp (buffs/mods applied) — and, when damaged,
@@ -499,13 +474,15 @@ export class GameView {
     // spell/trap zone
     const sz = document.createElement("div");
     sz.className = "zone zone-st";
+    ensureCardCompositing();
+    const trapLabel = t("duel.setTrap");
     p.traps.forEach((t) => {
-      // Set traps stay face-down for BOTH players — but NOT as a card back or a
-      // green frame: a dedicated owner-coloured trap-jaw icon tile (mine = blue,
-      // opponent = red). Identity is still revealed only by the reveal flow.
+      // Generic trap icon and unknown cost preserve hidden identity for both players.
       const tile = document.createElement("div");
-      tile.className = "card card--field card--field-trap";
-      tile.style.backgroundImage = `url(${isMe ? "/ui/trap-set-icons/set-trap-mine.png" : "/ui/trap-set-icons/set-trap-opponent.png"})`;
+      tile.className = "buff-icon buff-icon--trap";
+      tile.innerHTML = `<span class="buff-frame" style="background-image:url(${fieldFrameFor('trap')})"></span><span class="buff-art" style="background-image:url(${refinedArt('trap-seal')})"></span><span class="buff-cost" aria-hidden="true"><span>?</span></span>`;
+      tile.title = trapLabel;
+      tile.setAttribute("aria-label", trapLabel);
       // v30 카운터 배지 — 카운트다운(⏳남은 턴) / 정보상(×남은 사용 횟수).
       // 자신의 함정은 항상, 상대 함정은 발동으로 정체가 공개된 정보상만 (카운트다운은 비공개 유지)
       if (t.cnt != null && (isMe || t.card.react === "infoDealer")) {
@@ -517,25 +494,52 @@ export class GameView {
       sz.appendChild(tile);
     });
     p.enchants.forEach((e) => {
-      // 영구(99) 영구마법은 턴 배지를 아예 표시하지 않는다 — 기한부만 남은 턴을 크게 표시 (v21 UX)
-      // 혈귀술/고대 문명처럼 turns=99지만 bornTurn 기준 N턴 후 사라지는 카드도 남은 턴을 보여준다
       const lim = e.card.ench ? ENCH_TURN_LIMITS[e.card.ench] : undefined;
-      const rem = e.turns < 99 ? e.turns : lim != null ? Math.max(0, (e.bornTurn ?? 0) + lim - g.turn) : null;
-      // 완전 영구는 ∞ 배지 — "언제 사라지나?"를 보드에서 바로 답한다. 기한부는 남은 턴 카운트다운.
-      // 카운터 보유 영구마법(상회/양조)은 카운터 수를 병기한다.
-      const bits: string[] = [rem != null ? `⏳${rem}` : "∞"];
+      const elapsed = lim != null ? Math.max(0, g.turn - (e.bornTurn ?? 0)) : null;
+      const rem = lim != null ? Math.max(0, lim - elapsed!) : enchantHasTurnCountdown(e.card) ? Math.max(0, e.turns) : null;
+      const bits = [elapsed != null ? `${Math.min(elapsed,lim!)}/${lim}` : rem != null ? `${getLang() === 'ja' ? '残り' : getLang() === 'en' ? '' : '남은 '}${rem}` : ''];
       if (e.cnt != null && e.cnt > 0) bits.push(`×${e.cnt}`);
-      const card = cardEl(e.card, { compactField: true, badge: bits.join(" ") });
+      const lang = getLang();
+      const state = elapsed != null
+        ? (lang === 'ja' ? `経過 ${elapsed}/${lim}ターン · 残り ${rem}ターン` : lang === 'en' ? `Elapsed ${elapsed}/${lim} turns · ${rem} remaining` : `경과 ${elapsed}/${lim}턴 · 남은 ${rem}턴`)
+        : rem != null ? (lang === 'ja' ? `残り ${rem}ターン` : lang === 'en' ? `${rem} turns remaining` : `남은 ${rem}턴`)
+        : (lang === 'ja' ? '永続魔法' : lang === 'en' ? 'Permanent spell' : '지속 마법');
+      const stateText = state + (e.cnt ? ` · ×${e.cnt}` : '');
+      const durationUi = rem == null
+        ? `<img class="buff-infinity" src="/art/biblion/modular/infinity.png" alt="${lang === 'ja' ? '無期限' : lang === 'en' ? 'Permanent' : '무기한'}">${e.cnt ? `<span class="buff-counter">×${e.cnt}</span>` : ''}`
+        : `<span class="buff-duration" aria-label="${stateText}"><span>${bits.join(' ')}</span></span>`;
+      const card = enchantmentTile(e.card,durationUi);
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', `${cardName(e.card)} ${stateText}`);
+      card.title = `${cardName(e.card)} · ${stateText}`;
+      card.onclick = () => zoomCard(e.card, undefined, stateText);
+      card.onkeydown = ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); zoomCard(e.card, undefined, stateText); } };
       if (rem != null) { card.classList.add("ench-timed"); if (rem <= 1) card.classList.add("ench-expiring"); }
       else card.classList.add("ench-perm");
-      bindZoom(card, e.card);
+      bindZoom(card, e.card, undefined, stateText);
       sz.appendChild(card);
     });
-    for (let i = p.traps.length + p.enchants.length; i < ST_SLOTS; i++) sz.appendChild(this.slotEl());
+    for (const q of p.quests ?? []) {
+      const tile = questTile(q.card,q.progress);
+      tile.tabIndex=0;tile.setAttribute("role","button");
+      tile.dataset.uid = q.card.uid;
+      const progress = `${q.progress}/${q.card.quest?.target ?? 0}`;
+      tile.title = `${cardName(q.card)} · ${progress} · ${q.card.textJa ?? q.card.text}`;
+      tile.setAttribute("aria-label", `${cardName(q.card)} クエスト進捗 ${progress}`);
+      tile.onclick = () => zoomCard(q.card, undefined, `クエスト進捗 ${progress}`);
+      tile.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();tile.click();}};
+      sz.appendChild(tile);
+    }
+    for (let i = p.traps.length + p.enchants.length + (p.quests?.length ?? 0); i < ST_SLOTS; i++) sz.appendChild(this.slotEl());
 
     // Monster zone nearest the center line: me → mon on top, opp → mon on bottom.
     const monRow = this.zoneRow(mz);
     const stRow = this.zoneRow(sz);
+    monRow.dataset.label = `${t("duel.monsters")} ${p.field.length}/${MON_SLOTS}`;
+    stRow.dataset.label = `${t("duel.spellsTraps")} ${p.traps.length + p.enchants.length + (p.quests?.length ?? 0)}/${ST_SLOTS}`;
+    mz.setAttribute("aria-label", monRow.dataset.label);
+    sz.setAttribute("aria-label", stRow.dataset.label);
     const zones = document.createElement("div");
     zones.className = "zones";
     if (isMe) zones.append(monRow, stRow); else zones.append(stRow, monRow);
@@ -552,13 +556,18 @@ export class GameView {
     const aside = document.createElement("div");
     aside.className = "row-aside";
     const removed = (p.removed ?? []).slice().sort((a, b) => a.cost - b.cost);
-    if (removed.length > 0) {
+    {
       const rbtn = document.createElement("button");
-      rbtn.className = "btn btn-ghost mp-btn mp-btn--exile";
-      rbtn.innerHTML = `<span class="mp-ico">⛔</span><span class="mp-lb">${t("deck.removed")}</span><b>${removed.length}</b>`;
+      rbtn.className = "rift-button";
+      rbtn.id = isMe ? "rift-me" : "rift-opp";
+      const previous = this.riftCounts.get(rbtn.id);
+      if (previous != null && removed.length > previous) rbtn.classList.add("is-absorbing");
+      this.riftCounts.set(rbtn.id, removed.length);
+      rbtn.addEventListener("animationend", () => rbtn.classList.remove("is-absorbing"));
+      rbtn.innerHTML = `<span class="rift-sprite" aria-hidden="true"></span><span class="rift-label">${t("deck.removed")} <b>${removed.length}</b></span>`;
       rbtn.title = `${t("deck.removed")} ${removed.length}`;
       rbtn.onclick = () => cardPicker(`${esc(p.name)} — ${t("deck.removed")} (${removed.length})`, removed, () => { /* browse only */ });
-      aside.appendChild(rbtn);
+      piles.appendChild(rbtn);
     }
 
     row.append(block, aside);
@@ -601,6 +610,8 @@ export class GameView {
       const sx = e.clientX, sy = e.clientY, t0 = performance.now();
       let ghost: HTMLElement | null = null;
       let marker: HTMLElement | null = null;
+      let aim: ReturnType<typeof createAttackAim> | null = null;
+      let started = false;
       let to = index;
       let done = false;
       let mode: "reorder" | "attack" = "reorder";
@@ -628,19 +639,26 @@ export class GameView {
       };
 
       const place = (x: number, y: number): void => {
-        if (!ghost) return;
-        ghost.style.left = `${x}px`;
-        ghost.style.top = `${y}px`;
+        if (!started) return;
         const zr = zone.getBoundingClientRect();
         const t = o.canAttack ? targetAt(x, y) : { mon: null, portrait: null };
         // above my own monster row = aiming at the opponent
-        mode = o.canAttack && (!!t.mon || !!t.portrait || y < zr.top - 10) ? "attack" : "reorder";
-        ghost.classList.toggle("drag-attack", mode === "attack");
+        mode = o.canAttack && (!!t.mon || !!t.portrait || y < zr.top - 10 || (y < sy-12 && Math.abs(y-sy)>Math.abs(x-sx)*.65)) ? "attack" : "reorder";
+        card.classList.toggle('is-aiming',mode==='attack');
+        card.classList.toggle('is-dragging',mode==='reorder');
         if (mode === "attack") {
+          if(ghost)ghost.style.display='none';
+          if(!aim)aim=createAttackAim();
           if (marker) marker.style.display = "none";
-          setHot(t.mon ?? t.portrait);
+          const valid=!!t.mon || (!!t.portrait && (!o.oppHasMon || o.directOnly));
+          setHot(valid ? t.mon ?? t.portrait : null);
+          const a=card.getBoundingClientRect(),b=hot?.getBoundingClientRect();
+          aim.update(a.left+a.width/2,a.top+a.height*.4,b?b.left+b.width/2:x,b?b.top+b.height/2:y,valid,!!t.portrait&&!valid);
           return;
         }
+        aim?.remove();aim=null;
+        if(!ghost){ghost=card.cloneNode(true) as HTMLElement;ghost.className=card.className+' drag-ghost';ghost.classList.remove('is-attacker','is-aiming','is-dragging');ghost.style.width=`${card.offsetWidth}px`;ghost.style.height=`${card.offsetHeight}px`;document.body.append(ghost);}
+        ghost.style.display='';ghost.style.left=`${x}px`;ghost.style.top=`${y}px`;
         setHot(null);
         if (!marker) return;
         marker.style.display = "";
@@ -651,28 +669,28 @@ export class GameView {
       };
 
       const cleanup = (): void => {
+        if(done)return;
         done = true;
-        ghost?.remove(); marker?.remove();
+        ghost?.remove(); marker?.remove(); aim?.remove();
         setHot(null);
-        card.classList.remove("is-dragging");
+        card.classList.remove("is-dragging", "is-aiming");
+        try { if(card.hasPointerCapture(e.pointerId))card.releasePointerCapture(e.pointerId); } catch { /* detached */ }
         window.removeEventListener("pointermove", onMove);
         window.removeEventListener("pointerup", onUp);
         window.removeEventListener("pointercancel", cleanup);
+        window.removeEventListener("blur", cleanup);
+        window.removeEventListener("keydown", onKey);
+        const idx=this.cleanups.indexOf(cleanup);if(idx>=0)this.cleanups.splice(idx,1);
       };
 
+      const onKey=(ev:KeyboardEvent):void=>{if(ev.key==="Escape")cleanup();};
       const onMove = (ev: PointerEvent): void => {
-        if (done) return;
-        if (!ghost) {
+        if (done || ev.pointerId !== e.pointerId) return;
+        if (!started) {
           if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 14) return;
           if (isTouch && performance.now() - t0 > 340) { cleanup(); return; } // zoom overlay owns this gesture
           try { card.setPointerCapture(ev.pointerId); } catch { /* ok */ }
-          ghost = card.cloneNode(true) as HTMLElement;
-          ghost.className = card.className + " drag-ghost";
-          ghost.classList.remove("is-attacker");
-          ghost.style.width = `${card.offsetWidth}px`;
-          ghost.style.height = `${card.offsetHeight}px`;
-          document.body.appendChild(ghost);
-          card.classList.add("is-dragging");
+          started=true;
           if (o.canReorder) {
             marker = document.createElement("div");
             marker.className = "drop-marker";
@@ -683,7 +701,8 @@ export class GameView {
       };
 
       const onUp = (ev: PointerEvent): void => {
-        const dragged = !!ghost;
+        if (done || ev.pointerId !== e.pointerId) return;
+        const dragged = started;
         const t = dragged && o.canAttack ? targetAt(ev.clientX, ev.clientY) : { mon: null, portrait: null };
         const aimed = mode === "attack";
         cleanup();
@@ -705,41 +724,10 @@ export class GameView {
       window.addEventListener("pointermove", onMove);
       window.addEventListener("pointerup", onUp);
       window.addEventListener("pointercancel", cleanup);
+      window.addEventListener("blur", cleanup);
+      window.addEventListener("keydown", onKey);
+      this.cleanups.push(cleanup);
     });
-  }
-
-  /** Right side-rail group (OUTSIDE the field): 제외(exile) browser + tribe chips.
-   *  (묘지는 필드 오른쪽 더미 열로 이동 · the turn clock lives in the market aside.) */
-  private renderRail(panel: HTMLElement, p: PlayerState): void {
-    // 종족: 현재 필드 진행도 + 이미 달성한 시너지를 함께, 시각적으로 구분해 표기
-    const byTribe = new Map<string, Set<string>>();
-    for (const m of p.field) if (m.tribe) { if (!byTribe.has(m.tribe)) byTribe.set(m.tribe, new Set()); byTribe.get(m.tribe)!.add(m.id); }
-    const firedBy = new Map<string, Set<number>>();
-    for (const f of p.tribesFired) { const [tr, n] = f.split(":"); if (!firedBy.has(tr)) firedBy.set(tr, new Set()); firedBy.get(tr)!.add(Number(n)); }
-    const allTribes = new Set<string>([...byTribe.keys(), ...firedBy.keys()]);
-    const tribeChips: string[] = [];
-    for (const tr of allTribes) {
-      const ths = tr === "시초" ? [2, 3, 4] : [2, 3];  // 시초 has a 4-count payoff; others cap at 3
-      const onField = byTribe.get(tr)?.size ?? 0;      // DISTINCT tribe cards on field (matches synergy rule)
-      const fired = firedBy.get(tr) ?? new Set<number>();
-      const nm = TRIBES[tr]?.[getLang()]?.name ?? tr;
-      const allDone = ths.every((th) => fired.has(th));
-      const pips = ths.map((th) => {
-        if (fired.has(th)) return `<span class="tp done">✓${th}</span>`;
-        if (onField >= th) return `<span class="tp ready">${th}</span>`;
-        return `<span class="tp">${th}</span>`;
-      }).join("");
-      tribeChips.push(`<span class="tribe-chip ${fired.size ? "has-syn" : ""} ${allDone ? "all" : ""}"><span class="tc-name">${nm}</span><span class="tc-cnt">${onField}</span>${pips}</span>`);
-    }
-
-    // 묘지·덱 = 필드 오른쪽 더미 열, 제외 = 필드 바로 오른쪽(renderRow).
-    // 레일에는 이름 + 종족 시너지만 남는다.
-    // nothing but tribe synergy lives here now — with no chips the rail would
-    // just be two player names floating in the gutter, so render nothing.
-    panel.innerHTML = tribeChips.length
-      ? `<div class="rail-head"><span class="rail-name">${esc(p.name)}</span></div>
-         <div class="mp-tribes">${tribeChips.join("")}</div>`
-      : "";
   }
 
   /** Full owned-card list for the deck-view button (opponent side uses only public info). */
@@ -748,7 +736,7 @@ export class GameView {
     const enchCards = p.enchants.map((e) => e.card);
     let pool: CardInst[];
     if (isMe) {
-      pool = [...p.deck, ...p.hand, ...p.discard, ...fieldCards, ...p.traps.map((tr) => tr.card), ...enchCards];
+      pool = [...p.deck, ...p.hand, ...p.discard, ...fieldCards, ...p.traps.map((tr) => tr.card), ...(p.quests ?? []).map(q=>q.card), ...enchCards];
     } else if (p.collection) {
       // Online: server-provided game-long reveal history. Current public zones are
       // already included, so adding them again would double-count those cards.
@@ -758,7 +746,7 @@ export class GameView {
       pool = p.revealedCards.map((known, i) => { const d = DBC[known.id] ?? STARTERS[known.id]; return d ? { uid: `v_${i}`, ...d } : null; }).filter((c): c is CardInst => !!c);
     } else {
       // Legacy state fallback: show only cards that are public right now.
-      pool = [...p.discard, ...fieldCards, ...enchCards];
+      pool = [...p.discard, ...fieldCards, ...(p.quests ?? []).map(q=>q.card), ...enchCards];
     }
     return pool.filter((c) => c && c.id !== "HIDDEN").sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
   }
@@ -771,19 +759,14 @@ export class GameView {
     // 재렌더로 카드 노드가 갈리면 body에 떠 있던 확인 배지는 가리킬 대상을 잃는다
     document.querySelectorAll(".buy-confirm").forEach((b) => b.remove());
     mk.innerHTML = `
-      <div class="market-sub market-sub--supply">
-        <div class="sub-head">
-          <span class="tag">${t("game.supply")}</span>
-          <button class="refresh-btn" id="refreshBtn"><span class="rf-ico">⟳</span> ${t("game.refresh")} <b>1</b>
-            <span class="refresh-tip">${t("game.refresh.tip")}</span>
-          </button>
+      <div class="market-heading"><span>${t("duel.market")}</span></div>
+      <div class="market-counter">
+        <div class="market-sub market-sub--supply">
+          <div class="sub-head"><button class="refresh-btn" id="refreshBtn" aria-describedby="rerollHint"><span class="rf-ico">⟳</span> ${t("duel.rerollFour").replace("4", String(owner.supply.length))} <b>1</b> ◈</button></div>
+          <div class="market-cards" id="supplyMarket"></div>
+          <span class="reroll-hint" id="rerollHint">${t("duel.rerollHint").replace("4", String(owner.supply.length))}</span>
         </div>
-        <div class="market-cards" id="supplyMarket"></div>
-      </div>
-      <div class="market-div"></div>
-      <div class="market-sub">
-        <div class="sub-head"><span class="tag">${t("game.std")}</span></div>
-        <div class="market-cards" id="fixedMarket"></div>
+        <div class="market-sub market-sub--fixed"><div class="market-cards" id="fixedMarket"></div></div>
       </div>`;
 
     // 오클릭 구매 방지: 첫 클릭 = 선택(확인 배지 표시), 같은 카드 재클릭 = 구매.
@@ -852,7 +835,7 @@ export class GameView {
     const fixed = this.q("fixedMarket");
     g.market.forEach((c, i) => {
       const bc = buyCost(owner, c);
-      const aff = myTurn && !g.pending && me.mana >= bc;
+      const aff = myTurn && !g.pending && me.mana >= bc && purchaseAllowed(g, me, c) && !freeBuyBlocked(me, c);
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc }); // same size as 제시
       if (aff) armBuy(card, "mkt" + i, () => this.h.onBuyMarket(i), c); else zoomOnTap(card, c);
       // v40: 슬롯 재고 — 다 팔리면 새 카드로 교체되므로 남은 수를 보여준다
@@ -875,8 +858,13 @@ export class GameView {
     filled.sort((a, b) => rank(a.c.t) - rank(b.c.t) || a.c.cost - b.c.cost);
     for (const { c, i } of filled) {
       const bc = buyCost(owner, c);
-      const aff = myTurn && !g.pending && me.mana >= bc;
+      const aff = myTurn && !g.pending && me.mana >= bc && purchaseAllowed(g, me, c) && !freeBuyBlocked(me, c);
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc });
+      const stock = document.createElement("div");
+      stock.className = "mkt-stock mkt-stock--single";
+      stock.textContent = "×1";
+      stock.title = `${t("market.stock")} 1`;
+      card.appendChild(stock);
       card.dataset.supIdx = String(i);  // ORIGINAL supply index (display is sorted) — buy anim finds it by this
       if (aff) armBuy(card, "sup" + i, () => this.h.onBuySupply(i), c); else zoomOnTap(card, c);
       if (myTurn) markWatch(card, c.id); // 제시는 내 턴의 내 제시만 (상대 제시엔 표시 무의미)
@@ -889,26 +877,28 @@ export class GameView {
     const rtok = me.refreshTokens || 0; // 렐릭 헌터(v36): 카운터가 있으면 무료 갱신
     rb.disabled = !myTurn || !!g.pending || (me.mana < 1 && rtok <= 0);
     const rbCost = rb.querySelector("b"); if (rbCost) rbCost.textContent = rtok > 0 ? `0 (${rtok})` : "1";
+    rb.onpointerenter = () => mk.classList.add("reroll-focus");
+    rb.onpointerleave = () => mk.classList.remove("reroll-focus");
+    rb.onfocus = () => mk.classList.add("reroll-focus");
+    rb.onblur = () => mk.classList.remove("reroll-focus");
     rb.onclick = () => this.h.onRefresh();
   }
 
-  /** Hearthstone-style center portrait (FIXED at true center): avatar ring + HP gem
-   *  (carries the hp/hpbar element ids the FX target) + mana crystals to its LEFT. */
-  /** Center portrait: a real ROW — [mana] [avatar ring] [HP] — with the name and
-   *  the thin FX hp-bar under it. Everything used to be absolutely pinned INSIDE
-   *  the 60px circle, so on小 viewports the HP gem sat on the avatar and on the
-   *  name at once; as flow items they simply can't collide. */
+  /** Shared portrait row: aligned HP on the left and mana on the right. */
   private renderPortrait(el: HTMLElement, p: PlayerState, isMe: boolean): void {
     const sd = isMe ? "me" : "opp";
     const emax = effMaxMana(p);
     const hp = Math.max(0, p.hp);
     const hpPct = hp / p.maxHp * 100;
+    const crystals = Array.from({ length: Math.min(MAX_MANA, Math.max(0, emax)) }, (_, i) => `<i class="mana-crystal${i < p.mana ? " is-lit" : ""}" aria-hidden="true"></i>`).join("");
+    const avatar = isMe ? MY_AVATAR : OPP_AVATAR;
+    const seeker = avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE" ? avatar : isMe ? "SEEKER_BLUE" : "SEEKER_RED";
     el.innerHTML = `
-      <span class="pt-mana pips" title="${t("game.mana")}"><span class="pt-mana-gem">◈</span><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span>
-      <span class="pt-ring">${avatarHtml(isMe ? MY_AVATAR : OPP_AVATAR, p.name, 58)}</span>
-      <span class="pt-hp" title="${hp}/${p.maxHp}"><span class="pt-hp-ico">❤</span><b id="hp-${sd}">${hp}</b><span class="pt-hp-max">/${p.maxHp}</span></span>
-      ${(p.brand ?? 0) > 0 ? `<span class="pt-brand" title="${esc(t("game.brandTip").replace("{n}", String(p.brand)))}"><span class="pt-brand-ico">🔥</span><b>${p.brand}</b><span class="pt-brand-lb">${t("game.brand")}</span></span>` : ""}
-      <span class="pt-hpbar hpbar" id="hpbar-${sd}"><i style="width:${hpPct}%"></i></span>
+      <span class="pt-vitals"><span class="pt-hp" title="HP ${hp}/${p.maxHp}"><span class="pt-hp-ico">HP</span><b id="hp-${sd}">${hp}</b><span class="pt-hp-max">/${p.maxHp}</span></span>
+      <span class="pt-hpbar hpbar" id="hpbar-${sd}" role="meter" aria-label="HP" aria-valuemin="0" aria-valuemax="${p.maxHp}" aria-valuenow="${hp}"><i style="width:${Math.min(100, hpPct)}%"></i></span></span>
+      <span class="pt-ring">${avatarHtml(seeker, p.name, 100)}</span>
+      <span class="pt-mana pips" aria-label="${t("game.mana")} ${p.mana}/${emax}"><span class="mana-readout">${t("game.mana")} <b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span><span class="mana-crystals" style="--mana-rows:${Math.max(1,Math.ceil(Math.min(MAX_MANA,emax)/10))}">${crystals}</span></span>
+      ${(p.brand ?? 0) > 0 ? `<span class="pt-brand" title="${esc(t("game.brandTip").replace("{n}", String(p.brand)))}">${t("game.brand")} <b>${p.brand}</b></span>` : ""}
       <span class="pt-name">${esc(p.name)}</span>`;
   }
 
@@ -918,11 +908,12 @@ export class GameView {
    *    Any press on it just expands the hand.
    *  - open: large, bottom-center. Click a card = zoom preview; DRAG it up = play. */
   private renderHand(g: GameState, me: PlayerState, myTurn: boolean): void {
+    this.cancelHandDrag?.();
     const handEl = this.q("hand");
     handEl.innerHTML = "";
     me.hand.forEach((c, idx) => {
       const pc = playCost(c, me);
-      const aff = myTurn && !g.pending && me.mana >= pc;
+      const aff = myTurn && !g.pending && !c.quick && me.mana >= pc && (c.t !== "quest" || me.traps.length + me.enchants.length + (me.quests?.length ?? 0) < 14);
       const card = cardEl(c, { size: "hand", playable: aff, dim: !aff, costOverride: pc });
       card.style.setProperty("--hi", String(idx));
       card.style.zIndex = String(idx);
@@ -949,52 +940,108 @@ export class GameView {
     handEl.style.setProperty("--h-w-compact", `${n ? cw + (n - 1) * compactStep : 0}px`);
   }
 
-  /** Compact press = expand. Open: click = zoom preview, drag up past the hand = play. */
+  /** Drag onto the visible board to play; return to the hand to cancel. */
   private bindHandCard(card: HTMLElement, c: CardInst, aff: boolean): void {
     card.style.touchAction = "none";
     card.draggable = false;
     card.addEventListener("dragstart", (e) => e.preventDefault());
     card.addEventListener("pointerdown", (e: PointerEvent) => {
       if (e.button !== 0) return;
-      if (!this.handOpen) {
-        // a press anywhere on the compact stack just opens the hand
-        e.stopPropagation();
-        this.setHandOpen(true);
-        swallowNextClick(card);
-        return;
-      }
+      this.cancelHandDrag?.();
+      const wasOpen = this.handOpen;
+      if (!wasOpen) { this.setHandOpen(true); swallowNextClick(card); }
+      e.preventDefault();
+      // Capture before the expansion moves the original card away from the
+      // pointer. Mouse, pen and touch then follow one uninterrupted gesture.
+      try { card.setPointerCapture(e.pointerId); } catch { /* detached/legacy */ }
       const sx = e.clientX, sy = e.clientY;
       let ghost: HTMLElement | null = null;
       let done = false;
+      let guide: HTMLElement | null = null;
+      const destination = this.root.querySelector<HTMLElement>(c.t === "mon" ? "#meRow .zone-mon" : "#meRow .zone-st");
+      const dropBounds = () => {
+        const top = this.q("oppRow").getBoundingClientRect();
+        const bottom = this.q("meRow").getBoundingClientRect();
+        return { left: bottom.left, right: bottom.right, top: top.top - 12, bottom: bottom.bottom + 16 };
+      };
+      const canDropAt = (x: number, y: number) => {
+        const r = dropBounds(), hand = this.q("hand").getBoundingClientRect();
+        const overHand = x >= hand.left && x <= hand.right && y >= hand.top && y <= hand.bottom;
+        return !overHand && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+      };
       const game = this.root.querySelector(".game") as HTMLElement | null;
 
       const cleanup = (): void => {
+        if (done) return;
         done = true;
         ghost?.remove();
+        guide?.remove();
+        destination?.classList.remove("drop-destination", "drop-ready");
         card.classList.remove("is-dragging");
         game?.classList.remove("drag-play");
+        this.cancelHandDrag = null;
+        try { card.releasePointerCapture(e.pointerId); } catch { /* already released */ }
+        card.removeEventListener("lostpointercapture", cleanup);
         window.removeEventListener("pointermove", onMove);
         window.removeEventListener("pointerup", onUp);
         window.removeEventListener("pointercancel", cleanup);
       };
       const onMove = (ev: PointerEvent): void => {
-        if (done) return;
+        if (done || ev.pointerId !== e.pointerId) return;
         if (!ghost) {
-          if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 12) return;
+          if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < (e.pointerType === 'touch' ? 10 : 6)) return;
           try { card.setPointerCapture(ev.pointerId); } catch { /* ok */ }
           ghost = card.cloneNode(true) as HTMLElement;
-          ghost.className = card.className + " drag-ghost";
-          ghost.style.width = `${card.offsetWidth}px`;
-          ghost.style.height = `${card.offsetHeight}px`;
+          ghost.className = card.className + " drag-ghost drag-ghost--hand";
+          ghost.classList.remove('is-played', 'is-dragging', 'tilt-live');
+          // A hand card has inline z-index 0..N. That must never override the
+          // drag layer: low-index cards otherwise disappear behind the board.
+          ghost.style.zIndex = '2000';
+          ghost.style.visibility = 'visible';
+          ghost.style.opacity = '1';
+          // Field-sized silhouette, with hand aspect ratio and proportional seals.
+          const field = this.root.querySelector<HTMLElement>("#meRow .zone-mon .card, #meRow .zone-mon .slot");
+          const fieldWidth = field?.getBoundingClientRect().width || 64;
+          const width = Math.min(card.offsetWidth * .65 * .72, fieldWidth);
+          const height = width * card.offsetHeight / card.offsetWidth;
+          ghost.style.setProperty("--cw", `${width}px`);
+          ghost.style.setProperty("--ch", `${height}px`);
+          ghost.style.width = `${width}px`;
+          ghost.style.height = `${height}px`;
+          // Text fitting stores pixel sizes on the source. Scale those too,
+          // otherwise the smaller drag card inherits an oversized clipped title.
+          for (const label of ghost.querySelectorAll<HTMLElement>("[style]")) {
+            if (label.style.fontSize.endsWith("px")) label.style.fontSize = `${parseFloat(label.style.fontSize) * width / card.offsetWidth}px`;
+          }
           document.body.appendChild(ghost);
           card.classList.add("is-dragging");
           if (aff) game?.classList.add("drag-play");
+          guide = document.createElement("div");
+          guide.className = "play-drop-guide";
+          guide.setAttribute("role", "status");
+          guide.setAttribute("aria-live", "polite");
+          document.body.appendChild(guide);
+          if (aff) destination?.classList.add("drop-destination");
         }
         ghost.style.left = `${ev.clientX}px`;
         ghost.style.top = `${ev.clientY}px`;
+        const ready = canDropAt(ev.clientX, ev.clientY);
+        destination?.classList.toggle("drop-ready", ready && aff);
+        ghost.classList.toggle("drop-ready", ready && aff);
+        if (guide) {
+          const r = dropBounds();
+          guide.style.left = `${r.left}px`; guide.style.top = `${r.top}px`;
+          guide.style.width = `${r.right - r.left}px`; guide.style.height = `${r.bottom - r.top}px`;
+          guide.classList.toggle("is-ready", ready && aff);
+          guide.classList.toggle("is-blocked", !aff);
+          const label = !aff ? t("play.drop.blocked") : ready ? t("play.drop.release") : t("play.drop.guide");
+          if (guide.textContent !== label) guide.textContent = label;
+        }
       };
       const onUp = (ev: PointerEvent): void => {
+        if (done || ev.pointerId !== e.pointerId) return;
         const dragged = !!ghost;
+        const inPlayArea = canDropAt(ev.clientX, ev.clientY);
         // Where the card actually IS when you let go — the play FX continues from
         // here (and leans with the drag) instead of restarting at the hand's left
         // edge. Derived from the pointer + the ghost's own anchor (CSS .drag-ghost
@@ -1005,15 +1052,16 @@ export class GameView {
         cleanup();
         if (!dragged) return; // plain click → the click handler zooms
         swallowNextClick(card);
-        // released above the hand region = play it (drop back onto the hand = cancel)
-        const handTop = this.q("hand").getBoundingClientRect().top;
-        if (ev.clientY < handTop - 24) {
+        // The highlight and submission use the same board bounds.
+        if (inPlayArea) {
           if (aff) {
             setPlayOrigin(rel ? { left: rel.left, top: rel.top, width: rel.width, height: rel.height, dx: ev.clientX - sx, dy: ev.clientY - sy } : null);
             this.h.onPlay(c.uid); // uid, not index: the DOM can lag the logical state
           } else this.h.onBlockedPlay(c.uid); // explain WHY it can't be played (popup)
         } else setPlayOrigin(null); // dropped back on the hand — don't leak a stale origin
       };
+      this.cancelHandDrag = cleanup;
+      card.addEventListener("lostpointercapture", cleanup);
       window.addEventListener("pointermove", onMove);
       window.addEventListener("pointerup", onUp);
       window.addEventListener("pointercancel", cleanup);
@@ -1024,27 +1072,38 @@ export class GameView {
     };
   }
 
-  /** A flat, NORMAL-RATIO card pile (0.64 w/h — same proportions as every other
-   *  card). The old CSS-3D "standing box" is gone: it distorted the card art. */
+  /** Semantic pile controls and GPU fallback; duelScene supplies the 3D skin. */
   private pileEl(id: string, count: number, frame: string | null, faceCard: CardInst | null, tag: string, onOpen?: () => void): HTMLElement {
     const pile = document.createElement("div");
-    pile.className = "pile" + (count ? "" : " is-empty");
+    pile.className = "pile" + (id.endsWith("Disc") ? " pile--shelf" : " pile--deck") + (count ? "" : " is-empty");
+    pile.tabIndex = 0;
+    pile.setAttribute("role", "button");
+    pile.setAttribute("aria-label", `${tag} ${count}`);
+    pile.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpen?.(); } };
     pile.id = id;
-    // stacked-paper depth: a couple of offset shadow layers behind the top card
-    const under = document.createElement("div"); under.className = "pile-under";
+    pile.dataset.count = String(count);
+    pile.dataset.texture = frame || FRAME_BACK;
+    pile.dataset.sleeve = backFor(id.startsWith('pile-my'));
+    // Only the public discard top gets a face texture. Decks use sleeve only.
+    if (id.endsWith('Disc') && faceCard && faceCard.id !== 'HIDDEN') pile.dataset.face = artUrl.full(faceCard.id);
+    const body = document.createElement("div");
+    body.className = "pile-body";
+    const shelf = id.endsWith("Disc");
+    const bucket = deckBucket(count);
+    pile.dataset.bucket = String(bucket);
+    body.style.backgroundImage = `url(${refinedArt(shelf ? "shelf-case" : `deck-${bucket || 1}`)})`;
+    if (!shelf && !count) body.style.opacity = "0.18";
     const front = document.createElement("div");
     front.className = "pile-card";
-    // 묘지(discard)는 공개 정보 → 맨 위 카드를 "카드 프레임까지 포함한 온전한 앞면"으로
-    // 렌더한다. 예전엔 아트만 background-image로 깔아서 프레임·이름·코스트가 사라졌다.
-    const faceUp = !!count && !!faceCard && faceCard.id !== "HIDDEN";
-    if (faceUp) {
-      const face = cardEl(faceCard!, {});
-      face.classList.add("pile-face");
-      front.appendChild(face);
-    } else if (frame && count) {
-      front.style.backgroundImage = `url(${frame})`;
+    if (count) front.style.backgroundImage = `url(${shelf && faceCard ? artUrl.full(faceCard.id) : backFor(id.startsWith('pile-my'))})`;
+    else front.hidden = true;
+    body.append(front); pile.append(body);
+    if (shelf && faceCard && faceCard.id !== 'HIDDEN') {
+      // Public discard face rendered by the same component as every real card.
+      // Offscreen print feeds the mesh; it never receives input or accessibility focus.
+      const print=document.createElement('div'); print.className='pile-print'; print.setAttribute('aria-hidden','true');
+      print.append(cardEl(faceCard,{size:'hand'})); pile.append(print);
     }
-    pile.append(under, front);
     const tg = document.createElement("div"); tg.className = "pile-tag"; tg.textContent = tag; pile.appendChild(tg);
     const cnt = document.createElement("div"); cnt.className = "pile-count"; cnt.textContent = String(count); pile.appendChild(cnt);
     if (faceCard && faceCard.id !== "HIDDEN") bindZoom(pile, faceCard);

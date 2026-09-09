@@ -1,0 +1,25 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "browser": "Chrome native UI",
+  "userFlow": [
+    "home",
+    "normal-difficulty bot match",
+    "quest cards visible in market",
+    "drag chest from expanded hand to own field",
+    "chest roll 3 raises maximum HP from 40 to 47",
+    "turn advances and hand remains usable"
+  ],
+  "observed": {
+    "blockingClaimButtons": 0,
+    "blenderObjects": [
+      "own deck",
+      "own tray",
+      "opponent deck",
+      "opponent tray",
+      "market",
+      "raised supply insert"
+    ],
+    "riftCycle": "16s"
+  },
+  "note": "Verified actual deployed bundle, separate from source-module fixtures."
+}

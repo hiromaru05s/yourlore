@@ -1,0 +1,311 @@
+{
+  "specVersion": 1,
+  "status": "production-contract-runtime-not-implemented",
+  "unitMeters": 0.064,
+  "coordinates": {
+    "props": "X width, Y up, +Z toward owner",
+    "card": "XY plane, +Z face, -Z back",
+    "gltfUnit": "meter"
+  },
+  "card": {
+    "sizeU": [
+      1,
+      1.5625,
+      0.005
+    ],
+    "cornerRadiusU": 0.045
+  },
+  "sleeve": {
+    "anchor": "sleeve_back",
+    "boundsU": {
+      "min": [
+        -0.5,
+        -0.78125,
+        -0.0325
+      ],
+      "max": [
+        0.5,
+        0.78125,
+        -0.0025
+      ]
+    },
+    "clipToCardRoundedOutline": true,
+    "rigidCenterHalfExtentXYU": 0.12,
+    "bendMaxEdgeU": 0.08,
+    "texturePixels": {
+      "source": [
+        2048,
+        3200
+      ],
+      "standard": [
+        1024,
+        1600
+      ],
+      "low": [
+        512,
+        800
+      ]
+    }
+  },
+  "deck_holder": {
+    "anchor": "deck_mount",
+    "boundsU": {
+      "min": [
+        -0.65,
+        -0.14,
+        -0.975
+      ],
+      "max": [
+        0.65,
+        0,
+        0.975
+      ]
+    },
+    "topSizeXZU": [
+      1.2,
+      1.85
+    ],
+    "topY": 0,
+    "topCornerRadiusU": 0.04,
+    "topPlaneToleranceU": 0.0001,
+    "protectedU": {
+      "min": [
+        -0.55,
+        0,
+        -0.835
+      ],
+      "max": [
+        0.55,
+        0.8,
+        0.835
+      ]
+    },
+    "noModelAboveY": 0,
+    "groundYU": -0.14
+  },
+  "shelf": {
+    "anchor": "shelf_mount",
+    "boundsU": {
+      "min": [
+        -1,
+        -0.12,
+        -0.7
+      ],
+      "max": [
+        1,
+        1.15,
+        0.7
+      ]
+    },
+    "protectedU": {
+      "min": [
+        -0.83,
+        0,
+        -0.61
+      ],
+      "max": [
+        0.83,
+        1.12,
+        0.59
+      ]
+    },
+    "sideWallMinAbsXU": 0.85,
+    "frontWallMinZU": 0.61,
+    "frontWallMaxYU": 0.18,
+    "backWallMaxZU": -0.63,
+    "slots": {
+      "visualLimit": 12,
+      "firstBottomCenterU": [
+        0,
+        0.001,
+        0.55
+      ],
+      "stepU": [
+        0,
+        0,
+        -0.09
+      ],
+      "leanBackDegrees": 8,
+      "landscape": true,
+      "logicalCountUnbounded": true
+    },
+    "groundYU": -0.12
+  },
+  "anchors": {
+    "positionU": [
+      0,
+      0,
+      0
+    ],
+    "rotationDegrees": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "fallbackProp": {
+    "pixels": [
+      512,
+      512
+    ],
+    "cameraU": [
+      0,
+      4,
+      6
+    ],
+    "targetU": [
+      0,
+      0,
+      0
+    ],
+    "orthographicSpanU": 2.8,
+    "modelYDegrees": {
+      "self": 0,
+      "opponent": 180
+    },
+    "transparent": true
+  },
+  "clipsSeconds": {
+    "idle": {
+      "min": 4,
+      "max": 12,
+      "loop": true
+    },
+    "focus": {
+      "max": 0.25,
+      "loop": false
+    },
+    "draw_react": {
+      "max": 0.3,
+      "loop": false
+    },
+    "receive_react": {
+      "max": 0.4,
+      "loop": false
+    },
+    "refill_react": {
+      "max": 0.8,
+      "loop": false
+    }
+  },
+  "presets": {
+    "none": {},
+    "emissive_pulse": {
+      "periodSeconds": [
+        4,
+        12
+      ],
+      "strength": [
+        0,
+        1
+      ]
+    },
+    "foil_sweep": {
+      "periodSeconds": [
+        4,
+        12
+      ],
+      "strength": [
+        0,
+        1
+      ]
+    }
+  },
+  "budget": {
+    "sleeve": {
+      "standard": {
+        "triangles": 3000,
+        "drawCalls": 2,
+        "gpuMiB": 12,
+        "activeTransferMB": 4
+      },
+      "low": {
+        "triangles": 0,
+        "drawCalls": 0,
+        "gpuMiB": 3,
+        "activeTransferMB": 0.3
+      }
+    },
+    "shelf": {
+      "standard": {
+        "triangles": 8000,
+        "drawCalls": 3,
+        "gpuMiB": 12,
+        "activeTransferMB": 4
+      },
+      "low": {
+        "triangles": 2000,
+        "drawCalls": 1,
+        "gpuMiB": 4,
+        "activeTransferMB": 1.5
+      }
+    },
+    "deck_holder": {
+      "standard": {
+        "triangles": 4000,
+        "drawCalls": 2,
+        "gpuMiB": 8,
+        "activeTransferMB": 3
+      },
+      "low": {
+        "triangles": 1000,
+        "drawCalls": 1,
+        "gpuMiB": 4,
+        "activeTransferMB": 1.5
+      }
+    },
+    "scene": {
+      "standard": {
+        "triangles": 40000,
+        "drawCalls": 16,
+        "gpuMiB": 64,
+        "activeTransferMB": 24
+      },
+      "low": {
+        "triangles": 6000,
+        "drawCalls": 4,
+        "gpuMiB": 24,
+        "activeTransferMB": 8
+      }
+    },
+    "maxRichSleevesInMatch": 2,
+    "maxRichSleevesInInspector": 1
+  },
+  "bundleMB": {
+    "sleeve": {
+      "print": 1,
+      "material": 3,
+      "sculpted": 5
+    },
+    "prop": {
+      "print": 4,
+      "material": 4,
+      "sculpted": 8
+    },
+    "propLow": 2,
+    "preview": 0.2
+  },
+  "qaViewports": [
+    [
+      1280,
+      720
+    ],
+    [
+      1920,
+      1080
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      844,
+      390
+    ]
+  ]
+}

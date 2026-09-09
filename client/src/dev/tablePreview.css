@@ -1,0 +1,30 @@
+:root { font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif; color: #273347; background: #d5d6d8; font-synthesis: none; }
+* { box-sizing: border-box; }
+body { margin: 0; overflow: hidden; }
+#table-stage { width: 100%; height: 100dvh; }
+canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+.preview-header,.preview-footer { position: fixed; left: 38px; right: 38px; display: flex; justify-content: space-between; align-items: center; gap: 20px; pointer-events: none; }
+.preview-header { top: 29px; }
+.preview-footer { bottom: 28px; }
+.eyebrow { font-size: 10px; letter-spacing: .22em; margin: 0 0 10px; color: #646970; }
+h1 { margin: 0; font-family: 'Hiragino Mincho ProN', 'Yu Mincho', serif; font-size: 22px; font-weight: 500; letter-spacing: .10em; }
+nav,.options { display: flex; align-items: center; gap: 6px; pointer-events: auto; }
+nav { background: #f5f4f09c; padding: 4px; border: 1px solid #fff8; border-radius: 8px; }
+button { border: 0; padding: 10px 15px; border-radius: 5px; color: #626872; background: transparent; font: inherit; font-size: 12px; cursor: pointer; }
+button[aria-pressed=true] { background: #273347; color: #fffdf6; }
+button:hover { box-shadow: inset 0 0 0 1px #b2a68f; }
+button:focus-visible,a:focus-visible { outline: 2px solid #8d6a33; outline-offset: 4px; }
+#status { margin: 0 0 7px; font-size: 12px; font-variant-numeric: tabular-nums; }
+.hint { margin: 0; color: #6c7077; font-size: 11px; }
+.options { gap: 23px; font-size: 12px; }
+.options label { display: flex; align-items: center; gap: 7px; cursor: pointer; }
+input { accent-color: #273347; }
+a { color: inherit; text-decoration: none; padding: 9px 0; border-bottom: 1px solid #8f8167; }
+a span { margin-left: 10px; }
+.fallback { width: 100%; height: 100%; object-fit: contain; }
+@media(max-width: 640px) {
+  .preview-header,.preview-footer { left: 18px; right: 18px; }
+  .preview-header { top: 20px; align-items: flex-start; flex-direction: column; gap: 17px; }
+  .preview-footer { bottom: 20px; align-items: flex-start; flex-direction: column; gap: 17px; }
+  h1 { font-size: 20px; } button { padding: 9px 12px; } .options { width: 100%; justify-content: space-between; }
+}

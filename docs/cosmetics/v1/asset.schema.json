@@ -1,0 +1,570 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LORE Cosmetic Asset v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "specVersion",
+    "assetId",
+    "version",
+    "status",
+    "category",
+    "grade",
+    "collectionId",
+    "modelKey",
+    "anchor",
+    "files",
+    "preset",
+    "clips",
+    "sourceNote"
+  ],
+  "properties": {
+    "specVersion": {
+      "const": 1
+    },
+    "assetId": {
+      "type": "string",
+      "pattern": "^(sleeve|shelf|deck_holder)_[a-z0-9_]+$"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "ready"
+      ]
+    },
+    "category": {
+      "enum": [
+        "sleeve",
+        "shelf",
+        "deck_holder"
+      ]
+    },
+    "grade": {
+      "enum": [
+        "print",
+        "material",
+        "sculpted"
+      ]
+    },
+    "collectionId": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "modelKey": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "anchor": {
+      "enum": [
+        "sleeve_back",
+        "shelf_mount",
+        "deck_mount"
+      ]
+    },
+    "files": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "preview"
+      ],
+      "properties": {
+        "preview": {
+          "$ref": "#/$defs/file"
+        },
+        "back": {
+          "$ref": "#/$defs/file"
+        },
+        "backLow": {
+          "$ref": "#/$defs/file"
+        },
+        "fallbackSelf": {
+          "$ref": "#/$defs/file"
+        },
+        "fallbackOpponent": {
+          "$ref": "#/$defs/file"
+        },
+        "basecolor": {
+          "$ref": "#/$defs/file"
+        },
+        "normal": {
+          "$ref": "#/$defs/file"
+        },
+        "orm": {
+          "$ref": "#/$defs/file"
+        },
+        "emissive": {
+          "$ref": "#/$defs/file"
+        },
+        "paletteMask": {
+          "$ref": "#/$defs/file"
+        },
+        "model": {
+          "$ref": "#/$defs/file"
+        },
+        "modelLow": {
+          "$ref": "#/$defs/file"
+        }
+      }
+    },
+    "preset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "periodSeconds",
+        "strength",
+        "color"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "none",
+            "emissive_pulse",
+            "foil_sweep"
+          ]
+        },
+        "periodSeconds": {
+          "type": "number",
+          "minimum": 4,
+          "maximum": 12
+        },
+        "strength": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        }
+      }
+    },
+    "clips": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 5,
+      "items": {
+        "enum": [
+          "idle",
+          "focus",
+          "draw_react",
+          "receive_react",
+          "refill_react"
+        ]
+      }
+    },
+    "sourceNote": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "$defs": {
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(?!.*(?:\\.\\.|//))[a-zA-Z0-9_][a-zA-Z0-9_/-]*\\.(?:png|jpg|jpeg|webp|glb)$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "category": {
+            "const": "sleeve"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "anchor": {
+            "const": "sleeve_back"
+          },
+          "assetId": {
+            "pattern": "^sleeve_"
+          },
+          "files": {
+            "required": [
+              "back",
+              "backLow"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "category": {
+            "const": "shelf"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "anchor": {
+            "const": "shelf_mount"
+          },
+          "assetId": {
+            "pattern": "^shelf_"
+          },
+          "files": {
+            "required": [
+              "fallbackSelf",
+              "fallbackOpponent"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "category": {
+            "const": "deck_holder"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "anchor": {
+            "const": "deck_mount"
+          },
+          "assetId": {
+            "pattern": "^deck_holder_"
+          },
+          "files": {
+            "required": [
+              "fallbackSelf",
+              "fallbackOpponent"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "grade": {
+            "const": "print"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "preset": {
+            "properties": {
+              "id": {
+                "const": "none"
+              },
+              "strength": {
+                "const": 0
+              }
+            }
+          },
+          "clips": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "grade": {
+            "enum": [
+              "print",
+              "material"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "clips": {
+            "maxItems": 0
+          },
+          "files": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "model"
+                  ]
+                },
+                {
+                  "required": [
+                    "modelLow"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "grade": {
+            "const": "sculpted"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "files": {
+            "required": [
+              "model"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "grade": {
+            "const": "sculpted"
+          },
+          "category": {
+            "enum": [
+              "shelf",
+              "deck_holder"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "files": {
+            "required": [
+              "modelLow"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "grade": {
+            "enum": [
+              "print",
+              "material"
+            ]
+          },
+          "category": {
+            "enum": [
+              "shelf",
+              "deck_holder"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "files": {
+            "required": [
+              "basecolor"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "category": {
+            "const": "sleeve"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "files": {
+            "not": {
+              "required": [
+                "modelLow"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "ready"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "files": {
+            "properties": {
+              "preview": {
+                "required": [
+                  "sha256",
+                  "bytes"
+                ]
+              },
+              "back": {
+                "required": [
+                  "sha256",
+                  "bytes"
+                ]
+              },
+              "backLow": {
+                "required": [
+                  "sha256",
+                  "bytes"
+                ]
+              },
+              "fallbackSelf": {
+                "required": [
+                  "sha256",
+                  "bytes"
+                ]
+              },
+              "fallbackOpponent": {
+                "required": [
+                  "sha256",
+                  "bytes"
+                ]
+              },
+              "basecolor": {
+                "required": [
+                  "sha256",
+                  "bytes"
+                ]
+              },
+              "normal": {
+                "required": [
+                  "sha256",
+                  "bytes"
+                ]
+              },
+              "orm": {
+                "required": [
+                  "sha256",
+                  "bytes"
+                ]
+              },
+              "emissive": {
+                "required": [
+                  "sha256",
+                  "bytes"
+                ]
+              },
+              "paletteMask": {
+                "required": [
+                  "sha256",
+                  "bytes"
+                ]
+              },
+              "model": {
+                "required": [
+                  "sha256",
+                  "bytes"
+                ]
+              },
+              "modelLow": {
+                "required": [
+                  "sha256",
+                  "bytes"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "category": {
+            "const": "sleeve"
+          },
+          "grade": {
+            "enum": [
+              "print",
+              "material"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "modelKey": {
+            "const": "card_standard_v1"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "category": {
+            "const": "shelf"
+          },
+          "grade": {
+            "enum": [
+              "print",
+              "material"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "modelKey": {
+            "const": "shelf_standard_v1"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "category": {
+            "const": "deck_holder"
+          },
+          "grade": {
+            "enum": [
+              "print",
+              "material"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "modelKey": {
+            "const": "deck_pedestal_v1"
+          }
+        }
+      }
+    }
+  ]
+}

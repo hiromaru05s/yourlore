@@ -1,0 +1,43 @@
+{
+  "asset_id": "lore_table_ivory_v1",
+  "reference": "reference.png",
+  "generator": "scripts/blender/build_lore_table.py",
+  "blender_version": "5.2.1 LTS",
+  "units": "meters",
+  "gltf_up": "+Y",
+  "gltf_dimensions_xyz_m": [
+    1.6,
+    0.075,
+    1.02
+  ],
+  "tabletop_y_m": 0,
+  "corner_radius_m": 0.4,
+  "dimensions_are": "working dimensions inferred from the reference; not an existing field size contract",
+  "top_surface": "exact plane, flat normals, no normal or displacement maps",
+  "variants": {
+    "standard": {
+      "file": "client/public/models/lore-table/table.glb",
+      "triangles": 3168,
+      "materials": 3,
+      "draw_calls": 3,
+      "bytes": 218004,
+      "texture_size": [
+        2048,
+        1306
+      ],
+      "sha256": "eb8a42dd6a2d53127ffc30a2b2f7490a5a947191f07c1c914ed64c9d20263c9b"
+    },
+    "low": {
+      "file": "client/public/models/lore-table/table-low.glb",
+      "triangles": 1248,
+      "materials": 3,
+      "draw_calls": 3,
+      "bytes": 88284,
+      "texture_size": [
+        1024,
+        653
+      ],
+      "sha256": "0d5999df197531ebb90be09ba2c73bc1c394ce31083507e886111e7b2abe88b2"
+    }
+  }
+}
