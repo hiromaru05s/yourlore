@@ -26,6 +26,10 @@ See `browser-checks.json`, `piles/browser-checks.json`, `rift-alpha-check.json`,
 
 Engine tests cover all quick effects, quest lifecycle / rewards / progress / capacity / targeting, public persistence, server ownership, retired-card sanitization, tutorials and 10 completed bot matches. Typechecks, design guard and production build pass. Existing Vite bundle-size warnings remain; no claim of exhaustive device or network coverage.
 
+## Asset boundary
+
+The filename-only `art:check` inventory reports 37 missing dedicated images: 19 are the new cards explicitly resolved through illustration aliases, while 18 pre-existing catalog cards retain their existing fallback presentation. This release does not claim a complete dedicated-art refresh of the entire catalog. The filename checker also reports existing thumbnail age differences.
+
 ## Deployment
 
 Staging and production identifiers and remote content hashes are recorded in the adjacent JSON files. Production uses the same verified build. Existing D1 / Durable Object bindings are retained; this release requires no database schema migration. The production version preceding this release was `d98ac879-17a0-467d-a7d7-f119398cc912`.

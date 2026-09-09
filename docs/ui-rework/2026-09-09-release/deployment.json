@@ -3,7 +3,9 @@
     "origin": "https://test.yourlore.xyz",
     "worker": "lore-server-staging",
     "version": "eda9583e-7e37-4c84-abb3-d35b151fce95",
-    "initialVerifiedVersion": "2e934903-62c9-482f-9349-41a1ea82f49f"
+    "initialVerifiedVersion": "2e934903-62c9-482f-9349-41a1ea82f49f",
+    "qaAccountsCleaned": true,
+    "verifiedAssetHashes": 28
   },
   "production": {
     "origin": "https://yourlore.xyz",

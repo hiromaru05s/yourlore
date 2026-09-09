@@ -4,7 +4,7 @@
     {
       "path": "index.html",
       "bytes": 1192,
-      "sha256": "d44eff1cc5ff2badd9da7b84ba2e99e1627540c92135d55ff45507190aa4a301",
+      "sha256": "33c44e7785ef63ba241b2de1eb626b213d25b38a8aa28ec6d9d5f0399ce863b1",
       "match": true
     },
     {
@@ -20,15 +20,15 @@
       "match": true
     },
     {
-      "path": "assets/GLTFLoader-xThsSWrz.js",
-      "bytes": 44842,
-      "sha256": "bb33f2710bdca27cb2f1504ce1c6fe94dd6342efbc2c1c1386a89138dee9be1f",
+      "path": "assets/main-D0fdHxzN.js",
+      "bytes": 1023950,
+      "sha256": "01c9e5a78c3a733d41e194bfed1bf5e87731584a649bd67efbc2d11d6f1bd9a3",
       "match": true
     },
     {
-      "path": "assets/duelScene-CgZPX5x7.js",
-      "bytes": 12791,
-      "sha256": "5fd77b6e221b2a5bdbdb462e6fe95981abe468a89c3f4c520b6d062c4ca814bf",
+      "path": "assets/GLTFLoader-xThsSWrz.js",
+      "bytes": 44842,
+      "sha256": "bb33f2710bdca27cb2f1504ce1c6fe94dd6342efbc2c1c1386a89138dee9be1f",
       "match": true
     },
     {
@@ -68,15 +68,9 @@
       "match": true
     },
     {
-      "path": "assets/main-eot6-8sP.css",
-      "bytes": 161305,
-      "sha256": "82efe97058b64f06f6784eeebf4ead446ce6f508328bfd3f1f4d5f455a731bcf",
-      "match": true
-    },
-    {
-      "path": "assets/main-D49TuXxu.js",
-      "bytes": 1023950,
-      "sha256": "628f771c39f51a6999059188cdaac557fb5f286367d2deaddefa6794edef7d04",
+      "path": "assets/main-DhQyVc6n.css",
+      "bytes": 161371,
+      "sha256": "6c371a44df320154af72f5cebcd6e8b6abb3a3e8ddd0509d51564423e4eecef4",
       "match": true
     },
     {
@@ -89,6 +83,12 @@
       "path": "assets/tablePreview-GFpLb3f0.js",
       "bytes": 25340,
       "sha256": "02c232f613bd53a11bababc5a36efa75cd9034933dc05f3448e96c7e5c8c504a",
+      "match": true
+    },
+    {
+      "path": "assets/duelScene-C-9HSxNV.js",
+      "bytes": 12791,
+      "sha256": "4a5f35a541c946862f144f25f6b70c1613415a18a39ab69df36cacfbb9e0e732",
       "match": true
     },
     {
