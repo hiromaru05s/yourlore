@@ -1,0 +1,317 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 1192,
+      "sha256": "dd5eaecd518c744650e0a1f1eeb65a1ea5939855ab386818854bce28d321bc48",
+      "match": true
+    },
+    {
+      "path": "art/biblion/release/rift-purple07-idle16.png",
+      "bytes": 586297,
+      "sha256": "5066c2d4e7489b3ba7f7a32dc094f3c19184a8e524e5de8fab173524e6a87b7d",
+      "match": true
+    },
+    {
+      "path": "rift-purple-concepts.html",
+      "bytes": 2877,
+      "sha256": "43aab52e2df986343cc96426738472a0dba1480492288175ec72bc8b4cb493d7",
+      "match": true
+    },
+    {
+      "path": "ui/cursors/drag.svg",
+      "bytes": 423,
+      "sha256": "7725638e47c941f4f009d75c656c0ca4ce6d5f03e53e7f371b970da51a68988b",
+      "match": true
+    },
+    {
+      "path": "ui/cursors/loading.svg",
+      "bytes": 499,
+      "sha256": "4b87f2f9150c078fb5ac5c5b6737fed07b9b3da0711b5d3781de0751ad8b957c",
+      "match": true
+    },
+    {
+      "path": "ui/cursors/hover.svg",
+      "bytes": 358,
+      "sha256": "3d5cfc4226918172d15f30aef256e94d7f032c5ed89985cb73442359ad6f4bf9",
+      "match": true
+    },
+    {
+      "path": "ui/cursors/blocked.svg",
+      "bytes": 435,
+      "sha256": "81dd0e16b4136e2123861f07d8aefdff30d9ddeac0343b04c4a7721bb8f3c2cc",
+      "match": true
+    },
+    {
+      "path": "ui/cursors/normal.svg",
+      "bytes": 295,
+      "sha256": "a799acedd9716c33bc20f0e08ddf0d81a03fe0ba31c9c51230d720385f5b0edd",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-purple-eight/02-soft-tear.png",
+      "bytes": 316220,
+      "sha256": "856a79043c21db9cc60aff03d7ebf0aa29d2f2a418f19996258223128c1923c9",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-purple-eight/06-offset.png",
+      "bytes": 200808,
+      "sha256": "5dce1aade0afda37f40f6c1f1f80f7ccbee809aaa6803ecb622c8ed22d588085",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-purple-eight/03-angular.png",
+      "bytes": 295909,
+      "sha256": "eb92aebc9d5000e586f01c9276ef13467bed9b15f264bd949675b2db6d9594d6",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-purple-eight/05-ink.png",
+      "bytes": 168143,
+      "sha256": "f4beb8e10777d5264413105f2b2507a4a6f5d4c277d7be79e01a5922054eec05",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-purple-eight/08-haze.png",
+      "bytes": 352410,
+      "sha256": "e7a4d6dc46e30116d5abf9664ed17545114bb53bed7a6a06073582be2b24ed71",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-purple-eight/04-lens.png",
+      "bytes": 211688,
+      "sha256": "315d89aee0119d45f5f298fc576afd7ef4693ca6deeb83706ffd67f7c199ffc1",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-purple-eight/01-razor.png",
+      "bytes": 121670,
+      "sha256": "3a09aec1064886931e768736e4d8de1048e51d29b41bfe4983ca4778d57fc9d3",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-purple-eight/07-wedge.png",
+      "bytes": 237613,
+      "sha256": "6c650fa4334e57d5bf03bd0af234c1ca454daee9dca7afc59f6a791f92bd153f",
+      "match": true
+    },
+    {
+      "path": "assets/riftScene-DfytM_Yo.js",
+      "bytes": 2931,
+      "sha256": "eeb50d563059d8fb9450054a4f5ed2df6533273e46ddb12920fcf3e9b0a184d8",
+      "match": true
+    },
+    {
+      "path": "assets/paperDraw-C-pzDs7b.js",
+      "bytes": 3263,
+      "sha256": "0b15a1be414bc1d171d290394cc8fcd7fd235caf931e01b27b6c5baf26661634",
+      "match": true
+    },
+    {
+      "path": "assets/main-iBJkPUxk.css",
+      "bytes": 171006,
+      "sha256": "b56d35c49c90e3339a5ba8284dca54f000494abe79ddac8f02eb98d546c14cbe",
+      "match": true
+    },
+    {
+      "path": "assets/cardSurface-CJUPGRm_.js",
+      "bytes": 4759,
+      "sha256": "d14f65ccae0c1c04419f9ca1b05c837c094a077e7248556d18657f21b3409012",
+      "match": true
+    },
+    {
+      "path": "assets/duelScene-OA2RHoah.js",
+      "bytes": 21671,
+      "sha256": "4955601b7213e9967660d5f26cc4eecaaca4c7e9accc76121ff6dd469c84bf96",
+      "match": true
+    },
+    {
+      "path": "assets/main-DH_KsfNp.js",
+      "bytes": 1034667,
+      "sha256": "6c272c38ff683f61d469118569f3d81414ab64d390c74f07e2e5909189fc2b4b",
+      "match": true
+    },
+    {
+      "path": "assets/three.module-x0HVazuD.js",
+      "bytes": 602980,
+      "sha256": "89d799e899f011180a3ef7711254b14931784c792b80e537219f533b62688386",
+      "match": true
+    },
+    {
+      "path": "assets/RoomEnvironment-jRZJJjmS.js",
+      "bytes": 2119,
+      "sha256": "4aba374465f806ef66555859cac9cac8b98c7857d15c8e89ebd3dcda98349deb",
+      "match": true
+    },
+    {
+      "path": "assets/GLTFLoader-COxpBJ-q.js",
+      "bytes": 44847,
+      "sha256": "f22f92cb0df745ec438108092c45900038de7036ebcb1d38a059d54f9c9c067c",
+      "match": true
+    },
+    {
+      "path": "assets/paperCard-DehyCqlR.js",
+      "bytes": 2684,
+      "sha256": "57ed1bdc31ef1c32c4ec97d09b30b1b537b4ecb4b6d13fb75d99b58c6e03dbc0",
+      "match": true
+    },
+    {
+      "path": "assets/diceScene-B-rewT-T.js",
+      "bytes": 7153,
+      "sha256": "4fb73cb46223e6694c66348c9608a7b7e51257428abdd820a7a06b064bbfafba",
+      "match": true
+    },
+    {
+      "path": "assets/tablePreview-2Rkra2Ey.css",
+      "bytes": 1870,
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+      "match": true
+    },
+    {
+      "path": "assets/modulepreload-polyfill-B5Qt9EMX.js",
+      "bytes": 771,
+      "sha256": "607112fb81d7899ceedf89cdb1b3540a53eb96ad5e4202fb1e22f873281de839",
+      "match": true
+    },
+    {
+      "path": "assets/tablePreview-C-06yR3a.js",
+      "bytes": 25340,
+      "sha256": "277f551498384252bfd867173a5fd7813ab511a55c35cc36a2e81b1587116d4f",
+      "match": true
+    },
+    {
+      "path": "assets/coinScene-CJdWb6yp.js",
+      "bytes": 4399,
+      "sha256": "c2723adb842d917aa18a135e440acb3d7a3baad3b73c235bf868aad575558b51",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/shelf-low.glb",
+      "bytes": 54272,
+      "sha256": "b987427ef758df58fab602c51b12eaecae7b99a8bda44852a8ea287aa5ea57d6",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/market-low.glb",
+      "bytes": 43864,
+      "sha256": "53467b4b1a184e0f844de266616d1ca5c7815e624f24f3021a12307cb561b5f8",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/market.glb",
+      "bytes": 96872,
+      "sha256": "421d378ae17154209c05abe8d09a2b6aa3d0a2cf68103b6bb63f039d6d11de56",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/shelf.glb",
+      "bytes": 115852,
+      "sha256": "ebb40407e598b9f08ed1528cffaf524beb6fd3dcdf6d5c479c7d7f2f3673b9d8",
+      "match": true
+    },
+    {
+      "path": "models/lore-table/table-low.glb",
+      "bytes": 88284,
+      "sha256": "0d5999df197531ebb90be09ba2c73bc1c394ce31083507e886111e7b2abe88b2",
+      "match": true
+    },
+    {
+      "path": "models/lore-table/table.glb",
+      "bytes": 218004,
+      "sha256": "eb8a42dd6a2d53127ffc30a2b2f7490a5a947191f07c1c914ed64c9d20263c9b",
+      "match": true
+    },
+    {
+      "path": "models/cosmetics/deck_holder_biblion_ivory/v1/model-low.glb",
+      "bytes": 31600,
+      "sha256": "3a45ab899b2dd272149bf1cc177d3f8b8e0ff35e839e3dc8a12b9fc65633b213",
+      "match": true
+    },
+    {
+      "path": "models/cosmetics/deck_holder_biblion_ivory/v1/model.glb",
+      "bytes": 92912,
+      "sha256": "d8d9bd9b7ca4b9b2f79033a70dac763d07ad4d5166aab2c5ef55fdfb4704b5e9",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/v2/shelf-low.glb",
+      "bytes": 116228,
+      "sha256": "1dff51240baa0b16c050ac0069100e28cb9e72db6ce13c8cacc70697cf4927fc",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/v2/supply.glb",
+      "bytes": 35544,
+      "sha256": "ad7dba676ca6cf3b7c3ee813ffb4059ec3c0372b6cc2023569034010ba8fbaa1",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/v2/supply-low.glb",
+      "bytes": 16832,
+      "sha256": "38fab62cd0837fdb99c33253cf6305085b0847c38d411ff6a65e4bb2c405349d",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/v2/shelf.glb",
+      "bytes": 541128,
+      "sha256": "96c7d57746c8c1df5a80fc3de65d7c4588edc37139ca7c8b6697f0846916cac4",
+      "match": true
+    },
+    {
+      "path": "art/biblion/release/rift-slit-16.png",
+      "bytes": 380874,
+      "sha256": "b1b981d78428edf348e3f1d20c5a87c361972003c76eb3a4a6647e5186e71b1c",
+      "match": true
+    },
+    {
+      "path": "rift-concepts.html",
+      "bytes": 2922,
+      "sha256": "a18afdf4980837166ceb063df4021433f67ca8804b221f804e7d6ba46b865af9",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-concepts/03-paper-tear.png",
+      "bytes": 279550,
+      "sha256": "ccfb541d4bb046ec5125f4fefe9befedf3fe82f991af881f3fde7cd057316218",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-concepts/05-ink-fissure.png",
+      "bytes": 348384,
+      "sha256": "9c4ab48ff9aa2ecbbbe376eb4249b36bf3842f78788138df1226657f9c461cd4",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-concepts/04-folded-space.png",
+      "bytes": 473906,
+      "sha256": "60701b01446183f6d2f7b0895c7f99a860dbd81fcd20b30e7ce805ea8a4ae720",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-concepts/02-glass-fracture.png",
+      "bytes": 275273,
+      "sha256": "c200a42b184f0b327aaef2ac843fe7010cda9d4943454b621056c6c525ed4541",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-concepts/01-silk-seam.png",
+      "bytes": 143952,
+      "sha256": "e02344b6ac08081d4966a5371d7d76491adc3d66b0bffadcc92c67f937b83d67",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-concepts/06-moon-seam.png",
+      "bytes": 371286,
+      "sha256": "3be695669c708d3f8c00187e5751c02ce426ab1f56a61d88030fe8fdd15b1372",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-concepts/07-stitch.png",
+      "bytes": 359443,
+      "sha256": "70c8f387a37111f9a77217e2a0b0caad3b189bf0532db10be51a2ddf9bb3116b",
+      "match": true
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "deployedAt": "2026-09-09T23:28:19.890688+00:00",
+  "url": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "database": "lore-db-staging",
+  "sourceCommit": "4d568fe00120c55b8319611746a66633b8a5f33c",
+  "version": "02219917-4a82-4070-bafa-3b8b7bbfff04",
+  "branch": "codex/duel-render-audit-20260910",
+  "uploadedAssetCount": 27,
+  "existingAssetCount": 1452,
+  "verifiedAssetCount": 52,
+  "allVerifiedAssetsMatch": true,
+  "dryRunPassed": true,
+  "productionChanged": false,
+  "remoteSmoke": "HTTP 200; app mounted; no JS exceptions; unauthenticated startup",
+  "duelQA": "Local Chrome with real engine/controller. No remote two-player or Safari run."
+}

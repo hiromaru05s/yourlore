@@ -1,6 +1,6 @@
 # Duel rendering audit — 2026-09-10
 
-対象: https://test.yourlore.xyz / lore-server-staging。今回の変更は対戦表示・入力・イベント再生。ゲームルール、カード定義、DBスキーマは変更しない。
+対象: https://test.yourlore.xyz / lore-server-staging。配信済みバージョン `02219917-4a82-4070-bafa-3b8b7bbfff04`（ソース `4d568fe`）、52件の配信ファイル照合済み。今回の変更は対戦表示・入力・イベント再生。ゲームルール、カード定義、DBスキーマは変更しない。
 
 ## 今回修正した原因
 
