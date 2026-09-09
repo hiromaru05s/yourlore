@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-09-09T23:26:40.357481+00:00",
+  "passed": [
+    "typecheck client/server",
+    "build/design guard",
+    "git diff --check",
+    "duel-render-audit-browser",
+    "duel-impact-browser",
+    "duel-continuity-browser",
+    "duel-stagecraft-browser",
+    "rift-fold-browser",
+    "board-perspective-browser",
+    "duel-ui",
+    "dice-model",
+    "stagecraft-models",
+    "opening-hands",
+    "quest-quick",
+    "trap-removal",
+    "paper-card",
+    "rift-fold"
+  ],
+  "scope": "Local Chrome fixtures use the real engine and controller; not remote two-player or Safari QA.",
+  "existingWarnings": [
+    "Vite chunks >500 kB",
+    "Some original card art is unavailable; thumbnail fallback retained"
+  ]
+}

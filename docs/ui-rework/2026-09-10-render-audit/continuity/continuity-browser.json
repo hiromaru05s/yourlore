@@ -1,0 +1,80 @@
+{
+  "proportions": {
+    "self": {
+      "x": 575.15625,
+      "y": 588.609375,
+      "width": 129.671875,
+      "height": 129.671875,
+      "top": 588.609375,
+      "right": 704.828125,
+      "bottom": 718.28125,
+      "left": 575.15625
+    },
+    "opp": {
+      "x": 575.15625,
+      "y": 1.7008743286132812,
+      "width": 129.671875,
+      "height": 129.671875,
+      "top": 1.7008743286132812,
+      "right": 704.828125,
+      "bottom": 131.37274932861328,
+      "left": 575.15625
+    },
+    "hand": {
+      "x": 902.90625,
+      "y": 619.2359619140625,
+      "width": 61.9302978515625,
+      "height": 96.7640380859375,
+      "top": 619.2359619140625,
+      "right": 964.8365478515625,
+      "bottom": 716,
+      "left": 902.90625
+    },
+    "opponentHand": {
+      "x": 902.90625,
+      "y": 2.9977493286132812,
+      "width": 61.921875,
+      "height": 96.765625,
+      "top": 2.9977493286132812,
+      "right": 964.828125,
+      "bottom": 99.76337432861328,
+      "left": 902.90625
+    },
+    "manaFont": "32px"
+  },
+  "crop": {
+    "grid": {
+      "x": 344.67437744140625,
+      "y": 289.19378662109375,
+      "width": 590.6511840820312,
+      "height": 130.27154541015625,
+      "top": 289.19378662109375,
+      "right": 935.3255615234375,
+      "bottom": 419.46533203125,
+      "left": 344.67437744140625
+    },
+    "seal": {
+      "x": 494.865966796875,
+      "y": 302.11865234375,
+      "width": 15.746795654296875,
+      "height": 15.74676513671875,
+      "top": 302.11865234375,
+      "right": 510.6127624511719,
+      "bottom": 317.86541748046875,
+      "left": 494.865966796875
+    }
+  },
+  "errors": [],
+  "checks": [
+    "instant market select and explicit confirm",
+    "purchase and spell shelf handoff",
+    "shared-camera split/interleave/square/land",
+    "picker seal within scrollport",
+    "rift absorption",
+    "opening market/furniture/decks",
+    "simultaneous opening draws",
+    "fast-forward cancellation",
+    "mobile head clearance",
+    "reduced motion"
+  ]
+}

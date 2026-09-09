@@ -203,6 +203,17 @@ export async function summonFromHand(card: CardInst, uid: string, side: ViewSide
   try { await focusCard(ghost, side); face=await flyIntoSlot(ghost,target,target.cloneNode(true) as HTMLElement,true); }
   finally { ghost.remove(); face?.remove(); target.style.visibility = ""; }
 }
+/** Public hand-to-shelf movement, including the end-turn overflow picker. */
+export async function discardFromHand(card:CardInst,side:ViewSide):Promise<void>{
+  if(fxSkip)return;
+  const source=document.querySelector<HTMLElement>(`${side==='me'?'#hand .card':'#oppHand .card--back'}[data-uid="${card.uid}"]`);
+  const from=source?.getBoundingClientRect()||handRect(side);if(!from)return;
+  const node=floatAt(cardEl(card,{size:'hand'}),from);node.dataset.discardFlight=card.uid;
+  node.style.width=`${from.width}px`;node.style.height=`${from.height}px`;node.style.setProperty('--cw',`${from.width}px`);node.style.setProperty('--ch',`${from.height}px`);
+  if(source)source.style.visibility='hidden';
+  try{await landOnShelf(node,side);}finally{node.remove();}
+}
+
 /** Face-down plays reveal only the sleeve, never a trap's identity. */
 export async function trapSetAnim(side: ViewSide): Promise<void> {
   const from = fromRect(side, takeOrigin(side));

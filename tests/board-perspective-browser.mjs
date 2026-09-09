@@ -35,7 +35,7 @@ await page.waitForSelector('.market-model-ready');await page.waitForFunction(()=
 await page.evaluate(async()=>{(await import('/src/ui/duelClock.ts')).paintDuelClock(document.getElementById('clock-me'),75,90,true);});await page.waitForSelector('.mp-clock.show .tc-dial');await page.waitForTimeout(200);
 await page.screenshot({path:output+'/desktop-1280.png'});
 const dimensions=await page.evaluate(()=>({portrait:document.querySelector('#portraitMe').getBoundingClientRect().width,ratio:(()=>{const e=document.querySelector('#meRow .zone-mon .card'),w=e.offsetWidth,h=e.offsetHeight,m=qa.A.fieldPlacement(e,w,h);const p=(x,y)=>{const q=m.transformPoint(new DOMPoint(x,y));return {x:q.x/q.w,y:q.y/q.w};};const a=p(0,h/2),b=p(w,h/2),c=p(w/2,0),d=p(w/2,h);return Math.hypot(a.x-b.x,a.y-b.y)/Math.hypot(c.x-d.x,c.y-d.y);})(),canvas:document.querySelectorAll('canvas').length}));
-console.log('dimensions',JSON.stringify(dimensions));assert(dimensions.portrait>=165);const units=await page.evaluate(()=>{const m=document.querySelector('#meRow .zone-mon .card'),k=document.querySelector('#market .card'),d=document.querySelector('#pile-myDeck'),s=document.querySelector('#pile-myDisc');return {monster:[m.offsetWidth,m.offsetHeight],market:[k.offsetWidth,k.offsetHeight],deck:d.offsetWidth,shelf:s.offsetWidth};});assert.deepEqual(units.monster,units.market,'market and monsters share the physical card footprint');assert(Math.abs(units.deck/units.monster[0]-1.3)<.025);assert(Math.abs(units.shelf/units.monster[0]-1.52)<.025);assert.equal(await page.locator('.hourglass-anchor').count(),0);console.log('physical units',JSON.stringify(units));assert.equal(dimensions.canvas,1);
+console.log('dimensions',JSON.stringify(dimensions));assert(dimensions.portrait>=165);const units=await page.evaluate(()=>{const m=document.querySelector('#meRow .zone-mon .card'),k=document.querySelector('#market .card'),d=document.querySelector('#pile-myDeck'),s=document.querySelector('#pile-myDisc');return {monster:[m.offsetWidth,m.offsetHeight],market:[k.offsetWidth,k.offsetHeight],deck:d.offsetWidth,shelf:s.offsetWidth};});assert.deepEqual(units.monster,units.market,'market and monsters share the physical card footprint');assert(Math.abs(units.deck/units.monster[0]-1.3)<.025);assert(Math.abs(units.shelf/units.monster[0]-1.52)<.025);assert.equal(await page.locator('.hourglass-anchor').count(),0);console.log('physical units',JSON.stringify(units));assert.equal(dimensions.canvas,2);
 // Independent WebGL projection versus actual browser DOM bounds across the board.
 const projection=await page.evaluate(async()=>{
  const T=await import('/node_modules/.vite/deps/three.js');
@@ -64,7 +64,7 @@ const aimed=await page.locator('#meRow .zone-mon .card').first().boundingBox();a
 await page.screenshot({path:output+'/attack-arrow.png'});await page.mouse.up();await page.evaluate(()=>qa.c.queue);assert.equal(await page.locator('.attack-aim').count(),0);
 const landings=[];
 for(const [uid,selector] of [['summon-test','#meRow .zone-mon .card'],['permanent-test','#meRow .buff-icon--spell']]){
- await reset('play');await page.evaluate(id=>{qa.landingRect=null;window.addEventListener('lore:summon-dust',e=>{qa.landingRect=e.detail.toJSON();},{once:true});void qa.c.onPlay(id);},uid);
+ await reset('play');await page.evaluate(id=>{qa.landingRect=null;const contact=e=>{qa.landingRect=e.detail.toJSON();for(const name of ['lore:summon-dust','lore:summon-impact'])window.removeEventListener(name,contact);};for(const name of ['lore:summon-dust','lore:summon-impact'])window.addEventListener(name,contact);void qa.c.onPlay(id);},uid);
  await page.waitForSelector('.fx-field-ghost');await page.waitForTimeout(350);await page.screenshot({path:output+'/'+uid+'-flight.png'});
  await page.evaluate(()=>qa.c.queue);const ghost=await page.evaluate(()=>qa.landingRect);assert(ghost,'landing emits contact feedback');
  const landed=await page.locator(selector).boundingBox();assert(landed,'real destination appears');
@@ -92,7 +92,7 @@ for(const kind of ['quest','spell']){
   p.enchants=[{card:{...DB.E1,uid:'prior-enchant'},turns:2}];
   p.hand=[{...DB[kind==='quest'?'Q_BRAND':'NHEAL'],uid:'integrated-'+kind}];
   qa.c.view.render(qa.c.state);qa.landingRect=null;
-  window.addEventListener('lore:summon-dust',e=>{qa.landingRect=e.detail.toJSON();},{once:true});
+  const contact=e=>{qa.landingRect=e.detail.toJSON();for(const name of ['lore:summon-dust','lore:summon-impact'])window.removeEventListener(name,contact);};for(const name of ['lore:summon-dust','lore:summon-impact'])window.addEventListener(name,contact);
  },kind);
  await page.waitForTimeout(180);await page.evaluate(kind=>{void qa.c.onPlay('integrated-'+kind);},kind);
  await page.waitForSelector('.fx-field-ghost');await page.evaluate(()=>qa.c.queue);await page.evaluate(()=>new Promise(requestAnimationFrame));
@@ -117,8 +117,8 @@ await page.waitForTimeout(2250);assert.equal(await page.locator('.treasure-notic
 await page.getByRole('button',{name:'Continue',exact:true}).click();assert.equal(await page.evaluate(()=>qa.confirm),true);
 await reset('dense');
 const rift=page.locator('#rift-me');
-assert.equal(await rift.locator('.rift-sprite').evaluate(e=>getComputedStyle(e).animationDuration),'16s');
-await rift.hover();const idle=await rift.locator('.rift-sprite').evaluate(e=>({animation:getComputedStyle(e).animationName,position:getComputedStyle(e).backgroundPosition,transform:getComputedStyle(e).transform}));
+assert.equal(await rift.locator('.rift-sprite').evaluate(e=>getComputedStyle(e,'::after').animationDuration),'32s');
+await rift.hover();await page.waitForTimeout(250);assert.equal(await rift.locator('.rift-sprite').evaluate(e=>getComputedStyle(e,'::after').animationPlayState),'paused');const idle=await rift.locator('.rift-sprite').evaluate(e=>({animation:getComputedStyle(e).animationName,position:getComputedStyle(e).backgroundPosition,transform:getComputedStyle(e).transform}));
 await page.waitForTimeout(650);assert.deepEqual(await rift.locator('.rift-sprite').evaluate(e=>({animation:getComputedStyle(e).animationName,position:getComputedStyle(e).backgroundPosition,transform:getComputedStyle(e).transform})),idle);assert.equal(idle.animation,'none');
 await page.mouse.move(5,5);
 const frames=await page.locator('.portrait .pt-ring').evaluateAll(es=>es.map(e=>{const s=getComputedStyle(e,'::after');return {width:parseFloat(s.width),height:parseFloat(s.height),size:s.backgroundSize};}));
@@ -136,7 +136,7 @@ await reset('attack');
 const cancelSource=await page.locator('#meRow .zone-mon .card').first().boundingBox();
 await page.mouse.move(cancelSource.x+20,cancelSource.y+20);await page.mouse.down();await page.mouse.move(cancelSource.x+20,cancelSource.y-80,{steps:5});await page.waitForSelector('.attack-aim');await page.keyboard.press('Escape');assert.equal(await page.locator('.attack-aim,.is-aiming').count(),0);await page.mouse.up();
 await reset('play');await page.evaluate(()=>{void qa.c.onPlay('summon-test');});await page.waitForSelector('.fx-field-ghost');
-await page.evaluate(async()=>{qa.c.destroy();qa.stop();await qa.c.queue;});assert.equal(await page.locator('.duel-objects-3d,.fx-card-flight,.attack-aim,.cast-veil').count(),0);
+await page.evaluate(async()=>{qa.c.destroy();qa.stop();await qa.c.queue;});assert.equal(await page.locator('.duel-objects-3d,.board-flight-canvas,.fx-card-flight,.attack-aim,.cast-veil').count(),0);
 assert.deepEqual(errors,[]);await fs.writeFile(output+'/browser-checks.json',JSON.stringify({dimensions,units,projection,landings,errors,checks:['damage stacking','aspect','larger portraits','all three Blender furniture models','attack arrow stays anchored','summon exact handoff','enchantment exact handoff','PC and phone','grounded dice','cleanup']},null,2));
 console.log('PASS: shared-perspective browser integration');
 } finally {await browser.close();}

@@ -515,7 +515,7 @@ function artEl(cardId: string, full = false, lazy = false, gallery = false): HTM
     img.classList.add("art-loaded");
     art.classList.add("art-done");
   };
-  if (img.complete && img.naturalWidth) done();
+  if (known === "ok" || (img.complete && img.naturalWidth)) done();
   else img.onload = done;
   // One quick retry before giving up. The old handler removed the <img> on the
   // first error, so a single transient failure blanked that card for the rest of

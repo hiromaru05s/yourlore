@@ -16,6 +16,7 @@ import { logToEn } from "../shared/logEn";
 import { getSfxVolume, setSfxVolume } from "./sound";
 import { deckBucket, refinedArt } from "./duelMaterials";
 import { avatarHtml } from "./social";
+import { projectBoardDOM } from './boardProjection';
 import { installGameCursor } from './gameCursor';
 import { createAttackAim } from './attackAim';
 
@@ -330,6 +331,8 @@ export class GameView {
   }
 
   render(g: GameState): void {
+    const readyPiles=new Set([...this.root.querySelectorAll('.pile--3d-ready')].map(el=>el.id));
+    const oldCards=new Map([...this.root.querySelectorAll<HTMLElement>('.card[data-uid]')].map(el=>[el.dataset.uid,{width:el.offsetWidth,fonts:[...el.querySelectorAll<HTMLElement>('.card-name,.seal-value')].map(e=>({text:e.textContent,font:e.style.fontSize}))}]));
     this.root.querySelector('.card-block-tip')?.remove();
     const me = g.players[this.you];
     const opp = g.players[1 - this.you];
@@ -363,6 +366,7 @@ export class GameView {
     for (let i = 0; i < n; i++) {
       const cb = document.createElement("div");
       cb.className = "card--back";
+      cb.dataset.uid = opp.hand[i].uid;
       cb.style.width = `${obw}px`;
       cb.style.height = `${obw / .64}px`;
       cb.style.backgroundImage = `url(${OPP_SLEEVE})`;
@@ -406,6 +410,16 @@ export class GameView {
     } else {
       hint.style.display = "none";
     }
+    // Keep fitted text and the board plane stable across a synchronous snapshot.
+    for(const el of this.root.querySelectorAll<HTMLElement>('.card[data-uid]')){
+      const previous=oldCards.get(el.dataset.uid);
+      if(!previous||previous.width!==el.offsetWidth)continue;
+      [...el.querySelectorAll<HTMLElement>('.card-name,.seal-value')].forEach((label,i)=>{
+        const old=previous.fonts[i];if(old?.text===label.textContent&&old.font)label.style.fontSize=old.font;
+      });
+    }
+    for(const id of readyPiles)this.root.querySelector(`#${id}`)?.classList.add('pile--3d-ready');
+    projectBoardDOM(this.root);
   }
 
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {
@@ -975,17 +989,19 @@ export class GameView {
       let ghost: HTMLElement | null = null;
       let done = false;
       let guide: HTMLElement | null = null;
-      const destination = this.root.querySelector<HTMLElement>(c.t === "mon" ? "#meRow .zone-mon" : "#meRow .zone-st");
+      const destination = c.t === "mon" ? this.root.querySelector<HTMLElement>("#meRow .zone-mon") : null;
       const dropBounds = () => {
         const top = this.q("oppRow").getBoundingClientRect();
         const bottom = this.q("meRow").getBoundingClientRect();
         return c.t==='mon' ? { left: bottom.left, right: bottom.right, top: top.top - 12, bottom: bottom.bottom + 16 }
-          : {left:12,right:innerWidth-12,top:Math.max(44,top.top-30),bottom:Math.min(innerHeight-12,Math.max(bottom.bottom+40,innerHeight*.88))};
+          : {left:12,right:innerWidth-12,top:40,bottom:innerHeight-12};
       };
       const canDropAt = (x: number, y: number) => {
         const r = dropBounds(), hand = this.q("hand").getBoundingClientRect();
         const overHand = x >= hand.left && x <= hand.right && y >= hand.top && y <= hand.bottom;
-        return !overHand && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+        // Expanding the hand must not move the cancellation area under a spell drag.
+        const returnedToHand=overHand&&(c.t==='mon'||sy-y<28);
+        return !returnedToHand && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
       };
       const game = this.root.querySelector(".game") as HTMLElement | null;
 
@@ -1118,7 +1134,7 @@ export class GameView {
     body.append(front); pile.append(body);
     if (shelf && faceCard && faceCard.id !== 'HIDDEN') {
       // Public discard face rendered by the same component as every real card.
-      // Offscreen print feeds the mesh; it never receives input or accessibility focus.
+      // Native face shares the board plane; it has no independent input or focus.
       const print=document.createElement('div'); print.className='pile-print'; print.setAttribute('aria-hidden','true');
       print.append(cardEl(faceCard,{size:'hand'})); pile.append(print);
     }

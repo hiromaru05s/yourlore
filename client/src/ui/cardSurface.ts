@@ -1,7 +1,7 @@
 /** Rasterize the current card layers for a deformable mesh. Layout and text
  * come from the real DOM card, not a second set of card rules or translations. */
 export const CARD_PADDING = .12;
-const RESOLUTION = 768;
+const RESOLUTION = 1536;
 const imageCache = new Map<string, Promise<HTMLImageElement>>();
 const matteCache = new Map<string, Promise<HTMLCanvasElement>>();
 
@@ -76,9 +76,9 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
   layers.push(async () => { ctx.drawImage(await matte(frameUrl), pad, pad, w, h); });
   const art = node.querySelector<HTMLImageElement>('.card-art img');
   if (art) {
-    const b = box(art), src = art.currentSrc || art.src;
+    const b = box(art), src = art.srcset?(art.currentSrc||art.src):art.src;
     const position = getComputedStyle(art).objectPosition.split(' ').map(v => parseFloat(v)/100);
-    const path = document.querySelector('#celestial-base-spell path')?.getAttribute('d');
+    const path = document.querySelector(node.classList.contains('card--field')?'#celestial-field-spell path':'#celestial-base-spell path')?.getAttribute('d');
     layers.push(async () => {
       let img:HTMLImageElement;try{img=await image(src);}catch{return;}
       ctx.save();
@@ -132,8 +132,10 @@ export async function capturePileSurface(node:HTMLElement,sleeve:string,preserve
   const copy=node.cloneNode(true) as HTMLElement;copy.removeAttribute('style');
   copy.classList.remove('fx-card-flight','cast-reveal','is-picked','is-armed','card--dim','is-dim','is-exhausted','is-playable','is-buyable');
   copy.style.cssText='--cw:128px;--ch:200px;width:128px;height:200px;transform:none';
+  const originalWidth=node.offsetWidth||parseFloat(getComputedStyle(node).width)||128;
+  copy.querySelectorAll<HTMLElement>('[style]').forEach(el=>{if(el.style.fontSize.endsWith('px'))el.style.fontSize=`${parseFloat(el.style.fontSize)*128/originalWidth}px`;});
   const art=copy.querySelector<HTMLImageElement>('.card-art img');
-  if(art){const original=art.currentSrc||art.src;art.removeAttribute('srcset');art.removeAttribute('sizes');const full=art.src.replace(/\/art\/cards-(sm|xs)\//,'/art/cards/');try{await image(full);art.src=full;}catch{art.src=original;}}
+  if(art){const original=art.currentSrc||art.src;art.removeAttribute('srcset');art.removeAttribute('sizes');const full=art.src.replace(/\/art\/cards-(sm|xs)\//,'/art/cards/');try{await image(full);art.src=full;}catch{art.src=original;}try{await art.decode();}catch{}}
   host.append(copy);document.body.append(host);
   try{const result=await captureCardSurface(copy,sleeve,true);
     if(preserveDim&&node.classList.contains('is-dim')&&getComputedStyle(node).filter!=='none'&&result.face){const c=canvas(result.face.width,result.face.height),ctx=c.getContext('2d')!;ctx.filter='grayscale(1) brightness(.55) contrast(.9)';ctx.drawImage(result.face,0,0);result.face=c;}

@@ -367,6 +367,19 @@ export abstract class BaseController implements BoardHandlers {
       }
     }
 
+    // Overflow picks emit logs only; animate the public zone delta before commit.
+    for(const pl of [0,1] as Side[]){
+      const inHand=new Set(prev.players[pl].hand.map(c=>c.uid));
+      const previousDiscard=new Set(prev.players[pl].discard.map(c=>c.uid));
+      const played=new Map<string,number>();
+      for(const e of events)if(e.type==='playSpell'&&e.player===pl&&e.dest==='discard')played.set(e.id,(played.get(e.id)||0)+1);
+      for(const c of res.state.players[pl].discard){
+        if(!inHand.has(c.uid)||previousDiscard.has(c.uid))continue;
+        const n=played.get(c.id)||0;if(n){played.set(c.id,n-1);continue;}
+        await A.discardFromHand(c,sideOf(pl));
+      }
+    }
+
     // Public removed-zone deltas cover void exits, culls and effect-driven exile.
     const animatedIds=new Map<string,number>();
     for(const e of events)if(e.type==='playSpell'&&e.dest==='vanish'||e.type==='buy'&&DB[e.id]?.quick)animatedIds.set(e.id,(animatedIds.get(e.id)||0)+1);

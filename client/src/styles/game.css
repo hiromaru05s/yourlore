@@ -733,10 +733,23 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
 @media(min-width:900px) and (max-aspect-ratio:3/2){.game #oppRow{align-self:start;}.game #meRow{align-self:end;}}
 
 /* No raster-to-model flash while the shared board is loading. */
-[data-table-state="loading"] .game { background:#152036; }
+[data-table-state="loading"] .game { background:#eeeae3; }
+[data-table-state="loading"] .game::before { content:"";position:fixed;inset:5% -3% 1%;border:3px double #bca37b;border-radius:26% / 19%;background:#f2f0ec;pointer-events:none;z-index:0; }
 .awaiting-board .pile-tag,.awaiting-board .pile-count { visibility:hidden; }
 .cointoss-ov.coin-loading .ct-coin { visibility:hidden; }
 /* Keep depleted supply slots empty, including mouse/focus effects, until commit. */
 .market-cards .card[data-purchase-source][aria-hidden="true"] { visibility:hidden!important;pointer-events:none!important; }
 
 .rift-fold-canvas { position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:126; }
+
+/* Flight geometry uses the same camera as the furniture, above stationary cards. */
+.board-flight-canvas { position:fixed;inset:0;width:100vw;height:100vh;z-index:126;pointer-events:none; }
+.cast-reveal { transform-style:flat!important;isolation:isolate;box-shadow:none;filter:drop-shadow(0 18px 22px #0005)!important; }
+.cast-reveal::after { content:none; }
+.fx-card-flight { isolation:isolate;transform-style:flat!important; }
+/* Resting shelf faces remain native cards: no second rasterization or matte. */
+.pile--shelf { transform-style:preserve-3d; }
+.pile--shelf.pile--3d-ready > .pile-print { position:absolute;left:50%;top:50%;width:var(--card-w);height:var(--card-h);transform:translate(-50%,-50%) translateZ(var(--shelf-elevation,12px));visibility:visible;z-index:1; }
+.pile--shelf > .pile-print > .card { --cw:var(--card-w);--ch:var(--card-h);width:var(--cw);height:var(--ch);pointer-events:none; }
+.pile--shelf > .pile-count { transform:translateZ(calc(var(--shelf-elevation,12px) + 1px));z-index:6; }
+.awaiting-board .pile--shelf > .pile-print,.duel-opening .pile--shelf > .pile-print,.pile--shelf.is-shuffling > .pile-print { visibility:hidden; }

@@ -37,9 +37,9 @@ await page.screenshot({path:out+'/spell-flight.png'});await page.evaluate(()=>qa
 assert.equal(await page.locator('#pile-myDisc').getAttribute('data-count'),'3');await page.screenshot({path:out+'/shelf-settled.png'});
 // Two packets visibly separate, interleave and square; same canvas at all phases.
 await page.evaluate(()=>{qa.shuffle=qa.A.animateReshuffle('me',12);});await page.waitForFunction(()=>document.querySelector('[data-shuffle-phase="split"]'));
-assert.equal(await page.locator('canvas').count(),1);await page.screenshot({path:out+'/shared-shuffle-split.png'});
+assert.equal(await page.locator('.duel-objects-3d,.board-flight-canvas').count(),2);await page.screenshot({path:out+'/shared-shuffle-split.png'});
 await page.waitForFunction(()=>document.querySelector('[data-shuffle-phase="square"]'));await page.screenshot({path:out+'/shared-shuffle-square.png'});await page.evaluate(()=>qa.shuffle);
-assert.equal(await page.locator('.is-shuffling,[data-shuffle-phase]').count(),0);assert.equal(await page.locator('#pile-myDeck').getAttribute('data-count'),'12');await page.screenshot({path:out+'/shared-shuffle-rest.png'});
+assert.equal(await page.locator('#pile-myDisc .pile-print').count(),0);assert.equal(await page.locator('.is-shuffling,[data-shuffle-phase]').count(),0);assert.equal(await page.locator('#pile-myDeck').getAttribute('data-count'),'12');await page.screenshot({path:out+'/shared-shuffle-rest.png'});
 // Picker padding contains the raised card including its protruding cost seal.
 await page.evaluate(async()=>{const {cardPickerMulti}=await import('/src/ui/modal.ts');cardPickerMulti('捨てるカードを3枚選択',Array.from({length:8},(_,i)=>({...qa.C.STARTERS.STARTER_CHEST,uid:'pick-'+i})),3,()=>{});});
 

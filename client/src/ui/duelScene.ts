@@ -1,7 +1,6 @@
-/** All physical props share the table's camera, lighting, scale and depth buffer. */
+/** Furniture and front-layer card flights share one camera and physical scale. */
 import * as T from 'three';
 import {makePile,type PileModel} from './pileModels';
-import {capturePileSurface} from './cardSurface';
 import {installSceneMotion} from './sceneMotion';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 import {createDuelTable} from './duelTable';
@@ -12,20 +11,24 @@ const clamp=(n:number)=>Math.min(1,Math.max(0,n));
 export function mountDuelScene(root:HTMLElement):()=>void {
   let renderer:T.WebGLRenderer;
   try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{root.dataset.tableState='fallback';return ()=>{};}
-  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));renderer.setClearColor(0,0);renderer.autoClear=false;
+  let flightRenderer:T.WebGLRenderer;
+  try{flightRenderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{renderer.dispose();root.dataset.tableState='fallback';return ()=>{};}
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setClearColor(0,0);renderer.autoClear=false;
   renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.9;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
   const canvas=renderer.domElement;canvas.className='duel-objects-3d';canvas.setAttribute('aria-hidden','true');root.append(canvas);
   const pmrem=new T.PMREMGenerator(renderer),room=new RoomEnvironment(),environment=pmrem.fromScene(room,.04);room.dispose();pmrem.dispose();
+  const flightScene=new T.Scene();
+  flightRenderer.setPixelRatio(Math.min(devicePixelRatio||1,2));flightRenderer.setClearColor(0,0);flightRenderer.toneMapping=T.NoToneMapping;
+  const flightCanvas=flightRenderer.domElement;flightCanvas.className='board-flight-canvas';flightCanvas.setAttribute('aria-hidden','true');document.body.append(flightCanvas);
+  flightScene.add(new T.AmbientLight(0xffffff,1.5));
   const scene=new T.Scene();scene.environment=environment.texture;scene.environmentIntensity=.6;
   scene.add(new T.HemisphereLight(0xf7f3eb,0x39465d,1.25));
   const keyLight=new T.DirectionalLight(0xfff2da,2.2);keyLight.castShadow=true;keyLight.shadow.mapSize.set(2048,2048);keyLight.shadow.bias=-.0002;keyLight.shadow.normalBias=.35;keyLight.shadow.autoUpdate=false;scene.add(keyLight);
   const fill=new T.DirectionalLight(0xbbdfff,.65);fill.position.set(700,500,-700);scene.add(fill);
   const camera=new T.PerspectiveCamera();const table=createDuelTable(root,scene);
-  let dead=false,dirty=true,frame=0,last=0,width=0,height=0;
+  let dead=false,dirty=true,flightActive=false,frame=0,last=0,width=0,height=0;
   const furniture=loadLibraryAssets(()=>{dirty=true;});
-  const surfaces=new Map<string,T.Texture>();
-  const surfaceKey=(el:HTMLElement)=>{const card=el.querySelector<HTMLElement>('.pile-print .card');return `${el.dataset.sleeve}:${card?.dataset.cardId}:${card?.textContent}`;};
   const items=new Map<string,Item>(),textures=new Map<string,T.Texture>();const loader=new T.TextureLoader();
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   function texture(url:string){let t=textures.get(url);if(!t){t=loader.load(url);t.colorSpace=T.SRGBColorSpace;t.anisotropy=4;textures.set(url,t);}return t;}
@@ -41,31 +44,21 @@ export function mountDuelScene(root:HTMLElement):()=>void {
       if((market&&!furniture.has('market'))||(supply&&!furniture.has('supply')))continue;
       const key=`${el.dataset.count}:${el.dataset.face}:${el.dataset.sleeve}:${furniture.revision}`;
       el.dataset.furniture=furniture.has(supply?'supply':market?'market':shelf?'shelf':'deck')?'blender':'fallback';
-      let item=items.get(id);if(item?.key===key){item.element=el;continue;}
+      let item=items.get(id);if(item?.key===key){item.element=el;if(shelf){const print=el.querySelector<HTMLElement>('.pile-print .card');el.dataset.surfaceReady=String(!!print);el.dataset.surfaceCard=print?.dataset.cardId||'';}continue;}
       if(item)removeItem(item);
       const group=new T.Group();scene.add(group);item={group,key,element:el,market,supply};items.set(id,item);
       if(market||supply)group.add(furniture.clone(supply?'supply':'market')!);
       else{
         const count=Number(el.dataset.count)||0;item.count=count;
-        item.pile=makePile(count,shelf,texture(el.dataset.sleeve!),shelf?surfaces.get(surfaceKey(el)):undefined,furniture.clone(shelf?'shelf':'deck'));group.add(item.pile.group);
+        item.pile=makePile(count,shelf,texture(el.dataset.sleeve!),undefined,furniture.clone(shelf?'shelf':'deck'));group.add(item.pile.group);
         const print=el.querySelector<HTMLElement>('.pile-print .card');
-        if(shelf){el.dataset.surfaceReady=String(surfaces.has(surfaceKey(el)));el.dataset.surfaceCard=print?.dataset.cardId||'';}
-        if(shelf&&count&&print&&!surfaces.has(surfaceKey(el))){const owner=item;void capturePileSurface(print,el.dataset.sleeve!).then(surface=>{
-          if(dead||items.get(el.id)!==owner||!surface.face)return;
-          const map=new T.CanvasTexture(surface.face);map.colorSpace=T.SRGBColorSpace;map.anisotropy=4;
-          surfaces.set(surfaceKey(el),map);dirty=true;
-          // Rebuild once with the padded full frame, including the protruding seals.
-          owner.key='surface-ready';
-
-        }).catch(()=>{});}
+        if(shelf){el.dataset.surfaceReady=String(!!print);el.dataset.surfaceCard=print?.dataset.cardId||'';}
       }
     }
     const used=new Set(elements.flatMap(el=>[el.dataset.sleeve,el.dataset.face]).filter(Boolean));for(const [url,map] of textures)if(!used.has(url)){map.dispose();textures.delete(url);}
-    const activeSurfaces=new Set(elements.map(surfaceKey));
-    for(const [key,map] of surfaces)if(surfaces.size>24&&!activeSurfaces.has(key)){map.dispose();surfaces.delete(key);}
     projectBoardDOM(root);keyLight.shadow.needsUpdate=true;
   }
-  const motion=installSceneMotion(root,scene,items,texture,refresh,surfaces,surfaceKey);
+  const motion=installSceneMotion(root,flightScene,items,texture,refresh);
   const observer=new MutationObserver(()=>{dirty=true;});observer.observe(root,{childList:true,subtree:true,attributes:true,attributeFilter:['class','data-count','data-sleeve','data-face']});
   const onLayout=()=>{dirty=true;};window.addEventListener('lore:layout',onLayout);
   const dustScene=new T.Scene(), dustCamera=new T.PerspectiveCamera(45,1,1,4000);
@@ -94,7 +87,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   function render(now:number):void {
     if(dead)return;frame=requestAnimationFrame(render);if(document.hidden||now-last<16)return;last=now;
     if(!root.isConnected){dispose();return;}
-    if(width!==innerWidth||height!==innerHeight){width=innerWidth;height=innerHeight;renderer.setSize(width,height);dirty=true;}
+    if(width!==innerWidth||height!==innerHeight){width=innerWidth;height=innerHeight;renderer.setSize(width,height);flightRenderer.setSize(width,height);dirty=true;}
     if(dirty){refresh();dirty=false;}
     const {focal,angle,cx,cy}=boardLens(width,height),unit=cardUnit(root);
     // Pixel-space world: keep the near plane close enough to resolve thin card stock.
@@ -114,6 +107,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
         item.group.scale.set((r.width+12)/6,unit,(r.height+8)/1.1);
       }else if(item.pile){
         item.pile.cards.visible=!item.element.classList.contains('is-shuffling');
+        if(item.element.classList.contains('pile--shelf')&&item.element.querySelector('.pile-print')){const front=item.pile.top.getObjectByName('stock-front');if(front)front.visible=false;}
         if(item.entered){const t=clamp((now-item.entered)/480);item.pile.top.position.y=item.pile.top.userData.restY+.3*(1-t)**3;keyLight.shadow.needsUpdate=true;if(t===1)item.entered=undefined;}
         item.group.updateMatrixWorld(true);
         const point=item.pile.top.getWorldPosition(new T.Vector3()).project(camera),screen={x:(point.x+1)*width/2,y:(1-point.y)*height/2};
@@ -149,12 +143,15 @@ export function mountDuelScene(root:HTMLElement):()=>void {
       }
       renderer.render(dustScene,dustCamera);
     }
+    const active=flightScene.children.length>1;
+    if(active||flightActive)flightRenderer.render(flightScene,camera);
+    flightActive=active;
     if(!root.classList.contains('duel-webgl'))root.classList.add('duel-webgl');
   }
-  const lost=(event:Event)=>{event.preventDefault();dispose();};canvas.addEventListener('webglcontextlost',lost);
+  const lost=(event:Event)=>{event.preventDefault();dispose();};canvas.addEventListener('webglcontextlost',lost);flightCanvas.addEventListener('webglcontextlost',lost);
   function dispose(){
-    if(dead)return;dead=true;motion.dispose();cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:summon-impact',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);
-    items.forEach(removeItem);surfaces.forEach(t=>t.dispose());textures.forEach(t=>t.dispose());table.dispose();furniture.dispose();keyLight.shadow.dispose();disposeObject(dustScene);dustMap.dispose();environment.dispose();renderer.dispose();canvas.remove();
+    if(dead)return;dead=true;motion.dispose();cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:summon-impact',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);flightCanvas.removeEventListener('webglcontextlost',lost);
+    items.forEach(removeItem);textures.forEach(t=>t.dispose());table.dispose();furniture.dispose();keyLight.shadow.dispose();disposeObject(dustScene);dustMap.dispose();environment.dispose();renderer.dispose();canvas.remove();flightRenderer.dispose();flightCanvas.remove();
     root.querySelectorAll<HTMLElement>('.pile').forEach(el=>{el.classList.remove('pile--3d-ready');delete el.dataset.furniture;el.querySelector('.pile-draw-anchor')?.remove();});clearBoardProjection(root);root.classList.remove('duel-webgl','market-model-ready','supply-model-ready');
   }
   frame=requestAnimationFrame(render);return dispose;

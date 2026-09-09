@@ -26,6 +26,7 @@ export function screenToBoard(x:number,y:number,elevation=0) {
 }
 export function cardUnit(root:HTMLElement):number {return parseFloat(getComputedStyle(root).getPropertyValue('--card-w'))||60;}
 export function projectBoardDOM(root:HTMLElement):void {
+  if(typeof DOMMatrix==='undefined')return;
   const unit=cardUnit(root);
   const planes=[...root.querySelectorAll<HTMLElement>('.zone-row,.market-counter,.mid-aside,.pile,.rift-button')].map(element=>({element,rect:layoutRect(element),elevation:(element.classList.contains('market-counter')?unit*.22:0)+(Number(element.dataset.introHeight)||0)}));
   for(const {element,rect,elevation} of planes){
@@ -38,6 +39,7 @@ export function projectBoardDOM(root:HTMLElement):void {
     element.dataset.boardPlane=String(unit*.30);element.style.transformOrigin='0 0';
     element.style.transform=`translateZ(${unit*.08}px)`;
   });
+  root.querySelectorAll<HTMLElement>('.pile--shelf').forEach(el=>{const n=Number(el.dataset.count)||0;el.style.setProperty('--shelf-elevation',`${unit*(.126+(n>1?Math.min(n,40)*.004:0))+.0075*unit}px`);});
   root.classList.add('board-projected');
 }
 export function clearBoardProjection(root:HTMLElement):void {

@@ -6,7 +6,7 @@ import {capturePileSurface} from './cardSurface';
 type Item={group:T.Group;element:HTMLElement;pile?:PileModel;market:boolean;supply:boolean};
 const sat=(v:number)=>Math.max(0,Math.min(1,v));
 const smooth=(v:number)=>{v=sat(v);return v*v*(3-2*v);};
-export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<string,Item>,texture:(url:string)=>T.Texture,refresh:()=>void,surfaces:Map<string,T.Texture>,surfaceKey:(e:HTMLElement)=>string){
+export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<string,Item>,texture:(url:string)=>T.Texture,refresh:()=>void){
   let disposed=false;
   const tasks=new Set<(now:number)=>void>(),cancels=new Set<()=>void>();
   const dust=(el:HTMLElement)=>window.dispatchEvent(new CustomEvent('lore:summon-dust',{detail:el.getBoundingClientRect()}));
@@ -26,9 +26,9 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       const item=items.get(req.target.id);if(!item?.pile)return false;
       const count=Number(req.target.dataset.count)||0;
       const capture=await capturePileSurface(req.card,req.target.dataset.sleeve!);if(req.signal.aborted)return false;
-      const map=new T.CanvasTexture(capture.face!);map.colorSpace=T.SRGBColorSpace;map.anisotropy=4;
+      const map=new T.CanvasTexture(capture.face!);map.colorSpace=T.SRGBColorSpace;map.anisotropy=8;
       const moving=cardStock(texture(req.target.dataset.sleeve!),map);scene.add(moving);
-      const from=req.card.getBoundingClientRect(),r=layoutRect(req.target),height=unit*(.126+Math.min(count+1,40)*.004);
+      const from=req.card.getBoundingClientRect(),r=layoutRect(req.target),height=unit*(.126+(count===0?0:Math.min(count+1,40)*.004));
       const purchase=req.kind==='purchase',origin=purchase?layoutRect(req.source):null;
       const elevation=purchase?unit*(req.source.closest('#supplyMarket')?.30:.22)+unit*.0075:unit*4;
       const start=origin?{x:origin.left+origin.width/2,y:origin.top+origin.height/2}:screenToBoard(from.left+from.width/2,from.top+from.height/2,elevation);
@@ -40,14 +40,15 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
         moving.position.set(start.x-cx+(r.left+r.width/2-start.x)*p,elevation+(height-elevation)*p+lift,start.y-cy+(r.top+r.height/2-start.y)*p);
         moving.scale.setScalar(size+(unit-size)*p);moving.rotation.set(-Math.PI/2+(purchase?Math.sin(Math.PI*t)*.07:angle*(1-p)),0,0);
       });
-      if(disposed||req.signal.aborted||!req.target.isConnected){map.dispose();return false;}
+      if(disposed||req.signal.aborted||!req.target.isConnected){return false;}
       const print=document.createElement('div');print.className='pile-print';print.setAttribute('aria-hidden','true');
-      const copy=req.card.cloneNode(true) as HTMLElement;copy.removeAttribute('style');copy.classList.remove('fx-card-flight','cast-reveal');print.append(copy);
+      const copy=req.card.cloneNode(true) as HTMLElement;copy.removeAttribute('style');copy.classList.remove('fx-card-flight','cast-reveal');copy.querySelectorAll<HTMLElement>('[style]').forEach(el=>{if(el.style.fontSize.endsWith('px'))el.style.fontSize=`${parseFloat(el.style.fontSize)*unit/(req.card.offsetWidth||unit)}px`;});print.append(copy);
       req.target.querySelector('.pile-print')?.remove();req.target.append(print);
       req.target.dataset.face=copy.querySelector<HTMLImageElement>('.card-art img')?.src||req.target.dataset.sleeve!;
       req.target.dataset.count=String(count+1);const counter=req.target.querySelector('.pile-count');if(counter)counter.textContent=String(count+1);
-      const key=surfaceKey(req.target);if(!surfaces.has(key))surfaces.set(key,map);else map.dispose();refresh();dust(req.target);
-      }finally{delete req.target.dataset.motion;dispose(moving);req.card.style.visibility='';}
+      refresh();
+      await timeline(34,req.signal,()=>{});if(!req.signal.aborted)dust(req.target);
+      }finally{delete req.target.dataset.motion;dispose(moving);map.dispose();req.card.style.visibility='';}
       return true;
     }
     if(req.kind==='shuffle'){
@@ -74,6 +75,7 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       });
       if(disposed||req.signal.aborted)return false;
       req.target.dataset.count=String(req.count);req.source.dataset.count='0';
+      req.source.querySelector('.pile-print')?.remove();delete req.source.dataset.face;
       for(const e of [req.source,req.target]){const c=e.querySelector('.pile-count');if(c)c.textContent=e.dataset.count!;}
       refresh();dust(req.target);
       }finally{cards.forEach(dispose);req.source.classList.remove('is-shuffling');req.target.classList.remove('is-shuffling');delete root.dataset.shufflePhase;delete root.dataset.shuffleRound;}
