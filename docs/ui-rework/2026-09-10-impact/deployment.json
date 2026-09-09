@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-09-09T22:33:04.840928+00:00",
+  "environment": "staging",
+  "url": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "database": "lore-db-staging",
+  "sourceCommit": "e962659e2ac5829cc82aa7e2b73f3dc021368044",
+  "branch": "codex/duel-impact-20260910",
+  "versionId": "b56ce138-c596-4ce6-a6f5-e411d38a7065",
+  "assetHashesMatched": 50,
+  "assetHashesChecked": 50,
+  "productionDeployed": false,
+  "mainMerged": false,
+  "databaseMigrations": false,
+  "gameRulesChanged": false,
+  "onlineMatchRechecked": false,
+  "checks": [
+    "client/server typecheck",
+    "client build and design guard",
+    "impact browser including consecutive purchase cancellation",
+    "continuity browser including mobile and reduced motion",
+    "git diff whitespace check",
+    "deployed asset SHA256 equality"
+  ]
+}
