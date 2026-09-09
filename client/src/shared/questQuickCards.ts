@@ -8,8 +8,8 @@ const quick = (id: string, cost: number, nameJa: string, textJa: string): CardDe
 });
 
 export const QUEST_QUICK_CARDS: CardDef[] = [
-  quest('Q_RIFT', 2, 'リフト研究', '【条件】自分のカードを10枚ゲームから除外する。【報酬】自分のカルを7枚ゲームから除外する。', 'exile', 10),
-  quest('Q_BRAND', 2, '反撃の狼煙', '【条件】相手から累計40ダメージを受ける。【報酬】相手プレイヤーに烙印カウンターを付与する。', 'opponentDamage', 40),
+  quest('Q_RIFT', 2, 'リフト研究', '【条件】自分のカードを10枚ゲームから除外する。【報酬】新しいカル7枚を生成して自分のリフトへ追加する。', 'exile', 10),
+  { ...quest('Q_BRAND', 2, '反撃の狼煙', '【条件】相手から累計40ダメージを受ける。【報酬】相手プレイヤーに烙印カウンターを1個付与する。', 'opponentDamage', 40), val: 1 },
   quest('Q_TORI', 2, '精霊 - トリ', '【条件】自分の場にモンスターがいない状態で、自分のターンを5回終了する。【報酬】自分の最大体力+30。', 'emptyTurn', 5),
   quest('Q_WINTER', 2, '精霊 - ウィンター', '【条件】自分の最大体力を累計30上昇させる。【報酬】自分の最大マナ+2。', 'maxHp', 30),
   quest('Q_TRIBE', 3, '一族の誓い', '【条件】種族モンスターを6回召喚する。【報酬】自分の場の種族モンスターと同じ種族で、場にいない異なるモンスター1体を選び召喚する。', 'tribeSummon', 6),
@@ -31,8 +31,8 @@ export const QUEST_QUICK_CARDS: CardDef[] = [
 
 // Keep authored text in all three languages; no machine-generated fallback in the live catalog.
 const LOCALIZED: Record<string, [string, string, string, string]> = {
-  Q_RIFT: ['리프트 연구', '【조건】자신 카드 10장 게임에서 제외. 【보상】자신의 컬 7장 게임에서 제외.', 'Rift Research', 'Quest: Exile 10 of your cards. Reward: Exile 7 of your Culls.'],
-  Q_BRAND: ['반격의 봉화', '【조건】상대에게 누적 40 데미지를 받는다. 【보상】상대 플레이어에게 낙인 카운터 부여.', 'Signal of Retaliation', 'Quest: Take 40 damage from your opponent. Reward: Give the opponent Brand counters.'],
+  Q_RIFT: ['리프트 연구', '【조건】자신 카드 10장 게임에서 제외. 【보상】새로운 컬 7장을 생성해 자신 리프트에 추가.', 'Rift Research', 'Quest: Exile 10 of your cards. Reward: Create 7 new Culls in your Rift.'],
+  Q_BRAND: ['반격의 봉화', '【조건】상대에게 누적 40 데미지를 받는다. 【보상】상대 플레이어에게 낙인 카운터 1개 부여.', 'Signal of Retaliation', 'Quest: Take 40 damage from your opponent. Reward: Give the opponent 1 Brand counter.'],
   Q_TORI: ['정령 - 토리', '【조건】자신 필드에 몬스터가 없는 상태로 자신의 턴 5회 종료. 【보상】자신 최대 체력 +30.', 'Spirit - Tori', 'Quest: End 5 of your turns with no monsters on your field. Reward: Your max HP +30.'],
   Q_WINTER: ['정령 - 윈터', '【조건】자신 최대 체력을 누적 30 올린다. 【보상】자신 최대 마나 +2.', 'Spirit - Winter', 'Quest: Increase your max HP by a total of 30. Reward: Your max mana +2.'],
   Q_TRIBE: ['일족의 맹세', '【조건】종족 몬스터 6회 소환. 【보상】자신 필드의 종족과 같고 필드에 없는 다른 몬스터 1체 선택 소환.', 'Clan Oath', 'Quest: Summon tribal monsters 6 times. Reward: Choose and summon 1 missing monster of a tribe on your field.'],

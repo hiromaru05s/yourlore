@@ -4751,13 +4751,11 @@ function resolveQuests(g: GameState, ctx: Ctx, automaticOnly = false): void {
       if (g.over || g.pending) return;
       if (!q.card.quest || q.progress < q.card.quest.target) continue;
       if (automaticOnly && (q.card.id === "Q_TRIBE" || q.card.id === "Q_ASSASSIN")) continue;
-      // Counter quantity awaits the owner's specification; never invent a reward.
-      if (q.card.id === 'Q_BRAND' && q.card.val == null) continue;
       p.quests!.splice(p.quests!.indexOf(q), 1);
       rmz(p).push(q.card);
       ctx.log(`${cn(q.card)} クエスト達成！`, `${cn(q.card)} クエスト達成！`);
       switch (q.card.id) {
-        case 'Q_RIFT': exileCulls(p, 7); break;
+        case 'Q_RIFT': for (let i = 0; i < 7; i++) rmz(p).push(starter(g, 'STARTER_TRASH')); break;
         case 'Q_BRAND': { const o = g.players[1 - side(g, p)]; o.brand = (o.brand ?? 0) + q.card.val!; break; }
         case 'Q_TORI': addMaxHp(p, 30); break;
         case 'Q_WINTER': p.maxMana += 2; break;
