@@ -7,6 +7,7 @@ import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES,
 import { cardEl, cardRulesEl, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
 import { t, getLang, cardText, cardName } from "../i18n";
 
+import { moveOnBoard } from "./boardMotion";
 import { projectedPlacement } from "./boardProjection";
 
 export type ViewSide = "me" | "opp";
@@ -180,7 +181,9 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
         const duration=enchantHasTurnCountdown(card)?`<span class="buff-duration"><span>${getLang()==='ja'?'残り':''}${card.val??1}</span></span>`:'<img class="buff-infinity" src="/art/biblion/modular/infinity.png" alt="">';
         return await flyIntoSlot(node,target,card.t==='quest'?questTile(card):enchantmentTile(card,duration));
       }
-    } else if (to) await landCard(node, to, true);
+    } else if (dest === "discard") await landOnShelf(node,side);
+    else if(dest === "vanish") await absorbIntoRift(node,side);
+    else if (to) await landCard(node, to, true);
     if (dest === "discard") pileFlash(discId(side));
   } finally { node.remove(); }
   return null;
@@ -227,9 +230,9 @@ export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | n
   await raf();
   node.style.transition = `transform .26s ${EASE}`; node.style.transform = "scale(1.4)";
   await wait(320);
-  node.style.transition = `left .5s ${EASE}, top .5s ${EASE}, transform .5s ${EASE}, opacity .5s`;
-  node.style.left = to.left + "px"; node.style.top = to.top + "px"; node.style.transform = "scale(.45)"; node.style.opacity = "0";
-  await wait(520); pileFlash(destination); node.remove();
+  try { if(card.quick)await absorbIntoRift(node,side);else await landOnShelf(node,side); }
+  finally {node.remove();}
+
 }
 
 function byUid(uid: string): HTMLElement | null {
@@ -290,7 +293,7 @@ export async function attackStrike(uid: string, targetUid: string | null, defend
   const n = byUid(uid);
   if (!n) return;
   const direct = !targetUid;
-  const tEl: Element | null = targetUid ? byUid(targetUid) : document.getElementById("hpbar-" + defender);
+  const tEl: Element | null = targetUid ? byUid(targetUid) : document.querySelector(defender === "me" ? "#portraitMe .avatar" : "#portraitOpp .avatar");
   const to = tEl ? tEl.getBoundingClientRect() : null;
   const from = n.getBoundingClientRect();
   if (!to) { lunge(uid, defender === "opp" ? "up" : "down"); await wait(460); onImpact?.(); return; }
@@ -303,13 +306,18 @@ export async function attackStrike(uid: string, targetUid: string | null, defend
   const dur = direct ? 660 : 570;
 
   n.classList.add("striking");
-  const anim = n.animate([
-    { transform: "translate(0,0) scale(1)", easing: "cubic-bezier(.5,0,.8,.4)" },
-    { transform: `translate(${-cx * 0.1}px,${-cy * 0.1}px) scale(1.09) rotate(${cx > 0 ? -3 : 3}deg)`, offset: 0.32, easing: "cubic-bezier(.7,0,.85,.4)" }, // wind-up
-    { transform: `translate(${dx}px,${dy}px) scale(1.14)`, offset: 0.6 },  // charge!
-    { transform: `translate(${dx * 0.96}px,${dy * 0.96}px) scale(1.12)`, offset: 0.7, easing: "cubic-bezier(.2,.6,.4,1)" }, // recoil hold
-    { transform: "translate(0,0) scale(1)" },                              // return
-  ], { duration: dur, easing: "linear", fill: "none" });
+  const moving=floatAt(n.cloneNode(true) as HTMLElement,{left:0,top:0});moving.removeAttribute('data-uid');moving.classList.add('attack-flight');
+  const w=n.offsetWidth,h=n.offsetHeight,start=fieldPlacement(n,w,h);
+  moving.style.width=`${w}px`;moving.style.height=`${h}px`;moving.style.setProperty('--cw',`${w}px`);moving.style.setProperty('--ch',`${h}px`);moving.style.transformOrigin='0 0';
+  const pose=(x:number,y:number)=>new DOMMatrix().translate(x,y).multiply(start).toString();
+  n.style.visibility='hidden';moving.style.visibility='visible';
+  const anim = moving.animate([
+    { transform:pose(0,0), easing:"cubic-bezier(.5,0,.8,.4)" },
+    { transform:pose(-cx*.1,-cy*.1), offset:.32, easing:"cubic-bezier(.7,0,.85,.4)" },
+    { transform:pose(dx,dy),offset:.6 },
+    { transform:pose(dx*.96,dy*.96),offset:.7,easing:"cubic-bezier(.2,.6,.4,1)" },
+    { transform:pose(0,0) },
+  ], {duration:dur,easing:'linear',fill:'none'});
 
   await wait(dur * 0.6); // ...until the moment of contact
   impactBurst(to.left + to.width / 2, to.top + to.height / 2, direct);
@@ -317,8 +325,7 @@ export async function attackStrike(uid: string, targetUid: string | null, defend
   onImpact?.();
   // the return travel is decorative — wait skippably instead of on anim.finished
   await wait(dur * 0.4);
-  if (fxSkip) { try { anim.finish(); } catch { /* already done */ } }
-  n.classList.remove("striking");
+  anim.cancel();moving.remove();n.style.visibility='';n.classList.remove('striking');
 }
 
 /** Radial flash + flying sparks at the point of impact. */
@@ -393,9 +400,7 @@ export async function animateReshuffle(side:ViewSide,count:number):Promise<void>
   fxWaiters.add(cancel);window.addEventListener('resize',cancel,{once:true});document.addEventListener('visibilitychange',cancel,{once:true});
   const deadline=setTimeout(cancel,4300);
   try {
-    await Promise.race([cancelled,import('./paperShuffle').then(async({shufflePaperCards})=>{
-      if(!abort.signal.aborted&&!fxSkip)await shufflePaperCards(shelf,deck,count,abort.signal);
-    })]);
+    await Promise.race([cancelled,moveOnBoard({kind:'shuffle',source:shelf,target:deck,count,signal:abort.signal})]);
   } catch { /* Keep the state pipeline alive on an unavailable GPU/module. */ }
   finally {
     clearTimeout(deadline);cancel();fxWaiters.delete(cancel);
@@ -431,7 +436,7 @@ export async function animateDraw(handEl: HTMLElement | null, count: number, sid
     await Promise.race([cancelled, import('./paperDraw').then(async ({ drawPaperCards }) => {
       if (abort.signal.aborted || fxSkip || !handEl.isConnected) return;
       await drawPaperCards({ cards: incoming, origin, sleeve: deck.dataset.sleeve || FRAME_BACK,
-        reveal: side === 'me', signal: abort.signal, onLand: restore });
+        reveal: side === 'me', signal: abort.signal, onLand: node=>{restore(node);if(deck.dataset.openingCount!=null){deck.dataset.count=String(Math.max(Number(deck.dataset.openingCount),Number(deck.dataset.count)-1));const c=deck.querySelector('.pile-count');if(c)c.textContent=deck.dataset.count;}} });
     })]);
   } catch { /* Unsupported GPU or unavailable module: reveal the resting cards. */ }
   finally {
@@ -439,6 +444,7 @@ export async function animateDraw(handEl: HTMLElement | null, count: number, sid
     window.removeEventListener('resize', cancel);
     document.removeEventListener('visibilitychange', cancel);
     incoming.forEach(restore);
+    if(deck.dataset.openingCount!=null){deck.dataset.count=deck.dataset.openingCount;delete deck.dataset.openingCount;const c=deck.querySelector('.pile-count');if(c)c.textContent=deck.dataset.count;}
   }
 }
 
@@ -857,4 +863,48 @@ export function reviewFab(onClick: () => void): void {
 }
 export function removeReviewFab(): void {
   document.getElementById("reviewFab")?.remove();
+}
+
+/** Every temporary renderer has one cancellation path, including tab/viewport changes. */
+async function boardMotionScope(run:(signal:AbortSignal)=>Promise<boolean>,deadline=5000):Promise<boolean>{
+  const abort=new AbortController(),cancel=()=>abort.abort();fxWaiters.add(cancel);
+  window.addEventListener('resize',cancel);document.addEventListener('visibilitychange',cancel);
+  const timer=setTimeout(cancel,deadline);
+  try{return await Promise.race([run(abort.signal),new Promise<boolean>(r=>abort.signal.addEventListener('abort',()=>r(false),{once:true}))]);}
+  finally{clearTimeout(timer);cancel();fxWaiters.delete(cancel);window.removeEventListener('resize',cancel);document.removeEventListener('visibilitychange',cancel);}
+}
+async function landOnShelf(node:HTMLElement,side:ViewSide):Promise<void>{
+  const target=document.getElementById(discId(side));if(!target||fxSkip)return;
+  const moved=await boardMotionScope(signal=>moveOnBoard({kind:'arrival',target,card:node,signal}));
+  if(!moved&&!fxSkip){
+    const r=(target.querySelector('.pile-card')||target).getBoundingClientRect();await landCard(node,r);
+    // Fallback stays visible until the authoritative board replaces it.
+    const copy=node.cloneNode(true) as HTMLElement;copy.classList.add('pile-arrival-fallback');document.body.append(copy);
+    const observer=new MutationObserver(()=>{if(!target.isConnected){copy.remove();observer.disconnect();}});
+    observer.observe(document.body,{subtree:true,childList:true});setTimeout(()=>{copy.remove();observer.disconnect();},5000);
+  }
+}
+export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<void>{
+  const target=document.getElementById(side==='me'?'rift-me':'rift-opp');if(!target||fxSkip)return;
+  const a=node.getBoundingClientRect(),b=target.getBoundingClientRect();
+  const x=b.left+b.width/2,y=b.top+b.height/2;
+  window.dispatchEvent(new CustomEvent('lore:buff-flow',{detail:{from:a,to:b}}));
+  target.classList.add('is-absorbing');node.style.transformOrigin='center';
+  const w=node.offsetWidth||a.width,h=node.offsetHeight||a.height;
+  const start=node.style.transform.startsWith('matrix')?new DOMMatrix(node.style.transform):new DOMMatrix().translate(a.left,a.top).scale(a.width/w,a.height/h);
+  node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transition='none';
+  const end=new DOMMatrix().translate(x,y).rotate(0,72,-14).scale(.015,.2);
+  const motion=node.animate([{transform:start.toString(),opacity:1,filter:'brightness(1)'},{offset:.55,opacity:1,filter:'brightness(1.35)'},{transform:end.toString(),opacity:0,filter:'brightness(1.8) blur(2px)'}],{duration:760,easing:'cubic-bezier(.55,.02,.8,.45)',fill:'forwards'});
+  try{await wait(matchMedia('(prefers-reduced-motion:reduce)').matches?80:760);}finally{motion.cancel();target.classList.remove('is-absorbing');}
+}
+export async function exileCard(card:CardInst,side:ViewSide,source?:HTMLElement|null):Promise<void>{
+  const r=source?.getBoundingClientRect()||rectOf('#'+discId(side));if(!r)return;
+  const node=floatAt(source?source.cloneNode(true) as HTMLElement:cardEl(card,{size:'hand'}),r);node.style.visibility='visible';if(source){node.style.width=`${source.offsetWidth}px`;node.style.height=`${source.offsetHeight}px`;node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transform=fieldPlacement(source,source.offsetWidth,source.offsetHeight).toString();source.style.visibility='hidden';}
+  try{await absorbIntoRift(node,side);}finally{node.remove();if(source)source.style.visibility='';}
+}
+export async function openingBoard():Promise<void>{
+  if(fxSkip||typeof WebGL2RenderingContext==='undefined')return;
+  // Scene and GLBs load asynchronously when the game screen mounts.
+  for(let i=0;i<40&&!document.querySelector('.supply-model-ready');i++){await wait(50);if(fxSkip)return;}
+  await boardMotionScope(signal=>moveOnBoard({kind:'opening',signal}),4500);
 }

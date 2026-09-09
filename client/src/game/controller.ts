@@ -276,7 +276,9 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "destroy": {
           const gh = ghosts.get(e.uid);
-          if (gh) { await A.ghostDie(gh.el, gh.side); ghosts.delete(e.uid); }
+          const exiled=res.state.players[e.player].removed?.find(c=>c.uid===e.uid);
+          if(exiled){await A.exileCard(exiled,sideOf(e.player),gh?.el??document.querySelector<HTMLElement>(`.card[data-uid="${e.uid}"]`));gh?.el.remove();ghosts.delete(e.uid);}
+          else if (gh) { await A.ghostDie(gh.el, gh.side); ghosts.delete(e.uid); }
           else await A.destroyAnim(e.uid, sideOf(e.player));
           fieldCount[e.player] = Math.max(0, fieldCount[e.player] - 1);
           break;
@@ -358,6 +360,19 @@ export abstract class BaseController implements BoardHandlers {
         }
         default:
           break; // log / turnHeader / win / needTarget — no board animation
+      }
+    }
+
+    // Public removed-zone deltas cover void exits, culls and effect-driven exile.
+    const animatedIds=new Map<string,number>();
+    for(const e of events)if(e.type==='playSpell'&&e.dest==='vanish'||e.type==='buy'&&DB[e.id]?.quick)animatedIds.set(e.id,(animatedIds.get(e.id)||0)+1);
+    const destroyed=new Set(events.filter(e=>e.type==='destroy').map(e=>e.uid));
+    for(const pl of [0,1] as Side[]){
+      const old=new Set((prev.players[pl].removed??[]).map(c=>c.uid));
+      for(const c of res.state.players[pl].removed??[]){
+        if(old.has(c.uid)||destroyed.has(c.uid))continue;
+        const n=animatedIds.get(c.id)||0;if(n){animatedIds.set(c.id,n-1);continue;}
+        await A.exileCard(c,sideOf(pl),document.querySelector<HTMLElement>(`.card[data-uid="${c.uid}"]`));
       }
     }
 
@@ -443,7 +458,7 @@ export abstract class BaseController implements BoardHandlers {
       this.showCoinToss(this.state.cur);
       return;
     }
-    if (document.querySelector('.cointoss-ov') && !this.state.over) return;
+    if (document.querySelector('.cointoss-ov,.opening-hands') && !this.state.over) return;
     // max-mana growth cue (mid-turn gains too)
     const mm = this.state?.players?.[this.you]?.maxMana ?? 0;
     if (this.prevMaxMana && mm > this.prevMaxMana) sfx("mana");
@@ -656,7 +671,11 @@ export abstract class BaseController implements BoardHandlers {
 
   /** Coin-toss reveal at game start: a two-headed coin — each face is a player's
       profile avatar — flips and lands on the face of whoever goes first. */
-  private showCoinToss(firstSide: Side): void {
+  private async showCoinToss(firstSide: Side): Promise<void> {
+    const game=document.querySelector<HTMLElement>(".game");game?.classList.add("opening-hands","awaiting-board");
+    await A.openingBoard();
+    game?.classList.remove("awaiting-board");
+    if(this.dead){game?.classList.remove("opening-hands");return;}
     const iAmFirst = firstSide === this.you;
     const firstName = firstSide === this.you ? COIN_ME.name : COIN_OPP.name;
     const heads = iAmFirst; // heads face = ME; land on heads if I'm first, else on OPP (tails)
@@ -680,16 +699,19 @@ export abstract class BaseController implements BoardHandlers {
       </div>`;
     document.body.appendChild(ov);
     sfx("coin");
-    setTimeout(() => sfx(iAmFirst ? "turn" : "pop"), 900);
+    setTimeout(() => sfx(iAmFirst ? "turn" : "pop"), 1700);
     setTimeout(() => { ov.classList.add("out"); setTimeout(async () => {
       ov.remove();
       if (this.dead || this.state.over) return;
       A.turnBanner(this.state.cur === this.you, this.state.turn);
       try {
-        if (this.state.turn === 1) await A.animateDraw(document.getElementById(firstSide === this.you ? 'hand' : 'oppHand'), 3, firstSide === this.you ? 'me' : 'opp');
+        if (this.state.turn === 1) {
+          game?.classList.remove('opening-hands');
+          await Promise.all([A.animateDraw(document.getElementById('hand'),3,'me'),A.animateDraw(document.getElementById('oppHand'),3,'opp')]);
+        }
       } catch (error) { console.error('[opening draw]', error); }
       if (!this.dead) this.afterApply({ state: this.state, events: [] });
-    }, 350); }, 2200);
+    }, 350); }, 2800);
   }
 
   private turnToast(text: string, size: "big" | "small", ms: number): void {

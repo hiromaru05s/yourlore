@@ -6,7 +6,7 @@ import {build} from 'esbuild';
 const origin='https://test.yourlore.xyz';
 const users=JSON.parse(await fs.readFile(process.env.LORE_QA_AUTH_FILE,'utf8'));
 assert.equal(users.length,2);assert(users.every(u=>u.id.startsWith('qa-release-')));
-const output='docs/ui-rework/2026-09-09-release';
+const output=process.env.LORE_TEST_OUTPUT||'docs/ui-rework/2026-09-09-release';
 await build({stdin:{contents:"export {greedyDecide,candidates} from './client/src/shared/bot';export {actingSide} from './client/src/shared/engine';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:'/tmp/lore-online-release-bot.mjs'});
 const {greedyDecide,candidates,actingSide}=await import('/tmp/lore-online-release-bot.mjs');
 const api=async(i,path,body)=>{const res=await fetch(origin+'/api'+path,{method:body?'POST':'GET',headers:{'content-type':'application/json',cookie:'lore_session='+users[i].token},body:body?JSON.stringify(body):undefined});assert.equal(res.status,200,path);return res.json();};
@@ -22,6 +22,8 @@ async function connect(i){
 async function until(test,ms=12000){const end=Date.now()+ms;while(!test()){if(Date.now()>end)throw Error('Staging response timeout');await new Promise(r=>setTimeout(r,80));}}
 try{
  await Promise.all([connect(0),connect(1)]);
+ const openingHands=peers.map(p=>p.state.players.map(pl=>pl.hand.length));
+ if(process.env.LORE_EXPECT_OPENING_HANDS)for(const counts of openingHands)assert.deepEqual(counts,[3,3]);
  for(const [i,p]of peers.entries()){
   assert(p.state.players[1-i].hand.every(c=>c.id==='HIDDEN'));assert.equal(p.state.rng,0);assert(p.state.players[i].quests==null||Array.isArray(p.state.players[i].quests));
   assert([...p.state.market,...p.state.players[i].supply].filter(Boolean).every(c=>c.t!=='trap'));
@@ -38,6 +40,6 @@ try{
  }
  if(!peers[0].state.over){const rev=peers[0].revision;peers[0].ws.send(JSON.stringify({type:'action',action:{type:'surrender',player:0}}));await until(()=>peers[0].revision>rev&&peers[0].state.over);}
  assert(peers[0].state.over);assert(peers[0].state.turn>3);assert(events.includes('buy'));assert(events.includes('playSpell'));assert.deepEqual(errors,[]);
- const report={origin,roomId:game.roomId,actions,turn:peers[0].state.turn,reconnected,over:peers[0].state.over,events:[...new Set(events)],errors,checks:['two isolated authenticated users','friendly room creation','live authoritative actions','hidden opponent hand and RNG','public quest arrays','no traps in market','reconnect restores live state','completed match']};
+ const report={origin,openingHands,roomId:game.roomId,actions,turn:peers[0].state.turn,reconnected,over:peers[0].state.over,events:[...new Set(events)],errors,checks:['two isolated authenticated users','friendly room creation','live authoritative actions','hidden opponent hand and RNG','public quest arrays','no traps in market','reconnect restores live state','completed match']};
  await fs.writeFile(output+'/staging-online.json',JSON.stringify(report,null,2));console.log('PASS:',JSON.stringify(report));
 }finally{for(const p of peers)p?.ws.close();}

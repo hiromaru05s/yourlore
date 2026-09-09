@@ -27,7 +27,7 @@ export function screenToBoard(x:number,y:number,elevation=0) {
 export function cardUnit(root:HTMLElement):number {return parseFloat(getComputedStyle(root).getPropertyValue('--card-w'))||60;}
 export function projectBoardDOM(root:HTMLElement):void {
   const unit=cardUnit(root);
-  const planes=[...root.querySelectorAll<HTMLElement>('.zone-row,.market-counter,.mid-aside,.pile,.rift-button')].map(element=>({element,rect:layoutRect(element),elevation:element.classList.contains('market-counter')?unit*.22:0}));
+  const planes=[...root.querySelectorAll<HTMLElement>('.zone-row,.market-counter,.mid-aside,.pile,.rift-button')].map(element=>({element,rect:layoutRect(element),elevation:(element.classList.contains('market-counter')?unit*.22:0)+(Number(element.dataset.introHeight)||0)}));
   for(const {element,rect,elevation} of planes){
     element.dataset.boardPlane=String(elevation);element.style.transformOrigin='0 0';
     element.style.transform=new DOMMatrix().translate(-rect.left,-rect.top).multiply(boardMatrix(rect.left,rect.top,elevation)).toString();

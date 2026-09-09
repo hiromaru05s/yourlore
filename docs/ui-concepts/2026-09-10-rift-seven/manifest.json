@@ -1,0 +1,62 @@
+{
+  "tool": "built-in image_gen",
+  "status": "concepts for selection; current in-game rift unchanged",
+  "concepts": [
+    {
+      "id": "01-silk-seam",
+      "description": "An extremely thin vertical asymmetric slit in space, like a cut in dark silk, delicate silver-blue rim with a tiny muted violet inner light, two tapering curved ends. Restrained elegant minimal silhouette.",
+      "prompt": "Use case: stylized-concept. Asset: one standalone game rift concept PNG for LORE magical library card game. An extremely thin vertical asymmetric slit in space, like a cut in dark silk, delicate silver-blue rim with a tiny muted violet inner light, two tapering curved ends. Restrained elegant minimal silhouette. Centered single isolated subject on a genuinely transparent background, generous transparent margins, square canvas. Polished hand-painted 3D fantasy game VFX asset, readable small UI silhouette, near-static understated energy. No black hole, no vortex, no swirling rings, no round portal, no landscape, no text, no labels, no cards, no border. This is concept 01-silk-seam.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08108-7437-7093-8e62-d318c07e7d8a/exec-afb9339b-b204-484f-9e46-1e636792bd1f.png",
+      "nameJa": "銀糸の裂け目",
+      "output": "client/public/art/biblion/rift-concepts/01-silk-seam.png"
+    },
+    {
+      "id": "02-glass-fracture",
+      "description": "A small diagonal split in reality like a single cracked pane of invisible glass, three delicate angular fissures, transparent beveled refractive edges, pale blue and restrained brass highlights. No surrounding glass sheet.",
+      "prompt": "Use case: stylized-concept. Asset: one standalone game rift concept PNG for LORE magical library card game. A small diagonal split in reality like a single cracked pane of invisible glass, three delicate angular fissures, transparent beveled refractive edges, pale blue and restrained brass highlights. No surrounding glass sheet. Centered single isolated subject on a genuinely transparent background, generous transparent margins, square canvas. Polished hand-painted 3D fantasy game VFX asset, readable small UI silhouette, near-static understated energy. No black hole, no vortex, no swirling rings, no round portal, no landscape, no text, no labels, no cards, no border. This is concept 02-glass-fracture.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08108-7437-7093-8e62-d318c07e7d8a/exec-466f7dda-5ad3-4d34-b267-da4f96cd72d6.png",
+      "nameJa": "硝子の亀裂",
+      "output": "client/public/art/biblion/rift-concepts/02-glass-fracture.png"
+    },
+    {
+      "id": "03-paper-tear",
+      "description": "An elegant short vertical tear through reality like torn vellum, softly curled ivory edges with navy shadow inside, slim warm gold light at the seam, crafted fantasy magical library aesthetic.",
+      "prompt": "Use case: stylized-concept. Asset: one standalone game rift concept PNG for LORE magical library card game. An elegant short vertical tear through reality like torn vellum, softly curled ivory edges with navy shadow inside, slim warm gold light at the seam, crafted fantasy magical library aesthetic. Centered single isolated subject on a genuinely transparent background, generous transparent margins, square canvas. Polished hand-painted 3D fantasy game VFX asset, readable small UI silhouette, near-static understated energy. No black hole, no vortex, no swirling rings, no round portal, no landscape, no text, no labels, no cards, no border. This is concept 03-paper-tear.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08108-7437-7093-8e62-d318c07e7d8a/exec-3ddf344d-d406-4dee-8f02-b451938603a7.png",
+      "nameJa": "羊皮紙の裂け目",
+      "output": "client/public/art/biblion/rift-concepts/03-paper-tear.png"
+    },
+    {
+      "id": "04-folded-space",
+      "description": "Two offset slender folded planes of space forming an angular narrow opening, translucent smoke-blue facets, a thin platinum edge, dark navy depth. Sophisticated architectural folded-space silhouette.",
+      "prompt": "Use case: stylized-concept. Asset: one standalone game rift concept PNG for LORE magical library card game. Two offset slender folded planes of space forming an angular narrow opening, translucent smoke-blue facets, a thin platinum edge, dark navy depth. Sophisticated architectural folded-space silhouette. Centered single isolated subject on a genuinely transparent background, generous transparent margins, square canvas. Polished hand-painted 3D fantasy game VFX asset, readable small UI silhouette, near-static understated energy. No black hole, no vortex, no swirling rings, no round portal, no landscape, no text, no labels, no cards, no border. This is concept 04-folded-space.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08108-7437-7093-8e62-d318c07e7d8a/exec-06b9c355-81c6-4a4a-83bd-eba4a23fe5b7.png",
+      "nameJa": "折り畳まれた空間",
+      "output": "client/public/art/biblion/rift-concepts/04-folded-space.png"
+    },
+    {
+      "id": "05-ink-fissure",
+      "description": "A calligraphic tapered ink fissure, slightly curved vertical black-navy brushstroke with fine blue-silver edge, tiny subtle golden dust only at the two tips. Very restrained magical library ink aesthetic.",
+      "prompt": "Use case: stylized-concept. Asset: one standalone game rift concept PNG for LORE magical library card game. A calligraphic tapered ink fissure, slightly curved vertical black-navy brushstroke with fine blue-silver edge, tiny subtle golden dust only at the two tips. Very restrained magical library ink aesthetic. Centered single isolated subject on a genuinely transparent background, generous transparent margins, square canvas. Polished hand-painted 3D fantasy game VFX asset, readable small UI silhouette, near-static understated energy. No black hole, no vortex, no swirling rings, no round portal, no landscape, no text, no labels, no cards, no border. This is concept 05-ink-fissure.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08108-7437-7093-8e62-d318c07e7d8a/exec-30995559-b73e-41ea-8d46-832f8fea7ff7.png",
+      "nameJa": "墨の裂け目",
+      "output": "client/public/art/biblion/rift-concepts/05-ink-fissure.png"
+    },
+    {
+      "id": "06-moon-seam",
+      "description": "A narrow crescent-shaped split in space, two almost-touching offset arcs forming a delicate vertical seam, pearl silver rim, deep navy interior, faint lavender refraction. No circle or celestial body.",
+      "prompt": "Use case: stylized-concept. Asset: one standalone game rift concept PNG for LORE magical library card game. A narrow crescent-shaped split in space, two almost-touching offset arcs forming a delicate vertical seam, pearl silver rim, deep navy interior, faint lavender refraction. No circle or celestial body. Centered single isolated subject on a genuinely transparent background, generous transparent margins, square canvas. Polished hand-painted 3D fantasy game VFX asset, readable small UI silhouette, near-static understated energy. No black hole, no vortex, no swirling rings, no round portal, no landscape, no text, no labels, no cards, no border. This is concept 06-moon-seam.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08108-7437-7093-8e62-d318c07e7d8a/exec-b11e42c7-a791-4e50-8986-9cd74fdf0343.png",
+      "nameJa": "月光の継ぎ目",
+      "output": "client/public/art/biblion/rift-concepts/06-moon-seam.png"
+    },
+    {
+      "id": "07-stitch",
+      "description": "A short jagged dimensional wound stitched by three tiny floating gold filaments across a navy slit, pale icy rim, sparse details, very polished restrained magical-library artifact aesthetic.",
+      "prompt": "Use case: stylized-concept. Asset: one standalone game rift concept PNG for LORE magical library card game. A short jagged dimensional wound stitched by three tiny floating gold filaments across a navy slit, pale icy rim, sparse details, very polished restrained magical-library artifact aesthetic. Centered single isolated subject on a genuinely transparent background, generous transparent margins, square canvas. Polished hand-painted 3D fantasy game VFX asset, readable small UI silhouette, near-static understated energy. No black hole, no vortex, no swirling rings, no round portal, no landscape, no text, no labels, no cards, no border. This is concept 07-stitch.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08108-7437-7093-8e62-d318c07e7d8a/exec-6bdeb5c5-77f8-45a3-acab-d6cd5aab9097.png",
+      "nameJa": "金糸で縫われた裂け目",
+      "output": "client/public/art/biblion/rift-concepts/07-stitch.png"
+    }
+  ]
+}

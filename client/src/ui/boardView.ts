@@ -352,8 +352,8 @@ export class GameView {
     const oh = this.q("oppHand"); oh.innerHTML = "";
     const n = opp.hand.length;
     // back size follows the solved portrait size (--pt) so it scales with the viewport
-    const pt = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--pt")) || 58;
-    const obw = Math.max(18, Math.round(pt * 0.82 * 0.64)); // back width (px)
+    const handWidth = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--card-w-hand")) || 100;
+    const obw = Math.max(14, Math.min(30, Math.round(handWidth * .22))); // back width (px)
     const spread = obw * 4.4;
     const ostep = n <= 1 ? 0 : Math.min(obw * 0.62, Math.max(6, (spread - obw) / (n - 1)));
     for (let i = 0; i < n; i++) {
@@ -652,7 +652,7 @@ export class GameView {
           if (marker) marker.style.display = "none";
           const valid=!!t.mon || (!!t.portrait && (!o.oppHasMon || o.directOnly));
           setHot(valid ? t.mon ?? t.portrait : null);
-          const a=card.getBoundingClientRect(),b=hot?.getBoundingClientRect();
+          const a=card.getBoundingClientRect(),b=(t.portrait?.querySelector('.avatar')??hot)?.getBoundingClientRect();
           aim.update(a.left+a.width/2,a.top+a.height*.4,b?b.left+b.width/2:x,b?b.top+b.height/2:y,valid,!!t.portrait&&!valid);
           return;
         }
@@ -785,22 +785,22 @@ export class GameView {
       dropBadge();
       armedEl = null; armedKey = "";
     };
-    // 마켓 카드 조작 = 손패와 동일하게 "탭 = 확대". 구매는 더블탭으로 무장(확인 배지) →
-    // 한 번 더 탭하면 구매. (예전엔 첫 탭이 곧 구매 무장이라 손패와 규칙이 어긋났다.)
-    const TAP_MS = 260;
-    let tapTimer = 0;
-    const armBuy = (card: HTMLElement, key: string, buy: () => void, inst: CardInst) => {
+    // Selection is immediate; a second explicit action buys. Inspection stays on right-click / hold.
+    const armBuy = (card: HTMLElement, key: string, buy: () => void, _inst: CardInst) => {
+      card.tabIndex=0;card.setAttribute('role','button');
       card.onclick = (e) => {
         e.stopPropagation();
-        if (armedKey === key) { clearTimeout(tapTimer); tapTimer = 0; disarm(); buy(); return; } // 무장 상태에서 탭 = 구매
-        if (tapTimer) { clearTimeout(tapTimer); tapTimer = 0; arm(card, key); return; }          // 더블탭 = 무장
-        tapTimer = window.setTimeout(() => { tapTimer = 0; disarm(); zoomCard(inst); }, TAP_MS); // 단일 탭 = 확대
+        if (armedKey === key) { disarm(); buy(); return; }
+        arm(card, key);
       };
+      card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();card.click();}};
       const arm = (c2: HTMLElement, k: string): void => {
         disarm();
         armedEl = c2; armedKey = k;
         c2.classList.add("is-armed");
-        const badge = document.createElement("div");
+        const badge = document.createElement("button");
+        badge.type="button";
+        badge.onclick=e=>{e.stopPropagation();disarm();buy();};
         badge.className = "buy-confirm";
         badge.textContent = t("market.confirm");
         document.body.appendChild(badge);

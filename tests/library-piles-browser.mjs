@@ -46,14 +46,14 @@ await page.evaluate(()=>qa.view.setHandOpen(false));
 await page.screenshot({path:output+'/desktop.png'});
 const start=async(side='me',count=12)=>page.evaluate(({side,count})=>{qa.draw=qa.A.animateReshuffle(side,count);},{side,count});
 const clean=async()=>{await page.evaluate(()=>qa.draw);assert.equal(await page.locator('.paper-shuffle-canvas,.is-shuffling').count(),0);};
-await start();await page.waitForSelector('.paper-shuffle-canvas');
+await start();await page.waitForSelector('[data-shuffle-phase]');
 await page.waitForTimeout(600);await page.screenshot({path:output+'/shuffle-split.png'});
 await page.waitForTimeout(560);await page.screenshot({path:output+'/shuffle-merge.png'});await clean();
 assert.equal(await page.locator('#pile-myDeck').getAttribute('data-count'),'12');
 assert.equal(await page.locator('#pile-myDisc').getAttribute('data-count'),'0');
 // Fast-forward, reduced motion and viewport changes cannot leave invisible piles.
-await start('opp');await page.waitForSelector('.paper-shuffle-canvas');await page.evaluate(()=>qa.A.setFxSkip(true));await clean();await page.evaluate(()=>qa.A.setFxSkip(false));
-await start();await page.waitForSelector('.paper-shuffle-canvas');await page.setViewportSize({width:900,height:700});await clean();
+await start('opp');await page.waitForSelector('[data-shuffle-phase]');await page.evaluate(()=>qa.A.setFxSkip(true));await clean();await page.evaluate(()=>qa.A.setFxSkip(false));
+await start();await page.waitForSelector('[data-shuffle-phase]');await page.setViewportSize({width:900,height:700});await clean();
 await page.emulateMedia({reducedMotion:'reduce'});await start();await clean();await page.emulateMedia({reducedMotion:'no-preference'});
 // Engine event is emitted only on refill, before the draw, and carries no identities.
 const result=await page.evaluate(()=>{
@@ -76,7 +76,7 @@ assert.equal(await page.locator('.pile--3d-ready').count(),4);
 for(const id of ['pile-myDeck','pile-myDisc','pile-oppDeck','pile-oppDisc']){
   const b=await page.locator('#'+id).boundingBox();assert(b.x>=0&&b.x+b.width<=391,`${id} within mobile viewport`);
 }
-await start('opp');await page.waitForSelector('.paper-shuffle-canvas');await page.waitForTimeout(550);await page.screenshot({path:output+'/mobile-shuffle.png'});await clean();
+await start('opp');await page.waitForSelector('[data-shuffle-phase]');await page.waitForTimeout(550);await page.screenshot({path:output+'/mobile-shuffle.png'});await clean();
 // Real controller: authoritative refill event -> shuffle -> draw -> usable hand.
 await page.setViewportSize({width:1280,height:800});
 await page.evaluate(async()=>{
@@ -91,9 +91,9 @@ await page.evaluate(async()=>{
 });
 await page.waitForSelector('.pile--3d-ready');
 await page.evaluate(()=>{qa.playback=qa.control.feed(qa.refill);});
-await page.waitForSelector('.paper-shuffle-canvas');
+await page.waitForSelector('[data-shuffle-phase]');
 await page.screenshot({path:output+'/controller-reshuffle.png'});
-await page.waitForSelector('.paper-draw-canvas:not(.paper-shuffle-canvas)');
+await page.waitForSelector('.paper-draw-canvas');
 await page.screenshot({path:output+'/controller-refill-draw.png'});
 await page.evaluate(()=>qa.playback);
 assert.equal(await page.locator('.paper-draw-canvas,.is-shuffling').count(),0);

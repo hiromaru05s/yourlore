@@ -192,7 +192,7 @@ control.feed(opening);
 await new Promise(r=>setTimeout(r,20));
 assert(document.querySelector('.cointoss-ov'));
 assert(!document.querySelector('.fx-turnbanner'),'opening banner must not be obscured by coin');
-await new Promise(r=>setTimeout(r,2600));
+await new Promise(r=>setTimeout(r,3250));
 assert.equal(document.querySelector('.fx-turnbanner span')?.textContent,'あなたのターンです');
 const next=structuredClone(opening.state);next.cur=1;next.turn=2;next.pending=null;
 control.feed({state:next,events:[]});

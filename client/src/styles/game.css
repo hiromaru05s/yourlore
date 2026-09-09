@@ -643,3 +643,37 @@
 .game .buff-icon--quest .quest-progress { inset:auto 6% 3%; padding:1px 0; border-top:1px solid #c6a8df88; background:linear-gradient(90deg,#231330dd,#38214bef,#231330dd); color:#f7e7ff; font-size:clamp(7px,.72vw,11px); line-height:1.1; }
 .game .portrait:not(.portrait--opp) .pt-ring { width:117%; height:117%; left:-8.5%; top:-4%; }
 .game .rift-sprite { width:140%; left:-20%; top:-12%; }
+
+/* Continuity pass: native square character cells and room for raised card seals. */
+.game .portrait .pt-ring .avatar { inset:10% 12% 14%; width:76%; height:76%; border-radius:35% 35% 30% 30%; }
+.game .portrait:not(.portrait--opp) .pt-ring { width:100%; height:100%; left:0; top:0; }
+.game .pcluster--opp { transform:translateY(calc(var(--pt) * -.085)); }
+.game .opp-hand { height:70px; }
+.duel-dialog .picker-grid,.modal .picker-grid { padding:18px 12px 14px!important; scroll-padding:18px; box-sizing:border-box; }
+.game .portrait .pt-mana { width:clamp(110px,13vw,184px); height:64px; grid-template-rows:38px 22px; }
+.game .portrait .mana-readout { height:38px; font-size:12px; line-height:38px; }
+.game .portrait .mana-readout b { font-size:32px; line-height:38px; }
+.game .portrait .pt-mana-max { font-size:15px; }
+.game .portrait .mana-crystals { height:22px; }
+.game .portrait .mana-crystal { height:min(18px,calc(22px / var(--mana-rows,1))); }
+.buy-confirm { pointer-events:auto!important; cursor:pointer; border:1px solid #d9bf84; }
+.market-cards .card { touch-action:manipulation; cursor:pointer; }
+.market-cards .card::after,.mkt-stock,.watch-dot { pointer-events:none; }
+.market-cards .card:focus-visible { outline:2px solid #c9eaff; outline-offset:4px; }
+@media(max-width:700px) and (orientation:portrait) {
+ .game .portrait .pt-mana { width:clamp(92px,26vw,116px); height:52px; grid-template-rows:30px 18px; }
+ .game .portrait .mana-readout { height:30px; line-height:30px; font-size:9px; }
+ .game .portrait .mana-readout b { font-size:25px; line-height:30px; }
+ .game .portrait .pt-mana-max { font-size:12px; }
+ .game .portrait .mana-crystals { height:18px; }
+ .game .portrait .mana-crystal { height:min(13px,calc(18px / var(--mana-rows,1))); }
+}
+/* Chromium must hit the raised card, not the coplanar market row behind it. */
+.board-projected .market-sub--fixed,.board-projected .market-cards { transform-style:preserve-3d; }
+.board-projected .market-cards { pointer-events:none; }
+.board-projected .market-cards > .card { pointer-events:auto; }
+
+.awaiting-board .market-counter,.awaiting-board .pile-body { visibility:hidden; }
+.duel-opening .pile-tag,.duel-opening .pile-count { visibility:hidden; }
+
+@media(max-width:700px) and (orientation:portrait) { .game .portrait:not(.portrait--opp) .pt-mana { top:24%; } }

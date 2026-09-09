@@ -1,0 +1,209 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 1192,
+      "sha256": "232d1a97f64628825ede4552dbc3f58f82cd596a90c2b19446b5b73a8d393423",
+      "match": true
+    },
+    {
+      "path": "assets/three.module-ov51GNqx.js",
+      "bytes": 600848,
+      "sha256": "614e88a9ff18db20473dc8772e07532e1f641dac7efd05c2f3e1520539270702",
+      "match": true
+    },
+    {
+      "path": "assets/paperDraw-CwM3bRtm.js",
+      "bytes": 5764,
+      "sha256": "4d6134dacd6929db5bc6e4524fc2fd94b6a5f59a9d83cbf77d734655c782f372",
+      "match": true
+    },
+    {
+      "path": "assets/duelScene-CN-JnwJ0.js",
+      "bytes": 18625,
+      "sha256": "57823b124dcf262437f0a348e30d90eba707ceffaaa69c6cee8ec11b1cb7188f",
+      "match": true
+    },
+    {
+      "path": "assets/cardSurface-C7yjkZr8.js",
+      "bytes": 3785,
+      "sha256": "749c006ca07df1842f6c6198d4b70c589526ae6aa6c9a8b29db9bd09d0ffb2c4",
+      "match": true
+    },
+    {
+      "path": "assets/diceScene-cMpl064W.js",
+      "bytes": 7129,
+      "sha256": "8f6cd8ce3245247fde8529d3227941467c9a40501928331d1c5c5be9c9ae6f7b",
+      "match": true
+    },
+    {
+      "path": "assets/GLTFLoader-ChQLPBZx.js",
+      "bytes": 44841,
+      "sha256": "52a3ae40ccfb579eb4a0b33f46a1f05599082cf6434b54e67831721d588d340c",
+      "match": true
+    },
+    {
+      "path": "assets/tablePreview-DzhmGhH0.js",
+      "bytes": 25340,
+      "sha256": "63f7fed1971e0d701b7b8d19a763e684d2147e987579d10fd42209bdbdbdddf6",
+      "match": true
+    },
+    {
+      "path": "assets/tablePreview-2Rkra2Ey.css",
+      "bytes": 1870,
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+      "match": true
+    },
+    {
+      "path": "assets/modulepreload-polyfill-B5Qt9EMX.js",
+      "bytes": 771,
+      "sha256": "607112fb81d7899ceedf89cdb1b3540a53eb96ad5e4202fb1e22f873281de839",
+      "match": true
+    },
+    {
+      "path": "assets/main-Bsucq7UX.css",
+      "bytes": 165364,
+      "sha256": "4ead772422e4ffc8b7233c59ad9db1eac96bb5c82cfb3ff499073494b36a19fc",
+      "match": true
+    },
+    {
+      "path": "assets/RoomEnvironment-BPHe5KlW.js",
+      "bytes": 2118,
+      "sha256": "b0f35ce6211baf2fc8a1ab8286d6c13c65ee749cd1f77a8dd51d28de917b238c",
+      "match": true
+    },
+    {
+      "path": "assets/main-Csj_AxvY.js",
+      "bytes": 1028465,
+      "sha256": "69c595d18ac527753792cc6346b033bbeb7d888fe7a325c85b7daba0eea68a77",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/shelf-low.glb",
+      "bytes": 54272,
+      "sha256": "b987427ef758df58fab602c51b12eaecae7b99a8bda44852a8ea287aa5ea57d6",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/market-low.glb",
+      "bytes": 43864,
+      "sha256": "53467b4b1a184e0f844de266616d1ca5c7815e624f24f3021a12307cb561b5f8",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/market.glb",
+      "bytes": 96872,
+      "sha256": "421d378ae17154209c05abe8d09a2b6aa3d0a2cf68103b6bb63f039d6d11de56",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/shelf.glb",
+      "bytes": 115852,
+      "sha256": "ebb40407e598b9f08ed1528cffaf524beb6fd3dcdf6d5c479c7d7f2f3673b9d8",
+      "match": true
+    },
+    {
+      "path": "models/lore-table/table-low.glb",
+      "bytes": 88284,
+      "sha256": "0d5999df197531ebb90be09ba2c73bc1c394ce31083507e886111e7b2abe88b2",
+      "match": true
+    },
+    {
+      "path": "models/lore-table/table.glb",
+      "bytes": 218004,
+      "sha256": "eb8a42dd6a2d53127ffc30a2b2f7490a5a947191f07c1c914ed64c9d20263c9b",
+      "match": true
+    },
+    {
+      "path": "models/cosmetics/deck_holder_biblion_ivory/v1/model-low.glb",
+      "bytes": 31600,
+      "sha256": "3a45ab899b2dd272149bf1cc177d3f8b8e0ff35e839e3dc8a12b9fc65633b213",
+      "match": true
+    },
+    {
+      "path": "models/cosmetics/deck_holder_biblion_ivory/v1/model.glb",
+      "bytes": 92912,
+      "sha256": "d8d9bd9b7ca4b9b2f79033a70dac763d07ad4d5166aab2c5ef55fdfb4704b5e9",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/v2/shelf-low.glb",
+      "bytes": 116228,
+      "sha256": "1dff51240baa0b16c050ac0069100e28cb9e72db6ce13c8cacc70697cf4927fc",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/v2/supply.glb",
+      "bytes": 35544,
+      "sha256": "ad7dba676ca6cf3b7c3ee813ffb4059ec3c0372b6cc2023569034010ba8fbaa1",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/v2/supply-low.glb",
+      "bytes": 16832,
+      "sha256": "38fab62cd0837fdb99c33253cf6305085b0847c38d411ff6a65e4bb2c405349d",
+      "match": true
+    },
+    {
+      "path": "models/library-furniture/v2/shelf.glb",
+      "bytes": 541128,
+      "sha256": "96c7d57746c8c1df5a80fc3de65d7c4588edc37139ca7c8b6697f0846916cac4",
+      "match": true
+    },
+    {
+      "path": "art/biblion/release/rift-slit-16.png",
+      "bytes": 380874,
+      "sha256": "b1b981d78428edf348e3f1d20c5a87c361972003c76eb3a4a6647e5186e71b1c",
+      "match": true
+    },
+    {
+      "path": "rift-concepts.html",
+      "bytes": 2922,
+      "sha256": "a18afdf4980837166ceb063df4021433f67ca8804b221f804e7d6ba46b865af9",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-concepts/03-paper-tear.png",
+      "bytes": 279550,
+      "sha256": "ccfb541d4bb046ec5125f4fefe9befedf3fe82f991af881f3fde7cd057316218",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-concepts/05-ink-fissure.png",
+      "bytes": 348384,
+      "sha256": "9c4ab48ff9aa2ecbbbe376eb4249b36bf3842f78788138df1226657f9c461cd4",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-concepts/04-folded-space.png",
+      "bytes": 473906,
+      "sha256": "60701b01446183f6d2f7b0895c7f99a860dbd81fcd20b30e7ce805ea8a4ae720",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-concepts/02-glass-fracture.png",
+      "bytes": 275273,
+      "sha256": "c200a42b184f0b327aaef2ac843fe7010cda9d4943454b621056c6c525ed4541",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-concepts/01-silk-seam.png",
+      "bytes": 143952,
+      "sha256": "e02344b6ac08081d4966a5371d7d76491adc3d66b0bffadcc92c67f937b83d67",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-concepts/06-moon-seam.png",
+      "bytes": 371286,
+      "sha256": "3be695669c708d3f8c00187e5751c02ce426ab1f56a61d88030fe8fdd15b1372",
+      "match": true
+    },
+    {
+      "path": "art/biblion/rift-concepts/07-stitch.png",
+      "bytes": 359443,
+      "sha256": "70c8f387a37111f9a77217e2a0b0caad3b189bf0532db10be51a2ddf9bb3116b",
+      "match": true
+    }
+  ]
+}

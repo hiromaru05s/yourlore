@@ -28,6 +28,7 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand}:
   scene.add(new T.AmbientLight(0xffffff,1.75));
   const light=new T.DirectionalLight(0xfff4e3,1.55);light.position.set(-250,500,900);scene.add(light);
   const rim=new T.DirectionalLight(0xc7ddff,.7);rim.position.set(350,50,-500);scene.add(rim);
+  const landed=new Set<HTMLElement>();
   const models:PaperCard[]=[];
   const shadows:T.Mesh<T.PlaneGeometry,T.MeshBasicMaterial>[]=[];
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=128;shadowCanvas.height=128;
@@ -64,7 +65,7 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand}:
           const elapsed=now-start-i*STAGGER,t=Math.min(1,Math.max(0,elapsed/DURATION));
           const visible=elapsed>=0 && t<1;model.group.visible=visible;shadows[i].visible=visible;
           if(elapsed<DURATION)running=true;
-          if(!visible){if(t===1)onLand(cards[i]);return;}
+          if(!visible){if(t===1&&!landed.has(cards[i])){landed.add(cards[i]);onLand(cards[i]);}return;}
           const target=cards[i].getBoundingClientRect(),pose=drawPose(t,reveal);
           const ox=origin.left+origin.width/2,oy=origin.top+origin.height/2;
           const tx=target.left+target.width/2,ty=target.top+target.height/2;

@@ -617,6 +617,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const sizeClass = opt.size === "mkt" ? "card--mkt" : opt.size === "hand" ? "card--hand" : "";
   const node = el("div", `card ${typeClass} ${sizeClass}`.trim());
   node.dataset.uid = c.uid;
+  node.dataset.cardId = c.id;
   node.dataset.cardType = c.t === "mon" ? "mon" : c.t === "trap" ? "trap" : c.t === "quest" ? "quest" : "spell";
   const labels = getLang() === "ja" ? ["モンスター", "魔法", "罠", "クエスト", "クイック魔法"] : getLang() === "en" ? ["Monster", "Spell", "Trap", "Quest", "Quick spell"] : ["몬스터", "마법", "함정", "퀘스트", "퀵 마법"];
   const typeIndex = c.t === "mon" ? 0 : c.t === "trap" ? 2 : c.t === "quest" ? 3 : c.quick ? 4 : 1;

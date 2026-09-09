@@ -1,5 +1,6 @@
 /** Blender furniture mounting and reusable thin, rounded card stock. */
 import * as T from 'three';
+import { CARD_PADDING } from './cardSurface';
 
 export interface PileModel { group:T.Group; cards:T.Group; top:T.Object3D; }
 const RATIO=1/.64;
@@ -18,9 +19,10 @@ export function cardStock(map:T.Texture, face?:T.Texture):T.Group {
   const edge=new T.ExtrudeGeometry(shape,{depth:.008,bevelEnabled:false,curveSegments:4});edge.translate(0,0,-.004);
   const stock=new T.Mesh(edge,new T.MeshStandardMaterial({color:0xccbea5,roughness:.85}));stock.castShadow=true;stock.receiveShadow=true;g.add(stock);
   const skin=(texture:T.Texture,back:boolean)=>{
-    const geo=new T.ShapeGeometry(shape,4),p=geo.getAttribute('position'),uv=geo.getAttribute('uv');
-    for(let i=0;i<p.count;i++)uv.setXY(i,p.getX(i)+.5,p.getY(i)/RATIO+.5);
-    const mesh=new T.Mesh(geo,new T.MeshStandardMaterial({map:texture,roughness:.56,metalness:.035,emissive:0xffffff,emissiveMap:texture,emissiveIntensity:.12}));
+    const padded=!back&&!!face;
+    const geo=padded?new T.PlaneGeometry(1+2*CARD_PADDING,RATIO+2*CARD_PADDING):new T.ShapeGeometry(shape,4),p=geo.getAttribute('position'),uv=geo.getAttribute('uv');
+    if(!padded)for(let i=0;i<p.count;i++)uv.setXY(i,p.getX(i)+.5,p.getY(i)/RATIO+.5);
+    const mesh=new T.Mesh(geo,new T.MeshStandardMaterial({map:texture,roughness:.56,metalness:.035,emissive:0xffffff,emissiveMap:texture,emissiveIntensity:.12,transparent:padded,alphaTest:padded?.025:0}));
     mesh.name=back?'stock-back':'stock-front';
     mesh.position.z=back?-.0045:.0045;if(back)mesh.rotation.y=Math.PI;
     mesh.castShadow=true;mesh.receiveShadow=true;g.add(mesh);

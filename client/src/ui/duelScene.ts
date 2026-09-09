@@ -1,7 +1,8 @@
 /** All physical props share the table's camera, lighting, scale and depth buffer. */
 import * as T from 'three';
 import {makePile,type PileModel} from './pileModels';
-import {captureCardSurface,CARD_PADDING} from './cardSurface';
+import {capturePileSurface} from './cardSurface';
+import {installSceneMotion} from './sceneMotion';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 import {createDuelTable} from './duelTable';
 import {loadLibraryAssets} from './libraryAssets';
@@ -23,12 +24,14 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   const camera=new T.PerspectiveCamera();const table=createDuelTable(root,scene);
   let dead=false,dirty=true,frame=0,last=0,width=0,height=0;
   const furniture=loadLibraryAssets(()=>{dirty=true;});
+  const surfaces=new Map<string,T.Texture>();
+  const surfaceKey=(el:HTMLElement)=>{const card=el.querySelector<HTMLElement>('.pile-print .card');return `${el.dataset.sleeve}:${card?.dataset.cardId}:${card?.textContent}`;};
   const items=new Map<string,Item>(),textures=new Map<string,T.Texture>();const loader=new T.TextureLoader();
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   function texture(url:string){let t=textures.get(url);if(!t){t=loader.load(url);t.colorSpace=T.SRGBColorSpace;t.anisotropy=4;textures.set(url,t);}return t;}
   function mesh(g:T.BufferGeometry,m:T.Material|T.Material[],parent:T.Object3D,x=0,y=0,z=0){const a=new T.Mesh(g,m);a.position.set(x,y,z);parent.add(a);return a;}
   function disposeObject(object:T.Object3D){const geos=new Set<T.BufferGeometry>(),mats=new Set<T.Material>();object.traverse(o=>{if(o instanceof T.Mesh){geos.add(o.geometry);(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>mats.add(m));}});geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());}
-  function removeItem(item:Item){scene.remove(item.group);disposeObject(item.group);item.surface?.dispose();}
+  function removeItem(item:Item){scene.remove(item.group);disposeObject(item.group);}
   function refresh(){
     const elements=[...root.querySelectorAll<HTMLElement>('.pile--deck,.pile--shelf,.market-counter,.market-sub--supply')];
     const ids=new Set(elements.map(el=>el.classList.contains('market-counter')?'market-base':el.classList.contains('market-sub--supply')?'supply-base':el.id));
@@ -39,35 +42,42 @@ export function mountDuelScene(root:HTMLElement):()=>void {
       const key=`${el.dataset.count}:${el.dataset.face}:${el.dataset.sleeve}:${furniture.revision}`;
       el.dataset.furniture=furniture.has(supply?'supply':market?'market':shelf?'shelf':'deck')?'blender':'fallback';
       let item=items.get(id);if(item?.key===key){item.element=el;continue;}
-      const previous=item?.count;if(item)removeItem(item);
+      if(item)removeItem(item);
       const group=new T.Group();scene.add(group);item={group,key,element:el,market,supply};items.set(id,item);
       if(market||supply)group.add(furniture.clone(supply?'supply':'market')!);
       else{
         const count=Number(el.dataset.count)||0;item.count=count;
-        item.pile=makePile(count,shelf,texture(el.dataset.sleeve!),shelf&&el.dataset.face?texture(el.dataset.face):undefined,furniture.clone(shelf?'shelf':'deck'));group.add(item.pile.group);
-        if(shelf&&previous!=null&&count>previous&&!reduced.matches)item.entered=performance.now();
+        item.pile=makePile(count,shelf,texture(el.dataset.sleeve!),shelf?surfaces.get(surfaceKey(el)):undefined,furniture.clone(shelf?'shelf':'deck'));group.add(item.pile.group);
         const print=el.querySelector<HTMLElement>('.pile-print .card');
-        if(shelf&&count&&print){const owner=item;void captureCardSurface(print,el.dataset.sleeve!,true).then(surface=>{
+        if(shelf){el.dataset.surfaceReady=String(surfaces.has(surfaceKey(el)));el.dataset.surfaceCard=print?.dataset.cardId||'';}
+        if(shelf&&count&&print&&!surfaces.has(surfaceKey(el))){const owner=item;void capturePileSurface(print,el.dataset.sleeve!).then(surface=>{
           if(dead||items.get(el.id)!==owner||!surface.face)return;
           const map=new T.CanvasTexture(surface.face);map.colorSpace=T.SRGBColorSpace;map.anisotropy=4;
-          map.offset.set(CARD_PADDING/(1+2*CARD_PADDING),CARD_PADDING/(1/.64+2*CARD_PADDING));map.repeat.set(1/(1+2*CARD_PADDING),(1/.64)/(1/.64+2*CARD_PADDING));owner.surface=map;
-          const front=owner.pile!.top.getObjectByName('stock-front') as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>;
-          if(front){front.material.map=map;front.material.emissiveMap=map;front.material.transparent=true;front.material.alphaTest=.025;front.material.needsUpdate=true;}
+          surfaces.set(surfaceKey(el),map);dirty=true;
+          // Rebuild once with the padded full frame, including the protruding seals.
+          owner.key='surface-ready';
+
         }).catch(()=>{});}
       }
     }
     const used=new Set(elements.flatMap(el=>[el.dataset.sleeve,el.dataset.face]).filter(Boolean));for(const [url,map] of textures)if(!used.has(url)){map.dispose();textures.delete(url);}
+    const activeSurfaces=new Set(elements.map(surfaceKey));
+    for(const [key,map] of surfaces)if(surfaces.size>24&&!activeSurfaces.has(key)){map.dispose();surfaces.delete(key);}
     projectBoardDOM(root);keyLight.shadow.needsUpdate=true;
   }
+  const motion=installSceneMotion(root,scene,items,texture,refresh,surfaces,surfaceKey);
   const observer=new MutationObserver(()=>{dirty=true;});observer.observe(root,{childList:true,subtree:true,attributes:true,attributeFilter:['class','data-count','data-sleeve','data-face']});
   const onLayout=()=>{dirty=true;};window.addEventListener('lore:layout',onLayout);
   const dustScene=new T.Scene(), dustCamera=new T.PerspectiveCamera(45,1,1,4000);
+  const dustCanvas=document.createElement('canvas');dustCanvas.width=dustCanvas.height=64;
+  const dc=dustCanvas.getContext('2d')!,dg=dc.createRadialGradient(32,32,2,32,32,32);dg.addColorStop(0,'#ffffffaa');dg.addColorStop(.35,'#ffffff65');dg.addColorStop(1,'#ffffff00');dc.fillStyle=dg;dc.fillRect(0,0,64,64);
+  const dustMap=new T.CanvasTexture(dustCanvas);
   const dusts:Array<{group:T.Group;start:number;rect:DOMRect}>=[];
   const onDust=(event:Event):void=>{
     if(reduced.matches)return;
     const rect=(event as CustomEvent<DOMRect>).detail;
     const group=new T.Group();dustScene.add(group);
-    for(let i=0;i<22;i++)mesh(new T.IcosahedronGeometry(1.5+(i%4),0),new T.MeshBasicMaterial({color:i%3?0xcbbda5:0xf9e6b1,transparent:true,opacity:.28,depthWrite:false}),group);
+    for(let i=0;i<22;i++)mesh(new T.PlaneGeometry(12+(i%4)*4,12+(i%4)*4),new T.MeshBasicMaterial({map:dustMap,color:0xcbbda5,transparent:true,opacity:.22,depthWrite:false}),group);
     dusts.push({group,start:performance.now(),rect});
   };
   window.addEventListener('lore:summon-dust',onDust);
@@ -91,6 +101,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
     camera.position.set(0,focal*Math.cos(angle),focal*Math.sin(angle));camera.lookAt(0,0,0);camera.updateProjectionMatrix();camera.updateMatrixWorld();
     keyLight.position.set(-width*.35,height*1.4,height*.55);const shadowCamera=keyLight.shadow.camera;shadowCamera.left=-width*.8;shadowCamera.right=width*.8;shadowCamera.top=height;shadowCamera.bottom=-height;shadowCamera.near=1;shadowCamera.far=height*5;shadowCamera.updateProjectionMatrix();
     table.resize(width,height,unit);
+    if(motion.tick(now))keyLight.shadow.needsUpdate=true;
     for(const item of items.values()){
       const r=layoutRect(item.element);item.group.position.set(r.left+r.width/2-cx,0,r.top+r.height/2-cy);item.group.scale.setScalar(unit);
       if(item.supply){
@@ -110,6 +121,8 @@ export function mountDuelScene(root:HTMLElement):()=>void {
         anchor.style.cssText=`left:${anchorPoint.x-r.left-unit/2}px;top:${anchorPoint.y-r.top-unit/.64/2}px;width:${unit}px;height:${unit/.64}px`;
         if(!item.element.classList.contains('pile--3d-ready'))item.element.classList.add('pile--3d-ready');
       }
+      item.group.position.y+=Number(item.group.userData.introHeight)||0;
+      if(root.querySelector('.awaiting-board'))item.group.visible=false;
     }
     renderer.setScissorTest(false);renderer.setViewport(0,0,width,height);renderer.clear();renderer.render(scene,camera);
     if(furniture.has('market')&&!root.classList.contains('market-model-ready'))root.classList.add('market-model-ready');
@@ -120,7 +133,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
       for(let j=dusts.length-1;j>=0;j--){const d=dusts[j],age=(now-d.start)/800;
         if(age>=1){dustScene.remove(d.group);disposeObject(d.group);dusts.splice(j,1);continue;}
         d.group.position.set(d.rect.left+d.rect.width/2-width/2,height/2-d.rect.bottom,0);
-        d.group.children.forEach((o,i)=>{const m=o as T.Mesh;const angle=i*2.399;m.position.set(Math.cos(angle)*age*70,Math.sin(angle)*age*12+Math.sin(age*Math.PI)*16,Math.sin(angle)*age*38);m.rotation.set(age*i,age*2,0);m.scale.setScalar(1+age*2);(m.material as T.MeshBasicMaterial).opacity=(1-age)*.25;});
+        d.group.children.forEach((o,i)=>{const m=o as T.Mesh;const angle=i*2.399;m.position.set(Math.cos(angle)*age*70,Math.sin(angle)*age*12+Math.sin(age*Math.PI)*16,Math.sin(angle)*age*38);m.rotation.z=age*i;m.scale.setScalar(.5+age*2);(m.material as T.MeshBasicMaterial).opacity=(1-age)*.25;});
       }
       for(let j=flows.length-1;j>=0;j--){
         const f=flows[j],age=(now-f.start)/700;
@@ -138,8 +151,8 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   }
   const lost=(event:Event)=>{event.preventDefault();dispose();};canvas.addEventListener('webglcontextlost',lost);
   function dispose(){
-    if(dead)return;dead=true;cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);
-    items.forEach(removeItem);textures.forEach(t=>t.dispose());table.dispose();furniture.dispose();keyLight.shadow.dispose();disposeObject(dustScene);environment.dispose();renderer.dispose();canvas.remove();
+    if(dead)return;dead=true;motion.dispose();cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);
+    items.forEach(removeItem);surfaces.forEach(t=>t.dispose());textures.forEach(t=>t.dispose());table.dispose();furniture.dispose();keyLight.shadow.dispose();disposeObject(dustScene);dustMap.dispose();environment.dispose();renderer.dispose();canvas.remove();
     root.querySelectorAll<HTMLElement>('.pile').forEach(el=>{el.classList.remove('pile--3d-ready');delete el.dataset.furniture;el.querySelector('.pile-draw-anchor')?.remove();});clearBoardProjection(root);root.classList.remove('duel-webgl','market-model-ready','supply-model-ready');
   }
   frame=requestAnimationFrame(render);return dispose;

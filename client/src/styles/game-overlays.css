@@ -710,3 +710,34 @@
 .inspect-state { color:#d6e8f4; font-size:15px; line-height:1.8; }
 
 .zoom-details .ztc-grid { padding:12px 9px 8px; max-height:none; overflow:visible; }
+/* A coin falls onto the same tabletop: contact, two smaller rebounds, settle. */
+.cointoss-ov { background:radial-gradient(ellipse at center,#09132318,#07101c60); pointer-events:none; }
+.cointoss { position:relative; }
+.cointoss::before { content:''; position:absolute; width:160px; height:70px; top:103px; border-radius:50%; background:radial-gradient(ellipse,#02060c70,transparent 68%); animation:coinContactShadow 1.85s linear both; }
+.ct-coin.to-heads { animation:coinGroundHeads 1.85s linear forwards; }
+.ct-coin.to-tails { animation:coinGroundTails 1.85s linear forwards; }
+.ct-face { filter:drop-shadow(0 2px 2px #0004); }
+.ct-caption { animation-delay:1.8s; }
+@keyframes coinGroundHeads {
+  0% { transform:translateY(-260px) rotateX(62deg) rotateY(0deg); }
+  42% { transform:translateY(0) rotateX(78deg) rotateY(990deg); }
+  58% { transform:translateY(-66px) rotateX(45deg) rotateY(1190deg); }
+  72% { transform:translateY(0) rotateX(39deg) rotateY(1380deg); }
+  82% { transform:translateY(-17px) rotateX(34deg) rotateY(1428deg); }
+  90% { transform:translateY(0) rotateX(30deg) rotateY(1440deg); }
+  95% { transform:translateY(-3px) rotateX(33deg) rotateY(1440deg); }
+  100% { transform:translateY(0) rotateX(32deg) rotateY(1440deg); }
+}
+@keyframes coinGroundTails {
+  0% { transform:translateY(-260px) rotateX(62deg) rotateY(180deg); }
+  42% { transform:translateY(0) rotateX(78deg) rotateY(1170deg); }
+  58% { transform:translateY(-66px) rotateX(45deg) rotateY(1370deg); }
+  72% { transform:translateY(0) rotateX(39deg) rotateY(1560deg); }
+  82% { transform:translateY(-17px) rotateX(34deg) rotateY(1608deg); }
+  90% { transform:translateY(0) rotateX(30deg) rotateY(1620deg); }
+  95% { transform:translateY(-3px) rotateX(33deg) rotateY(1620deg); }
+  100% { transform:translateY(0) rotateX(32deg) rotateY(1620deg); }
+}
+@keyframes coinContactShadow { 0% { opacity:.15;scale:1.6; } 42%,72%,90%,100% { opacity:1;scale:1; } 58% { opacity:.4;scale:1.25; } 82% { opacity:.7;scale:1.1; } }
+.opening-hands #hand,.opening-hands #oppHand { visibility:hidden; }
+@media(prefers-reduced-motion:reduce) { .ct-coin.to-heads { animation:none;transform:rotateX(32deg); } .ct-coin.to-tails { animation:none;transform:rotateX(32deg) rotateY(180deg); } .cointoss::before { animation:none; } .ct-caption { animation-delay:0s; } }

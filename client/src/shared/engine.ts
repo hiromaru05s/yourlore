@@ -298,7 +298,9 @@ export function createGame(opts: CreateOpts): ReduceResult {
   const ev: GameEvent[] = [];
   const ctx = makeCtx(g, ev);
   g.players.forEach((p) => rollSupply(g, p));
-  ctx.drawN(g.players[g.cur], 3);
+  ctx.drawN(g.players[start], 3);
+  ctx.drawN(g.players[second], 3);
+  g.players[second].openingDrawReady = true;
   ctx.log(
     '<span class="t">게임 시작.</span> 초기 덱 · 3장 드로우 · 마나 4.',
     '<span class="t">ゲーム開始。</span> 初期デッキ · 3枚ドロー · マナ4。',
@@ -572,7 +574,8 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
     if (dp > 0) ctx.log(`  └ <span class="dmg">흉조</span>: 드로우 -${dp}`, `  └ <span class="dmg">凶兆</span>: ドロー-${dp}`);
     const pageDraw = p.field.filter((m) => m.aura === "pageDraw").length; // 귀족의 집사
     // v42: 매 턴 3장 드로우 (첫 손패 포함). 손패는 턴 종료에 버리지 않고 HAND_CARRY장까지 이월한다.
-    const baseDraw = TURN_DRAW;
+    const baseDraw = p.openingDrawReady ? 0 : TURN_DRAW;
+    p.openingDrawReady = false;
     ctx.drawN(p, Math.max(0, baseDraw + p.bonusDrawPerm + enchDraw + pageDraw - dp));
     if (p.bastionDraw) { // 최후의 보루: 다음 턴 시작시 1회성 추가 드로우
       const bn = ctx.drawN(p, p.bastionDraw);

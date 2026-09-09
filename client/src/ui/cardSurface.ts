@@ -123,3 +123,14 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
   backCtx.drawImage(await backImage, pad,pad,w,h);
   return { face, back };
 }
+
+/** Measure a canonical upright card outside every projected ancestor. */
+export async function capturePileSurface(node:HTMLElement,sleeve:string):Promise<CardSurface> {
+  const host=document.createElement('div');host.className='pile-print';
+  host.style.cssText='position:fixed;left:-1000px;top:0;width:128px;height:200px;visibility:hidden;pointer-events:none';
+  const copy=node.cloneNode(true) as HTMLElement;copy.removeAttribute('style');
+  copy.classList.remove('fx-card-flight','cast-reveal','is-picked','is-armed','card--dim');
+  copy.style.cssText='--cw:128px;--ch:200px;width:128px;height:200px;transform:none';
+  host.append(copy);document.body.append(host);
+  try{return await captureCardSurface(copy,sleeve,true);}finally{host.remove();}
+}
