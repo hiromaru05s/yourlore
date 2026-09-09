@@ -1,0 +1,70 @@
+{
+  "checkedAt": "2026-09-09T22:08:51.299102+00:00",
+  "environment": "staging",
+  "url": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "database": "lore-db-staging",
+  "sourceCommit": "8e55be607b297dab029164162d54ea50e1ad9fd0",
+  "branch": "codex/duel-stagecraft-20260910",
+  "versionId": "2f40d09b-7fe4-4489-9257-188cac3c29de",
+  "assetHashesMatched": 50,
+  "assetHashesChecked": 50,
+  "productionDeployed": false,
+  "mainMerged": false,
+  "databaseMigrations": false,
+  "riftDesign": "07",
+  "riftFrames": 16,
+  "riftLoopSeconds": 32,
+  "browserViewports": [
+    [
+      1280,
+      720
+    ],
+    [
+      1920,
+      1080
+    ],
+    [
+      1814,
+      1274
+    ],
+    [
+      390,
+      844
+    ]
+  ],
+  "checks": [
+    "typecheck",
+    "build and design guard",
+    "stagecraft models and shared play conditions",
+    "stagecraft browser",
+    "duel continuity browser",
+    "board perspective browser",
+    "library piles browser",
+    "duel UI",
+    "dice models",
+    "simultaneous opening hands",
+    "quest and quick cards",
+    "trap removal"
+  ],
+  "onlineQa": {
+    "version": "2f40d09b-7fe4-4489-9257-188cac3c29de",
+    "actions": 140,
+    "turns": 29,
+    "reconnect": true,
+    "completed": true,
+    "openingHands": [
+      [
+        3,
+        3
+      ],
+      [
+        3,
+        3
+      ]
+    ],
+    "errors": []
+  },
+  "qaAccountsCleaned": true,
+  "qaRemainingUsers": 0
+}
