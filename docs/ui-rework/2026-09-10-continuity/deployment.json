@@ -1,0 +1,42 @@
+{
+  "checkedAt": "2026-09-09T21:14:28.300476+00:00",
+  "environment": "staging",
+  "url": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "database": "lore-db-staging",
+  "sourceCommit": "bf1fe12f8b401f9d406a509d22f39feaf41796bb",
+  "branch": "codex/duel-continuity-20260910",
+  "versionId": "e1b6931f-1550-41af-b302-e4adc335324e",
+  "earlierVersionsThisTask": [
+    "d8dd7243-5974-4d45-9e94-a71170462d77",
+    "3a409b73-012d-4897-99e9-a18d7e2452fd"
+  ],
+  "assetHashesMatched": 34,
+  "assetHashesChecked": 34,
+  "productionDeployed": false,
+  "mainMerged": false,
+  "databaseMigrations": false,
+  "qaAccountsCleaned": true,
+  "qaRemainingUsers": 0,
+  "onlineQa": {
+    "version": "d8dd7243-5974-4d45-9e94-a71170462d77",
+    "actions": 113,
+    "turns": 18,
+    "reconnect": true,
+    "completed": true,
+    "openingHands": [
+      [
+        3,
+        3
+      ],
+      [
+        3,
+        3
+      ]
+    ],
+    "errors": []
+  },
+  "laterChanges": "Opponent hand reduced further; market help text updated. Final browser regression covers final hand size. Final asset hashes cover final build.",
+  "conceptGallery": "https://test.yourlore.xyz/rift-concepts",
+  "riftDesignSelectionPending": true
+}
