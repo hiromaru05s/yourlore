@@ -1,0 +1,248 @@
+{
+  "date": "2026-09-09",
+  "status": "proposal-not-game-data",
+  "baseline": "181ccc2 / v44",
+  "rulesReference": "README.md",
+  "cards": [
+    {
+      "id": "G01",
+      "kind": "gift",
+      "nameJa": "ミミック飼育許可証",
+      "proposedPurchaseCost": 3,
+      "effectJa": "各自分ターン、最初に宝箱の使用を解決した後、自分の場にミミック(3/2)1体を召喚",
+      "designIntentJa": "供給の復旧。自分で始動できる。マスターミミックの宝箱封印中は使えない"
+    },
+    {
+      "id": "G02",
+      "kind": "gift",
+      "nameJa": "隠れ家の遺産",
+      "proposedPurchaseCost": 4,
+      "effectJa": "各ターン、最初に自分のミミック系が破壊された後、自分の除外ミミック系の枚数だけ相手にダメージ。最大4",
+      "designIntentJa": "旧隠れ家の役割を継続的な小火力に変更。破壊された分も除外枚数に含める"
+    },
+    {
+      "id": "G03",
+      "kind": "gift",
+      "nameJa": "城塞の設計図",
+      "proposedPurchaseCost": 3,
+      "effectJa": "自分のターン開始時、自分の城のカウンターが2個以下なら1個追加",
+      "designIntentJa": "攻撃をしのぐ最低限の維持。高カウンターを無制限に蓄積しない"
+    },
+    {
+      "id": "G04",
+      "kind": "gift",
+      "nameJa": "捕食者の牙",
+      "proposedPurchaseCost": 3,
+      "effectJa": "各自分ターン、自分の捕食モンスターが初めて戦闘で相手モンスターを破壊したとき、その捕食モンスターに+2/+2(持続)。場に残っている場合のみ",
+      "designIntentJa": "受け身の確定除去を、狩りに成功して育つ能力へ"
+    },
+    {
+      "id": "G05",
+      "kind": "gift",
+      "nameJa": "八頁の奥義書",
+      "proposedPurchaseCost": 4,
+      "effectJa": "デッキ構成が8枚以下なら、各相手ターンに相手から受ける最初のプレイヤーダメージを4軽減(最低0)",
+      "designIntentJa": "圧縮への防御報酬。このギフト自身も8枚に含む。小ダメージで先に消費される"
+    },
+    {
+      "id": "G06",
+      "kind": "gift",
+      "nameJa": "横隊の軍旗",
+      "proposedPurchaseCost": 4,
+      "effectJa": "自分の場にモンスターが6体以上いる間、自分のモンスター全て+1/+1",
+      "designIntentJa": "大部隊を維持する理由。6体未満になると加算が消える。減算時の死亡処理は要定義"
+    },
+    {
+      "id": "G07",
+      "kind": "gift",
+      "nameJa": "再生の縫い糸",
+      "proposedPurchaseCost": 4,
+      "effectJa": "自分のターン開始時、直前の相手ターンに破壊された自分のコスト3以下・非トークンのモンスター1枚を、墓地から手札へ戻してよい",
+      "designIntentJa": "輪廻より小さな再利用。墓地に残っている実カードだけが対象"
+    },
+    {
+      "id": "G08",
+      "kind": "gift",
+      "nameJa": "赤字の誓約書",
+      "proposedPurchaseCost": 3,
+      "effectJa": "各自分ターン、最初に「血の魔法」の解決で自傷ダメージを受けて生存した後、体力4回復",
+      "designIntentJa": "血を支払う継続力。自傷が無効なら発動せず、致死ダメージは救わない"
+    },
+    {
+      "id": "G09",
+      "kind": "gift",
+      "nameJa": "呪印の監査印",
+      "proposedPurchaseCost": 4,
+      "effectJa": "相手が各ターン3枚目の魔法を発動した後、相手に烙印1個",
+      "designIntentJa": "魔法連打への公開された圧力。魔法自体は無効にしない"
+    },
+    {
+      "id": "G10",
+      "kind": "gift",
+      "nameJa": "予備の心臓",
+      "proposedPurchaseCost": 5,
+      "effectJa": "この対戦で一度だけ、相手からの致死ダメージに体力1で耐える。使用後も効果なしのギフトとしてデッキに残る",
+      "designIntentJa": "最後の砦の代役。全デッキ必須になるリスクが最も高く、後回しの試作候補"
+    },
+    {
+      "id": "Q01",
+      "kind": "quest",
+      "nameJa": "偽りの王国",
+      "proposedPurchaseCost": 2,
+      "effectJa": "自分のミミック系が計4体破壊される → ミミックキング1枚を手札に加える",
+      "designIntentJa": "小型を使い切って王へ進む。王の召喚マナは別途必要"
+    },
+    {
+      "id": "Q02",
+      "kind": "quest",
+      "nameJa": "城門の再建",
+      "proposedPurchaseCost": 2,
+      "effectJa": "自分の城が攻撃無効化で計5個のカウンターを消費 → 自分の城にカウンター5個追加し、騎士(4/4)2体を召喚",
+      "designIntentJa": "防衛成功を反攻へ変える。城が残っていれば騎士2体からも既存効果で+2個"
+    },
+    {
+      "id": "Q03",
+      "kind": "quest",
+      "nameJa": "飽くなき狩り",
+      "proposedPurchaseCost": 2,
+      "effectJa": "自分の捕食モンスターが戦闘で相手モンスターを計2体破壊 → 自分の場の捕食モンスター全て+3/+3(持続)",
+      "designIntentJa": "大型を食いながら盤面を育てる"
+    },
+    {
+      "id": "Q04",
+      "kind": "quest",
+      "nameJa": "八頁への帰還",
+      "proposedPurchaseCost": 2,
+      "effectJa": "自分のターン終了時にデッキ構成8枚以下を計2回満たす → 最大体力+12、体力12回復、カード2枚ドロー",
+      "designIntentJa": "圧縮を維持するクエスト。このクエストも進行中は8枚の内側に数える"
+    },
+    {
+      "id": "Q05",
+      "kind": "quest",
+      "nameJa": "百人隊への号令",
+      "proposedPurchaseCost": 3,
+      "effectJa": "自分が兵士・騎士を計6体召喚 → 自分の場の兵士・騎士全てに気合カウンター1個を付与",
+      "designIntentJa": "徴兵・策略に頼った大部隊を守る。既存の気合にはカウンター+1"
+    },
+    {
+      "id": "Q06",
+      "kind": "quest",
+      "nameJa": "忘れられた戦友",
+      "proposedPurchaseCost": 2,
+      "effectJa": "相手ターン中に自分の非トークンモンスターが計3体破壊される → 自分の墓地のコスト6以下のモンスター1枚を選んで召喚",
+      "designIntentJa": "継続的な輪廻ではなく、一度の立て直し"
+    },
+    {
+      "id": "Q07",
+      "kind": "quest",
+      "nameJa": "血盟の継承",
+      "proposedPurchaseCost": 2,
+      "effectJa": "異なる名前の「血の魔法」を3種類発動 → 中級吸血鬼1体を召喚し、体力10回復",
+      "designIntentJa": "血の魔法の種類を揃える動機。即効の血魔法も別名なら1種に数える"
+    },
+    {
+      "id": "Q08",
+      "kind": "quest",
+      "nameJa": "魔術の代償",
+      "proposedPurchaseCost": 2,
+      "effectJa": "相手が魔法を計5枚発動 → 相手に烙印2個",
+      "designIntentJa": "対魔法の進捗を公開。相手が発動枚数を抑える選択肢を残す"
+    },
+    {
+      "id": "Q09",
+      "kind": "quest",
+      "nameJa": "限界の向こうへ",
+      "proposedPurchaseCost": 2,
+      "effectJa": "現在体力10以下で自分のターン開始を迎える → 最大体力+15、その後体力15回復",
+      "designIntentJa": "低体力からの再起。発動したターンの即達成は不可で、相手ターンを越える必要がある"
+    },
+    {
+      "id": "Q10",
+      "kind": "quest",
+      "nameJa": "三つの旗の下に",
+      "proposedPurchaseCost": 3,
+      "effectJa": "自分が3種類の種族のモンスターを召喚 → 全体プールからコスト4以下の種族モンスター1枚を選び手札に加える",
+      "designIntentJa": "談合で失った種族の入手手段。報酬は購入扱いではなく、召喚マナも必要"
+    },
+    {
+      "id": "I01",
+      "kind": "quick_spell",
+      "nameJa": "ミミックの運び箱",
+      "proposedPurchaseCost": 3,
+      "effectJa": "自分にミミック(3/2)2体、相手に1体を召喚",
+      "designIntentJa": "その場で供給を補う。これは「宝箱」扱いにしない。相手にも戦力を渡す"
+    },
+    {
+      "id": "I02",
+      "kind": "quick_spell",
+      "nameJa": "廃城の増援",
+      "proposedPurchaseCost": 4,
+      "effectJa": "自分に兵士(2/2)2体を召喚し、自分の城にカウンター2個追加",
+      "designIntentJa": "城があれば兵士召喚分と合わせて計+4個。召喚できない分の+1は得ない"
+    },
+    {
+      "id": "I03",
+      "kind": "quick_spell",
+      "nameJa": "狩りの号笛",
+      "proposedPurchaseCost": 3,
+      "effectJa": "自分の捕食モンスター1体に+2/+2(持続)と気合カウンター1個",
+      "designIntentJa": "今から仕掛ける狩りの支援。攻撃後に買う選択もできる"
+    },
+    {
+      "id": "I04",
+      "kind": "quick_spell",
+      "nameJa": "研ぎ澄ます一手",
+      "proposedPurchaseCost": 2,
+      "effectJa": "自分の山札・墓地からカル1枚を除外。解決後にデッキ構成8枚以下なら1枚ドロー",
+      "designIntentJa": "圧縮カード自身がデッキを太らせない利点を活かす"
+    },
+    {
+      "id": "I05",
+      "kind": "quick_spell",
+      "nameJa": "防衛線の敷設",
+      "proposedPurchaseCost": 3,
+      "effectJa": "自分のモンスターを最大3体選び、体力+2(持続)",
+      "designIntentJa": "相手ターンが来る前の公開された防御準備"
+    },
+    {
+      "id": "I06",
+      "kind": "quick_spell",
+      "nameJa": "戦友の呼び戻し",
+      "proposedPurchaseCost": 4,
+      "effectJa": "自分の墓地のコスト3以下のモンスター1枚を選び、自分の場に召喚",
+      "designIntentJa": "引き直しを待たない復帰。既存の召喚時効果も発動する"
+    },
+    {
+      "id": "I07",
+      "kind": "quick_spell",
+      "nameJa": "血の魔法 - 緊急輸血",
+      "proposedPurchaseCost": 3,
+      "effectJa": "自分に8ダメージ。生存していれば自分の墓地の即効魔法以外の「血の魔法」1枚を手札に戻す",
+      "designIntentJa": "自傷・吸血鬼の進化・次の血魔法をつなぐ。即効魔法自体は墓地に残らない"
+    },
+    {
+      "id": "I08",
+      "kind": "quick_spell",
+      "nameJa": "禁書の封蝋",
+      "proposedPurchaseCost": 4,
+      "effectJa": "次の相手ターン、相手が最初に使う魔法の発動コスト+2。そのターン終了で消滅",
+      "designIntentJa": "無効化を使わない一時的な魔法対策。安い魔法で解除できる。相手の即効魔法なら購入時総額に+2する"
+    },
+    {
+      "id": "I09",
+      "kind": "quick_spell",
+      "nameJa": "最後の補給",
+      "proposedPurchaseCost": 3,
+      "effectJa": "現在体力10以下なら体力10回復。それ以外なら4回復",
+      "designIntentJa": "回復札のドロー待ちを減らす。相手ターンの致死攻撃には割り込めない"
+    },
+    {
+      "id": "I10",
+      "kind": "quick_spell",
+      "nameJa": "緑陰の祓い",
+      "proposedPurchaseCost": 3,
+      "effectJa": "両者の場の永続魔法1枚を選んで破壊",
+      "designIntentJa": "ブラッドシャワー・浄化の爆発の削除で減った永続魔法対策。ギフトは対象にしない"
+    }
+  ]
+}

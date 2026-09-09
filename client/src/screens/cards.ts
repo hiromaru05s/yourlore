@@ -8,20 +8,20 @@ import type { CardInst, CardType } from "../shared/types";
 import { DB, STARTERS } from "../shared/cards";
 import { cardEl } from "../ui/cardView";
 import { zoomCard } from "../ui/anim";
-import { t, cardName, onLangChange } from "../i18n";
+import { t, cardName, onLangChange, getLang } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
 
 // Build a stable, sorted list of every card as instances (uid = id).
 const ALL: CardInst[] = [...Object.values(DB), ...Object.values(STARTERS)]
   .map((d) => ({ ...d, uid: d.id }))
   .sort((a, b) => {
-    const order: Record<CardType, number> = { mon: 0, spell: 1, trap: 2, starter: 3 };
+    const order: Record<CardType, number> = { mon: 0, spell: 1, quest: 2, trap: 3, starter: 4 };
     if (order[a.t] !== order[b.t]) return order[a.t] - order[b.t];
     if (a.cost !== b.cost) return a.cost - b.cost;
     return a.id.localeCompare(b.id);
   });
 
-type TypeFilter = "all" | CardType;
+type TypeFilter = "all" | "quick" | CardType;
 
 export function mountCards(app: App): Screen {
   let typeF: TypeFilter = "all";
@@ -58,7 +58,9 @@ export function mountCards(app: App): Screen {
   // ---- type chips ----
   const typeDefs: [TypeFilter, string][] = [
     ["all", t("cards.f.all")], ["mon", t("cards.f.mon")],
-    ["spell", t("cards.f.spell")], ["trap", t("cards.f.trap")],
+    ["spell", t("cards.f.spell")],
+    ["quick", getLang() === "ja" ? "クイック魔法" : getLang() === "en" ? "Quick spells" : "퀵 마법"],
+    ["quest", getLang() === "ja" ? "クエスト" : getLang() === "en" ? "Quests" : "퀘스트"],
     ["starter", t("cards.f.starter")],
   ];
   const typeChips = typeDefs.map(([key, label]) => {
@@ -92,6 +94,7 @@ export function mountCards(app: App): Screen {
     const list = ALL.filter((c) => {
       // "스타터" 탭 = 컬/보물상자/어튠 + 덱 구성 전용(noShop) 스타팅 카드 전부
       if (typeF === "starter") { if (!(c.t === "starter" || c.noShop)) return false; }
+      else if (typeF === "quick") { if (!c.quick) return false; }
       else if (typeF !== "all" && c.t !== typeF) return false;
       if (costF !== -1 && c.cost !== costF) return false;
       if (q && !cardName(c).toLowerCase().includes(q) && !c.name.toLowerCase().includes(q)) return false;

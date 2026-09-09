@@ -10,3 +10,5 @@ _render.cjs
 .worktrees/
 *.timestamp-*.mjs
 .claude/settings.local.json
+
+/art/.cache/questQuickCards.mjs

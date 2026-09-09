@@ -1,0 +1,308 @@
+{
+  "date": "2026-09-09",
+  "baseline": "338eb3b / v43",
+  "targetVersion": "v44",
+  "deleted": [
+    {
+      "id": "M13",
+      "t": "mon",
+      "cost": 4,
+      "name": "보이드 리버",
+      "atk": 3,
+      "def": 2,
+      "text": "【소환시】세트 함정 1장 파괴(양측)",
+      "onSummon": "breaktrap",
+      "nameJa": "ヴォイド・リーヴァー",
+      "textJa": "【召喚時】セット罠1枚を破壊(両方の場)",
+      "nameEn": "Void Reaver",
+      "textEn": "【On Summon】destroy 1 set trap (either side)"
+    },
+    {
+      "id": "TRAPSMITH",
+      "t": "mon",
+      "cost": 4,
+      "atk": 1,
+      "def": 4,
+      "onSummon": "trapsmithBuff",
+      "name": "함정 기술자",
+      "nameJa": "罠職人",
+      "text": "【소환시】덱·묘지·세트한 함정 1장당 +2/+2 · 【상시】함정 카드의 구매 코스트 -1",
+      "textJa": "【召喚時】デッキ・墓地・セットした罠1枚につき+2/+2 · 【常時】罠カードの購入コスト-1",
+      "aura": "trapDiscount",
+      "nameEn": "Trapsmith",
+      "textEn": "【On Summon】+2/+2 per trap in your deck, graveyard and set zone · 【Passive】traps cost 1 less to buy"
+    },
+    {
+      "id": "SX2",
+      "t": "spell",
+      "cost": 2,
+      "name": "봉인의 실밥",
+      "text": "필드의 세트 함정 1장을 선택해 파괴 · 주사위를 굴려 5 이상이면 그 함정을 게임에서 제외(양측)",
+      "act": "destroyTrap",
+      "val": 1,
+      "nameJa": "封印の綻び",
+      "textJa": "場のセットトラップ1枚を選んで破壊 · ダイスを振り5以上ならその罠をゲームから除外(両方の場)",
+      "nameEn": "Loose Thread of the Seal",
+      "textEn": "Choose and destroy 1 set trap · Roll a die: on 5+, exile it (either side)"
+    },
+    {
+      "id": "SX4",
+      "t": "spell",
+      "cost": 4,
+      "name": "두 번째 열쇠",
+      "text": "세트 함정 2장 파괴(양측)",
+      "act": "destroyTrap",
+      "val": 2,
+      "nameJa": "第二の鍵",
+      "textJa": "セット罠2枚を破壊(両方の場)",
+      "nameEn": "The Second Key",
+      "textEn": "Destroy 2 set traps (either side)"
+    },
+    {
+      "id": "NWIPE",
+      "t": "spell",
+      "cost": 5,
+      "name": "정화의 폭발",
+      "text": "자신 필드에 몬스터가 없을 때만 · 상대 함정·마법 전부 파괴",
+      "act": "wipeBack",
+      "nameJa": "浄化の爆発",
+      "textJa": "自分の場にモンスターがいない時のみ · 相手の罠・魔法を全て破壊",
+      "val": 0,
+      "nameEn": "Purging Blast",
+      "textEn": "Only while your field is empty · Destroy all enemy traps and enchantments"
+    },
+    {
+      "id": "BLOOD2",
+      "t": "spell",
+      "cost": 4,
+      "play": 2,
+      "name": "피의 마법 - 블러드 샤워",
+      "nameJa": "血の魔法 - ブラッドシャワー",
+      "text": "자신에게 15 데미지 · 영구마법·세트 함정 2장을 선택해 파괴(양측)",
+      "textJa": "自分に15ダメージ · 永続魔法・セットトラップを2枚選んで破壊(両方の場)",
+      "nameEn": "Blood Magic - Blood Shower",
+      "textEn": "you take 15 damage · Choose and destroy 2 enchantments/set traps (either side)"
+    },
+    {
+      "id": "NEGOTIATE",
+      "t": "spell",
+      "cost": 1,
+      "noShop": true,
+      "name": "검은 봉인의 거래",
+      "nameJa": "黒封印の取引",
+      "text": "상대의 최대 마나 +1 · 상대는 2턴 동안 함정을 세트할 수 없다",
+      "textJa": "相手の最大マナ+1 · 相手は2ターンの間 罠をセットできない",
+      "nameEn": "Bargain of the Black Seal",
+      "textEn": "Enemy max mana +1 · The opponent cannot set traps for 2 turns"
+    }
+  ],
+  "reworked": [
+    {
+      "id": "TAR3",
+      "before": {
+        "id": "TAR3",
+        "t": "mon",
+        "cost": 3,
+        "atk": 2,
+        "def": 3,
+        "tribe": "귀족",
+        "aura": "trapBan",
+        "name": "몰락한 기사",
+        "nameJa": "没落した騎士",
+        "text": "【상시】상대는 함정 카드를 세트할 수 없다",
+        "textJa": "【常時】相手は罠カードをセットできない",
+        "passive": [
+          "aura",
+          "majesty"
+        ],
+        "nameEn": "Fallen Knight",
+        "textEn": "【Passive】The opponent cannot set trap cards"
+      }
+    },
+    {
+      "id": "GM6_8",
+      "before": {
+        "id": "GM6_8",
+        "t": "mon",
+        "cost": 6,
+        "name": "공허의 공성병",
+        "nameJa": "虚空の攻城兵",
+        "atk": 14,
+        "def": 1,
+        "onSummon": "siegeBreak2",
+        "text": "【소환시】상대 함정 2장 파괴, 미달이면 자신 묘지 무작위 1장 제외 · 파괴되면 병사(2/2) 1체 소환",
+        "textJa": "【召喚時】相手の罠2枚破壊、未達なら自分の墓地のランダム1枚を除外 · 破壊されたら兵士(2/2)1体を召喚",
+        "nameEn": "Void Siegebreaker",
+        "textEn": "【On Summon】destroy 2 enemy traps; if fewer, exile 1 graveyard card at random · On death: a 2/2 Soldier"
+      }
+    },
+    {
+      "id": "ORIGIN_MIMIC",
+      "before": {
+        "id": "ORIGIN_MIMIC",
+        "t": "mon",
+        "cost": 8,
+        "atk": 3,
+        "def": 3,
+        "tribe": "시초",
+        "onSummon": "originMimic",
+        "name": "시초의 미믹",
+        "nameJa": "始原のミミック",
+        "text": "【소환시】자신 필드·묘지·제외의 '미믹' 계열 1장당 +2/+2 · 제외가 8장 이상이면 상대 함정 최대 2장 파괴",
+        "textJa": "【召喚時】自分の場・墓地・除外の「ミミック」系1枚につき+2/+2 · 除外が8枚以上なら相手の罠を最大2枚破壊",
+        "nameEn": "Origin Mimic",
+        "textEn": "【On Summon】+2/+2 per 'Mimic' card in your field/graveyard/exile · 8+ exiled: destroy up to 2 enemy traps"
+      }
+    },
+    {
+      "id": "ASSASSIN4",
+      "before": {
+        "id": "ASSASSIN4",
+        "t": "mon",
+        "cost": 8,
+        "name": "특급 암살자 - 나이트로드",
+        "nameJa": "特級アサシン - ナイトロード",
+        "atk": 23,
+        "def": 20,
+        "mult": 2,
+        "summonReq": "assassinTrio",
+        "onSummon": "nightlord",
+        "text": "【조건】덱 구성에 이 몬스터 외 '암살자' 3종 이상 · 【소환시】상대에게 낙인 카운터 3개, 상대 세트 함정 전부 파괴",
+        "textJa": "【条件】デッキ構成にこのモンスター以外の「アサシン」3種以上 · 【召喚時】相手に烙印カウンター3個、相手のセット罠を全て破壊",
+        "passive": [
+          "majesty",
+          "aura",
+          "trapmaster",
+          "evade"
+        ],
+        "nameEn": "Master Assassin - Nightlord",
+        "textEn": "【Requires】3+ distinct other Assassins in deck · 【On Summon】opponent gets 3 Brand counters, destroy their set traps"
+      }
+    },
+    {
+      "id": "CHOSEN_ROGUE",
+      "before": {
+        "id": "CHOSEN_ROGUE",
+        "t": "mon",
+        "cost": 7,
+        "atk": 0,
+        "def": 4,
+        "condAtk": "cullAtk2",
+        "directOnly": true,
+        "passive": [
+          "evade",
+          "trapmaster"
+        ],
+        "name": "선택받은 도적",
+        "nameJa": "選ばれし盗賊",
+        "text": "【상시】제외된 자신의 '컬' 2장당 공격력 +2 · 직접 공격 성공 시 덱·묘지의 함정 1장을 코스트 없이 세트",
+        "textJa": "【常時】除外された自分の「カル」2枚につき攻撃力+2 · 直接攻撃成功時、デッキ・墓地の罠1枚をコストなしでセット",
+        "attackFx": "rogueTrap",
+        "nameEn": "Chosen Rogue",
+        "textEn": "【Passive】ATK +2 per 2 exiled Culls · On a direct hit, set 1 trap from deck or graveyard for free"
+      }
+    },
+    {
+      "id": "NMD6",
+      "before": {
+        "id": "NMD6",
+        "t": "mon",
+        "cost": 6,
+        "name": "대현자",
+        "atk": 8,
+        "def": 5,
+        "text": "【상시】덱 구성에 마법이 13장 이상이면 마법의 시전 코스트 -1",
+        "nameJa": "大賢者",
+        "textJa": "【常時】デッキ構成に魔法が13枚以上なら魔法の発動コスト-1",
+        "passive": [
+          "trapmaster"
+        ],
+        "aura": "sageDiscount",
+        "nameEn": "Grand Sage",
+        "textEn": "【Passive】with 13+ spells in your deck, spells cost 1 less to cast"
+      }
+    },
+    {
+      "id": "VAMP5",
+      "before": {
+        "id": "VAMP5",
+        "t": "mon",
+        "cost": 0,
+        "atk": 21,
+        "def": 5,
+        "onSummon": "vampLord",
+        "attackFx": "vampDrain",
+        "val": 100,
+        "aura": "trapImmune",
+        "name": "특급 흡혈귀",
+        "nameJa": "特級吸血鬼",
+        "text": "【소환시】상대에게 15 데미지, 자신 최대 체력 +30 · 이 몬스터가 상대에게 준 데미지만큼 자신 최대 체력 +",
+        "textJa": "【召喚時】相手に15ダメージ、自分の最大体力+30 · このモンスターが相手に与えたダメージだけ自分の最大体力+",
+        "passive": [
+          "void"
+        ],
+        "nameEn": "Supreme Vampire",
+        "textEn": "【On Summon】15 damage to the opponent, your max HP +30 · Damage it deals the opponent adds to your max HP"
+      }
+    },
+    {
+      "id": "LEGEND_GAMBLER",
+      "before": {
+        "id": "LEGEND_GAMBLER",
+        "t": "mon",
+        "cost": 7,
+        "atk": 3,
+        "def": 9,
+        "passive": [
+          "trapmaster",
+          "void",
+          "aura"
+        ],
+        "turnFx": "legendGambler",
+        "name": "전설의 도박꾼",
+        "nameJa": "伝説のギャンブラー",
+        "text": "【매턴】눈 예측 후 주사위 3개 · 맞히면 최대 마나 +4·최대 체력 +35·상대 카드 2장 파괴 택1(도박꾼:전부)",
+        "textJa": "【毎ターン】出目を予測しダイス3個 · 的中で最大マナ+4·最大体力+35·相手カード2枚破壊から1つ(ギャンブラー:全て)",
+        "nameEn": "Legendary Gambler",
+        "textEn": "【Each Turn】roll 3 dice vs a guess · Hit: max mana +4, max HP +35 or kill 2 enemy cards (all with Gambler)"
+      }
+    },
+    {
+      "id": "HIGH_ELF",
+      "before": {
+        "id": "HIGH_ELF",
+        "t": "mon",
+        "cost": 6,
+        "atk": 25,
+        "def": 25,
+        "passive": [
+          "trapmaster",
+          "aura",
+          "majesty",
+          "evade"
+        ],
+        "summonReq": "maxHp99",
+        "name": "하이엘프",
+        "nameJa": "ハイエルフ",
+        "text": "【조건】자신의 최대 체력이 99 이상일 때만 소환 가능",
+        "textJa": "【条件】自分の最大体力が99以上の時のみ召喚可能",
+        "nameEn": "High Elf",
+        "textEn": "【Requires】Summonable only while your max HP is 99 or higher"
+      }
+    },
+    {
+      "id": "NL_SECRET",
+      "before": {
+        "id": "NL_SECRET",
+        "t": "spell",
+        "cost": 3,
+        "name": "나이트로드의 비기",
+        "nameJa": "ナイトロードの秘技",
+        "text": "자신 몬스터 1체에 트랩마스터·암습·회피 중 1개 부여 · 자신의 '암살자' 2체의 공격력 +3(지속)",
+        "textJa": "自分のモンスター1体にトラップマスター・暗襲・回避の1つを付与 · 自分の「アサシン」2体の攻撃力+3(持続)",
+        "nameEn": "Nightlord's Secret Art",
+        "textEn": "Give Trap Master, Infiltrate or Evade to 1 monster · 2 of your Assassins ATK +3 (lasting)"
+      }
+    }
+  ]
+}

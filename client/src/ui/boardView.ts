@@ -4,6 +4,7 @@
 // All animation lives in anim.ts; this file only draws + binds.
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
+import { purchaseAllowed, freeBuyBlocked } from "../shared/engine";
 import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem, marketStockOf } from "../shared/engine";
 import { enchantHasTurnCountdown, fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
@@ -519,13 +520,24 @@ export class GameView {
       bindZoom(card, e.card, undefined, stateText);
       sz.appendChild(card);
     });
-    for (let i = p.traps.length + p.enchants.length; i < ST_SLOTS; i++) sz.appendChild(this.slotEl());
+    for (const q of p.quests ?? []) {
+      const tile = document.createElement("button");
+      tile.className = "buff-icon buff-icon--quest";
+      tile.dataset.uid = q.card.uid;
+      const progress = `${q.progress}/${q.card.quest?.target ?? 0}`;
+      tile.title = `${cardName(q.card)} · ${progress} · ${q.card.textJa ?? q.card.text}`;
+      tile.setAttribute("aria-label", `${cardName(q.card)} クエスト進捗 ${progress}`);
+      tile.innerHTML = `<span class="buff-frame" style="background-image:url(${fieldFrameFor('quest')})"></span><span class="quest-progress">${progress}</span>`;
+      tile.onclick = () => zoomCard(q.card, undefined, `クエスト進捗 ${progress}`);
+      sz.appendChild(tile);
+    }
+    for (let i = p.traps.length + p.enchants.length + (p.quests?.length ?? 0); i < ST_SLOTS; i++) sz.appendChild(this.slotEl());
 
     // Monster zone nearest the center line: me → mon on top, opp → mon on bottom.
     const monRow = this.zoneRow(mz);
     const stRow = this.zoneRow(sz);
     monRow.dataset.label = `${t("duel.monsters")} ${p.field.length}/${MON_SLOTS}`;
-    stRow.dataset.label = `${t("duel.spellsTraps")} ${p.traps.length + p.enchants.length}/${ST_SLOTS}`;
+    stRow.dataset.label = `${t("duel.spellsTraps")} ${p.traps.length + p.enchants.length + (p.quests?.length ?? 0)}/${ST_SLOTS}`;
     mz.setAttribute("aria-label", monRow.dataset.label);
     sz.setAttribute("aria-label", stRow.dataset.label);
     const zones = document.createElement("div");
@@ -823,7 +835,7 @@ export class GameView {
     const fixed = this.q("fixedMarket");
     g.market.forEach((c, i) => {
       const bc = buyCost(owner, c);
-      const aff = myTurn && !g.pending && me.mana >= bc;
+      const aff = myTurn && !g.pending && me.mana >= bc && purchaseAllowed(g, me, c) && !freeBuyBlocked(me, c);
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc }); // same size as 제시
       if (aff) armBuy(card, "mkt" + i, () => this.h.onBuyMarket(i), c); else zoomOnTap(card, c);
       // v40: 슬롯 재고 — 다 팔리면 새 카드로 교체되므로 남은 수를 보여준다
@@ -846,7 +858,7 @@ export class GameView {
     filled.sort((a, b) => rank(a.c.t) - rank(b.c.t) || a.c.cost - b.c.cost);
     for (const { c, i } of filled) {
       const bc = buyCost(owner, c);
-      const aff = myTurn && !g.pending && me.mana >= bc;
+      const aff = myTurn && !g.pending && me.mana >= bc && purchaseAllowed(g, me, c) && !freeBuyBlocked(me, c);
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc });
       const stock = document.createElement("div");
       stock.className = "mkt-stock mkt-stock--single";
@@ -901,7 +913,7 @@ export class GameView {
     handEl.innerHTML = "";
     me.hand.forEach((c, idx) => {
       const pc = playCost(c, me);
-      const aff = myTurn && !g.pending && me.mana >= pc;
+      const aff = myTurn && !g.pending && !c.quick && me.mana >= pc && (c.t !== "quest" || me.traps.length + me.enchants.length + (me.quests?.length ?? 0) < 14);
       const card = cardEl(c, { size: "hand", playable: aff, dim: !aff, costOverride: pc });
       card.style.setProperty("--hi", String(idx));
       card.style.zIndex = String(idx);

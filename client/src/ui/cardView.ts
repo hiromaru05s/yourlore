@@ -604,13 +604,13 @@ export function ensureCardCompositing(): void {
 
 export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   ensureCardCompositing();
-  const typeClass = c.t === "mon" ? "card--mon" : c.t === "trap" ? "card--trap" : c.t === "starter" ? "card--starter" : "card--spell";
+  const typeClass = c.t === "mon" ? "card--mon" : c.t === "trap" ? "card--trap" : c.t === "starter" ? "card--starter" : c.t === "quest" ? "card--quest" : "card--spell";
   const sizeClass = opt.size === "mkt" ? "card--mkt" : opt.size === "hand" ? "card--hand" : "";
   const node = el("div", `card ${typeClass} ${sizeClass}`.trim());
   node.dataset.uid = c.uid;
-  node.dataset.cardType = c.t === "mon" ? "mon" : c.t === "trap" ? "trap" : "spell";
-  const labels = getLang() === "ja" ? ["モンスター", "魔法", "罠"] : getLang() === "en" ? ["Monster", "Spell", "Trap"] : ["몬스터", "마법", "함정"];
-  const typeIndex = c.t === "mon" ? 0 : c.t === "trap" ? 2 : 1;
+  node.dataset.cardType = c.t === "mon" ? "mon" : c.t === "trap" ? "trap" : c.t === "quest" ? "quest" : "spell";
+  const labels = getLang() === "ja" ? ["モンスター", "魔法", "罠", "クエスト", "クイック魔法"] : getLang() === "en" ? ["Monster", "Spell", "Trap", "Quest", "Quick spell"] : ["몬스터", "마법", "함정", "퀘스트", "퀵 마법"];
+  const typeIndex = c.t === "mon" ? 0 : c.t === "trap" ? 2 : c.t === "quest" ? 3 : c.quick ? 4 : 1;
 
   if (opt.compactField) node.classList.add("card--field");
   // Complete raster face underneath the illustration and live typography.
@@ -679,6 +679,11 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
       return pd ? (lang0 === "ja" ? pd.ja.name : lang0 === "en" ? pd.en.name : pd.ko.name) : null;
     };
     const band = el("div", "card-status");
+    if (c.quick || c.t === "quest") {
+      const chip = el("span", "kw", labels[typeIndex]);
+      chip.title = c.quick ? label("購入時に1回だけ発動し、ゲームから除外", "Resolves once on purchase, then leaves the game", "구매시 1회 발동 후 게임에서 제외") : label("発動後から条件を数え、達成時に報酬を1回獲得", "Counts progress after activation; earn the reward once", "발동 후 조건을 세고 달성시 보상 1회 획득");
+      band.appendChild(chip);
+    }
     const fm = c as FieldMon;
     // 1) 키워드 — 카드가 원래 가진 것 + 게임 중 부여된 것 (필드 타일에서만;
     //    손패/마켓/확대는 효과판의 키워드 칩 행이 같은 정보를 이미 보여준다)

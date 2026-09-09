@@ -45,9 +45,12 @@ eternal.players[0].enchants.push({card:{...contract,uid:'contract-expiry'},turns
 eternal=reduce(eternal,{type:'endTurn'}).state;
 assert(!eternal.players[0].enchants.some(e=>e.card.uid==='contract-expiry'));
 assert(eternal.players[0].removed.some(c=>c.uid==='contract-expiry'));
+// Legacy persisted games still render/resolve traps, even though v43 removes
+// every trap from DB. Use an explicit fixture, never a live catalog lookup.
+const legacyTrap={id:'T9',t:'trap',cost:2,play:1,react:'thornShield',val:3,name:'Legacy trap',nameJa:'旧罠',text:'Attack response'};
 // Shared engine capacity applies to both browser and staging worker reducers.
 const boundary=createGame({mode:'bot',seed:7,starting:0,p0:{id:'x',name:'X'},p1:{id:'y',name:'Y'}}).state;
-const trapDef=Object.values(DB).find(c=>c.t==='trap' && !c.req);
+const trapDef=legacyTrap;
 boundary.pending=null;boundary.players[0].mana=30;
 boundary.players[0].traps=Array.from({length:13},(_,i)=>({card:{...trapDef,uid:'b-'+i}}));
 boundary.players[0].hand=[{...trapDef,uid:'fourteenth'},{...trapDef,uid:'fifteenth'}];
@@ -57,7 +60,7 @@ cap=reduce(cap,{type:'play',idx:0,player:0}).state;
 assert.equal(cap.players[0].traps.length,14);assert(cap.players[0].hand.some(c=>c.uid==='fifteenth'));
 const g=createGame({mode:'bot',seed:42,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;
 const mon=Object.values(DB).find(c=>c.t==='mon');
-const trap=Object.values(DB).find(c=>c.t==='trap');
+const trap=legacyTrap;
 const spell=Object.values(DB).find(c=>c.ench);
 for(const [i,p] of g.players.entries()){
  p.maxMana=30;p.mana=23;p.hp=20;
@@ -163,6 +166,22 @@ assert(document.querySelector('.cast-reveal'));assert(document.querySelector('.c
 setFxSkip(true);await reveal;setFxSkip(false);
 assert(!document.querySelector('.cast-reveal'));assert(!document.querySelector('.cast-veil'));
 assert(document.getElementById('pile-myDisc'));
+// Public quest progress and conditional quick-buy affordances survive both PC layouts.
+const qstate=structuredClone(g);qstate.cur=0;qstate.pending=null;
+for (const [s,p] of qstate.players.entries()) {
+ p.traps=[];p.enchants=[];p.quests=[{card:{...DB.Q_WINTER,uid:`quest-${s}`},progress:17,startedTurn:1}];
+}
+qstate.players[0].hp=16;qstate.market[0]={...DB.QUICK_SURVIVAL,uid:'quick-market'};
+for (const [width,height] of [[1280,720],[1920,1080]]) {
+ globalThis.innerWidth=width;globalThis.innerHeight=height;v.render(qstate);
+ assert.equal(document.querySelectorAll('.buff-icon--quest').length,2);
+ assert([...document.querySelectorAll('.buff-icon--quest')].every(n=>n.getAttribute('aria-label').includes('17/30')));
+ assert(!document.querySelector('#fixedMarket .card[data-uid="quick-market"]').classList.contains('is-buyable'));
+}
+qstate.players[0].hp=15;v.render(qstate);
+assert(document.querySelector('#fixedMarket .card[data-uid="quick-market"]').classList.contains('is-buyable'));
+const questFace=cardEl({...DB.Q_WINTER,uid:'quest-face'});
+assert(questFace.classList.contains('card--quest'));assert(questFace.querySelector('.card-frame').style.backgroundImage.includes('base-quest.png'));
 v.destroy();
 document.getElementById('app').innerHTML='';
 // Regression through the real controller: first banner follows the coin; next turn announces once.

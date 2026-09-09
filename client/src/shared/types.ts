@@ -3,7 +3,7 @@
 // Imported by both the client UI and the authoritative server.
 // ============================================================
 
-export type CardType = "mon" | "spell" | "trap" | "starter";
+export type CardType = "mon" | "spell" | "quest" | "trap" | "starter";
 export type Side = 0 | 1;
 
 export interface CardDef {
@@ -23,6 +23,8 @@ export interface CardDef {
   val?: number; // generic effect magnitude (also enchant duration)
   val2?: number; // secondary magnitude (e.g. heal+draw, atk+def buff, enchant amount)
   play?: number; // play/cast cost (defaults to `cost`); buy cost stays `cost`
+  quick?: boolean; // spell: resolve once on purchase, then permanently leave the game
+  quest?: { event: QuestEvent; target: number };
   ench?: string; // persistent field-enchantment key (spell stays on field)
   tribe?: string; // tribe key (고독/고귀/포식/귀족) for synergy monsters
   turnFx?: string; // per-turn effect while on field (fires on owner's turn start)
@@ -44,6 +46,14 @@ export interface CardDef {
   textJa?: string; // Japanese effect text (falls back to text)
   nameEn?: string; // English name (falls back to name)
   textEn?: string; // English effect text (falls back to text)
+}
+
+export type QuestEvent = "exile" | "opponentDamage" | "emptyTurn" | "maxHp" | "tribeSummon" | "castleTurn" | "decayKill" | "assassinHit" | "spellPlay";
+export interface QuestState {
+  card: CardInst;
+  progress: number;
+  startedTurn: number;
+  anchorUid?: string;
 }
 
 export interface Enchant {
@@ -113,6 +123,8 @@ export interface PlayerState {
   boughtCount: number;
   taxFlag: boolean;
   enchants: Enchant[]; // active persistent spells (public, on field)
+  quests?: QuestState[]; // public active quests; optional for persisted older matches
+  spellDiscountTurn?: number;
   tribesFired: string[]; // "<tribe>:<count>" synergy thresholds already used this game
   bonusDrawPerm: number; // permanent extra draw at turn start (귀족 3 synergy)
   bleed: number; // persistent damage taken at the start of each of this player's turns
@@ -160,7 +172,8 @@ export interface PlayerState {
 }
 
 export interface Pending {
-  kind: "oppMon" | "myMon" | "seek" | "recall" | "purge" | "oppRmz" | "oppBoard" | "reroll" | "giantShop"; // oppRmz: 흑룡 · oppBoard: 신수 · reroll: 수레바퀴 · giantShop: 시초의 거인 교역
+  owner?: Side; // effect choice may belong to the non-active player
+  kind: "cardChoice" | "oppMon" | "myMon" | "seek" | "recall" | "purge" | "oppRmz" | "oppBoard" | "reroll" | "giantShop"; // oppRmz: 흑룡 · oppBoard: 신수 · reroll: 수레바퀴 · giantShop: 시초의 거인 교역
   hint: string;
   hintJa: string; // Japanese target hint
   reason: string; // which effect awaits input
