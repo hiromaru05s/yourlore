@@ -76,9 +76,12 @@ export class PaperCard {
     this.group.name='paper-card';
   }
   deform(curvature:number,twist:number):void {
+    this.deformWith((x,y,z)=>bendPoint(x,y,z,curvature,twist));
+  }
+  deformWith(map:(x:number,y:number,z:number)=>[number,number,number]):void {
     for(const {mesh,rest} of this.parts){
       const p=mesh.geometry.getAttribute('position');
-      for(let i=0;i<p.count;i++)p.setXYZ(i,...bendPoint(rest[i*3],rest[i*3+1],rest[i*3+2],curvature,twist));
+      for(let i=0;i<p.count;i++)p.setXYZ(i,...map(rest[i*3],rest[i*3+1],rest[i*3+2]));
       p.needsUpdate=true;mesh.geometry.computeVertexNormals();
     }
   }

@@ -911,19 +911,29 @@ export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<voi
   const target=document.getElementById(side==='me'?'rift-me':'rift-opp');if(!target||fxSkip)return;
   const a=node.getBoundingClientRect(),b=target.getBoundingClientRect();
   const x=b.left+b.width/2,y=b.top+b.height/2;
-  window.dispatchEvent(new CustomEvent('lore:buff-flow',{detail:{from:a,to:b}}));
-  target.classList.add('is-absorbing');node.style.transformOrigin='center';
+  target.classList.add('is-absorbing');
   const w=node.offsetWidth||a.width,h=node.offsetHeight||a.height;
   const start=node.style.transform.startsWith('matrix')?new DOMMatrix(node.style.transform):new DOMMatrix().translate(a.left,a.top).scale(a.width/w,a.height/h);
-  node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transition='none';
-  const end=new DOMMatrix().translate(x,y).rotate(0,72,-14).scale(.015,.2);
-  const motion=node.animate([{transform:start.toString(),opacity:1,filter:'brightness(1)'},{offset:.55,opacity:1,filter:'brightness(1.35)'},{transform:end.toString(),opacity:0,filter:'brightness(1.8) blur(2px)'}],{duration:760,easing:'cubic-bezier(.55,.02,.8,.45)',fill:'forwards'});
-  try{await wait(matchMedia('(prefers-reduced-motion:reduce)').matches?80:760);}finally{motion.cancel();target.classList.remove('is-absorbing');}
+  const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  let started=false;
+  try{
+    if(!reduced&&typeof WebGL2RenderingContext!=='undefined'){
+      try{const {swallowRiftCard}=await import('./riftScene');
+        await boardMotionScope(async signal=>{await swallowRiftCard(node,target,start,signal,()=>{started=true;});return true;},5000);
+      }catch{ /* Preserve a complete pull into the aperture without GPU. */ }
+      if(started||fxSkip)return;
+    }
+    node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transition='none';
+    const end=new DOMMatrix().translate(x,y).scale(0);
+    const duration=reduced?100:900;
+    const motion=node.animate([{transform:start.toString()},{transform:end.toString()}],{duration,easing:'cubic-bezier(.55,.02,.6,1)',fill:'forwards'});
+    try{await wait(duration);}finally{motion.cancel();}
+  }finally{target.classList.remove('is-absorbing');}
 }
 export async function exileCard(card:CardInst,side:ViewSide,source?:HTMLElement|null):Promise<void>{
   const r=source?.getBoundingClientRect()||rectOf('#'+discId(side));if(!r)return;
   const node=floatAt(source?source.cloneNode(true) as HTMLElement:cardEl(card,{size:'hand'}),r);node.style.visibility='visible';if(source){node.style.width=`${source.offsetWidth}px`;node.style.height=`${source.offsetHeight}px`;node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transform=fieldPlacement(source,source.offsetWidth,source.offsetHeight).toString();source.style.visibility='hidden';}
-  try{await absorbIntoRift(node,side);}finally{node.remove();if(source)source.style.visibility='';}
+  try{await absorbIntoRift(node,side);}finally{node.remove();} // The old source stays hidden until the authoritative board render.
 }
 export async function openingBoard():Promise<void>{
   if(fxSkip||typeof WebGL2RenderingContext==='undefined')return;

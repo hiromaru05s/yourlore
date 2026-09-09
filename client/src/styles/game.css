@@ -738,3 +738,5 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
 .cointoss-ov.coin-loading .ct-coin { visibility:hidden; }
 /* Keep depleted supply slots empty, including mouse/focus effects, until commit. */
 .market-cards .card[data-purchase-source][aria-hidden="true"] { visibility:hidden!important;pointer-events:none!important; }
+
+.rift-fold-canvas { position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:126; }
