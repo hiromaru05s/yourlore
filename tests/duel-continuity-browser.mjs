@@ -23,7 +23,7 @@ await page.evaluate(async()=>{
 await page.waitForSelector('.supply-model-ready');await page.waitForTimeout(700);
 const proportions=await page.evaluate(()=>{const rect=s=>document.querySelector(s).getBoundingClientRect();return {self:rect('#portraitMe .avatar').toJSON(),opp:rect('#portraitOpp .avatar').toJSON(),hand:rect('#hand .card').toJSON(),opponentHand:rect('#oppHand .card--back').toJSON(),manaFont:getComputedStyle(document.querySelector('#portraitMe .mana-readout b')).fontSize};});
 assert(Math.abs(proportions.self.width/proportions.self.height-1)<.02);assert(Math.abs(proportions.opp.width/proportions.opp.height-1)<.02);
-assert(proportions.opponentHand.width<proportions.hand.width*.8);assert(proportions.opp.y>=0);assert(parseFloat(proportions.manaFont)>=30);
+assert(Math.abs(proportions.opponentHand.width-proportions.hand.width)<1);assert(proportions.opp.y>=0);assert(parseFloat(proportions.manaFont)>=30);
 await page.screenshot({path:out+'/continuity-desktop.png'});
 // One click is immediate selection, second confirmation submits exactly one buy.
 const market=page.locator('#fixedMarket .card').first();await market.click();assert(await market.evaluate(e=>e.classList.contains('is-armed')));assert.equal(await page.locator('.buy-confirm').count(),1);

@@ -677,3 +677,57 @@
 .duel-opening .pile-tag,.duel-opening .pile-count { visibility:hidden; }
 
 @media(max-width:700px) and (orientation:portrait) { .game .portrait:not(.portrait--opp) .pt-mana { top:24%; } }
+
+/* Archive pointer set: same precise tip/hotspot in all five states. */
+body:has(.game) { cursor:url(/ui/cursors/normal.svg) 3 3,default; }
+body:has(.game) :is(button,a,[role=button],.card,.pile,.hand) { cursor:url(/ui/cursors/hover.svg) 3 3,pointer!important; }
+body:has(.game) :is([data-block-reason],[data-block-reason] *,button:disabled,[aria-disabled=true]) { cursor:url(/ui/cursors/blocked.svg) 3 3,not-allowed!important; }
+body:has(.game.drag-play) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!important; }
+body:has(.opening-hands) *,body:has(.game) [aria-busy=true] { cursor:url(/ui/cursors/loading.svg) 3 3,progress!important; }
+.card-block-tip { position:fixed;z-index:250;pointer-events:none;max-width:min(320px,90vw);padding:9px 14px;color:#f2e3cd;background:#20283bf5;border:1px solid #bca27a;border-radius:8px 8px 8px 2px;box-shadow:0 5px 16px #070c2350;font-size:12px;line-height:1.5; }
+.game .card.is-dim { filter:grayscale(1) brightness(.55) contrast(.9)!important; }
+.game .card.is-dim:hover { filter:grayscale(.95) brightness(.65) contrast(.9)!important; }
+.game .card-frame { filter:url(#celestial-matte) drop-shadow(0 1px 0 #d3c3a0) drop-shadow(0 1px 0 #655846); }
+.game .pcluster--opp { transform:translateY(calc(var(--pt) * -.15)); }
+.game .pcluster--me { bottom:calc(var(--pt) * -.07); }
+.game .portrait .pt-ring::after { background-image:url(/art/biblion/refined/portrait-opp.png);background-size:contain;inset:0; }
+.game .portrait .pt-ring .avatar { inset:16% 12% 8%;width:76%;height:76%; }
+.game .pcluster--me .pt-name { bottom:8%; }
+.game .pcluster--opp .pc-side--r { position:absolute;left:calc(50% + var(--pt)/2 + clamp(95px,12vw,170px) + 24px);top:calc(var(--pt) * .15 + 3px);bottom:auto;padding:0;align-self:start; }
+.game .opp-hand .card--back { top:0;bottom:auto; }
+.game .rift-button { width:calc(var(--card-w)*1.05);height:calc(var(--card-w)*1.15); }
+.game .rift-sprite { width:160%;left:-30%;top:-25%; }
+@media(max-width:700px) and (orientation:portrait){
+ .game .pcluster--opp .pc-side--r { left:auto;right:0;top:calc(var(--pt)*.15 + 3px); }
+ .game .pcluster--opp .opp-hand { transform:scale(.8);transform-origin:top right; }
+ .game .pcluster--me .pc-side--r { transform:scale(.8);transform-origin:bottom left; }
+ .game .rift-button { width:calc(var(--card-w)*.9); }
+}
+
+.game .pcluster--me .pc-side--r { bottom:calc(var(--pt)*.07 + 4px); }
+@media(max-width:700px) and (orientation:portrait){
+ .game .pcluster--opp .pc-side--r,.game .pcluster--opp .opp-hand,.game .pcluster--me .pc-side--r { transform:none; }
+ .game:not(.hand-open) .hand { width:calc(var(--h-w-compact)*.42);height:calc(var(--card-h-hand)*.42); }
+ .game:not(.hand-open) .hand .card { left:calc(var(--hi)*var(--h-step-compact)*.42);transform:scale(.42); }
+}
+
+@media(max-width:700px) and (orientation:portrait){
+ .game .portrait--opp .pt-mana { top:calc(var(--pt)*.86);bottom:auto;left:calc(100% + 4px); }
+ .game .portrait:not(.portrait--opp) .pt-mana { top:0;bottom:auto; }
+}
+
+/* Generated 16-frame purple wedge. A stable base holds the silhouette while
+   a low-opacity atlas pass adds only a trace of movement at the rim. */
+.game .rift-sprite { background-image:url(/art/biblion/release/rift-purple07-idle16.png);background-position:0 0;background-size:400% 400%;animation:none; }
+.game .rift-sprite::after { content:'';position:absolute;inset:0;background-image:inherit;background-size:400% 400%;animation:riftFrames 32s steps(1,end) infinite;opacity:.16;pointer-events:none; }
+.game .rift-button:hover .rift-sprite,.game .rift-button:focus-visible .rift-sprite { filter:brightness(1.12) drop-shadow(0 0 2px #8d59b5);transform:scaleX(1.025); }
+.game .rift-button:hover .rift-sprite::after,.game .rift-button:focus-visible .rift-sprite::after,.game .rift-button.is-absorbing .rift-sprite::after { animation-play-state:paused; }
+@media(prefers-reduced-motion:reduce){.game .rift-sprite::after{animation:none;}}
+
+.game .rift-button { margin-left:calc(var(--card-w)*.45); }
+.game .rift-label { bottom:-10px; }
+
+.game.opening-hands .market-cards .card.is-dim { filter:none!important; }
+body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!important; }
+
+@media(min-width:900px) and (max-aspect-ratio:3/2){.game #oppRow{align-self:start;}.game #meRow{align-self:end;}}

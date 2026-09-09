@@ -1,0 +1,78 @@
+{
+  "tool": "built-in image_gen",
+  "status": "eight concepts for selection",
+  "concepts": [
+    {
+      "id": "01-razor",
+      "nameJa": "一閃",
+      "description": "A single razor-thin straight incision, extremely long and narrow, crisp near-black core, one hairline dark violet edge. Needle tips; simplest possible design.",
+      "angle": 40,
+      "prompt": "Use case: stylized-concept. Asset: standalone selectable concept PNG for the Rift in LORE TCG. User direction: much simpler purple-black design with a strong diagonal orientation. A single razor-thin straight incision, extremely long and narrow, crisp near-black core, one hairline dark violet edge. Needle tips; simplest possible design. Composition: a single isolated spatial fissure angled 40 degrees above horizontal, running from lower left to upper right. Square canvas, entire fissure centered with generous empty margins, occupy about 72 percent of diagonal extent. It must read as a cut through space, never an object or blade. Palette strictly near-black (#0d0812), dark aubergine and restrained violet-purple; black interior is opaque, background genuinely transparent RGBA. Simple polished game VFX concept, quiet almost static presence, clear silhouette at small size. No gold, no silver, no cyan, no white hot highlights, no ornaments, no runes, no frame, no floor, no cards, no environment, no text, no labels, no particles, no lightning branches, no swirling clouds, no vortex, no circular portal. One concept only, not a sheet or grid.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08108-7437-7093-8e62-d318c07e7d8a/exec-20ec4673-b8a4-4c1e-9003-1c3e3dd0a9b8.png",
+      "output": "client/public/art/biblion/rift-purple-eight/01-razor.png"
+    },
+    {
+      "id": "02-soft-tear",
+      "nameJa": "静かな裂け目",
+      "description": "One gently bowed tear with asymmetric tapered ends, modestly wider at center, black velvet interior and a very soft narrow purple rim. Smooth continuous contour.",
+      "angle": 45,
+      "prompt": "Use case: stylized-concept. Asset: standalone selectable concept PNG for the Rift in LORE TCG. User direction: much simpler purple-black design with a strong diagonal orientation. One gently bowed tear with asymmetric tapered ends, modestly wider at center, black velvet interior and a very soft narrow purple rim. Smooth continuous contour. Composition: a single isolated spatial fissure angled 45 degrees above horizontal, running from lower left to upper right. Square canvas, entire fissure centered with generous empty margins, occupy about 72 percent of diagonal extent. It must read as a cut through space, never an object or blade. Palette strictly near-black (#0d0812), dark aubergine and restrained violet-purple; black interior is opaque, background genuinely transparent RGBA. Simple polished game VFX concept, quiet almost static presence, clear silhouette at small size. No gold, no silver, no cyan, no white hot highlights, no ornaments, no runes, no frame, no floor, no cards, no environment, no text, no labels, no particles, no lightning branches, no swirling clouds, no vortex, no circular portal. One concept only, not a sheet or grid.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08108-7437-7093-8e62-d318c07e7d8a/exec-cd2f50fb-7dc4-4690-91bc-66a6dc0ade26.png",
+      "output": "client/public/art/biblion/rift-purple-eight/02-soft-tear.png"
+    },
+    {
+      "id": "03-angular",
+      "nameJa": "折れた亀裂",
+      "description": "One continuous angular crack made of three clean long segments, one restrained sharp bend, nearly black interior with deep violet edge. No branch cracks. Graphic and minimal.",
+      "angle": 50,
+      "prompt": "Use case: stylized-concept. Asset: standalone selectable concept PNG for the Rift in LORE TCG. User direction: much simpler purple-black design with a strong diagonal orientation. One continuous angular crack made of three clean long segments, one restrained sharp bend, nearly black interior with deep violet edge. No branch cracks. Graphic and minimal. Composition: a single isolated spatial fissure angled 50 degrees above horizontal, running from lower left to upper right. Square canvas, entire fissure centered with generous empty margins, occupy about 72 percent of diagonal extent. It must read as a cut through space, never an object or blade. Palette strictly near-black (#0d0812), dark aubergine and restrained violet-purple; black interior is opaque, background genuinely transparent RGBA. Simple polished game VFX concept, quiet almost static presence, clear silhouette at small size. No gold, no silver, no cyan, no white hot highlights, no ornaments, no runes, no frame, no floor, no cards, no environment, no text, no labels, no particles, no lightning branches, no swirling clouds, no vortex, no circular portal. One concept only, not a sheet or grid.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08108-7437-7093-8e62-d318c07e7d8a/exec-11ca2fb3-ce74-4cb9-912f-9fc6cb681b03.png",
+      "output": "client/public/art/biblion/rift-purple-eight/03-angular.png"
+    },
+    {
+      "id": "04-lens",
+      "nameJa": "細い開口",
+      "description": "A slender open lens-shaped fissure with pointed ends and long nearly straight edges, clearly visible solid near-black inner void, thin muted purple lip suggesting subtle depth. No eyeball.",
+      "angle": 35,
+      "prompt": "Use case: stylized-concept. Asset: standalone selectable concept PNG for the Rift in LORE TCG. User direction: much simpler purple-black design with a strong diagonal orientation. A slender open lens-shaped fissure with pointed ends and long nearly straight edges, clearly visible solid near-black inner void, thin muted purple lip suggesting subtle depth. No eyeball. Composition: a single isolated spatial fissure angled 35 degrees above horizontal, running from lower left to upper right. Square canvas, entire fissure centered with generous empty margins, occupy about 72 percent of diagonal extent. It must read as a cut through space, never an object or blade. Palette strictly near-black (#0d0812), dark aubergine and restrained violet-purple; black interior is opaque, background genuinely transparent RGBA. Simple polished game VFX concept, quiet almost static presence, clear silhouette at small size. No gold, no silver, no cyan, no white hot highlights, no ornaments, no runes, no frame, no floor, no cards, no environment, no text, no labels, no particles, no lightning branches, no swirling clouds, no vortex, no circular portal. One concept only, not a sheet or grid.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08108-7437-7093-8e62-d318c07e7d8a/exec-9eed0949-954d-48a7-8215-676c6c6cf7d8.png",
+      "output": "client/public/art/biblion/rift-purple-eight/04-lens.png"
+    },
+    {
+      "id": "05-ink",
+      "nameJa": "墨の切れ目",
+      "description": "One elegant tapered calligraphic cut, slightly S-curved, dark plum-black opaque body, restrained violet edge along only one side. Smooth painted silhouette without brush splatter.",
+      "angle": 55,
+      "prompt": "Use case: stylized-concept. Asset: standalone selectable concept PNG for the Rift in LORE TCG. User direction: much simpler purple-black design with a strong diagonal orientation. One elegant tapered calligraphic cut, slightly S-curved, dark plum-black opaque body, restrained violet edge along only one side. Smooth painted silhouette without brush splatter. Composition: a single isolated spatial fissure angled 55 degrees above horizontal, running from lower left to upper right. Square canvas, entire fissure centered with generous empty margins, occupy about 72 percent of diagonal extent. It must read as a cut through space, never an object or blade. Palette strictly near-black (#0d0812), dark aubergine and restrained violet-purple; black interior is opaque, background genuinely transparent RGBA. Simple polished game VFX concept, quiet almost static presence, clear silhouette at small size. No gold, no silver, no cyan, no white hot highlights, no ornaments, no runes, no frame, no floor, no cards, no environment, no text, no labels, no particles, no lightning branches, no swirling clouds, no vortex, no circular portal. One concept only, not a sheet or grid.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08108-7437-7093-8e62-d318c07e7d8a/exec-44986d8f-be23-4dc8-8ec5-5ff2f0e0d75e.png",
+      "output": "client/public/art/biblion/rift-purple-eight/05-ink.png"
+    },
+    {
+      "id": "06-offset",
+      "nameJa": "ずれた空間",
+      "description": "One slit formed by two slightly offset clean dark-purple lips of space, a narrow black gap between them, a tiny interruption at the middle like a displaced seam. Minimal shallow three-dimensional relief.",
+      "angle": 40,
+      "prompt": "Use case: stylized-concept. Asset: standalone selectable concept PNG for the Rift in LORE TCG. User direction: much simpler purple-black design with a strong diagonal orientation. One slit formed by two slightly offset clean dark-purple lips of space, a narrow black gap between them, a tiny interruption at the middle like a displaced seam. Minimal shallow three-dimensional relief. Composition: a single isolated spatial fissure angled 40 degrees above horizontal, running from lower left to upper right. Square canvas, entire fissure centered with generous empty margins, occupy about 72 percent of diagonal extent. It must read as a cut through space, never an object or blade. Palette strictly near-black (#0d0812), dark aubergine and restrained violet-purple; black interior is opaque, background genuinely transparent RGBA. Simple polished game VFX concept, quiet almost static presence, clear silhouette at small size. No gold, no silver, no cyan, no white hot highlights, no ornaments, no runes, no frame, no floor, no cards, no environment, no text, no labels, no particles, no lightning branches, no swirling clouds, no vortex, no circular portal. One concept only, not a sheet or grid.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08108-7437-7093-8e62-d318c07e7d8a/exec-8ac0113c-87c8-4fd4-8c1f-2a3601f7eeca.png",
+      "output": "client/public/art/biblion/rift-purple-eight/06-offset.png"
+    },
+    {
+      "id": "07-wedge",
+      "nameJa": "楔の裂け目",
+      "description": "A single asymmetrical narrow wedge-shaped tear, one long pointed end and a shorter sharply tapered opposite end, solid black depth and broad but dim aubergine edge. Only two or three clean facets.",
+      "angle": 45,
+      "prompt": "Use case: stylized-concept. Asset: standalone selectable concept PNG for the Rift in LORE TCG. User direction: much simpler purple-black design with a strong diagonal orientation. A single asymmetrical narrow wedge-shaped tear, one long pointed end and a shorter sharply tapered opposite end, solid black depth and broad but dim aubergine edge. Only two or three clean facets. Composition: a single isolated spatial fissure angled 45 degrees above horizontal, running from lower left to upper right. Square canvas, entire fissure centered with generous empty margins, occupy about 72 percent of diagonal extent. It must read as a cut through space, never an object or blade. Palette strictly near-black (#0d0812), dark aubergine and restrained violet-purple; black interior is opaque, background genuinely transparent RGBA. Simple polished game VFX concept, quiet almost static presence, clear silhouette at small size. No gold, no silver, no cyan, no white hot highlights, no ornaments, no runes, no frame, no floor, no cards, no environment, no text, no labels, no particles, no lightning branches, no swirling clouds, no vortex, no circular portal. One concept only, not a sheet or grid.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08108-7437-7093-8e62-d318c07e7d8a/exec-1181d7ab-273f-4550-bd25-f73f910992e0.png",
+      "output": "client/public/art/biblion/rift-purple-eight/07-wedge.png"
+    },
+    {
+      "id": "08-haze",
+      "nameJa": "薄紫の縁",
+      "description": "One smooth very narrow crescent-shaped black spatial cut, long tapering points, delicate blurred purple halo tightly hugging its contour. Quiet and understated, with no detached wisps.",
+      "angle": 50,
+      "prompt": "Use case: stylized-concept. Asset: standalone selectable concept PNG for the Rift in LORE TCG. User direction: much simpler purple-black design with a strong diagonal orientation. One smooth very narrow crescent-shaped black spatial cut, long tapering points, delicate blurred purple halo tightly hugging its contour. Quiet and understated, with no detached wisps. Composition: a single isolated spatial fissure angled 50 degrees above horizontal, running from lower left to upper right. Square canvas, entire fissure centered with generous empty margins, occupy about 72 percent of diagonal extent. It must read as a cut through space, never an object or blade. Palette strictly near-black (#0d0812), dark aubergine and restrained violet-purple; black interior is opaque, background genuinely transparent RGBA. Simple polished game VFX concept, quiet almost static presence, clear silhouette at small size. No gold, no silver, no cyan, no white hot highlights, no ornaments, no runes, no frame, no floor, no cards, no environment, no text, no labels, no particles, no lightning branches, no swirling clouds, no vortex, no circular portal. One concept only, not a sheet or grid.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08108-7437-7093-8e62-d318c07e7d8a/exec-dbaaeb07-8b71-41bb-a7b4-1a5554b9d89a.png",
+      "output": "client/public/art/biblion/rift-purple-eight/08-haze.png"
+    }
+  ]
+}

@@ -25,7 +25,7 @@ export function diePose(t:number,value:number,index=0) {
 export function createDie(map:T.Texture|null,casino=false):T.Group {
   const die=new T.Group();die.name='archive-die';
   const gold=new T.MeshStandardMaterial({color:casino?0xe0b35c:0xb4a07b,roughness:.32,metalness:.72});
-  const enamel=new T.MeshPhysicalMaterial({map,color:map?0xffffff:0x16273f,roughness:.4,metalness:.12,clearcoat:.7,clearcoatRoughness:.2});
+  const enamel=new T.MeshPhysicalMaterial({map,color:map?0xffffff:0x16273f,roughness:.82,metalness:0,clearcoat:.08,clearcoatRoughness:.8});
   const pipMat=new T.MeshStandardMaterial({color:casino?0xffe4a4:0xe8f4ea,roughness:.25,metalness:.25,emissive:casino?0x644117:0x1e596c,emissiveIntensity:.24});
   const core=new T.Mesh(new RoundedBoxGeometry(1,1,1,4,.095),gold);core.castShadow=true;core.receiveShadow=true;die.add(core);
   for(let value=1;value<=6;value++) {
@@ -71,10 +71,10 @@ export async function mountDiceScene(host:HTMLElement,rolls:number[],casino:bool
     const ok=await Promise.race([loaded,ended,new Promise<boolean>(resolve=>{timeout=setTimeout(()=>resolve(false),1800);})]);
     clearTimeout(timeout);if(!ok||dead||signal.aborted){dispose();return null;}
     texture!.colorSpace=T.SRGBColorSpace;texture!.anisotropy=4;
-    const pmrem=new T.PMREMGenerator(renderer),room=new RoomEnvironment();environment=pmrem.fromScene(room,.05);scene.environment=environment.texture;room.dispose();pmrem.dispose();
-    scene.add(new T.HemisphereLight(0xd9ecff,0x323844,1.25));
-    const key=new T.DirectionalLight(0xffefcf,1.8);key.position.set(-3,5,6);scene.add(key);
-    const rim=new T.DirectionalLight(0x93d9ff,.7);rim.position.set(4,2,-2);scene.add(rim);
+    const pmrem=new T.PMREMGenerator(renderer),room=new RoomEnvironment();environment=pmrem.fromScene(room,.05);scene.environment=environment.texture;scene.environmentIntensity=.22;room.dispose();pmrem.dispose();
+    scene.add(new T.HemisphereLight(0xffffff,0x40404a,1.1));
+    const key=new T.DirectionalLight(0xffffff,.8);key.position.set(-3,5,6);scene.add(key);
+    const rim=new T.DirectionalLight(0xcbd2df,.2);rim.position.set(4,2,-2);scene.add(rim);
     // Soft ground shadows grow and fade with height, tightening at each contact.
     const shadowCanvas=document.createElement('canvas');shadowCanvas.width=shadowCanvas.height=64;
     const ctx=shadowCanvas.getContext('2d')!,gradient=ctx.createRadialGradient(32,32,4,32,32,32);

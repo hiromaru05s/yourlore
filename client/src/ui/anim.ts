@@ -906,5 +906,5 @@ export async function openingBoard():Promise<void>{
   if(fxSkip||typeof WebGL2RenderingContext==='undefined')return;
   // Scene and GLBs load asynchronously when the game screen mounts.
   for(let i=0;i<40&&!document.querySelector('.supply-model-ready');i++){await wait(50);if(fxSkip)return;}
-  await boardMotionScope(signal=>moveOnBoard({kind:'opening',signal}),4500);
+  await boardMotionScope(signal=>moveOnBoard({kind:'opening',signal}),7500);
 }

@@ -1,0 +1,32 @@
+{
+  "selectedConcept": "07-wedge",
+  "tool": "built-in image_gen",
+  "source": "/Users/hiromaru05s/.codex/generated_images/01a08108-7437-7093-8e62-d318c07e7d8a/exec-b9a91805-f643-4b2c-b0ca-089f29ffd911.png",
+  "output": "client/public/art/biblion/release/rift-purple07-idle16.png",
+  "prompt": "Transparent background PNG asset. Using the attached original isolated rift, draw sixteen near-identical copies arranged evenly in a 4 by 4 grid. Every copy has same position inside its cell, same strong diagonal angle and shape, black opaque interior and purple rim. The copies form an almost motionless idle loop, only barely perceptible variation in purple rim shading. Preserve reference design exactly. Every empty pixel outside the rifts must have zero alpha, like the original reference. Deliver cutout assets on transparent background. No backdrop, no pattern, no grid lines, no labels.",
+  "frames": 16,
+  "grid": [
+    4,
+    4
+  ],
+  "alpha": true,
+  "playback": {
+    "seconds": 32,
+    "stableBaseFrame": 0,
+    "animatedOverlayOpacity": 0.16,
+    "hover": "pause and 2.5 percent width highlight",
+    "reducedMotion": "static"
+  },
+  "rejected": [
+    {
+      "source": "exec-c36b057d-98d0-4e7b-9654-ad21edb589fa.png",
+      "reason": "baked checkerboard, no alpha",
+      "prompt": "Create a production sprite atlas for a VERY SUBTLE idle animation of the attached purple-black spatial rift number07. Reference is the sole design identity: preserve its angled irregular wedge silhouette, black opaque inner void, dark purple faceted rim, lower-left to upper-right angle, scale and position. Output ONE transparent RGBA square sprite sheet consisting of exactly 4 columns by 4 rows, sixteen equally sized square cells, reading left-to-right top-to-bottom. Same rift centered at exactly the same place and same scale in EACH of the 16 cells with generous transparent margins, no clipping or overlaps. Subtle near-static loop: rim violet brightness breathes only about 3 percent and the inner purple seam shifts a tiny amount only, shape and tips locked. No rotation, no translation, no zoom, no particles, no lightning, no extra detail. Frame16 almost identical to frame1 for seamless wrapping. Background truly transparent, the black interior remains opaque. No cell borders, no labels, no numbers, no letters, no backdrop, no floor. The sixteen frames should look almost identical at a glance. Requested format 2048x2048 if supported, each cell512square."
+    },
+    {
+      "source": "exec-80076056-14b3-44d9-aab1-2dd49b4bac46.png",
+      "reason": "baked checkerboard, no alpha",
+      "prompt": "Background extraction edit ONLY. The attached sprite atlas incorrectly contains a baked gray-and-white checkerboard. REMOVE ALL CHECKERBOARD PIXELS and make them truly transparent alpha=0. Preserve every one of the sixteen purple-black rift sprites exactly where they are, unchanged size, shape, color, orientation, and unchanged 4x4 grid. Black rift interiors must remain opaque; only the neutral gray/white background becomes transparent. Return a true RGBA PNG with real alpha channel. Do not draw any replacement background or checker pattern. No checkerboard, no white rectangle, no black rectangle. All sixteen assets isolated on actual transparency."
+    }
+  ]
+}

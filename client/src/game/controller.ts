@@ -673,7 +673,7 @@ export abstract class BaseController implements BoardHandlers {
       profile avatar — flips and lands on the face of whoever goes first. */
   private async showCoinToss(firstSide: Side): Promise<void> {
     const game=document.querySelector<HTMLElement>(".game");game?.classList.add("opening-hands","awaiting-board");
-    await A.openingBoard();
+    try{await A.openingBoard();}catch(error){console.error("[opening scene]",error);}
     game?.classList.remove("awaiting-board");
     if(this.dead){game?.classList.remove("opening-hands");return;}
     const iAmFirst = firstSide === this.you;
@@ -683,7 +683,7 @@ export abstract class BaseController implements BoardHandlers {
     // transparent ring-frame PNG (front = my face, back = opponent's face), so
     // the compass ornaments wrap around the portrait.
     const face = (p: CoinProfile, frame: string) =>
-      `<span class="ct-avatar-mask">${avatarHtml(p.avatar, p.name, 96)}</span><img class="ct-frame" src="${frame}" alt="" draggable="false">`;
+      `<span class="ct-avatar-mask">${avatarHtml(p.avatar || (p===COIN_ME?"SEEKER_BLUE":"SEEKER_RED"), p.name, 96)}</span><img class="ct-frame" src="${frame}" alt="" draggable="false">`;
     const ov = document.createElement("div");
     ov.className = "cointoss-ov";
     ov.innerHTML = `
@@ -698,6 +698,8 @@ export abstract class BaseController implements BoardHandlers {
         </div>
       </div>`;
     document.body.appendChild(ov);
+    try { const {mountCoinScene}=await import('../ui/coinScene');await mountCoinScene(ov.querySelector<HTMLElement>('.ct-coin')!,heads); } catch { /* CSS coin remains available without GPU. */ }
+    if(this.dead){ov.remove();return;}
     sfx("coin");
     setTimeout(() => sfx(iAmFirst ? "turn" : "pop"), 1700);
     setTimeout(() => { ov.classList.add("out"); setTimeout(async () => {

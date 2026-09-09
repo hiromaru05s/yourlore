@@ -741,3 +741,9 @@
 @keyframes coinContactShadow { 0% { opacity:.15;scale:1.6; } 42%,72%,90%,100% { opacity:1;scale:1; } 58% { opacity:.4;scale:1.25; } 82% { opacity:.7;scale:1.1; } }
 .opening-hands #hand,.opening-hands #oppHand { visibility:hidden; }
 @media(prefers-reduced-motion:reduce) { .ct-coin.to-heads { animation:none;transform:rotateX(32deg); } .ct-coin.to-tails { animation:none;transform:rotateX(32deg) rotateY(180deg); } .cointoss::before { animation:none; } .ct-caption { animation-delay:0s; } }
+
+.ct-coin.ct-model { width:min(520px,92vw);height:min(330px,58vw);animation:none!important;transform:none!important; }
+.ct-model .ct-face { visibility:hidden; }
+.coin-model-canvas { width:100%;height:100%;display:block; }
+.cointoss:has(.ct-model)::before { display:none; }
+.cointoss:has(.ct-model) { gap:0; }

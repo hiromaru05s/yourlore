@@ -1,7 +1,7 @@
 /** Rasterize the current card layers for a deformable mesh. Layout and text
  * come from the real DOM card, not a second set of card rules or translations. */
 export const CARD_PADDING = .12;
-const RESOLUTION = 384;
+const RESOLUTION = 768;
 const imageCache = new Map<string, Promise<HTMLImageElement>>();
 const matteCache = new Map<string, Promise<HTMLCanvasElement>>();
 
@@ -10,7 +10,8 @@ function image(url: string): Promise<HTMLImageElement> {
   if (!pending) {
     pending = new Promise((resolve, reject) => {
       const img = new Image(); img.crossOrigin = 'anonymous';
-      img.onload = () => resolve(img); img.onerror = () => reject(new Error('Card texture unavailable'));
+      const timeout=setTimeout(()=>reject(new Error('Card texture timeout')),2500);
+      img.onload = () => {clearTimeout(timeout);resolve(img);}; img.onerror = () => {clearTimeout(timeout);reject(new Error('Card texture unavailable'));};
       img.src = url;
     });
     imageCache.set(url, pending);
@@ -79,7 +80,7 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
     const position = getComputedStyle(art).objectPosition.split(' ').map(v => parseFloat(v)/100);
     const path = document.querySelector('#celestial-base-spell path')?.getAttribute('d');
     layers.push(async () => {
-      const img = await image(src);
+      let img:HTMLImageElement;try{img=await image(src);}catch{return;}
       ctx.save();
       if (path) {
         ctx.translate(pad,pad); ctx.scale(w,h); ctx.clip(new Path2D(path)); ctx.scale(1/w,1/h); ctx.translate(-pad,-pad);
@@ -118,19 +119,24 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
     layers.push(async () => { ctx.drawImage(await matte('/art/biblion/modular/plaque.png'), b.x,b.y,b.w,b.h); });
     layers.push(drawText(label));
   }
-  await Promise.all([backImage, image(frameUrl), ...(art ? [image(art.currentSrc || art.src)] : [])]);
+  await Promise.all([backImage, image(frameUrl), ...(art ? [image(art.currentSrc || art.src).catch(()=>null)] : [])]);
   for (const draw of layers) await draw();
   backCtx.drawImage(await backImage, pad,pad,w,h);
   return { face, back };
 }
 
 /** Measure a canonical upright card outside every projected ancestor. */
-export async function capturePileSurface(node:HTMLElement,sleeve:string):Promise<CardSurface> {
+export async function capturePileSurface(node:HTMLElement,sleeve:string,preserveDim=false):Promise<CardSurface> {
   const host=document.createElement('div');host.className='pile-print';
   host.style.cssText='position:fixed;left:-1000px;top:0;width:128px;height:200px;visibility:hidden;pointer-events:none';
   const copy=node.cloneNode(true) as HTMLElement;copy.removeAttribute('style');
-  copy.classList.remove('fx-card-flight','cast-reveal','is-picked','is-armed','card--dim');
+  copy.classList.remove('fx-card-flight','cast-reveal','is-picked','is-armed','card--dim','is-dim','is-exhausted','is-playable','is-buyable');
   copy.style.cssText='--cw:128px;--ch:200px;width:128px;height:200px;transform:none';
+  const art=copy.querySelector<HTMLImageElement>('.card-art img');
+  if(art){const original=art.currentSrc||art.src;art.removeAttribute('srcset');art.removeAttribute('sizes');const full=art.src.replace(/\/art\/cards-(sm|xs)\//,'/art/cards/');try{await image(full);art.src=full;}catch{art.src=original;}}
   host.append(copy);document.body.append(host);
-  try{return await captureCardSurface(copy,sleeve,true);}finally{host.remove();}
+  try{const result=await captureCardSurface(copy,sleeve,true);
+    if(preserveDim&&node.classList.contains('is-dim')&&getComputedStyle(node).filter!=='none'&&result.face){const c=canvas(result.face.width,result.face.height),ctx=c.getContext('2d')!;ctx.filter='grayscale(1) brightness(.55) contrast(.9)';ctx.drawImage(result.face,0,0);result.face=c;}
+    return result;
+  }finally{host.remove();}
 }

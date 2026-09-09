@@ -16,15 +16,15 @@ function rounded(w:number,h:number,r:number):T.Shape {
 export function cardStock(map:T.Texture, face?:T.Texture):T.Group {
   const g=new T.Group();g.name='card-stock';
   const shape=rounded(1,RATIO,.045);
-  const edge=new T.ExtrudeGeometry(shape,{depth:.008,bevelEnabled:false,curveSegments:4});edge.translate(0,0,-.004);
+  const edge=new T.ExtrudeGeometry(shape,{depth:.014,bevelEnabled:false,curveSegments:4});edge.translate(0,0,-.007);
   const stock=new T.Mesh(edge,new T.MeshStandardMaterial({color:0xccbea5,roughness:.85}));stock.castShadow=true;stock.receiveShadow=true;g.add(stock);
   const skin=(texture:T.Texture,back:boolean)=>{
     const padded=!back&&!!face;
     const geo=padded?new T.PlaneGeometry(1+2*CARD_PADDING,RATIO+2*CARD_PADDING):new T.ShapeGeometry(shape,4),p=geo.getAttribute('position'),uv=geo.getAttribute('uv');
     if(!padded)for(let i=0;i<p.count;i++)uv.setXY(i,p.getX(i)+.5,p.getY(i)/RATIO+.5);
-    const mesh=new T.Mesh(geo,new T.MeshStandardMaterial({map:texture,roughness:.56,metalness:.035,emissive:0xffffff,emissiveMap:texture,emissiveIntensity:.12,transparent:padded,alphaTest:padded?.025:0}));
+    const mesh=new T.Mesh(geo,new T.MeshBasicMaterial({map:texture,toneMapped:false,transparent:padded,alphaTest:padded?.025:0}));
     mesh.name=back?'stock-back':'stock-front';
-    mesh.position.z=back?-.0045:.0045;if(back)mesh.rotation.y=Math.PI;
+    mesh.position.z=back?-.0075:.0075;if(back)mesh.rotation.y=Math.PI;
     mesh.castShadow=true;mesh.receiveShadow=true;g.add(mesh);
   };
   skin(face||map,false);skin(map,true);return g;

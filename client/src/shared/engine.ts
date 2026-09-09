@@ -3835,10 +3835,98 @@ export function summonReqMet(p: PlayerState, card: CardInst, o?: PlayerState): b
   return true;
 }
 
+/** Read-only pre-payment legality shared by the reducer and hand affordances. */
+export function playBlockReason(g:GameState, who:Side, card:CardInst):{ko:string;ja:string}|null {
+  const p=g.players[who],o0=g.players[1-who];
+  if(p.mana<playCost(card,p))return {ko:'마나가 부족합니다',ja:'マナが不足しています'};
+  if(card.quick)return {ko:'구매 시 발동하는 카드입니다',ja:'購入時に発動するカードです'};
+  if(card.t==='quest'&&(!card.quest||p.traps.length+p.enchants.length+(p.quests?.length??0)>=ST_MAX))return {ko:'퀘스트를 배치할 수 없습니다',ja:'クエストを配置できません'};
+  const reason=(ko:string,ja:string)=>({ko,ja});
+  if(card.t==='starter'){
+    if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) { return reason(`  └ <span class="dmg">침묵의 거신</span>이 필드에 있어 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の巨神</span>が場にいるため魔法を使用できません`); }
+    if (sealLowBlocks(g, playCost(card, p))) { return reason(`  └ <span class="dmg">침묵의 파수꾼</span>이 필드에 있어 코스트 ${sealLowCap(g)} 이하 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の番人</span>が場にいるためコスト${sealLowCap(g)}以下の魔法を使用できません`); }
+    if (p.spellSealTurn) { return reason(`  └ <span class="dmg">침묵의 심판</span>: 이번 턴 동안 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の審判</span>: このターン中は魔法を使用できません`); }
+    if (spaceLocked(g, p)) { return reason(`  └ <span class="dmg">공간 술식</span>: 마법을 사용할 수 없다`, `  └ <span class="dmg">空間術式</span>: 魔法を使用できない`); }
+    if (isChestCard(card) && chestLocked(g)) { return reason(`  └ <span class="dmg">${cn(DB.MIMIC2)}</span>: 보물상자 사용 봉인 중`, `  └ <span class="dmg">${cn(DB.MIMIC2)}</span>: 宝箱の使用は封印中`); }
+  }
+  if(card.t==='mon'){
+    if (spaceLocked(g, p)) { return reason(`  └ <span class="dmg">공간 술식</span>: 몬스터를 소환할 수 없다`, `  └ <span class="dmg">空間術式</span>: モンスターを召喚できない`); }
+    if (summonBlockedLow(g, p, card)) { return reason(`  └ <span class="dmg">봉쇄령</span>: 코스트 ${card.cost} 몬스터 소환 불가`, `  └ <span class="dmg">封鎖令</span>: コスト ${card.cost} のモンスター召喚不可`); }
+    if ((p.summonLockUntil ?? 0) > g.turn) { return reason(`  └ <span class="dmg">은둔자</span>: 다른 몬스터를 소환할 수 없다`, `  └ <span class="dmg">隠遁者</span>: 他のモンスターを召喚できない`); }
+    if (p.summonCap != null && p.field.length >= p.summonCap) { return reason(`  └ <span class="dmg">고독의 저주</span>: 몬스터를 ${p.summonCap + 1}체 이상 소환할 수 없다`, `  └ <span class="dmg">孤独の呪い</span>: モンスターを${p.summonCap + 1}体以上召喚できない`); }
+    if (p.lowSummonBanTurn && (card.cost ?? 0) <= 3) { return reason(`  └ <span class="dmg">삼격의 불씨</span>: 이번 턴 코스트 3 이하 소환 불가`, `  └ <span class="dmg">三撃の火種</span>: このターン コスト3以下は召喚不可`); }
+    if (!summonReqMet(p, card, o0)) { return reason(`  └ <span class="dmg">소환 조건 미충족</span>: ${cn(card)}`, `  └ <span class="dmg">召喚条件を満たしていない</span>: ${cn(card)}`); }
+    if ((card.cost ?? 0) >= 5 && castleOf(p)) { return reason(`  └ <span class="dmg">성</span>: 코스트 5 이상 몬스터를 소환할 수 없다`, `  └ <span class="dmg">城</span>: コスト5以上のモンスターは召喚できない`); }
+    if (p.field.length >= FIELD_MAX) { return reason(`  └ <span class="dmg">몬스터 존이 가득 찼습니다 (최대 ${FIELD_MAX})</span>`, `  └ <span class="dmg">モンスターゾーンが満杯です (最大 ${FIELD_MAX})</span>`); }
+  }
+  if(card.t==='spell'){
+    if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) { return reason(`  └ <span class="dmg">침묵의 거신</span>이 필드에 있어 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の巨神</span>が場にいるため魔法を使用できません`); }
+    if (sealLowBlocks(g, playCost(card, p))) { return reason(`  └ <span class="dmg">침묵의 파수꾼</span>이 필드에 있어 코스트 ${sealLowCap(g)} 이하 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の番人</span>が場にいるためコスト${sealLowCap(g)}以下の魔法を使用できません`); }
+    if (p.spellSealTurn) { return reason(`  └ <span class="dmg">침묵의 심판</span>: 이번 턴 동안 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の審判</span>: このターン中は魔法を使用できません`); }
+    if (p.spellCastCap != null && (p.spellsCastTurn || 0) >= p.spellCastCap) { return reason(`  └ <span class="dmg">마족 시너지</span>: 이번 턴 마법을 더 사용할 수 없습니다 (한도 ${p.spellCastCap})`, `  └ <span class="dmg">魔族シナジー</span>: このターンはこれ以上魔法を使えません (上限${p.spellCastCap})`); }
+    if (spaceLocked(g, p)) { return reason(`  └ <span class="dmg">공간 술식</span>: 마법을 사용할 수 없다`, `  └ <span class="dmg">空間術式</span>: 魔法を使用できない`); }
+    if (card.id === "BEGINNER_MIND" && p.hand.length !== 1) { return reason("  └ 패가 0장일 때만 발동 가능", "  └ 手札が0枚の時のみ発動可能"); }
+    if (card.id === "SPACE_RITE" && o0.field.length + o0.traps.length + o0.enchants.length < 6) { return reason("  └ 상대 필드의 카드가 6장 미만이라 사용 불가", "  └ 相手の場のカードが6枚未満のため使用不可"); }
+    if (card.id === "BUYOUT" && !Object.values(p.buysTurn ?? {}).some((n2) => n2 >= 2)) { return reason("  └ 이번 턴 같은 카드를 2장 구매하지 않았다", "  └ このターン同じカードを2枚購入していない"); }
+    if (card.id === "PACK_INSTINCT" && !p.field.some((m) => p.field.filter((x) => x.id === m.id).length >= 2)) { return reason("  └ 자신 필드에 같은 이름의 몬스터가 2체 이상 없다", "  └ 自分の場に同名モンスターが2体以上いない"); }
+    if (card.id === "MIND_BURST" && !p.field.some((m) => (m.guts || 0) > 0)) { return reason("  └ 자신 필드에 카운터가 없다", "  └ 自分の場にカウンターがない"); }
+    if (card.id === "PENANCE" && !(p.brand ?? 0)) { return reason("  └ 자신에게 낙인 카운터가 없다", "  └ 自分に烙印カウンターがない"); }
+    if (card.act === "wipeBack" && p.field.length > 0) { return reason(`  └ 필드에 몬스터가 있어 사용 불가`, `  └ 場にモンスターがいるため使用不可`); }
+    if (card.id === "S4" && (p.usesTurn["S4"] || 0) >= 1) { return reason("  └ 이번 턴에 이미 사용했습니다", "  └ このターンは既に使用済み"); }
+    if (card.id === "GS9_0" && o0.hp <= 21) { return reason("  └ 상대 체력 21 이하라 사용 불가", "  └ 相手の体力が21以下のため使用不可"); }
+    if (card.id === "GS10_0" && p.field.length > 1) { return reason("  └ 자신 필드 몬스터 2체 이상이라 사용 불가", "  └ 自分の場のモンスターが2体以上のため使用不可"); }
+    if (card.id === "RUNE1" && !o0.field.some((m) => (m.cost ?? 0) >= 5)) { return reason("  └ 코스트 5 이상 상대 몬스터가 없습니다", "  └ コスト5以上の敵モンスターがいません"); }
+    if ((card.id === "RUNE2" || card.id === "RUNE3") && !spellDeckHalf(p)) { return reason("  └ 덱의 절반 이상이 마법이어야 발동 가능", "  └ デッキの半分以上が魔法でなければ発動不可"); }
+    if ((card.id === "DISARM1" || card.id === "DISARM2" || card.id === "DISARM3") && o0.enchants.length === 0) { return reason("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); }
+    if (card.id === "BLOOD_SECRET" && !p.field.some((m) => isVampFamily(m))) { return reason("  └ 자신 필드에 '흡혈귀' 계열 몬스터가 없습니다", "  └ 自分の場に「吸血鬼」系列モンスターがいません"); }
+    if (card.id === "BLOOD2" && o0.traps.length + o0.enchants.length === 0) { return reason("  └ 파괴할 상대 영구마법·세트 함정이 없습니다", "  └ 破壊する相手の永続魔法・セットトラップがありません"); }
+    if (card.act === "destroyMon" && card.cap && ![...o0.field, ...p.field].some((m) => m.cost <= card.cap!)) { return reason(`  └ 코스트 ${card.cap} 이하의 대상 몬스터가 없습니다`, `  └ コスト${card.cap}以下の対象モンスターがいません`); }
+    if (card.id === "CHOSEN_AREA" && cullExiled(p) < 25) { return reason(`  └ 게임에서 제외된 컬이 ${cullExiled(p)}장 — 25장 이상이어야 발동 가능`, `  └ ゲームから除外されたカルが${cullExiled(p)}枚 — 25枚以上で発動可能`); }
+    if ((card.id === "DECAY_CRAFT" || card.id === "MAJESTY_RITE") && p.field.length === 0) { return reason("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); }
+    if (card.id === "MAJESTY_RITE" && !p.field.some((m) => !hasPassive(m, "majesty"))) { return reason("  └ '위엄'을 부여할 수 있는 몬스터가 없습니다", "  └ 「威厳」を与えられるモンスターがいません"); }
+    if (card.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) { return reason("  └ 자신 필드에 이미 '선견지명'이 있습니다", "  └ 自分の場に既に「先見の明」があります"); }
+    if (card.ench === "guild" && p.enchants.some((e) => e.card.ench === "guild")) { return reason("  └ 자신 필드에 이미 '상회'가 있습니다", "  └ 自分の場に既に「商会」があります"); }
+    if (card.id === "SLUM" && !p.enchants.some((e) => e.card.ench === "guild")) { return reason("  └ 자신 필드에 '상회'가 없습니다", "  └ 自分の場に「商会」がありません"); }
+    if (card.id === "DUNGEON_FLOOR" && o0.maxMana < 7) { return reason("  └ 상대 최대 마나가 7 미만이라 사용 불가", "  └ 相手の最大マナが7未満のため使用不可"); }
+    if (card.id === "MEDITATE" && p.maxMana > 11) { return reason("  └ 최대 마나가 11을 초과해 사용 불가", "  └ 最大マナが11を超えているため使用不可"); }
+    if (card.id === "MEDITATE" && p.hp >= p.maxHp) { return reason("  └ 체력이 이미 가득 찼습니다", "  └ 体力が既に満タンです"); }
+    if (card.id === "HERMIT" && p.field.length > 0) { return reason("  └ 필드에 몬스터가 있어 사용 불가", "  └ 場にモンスターがいるため使用不可"); }
+    if (card.id === "HERMIT" && (p.uses["HERMIT"] || 0) >= 5) { return reason("  └ 게임당 5회까지만 사용 가능", "  └ ゲーム中5回まで使用可能"); }
+    if (card.id === "FORBIDDEN" && !p.field.some((m) => m.tribe && m.tribe !== "시초")) { return reason("  └ 시초 외 종족 몬스터가 필드에 없습니다", "  └ 始原以外の種族モンスターが場にいません"); }
+    if (card.id === "MULTI_CULTURE" && new Set(p.field.filter((m) => m.tribe).map((m) => m.tribe)).size < 2) { return reason("  └ 서로 다른 종족이 2종 이상 필요합니다", "  └ 異なる種族が2種以上必要です"); }
+    if (card.id === "GS6_4" && !(o0.brand ?? 0)) { return reason("  └ 상대에게 낙인 카운터가 없습니다", "  └ 相手に烙印カウンターがありません"); }
+    if (card.act === "exilePick" && p.discard.length === 0) { return reason("  └ 묘지가 비어 있습니다", "  └ 墓地が空です"); }
+    if (card.act === "incubate" && !p.field.some((m) => m.hatch != null && m.hatch > 0)) { return reason("  └ 자신 필드에 알이 없습니다", "  └ 自分の場に卵がありません"); }
+    if (card.id === "VAMP_PACT" && p.field.length >= FIELD_MAX) { return reason(`  └ <span class="dmg">몬스터 존이 가득 찼습니다 (최대 ${FIELD_MAX})</span>`, `  └ <span class="dmg">モンスターゾーンが満杯です (最大 ${FIELD_MAX})</span>`); }
+    if (card.id === "COUNTERCALC" && o0.maxMana > 7) { return reason("  └ 상대 최대 마나가 7을 초과해 사용 불가", "  └ 相手の最大マナが7を超えているため使用不可"); }
+    if ((card.id === "EXPANSION" || card.id === "LAND_GRANT") && !castleOf(p)) { return reason("  └ 자신 필드에 '성'이 없습니다", "  └ 自分の場に「城」がありません"); }
+    if (card.id === "TREASON" && !castleOf(o0)) { return reason("  └ 상대 필드에 '성'이 없습니다", "  └ 相手の場に「城」がありません"); }
+    if (card.id === "AEM" && (new Set(deckComp(p).filter((c) => c.t === "mon" && isGolem(c)).map((c) => c.id)).size < 2 || !p.field.some((m) => isGolem(m)))) { return reason("  └ 덱 구성에 서로 다른 골램 2장과 필드의 골램이 필요합니다", "  └ デッキ構成に異なるゴーレム2枚と場のゴーレムが必要です"); }
+    if ((card.id === "KNIGHT_TEACH" || card.id === "NL_SECRET") && p.field.length === 0) { return reason("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); }
+    if (card.id === "COUNTERCALC" && o0.enchants.length === 0) { return reason("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); }
+    if (card.id === "AMBUSH" && o0.maxMana !== 4) { return reason("  └ 상대 최대 마나가 4가 아니라 사용 불가", "  └ 相手の最大マナが4ではないため使用不可"); }
+    if (card.id === "TRUMPET" && p.field.length === 0) { return reason("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); }
+    if (card.id === "WALLBREAK1" && ![...o0.field, ...p.field].some((m) => effAtk(o0, m) <= 2)) { return reason("  └ 공격력 2 이하 몬스터가 없습니다", "  └ 攻撃力2以下のモンスターがいません"); }
+    if (card.id === "WALLBREAK2" && !o0.field.some((m) => effAtk(o0, m) <= 2)) { return reason("  └ 공격력 2 이하 적 몬스터가 없습니다", "  └ 攻撃力2以下の敵モンスターがいません"); }
+    if (card.id === "SNIPE1" && ![...o0.field, ...p.field].some((m) => curHp(o0, m) <= 3)) { return reason("  └ 체력 3 이하 몬스터가 없습니다", "  └ 体力3以下のモンスターがいません"); }
+    if (card.id === "SNIPE2" && !o0.field.some((m) => curHp(o0, m) <= 2)) { return reason("  └ 체력 2 이하 적 몬스터가 없습니다", "  └ 体力2以下の敵モンスターがいません"); }
+    if (card.id === "INQUISITION" && !o0.deck.some(c=>c.id==="HIDDEN") && ![...o0.deck, ...o0.discard, ...o0.field].some((m) => m.t === "mon" && m.tribe)) { return reason("  └ 상대에게 종족 몬스터가 없습니다", "  └ 相手に種族モンスターがいません"); }
+    if (card.id === "PURGE_ALL" && p.deck.length + p.discard.length === 0) { return reason("  └ 덱과 묘지가 비어 있습니다", "  └ デッキと墓地が空です"); }
+    if (card.id === "GOLIATH_HUNT" && !o0.field.some((m) => effDef(o0, m) >= 10)) { return reason("  └ 최대 체력 10 이상 적 몬스터가 없습니다", "  └ 最大体力10以上の敵モンスターがいません"); }
+    if (card.id === "MASSACRE" && o0.field.length === 0) { return reason("  └ 파괴할 적 몬스터가 없습니다", "  └ 破壊する敵モンスターがいません"); }
+    if (card.id === "SCRAPPER" && [...p.deck, ...p.discard].filter((c) => c.cost <= 1).length < 2) { return reason("  └ 덱·묘지에 코스트 1 이하 카드가 2장 없습니다", "  └ デッキ・墓地にコスト1以下のカードが2枚ありません"); }
+    if (card.ench && p.traps.length + p.enchants.length + (p.quests?.length ?? 0) >= ST_MAX) { return reason(`  └ <span class="dmg">마법·함정 존이 가득 찼습니다 (최대 ${ST_MAX})</span>`, `  └ <span class="dmg">魔法・罠ゾーンが満杯です (最大 ${ST_MAX})</span>`); }
+    if (isChestCard(card) && chestLocked(g)) { return reason(`  └ <span class="dmg">${cn(DB.MIMIC2)}</span>: 보물상자 사용 봉인 중`, `  └ <span class="dmg">${cn(DB.MIMIC2)}</span>: 宝箱の使用は封印中`); }
+  }
+  return null;
+}
+
 function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   const p = g.players[g.cur];
   const card = p.hand[idx];
-  if (!card || p.mana < playCost(card, p)) return;
+  if (!card) return;
+  const blocked=playBlockReason(g,g.cur,card);
+  if(blocked){ctx.log(blocked.ko,blocked.ja);return;}
   // 운명의 수레바퀴: 주사위·확률 카드 시전 직전 스냅샷 (재굴림용, 매턴 1회)
   if (card.t === "spell" && RANDOM_CARDS.has(card.id) && !p.wheelUsed && p.enchants.some((e) => e.card.ench === "fateWheel")) {
     const snap = structuredClone(g);
@@ -3849,11 +3937,6 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   if (card.t === "starter") {
     // Starters (컬/보물상자/어튠) are spell-type cards played from hand → they are subject to
     // the same spell seals (침묵) and null-spell trap (마법 무효화) as regular spells.
-    if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) { ctx.log(`  └ <span class="dmg">침묵의 거신</span>이 필드에 있어 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の巨神</span>が場にいるため魔法を使用できません`); return; }
-    if (sealLowBlocks(g, playCost(card, p))) { ctx.log(`  └ <span class="dmg">침묵의 파수꾼</span>이 필드에 있어 코스트 ${sealLowCap(g)} 이하 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の番人</span>が場にいるためコスト${sealLowCap(g)}以下の魔法を使用できません`); return; }
-    if (p.spellSealTurn) { ctx.log(`  └ <span class="dmg">침묵의 심판</span>: 이번 턴 동안 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の審判</span>: このターン中は魔法を使用できません`); return; }
-    if (spaceLocked(g, p)) { ctx.log(`  └ <span class="dmg">공간 술식</span>: 마법을 사용할 수 없다`, `  └ <span class="dmg">空間術式</span>: 魔法を使用できない`); return; }
-    if (isChestCard(card) && chestLocked(g)) { ctx.log(`  └ <span class="dmg">${cn(DB.MIMIC2)}</span>: 보물상자 사용 봉인 중`, `  └ <span class="dmg">${cn(DB.MIMIC2)}</span>: 宝箱の使用は封印中`); return; }
     p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1);
     ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: card.star === "trash" ? "vanish" : "discard" });
     afterPlay(g, ctx, p, card);
@@ -3892,14 +3975,6 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     return;
   }
   if (card.t === "mon") {
-    if (spaceLocked(g, p)) { ctx.log(`  └ <span class="dmg">공간 술식</span>: 몬스터를 소환할 수 없다`, `  └ <span class="dmg">空間術式</span>: モンスターを召喚できない`); return; }
-    if (summonBlockedLow(g, p, card)) { ctx.log(`  └ <span class="dmg">봉쇄령</span>: 코스트 ${card.cost} 몬스터 소환 불가`, `  └ <span class="dmg">封鎖令</span>: コスト ${card.cost} のモンスター召喚不可`); return; }
-    if ((p.summonLockUntil ?? 0) > g.turn) { ctx.log(`  └ <span class="dmg">은둔자</span>: 다른 몬스터를 소환할 수 없다`, `  └ <span class="dmg">隠遁者</span>: 他のモンスターを召喚できない`); return; }
-    if (p.summonCap != null && p.field.length >= p.summonCap) { ctx.log(`  └ <span class="dmg">고독의 저주</span>: 몬스터를 ${p.summonCap + 1}체 이상 소환할 수 없다`, `  └ <span class="dmg">孤独の呪い</span>: モンスターを${p.summonCap + 1}体以上召喚できない`); return; }
-    if (p.lowSummonBanTurn && (card.cost ?? 0) <= 3) { ctx.log(`  └ <span class="dmg">삼격의 불씨</span>: 이번 턴 코스트 3 이하 소환 불가`, `  └ <span class="dmg">三撃の火種</span>: このターン コスト3以下は召喚不可`); return; }
-    if (!summonReqMet(p, card, g.players[1 - g.cur])) { ctx.log(`  └ <span class="dmg">소환 조건 미충족</span>: ${cn(card)}`, `  └ <span class="dmg">召喚条件を満たしていない</span>: ${cn(card)}`); return; }
-    if ((card.cost ?? 0) >= 5 && castleOf(p)) { ctx.log(`  └ <span class="dmg">성</span>: 코스트 5 이상 몬스터를 소환할 수 없다`, `  └ <span class="dmg">城</span>: コスト5以上のモンスターは召喚できない`); return; }
-    if (p.field.length >= FIELD_MAX) { ctx.log(`  └ <span class="dmg">몬스터 존이 가득 찼습니다 (최대 ${FIELD_MAX})</span>`, `  └ <span class="dmg">モンスターゾーンが満杯です (最大 ${FIELD_MAX})</span>`); return; }
     p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1);
     p.uses[card.id] = (p.uses[card.id] || 0) + 1;             // game-long usage count (card analytics — monsters too)
     afterPlay(g, ctx, p, card);
@@ -3908,72 +3983,14 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     return;
   }
   if (card.t === "spell") {
-    const o0 = g.players[1 - g.cur];
     // ---- spell seals (침묵 오라 / 침묵의 심판) ----
-    if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) { ctx.log(`  └ <span class="dmg">침묵의 거신</span>이 필드에 있어 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の巨神</span>が場にいるため魔法を使用できません`); return; }
-    if (sealLowBlocks(g, playCost(card, p))) { ctx.log(`  └ <span class="dmg">침묵의 파수꾼</span>이 필드에 있어 코스트 ${sealLowCap(g)} 이하 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の番人</span>が場にいるためコスト${sealLowCap(g)}以下の魔法を使用できません`); return; }
-    if (p.spellSealTurn) { ctx.log(`  └ <span class="dmg">침묵의 심판</span>: 이번 턴 동안 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の審判</span>: このターン中は魔法を使用できません`); return; }
-    if (p.spellCastCap != null && (p.spellsCastTurn || 0) >= p.spellCastCap) { ctx.log(`  └ <span class="dmg">마족 시너지</span>: 이번 턴 마법을 더 사용할 수 없습니다 (한도 ${p.spellCastCap})`, `  └ <span class="dmg">魔族シナジー</span>: このターンはこれ以上魔法を使えません (上限${p.spellCastCap})`); return; }
-    if (spaceLocked(g, p)) { ctx.log(`  └ <span class="dmg">공간 술식</span>: 마법을 사용할 수 없다`, `  └ <span class="dmg">空間術式</span>: 魔法を使用できない`); return; }
     // ---- v41b 조건부 마법 ----
-    if (card.id === "BEGINNER_MIND" && p.hand.length !== 1) { ctx.log("  └ 패가 0장일 때만 발동 가능", "  └ 手札が0枚の時のみ発動可能"); return; }
-    if (card.id === "SPACE_RITE" && o0.field.length + o0.traps.length + o0.enchants.length < 6) { ctx.log("  └ 상대 필드의 카드가 6장 미만이라 사용 불가", "  └ 相手の場のカードが6枚未満のため使用不可"); return; }
-    if (card.id === "BUYOUT" && !Object.values(p.buysTurn ?? {}).some((n2) => n2 >= 2)) { ctx.log("  └ 이번 턴 같은 카드를 2장 구매하지 않았다", "  └ このターン同じカードを2枚購入していない"); return; }
-    if (card.id === "PACK_INSTINCT" && !p.field.some((m) => p.field.filter((x) => x.id === m.id).length >= 2)) { ctx.log("  └ 자신 필드에 같은 이름의 몬스터가 2체 이상 없다", "  └ 自分の場に同名モンスターが2体以上いない"); return; }
-    if (card.id === "MIND_BURST" && !p.field.some((m) => (m.guts || 0) > 0)) { ctx.log("  └ 자신 필드에 카운터가 없다", "  └ 自分の場にカウンターがない"); return; }
-    if (card.id === "PENANCE" && !(p.brand ?? 0)) { ctx.log("  └ 자신에게 낙인 카운터가 없다", "  └ 自分に烙印カウンターがない"); return; }
     // ---- conditional / usage-gated preconditions (checked BEFORE paying) ----
-    if (card.act === "wipeBack" && p.field.length > 0) { ctx.log(`  └ 필드에 몬스터가 있어 사용 불가`, `  └ 場にモンスターがいるため使用不可`); return; }
-    if (card.id === "S4" && (p.usesTurn["S4"] || 0) >= 1) { ctx.log("  └ 이번 턴에 이미 사용했습니다", "  └ このターンは既に使用済み"); return; }
-    if (card.id === "GS9_0" && o0.hp <= 21) { ctx.log("  └ 상대 체력 21 이하라 사용 불가", "  └ 相手の体力が21以下のため使用不可"); return; }
-    if (card.id === "GS10_0" && p.field.length > 1) { ctx.log("  └ 자신 필드 몬스터 2체 이상이라 사용 불가", "  └ 自分の場のモンスターが2体以上のため使用不可"); return; }
-    if (card.id === "RUNE1" && !o0.field.some((m) => (m.cost ?? 0) >= 5)) { ctx.log("  └ 코스트 5 이상 상대 몬스터가 없습니다", "  └ コスト5以上の敵モンスターがいません"); return; }
-    if ((card.id === "RUNE2" || card.id === "RUNE3") && !spellDeckHalf(p)) { ctx.log("  └ 덱의 절반 이상이 마법이어야 발동 가능", "  └ デッキの半分以上が魔法でなければ発動不可"); return; }
-    if ((card.id === "DISARM1" || card.id === "DISARM2" || card.id === "DISARM3") && o0.enchants.length === 0) { ctx.log("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); return; }
-    if (card.id === "BLOOD_SECRET" && !p.field.some((m) => isVampFamily(m))) { ctx.log("  └ 자신 필드에 '흡혈귀' 계열 몬스터가 없습니다", "  └ 自分の場に「吸血鬼」系列モンスターがいません"); return; }
-    if (card.id === "BLOOD2" && o0.traps.length + o0.enchants.length === 0) { ctx.log("  └ 파괴할 상대 영구마법·세트 함정이 없습니다", "  └ 破壊する相手の永続魔法・セットトラップがありません"); return; }
-    if (card.act === "destroyMon" && card.cap && ![...o0.field, ...p.field].some((m) => m.cost <= card.cap!)) { ctx.log(`  └ 코스트 ${card.cap} 이하의 대상 몬스터가 없습니다`, `  └ コスト${card.cap}以下の対象モンスターがいません`); return; }
-    if (card.id === "CHOSEN_AREA" && cullExiled(p) < 25) { ctx.log(`  └ 게임에서 제외된 컬이 ${cullExiled(p)}장 — 25장 이상이어야 발동 가능`, `  └ ゲームから除外されたカルが${cullExiled(p)}枚 — 25枚以上で発動可能`); return; }
-    if ((card.id === "DECAY_CRAFT" || card.id === "MAJESTY_RITE") && p.field.length === 0) { ctx.log("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); return; }
     // 각인 비술: 위엄 미보유 몬스터가 하나도 없으면 발동 불가 — 전원 보유 상태에서
     // 발동되면 allowCancel:false pending이 영원히 해소 불가(모든 픽이 재선택) = 소프트락
-    if (card.id === "MAJESTY_RITE" && !p.field.some((m) => !hasPassive(m, "majesty"))) { ctx.log("  └ '위엄'을 부여할 수 있는 몬스터가 없습니다", "  └ 「威厳」を与えられるモンスターがいません"); return; }
-    if (card.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) { ctx.log("  └ 자신 필드에 이미 '선견지명'이 있습니다", "  └ 自分の場に既に「先見の明」があります"); return; }
-    if (card.ench === "guild" && p.enchants.some((e) => e.card.ench === "guild")) { ctx.log("  └ 자신 필드에 이미 '상회'가 있습니다", "  └ 自分の場に既に「商会」があります"); return; }
-    if (card.id === "SLUM" && !p.enchants.some((e) => e.card.ench === "guild")) { ctx.log("  └ 자신 필드에 '상회'가 없습니다", "  └ 自分の場に「商会」がありません"); return; }
-    if (card.id === "DUNGEON_FLOOR" && o0.maxMana < 7) { ctx.log("  └ 상대 최대 마나가 7 미만이라 사용 불가", "  └ 相手の最大マナが7未満のため使用不可"); return; }
-    if (card.id === "MEDITATE" && p.maxMana > 11) { ctx.log("  └ 최대 마나가 11을 초과해 사용 불가", "  └ 最大マナが11を超えているため使用不可"); return; }
 
-    if (card.id === "MEDITATE" && p.hp >= p.maxHp) { ctx.log("  └ 체력이 이미 가득 찼습니다", "  └ 体力が既に満タンです"); return; }
-    if (card.id === "HERMIT" && p.field.length > 0) { ctx.log("  └ 필드에 몬스터가 있어 사용 불가", "  └ 場にモンスターがいるため使用不可"); return; }
-    if (card.id === "HERMIT" && (p.uses["HERMIT"] || 0) >= 5) { ctx.log("  └ 게임당 5회까지만 사용 가능", "  └ ゲーム中5回まで使用可能"); return; }
-    if (card.id === "FORBIDDEN" && !p.field.some((m) => m.tribe && m.tribe !== "시초")) { ctx.log("  └ 시초 외 종족 몬스터가 필드에 없습니다", "  └ 始原以外の種族モンスターが場にいません"); return; }
-    if (card.id === "MULTI_CULTURE" && new Set(p.field.filter((m) => m.tribe).map((m) => m.tribe)).size < 2) { ctx.log("  └ 서로 다른 종족이 2종 이상 필요합니다", "  └ 異なる種族が2種以上必要です"); return; }
-    if (card.id === "GS6_4" && !(o0.brand ?? 0)) { ctx.log("  └ 상대에게 낙인 카운터가 없습니다", "  └ 相手に烙印カウンターがありません"); return; }
-    if (card.act === "exilePick" && p.discard.length === 0) { ctx.log("  └ 묘지가 비어 있습니다", "  └ 墓地が空です"); return; }
-    if (card.act === "incubate" && !p.field.some((m) => m.hatch != null && m.hatch > 0)) { ctx.log("  └ 자신 필드에 알이 없습니다", "  └ 自分の場に卵がありません"); return; }
-    if (card.id === "VAMP_PACT" && p.field.length >= FIELD_MAX) { ctx.log(`  └ <span class="dmg">몬스터 존이 가득 찼습니다 (최대 ${FIELD_MAX})</span>`, `  └ <span class="dmg">モンスターゾーンが満杯です (最大 ${FIELD_MAX})</span>`); return; }
-    if (card.id === "COUNTERCALC" && o0.maxMana > 7) { ctx.log("  └ 상대 최대 마나가 7을 초과해 사용 불가", "  └ 相手の最大マナが7を超えているため使用不可"); return; }
-    if ((card.id === "EXPANSION" || card.id === "LAND_GRANT") && !castleOf(p)) { ctx.log("  └ 자신 필드에 '성'이 없습니다", "  └ 自分の場に「城」がありません"); return; }
-    if (card.id === "TREASON" && !castleOf(o0)) { ctx.log("  └ 상대 필드에 '성'이 없습니다", "  └ 相手の場に「城」がありません"); return; }
-    if (card.id === "AEM" && (new Set(deckComp(p).filter((c) => c.t === "mon" && isGolem(c)).map((c) => c.id)).size < 2 || !p.field.some((m) => isGolem(m)))) { ctx.log("  └ 덱 구성에 서로 다른 골램 2장과 필드의 골램이 필요합니다", "  └ デッキ構成に異なるゴーレム2枚と場のゴーレムが必要です"); return; }
-    if ((card.id === "KNIGHT_TEACH" || card.id === "NL_SECRET") && p.field.length === 0) { ctx.log("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); return; }
-    if (card.id === "COUNTERCALC" && o0.enchants.length === 0) { ctx.log("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); return; }
-    if (card.id === "AMBUSH" && o0.maxMana !== 4) { ctx.log("  └ 상대 최대 마나가 4가 아니라 사용 불가", "  └ 相手の最大マナが4ではないため使用不可"); return; }
-    if (card.id === "TRUMPET" && p.field.length === 0) { ctx.log("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); return; }
-    if (card.id === "WALLBREAK1" && ![...o0.field, ...p.field].some((m) => effAtk(o0, m) <= 2)) { ctx.log("  └ 공격력 2 이하 몬스터가 없습니다", "  └ 攻撃力2以下のモンスターがいません"); return; }
-    if (card.id === "WALLBREAK2" && !o0.field.some((m) => effAtk(o0, m) <= 2)) { ctx.log("  └ 공격력 2 이하 적 몬스터가 없습니다", "  └ 攻撃力2以下の敵モンスターがいません"); return; }
-    if (card.id === "SNIPE1" && ![...o0.field, ...p.field].some((m) => curHp(o0, m) <= 3)) { ctx.log("  └ 체력 3 이하 몬스터가 없습니다", "  └ 体力3以下のモンスターがいません"); return; }
-    if (card.id === "SNIPE2" && !o0.field.some((m) => curHp(o0, m) <= 2)) { ctx.log("  └ 체력 2 이하 적 몬스터가 없습니다", "  └ 体力2以下の敵モンスターがいません"); return; }
-    if (card.id === "INQUISITION" && ![...o0.deck, ...o0.discard, ...o0.field].some((m) => m.t === "mon" && m.tribe)) { ctx.log("  └ 상대에게 종족 몬스터가 없습니다", "  └ 相手に種族モンスターがいません"); return; }
-    if (card.id === "PURGE_ALL" && p.deck.length + p.discard.length === 0) { ctx.log("  └ 덱과 묘지가 비어 있습니다", "  └ デッキと墓地が空です"); return; }
-    if (card.id === "GOLIATH_HUNT" && !o0.field.some((m) => effDef(o0, m) >= 10)) { ctx.log("  └ 최대 체력 10 이상 적 몬스터가 없습니다", "  └ 最大体力10以上の敵モンスターがいません"); return; }
-    if (card.id === "MASSACRE" && o0.field.length === 0) { ctx.log("  └ 파괴할 적 몬스터가 없습니다", "  └ 破壊する敵モンスターがいません"); return; }
-    if (card.id === "SCRAPPER" && [...p.deck, ...p.discard].filter((c) => c.cost <= 1).length < 2) { ctx.log("  └ 덱·묘지에 코스트 1 이하 카드가 2장 없습니다", "  └ デッキ・墓地にコスト1以下のカードが2枚ありません"); return; }
-    if (card.ench && p.traps.length + p.enchants.length + (p.quests?.length ?? 0) >= ST_MAX) { ctx.log(`  └ <span class="dmg">마법·함정 존이 가득 찼습니다 (최대 ${ST_MAX})</span>`, `  └ <span class="dmg">魔法・罠ゾーンが満杯です (最大 ${ST_MAX})</span>`); return; }
     // 마스터 미믹(chestLock): 보물상자 "계열" 전부 봉인. 행운/길드의 보물상자는 스타터가 아니라
     // 스펠이라 star==="chest" 검사만 있던 예전 가드를 통째로 빠져나갔다.
-    if (isChestCard(card) && chestLocked(g)) { ctx.log(`  └ <span class="dmg">${cn(DB.MIMIC2)}</span>: 보물상자 사용 봉인 중`, `  └ <span class="dmg">${cn(DB.MIMIC2)}</span>: 宝箱の使用は封印中`); return; }
 
     p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1); p.discard.push(card);
     afterPlay(g, ctx, p, card);

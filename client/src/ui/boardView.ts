@@ -4,7 +4,7 @@
 // All animation lives in anim.ts; this file only draws + binds.
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
-import { purchaseAllowed, freeBuyBlocked } from "../shared/engine";
+import { purchaseAllowed, freeBuyBlocked, playBlockReason } from "../shared/engine";
 import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem, marketStockOf } from "../shared/engine";
 import { enchantHasTurnCountdown, fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
@@ -16,6 +16,7 @@ import { logToEn } from "../shared/logEn";
 import { getSfxVolume, setSfxVolume } from "./sound";
 import { deckBucket, refinedArt } from "./duelMaterials";
 import { avatarHtml } from "./social";
+import { installGameCursor } from './gameCursor';
 import { createAttackAim } from './attackAim';
 
 // the local player's profile avatar (set by the game screen), shown on MY portrait
@@ -83,6 +84,7 @@ export class GameView {
     this.you = you;
     this.h = h;
     this.buildSkeleton();
+    this.cleanups.push(installGameCursor(this.root));
     if (typeof WebGL2RenderingContext !== 'undefined') {
       void import('./duelScene').then(({ mountDuelScene }) => {
         if (!this.disposed) this.disposeScene = mountDuelScene(this.root);
@@ -271,7 +273,7 @@ export class GameView {
       swallowNextClick(handEl);
     }, { capture: true });
     // Re-measure compact and expanded hand steps after responsive sizing.
-    this.onLayout = () => this.layoutHand();
+    this.onLayout = () => {this.layoutHand();this.layoutOpponentHand();};
     window.addEventListener("lore:layout", this.onLayout);
   }
 
@@ -327,6 +329,7 @@ export class GameView {
   }
 
   render(g: GameState): void {
+    this.root.querySelector('.card-block-tip')?.remove();
     const me = g.players[this.you];
     const opp = g.players[1 - this.you];
     const myTurn = g.cur === this.you && !g.over;
@@ -353,7 +356,7 @@ export class GameView {
     const n = opp.hand.length;
     // back size follows the solved portrait size (--pt) so it scales with the viewport
     const handWidth = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--card-w-hand")) || 100;
-    const obw = Math.max(14, Math.min(30, Math.round(handWidth * .22))); // back width (px)
+    const obw = handWidth * .42; // back width (px)
     const spread = obw * 4.4;
     const ostep = n <= 1 ? 0 : Math.min(obw * 0.62, Math.max(6, (spread - obw) / (n - 1)));
     for (let i = 0; i < n; i++) {
@@ -375,6 +378,7 @@ export class GameView {
     }
 
 
+    this.layoutOpponentHand();
     this.renderRow(this.q("oppRow"), g, opp, false, myTurn, pending);
     this.renderRow(this.q("meRow"), g, me, true, myTurn, pending);
     this.renderMarket(g, me, myTurn);
@@ -837,6 +841,7 @@ export class GameView {
       const bc = buyCost(owner, c);
       const aff = myTurn && !g.pending && me.mana >= bc && purchaseAllowed(g, me, c) && !freeBuyBlocked(me, c);
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc }); // same size as 제시
+      if(!aff)card.dataset.blockReason=!myTurn?t('play.block.turn'):g.pending?t('play.block.pending'):me.mana<bc?t('play.block.mana'):t('play.block.cond');
       if (aff) armBuy(card, "mkt" + i, () => this.h.onBuyMarket(i), c); else zoomOnTap(card, c);
       // v40: 슬롯 재고 — 다 팔리면 새 카드로 교체되므로 남은 수를 보여준다
       const stock = marketStockOf(g, i);
@@ -866,6 +871,7 @@ export class GameView {
       stock.title = `${t("market.stock")} 1`;
       card.appendChild(stock);
       card.dataset.supIdx = String(i);  // ORIGINAL supply index (display is sorted) — buy anim finds it by this
+      if(!aff)card.dataset.blockReason=!myTurn?t('play.block.turn'):g.pending?t('play.block.pending'):me.mana<bc?t('play.block.mana'):t('play.block.cond');
       if (aff) armBuy(card, "sup" + i, () => this.h.onBuySupply(i), c); else zoomOnTap(card, c);
       if (myTurn) markWatch(card, c.id); // 제시는 내 턴의 내 제시만 (상대 제시엔 표시 무의미)
       bindZoom(card, c);
@@ -913,14 +919,24 @@ export class GameView {
     handEl.innerHTML = "";
     me.hand.forEach((c, idx) => {
       const pc = playCost(c, me);
-      const aff = myTurn && !g.pending && !c.quick && me.mana >= pc && (c.t !== "quest" || me.traps.length + me.enchants.length + (me.quests?.length ?? 0) < 14);
+      const blocked=playBlockReason(g,this.you,c);
+      const aff = myTurn && !g.pending && !blocked;
       const card = cardEl(c, { size: "hand", playable: aff, dim: !aff, costOverride: pc });
+      if(!aff)card.dataset.blockReason=!myTurn?t('play.block.turn'):g.pending?t('play.block.pending'):me.mana<pc?t('play.block.mana'):(getLang()==='ja'?blocked?.ja:getLang()==='ko'?blocked?.ko:null)||t('play.block.cond');
       card.style.setProperty("--hi", String(idx));
       card.style.zIndex = String(idx);
       this.bindHandCard(card, c, aff);
       handEl.appendChild(card);
     });
     this.layoutHand();
+  }
+
+  private layoutOpponentHand():void {
+    const hand=this.q('oppHand'),cards=[...hand.querySelectorAll<HTMLElement>('.card--back')];
+    const w=(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--card-w-hand'))||100)*.42;
+    const step=cards.length<=1?0:Math.min(w*.62,Math.max(5,w*3.4/(cards.length-1)));
+    cards.forEach((c,i)=>{c.style.width=w+'px';c.style.height=w/.64+'px';c.style.left=i*step+'px';});
+    hand.style.width=(cards.length?w+(cards.length-1)*step:0)+'px';hand.style.height=w/.64+'px';
   }
 
   /** Per-state overlap steps (CSS picks the var by .hand-open on .game).
@@ -962,7 +978,8 @@ export class GameView {
       const dropBounds = () => {
         const top = this.q("oppRow").getBoundingClientRect();
         const bottom = this.q("meRow").getBoundingClientRect();
-        return { left: bottom.left, right: bottom.right, top: top.top - 12, bottom: bottom.bottom + 16 };
+        return c.t==='mon' ? { left: bottom.left, right: bottom.right, top: top.top - 12, bottom: bottom.bottom + 16 }
+          : {left:12,right:innerWidth-12,top:Math.max(44,top.top-30),bottom:Math.min(innerHeight-12,Math.max(bottom.bottom+40,innerHeight*.88))};
       };
       const canDropAt = (x: number, y: number) => {
         const r = dropBounds(), hand = this.q("hand").getBoundingClientRect();

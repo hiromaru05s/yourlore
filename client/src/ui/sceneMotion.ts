@@ -75,31 +75,64 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       return true;
     }
     const openingDecks=[...root.querySelectorAll<HTMLElement>('.pile--deck')].map(el=>({el,count:Number(el.dataset.count)||0}));
+    const marketCards=[...root.querySelectorAll<HTMLElement>('#fixedMarket .card,#supplyMarket .card')];
+    const movingCards:Array<{element:HTMLElement;mesh:T.Group;map:T.Texture;index:number;supply:boolean;landed:boolean}>=[];
+    // Capture only the already-public market. Faces remain absent until their own flight.
+    try { await Promise.allSettled(marketCards.map(async(element)=>{
+      const surface=await capturePileSurface(element,openingDecks[0]?.el.dataset.sleeve||'/art/frames/back.webp',true);
+      if(disposed||req.signal.aborted||!surface.face)return;
+      const map=new T.CanvasTexture(surface.face);map.colorSpace=T.SRGBColorSpace;map.anisotropy=8;
+      const mesh=cardStock(texture(openingDecks[0].el.dataset.sleeve!),map);mesh.visible=false;scene.add(mesh);
+      const supply=element.parentElement?.id==='supplyMarket',siblings=[...element.parentElement!.querySelectorAll('.card')];
+      const index=supply?siblings.indexOf(element):siblings.length-1-siblings.indexOf(element);
+      movingCards.push({element,mesh,map,index,supply,landed:false});element.style.visibility='hidden';
+    }));
+    if(disposed||req.signal.aborted)return false;
     for(const {el,count} of openingDecks){el.dataset.count=String(count+3);el.dataset.openingCount=String(count);}
-    refresh();
-    root.querySelector('.awaiting-board')?.classList.remove('awaiting-board');
+    refresh();root.querySelector('.awaiting-board')?.classList.remove('awaiting-board');
     root.classList.add('duel-opening');root.dataset.openingPhase='market';
-    try{await timeline(reduced?100:2600,req.signal,t=>{
-      root.dataset.openingPhase=t<.28?'market':t<.5?'furniture':'decks';
+    const duration=4300,above=-innerHeight*.45,flightHeight=innerHeight*.45;
+    // Project a start point outside the viewport instead of spawning at a fixed
+    // small world height. This works at every viewport and for the back/front rows.
+    const fromAbove=(r:DOMRect)=>screenToBoard(r.left+r.width/2,above,flightHeight);
+    try{await timeline(reduced?100:duration,req.signal,t=>{
+      const ms=t*duration;
+      root.dataset.openingPhase=ms<700?'market':ms<2100?'market-cards':ms<2900?'furniture':'decks';
       for(const item of items.values()){
-        const delay=item.market||item.supply?0:.27;
-        const p=sat((t-delay)/.24),height=p<1?3.8*(1-p*p):0;
-        item.group.userData.introHeight=height*unit;
-        item.group.visible=t>=delay;
+        const isMarket=item.market||item.supply,delay=isMarket?0:2100;
+        const p=sat((ms-delay)/650),travel=p*p,r=layoutRect(item.element),from=fromAbove(r);
+        item.group.userData.introHeight=flightHeight*(1-travel);
+        item.group.userData.introZ=(from.y-(r.top+r.height/2))*(1-travel);
+        item.group.visible=ms>=delay;
         if(p===1&&!item.group.userData.introLanded){item.group.userData.introLanded=true;dust(item.element);}
         if(item.pile)item.pile.cards.children.forEach((c,i)=>{
-          const start=.52+.34*Math.sqrt((i+1)/Math.max(1,item.pile!.cards.children.length));
-          const v=sat((t-start)/.12);c.visible=t>=start;
-          c.userData.restY??=c.position.y;c.position.y=c.userData.restY+4.5*(1-v*v);
+          const start=2900+950*Math.sqrt((i+1)/Math.max(1,item.pile!.cards.children.length));
+          const v=sat((ms-start)/350);c.visible=ms>=start;c.userData.restY??=c.position.y;
+          c.position.y=c.userData.restY+(flightHeight/unit)*(1-v*v);
+          c.position.z=(from.y-(r.top+r.height/2))/unit*(1-v*v);
           if(v===1&&!c.userData.introLanded){c.userData.introLanded=true;if(i%3===0)dust(item.element);}
         });
       }
-      const market=root.querySelector<HTMLElement>('.market-counter');if(market){market.style.opacity=t<.02?'0':'1';market.dataset.introHeight=String(3.8*(1-sat(t/.24)**2)*unit);projectBoardDOM(root);}
+      for(const card of movingCards){
+        const start=700+(card.supply?card.index*160+80:card.index*80),v=sat((ms-start)/650),p=v*v;
+        const r=layoutRect(card.element),h=unit*(card.supply?.30:.22),sx=card.supply?-unit*2:innerWidth+unit*2;
+        const from=screenToBoard(sx,-innerHeight*.2,flightHeight),x=r.left+r.width/2,z=r.top+r.height/2;
+        card.mesh.visible=ms>=start&&!card.landed;card.mesh.scale.setScalar(unit);
+        card.mesh.position.set(from.x-cx+(x-from.x)*p,flightHeight+(h-flightHeight)*p,from.y-cy+(z-from.y)*p);
+        card.mesh.rotation.set(-Math.PI/2+(1-v)*.25,0,(card.supply?1:-1)*(1-v)*.16);
+        if(v===1&&!card.landed){card.landed=true;card.element.style.visibility='';card.mesh.visible=false;card.element.dataset.introLanded='true';dust(card.element);}
+      }
+      const market=root.querySelector<HTMLElement>('.market-counter');if(market){
+        // Empty furniture falls first; DOM controls are revealed after it lands.
+        market.style.visibility=ms<650?'hidden':'';
+        market.querySelectorAll<HTMLElement>('.sub-head,.reroll-hint').forEach(e=>e.style.visibility=ms<2050?'hidden':'');
+      }
     });}finally{
-      items.forEach(item=>{item.group.visible=true;delete item.group.userData.introHeight;item.pile?.cards.children.forEach(c=>{c.visible=true;if(c.userData.restY!=null)c.position.y=c.userData.restY;});});
-      const market=root.querySelector<HTMLElement>('.market-counter');market?.style.removeProperty('opacity');if(market)delete market.dataset.introHeight;projectBoardDOM(root);
-      root.classList.remove('duel-opening');delete root.dataset.openingPhase;
+      items.forEach(item=>{item.group.visible=true;delete item.group.userData.introHeight;delete item.group.userData.introZ;delete item.group.userData.introLanded;item.pile?.cards.children.forEach(c=>{c.visible=true;c.position.z=0;if(c.userData.restY!=null)c.position.y=c.userData.restY;delete c.userData.introLanded;});});
+      const market=root.querySelector<HTMLElement>('.market-counter');market?.style.removeProperty('visibility');market?.querySelectorAll<HTMLElement>('.sub-head,.reroll-hint').forEach(e=>e.style.removeProperty('visibility'));
+      projectBoardDOM(root);root.classList.remove('duel-opening');delete root.dataset.openingPhase;
     }
+    }finally{movingCards.forEach(c=>{c.element.style.removeProperty('visibility');delete c.element.dataset.introLanded;dispose(c.mesh);c.map.dispose();});}
     return true;
   });
   return {tick(now:number){tasks.forEach(t=>t(now));return tasks.size>0;},dispose(){disposed=true;unbind();cancels.forEach(c=>c());}};

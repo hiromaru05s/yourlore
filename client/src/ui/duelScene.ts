@@ -122,6 +122,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
         if(!item.element.classList.contains('pile--3d-ready'))item.element.classList.add('pile--3d-ready');
       }
       item.group.position.y+=Number(item.group.userData.introHeight)||0;
+      item.group.position.z+=Number(item.group.userData.introZ)||0;
       if(root.querySelector('.awaiting-board'))item.group.visible=false;
     }
     renderer.setScissorTest(false);renderer.setViewport(0,0,width,height);renderer.clear();renderer.render(scene,camera);
