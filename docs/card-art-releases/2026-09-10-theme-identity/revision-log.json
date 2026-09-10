@@ -1,0 +1,62 @@
+{
+  "DUNGEON": {
+    "status": "resolved",
+    "reason": "portable chest obscured living tunnel identity",
+    "correction": "Remove treasure chest completely. Show the mine tunnel itself as the living monster, enormous mineral tooth arch, amber eye fissures, rails and wet wood braces. No chest, box, tongue or portable furniture. Environment creature fills composition.",
+    "final": "images/DUNGEON.png",
+    "firstAttempt": "iterations/DUNGEON-attempt1.png"
+  },
+  "QUICK_SURVIVAL": {
+    "status": "resolved",
+    "reason": "portable chest obscured living tunnel identity",
+    "correction": "Remove treasure chest completely. One battered lantern with small red flame lies beside a gigantic living mine tunnel mouth of rock teeth. Wet wooden supports, rails and collapsing rubble. The dungeon itself is the monster; no chest, box, portable mimic, person or tongue.",
+    "final": "images/QUICK_SURVIVAL.png",
+    "firstAttempt": "iterations/QUICK_SURVIVAL-attempt1.png"
+  },
+  "GREED_PRICE": {
+    "status": "resolved",
+    "reason": "six record cards instead of five",
+    "correction": "Removed one card through image editing; final image has five intact record cards and two mimics.",
+    "final": "images/GREED_PRICE.png",
+    "firstAttempt": "iterations/GREED_PRICE-attempt1.png"
+  },
+  "GUILD_HALL": {
+    "status": "resolved",
+    "reason": "foreground assassin obscured architecture",
+    "correction": "Make the guild building the protagonist",
+    "final": "images/GUILD_HALL.png",
+    "firstAttempt": "iterations/GUILD_HALL-attempt1.png"
+  },
+  "GUILD_HQ": {
+    "status": "resolved",
+    "reason": "foreground assassin obscured architecture",
+    "correction": "Make the guild building the protagonist",
+    "final": "images/GUILD_HQ.png",
+    "firstAttempt": "iterations/GUILD_HQ-attempt1.png"
+  },
+  "WORLD_TREE": {
+    "status": "resolved",
+    "reason": "foreground elf obscured the World Tree",
+    "correction": "Entire tree from roots to canopy is the sole main subject; no people",
+    "final": "images/WORLD_TREE.png",
+    "firstAttempt": "iterations/WORLD_TREE-attempt1.png"
+  },
+  "Q_TORI": {
+    "status": "resolved",
+    "reason": "User rejected v2 as still too realistic and inconsistent with the concept",
+    "correction": "探書の精霊と同じ簡潔な顔、目、紙片状の毛束、浮遊する魔法生物の造形。犬の毛色と垂れ耳を識別のモチーフとして保持。",
+    "final": "images/Q_TORI.png",
+    "firstAttempt": "iterations/Q_TORI-attempt1.png",
+    "secondAttempt": "iterations/Q_TORI-attempt2.png",
+    "styleReference": "references/NMD2-spirit-style.webp"
+  },
+  "Q_WINTER": {
+    "status": "resolved",
+    "reason": "User rejected v2 as still too realistic and inconsistent with the concept",
+    "correction": "探書の精霊と同じ簡潔な顔、目、紙片状の毛束、浮遊する魔法生物の造形。犬の毛色と垂れ耳を識別のモチーフとして保持。",
+    "final": "images/Q_WINTER.png",
+    "firstAttempt": "iterations/Q_WINTER-attempt1.png",
+    "secondAttempt": "iterations/Q_WINTER-attempt2.png",
+    "styleReference": "references/NMD2-spirit-style.webp"
+  }
+}

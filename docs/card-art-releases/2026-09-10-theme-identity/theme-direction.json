@@ -1,0 +1,54 @@
+{
+  "golem": {
+    "label": "ゴーレム",
+    "direction": "Rust: monumental working constructs, weathered ivory ceramic slabs over dark basalt, visible heavy copper joints and turquoise cores. Wide industrial excavation landscapes, gantries and ore strata. Weight, irregular blocks and practical machinery. No palace, throne hall, human face, futuristic robot, or knight wearing ordinary plate armor."
+  },
+  "hexer": {
+    "label": "呪術師",
+    "direction": "Blood: ceremonial masked spellbinders in peat-black, muted plum and wax ivory. Keep distinctive porcelain masks with narrow eyes and gold-repaired cracks; mask shape changes by rank. Tangled cords, knotted charms, thorn cages and violet candle smoke. Reed marsh, hanging willow roots, fabric shelters and carved timber ritual stations. No gothic cathedral, vampire wings, or identical handsome uncovered faces."
+  },
+  "mimic": {
+    "label": "ミミック",
+    "direction": "Rust: living treasure-chest ecology. Preserve barrel lid, walnut frame, worn ivory/navy panels, brass bands, round ornament and shield latch from reference. Distinct silhouettes through legs, tongues, teeth, shell damage and rank. Damp subterranean treasure geology: mineral pools, mine tunnels, salt shelves, collapsed hoards. Moss, grime and patina. No bright marble palace or unrelated furniture monsters."
+  },
+  "demon": {
+    "label": "魔族",
+    "direction": "Blood: demons are visibly nonhuman, obsidian horns, ember fissures, tough ash-red hide, asymmetric black-glass body armor and angular hooked silhouettes. Red basalt badlands with charcoal ash skies, fumaroles and floating jagged black rock. Crimson plus scorched orange. No pale pretty vampire, white palace, feather wings, or library."
+  },
+  "predator": {
+    "label": "捕食",
+    "direction": "Feral predator lineage: nonhumanoid powerful feline-canid anatomy, ochre charcoal mottled hide, ivory blade-like bony back plates, long canines and yellow eyes. Thorn savannah, dry gullies, dusty hunting grounds, wind-bent grass. Warm ochre/sienna and bone palette. Skin and fur, not stone statues; no buildings, crowns or human costume."
+  },
+  "noble": {
+    "label": "貴族",
+    "direction": "Crown: aristocratic human society, peacock teal and midnight blue velvet, ivory lace, restrained old gold, heraldic brooches, dignified distinctive ages and profiles. Intimate lived-in aristocratic places: paneled salon, winter garden, estate coach, tapestry room. Jewel green light and warm candles. No repeated white palace steps, blood moon, vampire fangs or cathedral."
+  },
+  "lonely": {
+    "label": "孤独",
+    "direction": "Solitude: sparse desaturated slate blue, mist silver, pale ochre cloth; weather-worn practical traveler designs. Vast empty salt flats, windswept coast, lonely upland and isolated shelters. Strong negative space, one subject and clear horizon; intimate solemn mood. No decorative palace, crowds, gold armor or giant magic rings."
+  },
+  "origin": {
+    "label": "始原",
+    "direction": "Roots primordial lineage distinct from worldtree and elves: smooth dark volcanic stone, amber translucent sap, spiral fossil and seed geometries; organic embryo-like living forms woven from pale roots and amber. Geothermal terraces, misty fern caldera, still black water, unworked standing stones. Amber/orange with blue steam. No leafy human elf, royal library, marble hall or ordinary gold-armored king."
+  },
+  "vampire": {
+    "label": "吸血鬼",
+    "direction": "Blood: recognizable elegant vampires, visible tiny fangs, pale skin, wine velvet, black silk, red glass and silver filigree. Distinct ranks/ages/hair/silhouettes; special rank retains long silver hair. Night vineyard, velvet chamber, canal manor, crypt wine cellar; blood-red reflected light and cool moon shadow. No white public cathedral, demon horns, uniform huge bat wings on every rank, or same face copied to all."
+  },
+  "elf": {
+    "label": "エルフ",
+    "direction": "Roots: long-eared woodland people with individual hair, age and face; jade woven leaves, warm bark leather, copper branch fittings, ivory linen as small accents. Elevated tree dwellings, woven root bridges, giant fern canopy, rain-catching leaf roofs. Dappled green light and warm copper. No stone palace, gold crown on every elf, dark elf, or a clone of the reference face."
+  },
+  "assassin": {
+    "label": "アサシン",
+    "direction": "Blood: stealth guild, lean practical silhouettes, ink navy layered cloth, muted oxblood scarf, asymmetric segmented leather, small concealed blades. Rainy slate rooftops, tight timber alleys, red paper lamps, hidden passages, chimney smoke. Deep teal shadows and sparse vermilion signals. Faces use cloth or subtle half-mask; preserve Nightlord special identity, porcelain ritual masks primarily belong to hexers. No castle cathedral, open ceremonial plinth or elaborate spiky gold full armor."
+  },
+  "worldtree": {
+    "label": "世界樹",
+    "direction": "Roots sacred ecology: colossal living tree and its connected roots, honey-gold sap, emerald leaves, cream-white living bark, jade pools and soft luminous pollen. Every place is grown wood, roots, moss, flowers and flowing water, dramatic organic scale. Distinct viewpoint and season for each card. No stone buildings, pillars, marble pedestal, gold metal compass ornament or generic potted tree."
+  },
+  "decay": {
+    "label": "腐敗・マッシュルーム",
+    "direction": "Rust decay ecology: orange-rust mushroom caps with verdigris speckles, blue-green luminous gills, pale fibrous stalks, oil-dark peat and corroded iron. Spore colonies in drowned scrapyard, rotten logs, fungus caverns and bog. Chartreuse corrosion with copper orange. Wet organic textures; mushrooms are main visual motif, no white palace, flower garden, bright clean laboratory or cute generic red polka-dot toadstools."
+  }
+}

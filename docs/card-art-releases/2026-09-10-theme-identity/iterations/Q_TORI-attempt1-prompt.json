@@ -1,0 +1,15 @@
+{
+  "number": "R001",
+  "id": "Q_TORI",
+  "theme": "spirit",
+  "themeJa": "犬の精霊",
+  "name": "精霊 - トリ",
+  "effect": "【条件】自分の場にモンスターがいない状態で、自分のターンを5回終了する · 【報酬】自分の最大体力+30",
+  "scene": "Use case: stylized-concept. Create one finished LORE inner-card painting, landscape aspect 1.095:1, no card frame or text. Spirit Tori MUST be a DOG based closely on the first two reference photos: small scruffy warm tan dog, dark brown/black floppy feathered ears, large round dark eyes, black nose, pale cream muzzle/chin and chest, slender forelegs and feathery curled tail. Preserve these recognizable facial features and proportions; no bird, wings, antlers or humanoid. The third image is ONLY the refined hand-painted fantasy illustration style, not its person or architecture. Setting: intimate mossy woodland pool at sunrise, low ferns, warm amber fireflies, roots and small white flowers. Tori rests one forepaw forward on moss and looks gently toward viewer; body mostly solid, a subtle golden spirit glow along fur tips and tail, no costume obscuring fur, one tiny leaf charm allowed. Express quiet companionship and sanctuary (quest requires turns with no monsters, reward vitality). Dog occupies 60% of frame, entire ears paws tail inside central80%; painterly depth, fine expressive eyes, soft brush texture, luminous but restrained. No white stone buildings, arches, plinths, compass-star decoration, modern bedding, social media UI, captions or watermarks.",
+  "reference": [
+    "/Users/hiromaru05s/Downloads/IMG_1483.jpg",
+    "/Users/hiromaru05s/Downloads/IMG_1484.jpg",
+    "/Users/hiromaru05s/Desktop/LORE_TCG-art-theme-revision/docs/card-art-releases/2026-09-10-theme-identity/references/F180-ELF.png"
+  ],
+  "prompt": "Use case: stylized-concept. Create one finished LORE inner-card painting, landscape aspect 1.095:1, no card frame or text. Spirit Tori MUST be a DOG based closely on the first two reference photos: small scruffy warm tan dog, dark brown/black floppy feathered ears, large round dark eyes, black nose, pale cream muzzle/chin and chest, slender forelegs and feathery curled tail. Preserve these recognizable facial features and proportions; no bird, wings, antlers or humanoid. The third image is ONLY the refined hand-painted fantasy illustration style, not its person or architecture. Setting: intimate mossy woodland pool at sunrise, low ferns, warm amber fireflies, roots and small white flowers. Tori rests one forepaw forward on moss and looks gently toward viewer; body mostly solid, a subtle golden spirit glow along fur tips and tail, no costume obscuring fur, one tiny leaf charm allowed. Express quiet companionship and sanctuary (quest requires turns with no monsters, reward vitality). Dog occupies 60% of frame, entire ears paws tail inside central80%; painterly depth, fine expressive eyes, soft brush texture, luminous but restrained. No white stone buildings, arches, plinths, compass-star decoration, modern bedding, social media UI, captions or watermarks."
+}

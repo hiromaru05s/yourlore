@@ -1,0 +1,498 @@
+{
+  "Q_TORI": {
+    "finding": "写真と旧犬画像を参照から外し、NMD2探書の精霊だけを描画基準に再生成。単純化した短い顔・大きい描画の目・紙片状の毛・浮遊する体に再設計。トリは茶色と黒い両垂れ耳、ウィンターは白灰の配色と長い白い脚で区別。",
+    "status": "visually_checked"
+  },
+  "Q_WINTER": {
+    "finding": "写真と旧犬画像を参照から外し、NMD2探書の精霊だけを描画基準に再生成。単純化した短い顔・大きい描画の目・紙片状の毛・浮遊する体に再設計。トリは茶色と黒い両垂れ耳、ウィンターは白灰の配色と長い白い脚で区別。",
+    "status": "visually_checked"
+  },
+  "NWL3": {
+    "finding": "水門で大きな盾状の両腕を使う守護型。露出した銅関節と採掘場背景に変更。",
+    "status": "visually_checked"
+  },
+  "M10": {
+    "finding": "管と円筒を備えた丸い胴体、青緑の鉱脈を汲む採掘場。背景に小型ゴーレムがありマナの連携として読める。",
+    "status": "visually_checked"
+  },
+  "NGA3": {
+    "finding": "楔形頭部と巨大な前腕刃。溶鉱炉を跨ぐ運搬橋で戦士の輪郭が明快。足元は橋に隠れる。",
+    "status": "visually_checked"
+  },
+  "MANA_GIANT": {
+    "finding": "小さな採掘機材との対比で巨体を表現。長い両腕と大きく露出した胸核が他のゴーレムとの差。",
+    "status": "visually_checked"
+  },
+  "GOLEM3": {
+    "finding": "王冠と大型ハンマーを備えた立像。屋外の鋳造場で、旧版の座った王と区別。ハンマー下部と足は岩に隠れるが主要形状は明快。",
+    "status": "visually_checked"
+  },
+  "GOLEM2": {
+    "finding": "片肩の高い標識フィン、胸を囲む環、指揮する腕でリーダーを識別。雨の鉱山鉄道背景。指先が上端に近い。",
+    "status": "visually_checked"
+  },
+  "GOLEM1": {
+    "finding": "装飾のない四角い顔と単純な兵士形。粘土型から出る工程を背景と一体化。",
+    "status": "visually_checked"
+  },
+  "AEM": {
+    "finding": "二本のゴーレム前腕へ溶けた魔力が流れ、強化工程が読み取れる。石と銅の系列を維持。",
+    "status": "visually_checked"
+  },
+  "KNIGHT_TEACH": {
+    "finding": "巨大な手が三つの青い核を小さなゴーレムへ示す。頭部を描かず手と大きさで教えを表現。",
+    "status": "visually_checked"
+  },
+  "NHEX": {
+    "finding": "ひびの入った片目の仮面を保持。柳と木杭の湿地で呪符の紐を結ぶ手元が主役。髪は銀灰色で元の黒髪から変更。",
+    "status": "visually_checked"
+  },
+  "HEXER1": {
+    "finding": "長い黒髪と編み込み、紫の衣に白い仮面。湿地の木道で紐を結ぶ。仮面は指示した半面より広いが系列として統一。",
+    "status": "visually_checked"
+  },
+  "HEXER2": {
+    "finding": "太い首紐と重い香炉、幅のある体形で中級を区別。仮面は四角形指定より尖った顎になっている。",
+    "status": "visually_checked"
+  },
+  "HEXER3": {
+    "finding": "細い老人の手、灰髪、頭の枝状飾りと五枚の吊り呪符。夕暮れの柳の湿地で上級の儀式感。",
+    "status": "visually_checked"
+  },
+  "HEXER4": {
+    "finding": "銀髪、尖った亀裂仮面、赤石の棘杖、青い魔法を閉じ込める棘の輪を維持。背景は湿地の小島。右の魔法輪の外縁が一部画面外。",
+    "status": "visually_checked"
+  },
+  "CURSE": {
+    "finding": "亀裂仮面の呪具を葦の敷物の上に置き、紫煙と黒紐で呪術師の系列に統一。",
+    "status": "visually_checked"
+  },
+  "WEAKEN_ALL": {
+    "finding": "二つの木の標的を紐と紫の光で弱める構図。予定外の仮面術師が中央に加わるが、効果の作用先も見える。",
+    "status": "visually_checked"
+  },
+  "MIMIC": {
+    "finding": "倒れた鉱車の下、緑の鉱泉に潜む小さなミミック。宝箱の元意匠と軽い汚れを維持。",
+    "status": "visually_checked"
+  },
+  "MIMIC2": {
+    "finding": "二叉の長い舌と蟹のような関節脚、青い鉱石と塩棚でマスター型を区別。",
+    "status": "visually_checked"
+  },
+  "QUICK_GRIMOIRE": {
+    "finding": "呪術書と仮面の型、紫と金の光。予定外の術師が背後にいるが魔法書は大きく読み取れる。",
+    "status": "visually_checked"
+  },
+  "MIMIC_LORD": {
+    "finding": "縦に伸びた紋章と鍵束、長めの脚。坑道の分岐に配置しリーダーらしさを付与。",
+    "status": "visually_checked"
+  },
+  "AWAKENED_MIMIC": {
+    "finding": "黒い水から現れる大きな口と舌、濡れた苔の宝箱。基本ミミックとの胴体差は控えめで、主に水と口の規模で区別。",
+    "status": "visually_checked"
+  },
+  "MIMIC_KING": {
+    "finding": "王冠状の蓋と非常に太い牙、広い胴体でキングを識別。鉱泉と財宝の棚の上。",
+    "status": "visually_checked"
+  },
+  "LUCKY_CHEST": {
+    "finding": "傾いた財宝の崖に、少しだけ開いた蓋から牙と舌が覗く。宝箱の危険な抽選を表現。",
+    "status": "visually_checked"
+  },
+  "MIMIC_KING2": {
+    "finding": "二段の樽蓋と舌に載せた王冠。鉱山の昇降機に配置し初代と輪郭が異なる。",
+    "status": "visually_checked"
+  },
+  "DUNGEON_FLOOR": {
+    "finding": "緑の鉱洞の線路沿いに複数のミミック。最下層の群生として機能するが、環境より手前の個体が大きい構図。",
+    "status": "visually_checked"
+  },
+  "QUICK_MIMIC": {
+    "finding": "跳ねる一体と、リフト内の二体の小型ミミックで効果を表す。記録カードは平面ではなく具現化した姿として描かれる。",
+    "status": "visually_checked"
+  },
+  "DUNGEON": {
+    "finding": "再生成で宝箱を除去。坑道の岩壁が眼、鍾乳石が歯となり、線路が喉へ続く生きたダンジョンを確認。",
+    "status": "visually_checked"
+  },
+  "ORIGIN_MIMIC": {
+    "finding": "琥珀の歯と口内の核、根の脚で始原のミミックを区別。化石と琥珀の鉱洞背景。",
+    "status": "visually_checked"
+  },
+  "GEM_RAIN": {
+    "finding": "青・赤・琥珀の宝石がミミックの殻へ降り、鉱洞の宝物群とつながる。強化対象が明快。",
+    "status": "visually_checked"
+  },
+  "QUICK_SURVIVAL": {
+    "finding": "再生成で宝箱を除去。赤いランタンの冒険者と、眼と歯を持つ巨大な坑道、落下しそうな線路で生存の緊迫感を表現。",
+    "status": "visually_checked"
+  },
+  "TDE1": {
+    "finding": "小柄で俊敏な斥候、黒い角と灰赤の皮膚、爪のある手足。背景は赤黒い火山地形で吸血鬼との配色差が明快。",
+    "status": "visually_checked"
+  },
+  "TDE3": {
+    "finding": "巨大な角冠と斧、赤い筋肉、火山の城砦で狂戦士を識別。武器外縁は一部画面外。",
+    "status": "visually_checked"
+  },
+  "DEMON_REALM": {
+    "finding": "赤黒い浮遊玄武岩の魔界門と溶岩。人物を置かない環境画として確認。",
+    "status": "visually_checked"
+  },
+  "TDE2": {
+    "finding": "灰赤色の筋肉と巻き角、黒曜石の大剣、火山地形で戦士を識別。",
+    "status": "visually_checked"
+  },
+  "GS5_3": {
+    "finding": "開いた黒い書物と四つの角形の赤い封印、白い解読魔法。頁には擬似文字状の細部あり。",
+    "status": "visually_checked"
+  },
+  "INFERNO": {
+    "finding": "溶岩の渦と浮遊岩、巨大な魔族のシルエット。地獄の赤黒い環境が明確。",
+    "status": "visually_checked"
+  },
+  "TPO1": {
+    "finding": "砂色の仔獣、牙と象牙の背棘、棘の巣穴と乾いた草原で捕食系統を識別。",
+    "status": "visually_checked"
+  },
+  "TDE4": {
+    "finding": "長い角と翼、王笏、黒赤の甲冑で魔王の地位を表現。足先は下部の地形に重なる。",
+    "status": "visually_checked"
+  },
+  "TPO2": {
+    "finding": "水場の縁を歩く成獣。仔獣より長い牙と大きな背板、乾燥した河岸で差別化。",
+    "status": "visually_checked"
+  },
+  "TPO3": {
+    "finding": "鼻を低くして地面を追う細長い姿勢。夕方の尾根と足跡で追跡者を表現。",
+    "status": "visually_checked"
+  },
+  "PACK_INSTINCT": {
+    "finding": "同じ特徴を持つ二頭が草むらに並ぶ構図で群れの連携を表現。足先は草に隠れる。",
+    "status": "visually_checked"
+  },
+  "TPO5": {
+    "finding": "巨体と長い牙、大きな前足で群れの頂点を表現。前景の骨質物は岩と同化気味。",
+    "status": "visually_checked"
+  },
+  "SLAY_ART": {
+    "finding": "巨大な爪が骨質の獲物を粉砕する瞬間。捕食者本体との構図の近さはあるが砕ける破片で行為を表現。",
+    "status": "visually_checked"
+  },
+  "TAR2": {
+    "finding": "傷んだ深緑の礼服、封書と蔦の侵入する温室。貴族の上品さと没落した住環境を両立。",
+    "status": "visually_checked"
+  },
+  "TAR3": {
+    "finding": "雨の馬車脇、傷のある鎧と落ち着いた中年の顔。邸宅内の貴族とは別の生活場面。",
+    "status": "visually_checked"
+  },
+  "TAR1": {
+    "finding": "眼鏡と白手袋の年配執事が封書を整理。主役の年齢と所作で領主と区別。",
+    "status": "visually_checked"
+  },
+  "TAR5": {
+    "finding": "領地図の前に立つ髭の領主、窓越しの整った庭園。深緑の豪華な服と権威を保持。",
+    "status": "visually_checked"
+  },
+  "LAND_GRANT": {
+    "finding": "封蝋付き権利書、大きな鍵、地図と城の駒で領土付与を表現。人物なし。",
+    "status": "visually_checked"
+  },
+  "MAJESTY_RITE": {
+    "finding": "無人の礼服に金の刻印が発光。深緑の布と紋章を中心に貴族の魔法を表現。",
+    "status": "visually_checked"
+  },
+  "RICH_HABIT": {
+    "finding": "茶器と硬貨、書類を置いた朝の机。人物を置かず富裕な日課の生活感を表現。",
+    "status": "visually_checked"
+  },
+  "TSO1": {
+    "finding": "海岸の岩陰に一人暮らす白髭の隠遁者。鍋と粗末な天幕で生活感、広い水平線で孤独を表現。",
+    "status": "visually_checked"
+  },
+  "TSO2": {
+    "finding": "白灰色の狼が一頭だけ立つ塩原。全身と耳が収まり、余白のある背景で捕食獣とは区別。",
+    "status": "visually_checked"
+  },
+  "TSO3": {
+    "finding": "弓を持つ若い狩人と遠く離れた小屋。灰色の外套と冷えた無人の高原で孤独系統を表現。",
+    "status": "visually_checked"
+  },
+  "HERMIT": {
+    "finding": "誰もいない粗末な寝床と焚火、静かな海岸。隠遁者の安息の場所を環境で表現。",
+    "status": "visually_checked"
+  },
+  "MEDITATE": {
+    "finding": "水際で目を閉じた一人の旅人とその反射。静かな余白と淡い色、瞑想の所作を確認。",
+    "status": "visually_checked"
+  },
+  "TGE1": {
+    "finding": "白い根に包まれた琥珀の卵と螺旋化石。地熱の段丘と原始的な植生で始原を表現。",
+    "status": "visually_checked"
+  },
+  "TGE3": {
+    "finding": "玄武岩・白い根・琥珀の核を持つ四足の巨獣。人工的なゴーレムとは素材と有機形状で区別。",
+    "status": "visually_checked"
+  },
+  "TGE2": {
+    "finding": "琥珀の火種を包む小さな浮遊精霊。黒い丸顔と白い根、雫の曲線で卵や守護者と区別。",
+    "status": "visually_checked"
+  },
+  "TSO5": {
+    "finding": "布で口元を覆った旅人が塩原の細道を一人進む。杖と全身、遠い廃墟まで収まる孤独な旅。",
+    "status": "visually_checked"
+  },
+  "TGE4": {
+    "finding": "顔のない玄武岩の裁判官が左右に琥珀球を持つ。白根の体と二つの球で審判の構図を確認。",
+    "status": "visually_checked"
+  },
+  "TGE5": {
+    "finding": "白い根の渦と琥珀の種が浮かぶ精霊。人型を避け、火種より大きく複雑な有機輪郭で表現。",
+    "status": "visually_checked"
+  },
+  "TGE6": {
+    "finding": "地熱段丘をまたぐ巨大な体と鋭い頭部。根と岩、化石の体が背景の小さな樹木で巨大に見える。",
+    "status": "visually_checked"
+  },
+  "TGE7": {
+    "finding": "種を中心にした枝の王冠、静かに水へ触れる巨大な君主。戦闘姿勢の巨人との違いを確認。",
+    "status": "visually_checked"
+  },
+  "GREED_PRICE": {
+    "finding": "二体のミミックと宝石、リフトへ移る五枚の無傷の記録カード。初稿の六枚を五枚へ画像編集して効果と一致させた。",
+    "status": "visually_checked"
+  },
+  "GENESIS_SONG": {
+    "finding": "琥珀と白い根の螺旋殻から広がる金の音波。人物を置かず始原の歌を表現。",
+    "status": "visually_checked"
+  },
+  "GENESIS_MAGIC": {
+    "finding": "琥珀の核から五方向へ流れる金の力と原生の池。主核の上部は画面端に続くが中心の発光と流れは明瞭。",
+    "status": "visually_checked"
+  },
+  "ORIGIN_RITE": {
+    "finding": "白根の核と化石石柱を金の流路が結ぶ。人工の床紋様ではなく原始の地形で術式を表現。",
+    "status": "visually_checked"
+  },
+  "VAMP1": {
+    "finding": "短髪の若い吸血鬼、赤い眼と小さな牙、葡萄樽と杯。見習いの軽装と夜の醸造所で個性を付与。",
+    "status": "visually_checked"
+  },
+  "ORIGIN_QUEST": {
+    "finding": "割れた螺旋化石の内部から発芽する琥珀の種。探索対象が一目で分かる環境寄りの構図。",
+    "status": "visually_checked"
+  },
+  "VAMP2": {
+    "finding": "短髪の女性吸血鬼と血色の杯。夜の葡萄棚と運河、赤い月で系統を明確化。",
+    "status": "visually_checked"
+  },
+  "VAMP4": {
+    "finding": "白い三つ編みと鋭い牙、指先の血のリボン。上位の吸血鬼の顔と魔法を個性的に表現。",
+    "status": "visually_checked"
+  },
+  "VAMP3": {
+    "finding": "口髭と片側を流した髪、運河のバルコニー。見習いと異なる成熟した表情を確認。",
+    "status": "visually_checked"
+  },
+  "BLOOD1": {
+    "finding": "杯から三枚の無傷のカードが浮かぶ。血の流れと葡萄樽、赤い月でブラッドドローを表現。",
+    "status": "visually_checked"
+  },
+  "VAMP5": {
+    "finding": "長い白髪と蝙蝠の翼、広大な葡萄園と運河を見下ろす構図。特級の規模と既存の美形像を保持。",
+    "status": "visually_checked"
+  },
+  "BLOOD_JOY": {
+    "finding": "二つの杯が魔法で乾杯し、赤い雫が弾む。喜びを表す明快な静物構図。",
+    "status": "visually_checked"
+  },
+  "VAMP_BUTLER": {
+    "finding": "整えた短い銀髪、白手袋、盆とデキャンタ。酒蔵の樽を背景に執事の役割を表現。",
+    "status": "visually_checked"
+  },
+  "BLOOD_ANGER": {
+    "finding": "割れる赤い結晶と二本の刃、尖った血の魔法。酒蔵に激しい斜線を入れ怒りを区別。",
+    "status": "visually_checked"
+  },
+  "BLOOD_PLEASURE": {
+    "finding": "華やかなデキャンタと杯を赤い魔法が巡る。卓上の宴の豊かさで楽を表現。",
+    "status": "visually_checked"
+  },
+  "VAMP_PACT": {
+    "finding": "赤い印章を押す手と壁に浮かぶ吸血鬼の影。契約行為を近景で示し、葡萄樽の場所へ統一。",
+    "status": "visually_checked"
+  },
+  "BLOOD_SORROW": {
+    "finding": "白い薔薇と残された杯、リフトへ沈む一枚の無傷のカード。静かな水面で哀を表現。",
+    "status": "visually_checked"
+  },
+  "VAMP_PACT2": {
+    "finding": "赤い糸で結んだ二つの封印と黒手袋。二重の契約印を明瞭に表現。",
+    "status": "visually_checked"
+  },
+  "BLOOD_FEST": {
+    "finding": "長卓に並ぶ多数の杯と赤い吊り結晶、夜の葡萄園の宴。単独の杯の魔法とは場面の規模で区別。",
+    "status": "visually_checked"
+  },
+  "BLOOD_SHIELD": {
+    "finding": "杯を包む赤い球状結界と外へ弾く血の棘。吸血系の守りを明確に表現。",
+    "status": "visually_checked"
+  },
+  "VAMP_WARD": {
+    "finding": "棺を包む赤い結晶膜と鎖、白薔薇。杯の術式とは棺のシルエットで区別。",
+    "status": "visually_checked"
+  },
+  "BLOOD_RITE": {
+    "finding": "翼のある彫金容器から二つの杯へ赤金の魔力を注ぐ。夜の葡萄園と生命力の受け渡しを表現。",
+    "status": "visually_checked"
+  },
+  "HALF_ELF": {
+    "finding": "茶色の短髪とそばかす、苗を育てる手仕事。樹上の菜園と実用的な道具で暮らしを表現。",
+    "status": "visually_checked"
+  },
+  "HIGH_ELF": {
+    "finding": "長い白金髪と葉織りの大袖、葉から落ちる水を受ける姿。高い樹冠の橋と有機建築を確認。",
+    "status": "visually_checked"
+  },
+  "BLOOD_SECRET": {
+    "finding": "杯から血の精霊状の影を三つの瓶へ分ける秘術。描写は魔法として非写実的、瓶が明瞭。",
+    "status": "visually_checked"
+  },
+  "ELF": {
+    "finding": "赤茶の長髪と弓、樹上の枝で構える姿。葉の布と木の橋でエルフの生活圏を確認。",
+    "status": "visually_checked"
+  },
+  "ELDER_ELF_KING": {
+    "finding": "深い皺と編んだ白髭、枝の王冠。高齢の王として他の若いエルフと顔・所作を差別化。",
+    "status": "visually_checked"
+  },
+  "ELF_HAVEN": {
+    "finding": "木のカップと果実、樹上の休憩席、奥を歩く住人。戦闘ではなく暮らしの場として描写。",
+    "status": "visually_checked"
+  },
+  "ASSASSIN1": {
+    "finding": "雨に濡れた木造路地を見下ろす覆面の短剣使い。赤提灯と黒い装備で系統を識別。",
+    "status": "visually_checked"
+  },
+  "ASSASSIN4": {
+    "finding": "二本の短剣と白い仮面状の顔、屋根を渡る全身。ナイトロードの既存の印象と機動性を保持。",
+    "status": "visually_checked"
+  },
+  "GUILD_CHEST": {
+    "finding": "濡れた板床に隠された古びた宝箱。短剣と赤い封印、屋根裏の隠し場所でギルドの所属を表現。",
+    "status": "visually_checked"
+  },
+  "ASSASSIN2": {
+    "finding": "長い編み髪の女性アサシンが濡れた屋根を進む。覆面と片手短剣、低い姿勢で中級を表現。",
+    "status": "visually_checked"
+  },
+  "GUILD_EYE": {
+    "finding": "板壁の覗き穴と街中をつなぐ赤糸。監視する窓や高低差が情報網の構造を表す。",
+    "status": "visually_checked"
+  },
+  "ASSASSIN3": {
+    "finding": "梁から身を乗り出す二刀の覆面アサシン。上下の移動と雨の街の奥行きで上級を表現。",
+    "status": "visually_checked"
+  },
+  "GUILD_HALL": {
+    "finding": "人物を除き、濡れた路地の階段と閉じた入口を主役に修正。赤い提灯と短剣の紋章でギルドを示す。",
+    "status": "visually_checked"
+  },
+  "GUILD_HQ": {
+    "finding": "吹き抜けの夜市を内包する高い木造施設と屋根付き橋。人物は建物内部の小さな影に抑え、支部の隠し入口と規模を区別。",
+    "status": "visually_checked"
+  },
+  "NL_SECRET": {
+    "finding": "残された短剣と外套、屋根を渡る赤い残像。秘技の速さと身代わりを主役にする構図。",
+    "status": "visually_checked"
+  },
+  "Q_ASSASSIN": {
+    "finding": "屋根間のロープを渡す黒い伝達筒、リフトと無傷の記録カード。ギルドの秘密の連絡を表現。",
+    "status": "visually_checked"
+  },
+  "WORLD_SEED": {
+    "finding": "白い根と緑の葉に抱かれた金色の種。清い水と生木を背景に始原の化石とは区別。",
+    "status": "visually_checked"
+  },
+  "AMBUSH": {
+    "finding": "濡れた木道の隙間から現れる刃と赤い光。人物を置かず罠の奇襲として読める。",
+    "status": "visually_checked"
+  },
+  "LIFE_CYCLE": {
+    "finding": "白い根のアーチと翡翠の池、花・種子・落葉で生命の循環を表現。",
+    "status": "visually_checked"
+  },
+  "WORLD_HEART": {
+    "finding": "白い根と金色の樹液が心臓形に結びついた樹の中心。",
+    "status": "visually_checked"
+  },
+  "LIFE_SANCTUM": {
+    "finding": "生きた樹洞と段状の翡翠の池。建築物や人物ではなく自然の聖域。",
+    "status": "visually_checked"
+  },
+  "WORLD_BLESS": {
+    "finding": "裂けた枝に金色の花粉と若葉が戻る植物の接写。",
+    "status": "visually_checked"
+  },
+  "VITAL2": {
+    "finding": "木の器で樹液を受ける素朴な人間の信徒。エルフと顔立ち・衣服を区別。",
+    "status": "visually_checked"
+  },
+  "VITAL3": {
+    "finding": "白髪と髭の守り人、樹皮の肩当てと根の杖。水辺と体格で信徒と区別。",
+    "status": "visually_checked"
+  },
+  "WORLD_CARE": {
+    "finding": "白い根元の幼木群を樹液が養う静かな情景。",
+    "status": "visually_checked"
+  },
+  "HPS_GRAFT": {
+    "finding": "太い幹の傷口と若い枝の接合を金色の繊維で明示。",
+    "status": "visually_checked"
+  },
+  "HPS_SOIL": {
+    "finding": "黒い土の断面と白い根の網、新芽を中心とした構図。",
+    "status": "visually_checked"
+  },
+  "QUICK_WORLD": {
+    "finding": "樹洞の中心から黄金の樹液が根と花へ流れ出す恩恵の情景。",
+    "status": "visually_checked"
+  },
+  "RUST_SHROOM": {
+    "finding": "巨大な錆色の傘と青緑のひだ、菌糸の脚。浸水した鉄骨遺構で腐敗テーマが明快。",
+    "status": "visually_checked"
+  },
+  "RUST_SLUG": {
+    "finding": "白い粘液質の腹足と四本の触角、錆色の茸を背負ったナメクジ。人型のラストマッシュルームと輪郭を区別。",
+    "status": "visually_checked"
+  },
+  "ACID_RAIN": {
+    "finding": "雨粒が錆びた盾に穴を開ける近景。黄緑の酸と青緑の菌で腐食を示す。",
+    "status": "visually_checked"
+  },
+  "DECAY_CRAFT": {
+    "finding": "短剣二振りが菌糸と腐食した木材に包まれる暗器の静物。",
+    "status": "visually_checked"
+  },
+  "STRONG_ACID": {
+    "finding": "巨大な鉄門全体が崩れる酸の豪雨。通常酸性雨の盾の近景と規模を区別。",
+    "status": "visually_checked"
+  },
+  "Q_DECAY": {
+    "finding": "毒液を滴らせる三角の鉄菱の列。尖った罠が主役として明瞭。",
+    "status": "visually_checked"
+  },
+  "ROTTEN_GROUND": {
+    "finding": "白い菌糸と茸が鉄輪と浸水した土地を覆う広い腐敗風景。",
+    "status": "visually_checked"
+  },
+  "QUICK_POISON": {
+    "finding": "茸のひだの毒嚢から緑の大きな滴が鎧に落ちる接写。菌の毒が作用する瞬間を主役にする。",
+    "status": "visually_checked"
+  },
+  "WORLD_TREE": {
+    "finding": "人物を除去し、湖の島から立ち上がる白い巨木、緑の樹冠と黄金の樹液を主役に修正。樹の根元と水面が明瞭。",
+    "status": "visually_checked"
+  }
+}

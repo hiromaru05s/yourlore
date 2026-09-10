@@ -1,0 +1,13 @@
+{
+  "number": "R112",
+  "id": "WORLD_TREE",
+  "theme": "worldtree",
+  "themeJa": "世界樹",
+  "name": "世界樹",
+  "effect": "【常時】自分の最大体力が増えるとカウンター1個 · 【毎ターン】カウンター1個で自分のモンスター全体を全回復、自分の体力を80%に",
+  "scene": "Full awe-inspiring worldtree rises from a lake island, twisting cream living bark and immense emerald canopy with golden sap channels; distant roots like mountains, no palace skyline.",
+  "reference": [
+    "/Users/hiromaru05s/Desktop/LORE_TCG-art-theme-revision/docs/card-art-releases/2026-09-10-theme-identity/references/F180-ELF.png"
+  ],
+  "prompt": "Use case: stylized-concept. Generate ONE new finished LORE TCG inner-art painting, exact intended canvas 1472x1344 (landscape aspect 1.095:1). Reference is a STYLE / MATERIAL anchor, not a composition or background to copy. User requests theme identities clearly distinguishable at a glance; substantially redesign background and silhouette while retaining the refined illustrated fantasy art style.\nTheme: 世界樹. Roots sacred ecology: colossal living tree and its connected roots, honey-gold sap, emerald leaves, cream-white living bark, jade pools and soft luminous pollen. Every place is grown wood, roots, moss, flowers and flowing water, dramatic organic scale. Distinct viewpoint and season for each card. No stone buildings, pillars, marble pedestal, gold metal compass ornament or generic potted tree.\nSpecific scene and character: Full awe-inspiring worldtree rises from a lake island, twisting cream living bark and immense emerald canopy with golden sap channels; distant roots like mountains, no palace skyline.\nCard identity: 世界樹 (WORLD_TREE); current effect for semantic guidance only: 【常時】自分の最大体力が増えるとカウンター1個 · 【毎ターン】カウンター1個で自分のモンスター全体を全回復、自分の体力を80%に. Do not print effect or name.\nRendering: premium Japanese fantasy card illustration, nuanced hand-painted texture, expressive clean shapes, beautiful atmospheric light, grounded materials. Keep finish and sophistication of reference. Important subject occupies 55-68 percent, complete face/ears/horns/weapon tips/paws inside central 80 percent with meaningful environment visible. Scene should look inhabited or natural, not staged on a pedestal. One dominant subject unless the scene explicitly needs more. No repeated white arches/cathedral/library, compass-star decor everywhere, frame, UI, text, watermark, signature, modern objects, or photorealistic snapshot. Do not import reference character identity into unrelated people. Magical Rift leaves record cards intact. No gratuitous gore."
+}
