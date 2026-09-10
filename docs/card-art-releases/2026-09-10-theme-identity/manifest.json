@@ -1,0 +1,4473 @@
+{
+  "date": "2026-09-10",
+  "generator": "built-in image_gen",
+  "expected": 124,
+  "generated": 124,
+  "conversion": "Preserve full aspect ratio; WebP 832/384/192 widths. No paint edits.",
+  "assets": [
+    {
+      "id": "Q_TORI",
+      "file": "images/Q_TORI.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-75bc0281-3516-4b41-a5a6-c1a55b23bec7.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "a6a7a3f6bfc56cbce6e95011e54fa27d81834a0748e6b39b3d145496c44a09f9",
+      "bytes": 2651321,
+      "status": "review_pending",
+      "name": "精霊 - トリ",
+      "theme": "spirit",
+      "number": "R001",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/Q_TORI.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "7c4d8062a6276e34fd61ae8c17d1c33053d5db7a87a93c4ce4e4eee2812973aa",
+          "bytes": 202314
+        },
+        {
+          "file": "client/public/art/cards-sm/Q_TORI.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "b7b7b26b2f6cb365b26740b3326fe9f2d1852547fcb1d987b0ab605b7015d65e",
+          "bytes": 37190
+        },
+        {
+          "file": "client/public/art/cards-xs/Q_TORI.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "1dfbbde79d422de4781dc50b37ce52cb47e508872115676413e6f4a5884f87d9",
+          "bytes": 11000
+        }
+      ]
+    },
+    {
+      "id": "Q_WINTER",
+      "file": "images/Q_WINTER.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-f5c2cf3d-d88d-4083-b828-2b76febe6cc0.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "7feab799d3052e55f52a23d7a2560648427d595f8b614468978bf8d6d22151f3",
+      "bytes": 2703888,
+      "status": "review_pending",
+      "name": "精霊 - ウィンター",
+      "theme": "spirit",
+      "number": "R002",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/Q_WINTER.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "86d08da57cb6b0ce057789385e8a4e0e3ef8bf8805f95113218e23d338e1496a",
+          "bytes": 199908
+        },
+        {
+          "file": "client/public/art/cards-sm/Q_WINTER.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "d0054f817f622048499bd1866c4b022bf7f1600a96bb649d7a043d3a18d201c4",
+          "bytes": 34444
+        },
+        {
+          "file": "client/public/art/cards-xs/Q_WINTER.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "2b54b716ec39ad7df76379762d0e5a4adf1ff3f3bcc103b0234a4eb315ed35c7",
+          "bytes": 9218
+        }
+      ]
+    },
+    {
+      "id": "M10",
+      "file": "images/M10.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-194cf5f7-9cab-4aa7-af95-44137b4a90ce.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "4996caf25988ed5c46d25b45d91c30a63b0264cfd8cfb34baa75aadbd2909d8b",
+      "bytes": 2835884,
+      "status": "review_pending",
+      "name": "マナ・ゴーレム",
+      "theme": "golem",
+      "number": "R003",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/M10.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "b8003ea38680db287817f70124816b559398f0ce08bc807de20d1ca96e673783",
+          "bytes": 216214
+        },
+        {
+          "file": "client/public/art/cards-sm/M10.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "580f1ebd65298d863bd7eb701ad28d54e8b2734161fe83875030e6c711d27fd4",
+          "bytes": 35140
+        },
+        {
+          "file": "client/public/art/cards-xs/M10.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "f61459c26e20e932003ed6fcbb4c5744c93b59137ed4a8258541c557778c9059",
+          "bytes": 9942
+        }
+      ]
+    },
+    {
+      "id": "NGA3",
+      "file": "images/NGA3.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-306175ef-4268-4da8-947c-e4ce24e95490.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "988f0ece23b6eeea9e4602e3cf09dd91258a17d0ad71d42be7da6fc9201c41e5",
+      "bytes": 2716425,
+      "status": "review_pending",
+      "name": "戦士ゴーレム",
+      "theme": "golem",
+      "number": "R004",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/NGA3.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "44670b08d084591174108b2450d1a7239ce11cc8474af004be5c9774843511ca",
+          "bytes": 213822
+        },
+        {
+          "file": "client/public/art/cards-sm/NGA3.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "a00ab651b8381086d356b8fdd04aa713f08c4615a015e59aa649490eb8b37abf",
+          "bytes": 34074
+        },
+        {
+          "file": "client/public/art/cards-xs/NGA3.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "5ecf14b2002c5a784256fa0b2bcc6efdb04ba1f32104dc694932a975f0345604",
+          "bytes": 9436
+        }
+      ]
+    },
+    {
+      "id": "NWL3",
+      "file": "images/NWL3.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-9823b3dc-2436-4494-8417-81117de7e7e0.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "487c50f2ecc12db0948c27d1d77967025bb16b6988a1e99107e60bb7347d42e9",
+      "bytes": 3074378,
+      "status": "review_pending",
+      "name": "ガーディアンゴーレム",
+      "theme": "golem",
+      "number": "R005",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/NWL3.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "e4f576f8ea0bc91945b95f1a88e21ef00ac77fd3b2a1cf816a21e63954343ab3",
+          "bytes": 252900
+        },
+        {
+          "file": "client/public/art/cards-sm/NWL3.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "cadad06dfe296f710ac1812ddcb856c3c50046896ff2800bf8d312c4a89a77f3",
+          "bytes": 39804
+        },
+        {
+          "file": "client/public/art/cards-xs/NWL3.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "1de1c7e87deb2d02d12e1be1395401c3f98410eb4b01a51f5ba26d78c379ad9f",
+          "bytes": 9842
+        }
+      ]
+    },
+    {
+      "id": "MANA_GIANT",
+      "file": "images/MANA_GIANT.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-4fd74b8e-89c7-40f5-8925-91524059e356.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "bf30843f71e6ee95efb447b7b5e7448e61739cb64b72d84821e8f68b2fdb6d8b",
+      "bytes": 2928270,
+      "status": "review_pending",
+      "name": "ジャイアントゴーレム",
+      "theme": "golem",
+      "number": "R006",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/MANA_GIANT.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "10f8a2e2273cf02f026e6e02ab4aa2ad22df03d492576ce520a5295b90b52e77",
+          "bytes": 237150
+        },
+        {
+          "file": "client/public/art/cards-sm/MANA_GIANT.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "10f242873be4c05a3175c48eca559ec311a0c95b853389c4356f8c03f81c2fce",
+          "bytes": 37700
+        },
+        {
+          "file": "client/public/art/cards-xs/MANA_GIANT.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "ed647faaeb50b3e03c25ef2a9efefa45c64d35777ade8d923f490fe64f3f46f3",
+          "bytes": 10040
+        }
+      ]
+    },
+    {
+      "id": "GOLEM1",
+      "file": "images/GOLEM1.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-7ecb82e2-31b1-434a-a9e7-b6743c4c8f02.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "2a3d8a98c7b8197674d86359946faa2751c09d4fd7460d4c8d189baa9003e683",
+      "bytes": 2762585,
+      "status": "review_pending",
+      "name": "兵士ゴーレム",
+      "theme": "golem",
+      "number": "R007",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/GOLEM1.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "e6745678712a665fb16f5a2fca24c5fb7c983d55de4a7f84910f4124c5cdc771",
+          "bytes": 211282
+        },
+        {
+          "file": "client/public/art/cards-sm/GOLEM1.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "dfc907646858f90b1bdb56957cc95573aac35290fea7ca5179f1e0e88f02107d",
+          "bytes": 34894
+        },
+        {
+          "file": "client/public/art/cards-xs/GOLEM1.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "87cf1467e8c2c9c655d1e8b63b2b04a3e590ba69ac24d45401c31013b51591a6",
+          "bytes": 9630
+        }
+      ]
+    },
+    {
+      "id": "GOLEM2",
+      "file": "images/GOLEM2.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-fa429fb1-8198-4ef7-9fc0-3e8a4d2cd5c1.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "3252cacf3478ac384416cb219af3126ab6066fc121a42ce475e44f2962de3c6a",
+      "bytes": 2850098,
+      "status": "review_pending",
+      "name": "リーダーゴーレム",
+      "theme": "golem",
+      "number": "R008",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/GOLEM2.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "0e5129817ec2890efd1d46993a500166d521117304a9d139f0ffdc08d04a7a2f",
+          "bytes": 218582
+        },
+        {
+          "file": "client/public/art/cards-sm/GOLEM2.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "23f5089de52fb46d61a4e417ae2e3f3e434efd3317466ad1434da75ea12905e0",
+          "bytes": 36390
+        },
+        {
+          "file": "client/public/art/cards-xs/GOLEM2.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "85879895cab738428102e7192afa02efaf4f097cea2959a83d1b722822d276a7",
+          "bytes": 9728
+        }
+      ]
+    },
+    {
+      "id": "GOLEM3",
+      "file": "images/GOLEM3.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-4ca0b1c8-f237-4748-9fb6-ce6597840d53.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "4674eb76da209ebd5a363a957d2d2499142c7d1c19d2c61116edcb777e90ac7a",
+      "bytes": 2892364,
+      "status": "review_pending",
+      "name": "ゴーレムキング",
+      "theme": "golem",
+      "number": "R009",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/GOLEM3.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "ed0900c181eb751877dc6c8e86e620de3cf98c3d2daba646923111356da584a9",
+          "bytes": 226384
+        },
+        {
+          "file": "client/public/art/cards-sm/GOLEM3.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "ccb288ea97d511993c8bbd9031575e37722d82318317cd5c21fd083275348952",
+          "bytes": 36898
+        },
+        {
+          "file": "client/public/art/cards-xs/GOLEM3.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "e8f1a6b40ccf8928dc6d09be76ada9ae5229c713631bffcdf76cb6e420d51ae6",
+          "bytes": 9978
+        }
+      ]
+    },
+    {
+      "id": "AEM",
+      "file": "images/AEM.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-fe6d8f65-85be-43df-a2bc-e5bea6a331ab.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "7c4b9a71b0e9254d130ea623267f9a85c80c064920616fc82399cc170ee05299",
+      "bytes": 2754493,
+      "status": "review_pending",
+      "name": "アンティークエンハンスマジック",
+      "theme": "golem",
+      "number": "R010",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/AEM.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "7168a430a2ef9874da361d3524a9b8cfbabbe304cb434d2c73f9d48a7b69d91a",
+          "bytes": 214458
+        },
+        {
+          "file": "client/public/art/cards-sm/AEM.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "e14833b6346d71018bb262047558c7117f3f25e82586217f195e70869a1d468d",
+          "bytes": 34582
+        },
+        {
+          "file": "client/public/art/cards-xs/AEM.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "e0ba4767b4a375143d156f2dcaa5a4a3bdcc78e34fc20c92d822629be1188979",
+          "bytes": 9450
+        }
+      ]
+    },
+    {
+      "id": "KNIGHT_TEACH",
+      "file": "images/KNIGHT_TEACH.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-bcb0a58c-cf5d-49b1-855f-d68bc597e673.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "8583f70d3ba04e76f0058e56ad8a14b124287d362dbbc40754fe5bf3c4daa33c",
+      "bytes": 2643176,
+      "status": "review_pending",
+      "name": "ゴーレムキングの教え",
+      "theme": "golem",
+      "number": "R011",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/KNIGHT_TEACH.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "abcdb119f7e1f5e6e287d0ea3428076399282db32b83e1c925312a5312e640c0",
+          "bytes": 199974
+        },
+        {
+          "file": "client/public/art/cards-sm/KNIGHT_TEACH.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "8e5c55560eebb28ebd90c1d53a2a5a14c599936757e457958ec2cca66bec9918",
+          "bytes": 33540
+        },
+        {
+          "file": "client/public/art/cards-xs/KNIGHT_TEACH.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "d1375c5633f795ec2214020db7d3b683b02371a92afea0889593c844bc0ecf0f",
+          "bytes": 9324
+        }
+      ]
+    },
+    {
+      "id": "NHEX",
+      "file": "images/NHEX.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-9c40b8cf-d918-44f0-8439-8323046b95e4.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "8260a0957bdb8b3736dc96cdc747c2221f0cf5be7677122060496339f5ee48f4",
+      "bytes": 2714524,
+      "status": "review_pending",
+      "name": "見習い呪術師",
+      "theme": "hexer",
+      "number": "R012",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/NHEX.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "80404ffe8db663bb7674fa73892666a9434e2cf48c5d73e7148e59c903e8b9f8",
+          "bytes": 205326
+        },
+        {
+          "file": "client/public/art/cards-sm/NHEX.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "7b34e033e016660094776ae72f5db838754dafb2993c2dbaa129b870ddd06210",
+          "bytes": 35978
+        },
+        {
+          "file": "client/public/art/cards-xs/NHEX.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "fd68a440f91d546dab16deb2e64e95051e269456ca3667d7edeb3097c7d9e057",
+          "bytes": 9796
+        }
+      ]
+    },
+    {
+      "id": "HEXER1",
+      "file": "images/HEXER1.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-4280c029-311a-4964-9547-17736df60bac.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "1fa6d49d5e4cd7ddc990f7a72846833bf9b8bdba9ccb3594731a4ef39fa4e4c2",
+      "bytes": 2780354,
+      "status": "review_pending",
+      "name": "初級呪術師",
+      "theme": "hexer",
+      "number": "R013",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/HEXER1.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "94bb8fea0da4785b1dbc56dff524cdc33b549745554c827e099212426e30b952",
+          "bytes": 212678
+        },
+        {
+          "file": "client/public/art/cards-sm/HEXER1.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "90916fdb6ee741ac6cc7e61f6ce0d1b50b2865789c8f7b17131409b0ffe3d10b",
+          "bytes": 36282
+        },
+        {
+          "file": "client/public/art/cards-xs/HEXER1.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "6c112f4fe49c338f1015f0eaa743628c63be13fb684b0aff03a9e1adb89990c6",
+          "bytes": 9624
+        }
+      ]
+    },
+    {
+      "id": "HEXER2",
+      "file": "images/HEXER2.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-11e31c11-e1fb-4c85-a289-46f9149b7387.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "9c5826ee0837d0ad509152d2343b3fb7aa48e69bdd1409ccc19f85b2abfdfba9",
+      "bytes": 2742045,
+      "status": "review_pending",
+      "name": "中級呪術師",
+      "theme": "hexer",
+      "number": "R014",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/HEXER2.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "81257afba38be9345b1b954a028c397e8110f18b6bb1d40daae9ef470588dd81",
+          "bytes": 209256
+        },
+        {
+          "file": "client/public/art/cards-sm/HEXER2.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "021eefcf3f7d33c87b731229edd7ecfbf4b99a26ce5ace52db62bb25df4f6ef1",
+          "bytes": 35470
+        },
+        {
+          "file": "client/public/art/cards-xs/HEXER2.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "0e6862d5fb1700829ff467beda619eeaef001234c7d18f2c46bb430e79f9ae9d",
+          "bytes": 9574
+        }
+      ]
+    },
+    {
+      "id": "HEXER3",
+      "file": "images/HEXER3.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-ee65e397-1479-4fcd-af3d-fad90b8d19dd.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "ead1e3ffe746a26f2fa32b5b6a80a578206791035188152b1d408ff5c080c795",
+      "bytes": 2877391,
+      "status": "review_pending",
+      "name": "上級呪術師",
+      "theme": "hexer",
+      "number": "R015",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/HEXER3.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "9afe037d5c4735b43bc6149ca54bf513a14b571afe4aba93a767a72cb56c0dcb",
+          "bytes": 237642
+        },
+        {
+          "file": "client/public/art/cards-sm/HEXER3.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "f393d481a932fb77c9ef68fcd9c08e88f32eabadc469faf95dfd288318e96d2e",
+          "bytes": 38740
+        },
+        {
+          "file": "client/public/art/cards-xs/HEXER3.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "3bec4c76f91aa6c1a46ff94ae14e73b5159f6d14bc693920c67e62c9956734d7",
+          "bytes": 10396
+        }
+      ]
+    },
+    {
+      "id": "HEXER4",
+      "file": "images/HEXER4.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-4623727e-dda3-4470-8ae4-39104c2b44a9.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "da2fd6874a3139733ee1b225437fd36f11bf42fdd74433366f2343ea754da083",
+      "bytes": 3059401,
+      "status": "review_pending",
+      "name": "特級呪術師 - ケロイド",
+      "theme": "hexer",
+      "number": "R016",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/HEXER4.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "7bd4da18d44b7170c7a0208c43b37bf418054a02dee2cffa2497f0c6f409b30f",
+          "bytes": 253772
+        },
+        {
+          "file": "client/public/art/cards-sm/HEXER4.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "ef88239bcfd451d0ea7c49f4cdfec1c3913a39185e232135ff6ad94262a56b4b",
+          "bytes": 40932
+        },
+        {
+          "file": "client/public/art/cards-xs/HEXER4.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "842f0b3063dd3dfd996fba474b32c74e8040c576aa18a2dd9ca287b10d20a3fc",
+          "bytes": 11054
+        }
+      ]
+    },
+    {
+      "id": "CURSE",
+      "file": "images/CURSE.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-06e8b293-78a3-4dc2-a255-3e91df631c58.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "bb36e893da47e4a8e2c4e0164a4834f52fb271089b4e770b7796716a69c0d2af",
+      "bytes": 2449994,
+      "status": "review_pending",
+      "name": "呪い",
+      "theme": "hexer",
+      "number": "R017",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/CURSE.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "a2a7e9191fb1117cf020e30e2e9f5a347c556b3ee99b344866170dd684d7af9b",
+          "bytes": 171118
+        },
+        {
+          "file": "client/public/art/cards-sm/CURSE.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "fb38d51bc5c42c35f31b14ed2f61e8332f403814c182bff43b1f99ef74fb3491",
+          "bytes": 30038
+        },
+        {
+          "file": "client/public/art/cards-xs/CURSE.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "a48371abb8f3726145064649a754e227b764191ea751414706f65964abc25bcf",
+          "bytes": 7994
+        }
+      ]
+    },
+    {
+      "id": "QUICK_GRIMOIRE",
+      "file": "images/QUICK_GRIMOIRE.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-8bd42a82-3125-413b-97bb-8b64f2a1b3ab.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "d611adf3f50e992676e08551f1229e8e4a68c417d0f934e42b9291ca256c2937",
+      "bytes": 2639933,
+      "status": "review_pending",
+      "name": "呪術魔法書",
+      "theme": "hexer",
+      "number": "R018",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/QUICK_GRIMOIRE.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "2f823f7bf9f2bddb23bb64fa6bee0dcac71d9c67cf7d5370aec9b8c2d190f09c",
+          "bytes": 197968
+        },
+        {
+          "file": "client/public/art/cards-sm/QUICK_GRIMOIRE.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "a01d0cc9cc8109e5a21f30fb2c423223a76f89685fe4455e903736f5bf80c04e",
+          "bytes": 33910
+        },
+        {
+          "file": "client/public/art/cards-xs/QUICK_GRIMOIRE.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "8ee58dfe05707cbe55df3c81c86aa9b94d0a54905a13aaa7175904bfc998181a",
+          "bytes": 9144
+        }
+      ]
+    },
+    {
+      "id": "WEAKEN_ALL",
+      "file": "images/WEAKEN_ALL.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-26a67cf9-8f54-4df0-b7f8-c5d1307c6920.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "2eafb39088a87b7e22a087512ba77da01579bb110acedb6183ddcfad73ce023d",
+      "bytes": 2931000,
+      "status": "review_pending",
+      "name": "弱化術式",
+      "theme": "hexer",
+      "number": "R019",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/WEAKEN_ALL.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "6a21a0786ff6bb4645035dcecce4fdc5159b7668a1eb878549266879b8cc7b69",
+          "bytes": 241012
+        },
+        {
+          "file": "client/public/art/cards-sm/WEAKEN_ALL.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "b051f7d7c0f689113e77ed8e8299859329cadcaed28286a1b25756d3684441c5",
+          "bytes": 40040
+        },
+        {
+          "file": "client/public/art/cards-xs/WEAKEN_ALL.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "3549c37e40d493520fe387382f0fa06f272b87bba9a788375fb19985fc6298c3",
+          "bytes": 10574
+        }
+      ]
+    },
+    {
+      "id": "MIMIC",
+      "file": "images/MIMIC.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-6403e523-bc75-4caa-b14d-90cb4ed0c2b4.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "37a6c0e31c8ee4a87da769ef1916b709af445c48b910c83269d163bc94f4f562",
+      "bytes": 2665952,
+      "status": "review_pending",
+      "name": "ミミック",
+      "theme": "mimic",
+      "number": "R020",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/MIMIC.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "7ee324cfa3b95ddccb2ecdf4895169117320c7ea47c7a6e3d503dac8ba9c9179",
+          "bytes": 190262
+        },
+        {
+          "file": "client/public/art/cards-sm/MIMIC.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "93dd503469261db7a704d602dcca93f65a2e828e0c26facda427f807becad296",
+          "bytes": 30830
+        },
+        {
+          "file": "client/public/art/cards-xs/MIMIC.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "14cfade209310925c2dd1a92a518fb9ce19b987d4c400e0ab8ef854fb4d061e6",
+          "bytes": 8232
+        }
+      ]
+    },
+    {
+      "id": "MIMIC2",
+      "file": "images/MIMIC2.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-3d798772-4df6-499f-bf52-aba869bbf3c2.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "b805a795a8147e8b2ebd2a8ae785332ae003657ad8e0f646f7256fe7db32359c",
+      "bytes": 2875274,
+      "status": "review_pending",
+      "name": "マスターミミック",
+      "theme": "mimic",
+      "number": "R021",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/MIMIC2.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "2eae13d6738f3b604fb68829c36b1ec2c9587e92eb593e2180f6afce87c22956",
+          "bytes": 238100
+        },
+        {
+          "file": "client/public/art/cards-sm/MIMIC2.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "7c44bdaedb1a8556db7d405c230e634c17d0e4fa2adb9412fca1cb3a027ef698",
+          "bytes": 39258
+        },
+        {
+          "file": "client/public/art/cards-xs/MIMIC2.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "bd68dd48ce6bfe6c56db08fc6f771f2752d785cbe1cb0f65ed214012f5abc66b",
+          "bytes": 10034
+        }
+      ]
+    },
+    {
+      "id": "MIMIC_LORD",
+      "file": "images/MIMIC_LORD.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-8faf1f7a-340b-4f45-97bf-ed2ea172ca7c.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "a084800fa9a854db61513b8085bbaa3142e9b7edf2bd9edaa9d36be5f21f22d4",
+      "bytes": 2899107,
+      "status": "review_pending",
+      "name": "ミミックリーダー",
+      "theme": "mimic",
+      "number": "R022",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/MIMIC_LORD.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "c1130b68d9dd9e3acf4b932176b81d476ace77f47a6349566eb4ca83a2e14cfb",
+          "bytes": 238952
+        },
+        {
+          "file": "client/public/art/cards-sm/MIMIC_LORD.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "f80d21903ab31ca037718549bceb7d611c5c9885d771c26f96b9bbb365578a8d",
+          "bytes": 36806
+        },
+        {
+          "file": "client/public/art/cards-xs/MIMIC_LORD.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "b7c735a326f3f5cba8934df69e876498d839919183092f68cecf54314b39d31f",
+          "bytes": 9262
+        }
+      ]
+    },
+    {
+      "id": "AWAKENED_MIMIC",
+      "file": "images/AWAKENED_MIMIC.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-a17f2018-2560-4ca0-93e1-38c2fcff01ac.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "d31274bc9d236add21076d889403c1f808d2b89cfe2bc9133799f242975cfa75",
+      "bytes": 2956525,
+      "status": "review_pending",
+      "name": "覚醒ミミック",
+      "theme": "mimic",
+      "number": "R023",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/AWAKENED_MIMIC.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "68c70a70559956920b6af86fdd01c4b0be422cff7f564559648cbf623bc06a6e",
+          "bytes": 245804
+        },
+        {
+          "file": "client/public/art/cards-sm/AWAKENED_MIMIC.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "a6eddb0d5e9a8e5bb982096422cd6965e36c15c90dbb3c59c49094473b2aedfd",
+          "bytes": 41384
+        },
+        {
+          "file": "client/public/art/cards-xs/AWAKENED_MIMIC.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "7a635c40e1dfe84425b6fd7d1080cb954ad70fe7ed6697937be2487e102a697a",
+          "bytes": 10552
+        }
+      ]
+    },
+    {
+      "id": "MIMIC_KING",
+      "file": "images/MIMIC_KING.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-5b831e9a-e44a-4e2d-a91b-f8e83eb77bcc.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "952cd8217fa6f50fe5151cdd7fc5dd9f63e51750e954ff7c43c7a50e1e454c06",
+      "bytes": 2855977,
+      "status": "review_pending",
+      "name": "ミミックキング",
+      "theme": "mimic",
+      "number": "R024",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/MIMIC_KING.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "309cac52017aeef7c42ff5897f14b8da9ae311c0efc3835dd70d14c553fdd734",
+          "bytes": 226552
+        },
+        {
+          "file": "client/public/art/cards-sm/MIMIC_KING.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "1012c041eec5fb3b9cd0947c49f0512a6f808794c5db458130db213a61a54255",
+          "bytes": 37360
+        },
+        {
+          "file": "client/public/art/cards-xs/MIMIC_KING.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "ba904f477b7ec8eb84e8cd56621acb32b64110e031a6ebf451b37c75a5610b34",
+          "bytes": 9880
+        }
+      ]
+    },
+    {
+      "id": "MIMIC_KING2",
+      "file": "images/MIMIC_KING2.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-69040a73-73fc-40ce-b9cb-601d9d6879ab.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "2e262b8fca38bf73d84b43181a5bd2df338e7139a76f299b08417ae86d9d9ff6",
+      "bytes": 2811453,
+      "status": "review_pending",
+      "name": "ミミックキング2世",
+      "theme": "mimic",
+      "number": "R025",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/MIMIC_KING2.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "57dd3a419a409e54a8b337421b90b2e80b4b0ed28c9ff4d2fa52984f7c38cc77",
+          "bytes": 224756
+        },
+        {
+          "file": "client/public/art/cards-sm/MIMIC_KING2.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "417c78b82a50928871c3213d87696e164724a24292a6775a8da7dbefc5797037",
+          "bytes": 34836
+        },
+        {
+          "file": "client/public/art/cards-xs/MIMIC_KING2.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "1e1ff94b1c5194b23a8784c62e8fa3bf70f69bc4b6c01ba82130bf642a75e2a7",
+          "bytes": 8830
+        }
+      ]
+    },
+    {
+      "id": "ORIGIN_MIMIC",
+      "file": "images/ORIGIN_MIMIC.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-4ca9f8a6-0bcd-4549-84c3-d820bd87400b.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "4a88c34800839530f8e15273526bbac63a3dccb76d05a226cd0422402dc29bbc",
+      "bytes": 3068109,
+      "status": "review_pending",
+      "name": "始原のミミック",
+      "theme": "mimic",
+      "number": "R026",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/ORIGIN_MIMIC.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "54105ca04cdb9b33fdcbd66d100b7e2a2eaa709ba5794aeeab8f54be73ec3024",
+          "bytes": 262706
+        },
+        {
+          "file": "client/public/art/cards-sm/ORIGIN_MIMIC.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "1fffec90c9b30b6b9926c52073c377b55060f9fd3c6696be84a510f02776d4d8",
+          "bytes": 40678
+        },
+        {
+          "file": "client/public/art/cards-xs/ORIGIN_MIMIC.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "5c6b0c7f69352698413b5e0c12b6ac61dd973a64c399adf93ef2c13453ca6ea6",
+          "bytes": 10198
+        }
+      ]
+    },
+    {
+      "id": "LUCKY_CHEST",
+      "file": "images/LUCKY_CHEST.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-34bef1a3-4060-428a-8650-0597253d379c.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "59df94c112becff197c5da64367e532f9c540d800e20a1b5ab04395525893b83",
+      "bytes": 2853764,
+      "status": "review_pending",
+      "name": "幸運の宝箱",
+      "theme": "mimic",
+      "number": "R027",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/LUCKY_CHEST.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "03896680ab3fd03e8da528535be33f6b3e7acb12529f7806fbeab8ba09d28462",
+          "bytes": 229778
+        },
+        {
+          "file": "client/public/art/cards-sm/LUCKY_CHEST.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "4488cdd0edc30403d85826ec4009478bc506613be779f76234b4c9c3e5939373",
+          "bytes": 38222
+        },
+        {
+          "file": "client/public/art/cards-xs/LUCKY_CHEST.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "d974c5d2a6d566b424885fa457e06bc5c617189a4f5d8fbe4ca20c6e507d2f94",
+          "bytes": 10128
+        }
+      ]
+    },
+    {
+      "id": "DUNGEON_FLOOR",
+      "file": "images/DUNGEON_FLOOR.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-304a473c-6d1b-4232-b7e7-de40134d078e.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "4771dac99c179a9b97c5d847d200bb91410e5ef973569fbd25068b7ba315be71",
+      "bytes": 2819068,
+      "status": "review_pending",
+      "name": "ダンジョン最下層",
+      "theme": "mimic",
+      "number": "R028",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/DUNGEON_FLOOR.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "af0131b39b26ab7604bab26af2fa96b209eee5ca9de130bce67486438f4b41d1",
+          "bytes": 216126
+        },
+        {
+          "file": "client/public/art/cards-sm/DUNGEON_FLOOR.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "3bda46b308ee87cb06def01ab58854713f782f3c908c6fc4305f3cea43b1988a",
+          "bytes": 33890
+        },
+        {
+          "file": "client/public/art/cards-xs/DUNGEON_FLOOR.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "cedd4ad138452b00f56de7a2c99acfdff6223a5fc1c2ec9b858f12453a6eac35",
+          "bytes": 9008
+        }
+      ]
+    },
+    {
+      "id": "GEM_RAIN",
+      "file": "images/GEM_RAIN.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-a5bf3e86-d55e-4b8b-b986-19bff05a27d9.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "8992be5b782b3b545f56ba5618b1f4618315f81fec87e81de182efcb2d8ef1a6",
+      "bytes": 2850848,
+      "status": "review_pending",
+      "name": "宝石の雨",
+      "theme": "mimic",
+      "number": "R029",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/GEM_RAIN.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "4ab1be262be1bd3b7d28f2f4984720a01156bfbc342e7928e7f98b85bfdf1b7b",
+          "bytes": 237638
+        },
+        {
+          "file": "client/public/art/cards-sm/GEM_RAIN.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "ec94f9a70b8de17817a14c1b91790fc073fe3bc97e9697bca6de523847c34869",
+          "bytes": 39760
+        },
+        {
+          "file": "client/public/art/cards-xs/GEM_RAIN.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "5d7271f4d88e0b776eb3c3274d92bb64ebf2ec916a8fb30d238a399881bb9647",
+          "bytes": 10418
+        }
+      ]
+    },
+    {
+      "id": "QUICK_MIMIC",
+      "file": "images/QUICK_MIMIC.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-4c26ec5d-b550-48cc-81eb-fb60b5301f63.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "205325eb9f83f66fbe1a23df7a4f551910caa93953a24c2559529f6a3af7f4f5",
+      "bytes": 3041813,
+      "status": "review_pending",
+      "name": "ミミックパーティー",
+      "theme": "mimic",
+      "number": "R030",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/QUICK_MIMIC.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "697c2d21935a3301340be29f57bf17cfb80d1cf3ca899ea45ca17946115fad1d",
+          "bytes": 259960
+        },
+        {
+          "file": "client/public/art/cards-sm/QUICK_MIMIC.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "079bb1d979f68e2dcef2f497c77b57dd133b7a3da7c7c7e46f3f47af8005445e",
+          "bytes": 42512
+        },
+        {
+          "file": "client/public/art/cards-xs/QUICK_MIMIC.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "286f742036b3e98555dc9138998d1c52f5357365218b6a177baedfb20b90c6e0",
+          "bytes": 10816
+        }
+      ]
+    },
+    {
+      "id": "DUNGEON",
+      "file": "images/DUNGEON.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-40c0b03b-c512-4e81-8c6e-b5ac44abd260.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "39ce936ba367926e9101794a130bdf43afa0fd568ba75f5f16acff3464220b49",
+      "bytes": 2924457,
+      "status": "review_pending",
+      "name": "生きているダンジョン",
+      "theme": "mimic",
+      "number": "R031",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/DUNGEON.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "1b70eabdd3918c9ec96065dde0fbe0ffdfea688c48f45695dfa14338186e2c17",
+          "bytes": 231046
+        },
+        {
+          "file": "client/public/art/cards-sm/DUNGEON.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "b4b8d2f01053b26d86b2aba6736b8fd8bfdd4fa3bd8027d2b4fb599eb36b6842",
+          "bytes": 32160
+        },
+        {
+          "file": "client/public/art/cards-xs/DUNGEON.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "406776ae6fe8948c2f1da8e7ac6e67fc79fa3cd16953c1cbf731ff5375050648",
+          "bytes": 7836
+        }
+      ]
+    },
+    {
+      "id": "QUICK_SURVIVAL",
+      "file": "images/QUICK_SURVIVAL.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-52f87764-1780-4e12-a190-9c37adf4f28f.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "acae6aad20c9cf7565e0631f567ffae2c4edde036efedec5b3e2f807a48539b5",
+      "bytes": 2793308,
+      "status": "review_pending",
+      "name": "生存をかけた戦い",
+      "theme": "mimic",
+      "number": "R032",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/QUICK_SURVIVAL.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "8362ad81d61784c6f5b552e47e1675a8248af62245710b879064ef975e4ec2dc",
+          "bytes": 208034
+        },
+        {
+          "file": "client/public/art/cards-sm/QUICK_SURVIVAL.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "839d4cb0707e32e1742169d7616bd8a8f678924601d37f8847e04818fb171bd2",
+          "bytes": 29240
+        },
+        {
+          "file": "client/public/art/cards-xs/QUICK_SURVIVAL.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "93078cc406c37238fa06a7a44ffdd00a538fadc438629d2fad84f31645013497",
+          "bytes": 7326
+        }
+      ]
+    },
+    {
+      "id": "TDE1",
+      "file": "images/TDE1.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-fe646db4-ead3-45e9-9553-fa38c730a0b9.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "fa541e42cca484e6e47b9def75c372b822b3ccadeaf669740d8b7e9cde6ce2df",
+      "bytes": 2716196,
+      "status": "review_pending",
+      "name": "魔族の斥候",
+      "theme": "demon",
+      "number": "R033",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TDE1.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "1e36808f2ff3809db7865d53c600a31bd244c45725374180ef7434f5c78429f6",
+          "bytes": 208702
+        },
+        {
+          "file": "client/public/art/cards-sm/TDE1.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "6e1ccadc72b2c6441c8a08ac4c33bfc9c99b32f8274c00174becd54f1b1e4cc2",
+          "bytes": 33802
+        },
+        {
+          "file": "client/public/art/cards-xs/TDE1.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "be6c01bd0572b6705b561cc45aa435abac04bc505a7d275850845fa6ae1da4c7",
+          "bytes": 9712
+        }
+      ]
+    },
+    {
+      "id": "TDE2",
+      "file": "images/TDE2.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-28d1a1b6-cf30-40ef-8987-8ff91f483547.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "5280f16808049704a25d68ea6f56fe970b7a9d0bddd657748b8a24e0e16f4119",
+      "bytes": 2836146,
+      "status": "review_pending",
+      "name": "魔族の戦士",
+      "theme": "demon",
+      "number": "R034",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TDE2.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "2461c86f57724906850462326d8eee62dbb627d61e097936f6556f0b3f73897a",
+          "bytes": 231340
+        },
+        {
+          "file": "client/public/art/cards-sm/TDE2.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "1286ccf9fb574624af8afa3dfd38e9cefae223596d5d459677d4873d13248637",
+          "bytes": 38708
+        },
+        {
+          "file": "client/public/art/cards-xs/TDE2.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "838aaaaa2a6f45be320142734c59d4a737dd3484e5dc16b047527c389ad38b0d",
+          "bytes": 10756
+        }
+      ]
+    },
+    {
+      "id": "TDE3",
+      "file": "images/TDE3.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-4588baa2-b152-4fdc-9a30-785ba4d7b8c8.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "2ec5027b0a63f99af147c96a5966449cecbb3a5fd5c6f940506d774345c1ef66",
+      "bytes": 2803570,
+      "status": "review_pending",
+      "name": "魔族の狂戦士",
+      "theme": "demon",
+      "number": "R035",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TDE3.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "c8b3fd4d8ab0b752810ac11799b2068707cafe51e24a8ca5543f77724ffb6082",
+          "bytes": 226662
+        },
+        {
+          "file": "client/public/art/cards-sm/TDE3.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "5c52db96001f33c5af90f7994186661a553221b5391b992b0ca263d26b5329e4",
+          "bytes": 38540
+        },
+        {
+          "file": "client/public/art/cards-xs/TDE3.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "3e30e52ae682d24a61fd2656c74ee5d725f73a09652cf4c3ce9bf69ebe88054e",
+          "bytes": 11094
+        }
+      ]
+    },
+    {
+      "id": "TDE4",
+      "file": "images/TDE4.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-ef0719e8-f3ab-4f2f-9ed0-ddbeff9c25b7.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "05822b1301ffaad1624d5ed5a21ed58a817dc162da655143365d73ce620d5428",
+      "bytes": 2875453,
+      "status": "review_pending",
+      "name": "魔王",
+      "theme": "demon",
+      "number": "R036",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TDE4.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "c33e8ef82a07722c1b60511f18aec3c57c44c039a031570545fe44f6d644e4c7",
+          "bytes": 237070
+        },
+        {
+          "file": "client/public/art/cards-sm/TDE4.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "aea9f4310e34e81e4674872def807e90cabad54f5ab308c365e71fa3c7810db3",
+          "bytes": 41264
+        },
+        {
+          "file": "client/public/art/cards-xs/TDE4.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "4e23ef5bd6c86b398b959bcbb480f76ee717fabe9e228fe683708c1e7d11061d",
+          "bytes": 11912
+        }
+      ]
+    },
+    {
+      "id": "DEMON_REALM",
+      "file": "images/DEMON_REALM.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-b2e1fe45-82d7-46d9-ad66-7b2a1747e714.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "480a0c2ef453e9d97992ebf1a290c807cbcade31a38cb717294947d77eb4d90c",
+      "bytes": 2735587,
+      "status": "review_pending",
+      "name": "魔界",
+      "theme": "demon",
+      "number": "R037",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/DEMON_REALM.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "11a6f49fd3eca2ff8ec10c48b0aa2a2901aeea032d76c694205331b53da1c622",
+          "bytes": 217746
+        },
+        {
+          "file": "client/public/art/cards-sm/DEMON_REALM.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "4f47fd3747dc3f55064fb173d205cdedaa26a44c252edc53738a118f038e3fbe",
+          "bytes": 36168
+        },
+        {
+          "file": "client/public/art/cards-xs/DEMON_REALM.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "470c05eb2e00c6aa77a787d200b076190c09ad1cfdb6c3a0b5f063381bf9acc2",
+          "bytes": 10260
+        }
+      ]
+    },
+    {
+      "id": "GS5_3",
+      "file": "images/GS5_3.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-d3f2d082-f3a4-4e82-b1e6-efce9dfa01a6.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "bbfad328028bb359343f71a814fedba3077a255b73db3f6ef50db129dea81602",
+      "bytes": 2775923,
+      "status": "review_pending",
+      "name": "呪文書の解読",
+      "theme": "demon",
+      "number": "R038",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/GS5_3.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "3394f83f577f755fe991671ff07d7d1edaedb492bdc60459a6746e1fded604b8",
+          "bytes": 220500
+        },
+        {
+          "file": "client/public/art/cards-sm/GS5_3.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "79dafc6c492068de9c88609d0371c1d69d95de2657e33a5e7d1b54d8b0504944",
+          "bytes": 36328
+        },
+        {
+          "file": "client/public/art/cards-xs/GS5_3.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "d8f135c31bd89ea40db86970e8502f442a56b5d65bac30885f6abc728015d1a8",
+          "bytes": 10046
+        }
+      ]
+    },
+    {
+      "id": "INFERNO",
+      "file": "images/INFERNO.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-172dd3cd-d328-465c-9c08-a077af60585c.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "23ad07e3bb99976599ce9f02a7e00d5d5ee2ecca261b7fdd73d5978709237359",
+      "bytes": 2734209,
+      "status": "review_pending",
+      "name": "地獄",
+      "theme": "demon",
+      "number": "R039",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/INFERNO.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "b45efcb5e692763995e029878a34fcab9fec2a2957760fc8386c4ff4849fe272",
+          "bytes": 217330
+        },
+        {
+          "file": "client/public/art/cards-sm/INFERNO.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "14ef9dc0c5d97233388d8142c0facece0c47e44ad5f3a6c4beb376c1e596bdc6",
+          "bytes": 38308
+        },
+        {
+          "file": "client/public/art/cards-xs/INFERNO.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "3bd1d5166172e478f9113e6b204a688e449a24f5e29a3cf8056853610ebed663",
+          "bytes": 10760
+        }
+      ]
+    },
+    {
+      "id": "TPO1",
+      "file": "images/TPO1.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-3363d57d-3990-4160-b19e-c767a342c511.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "eac11bda6c17628fff6867dbbe50477d8ce956dadb7cb6be3a18a5ad76b9948e",
+      "bytes": 2711259,
+      "status": "review_pending",
+      "name": "飢えた仔獣",
+      "theme": "predator",
+      "number": "R040",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TPO1.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "4503c11fc372d02b1c84c33bda57096402024b36bf56bdf561d5a9e84372fbf9",
+          "bytes": 204654
+        },
+        {
+          "file": "client/public/art/cards-sm/TPO1.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "b196f845521fa65c8d0cafd18145474f56fed97bc3645d985064fc68c6d16d3b",
+          "bytes": 36960
+        },
+        {
+          "file": "client/public/art/cards-xs/TPO1.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "17a03e18e0c3c9a5243b4d9faab5c6f1dcca0bbb45f1ef4a4f658a3f228c2a17",
+          "bytes": 10246
+        }
+      ]
+    },
+    {
+      "id": "TPO2",
+      "file": "images/TPO2.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-b2a39552-199d-4665-83ee-3f89544425ed.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "b627155c266856561480e9e2b8dfe692a89391534831e59b932ed2fb979e05e3",
+      "bytes": 2825937,
+      "status": "review_pending",
+      "name": "飢えた獣",
+      "theme": "predator",
+      "number": "R041",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TPO2.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "dc39dc968872e43ddc27fe24caa81e06f2f506af204a3c7ce0fd9cec4e6fc2f8",
+          "bytes": 221434
+        },
+        {
+          "file": "client/public/art/cards-sm/TPO2.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "f2ef3bb9b8655162c72027a99923561f8fbfe07023ba9c1624641399efa86175",
+          "bytes": 35382
+        },
+        {
+          "file": "client/public/art/cards-xs/TPO2.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "61d8629a8b1741a9ad16659c938dff6953f497259ee858bb885ed9e169573101",
+          "bytes": 9586
+        }
+      ]
+    },
+    {
+      "id": "TPO3",
+      "file": "images/TPO3.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-1ba1a5f0-1cc1-4633-a325-fd08284593fe.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "3c49ce122ab44598c9e0ed3687ef372024312cf072c1ae299a48df2a128572bf",
+      "bytes": 2808449,
+      "status": "review_pending",
+      "name": "飢えた追跡者",
+      "theme": "predator",
+      "number": "R042",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TPO3.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "2ce8469f9b8f7b24da3f49f3500be4c9649620aee4c2e02977053c35dc0b848c",
+          "bytes": 218046
+        },
+        {
+          "file": "client/public/art/cards-sm/TPO3.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "b21aaf396480d61dcc47f01da85b8172932f0ecd0b2abf5ed83425b69fe00737",
+          "bytes": 34330
+        },
+        {
+          "file": "client/public/art/cards-xs/TPO3.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "8a5edd5ebb2a82bdde9bcef42dd8b6895de2949e9b291ae27aad84859ef9ef8b",
+          "bytes": 9286
+        }
+      ]
+    },
+    {
+      "id": "TPO5",
+      "file": "images/TPO5.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-4dd924c9-5c94-49e8-b375-68f549b541e2.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "3a844667f1ed87c5458952524e24239016292dfdc00c894c5e5b54ea94c26785",
+      "bytes": 2800273,
+      "status": "review_pending",
+      "name": "捕食者",
+      "theme": "predator",
+      "number": "R043",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TPO5.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "f77241b221750d15774c1e75acff5769640386fe20046e3704dcd8f6a57a72f3",
+          "bytes": 215570
+        },
+        {
+          "file": "client/public/art/cards-sm/TPO5.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "870ee7a073ad87aa4abe26e221746c7d2b523f90ab23fc3eeac5129a7187b9a7",
+          "bytes": 34086
+        },
+        {
+          "file": "client/public/art/cards-xs/TPO5.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "bb1b02bd1f248f3e4a5f7a8e6e00e7a48e3758c59b13a747b53454876562c18f",
+          "bytes": 9738
+        }
+      ]
+    },
+    {
+      "id": "PACK_INSTINCT",
+      "file": "images/PACK_INSTINCT.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-37c044ec-d6a3-45c7-9214-464f2a3fac75.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "43758e2f6352875603e46900bd7f351d920b9c532f28e03bb9d4a2ac1137374d",
+      "bytes": 2545417,
+      "status": "review_pending",
+      "name": "群れの本能",
+      "theme": "predator",
+      "number": "R044",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/PACK_INSTINCT.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "2487c88eab96e8083285b19216867bb77d243c98b3d5aecd3bf6cdcbf6ef7e1e",
+          "bytes": 189122
+        },
+        {
+          "file": "client/public/art/cards-sm/PACK_INSTINCT.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "805db9adb42d2d8475576fd84f6da82fd35f3fadef3947e7e3a95baa5396d776",
+          "bytes": 33696
+        },
+        {
+          "file": "client/public/art/cards-xs/PACK_INSTINCT.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "39096e77b3be8d3e919a2c23190d3fcc71a99611cebd8a38a5a1078fe53b7afc",
+          "bytes": 9564
+        }
+      ]
+    },
+    {
+      "id": "SLAY_ART",
+      "file": "images/SLAY_ART.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-1a77dcaf-5339-4ad0-aa9f-87ef0ce4f252.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "fae6f504929e0027defe28c644a37bbe6ee7407e2826671e2981ddc8b424a389",
+      "bytes": 2782156,
+      "status": "review_pending",
+      "name": "殺生の極意",
+      "theme": "predator",
+      "number": "R045",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/SLAY_ART.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "4151e67893acd8091b0d4f70a8d663d7212b9953622cc2512496bc2e36b3bef3",
+          "bytes": 210716
+        },
+        {
+          "file": "client/public/art/cards-sm/SLAY_ART.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "f1bedae7c76ea6c68988a442cc9c58b72e390e5d3ae42d60092779c0c7f6081d",
+          "bytes": 34010
+        },
+        {
+          "file": "client/public/art/cards-xs/SLAY_ART.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "d9d3a81deb1137e02d043a2e28fac844b4646e340c2f0e223c185fb6433a4715",
+          "bytes": 9394
+        }
+      ]
+    },
+    {
+      "id": "TAR1",
+      "file": "images/TAR1.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-55aa6740-1e84-4f12-b050-5f984e30e9be.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "9037dc5399e6b10d41efd971157cacb883efae42d70830bf909303e58b63b172",
+      "bytes": 2332589,
+      "status": "review_pending",
+      "name": "貴族の執事",
+      "theme": "noble",
+      "number": "R046",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TAR1.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "cc61c56fb17c04fb6c7bce98f46373e4354e85d2a1ffa9ccd29b4a2283d87b0b",
+          "bytes": 162856
+        },
+        {
+          "file": "client/public/art/cards-sm/TAR1.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "dc8bd5ba497096550880e0685f1be044d1d84e3860081813b5e75acbcdbd97a9",
+          "bytes": 30628
+        },
+        {
+          "file": "client/public/art/cards-xs/TAR1.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "897f0d7b4a8db0b8912ebc5f4aa7135e120ee601e20e554ddbc079ceb644d28b",
+          "bytes": 8866
+        }
+      ]
+    },
+    {
+      "id": "TAR2",
+      "file": "images/TAR2.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-9e771b60-8b30-4eab-8fce-13f4159b54fb.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "455ab178e9b9c2cdd7a70a4c1211be47be3290c424612b6b6d5fa00a348e783f",
+      "bytes": 2677240,
+      "status": "review_pending",
+      "name": "没落貴族",
+      "theme": "noble",
+      "number": "R047",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TAR2.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "6f78cf50a8d924427b93994f214ed5f3daf8a925a9ffb5b1cc23943c696ee3d0",
+          "bytes": 207864
+        },
+        {
+          "file": "client/public/art/cards-sm/TAR2.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "e92d4af6c4ea845ee43ef6f082dc045ff751b488327ee509411c6e399a386126",
+          "bytes": 36056
+        },
+        {
+          "file": "client/public/art/cards-xs/TAR2.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "54f35052f532ab23c0e41623a71b9fb29a6163718b17f36e8e8f985b76f0fbfd",
+          "bytes": 10120
+        }
+      ]
+    },
+    {
+      "id": "TAR3",
+      "file": "images/TAR3.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-5d8fd85f-2737-43f6-b30c-dd87ebee2d7c.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "a5d6aa8b4f3e3771f4b9eb8e5bb9e40adeca6fed682aee10e5ba915c5a9d1538",
+      "bytes": 2648704,
+      "status": "review_pending",
+      "name": "没落した騎士",
+      "theme": "noble",
+      "number": "R048",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TAR3.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "66b178a5d44cef24049544de379ecb0ef91065af1bbaeedd193073a7cade7e21",
+          "bytes": 197074
+        },
+        {
+          "file": "client/public/art/cards-sm/TAR3.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "fb24a1d86ae21b67da7f3e72fd6ae32afab46c9345cda79d25226c77331dcb2f",
+          "bytes": 30900
+        },
+        {
+          "file": "client/public/art/cards-xs/TAR3.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "6bab3c8685081bba71f5181ff825768628ab68da4941c709df6170153dd3073b",
+          "bytes": 8084
+        }
+      ]
+    },
+    {
+      "id": "TAR5",
+      "file": "images/TAR5.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-5229dcfb-ec16-4216-808a-441093d8dc93.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "d71cf2f2dc5b5b504435f6ff3895d6f9c91ce003981f4a73267a5fa1326c92ed",
+      "bytes": 2354911,
+      "status": "review_pending",
+      "name": "貴族領主",
+      "theme": "noble",
+      "number": "R049",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TAR5.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "08d881978f95538ac06a8adabb5d31386d35f28936bddcb7cefa0438760cfb2c",
+          "bytes": 174780
+        },
+        {
+          "file": "client/public/art/cards-sm/TAR5.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "31bd78f91610d26f47cda5214440359d765d173be8ea365bad3ebb45731ea6b0",
+          "bytes": 32486
+        },
+        {
+          "file": "client/public/art/cards-xs/TAR5.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "12815a3a8685f50fc39d1f0b590fcc3d0375641e53ede878f8af85ac8b5e3794",
+          "bytes": 9182
+        }
+      ]
+    },
+    {
+      "id": "LAND_GRANT",
+      "file": "images/LAND_GRANT.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-7d6fdf59-060b-4b8d-bcdf-bf75bdcbeef0.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "f7955757e30d7d86058edf1e8aa474468e3fd63057532bdda430a44c659b4ea9",
+      "bytes": 2427023,
+      "status": "review_pending",
+      "name": "領土付与",
+      "theme": "noble",
+      "number": "R050",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/LAND_GRANT.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "b674284a577da5baaa59863fa3d7cb65fa3310f120deb20fae2413c2cea32d4a",
+          "bytes": 178068
+        },
+        {
+          "file": "client/public/art/cards-sm/LAND_GRANT.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "0e6da10c84afd81b22d4f32c805f8e1802555dc7136fe8162b8813cbcc9bd0d2",
+          "bytes": 33748
+        },
+        {
+          "file": "client/public/art/cards-xs/LAND_GRANT.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "5ddbc65f36edfcbe24862b158b52bf2f5576c8ac2e909f1a369d8da213662d6e",
+          "bytes": 9634
+        }
+      ]
+    },
+    {
+      "id": "MAJESTY_RITE",
+      "file": "images/MAJESTY_RITE.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-18c0eb88-e2ae-42e7-b2cb-bc6c924cd6d4.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "8fc45bfcc41cc4d2d27a51501bf752b6fe4d2f52acfb5760b0185b42b3f636da",
+      "bytes": 2467763,
+      "status": "review_pending",
+      "name": "刻印秘術",
+      "theme": "noble",
+      "number": "R051",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/MAJESTY_RITE.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "14a1d04a8d31f4f78cdc6295ecb6c3429178bedd0e47c236dab090cf2cf2f5ac",
+          "bytes": 182650
+        },
+        {
+          "file": "client/public/art/cards-sm/MAJESTY_RITE.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "31559ac094deeb933ba0b675fe818b76078ad8f8991411adb60c58c7c4dad110",
+          "bytes": 32536
+        },
+        {
+          "file": "client/public/art/cards-xs/MAJESTY_RITE.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "94b956d64f4142db3002ad6b7c895d395c5bfe57123e4493096ee32264e271c2",
+          "bytes": 9076
+        }
+      ]
+    },
+    {
+      "id": "RICH_HABIT",
+      "file": "images/RICH_HABIT.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-3033da0a-9ed0-48b2-9332-7e602d6b78dc.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "326cb252ed0d81dd5a655d37f1294abb155c50503520774272219666d5455256",
+      "bytes": 2486599,
+      "status": "review_pending",
+      "name": "富豪の習慣",
+      "theme": "noble",
+      "number": "R052",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/RICH_HABIT.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "2bfdca27b3791c1186a6b6dd5e1f2cd668f394d83a88b580dbcfab8a0abfeafd",
+          "bytes": 188656
+        },
+        {
+          "file": "client/public/art/cards-sm/RICH_HABIT.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "c55c6c30c07a54a1e6a3459678270480ad3c95e5176db3237ec839208b0d2835",
+          "bytes": 35334
+        },
+        {
+          "file": "client/public/art/cards-xs/RICH_HABIT.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "f11bf3ecd22b53d6049829a670229ff4030ea9b57923071606302022c7c388e1",
+          "bytes": 9764
+        }
+      ]
+    },
+    {
+      "id": "TSO1",
+      "file": "images/TSO1.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-c6f446c7-4ad9-4c52-a623-3a021fd721e1.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "0118047f31fb233cd142cd5ca98f7bd6018a672216624ae596530f5a2198e142",
+      "bytes": 2636149,
+      "status": "review_pending",
+      "name": "隠遁者",
+      "theme": "lonely",
+      "number": "R053",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TSO1.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "2eebb6aea298d2db727c87fb8d159f6cbb8a690635a965072ed8a08022afb072",
+          "bytes": 182836
+        },
+        {
+          "file": "client/public/art/cards-sm/TSO1.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "9f19d6f79f87d522c8e116fdacbb1db98ffa851ba6238fc1f190414e21a67fda",
+          "bytes": 28820
+        },
+        {
+          "file": "client/public/art/cards-xs/TSO1.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "e15670911ae4fb92ffcbb3e0925e0ad83cd3a8c181f3e0c83c96b5c2ce368f4f",
+          "bytes": 7646
+        }
+      ]
+    },
+    {
+      "id": "TSO2",
+      "file": "images/TSO2.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-fd93b495-b196-456e-818d-acfd8304a7b7.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "59859bfe2c6fdeb113cb75d7d069c08bf59c3ddaddb11abcef331e86f43310a1",
+      "bytes": 2461888,
+      "status": "review_pending",
+      "name": "孤独な狼",
+      "theme": "lonely",
+      "number": "R054",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TSO2.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "db2f2dca9de49f760c1c531d0c77d74119a4dfc8c67beb41f9c99c37b3cb405b",
+          "bytes": 165778
+        },
+        {
+          "file": "client/public/art/cards-sm/TSO2.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "0f54a1db2df598977d87204521592488ef65172dcb441f67300e8d976baf80ab",
+          "bytes": 28488
+        },
+        {
+          "file": "client/public/art/cards-xs/TSO2.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "c5f121d516d7eed787e3f5e465e6bd48105fc4f41a65b26a34a5e2c976d7e546",
+          "bytes": 7578
+        }
+      ]
+    },
+    {
+      "id": "TSO3",
+      "file": "images/TSO3.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-198bafa3-26e0-483b-a45a-ff49f1f72879.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "86db7a1258c2c176f7e946b8100c74d4572c853aaf07268de0a5e4725a47c431",
+      "bytes": 2675007,
+      "status": "review_pending",
+      "name": "孤独な狩人",
+      "theme": "lonely",
+      "number": "R055",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TSO3.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "497b54ce2ef8abe4f7d441e64b4ce89a876801d5fe6aab738f93067a34bbc14f",
+          "bytes": 192332
+        },
+        {
+          "file": "client/public/art/cards-sm/TSO3.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "897e773e4035945065f3c771bacf89f21ff15df65934d9047daa98b4843a9001",
+          "bytes": 32618
+        },
+        {
+          "file": "client/public/art/cards-xs/TSO3.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "db8a3a79b955e1bb01a7c925229bd933778ae273146bd1ac6f809f4269fd0691",
+          "bytes": 8800
+        }
+      ]
+    },
+    {
+      "id": "TSO5",
+      "file": "images/TSO5.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-5e663865-f1ee-4d61-8fa5-ea92446ba357.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "d772bd7b80df5de988ecbc0b66ab8c19041e0dccf0dd7d51b004392d6afd5ae2",
+      "bytes": 2721947,
+      "status": "review_pending",
+      "name": "孤独な放浪者",
+      "theme": "lonely",
+      "number": "R056",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TSO5.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "3b1923161f5287c6fda5ddfb5923228dbf90ea6e5c40587556efd427f19cb35c",
+          "bytes": 192986
+        },
+        {
+          "file": "client/public/art/cards-sm/TSO5.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "9ab752e78fb530c3b99e40e17e6cc9f8f24172a9759a689a158341de5cf1f79c",
+          "bytes": 30586
+        },
+        {
+          "file": "client/public/art/cards-xs/TSO5.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "58d46644af666d866ea362d15b0c20ba032e4fb42d592b4e0fcddeeea11098cd",
+          "bytes": 8168
+        }
+      ]
+    },
+    {
+      "id": "HERMIT",
+      "file": "images/HERMIT.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-4f1aee1f-881c-4be1-84e0-b3a8fa9be0a1.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "f2c46fb90bd82f199f28bcb577e2d3db019206012e68292c34231e0cd63d77fc",
+      "bytes": 2741702,
+      "status": "review_pending",
+      "name": "隠遁の安息",
+      "theme": "lonely",
+      "number": "R057",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/HERMIT.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "10c6343c5ec71c1201538e29a405b58e2c0dd835fce7b70a72d17cb223fe21b9",
+          "bytes": 198276
+        },
+        {
+          "file": "client/public/art/cards-sm/HERMIT.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "f44f29c66283d59d3b46feb30d68a5a9a3ea3393e9232d5a8b0614f60fc29d60",
+          "bytes": 29708
+        },
+        {
+          "file": "client/public/art/cards-xs/HERMIT.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "6546e8597391f39dab5847fbc2625fbe8586d7f1e7214ce3f28cbdb510999b76",
+          "bytes": 7680
+        }
+      ]
+    },
+    {
+      "id": "MEDITATE",
+      "file": "images/MEDITATE.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-dbf57679-750c-4b36-b4a6-1acd090e04e8.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "3037bdbe8da9b869eb7723f1bbb376492b99b46e68a6caad630d135cda413824",
+      "bytes": 2455795,
+      "status": "review_pending",
+      "name": "瞑想",
+      "theme": "lonely",
+      "number": "R058",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/MEDITATE.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "3c95dd3ece477350d9c09fd531f8a11ecf4d72858363814e5932cc09b79c20a8",
+          "bytes": 154572
+        },
+        {
+          "file": "client/public/art/cards-sm/MEDITATE.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "28903e0d7835cff2b4e79a3a2404a8433bca1fa2fd86186cb5b17ce3c1772c6d",
+          "bytes": 24366
+        },
+        {
+          "file": "client/public/art/cards-xs/MEDITATE.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "2397b11d59315d6f26133d71b20bdb23b24432aa108c9072e7b398c70a65d270",
+          "bytes": 6726
+        }
+      ]
+    },
+    {
+      "id": "TGE1",
+      "file": "images/TGE1.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-10220e9a-7857-411e-822e-4c638a748995.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "584724fcabb39e13901a95f1c2a8662eacfe7b5d4e4621dac8a0926996605e26",
+      "bytes": 2980593,
+      "status": "review_pending",
+      "name": "始原の卵",
+      "theme": "origin",
+      "number": "R059",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TGE1.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "5529000c292f28dba5e2345fc6dcc104855f3a02590bbf81c16c5f986eebc7fd",
+          "bytes": 253248
+        },
+        {
+          "file": "client/public/art/cards-sm/TGE1.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "7207a1aed7393c0d5daffa6b814b1797224286ffeeb7308efc5243e0162d7fbb",
+          "bytes": 41154
+        },
+        {
+          "file": "client/public/art/cards-xs/TGE1.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "b91d9b8bf5badf3c1bc2fb14f103f3ed668d9dcc3b2d331c9d83296e4f804548",
+          "bytes": 10904
+        }
+      ]
+    },
+    {
+      "id": "TGE2",
+      "file": "images/TGE2.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-a9ecdb63-9458-4d1b-9f87-b9ce899f408c.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "e3275daa1d59ac1140f6585fbdbcb42e44e8c73df07793f9610f82ef2a6238f3",
+      "bytes": 2861413,
+      "status": "review_pending",
+      "name": "始原の火種",
+      "theme": "origin",
+      "number": "R060",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TGE2.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "1bd8a68743e56e43b98981ecf3dbf0808b1b1c008a6b6321274f5614e7b00f19",
+          "bytes": 242304
+        },
+        {
+          "file": "client/public/art/cards-sm/TGE2.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "23eeeeaccbd885859221fb38346c218610ca2b2e5bc954a68a49777341ff0c85",
+          "bytes": 39514
+        },
+        {
+          "file": "client/public/art/cards-xs/TGE2.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "e353092937ec0dc1391034699b44bdcf8369af222c77321edabd09a55cc2417d",
+          "bytes": 10822
+        }
+      ]
+    },
+    {
+      "id": "TGE3",
+      "file": "images/TGE3.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-6026e333-522d-4825-a4f2-50e6e3d2539f.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "ced5f7103a83f9ef3d3d78d120b77dc7022868335b275cf6a424d96a46193bdd",
+      "bytes": 2887661,
+      "status": "review_pending",
+      "name": "始原の守護者",
+      "theme": "origin",
+      "number": "R061",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TGE3.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "e5f1d1d6813417925b1c177e7482490f171bd24b4dafe94bf99ae787eaed7bae",
+          "bytes": 245398
+        },
+        {
+          "file": "client/public/art/cards-sm/TGE3.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "6c8388995dd2ac651ecfe5fc0f5eb6e907a08c43ad78dd5e9145dd5374089cd0",
+          "bytes": 41282
+        },
+        {
+          "file": "client/public/art/cards-xs/TGE3.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "6cd3af12eb931af41366dcdae83588af8f2c44fd7d3c01e19160cacac7e41808",
+          "bytes": 11260
+        }
+      ]
+    },
+    {
+      "id": "TGE4",
+      "file": "images/TGE4.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-88a0309b-1770-4692-ada1-667e5e9f9cf1.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "9c685869e95f5f35e3b2d1541835d15b93f754f5ad67a52dc3d351821deeae18",
+      "bytes": 2947938,
+      "status": "review_pending",
+      "name": "始原の裁判官",
+      "theme": "origin",
+      "number": "R062",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TGE4.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "a3533ec17b4906b05e744d51847eae5f93e784d19a2add190c7893e48797a22d",
+          "bytes": 253204
+        },
+        {
+          "file": "client/public/art/cards-sm/TGE4.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "29e708e4a01ec67e512b19e2f98f8e05fe7a2ab5fd0062670fb686785ac8e13e",
+          "bytes": 41356
+        },
+        {
+          "file": "client/public/art/cards-xs/TGE4.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "bdec17ded7f42a5c2016e516ff133cc807badec76071152503d2b171c4431ef4",
+          "bytes": 11068
+        }
+      ]
+    },
+    {
+      "id": "TGE5",
+      "file": "images/TGE5.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-8c61879f-48ce-44d3-abe7-8c19bfc6cb90.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "e0b73328ed657d954381989206cb802293e50ee67c2d84791d7950cd87d3b170",
+      "bytes": 3005698,
+      "status": "review_pending",
+      "name": "始原の精霊",
+      "theme": "origin",
+      "number": "R063",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TGE5.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "87f35d0738cf057b9fc95ad3d2b2f363c2dc912db40e079dfb4a6ed887105715",
+          "bytes": 255328
+        },
+        {
+          "file": "client/public/art/cards-sm/TGE5.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "579172b59540de21a08d6fcbaaedc08e5f26f90879f1a08d2dc8ec5af4197a24",
+          "bytes": 40660
+        },
+        {
+          "file": "client/public/art/cards-xs/TGE5.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "c7675aabb86d9046bb93ac3e63bb0b14e201433632337b545aa52900d1c77056",
+          "bytes": 10664
+        }
+      ]
+    },
+    {
+      "id": "TGE6",
+      "file": "images/TGE6.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-7837c568-07f8-4e2c-bf4c-1206cbdf4966.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "f2d9019c0108e28878126b0ed5bc943d76fa31879893e4c4045593f34112a69c",
+      "bytes": 3089151,
+      "status": "review_pending",
+      "name": "始原の巨人",
+      "theme": "origin",
+      "number": "R064",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TGE6.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "3560d56ea227a8b5c63b484711e5cb8a1dfe0bed25552096966193f78532d9bd",
+          "bytes": 267066
+        },
+        {
+          "file": "client/public/art/cards-sm/TGE6.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "3dc6a59161435670364ed1319fede60c933a9e17ec15cb631d2e4e7bcceb8c17",
+          "bytes": 43082
+        },
+        {
+          "file": "client/public/art/cards-xs/TGE6.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "9f427b821d6aa24984eef6918735229747837353dcef5def05bcefec211903f6",
+          "bytes": 11396
+        }
+      ]
+    },
+    {
+      "id": "TGE7",
+      "file": "images/TGE7.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-8919e58e-014c-4cf1-bf10-b3fca38696a5.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "5cccb342745a6670a24a0442133351ead39d3b564e94beb27e434160b3f1f157",
+      "bytes": 2955901,
+      "status": "review_pending",
+      "name": "始原の君主",
+      "theme": "origin",
+      "number": "R065",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/TGE7.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "84d6d82a7991bdfa50067a8b2957eb28ab2ff507dec90dd0c8f8eeed63104682",
+          "bytes": 252602
+        },
+        {
+          "file": "client/public/art/cards-sm/TGE7.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "e6584b0d3811dceaa89b552aa47166e44060fafa82c77e45acdd5368fdf9624b",
+          "bytes": 40716
+        },
+        {
+          "file": "client/public/art/cards-xs/TGE7.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "409ef6ded048d574f574fc7c434d0fa84b9c58594805df8faa76bce9039408bc",
+          "bytes": 11030
+        }
+      ]
+    },
+    {
+      "id": "GENESIS_SONG",
+      "file": "images/GENESIS_SONG.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-fb8722a3-ca92-4747-88b8-6b1fb09e1ab1.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "a39505e3cba90727cbd38bd2d601e7de372f585bb99bc8bbe4b2a858bed3bca8",
+      "bytes": 2928745,
+      "status": "review_pending",
+      "name": "始原の歌",
+      "theme": "origin",
+      "number": "R066",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/GENESIS_SONG.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "a59d5440d6dc036eaad1fb7cb195d92a7e64b25f9c7b99bacf4271ae2ea4635f",
+          "bytes": 252630
+        },
+        {
+          "file": "client/public/art/cards-sm/GENESIS_SONG.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "56f51196b6847a42e9ffeea5741dd1e40f965ecf788a780f3d759ebc0d65784c",
+          "bytes": 42740
+        },
+        {
+          "file": "client/public/art/cards-xs/GENESIS_SONG.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "e76540c0ec71e35a28aef4bb3d3e0fab74189be7c8cccf4fb0f0eec1b2172791",
+          "bytes": 11500
+        }
+      ]
+    },
+    {
+      "id": "GENESIS_MAGIC",
+      "file": "images/GENESIS_MAGIC.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-3b618679-0996-4667-b78c-f785f2ed3643.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "bdce048fa5028fe46a65ee7252d85b3b2b7567e5af41afc60a1abae710c465f9",
+      "bytes": 2914330,
+      "status": "review_pending",
+      "name": "始原の魔法",
+      "theme": "origin",
+      "number": "R067",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/GENESIS_MAGIC.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "c93090d3edc7b1c38c9b9f1f5e33f2a6568e6fe444fc51c0d687dfd40df5b658",
+          "bytes": 243238
+        },
+        {
+          "file": "client/public/art/cards-sm/GENESIS_MAGIC.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "0f0a81dc5f191acaab3df5d4c837e87fe392e513e94f0d06ce2649dafeb8665c",
+          "bytes": 38772
+        },
+        {
+          "file": "client/public/art/cards-xs/GENESIS_MAGIC.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "e89a0b70a98a4b22c389c859511676dadae7f06fd98bcaa9be4d28e21460a5dc",
+          "bytes": 10282
+        }
+      ]
+    },
+    {
+      "id": "ORIGIN_RITE",
+      "file": "images/ORIGIN_RITE.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-0f6ef636-9681-4335-a8ec-f56c4158891e.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "9141b6ef11baccb4936f950a172f186bcea571b952c7d6e6550d247d516fbd6b",
+      "bytes": 2897754,
+      "status": "review_pending",
+      "name": "始原の術式",
+      "theme": "origin",
+      "number": "R068",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/ORIGIN_RITE.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "ae2f367ee25bd3f39db3af194368f73e23de7aa44dea4652911ed350797635ce",
+          "bytes": 246218
+        },
+        {
+          "file": "client/public/art/cards-sm/ORIGIN_RITE.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "02c32ba41e6568f78e5eb8174769fdf81848f1867726ca2f5cff668859efb9f4",
+          "bytes": 40696
+        },
+        {
+          "file": "client/public/art/cards-xs/ORIGIN_RITE.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "c67b78d9d022608805973adf55701d747e145cdb72aef26975c7623480d9b609",
+          "bytes": 10442
+        }
+      ]
+    },
+    {
+      "id": "ORIGIN_QUEST",
+      "file": "images/ORIGIN_QUEST.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-92818713-0f66-450f-a437-585d9dd7ffcd.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "84ec5a287fd94f65fd2844a764dea81b8b1f7b7f086bc1a23863a701f573d085",
+      "bytes": 2990589,
+      "status": "review_pending",
+      "name": "起源の探究",
+      "theme": "origin",
+      "number": "R069",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/ORIGIN_QUEST.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "dc05e77fba3b91142059590862543a3cdccf3567d25bf0c3e075350fd1b9ccfe",
+          "bytes": 259252
+        },
+        {
+          "file": "client/public/art/cards-sm/ORIGIN_QUEST.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "a5855dc70e314bcc082e79e17823cd56f47475d52a9812f61c2c6c8a038b009d",
+          "bytes": 41960
+        },
+        {
+          "file": "client/public/art/cards-xs/ORIGIN_QUEST.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "82ddb45987c9bd5dcf6a2244904479341e880922b37a4963ccb2666f4ef85231",
+          "bytes": 10670
+        }
+      ]
+    },
+    {
+      "id": "VAMP1",
+      "file": "images/VAMP1.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-e4281442-4885-43cf-adb3-d9a7359149d2.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "91ef362eedea8ed96e00196a29c287a5c0a6dff730b88c301ca814ae96adc927",
+      "bytes": 2447293,
+      "status": "review_pending",
+      "name": "見習い吸血鬼",
+      "theme": "vampire",
+      "number": "R070",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/VAMP1.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "22a829284d875c85678d45a66524b183ca9b41a1cd59297218d990a69f86c4a1",
+          "bytes": 174580
+        },
+        {
+          "file": "client/public/art/cards-sm/VAMP1.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "8d05938068743a9d9d6c183a1220ae01d8d74a8ca4aa9b8a1e46d45c8141419f",
+          "bytes": 30204
+        },
+        {
+          "file": "client/public/art/cards-xs/VAMP1.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "34aff6d31b95e83a44ed3b1e0c76f161701fc37f0ecf741b1709c904fcfda9bd",
+          "bytes": 8796
+        }
+      ]
+    },
+    {
+      "id": "VAMP2",
+      "file": "images/VAMP2.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-0c8822a4-0ce7-4842-bc28-06ce5f4e41ab.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "90508aca63f6fd0666175fb10689df5af60f893988b6f373874d1153a1318000",
+      "bytes": 2643179,
+      "status": "review_pending",
+      "name": "初級吸血鬼",
+      "theme": "vampire",
+      "number": "R071",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/VAMP2.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "9d042f8690ead2485cfeae4551e31a8b0ac95fd67c87a888a1ef534eaf9a3abf",
+          "bytes": 192946
+        },
+        {
+          "file": "client/public/art/cards-sm/VAMP2.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "aed18778a2f1da4ec04c2d5eaeef7ab615096c476462a7a2b9c584f03fa1a2c1",
+          "bytes": 32946
+        },
+        {
+          "file": "client/public/art/cards-xs/VAMP2.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "1f35f829631fe8835667681f7a72ceb9f0cf5a19514a970c4209bda32d48caf6",
+          "bytes": 9416
+        }
+      ]
+    },
+    {
+      "id": "VAMP3",
+      "file": "images/VAMP3.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-b6a76435-3c39-47e7-bc66-d1c4404722d9.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "a0ae47efd475cd3ce768d9f2ecdd765797e2c91efddd374565b4b01d8243611e",
+      "bytes": 2543147,
+      "status": "review_pending",
+      "name": "中級吸血鬼",
+      "theme": "vampire",
+      "number": "R072",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/VAMP3.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "e3c54d99ce2404a044eac5960d0a6e0b50b65dc415efeee6ee913f7c2d018526",
+          "bytes": 183902
+        },
+        {
+          "file": "client/public/art/cards-sm/VAMP3.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "f4b585344aa5f76f718306d93c76bdbb4b7701b03b5c72ef1f1e6fbb3a59d4c0",
+          "bytes": 31340
+        },
+        {
+          "file": "client/public/art/cards-xs/VAMP3.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "c078d866045ab22e567060d44fa928ccea6f219316c340d1ae7f360b352bd6d3",
+          "bytes": 8744
+        }
+      ]
+    },
+    {
+      "id": "VAMP4",
+      "file": "images/VAMP4.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-225332ae-5676-431b-8472-2ae5f1cdf1f5.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "f6d598a6658eaa78e8f5894605082c95415505987d0b9710499b45cb4939167e",
+      "bytes": 2917792,
+      "status": "review_pending",
+      "name": "上級吸血鬼",
+      "theme": "vampire",
+      "number": "R073",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/VAMP4.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "e884b7e74e6b98ceeefa7fb198ec37b86c05458669439d36d636f5e61ba78e0b",
+          "bytes": 235936
+        },
+        {
+          "file": "client/public/art/cards-sm/VAMP4.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "030fa52689b25f9c07d19351b2d3accd91c4c506e1123ff28303c1f62db49611",
+          "bytes": 39888
+        },
+        {
+          "file": "client/public/art/cards-xs/VAMP4.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "0a32e6728e3fdc00c27a626844106acac139bedaec651192a010ee2828ae1956",
+          "bytes": 10708
+        }
+      ]
+    },
+    {
+      "id": "VAMP5",
+      "file": "images/VAMP5.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-db80877e-750d-4ef7-b56d-0d9f3f00487b.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "cf773ef292cb932bf729b99ab4e53bdfd83af5de2fdd4042c6f71c447231822b",
+      "bytes": 2710121,
+      "status": "review_pending",
+      "name": "特級吸血鬼",
+      "theme": "vampire",
+      "number": "R074",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/VAMP5.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "b616a1a6d02eb0626ad06d50932fe773b0da89c3af653cbdc6577c040ac1eee8",
+          "bytes": 201590
+        },
+        {
+          "file": "client/public/art/cards-sm/VAMP5.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "c5e3ef2237705ec3a2f04309a1b4c43f5db76c5716b35cf57cc2a9de38c49587",
+          "bytes": 33876
+        },
+        {
+          "file": "client/public/art/cards-xs/VAMP5.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "b4cd3664f691c31e0ca392977cdb00a154903b9f0e7350f0d2c8d84e7f129e96",
+          "bytes": 9354
+        }
+      ]
+    },
+    {
+      "id": "VAMP_BUTLER",
+      "file": "images/VAMP_BUTLER.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-806b2bb1-423f-4514-a48f-44fff5ca5c3a.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "aa4e51b9be139c8c4152a5ef0c807ea2fffa559686119d3224950657c360872f",
+      "bytes": 2354413,
+      "status": "review_pending",
+      "name": "ヴァンパイア執事",
+      "theme": "vampire",
+      "number": "R075",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/VAMP_BUTLER.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "5509f9ec8ca53937558170c06eb1598f37d1a930d5675d095156b83585bb3bc8",
+          "bytes": 152732
+        },
+        {
+          "file": "client/public/art/cards-sm/VAMP_BUTLER.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "491ad18327146d4532ce9d9af2e93054083c4524d2ac03327a7d4208bb7ef47c",
+          "bytes": 27250
+        },
+        {
+          "file": "client/public/art/cards-xs/VAMP_BUTLER.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "41ec4d3470a7af1266bce5e09b416210aa67c33ccfe6fe6528c7a96d32075bf5",
+          "bytes": 7874
+        }
+      ]
+    },
+    {
+      "id": "BLOOD1",
+      "file": "images/BLOOD1.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-99618122-47b5-4bca-a117-ea49c55ab750.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "4038430d3c585da710325791e3375cfa82d3d6ba68c5788e9e24ecdcbda0b2c1",
+      "bytes": 2345689,
+      "status": "review_pending",
+      "name": "血の魔法 - ブラッドドロー",
+      "theme": "vampire",
+      "number": "R076",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/BLOOD1.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "7bf167fa4767124a221a1f388fbb981e97c56384342b09a55fe6e5467c52f150",
+          "bytes": 161506
+        },
+        {
+          "file": "client/public/art/cards-sm/BLOOD1.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "6ce284ab33118714fb4eac957148f0372aa2ae8f92132b30026545e8e90b85d1",
+          "bytes": 29854
+        },
+        {
+          "file": "client/public/art/cards-xs/BLOOD1.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "b5643e3dc9e528352bbb04478550099a6068760df8f580445263cd9f87635821",
+          "bytes": 8458
+        }
+      ]
+    },
+    {
+      "id": "BLOOD_JOY",
+      "file": "images/BLOOD_JOY.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-83ca84f1-6bc9-45e6-8bc0-0bcfe308db12.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "858aa2b0bd331a63cde43c6e2cd1e715a5748787dfaa4169c19d56e202a5b5f5",
+      "bytes": 2783620,
+      "status": "review_pending",
+      "name": "血の魔法 - 喜",
+      "theme": "vampire",
+      "number": "R077",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/BLOOD_JOY.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "3d59f176a0e4b4dfa2e1816d8365cbf1d1f0d6c3209deecdf4f3f648883d0ffe",
+          "bytes": 226940
+        },
+        {
+          "file": "client/public/art/cards-sm/BLOOD_JOY.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "56fcb0cbe95d8cf9859bb6f352c15e1521297686be68e9cae7aa7e45857b1e16",
+          "bytes": 36706
+        },
+        {
+          "file": "client/public/art/cards-xs/BLOOD_JOY.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "39930ff0013513cde5a4389efc42e32cbd8a5b09e2f1c3d4bad8c284ad75e63f",
+          "bytes": 9722
+        }
+      ]
+    },
+    {
+      "id": "BLOOD_ANGER",
+      "file": "images/BLOOD_ANGER.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-2ab20238-fba9-42a1-a4e5-f37dc06ce0ad.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "df07d6155267919623096601e80c4ff0f3bba98870973854f4f01102f70372c4",
+      "bytes": 2560990,
+      "status": "review_pending",
+      "name": "血の魔法 - 怒",
+      "theme": "vampire",
+      "number": "R078",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/BLOOD_ANGER.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "0879dc62c30d3c578c509245890ce8bc323fa6942270c52111a6811e33dc2184",
+          "bytes": 193628
+        },
+        {
+          "file": "client/public/art/cards-sm/BLOOD_ANGER.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "df97f33e99aa4e0f973d2847bb21e5b24518ce9648a411cc5fe9f83cf4ebfd2d",
+          "bytes": 32566
+        },
+        {
+          "file": "client/public/art/cards-xs/BLOOD_ANGER.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "3de4524b44f9a84396adf9e5ba2209e385089d2bb065e7305b0418109dd4a64c",
+          "bytes": 8830
+        }
+      ]
+    },
+    {
+      "id": "BLOOD_SORROW",
+      "file": "images/BLOOD_SORROW.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-3a43977c-a09c-4aaf-9bd9-e7c5f87dd39f.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "3095395a67e33de77b7fbf181331e4a0222597f91fc8ec612d188f1aa4c3c53f",
+      "bytes": 2539320,
+      "status": "review_pending",
+      "name": "血の魔法 - 哀",
+      "theme": "vampire",
+      "number": "R079",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/BLOOD_SORROW.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "f546944f1a204602cdf8d6f050eeb34754695977ec7b15bbfbc4af31e95d66b5",
+          "bytes": 184992
+        },
+        {
+          "file": "client/public/art/cards-sm/BLOOD_SORROW.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "aad1152bc84f7a832d4a588453f9f125ba117dd3991c9c08f90470273f49b747",
+          "bytes": 31586
+        },
+        {
+          "file": "client/public/art/cards-xs/BLOOD_SORROW.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "67a4186df045b10b9ddc90977e8f050487d3552e060956007b9956d4b134e415",
+          "bytes": 8604
+        }
+      ]
+    },
+    {
+      "id": "BLOOD_PLEASURE",
+      "file": "images/BLOOD_PLEASURE.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-88b526c9-3f34-4628-8b46-3df9ba1e7f2f.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "4c3376ab9b980dbc8d71cf216347cc02975ebc6c14a35c3aecd3518e455e9c08",
+      "bytes": 2501460,
+      "status": "review_pending",
+      "name": "血の魔法 - 楽",
+      "theme": "vampire",
+      "number": "R080",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/BLOOD_PLEASURE.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "6fdb3db0a3a6eea6ea68246593b5133f224ed966003dfe04cc100cdbb0ae2095",
+          "bytes": 185290
+        },
+        {
+          "file": "client/public/art/cards-sm/BLOOD_PLEASURE.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "9e0e10c0d37827c19721ada2fb310cb100947a49fe483b7a22240c0bb85ad741",
+          "bytes": 31398
+        },
+        {
+          "file": "client/public/art/cards-xs/BLOOD_PLEASURE.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "b745d120ea356f922490d84a91fd207533a63facaa46efd92a7405de4a99077e",
+          "bytes": 8824
+        }
+      ]
+    },
+    {
+      "id": "VAMP_PACT",
+      "file": "images/VAMP_PACT.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-1b6a495c-0d87-4740-ba12-f2b99711f0e6.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "a2626f68281146c948253adaf41a6ae754f61515df055ca24b221064be878ca0",
+      "bytes": 2489188,
+      "status": "review_pending",
+      "name": "吸血契約",
+      "theme": "vampire",
+      "number": "R081",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/VAMP_PACT.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "18dd37af41be1965531610a34f189e53fc87a7e9cdd4641ddf6b8d4ccbf5d7b7",
+          "bytes": 178780
+        },
+        {
+          "file": "client/public/art/cards-sm/VAMP_PACT.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "7782591993b976a656bb0d09d2b42209e08ae6d9e7575d97c856cc42e0b90c3f",
+          "bytes": 31896
+        },
+        {
+          "file": "client/public/art/cards-xs/VAMP_PACT.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "bf95fe55e1844a313efc8f30d23120ae695b1e4d7aac8b1003a24e0c19750d60",
+          "bytes": 9162
+        }
+      ]
+    },
+    {
+      "id": "VAMP_PACT2",
+      "file": "images/VAMP_PACT2.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-ad32f6c4-a68a-4233-8c18-7072de2f564d.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "000a4309bd9884c1cf7ab4fb8cf80ac380428bf62d1979ca15f4c13abf0d426b",
+      "bytes": 2482321,
+      "status": "review_pending",
+      "name": "吸血刻印契約",
+      "theme": "vampire",
+      "number": "R082",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/VAMP_PACT2.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "423f4011f7e17b126830fe8d241522ce3d861aa91d31a3bd8ac5656bb968a3ea",
+          "bytes": 179010
+        },
+        {
+          "file": "client/public/art/cards-sm/VAMP_PACT2.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "6dd021e94d3e9b22d5a52ca290f5ade94b48573778b5e75e63a31abbff80197f",
+          "bytes": 30022
+        },
+        {
+          "file": "client/public/art/cards-xs/VAMP_PACT2.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "d0c2356873bfa60df3a9c9b604f3e6f4e7e6f876d8cc6cfbcdee5857bdef2d72",
+          "bytes": 8056
+        }
+      ]
+    },
+    {
+      "id": "BLOOD_FEST",
+      "file": "images/BLOOD_FEST.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-fd3104aa-6a0e-453c-98cc-28059e04b77f.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "6203ab05f5be687b5489b2beb96b9ef1bf8fab3b1062d3ca6ae36829f9286861",
+      "bytes": 2749283,
+      "status": "review_pending",
+      "name": "血の祝祭",
+      "theme": "vampire",
+      "number": "R083",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/BLOOD_FEST.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "2bdce97b2fe931d77c98516d200718cc291fa83814026a7a9d440df111c3ee84",
+          "bytes": 222608
+        },
+        {
+          "file": "client/public/art/cards-sm/BLOOD_FEST.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "f3bc500c0365856f090d7d15484207d95ce26d98811614b8b2505f6ecffd8039",
+          "bytes": 36714
+        },
+        {
+          "file": "client/public/art/cards-xs/BLOOD_FEST.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "a602b796068c4550209980e845e28b9bcd6f07bfbb1134e7f47d2c1a23158f8e",
+          "bytes": 9660
+        }
+      ]
+    },
+    {
+      "id": "BLOOD_SHIELD",
+      "file": "images/BLOOD_SHIELD.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-002eb177-54e0-45ef-90e8-259cd74b16c8.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "4d1627215ec7ce836936b536e2cdef6fd1e815ce31a3032d4aa8f22480d75ba0",
+      "bytes": 2641693,
+      "status": "review_pending",
+      "name": "吸血術式",
+      "theme": "vampire",
+      "number": "R084",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/BLOOD_SHIELD.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "de9f4eae3e710be1f7b9c870820e47e9eb5026cc3e2b6c9bf095ad98df6b23da",
+          "bytes": 195658
+        },
+        {
+          "file": "client/public/art/cards-sm/BLOOD_SHIELD.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "83509868cf508706345fe8ad13659073b8654e3f2c2afaf888c122f6ad1b40af",
+          "bytes": 32770
+        },
+        {
+          "file": "client/public/art/cards-xs/BLOOD_SHIELD.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "4e25823af33b35a46de57446e41c03585f1807d714965aea9c2dc06234c6554c",
+          "bytes": 8818
+        }
+      ]
+    },
+    {
+      "id": "VAMP_WARD",
+      "file": "images/VAMP_WARD.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-ec5debb5-d69b-4a2d-95fe-d70fe9c9daad.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "0d881a8ab6b7d44da05c656fed115557e45566d4c5c7632e5e0ef663a7b1f3cf",
+      "bytes": 2775989,
+      "status": "review_pending",
+      "name": "吸血の極意",
+      "theme": "vampire",
+      "number": "R085",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/VAMP_WARD.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "3ace630fb95b4032893d4f6584ccc43183adf3ac43b8dfbc38d93ed0b31d01ad",
+          "bytes": 211644
+        },
+        {
+          "file": "client/public/art/cards-sm/VAMP_WARD.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "180866a2e5dddd042a24677765ccf95df4329eaa418ee043841313697fb074fd",
+          "bytes": 35656
+        },
+        {
+          "file": "client/public/art/cards-xs/VAMP_WARD.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "30ca58b5dc28003e210ed7dfb7095427887ff4da63e6e606a875fbd5b6719dbf",
+          "bytes": 9674
+        }
+      ]
+    },
+    {
+      "id": "BLOOD_SECRET",
+      "file": "images/BLOOD_SECRET.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-997518d0-9873-4a87-8533-99acaecb2a19.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "3ec8b91d9012aec93a8f4226976b3ba9dff4a803594c021f418b63c90d8eab20",
+      "bytes": 2416782,
+      "status": "review_pending",
+      "name": "血の魔法 - 秘術",
+      "theme": "vampire",
+      "number": "R086",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/BLOOD_SECRET.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "2faf2f371b232edd79ebdd0a40082d044f959bd845502784363be07f5ae1d106",
+          "bytes": 156412
+        },
+        {
+          "file": "client/public/art/cards-sm/BLOOD_SECRET.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "0e788bf685d571bad7f0cdc875300d52ca4b1e0a4f0b86a57301ca7aded1d284",
+          "bytes": 26744
+        },
+        {
+          "file": "client/public/art/cards-xs/BLOOD_SECRET.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "5b11b9f45717dfc66d77051b278fa52467591b459f08e2fc091d3b5385108b5c",
+          "bytes": 7732
+        }
+      ]
+    },
+    {
+      "id": "BLOOD_RITE",
+      "file": "images/BLOOD_RITE.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-2bcb0c46-525a-4c20-a8a3-a728ede971b4.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "cca8bbab9c1e832e22bd3cdf64ead17cccaf05e40b3e37ac24bf1f8454cd6436",
+      "bytes": 2711906,
+      "status": "review_pending",
+      "name": "血鬼術",
+      "theme": "vampire",
+      "number": "R087",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/BLOOD_RITE.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "3d2c851ce0b33cdfae42ce2dbdcfd128b23e53be65b994ed42f284c5a4abbb9e",
+          "bytes": 214036
+        },
+        {
+          "file": "client/public/art/cards-sm/BLOOD_RITE.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "61ffe317ebc8593901efbe75347240ea69f6fafbee6f8836d546c82d43755817",
+          "bytes": 37422
+        },
+        {
+          "file": "client/public/art/cards-xs/BLOOD_RITE.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "0956e5ca4f903990279528e98ed13e15c2c4884372c367532ef37d19b8ee522e",
+          "bytes": 10128
+        }
+      ]
+    },
+    {
+      "id": "HALF_ELF",
+      "file": "images/HALF_ELF.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-3b713982-7d93-4272-bad0-3388a8992808.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "2c760a8ea0a163d02b9be71857d34e6c22a9157752d9940e0d94fe3d90335f34",
+      "bytes": 2985106,
+      "status": "review_pending",
+      "name": "ハーフエルフ",
+      "theme": "elf",
+      "number": "R088",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/HALF_ELF.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "0adff26b4b7a0785410c54095df257e910614a11e508c614d59e1ba20bcb7f03",
+          "bytes": 252962
+        },
+        {
+          "file": "client/public/art/cards-sm/HALF_ELF.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "9ef90915fb215b182bf1bacc635824d1f2503084863b4d469edcd1b0aee48e00",
+          "bytes": 43998
+        },
+        {
+          "file": "client/public/art/cards-xs/HALF_ELF.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "567a3302905658de488ae5799e7f68d6cde6ba9f5df01b3df02fc4bd973593f6",
+          "bytes": 11810
+        }
+      ]
+    },
+    {
+      "id": "ELF",
+      "file": "images/ELF.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-b94f3cb7-d691-4987-bd85-7d7cda1a8b00.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "1aeac280c9e9d24a28c695c69844578b90a1cbf1e491d79c07412d3429c2dc2b",
+      "bytes": 3104648,
+      "status": "review_pending",
+      "name": "エルフ",
+      "theme": "elf",
+      "number": "R089",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/ELF.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "bc8017f4bdec1ad236555c1ed77a8449c8a24503255d6798c832bf11e11fe345",
+          "bytes": 266018
+        },
+        {
+          "file": "client/public/art/cards-sm/ELF.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "7f4849cc122020312e322c28ae038ec7b17573992d813cfd0319f5663b1f83e0",
+          "bytes": 45392
+        },
+        {
+          "file": "client/public/art/cards-xs/ELF.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "6b1bcbfc50c078617f0001c377f81910e2069163d22509b10d283f1d72ac99d6",
+          "bytes": 11886
+        }
+      ]
+    },
+    {
+      "id": "HIGH_ELF",
+      "file": "images/HIGH_ELF.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-c79f780a-7278-4ed0-9412-a387404b6ae7.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "5dd06f6be72036c3dfea6d50dc6cb207bb4dc5a0d63db8d0fd0e4f5773422c6d",
+      "bytes": 2951061,
+      "status": "review_pending",
+      "name": "ハイエルフ",
+      "theme": "elf",
+      "number": "R090",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/HIGH_ELF.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "79d743630dc41ee55d5ae82154c2047cb2c3727206ff090d7fc6309c4e01bdf6",
+          "bytes": 247448
+        },
+        {
+          "file": "client/public/art/cards-sm/HIGH_ELF.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "4025665fcf0a474ac125f1f5e7f8032c7ec8143321ede0a9b41f551f450d74f3",
+          "bytes": 43012
+        },
+        {
+          "file": "client/public/art/cards-xs/HIGH_ELF.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "f1c421b1a4ff260b6ae81489b7374fe5d8fddd4a4fec2a333c7f553a890b6477",
+          "bytes": 11414
+        }
+      ]
+    },
+    {
+      "id": "ELDER_ELF_KING",
+      "file": "images/ELDER_ELF_KING.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-31ed596a-9564-4dfb-8725-486223138db5.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "ea72344595f32049872cd8c25d3078a74b1269daa7799eb4f4ae4a7c96b0effc",
+      "bytes": 2923552,
+      "status": "review_pending",
+      "name": "エルダーハイエルフキング",
+      "theme": "elf",
+      "number": "R091",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/ELDER_ELF_KING.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "0b52dd7e52e07964ded232929e36632ff3a4587b9361b86f2dc44c98bdb1e0ed",
+          "bytes": 236012
+        },
+        {
+          "file": "client/public/art/cards-sm/ELDER_ELF_KING.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "350f74dcad6b502d5b19aa1778519f02887ddafc382c0185eba9bb5bc40b4719",
+          "bytes": 41348
+        },
+        {
+          "file": "client/public/art/cards-xs/ELDER_ELF_KING.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "3815d655e31bf66d039967a7d9f7586d6ea9943e284f1f4c308353c9f42f9d3f",
+          "bytes": 11388
+        }
+      ]
+    },
+    {
+      "id": "ELF_HAVEN",
+      "file": "images/ELF_HAVEN.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-7fce1567-13ec-4fb0-b96c-d198aac072be.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "9b48e1de85a56a05f3080974850757d0e498d16a73e29844b0bc86d68739fd00",
+      "bytes": 3023574,
+      "status": "review_pending",
+      "name": "エルフの憩い場",
+      "theme": "elf",
+      "number": "R092",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/ELF_HAVEN.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "1e126d28bd678e17f74e7fe60c003426ff08cba85c4619f891c46a5d31006e37",
+          "bytes": 252516
+        },
+        {
+          "file": "client/public/art/cards-sm/ELF_HAVEN.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "ea696b51dbf2a6e7354baffd17a048f30899896e56e3ddcdc67f26873dc81832",
+          "bytes": 43220
+        },
+        {
+          "file": "client/public/art/cards-xs/ELF_HAVEN.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "c8b6f4516826802c89878a6fe70f402c93679cfac77b8aff4cd4827c194a8322",
+          "bytes": 11334
+        }
+      ]
+    },
+    {
+      "id": "ASSASSIN1",
+      "file": "images/ASSASSIN1.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-5cec4291-3f2c-41a2-b225-3183706e2b32.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "f4bb5fe987e3e607482021185e2411662bbbcf989da1fb236bdc8b171d4af7c4",
+      "bytes": 2543441,
+      "status": "review_pending",
+      "name": "初級アサシン",
+      "theme": "assassin",
+      "number": "R093",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/ASSASSIN1.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "4ad0e85d953464a936ea7f844254cce19bc08a89eb032a5e63c16a52a0b7ca00",
+          "bytes": 184016
+        },
+        {
+          "file": "client/public/art/cards-sm/ASSASSIN1.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "11b4ea45f82d0f527b4aa4eff33719a5a4534221752d33edf6a36c519a3688d9",
+          "bytes": 31730
+        },
+        {
+          "file": "client/public/art/cards-xs/ASSASSIN1.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "c9fa80034fa4b168188ee23fd285b16a3f954f1d3d25133f4eac1966403838ca",
+          "bytes": 8786
+        }
+      ]
+    },
+    {
+      "id": "ASSASSIN2",
+      "file": "images/ASSASSIN2.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-484474c3-ffb9-459c-981f-c24aa126bfd6.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "e64c2bccc46be7e10a65e476851085187123adedcee79e2d156bc6ce86860eba",
+      "bytes": 2663663,
+      "status": "review_pending",
+      "name": "中級アサシン",
+      "theme": "assassin",
+      "number": "R094",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/ASSASSIN2.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "be554edaf8bca3c39c423f0e7abe79a4630ff87b6367776ff52f1313f6212618",
+          "bytes": 192234
+        },
+        {
+          "file": "client/public/art/cards-sm/ASSASSIN2.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "524a5ae0521a79be991ef6c3101c9dc98bda7cc963561c3bab2228b787ffc8b1",
+          "bytes": 33064
+        },
+        {
+          "file": "client/public/art/cards-xs/ASSASSIN2.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "f3d103751b19f1a960895a44fe67a45aabfa388d4eb6dc6fe31b6b685c93915e",
+          "bytes": 9102
+        }
+      ]
+    },
+    {
+      "id": "ASSASSIN3",
+      "file": "images/ASSASSIN3.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-a8ed9ae2-df71-4c61-839e-867237c1f152.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "e940924dcdb03338aa7eea6bd5781831b747e7376d1365fdb8d0b10c498bc2a3",
+      "bytes": 2442031,
+      "status": "review_pending",
+      "name": "上級アサシン",
+      "theme": "assassin",
+      "number": "R095",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/ASSASSIN3.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "8aa0430b99d2d53b61d458409045c6f1b5019322c10b923c849c5a3b2b0067e2",
+          "bytes": 159250
+        },
+        {
+          "file": "client/public/art/cards-sm/ASSASSIN3.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "da046a133360243b8c7f7f092caacdb060e00a00300886f464c1c19147176976",
+          "bytes": 26002
+        },
+        {
+          "file": "client/public/art/cards-xs/ASSASSIN3.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "08b6ac9ec74e143658c23b916fa3ba18c76aa375c501f9c8cc0905a0b3afa7c9",
+          "bytes": 7256
+        }
+      ]
+    },
+    {
+      "id": "ASSASSIN4",
+      "file": "images/ASSASSIN4.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-1a814a95-7425-4225-9cf5-d72b63ac1597.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "bf1b6df7ea9ddbaa07c335145da08ec1bd1e1bdcdf5b8a3afc61954fba2006c3",
+      "bytes": 2632006,
+      "status": "review_pending",
+      "name": "特級アサシン - ナイトロード",
+      "theme": "assassin",
+      "number": "R096",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/ASSASSIN4.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "08d21ead1b8bb349863229cb8118fd4e88e3ff0218019f6cb268738929aa4b5c",
+          "bytes": 188298
+        },
+        {
+          "file": "client/public/art/cards-sm/ASSASSIN4.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "5031a4cd78b94d151a432e362f2e946de49862a20c5b0495b5d6937628703e1a",
+          "bytes": 30578
+        },
+        {
+          "file": "client/public/art/cards-xs/ASSASSIN4.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "469b3423fa5c8a80594d8c5c4359b027c6931d410afe20054352fb18abe0adad",
+          "bytes": 8498
+        }
+      ]
+    },
+    {
+      "id": "GUILD_CHEST",
+      "file": "images/GUILD_CHEST.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-ef468f71-4e57-4a7c-8edf-2b28b6012f7f.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "d44b769aff74ef599b20b134a488068b53fe8dea366dd89036b76e254ae9b453",
+      "bytes": 2491237,
+      "status": "review_pending",
+      "name": "アサシンギルドの宝箱",
+      "theme": "assassin",
+      "number": "R097",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/GUILD_CHEST.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "8d36a78dd88c537364b6cbf313e77c216537c27aaf389da54149094312e64b2b",
+          "bytes": 170872
+        },
+        {
+          "file": "client/public/art/cards-sm/GUILD_CHEST.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "f94c26d4dfc8acf49d67b69f38ebc3d51abea5a732e5f1a5902180fb07051c30",
+          "bytes": 27530
+        },
+        {
+          "file": "client/public/art/cards-xs/GUILD_CHEST.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "5839af367320e76f28639e8f145baf713feea8637e3c3a27e094fc03dc4f2536",
+          "bytes": 7308
+        }
+      ]
+    },
+    {
+      "id": "GUILD_EYE",
+      "file": "images/GUILD_EYE.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-f1dfa604-f9b2-4f67-a5e1-62a8190c8194.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "3c736e24faa97a0e6843e3631870043d99c258ab5e3832a2991f6a95cba0733e",
+      "bytes": 2351848,
+      "status": "review_pending",
+      "name": "ギルドの情報網",
+      "theme": "assassin",
+      "number": "R098",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/GUILD_EYE.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "e4ef7666acf5cd22b49781b3aaa08370140b33a197413e9f4ad9f8cc7d3f0868",
+          "bytes": 148434
+        },
+        {
+          "file": "client/public/art/cards-sm/GUILD_EYE.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "8d6d8a6fc0da5879d21d7a9f489534c8b4784272863baae6748c478ac520e472",
+          "bytes": 25354
+        },
+        {
+          "file": "client/public/art/cards-xs/GUILD_EYE.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "5460338b150f346bab55aa81df8c0f7bb62181094a85fd0a7a5a61b23a5ffac3",
+          "bytes": 6852
+        }
+      ]
+    },
+    {
+      "id": "GUILD_HALL",
+      "file": "images/GUILD_HALL.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-fc28f371-8916-45e4-bb73-31c1649b1c09.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "6d0f91e1c26e566b7e08f9f26a3053c17e34acf127d935083f9ee918dc11bfe1",
+      "bytes": 2590522,
+      "status": "review_pending",
+      "name": "アサシンギルド支部",
+      "theme": "assassin",
+      "number": "R099",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/GUILD_HALL.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "4a4f8c532b551ebc991690d7472ea57c3c83a130fd179fa2085839e2e2f78634",
+          "bytes": 205294
+        },
+        {
+          "file": "client/public/art/cards-sm/GUILD_HALL.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "f6b8630ae2201be6f16740f37b36034d7bc9a6e5b04a06eaf147aca573a60db7",
+          "bytes": 30964
+        },
+        {
+          "file": "client/public/art/cards-xs/GUILD_HALL.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "8e0593205ea1fbf75478e29971216bdea23316de0dbff25e4053518719abafe0",
+          "bytes": 7512
+        }
+      ]
+    },
+    {
+      "id": "GUILD_HQ",
+      "file": "images/GUILD_HQ.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-b2849880-99b4-4e45-8c54-c9294139b8a0.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "edd86890541ffdbe6a5d7e1fe88a67208b516d9babcbb01abcfae32d6e5124bd",
+      "bytes": 2833264,
+      "status": "review_pending",
+      "name": "アサシンギルド本部",
+      "theme": "assassin",
+      "number": "R100",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/GUILD_HQ.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "956c423559ba2e4c4324a7f11ac33e0a881ab009daed6c49690f8ddc296b917a",
+          "bytes": 235750
+        },
+        {
+          "file": "client/public/art/cards-sm/GUILD_HQ.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "c49c71f49c6265dd005fff9d6a8eabacf2c2252f54bc5a28f68b4da4a457313b",
+          "bytes": 35052
+        },
+        {
+          "file": "client/public/art/cards-xs/GUILD_HQ.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "50953c18c943927ac8d1d78d8be6156e0d2f20392805ed53cbb4ad265bb16931",
+          "bytes": 8408
+        }
+      ]
+    },
+    {
+      "id": "NL_SECRET",
+      "file": "images/NL_SECRET.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-55705c69-0324-44bd-b315-7e526ef4feb1.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "c698ef85c005192e96b5b1aba97f5e9047d699ae7b236c7b7fcaf50b95ff6b49",
+      "bytes": 2559000,
+      "status": "review_pending",
+      "name": "ナイトロードの秘技",
+      "theme": "assassin",
+      "number": "R101",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/NL_SECRET.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "d46cb46ec5f0059d707f8cf797633b74e01497d55c91b1e7ec0e3a0dd7baf441",
+          "bytes": 182216
+        },
+        {
+          "file": "client/public/art/cards-sm/NL_SECRET.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "bcbcc785bd3bb3a39039b370f42367aae6b24dedc9665cc140657391847c1f2d",
+          "bytes": 29692
+        },
+        {
+          "file": "client/public/art/cards-xs/NL_SECRET.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "6d3df1f4e3ea0a3f386ec620aec734c9a382fa799a6c2e299becf81b843b63ce",
+          "bytes": 7920
+        }
+      ]
+    },
+    {
+      "id": "AMBUSH",
+      "file": "images/AMBUSH.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-12c102f1-50cd-46a4-b252-3aa5072cde48.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "ece179a66b6b5bbd024c72b1abbffe835e9679370d6262ebac65220acabd1825",
+      "bytes": 2332182,
+      "status": "review_pending",
+      "name": "奇襲",
+      "theme": "assassin",
+      "number": "R102",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/AMBUSH.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "ebfa3118cf9d95f69041bec0f1ff2b50367d9c169e6a12f676227ec12b1beecb",
+          "bytes": 147618
+        },
+        {
+          "file": "client/public/art/cards-sm/AMBUSH.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "91059a26770cdbef586cdf13820f7894835f2c49d400e4ce600f2aa6eaeea161",
+          "bytes": 26202
+        },
+        {
+          "file": "client/public/art/cards-xs/AMBUSH.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "ac608ee3a28de27eeb6434637e4077563921ca473f9c464b02c856fe426d3568",
+          "bytes": 7514
+        }
+      ]
+    },
+    {
+      "id": "Q_ASSASSIN",
+      "file": "images/Q_ASSASSIN.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-076b7132-4ec4-4582-ae2d-1f7dd91409ad.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "dfe039b24306ab895f2389358a72934e6b190a2d624d57ff6d5e9fe59470b3f3",
+      "bytes": 2302703,
+      "status": "review_pending",
+      "name": "アサシンギルドの伝達",
+      "theme": "assassin",
+      "number": "R103",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/Q_ASSASSIN.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "5b909bd57102711eb971e21198e48d8546b7da6728e6694f613ed3cf9c6057bd",
+          "bytes": 151920
+        },
+        {
+          "file": "client/public/art/cards-sm/Q_ASSASSIN.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "51d09bd9c33e9f4237440c7e317dab30bb076d81eb8f953db032281959ea6c44",
+          "bytes": 25786
+        },
+        {
+          "file": "client/public/art/cards-xs/Q_ASSASSIN.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "48df2ddf1258a2fcb8928d68a9694bb47907584b080aa4291987edbab7d00eea",
+          "bytes": 6888
+        }
+      ]
+    },
+    {
+      "id": "WORLD_SEED",
+      "file": "images/WORLD_SEED.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-805946e5-a2dc-4820-b3ef-31190bb8faca.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "ca2a3d34b6c289b525fd3655329335f639423ce4a4acbc3602ee95e9da35c53a",
+      "bytes": 3006557,
+      "status": "review_pending",
+      "name": "世界樹の種",
+      "theme": "worldtree",
+      "number": "R104",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/WORLD_SEED.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "8d092be6992e91b87cc511425da8bbbba7b42843e7fca3e7412dc95858c77d8a",
+          "bytes": 259240
+        },
+        {
+          "file": "client/public/art/cards-sm/WORLD_SEED.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "a2573916dc6419fa48ec8e642ef8b68a2b9176d1143006f3a8baf1db43338c85",
+          "bytes": 43070
+        },
+        {
+          "file": "client/public/art/cards-xs/WORLD_SEED.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "87c06bf80dff5140bce51aef1aca1c74518579af24bf1f44d0d58b39c8096383",
+          "bytes": 11106
+        }
+      ]
+    },
+    {
+      "id": "LIFE_CYCLE",
+      "file": "images/LIFE_CYCLE.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-62902143-58c8-4cb5-9ec8-a9d5810ff4ec.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "47625ca3806cf19e56a721f09c29208b81bc515a06aff6e536a8b74b2cbf88d4",
+      "bytes": 3171646,
+      "status": "review_pending",
+      "name": "生命の循環",
+      "theme": "worldtree",
+      "number": "R105",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/LIFE_CYCLE.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "4110212abe23e1a67cbe7ca4c765313996c270810cea734ea84cd9f2207ec590",
+          "bytes": 279178
+        },
+        {
+          "file": "client/public/art/cards-sm/LIFE_CYCLE.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "8cd648bce8e2aa1f3a267cb915a0ce84df27c4e05c392df72ec31c643c865013",
+          "bytes": 46506
+        },
+        {
+          "file": "client/public/art/cards-xs/LIFE_CYCLE.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "d3a61198cd284684aca5dde31059e7b8017054d328c94e55a6b6651e98955178",
+          "bytes": 11686
+        }
+      ]
+    },
+    {
+      "id": "LIFE_SANCTUM",
+      "file": "images/LIFE_SANCTUM.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-11575bd7-c4fd-48e4-85fe-ee683c692bfd.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "759d745e8400408a2007df52a3a3b14e5d22b12d116db7a5ef7ea2f44adc4daa",
+      "bytes": 3109858,
+      "status": "review_pending",
+      "name": "生命の聖域",
+      "theme": "worldtree",
+      "number": "R106",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/LIFE_SANCTUM.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "7d5b7606b63f0eddc76d785d4c23912d3c9565ee1bb9368c68c606b71c682724",
+          "bytes": 271020
+        },
+        {
+          "file": "client/public/art/cards-sm/LIFE_SANCTUM.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "cbe85bb40874b8789a62602e54654195a1614c78775bbecb6ec66da822e8de7a",
+          "bytes": 44536
+        },
+        {
+          "file": "client/public/art/cards-xs/LIFE_SANCTUM.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "691a042284f3bbc17a4e1c61a40a1deb647d4169159054be1488e76e0fb4c31c",
+          "bytes": 11264
+        }
+      ]
+    },
+    {
+      "id": "WORLD_HEART",
+      "file": "images/WORLD_HEART.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-0980c83b-815b-4a9b-844d-2fcb7512c2f9.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "3d0975e4b421c5b81b44204c80ee2e5169ff2700229de83ed9552a782d522a0c",
+      "bytes": 3001342,
+      "status": "review_pending",
+      "name": "世界樹の心臓",
+      "theme": "worldtree",
+      "number": "R107",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/WORLD_HEART.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "ffd6f57f0f230614980be5a52fdc7aa985da861041705af7b74996e64096e5d2",
+          "bytes": 263484
+        },
+        {
+          "file": "client/public/art/cards-sm/WORLD_HEART.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "1bd9c103e87b954a36294a3ec28a5bbf1b808c70929b3c6c84c9fdb69dc346ba",
+          "bytes": 44852
+        },
+        {
+          "file": "client/public/art/cards-xs/WORLD_HEART.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "c995317f8d5a68698c3ee3c515325550051cb343683147a2898c80269e695f0e",
+          "bytes": 11190
+        }
+      ]
+    },
+    {
+      "id": "WORLD_BLESS",
+      "file": "images/WORLD_BLESS.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-286cd6de-52ff-424e-8206-6775bd03725f.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "4fad7274d3a1c0ade903b2ffa9e28e5643739c468c436ccfc87fac4fab42af03",
+      "bytes": 2729244,
+      "status": "review_pending",
+      "name": "世界樹の祝福",
+      "theme": "worldtree",
+      "number": "R108",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/WORLD_BLESS.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "5f3cc71d398bb1b5f4317e0aebbd205e99616f4ba4ac448081212451e78bf4d4",
+          "bytes": 210656
+        },
+        {
+          "file": "client/public/art/cards-sm/WORLD_BLESS.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "1ebd6ab2bdfd2b6c6e075173a40726b1f1946d73b346ea7dc0962d808b551b01",
+          "bytes": 39638
+        },
+        {
+          "file": "client/public/art/cards-xs/WORLD_BLESS.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "2977d23f4667f41fc494599099959c3537b4eb0aca4362fcf6e1ff64894baf90",
+          "bytes": 10878
+        }
+      ]
+    },
+    {
+      "id": "VITAL2",
+      "file": "images/VITAL2.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-510ec255-3af9-4206-9faa-24848237701a.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "940e9d0497a3f47b616c11c90ff3d5f9dc26ad82c5e374b42578abba28bb9c7a",
+      "bytes": 2874698,
+      "status": "review_pending",
+      "name": "世界樹の信徒",
+      "theme": "worldtree",
+      "number": "R109",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/VITAL2.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "b6717898100906a344f04cb806ae7e1ee0012688f0999a65a51eab6b97f0e12f",
+          "bytes": 237806
+        },
+        {
+          "file": "client/public/art/cards-sm/VITAL2.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "8dc79111db7d43d9fc74f841ff1774ba9ed80a8a877c1d3aaaa9d2452c49285a",
+          "bytes": 42434
+        },
+        {
+          "file": "client/public/art/cards-xs/VITAL2.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "69c5ef65850071ee6127c04781f08d48de141da811a6fadd1d6ba3ef40457c47",
+          "bytes": 11046
+        }
+      ]
+    },
+    {
+      "id": "VITAL3",
+      "file": "images/VITAL3.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-ce81432f-21ab-432d-b76d-853aea33f1d6.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "1c46dacc6a9552ed8f349cc93219b8f59c3be3034be86685bc79958b8ab83ccd",
+      "bytes": 2897667,
+      "status": "review_pending",
+      "name": "世界樹の守り人",
+      "theme": "worldtree",
+      "number": "R110",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/VITAL3.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "2926347b3e268cd25a93b14fcf59fbe1307bf99f7ec267b4ba1ad2125914936d",
+          "bytes": 242438
+        },
+        {
+          "file": "client/public/art/cards-sm/VITAL3.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "b7ebb34f0743434589190c5d407a9ea578bab336ff73db71d37f3b129db91c73",
+          "bytes": 42184
+        },
+        {
+          "file": "client/public/art/cards-xs/VITAL3.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "baa7d07e76b6a618f19a93ea9dbfb8391cd179bef0acf4c4749e6849e9847785",
+          "bytes": 11354
+        }
+      ]
+    },
+    {
+      "id": "WORLD_CARE",
+      "file": "images/WORLD_CARE.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-a7c4ea7b-1d7f-4743-af66-3964d6c0f9a4.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "31d35a476c945177f6776986785323ffb86a51bdb1bb895945b6a21f66287553",
+      "bytes": 2834405,
+      "status": "review_pending",
+      "name": "世界樹の慈しみ",
+      "theme": "worldtree",
+      "number": "R111",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/WORLD_CARE.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "dac1b5fc9af2d6195f627056aa4ce6f1ebdb325a3e73be726f4bba3066a5d12b",
+          "bytes": 230310
+        },
+        {
+          "file": "client/public/art/cards-sm/WORLD_CARE.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "51956335548e34aafd4052c6ddde2894f111bdf6ecd4ad457823fa2362f854a3",
+          "bytes": 42022
+        },
+        {
+          "file": "client/public/art/cards-xs/WORLD_CARE.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "babe580568cc2eafaf2fa3170c7fddbf6a87512c09e125f62c75b761984e5b61",
+          "bytes": 11326
+        }
+      ]
+    },
+    {
+      "id": "WORLD_TREE",
+      "file": "images/WORLD_TREE.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-2a3be651-53ae-4e1d-81ff-6bc2001c1238.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "d8cd37715af52a70614467cfefa129166eb1fc2fd9b6a0b84b1edc5811c03f67",
+      "bytes": 3128263,
+      "status": "review_pending",
+      "name": "世界樹",
+      "theme": "worldtree",
+      "number": "R112",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/WORLD_TREE.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "cdc2b01f173b35a0a4246af92a391ea9fde6b4f8552fcea05d4fd1cd768d9ae1",
+          "bytes": 285310
+        },
+        {
+          "file": "client/public/art/cards-sm/WORLD_TREE.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "db069186b2b6fe3e5f1253765d1ef423944cb2b591a9042c535fea1035841edc",
+          "bytes": 46868
+        },
+        {
+          "file": "client/public/art/cards-xs/WORLD_TREE.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "443ac5bf41ef6ede19e25ed050229258942cf6550b9bcf07eb5c9f0ec3ab55f5",
+          "bytes": 11624
+        }
+      ]
+    },
+    {
+      "id": "HPS_GRAFT",
+      "file": "images/HPS_GRAFT.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-49ffbd05-4c4f-4e58-8345-b7df4978a900.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "999d694f0510a7f0c4664e14158c19f27f3a9b992679e81e7f15ba495402edd0",
+      "bytes": 2887133,
+      "status": "review_pending",
+      "name": "生命の接ぎ木",
+      "theme": "worldtree",
+      "number": "R113",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/HPS_GRAFT.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "0a7b8b007325d43e0ad4a640422d290e7ad933c00be40ef50de35faff56e838b",
+          "bytes": 232724
+        },
+        {
+          "file": "client/public/art/cards-sm/HPS_GRAFT.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "547029a3172860ac6ec291cb74152ff4f62f2bb48359d03d1b1b82f55158cbe8",
+          "bytes": 41120
+        },
+        {
+          "file": "client/public/art/cards-xs/HPS_GRAFT.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "4e9d7a94b3586c0d1d3d7c83973fc0e5db3f95261f23c035c9954028198db072",
+          "bytes": 11200
+        }
+      ]
+    },
+    {
+      "id": "HPS_SOIL",
+      "file": "images/HPS_SOIL.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-87f1c7fe-f03a-4860-a181-d11e962daaa4.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "6552f475a547a768d4cd3f415ce1a984409701a69bad753b59697387822403d7",
+      "bytes": 3102281,
+      "status": "review_pending",
+      "name": "生命の土壌",
+      "theme": "worldtree",
+      "number": "R114",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/HPS_SOIL.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "d663c8759a70d527a0844b6d4e3c592db2a5a8aef987afee549e064b69ce1ffa",
+          "bytes": 268264
+        },
+        {
+          "file": "client/public/art/cards-sm/HPS_SOIL.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "682ce49bac79c1bf694d7be932d75b1892dba21b7b0b1b3c82d8d6f652c196fd",
+          "bytes": 45148
+        },
+        {
+          "file": "client/public/art/cards-xs/HPS_SOIL.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "b7b79efc604dade3fbcab28e3f4c1beba3863d50d9d3f3db68d2a2076660893b",
+          "bytes": 11884
+        }
+      ]
+    },
+    {
+      "id": "QUICK_WORLD",
+      "file": "images/QUICK_WORLD.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-d33df22c-67b8-4fed-8856-4cfb9d1f0c69.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "daa8609f345bb491772638000dcf3fe745528cdc08bda483009759b62a9b439d",
+      "bytes": 3116267,
+      "status": "review_pending",
+      "name": "世界樹の恵み",
+      "theme": "worldtree",
+      "number": "R115",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/QUICK_WORLD.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "cfed1faad5cdba52ed0db40a735d058e9cad146d6d698e291285b25c83ca8742",
+          "bytes": 274254
+        },
+        {
+          "file": "client/public/art/cards-sm/QUICK_WORLD.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "2fcfcc8a93c8e5228ae5f2b5bd8484795d81b434b36f9cf6a17f0d4ae3b103ba",
+          "bytes": 45868
+        },
+        {
+          "file": "client/public/art/cards-xs/QUICK_WORLD.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "7c413439e085a24ee8b03a47b90bb1858b6891930ca035f524535b40f1662fbf",
+          "bytes": 11876
+        }
+      ]
+    },
+    {
+      "id": "RUST_SHROOM",
+      "file": "images/RUST_SHROOM.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-6bc058f2-218b-4376-8615-4ce8df6d11cd.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "b24ce2db94869779d3ee74f1295cc9ff9ea77ee0450f8d2bd9448a2468850b4c",
+      "bytes": 3012298,
+      "status": "review_pending",
+      "name": "ラストマッシュルーム",
+      "theme": "decay",
+      "number": "R116",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/RUST_SHROOM.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "67bd32ab18ec29b1814b3570a3d10b1fd5fd83b0f87fc21c4c54e1f628ca7f95",
+          "bytes": 244456
+        },
+        {
+          "file": "client/public/art/cards-sm/RUST_SHROOM.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "8b43695abafadbbf2aa7edf25db3c97de0bd1febd9b355e7ecde0d8153efa381",
+          "bytes": 38478
+        },
+        {
+          "file": "client/public/art/cards-xs/RUST_SHROOM.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "aaa4f805f5184e48de6439efe7ea63a5ccdac57dcef437dff171577ff8ac3179",
+          "bytes": 10162
+        }
+      ]
+    },
+    {
+      "id": "RUST_SLUG",
+      "file": "images/RUST_SLUG.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-9e57788f-5ddb-437a-ba58-2c17d1416746.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "c6e0e57bb6aadc520c37824b6ef945ca3083428f10a4bee06e37f6d6930f6b5f",
+      "bytes": 2935423,
+      "status": "review_pending",
+      "name": "ラストキャップ・スラッグ",
+      "theme": "decay",
+      "number": "R117",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/RUST_SLUG.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "a639af6cea97f93f27cdb256fab7de6bc72f51e0742245228fcdbd46a620669c",
+          "bytes": 230824
+        },
+        {
+          "file": "client/public/art/cards-sm/RUST_SLUG.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "c21d112bd3347205221c90ee7660ed231ad273485c7ceac69dc09c9d90baea4c",
+          "bytes": 37132
+        },
+        {
+          "file": "client/public/art/cards-xs/RUST_SLUG.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "4424da240d165be8c3be8d47f2ed0fd36e91b279d0fe258454d6b6df1eb356bb",
+          "bytes": 9762
+        }
+      ]
+    },
+    {
+      "id": "DECAY_CRAFT",
+      "file": "images/DECAY_CRAFT.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-09cb190f-19ac-4a43-b2e3-17c1ebe3ed9e.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "f0de3f9351a544417d767e0af574e7d4d12d1b51e86ab8b88f6b83a092e1f6d5",
+      "bytes": 2862247,
+      "status": "review_pending",
+      "name": "暗器製造",
+      "theme": "decay",
+      "number": "R118",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/DECAY_CRAFT.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "1c912555f8e0cfd704905dc9f17c62c185b4b45990c83d625040de8f811e1074",
+          "bytes": 234746
+        },
+        {
+          "file": "client/public/art/cards-sm/DECAY_CRAFT.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "68f0865c1f2124897b8e57463f6d625170be77910237327eb4e11be7f02cceb0",
+          "bytes": 39394
+        },
+        {
+          "file": "client/public/art/cards-xs/DECAY_CRAFT.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "7c5560d7358de9fe7bb5a8e2e639e00fe35517bb865bbe7529f2a931aa76dadb",
+          "bytes": 10566
+        }
+      ]
+    },
+    {
+      "id": "ACID_RAIN",
+      "file": "images/ACID_RAIN.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-08c76776-e50c-4075-9e50-8a3dfeda730b.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "35126f8d59f0b42b976b607b616511b5e3c10f6d09798f9c53fe6f408778863d",
+      "bytes": 2982821,
+      "status": "review_pending",
+      "name": "酸性雨",
+      "theme": "decay",
+      "number": "R119",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/ACID_RAIN.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "31fd41208d4306837d16e30fc52a897e3a927e148c25c50ce068abb2fda86e6c",
+          "bytes": 249832
+        },
+        {
+          "file": "client/public/art/cards-sm/ACID_RAIN.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "5ab18f62c4553aa142bc27ef13c052496d50bddee883d7c8a502cf1737c88982",
+          "bytes": 38466
+        },
+        {
+          "file": "client/public/art/cards-xs/ACID_RAIN.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "c352e62db0f49ebd33edc8e3d5b547884e8270457245c1145db64224e48c9fe3",
+          "bytes": 9764
+        }
+      ]
+    },
+    {
+      "id": "STRONG_ACID",
+      "file": "images/STRONG_ACID.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-1f9851e9-5d0a-4814-941b-d2fa3135b37e.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "6af1b48a22ca764389bb86706fec4a3be3aa4e7de8885f54ffed234a3513c2e2",
+      "bytes": 2985653,
+      "status": "review_pending",
+      "name": "強酸性雨",
+      "theme": "decay",
+      "number": "R120",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/STRONG_ACID.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "ce371e35a32d7265f4e346fbc84e33afeb3422159ff30f5b3d08435849aca8d6",
+          "bytes": 238210
+        },
+        {
+          "file": "client/public/art/cards-sm/STRONG_ACID.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "061a033122a596d82878bdbbc3328b7abbbaf37648b9e514d13ae9653e4a3b41",
+          "bytes": 36026
+        },
+        {
+          "file": "client/public/art/cards-xs/STRONG_ACID.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "f88bb1d12d2f7fb43d774a3030982bbf6522b07f3a34145db8b61d5df4616708",
+          "bytes": 9242
+        }
+      ]
+    },
+    {
+      "id": "ROTTEN_GROUND",
+      "file": "images/ROTTEN_GROUND.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-1b7dffb9-88dd-4bbd-b004-699e027cb9af.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "005a2b0efb8dc2c7ffbf11922de02d5f1a88d426721cac5a7c6e33dce000648c",
+      "bytes": 2944546,
+      "status": "review_pending",
+      "name": "腐敗した土地",
+      "theme": "decay",
+      "number": "R121",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/ROTTEN_GROUND.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "7d4ef07e49dd63eb41ffa84d154eb63f4e555baf98450297da5eedf993167674",
+          "bytes": 240144
+        },
+        {
+          "file": "client/public/art/cards-sm/ROTTEN_GROUND.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "8707835b105ecb080a23f9790c6cfaed266538118e08967f66a2f83eccb42dd3",
+          "bytes": 37682
+        },
+        {
+          "file": "client/public/art/cards-xs/ROTTEN_GROUND.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "dbe3adabd56b45dbff60b5fa227d4766cf6ea01daf19fdf4353a2e4fd6e28f95",
+          "bytes": 9996
+        }
+      ]
+    },
+    {
+      "id": "Q_DECAY",
+      "file": "images/Q_DECAY.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-78ed3e3f-4efa-41c0-b438-93c7f55268a2.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "a25f9359944b7811a36e3c9267494e0ce6040b815541b81eb8bf0b2e13c34502",
+      "bytes": 2749462,
+      "status": "review_pending",
+      "name": "どくびし",
+      "theme": "decay",
+      "number": "R122",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/Q_DECAY.webp",
+          "width": 832,
+          "height": 759,
+          "sha256": "d3266997867955357e72c438af84aa4b9c9c8e2fcccf8c962ea141b8888f67c0",
+          "bytes": 220270
+        },
+        {
+          "file": "client/public/art/cards-sm/Q_DECAY.webp",
+          "width": 384,
+          "height": 350,
+          "sha256": "c00bc49c62c830e42d6a7a57fcd3a5df4eafc2afbdc29857a42e6f2bd7cda362",
+          "bytes": 35448
+        },
+        {
+          "file": "client/public/art/cards-xs/Q_DECAY.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "aa1518eee82a4c7abe29af221c5374e52b4d0b90d33d2a162c9b745f07b0ae13",
+          "bytes": 9690
+        }
+      ]
+    },
+    {
+      "id": "QUICK_POISON",
+      "file": "images/QUICK_POISON.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-df39a3ec-e996-455b-b915-3a674b35a842.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "1f86eee81d9e5600dda32aa610c278cd62de50a1bff0f864f65257f4436f2efc",
+      "bytes": 2844730,
+      "status": "review_pending",
+      "name": "ポイズン",
+      "theme": "decay",
+      "number": "R123",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/QUICK_POISON.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "a986e46b1256c2d2f86c0d4c1b8cb58aa2934ae3002f19e97374e143bbfba5d8",
+          "bytes": 216078
+        },
+        {
+          "file": "client/public/art/cards-sm/QUICK_POISON.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "6ddeaefa0f288dd26d022f95f78c4e5f756124d581689c2ad580a03c8afe320c",
+          "bytes": 35684
+        },
+        {
+          "file": "client/public/art/cards-xs/QUICK_POISON.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "b1470516b95f363af45ee3e4b0e3a1b49b35c4947008691836f91aef47d6d735",
+          "bytes": 9726
+        }
+      ]
+    },
+    {
+      "id": "GREED_PRICE",
+      "file": "images/GREED_PRICE.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-6e215946-43cb-4406-8203-9ac251a9f2da.png",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "23c1aec8f26d7c9de4db82250caee78bf6a75f1f5984e53fb4fc3f9ea31e7a2e",
+      "bytes": 2745726,
+      "status": "review_pending",
+      "name": "強欲の代価",
+      "theme": "mimic",
+      "number": "R124",
+      "outputs": [
+        {
+          "file": "client/public/art/cards/GREED_PRICE.webp",
+          "width": 832,
+          "height": 760,
+          "sha256": "5a37b6b40d4d7110d0b179341af4fd030647e2951ac698299add752e7248cc7a",
+          "bytes": 231652
+        },
+        {
+          "file": "client/public/art/cards-sm/GREED_PRICE.webp",
+          "width": 384,
+          "height": 351,
+          "sha256": "6f76e0d047485fa5803d2b413326e47bff4f09f4a9a1b9c43f735ae6f8f2c2a5",
+          "bytes": 38440
+        },
+        {
+          "file": "client/public/art/cards-xs/GREED_PRICE.webp",
+          "width": 192,
+          "height": 175,
+          "sha256": "82557af8a65fb0e43957b1e8829dd16e8c341b7088901021e7d428266d880282",
+          "bytes": 10360
+        }
+      ]
+    }
+  ]
+}

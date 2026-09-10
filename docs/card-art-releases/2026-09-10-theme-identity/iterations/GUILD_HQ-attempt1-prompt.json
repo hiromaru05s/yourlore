@@ -1,0 +1,13 @@
+{
+  "number": "R100",
+  "id": "GUILD_HQ",
+  "theme": "assassin",
+  "themeJa": "アサシン",
+  "name": "アサシンギルド本部",
+  "effect": "【常時】「アサシン」が相手を叩くたび相手に烙印カウンター1個 · 【毎ターン】「アサシン」カードを売るナイトマーケット開店",
+  "scene": "Unassuming high timber guild house nested among slate roofs, covered bridges and red lamps, secret night market lit behind sliding shutters; dense intimate city rather than castle.",
+  "reference": [
+    "/Users/hiromaru05s/Desktop/LORE_TCG-art-theme-revision/docs/card-art-releases/2026-09-10-theme-identity/references/F080-ASSASSIN4.png"
+  ],
+  "prompt": "Use case: stylized-concept. Generate ONE new finished LORE TCG inner-art painting, exact intended canvas 1472x1344 (landscape aspect 1.095:1). Reference is a STYLE / MATERIAL anchor, not a composition or background to copy. User requests theme identities clearly distinguishable at a glance; substantially redesign background and silhouette while retaining the refined illustrated fantasy art style.\nTheme: アサシン. Blood: stealth guild, lean practical silhouettes, ink navy layered cloth, muted oxblood scarf, asymmetric segmented leather, small concealed blades. Rainy slate rooftops, tight timber alleys, red paper lamps, hidden passages, chimney smoke. Deep teal shadows and sparse vermilion signals. Faces use cloth or subtle half-mask; preserve Nightlord special identity, porcelain ritual masks primarily belong to hexers. No castle cathedral, open ceremonial plinth or elaborate spiky gold full armor.\nSpecific scene and character: Unassuming high timber guild house nested among slate roofs, covered bridges and red lamps, secret night market lit behind sliding shutters; dense intimate city rather than castle.\nCard identity: アサシンギルド本部 (GUILD_HQ); current effect for semantic guidance only: 【常時】「アサシン」が相手を叩くたび相手に烙印カウンター1個 · 【毎ターン】「アサシン」カードを売るナイトマーケット開店. Do not print effect or name.\nRendering: premium Japanese fantasy card illustration, nuanced hand-painted texture, expressive clean shapes, beautiful atmospheric light, grounded materials. Keep finish and sophistication of reference. Important subject occupies 55-68 percent, complete face/ears/horns/weapon tips/paws inside central 80 percent with meaningful environment visible. Scene should look inhabited or natural, not staged on a pedestal. One dominant subject unless the scene explicitly needs more. No repeated white arches/cathedral/library, compass-star decor everywhere, frame, UI, text, watermark, signature, modern objects, or photorealistic snapshot. Do not import reference character identity into unrelated people. Magical Rift leaves record cards intact. No gratuitous gore."
+}

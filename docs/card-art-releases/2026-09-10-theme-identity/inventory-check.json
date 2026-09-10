@@ -1,0 +1,10 @@
+{
+  "inventory": {
+    "present": 296,
+    "expected": 296
+  },
+  "mtimeWarnings": 172,
+  "warningsOnlyUntouchedCards": true,
+  "changedCardsWithMtimeWarnings": 0,
+  "explanation": "Fresh git worktree checkout timestamps make untouched thumbnails older than master files. All untouched bytes match the baseline; all 888 live images decoded in Chrome. No unrelated art was rewritten."
+}
