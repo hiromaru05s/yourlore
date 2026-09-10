@@ -1,0 +1,5 @@
+raw/
+pilot*/
+plan.json
+*-plan.json
+*.log

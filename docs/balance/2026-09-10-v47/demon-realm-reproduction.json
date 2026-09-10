@@ -1,0 +1,31 @@
+{
+  "seed": 42,
+  "initialMaxMana": 8,
+  "finalMaxMana": 8,
+  "king": {
+    "atk": 12,
+    "def": 14,
+    "majesty": true,
+    "aura": true,
+    "manaLock": null,
+    "onSummon": null
+  },
+  "events": [
+    {
+      "type": "log",
+      "html": "<span class=\"t\">A</span> <b class=\"log-card\" data-card=\"TDE4\">마왕</b> 소환 (공12/체14)",
+      "htmlJa": "<span class=\"t\">A</span> <b class=\"log-card\" data-card=\"TDE4\">마왕</b> 召喚 (攻12/体14)"
+    },
+    {
+      "type": "summon",
+      "player": 0,
+      "uid": "king-test",
+      "id": "TDE4"
+    },
+    {
+      "type": "log",
+      "html": "  └ 마계: <b class=\"log-card\" data-card=\"TDE4\">마왕</b> 의 효과 무효화",
+      "htmlJa": "  └ 魔界: <b class=\"log-card\" data-card=\"TDE4\">마왕</b> の効果を無効化"
+    }
+  ]
+}
