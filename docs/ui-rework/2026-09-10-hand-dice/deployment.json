@@ -1,0 +1,27 @@
+{
+  "deployedAt": "2026-09-10T09:10:14.020218+00:00",
+  "url": "https://test.yourlore.xyz/",
+  "worker": "lore-server-staging",
+  "versionId": "d1c43aa5-2c8b-4c8a-a90b-d7a07ee67823",
+  "sourceCommit": "75865113cd3c84f0add4527b12b9fb66161bdfbb",
+  "branch": "codex/duel-hand-dice-staging-20260910",
+  "remoteMatchingAssets": 55,
+  "remoteSmoke": "HTTP 200, mounted app, no JavaScript exceptions; unauthenticated startup only",
+  "isolatedFromConcurrentStatRise": true,
+  "localOrigin": "http://127.0.0.1:5188",
+  "browserSuites": [
+    "duel-hand-dice-browser",
+    "duel-render-audit-browser",
+    "paper-card-browser"
+  ],
+  "checks": [
+    "client and server typecheck",
+    "production build and design guard",
+    "3203 engine action comparisons; 728 attributed rolls; state and RNG unchanged",
+    "inset shelf paper edges and intact private deck sleeves",
+    "paper draw geometry and lifecycle",
+    "stagecraft coin and shared play restrictions",
+    "simultaneous opening hands and private opponent identity",
+    "git diff --check"
+  ]
+}

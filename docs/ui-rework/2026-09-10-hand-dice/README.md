@@ -24,4 +24,4 @@ Browser tests use the actual local controller and renderer with deterministic fi
 
 The final build/deploy uses an isolated worktree on `codex/duel-hand-dice-staging-20260910`, based on `4c27ff3`. Concurrent stat-rise implementation in the original checkout is preserved and excluded from this release.
 
-Deployment details are recorded in `deployment.json` after publication. Staging only; production and main are not changed by this pass.
+Published to staging as version `d1c43aa5-2c8b-4c8a-a90b-d7a07ee67823` from source `7586511`. All 55 checked asset hashes match, and unauthenticated startup returns HTTP 200 with no JavaScript exceptions. Details are in `deployment.json`. Staging only; production and main are not changed by this pass.
