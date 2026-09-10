@@ -1,0 +1,35 @@
+{
+  "deployedAt": "2026-09-10T11:22:17.543928+00:00",
+  "url": "https://test.yourlore.xyz/",
+  "worker": "lore-server-staging",
+  "versionId": "48c181a3-6a62-4866-b5d4-92f29fb89dc3",
+  "sourceCommit": "775cd9c355ed74d5ebb04f34487488fc7417876b",
+  "branch": "codex/grounded-board-staging-20260910",
+  "previousVersion": "d1c43aa5-2c8b-4c8a-a90b-d7a07ee67823",
+  "remoteMatchingAssets": 55,
+  "remoteSmoke": "HTTP 200; mounted anonymous app; no JS exceptions. No authenticated remote duel.",
+  "browserSuites": [
+    "grounded-board-browser",
+    "grounded-motion-browser",
+    "duel-render-audit-browser",
+    "paper-card-browser",
+    "rift-fold-browser"
+  ],
+  "modelChecks": [
+    "grounded-motion",
+    "dice-model",
+    "rift-fold",
+    "pile-stock",
+    "paper-card",
+    "opening-hands",
+    "stagecraft-models",
+    "duel-ui"
+  ],
+  "buildChecks": [
+    "client/server typecheck",
+    "production build",
+    "design guard",
+    "git diff --check"
+  ],
+  "scope": "Staging client presentation. Existing engine, server logic, card art and balance preserved from previous staging; unrelated concurrent workspace changes excluded."
+}
