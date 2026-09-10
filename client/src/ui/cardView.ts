@@ -2,7 +2,8 @@
 // LORE — card DOM builder. One renderer for every card everywhere
 // (board / market / hand / pile / zoom) so sizing stays consistent.
 // ============================================================
-import { CARD_ART_ALIASES } from "./cardArtAliases";
+import { artUrl } from "./cardArt";
+export { ART_V, artUrl } from "./cardArt";
 import type { CardInst, FieldMon, PlayerState } from "../shared/types";
 import { FRAME_BACK, PASSIVES, cardPassives, frameFor, fieldFrameFor } from "../shared/cards";
 import { curHp, effAtk, effDef, playCost } from "../shared/engine";
@@ -375,15 +376,6 @@ function artStatus(key: string): "ok" | "fail" | "unknown" {
 // requested, so the player watched it arrive. Two things fix that: the 384px
 // thumbnail (already on screen) is painted underneath immediately, and the full
 // art is fetched before the tap wherever we can see the tap coming.
-// 아트 캐시 버전 — 미스가 SPA 셸(200 HTML)로 7일 캐시되는 사고가 있어, 대량 아트 추가 시
-// 이 값을 올리면 모든 클라이언트가 오염된 캐시를 우회해 새로 받는다.
-export const ART_V = "12"; // Codex full-art batch 2026-09-07 (CDN/browser cache bust)
-export const artUrl = {
-  xs: (id: string) => `/art/cards-xs/${CARD_ART_ALIASES[id]??id}.webp?v=${ART_V}`,
-  sm: (id: string) => `/art/cards-sm/${CARD_ART_ALIASES[id]??id}.webp?v=${ART_V}`,
-  full: (id: string) => `/art/cards/${CARD_ART_ALIASES[id]??id}.webp?v=${ART_V}`,
-};
-
 const prefetched = new Set<string>();
 let inFlight = 0;
 const prefetchQueue: string[] = [];
