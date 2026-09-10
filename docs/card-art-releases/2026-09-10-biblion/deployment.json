@@ -1,0 +1,27 @@
+{
+  "deployedAt": "2026-09-10T07:08:05.842351+00:00",
+  "url": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "sourceCommit": "78d3ab291487ec2bcf56aa212c2bd6be024c0afa",
+  "version": "e561a39a-97a2-4e8f-abf4-cc47e4f0ffc5",
+  "liveCards": 296,
+  "artFiles": 888,
+  "verifiedFiles": 904,
+  "allVerifiedFilesMatch": true,
+  "uploadedFiles": 893,
+  "existingFiles": 697,
+  "cacheVersion": "20260910-biblion",
+  "productionChanged": false,
+  "checks": [
+    "296 source PNG hashes and exact live ID coverage",
+    "888 browser image decodes",
+    "24 framed samples visually inspected",
+    "real-engine duel render audit",
+    "art:check including starters",
+    "client/server typecheck",
+    "build/design guard",
+    "duel-ui regression",
+    "904 remote SHA256 matches",
+    "public staging startup without JS exceptions"
+  ]
+}
