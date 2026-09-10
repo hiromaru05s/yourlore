@@ -11,6 +11,7 @@ import { t, getLang, cardText, cardName } from "../i18n";
 import { sfx } from "./sound";
 import { moveOnBoard } from "./boardMotion";
 import { projectedPlacement } from "./boardProjection";
+import {playBiblionFx,clearBiblionFx} from './biblionFx';
 
 export type ViewSide = "me" | "opp";
 
@@ -26,6 +27,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on;
+  if(on)clearBiblionFx();
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -167,15 +169,27 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const duration=reduced?120:heavy?560:620;
-  const options:KeyframeAnimationOptions={duration,easing:heavy?'cubic-bezier(.72,0,.94,.35)':'cubic-bezier(.22,.65,.25,1)',fill:'both'};
-  const moving=face.animate([{transform:start.toString(),opacity:0},{opacity:0,offset:.25},{opacity:1,offset:.8},{transform:end.toString(),opacity:1}],options);
-  const old=reveal.animate([{transform:oldStart.toString(),opacity:1},{opacity:1,offset:.25},{opacity:0,offset:.8},{transform:oldEnd.toString(),opacity:0}],options);
+  const duration=reduced?120:heavy?960:620;
+  const options:KeyframeAnimationOptions={duration,easing:'linear',fill:'both'};
+  const hover=new DOMMatrix().translate(0,-Math.min(innerHeight*.18,w*1.35)).multiply(end).scale(1.06);
+  const oldHover=new DOMMatrix().translate(0,-Math.min(innerHeight*.18,w*1.35)).multiply(oldEnd).scale(1.06);
+  if(heavy&&!reduced&&!fxSkip)playBiblionFx('summon-charge',target);
+  const moving=face.animate(heavy&&!reduced?[
+    {transform:start.toString(),opacity:0,easing:'cubic-bezier(.16,.8,.25,1)'},
+    {transform:hover.toString(),opacity:1,offset:.4},
+    {transform:hover.toString(),opacity:1,offset:.6,easing:'cubic-bezier(.7,0,1,.4)'},
+    {transform:end.toString(),opacity:1},
+  ]:[{transform:start.toString(),opacity:0},{transform:end.toString(),opacity:1}],options);
+  const old=reveal.animate(heavy&&!reduced?[
+    {transform:oldStart.toString(),opacity:1,easing:'cubic-bezier(.16,.8,.25,1)'},
+    {transform:oldHover.toString(),opacity:0,offset:.4},
+    {transform:oldEnd.toString(),opacity:0},
+  ]:[{transform:oldStart.toString(),opacity:1},{transform:oldEnd.toString(),opacity:0}],options);
   await wait(duration);
   moving.cancel();old.cancel();reveal.remove();face.style.transform=fieldPlacement(target,w,h).toString();
   if(!fxSkip){
-    if(heavy&&!reduced){sfx('impact');window.dispatchEvent(new CustomEvent('lore:summon-impact',{detail:face.getBoundingClientRect()}));
-      const objects=[document.querySelector('.duel-objects-3d'),document.querySelector('.stage'),face].filter(Boolean) as HTMLElement[];
+    if(heavy&&!reduced){sfx('impact');playBiblionFx('summon-impact',face.getBoundingClientRect());
+      const objects=[face];
       const shakes=objects.map(el=>el.animate([{translate:'0 0'},{translate:'0 3px',offset:.12},{translate:'-1px -2px',offset:.3},{translate:'1px 1px',offset:.55},{translate:'0 0'}],{duration:240,easing:'ease-out'}));
       await wait(240);shakes.forEach(a=>a.cancel());
     }else summonDust(face.getBoundingClientRect());
@@ -193,9 +207,11 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
       const target=(slotIndex==null?zone?.querySelector('.slot'):zone?.children[Math.min(slotIndex,zone.children.length-1)]) as HTMLElement|null;
       if(target){
         const duration=enchantHasTurnCountdown(card)?`<span class="buff-duration"><span>${getLang()==='ja'?'残り':''}${card.val??1}</span></span>`:'<img class="buff-infinity" src="/art/biblion/modular/infinity.png" alt="">';
-        return await flyIntoSlot(node,target,card.t==='quest'?questTile(card):enchantmentTile(card,duration));
+        const face=await flyIntoSlot(node,target,card.t==='quest'?questTile(card):enchantmentTile(card,duration));
+        if(!fxSkip)playBiblionFx(card.t==='quest'?'quest':'enchant',face);
+        return face;
       }
-    } else if (dest === "discard") await landOnShelf(node,side);
+    } else if (dest === "discard") await landOnShelf(node,side,true);
     else if(dest === "vanish") await absorbIntoRift(node,side);
     else if (to) await landCard(node, to, true);
     if (dest === "discard") pileFlash(discId(side));
@@ -270,6 +286,7 @@ export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | n
   node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transform=pose.toString();
   await raf();
   node.style.transition = `transform .26s ${EASE}`; node.style.transform = new DOMMatrix().translate(0,-22).multiply(pose).scale(1.08).toString();
+  if(card.quick&&!fxSkip)playBiblionFx('quick',node);
   await wait(320);
   try { if(card.quick)await absorbIntoRift(node,side);else await landOnShelf(node,side); }
   finally {node.remove();}
@@ -304,9 +321,10 @@ export function hpFeedback(side: ViewSide, kind: "dmg" | "heal", amount: number)
   }
   const bar = document.getElementById("hpbar-" + side);
   const num = document.getElementById("hp-" + side);
-  if (bar) { bar.classList.add("shake"); setTimeout(() => bar.classList.remove("shake"), 400); }
+  if(kind==='heal'&&amount>0&&!fxSkip)playBiblionFx('heal',()=>document.getElementById(side==='me'?'portraitMe':'portraitOpp')?.getBoundingClientRect()??null);
+  if (bar && kind==='dmg') { bar.classList.add("shake"); setTimeout(() => bar.classList.remove("shake"), 400); }
   if (num) { num.classList.add(kind === "dmg" ? "hp-hit" : "hp-heal"); setTimeout(() => num.classList.remove("hp-hit", "hp-heal"), 450); }
-  floatNum(bar || num, (kind === "dmg" ? "-" : "+") + amount, kind);
+  if(kind==='dmg')floatNum(bar || num, "-" + amount, kind);
 }
 
 export function pileFlash(id: string): void {
@@ -774,50 +792,9 @@ function gainLabel(anchor: DOMRect, text: string, cls: string): HTMLElement {
 
 /** Rich "max mana increased" celebration around the mana pips (~2.2s). */
 export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
-  const bar = document.getElementById("hpbar-" + side)?.closest(".pcluster") as HTMLElement | null;
-  const anchor = (bar?.querySelector(".pips") as HTMLElement | null) ?? bar;
-  if (!anchor) return;
-  const r = anchor.getBoundingClientRect();
-  const aura = document.createElement("div");
-  aura.className = "fx-mana-aura";
-  aura.style.left = r.left + r.width / 2 + "px";
-  aura.style.top = r.top + r.height / 2 + "px";
-  document.body.appendChild(aura);
-  for (let i = 0; i < 16; i++) {
-    const d = document.createElement("div");
-    d.className = "fx-mana-p";
-    const ang = Math.random() * Math.PI * 2;
-    const dist = 80 + Math.random() * 120;
-    d.style.setProperty("--sx", Math.cos(ang) * dist + "px");
-    d.style.setProperty("--sy", Math.sin(ang) * dist + "px");
-    d.style.left = r.left + r.width / 2 + "px";
-    d.style.top = r.top + r.height / 2 + "px";
-    d.style.animationDelay = i * 60 + "ms";
-    document.body.appendChild(d);
-    setTimeout(() => d.remove(), 1400 + i * 60);
-    // spark burst when the gem lands on the pips
-    setTimeout(() => {
-      for (let k = 0; k < 2; k++) {
-        const s = document.createElement("div");
-        s.className = "fx-mana-s";
-        const a2 = Math.random() * Math.PI * 2;
-        const d2 = 16 + Math.random() * 30;
-        s.style.setProperty("--sx", Math.cos(a2) * d2 + "px");
-        s.style.setProperty("--sy", Math.sin(a2) * d2 + "px");
-        s.style.left = r.left + r.width / 2 + (Math.random() - 0.5) * r.width * 0.6 + "px";
-        s.style.top = r.top + r.height / 2 + "px";
-        document.body.appendChild(s);
-        setTimeout(() => s.remove(), 700);
-      }
-    }, 950 + i * 60);
-  }
-  anchor.classList.add("fx-pip-wave", "fx-pips-punch");
-  const lb = gainLabel(r, `◆ ${tt("fx.mana")} +${amount}`, "mana");
-  await wait(2100);
-  lb.classList.add("out"); aura.classList.add("out");
-  await wait(300);
-  lb.remove(); aura.remove();
-  anchor.classList.remove("fx-pip-wave", "fx-pips-punch");
+  if(amount<=0||fxSkip)return;
+  playBiblionFx('mana',()=>{const cluster=document.getElementById('hpbar-'+side)?.closest('.pcluster');return (cluster?.querySelector('.pips')||cluster?.querySelector('.mana-group'))?.getBoundingClientRect()??null;});
+  await wait(1850);
 }
 
 /** Rich "max HP increased" celebration around the HP bar (~2s). */
@@ -914,11 +891,12 @@ async function boardMotionScope(run:(signal:AbortSignal)=>Promise<boolean>,deadl
   try{return await Promise.race([run(abort.signal),new Promise<boolean>(r=>abort.signal.addEventListener('abort',()=>r(false),{once:true}))]);}
   finally{clearTimeout(timer);cancel();fxWaiters.delete(cancel);window.removeEventListener('resize',cancel);document.removeEventListener('visibilitychange',cancel);}
 }
-async function landOnShelf(node:HTMLElement,side:ViewSide):Promise<void>{
+async function landOnShelf(node:HTMLElement,side:ViewSide,spell=false):Promise<void>{
   const target=document.getElementById(discId(side));if(!target||fxSkip)return;
-  const moved=await boardMotionScope(signal=>moveOnBoard({kind:'arrival',target,card:node,signal}));
+  let current:DOMRect|null=null,started=false;
+  const moved=await boardMotionScope(signal=>moveOnBoard({kind:'arrival',target,card:node,signal,onFrame:spell?r=>{current=r;if(!started&&!fxSkip){started=true;playBiblionFx('spell',()=>current);}}:undefined}));
   if(!moved&&!fxSkip){
-    const r=(target.querySelector('.pile-card')||target).getBoundingClientRect();await landCard(node,r);
+    const r=(target.querySelector('.pile-card')||target).getBoundingClientRect();if(spell&&!fxSkip)playBiblionFx('spell',node);await landCard(node,r);
     // Fallback stays visible until the authoritative board replaces it.
     const copy=node.cloneNode(true) as HTMLElement;copy.classList.add('pile-arrival-fallback');document.body.append(copy);
     const observer=new MutationObserver(()=>{if(!target.isConnected){copy.remove();observer.disconnect();}});
@@ -959,3 +937,6 @@ export async function openingBoard():Promise<void>{
   if(fxSkip||typeof WebGL2RenderingContext==='undefined'||!root?.isConnected)return;
   await boardMotionScope(signal=>moveOnBoard({kind:'opening',signal}),7500);
 }
+
+/** Pulse the exact public source, not every remaining spell on the board. */
+export function enchantActivation(uid:string):void{if(fxSkip)return;const source=document.querySelector<HTMLElement>(`.buff-icon[data-uid="${CSS.escape(uid)}"]`);if(source)playBiblionFx('enchant',source);}

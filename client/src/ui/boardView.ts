@@ -1,3 +1,4 @@
+import {clearBiblionFx} from './biblionFx';
 import {prepareDuel} from './duelReadiness';
 // ============================================================
 // LORE — board view. Renders the whole game from a GameState
@@ -299,6 +300,7 @@ export class GameView {
     this.cancelHandDrag?.();
     this.disposeScene?.();
     this.statRise.dispose();
+    clearBiblionFx(true);
     if (this.onLayout) window.removeEventListener("lore:layout", this.onLayout);
     for (const fn of this.cleanups.splice(0)) { try { fn(); } catch { /* already gone */ } }
   }

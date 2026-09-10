@@ -1,3 +1,4 @@
+import {boardPoint} from './boardProjection';
 import * as T from 'three';
 import {bindBoardMotion,type BoardMotion} from './boardMotion';
 import {cardStock,type PileModel} from './pileModels';
@@ -38,7 +39,9 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       try{await timeline(reduced?100:purchase?960:620,req.signal,t=>{
         const p=purchase?smooth(sat((t-.18)/.82)):smooth(t),lift=Math.sin(Math.PI*t)*unit*(purchase?1.15:.65);
         moving.position.set(start.x-cx+(r.left+r.width/2-start.x)*p,elevation+(height-elevation)*p+lift,start.y-cy+(r.top+r.height/2-start.y)*p);
-        moving.scale.setScalar(size+(unit-size)*p);moving.rotation.set(-Math.PI/2+(purchase?Math.sin(Math.PI*t)*.07:angle*(1-p)),0,0);
+        moving.scale.setScalar(size+(unit-size)*p);
+        if(req.kind==='arrival'&&req.onFrame){const v=boardPoint(moving.position.x+cx,moving.position.z+cy,moving.position.y),sz=moving.scale.x;req.onFrame(new DOMRect(v.x-sz/2,v.y-sz/.64/2,sz,sz/.64));}
+        moving.rotation.set(-Math.PI/2+(purchase?Math.sin(Math.PI*t)*.07:angle*(1-p)),0,0);
       });
       if(disposed||req.signal.aborted||!req.target.isConnected){return false;}
       const print=document.createElement('div');print.className='pile-print';print.setAttribute('aria-hidden','true');

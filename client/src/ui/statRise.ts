@@ -6,9 +6,9 @@ import {createStatRiseVisual, STAT_RISE_DURATION} from './statRiseVisual';
 
 /** One lazily created canvas per board, shared by all simultaneous stat gains. */
 export function createBoardStatRise(root: HTMLElement) {
-  const track = createAttackRiseTracker();
+  const track = createAttackRiseTracker(), trackHealth = createAttackRiseTracker('health');
   const scene = new T.Scene(), camera = new T.PerspectiveCamera();
-  const active = new Map<string, {visual: ReturnType<typeof createStatRiseVisual>; start: number}>();
+  const active = new Map<string, {uid: string; visual: ReturnType<typeof createStatRiseVisual>; start: number}>();
   let renderer: T.WebGLRenderer | undefined;
   let frame = 0, width = 0, height = 0, disposed = false, unavailable = false;
   const reduced = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : null;
@@ -46,8 +46,9 @@ export function createBoardStatRise(root: HTMLElement) {
     // Re-resolve every frame: GameView replaces card elements on each snapshot.
     const targets = new Map([...root.querySelectorAll<HTMLElement>('.zone-mon .card[data-uid]')].map(el => [el.dataset.uid, el]));
     for (const [uid, entry] of active) {
-      const target = targets.get(uid), age = (now - entry.start) / 1000;
+      const target = targets.get(entry.uid), age = (now - entry.start) / 1000;
       if (!target || age >= STAT_RISE_DURATION) {entry.visual.dispose(); active.delete(uid); continue;}
+      entry.visual.group.visible=age>=0;if(age<0)continue;
       const rect = layoutRect(target), group = entry.visual.group;
       group.position.set(rect.left + rect.width / 2 - width / 2, 0, rect.top + rect.height / 2 - height / 2);
       group.scale.setScalar(rect.width); entry.visual.update(age, camera);
@@ -62,14 +63,16 @@ export function createBoardStatRise(root: HTMLElement) {
   return {
     update(state: GameState) {
       if (disposed) return;
-      const raised = track(state);
+      const raised = track(state).map(uid=>({uid,kind:'attack' as const}));
+      const health = trackHealth(state).map(uid=>({uid,kind:'health' as const}));
+      const gains = [...raised,...health];
       if (state.over || document.hidden || reduced?.matches) {clear(); return;}
-      if (!raised.length || !ensureRenderer()) return;
+      if (!gains.length || !ensureRenderer()) return;
       const start = performance.now();
-      for (const uid of raised) {
-        active.get(uid)?.visual.dispose();
-        const visual = createStatRiseVisual(); scene.add(visual.group);
-        active.set(uid, {visual, start});
+      for (const {uid,kind} of gains) {
+        const key=uid+'|'+kind;active.get(key)?.visual.dispose();
+        const visual = createStatRiseVisual(kind); scene.add(visual.group);
+        active.set(key, {uid, visual, start:start+(kind==='health'&&raised.some(e=>e.uid===uid)?600:0)});
       }
       renderer!.domElement.hidden = false;
       if (!frame) frame = requestAnimationFrame(tick);

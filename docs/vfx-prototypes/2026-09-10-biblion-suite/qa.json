@@ -1,0 +1,128 @@
+{
+  "date": "2026-09-10",
+  "desktop": [
+    {
+      "key": "attack",
+      "frames": 39,
+      "duration": 1787,
+      "status": "完了"
+    },
+    {
+      "key": "health",
+      "frames": 41,
+      "duration": 1763,
+      "status": "完了"
+    },
+    {
+      "key": "heal",
+      "frames": 51,
+      "duration": 1787,
+      "status": "完了"
+    },
+    {
+      "key": "spell",
+      "frames": 63,
+      "duration": 2926,
+      "status": "完了"
+    },
+    {
+      "key": "summon",
+      "frames": 91,
+      "duration": 3702,
+      "status": "完了"
+    },
+    {
+      "key": "quest",
+      "frames": 82,
+      "duration": 3527,
+      "status": "完了"
+    },
+    {
+      "key": "quick",
+      "frames": 52,
+      "duration": 2202,
+      "status": "完了"
+    },
+    {
+      "key": "enchant",
+      "frames": 40,
+      "duration": 1553,
+      "status": "完了"
+    }
+  ],
+  "mobile": {
+    "viewport": "390x844",
+    "side": "opp",
+    "effects": [
+      {
+        "name": "攻撃力上昇 · 青",
+        "ghosts": 0,
+        "status": "完了",
+        "viewport": 390,
+        "width": 390
+      },
+      {
+        "name": "モンスター体力 · 赤",
+        "ghosts": 0,
+        "status": "完了",
+        "viewport": 390,
+        "width": 390
+      },
+      {
+        "name": "最大マナ上昇",
+        "ghosts": 0,
+        "status": "完了",
+        "viewport": 390,
+        "width": 390
+      },
+      {
+        "name": "プレイヤー回復",
+        "ghosts": 0,
+        "status": "完了",
+        "viewport": 390,
+        "width": 390
+      },
+      {
+        "name": "魔法 → シェルフ",
+        "ghosts": 0,
+        "status": "完了",
+        "viewport": 390,
+        "width": 390
+      },
+      {
+        "name": "モンスター召喚",
+        "ghosts": 0,
+        "status": "完了",
+        "viewport": 390,
+        "width": 390
+      },
+      {
+        "name": "クエスト設置",
+        "ghosts": 0,
+        "status": "完了",
+        "viewport": 390,
+        "width": 390
+      },
+      {
+        "name": "クイック購入",
+        "ghosts": 0,
+        "status": "完了",
+        "viewport": 390,
+        "width": 390
+      },
+      {
+        "name": "残存魔法の発動",
+        "ghosts": 0,
+        "status": "完了",
+        "viewport": 390,
+        "width": 390
+      }
+    ]
+  },
+  "observations": {
+    "selfMobileManaVisible": true,
+    "concurrentCanvasCount": 1,
+    "stopGhosts": 0,
+    "desktopEffectsCompleted": 9
+  }
+}

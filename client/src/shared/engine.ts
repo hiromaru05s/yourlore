@@ -159,6 +159,7 @@ function afterPlay(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): void
   if ((card.cost ?? 0) !== 0 || g.over) return;
   for (const e of p.enchants) {
     if (e.card.ench !== "freeReward") continue;
+    enchantFx(g,ctx.ev,p,e.card);
     const n = ctx.drawN(p, 1);
     if (n > 0) ctx.log(`  └ ${cn(e.card)}: 코스트 0 카드 플레이 → 1장 드로우`, `  └ ${cn(e.card)}: コスト0カードをプレイ → 1枚ドロー`);
   }
@@ -405,6 +406,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     }
     // 생명의 순환: 회복할 때마다 (장당) 주사위 6이면 최대 마나 +1
     for (const e of p.enchants) {
+      if(e.card.ench==="healMana")enchantFx(g,ev,p,e.card);
       if (e.card.ench === "healMana" && diceChanceRaw(g, ev, log, side(g, p), 50)) { // v34: 🎲 4+
         p.maxMana += 1;
         log(`  └ 생명의 순환: 최대 마나 +1 (${p.maxMana})`, `  └ 生命の循環: 最大マナ +1 (${p.maxMana})`);
@@ -415,7 +417,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     if (amt <= 0) return;
     // 살생의 극의(slayArt): +2 to every hit dealt to a player, per active copy (either side)
     const slay = g.players.reduce((s, pl) => s + pl.enchants.filter((e) => e.card.ench === "slayArt").length, 0);
-    if (slay > 0) amt += 3 * slay; // v34: +2 → +3
+    if (slay > 0) {enchantKindFx(g,ev,"slayArt");amt += 3 * slay;} // v34: +2 → +3
     // 적룡(spellAmp): 자신의 마법이 상대에게 데미지를 줄 때마다 +3 (필드의 적룡 1마리당)
     if (spellDepth > 0 && target === g.players[1 - g.cur]) {
       const amp = g.players[g.cur].field.filter((m) => m.aura === "spellAmp").length * 3;
@@ -423,12 +425,14 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     }
     // 혈귀술(spellHeal): 양 플레이어는 마법 데미지를 받지 않고 그만큼 회복 (어느 쪽 필드에 있든)
     if (spellDepth > 0 && g.players.some((pl) => pl.enchants.some((e2) => e2.card.ench === "spellHeal"))) {
+      enchantKindFx(g,ev,"spellHeal");
       log(`  └ 혈귀술: ${amt} 데미지 → 회복으로 반전`, `  └ 血鬼術: ${amt} ダメージ → 回復に反転`);
       heal(target, amt);
       return;
     }
     // 흡혈 술식(bloodShield): 자신이 시전한 "피의 마법"의 자해 데미지 무효
     if (bloodDepth > 0 && target === g.players[g.cur] && target.enchants.some((e2) => e2.card.ench === "bloodShield")) {
+      enchantKindFx(g,ev,"bloodShield",target);
       log(`  └ 흡혈 술식: 피의 마법 데미지 무효`, `  └ 吸血術式: 血の魔法のダメージ無効`);
       return;
     }
@@ -436,11 +440,12 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     if (source !== side(g, target)) advanceQuest(target, "opponentDamage", amt);
     // 고통 수확: 상대(=target)가 데미지를 입을 때마다 컬 1장 획득
     for (const pl of g.players) {
-      if (pl !== target && pl.enchants.some((e2) => e2.card.ench === "cullOnHit")) { rmz(pl).push(starter(g, "STARTER_TRASH"), starter(g, "STARTER_TRASH")); } // v34: 제외된 컬 2장
+      if (pl !== target && pl.enchants.some((e2) => e2.card.ench === "cullOnHit")) { enchantKindFx(g,ev,"cullOnHit",pl);rmz(pl).push(starter(g, "STARTER_TRASH"), starter(g, "STARTER_TRASH")); } // v34: 제외된 컬 2장
     }
     // 노 페인 노 게인(v41b painGain): 자신이 데미지를 받을 때마다 (장당) 🎲 6이면 최대 마나 +1
     for (const e of target.enchants) {
       if (e.card.ench !== "painGain" || target.hp <= 0) continue;
+      enchantFx(g,ev,target,e.card);
       const { rolls: pr } = diceRoll(g, ev, side(g, target), 1);
       if (pr[0] === 6) { target.maxMana += 1; log(`  └ ${cn(e.card)}: 🎲 6! 최대 마나 +1 (${target.maxMana})`, `  └ ${cn(e.card)}: 🎲 6！最大マナ+1 (${target.maxMana})`); }
       else log(`  └ ${cn(e.card)}: 🎲 ${pr[0]}`, `  └ ${cn(e.card)}: 🎲 ${pr[0]}`);
@@ -463,6 +468,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
   const destroyMonsterCore = (owner: PlayerState, m: FieldMon): void => {
     // 흡혈의 극의(vampWard): 필드에 있는 한 양 필드의 '흡혈귀'는 파괴되지 않는다
     if (isVampFamily(m) && g.players.some((pl) => pl.enchants.some((e2) => e2.card.ench === "vampWard"))) {
+      enchantKindFx(g,ev,"vampWard");
       log(`  └ 흡혈의 극의: ${cn(m)} 파괴되지 않음`, `  └ 吸血の極意: ${cn(m)} は破壊されない`);
       return;
     }
@@ -576,6 +582,7 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
     // v42: 매 턴 3장 드로우 (첫 손패 포함). 손패는 턴 종료에 버리지 않고 HAND_CARRY장까지 이월한다.
     const baseDraw = p.openingDrawReady ? 0 : TURN_DRAW;
     p.openingDrawReady = false;
+    if(enchDraw>0)enchantKindFx(g,ctx.ev,"bonusDraw",p);
     ctx.drawN(p, Math.max(0, baseDraw + p.bonusDrawPerm + enchDraw + pageDraw - dp));
     if (p.bastionDraw) { // 최후의 보루: 다음 턴 시작시 1회성 추가 드로우
       const bn = ctx.drawN(p, p.bastionDraw);
@@ -892,8 +899,8 @@ function addDecay(g: GameState, ctx: Ctx, owner: PlayerState, tm: FieldMon, n: n
       // 산성비 / 강산성비(v37): 상대 몬스터가 부패로 파괴될 때마다 낙인 (+7 데미지)
       for (const e of foe.enchants) {
         if (g.over) break;
-        if (e.card.ench === "acidRain") { owner.brand = (owner.brand || 0) + 1; ctx.log(`  └ ${cn(e.card)}: ${owner.name} 에게 낙인 카운터 +1 (합계 ${owner.brand})`, `  └ ${cn(e.card)}: ${owner.name} に烙印カウンター+1 (計${owner.brand})`); }
-        if (e.card.ench === "strongAcid") { ctx.dealDamage(owner, 7, cn(e.card), cn(e.card)); if (!g.over) { owner.brand = (owner.brand || 0) + 1; ctx.log(`  └ ${cn(e.card)}: ${owner.name} 에게 낙인 카운터 +1 (합계 ${owner.brand})`, `  └ ${cn(e.card)}: ${owner.name} に烙印カウンター+1 (計${owner.brand})`); } }
+        if (e.card.ench === "acidRain") {enchantFx(g,ctx.ev,foe,e.card); owner.brand = (owner.brand || 0) + 1; ctx.log(`  └ ${cn(e.card)}: ${owner.name} 에게 낙인 카운터 +1 (합계 ${owner.brand})`, `  └ ${cn(e.card)}: ${owner.name} に烙印カウンター+1 (計${owner.brand})`); }
+        if (e.card.ench === "strongAcid") {enchantFx(g,ctx.ev,foe,e.card); ctx.dealDamage(owner, 7, cn(e.card), cn(e.card)); if (!g.over) { owner.brand = (owner.brand || 0) + 1; ctx.log(`  └ ${cn(e.card)}: ${owner.name} 에게 낙인 카운터 +1 (합계 ${owner.brand})`, `  └ ${cn(e.card)}: ${owner.name} に烙印カウンター+1 (計${owner.brand})`); } }
       }
       // 러스트캡 슬러그(v36): 부패로 상대 몬스터를 파괴하면 최대 마나 +1, 최대 체력 +5
       if (!g.over && foe.field.some((m) => m.id === "RUST_SLUG")) {
@@ -935,6 +942,7 @@ function bloodSecretDestroy(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon)
 function offerReroll(g: GameState, ctx: Ctx, card: CardInst): void {
   if (!g._wheelSnap) return;
   if (g.over || g.pending) { g._wheelSnap = null; return; } // 스펠이 자체 pending을 열었으면 재굴림 생략
+  enchantKindFx(g,ctx.ev,"fateWheel",g.players[g.cur]);
   g.pending = { kind: "reroll", hint: `운명의 수레바퀴 — ${cn(card)} 의 결과를 다시 굴릴 수 있다`, hintJa: `運命の輪 — ${cn(card)} の結果を振り直せる`, reason: "reroll", allowCancel: true };
   ctx.ev.push({ type: "needTarget", pending: g.pending });
 }
@@ -943,7 +951,7 @@ function offerReroll(g: GameState, ctx: Ctx, card: CardInst): void {
 function bloodTriggers(g: GameState, ctx: Ctx, p: PlayerState): void {
   if (g.over) return;
   const fest = p.enchants.filter((e) => e.card.ench === "bloodFest").length;
-  if (fest > 0) { p.maxMana += fest; ctx.log(`  └ 피의 축제: 최대 마나 +${fest} (${p.maxMana})`, `  └ 血の祝祭: 最大マナ+${fest} (${p.maxMana})`); }
+  if (fest > 0) { enchantKindFx(g,ctx.ev,"bloodFest",p);p.maxMana += fest; ctx.log(`  └ 피의 축제: 최대 마나 +${fest} (${p.maxMana})`, `  └ 血の祝祭: 最大マナ+${fest} (${p.maxMana})`); }
   // 진화는 발동 시점의 필드 스냅샷 기준 — 이번 발동으로 새로 소환된 흡혈귀는 미반응
   for (const m of [...p.field]) {
     if (g.over) return;
@@ -966,10 +974,22 @@ function guildPayout(g: GameState, ctx: Ctx, pl: PlayerState, e: Enchant): void 
   }
 }
 
+/** Public presentation event emitted only when a remaining spell resolves. */
+function enchantFx(g: GameState, ev: GameEvent[], owner: PlayerState, card: CardInst): void {
+  const last=ev[ev.length-1];
+  if(last?.type==='enchantActivate'&&last.uid===card.uid)return;
+  ev.push({type:'enchantActivate',player:side(g,owner),uid:card.uid,id:card.id});
+}
+function enchantKindFx(g: GameState, ev: GameEvent[], kind: string, owner?: PlayerState): void {
+  for(const pl of owner?[owner]:g.players)for(const e of pl.enchants)if(e.card.ench===kind)enchantFx(g,ev,pl,e.card);
+}
+
 function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
   for (const pl of g.players) {
     const opp = g.players[0] === pl ? g.players[1] : g.players[0];
     pl.enchants = pl.enchants.filter((e) => {
+      const activationStart=ctx.ev.length;
+      const emitActivation=()=>{if(ctx.ev.length>activationStart)ctx.ev.splice(activationStart,0,{type:'enchantActivate',player:side(g,pl),uid:e.card.uid,id:e.card.id});};
       const ownerTurn = pl === cur;
       const everyTurn = e.card.ench === "noAttack";
       // 지옥: each owner turn, self 6 / opp 5
@@ -1072,7 +1092,7 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
         pl.maxMana += 2;
         ctx.log(`<span class="t">${cn(e.card)}</span> 발현! 최대 마나 +2 (${pl.maxMana}) — 이 카드는 게임에서 제외`, `<span class="t">${cn(e.card)}</span> 発現！最大マナ+2 (${pl.maxMana}) — このカードはゲームから除外`);
         rmz(pl).push(e.card);
-        return false;
+        emitActivation();return false;
       }
       // 혈귀술: 발동 14턴 후 자동 파괴 (공허 — 게임에서 제외)
       if (e.card.ench === "spellHeal" && !g.over && g.turn >= (e.bornTurn ?? 0) + 14) {
@@ -1097,13 +1117,14 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
         ctx.ev.push({ type: "needTarget", pending: g.pending });
         ctx.log(`  └ ${cn(e.card)} 은(는) 파괴된다`, `  └ ${cn(e.card)} は破壊される`);
         binEnch(g, ctx, pl, e.card);
-        return false;
+        emitActivation();return false;
       }
       // 다종족 계약(v37): 45턴까지 종족 시너지를 발동하지 못하면 패배
       if (e.card.ench === "tribeContract" && ownerTurn && !g.over && g.turn >= 45 && pl.tribesFired.length === 0) {
         ctx.log(`<span class="t">${cn(e.card)}</span> <span class="dmg">계약 불이행! ${pl.name} 패배</span>`, `<span class="t">${cn(e.card)}</span> <span class="dmg">契約不履行！ ${pl.name} の敗北</span>`);
         handleDefeat(g, ctx, pl, side(g, opp));
       }
+      emitActivation();
       if (enchantHasTurnCountdown(e.card) && (everyTurn || ownerTurn)) {
         e.turns--;
         if (e.turns <= 0) {
@@ -2908,6 +2929,7 @@ function diceRoll(g: GameState, ev: GameEvent[], pl: Side, n: number, need?: num
   const sixes = rolls.filter((r) => r === 6).length;
   const echoes = g.players[pl].enchants.filter((e) => e.card.ench === "luckyEcho").length;
   if (sixes > 0 && echoes > 0 && !g.over) {
+    enchantKindFx(g,ev,"luckyEcho",g.players[pl]);
     const c2 = makeCtx(g, ev);
     const opp2 = g.players[1 - pl];
     c2.log(`  └ <span class="t">행운의 잔향</span>: 🎲 6 ×${sixes} → ${opp2.name} 에게 ${6 * sixes * echoes} 데미지`, `  └ <span class="t">幸運の残響</span>: 🎲 6 ×${sixes} → ${opp2.name} に${6 * sixes * echoes}ダメージ`);
@@ -3630,19 +3652,21 @@ function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): vo
   else if ((isSoldier(m) || isKnight(m)) && p.field.some((x) => x.uid !== m.uid && x.aura === "rallyGuts")) grantGuts(m);
   // 마계(v38 demonRealm): 자신이 소환하는 '마족' 몬스터의 효과를 전부 무효화
   if (m.tribe === "마족" && p.enchants.some((e) => e.card.ench === "demonRealm") && (m.onSummon || m.turnFx || m.aura)) {
+    enchantKindFx(g,ctx.ev,"demonRealm",p);
     m.onSummon = undefined; m.turnFx = undefined; m.aura = undefined;
     ctx.log(`  └ 마계: ${cn(m)} 의 효과 무효화`, `  └ 魔界: ${cn(m)} の効果を無効化`);
   }
   // 성(v37): 자신 필드에 병사·기사가 소환될 때마다 카운터 +1
   if (isSoldier(m) || isKnight(m)) for (const cs of p.field) if (cs.id === "CASTLE" && cs.uid !== m.uid) { cs.gcount = (cs.gcount || 0) + 1; ctx.log(`  └ ${cn(cs)} 카운터 +1 (${cs.gcount})`, `  └ ${cn(cs)} カウンター+1 (${cs.gcount})`); }
   // 무법지대(v41 lawless): 필드에 소환되는 모든 몬스터의 체력이 1 (알 제외)
-  if (m.hatch == null && lawlessActive(g) && p.field.some((x) => x.uid === m.uid) && effDef(p, m) > 1) { setHpOne(p, m); ctx.log(`  └ 무법지대: ${cn(m)} 의 체력이 1이 된다`, `  └ 不法地帯: ${cn(m)} の体力が1になる`); }
+  if (m.hatch == null && lawlessActive(g) && p.field.some((x) => x.uid === m.uid) && effDef(p, m) > 1) { enchantKindFx(g,ctx.ev,"lawless");setHpOne(p, m); ctx.log(`  └ 무법지대: ${cn(m)} 의 체력이 1이 된다`, `  └ 不法地帯: ${cn(m)} の体力が1になる`); }
   // 부패한 땅(v37 rottenGround): 필드에 소환되는 모든 몬스터에 카운터 2개 (알 제외)
-  if (m.hatch == null && !g.over && g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "rottenGround")) && p.field.some((x) => x.uid === m.uid)) addDecay(g, ctx, p, m, 2);
+  if (m.hatch == null && !g.over && g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "rottenGround")) && p.field.some((x) => x.uid === m.uid)) {enchantKindFx(g,ctx.ev,"rottenGround");addDecay(g, ctx, p, m, 2);}
   // 시초의 술식(v36 originRite): '시초의 수호자'를 제외한 시초 몬스터를 소환할 때마다 상대 필드 카드 1장 파괴 (없으면 낙인 +1)
   if (m.tribe === "시초" && m.id !== "TGE3" && !g.over) {
     for (const e of p.enchants) {
       if (e.card.ench !== "originRite" || g.over) continue;
+      enchantFx(g,ctx.ev,p,e.card);
       const pool: Array<() => void> = [];
       o.field.filter((x) => !hasPassive(x, "aura")).forEach((x) => pool.push(() => { ctx.log(`  └ ${cn(e.card)}: ${cn(x)} 파괴`, `  └ ${cn(e.card)}: ${cn(x)} 破壊`); ctx.destroyMonster(o, x); }));
       o.traps.forEach((_t, i) => pool.push(() => { if (o.traps[i] && !trySnare(g, ctx, o)) { const tr = o.traps.splice(i, 1)[0]; if (tr.card.exileOnDestroy) rmz(o).push(tr.card); else o.discard.push(tr.card); ctx.log(`  └ ${cn(e.card)}: 세트 함정 파괴 (정체: ${cn(tr.card)})`, `  └ ${cn(e.card)}: セットトラップ破壊 (正体: ${cn(tr.card)})`); } }));
@@ -3670,6 +3694,7 @@ function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): 
   // 생명의 가호(v34): 누구든 소환할 때마다 — 가호 주인 최대 체력 +8, 상대 +4
   for (const pl of g.players) {
     for (const e of pl.enchants.filter((e2) => e2.card.ench === "healSummon")) {
+      enchantFx(g,ctx.ev,pl,e.card);
       const oth = g.players[0] === pl ? g.players[1] : g.players[0];
       addMaxHp(pl, 8); addMaxHp(oth, 4);
       ctx.log(`<span class="t">${cn(e.card)}</span> 소환 반응 — 자신 최대 체력 +8 (${pl.maxHp}), 상대 +4 (${oth.maxHp})`, `<span class="t">${cn(e.card)}</span> 召喚反応 — 自分の最大体力+8 (${pl.maxHp}), 相手+4 (${oth.maxHp})`);
@@ -3678,7 +3703,7 @@ function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): 
   // 생명의 토양(soilHp): 자신이 소환한 몬스터의 체력 +val2 (여러 장이면 중첩)
   {
     const soil = p.enchants.filter((e) => e.card.ench === "soilHp").reduce((s2, e) => s2 + (e.card.val2 || 2), 0);
-    if (soil > 0) { m.defMod = (m.defMod || 0) + soil; ctx.log(`  └ 생명의 토양: ${cn(m)} 체력 +${soil}`, `  └ 生命の土壌: ${cn(m)} 体力+${soil}`); }
+    if (soil > 0) { enchantKindFx(g,ctx.ev,"soilHp",p);m.defMod = (m.defMod || 0) + soil; ctx.log(`  └ 생명의 토양: ${cn(m)} 체력 +${soil}`, `  └ 生命の土壌: ${cn(m)} 体力+${soil}`); }
   }
   // 1) the monster's own summon effect resolves first (draw / breaktrap / burn ...)
   resolveOnSummon(g, ctx, m);
@@ -3765,7 +3790,7 @@ function applyTribe(g: GameState, ctx: Ctx, p: PlayerState, o: PlayerState, trib
       // 상대 필드의 모든 카드를 파괴하고 게임에서 제외 (흡혈의 극의가 지키는 흡혈귀는 예외)
       const ward = g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "vampWard"));
       for (const tm of [...o.field]) {
-        if (ward && isVampFamily(tm)) { ctx.log(`  └ 흡혈의 극의: ${cn(tm)} 파괴되지 않음`, `  └ 吸血の極意: ${cn(tm)} は破壊されない`); continue; }
+        if (ward && isVampFamily(tm)) { enchantKindFx(g,ctx.ev,"vampWard");ctx.log(`  └ 흡혈의 극의: ${cn(tm)} 파괴되지 않음`, `  └ 吸血の極意: ${cn(tm)} は破壊されない`); continue; }
         const fi = o.field.findIndex((x) => x.uid === tm.uid);
         if (fi >= 0) { o.field.splice(fi, 1); rmz(o).push(resetInst(tm)); ctx.ev.push({ type: "destroy", player: side(g, o), uid: tm.uid, id: tm.id }); }
       }
@@ -4059,7 +4084,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       spellDepth++; if (blood) bloodDepth++;
       try { customSpell(g, ctx, card); } finally { spellDepth--; if (blood) bloodDepth--; }
       if (blood) bloodTriggers(g, ctx, p);
-      if (echo && !g.pending && !g.over) {
+      if (echo && !g.pending && !g.over) {enchantKindFx(g,ctx.ev,"runeEcho",p);
         ctx.log(`  └ <span class="good">룬 학문 - 상급</span>: ${cn(card)} 재발동!`, `  └ <span class="good">ルーン学問 - 上級</span>: ${cn(card)} 再発動！`);
         runeEchoDepth++;
         spellDepth++; if (blood) bloodDepth++;
@@ -4140,7 +4165,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     spellDepth++; if (blood) bloodDepth++;
     try { applySpell(g, ctx, card); } finally { spellDepth--; if (blood) bloodDepth--; }
     if (blood) bloodTriggers(g, ctx, p);
-    if (echo && !g.pending && !g.over) { // 룬 학문 - 상급(v34)
+    if (echo && !g.pending && !g.over) {enchantKindFx(g,ctx.ev,"runeEcho",p); // 룬 학문 - 상급(v34)
       ctx.log(`  └ <span class="good">룬 학문 - 상급</span>: ${cn(card)} 재발동!`, `  └ <span class="good">ルーン学問 - 上級</span>: ${cn(card)} 再発動！`);
       runeEchoDepth++;
       spellDepth++; if (blood) bloodDepth++;
@@ -4817,6 +4842,7 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
           advanceQuest(pl, "exile", added.length);
           const rifts = pl.enchants.filter(e => e.card.ench === "rift").length;
           if (rifts) {
+            enchantKindFx(g2,questCtx.ev,"rift",pl);
             const gain = 5 * added.length * rifts;
             addMaxHp(pl, gain);
             questCtx.log(`차원의 균열: 최대 체력 +${gain}`, `次元の裂け目: 最大体力+${gain}`);
@@ -4882,6 +4908,7 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
     for (const s4 of [0, 1] as Side[]) {
       const pl4 = g2.players[s4];
       if (pl4.maxHp > pre[s4].mh && pl4.enchants.some((e) => e.card.ench === "healMana")) {
+        enchantKindFx(g2,res.events as GameEvent[],"healMana",pl4);
         const { rolls: lcr } = diceRoll(g2, res.events as GameEvent[], s4, 1, 4);
         if (lcr[0] >= 4) { pl4.maxMana += 1; ctx4.log(`  └ 생명의 순환: 최대 마나 +1 (${pl4.maxMana})`, `  └ 生命の循環: 最大マナ+1 (${pl4.maxMana})`); }
       }

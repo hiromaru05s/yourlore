@@ -225,6 +225,7 @@ export type Action =
 
 // --- Events: emitted by reduce(), consumed by the UI for animation/log ---
 export type GameEvent =
+  | { type: "enchantActivate"; player: Side; uid: string; id: string }
   | { type: "log"; html: string; htmlJa: string }
   | { type: "turnHeader"; turn: number; name: string; isBot: boolean; player?: Side } // player: whose turn (log tinting)
   | { type: "summon"; player: Side; uid: string; id?: string } // id: card id (drives the summon ghost when the monster dies in the same batch)

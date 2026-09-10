@@ -250,6 +250,10 @@ export abstract class BaseController implements BoardHandlers {
       else if (e.type === "damage" && e.player === this.you) sfx("damage");
       else if (e.type === "heal" && e.player === this.you) sfx("heal");
       switch (e.type) {
+        case "enchantActivate":
+          A.enchantActivation(e.uid);
+          await wait(320);
+          break;
         case "summon": {
           const card = this.findCard(res.state, e.uid) ?? this.defOf(e.id, e.uid);
           if (card) {
@@ -309,8 +313,9 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "heal": {
-          hpNow[e.player] = Math.min(res.state.players[e.player].maxHp, hpNow[e.player] + e.amount);
-          A.hpFeedback(sideOf(e.player), "heal", e.amount);
+          const healed=Math.max(0,Math.min(e.amount,res.state.players[e.player].maxHp-hpNow[e.player]));
+          hpNow[e.player] += healed;
+          if(healed>0)A.hpFeedback(sideOf(e.player), "heal", healed);
           A.hpBarSet(sideOf(e.player), hpNow[e.player], res.state.players[e.player].maxHp);
           await wait(340);
           break;
@@ -318,7 +323,11 @@ export abstract class BaseController implements BoardHandlers {
         case "playSpell": {
           const def = DB[e.id] ?? STARTERS[e.id]; // 컬/어튠/보물상자 live in STARTERS
           if (def) {
-            const face=await A.revealSpell({ uid: "fx", ...def }, sideOf(e.player), e.dest,buffCount[e.player]+(def.t==='quest'?questCount[e.player]:0));
+            // Preserve the new public source UID so reactions during this batch can find its ghost.
+            const oldUids=new Set(prev.players[e.player].enchants.map(x=>x.card.uid));
+            const shownUids=new Set(spellGhosts.map(x=>x.dataset.uid));
+            const placed=e.dest==='field'?res.state.players[e.player].enchants.find(x=>x.card.id===e.id&&!oldUids.has(x.card.uid)&&!shownUids.has(x.card.uid))?.card:undefined;
+            const face=await A.revealSpell(placed??{ uid: "fx", ...def }, sideOf(e.player), e.dest,buffCount[e.player]+(def.t==='quest'?questCount[e.player]:0));
             if(face){spellGhosts.push(face);if(def.t==='quest')questCount[e.player]++;else buffCount[e.player]++;}
           }
           // random-roll cards: roll the 3D dice first, THEN show the outcome popup
