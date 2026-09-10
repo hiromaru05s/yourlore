@@ -740,7 +740,7 @@ function tickTurnFx(g: GameState, ctx: Ctx, p: PlayerState): void {
         break;
       }
       case "emberRecoil": {
-        const { rolls } = diceRoll(g, ctx.ev, side(g, p), 1, 5);
+        const { rolls } = diceRoll(g, ctx.ev, side(g, p), { id: m.id, player: side(g, p) }, 1, 5);
         ctx.log(`  └ ${cn(m)} 🎲 ${rolls[0]}`, `  └ ${cn(m)} 🎲 ${rolls[0]}`);
         if (rolls[0] >= 5) ctx.dealDamage(p, 3, cn(m), cn(m), side(g, p));
         break;

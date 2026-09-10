@@ -190,6 +190,7 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   moving.cancel();old.cancel();reveal.remove();face.style.transform=fieldPlacement(target,w,h).toString();
   if(!fxSkip){
     if(heavy&&!reduced){sfx('impact');playBiblionFx('summon-impact',face.getBoundingClientRect());
+      window.dispatchEvent(new CustomEvent('lore:summon-impact',{detail:face.getBoundingClientRect()}));
       const objects=[face];
       const shakes=objects.map(el=>el.animate([{translate:'0 0'},{translate:'0 3px',offset:.12},{translate:'-1px -2px',offset:.3},{translate:'1px 1px',offset:.55},{translate:'0 0'}],{duration:240,easing:'ease-out'}));
       await wait(240);shakes.forEach(a=>a.cancel());

@@ -8,7 +8,7 @@ export function createAttackRiseTracker(kind: 'attack' | 'health' = 'attack') {
     const next = new Map<string, {id: string; owner: number; atk: number}>();
     const raised: string[] = [];
     state.players.forEach((player, owner) => player.field.forEach(mon => {
-      const value = {id: mon.id, owner, atk: kind === 'health' ? effDef(player, mon) : effAtk(player, mon)};
+      const value = {id: mon.id, owner, atk: kind === 'health' ? effDef(player, mon) : effAtk(player, mon, state)};
       const old = previous.get(mon.uid);
       if (old && old.id === value.id && old.owner === owner && value.atk > old.atk) raised.push(mon.uid);
       next.set(mon.uid, value);

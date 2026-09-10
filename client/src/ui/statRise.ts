@@ -1,6 +1,6 @@
 import * as T from 'three';
 import type {GameState} from '../shared/types';
-import {boardLens, layoutRect} from './boardProjection';
+import {boardLens, layoutRect, screenToBoard} from './boardProjection';
 import {createAttackRiseTracker} from './statRiseChanges';
 import {createStatRiseVisual, STAT_RISE_DURATION} from './statRiseVisual';
 
@@ -50,7 +50,8 @@ export function createBoardStatRise(root: HTMLElement) {
       if (!target || age >= STAT_RISE_DURATION) {entry.visual.dispose(); active.delete(uid); continue;}
       entry.visual.group.visible=age>=0;if(age<0)continue;
       const rect = layoutRect(target), group = entry.visual.group;
-      group.position.set(rect.left + rect.width / 2 - width / 2, 0, rect.top + rect.height / 2 - height / 2);
+      const screen=target.getBoundingClientRect(),center=screenToBoard(screen.left+screen.width/2,screen.top+screen.height/2);
+      group.position.set(center.x-width/2,0,center.y-height/2);
       group.scale.setScalar(rect.width); entry.visual.update(age, camera);
     }
     renderer.domElement.dataset.targets = [...active.keys()].join(' ');

@@ -31,5 +31,11 @@ try {
   assert.deepEqual(track(g),[],'removed then re-entering cards are new');
   g.over=true; g.players[0].field[0].atkMod=50;
   assert.deepEqual(track(g),[],'no gain effects after match end');
+  const cross=createGame({mode:'bot',seed:72,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;
+  cross.players[0].field=[{...DB.HALF_ELF,uid:'half',dmg:0}];cross.players[1].field=[];
+  const conditional=createAttackRiseTracker();assert.deepEqual(conditional(cross),[]);
+  cross.players[1].field.push({...DB.WORLD_TREE,uid:'opponent-tree',dmg:0});
+  assert.deepEqual(conditional(cross),['half'],'opponent World Tree activates v48 blue attack rise');
+  cross.players[1].field=[];assert.deepEqual(conditional(cross),[],'condition loss does not replay rise');
   console.log('PASS: initial/summon, mutations, repeats, both sides, aura, decreases, health, ownership, re-entry and match end');
 } finally {await rm(dir,{recursive:true,force:true});}

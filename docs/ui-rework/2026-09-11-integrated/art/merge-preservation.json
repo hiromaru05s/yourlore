@@ -1,0 +1,3558 @@
+{
+  "source": "a28e9cc",
+  "verified": 888,
+  "files": [
+    {
+      "path": "client/public/art/cards/STARTER_TRASH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/STARTER_TRASH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/STARTER_TRASH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/STARTER_CHEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/STARTER_CHEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/STARTER_CHEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/STARTER_MANA.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/STARTER_MANA.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/STARTER_MANA.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/M1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/M1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/M1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/M2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/M2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/M2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/M3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/M3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/M3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/M4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/M4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/M4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/M5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/M5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/M5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/M6.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/M6.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/M6.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/M7.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/M7.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/M7.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/M8.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/M8.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/M8.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/M9.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/M9.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/M9.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/M10.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/M10.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/M10.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/M11.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/M11.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/M11.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/M12.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/M12.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/M12.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/S1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/S1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/S1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/S10.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/S10.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/S10.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/S3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/S3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/S3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/S4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/S4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/S4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/S5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/S5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/S5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/S8.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/S8.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/S8.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/S6.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/S6.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/S6.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/S7.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/S7.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/S7.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/S12.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/S12.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/S12.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/S13.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/S13.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/S13.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/S14.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/S14.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/S14.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/S15.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/S15.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/S15.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/MIMIC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/MIMIC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/MIMIC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/E1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/E1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/E1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/E2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/E2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/E2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/E3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/E3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/E3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TSO2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TSO2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TSO2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TSO5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TSO5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TSO5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TPO2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TPO2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TPO2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TPO5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TPO5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TPO5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TAR2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TAR2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TAR2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TAR5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TAR5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TAR5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ND2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ND2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ND2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ND3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ND3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ND3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ND5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ND5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ND5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/NMD2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/NMD2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/NMD2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/NMD4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/NMD4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/NMD4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/NMD6.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/NMD6.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/NMD6.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/NGA3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/NGA3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/NGA3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/NGA4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/NGA4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/NGA4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/NWL3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/NWL3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/NWL3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/NHEX.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/NHEX.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/NHEX.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/AHEUK.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/AHEUK.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/AHEUK.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/AJIN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/AJIN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/AJIN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/AMA.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/AMA.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/AMA.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/NHEAL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/NHEAL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/NHEAL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GM5_0.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GM5_0.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GM5_0.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GM5_2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GM5_2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GM5_2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GM5_3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GM5_3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GM5_3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GS5_3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GS5_3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GS5_3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GS5_4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GS5_4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GS5_4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GM6_0.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GM6_0.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GM6_0.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GM6_1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GM6_1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GM6_1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GM6_7.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GM6_7.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GM6_7.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GM6_8.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GM6_8.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GM6_8.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GS6_4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GS6_4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GS6_4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GS8_0.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GS8_0.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GS8_0.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/INFKNIGHT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/INFKNIGHT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/INFKNIGHT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/NT_SEAL3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/NT_SEAL3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/NT_SEAL3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/NT_SEAL5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/NT_SEAL5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/NT_SEAL5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TSO3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TSO3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TSO3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TPO3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TPO3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TPO3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TAR3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TAR3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TAR3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TGE1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TGE1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TGE1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TGE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TGE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TGE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TGE3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TGE3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TGE3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TGE4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TGE4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TGE4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TGE5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TGE5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TGE5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TGE6.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TGE6.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TGE6.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TGE7.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TGE7.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TGE7.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/HANDRESET.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/HANDRESET.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/HANDRESET.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TIMEWARP.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TIMEWARP.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TIMEWARP.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/INFERNO.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/INFERNO.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/INFERNO.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GAMBLE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GAMBLE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GAMBLE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ASSASSIN1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ASSASSIN1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ASSASSIN1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ASSASSIN2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ASSASSIN2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ASSASSIN2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ASSASSIN3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ASSASSIN3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ASSASSIN3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ASSASSIN4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ASSASSIN4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ASSASSIN4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/RUNE1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/RUNE1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/RUNE1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/RUNE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/RUNE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/RUNE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/RUNE3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/RUNE3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/RUNE3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GENESIS_SONG.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GENESIS_SONG.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GENESIS_SONG.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GENESIS_MAGIC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GENESIS_MAGIC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GENESIS_MAGIC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/KIN_CALL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/KIN_CALL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/KIN_CALL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/MULTI_CULTURE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/MULTI_CULTURE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/MULTI_CULTURE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/SLAY_ART.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/SLAY_ART.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/SLAY_ART.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/BLOOD1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/BLOOD1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/BLOOD1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/DISARM1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/DISARM1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/DISARM1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/DISARM2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/DISARM2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/DISARM2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/DISARM3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/DISARM3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/DISARM3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/FORBIDDEN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/FORBIDDEN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/FORBIDDEN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/LUCKY_CHEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/LUCKY_CHEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/LUCKY_CHEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/MIMIC2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/MIMIC2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/MIMIC2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GUILD_CHEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GUILD_CHEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GUILD_CHEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GUILD_EYE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GUILD_EYE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GUILD_EYE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/CATALYST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/CATALYST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/CATALYST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/WORLD_SEED.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/WORLD_SEED.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/WORLD_SEED.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/MANA_GIANT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/MANA_GIANT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/MANA_GIANT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/HOURGLASS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/HOURGLASS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/HOURGLASS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/LIFE_CYCLE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/LIFE_CYCLE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/LIFE_CYCLE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/LIFE_SANCTUM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/LIFE_SANCTUM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/LIFE_SANCTUM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/WORLD_HEART.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/WORLD_HEART.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/WORLD_HEART.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/MEDITATE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/MEDITATE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/MEDITATE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/HERMIT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/HERMIT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/HERMIT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/WORLD_BLESS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/WORLD_BLESS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/WORLD_BLESS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GLASS_BAN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GLASS_BAN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GLASS_BAN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/SHATTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/SHATTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/SHATTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/SCARECROW.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/SCARECROW.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/SCARECROW.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/LEVY.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/LEVY.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/LEVY.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/INQUISITION.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/INQUISITION.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/INQUISITION.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/MIMIC_LORD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/MIMIC_LORD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/MIMIC_LORD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/AWAKENED_MIMIC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/AWAKENED_MIMIC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/AWAKENED_MIMIC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/MIMIC_KING.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/MIMIC_KING.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/MIMIC_KING.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/VITAL2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/VITAL2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/VITAL2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/VITAL3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/VITAL3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/VITAL3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/VITAL4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/VITAL4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/VITAL4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/CULL_FLOOD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/CULL_FLOOD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/CULL_FLOOD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/PAIN_HARVEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/PAIN_HARVEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/PAIN_HARVEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/CULL_FARM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/CULL_FARM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/CULL_FARM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/PURGE_ALL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/PURGE_ALL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/PURGE_ALL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/EXILE_NUKE1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/EXILE_NUKE1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/EXILE_NUKE1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/EXILE_NUKE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/EXILE_NUKE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/EXILE_NUKE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GOLIATH_HUNT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GOLIATH_HUNT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GOLIATH_HUNT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/DOUBLE_EXEC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/DOUBLE_EXEC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/DOUBLE_EXEC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/MASSACRE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/MASSACRE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/MASSACRE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/MIMIC_KING2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/MIMIC_KING2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/MIMIC_KING2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ORIGIN_MIMIC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ORIGIN_MIMIC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ORIGIN_MIMIC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GREED_PRICE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GREED_PRICE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GREED_PRICE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/MARKET_CRISIS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/MARKET_CRISIS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/MARKET_CRISIS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TOKEN00.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TOKEN00.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TOKEN00.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/SOLDIER2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/SOLDIER2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/SOLDIER2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/FURNACE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/FURNACE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/FURNACE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/PURGE_TOUCH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/PURGE_TOUCH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/PURGE_TOUCH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/SCRAPPER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/SCRAPPER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/SCRAPPER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/HORDE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/HORDE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/HORDE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ELITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ELITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ELITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/WALLBREAK1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/WALLBREAK1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/WALLBREAK1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/WALLBREAK2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/WALLBREAK2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/WALLBREAK2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/SNIPE1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/SNIPE1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/SNIPE1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/SNIPE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/SNIPE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/SNIPE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/DRAGON_EGG.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/DRAGON_EGG.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/DRAGON_EGG.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/BEAST_EGG.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/BEAST_EGG.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/BEAST_EGG.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/D_BLACK.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/D_BLACK.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/D_BLACK.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/D_RED.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/D_RED.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/D_RED.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/D_BLUE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/D_BLUE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/D_BLUE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/DIVINE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/DIVINE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/DIVINE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/EGG_HUNTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/EGG_HUNTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/EGG_HUNTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/INCUBATOR.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/INCUBATOR.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/INCUBATOR.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/EGG_MASTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/EGG_MASTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/EGG_MASTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/BLOOD_JOY.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/BLOOD_JOY.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/BLOOD_JOY.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/BLOOD_ANGER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/BLOOD_ANGER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/BLOOD_ANGER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/BLOOD_SORROW.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/BLOOD_SORROW.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/BLOOD_SORROW.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/BLOOD_PLEASURE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/BLOOD_PLEASURE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/BLOOD_PLEASURE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/VAMP_PACT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/VAMP_PACT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/VAMP_PACT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/BLOOD_FEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/BLOOD_FEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/BLOOD_FEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/BLOOD_SHIELD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/BLOOD_SHIELD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/BLOOD_SHIELD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/VAMP_WARD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/VAMP_WARD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/VAMP_WARD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/VAMP_PACT2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/VAMP_PACT2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/VAMP_PACT2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/VAMP_BUTLER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/VAMP_BUTLER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/VAMP_BUTLER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/BLOOD_SECRET.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/BLOOD_SECRET.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/BLOOD_SECRET.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/VAMP1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/VAMP1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/VAMP1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/VAMP2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/VAMP2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/VAMP2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/VAMP3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/VAMP3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/VAMP3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/VAMP4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/VAMP4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/VAMP4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/VAMP5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/VAMP5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/VAMP5.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/FLAME.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/FLAME.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/FLAME.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GHOST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GHOST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GHOST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/BLOOD_RITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/BLOOD_RITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/BLOOD_RITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/WEAKEN_ALL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/WEAKEN_ALL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/WEAKEN_ALL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GUILD_HALL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GUILD_HALL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GUILD_HALL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/FATE_WHEEL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/FATE_WHEEL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/FATE_WHEEL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/COUNTERCALC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/COUNTERCALC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/COUNTERCALC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/AMBUSH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/AMBUSH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/AMBUSH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TRUMPET.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TRUMPET.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TRUMPET.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/FORESIGHT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/FORESIGHT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/FORESIGHT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TRICKROOM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TRICKROOM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TRICKROOM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/INCUBATOR_S.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/INCUBATOR_S.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/INCUBATOR_S.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TRIBE_PACT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TRIBE_PACT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TRIBE_PACT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GOLEM1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GOLEM1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GOLEM1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GOLEM2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GOLEM2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GOLEM2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GOLEM3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GOLEM3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GOLEM3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/DECAY_CRAFT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/DECAY_CRAFT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/DECAY_CRAFT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/RUST_SLUG.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/RUST_SLUG.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/RUST_SLUG.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/MAJESTY_RITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/MAJESTY_RITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/MAJESTY_RITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/CROSSROADS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/CROSSROADS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/CROSSROADS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/CHOSEN_KNIGHT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/CHOSEN_KNIGHT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/CHOSEN_KNIGHT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/CHOSEN_MAGE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/CHOSEN_MAGE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/CHOSEN_MAGE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/CHOSEN_ARCHER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/CHOSEN_ARCHER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/CHOSEN_ARCHER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/CHOSEN_ROGUE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/CHOSEN_ROGUE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/CHOSEN_ROGUE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/RUST_SHROOM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/RUST_SHROOM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/RUST_SHROOM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/CHOSEN_AREA.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/CHOSEN_AREA.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/CHOSEN_AREA.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TRIAL_AREA.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TRIAL_AREA.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TRIAL_AREA.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ANCIENT_CIV.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ANCIENT_CIV.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ANCIENT_CIV.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GAMBLER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GAMBLER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GAMBLER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ELF_HAVEN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ELF_HAVEN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ELF_HAVEN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/HALF_ELF.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/HALF_ELF.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/HALF_ELF.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/LEGEND_GAMBLER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/LEGEND_GAMBLER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/LEGEND_GAMBLER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ELF.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ELF.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ELF.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/DARK_ELF.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/DARK_ELF.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/DARK_ELF.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/HIGH_ELF.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/HIGH_ELF.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/HIGH_ELF.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ELDER_ELF_KING.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ELDER_ELF_KING.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ELDER_ELF_KING.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/WORLD_CARE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/WORLD_CARE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/WORLD_CARE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/HPS_SCALE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/HPS_SCALE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/HPS_SCALE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/HPS_GRAFT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/HPS_GRAFT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/HPS_GRAFT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/HPS_OATH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/HPS_OATH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/HPS_OATH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/HPS_SOIL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/HPS_SOIL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/HPS_SOIL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/HPS_BOULDER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/HPS_BOULDER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/HPS_BOULDER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GUILD_CO.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GUILD_CO.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GUILD_CO.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/SLUM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/SLUM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/SLUM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GRAPE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GRAPE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GRAPE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/BREWING.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/BREWING.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/BREWING.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/MERCH1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/MERCH1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/MERCH1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/MERCH2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/MERCH2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/MERCH2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GRAPE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GRAPE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GRAPE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/WINE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/WINE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/WINE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/DARK_MERCHANT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/DARK_MERCHANT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/DARK_MERCHANT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TPO1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TPO1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TPO1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TSO1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TSO1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TSO1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TAR1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TAR1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TAR1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TDE1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TDE1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TDE1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TDE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TDE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TDE2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TDE3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TDE3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TDE3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TDE4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TDE4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TDE4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/DUNGEON_FLOOR.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/DUNGEON_FLOOR.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/DUNGEON_FLOOR.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GEM_RAIN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GEM_RAIN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GEM_RAIN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/VOID_FRUIT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/VOID_FRUIT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/VOID_FRUIT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/VOID_APOSTLE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/VOID_APOSTLE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/VOID_APOSTLE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/CASINO.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/CASINO.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/CASINO.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/REFRESH_HAND.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/REFRESH_HAND.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/REFRESH_HAND.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/FOCUS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/FOCUS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/FOCUS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/GUILD_HQ.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/GUILD_HQ.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/GUILD_HQ.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/WORLD_TREE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/WORLD_TREE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/WORLD_TREE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/CURSE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/CURSE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/CURSE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ORIGIN_RITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ORIGIN_RITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ORIGIN_RITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/DRAGON_RIDER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/DRAGON_RIDER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/DRAGON_RIDER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ANTIQUE_DK.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ANTIQUE_DK.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ANTIQUE_DK.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/CASTLE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/CASTLE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/CASTLE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ACID_RAIN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ACID_RAIN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ACID_RAIN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/BUDGET.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/BUDGET.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/BUDGET.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/EXPANSION.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/EXPANSION.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/EXPANSION.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/LAND_GRANT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/LAND_GRANT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/LAND_GRANT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/TREASON.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/TREASON.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/TREASON.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/STRONG_ACID.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/STRONG_ACID.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/STRONG_ACID.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ROTTEN_GROUND.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ROTTEN_GROUND.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ROTTEN_GROUND.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/UNBRAND.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/UNBRAND.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/UNBRAND.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/DEMON_REALM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/DEMON_REALM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/DEMON_REALM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/AEM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/AEM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/AEM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/KNIGHT_TEACH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/KNIGHT_TEACH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/KNIGHT_TEACH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/DUNGEON.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/DUNGEON.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/DUNGEON.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/NL_SECRET.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/NL_SECRET.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/NL_SECRET.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/HEXER1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/HEXER1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/HEXER1.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/HEXER2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/HEXER2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/HEXER2.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/HEXER3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/HEXER3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/HEXER3.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/HEXER4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/HEXER4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/HEXER4.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/SORTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/SORTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/SORTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/COLOSSEUM_REST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/COLOSSEUM_REST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/COLOSSEUM_REST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/COLOSSEUM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/COLOSSEUM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/COLOSSEUM.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/UNBRANDER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/UNBRANDER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/UNBRANDER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/LAWLESS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/LAWLESS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/LAWLESS.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/RIFT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/RIFT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/RIFT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/FREE_REWARD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/FREE_REWARD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/FREE_REWARD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/NO_PAIN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/NO_PAIN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/NO_PAIN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/ORIGIN_QUEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/ORIGIN_QUEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/ORIGIN_QUEST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/BEGINNER_MIND.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/BEGINNER_MIND.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/BEGINNER_MIND.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/VOID_RITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/VOID_RITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/VOID_RITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/SPACE_RITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/SPACE_RITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/SPACE_RITE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/LUCKY_ECHO.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/LUCKY_ECHO.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/LUCKY_ECHO.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/BUYOUT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/BUYOUT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/BUYOUT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/PENANCE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/PENANCE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/PENANCE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/PACK_INSTINCT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/PACK_INSTINCT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/PACK_INSTINCT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/MIND_BURST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/MIND_BURST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/MIND_BURST.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/RICH_HABIT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/RICH_HABIT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/RICH_HABIT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/Q_RIFT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/Q_RIFT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/Q_RIFT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/Q_BRAND.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/Q_BRAND.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/Q_BRAND.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/Q_TORI.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/Q_TORI.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/Q_TORI.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/Q_WINTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/Q_WINTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/Q_WINTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/Q_TRIBE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/Q_TRIBE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/Q_TRIBE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/Q_CASTLE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/Q_CASTLE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/Q_CASTLE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/Q_DECAY.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/Q_DECAY.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/Q_DECAY.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/Q_ASSASSIN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/Q_ASSASSIN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/Q_ASSASSIN.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/Q_MANA.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/Q_MANA.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/Q_MANA.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/QUICK_MIMIC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/QUICK_MIMIC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/QUICK_MIMIC.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/QUICK_SURVIVAL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/QUICK_SURVIVAL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/QUICK_SURVIVAL.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/QUICK_POISON.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/QUICK_POISON.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/QUICK_POISON.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/QUICK_WORLD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/QUICK_WORLD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/QUICK_WORLD.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/QUICK_MUSTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/QUICK_MUSTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/QUICK_MUSTER.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/QUICK_SORT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/QUICK_SORT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/QUICK_SORT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/QUICK_REBIRTH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/QUICK_REBIRTH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/QUICK_REBIRTH.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/QUICK_ATTUNE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/QUICK_ATTUNE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/QUICK_ATTUNE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/QUICK_GRIMOIRE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/QUICK_GRIMOIRE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/QUICK_GRIMOIRE.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards/QUICK_ASSAULT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-sm/QUICK_ASSAULT.webp",
+      "match": true
+    },
+    {
+      "path": "client/public/art/cards-xs/QUICK_ASSAULT.webp",
+      "match": true
+    }
+  ]
+}

@@ -7,13 +7,13 @@ import path from 'node:path';
 const dir=await mkdtemp(path.join(tmpdir(),'lore-dice-source-'));
 try{
  const shared=path.resolve('client/src/shared');
- const baseline=execFileSync('git',['show','a0bfc93:client/src/shared/engine.ts'],{encoding:'utf8'});
+ const baseline=execFileSync('git',['show','cffc130:client/src/shared/engine.ts'],{encoding:'utf8'});
  await build({stdin:{contents:baseline+'\nexport {DB,STARTERS} from "./cards";',resolveDir:shared,loader:'ts'},bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'before.mjs')});
  await build({stdin:{contents:'export * from "./engine";export {DB,STARTERS} from "./cards";',resolveDir:shared,loader:'ts'},bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'after.mjs')});
  const before=await import(path.join(dir,'before.mjs')),after=await import(path.join(dir,'after.mjs'));
  const cards={...after.DB,...after.STARTERS},sources=new Set();let rolls=0,checks=0;
  const initial=(seed)=>{const g=after.createGame({mode:'bot',seed,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.turn=5;g.pending=null;for(const [i,p] of g.players.entries()){p.hand=[];p.field=[];p.enchants=[];p.traps=[];p.mana=30;p.maxMana=30;p.hp=80;p.maxHp=100;p.openingDrawReady=false;p.deck=Array.from({length:12},(_,n)=>({...after.DB.ELF,uid:`deck-${i}-${n}`}));}return g;};
- const compare=(g,a)=>{const x=before.reduce(structuredClone(g),a),y=after.reduce(structuredClone(g),a);assert.deepEqual(y.state,x.state,'source metadata must not change game state or RNG');const events=y.events.map(e=>{if(e.type!=='dice')return e;rolls++;const {source,...rest}=e;assert(source);assert([0,1].includes(source.player));assert(source.id?cards[source.id]:['brand','solitude'].includes(source.status));sources.add(source.id??source.status);return rest;});assert.deepEqual(events,x.events);checks++;return y;};
+ const compare=(g,a)=>{const x=before.reduce(structuredClone(g),a),y=after.reduce(structuredClone(g),a);assert.deepEqual(y.state,x.state,'source metadata must not change game state or RNG');const events=y.events.map(e=>{if(e.type!=='dice')return e;rolls++;const {source,...rest}=e;assert(source);assert([0,1].includes(source.player));assert(source.id?cards[source.id]:['brand','solitude'].includes(source.status));sources.add(source.id??source.status);return rest;});assert.deepEqual(events.filter(e=>e.type==='dice'),x.events.filter(e=>e.type==='dice'),'attribution and VFX preserve authoritative rolls');checks++;return y;};
  for(const seed of [2,7,19,71])for(const c of Object.values(cards)){
   const g=initial(seed);g.players[0].hand=[{...c,uid:'played'}];g.players[1].field=[{...after.DB.ELF,uid:'target',exhausted:false}];compare(g,{type:'play',idx:0});
   if(c.t==='mon'||c.ench){

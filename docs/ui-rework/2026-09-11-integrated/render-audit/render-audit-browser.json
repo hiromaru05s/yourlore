@@ -1,0 +1,84 @@
+{
+  "softwareGL": false,
+  "shelf": {
+    "width": 116,
+    "artWidth": 384,
+    "opacity": "1"
+  },
+  "layers": {
+    "flight": "126",
+    "app": "1"
+  },
+  "touchdown": {
+    "x": 305.42144775390625,
+    "y": 695.9453125,
+    "width": 149.5267333984375,
+    "height": 175.42840576171875
+  },
+  "settled": {
+    "x": 305.42144775390625,
+    "y": 695.9453125,
+    "width": 149.5267333984375,
+    "height": 175.42840576171875
+  },
+  "purchaseCommit": {
+    "transform": "matrix3d(1, 0, 0, 0, -0.194036, 0.826637, 0.529919, -0.000223, -0.310523, -0.564184, 0.848048, -0.0003569, 10.7029, 2.24486, -29.2301, 1.0123)",
+    "shelfVisible": "visible",
+    "arts": [
+      {
+        "loaded": true,
+        "opacity": "1"
+      },
+      {
+        "loaded": true,
+        "opacity": "1"
+      },
+      {
+        "loaded": true,
+        "opacity": "1"
+      },
+      {
+        "loaded": true,
+        "opacity": "1"
+      },
+      {
+        "loaded": true,
+        "opacity": "1"
+      },
+      {
+        "loaded": true,
+        "opacity": "1"
+      },
+      {
+        "loaded": true,
+        "opacity": "1"
+      },
+      {
+        "loaded": true,
+        "opacity": "1"
+      }
+    ]
+  },
+  "alpha": {
+    "w": 1905,
+    "corner": 0,
+    "capVisible": false
+  },
+  "drags": [
+    "collapsed-left",
+    "expanded-center",
+    "expanded-over-hand"
+  ],
+  "errors": [],
+  "checks": [
+    "cold white board with held model request",
+    "native shelf image resolution",
+    "front flight canvas",
+    "purchase touchdown matches committed native face",
+    "synchronous gray-out commit without blank art or unprojected market",
+    "transparent capture and cap geometry",
+    "three actual spell drag positions including expanded hand overlap",
+    "return-to-hand cancellation",
+    "actual two-card end-turn discard flights"
+  ]
+}

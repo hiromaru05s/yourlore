@@ -32,6 +32,8 @@ for(const [width,height] of [[1280,720],[1920,1080],[1814,1274],[390,844]]){
  assert(Math.abs(m.opp.x+m.opp.width/2-width/2)<3);
  assert(m.clock.right<width&&m.clock.left>=0);
  assert(m.end.right<width&&m.end.left>=0,JSON.stringify({width,end:m.end}));
+ if(width>700)assert(m.shelf.right<m.field.left&&m.shelf.left>=0,'shelf stays left of the centered field');
+ assert(m.rift.left>=0);
  assert(m.deck.right<width&&m.shelf.right<width&&m.rift.right<width,JSON.stringify({width,shelf:m.shelf,rift:m.rift}));
 }
 await page.setViewportSize({width:1280,height:720});await page.evaluate(()=>qa.c.reset());await page.waitForTimeout(400);
@@ -40,6 +42,12 @@ for(let n=1;n<=7;n++){
  const m=await page.locator('#meRow .zone-mon > .card').evaluateAll(es=>es.map(e=>e.getBoundingClientRect().toJSON()));assert.equal(m.length,n);assert(Math.abs((m[0].left+m.at(-1).right)/2-640)<3);
 }
 await page.screenshot({path:out+'/seven-centered.png'});
+// The merged v48 condition must also reach the VFX tracker through GameView.
+await page.evaluate(()=>{qa.c.reset();qa.c.state.players[0].field=[{...qa.C.DB.HALF_ELF,uid:'conditional-half',dmg:0}];qa.c.view.render(qa.c.state);});
+await page.evaluate(()=>{qa.c.state.players[1].field=[{...qa.C.DB.WORLD_TREE,uid:'condition-tree',dmg:0}];qa.c.view.render(qa.c.state);});
+await page.waitForFunction(()=>document.querySelector('.stat-rise-layer')?.dataset.targets.includes('conditional-half|attack'));
+await page.screenshot({path:out+'/half-elf-opponent-tree-buff.png'});
+await page.waitForFunction(()=>document.querySelector('.stat-rise-layer')?.hidden===true);
 await fs.writeFile(out+'/layout.json',JSON.stringify({layouts,errors},null,2));assert.deepEqual(errors,[]);
 console.log('PASS: 1–7 centered monsters, both field centers, rack and controls within four viewports');
 await page.evaluate(()=>{qa.c.destroy();qa.stop();});

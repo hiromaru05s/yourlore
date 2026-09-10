@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-09-10T20:09:32.088Z",
+  "checks": [
+    "current face texture",
+    "three sequential cards",
+    "flat DOM handoff",
+    "input cancellation",
+    "resize cancellation",
+    "opponent face privacy",
+    "reduced motion",
+    "390px compact hand",
+    "six-card batch",
+    "view teardown",
+    "GPU context loss",
+    "cancel during texture load",
+    "LocalController opening draw"
+  ],
+  "frameTiming": {
+    "samples": 66,
+    "medianMs": 16.699999999999818,
+    "p95Ms": 16.700000000000273
+  },
+  "errors": []
+}
