@@ -1,4 +1,5 @@
 import {fieldPositions,settleField} from './fieldLayout';
+import {clearBiblionFx} from './biblionFx';
 import {prepareDuel} from './duelReadiness';
 // ============================================================
 // LORE — board view. Renders the whole game from a GameState
@@ -21,6 +22,7 @@ import { avatarHtml } from "./social";
 import { projectBoardDOM } from './boardProjection';
 import { installGameCursor } from './gameCursor';
 import { createAttackAim } from './attackAim';
+import { createBoardStatRise } from './statRise';
 
 // the local player's profile avatar (set by the game screen), shown on MY portrait
 let MY_AVATAR: string | null | undefined;
@@ -79,6 +81,7 @@ export class GameView {
   logEl!: HTMLElement;
   /** battlefield art for THIS match — rolled once at construction (see pickBattlefieldBg) */
   private disposed = false;
+  private statRise: ReturnType<typeof createBoardStatRise>;
   private disposeScene?: () => void;
   private readonly battlefieldBg = pickBattlefieldBg();
 
@@ -86,6 +89,7 @@ export class GameView {
     this.root = root;
     this.you = you;
     this.h = h;
+    this.statRise = createBoardStatRise(root);
     delete this.root.dataset.sceneReady;delete this.root.dataset.boardRendered;delete this.root.dataset.preloadedImages;
     this.root.dataset.tableState=typeof WebGL2RenderingContext!=='undefined'?'loading':'fallback';
     this.buildSkeleton();
@@ -296,6 +300,8 @@ export class GameView {
     this.disposed = true;
     this.cancelHandDrag?.();
     this.disposeScene?.();
+    this.statRise.dispose();
+    clearBiblionFx(true);
     if (this.onLayout) window.removeEventListener("lore:layout", this.onLayout);
     for (const fn of this.cleanups.splice(0)) { try { fn(); } catch { /* already gone */ } }
   }
@@ -425,6 +431,7 @@ export class GameView {
     projectBoardDOM(this.root);
     this.root.dataset.boardRendered="true";
     settleField(this.root,fieldBefore);
+    this.statRise.update(g);
   }
 
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {

@@ -1,0 +1,52 @@
+{
+  "revision": "arrow-primary-simplified",
+  "before": {
+    "rect": {
+      "h": 100.7662353515625,
+      "w": 85.26980590820312,
+      "x": 256.0303955078125,
+      "y": 438.4046630859375
+    },
+    "text": "6ドラゴン63",
+    "uid": "field-0-1"
+  },
+  "after": {
+    "rect": {
+      "h": 100.7662353515625,
+      "w": 85.26980590820312,
+      "x": 256.0303955078125,
+      "y": 438.4046630859375
+    },
+    "text": "6ドラゴン63",
+    "uid": "field-0-1",
+    "vfxCanvases": 1
+  },
+  "checks": [
+    "Chevron shape, color, timing and motion preserved",
+    "Removed wisp texture, spiral strips, contact ring and center flash",
+    "Arrows render after support, with depth testing disabled",
+    "Six dim perimeter glints end by 0.65 seconds",
+    "Target bounds and original text unchanged",
+    "Opponent target selection works; single VFX canvas",
+    "1280x720, 1920x1080, 390x844 visual inspection",
+    "390px document width equals viewport",
+    "85 frames at 30 fps exported",
+    "esbuild bundle and git diff --check passed"
+  ],
+  "errors": [],
+  "limitations": [
+    "Visual fixture only; no game-rule integration",
+    "No concurrent effects or GPU performance benchmark",
+    "Optional audio not audibly reviewed"
+  ],
+  "integration": {
+    "status": "adopted",
+    "checks": [
+      "Client typecheck passed",
+      "tests/stat-rise.mjs passed",
+      "Browser: attack 6 to 7 automatically emitted one target-local canvas",
+      "Repeated gain reused same canvas; rising arrows visually confirmed"
+    ],
+    "screenshot": "integration.jpg"
+  }
+}

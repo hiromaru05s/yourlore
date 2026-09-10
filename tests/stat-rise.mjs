@@ -1,0 +1,35 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {mkdtemp,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import path from 'node:path';
+const dir=await mkdtemp(path.join(tmpdir(),'lore-stat-rise-'));
+try {
+  await build({stdin:{contents:"export {createAttackRiseTracker} from './client/src/ui/statRiseChanges'; export {createGame,effAtk} from './client/src/shared/engine'; export {DB} from './client/src/shared/cards';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'test.mjs')});
+  const {createAttackRiseTracker,createGame,DB}=await import(path.join(dir,'test.mjs'));
+  const g=createGame({mode:'bot',seed:71,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;
+  const mon=(uid)=>({...DB.GM6_0,uid,atkMod:0,tempAtk:0,defMod:0,dmg:0});
+  g.players[0].field=[mon('a'),mon('b')]; g.players[1].field=[mon('c')];
+  const track=createAttackRiseTracker();
+  assert.deepEqual(track(g),[],'initial board is a baseline');
+  g.players[0].field[0].tempAtk=2;
+  assert.deepEqual(track(g),['a'],'in-place mutation and temporary buff');
+  assert.deepEqual(track(g),[],'repeated snapshot does not replay');
+  g.players[0].field[0].atkMod=3; g.players[0].field[1].atkMod=3; g.players[1].field[0].atkMod=1;
+  assert.deepEqual(track(g),['a','b','c'],'simultaneous buffs on both sides');
+  g.players[0].field[0].tempAtk=0;
+  assert.deepEqual(track(g),[],'decreases do not fire');
+  g.players[0].field.push(mon('new'));
+  assert.deepEqual(track(g),[],'summoning does not fire');
+  g.players[0].field[0].tribe='시초'; g.players[0].field.push({...mon('lord'),aura:'originLord',val:3});
+  assert.deepEqual(track(g),['a'],'effective aura gain is included');
+  g.players[0].field[0].dmg=0; g.players[0].field[0].defMod=5;
+  assert.deepEqual(track(g),[],'health-only gain is not attack');
+  const moved=g.players[0].field.shift(); moved.atkMod+=10; g.players[1].field.push(moved);
+  assert.deepEqual(track(g),[],'ownership transfer establishes a baseline');
+  g.players[0].field=[]; track(g); g.players[0].field=[mon('b')];
+  assert.deepEqual(track(g),[],'removed then re-entering cards are new');
+  g.over=true; g.players[0].field[0].atkMod=50;
+  assert.deepEqual(track(g),[],'no gain effects after match end');
+  console.log('PASS: initial/summon, mutations, repeats, both sides, aura, decreases, health, ownership, re-entry and match end');
+} finally {await rm(dir,{recursive:true,force:true});}

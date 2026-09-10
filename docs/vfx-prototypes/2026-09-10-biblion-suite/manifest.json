@@ -1,0 +1,106 @@
+{
+  "date": "2026-09-10",
+  "purpose": "Biblion board VFX suite, blue attack and red health",
+  "files": [
+    {
+      "file": ".gitignore",
+      "sha256": "a7036d33a813695ac80e4d51a36ad7927c22cd6e853399c3453d2de0b53dc0e7",
+      "bytes": 69
+    },
+    {
+      "file": "README.md",
+      "sha256": "a3cc4161e0ddef2c818305ed84bf73b48062c3c7e8fb1d1375d961b3907b6a3f",
+      "bytes": 5167
+    },
+    {
+      "file": "attack.jpg",
+      "sha256": "2bc8ac6d475ed4d59908cc621790cb7cf2f8a6db4a148f4772d1f3763627a772",
+      "bytes": 152410
+    },
+    {
+      "file": "enchant.jpg",
+      "sha256": "1e5622c89f50f2a8bcc1d49e87edb5179cd5bddb789be464f7d0a8fcd0d3c912",
+      "bytes": 152593
+    },
+    {
+      "file": "heal.jpg",
+      "sha256": "0bcd84f0cc94d4cc3ebc1f682b690ea0a04ce3b29b61e612c0a1c19729a2a103",
+      "bytes": 146559
+    },
+    {
+      "file": "health.jpg",
+      "sha256": "0a523ff94699e8bab67db3597751881d19af8bb360ae25898e78cf61a29dbe0b",
+      "bytes": 152457
+    },
+    {
+      "file": "index.html",
+      "sha256": "2e865394d2e96e90fbd9df1410e0574aaabb0421fef89e1920f13762af7d77cd",
+      "bytes": 1431
+    },
+    {
+      "file": "mana.jpg",
+      "sha256": "1eb31f09fc6ca28f2a02cb600172297af852d326be7f1cd6e84762a51b9635a7",
+      "bytes": 151029
+    },
+    {
+      "file": "mobile-mana.jpg",
+      "sha256": "da5a6e7c7f6060b08b5cff224f92b1beb8acb011353d86d46ad17d852ca7e607",
+      "bytes": 62405
+    },
+    {
+      "file": "mobile-summon.jpg",
+      "sha256": "7a8aa930c87c2d8a8299a5ef63c9fcd81061999cadfda6f2dc0486616d2a46c2",
+      "bytes": 62520
+    },
+    {
+      "file": "preview.css",
+      "sha256": "c0b13d355fa30d555cbdf8e722af605516882144cce40d4fd7e878615cb8ed74",
+      "bytes": 1796
+    },
+    {
+      "file": "preview.ts",
+      "sha256": "231b0324bd554d1a832884eacc3fb33d69a341c74eed21aa5e06f28a60982bd7",
+      "bytes": 5841
+    },
+    {
+      "file": "qa.json",
+      "sha256": "1b8524eb713859eaf623e3f079742feedf121176b01291e554c016509f8147ed",
+      "bytes": 2492
+    },
+    {
+      "file": "quest.jpg",
+      "sha256": "1acd7fca4b87dfee2a9b2a584fb3d8efc75073f470b0bb6060e69a7f82d7be03",
+      "bytes": 153109
+    },
+    {
+      "file": "quick.jpg",
+      "sha256": "96224846c1365f9ecb4ca493249c2eb8c6a11f286243b5047237f189ea6ebcb3",
+      "bytes": 146275
+    },
+    {
+      "file": "spell.jpg",
+      "sha256": "366743a6b17cb6bcbaea8e7534e1c7c77f715f30ac3151406d31b0e8b961a12d",
+      "bytes": 146230
+    },
+    {
+      "file": "summon-hover.jpg",
+      "sha256": "2dead9ee6e787c45cb882a7835da3d3d9db85ce76b4a09b99971e9d2c9026df5",
+      "bytes": 154212
+    },
+    {
+      "file": "summon.jpg",
+      "sha256": "f51720979d56f4ca2e1bc6e08034ac14f0209e64020c0015389f4f9c482058e9",
+      "bytes": 155574
+    },
+    {
+      "file": "summon.mp4",
+      "sha256": "992d53d502b89f7af65e98cca1dc7509b41a07ba1106e6070d5a13e10848eab2",
+      "bytes": 595056
+    },
+    {
+      "file": "vite.config.mjs",
+      "sha256": "f6e580443772315a64692281cfe29110be3f4090d317ab9410cd9acbe205464e",
+      "bytes": 479
+    }
+  ]
+}
