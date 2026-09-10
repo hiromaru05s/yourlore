@@ -832,3 +832,29 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
 .board-projected .market-cards > .card { transform:translateZ(1px); }
 .board-projected .market-cards > .card.is-buyable:hover { transform:translateY(-6px) translateZ(1px); }
 .reroll-focus #supplyMarket .card { transform:translateY(-3px) translateZ(1px); }
+
+/* The fighting lane has its own center, independent of the equipment rack. */
+.game .zone-mon { justify-content:center;min-height:var(--card-h); }
+.game .zone-mon > .slot:not([data-reserved-uid]) { position:absolute;visibility:hidden;pointer-events:none;left:50%;top:0; }
+.game .zone-mon > .slot[data-reserved-uid] { flex:none;visibility:hidden; }
+.game .zone-mon > .card { flex:none; }
+.game .rift-button { width:calc(var(--card-w)*.72);height:calc(var(--card-w)*.82);margin-left:0; }
+.game .mid-aside { width:calc(var(--card-w)*1.25);flex-basis:calc(var(--card-w)*1.25);gap:4px; }
+.game #endBtn { width:calc(var(--card-w)*1.25);min-height:calc(var(--card-w)*.53);font-size:clamp(8px,.73vw,11px); }
+.game .mp-clock.show,.game .tc-dial { width:calc(var(--card-w)*.86);height:calc(var(--card-w)*.86); }
+.game .tc-num { font-size:calc(var(--card-w)*.42); }
+@media(min-width:701px){
+ .game .prow > .field-block { width:calc(7*var(--card-w) + 6*var(--slot-gap));padding:0; }
+ .game .prow .pile-col { position:absolute;left:calc(100% + var(--slot-gap)*2);top:0;bottom:0;height:calc(var(--card-w)*2.08);margin-block:auto;gap:var(--slot-gap); }
+ .game .prow .rift-button { position:absolute;right:calc(var(--card-w)*.3);top:calc(100% + 8px); }
+}
+@media(max-width:700px) and (orientation:portrait){
+ .game .mid-aside { width:42px;flex-basis:42px; }
+ .game #endBtn { width:42px;min-height:30px;font-size:7px; }
+ .game .mp-clock.show,.game .tc-dial { width:36px;height:36px; }
+ .game .tc-num { font-size:18px; }
+ .game .pile-col { gap:8px; }
+}
+
+.game .rift-sprite { width:135%;left:-17.5%;top:-15%; }
+.opp-hand .card--back { clip-path:inset(3% round 12%); }

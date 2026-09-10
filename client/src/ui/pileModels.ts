@@ -15,8 +15,7 @@ function rounded(w:number,h:number,r:number):T.Shape {
  * vertices for resting stacks. The sleeve is shared, never per-card geometry. */
 export function cardStock(map:T.Texture, face?:T.Texture, edgesOnly=false):T.Group {
   const g=new T.Group();g.name='card-stock';
-  const inset=!!face||edgesOnly;
-  const shape=rounded(inset?.94:1,inset?RATIO*.94:RATIO,inset?.12:.045);
+  const shape=rounded(.94,RATIO*.94,.12);
   const edge=new T.ExtrudeGeometry(shape,{depth:.014,bevelEnabled:false,curveSegments:4});edge.translate(0,0,-.007);
   const stock=new T.Mesh(edge,[new T.MeshBasicMaterial({visible:false}),new T.MeshStandardMaterial({color:0xccbea5,roughness:.85})]);stock.castShadow=true;stock.receiveShadow=true;g.add(stock);
   const skin=(texture:T.Texture,back:boolean)=>{

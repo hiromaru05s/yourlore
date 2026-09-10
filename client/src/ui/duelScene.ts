@@ -1,3 +1,4 @@
+import {dustTexture,dustDuration,dustPose,createDust} from './impactDust';
 /** Furniture and front-layer card flights share one camera and physical scale. */
 import * as T from 'three';
 import {makePile,type PileModel} from './pileModels';
@@ -62,16 +63,15 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   const observer=new MutationObserver(()=>{dirty=true;});observer.observe(root,{childList:true,subtree:true,attributes:true,attributeFilter:['class','data-count','data-sleeve','data-face']});
   const onLayout=()=>{dirty=true;};window.addEventListener('lore:layout',onLayout);
   const dustScene=new T.Scene(), dustCamera=new T.PerspectiveCamera(45,1,1,4000);
-  const dustCanvas=document.createElement('canvas');dustCanvas.width=dustCanvas.height=64;
-  const dc=dustCanvas.getContext('2d')!,dg=dc.createRadialGradient(32,32,2,32,32,32);dg.addColorStop(0,'#ffffffaa');dg.addColorStop(.35,'#ffffff65');dg.addColorStop(1,'#ffffff00');dc.fillStyle=dg;dc.fillRect(0,0,64,64);
-  const dustMap=new T.CanvasTexture(dustCanvas);
+  const dustMap=dustTexture();
   const dusts:Array<{group:T.Group;start:number;rect:DOMRect;heavy:boolean}>=[];
   const onDust=(event:Event):void=>{
     if(reduced.matches)return;
     const rect=(event as CustomEvent<DOMRect>).detail;
     const heavy=event.type==='lore:summon-impact';
-    const group=new T.Group();dustScene.add(group);
-    for(let i=0;i<(heavy?52:22);i++)mesh(new T.PlaneGeometry(12+(i%4)*4,12+(i%4)*4),new T.MeshBasicMaterial({map:dustMap,color:heavy?0x9b8c77:0xcbbda5,transparent:true,opacity:.22,depthWrite:false}),group);
+    const group=createDust(dustMap,heavy);dustScene.add(group);
+    // Bound concurrent opening impacts without changing gameplay timing.
+    if(dusts.length>=16){const old=dusts.shift()!;dustScene.remove(old.group);disposeObject(old.group);}
     dusts.push({group,start:performance.now(),rect,heavy});
   };
   window.addEventListener('lore:summon-dust',onDust);window.addEventListener('lore:summon-impact',onDust);
@@ -126,10 +126,10 @@ export function mountDuelScene(root:HTMLElement):()=>void {
     if(dusts.length || flows.length){
       renderer.setViewport(0,0,width,height);renderer.setScissor(0,0,width,height);renderer.clearDepth();
       dustCamera.aspect=width/height;dustCamera.position.z=height/(2*Math.tan(Math.PI/8));dustCamera.updateProjectionMatrix();
-      for(let j=dusts.length-1;j>=0;j--){const d=dusts[j],age=(now-d.start)/(d.heavy?1050:800);
+      for(let j=dusts.length-1;j>=0;j--){const d=dusts[j],age=(now-d.start)/dustDuration(d.heavy);
         if(age>=1){dustScene.remove(d.group);disposeObject(d.group);dusts.splice(j,1);continue;}
         d.group.position.set(d.rect.left+d.rect.width/2-width/2,height/2-d.rect.bottom,0);
-        d.group.children.forEach((o,i)=>{const m=o as T.Mesh;const angle=i*2.399,spread=d.heavy?1-(1-age)**3:age;m.position.set(Math.cos(angle)*spread*(d.heavy?125:70),Math.sin(angle)*spread*12+Math.sin(age*Math.PI)*(d.heavy?30:16),Math.sin(angle)*age*38);m.rotation.z=age*i;m.scale.setScalar((.5+age*2)*(d.heavy?1.45:1));(m.material as T.MeshBasicMaterial).opacity=(1-age)*(d.heavy?.42:.25);});
+        d.group.children.forEach((o,i)=>{const m=o as T.Mesh,p=dustPose(age,i,d.heavy,Math.max(24,d.rect.width));m.position.set(p.x,p.y,p.z);m.rotation.z=p.rotation;m.scale.set(p.size,p.size*(i<32?.72:1),1);(m.material as T.MeshBasicMaterial).opacity=p.opacity;});
       }
       for(let j=flows.length-1;j>=0;j--){
         const f=flows[j],age=(now-f.start)/700;
@@ -143,6 +143,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
       }
       renderer.render(dustScene,dustCamera);
     }
+    canvas.dataset.dustCount=String(dusts.length);
     const active=flightScene.children.length>1;
     if(active||flightActive)flightRenderer.render(flightScene,camera);
     flightActive=active;

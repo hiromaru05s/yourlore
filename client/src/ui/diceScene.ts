@@ -13,11 +13,11 @@ export function landingQuaternion(value:number):T.Quaternion {
  * through the ground, even while it tumbles over an edge. */
 export function diePose(t:number,value:number,index=0) {
   t=T.MathUtils.clamp(t,0,1);
-  const end=landingQuaternion(value),spin=Math.pow(Math.max(0,1-t/.94),2);
+  const end=landingQuaternion(value),spin=Math.pow(Math.max(0,1-t/.90),2);
   const quaternion=new T.Quaternion().setFromEuler(new T.Euler(spin*Math.PI*3,spin*Math.PI*4,spin*(index%2?-1.8:1.8))).multiply(end);
   let lift=0;
-  if(t<.3)lift=.95*(1-(t/.3)**2);
-  else for(const [a,b,h] of [[.3,.59,.42],[.59,.79,.16],[.79,.92,.05],[.92,1,.01]])if(t>=a&&t<=b){const u=(t-a)/(b-a);lift=4*h*u*(1-u);break;}
+  if(t<.3)lift=.62*(1-(t/.3)**2);
+  else for(const [a,b,h] of [[.3,.59,.20],[.59,.79,.065],[.79,.92,.016],[.92,1,0]])if(t>=a&&t<=b){const u=(t-a)/(b-a);lift=4*h*u*(1-u);break;}
   const m=new T.Matrix4().makeRotationFromQuaternion(quaternion).elements;
   const support=.405*(Math.abs(m[1])+Math.abs(m[5])+Math.abs(m[9]))+.095;
   return {quaternion,lift,y:support+lift,x:(index%2?1:-1)*.6*(1-t)**2};
@@ -48,6 +48,7 @@ export async function mountDiceScene(host:HTMLElement,rolls:number[],casino:bool
   try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return null;}
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));renderer.setClearColor(0,0);
   renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.92;
+  renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
 
   const canvas=renderer.domElement;canvas.className='d3-canvas';canvas.setAttribute('aria-hidden','true');
   let groundMap:T.Texture|null=null;
@@ -73,8 +74,16 @@ export async function mountDiceScene(host:HTMLElement,rolls:number[],casino:bool
     texture!.colorSpace=T.SRGBColorSpace;texture!.anisotropy=4;
     const pmrem=new T.PMREMGenerator(renderer),room=new RoomEnvironment();environment=pmrem.fromScene(room,.05);scene.environment=environment.texture;scene.environmentIntensity=.22;room.dispose();pmrem.dispose();
     scene.add(new T.HemisphereLight(0xffffff,0x40404a,1.1));
-    const key=new T.DirectionalLight(0xffffff,.8);key.position.set(-3,5,6);scene.add(key);
+    const key=new T.DirectionalLight(0xffffff,.8);key.position.set(-3,7,3);key.castShadow=true;key.shadow.mapSize.set(1024,1024);key.shadow.camera.left=-7;key.shadow.camera.right=7;key.shadow.camera.top=5;key.shadow.camera.bottom=-5;key.shadow.camera.near=.5;key.shadow.camera.far=20;key.shadow.bias=-.0001;key.shadow.normalBias=.012;scene.add(key);
     const rim=new T.DirectionalLight(0xcbd2df,.2);rim.position.set(4,2,-2);scene.add(rim);
+    // A physical matte receiving surface and cast shadows make every contact readable.
+    const trayWidth=(rolls.length*1.65+1.5)/3.2;
+    const rimBase=new T.Mesh(new T.CylinderGeometry(1.6,1.6,.10,96),new T.MeshStandardMaterial({color:0xa18b63,roughness:.68,metalness:.35}));
+    rimBase.scale.x=trayWidth;rimBase.position.y=-.06;rimBase.receiveShadow=true;scene.add(rimBase);
+    const floor=new T.Mesh(new T.CylinderGeometry(1.56,1.56,.045,96),new T.MeshStandardMaterial({color:0x273a4a,roughness:1,metalness:0}));
+    floor.name='dice-ground';floor.scale.x=trayWidth;floor.position.y=-.0225;floor.receiveShadow=true;scene.add(floor);
+    const inlay=new T.Mesh(new T.TorusGeometry(1.47,.006,4,96),new T.MeshBasicMaterial({color:0x827457}));
+    inlay.rotation.x=-Math.PI/2;inlay.scale.x=trayWidth;inlay.position.y=.001;scene.add(inlay);
     // Soft ground shadows grow and fade with height, tightening at each contact.
     const shadowCanvas=document.createElement('canvas');shadowCanvas.width=shadowCanvas.height=64;
     const ctx=shadowCanvas.getContext('2d')!,gradient=ctx.createRadialGradient(32,32,4,32,32,32);
@@ -86,22 +95,18 @@ export async function mountDiceScene(host:HTMLElement,rolls:number[],casino:bool
     const camera=new T.PerspectiveCamera(30,1,.1,50);
     const rect=host.getBoundingClientRect();renderer.setSize(rect.width,rect.height,false);camera.aspect=rect.width/rect.height;
     const distance=Math.max(6.8,(rolls.length*1.6+2)/(2*Math.tan(Math.PI/12)*camera.aspect));
-    camera.position.set(0,distance*.78,distance*.62);camera.lookAt(0,.35,0);camera.updateProjectionMatrix();
+    camera.position.set(0,distance*Math.cos(.22),distance*Math.sin(.22));camera.lookAt(0,.35,0);camera.updateProjectionMatrix();
     const start=performance.now(),vw=innerWidth,vh=innerHeight;
     const tick=(now:number)=>{
       if(dead)return;
       if(!host.isConnected||document.hidden||innerWidth!==vw||innerHeight!==vh){dispose();return;}
-      // The dice keep resting on the ground. The view rises during the final
-      // two small bounces, then holds the authoritative upper faces in view.
-      const progress=T.MathUtils.clamp((now-start-850)/(600+Math.max(0,rolls.length-1)*85),0,1);
-      const ease=progress*progress*(3-2*progress),angle=T.MathUtils.lerp(Math.atan2(.62,.78),.035,ease);
-      camera.position.set(0,distance*Math.cos(angle),distance*Math.sin(angle));camera.lookAt(0,.35,0);
+      // Fixed view: floor and dice never orbit away from one another at rest.
       let settled=true;
       dice.forEach(({die,value,shadow},i)=>{
         const t=Math.max(0,Math.min(1,(now-start-i*85)/1450));if(t<1)settled=false;
         const pose=diePose(t,value,i);die.quaternion.copy(pose.quaternion);
         die.position.set((i-(rolls.length-1)/2)*1.65+pose.x,pose.y,.12*(1-t)*(i%2?1:-1));
-        shadow.position.x=die.position.x;shadow.position.z=die.position.z;shadow.scale.setScalar(.8+pose.lift*.5);shadow.material.opacity=.72/(1+pose.lift*1.5);
+        shadow.position.x=die.position.x;shadow.position.z=die.position.z;shadow.scale.setScalar(.64+pose.lift*.6);shadow.material.opacity=.62/(1+pose.lift*2.5);
       });
       try{renderer.render(scene,camera);}catch{dispose();return;}
       if(settled){host.dataset.settled=rolls.join(',');resolveFinished();}else frame=requestAnimationFrame(tick);

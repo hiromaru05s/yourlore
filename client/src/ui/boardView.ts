@@ -1,3 +1,4 @@
+import {fieldPositions,settleField} from './fieldLayout';
 import {prepareDuel} from './duelReadiness';
 // ============================================================
 // LORE — board view. Renders the whole game from a GameState
@@ -332,6 +333,7 @@ export class GameView {
   }
 
   render(g: GameState): void {
+    const fieldBefore=fieldPositions(this.root);
     const readyPiles=new Set([...this.root.querySelectorAll('.pile--3d-ready')].map(el=>el.id));
     const oldCards=new Map([...this.root.querySelectorAll<HTMLElement>('.card[data-uid]')].map(el=>[el.dataset.uid,{width:el.offsetWidth,fonts:[...el.querySelectorAll<HTMLElement>('.card-name,.seal-value')].map(e=>({text:e.textContent,font:e.style.fontSize}))}]));
     this.root.querySelector('.card-block-tip')?.remove();
@@ -422,6 +424,7 @@ export class GameView {
     for(const id of readyPiles)this.root.querySelector(`#${id}`)?.classList.add('pile--3d-ready');
     projectBoardDOM(this.root);
     this.root.dataset.boardRendered="true";
+    settleField(this.root,fieldBefore);
   }
 
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {

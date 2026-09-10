@@ -1,3 +1,4 @@
+import {reserveMonster} from './fieldLayout';
 import {waitForDuel} from './duelReadiness';
 // ============================================================
 // LORE — animation helpers. Triggered by engine events; never
@@ -702,14 +703,18 @@ function monZoneEl(side: ViewSide): HTMLElement | null {
  * field slot and STAYS there (the real board re-renders later). Returns the
  * ghost node so a same-batch destroy can kill it visibly.
  */
-export async function ghostSummon(card: CardInst, side: ViewSide, slotIndex: number): Promise<HTMLElement | null> {
+export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: number): Promise<HTMLElement | null> {
   const from = fromRect(side, takeOrigin(side)); const zone=monZoneEl(side);
-  const target=zone?.children[Math.max(0,Math.min(slotIndex,zone.children.length-1))] as HTMLElement|undefined;
-  if (!from || !target) return null;
+  if(!from||!zone)return null;
+  const target=reserveMonster(zone,card.uid);
+  if (!target) return null;
   const node = floatAt(cardEl(card, { size: "hand", fullArt:true }), from);
   try {
     await focusCard(node, side);
-    return await flyIntoSlot(node,target,cardEl(card,{field:true}),true);
+    const face=await flyIntoSlot(node,target,cardEl(card,{field:true}),true);
+    // Hand the exact landing face to the lane before another summon opens space.
+    face.removeAttribute('style');face.classList.remove('fx-field-ghost','fx-card-flight');
+    target.replaceWith(face);return face;
   } finally { node.remove(); }
 }
 
@@ -718,7 +723,7 @@ export async function ghostDie(node: HTMLElement, side: ViewSide): Promise<void>
   const from = node.getBoundingClientRect();
   node.classList.add("mdie");
   await wait(320);
-  node.remove();
+  if(node.closest(".zone-mon"))node.style.visibility="hidden";else node.remove();
   flyCardFrame(frameFor("mon"), from, rectOf("#" + discId(side)));
   pileFlash(discId(side));
   await wait(340);

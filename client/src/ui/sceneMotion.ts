@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {overhandPose} from './shufflePose';
 import {bindBoardMotion,type BoardMotion} from './boardMotion';
 import {cardStock,type PileModel} from './pileModels';
 import {boardLens,layoutRect,cardUnit,screenToBoard,projectBoardDOM,boardMatrix} from './boardProjection';
@@ -61,21 +62,22 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       try{await timeline(reduced?100:2800,req.signal,t=>{
         // Lift together, mix faster while carrying, square above the deck, then
         // release the entire stack. No card drifts down during the mixing phase.
-        const mixing=sat((t-.19)/.51),cycle=Math.pow(mixing,1.5)*8;
-        const round=Math.min(7,Math.floor(cycle)),phase=cycle-round;
-        root.dataset.shufflePhase=t<.19?'lift':t<.70?(phase<.45?'split':'interleave'):t<.80?'square':'land';
-        root.dataset.shuffleRound=String(round+1);
+        const mixing=sat((t-.19)/.51),motion=overhandPose(t,0,n);
+        root.dataset.shufflePhase=motion.phase;root.dataset.shuffleRound=String(motion.round);
         const lift=smooth(t/.19),travel=Math.pow(smooth(mixing),1.4),fall=sat((t-.8)/.15)**3;
-        const rebound=t>.95?Math.sin((t-.95)/.05*Math.PI)*unit*.065:0;
+        const rebound=t>.95?Math.sin((t-.95)/.05*Math.PI)*unit*.04:0;
+        const square=smooth((t-.70)/.10);
         cards.forEach((m,i)=>{
-          const local=sat((phase-(i%4)*.025)/.9),split=t>=.19&&t<.70?Math.sin(local*Math.PI)**.7:0;
-          const side=(i+round)%2?1:-1;
+          const pose=overhandPose(t,i,n);
           const x=a.left+a.width/2+(b.left+b.width/2-a.left-a.width/2)*travel;
           const z=a.top+a.height/2+(b.top+b.height/2-a.top-a.height/2)*travel;
-          const rest=unit*(.144+(n<=1?0:i/(n-1))*Math.min(req.count,40)*.005);
+          const rank=(i-8*Math.max(1,Math.floor(n/3))%n+n)%n;
+          const rest=unit*(.144+(n<=1?0:rank/(n-1))*Math.min(req.count,40)*.005);
           const fromY=unit*(.126+(n<=1?0:i/(n-1))*Math.min(req.count,40)*.004);
-          m.position.set(x-cx+split*side*unit*.8,fromY+(rest-fromY)*travel+unit*1.65*lift*(1-fall)+rebound+i*unit*.009*split,z-cy+side*split*unit*.15);
-          m.scale.setScalar(unit);m.rotation.set(-Math.PI/2+split*.08,0,side*split*.16);
+          const stack=unit*(.144+pose.y);
+          const level=fromY+(stack-fromY)*smooth(t/.19)+(rest-stack)*square;
+          m.position.set(x-cx+pose.x*unit,level+unit*1.4*lift*(1-fall)+rebound,z-cy+pose.z*unit);
+          m.scale.setScalar(unit);m.rotation.set(-Math.PI/2+pose.tilt,0,pose.roll);
         });
         if(t>=.95&&!impacted&&!req.signal.aborted){impacted=true;if(!reduced){
           window.dispatchEvent(new CustomEvent('lore:summon-impact',{detail:req.target.getBoundingClientRect()}));

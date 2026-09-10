@@ -1,3 +1,4 @@
+import {releaseMonster} from '../ui/fieldLayout';
 import { paintDuelClock } from '../ui/duelClock';
 // ============================================================
 // LORE — game controllers.
@@ -277,9 +278,10 @@ export abstract class BaseController implements BoardHandlers {
         case "destroy": {
           const gh = ghosts.get(e.uid);
           const exiled=res.state.players[e.player].removed?.find(c=>c.uid===e.uid);
-          if(exiled){await A.exileCard(exiled,sideOf(e.player),gh?.el??document.querySelector<HTMLElement>(`.card[data-uid="${e.uid}"]`));gh?.el.remove();ghosts.delete(e.uid);}
+          if(exiled){await A.exileCard(exiled,sideOf(e.player),gh?.el??document.querySelector<HTMLElement>(`.card[data-uid="${e.uid}"]`));if(gh&&!gh.el.closest(".zone-mon"))gh.el.remove();ghosts.delete(e.uid);}
           else if (gh) { await A.ghostDie(gh.el, gh.side); ghosts.delete(e.uid); }
           else await A.destroyAnim(e.uid, sideOf(e.player));
+          releaseMonster(e.uid);
           fieldCount[e.player] = Math.max(0, fieldCount[e.player] - 1);
           break;
         }

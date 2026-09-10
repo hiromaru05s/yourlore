@@ -1,0 +1,25 @@
+{
+  "frames": [
+    {
+      "progress": 0.23,
+      "opacity": "1"
+    },
+    {
+      "progress": 0.52,
+      "opacity": "1"
+    },
+    {
+      "progress": 0.84,
+      "opacity": "1"
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "public card deforming mesh",
+    "opacity stays one through last tail",
+    "source never reappears before state commit",
+    "opponent rift and fast-forward cleanup",
+    "shared paper draw regression",
+    "reduced motion fallback"
+  ]
+}
