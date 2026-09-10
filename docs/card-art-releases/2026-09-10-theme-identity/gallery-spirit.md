@@ -15,14 +15,14 @@
 
 【条件】自分の場にモンスターがいない状態で、自分のターンを5回終了する · 【報酬】自分の最大体力+30
 
-Use case: stylized-concept. Create one finished LORE inner-card painting, landscape aspect 1.095:1, no card frame or text. Spirit Tori MUST be a DOG based closely on the first two reference photos: small scruffy warm tan dog, dark brown/black floppy feathered ears, large round dark eyes, black nose, pale cream muzzle/chin and chest, slender forelegs and feathery curled tail. Preserve these recognizable facial features and proportions; no bird, wings, antlers or humanoid. The third image is ONLY the refined hand-painted fantasy illustration style, not its person or architecture. Setting: intimate mossy woodland pool at sunrise, low ferns, warm amber fireflies, roots and small white flowers. Tori rests one forepaw forward on moss and looks gently toward viewer; body mostly solid, a subtle golden spirit glow along fur tips and tail, no costume obscuring fur, one tiny leaf charm allowed. Express quiet companionship and sanctuary (quest requires turns with no monsters, reward vitality). Dog occupies 60% of frame, entire ears paws tail inside central80%; painterly depth, fine expressive eyes, soft brush texture, luminous but restrained. No white stone buildings, arches, plinths, compass-star decoration, modern bedding, social media UI, captions or watermarks.
+探書の精霊と同じ簡潔な顔、目、紙片状の毛束、浮遊する魔法生物の造形。犬の毛色と垂れ耳を識別のモチーフとして保持。
 
-ユーザーの写実感への指摘を受け再生成。毛を輪郭線と面の毛束に置き換え、顔・鼻を描画として簡略化。エルフの線と塗りをスタイル基準にし、犬固有の毛色と耳の特徴を保持。
+写真と旧犬画像を参照から外し、NMD2探書の精霊だけを描画基準に再生成。単純化した短い顔・大きい描画の目・紙片状の毛・浮遊する体に再設計。トリは茶色と黒い両垂れ耳、ウィンターは白灰の配色と長い白い脚で区別。
 
 ### R002 精霊 - ウィンター
 
 【条件】自分の最大体力を累計30上昇させる · 【報酬】自分の最大マナ+2
 
-Use case: stylized-concept. Create one finished LORE inner-card painting landscape 1.095:1, no frame/text. Spirit Winter MUST be a DOG whose identity comes from first three reference photos. Large shaggy white-and-gray dog, very fluffy white face/muzzle/chest/long lower legs and paws, broad black nose, gentle brown eyes, gray floppy ears, gray patch over viewer-right side of head/eye and gray saddle body. Keep soft wavy fur and friendly open mouth with pink tongue. Fourth reference is ONLY painterly fantasy art style, not its human or buildings. Scene: secluded snowy conifer forest, deep turquoise frozen stream, soft dusk lavender sky and small northern-light ribbons. Dog stands with one fluffy forepaw raised on a snowy fallen log, looking at viewer; full body entirely visible and features faithful. Keep 80% solid fluffy dog, only faint icy blue spirit light at fur tips and delicate floating snow sparks, no wings, butterfly, antlers, armor or human form. Quest represents accumulated vitality blossoming into mana. Composition 60% subject, ample margin for ears paws tail, beautiful refined Japanese fantasy handpainting consistent with reference. No white marble architecture or pedestal; no orange modern jacket/harness, tags/QR codes, social media interface, lettering, watermark. Do not copy any screenshot text.
+探書の精霊と同じ簡潔な顔、目、紙片状の毛束、浮遊する魔法生物の造形。犬の毛色と垂れ耳を識別のモチーフとして保持。
 
-ユーザーの写実感への指摘を受け再生成。毛を輪郭線と面の毛束に置き換え、顔・鼻を描画として簡略化。エルフの線と塗りをスタイル基準にし、犬固有の毛色と耳の特徴を保持。
+写真と旧犬画像を参照から外し、NMD2探書の精霊だけを描画基準に再生成。単純化した短い顔・大きい描画の目・紙片状の毛・浮遊する体に再設計。トリは茶色と黒い両垂れ耳、ウィンターは白灰の配色と長い白い脚で区別。

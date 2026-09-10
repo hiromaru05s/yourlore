@@ -43,16 +43,20 @@
   },
   "Q_TORI": {
     "status": "resolved",
-    "reason": "User rejected photographic fur and face as inconsistent with the card illustration style",
-    "correction": "Drawn contours, grouped fur locks, simplified face and painted shadow planes; same canine identity and setting",
+    "reason": "User rejected v2 as still too realistic and inconsistent with the concept",
+    "correction": "探書の精霊と同じ簡潔な顔、目、紙片状の毛束、浮遊する魔法生物の造形。犬の毛色と垂れ耳を識別のモチーフとして保持。",
     "final": "images/Q_TORI.png",
-    "firstAttempt": "iterations/Q_TORI-attempt1.png"
+    "firstAttempt": "iterations/Q_TORI-attempt1.png",
+    "secondAttempt": "iterations/Q_TORI-attempt2.png",
+    "styleReference": "references/NMD2-spirit-style.webp"
   },
   "Q_WINTER": {
     "status": "resolved",
-    "reason": "User rejected photographic fur and face as inconsistent with the card illustration style",
-    "correction": "Drawn contours, grouped fur locks, simplified face and painted shadow planes; same canine identity and setting",
+    "reason": "User rejected v2 as still too realistic and inconsistent with the concept",
+    "correction": "探書の精霊と同じ簡潔な顔、目、紙片状の毛束、浮遊する魔法生物の造形。犬の毛色と垂れ耳を識別のモチーフとして保持。",
     "final": "images/Q_WINTER.png",
-    "firstAttempt": "iterations/Q_WINTER-attempt1.png"
+    "firstAttempt": "iterations/Q_WINTER-attempt1.png",
+    "secondAttempt": "iterations/Q_WINTER-attempt2.png",
+    "styleReference": "references/NMD2-spirit-style.webp"
   }
 }

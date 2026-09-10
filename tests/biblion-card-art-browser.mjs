@@ -18,7 +18,7 @@ try{
   return results;
  });
  assert.equal(result.length,296);assert.equal(new Set(result.map(r=>r.id)).size,296);
- for(const r of result){for(let i=0;i<3;i++){assert(r.urls[i].includes(`/${r.id}.webp?v=20260910-theme-identity-v2`));assert.equal(r.sizes[i][0],[192,384,832][i]);}}
+ for(const r of result){for(let i=0;i<3;i++){assert(r.urls[i].includes(`/${r.id}.webp?v=20260910-theme-identity-v3`));assert.equal(r.sizes[i][0],[192,384,832][i]);}}
  const sampleIds=process.env.LORE_ART_QA_IDS?.split(',');
  await page.evaluate((sampleIds)=>{
   document.body.style.background='#273248';const root=document.getElementById('app');root.style.cssText='height:auto;display:grid;grid-template-columns:repeat(8,170px);gap:32px 24px;padding:35px;justify-content:center';
