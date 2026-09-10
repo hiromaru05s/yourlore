@@ -30,6 +30,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
   ko: [
     { icon: "🎯", h: "게임 목표", body: [
       "상대의 <b>체력</b>을 0으로 만들면 승리합니다.",
+      "<b>체력 회복</b>은 현재 최대 체력까지 회복합니다. <b>최대 체력 증가</b>는 최대치와 현재 체력을 같은 양만큼 늘립니다.",
       "선공은 체력 <b>40</b>, 후공은 <b>45</b>로 시작해요. (후공이 조금 높은 건 선공의 템포 이점을 보정하기 위함입니다.)",
       "선공/후공은 매 게임 <b>코인토스</b>로 공정하게 정해집니다.",
     ] },
@@ -96,6 +97,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
   ja: [
     { icon: "🎯", h: "ゲームの目的", body: [
       "相手の<b>体力</b>を0にすれば勝利です。",
+      "<b>体力回復</b>は現在の最大体力まで回復します。<b>最大体力増加</b>は上限を増やし、同じ量の体力も回復します。",
       "先攻は体力<b>40</b>、後攻は<b>45</b>でスタート。(後攻が少し高いのは先攻のテンポ有利を補正するためです。)",
       "先攻/後攻は毎ゲーム<b>コイントス</b>で公平に決まります。",
     ] },
@@ -162,6 +164,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
   en: [
     { icon: "🎯", h: "Goal", body: [
       "Reduce your opponent's <b>HP</b> to 0 to win.",
+      "<b>Healing</b> restores HP up to your current maximum. <b>Increasing max HP</b> raises the maximum and restores the same amount of HP.",
       "The first player starts at <b>40</b> HP, the second at <b>45</b>. (The extra HP offsets the first player's tempo advantage.)",
       "Who goes first is decided fairly by a <b>coin toss</b> each game.",
     ] },

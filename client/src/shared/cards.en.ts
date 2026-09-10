@@ -579,9 +579,9 @@ Object.assign(TEXTS, {
   TAR3: "【Passive】The opponent cannot set trap cards",
   TAR5: "【Passive】Enemy monsters of cost 6 or less cannot attack this one; while it lives, no direct attacks",
   TDE1: "Your max mana -1 for your next 5 turns · 【Requires】Max mana 5 or more",
-  TDE2: "【Passive】Your max mana -2 (never below 3)",
+  TDE2: "【Requires】Your max mana is at least 5 · 【Passive】Your max mana -2 (never below 3)",
   TDE3: "【Each Turn】Roll a die: on 1-3, your max mana -1; on 4-6, -2 (never below 3)",
-  TDE4: "【On Summon】Your max mana becomes 4",
+  TDE4: "【Requires】Your max mana ≥5＋non-King Demon in deck · 【On Summon】Your max mana =3 · 【Passive】Your max mana cannot grow",
   COLLUSION: "Negate attacks on your tribe monsters; kill the attacker · Max mana -1: gain 1 card of the tribe",
 });
 
@@ -698,7 +698,7 @@ Object.assign(TEXTS, {
   EGG_MASTER: "On summon: all Eggs on your field gain 5 counters",
   GOLEM2: "Passive: whenever a monster on your field dies, this monster gains 1 counter",
   M10: "Passive: max mana +1 per other Golem monster on your field",
-  M7: "When this monster's attack destroys an enemy monster, it may attack once more this turn (max 7)",
+  M7: "【Passive】Kill an enemy monster by attack: 1 extra attack/turn · 【Each Turn】Turn start: die ≥5, take 3 damage",
   M9: "On summon: 1 counter · On your turn, spend a counter to refresh the offer without mana",
   NGA3: "On summon: if another Golem monster is on your field, this monster gains 3 counters",
   NHEX: "Each turn: with 10+ spells in your deck, roll a die: on 5+, add 3 Curses to the enemy graveyard",
