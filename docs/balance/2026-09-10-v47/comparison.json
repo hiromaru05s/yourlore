@@ -1,0 +1,4249 @@
+{
+  "market": [
+    {
+      "key": "TGE4",
+      "name": "始原の裁判官",
+      "before": 0.7519685039370079,
+      "after": 0.796875,
+      "change": 0.04490649606299213,
+      "beforeRank": 6,
+      "afterRank": 1
+    },
+    {
+      "key": "M11",
+      "name": "ウォーロード",
+      "before": 0.7698412698412699,
+      "after": 0.7795275590551181,
+      "change": 0.009686289213848176,
+      "beforeRank": 5,
+      "afterRank": 2
+    },
+    {
+      "key": "NGA4",
+      "name": "剣鬼",
+      "before": 0.84375,
+      "after": 0.7795275590551181,
+      "change": -0.06422244094488194,
+      "beforeRank": 2,
+      "afterRank": 3
+    },
+    {
+      "key": "TDE3",
+      "name": "魔族の狂戦士",
+      "before": 0.8203125,
+      "after": 0.74609375,
+      "change": -0.07421875,
+      "beforeRank": 4,
+      "afterRank": 4
+    },
+    {
+      "key": "ASSASSIN2",
+      "name": "中級アサシン",
+      "before": 0.69921875,
+      "after": 0.7421875,
+      "change": 0.04296875,
+      "beforeRank": 11,
+      "afterRank": 5
+    },
+    {
+      "key": "QUICK_MIMIC",
+      "name": "ミミックパーティー",
+      "before": 0.728,
+      "after": 0.7322834645669292,
+      "change": 0.004283464566929185,
+      "beforeRank": 8,
+      "afterRank": 6
+    },
+    {
+      "key": "VITAL2",
+      "name": "世界樹の信徒",
+      "before": 0.664,
+      "after": 0.7303149606299213,
+      "change": 0.06631496062992126,
+      "beforeRank": 19,
+      "afterRank": 7
+    },
+    {
+      "key": "ELITE",
+      "name": "精鋭騎士団長",
+      "before": 0.708984375,
+      "after": 0.7265625,
+      "change": 0.017578125,
+      "beforeRank": 9,
+      "afterRank": 8
+    },
+    {
+      "key": "TPO2",
+      "name": "飢えた獣",
+      "before": 0.6875,
+      "after": 0.7125984251968503,
+      "change": 0.02509842519685035,
+      "beforeRank": 12,
+      "afterRank": 9
+    },
+    {
+      "key": "TAR2",
+      "name": "没落貴族",
+      "before": 0.7076271186440678,
+      "after": 0.7058823529411765,
+      "change": -0.0017447657028912822,
+      "beforeRank": 10,
+      "afterRank": 10
+    },
+    {
+      "key": "TPO5",
+      "name": "捕食者",
+      "before": 0.6692913385826772,
+      "after": 0.7047244094488189,
+      "change": 0.03543307086614167,
+      "beforeRank": 17,
+      "afterRank": 11
+    },
+    {
+      "key": "M7",
+      "name": "エンバー・ドレイク",
+      "before": 0.8203125,
+      "after": 0.69921875,
+      "change": -0.12109375,
+      "beforeRank": 3,
+      "afterRank": 12
+    },
+    {
+      "key": "VITAL3",
+      "name": "世界樹の守り人",
+      "before": 0.6692913385826772,
+      "after": 0.6953125,
+      "change": 0.026021161417322802,
+      "beforeRank": 18,
+      "afterRank": 13
+    },
+    {
+      "key": "M4",
+      "name": "ブレード・ヘア",
+      "before": 0.6825396825396826,
+      "after": 0.6929133858267716,
+      "change": 0.010373703287089087,
+      "beforeRank": 13,
+      "afterRank": 14
+    },
+    {
+      "key": "ASSASSIN1",
+      "name": "初級アサシン",
+      "before": 0.6796875,
+      "after": 0.6796875,
+      "change": 0.0,
+      "beforeRank": 14,
+      "afterRank": 15
+    },
+    {
+      "key": "M8",
+      "name": "グローブ・ウォーデン",
+      "before": 0.6692913385826772,
+      "after": 0.67578125,
+      "change": 0.006489911417322802,
+      "beforeRank": 16,
+      "afterRank": 16
+    },
+    {
+      "key": "TAR5",
+      "name": "貴族領主",
+      "before": 0.67578125,
+      "after": 0.671875,
+      "change": -0.00390625,
+      "beforeRank": 15,
+      "afterRank": 17
+    },
+    {
+      "key": "TGE7",
+      "name": "始原の君主",
+      "before": 0.6484375,
+      "after": 0.6640625,
+      "change": 0.015625,
+      "beforeRank": 20,
+      "afterRank": 18
+    },
+    {
+      "key": "S13",
+      "name": "星墓の落下",
+      "before": 0.63671875,
+      "after": 0.66015625,
+      "change": 0.0234375,
+      "beforeRank": 24,
+      "afterRank": 19
+    },
+    {
+      "key": "M9",
+      "name": "レリック・ハンター",
+      "before": 0.638671875,
+      "after": 0.65234375,
+      "change": 0.013671875,
+      "beforeRank": 23,
+      "afterRank": 20
+    },
+    {
+      "key": "GM5_2",
+      "name": "鋼鉄の戦士",
+      "before": 0.5964566929133859,
+      "after": 0.6456692913385826,
+      "change": 0.04921259842519676,
+      "beforeRank": 37,
+      "afterRank": 21
+    },
+    {
+      "key": "DRAGON_EGG",
+      "name": "ドラゴンの卵",
+      "before": 0.6219512195121951,
+      "after": 0.6352459016393442,
+      "change": 0.013294682127149127,
+      "beforeRank": 30,
+      "afterRank": 22
+    },
+    {
+      "key": "NGA3",
+      "name": "戦士ゴーレム",
+      "before": 0.5992063492063492,
+      "after": 0.6338582677165354,
+      "change": 0.03465191851018623,
+      "beforeRank": 34,
+      "afterRank": 23
+    },
+    {
+      "key": "S3",
+      "name": "刃の囁き",
+      "before": 0.5967741935483871,
+      "after": 0.6330645161290323,
+      "change": 0.03629032258064513,
+      "beforeRank": 36,
+      "afterRank": 24
+    },
+    {
+      "key": "AWAKENED_MIMIC",
+      "name": "覚醒ミミック",
+      "before": 0.640625,
+      "after": 0.6328125,
+      "change": -0.0078125,
+      "beforeRank": 21,
+      "afterRank": 25
+    },
+    {
+      "key": "M3",
+      "name": "ダスト・スカウト",
+      "before": 0.6388888888888888,
+      "after": 0.6220472440944882,
+      "change": -0.016841644794400645,
+      "beforeRank": 22,
+      "afterRank": 26
+    },
+    {
+      "key": "RICH_HABIT",
+      "name": "富豪の習慣",
+      "before": 0.626984126984127,
+      "after": 0.6190476190476191,
+      "change": -0.007936507936507908,
+      "beforeRank": 28,
+      "afterRank": 27
+    },
+    {
+      "key": "NMD6",
+      "name": "大賢者",
+      "before": 0.5984251968503937,
+      "after": 0.6181102362204725,
+      "change": 0.019685039370078705,
+      "beforeRank": 35,
+      "afterRank": 28
+    },
+    {
+      "key": "RUST_SLUG",
+      "name": "ラストキャップ・スラッグ",
+      "before": 0.628968253968254,
+      "after": 0.6150793650793651,
+      "change": -0.01388888888888884,
+      "beforeRank": 26,
+      "afterRank": 29
+    },
+    {
+      "key": "SNIPE2",
+      "name": "一斉射撃",
+      "before": 0.594488188976378,
+      "after": 0.6141732283464567,
+      "change": 0.019685039370078705,
+      "beforeRank": 38,
+      "afterRank": 30
+    },
+    {
+      "key": "TGE2",
+      "name": "始原の火種",
+      "before": 0.5787401574803149,
+      "after": 0.61328125,
+      "change": 0.03454109251968507,
+      "beforeRank": 48,
+      "afterRank": 31
+    },
+    {
+      "key": "MIMIC_KING2",
+      "name": "ミミックキング2世",
+      "before": 0.625,
+      "after": 0.6082677165354331,
+      "change": -0.0167322834645669,
+      "beforeRank": 29,
+      "afterRank": 32
+    },
+    {
+      "key": "GM6_8",
+      "name": "虚空の攻城兵",
+      "before": 0.6150793650793651,
+      "after": 0.6062992125984252,
+      "change": -0.008780152480939885,
+      "beforeRank": 32,
+      "afterRank": 33
+    },
+    {
+      "key": "M5",
+      "name": "アイアン・シェル",
+      "before": 0.5866141732283464,
+      "after": 0.6031746031746031,
+      "change": 0.016560429946256727,
+      "beforeRank": 42,
+      "afterRank": 34
+    },
+    {
+      "key": "QUICK_WORLD",
+      "name": "世界樹の恵み",
+      "before": 0.5708661417322834,
+      "after": 0.6023622047244095,
+      "change": 0.03149606299212604,
+      "beforeRank": 54,
+      "afterRank": 35
+    },
+    {
+      "key": "EGG_HUNTER",
+      "name": "エッグハンター",
+      "before": 0.59375,
+      "after": 0.6015625,
+      "change": 0.0078125,
+      "beforeRank": 39,
+      "afterRank": 36
+    },
+    {
+      "key": "TPO3",
+      "name": "飢えた追跡者",
+      "before": 0.626984126984127,
+      "after": 0.5992063492063492,
+      "change": -0.02777777777777779,
+      "beforeRank": 27,
+      "afterRank": 37
+    },
+    {
+      "key": "QUICK_MUSTER",
+      "name": "緊急召集",
+      "before": 0.6309523809523809,
+      "after": 0.5992063492063492,
+      "change": -0.031746031746031744,
+      "beforeRank": 25,
+      "afterRank": 38
+    },
+    {
+      "key": "M6",
+      "name": "ツイン・ファング",
+      "before": 0.6190476190476191,
+      "after": 0.5984251968503937,
+      "change": -0.02062242219722532,
+      "beforeRank": 31,
+      "afterRank": 39
+    },
+    {
+      "key": "M1",
+      "name": "スパーク・インプ",
+      "before": 0.5873015873015873,
+      "after": 0.5952380952380952,
+      "change": 0.007936507936507908,
+      "beforeRank": 41,
+      "afterRank": 40
+    },
+    {
+      "key": "VAMP_BUTLER",
+      "name": "ヴァンパイア執事",
+      "before": 0.57421875,
+      "after": 0.594488188976378,
+      "change": 0.020269438976378007,
+      "beforeRank": 52,
+      "afterRank": 41
+    },
+    {
+      "key": "GM5_3",
+      "name": "業火のドレイク",
+      "before": 0.5826771653543307,
+      "after": 0.59375,
+      "change": 0.011072834645669327,
+      "beforeRank": 45,
+      "afterRank": 42
+    },
+    {
+      "key": "TDE2",
+      "name": "魔族の戦士",
+      "before": 0.7519685039370079,
+      "after": 0.59375,
+      "change": -0.15821850393700787,
+      "beforeRank": 7,
+      "afterRank": 43
+    },
+    {
+      "key": "WORLD_HEART",
+      "name": "世界樹の心臓",
+      "before": 0.5703125,
+      "after": 0.591796875,
+      "change": 0.021484375,
+      "beforeRank": 55,
+      "afterRank": 44
+    },
+    {
+      "key": "GM6_7",
+      "name": "将軍",
+      "before": 0.5787401574803149,
+      "after": 0.5905511811023622,
+      "change": 0.011811023622047223,
+      "beforeRank": 47,
+      "afterRank": 45
+    },
+    {
+      "key": "NHEAL",
+      "name": "生命の加護",
+      "before": 0.4642857142857143,
+      "after": 0.5859375,
+      "change": 0.1216517857142857,
+      "beforeRank": 149,
+      "afterRank": 46
+    },
+    {
+      "key": "BEAST_EGG",
+      "name": "神獣の卵",
+      "before": 0.5833333333333334,
+      "after": 0.584,
+      "change": 0.0006666666666665932,
+      "beforeRank": 43,
+      "afterRank": 47
+    },
+    {
+      "key": "ORIGIN_MIMIC",
+      "name": "始原のミミック",
+      "before": 0.5826771653543307,
+      "after": 0.5833333333333334,
+      "change": 0.0006561679790026975,
+      "beforeRank": 46,
+      "afterRank": 48
+    },
+    {
+      "key": "HEXER2",
+      "name": "中級呪術師",
+      "before": 0.547244094488189,
+      "after": 0.5826771653543307,
+      "change": 0.03543307086614167,
+      "beforeRank": 61,
+      "afterRank": 49
+    },
+    {
+      "key": "QUICK_REBIRTH",
+      "name": "強制輪廻",
+      "before": 0.61328125,
+      "after": 0.5826771653543307,
+      "change": -0.030604084645669327,
+      "beforeRank": 33,
+      "afterRank": 50
+    },
+    {
+      "key": "WALLBREAK2",
+      "name": "攻城崩壊",
+      "before": 0.58984375,
+      "after": 0.58203125,
+      "change": -0.0078125,
+      "beforeRank": 40,
+      "afterRank": 51
+    },
+    {
+      "key": "LEGEND_GAMBLER",
+      "name": "伝説のギャンブラー",
+      "before": 0.5634920634920635,
+      "after": 0.582,
+      "change": 0.018507936507936473,
+      "beforeRank": 56,
+      "afterRank": 52
+    },
+    {
+      "key": "GM5_0",
+      "name": "古代の狂戦士",
+      "before": 0.5826771653543307,
+      "after": 0.5748031496062992,
+      "change": -0.007874015748031482,
+      "beforeRank": 44,
+      "afterRank": 53
+    },
+    {
+      "key": "HORDE",
+      "name": "軍団の旗手",
+      "before": 0.5511811023622047,
+      "after": 0.5748031496062992,
+      "change": 0.023622047244094446,
+      "beforeRank": 58,
+      "afterRank": 54
+    },
+    {
+      "key": "TSO3",
+      "name": "孤独な狩人",
+      "before": 0.5396825396825397,
+      "after": 0.5714285714285714,
+      "change": 0.031746031746031744,
+      "beforeRank": 66,
+      "afterRank": 55
+    },
+    {
+      "key": "TGE1",
+      "name": "始原の卵",
+      "before": 0.578125,
+      "after": 0.5669291338582677,
+      "change": -0.011195866141732291,
+      "beforeRank": 49,
+      "afterRank": 56
+    },
+    {
+      "key": "GOLEM1",
+      "name": "兵士ゴーレム",
+      "before": 0.51953125,
+      "after": 0.5590551181102362,
+      "change": 0.03952386811023623,
+      "beforeRank": 78,
+      "afterRank": 57
+    },
+    {
+      "key": "TGE5",
+      "name": "始原の精霊",
+      "before": 0.5753968253968254,
+      "after": 0.55859375,
+      "change": -0.01680307539682535,
+      "beforeRank": 50,
+      "afterRank": 58
+    },
+    {
+      "key": "QUICK_ATTUNE",
+      "name": "アチューン・瞬",
+      "before": 0.51953125,
+      "after": 0.55859375,
+      "change": 0.0390625,
+      "beforeRank": 80,
+      "afterRank": 59
+    },
+    {
+      "key": "TGE6",
+      "name": "始原の巨人",
+      "before": 0.5748031496062992,
+      "after": 0.5551181102362205,
+      "change": -0.019685039370078705,
+      "beforeRank": 51,
+      "afterRank": 60
+    },
+    {
+      "key": "NMD2",
+      "name": "探書の精霊",
+      "before": 0.546875,
+      "after": 0.5546875,
+      "change": 0.0078125,
+      "beforeRank": 62,
+      "afterRank": 61
+    },
+    {
+      "key": "TAR3",
+      "name": "没落した騎士",
+      "before": 0.5625,
+      "after": 0.5546875,
+      "change": -0.0078125,
+      "beforeRank": 57,
+      "afterRank": 62
+    },
+    {
+      "key": "QUICK_ASSAULT",
+      "name": "総攻撃",
+      "before": 0.5357142857142857,
+      "after": 0.5546875,
+      "change": 0.0189732142857143,
+      "beforeRank": 68,
+      "afterRank": 63
+    },
+    {
+      "key": "M10",
+      "name": "マナ・ゴーレム",
+      "before": 0.547244094488189,
+      "after": 0.5531496062992126,
+      "change": 0.0059055118110236116,
+      "beforeRank": 60,
+      "afterRank": 64
+    },
+    {
+      "key": "GOLEM2",
+      "name": "リーダーゴーレム",
+      "before": 0.57421875,
+      "after": 0.546875,
+      "change": -0.02734375,
+      "beforeRank": 53,
+      "afterRank": 65
+    },
+    {
+      "key": "BLOOD_SORROW",
+      "name": "血の魔法 - 哀",
+      "before": 0.5236220472440944,
+      "after": 0.5436507936507936,
+      "change": 0.02002874640669916,
+      "beforeRank": 74,
+      "afterRank": 66
+    },
+    {
+      "key": "M2",
+      "name": "ストーン・パップ",
+      "before": 0.5078125,
+      "after": 0.5390625,
+      "change": 0.03125,
+      "beforeRank": 89,
+      "afterRank": 67
+    },
+    {
+      "key": "TSO1",
+      "name": "隠遁者",
+      "before": 0.51953125,
+      "after": 0.5390625,
+      "change": 0.01953125,
+      "beforeRank": 79,
+      "afterRank": 68
+    },
+    {
+      "key": "WALLBREAK1",
+      "name": "城壁破砕",
+      "before": 0.5277777777777778,
+      "after": 0.5357142857142857,
+      "change": 0.007936507936507908,
+      "beforeRank": 70,
+      "afterRank": 69
+    },
+    {
+      "key": "HEXER1",
+      "name": "初級呪術師",
+      "before": 0.5433070866141733,
+      "after": 0.5354330708661418,
+      "change": -0.007874015748031482,
+      "beforeRank": 65,
+      "afterRank": 70
+    },
+    {
+      "key": "QUICK_SORT",
+      "name": "選別の掟",
+      "before": 0.5390625,
+      "after": 0.533203125,
+      "change": -0.005859375,
+      "beforeRank": 67,
+      "afterRank": 71
+    },
+    {
+      "key": "M12",
+      "name": "タイタン・ゲート",
+      "before": 0.5433070866141733,
+      "after": 0.53125,
+      "change": -0.012057086614173262,
+      "beforeRank": 64,
+      "afterRank": 72
+    },
+    {
+      "key": "QUICK_SURVIVAL",
+      "name": "生存をかけた戦い",
+      "before": 0.55078125,
+      "after": 0.52734375,
+      "change": -0.0234375,
+      "beforeRank": 59,
+      "afterRank": 73
+    },
+    {
+      "key": "S12",
+      "name": "鋼脈刻印",
+      "before": 0.517578125,
+      "after": 0.525390625,
+      "change": 0.0078125,
+      "beforeRank": 81,
+      "afterRank": 74
+    },
+    {
+      "key": "NT_SEAL3",
+      "name": "沈黙の番人",
+      "before": 0.5158730158730159,
+      "after": 0.524,
+      "change": 0.008126984126984094,
+      "beforeRank": 83,
+      "afterRank": 75
+    },
+    {
+      "key": "COLOSSEUM_REST",
+      "name": "コロシアムの休憩場",
+      "before": 0.4704724409448819,
+      "after": 0.5236220472440944,
+      "change": 0.05314960629921256,
+      "beforeRank": 138,
+      "afterRank": 76
+    },
+    {
+      "key": "GM6_0",
+      "name": "ドラゴン",
+      "before": 0.5354330708661418,
+      "after": 0.5216535433070866,
+      "change": -0.013779527559055205,
+      "beforeRank": 69,
+      "afterRank": 77
+    },
+    {
+      "key": "SORTER",
+      "name": "選別者",
+      "before": 0.5078740157480315,
+      "after": 0.5196850393700787,
+      "change": 0.011811023622047223,
+      "beforeRank": 88,
+      "afterRank": 78
+    },
+    {
+      "key": "TDE1",
+      "name": "魔族の斥候",
+      "before": 0.5158730158730159,
+      "after": 0.515748031496063,
+      "change": -0.0001249843769529635,
+      "beforeRank": 84,
+      "afterRank": 79
+    },
+    {
+      "key": "TSO2",
+      "name": "孤独な狼",
+      "before": 0.5078125,
+      "after": 0.515625,
+      "change": 0.0078125,
+      "beforeRank": 90,
+      "afterRank": 80
+    },
+    {
+      "key": "CHOSEN_MAGE",
+      "name": "選ばれし魔法使い",
+      "before": 0.4765625,
+      "after": 0.515625,
+      "change": 0.0390625,
+      "beforeRank": 126,
+      "afterRank": 81
+    },
+    {
+      "key": "HEXER3",
+      "name": "上級呪術師",
+      "before": 0.49015748031496065,
+      "after": 0.515625,
+      "change": 0.025467519685039353,
+      "beforeRank": 109,
+      "afterRank": 82
+    },
+    {
+      "key": "S7",
+      "name": "戦場の脈動",
+      "before": 0.5,
+      "after": 0.5119047619047619,
+      "change": 0.011904761904761862,
+      "beforeRank": 97,
+      "afterRank": 83
+    },
+    {
+      "key": "MIMIC_KING",
+      "name": "ミミックキング",
+      "before": 0.5275590551181102,
+      "after": 0.5118110236220472,
+      "change": -0.015748031496062964,
+      "beforeRank": 71,
+      "afterRank": 84
+    },
+    {
+      "key": "SPACE_RITE",
+      "name": "空間術式",
+      "before": 0.5436507936507936,
+      "after": 0.5118110236220472,
+      "change": -0.031839770028746384,
+      "beforeRank": 63,
+      "afterRank": 85
+    },
+    {
+      "key": "ND2",
+      "name": "予知のルーン",
+      "before": 0.51953125,
+      "after": 0.5098425196850394,
+      "change": -0.009688730314960647,
+      "beforeRank": 77,
+      "afterRank": 86
+    },
+    {
+      "key": "TPO1",
+      "name": "飢えた仔獣",
+      "before": 0.49206349206349204,
+      "after": 0.5098425196850394,
+      "change": 0.017779027621547316,
+      "beforeRank": 106,
+      "afterRank": 87
+    },
+    {
+      "key": "GM6_1",
+      "name": "次元幽閉者",
+      "before": 0.484251968503937,
+      "after": 0.5078740157480315,
+      "change": 0.023622047244094502,
+      "beforeRank": 113,
+      "afterRank": 88
+    },
+    {
+      "key": "HERMIT",
+      "name": "隠遁の安息",
+      "before": 0.5,
+      "after": 0.5078740157480315,
+      "change": 0.007874015748031482,
+      "beforeRank": 99,
+      "afterRank": 89
+    },
+    {
+      "key": "VOID_FRUIT",
+      "name": "虚無の果実",
+      "before": 0.42913385826771655,
+      "after": 0.5078740157480315,
+      "change": 0.07874015748031493,
+      "beforeRank": 179,
+      "afterRank": 90
+    },
+    {
+      "key": "ROTTEN_GROUND",
+      "name": "腐敗した土地",
+      "before": 0.4448818897637795,
+      "after": 0.5078740157480315,
+      "change": 0.06299212598425197,
+      "beforeRank": 166,
+      "afterRank": 91
+    },
+    {
+      "key": "CROSSROADS",
+      "name": "選択の岐路",
+      "before": 0.490234375,
+      "after": 0.5078125,
+      "change": 0.017578125,
+      "beforeRank": 107,
+      "afterRank": 92
+    },
+    {
+      "key": "MULTI_CULTURE",
+      "name": "多様な文化",
+      "before": 0.5161290322580645,
+      "after": 0.5059523809523809,
+      "change": -0.01017665130568357,
+      "beforeRank": 82,
+      "afterRank": 93
+    },
+    {
+      "key": "WORLD_BLESS",
+      "name": "世界樹の祝福",
+      "before": 0.47244094488188976,
+      "after": 0.503968253968254,
+      "change": 0.0315273090863642,
+      "beforeRank": 132,
+      "afterRank": 94
+    },
+    {
+      "key": "EXILE_NUKE2",
+      "name": "虚空大崩壊",
+      "before": 0.5275590551181102,
+      "after": 0.5039370078740157,
+      "change": -0.023622047244094446,
+      "beforeRank": 72,
+      "afterRank": 95
+    },
+    {
+      "key": "VAMP_PACT",
+      "name": "吸血契約",
+      "before": 0.502,
+      "after": 0.5039370078740157,
+      "change": 0.0019370078740157393,
+      "beforeRank": 96,
+      "afterRank": 96
+    },
+    {
+      "key": "MERCH1",
+      "name": "見習い商人",
+      "before": 0.5118110236220472,
+      "after": 0.50390625,
+      "change": -0.007904773622047223,
+      "beforeRank": 86,
+      "afterRank": 97
+    },
+    {
+      "key": "INFERNO",
+      "name": "地獄",
+      "before": 0.4742063492063492,
+      "after": 0.5019685039370079,
+      "change": 0.027762154730658684,
+      "beforeRank": 129,
+      "afterRank": 98
+    },
+    {
+      "key": "AMA",
+      "name": "アチューン・魔",
+      "before": 0.4645669291338583,
+      "after": 0.5,
+      "change": 0.035433070866141725,
+      "beforeRank": 146,
+      "afterRank": 99
+    },
+    {
+      "key": "TGE3",
+      "name": "始原の守護者",
+      "before": 0.5234375,
+      "after": 0.5,
+      "change": -0.0234375,
+      "beforeRank": 75,
+      "afterRank": 100
+    },
+    {
+      "key": "HOURGLASS",
+      "name": "時の砂時計",
+      "before": 0.5039370078740157,
+      "after": 0.5,
+      "change": -0.003937007874015741,
+      "beforeRank": 92,
+      "afterRank": 101
+    },
+    {
+      "key": "LIFE_CYCLE",
+      "name": "生命の循環",
+      "before": 0.47244094488188976,
+      "after": 0.5,
+      "change": 0.027559055118110243,
+      "beforeRank": 131,
+      "afterRank": 102
+    },
+    {
+      "key": "PURGE_ALL",
+      "name": "大粛清",
+      "before": 0.484,
+      "after": 0.5,
+      "change": 0.016000000000000014,
+      "beforeRank": 119,
+      "afterRank": 103
+    },
+    {
+      "key": "BLOOD_ANGER",
+      "name": "血の魔法 - 怒",
+      "before": 0.488,
+      "after": 0.5,
+      "change": 0.01200000000000001,
+      "beforeRank": 111,
+      "afterRank": 104
+    },
+    {
+      "key": "VOID_RITE",
+      "name": "次元術式",
+      "before": 0.48412698412698413,
+      "after": 0.5,
+      "change": 0.015873015873015872,
+      "beforeRank": 118,
+      "afterRank": 105
+    },
+    {
+      "key": "NT_SEAL5",
+      "name": "沈黙の巨神",
+      "before": 0.468,
+      "after": 0.498,
+      "change": 0.02999999999999997,
+      "beforeRank": 142,
+      "afterRank": 106
+    },
+    {
+      "key": "NWL3",
+      "name": "ガーディアンゴーレム",
+      "before": 0.52734375,
+      "after": 0.49609375,
+      "change": -0.03125,
+      "beforeRank": 73,
+      "afterRank": 107
+    },
+    {
+      "key": "VITAL4",
+      "name": "鼓舞王",
+      "before": 0.470703125,
+      "after": 0.49609375,
+      "change": 0.025390625,
+      "beforeRank": 137,
+      "afterRank": 108
+    },
+    {
+      "key": "HPS_GRAFT",
+      "name": "生命の接ぎ木",
+      "before": 0.50390625,
+      "after": 0.49609375,
+      "change": -0.0078125,
+      "beforeRank": 95,
+      "afterRank": 109
+    },
+    {
+      "key": "GREED_PRICE",
+      "name": "強欲の代価",
+      "before": 0.47244094488188976,
+      "after": 0.49606299212598426,
+      "change": 0.023622047244094502,
+      "beforeRank": 133,
+      "afterRank": 110
+    },
+    {
+      "key": "CHOSEN_ARCHER",
+      "name": "選ばれし弓手",
+      "before": 0.5040322580645161,
+      "after": 0.49603174603174605,
+      "change": -0.00800051203277008,
+      "beforeRank": 91,
+      "afterRank": 111
+    },
+    {
+      "key": "RUNE2",
+      "name": "ルーン学問 - 中級",
+      "before": 0.4921259842519685,
+      "after": 0.4921875,
+      "change": 6.151574803148208e-05,
+      "beforeRank": 103,
+      "afterRank": 112
+    },
+    {
+      "key": "NL_SECRET",
+      "name": "ナイトロードの秘技",
+      "before": 0.4862204724409449,
+      "after": 0.4921875,
+      "change": 0.005967027559055094,
+      "beforeRank": 112,
+      "afterRank": 113
+    },
+    {
+      "key": "TSO5",
+      "name": "孤独な放浪者",
+      "before": 0.482421875,
+      "after": 0.49206349206349204,
+      "change": 0.009641617063492036,
+      "beforeRank": 120,
+      "afterRank": 114
+    },
+    {
+      "key": "BLOOD1",
+      "name": "血の魔法 - ブラッドドロー",
+      "before": 0.48412698412698413,
+      "after": 0.49206349206349204,
+      "change": 0.007936507936507908,
+      "beforeRank": 117,
+      "afterRank": 115
+    },
+    {
+      "key": "HPS_SOIL",
+      "name": "生命の土壌",
+      "before": 0.484251968503937,
+      "after": 0.49206349206349204,
+      "change": 0.007811523559555056,
+      "beforeRank": 114,
+      "afterRank": 116
+    },
+    {
+      "key": "QUICK_POISON",
+      "name": "ポイズン",
+      "before": 0.47619047619047616,
+      "after": 0.49206349206349204,
+      "change": 0.015873015873015872,
+      "beforeRank": 128,
+      "afterRank": 117
+    },
+    {
+      "key": "E2",
+      "name": "平和協定",
+      "before": 0.513671875,
+      "after": 0.490234375,
+      "change": -0.0234375,
+      "beforeRank": 85,
+      "afterRank": 118
+    },
+    {
+      "key": "AHEUK",
+      "name": "アチューン・黒",
+      "before": 0.4566929133858268,
+      "after": 0.49015748031496065,
+      "change": 0.033464566929133854,
+      "beforeRank": 155,
+      "afterRank": 119
+    },
+    {
+      "key": "LEVY",
+      "name": "召集",
+      "before": 0.4940944881889764,
+      "after": 0.48828125,
+      "change": -0.0058132381889763884,
+      "beforeRank": 101,
+      "afterRank": 120
+    },
+    {
+      "key": "DISARM1",
+      "name": "最初の螺子抜き",
+      "before": 0.49206349206349204,
+      "after": 0.4880952380952381,
+      "change": -0.003968253968253954,
+      "beforeRank": 105,
+      "afterRank": 121
+    },
+    {
+      "key": "GRAPE2",
+      "name": "高品質ぶどう",
+      "before": 0.5078740157480315,
+      "after": 0.4861111111111111,
+      "change": -0.021762904636920377,
+      "beforeRank": 87,
+      "afterRank": 122
+    },
+    {
+      "key": "CULL_FARM",
+      "name": "カル栽培",
+      "before": 0.4765625,
+      "after": 0.484375,
+      "change": 0.0078125,
+      "beforeRank": 125,
+      "afterRank": 123
+    },
+    {
+      "key": "ASSASSIN3",
+      "name": "上級アサシン",
+      "before": 0.4801587301587302,
+      "after": 0.484251968503937,
+      "change": 0.004093238345206807,
+      "beforeRank": 123,
+      "afterRank": 124
+    },
+    {
+      "key": "HIGH_ELF",
+      "name": "ハイエルフ",
+      "before": 0.5198412698412699,
+      "after": 0.48412698412698413,
+      "change": -0.035714285714285754,
+      "beforeRank": 76,
+      "afterRank": 125
+    },
+    {
+      "key": "MIND_BURST",
+      "name": "精神放出術",
+      "before": 0.484251968503937,
+      "after": 0.48412698412698413,
+      "change": -0.00012498437695285247,
+      "beforeRank": 115,
+      "afterRank": 126
+    },
+    {
+      "key": "CULL_FLOOD",
+      "name": "カルの洗礼",
+      "before": 0.45934959349593496,
+      "after": 0.4838709677419355,
+      "change": 0.024521374246000538,
+      "beforeRank": 152,
+      "afterRank": 127
+    },
+    {
+      "key": "CHOSEN_ROGUE",
+      "name": "選ばれし盗賊",
+      "before": 0.46484375,
+      "after": 0.48046875,
+      "change": 0.015625,
+      "beforeRank": 144,
+      "afterRank": 128
+    },
+    {
+      "key": "MERCH2",
+      "name": "王都の商売人",
+      "before": 0.4765625,
+      "after": 0.48046875,
+      "change": 0.00390625,
+      "beforeRank": 127,
+      "afterRank": 129
+    },
+    {
+      "key": "RUNE1",
+      "name": "ルーン学問 - 初級",
+      "before": 0.5,
+      "after": 0.48031496062992124,
+      "change": -0.01968503937007876,
+      "beforeRank": 98,
+      "afterRank": 130
+    },
+    {
+      "key": "DISARM2",
+      "name": "青銅解剖図",
+      "before": 0.4765625,
+      "after": 0.4765625,
+      "change": 0.0,
+      "beforeRank": 124,
+      "afterRank": 131
+    },
+    {
+      "key": "S4",
+      "name": "双月の啓示",
+      "before": 0.48412698412698413,
+      "after": 0.4763779527559055,
+      "change": -0.00774903137107863,
+      "beforeRank": 116,
+      "afterRank": 132
+    },
+    {
+      "key": "NHEX",
+      "name": "見習い呪術師",
+      "before": 0.4921259842519685,
+      "after": 0.4763779527559055,
+      "change": -0.01574803149606302,
+      "beforeRank": 102,
+      "afterRank": 133
+    },
+    {
+      "key": "GEM_RAIN",
+      "name": "宝石の雨",
+      "before": 0.46653543307086615,
+      "after": 0.4763779527559055,
+      "change": 0.009842519685039353,
+      "beforeRank": 143,
+      "afterRank": 134
+    },
+    {
+      "key": "LUCKY_ECHO",
+      "name": "幸運の残響",
+      "before": 0.5039370078740157,
+      "after": 0.47619047619047616,
+      "change": -0.027746531683539577,
+      "beforeRank": 94,
+      "afterRank": 135
+    },
+    {
+      "key": "BEGINNER_MIND",
+      "name": "初心",
+      "before": 0.4704724409448819,
+      "after": 0.4742063492063492,
+      "change": 0.0037339082614673003,
+      "beforeRank": 139,
+      "afterRank": 136
+    },
+    {
+      "key": "GOLIATH_HUNT",
+      "name": "ジャイアントキリング",
+      "before": 0.468503937007874,
+      "after": 0.47265625,
+      "change": 0.004152312992125984,
+      "beforeRank": 140,
+      "afterRank": 137
+    },
+    {
+      "key": "UNBRANDER",
+      "name": "除印師",
+      "before": 0.47244094488188976,
+      "after": 0.47265625,
+      "change": 0.00021530511811024278,
+      "beforeRank": 135,
+      "afterRank": 138
+    },
+    {
+      "key": "SHATTER",
+      "name": "地震",
+      "before": 0.498046875,
+      "after": 0.47244094488188976,
+      "change": -0.025605930118110243,
+      "beforeRank": 100,
+      "afterRank": 139
+    },
+    {
+      "key": "KIN_CALL",
+      "name": "同族の呼び声",
+      "before": 0.49206349206349204,
+      "after": 0.472,
+      "change": -0.02006349206349206,
+      "beforeRank": 104,
+      "afterRank": 140
+    },
+    {
+      "key": "HEXER4",
+      "name": "特級呪術師 - ケロイド",
+      "before": 0.490234375,
+      "after": 0.470703125,
+      "change": -0.01953125,
+      "beforeRank": 108,
+      "afterRank": 141
+    },
+    {
+      "key": "HANDRESET",
+      "name": "忘却の新札",
+      "before": 0.4645669291338583,
+      "after": 0.468503937007874,
+      "change": 0.003937007874015741,
+      "beforeRank": 147,
+      "afterRank": 142
+    },
+    {
+      "key": "GENESIS_SONG",
+      "name": "始原の歌",
+      "before": 0.4642857142857143,
+      "after": 0.468503937007874,
+      "change": 0.004218222722159715,
+      "beforeRank": 150,
+      "afterRank": 143
+    },
+    {
+      "key": "MANA_GIANT",
+      "name": "ジャイアントゴーレム",
+      "before": 0.4645669291338583,
+      "after": 0.468503937007874,
+      "change": 0.003937007874015741,
+      "beforeRank": 148,
+      "afterRank": 144
+    },
+    {
+      "key": "DECAY_CRAFT",
+      "name": "暗器製造",
+      "before": 0.48031496062992124,
+      "after": 0.468503937007874,
+      "change": -0.011811023622047223,
+      "beforeRank": 122,
+      "afterRank": 145
+    },
+    {
+      "key": "HPS_OATH",
+      "name": "守護の誓い",
+      "before": 0.46484375,
+      "after": 0.468503937007874,
+      "change": 0.003660187007874016,
+      "beforeRank": 145,
+      "afterRank": 146
+    },
+    {
+      "key": "PURGE_TOUCH",
+      "name": "浄化の手",
+      "before": 0.5039370078740157,
+      "after": 0.46825396825396826,
+      "change": -0.035683039620047485,
+      "beforeRank": 93,
+      "afterRank": 147
+    },
+    {
+      "key": "WORLD_SEED",
+      "name": "世界樹の種",
+      "before": 0.37890625,
+      "after": 0.4645669291338583,
+      "change": 0.08566067913385828,
+      "beforeRank": 217,
+      "afterRank": 148
+    },
+    {
+      "key": "ELDER_ELF_KING",
+      "name": "エルダーハイエルフキング",
+      "before": 0.47244094488188976,
+      "after": 0.4645669291338583,
+      "change": -0.007874015748031482,
+      "beforeRank": 134,
+      "afterRank": 149
+    },
+    {
+      "key": "NO_PAIN",
+      "name": "ノーペインノーゲイン",
+      "before": 0.4609375,
+      "after": 0.4645669291338583,
+      "change": 0.003629429133858275,
+      "beforeRank": 151,
+      "afterRank": 150
+    },
+    {
+      "key": "GS5_4",
+      "name": "聖剣の一閃",
+      "before": 0.43700787401574803,
+      "after": 0.4609375,
+      "change": 0.023929625984251968,
+      "beforeRank": 173,
+      "afterRank": 151
+    },
+    {
+      "key": "LAND_GRANT",
+      "name": "領土付与",
+      "before": 0.46825396825396826,
+      "after": 0.4603174603174603,
+      "change": -0.007936507936507964,
+      "beforeRank": 141,
+      "afterRank": 152
+    },
+    {
+      "key": "PACK_INSTINCT",
+      "name": "群れの本能",
+      "before": 0.472,
+      "after": 0.46,
+      "change": -0.011999999999999955,
+      "beforeRank": 136,
+      "afterRank": 153
+    },
+    {
+      "key": "Q_BRAND",
+      "name": "反撃の狼煙",
+      "before": 0.43700787401574803,
+      "after": 0.45703125,
+      "change": 0.020023375984251968,
+      "beforeRank": 175,
+      "afterRank": 154
+    },
+    {
+      "key": "KNIGHT_TEACH",
+      "name": "ゴーレムキングの教え",
+      "before": 0.4251968503937008,
+      "after": 0.4566929133858268,
+      "change": 0.031496062992125984,
+      "beforeRank": 185,
+      "afterRank": 155
+    },
+    {
+      "key": "PENANCE",
+      "name": "苦行の対価",
+      "before": 0.45,
+      "after": 0.45436507936507936,
+      "change": 0.00436507936507935,
+      "beforeRank": 158,
+      "afterRank": 156
+    },
+    {
+      "key": "EXILE_NUKE1",
+      "name": "虚空砲撃",
+      "before": 0.48046875,
+      "after": 0.452755905511811,
+      "change": -0.027712844488189003,
+      "beforeRank": 121,
+      "afterRank": 157
+    },
+    {
+      "key": "BLOOD_SECRET",
+      "name": "血の魔法 - 秘術",
+      "before": 0.446,
+      "after": 0.4523809523809524,
+      "change": 0.006380952380952376,
+      "beforeRank": 164,
+      "afterRank": 158
+    },
+    {
+      "key": "ND3",
+      "name": "賢者の予言",
+      "before": 0.42578125,
+      "after": 0.44921875,
+      "change": 0.0234375,
+      "beforeRank": 183,
+      "afterRank": 159
+    },
+    {
+      "key": "PAIN_HARVEST",
+      "name": "苦痛の収穫",
+      "before": 0.4453125,
+      "after": 0.44881889763779526,
+      "change": 0.0035063976377952555,
+      "beforeRank": 165,
+      "afterRank": 160
+    },
+    {
+      "key": "QUICK_GRIMOIRE",
+      "name": "呪術魔法書",
+      "before": 0.4126984126984127,
+      "after": 0.44881889763779526,
+      "change": 0.03612048493938258,
+      "beforeRank": 200,
+      "afterRank": 161
+    },
+    {
+      "key": "ND5",
+      "name": "古代の知識",
+      "before": 0.427734375,
+      "after": 0.447265625,
+      "change": 0.01953125,
+      "beforeRank": 181,
+      "afterRank": 162
+    },
+    {
+      "key": "S1",
+      "name": "三撃の火種",
+      "before": 0.4468503937007874,
+      "after": 0.4468503937007874,
+      "change": 0.0,
+      "beforeRank": 162,
+      "afterRank": 163
+    },
+    {
+      "key": "SCRAPPER",
+      "name": "スクラップ収集家",
+      "before": 0.45703125,
+      "after": 0.4453125,
+      "change": -0.01171875,
+      "beforeRank": 153,
+      "afterRank": 164
+    },
+    {
+      "key": "HPS_SCALE",
+      "name": "鋼の鱗",
+      "before": 0.44841269841269843,
+      "after": 0.4448818897637795,
+      "change": -0.003530808648918915,
+      "beforeRank": 159,
+      "afterRank": 165
+    },
+    {
+      "key": "MASSACRE",
+      "name": "大虐殺",
+      "before": 0.4409448818897638,
+      "after": 0.4444444444444444,
+      "change": 0.0034995625546806464,
+      "beforeRank": 168,
+      "afterRank": 166
+    },
+    {
+      "key": "EXPANSION",
+      "name": "増設",
+      "before": 0.4330708661417323,
+      "after": 0.44291338582677164,
+      "change": 0.009842519685039353,
+      "beforeRank": 176,
+      "afterRank": 167
+    },
+    {
+      "key": "INQUISITION",
+      "name": "異端審問",
+      "before": 0.47265625,
+      "after": 0.4409448818897638,
+      "change": -0.03171136811023623,
+      "beforeRank": 130,
+      "afterRank": 168
+    },
+    {
+      "key": "CHOSEN_KNIGHT",
+      "name": "選ばれし剣士",
+      "before": 0.4296875,
+      "after": 0.439453125,
+      "change": 0.009765625,
+      "beforeRank": 178,
+      "afterRank": 169
+    },
+    {
+      "key": "BUYOUT",
+      "name": "買い占め",
+      "before": 0.45703125,
+      "after": 0.439453125,
+      "change": -0.017578125,
+      "beforeRank": 154,
+      "afterRank": 170
+    },
+    {
+      "key": "GOLEM3",
+      "name": "ゴーレムキング",
+      "before": 0.4409448818897638,
+      "after": 0.4375,
+      "change": -0.0034448818897637734,
+      "beforeRank": 169,
+      "afterRank": 171
+    },
+    {
+      "key": "BUDGET",
+      "name": "運営予算",
+      "before": 0.4881889763779528,
+      "after": 0.43700787401574803,
+      "change": -0.051181102362204745,
+      "beforeRank": 110,
+      "afterRank": 172
+    },
+    {
+      "key": "Q_TORI",
+      "name": "精霊 - トリ",
+      "before": 0.4330708661417323,
+      "after": 0.4330708661417323,
+      "change": 0.0,
+      "beforeRank": 177,
+      "afterRank": 173
+    },
+    {
+      "key": "CATALYST",
+      "name": "亀裂の触媒",
+      "before": 0.44047619047619047,
+      "after": 0.4311023622047244,
+      "change": -0.009373828271466045,
+      "beforeRank": 171,
+      "afterRank": 174
+    },
+    {
+      "key": "MIMIC_LORD",
+      "name": "ミミックリーダー",
+      "before": 0.4566929133858268,
+      "after": 0.4311023622047244,
+      "change": -0.025590551181102372,
+      "beforeRank": 156,
+      "afterRank": 175
+    },
+    {
+      "key": "GLASS_BAN",
+      "name": "戦略変更",
+      "before": 0.40625,
+      "after": 0.4296875,
+      "change": 0.0234375,
+      "beforeRank": 207,
+      "afterRank": 176
+    },
+    {
+      "key": "BLOOD_FEST",
+      "name": "血の祝祭",
+      "before": 0.44140625,
+      "after": 0.4296875,
+      "change": -0.01171875,
+      "beforeRank": 167,
+      "afterRank": 177
+    },
+    {
+      "key": "VAMP_WARD",
+      "name": "吸血の極意",
+      "before": 0.41338582677165353,
+      "after": 0.4296875,
+      "change": 0.01630167322834647,
+      "beforeRank": 197,
+      "afterRank": 178
+    },
+    {
+      "key": "SCARECROW",
+      "name": "かかし召集",
+      "before": 0.412109375,
+      "after": 0.42913385826771655,
+      "change": 0.01702448326771655,
+      "beforeRank": 201,
+      "afterRank": 179
+    },
+    {
+      "key": "FREE_REWARD",
+      "name": "無償の対価",
+      "before": 0.44841269841269843,
+      "after": 0.42913385826771655,
+      "change": -0.01927884014498188,
+      "beforeRank": 161,
+      "afterRank": 180
+    },
+    {
+      "key": "UNBRAND",
+      "name": "徐印",
+      "before": 0.4409448818897638,
+      "after": 0.42857142857142855,
+      "change": -0.012373453318335226,
+      "beforeRank": 170,
+      "afterRank": 181
+    },
+    {
+      "key": "ELF",
+      "name": "エルフ",
+      "before": 0.369140625,
+      "after": 0.42578125,
+      "change": 0.056640625,
+      "beforeRank": 224,
+      "afterRank": 182
+    },
+    {
+      "key": "DARK_ELF",
+      "name": "ダークエルフ",
+      "before": 0.421259842519685,
+      "after": 0.42578125,
+      "change": 0.004521407480314987,
+      "beforeRank": 189,
+      "afterRank": 183
+    },
+    {
+      "key": "COLOSSEUM",
+      "name": "コロシアム",
+      "before": 0.40234375,
+      "after": 0.42578125,
+      "change": 0.0234375,
+      "beforeRank": 211,
+      "afterRank": 184
+    },
+    {
+      "key": "NMD4",
+      "name": "記録者",
+      "before": 0.373015873015873,
+      "after": 0.4246031746031746,
+      "change": 0.05158730158730157,
+      "beforeRank": 220,
+      "afterRank": 185
+    },
+    {
+      "key": "ASSASSIN4",
+      "name": "特級アサシン - ナイトロード",
+      "before": 0.43700787401574803,
+      "after": 0.42322834645669294,
+      "change": -0.013779527559055094,
+      "beforeRank": 174,
+      "afterRank": 186
+    },
+    {
+      "key": "AEM",
+      "name": "アンティークエンハンスマジック",
+      "before": 0.44841269841269843,
+      "after": 0.42322834645669294,
+      "change": -0.02518435195600549,
+      "beforeRank": 160,
+      "afterRank": 187
+    },
+    {
+      "key": "DISARM3",
+      "name": "魔法研究機関",
+      "before": 0.4140625,
+      "after": 0.421875,
+      "change": 0.0078125,
+      "beforeRank": 194,
+      "afterRank": 188
+    },
+    {
+      "key": "TREASON",
+      "name": "反逆罪",
+      "before": 0.40476190476190477,
+      "after": 0.41796875,
+      "change": 0.013206845238095233,
+      "beforeRank": 209,
+      "afterRank": 189
+    },
+    {
+      "key": "INCUBATOR",
+      "name": "高級孵化器",
+      "before": 0.42857142857142855,
+      "after": 0.41732283464566927,
+      "change": -0.011248593925759276,
+      "beforeRank": 180,
+      "afterRank": 190
+    },
+    {
+      "key": "STRONG_ACID",
+      "name": "強酸性雨",
+      "before": 0.4094488188976378,
+      "after": 0.41732283464566927,
+      "change": 0.007874015748031482,
+      "beforeRank": 203,
+      "afterRank": 191
+    },
+    {
+      "key": "Q_CASTLE",
+      "name": "対攻城作戦",
+      "before": 0.3956692913385827,
+      "after": 0.41732283464566927,
+      "change": 0.021653543307086576,
+      "beforeRank": 214,
+      "afterRank": 192
+    },
+    {
+      "key": "GS5_3",
+      "name": "呪文書の解読",
+      "before": 0.452755905511811,
+      "after": 0.4166666666666667,
+      "change": -0.03608923884514431,
+      "beforeRank": 157,
+      "afterRank": 193
+    },
+    {
+      "key": "VAMP_PACT2",
+      "name": "吸血刻印契約",
+      "before": 0.4468503937007874,
+      "after": 0.416015625,
+      "change": -0.030834768700787385,
+      "beforeRank": 163,
+      "afterRank": 194
+    },
+    {
+      "key": "DUNGEON",
+      "name": "生きているダンジョン",
+      "before": 0.421875,
+      "after": 0.416015625,
+      "change": -0.005859375,
+      "beforeRank": 187,
+      "afterRank": 195
+    },
+    {
+      "key": "E1",
+      "name": "封鎖令",
+      "before": 0.41796875,
+      "after": 0.4140625,
+      "change": -0.00390625,
+      "beforeRank": 190,
+      "afterRank": 196
+    },
+    {
+      "key": "S15",
+      "name": "ルーン爆裂",
+      "before": 0.40234375,
+      "after": 0.41015625,
+      "change": 0.0078125,
+      "beforeRank": 210,
+      "afterRank": 197
+    },
+    {
+      "key": "S10",
+      "name": "青藍の書庫",
+      "before": 0.421259842519685,
+      "after": 0.4094488188976378,
+      "change": -0.011811023622047223,
+      "beforeRank": 188,
+      "afterRank": 198
+    },
+    {
+      "key": "GENESIS_MAGIC",
+      "name": "始原の魔法",
+      "before": 0.3951612903225806,
+      "after": 0.4092741935483871,
+      "change": 0.014112903225806495,
+      "beforeRank": 215,
+      "afterRank": 199
+    },
+    {
+      "key": "S14",
+      "name": "大地の祝福",
+      "before": 0.4271653543307087,
+      "after": 0.408203125,
+      "change": -0.01896222933070868,
+      "beforeRank": 182,
+      "afterRank": 200
+    },
+    {
+      "key": "LIFE_SANCTUM",
+      "name": "生命の聖域",
+      "before": 0.37109375,
+      "after": 0.40625,
+      "change": 0.03515625,
+      "beforeRank": 222,
+      "afterRank": 201
+    },
+    {
+      "key": "SLAY_ART",
+      "name": "殺生の極意",
+      "before": 0.3779527559055118,
+      "after": 0.4015748031496063,
+      "change": 0.023622047244094502,
+      "beforeRank": 219,
+      "afterRank": 202
+    },
+    {
+      "key": "Q_WINTER",
+      "name": "精霊 - ウィンター",
+      "before": 0.4140625,
+      "after": 0.4015748031496063,
+      "change": -0.012487696850393692,
+      "beforeRank": 196,
+      "afterRank": 203
+    },
+    {
+      "key": "E3",
+      "name": "知識の泉",
+      "before": 0.4074803149606299,
+      "after": 0.4007936507936508,
+      "change": -0.006686664166979106,
+      "beforeRank": 206,
+      "afterRank": 204
+    },
+    {
+      "key": "GS6_4",
+      "name": "火脈点火",
+      "before": 0.408,
+      "after": 0.4007936507936508,
+      "change": -0.007206349206349161,
+      "beforeRank": 205,
+      "afterRank": 205
+    },
+    {
+      "key": "DOUBLE_EXEC",
+      "name": "二重処刑",
+      "before": 0.408203125,
+      "after": 0.400390625,
+      "change": -0.0078125,
+      "beforeRank": 204,
+      "afterRank": 206
+    },
+    {
+      "key": "Q_TRIBE",
+      "name": "一族の誓い",
+      "before": 0.4015748031496063,
+      "after": 0.400390625,
+      "change": -0.0011841781496063075,
+      "beforeRank": 213,
+      "afterRank": 207
+    },
+    {
+      "key": "S6",
+      "name": "運命の糸",
+      "before": 0.4140625,
+      "after": 0.3984375,
+      "change": -0.015625,
+      "beforeRank": 193,
+      "afterRank": 208
+    },
+    {
+      "key": "BLOOD_JOY",
+      "name": "血の魔法 - 喜",
+      "before": 0.4251968503937008,
+      "after": 0.39763779527559057,
+      "change": -0.027559055118110243,
+      "beforeRank": 184,
+      "afterRank": 209
+    },
+    {
+      "key": "Q_DECAY",
+      "name": "どくびし",
+      "before": 0.4246031746031746,
+      "after": 0.39763779527559057,
+      "change": -0.026965379327584027,
+      "beforeRank": 186,
+      "afterRank": 210
+    },
+    {
+      "key": "BLOOD_PLEASURE",
+      "name": "血の魔法 - 楽",
+      "before": 0.4126984126984127,
+      "after": 0.3968253968253968,
+      "change": -0.015873015873015872,
+      "beforeRank": 198,
+      "afterRank": 211
+    },
+    {
+      "key": "RUNE3",
+      "name": "ルーン学問 - 上級",
+      "before": 0.41796875,
+      "after": 0.396484375,
+      "change": -0.021484375,
+      "beforeRank": 191,
+      "afterRank": 212
+    },
+    {
+      "key": "DEMON_REALM",
+      "name": "魔界",
+      "before": 0.4140625,
+      "after": 0.39453125,
+      "change": -0.01953125,
+      "beforeRank": 195,
+      "afterRank": 213
+    },
+    {
+      "key": "HPS_BOULDER",
+      "name": "巨岩の加護",
+      "before": 0.412,
+      "after": 0.39285714285714285,
+      "change": -0.019142857142857128,
+      "beforeRank": 202,
+      "afterRank": 214
+    },
+    {
+      "key": "EGG_MASTER",
+      "name": "孵化マスター",
+      "before": 0.4015748031496063,
+      "after": 0.388,
+      "change": -0.013574803149606296,
+      "beforeRank": 212,
+      "afterRank": 215
+    },
+    {
+      "key": "TAR1",
+      "name": "貴族の執事",
+      "before": 0.359375,
+      "after": 0.38671875,
+      "change": 0.02734375,
+      "beforeRank": 230,
+      "afterRank": 216
+    },
+    {
+      "key": "GS8_0",
+      "name": "銀月砲",
+      "before": 0.40551181102362205,
+      "after": 0.3858267716535433,
+      "change": -0.01968503937007876,
+      "beforeRank": 208,
+      "afterRank": 217
+    },
+    {
+      "key": "Q_RIFT",
+      "name": "リフト研究",
+      "before": 0.4126984126984127,
+      "after": 0.3858267716535433,
+      "change": -0.026871641044869388,
+      "beforeRank": 199,
+      "afterRank": 218
+    },
+    {
+      "key": "ORIGIN_QUEST",
+      "name": "起源の探究",
+      "before": 0.41796875,
+      "after": 0.3828125,
+      "change": -0.03515625,
+      "beforeRank": 192,
+      "afterRank": 219
+    },
+    {
+      "key": "BLOOD_SHIELD",
+      "name": "吸血術式",
+      "before": 0.4389763779527559,
+      "after": 0.38188976377952755,
+      "change": -0.057086614173228356,
+      "beforeRank": 172,
+      "afterRank": 220
+    },
+    {
+      "key": "S5",
+      "name": "マーケット・クラッシュ",
+      "before": 0.3641732283464567,
+      "after": 0.375,
+      "change": 0.010826771653543288,
+      "beforeRank": 228,
+      "afterRank": 221
+    },
+    {
+      "key": "MARKET_CRISIS",
+      "name": "経済危機",
+      "before": 0.3700787401574803,
+      "after": 0.37401574803149606,
+      "change": 0.003937007874015741,
+      "beforeRank": 223,
+      "afterRank": 222
+    },
+    {
+      "key": "FURNACE",
+      "name": "溶鉱炉",
+      "before": 0.36507936507936506,
+      "after": 0.3700787401574803,
+      "change": 0.004999375078115265,
+      "beforeRank": 227,
+      "afterRank": 223
+    },
+    {
+      "key": "S8",
+      "name": "リコール",
+      "before": 0.37109375,
+      "after": 0.36328125,
+      "change": -0.0078125,
+      "beforeRank": 221,
+      "afterRank": 224
+    },
+    {
+      "key": "Q_ASSASSIN",
+      "name": "アサシンギルドの伝達",
+      "before": 0.36220472440944884,
+      "after": 0.361328125,
+      "change": -0.0008765994094488416,
+      "beforeRank": 229,
+      "afterRank": 225
+    },
+    {
+      "key": "Q_MANA",
+      "name": "マナ順応",
+      "before": 0.37890625,
+      "after": 0.35546875,
+      "change": -0.0234375,
+      "beforeRank": 218,
+      "afterRank": 226
+    },
+    {
+      "key": "MAJESTY_RITE",
+      "name": "刻印秘術",
+      "before": 0.33203125,
+      "after": 0.3543307086614173,
+      "change": 0.022299458661417304,
+      "beforeRank": 232,
+      "afterRank": 227
+    },
+    {
+      "key": "LAWLESS",
+      "name": "不法地帯",
+      "before": 0.3661417322834646,
+      "after": 0.35039370078740156,
+      "change": -0.01574803149606302,
+      "beforeRank": 225,
+      "afterRank": 228
+    },
+    {
+      "key": "FORBIDDEN",
+      "name": "禁断の術式",
+      "before": 0.36507936507936506,
+      "after": 0.3492063492063492,
+      "change": -0.015873015873015872,
+      "beforeRank": 226,
+      "afterRank": 229
+    },
+    {
+      "key": "SNIPE1",
+      "name": "狙撃",
+      "before": 0.3888888888888889,
+      "after": 0.3407258064516129,
+      "change": -0.04816308243727602,
+      "beforeRank": 216,
+      "afterRank": 230
+    },
+    {
+      "key": "GAMBLE",
+      "name": "六面の気まぐれ",
+      "before": 0.33203125,
+      "after": 0.328125,
+      "change": -0.00390625,
+      "beforeRank": 231,
+      "afterRank": 231
+    },
+    {
+      "key": "AJIN",
+      "name": "アチューン・真",
+      "before": 0.3055555555555556,
+      "after": 0.31640625,
+      "change": 0.01085069444444442,
+      "beforeRank": 236,
+      "afterRank": 232
+    },
+    {
+      "key": "TDE4",
+      "name": "魔王",
+      "before": 0.97265625,
+      "after": 0.3125,
+      "change": -0.66015625,
+      "beforeRank": 1,
+      "afterRank": 233
+    },
+    {
+      "key": "GUILD_CHEST",
+      "name": "アサシンギルドの宝箱",
+      "before": 0.3031496062992126,
+      "after": 0.2992125984251969,
+      "change": -0.003937007874015741,
+      "beforeRank": 237,
+      "afterRank": 234
+    },
+    {
+      "key": "GUILD_HQ",
+      "name": "アサシンギルド本部",
+      "before": 0.3203125,
+      "after": 0.296875,
+      "change": -0.0234375,
+      "beforeRank": 234,
+      "afterRank": 235
+    },
+    {
+      "key": "MEDITATE",
+      "name": "瞑想",
+      "before": 0.32421875,
+      "after": 0.29296875,
+      "change": -0.03125,
+      "beforeRank": 233,
+      "afterRank": 236
+    },
+    {
+      "key": "LUCKY_CHEST",
+      "name": "幸運の宝箱",
+      "before": 0.31451612903225806,
+      "after": 0.29133858267716534,
+      "change": -0.023177546355092726,
+      "beforeRank": 235,
+      "afterRank": 237
+    },
+    {
+      "key": "VOID_APOSTLE",
+      "name": "虚無空間の使徒",
+      "before": 0.125,
+      "after": 0.125,
+      "change": 0.0,
+      "beforeRank": 238,
+      "afterRank": 238
+    },
+    {
+      "key": "WORLD_TREE",
+      "name": "世界樹",
+      "before": null,
+      "after": null,
+      "change": null,
+      "beforeRank": 239,
+      "afterRank": 239
+    },
+    {
+      "key": "TIMEWARP",
+      "name": "時空間操作",
+      "before": null,
+      "after": null,
+      "change": null,
+      "beforeRank": 240,
+      "afterRank": 240
+    }
+  ],
+  "starters": [
+    {
+      "key": "RUST_SHROOM",
+      "name": "ラストマッシュルーム",
+      "before": 0.04336734693877551,
+      "after": 0.07653061224489796,
+      "change": 0.03316326530612245,
+      "beforeRank": 3,
+      "afterRank": 1
+    },
+    {
+      "key": "CASTLE",
+      "name": "城",
+      "before": 0.05357142857142857,
+      "after": 0.046954314720812185,
+      "change": -0.006617113850616384,
+      "beforeRank": 1,
+      "afterRank": 2
+    },
+    {
+      "key": "ELF_HAVEN",
+      "name": "エルフの憩い場",
+      "before": 0.045454545454545456,
+      "after": 0.04522613065326633,
+      "change": -0.00022841480127912261,
+      "beforeRank": 2,
+      "afterRank": 3
+    },
+    {
+      "key": "TRUMPET",
+      "name": "支援ラッパ",
+      "before": 0.022613065326633167,
+      "after": 0.035,
+      "change": 0.012386934673366837,
+      "beforeRank": 6,
+      "afterRank": 4
+    },
+    {
+      "key": "GUILD_HALL",
+      "name": "アサシンギルド支部",
+      "before": 0.0,
+      "after": 0.030303030303030304,
+      "change": 0.030303030303030304,
+      "beforeRank": 10,
+      "afterRank": 5
+    },
+    {
+      "key": "REFRESH_HAND",
+      "name": "リフレッシュ",
+      "before": 0.0275,
+      "after": 0.02,
+      "change": -0.0075,
+      "beforeRank": 5,
+      "afterRank": 6
+    },
+    {
+      "key": "STARTER_CHEST",
+      "name": "宝箱",
+      "before": 0.04081632653061224,
+      "after": 0.015306122448979591,
+      "change": -0.02551020408163265,
+      "beforeRank": 4,
+      "afterRank": 7
+    },
+    {
+      "key": "SLUM",
+      "name": "スラム街",
+      "before": -0.0025252525252525255,
+      "after": 0.012626262626262626,
+      "change": 0.015151515151515152,
+      "beforeRank": 13,
+      "afterRank": 8
+    },
+    {
+      "key": "COUNTERCALC",
+      "name": "逆算",
+      "before": 0.0,
+      "after": 0.0125,
+      "change": 0.0125,
+      "beforeRank": 11,
+      "afterRank": 9
+    },
+    {
+      "key": "RIFT",
+      "name": "次元の裂け目",
+      "before": -0.0663265306122449,
+      "after": 0.007653061224489796,
+      "change": 0.07397959183673469,
+      "beforeRank": 28,
+      "afterRank": 10
+    },
+    {
+      "key": "FOCUS",
+      "name": "選択と集中",
+      "before": 0.005050505050505051,
+      "after": 0.007614213197969543,
+      "change": 0.0025637081474644925,
+      "beforeRank": 8,
+      "afterRank": 11
+    },
+    {
+      "key": "ANCIENT_CIV",
+      "name": "古代文明",
+      "before": 0.012690355329949238,
+      "after": 0.00641025641025641,
+      "change": -0.006280098919692828,
+      "beforeRank": 7,
+      "afterRank": 12
+    },
+    {
+      "key": "DUNGEON_FLOOR",
+      "name": "ダンジョン最下層",
+      "before": -0.005025125628140704,
+      "after": 0.0025380710659898475,
+      "change": 0.007563196694130551,
+      "beforeRank": 16,
+      "afterRank": 13
+    },
+    {
+      "key": "STARTER_TRASH",
+      "name": "カル",
+      "before": 0.0,
+      "after": 0.0,
+      "change": 0.0,
+      "beforeRank": 9,
+      "afterRank": 14
+    },
+    {
+      "key": "HALF_ELF",
+      "name": "ハーフエルフ",
+      "before": -0.012626262626262626,
+      "after": -0.0038461538461538464,
+      "change": 0.00878010878010878,
+      "beforeRank": 17,
+      "afterRank": 15
+    },
+    {
+      "key": "TRICKROOM",
+      "name": "トリックルーム",
+      "before": -0.005025125628140704,
+      "after": -0.005025125628140704,
+      "change": 0.0,
+      "beforeRank": 15,
+      "afterRank": 16
+    },
+    {
+      "key": "GRAPE",
+      "name": "ぶどう",
+      "before": -0.01403061224489796,
+      "after": -0.007575757575757576,
+      "change": 0.006454854669140383,
+      "beforeRank": 19,
+      "afterRank": 17
+    },
+    {
+      "key": "FORESIGHT",
+      "name": "先見の明",
+      "before": -0.032663316582914576,
+      "after": -0.007653061224489796,
+      "change": 0.025010255358424778,
+      "beforeRank": 23,
+      "afterRank": 18
+    },
+    {
+      "key": "INCUBATOR_S",
+      "name": "孵化器",
+      "before": -0.002551020408163265,
+      "after": -0.007653061224489796,
+      "change": -0.005102040816326531,
+      "beforeRank": 14,
+      "afterRank": 19
+    },
+    {
+      "key": "FLAME",
+      "name": "火種の負債",
+      "before": -0.017676767676767676,
+      "after": -0.01,
+      "change": 0.007676767676767676,
+      "beforeRank": 21,
+      "afterRank": 20
+    },
+    {
+      "key": "CASINO",
+      "name": "カジノ",
+      "before": -0.04060913705583756,
+      "after": -0.01,
+      "change": 0.03060913705583756,
+      "beforeRank": 24,
+      "afterRank": 21
+    },
+    {
+      "key": "BLOOD_RITE",
+      "name": "血鬼術",
+      "before": -0.012690355329949238,
+      "after": -0.01015228426395939,
+      "change": 0.0025380710659898484,
+      "beforeRank": 18,
+      "afterRank": 22
+    },
+    {
+      "key": "CHOSEN_AREA",
+      "name": "選ばれし領域",
+      "before": 0.0,
+      "after": -0.015151515151515152,
+      "change": -0.015151515151515152,
+      "beforeRank": 12,
+      "afterRank": 23
+    },
+    {
+      "key": "ACID_RAIN",
+      "name": "酸性雨",
+      "before": -0.04271356783919598,
+      "after": -0.015151515151515152,
+      "change": 0.027562052687680826,
+      "beforeRank": 25,
+      "afterRank": 24
+    },
+    {
+      "key": "AMBUSH",
+      "name": "奇襲",
+      "before": -0.015228426395939087,
+      "after": -0.020202020202020204,
+      "change": -0.004973593806081117,
+      "beforeRank": 20,
+      "afterRank": 25
+    },
+    {
+      "key": "GHOST",
+      "name": "幽霊",
+      "before": -0.04846938775510204,
+      "after": -0.045454545454545456,
+      "change": 0.0030148423005565833,
+      "beforeRank": 27,
+      "afterRank": 26
+    },
+    {
+      "key": "GUILD_CO",
+      "name": "商会",
+      "before": -0.04591836734693878,
+      "after": -0.050505050505050504,
+      "change": -0.004586683158111726,
+      "beforeRank": 26,
+      "afterRank": 27
+    },
+    {
+      "key": "WEAKEN_ALL",
+      "name": "弱化術式",
+      "before": -0.030612244897959183,
+      "after": -0.05128205128205128,
+      "change": -0.020669806384092097,
+      "beforeRank": 22,
+      "afterRank": 28
+    },
+    {
+      "key": "FATE_WHEEL",
+      "name": "運命の輪",
+      "before": -0.08461538461538462,
+      "after": -0.05897435897435897,
+      "change": 0.025641025641025647,
+      "beforeRank": 32,
+      "afterRank": 29
+    },
+    {
+      "key": "TRIBE_PACT",
+      "name": "多種族契約",
+      "before": -0.07692307692307693,
+      "after": -0.06852791878172589,
+      "change": 0.008395158141351042,
+      "beforeRank": 30,
+      "afterRank": 30
+    },
+    {
+      "key": "TRIAL_AREA",
+      "name": "試練の領域",
+      "before": -0.08375634517766498,
+      "after": -0.09183673469387756,
+      "change": -0.00808038951621258,
+      "beforeRank": 31,
+      "afterRank": 31
+    },
+    {
+      "key": "GAMBLER",
+      "name": "ギャンブラー",
+      "before": -0.07653061224489796,
+      "after": -0.09230769230769231,
+      "change": -0.015777080062794352,
+      "beforeRank": 29,
+      "afterRank": 32
+    },
+    {
+      "key": "BREWING",
+      "name": "醸造",
+      "before": -0.08585858585858586,
+      "after": -0.12563451776649745,
+      "change": -0.039775931907911594,
+      "beforeRank": 33,
+      "afterRank": 33
+    }
+  ],
+  "builds": [
+    {
+      "key": "RIFT",
+      "name": "RIFT",
+      "before": 0.43875278396436523,
+      "after": 0.7691879866518354,
+      "change": 0.3304352026874702,
+      "beforeRank": 12,
+      "afterRank": 1
+    },
+    {
+      "key": "CULL",
+      "name": "CULL",
+      "before": 0.46444444444444444,
+      "after": 0.7633630289532294,
+      "change": 0.29891858450878495,
+      "beforeRank": 9,
+      "afterRank": 2
+    },
+    {
+      "key": "AGGRO",
+      "name": "AGGRO",
+      "before": 0.6785714285714286,
+      "after": 0.6573660714285714,
+      "change": -0.021205357142857206,
+      "beforeRank": 4,
+      "afterRank": 3
+    },
+    {
+      "key": "ELF",
+      "name": "ELF",
+      "before": 0.5412026726057907,
+      "after": 0.6562847608453838,
+      "change": 0.1150820882395931,
+      "beforeRank": 7,
+      "afterRank": 4
+    },
+    {
+      "key": "RAMP",
+      "name": "RAMP",
+      "before": 0.692992213570634,
+      "after": 0.6322222222222222,
+      "change": -0.06076999134841177,
+      "beforeRank": 3,
+      "afterRank": 5
+    },
+    {
+      "key": "DEFAULT",
+      "name": "DEFAULT",
+      "before": 0.7222222222222222,
+      "after": 0.6283333333333333,
+      "change": -0.09388888888888891,
+      "beforeRank": 1,
+      "afterRank": 6
+    },
+    {
+      "key": "DUNGEON",
+      "name": "DUNGEON",
+      "before": 0.7163515016685206,
+      "after": 0.6223581757508343,
+      "change": -0.09399332591768628,
+      "beforeRank": 2,
+      "afterRank": 7
+    },
+    {
+      "key": "MIDRANGE",
+      "name": "MIDRANGE",
+      "before": 0.5608938547486033,
+      "after": 0.5363128491620112,
+      "change": -0.024581005586592153,
+      "beforeRank": 5,
+      "afterRank": 8
+    },
+    {
+      "key": "EGG",
+      "name": "EGG",
+      "before": 0.553072625698324,
+      "after": 0.47592385218365063,
+      "change": -0.07714877351467342,
+      "beforeRank": 6,
+      "afterRank": 9
+    },
+    {
+      "key": "DECAY",
+      "name": "DECAY",
+      "before": 0.5072302558398221,
+      "after": 0.4382647385984427,
+      "change": -0.06896551724137934,
+      "beforeRank": 8,
+      "afterRank": 10
+    },
+    {
+      "key": "CASTLE",
+      "name": "CASTLE",
+      "before": 0.45535714285714285,
+      "after": 0.4216125419932811,
+      "change": -0.03374460086386177,
+      "beforeRank": 10,
+      "afterRank": 11
+    },
+    {
+      "key": "TRIBE",
+      "name": "TRIBE",
+      "before": 0.4552572706935123,
+      "after": 0.33856502242152464,
+      "change": -0.11669224827198765,
+      "beforeRank": 11,
+      "afterRank": 12
+    },
+    {
+      "key": "ASSASSIN",
+      "name": "ASSASSIN",
+      "before": 0.3716517857142857,
+      "after": 0.3119419642857143,
+      "change": -0.0597098214285714,
+      "beforeRank": 13,
+      "afterRank": 13
+    },
+    {
+      "key": "MERCHANT",
+      "name": "MERCHANT",
+      "before": 0.3132664437012263,
+      "after": 0.2936596218020022,
+      "change": -0.01960682189922408,
+      "beforeRank": 14,
+      "afterRank": 14
+    },
+    {
+      "key": "GAMBLER",
+      "name": "GAMBLER",
+      "before": 0.30777777777777776,
+      "after": 0.26555555555555554,
+      "change": -0.04222222222222222,
+      "beforeRank": 15,
+      "afterRank": 15
+    },
+    {
+      "key": "CASINO",
+      "name": "CASINO",
+      "before": 0.22111111111111112,
+      "after": 0.18777777777777777,
+      "change": -0.033333333333333354,
+      "beforeRank": 16,
+      "afterRank": 16
+    }
+  ],
+  "paired": {
+    "starter:STARTER_TRASH": {
+      "n": 195,
+      "mean": 0.0,
+      "lo": 0.0,
+      "hi": 0.0
+    },
+    "starter:STARTER_CHEST": {
+      "n": 195,
+      "mean": -0.028205128205128206,
+      "lo": -0.06670311710082856,
+      "hi": 0.010292860690572152
+    },
+    "starter:FLAME": {
+      "n": 198,
+      "mean": 0.010101010101010102,
+      "lo": -0.03642568571499582,
+      "hi": 0.056627705917016026
+    },
+    "starter:GHOST": {
+      "n": 196,
+      "mean": 0.00510204081632653,
+      "lo": -0.04980580739202885,
+      "hi": 0.060009889024681906
+    },
+    "starter:BLOOD_RITE": {
+      "n": 196,
+      "mean": 0.00510204081632653,
+      "lo": -0.03859270451112411,
+      "hi": 0.048796786143777166
+    },
+    "starter:WEAKEN_ALL": {
+      "n": 195,
+      "mean": -0.020512820512820513,
+      "lo": -0.06927828060160073,
+      "hi": 0.028252639575959696
+    },
+    "starter:GUILD_HALL": {
+      "n": 198,
+      "mean": 0.030303030303030304,
+      "lo": -0.018130337228197527,
+      "hi": 0.07873639783425813
+    },
+    "starter:FATE_WHEEL": {
+      "n": 194,
+      "mean": 0.028350515463917526,
+      "lo": -0.008302855045549073,
+      "hi": 0.06500388597338412
+    },
+    "starter:COUNTERCALC": {
+      "n": 198,
+      "mean": 0.012626262626262626,
+      "lo": -0.03467574375360813,
+      "hi": 0.05992826900613338
+    },
+    "starter:AMBUSH": {
+      "n": 197,
+      "mean": -0.005076142131979695,
+      "lo": -0.050232413802016165,
+      "hi": 0.04008012953805677
+    },
+    "starter:TRUMPET": {
+      "n": 199,
+      "mean": 0.01256281407035176,
+      "lo": -0.02466994747645141,
+      "hi": 0.049795575617154926
+    },
+    "starter:FORESIGHT": {
+      "n": 195,
+      "mean": 0.028205128205128206,
+      "lo": -0.012845976765725294,
+      "hi": 0.0692562331759817
+    },
+    "starter:TRICKROOM": {
+      "n": 199,
+      "mean": 0.0,
+      "lo": -0.028787662394095855,
+      "hi": 0.028787662394095855
+    },
+    "starter:INCUBATOR_S": {
+      "n": 195,
+      "mean": -0.005128205128205128,
+      "lo": -0.03471434485525814,
+      "hi": 0.024457934598847885
+    },
+    "starter:TRIBE_PACT": {
+      "n": 195,
+      "mean": 0.010256410256410256,
+      "lo": -0.03590035177442877,
+      "hi": 0.05641317228724928
+    },
+    "starter:RUST_SHROOM": {
+      "n": 195,
+      "mean": 0.035897435897435895,
+      "lo": -0.009448322127590635,
+      "hi": 0.08124319392246243
+    },
+    "starter:CHOSEN_AREA": {
+      "n": 197,
+      "mean": -0.015228426395939087,
+      "lo": -0.0450761421319797,
+      "hi": 0.014619289340101524
+    },
+    "starter:TRIAL_AREA": {
+      "n": 196,
+      "mean": -0.007653061224489796,
+      "lo": -0.05275550871052728,
+      "hi": 0.03744938626154769
+    },
+    "starter:ANCIENT_CIV": {
+      "n": 194,
+      "mean": -0.006443298969072165,
+      "lo": -0.05007483940637954,
+      "hi": 0.03718824146823521
+    },
+    "starter:GAMBLER": {
+      "n": 195,
+      "mean": -0.020512820512820513,
+      "lo": -0.06822572298702692,
+      "hi": 0.0272000819613859
+    },
+    "starter:ELF_HAVEN": {
+      "n": 198,
+      "mean": -0.0025252525252525255,
+      "lo": -0.051394418600467874,
+      "hi": 0.04634391354996282
+    },
+    "starter:HALF_ELF": {
+      "n": 194,
+      "mean": 0.00902061855670103,
+      "lo": -0.036331559413276995,
+      "hi": 0.05437279652667905
+    },
+    "starter:GUILD_CO": {
+      "n": 196,
+      "mean": -0.007653061224489796,
+      "lo": -0.054397044794570776,
+      "hi": 0.03909092234559118
+    },
+    "starter:SLUM": {
+      "n": 198,
+      "mean": 0.015151515151515152,
+      "lo": -0.01006140769967857,
+      "hi": 0.04036443800270888
+    },
+    "starter:GRAPE": {
+      "n": 196,
+      "mean": 0.0012755102040816326,
+      "lo": -0.02465029616519907,
+      "hi": 0.027201316573362336
+    },
+    "starter:BREWING": {
+      "n": 197,
+      "mean": -0.03934010152284264,
+      "lo": -0.08478484336734096,
+      "hi": 0.00610464032165569
+    },
+    "starter:DUNGEON_FLOOR": {
+      "n": 197,
+      "mean": 0.007614213197969543,
+      "lo": -0.02656032701312168,
+      "hi": 0.04178875340906077
+    },
+    "starter:CASINO": {
+      "n": 197,
+      "mean": 0.03299492385786802,
+      "lo": -0.013293536441167299,
+      "hi": 0.07928338415690334
+    },
+    "starter:REFRESH_HAND": {
+      "n": 200,
+      "mean": -0.0075,
+      "lo": -0.03736215483613475,
+      "hi": 0.022362154836134754
+    },
+    "starter:FOCUS": {
+      "n": 197,
+      "mean": 0.0025380710659898475,
+      "lo": -0.02337422996437193,
+      "hi": 0.028450372096351626
+    },
+    "starter:CASTLE": {
+      "n": 194,
+      "mean": -0.001288659793814433,
+      "lo": -0.04886606387463697,
+      "hi": 0.0462887442870081
+    },
+    "starter:ACID_RAIN": {
+      "n": 198,
+      "mean": 0.027777777777777776,
+      "lo": -0.014440092662928325,
+      "hi": 0.06999564821848388
+    },
+    "starter:RIFT": {
+      "n": 196,
+      "mean": 0.07397959183673469,
+      "lo": 0.03690205699764931,
+      "hi": 0.11105712667582007
+    },
+    "market:M1": {
+      "n": 125,
+      "mean": 0.008,
+      "lo": -0.042994033300554534,
+      "hi": 0.058994033300554534
+    },
+    "market:M2": {
+      "n": 128,
+      "mean": 0.03125,
+      "lo": -0.009057473516208413,
+      "hi": 0.07155747351620842
+    },
+    "market:M3": {
+      "n": 126,
+      "mean": -0.015873015873015872,
+      "lo": -0.05995867883743487,
+      "hi": 0.02821264709140313
+    },
+    "market:M4": {
+      "n": 125,
+      "mean": 0.004,
+      "lo": -0.03982127690605808,
+      "hi": 0.04782127690605807
+    },
+    "market:M5": {
+      "n": 126,
+      "mean": 0.01984126984126984,
+      "lo": -0.032426322743121315,
+      "hi": 0.072108862425661
+    },
+    "market:M6": {
+      "n": 126,
+      "mean": -0.01984126984126984,
+      "lo": -0.06026776158329342,
+      "hi": 0.020585221900753736
+    },
+    "market:M7": {
+      "n": 128,
+      "mean": -0.12109375,
+      "lo": -0.1832971292367581,
+      "hi": -0.058890370763241905
+    },
+    "market:M8": {
+      "n": 127,
+      "mean": 0.007874015748031496,
+      "lo": -0.03160464466794979,
+      "hi": 0.04735267616401278
+    },
+    "market:M9": {
+      "n": 128,
+      "mean": 0.013671875,
+      "lo": -0.027830267411281064,
+      "hi": 0.055174017411281064
+    },
+    "market:M10": {
+      "n": 127,
+      "mean": 0.005905511811023622,
+      "lo": -0.039751303089572226,
+      "hi": 0.05156232671161946
+    },
+    "market:M11": {
+      "n": 126,
+      "mean": 0.007936507936507936,
+      "lo": -0.036214970933624524,
+      "hi": 0.052087986806640396
+    },
+    "market:M12": {
+      "n": 127,
+      "mean": -0.015748031496062992,
+      "lo": -0.05664948231618295,
+      "hi": 0.025153419324056965
+    },
+    "market:S1": {
+      "n": 127,
+      "mean": 0.0,
+      "lo": -0.050206920918698876,
+      "hi": 0.050206920918698876
+    },
+    "market:S10": {
+      "n": 126,
+      "mean": -0.011904761904761904,
+      "lo": -0.06062619227967781,
+      "hi": 0.036816668470154
+    },
+    "market:S3": {
+      "n": 124,
+      "mean": 0.036290322580645164,
+      "lo": -0.005958489226324033,
+      "hi": 0.07853913438761437
+    },
+    "market:S4": {
+      "n": 126,
+      "mean": -0.007936507936507936,
+      "lo": -0.0428309165586127,
+      "hi": 0.02695790068559683
+    },
+    "market:S5": {
+      "n": 126,
+      "mean": 0.011904761904761904,
+      "lo": -0.03152282789199697,
+      "hi": 0.05533235170152078
+    },
+    "market:S8": {
+      "n": 128,
+      "mean": -0.0078125,
+      "lo": -0.05517475592358602,
+      "hi": 0.03954975592358602
+    },
+    "market:S6": {
+      "n": 128,
+      "mean": -0.015625,
+      "lo": -0.054723438192522324,
+      "hi": 0.023473438192522324
+    },
+    "market:S7": {
+      "n": 126,
+      "mean": 0.011904761904761904,
+      "lo": -0.022069084245213845,
+      "hi": 0.04587860805473765
+    },
+    "market:S12": {
+      "n": 128,
+      "mean": 0.0078125,
+      "lo": -0.03283705156058639,
+      "hi": 0.04846205156058639
+    },
+    "market:S13": {
+      "n": 128,
+      "mean": 0.0234375,
+      "lo": -0.01238341239091651,
+      "hi": 0.05925841239091651
+    },
+    "market:S14": {
+      "n": 127,
+      "mean": -0.015748031496062992,
+      "lo": -0.06214920240470363,
+      "hi": 0.03065313941257765
+    },
+    "market:S15": {
+      "n": 128,
+      "mean": 0.0078125,
+      "lo": -0.03283705156058639,
+      "hi": 0.04846205156058639
+    },
+    "market:E1": {
+      "n": 128,
+      "mean": -0.00390625,
+      "lo": -0.04529284743838658,
+      "hi": 0.03748034743838658
+    },
+    "market:E2": {
+      "n": 128,
+      "mean": -0.0234375,
+      "lo": -0.07425965758432132,
+      "hi": 0.027384657584321327
+    },
+    "market:E3": {
+      "n": 126,
+      "mean": -0.001984126984126984,
+      "lo": -0.0434871537962512,
+      "hi": 0.03951889982799723
+    },
+    "market:TSO2": {
+      "n": 128,
+      "mean": 0.0078125,
+      "lo": -0.03283705156058639,
+      "hi": 0.04846205156058639
+    },
+    "market:TSO5": {
+      "n": 126,
+      "mean": 0.013888888888888888,
+      "lo": -0.03038982990774755,
+      "hi": 0.05816760768552533
+    },
+    "market:TPO2": {
+      "n": 127,
+      "mean": 0.023622047244094488,
+      "lo": -0.02136219545941924,
+      "hi": 0.06860628994760821
+    },
+    "market:TPO5": {
+      "n": 127,
+      "mean": 0.03543307086614173,
+      "lo": -0.012550296441086815,
+      "hi": 0.08341643817337027
+    },
+    "market:TAR2": {
+      "n": 115,
+      "mean": -0.013043478260869565,
+      "lo": -0.05907304977656315,
+      "hi": 0.03298609325482402
+    },
+    "market:TAR5": {
+      "n": 128,
+      "mean": -0.00390625,
+      "lo": -0.05430433120612678,
+      "hi": 0.04649183120612678
+    },
+    "market:ND2": {
+      "n": 127,
+      "mean": -0.00984251968503937,
+      "lo": -0.043789290015625204,
+      "hi": 0.024104250645546468
+    },
+    "market:ND3": {
+      "n": 128,
+      "mean": 0.0234375,
+      "lo": -0.01554270859558747,
+      "hi": 0.06241770859558747
+    },
+    "market:ND5": {
+      "n": 128,
+      "mean": 0.01953125,
+      "lo": -0.02449251513700402,
+      "hi": 0.06355501513700401
+    },
+    "market:NMD2": {
+      "n": 128,
+      "mean": 0.0078125,
+      "lo": -0.03564673307784626,
+      "hi": 0.05127173307784626
+    },
+    "market:NMD4": {
+      "n": 126,
+      "mean": 0.051587301587301584,
+      "lo": 0.012032120565354375,
+      "hi": 0.09114248260924879
+    },
+    "market:NMD6": {
+      "n": 127,
+      "mean": 0.01968503937007874,
+      "lo": -0.026018329820536618,
+      "hi": 0.0653884085606941
+    },
+    "market:NGA3": {
+      "n": 126,
+      "mean": 0.031746031746031744,
+      "lo": -0.009197892568469486,
+      "hi": 0.07268995606053297
+    },
+    "market:NGA4": {
+      "n": 127,
+      "mean": -0.06299212598425197,
+      "lo": -0.10815460784905237,
+      "hi": -0.01782964411945156
+    },
+    "market:NWL3": {
+      "n": 128,
+      "mean": -0.03125,
+      "lo": -0.08076574055784813,
+      "hi": 0.01826574055784813
+    },
+    "market:NHEX": {
+      "n": 127,
+      "mean": -0.015748031496062992,
+      "lo": -0.05664948231618295,
+      "hi": 0.025153419324056965
+    },
+    "market:AHEUK": {
+      "n": 126,
+      "mean": 0.02976190476190476,
+      "lo": -0.017611083322023408,
+      "hi": 0.07713489284583293
+    },
+    "market:AJIN": {
+      "n": 126,
+      "mean": 0.007936507936507936,
+      "lo": -0.04143124782210413,
+      "hi": 0.057304263695120004
+    },
+    "market:AMA": {
+      "n": 125,
+      "mean": 0.036,
+      "lo": -0.012747711807341404,
+      "hi": 0.08474771180734139
+    },
+    "market:NHEAL": {
+      "n": 126,
+      "mean": 0.12301587301587301,
+      "lo": 0.0628458259168285,
+      "hi": 0.18318592011491752
+    },
+    "market:GM5_0": {
+      "n": 127,
+      "mean": -0.007874015748031496,
+      "lo": -0.04418509721071,
+      "hi": 0.028437065714647006
+    },
+    "market:GM5_2": {
+      "n": 126,
+      "mean": 0.041666666666666664,
+      "lo": -0.0020732210535570547,
+      "hi": 0.08540655438689038
+    },
+    "market:GM5_3": {
+      "n": 127,
+      "mean": 0.007874015748031496,
+      "lo": -0.03592860535067684,
+      "hi": 0.05167663684673983
+    },
+    "market:GS5_3": {
+      "n": 126,
+      "mean": -0.03571428571428571,
+      "lo": -0.0758041846914595,
+      "hi": 0.004375613262888073
+    },
+    "market:GS5_4": {
+      "n": 127,
+      "mean": 0.023622047244094488,
+      "lo": -0.0171636990986168,
+      "hi": 0.06440779358680578
+    },
+    "market:GM6_0": {
+      "n": 126,
+      "mean": -0.017857142857142856,
+      "lo": -0.06277608219358657,
+      "hi": 0.02706179647930087
+    },
+    "market:GM6_1": {
+      "n": 126,
+      "mean": 0.01984126984126984,
+      "lo": -0.022066447707213478,
+      "hi": 0.06174898738975316
+    },
+    "market:GM6_7": {
+      "n": 127,
+      "mean": 0.011811023622047244,
+      "lo": -0.026869517180957543,
+      "hi": 0.05049156442505203
+    },
+    "market:GM6_8": {
+      "n": 126,
+      "mean": -0.003968253968253968,
+      "lo": -0.04453814488975776,
+      "hi": 0.036601636953249826
+    },
+    "market:GS6_4": {
+      "n": 125,
+      "mean": -0.004,
+      "lo": -0.049213127411434174,
+      "hi": 0.04121312741143418
+    },
+    "market:GS8_0": {
+      "n": 127,
+      "mean": -0.01968503937007874,
+      "lo": -0.05979311801854433,
+      "hi": 0.020423039278386852
+    },
+    "market:NT_SEAL3": {
+      "n": 125,
+      "mean": 0.012,
+      "lo": -0.030336936668252375,
+      "hi": 0.05433693666825237
+    },
+    "market:NT_SEAL5": {
+      "n": 125,
+      "mean": 0.03,
+      "lo": -0.01643547031339089,
+      "hi": 0.07643547031339089
+    },
+    "market:TSO3": {
+      "n": 126,
+      "mean": 0.031746031746031744,
+      "lo": -0.0061022684424905105,
+      "hi": 0.069594331934554
+    },
+    "market:TPO3": {
+      "n": 125,
+      "mean": -0.032,
+      "lo": -0.07617054572537471,
+      "hi": 0.012170545725374717
+    },
+    "market:TAR3": {
+      "n": 128,
+      "mean": -0.0078125,
+      "lo": -0.04846205156058639,
+      "hi": 0.03283705156058639
+    },
+    "market:TGE1": {
+      "n": 127,
+      "mean": -0.011811023622047244,
+      "lo": -0.06709790434383356,
+      "hi": 0.043475857099739064
+    },
+    "market:TGE2": {
+      "n": 127,
+      "mean": 0.031496062992125984,
+      "lo": -0.004422454705757389,
+      "hi": 0.06741458069000936
+    },
+    "market:TGE3": {
+      "n": 128,
+      "mean": -0.0234375,
+      "lo": -0.06390496978715632,
+      "hi": 0.017029969787156318
+    },
+    "market:TGE4": {
+      "n": 127,
+      "mean": 0.04330708661417323,
+      "lo": -0.009263250760863546,
+      "hi": 0.09587742398921001
+    },
+    "market:TGE5": {
+      "n": 126,
+      "mean": -0.01984126984126984,
+      "lo": -0.06174898738975316,
+      "hi": 0.022066447707213478
+    },
+    "market:TGE6": {
+      "n": 127,
+      "mean": -0.01968503937007874,
+      "lo": -0.0738056724479772,
+      "hi": 0.03443559370781972
+    },
+    "market:TGE7": {
+      "n": 128,
+      "mean": 0.015625,
+      "lo": -0.02193200228020855,
+      "hi": 0.05318200228020855
+    },
+    "market:HANDRESET": {
+      "n": 127,
+      "mean": 0.003937007874015748,
+      "lo": -0.05028830737728512,
+      "hi": 0.05816232312531661
+    },
+    "market:TIMEWARP": {
+      "n": 126,
+      "mean": 0.015873015873015872,
+      "lo": -0.029574769931882273,
+      "hi": 0.06132080167791402
+    },
+    "market:INFERNO": {
+      "n": 126,
+      "mean": 0.031746031746031744,
+      "lo": -0.009197892568469486,
+      "hi": 0.07268995606053297
+    },
+    "market:GAMBLE": {
+      "n": 128,
+      "mean": -0.00390625,
+      "lo": -0.04669655142854762,
+      "hi": 0.03888405142854762
+    },
+    "market:ASSASSIN1": {
+      "n": 128,
+      "mean": 0.0,
+      "lo": -0.03261035172104217,
+      "hi": 0.03261035172104217
+    },
+    "market:ASSASSIN2": {
+      "n": 128,
+      "mean": 0.04296875,
+      "lo": -0.0018859214663021553,
+      "hi": 0.08782342146630215
+    },
+    "market:ASSASSIN3": {
+      "n": 126,
+      "mean": 0.003968253968253968,
+      "lo": -0.0395038883816904,
+      "hi": 0.04744039631819834
+    },
+    "market:ASSASSIN4": {
+      "n": 127,
+      "mean": -0.013779527559055118,
+      "lo": -0.06467125273168504,
+      "hi": 0.0371121976135748
+    },
+    "market:RUNE1": {
+      "n": 127,
+      "mean": -0.01968503937007874,
+      "lo": -0.0626818760458459,
+      "hi": 0.023311797305688414
+    },
+    "market:RUNE2": {
+      "n": 127,
+      "mean": 0.003937007874015748,
+      "lo": -0.04318172343689373,
+      "hi": 0.051055739184925224
+    },
+    "market:RUNE3": {
+      "n": 128,
+      "mean": -0.021484375,
+      "lo": -0.0707091292542831,
+      "hi": 0.027740379254283097
+    },
+    "market:GENESIS_SONG": {
+      "n": 126,
+      "mean": 0.003968253968253968,
+      "lo": -0.04479289227253952,
+      "hi": 0.052729400209047456
+    },
+    "market:GENESIS_MAGIC": {
+      "n": 124,
+      "mean": 0.014112903225806451,
+      "lo": -0.03017653130317019,
+      "hi": 0.058402337754783096
+    },
+    "market:KIN_CALL": {
+      "n": 125,
+      "mean": -0.02,
+      "lo": -0.06508137445310032,
+      "hi": 0.025081374453100314
+    },
+    "market:MULTI_CULTURE": {
+      "n": 124,
+      "mean": -0.018145161290322582,
+      "lo": -0.05458420077369025,
+      "hi": 0.01829387819304509
+    },
+    "market:SLAY_ART": {
+      "n": 127,
+      "mean": 0.023622047244094488,
+      "lo": -0.018609600845431153,
+      "hi": 0.06585369533362012
+    },
+    "market:BLOOD1": {
+      "n": 126,
+      "mean": 0.007936507936507936,
+      "lo": -0.030293465437763865,
+      "hi": 0.04616648131077974
+    },
+    "market:DISARM1": {
+      "n": 125,
+      "mean": -0.004,
+      "lo": -0.04782127690605807,
+      "hi": 0.03982127690605808
+    },
+    "market:DISARM2": {
+      "n": 128,
+      "mean": 0.0,
+      "lo": -0.04348046896138957,
+      "hi": 0.04348046896138957
+    },
+    "market:DISARM3": {
+      "n": 128,
+      "mean": 0.0078125,
+      "lo": -0.043154760399475585,
+      "hi": 0.058779760399475585
+    },
+    "market:FORBIDDEN": {
+      "n": 126,
+      "mean": -0.015873015873015872,
+      "lo": -0.05709964037589307,
+      "hi": 0.025353608629861323
+    },
+    "market:LUCKY_CHEST": {
+      "n": 124,
+      "mean": -0.020161290322580645,
+      "lo": -0.06829807402727843,
+      "hi": 0.027975493382117137
+    },
+    "market:GUILD_CHEST": {
+      "n": 127,
+      "mean": -0.003937007874015748,
+      "lo": -0.04706553501641931,
+      "hi": 0.03919151926838781
+    },
+    "market:CATALYST": {
+      "n": 126,
+      "mean": -0.00992063492063492,
+      "lo": -0.054914928111584,
+      "hi": 0.03507365827031416
+    },
+    "market:WORLD_SEED": {
+      "n": 127,
+      "mean": 0.08661417322834646,
+      "lo": 0.03511551506026915,
+      "hi": 0.13811283139642377
+    },
+    "market:MANA_GIANT": {
+      "n": 127,
+      "mean": 0.003937007874015748,
+      "lo": -0.04318172343689373,
+      "hi": 0.051055739184925224
+    },
+    "market:HOURGLASS": {
+      "n": 126,
+      "mean": -0.003968253968253968,
+      "lo": -0.05973009321382927,
+      "hi": 0.051793585277321336
+    },
+    "market:LIFE_CYCLE": {
+      "n": 127,
+      "mean": 0.027559055118110236,
+      "lo": -0.018020063631852927,
+      "hi": 0.07313817386807339
+    },
+    "market:LIFE_SANCTUM": {
+      "n": 128,
+      "mean": 0.03515625,
+      "lo": -0.01487415836834579,
+      "hi": 0.0851866583683458
+    },
+    "market:WORLD_HEART": {
+      "n": 128,
+      "mean": 0.021484375,
+      "lo": -0.02062499999999999,
+      "hi": 0.06359374999999999
+    },
+    "market:MEDITATE": {
+      "n": 128,
+      "mean": -0.03125,
+      "lo": -0.07955785768561083,
+      "hi": 0.01705785768561082
+    },
+    "market:HERMIT": {
+      "n": 127,
+      "mean": 0.007874015748031496,
+      "lo": -0.03005393743448049,
+      "hi": 0.04580196893054348
+    },
+    "market:WORLD_BLESS": {
+      "n": 126,
+      "mean": 0.03571428571428571,
+      "lo": -0.015107406941945678,
+      "hi": 0.0865359783705171
+    },
+    "market:GLASS_BAN": {
+      "n": 128,
+      "mean": 0.0234375,
+      "lo": -0.025003936847886703,
+      "hi": 0.07187893684788671
+    },
+    "market:SHATTER": {
+      "n": 127,
+      "mean": -0.021653543307086614,
+      "lo": -0.06878480986292,
+      "hi": 0.025477723248746777
+    },
+    "market:SCARECROW": {
+      "n": 127,
+      "mean": 0.013779527559055118,
+      "lo": -0.03375857771530599,
+      "hi": 0.061317632833416236
+    },
+    "market:LEVY": {
+      "n": 127,
+      "mean": -0.005905511811023622,
+      "lo": -0.05317694601180925,
+      "hi": 0.041365922389762
+    },
+    "market:INQUISITION": {
+      "n": 127,
+      "mean": -0.031496062992125984,
+      "lo": -0.07061396049268517,
+      "hi": 0.007621834508433199
+    },
+    "market:MIMIC_LORD": {
+      "n": 127,
+      "mean": -0.025590551181102362,
+      "lo": -0.07329487845122085,
+      "hi": 0.022113776089016126
+    },
+    "market:AWAKENED_MIMIC": {
+      "n": 128,
+      "mean": -0.0078125,
+      "lo": -0.056406149121980505,
+      "hi": 0.040781149121980505
+    },
+    "market:MIMIC_KING": {
+      "n": 127,
+      "mean": -0.015748031496062992,
+      "lo": -0.06083720609559777,
+      "hi": 0.029341143103471787
+    },
+    "market:VITAL2": {
+      "n": 125,
+      "mean": 0.066,
+      "lo": 0.020732088699075293,
+      "hi": 0.11126791130092471
+    },
+    "market:VITAL3": {
+      "n": 127,
+      "mean": 0.023622047244094488,
+      "lo": -0.0171636990986168,
+      "hi": 0.06440779358680578
+    },
+    "market:VITAL4": {
+      "n": 128,
+      "mean": 0.025390625,
+      "lo": -0.005277674545213714,
+      "hi": 0.05605892454521372
+    },
+    "market:CULL_FLOOD": {
+      "n": 123,
+      "mean": 0.024390243902439025,
+      "lo": -0.02727514840904737,
+      "hi": 0.07605563621392541
+    },
+    "market:PAIN_HARVEST": {
+      "n": 127,
+      "mean": 0.007874015748031496,
+      "lo": -0.04465135511687374,
+      "hi": 0.06039938661293673
+    },
+    "market:CULL_FARM": {
+      "n": 128,
+      "mean": 0.0078125,
+      "lo": -0.036985540007722036,
+      "hi": 0.052610540007722036
+    },
+    "market:PURGE_ALL": {
+      "n": 125,
+      "mean": 0.016,
+      "lo": -0.028439062154384957,
+      "hi": 0.06043906215438496
+    },
+    "market:EXILE_NUKE1": {
+      "n": 127,
+      "mean": -0.027559055118110236,
+      "lo": -0.06899998994282917,
+      "hi": 0.013881879706608702
+    },
+    "market:EXILE_NUKE2": {
+      "n": 127,
+      "mean": -0.023622047244094488,
+      "lo": -0.06860628994760821,
+      "hi": 0.02136219545941924
+    },
+    "market:GOLIATH_HUNT": {
+      "n": 127,
+      "mean": 0.007874015748031496,
+      "lo": -0.03727800093719038,
+      "hi": 0.05302603243325337
+    },
+    "market:DOUBLE_EXEC": {
+      "n": 128,
+      "mean": -0.0078125,
+      "lo": -0.058779760399475585,
+      "hi": 0.043154760399475585
+    },
+    "market:MASSACRE": {
+      "n": 126,
+      "mean": 0.003968253968253968,
+      "lo": -0.0395038883816904,
+      "hi": 0.04744039631819834
+    },
+    "market:MIMIC_KING2": {
+      "n": 127,
+      "mean": -0.013779527559055118,
+      "lo": -0.05770873441629289,
+      "hi": 0.030149679298182654
+    },
+    "market:ORIGIN_MIMIC": {
+      "n": 126,
+      "mean": -0.003968253968253968,
+      "lo": -0.046014319241217044,
+      "hi": 0.03807781130470911
+    },
+    "market:GREED_PRICE": {
+      "n": 126,
+      "mean": 0.027777777777777776,
+      "lo": -0.026666666666666665,
+      "hi": 0.08222222222222222
+    },
+    "market:MARKET_CRISIS": {
+      "n": 126,
+      "mean": 0.007936507936507936,
+      "lo": -0.036558907280215706,
+      "hi": 0.05243192315323158
+    },
+    "market:FURNACE": {
+      "n": 126,
+      "mean": 0.003968253968253968,
+      "lo": -0.0395038883816904,
+      "hi": 0.04744039631819834
+    },
+    "market:PURGE_TOUCH": {
+      "n": 126,
+      "mean": -0.031746031746031744,
+      "lo": -0.0741531124499326,
+      "hi": 0.01066104895786911
+    },
+    "market:SCRAPPER": {
+      "n": 128,
+      "mean": -0.01171875,
+      "lo": -0.05714601396348528,
+      "hi": 0.03370851396348528
+    },
+    "market:HORDE": {
+      "n": 127,
+      "mean": 0.023622047244094488,
+      "lo": -0.028759171387795983,
+      "hi": 0.07600326587598497
+    },
+    "market:ELITE": {
+      "n": 128,
+      "mean": 0.017578125,
+      "lo": -0.025964664474022105,
+      "hi": 0.061120914474022105
+    },
+    "market:WALLBREAK1": {
+      "n": 126,
+      "mean": 0.007936507936507936,
+      "lo": -0.038895790720838194,
+      "hi": 0.054768806593854066
+    },
+    "market:WALLBREAK2": {
+      "n": 128,
+      "mean": -0.0078125,
+      "lo": -0.04698170465439493,
+      "hi": 0.03135670465439493
+    },
+    "market:SNIPE1": {
+      "n": 124,
+      "mean": -0.046370967741935484,
+      "lo": -0.09540531079928677,
+      "hi": 0.0026633753154157933
+    },
+    "market:SNIPE2": {
+      "n": 127,
+      "mean": 0.01968503937007874,
+      "lo": -0.028573306505269937,
+      "hi": 0.06794338524542742
+    },
+    "market:DRAGON_EGG": {
+      "n": 121,
+      "mean": 0.024793388429752067,
+      "lo": -0.028971135623075295,
+      "hi": 0.07855791248257943
+    },
+    "market:BEAST_EGG": {
+      "n": 125,
+      "mean": 0.004,
+      "lo": -0.045152768307167246,
+      "hi": 0.05315276830716724
+    },
+    "market:EGG_HUNTER": {
+      "n": 128,
+      "mean": 0.0078125,
+      "lo": -0.036985540007722036,
+      "hi": 0.052610540007722036
+    },
+    "market:INCUBATOR": {
+      "n": 126,
+      "mean": -0.011904761904761904,
+      "lo": -0.05671448307228437,
+      "hi": 0.03290495926276056
+    },
+    "market:EGG_MASTER": {
+      "n": 125,
+      "mean": -0.012,
+      "lo": -0.055776006979814566,
+      "hi": 0.03177600697981457
+    },
+    "market:BLOOD_JOY": {
+      "n": 127,
+      "mean": -0.027559055118110236,
+      "lo": -0.0744364597140218,
+      "hi": 0.019318349477801325
+    },
+    "market:BLOOD_ANGER": {
+      "n": 125,
+      "mean": 0.016,
+      "lo": -0.028439062154384957,
+      "hi": 0.06043906215438496
+    },
+    "market:BLOOD_SORROW": {
+      "n": 126,
+      "mean": 0.01984126984126984,
+      "lo": -0.022066447707213478,
+      "hi": 0.06174898738975316
+    },
+    "market:BLOOD_PLEASURE": {
+      "n": 125,
+      "mean": -0.02,
+      "lo": -0.060750000989511166,
+      "hi": 0.02075000098951117
+    },
+    "market:VAMP_PACT": {
+      "n": 125,
+      "mean": -0.002,
+      "lo": -0.04155247979665139,
+      "hi": 0.037552479796651383
+    },
+    "market:BLOOD_FEST": {
+      "n": 128,
+      "mean": -0.01171875,
+      "lo": -0.054465883395940995,
+      "hi": 0.031028383395940995
+    },
+    "market:BLOOD_SHIELD": {
+      "n": 127,
+      "mean": -0.05708661417322835,
+      "lo": -0.10644631034421936,
+      "hi": -0.007726918002237328
+    },
+    "market:VAMP_WARD": {
+      "n": 127,
+      "mean": 0.015748031496062992,
+      "lo": -0.029341143103471787,
+      "hi": 0.06083720609559777
+    },
+    "market:VAMP_PACT2": {
+      "n": 127,
+      "mean": -0.027559055118110236,
+      "lo": -0.0861068968102738,
+      "hi": 0.030988786574053323
+    },
+    "market:VAMP_BUTLER": {
+      "n": 127,
+      "mean": 0.015748031496062992,
+      "lo": -0.02798980876202229,
+      "hi": 0.059485871754148274
+    },
+    "market:BLOOD_SECRET": {
+      "n": 125,
+      "mean": 0.006,
+      "lo": -0.040722801506814225,
+      "hi": 0.05272280150681422
+    },
+    "market:GOLEM1": {
+      "n": 127,
+      "mean": 0.03937007874015748,
+      "lo": -0.01819485855001759,
+      "hi": 0.09693501603033255
+    },
+    "market:GOLEM2": {
+      "n": 128,
+      "mean": -0.02734375,
+      "lo": -0.07385539742458724,
+      "hi": 0.019167897424587244
+    },
+    "market:GOLEM3": {
+      "n": 127,
+      "mean": -0.007874015748031496,
+      "lo": -0.054336254247355886,
+      "hi": 0.038588222751292894
+    },
+    "market:DECAY_CRAFT": {
+      "n": 127,
+      "mean": -0.011811023622047244,
+      "lo": -0.04890750918587622,
+      "hi": 0.02528546194178173
+    },
+    "market:RUST_SLUG": {
+      "n": 126,
+      "mean": -0.013888888888888888,
+      "lo": -0.06275042163926473,
+      "hi": 0.03497264386148694
+    },
+    "market:MAJESTY_RITE": {
+      "n": 127,
+      "mean": 0.01968503937007874,
+      "lo": -0.013908382461722116,
+      "hi": 0.053278461201879596
+    },
+    "market:CROSSROADS": {
+      "n": 128,
+      "mean": 0.017578125,
+      "lo": -0.02316074608820292,
+      "hi": 0.05831699608820292
+    },
+    "market:CHOSEN_KNIGHT": {
+      "n": 128,
+      "mean": 0.009765625,
+      "lo": -0.033851302448369106,
+      "hi": 0.053382552448369106
+    },
+    "market:CHOSEN_MAGE": {
+      "n": 128,
+      "mean": 0.0390625,
+      "lo": -0.0038839218114557275,
+      "hi": 0.08200892181145572
+    },
+    "market:CHOSEN_ARCHER": {
+      "n": 124,
+      "mean": -0.004032258064516129,
+      "lo": -0.05229546820810406,
+      "hi": 0.044230952079071795
+    },
+    "market:CHOSEN_ROGUE": {
+      "n": 128,
+      "mean": 0.015625,
+      "lo": -0.03528789530624404,
+      "hi": 0.06653789530624404
+    },
+    "market:LEGEND_GAMBLER": {
+      "n": 125,
+      "mean": 0.014,
+      "lo": -0.030633837012423795,
+      "hi": 0.05863383701242379
+    },
+    "market:ELF": {
+      "n": 128,
+      "mean": 0.056640625,
+      "lo": 0.01699268493218639,
+      "hi": 0.09628856506781361
+    },
+    "market:DARK_ELF": {
+      "n": 127,
+      "mean": 0.003937007874015748,
+      "lo": -0.03919151926838781,
+      "hi": 0.04706553501641931
+    },
+    "market:HIGH_ELF": {
+      "n": 125,
+      "mean": -0.032,
+      "lo": -0.07889224105294756,
+      "hi": 0.01489224105294757
+    },
+    "market:ELDER_ELF_KING": {
+      "n": 127,
+      "mean": -0.007874015748031496,
+      "lo": -0.04418509721071,
+      "hi": 0.028437065714647006
+    },
+    "market:HPS_SCALE": {
+      "n": 125,
+      "mean": 0.0,
+      "lo": -0.047229296539466926,
+      "hi": 0.047229296539466926
+    },
+    "market:HPS_GRAFT": {
+      "n": 128,
+      "mean": -0.0078125,
+      "lo": -0.04383898602931014,
+      "hi": 0.02821398602931014
+    },
+    "market:HPS_OATH": {
+      "n": 127,
+      "mean": 0.003937007874015748,
+      "lo": -0.03777671717958614,
+      "hi": 0.045650732927617635
+    },
+    "market:HPS_SOIL": {
+      "n": 126,
+      "mean": 0.011904761904761904,
+      "lo": -0.041589162983957935,
+      "hi": 0.06539868679348174
+    },
+    "market:HPS_BOULDER": {
+      "n": 125,
+      "mean": -0.024,
+      "lo": -0.0723392612753356,
+      "hi": 0.02433926127533561
+    },
+    "market:MERCH1": {
+      "n": 127,
+      "mean": -0.007874015748031496,
+      "lo": -0.05806210789392545,
+      "hi": 0.04231407639786246
+    },
+    "market:MERCH2": {
+      "n": 128,
+      "mean": 0.00390625,
+      "lo": -0.042842955798629956,
+      "hi": 0.050655455798629956
+    },
+    "market:GRAPE2": {
+      "n": 126,
+      "mean": -0.021825396825396824,
+      "lo": -0.06531006135650153,
+      "hi": 0.021659267705707884
+    },
+    "market:TPO1": {
+      "n": 126,
+      "mean": 0.017857142857142856,
+      "lo": -0.024977163227790714,
+      "hi": 0.060691448942076426
+    },
+    "market:TSO1": {
+      "n": 128,
+      "mean": 0.01953125,
+      "lo": -0.03191822608821178,
+      "hi": 0.07098072608821178
+    },
+    "market:TAR1": {
+      "n": 128,
+      "mean": 0.02734375,
+      "lo": -0.0096124005925814,
+      "hi": 0.0642999005925814
+    },
+    "market:TDE1": {
+      "n": 126,
+      "mean": 0.003968253968253968,
+      "lo": -0.04088464689723501,
+      "hi": 0.04882115483374295
+    },
+    "market:TDE2": {
+      "n": 127,
+      "mean": -0.16141732283464566,
+      "lo": -0.22612472183357069,
+      "hi": -0.09670992383572063
+    },
+    "market:TDE3": {
+      "n": 128,
+      "mean": -0.07421875,
+      "lo": -0.12294045834810469,
+      "hi": -0.025497041651895307
+    },
+    "market:TDE4": {
+      "n": 128,
+      "mean": -0.66015625,
+      "lo": -0.7279822920343018,
+      "hi": -0.5923302079656982
+    },
+    "market:GEM_RAIN": {
+      "n": 127,
+      "mean": 0.00984251968503937,
+      "lo": -0.037408916023386085,
+      "hi": 0.05709395539346482
+    },
+    "market:VOID_FRUIT": {
+      "n": 127,
+      "mean": 0.07874015748031496,
+      "lo": 0.026857516781917258,
+      "hi": 0.13062279817871267
+    },
+    "market:VOID_APOSTLE": {
+      "n": 128,
+      "mean": 0.0,
+      "lo": -0.03261035172104217,
+      "hi": 0.03261035172104217
+    },
+    "market:GUILD_HQ": {
+      "n": 128,
+      "mean": -0.0234375,
+      "lo": -0.06390496978715632,
+      "hi": 0.017029969787156318
+    },
+    "market:WORLD_TREE": {
+      "n": 128,
+      "mean": 0.0234375,
+      "lo": -0.02119538538097332,
+      "hi": 0.06807038538097332
+    },
+    "market:BUDGET": {
+      "n": 126,
+      "mean": -0.051587301587301584,
+      "lo": -0.09854344082750828,
+      "hi": -0.004631162347094889
+    },
+    "market:EXPANSION": {
+      "n": 127,
+      "mean": 0.00984251968503937,
+      "lo": -0.03676950321350786,
+      "hi": 0.05645454258358659
+    },
+    "market:LAND_GRANT": {
+      "n": 126,
+      "mean": -0.007936507936507936,
+      "lo": -0.05344813987797219,
+      "hi": 0.037575124004956315
+    },
+    "market:TREASON": {
+      "n": 126,
+      "mean": 0.011904761904761904,
+      "lo": -0.03152282789199697,
+      "hi": 0.05533235170152078
+    },
+    "market:STRONG_ACID": {
+      "n": 127,
+      "mean": 0.007874015748031496,
+      "lo": -0.04231407639786246,
+      "hi": 0.05806210789392545
+    },
+    "market:ROTTEN_GROUND": {
+      "n": 127,
+      "mean": 0.06299212598425197,
+      "lo": 0.02200987639602433,
+      "hi": 0.1039743755724796
+    },
+    "market:UNBRAND": {
+      "n": 126,
+      "mean": -0.011904761904761904,
+      "lo": -0.06424637483791906,
+      "hi": 0.040436851028395254
+    },
+    "market:DEMON_REALM": {
+      "n": 128,
+      "mean": -0.01953125,
+      "lo": -0.0578125,
+      "hi": 0.018750000000000003
+    },
+    "market:AEM": {
+      "n": 126,
+      "mean": -0.02976190476190476,
+      "lo": -0.0790278497272998,
+      "hi": 0.01950404020349028
+    },
+    "market:KNIGHT_TEACH": {
+      "n": 127,
+      "mean": 0.031496062992125984,
+      "lo": -0.010578631256499854,
+      "hi": 0.07357075724075182
+    },
+    "market:DUNGEON": {
+      "n": 128,
+      "mean": -0.005859375,
+      "lo": -0.05400333279628251,
+      "hi": 0.04228458279628251
+    },
+    "market:NL_SECRET": {
+      "n": 127,
+      "mean": 0.005905511811023622,
+      "lo": -0.03875452065815525,
+      "hi": 0.050565544280202504
+    },
+    "market:HEXER1": {
+      "n": 126,
+      "mean": -0.007936507936507936,
+      "lo": -0.05344813987797219,
+      "hi": 0.037575124004956315
+    },
+    "market:HEXER2": {
+      "n": 127,
+      "mean": 0.03543307086614173,
+      "lo": -0.009979851819910047,
+      "hi": 0.08084599355219352
+    },
+    "market:HEXER3": {
+      "n": 127,
+      "mean": 0.025590551181102362,
+      "lo": -0.022113776089016126,
+      "hi": 0.07329487845122085
+    },
+    "market:HEXER4": {
+      "n": 128,
+      "mean": -0.01953125,
+      "lo": -0.06487715770573446,
+      "hi": 0.025814657705734455
+    },
+    "market:SORTER": {
+      "n": 127,
+      "mean": 0.011811023622047244,
+      "lo": -0.031273651422445765,
+      "hi": 0.05489569866654025
+    },
+    "market:COLOSSEUM_REST": {
+      "n": 127,
+      "mean": 0.0531496062992126,
+      "lo": 0.005509714224435483,
+      "hi": 0.10078949837398972
+    },
+    "market:COLOSSEUM": {
+      "n": 128,
+      "mean": 0.0234375,
+      "lo": -0.018464475607282614,
+      "hi": 0.06533947560728262
+    },
+    "market:UNBRANDER": {
+      "n": 127,
+      "mean": 0.0,
+      "lo": -0.0464825765342224,
+      "hi": 0.0464825765342224
+    },
+    "market:LAWLESS": {
+      "n": 126,
+      "mean": -0.011904761904761904,
+      "lo": -0.06306811684644735,
+      "hi": 0.03925859303692354
+    },
+    "market:FREE_REWARD": {
+      "n": 126,
+      "mean": -0.023809523809523808,
+      "lo": -0.07047619047619047,
+      "hi": 0.02285714285714286
+    },
+    "market:NO_PAIN": {
+      "n": 127,
+      "mean": 0.003937007874015748,
+      "lo": -0.04318172343689373,
+      "hi": 0.051055739184925224
+    },
+    "market:ORIGIN_QUEST": {
+      "n": 128,
+      "mean": -0.03515625,
+      "lo": -0.08399150686104812,
+      "hi": 0.013679006861048115
+    },
+    "market:BEGINNER_MIND": {
+      "n": 126,
+      "mean": 0.0,
+      "lo": -0.03981736081437621,
+      "hi": 0.03981736081437621
+    },
+    "market:VOID_RITE": {
+      "n": 126,
+      "mean": 0.007936507936507936,
+      "lo": -0.03481156255637159,
+      "hi": 0.050684578429387464
+    },
+    "market:SPACE_RITE": {
+      "n": 126,
+      "mean": -0.027777777777777776,
+      "lo": -0.07630014121038914,
+      "hi": 0.02074458565483358
+    },
+    "market:LUCKY_ECHO": {
+      "n": 126,
+      "mean": -0.027777777777777776,
+      "lo": -0.07237097329480428,
+      "hi": 0.01681541773924873
+    },
+    "market:BUYOUT": {
+      "n": 128,
+      "mean": -0.017578125,
+      "lo": -0.06861665170377933,
+      "hi": 0.03346040170377933
+    },
+    "market:PENANCE": {
+      "n": 125,
+      "mean": 0.004,
+      "lo": -0.05357111551755345,
+      "hi": 0.061571115517553454
+    },
+    "market:PACK_INSTINCT": {
+      "n": 125,
+      "mean": -0.012,
+      "lo": -0.059834156510094924,
+      "hi": 0.03583415651009493
+    },
+    "market:MIND_BURST": {
+      "n": 126,
+      "mean": 0.0,
+      "lo": -0.04553289409256174,
+      "hi": 0.04553289409256174
+    },
+    "market:RICH_HABIT": {
+      "n": 125,
+      "mean": -0.008,
+      "lo": -0.049628516280813266,
+      "hi": 0.033628516280813266
+    },
+    "market:Q_RIFT": {
+      "n": 126,
+      "mean": -0.023809523809523808,
+      "lo": -0.06491859282787493,
+      "hi": 0.01729954520882731
+    },
+    "market:Q_BRAND": {
+      "n": 127,
+      "mean": 0.015748031496062992,
+      "lo": -0.031929045357687445,
+      "hi": 0.06342510834981344
+    },
+    "market:Q_TORI": {
+      "n": 126,
+      "mean": 0.0,
+      "lo": -0.04277070648625451,
+      "hi": 0.04277070648625451
+    },
+    "market:Q_WINTER": {
+      "n": 127,
+      "mean": -0.015748031496062992,
+      "lo": -0.06214920240470363,
+      "hi": 0.03065313941257765
+    },
+    "market:Q_TRIBE": {
+      "n": 127,
+      "mean": -0.001968503937007874,
+      "lo": -0.043865922310254796,
+      "hi": 0.03992891443623904
+    },
+    "market:Q_CASTLE": {
+      "n": 127,
+      "mean": 0.021653543307086614,
+      "lo": -0.028560436581196346,
+      "hi": 0.07186752319536957
+    },
+    "market:Q_DECAY": {
+      "n": 126,
+      "mean": -0.023809523809523808,
+      "lo": -0.06915069960175732,
+      "hi": 0.021531651982709697
+    },
+    "market:Q_ASSASSIN": {
+      "n": 127,
+      "mean": -0.001968503937007874,
+      "lo": -0.0540806295062769,
+      "hi": 0.05014362163226116
+    },
+    "market:Q_MANA": {
+      "n": 128,
+      "mean": -0.0234375,
+      "lo": -0.06533947560728262,
+      "hi": 0.018464475607282614
+    },
+    "market:QUICK_MIMIC": {
+      "n": 125,
+      "mean": 0.008,
+      "lo": -0.03920830107430875,
+      "hi": 0.05520830107430875
+    },
+    "market:QUICK_SURVIVAL": {
+      "n": 128,
+      "mean": -0.0234375,
+      "lo": -0.06638392181145572,
+      "hi": 0.019508921811455728
+    },
+    "market:QUICK_POISON": {
+      "n": 125,
+      "mean": 0.024,
+      "lo": -0.021703818432980394,
+      "hi": 0.0697038184329804
+    },
+    "market:QUICK_WORLD": {
+      "n": 127,
+      "mean": 0.031496062992125984,
+      "lo": -0.013340862497546492,
+      "hi": 0.07633298848179845
+    },
+    "market:QUICK_MUSTER": {
+      "n": 126,
+      "mean": -0.031746031746031744,
+      "lo": -0.07117253783921795,
+      "hi": 0.0076804743471544645
+    },
+    "market:QUICK_SORT": {
+      "n": 128,
+      "mean": -0.005859375,
+      "lo": -0.048121925237831036,
+      "hi": 0.036403175237831036
+    },
+    "market:QUICK_REBIRTH": {
+      "n": 127,
+      "mean": -0.027559055118110236,
+      "lo": -0.0718018067323317,
+      "hi": 0.016683696496111233
+    },
+    "market:QUICK_ATTUNE": {
+      "n": 128,
+      "mean": 0.0390625,
+      "lo": -0.021077227956575795,
+      "hi": 0.0992022279565758
+    },
+    "market:QUICK_GRIMOIRE": {
+      "n": 125,
+      "mean": 0.032,
+      "lo": -0.01355172543738141,
+      "hi": 0.07755172543738141
+    },
+    "market:QUICK_ASSAULT": {
+      "n": 126,
+      "mean": 0.023809523809523808,
+      "lo": -0.020166227084197914,
+      "hi": 0.06778527470324552
+    }
+  }
+}

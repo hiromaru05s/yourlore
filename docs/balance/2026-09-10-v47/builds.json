@@ -1,0 +1,162 @@
+{
+  "DEFAULT": [
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_CHEST",
+    "STARTER_CHEST"
+  ],
+  "AGGRO": [
+    "AMBUSH",
+    "FLAME",
+    "FLAME",
+    "FLAME",
+    "GHOST",
+    "GHOST",
+    "TRUMPET",
+    "STARTER_CHEST"
+  ],
+  "RAMP": [
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "FORESIGHT",
+    "STARTER_CHEST",
+    "STARTER_CHEST",
+    "STARTER_CHEST"
+  ],
+  "MIDRANGE": [
+    "GHOST",
+    "GHOST",
+    "TRUMPET",
+    "GUILD_HALL",
+    "FLAME",
+    "STARTER_TRASH",
+    "STARTER_CHEST",
+    "STARTER_CHEST"
+  ],
+  "GAMBLER": [
+    "GAMBLER",
+    "GAMBLER",
+    "GAMBLER",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_CHEST",
+    "STARTER_CHEST"
+  ],
+  "ELF": [
+    "ELF_HAVEN",
+    "HALF_ELF",
+    "HALF_ELF",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_CHEST",
+    "STARTER_CHEST"
+  ],
+  "CASTLE": [
+    "CASTLE",
+    "CASTLE",
+    "TRUMPET",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH"
+  ],
+  "ASSASSIN": [
+    "GUILD_HALL",
+    "GUILD_HALL",
+    "AMBUSH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH"
+  ],
+  "DECAY": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "ACID_RAIN",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH"
+  ],
+  "CULL": [
+    "CHOSEN_AREA",
+    "TRIAL_AREA",
+    "RIFT",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH"
+  ],
+  "EGG": [
+    "ANCIENT_CIV",
+    "INCUBATOR_S",
+    "INCUBATOR_S",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH"
+  ],
+  "MERCHANT": [
+    "GUILD_CO",
+    "SLUM",
+    "GRAPE",
+    "GRAPE",
+    "BREWING",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH"
+  ],
+  "DUNGEON": [
+    "DUNGEON_FLOOR",
+    "STARTER_CHEST",
+    "STARTER_CHEST",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH"
+  ],
+  "CASINO": [
+    "CASINO",
+    "FATE_WHEEL",
+    "GAMBLER",
+    "GAMBLER",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH"
+  ],
+  "RIFT": [
+    "RIFT",
+    "TRIAL_AREA",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH"
+  ],
+  "TRIBE": [
+    "TRIBE_PACT",
+    "TRIBE_PACT",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH"
+  ]
+}

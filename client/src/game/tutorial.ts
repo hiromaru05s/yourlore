@@ -171,7 +171,7 @@ export class TutorialController extends BaseController {
     if (i === 8) {                                            // victory: one clean hit finishes it
       this.ensureAttacker();
       const bot = g.players[1];
-      const best = Math.max(1, ...me.field.map((m) => effAtk(me, m)));
+      const best = Math.max(1, ...me.field.map((m) => effAtk(me, m, g)));
       bot.hp = Math.min(bot.hp, best); // ≤ the player's strongest hit
     }
     this.view.render(this.state);

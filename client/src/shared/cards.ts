@@ -2234,6 +2234,26 @@ for (const card of QUEST_QUICK_CARDS) {
   DB[card.id] = card;
 }
 
+// v47: requested balance changes, after all earlier balance layers.
+Object.assign(DB.NGA4, { atk: 8, def: 1 });
+Object.assign(DB.TDE1, { atk: 3, def: 5 });
+Object.assign(DB.TDE2, { atk: 5, def: 8, summonReq: "mm5",
+  text: "【조건】자신의 최대 마나가 5 이상 · 【상시】자신의 최대 마나 -2(최저 3)",
+  textJa: "【条件】自分の最大マナが5以上 · 【常時】自分の最大マナ-2(最低3)" });
+Object.assign(DB.TDE3, { atk: 7, def: 11 });
+Object.assign(DB.TDE4, { atk: 12, def: 14, passive: ["majesty", "aura"], onSummon: "manaSet3", aura: "manaGrowthLock", summonReq: "demonKing",
+  text: "【조건】자신 최대 마나 5 이상＋덱 구성에 마왕 외 마족 몬스터 · 【소환시】자신 최대 마나 3 · 【상시】자신 최대 마나 증가 불가",
+  textJa: "【条件】自分の最大マナ5以上＋デッキ構成に魔王以外の魔族モンスター · 【召喚時】自分の最大マナを3に · 【常時】自分の最大マナ増加不可" });
+Object.assign(DB.M7, { atk: 3, def: 1, turnFx: "emberRecoil",
+  text: "【상시】공격으로 상대 몬스터 파괴 시 턴당 1번 추가 공격 · 【매 턴】자신 턴 시작: 주사위 5+면 자신에게 3 데미지",
+  textJa: "【常時】攻撃で相手モンスターを破壊したら、そのターンに1度だけ追加攻撃 · 【毎ターン】自分のターン開始にダイス5以上なら自分に3ダメージ" });
+Object.assign(DB.ELF_HAVEN, { play: 4 });
+
+// v48: Half Elf gains attack only while a World Tree named card is on either field.
+Object.assign(DB.HALF_ELF, { atk: 0, condAtk: "worldTree",
+  text: "【상시】어느 필드든 '세계수' 이름 카드가 있으면 공격력+3 · 【소환시】자신 필드에 있으면 '세계수의 보살핌' 전개",
+  textJa: "【常時】どちらかの場に「世界樹」名のカードがあれば攻撃力+3 · 【召喚時】自分の場にあれば「世界樹の慈しみ」を展開" });
+
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 // 플레이버 카드명(ko/ja/en 3개 국어) 적용 — applyEnglish 이후, standardizeCardTexts 이전
 applyFlavorCardNames([DB, STARTERS as unknown as Record<string, CardDef>]);
@@ -2341,7 +2361,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v46"; // v46: all nine quests live; Brand +1 and seven newly generated Rift Culls
+export const BALANCE_VERSION = "v48"; // v47: targeted nerfs; maximum HP growth heals; Demon King locks maximum mana growth
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

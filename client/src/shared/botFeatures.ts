@@ -22,11 +22,11 @@ function deckQ(p: PlayerState): number {
 }
 
 // o's potential face damage next swing into p's board (penetration included)
-function threatFace(o: PlayerState, p: PlayerState): number {
+function threatFace(o: PlayerState, p: PlayerState, g: GameState): number {
   const defs = p.field.map((m) => effDef(p, m)).sort((a, b) => b - a);
   let total = 0;
-  for (const m of [...o.field].sort((a, b) => effAtk(o, b) - effAtk(o, a))) {
-    const a = effAtk(o, m);
+  for (const m of [...o.field].sort((a, b) => effAtk(o, b, g) - effAtk(o, a, g))) {
+    const a = effAtk(o, m, g);
     if (a <= 0) continue;
     if ((m as FieldMon).directOnly || defs.length === 0) { total += a; continue; }
     const k = defs.findIndex((d) => a > d);
@@ -35,17 +35,17 @@ function threatFace(o: PlayerState, p: PlayerState): number {
   return total;
 }
 
-const boardAtk = (x: PlayerState) => x.field.reduce((t, m) => t + effAtk(x, m), 0);
+const boardAtk = (x: PlayerState, g: GameState) => x.field.reduce((t, m) => t + effAtk(x, m, g), 0);
 const boardDef = (x: PlayerState) => x.field.reduce((t, m) => t + effDef(x, m), 0);
 
 /** Extract the feature vector for side `s`. Length === NUM_FEATURES. */
 export function features(g: GameState, s: Side): number[] {
   const p = g.players[s], o = g.players[1 - s];
-  const aP = boardAtk(p), aO = boardAtk(o);
+  const aP = boardAtk(p, g), aO = boardAtk(o, g);
   const dP = boardDef(p), dO = boardDef(o);
   const qP = deckQ(p), qO = deckQ(o);
-  const tIn = threatFace(o, p);   // danger to me
-  const tOut = threatFace(p, o);  // pressure I apply
+  const tIn = threatFace(o, p, g);   // danger to me
+  const tOut = threatFace(p, o, g);  // pressure I apply
   return [
     p.hp / 45, o.hp / 45, (p.hp - o.hp) / 45,
     p.maxMana / 15, o.maxMana / 15, (p.maxMana - o.maxMana) / 15,

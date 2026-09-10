@@ -1,0 +1,110 @@
+{
+  "raw/coverage/games-0.jsonl.gz": {
+    "games": 1440,
+    "rawSha256": "0663539357c80f4af12950825e4e8ec844a45f614eab0a32cdd9f7848c551a62",
+    "gzipSha256": "9ecb33a9c40a07c17fe6b4c0cd75bca9b34cbfde571a4a106a3ab4e1a8f7cd7c",
+    "bytes": 3380031
+  },
+  "raw/factor/games-0.jsonl.gz": {
+    "games": 8960,
+    "rawSha256": "240b9a08fc77e83b22246ab8cbd7e59967d35c4e4699cd87abbf639e36043edf",
+    "gzipSha256": "b8af168eb9a9cc24eb57beb6fe2c17b3f29a31db5cee727e116c216f4852923a",
+    "bytes": 22262827
+  },
+  "raw/factor/games-1.jsonl.gz": {
+    "games": 8960,
+    "rawSha256": "0c6344fecf8ecd16abfc0f4c6fa56c35b70b93c0db965ba5c716aeb144a7869e",
+    "gzipSha256": "effb85c4c29a6c65b3b0fec0a4e3f4f01569e1dbaf0b95220e2649598b4d8f72",
+    "bytes": 22332705
+  },
+  "raw/king-factor/games-0.jsonl.gz": {
+    "games": 1280,
+    "rawSha256": "f21b8f0f7802415f808053cef3ac986c412086969b5bfc7257bfed758824c4ed",
+    "gzipSha256": "f4e5db2393d2cdba864290a5f87ed22c031549574cffbddcfb0d54863f2008e5",
+    "bytes": 3063466
+  },
+  "raw/king-factor/games-1.jsonl.gz": {
+    "games": 1280,
+    "rawSha256": "66b8d4076cc2e6ce8073b00884156c772d688c889469422dd4d2a83ae0957413",
+    "gzipSha256": "9b3a56d02ea5dafeccb80a5ada002f849aa7069895e50b018b114d7394eba987",
+    "bytes": 3029274
+  },
+  "raw/main/games-0.jsonl.gz": {
+    "games": 19840,
+    "rawSha256": "2e9782476d3752c0166870b59d3534b56515119acb933ed6c52470f12aec8277",
+    "gzipSha256": "5cff7c1aeca8f830fce62b88d94349ec990595c6fee33f6416132d670f170d11",
+    "bytes": 48743808
+  },
+  "raw/main/games-1.jsonl.gz": {
+    "games": 19840,
+    "rawSha256": "f453b0bfc3984ae096c37107837cfab3d13c8b547a344fbcc5f547d70b724e16",
+    "gzipSha256": "013623cfadab7203811ce850d2dda7e30c48d79d9fb461117e46da6aa401ba13",
+    "bytes": 48680321
+  },
+  "raw/main/games-2.jsonl.gz": {
+    "games": 19840,
+    "rawSha256": "9631ce51972d55e8a906443bd4c092b546031b0f69195826df2729d228c5d4e4",
+    "gzipSha256": "1da9629a86396d1881cc64c7cea902db9320068f936bcc40b3ccde9e2ccd190a",
+    "bytes": 48694216
+  },
+  "raw/main/games-3.jsonl.gz": {
+    "games": 19840,
+    "rawSha256": "ea33121021a169fb45ba92a24930303643fa2fcdad3063121f2c001cfd58b5c4",
+    "gzipSha256": "2c8ad1106a43c0ee0ed5652e70ae93ee85d1b44ad72d797d882a6491170858c4",
+    "bytes": 48696934
+  },
+  "raw/main/games-4.jsonl.gz": {
+    "games": 19840,
+    "rawSha256": "887c943175f86c516576789c9ebc80a70069592ba07127ec8de269da2e84b20a",
+    "gzipSha256": "08af75ba71c43e97a7eda2bf96f1c6b414dcae7b857a15f300992b8446cbb564",
+    "bytes": 48647553
+  },
+  "raw/main/games-5.jsonl.gz": {
+    "games": 19840,
+    "rawSha256": "b68bed7fcacb72697b6ffb55878a21875afc8ff912a96c39089d898c79e7f45d",
+    "gzipSha256": "c4d55d5dd8545027bae1ab142e6950a690ddc750360b5dbfbca227755c3a03fb",
+    "bytes": 48690999
+  },
+  "raw/market-validation/games-0.jsonl.gz": {
+    "games": 96,
+    "rawSha256": "977ebdc75ca910869460308647431f1934c03a81bf6871e2fa11f7cbc057d7c9",
+    "gzipSha256": "3fc0e7e3a435d27be97086cdffe61f66b8b20896ccff9a5c1124331acad33431",
+    "bytes": 224952
+  },
+  "raw/market-validation/games-1.jsonl.gz": {
+    "games": 96,
+    "rawSha256": "208b9e355e6e238ed709d3f6338a9a4188cd2b8b2d2d2bc4783fcc1ebbee2672",
+    "gzipSha256": "7865300e88a8f54f76d778abe433fbc4de4f603eb49668fc1ea792eacfc8ed45",
+    "bytes": 224941
+  },
+  "raw/validation/games-0.jsonl.gz": {
+    "games": 98,
+    "rawSha256": "41ddf6b8ed6761dc96565345c514eb3e8c226abfb26561450abb7be6b89e069a",
+    "gzipSha256": "13c7039756c721dddf3b684e54d71a6f5d9c7ea84f689e09dc64b6178642fb83",
+    "bytes": 245491
+  },
+  "raw/validation-tail/games-0.jsonl.gz": {
+    "games": 143,
+    "rawSha256": "5e39f0c0d6f11d33b39bdf1293bdbef957d1b15b886160ed1c99e6c302e87999",
+    "gzipSha256": "a7926d6377df788f7fa791bb55e5c117a1f42b1d248d87653cbf3c5034d0f353",
+    "bytes": 360712
+  },
+  "raw/validation-tail/games-1.jsonl.gz": {
+    "games": 143,
+    "rawSha256": "deda12bd25a48278cc7fc1e0b1a21e4643d8ed0175211880753ce0056b648cf7",
+    "gzipSha256": "69a5698b6e8bc73a34d7286e8c9119bc11473bac151a672f0285c2538096f7f7",
+    "bytes": 351027
+  },
+  "raw/weak-factor/games-0.jsonl.gz": {
+    "games": 1920,
+    "rawSha256": "0e42094b95cd6d854961bb43aca555f39f9540fc3e99f2456b9acecac911cee8",
+    "gzipSha256": "6da2b75cc5d33412261ef3cd9311c7ea09734d40f842db17c8d07d25a6c379e7",
+    "bytes": 4783965
+  },
+  "raw/weak-factor/games-1.jsonl.gz": {
+    "games": 1920,
+    "rawSha256": "582392e34291123ff4ec978d22be32cada2753fde22d1eb761fe3dc6f3f0d08c",
+    "gzipSha256": "7a69e74414ddc0dc54a7bd64e8f8c7a46f10e8a5f29f3baf1bc8c93e40e2c48b",
+    "bytes": 4730122
+  }
+}

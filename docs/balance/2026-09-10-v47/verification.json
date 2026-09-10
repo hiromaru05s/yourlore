@@ -1,0 +1,26 @@
+{
+  "engineCommit": "010c3c444da9e0dc3e3baad9140e9348c36ff4ca",
+  "attempted": 145376,
+  "finished": 144785,
+  "excluded": 591,
+  "rawCountAndHashes": true,
+  "baselineSharedSourcesMatch": true,
+  "allTacticalGamesFinished": true,
+  "passed": [
+    "typecheck client/server",
+    "text:check 296 cards x 3 languages",
+    "production build",
+    "balance-v47 mechanics",
+    "quest-quick",
+    "trap-related-rework",
+    "trap-removal",
+    "trap-removal-tutorial",
+    "opening-hands",
+    "dice-model",
+    "80 native/plain-clone game traces (14966 actions each)",
+    "seeded replay and complete statistics",
+    "offline report DOM/search/sort/tabs",
+    "git diff --check"
+  ],
+  "browserVisualQA": false
+}

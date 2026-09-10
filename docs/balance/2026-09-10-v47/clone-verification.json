@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "times": [
+    {
+      "mode": "native",
+      "games": 80,
+      "steps": 14966,
+      "seconds": 28.163857958999998
+    },
+    {
+      "mode": "plain",
+      "games": 80,
+      "steps": 14966,
+      "seconds": 16.939768500000003
+    }
+  ]
+}

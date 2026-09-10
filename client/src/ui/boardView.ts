@@ -479,13 +479,13 @@ export class GameView {
       // 카지노(v34): 카운터 배지 (12개마다 카지노 주사위)
       const countLabel = getLang() === 'ja' ? 'カウント' : getLang() === 'en' ? 'Count' : '카운트';
       const casinoBadge = m.aura === "casino" ? { badge: `${countLabel} ${m.gcount || 0}/12` } : m.id === "CASTLE" ? { badge: `${countLabel} ${m.gcount || 0}` } : {};
-      const card = cardEl(m, { field: true, owner: p, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted, ...casinoBadge });
+      const card = cardEl(m, { field: true, owner: p, game: g, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted, ...casinoBadge });
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
       // zoom shows the monster's CURRENT atk/hp (buffs/mods applied) — and, when damaged,
       // "현재/최대" exactly like the field tile (v29: the zoom used to show max HP only,
       // so a 4/20 monster read as a healthy 20 in the view players trade off).
-      bindZoom(card, { ...m, atk: effAtk(p, m), def: effDef(p, m) }, { now: curHp(p, m), max: effDef(p, m) });
+      bindZoom(card, { ...m, atk: effAtk(p, m, g), def: effDef(p, m) }, { now: curHp(p, m), max: effDef(p, m) });
       // 드래그 = 공격(상대 몬스터/초상화로) + 내 필드 안에서는 순서 변경.
       // 예전엔 몬스터가 2체 이상일 때만 드래그가 붙어서 1체일 땐 공격 드래그가 아예 없었다.
       if (isMe && myTurn && !pending && !g.over && (canAttack || p.field.length > 1)) {

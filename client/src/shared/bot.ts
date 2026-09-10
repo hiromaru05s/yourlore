@@ -143,7 +143,7 @@ export function candidates(g: GameState): Action[] {
       // attack targeting: only killable targets — a blocked swing (atk<=def) does
       // NOTHING, so it's strictly dominated; if none killable defer to greedy
       const att = p.field.find((m) => m.uid === (pend.data?.attackerUid as string));
-      const a = att ? effAtk(p, att) : 0;
+      const a = att ? effAtk(p, att, g) : 0;
       o.field.filter((tm) => a >= curHp(o, tm))
         .filter((tm) => !(tm.aura === "eliteGuard" && (att?.cost ?? 0) <= 6)) // 귀족 영주
         .forEach((m) => push(m.uid));
@@ -224,8 +224,8 @@ export function candidates(g: GameState): Action[] {
       if (m.exhausted) return;
       if (m.hatch != null) return; // 알은 공격 불가 (엔진이 거부 — 후보에서 제외해야 무한 재시도 안 함)
       if (m.summonedTurn === g.turn && o.field.some((tm) => hasPassive(tm, "majesty"))) return;
-      const a = effAtk(p, m);
-      if (glassBanActive(g) && Math.abs(effAtk(p, m) - effDef(p, m)) >= 4) return; // 전략 변경(v34)
+      const a = effAtk(p, m, g);
+      if (glassBanActive(g) && Math.abs(effAtk(p, m, g) - effDef(p, m)) >= 4) return; // 전략 변경(v34)
       if (o.field.some((tm) => tm.aura === "lowAtkBan") && (m.cost ?? 0) <= 2) return; // 몰락 귀족
       const direct = m.directOnly || o.field.length === 0;
       if (direct && (p.noDirectTurn || o.field.some((tm) => tm.aura === "eliteGuard"))) return; // 천궁의 폐문 / 귀족 영주
@@ -368,7 +368,7 @@ function legalActions(g: GameState): Action[] {
   const noAtk = g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "noAttack"));
   if (!noAtk) {
     p.field.forEach((m) => {
-      if (!m.exhausted && (!glassBanActive(g) || Math.abs(effAtk(p, m) - effDef(p, m)) < 4)) add({ type: "attack", uid: m.uid });
+      if (!m.exhausted && (!glassBanActive(g) || Math.abs(effAtk(p, m, g) - effDef(p, m)) < 4)) add({ type: "attack", uid: m.uid });
     });
   }
   p.supply.forEach((c, i) => { if (c && buyableByBot(p, c, g)) add({ type: "buySupply", i }); });
@@ -411,10 +411,10 @@ function actionPrior(g: GameState, a: Action): number {
   if (a.type === "attack") {
     const m = p.field.find((x) => x.uid === a.uid);
     if (!m) return 0.01;
-    const atk = effAtk(p, m);
+    const atk = effAtk(p, m, g);
     if (m.directOnly || o.field.length === 0) return 4 + atk * 0.45 + (atk >= o.hp ? 10 : 0) - (o.traps.length > 0 ? 0.7 + read.trap * 0.25 : 0);
-    const bestKill = o.field.filter((tm) => atk >= curHp(o, tm)).sort((x, y) => (effAtk(o, y) * 2 + effDef(o, y)) - (effAtk(o, x) * 2 + effDef(o, x)))[0];
-    return bestKill ? 3 + atk * 0.25 + effAtk(o, bestKill) * 0.35 - (o.traps.length > 0 ? 0.45 + read.trap * 0.15 : 0) : 0.08;
+    const bestKill = o.field.filter((tm) => atk >= curHp(o, tm)).sort((x, y) => (effAtk(o, y, g) * 2 + effDef(o, y)) - (effAtk(o, x, g) * 2 + effDef(o, x)))[0];
+    return bestKill ? 3 + atk * 0.25 + effAtk(o, bestKill, g) * 0.35 - (o.traps.length > 0 ? 0.45 + read.trap * 0.15 : 0) : 0.08;
   }
   if (a.type === "buySupply") {
     const c = p.supply[a.i];
@@ -485,8 +485,8 @@ function buyFit(g: GameState, p: PlayerState, o: PlayerState, c: CardInst): numb
 function strongValueEval(g: GameState, s: Side): number {
   const base = netEval(g, s);
   const p = g.players[s], o = g.players[1 - s];
-  const myAtk = p.field.reduce((t, m) => t + effAtk(p, m), 0);
-  const opAtk = o.field.reduce((t, m) => t + effAtk(o, m), 0);
+  const myAtk = p.field.reduce((t, m) => t + effAtk(p, m, g), 0);
+  const opAtk = o.field.reduce((t, m) => t + effAtk(o, m, g), 0);
   const myDef = p.field.reduce((t, m) => t + curHp(p, m), 0);
   const opDef = o.field.reduce((t, m) => t + curHp(o, m), 0);
   const pressure = (potentialFace(p, o) - potentialFace(o, p)) / 45;
@@ -498,10 +498,11 @@ function strongValueEval(g: GameState, s: Side): number {
 }
 
 function potentialFace(p: PlayerState, o: PlayerState): number {
+  const g: Pick<GameState, "players"> = { players: [p, o] };
   const defs = o.field.map((m) => curHp(o, m)).sort((a, b) => b - a);
   let total = 0;
-  for (const m of [...p.field].filter((x) => !x.exhausted).sort((a, b) => effAtk(p, b) - effAtk(p, a))) {
-    const a = effAtk(p, m);
+  for (const m of [...p.field].filter((x) => !x.exhausted).sort((a, b) => effAtk(p, b, g) - effAtk(p, a, g))) {
+    const a = effAtk(p, m, g);
     if (a <= 0) continue;
     if (m.directOnly || defs.length === 0) { total += a; continue; }
     const k = defs.findIndex((d) => a > d);
@@ -559,7 +560,7 @@ function policyFeatures(g: GameState, a: Action): number[] {
   } else if (a.type === "attack") {
     const m = p.field.find((x) => x.uid === a.uid);
     if (m) {
-      const atk = effAtk(p, m);
+      const atk = effAtk(p, m, g);
       face = m.directOnly || o.field.length === 0 ? Math.min(1, atk / Math.max(1, o.hp)) : 0;
       removes = o.field.some((tm) => atk >= curHp(o, tm)) ? 0.8 : 0.3; // v24: chip damage has residual value
       attackOk = face > 0 || removes > 0 ? 1 : 0;
@@ -589,7 +590,7 @@ function actionCanWin(g: GameState, a: Action): boolean {
   }
   if (a.type === "attack") {
     const m = p.field.find((x) => x.uid === a.uid);
-    return !!m && (m.directOnly || o.field.length === 0) && effAtk(p, m) >= o.hp;
+    return !!m && (m.directOnly || o.field.length === 0) && effAtk(p, m, g) >= o.hp;
   }
   return false;
 }
@@ -705,8 +706,8 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     // 폐기 경제 카드: 대상이 있어야 시전
     if (c.act === "exilePick" && p.discard.length === 0) return false;
     if (c.act === "destroyMon" && c.cap && !o.field.some((m) => m.cost <= c.cap!)) return false; // 룬 파열: 코스트 캡 대상 필요
-    if (c.id === "WALLBREAK1" && ![...o.field, ...p.field].some((m) => effAtk(o, m) <= 2)) return false;
-    if (c.id === "WALLBREAK2" && !o.field.some((m) => effAtk(o, m) <= 2)) return false;
+    if (c.id === "WALLBREAK1" && ![...o.field, ...p.field].some((m) => effAtk(o, m, g) <= 2)) return false;
+    if (c.id === "WALLBREAK2" && !o.field.some((m) => effAtk(o, m, g) <= 2)) return false;
     if (c.id === "SNIPE1" && ![...o.field, ...p.field].some((m) => curHp(o, m) <= 3)) return false;
     if (c.id === "SNIPE2" && !o.field.some((m) => curHp(o, m) <= 2)) return false;
     if (c.id === "SHATTER" && p.hp <= 7) return false;
@@ -765,7 +766,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   // 1.5) removal-lethal: if clearing the biggest blocker makes the swing lethal, do it now
   const removal = spells.find((x) => (x.c.act === "destroyMon" || x.c.act === "weaken") && o.field.length > 0);
   if (removal && removal.c.act === "destroyMon" && !noAtk && o.field.length > 0) {
-    const big = [...o.field].sort((a, b) => (effAtk(o, b) + b.def!) - (effAtk(o, a) + a.def!))[0]; // autoTarget picks this one
+    const big = [...o.field].sort((a, b) => (effAtk(o, b, g) + b.def!) - (effAtk(o, a, g) + a.def!))[0]; // autoTarget picks this one
     const after = facePlan(p, o, ready, spells.filter((x) => x.i !== removal.i), noAtk, big.uid);
     if (after.total >= o.hp) return { type: "play", idx: removal.i };
   }
@@ -793,13 +794,13 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   if (!noAtk) {
     const ban = glassBanActive(g);
     const lowBan = o.field.some((tm) => tm.aura === "lowAtkBan");
-    const canSwing = (m: FieldMon): boolean => (!ban || Math.abs(effAtk(p, m) - effDef(p, m)) < 4) && !(lowBan && (m.cost ?? 0) <= 2);
+    const canSwing = (m: FieldMon): boolean => (!ban || Math.abs(effAtk(p, m, g) - effDef(p, m)) < 4) && !(lowBan && (m.cost ?? 0) <= 2);
     const eliteWall = o.field.some((tm) => tm.aura === "eliteGuard");
     const assassin = ready.find((m) => m.directOnly && canSwing(m) && !p.noDirectTurn && !eliteWall);
     if (assassin) return { type: "attack", uid: assassin.uid };
-    for (const m of [...ready].filter((m2) => canSwing(m2) && !m2.directOnly).sort((a, b) => effAtk(p, b) - effAtk(p, a))) {
+    for (const m of [...ready].filter((m2) => canSwing(m2) && !m2.directOnly).sort((a, b) => effAtk(p, b, g) - effAtk(p, a, g))) {
       if (o.field.length === 0) { if (p.noDirectTurn || eliteWall) break; return { type: "attack", uid: m.uid }; } // 천궁의 폐문 / 귀족 영주
-      const a = effAtk(p, m);
+      const a = effAtk(p, m, g);
       if (o.field.some((tm) => a >= curHp(o, tm) && !(tm.aura === "eliteGuard" && (m.cost ?? 0) <= 6))) return { type: "attack", uid: m.uid };
     }
   }
@@ -889,6 +890,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
 // `withoutUid` simulates the board after removing one enemy monster (removal spell).
 interface FacePlan { total: number; spellIdx: number | null; attackUid: string | null }
 function facePlan(p: PlayerState, o: PlayerState, ready: FieldMon[], spells: { c: CardInst; i: number }[], noAtk: boolean, withoutUid?: string): FacePlan {
+  const g: Pick<GameState, "players"> = { players: [p, { ...o, field: o.field.filter(m => m.uid !== withoutUid) }] };
   let total = 0;
   let spellIdx: number | null = null;
   let manaLeft = p.mana;
@@ -906,10 +908,10 @@ function facePlan(p: PlayerState, o: PlayerState, ready: FieldMon[], spells: { c
     const defs = o.field.filter((m) => m.uid !== withoutUid)
       .map((m) => ({ hp: curHp(o, m), elite: m.aura === "eliteGuard" }))
       .sort((a, b) => b.hp - a.hp); // toughest first
-    for (const m of [...ready].sort((a, b) => effAtk(p, b) - effAtk(p, a))) {
-      const a = effAtk(p, m);
+    for (const m of [...ready].sort((a, b) => effAtk(p, b, g) - effAtk(p, a, g))) {
+      const a = effAtk(p, m, g);
       if (a <= 0) continue;
-      if (ban && Math.abs(effAtk(p, m) - effDef(p, m)) >= 4) continue;
+      if (ban && Math.abs(effAtk(p, m, g) - effDef(p, m)) >= 4) continue;
       if (m.directOnly || defs.length === 0) {
         if (p.noDirectTurn || o.field.some((tm) => tm.aura === "eliteGuard")) continue; // 폐문/귀족 영주 — 리썰 계산 제외
         total += a; if (!attackUid) attackUid = m.uid; continue;
@@ -958,7 +960,7 @@ function lethalWorthSearching(g: GameState): boolean {
       else if (c.act === "destroyTrap" || c.act === "destroyMon" || c.act === "weaken" || c.act === "draw" || c.act === "seek" || c.act === "recall") ceiling += 4;
     }
   }
-  for (const m of p.field) if (!m.exhausted) ceiling += Math.max(0, effAtk(p, m));
+  for (const m of p.field) if (!m.exhausted) ceiling += Math.max(0, effAtk(p, m, g));
   return ceiling >= o.hp;
 }
 
@@ -1002,8 +1004,8 @@ function lethalActions(g: GameState): Action[] {
   if (!noAtk && o.traps.length === 0) {
     const ban = glassBanActive(g);
     [...p.field]
-      .filter((m) => !m.exhausted && (!ban || Math.abs(effAtk(p, m) - effDef(p, m)) < 4))
-      .sort((a, b) => effAtk(p, b) - effAtk(p, a))
+      .filter((m) => !m.exhausted && (!ban || Math.abs(effAtk(p, m, g) - effDef(p, m)) < 4))
+      .sort((a, b) => effAtk(p, b, g) - effAtk(p, a, g))
       .forEach((m) => add({ type: "attack", uid: m.uid }));
   }
 
@@ -1071,12 +1073,12 @@ function autoTarget(g: GameState): Action {
   if (pending.kind === "oppMon") {
     if (pending.reason === "attack") {
       const att = p.field.find((m) => m.uid === (pending.data!.attackerUid as string));
-      const a = att ? effAtk(p, att) : 0;
+      const a = att ? effAtk(p, att, g) : 0;
       // among killable targets, take out the biggest THREAT (atk-weighted), not just the softest
       // 알은 부화 임박도(진행도)를 위협으로 환산 — 부화 직전 알은 최우선으로 깬다
       const threat = (tm: FieldMon): number =>
         tm.hatch != null ? Math.max(0, (tm.hatchTurns ?? 8) - tm.hatch) * 4 * (tm.id === "BEAST_EGG" ? 1.4 : 1)
-        : effAtk(o, tm) * 2 + effDef(o, tm);
+        : effAtk(o, tm, g) * 2 + effDef(o, tm);
       const legal = (tm: FieldMon): boolean => !(tm.aura === "eliteGuard" && (att?.cost ?? 0) <= 6); // 귀족 영주
       const killable = o.field
         .filter(legal)
@@ -1087,16 +1089,16 @@ function autoTarget(g: GameState): Action {
     }
     if (pending.reason === "decayMark") { // 러스트캡 슬러그: 알·아우라 제외, 가장 위협적인 몬스터에 카운터
       const t0 = [...o.field].filter((m) => m.hatch == null && !hasPassive(m, "aura"))
-        .sort((a, b) => (effAtk(o, b) + b.def!) - (effAtk(o, a) + a.def!))[0];
+        .sort((a, b) => (effAtk(o, b, g) + b.def!) - (effAtk(o, a, g) + a.def!))[0];
       return { type: "chooseTarget", uid: t0 ? t0.uid : null };
     }
     // destroy / debuff → hit the most valuable enemy monster (아우라 몬스터는 대상 불가 · 룬 파열 코스트 캡 준수)
     const mc0 = pending.data?.maxCost as number | undefined; // destroyMon/bounceLow 등 코스트 캡 공통
-    const t = [...o.field].filter((m) => !hasPassive(m, "aura") && (mc0 == null || m.cost <= mc0)).sort((a, b) => (effAtk(o, b) + b.def!) - (effAtk(o, a) + a.def!))[0];
+    const t = [...o.field].filter((m) => !hasPassive(m, "aura") && (mc0 == null || m.cost <= mc0)).sort((a, b) => (effAtk(o, b, g) + b.def!) - (effAtk(o, a, g) + a.def!))[0];
     if (t) return { type: "chooseTarget", uid: t.uid };
     // anySide 파괴에서 적 대상이 없고 취소도 불가능하면(포식 등) 자기 최저가치 몬스터로 해소 (봇 무한 pending 방지)
     if ((pending.data?.anySide as boolean | undefined) && !pending.allowCancel) {
-      const own = [...p.field].filter((m) => mc0 == null || m.cost <= mc0).sort((a, b) => (effAtk(p, a) + (a.def || 0)) - (effAtk(p, b) + (b.def || 0)))[0];
+      const own = [...p.field].filter((m) => mc0 == null || m.cost <= mc0).sort((a, b) => (effAtk(p, a, g) + (a.def || 0)) - (effAtk(p, b, g) + (b.def || 0)))[0];
       if (own) return { type: "chooseTarget", uid: own.uid };
     }
     return { type: "chooseTarget", uid: null };
@@ -1107,7 +1109,7 @@ function autoTarget(g: GameState): Action {
       return { type: "chooseTarget", uid: egg ? egg.uid : null };
     }
     if (pending.reason === "bloodSecret") { // 비술: 가장 약한 흡혈귀를 대가로 바친다
-      const v = [...p.field].filter((m) => isVampFamily(m)).sort((a, b) => (effAtk(p, a) + effDef(p, a)) - (effAtk(p, b) + effDef(p, b)))[0];
+      const v = [...p.field].filter((m) => isVampFamily(m)).sort((a, b) => (effAtk(p, a, g) + effDef(p, a)) - (effAtk(p, b, g) + effDef(p, b)))[0];
       return { type: "chooseTarget", uid: v ? v.uid : null };
     }
     if (pending.reason === "chosenMage") { // 선택받은 마법사: 미발동 마법사가 있으면 발동 (6뎀 이득)
@@ -1116,7 +1118,7 @@ function autoTarget(g: GameState): Action {
       return { type: "chooseTarget", uid: mage ? mage.uid : null };
     }
     if (pending.reason === "grantDecay") { // 암기 제작: 부패가 없는 몬스터 중 공격력 높은 순
-      const t0 = [...p.field].filter((m) => !hasPassive(m, "decay")).sort((x, y) => effAtk(p, y) - effAtk(p, x))[0];
+      const t0 = [...p.field].filter((m) => !hasPassive(m, "decay")).sort((x, y) => effAtk(p, y, g) - effAtk(p, x, g))[0];
       return { type: "chooseTarget", uid: t0 ? t0.uid : null };
     }
     if (pending.reason === "grantMajesty") { // 각인 비술: 위엄이 없는 몬스터 중 방어 높은 순 (오래 버틸 몸)
@@ -1125,16 +1127,16 @@ function autoTarget(g: GameState): Action {
     }
     if (pending.reason === "golemBuff") { // 앤티크 인핸스 매직: 공격력 높은 골램부터
       const excl = (pending.data?.excl as string[] | undefined) ?? [];
-      const t0 = [...p.field].filter((m) => isGolem(m) && !excl.includes(m.uid)).sort((x, y) => effAtk(p, y) - effAtk(p, x))[0];
+      const t0 = [...p.field].filter((m) => isGolem(m) && !excl.includes(m.uid)).sort((x, y) => effAtk(p, y, g) - effAtk(p, x, g))[0];
       return { type: "chooseTarget", uid: t0 ? t0.uid : null };
     }
     if (pending.reason === "nlTarget") { // 나이트로드의 비기: 가장 강한 암살자(없으면 최강 몬스터)
-      const t0 = ([...p.field].filter((m) => isAssassinCard(m)).sort((x, y) => effAtk(p, y) - effAtk(p, x))[0]) ?? [...p.field].sort((x, y) => effAtk(p, y) - effAtk(p, x))[0];
+      const t0 = ([...p.field].filter((m) => isAssassinCard(m)).sort((x, y) => effAtk(p, y, g) - effAtk(p, x, g))[0]) ?? [...p.field].sort((x, y) => effAtk(p, y, g) - effAtk(p, x, g))[0];
       return { type: "chooseTarget", uid: t0 ? t0.uid : null };
     }
     if (pending.reason === "emberBuff") { // 시초의 불씨: 다른 시초 몬스터 중 공격력 높은 순
       const excl = (pending.data?.excl as string[] | undefined) ?? [];
-      const t0 = [...p.field].filter((m) => m.tribe === "시초" && !excl.includes(m.uid)).sort((x, y) => effAtk(p, y) - effAtk(p, x))[0];
+      const t0 = [...p.field].filter((m) => m.tribe === "시초" && !excl.includes(m.uid)).sort((x, y) => effAtk(p, y, g) - effAtk(p, x, g))[0];
       return { type: "chooseTarget", uid: t0 ? t0.uid : null };
     }
     if (pending.reason === "worldTree") { // 세계수: 체력이 80% 미만이거나 다친 몬스터가 있을 때만 발동
@@ -1144,7 +1146,7 @@ function autoTarget(g: GameState): Action {
     }
     // 지원 나팔의 exclude(중복 선택 불가)를 지켜야 무한 재무장 루프에 안 빠진다
     const excl = (pending.data?.excl as string[] | undefined) ?? [];
-    const t = [...p.field].filter((x) => !excl.includes(x.uid)).sort((x, y) => effAtk(p, y) - effAtk(p, x))[0];
+    const t = [...p.field].filter((x) => !excl.includes(x.uid)).sort((x, y) => effAtk(p, y, g) - effAtk(p, x, g))[0];
     return { type: "chooseTarget", uid: t ? t.uid : null };
   }
   if (pending.kind === "seek") {
@@ -1225,7 +1227,7 @@ function autoTarget(g: GameState): Action {
     const wantTrap = !d0.enchOnly;
     const wantEnch = !d0.trapOnly;
     const best = wantMon ? [...o.field].filter((m) => !hasPassive(m, "aura"))
-      .sort((a, b) => (effAtk(o, b) + (b.def || 0)) - (effAtk(o, a) + (a.def || 0)))[0] : undefined;
+      .sort((a, b) => (effAtk(o, b, g) + (b.def || 0)) - (effAtk(o, a, g) + (a.def || 0)))[0] : undefined;
     const uid = best?.uid ?? (wantTrap ? o.traps[0]?.card.uid : undefined) ?? (wantEnch ? o.enchants[0]?.card.uid : undefined) ?? null;
     return { type: "pick", uid };
   }
