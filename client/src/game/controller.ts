@@ -297,7 +297,7 @@ export abstract class BaseController implements BoardHandlers {
         case "dice":
           if (!diceDone.has(i)) {
             diceDone.add(i);
-            await diceRollAnim(e.rolls, { need: e.need, success: e.success, mine: e.player === this.you, casino: e.variant === "casino" });
+            await diceRollAnim(e.rolls, { need: e.need, success: e.success, mine: e.player === this.you, casino: e.variant === "casino", source: e.source, viewer: this.you });
           }
           break;
         case "damage": {
@@ -328,7 +328,7 @@ export abstract class BaseController implements BoardHandlers {
               if (e2.type === "playSpell" || e2.type === "trapSet" || e2.type === "trapReveal" || e2.type === "buy" || e2.type === "turnHeader" || e2.type === "win") break;
               if (e2.type === "dice" && !diceDone.has(j)) {
                 diceDone.add(j);
-                await diceRollAnim(e2.rolls, { need: e2.need, success: e2.success, mine: e2.player === this.you });
+                await diceRollAnim(e2.rolls, { need: e2.need, success: e2.success, mine: e2.player === this.you, casino: e2.variant === "casino", source: e2.source, viewer: this.you });
               }
             }
             const lines = this.effectLines(events, i);

@@ -771,14 +771,12 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
 .game .mp-clock.opp .tc-progress { stroke:#ecaca0; }
 .game .mp-clock.opp .tc-track { stroke:#f8b5a12e; }
 .game .mp-clock.opp .tc-num { color:#ffe2d7; }
-/* Squat, faceted mana stones; an earned slot has a short weighty pulse. */
-.game .portrait .mana-crystals { height:24px;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:3px;align-content:start;justify-items:center;overflow:visible; }
-.game .portrait .mana-crystal { position:relative;width:100%;max-width:18px;height:auto;aspect-ratio:1;background:linear-gradient(145deg,#547082,#182b3f 45%,#080f21);border:1px solid #8d8a76;border-radius:25%;box-shadow:inset 1px 1px 0 #b6c7cd66,inset -2px -2px 1px #020913,0 2px 1px #17243466;filter:none; }
-.game .portrait .mana-crystal::before { content:'';position:absolute;inset:21%;border-radius:17%;background:#1a3043;box-shadow:inset 1px 1px 0 #8aafbb55; }
-.game .portrait .mana-crystal.is-lit { border-color:#b7cfca;background:conic-gradient(from 45deg,#1f719c,#092941,#4796b2,#93dbeb,#1f719c);box-shadow:inset 1px 1px 0 #e6faff,inset -2px -2px 1px #09253d,0 2px 1px #142e43; }
-.game .portrait .mana-crystal.is-lit::before { background:linear-gradient(145deg,#d5f5ff,#5eaeca 45%,#286886);box-shadow:inset 1px 1px 0 #f6ffffaa; }
+/* Ivory-set lapis diamonds echo the table inlay and the portrait ornaments. */
+.game .portrait .mana-crystals { height:38px;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));grid-template-rows:repeat(var(--mana-rows,1),minmax(0,1fr));gap:1px;align-items:start;justify-items:center;overflow:visible; }
+.game .portrait .mana-crystal { display:block;width:100%;max-width:24px;height:min(28px,calc(38px / var(--mana-rows,1)));aspect-ratio:auto;background:url(/ui/mana/empty.svg) center/contain no-repeat;border:0;border-radius:0;box-shadow:none;filter:none; }
+.game .portrait .mana-crystal.is-lit { background-image:url(/ui/mana/filled.svg);filter:drop-shadow(0 1px 1px #10253a66); }
 .game .portrait .mana-crystal.is-gained { animation:manaStoneGain .45s cubic-bezier(.2,.7,.3,1) both; }
-@keyframes manaStoneGain { 0%{transform:translateY(-12px) scale(.6);filter:brightness(1.7)}65%{transform:translateY(2px) scale(1.12,.88)}100%{transform:none;filter:none} }
+@keyframes manaStoneGain { 0%{transform:translateY(-10px) scale(.7);filter:brightness(1.6)}65%{transform:translateY(1px) scale(1.1)}100%{transform:none} }
 .cointoss-ov { background:radial-gradient(ellipse at center,#292c3240,#22252c80);backdrop-filter:grayscale(.5); }
 .opening-card-flight { isolation:isolate;transform-style:flat!important; }
 .fx-card-flight,.fx-card-flight:hover { background:transparent!important;border:0!important;box-shadow:none!important; }
@@ -791,13 +789,17 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
 /* A single preparation cover. The actual board never appears before its first
    complete render; no temporary raster table or partial labels are exposed. */
 .duel-preparing > .game,.duel-preparing > canvas { visibility:hidden!important; }
-.duel-preparing::after { content:'LORE';position:fixed;inset:0;display:grid;place-items:center;background:#eeeae3;color:#9a825b;font:24px Georgia,serif;letter-spacing:.35em;z-index:300; }
+.duel-loader { position:fixed;inset:0;z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;background:radial-gradient(ellipse at 50% 42%,#f9f7f1,#e8e3d9);color:#766343;font-size:12px;letter-spacing:.18em; }
+.duel-loader > img { width:min(52vw,320px);height:auto;object-fit:contain; }
+.duel-load-track { width:min(42vw,230px);height:3px;background:#b49d6933;overflow:hidden;border-radius:2px; }
+.duel-load-track > i { display:block;width:40%;height:100%;background:linear-gradient(90deg,transparent,#a78b52,#ddd0a4,transparent);animation:duelLoading 1.6s ease-in-out infinite; }
+@keyframes duelLoading { from{transform:translateX(-100%)}to{transform:translateX(350%)} }
+@media(prefers-reduced-motion:reduce){.duel-load-track>i{animation:none;width:100%;opacity:.7}}
 /* Clock updates must never resize the market row or move a shelf at touchdown. */
 .game .mid-aside { height:0;min-height:0;overflow:visible;justify-content:center;align-self:center; }
 .game .mid-aside > * { flex-shrink:0; }
 .game .refresh-btn .rf-ico { background:none;width:auto;height:auto; }
-.game .portrait .mana-crystals { height:36px;align-items:start;row-gap:2px; }
-.game .portrait .mana-crystal { width:min(100%,calc(36px / var(--mana-rows,1) - 2px)); }
+
 
 .game #refreshBtn:hover:not(:disabled),.game #refreshBtn:focus-visible { filter:brightness(1.16);outline:1px solid #d8eafa;outline-offset:2px; }
 .game #refreshBtn:active:not(:disabled) { filter:brightness(.85); }
@@ -807,3 +809,26 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
  .game .prow .zones { height:100%; }
  .game .zone-row:has(> .zone-mon) { flex:1;min-height:var(--card-h);display:flex;align-items:center; }
 }
+
+/* Crop the frame, preserving the character head and both portrait proportions. */
+.game .pcluster--opp { transform:translateY(calc(var(--pt)*-.23)); }
+.game .portrait--opp .pt-ring .avatar { top:24%;bottom:8%;height:68%; }
+.game .portrait--opp .pt-ring .avatar img { height:111.764706%; }
+.game .portrait--opp .pt-name { bottom:10%; }
+.game .pcluster--me { bottom:calc(var(--pt)*-.20); }
+.game .pcluster--opp .pc-side--r { top:calc(var(--pt)*.23 + 3px); }
+.game .pcluster--me .pc-side--r { bottom:calc(var(--pt)*.20 + 4px); }
+/* Purchase selection follows the cutout frame and stat seals, never a box. */
+.game .market-cards .card.is-armed { outline:0;box-shadow:none; }
+.game .market-cards .card.is-armed .card-frame,
+.game .market-cards .card.is-armed .seal-face { filter:url(#celestial-matte) drop-shadow(0 0 1px #d4f3ff) drop-shadow(0 0 3px #68c3f6); }
+.draw-grip { isolation:isolate; }
+
+.game .portrait .mana-readout { border:1px solid #baa77888;border-radius:3px;background:linear-gradient(145deg,#294155ed,#142537ed);box-shadow:inset 0 1px 0 #e6dbbd26,inset 0 -2px 0 #080f2070,0 2px 3px #13203126;color:#f4ead3; }
+
+@media(max-width:700px) and (orientation:portrait){.game .pcluster--me .pt-vitals{transform:translateY(calc(-50% - 9px))}}
+/* Cards sit just above their market plane. Coplanar hit testing in Chromium
+   otherwise retargets pointerdown/up to the empty counter despite a visible card. */
+.board-projected .market-cards > .card { transform:translateZ(1px); }
+.board-projected .market-cards > .card.is-buyable:hover { transform:translateY(-6px) translateZ(1px); }
+.reroll-focus #supplyMarket .card { transform:translateY(-3px) translateZ(1px); }

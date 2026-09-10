@@ -29,6 +29,19 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand}:
   const light=new T.DirectionalLight(0xfff4e3,1.55);light.position.set(-250,500,900);scene.add(light);
   const rim=new T.DirectionalLight(0xc7ddff,.7);rim.position.set(350,50,-500);scene.add(rim);
   const landed=new Set<HTMLElement>();
+  const grips:Array<{node:HTMLElement;copy:HTMLElement;visibility:string}>=[];
+  // The new rightmost card slips beneath the cards already held in the left
+  // hand. Native foreground faces preserve the exact contour and typography.
+  const holdInFront=(node:HTMLElement)=>{
+    if(!reveal||grips.some(g=>g.node===node))return;
+    const copy=node.cloneNode(true) as HTMLElement,r=node.getBoundingClientRect(),cs=getComputedStyle(node);
+    const w=node.offsetWidth,h=node.offsetHeight;
+    copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.classList.add('draw-grip');copy.setAttribute('aria-hidden','true');
+    copy.style.cssText=`position:fixed;left:${r.left}px;top:${r.top}px;bottom:auto;width:${w}px;height:${h}px;--cw:${w}px;--ch:${h}px;transform:scale(${r.width/w},${r.height/h});transform-origin:0 0;z-index:${127+Number(cs.zIndex||0)};pointer-events:none;transition:none;animation:none;visibility:visible;`;
+    const originals=node.querySelectorAll<HTMLElement>('*');
+    copy.querySelectorAll<HTMLElement>('*').forEach((el,i)=>{const c=getComputedStyle(originals[i]);el.style.fontSize=c.fontSize;el.style.lineHeight=c.lineHeight;el.style.filter=c.filter;});
+    grips.push({node,copy,visibility:node.style.visibility});document.body.append(copy);node.style.visibility='hidden';
+  };
   const models:PaperCard[]=[];
   const shadows:T.Mesh<T.PlaneGeometry,T.MeshBasicMaterial>[]=[];
   const shadowCanvas=document.createElement('canvas');shadowCanvas.width=128;shadowCanvas.height=128;
@@ -53,6 +66,7 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand}:
       shadow.position.z=-40;shadows.push(shadow);scene.add(shadow);
     });
     document.body.appendChild(canvas);
+    if(reveal)cards[0]?.parentElement?.querySelectorAll<HTMLElement>('.card').forEach(node=>{if(!cards.includes(node))holdInFront(node);});
     const width=innerWidth,height=innerHeight,start=performance.now();
     await new Promise<void>(resolve=>{
       const finish=()=>{cancelAnimationFrame(frame);resolve();};
@@ -65,7 +79,7 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand}:
           const elapsed=now-start-i*STAGGER,t=Math.min(1,Math.max(0,elapsed/DURATION));
           const visible=elapsed>=0 && t<1;model.group.visible=visible;shadows[i].visible=visible;
           if(elapsed<DURATION)running=true;
-          if(!visible){if(t===1&&!landed.has(cards[i])){landed.add(cards[i]);onLand(cards[i]);}return;}
+          if(!visible){if(t===1&&!landed.has(cards[i])){landed.add(cards[i]);onLand(cards[i]);holdInFront(cards[i]);}return;}
           const target=cards[i].getBoundingClientRect(),pose=drawPose(t,reveal);
           const ox=origin.left+origin.width/2,oy=origin.top+origin.height/2;
           const tx=target.left+target.width/2,ty=target.top+target.height/2;
@@ -91,6 +105,7 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand}:
     // A missing image/context skips decorative playback; gameplay still commits.
   } finally {
     clearTimeout(deadline);cancelAnimationFrame(frame);
+    for(const grip of grips){grip.copy.remove();grip.node.style.visibility=grip.visibility;}
     signal.removeEventListener('abort',onAbort);
     canvas.removeEventListener('webglcontextlost',lost);
     models.forEach(m=>m.dispose());shadows.forEach(s=>{s.geometry.dispose();s.material.dispose();});

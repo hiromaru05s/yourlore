@@ -140,3 +140,15 @@
 @media(prefers-reduced-motion:reduce) { .d3-overlay,.d3-verdict { animation:none!important; transition:none!important; } }
 
 .d3-row.is-loading .d3-fallback { visibility:hidden; }
+
+/* The cause stays on the left for the entire roll and result, with ownership
+   labelled separately from whose dice are rolled (opponent-guess effects). */
+.d3-overlay { gap:clamp(16px,4vw,64px);padding:24px; }
+.d3-source { --card-w-hand:clamp(100px,17vw,190px);--card-h-hand:calc(var(--card-w-hand)/.64);flex:0 0 var(--card-w-hand);display:flex;flex-direction:column;align-items:center;gap:14px; }
+.d3-owner { color:#dcf2ff;background:linear-gradient(90deg,transparent,#153951df,transparent);border-block:1px solid #8bbfce80;padding:7px 12px;font-size:clamp(10px,1.1vw,14px);letter-spacing:.08em;white-space:nowrap; }
+.source-opp .d3-owner { color:#ffe5dc;border-color:#c9948280;background:linear-gradient(90deg,transparent,#572b38df,transparent); }
+.d3-source-card { pointer-events:none;flex-shrink:0;filter:drop-shadow(0 8px 18px #0008); }
+.d3-status { display:grid;place-items:center;min-height:140px;color:#f1e3c6;font:18px Georgia,serif;text-align:center; }
+.d3-overlay .d3-row { width:min(54vw,620px);flex-wrap:wrap; }
+.d3-overlay .d3-tray { min-width:0;padding-inline:0; }
+@media(max-width:640px){.d3-overlay{gap:8px;padding:12px}.d3-source{--card-w-hand:100px}.d3-overlay .d3-row{width:calc(100vw - 140px);height:180px}.d3-cap{padding:8px;font-size:20px;max-width:calc(100vw - 140px)}.d3-verdict{font-size:12px}.d3-owner{padding:6px 8px}.d3-row .d3-fallback{width:40px;height:40px;padding:7px}.d3-row .d3-pip{width:5px;height:5px}}

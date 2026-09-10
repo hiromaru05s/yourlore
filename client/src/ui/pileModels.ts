@@ -13,9 +13,10 @@ function rounded(w:number,h:number,r:number):T.Shape {
 }
 /** Same 0.64 proportions/rounded stock as the moving PaperCard, with fewer
  * vertices for resting stacks. The sleeve is shared, never per-card geometry. */
-export function cardStock(map:T.Texture, face?:T.Texture):T.Group {
+export function cardStock(map:T.Texture, face?:T.Texture, edgesOnly=false):T.Group {
   const g=new T.Group();g.name='card-stock';
-  const shape=rounded(face?.94:1,face?RATIO*.94:RATIO,face?.12:.045);
+  const inset=!!face||edgesOnly;
+  const shape=rounded(inset?.94:1,inset?RATIO*.94:RATIO,inset?.12:.045);
   const edge=new T.ExtrudeGeometry(shape,{depth:.014,bevelEnabled:false,curveSegments:4});edge.translate(0,0,-.007);
   const stock=new T.Mesh(edge,[new T.MeshBasicMaterial({visible:false}),new T.MeshStandardMaterial({color:0xccbea5,roughness:.85})]);stock.castShadow=true;stock.receiveShadow=true;g.add(stock);
   const skin=(texture:T.Texture,back:boolean)=>{
@@ -27,7 +28,7 @@ export function cardStock(map:T.Texture, face?:T.Texture):T.Group {
     mesh.position.z=back?-.0075:.0075;if(back)mesh.rotation.y=Math.PI;
     mesh.castShadow=true;mesh.receiveShadow=true;g.add(mesh);
   };
-  skin(face||map,false);skin(map,true);return g;
+  if(!edgesOnly){skin(face||map,false);skin(map,true);}return g;
 }
 /** Shared physical card slots, independent of the equipped Blender furniture. */
 export function makePile(count:number,shelf:boolean,sleeve:T.Texture,face?:T.Texture,furniture?:T.Group):PileModel {
@@ -49,7 +50,7 @@ export function makePile(count:number,shelf:boolean,sleeve:T.Texture,face?:T.Tex
   }else{
     const n=Math.min(count,12),height=Math.min(count,40)*.004;
     for(let j=0;j<n;j++){
-      const card=cardStock(sleeve,j===n-1?face:undefined);card.rotation.x=-Math.PI/2;
+      const card=cardStock(sleeve,j===n-1?face:undefined,!face || j<n-1);card.rotation.x=-Math.PI/2;
       card.position.set(0,mount+.006+(n<=1?0:j/(n-1)*height),0);
       cards.add(card);top=card;
     }

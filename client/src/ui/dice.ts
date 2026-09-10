@@ -3,7 +3,10 @@
 import { t, getLang } from '../i18n';
 import { sfx } from './sound';
 import type { DiceScene } from './diceScene';
-export interface DiceOpts { need?:number; success?:boolean; mine:boolean; casino?:boolean; }
+import type { DiceSource, Side } from '../shared/types';
+import { DB, STARTERS } from '../shared/cards';
+import { cardEl } from './cardView';
+export interface DiceOpts { need?:number; success?:boolean; mine:boolean; casino?:boolean; source?:DiceSource; viewer?:Side; }
 const active=new Set<AbortController>();
 export function cancelDiceAnimations():void {for(const abort of active)abort.abort();}
 const PIPS:Record<number,number[]>={1:[5],2:[1,9],3:[1,5,9],4:[1,3,7,9],5:[1,3,5,7,9],6:[1,3,4,6,7,9]};
@@ -16,7 +19,17 @@ export async function diceRollAnim(rolls:number[],opts:DiceOpts):Promise<void>{
   ov.setAttribute('role','dialog');ov.setAttribute('aria-label',opts.mine?'Dice':t('fx.opp')+' · Dice');
   ov.tabIndex=0;ov.onclick=()=>abort.abort();ov.onkeydown=e=>{if(e.key==='Escape'||e.key==='Enter'||e.key===' '){e.preventDefault();abort.abort();}};
   const tray=document.createElement('div');tray.className='d3-tray';
-  const heading=document.createElement('div');heading.className='d3-who';heading.textContent=opts.casino?'CASINO':opts.mine?'LORE':t('fx.opp');tray.append(heading);
+  const lang=getLang();
+  const local=(ja:string,en:string,ko:string)=>lang==='ja'?ja:lang==='en'?en:ko;
+  const sourceMine=opts.source&&opts.viewer!=null?opts.source.player===opts.viewer:opts.mine;
+  ov.classList.toggle('source-opp',!sourceMine);
+  const source=document.createElement('div');source.className='d3-source';
+  const owner=document.createElement('div');owner.className='d3-owner';owner.textContent=sourceMine?local('あなたの効果','Your effect','자신의 효과'):local('相手の効果','Opponent effect','상대의 효과');source.append(owner);
+  const def=opts.source?.id?(DB[opts.source.id]??STARTERS[opts.source.id]):undefined;
+  if(def){const face=cardEl({...def,uid:'dice-source'}, {size:'hand',fullArt:true});face.classList.add('d3-source-card');source.append(face);source.dataset.cardId=def.id;}
+  else {const status=document.createElement('div');status.className='d3-status';status.textContent=opts.source?.status==='brand'?local('烙印','Brand','낙인'):opts.source?.status==='solitude'?local('孤独の呪い','Curse of solitude','고독의 저주'):local('ダイス効果','Dice effect','주사위 효과');source.append(status);}
+  ov.append(source);
+  const heading=document.createElement('div');heading.className='d3-who';heading.textContent=opts.mine?local('あなたのダイス','Your dice','자신의 주사위'):local('相手のダイス','Opponent dice','상대의 주사위');tray.append(heading);
   const row=document.createElement('div');row.className='d3-row';tray.append(row);
   for(const value of rolls){const face=document.createElement('div');face.className='d3-fallback';face.setAttribute('aria-label',String(value));
     for(const cell of PIPS[value]){const pip=document.createElement('i');pip.className='d3-pip';pip.style.gridArea=`${Math.ceil(cell/3)} / ${((cell-1)%3)+1}`;face.append(pip);}row.append(face);

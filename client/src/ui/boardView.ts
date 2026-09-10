@@ -944,7 +944,7 @@ export class GameView {
       const card = cardEl(c, { size: "hand", playable: aff, dim: !aff, costOverride: pc });
       if(!aff)card.dataset.blockReason=!myTurn?t('play.block.turn'):g.pending?t('play.block.pending'):me.mana<pc?t('play.block.mana'):(getLang()==='ja'?blocked?.ja:getLang()==='ko'?blocked?.ko:null)||t('play.block.cond');
       card.style.setProperty("--hi", String(idx));
-      card.style.zIndex = String(idx);
+      card.style.zIndex = String(me.hand.length - idx);
       this.bindHandCard(card, c);
       handEl.appendChild(card);
     });

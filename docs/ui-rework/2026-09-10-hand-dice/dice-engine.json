@@ -1,0 +1,25 @@
+{
+  "checks": 3203,
+  "rolls": 728,
+  "sources": [
+    "AJIN",
+    "BUDGET",
+    "DUNGEON_FLOOR",
+    "GAMBLE",
+    "GAMBLER",
+    "GM6_7",
+    "GUILD_CHEST",
+    "LUCKY_CHEST",
+    "ND3",
+    "S1",
+    "S12",
+    "STARTER_CHEST",
+    "TDE3",
+    "TIMEWARP",
+    "VOID_APOSTLE",
+    "WORLD_SEED",
+    "brand",
+    "solitude"
+  ],
+  "stateAndRngUnchanged": true
+}

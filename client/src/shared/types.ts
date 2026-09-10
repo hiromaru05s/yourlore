@@ -224,6 +224,8 @@ export type Action =
   | { type: "surrender"; player: Side };
 
 // --- Events: emitted by reduce(), consumed by the UI for animation/log ---
+export type DiceSource = { player: Side } & ({ id: string; status?: never } | { status: "brand" | "solitude"; id?: never });
+
 export type GameEvent =
   | { type: "log"; html: string; htmlJa: string }
   | { type: "turnHeader"; turn: number; name: string; isBot: boolean; player?: Side } // player: whose turn (log tinting)
@@ -238,7 +240,7 @@ export type GameEvent =
   | { type: "draw"; player: Side; count: number }
   | { type: "reshuffle"; player: Side; count: number } // public count only; no card order
   | { type: "treasure"; player: Side; kind: string; text: string; textJa: string; isBot: boolean }
-  | { type: "dice"; player: Side; rolls: number[]; need?: number; success?: boolean; variant?: "casino" } // dice roll (need = min TOTAL for success; undefined = outcome-table roll · variant "casino" = 카지노 전용 연출)
+  | { type: "dice"; source: DiceSource; player: Side; rolls: number[]; need?: number; success?: boolean; variant?: "casino" } // dice roll (need = min TOTAL for success; undefined = outcome-table roll · variant "casino" = 카지노 전용 연출)
   | { type: "playSpell"; player: Side; id: string; dest: "discard" | "field" | "vanish" } // spell/starter/enchant played from hand
   | { type: "trapSet"; player: Side } // a face-down trap was set (identity hidden)
   | { type: "trapReveal"; player: Side; id: string } // a trap fired → reveal then discard

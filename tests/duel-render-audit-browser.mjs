@@ -3,7 +3,8 @@ import fs from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5182';
 const out=process.env.LORE_TEST_OUTPUT||'docs/ui-rework/2026-09-10-render-audit';await fs.mkdir(out,{recursive:true});
-const browser=await chromium.launch({channel:'chrome',headless:true});
+const softwareGL=process.env.LORE_SOFTWARE_GL==='1';
+const browser=await chromium.launch({channel:'chrome',headless:true,args:softwareGL?['--use-angle=swiftshader']:[]});
 const page=await browser.newPage({viewport:{width:1280,height:720}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
 try{
 await page.route('**/continuity-fixture',r=>r.fulfill({contentType:'text/html',body:'<html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="app"></div></body></html>'}));
@@ -82,6 +83,6 @@ await page.evaluate(()=>{qa.c.reset();qa.c.state.players[0].hand=Array.from({len
 await page.waitForSelector('.picker-grid');await page.locator('.picker-grid .card').nth(0).click();await page.locator('.picker-grid .card').nth(1).click();await page.locator('.picker-modal .btn-gold').click();
 await page.waitForSelector('[data-discard-flight]');await page.waitForFunction(()=>document.querySelector('#pile-myDisc')?.dataset.motion==='arrival');await page.screenshot({path:out+'/hand-discard-flight.png'});
 await page.waitForFunction(()=>qa.c.state.players[0].hand.length===5);await page.evaluate(()=>qa.c.queue);assert.deepEqual(await page.evaluate(()=>qa.discards),['overflow-0','overflow-1']);assert.equal(await page.locator('#pile-myDisc').getAttribute('data-count'),'3');assert.equal(await page.locator('[data-discard-flight]').count(),0);await page.evaluate(()=>qa.observer.disconnect());
-assert.deepEqual(errors,[]);await fs.writeFile(out+'/render-audit-browser.json',JSON.stringify({shelf,layers,touchdown,settled,purchaseCommit,alpha,drags,errors,checks:['cold white board with held model request','native shelf image resolution','front flight canvas','purchase touchdown matches committed native face','synchronous gray-out commit without blank art or unprojected market','transparent capture and cap geometry','three actual spell drag positions including expanded hand overlap','return-to-hand cancellation','actual two-card end-turn discard flights']},null,2));
+assert.deepEqual(errors,[]);await fs.writeFile(out+'/render-audit-browser.json',JSON.stringify({softwareGL,shelf,layers,touchdown,settled,purchaseCommit,alpha,drags,errors,checks:['cold white board with held model request','native shelf image resolution','front flight canvas','purchase touchdown matches committed native face','synchronous gray-out commit without blank art or unprojected market','transparent capture and cap geometry','three actual spell drag positions including expanded hand overlap','return-to-hand cancellation','actual two-card end-turn discard flights']},null,2));
 await page.evaluate(()=>{qa.c.destroy();qa.stop();});console.log('PASS: render audit browser');
 }finally{await browser.close();}

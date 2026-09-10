@@ -5,7 +5,7 @@ export function solveBoard(w: number, h: number, _underPile = false) {
   const phone = w < 700 && h > w;
   const gap = phone ? 4 : Math.min(9,w*.006);
   const portrait = 1.5*Math.max(48, Math.min(142,h*.158,w*.205));
-  const portraitReserve=portrait*(phone?.76:.63);
+  const portraitReserve=portrait*(phone?.66:.48);
   // Full cards share one width across market, monsters and every 3D pile.
   // Fourteen status cards occupy half-unit slots across the seven-column lane.
   const horizontal=phone?(w*.91-76-5*gap)/7:(w*.92-60-13*gap)/13.6;
