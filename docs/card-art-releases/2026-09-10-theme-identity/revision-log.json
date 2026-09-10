@@ -40,5 +40,19 @@
     "correction": "Entire tree from roots to canopy is the sole main subject; no people",
     "final": "images/WORLD_TREE.png",
     "firstAttempt": "iterations/WORLD_TREE-attempt1.png"
+  },
+  "Q_TORI": {
+    "status": "resolved",
+    "reason": "User rejected photographic fur and face as inconsistent with the card illustration style",
+    "correction": "Drawn contours, grouped fur locks, simplified face and painted shadow planes; same canine identity and setting",
+    "final": "images/Q_TORI.png",
+    "firstAttempt": "iterations/Q_TORI-attempt1.png"
+  },
+  "Q_WINTER": {
+    "status": "resolved",
+    "reason": "User rejected photographic fur and face as inconsistent with the card illustration style",
+    "correction": "Drawn contours, grouped fur locks, simplified face and painted shadow planes; same canine identity and setting",
+    "final": "images/Q_WINTER.png",
+    "firstAttempt": "iterations/Q_WINTER-attempt1.png"
   }
 }

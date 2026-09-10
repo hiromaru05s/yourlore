@@ -8,11 +8,11 @@
     {
       "id": "Q_TORI",
       "file": "images/Q_TORI.png",
-      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-75bc0281-3516-4b41-a5a6-c1a55b23bec7.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-4ccf295d-4d18-4c48-865b-b459ddf865c1.png",
       "width": 1313,
       "height": 1198,
-      "sha256": "a6a7a3f6bfc56cbce6e95011e54fa27d81834a0748e6b39b3d145496c44a09f9",
-      "bytes": 2651321,
+      "sha256": "aceb59253b3341bd33756977859dfd72e06c5a62ac5001cad93ac15e3eb88774",
+      "bytes": 2749697,
       "status": "review_pending",
       "name": "精霊 - トリ",
       "theme": "spirit",
@@ -22,33 +22,33 @@
           "file": "client/public/art/cards/Q_TORI.webp",
           "width": 832,
           "height": 759,
-          "sha256": "7c4d8062a6276e34fd61ae8c17d1c33053d5db7a87a93c4ce4e4eee2812973aa",
-          "bytes": 202314
+          "sha256": "33695a4fec0d4bc995bd05687dd4e259e9e59da15a26df523b363d1e0f6e13ef",
+          "bytes": 226670
         },
         {
           "file": "client/public/art/cards-sm/Q_TORI.webp",
           "width": 384,
           "height": 350,
-          "sha256": "b7b7b26b2f6cb365b26740b3326fe9f2d1852547fcb1d987b0ab605b7015d65e",
-          "bytes": 37190
+          "sha256": "1599d56d02adc84fdc026bfb163765fff0c8565212f526caf0833bbc12aec7ff",
+          "bytes": 41076
         },
         {
           "file": "client/public/art/cards-xs/Q_TORI.webp",
           "width": 192,
           "height": 175,
-          "sha256": "1dfbbde79d422de4781dc50b37ce52cb47e508872115676413e6f4a5884f87d9",
-          "bytes": 11000
+          "sha256": "78ca25d4aece7345f4e45bd3aff9a784fec83cfed3cdfe47b6c6d0bc22488435",
+          "bytes": 11276
         }
       ]
     },
     {
       "id": "Q_WINTER",
       "file": "images/Q_WINTER.png",
-      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-f5c2cf3d-d88d-4083-b828-2b76febe6cc0.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a08834-f572-7b20-bb3f-060bf2c2acb6/exec-a8867bc5-b2bf-4a75-bef9-998fd574ef31.png",
       "width": 1312,
       "height": 1199,
-      "sha256": "7feab799d3052e55f52a23d7a2560648427d595f8b614468978bf8d6d22151f3",
-      "bytes": 2703888,
+      "sha256": "e5610408416b886d302dafd82c57797d90b98559ba35629db9d36760850db282",
+      "bytes": 2760992,
       "status": "review_pending",
       "name": "精霊 - ウィンター",
       "theme": "spirit",
@@ -58,22 +58,22 @@
           "file": "client/public/art/cards/Q_WINTER.webp",
           "width": 832,
           "height": 760,
-          "sha256": "86d08da57cb6b0ce057789385e8a4e0e3ef8bf8805f95113218e23d338e1496a",
-          "bytes": 199908
+          "sha256": "ad7a4b480aa88ef9bbd2677cc1694d6a144c37de8890da246b757d15ece16ee8",
+          "bytes": 217276
         },
         {
           "file": "client/public/art/cards-sm/Q_WINTER.webp",
           "width": 384,
           "height": 351,
-          "sha256": "d0054f817f622048499bd1866c4b022bf7f1600a96bb649d7a043d3a18d201c4",
-          "bytes": 34444
+          "sha256": "dd063d96ea1745c92d7caefc8491d15cd4c0a9a2ac6de8f465a4b7893a760e44",
+          "bytes": 37142
         },
         {
           "file": "client/public/art/cards-xs/Q_WINTER.webp",
           "width": 192,
           "height": 175,
-          "sha256": "2b54b716ec39ad7df76379762d0e5a4adf1ff3f3bcc103b0234a4eb315ed35c7",
-          "bytes": 9218
+          "sha256": "3b78489e11f760cd07bf4472e1be000a30bed85fbd909e7cf0a3c5a8cf868703",
+          "bytes": 10036
         }
       ]
     },

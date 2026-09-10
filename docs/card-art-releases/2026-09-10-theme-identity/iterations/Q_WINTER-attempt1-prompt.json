@@ -1,0 +1,16 @@
+{
+  "number": "R002",
+  "id": "Q_WINTER",
+  "theme": "spirit",
+  "themeJa": "犬の精霊",
+  "name": "精霊 - ウィンター",
+  "effect": "【条件】自分の最大体力を累計30上昇させる · 【報酬】自分の最大マナ+2",
+  "scene": "Use case: stylized-concept. Create one finished LORE inner-card painting landscape 1.095:1, no frame/text. Spirit Winter MUST be a DOG whose identity comes from first three reference photos. Large shaggy white-and-gray dog, very fluffy white face/muzzle/chest/long lower legs and paws, broad black nose, gentle brown eyes, gray floppy ears, gray patch over viewer-right side of head/eye and gray saddle body. Keep soft wavy fur and friendly open mouth with pink tongue. Fourth reference is ONLY painterly fantasy art style, not its human or buildings. Scene: secluded snowy conifer forest, deep turquoise frozen stream, soft dusk lavender sky and small northern-light ribbons. Dog stands with one fluffy forepaw raised on a snowy fallen log, looking at viewer; full body entirely visible and features faithful. Keep 80% solid fluffy dog, only faint icy blue spirit light at fur tips and delicate floating snow sparks, no wings, butterfly, antlers, armor or human form. Quest represents accumulated vitality blossoming into mana. Composition 60% subject, ample margin for ears paws tail, beautiful refined Japanese fantasy handpainting consistent with reference. No white marble architecture or pedestal; no orange modern jacket/harness, tags/QR codes, social media interface, lettering, watermark. Do not copy any screenshot text.",
+  "reference": [
+    "/Users/hiromaru05s/Downloads/IMG_1513.png",
+    "/Users/hiromaru05s/Downloads/IMG_1514.png",
+    "/Users/hiromaru05s/Downloads/IMG_1515.png",
+    "/Users/hiromaru05s/Desktop/LORE_TCG-art-theme-revision/docs/card-art-releases/2026-09-10-theme-identity/references/F180-ELF.png"
+  ],
+  "prompt": "Use case: stylized-concept. Create one finished LORE inner-card painting landscape 1.095:1, no frame/text. Spirit Winter MUST be a DOG whose identity comes from first three reference photos. Large shaggy white-and-gray dog, very fluffy white face/muzzle/chest/long lower legs and paws, broad black nose, gentle brown eyes, gray floppy ears, gray patch over viewer-right side of head/eye and gray saddle body. Keep soft wavy fur and friendly open mouth with pink tongue. Fourth reference is ONLY painterly fantasy art style, not its human or buildings. Scene: secluded snowy conifer forest, deep turquoise frozen stream, soft dusk lavender sky and small northern-light ribbons. Dog stands with one fluffy forepaw raised on a snowy fallen log, looking at viewer; full body entirely visible and features faithful. Keep 80% solid fluffy dog, only faint icy blue spirit light at fur tips and delicate floating snow sparks, no wings, butterfly, antlers, armor or human form. Quest represents accumulated vitality blossoming into mana. Composition 60% subject, ample margin for ears paws tail, beautiful refined Japanese fantasy handpainting consistent with reference. No white marble architecture or pedestal; no orange modern jacket/harness, tags/QR codes, social media interface, lettering, watermark. Do not copy any screenshot text."
+}

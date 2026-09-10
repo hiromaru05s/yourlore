@@ -1,6 +1,6 @@
 # 検証とマージ時の引き継ぎ
 
-124カードを改訂。PNG原本124枚、配信用WebP372枚（832 / 384 / 192px幅）を保存した。各画像の目視所見は `visual-qa.json`、やり直した6カードの経緯は `revision-log.json` に記録。生成時の寸法は結果ごとにmanifestへ記録し、変換時は全構図と縦横比を保持している。
+124カードを改訂。PNG原本124枚、配信用WebP372枚（832 / 384 / 192px幅）を保存した。各画像の目視所見は `visual-qa.json`、やり直した8カードの経緯は `revision-log.json` に記録。生成時の寸法は結果ごとにmanifestへ記録し、変換時は全構図と縦横比を保持している。
 
 - `python3 verify.py`：124枚の原本・生成元・配信用画像のSHA-256一致、対象外969ファイルの不変、ダークエルフ除外を確認。結果は [verification.json](verification.json)。
 - 既存のブラウザー検証：全296カード・888画像URLをChromeでデコード。幅とキャッシュバージョン、24枚のカード枠表示、JavaScriptエラー0件を確認。[表示サンプル](framed-samples.png) / [検証結果](browser-art-check.json)。
@@ -17,3 +17,7 @@
 一覧は `index.html` をブラウザーで開く。原本を含む比較画像は相対参照なのでフォルダごと移動できる。Markdown画像一覧はCodex表示のため制作worktreeの絶対パスを使っている。別のcheckoutで表示する場合は `python3 build-review.py` で一覧を再生成する。
 
 配信用画像の再変換は `node import-art.mjs`。再検証は `python3 verify.py`。生成元PNGが別マシンにない場合、元ファイルとの照合部分は利用できないが、保存済みPNGとmanifestのハッシュが証跡として残る。
+
+## 精霊2枚の追加修正
+
+ユーザーの写実感への指摘を受け、トリとウィンターを輪郭線と色面を使う描画へ再生成。犬の識別特徴は維持し、前案はiterationsへ保存。詳細は [精霊修正版](SPIRIT-V2.md)。
