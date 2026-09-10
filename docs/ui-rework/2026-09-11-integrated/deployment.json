@@ -1,0 +1,23 @@
+{
+  "environment": "staging",
+  "url": "https://test.yourlore.xyz/",
+  "worker": "lore-server-staging",
+  "sourceCommit": "f32029b437746277d1dd47ead97fa8678e8e6ad8",
+  "version": "d4d7f160-6311-453c-8937-5f7adf6abb21",
+  "previousVersion": "48c181a3-6a62-4866-b5d4-92f29fb89dc3",
+  "balanceVersion": "v48",
+  "artVersion": "20260910-theme-identity-v3",
+  "mergedSources": {
+    "groundedBoard": "c0ef291",
+    "biblionEffects": "775fa0f",
+    "balance": "cffc130",
+    "approvedArt": "a28e9cc",
+    "historicalArt": "52e8677"
+  },
+  "remoteMainSourceVerified": true,
+  "productionDeployed": false,
+  "remoteGameplayScope": "Anonymous startup; authenticated online match not exercised. Actual controller and rendering flows exercised through local browser fixtures.",
+  "verifiedAssets": 1407,
+  "allAssetHashesMatch": true,
+  "verifiedAt": "2026-09-10T20:13:46.970684+00:00"
+}

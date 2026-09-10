@@ -31,3 +31,9 @@ Stat-rise tracking now receives full game state so an opponent World Tree activa
 - Card text: 296 cards × 3 languages, zero violations. Art inventory: 293/293 non-starter masters present. The legacy art checker reports thumbnail mtime ordering after git checkout; byte comparison and browser decode above verify the actual approved thumbnails without recompressing them.
 
 Remote verification and deployment version are recorded separately after upload. Browser duel fixtures use the actual local controller/renderer; remote smoke validation is anonymous startup, not an authenticated online match.
+
+- Paper card browser: sequential draws, six-card batch, opening draw controller, opponent privacy, mobile layout, cancellation, GPU context loss and teardown passed with no browser errors.
+
+## Deployed result
+
+Staging source `f32029b`; Cloudflare version `d4d7f160-6311-453c-8937-5f7adf6abb21`. Both main and the integration branch were pushed. All **1,407 / 1,407** remote asset SHA-256 hashes match the verified build. Anonymous startup returned HTTP 200, mounted the app, and raised no JavaScript exception. Production was not deployed.
