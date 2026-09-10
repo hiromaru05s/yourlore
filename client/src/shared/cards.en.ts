@@ -216,7 +216,7 @@ const TEXTS: Record<string, string> = {
   GAMBLER: "At the start of your turn: roll a die — on 4/5/6, max mana +1",
   LEGEND_GAMBLER: "At the start of your turn: roll a die — on 6, max mana +10 · If a 'Gambler' is in your deck/graveyard, roll 3 dice in total · Void",
   ELF_HAVEN: "Enchantment: 'World Tree' cards cost 0 to buy/cast (3/turn) · Buy one from the offer: your max HP +10",
-  HALF_ELF: "On summon: if a card with 'World Tree' in its name is on your field, deploy 'World Tree's Care'",
+  HALF_ELF: "【Passive】'World Tree' name on either field: ATK +3 · 【On Summon】On yours: deploy 'World Tree's Care'",
   WORLD_CARE: "Enchantment: at the start of each of your turns, your max HP +9",
   ELF: "Summonable only while your max HP is 65 or higher",
   DARK_ELF: "Infiltrate · Summonable only while your max HP is 65+ and you control no 'Elf' monsters",

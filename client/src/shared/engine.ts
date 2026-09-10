@@ -168,8 +168,15 @@ function afterPlay(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): void
 function lawlessActive(g: GameState): boolean {
   return g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "lawless"));
 }
-export function effAtk(p: PlayerState, m: FieldMon): number {
+function hasWorldTreeOnField(p: PlayerState): boolean {
+  const named = (c: CardInst) => (c.name || "").includes("세계수");
+  return p.field.some(named) || p.enchants.some(e => named(e.card))
+    || p.traps.some(t => named(t.card)) || (p.quests ?? []).some(q => named(q.card));
+}
+/** Pass the live game for conditions that inspect both fields. */
+export function effAtk(p: PlayerState, m: FieldMon, g?: Pick<GameState, "players">): number {
   let a = m.atk! + (m.tempAtk || 0) + (m.atkMod || 0);
+  if (m.condAtk === "worldTree" && (g?.players ?? [p]).some(hasWorldTreeOnField)) a += 3;
   if (m.condAtk === "twoPlus" && p.field.length >= 2) a += m.val ?? 2; // 보너스량 = val (기본 2)
   if (m.condAtk === "hp45" && p.hp >= 45) a += 1; // 혈기왕성: 체력 45+면 +1/+3
   // 선택받은 시리즈: 제외된 컬 2장당 스케일링 (반내림)
@@ -1262,7 +1269,7 @@ function trySnare(g: GameState, ctx: Ctx, victim: PlayerState): boolean {
 function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: string | null): void {
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];
-  let atk = effAtk(p, att);
+  let atk = effAtk(p, att, g);
   // 드래곤 라이더(v36 halfSecond): 2회째 공격은 공격력 절반(내림)
   if (att.attackFx === "halfSecond" && (att.attacksUsed || 0) >= 1) { atk = Math.floor(atk / 2); ctx.log(`  └ ${cn(att)} 2회째 공격 — 공격력 절반(${atk})`, `  └ ${cn(att)} 2回目の攻撃 — 攻撃力半分(${atk})`); }
   // 살아있는 던전(v38 dungeon): 기합·회피가 없는 몬스터는 공격 시 공격력 1
@@ -1377,7 +1384,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     att.exhausted = true;
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 상대 필드의 카드 2장 파괴`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 相手の場のカード2枚を破壊`);
     let left = 2;
-    const mons = [...p.field].filter((x) => x.hatch == null).sort((a2, b2) => (effAtk(p, b2) + effDef(p, b2)) - (effAtk(p, a2) + effDef(p, a2)));
+    const mons = [...p.field].filter((x) => x.hatch == null).sort((a2, b2) => (effAtk(p, b2, g) + effDef(p, b2)) - (effAtk(p, a2, g) + effDef(p, a2)));
     for (const x of mons) { if (left <= 0 || g.over) break; if (!p.field.some((y) => y.uid === x.uid)) continue; trapKill(p, x); left--; }
     while (left > 0 && !g.over && p.enchants.length > 0) { const ec = p.enchants.shift()!.card; ctx.log(`  └ 영구마법 ${cn(ec)} 파괴`, `  └ 永続魔法 ${cn(ec)} 破壊`); binEnch(g, ctx, p, ec); left--; }
     while (left > 0 && !g.over && p.traps.length > 0) { if (trySnare(g, ctx, p)) break; const tr = p.traps.shift()!; if (tr.card.exileOnDestroy) rmz(p).push(tr.card); else p.discard.push(tr.card); ctx.log(`  └ 세트 함정 파괴 (정체: ${cn(tr.card)})`, `  └ セットトラップ破壊 (正体: ${cn(tr.card)})`); left--; }
@@ -1387,7 +1394,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   if (o.field.length >= 6 && o.traps.some((t) => t.card.react === "stratagem") && (tc = takeTrap(g, ctx, o, "stratagem"))) {
     att.exhausted = true;
     const picks = p.field.filter((x) => (x.cost ?? 0) <= 6 && x.hatch == null)
-      .sort((a2, b2) => (effAtk(p, b2) + effDef(p, b2)) - (effAtk(p, a2) + effDef(p, a2))).slice(0, 3);
+      .sort((a2, b2) => (effAtk(p, b2, g) + effDef(p, b2)) - (effAtk(p, a2, g) + effDef(p, a2))).slice(0, 3);
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 코스트 6 이하 상대 몬스터 ${picks.length}체 파괴`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + コスト6以下の相手モンスター${picks.length}体を破壊`);
     for (const x of picks) { if (g.over) break; if (p.field.some((y) => y.uid === x.uid)) trapKill(p, x); }
     return;
@@ -1435,8 +1442,8 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   // 대역(decoy): 공격을 다른 상대(공격측) 몬스터에게 돌린다 (관통 적용)
   if (p.field.some((x) => x.uid !== att.uid && x.hatch == null) && o.traps.some((t) => t.card.react === "decoy") && (tc = takeTrap(g, ctx, o, "decoy"))) {
     const cands = p.field.filter((x) => x.uid !== att.uid && x.hatch == null);
-    const killable = cands.filter((x) => atk >= curHp(p, x)).sort((a2, b2) => (effAtk(p, b2) + effDef(p, b2)) - (effAtk(p, a2) + effDef(p, a2)));
-    const dec = killable[0] ?? [...cands].sort((a2, b2) => (effAtk(p, b2) + effDef(p, b2)) - (effAtk(p, a2) + effDef(p, a2)))[0];
+    const killable = cands.filter((x) => atk >= curHp(p, x)).sort((a2, b2) => (effAtk(p, b2, g) + effDef(p, b2)) - (effAtk(p, a2, g) + effDef(p, a2)));
+    const dec = killable[0] ?? [...cands].sort((a2, b2) => (effAtk(p, b2, g) + effDef(p, b2)) - (effAtk(p, a2, g) + effDef(p, a2)))[0];
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격이 ${cn(dec)} 에게 향한다`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃が ${cn(dec)} に向かう`);
     resolveFriendlyFire(g, ctx, att, dec, true);
     return;
@@ -1444,7 +1451,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   // 용암 함정(lavaPit): 무효 + 파괴 · 공격력 4 이상이면 상대 낙인 +1
   if ((tc = takeTrap(g, ctx, o, "lavaPit"))) {
     att.exhausted = true;
-    const big = effAtk(p, att) >= 4;
+    const big = effAtk(p, att, g) >= 4;
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + ${cn(att)} 파괴${big ? ` + ${p.name} 에게 낙인 카운터 +1` : ""}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + ${cn(att)} 破壊${big ? ` + ${p.name} に烙印カウンター+1` : ""}`);
     trapKill(p, att);
     if (big) p.brand = (p.brand || 0) + 1;
@@ -1453,7 +1460,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   // 식탐(gluttony): 무효 + 자신 몬스터 1체 체력 +12(지속)
   if ((tc = takeTrap(g, ctx, o, "gluttony"))) {
     att.exhausted = true;
-    const fed = [...o.field].filter((x) => x.hatch == null).sort((a2, b2) => effAtk(o, b2) - effAtk(o, a2))[0];
+    const fed = [...o.field].filter((x) => x.hatch == null).sort((a2, b2) => effAtk(o, b2, g) - effAtk(o, a2, g))[0];
     if (fed) fed.defMod = (fed.defMod || 0) + 12;
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효${fed ? ` + ${cn(fed)} 체력 +12(지속)` : ""}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効${fed ? ` + ${cn(fed)} 体力+12(持続)` : ""}`);
     return;
@@ -1463,7 +1470,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(tgt0)} 을(를) 제물로 상대 몬스터 2체 파괴`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(tgt0)} を生贄に相手モンスター2体を破壊`);
     ctx.destroyMonster(o, tgt0);
     trapKill(p, att);
-    const other = [...p.field].filter((x) => x.uid !== att.uid).sort((a2, b2) => (effAtk(p, b2) + effDef(p, b2)) - (effAtk(p, a2) + effDef(p, a2)))[0];
+    const other = [...p.field].filter((x) => x.uid !== att.uid).sort((a2, b2) => (effAtk(p, b2, g) + effDef(p, b2)) - (effAtk(p, a2, g) + effDef(p, a2)))[0];
     if (other && !g.over) trapKill(p, other);
     return;
   }
@@ -1729,7 +1736,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     if (p.field.length > 0) {
       o.maxMana = Math.max(1, o.maxMana - 1);
       let k = 0; const lim = tc.val || 3;
-      for (const tm of [...p.field].sort((a2, b2) => (effAtk(p, b2) + b2.def!) - (effAtk(p, a2) + a2.def!))) { if (k >= lim) break; trapKill(p, tm); k++; }
+      for (const tm of [...p.field].sort((a2, b2) => (effAtk(p, b2, g) + b2.def!) - (effAtk(p, a2, g) + a2.def!))) { if (k >= lim) break; trapKill(p, tm); k++; }
       ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 최대 마나 -1, 상대 몬스터 ${k}체 파괴`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 最大マナ-1, 敵モンスター${k}体破壊`);
     } else ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効`);
     return;
@@ -1764,7 +1771,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     const tv = tc.val || 0;
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> ${cn(att)} 파괴 + 공격 ${tv} 이하 상대 몬스터 전멸`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> ${cn(att)} 破壊 + 攻撃${tv}以下の敵モンスター全滅`);
     trapKill(p, att);
-    for (const tm of [...p.field]) if (effAtk(p, tm) <= tv) trapKill(p, tm);
+    for (const tm of [...p.field]) if (effAtk(p, tm, g) <= tv) trapKill(p, tm);
     return;
   }
 
@@ -1819,7 +1826,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   }
   // 독가시 마름쇠(caltrops, v37): 공격 몬스터 포함 상대 몬스터 최대 3체에 부패 2개씩
   if ((tc = takeTrap(g, ctx, o, "caltrops"))) {
-    const others = [...p.field].filter((x) => x.uid !== att.uid && x.hatch == null).sort((a2, b2) => effAtk(p, b2) - effAtk(p, a2)).slice(0, 2);
+    const others = [...p.field].filter((x) => x.uid !== att.uid && x.hatch == null).sort((a2, b2) => effAtk(p, b2, g) - effAtk(p, a2, g)).slice(0, 2);
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 상대 몬스터 ${1 + others.length}체에 카운터 2개`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 相手モンスター${1 + others.length}体にカウンター2個`);
     for (const x of others) { if (g.over) break; if (p.field.some((y) => y.uid === x.uid)) addDecay(g, ctx, p, x, 2); }
     if (!g.over && att.hatch == null) addDecay(g, ctx, p, att, 2);
@@ -1875,7 +1882,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃が ${atk} に半減 + 味方全員が反撃`,
     );
     const strikers = o.field.filter((m2) => m2.hatch == null);
-    const volley = strikers.reduce((s2, m2) => s2 + effAtk(o, m2), 0);
+    const volley = strikers.reduce((s2, m2) => s2 + effAtk(o, m2, g), 0);
     if (volley > 0) {
       // v24 HP-combat: 반격 데미지도 누적. 치명이면 파괴 + 초과분 관통 (기합은 체력 1로 생존)
       const maxHp2 = effDef(p, att);
@@ -2049,7 +2056,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
 /** 검귀(v36 berserk): 자신 필드의 몬스터를 공격 — HP 전투 규칙 그대로(누적·기합), 관통 없음. */
 function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: FieldMon, pierce = false): void {
   const p = g.players[g.cur];
-  const atk = effAtk(p, att);
+  const atk = effAtk(p, att, g);
   ctx.ev.push({ type: "attack", player: side(g, p), uid: att.uid, targetUid: target.uid });
   ctx.ev.push({ type: "hit", uid: target.uid });
   if (target.hatch != null) {
@@ -2116,7 +2123,7 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
     case "preyExec": { // 포식자: 상대 3~4코 몬스터 1체 파괴 → 성공 시 최대 마나 +1
       const cand = o.field.filter((x) => ((x.cost ?? 0) === 3 || (x.cost ?? 0) === 4) && !hasPassive(x, "aura"));
       if (cand.length) {
-        const tgt = cand.sort((a2, b2) => (effAtk(o, b2) + (b2.def ?? 0)) - (effAtk(o, a2) + (a2.def ?? 0)))[0];
+        const tgt = cand.sort((a2, b2) => (effAtk(o, b2, g) + (b2.def ?? 0)) - (effAtk(o, a2, g) + (a2.def ?? 0)))[0];
         ctx.log(`  └ ${cn(tgt)} 을(를) 포식한다`, `  └ ${cn(tgt)} を捕食する`);
         ctx.destroyMonster(o, tgt);
         if (!o.field.some((x) => x.uid === tgt.uid)) {
@@ -2398,7 +2405,7 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       else { const n = ctx.drawN(p, 4); ctx.log(`  └ 상대 체력 짝수 → ${n}장 드로우`, `  └ 相手の体力が偶数 → ${n}枚ドロー`); }
       break;
     case "smite": // GM9_0
-      for (const tm of [...o.field]) if (effAtk(o, tm) <= v) ctx.destroyMonster(o, tm);
+      for (const tm of [...o.field]) if (effAtk(o, tm, g) <= v) ctx.destroyMonster(o, tm);
       ctx.log(`  └ 공격 ${v} 이하 상대 몬스터 전멸`, `  └ 攻撃${v}以下の敵モンスターを全滅`);
       break;
     case "summonRandom": { // GM10_2
@@ -3122,7 +3129,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       break;
     }
     case "RUNE1": { // 룬 학문 - 초급: 코스트5 이상 상대 몬스터 1체 파괴 (강한 것부터)
-      const targets = o.field.filter((m) => (m.cost ?? 0) >= 5).sort((a, b) => (effAtk(o, b) + b.def!) - (effAtk(o, a) + a.def!));
+      const targets = o.field.filter((m) => (m.cost ?? 0) >= 5).sort((a, b) => (effAtk(o, b, g) + b.def!) - (effAtk(o, a, g) + a.def!));
       if (targets[0]) { ctx.log(`${tag(p, card)} ${cn(targets[0])} 파괴`, `${tag(p, card)} ${cn(targets[0])} 破壊`); ctx.destroyMonster(o, targets[0]); }
       break;
     }
@@ -3308,7 +3315,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "GOLIATH_HUNT": { // 자이언트 킬링(v34): 최대 체력 10+ 몬스터 중 최고가치 1체 파괴
       const gts = o.field.filter((mm) => effDef(o, mm) >= 10)
-        .sort((a2, b2) => (effAtk(o, b2) + effDef(o, b2)) - (effAtk(o, a2) + effDef(o, a2)));
+        .sort((a2, b2) => (effAtk(o, b2, g) + effDef(o, b2)) - (effAtk(o, a2, g) + effDef(o, a2)));
       if (gts.length) { ctx.log(`${tag(p, card)} 거벽 ${cn(gts[0])} 파괴!`, `${tag(p, card)} 巨壁 ${cn(gts[0])} を破壊！`); ctx.destroyMonster(o, gts[0]); }
       break;
     }
@@ -3446,11 +3453,11 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "WALLBREAK1": case "SNIPE1": { // 조건부 단일 제거(v34): 성벽 파쇄=공격력 2 이하 · 저격=체력 3 이하
       const cond = card.id === "WALLBREAK1"
-        ? (mm: FieldMon, ow: PlayerState) => effAtk(ow, mm) <= 2
+        ? (mm: FieldMon, ow: PlayerState) => effAtk(ow, mm, g) <= 2
         : (mm: FieldMon, ow: PlayerState) => curHp(ow, mm) <= 3;
       const cands2: Array<{ mm: FieldMon; ow: PlayerState }> = [];
       for (const ow of [o, p]) for (const mm of ow.field) if (cond(mm, ow) && !(ow !== p && hasPassive(mm, "aura"))) cands2.push({ mm, ow });
-      const best = cands2.sort((a2, b2) => (effAtk(b2.ow, b2.mm) + effDef(b2.ow, b2.mm)) - (effAtk(a2.ow, a2.mm) + effDef(a2.ow, a2.mm)))[0];
+      const best = cands2.sort((a2, b2) => (effAtk(b2.ow, b2.mm, g) + effDef(b2.ow, b2.mm)) - (effAtk(a2.ow, a2.mm, g) + effDef(a2.ow, a2.mm)))[0];
       if (best) { ctx.log(`${tag(p, card)} ${cn(best.mm)} 파괴`, `${tag(p, card)} ${cn(best.mm)} 破壊`); ctx.destroyMonster(best.ow, best.mm); }
       break;
     }
@@ -3458,7 +3465,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       const isAtk = card.id === "WALLBREAK2";
       const lim = 2;
       let k = 0;
-      for (const mm of [...o.field]) if ((isAtk ? effAtk(o, mm) : curHp(o, mm)) <= lim) { ctx.destroyMonster(o, mm); k++; }
+      for (const mm of [...o.field]) if ((isAtk ? effAtk(o, mm, g) : curHp(o, mm)) <= lim) { ctx.destroyMonster(o, mm); k++; }
       ctx.log(`${tag(p, card)} ${isAtk ? "공격력" : "체력"} ${lim} 이하 몬스터 ${k}체 파괴`, `${tag(p, card)} ${isAtk ? "攻撃力" : "体力"}${lim}以下のモンスター${k}体を破壊`);
       break;
     }
@@ -3668,7 +3675,7 @@ function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): 
   if (m.hatch != null)
     ctx.log(`<span class="t">${p.name}</span> ${cn(card)} 소환 (부화 ${m.hatch}턴 / 내구도 ${m.dur})`, `<span class="t">${p.name}</span> ${cn(card)} 召喚 (孵化${m.hatch}ターン / 耐久${m.dur})`);
   else
-    ctx.log(`<span class="t">${p.name}</span> ${cn(card)} 소환 (공${effAtk(p, m)}/체${effDef(p, m)})`, `<span class="t">${p.name}</span> ${cn(card)} 召喚 (攻${effAtk(p, m)}/体${effDef(p, m)})`);
+    ctx.log(`<span class="t">${p.name}</span> ${cn(card)} 소환 (공${effAtk(p, m, g)}/체${effDef(p, m)})`, `<span class="t">${p.name}</span> ${cn(card)} 召喚 (攻${effAtk(p, m, g)}/体${effDef(p, m)})`);
   ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid, id: m.id });
   applyEnterAura(g, ctx, p, m);
   // GM5_2: summon-buff aura grants +1/+1 to each monster you summon
@@ -3914,8 +3921,8 @@ export function playBlockReason(g:GameState, who:Side, card:CardInst):{ko:string
     if (card.id === "COUNTERCALC" && o0.enchants.length === 0) { return reason("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); }
     if (card.id === "AMBUSH" && o0.maxMana !== 4) { return reason("  └ 상대 최대 마나가 4가 아니라 사용 불가", "  └ 相手の最大マナが4ではないため使用不可"); }
     if (card.id === "TRUMPET" && p.field.length === 0) { return reason("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); }
-    if (card.id === "WALLBREAK1" && ![...o0.field, ...p.field].some((m) => effAtk(o0, m) <= 2)) { return reason("  └ 공격력 2 이하 몬스터가 없습니다", "  └ 攻撃力2以下のモンスターがいません"); }
-    if (card.id === "WALLBREAK2" && !o0.field.some((m) => effAtk(o0, m) <= 2)) { return reason("  └ 공격력 2 이하 적 몬스터가 없습니다", "  └ 攻撃力2以下の敵モンスターがいません"); }
+    if (card.id === "WALLBREAK1" && ![...o0.field, ...p.field].some((m) => effAtk(o0, m, g) <= 2)) { return reason("  └ 공격력 2 이하 몬스터가 없습니다", "  └ 攻撃力2以下のモンスターがいません"); }
+    if (card.id === "WALLBREAK2" && !o0.field.some((m) => effAtk(o0, m, g) <= 2)) { return reason("  └ 공격력 2 이하 적 몬스터가 없습니다", "  └ 攻撃力2以下の敵モンスターがいません"); }
     if (card.id === "SNIPE1" && ![...o0.field, ...p.field].some((m) => curHp(o0, m) <= 3)) { return reason("  └ 체력 3 이하 몬스터가 없습니다", "  └ 体力3以下のモンスターがいません"); }
     if (card.id === "SNIPE2" && !o0.field.some((m) => curHp(o0, m) <= 2)) { return reason("  └ 체력 2 이하 적 몬스터가 없습니다", "  └ 体力2以下の敵モンスターがいません"); }
     if (card.id === "INQUISITION" && !o0.deck.some(c=>c.id==="HIDDEN") && ![...o0.deck, ...o0.discard, ...o0.field].some((m) => m.t === "mon" && m.tribe)) { return reason("  └ 상대에게 종족 몬스터가 없습니다", "  └ 相手に種族モンスターがいません"); }
@@ -4526,7 +4533,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
         if (uid === "ambush") tm.directOnly = true; else if (!hasPassive(tm, uid)) (tm.passivesG ??= []).push(uid);
         ctx.log(`<span class="t">${p.name}</span> 나이트로드의 비기 → ${cn(tm)} 이(가) '${PASSIVES[uid]?.ko.name ?? uid}'을(를) 얻는다`, `<span class="t">${p.name}</span> ナイトロードの秘技 → ${cn(tm)} が「${PASSIVES[uid]?.ja.name ?? uid}」を得る`);
       }
-      const ass = [...p.field].filter((x) => isAssassinCard(x)).sort((a2, b2) => effAtk(p, b2) - effAtk(p, a2)).slice(0, 2);
+      const ass = [...p.field].filter((x) => isAssassinCard(x)).sort((a2, b2) => effAtk(p, b2, g) - effAtk(p, a2, g)).slice(0, 2);
       for (const a3 of ass) { a3.atkMod = (a3.atkMod || 0) + 3; ctx.log(`  └ ${cn(a3)} 공격력 +3(지속)`, `  └ ${cn(a3)} 攻撃力+3(持続)`); }
       return;
     }
@@ -4986,7 +4993,7 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
       const m = p.field.find((x) => x.uid === action.uid);
       if (!m || m.exhausted) break;
       if (m.hatch != null) { ctx.log(`  └ <span class="dmg">알은 공격할 수 없습니다</span>`, `  └ <span class="dmg">卵は攻撃できません</span>`); break; }
-      if (glassBanActive(g) && Math.abs(effAtk(p, m) - effDef(p, m)) >= 4) { ctx.log(`  └ <span class="dmg">전략 변경</span>: 공격력과 체력의 차가 4 이상이면 공격 불가`, `  └ <span class="dmg">戦略変更</span>: 攻撃力と体力の差が4以上なら攻撃不可`); break; }
+      if (glassBanActive(g) && Math.abs(effAtk(p, m, g) - effDef(p, m)) >= 4) { ctx.log(`  └ <span class="dmg">전략 변경</span>: 공격력과 체력의 차가 4 이상이면 공격 불가`, `  └ <span class="dmg">戦略変更</span>: 攻撃力と体力の差が4以上なら攻撃不可`); break; }
       const o = g.players[1 - g.cur];
       // 몰락 귀족(lowAtkBan): 코스트 2 이하 몬스터 공격 봉쇄
       if (o.field.some((x) => x.aura === "lowAtkBan") && (m.cost ?? 0) <= 2) { ctx.log(`  └ <span class="dmg">몰락 귀족</span>: 코스트 2 이하는 공격할 수 없다`, `  └ <span class="dmg">没落貴族</span>: コスト2以下は攻撃できない`); break; }

@@ -4,7 +4,7 @@
 // ============================================================
 import { artUrl } from "./cardArt";
 export { ART_V, artUrl } from "./cardArt";
-import type { CardInst, FieldMon, PlayerState } from "../shared/types";
+import type { CardInst, FieldMon, PlayerState, GameState } from "../shared/types";
 import { FRAME_BACK, PASSIVES, cardPassives, frameFor, fieldFrameFor } from "../shared/cards";
 import { curHp, effAtk, effDef, playCost } from "../shared/engine";
 import { cardName, cardText, getLang, t } from "../i18n";
@@ -51,6 +51,8 @@ export function decoratePassives(c: CardInst, txt: string): string {
 }
 
 export interface CardOpts {
+  game?: GameState; // live field conditions, including the opponent
+
   size?: "board" | "mkt" | "hand";
   fullArt?: boolean; // zoom overlay: load the full-resolution art (default: 384px thumb)
   /** Gallery grids (card list / deck pool / pickers) render hundreds of cards —
@@ -646,7 +648,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   node.setAttribute("aria-label", `${nm} · ${labels[typeIndex]} · ${cost}`);
 
   if (c.t === "mon") {
-    const a = opt.field && opt.owner ? effAtk(opt.owner, c as FieldMon) : c.atk!;
+    const a = opt.field && opt.owner ? effAtk(opt.owner, c as FieldMon, opt.game) : c.atk!;
     // v24 HP-combat: the shield slot shows CURRENT HP — on the field AND in zoom
     // (v29: zoom used to show max HP, so a damaged monster read as healthy there).
     // 최대 체력은 몬스터 칩에 표시하지 않는다 (숫자 하나 + 손상 시 빨간색만).
