@@ -1,0 +1,26 @@
+{
+  "deployedAt": "2026-09-10T08:20:47.221405+00:00",
+  "url": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "versionId": "fa3e9a09-0a69-4396-81bf-e2ddcea6845e",
+  "sourceCommit": "a0bfc93bd7ee312ca0f1b2aeaa1e5730986d02bf",
+  "branch": "codex/duel-motion-layout-20260910",
+  "remoteMatchingAssets": 52,
+  "remoteSmoke": "HTTP 200, mounted app, no JavaScript exceptions; unauthenticated startup only",
+  "browserSuites": [
+    "duel-motion-layout-browser",
+    "paper-card-browser",
+    "duel-impact-browser",
+    "board-perspective-browser",
+    "duel-render-audit-browser"
+  ],
+  "checks": [
+    "typecheck client and server",
+    "production build including design guard",
+    "paper-card geometry and turn direction",
+    "stagecraft coin and play restrictions",
+    "opening-hands rules and hidden identities",
+    "duel-ui DOM and responsive solver",
+    "git diff --check"
+  ]
+}
