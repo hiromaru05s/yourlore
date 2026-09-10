@@ -13,6 +13,7 @@ import { seekerLevel } from "../ui/seekerLevel";
 import "../styles/home.css";
 
 export function mountHome(app: App): Screen {
+  void import("../ui/duelReadiness").then(({warmDuel})=>warmDuel());
   const u = app.user;
   const level = seekerLevel(u?.wins ?? 0, u?.losses ?? 0);
   const shortLabels: Record<string, string> = { tutorial: "home.nav.guide", deck: "home.nav.deck", cards: "home.nav.cards", lb: "home.nav.ranking" };

@@ -596,7 +596,7 @@ export function ensureCardCompositing(): void {
   const baseWindow = 'M .082 .221 Q .082 .177 .134 .202 L .486 .202 L .5 .214 L .514 .202 L .868 .202 Q .925 .177 .922 .221 L .922 .89 Q .928 .932 .878 .94 Q .58 .966 .50 .934 Q .445 .965 .13 .94 Q .077 .933 .082 .887 Z';
   const fieldWindow = 'M .09 .158 Q .085 .088 .47 .054 L .50 .075 L .53 .054 Q .916 .088 .91 .158 L .91 .88 Q .916 .935 .87 .941 Q .59 .968 .50 .941 Q .42 .967 .13 .941 Q .087 .935 .09 .88 Z';
   svg.innerHTML = `<defs>
-    <filter id="celestial-matte" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 10 10 10 0 -0.1" result="matte"/><feComposite in="SourceGraphic" in2="matte" operator="in"/></filter>
+    <filter id="celestial-matte" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 10 10 10 0 -0.65" result="matte"/><feComposite in="SourceGraphic" in2="matte" operator="in"/></filter>
     <clipPath id="celestial-base-spell" clipPathUnits="objectBoundingBox"><path d="${baseWindow}"/></clipPath>
     <clipPath id="celestial-field-spell" clipPathUnits="objectBoundingBox"><path d="${fieldWindow}"/></clipPath>
   </defs>`;

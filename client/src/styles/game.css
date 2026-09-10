@@ -753,3 +753,57 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
 .pile--shelf > .pile-print > .card { --cw:var(--card-w);--ch:var(--card-h);width:var(--cw);height:var(--ch);pointer-events:none; }
 .pile--shelf > .pile-count { transform:translateZ(calc(var(--shelf-elevation,12px) + 1px));z-index:6; }
 .awaiting-board .pile--shelf > .pile-print,.duel-opening .pile--shelf > .pile-print,.pile--shelf.is-shuffling > .pile-print { visibility:hidden; }
+
+/* September 10: compact controls return vertical space to the two fields. */
+.game .market-sub--supply { display:flex;align-items:center;gap:7px;padding:7px 5px 10px; }
+.game .market-sub--supply .sub-head { position:static;flex:0 0 auto;transform:none;width:auto; }
+.game #refreshBtn { position:relative;display:grid;place-items:center;width:clamp(25px,calc(var(--card-w)*.5),42px);height:clamp(25px,calc(var(--card-w)*.5),42px);min-height:0;padding:0;border-radius:50%;border:1px solid #d7bc80;background:radial-gradient(circle at 40% 25%,#426077,#172b40 68%);box-shadow:inset 0 0 0 2px #102032,inset 0 -3px 3px #070c1c,0 2px 3px #080f2059;font-size:11px; }
+.game .refresh-btn .rf-ico { font-size:clamp(17px,calc(var(--card-w)*.35),29px);line-height:1;transform:translateY(-2px); }
+.game .refresh-btn .rf-cost { position:absolute;bottom:-7px;font-size:8px;line-height:12px;padding:0 3px;border-radius:5px;color:#efe2bd;background:#182b3d;border:1px solid #a58d5f; }
+.game .refresh-btn:disabled { filter:grayscale(.65);opacity:.55; }
+.game .reroll-hint { position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%); }
+.game .market-counter { padding-top:4px;padding-bottom:4px; }
+.game .rift-button { margin-left:calc(var(--card-w)*.65); }
+.game .portrait:not(.portrait--opp) .pt-ring::after { transform:scaleY(-1); }
+.game .portrait:not(.portrait--opp) .pt-ring .avatar { inset:8% 12% 16%;border-radius:30% 30% 35% 35%; }
+.game .pcluster--me .pt-name--vitals { position:absolute;top:100%;margin-top:2px;bottom:auto;left:0;transform:none;width:100%;max-width:none;height:auto;line-height:1.35;text-align:left;padding:0;font-size:clamp(9px,.8vw,12px);color:#243449;background:none;text-shadow:0 1px #fff8; }
+.game .mp-clock.opp .tc-dial { background:radial-gradient(circle at 40% 25%,#693b40,#311c29 75%);box-shadow:inset 0 0 0 1px #d89d89,0 3px 7px #24102055; }
+.game .mp-clock.opp .tc-progress { stroke:#ecaca0; }
+.game .mp-clock.opp .tc-track { stroke:#f8b5a12e; }
+.game .mp-clock.opp .tc-num { color:#ffe2d7; }
+/* Squat, faceted mana stones; an earned slot has a short weighty pulse. */
+.game .portrait .mana-crystals { height:24px;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:3px;align-content:start;justify-items:center;overflow:visible; }
+.game .portrait .mana-crystal { position:relative;width:100%;max-width:18px;height:auto;aspect-ratio:1;background:linear-gradient(145deg,#547082,#182b3f 45%,#080f21);border:1px solid #8d8a76;border-radius:25%;box-shadow:inset 1px 1px 0 #b6c7cd66,inset -2px -2px 1px #020913,0 2px 1px #17243466;filter:none; }
+.game .portrait .mana-crystal::before { content:'';position:absolute;inset:21%;border-radius:17%;background:#1a3043;box-shadow:inset 1px 1px 0 #8aafbb55; }
+.game .portrait .mana-crystal.is-lit { border-color:#b7cfca;background:conic-gradient(from 45deg,#1f719c,#092941,#4796b2,#93dbeb,#1f719c);box-shadow:inset 1px 1px 0 #e6faff,inset -2px -2px 1px #09253d,0 2px 1px #142e43; }
+.game .portrait .mana-crystal.is-lit::before { background:linear-gradient(145deg,#d5f5ff,#5eaeca 45%,#286886);box-shadow:inset 1px 1px 0 #f6ffffaa; }
+.game .portrait .mana-crystal.is-gained { animation:manaStoneGain .45s cubic-bezier(.2,.7,.3,1) both; }
+@keyframes manaStoneGain { 0%{transform:translateY(-12px) scale(.6);filter:brightness(1.7)}65%{transform:translateY(2px) scale(1.12,.88)}100%{transform:none;filter:none} }
+.cointoss-ov { background:radial-gradient(ellipse at center,#292c3240,#22252c80);backdrop-filter:grayscale(.5); }
+.opening-card-flight { isolation:isolate;transform-style:flat!important; }
+.fx-card-flight,.fx-card-flight:hover { background:transparent!important;border:0!important;box-shadow:none!important; }
+@media(max-width:700px) and (orientation:portrait){
+ .game .market-sub--supply { gap:4px;padding:6px 3px 9px; }
+ .game .portrait .mana-crystals { gap:2px; }
+ .game .pcluster--me .pt-name--vitals { top:100%;font-size:8px; }
+}
+@media(prefers-reduced-motion:reduce){.game .portrait .mana-crystal.is-gained { animation:none; }}
+/* A single preparation cover. The actual board never appears before its first
+   complete render; no temporary raster table or partial labels are exposed. */
+.duel-preparing > .game,.duel-preparing > canvas { visibility:hidden!important; }
+.duel-preparing::after { content:'LORE';position:fixed;inset:0;display:grid;place-items:center;background:#eeeae3;color:#9a825b;font:24px Georgia,serif;letter-spacing:.35em;z-index:300; }
+/* Clock updates must never resize the market row or move a shelf at touchdown. */
+.game .mid-aside { height:0;min-height:0;overflow:visible;justify-content:center;align-self:center; }
+.game .mid-aside > * { flex-shrink:0; }
+.game .refresh-btn .rf-ico { background:none;width:auto;height:auto; }
+.game .portrait .mana-crystals { height:36px;align-items:start;row-gap:2px; }
+.game .portrait .mana-crystal { width:min(100%,calc(36px / var(--mana-rows,1) - 2px)); }
+
+.game #refreshBtn:hover:not(:disabled),.game #refreshBtn:focus-visible { filter:brightness(1.16);outline:1px solid #d8eafa;outline-offset:2px; }
+.game #refreshBtn:active:not(:disabled) { filter:brightness(.85); }
+@media(min-width:701px){
+ .game #meRow,.game #oppRow { align-self:stretch; }
+ .game .prow > .field-block { height:100%; }
+ .game .prow .zones { height:100%; }
+ .game .zone-row:has(> .zone-mon) { flex:1;min-height:var(--card-h);display:flex;align-items:center; }
+}

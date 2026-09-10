@@ -1,3 +1,4 @@
+import {prepareDuel} from './duelReadiness';
 // ============================================================
 // LORE — board view. Renders the whole game from a GameState
 // (from the viewer's perspective) and wires interaction handlers.
@@ -84,14 +85,14 @@ export class GameView {
     this.root = root;
     this.you = you;
     this.h = h;
+    delete this.root.dataset.sceneReady;delete this.root.dataset.boardRendered;delete this.root.dataset.preloadedImages;
     this.root.dataset.tableState=typeof WebGL2RenderingContext!=='undefined'?'loading':'fallback';
     this.buildSkeleton();
     this.cleanups.push(installGameCursor(this.root));
-    if (typeof WebGL2RenderingContext !== 'undefined') {
-      void import('./duelScene').then(({ mountDuelScene }) => {
-        if (!this.disposed) this.disposeScene = mountDuelScene(this.root);
-      }).catch(() => { this.root.dataset.tableState='fallback'; });
-    }
+    const mount=typeof WebGL2RenderingContext!=='undefined'
+      ? import('./duelScene').then(({mountDuelScene})=>{if(!this.disposed)this.disposeScene=mountDuelScene(this.root);}).catch(()=>{this.root.dataset.tableState='fallback';})
+      : Promise.resolve();
+    prepareDuel(this.root,mount);
   }
 
   private buildSkeleton(): void {
@@ -420,6 +421,7 @@ export class GameView {
     }
     for(const id of readyPiles)this.root.querySelector(`#${id}`)?.classList.add('pile--3d-ready');
     projectBoardDOM(this.root);
+    this.root.dataset.boardRendered="true";
   }
 
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {
@@ -781,7 +783,7 @@ export class GameView {
       <div class="market-heading"><span>${t("duel.market")}</span></div>
       <div class="market-counter">
         <div class="market-sub market-sub--supply">
-          <div class="sub-head"><button class="refresh-btn" id="refreshBtn" aria-describedby="rerollHint"><span class="rf-ico">⟳</span> ${t("duel.rerollFour").replace("4", String(owner.supply.length))} <b>1</b> ◈</button></div>
+          <div class="sub-head"><button class="refresh-btn" id="refreshBtn" aria-label="${esc(t("duel.rerollFour").replace("4", String(owner.supply.length)))} · 1 ◈" aria-describedby="rerollHint"><span class="rf-ico" aria-hidden="true">⟳</span><span class="rf-cost" aria-hidden="true"><b>1</b> ◈</span></button></div>
           <div class="market-cards" id="supplyMarket"></div>
           <span class="reroll-hint" id="rerollHint">${t("duel.rerollHint").replace("4", String(owner.supply.length))}</span>
         </div>
@@ -898,6 +900,8 @@ export class GameView {
     const rtok = me.refreshTokens || 0; // 렐릭 헌터(v36): 카운터가 있으면 무료 갱신
     rb.disabled = !myTurn || !!g.pending || (me.mana < 1 && rtok <= 0);
     const rbCost = rb.querySelector("b"); if (rbCost) rbCost.textContent = rtok > 0 ? `0 (${rtok})` : "1";
+    rb.title=`${t("duel.rerollFour").replace("4",String(owner.supply.length))} · ${rbCost?.textContent??"1"} ◈`;
+    rb.setAttribute("aria-label",rb.title);
     rb.onpointerenter = () => mk.classList.add("reroll-focus");
     rb.onpointerleave = () => mk.classList.remove("reroll-focus");
     rb.onfocus = () => mk.classList.add("reroll-focus");
@@ -911,16 +915,17 @@ export class GameView {
     const emax = effMaxMana(p);
     const hp = Math.max(0, p.hp);
     const hpPct = hp / p.maxHp * 100;
-    const crystals = Array.from({ length: Math.min(MAX_MANA, Math.max(0, emax)) }, (_, i) => `<i class="mana-crystal${i < p.mana ? " is-lit" : ""}" aria-hidden="true"></i>`).join("");
+    const previousMax=el.querySelectorAll(".mana-crystal").length;
+    const crystals = Array.from({ length: Math.min(MAX_MANA, Math.max(0, emax)) }, (_, i) => `<i class="mana-crystal${i < p.mana ? " is-lit" : ""}${previousMax>0&&i>=previousMax?" is-gained":""}" aria-hidden="true"></i>`).join("");
     const avatar = isMe ? MY_AVATAR : OPP_AVATAR;
     const seeker = avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE" ? avatar : isMe ? "SEEKER_BLUE" : "SEEKER_RED";
     el.innerHTML = `
       <span class="pt-vitals"><span class="pt-hp" title="HP ${hp}/${p.maxHp}"><span class="pt-hp-ico">HP</span><b id="hp-${sd}">${hp}</b><span class="pt-hp-max">/${p.maxHp}</span></span>
-      <span class="pt-hpbar hpbar" id="hpbar-${sd}" role="meter" aria-label="HP" aria-valuemin="0" aria-valuemax="${p.maxHp}" aria-valuenow="${hp}"><i style="width:${Math.min(100, hpPct)}%"></i></span></span>
+      <span class="pt-hpbar hpbar" id="hpbar-${sd}" role="meter" aria-label="HP" aria-valuemin="0" aria-valuemax="${p.maxHp}" aria-valuenow="${hp}"><i style="width:${Math.min(100, hpPct)}%"></i></span>${isMe?`<span class="pt-name pt-name--vitals">${esc(p.name)}</span>`:""}</span>
       <span class="pt-ring">${avatarHtml(seeker, p.name, 100)}</span>
       <span class="pt-mana pips" aria-label="${t("game.mana")} ${p.mana}/${emax}"><span class="mana-readout">${t("game.mana")} <b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span><span class="mana-crystals" style="--mana-rows:${Math.max(1,Math.ceil(Math.min(MAX_MANA,emax)/10))}">${crystals}</span></span>
       ${(p.brand ?? 0) > 0 ? `<span class="pt-brand" title="${esc(t("game.brandTip").replace("{n}", String(p.brand)))}">${t("game.brand")} <b>${p.brand}</b></span>` : ""}
-      <span class="pt-name">${esc(p.name)}</span>`;
+      ${!isMe?`<span class="pt-name">${esc(p.name)}</span>`:""}`;
   }
 
   /** MY hand — straight upright cards (no fan) in two states:
@@ -929,7 +934,7 @@ export class GameView {
    *    Any press on it just expands the hand.
    *  - open: large, bottom-center. Click a card = zoom preview; DRAG it up = play. */
   private renderHand(g: GameState, me: PlayerState, myTurn: boolean): void {
-    this.cancelHandDrag?.();
+    // Preserve an in-flight pointer session across authoritative board renders.
     const handEl = this.q("hand");
     handEl.innerHTML = "";
     me.hand.forEach((c, idx) => {
@@ -940,7 +945,7 @@ export class GameView {
       if(!aff)card.dataset.blockReason=!myTurn?t('play.block.turn'):g.pending?t('play.block.pending'):me.mana<pc?t('play.block.mana'):(getLang()==='ja'?blocked?.ja:getLang()==='ko'?blocked?.ko:null)||t('play.block.cond');
       card.style.setProperty("--hi", String(idx));
       card.style.zIndex = String(idx);
-      this.bindHandCard(card, c, aff);
+      this.bindHandCard(card, c);
       handEl.appendChild(card);
     });
     this.layoutHand();
@@ -972,7 +977,7 @@ export class GameView {
   }
 
   /** Drag onto the visible board to play; return to the hand to cancel. */
-  private bindHandCard(card: HTMLElement, c: CardInst, aff: boolean): void {
+  private bindHandCard(card: HTMLElement, c: CardInst): void {
     card.style.touchAction = "none";
     card.draggable = false;
     card.addEventListener("dragstart", (e) => e.preventDefault());
@@ -986,23 +991,21 @@ export class GameView {
       // pointer. Mouse, pen and touch then follow one uninterrupted gesture.
       try { card.setPointerCapture(e.pointerId); } catch { /* detached/legacy */ }
       const sx = e.clientX, sy = e.clientY;
+      const sourceWidth=card.offsetWidth,sourceHeight=card.offsetHeight;
       let ghost: HTMLElement | null = null;
       let done = false;
       let guide: HTMLElement | null = null;
       const destination = c.t === "mon" ? this.root.querySelector<HTMLElement>("#meRow .zone-mon") : null;
-      const dropBounds = () => {
-        const top = this.q("oppRow").getBoundingClientRect();
-        const bottom = this.q("meRow").getBoundingClientRect();
-        return c.t==='mon' ? { left: bottom.left, right: bottom.right, top: top.top - 12, bottom: bottom.bottom + 16 }
-          : {left:12,right:innerWidth-12,top:40,bottom:innerHeight-12};
+      // Gesture-space cancellation is stable even when opening/re-rendering the
+      // hand moves its DOM underneath the pointer. Both types use the whole board.
+      const dropBounds = () => ({left:8,right:innerWidth-8,top:24,bottom:innerHeight-8});
+      const canDropAt = (x:number,y:number) => {
+        const r=dropBounds(),hand=this.q('hand').getBoundingClientRect();
+        const upward=sy-y>=28;
+        const aboveHand=y<hand.top-8;
+        return (upward||aboveHand)&&x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom;
       };
-      const canDropAt = (x: number, y: number) => {
-        const r = dropBounds(), hand = this.q("hand").getBoundingClientRect();
-        const overHand = x >= hand.left && x <= hand.right && y >= hand.top && y <= hand.bottom;
-        // Expanding the hand must not move the cancellation area under a spell drag.
-        const returnedToHand=overHand&&(c.t==='mon'||sy-y<28);
-        return !returnedToHand && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
-      };
+      const playableNow=()=>this.root.querySelector<HTMLElement>(`#hand .card[data-uid="${CSS.escape(c.uid)}"]`)?.classList.contains('is-playable')??false;
       const game = this.root.querySelector(".game") as HTMLElement | null;
 
       const cleanup = (): void => {
@@ -1015,13 +1018,15 @@ export class GameView {
         game?.classList.remove("drag-play");
         this.cancelHandDrag = null;
         try { card.releasePointerCapture(e.pointerId); } catch { /* already released */ }
-        card.removeEventListener("lostpointercapture", cleanup);
-        window.removeEventListener("pointermove", onMove);
-        window.removeEventListener("pointerup", onUp);
+
+        window.removeEventListener("pointermove", onMove, true);
+        window.removeEventListener("pointerup", onUp, true);
         window.removeEventListener("pointercancel", cleanup);
+        window.removeEventListener("blur", cleanup);
       };
       const onMove = (ev: PointerEvent): void => {
         if (done || ev.pointerId !== e.pointerId) return;
+        const aff=playableNow();
         if (!ghost) {
           if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < (e.pointerType === 'touch' ? 10 : 6)) return;
           try { card.setPointerCapture(ev.pointerId); } catch { /* ok */ }
@@ -1036,8 +1041,8 @@ export class GameView {
           // Field-sized silhouette, with hand aspect ratio and proportional seals.
           const field = this.root.querySelector<HTMLElement>("#meRow .zone-mon .card, #meRow .zone-mon .slot");
           const fieldWidth = field?.getBoundingClientRect().width || 64;
-          const width = Math.min(card.offsetWidth * .65 * .72, fieldWidth);
-          const height = width * card.offsetHeight / card.offsetWidth;
+          const width = Math.min(sourceWidth * .65 * .72, fieldWidth);
+          const height = width * sourceHeight / sourceWidth;
           ghost.style.setProperty("--cw", `${width}px`);
           ghost.style.setProperty("--ch", `${height}px`);
           ghost.style.width = `${width}px`;
@@ -1045,7 +1050,7 @@ export class GameView {
           // Text fitting stores pixel sizes on the source. Scale those too,
           // otherwise the smaller drag card inherits an oversized clipped title.
           for (const label of ghost.querySelectorAll<HTMLElement>("[style]")) {
-            if (label.style.fontSize.endsWith("px")) label.style.fontSize = `${parseFloat(label.style.fontSize) * width / card.offsetWidth}px`;
+            if (label.style.fontSize.endsWith("px")) label.style.fontSize = `${parseFloat(label.style.fontSize) * width / sourceWidth}px`;
           }
           document.body.appendChild(ghost);
           card.classList.add("is-dragging");
@@ -1088,17 +1093,19 @@ export class GameView {
         swallowNextClick(card);
         // The highlight and submission use the same board bounds.
         if (inPlayArea) {
-          if (aff) {
+          if (playableNow()) {
             setPlayOrigin(rel ? { left: rel.left, top: rel.top, width: rel.width, height: rel.height, dx: ev.clientX - sx, dy: ev.clientY - sy } : null);
             this.h.onPlay(c.uid); // uid, not index: the DOM can lag the logical state
           } else this.h.onBlockedPlay(c.uid); // explain WHY it can't be played (popup)
         } else setPlayOrigin(null); // dropped back on the hand — don't leak a stale origin
       };
       this.cancelHandDrag = cleanup;
-      card.addEventListener("lostpointercapture", cleanup);
-      window.addEventListener("pointermove", onMove);
-      window.addEventListener("pointerup", onUp);
+      // Losing capture when renderHand replaces the source does not cancel a
+      // gesture. Window capture listeners retain the release; pointercancel aborts.
+      window.addEventListener("pointermove", onMove, true);
+      window.addEventListener("pointerup", onUp, true);
       window.addEventListener("pointercancel", cleanup);
+      window.addEventListener("blur", cleanup);
     });
     card.onclick = (e) => {
       e.stopPropagation();

@@ -1,0 +1,25 @@
+{
+  "rounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "easing": "cubic-bezier(0.72, 0, 0.94, 0.35)",
+  "errors": [],
+  "checks": [
+    "neutral loading surface without raster flash",
+    "supply empty before lift",
+    "purchase shared WebGL depth without DOM overlay",
+    "fixed market stock retained",
+    "consecutive purchase cancellation commits both cards",
+    "eight shuffle cycles",
+    "accelerating heavy summon and bounded shake",
+    "startup labels hidden",
+    "opening flights keep shared depth until simultaneous handoff"
+  ]
+}

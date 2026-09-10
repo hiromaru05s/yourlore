@@ -21,6 +21,7 @@ try {
     assert(p.travel>=0 && p.travel<=1);
   }
   assert(drawPose(.25,true).bend>.35);
+  assert(drawPose(.4,true).ry<0,"right edge turns toward the viewer");
   for(const point of [[0,0,0],[.5,.78,.0025],[-.5,-.78,-.0025]])assert.deepEqual(bendPoint(...point,0,0),point);
   // A strip bent to a circular arc preserves length, unlike a scaled wave.
   let length=0,previous=bendPoint(0,-.78,0,.6,0);

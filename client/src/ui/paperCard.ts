@@ -16,7 +16,8 @@ export function drawPose(t:number, reveal:boolean) {
     bend:.56*peel + .12*settle,
     twist:.11*Math.sin(Math.PI*t)*Math.sin(Math.PI*2*t),
     rx:-.27*Math.sin(Math.PI*t),
-    ry:reveal ? Math.PI*(1-smooth(.12,.78,t)) : Math.PI,
+    // Right hand peels the right edge toward the viewer; hidden hands stay back-up.
+    ry:reveal ? Math.PI*(smooth(.12,.78,t)-1) : Math.PI,
     rz:-.14*Math.sin(Math.PI*t)+.035*settle,
   };
 }

@@ -403,3 +403,5 @@
 /* Public quest progress shares the existing persistent-card rail. */
 .buff-icon.buff-icon--quest { color: #f0ddff; border: 1px solid #9671bb; background: #20152e; cursor: pointer; }
 .quest-progress { position: absolute; inset: 35% 0 auto; text-align: center; font-weight: 800; font-size: 12px; text-shadow: 0 1px 3px #000; z-index: 3; }
+/* Optical baseline compensation shared by cost, attack and health seals. */
+.seal-value { transform:translateY(-.075em); }

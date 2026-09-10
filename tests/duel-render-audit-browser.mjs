@@ -53,7 +53,7 @@ const touchdown=await page.locator('#pile-myDisc .pile-print .card').boundingBox
 await page.screenshot({path:out+'/purchase-touchdown.png'});
 await page.evaluate(()=>{qa.clock=qa.start+1000;});await page.evaluate(()=>qa.c.queue);await page.evaluate(()=>qa.thaw());
 const settled=await page.locator('#pile-myDisc .pile-print .card').boundingBox();
-for(const k of ['x','y','width','height'])assert(Math.abs(touchdown[k]-settled[k])<1,`${k} changed at commit`);
+for(const k of ['x','y','width','height'])assert(Math.abs(touchdown[k]-settled[k])<1,`${k} changed at commit: ${JSON.stringify({touchdown,settled})}`);
 assert.equal(await page.evaluate(()=>qa.c.state.players[0].mana),1);
 assert.match(await page.locator('#fixedMarket .card').first().evaluate(e=>getComputedStyle(e).filter),/grayscale/);
 await page.screenshot({path:out+'/purchase-committed.png'});

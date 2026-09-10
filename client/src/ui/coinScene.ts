@@ -37,7 +37,7 @@ export async function mountCoinScene(host:HTMLElement,heads:boolean):Promise<(()
   if(!host.isConnected){maps.forEach(m=>m.dispose());renderer.dispose();return null;}
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setClearColor(0,0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.85;
   host.classList.add('ct-model');const rect=host.getBoundingClientRect();renderer.setSize(rect.width,rect.height,false);renderer.domElement.className='coin-model-canvas';host.append(renderer.domElement);
-  const scene=new T.Scene(),camera=new T.PerspectiveCamera(38,rect.width/rect.height,.1,50);camera.position.set(0,6.8,4.3);camera.lookAt(0,.65,0);
+  const scene=new T.Scene(),camera=new T.PerspectiveCamera(38,rect.width/rect.height,.1,50);camera.position.set(0,7.2,3.5);camera.lookAt(0,.65,0);
   scene.add(new T.HemisphereLight(0xffffff,0x303447,1.5));const key=new T.DirectionalLight(0xffefcf,2);key.position.set(-4,6,3);scene.add(key);
   const coin=createCoin(maps[0],maps[1]);scene.add(coin);
   const shade=document.createElement('canvas');shade.width=shade.height=64;const ctx=shade.getContext('2d')!,g=ctx.createRadialGradient(32,32,1,32,32,32);g.addColorStop(0,'#0a0b1590');g.addColorStop(1,'#0a0b1500');ctx.fillStyle=g;ctx.fillRect(0,0,64,64);

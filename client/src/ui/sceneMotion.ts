@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {bindBoardMotion,type BoardMotion} from './boardMotion';
 import {cardStock,type PileModel} from './pileModels';
-import {boardLens,layoutRect,cardUnit,screenToBoard,projectBoardDOM} from './boardProjection';
+import {boardLens,layoutRect,cardUnit,screenToBoard,projectBoardDOM,boardMatrix} from './boardProjection';
 import {capturePileSurface} from './cardSurface';
 type Item={group:T.Group;element:HTMLElement;pile?:PileModel;market:boolean;supply:boolean};
 const sat=(v:number)=>Math.max(0,Math.min(1,v));
@@ -57,21 +57,30 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       // Reuse the exact resting stock, sleeve, lights and table camera throughout.
       for(let i=0;i<n;i++){const m=cardStock(texture(req.target.dataset.sleeve!));scene.add(m);cards.push(m);}
       req.source.classList.add('is-shuffling');req.target.classList.add('is-shuffling');root.dataset.shufflePhase='lift';
-      try{await timeline(reduced?100:2450,req.signal,t=>{
-        const cycle=sat((t-.15)/.65)*8,round=Math.min(7,Math.floor(cycle)),phase=cycle-round;
-        root.dataset.shufflePhase=t<.15?'lift':t<.8?(phase<.45?'split':'interleave'):t<.93?'square':'land';
+      let impacted=false;
+      try{await timeline(reduced?100:2800,req.signal,t=>{
+        // Lift together, mix faster while carrying, square above the deck, then
+        // release the entire stack. No card drifts down during the mixing phase.
+        const mixing=sat((t-.19)/.51),cycle=Math.pow(mixing,1.5)*8;
+        const round=Math.min(7,Math.floor(cycle)),phase=cycle-round;
+        root.dataset.shufflePhase=t<.19?'lift':t<.70?(phase<.45?'split':'interleave'):t<.80?'square':'land';
         root.dataset.shuffleRound=String(round+1);
+        const lift=smooth(t/.19),travel=Math.pow(smooth(mixing),1.4),fall=sat((t-.8)/.15)**3;
+        const rebound=t>.95?Math.sin((t-.95)/.05*Math.PI)*unit*.065:0;
         cards.forEach((m,i)=>{
-          const lift=smooth(t/.15),travel=smooth((t-.08)/.77),land=smooth((t-.8)/.2);
-          const local=sat((phase-(i%4)*.025)/.9),split=t>=.15&&t<.8?Math.sin(local*Math.PI)**.7:0;
+          const local=sat((phase-(i%4)*.025)/.9),split=t>=.19&&t<.70?Math.sin(local*Math.PI)**.7:0;
           const side=(i+round)%2?1:-1;
           const x=a.left+a.width/2+(b.left+b.width/2-a.left-a.width/2)*travel;
           const z=a.top+a.height/2+(b.top+b.height/2-a.top-a.height/2)*travel;
           const rest=unit*(.144+(n<=1?0:i/(n-1))*Math.min(req.count,40)*.005);
           const fromY=unit*(.126+(n<=1?0:i/(n-1))*Math.min(req.count,40)*.004);
-          m.position.set(x-cx+split*side*unit*.8,fromY+(rest-fromY)*travel+unit*1.3*lift*(1-land)+i*unit*.009*split,z-cy+side*split*unit*.15);
+          m.position.set(x-cx+split*side*unit*.8,fromY+(rest-fromY)*travel+unit*1.65*lift*(1-fall)+rebound+i*unit*.009*split,z-cy+side*split*unit*.15);
           m.scale.setScalar(unit);m.rotation.set(-Math.PI/2+split*.08,0,side*split*.16);
         });
+        if(t>=.95&&!impacted&&!req.signal.aborted){impacted=true;if(!reduced){
+          window.dispatchEvent(new CustomEvent('lore:summon-impact',{detail:req.target.getBoundingClientRect()}));
+          root.querySelector('.stage')?.animate([{translate:'0 0'},{translate:'0 2px'},{translate:'0 -1px'},{translate:'0 0'}],{duration:180});
+        }}
       });
       if(disposed||req.signal.aborted)return false;
       req.target.dataset.count=String(req.count);req.source.dataset.count='0';
@@ -83,17 +92,28 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
     }
     const openingDecks=[...root.querySelectorAll<HTMLElement>('.pile--deck')].map(el=>({el,count:Number(el.dataset.count)||0}));
     const marketCards=[...root.querySelectorAll<HTMLElement>('#fixedMarket .card,#supplyMarket .card')];
-    const movingCards:Array<{element:HTMLElement;mesh:T.Group;map:T.Texture;index:number;supply:boolean;landed:boolean}>=[];
-    // Capture only the already-public market. Faces remain absent until their own flight.
-    try { await Promise.allSettled(marketCards.map(async(element)=>{
-      const surface=await capturePileSurface(element,openingDecks[0]?.el.dataset.sleeve||'/art/frames/back.webp',true);
-      if(disposed||req.signal.aborted||!surface.face)return;
-      const map=new T.CanvasTexture(surface.face);map.colorSpace=T.SRGBColorSpace;map.anisotropy=8;
-      const mesh=cardStock(texture(openingDecks[0].el.dataset.sleeve!),map);mesh.visible=false;scene.add(mesh);
-      const supply=element.parentElement?.id==='supplyMarket',siblings=[...element.parentElement!.querySelectorAll('.card')];
-      const index=supply?siblings.indexOf(element):siblings.length-1-siblings.indexOf(element);
-      movingCards.push({element,mesh,map,index,supply,landed:false});element.style.visibility='hidden';
-    }));
+    const movingCards:Array<{element:HTMLElement;face:HTMLElement;correction:DOMMatrix;index:number;supply:boolean;landed:boolean}>=[];
+    // Native card faces from first flight through landing: no second raster,
+    // alternate frame crop, WebGL texture resolution or all-at-once replacement.
+    try {
+      await Promise.all(marketCards.flatMap(e=>[...e.querySelectorAll('img')].map(i=>i.decode().catch(()=>{}))));
+      for(const element of marketCards){
+        const face=element.cloneNode(true) as HTMLElement;
+        const r=layoutRect(element),style=getComputedStyle(element);
+        face.classList.add('opening-card-flight');face.classList.remove('is-dim');face.removeAttribute('id');
+        face.style.cssText=`position:fixed;left:0;top:0;margin:0;width:${r.width}px;height:${r.height}px;--cw:${r.width}px;--ch:${r.height}px;font-size:${style.fontSize};transform-origin:0 0;z-index:127;pointer-events:none;transition:none;visibility:hidden;`;
+        const originals=element.querySelectorAll<HTMLElement>('*');
+        face.querySelectorAll<HTMLElement>('*').forEach((el,i)=>{const cs=getComputedStyle(originals[i]);el.style.fontSize=cs.fontSize;el.style.lineHeight=cs.lineHeight;if(el.classList.contains('card-frame'))el.style.filter=cs.filter;});
+        const supply=element.parentElement?.id==='supplyMarket',siblings=[...element.parentElement!.querySelectorAll('.card')];
+        const index=supply?siblings.indexOf(element):siblings.length-1-siblings.indexOf(element);
+        document.body.append(face);
+        face.style.transform=boardMatrix(r.left,r.top,unit*(supply?.30:.22)).toString();
+        const actual=element.getBoundingClientRect(),projected=face.getBoundingClientRect();
+        // offsetLeft rounds nested flex positions to whole pixels. Retain the
+        // browser's fractional layout too, so handoff cannot nudge the print.
+        const correction=new DOMMatrix().translate(actual.left,actual.top).scale(actual.width/projected.width,actual.height/projected.height).translate(-projected.left,-projected.top);
+        movingCards.push({element,face,correction,index,supply,landed:false});element.style.visibility='hidden';
+      }
     if(disposed||req.signal.aborted)return false;
     for(const {el,count} of openingDecks){el.dataset.count=String(count+3);el.dataset.openingCount=String(count);}
     refresh();root.querySelector('.awaiting-board')?.classList.remove('awaiting-board');
@@ -124,11 +144,16 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
         const start=700+(card.supply?card.index*160+80:card.index*80),v=sat((ms-start)/650),p=v*v*v*v;
         const r=layoutRect(card.element),h=unit*(card.supply?.30:.22),sx=card.supply?-unit*2:innerWidth+unit*2;
         const from=screenToBoard(sx,-innerHeight*.2,flightHeight),x=r.left+r.width/2,z=r.top+r.height/2;
-        card.mesh.visible=ms>=start&&ms<1960;card.mesh.scale.setScalar(unit);
-        card.mesh.position.set(from.x-cx+(x-from.x)*p,flightHeight+(h-flightHeight)*p,from.y-cy+(z-from.y)*p);
-        card.mesh.rotation.set(-Math.PI/2+(1-v)*.25,0,(card.supply?1:-1)*(1-v)*.16);
+        card.face.style.visibility=ms>=start?'visible':'hidden';
+        const px=from.x+(x-from.x)*p,py=from.y+(z-from.y)*p,elevation=flightHeight+(h-flightHeight)*p;
+        // CSS and WebGL share the same board camera; at t=1 this is the exact
+        // native card matrix, including its full-size print and all numeric seals.
+        card.face.style.transform=card.correction.multiply(boardMatrix(px,py,elevation).rotate((1-v)*-14,0,(card.supply?1:-1)*(1-v)*9).translate(-r.width/2,-r.height/2)).toString();
         if(v===1&&!card.landed){card.landed=true;card.element.dataset.introLanded='true';dust(card.element);}
-        if(ms>=1960)card.element.style.visibility='';
+        // Landed cards stay below remaining airborne cards in the same portal.
+        card.face.style.zIndex=String(card.landed?127:128);
+        if(ms>=1960){card.element.style.visibility='';card.face.style.visibility='hidden';}
+
       }
       const market=root.querySelector<HTMLElement>('.market-counter');if(market){
         // Empty furniture falls first; DOM controls are revealed after it lands.
@@ -140,7 +165,7 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       const market=root.querySelector<HTMLElement>('.market-counter');market?.style.removeProperty('visibility');market?.querySelectorAll<HTMLElement>('.sub-head,.reroll-hint').forEach(e=>e.style.removeProperty('visibility'));
       projectBoardDOM(root);root.classList.remove('duel-opening');delete root.dataset.openingPhase;
     }
-    }finally{movingCards.forEach(c=>{c.element.style.removeProperty('visibility');delete c.element.dataset.introLanded;dispose(c.mesh);c.map.dispose();});}
+    }finally{movingCards.forEach(c=>{c.element.style.removeProperty('visibility');delete c.element.dataset.introLanded;c.face.remove();});}
     return true;
   });
   return {tick(now:number){tasks.forEach(t=>t(now));return tasks.size>0;},dispose(){disposed=true;unbind();cancels.forEach(c=>c());}};

@@ -21,7 +21,7 @@ await page.evaluate(async()=>{
   const {setLang}=await import('/src/i18n.ts');setLang('ja');
   const g=createGame({mode:'bot',seed:42,starting:0,p0:{id:'a',name:'YOU'},p1:{id:'b',name:'OPP'}}).state;
   g.pending=null;
-  const defs=['mon','spell','trap'].map(t=>Object.values(DB).find(c=>c.t===t));
+  const defs=['mon','spell','quest'].map(t=>Object.values(DB).find(c=>c.t===t));
   g.players[0].hand=defs.map((c,i)=>({...c,uid:'paper-'+i}));
   g.players[1].hand=defs.map((c,i)=>({...c,uid:'opponent-private-'+i}));
   const view=new GameView(document.getElementById('app'),0,new Proxy({},{get:()=>()=>{}}));view.render(g);
@@ -30,6 +30,7 @@ await page.evaluate(async()=>{
   document.querySelector('.game').classList.add('hand-open');
 });
 await page.waitForFunction(()=>[...document.querySelectorAll('#hand img')].every(i=>i.complete&&i.naturalWidth));
+await page.waitForFunction(()=>!document.querySelector('.duel-preparing'));
 await page.waitForTimeout(300);
 // The actual current face, including art aperture, cost, stats and Japanese text.
 const surface=await page.evaluate(async()=>{

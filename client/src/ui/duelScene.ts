@@ -29,7 +29,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   const camera=new T.PerspectiveCamera();const table=createDuelTable(root,scene);
   let dead=false,dirty=true,flightActive=false,frame=0,last=0,width=0,height=0;
   const furniture=loadLibraryAssets(()=>{dirty=true;});
-  const items=new Map<string,Item>(),textures=new Map<string,T.Texture>();const loader=new T.TextureLoader();
+  const items=new Map<string,Item>(),textures=new Map<string,T.Texture>();const loading=new T.LoadingManager();let pendingTextures=0;loading.onStart=()=>{pendingTextures++;};loading.onLoad=()=>{pendingTextures=0;};const loader=new T.TextureLoader(loading);
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   function texture(url:string){let t=textures.get(url);if(!t){t=loader.load(url);t.colorSpace=T.SRGBColorSpace;t.anisotropy=4;textures.set(url,t);}return t;}
   function mesh(g:T.BufferGeometry,m:T.Material|T.Material[],parent:T.Object3D,x=0,y=0,z=0){const a=new T.Mesh(g,m);a.position.set(x,y,z);parent.add(a);return a;}
@@ -147,10 +147,18 @@ export function mountDuelScene(root:HTMLElement):()=>void {
     if(active||flightActive)flightRenderer.render(flightScene,camera);
     flightActive=active;
     if(!root.classList.contains('duel-webgl'))root.classList.add('duel-webgl');
+    if(root.dataset.sceneReady!=='true'&&furniture.settled&&pendingTextures===0&&root.dataset.tableState!=='loading'){
+      // Compile/upload hidden opening furniture offscreen too, so its first fall
+      // cannot cause a shader/texture hitch on the visible canvas.
+      const visibility=[...items.values()].map(i=>[i.group,i.group.visible] as const);
+      visibility.forEach(([g])=>{g.visible=true;});
+      const warm=new T.WebGLRenderTarget(64,64);renderer.setRenderTarget(warm);renderer.render(scene,camera);renderer.setRenderTarget(null);warm.dispose();
+      visibility.forEach(([g,v])=>{g.visible=v;});root.dataset.sceneReady='true';
+    }
   }
   const lost=(event:Event)=>{event.preventDefault();dispose();};canvas.addEventListener('webglcontextlost',lost);flightCanvas.addEventListener('webglcontextlost',lost);
   function dispose(){
-    if(dead)return;dead=true;motion.dispose();cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:summon-impact',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);flightCanvas.removeEventListener('webglcontextlost',lost);
+    if(dead)return;dead=true;root.dataset.tableState='fallback';motion.dispose();cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:summon-impact',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);flightCanvas.removeEventListener('webglcontextlost',lost);
     items.forEach(removeItem);textures.forEach(t=>t.dispose());table.dispose();furniture.dispose();keyLight.shadow.dispose();disposeObject(dustScene);dustMap.dispose();environment.dispose();renderer.dispose();canvas.remove();flightRenderer.dispose();flightCanvas.remove();
     root.querySelectorAll<HTMLElement>('.pile').forEach(el=>{el.classList.remove('pile--3d-ready');delete el.dataset.furniture;el.querySelector('.pile-draw-anchor')?.remove();});clearBoardProjection(root);root.classList.remove('duel-webgl','market-model-ready','supply-model-ready');
   }

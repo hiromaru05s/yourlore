@@ -3,7 +3,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 export type FurnitureKind='deck'|'shelf'|'market'|'supply';
 /** Cached GLBs own textures; scene instances own their cloned meshes/materials. */
 export function loadLibraryAssets(onReady:()=>void) {
-  const cache=new Map<FurnitureKind,T.Group>();let dead=false,revision=0;
+  const cache=new Map<FurnitureKind,T.Group>();let dead=false,revision=0,pending=4;
   const low=matchMedia('(max-width:700px)').matches;
   const paths:Record<FurnitureKind,string>={deck:`/models/cosmetics/deck_holder_biblion_ivory/v1/model${low?'-low':''}.glb`,shelf:`/models/library-furniture/v2/shelf${low?'-low':''}.glb`,market:`/models/library-furniture/market${low?'-low':''}.glb`,supply:`/models/library-furniture/v2/supply${low?'-low':''}.glb`};
   function release(root:T.Object3D){
@@ -14,9 +14,10 @@ export function loadLibraryAssets(onReady:()=>void) {
   }
   for(const kind of Object.keys(paths) as FurnitureKind[])void new GLTFLoader().loadAsync(paths[kind]).then(g=>{
     if(dead){release(g.scene);return;}cache.set(kind,g.scene);revision++;onReady();
-  }).catch(()=>{/* Keep the existing usable furniture fallback. */});
+  }).catch(()=>{/* Keep the existing usable furniture fallback. */}).finally(()=>{pending--;onReady();});
   return {
     get revision(){return revision;},
+    get settled(){return pending===0;},
     has(kind:FurnitureKind){return cache.has(kind);},
     clone(kind:FurnitureKind):T.Group|undefined{
       const source=cache.get(kind);if(!source)return;

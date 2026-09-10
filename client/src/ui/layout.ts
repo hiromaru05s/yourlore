@@ -9,7 +9,7 @@ export function solveBoard(w: number, h: number, _underPile = false) {
   // Full cards share one width across market, monsters and every 3D pile.
   // Fourteen status cards occupy half-unit slots across the seven-column lane.
   const horizontal=phone?(w*.91-76-5*gap)/7:(w*.92-60-13*gap)/13.6;
-  const vertical=(h-portraitReserve*2-(phone?148:128))/(phone?11.6:5.9375);
+  const vertical=(h-portraitReserve*2-(phone?112:96))/(phone?11.6:5.9375);
   const tile=Math.max(24.32,Math.min(116,horizontal,vertical));
   const mktH=tile/CARD_RATIO;
   const handH = Math.min(270, h * .32, w * .44);

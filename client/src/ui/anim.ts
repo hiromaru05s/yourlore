@@ -1,3 +1,4 @@
+import {waitForDuel} from './duelReadiness';
 // ============================================================
 // LORE — animation helpers. Triggered by engine events; never
 // touch game state, only the DOM.
@@ -114,16 +115,22 @@ async function focusCard(node: HTMLElement, side: ViewSide): Promise<void> {
   const w = node.offsetWidth || 100;
   const h = node.offsetHeight || 156;
   const scale = Math.min(innerHeight * .62 / h, innerWidth * .58 / w, 3.4);
+  // Rasterize at the reveal's final CSS size before animating. Upscaling a
+  // hand-sized compositing layer makes the entire frame and its text blurry.
+  const revealW=w*scale,revealH=h*scale;
+  node.style.width=`${revealW}px`;node.style.height=`${revealH}px`;
+  node.style.setProperty('--cw',`${revealW}px`);node.style.setProperty('--ch',`${revealH}px`);
+  node.querySelectorAll<HTMLElement>('[style]').forEach(el=>{if(el.style.fontSize.endsWith('px'))el.style.fontSize=`${parseFloat(el.style.fontSize)*scale}px`;});
   node.style.transformOrigin = "top left";
   node.classList.add("cast-reveal");
-  node.style.transform = reduced ? "none" : "perspective(1400px) rotateX(12deg) rotateY(-18deg) scale(.9)";
+  node.style.transform = reduced ? "none" : `perspective(1400px) rotateX(12deg) rotateY(-18deg) scale(${.9/scale})`;
   node.classList.toggle("fx-opp-cast", side === "opp");
   try {
     await raf();
     node.style.transition = reduced ? "none" : `left .42s cubic-bezier(.16,1,.3,1), top .42s cubic-bezier(.16,1,.3,1), transform .5s cubic-bezier(.16,1,.3,1)`;
     node.style.left = `${(innerWidth - w * scale) / 2}px`;
     node.style.top = `${(innerHeight - h * scale) / 2}px`;
-    node.style.transform = `perspective(1400px) rotateX(0deg) rotateY(0deg) scale(${scale})`;
+    node.style.transform = "perspective(1400px) rotateX(0deg) rotateY(0deg) scale(1)";
     await wait(reduced ? 120 : side === "opp" ? 1050 : 780);
   } finally { veil.remove(); node.classList.remove("cast-reveal"); }
 }
@@ -699,7 +706,7 @@ export async function ghostSummon(card: CardInst, side: ViewSide, slotIndex: num
   const from = fromRect(side, takeOrigin(side)); const zone=monZoneEl(side);
   const target=zone?.children[Math.max(0,Math.min(slotIndex,zone.children.length-1))] as HTMLElement|undefined;
   if (!from || !target) return null;
-  const node = floatAt(cardEl(card, { size: "hand" }), from);
+  const node = floatAt(cardEl(card, { size: "hand", fullArt:true }), from);
   try {
     await focusCard(node, side);
     return await flyIntoSlot(node,target,cardEl(card,{field:true}),true);
@@ -947,8 +954,8 @@ export async function exileCard(card:CardInst,side:ViewSide,source?:HTMLElement|
   try{await absorbIntoRift(node,side);}finally{node.remove();} // The old source stays hidden until the authoritative board render.
 }
 export async function openingBoard():Promise<void>{
-  if(fxSkip||typeof WebGL2RenderingContext==='undefined')return;
-  // Scene and GLBs load asynchronously when the game screen mounts.
-  for(let i=0;i<40&&!document.querySelector('.supply-model-ready');i++){await wait(50);if(fxSkip)return;}
+  const root=document.querySelector<HTMLElement>('.game')?.parentElement;
+  if(root)await waitForDuel(root);
+  if(fxSkip||typeof WebGL2RenderingContext==='undefined'||!root?.isConnected)return;
   await boardMotionScope(signal=>moveOnBoard({kind:'opening',signal}),7500);
 }
