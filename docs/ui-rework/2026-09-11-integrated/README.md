@@ -37,3 +37,7 @@ Remote verification and deployment version are recorded separately after upload.
 ## Deployed result
 
 Staging source `f32029b`; Cloudflare version `d4d7f160-6311-453c-8937-5f7adf6abb21`. Both main and the integration branch were pushed. All **1,407 / 1,407** remote asset SHA-256 hashes match the verified build. Anonymous startup returned HTTP 200, mounted the app, and raised no JavaScript exception. Production was not deployed.
+
+## Production promotion — 2026-09-11
+
+On explicit user request, the same verified staging source `f32029b` was promoted to `yourlore.xyz`. Production version: `4df105c9-eb5f-4d20-ba85-6c56d6600113`; prior version: `4de58e67-23a5-49e3-8fcf-6b9c05363a30`. All 1,407 remote file hashes match the staging build (HTML canonical redirects followed). Root, www, admin and geo API return HTTP 200 through curl. CUA confirmed the login screen without JavaScript errors. Authenticated production gameplay was not exercised. No schema migration or quality-audit redesign was included. See production-deployment.json.
