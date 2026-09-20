@@ -1,3 +1,4 @@
+import {READING_ASSETS} from './readingBoardLayout';
 import * as T from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 export type FurnitureKind='deck'|'shelf'|'market'|'supply';
@@ -5,7 +6,7 @@ export type FurnitureKind='deck'|'shelf'|'market'|'supply';
 export function loadLibraryAssets(onReady:()=>void) {
   const cache=new Map<FurnitureKind,T.Group>();let dead=false,revision=0,pending=4;
   const low=matchMedia('(max-width:700px)').matches;
-  const paths:Record<FurnitureKind,string>={deck:`/models/cosmetics/deck_holder_biblion_ivory/v1/model${low?'-low':''}.glb`,shelf:`/models/library-furniture/v2/shelf${low?'-low':''}.glb`,market:`/models/library-furniture/market${low?'-low':''}.glb`,supply:`/models/library-furniture/v2/supply${low?'-low':''}.glb`};
+  const paths:Record<FurnitureKind,string>={deck:READING_ASSETS+`deck-place${low?'-lod1':''}.glb`,shelf:READING_ASSETS+`shelf${low?'-lod1':''}.glb`,market:READING_ASSETS+`market${low?'-low':''}.glb`,supply:READING_ASSETS+`supply${low?'-low':''}.glb`};
   function release(root:T.Object3D){
     const geos=new Set<T.BufferGeometry>(),mats=new Set<T.Material>(),maps=new Set<T.Texture>();
     root.traverse(o=>{if(o instanceof T.Mesh){geos.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:[o.material]){mats.add(m);for(const v of Object.values(m))if(v instanceof T.Texture)maps.add(v);}}});
@@ -21,7 +22,7 @@ export function loadLibraryAssets(onReady:()=>void) {
     has(kind:FurnitureKind){return cache.has(kind);},
     clone(kind:FurnitureKind):T.Group|undefined{
       const source=cache.get(kind);if(!source)return;
-      const instance=source.clone(true);instance.scale.setScalar(1/.064);
+      const instance=source.clone(true);instance.scale.setScalar(1/.110);
       instance.traverse(o=>{if(o instanceof T.Mesh){o.geometry=o.geometry.clone();o.material=Array.isArray(o.material)?o.material.map(m=>m.clone()):o.material.clone();o.castShadow=true;o.receiveShadow=true;}});
       return instance;
     },

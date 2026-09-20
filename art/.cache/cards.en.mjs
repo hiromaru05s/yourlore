@@ -128,7 +128,7 @@ const TEXTS = {
     VAMP2: "When you cast a 'Blood Magic': summon an Adept Vampire (once) · Void",
     VAMP3: "When you cast a 'Blood Magic': summon an Elite Vampire (once) · Void",
     VAMP4: "When you cast a 'Blood Magic': summon a Supreme Vampire (once) · You gain max HP equal to 50% of the damage it deals to the opponent · Void",
-    VAMP5: "On summon: deal 15 damage to the opponent and gain +30 max HP · You gain max HP equal to the damage it deals to the opponent · Trap Master · Void",
+    VAMP5: "On summon: deal 15 damage to the opponent and gain +30 max HP · You gain max HP equal to the damage it deals to the opponent · Void",
     FLAME: "Deal 2 damage to the opponent, take 1 damage",
     GHOST: "Infiltrate · Enemy max mana/max HP up: YOU take 2 damage · Enemy heals: your 'Ghosts' +1 ATK (lasting)",
     NEGOTIATE: "Opponent's max mana +1 · The opponent cannot set traps next turn",
@@ -185,7 +185,7 @@ const TEXTS = {
     GREED_PRICE: "Take 2 damage · Summon two Mimics (3/2) to your field · Exile 3 more Mimics from the game",
     MIMIC_KING2: "On summon: +1/+1 per 'Mimic'-family card in your field/graveyard/exile · If 6+ Mimics are exiled: summon a Master Mimic",
     ORIGIN_MIMIC: "On summon: +2/+2 per 'Mimic'-family card in your field/graveyard/exile · If 8+ Mimics are exiled: destroy up to 2 enemy traps",
-    MARKET_CRISIS: "Refresh all 8 cards of the fixed market",
+    MARKET_CRISIS: "Refresh all 7 cards of the fixed market",
     GOLIATH_HUNT: "Destroy 1 enemy monster with max HP 20 or more",
     WORLD_GUARD: "On summon: if your max HP is 90 or more, max mana +1 and your max HP +15",
     DOUBLE_EXEC: "Destroy 2 enemy monsters",
@@ -205,13 +205,13 @@ const TEXTS = {
     CHOSEN_AREA: "Castable only while 25+ of your 'Culls' are exiled from the game · Win the game immediately",
     TRIAL_AREA: "Permanent: take 6 damage on cast · At the start of each of your turns, add a Cull to your graveyard, then you may exile up to 2 cards from your graveyard",
     GAMBLER: "At the start of your turn: roll a die — on 4/5/6, max mana +1",
-    LEGEND_GAMBLER: "At the start of your turn: roll a die — on 6, max mana +10 · If a 'Gambler' is in your deck/graveyard, roll 3 dice in total · Trap Master · Void",
+    LEGEND_GAMBLER: "At the start of your turn: roll a die — on 6, max mana +10 · If a 'Gambler' is in your deck/graveyard, roll 3 dice in total · Void",
     ELF_HAVEN: "Enchantment: 'World Tree' cards cost 0 to buy/cast (3/turn) · Buy one from the offer: your max HP +10",
-    HALF_ELF: "On summon: if a card with 'World Tree' in its name is on your field, deploy 'World Tree's Care'",
+    HALF_ELF: "【Passive】'World Tree' name on either field: ATK +3 · 【On Summon】On yours: deploy 'World Tree's Care'",
     WORLD_CARE: "Enchantment: at the start of each of your turns, your max HP +9",
     ELF: "Summonable only while your max HP is 65 or higher",
     DARK_ELF: "Infiltrate · Summonable only while your max HP is 65+ and you control no 'Elf' monsters",
-    HIGH_ELF: "Trap Master · Aura · Summonable only while your max HP is 99 or higher",
+    HIGH_ELF: "Aura · Summonable only while your max HP is 99 or higher",
     ELDER_ELF_KING: "Summonable only while a 'High Elf' is in your graveyard and your max HP is 99+ · On summon: summon 2 High Elves to your field, then all 'High Elves' on your field gain +15 ATK",
     ANCIENT_CIV: "Permanent: 13 turns after activation, your max mana -1 and add a 'Dragon Egg' or 'Divine Beast Egg' of your choice to your hand · Then this monster is destroyed",
     DRAGON_EGG: "Cannot attack · Aura · Hatches in 8 turns (both players' turns) / Durability 6 · Enemy monster attacks only consume 1 durability · If hatching completes with durability left, one of Black/Red/Blue Dragon is summoned (Summon 4)",
@@ -444,7 +444,7 @@ Object.assign(TEXTS, {
     LIFE_CYCLE: "Enchantment: whenever you restore HP, roll a die — on 6, max mana +1 (Cast 2)",
     WORLD_SEED: "Enchantment: at the start of each of your turns, roll a die — on 5+, max mana +1",
     LUCKY_CHEST: "Roll 2 dice — 2·3: max mana +3 & draw 2 / 4·5: dud (Master Mimic 10/3 on enemy field) / 6-8: max mana +1 / 9-11: your max HP +8 / 12: your max HP +12",
-    GUILD_CHEST: "Roll 2 dice — 2·3: max mana +3 / 4: +1 draw at turn start (permanent; fails if your spell/trap zone is full) / 5·6: max mana +2 / 7: max mana +1 / 8: your max HP +10 / 9·10: Novice & Adept Assassins on enemy field / 11·12: Novice, Adept & Elite Assassins on enemy field + take 10 damage (Cast 3)",
+    GUILD_CHEST: "Roll 2 dice — 2·3: max mana +3 / 4: +1 draw at turn start (permanent; fails if your spell zone is full) / 5·6: max mana +2 / 7: max mana +1 / 8: your max HP +10 / 9·10: Novice & Adept Assassins on enemy field / 11·12: Novice, Adept & Elite Assassins on enemy field + take 10 damage (Cast 3)",
     // ---- v30 text unification: cards whose English had fallen back to Korean, or had drifted ----
     GS7_2: "Your HP +13 · From the 3rd cast: your HP +5 whenever you are attacked",
     GT8_0: "Negate the attack + all your monsters +4 HP (lasting) + draw 1 card",
@@ -563,7 +563,7 @@ Object.assign(TEXTS, {
     TPO3: "【Passive】Roll a die whenever enemy monsters die: on 5+, summon a copy to your field",
     TPO5: "【On Summon】Destroy 1 enemy monster of cost 3-4 · If it dies, max mana +1",
     TSO1: "After summoning, you cannot summon other monsters for your next 3 turns",
-    TSO2: "【On Summon】If you have 1 card or less on the field besides this (monsters, spells, traps), +3/+3",
+    TSO2: "【On Summon】If you have at most 1 other card on the field (monsters or spells), +3/+3",
     TSO3: "【On Summon】If your graveyard holds no monsters, draw 4 cards",
     TSO5: "【Requires】No non-Solitary monsters on your field",
     TAR1: "【Passive】+1 draw at the start of your turns",
@@ -571,9 +571,9 @@ Object.assign(TEXTS, {
     TAR3: "【Passive】The opponent cannot set trap cards",
     TAR5: "【Passive】Enemy monsters of cost 6 or less cannot attack this one; while it lives, no direct attacks",
     TDE1: "Your max mana -1 for your next 5 turns · 【Requires】Max mana 5 or more",
-    TDE2: "【Passive】Your max mana -2 (never below 3)",
+    TDE2: "【Requires】Your max mana is at least 5 · 【Passive】Your max mana -2 (never below 3)",
     TDE3: "【Each Turn】Roll a die: on 1-3, your max mana -1; on 4-6, -2 (never below 3)",
-    TDE4: "【On Summon】Your max mana becomes 4",
+    TDE4: "【Requires】Your max mana ≥5＋non-King Demon in deck · 【On Summon】Your max mana =3 · 【Passive】Your max mana cannot grow",
     COLLUSION: "Negate attacks on your tribe monsters; kill the attacker · Max mana -1: gain 1 card of the tribe",
 });
 // ---- MIMIC/VOID EXPANSION (v33) ----
@@ -686,7 +686,7 @@ Object.assign(TEXTS, {
     EGG_MASTER: "On summon: all Eggs on your field gain 5 counters",
     GOLEM2: "Passive: whenever a monster on your field dies, this monster gains 1 counter",
     M10: "Passive: max mana +1 per other Golem monster on your field",
-    M7: "When this monster's attack destroys an enemy monster, it may attack once more this turn (max 7)",
+    M7: "【Passive】Kill an enemy monster by attack: 1 extra attack/turn · 【Each Turn】Turn start: die ≥5, take 3 damage",
     M9: "On summon: 1 counter · On your turn, spend a counter to refresh the offer without mana",
     NGA3: "On summon: if another Golem monster is on your field, this monster gains 3 counters",
     NHEX: "Each turn: with 10+ spells in your deck, roll a die: on 5+, add 3 Curses to the enemy graveyard",
@@ -787,7 +787,7 @@ Object.assign(TEXTS, {
     AEM: "Only with 2 different Golem cards in your deck · 2 Golem monsters on your field ATK +7 (lasting)",
     KNIGHT_TEACH: "All your monsters gain Guts · Those that already have it gain 3 counters",
     DUNGEON: "Passive: monsters without Guts or Evade attack with ATK 1",
-    NL_SECRET: "Give Trap Master, Infiltrate or Evade to 1 monster · 2 of your Assassins ATK +3 (lasting)",
+    NL_SECRET: "Give Infiltrate or Evade to 1 monster · 2 of your Assassins ATK +3 (lasting)",
 });
 // ---- v39 주술사 계열 ----
 Object.assign(NAMES, { NHEX: "Apprentice Hexer", HEXER1: "Novice Hexer", HEXER2: "Adept Hexer", HEXER3: "Master Hexer", HEXER4: "Grand Hexer - Keloid" });
@@ -827,10 +827,20 @@ Object.assign(TEXTS, {
     MIND_BURST: "Remove all counters from your field · The opponent takes 4 damage per counter",
     RICH_HABIT: "Permanent: at your turn start with 4+ cards in hand, max HP +6 · with 6+, also max mana +1",
 });
+// ---- v44: approved reworks after trap retirement ----
+Object.assign(TEXTS, {
+    TAR3: "—",
+    GM6_8: "On death: summon a Soldier (2/2)",
+    ORIGIN_MIMIC: "On summon: +2/+2 per 'Mimic' card in your field/graveyard/exile",
+    ASSASSIN4: "【Requires】3+ distinct other Assassins in deck · 【On Summon】opponent gets 3 Brand counters",
+    CHOSEN_ROGUE: "Passive: ATK +2 per 2 exiled Culls",
+});
 export function applyEnglish(pools) {
     for (const pool of pools) {
         for (const id of Object.keys(pool)) {
             const c = pool[id];
+            if (c.quest || c.quick)
+                continue; // v45 cards carry authored translations
             c.nameEn = NAMES[id] ?? genNameEn(c.name) ?? c.name;
             const en = TEXTS[id] ?? genTextEn(c.text);
             c.textEn = en ? shortenEn(en) : c.text;

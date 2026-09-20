@@ -826,7 +826,7 @@ const NEW_CARDS7: CardDef[] = [
   { id: "GREED_PRICE", t: "spell", cost: 4, name: "탐욕의 대가", nameJa: "強欲の代価",
     text: "자신에게 2 데미지 · 자신 필드에 '미믹'(3/2) 2마리 소환 · 추가로 '미믹' 3장을 게임에서 제외", textJa: "自分に2ダメージ · 自分の場に「ミミック」(3/2)2体を召喚 · さらに「ミミック」3枚をゲームから除外" },
   { id: "MARKET_CRISIS", t: "spell", cost: 3, name: "경제 위기", nameJa: "経済危機",
-    text: "고정 마켓 8장을 전부 갱신한다", textJa: "固定マーケット8枚を全て更新する" },
+    text: "고정 마켓 7장을 전부 갱신한다", textJa: "固定マーケット7枚を全て更新する" },
   // 토큰 (구매 불가, cost 0)
   { id: "TOKEN00", t: "mon", cost: 0, atk: 0, def: 1, name: "허수아비", nameJa: "かかし", text: "죽으면 게임에서 제외", textJa: "死亡時ゲームから除外" },
   { id: "SOLDIER2", t: "mon", cost: 0, atk: 2, def: 2, name: "병사", nameJa: "兵士", text: "죽으면 게임에서 제외", textJa: "死亡時ゲームから除外" },
@@ -1393,7 +1393,7 @@ CHEST_ODDS.en = { title: "Golden chest die", rows: ["5·6 — Max mana +1", "3·
 const PATCH29: Record<string, Partial<CardDef>> = {
   // ---- 텍스트가 엔진과 달랐던 것 ----
   // 마켓 크래시: 제시가 v28에서 4장이 되었는데 문구는 3→2로 남아 있었음 · 구매=시전이라 (시전) 표기 삭제
-  S5: { text: "다음 상대 제시를 4장 → 3장으로 축소", textJa: "次の相手の提示を4枚→3枚に縮小" },
+  S5: { text: "다음 상대 제시를 3장 → 2장으로 축소", textJa: "次の相手の提示を3枚→2枚に縮小" },
   // 광휘검진: 지속 +2는 이번 턴부터 즉시 적용된다(=이번 턴 +15). "턴 종료 후" 문구 삭제
   GS8_4: { text: "아군 전체 공격력 +13(이번 턴) · 공격력 +2(지속)", textJa: "味方全体の攻撃力+13(このターン) · 攻撃力+2(持続)" },
   // 악마의 주사위 ③④: 상대 '최대' 마나 -1
@@ -2361,7 +2361,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v48"; // v47: targeted nerfs; maximum HP growth heals; Demon King locks maximum mana growth
+export const BALANCE_VERSION = "v49"; // 3 offered + 7 fixed cards; all v48 card mechanics retained
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

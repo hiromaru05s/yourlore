@@ -85,8 +85,8 @@ try {
   for (let seed = 1; seed <= 40; seed++) {
     let g = createGame({ mode: 'online', seed, starting: 0, p0: { id: 'p', name: 'P', deck: saved }, p1: { id: 'q', name: 'Q', deck: saved } }).state;
     assertNoTraps(g);
-    assert.equal(g.market.length, 8);
-    for (let cycle = 0; cycle < 8; cycle++) {
+    assert.equal(g.market.length, 7);
+    for (let cycle = 0; cycle < g.market.length; cycle++) {
       // Stock mechanics use an unconditional, non-targeted fixture; quick purchase rules have their own suite.
       if (g.market[cycle].quick) g.market[cycle] = { ...DB.S1, uid: `stock-${seed}-${cycle}` };
       g.pending = null;
@@ -99,7 +99,7 @@ try {
       g.players[0].mana = 30;
       g = reduce(g, { type: 'refresh' }).state;
       assertNoTraps(g);
-      assert.equal(g.players[0].supply.length, 4);
+      assert.equal(g.players[0].supply.length, 3);
       g.players[0].mana = 30;
       g = reduce(g, { type: 'buySupply', i: 0 }).state;
       assertNoTraps(g);

@@ -1,3 +1,4 @@
+import {READING_ASSETS} from './readingBoardLayout';
 import { getLang } from '../i18n';
 /** Game content is revealed only after assets are decoded and the 3D scene has
  * painted. A slow/cold connection must never reveal intermediate furniture. */
@@ -41,8 +42,8 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
 let warming:Promise<void>|undefined;
 export function warmDuel():Promise<void>{
   return warming??=(async()=>{
-    const low=matchMedia('(max-width:700px)').matches,suffix=low?'-low':'';
-    const urls=[`/models/lore-table/table${suffix}.glb?v=20260909`,`/models/cosmetics/deck_holder_biblion_ivory/v1/model${suffix}.glb`,`/models/library-furniture/market${suffix}.glb`,`/models/library-furniture/v2/shelf${suffix}.glb`,`/models/library-furniture/v2/supply${suffix}.glb`];
+    const low=matchMedia('(max-width:700px)').matches;
+    const urls=[...['board','market','supply'].map(n=>`${n}${low?'-low':''}.glb`),...['deck-place','shelf'].map(n=>`${n}${low?'-lod1':''}.glb`),'mana-tray.glb','mana-counter.glb','mana-crystal-ready.glb','mana-crystal-spent.glb','crystal-optics.json','turn-button.glb','timer-inserts.glb','reroll-button.glb'].map(n=>READING_ASSETS+n);
     await Promise.allSettled([...urls.map(async url=>{const r=await fetch(url);if(r.ok)await r.arrayBuffer();}),...[logo,...coinImages].map(decode),import('./duelScene')]);
   })();
 }

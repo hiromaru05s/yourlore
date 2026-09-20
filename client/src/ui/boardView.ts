@@ -347,12 +347,13 @@ export class GameView {
     const opp = g.players[1 - this.you];
     const myTurn = g.cur === this.you && !g.over;
     const pending = g.pending;
+    this.root.dataset.readingTurn=myTurn?"player":"opponent";
     // opponent's equipped sleeve (server-synced); falls back to default for bot/local games
     OPP_SLEEVE = sleeveUrl(g.sleeves?.[1 - this.you]);
 
     this.q("turnInfo").innerHTML = `<span class="turn-badge"><span class="tb-label">${t("game.turn")}</span><span class="tb-num">${g.turn}</span></span><span class="turn-cur"><b>${t(myTurn ? "fx.yourturn" : "fx.oppturn")}</b></span>`;
     // refresh static labels (so a live language switch updates them)
-    this.q("endBtn").textContent = t("game.endturn");
+    this.q("endBtn").innerHTML = `<span class="end-turn-label">${myTurn ? "END\nTURN" : "ENEMY\nTURN"}</span>`;
     const gvl = this.q("giveupBtn").querySelector(".gv-label"); if (gvl) gvl.textContent = t("game.surrender");
     this.q("logTitle").textContent = t("game.log");
     this.q("logTab").textContent = t("game.log");
@@ -380,7 +381,7 @@ export class GameView {
       cb.style.height = `${obw / .64}px`;
       cb.style.backgroundImage = `url(${OPP_SLEEVE})`;
       cb.style.left = `${i * ostep}px`;
-      cb.style.zIndex = String(i);
+      cb.style.zIndex = String(n-i);
       oh.appendChild(cb);
     }
     oh.style.width = `${n ? obw + (n - 1) * ostep : 0}px`;
@@ -931,11 +932,11 @@ export class GameView {
     const seeker = avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE" ? avatar : isMe ? "SEEKER_BLUE" : "SEEKER_RED";
     el.innerHTML = `
       <span class="pt-vitals"><span class="pt-hp" title="HP ${hp}/${p.maxHp}"><span class="pt-hp-ico">HP</span><b id="hp-${sd}">${hp}</b><span class="pt-hp-max">/${p.maxHp}</span></span>
-      <span class="pt-hpbar hpbar" id="hpbar-${sd}" role="meter" aria-label="HP" aria-valuemin="0" aria-valuemax="${p.maxHp}" aria-valuenow="${hp}"><i style="width:${Math.min(100, hpPct)}%"></i></span>${isMe?`<span class="pt-name pt-name--vitals">${esc(p.name)}</span>`:""}</span>
+      <span class="pt-hpbar hpbar" id="hpbar-${sd}" role="meter" aria-label="HP" aria-valuemin="0" aria-valuemax="${p.maxHp}" aria-valuenow="${hp}"><i style="width:${Math.min(100, hpPct)}%"></i></span></span>
       <span class="pt-ring">${avatarHtml(seeker, p.name, 100)}</span>
-      <span class="pt-mana pips" aria-label="${t("game.mana")} ${p.mana}/${emax}"><span class="mana-readout">${t("game.mana")} <b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span><span class="mana-crystals" style="--mana-rows:${Math.max(1,Math.ceil(Math.min(MAX_MANA,emax)/10))}">${crystals}</span></span>
+      <span class="pt-mana pips" data-mana="${p.mana}" data-maximum="${emax}" aria-label="${t("game.mana")} ${p.mana}/${emax}"><span class="mana-readout"><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span><span class="mana-crystals" style="--mana-rows:${Math.max(1,Math.ceil(Math.min(MAX_MANA,emax)/10))}">${crystals}</span></span>
       ${(p.brand ?? 0) > 0 ? `<span class="pt-brand" title="${esc(t("game.brandTip").replace("{n}", String(p.brand)))}">${t("game.brand")} <b>${p.brand}</b></span>` : ""}
-      ${!isMe?`<span class="pt-name">${esc(p.name)}</span>`:""}`;
+      <span class="pt-name">${esc(p.name)}</span>`;
   }
 
   /** MY hand — straight upright cards (no fan) in two states:
@@ -965,7 +966,7 @@ export class GameView {
     const hand=this.q('oppHand'),cards=[...hand.querySelectorAll<HTMLElement>('.card--back')];
     const w=(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--card-w-hand'))||100)*.42;
     const step=cards.length<=1?0:Math.min(w*.62,Math.max(5,w*3.4/(cards.length-1)));
-    cards.forEach((c,i)=>{c.style.width=w+'px';c.style.height=w/.64+'px';c.style.left=i*step+'px';});
+    cards.forEach((c,i)=>{c.style.width=w+'px';c.style.height=w/.64+'px';c.style.left=i*step+'px';c.style.transform=`rotate(${(i-(cards.length-1)/2)*Math.min(5,24/Math.max(1,cards.length-1))}deg)`;c.style.transformOrigin='50% 100%';});
     hand.style.width=(cards.length?w+(cards.length-1)*step:0)+'px';hand.style.height=w/.64+'px';
   }
 
@@ -979,7 +980,8 @@ export class GameView {
     const cw = (handEl.querySelector(".card") as HTMLElement | null)?.offsetWidth || 100;
     const vw = Math.round(window.visualViewport?.width || window.innerWidth) || 960; // hidden tabs report 0
     const openStep = n <= 1 ? cw : Math.min(cw + 8, Math.max(cw * 0.42, (Math.min(vw * 0.86, 960) - cw) / (n - 1)));
-    const compactStep = n <= 1 ? cw : Math.min(cw * 0.6, Math.max(16, (300 - cw) / (n - 1)));
+    const compactStep = n <= 1 ? cw : Math.min(cw * 0.6, Math.max(cw*.16, (cw*3.4) / (n - 1)));
+    [...handEl.children].forEach((el,i)=>(el as HTMLElement).style.setProperty("--hand-angle",`${(i-(n-1)/2)*Math.min(5,24/Math.max(1,n-1))}deg`));
     handEl.style.setProperty("--h-step-open", `${openStep}px`);
     handEl.style.setProperty("--h-step-compact", `${compactStep}px`);
     handEl.style.setProperty("--h-w-open", `${n ? cw + (n - 1) * openStep : 0}px`);

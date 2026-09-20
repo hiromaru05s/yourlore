@@ -1,6 +1,6 @@
 /** The real Blender table, drawn behind the DOM with the existing duel renderer. */
 import * as T from 'three';
-import { BOARD_TILT } from './boardProjection';
+import { READING_ASSETS } from './readingBoardLayout';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 export function createDuelTable(root: HTMLElement, scene: T.Scene) {
@@ -8,7 +8,7 @@ export function createDuelTable(root: HTMLElement, scene: T.Scene) {
   let dead = false;
   const low = matchMedia('(max-width: 700px)').matches;
   // Versioned URLs prevent a cached model from silently disagreeing with its renderer.
-  const url = `/models/lore-table/${low ? 'table-low' : 'table'}.glb?v=20260909`;
+  const url = READING_ASSETS+`board${low ? '-low' : ''}.glb`;
   root.dataset.tableState = 'loading';
 
   function release(object: T.Object3D): void {
@@ -51,9 +51,9 @@ export function createDuelTable(root: HTMLElement, scene: T.Scene) {
   });
 
   return {
-    resize(width:number,height:number,unit:number):void {
+    resize(_width:number,_height:number,unit:number):void {
       if(dead||!model)return;
-      model.scale.set(width*.92/1.6,unit*.42/.075,height*.90/Math.cos(BOARD_TILT*Math.PI/180)/1.02);
+      model.scale.setScalar(unit/.110);
       if(!root.classList.contains('duel-table-ready')){root.classList.add('duel-table-ready');root.dataset.tableState=low?'ready-low':'ready';}
     },
     dispose(): void {

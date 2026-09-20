@@ -299,7 +299,7 @@ export function createGame(opts: CreateOpts): ReduceResult {
   const second = (1 - start) as Side;
   g.players[start].hp = 40; g.players[start].maxHp = 40;
   g.players[second].hp = 45; g.players[second].maxHp = 45;
-  // STANDARD market: 8 DISTINCT random cards of cost 1–6 (mixed types, 스타팅 전용 제외)
+  // STANDARD market: 7 DISTINCT random cards of cost 1–6 (mixed types, 스타팅 전용 제외)
   // v20: 1–4 → 1–6 — 저코만 나오면 구조적으로 어그로 판이 과다해져 상한 확대
   const lowAvail = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 6 && !DB[id].noShop);
   g.market = [];
@@ -327,12 +327,12 @@ function rollSupply(g: GameState, p: PlayerState): void {
   const inMarket = new Set(g.market.map((c) => c.id)); // 고정 마켓과 중복 금지
   const pool = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= hi && DB[id].cost > 0 && !DB[id].noShop && !inMarket.has(id));
   const avail = pool.slice();
-  const want = p.supplyShrink > 0 ? Math.max(2, 4 - p.supplyShrink) : 4; // 마켓 크래시: 다음 제시 축소 (v34: 최대 2장까지)
+  const want = p.supplyShrink > 0 ? Math.max(2, 3 - p.supplyShrink) : 3; // 마켓 크래시: 다음 제시 축소 (v34: 최대 2장까지)
   if (p.supplyShrink > 0) p.supplyShrink = 0;
   const picks: (CardInst | null)[] = [];
   while (picks.length < want && avail.length) picks.push(inst(g, avail.splice(randInt(g, avail.length), 1)[0])); // distinct
   while (picks.length < want) picks.push(pool.length ? inst(g, pool[randInt(g, pool.length)]) : null);
-  while (picks.length < 4) picks.push(null); // keep 4 slots; shrunk rolls leave an empty slot
+  while (picks.length < 3) picks.push(null); // keep 3 slots; shrunk rolls leave an empty slot
   p.supply = picks;
   // 기록자(v36): 제시 이력 기록 (갱신분 포함) — 최근 40회만 보관
   const hist = (p.supplyHist ??= []);
@@ -3366,7 +3366,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       while (nextMk.length < MARKET_SIZE && availMk.length) nextMk.push(inst(g, availMk.splice(randInt(g, availMk.length), 1)[0]));
       g.market = nextMk;
       g.marketStock = nextMk.map(() => MARKET_STOCK); // v40: 재고도 초기화
-      ctx.log(`${tag(p, card)} <span class="dmg">경제 위기!</span> 고정 마켓 8장 전부 갱신`, `${tag(p, card)} <span class="dmg">経済危機！</span> 固定マーケット8枚を全て更新`);
+      ctx.log(`${tag(p, card)} <span class="dmg">경제 위기!</span> 고정 마켓 ${MARKET_SIZE}장 전부 갱신`, `${tag(p, card)} <span class="dmg">経済危機！</span> 固定マーケット${MARKET_SIZE}枚を全て更新`);
       break;
     }
     case "SHATTER": { // 붕괴 진동(v26): 자신 5뎀, 양측 모든 몬스터의 체력을 1로 (최대체력 1 + 누적 데미지 초기화 — 즉사 없음, 전원 유리몸)
@@ -3826,8 +3826,8 @@ function applyTribe(g: GameState, ctx: Ctx, p: PlayerState, o: PlayerState, trib
 
 // Zone capacity: 7 monsters and 14 shared spell/trap slots.
 export const FIELD_MAX = 7;
-export /** 고정 마켓 슬롯 수 (v28: 10 → 8). 경제 위기(MARKET_CRISIS)의 재구성도 이 값을 쓴다. */
-const MARKET_SIZE = 8;
+export /** 고정 마켓 슬롯 수 (reading-board: 7). 경제 위기(MARKET_CRISIS)의 재구성도 이 값을 쓴다. */
+const MARKET_SIZE = 7;
 export const ST_MAX = 14;
 const ASSASSIN_IDS = ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3"];
 /** 침묵의 파수꾼/거신(sealLow, v36): 필드의 봉인 몬스터 중 가장 높은 코스트 상한 (없으면 -1). */

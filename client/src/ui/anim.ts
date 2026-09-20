@@ -1,4 +1,6 @@
 import {reserveMonster} from './fieldLayout';
+import {attackPlan,attackPose,ATTACK_DURATION_MS} from './attackVisual';
+import {runAttackTimeline} from './attackMotion';
 import {waitForDuel} from './duelReadiness';
 // ============================================================
 // LORE — animation helpers. Triggered by engine events; never
@@ -79,7 +81,7 @@ function fromRect(side: ViewSide, org: PlayOrigin | null): DOMRect | null {
   return handRect(side);
 }
 const handRect = (side: ViewSide): DOMRect | null => rectOf(side === "me" ? "#hand" : "#oppHand");
-const rowRect = (side: ViewSide): DOMRect | null => rectOf(side === "me" ? "#meRow" : "#oppRow");
+const rowRect = (side: ViewSide): DOMRect | null => rectOf(side === "me" ? "#meRow .zone-mon" : "#oppRow .zone-mon");
 const discId = (side: ViewSide): string => (side === "me" ? "pile-myDisc" : "pile-oppDisc");
 function trapZoneRect(side: ViewSide): DOMRect | null {
   const row = document.getElementById(side === "me" ? "meRow" : "oppRow");
@@ -198,9 +200,10 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   }
   return face;
 }
-export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish",slotIndex?:number): Promise<HTMLElement|null> {
+export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish",slotIndex?:number,deferVanish=false): Promise<HTMLElement|null> {
   const from = fromRect(side, takeOrigin(side)); if (!from) return null;
   const node = floatAt(cardEl(card, {size:"hand"}), from);
+  let held=false;
   try {
     await focusCard(node, side);
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
@@ -210,14 +213,18 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
       if(target){
         const duration=enchantHasTurnCountdown(card)?`<span class="buff-duration"><span>${getLang()==='ja'?'残り':''}${card.val??1}</span></span>`:'<img class="buff-infinity" src="/art/biblion/modular/infinity.png" alt="">';
         const face=await flyIntoSlot(node,target,card.t==='quest'?questTile(card):enchantmentTile(card,duration));
-        if(!fxSkip)playBiblionFx(card.t==='quest'?'quest':'enchant',face);
+        if(!fxSkip)playBiblionFx(card.t==='quest'?'quest':'enchant-place',face);
         return face;
       }
     } else if (dest === "discard") await landOnShelf(node,side,true);
-    else if(dest === "vanish") await absorbIntoRift(node,side);
+    else if(dest === "vanish") {
+      if(card.quick&&!fxSkip)playBiblionFx('quick',node);
+      if(deferVanish&&!fxSkip){await parkQuickSpell(node,side);held=true;return node;}
+      await absorbIntoRift(node,side);
+    }
     else if (to) await landCard(node, to, true);
     if (dest === "discard") pileFlash(discId(side));
-  } finally { node.remove(); }
+  } finally { if(!held)node.remove(); }
   return null;
 }
 export async function summonFromHand(card: CardInst, uid: string, side: ViewSide): Promise<void> {
@@ -264,12 +271,13 @@ export async function trapRevealAnim(card: CardInst, side: ViewSide, hold = 2000
   await wait(460); pileFlash(discId(side)); node.remove();
 }
 
-/** A card was bought: pop the card UI at the market, then fly it to that player's discard. */
-export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | null, source?:HTMLElement|null, remaining=0): Promise<void> {
-  if(fxSkip)return;
+/** Purchases fly to the shelf; quick spells return a revealed face for effect-first playback. */
+export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | null, source?:HTMLElement|null, remaining=0,paidMana=card.cost): Promise<HTMLElement|null> {
+  if(fxSkip)return null;
   const destination = card.quick ? (side === "me" ? "rift-me" : "rift-opp") : discId(side);
   const to = rectOf("#" + destination);
-  if (!src || !to) { pileFlash(destination); return; }
+  if (!src || !to) { if(card.quick)return revealSpell(card,side,"vanish",undefined,true);pileFlash(destination); return null; }
+  if(paidMana>0){await purchaseMana(side,src);if(fxSkip)return null;}
   if(source){
     // Remove the last-stock face before any texture work or lift. Keep its slot
     // geometry stable until the authoritative board render replaces the market.
@@ -278,21 +286,56 @@ export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | n
     else {const stock=source.querySelector('.mkt-stock');if(stock)stock.textContent=`×${remaining}`;}
     if(!card.quick){
       const target=document.getElementById(destination),print=cardEl(card,{size:'mkt'});
-      try {if(target&&await boardMotionScope(signal=>moveOnBoard({kind:'purchase',source,target,card:print,signal}),3500))return;}
+      try {if(target&&await boardMotionScope(signal=>moveOnBoard({kind:'purchase',source,target,card:print,signal}),3500))return null;}
       catch { /* The projected fallback keeps the purchase pipeline alive. */ }
-      if(fxSkip)return;
+      if(fxSkip)return null;
     }
   }
   const node = floatAt(cardEl(card, { size: "mkt" }), src);
   const pose=source?fieldPlacement(source,node.offsetWidth,node.offsetHeight):new DOMMatrix().translate(src.left,src.top);
   node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transform=pose.toString();
-  await raf();
-  node.style.transition = `transform .26s ${EASE}`; node.style.transform = new DOMMatrix().translate(0,-22).multiply(pose).scale(1.08).toString();
-  if(card.quick&&!fxSkip)playBiblionFx('quick',node);
-  await wait(320);
-  try { if(card.quick)await absorbIntoRift(node,side);else await landOnShelf(node,side); }
-  finally {node.remove();}
+  let held=false;
+  try {
+    if(card.quick){
+      // The controller owns this face until effect playback (including choices) completes.
+      node.dataset.quickPhase='reveal';
+      await focusCard(node,side);
+      if(fxSkip)return null;
+      playBiblionFx('quick',node);
+      await parkQuickSpell(node,side);held=true;return node;
+    }
+    await raf();
+    node.style.transition = `transform .26s ${EASE}`; node.style.transform = new DOMMatrix().translate(0,-22).multiply(pose).scale(1.08).toString();
+    await wait(320);await landOnShelf(node,side);
+  } finally {if(!held)node.remove();}
+  return null;
+}
 
+/** Mana moves from the payer's crystals into the purchase before the card leaves its slot. */
+async function purchaseMana(side:ViewSide,target:DOMRect):Promise<void>{
+  if(fxSkip)return;
+  const cluster=document.getElementById('hpbar-'+side)?.closest('.pcluster');
+  const source=cluster?.querySelector<HTMLElement>('.mana-crystals')??cluster?.querySelector<HTMLElement>('.pips');
+  if(!source)return;
+  const stop=playBiblionFx('purchase',source.getBoundingClientRect(),target);
+  try{
+    await wait(530);if(!fxSkip&&!document.hidden)sfx('mana-pay');
+    await wait(330);
+  }finally{stop();}
+}
+
+/** Keep the revealed source readable at the board edge while its effect resolves. */
+async function parkQuickSpell(node:HTMLElement,side:ViewSide):Promise<void>{
+  const row=rowRect(side),w=Math.min(92,innerWidth*.18),scale=w/node.offsetWidth;
+  const h=node.offsetHeight*scale;
+  node.dataset.quickPhase='resolving';
+  node.style.transition=matchMedia('(prefers-reduced-motion:reduce)').matches?'none':`left .3s ${EASE},top .3s ${EASE},transform .3s ${EASE}`;
+  node.style.left=`${innerWidth-w-12}px`;node.style.top=`${Math.max(12,Math.min(innerHeight-h-12,(row?.top??innerHeight*.5)+12))}px`;
+  node.style.transform=`scale(${scale})`;
+  await wait(310);
+}
+export async function finishQuickSpell(node:HTMLElement,side:ViewSide):Promise<void>{
+  try{node.dataset.quickPhase='exile';if(node.isConnected)await absorbIntoRift(node,side);}finally{node.remove();}
 }
 
 function byUid(uid: string): HTMLElement | null {
@@ -323,7 +366,7 @@ export function hpFeedback(side: ViewSide, kind: "dmg" | "heal", amount: number)
   }
   const bar = document.getElementById("hpbar-" + side);
   const num = document.getElementById("hp-" + side);
-  if(kind==='heal'&&amount>0&&!fxSkip)playBiblionFx('heal',()=>document.getElementById(side==='me'?'portraitMe':'portraitOpp')?.getBoundingClientRect()??null);
+  if(kind==='heal'&&amount>0&&!fxSkip)playBiblionFx('heal',()=>document.querySelector(side==='me'?'#portraitMe .pt-ring':'#portraitOpp .pt-ring')?.getBoundingClientRect()??null);
   if (bar && kind==='dmg') { bar.classList.add("shake"); setTimeout(() => bar.classList.remove("shake"), 400); }
   if (num) { num.classList.add(kind === "dmg" ? "hp-hit" : "hp-heal"); setTimeout(() => num.classList.remove("hp-hit", "hp-heal"), 450); }
   if(kind==='dmg')floatNum(bar || num, "-" + amount, kind);
@@ -344,80 +387,44 @@ export function lunge(uid: string, dir: "up" | "down"): void {
   if (n) { const c = "lunge-" + dir; n.classList.add(c); setTimeout(() => n.classList.remove(c), 460); }
 }
 
-/**
- * Hearthstone-style attack: the attacker card winds up, CHARGES into its
- * target (an enemy monster, or the defending player's HP bar on a direct
- * attack), slams with an impact burst + screen shake, then snaps back.
- * `onImpact` fires exactly at the moment of contact (e.g. to shake the victim).
- */
-export async function attackStrike(uid: string, targetUid: string | null, defender: ViewSide, onImpact?: () => void): Promise<void> {
-  const n = byUid(uid);
-  if (!n) return;
-  const direct = !targetUid;
-  const tEl: Element | null = targetUid ? byUid(targetUid) : document.querySelector(defender === "me" ? "#portraitMe .avatar" : "#portraitOpp .avatar");
-  const to = tEl ? tEl.getBoundingClientRect() : null;
-  const from = n.getBoundingClientRect();
-  if (!to) { lunge(uid, defender === "opp" ? "up" : "down"); await wait(460); onImpact?.(); return; }
-
-  const cx = to.left + to.width / 2 - (from.left + from.width / 2);
-  const cy = to.top + to.height / 2 - (from.top + from.height / 2);
-  // stop just short of the target center so the card's edge visually slams it
-  const k = direct ? 0.94 : 0.82;
-  const dx = cx * k, dy = cy * k;
-  const dur = direct ? 660 : 570;
-
-  n.classList.add("striking");
-  const moving=floatAt(n.cloneNode(true) as HTMLElement,{left:0,top:0});moving.removeAttribute('data-uid');moving.classList.add('attack-flight');
-  const w=n.offsetWidth,h=n.offsetHeight,start=fieldPlacement(n,w,h);
+/** Physical card attack: anticipation, accelerating contact, hit stop, recoil and a settled return. */
+export async function attackStrike(uid:string,targetUid:string|null,defender:ViewSide,onImpact?:()=>void):Promise<void>{
+  const source=byUid(uid);
+  const target=targetUid?byUid(targetUid):document.querySelector<HTMLElement>(defender==='me'?'#portraitMe .avatar':'#portraitOpp .avatar');
+  if(!source||!target||fxSkip)return;
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches){onImpact?.();await wait(100);return;}
+  const from=source.getBoundingClientRect(),to=target.getBoundingClientRect();
+  const w=source.offsetWidth,h=source.offsetHeight;if(!w||!h)return;
+  const start=fieldPlacement(source,w,h),plan=attackPlan(from,to);
+  const moving=floatAt(source.cloneNode(true) as HTMLElement,{left:0,top:0});
+  moving.removeAttribute('data-uid');moving.removeAttribute('id');moving.classList.add('attack-flight');
   moving.style.width=`${w}px`;moving.style.height=`${h}px`;moving.style.setProperty('--cw',`${w}px`);moving.style.setProperty('--ch',`${h}px`);moving.style.transformOrigin='0 0';
-  const pose=(x:number,y:number)=>new DOMMatrix().translate(x,y).multiply(start).toString();
-  n.style.visibility='hidden';moving.style.visibility='visible';
-  const anim = moving.animate([
-    { transform:pose(0,0), easing:"cubic-bezier(.5,0,.8,.4)" },
-    { transform:pose(-cx*.1,-cy*.1), offset:.32, easing:"cubic-bezier(.7,0,.85,.4)" },
-    { transform:pose(dx,dy),offset:.6 },
-    { transform:pose(dx*.96,dy*.96),offset:.7,easing:"cubic-bezier(.2,.6,.4,1)" },
-    { transform:pose(0,0) },
-  ], {duration:dur,easing:'linear',fill:'none'});
-
-  await wait(dur * 0.6); // ...until the moment of contact
-  impactBurst(to.left + to.width / 2, to.top + to.height / 2, direct);
-  boardShake(direct ? "hard" : "soft");
-  onImpact?.();
-  // the return travel is decorative — wait skippably instead of on anim.finished
-  await wait(dur * 0.4);
-  anim.cancel();moving.remove();n.style.visibility='';n.classList.remove('striking');
-}
-
-/** Radial flash + flying sparks at the point of impact. */
-function impactBurst(x: number, y: number, big: boolean): void {
-  const b = document.createElement("div");
-  b.className = "impact-burst" + (big ? " big" : "");
-  b.style.left = x + "px";
-  b.style.top = y + "px";
-  const shards = big ? 12 : 8;
-  for (let i = 0; i < shards; i++) {
-    const s = document.createElement("i");
-    const a = (Math.PI * 2 * i) / shards + Math.random() * 0.6;
-    const d = (big ? 64 : 42) + Math.random() * 34;
-    s.style.setProperty("--tx", Math.cos(a) * d + "px");
-    s.style.setProperty("--ty", Math.sin(a) * d + "px");
-    b.appendChild(s);
-  }
-  document.body.appendChild(b);
-  setTimeout(() => b.remove(), 520);
-}
-
-/** Shake the whole board — soft for monster trades, hard for face hits. */
-function boardShake(kind: "soft" | "hard"): void {
-  // Shake the common parent of the DOM board and WebGL canvas. Transforming
-  // only .game creates a stacking context below the opaque table canvas.
-  const el = document.querySelector(".game")?.parentElement;
-  if (!el) return;
-  el.classList.remove("shake-soft", "shake-hard");
-  void el.offsetWidth; // restart the animation if one is mid-flight
-  el.classList.add("shake-" + kind);
-  setTimeout(() => el.classList.remove("shake-" + kind), kind === "hard" ? 450 : 340);
+  moving.style.visibility='visible';moving.style.transform=start.toString();
+  const visibility=source.style.visibility;source.style.visibility='hidden';
+  let recoil:Animation|undefined;
+  try{
+    await boardMotionScope(async signal=>{
+      const started=performance.now(),stopFx=playBiblionFx('attack',from,to,started);
+      try{
+        await runAttackTimeline({start:started,signal,
+          isAlive:()=>source.isConnected&&target.isConnected&&moving.isConnected,
+          paint:ms=>{
+            const pose=attackPose(plan,ms);
+            moving.dataset.attackPhase=pose.phase;moving.dataset.attackProgress=String(ms/ATTACK_DURATION_MS);
+            moving.style.transform=new DOMMatrix().translate(pose.x,pose.y).rotate(pose.turn).scale(pose.scale).translate(-plan.origin.x,-plan.origin.y).multiply(start).toString();
+          },
+          onLaunch:()=>sfx('attack'),
+          onImpact:()=>{
+            sfx(targetUid?'impact':'facehit');
+            const amount=Math.min(6,plan.u*.07),x=plan.nx*amount,y=plan.ny*amount;
+            recoil=target.animate([{translate:'0 0',filter:'brightness(1)'},{translate:`${x}px ${y}px`,filter:'brightness(1.24)',offset:.18},{translate:`${-x*.25}px ${-y*.25}px`,filter:'brightness(1.03)',offset:.55},{translate:'0 0',filter:'brightness(1)'}],{duration:280,easing:'ease-out'});
+            onImpact?.();
+          }
+        });
+      }finally{stopFx();}
+      return !signal.aborted;
+    },2500);
+  }finally{recoil?.cancel();moving.remove();source.style.visibility=visibility;}
 }
 
 export function monHit(uid: string): void {
@@ -909,33 +916,53 @@ async function landOnShelf(node:HTMLElement,side:ViewSide,spell=false):Promise<v
     observer.observe(document.body,{subtree:true,childList:true});setTimeout(()=>{copy.remove();observer.disconnect();},5000);
   }
 }
+const riftUsers=new WeakMap<HTMLElement,number>();
 export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<void>{
   const target=document.getElementById(side==='me'?'rift-me':'rift-opp');if(!target||fxSkip)return;
-  const a=node.getBoundingClientRect(),b=target.getBoundingClientRect();
-  const x=b.left+b.width/2,y=b.top+b.height/2;
-  target.classList.add('is-absorbing');
+  const a=node.getBoundingClientRect();
+  riftUsers.set(target,(riftUsers.get(target)??0)+1);target.classList.add('is-absorbing');
   const w=node.offsetWidth||a.width,h=node.offsetHeight||a.height;
   const start=node.style.transform.startsWith('matrix')?new DOMMatrix(node.style.transform):new DOMMatrix().translate(a.left,a.top).scale(a.width/w,a.height/h);
   const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
   let started=false;
   try{
-    if(!reduced&&typeof WebGL2RenderingContext!=='undefined'){
+    if(!reduced){
       try{const {swallowRiftCard}=await import('./riftScene');
-        await boardMotionScope(async signal=>{await swallowRiftCard(node,target,start,signal,()=>{started=true;});return true;},5000);
-      }catch{ /* Preserve a complete pull into the aperture without GPU. */ }
+        const completed=await boardMotionScope(async signal=>{await swallowRiftCard(node,target,start,signal,()=>{started=true;});return !signal.aborted;},5000);
+        if(!completed)return;
+      }catch(error){ console.warn('[Rift animation]',error); }
       if(started||fxSkip)return;
     }
     node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transition='none';
-    const end=new DOMMatrix().translate(x,y).scale(0);
-    const duration=reduced?100:900;
+    const end=new DOMMatrix().translate(a.left+a.width/2,a.top+a.height/2).scale(0);
+    const duration=reduced?100:350;
     const motion=node.animate([{transform:start.toString()},{transform:end.toString()}],{duration,easing:'cubic-bezier(.55,.02,.6,1)',fill:'forwards'});
     try{await wait(duration);}finally{motion.cancel();}
-  }finally{target.classList.remove('is-absorbing');}
+  }finally{const left=(riftUsers.get(target)??1)-1;if(left>0)riftUsers.set(target,left);else{riftUsers.delete(target);target.classList.remove('is-absorbing');}}
 }
 export async function exileCard(card:CardInst,side:ViewSide,source?:HTMLElement|null):Promise<void>{
   const r=source?.getBoundingClientRect()||rectOf('#'+discId(side));if(!r)return;
-  const node=floatAt(source?source.cloneNode(true) as HTMLElement:cardEl(card,{size:'hand'}),r);node.style.visibility='visible';if(source){node.style.width=`${source.offsetWidth}px`;node.style.height=`${source.offsetHeight}px`;node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transform=fieldPlacement(source,source.offsetWidth,source.offsetHeight).toString();source.style.visibility='hidden';}
+  const node=floatAt(source?source.cloneNode(true) as HTMLElement:cardEl(card,{size:'hand'}),r);node.classList.remove('is-played');node.style.visibility='visible';if(source){node.style.width=`${source.offsetWidth}px`;node.style.height=`${source.offsetHeight}px`;node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transform=fieldPlacement(source,source.offsetWidth,source.offsetHeight).toString();source.style.visibility='hidden';}
   try{await absorbIntoRift(node,side);}finally{node.remove();} // The old source stays hidden until the authoritative board render.
+}
+/** Conjured removals have no library/hand origin. Show up to three staggered apparitions. */
+export async function exileGeneratedCards(cards:CardInst[],side:ViewSide,origin?:DOMRect):Promise<void>{
+  const row=rectOf(`${side==='me'?'#meRow':'#oppRow'} .zone-mon`)??rowRect(side);if(!row||fxSkip)return;
+  const w=Math.min(76,innerWidth*.15),h=w/.64;
+  const cx=origin?origin.left+origin.width/2:row.left+row.width*.7;
+  const cy=origin?origin.top+origin.height/2:row.top+row.height*.5;
+  for(let offset=0;offset<cards.length&&!fxSkip;offset+=3){
+    const batch=cards.slice(offset,offset+3);
+    await Promise.all(batch.map(async(card,i)=>{
+      await wait(i*150);if(fxSkip)return;
+      const x=Math.max(8,Math.min(innerWidth-w-8,cx+(i-(batch.length-1)/2)*w*.82-w/2));
+      const y=Math.max(h*.45,Math.min(innerHeight-h-8,cy-h/2+(i%2)*8));
+      const node=floatAt(cardEl(card,{size:'hand'}),{left:x,top:y});
+      node.dataset.generatedExile=card.uid;node.style.width=`${w}px`;node.style.height=`${h}px`;node.style.setProperty('--cw',`${w}px`);node.style.setProperty('--ch',`${h}px`);
+      const appear=node.animate([{opacity:0,translate:'0 10px'},{opacity:1,translate:'0 0'}],{duration:200,fill:'both'});
+      try{await wait(220);appear.cancel();await absorbIntoRift(node,side);}finally{appear.cancel();node.remove();}
+    }));
+  }
 }
 export async function openingBoard():Promise<void>{
   const root=document.querySelector<HTMLElement>('.game')?.parentElement;

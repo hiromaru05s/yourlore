@@ -1,21 +1,15 @@
+import {readingScale} from './readingBoardLayout';
 import { CARD_RATIO } from './boardProjection';
 /** Single sizing pass: four field rows, one central market and two portraits.
  * Card sizes are bounded by both axes; no measure/reflow feedback loop. */
 export function solveBoard(w: number, h: number, _underPile = false) {
   const phone = w < 700 && h > w;
-  const gap = phone ? 4 : Math.min(9,w*.006);
-  const portrait = 1.5*Math.max(48, Math.min(142,h*.158,w*.205));
-  const portraitReserve=portrait*(phone?.66:.48);
-  // Full cards share one width across market, monsters and every 3D pile.
-  // Fourteen status cards occupy half-unit slots across the seven-column lane.
-  const horizontal=phone?(w*.91-76-5*gap)/7:(w*.92-60-13*gap)/13.6;
-  const vertical=(h-portraitReserve*2-(phone?112:96))/(phone?11.6:5.9375);
-  const tile=Math.max(24.32,Math.min(116,horizontal,vertical));
+  const scale=readingScale(w,h),tile=.110*scale,gap=.008*scale;
+  const portrait=.184*scale,portraitReserve=0;
+  const handH=Math.min(270,tile/.64/.42);
   const mktH=tile/CARD_RATIO;
-  const handH = Math.min(270, h * .32, w * .44);
-  return { cardH: tile / CARD_RATIO, mktH, handH, tile, gap, portrait, railW: 0, logW: 0,
-    portraitReserve, compact: w < 1000, tiny: w < 560 || h < 480, flatMkt: !phone, stackMkt: phone,
-    underPile: false, phone, capH: tile / CARD_RATIO, capMkt: mktH };
+  return {cardH:mktH,mktH,handH,tile,gap,portrait,railW:0,logW:0,portraitReserve,
+    compact:w<1000,tiny:w<560||h<480,flatMkt:true,stackMkt:false,underPile:false,phone,capH:mktH,capMkt:mktH};
 }
 export function startBoardLayout(): () => void {
   const root = document.documentElement;

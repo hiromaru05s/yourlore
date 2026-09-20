@@ -1,3 +1,4 @@
+import {pileCenter,marketHeight,STOCK_THICKNESS} from './readingBoardLayout';
 import {boardPoint} from './boardProjection';
 import * as T from 'three';
 import {overhandPose} from './shufflePose';
@@ -30,9 +31,9 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       const capture=await capturePileSurface(req.card,req.target.dataset.sleeve!);if(req.signal.aborted)return false;
       const map=new T.CanvasTexture(capture.face!);map.colorSpace=T.SRGBColorSpace;map.anisotropy=8;
       const moving=cardStock(texture(req.target.dataset.sleeve!),map);scene.add(moving);
-      const from=req.card.getBoundingClientRect(),r=layoutRect(req.target),height=unit*(.126+(count===0?0:Math.min(count+1,40)*.004));
+      const from=req.card.getBoundingClientRect(),r=layoutRect(req.target),height=unit*pileCenter(count+1,true);
       const purchase=req.kind==='purchase',origin=purchase?layoutRect(req.source):null;
-      const elevation=purchase?unit*(req.source.closest('#supplyMarket')?.30:.22)+unit*.0075:unit*4;
+      const elevation=purchase?unit*(marketHeight(!!req.source.closest('#supplyMarket'))+STOCK_THICKNESS/2):unit*4;
       const start=origin?{x:origin.left+origin.width/2,y:origin.top+origin.height/2}:screenToBoard(from.left+from.width/2,from.top+from.height/2,elevation);
       const depth=focal-Math.sin(angle)*(start.y-cy)-Math.cos(angle)*elevation;
       const size=purchase?unit:from.width*depth/focal;
@@ -75,9 +76,9 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
           const x=a.left+a.width/2+(b.left+b.width/2-a.left-a.width/2)*travel;
           const z=a.top+a.height/2+(b.top+b.height/2-a.top-a.height/2)*travel;
           const rank=(i-8*Math.max(1,Math.floor(n/3))%n+n)%n;
-          const rest=unit*(.144+(n<=1?0:rank/(n-1))*Math.min(req.count,40)*.005);
-          const fromY=unit*(.126+(n<=1?0:i/(n-1))*Math.min(req.count,40)*.004);
-          const stack=unit*(.144+pose.y);
+          const rest=unit*(pileCenter(1,false)+(n<=1?0:rank/(n-1))*(pileCenter(req.count,false)-pileCenter(1,false)));
+          const fromY=unit*(pileCenter(1,true)+(n<=1?0:i/(n-1))*(pileCenter(req.count,true)-pileCenter(1,true)));
+          const stack=unit*(pileCenter(1,false)+pose.y);
           const level=fromY+(stack-fromY)*smooth(t/.19)+(rest-stack)*square;
           m.position.set(x-cx+pose.x*unit,level+unit*1.4*lift*(1-fall)+rebound,z-cy+pose.z*unit);
           m.scale.setScalar(unit);m.rotation.set(-Math.PI/2+pose.tilt,0,pose.roll);
@@ -112,7 +113,7 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
         const supply=element.parentElement?.id==='supplyMarket',siblings=[...element.parentElement!.querySelectorAll('.card')];
         const index=supply?siblings.indexOf(element):siblings.length-1-siblings.indexOf(element);
         document.body.append(face);
-        face.style.transform=boardMatrix(r.left,r.top,unit*(supply?.30:.22)).toString();
+        face.style.transform=boardMatrix(r.left,r.top,unit*marketHeight(supply)).toString();
         const actual=element.getBoundingClientRect(),projected=face.getBoundingClientRect();
         // offsetLeft rounds nested flex positions to whole pixels. Retain the
         // browser's fractional layout too, so handoff cannot nudge the print.
@@ -147,7 +148,7 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       }
       for(const card of movingCards){
         const start=700+(card.supply?card.index*160+80:card.index*80),v=sat((ms-start)/650),p=v*v*v*v;
-        const r=layoutRect(card.element),h=unit*(card.supply?.30:.22),sx=card.supply?-unit*2:innerWidth+unit*2;
+        const r=layoutRect(card.element),h=unit*marketHeight(card.supply),sx=card.supply?-unit*2:innerWidth+unit*2;
         const from=screenToBoard(sx,-innerHeight*.2,flightHeight),x=r.left+r.width/2,z=r.top+r.height/2;
         card.face.style.visibility=ms>=start?'visible':'hidden';
         const px=from.x+(x-from.x)*p,py=from.y+(z-from.y)*p,elevation=flightHeight+(h-flightHeight)*p;

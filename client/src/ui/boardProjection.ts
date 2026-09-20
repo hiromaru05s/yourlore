@@ -1,6 +1,7 @@
+import {placeReadingBoard,marketHeight,pileFace} from './readingBoardLayout';
 /** One perspective and one physical card unit for the DOM and WebGL board.
  * CSS x/y maps to world X/Z; world Y is height above the table. */
-export const BOARD_TILT = 32;
+export const BOARD_TILT = 18;
 export const CARD_RATIO = .64;
 export function boardLens(width=innerWidth,height=innerHeight) {
   return {width,height,cx:width/2,cy:height/2,focal:height*2.2,angle:BOARD_TILT*Math.PI/180};
@@ -27,8 +28,9 @@ export function screenToBoard(x:number,y:number,elevation=0) {
 export function cardUnit(root:HTMLElement):number {return parseFloat(getComputedStyle(root).getPropertyValue('--card-w'))||60;}
 export function projectBoardDOM(root:HTMLElement):void {
   if(typeof DOMMatrix==='undefined')return;
+  placeReadingBoard(root);
   const unit=cardUnit(root);
-  const planes=[...root.querySelectorAll<HTMLElement>('.zone-row,.market-counter,.mid-aside,.pile,.rift-button')].map(element=>({element,rect:layoutRect(element),elevation:(element.classList.contains('market-counter')?unit*.22:0)+(Number(element.dataset.introHeight)||0)}));
+  const planes=[...root.querySelectorAll<HTMLElement>('.zone-row,.market-counter,.mid-aside,.pile,.rift-button,.pt-ring,.pt-vitals,.pt-mana,.portrait>.pt-name,.pt-name--vitals,.pt-brand')].map(element=>({element,rect:layoutRect(element),elevation:(element.classList.contains('market-counter')?unit*marketHeight():element.classList.contains('mid-aside')?unit*.028/.110:element.classList.contains('pt-ring')?unit*.009/.110:element.classList.contains('pt-mana')?unit*.0165/.110:0)+(Number(element.dataset.introHeight)||0)}));
   for(const {element,rect,elevation} of planes){
     element.dataset.boardPlane=String(elevation);element.style.transformOrigin='0 0';
     element.style.transform=new DOMMatrix().translate(-rect.left,-rect.top).multiply(boardMatrix(rect.left,rect.top,elevation)).toString();
@@ -36,10 +38,10 @@ export function projectBoardDOM(root:HTMLElement):void {
   // This child sits on a second physical plinth above the market. Preserve the
   // parent's 3D transform so its height is projected exactly once by our lens.
   root.querySelectorAll<HTMLElement>('.market-sub--supply').forEach(element=>{
-    element.dataset.boardPlane=String(unit*.30);element.style.transformOrigin='0 0';
-    element.style.transform=`translateZ(${unit*.08}px)`;
+    element.dataset.boardPlane=String(unit*marketHeight(true));element.style.transformOrigin='0 0';
+    element.style.transform=`translateZ(${unit*(marketHeight(true)-marketHeight())}px)`;
   });
-  root.querySelectorAll<HTMLElement>('.pile--shelf').forEach(el=>{const n=Number(el.dataset.count)||0;el.style.setProperty('--shelf-elevation',`${unit*(.126+(n>1?Math.min(n,40)*.004:0))+.0075*unit}px`);});
+  root.querySelectorAll<HTMLElement>('.pile--shelf').forEach(el=>{const n=Number(el.dataset.count)||0;el.style.setProperty('--shelf-elevation',`${unit*pileFace(n,true)}px`);});
   root.classList.add('board-projected');
 }
 export function clearBoardProjection(root:HTMLElement):void {

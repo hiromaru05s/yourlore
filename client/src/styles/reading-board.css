@@ -1,0 +1,111 @@
+/* Physical board 01–06. Layout coordinates are authored in meters in readingBoardLayout.ts. */
+@font-face{font-family:LoreBoardSerif;src:url('/models/reading-board/v1/fonts/DejaVuSerif.ttf') format('truetype');font-display:swap;}
+:is(#app,.reading-board).reading-board .game{background:radial-gradient(ellipse at 50% 35%,#303b49,#151b24 80%);isolation:auto;}
+:is(#app,.reading-board).reading-board .game::before,:is(#app,.reading-board).reading-board .game::after{display:none!important;}
+:is(#app,.reading-board).reading-board .stage{position:absolute;inset:0;display:block;padding:0;margin:0;transform:none;}
+:is(#app,.reading-board).reading-board .board-col,:is(#app,.reading-board).reading-board .pcluster,:is(#app,.reading-board).reading-board .pc-side,:is(#app,.reading-board).reading-board .prow,:is(#app,.reading-board).reading-board .field-block,:is(#app,.reading-board).reading-board .zones,:is(#app,.reading-board).reading-board .pile-col,:is(#app,.reading-board).reading-board .mid-row,:is(#app,.reading-board).reading-board .market,:is(#app,.reading-board).reading-board .hand-area,:is(#app,.reading-board).reading-board .portrait{display:contents!important;position:static!important;transform:none!important;filter:none!important;}
+:is(#app,.reading-board).reading-board .zone-row,:is(#app,.reading-board).reading-board .pile,:is(#app,.reading-board).reading-board .rift-button,:is(#app,.reading-board).reading-board .mid-aside,:is(#app,.reading-board).reading-board .market-counter,:is(#app,.reading-board).reading-board .portrait .pt-ring,:is(#app,.reading-board).reading-board .portrait .pt-vitals,:is(#app,.reading-board).reading-board .portrait .pt-mana,:is(#app,.reading-board).reading-board .portrait .pt-name,:is(#app,.reading-board).reading-board .portrait .pt-brand{position:absolute;right:auto;bottom:auto;margin:0;padding:0;box-sizing:border-box;}
+:is(#app,.reading-board).reading-board .zone-row{display:flex;align-items:center;justify-content:center;min-height:0;pointer-events:none;}
+:is(#app,.reading-board).reading-board .zone-row::before,:is(#app,.reading-board).reading-board .zone-row::after{display:none;}
+:is(#app,.reading-board).reading-board .zone{transform:none;filter:none;gap:calc(var(--board-meter)*.008);margin:0;align-items:center;}
+:is(#app,.reading-board).reading-board .zone-mon{width:100%;display:flex;justify-content:center;}
+:is(#app,.reading-board).reading-board .zone-mon>.slot{display:none;}
+:is(#app,.reading-board).reading-board .zone-mon>.card{pointer-events:auto;flex-shrink:0;}
+:is(#app,.reading-board).reading-board .zone-st{width:100%;display:flex;gap:calc(var(--board-meter)*.007);justify-content:center;}
+:is(#app,.reading-board).reading-board .zone-st>.slot{display:none;}
+:is(#app,.reading-board).reading-board .zone-st>.buff-icon{width:calc(var(--board-meter)*.05);height:calc(var(--board-meter)*.055);pointer-events:auto;flex-shrink:0;}
+:is(#app,.reading-board).reading-board .market-heading{display:none;}
+:is(#app,.reading-board).reading-board .market-counter{display:block;border:0!important;border-radius:0;background:none!important;box-shadow:none!important;padding:0;gap:0;min-height:0;}
+:is(#app,.reading-board).reading-board .market-counter::before,:is(#app,.reading-board).reading-board .market-counter::after,:is(#app,.reading-board).reading-board .market-sub::before,:is(#app,.reading-board).reading-board .market-sub::after{display:none;}
+:is(#app,.reading-board).reading-board .market-sub{position:absolute;display:flex;align-items:center;justify-content:center;border:0;background:none;box-shadow:none;padding:0;margin:0;min-width:0;}
+:is(#app,.reading-board).reading-board .market-cards{display:flex;flex-wrap:nowrap;justify-content:center;align-items:center;gap:calc(var(--board-meter)*.010);width:100%;padding:0;margin:0;}
+:is(#app,.reading-board).reading-board #supplyMarket{gap:calc(var(--board-meter)*.005);}
+:is(#app,.reading-board).reading-board .market-cards>.card,:is(#app,.reading-board).reading-board .market-cards>.slot{flex:0 0 var(--card-w);width:var(--card-w);height:var(--card-h);--cw:var(--card-w);--ch:var(--card-h);margin:0;}
+/* Saved older rooms can contain 4+8. Preserve every card without silently dropping stock. */
+:is(#app,.reading-board).reading-board #supplyMarket:has(>:nth-child(4)){gap:0;}
+:is(#app,.reading-board).reading-board #supplyMarket:has(>:nth-child(4))>:not(:first-child){margin-left:calc(var(--card-w)*-.24);}
+:is(#app,.reading-board).reading-board #fixedMarket:has(>:nth-child(8)){gap:0;}
+:is(#app,.reading-board).reading-board #fixedMarket:has(>:nth-child(8))>:not(:first-child){margin-left:calc(var(--card-w)*-.05);}
+:is(#app,.reading-board).reading-board .sub-head{position:absolute;display:block;right:auto;bottom:auto;transform:none;padding:0;z-index:5;}
+:is(#app,.reading-board).reading-board .refresh-btn{position:absolute;inset:0;width:100%;height:100%;min-width:0;min-height:0;border:0;background:transparent;box-shadow:none;border-radius:50%;padding:0;transform:none;}
+:is(#app,.reading-board).reading-board .refresh-btn .rf-ico{visibility:hidden;}
+:is(#app,.reading-board).reading-board .refresh-btn .rf-cost{position:absolute;top:calc(100% + var(--board-meter)*.004);left:50%;transform:translateX(-50%);font-size:clamp(8px,calc(var(--board-meter)*.012),15px);white-space:nowrap;color:#e9dcc0;text-shadow:0 1px 3px #051120;background:none;border:0;padding:0;}
+:is(#app,.reading-board).reading-board .refresh-btn:disabled{opacity:.65;}
+:is(#app,.reading-board).reading-board .reroll-hint{display:none!important;}
+:is(#app,.reading-board).reading-board.reroll-focus .market-sub--supply{background:radial-gradient(ellipse,#7eccef15,transparent 75%);box-shadow:inset 0 0 calc(var(--board-meter)*.015) #a6e6ff55;outline:1px solid #b6dfee88;border-radius:calc(var(--board-meter)*.01);}
+:is(#app,.reading-board).reading-board .mid-aside{display:block;min-width:0;gap:0;}
+:is(#app,.reading-board).reading-board .mid-aside .turn-info{position:absolute;top:calc(100% + var(--board-meter)*.005);width:100%;text-align:center;font-size:clamp(7px,calc(var(--board-meter)*.009),13px);color:#d6c6aa;line-height:1.3;}
+:is(#app,.reading-board).reading-board .mid-aside .turn-cur{display:none;}
+:is(#app,.reading-board).reading-board .mid-aside .tb-num{font-size:inherit;}
+:is(#app,.reading-board).reading-board .mid-aside .turn-badge{display:block;}
+:is(#app,.reading-board).reading-board .end-turn-wrap{position:absolute;inset:14%;display:block;margin:0;}
+:is(#app,.reading-board).reading-board .game #endBtn{width:100%;height:100%;min-height:0;display:flex;align-items:center;justify-content:center;background:none!important;border:0;border-radius:50%;box-shadow:none!important;padding:0;color:#ede5ce;font-family:LoreBoardSerif,Georgia,serif;font-size:calc(var(--board-meter)*.014);font-weight:500;line-height:1.15;white-space:pre-line;text-shadow:0 1px 2px #05111e;transform:none;}
+:is(#app,.reading-board).reading-board #endBtn:disabled{opacity:.85;cursor:default;}
+:is(#app,.reading-board).reading-board #endBtn:focus-visible,:is(#app,.reading-board).reading-board #refreshBtn:focus-visible{outline:2px solid #c1ebfa;outline-offset:3px;}
+:is(#app,.reading-board).reading-board .mid-aside .mp-clock{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;opacity:0;}
+:is(#app,.reading-board).reading-board .pile::before,:is(#app,.reading-board).reading-board .pile-body,:is(#app,.reading-board).reading-board .pile-tag{display:none!important;}
+:is(#app,.reading-board).reading-board .pile-count{position:absolute;left:auto;right:2%;bottom:calc(var(--board-meter)*-.012);min-width:calc(var(--board-meter)*.028);height:calc(var(--board-meter)*.028);font-size:calc(var(--board-meter)*.017);line-height:1.2;border-width:1px;padding:0;}
+:is(#app,.reading-board).reading-board .pile--shelf .pile-print{overflow:visible;}
+:is(#app,.reading-board).reading-board .rift-button{background:none;border:0;box-shadow:none;transform-style:preserve-3d;clip-path:polygon(14% 0,60% 10%,90% 30%,100% 65%,70% 100%,35% 90%,0 60%,0 30%);}
+:is(#app,.reading-board).reading-board .rift-sprite{inset:0;width:100%;height:100%;background:none;opacity:.8;transform:none;animation:none;}
+:is(#app,.reading-board).reading-board .rift-sprite::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 55% 40%,#57269066 0,#19102c 38%,#070b18 70%);}
+:is(#app,.reading-board).reading-board .rift-sprite::after{content:'';position:absolute;inset:8% 15%;background:radial-gradient(circle at 60% 30%,#e5d0ff 0 1px,transparent 2px),radial-gradient(circle at 35% 65%,#9ac4ff 0 1px,transparent 2px),radial-gradient(ellipse at 55% 45%,#b476e42a,transparent 60%);}
+:is(#app,.reading-board).reading-board .rift-button:hover .rift-sprite{filter:brightness(1.16);transform:none;}
+:is(#app,.reading-board).reading-board .rift-label{position:absolute;bottom:18%;left:40%;font-size:calc(var(--board-meter)*.013);color:#c5b7d9;}
+:is(#app,.reading-board).reading-board .portrait .pt-ring{padding:0;border:0;background:transparent;filter:none;border-radius:50%;overflow:hidden;pointer-events:auto;}
+:is(#app,.reading-board).reading-board .portrait .pt-ring::before,:is(#app,.reading-board).reading-board .portrait .pt-ring::after{display:none!important;}
+:is(#app,.reading-board).reading-board .portrait .pt-ring .avatar{inset:0!important;width:100%!important;height:100%!important;border:0;border-radius:50%;object-fit:cover;background:#122036;}
+:is(#app,.reading-board).reading-board .portrait .pt-ring .avatar img{width:100%;height:100%!important;object-fit:cover;object-position:center 30%;}
+:is(#app,.reading-board).reading-board .portrait .pt-vitals{display:block;min-width:0;max-width:none;overflow:visible;pointer-events:none;z-index:2;}
+:is(#app,.reading-board).reading-board .portrait .pt-hp{display:flex;justify-content:center;align-items:center;width:100%;height:100%;padding:0;background:url('/art/biblion/modular/health.png') center/100% 100% no-repeat;border:0;border-radius:0;box-shadow:none;gap:0;}
+:is(#app,.reading-board).reading-board .portrait .pt-hp b{font-family:LoreBoardSerif,Georgia,serif;font-size:calc(var(--board-meter)*.029);font-weight:600;line-height:1;color:#fff8e7;text-shadow:0 1px 2px #0008;margin-top:calc(var(--board-meter)*-.003);}
+:is(#app,.reading-board).reading-board .pt-hp-ico,:is(#app,.reading-board).reading-board .pt-hp-max{display:none;}
+:is(#app,.reading-board).reading-board .pt-hpbar{position:absolute;inset:0;opacity:0;pointer-events:none;height:100%;width:100%;}
+:is(#app,.reading-board).reading-board .portrait .pt-mana{display:block;gap:0;background:none;border:0;box-shadow:none;min-width:0;max-width:none;z-index:2;pointer-events:none;}
+:is(#app,.reading-board).reading-board .portrait .mana-readout{position:absolute;left:0;top:0;width:24.5%;height:100%;display:flex;align-items:center;justify-content:center;gap:calc(var(--board-meter)*.002);background:none;border:0;box-shadow:none;border-radius:0;padding:0;transform:none;color:#eee5cc;line-height:1;text-shadow:0 1px 2px #060d1b;}
+:is(#app,.reading-board).reading-board .portrait .mana-readout b{font-family:LoreBoardSerif,Georgia,serif;font-size:calc(var(--board-meter)*.023);line-height:1;margin:0;font-weight:500;}
+:is(#app,.reading-board).reading-board .portrait .pt-mana-max{font-family:LoreBoardSerif,Georgia,serif;font-size:calc(var(--board-meter)*.015);margin:0;}
+:is(#app,.reading-board).reading-board .portrait .mana-crystals{position:absolute;left:29%;right:3%;top:8%;height:84%;opacity:0;pointer-events:none;display:grid;grid-template-columns:repeat(10,1fr);grid-template-rows:repeat(var(--mana-rows),1fr);}
+:is(#app,.reading-board).reading-board .portrait .mana-crystal{width:100%;height:100%;}
+:is(#app,.reading-board).reading-board .portrait .pt-name{font-size:clamp(8px,calc(var(--board-meter)*.010),13px);font-weight:400;line-height:1.2;color:#c8beaa;text-shadow:0 1px 2px #0a1524;background:none;border:0;box-shadow:none;max-width:none;text-align:center;white-space:nowrap;}
+:is(#app,.reading-board).reading-board .portrait .pt-name--vitals{position:fixed;}
+:is(#app,.reading-board).reading-board .portrait .pt-brand{font-size:calc(var(--board-meter)*.012);}
+:is(#app,.reading-board).reading-board .game:not(.hand-open) #hand{position:absolute;transform:none;z-index:35;max-height:none;}
+:is(#app,.reading-board).reading-board .game:not(.hand-open) #hand .card{transform:scale(.42) rotate(var(--hand-angle,0deg));transform-origin:50% 100%;left:calc(var(--hi)*var(--h-step-compact)*.42 - var(--card-w-hand)*.29);}
+:is(#app,.reading-board).reading-board #oppHand{position:absolute;transform:none;z-index:25;margin:0;padding:0;}
+:is(#app,.reading-board).reading-board #oppHand .card--back{bottom:auto;top:0;}
+:is(#app,.reading-board).reading-board .game.hand-open #hand{top:auto!important;left:50%!important;bottom:8px!important;transform:translateX(-50%);}
+:is(#app,.reading-board).reading-board .game .topbar{z-index:70;}
+:is(#app,.reading-board).reading-board .help-fab,:is(#app,.reading-board).reading-board .mute-fab{z-index:70;}
+/* A useful native fallback also retains controls on machines without WebGL. */
+:is(#app,.reading-board).reading-board[data-table-state="fallback"] .market-counter{background:#16293ae8!important;border:1px solid #b9a47c!important;}
+:is(#app,.reading-board).reading-board[data-widgets-ready="fallback"] .mana-crystals{opacity:1;}
+:is(#app,.reading-board).reading-board[data-widgets-ready="fallback"] #endBtn,:is(#app,.reading-board).reading-board[data-widgets-ready="fallback"] #refreshBtn{background:#173348!important;border:1px solid #cbb78b;}
+@media(prefers-reduced-motion:reduce){:is(#app,.reading-board).reading-board .hand .card{transition:none;}}
+:is(#app,.reading-board).reading-board .game #refreshBtn{position:absolute;inset:0;width:100%;height:100%;min-width:0;min-height:0;margin:0;padding:0;transform:none;}
+
+:is(#app,.reading-board).reading-board .game #refreshBtn{background:transparent!important;border:0!important;box-shadow:none!important;}
+:is(#app,.reading-board).reading-board .rift-sprite{display:none;}
+:is(#app,.reading-board).reading-board .rift-button{clip-path:none;margin:0;}
+:is(#app,.reading-board).reading-board .rift-label{left:25%;bottom:10%;font-size:calc(var(--board-meter)*.010);}
+:is(#app,.reading-board).reading-board .portrait .avatar-seeker .seeker-sprite{width:100%;height:calc(var(--board-meter)*.181);top:0;background-size:200% 100%;}
+:is(#app,.reading-board).reading-board .portrait .pt-name--vitals{position:absolute;}
+
+:is(#app,.reading-board).reading-board .zone-st{display:grid;grid-template-columns:repeat(7,minmax(0,1fr)) calc(var(--board-meter)*.22) repeat(7,minmax(0,1fr));gap:calc(var(--board-meter)*.005);align-items:center;}
+:is(#app,.reading-board).reading-board .zone-st>.buff-icon{width:100%;height:calc(var(--board-meter)*.048);}
+:is(#app,.reading-board).reading-board .zone-st>:nth-child(8){grid-column:9;}
+
+/* Invisible slots still have physical dimensions for summon/enchantment flights. */
+:is(#app,.reading-board).reading-board .zone-mon>.slot{display:block;position:absolute;visibility:hidden;pointer-events:none;left:calc(50% - var(--card-w)/2);top:0;width:var(--card-w);height:var(--card-h);}
+:is(#app,.reading-board).reading-board .zone-mon{height:var(--card-h);}
+:is(#app,.reading-board).reading-board .zone-st>.slot{display:block;visibility:hidden;pointer-events:none;width:100%;height:calc(var(--board-meter)*.048);}
+
+:is(#app,.reading-board).reading-board .game #endBtn::before{display:none;}
+:is(#app,.reading-board).reading-board #endBtn .end-turn-label{pointer-events:none;transform:translateY(calc(var(--cap-press,0px)*-.309));}
+:is(#app,.reading-board).reading-board .mid-aside .mp-clock.show{opacity:1;background:none;box-shadow:none;border:0;display:block;z-index:2;}
+:is(#app,.reading-board).reading-board .mid-aside .tc-dial{position:static;background:none;box-shadow:none;border:0;width:100%;height:100%;}
+:is(#app,.reading-board).reading-board .mid-aside .tc-dial svg{display:none;}
+:is(#app,.reading-board).reading-board .mid-aside .tc-num{position:absolute;top:68%;left:0;right:auto;bottom:auto;width:100%;height:auto;display:block;padding:0;text-align:center;color:#d1d7d5;font-family:LoreBoardSerif,Georgia,serif;font-size:calc(var(--board-meter)*.011);font-weight:500;line-height:1.2;}
+
+/* Reserving a summon joins the centered flex lane before the flight starts. */
+:is(#app,.reading-board).reading-board .zone-mon>.slot[data-reserved-uid]{position:static;flex:0 0 var(--card-w);}

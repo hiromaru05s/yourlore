@@ -10,7 +10,7 @@ export type SfxName =
   | "click" | "play" | "summon" | "attack" | "impact" | "damage" | "heal"
   | "death" | "trapSet" | "trap" | "draw" | "buy" | "mana" | "maxhp"
   | "turn" | "win" | "lose" | "drawGame" | "match" | "error" | "coin" | "pop"
-  | "facehit" | "mimic";
+  | "facehit" | "mimic" | "mana-pay";
 
 // Real audio samples (uploaded mp3s). When a name has a sample it plays the
 // file; otherwise the synth voice below is used. Samples decode once on the
@@ -142,6 +142,13 @@ const SOUNDS: Record<SfxName, () => void> = {
   trapSet: () => { tone({ f: 340, f2: 250, type: "square", dur: 0.05, vol: 0.1 }); tone({ f: 250, f2: 190, type: "square", dur: 0.05, vol: 0.1, at: 0.07 }); },
   trap:    () => { tone({ f: 1250, f2: 300, type: "sawtooth", dur: 0.2, vol: 0.22 }); noise({ dur: 0.12, vol: 0.12, hp: 800 }); },
   buy:     () => { tone({ f: 988, type: "square", dur: 0.06, vol: 0.09 }); tone({ f: 1319, type: "square", dur: 0.1, vol: 0.09, at: 0.06 }); },
+  "mana-pay": () => {
+    // Soft resonant facets, without the square-wave bite of metallic coins.
+    [784,1175,1568].forEach((f,i)=>{
+      tone({f,f2:f*.992,type:'sine',dur:.22,vol:.12,at:i*.075,attack:.004});
+      tone({f:f*2.01,type:'sine',dur:.10,vol:.023,at:i*.075});
+    });
+  },
   coin:    () => { [988, 1319, 1568, 2093].forEach((f, i) => tone({ f, type: "square", dur: 0.09, vol: 0.08, at: i * 0.07 })); },
   mana:    () => { [523, 784, 1047].forEach((f, i) => tone({ f, type: "triangle", dur: 0.1, vol: 0.1, at: i * 0.05 })); },
   maxhp:   () => { tone({ f: 392, type: "sine", dur: 0.16, vol: 0.14 }); tone({ f: 588, type: "sine", dur: 0.22, vol: 0.12, at: 0.08 }); },

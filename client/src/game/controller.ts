@@ -10,7 +10,7 @@ import { paintDuelClock } from '../ui/duelClock';
 // ============================================================
 import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
-import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed } from "../shared/engine";
+import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef } from "../shared/engine";
 import { botDecide, pickBotDeck, type BotDifficulty } from "../shared/bot";
 import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
@@ -47,6 +47,7 @@ export abstract class BaseController implements BoardHandlers {
   protected state!: GameState;
   protected you: Side;
   protected exits: ControllerExits;
+  private quickFaces: {card:CardInst;side:A.ViewSide;node:HTMLElement}[] = [];
   private winShown = false;
   private dead = false;
   private queue: Promise<void> = Promise.resolve();
@@ -152,6 +153,7 @@ export abstract class BaseController implements BoardHandlers {
       .then(() => this.playResult(prev, res, animate, gen))
       .catch((err) => {
         console.error("[playback]", err);
+        this.clearQuickFaces();
         // A playback exception must not strand the game: afterApply is what
         // re-arms the bot (LocalController) and pending pickers. Skipping it for
         // this batch permanently froze bot games on one animation error.
@@ -167,6 +169,7 @@ export abstract class BaseController implements BoardHandlers {
     A.setFxSkip(gen <= this.skipGen);
     this.consumeLogs(res.events);
     if (!animate) {
+      this.clearQuickFaces();
       this.view.render(res.state);
       this.afterApply(res);
       return;
@@ -245,8 +248,7 @@ export abstract class BaseController implements BoardHandlers {
       // sound per event
       let sn: SfxName | undefined;
       if (e.type === "summon") sn = e.id === "MIMIC" ? "mimic" : "summon";      // Mimic token has its own cue
-      else if (e.type === "attack") sn = e.targetUid ? "attack" : "facehit";     // no target = direct hit on a player
-      else sn = ({ hit: "impact", destroy: "death", buy: "buy", draw: "draw", playSpell: "play", trapReveal: "trap", trapSet: "trapSet" } as Partial<Record<GameEvent["type"], SfxName>>)[e.type];
+      else sn = ({ hit: "impact", destroy: "death", draw: "draw", playSpell: "play", trapReveal: "trap", trapSet: "trapSet" } as Partial<Record<GameEvent["type"], SfxName>>)[e.type];
       if (sn) sfx(sn);
       else if (e.type === "damage" && e.player === this.you) sfx("damage");
       else if (e.type === "heal" && e.player === this.you) sfx("heal");
@@ -290,10 +292,9 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "attack": {
-          // charge INTO the target (Hearthstone-style): enemy monster, or the
-          // defender's HP bar on a direct hit — impact shakes the victim
+          // The shared attack timeline owns launch/contact cues and local target recoil.
           const defender = sideOf((1 - e.player) as Side);
-          await A.attackStrike(e.uid, e.targetUid, defender, () => { if (e.targetUid) A.monHit(e.targetUid); });
+          await A.attackStrike(e.uid, e.targetUid, defender);
           break;
         }
         case "hit":
@@ -329,8 +330,17 @@ export abstract class BaseController implements BoardHandlers {
             const oldUids=new Set(prev.players[e.player].enchants.map(x=>x.card.uid));
             const shownUids=new Set(spellGhosts.map(x=>x.dataset.uid));
             const placed=e.dest==='field'?res.state.players[e.player].enchants.find(x=>x.card.id===e.id&&!oldUids.has(x.card.uid)&&!shownUids.has(x.card.uid))?.card:undefined;
-            const face=await A.revealSpell(placed??{ uid: "fx", ...def }, sideOf(e.player), e.dest,buffCount[e.player]+(def.t==='quest'?questCount[e.player]:0));
-            if(face){spellGhosts.push(face);if(def.t==='quest')questCount[e.player]++;else buffCount[e.player]++;}
+            if(def.quick){
+              // A purchase and playSpell describe the same card: reveal it once and defer its exit.
+              if(!this.quickFaces.some(x=>x.card.id===e.id&&x.side===sideOf(e.player))){
+                const card=res.state.players[e.player].removed?.find(c=>c.id===e.id&&!(prev.players[e.player].removed??[]).some(old=>old.uid===c.uid))??{uid:'fx',...def};
+                const node=await A.revealSpell(card,sideOf(e.player),'vanish',undefined,true);
+                if(node){if(this.dead)node.remove();else this.quickFaces.push({card,side:sideOf(e.player),node});}
+              }
+            }else{
+              const face=await A.revealSpell(placed??{ uid: "fx", ...def }, sideOf(e.player), e.dest,buffCount[e.player]+(def.t==='quest'?questCount[e.player]:0));
+              if(face){spellGhosts.push(face);if(def.t==='quest')questCount[e.player]++;else buffCount[e.player]++;}
+            }
           }
           // random-roll cards: roll the 3D dice first, THEN show the outcome popup
           if (def && RANDOM_CARDS.has(def.id)) {
@@ -356,7 +366,10 @@ export abstract class BaseController implements BoardHandlers {
           if (def) {
             const source=this.marketCardNode(e.from,e.i);
             const stock=Number(source?.querySelector('.mkt-stock')?.textContent?.replace('×',''))||1;
-            await A.buyReveal({uid:"fx",...def},sideOf(e.player),source?.getBoundingClientRect()??null,source,e.from==='supply'?0:Math.max(0,stock-1));
+            const card=def.quick?res.state.players[e.player].removed?.find(c=>c.id===e.id&&!(prev.players[e.player].removed??[]).some(old=>old.uid===c.uid)):undefined;
+            const shown=card??{uid:'fx',...def};
+            const node=await A.buyReveal(shown,sideOf(e.player),source?.getBoundingClientRect()??null,source,e.from==='supply'?0:Math.max(0,stock-1),buyCost(prev.players[e.player],shown));
+            if(node){if(this.dead)node.remove();else this.quickFaces.push({card:shown,side:sideOf(e.player),node});}
           }
           else A.pileFlash(e.player === this.you ? "pile-myDisc" : "pile-oppDisc");
           break;
@@ -392,37 +405,64 @@ export abstract class BaseController implements BoardHandlers {
     }
 
     // Public removed-zone deltas cover void exits, culls and effect-driven exile.
-    const animatedIds=new Map<string,number>();
-    for(const e of events)if(e.type==='playSpell'&&e.dest==='vanish'||e.type==='buy'&&DB[e.id]?.quick)animatedIds.set(e.id,(animatedIds.get(e.id)||0)+1);
+    const animatedIds=[new Map<string,number>(),new Map<string,number>()];
+    // Quick purchases also emit playSpell; count the exit only once, scoped to its owner.
+    for(const e of events)if(e.type==='playSpell'&&e.dest==='vanish'){
+      const ids=animatedIds[e.player];ids.set(e.id,(ids.get(e.id)||0)+1);
+    }
     const destroyed=new Set(events.filter(e=>e.type==='destroy').map(e=>e.uid));
     for(const pl of [0,1] as Side[]){
-      const old=new Set((prev.players[pl].removed??[]).map(c=>c.uid));
+      const before=prev.players[pl];
+      const old=new Set((before.removed??[]).map(c=>c.uid));
+      const existed=new Set([...before.hand,...before.deck,...before.discard,...before.field,...before.enchants.map(e=>e.card),...before.traps.map(t=>t.card),...(before.quests??[]).map(q=>q.card),...before.exile.map(e=>e.card)].map(c=>c.uid));
+      const generated:CardInst[]=[];
       for(const c of res.state.players[pl].removed??[]){
         if(old.has(c.uid)||destroyed.has(c.uid))continue;
-        const n=animatedIds.get(c.id)||0;if(n){animatedIds.set(c.id,n-1);continue;}
-        await A.exileCard(c,sideOf(pl),document.querySelector<HTMLElement>(`.card[data-uid="${c.uid}"]`));
+        const n=animatedIds[pl].get(c.id)||0;if(n){animatedIds[pl].set(c.id,n-1);continue;}
+        if(!existed.has(c.uid)){generated.push(c);continue;}
+        await A.exileCard(c,sideOf(pl),document.querySelector<HTMLElement>(`.card[data-uid="${c.uid}"],.card--back[data-uid="${c.uid}"],.buff-icon[data-uid="${c.uid}"]`));
       }
+      await A.exileGeneratedCards(generated,sideOf(pl));
     }
 
     // ---- state-diff celebrations: max mana / max HP gains ----
     // Fire-and-forget: the surge plays OVER the re-rendered board, so the
     // numbers/pips update immediately instead of waiting out the celebration.
+    const effectFinishes:Promise<void>[]=[];
     for (const pl of [0, 1] as Side[]) {
       if (this.dead) return;
       const dMana = res.state.players[pl].maxMana - prev.players[pl].maxMana;
       const dHp = res.state.players[pl].maxHp - prev.players[pl].maxHp;
-      if (dMana > 0) void A.manaSurge(sideOf(pl), dMana);
+      if (dMana > 0) effectFinishes.push(A.manaSurge(sideOf(pl), dMana));
       else if (dMana < 0) A.manaDrop(sideOf(pl), -dMana);
-      if (dHp > 0) { void A.maxHpSurge(sideOf(pl), dHp); sfx("maxhp"); }
+      if (dHp > 0) { effectFinishes.push(A.maxHpSurge(sideOf(pl), dHp)); sfx("maxhp"); }
     }
 
     if (this.dead) return;
+    let statFeedbackMs=0;
+    if(this.quickFaces.length)for(const pl of [0,1] as Side[]){
+      for(const mon of res.state.players[pl].field){
+        const old=prev.players[pl].field.find(m=>m.uid===mon.uid);if(!old)continue;
+        const atk=effAtk(res.state.players[pl],mon)>effAtk(prev.players[pl],old);
+        const hp=effDef(res.state.players[pl],mon)>effDef(prev.players[pl],old);
+        if(atk||hp)statFeedbackMs=Math.max(statFeedbackMs,atk&&hp?2100:1500);
+      }
+    }
     this.view.render(res.state);
     // ghosts overlap the freshly-rendered real cards — drop them next frame
     requestAnimationFrame(() => {ghosts.forEach((g) => g.el.remove());spellGhosts.forEach(g=>g.remove());});
     await Promise.all(([0, 1] as Side[]).map(player => draws[player] > 0
       ? A.animateDraw(document.getElementById(player === this.you ? "hand" : "oppHand"), draws[player], sideOf(player))
       : Promise.resolve()));
+
+    // Pending targets can span multiple reducer batches. Keep the face until the last choice,
+    // board update, draw and stat feedback have completed; do not change engine timing.
+    if(this.quickFaces.length&&(!res.state.pending||res.state.over)){
+      // Dual stat rises stagger health by 600ms; source exit follows both arrows.
+      await Promise.all([...effectFinishes,wait(statFeedbackMs)]);
+      const finished=this.quickFaces.splice(0);
+      await Promise.all(finished.map(x=>A.finishQuickSpell(x.node,x.side)));
+    }
 
     // ---- death sequence: HP orb shatters + cause of death, before the result modal ----
     if (res.state.over && res.state.winner != null && !this.winShown) {
@@ -830,8 +870,11 @@ export abstract class BaseController implements BoardHandlers {
     (el as HTMLElement).style.display = "";
   }
 
+  private clearQuickFaces():void {this.quickFaces.splice(0).forEach(x=>x.node.remove());}
+
   destroy(): void {
     this.dead = true;
+    this.clearQuickFaces();
     A.setFxSkip(true);
     cancelDiceAnimations();
     closeTreasureNotices();

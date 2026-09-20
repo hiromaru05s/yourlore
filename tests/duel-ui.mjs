@@ -101,9 +101,9 @@ assert.equal(document.querySelectorAll('.mana-crystal').length,60);
 assert.equal(document.querySelectorAll('#portraitMe .mana-crystal.is-lit').length,23);
 assert.equal(document.querySelector('#hpbar-me').getAttribute('aria-valuenow'),'20');
 assert.equal(document.querySelector('#hpbar-me i').style.width,'50%');
-assert.equal(document.querySelectorAll('#fixedMarket > .card').length,8);
-assert.equal(document.querySelectorAll('#supplyMarket > .card').length,4);
-assert.deepEqual([...document.querySelectorAll('#supplyMarket .mkt-stock')].map(e=>e.textContent),['×1','×1','×1','×1']);
+assert.equal(document.querySelectorAll('#fixedMarket > .card').length,7);
+assert.equal(document.querySelectorAll('#supplyMarket > .card').length,3);
+assert.deepEqual([...document.querySelectorAll('#supplyMarket .mkt-stock')].map(e=>e.textContent),['×1','×1','×1']);
 assert.equal(document.querySelectorAll('.side-rail').length,0);
 assert.equal(document.querySelector('#oppRow [data-uid^="secret"]'),null,'hidden trap identity stays private');
 const click=el=>el.dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true}));
@@ -112,9 +112,9 @@ const sup=document.querySelector('#supplyMarket > .card');const original=Number(
 click(document.querySelector('#refreshBtn'));assert.equal(rerolls,1);
 v.setHandOpen(true);assert(document.querySelector('.game.hand-open'));v.setHandOpen(false);assert(!document.querySelector('.game.hand-open'));
 g.cur=1;v.render(g);assert(document.querySelector('#refreshBtn').disabled);assert(document.querySelector('#endBtn').disabled);
-g.cur=0;g.players[0].supply[1]=null;v.render(g);assert.equal(document.querySelectorAll('#supplyMarket > *').length,4);assert.equal(document.querySelectorAll('#supplyMarket > .is-bought').length,1);
+g.cur=0;g.players[0].supply[1]=null;v.render(g);assert.equal(document.querySelectorAll('#supplyMarket > *').length,3);assert.equal(document.querySelectorAll('#supplyMarket > .is-bought').length,1);
 assert.deepEqual(avatarPresets(),['SEEKER_RED','SEEKER_BLUE']);assert(avatarHtml('SEEKER_RED','A').includes('seeker-red'));
-for(const [w,h] of [[1920,1080],[1280,720],[1024,768],[390,844],[320,568],[844,390]]) {const m=solveBoard(w,h);assert(m.tile>=20&&m.mktH>=38);assert.equal(m.underPile,false);}
+for(const [w,h] of [[1920,1080],[1280,720],[1024,768],[390,844],[320,568],[844,390]]) {const m=solveBoard(w,h);assert(m.tile>=20&&m.mktH>=31);assert.equal(m.underPile,false);}
 // Complete type-specific PNG faces and live numeric overlays survive rendering.
 for (const card of document.querySelectorAll('.card[data-card-type]')) {
   const compact = card.matches('.card--field');

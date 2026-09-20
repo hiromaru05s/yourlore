@@ -1,3 +1,4 @@
+import {pileCenter,STOCK_THICKNESS} from './readingBoardLayout';
 /** Blender furniture mounting and reusable thin, rounded card stock. */
 import * as T from 'three';
 import { CARD_PADDING } from './cardSurface';
@@ -16,7 +17,7 @@ function rounded(w:number,h:number,r:number):T.Shape {
 export function cardStock(map:T.Texture, face?:T.Texture, edgesOnly=false):T.Group {
   const g=new T.Group();g.name='card-stock';
   const shape=rounded(.94,RATIO*.94,.12);
-  const edge=new T.ExtrudeGeometry(shape,{depth:.014,bevelEnabled:false,curveSegments:4});edge.translate(0,0,-.007);
+  const edge=new T.ExtrudeGeometry(shape,{depth:STOCK_THICKNESS,bevelEnabled:false,curveSegments:4});edge.translate(0,0,-STOCK_THICKNESS/2);
   const stock=new T.Mesh(edge,[new T.MeshBasicMaterial({visible:false}),new T.MeshStandardMaterial({color:0xccbea5,roughness:.85})]);stock.castShadow=true;stock.receiveShadow=true;g.add(stock);
   const skin=(texture:T.Texture,back:boolean)=>{
     const padded=!back&&!!face;
@@ -24,7 +25,7 @@ export function cardStock(map:T.Texture, face?:T.Texture, edgesOnly=false):T.Gro
     if(!padded)for(let i=0;i<p.count;i++)uv.setXY(i,p.getX(i)+.5,p.getY(i)/RATIO+.5);
     const mesh=new T.Mesh(geo,new T.MeshBasicMaterial({map:texture,toneMapped:false,transparent:padded,alphaTest:padded?.025:0}));
     mesh.name=back?'stock-back':'stock-front';
-    mesh.position.z=back?-.0075:.0075;if(back)mesh.rotation.y=Math.PI;
+    mesh.position.z=(back?-1:1)*STOCK_THICKNESS/2;if(back)mesh.rotation.y=Math.PI;
     mesh.castShadow=true;mesh.receiveShadow=true;g.add(mesh);
   };
   if(!edgesOnly){skin(face||map,false);skin(map,true);}return g;
@@ -33,27 +34,27 @@ export function cardStock(map:T.Texture, face?:T.Texture, edgesOnly=false):T.Gro
 export function makePile(count:number,shelf:boolean,sleeve:T.Texture,face?:T.Texture,furniture?:T.Group):PileModel {
   const group=new T.Group(),cards=new T.Group();group.add(cards);
   let top:T.Object3D=new T.Object3D();group.add(top);
-  const mount=shelf?.12:.14;
-  if(furniture){furniture.position.y=mount;group.add(furniture);}
+  const mount=(shelf?.009:.0088)/.110;
+  if(furniture){furniture.position.y=0;group.add(furniture);}
   else {
     const fallback=new T.Mesh(new T.BoxGeometry(shelf?1.52:1.26,mount,shelf?2.08:1.91),new T.MeshStandardMaterial({color:0xd7cbb0,roughness:.7}));
     fallback.position.y=mount/2;fallback.receiveShadow=true;group.add(fallback);
   }
   if(!shelf){
-    const n=Math.min(count,20),height=Math.min(count,40)*.005;
+    const n=Math.min(count,20),height=Math.max(0,Math.min(count,40)-1)*STOCK_THICKNESS;
     for(let i=0;i<n;i++){
       const card=cardStock(sleeve);card.rotation.x=-Math.PI/2;
-      card.position.set(0,mount+.004+(n<=1?0:i/(n-1)*height),0);cards.add(card);top=card;
+      card.position.set(0,pileCenter(1,false)+(n<=1?0:i/(n-1)*height),0);cards.add(card);top=card;
     }
-    if(!n)top.position.y=mount+.004;
+    if(!n)top.position.y=pileCenter(1,false);
   }else{
-    const n=Math.min(count,12),height=Math.min(count,40)*.004;
+    const n=Math.min(count,12),height=Math.max(0,Math.min(count,40)-1)*STOCK_THICKNESS;
     for(let j=0;j<n;j++){
       const card=cardStock(sleeve,j===n-1?face:undefined,!face || j<n-1);card.rotation.x=-Math.PI/2;
-      card.position.set(0,mount+.006+(n<=1?0:j/(n-1)*height),0);
+      card.position.set(0,pileCenter(1,true)+(n<=1?0:j/(n-1)*height),0);
       cards.add(card);top=card;
     }
-    if(!n)top.position.set(0,mount+.006,0);
+    if(!n)top.position.set(0,pileCenter(1,true),0);
   }
   top.userData.restY=top.position.y;
   return {group,cards,top};

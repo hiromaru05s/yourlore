@@ -1,3 +1,4 @@
+import "../styles/reading-board.css";
 /// <reference types="vite/client" />
 /** Development-only visual fixture. Not an entry point of the production build. */
 import '../styles/tokens.css';
