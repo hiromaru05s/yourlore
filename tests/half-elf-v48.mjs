@@ -17,7 +17,7 @@ try {
     g.players[0].field.push(mon('HALF_ELF'));
     return g;
   };
-  assert.equal(BALANCE_VERSION, 'v48');
+  assert(Number(BALANCE_VERSION.slice(1)) >= 48, 'v48 Half Elf mechanics remain covered');
   assert.equal(DB.HALF_ELF.atk, 0);
   assert.equal(DB.HALF_ELF.def, 1);
   assert.equal(DB.HALF_ELF.onSummon, 'halfElf');

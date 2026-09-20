@@ -853,6 +853,13 @@ Object.assign(TEXTS, {
   CHOSEN_ROGUE: "Passive: ATK +2 per 2 exiled Culls",
 });
 
+// ---- v49 ----
+Object.assign(TEXTS, {
+  TGE4: "【On Summon】Once/game: another Origin card in your deck (excluding this instance): opponent Brand +1",
+  WORLD_CARE: "【Passive】Max 1 on your field · 【Each Turn】At your turn start: your max HP +3",
+  ANCIENT_CIV: "【Lasts 9 Turns】After 9 turns: max mana -1, add a 'Dragon Egg' or 'Divine Beast Egg' to hand · Then destroyed",
+});
+
 export function applyEnglish(pools: Array<Record<string, CardDef>>): void {
   for (const pool of pools) {
     for (const id of Object.keys(pool)) {
