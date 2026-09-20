@@ -62,7 +62,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
     projectBoardDOM(root);keyLight.shadow.needsUpdate=true;
   }
   const motion=installSceneMotion(root,flightScene,items,texture,refresh);
-  const observer=new MutationObserver(()=>{dirty=true;});observer.observe(root,{childList:true,subtree:true,attributes:true,attributeFilter:['class','data-count','data-sleeve','data-face']});
+  const observer=new MutationObserver(records=>{if(records.some(r=>r.type==='childList'||r.oldValue!==(r.target as Element).getAttribute(r.attributeName!)))dirty=true;});observer.observe(root,{childList:true,subtree:true,attributes:true,attributeOldValue:true,attributeFilter:['class','data-count','data-sleeve','data-face']});
   const onLayout=()=>{dirty=true;};window.addEventListener('lore:layout',onLayout);
   const dustScene=new T.Scene(), dustCamera=new T.PerspectiveCamera(45,1,1,4000);
   const dustMap=dustTexture();
@@ -86,13 +86,15 @@ export function mountDuelScene(root:HTMLElement):()=>void {
     flows.push({group,start:performance.now(),from,to});
   };
   window.addEventListener('lore:buff-flow',onFlow);
+  let perfStart=0,perfFrames=0,perfMs=0;
+  const diagnostics=new URLSearchParams(location.search).has("polish");
   function render(now:number):void {
     if(dead)return;frame=requestAnimationFrame(render);if(document.hidden||now-last<16)return;last=now;
     if(!root.isConnected){dispose();return;}
     if(width!==innerWidth||height!==innerHeight){width=innerWidth;height=innerHeight;renderer.setSize(width,height);flightRenderer.setSize(width,height);dirty=true;}
     const widgetMotion=widgets.tick(now),boardMotion=motion.tick(now);
     if(!dirty&&!widgetMotion&&!boardMotion&&!dusts.length&&!flows.length&&flightScene.children.length<=1&&!flightActive&&now-lastPaint<2000)return;
-    lastPaint=now;
+    lastPaint=now;const paintStart=performance.now();
     if(dirty){refresh();dirty=false;}
     const {focal,angle,cx,cy}=boardLens(width,height),unit=cardUnit(root);
     // Pixel-space world: keep the near plane close enough to resolve thin card stock.
@@ -100,7 +102,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
     camera.position.set(0,focal*Math.cos(angle),focal*Math.sin(angle));camera.lookAt(0,0,0);camera.updateProjectionMatrix();camera.updateMatrixWorld();
     keyLight.position.set(-unit/.110*.6,unit/.110,unit/.110*.5);const shadowCamera=keyLight.shadow.camera;shadowCamera.left=-width*.8;shadowCamera.right=width*.8;shadowCamera.top=height;shadowCamera.bottom=-height;shadowCamera.near=1;shadowCamera.far=height*5;shadowCamera.updateProjectionMatrix();
     table.resize(width,height,unit);
-    if(widgetMotion)keyLight.shadow.needsUpdate=true;
+    if(widgets.takeShadowUpdate())keyLight.shadow.needsUpdate=true;
     if(boardMotion)keyLight.shadow.needsUpdate=true;
     for(const item of items.values()){
       const r=layoutRect(item.element);item.group.position.set(r.left+r.width/2-cx,0,r.top+r.height/2-cy);item.group.scale.setScalar(unit);
@@ -149,6 +151,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
       renderer.render(dustScene,dustCamera);
     }
     canvas.dataset.dustCount=String(dusts.length);
+    if(diagnostics){if(!perfStart)perfStart=now;perfFrames++;perfMs+=performance.now()-paintStart;if(now-perfStart>=5000){root.dataset.scenePerf=JSON.stringify({seconds:+((now-perfStart)/1000).toFixed(1),paints:perfFrames,cpuMs:+perfMs.toFixed(1),calls:renderer.info.render.calls,triangles:renderer.info.render.triangles});perfStart=now;perfFrames=0;perfMs=0;}}
     const active=flightScene.children.length>1;
     if(active||flightActive)flightRenderer.render(flightScene,camera);
     flightActive=active;

@@ -1,3 +1,4 @@
+import {mountRiftApertures} from './riftAperture';
 import * as T from 'three';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {READING_ASSETS,readingScale} from './readingBoardLayout';
@@ -5,18 +6,11 @@ import {addCrystalOptics} from './readingCrystalOptics';
 /** Geometry-only UI; the original native buttons retain keyboard/game authority. */
 export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
  const group=new T.Group();group.name='Reading board 02 05 06';scene.add(group);
- const riftMaterial=new T.ShaderMaterial({uniforms:{phase:{value:0}},vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,fragmentShader:`varying vec2 vUv;uniform float phase;float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}void main(){vec2 p=vUv;float cloud=exp(-length((p-vec2(.5,.48))*vec2(2.5,1.5))*2.4);float grain=hash(floor(p*vec2(130.,260.)));float stars=pow(grain,90.)*.42;float pulse=.95+.05*sin(phase);vec3 color=mix(vec3(.009,.011,.028),vec3(.075,.034,.14),cloud*pulse)+vec3(.34,.42,.62)*stars;gl_FragColor=vec4(color,1.);}`});
- const riftGeometry:T.BufferGeometry[]=[];
- for(const sign of [-1,1]){
-  const shape=new T.Shape();shape.moveTo(.670,sign*.371);shape.bezierCurveTo(.670,sign*.273,.725,sign*.175,.773,sign*.123);shape.bezierCurveTo(.782,sign*.245,.725,sign*.335,.670,sign*.371);
-  const geometry=new T.ShapeGeometry(shape,48),positions=geometry.getAttribute('position'),uv=geometry.getAttribute('uv');
-  for(let i=0;i<uv.count;i++)uv.setXY(i,(positions.getX(i)-.665)/.115,(Math.abs(positions.getY(i))-.12)/.26);
-  const plane=new T.Mesh(geometry,riftMaterial);plane.rotation.x=-Math.PI/2;plane.position.y=-.008;plane.material.side=T.DoubleSide;group.add(plane);riftGeometry.push(geometry);
- }
+ const apertures=mountRiftApertures(root);let shadowDirty=true;
  const templates:T.Group[]=[];const owned:T.Material[]=[];const geometries:T.BufferGeometry[]=[];
- const manas:Array<{root:T.Group;batches:Record<'ready'|'spent',T.InstancedMesh[]>;key:string;side:string}>=[];
+ const manas:Array<{root:T.Group;batches:Record<'ready'|'spent',T.InstancedMesh[]>;key:string;side:string;maximum:number;current:number;gainStart:number;gainFrom:number}>=[];
  let dead=false,ready=false,turn:T.Group|undefined,reroll:T.Group|undefined,turnCap:T.Object3D|undefined,rerollCap:T.Object3D|undefined,arrows:T.Object3D|undefined,enamel:T.MeshStandardMaterial|undefined;
- let hover='',pressed='',last=performance.now(),rerollTime=-10000,animateUntil=0,lastState='',lastPhase=-1;
+ let hover='',pressed='',last=performance.now(),rerollTime=-10000,turnTime=-10000,animateUntil=0,lastState='',displayEnemy=false;
  const segments:T.Mesh[]=[];const rerollMaterials:Array<{material:T.MeshStandardMaterial;color:T.Color}>=[];
  const lit=new T.MeshStandardMaterial({color:0x3daacb,emissive:0x3ba7cc,emissiveIntensity:.45,metalness:.1,roughness:.32}),dark=new T.MeshStandardMaterial({color:0x10202b,metalness:.2,roughness:.42});owned.push(lit,dark);
  const color=new T.Color();
@@ -33,6 +27,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
    fetch(READING_ASSETS+'crystal-optics.json').then(r=>r.json())
   ]) as [T.Group,T.Group,T.Group,T.Group,T.Group,T.Group,T.Group,{planes:number[][];center:number[];scale:number}];
   if(dead)return;
+  jewel.traverse(o=>{if(o instanceof T.Mesh&&o.material instanceof T.MeshPhysicalMaterial){o.material.color.set('#378bea');o.material.attenuationColor.set('#2373c9');}});
   for(const gem of [jewel,spent])gem.traverse(o=>{if(o instanceof T.Mesh&&o.material instanceof T.MeshPhysicalMaterial&&o.material.transmission>0){addCrystalOptics(o.material,cut);o.material.userData.authoredAttenuation=o.material.attenuationDistance;opticalMaterials.push(o.material);}});
   for(const [side,z] of [['Me',.397],['Opp',-.397]] as const){
    const mana=new T.Group();mana.position.set(-.29,.012,z);group.add(mana);
@@ -46,7 +41,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
      mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);mana.add(mesh);batches[state].push(mesh);
     });
    }
-   manas.push({root:mana,batches,key:'',side});
+   manas.push({root:mana,batches,key:'',side,maximum:0,current:0,gainStart:-10000,gainFrom:0});
   }
   turn=button;turn.position.set(.7,.015,0);timer.position.copy(turn.position);group.add(turn,timer);
   turnCap=turn.getObjectByName('PRESS_CAP');turn.traverse(o=>{if(o instanceof T.Mesh&&o.material instanceof T.MeshStandardMaterial&&o.material.name.startsWith('Turn enamel'))enamel=o.material;});
@@ -57,25 +52,30 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
  })().catch(error=>{if(!dead){console.error('Reading board widgets failed',error);root.dataset.widgetsReady='fallback';ready=true;}});
  const id=(event:Event)=>(event.target as Element)?.closest<HTMLElement>('#endBtn,#refreshBtn')?.id||'';
  const over=(e:Event)=>{const next=id(e);if(next!==hover)animateUntil=performance.now()+500;hover=next;};const down=(e:Event)=>{const target=(e.target as Element)?.closest<HTMLButtonElement>('button');pressed=target&&!target.disabled?id(e):'';animateUntil=performance.now()+500;};
- const up=()=>{pressed='';animateUntil=performance.now()+500;};const click=(e:Event)=>{if(id(e)==='refreshBtn'&&!(e.target as Element).closest<HTMLButtonElement>('button')?.disabled)rerollTime=performance.now();};
- root.addEventListener('pointerover',over);root.addEventListener('pointerdown',down);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);root.addEventListener('click',click);
+ const up=()=>{pressed='';animateUntil=performance.now()+650;};
+ const click=(e:Event)=>{const button=(e.target as Element).closest<HTMLButtonElement>('button');if(button?.disabled)return;const now=performance.now();if(id(e)==='refreshBtn')rerollTime=now;if(id(e)==='endBtn')turnTime=now;animateUntil=now+1000;};
+ root.addEventListener('pointerover',over);root.addEventListener('pointerdown',down);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);root.addEventListener('click',click,true);
  function tick(now:number){
   if(dead)return false;const scale=readingScale();group.scale.setScalar(scale);
-  riftMaterial.uniforms.phase.value=Math.floor(now/2000)%16/16*Math.PI*2;
+  apertures.tick(now);
   if(!ready)return false;
   const dt=Math.min(.06,(now-last)/1000);last=now;let changed=false;
   for(const material of opticalMaterials)material.attenuationDistance=Number(material.userData.authoredAttenuation)*scale;
   for(const mana of manas){
    const el=root.querySelector<HTMLElement>(`#portrait${mana.side} .pt-mana`);if(!el)continue;
-   const key=el.dataset.mana+':'+el.dataset.maximum;if(key===mana.key)continue;mana.key=key;changed=true;
    const maximum=Math.min(30,Math.max(0,Number(el.dataset.maximum)||0)),current=Math.max(0,Number(el.dataset.mana)||0);
+   const key=el.dataset.mana+':'+el.dataset.maximum,newState=key!==mana.key;
+   if(newState){if(mana.key&&(maximum>mana.maximum||current>mana.current)){mana.gainStart=now;mana.gainFrom=Math.min(mana.maximum,mana.current);}mana.key=key;mana.maximum=maximum;mana.current=current;shadowDirty=true;}
+   const gain=Math.max(0,(now-mana.gainStart)/1100),animating=gain<1;
+   if(!newState&&!animating)continue;changed=true;if(animating)shadowDirty=true;
    const counts={ready:0,spent:0},matrix=new T.Matrix4(),q=new T.Quaternion();
    const rows=maximum<=10?1:maximum<=20?2:3;
    for(let i=0;i<maximum;i++){
     const small=rows===1?Math.min(1,(.226/maximum-.003)/.02954):rows===2?.57:.46;
     const x=rows===1?(i-(maximum-1)/2)*Math.min(.045,.226/maximum):(i%10-4.5)*.023;
     const z=rows===1?0:(Math.floor(i/10)-(rows-1)/2)*(rows===2?.026:.019);
-    matrix.compose(new T.Vector3(x,.0038*(1-small),z),q,new T.Vector3().setScalar(small));
+    const t=Math.min(1,Math.max(0,(gain-(i-mana.gainFrom)*.025)/.66)),bloom=animating&&i>=mana.gainFrom?Math.sin(Math.PI*t):0;
+    q.setFromAxisAngle(new T.Vector3(0,1,0),bloom*.28);matrix.compose(new T.Vector3(x,.0038*(1-small)+.023*bloom,z),q,new T.Vector3().setScalar(small*(1+.17*bloom)));
     const state=i<current?'ready':'spent',index=counts[state]++;mana.batches[state].forEach(m=>m.setMatrixAt(index,matrix));
    }
    for(const state of ['ready','spent'] as const)for(const mesh of mana.batches[state]){mesh.count=counts[state];mesh.visible=mesh.count>0;mesh.instanceMatrix.needsUpdate=true;if(mesh.count){mesh.computeBoundingSphere();mesh.computeBoundingBox();}}
@@ -85,24 +85,28 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   for(const m of rerollMaterials){color.copy(m.color);if(refresh?.disabled){const l=color.r*.2126+color.g*.7152+color.b*.0722;color.lerp(new T.Color(l,l,l),.8).multiplyScalar(.5);}else if(hover==='refreshBtn')color.multiplyScalar(1.12);m.material.color.lerp(color,1-Math.exp(-dt*18));}
   const clock=root.querySelector<HTMLElement>('.mp-clock.show'),remaining=clock?Math.min(1,Number(clock.dataset.remaining)/Math.max(1,Number(clock.dataset.total))):1;
   segments.forEach((mesh,i)=>{mesh.material=i<Math.ceil(remaining*24)?lit:dark;});
-  color.set(enemy?0x492633:0x133042);if(hover==='endBtn'&&!end?.disabled)color.multiplyScalar(1.18);enamel?.color.lerp(color,1-Math.exp(-dt*18));
-  color.set(enemy?0xba6471:0x3daacb);lit.color.copy(color);lit.emissive.copy(color);
-  if(turnCap){turnCap.position.y+=((pressed==='endBtn'?-.0015:0)-turnCap.position.y)*(1-Math.exp(-dt*32));end?.style.setProperty('--cap-press',`${turnCap.position.y*scale}px`);}
-  if(rerollCap)rerollCap.position.y+=((pressed==='refreshBtn'?-.0012:0)-rerollCap.position.y)*(1-Math.exp(-dt*32));
-  const t=Math.min(1,Math.max(0,(now-rerollTime)/460)),target=2*Math.PI*(1-(1-t)**3);if(arrows)arrows.rotation.y=target;
-  // The reroll cap is physically attached to the market during its initial fall.
-  group.visible=!root.querySelector('.awaiting-board');
+  const turnAge=now-turnTime;if(turnAge>=650||turnAge<0)displayEnemy=enemy;
+  color.set(displayEnemy?0x492633:0x133042);if(hover==='endBtn'&&!end?.disabled)color.multiplyScalar(1.18);enamel?.color.lerp(color,1-Math.exp(-dt*18));
+  color.set(displayEnemy?0xba6471:0x3daacb);lit.color.copy(color);lit.emissive.copy(color);
+  const pressDepth=(age:number)=>age<0||age>=620?0:age<120?Math.sin(age/120*Math.PI/2):age<230?1:(1-(age-230)/390)**2;
+  const turnPress=pressDepth(turnAge),rerollPress=pressDepth(now-rerollTime);
+  const spin=Math.min(1,Math.max(0,(turnAge-190)/520));const rotation=2*Math.PI*(spin*spin*(3-2*spin));
+  if(turnCap){turnCap.position.y=-.006*Math.max(turnPress,pressed==='endBtn'?.7:0);turnCap.rotation.y=rotation;end?.style.setProperty('--cap-press',`${turnCap.position.y*scale}px`);end?.style.setProperty('--cap-turn',`${-rotation}rad`);}
+  if(rerollCap){rerollCap.position.y=-.0045*Math.max(rerollPress,pressed==='refreshBtn'?.7:0);if(refresh){refresh.dataset.physicalPhase=now-rerollTime<120?'press':now-rerollTime<620?'spin':'rest';refresh.style.setProperty('--cap-press',`${rerollCap.position.y*scale}px`);}}
+  const t=Math.min(1,Math.max(0,(now-rerollTime-120)/500)),target=2*Math.PI*(1-(1-t)**3);if(arrows)arrows.rotation.y=target;
+  if(turnPress||rerollPress||pressed)shadowDirty=true;
+  if(end){end.dataset.physicalPhase=turnAge<120?'press':turnAge<710?'spin':'rest';const label=end.querySelector<HTMLElement>('.end-turn-label');if(label){label.style.opacity=turnAge>140&&turnAge<650?'0':'1';}}
+  group.visible=true;
 
-  const phase=riftMaterial.uniforms.phase.value,state=`${enemy}:${end?.disabled}:${refresh?.disabled}`;
+  const state=`${enemy}:${end?.disabled}:${refresh?.disabled}`;
   if(state!==lastState){animateUntil=now+500;lastState=state;}
-  const phaseChanged=phase!==lastPhase;lastPhase=phase;
-  return changed||phaseChanged||now<animateUntil||t<1;
+  return changed||now<animateUntil||t<1;
  }
- return {tick,warm(render:()=>void){
+ return {tick,takeShadowUpdate(){const value=shadowDirty;shadowDirty=false;return value;},warm(render:()=>void){
   const wasVisible=group.visible,rerollVisible=reroll?.visible;
   const saved=manas.flatMap(m=>Object.values(m.batches).flat().map(mesh=>({mesh,count:mesh.count,visible:mesh.visible})));
   group.visible=true;if(reroll)reroll.visible=true;
   for(const {mesh,count} of saved){if(!count){mesh.setMatrixAt(0,new T.Matrix4());mesh.instanceMatrix.needsUpdate=true;mesh.count=1;}mesh.visible=true;}
   try{render();}finally{group.visible=wasVisible;if(reroll)reroll.visible=rerollVisible??true;for(const {mesh,count,visible} of saved){mesh.count=count;mesh.visible=visible;}}
- },setMarketMotion(height:number,z:number,visible:boolean){if(reroll){const s=readingScale();reroll.position.set(-.694,.016+height/s,z/s);reroll.visible=visible;}},get settled(){return ready;},dispose(){if(dead)return;dead=true;root.removeEventListener('pointerover',over);root.removeEventListener('pointerdown',down);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);root.removeEventListener('click',click);manas.forEach(m=>Object.values(m.batches).flat().forEach(b=>b.dispose()));geometries.forEach(g=>g.dispose());riftGeometry.forEach(g=>g.dispose());riftMaterial.dispose();templates.forEach(releaseTemplate);owned.forEach(m=>m.dispose());group.removeFromParent();delete root.dataset.widgetsReady;}};
+ },setMarketMotion(height:number,z:number,visible:boolean){if(reroll){const s=readingScale();reroll.position.set(-.694,.016+height/s,z/s);reroll.visible=visible;}},get settled(){return ready;},dispose(){if(dead)return;dead=true;root.removeEventListener('pointerover',over);root.removeEventListener('pointerdown',down);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);root.removeEventListener('click',click,true);manas.forEach(m=>Object.values(m.batches).flat().forEach(b=>b.dispose()));geometries.forEach(g=>g.dispose());apertures.dispose();templates.forEach(releaseTemplate);owned.forEach(m=>m.dispose());group.removeFromParent();delete root.dataset.widgetsReady;}};
 }

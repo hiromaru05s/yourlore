@@ -2,50 +2,18 @@
   "levels": [
     {
       "level": "lod0",
-      "triangles": 71992,
-      "material_meshes": 6,
-      "file_bytes": 6516420,
-      "ratio": 0.8237232289950577,
-      "tangents_reconstructed_from_triangle_uvs": 2
-    },
-    {
-      "level": "lod1",
-      "triangles": 23034,
-      "material_meshes": 6,
-      "file_bytes": 1748236,
-      "ratio": 0.2849228333992877,
-      "tangents_reconstructed_from_triangle_uvs": 2
-    },
-    {
-      "level": "lod0",
-      "triangles": 4196,
-      "material_meshes": 3,
-      "file_bytes": 1668300,
-      "ratio": 0.9962049335863378,
+      "triangles": 72000,
+      "material_meshes": 5,
+      "file_bytes": 5015640,
+      "ratio": 1,
       "tangents_reconstructed_from_triangle_uvs": 0
     },
     {
       "level": "lod1",
-      "triangles": 1340,
-      "material_meshes": 3,
-      "file_bytes": 426824,
-      "ratio": 0.3187855787476281,
-      "tangents_reconstructed_from_triangle_uvs": 1
-    },
-    {
-      "level": "lod0",
-      "triangles": 1798,
-      "material_meshes": 2,
-      "file_bytes": 1594152,
-      "ratio": 0.6064690026954178,
-      "tangents_reconstructed_from_triangle_uvs": 0
-    },
-    {
-      "level": "lod1",
-      "triangles": 574,
-      "material_meshes": 2,
-      "file_bytes": 404764,
-      "ratio": 0.1940700808625337,
+      "triangles": 23036,
+      "material_meshes": 5,
+      "file_bytes": 1374148,
+      "ratio": 0.3519921779516011,
       "tangents_reconstructed_from_triangle_uvs": 0
     }
   ]

@@ -172,7 +172,7 @@ function normalizeFitGroups(): void {
     // under ~5px on market/hand cards, so capping at it guaranteed unreadable
     // text; the floor is allowed to exceed it and the overflow becomes the
     // .is-clipped fade — the full text is one tap away in the zoom view.
-    const px = Math.max(Math.min(Math.max(need, base * GROUP_FLOOR), base), minReadablePx());
+    const px = key.startsWith("name:") ? Math.min(need,base) : Math.max(Math.min(Math.max(need, base * GROUP_FLOOR), base), minReadablePx());
     const val = px.toFixed(2) + "px";
     // A box already at the group size needs neither the write nor the re-measure;
     // its .is-clipped flag is still the right one. (Reading an inline style costs
@@ -341,7 +341,7 @@ function flushFits(): void {
  *              WITH) and never gets clipped: it shrinks until everything fits.
  */
 function fitToBox(box: HTMLElement, { solo = false } = {}): void {
-  fitState.set(box, { solo, minPx: solo ? ZOOM_MIN_PX : minReadablePx(), lastW: -1, lastH: -1, waits: 0 });
+  fitState.set(box, { solo, minPx: box.classList.contains("card-name") ? 1 : solo ? ZOOM_MIN_PX : minReadablePx(), lastW: -1, lastH: -1, waits: 0 });
   fitPending.add(box);
   queueFit();
   // 카드가 리사이즈되면 다시 맞춘다 (한 번만 맞추면 리사이즈 후 글자가 잘린 채 남는다).

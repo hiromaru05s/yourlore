@@ -803,11 +803,11 @@ function gainLabel(anchor: DOMRect, text: string, cls: string): HTMLElement {
   return lb;
 }
 
-/** Rich "max mana increased" celebration around the mana pips (~2.2s). */
+/** A 1.4s refractive sweep anchored to the actual crystal tray. */
 export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
   if(amount<=0||fxSkip)return;
-  playBiblionFx('mana',()=>{const cluster=document.getElementById('hpbar-'+side)?.closest('.pcluster');return (cluster?.querySelector('.pips')||cluster?.querySelector('.mana-group'))?.getBoundingClientRect()??null;});
-  await wait(1850);
+  playBiblionFx('mana',()=>{const cluster=document.getElementById('hpbar-'+side)?.closest('.pcluster');return (cluster?.querySelector('.mana-crystals')||cluster?.querySelector('.pt-mana')||cluster?.querySelector('.pips'))?.getBoundingClientRect()??null;});
+  await wait(1400);
 }
 
 /** Rich "max HP increased" celebration around the HP bar (~2s). */

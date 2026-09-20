@@ -4,7 +4,7 @@ import * as T from 'three';
 import {overhandPose} from './shufflePose';
 import {bindBoardMotion,type BoardMotion} from './boardMotion';
 import {cardStock,type PileModel} from './pileModels';
-import {boardLens,layoutRect,cardUnit,screenToBoard,projectBoardDOM,boardMatrix} from './boardProjection';
+import {boardLens,layoutRect,cardUnit,screenToBoard} from './boardProjection';
 import {capturePileSurface} from './cardSurface';
 type Item={group:T.Group;element:HTMLElement;pile?:PileModel;market:boolean;supply:boolean};
 const sat=(v:number)=>Math.max(0,Math.min(1,v));
@@ -96,82 +96,7 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       }finally{cards.forEach(dispose);req.source.classList.remove('is-shuffling');req.target.classList.remove('is-shuffling');delete root.dataset.shufflePhase;delete root.dataset.shuffleRound;}
       return true;
     }
-    const openingDecks=[...root.querySelectorAll<HTMLElement>('.pile--deck')].map(el=>({el,count:Number(el.dataset.count)||0}));
-    const marketCards=[...root.querySelectorAll<HTMLElement>('#fixedMarket .card,#supplyMarket .card')];
-    const movingCards:Array<{element:HTMLElement;face:HTMLElement;correction:DOMMatrix;index:number;supply:boolean;landed:boolean}>=[];
-    // Native card faces from first flight through landing: no second raster,
-    // alternate frame crop, WebGL texture resolution or all-at-once replacement.
-    try {
-      await Promise.all(marketCards.flatMap(e=>[...e.querySelectorAll('img')].map(i=>i.decode().catch(()=>{}))));
-      for(const element of marketCards){
-        const face=element.cloneNode(true) as HTMLElement;
-        const r=layoutRect(element),style=getComputedStyle(element);
-        face.classList.add('opening-card-flight');face.classList.remove('is-dim');face.removeAttribute('id');
-        face.style.cssText=`position:fixed;left:0;top:0;margin:0;width:${r.width}px;height:${r.height}px;--cw:${r.width}px;--ch:${r.height}px;font-size:${style.fontSize};transform-origin:0 0;z-index:127;pointer-events:none;transition:none;visibility:hidden;`;
-        const originals=element.querySelectorAll<HTMLElement>('*');
-        face.querySelectorAll<HTMLElement>('*').forEach((el,i)=>{const cs=getComputedStyle(originals[i]);el.style.fontSize=cs.fontSize;el.style.lineHeight=cs.lineHeight;if(el.classList.contains('card-frame'))el.style.filter=cs.filter;});
-        const supply=element.parentElement?.id==='supplyMarket',siblings=[...element.parentElement!.querySelectorAll('.card')];
-        const index=supply?siblings.indexOf(element):siblings.length-1-siblings.indexOf(element);
-        document.body.append(face);
-        face.style.transform=boardMatrix(r.left,r.top,unit*marketHeight(supply)).toString();
-        const actual=element.getBoundingClientRect(),projected=face.getBoundingClientRect();
-        // offsetLeft rounds nested flex positions to whole pixels. Retain the
-        // browser's fractional layout too, so handoff cannot nudge the print.
-        const correction=new DOMMatrix().translate(actual.left,actual.top).scale(actual.width/projected.width,actual.height/projected.height).translate(-projected.left,-projected.top);
-        movingCards.push({element,face,correction,index,supply,landed:false});element.style.visibility='hidden';
-      }
-    if(disposed||req.signal.aborted)return false;
-    for(const {el,count} of openingDecks){el.dataset.count=String(count+3);el.dataset.openingCount=String(count);}
-    refresh();root.querySelector('.awaiting-board')?.classList.remove('awaiting-board');
-    root.classList.add('duel-opening');root.dataset.openingPhase='market';
-    const duration=4300,above=-innerHeight*.45,flightHeight=innerHeight*.45;
-    // Project a start point outside the viewport instead of spawning at a fixed
-    // small world height. This works at every viewport and for the back/front rows.
-    const fromAbove=(r:DOMRect)=>screenToBoard(r.left+r.width/2,above,flightHeight);
-    try{await timeline(reduced?100:duration,req.signal,t=>{
-      const ms=t*duration;
-      root.dataset.openingPhase=ms<700?'market':ms<2100?'market-cards':ms<2900?'furniture':'decks';
-      for(const item of items.values()){
-        const isMarket=item.market||item.supply,delay=isMarket?0:2100;
-        const p=sat((ms-delay)/650),travel=p*p,r=layoutRect(item.element),from=fromAbove(r);
-        item.group.userData.introHeight=flightHeight*(1-travel);
-        item.group.userData.introZ=(from.y-(r.top+r.height/2))*(1-travel);
-        item.group.visible=ms>=delay;
-        if(p===1&&!item.group.userData.introLanded){item.group.userData.introLanded=true;dust(item.element);}
-        if(item.pile)item.pile.cards.children.forEach((c,i)=>{
-          const start=2900+950*Math.sqrt((i+1)/Math.max(1,item.pile!.cards.children.length));
-          const v=sat((ms-start)/350);c.visible=ms>=start;c.userData.restY??=c.position.y;
-          c.position.y=c.userData.restY+(flightHeight/unit)*(1-v*v);
-          c.position.z=(from.y-(r.top+r.height/2))/unit*(1-v*v);
-          if(v===1&&!c.userData.introLanded){c.userData.introLanded=true;if(i%3===0)dust(item.element);}
-        });
-      }
-      for(const card of movingCards){
-        const start=700+(card.supply?card.index*160+80:card.index*80),v=sat((ms-start)/650),p=v*v*v*v;
-        const r=layoutRect(card.element),h=unit*marketHeight(card.supply),sx=card.supply?-unit*2:innerWidth+unit*2;
-        const from=screenToBoard(sx,-innerHeight*.2,flightHeight),x=r.left+r.width/2,z=r.top+r.height/2;
-        card.face.style.visibility=ms>=start?'visible':'hidden';
-        const px=from.x+(x-from.x)*p,py=from.y+(z-from.y)*p,elevation=flightHeight+(h-flightHeight)*p;
-        // CSS and WebGL share the same board camera; at t=1 this is the exact
-        // native card matrix, including its full-size print and all numeric seals.
-        card.face.style.transform=card.correction.multiply(boardMatrix(px,py,elevation).rotate((1-v)*-14,0,(card.supply?1:-1)*(1-v)*9).translate(-r.width/2,-r.height/2)).toString();
-        if(v===1&&!card.landed){card.landed=true;card.element.dataset.introLanded='true';dust(card.element);}
-        // Landed cards stay below remaining airborne cards in the same portal.
-        card.face.style.zIndex=String(card.landed?127:128);
-        if(ms>=1960){card.element.style.visibility='';card.face.style.visibility='hidden';}
-
-      }
-      const market=root.querySelector<HTMLElement>('.market-counter');if(market){
-        // Empty furniture falls first; DOM controls are revealed after it lands.
-        market.style.visibility=ms<650?'hidden':'';
-        market.querySelectorAll<HTMLElement>('.sub-head,.reroll-hint').forEach(e=>e.style.visibility=ms<2050?'hidden':'');
-      }
-    });}finally{
-      items.forEach(item=>{item.group.visible=true;delete item.group.userData.introHeight;delete item.group.userData.introZ;delete item.group.userData.introLanded;item.pile?.cards.children.forEach(c=>{c.visible=true;c.position.z=0;if(c.userData.restY!=null)c.position.y=c.userData.restY;delete c.userData.introLanded;});});
-      const market=root.querySelector<HTMLElement>('.market-counter');market?.style.removeProperty('visibility');market?.querySelectorAll<HTMLElement>('.sub-head,.reroll-hint').forEach(e=>e.style.removeProperty('visibility'));
-      projectBoardDOM(root);root.classList.remove('duel-opening');delete root.dataset.openingPhase;
-    }
-    }finally{movingCards.forEach(c=>{c.element.style.removeProperty('visibility');delete c.element.dataset.introLanded;c.face.remove();});}
+    // Opening furniture flights were retired; the board starts fully assembled.
     return true;
   });
   return {tick(now:number){tasks.forEach(t=>t(now));return tasks.size>0;},dispose(){disposed=true;unbind();cancels.forEach(c=>c());}};

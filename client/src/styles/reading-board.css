@@ -109,3 +109,23 @@
 
 /* Reserving a summon joins the centered flex lane before the flight starts. */
 :is(#app,.reading-board).reading-board .zone-mon>.slot[data-reserved-uid]{position:static;flex:0 0 var(--card-w);}
+
+/* The player's portrait is a separate, unprojected 2D layer. */
+:is(#app,.reading-board).reading-board .game .portrait .pt-ring{overflow:visible;border-radius:0;z-index:18;transform:none!important;}
+:is(#app,.reading-board).reading-board .game .portrait .pt-ring::after{display:block!important;inset:-9% -4%;background:url('/art/biblion/refined/portrait-opp.png') center/100% 100% no-repeat;transform:none!important;}
+:is(#app,.reading-board).reading-board .game .portrait .pt-ring .avatar{inset:12% 13%!important;width:74%!important;height:76%!important;border-radius:40% 40% 30% 30%;}
+:is(#app,.reading-board).reading-board .game .portrait .avatar-seeker .seeker-sprite{height:100%;background-size:200% 100%;}
+:is(#app,.reading-board).reading-board .game .portrait .pt-vitals{z-index:22;}
+:is(#app,.reading-board).reading-board .game .portrait .pt-hp b{font-size:calc(var(--board-meter)*.025);max-width:64%;font-variant-numeric:tabular-nums;margin:0 0 7%;letter-spacing:-.05em;}
+/* Same circular fan for both states; no mismatched corner pivots. */
+:is(#app,.reading-board).reading-board .game:not(.hand-open) #hand{width:calc(var(--fan-width)*.42);height:calc(var(--card-h-hand)*.42);}
+:is(#app,.reading-board).reading-board .game:not(.hand-open) #hand .card{left:calc(50% + var(--fan-x)*.42 - var(--card-w-hand)*.5);top:auto;bottom:calc(var(--fan-y)*-.42);transform:scale(.42) rotate(var(--hand-angle));transform-origin:50% 100%;}
+:is(#app,.reading-board).reading-board .game.hand-open #hand{width:calc(var(--fan-open-width)*.58);height:calc(var(--card-h-hand)*.58);transform:translateX(-50%);bottom:max(24px,calc(var(--fan-open-overhang,0px) + 10px))!important;filter:drop-shadow(0 5px 9px #0006);}
+:is(#app,.reading-board).reading-board .game.hand-open #hand .card{left:calc(50% + var(--fan-open-x)*.58 - var(--card-w-hand)*.5);top:auto;bottom:calc(var(--fan-open-y)*-.58);transform:scale(.58) rotate(var(--fan-open-angle));transform-origin:50% 100%;}
+:is(#app,.reading-board).reading-board .game.hand-open #hand .card:hover{transform:translateY(-9px) scale(.58) rotate(var(--fan-open-angle));}
+:is(#app,.reading-board).reading-board .game #endBtn .end-turn-label{transform:translateY(calc(var(--cap-press,0px)*-.309)) rotate(var(--cap-turn,0deg));}
+:is(#app,.reading-board).reading-board .rift-sprite{display:block;inset:0;opacity:1;}
+:is(#app,.reading-board).reading-board .rift-sprite::before,:is(#app,.reading-board).reading-board .rift-sprite::after{display:none;}
+:is(#app,.reading-board).reading-board .rift-aperture{display:block;width:100%;height:100%;pointer-events:none;}
+
+:is(#app,.reading-board).reading-board #portraitMe .pt-ring::after{background-image:url('/art/biblion/refined/portrait-self.png');}

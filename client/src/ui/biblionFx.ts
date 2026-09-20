@@ -1,3 +1,4 @@
+import {drawManaGain} from './manaGain';
 import {drawAttackVisual,ATTACK_DURATION_MS} from './attackVisual';
 import {projectedPlacement} from './boardProjection';
 import {drawManaPurchase,MANA_PURCHASE_DURATION} from './manaPurchase';
@@ -5,7 +6,7 @@ import {drawToonPlay,TOON_PLAY_DURATION,disposeToonPlayVisual} from './toonPlayV
 /** Target-local Biblion VFX. All geometry is procedural; no labels or stat changes. */
 export type BiblionEffect = 'mana' | 'attack' | 'purchase' | 'heal' | 'spell' | 'summon-charge' | 'summon-impact' | 'quest' | 'quick' | 'enchant' | 'enchant-place';
 export type FxRect = Pick<DOMRect, 'left' | 'top' | 'width' | 'height'>;
-export const EFFECT_DURATION: Record<BiblionEffect, number> = {attack:ATTACK_DURATION_MS/1000,purchase:MANA_PURCHASE_DURATION,mana:1.85,heal:1.65,enchant:1.4,...TOON_PLAY_DURATION};
+export const EFFECT_DURATION: Record<BiblionEffect, number> = {attack:ATTACK_DURATION_MS/1000,purchase:MANA_PURCHASE_DURATION,mana:1.4,heal:1.65,enchant:1.4,...TOON_PLAY_DURATION};
 const TAU=Math.PI*2;
 const clamp=(x:number)=>Math.max(0,Math.min(1,x));
 const smooth=(x:number)=>{x=clamp(x);return x*x*(3-2*x);};
@@ -14,11 +15,12 @@ const palettes={blue:['#397ee5','#a9e4ff','#fff4d6'],red:['#d35464','#ffd4cd','#
 function ellipse(c:CanvasRenderingContext2D,x:number,y:number,rx:number,ry:number,color:string,alpha:number,width=1,start=0,end=TAU){c.globalAlpha=clamp(alpha);c.strokeStyle=color;c.lineWidth=width;c.beginPath();c.ellipse(x,y,Math.max(.1,rx),Math.max(.1,ry),0,start,end);c.strokeStyle='#42536b';c.globalAlpha=clamp(alpha)*.26;c.lineWidth=width+1.8;c.stroke();c.strokeStyle=color;c.globalAlpha=clamp(alpha);c.lineWidth=width;c.stroke();}
 function glow(c:CanvasRenderingContext2D,x:number,y:number,r:number,color:string,alpha:number){if(r<=0||alpha<=0)return;c.globalAlpha=clamp(alpha);const g=c.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,color);g.addColorStop(.28,color+'99');g.addColorStop(1,color+'00');c.fillStyle=g;c.fillRect(x-r,y-r,r*2,r*2);}
 function shard(c:CanvasRenderingContext2D,x:number,y:number,s:number,a:number,color:string,alpha:number){c.save();c.translate(x,y);c.rotate(a);c.globalAlpha=clamp(alpha);c.fillStyle=color;c.beginPath();c.moveTo(0,-s);c.lineTo(s*.4,0);c.lineTo(0,s);c.lineTo(-s*.4,0);c.closePath();c.fill();c.restore();}
-function gem(c:CanvasRenderingContext2D,x:number,y:number,s:number,alpha:number){c.save();c.globalAlpha=clamp(alpha);c.translate(x,y);const faces=[['#d4f2ff',0,-1,-.53,0,0,.22],['#73b4f5',0,-1,.53,0,0,.22],['#3366b6',-.53,0,0,1,0,.22],['#9bd5ff',.53,0,0,1,0,.22]] as const;for(const [color,x1,y1,x2,y2,x3,y3] of faces){c.fillStyle=color;c.beginPath();c.moveTo(x1*s,y1*s);c.lineTo(x2*s,y2*s);c.lineTo(x3*s,y3*s);c.closePath();c.fill();}c.strokeStyle='#fff1cb';c.lineWidth=.7;c.beginPath();c.moveTo(0,-s);c.lineTo(s*.53,0);c.lineTo(0,s);c.lineTo(-s*.53,0);c.closePath();c.stroke();c.restore();}
+
 function compass(c:CanvasRenderingContext2D,x:number,y:number,r:number,p:number,color:string,alpha:number){ellipse(c,x,y,r,r*.55,color,alpha,1,-Math.PI*.5,-Math.PI*.5+TAU*smooth(p*3));for(let i=0;i<8;i++){const a=i*TAU/8;shard(c,x+Math.cos(a)*r,y+Math.sin(a)*r*.55,i%2?r*.035:r*.07,a+Math.PI/2,color,alpha*.85);}}
 
 /** Normalized card/UI geometry keeps effects bounded at phone and desktop sizes. */
 export function drawBiblionEffect(c:CanvasRenderingContext2D,kind:BiblionEffect,r:FxRect,age:number,destination?:FxRect){
+ if(kind==='mana'){drawManaGain(c,r,age);return;}
  if(kind==='attack'){drawAttackVisual(c,r,destination??r,age);return;}
  if(kind==='purchase'){drawManaPurchase(c,r,destination??r,age);return;}
  if(kind==='spell'||kind==='quest'||kind==='quick'||kind==='enchant-place'||kind==='summon-charge'||kind==='summon-impact'){drawToonPlay(c,kind,r,age);return;}
@@ -26,16 +28,7 @@ export function drawBiblionEffect(c:CanvasRenderingContext2D,kind:BiblionEffect,
  const x=r.left+r.width/2,y=kind==='enchant'?r.top-r.width*.24:r.top+r.height/2,u=Math.max(24,Math.min(r.width,180));
  const envelope=smooth(p*10)*(1-smooth((p-.6)/.4));
  c.save();c.lineCap='round';
- if(kind==='mana'){
-   const cy=y-Math.min(35,u*.28),gather=smooth(p/.48),lift=Math.sin(p*Math.PI);
-   compass(c,x,cy,u*(.38+.05*lift),p,palettes.blue[1],envelope*.58);
-   ellipse(c,x,cy,u*.32,u*.15,'#d8bd80',envelope*.65,.9,p*TAU,p*TAU+Math.PI*1.4);
-   for(let i=0;i<20;i++){const a=i*2.399,delay=random(i)*.13,q=clamp((p-delay)/.56),d=u*(.45+random(i+5)*.35)*(1-smooth(q));const px=x+Math.cos(a)*d,py=cy+Math.sin(a)*d*.58;shard(c,px,py,u*(.018+random(i+1)*.023),a+q*2,i%4?palettes.blue[1]:palettes.blue[2],Math.sin(q*Math.PI)*.8);}
-   glow(c,x,cy,u*.35,'#69baff',Math.exp(-(((p-.5)/.1)**2))*.36);
-   gem(c,x,cy+(y-cy)*smooth((p-.55)/.3),u*(.08+.10*gather)*(1-.5*smooth((p-.6)/.3)),envelope);
-   // Thin acknowledgement along the pips, then a clean disappearance.
-   ellipse(c,x,y,u*(.14+.42*smooth((p-.5)/.4)),Math.max(6,r.height*.38),'#a3d8ff',Math.sin(clamp((p-.48)/.52)*Math.PI)*.45,1.5);
- } else if(kind==='heal'){
+ if(kind==='heal'){
    const h=Math.min(135,Math.max(r.height,55));
    for(let j=0;j<3;j++){const q=clamp((p-j*.08)/.74),fade=Math.sin(q*Math.PI);c.globalAlpha=fade*.7;c.strokeStyle=j===1?palettes.red[2]:palettes.red[1];c.lineWidth=j===1?1.8:1;c.beginPath();for(let k=0;k<=40;k++){const t=k/40,a=t*Math.PI*1.4+q*1.7+j*1.4,px=x+Math.cos(a)*u*(.28+.07*t),py=y+h*.3-q*h*.55+Math.sin(a)*h*.12;k?c.lineTo(px,py):c.moveTo(px,py);}c.stroke();}
    for(let i=0;i<22;i++){const q=clamp((p-random(i)*.24)/.76);shard(c,x+(random(i+3)-.5)*u*.95,y+h*.4-q*h*.9,u*.024*(.6+random(i+1)),q*.4,palettes.red[i%3],Math.sin(q*Math.PI)*.68);}
@@ -43,7 +36,7 @@ export function drawBiblionEffect(c:CanvasRenderingContext2D,kind:BiblionEffect,
  } else {
    // The library eye opens on the source card; orbiting pages release the pulse.
    compass(c,x,y,u*(.58+.06*Math.sin(p*Math.PI)),p,palettes.blue[1],envelope*.7);
-   c.globalAlpha=envelope;c.strokeStyle='#977542';c.lineWidth=1.8;c.shadowColor='#f5daa0';c.shadowBlur=5;const rx=u*.34,ry=u*.15*smooth(p*5);c.beginPath();c.moveTo(x-rx,y);c.quadraticCurveTo(x,y-ry*2,x+rx,y);c.quadraticCurveTo(x,y+ry*2,x-rx,y);c.stroke();gem(c,x,y,u*.075,envelope);
+   c.globalAlpha=envelope;c.strokeStyle='#977542';c.lineWidth=1.8;c.shadowColor='#f5daa0';c.shadowBlur=5;const rx=u*.34,ry=u*.15*smooth(p*5);c.beginPath();c.moveTo(x-rx,y);c.quadraticCurveTo(x,y-ry*2,x+rx,y);c.quadraticCurveTo(x,y+ry*2,x-rx,y);c.stroke();shard(c,x,y,u*.075,0,palettes.blue[1],envelope);
    for(let i=0;i<12;i++){const a=i*TAU/12+p*.8;shard(c,x+Math.cos(a)*u*.55,y+Math.sin(a)*u*.3,u*.024,a,palettes.gold[i%3],envelope*.7);}
  }
  c.restore();

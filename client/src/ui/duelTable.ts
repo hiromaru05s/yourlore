@@ -8,7 +8,7 @@ export function createDuelTable(root: HTMLElement, scene: T.Scene) {
   let dead = false;
   const low = matchMedia('(max-width: 700px)').matches;
   // Versioned URLs prevent a cached model from silently disagreeing with its renderer.
-  const url = READING_ASSETS+`board${low ? '-low' : ''}.glb`;
+  const url = READING_ASSETS+`board${low ? '-low' : ''}.glb?revision=portrait-layer-20260921`;
   root.dataset.tableState = 'loading';
 
   function release(object: T.Object3D): void {

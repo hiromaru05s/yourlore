@@ -27,16 +27,16 @@ export function placeReadingBoard(root:HTMLElement):void {
   place(`#${id}Row .zone-row:has(.zone-st)`,0,sign*.326,.83,.048);
   place(`#pile-${id==='me'?'my':'opp'}Deck`,.54,sign*.245,.136,.198);
   place(`#pile-${id==='me'?'my':'opp'}Disc`,-.54,sign*.245,.166,.232);
-  place(`#rift-${id}`,.725,sign*.245,.095,.268);
+  place(`#rift-${id}`,.722,sign*.247,.125,.268);
   const p=id==='me'?'Me':'Opp';
   place(`#portrait${p} .pt-ring`,0,sign*.385,.181,.147);
-  place(`#portrait${p} .pt-vitals`,.079,sign*.333,.05,.059);
+  place(`#portrait${p} .pt-vitals`,.093,sign*.335,.075,.083);
   place(`#portrait${p} .pt-mana`,-.29,sign*.397,.350,.077);
   place(`#portrait${p}>.pt-name,#portrait${p} .pt-name--vitals`,-.29,sign*.455,.34,.017);
   place(`#portrait${p} .pt-brand`,-.09,sign*.335,.08,.028);
  }
  // Hand cards float over the board, outside the play lanes. They are not sockets.
  const hand=root.querySelector<HTMLElement>('#hand'),opp=root.querySelector<HTMLElement>('#oppHand');
- if(hand&&!root.querySelector('.game.hand-open')){hand.style.left=`${cx+.16*s}px`;hand.style.top=`${cy+.337*s}px`;hand.style.bottom='auto';}
+ if(hand&&!root.querySelector('.game.hand-open')){hand.style.left=`${cx+.16*s}px`;const css=getComputedStyle(hand),height=parseFloat(css.getPropertyValue('--card-h-hand'))*.42||0,edge=parseFloat(css.getPropertyValue('--fan-overhang'))||0;hand.style.top=`${Math.min(cy+.337*s,innerHeight-height-edge-10)}px`;hand.style.bottom='auto';}
  if(opp){opp.style.left=`${cx+.16*s}px`;opp.style.top=`${cy-.452*s}px`;}
 }

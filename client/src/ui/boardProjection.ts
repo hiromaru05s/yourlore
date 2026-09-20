@@ -30,11 +30,12 @@ export function projectBoardDOM(root:HTMLElement):void {
   if(typeof DOMMatrix==='undefined')return;
   placeReadingBoard(root);
   const unit=cardUnit(root);
-  const planes=[...root.querySelectorAll<HTMLElement>('.zone-row,.market-counter,.mid-aside,.pile,.rift-button,.pt-ring,.pt-vitals,.pt-mana,.portrait>.pt-name,.pt-name--vitals,.pt-brand')].map(element=>({element,rect:layoutRect(element),elevation:(element.classList.contains('market-counter')?unit*marketHeight():element.classList.contains('mid-aside')?unit*.028/.110:element.classList.contains('pt-ring')?unit*.009/.110:element.classList.contains('pt-mana')?unit*.0165/.110:0)+(Number(element.dataset.introHeight)||0)}));
+  const planes=[...root.querySelectorAll<HTMLElement>('.zone-row,.market-counter,.mid-aside,.pile,.rift-button,.pt-vitals,.pt-mana,.portrait>.pt-name,.pt-name--vitals,.pt-brand')].map(element=>({element,rect:layoutRect(element),elevation:(element.classList.contains('market-counter')?unit*marketHeight():element.classList.contains('mid-aside')?unit*.028/.110:element.classList.contains('pt-ring')?unit*.009/.110:element.classList.contains('pt-mana')?unit*.0165/.110:0)+(Number(element.dataset.introHeight)||0)}));
   for(const {element,rect,elevation} of planes){
     element.dataset.boardPlane=String(elevation);element.style.transformOrigin='0 0';
     element.style.transform=new DOMMatrix().translate(-rect.left,-rect.top).multiply(boardMatrix(rect.left,rect.top,elevation)).toString();
   }
+  root.querySelectorAll<HTMLElement>('.pt-ring').forEach(el=>{delete el.dataset.boardPlane;el.style.transform='none';});
   // This child sits on a second physical plinth above the market. Preserve the
   // parent's 3D transform so its height is projected exactly once by our lens.
   root.querySelectorAll<HTMLElement>('.market-sub--supply').forEach(element=>{

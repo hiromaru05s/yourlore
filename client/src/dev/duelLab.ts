@@ -8,7 +8,7 @@ import '../styles/game-overlays.css';
 import '../styles/game.css';
 import '../styles/screens.css';
 import { cardPickerMulti } from '../ui/modal';
-import { turnBanner } from '../ui/anim';
+import { turnBanner, manaSurge, exileCard } from '../ui/anim';
 import { LocalController } from '../game/controller';
 import { paintDuelClock } from '../ui/duelClock';
 import { createGame } from '../shared/engine';
@@ -28,6 +28,7 @@ if (import.meta.env.DEV) {
     const stop=startBoardLayout();
     window.addEventListener('pagehide',()=>{stop();controller.destroy();},{once:true});
   } else {
+  const polish = new URLSearchParams(location.search).has('polish');
   const dense = new URLSearchParams(location.search).has('dense');
   const g = createGame({mode:'bot',seed:207,starting:0,p0:{id:'fixture-me',name:'シーカー'},p1:{id:'fixture-opp',name:'シーカー'}}).state;
   const mons = Object.values(DB).filter(c=>c.t==='mon' && c.atk && c.def);
@@ -52,10 +53,22 @@ if (import.meta.env.DEV) {
     g.players[0].field[1].guts=2;g.players[0].field[1].decayCnt=1;
   }
   setMyAvatar('SEEKER_BLUE');setOppAvatar('SEEKER_RED');startBoardLayout();
-  const handlers = {onPlay:async(uid:string)=>{const card=g.players[0].hand.find(c=>c.uid===uid);if(!card)return;if(card.t==='mon'){const ghost=await ghostSummon(card,'me',Math.min(6,g.players[0].field.length));setTimeout(()=>ghost?.remove(),300);}else { await revealSpell(card,'me',card.ench?'field':'discard'); if(card.ench){g.players[0].enchants.push({card,turns:card.val||1,bornTurn:g.turn});render();} }},onBlockedPlay:()=>{},onAttack:()=>{hpFeedback('opp','dmg',4);},onBlockedAttack:()=>{},onReorder:(a:number,b:number)=>{const f=g.players[0].field;f.splice(b,0,f.splice(a,1)[0]);render();},onChooseTarget:()=>{},onBuyMarket:()=>{},onBuySupply:()=>{},onRefresh:()=>{(g.players[0].removed ??= []).push(inst(mons[10].id));render();hpFeedback('me','dmg',3);},onEndTurn:()=>{turnBanner(true,++g.turn);},onSurrender:()=>{location.href='/duel-lab.html'+(dense?'':'?dense=1');}};
+  const handlers = {onPlay:async(uid:string)=>{const card=g.players[0].hand.find(c=>c.uid===uid);if(!card)return;if(card.t==='mon'){const ghost=await ghostSummon(card,'me',Math.min(6,g.players[0].field.length));setTimeout(()=>ghost?.remove(),300);}else { await revealSpell(card,'me',card.ench?'field':'discard'); if(card.ench){g.players[0].enchants.push({card,turns:card.val||1,bornTurn:g.turn});render();} }},onBlockedPlay:()=>{},onAttack:()=>{hpFeedback('opp','dmg',4);},onBlockedAttack:()=>{},onReorder:(a:number,b:number)=>{const f=g.players[0].field;f.splice(b,0,f.splice(a,1)[0]);render();},onChooseTarget:()=>{},onBuyMarket:()=>{},onBuySupply:()=>{},onRefresh:()=>{(g.players[0].removed ??= []).push(inst(mons[10].id));render();hpFeedback('me','dmg',3);},onEndTurn:()=>{if(polish){g.cur=1;render();}else turnBanner(true,++g.turn);},onSurrender:()=>{location.href='/duel-lab.html'+(dense?'':'?dense=1');}};
   const view = new GameView(document.getElementById('app')!,0,handlers);
   function render(){view.render(g);}
   render();
+  if(polish){
+    const panel=document.createElement('div');panel.dataset.polishControls='true';
+    panel.style.cssText='position:fixed;top:8px;left:48px;right:90px;z-index:200;display:flex;flex-wrap:wrap;gap:5px;font:12px sans-serif';
+    const add=(label:string,action:()=>void|Promise<void>)=>{const button=document.createElement('button');button.textContent=label;button.style.cssText='padding:6px 9px;background:#182837;color:#e4eafa;border:1px solid #627d91;border-radius:4px';button.onclick=async()=>{button.disabled=true;try{await action();}finally{button.disabled=false;}};panel.append(button);};
+    add('マナ増加',async()=>{const p=g.players[0];if(p.maxMana>=30){p.maxMana=8;p.mana=6;render();await new Promise(r=>setTimeout(r,120));}p.maxMana=Math.min(30,p.maxMana+2);p.mana=Math.min(p.maxMana,p.mana+3);render();await manaSurge('me',2);});
+    add('場から虚無',async()=>{const p=g.players[0],card=p.field[0];const source=document.querySelector<HTMLElement>('#myField .card')??document.querySelector<HTMLElement>('#meRow .zone-mon .card');if(card&&source){try{await exileCard(card,'me',source);}finally{source.style.visibility='';render();}}});
+    add('手札から虚無',async()=>{const card=g.players[0].hand[0],source=document.querySelector<HTMLElement>('#hand .card');if(card&&source){try{await exileCard(card,'me',source);}finally{source.style.visibility='';render();}}});
+    add('手札の開閉',()=>{view.setHandOpen(!document.querySelector('.game')?.classList.contains('hand-open'));});
+    add('手札10枚',()=>{g.players[0].hand=mons.slice(0,10).map(c=>inst(c.id));render();});
+    add('自分のターン',()=>{g.cur=0;render();});
+    document.body.append(panel);
+  }
   let remaining=90;
   const tick=()=>paintDuelClock(document.getElementById('clock-me')!, remaining,90,true);
   tick();

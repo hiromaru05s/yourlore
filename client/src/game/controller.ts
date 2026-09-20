@@ -740,9 +740,8 @@ export abstract class BaseController implements BoardHandlers {
   /** Coin-toss reveal at game start: a two-headed coin — each face is a player's
       profile avatar — flips and lands on the face of whoever goes first. */
   private async showCoinToss(firstSide: Side): Promise<void> {
-    const game=document.querySelector<HTMLElement>(".game");game?.classList.add("opening-hands","awaiting-board");
-    try{await A.openingBoard();}catch(error){console.error("[opening scene]",error);}
-    game?.classList.remove("awaiting-board");
+    const game=document.querySelector<HTMLElement>(".game");game?.classList.add("opening-hands");
+    // The board starts fully assembled.
     if(this.dead){game?.classList.remove("opening-hands");return;}
     const iAmFirst = firstSide === this.you;
     const firstName = firstSide === this.you ? COIN_ME.name : COIN_OPP.name;

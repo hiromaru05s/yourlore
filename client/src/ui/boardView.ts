@@ -1,3 +1,4 @@
+import {handFan} from './handFan';
 import {fieldPositions,settleField} from './fieldLayout';
 import {clearBiblionFx} from './biblionFx';
 import {prepareDuel} from './duelReadiness';
@@ -312,6 +313,7 @@ export class GameView {
     if (this.handOpen === open) return;
     this.handOpen = open;
     (this.root.querySelector(".game") as HTMLElement | null)?.classList.toggle("hand-open", open);
+    this.layoutHand();
   }
 
   private q(id: string): HTMLElement { return this.root.querySelector("#" + id) as HTMLElement; }
@@ -965,9 +967,9 @@ export class GameView {
   private layoutOpponentHand():void {
     const hand=this.q('oppHand'),cards=[...hand.querySelectorAll<HTMLElement>('.card--back')];
     const w=(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--card-w-hand'))||100)*.42;
-    const step=cards.length<=1?0:Math.min(w*.62,Math.max(5,w*3.4/(cards.length-1)));
-    cards.forEach((c,i)=>{c.style.width=w+'px';c.style.height=w/.64+'px';c.style.left=i*step+'px';c.style.transform=`rotate(${(i-(cards.length-1)/2)*Math.min(5,24/Math.max(1,cards.length-1))}deg)`;c.style.transformOrigin='50% 100%';});
-    hand.style.width=(cards.length?w+(cards.length-1)*step:0)+'px';hand.style.height=w/.64+'px';
+    const fan=handFan(cards.length,w,Math.min(innerWidth*.43,w*4.4));
+    cards.forEach((c,i)=>{const p=fan.cards[i];c.style.width=w+'px';c.style.height=w/.64+'px';c.style.left=(fan.width/2+p.x-w/2)+'px';c.style.top=p.y+'px';c.style.transform=`rotate(${p.angle}deg)`;c.style.transformOrigin='50% 100%';});
+    hand.style.width=fan.width+'px';hand.style.height=w/.64+'px';
   }
 
   /** Per-state overlap steps (CSS picks the var by .hand-open on .game).
@@ -981,7 +983,15 @@ export class GameView {
     const vw = Math.round(window.visualViewport?.width || window.innerWidth) || 960; // hidden tabs report 0
     const openStep = n <= 1 ? cw : Math.min(cw + 8, Math.max(cw * 0.42, (Math.min(vw * 0.86, 960) - cw) / (n - 1)));
     const compactStep = n <= 1 ? cw : Math.min(cw * 0.6, Math.max(cw*.16, (cw*3.4) / (n - 1)));
-    [...handEl.children].forEach((el,i)=>(el as HTMLElement).style.setProperty("--hand-angle",`${(i-(n-1)/2)*Math.min(5,24/Math.max(1,n-1))}deg`));
+    const compact=handFan(n,cw,Math.min(vw*.42/.42,cw*4.4));
+    const opened=handFan(n,cw,Math.min(vw*.88/.58,cw*6.3),18);
+    [...handEl.children].forEach((el,i)=>{const card=el as HTMLElement;const p=compact.cards[i],o=opened.cards[i];
+      card.style.setProperty('--hand-angle',`${p.angle}deg`);card.style.setProperty('--fan-x',`${p.x}px`);card.style.setProperty('--fan-y',`${p.y}px`);
+      card.style.setProperty('--fan-open-angle',`${o.angle}deg`);card.style.setProperty('--fan-open-x',`${o.x}px`);card.style.setProperty('--fan-open-y',`${o.y}px`);
+    });
+    const overhang=(fan:ReturnType<typeof handFan>,scale:number)=>Math.max(0,...fan.cards.map(p=>(p.y+cw*.5*Math.abs(Math.sin(p.angle*Math.PI/180)))*scale));
+    handEl.style.setProperty('--fan-overhang',`${overhang(compact,.42)}px`);handEl.style.setProperty('--fan-open-overhang',`${overhang(opened,.58)}px`);
+    handEl.style.setProperty('--fan-width',`${compact.width}px`);handEl.style.setProperty('--fan-open-width',`${opened.width}px`);
     handEl.style.setProperty("--h-step-open", `${openStep}px`);
     handEl.style.setProperty("--h-step-compact", `${compactStep}px`);
     handEl.style.setProperty("--h-w-open", `${n ? cw + (n - 1) * openStep : 0}px`);
