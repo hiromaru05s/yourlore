@@ -1,3 +1,4 @@
+import { EXPANSION_CARDS, COUNTER_IDS } from "./expansionCards.mjs";
 import { QUEST_QUICK_CARDS } from "./questQuickCards.mjs";
 import { applyEnglish } from "./cards.en.mjs";
 import { applyFlavorCardNames } from "./cardNames.flavor.mjs";
@@ -1005,6 +1006,11 @@ for (const c of NEW_CARDS10) {
     DB[c.id] = c;
 }
 export const PASSIVES = {
+    counter: {
+        ko: { name: "반격", desc: "무효화되지 않은 공격을 받으면 공격력 절반(올림)만큼 공격자에게 반격. 치명타에도 발동. 관통·연쇄 반격·공격 효과 없음." },
+        ja: { name: "反撃", desc: "無効化されなかった攻撃を受けると、攻撃者に攻撃力の半分(切り上げ)のダメージ。倒されても発動。貫通・再反撃・攻撃時効果は発生しない。" },
+        en: { name: "Counter", desc: "When an attack connects, deal half your attack (rounded up) to its attacker, even if killed. No piercing, counter chains, or attack triggers." },
+    },
     dual: {
         ko: { name: "이도류", desc: "한 턴에 2번 공격할 수 있다." },
         ja: { name: "二刀流", desc: "1ターンに2回攻撃できる。" },
@@ -1067,7 +1073,7 @@ export function cardPassives(c) {
         out.push("ambush");
     if (c.aura === "ward" || has("aura"))
         out.push("aura");
-    for (const k of ["taunt", "evade", "guts", "decay", "majesty", "relic"])
+    for (const k of ["taunt", "evade", "guts", "decay", "majesty", "relic", "counter"])
         if (has(k))
             out.push(k);
     if (c.exileOnDestroy || has("void"))
@@ -2339,7 +2345,16 @@ Object.assign(DB.ELF_HAVEN, { play: 4 });
 Object.assign(DB.HALF_ELF, { atk: 0, condAtk: "worldTree",
     text: "【상시】어느 필드든 '세계수' 이름 카드가 있으면 공격력+3 · 【소환시】자신 필드에 있으면 '세계수의 보살핌' 전개",
     textJa: "【常時】どちらかの場に「世界樹」名のカードがあれば攻撃力+3 · 【召喚時】自分の場にあれば「世界樹の慈しみ」を展開" });
+for (const id of COUNTER_IDS)
+    if (DB[id])
+        DB[id].passive = [...new Set([...(DB[id].passive ?? []), "counter"])];
+Object.assign(DB.MIMIC_KING2, { onSummon: "expansion", text: "【소환시】리프트에 미믹 계열 6장 이상이면 미믹의 은신처를 전개", textJa: "【召喚時】自分のリフトにミミック系6枚以上なら「ミミックの隠れ家」を展開", textEn: "On summon: With 6+ Mimic-family cards in your Rift, deploy Mimic Hideout." });
+DB.GUILD_CHEST.textJa += " · 自分の場にアサシン系カードがある場合、9〜12はカード4枚ドローに変更";
 applyEnglish([DB, STARTERS]);
+for (const c of EXPANSION_CARDS)
+    DB[c.id] = c;
+for (const id of ["FIRE_ARROW", "FIRE_METEOR"])
+    RANDOM_CARDS.add(id);
 // 플레이버 카드명(ko/ja/en 3개 국어) 적용 — applyEnglish 이후, standardizeCardTexts 이전
 applyFlavorCardNames([DB, STARTERS]);
 // ============================================================
@@ -2349,6 +2364,9 @@ applyFlavorCardNames([DB, STARTERS]);
 // renaming pass. Style rules: docs/card-text-style.md
 // ============================================================
 // 효과 텍스트 표준 표기(【태그】) 적용 — 규칙: docs/card-text-style.md (applyEnglish 이후 필수)
+Object.assign(DB.MIMIC_KING2, { text: "【소환시】리프트에 미믹 계열 6장 이상이면 미믹의 은신처를 전개", textJa: "【召喚時】自分のリフトにミミック系6枚以上なら「ミミックの隠れ家」を展開", textEn: "On summon: With 6+ Mimic-family cards in your Rift, deploy Mimic Hideout." });
+DB.GUILD_CHEST.textEn += " · If you control an Assassin-family card, results 9–12 draw 4 instead.";
+DB.GUILD_CHEST.text += " · 아군 필드에 암살자 계열 카드가 있으면 9~12는 카드 4장 드로우";
 standardizeCardTexts([DB, STARTERS], 
 // keyword names for rule R3 (they move to the chip row) — injected so cardText.ts
 // never has to import back from this module (see the note there).
@@ -2360,6 +2378,21 @@ export const BUYABLE_POOL = ALL_IDS.filter((id) => DB[id].cost > 0 && !DB[id].no
 // Auto-derived by matching OTHER cards' names inside a card's text, plus a manual
 // map for abbreviated references (e.g. "초급·중급 암살자") the name-scan can't catch.
 const RELATED_MANUAL = {
+    INTERCEPT: ["GUNNER", "HEAVY_GUNNER", "CASTLE", "SOLDIER2"],
+    REINFORCE: ["INFKNIGHT", "SOLDIER2", "GUNNER"],
+    FARM_KEEPER: ["BREWING", "TOKEN00"],
+    STABLE: ["INFKNIGHT", "CAVALRY"],
+    MERCENARY: ["SOLDIER2", "CASINO", "MERC_ART"],
+    MERC_LEADER: ["SOLDIER2", "CASINO", "MERC_ART"],
+    MERC_MASTER: ["SOLDIER2", "CASINO", "MERC_ART"],
+    MERC_ART: ["MERCENARY", "MERC_LEADER", "MERC_MASTER"],
+    Q_TOWN: ["SOLDIER2", "CASINO", "WINE", "DOMINION"],
+    EMPTY_MIND: ["CREATION"],
+    MIMIC_KING2: ["MIMIC_HIDEOUT"],
+    MIMIC_HIDEOUT: ["MIMIC2"],
+    FIRE_ART: ["FIRE_BALL", "FIRE_ARROW", "FIRE_ZONE", "FIRE_METEOR"],
+    FIRE_MASTER: ["FIRE_BALL", "FIRE_ARROW", "FIRE_ZONE", "FIRE_METEOR"],
+    ASSASSIN_SQUAD: ["ASSASSIN2"],
     ASSASSIN3: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN4", "GUILD_HALL", "GUILD_HQ"], // 상급(v36): 덱 구성에 다른 암살자 카드
     ASSASSIN4: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3", "GUILD_HALL", "GUILD_HQ"], // 특급(v36): 서로 다른 암살자 3종
     GUILD_CHEST: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3"], // 암살자 길드 보물상자
@@ -2451,7 +2484,7 @@ export function relatedCardIds(id) {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v49"; // 3 offered + 7 fixed cards; all v48 card mechanics retained
+export const BALANCE_VERSION = "v50"; // Counter + 48-card expansion on the v49 reading-board design
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

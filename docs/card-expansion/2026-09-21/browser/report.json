@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "48 unique artworks: all 144 full/small/tiny URLs decode at expected widths",
+    "All 48 cards render in Japanese, Korean and English with loaded art and formatted condition tags",
+    "Stable actual UI selection consumes Knight, summons Cavalry; mandatory choice has no misleading Cancel",
+    "Fireball UI offers both players and monsters; clicking opponent deals 6 damage",
+    "Fire Master death opens two consecutive owner choices during opponent turn",
+    "Completed Cheating quest presents enemy deck choices and exiles selected card through UI"
+  ],
+  "errors": []
+}

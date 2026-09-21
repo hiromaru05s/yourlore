@@ -60,13 +60,15 @@ try {
     if (id === 'GM6_8') delete expected.onSummon;
     if (id === 'CHOSEN_ROGUE') delete expected.attackFx;
     const current = JSON.parse(JSON.stringify(DB[id]));
+    // v50 adds Counter without restoring any retired trap abilities.
+    if (current.passive?.includes("counter")) expected.passive = [...(expected.passive ?? []), "counter"];
     for (const field of ['text', 'textJa', 'textEn']) {
       assert(!/罠|トラップ|함정|트랩|trap/i.test(current[field] || ''), `${id} ${field}`);
       delete expected[field]; delete current[field];
     }
     assert.deepEqual(current, expected, `${id}: preserve stats, cost, names, conditions and unrelated effects`);
   }
-  assert.deepEqual(cardPassives(DB.TAR3), []);
+  assert.deepEqual(cardPassives(DB.TAR3), ["counter"]);
   for (const key of ['text', 'textJa', 'textEn']) assert.equal(DB.TAR3[key], '—');
 
   // Siege: neither trap destruction nor fallback exile; death summon still works.

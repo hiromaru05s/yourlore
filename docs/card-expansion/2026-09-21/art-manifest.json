@@ -1,0 +1,434 @@
+[
+  {
+    "id": "INTERCEPT",
+    "name": "迎撃準備",
+    "path": "client/public/art/cards/INTERCEPT.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 381272,
+    "sha256": "9276d48492957cd5d6f401671bd937fcea112efe3f62162eea62aeb9085bf81c"
+  },
+  {
+    "id": "REINFORCE",
+    "name": "緊急応援",
+    "path": "client/public/art/cards/REINFORCE.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 397932,
+    "sha256": "abd38e8dff85cec2c90309600231b9ed8ac6242450b24d52a1ebf3304bbf0e63"
+  },
+  {
+    "id": "GUNNER",
+    "name": "砲撃兵",
+    "path": "client/public/art/cards/GUNNER.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 363584,
+    "sha256": "519d00cf2e1c019dcf2399d53dd94a3d8d31b94ae619ef11fc36d10b56e3577c"
+  },
+  {
+    "id": "HEAVY_GUNNER",
+    "name": "大砲兵",
+    "path": "client/public/art/cards/HEAVY_GUNNER.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 454844,
+    "sha256": "6575c29816a14a2fa0d79265c73ee79de3912add22ff73431103a68d281d7694"
+  },
+  {
+    "id": "FARM_KEEPER",
+    "name": "農場管理者",
+    "path": "client/public/art/cards/FARM_KEEPER.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 440184,
+    "sha256": "f806224393d6e2a51546979a7dcf4a7bf4f5c978a00096e5dfa3129a75c499cb"
+  },
+  {
+    "id": "MIMIC_HUNTER",
+    "name": "ミミックハンター",
+    "path": "client/public/art/cards/MIMIC_HUNTER.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 417108,
+    "sha256": "7de2cedc029106c6d5b72616df65edc7ba223bb2ca6840d7af5d8d88ac4d8d5f"
+  },
+  {
+    "id": "QUICK_HELLFIRE",
+    "name": "獄炎",
+    "path": "client/public/art/cards/QUICK_HELLFIRE.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 452546,
+    "sha256": "55e0187e4170458837fdbaaff2a97c4f316380e8e73d70f463130ca351dd93dd"
+  },
+  {
+    "id": "STABLE",
+    "name": "馬小屋",
+    "path": "client/public/art/cards/STABLE.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 384726,
+    "sha256": "bcea43e1bfd956f4a2c423811b07735be6ec94bfeda40e2ed633831f5c6b3c01"
+  },
+  {
+    "id": "CAVALRY",
+    "name": "騎馬兵",
+    "path": "client/public/art/cards/CAVALRY.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 399696,
+    "sha256": "17aec6cf2fc572274aa758354e92b029bde5f29397da1cdf09938ef4bc2348cb"
+  },
+  {
+    "id": "MERCENARY",
+    "name": "傭兵",
+    "path": "client/public/art/cards/MERCENARY.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 444776,
+    "sha256": "57093a99597d82495f198911ce6fd636e6faf2a9e2a232cbf31dc3d02c9e7e34"
+  },
+  {
+    "id": "MERC_LEADER",
+    "name": "傭兵リーダー",
+    "path": "client/public/art/cards/MERC_LEADER.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 370302,
+    "sha256": "d1cd0cbb38b4c6a7b2dce59079ae6c405690c045504610a33753b437d4755e73"
+  },
+  {
+    "id": "MERC_MASTER",
+    "name": "傭兵ギルドマスター",
+    "path": "client/public/art/cards/MERC_MASTER.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 375306,
+    "sha256": "c5a4a7efbeed62e69a73d11bdb50c55daf04084a107452ff7ae9683190893b4f"
+  },
+  {
+    "id": "MERC_ART",
+    "name": "傭兵術",
+    "path": "client/public/art/cards/MERC_ART.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 423482,
+    "sha256": "0d0035180b4db332e2ffff10dba7e623f3491d9a6e7c77d8bc3261014ea60e0d"
+  },
+  {
+    "id": "Q_CHEAT",
+    "name": "イカサマ",
+    "path": "client/public/art/cards/Q_CHEAT.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 356508,
+    "sha256": "8d682c620e07f4059c2a986a22d8ff5d9672a0b1404253d56e1939d421f5d372"
+  },
+  {
+    "id": "Q_TOWN",
+    "name": "城下町",
+    "path": "client/public/art/cards/Q_TOWN.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 524700,
+    "sha256": "3fb03e7dc5ac4667ccbd94f00f8dedf4a29aaaa4776b0e098bdec1ba8ab698d0"
+  },
+  {
+    "id": "DOMINION",
+    "name": "支配",
+    "path": "client/public/art/cards/DOMINION.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 420468,
+    "sha256": "ea435877d4613fa58cc540b40650e5aa185ac8af646ca0ed2f754fea1b927642"
+  },
+  {
+    "id": "POISON_MASTER",
+    "name": "ポイズンマスター",
+    "path": "client/public/art/cards/POISON_MASTER.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 380104,
+    "sha256": "703219d0fd0e0f4e5e2743749e7819d75b140c7d17327824b314135c65a350aa"
+  },
+  {
+    "id": "ADVANCE",
+    "name": "快進撃",
+    "path": "client/public/art/cards/ADVANCE.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 409470,
+    "sha256": "70d8205cc7f9396e59bd774d3636044897ac4fd2f50bf8805eb553452f991a2d"
+  },
+  {
+    "id": "QUICK_AID",
+    "name": "応急手当て",
+    "path": "client/public/art/cards/QUICK_AID.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 388870,
+    "sha256": "18d6696cdbeb102d1b8e4080ba695e747861940a857434f75e7c8e63948d2eae"
+  },
+  {
+    "id": "EMPTY_MIND",
+    "name": "無の境地",
+    "path": "client/public/art/cards/EMPTY_MIND.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 448060,
+    "sha256": "ab992b228473bd801ee5557642bd924bc3acc27eb446a926d196e08890d302cd"
+  },
+  {
+    "id": "CREATION",
+    "name": "創造",
+    "path": "client/public/art/cards/CREATION.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 516660,
+    "sha256": "db9e6e1968c041717f5181356b23d4ee9b6a4e0d0f4ca6a87739d03116c92c00"
+  },
+  {
+    "id": "ROGUE_ART",
+    "name": "盗賊の心得",
+    "path": "client/public/art/cards/ROGUE_ART.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 345048,
+    "sha256": "9748b1eecc91e745a610b9050e7cfbbdcfab90b55a193074b39e13330d878873"
+  },
+  {
+    "id": "MIMIC_HIDEOUT",
+    "name": "ミミックの隠れ家",
+    "path": "client/public/art/cards/MIMIC_HIDEOUT.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 473438,
+    "sha256": "17e705f69e6f861aea93d12935e9ed4651faa68a2f0e29f1ddfa5a5b0e8924de"
+  },
+  {
+    "id": "BLACK_REVERSE",
+    "name": "黒魔法：リバース",
+    "path": "client/public/art/cards/BLACK_REVERSE.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 451976,
+    "sha256": "bfda9096bbc6ee074587e92707276a011d069fc9717491cfa9e50dc11c725347"
+  },
+  {
+    "id": "BLACK_INFINITY",
+    "name": "黒魔法：インフィニティ",
+    "path": "client/public/art/cards/BLACK_INFINITY.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 781078,
+    "sha256": "69f94c6ce46a5a99455299dbb2f4750e15c9702daa0a7001781ad69fc842384d"
+  },
+  {
+    "id": "BLACK_NOVA",
+    "name": "黒魔法：ノヴァ",
+    "path": "client/public/art/cards/BLACK_NOVA.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 473406,
+    "sha256": "9e6a6e3491dc8b05a0eef6d82fa1906a8a9297082af2528187bc87eed78c04d5"
+  },
+  {
+    "id": "BLACK_CURSE",
+    "name": "黒魔法：カース",
+    "path": "client/public/art/cards/BLACK_CURSE.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 356152,
+    "sha256": "9ecdb26e4e7194d979d589b39ea2548552b0332abc5b6c4e0b689cd13cf4a505"
+  },
+  {
+    "id": "BLACK_ELSA",
+    "name": "黒魔術師 - エルサ",
+    "path": "client/public/art/cards/BLACK_ELSA.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 387074,
+    "sha256": "bdcdb3ce0cd567d59f91aec424e6994816a46ca6c4900cf2e1952b000397e8e4"
+  },
+  {
+    "id": "BLACK_ALICE",
+    "name": "黒魔術師 - アリス",
+    "path": "client/public/art/cards/BLACK_ALICE.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 368434,
+    "sha256": "5447a93d5b9ecda9dc89cd08a4c8db3a22567b394597e707ac42a52727405128"
+  },
+  {
+    "id": "QUICK_CURSE",
+    "name": "消えない呪い",
+    "path": "client/public/art/cards/QUICK_CURSE.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 372132,
+    "sha256": "c67ca905252988b1846be2b8b41214a75a034c6e134558d776e41f5bacc3d7db"
+  },
+  {
+    "id": "SOUL_HARVEST",
+    "name": "魂の収穫",
+    "path": "client/public/art/cards/SOUL_HARVEST.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 432218,
+    "sha256": "86e55820853d6536458179d93defee09d8365ac91087772ab981dc25368e62dc"
+  },
+  {
+    "id": "ANESTHESIA",
+    "name": "麻酔",
+    "path": "client/public/art/cards/ANESTHESIA.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 412502,
+    "sha256": "257048bf45f8dfe72526138de914963f87417b3f173a0303ba7c22751968d995"
+  },
+  {
+    "id": "EARTHQUAKE",
+    "name": "地震",
+    "path": "client/public/art/cards/EARTHQUAKE.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 485334,
+    "sha256": "8fa88ce7aa6d9d97232576e0d73ef1393843c37dd8aa616d39d3128a3518c037"
+  },
+  {
+    "id": "MAGMA_RAIN",
+    "name": "マグマの雨",
+    "path": "client/public/art/cards/MAGMA_RAIN.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 375416,
+    "sha256": "39cbbd7ee72951eae242789a180a19172ca6bb75001ad047106ffba6d444fe0a"
+  },
+  {
+    "id": "FIRE_BALL",
+    "name": "ファイアーボール",
+    "path": "client/public/art/cards/FIRE_BALL.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 421714,
+    "sha256": "14dfb1a7986845c385dc0897bc292540c31d63690db45f421f97f2f06a18e436"
+  },
+  {
+    "id": "FIRE_ARROW",
+    "name": "ファイアーアロー",
+    "path": "client/public/art/cards/FIRE_ARROW.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 430544,
+    "sha256": "888d3d75ac750eb4386fbca1ad70caf174fe2baa46304bed5383df2a8015c391"
+  },
+  {
+    "id": "FIRE_ZONE",
+    "name": "ファイアーゾーン",
+    "path": "client/public/art/cards/FIRE_ZONE.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 500394,
+    "sha256": "6f0f8972ae7d2b88f4772487ec187106481d3839e45ae4747a1c296f8a0827db"
+  },
+  {
+    "id": "FIRE_METEOR",
+    "name": "ファイアーメテオ",
+    "path": "client/public/art/cards/FIRE_METEOR.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 459706,
+    "sha256": "db5f2076524432462a59e8343f52db125008b519da7d1828ae3ee2473453cdf5"
+  },
+  {
+    "id": "FIRE_ART",
+    "name": "炎術の極意",
+    "path": "client/public/art/cards/FIRE_ART.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 527960,
+    "sha256": "4e323d3de46f3de6b2c36c354bfe227a8507507962550df7e3158eaa1b4231ce"
+  },
+  {
+    "id": "FIRE_MASTER",
+    "name": "ファイアーマスター",
+    "path": "client/public/art/cards/FIRE_MASTER.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 511174,
+    "sha256": "3403353c0875708b5c71f2fd38821e12ea695f8859870f71f2ff5113ce5dd737"
+  },
+  {
+    "id": "DOUBLE_UP",
+    "name": "ダブルアップ",
+    "path": "client/public/art/cards/DOUBLE_UP.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 586150,
+    "sha256": "8d3b356ac2d3a898ac936e8bf65718c309199f053f6d93784de16d20363de9d3"
+  },
+  {
+    "id": "ASSASSIN_SQUAD",
+    "name": "アサシンスカッド",
+    "path": "client/public/art/cards/ASSASSIN_SQUAD.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 327448,
+    "sha256": "268e76b41911516eb307171d70abfc38a2ecc8ff90606e66d2bf222f177a29f2"
+  },
+  {
+    "id": "DISCOVERY_SMALL",
+    "name": "小さな発見",
+    "path": "client/public/art/cards/DISCOVERY_SMALL.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 443690,
+    "sha256": "fd0ab44a6275082ed2b1f282d16a98459e85c3e8c0cddae58f2488ef9fad2ed0"
+  },
+  {
+    "id": "DISCOVERY",
+    "name": "発見",
+    "path": "client/public/art/cards/DISCOVERY.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 454860,
+    "sha256": "95540483fd5028f485389f70a4afbf09c512907a854a908fb2653fac98f5b9e1"
+  },
+  {
+    "id": "DISCOVERY_LARGE",
+    "name": "大きな発見",
+    "path": "client/public/art/cards/DISCOVERY_LARGE.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 506020,
+    "sha256": "e158ba4cc1c9f1a96abd21476d0ec4d4c792e3c0e3db87fc3c3c60a550a12b2f"
+  },
+  {
+    "id": "PREPARATION",
+    "name": "仕込み",
+    "path": "client/public/art/cards/PREPARATION.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 395394,
+    "sha256": "3fbfd235011972ca1b672698c3c554da88c8d9159c282b4781673bf49dbaf4f8"
+  },
+  {
+    "id": "EROSION",
+    "name": "摩耗",
+    "path": "client/public/art/cards/EROSION.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 445912,
+    "sha256": "12d34f59d4f1a9ed6ef67dd1fec0b51e85c6e2a9e1d4ff0843fdac79d9009a6a"
+  },
+  {
+    "id": "GROWTH",
+    "name": "成長",
+    "path": "client/public/art/cards/GROWTH.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 591090,
+    "sha256": "906c762b9ff9c97f0fb0e3051f120eac28ab3568a96bdf77ea659449a1629f51"
+  }
+]

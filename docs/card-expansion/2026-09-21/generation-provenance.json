@@ -1,0 +1,246 @@
+{
+  "generator": "Codex built-in imagegen",
+  "count": 48,
+  "images": [
+    {
+      "id": "INTERCEPT",
+      "generatedPath": null,
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-dcd625b5-ecf0-4dc0-89b9-8c13e3b52533.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "REINFORCE",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-37c5f834-e7b2-4ef6-becc-7399b9383957.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-37c5f834-e7b2-4ef6-becc-7399b9383957.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "GUNNER",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-789188c4-df23-4596-837c-7d713ec53e67.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-789188c4-df23-4596-837c-7d713ec53e67.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "HEAVY_GUNNER",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-270d127a-d752-4852-bfaa-472967e2890c.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-270d127a-d752-4852-bfaa-472967e2890c.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "FARM_KEEPER",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-1eaeefe9-e9e0-48a6-900b-d8892e349e53.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-1eaeefe9-e9e0-48a6-900b-d8892e349e53.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "MIMIC_HUNTER",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-65d0d640-7f6c-4d97-8283-95a5c83399b9.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-65d0d640-7f6c-4d97-8283-95a5c83399b9.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "QUICK_HELLFIRE",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-b10b4189-d937-4e16-8ba0-5a3cf5f8c4d8.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-b10b4189-d937-4e16-8ba0-5a3cf5f8c4d8.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "STABLE",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-1de25c5d-5353-41f2-896e-b8e0ef33b92c.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-1de25c5d-5353-41f2-896e-b8e0ef33b92c.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "CAVALRY",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-a7929c39-db85-4ba1-aca4-dbe5df70e960.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-a7929c39-db85-4ba1-aca4-dbe5df70e960.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "MERCENARY",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-02b69a0d-85b3-4726-b893-8aa442ed9589.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-02b69a0d-85b3-4726-b893-8aa442ed9589.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "MERC_LEADER",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-54468b9c-fc4a-4a73-8574-da91d2fdb78a.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-54468b9c-fc4a-4a73-8574-da91d2fdb78a.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "MERC_MASTER",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-572c374d-aba8-4883-b079-65c1f93b01dd.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-572c374d-aba8-4883-b079-65c1f93b01dd.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "MERC_ART",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-92f3f47f-9ea7-4cc7-bd7d-d41bb736f977.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-92f3f47f-9ea7-4cc7-bd7d-d41bb736f977.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "Q_CHEAT",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-e3c12569-3dab-497f-b827-e510e531a236.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-e3c12569-3dab-497f-b827-e510e531a236.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "DOMINION",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-63836e37-2deb-47d2-9974-5397e617f9e0.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-63836e37-2deb-47d2-9974-5397e617f9e0.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "Q_TOWN",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-abac1a99-d1d8-4085-b190-9148b59f69b7.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-abac1a99-d1d8-4085-b190-9148b59f69b7.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "ADVANCE",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-0dde46ad-057f-457d-915a-bf5205735aa3.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-0dde46ad-057f-457d-915a-bf5205735aa3.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "POISON_MASTER",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-be157d2f-7ff5-4075-a2aa-ded822300eaa.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-be157d2f-7ff5-4075-a2aa-ded822300eaa.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "QUICK_AID",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-24ee7a56-fa37-4188-8a7c-e40885e8274f.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-24ee7a56-fa37-4188-8a7c-e40885e8274f.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "EMPTY_MIND",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-e822eb76-132e-422f-b5d6-3b3e0dcc55e3.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-e822eb76-132e-422f-b5d6-3b3e0dcc55e3.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "ROGUE_ART",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-f1fa32aa-18a7-47ce-96ca-3075b38e7c17.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-f1fa32aa-18a7-47ce-96ca-3075b38e7c17.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "CREATION",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-8339d0a4-b664-49ee-a045-38d55164a845.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-8339d0a4-b664-49ee-a045-38d55164a845.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "MIMIC_HIDEOUT",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-fe07f4e1-f2d1-45b9-ae9c-e6ff4c0fbf9b.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-fe07f4e1-f2d1-45b9-ae9c-e6ff4c0fbf9b.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "BLACK_REVERSE",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-b6cd7ac1-d320-44d0-9506-ededfaaa8d22.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-b6cd7ac1-d320-44d0-9506-ededfaaa8d22.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "BLACK_INFINITY",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-e2ad2057-da68-43bf-a09e-bfa1ad3bd07b.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-e2ad2057-da68-43bf-a09e-bfa1ad3bd07b.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "BLACK_NOVA",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-4ee1a6b8-0c42-4a25-a5c9-1b58a9fcd92c.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-4ee1a6b8-0c42-4a25-a5c9-1b58a9fcd92c.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "BLACK_CURSE",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-8cbc15e4-2a7f-4108-84ba-cc5904334a51.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-8cbc15e4-2a7f-4108-84ba-cc5904334a51.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "BLACK_ELSA",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-428bfa83-a5d5-4dc5-b63e-d50aaf679a40.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-428bfa83-a5d5-4dc5-b63e-d50aaf679a40.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "BLACK_ALICE",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-665fdbf6-aec3-4fcb-9870-0b53193ae90e.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-665fdbf6-aec3-4fcb-9870-0b53193ae90e.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "QUICK_CURSE",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-f2ac5997-25bc-4017-b4df-8fab1dc216e3.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-f2ac5997-25bc-4017-b4df-8fab1dc216e3.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "SOUL_HARVEST",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-a560cd99-9f33-4e71-9d3b-5c4ff429e562.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-a560cd99-9f33-4e71-9d3b-5c4ff429e562.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "ANESTHESIA",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-cd1806bf-381e-4a86-8b9a-cdc45b2914c9.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-cd1806bf-381e-4a86-8b9a-cdc45b2914c9.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "EARTHQUAKE",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-56a061ff-2cda-4d49-af3f-18007f44f33c.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-56a061ff-2cda-4d49-af3f-18007f44f33c.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "MAGMA_RAIN",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-90e4f86d-b6ad-4a85-be2d-aab571afe9af.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-90e4f86d-b6ad-4a85-be2d-aab571afe9af.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "FIRE_BALL",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-6aee3653-9a47-4477-b167-8731ae2fdd30.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-6aee3653-9a47-4477-b167-8731ae2fdd30.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "FIRE_ARROW",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-cb2e7a6c-a7af-425e-a05d-20ca2fc53a02.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-cb2e7a6c-a7af-425e-a05d-20ca2fc53a02.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "FIRE_ZONE",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-fa521101-a56a-49e8-948e-1935740565f4.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-fa521101-a56a-49e8-948e-1935740565f4.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "FIRE_METEOR",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-d051cedb-6f0b-4448-b979-5a8d3a0a6a06.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-d051cedb-6f0b-4448-b979-5a8d3a0a6a06.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "FIRE_ART",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-f02ead90-a8ac-45e8-a486-30b697949ce9.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-f02ead90-a8ac-45e8-a486-30b697949ce9.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "FIRE_MASTER",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-c17fca0c-5c64-480e-9e63-2c10fd0b24cf.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-c17fca0c-5c64-480e-9e63-2c10fd0b24cf.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "DOUBLE_UP",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-ca6ed348-bfc0-4b5e-82c5-86718ebd18c4.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-ca6ed348-bfc0-4b5e-82c5-86718ebd18c4.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "ASSASSIN_SQUAD",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-b51b5f33-7a83-45be-befe-cbd34e1f5239.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-b51b5f33-7a83-45be-befe-cbd34e1f5239.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "DISCOVERY",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-50fe2ce9-68c0-47bb-8f63-3c6666a57322.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-50fe2ce9-68c0-47bb-8f63-3c6666a57322.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "DISCOVERY_SMALL",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-7f560175-09ab-46af-aa9b-4574cfd88819.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-7f560175-09ab-46af-aa9b-4574cfd88819.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "DISCOVERY_LARGE",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-f8ca696c-9eba-463f-b8ca-3b87d4e130da.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-f8ca696c-9eba-463f-b8ca-3b87d4e130da.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "PREPARATION",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-1a3e21e7-6179-4c6e-92d8-c4c5421a06be.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-1a3e21e7-6179-4c6e-92d8-c4c5421a06be.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "EROSION",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-ab92a2ed-4440-4f3a-85ac-a46a910532d4.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-ab92a2ed-4440-4f3a-85ac-a46a910532d4.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "id": "GROWTH",
+      "generatedPath": "/Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-fa9f383d-9f64-4700-a220-886a2a3151bf.png",
+      "outputHint": "Generated images are saved to /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5 as /Users/hiromaru05s/.codex/generated_images/01a0c102-79f3-7141-8647-4b8747356af5/exec-fa9f383d-9f64-4700-a220-886a2a3151bf.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    }
+  ]
+}

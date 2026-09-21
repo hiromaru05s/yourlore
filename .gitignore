@@ -1,4 +1,4 @@
-node_modules/
+node_modules
 dist/
 .wrangler/
 .dev.vars
@@ -12,3 +12,6 @@ _render.cjs
 .claude/settings.local.json
 
 /art/.cache/questQuickCards.mjs
+
+/art/.cache/expansionCards.mjs
+/docs/card-expansion/*/generated/

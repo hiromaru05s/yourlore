@@ -19,8 +19,8 @@ try {
   const activate = (g,id,s=0) => { g.cur=s; g.players[s].hand.push(card(id)); return step(g,{type:'play',idx:g.players[s].hand.length-1}); };
   const buy = (g,id,from='buyMarket') => { if(from==='buyMarket')g.market[0]=card(id);else g.players[g.cur].supply[0]=card(id); return step(g,{type:from,i:0}); };
   const pick = (g,uid) => step(g,{type:'pick',uid});
-  assert.equal(Object.values(DB).filter(c=>c.t==='quest').length,9);
-  assert.equal(Object.values(DB).filter(c=>c.quick).length,10);
+  assert.equal(Object.values(DB).filter(c=>c.t==='quest').length,11);
+  assert.equal(Object.values(DB).filter(c=>c.quick).length,13);
   assert(Object.values(DB).filter(c=>c.quick).every(c=>c.t==='spell'));
   assert.equal(frameFor('quest'),'/art/biblion/modular/base-quest.png');
 
@@ -117,5 +117,5 @@ try {
     await server.handleAction(1,{type:'pick',uid:chosen});assert(server.room.game.pending);
     await server.handleAction(0,{type:'pick',uid:chosen});assert(!server.room.game.pending);assert.equal(server.room.game.cur,1);
   }
-  console.log('PASS: quest lifecycle, progression, rewards, public persistence, all 10 quick spells, both markets, mandatory choices, bot choices and rejection boundaries');
+  console.log('PASS: quest lifecycle, progression, rewards, public persistence, legacy quick spells plus expanded catalog, both markets, mandatory choices, bot choices and rejection boundaries');
 } finally { await rm(dir,{recursive:true,force:true}); }

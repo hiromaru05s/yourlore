@@ -305,7 +305,7 @@ const PASSIVE_PTS: Record<string, number> = {
 };
 function passiveValue(c: CardDef): number {
   let t = 0;
-  for (const k of cardPassives(c)) t += PASSIVE_PTS[k] ?? 2;
+  for (const k of cardPassives(c)) t += k === "counter" ? Math.ceil(n(c.atk) / 2) * 0.9 : (PASSIVE_PTS[k] ?? 2);
   return t;
 }
 
@@ -347,11 +347,29 @@ function bodyValue(c: CardDef): number {
   return atk * atkW * mult + def * 1.0;
 }
 
+// v50 priorities are initial effect estimates, not measured win rates.
+const EXPANSION_EFFECT_PTS: Record<string, number> = {
+  INTERCEPT: 7, REINFORCE: 11, GUNNER: 3, HEAVY_GUNNER: 6,
+  FARM_KEEPER: 4, MIMIC_HUNTER: 3, QUICK_HELLFIRE: 16, STABLE: 10, CAVALRY: 3,
+  MERCENARY: 4, MERC_LEADER: 8, MERC_MASTER: 19, MERC_ART: 15,
+  Q_CHEAT: 13, Q_TOWN: 18, DOMINION: 3 * DRAW + MANA * 2,
+  POISON_MASTER: 8, ADVANCE: 8, QUICK_AID: 25 * HEAL, EMPTY_MIND: 6,
+  CREATION: DRAW + HEAL + 3, ROGUE_ART: 7, MIMIC_HIDEOUT: 22,
+  BLACK_REVERSE: 6, BLACK_INFINITY: 10, BLACK_NOVA: 3, BLACK_CURSE: 7,
+  BLACK_ELSA: 14, BLACK_ALICE: 12, QUICK_CURSE: 7, SOUL_HARVEST: 14,
+  ANESTHESIA: 5, EARTHQUAKE: 7, MAGMA_RAIN: 9,
+  FIRE_BALL: 6 - 2 * HEAL, FIRE_ARROW: 3 - HEAL, FIRE_ZONE: 13,
+  FIRE_METEOR: 16 - MANA, FIRE_ART: 6, FIRE_MASTER: 11, DOUBLE_UP: 13,
+  ASSASSIN_SQUAD: 8, DISCOVERY_SMALL: 2 * DRAW, DISCOVERY: 3.5 * DRAW,
+  DISCOVERY_LARGE: 5 * DRAW, PREPARATION: 7 * DRAW, EROSION: 17, GROWTH: 15,
+};
+
 /**
  * Static, board-independent power estimate in damage-equivalent points.
  * Used for buy decisions, deck-quality measurement, and pick ordering.
  */
 export function cardPower(c: CardDef): number {
+  if (EXPANSION_EFFECT_PTS[c.id] != null) return bodyValue(c) + passiveValue(c) + EXPANSION_EFFECT_PTS[c.id];
   // Initial estimates for the new classes; these are bot priorities, not measured balance scores.
   if (c.quest) return ({ Q_RIFT: 15, Q_BRAND: 15, Q_TORI: 14, Q_WINTER: 14, Q_TRIBE: 17, Q_CASTLE: 18, Q_DECAY: 18, Q_ASSASSIN: 16, Q_MANA: 17 } as Record<string, number>)[c.id] ?? 12;
   if (c.quick) return ({ QUICK_MIMIC: 13, QUICK_SURVIVAL: 14, QUICK_POISON: 7, QUICK_WORLD: 20, QUICK_MUSTER: 17, QUICK_SORT: 13, QUICK_REBIRTH: 17, QUICK_ATTUNE: MANA + 2 * MAXHP, QUICK_GRIMOIRE: 6, QUICK_ASSAULT: 5 } as Record<string, number>)[c.id] ?? 6;

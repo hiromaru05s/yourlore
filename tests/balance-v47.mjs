@@ -53,7 +53,7 @@ try {
  // Growth must not roll Cycle of Life once for healing and again for max HP.
  {const g=fresh();g.players[0].enchants=[{card:card('LIFE_CYCLE'),turns:99}];const r=play(g,'GRAPE');assert.equal(r.events.filter(e=>e.type==='dice').length,1);}
  // Each kill may unlock only the second attack, never a third. Turn reset restores availability.
- {let g=fresh();const m=mon('M7');g.players[0].field=[m];g.players[1].field=[mon('MIMIC'),mon('MIMIC'),mon('MIMIC')];
+ {let g=fresh();const m=mon('M7');m.defMod=10;g.players[0].field=[m];g.players[1].field=[mon('MIMIC'),mon('MIMIC'),mon('MIMIC')]; // Survive v50 counters while testing the two-attack limit.
   for(let i=0;i<2;i++){g=step(g,{type:'attack',uid:m.uid});g=step(g,{type:'pick',uid:g.players[1].field[0].uid});}
   assert.equal(g.players[0].field[0].attacksUsed,2);assert(g.players[0].field[0].exhausted);assert.equal(g.players[1].field.length,1);
   const before=structuredClone(g.players[1]);g=step(g,{type:'attack',uid:m.uid,target:g.players[1].field[0].uid});assert.deepEqual(g.players[1],before);

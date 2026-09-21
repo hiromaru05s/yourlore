@@ -48,12 +48,13 @@ export interface CardDef {
   textEn?: string; // English effect text (falls back to text)
 }
 
-export type QuestEvent = "exile" | "opponentDamage" | "emptyTurn" | "maxHp" | "tribeSummon" | "castleTurn" | "decayKill" | "assassinHit" | "spellPlay";
+export type QuestEvent = "dice" | "town" | "exile" | "opponentDamage" | "emptyTurn" | "maxHp" | "tribeSummon" | "castleTurn" | "decayKill" | "assassinHit" | "spellPlay";
 export interface QuestState {
   card: CardInst;
   progress: number;
   startedTurn: number;
   anchorUid?: string;
+  townSeen?: string[];
 }
 
 export interface Enchant {
@@ -68,6 +69,8 @@ export interface CardInst extends CardDef {
 }
 
 export interface FieldMon extends CardInst {
+  immuneDamageTurn?: number;
+  expireOpponentOf?: Side;
   exhausted: boolean;
   tempAtk: number; // temporary atk (cleared end of turn)
   atkMod: number; // permanent atk change
@@ -104,6 +107,8 @@ export interface RevealedCard {
 }
 
 export interface PlayerState {
+  expansion?: { turn: number; extraDraw: number; firePlayed: string[]; fireDiscount: number; dominion: number; directHits?: string[]; directHitTurn?: number; lastDirectHits?: number; lastDirectTurn?: number; reversePlays?: number };
+
   id: string; // user id (online) or "bot"/"local"
   name: string;
   isBot: boolean;
@@ -183,6 +188,10 @@ export interface Pending {
 }
 
 export interface GameState {
+  spellDamageTurn?: number;
+  spellDamageAmount?: number;
+  expansionChoices?: { owner: Side; reason: string; hint: string; data?: Record<string, unknown> }[];
+
   players: [PlayerState, PlayerState];
   cur: Side;
   turn: number;

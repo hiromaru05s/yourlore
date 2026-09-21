@@ -22,7 +22,7 @@
 //  · hell   — never blunders + value-net look-ahead search → 최강
 // ============================================================
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
-import { effectChoices, purchaseAllowed } from "./engine";
+import { effectChoices, purchaseAllowed, playBlockReason } from "./engine";
 import { ST_MAX, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, effMaxMana, freeBuyBlocked, glassBanActive, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
 import { avgPower, cardPower } from "./cardEval";
 import { netEval, determinize } from "./botNet";
@@ -197,7 +197,7 @@ export function candidates(g: GameState): Action[] {
   const seenPlay = new Set<string>();
   const candSealAll = g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"));
   p.hand.forEach((c, idx) => {
-    if (c.quick) return;
+    if (c.quick || playBlockReason(g, g.cur, c)) return;
     if (c.star === "chest" && (g.turn <= T.chestTurn || chestLocked(g))) return;
     if (c.t === "trap" && p.trapBlockTurn) return; // Legacy set restriction — avoid rejected-play loops
     if (c.t === "mon" && ((p.summonLockUntil ?? 0) > g.turn || !summonReqMet(p, c, o))) return; // 은둔자 잠금 / 소환 조건
@@ -221,7 +221,7 @@ export function candidates(g: GameState): Action[] {
   if (!noAtk) {
     const seenAtk = new Set<string>();
     p.field.forEach((m) => {
-      if (m.exhausted) return;
+      if (m.exhausted || (m.id === "ASSASSIN_SQUAD" && o.hp < 11)) return;
       if (m.hatch != null) return; // 알은 공격 불가 (엔진이 거부 — 후보에서 제외해야 무한 재시도 안 함)
       if (m.summonedTurn === g.turn && o.field.some((tm) => hasPassive(tm, "majesty"))) return;
       const a = effAtk(p, m, g);
@@ -364,11 +364,13 @@ function legalActions(g: GameState): Action[] {
   }
 
   p.hand.forEach((c, idx) => {
-    if (c.quick) return; if (playCost(c) <= p.mana) add({ type: "play", idx }); });
+    if (c.quick || playBlockReason(g, g.cur, c)) return;
+    if (playCost(c, p) <= p.mana) add({ type: "play", idx });
+  });
   const noAtk = g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "noAttack"));
   if (!noAtk) {
     p.field.forEach((m) => {
-      if (!m.exhausted && (!glassBanActive(g) || Math.abs(effAtk(p, m, g) - effDef(p, m)) < 4)) add({ type: "attack", uid: m.uid });
+      if (!m.exhausted && !(m.id === "ASSASSIN_SQUAD" && o.hp < 11) && (!glassBanActive(g) || Math.abs(effAtk(p, m, g) - effDef(p, m)) < 4)) add({ type: "attack", uid: m.uid });
     });
   }
   p.supply.forEach((c, i) => { if (c && buyableByBot(p, c, g)) add({ type: "buySupply", i }); });
@@ -447,7 +449,7 @@ function opponentRead(o: PlayerState): OpponentRead {
 
 function earlyCullPressure(g: GameState, p: PlayerState): number {
   const trash = [...p.hand, ...p.deck, ...p.discard].filter((c) => c.star === "trash").length;
-  const handPlays = p.hand.filter((c) => c.star !== "trash" && playCost(c) <= p.mana).length;
+  const handPlays = p.hand.filter((c) => c.star !== "trash" && playCost(c, p) <= p.mana).length;
   const early = g.turn <= 8 ? 1 : g.turn <= 14 ? 0.55 : 0.2;
   const spare = p.mana >= 1 ? Math.min(1, p.mana / 4) : 0;
   const clutter = Math.min(1, trash / 8);
@@ -609,6 +611,9 @@ function clamp01(x: number): number {
 export function greedyDecide(g: GameState, useLethal = true): Action {
   if (g.pending?.kind === "cardChoice") {
     const pool = effectChoices(g).filter(c => g.pending?.reason !== "QUICK_REBIRTH" || c.cost <= 7);
+    const owner = g.pending.owner ?? g.cur;
+    if (g.pending.reason === 'FIRE_BALL') { const reversed = g.players.some(p => p.enchants.some(e => e.card.ench === 'blackReverse')); return { type: 'pick', uid: `player-${reversed ? owner : 1-owner}` }; }
+    if (g.pending.reason === 'FIRE_ZONE') return { type: 'pick', uid: [...pool].sort((a,b) => cardPower(a)-cardPower(b))[0]?.uid ?? null };
     const best = [...pool].sort((a, b) => cardPower(b) - cardPower(a))[0] ?? effectChoices(g)[0];
     return { type: "pick", uid: best?.uid ?? null };
   }
@@ -647,12 +652,12 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   const oppNoLow = o.enchants.some((e) => e.card.ench === "noSummonLow"); // blocks my cost<=3 summons
 
   const majesty = o.field.some((m) => hasPassive(m, "majesty"));
-  const ready = p.field.filter((m) => !m.exhausted && m.hatch == null && !(majesty && m.summonedTurn === g.turn));
+  const ready = p.field.filter((m) => !m.exhausted && !(m.id === "ASSASSIN_SQUAD" && o.hp < 11) && m.hatch == null && !(majesty && m.summonedTurn === g.turn));
 
   // castable(): reject spells that would be refused before paying (avoids the bot
   // re-picking an uncastable card forever) OR that would be self-defeating.
   const castable = (c: CardInst): boolean => {
-    if (c.quick) return false;
+    if (c.quick || playBlockReason(g, g.cur, c)) return false;
     // 침묵 오라 / 침묵의 심판: 마법 봉인 — v5부터 스타터(컬/상자/어튠)도 대상 (엔진 거부 → 봇도 스킵)
     if (c.t === "spell" || c.t === "starter") {
       if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) return false;
@@ -819,6 +824,13 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   const direct = spells.find((x) => x.c.act === "dmg" || x.c.act === "siphon" || burnDmg(x.c, o) > 0);
   if (direct) return { type: "play", idx: direct.i };
 
+  // Expansion spells participate in normal bot play; conditions come from the shared engine.
+  const expanded = spells.find(({c}) => c.act === 'expansion' && !c.ench && c.id !== 'BLACK_NOVA'
+    && !(c.id === 'ANESTHESIA' && !ready.length)
+    && !(['EARTHQUAKE','MAGMA_RAIN'].includes(c.id) && o.field.length <= p.field.length)
+    && !(c.id === 'FIRE_BALL' && p.hp <= 2) && !(c.id === 'FIRE_ARROW' && p.hp <= 1));
+  if (expanded) return { type: 'play', idx: expanded.i };
+
   // 8) utility spells (draw / ramp / disruption)
   const util = spells.find((x) => ["draw", "seek", "crash", "exile", "recall", "heal", "manaUp", "manaDown", "manaUpGain", "chestToMana"].includes(x.c.act || ""));
   if (util) return { type: "play", idx: util.i };
@@ -953,7 +965,7 @@ function lethalWorthSearching(g: GameState): boolean {
   const p = g.players[g.cur], o = g.players[1 - g.cur];
   let ceiling = p.mana;
   for (const c of p.hand) {
-    if (playCost(c) <= p.mana) {
+    if (playCost(c, p) <= p.mana) {
       if (c.act === "dmg" || c.act === "siphon") ceiling += c.val || 0;
       else if (c.act === "buffTurn" || c.act === "buffAllTurn" || c.act === "buffPerm") ceiling += (c.val || 0) * Math.max(1, p.field.length);
       else if (c.t === "mon") ceiling += c.atk || 0;
@@ -994,7 +1006,7 @@ function lethalActions(g: GameState): Action[] {
 
   const playable = p.hand
     .map((c, idx) => ({ c, idx }))
-    .filter(({ c }) => playCost(c) <= p.mana)
+    .filter(({ c }) => !playBlockReason(g, g.cur, c))
     .sort((a, b) => lethalPlayPriority(b.c) - lethalPlayPriority(a.c));
   playable.forEach(({ idx }) => add({ type: "play", idx }));
 
@@ -1004,7 +1016,7 @@ function lethalActions(g: GameState): Action[] {
   if (!noAtk && o.traps.length === 0) {
     const ban = glassBanActive(g);
     [...p.field]
-      .filter((m) => !m.exhausted && (!ban || Math.abs(effAtk(p, m, g) - effDef(p, m)) < 4))
+      .filter((m) => !m.exhausted && !(m.id === "ASSASSIN_SQUAD" && o.hp < 11) && (!ban || Math.abs(effAtk(p, m, g) - effDef(p, m)) < 4))
       .sort((a, b) => effAtk(p, b, g) - effAtk(p, a, g))
       .forEach((m) => add({ type: "attack", uid: m.uid }));
   }

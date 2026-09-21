@@ -543,7 +543,7 @@ export abstract class BaseController implements BoardHandlers {
     }
     if (g.pending && actingSide(g) === this.you) {
       if (g.pending.kind === "cardChoice") {
-        cardPicker(g.pending.hintJa, effectChoices(g), uid => this.submit({ type: "pick", uid }));
+        cardPicker(g.pending.hintJa, effectChoices(g), uid => this.submit({ type: "pick", uid }), !!g.pending.allowCancel);
         return;
       }
       if (multiKind) {
