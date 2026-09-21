@@ -20,7 +20,8 @@ try{
   }
  }
  assert.equal(riftState(1280).suction,1);assert(riftState(1281).travel>0&&riftState(1281).trail>0,'depart immediately after collapse without an intermediate hold');assert.equal(riftState(1660).travel,1);
- const raised=riftCardPoint({x:200,y:300},{x:200,y:300},90,riftState(400));assert(raised.y<260,'card rises visibly before absorption');assert.equal(riftState(700).shroud,1,'entire face is coated before suction');assert.equal(riftState(700).suction,0);
+ const raised=riftCardPoint({x:200,y:300},{x:200,y:300},90,riftState(400));assert(raised.y<300&&raised.y>270,'compact lift does not repeat the large play reveal');
+ const edge=riftCardPoint({x:245,y:300},{x:200,y:300},90,riftState(400));assert(Math.hypot(edge.x-raised.x,edge.y-raised.y)<45*.8,'card shrinks before absorption');assert.equal(riftState(700).shroud,1,'entire face is coated before suction');assert.equal(riftState(700).suction,0);
  for(const ms of [800,950,1100,1280]){const point=riftCardPoint({x:200,y:300},{x:200,y:300},90,riftState(ms));assert(Math.abs(point.x-raised.x)<1e-6&&Math.abs(point.y-raised.y)<1e-6,'vortex center stays at the raised card, never falls toward a second hole');}
  const topCenter={x:320,y:35};const topVortex=riftCardPoint(topCenter,topCenter,45,riftState(1100));assert(topVortex.y>=30,'opponent hand vortex remains below the top edge');
  const end=riftState(RIFT_DURATION);assert.equal(end.trail,0);assert.equal(end.arrival,0);

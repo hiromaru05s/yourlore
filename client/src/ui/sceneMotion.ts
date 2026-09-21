@@ -1,7 +1,8 @@
-import {pileCenter,marketHeight,STOCK_THICKNESS} from './readingBoardLayout';
+import {reformVeil} from './reformVeil';
+import {pileCenter,pileFace,marketHeight,STOCK_THICKNESS} from './readingBoardLayout';
 import {boardPoint} from './boardProjection';
 import * as T from 'three';
-import {overhandPose} from './shufflePose';
+import {reformState,REFORM_DURATION} from './deckReform';
 import {bindBoardMotion,type BoardMotion} from './boardMotion';
 import {cardStock,type PileModel} from './pileModels';
 import {boardLens,layoutRect,cardUnit,screenToBoard} from './boardProjection';
@@ -58,42 +59,39 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
     }
     if(req.kind==='shuffle'){
       const src=items.get(req.source.id),dest=items.get(req.target.id);if(!src?.pile||!dest?.pile)return false;
-      const a=layoutRect(req.source),b=layoutRect(req.target),n=Math.min(req.count,20),cards:T.Group[]=[];
-      // Reuse the exact resting stock, sleeve, lights and table camera throughout.
-      for(let i=0;i<n;i++){const m=cardStock(texture(req.target.dataset.sleeve!));scene.add(m);cards.push(m);}
-      req.source.classList.add('is-shuffling');req.target.classList.add('is-shuffling');root.dataset.shufflePhase='lift';
-      let impacted=false;
-      try{await timeline(reduced?100:2800,req.signal,t=>{
-        // Lift together, mix faster while carrying, square above the deck, then
-        // release the entire stack. No card drifts down during the mixing phase.
-        const mixing=sat((t-.19)/.51),motion=overhandPose(t,0,n);
-        root.dataset.shufflePhase=motion.phase;root.dataset.shuffleRound=String(motion.round);
-        const lift=smooth(t/.19),travel=Math.pow(smooth(mixing),1.4),fall=sat((t-.8)/.15)**3;
-        const rebound=t>.95?Math.sin((t-.95)/.05*Math.PI)*unit*.04:0;
-        const square=smooth((t-.70)/.10);
-        cards.forEach((m,i)=>{
-          const pose=overhandPose(t,i,n);
-          const x=a.left+a.width/2+(b.left+b.width/2-a.left-a.width/2)*travel;
-          const z=a.top+a.height/2+(b.top+b.height/2-a.top-a.height/2)*travel;
-          const rank=(i-8*Math.max(1,Math.floor(n/3))%n+n)%n;
-          const rest=unit*(pileCenter(1,false)+(n<=1?0:rank/(n-1))*(pileCenter(req.count,false)-pileCenter(1,false)));
-          const fromY=unit*(pileCenter(1,true)+(n<=1?0:i/(n-1))*(pileCenter(req.count,true)-pileCenter(1,true)));
-          const stack=unit*(pileCenter(1,false)+pose.y);
-          const level=fromY+(stack-fromY)*smooth(t/.19)+(rest-stack)*square;
-          m.position.set(x-cx+pose.x*unit,level+unit*1.4*lift*(1-fall)+rebound,z-cy+pose.z*unit);
-          m.scale.setScalar(unit);m.rotation.set(-Math.PI/2+pose.tilt,0,pose.roll);
-        });
-        if(t>=.95&&!impacted&&!req.signal.aborted){impacted=true;if(!reduced){
-          window.dispatchEvent(new CustomEvent('lore:summon-impact',{detail:req.target.getBoundingClientRect()}));
-          root.querySelector('.stage')?.animate([{translate:'0 0'},{translate:'0 2px'},{translate:'0 -1px'},{translate:'0 0'}],{duration:180});
-        }}
+      const a=layoutRect(req.source),b=layoutRect(req.target),count=req.count;
+      let face:T.CanvasTexture|undefined;
+      const print=req.source.querySelector<HTMLElement>('.pile-print .card');
+      if(print){try{const surface=await capturePileSurface(print,req.source.dataset.sleeve!);if(surface.face){face=new T.CanvasTexture(surface.face);face.colorSpace=T.SRGBColorSpace;}}catch{}}
+      if(req.signal.aborted||disposed){face?.dispose();return false;}
+      type Surface={material:T.MeshBasicMaterial|T.MeshStandardMaterial;color:T.Color};
+      const build=(shelf:boolean)=>{
+        const group=new T.Group(),surfaces:Surface[]=[],n=Math.min(count,shelf?12:20),height=Math.max(0,Math.min(count,40)-1)*STOCK_THICKNESS;
+        for(let i=0;i<n;i++){
+          const card=cardStock(texture((shelf?req.source:req.target).dataset.sleeve!),shelf&&i===n-1?face:undefined,shelf&&i<n-1);card.rotation.x=-Math.PI/2;
+          card.position.y=pileCenter(1,shelf)+(n<=1?0:i/(n-1)*height);group.add(card);
+          card.traverse(o=>{if(o instanceof T.Mesh)for(const material of Array.isArray(o.material)?o.material:[o.material])if(material instanceof T.MeshBasicMaterial||material instanceof T.MeshStandardMaterial){material.transparent=true;surfaces.push({material,color:material.color.clone()});}});
+        }
+        group.scale.setScalar(unit);scene.add(group);return {group,surfaces};
+      };
+      const source=build(true),target=build(false),sparkGroup=new T.Group();scene.add(sparkGroup);
+      source.group.position.set(a.left+a.width/2-cx,0,a.top+a.height/2-cy);target.group.position.set(b.left+b.width/2-cx,0,b.top+b.height/2-cy);sparkGroup.position.copy(target.group.position);
+      const sparks=Array.from({length:12},(_,i)=>{const m=new T.Mesh(new T.OctahedronGeometry(unit*.026,0),new T.MeshBasicMaterial({color:i%3?0x63c7ff:0xe1faff,transparent:true,depthWrite:false}));sparkGroup.add(m);return m;});
+      const coat=(actor:typeof source,charge:number,opacity:number)=>{actor.group.visible=opacity>.001;for(const {material,color} of actor.surfaces){material.color.copy(color).lerp(new T.Color('#409fe9'),charge);material.opacity=opacity;if(material instanceof T.MeshStandardMaterial){material.emissive.set('#2baeff');material.emissiveIntensity=charge*1.7;}else if(material.map){material.color.lerp(new T.Color('#c6f5ff'),charge*.4);}}};
+      const veil=(actor:typeof source,shelf:boolean)=>{const v=reformVeil(unit);v.mesh.position.copy(actor.group.position);v.mesh.position.y=unit*(pileFace(count,shelf)+.006);scene.add(v.mesh);return v;};
+      const sourceVeil=veil(source,true),targetVeil=veil(target,false);
+      req.source.classList.add('is-shuffling');req.target.classList.add('is-shuffling');
+      try{await timeline(reduced?100:REFORM_DURATION,req.signal,t=>{
+        const state=reformState(t);root.dataset.shufflePhase=state.phase;
+        coat(source,state.sourceCharge,state.sourceAlpha);coat(target,state.destinationCharge,state.destinationAlpha);
+        sourceVeil.update(state.sourceCharge,state.sourceAlpha*.96,t);targetVeil.update(state.destinationCharge,state.destinationAlpha*.98,t);
+        const burst=state.burst,travel=sat((t-.59)/.38);sparks.forEach((m,i)=>{const angle=i*2.399;m.position.set(Math.cos(angle)*unit*(.25+travel*.8),unit*(pileCenter(count,false)+.12+Math.sin(travel*Math.PI)*.4),Math.sin(angle)*unit*(.38+travel*.7));m.scale.set(.45*burst,(1.3+travel)*burst,.45*burst);m.rotation.z=angle;m.material.opacity=burst*.85;});
       });
       if(disposed||req.signal.aborted)return false;
-      req.target.dataset.count=String(req.count);req.source.dataset.count='0';
-      req.source.querySelector('.pile-print')?.remove();delete req.source.dataset.face;
+      req.target.dataset.count=String(count);req.source.dataset.count='0';req.source.querySelector('.pile-print')?.remove();delete req.source.dataset.face;
       for(const e of [req.source,req.target]){const c=e.querySelector('.pile-count');if(c)c.textContent=e.dataset.count!;}
-      refresh();dust(req.target);
-      }finally{cards.forEach(dispose);req.source.classList.remove('is-shuffling');req.target.classList.remove('is-shuffling');delete root.dataset.shufflePhase;delete root.dataset.shuffleRound;}
+      refresh();
+      }finally{[source.group,target.group,sparkGroup].forEach(dispose);sourceVeil.dispose();targetVeil.dispose();face?.dispose();req.source.classList.remove('is-shuffling');req.target.classList.remove('is-shuffling');delete root.dataset.shufflePhase;}
       return true;
     }
     // Opening furniture flights were retired; the board starts fully assembled.

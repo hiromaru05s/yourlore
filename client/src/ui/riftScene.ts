@@ -1,4 +1,4 @@
-import {drawVoidSurface} from './voidSurface';
+import {acquireVoidSurface,drawVoidSurface} from './voidSurface';
 import {captureCardSurface,CARD_PADDING} from './cardSurface';
 import {riftCardPoint,riftState,drawRiftTransmute,RIFT_DURATION,type Point} from './riftTransmute';
 
@@ -50,11 +50,10 @@ export async function swallowRiftCard(node:HTMLElement,target:HTMLElement,start:
   const d=coating.getContext('2d')!;d.drawImage(face,0,0);d.globalCompositeOperation='source-in';
   const g=d.createLinearGradient(0,0,face.width,face.height);g.addColorStop(0,'#58317c');g.addColorStop(.22,'#1e102d');g.addColorStop(.55,'#090611');g.addColorStop(.82,'#35154e');g.addColorStop(1,'#78539c');d.fillStyle=g;d.fillRect(0,0,face.width,face.height);
   d.globalCompositeOperation='source-atop';drawVoidSurface(d,face.width,face.height,0);
-  for(let i=0;i<7;i++){const x=face.width*(.12+(i%3)*.35),y=face.height*(.1+i*.12),radius=face.width*.42;const haze=d.createRadialGradient(x,y,0,x,y,radius);haze.addColorStop(0,i%2?'#8450b15c':'#1b0b2eaa');haze.addColorStop(1,'#29133b00');d.fillStyle=haze;d.fillRect(x-radius,y-radius,radius*2,radius*2);}
-  for(let i=0;i<9;i++){d.beginPath();const x=face.width*(.08+i*.11);d.moveTo(x,-face.height*.1);d.bezierCurveTo(x-face.width*.3,face.height*.35,x+face.width*.25,face.height*.58,x-face.width*.08,face.height*1.1);d.strokeStyle=i%3?'#a777d51b':'#d3a5f535';d.lineWidth=face.width*(i%3?.018:.045);d.stroke();}
+
  }
  if(signal.aborted||!node.isConnected)return;
- const oldStyle=node.getAttribute('style');
+ const releaseVoid=acquireVoidSurface();const oldStyle=node.getAttribute('style');
  let frame=0,finish=()=>{};
  const abort=()=>finish();signal.addEventListener('abort',abort,{once:true});
  try{
@@ -69,11 +68,12 @@ export async function swallowRiftCard(node:HTMLElement,target:HTMLElement,start:
      if(!face){
       node.style.transition='none';node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';
       node.style.visibility=suction>=1?'hidden':'visible';
-      const center=riftCardPoint(source,source,sourceWidth,state);node.style.transform=new DOMMatrix().translate(center.x,center.y).rotate(-state.lift*2.6+suction*255).scale((1+state.lift*.1)*(1-suction)**.66).translate(-source.x,-source.y).multiply(start).toString();node.style.clipPath=`inset(0 round ${suction*50}%)`;node.style.filter=`brightness(${1-state.shroud*.8}) sepia(${state.shroud}) hue-rotate(225deg)`;return;
+      const center=riftCardPoint(source,source,sourceWidth,state);node.style.transform=new DOMMatrix().translate(center.x,center.y).rotate(-state.lift*2.6+suction*255).scale((1-state.lift*.48)*(1-suction)**.66).translate(-source.x,-source.y).multiply(start).toString();node.style.clipPath=`inset(0 round ${suction*50}%)`;node.style.filter=`brightness(${1-state.shroud*.8}) sepia(${state.shroud}) hue-rotate(225deg)`;return;
      }
      if(suction>=1)return;
      let texture=face;
      if(mixed&&coating){
+      const surface=coating.getContext('2d')!;surface.globalCompositeOperation='source-atop';drawVoidSurface(surface,coating.width,coating.height,ms/1000,state.suction);
       const mix=mixed.getContext('2d')!;mix.clearRect(0,0,mixed.width,mixed.height);mix.globalCompositeOperation='source-over';mix.globalAlpha=1;mix.drawImage(face,0,0);mix.globalAlpha=state.shroud;mix.drawImage(coating,0,0);mix.globalAlpha=1;
       // The dark core and accreting highlights live IN the card texture and deform with it.
       // No disk, portal plane or ring is composited over/under the card.
@@ -96,5 +96,5 @@ export async function swallowRiftCard(node:HTMLElement,target:HTMLElement,start:
    };
    tick(begun);if(face)node.style.visibility='hidden';onStart();
   });
- }finally{cancelAnimationFrame(frame);signal.removeEventListener('abort',abort);canvas.remove();if(oldStyle===null)node.removeAttribute('style');else node.setAttribute('style',oldStyle);}
+ }finally{releaseVoid();cancelAnimationFrame(frame);signal.removeEventListener('abort',abort);canvas.remove();if(oldStyle===null)node.removeAttribute('style');else node.setAttribute('style',oldStyle);}
 }

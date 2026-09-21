@@ -11,9 +11,9 @@ export function riftState(ms:number){
 }
 export type RiftState=ReturnType<typeof riftState>;
 /** Keep upper-edge hand cards and their vortex inside the viewport. */
-export const riftLift=(source:Point,width:number)=>{const u=Math.max(32,Math.min(width,180));return Math.min(u*.55,Math.max(0,source.y-u*.85));};
+export const riftLift=(source:Point,width:number)=>{const u=Math.max(32,Math.min(width,180));return Math.min(u*.16,Math.max(0,source.y-u*.85));};
 export function riftCardPoint(p:Point,source:Point,width:number,state:RiftState):Point{
- const scale=1+state.lift*.10,angle=-state.lift*.045,lift=riftLift(source,width)*state.lift;
+ const scale=1-state.lift*.48,angle=-state.lift*.045,lift=riftLift(source,width)*state.lift;
  const dx=(p.x-source.x)*scale,dy=(p.y-source.y)*scale;
  const raised={x:source.x+dx*Math.cos(angle)-dy*Math.sin(angle),y:source.y+dx*Math.sin(angle)+dy*Math.cos(angle)-lift};
  return collapsePoint(raised,{x:source.x,y:source.y-lift},state.suction,width);

@@ -1,18 +1,31 @@
-import {drawVoidSurface} from './voidSurface';
-/** The aperture animates locally; it never invalidates the expensive furniture scene. */
+import {acquireVoidSurface,drawVoidSurface} from './voidSurface';
+import {boardPoint} from './boardProjection';
+import {readingScale} from './readingBoardLayout';
+/** The same meter-space aperture as the Blender cutter, behind its actual rails.
+ * Only the narrow Rift column is repainted. Its projection is cached on resize. */
 export function mountRiftApertures(root:HTMLElement){
- const views=new Map<string,{host:HTMLElement;canvas:HTMLCanvasElement;ctx:CanvasRenderingContext2D}>();let last=-Infinity;
- return {tick(now:number){if(document.hidden||now-last<100)return;last=now;
-  for(const side of ['me','opp']){
-   let v=views.get(side);if(!v?.host.isConnected){v?.canvas.remove();const host=root.querySelector<HTMLElement>(`#rift-${side} .rift-sprite`);if(!host)continue;
-    const canvas=document.createElement('canvas');canvas.className='rift-aperture';canvas.width=160;canvas.height=370;canvas.setAttribute('aria-hidden','true');host.append(canvas);v={host,canvas,ctx:canvas.getContext('2d')!};views.set(side,v);
-   }
-   const {ctx:c}=v,w=160,h=370;c.clearRect(0,0,w,h);c.save();if(side==='opp'){c.translate(0,h);c.scale(1,-1);}
-   c.beginPath();c.moveTo(w*.08,h*.97);c.bezierCurveTo(w*.08,h*.60,w*.52,h*.22,w*.9,h*.03);c.bezierCurveTo(w*.97,h*.5,w*.52,h*.84,w*.08,h*.97);c.closePath();c.clip();
-   const t=matchMedia('(prefers-reduced-motion: reduce)').matches?0:now/1000;drawVoidSurface(c,w,h,t);
-   // A central seam stays almost black while the surrounding planes slide past it.
-   c.beginPath();c.moveTo(w*.18,h*.83);c.bezierCurveTo(w*.39,h*.65,w*.54,h*.32,w*.84,h*.15);c.bezierCurveTo(w*.56,h*.53,w*.53,h*.78,w*.18,h*.83);c.fillStyle='#06091b';c.fill();
-   c.strokeStyle='#afa5e4';c.lineWidth=1.1;c.beginPath();c.moveTo(w*.16,h*.81);c.bezierCurveTo(w*.31,h*.54,w*.59,h*.35,w*.84,h*.15);c.stroke();c.restore();
-  }
- },dispose(){views.forEach(v=>v.canvas.remove());views.clear();}};
+ const canvas=document.createElement('canvas');canvas.className='rift-aperture-layer';canvas.setAttribute('aria-hidden','true');canvas.style.cssText='position:fixed;pointer-events:none;z-index:4';root.append(canvas);
+ const c=canvas.getContext('2d')!,texture=document.createElement('canvas');texture.width=192;texture.height=320;const ctx=texture.getContext('2d')!,release=acquireVoidSurface();
+ let last=-Infinity,w=0,h=0,left=0,top=0,width=0,height=0,dpr=1;
+ let apertures:Array<{path:Path2D;left:number;right:number;top:number;bottom:number;sign:number}>=[];
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ const cubic=(a:number[],b:number[],d:number[],e:number[],t:number)=>a.map((v,i)=>v*(1-t)**3+3*b[i]*t*(1-t)**2+3*d[i]*t*t*(1-t)+e[i]*t**3);
+ const outline:number[][]=[];for(let i=0;i<=48;i++)outline.push(cubic([.670,.371],[.670,.273],[.725,.175],[.773,.123],i/48));for(let i=0;i<=48;i++)outline.push(cubic([.773,.123],[.782,.245],[.725,.335],[.670,.371],i/48));
+ function resize(){
+  w=innerWidth;h=innerHeight;dpr=Math.min(devicePixelRatio,1.5);const scale=readingScale();
+  apertures=[1,-1].map(sign=>{
+   const points=outline.map(([x,z])=>boardPoint(w/2+x*scale,h/2+sign*z*scale,.006*scale)),path=new Path2D();
+   points.forEach((p,i)=>i?path.lineTo(p.x,p.y):path.moveTo(p.x,p.y));path.closePath();
+   return {path,sign,left:Math.min(...points.map(p=>p.x)),right:Math.max(...points.map(p=>p.x)),top:Math.min(...points.map(p=>p.y)),bottom:Math.max(...points.map(p=>p.y))};
+  });
+  left=Math.floor(Math.min(...apertures.map(a=>a.left)))-1;top=Math.floor(Math.min(...apertures.map(a=>a.top)))-1;
+  width=Math.ceil(Math.max(...apertures.map(a=>a.right)))-left+1;height=Math.ceil(Math.max(...apertures.map(a=>a.bottom)))-top+1;
+  canvas.style.left=left+'px';canvas.style.top=top+'px';canvas.style.width=width+'px';canvas.style.height=height+'px';canvas.width=Math.ceil(width*dpr);canvas.height=Math.ceil(height*dpr);
+ }
+ return {tick(now:number){
+  if(document.hidden)return;const resized=w!==innerWidth||h!==innerHeight||dpr!==Math.min(devicePixelRatio,1.5);
+  if(!resized&&now-last<33)return;if(reduced.matches&&!resized&&last>0)return;last=now;if(resized)resize();
+  c.setTransform(dpr,0,0,dpr,-left*dpr,-top*dpr);c.clearRect(left,top,width,height);drawVoidSurface(ctx,192,320,reduced.matches?0:now/1000);
+  for(const a of apertures){c.save();c.clip(a.path);c.translate(a.left,a.sign<0?a.bottom:a.top);c.scale(1,a.sign);c.drawImage(texture,0,0,a.right-a.left,a.bottom-a.top);c.restore();}
+ },dispose(){release();canvas.remove();}};
 }

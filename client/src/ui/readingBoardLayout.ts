@@ -5,10 +5,11 @@ export const STOCK_THICKNESS=.0008/CARD_METERS;
 export const marketHeight=(supply=false)=>(supply?.0218:.0158)/CARD_METERS;
 export const pileCenter=(count:number,shelf:boolean)=>((shelf?.009:.0088)+.0004+Math.max(0,Math.min(count,40)-1)*.0008)/CARD_METERS;
 export const pileFace=(count:number,shelf:boolean)=>pileCenter(count,shelf)+STOCK_THICKNESS/2;
-export function readingScale(width=innerWidth,height=innerHeight){return Math.min(width/1.76,height/1.055);}
+export function readingScale(width=innerWidth,height=innerHeight){return Math.min(width/1.76,height/1.28);}
 /** Containers are display:contents, so placements have the viewport as offset parent. */
 export function placeReadingBoard(root:HTMLElement):void {
  const s=readingScale(),cx=innerWidth/2,cy=innerHeight/2;
+ const portraitSize=Math.min(210,Math.max(104,s*.30),innerHeight*.24);root.style.setProperty('--portrait-size',`${portraitSize}px`);
  root.classList.add('reading-board');root.style.setProperty('--board-meter',`${s}px`);
  function place(selector:string,x:number,z:number,w:number,d:number,local=false){
   for(const el of root.querySelectorAll<HTMLElement>(selector)){
@@ -29,14 +30,17 @@ export function placeReadingBoard(root:HTMLElement):void {
   place(`#pile-${id==='me'?'my':'opp'}Disc`,-.54,sign*.245,.166,.232);
   place(`#rift-${id}`,.722,sign*.247,.125,.268);
   const p=id==='me'?'Me':'Opp';
-  place(`#portrait${p} .pt-ring`,0,sign*.385,.181,.147);
-  place(`#portrait${p} .pt-vitals`,.093,sign*.335,.075,.083);
-  place(`#portrait${p} .pt-mana`,-.29,sign*.397,.350,.077);
-  place(`#portrait${p}>.pt-name,#portrait${p} .pt-name--vitals`,-.29,sign*.455,.34,.017);
+  const portraitTop=sign>0?Math.min(innerHeight-portraitSize-8,cy+s*.326):Math.max(8,cy-s*.326-portraitSize);
+  const ring=root.querySelector<HTMLElement>(`#portrait${p} .pt-ring`),hp=root.querySelector<HTMLElement>(`#portrait${p} .pt-vitals`);
+  if(ring){ring.style.left=`${cx-portraitSize/2}px`;ring.style.top=`${portraitTop}px`;ring.style.width=ring.style.height=`${portraitSize}px`;}
+  if(hp){hp.style.left=`${cx-portraitSize*.46}px`;hp.style.top=`${portraitTop+portraitSize*.65}px`;hp.style.width=`${portraitSize*.30}px`;hp.style.height=`${portraitSize*.36}px`;}
+
+  place(`#portrait${p} .pt-mana`,-.345,sign*.397,.350,.077);
+  place(`#portrait${p}>.pt-name,#portrait${p} .pt-name--vitals`,-.345,sign*.455,.34,.017);
   place(`#portrait${p} .pt-brand`,-.09,sign*.335,.08,.028);
  }
  // Hand cards float over the board, outside the play lanes. They are not sockets.
  const hand=root.querySelector<HTMLElement>('#hand'),opp=root.querySelector<HTMLElement>('#oppHand');
- if(hand&&!root.querySelector('.game.hand-open')){hand.style.left=`${cx+.16*s}px`;const css=getComputedStyle(hand),height=parseFloat(css.getPropertyValue('--card-h-hand'))*.42||0,edge=parseFloat(css.getPropertyValue('--fan-overhang'))||0;hand.style.top=`${Math.min(cy+.337*s,innerHeight-height-edge-10)}px`;hand.style.bottom='auto';}
- if(opp){opp.style.left=`${cx+.16*s}px`;opp.style.top=`${cy-.452*s}px`;}
+ if(hand&&!root.querySelector('.game.hand-open')){hand.style.left=`${Math.max(cx+.16*s,cx+portraitSize*.5+8)}px`;const css=getComputedStyle(hand),height=parseFloat(css.getPropertyValue('--card-h-hand'))*.42||0,edge=parseFloat(css.getPropertyValue('--fan-overhang'))||0;hand.style.top=`${Math.min(cy+.337*s,innerHeight-height-edge-10)}px`;hand.style.bottom='auto';}
+ if(opp){opp.style.left=`${Math.max(cx+.16*s,cx+portraitSize*.5+8)}px`;opp.style.top=`${cy-.452*s}px`;}
 }

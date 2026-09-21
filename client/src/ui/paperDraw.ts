@@ -1,115 +1,60 @@
-import * as T from 'three';
-import { captureCardSurface } from './cardSurface';
-import { PaperCard, drawPose } from './paperCard';
-
-export interface PaperDrawOptions {
-  cards: HTMLElement[];
-  origin: DOMRect;
-  sleeve: string;
-  reveal: boolean;
-  signal: AbortSignal;
-  onLand: (node:HTMLElement) => void;
+import {drawMotion,DRAW_DURATION,DRAW_STAGGER} from './drawMotion';
+export interface PaperDrawOptions {cards:HTMLElement[];origin:DOMRect;sleeve:string;reveal:boolean;signal:AbortSignal;onLand:(node:HTMLElement)=>void;}
+/** Exact native hand transform. Bounding rectangles alone stretch rotated cards. */
+export function handCardMatrix(node:HTMLElement):DOMMatrix {
+ const parent=node.offsetParent as HTMLElement,rect=parent.getBoundingClientRect(),style=getComputedStyle(node),origin=style.transformOrigin.split(' ').map(parseFloat);
+ const transform=style.transform==='none'?new DOMMatrix():new DOMMatrix(style.transform);
+ return new DOMMatrix().translate(rect.left+(parseFloat(style.left)||node.offsetLeft)+origin[0],rect.top+(parseFloat(style.top)||node.offsetTop)+origin[1]).multiply(transform).translate(-origin[0],-origin[1]);
 }
-const DURATION=860, STAGGER=135;
-
-/** A batch shares one GPU context. The idle UI remains semantic DOM; only
- * moving cards are replaced by deformable meshes, then handed back exactly. */
-export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand}:PaperDrawOptions):Promise<void> {
-  if(signal.aborted || typeof WebGL2RenderingContext==='undefined')return;
-  let renderer:T.WebGLRenderer;
-  try {renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});} catch {return;}
-  renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
-  renderer.setSize(innerWidth,innerHeight);renderer.setClearColor(0,0);
-  renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.NoToneMapping;
-  const canvas=renderer.domElement;canvas.className='paper-draw-canvas';canvas.setAttribute('aria-hidden','true');
-  const scene=new T.Scene(), distance=1200;
-  const camera=new T.PerspectiveCamera(2*Math.atan(innerHeight/(2*distance))*180/Math.PI,innerWidth/innerHeight,.1,3000);
-  camera.position.z=distance;
-  scene.add(new T.AmbientLight(0xffffff,1.75));
-  const light=new T.DirectionalLight(0xfff4e3,1.55);light.position.set(-250,500,900);scene.add(light);
-  const rim=new T.DirectionalLight(0xc7ddff,.7);rim.position.set(350,50,-500);scene.add(rim);
-  const landed=new Set<HTMLElement>();
-  const grips:Array<{node:HTMLElement;copy:HTMLElement;visibility:string}>=[];
-  // The new rightmost card slips beneath the cards already held in the left
-  // hand. Native foreground faces preserve the exact contour and typography.
-  const holdInFront=(node:HTMLElement)=>{
-    if(!reveal||grips.some(g=>g.node===node))return;
-    const copy=node.cloneNode(true) as HTMLElement,r=node.getBoundingClientRect(),cs=getComputedStyle(node);
-    const w=node.offsetWidth,h=node.offsetHeight;
-    copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.classList.add('draw-grip');copy.setAttribute('aria-hidden','true');
-    copy.style.cssText=`position:fixed;left:${r.left}px;top:${r.top}px;bottom:auto;width:${w}px;height:${h}px;--cw:${w}px;--ch:${h}px;transform:scale(${r.width/w},${r.height/h});transform-origin:0 0;z-index:${127+Number(cs.zIndex||0)};pointer-events:none;transition:none;animation:none;visibility:visible;`;
-    const originals=node.querySelectorAll<HTMLElement>('*');
-    copy.querySelectorAll<HTMLElement>('*').forEach((el,i)=>{const c=getComputedStyle(originals[i]);el.style.fontSize=c.fontSize;el.style.lineHeight=c.lineHeight;el.style.filter=c.filter;});
-    grips.push({node,copy,visibility:node.style.visibility});document.body.append(copy);node.style.visibility='hidden';
-  };
-  const models:PaperCard[]=[];
-  const shadows:T.Mesh<T.PlaneGeometry,T.MeshBasicMaterial>[]=[];
-  const shadowCanvas=document.createElement('canvas');shadowCanvas.width=128;shadowCanvas.height=128;
-  const ctx=shadowCanvas.getContext('2d')!,gradient=ctx.createRadialGradient(64,64,8,64,64,64);
-  gradient.addColorStop(0,'rgba(8,15,24,.35)');gradient.addColorStop(1,'rgba(8,15,24,0)');ctx.fillStyle=gradient;ctx.fillRect(0,0,128,128);
-  const shadowTexture=new T.CanvasTexture(shadowCanvas);
-  let frame=0,stop=()=>{},aborted=false;
-  const cancelled=new Promise<null>(resolve=>{stop=()=>{aborted=true;resolve(null);};});
-  const lost=(e:Event)=>{e.preventDefault();stop();};
-  signal.addEventListener('abort',onAbort,{once:true});
-  canvas.addEventListener('webglcontextlost',lost);
-  // A slow/missing texture must never hold the game's event playback hostage.
-  const deadline=setTimeout(stop,1800);
-  try {
-    const surfaces=await Promise.race([Promise.all(cards.map(node=>captureCardSurface(node,sleeve,reveal))),cancelled]);
-    clearTimeout(deadline);
-    if(!surfaces || aborted || signal.aborted || cards.some(n=>!n.isConnected))return;
-    cards.forEach((node,i)=>{
-      const rect=node.getBoundingClientRect();
-      const model=new PaperCard(surfaces[i],rect.height/rect.width);models.push(model);scene.add(model.group);
-      const shadow=new T.Mesh(new T.PlaneGeometry(1,1),new T.MeshBasicMaterial({map:shadowTexture,transparent:true,depthWrite:false}));
-      shadow.position.z=-40;shadows.push(shadow);scene.add(shadow);
+function nativeCopy(node:HTMLElement){
+ const copy=node.cloneNode(true) as HTMLElement;copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.setAttribute('aria-hidden','true');
+ const sizing=getComputedStyle(node),w=parseFloat(sizing.width)||node.offsetWidth,h=parseFloat(sizing.height)||node.offsetHeight;copy.classList.remove('is-picked','is-armed');copy.style.cssText+=`;position:absolute;inset:0;width:${w}px;height:${h}px;--cw:${w}px;--ch:${h}px;margin:0;transform:none;transition:none;animation:none;visibility:visible;pointer-events:none;`;
+ // Preserve game-scoped surface treatment outside the board subtree, including
+ // the opponent sleeve's inline image and the inactive card's exact filter.
+ const appearance=getComputedStyle(node);copy.style.setProperty('filter',appearance.filter,'important');copy.style.fontFamily=appearance.fontFamily;
+ const originals=node.querySelectorAll<HTMLElement>('.card-frame');copy.querySelectorAll<HTMLElement>('.card-frame').forEach((frame,i)=>{frame.style.filter=getComputedStyle(originals[i]).filter;});
+ return copy;
+}
+/** Keep the same DOM art, masks, frame and glyphs throughout the flip and landing. */
+export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand}:PaperDrawOptions):Promise<void>{
+ if(signal.aborted||!cards.length)return;
+ const overlay=document.createElement('div');overlay.className='native-draw-layer';overlay.setAttribute('aria-hidden','true');overlay.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:126;perspective:1200px';document.body.append(overlay);
+ const flights=cards.map(node=>{
+  const sizing=getComputedStyle(node),w=parseFloat(sizing.width)||node.offsetWidth,h=parseFloat(sizing.height)||node.offsetHeight,root=document.createElement('div'),flip=document.createElement('div');
+  root.className='native-draw-card';root.style.cssText=`position:absolute;left:0;top:0;width:${w}px;height:${h}px;transform-origin:0 0;will-change:transform;visibility:hidden;`;
+  flip.style.cssText='position:absolute;inset:0;transform-style:preserve-3d;';
+  if(reveal){const front=nativeCopy(node);front.style.backfaceVisibility='hidden';front.style.transform='translateZ(.25px)';flip.append(front);}
+  const back=document.createElement('div');back.style.cssText=`position:absolute;inset:0;border-radius:7%;background-image:url("${sleeve}");background-size:100% 100%;backface-visibility:hidden;transform:rotateY(180deg);box-shadow:inset 0 0 0 1px #d0c5a380;`;
+  const sheen=document.createElement('div');sheen.style.cssText='position:absolute;inset:1%;border-radius:5%;background:linear-gradient(115deg,transparent 30%,#d8eaff44 48%,transparent 62%);pointer-events:none;opacity:0;transform:translateZ(.5px)';
+  flip.append(back,sheen);root.append(flip);overlay.append(root);return {node,w,h,root,flip,sheen,landed:false};
+ });
+ // Foreground cards retain their real affine placement while the new card slips behind.
+ const grips:Array<{node:HTMLElement;copy:HTMLElement;visibility:string}>=[];
+ const grip=(node:HTMLElement)=>{if(grips.some(g=>g.node===node))return;const copy=nativeCopy(node);copy.style.transformOrigin='0 0';copy.style.transform=handCardMatrix(node).toString();copy.style.zIndex=String(20+(parseFloat(getComputedStyle(node).zIndex)||0));overlay.append(copy);grips.push({node,copy,visibility:node.style.visibility});node.style.visibility='hidden';};
+ cards[0].parentElement?.querySelectorAll<HTMLElement>('.card').forEach(node=>{if(!cards.includes(node))grip(node);});
+ const width=innerWidth,height=innerHeight;let frame=0,finish=()=>{};let cancelDecode=()=>{};const cancelled=new Promise<void>(resolve=>{cancelDecode=resolve;});const cancel=()=>{cancelDecode();finish();};signal.addEventListener('abort',cancel,{once:true});
+ try{await Promise.race([cancelled,Promise.all([...overlay.querySelectorAll('img')].map(i=>i.decode().catch(()=>{})))]);if(signal.aborted)return;
+  const start=performance.now();await new Promise<void>(resolve=>{let done=false;finish=()=>{if(done)return;done=true;cancelAnimationFrame(frame);resolve();};
+   const tick=(now:number)=>{
+    if(signal.aborted||document.hidden||innerWidth!==width||innerHeight!==height||cards.some(n=>!n.isConnected)){finish();return;}
+    let running=false;
+    flights.forEach((f,i)=>{
+     const t=Math.max(0,Math.min(1,(now-start-i*DRAW_STAGGER)/DRAW_DURATION)),started=now-start>=i*DRAW_STAGGER;f.root.style.visibility=started&&!f.landed?'visible':'hidden';
+     if(t<1)running=true;if(!started||f.landed)return;
+     const target=handCardMatrix(f.node),end=target.transformPoint(new DOMPoint(f.w/2,f.h/2));
+     if(t===1){f.root.style.visibility='hidden';f.landed=true;onLand(f.node);grip(f.node);return;}
+     const p=drawMotion(t,reveal),ox=origin.left+origin.width/2,oy=origin.top+origin.height/2;
+     const dx=end.x-ox,arc=Math.min(90,Math.max(25,Math.abs(dx)*.22));
+     const x=ox+dx*p.travel+(reveal?-1:1)*p.peel*origin.width*.09,y=oy+(end.y-oy)*p.travel-arc*p.lift-origin.height*.07*p.peel;
+     const targetScale=Math.hypot(target.a,target.b),startScale=origin.width/f.w,scale=(startScale+(targetScale-startScale)*p.travel)*(1+p.size);
+     const angle=Math.atan2(target.b,target.a)*180/Math.PI;
+     f.root.style.transform=new DOMMatrix().translate(x,y).rotate(0,0,angle*p.travel+(reveal?-10:10)*p.bank).scale(scale).translate(-f.w/2,-f.h/2).toString();
+     f.flip.style.transform=`rotateX(${-12*p.peel}deg) rotateY(${180*(1-p.reveal)}deg)`;
+     f.root.style.filter=`drop-shadow(${4*p.lift}px ${5+14*p.lift}px ${2+7*p.lift}px #02091670)`;
+     f.sheen.style.opacity=String(Math.sin(Math.PI*p.reveal)*.7);f.root.dataset.progress=t.toFixed(3);f.root.dataset.phase=t<.18?'peel':t<.57?'reveal':t<.85?'carry':'land';
     });
-    document.body.appendChild(canvas);
-    if(reveal)cards[0]?.parentElement?.querySelectorAll<HTMLElement>('.card').forEach(node=>{if(!cards.includes(node))holdInFront(node);});
-    const width=innerWidth,height=innerHeight,start=performance.now();
-    await new Promise<void>(resolve=>{
-      const finish=()=>{cancelAnimationFrame(frame);resolve();};
-      // Abort also releases a frame wait when the tab stops receiving rAF.
-      void cancelled.then(finish);
-      const tick=(now:number)=>{
-        if(aborted || signal.aborted || document.hidden || innerWidth!==width || innerHeight!==height || cards.some(n=>!n.isConnected)) {finish();return;}
-        let running=false;
-        models.forEach((model,i)=>{
-          const elapsed=now-start-i*STAGGER,t=Math.min(1,Math.max(0,elapsed/DURATION));
-          const visible=elapsed>=0 && t<1;model.group.visible=visible;shadows[i].visible=visible;
-          if(elapsed<DURATION)running=true;
-          if(!visible){if(t===1&&!landed.has(cards[i])){landed.add(cards[i]);onLand(cards[i]);holdInFront(cards[i]);}return;}
-          const target=cards[i].getBoundingClientRect(),pose=drawPose(t,reveal);
-          const ox=origin.left+origin.width/2,oy=origin.top+origin.height/2;
-          const tx=target.left+target.width/2,ty=target.top+target.height/2;
-          // The lead edge lifts before translation. The carried card follows a
-          // shallow arc; it is not a tumbling projectile or a repeating wave.
-          const x=ox+(tx-ox)*pose.travel;
-          const y=oy+(ty-oy)*pose.travel-32*pose.lift;
-          const size=origin.width+(target.width-origin.width)*pose.travel;
-          model.group.position.set(x-width/2,height/2-y,65*pose.lift);
-          model.group.scale.set(size,size, size);
-          model.group.rotation.set(pose.rx,pose.ry,pose.rz);
-          model.deform(pose.bend,pose.twist);
-          const shadow=shadows[i];shadow.position.x=x-width/2+7*pose.lift;shadow.position.y=height/2-y-12*pose.lift;
-          shadow.scale.set(size*(1.25+.4*pose.lift),size*target.height/target.width*(1.1+.25*pose.lift),1);
-          shadow.material.opacity=.8-.35*pose.lift;
-        });
-        try {renderer.render(scene,camera);}catch{finish();return;}
-        if(running)frame=requestAnimationFrame(tick);else finish();
-      };
-      frame=requestAnimationFrame(tick);
-    });
-  } catch {
-    // A missing image/context skips decorative playback; gameplay still commits.
-  } finally {
-    clearTimeout(deadline);cancelAnimationFrame(frame);
-    for(const grip of grips){grip.copy.remove();grip.node.style.visibility=grip.visibility;}
-    signal.removeEventListener('abort',onAbort);
-    canvas.removeEventListener('webglcontextlost',lost);
-    models.forEach(m=>m.dispose());shadows.forEach(s=>{s.geometry.dispose();s.material.dispose();});
-    shadowTexture.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove();
-  }
-  function onAbort():void {stop();}
+    if(running)frame=requestAnimationFrame(tick);else finish();
+   };frame=requestAnimationFrame(tick);
+  });
+ }finally{cancelAnimationFrame(frame);signal.removeEventListener('abort',cancel);for(const g of grips)g.node.style.visibility=g.visibility;overlay.remove();}
 }
