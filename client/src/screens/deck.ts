@@ -1,3 +1,4 @@
+import { loungeText } from "../ui/loungeText";
 // ============================================================
 // LORE — 덱 빌더. 프리셋 5슬롯 × (초기 덱 9장 = 어튠 1 고정 + 자유 8장).
 // 덱마다 "마켓 알림이"(watch)를 설정: 게임 중 마켓/제시에 그 카드가 뜨면
@@ -8,9 +9,9 @@ import { DB, STARTERS, DECK_POOL, DECK_SIZE, DECK_MAX_COPIES, DECK_SLOTS, WATCH_
 import type { CardDef, CardInst } from "../shared/types";
 import { cardEl } from "../ui/cardView";
 import { bindZoom } from "../ui/anim";
-import { noticeModal } from "../ui/modal";
+import { confirmDialog } from "../ui/modal";
 import { api } from "../net/api";
-import { t, cardName } from "../i18n";
+import { t, cardName, onLangChange } from "../i18n";
 
 const def = (id: string): CardDef => STARTERS[id] ?? DB[id];
 
@@ -27,15 +28,17 @@ export function mountDeck(app: App): Screen {
       </div>
       <div class="deck-tabs" id="deckTabs"></div>
       <div class="deck-note">${t("deck.note")}</div>
+      <div class="deck-local-tabs" role="tablist"><button id="editTab" role="tab" aria-selected="true">${t("deck.current")}</button><button id="watchTab" role="tab" aria-selected="false">${t("deck.watch.title")}</button></div>
+      <section id="deckEditSection">
       <div class="deck-cur-head"><span>${t("deck.current")} <b id="deckCount"></b></span><button class="btn btn-ghost deck-use" id="useBtn"></button></div>
       <div class="deck-cur" id="deckCur"></div>
       <div class="deck-pool-head">${t("deck.pool")}</div>
       <div class="deck-pool" id="deckPool"></div>
-      <div class="deck-pool-head deck-watch-head">🔔 ${t("deck.watch.title")} <b id="watchCount"></b></div>
+      </section><section id="deckWatchSection" hidden><div class="deck-pool-head deck-watch-head">🔔 ${t("deck.watch.title")} <b id="watchCount"></b></div>
       <div class="deck-note">${t("deck.watch.desc")}</div>
       <input class="deck-watch-search" id="watchSearch" placeholder="${t("deck.watch.search")}">
       <div class="deck-pool deck-watchpool" id="watchPool"></div>
-      <div class="deck-msg" id="deckMsg"></div>
+      </section><div class="deck-msg" id="deckMsg" role="status" aria-live="polite"></div>
     </div>`;
   app.root.appendChild(wrap);
 
@@ -43,6 +46,9 @@ export function mountDeck(app: App): Screen {
   const store: DeckStore = sanitizeDecks(app.user?.decks ?? (app.user?.deck ? { sel: 0, list: [{ cards: app.user.deck, watch: [] }] } : null));
   let cur = store.sel; // 현재 편집 중인 슬롯 (store.sel = 게임에 사용되는 슬롯)
   let watchQ = "";
+  let saved = JSON.stringify(store);
+  let saving = false;
+  let dead = false;
 
   const q = (id: string): HTMLElement => wrap.querySelector("#" + id) as HTMLElement;
   const tabsEl = q("deckTabs"), curEl = q("deckCur"), poolEl = q("deckPool"), watchEl = q("watchPool");
@@ -50,6 +56,11 @@ export function mountDeck(app: App): Screen {
   const saveBtn = q("save") as HTMLButtonElement, useBtn = q("useBtn") as HTMLButtonElement;
   const searchEl = q("watchSearch") as HTMLInputElement;
 
+  const setTab = (watching: boolean): void => {
+    q("deckEditSection").hidden = watching; q("deckWatchSection").hidden = !watching;
+    q("editTab").setAttribute("aria-selected", String(!watching)); q("watchTab").setAttribute("aria-selected", String(watching));
+  };
+  q("editTab").onclick = () => setTab(false); q("watchTab").onclick = () => setTab(true);
   const inst = (id: string, uid: string): CardInst => ({ uid, ...structuredClone(def(id)) });
   const deck = (): string[] => store.list[cur].cards;
   const watch = (): string[] => store.list[cur].watch;
@@ -60,6 +71,7 @@ export function mountDeck(app: App): Screen {
 
   const render = (): void => {
     // 슬롯 탭
+    q("deckEditSection").inert = saving; q("deckWatchSection").inert = saving; tabsEl.inert = saving;
     tabsEl.innerHTML = "";
     for (let i = 0; i < DECK_SLOTS; i++) {
       const b = document.createElement("button");
@@ -69,7 +81,7 @@ export function mountDeck(app: App): Screen {
       tabsEl.appendChild(b);
     }
     useBtn.textContent = cur === store.sel ? `★ ${t("deck.inuse")}` : t("deck.use");
-    useBtn.disabled = cur === store.sel;
+    useBtn.disabled = saving || cur === store.sel || store.list.some(d => d.cards.length !== DECK_SIZE);
 
     countEl.textContent = `${deck().length + 1} / ${DECK_SIZE + 1}`;
     // ---- 현재 덱: 어튠(고정) + 8장 ----
@@ -137,40 +149,43 @@ export function mountDeck(app: App): Screen {
       bindZoom(el, c);
       watchEl.appendChild(el);
     }
-    saveBtn.disabled = false;
+    saveBtn.disabled = saving || store.list.some(d => d.cards.length !== DECK_SIZE);
   };
 
   searchEl.oninput = () => { watchQ = searchEl.value.trim(); render(); };
-  useBtn.onclick = () => { store.sel = cur; render(); void doSave(); };
+  useBtn.onclick = () => { void doSave(cur); };
 
-  const doSave = async (): Promise<void> => {
-    saveBtn.disabled = true;
+  const doSave = async (selected = store.sel): Promise<void> => {
+    if (saving || store.list.some(d => d.cards.length !== DECK_SIZE)) return;
+    saving = true; render();
     msgEl.textContent = "…";
     try {
-      const r = await api.saveDecks(store);
+      const r = await api.saveDecks({ ...store, sel: selected });
+      if (dead) return;
       Object.assign(store, r.decks);
+      saved = JSON.stringify(store);
       if (app.user) { app.user.decks = r.decks; app.user.deck = r.deck; }
       msgEl.textContent = t("deck.saved");
     } catch (e) {
       msgEl.textContent = (e as Error).message || t("api.fail");
     }
-    saveBtn.disabled = false;
-    render();
+    saving = false;
+    if (!dead) render();
   };
   saveBtn.onclick = () => { void doSave(); };
-  (q("back")).onclick = () => {
-    if (deck().length < DECK_SIZE) {
-      noticeModal(
-        "덱을 완성해주세요",
-        `현재 덱은 ${deck().length + 1} / ${DECK_SIZE + 1}장입니다. 뒤로 가기 전에 덱을 9장으로 완성해주세요.`,
-        t("common.confirm"),
-        () => {},
-      );
-      return;
-    }
-    app.home();
-  };
+  q("back").onclick = () => app.home();
+  const dirty = () => JSON.stringify(store) !== saved;
+  const beforeUnload = (e: BeforeUnloadEvent) => { if (dirty()) { e.preventDefault(); e.returnValue = ""; } };
+  window.addEventListener("beforeunload", beforeUnload);
+  const off = onLangChange(() => app.deck());
 
   render();
-  return { destroy: () => wrap.remove() };
+  return {
+    beforeLeave: async () => {
+      if (saving) return false;
+      if (!dirty()) return true;
+      return confirmDialog({title: loungeText("未保存の変更", "Unsaved changes", "저장하지 않은 변경"), body: loungeText("変更を破棄して移動しますか？", "Discard your changes and leave?", "변경을 취소하고 이동할까요?"), confirm: loungeText("破棄して移動", "Discard & leave", "취소하고 이동"), cancel: t("common.cancel")});
+    },
+    destroy: () => { dead = true; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
+  };
 }

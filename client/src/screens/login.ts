@@ -6,13 +6,13 @@
 // ============================================================
 import type { App, Screen } from "../router";
 import { api, type ApiError } from "../net/api";
-import { t, onLangChange } from "../i18n";
+import { t, onLangChange, esc } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
 import { DISCORD_INVITE, SUPPORT_EMAIL } from "../config";
 import { aCapture, aIdentify } from "../net/analytics";
 import { canUseLocalGuest } from "../dev/localAccount";
 
-type Mode = "login" | "register" | "forgot" | "reset";
+type Mode = "login" | "register" | "forgot" | "reset" | "verify" | "sent";
 
 const GOOGLE_SVG = `<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>`;
 
@@ -25,6 +25,7 @@ export function mountLogin(app: App): Screen {
   let mode: Mode = resetToken ? "reset" : "login";
   let notice: { html: string; ok: boolean } | null = justVerified ? { html: t("login.verified"), ok: true } : null;
   let lastEmail = "";
+  let busy = false;
 
   const wrap = document.createElement("div");
   wrap.className = "screen";
@@ -42,6 +43,19 @@ export function mountLogin(app: App): Screen {
     : mode === "login" ? t("login.tab.login") : t("login.tab.register");
 
   const render = () => {
+    if (mode === "verify" || mode === "sent") {
+      const verify = mode === "verify";
+      card.innerHTML = `<h2 class="auth-confirm-title">${verify ? t("login.verify.sent") : t("login.forgot.sent")}</h2><p class="sub">${esc(lastEmail)}</p><div id="msg" class="auth-error ok" role="status"></div>${verify ? `<button class="btn btn-gold btn-block" id="resendVerify">${t("login.verify.resend")}</button>` : ""}<button class="btn btn-ghost btn-block" id="returnLogin">${t("login.back")}</button>`;
+      card.querySelector<HTMLButtonElement>("#returnLogin")!.onclick = () => swap("login");
+      card.querySelector<HTMLButtonElement>("#resendVerify")?.addEventListener("click", async e => {
+        const btn=e.currentTarget as HTMLButtonElement; btn.disabled=true;
+        try { await api.resendVerify(lastEmail); card.querySelector("#msg")!.textContent=t("login.verify.resent"); }
+        catch { card.querySelector("#msg")!.textContent=t("login.err.generic"); }
+        finally { btn.disabled=false; }
+      });
+      return;
+    }
+
     const tabs = mode === "login" || mode === "register";
     card.innerHTML = `
       ${tabs ? `<div class="auth-tabs">
@@ -49,8 +63,8 @@ export function mountLogin(app: App): Screen {
         <button data-m="register" class="${mode === "register" ? "on" : ""}">${t("login.tab.register")}</button>
       </div>` : ""}
       <div class="sub">${sub()}</div>
-      ${mode !== "reset" ? `<div class="form-row"><label class="field-label">${t("login.email")}</label><input class="input" id="email" type="email" placeholder="you@example.com" autocomplete="email"></div>` : ""}
-      ${mode !== "forgot" ? `<div class="form-row"><label class="field-label">${mode === "reset" ? t("login.reset.newpw") : t("login.password")}</label><input class="input" id="password" type="password" placeholder="••••••••" autocomplete="${mode === "login" ? "current-password" : "new-password"}"></div>` : ""}
+      ${mode !== "reset" ? `<div class="form-row"><label class="field-label" for="email">${t("login.email")}</label><input class="input" id="email" type="email" placeholder="you@example.com" autocomplete="email"></div>` : ""}
+      ${mode !== "forgot" ? `<div class="form-row"><label class="field-label" for="password">${mode === "reset" ? t("login.reset.newpw") : t("login.password")}</label><input class="input" id="password" type="password" placeholder="••••••••" autocomplete="${mode === "login" ? "current-password" : "new-password"}"></div>` : ""}
       <button class="btn btn-gold btn-block" id="submit">${submitLabel()}</button>
       ${mode === "login" ? `
       <div class="auth-links"><a id="helpLink">${t("login.help")}</a></div>
@@ -110,12 +124,14 @@ export function mountLogin(app: App): Screen {
   };
 
   async function go(): Promise<void> {
+    if (busy) return;
     const submit = card.querySelector("#submit") as HTMLButtonElement;
     const email = ((card.querySelector("#email") as HTMLInputElement | null)?.value ?? "").trim();
     const password = (card.querySelector("#password") as HTMLInputElement | null)?.value ?? "";
     notice = null; paintNotice();
     if (mode !== "reset" && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { notice = { html: t("login.err.email"), ok: false }; paintNotice(); return; }
     if (mode !== "forgot" && password.length < 6) { notice = { html: t("login.err.pw"), ok: false }; paintNotice(); return; }
+    busy = true;
     submit.disabled = true;
     submit.textContent = t("login.processing");
     try {
@@ -129,13 +145,14 @@ export function mountLogin(app: App): Screen {
         const r = await api.register(email, password);
         aCapture("signup", { method: "password", needVerify: !r.user });
         if (r.user) { app.user = r.user; aIdentify(r.user.id); app.home(); return; }
-        mode = "login";
+        mode = "verify";
         notice = { html: t("login.verify.sent"), ok: true };
         render();
         return;
       }
       if (mode === "forgot") {
         await api.forgot(email);
+        mode = "sent";
         notice = { html: t("login.forgot.sent"), ok: true };
         render();
         return;
@@ -149,12 +166,12 @@ export function mountLogin(app: App): Screen {
       const e = ex as ApiError;
       notice = e.needVerify
         ? { html: `${t("login.verify.needed")} <a id="resendLink" style="cursor:pointer;text-decoration:underline">${t("login.verify.resend")}</a>`, ok: false }
-        : { html: e.message || t("login.err.generic"), ok: false };
+        : { html: esc(e.message || t("login.err.generic")), ok: false };
       render();
-    }
+    } finally { busy = false; }
   }
 
   render();
-  const unsub = onLangChange(() => app.login());
+  const unsub = onLangChange(render);
   return { destroy: unsub };
 }

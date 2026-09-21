@@ -4,114 +4,41 @@
 import type { App, Screen } from "../router";
 import type { BotDifficulty } from "../shared/bot";
 import { api } from "../net/api";
-import { t, onLangChange, esc } from "../i18n";
+import { t, onLangChange, esc, cardName } from "../i18n";
 import { tierChipHtml } from "../ui/tier";
-import { avatarHtml } from "../ui/social";
-import { watchSocial } from "./friends";
+import { mountFriends } from "./friends";
+import { DB, STARTERS, sanitizeDecks } from "../shared/cards";
+import { artUrl } from "../ui/cardArt";
 import { homeIcon, type HomeIcon } from "../ui/homeIcons";
-import { seekerLevel } from "../ui/seekerLevel";
-import "../styles/home.css";
+
 
 export function mountHome(app: App): Screen {
-  void import("../ui/duelReadiness").then(({warmDuel})=>warmDuel());
   const u = app.user;
-  const level = seekerLevel(u?.wins ?? 0, u?.losses ?? 0);
-  const shortLabels: Record<string, string> = { tutorial: "home.nav.guide", deck: "home.nav.deck", cards: "home.nav.cards", lb: "home.nav.ranking" };
-  const item = (id: string, icon: HomeIcon, key: string, extra = "") => `<button class="lobby-nav-item" id="${id}" title="${esc(t(key))}">${homeIcon(icon)}<span>${t(shortLabels[id] ?? key)}</span>${extra}</button>`;
   const wrap = document.createElement("div");
-  wrap.className = "screen lobby-home";
+  wrap.className = "screen lounge-home-screen";
+  const store=sanitizeDecks(u?.decks ?? null);
   wrap.innerHTML = `
-    <main class="lobby-shell">
-      <header class="lobby-header">
-        <button class="lobby-profile" id="profile" title="${esc(t("home.profile.title"))}">
-          <span class="lobby-avatar">${avatarHtml(u?.avatar, u?.display ?? "P", 60)}</span>
-          <span class="lobby-identity"><b>${esc(u?.display ?? "PLAYER")}</b>
-            <span class="lobby-level">${t("home.seekerLevel")} <strong id="seekerLevel">${level.level}</strong></span>
-            <span class="lobby-xp" role="progressbar" aria-label="${t("home.seekerLevel")}" aria-valuemin="0" aria-valuemax="5" aria-valuenow="${level.progress}" title="${t("home.levelRule")}"><i style="width:${level.progress / level.required * 100}%"></i></span>
-          </span><span class="lobby-profile-arrow" aria-hidden="true">›</span>
-        </button>
-        <div class="lobby-wallet">
-          <button id="credits" title="${esc(t("home.shop.title"))}">${homeIcon("shard")}<span><small>${t("home.shards")}</small><b id="shardBalance">${(u?.credits ?? 0).toLocaleString()}</b></span><span class="lobby-plus" aria-hidden="true">+</span></button>
-          <button id="settings" class="lobby-settings" aria-label="${esc(t("home.settings"))}" title="${esc(t("home.settings"))}">${homeIcon("settings")}</button>
-        </div>
-      </header>
-      <section class="lobby-wordmark" aria-label="LORE">
-        <img src="/art/brand/lore-logo-transparent.png" alt="LORE">
-        <p>${t("home.biblion")}</p>
+    <section class="lounge-home-main">
+      <div class="lounge-welcome"><span>BIBLION · THE GRAND LIBRARY</span><h1>${t("home.biblion")}</h1></div>
+      <section class="lounge-play">
+        <div id="myTier" class="lounge-rank-info">${t("lb.season")} —</div>
+        <h2>${t("home.ranked.title")}</h2>
+        <button class="lounge-play-button" id="ranked">${homeIcon("home")}<strong>${t("home.enterDuel")}</strong><span>›</span></button>
+        <div class="lounge-secondary-modes"><button id="online">${homeIcon("duel")}${t("home.online.title")}</button><button id="bot">${homeIcon("bot")}${t("home.bot.title")}</button></div>
       </section>
-      <aside class="lobby-utilities" aria-label="${t("home.utilities")}">
-        ${item("invite", "gift", "invite.title")}
-        ${item("inquiry", "mail", "home.inquiry.title")}
-      </aside>
-      <section class="lobby-duel" aria-label="${t("home.ranked.title")}">
-        <button class="lobby-ranked" id="ranked">
-          <span class="lobby-rank-emblem">${homeIcon("duel")}</span>
-          <span class="my-tier" id="myTier"></span>
-          <strong>${t("home.ranked.title")}</strong><span class="lobby-mode-description">${t("home.ranked.desc")}</span>
-          <span class="lobby-enter">${t("home.enterDuel")} <span aria-hidden="true">›</span></span>
-        </button>
-        <div class="lobby-other-modes">
-          <button id="online">${homeIcon("duel")}<span>${t("home.online.title")}</span></button>
-          <button id="bot">${homeIcon("bot")}<span>${t("home.bot.title")}</span></button>
-        </div>
-      </section>
-      <nav class="lobby-navigation" aria-label="${t("home.navigation")}">
-        ${item("tutorial", "book", "home.tutorial.title")}
-        ${item("deck", "deck", "home.deck.title")}
-        ${item("cards", "cards", "home.cards.title")}
-        <button class="lobby-nav-item is-current" aria-current="page" id="homeCurrent">${homeIcon("home")}<span>${t("home.title")}</span></button>
-        ${item("lb", "trophy", "home.lb.title")}
-        ${item("shop", "shop", "home.shop.title")}
-        ${item("friends", "friends", "home.friends.title", '<span class="fr-badge" id="frBadge" style="display:none"></span>')}
-      </nav>
-    </main>`;
+      <section class="lounge-active-deck"><div><h3>${t("deck.inuse")} · ${t("deck.slot").replace("{n}",String(store.sel+1))}</h3><div class="lounge-deck-preview">${["STARTER_MANA",...store.list[store.sel].cards].slice(0,5).map(id=>`<img src="${artUrl.sm(id)}" alt="${esc(cardName({...(STARTERS[id]??DB[id]),uid:id}))}" loading="lazy">`).join("")}</div></div><div class="lounge-deck-actions"><button class="btn btn-gold" id="deck">${homeIcon("deck")}${t("home.deck.title")} ›</button><button class="btn btn-ghost" id="profile">${t("profile.title")} ›</button></div></section>
+    </section><button class="lounge-friends-toggle" id="friendsToggle" aria-expanded="false" aria-controls="homeFriendsAside">${t("friends.title")} ↑</button><aside id="homeFriendsAside" class="lounge-home-friends"><div class="lounge-friends-heading"><h2>${t("friends.title")}</h2><button class="btn btn-ghost" id="allFriends">${t("cards.f.all")} ›</button></div><div id="homeFriends"></div></aside>`;
   app.root.appendChild(wrap);
-
-  (wrap.querySelector("#settings") as HTMLElement).onclick = () => app.settings();
-  (wrap.querySelector("#homeCurrent") as HTMLElement).onclick = () => app.home();
-  (wrap.querySelector("#ranked") as HTMLElement).onclick = () => app.rankedLobby();
-  (wrap.querySelector("#deck") as HTMLElement).onclick = () => app.deck();
-  (wrap.querySelector("#lb") as HTMLElement).onclick = () => app.leaderboard();
-  (wrap.querySelector("#invite") as HTMLElement).onclick = () => void showInviteModal();
-  (wrap.querySelector("#online") as HTMLElement).onclick = () => app.onlineLobby();
-  (wrap.querySelector("#bot") as HTMLElement).onclick = () => showBotDifficultyModal(app);
-
-  // current season tier badge (async, best-effort)
-  void api.rankMe().then((r) => {
-    const el = wrap.querySelector("#myTier");
-    if (el && r) el.innerHTML = tierChipHtml(r.tier, r.mmr);
-  }).catch(() => { /* not logged in / offline */ });
-  (wrap.querySelector("#cards") as HTMLElement).onclick = () => app.cards();
-  (wrap.querySelector("#shop") as HTMLElement).onclick = () => app.shop();
-  (wrap.querySelector("#tutorial") as HTMLElement).onclick = () => app.tutorial();
-  (wrap.querySelector("#inquiry") as HTMLElement).onclick = () => showInquiryModal();
-  (wrap.querySelector("#profile") as HTMLElement).onclick = () => app.profile();
-  (wrap.querySelector("#friends") as HTMLElement).onclick = () => app.friends();
-  (wrap.querySelector("#credits") as HTMLElement).onclick = () => app.shop();
-
-  // incoming friend requests badge + friendly-challenge popups while on HOME
-  const unwatch = watchSocial(app, (n) => {
-    const b = wrap.querySelector("#frBadge") as HTMLElement | null;
-    if (!b) return;
-    b.style.display = n > 0 ? "" : "none";
-    b.textContent = n > 0 ? String(n) : "";
-  });
-
-  // Refresh server-backed progression after returning from a duel, without
-  // switching screens or applying a late response to another account.
-  let disposed = false;
-  if (u && u.id !== "local-guest-user") void api.me().then(fresh => {
-    if (disposed || !fresh || fresh.id !== u.id || app.user?.id !== u.id) return;
-    app.user = fresh;
-    const next = seekerLevel(fresh.wins, fresh.losses);
-    wrap.querySelector("#seekerLevel")!.textContent = String(next.level);
-    wrap.querySelector("#shardBalance")!.textContent = fresh.credits.toLocaleString();
-    const bar = wrap.querySelector<HTMLElement>(".lobby-xp")!;
-    bar.setAttribute("aria-valuenow", String(next.progress));
-    bar.querySelector<HTMLElement>("i")!.style.width = `${next.progress / next.required * 100}%`;
-  });
-  const unsub = onLangChange(() => app.home());
-  return { destroy: () => { disposed = true; unsub(); unwatch(); } };
+  const q=(id:string)=>wrap.querySelector<HTMLButtonElement>('#'+id)!;
+  q('ranked').onclick=()=>app.rankedLobby(); q('online').onclick=()=>app.onlineLobby();
+  q('bot').onclick=()=>showBotDifficultyModal(app); q('deck').onclick=()=>app.deck(); q('profile').onclick=()=>app.profile();q('allFriends').onclick=()=>app.friends();
+  q('friendsToggle').onclick=()=>{const open=wrap.querySelector('#homeFriendsAside')!.classList.toggle('is-open');q('friendsToggle').setAttribute('aria-expanded',String(open));q('friendsToggle').textContent=t('friends.title')+(open?' ↓':' ↑');};
+  const friends=mountFriends(app,wrap.querySelector<HTMLElement>('#homeFriends')!,true);
+  let disposed=false;
+  void api.rankMe().then(r=>{if(disposed)return;const el=wrap.querySelector<HTMLElement>('#myTier')!;el.innerHTML=r?`${tierChipHtml(r.tier,r.mmr)} <small>${r.season} · #${r.rank}</small>`:t('lobby.connerr');});
+  if(u && u.id!=='local-guest-user') void api.me().then(fresh=>{if(!disposed&&fresh?.id===u.id&&app.user?.id===u.id) { app.user=fresh; document.dispatchEvent(new Event("lore:user")); }}).catch(()=>{});
+  const unsub=onLangChange(()=>app.home());
+  return {destroy:()=>{disposed=true;unsub();friends.destroy?.();}};
 }
 
 /** BOT match difficulty picker. Dims + blurs HOME behind a focused center modal. */
@@ -148,7 +75,7 @@ function showBotDifficultyModal(app: App): void {
 }
 
 /** 문의 모달: 제목+본문 → /api/inquiry → 어드민 대시보드 '문의' 탭. */
-function showInquiryModal(): void {
+export function showInquiryModal(): void {
   const ov = document.createElement("div");
   ov.className = "overlay";
   ov.innerHTML = `
@@ -196,7 +123,7 @@ function showInquiryModal(): void {
 }
 
 /** Invite-campaign modal: share link + invitee progress (max 3). */
-async function showInviteModal(): Promise<void> {
+export async function showInviteModal(): Promise<void> {
   let data: Awaited<ReturnType<typeof api.inviteMe>>;
   try { data = await api.inviteMe(); } catch { return; }
   const link = `${location.origin}/?ref=${data.code}`;

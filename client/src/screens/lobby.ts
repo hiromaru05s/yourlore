@@ -1,3 +1,4 @@
+import { loungeText } from "../ui/loungeText";
 // ============================================================
 // LORE — matchmaking lobby. Joins the Matchmaker queue and waits
 // for a pairing, then jumps into the online game.
@@ -25,6 +26,8 @@ export function mountLobby(app: App, ranked = false): Screen {
       <div class="spinner"></div>
       <h2 id="lobbyTitle">${ranked ? t("lobby.ranked") : t("lobby.searching")}</h2>
       <p id="lobbyMsg">${t("lobby.entered")}</p>
+      <div class="lounge-queue-time" id="queueTime" aria-label="elapsed">00:00</div>
+      <p class="lounge-queue-rule">${ranked ? loungeText("近いMMRの相手を探しています。待機時間に応じて検索範囲が広がります。", "Searching for a similar MMR. The range expands as you wait.", "비슷한 MMR의 상대를 찾고 있습니다. 대기 시간에 따라 검색 범위가 넓어집니다.") : t("home.online.desc")}</p>
       <button class="btn btn-ghost" id="cancel">${t("common.cancel")}</button>
     </div>`;
   app.root.appendChild(wrap);
@@ -32,6 +35,8 @@ export function mountLobby(app: App, ranked = false): Screen {
   const title = wrap.querySelector("#lobbyTitle") as HTMLElement;
   const msg = wrap.querySelector("#lobbyMsg") as HTMLElement;
 
+  const started = Date.now();
+  const clock = window.setInterval(() => { const n=Math.floor((Date.now()-started)/1000); wrap.querySelector("#queueTime")!.textContent=String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0"); },1000);
   let sock: Sock<QueueServerMsg, QueueClientMsg> | null = null;
   let hb: ReturnType<typeof setInterval> | null = null;
   let done = false; // matched / cancelled / unmounted — stop reconnecting
@@ -39,7 +44,7 @@ export function mountLobby(app: App, ranked = false): Screen {
 
   const stopHb = (): void => { if (hb) { clearInterval(hb); hb = null; } };
   let matchTimer = 0; // the 600ms "matched → enter game" delay; must die with the screen
-  const shutdown = (): void => { done = true; stopHb(); clearTimeout(matchTimer); sock?.close(); };
+  const shutdown = (): void => { done = true; clearInterval(clock); stopHb(); clearTimeout(matchTimer); sock?.close(); };
 
   const connect = (): void => {
     sock = new Sock<QueueServerMsg, QueueClientMsg>(ranked ? "/ws/queue?mode=ranked" : "/ws/queue", {
@@ -72,6 +77,7 @@ export function mountLobby(app: App, ranked = false): Screen {
         // dropped while waiting (idle timeout, deploy, network blip) — rejoin automatically,
         // with exponential backoff (max 15s) so a rejection loop can't hammer the matchmaker DO
         retry++;
+        if (!done) { title.textContent = t("lobby.connerr"); msg.textContent = t("lobby.connerr.desc"); }
         if (!done) setTimeout(() => { if (!done) connect(); }, Math.min(RETRY_MS * 2 ** (retry - 1), 15_000));
       },
       onError: () => { title.textContent = t("lobby.connerr"); msg.textContent = t("lobby.connerr.desc"); },

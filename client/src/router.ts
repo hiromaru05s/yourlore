@@ -1,3 +1,4 @@
+import { mountLounge, type LoungePage } from "./ui/lounge";
 // ============================================================
 // LORE — tiny screen router + auth/session context.
 // ============================================================
@@ -22,12 +23,14 @@ import { mountShop } from "./screens/shop";
 import { mountDeck } from "./screens/deck";
 import { LOCAL_GUEST_KEY, canUseLocalGuest, loadLocalDevDecks, loadLocalGuestProfile } from "./dev/localAccount";
 
-export interface Screen { destroy?(): void; }
+export interface Screen { destroy?(): void; beforeLeave?(): Promise<boolean>; }
 
 export class App {
   root: HTMLElement;
   user: User | null = null;
   private current: Screen | null = null;
+  private leaveLounge: (() => void) | null = null;
+  private navigating = false;
 
   constructor(root: HTMLElement) { this.root = root; }
 
@@ -76,27 +79,36 @@ export class App {
 
   // Clear the root BEFORE mounting the next screen. (Passing a thunk matters:
   // the mount fn appends to root, so it must run after innerHTML is cleared.)
-  private swap(make: () => Screen): void {
-    this.current?.destroy?.();
-    this.root.innerHTML = "";
-    this.current = make();
+  private swap(make: () => Screen, page?: LoungePage): void {
+    const mount = () => {
+      this.current?.destroy?.();
+      this.leaveLounge?.(); this.leaveLounge = null;
+      this.root.innerHTML = "";
+      this.current = make();
+      if (page) this.leaveLounge = mountLounge(this, page);
+    };
+    if (this.navigating) return;
+    if (this.current?.beforeLeave) {
+      this.navigating = true;
+      void this.current.beforeLeave().then(ok => { if (ok) mount(); }).finally(() => { this.navigating = false; });
+    } else mount();
   }
 
-  login(): void { this.swap(() => mountLogin(this)); }
-  home(): void { setPresence("menu"); this.swap(() => mountHome(this)); }
-  tutorial(): void { setPresence("menu"); this.swap(() => mountTutorial(this)); }
+  login(): void { this.swap(() => mountLogin(this), "login"); }
+  home(): void { setPresence("menu"); this.swap(() => mountHome(this), "home"); }
+  tutorial(): void { setPresence("menu"); this.swap(() => mountTutorial(this), "tutorial"); }
   tutorialGame(): void { setPresence("bot"); aCapture("game_start", { mode: "tutorial" }); this.swap(() => mountGame(this, { mode: "tutorial" })); }
-  cards(): void { setPresence("menu"); this.swap(() => mountCards(this)); }
+  cards(): void { setPresence("menu"); this.swap(() => mountCards(this), "cards"); }
   botGame(difficulty: BotDifficulty = "hard"): void { setPresence("bot"); aCapture("game_start", { mode: "bot", difficulty }); this.swap(() => mountGame(this, { mode: "bot", difficulty })); }
   // entering a lobby with a live game still stored → rejoin it instead of re-queuing
-  onlineLobby(): void { const g = loadActiveGame(); if (g) return this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked); setPresence("queue"); this.swap(() => mountLobby(this)); }
-  rankedLobby(): void { const g = loadActiveGame(); if (g) return this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked); setPresence("queue"); this.swap(() => mountLobby(this, true)); }
-  leaderboard(): void { setPresence("menu"); this.swap(() => mountLeaderboard(this)); }
-  profile(userId?: string, tab?: ProfileTab): void { setPresence("menu"); this.swap(() => mountProfile(this, userId, tab)); }
-  friends(): void { setPresence("menu"); this.swap(() => mountFriends(this)); }
+  onlineLobby(): void { const g = loadActiveGame(); if (g) return this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked); setPresence("queue"); this.swap(() => mountLobby(this), "lobby"); }
+  rankedLobby(): void { const g = loadActiveGame(); if (g) return this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked); setPresence("queue"); this.swap(() => mountLobby(this, true), "lobby"); }
+  leaderboard(): void { setPresence("menu"); this.swap(() => mountLeaderboard(this), "leaderboard"); }
+  profile(userId?: string, tab?: ProfileTab): void { setPresence("menu"); this.swap(() => mountProfile(this, userId, tab), "profile"); }
+  friends(): void { setPresence("menu"); this.swap(() => mountFriends(this), "friends"); }
   settings(): void { this.profile(undefined, "settings"); } // settings now lives as a profile tab
-  shop(): void { setPresence("menu"); this.swap(() => mountShop(this)); }
-  deck(): void { setPresence("menu"); this.swap(() => mountDeck(this)); }
+  shop(): void { setPresence("menu"); this.swap(() => mountShop(this), "shop"); }
+  deck(): void { setPresence("menu"); this.swap(() => mountDeck(this), "deck"); }
   onlineGame(roomId: string, you: Side, oppName: string, oppAvatar: string | null = null, ranked = false): void {
     setPresence("online");
     aCapture("game_start", { mode: "online" });

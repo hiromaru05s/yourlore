@@ -19,7 +19,7 @@ import type { GameClientMsg, GameServerMsg } from "../../client/src/shared/proto
 import { createGame, reduce, actingSide, effectChoices } from "../../client/src/shared/engine";
 import { redactFor } from "../../client/src/shared/protocol";
 import { BALANCE_VERSION } from "../../client/src/shared/cards";
-import { applyRanked, applyRankedDraw } from "./rank";
+import { settleRanked } from "./rank";
 
 interface PlayerRef { id: string; name: string; sleeve?: string | null; deck?: string | null; }
 
@@ -30,6 +30,8 @@ interface RoomData {
   initEvents: GameEvent[];
   readied: [boolean, boolean];
   recorded: boolean;
+  resultAt?: number;
+  rankOutcome?: Record<string,{before:number;after:number}>;
   /** Ranked match — result also updates the seasonal Elo ladder. */
   ranked: boolean;
   /** Connection generation per side — a close from an older gen is a replaced socket, not a disconnect. */
@@ -85,6 +87,7 @@ export class GameRoom {
    *  other in an infinite "replaced"→reconnect ping-pong; cap the join rate. */
   private joinTimes: [number[], number[]] = [[], []];
   /** recent message timestamps per socket — a looping client must not burn the DO request budget. */
+  private recording: Promise<void> | null = null;
   private msgTimes = new Map<WebSocket, number[]>();
 
   constructor(state: DurableObjectState, env: Env) {
@@ -108,6 +111,8 @@ export class GameRoom {
         readied: r.readied ?? [false, false],
         joinBy: r.joinBy ?? null,
         recorded: r.recorded ?? false,
+        resultAt: r.resultAt,
+        rankOutcome: r.rankOutcome,
         ranked: r.ranked ?? false,
         gen: r.gen ?? [0, 0],
         forfeitAt: r.forfeitAt ?? [null, null],
@@ -269,6 +274,8 @@ export class GameRoom {
       // normal start (non-ranked) or a mid-game reconnect resync
       this.persist();
       this.sendInit(att.side);
+      const outcome=room.rankOutcome?.[room.players[att.side].id];
+      if (room.game.over && outcome) this.send(ws,{type:"rankResult",...outcome});
       return;
     }
     if (msg.type === "startReady") {
@@ -305,6 +312,11 @@ export class GameRoom {
   private syncAlarm(): void {
     const room = this.room;
     if (!room) return;
+    if (room.game.over) {
+      if (!room.recorded) void this.state.storage.setAlarm(Date.now() + 5000);
+      else void this.state.storage.deleteAlarm();
+      return;
+    }
     const times = [...room.forfeitAt, room.joinBy, room.previewUntil].filter((t): t is number => t != null);
     // authoritative turn clock: arm the force-end deadline for the running turn
     if (!room.game.over && room.previewDone && room.readied[0] && room.readied[1]) {
@@ -317,6 +329,7 @@ export class GameRoom {
   async alarm(): Promise<void> {
     const room = await this.restore();
     if (!room) return;
+    if (room.game.over) { await this.recordResult(); this.syncAlarm(); return; }
     const now = Date.now();
     const bothJoined = room.readied[0] && room.readied[1];
 
@@ -485,42 +498,45 @@ export class GameRoom {
   }
 
   private async recordResult(): Promise<void> {
+    if (this.recording) return this.recording;
+    this.recording = this.settleResult();
+    try { await this.recording; } finally { this.recording = null; }
+  }
+
+  private async settleResult(): Promise<void> {
     const room = this.room;
     if (!room || room.recorded || !room.game.over) return;
-    room.recorded = true;
-    this.persist();
-    // No-contest guard: a game only counts (rank + W/L + match row) if BOTH players actually
-    // joined. If a side never connected (phantom match), leaving costs nothing.
-    if (!(room.readied[0] && room.readied[1])) return;
-    // per-player card usage (played) + buys → card analytics in the admin dashboard
-    const usesOf = (s: Side) => { try { return JSON.stringify(room.game.players[s].uses ?? {}); } catch { return "{}"; } };
-    const buysOf = (s: Side) => { try { return JSON.stringify(room.game.players[s].buys ?? {}); } catch { return "{}"; } };
-    const matchRow = (winnerId: string | null) =>
-      this.env.DB.prepare(`INSERT INTO matches (id, player_a, player_b, winner, mode, created_at, ended_at, cards_a, cards_b, turns, buys_a, buys_b, bver) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`)
-        .bind(crypto.randomUUID(), room.players[0].id, room.players[1].id, winnerId, room.ranked ? "ranked" : "online", room.startedAt ?? Date.now(), Date.now(), usesOf(0), usesOf(1), room.game.turn ?? null, buysOf(0), buysOf(1), BALANCE_VERSION);
-    // push each connected player their own MMR before/after so the result screen can show ±delta
-    const sendRank = (outcome: Record<string, { before: number; after: number }>): void => {
-      for (const s of [0, 1] as Side[]) {
-        const chg = outcome[room.players[s].id];
-        const ws = this.sockFor(s);
-        if (chg && ws) { try { this.send(ws, { type: "rankResult", before: chg.before, after: chg.after }); } catch { /* dropped */ } }
-      }
-    };
+    if (!(room.readied[0] && room.readied[1])) { room.recorded = true; await this.state.storage.put("room",room); return; }
+    room.resultAt ??= Date.now();
+    await this.state.storage.put("room",room);
+    // The DO id is stable across reconnects, eviction and retries.
+    const matchId = this.state.id.toString();
+    const winner = room.game.winner == null ? null : room.players[room.game.winner].id;
+    const loser = room.game.winner == null ? null : room.players[(1-room.game.winner) as Side].id;
+    const usesOf = (s: Side) => JSON.stringify(room.game.players[s].uses ?? {});
+    const buysOf = (s: Side) => JSON.stringify(room.game.players[s].buys ?? {});
     try {
-      if (room.game.winner == null) {
-        // 75-turn DRAW: no win/loss counts; ranked → symmetric Elo with S=0.5
-        await matchRow(null).run();
-        if (room.ranked) sendRank(await applyRankedDraw(this.env, room.players[0].id, room.players[1].id));
-        return;
-      }
-      const winner = room.players[room.game.winner];
-      const loser = room.players[(1 - room.game.winner) as Side];
+      // Gate totals on the same match row. Retrying telemetry never increments twice.
       await this.env.DB.batch([
-        this.env.DB.prepare(`UPDATE users SET wins = wins + 1 WHERE id = ?`).bind(winner.id),
-        this.env.DB.prepare(`UPDATE users SET losses = losses + 1 WHERE id = ?`).bind(loser.id),
-        matchRow(winner.id),
+        this.env.DB.prepare(`UPDATE users SET wins=wins+1 WHERE id=? AND NOT EXISTS (SELECT 1 FROM matches WHERE id=?)`).bind(winner,matchId),
+        this.env.DB.prepare(`UPDATE users SET losses=losses+1 WHERE id=? AND NOT EXISTS (SELECT 1 FROM matches WHERE id=?)`).bind(loser,matchId),
+        this.env.DB.prepare(`INSERT OR IGNORE INTO matches (id,player_a,player_b,winner,mode,created_at,ended_at,cards_a,cards_b,turns,buys_a,buys_b,bver) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`)
+          .bind(matchId,room.players[0].id,room.players[1].id,winner,room.ranked?"ranked":"online",room.startedAt,room.resultAt,usesOf(0),usesOf(1),room.game.turn??null,buysOf(0),buysOf(1),BALANCE_VERSION),
       ]);
-      if (room.ranked) sendRank(await applyRanked(this.env, winner.id, loser.id));
-    } catch { /* records are best-effort */ }
+      if (room.ranked) {
+        const outcome = await settleRanked(this.env,matchId,room.players[0].id,room.players[1].id,winner,room.resultAt);
+        room.rankOutcome=outcome;
+        for (const side of [0,1] as Side[]) {
+          const ws=this.sockFor(side), change=outcome[room.players[side].id];
+          if (ws && change) try { this.send(ws,{type:"rankResult",before:change.before,after:change.after}); } catch { /* disconnected */ }
+        }
+      }
+      room.recorded = true;
+      await this.state.storage.put("room",room);
+    } catch (error) {
+      room.recorded = false;
+      console.error("match_settlement_retry", matchId, String(error));
+      await this.state.storage.setAlarm(Date.now()+5000);
+    }
   }
 }

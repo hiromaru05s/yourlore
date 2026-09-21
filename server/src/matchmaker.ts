@@ -41,7 +41,7 @@ export class Matchmaker {
       sleeve: url.searchParams.get("sleeve") || null,
       deck: url.searchParams.get("deck") || null,
       ranked: url.searchParams.get("mode") === "ranked",
-      mmr: Number(url.searchParams.get("mmr")) || 1000,
+      mmr: url.searchParams.has("mmr") && Number.isFinite(Number(url.searchParams.get("mmr"))) ? Math.max(0,Number(url.searchParams.get("mmr"))) : 1000,
       since: 0,
     };
     server.accept();

@@ -1,0 +1,18 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-09-21",
+  "assets": [
+    {
+      "file": "client/public/art/lounge/v1/library.png",
+      "prompt": "Use case: stylized-concept. Production web game environment background, 16:9 wide landscape. Reference image is approved LORE Biblion Lounge HOME mock. Generate ONLY its gorgeous library environment as clean standalone artwork, remove ALL UI, text, logos, borders, panels and icons. Warm magical scholarly grand library with soaring pointed windows on the left, navy banners with subtle brass astronomical ornamentation, winding bookshelves, central round polished dark oak reading table and brass armillary globe, crimson upholstered chairs, navy oriental rug, little lamps and stacked books. Match the reference's refined painterly 3D Japanese fantasy game art and composition. Afternoon sunlight, warm ivory architectural stone, deep navy shelves, very inviting and calm. Scene fills whole frame; table and red chairs center-right, distant high windows left. No people or pets, no writing, no interface, no panels. Artwork suitable beneath functional HTML UI, not a screenshot.",
+      "reference": "docs/ui-concepts/2026-09-21-lounge-pages/01-home.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-0f5b5b71-089d-4674-91a7-00db692b00d9.png"
+    },
+    {
+      "file": "client/public/art/lounge/v1/entrance.png",
+      "prompt": "Production artwork for LORE Biblion Lounge web game. Same refined warm painterly 3D fantasy art as attached reference. A majestic tall brass astronomical doorway inside the magical grand library, welcoming warm ivory sunlight beyond the doorway, dark navy bookshelves and royal blue banners, warm wood and antique brass. Wide 16:9 composition: ornate closed double door in left half of frame, calm shadowed library shelves on right half beneath an HTML login form. No people, no text, no interface, no icons, no writing, no panels. A subtle eye-compass medallion on door. Elegant tranquil scholarly atmosphere. This is raw environment art ONLY, not a UI mockup.",
+      "reference": "client/public/art/lounge/v1/library.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-2c581381-79bf-467f-8e6d-3f030bb17a6c.png"
+    }
+  ]
+}

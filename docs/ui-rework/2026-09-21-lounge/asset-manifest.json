@@ -1,0 +1,16 @@
+[
+  {
+    "file": "client/public/art/lounge/v1/library.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 2509498,
+    "sha256": "8add8212b7abf38a709cbd4e6f538ce46d354f072d59b889b645da95db448d76"
+  },
+  {
+    "file": "client/public/art/lounge/v1/entrance.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 2464480,
+    "sha256": "8640e05153ab9e8f3708c9a9328785a82af1f6c70bec6390562476e954b936ae"
+  }
+]

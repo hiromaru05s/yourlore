@@ -269,6 +269,10 @@ export function mountTutorial(app: App): Screen {
       </div>
     </div>`;
   app.root.appendChild(wrap);
+  const contents = document.createElement("nav"); contents.className="lounge-guide-nav"; contents.setAttribute("aria-label",t("tutorial.rules"));
+  wrap.querySelectorAll<HTMLElement>(".tut-sec").forEach((section,i)=>{section.id="guide-section-"+i; const a=document.createElement("a");a.href="#"+section.id;a.textContent=section.querySelector("h3")?.textContent??String(i+1);a.onclick=e=>{e.preventDefault();section.scrollIntoView({block:"start",behavior:"smooth"});};contents.append(a);});
+  wrap.querySelector(".tut-body")?.prepend(contents);
+
   wrap.querySelector(".topright-lang")!.appendChild(langSelectEl());
   (wrap.querySelector("#back") as HTMLElement).onclick = () => app.home();
   (wrap.querySelector("#play") as HTMLElement).onclick = () => app.botGame();

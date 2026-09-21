@@ -139,9 +139,9 @@ assert(timed);
 g.turn=6;g.players[0].enchants=[{card:{...timed,uid:'elapsed-test'},turns:99,bornTurn:3}];
 v.render(g);
 const timedBuff=document.querySelector('[data-uid="elapsed-test"]');
-assert.equal(timedBuff.querySelector('.buff-duration').textContent,'3/13');
-assert(timedBuff.getAttribute('aria-label').includes('残り 10ターン'));
-click(timedBuff);assert(document.querySelector('.inspect-state').textContent.includes('経過 3/13ターン'));
+assert.equal(timedBuff.querySelector('.buff-duration').textContent,'3/9');
+assert(timedBuff.getAttribute('aria-label').includes('残り 6ターン'));
+click(timedBuff);assert(document.querySelector('.inspect-state').textContent.includes('経過 3/9ターン'));
 closeZoom();
 assert([...document.querySelectorAll('.buff-icon--trap .buff-cost')].every(e=>e.textContent==='?'));
 // UI classifies by definition, not a persisted 98/1-turn legacy value.

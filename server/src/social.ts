@@ -10,7 +10,7 @@
 // ============================================================
 import type { Env, SessionUser } from "./env";
 import { corsHeaders, sanitizeDisplay } from "./auth";
-import { getRating, tierOf, TIERS } from "./rank";
+import { getRating, tierOf, tierWithGm, rankPosition, TIERS } from "./rank";
 
 const CHALLENGE_TTL_MS = 90_000;
 const PRESENCE_ONLINE_MS = 70_000; // presence heartbeat is 30s — 70s covers 2 missed beats
@@ -59,9 +59,7 @@ async function profileOf(env: Env, targetId: string, viewer: SessionUser | null)
   if (!self && !u.stats_public) return { ...base, private: true };
 
   const rating = await getRating(env, u.id).catch(() => null);
-  const above = rating
-    ? await env.DB.prepare(`SELECT COUNT(*) AS n FROM ratings WHERE season = ? AND mmr > ?`).bind(rating.season, rating.mmr).first<{ n: number }>()
-    : null;
+  const rank = rating ? await rankPosition(env,u.id,rating.season) : null;
   const matches = await env.DB.prepare(
     `SELECT m.player_a, m.player_b, m.winner, m.mode, m.turns, m.created_at,
             ua.display AS da, ub.display AS db
@@ -80,9 +78,9 @@ async function profileOf(env: Env, targetId: string, viewer: SessionUser | null)
     ...base,
     stats_public: !!u.stats_public,
     wins: u.wins, losses: u.losses,
-    tier: rating ? tierOf(rating.mmr) : null,
+    tier: rating ? tierWithGm(rating.mmr,rank ?? 1) : null,
     mmr: rating?.mmr ?? null,
-    rank: above ? (above.n ?? 0) + 1 : null,
+    rank,
     recent,
     ...(self ? {
       badges: await ownedBadges(env, u.id),

@@ -1,3 +1,5 @@
+import { loungeText } from "../ui/loungeText";
+import { confirmDialog } from "../ui/modal";
 // ============================================================
 // LORE — profile screen. For the signed-in user it's TABBED:
 //   · 프로필  — avatar / rename / badges / record / recent matches
@@ -74,7 +76,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
 
   const load = async (): Promise<void> => {
     let p: Profile;
-    try { p = await api.profile(userId); } catch { body().innerHTML = `<div class="pf-loading">${t("login.err.generic")}</div>`; return; }
+    try { p = await api.profile(userId); } catch { if (dead) return; body().innerHTML = `<div class="pf-loading">${t("login.err.generic")}</div>`; return; }
     if (dead) return;
     cached = p;
     build();      // rebuild so the tab bar appears once we know self/other
@@ -82,6 +84,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   };
 
   const renderTab = (): void => {
+    body().classList.toggle("pf-overview", tab === "overview");
     if (!cached) return;
     if (!cached.self || tab === "overview") renderOverview(cached);
     else if (tab === "h2h") renderH2H(cached);
@@ -164,20 +167,13 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     if (!p.self) return;
 
     // ---- rename ----
-    const renameRow = body().querySelector("#renameRow") as HTMLElement;
     (body().querySelector("#renameBtn") as HTMLElement | null)?.addEventListener("click", () => {
-      renameRow.style.display = renameRow.style.display === "none" ? "flex" : "none";
-      (body().querySelector("#renameInput") as HTMLInputElement).value = p.display;
-      (body().querySelector("#renameInput") as HTMLInputElement).focus();
-    });
-    (body().querySelector("#renameSave") as HTMLElement | null)?.addEventListener("click", () => {
-      const v = (body().querySelector("#renameInput") as HTMLInputElement).value.trim();
-      if (v.length < 2) return;
-      void api.updateMe({ display: v }).then((r) => {
-        if (app.user) { app.user.display = r.display; }
-        sfx("pop");
-        void load();
-      }).catch((e) => alert((e as Error).message));
+      const ov=document.createElement("div");ov.className="overlay";
+      ov.innerHTML=`<div class="modal"><h2>${t("profile.rename")}</h2><label class="field-label" for="renameInput">${t("profile.rename.ph")}</label><input class="input" id="renameInput" maxlength="24" value="${esc(p.display)}"><div id="renameCount" class="set-desc"></div><p id="renameError" role="status"></p><div class="modal-row"><button class="btn btn-ghost" id="renameCancel">${t("common.cancel")}</button><button class="btn btn-gold" id="renameSave">${t("common.confirm")}</button></div></div>`;
+      document.body.append(ov);const input=ov.querySelector<HTMLInputElement>("#renameInput")!,save=ov.querySelector<HTMLButtonElement>("#renameSave")!;
+      const update=()=>{ov.querySelector("#renameCount")!.textContent=`${input.value.length} / 24`;save.disabled=input.value.trim().length<2;};update();input.oninput=update;
+      ov.querySelector<HTMLButtonElement>("#renameCancel")!.onclick=()=>ov.remove();
+      save.onclick=async()=>{save.disabled=true;try{const r=await api.updateMe({display:input.value.trim()});if(app.user)app.user.display=r.display;ov.remove();document.dispatchEvent(new Event("lore:user"));if(!dead)void load();}catch(e){ov.querySelector("#renameError")!.textContent=(e as Error).message;save.disabled=false;}};
     });
 
     // ---- avatar picker ----
@@ -191,7 +187,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     const rows = p.h2h ?? [];
     body().innerHTML = `
       <section class="tut-sec">
-        <h3><span class="tut-ico">⚔️</span>${t("profile.h2h.title")}</h3>
+        <h3><span class="tut-ico">⚔️</span>${t("profile.h2h.title")}</h3><p class="set-desc">${loungeText("2回以上対戦した相手を表示します。", "Opponents you have played at least twice.", "2번 이상 대전한 상대를 표시합니다.")}</p>
         ${!rows.length ? `<p>${t("profile.h2h.empty")}</p>` : `
         <div class="pf-h2h">
           ${rows.map((r) => {
@@ -304,11 +300,11 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
       </section>
       <section class="tut-sec">
         <h3><span class="tut-ico">💳</span>${t("settings.billing")}</h3>
-        <div class="set-row"><span class="set-label">${t("settings.billing.credits")}</span><span class="set-val">💎 <b id="credits">${credits}</b></span></div>
+        <div class="set-row"><span class="set-label">${t("home.shards")}</span><span class="set-val">💎 <b id="credits">${credits}</b></span></div>
         <div class="set-row"><span class="set-label">${t("settings.billing.sub")}</span><span class="set-val">${t("settings.billing.none")}</span></div>
         <div class="bill-plan">
           <div class="bill-plan-name">LORE PREMIUM</div>
-          <div class="bill-plan-desc">${t("settings.billing.plan")}</div>
+
           <button class="btn btn-primary btn-block" disabled>${t("settings.billing.soon")}</button>
         </div>
       </section>
@@ -332,8 +328,9 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     // privacy
     const pub = body().querySelector("#pub") as HTMLInputElement;
     pub.onchange = () => {
+      pub.disabled = true;
       void api.updateMe({ stats_public: pub.checked }).then(() => { if (cached) cached.stats_public = pub.checked; sfx("pop"); })
-        .catch(() => { pub.checked = !pub.checked; sfx("error"); });
+        .catch(() => { pub.checked = !pub.checked; sfx("error"); }).finally(() => { pub.disabled = false; });
     };
 
     // coupon
@@ -346,6 +343,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         couponMsg.textContent = `✓ ${t("settings.coupon.ok")} +${r.amount} 💎`;
         (body().querySelector("#credits") as HTMLElement).textContent = String(r.credits);
         if (app.user) app.user.credits = r.credits;
+        document.dispatchEvent(new Event("lore:user"));
         if (cached) cached.credits = r.credits;
         (body().querySelector("#coupon") as HTMLInputElement).value = "";
         sfx("coin");
@@ -356,7 +354,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
 
     // logout
     (body().querySelector("#logout") as HTMLElement).onclick = () => {
-      if (confirm(t("settings.logout.confirm"))) void app.logout();
+      void confirmDialog({ title: t("home.logout"), body: t("settings.logout.confirm"), confirm: t("common.yes"), cancel: t("common.no") }).then(ok => { if (ok) void app.logout(); });
     };
   };
 
@@ -381,6 +379,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         const id = (b as HTMLElement).dataset.id!;
         void api.updateMe({ avatar: id }).then(() => {
           if (app.user) app.user.avatar = id;
+          document.dispatchEvent(new Event("lore:user"));
           sfx("pop");
           ov.remove();
           void load();

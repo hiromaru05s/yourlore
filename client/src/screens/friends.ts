@@ -21,7 +21,7 @@ function esc(s: string): string { return s.replace(/[<>&"]/g, (c) => ({ "<": "&l
 const POLL_LIST_MS = 5000;
 const POLL_CHALLENGE_MS = 2000;
 
-export function mountFriends(app: App): Screen {
+export function mountFriends(app: App, host?: HTMLElement, compact = false): Screen {
   const wrap = document.createElement("div");
   wrap.className = "screen tut-screen";
   wrap.innerHTML = `
@@ -43,7 +43,8 @@ export function mountFriends(app: App): Screen {
         <div id="frLists"><div class="pf-loading">…</div></div>
       </div>
     </div>`;
-  app.root.appendChild(wrap);
+  (host ?? app.root).appendChild(wrap);
+  if (compact) wrap.classList.add("friends-compact");
   wrap.querySelector(".topright-lang")!.appendChild(langSelectEl());
   (wrap.querySelector("#back") as HTMLElement).onclick = () => app.home();
 
@@ -60,7 +61,7 @@ export function mountFriends(app: App): Screen {
   // ---- add friend ----
   const addFriend = (): void => {
     const q = (wrap.querySelector("#frq") as HTMLInputElement).value.trim();
-    if (!q) return;
+    if (!q || dead) return;
     msg.textContent = "…";
     api.friendRequest(q).then((r) => {
       msg.textContent = `✓ ${t("friends.add.sent")} (${r.display})`;
@@ -98,7 +99,7 @@ export function mountFriends(app: App): Screen {
           : d.friends.map((f) => row(f, `
             <button class="btn btn-mini btn-primary" data-ch="${f.id}" data-name="${esc(f.display)}" ${f.online ? "" : "disabled"}>⚔ ${t("friends.challenge")}</button>
             <button class="btn btn-mini btn-ghost" data-pf="${f.id}">${t("friends.profile")}</button>
-            <button class="btn btn-mini btn-ghost fr-x" data-rm="${f.id}">✕</button>`)).join("")}
+            <button class="btn btn-mini btn-ghost fr-x" data-rm="${f.id}" aria-label="${esc(t("friends.remove"))}">✕</button>`)).join("")}
       </section>
       ${d.outgoing.length ? `
       <section class="tut-sec">
@@ -149,6 +150,7 @@ export function mountFriends(app: App): Screen {
   // ---- outgoing challenge ----
   const sendChallenge = (uid: string, name: string): void => {
     api.challenge(uid).then(({ id }) => {
+      if (dead) { void api.challengeCancel(id).catch(() => {}); return; }
       sfx("pop");
       const ov = document.createElement("div");
       ov.className = "overlay";
@@ -191,13 +193,13 @@ export function mountFriends(app: App): Screen {
       if (dead) return;
       render(d);
       maybeShowChallenge(d);
-    } catch { /* transient */ }
+    } catch { if (!dead && !lists.querySelector(".fr-row")) lists.innerHTML = `<p role="status">${t("lobby.connerr")}</p>`; }
     clearTimeout(listTimer);
     listTimer = window.setTimeout(() => void refresh(), POLL_LIST_MS);
   };
   void refresh();
 
-  const unsub = onLangChange(() => app.friends());
+  const unsub = compact ? () => {} : onLangChange(() => app.friends());
   return { destroy: () => { cleanup(); unsub(); } };
 }
 
