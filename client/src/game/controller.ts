@@ -136,6 +136,8 @@ export abstract class BaseController implements BoardHandlers {
     const now = Date.now();
     if (now - this.lastEndTurnAt < 900) return;
     if (this.state?.cur === this.you && now - this.turnStartedWall < 500 && this.state.turn > 1) return;
+    if(!this.state||this.state.over||this.state.cur!==this.you||this.state.pending)return;
+    this.view.beginEndTurn();
     this.lastEndTurnAt = now;
     this.fastForward(); this.submit({ type: "endTurn" });
   }
@@ -147,6 +149,7 @@ export abstract class BaseController implements BoardHandlers {
   // ---- apply a reduce result: queued so batches play back one at a time ----
   protected applyResult(res: ReduceResult, animate = true): void {
     const prev = this.state ?? res.state;
+    this.view.syncTurn(res.state);
     this.state = res.state; // logical state advances immediately (input guards etc.)
     const gen = ++this.fxGen;
     this.queue = this.queue
@@ -255,7 +258,7 @@ export abstract class BaseController implements BoardHandlers {
       switch (e.type) {
         case "enchantActivate":
           A.enchantActivation(e.uid);
-          await wait(320);
+          await wait(140);
           break;
         case "summon": {
           const card = this.findCard(res.state, e.uid) ?? this.defOf(e.id, e.uid);
@@ -264,7 +267,7 @@ export abstract class BaseController implements BoardHandlers {
             if (g) ghosts.set(e.uid, { el: g, side: sideOf(e.player) });
           }
           fieldCount[e.player]++;
-          await wait(160);
+          await wait(65);
           break;
         }
         case "trapSet":
@@ -299,7 +302,7 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "hit":
           A.monHit(e.uid);
-          await wait(260);
+          await wait(110);
           break;
         case "dice":
           if (!diceDone.has(i)) {
@@ -312,7 +315,7 @@ export abstract class BaseController implements BoardHandlers {
           A.hpFeedback(sideOf(e.player), "dmg", e.amount);
           A.hpBarSet(sideOf(e.player), hpNow[e.player], res.state.players[e.player].maxHp);
           if (e.srcKo) lastKill = { srcKo: e.srcKo, srcJa: e.srcJa };
-          await wait(430);
+          await wait(140);
           break;
         }
         case "heal": {
@@ -320,7 +323,7 @@ export abstract class BaseController implements BoardHandlers {
           hpNow[e.player] += healed;
           if(healed>0)A.hpFeedback(sideOf(e.player), "heal", healed);
           A.hpBarSet(sideOf(e.player), hpNow[e.player], res.state.players[e.player].maxHp);
-          await wait(340);
+          await wait(130);
           break;
         }
         case "playSpell": {
@@ -924,7 +927,7 @@ export class LocalController extends BaseController {
     if (g.players[actingSide(g)].isBot) {
       clearTimeout(this.botTimer);
       // playback has already finished by the time afterApply runs — a short beat is enough
-      this.botTimer = window.setTimeout(() => this.botStep(), g.pending ? 380 : 600);
+      this.botTimer = window.setTimeout(() => this.botStep(), g.pending ? 150 : 220);
     }
   }
 

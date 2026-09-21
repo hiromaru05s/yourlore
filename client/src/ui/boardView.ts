@@ -340,6 +340,22 @@ export class GameView {
     (this.root.querySelector(".game") as HTMLElement | null)?.classList.toggle("fx-playing", on);
   }
 
+  private turnSnapshot = -1;
+  private endingTurn = false;
+  beginEndTurn(): void {
+    this.endingTurn = true;
+    this.root.dataset.readingTurn = 'opponent';
+    this.q('endBtn').querySelector('.end-turn-label')!.textContent = 'ENEMY\nTURN';
+    (this.q('endBtn') as HTMLButtonElement).disabled = true;
+  }
+  /** Logical ownership changes immediately, independently of visual playback. */
+  syncTurn(g: GameState): void {
+    if(g.turn < this.turnSnapshot)return;
+    this.turnSnapshot=g.turn;
+    this.endingTurn=false;
+    this.root.dataset.readingTurn=g.cur===this.you&&!g.over?'player':'opponent';
+  }
+
   render(g: GameState): void {
     const fieldBefore=fieldPositions(this.root);
     const readyPiles=new Set([...this.root.querySelectorAll('.pile--3d-ready')].map(el=>el.id));
@@ -349,13 +365,13 @@ export class GameView {
     const opp = g.players[1 - this.you];
     const myTurn = g.cur === this.you && !g.over;
     const pending = g.pending;
-    this.root.dataset.readingTurn=myTurn?"player":"opponent";
+    if(g.turn>=this.turnSnapshot&&!this.endingTurn)this.syncTurn(g);
     // opponent's equipped sleeve (server-synced); falls back to default for bot/local games
     OPP_SLEEVE = sleeveUrl(g.sleeves?.[1 - this.you]);
 
     this.q("turnInfo").innerHTML = `<span class="turn-badge"><span class="tb-label">${t("game.turn")}</span><span class="tb-num">${g.turn}</span></span><span class="turn-cur"><b>${t(myTurn ? "fx.yourturn" : "fx.oppturn")}</b></span>`;
     // refresh static labels (so a live language switch updates them)
-    this.q("endBtn").innerHTML = `<span class="end-turn-label">${myTurn ? "END\nTURN" : "ENEMY\nTURN"}</span>`;
+    this.q("endBtn").innerHTML = `<span class="end-turn-label">${this.root.dataset.readingTurn==='player' ? "END\nTURN" : "ENEMY\nTURN"}</span>`;
     const gvl = this.q("giveupBtn").querySelector(".gv-label"); if (gvl) gvl.textContent = t("game.surrender");
     this.q("logTitle").textContent = t("game.log");
     this.q("logTab").textContent = t("game.log");
@@ -401,7 +417,7 @@ export class GameView {
     this.renderMarket(g, me, myTurn);
     this.renderHand(g, me, myTurn);
 
-    (this.q("endBtn") as HTMLButtonElement).disabled = !myTurn || !!pending;
+    (this.q("endBtn") as HTMLButtonElement).disabled = this.root.dataset.readingTurn!=='player' || !!pending;
 
     // Warm the full-resolution art for everything enlargeable on this board, at
     // idle. A tap on a phone has no hover to hint from, so without this the
@@ -949,17 +965,28 @@ export class GameView {
   private renderHand(g: GameState, me: PlayerState, myTurn: boolean): void {
     // Preserve an in-flight pointer session across authoritative board renders.
     const handEl = this.q("hand");
-    handEl.innerHTML = "";
+    const old=new Map([...handEl.querySelectorAll<HTMLElement>(':scope > .card')].map(el=>[el.dataset.uid,el]));
+    const keep=new Set(me.hand.map(c=>c.uid));
+    for(const [uid,node] of old)if(!keep.has(uid!))node.remove();
     me.hand.forEach((c, idx) => {
       const pc = playCost(c, me);
       const blocked=playBlockReason(g,this.you,c);
       const aff = myTurn && !g.pending && !blocked;
-      const card = cardEl(c, { size: "hand", playable: aff, dim: !aff, costOverride: pc });
+      const key=JSON.stringify([c,pc,aff,blocked,getLang()]);
+      let card=old.get(c.uid);
+      if(!card||card.dataset.handSnapshot!==key){
+        const next=cardEl(c,{size:'hand',playable:aff,dim:!aff,costOverride:pc});
+        next.dataset.handSnapshot=key;
+        this.bindHandCard(next,c);
+        if(card)card.replaceWith(next);
+        card=next;
+      }
+      card.classList.remove('is-played');
       if(!aff)card.dataset.blockReason=!myTurn?t('play.block.turn'):g.pending?t('play.block.pending'):me.mana<pc?t('play.block.mana'):(getLang()==='ja'?blocked?.ja:getLang()==='ko'?blocked?.ko:null)||t('play.block.cond');
       card.style.setProperty("--hi", String(idx));
       card.style.zIndex = String(me.hand.length - idx);
-      this.bindHandCard(card, c);
-      handEl.appendChild(card);
+      const position=handEl.children[idx];
+      if(position!==card)handEl.insertBefore(card,position??null);
     });
     this.layoutHand();
   }

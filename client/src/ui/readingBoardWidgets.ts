@@ -53,7 +53,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
  const id=(event:Event)=>(event.target as Element)?.closest<HTMLElement>('#endBtn,#refreshBtn')?.id||'';
  const over=(e:Event)=>{const next=id(e);if(next!==hover)animateUntil=performance.now()+500;hover=next;};const down=(e:Event)=>{const target=(e.target as Element)?.closest<HTMLButtonElement>('button');pressed=target&&!target.disabled?id(e):'';animateUntil=performance.now()+500;};
  const up=()=>{pressed='';animateUntil=performance.now()+650;};
- const click=(e:Event)=>{const button=(e.target as Element).closest<HTMLButtonElement>('button');if(button?.disabled)return;const now=performance.now();if(id(e)==='refreshBtn')rerollTime=now;if(id(e)==='endBtn'){turnTime=now;displayEnemy=true;enamel?.color.set(0x682937);const label=button?.querySelector('.end-turn-label');if(label)label.textContent='ENEMY\nTURN';}animateUntil=now+1000;};
+ const click=(e:Event)=>{const button=(e.target as Element).closest<HTMLButtonElement>('button');if(button?.disabled)return;const now=performance.now();if(id(e)==='refreshBtn')rerollTime=now;if(id(e)==='endBtn')turnTime=now;animateUntil=now+1000;};
  root.addEventListener('pointerover',over);root.addEventListener('pointerdown',down);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);root.addEventListener('click',click,true);
  function tick(now:number){
   if(dead)return false;const scale=readingScale();group.scale.setScalar(scale);
@@ -85,7 +85,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   for(const m of rerollMaterials){color.copy(m.color);if(refresh?.disabled){const l=color.r*.2126+color.g*.7152+color.b*.0722;color.lerp(new T.Color(l,l,l),.8).multiplyScalar(.5);}else if(hover==='refreshBtn')color.multiplyScalar(1.12);m.material.color.lerp(color,1-Math.exp(-dt*18));}
   const clock=root.querySelector<HTMLElement>('.mp-clock.show'),remaining=clock?Math.min(1,Number(clock.dataset.remaining)/Math.max(1,Number(clock.dataset.total))):1;
   segments.forEach((mesh,i)=>{mesh.material=i<Math.ceil(remaining*24)?lit:dark;});
-  const turnAge=now-turnTime;displayEnemy=enemy||(turnAge>=0&&turnAge<900);
+  const turnAge=now-turnTime;displayEnemy=enemy;
   color.set(displayEnemy?0x492633:0x133042);if(hover==='endBtn'&&!end?.disabled)color.multiplyScalar(1.18);enamel?.color.lerp(color,1-Math.exp(-dt*18));
   color.set(displayEnemy?0xba6471:0x3daacb);lit.color.copy(color);lit.emissive.copy(color);
   const pressDepth=(age:number)=>age<0||age>=620?0:age<120?Math.sin(age/120*Math.PI/2):age<230?1:(1-(age-230)/390)**2;
@@ -95,7 +95,8 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   if(rerollCap){rerollCap.position.y=-.0045*Math.max(rerollPress,pressed==='refreshBtn'?.7:0);if(refresh){refresh.dataset.physicalPhase=now-rerollTime<120?'press':now-rerollTime<620?'spin':'rest';refresh.style.setProperty('--cap-press',`${rerollCap.position.y*scale}px`);}}
   const t=Math.min(1,Math.max(0,(now-rerollTime-120)/500)),target=2*Math.PI*(1-(1-t)**3);if(arrows)arrows.rotation.y=target;
   if(turnPress||rerollPress||pressed)shadowDirty=true;
-  if(end){end.dataset.physicalPhase=turnAge<120?'press':turnAge<710?'spin':'rest';const label=end.querySelector<HTMLElement>('.end-turn-label');if(label){label.style.opacity='1';if(displayEnemy&&turnAge<900)label.textContent='ENEMY\nTURN';}}
+  if(end){end.dataset.physicalPhase=turnAge<120?'press':turnAge<710?'spin':'rest';const label=end.querySelector<HTMLElement>('.end-turn-label');if(label){label.style.opacity='1';const text=displayEnemy?'ENEMY\nTURN':'END\nTURN';if(label.textContent!==text)label.textContent=text;}}
+  if(end)end.dataset.turnColor=displayEnemy?'red':'blue';
   group.visible=true;
 
   const state=`${enemy}:${end?.disabled}:${refresh?.disabled}`;

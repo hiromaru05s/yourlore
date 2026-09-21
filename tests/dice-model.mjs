@@ -16,6 +16,8 @@ try{
    const p=diePose(i/1000,n);assert(p.lift>=-1e-9);assert(p.y>=.4999,'die never crosses the floor');
   }
   for(const t of [.3,.59,.79,.92,1])assert(Math.abs(diePose(t,n).lift)<1e-8,'each bounce makes ground contact');
+  assert(Math.abs(diePose(0,n).x)>6,'roll enters outside the visible tray');
+  for(let i=1;i<=100;i++)assert(Math.abs(diePose(i/100,n).x)<=Math.abs(diePose((i-1)/100,n).x),'horizontal momentum decays toward its landing');
   assert(Math.abs(diePose(1,n).y-.5)<1e-9);assert(Math.abs(diePose(1,n).x)<1e-9);
   assert(FACE_NORMALS[n].clone().add(FACE_NORMALS[7-n]).length()<1e-9,'opposite sides sum to seven');
  }

@@ -1,3 +1,5 @@
+import {RIFT_MOUNT,readingScale} from './readingBoardLayout';
+import {boardPoint} from './boardProjection';
 import {acquireVoidSurface,drawVoidSurface} from './voidSurface';
 import {captureCardSurface,CARD_PADDING} from './cardSurface';
 import {riftCardPoint,riftState,drawRiftTransmute,RIFT_DURATION,type Point} from './riftTransmute';
@@ -36,7 +38,7 @@ export async function swallowRiftCard(node:HTMLElement,target:HTMLElement,start:
  }catch{/* Use the live card below. */}finally{signal.removeEventListener('abort',cancelCapture);host.remove();}
  if(signal.aborted||!node.isConnected)return;
  const project=(x:number,y:number):Point=>{const p=start.transformPoint(new DOMPoint(x,y));return {x:p.x/p.w,y:p.y/p.w};};
- const source=project(w/2,h/2),r=target.getBoundingClientRect(),sink={x:r.left+r.width/2,y:r.top+r.height/2};
+ const source=project(w/2,h/2),r=target.getBoundingClientRect(),sink=target.id==='rift-me'||target.id==='rift-opp'?boardPoint(innerWidth/2+RIFT_MOUNT.x*readingScale(),innerHeight/2+(target.id==='rift-me'?1:-1)*RIFT_MOUNT.z*readingScale(),RIFT_MOUNT.height*readingScale()):{x:r.left+r.width/2,y:r.top+r.height/2};
  const sourceWidth=Math.hypot(project(w,h/2).x-project(0,h/2).x,project(w,h/2).y-project(0,h/2).y);
  // Rasterizing a 1536px capture per triangle wastes work for a 30–180px board card.
  if(face){const small=document.createElement('canvas');small.width=Math.max(192,Math.min(384,Math.ceil(sourceWidth*3)));small.height=Math.round(small.width*face.height/face.width);const raster=small.getContext('2d');if(raster){raster.drawImage(face,0,0,small.width,small.height);face=small;}}

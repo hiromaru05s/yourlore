@@ -152,3 +152,6 @@
 .d3-overlay .d3-row { width:min(54vw,620px);flex-wrap:wrap; }
 .d3-overlay .d3-tray { min-width:0;padding-inline:0; }
 @media(max-width:640px){.d3-overlay{gap:8px;padding:12px}.d3-source{--card-w-hand:100px}.d3-overlay .d3-row{width:calc(100vw - 140px);height:180px}.d3-cap{padding:8px;font-size:20px;max-width:calc(100vw - 140px)}.d3-verdict{font-size:12px}.d3-owner{padding:6px 8px}.d3-row .d3-fallback{width:40px;height:40px;padding:7px}.d3-row .d3-pip{width:5px;height:5px}}
+
+/* Dice enter from beyond this real clipping boundary, then settle on the tray. */
+.d3-row{overflow:hidden;}

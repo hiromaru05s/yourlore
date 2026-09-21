@@ -58,6 +58,6 @@ export async function diceRollAnim(rolls:number[],opts:DiceOpts):Promise<void>{
       const ok=!!opts.success;ov.classList.add(ok?'win':'fail');
       const verdict=document.createElement('span');verdict.className='d3-verdict';verdict.textContent=`${opts.need}+ · `+(ok?(lang==='ja'?'成功':lang==='en'?'Success':'성공'):(lang==='ja'?'失敗':lang==='en'?'Fail':'실패'));cap.append(verdict);if(ok)sfx('mana');
     }
-    await pause(820);if(!abort.signal.aborted){ov.classList.add('out');await pause(180);}
+    await pause(560);if(!abort.signal.aborted){ov.classList.add('out');await pause(140);}
   }finally{abort.abort();active.delete(abort);scene?.dispose();clearTimeout(timer);document.removeEventListener('visibilitychange',hidden);document.removeEventListener('keydown',key,true);ov.remove();}
 }

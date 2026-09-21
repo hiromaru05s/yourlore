@@ -1,0 +1,8 @@
+{
+  "checks": [
+    "Cold GPU dice rolls settle at authoritative 6/1/4 and clean up",
+    "Actual surrender reducer event plays victory cinematic and opens result panel",
+    "Final result never attaches the battle countdown"
+  ],
+  "errors": []
+}

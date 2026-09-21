@@ -119,10 +119,10 @@
 :is(#app,.reading-board).reading-board .game .portrait .pt-hp b{font-size:calc(var(--board-meter)*.025);max-width:64%;font-variant-numeric:tabular-nums;margin:0 0 7%;letter-spacing:-.05em;}
 /* Same circular fan for both states; no mismatched corner pivots. */
 :is(#app,.reading-board).reading-board .game:not(.hand-open) #hand{width:calc(var(--fan-width)*.42);height:calc(var(--card-h-hand)*.42);}
-:is(#app,.reading-board).reading-board .game:not(.hand-open) #hand .card{left:calc(50% + var(--fan-x)*.42 - var(--card-w-hand)*.5);top:auto;bottom:calc(var(--fan-y)*-.42);transform:scale(.42) rotate(var(--hand-angle));transform-origin:50% 100%;}
+:is(#app,.reading-board).reading-board .game:not(.hand-open) #hand .card{left:calc(50% + var(--fan-x)*.42 - var(--card-w-hand)*.5);top:auto;bottom:calc(var(--fan-y)*-.42);transform:scale(.42) rotate(var(--hand-angle,0deg));transform-origin:50% 100%;}
 :is(#app,.reading-board).reading-board .game.hand-open #hand{width:calc(var(--fan-open-width)*.58);height:calc(var(--card-h-hand)*.58);transform:translateX(-50%);bottom:max(24px,calc(var(--fan-open-overhang,0px) + 10px))!important;filter:drop-shadow(0 5px 9px #0006);}
-:is(#app,.reading-board).reading-board .game.hand-open #hand .card{left:calc(50% + var(--fan-open-x)*.58 - var(--card-w-hand)*.5);top:auto;bottom:calc(var(--fan-open-y)*-.58);transform:scale(.58) rotate(var(--fan-open-angle));transform-origin:50% 100%;}
-:is(#app,.reading-board).reading-board .game.hand-open #hand .card:hover{transform:translateY(-9px) scale(.58) rotate(var(--fan-open-angle));}
+:is(#app,.reading-board).reading-board .game.hand-open #hand .card{left:calc(50% + var(--fan-open-x)*.58 - var(--card-w-hand)*.5);top:auto;bottom:calc(var(--fan-open-y)*-.58);transform:scale(.58) rotate(var(--fan-open-angle,0deg));transform-origin:50% 100%;}
+:is(#app,.reading-board).reading-board .game.hand-open #hand .card:hover{transform:translateY(-16px) scale(.66) rotate(var(--fan-open-angle,0deg));}
 :is(#app,.reading-board).reading-board .game #endBtn .end-turn-label{transform:translateY(calc(var(--cap-press,0px)*-.309)) rotate(var(--cap-turn,0deg));}
 :is(#app,.reading-board).reading-board .rift-sprite{display:block;inset:0;opacity:1;}
 :is(#app,.reading-board).reading-board .rift-sprite::before,:is(#app,.reading-board).reading-board .rift-sprite::after{display:none;}
@@ -140,3 +140,6 @@
 :is(#app,.reading-board).reading-board .game .portrait .pt-hp b{font-size:calc(var(--portrait-size)*.14);}
 :is(#app,.reading-board).reading-board .zone-st{grid-template-columns:repeat(7,minmax(0,1fr)) calc(var(--portrait-size)*1.04) repeat(7,minmax(0,1fr));}
 :is(#app,.reading-board).reading-board .rift-sprite{display:none!important;}
+
+/* Compact cards have no transform transition on snapshot insertion. */
+:is(#app,.reading-board).reading-board .game:not(.hand-open) #hand .card{transition:opacity .12s;animation:none;}

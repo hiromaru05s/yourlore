@@ -61,7 +61,13 @@ export function mountDuelScene(root:HTMLElement):()=>void {
     const used=new Set(elements.flatMap(el=>[el.dataset.sleeve,el.dataset.face]).filter(Boolean));for(const [url,map] of textures)if(!used.has(url)){map.dispose();textures.delete(url);}
     projectBoardDOM(root);keyLight.shadow.needsUpdate=true;
   }
-  const motion=installSceneMotion(root,flightScene,items,texture,refresh);
+  const motion=installSceneMotion(root,flightScene,items,texture,refresh,async()=>{
+    let timer:ReturnType<typeof setTimeout>|undefined;
+    try{await Promise.race([flightRenderer.compileAsync(flightScene,camera),new Promise<void>(resolve=>{timer=setTimeout(resolve,800);})]);}finally{clearTimeout(timer);}
+    if(dead)return;
+    const warm=new T.WebGLRenderTarget(64,64);flightRenderer.setRenderTarget(warm);
+    try{flightRenderer.render(flightScene,camera);}finally{flightRenderer.setRenderTarget(null);warm.dispose();}
+  });
   const observer=new MutationObserver(records=>{if(records.some(r=>r.type==='childList'||r.oldValue!==(r.target as Element).getAttribute(r.attributeName!)))dirty=true;});observer.observe(root,{childList:true,subtree:true,attributes:true,attributeOldValue:true,attributeFilter:['class','data-count','data-sleeve','data-face']});
   const onLayout=()=>{dirty=true;};window.addEventListener('lore:layout',onLayout);
   const dustScene=new T.Scene(), dustCamera=new T.PerspectiveCamera(45,1,1,4000);

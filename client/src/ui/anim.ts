@@ -1,3 +1,4 @@
+import {mountDuelOutcome} from './duelOutcome';
 import {reserveMonster} from './fieldLayout';
 import {attackPlan,attackPose,ATTACK_DURATION_MS} from './attackVisual';
 import {runAttackTimeline} from './attackMotion';
@@ -136,7 +137,7 @@ async function focusCard(node: HTMLElement, side: ViewSide): Promise<void> {
     node.style.left = `${(innerWidth - w * scale) / 2}px`;
     node.style.top = `${(innerHeight - h * scale) / 2}px`;
     node.style.transform = "perspective(1400px) rotateX(0deg) rotateY(0deg) scale(1)";
-    await wait(reduced ? 120 : side === "opp" ? 1050 : 780);
+    await wait(reduced ? 120 : side === "opp" ? 640 : 480);
   } finally { veil.remove(); node.classList.remove("cast-reveal"); }
 }
 function summonDust(rect: DOMRect): void {
@@ -769,7 +770,7 @@ export async function destroyAnim(uid: string, side: ViewSide): Promise<void> {
 }
 
 /** Random-card outcome popup. Big center card for your plays, compact upper popup for the opponent's. */
-export async function resultPopup(title: string, lines: string[], mine: boolean, ms = 2400): Promise<void> {
+export async function resultPopup(title: string, lines: string[], mine: boolean, ms = 1100): Promise<void> {
   const p = document.createElement("div");
   p.className = "fx-result" + (mine ? "" : " opp");
   p.innerHTML = `<div class="fx-result-title">🎲 ${title}</div>` + lines.map((l) => `<div class="fx-result-line">${l}</div>`).join("");
@@ -842,44 +843,14 @@ export function manaDrop(side: ViewSide, amount: number): void {
 }
 
 /**
- * Death sequence (~2.8s): vignette, the loser's HP bar cracks and shatters
- * into shards, screen quake, then a center verdict with the killing cause.
+ * Archive verdict (~1.55s): portrait light fragments, an engraved book seal,
+ * and the result with its cause. Reduced motion uses a short static verdict.
  */
 export async function deathShatter(loserSide: ViewSide, won: boolean, cause: string | null): Promise<void> {
-  const bar = document.getElementById("hpbar-" + loserSide);
-  const r = bar ? bar.getBoundingClientRect() : null;
-  const vg = document.createElement("div");
-  vg.className = "fx-death-vignette" + (won ? " win" : "");
-  document.body.appendChild(vg);
-  bar?.classList.add("fx-shatter");
-  await wait(420);
-  if (r) {
-    for (let i = 0; i < 20; i++) {
-      const s = document.createElement("div");
-      s.className = "fx-shard";
-      s.style.left = r.left + Math.random() * r.width + "px";
-      s.style.top = r.top + Math.random() * r.height + "px";
-      s.style.setProperty("--dx", (Math.random() - 0.5) * 260 + "px");
-      s.style.setProperty("--dy", 40 + Math.random() * 160 + "px");
-      s.style.setProperty("--rot", (Math.random() - 0.5) * 540 + "deg");
-      document.body.appendChild(s);
-      setTimeout(() => s.remove(), 1300);
-    }
-  }
-  hpBarSet(loserSide, 0, 1);
-  document.querySelector(".game")?.parentElement?.classList.add("fx-quake");
-  await wait(600);
-  const v = document.createElement("div");
-  v.className = "fx-verdict " + (won ? "win" : "lose");
-  v.innerHTML = `<div class="fx-verdict-main">${won ? t("modal.win") : t("modal.lose")}</div>` +
-    (cause ? `<div class="fx-verdict-sub">${won ? "⚔" : "💀"} ${cause}</div>` : "");
-  document.body.appendChild(v);
-  await wait(1800);
-  v.classList.add("out");
-  await wait(280);
-  v.remove(); vg.remove();
-  document.querySelector(".game")?.parentElement?.classList.remove("fx-quake");
-  bar?.classList.remove("fx-shatter");
+  if(fxSkip)return;
+  const portrait=document.querySelector<HTMLElement>(loserSide==='me'?'#portraitMe .pt-ring':'#portraitOpp .pt-ring');
+  const dispose=mountDuelOutcome(portrait,won,cause);
+  try{await wait(matchMedia('(prefers-reduced-motion:reduce)').matches?250:1550);}finally{dispose();}
 }
 
 /** Floating "결과 보기" button while reviewing the log after the game ends. */

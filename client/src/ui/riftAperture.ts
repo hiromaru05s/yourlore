@@ -1,6 +1,6 @@
 import {acquireVoidSurface,drawVoidSurface} from './voidSurface';
 import {boardPoint} from './boardProjection';
-import {readingScale} from './readingBoardLayout';
+import {readingScale,RIFT_MOUNT} from './readingBoardLayout';
 /** The same meter-space aperture as the Blender cutter, behind its actual rails.
  * Only the narrow Rift column is repainted. Its projection is cached on resize. */
 export function mountRiftApertures(root:HTMLElement){
@@ -14,7 +14,7 @@ export function mountRiftApertures(root:HTMLElement){
  function resize(){
   w=innerWidth;h=innerHeight;dpr=Math.min(devicePixelRatio,1.5);const scale=readingScale();
   apertures=[1,-1].map(sign=>{
-   const points=outline.map(([x,z])=>boardPoint(w/2+x*scale,h/2+sign*z*scale,.006*scale)),path=new Path2D();
+   const points=outline.map(([x,z])=>boardPoint(w/2+x*scale,h/2+sign*z*scale,RIFT_MOUNT.height*scale)),path=new Path2D();
    points.forEach((p,i)=>i?path.lineTo(p.x,p.y):path.moveTo(p.x,p.y));path.closePath();
    return {path,sign,left:Math.min(...points.map(p=>p.x)),right:Math.max(...points.map(p=>p.x)),top:Math.min(...points.map(p=>p.y)),bottom:Math.max(...points.map(p=>p.y))};
   });
@@ -24,7 +24,7 @@ export function mountRiftApertures(root:HTMLElement){
  }
  return {tick(now:number){
   if(document.hidden)return;const resized=w!==innerWidth||h!==innerHeight||dpr!==Math.min(devicePixelRatio,1.5);
-  if(!resized&&now-last<33)return;if(reduced.matches&&!resized&&last>0)return;last=now;if(resized)resize();
+  if(!resized&&now-last<66)return;if(reduced.matches&&!resized&&last>0)return;last=now;if(resized)resize();
   c.setTransform(dpr,0,0,dpr,-left*dpr,-top*dpr);c.clearRect(left,top,width,height);drawVoidSurface(ctx,192,320,reduced.matches?0:now/1000);
   for(const a of apertures){c.save();c.clip(a.path);c.translate(a.left,a.sign<0?a.bottom:a.top);c.scale(1,a.sign);c.drawImage(texture,0,0,a.right-a.left,a.bottom-a.top);c.restore();}
  },dispose(){release();canvas.remove();}};

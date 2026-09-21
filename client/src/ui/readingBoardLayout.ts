@@ -1,6 +1,8 @@
 /** Meter-authored 01–06 mounts. Every DOM hit area uses the same model-space units. */
 export const READING_ASSETS='/models/reading-board/v1/';
 export const CARD_METERS=.110;
+// ANCHOR_rift_player/opponent from board.glb, shared by visuals and hit targets.
+export const RIFT_MOUNT={x:.725,z:.245,height:.012};
 export const STOCK_THICKNESS=.0008/CARD_METERS;
 export const marketHeight=(supply=false)=>(supply?.0218:.0158)/CARD_METERS;
 export const pileCenter=(count:number,shelf:boolean)=>((shelf?.009:.0088)+.0004+Math.max(0,Math.min(count,40)-1)*.0008)/CARD_METERS;
@@ -32,7 +34,7 @@ export function placeReadingBoard(root:HTMLElement):void {
   place(`#${id}Row .zone-row:has(.zone-st)`,0,sign*.326,.83,.048);
   place(`#pile-${id==='me'?'my':'opp'}Deck`,.54,sign*.245,.136,.198);
   place(`#pile-${id==='me'?'my':'opp'}Disc`,-.54,sign*.245,.166,.232);
-  place(`#rift-${id}`,.722,sign*.247,.125,.268);
+  place(`#rift-${id}`,RIFT_MOUNT.x,sign*RIFT_MOUNT.z,.125,.268);
   const p=id==='me'?'Me':'Opp';
   const portraitTop=sign>0?Math.min(innerHeight-portraitSize-8,cy+s*.326):Math.max(8,cy-s*.326-portraitSize);
   const ring=root.querySelector<HTMLElement>(`#portrait${p} .pt-ring`),hp=root.querySelector<HTMLElement>(`#portrait${p} .pt-vitals`);

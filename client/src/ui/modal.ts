@@ -1,3 +1,4 @@
+import {outcomeCrest} from './duelOutcome';
 // ============================================================
 // LORE — overlays: generic modal, confirm (surrender), win,
 // treasure reveal, and the seek/recall card picker.
@@ -21,7 +22,7 @@ export function closeOverlay(): void { getRoot().innerHTML = ""; }
 function mount(node: HTMLElement): void {
   const ov = document.createElement("div");
   ov.className = "overlay";
-  if (document.querySelector(".game .mp-clock.show")) { node.classList.add("duel-dialog"); attachDuelClock(node); }
+  if (!node.classList.contains("outcome-result") && document.querySelector(".game .mp-clock.show")) { node.classList.add("duel-dialog"); attachDuelClock(node); }
   ov.appendChild(node);
   getRoot().innerHTML = "";
   getRoot().appendChild(ov);
@@ -58,8 +59,9 @@ export function winModal(won: boolean | null, detail: string, onAgain: () => voi
   const m = document.createElement("div");
   m.className = "modal";
   const title = won == null ? t("modal.draw") : won ? t("modal.win") : t("modal.lose");
-  const color = won == null ? "var(--paper)" : won ? "var(--gold-glow)" : "var(--vermil-hi)";
-  m.innerHTML = `<h2 style="color:${color}">${title}</h2><p id="winDetail" style="color:var(--paper);font-size:14px">${detail}</p><div class="win-rank" id="winRankDelta" style="display:none"></div><p>${t("modal.gameover")}</p><div class="modal-row"></div>`;
+  m.className='modal outcome-result '+(won==null?'is-draw':won?'is-victory':'is-defeat');
+  const color = "var(--outcome-light)";
+  m.innerHTML = `<div class="outcome-eyebrow">BIBLION · ARCHIVE</div>${outcomeCrest(won)}<h2 style="color:${color}">${title}</h2><p id="winDetail" style="color:var(--paper);font-size:14px">${detail}</p><div class="win-rank" id="winRankDelta" style="display:none"></div><p>${t("modal.gameover")}</p><div class="modal-row"></div>`;
   const row = m.querySelector(".modal-row")!;
   const home = document.createElement("button"); home.className = "btn btn-ghost"; home.textContent = t("modal.home");
   home.onclick = () => { closeOverlay(); onHome(); };

@@ -10,7 +10,7 @@ import {capturePileSurface} from './cardSurface';
 type Item={group:T.Group;element:HTMLElement;pile?:PileModel;market:boolean;supply:boolean};
 const sat=(v:number)=>Math.max(0,Math.min(1,v));
 const smooth=(v:number)=>{v=sat(v);return v*v*(3-2*v);};
-export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<string,Item>,texture:(url:string)=>T.Texture,refresh:()=>void){
+export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<string,Item>,texture:(url:string)=>T.Texture,refresh:()=>void,warm:()=>Promise<void>=async()=>{}){
   let disposed=false;
   const tasks=new Set<(now:number)=>void>(),cancels=new Set<()=>void>();
   const dust=(el:HTMLElement)=>window.dispatchEvent(new CustomEvent('lore:summon-dust',{detail:el.getBoundingClientRect()}));
@@ -39,7 +39,7 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       const depth=focal-Math.sin(angle)*(start.y-cy)-Math.cos(angle)*elevation;
       const size=purchase?unit:from.width*depth/focal;
       req.card.style.visibility='hidden';req.target.dataset.motion='arrival';
-      try{await timeline(reduced?100:purchase?960:620,req.signal,t=>{
+      try{await timeline(reduced?100:purchase?620:420,req.signal,t=>{
         const p=purchase?smooth(sat((t-.18)/.82)):smooth(t),lift=Math.sin(Math.PI*t)*unit*(purchase?1.15:.65);
         moving.position.set(start.x-cx+(r.left+r.width/2-start.x)*p,elevation+(height-elevation)*p+lift,start.y-cy+(r.top+r.height/2-start.y)*p);
         moving.scale.setScalar(size+(unit-size)*p);
@@ -76,12 +76,15 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       };
       const source=build(true),target=build(false),sparkGroup=new T.Group();scene.add(sparkGroup);
       source.group.position.set(a.left+a.width/2-cx,0,a.top+a.height/2-cy);target.group.position.set(b.left+b.width/2-cx,0,b.top+b.height/2-cy);sparkGroup.position.copy(target.group.position);
-      const sparks=Array.from({length:12},(_,i)=>{const m=new T.Mesh(new T.OctahedronGeometry(unit*.026,0),new T.MeshBasicMaterial({color:i%3?0x63c7ff:0xe1faff,transparent:true,depthWrite:false}));sparkGroup.add(m);return m;});
-      const coat=(actor:typeof source,charge:number,opacity:number)=>{actor.group.visible=opacity>.001;for(const {material,color} of actor.surfaces){material.color.copy(color).lerp(new T.Color('#409fe9'),charge);material.opacity=opacity;if(material instanceof T.MeshStandardMaterial){material.emissive.set('#2baeff');material.emissiveIntensity=charge*1.7;}else if(material.map){material.color.lerp(new T.Color('#c6f5ff'),charge*.4);}}};
+      const sparks=Array.from({length:12},(_,i)=>{const m=new T.Mesh(new T.OctahedronGeometry(unit*.012,0),new T.MeshBasicMaterial({color:i%3?0xace3ff:0xffffff,transparent:true,depthWrite:false,blending:T.AdditiveBlending,toneMapped:false}));sparkGroup.add(m);return m;});
+      const coat=(actor:typeof source,charge:number,opacity:number)=>{actor.group.visible=opacity>.001;for(const {material,color} of actor.surfaces){material.color.copy(color).lerp(new T.Color('#c4eaff'),charge*.4);material.opacity=opacity;if(material instanceof T.MeshStandardMaterial){material.emissive.set('#a8deff');material.emissiveIntensity=charge*.85;}else if(material.map){material.color.lerp(new T.Color('#c6f5ff'),charge*.4);}}};
       const veil=(actor:typeof source,shelf:boolean)=>{const v=reformVeil(unit);v.mesh.position.copy(actor.group.position);v.mesh.position.y=unit*(pileFace(count,shelf)+.006);scene.add(v.mesh);return v;};
       const sourceVeil=veil(source,true),targetVeil=veil(target,false);
+      coat(target,0,0);
+      try{
+      await warm();if(disposed||req.signal.aborted)return false;
       req.source.classList.add('is-shuffling');req.target.classList.add('is-shuffling');
-      try{await timeline(reduced?100:REFORM_DURATION,req.signal,t=>{
+      await timeline(reduced?100:REFORM_DURATION,req.signal,t=>{
         const state=reformState(t);root.dataset.shufflePhase=state.phase;
         coat(source,state.sourceCharge,state.sourceAlpha);coat(target,state.destinationCharge,state.destinationAlpha);
         sourceVeil.update(state.sourceCharge,state.sourceAlpha*.96,t);targetVeil.update(state.destinationCharge,state.destinationAlpha*.98,t);
