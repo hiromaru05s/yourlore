@@ -30,7 +30,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   jewel.traverse(o=>{if(o instanceof T.Mesh&&o.material instanceof T.MeshPhysicalMaterial){o.material.color.set('#378bea');o.material.attenuationColor.set('#2373c9');}});
   for(const gem of [jewel,spent])gem.traverse(o=>{if(o instanceof T.Mesh&&o.material instanceof T.MeshPhysicalMaterial&&o.material.transmission>0){addCrystalOptics(o.material,cut);o.material.userData.authoredAttenuation=o.material.attenuationDistance;opticalMaterials.push(o.material);}});
   for(const [side,z] of [['Me',.397],['Opp',-.397]] as const){
-   const mana=new T.Group();mana.position.set(-.29,.012,z);group.add(mana);
+   const mana=new T.Group();mana.position.set(-.345,.012,z);group.add(mana);
    const a=tray.clone(true),b=counter.clone(true);a.position.x=.0415;b.position.x=-.132;mana.add(a,b);
    const batches:{ready:T.InstancedMesh[];spent:T.InstancedMesh[]}={ready:[],spent:[]};
    for(const [state,asset] of [['ready',jewel],['spent',spent]] as const){
@@ -53,7 +53,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
  const id=(event:Event)=>(event.target as Element)?.closest<HTMLElement>('#endBtn,#refreshBtn')?.id||'';
  const over=(e:Event)=>{const next=id(e);if(next!==hover)animateUntil=performance.now()+500;hover=next;};const down=(e:Event)=>{const target=(e.target as Element)?.closest<HTMLButtonElement>('button');pressed=target&&!target.disabled?id(e):'';animateUntil=performance.now()+500;};
  const up=()=>{pressed='';animateUntil=performance.now()+650;};
- const click=(e:Event)=>{const button=(e.target as Element).closest<HTMLButtonElement>('button');if(button?.disabled)return;const now=performance.now();if(id(e)==='refreshBtn')rerollTime=now;if(id(e)==='endBtn')turnTime=now;animateUntil=now+1000;};
+ const click=(e:Event)=>{const button=(e.target as Element).closest<HTMLButtonElement>('button');if(button?.disabled)return;const now=performance.now();if(id(e)==='refreshBtn')rerollTime=now;if(id(e)==='endBtn'){turnTime=now;displayEnemy=true;enamel?.color.set(0x682937);const label=button?.querySelector('.end-turn-label');if(label)label.textContent='ENEMY\nTURN';}animateUntil=now+1000;};
  root.addEventListener('pointerover',over);root.addEventListener('pointerdown',down);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);root.addEventListener('click',click,true);
  function tick(now:number){
   if(dead)return false;const scale=readingScale();group.scale.setScalar(scale);
@@ -75,7 +75,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
     const x=rows===1?(i-(maximum-1)/2)*Math.min(.045,.226/maximum):(i%10-4.5)*.023;
     const z=rows===1?0:(Math.floor(i/10)-(rows-1)/2)*(rows===2?.026:.019);
     const t=Math.min(1,Math.max(0,(gain-(i-mana.gainFrom)*.025)/.66)),bloom=animating&&i>=mana.gainFrom?Math.sin(Math.PI*t):0;
-    q.setFromAxisAngle(new T.Vector3(0,1,0),bloom*.28);matrix.compose(new T.Vector3(x,.0038*(1-small)+.023*bloom,z),q,new T.Vector3().setScalar(small*(1+.17*bloom)));
+    q.setFromAxisAngle(new T.Vector3(0,1,0),bloom*.035);matrix.compose(new T.Vector3(x,.0038*(1-small)+.002*bloom,z),q,new T.Vector3().setScalar(small*(1+.025*bloom)));
     const state=i<current?'ready':'spent',index=counts[state]++;mana.batches[state].forEach(m=>m.setMatrixAt(index,matrix));
    }
    for(const state of ['ready','spent'] as const)for(const mesh of mana.batches[state]){mesh.count=counts[state];mesh.visible=mesh.count>0;mesh.instanceMatrix.needsUpdate=true;if(mesh.count){mesh.computeBoundingSphere();mesh.computeBoundingBox();}}
@@ -85,7 +85,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   for(const m of rerollMaterials){color.copy(m.color);if(refresh?.disabled){const l=color.r*.2126+color.g*.7152+color.b*.0722;color.lerp(new T.Color(l,l,l),.8).multiplyScalar(.5);}else if(hover==='refreshBtn')color.multiplyScalar(1.12);m.material.color.lerp(color,1-Math.exp(-dt*18));}
   const clock=root.querySelector<HTMLElement>('.mp-clock.show'),remaining=clock?Math.min(1,Number(clock.dataset.remaining)/Math.max(1,Number(clock.dataset.total))):1;
   segments.forEach((mesh,i)=>{mesh.material=i<Math.ceil(remaining*24)?lit:dark;});
-  const turnAge=now-turnTime;if(turnAge>=650||turnAge<0)displayEnemy=enemy;
+  const turnAge=now-turnTime;displayEnemy=enemy||(turnAge>=0&&turnAge<900);
   color.set(displayEnemy?0x492633:0x133042);if(hover==='endBtn'&&!end?.disabled)color.multiplyScalar(1.18);enamel?.color.lerp(color,1-Math.exp(-dt*18));
   color.set(displayEnemy?0xba6471:0x3daacb);lit.color.copy(color);lit.emissive.copy(color);
   const pressDepth=(age:number)=>age<0||age>=620?0:age<120?Math.sin(age/120*Math.PI/2):age<230?1:(1-(age-230)/390)**2;
@@ -95,7 +95,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   if(rerollCap){rerollCap.position.y=-.0045*Math.max(rerollPress,pressed==='refreshBtn'?.7:0);if(refresh){refresh.dataset.physicalPhase=now-rerollTime<120?'press':now-rerollTime<620?'spin':'rest';refresh.style.setProperty('--cap-press',`${rerollCap.position.y*scale}px`);}}
   const t=Math.min(1,Math.max(0,(now-rerollTime-120)/500)),target=2*Math.PI*(1-(1-t)**3);if(arrows)arrows.rotation.y=target;
   if(turnPress||rerollPress||pressed)shadowDirty=true;
-  if(end){end.dataset.physicalPhase=turnAge<120?'press':turnAge<710?'spin':'rest';const label=end.querySelector<HTMLElement>('.end-turn-label');if(label){label.style.opacity=turnAge>140&&turnAge<650?'0':'1';}}
+  if(end){end.dataset.physicalPhase=turnAge<120?'press':turnAge<710?'spin':'rest';const label=end.querySelector<HTMLElement>('.end-turn-label');if(label){label.style.opacity='1';if(displayEnemy&&turnAge<900)label.textContent='ENEMY\nTURN';}}
   group.visible=true;
 
   const state=`${enemy}:${end?.disabled}:${refresh?.disabled}`;

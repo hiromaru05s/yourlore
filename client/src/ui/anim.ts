@@ -480,11 +480,11 @@ export async function animateReshuffle(side:ViewSide,count:number):Promise<void>
   }
 }
 
-/** Real paper geometry during travel; DOM remains the accessible resting card. */
+/** Native card face throughout travel and landing, with a dimensional flip. */
 export async function animateDraw(handEl: HTMLElement | null, count: number, side: ViewSide = "me"): Promise<void> {
   const deck = document.getElementById(side === "me" ? "pile-myDeck" : "pile-oppDeck");
   if (!handEl || !deck || count <= 0 || fxSkip || document.hidden ||
-      typeof WebGL2RenderingContext === 'undefined' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const cards = Array.from(handEl.querySelectorAll<HTMLElement>(side === "me" ? ".card" : ".card--back"));
   const incoming = cards.slice(-Math.min(count, 6)).filter(n => n.getBoundingClientRect().width > 0);
   const origin = (deck.querySelector('.pile-draw-anchor') || deck.querySelector('.pile-card') || deck).getBoundingClientRect();
@@ -506,7 +506,7 @@ export async function animateDraw(handEl: HTMLElement | null, count: number, sid
       await drawPaperCards({ cards: incoming, origin, sleeve: deck.dataset.sleeve || FRAME_BACK,
         reveal: side === 'me', signal: abort.signal, onLand: node=>{restore(node);if(deck.dataset.openingCount!=null){deck.dataset.count=String(Math.max(Number(deck.dataset.openingCount),Number(deck.dataset.count)-1));const c=deck.querySelector('.pile-count');if(c)c.textContent=deck.dataset.count;}} });
     })]);
-  } catch { /* Unsupported GPU or unavailable module: reveal the resting cards. */ }
+  } catch { /* Unavailable module: reveal the resting cards. */ }
   finally {
     clearTimeout(deadline); cancel(); fxWaiters.delete(cancel);
     window.removeEventListener('resize', cancel);

@@ -343,7 +343,7 @@ export class GameView {
   render(g: GameState): void {
     const fieldBefore=fieldPositions(this.root);
     const readyPiles=new Set([...this.root.querySelectorAll('.pile--3d-ready')].map(el=>el.id));
-    const oldCards=new Map([...this.root.querySelectorAll<HTMLElement>('.card[data-uid]')].map(el=>[el.dataset.uid,{width:el.offsetWidth,fonts:[...el.querySelectorAll<HTMLElement>('.card-name,.seal-value')].map(e=>({text:e.textContent,font:e.style.fontSize}))}]));
+    const oldCards=new Map([...this.root.querySelectorAll<HTMLElement>('.card[data-uid]')].map(el=>[el.dataset.uid,{width:el.offsetWidth,fonts:[...el.querySelectorAll<HTMLElement>('.seal-value')].map(e=>({text:e.textContent,font:e.style.fontSize}))}]));
     this.root.querySelector('.card-block-tip')?.remove();
     const me = g.players[this.you];
     const opp = g.players[1 - this.you];
@@ -426,7 +426,7 @@ export class GameView {
     for(const el of this.root.querySelectorAll<HTMLElement>('.card[data-uid]')){
       const previous=oldCards.get(el.dataset.uid);
       if(!previous||previous.width!==el.offsetWidth)continue;
-      [...el.querySelectorAll<HTMLElement>('.card-name,.seal-value')].forEach((label,i)=>{
+      [...el.querySelectorAll<HTMLElement>('.seal-value')].forEach((label,i)=>{
         const old=previous.fonts[i];if(old?.text===label.textContent&&old.font)label.style.fontSize=old.font;
       });
     }

@@ -8,7 +8,7 @@ import '../styles/game-overlays.css';
 import '../styles/game.css';
 import '../styles/screens.css';
 import { cardPickerMulti } from '../ui/modal';
-import { turnBanner, manaSurge, exileCard } from '../ui/anim';
+import { turnBanner, manaSurge, exileCard, animateDraw, animateReshuffle } from '../ui/anim';
 import { LocalController } from '../game/controller';
 import { paintDuelClock } from '../ui/duelClock';
 import { createGame } from '../shared/engine';
@@ -64,8 +64,11 @@ if (import.meta.env.DEV) {
     add('マナ増加',async()=>{const p=g.players[0];if(p.maxMana>=30){p.maxMana=8;p.mana=6;render();await new Promise(r=>setTimeout(r,120));}p.maxMana=Math.min(30,p.maxMana+2);p.mana=Math.min(p.maxMana,p.mana+3);render();await manaSurge('me',2);});
     add('場から虚無',async()=>{const p=g.players[0],card=p.field[0];const source=document.querySelector<HTMLElement>('#myField .card')??document.querySelector<HTMLElement>('#meRow .zone-mon .card');if(card&&source){try{await exileCard(card,'me',source);}finally{source.style.visibility='';render();}}});
     add('手札から虚無',async()=>{const card=g.players[0].hand[0],source=document.querySelector<HTMLElement>('#hand .card');if(card&&source){try{await exileCard(card,'me',source);}finally{source.style.visibility='';render();}}});
+    add('虚無魔法プレイ',async()=>{await revealSpell(inst('STARTER_TRASH'),'me','vanish');});
     add('手札の開閉',()=>{view.setHandOpen(!document.querySelector('.game')?.classList.contains('hand-open'));});
     add('手札10枚',()=>{g.players[0].hand=mons.slice(0,10).map(c=>inst(c.id));render();});
+    add('ドロー3枚',async()=>{await animateDraw(document.getElementById('hand'),3,'me');});
+    add('デッキ再構成',async()=>{await animateReshuffle('me',g.players[0].discard.length);render();});
     add('自分のターン',()=>{g.cur=0;render();});
     document.body.append(panel);
   }
