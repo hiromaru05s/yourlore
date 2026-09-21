@@ -17,3 +17,7 @@
 - 詳細は `geometry.json` と同ディレクトリの画面画像。
 
 既存のViteチャンクサイズ警告は継続。ルール・カード数値は変更していない。
+
+## ステージング公開
+
+https://test.yourlore.xyz に反映。Worker版 `6d52f8c8-58cf-42f9-b19c-eb306aa5c4b5`、コード `505bdfe`。公開HTMLと全JS/CSSバンドルがローカルビルドとSHA-256で一致（`deployment.json`）。

@@ -1,0 +1,66 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "sourceCommit": "505bdfe",
+  "worker": "lore-server-staging",
+  "version": "6d52f8c8-58cf-42f9-b19c-eb306aa5c4b5",
+  "checkedAt": "2026-09-21T02:01:04.913Z",
+  "allMatched": true,
+  "files": [
+    {
+      "path": "/index.html",
+      "sha256": "bc80135111b7e94868b8d850374d213c97bcd24b6ca28378653f657b3a57bd1e"
+    },
+    {
+      "path": "/assets/GLTFLoader-B0O9yTir.js",
+      "sha256": "f663eaf6797b895f8cef3a1f8783a32835b7fcc7ed5e13fdc4c4ae0dbb6dc049"
+    },
+    {
+      "path": "/assets/RoomEnvironment-CLBdDOKr.js",
+      "sha256": "28e31b37e1ceedb7e754f0a1c4b89e2ecc0d5bdfeed8e9821409d36c56650597"
+    },
+    {
+      "path": "/assets/cardSurface-D_XjylMa.js",
+      "sha256": "bda6a18dd607a78b78707ab8cf1d4824d606be17a2b02ea4d184c30949c8420d"
+    },
+    {
+      "path": "/assets/coinScene-LNYdzhyn.js",
+      "sha256": "7019a3e1178d432f4e307921fa67d449b359f7ba7ca04f19e2b410ef929f468d"
+    },
+    {
+      "path": "/assets/diceScene-D_H3ye7g.js",
+      "sha256": "2719d4b539526d0feb017a7af167b9a890fb780060b8ce8f7d558ec3a93126c9"
+    },
+    {
+      "path": "/assets/duelScene-BWGtZYlh.js",
+      "sha256": "5d7b3fb141468d3f9dc8d49c33a5aff8e6f0d2d65a0cf3f31ff67845cb995c4e"
+    },
+    {
+      "path": "/assets/main-BompYjc_.js",
+      "sha256": "be7c6c0c11788b3fb9e6f0bb1a3c724bd6b8de62445fabe51de75e3738e25780"
+    },
+    {
+      "path": "/assets/main-bJtBqwh0.css",
+      "sha256": "0fc5a57357729b1725b43b1326e94a94c928aa55385381490fae60a6e497d53d"
+    },
+    {
+      "path": "/assets/paperDraw-DlS1gQWL.js",
+      "sha256": "bf1fc8dfbae519048b2a1f382ab33c3ee5a5fcf5b523a60ad27a1d5d7b6f47e0"
+    },
+    {
+      "path": "/assets/riftScene-C5c_peba.js",
+      "sha256": "66ac275e6f5d294e2b37a1db199a92253d1e9b7a3f0d53f7a0d3751eb8d8a1f5"
+    },
+    {
+      "path": "/assets/tablePreview-2Rkra2Ey.css",
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4"
+    },
+    {
+      "path": "/assets/tablePreview-B_goxsZa.js",
+      "sha256": "35f4d83fbd27c0bda8fb2efe3d1e58d282a5aacd05d8eac83367c39b5dd2a0ba"
+    },
+    {
+      "path": "/assets/three.module-ClbeDS-7.js",
+      "sha256": "faf93a0b5e8af889072fe190b568599fd3b2019c32c492c1723a82934c927ae8"
+    }
+  ]
+}
