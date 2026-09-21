@@ -130,9 +130,11 @@
 
 :is(#app,.reading-board).reading-board #portraitMe .pt-ring::after{background-image:url('/art/biblion/refined/portrait-self.png');}
 
-/* Portraits use the actual openings of each PNG, with a square shared canvas. */
+/* Both characters share the same opening. The blue frame has wider transparent
+   side gutters, so expand its background horizontally to match the red frame. */
 :is(#app,.reading-board).reading-board .game .portrait .pt-ring::after{inset:0;background-size:100% 100%;}
-:is(#app,.reading-board).reading-board .game #portraitMe .pt-ring .avatar{inset:7% 21% 11%!important;width:58%!important;height:82%!important;border-radius:49% 49% 28% 28%;}
+:is(#app,.reading-board).reading-board .game #portraitMe .pt-ring::after{inset:0 -17.25%;}
+:is(#app,.reading-board).reading-board .game #portraitMe .pt-ring .avatar{inset:7% 11% 11%!important;width:78%!important;height:82%!important;border-radius:49% 49% 28% 28%;}
 :is(#app,.reading-board).reading-board .game #portraitOpp .pt-ring .avatar{inset:7% 11% 11%!important;width:78%!important;height:82%!important;border-radius:24% 24% 25% 25%;}
 :is(#app,.reading-board).reading-board .game .portrait .seeker-sprite{height:100%;background-size:200% 100%;animation:none;}
 :is(#app,.reading-board).reading-board .game .portrait .pt-hp b{font-size:calc(var(--portrait-size)*.14);}

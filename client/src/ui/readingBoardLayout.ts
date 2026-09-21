@@ -5,11 +5,15 @@ export const STOCK_THICKNESS=.0008/CARD_METERS;
 export const marketHeight=(supply=false)=>(supply?.0218:.0158)/CARD_METERS;
 export const pileCenter=(count:number,shelf:boolean)=>((shelf?.009:.0088)+.0004+Math.max(0,Math.min(count,40)-1)*.0008)/CARD_METERS;
 export const pileFace=(count:number,shelf:boolean)=>pileCenter(count,shelf)+STOCK_THICKNESS/2;
-export function readingScale(width=innerWidth,height=innerHeight){return Math.min(width/1.76,height/1.28);}
+/** Fill the viewport with the table; portraits overlap its outer rim rather
+ * than reserving two extra rows outside it. Keep the near rim on screen. */
+export function readingScale(width=innerWidth,height=innerHeight){return Math.min(width/1.72,height/.94);}
 /** Containers are display:contents, so placements have the viewport as offset parent. */
 export function placeReadingBoard(root:HTMLElement):void {
  const s=readingScale(),cx=innerWidth/2,cy=innerHeight/2;
- const portraitSize=Math.min(210,Math.max(104,s*.30),innerHeight*.24);root.style.setProperty('--portrait-size',`${portraitSize}px`);
+ // Preserve the large desktop portrait; shorter windows need room for all
+ // seven monsters without the center card covering the player's face.
+ const portraitSize=Math.min(210,Math.max(104,s*.30),innerHeight*.195);root.style.setProperty('--portrait-size',`${portraitSize}px`);
  root.classList.add('reading-board');root.style.setProperty('--board-meter',`${s}px`);
  function place(selector:string,x:number,z:number,w:number,d:number,local=false){
   for(const el of root.querySelectorAll<HTMLElement>(selector)){
@@ -24,7 +28,7 @@ export function placeReadingBoard(root:HTMLElement):void {
  place('.sub-head',-.037,.092,.065,.065,true);
  place('.mid-aside',.7,0,.13,.13);
  for(const [id,sign] of [['me',1],['opp',-1]] as const){
-  place(`#${id}Row .zone-row:has(.zone-mon)`,0,sign*.205,.85,.171875);
+  place(`#${id}Row .zone-row:has(.zone-mon)`,0,sign*.195,.85,.171875);
   place(`#${id}Row .zone-row:has(.zone-st)`,0,sign*.326,.83,.048);
   place(`#pile-${id==='me'?'my':'opp'}Deck`,.54,sign*.245,.136,.198);
   place(`#pile-${id==='me'?'my':'opp'}Disc`,-.54,sign*.245,.166,.232);
@@ -41,6 +45,6 @@ export function placeReadingBoard(root:HTMLElement):void {
  }
  // Hand cards float over the board, outside the play lanes. They are not sockets.
  const hand=root.querySelector<HTMLElement>('#hand'),opp=root.querySelector<HTMLElement>('#oppHand');
- if(hand&&!root.querySelector('.game.hand-open')){hand.style.left=`${Math.max(cx+.16*s,cx+portraitSize*.5+8)}px`;const css=getComputedStyle(hand),height=parseFloat(css.getPropertyValue('--card-h-hand'))*.42||0,edge=parseFloat(css.getPropertyValue('--fan-overhang'))||0;hand.style.top=`${Math.min(cy+.337*s,innerHeight-height-edge-10)}px`;hand.style.bottom='auto';}
+ if(hand&&!root.querySelector('.game.hand-open')){hand.style.left=`${Math.max(cx+.16*s,cx+portraitSize*.5+8)}px`;const css=getComputedStyle(hand),height=parseFloat(css.getPropertyValue('--card-h-hand'))*.42||0,edge=parseFloat(css.getPropertyValue('--fan-overhang'))||0;hand.style.top=`${Math.min(cy+.365*s,innerHeight-height-edge-10)}px`;hand.style.bottom='auto';}
  if(opp){opp.style.left=`${Math.max(cx+.16*s,cx+portraitSize*.5+8)}px`;opp.style.top=`${cy-.452*s}px`;}
 }
