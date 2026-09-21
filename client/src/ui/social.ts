@@ -1,3 +1,4 @@
+import { homeIcon } from "./homeIcons";
 import { artUrl } from "./cardArt";
 // ============================================================
 // LORE — social presentation helpers: preset avatars (card art)
@@ -31,16 +32,16 @@ export interface BadgeMeta { icon: string; ko: string; ja: string; en: string; c
 const B = (icon: string, ko: string, ja: string, en: string, color: string): BadgeMeta => ({ icon, ko, ja, en, color });
 
 export const BADGE_META: Record<string, BadgeMeta> = {
-  "wins:10":  B("⚔️", "10승 달성", "10勝達成", "10 Wins", "#9aa7b8"),
-  "wins:50":  B("🗡️", "50승 달성", "50勝達成", "50 Wins", "#c08650"),
-  "wins:200": B("🏵️", "200승 달성", "200勝達成", "200 Wins", "#e8c25a"),
-  "tutorial": B("🎓", "튜토리얼 완주", "チュートリアル完走", "Tutorial Graduate", "#7fd6c2"),
-  "invite":   B("🎁", "친구 초대 성공", "友達招待成功", "Recruiter", "#f0a87f"),
+  "wins:10":  B(homeIcon("duel"), "10승 달성", "10勝達成", "10 Wins", "#9aa7b8"),
+  "wins:50":  B(homeIcon("duel"), "50승 달성", "50勝達成", "50 Wins", "#c08650"),
+  "wins:200": B(homeIcon("trophy"), "200승 달성", "200勝達成", "200 Wins", "#e8c25a"),
+  "tutorial": B(homeIcon("book"), "튜토리얼 완주", "チュートリアル完走", "Tutorial Graduate", "#7fd6c2"),
+  "invite":   B(homeIcon("gift"), "친구 초대 성공", "友達招待成功", "Recruiter", "#f0a87f"),
 };
 // tier badges reuse the ladder colors (bronze..gm; iron has no badge)
 for (const key of ["bronze", "silver", "gold", "platinum", "diamond", "master", "gm"]) {
   const m = TIER_META[key];
-  BADGE_META[`tier:${key}`] = B("🏆", `${m.ko} 도달`, `${m.ja}到達`, `${m.en} Reached`, m.color);
+  BADGE_META[`tier:${key}`] = B(homeIcon("trophy"), `${m.ko} 도달`, `${m.ja}到達`, `${m.en} Reached`, m.color);
 }
 
 export function badgeLabel(key: string): string {

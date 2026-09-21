@@ -1,3 +1,4 @@
+import { homeIcon } from "../ui/homeIcons";
 import { loungeText } from "../ui/loungeText";
 import { confirmDialog } from "../ui/modal";
 // ============================================================
@@ -55,10 +56,10 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         </div>
         ${isSelf() ? `
         <div class="pf-tabs">
-          <button class="pf-tab ${tab === "overview" ? "is-active" : ""}" data-tab="overview">${t("profile.tab.overview")}</button>
-          <button class="pf-tab ${tab === "h2h" ? "is-active" : ""}" data-tab="h2h">⚔️ ${t("profile.tab.h2h")}</button>
-          <button class="pf-tab ${tab === "sleeves" ? "is-active" : ""}" data-tab="sleeves">🃏 ${t("profile.tab.sleeves")}</button>
-          <button class="pf-tab ${tab === "settings" ? "is-active" : ""}" data-tab="settings">⚙ ${t("profile.tab.settings")}</button>
+          <button class="pf-tab ${tab === "overview" ? "is-active" : ""}" data-tab="overview">${homeIcon("profile")} ${t("profile.tab.overview")}</button>
+          <button class="pf-tab ${tab === "h2h" ? "is-active" : ""}" data-tab="h2h">${homeIcon("duel")} ${t("profile.tab.h2h")}</button>
+          <button class="pf-tab ${tab === "sleeves" ? "is-active" : ""}" data-tab="sleeves">${homeIcon("sleeve")} ${t("profile.tab.sleeves")}</button>
+          <button class="pf-tab ${tab === "settings" ? "is-active" : ""}" data-tab="settings">${homeIcon("settings")} ${t("profile.tab.settings")}</button>
         </div>` : ""}
         <div class="tut-body" id="pbody"><div class="pf-loading">…</div></div>
       </div>`;
@@ -115,11 +116,11 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     body().innerHTML = `
       <section class="tut-sec pf-card">
         <div class="pf-head">
-          <button class="pf-ava" id="avaBtn" ${p.self ? "" : "disabled"}>${avatarHtml(p.avatar, p.display, 72)}${p.self ? '<span class="pf-ava-edit">✎</span>' : ""}</button>
+          <button class="pf-ava" id="avaBtn" ${p.self ? "" : "disabled"}>${avatarHtml(p.avatar, p.display, 72)}${p.self ? `<span class="pf-ava-edit">${homeIcon("edit")}</span>` : ""}</button>
           <div class="pf-id">
             <div class="pf-name-row">
               <span class="pf-name" id="pfName">${esc(p.display)}</span>
-              ${p.self ? `<button class="btn btn-ghost btn-mini" id="renameBtn">✎ ${t("profile.rename")}</button>` : ""}
+              ${p.self ? `<button class="btn btn-ghost btn-mini" id="renameBtn">${homeIcon("edit")} ${t("profile.rename")}</button>` : ""}
             </div>
             <div class="pf-joined">${t("home.record")}${p.private ? "" : ` ${p.wins ?? 0}${t("home.win")} ${p.losses ?? 0}${t("home.loss")}`} · ${fmtDate(p.created_at)}~</div>
           </div>
@@ -132,7 +133,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
       ${p.private ? `<section class="tut-sec"><p>${t("profile.private")}</p></section>` : `
       <section class="tut-sec">
         <div class="pf-stats-head">
-          <h3><span class="tut-ico">📊</span>${t("profile.stats")}</h3>
+          <h3><span class="tut-ico">${homeIcon("trophy")}</span>${t("profile.stats")}</h3>
           ${p.self ? `<div class="lang-select pf-filter"><select id="modeFilter">
             ${filterOpts.map((f) => `<option value="${f}"${recFilter === f ? " selected" : ""}>${t(`profile.filter.${f}`)}</option>`).join("")}
           </select></div>` : ""}
@@ -145,7 +146,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         </div>
       </section>
       <section class="tut-sec">
-        <h3><span class="tut-ico">🕘</span>${t("profile.recent")}</h3>
+        <h3><span class="tut-ico">${homeIcon("history")}</span>${t("profile.recent")}</h3>
         ${!recent.length ? `<p>${t("profile.recent.empty")}</p>` : `
         <div class="pf-matches">
           ${recent.map((m) => `
@@ -187,7 +188,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     const rows = p.h2h ?? [];
     body().innerHTML = `
       <section class="tut-sec">
-        <h3><span class="tut-ico">⚔️</span>${t("profile.h2h.title")}</h3><p class="set-desc">${loungeText("2回以上対戦した相手を表示します。", "Opponents you have played at least twice.", "2번 이상 대전한 상대를 표시합니다.")}</p>
+        <h3><span class="tut-ico">${homeIcon("duel")}</span>${t("profile.h2h.title")}</h3><p class="set-desc">${loungeText("2回以上対戦した相手を表示します。", "Opponents you have played at least twice.", "2번 이상 대전한 상대를 표시합니다.")}</p>
         ${!rows.length ? `<p>${t("profile.h2h.empty")}</p>` : `
         <div class="pf-h2h">
           ${rows.map((r) => {
@@ -216,17 +217,17 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     const equipped = "default";
     body().innerHTML = `
       <section class="tut-sec sl-current">
-        <h3><span class="tut-ico">🃏</span>${t("sleeve.current")}</h3>
+        <h3><span class="tut-ico">${homeIcon("sleeve")}</span>${t("sleeve.current")}</h3>
         <div class="sl-current-row">
           <div class="sl-preview sl-preview-lg" style="background-image:url(${sleeveUrl(equipped)})"></div>
           <div class="sl-current-meta">
             <div class="sl-current-name">${sleeveName(equipped)}</div>
-            <div class="sl-current-tag">✓ ${t("sleeve.equipped")}</div>
+            <div class="sl-current-tag">${homeIcon("check")} ${t("sleeve.equipped")}</div>
           </div>
         </div>
       </section>
       <section class="tut-sec">
-        <h3><span class="tut-ico">🎴</span>${t("sleeve.title")}</h3>
+        <h3><span class="tut-ico">${homeIcon("sleeve")}</span>${t("sleeve.title")}</h3>
         <div class="sl-grid">
           ${SLEEVE_LIST.filter((s) => owned.has(s.id)).map((s) => {
             const eq = s.id === equipped;
@@ -262,7 +263,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     const credits = p.credits ?? app.user?.credits ?? 0;
     body().innerHTML = `
       <section class="tut-sec">
-        <h3><span class="tut-ico">🔊</span>${t("settings.sound")}</h3>
+        <h3><span class="tut-ico">${homeIcon("sound")}</span>${t("settings.sound")}</h3>
         <div class="set-row">
           <label class="set-label" for="vol">${t("settings.sound.volume")}</label>
           <input type="range" id="vol" min="0" max="100" step="5" value="${Math.round(getSfxVolume() * 100)}">
@@ -271,7 +272,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         </div>
       </section>
       <section class="tut-sec">
-        <h3><span class="tut-ico">🌐</span>${t("settings.language")}</h3>
+        <h3><span class="tut-ico">${homeIcon("language")}</span>${t("settings.language")}</h3>
         <div class="set-row">
           <label class="set-label">${t("settings.language")}</label>
           <div class="lang-select"><select id="langSel">
@@ -283,7 +284,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         <p class="set-desc">${t("settings.language.desc")}</p>
       </section>
       <section class="tut-sec">
-        <h3><span class="tut-ico">👁️</span>${t("settings.privacy")}</h3>
+        <h3><span class="tut-ico">${homeIcon("home")}</span>${t("settings.privacy")}</h3>
         <div class="set-row">
           <label class="set-label">${t("settings.privacy.public")}</label>
           <label class="switch"><input type="checkbox" id="pub" ${p.stats_public !== false ? "checked" : ""}><span class="slider"></span></label>
@@ -291,7 +292,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         <p class="set-desc">${t("settings.privacy.desc")}</p>
       </section>
       <section class="tut-sec">
-        <h3><span class="tut-ico">🎟️</span>${t("settings.coupon")}</h3>
+        <h3><span class="tut-ico">${homeIcon("gift")}</span>${t("settings.coupon")}</h3>
         <div class="set-row fr-add">
           <input class="input" id="coupon" placeholder="${t("settings.coupon.ph")}" maxlength="32" style="text-transform:uppercase">
           <button class="btn btn-gold" id="couponGo">${t("settings.coupon.apply")}</button>
@@ -299,8 +300,8 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         <div class="fr-add-msg" id="couponMsg"></div>
       </section>
       <section class="tut-sec">
-        <h3><span class="tut-ico">💳</span>${t("settings.billing")}</h3>
-        <div class="set-row"><span class="set-label">${t("home.shards")}</span><span class="set-val">💎 <b id="credits">${credits}</b></span></div>
+        <h3><span class="tut-ico">${homeIcon("shard")}</span>${t("settings.billing")}</h3>
+        <div class="set-row"><span class="set-label">${t("home.shards")}</span><span class="set-val">${homeIcon("shard")} <b id="credits">${credits}</b></span></div>
         <div class="set-row"><span class="set-label">${t("settings.billing.sub")}</span><span class="set-val">${t("settings.billing.none")}</span></div>
         <div class="bill-plan">
           <div class="bill-plan-name">LORE PREMIUM</div>
@@ -309,7 +310,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         </div>
       </section>
       <section class="tut-sec">
-        <h3><span class="tut-ico">👤</span>${t("settings.account")}</h3>
+        <h3><span class="tut-ico">${homeIcon("profile")}</span>${t("settings.account")}</h3>
         <div class="set-row"><span class="set-label">${p.self ? esc(p.display) : ""}</span>
           <button class="btn btn-ghost" id="logout">${t("home.logout")}</button>
         </div>
@@ -340,7 +341,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
       if (!code) return;
       couponMsg.textContent = "…";
       api.redeemCoupon(code).then((r) => {
-        couponMsg.textContent = `✓ ${t("settings.coupon.ok")} +${r.amount} 💎`;
+        couponMsg.textContent = `✓ ${t("settings.coupon.ok")} +${r.amount} ${t("home.shards")}`;
         (body().querySelector("#credits") as HTMLElement).textContent = String(r.credits);
         if (app.user) app.user.credits = r.credits;
         document.dispatchEvent(new Event("lore:user"));

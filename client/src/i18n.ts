@@ -548,7 +548,6 @@ const D: Record<string, Entry> = {
   "home.seekerLevel": { ko: "시커 레벨", ja: "シーカーレベル", en: "Seeker level" },
   "home.levelRule": { ko: "온라인 승패 기록 5회마다 레벨 상승. 무승부와 BOT전은 제외.", ja: "オンライン対戦の勝敗5戦ごとにレベルアップ。引き分け・BOT戦は対象外。", en: "Level up every 5 online wins or losses. Draws and BOT games excluded." },
   "home.shards": { ko: "샤드", ja: "シャード", en: "Shards" },
-  "home.biblion": { ko: "비블리온 마도도서관", ja: "ビブリオン魔導図書館", en: "Biblion Magic Library" },
   "home.utilities": { ko: "보상 및 문의", ja: "報酬・お問い合わせ", en: "Rewards and support" },
   "home.navigation": { ko: "메인 메뉴", ja: "メインメニュー", en: "Main menu" },
   "home.enterDuel": { ko: "듀얼 시작", ja: "デュエルへ", en: "Enter duel" },

@@ -1,0 +1,202 @@
+{
+  "checks": [
+    "home-final",
+    {
+      "width": 1586,
+      "height": 992,
+      "overflow": false,
+      "panelBottom": 968,
+      "gridBottom": 964,
+      "lastBottom": 931.59375,
+      "lastTop": 712.84375,
+      "gridTop": 317.09375,
+      "scrollable": true,
+      "headTop": 98,
+      "outerScroll": 0
+    },
+    "cards-bottom-1586",
+    "cards-empty-1586",
+    {
+      "width": 1024,
+      "height": 768,
+      "overflow": false,
+      "panelBottom": 744,
+      "gridBottom": 740,
+      "lastBottom": 707.59375,
+      "lastTop": 488.84375,
+      "gridTop": 317.09375,
+      "scrollable": true,
+      "headTop": 98,
+      "outerScroll": 0
+    },
+    "cards-bottom-1024",
+    "cards-empty-1024",
+    {
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "panelBottom": 832,
+      "gridBottom": 828,
+      "lastBottom": 803.796875,
+      "lastTop": 610.046875,
+      "gridTop": 321.796875,
+      "scrollable": true,
+      "headTop": 80,
+      "outerScroll": 0
+    },
+    "cards-bottom-390",
+    "cards-empty-390",
+    {
+      "width": 320,
+      "height": 568,
+      "overflow": false,
+      "panelBottom": 556,
+      "gridBottom": 552,
+      "lastBottom": 527.796875,
+      "lastTop": 334.046875,
+      "gridTop": 321.796875,
+      "scrollable": true,
+      "headTop": 80,
+      "outerScroll": 0
+    },
+    "cards-bottom-320",
+    "cards-empty-320",
+    "home-mobile-final",
+    "navigation-mobile",
+    "deck-mobile-final",
+    "watch-mobile-final",
+    "profile-final",
+    "settings-final",
+    "friends-final",
+    "shop-final",
+    "ranking-final"
+  ],
+  "icons": [
+    {
+      "name": "home",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "duel",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "bot",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "deck",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "cards",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "trophy",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "friends",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "shop",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "book",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "gift",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "mail",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "settings",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "shard",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "profile",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "sleeve",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "menu",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "check",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "close",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "arrow",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "search",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "bell",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "sound",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "language",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "history",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "name": "edit",
+      "width": 256,
+      "height": 256
+    }
+  ],
+  "errors": []
+}

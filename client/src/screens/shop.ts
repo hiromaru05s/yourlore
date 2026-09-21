@@ -1,3 +1,4 @@
+import { homeIcon } from "../ui/homeIcons";
 // ============================================================
 // LORE — Shop. Currently sells card sleeves for credits (1💎 each).
 // Server (social.ts /social/buy-sleeve) is authoritative on price &
@@ -29,12 +30,12 @@ export function mountShop(app: App): Screen {
       <div class="tut">
         <div class="tut-head">
           <button class="btn btn-ghost" id="back">← ${t("common.back")}</button>
-          <h2>🛒 ${t("shop.title")}</h2>
-          <span class="shop-credits">💎 <b id="shopCredits">${credits}</b></span>
+          <h2>${homeIcon("shop")} ${t("shop.title")}</h2>
+          <span class="shop-credits">${homeIcon("shard")} <b id="shopCredits">${credits}</b></span>
         </div>
         <div class="tut-body">
           <section class="tut-sec">
-            <h3><span class="tut-ico">🎴</span>${t("shop.sleeves")}</h3>
+            <h3><span class="tut-ico">${homeIcon("sleeve")}</span>${t("shop.sleeves")}</h3>
             <p class="set-desc">${t("shop.desc")}</p>
             <div class="shop-grid" id="grid"></div>
           </section>
@@ -59,8 +60,8 @@ export function mountShop(app: App): Screen {
           <div class="sl-preview" style="background-image:url(${s.url})"></div>
           <div class="sl-name">${sleeveName(s.id)}</div>
           ${has
-            ? `<button class="btn btn-mini btn-ghost" disabled>✓ ${t("shop.owned")}</button>`
-            : `<button class="btn btn-mini btn-gold" data-buy="${s.id}">${t("shop.buy")} 💎${s.price}</button>`}
+            ? `<button class="btn btn-mini btn-ghost" disabled>${homeIcon("check")} ${t("shop.owned")}</button>`
+            : `<button class="btn btn-mini btn-gold" data-buy="${s.id}">${t("shop.buy")} ${homeIcon("shard")}${s.price}</button>`}
         </div>`;
     }).join("");
 
@@ -69,7 +70,7 @@ export function mountShop(app: App): Screen {
         const id = (btn as HTMLElement).dataset.buy!;
         const s = SLEEVES[id];
         if (credits < s.price) { sfx("error"); alert(t("shop.nocredit")); return; }
-        if (!confirm(`${sleeveName(id)} — 💎${s.price}\n${t("shop.buy.confirm")}`)) return;
+        if (!confirm(`${sleeveName(id)} — ${s.price} ${t("home.shards")}\n${t("shop.buy.confirm")}`)) return;
         (btn as HTMLButtonElement).disabled = true;
         api.buySleeve(id).then((r) => {
           credits = r.credits;

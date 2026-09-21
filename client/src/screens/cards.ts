@@ -1,3 +1,4 @@
+import { homeIcon } from "../ui/homeIcons";
 // ============================================================
 // LORE — card list / gallery. Browse every card in card-UI form.
 // Reachable from HOME. Filter by type + cost, search by name,
@@ -34,9 +35,9 @@ export function mountCards(app: App): Screen {
     <div class="cards">
       <div class="cards-head">
         <button class="btn btn-ghost" id="back">← ${t("cards.back")}</button>
-        <h2>${t("cards.title")} <span class="cards-count" id="count"></span></h2>
+        <h2>${homeIcon("cards")}${t("cards.title")} <span class="cards-count" id="count"></span></h2>
         <div class="cards-head-r">
-          <input class="cards-search" id="search" type="text" placeholder="${t("cards.search")}" />
+          <label class="lounge-search">${homeIcon("search")}<input aria-label="${t("cards.search")}" class="cards-search" id="search" type="text" placeholder="${t("cards.search")}" /></label>
           <div class="cards-lang"></div>
         </div>
       </div>

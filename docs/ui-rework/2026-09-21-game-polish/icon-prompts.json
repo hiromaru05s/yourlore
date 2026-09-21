@@ -1,0 +1,155 @@
+{
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "name": "home",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: an eye-shaped sapphire inside a four-point navigation compass ring; LORE eye and compass seal.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-d705212d-ea52-45a8-b318-8de7035dc518.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/home.png"
+    },
+    {
+      "name": "duel",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: two short ritual swords crossed diagonally behind a small sapphire diamond, balanced strong X silhouette.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-819e9335-cbb2-4b91-b217-9ba62e31d625.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/duel.png"
+    },
+    {
+      "name": "bot",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: a faceless small navy-and-silver training automaton helmet with two glowing sapphire eyes and a small diamond crest, clearly artificial.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-3cc7b583-dbb8-4442-982a-b1f81d4d439d.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/bot.png"
+    },
+    {
+      "name": "deck",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: three thick navy-backed cards stacked with slight offset, the front card has a gold eye-and-compass seal. Thick pale edges.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-3c42fed5-cb82-48b3-a1ed-821d0e7f8a56.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/deck.png"
+    },
+    {
+      "name": "cards",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: two separate upright card tablets fanned open, one showing a luminous blue crystal silhouette and the other a star.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-b91f978b-b37f-4ace-90ef-f045be65341b.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/cards.png"
+    },
+    {
+      "name": "trophy",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: a sculpted silver chalice trophy with gold laurel handles, sapphire eye inset, heavy wide base.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-0df7a9d5-7c6b-4a60-9ba6-30f66da2a8d8.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/trophy.png"
+    },
+    {
+      "name": "friends",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: two overlapping seeker busts, hoods in navy and ivory with gold collars, equal sized and clearly a friendly pair.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-b221d365-64a5-4f39-add8-741bd896a70c.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/friends.png"
+    },
+    {
+      "name": "shop",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: a small ornate closed treasure coffer with blue enamel lid and gold clasp shaped like an eye, clear chest silhouette.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-a16bc5bb-ee8a-4f6f-96ac-4e18a986a51e.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/shop.png"
+    },
+    {
+      "name": "book",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: an open ivory grimoire with thick pages and navy binding, small blue four-point light floating just above its center.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-04b59357-2e62-4867-8992-6b3807ec4c4d.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/book.png"
+    },
+    {
+      "name": "gift",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: a small blue enamel gift coffer tied with broad silver ribbons, gold compass seal at their crossing, distinctive bow.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-a21e235d-64d1-4878-8525-333d18e8a30f.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/gift.png"
+    },
+    {
+      "name": "mail",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: a sealed ivory folded letter with a navy wax seal shaped as a golden eye; two simple visible folded diagonal edges.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-94b2174b-2a55-48fd-a522-bc5cc05e1614.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/mail.png"
+    },
+    {
+      "name": "settings",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: a mechanical attunement dial: thick six-tooth antique silver cog with gold rim and a luminous blue sapphire center.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-354f285a-05a3-48bd-88f5-74bee6cf1dd4.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/settings.png"
+    },
+    {
+      "name": "shard",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: one tall faceted cyan-blue shard crystal held by a tiny gold four-point mounting, diamond outline.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-4cf1ca95-7f22-40fc-bf61-5a2630ba18c9.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/shard.png"
+    },
+    {
+      "name": "profile",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: one faceless hooded seeker bust with navy hood, ivory metal shoulders, tiny sapphire eye-shaped collar pin.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-3cf95f7e-a6ef-428f-9a0c-c10ceec53931.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/profile.png"
+    },
+    {
+      "name": "sleeve",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: one vertical navy enamel card sleeve with thick embossed gold edge and an eye-and-compass design, no other cards.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-5355d9f7-e8a1-43d8-8eba-13ca542d4c11.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/sleeve.png"
+    },
+    {
+      "name": "menu",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: three short horizontal sculpted silver bars aligned and evenly spaced, gold pointed endcaps and blue centers, readable menu symbol.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-7f39ef8c-8ede-4251-8e5b-79d44095a2cc.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/menu.png"
+    },
+    {
+      "name": "check",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: a strong sculpted ivory check mark with a gold beveled edge and a tiny sapphire inset at the bend, absolutely no circle.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-3577d1a9-6fcd-48d2-bd5e-95241ab6fe53.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/check.png"
+    },
+    {
+      "name": "close",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: two sculpted ivory bars crossed into an X, with gold bevels and blue center join, readable close symbol, no circle.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-5d4ea5d8-1b3c-43db-8b64-35769aaee577.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/close.png"
+    },
+    {
+      "name": "arrow",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: a single bold right-pointing silver chevron with gold beveled edges and navy-blue recess, simple arrow, no circle.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-a035a6dd-72c8-489e-ae1d-a86f4f2a0279.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/arrow.png"
+    },
+    {
+      "name": "search",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: a magnifying lens with antique gold ring, pale blue glass bearing a subtle eye reflection, short navy handle down-right.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-632370c4-0448-4d0d-9bf9-39c1fe8538c6.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/search.png"
+    },
+    {
+      "name": "bell",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: one small sculpted silver notification bell with gold rim and blue crystal clapper, navy enamel eye on the bell.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-feb2fda6-3dc4-4d03-ad84-d76422562bc8.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/bell.png"
+    },
+    {
+      "name": "sound",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: a small ivory-metal speaking horn pointing right with two curved golden sound waves, navy enamel base and sapphire tip.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-3736c61f-1b64-4795-bec5-97fbdbdb49e0.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/sound.png"
+    },
+    {
+      "name": "language",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: a small celestial globe with ivory continents on a navy-blue sphere held in a gold compass ring, two gold meridian arcs.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-bfd7c08e-ae9f-458e-bd29-f07978334141.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/language.png"
+    },
+    {
+      "name": "history",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: a small ivory clock face without numbers, only two navy hands and four gold diamond markers, gold rim and blue crystal crown.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-5b574e85-3301-414c-8647-354a54300c66.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/history.png"
+    },
+    {
+      "name": "edit",
+      "prompt": "Production game HUD icon for LORE, a refined magical library collectible card duel game. ONE isolated emblem, centered, front view, bold legible silhouette at 40px. Premium hand-painted game inventory asset: sculpted ivory-silver metal, antique champagne-gold bevels, tiny luminous ice-blue sapphire inset, deep navy enamel recesses. Subtle weathering, crisp light-catching edges, controlled depth, broad simple shapes, no excessive tiny filigree. Not a web line icon, not emoji, not photographic. Square 512x512 PNG with TRUE TRANSPARENT BACKGROUND (alpha), no solid backdrop, no checkerboard baked in, no cast shadow outside the object. Object fills 78% canvas, generous identical padding. No lettering, no numbers, no text, no sheet, only one icon. SUBJECT: one ivory quill pen with a gold nib, laying diagonally from bottom-left to top-right with blue enamel central shaft.",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-400b91df-d6b7-4f13-b3f9-3a3a7773a24b.png",
+      "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/edit.png"
+    }
+  ]
+}

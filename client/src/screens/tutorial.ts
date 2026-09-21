@@ -1,3 +1,4 @@
+import { homeIcon } from "../ui/homeIcons";
 // ============================================================
 // LORE — tutorial / how-to-play screen (bilingual KO/JA).
 // Scrollable rule sections; reachable from HOME.
@@ -243,14 +244,14 @@ export function mountTutorial(app: App): Screen {
       </div>
       <div class="tut-body">
         <section class="tut-sec tut-inter">
-          <h3><span class="tut-ico">🎮</span>${t("tutorial.inter.title")}</h3>
+          <h3><span class="tut-ico">${homeIcon("duel")}</span>${t("tutorial.inter.title")}</h3>
           <p>${t("tutorial.inter.desc")}</p>
           <ol class="tut-steps">
             ${TUT_STEPS.map((s, i) => `
               <li data-key="${s.key}">
                 <span class="tut-step-n">${i + 1}</span>
                 <span class="tut-step-t">${t(s.titleKey)}</span>
-                <span class="tut-step-r">+${s.reward} 💎</span>
+                <span class="tut-step-r">+${s.reward} ${homeIcon("shard")}</span>
               </li>`).join("")}
           </ol>
           <div class="tut-cta">
@@ -260,7 +261,7 @@ export function mountTutorial(app: App): Screen {
         <h3 class="tut-rules-h">${t("tutorial.rules")}</h3>
         ${secs.map((s) => `
           <section class="tut-sec">
-            <h3><span class="tut-ico">${s.icon}</span>${s.h}</h3>
+            <h3><span class="tut-ico">${homeIcon("book")}</span>${s.h}</h3>
             ${s.body.map((p) => `<p>${p}</p>`).join("")}
           </section>`).join("")}
         <div class="tut-cta">
@@ -284,7 +285,7 @@ export function mountTutorial(app: App): Screen {
       const li = wrap.querySelector(`.tut-steps li[data-key="${k}"]`);
       if (!li) continue;
       li.classList.add("claimed");
-      (li.querySelector(".tut-step-r") as HTMLElement).innerHTML = `✓ ${t("tutorial.inter.done")}`;
+      (li.querySelector(".tut-step-r") as HTMLElement).innerHTML = `${homeIcon("check")} ${t("tutorial.inter.done")}`;
     }
   });
 

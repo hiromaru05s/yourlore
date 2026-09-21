@@ -19,14 +19,13 @@ export function mountHome(app: App): Screen {
   const store=sanitizeDecks(u?.decks ?? null);
   wrap.innerHTML = `
     <section class="lounge-home-main">
-      <div class="lounge-welcome"><span>BIBLION · THE GRAND LIBRARY</span><h1>${t("home.biblion")}</h1></div>
       <section class="lounge-play">
         <div id="myTier" class="lounge-rank-info">${t("lb.season")} —</div>
         <h2>${t("home.ranked.title")}</h2>
-        <button class="lounge-play-button" id="ranked">${homeIcon("home")}<strong>${t("home.enterDuel")}</strong><span>›</span></button>
+        <button class="lounge-play-button" id="ranked">${homeIcon("home")}<strong>${t("home.enterDuel")}</strong>${homeIcon("arrow")}</button>
         <div class="lounge-secondary-modes"><button id="online">${homeIcon("duel")}${t("home.online.title")}</button><button id="bot">${homeIcon("bot")}${t("home.bot.title")}</button></div>
       </section>
-      <section class="lounge-active-deck"><div><h3>${t("deck.inuse")} · ${t("deck.slot").replace("{n}",String(store.sel+1))}</h3><div class="lounge-deck-preview">${["STARTER_MANA",...store.list[store.sel].cards].slice(0,5).map(id=>`<img src="${artUrl.sm(id)}" alt="${esc(cardName({...(STARTERS[id]??DB[id]),uid:id}))}" loading="lazy">`).join("")}</div></div><div class="lounge-deck-actions"><button class="btn btn-gold" id="deck">${homeIcon("deck")}${t("home.deck.title")} ›</button><button class="btn btn-ghost" id="profile">${t("profile.title")} ›</button></div></section>
+      <section class="lounge-active-deck"><div><h3>${t("deck.inuse")} · ${t("deck.slot").replace("{n}",String(store.sel+1))}</h3><div class="lounge-deck-preview">${["STARTER_MANA",...store.list[store.sel].cards].slice(0,5).map(id=>`<img src="${artUrl.sm(id)}" alt="${esc(cardName({...(STARTERS[id]??DB[id]),uid:id}))}" loading="lazy">`).join("")}</div></div><div class="lounge-deck-actions"><button class="btn btn-gold" id="deck">${homeIcon("deck")}${t("home.deck.title")}</button><button class="btn btn-ghost" id="profile">${homeIcon("profile")}${t("profile.title")}</button></div></section>
     </section><button class="lounge-friends-toggle" id="friendsToggle" aria-expanded="false" aria-controls="homeFriendsAside">${t("friends.title")} ↑</button><aside id="homeFriendsAside" class="lounge-home-friends"><div class="lounge-friends-heading"><h2>${t("friends.title")}</h2><button class="btn btn-ghost" id="allFriends">${t("cards.f.all")} ›</button></div><div id="homeFriends"></div></aside>`;
   app.root.appendChild(wrap);
   const q=(id:string)=>wrap.querySelector<HTMLButtonElement>('#'+id)!;
@@ -110,7 +109,7 @@ export function showInquiryModal(): void {
       const box = ov.querySelector(".inquiry-box") as HTMLElement;
       box.innerHTML = `
         <h2>${homeIcon("mail")} ${t("inquiry.modal.title")}</h2>
-        <div class="inq-done">✅ ${t("inquiry.sent")}</div>
+        <div class="inq-done">${homeIcon("check")} ${t("inquiry.sent")}</div>
         <div class="modal-row"><button class="btn btn-gold btn-block" id="inqOk">${t("common.confirm")}</button></div>`;
       (box.querySelector("#inqOk") as HTMLElement).onclick = close;
     }).catch(() => {

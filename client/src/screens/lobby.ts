@@ -1,3 +1,4 @@
+import { homeIcon } from "../ui/homeIcons";
 import { loungeText } from "../ui/loungeText";
 // ============================================================
 // LORE — matchmaking lobby. Joins the Matchmaker queue and waits
@@ -23,7 +24,7 @@ export function mountLobby(app: App, ranked = false): Screen {
   wrap.innerHTML = `
     <div class="screen-brand"><div class="mark"></div><h1>LORE</h1></div>
     <div class="panel auth-card lobby">
-      <div class="spinner"></div>
+      <div class="spinner">${homeIcon("home")}</div>
       <h2 id="lobbyTitle">${ranked ? t("lobby.ranked") : t("lobby.searching")}</h2>
       <p id="lobbyMsg">${t("lobby.entered")}</p>
       <div class="lounge-queue-time" id="queueTime" aria-label="elapsed">00:00</div>

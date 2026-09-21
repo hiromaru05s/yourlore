@@ -1,3 +1,4 @@
+import { homeIcon } from "../ui/homeIcons";
 import { loungeText } from "../ui/loungeText";
 // ============================================================
 // LORE — season leaderboard. Top 100 by MMR; top 25 Masters are
@@ -39,7 +40,7 @@ export function mountLeaderboard(app: App): Screen {
       else {
         list.innerHTML = entries.map((e) => `
           <div class="lb-row ${e.tier === "gm" ? "is-gm" : ""}">
-            <span class="lb-rank">${e.rank <= 3 ? ["🥇", "🥈", "🥉"][e.rank - 1] : e.rank}</span>
+            <span class="lb-rank">${e.rank <= 3 ? `${homeIcon("trophy")}<b>${e.rank}</b>` : e.rank}</span>
             <span class="lb-name">${escapeHtml(e.display)}</span>
             ${tierChipHtml(e.tier)}
             <span class="lb-mmr">${e.mmr}</span>

@@ -1,0 +1,252 @@
+[
+  {
+    "name": "home",
+    "file": "client/public/art/lounge/icons/v2/home.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/home.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 80202,
+    "sha256": "a2cc7981780337aad174cffb5fafa0ef638f3dcc74e070fa8a721f5d72bacd6d",
+    "alphaPreserved": true
+  },
+  {
+    "name": "duel",
+    "file": "client/public/art/lounge/icons/v2/duel.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/duel.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 71322,
+    "sha256": "9a34cf06bafa8b22c1cfa6e4c916c7bb41d9fec93d64e2bb5126b80333dfdf33",
+    "alphaPreserved": true
+  },
+  {
+    "name": "bot",
+    "file": "client/public/art/lounge/icons/v2/bot.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/bot.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 104864,
+    "sha256": "b03ee551f62d16b371a97a18f9b5ad7326bdb909af6346e29ea90e3de1864d9c",
+    "alphaPreserved": true
+  },
+  {
+    "name": "deck",
+    "file": "client/public/art/lounge/icons/v2/deck.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/deck.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 112185,
+    "sha256": "e59d7609ce70479c0ee7656a6286de4ef7bc27d990836a73ddd0a2a2dbb05aab",
+    "alphaPreserved": true
+  },
+  {
+    "name": "cards",
+    "file": "client/public/art/lounge/icons/v2/cards.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/cards.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 98754,
+    "sha256": "97a62a081741dc54ae21893238a9d2553f29d806cdee99934dcd455f715abe25",
+    "alphaPreserved": true
+  },
+  {
+    "name": "trophy",
+    "file": "client/public/art/lounge/icons/v2/trophy.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/trophy.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 102943,
+    "sha256": "60ee50c0a0961a74d588e67cae4946871525d1b3cb1f748cfd34528b280f5f3a",
+    "alphaPreserved": true
+  },
+  {
+    "name": "friends",
+    "file": "client/public/art/lounge/icons/v2/friends.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/friends.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 99511,
+    "sha256": "79dce478d0f8e2a6ae21597e75c5b892b34bc2a888518cff43c4c6890502986a",
+    "alphaPreserved": true
+  },
+  {
+    "name": "shop",
+    "file": "client/public/art/lounge/icons/v2/shop.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/shop.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 112425,
+    "sha256": "e53df91d40c2bb59e5c1cf4a49acedf2c94ee5f5a9c8704038519b3f10a37b46",
+    "alphaPreserved": true
+  },
+  {
+    "name": "book",
+    "file": "client/public/art/lounge/icons/v2/book.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/book.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 88867,
+    "sha256": "6297c7f640daa1a632a7c8c96e2159cbc5b979ed2d3b4caaa28ef8c113df5c81",
+    "alphaPreserved": true
+  },
+  {
+    "name": "gift",
+    "file": "client/public/art/lounge/icons/v2/gift.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/gift.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 130644,
+    "sha256": "c5b4d377bc089799cc0fd3dd74ac94de22a924acf352d17b43036ed25adf767a",
+    "alphaPreserved": true
+  },
+  {
+    "name": "mail",
+    "file": "client/public/art/lounge/icons/v2/mail.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/mail.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 112047,
+    "sha256": "5a43e433c18fc7c4946f32804c5ff6d8d959dc4927bcab82ed66203cf391a8ba",
+    "alphaPreserved": true
+  },
+  {
+    "name": "settings",
+    "file": "client/public/art/lounge/icons/v2/settings.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/settings.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 122797,
+    "sha256": "1a66a13acdfb5432dc57d8ea39cedb35b9eda55171a995d025a716727c30bce2",
+    "alphaPreserved": true
+  },
+  {
+    "name": "shard",
+    "file": "client/public/art/lounge/icons/v2/shard.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/shard.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 61818,
+    "sha256": "5d72553eadee011f43802ee1e8c316672e0e454fbf7bd6c8d21aae598520114a",
+    "alphaPreserved": true
+  },
+  {
+    "name": "profile",
+    "file": "client/public/art/lounge/icons/v2/profile.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/profile.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 84989,
+    "sha256": "c8506e50944d4daa8baf41b05a44e3bcb4dcf9cef3f3faf5df43d964a01a53fc",
+    "alphaPreserved": true
+  },
+  {
+    "name": "sleeve",
+    "file": "client/public/art/lounge/icons/v2/sleeve.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/sleeve.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 105579,
+    "sha256": "a441cd510c14e06030e9bbad89b5cd0691648d67b4d977e15d645ffafb8bbf6d",
+    "alphaPreserved": true
+  },
+  {
+    "name": "menu",
+    "file": "client/public/art/lounge/icons/v2/menu.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/menu.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 69123,
+    "sha256": "162b9b3b5b66ae45dfbfb6d621a50d16e0bec0de0b04f47c6d6fb7a07706c609",
+    "alphaPreserved": true
+  },
+  {
+    "name": "check",
+    "file": "client/public/art/lounge/icons/v2/check.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/check.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 49205,
+    "sha256": "362e023e4e63f00fed81733bd87d6b2c72210ae2eb91505a1f6d970cf135dd50",
+    "alphaPreserved": true
+  },
+  {
+    "name": "close",
+    "file": "client/public/art/lounge/icons/v2/close.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/close.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 87971,
+    "sha256": "82886377758b1bf202c8fa694a6ca97c9eb8d1ceb71402e698d61a759b32d4a9",
+    "alphaPreserved": true
+  },
+  {
+    "name": "arrow",
+    "file": "client/public/art/lounge/icons/v2/arrow.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/arrow.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 58142,
+    "sha256": "de240d5cbc03721b6182e616bb12c5de002255d49d16880af61b782559605ee9",
+    "alphaPreserved": true
+  },
+  {
+    "name": "search",
+    "file": "client/public/art/lounge/icons/v2/search.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/search.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 76744,
+    "sha256": "9da72f74a8c5d50217f8fcb72134e13db315e8c2dd52fa1b42d78240ade5e962",
+    "alphaPreserved": true
+  },
+  {
+    "name": "bell",
+    "file": "client/public/art/lounge/icons/v2/bell.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/bell.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 79670,
+    "sha256": "7d7006e3368d8729207ee891d15e692c13461281a526cf185dfec98139c8f932",
+    "alphaPreserved": true
+  },
+  {
+    "name": "sound",
+    "file": "client/public/art/lounge/icons/v2/sound.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/sound.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 73780,
+    "sha256": "d51ca4187e5207b41ea615a6e2e5ef5fbc7a757bbe3c152dfd33541fb3f36b5d",
+    "alphaPreserved": true
+  },
+  {
+    "name": "language",
+    "file": "client/public/art/lounge/icons/v2/language.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/language.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 85415,
+    "sha256": "422c16ecf29cc1c1df0686611de78f4f36996cfbfb8815296b02d3f9b20b4b57",
+    "alphaPreserved": true
+  },
+  {
+    "name": "history",
+    "file": "client/public/art/lounge/icons/v2/history.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/history.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 86650,
+    "sha256": "3b538c8c69ce72009911d7d588c7686bde71f6c10fc3558bb48522f8b0642b37",
+    "alphaPreserved": true
+  },
+  {
+    "name": "edit",
+    "file": "client/public/art/lounge/icons/v2/edit.png",
+    "master": "docs/ui-rework/2026-09-21-game-polish/icon-sources/edit.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 53802,
+    "sha256": "8f437d10f025276ffd48edd837cb284593d86e63b425fd434bee539564317e4f",
+    "alphaPreserved": true
+  }
+]

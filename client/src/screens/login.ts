@@ -1,3 +1,4 @@
+import { homeIcon } from "../ui/homeIcons";
 // ============================================================
 // LORE — login / register / forgot / reset screen.
 // Email+password with verification, Google OAuth, password reset.
@@ -69,9 +70,9 @@ export function mountLogin(app: App): Screen {
       ${mode === "login" ? `
       <div class="auth-links"><a id="helpLink">${t("login.help")}</a></div>
       <div class="login-help" id="helpPanel" style="display:none">
-        <a id="helpReset">🔑 ${t("login.help.reset")}</a>
-        <a href="mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent("[LORE] login help")}">✉️ ${t("login.help.mail")}<span class="help-sub">${SUPPORT_EMAIL}</span></a>
-        ${DISCORD_INVITE ? `<a href="${DISCORD_INVITE}" target="_blank" rel="noopener">💬 ${t("login.help.discord")}</a>` : ""}
+        <a id="helpReset">${homeIcon("settings")} ${t("login.help.reset")}</a>
+        <a href="mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent("[LORE] login help")}">${homeIcon("mail")} ${t("login.help.mail")}<span class="help-sub">${SUPPORT_EMAIL}</span></a>
+        ${DISCORD_INVITE ? `<a href="${DISCORD_INVITE}" target="_blank" rel="noopener">${homeIcon("friends")} ${t("login.help.discord")}</a>` : ""}
       </div>` : ""}
       ${mode === "forgot" || mode === "reset" ? `<div class="auth-links"><a id="backLink">← ${t("login.back")}</a></div>` : ""}
       ${tabs ? `<div class="auth-or"><span>${t("login.or")}</span></div>

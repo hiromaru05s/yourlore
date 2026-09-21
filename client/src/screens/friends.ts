@@ -1,3 +1,4 @@
+import { homeIcon } from "../ui/homeIcons";
 // ============================================================
 // LORE — friends screen: add/accept/remove friends, online
 // presence, profiles, and friendly-match challenges.
@@ -33,7 +34,7 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
       </div>
       <div class="tut-body">
         <section class="tut-sec">
-          <h3><span class="tut-ico">➕</span>${t("friends.add")}</h3>
+          <h3><span class="tut-ico">${homeIcon("friends")}</span>${t("friends.add")}</h3>
           <div class="fr-add">
             <input class="input" id="frq" placeholder="${t("friends.add.ph")}" maxlength="80">
             <button class="btn btn-gold" id="frAdd">${t("friends.add")}</button>
@@ -88,22 +89,22 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
     lists.innerHTML = `
       ${d.incoming.length ? `
       <section class="tut-sec">
-        <h3><span class="tut-ico">📥</span>${t("friends.incoming")}</h3>
+        <h3><span class="tut-ico">${homeIcon("mail")}</span>${t("friends.incoming")}</h3>
         ${d.incoming.map((f) => row(f, `
           <button class="btn btn-mini btn-gold" data-acc="${f.id}">${t("friends.accept")}</button>
           <button class="btn btn-mini btn-ghost" data-dec="${f.id}">${t("friends.decline")}</button>`)).join("")}
       </section>` : ""}
       <section class="tut-sec">
-        <h3><span class="tut-ico">👥</span>${t("friends.title")} (${d.friends.length})</h3>
+        <h3><span class="tut-ico">${homeIcon("friends")}</span>${t("friends.title")} (${d.friends.length})</h3>
         ${d.friends.length === 0 ? `<p>${t("friends.empty")}</p>`
           : d.friends.map((f) => row(f, `
-            <button class="btn btn-mini btn-primary" data-ch="${f.id}" data-name="${esc(f.display)}" ${f.online ? "" : "disabled"}>⚔ ${t("friends.challenge")}</button>
+            <button class="btn btn-mini btn-primary" data-ch="${f.id}" data-name="${esc(f.display)}" ${f.online ? "" : "disabled"}>${homeIcon("duel")} ${t("friends.challenge")}</button>
             <button class="btn btn-mini btn-ghost" data-pf="${f.id}">${t("friends.profile")}</button>
-            <button class="btn btn-mini btn-ghost fr-x" data-rm="${f.id}" aria-label="${esc(t("friends.remove"))}">✕</button>`)).join("")}
+            <button class="btn btn-mini btn-ghost fr-x" data-rm="${f.id}" aria-label="${esc(t("friends.remove"))}">${homeIcon("close")}</button>`)).join("")}
       </section>
       ${d.outgoing.length ? `
       <section class="tut-sec">
-        <h3><span class="tut-ico">📤</span>${t("friends.outgoing")}</h3>
+        <h3><span class="tut-ico">${homeIcon("mail")}</span>${t("friends.outgoing")}</h3>
         ${d.outgoing.map((f) => row(f, "")).join("")}
       </section>` : ""}
     `;
@@ -129,7 +130,7 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
     ov.className = "overlay";
     ov.innerHTML = `
       <div class="modal">
-        <h2>⚔ ${esc(c.from)}${t("friends.challenge.from")}</h2>
+        <h2>${homeIcon("duel")} ${esc(c.from)}${t("friends.challenge.from")}</h2>
         <p>${t("friends.challenge.body")}</p>
         <div class="modal-row">
           <button class="btn btn-ghost" id="chNo">${t("friends.decline")}</button>
@@ -156,7 +157,7 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
       ov.className = "overlay";
       ov.innerHTML = `
         <div class="modal">
-          <h2>⚔ ${esc(name)}</h2>
+          <h2>${homeIcon("duel")} ${esc(name)}</h2>
           <p class="fr-wait"><span class="spinner"></span> ${t("friends.challenge.waiting")}</p>
           <div class="modal-row"><button class="btn btn-ghost btn-block" id="chCancel">${t("common.cancel")}</button></div>
         </div>`;
@@ -225,7 +226,7 @@ export function watchSocial(app: App, onBadge: (pendingCount: number) => void): 
         ov.className = "overlay";
         ov.innerHTML = `
           <div class="modal">
-            <h2>⚔ ${esc(c.from)}${t("friends.challenge.from")}</h2>
+            <h2>${homeIcon("duel")} ${esc(c.from)}${t("friends.challenge.from")}</h2>
             <p>${t("friends.challenge.body")}</p>
             <div class="modal-row">
               <button class="btn btn-ghost" id="wchNo">${t("friends.decline")}</button>

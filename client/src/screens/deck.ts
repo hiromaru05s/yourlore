@@ -1,3 +1,4 @@
+import { homeIcon } from "../ui/homeIcons";
 import { loungeText } from "../ui/loungeText";
 // ============================================================
 // LORE — 덱 빌더. 프리셋 5슬롯 × (초기 덱 9장 = 어튠 1 고정 + 자유 8장).
@@ -34,7 +35,7 @@ export function mountDeck(app: App): Screen {
       <div class="deck-cur" id="deckCur"></div>
       <div class="deck-pool-head">${t("deck.pool")}</div>
       <div class="deck-pool" id="deckPool"></div>
-      </section><section id="deckWatchSection" hidden><div class="deck-pool-head deck-watch-head">🔔 ${t("deck.watch.title")} <b id="watchCount"></b></div>
+      </section><section id="deckWatchSection" hidden><div class="deck-pool-head deck-watch-head">${homeIcon("bell")} ${t("deck.watch.title")} <b id="watchCount"></b></div>
       <div class="deck-note">${t("deck.watch.desc")}</div>
       <input class="deck-watch-search" id="watchSearch" placeholder="${t("deck.watch.search")}">
       <div class="deck-pool deck-watchpool" id="watchPool"></div>
@@ -76,11 +77,11 @@ export function mountDeck(app: App): Screen {
     for (let i = 0; i < DECK_SLOTS; i++) {
       const b = document.createElement("button");
       b.className = "deck-tab" + (i === cur ? " is-on" : "") + (i === store.sel ? " is-active" : "");
-      b.innerHTML = `${t("deck.slot").replace("{n}", String(i + 1))}${i === store.sel ? ` <span class="deck-star">★</span>` : ""}`;
+      b.innerHTML = `${t("deck.slot").replace("{n}", String(i + 1))}${i === store.sel ? ` <span class="deck-star">${homeIcon("check")}</span>` : ""}`;
       b.onclick = () => { cur = i; watchQ = ""; searchEl.value = ""; render(); };
       tabsEl.appendChild(b);
     }
-    useBtn.textContent = cur === store.sel ? `★ ${t("deck.inuse")}` : t("deck.use");
+    useBtn.innerHTML = cur === store.sel ? `${homeIcon("check")} ${t("deck.inuse")}` : t("deck.use");
     useBtn.disabled = saving || cur === store.sel || store.list.some(d => d.cards.length !== DECK_SIZE);
 
     countEl.textContent = `${deck().length + 1} / ${DECK_SIZE + 1}`;
@@ -136,7 +137,7 @@ export function mountDeck(app: App): Screen {
         el.classList.add("is-watch-pick");
         const bell = document.createElement("div");
         bell.className = "watch-bell";
-        bell.textContent = "🔔";
+        bell.innerHTML = homeIcon("bell");
         el.appendChild(bell);
       }
       el.onclick = () => {

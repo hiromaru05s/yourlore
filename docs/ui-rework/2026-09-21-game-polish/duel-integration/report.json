@@ -1,0 +1,24 @@
+{
+  "checks": [
+    "Opponent snapshots retain the compact hand nodes and .42 scale on every sampled frame",
+    "Both Rift hit targets and effect destinations align with the model mount projection",
+    "Expanded-hand hover enlarges the selected card from .58 to .66",
+    "END TURN stays red across a 1450ms simulated response delay and the actual end-turn playback",
+    "Shelf glow / disappearance / deck reformation completes with exact counts and no leftover stack",
+    "Three physical dice enter through the clipped boundary, settle on authoritative 2/5/3 and clean up",
+    "Victory and defeat cinematics lead to themed result panels with Home / Review / Again actions",
+    "Reduced motion, mobile result layout and renderer cleanup"
+  ],
+  "views": [],
+  "errors": [],
+  "rifts": [
+    {
+      "side": "me",
+      "delta": 0.4227992345053687
+    },
+    {
+      "side": "opp",
+      "delta": 0.5108694184627346
+    }
+  ]
+}
