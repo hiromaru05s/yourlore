@@ -1,0 +1,60 @@
+{
+  "target": "5af93a173df5a149add3a09661e3f8cf06040969",
+  "worktrees": [
+    {
+      "path": "/Users/hiromaru05s/Desktop/LORE_TCG",
+      "before": "fb815b3af0547b49e828ae2c89c29f285fd825a1",
+      "after": "5af93a173df5a149add3a09661e3f8cf06040969"
+    },
+    {
+      "path": "/private/tmp/lore-reading-staging-20260921",
+      "before": "a267d26d3f83300ea6503b93f95dc54e3abaadcf",
+      "after": "5af93a173df5a149add3a09661e3f8cf06040969"
+    },
+    {
+      "path": "/Users/hiromaru05s/Desktop/LORE_TCG-art-theme-revision",
+      "before": "fb815b3af0547b49e828ae2c89c29f285fd825a1",
+      "after": "5af93a173df5a149add3a09661e3f8cf06040969"
+    },
+    {
+      "path": "/Users/hiromaru05s/Desktop/LORE_TCG-balance-v47",
+      "before": "fb815b3af0547b49e828ae2c89c29f285fd825a1",
+      "after": "5af93a173df5a149add3a09661e3f8cf06040969"
+    },
+    {
+      "path": "/Users/hiromaru05s/Desktop/LORE_TCG-counter-expansion",
+      "before": "a267d26d3f83300ea6503b93f95dc54e3abaadcf",
+      "after": "5af93a173df5a149add3a09661e3f8cf06040969"
+    },
+    {
+      "path": "/Users/hiromaru05s/Desktop/LORE_TCG-lounge",
+      "before": "5af93a173df5a149add3a09661e3f8cf06040969",
+      "after": "5af93a173df5a149add3a09661e3f8cf06040969"
+    },
+    {
+      "path": "/Users/hiromaru05s/Desktop/LORE_TCG-mimic-art-staging",
+      "before": "fb815b3af0547b49e828ae2c89c29f285fd825a1",
+      "after": "5af93a173df5a149add3a09661e3f8cf06040969"
+    },
+    {
+      "path": "/Users/hiromaru05s/Desktop/LORE_TCG-trap-removal",
+      "before": "fb815b3af0547b49e828ae2c89c29f285fd825a1",
+      "after": "5af93a173df5a149add3a09661e3f8cf06040969"
+    },
+    {
+      "path": "/Users/hiromaru05s/Desktop/LORE_TCG/.worktrees/balance",
+      "before": "fb815b3af0547b49e828ae2c89c29f285fd825a1",
+      "after": "5af93a173df5a149add3a09661e3f8cf06040969"
+    },
+    {
+      "path": "/Users/hiromaru05s/Desktop/LORE_TCG/.worktrees/bot-ranking",
+      "before": "fb815b3af0547b49e828ae2c89c29f285fd825a1",
+      "after": "5af93a173df5a149add3a09661e3f8cf06040969"
+    },
+    {
+      "path": "/Users/hiromaru05s/Desktop/LORE_TCG/.worktrees/ui-rework",
+      "before": "fb815b3af0547b49e828ae2c89c29f285fd825a1",
+      "after": "5af93a173df5a149add3a09661e3f8cf06040969"
+    }
+  ]
+}

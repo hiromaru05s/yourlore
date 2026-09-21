@@ -1,0 +1,228 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "workerVersion": "2344a9e8-fccf-4fe7-9ef8-fd2602156618",
+  "previousVersion": "b657aec4-e1f2-499d-ba4c-c4290c24761e",
+  "sourceCommit": "5af93a173df5a149add3a09661e3f8cf06040969",
+  "integratedCommits": [
+    "9efbb08",
+    "a267d26"
+  ],
+  "verifiedAt": "2026-09-21T03:20:43.645Z",
+  "productionDeployed": false,
+  "backendChanged": false,
+  "checks": [
+    {
+      "path": "/art/lounge/icons/v2/arrow.png",
+      "bytes": 58142,
+      "sha256": "de240d5cbc03721b6182e616bb12c5de002255d49d16880af61b782559605ee9"
+    },
+    {
+      "path": "/art/lounge/icons/v2/bell.png",
+      "bytes": 79670,
+      "sha256": "7d7006e3368d8729207ee891d15e692c13461281a526cf185dfec98139c8f932"
+    },
+    {
+      "path": "/art/lounge/icons/v2/book.png",
+      "bytes": 88867,
+      "sha256": "6297c7f640daa1a632a7c8c96e2159cbc5b979ed2d3b4caaa28ef8c113df5c81"
+    },
+    {
+      "path": "/art/lounge/icons/v2/bot.png",
+      "bytes": 104864,
+      "sha256": "b03ee551f62d16b371a97a18f9b5ad7326bdb909af6346e29ea90e3de1864d9c"
+    },
+    {
+      "path": "/art/lounge/icons/v2/cards.png",
+      "bytes": 98754,
+      "sha256": "97a62a081741dc54ae21893238a9d2553f29d806cdee99934dcd455f715abe25"
+    },
+    {
+      "path": "/art/lounge/icons/v2/check.png",
+      "bytes": 49205,
+      "sha256": "362e023e4e63f00fed81733bd87d6b2c72210ae2eb91505a1f6d970cf135dd50"
+    },
+    {
+      "path": "/art/lounge/icons/v2/close.png",
+      "bytes": 87971,
+      "sha256": "82886377758b1bf202c8fa694a6ca97c9eb8d1ceb71402e698d61a759b32d4a9"
+    },
+    {
+      "path": "/art/lounge/icons/v2/deck.png",
+      "bytes": 112185,
+      "sha256": "e59d7609ce70479c0ee7656a6286de4ef7bc27d990836a73ddd0a2a2dbb05aab"
+    },
+    {
+      "path": "/art/lounge/icons/v2/duel.png",
+      "bytes": 71322,
+      "sha256": "9a34cf06bafa8b22c1cfa6e4c916c7bb41d9fec93d64e2bb5126b80333dfdf33"
+    },
+    {
+      "path": "/art/lounge/icons/v2/edit.png",
+      "bytes": 53802,
+      "sha256": "8f437d10f025276ffd48edd837cb284593d86e63b425fd434bee539564317e4f"
+    },
+    {
+      "path": "/art/lounge/icons/v2/friends.png",
+      "bytes": 99511,
+      "sha256": "79dce478d0f8e2a6ae21597e75c5b892b34bc2a888518cff43c4c6890502986a"
+    },
+    {
+      "path": "/art/lounge/icons/v2/gift.png",
+      "bytes": 130644,
+      "sha256": "c5b4d377bc089799cc0fd3dd74ac94de22a924acf352d17b43036ed25adf767a"
+    },
+    {
+      "path": "/art/lounge/icons/v2/history.png",
+      "bytes": 86650,
+      "sha256": "3b538c8c69ce72009911d7d588c7686bde71f6c10fc3558bb48522f8b0642b37"
+    },
+    {
+      "path": "/art/lounge/icons/v2/home.png",
+      "bytes": 80202,
+      "sha256": "a2cc7981780337aad174cffb5fafa0ef638f3dcc74e070fa8a721f5d72bacd6d"
+    },
+    {
+      "path": "/art/lounge/icons/v2/language.png",
+      "bytes": 85415,
+      "sha256": "422c16ecf29cc1c1df0686611de78f4f36996cfbfb8815296b02d3f9b20b4b57"
+    },
+    {
+      "path": "/art/lounge/icons/v2/mail.png",
+      "bytes": 112047,
+      "sha256": "5a43e433c18fc7c4946f32804c5ff6d8d959dc4927bcab82ed66203cf391a8ba"
+    },
+    {
+      "path": "/art/lounge/icons/v2/menu.png",
+      "bytes": 69123,
+      "sha256": "162b9b3b5b66ae45dfbfb6d621a50d16e0bec0de0b04f47c6d6fb7a07706c609"
+    },
+    {
+      "path": "/art/lounge/icons/v2/profile.png",
+      "bytes": 84989,
+      "sha256": "c8506e50944d4daa8baf41b05a44e3bcb4dcf9cef3f3faf5df43d964a01a53fc"
+    },
+    {
+      "path": "/art/lounge/icons/v2/search.png",
+      "bytes": 76744,
+      "sha256": "9da72f74a8c5d50217f8fcb72134e13db315e8c2dd52fa1b42d78240ade5e962"
+    },
+    {
+      "path": "/art/lounge/icons/v2/settings.png",
+      "bytes": 122797,
+      "sha256": "1a66a13acdfb5432dc57d8ea39cedb35b9eda55171a995d025a716727c30bce2"
+    },
+    {
+      "path": "/art/lounge/icons/v2/shard.png",
+      "bytes": 61818,
+      "sha256": "5d72553eadee011f43802ee1e8c316672e0e454fbf7bd6c8d21aae598520114a"
+    },
+    {
+      "path": "/art/lounge/icons/v2/shop.png",
+      "bytes": 112425,
+      "sha256": "e53df91d40c2bb59e5c1cf4a49acedf2c94ee5f5a9c8704038519b3f10a37b46"
+    },
+    {
+      "path": "/art/lounge/icons/v2/sleeve.png",
+      "bytes": 105579,
+      "sha256": "a441cd510c14e06030e9bbad89b5cd0691648d67b4d977e15d645ffafb8bbf6d"
+    },
+    {
+      "path": "/art/lounge/icons/v2/sound.png",
+      "bytes": 73780,
+      "sha256": "d51ca4187e5207b41ea615a6e2e5ef5fbc7a757bbe3c152dfd33541fb3f36b5d"
+    },
+    {
+      "path": "/art/lounge/icons/v2/trophy.png",
+      "bytes": 102943,
+      "sha256": "60ee50c0a0961a74d588e67cae4946871525d1b3cb1f748cfd34528b280f5f3a"
+    },
+    {
+      "path": "/assets/cardSurface-BuHo_Ijn.js",
+      "bytes": 7746,
+      "sha256": "bfc26b52daf66d4e0762a121b8ee0b54e2d4bfe4ca9c30982fb96ec1a57a0a3c"
+    },
+    {
+      "path": "/assets/coinScene-Dd-GwpNX.js",
+      "bytes": 4399,
+      "sha256": "2bc5229fc8b80ba6cd9a787632c46cc47923b211f4cdfd82e423f44b4a4724af"
+    },
+    {
+      "path": "/assets/diceScene-CvJAG4Pf.js",
+      "bytes": 8191,
+      "sha256": "c7955a3abe450783a21270d906ba3dd36ac06255d4a25c2ca34a9b9430875f16"
+    },
+    {
+      "path": "/assets/duelScene-CdK4i4ki.js",
+      "bytes": 37089,
+      "sha256": "2dddbfa442c7d71c4abf0debe4ccb7ae6c54e37e0c410209a738c0b225729b44"
+    },
+    {
+      "path": "/assets/GLTFLoader-Qt8tskRI.js",
+      "bytes": 44848,
+      "sha256": "560d01c87dcc9c5c1b8121b8ad3abfdbce0adf275f0d120f0e1d0d70d9b1cbbd"
+    },
+    {
+      "path": "/assets/main-BN0wJ184.js",
+      "bytes": 1122758,
+      "sha256": "667740d7c20f49ac537e8ab06158c447b6762d35a83046b78dfcc337e02cf1d2"
+    },
+    {
+      "path": "/assets/main-DoOarqnm.css",
+      "bytes": 233834,
+      "sha256": "8a5c191c6b21dd33d309ef918ea77e7c6fef6250cff1ff8e2a7be9f48687cea1"
+    },
+    {
+      "path": "/assets/paperDraw-CmkUNqTB.js",
+      "bytes": 5104,
+      "sha256": "f88da4945ca90a79b6818d263604ebf73e30d2acc693c0ed563918212201b237"
+    },
+    {
+      "path": "/assets/riftScene-fC4BaxxU.js",
+      "bytes": 8702,
+      "sha256": "2f9ec5c66df7ddd655881da2d742d879fcd8c8540023a278692fa2f83de19a7d"
+    },
+    {
+      "path": "/assets/RoomEnvironment-32GGg7Wt.js",
+      "bytes": 2114,
+      "sha256": "ac76344b30ad35e809f29b0c16ef5b26c895a8c90d36159b4080e0dec4e815c6"
+    },
+    {
+      "path": "/assets/tablePreview-2Rkra2Ey.css",
+      "bytes": 1870,
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4"
+    },
+    {
+      "path": "/assets/tablePreview-BxQiOqVA.js",
+      "bytes": 25295,
+      "sha256": "dcaf85bfcacada5aa984d064e00e7acac228aecc415b3e1cd8cd8d0620f77390"
+    },
+    {
+      "path": "/assets/three.module-BVF9cvqC.js",
+      "bytes": 605419,
+      "sha256": "148815b6c641f0b707c7cc5e5e0aa5493781081115b8ac0f3ecb94cf43846cc0"
+    },
+    {
+      "path": "/index.html",
+      "bytes": 1182,
+      "sha256": "1b18a13af2455301ccb30a3f608ba2f0875d48636481a250b762aa60127c721c"
+    }
+  ],
+  "validation": {
+    "typecheck": true,
+    "productionBuild": true,
+    "stagingDryRun": true,
+    "menuFlowStates": 31,
+    "catalogWidths": [
+      1586,
+      1024,
+      390,
+      320
+    ],
+    "iconsDecoded": 25,
+    "stagingBrowserPassed": true,
+    "stagingBrowserUsesApiFixtures": true,
+    "duelIntegrationPassed": true,
+    "synchronizedWorktrees": 11
+  }
+}
