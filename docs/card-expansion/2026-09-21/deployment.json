@@ -1,0 +1,901 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "version": "a265ac52-7098-4a67-bc77-cae5ea2d1884",
+  "sourceCommit": "adcb91c21a8b2244e9a1e340856c42832c1a428d",
+  "balanceVersion": "v50",
+  "designCommit": "cb7432c93bc30c6bc1663bc4cf13e54f8521c1f9",
+  "verifiedAt": "2026-09-21T00:35:02.777Z",
+  "newCards": 48,
+  "counterCards": 43,
+  "files": [
+    {
+      "path": "/art/cards-sm/ADVANCE.webp",
+      "sha256": "aa11a62c511d41a41b2f399e867ccd2ed3859e90500cc07f5559f9b213eff931",
+      "bytes": 31454,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/ANESTHESIA.webp",
+      "sha256": "416ed72e4b4b78cceb192e78e08f4ceb206ab83837d3a05ac489f1a066be0d86",
+      "bytes": 32746,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/ASSASSIN_SQUAD.webp",
+      "sha256": "bc67bf5eae59a555472483722ef55221ea55acbd9d3c866bdc5159ae655f7fe8",
+      "bytes": 23560,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/BLACK_ALICE.webp",
+      "sha256": "4e4679dc1fda31a68b2e9ec5d6e7583103415c96b6ad6fec3ed6cdeae82b94e4",
+      "bytes": 29150,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/BLACK_CURSE.webp",
+      "sha256": "51c229aa1928106461df5f2c2d4e1afc28c423fff70b53047343b1f76980d17e",
+      "bytes": 27234,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/BLACK_ELSA.webp",
+      "sha256": "d4e6abd908207f6962872b62e5e4eb4d26695da82fbb540c29ef7f2adb0c8dc5",
+      "bytes": 29206,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/BLACK_INFINITY.webp",
+      "sha256": "b45ba9f324308788ebb4745b840ed0183a6bb2c0318daee58f5f365aec62003e",
+      "bytes": 53002,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/BLACK_NOVA.webp",
+      "sha256": "c4eb4043a8c1e0efd9c6cb56437af3aac981805709b983b1f40063feb7c63468",
+      "bytes": 33504,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/BLACK_REVERSE.webp",
+      "sha256": "450107d057c9d0e1d21c1022df89e3b689ccf645f67207742710614d2026438e",
+      "bytes": 31508,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/CAVALRY.webp",
+      "sha256": "afc6a1a5b34bb1c77f0c6b1e64cce9c06806228ca655d00a93147684eff73677",
+      "bytes": 31170,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/CREATION.webp",
+      "sha256": "dd49983699865b0b32b49c32402482a29697ba0b884d77b667227010044570e3",
+      "bytes": 36400,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/DISCOVERY_LARGE.webp",
+      "sha256": "3dd1c3e6571ef2ce9f044467e72f802bc8b5b25dd668c7cf280061096704c7c9",
+      "bytes": 33648,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/DISCOVERY_SMALL.webp",
+      "sha256": "cdf7c510127b53d1cb8f1f948e8dd6d12aeb64aa111152169d9fa31cadf9677f",
+      "bytes": 30054,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/DISCOVERY.webp",
+      "sha256": "0520ae8cbf67502c0ec1777bf29c42dc54430ae934a04528dbc451e96d492d36",
+      "bytes": 32110,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/DOMINION.webp",
+      "sha256": "34c1661954c18a816f5c427e5b36623fe0011d3681fcc93982f174c44502526a",
+      "bytes": 31638,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/DOUBLE_UP.webp",
+      "sha256": "fc674efb16a3dec1680a0ff4ca79e029bfa49ad3d9c503416a3f2c89066b45bd",
+      "bytes": 39694,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/EARTHQUAKE.webp",
+      "sha256": "1fd15b9cc798ebebe1969252080bbcfc8a075d3308aefc812581345728435e4e",
+      "bytes": 33972,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/EMPTY_MIND.webp",
+      "sha256": "c3bf53e9734745e6672c145b0a236d3c719887a11e56efb08e95099322111242",
+      "bytes": 32034,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/EROSION.webp",
+      "sha256": "3a351cf614c6057e33de20b4f7221def9ce9fa708e2b73726a409b6a3a80e1be",
+      "bytes": 31524,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/FARM_KEEPER.webp",
+      "sha256": "a218545458143f8fa4883651f427ace48b6c41ce585aa61399359be253ed47d7",
+      "bytes": 32860,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/FIRE_ARROW.webp",
+      "sha256": "8e99e91eb2055002c7a0ea726774861e7abc70cd3e75d8b9fc4bbb86e9cdd63e",
+      "bytes": 32822,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/FIRE_ART.webp",
+      "sha256": "e3bed4c120cfe4cd6261c474386576b34660bbf26e93871a3d807c85d0985d43",
+      "bytes": 38732,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/FIRE_BALL.webp",
+      "sha256": "a3d25ba1ed1fd70c3fafd43aa3c5040beca5ba636e47bcbcb7c018301697a67e",
+      "bytes": 30238,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/FIRE_MASTER.webp",
+      "sha256": "3302357a83c9d04c5e7b19a91169906be0b4054c46a9dad2a6abe5756abcf860",
+      "bytes": 37700,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/FIRE_METEOR.webp",
+      "sha256": "625f887e40a92435a230db50264f220cf8fc0f0ff9f760b9cc4097377afdfef9",
+      "bytes": 32290,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/FIRE_ZONE.webp",
+      "sha256": "b76f66c8123f2aea5b7323fedcb9c2285aac6906dd89fd291f908e77bb6d4f0f",
+      "bytes": 37462,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/GROWTH.webp",
+      "sha256": "d4bdcd546e51195ded1549097f0f12c6c3e30300d39f173942b9ab5fe80a7014",
+      "bytes": 42048,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/GUNNER.webp",
+      "sha256": "7389173cd810cbc439a8aaa65ba1f30601ee26966bc7aa4d1035feb2c74a0cf9",
+      "bytes": 30230,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/HEAVY_GUNNER.webp",
+      "sha256": "66b20dccf00b477731ce5c8442144ae6f29fc0643d093344c4b1f118802ef7b2",
+      "bytes": 33208,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/INTERCEPT.webp",
+      "sha256": "6219d11637ab2bb27a62e1537f099b4e02ab787fea6e3ecd7cc1a752ae8d5ffa",
+      "bytes": 27424,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/MAGMA_RAIN.webp",
+      "sha256": "c85d42b20e9f68e5037fe4339f9b9b2659a8ff92905570d4e5e91a9940959184",
+      "bytes": 29352,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/MERC_ART.webp",
+      "sha256": "581d951e2fd58c391319d6c459d7a5107d0c4f6a831dcd1d9dcf1dd30853886f",
+      "bytes": 34106,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/MERC_LEADER.webp",
+      "sha256": "278c1d1b68771b72b7a5078e8d8817747aa15d4b290cb0c707d14f527b878b93",
+      "bytes": 30902,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/MERC_MASTER.webp",
+      "sha256": "f9f74dbd8ae8140e9bdbbca2f5aaeb506e8eca03d91fe99e99d834c17753914f",
+      "bytes": 30938,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/MERCENARY.webp",
+      "sha256": "8d22a4fe354f6dd0d292c9b73d070d41ef4802ef0516655fd8606ac06072f613",
+      "bytes": 33380,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/MIMIC_HIDEOUT.webp",
+      "sha256": "78579edafba49128c3ddcbd80c05e5a82bfd9f79c7d3d42fdf42bcf629acb03d",
+      "bytes": 30982,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/MIMIC_HUNTER.webp",
+      "sha256": "35d323cd151ce3e2051f082b8189e9124ff50079ddbdef6b3cd72b6dbbfa6767",
+      "bytes": 32034,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/POISON_MASTER.webp",
+      "sha256": "8a8818082c91d1415c2d7f980036f708b4cc151712f1c2f983a671a7250295a8",
+      "bytes": 29362,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/PREPARATION.webp",
+      "sha256": "718d32502d657ec2aeac7975d0d6b6f659cde2e91de362a53d4cefcbe5a9c6a6",
+      "bytes": 31060,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/Q_CHEAT.webp",
+      "sha256": "b25bf0dc7a99bf57b496aa947547764982659efab77ea57224b264def8e76ad8",
+      "bytes": 29442,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/Q_TOWN.webp",
+      "sha256": "2f5df1220df86ebc4c1dc3665346ea53529b7cd5846ac04c75817a8b29b2cb01",
+      "bytes": 37638,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/QUICK_AID.webp",
+      "sha256": "0acffa57641306646ad5c0d7f97e3d7904009253a1e789144c9558bd57ab4980",
+      "bytes": 31554,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/QUICK_CURSE.webp",
+      "sha256": "483ebae0b65657f2894cca71cd3f7dd7725e8a97de56a5878cdc9d7fc43d9910",
+      "bytes": 26222,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/QUICK_HELLFIRE.webp",
+      "sha256": "06809a8be0700d6bb8bd3aae602a77f2074c723cde4d315ab332d8f9a47cce16",
+      "bytes": 31592,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/REINFORCE.webp",
+      "sha256": "fb1978c3b62edebb9ce4ecb124e027d7635dd70c9d4577220d408bbb300ff56f",
+      "bytes": 28418,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/ROGUE_ART.webp",
+      "sha256": "085da4a6a167181715f04b2b1cabf6e4761f7e21266dac20d865b2697749c85e",
+      "bytes": 23850,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/SOUL_HARVEST.webp",
+      "sha256": "0bb02015a2c46ad79f63072d9c7d356952a046bf2c57591336e61aa55d44a62a",
+      "bytes": 30724,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-sm/STABLE.webp",
+      "sha256": "2c6b550e805942b238ffb35c0998f172595153fe50f876c9184a5b9ceb1b5e36",
+      "bytes": 30296,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/ADVANCE.webp",
+      "sha256": "1ffbfc3c55d347a98eff45ada673e90254568f4d42703f99250a5ce7be68dba9",
+      "bytes": 9362,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/ANESTHESIA.webp",
+      "sha256": "f2104c99744c4943407f000b0714607f9942baedfeb744bca6bd4a129d32c6ea",
+      "bytes": 9628,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/ASSASSIN_SQUAD.webp",
+      "sha256": "9ff5eefe51b0e4c81e44637cc4cc68bd4b67772e5f793abed48fea9bac85db39",
+      "bytes": 6780,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/BLACK_ALICE.webp",
+      "sha256": "d4757cd2d642d3a989694ffed5a50d13324e7e9303edc488a428e1e59bafc858",
+      "bytes": 8672,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/BLACK_CURSE.webp",
+      "sha256": "fa91e0db51225af03b7e5b1fa5252e00f54e15f55c634e83ed977b39b8c4800f",
+      "bytes": 8160,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/BLACK_ELSA.webp",
+      "sha256": "81e49291e01ddb7833e65fd5fa1f2b09e0664e98ce261ebd4b9e3ef96d92f4f2",
+      "bytes": 8170,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/BLACK_INFINITY.webp",
+      "sha256": "a767a97dfa448eb9140aab95889cc29040e7613a8b1c2cf0e812b04d94f6daf6",
+      "bytes": 16662,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/BLACK_NOVA.webp",
+      "sha256": "8138d2abb6327d0945a63ffffeaf45eef69164715ad9dfd0f3d5d42de938e61e",
+      "bytes": 9616,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/BLACK_REVERSE.webp",
+      "sha256": "4f1f4117421ad280ebc89eab9719b199ace2ddbd43d8ce1a8c841b4650a78a4f",
+      "bytes": 8888,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/CAVALRY.webp",
+      "sha256": "a82ac1f85f2c9759a348e966bda90e24df376b0ebba72fc4265b607a479fe7d1",
+      "bytes": 9068,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/CREATION.webp",
+      "sha256": "38aca3565465697d422ba59cd47a3f516b98a387f8f6246a30a9b43151cd5f73",
+      "bytes": 10010,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/DISCOVERY_LARGE.webp",
+      "sha256": "b85e083880cb4cc442988d1bbfdc9b80afd0daedb918608ff489c90b1f92b107",
+      "bytes": 9310,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/DISCOVERY_SMALL.webp",
+      "sha256": "83da0b1b51d282e4be62be2dcb4faf86256225f1a0d63210357300097aefc6fe",
+      "bytes": 8572,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/DISCOVERY.webp",
+      "sha256": "ae82abf1c2948f1ba8f4251830be900b897bb9a5b2bd87298f52c3ece199a22d",
+      "bytes": 9122,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/DOMINION.webp",
+      "sha256": "502c104e81c6d820d532d7402303c0efc585ea384b0275c6af56d01b1d1c0c2d",
+      "bytes": 9164,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/DOUBLE_UP.webp",
+      "sha256": "f5f3ea0cf7b5f3d12434e8ae5b5c8426c12a7cc647bf95d75466924320020c66",
+      "bytes": 11034,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/EARTHQUAKE.webp",
+      "sha256": "25cda93979bb8659a8bfd96c97487242f92af32d4aaa087040bf9b16b3bd7858",
+      "bytes": 9778,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/EMPTY_MIND.webp",
+      "sha256": "6acc19d13b4822c2cb062e5df5f402613cec9de45db60b893d88ec1ea0f116b3",
+      "bytes": 9010,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/EROSION.webp",
+      "sha256": "124df920089da5dd5761b667bf1291946648a3e9bdceadd8acc81e51b9172d88",
+      "bytes": 9024,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/FARM_KEEPER.webp",
+      "sha256": "fba2d046b31ba274a4e71efb6936a994ccf2493423cf4f3c17b754841120e277",
+      "bytes": 9660,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/FIRE_ARROW.webp",
+      "sha256": "f9432a4983ab3fd2ec484d6ffe8efeadb6e205ec182cb11672406167791e0886",
+      "bytes": 9390,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/FIRE_ART.webp",
+      "sha256": "afbf959456141ce22267e7d8472a845203847a3bcc254f3c288ce8c5104f0c51",
+      "bytes": 11196,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/FIRE_BALL.webp",
+      "sha256": "76507560c413495546d2d49f7074692c8fcf25d5bc44af52f9e2c8865626b60b",
+      "bytes": 8930,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/FIRE_MASTER.webp",
+      "sha256": "085f16d0288c94c168d427105aadfe8cb9e52ac6d7c14dc1a80163ee18d69aaa",
+      "bytes": 10796,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/FIRE_METEOR.webp",
+      "sha256": "d4146414fc660ff6e2ea17ce44d3a5595fab8e063dbbc99ac78fedcacbfed068",
+      "bytes": 9142,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/FIRE_ZONE.webp",
+      "sha256": "2df538582e56d2e937b39f570cfc5db7fa2fcbbf14f1826593d0f9eab0801682",
+      "bytes": 10926,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/GROWTH.webp",
+      "sha256": "82f35729daad7b346bb2a0cf08b0543ad40ae93477c80400a406c6fc571be199",
+      "bytes": 11272,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/GUNNER.webp",
+      "sha256": "3a4b2ee3375b00637234dbde40ce6a85e2f407a0de11256d1fdb47dd3096fd54",
+      "bytes": 8942,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/HEAVY_GUNNER.webp",
+      "sha256": "9b372a5757ccef301c66444041884fd492c8ff8ecf1a771d048814ba6f75a663",
+      "bytes": 9434,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/INTERCEPT.webp",
+      "sha256": "d236335ccf39ccccf1dba49b6c6b77fc68cf6b11504e808fe2328c60ac9e7d68",
+      "bytes": 7936,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/MAGMA_RAIN.webp",
+      "sha256": "5e197b0ddcf5502340a910dd232471934677a4f918029a25f6bb30b2f3d24503",
+      "bytes": 8656,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/MERC_ART.webp",
+      "sha256": "39ad8a4cfe91818d4b69a44dbbf180482fd65962960e281bf3369f206810317f",
+      "bytes": 9808,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/MERC_LEADER.webp",
+      "sha256": "42e9e1eab98dfa1e8e9249efbfd823da390295e99643785c1f6e494bed38ef93",
+      "bytes": 9132,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/MERC_MASTER.webp",
+      "sha256": "3ca7031814cf978156e8784f9f5c0ce918dd0dacb85c114dc71b5898cc078340",
+      "bytes": 9024,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/MERCENARY.webp",
+      "sha256": "a56f0502ac24aebdff172b6f3d15197caca9debc500bf2be176724f88f303cd0",
+      "bytes": 9772,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/MIMIC_HIDEOUT.webp",
+      "sha256": "cc922c0ddc23de08dd8d9a891aed4893f1b7353f1929e6c7689a75cb3ffde4fa",
+      "bytes": 8300,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/MIMIC_HUNTER.webp",
+      "sha256": "36adec60af7bcaeeca872e2130ae1929ef24b523d2e0ecea739f50c9bc8048a9",
+      "bytes": 9218,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/POISON_MASTER.webp",
+      "sha256": "23d32d848689fabf9ec76818acc7abe7fdf3988daef549f7fc2e2565348d08c7",
+      "bytes": 8428,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/PREPARATION.webp",
+      "sha256": "1eeb7a91a742fded6ef7f6aeecebecfc361fafdeae416faeb9883e880b6c14f2",
+      "bytes": 9174,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/Q_CHEAT.webp",
+      "sha256": "46a980092fa9ea21ce2825e3e6a97d8fbec02c95f53acbd12b199f64bf50408c",
+      "bytes": 8728,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/Q_TOWN.webp",
+      "sha256": "279184c88b791d532275ff604f54fc005307882333f19c732386f20ecc9f5eb7",
+      "bytes": 10492,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/QUICK_AID.webp",
+      "sha256": "37567a44abc2210ace2de3219bdc404840d29ee7b9ffb07fb15c3f5ddb5375b1",
+      "bytes": 9494,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/QUICK_CURSE.webp",
+      "sha256": "521e6fddbe8dac7cd7e4d3f54d650d40ce568a773b12b5061681c9c12eb57639",
+      "bytes": 7548,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/QUICK_HELLFIRE.webp",
+      "sha256": "e219b41e2d8a377d633c3c7663c13ae25e066ca889ba722b164cba3601d4452d",
+      "bytes": 8944,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/REINFORCE.webp",
+      "sha256": "40c78464821d166a33237ed0b5e03766ccb0f8c7f9bbc535fb3279920e3bee02",
+      "bytes": 8682,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/ROGUE_ART.webp",
+      "sha256": "ce25a3fb8c760b6425bc4c6cdcbc84a1c6b423e5c0cef0160b9d7fd3b83778dd",
+      "bytes": 6850,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/SOUL_HARVEST.webp",
+      "sha256": "1d2b54b36fdbf6151d5feb712f834af4247e9f46a98c18cdff40e3203f2c5845",
+      "bytes": 8810,
+      "status": 200
+    },
+    {
+      "path": "/art/cards-xs/STABLE.webp",
+      "sha256": "f8874ae8b098c63d97d40510ec45e728365194c72dbd60c0986848e3214a8c5c",
+      "bytes": 8812,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/ADVANCE.webp",
+      "sha256": "70d8205cc7f9396e59bd774d3636044897ac4fd2f50bf8805eb553452f991a2d",
+      "bytes": 409470,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/ANESTHESIA.webp",
+      "sha256": "257048bf45f8dfe72526138de914963f87417b3f173a0303ba7c22751968d995",
+      "bytes": 412502,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/ASSASSIN_SQUAD.webp",
+      "sha256": "268e76b41911516eb307171d70abfc38a2ecc8ff90606e66d2bf222f177a29f2",
+      "bytes": 327448,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/BLACK_ALICE.webp",
+      "sha256": "5447a93d5b9ecda9dc89cd08a4c8db3a22567b394597e707ac42a52727405128",
+      "bytes": 368434,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/BLACK_CURSE.webp",
+      "sha256": "9ecdb26e4e7194d979d589b39ea2548552b0332abc5b6c4e0b689cd13cf4a505",
+      "bytes": 356152,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/BLACK_ELSA.webp",
+      "sha256": "bdcdb3ce0cd567d59f91aec424e6994816a46ca6c4900cf2e1952b000397e8e4",
+      "bytes": 387074,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/BLACK_INFINITY.webp",
+      "sha256": "69f94c6ce46a5a99455299dbb2f4750e15c9702daa0a7001781ad69fc842384d",
+      "bytes": 781078,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/BLACK_NOVA.webp",
+      "sha256": "9e6a6e3491dc8b05a0eef6d82fa1906a8a9297082af2528187bc87eed78c04d5",
+      "bytes": 473406,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/BLACK_REVERSE.webp",
+      "sha256": "bfda9096bbc6ee074587e92707276a011d069fc9717491cfa9e50dc11c725347",
+      "bytes": 451976,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/CAVALRY.webp",
+      "sha256": "17aec6cf2fc572274aa758354e92b029bde5f29397da1cdf09938ef4bc2348cb",
+      "bytes": 399696,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/CREATION.webp",
+      "sha256": "db9e6e1968c041717f5181356b23d4ee9b6a4e0d0f4ca6a87739d03116c92c00",
+      "bytes": 516660,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/DISCOVERY_LARGE.webp",
+      "sha256": "e158ba4cc1c9f1a96abd21476d0ec4d4c792e3c0e3db87fc3c3c60a550a12b2f",
+      "bytes": 506020,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/DISCOVERY_SMALL.webp",
+      "sha256": "fd0ab44a6275082ed2b1f282d16a98459e85c3e8c0cddae58f2488ef9fad2ed0",
+      "bytes": 443690,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/DISCOVERY.webp",
+      "sha256": "95540483fd5028f485389f70a4afbf09c512907a854a908fb2653fac98f5b9e1",
+      "bytes": 454860,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/DOMINION.webp",
+      "sha256": "ea435877d4613fa58cc540b40650e5aa185ac8af646ca0ed2f754fea1b927642",
+      "bytes": 420468,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/DOUBLE_UP.webp",
+      "sha256": "8d3b356ac2d3a898ac936e8bf65718c309199f053f6d93784de16d20363de9d3",
+      "bytes": 586150,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/EARTHQUAKE.webp",
+      "sha256": "8fa88ce7aa6d9d97232576e0d73ef1393843c37dd8aa616d39d3128a3518c037",
+      "bytes": 485334,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/EMPTY_MIND.webp",
+      "sha256": "ab992b228473bd801ee5557642bd924bc3acc27eb446a926d196e08890d302cd",
+      "bytes": 448060,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/EROSION.webp",
+      "sha256": "12d34f59d4f1a9ed6ef67dd1fec0b51e85c6e2a9e1d4ff0843fdac79d9009a6a",
+      "bytes": 445912,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/FARM_KEEPER.webp",
+      "sha256": "f806224393d6e2a51546979a7dcf4a7bf4f5c978a00096e5dfa3129a75c499cb",
+      "bytes": 440184,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/FIRE_ARROW.webp",
+      "sha256": "888d3d75ac750eb4386fbca1ad70caf174fe2baa46304bed5383df2a8015c391",
+      "bytes": 430544,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/FIRE_ART.webp",
+      "sha256": "4e323d3de46f3de6b2c36c354bfe227a8507507962550df7e3158eaa1b4231ce",
+      "bytes": 527960,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/FIRE_BALL.webp",
+      "sha256": "14dfb1a7986845c385dc0897bc292540c31d63690db45f421f97f2f06a18e436",
+      "bytes": 421714,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/FIRE_MASTER.webp",
+      "sha256": "3403353c0875708b5c71f2fd38821e12ea695f8859870f71f2ff5113ce5dd737",
+      "bytes": 511174,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/FIRE_METEOR.webp",
+      "sha256": "db5f2076524432462a59e8343f52db125008b519da7d1828ae3ee2473453cdf5",
+      "bytes": 459706,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/FIRE_ZONE.webp",
+      "sha256": "6f0f8972ae7d2b88f4772487ec187106481d3839e45ae4747a1c296f8a0827db",
+      "bytes": 500394,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/GROWTH.webp",
+      "sha256": "906c762b9ff9c97f0fb0e3051f120eac28ab3568a96bdf77ea659449a1629f51",
+      "bytes": 591090,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/GUNNER.webp",
+      "sha256": "519d00cf2e1c019dcf2399d53dd94a3d8d31b94ae619ef11fc36d10b56e3577c",
+      "bytes": 363584,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/HEAVY_GUNNER.webp",
+      "sha256": "6575c29816a14a2fa0d79265c73ee79de3912add22ff73431103a68d281d7694",
+      "bytes": 454844,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/INTERCEPT.webp",
+      "sha256": "9276d48492957cd5d6f401671bd937fcea112efe3f62162eea62aeb9085bf81c",
+      "bytes": 381272,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/MAGMA_RAIN.webp",
+      "sha256": "39cbbd7ee72951eae242789a180a19172ca6bb75001ad047106ffba6d444fe0a",
+      "bytes": 375416,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/MERC_ART.webp",
+      "sha256": "0d0035180b4db332e2ffff10dba7e623f3491d9a6e7c77d8bc3261014ea60e0d",
+      "bytes": 423482,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/MERC_LEADER.webp",
+      "sha256": "d1cd0cbb38b4c6a7b2dce59079ae6c405690c045504610a33753b437d4755e73",
+      "bytes": 370302,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/MERC_MASTER.webp",
+      "sha256": "c5a4a7efbeed62e69a73d11bdb50c55daf04084a107452ff7ae9683190893b4f",
+      "bytes": 375306,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/MERCENARY.webp",
+      "sha256": "57093a99597d82495f198911ce6fd636e6faf2a9e2a232cbf31dc3d02c9e7e34",
+      "bytes": 444776,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/MIMIC_HIDEOUT.webp",
+      "sha256": "17e705f69e6f861aea93d12935e9ed4651faa68a2f0e29f1ddfa5a5b0e8924de",
+      "bytes": 473438,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/MIMIC_HUNTER.webp",
+      "sha256": "7de2cedc029106c6d5b72616df65edc7ba223bb2ca6840d7af5d8d88ac4d8d5f",
+      "bytes": 417108,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/POISON_MASTER.webp",
+      "sha256": "703219d0fd0e0f4e5e2743749e7819d75b140c7d17327824b314135c65a350aa",
+      "bytes": 380104,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/PREPARATION.webp",
+      "sha256": "3fbfd235011972ca1b672698c3c554da88c8d9159c282b4781673bf49dbaf4f8",
+      "bytes": 395394,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/Q_CHEAT.webp",
+      "sha256": "8d682c620e07f4059c2a986a22d8ff5d9672a0b1404253d56e1939d421f5d372",
+      "bytes": 356508,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/Q_TOWN.webp",
+      "sha256": "3fb03e7dc5ac4667ccbd94f00f8dedf4a29aaaa4776b0e098bdec1ba8ab698d0",
+      "bytes": 524700,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/QUICK_AID.webp",
+      "sha256": "18d6696cdbeb102d1b8e4080ba695e747861940a857434f75e7c8e63948d2eae",
+      "bytes": 388870,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/QUICK_CURSE.webp",
+      "sha256": "c67ca905252988b1846be2b8b41214a75a034c6e134558d776e41f5bacc3d7db",
+      "bytes": 372132,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/QUICK_HELLFIRE.webp",
+      "sha256": "55e0187e4170458837fdbaaff2a97c4f316380e8e73d70f463130ca351dd93dd",
+      "bytes": 452546,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/REINFORCE.webp",
+      "sha256": "abd38e8dff85cec2c90309600231b9ed8ac6242450b24d52a1ebf3304bbf0e63",
+      "bytes": 397932,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/ROGUE_ART.webp",
+      "sha256": "9748b1eecc91e745a610b9050e7cfbbdcfab90b55a193074b39e13330d878873",
+      "bytes": 345048,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/SOUL_HARVEST.webp",
+      "sha256": "86e55820853d6536458179d93defee09d8365ac91087772ab981dc25368e62dc",
+      "bytes": 432218,
+      "status": 200
+    },
+    {
+      "path": "/art/cards/STABLE.webp",
+      "sha256": "bcea43e1bfd956f4a2c423811b07735be6ec94bfeda40e2ed633831f5c6b3c01",
+      "bytes": 384726,
+      "status": 200
+    },
+    {
+      "path": "/assets/main-BNplMg4P.css",
+      "sha256": "c6eb5c39e2f432f9d283202ef66a998220f13b92ea929519e77c9eab60271e38",
+      "bytes": 198075,
+      "status": 200
+    },
+    {
+      "path": "/assets/main-D1N-lN_G.js",
+      "sha256": "fecfb13204fe7f88d9fba7951e65e2e8276804c344ba5312c45b6468a5aa9ca8",
+      "bytes": 1111203,
+      "status": 200
+    },
+    {
+      "path": "/assets/three.module-ClbeDS-7.js",
+      "sha256": "faf93a0b5e8af889072fe190b568599fd3b2019c32c492c1723a82934c927ae8",
+      "bytes": 605419,
+      "status": 200
+    },
+    {
+      "path": "/index.html",
+      "sha256": "a2ac0245995421618f2629a47fd436f52597885a1e8b88165fdae173c838b2bf",
+      "bytes": 1182,
+      "status": 200
+    }
+  ]
+}

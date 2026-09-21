@@ -1,0 +1,9 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checks": [
+    "authenticated home loads",
+    "Fire series: 5 cards",
+    "Black Magic / mage series: 6 cards"
+  ],
+  "errors": []
+}

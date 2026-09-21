@@ -1,0 +1,67 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "newCardsSeen": [
+    "FARM_KEEPER",
+    "STABLE",
+    "MERC_ART",
+    "DISCOVERY_LARGE",
+    "Q_CHEAT",
+    "BLACK_ALICE",
+    "EMPTY_MIND",
+    "MIMIC_HUNTER",
+    "FIRE_BALL",
+    "BLACK_CURSE"
+  ],
+  "newCardsPlayed": [
+    "FARM_KEEPER",
+    "Q_CHEAT",
+    "BLACK_ALICE",
+    "MIMIC_HUNTER",
+    "MERC_ART"
+  ],
+  "openingHands": [
+    [
+      3,
+      3
+    ],
+    [
+      3,
+      3
+    ]
+  ],
+  "roomId": "c5ec4d97-fdb7-4f6d-a4ae-3f162a36702d",
+  "actions": 140,
+  "turn": 23,
+  "reconnected": true,
+  "over": true,
+  "events": [
+    "draw",
+    "log",
+    "turnHeader",
+    "playSpell",
+    "buy",
+    "reshuffle",
+    "summon",
+    "attack",
+    "needTarget",
+    "hit",
+    "destroy",
+    "damage",
+    "dice",
+    "treasure",
+    "heal",
+    "marketRestock",
+    "win"
+  ],
+  "errors": [],
+  "checks": [
+    "two isolated authenticated users",
+    "friendly room creation",
+    "live authoritative actions",
+    "hidden opponent hand and RNG",
+    "public quest arrays",
+    "no traps in market",
+    "reconnect restores live state",
+    "completed match"
+  ]
+}
