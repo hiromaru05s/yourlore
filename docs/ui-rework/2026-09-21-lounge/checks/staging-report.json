@@ -1,0 +1,54 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "liveApi": true,
+  "checks": [
+    "home",
+    "deck",
+    "cards",
+    "friends",
+    "leaderboard",
+    "shop",
+    "tutorial",
+    "profile",
+    "settings",
+    "mobile-home",
+    "mobile-deck",
+    "mobile-cards",
+    "login"
+  ],
+  "errors": [],
+  "failed": [],
+  "mobileOverflow": false,
+  "assets": [
+    {
+      "path": "/index.html",
+      "sha256": "ffb1cbc9e5405280985a143ee4874876a5d44c1244cf059ce26aa3ce384547ef",
+      "bytes": 1182
+    },
+    {
+      "path": "/art/lounge/v1/library.png",
+      "sha256": "8add8212b7abf38a709cbd4e6f538ce46d354f072d59b889b645da95db448d76",
+      "bytes": 2509498
+    },
+    {
+      "path": "/art/lounge/v1/entrance.png",
+      "sha256": "8640e05153ab9e8f3708c9a9328785a82af1f6c70bec6390562476e954b936ae",
+      "bytes": 2464480
+    },
+    {
+      "path": "/assets/main-DogQOBJd.js",
+      "sha256": "fbb8c5ea4f8c61f738e4accbd433676e279baba7677ec209e2f44434e425ebfd",
+      "bytes": 1120041
+    },
+    {
+      "path": "/assets/three.module-ClbeDS-7.js",
+      "sha256": "faf93a0b5e8af889072fe190b568599fd3b2019c32c492c1723a82934c927ae8",
+      "bytes": 605419
+    },
+    {
+      "path": "/assets/main-CMWOcsay.css",
+      "sha256": "d699ed89e135efe4e18e299b20555606ea7915530b4b70a01cea243324598147",
+      "bytes": 213062
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "actions": 16,
+  "roomId": "41532f5e-453e-4dad-b38f-0008523a50db",
+  "changes": [
+    -16,
+    18
+  ],
+  "reconnected": true,
+  "duplicateResultUnchanged": true,
+  "profileAndLeaderboard": true,
+  "errors": [],
+  "checks": [
+    "authenticated ranked queue with two isolated QA ratings",
+    "opponent identity checked before joining",
+    "authoritative actions",
+    "surrender settlement +18/-16",
+    "rankResult over WebSocket",
+    "profile/leaderboard use committed MMR",
+    "reconnect repeats same outcome without applying twice"
+  ]
+}

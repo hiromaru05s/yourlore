@@ -1,0 +1,47 @@
+{
+  "verifiedAt": "2026-09-21T02:32:35.825431+00:00",
+  "origin": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "workerVersion": "0bd3a2ca-dfdd-464b-a54f-85c6ed754e1c",
+  "previousVersion": "6d52f8c8-58cf-42f9-b19c-eb306aa5c4b5",
+  "sourceCommit": "7ce433c83d2f4e2a30da7dc7348d97afebfa25fc",
+  "productionDeployed": false,
+  "migration": {
+    "file": "server/migrations/0014_ranked_results.sql",
+    "database": "lore-db-staging",
+    "additive": true,
+    "existingRatingsPreserved": true
+  },
+  "validation": {
+    "typecheck": true,
+    "productionBuild": true,
+    "stagingDryRun": true,
+    "localVisualStates": 31,
+    "stagingLiveScreens": 13,
+    "deployedAssetHashesMatch": true,
+    "realRankedMatch": true,
+    "rankedActions": 16,
+    "mmrChanges": [
+      -16,
+      18
+    ],
+    "reconnectAndDuplicateSettlement": true,
+    "qaCleanup": {
+      "qa_users": 0,
+      "qa_ratings": 0,
+      "qa_results": 0
+    }
+  },
+  "integration": {
+    "existingWorktrees": 11,
+    "implementationCommit": "7ce433c83d2f4e2a30da7dc7348d97afebfa25fc",
+    "sourceBalanceVersion": 51,
+    "dirtyWorkPreserved": true,
+    "details": "worktree-integration.json"
+  },
+  "limitations": [
+    "OAuth consent and email delivery were not newly exercised; existing server flows are retained.",
+    "MMR parameters are provisional and retain the existing server Elo rules.",
+    "Archived historical worktrees whose directories no longer exist were not modified."
+  ]
+}
