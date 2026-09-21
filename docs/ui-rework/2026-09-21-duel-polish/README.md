@@ -21,4 +21,12 @@
 
 演出画像は本ディレクトリ。シャッフルの発光は `shuffle-whole-stack-glow.png`、停止したダイスは `dice-landed.png`、新勝敗は `victory-animation.png` / `defeat-animation.png`。
 
-ローカルブラウザで演出を確認し、公開後には配信ビルドの一致を確認する。今回は新たなオンライン対戦や勝率測定は行っていない。既存のViteチャンクサイズ警告は継続。
+ローカルブラウザで演出を確認。ステージング公開後にHTML・JS・CSS全14ファイルのSHA-256が検証済みビルドと一致した。今回は新たなオンライン対戦や勝率測定は行っていない。既存のViteチャンクサイズ警告は継続。
+
+## ステージング反映
+
+- URL: https://test.yourlore.xyz
+- 実装コミット: `9efbb08`
+- Worker: `lore-server-staging`
+- Version: `b657aec4-e1f2-499d-ba4c-c4290c24761e`
+- 配信一致の記録: `deployment.json`。本番環境へのデプロイは実施していない。

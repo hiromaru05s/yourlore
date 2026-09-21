@@ -1,0 +1,108 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "version": "b657aec4-e1f2-499d-ba4c-c4290c24761e",
+  "sourceCommit": "9efbb08823c7f069ef569e3e90c24dbab66fe3e0",
+  "checkedAt": "2026-09-21T03:11:57.978Z",
+  "allMatched": true,
+  "files": [
+    {
+      "path": "index.html",
+      "status": 200,
+      "sha256": "9fec862914a048d42060c90174ab1d0e87dd02ccbadf5e5f66976d4cab638fcb",
+      "remoteSha256": "9fec862914a048d42060c90174ab1d0e87dd02ccbadf5e5f66976d4cab638fcb",
+      "matched": true
+    },
+    {
+      "path": "assets/GLTFLoader-Qt8tskRI.js",
+      "status": 200,
+      "sha256": "560d01c87dcc9c5c1b8121b8ad3abfdbce0adf275f0d120f0e1d0d70d9b1cbbd",
+      "remoteSha256": "560d01c87dcc9c5c1b8121b8ad3abfdbce0adf275f0d120f0e1d0d70d9b1cbbd",
+      "matched": true
+    },
+    {
+      "path": "assets/RoomEnvironment-32GGg7Wt.js",
+      "status": 200,
+      "sha256": "ac76344b30ad35e809f29b0c16ef5b26c895a8c90d36159b4080e0dec4e815c6",
+      "remoteSha256": "ac76344b30ad35e809f29b0c16ef5b26c895a8c90d36159b4080e0dec4e815c6",
+      "matched": true
+    },
+    {
+      "path": "assets/cardSurface-BuHo_Ijn.js",
+      "status": 200,
+      "sha256": "bfc26b52daf66d4e0762a121b8ee0b54e2d4bfe4ca9c30982fb96ec1a57a0a3c",
+      "remoteSha256": "bfc26b52daf66d4e0762a121b8ee0b54e2d4bfe4ca9c30982fb96ec1a57a0a3c",
+      "matched": true
+    },
+    {
+      "path": "assets/coinScene-Dd-GwpNX.js",
+      "status": 200,
+      "sha256": "2bc5229fc8b80ba6cd9a787632c46cc47923b211f4cdfd82e423f44b4a4724af",
+      "remoteSha256": "2bc5229fc8b80ba6cd9a787632c46cc47923b211f4cdfd82e423f44b4a4724af",
+      "matched": true
+    },
+    {
+      "path": "assets/diceScene-CvJAG4Pf.js",
+      "status": 200,
+      "sha256": "c7955a3abe450783a21270d906ba3dd36ac06255d4a25c2ca34a9b9430875f16",
+      "remoteSha256": "c7955a3abe450783a21270d906ba3dd36ac06255d4a25c2ca34a9b9430875f16",
+      "matched": true
+    },
+    {
+      "path": "assets/duelScene-RBm0nk4q.js",
+      "status": 200,
+      "sha256": "20ea9715c70f32a1b57a57c55d68aefd8cc24a5e43ed6e532181ec70ea873450",
+      "remoteSha256": "20ea9715c70f32a1b57a57c55d68aefd8cc24a5e43ed6e532181ec70ea873450",
+      "matched": true
+    },
+    {
+      "path": "assets/main-Aji6aVsc.js",
+      "status": 200,
+      "sha256": "46c818802c73cb034bcf3c922ca380a953c6c149c59a38f57ffb9ac4b7ff4bff",
+      "remoteSha256": "46c818802c73cb034bcf3c922ca380a953c6c149c59a38f57ffb9ac4b7ff4bff",
+      "matched": true
+    },
+    {
+      "path": "assets/main-DGGILrzB.css",
+      "status": 200,
+      "sha256": "2a8d8bbc8f0d827e6807ba6ac83f17aff0b57968721f6c764f3d98f41476700b",
+      "remoteSha256": "2a8d8bbc8f0d827e6807ba6ac83f17aff0b57968721f6c764f3d98f41476700b",
+      "matched": true
+    },
+    {
+      "path": "assets/paperDraw-CmkUNqTB.js",
+      "status": 200,
+      "sha256": "f88da4945ca90a79b6818d263604ebf73e30d2acc693c0ed563918212201b237",
+      "remoteSha256": "f88da4945ca90a79b6818d263604ebf73e30d2acc693c0ed563918212201b237",
+      "matched": true
+    },
+    {
+      "path": "assets/riftScene-BNjFWvVL.js",
+      "status": 200,
+      "sha256": "c57e6e708fb4e9ddf6a731dffe800942052ea97debbe0e76139453668b676c61",
+      "remoteSha256": "c57e6e708fb4e9ddf6a731dffe800942052ea97debbe0e76139453668b676c61",
+      "matched": true
+    },
+    {
+      "path": "assets/tablePreview-2Rkra2Ey.css",
+      "status": 200,
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+      "remoteSha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+      "matched": true
+    },
+    {
+      "path": "assets/tablePreview-BxQiOqVA.js",
+      "status": 200,
+      "sha256": "dcaf85bfcacada5aa984d064e00e7acac228aecc415b3e1cd8cd8d0620f77390",
+      "remoteSha256": "dcaf85bfcacada5aa984d064e00e7acac228aecc415b3e1cd8cd8d0620f77390",
+      "matched": true
+    },
+    {
+      "path": "assets/three.module-BVF9cvqC.js",
+      "status": 200,
+      "sha256": "148815b6c641f0b707c7cc5e5e0aa5493781081115b8ac0f3ecb94cf43846cc0",
+      "remoteSha256": "148815b6c641f0b707c7cc5e5e0aa5493781081115b8ac0f3ecb94cf43846cc0",
+      "matched": true
+    }
+  ]
+}
