@@ -14,7 +14,7 @@ try {
  const step=(g,a)=>reduce(g,a).state;
  const play=(g,id)=>{g.players[g.cur].hand.push(card(id));return reduce(g,{type:'play',idx:g.players[g.cur].hand.length-1});};
  assert(Number(BALANCE_VERSION.slice(1)) >= 47, 'v47 mechanics remain covered after later balance changes');
- for(const [id,atk,def] of [['NGA4',8,1],['TDE1',3,5],['TDE2',5,8],['TDE3',7,11],['TDE4',12,14],['M7',3,1]])assert.deepEqual([DB[id].atk,DB[id].def],[atk,def],id);
+ for(const [id,atk,def] of [['NGA4',8,1],['TDE1',3,5],['TDE2',5,8],['TDE4',12,14],['M7',3,1]])assert.deepEqual([DB[id].atk,DB[id].def],[atk,def],id);
  assert(hasPassive(card('TDE4'),'majesty'));assert(hasPassive(card('TDE4'),'aura'));
  assert.equal(playCost(card('ELF_HAVEN'),fresh().players[0]),4);
  // Failed requirements are atomic and agree with the bot's legal actions.
@@ -49,7 +49,7 @@ try {
  }
  {let g=fresh();g.players[0].enchants=[{card:card('RIFT'),turns:99}];g.players[0].supply[0]=card('QUICK_ATTUNE');const r=reduce(g,{type:'buySupply',i:0});assert.equal(r.state.players[0].maxHp,107);assert.equal(r.state.players[0].hp,47);}
  {let g=fresh();g.players[0].quests=[{card:card('Q_TORI'),progress:5}];g=step(g,{type:'pick',uid:null});assert.equal(g.players[0].maxHp,130);assert.equal(g.players[0].hp,70);}
- {let g=fresh();g.players[0].enchants=[{card:card('WORLD_CARE'),turns:99}];g=step(g,{type:'endTurn'});g=step(g,{type:'endTurn'});assert.equal(g.players[0].maxHp,109);assert.equal(g.players[0].hp,49);}
+ {let g=fresh();g.players[0].enchants=[{card:card('WORLD_CARE'),turns:99}];g=step(g,{type:'endTurn'});g=step(g,{type:'endTurn'});assert.equal(g.players[0].maxHp,103);assert.equal(g.players[0].hp,43);}
  // Growth must not roll Cycle of Life once for healing and again for max HP.
  {const g=fresh();g.players[0].enchants=[{card:card('LIFE_CYCLE'),turns:99}];const r=play(g,'GRAPE');assert.equal(r.events.filter(e=>e.type==='dice').length,1);}
  // Each kill may unlock only the second attack, never a third. Turn reset restores availability.

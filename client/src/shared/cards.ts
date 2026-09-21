@@ -2263,6 +2263,20 @@ Object.assign(DB.HALF_ELF, { atk: 0, condAtk: "worldTree",
 for (const id of COUNTER_IDS) if (DB[id]) DB[id].passive = [...new Set([...(DB[id].passive ?? []), "counter"])];
 Object.assign(DB.MIMIC_KING2, { onSummon: "expansion", text: "【소환시】리프트에 미믹 계열 6장 이상이면 미믹의 은신처를 전개", textJa: "【召喚時】自分のリフトにミミック系6枚以上なら「ミミックの隠れ家」を展開", textEn: "On summon: With 6+ Mimic-family cards in your Rift, deploy Mimic Hideout." });
 DB.GUILD_CHEST.textJa += " · 自分の場にアサシン系カードがある場合、9〜12はカード4枚ドローに変更";
+// v49: approved combined balance pass.
+Object.assign(DB.TDE3, { atk: 6, def: 10 });
+Object.assign(DB.GAMBLER, { atk: 0, def: 2 });
+Object.assign(DB.EGG_MASTER, { atk: 2, def: 6 });
+Object.assign(DB.TGE4, {
+  text: "【소환시】게임 중 1회: 덱 구성에 이번에 소환한 자신 외 시초 카드가 있으면 상대 낙인 +1",
+  textJa: "【召喚時】ゲーム中1回：デッキ構成に今召喚した自身以外の始原カードがあれば相手に烙印+1" });
+Object.assign(DB.WORLD_CARE, {
+  text: "【상시】자신 필드에 최대 1장 · 【매턴】자신의 턴 시작: 자신 최대 체력 +3",
+  textJa: "【常時】自分の場に最大1枚 · 【毎ターン】自分のターン開始：自分の最大体力+3" });
+Object.assign(DB.ANCIENT_CIV, {
+  text: "영구: 발동 9턴 후 자신 최대 마나 -1, '드래곤의 알'·'신수의 알' 중 하나를 패에 넣는다 · 이 마법 파괴",
+  textJa: "永続: 発動9ターン後に自分の最大マナ-1、「ドラゴンの卵」か「神獣の卵」を選んで手札に加える · この魔法は破壊される" });
+
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 for (const c of EXPANSION_CARDS) DB[c.id] = c;
 for (const id of ["FIRE_ARROW", "FIRE_METEOR"]) RANDOM_CARDS.add(id);
@@ -2390,7 +2404,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v50"; // Counter + 48-card expansion on the v49 reading-board design
+export const BALANCE_VERSION = "v51"; // v50 expansion + previously approved six-card balance pass
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

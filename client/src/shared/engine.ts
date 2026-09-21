@@ -1133,10 +1133,10 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
         addMaxHp(ctx, pl, amt);
         ctx.log(`<span class="t">${cn(e.card)}</span> 최대 체력 +${amt} (${pl.maxHp})`, `<span class="t">${cn(e.card)}</span> 最大体力 +${amt} (${pl.maxHp})`);
       }
-      // 세계수의 보살핌(토큰): 자신의 턴 시작마다 최대 체력 +9 (증가만 — 회복 없음) (v19: 15→12, v26: 12→9)
+      // v49: 세계수의 보살핌 — 자신의 턴 시작마다 최대 체력 +3 (동량 회복 포함)
       if (e.card.ench === "worldCare" && ownerTurn && !g.over) {
-        addMaxHp(ctx, pl, 9);
-        ctx.log(`<span class="t">${cn(e.card)}</span> 최대 체력 +9 (${pl.maxHp})`, `<span class="t">${cn(e.card)}</span> 最大体力 +9 (${pl.maxHp})`);
+        addMaxHp(ctx, pl, 3);
+        ctx.log(`<span class="t">${cn(e.card)}</span> 최대 체력 +3 (${pl.maxHp})`, `<span class="t">${cn(e.card)}</span> 最大体力 +3 (${pl.maxHp})`);
       }
       // 선견지명: 최대 마나 10 이상이 되면 +2 후 자괴 (필드를 떠나면 게임에서 제외) (v19: 9→10)
       if (e.card.ench === "foresight" && !g.over && pl.maxMana >= 10) {
@@ -1160,8 +1160,8 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
           ctx.ev.push({ type: "needTarget", pending: g.pending });
         }
       }
-      // 고대 문명: 발동 13턴 후 (자신의 턴에) 최대 마나 -1 → 알 선택 → 자괴
-      if (e.card.ench === "ancientCiv" && ownerTurn && !g.over && g.turn >= (e.bornTurn ?? 0) + 13 && !g.pending) {
+      // 고대 문명: 발동 9턴 후 (자신의 턴에) 최대 마나 -1 → 알 선택 → 자괴
+      if (e.card.ench === "ancientCiv" && ownerTurn && !g.over && g.turn >= (e.bornTurn ?? 0) + 9 && !g.pending) {
         pl.maxMana = Math.max(1, pl.maxMana - 1);
         ctx.log(`<span class="t">${cn(e.card)}</span> <span class="good">고대 문명이 깨어난다!</span> 최대 마나 -1 (${pl.maxMana})`, `<span class="t">${cn(e.card)}</span> <span class="good">古代文明が目覚める！</span> 最大マナ-1 (${pl.maxMana})`);
         g.pending = { kind: "giantShop", hint: "고대 문명 — 패에 넣을 알 선택", hintJa: "古代文明 — 手札に加える卵を選択", reason: "civChoice", allowCancel: false, data: { ids: ["DRAGON_EGG", "BEAST_EGG"] } };
@@ -2405,6 +2405,7 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
     case "halfElf": { // 하프 엘프: 자신 필드에 '세계수' 이름 카드가 있으면 '세계수의 보살핌' 전개
       const hasTree = p.field.some((x) => (x.name || "").includes("세계수")) || p.enchants.some((e) => (e.card.name || "").includes("세계수"));
       if (!hasTree) { ctx.log(`  └ 필드에 '세계수' 카드 없음`, `  └ 場に「世界樹」カードなし`); break; }
+      if (p.enchants.some((e) => e.card.ench === "worldCare")) { ctx.log("  └ 세계수의 보살핌은 자신 필드에 최대 1장", "  └ 世界樹の慈しみは自分の場に最大1枚"); break; }
       if (p.traps.length + p.enchants.length + (p.quests?.length ?? 0) >= ST_MAX) { ctx.log(`  └ 마법·함정 존이 가득 찼습니다 (최대 ${ST_MAX})`, `  └ 魔法・罠ゾーンが満杯です (最大${ST_MAX})`); break; }
       p.enchants.push({ card: inst(g, "WORLD_CARE"), turns: 99, bornTurn: g.turn });
       ctx.log(`  └ <span class="good">세계수의 보살핌 전개</span>`, `  └ <span class="good">世界樹の慈しみを展開</span>`);
@@ -2586,13 +2587,13 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       } else ctx.log("  └ 상대의 제외된 카드가 없음", "  └ 相手の除外カードがない");
       break;
     }
-    case "originArbiter": { // 시초의 재판관: 게임 중 1회 — 덱 구성의 시초 카드 1장당 상대 낙인 +1
+    case "originArbiter": { // v49: 게임 중 1회 — 이번에 소환한 자신 외 시초 카드가 있으면 상대 낙인 +1
       const once = (p.onceUsed ??= []);
       if (once.includes("TGE4")) { ctx.log("  └ 이 게임에서 이미 발동함", "  └ このゲームで既に発動済み"); break; }
       once.push("TGE4");
-      const n = deckComp(p).filter((c) => c.tribe === "시초").length;
+      const n = Math.min(1, deckComp(p).filter((c) => c.tribe === "시초" && c.uid !== m.uid).length);
       if (n > 0) { o.brand = (o.brand || 0) + n; ctx.log(`  └ 시초 ${n}장 → ${o.name} 에게 낙인 카운터 +${n} (합계 ${o.brand})`, `  └ 始原${n}枚 → ${o.name} に烙印カウンター+${n} (計${o.brand})`); }
-      else ctx.log("  └ 덱 구성에 시초 카드 없음", "  └ デッキ構成に始原カードなし");
+      else ctx.log("  └ 덱 구성에 이번에 소환한 자신 외 시초 카드 없음", "  └ デッキ構成に今回召喚した自身以外の始原カードなし");
       break;
     }
     case "originRite": { // 시초의 정령: '시초의 술식' 전개
@@ -3961,6 +3962,7 @@ export function playBlockReason(g:GameState, who:Side, card:CardInst):{ko:string
     if (p.field.length >= FIELD_MAX) { return reason(`  └ <span class="dmg">몬스터 존이 가득 찼습니다 (최대 ${FIELD_MAX})</span>`, `  └ <span class="dmg">モンスターゾーンが満杯です (最大 ${FIELD_MAX})</span>`); }
   }
   if(card.t==='spell'){
+    if (card.ench === "worldCare" && p.enchants.some((e) => e.card.ench === "worldCare")) { return reason("세계수의 보살핌은 자신 필드에 최대 1장", "世界樹の慈しみは自分の場に最大1枚"); }
     if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) { return reason(`  └ <span class="dmg">침묵의 거신</span>이 필드에 있어 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の巨神</span>が場にいるため魔法を使用できません`); }
     if (sealLowBlocks(g, playCost(card, p))) { return reason(`  └ <span class="dmg">침묵의 파수꾼</span>이 필드에 있어 코스트 ${sealLowCap(g)} 이하 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の番人</span>が場にいるためコスト${sealLowCap(g)}以下の魔法を使用できません`); }
     if (p.spellSealTurn) { return reason(`  └ <span class="dmg">침묵의 심판</span>: 이번 턴 동안 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の審判</span>: このターン中は魔法を使用できません`); }
