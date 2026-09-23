@@ -1,3 +1,4 @@
+import {waitForDuel} from '../ui/duelReadiness';
 import {releaseMonster} from '../ui/fieldLayout';
 import { paintDuelClock } from '../ui/duelClock';
 // ============================================================
@@ -20,7 +21,7 @@ import { cardPicker, cardPickerMulti, confirmDialog, treasureModal, winModal, cl
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { sfx, type SfxName } from "../ui/sound";
-import { avatarHtml } from "../ui/social";
+import { playDuelOpening } from "../ui/duelOpening";
 import { tierOf, tierLabel } from "../ui/tier";
 import { t, getLang, cardName, onLangChange } from "../i18n";
 import { diceRollAnim, cancelDiceAnimations } from "../ui/dice";
@@ -49,6 +50,7 @@ export abstract class BaseController implements BoardHandlers {
   protected exits: ControllerExits;
   private quickFaces: {card:CardInst;side:A.ViewSide;node:HTMLElement}[] = [];
   private winShown = false;
+  private outcomePlayed = false;
   private dead = false;
   private queue: Promise<void> = Promise.resolve();
   private unsubLang: () => void;
@@ -251,7 +253,7 @@ export abstract class BaseController implements BoardHandlers {
       // sound per event
       let sn: SfxName | undefined;
       if (e.type === "summon") sn = e.id === "MIMIC" ? "mimic" : "summon";      // Mimic token has its own cue
-      else sn = ({ hit: "impact", destroy: "death", draw: "draw", playSpell: "play", trapReveal: "trap", trapSet: "trapSet" } as Partial<Record<GameEvent["type"], SfxName>>)[e.type];
+      else sn = ({ hit: "impact", destroy: "death", playSpell: "play", trapReveal: "trap", trapSet: "trapSet" } as Partial<Record<GameEvent["type"], SfxName>>)[e.type];
       if (sn) sfx(sn);
       else if (e.type === "damage" && e.player === this.you) sfx("damage");
       else if (e.type === "heal" && e.player === this.you) sfx("heal");
@@ -473,6 +475,7 @@ export abstract class BaseController implements BoardHandlers {
       const loser = (1 - res.state.winner) as Side;
       const cause = lastKill ? (getLang() === "ja" ? lastKill.srcJa ?? lastKill.srcKo : getLang() === "en" ? logToEn(lastKill.srcKo ?? "") : lastKill.srcKo) : null;
       await wait(250);
+      this.outcomePlayed = true;
       await A.deathShatter(sideOf(loser), won, this.stripHtml(cause ?? "") || null);
     }
   }
@@ -740,50 +743,19 @@ export abstract class BaseController implements BoardHandlers {
     paintDuelClock(el, s, total, mine);
   }
 
-  /** Coin-toss reveal at game start: a two-headed coin — each face is a player's
-      profile avatar — flips and lands on the face of whoever goes first. */
+  /** Open the archive, introduce both seekers, then reveal the server-selected first side. */
   private async showCoinToss(firstSide: Side): Promise<void> {
-    const game=document.querySelector<HTMLElement>(".game");game?.classList.add("opening-hands");
-    // The board starts fully assembled.
-    if(this.dead){game?.classList.remove("opening-hands");return;}
-    const iAmFirst = firstSide === this.you;
-    const firstName = firstSide === this.you ? COIN_ME.name : COIN_OPP.name;
-    const heads = iAmFirst; // heads face = ME; land on heads if I'm first, else on OPP (tails)
-    // "Celestial Eye Compass" coin: the avatar sits in a circular mask UNDER a
-    // transparent ring-frame PNG (front = my face, back = opponent's face), so
-    // the compass ornaments wrap around the portrait.
-    const face = (p: CoinProfile, frame: string) =>
-      `<span class="ct-avatar-mask">${avatarHtml(p.avatar || (p===COIN_ME?"SEEKER_BLUE":"SEEKER_RED"), p.name, 96)}</span><img class="ct-frame" src="${frame}" alt="" draggable="false">`;
-    const ov = document.createElement("div");
-    ov.className = "cointoss-ov coin-loading";
-    ov.innerHTML = `
-      <div class="cointoss">
-        <div class="ct-coin ${heads ? "to-heads" : "to-tails"}">
-          <div class="ct-face ct-heads">${face(COIN_ME, "/ui/coin-toss/coin-option-1-front.png")}</div>
-          <div class="ct-face ct-tails">${face(COIN_OPP, "/ui/coin-toss/coin-option-1-back.png")}</div>
-        </div>
-        <div class="ct-caption">
-          <div class="ct-head">${t("coin.title")}</div>
-          <div class="ct-result">${iAmFirst ? t("coin.youFirst") : `${firstName} ${t("coin.oppFirst")}`}</div>
-        </div>
-      </div>`;
-    document.body.appendChild(ov);
-    try { const {mountCoinScene}=await import('../ui/coinScene');await mountCoinScene(ov.querySelector<HTMLElement>('.ct-coin')!,heads); } catch { /* CSS coin remains available without GPU. */ } finally {ov.classList.remove("coin-loading");}
-    if(this.dead){ov.remove();return;}
-    sfx("coin");
-    setTimeout(() => sfx(iAmFirst ? "turn" : "pop"), 1700);
-    setTimeout(() => { ov.classList.add("out"); setTimeout(async () => {
-      ov.remove();
-      if (this.dead || this.state.over) return;
-      A.turnBanner(this.state.cur === this.you, this.state.turn);
-      try {
-        if (this.state.turn === 1) {
-          game?.classList.remove('opening-hands');
-          await Promise.all([A.animateDraw(document.getElementById('hand'),3,'me'),A.animateDraw(document.getElementById('oppHand'),3,'opp')]);
-        }
-      } catch (error) { console.error('[opening draw]', error); }
-      if (!this.dead) this.afterApply({ state: this.state, events: [] });
-    }, 350); }, 2800);
+    const game=document.querySelector<HTMLElement>('.game');game?.classList.add('opening-hands');
+    try {
+      await waitForDuel(this.view.root);
+      if(this.dead)return;
+      await playDuelOpening(COIN_ME,COIN_OPP,firstSide===this.you);
+      if(this.dead||this.state.over)return;
+      A.turnBanner(this.state.cur===this.you,this.state.turn);
+      game?.classList.remove('opening-hands');
+      if(this.state.turn===1)await Promise.all([A.animateDraw(document.getElementById('hand'),3,'me'),A.animateDraw(document.getElementById('oppHand'),3,'opp')]);
+    } catch(error){console.error('[opening]',error);}
+    finally {game?.classList.remove('opening-hands');if(!this.dead)this.afterApply({state:this.state,events:[]});}
   }
 
   private turnToast(text: string, size: "big" | "small", ms: number): void {
@@ -821,7 +793,7 @@ export abstract class BaseController implements BoardHandlers {
     if (this.winShown || !this.state.over) return;
     this.winShown = true;
     const won: boolean | null = this.state.winner == null ? null : this.state.winner === this.you;
-    if (won != null) sfx(won ? "win" : "lose");
+    if (!this.outcomePlayed) sfx(won===null ? "drawGame" : won ? "win" : "lose");
     // bot games are client-local — report the result for analytics (online games are recorded server-side)
     if (this.state.mode === "bot") void api.trackBot(won);
     aCapture("game_end", { mode: this.state.mode, won, turns: this.state.turn });

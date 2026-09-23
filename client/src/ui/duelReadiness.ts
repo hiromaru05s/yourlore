@@ -28,7 +28,7 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
       for(const pseudo of [null,'::before','::after'])for(const match of getComputedStyle(el,pseudo).backgroundImage.matchAll(/url\(["']?(.*?)["']?\)/g))urls.add(match[1]);
     }
     for(const url of [...urls])if(url.includes('/art/cards-sm/'))urls.add(url.replace('/art/cards-sm/','/art/cards/'));
-    await Promise.all([document.fonts.ready,...[...urls].map(decode),import('./coinScene'),import('./paperDraw')]);
+    await Promise.all([document.fonts.ready,...[...urls].map(decode),import('./ceremonyScene'),import('./paperDraw')]);
     // Decode the actual image nodes too (not only a separate preloader object).
     await Promise.all([...root.querySelectorAll('img')].map(img=>img.decode().catch(()=>{})));
     while(root.isConnected&&root.dataset.sceneReady!=='true'&&root.dataset.tableState!=='fallback')await new Promise<void>(r=>requestAnimationFrame(()=>r()));
@@ -38,7 +38,7 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
   })().finally(()=>{root.classList.remove('duel-preparing');root.removeAttribute('aria-busy');loader.remove();});
   readiness.set(root,task);
 }
-/** Warm public furniture and the coin while the player is still in the lobby. */
+/** Warm public furniture and the opening portraits while the player is still in the lobby. */
 let warming:Promise<void>|undefined;
 export function warmDuel():Promise<void>{
   return warming??=(async()=>{

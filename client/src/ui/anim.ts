@@ -1,4 +1,4 @@
-import {mountDuelOutcome} from './duelOutcome';
+import {mountDuelOutcome,OUTCOME_DURATION} from './duelOutcome';
 import {reserveMonster} from './fieldLayout';
 import {attackPlan,attackPose,ATTACK_DURATION_MS} from './attackVisual';
 import {runAttackTimeline} from './attackMotion';
@@ -469,6 +469,7 @@ export async function animateReshuffle(side:ViewSide,count:number):Promise<void>
   fxWaiters.add(cancel);window.addEventListener('resize',cancel,{once:true});document.addEventListener('visibilitychange',cancel,{once:true});
   const deadline=setTimeout(cancel,4300);
   try {
+    sfx('shuffle');
     await Promise.race([cancelled,moveOnBoard({kind:'shuffle',source:shelf,target:deck,count,signal:abort.signal})]);
   } catch { /* Keep the state pipeline alive on an unavailable GPU/module. */ }
   finally {
@@ -843,14 +844,14 @@ export function manaDrop(side: ViewSide, amount: number): void {
 }
 
 /**
- * Archive verdict (~1.55s): portrait light fragments, an engraved book seal,
+ * Archive verdict (~3.3s): a gilded book opens or seals its final chapter,
  * and the result with its cause. Reduced motion uses a short static verdict.
  */
 export async function deathShatter(loserSide: ViewSide, won: boolean, cause: string | null): Promise<void> {
   if(fxSkip)return;
   const portrait=document.querySelector<HTMLElement>(loserSide==='me'?'#portraitMe .pt-ring':'#portraitOpp .pt-ring');
   const dispose=mountDuelOutcome(portrait,won,cause);
-  try{await wait(matchMedia('(prefers-reduced-motion:reduce)').matches?250:1550);}finally{dispose();}
+  try{await wait(matchMedia('(prefers-reduced-motion:reduce)').matches?250:OUTCOME_DURATION);}finally{dispose();}
 }
 
 /** Floating "결과 보기" button while reviewing the log after the game ends. */
@@ -899,7 +900,7 @@ export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<voi
   try{
     if(!reduced){
       try{const {swallowRiftCard}=await import('./riftScene');
-        const completed=await boardMotionScope(async signal=>{await swallowRiftCard(node,target,start,signal,()=>{started=true;});return !signal.aborted;},5000);
+        const completed=await boardMotionScope(async signal=>{await swallowRiftCard(node,target,start,signal,()=>{started=true;sfx('void');});return !signal.aborted;},5000);
         if(!completed)return;
       }catch(error){ console.warn('[Rift animation]',error); }
       if(started||fxSkip)return;

@@ -1,3 +1,4 @@
+import {sfx} from './sound';
 import {drawMotion,DRAW_DURATION,DRAW_STAGGER} from './drawMotion';
 export interface PaperDrawOptions {cards:HTMLElement[];origin:DOMRect;sleeve:string;reveal:boolean;signal:AbortSignal;onLand:(node:HTMLElement)=>void;}
 /** Exact native hand transform. Bounding rectangles alone stretch rotated cards. */
@@ -26,7 +27,7 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand}:
   if(reveal){const front=nativeCopy(node);front.style.backfaceVisibility='hidden';front.style.transform='translateZ(.25px)';flip.append(front);}
   const back=document.createElement('div');back.style.cssText=`position:absolute;inset:0;border-radius:7%;background-image:url("${sleeve}");background-size:100% 100%;backface-visibility:hidden;transform:rotateY(180deg);box-shadow:inset 0 0 0 1px #d0c5a380;`;
   const sheen=document.createElement('div');sheen.style.cssText='position:absolute;inset:1%;border-radius:5%;background:linear-gradient(115deg,transparent 30%,#d8eaff44 48%,transparent 62%);pointer-events:none;opacity:0;transform:translateZ(.5px)';
-  flip.append(back,sheen);root.append(flip);overlay.append(root);return {node,w,h,root,flip,sheen,landed:false};
+  flip.append(back,sheen);root.append(flip);overlay.append(root);return {node,w,h,root,flip,sheen,landed:false,sounded:false};
  });
  // Foreground cards retain their real affine placement while the new card slips behind.
  const grips:Array<{node:HTMLElement;copy:HTMLElement;visibility:string}>=[];
@@ -41,6 +42,7 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand}:
     flights.forEach((f,i)=>{
      const t=Math.max(0,Math.min(1,(now-start-i*DRAW_STAGGER)/DRAW_DURATION)),started=now-start>=i*DRAW_STAGGER;f.root.style.visibility=started&&!f.landed?'visible':'hidden';
      if(t<1)running=true;if(!started||f.landed)return;
+     if(!f.sounded){f.sounded=true;sfx('draw');}
      const target=handCardMatrix(f.node),end=target.transformPoint(new DOMPoint(f.w/2,f.h/2));
      if(t===1){f.root.style.visibility='hidden';f.landed=true;onLand(f.node);grip(f.node);return;}
      const p=drawMotion(t,reveal),ox=origin.left+origin.width/2,oy=origin.top+origin.height/2;
