@@ -2292,6 +2292,31 @@ applyFlavorCardNames([DB, STARTERS as unknown as Record<string, CardDef>]);
 Object.assign(DB.MIMIC_KING2, { text: "【소환시】리프트에 미믹 계열 6장 이상이면 미믹의 은신처를 전개", textJa: "【召喚時】自分のリフトにミミック系6枚以上なら「ミミックの隠れ家」を展開", textEn: "On summon: With 6+ Mimic-family cards in your Rift, deploy Mimic Hideout." });
 DB.GUILD_CHEST.textEn += " · If you control an Assassin-family card, results 9–12 draw 4 instead.";
 DB.GUILD_CHEST.text += " · 아군 필드에 암살자 계열 카드가 있으면 9~12는 카드 4장 드로우";
+// v52: approved post-expansion balance rework, after all language overrides.
+for (const id of ["DISCOVERY_SMALL", "DISCOVERY", "DISCOVERY_LARGE", "CREATION"]) {
+  const c = DB[id], limit = id === "CREATION" ? 3 : 1;
+  c.maxUsesPerTurn = limit;
+  c.text = c.text.replace(/[.。]+$/, "") + ` · 【동명 합계: 자신의 턴마다 ${limit}회까지】`;
+  c.textJa += ` · 【同名合計：自分の各ターン${limit}回まで】`;
+  c.textEn = c.textEn!.replace(/[.]+$/, "") + ` · 【Same name: ${limit} ${limit === 1 ? "use" : "uses"}/own turn】`;
+}
+Object.assign(DB.M11, {
+  text: "소환시: 이 몬스터 외 아군 몬스터가 2체 이상이면 기사(4/4) 1체를 소환",
+  textJa: "召喚時: このモンスター以外の味方モンスターが2体以上いるなら、騎士(4/4)1体を召喚",
+  textEn: "On summon: If you control at least 2 other monsters, summon 1 Knight (4/4)." });
+Object.assign(DB.SOUL_HARVEST, {
+  text: "상대 덱 구성의 저주 1장당 상대 플레이어에게 4 데미지.",
+  textJa: "相手のデッキ構成にある呪い1枚につき相手プレイヤーに4ダメージ",
+  textEn: "Deal 4 damage to the opponent per Curse in their deck composition." });
+DB.AJIN.play = 2;
+for (const key of ["text", "textJa", "textEn"] as const) {
+  DB.LUCKY_CHEST[key] = DB.LUCKY_CHEST[key]!.replace("마스터 미믹 12/6", "미믹 3/2").replace("マスターミミック12/6", "ミミック3/2").replace("Master Mimic 12/6", "Mimic 3/2");
+  DB.ELF_HAVEN[key] = DB.ELF_HAVEN[key]!.replace("+10", "+5");
+}
+Object.assign(DB.DEMON_REALM, {
+  text: "영구: 발동 시 자신 필드의 마족 및 이후 소환하는 마족의 효과·키워드 능력을 전부 무효화",
+  textJa: "永続: 発動時に自分の場にいる魔族と、以後自分が召喚する魔族の効果・キーワード能力を全て無効化",
+  textEn: "Permanent: Negate all effects and keywords of your Demonkin in play and those you summon later." });
 standardizeCardTexts(
   [DB, STARTERS as unknown as Record<string, CardDef>],
   // keyword names for rule R3 (they move to the chip row) — injected so cardText.ts
@@ -2404,7 +2429,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v51"; // v50 expansion + previously approved six-card balance pass
+export const BALANCE_VERSION = "v52"; // approved ten-card post-expansion rework
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

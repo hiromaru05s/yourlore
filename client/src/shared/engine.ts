@@ -2567,9 +2567,9 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
       ctx.log(hk ? `  └ 병사·기사 ${hk}체 공격력 +4(지속)` : "  └ 대상 없음", hk ? `  └ 兵士・騎士${hk}体の攻撃力+4(持続)` : "  └ 対象なし");
       break;
     }
-    case "warlordKnight": { // 워로드: 아군 몬스터 2체 이상이면 기사 1체
-      if (p.field.length >= 2) { spawnToken(g, ctx, p, "INFKNIGHT"); ctx.log("  └ 군세 결집 — 기사(4/4) 소환", "  └ 軍勢結集 — 騎士(4/4)召喚"); }
-      else ctx.log("  └ 아군 몬스터 2체 미만 — 불발", "  └ 味方モンスター2体未満 — 不発");
+    case "warlordKnight": { // v52: exclude the summoned Warlord itself
+      if (p.field.filter(x => x.uid !== m.uid).length >= 2) { spawnToken(g, ctx, p, "INFKNIGHT"); ctx.log("  └ 군세 결집 — 기사(4/4) 소환", "  └ 軍勢結集 — 騎士(4/4)召喚"); }
+      else ctx.log("  └ 자신 외 아군 몬스터 2체 미만 — 불발", "  └ 自身以外の味方モンスター2体未満 — 不発");
       break;
     }
     case "chronicler": { // 기록자: 최근 5턴(자신 기준)의 제시 이력에서 원하는 카드를 마나로 구매
@@ -3677,8 +3677,8 @@ function luckyChest(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): voi
   } else if (sum <= 5) {
     // spawnToken 경유 필수: 인라인으로 field.push 하면 약화술식·트릭룸(applyFieldGlobals)과
     // 등장 오라(applyEnterAura)가 통째로 빠진다 — 마스터 미믹에 弱化術式이 안 걸리던 원인.
-    spawnToken(g, ctx, o, "MIMIC2");
-    ctx.log(`  └ <span class="dmg">꽝! 상대 필드에 마스터 미믹(10/3) 소환</span>`, `  └ <span class="dmg">ハズレ！相手の場にマスターミミック(10/3)召喚</span>`);
+    spawnToken(g, ctx, o, "MIMIC");
+    ctx.log(`  └ <span class="dmg">꽝! 상대 필드에 미믹(3/2) 소환</span>`, `  └ <span class="dmg">ハズレ！相手の場にミミック(3/2)召喚</span>`);
   } else if (sum <= 8) {
     addMaxMana(p, 1);
     ctx.log(`  └ 최대 마나 +1`, `  └ 最大マナ +1`);
@@ -3710,6 +3710,12 @@ function openTreasure(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): v
 // ============================================================
 // play / buy
 // ============================================================
+function negateDemonEffects(m: FieldMon): void {
+  m.onSummon = undefined; m.turnFx = undefined; m.aura = undefined;
+  m.passive = []; m.passivesG = []; m.guts = 0;
+  // Some keywords are represented by fields rather than the passive arrays.
+  m.mult = undefined; m.directOnly = undefined; m.exileOnDestroy = undefined;
+}
 function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): void {
   const o = g.players[0] === p ? g.players[1] : g.players[0];
   // 폭풍의 광전사(drainMana): while on field, opponent's max mana -val
@@ -3724,9 +3730,9 @@ function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): vo
   if (m.aura === "rallyGuts") p.field.forEach((x) => { if (x.uid !== m.uid && (isSoldier(x) || isKnight(x))) grantGuts(x); });
   else if ((isSoldier(m) || isKnight(m)) && p.field.some((x) => x.uid !== m.uid && x.aura === "rallyGuts")) grantGuts(m);
   // 마계(v38 demonRealm): 자신이 소환하는 '마족' 몬스터의 효과를 전부 무효화
-  if (m.tribe === "마족" && p.enchants.some((e) => e.card.ench === "demonRealm") && (m.onSummon || m.turnFx || m.aura)) {
+  if (m.tribe === "마족" && p.enchants.some((e) => e.card.ench === "demonRealm")) {
     enchantKindFx(g,ctx.ev,"demonRealm",p);
-    m.onSummon = undefined; m.turnFx = undefined; m.aura = undefined;
+    negateDemonEffects(m);
     ctx.log(`  └ 마계: ${cn(m)} 의 효과 무효화`, `  └ 魔界: ${cn(m)} の効果を無効化`);
   }
   // 성(v37): 자신 필드에 병사·기사가 소환될 때마다 카운터 +1
@@ -3962,6 +3968,9 @@ export function playBlockReason(g:GameState, who:Side, card:CardInst):{ko:string
     if (p.field.length >= FIELD_MAX) { return reason(`  └ <span class="dmg">몬스터 존이 가득 찼습니다 (최대 ${FIELD_MAX})</span>`, `  └ <span class="dmg">モンスターゾーンが満杯です (最大 ${FIELD_MAX})</span>`); }
   }
   if(card.t==='spell'){
+    if (card.maxUsesPerTurn != null && (p.usesTurn[card.id] ?? 0) >= card.maxUsesPerTurn) {
+      return reason(`동명 카드는 자신의 턴마다 합계 ${card.maxUsesPerTurn}회까지 사용할 수 있습니다`, `同名カードは自分の各ターン合計${card.maxUsesPerTurn}回まで使用できます`);
+    }
     if (card.ench === "worldCare" && p.enchants.some((e) => e.card.ench === "worldCare")) { return reason("세계수의 보살핌은 자신 필드에 최대 1장", "世界樹の慈しみは自分の場に最大1枚"); }
     if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) { return reason(`  └ <span class="dmg">침묵의 거신</span>이 필드에 있어 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の巨神</span>が場にいるため魔法を使用できません`); }
     if (sealLowBlocks(g, playCost(card, p))) { return reason(`  └ <span class="dmg">침묵의 파수꾼</span>이 필드에 있어 코스트 ${sealLowCap(g)} 이하 마법을 사용할 수 없습니다`, `  └ <span class="dmg">沈黙の番人</span>が場にいるためコスト${sealLowCap(g)}以下の魔法を使用できません`); }
@@ -4096,6 +4105,8 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     // 스펠이라 star==="chest" 검사만 있던 예전 가드를 통째로 빠져나갔다.
 
     p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1); p.discard.push(card);
+    // A negated cast still consumes the same-name limit; count before reactions.
+    if (card.maxUsesPerTurn != null) p.usesTurn[card.id] = (p.usesTurn[card.id] ?? 0) + 1;
     afterPlay(g, ctx, p, card);
     advanceQuest(p, "spellPlay");
     p.spellsCastTurn = (p.spellsCastTurn || 0) + 1; // 마나 역류: 마법(t==="spell")만 카운트 (스타터 제외)
@@ -4113,7 +4124,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       if (vi >= 0) { p.discard.splice(vi, 1); rmz(p).push(card); }
     }
     p.uses[card.id] = (p.uses[card.id] || 0) + 1;             // game-long usage count
-    p.usesTurn[card.id] = (p.usesTurn[card.id] || 0) + 1;     // per-turn usage count
+    if (card.maxUsesPerTurn == null) p.usesTurn[card.id] = (p.usesTurn[card.id] || 0) + 1;
     if (card.ench) {
       p.discard.pop(); // stays on the field instead of going to discard
       p.enchants.push({ card, turns: card.val || 1, bornTurn: g.turn });
@@ -4127,7 +4138,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       }
       // 마계(v38): 발동 시 자신 필드의 마족 몬스터 효과도 무효화
       if (card.ench === "demonRealm") {
-        for (const dm of p.field) if (dm.tribe === "마족" && (dm.onSummon || dm.turnFx || dm.aura)) { dm.onSummon = undefined; dm.turnFx = undefined; dm.aura = undefined; ctx.log(`  └ 마계: ${cn(dm)} 의 효과 무효화`, `  └ 魔界: ${cn(dm)} の効果を無効化`); }
+        for (const dm of p.field) if (dm.tribe === "마족") { negateDemonEffects(dm); ctx.log(`  └ 마계: ${cn(dm)} 의 효과 무효화`, `  └ 魔界: ${cn(dm)} の効果を無効化`); }
       }
       // 무법지대(v41): 발동 시 필드의 모든 몬스터(알 제외)의 체력을 1로
       if (card.ench === "lawless") {
@@ -5073,10 +5084,10 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
         p.mana -= bc; if (!bought.quick) p.discard.push(bought); p.supply[action.i] = null; p.boughtCount++; p.taxFlag = true; p.buys[card.id] = (p.buys[card.id] || 0) + 1; (p.buysTurn ??= {})[card.id] = (p.buysTurn[card.id] || 0) + 1;
         ctx.log(`<span class="t">${p.name}</span> 제시 마켓 ${cn(card)} 구매 (${bc}) <span class="muted">[${card.quick ? "게임에서 제외" : "묘지로"}]</span>`, `<span class="t">${p.name}</span> 提示マーケット ${cn(card)} 購入 (${bc}) <span class="muted">[${card.quick ? "ゲームから除外" : "墓地へ"}]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "supply", i: action.i, id: card.id });
-        // 엘프의 쉼터 — v25: 제시 마켓에서 '세계수' 카드를 구매하면 자신 최대 체력 +10
+        // v52: World Tree supply purchases increase max HP and heal by 5.
         if ((card.name || "").includes("세계수") && p.enchants.some((e) => e.card.ench === "elfHaven")) {
-          addMaxHp(ctx, p, 10);
-          ctx.log(`  └ 엘프의 쉼터: 최대 체력 +10 (${p.maxHp})`, `  └ エルフの憩い場: 最大体力+10 (${p.maxHp})`);
+          addMaxHp(ctx, p, 5);
+          ctx.log(`  └ 엘프의 쉼터: 최대 체력 +5 (${p.maxHp})`, `  └ エルフの憩い場: 最大体力+5 (${p.maxHp})`);
         }
         if (bought.quick) resolveQuick(g, ctx, p, bought);
         tryToll(g, ctx, p, bought); // 통행세: 구매 반응
@@ -5284,7 +5295,7 @@ function expansionSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case 'ROGUE_ART': if (p.field.some(isAssassinCard)) { for (const m of p.field) m.passivesG = [...new Set([...(m.passivesG ?? []), 'evade'])]; } else queueExpansionChoice(g, p, card.id, '回避を付与する自分のモンスターを選択'); break;
     case 'BLACK_NOVA': p.hp = 1; o.skipTurns = (o.skipTurns ?? 0) + 1; break;
     case 'BLACK_CURSE': addCurses(g, o, 5); break;
-    case 'SOUL_HARVEST': ctx.dealDamage(o, deckComp(o).filter(c => c.id === 'CURSE').length * 7, cn(card), cn(card)); break;
+    case 'SOUL_HARVEST': ctx.dealDamage(o, deckComp(o).filter(c => c.id === 'CURSE').length * 4, cn(card), cn(card)); break;
     case 'ANESTHESIA': for (const m of p.field) m.immuneDamageTurn = g.turn; break;
     case 'EARTHQUAKE': areaDamage(g, ctx, p, 4, true, card); break;
     case 'MAGMA_RAIN': areaDamage(g, ctx, p, 6, true, card); break;

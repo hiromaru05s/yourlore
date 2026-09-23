@@ -23,6 +23,7 @@ export interface CardDef {
   val?: number; // generic effect magnitude (also enchant duration)
   val2?: number; // secondary magnitude (e.g. heal+draw, atk+def buff, enchant amount)
   play?: number; // play/cast cost (defaults to `cost`); buy cost stays `cost`
+  maxUsesPerTurn?: number; // same-name casts across all copies, including generated copies and negated casts
   quick?: boolean; // spell: resolve once on purchase, then permanently leave the game
   quest?: { event: QuestEvent; target: number };
   ench?: string; // persistent field-enchantment key (spell stays on field)
