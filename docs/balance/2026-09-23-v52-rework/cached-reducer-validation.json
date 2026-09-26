@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "games": 200,
+  "exactOutcomesMatch": true,
+  "groups": [
+    "baseline",
+    "coverage",
+    "combos",
+    "packages",
+    "tactical"
+  ],
+  "runs": [
+    {
+      "label": "original",
+      "cpu": {
+        "user": 5085246,
+        "system": 94202
+      },
+      "wallMs": 2645
+    },
+    {
+      "label": "cached",
+      "cpu": {
+        "user": 4663085,
+        "system": 83141
+      },
+      "wallMs": 2361
+    }
+  ]
+}

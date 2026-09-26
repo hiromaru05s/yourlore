@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "games": 16,
+  "exactOutcomes": true,
+  "scope": "Current v52 native structuredClone versus optimized clone; diagnostic runs excluded from main total."
+}

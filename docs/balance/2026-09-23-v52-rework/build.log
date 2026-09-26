@@ -1,0 +1,35 @@
+
+> lore-tcg@0.1.0 build
+> node scripts/guard-design.mjs && npm --workspace client run build
+
+✓ guard-design: ok
+
+> lore-client@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v5.4.21 building for production...
+transforming...
+✓ 120 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                            1.17 kB │ gzip:   0.63 kB
+dist/table-preview.html                    1.51 kB │ gzip:   0.87 kB
+dist/assets/tablePreview-2Rkra2Ey.css      1.87 kB │ gzip:   0.85 kB
+dist/assets/main-DoOarqnm.css            233.82 kB │ gzip:  49.96 kB
+dist/assets/RoomEnvironment-32GGg7Wt.js    2.11 kB │ gzip:   0.93 kB │ map:     8.56 kB
+dist/assets/coinScene-Dd-GwpNX.js          4.40 kB │ gzip:   2.26 kB │ map:    12.93 kB
+dist/assets/paperDraw-CmkUNqTB.js          5.10 kB │ gzip:   2.30 kB │ map:    13.83 kB
+dist/assets/cardSurface-BuHo_Ijn.js        7.75 kB │ gzip:   3.67 kB │ map:    21.24 kB
+dist/assets/diceScene-CvJAG4Pf.js          8.19 kB │ gzip:   3.83 kB │ map:    31.54 kB
+dist/assets/riftScene-BI4KUoVi.js          8.66 kB │ gzip:   4.03 kB │ map:    29.12 kB
+dist/assets/tablePreview-BxQiOqVA.js      24.96 kB │ gzip:   7.24 kB │ map:    80.93 kB
+dist/assets/duelScene-aDPitqqI.js         37.07 kB │ gzip:  14.54 kB │ map:   110.66 kB
+dist/assets/GLTFLoader-Qt8tskRI.js        44.85 kB │ gzip:  13.56 kB │ map:   242.44 kB
+dist/assets/three.module-BVF9cvqC.js     605.42 kB │ gzip: 154.92 kB │ map: 2,948.04 kB
+dist/assets/main-yCx6xOEM.js             941.34 kB │ gzip: 368.93 kB │ map: 2,359.10 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 6.54s

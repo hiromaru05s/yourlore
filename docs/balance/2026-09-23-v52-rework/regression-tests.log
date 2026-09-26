@@ -1,0 +1,5 @@
+PASS: v49 stats, Arbiter instance/cap/once, Care singleton/healing, Ancient timing/reward and translations
+PASS: v47 stats/cost, summon gates, mana lock/suppression, growth healing/triggers, Ember limit and recoil
+PASS: Half Elf base stats, both fields, removal, non-stacking, modifiers, zones, combat, bot features and existing summon effect
+PASS: quest lifecycle, progression, rewards, public persistence, legacy quick spells plus expanded catalog, both markets, mandatory choices, bot choices and rejection boundaries
+PASS: 32 retired traps, catalog text/effects/reactions, saved decks/watchlists/markets, related links, 40 market seeds, 2 reworked monsters, 10 completed bot games (1036 actions)

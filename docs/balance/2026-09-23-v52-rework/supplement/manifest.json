@@ -1,0 +1,12 @@
+{
+  "hashes": {
+    "supplement/plans/games-1.jsonl": "89fde05146517115042e515d8777dddfb6b1115c8801190165b7f3bc0abe7cf4",
+    "supplement/plans/games-3.jsonl": "f1c94356fa85d11476ffbabd16b7c80a8e0812fd5ad49ef62e5e5878c09f43ff",
+    "supplement/plans/games-2.jsonl": "61e75483207f7ff08f528a7deabcd3abf7416c444beb24f8f3dfde4cd5b12605",
+    "supplement/plans/games-0.jsonl": "035c4261e6e394f674171d61abb99b8f4c834352cd765a3ea86458aa9c983cce",
+    "harness/sensitivity-run.mjs": "a75ceaf6df065ad3c96bd31bfa4ff12718bfd877714276052cd427600d267d95",
+    "harness/aware-policy.mjs": "c116ece1c790de075f43252e7badc094ea99b37f87f7474d43d445146df5d90d",
+    "harness/core.bundle.mjs": "4e3004e90b3411bf3c96d55abb975fa151d4abe59703f19701e8a303cec8a18c",
+    "harness/clone.mjs": "4d250d10d324fecdbc9324bf0ac583fa3bd6a8a8ba938d180b1b4cb950a4407c"
+  }
+}

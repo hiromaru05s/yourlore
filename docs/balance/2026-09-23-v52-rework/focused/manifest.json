@@ -1,0 +1,9 @@
+{
+  "hashes": {
+    "focused/gambler-plan.jsonl": "e7cba2c9e1d04991791e687882d31c111b0bcfbdcd2148883e8a55059f5723a3",
+    "harness/core-cached.bundle.mjs": "6033bbf1b962f8824eb9646823f0663a683cebd844a02a4578a561796725331c",
+    "harness/run-cached.mjs": "99fe380d25bce9da032012b54ba6f55fe0b2da0e5aa90a3e1be7185352dda89b",
+    "harness/clone.mjs": "4d250d10d324fecdbc9324bf0ac583fa3bd6a8a8ba938d180b1b4cb950a4407c",
+    "harness/resume-worker.mjs": "afca7a2cff82384a375dd2c4e6070a867b4f1b2b836195e7e9c4b729edf074c6"
+  }
+}

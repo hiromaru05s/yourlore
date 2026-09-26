@@ -1,0 +1,182 @@
+{
+  "README.md": {
+    "bytes": 1575,
+    "sha256": "30c35b37711c9ef9cc0642c9d3f825147162039c91c6cdbdcaac8a44fe96ceef"
+  },
+  "REPORT.md": {
+    "bytes": 20530,
+    "sha256": "4d23c13936f8bb5fa6952b7f4f5e1ec012d1125d55a8224954e2f836c485dbe8"
+  },
+  "analysis-validation.json": {
+    "bytes": 394,
+    "sha256": "9c6af7c14d5030fa42f7a36627f7386499845db8c969def031406f448a1c2d41"
+  },
+  "archive-validation.json": {
+    "bytes": 17748,
+    "sha256": "dff84dfd92458d2c9afce1e3345eaa04b15b94e24ef05a89c09d0c21f28c346a"
+  },
+  "background-sensitivity.md": {
+    "bytes": 28584,
+    "sha256": "ec367318be06f6da4bf1a6a16840046ac239022e515035a7b18d93e18fac9612"
+  },
+  "base-source-validation.json": {
+    "bytes": 688,
+    "sha256": "6cb71702148eaa37be8b6bd06f319c4acf550884d6378f0c75933c0cbdcc48aa"
+  },
+  "build-labels.json": {
+    "bytes": 1620,
+    "sha256": "5200aab9a557816b7da865105775933a33a683ae00fa174ec7c0c2b621f123d3"
+  },
+  "builds-report.md": {
+    "bytes": 24488,
+    "sha256": "ffdac355a2498c594084d3cb9b1a6d860e5e9584ad125b90e6c8737169ddeb96"
+  },
+  "builds.json": {
+    "bytes": 2713,
+    "sha256": "9ce11cc959cf7d8e38aabdc86ec91486b05b88988ceb0a1f423a4eb1ed81ab65"
+  },
+  "cached-reducer-validation.json": {
+    "bytes": 445,
+    "sha256": "25e0664b8363e0f82ee444418efc8c2de689bb8ed68770afe44c7552f8d477e4"
+  },
+  "catalog-diff-v51.json": {
+    "bytes": 8567,
+    "sha256": "59eb2c7f696789c536fcb940b760e2cf16045a644a859f96bc9646984a74bd74"
+  },
+  "catalog.json": {
+    "bytes": 204114,
+    "sha256": "8d23b51e2aa863104e068cc40c81f836267d52d85aa09d2a1ae0f15a2d87757b"
+  },
+  "combos.md": {
+    "bytes": 10632,
+    "sha256": "dd5ed529a5f2f9b3fc718e97d7c930f62465ab14854d8df787e17ac470c9f1da"
+  },
+  "delivery-counts.json": {
+    "bytes": 133,
+    "sha256": "e53893e4da693cff08935f5fd63fd253e37a206a24c38891174f12e839e8b501"
+  },
+  "elite-routes.json": {
+    "bytes": 13816,
+    "sha256": "045313d916a946578da6204192493ae43f70e3d5c01996a563a1061767bf3074"
+  },
+  "elite-routes.md": {
+    "bytes": 1150,
+    "sha256": "d06fa355b11655ceeff72bc6d90dfcf65e960c314f932afdc121517ffc03b473"
+  },
+  "experiment-plan.json": {
+    "bytes": 4739,
+    "sha256": "922a8a310bd74002cab9b74b27b5091404f7ca7e1757d8b462e95bfc7b4059c2"
+  },
+  "findings.md": {
+    "bytes": 11265,
+    "sha256": "fb91b505826794f3b1ec6d48c457c8f685f489b63e6a560e360a0716eb8f6e30"
+  },
+  "gambler-role.md": {
+    "bytes": 1051,
+    "sha256": "539f40d4772434be53b56654d6e9bb490bd7d39025a0d5e7e38b4013442521d0"
+  },
+  "generated-cards.md": {
+    "bytes": 3795,
+    "sha256": "134b6ac91a47a8d332d511dff384f8b1d4d7f06972d4655ca77575f53a82f0e0"
+  },
+  "implementation-validation.json": {
+    "bytes": 968,
+    "sha256": "9df434af8f13bc47e3fc7559c627f3070b1b2eb3092604ade7fb598bf40e9041"
+  },
+  "index.html": {
+    "bytes": 12584671,
+    "sha256": "fe10cc62d9acbca3c7173bddd30256d35535426cabeee071ab2290f20e8e75a6"
+  },
+  "invalid-games.json": {
+    "bytes": 498082,
+    "sha256": "d0d1136f7f6fc9e9559bb285026a8f92b1383a27be4f71303a5a89384fdfb0bc"
+  },
+  "market-ranking.md": {
+    "bytes": 35640,
+    "sha256": "1d57d0c6ff651142b956e53c5573c765c36f454f8a16ccb3e4bb9bdad19e3384"
+  },
+  "methodology.md": {
+    "bytes": 5910,
+    "sha256": "ddc3be96ea5f1b1664af8b885bd30759005446cbcf9355a9b3f5447d094c321a"
+  },
+  "native-clone-validation.json": {
+    "bytes": 176,
+    "sha256": "5f37442638da097040b1701c583d016dc4f681553e30fa2e0855933b26fbad14"
+  },
+  "packages.json": {
+    "bytes": 3792,
+    "sha256": "62d8db7259eb73f0cf75570ee4aed8b23d2c3c5b36780e7ca1fd8e53999ee17e"
+  },
+  "pairs-observed.md": {
+    "bytes": 580222,
+    "sha256": "262e482f9eceee476b547fbeefd27f5d389e342f8c7e6b4d8c5c061998376aa1"
+  },
+  "peer-coverage-sensitivity.json": {
+    "bytes": 267536,
+    "sha256": "d2146e5fcfee71479af7a86f507d32baba003d8900eb69ba33c59ee44c456f68"
+  },
+  "peer-coverage-sensitivity.md": {
+    "bytes": 18572,
+    "sha256": "05017373371c833ab74162228b0f399642546690607b2011d5a75c4631eac11e"
+  },
+  "plan-validation.json": {
+    "bytes": 161,
+    "sha256": "9702f3e47cf3ba5d7c245465c49c64b7fa37efab70cab4e19db1ceb28d1cd8d7"
+  },
+  "policy-sensitivity.md": {
+    "bytes": 29326,
+    "sha256": "99c5cf02ccbc4d9ba419da4599cf4601acdceea7e70a81782754277ba7b497bf"
+  },
+  "results.json": {
+    "bytes": 13262255,
+    "sha256": "9eefd7fe2842c3721ff18be66a5f167ef653001cfb0a0a882c59cfaa5fcaeaff"
+  },
+  "rule-validation.json": {
+    "bytes": 770,
+    "sha256": "6c5e6400dd292e0a0882ee7fd366d6f4d0ce606a224f23a1e1bd5ef3c9d22187"
+  },
+  "schedule.json": {
+    "bytes": 280824,
+    "sha256": "3341cc30f2382656f6c20cb46c5c6c0a3c294c6ed433706556932e7276779ea4"
+  },
+  "source-audit.md": {
+    "bytes": 3456,
+    "sha256": "5c6a6fe1f7cce56811712cbe15d842be80903941d925def3698cbf3fead81ff1"
+  },
+  "source-manifest.json": {
+    "bytes": 7652,
+    "sha256": "a329a6bee1147d57461e1d2c92a20e36098f4d7796a0ad3882bf952b542529aa"
+  },
+  "starter-ranking.md": {
+    "bytes": 4015,
+    "sha256": "474c1db68a1376300ffeaab0656623ba49e45308a721446d70b60c5ab231ebb0"
+  },
+  "study-validation.json": {
+    "bytes": 8188,
+    "sha256": "4424254fe097b70a81ac430416596c38bc050230d29644e6da5f87d1efbb1b20"
+  },
+  "superseded-jobs.json": {
+    "bytes": 11,
+    "sha256": "e574d69bd2b8d021728496516d52c066d1b3e38dae015d7d5302173c90a5593d"
+  },
+  "supplement-report.md": {
+    "bytes": 30688,
+    "sha256": "93292aa937dfae6de3bef903f8c8961c463cf684543d3cf077642ffa2098c66c"
+  },
+  "version-comparison-supplement.json": {
+    "bytes": 5589,
+    "sha256": "2fcc5349280bc5e893921f62898927c492bb4fa4d3068dbbace6064e294edf80"
+  },
+  "version-comparison-supplement.md": {
+    "bytes": 2492,
+    "sha256": "58f3b57e5307936bfc0cd7bec66a74b2c52aecaf5de971a725a32e7c40d7fd01"
+  },
+  "version-comparison.json": {
+    "bytes": 127835,
+    "sha256": "cce5e1819c8cc2e7df2362f33f76406095b9f2305dd9e69ce014ec95fec974d8"
+  },
+  "version-comparison.md": {
+    "bytes": 36129,
+    "sha256": "0125c0809302178bfab244400dcaa681c198eefc275a4c1aa1c35797d72fd742"
+  }
+}

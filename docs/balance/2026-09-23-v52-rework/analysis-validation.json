@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "checks": [
+    "exact sample counts",
+    "all 282 market and 33 starter cards",
+    "frozen v52 rework, ten approved card changes",
+    "64 factorial combinations",
+    "zero Cull placebo",
+    "paired deltas and confidence intervals",
+    "complementary matchup scores",
+    "no simulation exceptions",
+    "observed pair comparison denominators and score bounds"
+  ]
+}

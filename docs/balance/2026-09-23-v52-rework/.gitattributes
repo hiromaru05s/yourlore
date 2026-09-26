@@ -1,0 +1,3 @@
+# Preserve verbatim validation logs and patch context.
+*.log -whitespace
+*.patch -whitespace

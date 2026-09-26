@@ -1,0 +1,12 @@
+raw/
+plans/
+pilot*/
+supplement/raw/
+supplement/plans/
+focused/raw/
+*.jsonl
+__pycache__/
+TASK_STATE.md
+findings-draft.md
+*-preview.json
+version-comparison.packages.*

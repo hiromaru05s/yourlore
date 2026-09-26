@@ -1,0 +1,64 @@
+{
+  "passed": true,
+  "attempted": 2688,
+  "finished": 2688,
+  "unfinished": 0,
+  "reasons": {},
+  "completeBlocks": 448,
+  "arms": {
+    "0": {
+      "n": 448,
+      "mean": 0.28794642857142855,
+      "lo": 0.2522684831038819,
+      "hi": 0.3236243740389752
+    },
+    "1": {
+      "n": 448,
+      "mean": 0.3950892857142857,
+      "lo": 0.3571408230951413,
+      "hi": 0.4330377483334301
+    },
+    "2": {
+      "n": 448,
+      "mean": 0.4263392857142857,
+      "lo": 0.38902806485271096,
+      "hi": 0.46365050657586043
+    }
+  },
+  "deltas": {
+    "0->1": {
+      "n": 448,
+      "mean": 0.10714285714285714,
+      "lo": 0.0710633091861459,
+      "hi": 0.14322240509956838
+    },
+    "1->2": {
+      "n": 448,
+      "mean": 0.03125,
+      "lo": -0.001397820346511279,
+      "hi": 0.06389782034651129
+    },
+    "0->2": {
+      "n": 448,
+      "mean": 0.13839285714285715,
+      "lo": 0.09875069551224973,
+      "hi": 0.17803501877346456
+    }
+  },
+  "use": {
+    "0": {
+      "gamblerUsed": 0,
+      "legendUsed": 0.6183035714285714
+    },
+    "1": {
+      "gamblerUsed": 1,
+      "legendUsed": 0.5647321428571429
+    },
+    "2": {
+      "gamblerUsed": 1,
+      "legendUsed": 0.6171875
+    }
+  },
+  "rawSha256": "af04b46ddf500700b967449d19d0c1037dd12a0286f6d7bef889a323dfd62572",
+  "notes": "Follow-up design inherited unchanged from v51, fixed Casino recipe and 28 opponents; differences conditional on deliberate Legendary Gambler acquisition. Same seeds/starts; all six games must finish."
+}

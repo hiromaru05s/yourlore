@@ -1,0 +1,410 @@
+{
+  "passed": true,
+  "files": [
+    {
+      "original": "raw/baseline/games-0.jsonl",
+      "originalBytes": 164237766,
+      "originalSha256": "c526c1779107f8e7baf6d7f9c4712d62b69be894c315a46e7e9f1c3f84b5760d",
+      "archive": "raw/baseline/games-0.jsonl.gz",
+      "archiveBytes": 31343106,
+      "archiveSha256": "83bfe4dd37d89f618774a1a9bf2ae0af219451cc96b7372f84cb728aa6dcb52f",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/baseline/games-1.jsonl",
+      "originalBytes": 164094160,
+      "originalSha256": "ab1562dc5dd71498b35c600c34f9ed3a574867f51bc58314e98937534cd5085a",
+      "archive": "raw/baseline/games-1.jsonl.gz",
+      "archiveBytes": 31328719,
+      "archiveSha256": "1f7ba9f804b3d6b4afa54738151bf57e38a7c38632245f8353d640603eaa49db",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/baseline/games-2.jsonl",
+      "originalBytes": 167683919,
+      "originalSha256": "a13729d2d8324c532b76a06e20ff894cbc109f08ea385472e74fe74abb61560d",
+      "archive": "raw/baseline/games-2.jsonl.gz",
+      "archiveBytes": 34716324,
+      "archiveSha256": "7b5cfb064e6b0df53d6fb3a0da4f9010f3d510f60d510566480422857244e34a",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/baseline/games-3.jsonl",
+      "originalBytes": 167129727,
+      "originalSha256": "f1ea44cceabf8dbccb5e31170405c37d2fb7977782ff7d6d5d3cb80393a77374",
+      "archive": "raw/baseline/games-3.jsonl.gz",
+      "archiveBytes": 34559604,
+      "archiveSha256": "e4ae9fcfd4a21a1df54a7c1a50e6489262ce3312ebd9014c56a90b6cb2cdbed5",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/baseline/games-4.jsonl",
+      "originalBytes": 152162525,
+      "originalSha256": "0af67c16ab5c590f26f4838be8cc111ac3007f26a528752d2d863afde4d9c7b8",
+      "archive": "raw/baseline/games-4.jsonl.gz",
+      "archiveBytes": 29251990,
+      "archiveSha256": "f40f96ba83c27d1f1c5cc4829588d7a77d8c67f22d9116cc645be64c6f6ef0c1",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/baseline/games-5.jsonl",
+      "originalBytes": 152155935,
+      "originalSha256": "f6855eac5ca629eea107bdd3910fab2643b4501ccbca43c43a749124e8f47bee",
+      "archive": "raw/baseline/games-5.jsonl.gz",
+      "archiveBytes": 29246602,
+      "archiveSha256": "891bbeddcaaa10851d0b14eda5e6073bbdadb22b5279257f263651b98795081e",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/baseline/games-6.jsonl",
+      "originalBytes": 162085086,
+      "originalSha256": "871f573cae105533b475dc2216ced44752dd20b999235a57fa990364adae0ddd",
+      "archive": "raw/baseline/games-6.jsonl.gz",
+      "archiveBytes": 32553425,
+      "archiveSha256": "ac46aeca26de0192f5b0d76c75aec35eae56922c49d4198944d10b5ff0f33db8",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/baseline/games-7.jsonl",
+      "originalBytes": 162390892,
+      "originalSha256": "67f1e200ec98a4decff819689724a2a1676acb7ee9ce55bb4455333f60727d11",
+      "archive": "raw/baseline/games-7.jsonl.gz",
+      "archiveBytes": 32618191,
+      "archiveSha256": "138fc37bd9bdd3c0b07595aa96f88a1bed2cf91ab161abcdc68c865c24c73007",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/combos/games-0.jsonl",
+      "originalBytes": 43938781,
+      "originalSha256": "3b9a958e45c6485bd05adb35ba3db24ffe85f49357935a3bc56f0e589fd16187",
+      "archive": "raw/combos/games-0.jsonl.gz",
+      "archiveBytes": 8804723,
+      "archiveSha256": "e67b39767f0c844e82463fffc351e33a57f6ad20fb97f64a6422f9c7f57fb19b",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/combos/games-1.jsonl",
+      "originalBytes": 44062235,
+      "originalSha256": "528501c30db60a4d447ceb7be2809f4232277e2efa86824eb0e982fea039301d",
+      "archive": "raw/combos/games-1.jsonl.gz",
+      "archiveBytes": 8842431,
+      "archiveSha256": "a711380ef4d92951f19d2e9e0f432bd132e2180e82daff52f9c906c50eaf3be6",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/combos/games-2.jsonl",
+      "originalBytes": 44154866,
+      "originalSha256": "e57b63c9a796e1e5c2fbd6b8a9520257232012e3e205fab8dcc775d7a89705d1",
+      "archive": "raw/combos/games-2.jsonl.gz",
+      "archiveBytes": 8793745,
+      "archiveSha256": "9c84ebe81774464e93e367cc2ccb755d036dbc1c21e287e72d3e4b6469882f1a",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/combos/games-3.jsonl",
+      "originalBytes": 44276053,
+      "originalSha256": "f16cab3142013a23fd30c310604f0f2b64a4af15e40f25cb32a57cddcc2421f8",
+      "archive": "raw/combos/games-3.jsonl.gz",
+      "archiveBytes": 8821789,
+      "archiveSha256": "e752a302a97bbdf9d235d147c58a17d5e4bfa4a31fc0c753e62a9cfd3f442d0a",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/combos/games-4.jsonl",
+      "originalBytes": 43157422,
+      "originalSha256": "d9f44440e7012db42ede60430f1ee044df9ea5a7f75d4e854a9162a6401fd103",
+      "archive": "raw/combos/games-4.jsonl.gz",
+      "archiveBytes": 8481213,
+      "archiveSha256": "c4cc6ff580e10c566ef6d45971d4e195bf80dbd69c6682cda90addbb7df99970",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/combos/games-5.jsonl",
+      "originalBytes": 43441026,
+      "originalSha256": "63e953e13a8a3416cf99fb9ef132cfa9057e6f610a37a9702e845495cf99e3bc",
+      "archive": "raw/combos/games-5.jsonl.gz",
+      "archiveBytes": 8560361,
+      "archiveSha256": "26f5ab36e3af0655c4e6a88757491eb9f32fbf2da3498ee693ede06d94517e54",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/combos/games-6.jsonl",
+      "originalBytes": 42590788,
+      "originalSha256": "1bb1eb8fa635c4faf7546d3dade7661f59125341f7c14bde64d7b92250f1ccc9",
+      "archive": "raw/combos/games-6.jsonl.gz",
+      "archiveBytes": 8207747,
+      "archiveSha256": "0a3470c33111a6086ab937e539fc2c9cf7812bcaa39da7ddb9302ec71e6bfc1d",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/combos/games-7.jsonl",
+      "originalBytes": 42928269,
+      "originalSha256": "9c8ccff593ac69d2e8da4dc5d510d929d6a644249de3b08b3d930f96a914be5d",
+      "archive": "raw/combos/games-7.jsonl.gz",
+      "archiveBytes": 8303298,
+      "archiveSha256": "bf502307c13fbf0b3fd8c15d21cb3b3f6c88e8790d45042dadbc7934e8320ea3",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/coverage/games-0.jsonl",
+      "originalBytes": 38085773,
+      "originalSha256": "8676567dc1a43c9a3a0729cf53cf0c24d01cffed0e17fbdc7aff01045312f592",
+      "archive": "raw/coverage/games-0.jsonl.gz",
+      "archiveBytes": 7232354,
+      "archiveSha256": "5f513ac39bb21f3d7e1f6ade203ebf9d246403922d52e859b70bdc4da941c60b",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/coverage/games-1.jsonl",
+      "originalBytes": 37907694,
+      "originalSha256": "cbc3f91ed0092943c265cca8b589582ea08203245e20273732beb23b3dc4bd39",
+      "archive": "raw/coverage/games-1.jsonl.gz",
+      "archiveBytes": 7187915,
+      "archiveSha256": "15ec29153f33706b4c75b601d6727e7da31b88a010f28584b637fdd61b25942d",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/coverage/games-2.jsonl",
+      "originalBytes": 38545279,
+      "originalSha256": "7da56492db60ee2455b80774bbf621918e9512facb4d0e0e80f76f9d45df2c42",
+      "archive": "raw/coverage/games-2.jsonl.gz",
+      "archiveBytes": 8034473,
+      "archiveSha256": "c6587a4a43cde91819ac51a0b0de3235dc39418c00c56d24a808742a6921ef0d",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/coverage/games-3.jsonl",
+      "originalBytes": 38700229,
+      "originalSha256": "34eeb04ae6d202c286db6bee2e552ab6389033f2c9f27c438280845c5833aac5",
+      "archive": "raw/coverage/games-3.jsonl.gz",
+      "archiveBytes": 8064973,
+      "archiveSha256": "e1574371b927b9442c7ae38f77fe2fd80d4b1178b79707baf6442f5cbca5c591",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/coverage/games-4.jsonl",
+      "originalBytes": 35866947,
+      "originalSha256": "3c0538f489c7967fef7c23134df4c1c310587c4eac014cbc41e919f55c0cb1a9",
+      "archive": "raw/coverage/games-4.jsonl.gz",
+      "archiveBytes": 6911892,
+      "archiveSha256": "9587b856c3c04567101de453040c8e6447883fa848d912b2b1134aabab8a6f40",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/coverage/games-5.jsonl",
+      "originalBytes": 35705439,
+      "originalSha256": "18bc00a1c2834155c8cc322690a777f6fd179d9ed4f760d1acf514651ca7dc7c",
+      "archive": "raw/coverage/games-5.jsonl.gz",
+      "archiveBytes": 6876180,
+      "archiveSha256": "26f73ec1223c61d854bef48f0163305c76ec4227100b8c80bc444fa4fcf19be3",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/coverage/games-6.jsonl",
+      "originalBytes": 37478047,
+      "originalSha256": "30a7a338317774b77a786accd1f7c9e1d108c3fbb5b87122d2587f24fb45a1d9",
+      "archive": "raw/coverage/games-6.jsonl.gz",
+      "archiveBytes": 7531559,
+      "archiveSha256": "5dd8b7f2f9f2195467dfc50088258b8edcb82fe9c2e33c258c37f3044a67a6a4",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/coverage/games-7.jsonl",
+      "originalBytes": 37119085,
+      "originalSha256": "1d2acfc0cd0851ed789ca41275dfb88b6b87ef27ad62be557c74910b6fa2fae2",
+      "archive": "raw/coverage/games-7.jsonl.gz",
+      "archiveBytes": 7445291,
+      "archiveSha256": "08b43835811bbd29d96eb26fd16dc3f91309e354c3c7e281f54dd5fa2811cdda",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/packages/games-0.jsonl",
+      "originalBytes": 15059215,
+      "originalSha256": "3d6e9c313e8dcbaebaa01c55266221da5cf2fb27c7f744772594c5c1c18f2274",
+      "archive": "raw/packages/games-0.jsonl.gz",
+      "archiveBytes": 2231719,
+      "archiveSha256": "81c3d541cc6a0239bbce4c3a7e3db16ef1d9e79fda3c7859dcbd216766533b8f",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/packages/games-1.jsonl",
+      "originalBytes": 15144557,
+      "originalSha256": "778367a132f328c3e7939ea26e394980f3fb843254f264ee51db7b3043f01358",
+      "archive": "raw/packages/games-1.jsonl.gz",
+      "archiveBytes": 2260913,
+      "archiveSha256": "96f9da2324d949d17965629ad7bd2629bd9d700ceb69708c6aa6d4d2813d6bcd",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/packages/games-2.jsonl",
+      "originalBytes": 15055579,
+      "originalSha256": "23abef7558f21df48d12e2873715dcbed73cee185a4632d036cec4b98de21a42",
+      "archive": "raw/packages/games-2.jsonl.gz",
+      "archiveBytes": 2230410,
+      "archiveSha256": "49cbb79a5ae7359ee0462afb8a851ab23f9b785b9d1075ef31eb058d00bcb86f",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/packages/games-3.jsonl",
+      "originalBytes": 15168909,
+      "originalSha256": "90753dfc4dfa8cb1c34c68425e76f0390cb2cd0e1251558a5187a7a70fde1203",
+      "archive": "raw/packages/games-3.jsonl.gz",
+      "archiveBytes": 2265291,
+      "archiveSha256": "bcc2f211595769ca82e235df5df547a107f4c33bfc9c3d206f78ee66ca75cf92",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/packages/games-4.jsonl",
+      "originalBytes": 15081682,
+      "originalSha256": "3389fb2a948c9d2d54f5d2ed2a8dad3c4aba7137d3c6c011219ad8fca564ea7c",
+      "archive": "raw/packages/games-4.jsonl.gz",
+      "archiveBytes": 2239368,
+      "archiveSha256": "ed82655a8bee4bc9327b2f215a4c327fd2c74c55912dc195804709d15bac9f67",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/packages/games-5.jsonl",
+      "originalBytes": 15131358,
+      "originalSha256": "bf99fcda229d844694cd12e31c8a9bb8805e282b1c03b08e7f9d4bbc6dbefc4b",
+      "archive": "raw/packages/games-5.jsonl.gz",
+      "archiveBytes": 2253170,
+      "archiveSha256": "2d16bd24c8d17d1bb3a7e282f6f0c53c09710060c15a8853d33ed833d7d8f418",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/packages/games-6.jsonl",
+      "originalBytes": 15040378,
+      "originalSha256": "d4f5867a98db8a8a695d43fcd9417b03ce1b1b7cbb1a16bdbdc892c1e2f26400",
+      "archive": "raw/packages/games-6.jsonl.gz",
+      "archiveBytes": 2225247,
+      "archiveSha256": "dab8e00e570334c8c650180164b2af68f02fb8fa9b4d84a80fc91a9089dd65e6",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/packages/games-7.jsonl",
+      "originalBytes": 15172876,
+      "originalSha256": "62a331b190dcd5acd2a2cc957551e841f3640e37f137ac9ebb2b96f7dc3d43dc",
+      "archive": "raw/packages/games-7.jsonl.gz",
+      "archiveBytes": 2261221,
+      "archiveSha256": "582bf96d7b7ee87b17fe3f8215aee3bdddad3e2d0190f891a5917b08e57078b0",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/tactical/games-0.jsonl",
+      "originalBytes": 1756964,
+      "originalSha256": "3a1cfb2999056042d87c5428e7393026295bc6c4248bae3daaa30963960b1096",
+      "archive": "raw/tactical/games-0.jsonl.gz",
+      "archiveBytes": 310305,
+      "archiveSha256": "80a60872108cabf0a4be545e25046ad43f4e8afcf124fd2bcb8f2d75ddf98118",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/tactical/games-1.jsonl",
+      "originalBytes": 1795822,
+      "originalSha256": "8e932fbc84b83a17b43bf645672006f80dff985b7ba14c2cad96269c0257ff3d",
+      "archive": "raw/tactical/games-1.jsonl.gz",
+      "archiveBytes": 317280,
+      "archiveSha256": "d93b58f33e83a4c4ca224a11b0fdfe2f51845aa6e483930fd53e0d4c4ce707d4",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/tactical/games-2.jsonl",
+      "originalBytes": 1705756,
+      "originalSha256": "4d117e04c13695271d2f21d4abaf0694b629aea0a0299cb87eb4e4ab268e8239",
+      "archive": "raw/tactical/games-2.jsonl.gz",
+      "archiveBytes": 308481,
+      "archiveSha256": "d6d248237ec96b98ce1482c03496dd365f7682d4bd171f69f8e8ed4c48e82ffc",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/tactical/games-3.jsonl",
+      "originalBytes": 1715290,
+      "originalSha256": "ad615bbf0fc969b8128faa1200f657e2fc237b622f69777b6c7b2891d9ce1649",
+      "archive": "raw/tactical/games-3.jsonl.gz",
+      "archiveBytes": 311905,
+      "archiveSha256": "1916f1f291fa9dac375698c2be626f54a11ba279d658e65da94313d706e1c8da",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/tactical/games-4.jsonl",
+      "originalBytes": 1533349,
+      "originalSha256": "15f82768700ba9e6f545a70268ec1c81c14826e3dbc11dd2afe8deca0963eef4",
+      "archive": "raw/tactical/games-4.jsonl.gz",
+      "archiveBytes": 259382,
+      "archiveSha256": "0256e521b2102012cefa6ae25510dd1d2a558db60a9aed85dc5c06a247d8a0b8",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/tactical/games-5.jsonl",
+      "originalBytes": 1502255,
+      "originalSha256": "155744282cceb7d6b7986e392a708026c5018264b3b098074c55d3bd51d6a358",
+      "archive": "raw/tactical/games-5.jsonl.gz",
+      "archiveBytes": 251697,
+      "archiveSha256": "08e186f706d7515de1bf15a3036c578c31ae1190ad0a6d0684843c6adb22c9ee",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/tactical/games-6.jsonl",
+      "originalBytes": 1624900,
+      "originalSha256": "580d514cc50ab0be877e5caaac8713d0eb502b22982dd134b1c3d4b80970030f",
+      "archive": "raw/tactical/games-6.jsonl.gz",
+      "archiveBytes": 283785,
+      "archiveSha256": "28e2f1bf03f3d48cf2632a67bb99f10bd8b02e191507820400b7d0bd98c1a1cd",
+      "decompressionVerified": true
+    },
+    {
+      "original": "raw/tactical/games-7.jsonl",
+      "originalBytes": 1580663,
+      "originalSha256": "beab2ad235d0806adce901766a3234322d4c152a8fbe04583a560f2f972b0795",
+      "archive": "raw/tactical/games-7.jsonl.gz",
+      "archiveBytes": 271507,
+      "archiveSha256": "4b5ccc4a1648906121cb2c767701ad9700528d53f4edfe6cf9df9855aad8cbf6",
+      "decompressionVerified": true
+    },
+    {
+      "original": "supplement/raw/games-0.jsonl",
+      "originalBytes": 28373898,
+      "originalSha256": "6fcb2104f85dc01ba0d44c59026b0e715263ed2219d5f780cb4308203f07d75e",
+      "archive": "supplement/raw/games-0.jsonl.gz",
+      "archiveBytes": 4034692,
+      "archiveSha256": "594afb995080a29d79e4ed809c67f9e3f591364528f0ccda59dda41e904a4be3",
+      "decompressionVerified": true
+    },
+    {
+      "original": "supplement/raw/games-1.jsonl",
+      "originalBytes": 28117782,
+      "originalSha256": "7b5f3d1ee3b4b3797fe39bae857ce8fb8202f987d7f33de9c8826a0dabaf219a",
+      "archive": "supplement/raw/games-1.jsonl.gz",
+      "archiveBytes": 3952809,
+      "archiveSha256": "a917d7f4c688056611bd642f2ce846664cb5b35de26c44e636d0be750687cb59",
+      "decompressionVerified": true
+    },
+    {
+      "original": "supplement/raw/games-2.jsonl",
+      "originalBytes": 27533895,
+      "originalSha256": "6a390336ff6d9d63cfb024796f269dfa0db34767ca11e143b2e5d566a9a24e9f",
+      "archive": "supplement/raw/games-2.jsonl.gz",
+      "archiveBytes": 3983745,
+      "archiveSha256": "a434d2881d0eea561d9e82ccf707455be1d757e2aa748957e458d07e8df2f41c",
+      "decompressionVerified": true
+    },
+    {
+      "original": "supplement/raw/games-3.jsonl",
+      "originalBytes": 27544636,
+      "originalSha256": "9ef3e200b893e7fbc060e627820ff5a1ce6248e8b2f411ac5bc9e385a1d31e6c",
+      "archive": "supplement/raw/games-3.jsonl.gz",
+      "archiveBytes": 3978019,
+      "archiveSha256": "b15a07d6548ff6d5b0009edf1075735a88eb366c1fd25b8824a27eb7e800204f",
+      "decompressionVerified": true
+    },
+    {
+      "original": "focused/raw/games-0.jsonl",
+      "originalBytes": 6736838,
+      "originalSha256": "f3b6675afc656fe9424445a5e23f972e9d18f952395cfe3039bd1047d0709b8f",
+      "archive": "focused/raw/games-0.jsonl.gz",
+      "archiveBytes": 883394,
+      "archiveSha256": "af04b46ddf500700b967449d19d0c1037dd12a0286f6d7bef889a323dfd62572",
+      "decompressionVerified": true
+    }
+  ]
+}

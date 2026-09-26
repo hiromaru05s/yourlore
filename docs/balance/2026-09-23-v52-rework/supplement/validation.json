@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "planEquality": true,
+  "uniqueIds": true,
+  "sourceHashesMatch": true,
+  "counts": {
+    "attempted": 43264,
+    "finished": 43194,
+    "unfinished": 70,
+    "reasons": {
+      "stepcap": 70
+    },
+    "adaptiveFollowup": true,
+    "designOrigin": "Follow-up design selected in v51 and reused unchanged for this v52 study; not newly selected from v52 outcomes"
+  },
+  "files": [
+    {
+      "file": "supplement/raw/games-0.jsonl.gz",
+      "sha256": "594afb995080a29d79e4ed809c67f9e3f591364528f0ccda59dda41e904a4be3",
+      "bytes": 4034692
+    },
+    {
+      "file": "supplement/raw/games-1.jsonl.gz",
+      "sha256": "a917d7f4c688056611bd642f2ce846664cb5b35de26c44e636d0be750687cb59",
+      "bytes": 3952809
+    },
+    {
+      "file": "supplement/raw/games-2.jsonl.gz",
+      "sha256": "a434d2881d0eea561d9e82ccf707455be1d757e2aa748957e458d07e8df2f41c",
+      "bytes": 3983745
+    },
+    {
+      "file": "supplement/raw/games-3.jsonl.gz",
+      "sha256": "b15a07d6548ff6d5b0009edf1075735a88eb366c1fd25b8824a27eb7e800204f",
+      "bytes": 3978019
+    }
+  ]
+}

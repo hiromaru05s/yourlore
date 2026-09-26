@@ -1,0 +1,873 @@
+// ============================================================
+// LORE — English card localization.
+// Hand-authored cards get explicit names/texts; generated cards
+// (GM/GS/GT) are translated via prefix+noun dictionaries and
+// text pattern rules. Fallback: Korean original.
+// ============================================================
+import type { CardDef } from "./types";
+
+const NAMES: Record<string, string> = {
+  // core monsters
+  M1: "Spark Imp", M2: "Stone Pup", M3: "Dust Scout", M4: "Blade Hare", M5: "Iron Shell",
+  M6: "Twin Fang", M7: "Ember Drake", M8: "Grove Warden", M9: "Relic Hunter", M10: "Mana Golem",
+  M11: "Warlord", M12: "Titan Gate", M13: "Void Reaver",
+  NGA3: "Glass Cannon", NGA4: "Frenzied Blade Fiend", NWL3: "Rock Tortoise", NWL4: "Iron Gatekeeper",
+  NHEX: "Little Hexer", NSPR: "Crystal Spirit", NMD2: "Tome Sprite", NMD4: "Chronicler", NMD6: "Grand Sage",
+  MIMIC: "Mimic", MIMIC2: "Master Mimic", INFKNIGHT: "Infinite Knight", CREATOR: "Creator God",
+  MANA_GIANT: "Mana Crystal Giant",
+  // assassins
+  ASSASSIN1: "Novice Assassin", ASSASSIN2: "Adept Assassin", ASSASSIN3: "Elite Assassin", ASSASSIN4: "Master Assassin - Nightlord",
+  // tribes
+  TSO2: "Lone Wolf", TSO3: "Solitary Hunter", TSO5: "Solitary Wanderer",
+  TPO2: "Starving Beast", TPO3: "Starving Stalker", TPO5: "Predator",
+  TAR2: "Fallen Aristocrat", TAR3: "Fallen Knight", TAR5: "Aristocrat Lord",
+  TGE1: "Origin Egg", TGE2: "Origin Ember", TGE3: "Origin Sprout", TGE4: "Origin Spirit",
+  TGE5: "Origin Guardian", TGE6: "Origin Giant", TGE7: "Origin Monarch",
+  // spells
+  S1: "Quick Jab", S3: "Sharpen", S4: "Double Draw", S5: "Market Crash", S6: "Seek", S7: "Overload",
+  S8: "Recall", S9: "Siphon", S10: "Mana Charge", S11: "Fireball", S12: "Reinforce", S13: "Meteor",
+  S14: "Earth's Blessing", S15: "Rune Burst",
+  SX2: "Trapbreak", SX4: "Unseal", SX6: "Trap Collapse",
+  E1: "Lockdown Decree", E2: "Peace Treaty", E3: "Well of Knowledge",
+  ND2: "Rune of Foresight", ND3: "Sage's Prophecy", ND5: "Ancient Knowledge",
+  AHEUK: "Attune - Black", AJIN: "Attune - True", AMA: "Attune - Arcane",
+  NHEAL: "Grace of Life", NWIPE: "Purging Blast",
+  RUNE1: "Runecraft - Novice", RUNE2: "Runecraft - Adept", RUNE3: "Runecraft - Master",
+  GENESIS_SONG: "Song of Origin", GENESIS_MAGIC: "Magic of Origin",
+  KIN_CALL: "Call of Kin", MULTI_CULTURE: "Many Cultures", SLAY_ART: "Art of Slaughter",
+  BLOOD1: "Blood Magic - Blood Draw", BLOOD2: "Blood Magic - Blood Shower",
+  BLOOD_JOY: "Blood Magic - Joy", BLOOD_ANGER: "Blood Magic - Anger", BLOOD_SORROW: "Blood Magic - Sorrow", BLOOD_PLEASURE: "Blood Magic - Pleasure",
+  EGG_HUNTER: "Egg Hunter", INCUBATOR: "Advanced Incubator", EGG_MASTER: "Hatch Master",
+  VAMP_PACT: "Vampiric Pact", BLOOD_FEST: "Blood Festival", BLOOD_SHIELD: "Vampiric Ritual", VAMP_WARD: "Vampiric Secret Art",
+  VAMP_PACT2: "Vampiric Imprint Pact", VAMP_BUTLER: "Vampire Butler", BLOOD_SECRET: "Blood Magic - Secret Art",
+  VAMP1: "Apprentice Vampire", VAMP2: "Novice Vampire", VAMP3: "Adept Vampire", VAMP4: "Elite Vampire", VAMP5: "Supreme Vampire",
+  FLAME: "Flame", GHOST: "Ghost", NEGOTIATE: "Negotiation", BLOOD_RITE: "Blood Fiend Art", WEAKEN_ALL: "Enfeebling Ritual",
+  GUILD_HALL: "Assassins' Guild", MIMIC_PARTY: "Mimic Party", FATE_WHEEL: "Wheel of Fate", COUNTERCALC: "Back-Calculation",
+  AMBUSH: "Ambush", TRUMPET: "Rallying Horn", FORESIGHT: "Foresight", TRICKROOM: "Trick Room", INCUBATOR_S: "Incubator", TRIBE_PACT: "Multi-Tribe Pact",
+  DISARM1: "Disarm", DISARM2: "Device Analysis", DISARM3: "Magic Research Institute",
+  FORBIDDEN: "Forbidden Ritual", HANDRESET: "Hand Reset", TIMEWARP: "Spacetime Manipulation",
+  GAMBLE: "Gamble", DICE8: "Devil's Dice", INFERNO: "Inferno",
+  CATALYST: "Rift Catalyst", WORLD_SEED: "World Tree Seed", HOURGLASS: "Hourglass of Time",
+  LIFE_CYCLE: "Cycle of Life", LIFE_SANCTUM: "Sanctum of Life", WORLD_HEART: "Heart of the World Tree",
+  WORLD_BLESS: "Blessing of the World Tree",
+  MEDITATE: "Meditation", PRAYER: "Sanctuary Prayer", HERMIT: "Hermit's Rest",
+  LUCKY_CHEST: "Lucky Treasure Chest", GUILD_CHEST: "Assassin Guild's Chest", GUILD_EYE: "Guild Network",
+  GLASS_BAN: "Glass Arms Ban", SHATTER: "Shattering Tremor", SCARECROW: "Scarecrow Muster", LEVY: "Troop Levy",
+  INQUISITION: "Inquisition", MIMIC_LORD: "Mimic Leader", AWAKENED_MIMIC: "Awakened Mimic", MIMIC_KING: "Mimic King", VITAL2: "Vitality Devotee", VITAL3: "Vitality Priest", VITAL4: "Full-Blooded Warrior",
+  CULL_FLOOD: "Baptism of Culls", PAIN_HARVEST: "Pain Harvest", CULL_FARM: "Cull Farm", PURGE_ALL: "The Great Purge",
+  EXILE_NUKE1: "Void Barrage", EXILE_NUKE2: "Void Cataclysm", CULL_TITAN: "Avatar of Culls", GREED_PRICE: "Price of Greed", GOLIATH_HUNT: "Goliath Hunt", WORLD_GUARD: "Guardian of the World Tree", DOUBLE_EXEC: "Double Execution", MASSACRE: "Massacre", MIMIC_KING2: "Mimic King II", ORIGIN_MIMIC: "Origin Mimic", MARKET_CRISIS: "Economic Crisis", TOKEN00: "Scarecrow", SOLDIER2: "Soldier",
+  DRAGON_EGG: "Dragon Egg", BEAST_EGG: "Divine Beast Egg", D_BLACK: "Black Dragon", D_RED: "Red Dragon", D_BLUE: "Blue Dragon", DIVINE: "Divine Beast",
+  GOLEM1: "Soldier Golem", GOLEM2: "Leader Golem", GOLEM3: "Golem King",
+  DECAY_CRAFT: "Hidden Weapon Craft", RUST_SLUG: "Rustcap Slug", RUST_SHROOM: "Rust Mushroom", MAJESTY_RITE: "Rite of Engraving",
+  CROSSROADS: "Crossroads of Choice", CHOSEN_KNIGHT: "Chosen Swordsman", CHOSEN_MAGE: "Chosen Mage", CHOSEN_ARCHER: "Chosen Archer", CHOSEN_ROGUE: "Chosen Rogue",
+  CHOSEN_AREA: "Chosen Domain", TRIAL_AREA: "Domain of Trials", ANCIENT_CIV: "Ancient Civilization",
+  GAMBLER: "Gambler", LEGEND_GAMBLER: "Legendary Gambler",
+  ELF_HAVEN: "Elf Haven", HALF_ELF: "Half Elf", WORLD_CARE: "World Tree's Care",
+  ELF: "Elf", DARK_ELF: "Dark Elf", HIGH_ELF: "High Elf", ELDER_ELF_KING: "Elder High Elf King",
+  WALLBREAK1: "Wall Smash", WALLBREAK2: "Siege Collapse", SNIPE1: "Snipe", SNIPE2: "Volley Fire",
+  FURNACE: "Blast Furnace", PURGE_TOUCH: "Purging Touch", SCRAPPER: "Scrap Collector",
+  HORDE: "Horde Standard-Bearer", ELITE: "Elite Knight-Captain", TRAPSMITH: "Trapsmith",
+  // traps
+  T1: "Half Guard", T2: "Null Field", T3: "Pitfall", T4: "Mirror Hand", T6: "Counter Surge",
+  T8: "Spike Trap", T9: "Backflow", T10: "Soul Devour", T11: "Time Warp", T12: "Absolute Bulwark", T13: "Divine Punishment",
+  NT_NULL3: "Mana Block", NT_NULL5: "Spell Seal", NT_NULL6: "Anti-Magic Ward",
+  NT_NULL4: "Spellshatter", NT_NULL8: "Verdict of Silence", NT_SEAL3: "Silent Warden", NT_SEAL5: "Colossus of Silence",
+  // starters
+  HPS_SCALE: "Ironscale Ward", HPS_GRAFT: "Life Graft", HPS_OATH: "Oath of Warding", HPS_SOIL: "Soil of Life", HPS_BOULDER: "Boulder's Blessing",
+  STARTER_TRASH: "Cull", STARTER_CHEST: "Treasure Chest", STARTER_MANA: "Attune",
+};
+
+const TEXTS: Record<string, string> = {
+  GT6_5: "[On being attacked] Roll a die — on 5+, destroy the attacking monster and exile it from the game",
+  M3: "On summon: draw 1 card", M5: "On summon: take 2 damage", M6: "On summon: 1 enemy monster -2 HP (lasting)",
+  M7: "On summon: deal 2 damage to the opponent", M8: "On summon: restore 1 of your HP", M9: "On summon: refresh your offer row for free",
+  M10: "While on the field: max mana +1", M11: "ATK +1 while you control 2+ monsters",
+  M12: "On summon: 1 enemy monster -1 ATK (lasting)", M13: "On summon: destroy 1 enemy set trap",
+  NGA3: "On summon: take 2 damage", NGA4: "On summon: take 6 damage",
+  NHEX: "On summon: deal 5 damage to the opponent", NSPR: "While on the field: max mana +1. On summon: draw 2",
+  NMD2: "On summon: draw 1 card", NMD4: "On summon: draw 2 cards", NMD6: "On summon: draw 5 cards",
+  MIMIC: "Summoned to the opponent's field by a failed treasure chest · Void",
+  MIMIC2: "While this monster is on the field, neither player can use Treasure Chests (Attune - Arcane still works)",
+  CREATOR: "On summon: summon 3 random monsters from both decks/graveyards to your field",
+  MANA_GIANT: "While on the field: max mana +2",
+  ASSASSIN1: "Infiltrate",
+  ASSASSIN2: "Infiltrate",
+  ASSASSIN3: "Infiltrate · Requires an Assassin on your field to summon",
+  ASSASSIN4: "On summon: destroy ALL enemy set traps · Dual Wield · Summonable when Novice/Adept/Elite Assassins are each in your field/deck/graveyard (hand excluded)",
+  S1: "Deal 2 damage to the opponent. From the 3rd use this turn: draw 1", S3: "+3 ATK to one of your monsters (this turn)",
+  S4: "Draw 3 cards (Cast 1). Once per turn", S5: "Opponent's next offer shrinks 4 -> 3",
+  S6: "Take any 1 card from your deck (Cast 2)", S7: "+3 ATK to all your monsters (this turn)",
+  S8: "Take any 1 card from your graveyard", S9: "Deal 4 damage to the opponent + restore 3 of your HP",
+  S10: "Draw 2 cards", S11: "Deal 4 damage to the opponent", S12: "+2 ATK to one of your monsters (lasting)",
+  S13: "Deal 9 damage to the opponent", S14: "Restore 10 of your HP + draw 1 card", S15: "Destroy 1 enemy monster of cost 8 or less",
+  SX2: "Destroy 1 enemy set trap", SX4: "Destroy 2 enemy set traps", SX6: "Destroy all enemy set traps + draw 1",
+  E1: "For 2 turns, the opponent cannot summon monsters of cost 3 or less",
+  E2: "For 4 turns, neither player can attack with monsters",
+  E3: "For your next 4 turns: draw 1 extra at turn start. When it ends: max mana +1 next turn (Cast 4)",
+  ND2: "Draw 2 cards + restore 2 of your HP (Cast 1)", ND3: "Draw 3 cards, 30% chance to draw 2 more (Cast 1)",
+  ND5: "Draw 5 cards, 20% chance of max mana +1 (Cast 2)",
+  AHEUK: "Opponent's max mana -1. -1 more if you control no monsters",
+  AJIN: "Max mana +1, 50% chance to add an Attune to your graveyard",
+  AMA: "Discard a Treasure Chest from hand -> max mana +1",
+  NHEAL: "Enchantment: restore 1 of your HP whenever you summon a monster (Cast 2)",
+  NWIPE: "Only with no monsters on your field. Destroy all enemy traps & enchantments, then take 5 damage",
+  RUNE1: "Destroy 1 enemy monster of cost 5+ (Cast 3)", RUNE2: "Discard 'Runecraft - Novice' from hand -> max mana +2",
+  RUNE3: "Discard Novice & Adept from hand -> max mana +4 (Cast 8)",
+  GENESIS_SONG: "Summon 1 random 'Origin' monster from your deck/graveyard (Cast 2)",
+  GENESIS_MAGIC: "+4/+4 to all your 'Origin' monsters (Cast 0)",
+  KIN_CALL: "Enchantment: tribe cards in the market cost -2 (min 1) while you control a tribe monster",
+  MULTI_CULTURE: "Enchantment: +1 temporary max mana per tribe monster you control (Origin excluded) (Cast 4)",
+  SLAY_ART: "Enchantment: +2 bonus damage whenever either player takes damage",
+  BLOOD1: "Take 15 damage, draw 6 cards (Cast 1)", BLOOD2: "Take 15 damage · Choose and destroy 2 of your opponent's enchantments or set traps (Cast 2)",
+  BLOOD_JOY: "Take 6 damage. Both players gain 12 max HP",
+  BLOOD_ANGER: "Take 10 damage. All monsters on the field gain +3 ATK (lasting)",
+  BLOOD_SORROW: "Take 12 damage. Exile the highest-cost card in your graveyard from the game",
+  BLOOD_PLEASURE: "Take 14 damage. Your max mana +1",
+  EGG_HUNTER: "When this monster attacks an 'Egg', it consumes 4 counters",
+  INCUBATOR: "Reduce the counter of one of your 'Eggs' by 5 turns",
+  EGG_MASTER: "On summon: all 'Eggs' on your field gain +3 durability",
+  VAMP_PACT: "Take 6 damage. Summon an 'Apprentice Vampire' to your field",
+  BLOOD_FEST: "Permanent: whenever you use a 'Blood Magic' card, max mana +1",
+  BLOOD_SHIELD: "Permanent: you take no damage from 'Blood Magic'",
+  VAMP_WARD: "Permanent: while this monster is on the field, 'Vampire' monsters on both fields cannot be destroyed",
+  VAMP_PACT2: "Take 15 damage. Summon a 'Novice Vampire' to your field (Cast 2)",
+  VAMP_BUTLER: "Passive: gains 1 blood count whenever this monster attacks an enemy monster · Every 3 counts, summon an 'Apprentice Vampire' to your field · This card counts as a 'Vampire'",
+  BLOOD_SECRET: "Take 9 damage. Destroy 1 'Vampire' monster on your field — if destroyed, gain +3 max mana and +10 your max HP",
+  VAMP1: "When you cast a 'Blood Magic': summon a Novice Vampire (once) · Void",
+  VAMP2: "When you cast a 'Blood Magic': summon an Adept Vampire (once) · Void",
+  VAMP3: "When you cast a 'Blood Magic': summon an Elite Vampire (once) · Void",
+  VAMP4: "When you cast a 'Blood Magic': summon a Supreme Vampire (once) · You gain max HP equal to 50% of the damage it deals to the opponent · Void",
+  VAMP5: "On summon: deal 15 damage to the opponent and gain +30 max HP · You gain max HP equal to the damage it deals to the opponent · Void",
+  FLAME: "Deal 2 damage to the opponent, take 1 damage",
+  GHOST: "Infiltrate · Enemy max mana/max HP up: YOU take 2 damage · Enemy heals: your 'Ghosts' +1 ATK (lasting)",
+  NEGOTIATE: "Opponent's max mana +1 · The opponent cannot set traps next turn",
+  BLOOD_RITE: "Permanent: both players take no spell damage and heal that amount instead · Destroyed 14 turns after activation · Void",
+  WEAKEN_ALL: "Permanent: all monsters on both fields have -2 ATK · Void",
+  GUILD_HALL: "Aura: gain a count whenever your 'Assassin' monsters or this monster damage the opponent · At 3 counts: deal 14 damage (count resets) · The count is lost if this monster is destroyed",
+  MIMIC_PARTY: "Trap: when the opponent uses a Treasure Chest — summon 1 Mimic to their field and 2 Mimics to yours",
+  FATE_WHEEL: "Permanent: after seeing a dice card's result, you may reroll it (once per turn) · Void",
+  COUNTERCALC: "Usable only while the opponent's max mana is 6 or less · Destroy 1 enemy enchantment",
+  AMBUSH: "Usable only while the opponent's max mana is exactly 4 · Deal 7 damage, take 3 damage · Exiled from the game after use",
+  TRUMPET: "Give +1 ATK to up to 3 of your monsters (this turn)",
+  FORESIGHT: "Permanent: when your max mana reaches 10+, gain +2 max mana and destroy this monster · Castable only while you have no 'Foresight' on your field · Void",
+  TRICKROOM: "For 2 turns, all monsters' ATK and MAX HP are swapped (accumulated damage stays — a monster dies if its max HP drops to or below the damage it has taken) · While swapped, HP gains raise ATK and vice versa · When it ends, stats gained while swapped are kept",
+  INCUBATOR_S: "Reduce the counter of one of your 'Eggs' by 2 turns",
+  TRIBE_PACT: "Permanent: tribe synergy effects are doubled · If you have no tribe synergy by turn 40: max mana -2 and take 12 damage",
+  DISARM1: "Destroy 1 enemy enchantment (Cast 0)", DISARM2: "Destroy 2 enemy enchantments (Cast 2)",
+  DISARM3: "Destroy 1 enemy enchantment and exile it from the game (Cast 3)",
+  FORBIDDEN: "Your HP -15, max mana -2. On a die roll of 4-6, summon the rest of one tribe on your field (Origin excluded)",
+  HANDRESET: "Discard your hand, draw 4, your max HP +1 (Cast 2)",
+  TIMEWARP: "70% chance to skip the opponent's next turn (Cast 12)",
+  GAMBLE: "Roll a die — 1·2: take 8 damage / 3·4: deal 5 damage / 5: summon a Mana Golem / 6: summon 3 Glass Cannons",
+  DICE8: "Roll a die — 1·2: your max mana -4 / 3·4: enemy max mana -1 and 14 damage / 5: summon a Storm Warrior / 6: wipe enemy spells and traps, summon 2 Storm Warriors, max mana +2, your HP +10",
+  INFERNO: "Enchantment: each of your turns, 6 damage to you / 5 to the opponent",
+  CATALYST: "Take 4 damage, max mana +1",
+  WORLD_SEED: "Enchantment: 33% chance of max mana +1 at the start of each of your turns",
+  HOURGLASS: "Max mana +2, draw 2 cards",
+  LIFE_CYCLE: "Enchantment: whenever you restore HP, 15% chance of max mana +1 (Cast 2)",
+  LIFE_SANCTUM: "Enchantment: your max HP +2 each of your turns (Cast 2)",
+  WORLD_HEART: "Enchantment: your max HP +7 each of your turns. Your max mana -2 while this is on the field (Cast 4)",
+  WORLD_BLESS: "Enchantment: both players gain max mana +1 at the start of their turns. The caster has a 40% chance of +2 more each turn (Cast 6)",
+  MEDITATE: "Castable only if your HP is below 80% of max and you played no other card this turn. Restore your HP up to 80% of max",
+  PRAYER: "Castable only if your max mana is 12 or less, your HP is below 80% of max, and you played no other card this turn. Restore your HP up to 80% of max (Cast 5)",
+  HERMIT: "Castable only with no monsters on your field. Fully restore your HP + your max HP +15 (Cast 7)",
+  LUCKY_CHEST: "10%: max mana +3 & draw 2 / 40%: max mana +1 / 30%: your max HP +8 / 5%: your max HP +12 / 15%: dud (Master Mimic 10/3 on enemy field)",
+  GUILD_CHEST: "10%: max mana +3 / 10%: +1 draw at turn start (permanent) / 20%: max mana +2 / 10%: max mana +1 / 10%: your max HP +10 / 20%: Novice & Adept Assassins on enemy field / 20%: Novice, Adept & Elite Assassins + take 10 damage (Cast 3)",
+  GUILD_EYE: "Enchantment: draw 1 extra card at the start of your turn",
+  GLASS_BAN: "Enchantment: monsters with max HP 1 or less cannot attack (both players) (Cast 2)",
+  SHATTER: "Take 5 damage. Every monster on both fields has its MAX HP set to 1 (lasting; accumulated damage cleared; Eggs excluded) (Cast 2)",
+  SCARECROW: "Summon three 0/1 Scarecrows to your field",
+  LEVY: "Summon three 2/2 Soldiers to your field (Cast 4)",
+  INQUISITION: "Deal 4 damage per tribe monster in the opponent's deck, graveyard and field (Cast 2)",
+  MIMIC_LORD: "On summon: +3/+3 per 'Mimic'-family monster on either field (excluding itself)",
+  AWAKENED_MIMIC: "On summon: summon two Mimics (3/2) to your field",
+  MIMIC_KING: "On summon: +1/+1 per 'Mimic'-family card of yours exiled from the game. If 6+ are exiled: summon a Master Mimic to your field",
+  VITAL2: "On summon: your max HP +2", VITAL3: "On summon: your max HP +4",
+  VITAL4: "Aura: +1/+3 while your HP is 45 or more",
+  CULL_FLOOD: "Add 4 Culls to your graveyard, then exile any 3 cards from your deck/graveyard",
+  PAIN_HARVEST: "Enchantment: gain a Cull to hand whenever the opponent takes damage (Cast 2)",
+  CULL_FARM: "Enchantment: gain a Cull to hand at the start of each of your turns (Cast 2)",
+  PURGE_ALL: "Exile any number of cards from your deck/graveyard from the game",
+  EXILE_NUKE1: "Deal 1 damage per card of yours exiled from the game (Cast 4)",
+  EXILE_NUKE2: "Deal 2 damage per card of yours exiled from the game (Cast 10)",
+  CULL_TITAN: "On summon: +1/+1 per 'Cull' of yours exiled from the game",
+  GREED_PRICE: "Take 2 damage · Summon two Mimics (3/2) to your field · Exile 3 more Mimics from the game",
+  MIMIC_KING2: "On summon: +1/+1 per 'Mimic'-family card in your field/graveyard/exile · If 6+ Mimics are exiled: summon a Master Mimic",
+  ORIGIN_MIMIC: "On summon: +2/+2 per 'Mimic'-family card in your field/graveyard/exile · If 8+ Mimics are exiled: destroy up to 2 enemy traps",
+  MARKET_CRISIS: "Refresh all 7 cards of the fixed market",
+  GOLIATH_HUNT: "Destroy 1 enemy monster with max HP 20 or more",
+  WORLD_GUARD: "On summon: if your max HP is 90 or more, max mana +1 and your max HP +15",
+  DOUBLE_EXEC: "Destroy 2 enemy monsters",
+  MASSACRE: "Destroy ALL enemy monsters, then take 8 damage",
+  TOKEN00: "Token · Void", SOLDIER2: "Token · Void",
+  GOLEM1: "Guts", GOLEM2: "Guts",
+  GOLEM3: "Guts · On summon: -4/-4 if you have no other 'Golem' monster in your field/deck/hand/graveyard",
+  DECAY_CRAFT: "Choose 2 monsters on your field and grant them 'Decay'",
+  RUST_SLUG: "Decay · On summon: put 1 counter on an enemy monster",
+  RUST_SHROOM: "Decay · While this monster is out, whenever Decay destroys an enemy monster, your max mana +1",
+  MAJESTY_RITE: "Take 7 damage, max mana -1 · Grant 'Majesty' to one monster on your field",
+  CROSSROADS: "Add 2 Culls to your graveyard",
+  CHOSEN_KNIGHT: "Passive: +1/+1 per 2 'Culls' of yours exiled from the game · Whenever it damages the opponent, add a Cull to your graveyard",
+  CHOSEN_MAGE: "Passive: +1/+1 per 2 'Culls' of yours exiled from the game · (Optional) At turn start: return 1 exiled 'Cull' to your graveyard and deal 6 damage",
+  CHOSEN_ARCHER: "Passive: +2 ATK per 2 'Culls' of yours exiled from the game · Infiltrate · Evade",
+  CHOSEN_ROGUE: "Passive: +1 ATK per 2 'Culls' of yours exiled from the game · Infiltrate · Evade",
+  CHOSEN_AREA: "Castable only while 25+ of your 'Culls' are exiled from the game · Win the game immediately",
+  TRIAL_AREA: "Permanent: take 6 damage on cast · At the start of each of your turns, add a Cull to your graveyard, then you may exile up to 2 cards from your graveyard",
+  GAMBLER: "At the start of your turn: roll a die — on 4/5/6, max mana +1",
+  LEGEND_GAMBLER: "At the start of your turn: roll a die — on 6, max mana +10 · If a 'Gambler' is in your deck/graveyard, roll 3 dice in total · Void",
+  ELF_HAVEN: "Enchantment: 'World Tree' cards cost 0 to buy/cast (3/turn) · Buy one from the offer: your max HP +10",
+  HALF_ELF: "【Passive】'World Tree' name on either field: ATK +3 · 【On Summon】On yours: deploy 'World Tree's Care'",
+  WORLD_CARE: "Enchantment: at the start of each of your turns, your max HP +9",
+  ELF: "Summonable only while your max HP is 65 or higher",
+  DARK_ELF: "Infiltrate · Summonable only while your max HP is 65+ and you control no 'Elf' monsters",
+  HIGH_ELF: "Aura · Summonable only while your max HP is 99 or higher",
+  ELDER_ELF_KING: "Summonable only while a 'High Elf' is in your graveyard and your max HP is 99+ · On summon: summon 2 High Elves to your field, then all 'High Elves' on your field gain +15 ATK",
+  ANCIENT_CIV: "Permanent: 13 turns after activation, your max mana -1 and add a 'Dragon Egg' or 'Divine Beast Egg' of your choice to your hand · Then this monster is destroyed",
+  DRAGON_EGG: "Cannot attack · Aura · Hatches in 8 turns (both players' turns) / Durability 6 · Enemy monster attacks only consume 1 durability · If hatching completes with durability left, one of Black/Red/Blue Dragon is summoned (Summon 4)",
+  BEAST_EGG: "Cannot attack · Aura · Hatches in 10 turns (both players' turns) / Durability 7 · Enemy monster attacks only consume 1 durability · If hatching completes with durability left, the Divine Beast is summoned (Summon 5)",
+  D_BLACK: "On summon: choose up to 8 of the opponent's exiled cards and send them to their graveyard · All enemy monsters -3 HP (lasting) · Aura · Void",
+  D_RED: "On summon: deal 15 damage to the opponent · Passive: your spells deal +3 extra damage to the opponent · Aura · Void",
+  D_BLUE: "On summon: your max HP +20 · At the start of your turn: your max HP + the number of enemy monsters · Aura · Void",
+  DIVINE: "On summon: max mana +15 · +1 draw each turn (permanent) · Choose and destroy 3 of the opponent's cards (monsters, set traps, enchantments) · Aura · Void",
+  WALLBREAK1: "Destroy 1 enemy monster with ATK 1 or less (Cast 1)",
+  WALLBREAK2: "Destroy all enemy monsters with ATK 2 or less",
+  SNIPE1: "Destroy 1 enemy monster with HP 1 or less (Cast 1)",
+  SNIPE2: "Destroy all enemy monsters with HP 2 or less",
+  FURNACE: "Enchantment: at the start of each of your turns, exile the lowest-cost card in your graveyard from the game",
+  PURGE_TOUCH: "Pick a card in your graveyard, exile it from the game + draw 1 (Cast 1)",
+  SCRAPPER: "Exile 2 cards of cost 1 or less from your deck/graveyard -> max mana +1 (Cast 2)",
+  GM6_1: "Passive: all your monsters (including this one) +3 HP",
+  HORDE: "On summon: +3/+3 if your deck+graveyard is 20+ cards",
+  ELITE: "On summon: +4 ATK if your deck+graveyard is 8 or fewer cards",
+  TRAPSMITH: "On summon: +1/+1 per trap in your deck, graveyard and set zone",
+  // v29 monster-HP buff cycle
+  HPS_SCALE: "+3 HP to one of your monsters (lasting)",
+  HPS_GRAFT: "+6 HP to one of your monsters (lasting) · that monster -2 ATK (lasting)",
+  HPS_OATH: "+2 HP to all your monsters (lasting)",
+  HPS_SOIL: "Permanent: whenever you summon a monster, that monster +2 HP (lasting) (Cast 3)",
+  HPS_BOULDER: "+8 HP to one of your monsters (lasting) · grant it 'Taunt' (Cast 4)",
+  T1: "Halve the attack + 1 damage to the attacker's owner (Cast 1)", T2: "Negate 1 enemy spell of cast cost 4 or less",
+  T3: "Destroy a summoned enemy monster of cost 6 or less",
+  T4: "Destroy the attacking monster + 30% chance to deal its ATK to the opponent (Cast 3)",
+  T6: "Destroy the attacking monster + reflect half its ATK (Cast 3)",
+  T8: "When attacked: 4 damage to the attacker's owner", T9: "Negate the attack + restore 3 of your HP (Cast 1)",
+  T10: "Destroy the attacking monster + restore 2 of your HP", T11: "When attacked: draw 5 cards",
+  T12: "Negate this attack + all your monsters +4 HP (lasting)",
+  T13: "Destroy the attacking monster + 4 damage to the opponent (Cast 3)",
+  NT_NULL3: "Negate 1 enemy spell of cast cost 2 or less", NT_NULL5: "Negate 1 enemy spell + 4 damage to the opponent",
+  NT_NULL6: "Negate 1 enemy spell + 8 damage to the opponent",
+  NT_NULL4: "Negate 1 enemy spell of cast cost 6 or less",
+  NT_NULL8: "Negate 1 enemy spell + the opponent cannot cast spells for the rest of this turn",
+  NT_SEAL3: "While this monster is on the field, neither player can cast spells of cast cost 5 or less",
+  NT_SEAL5: "While this monster is on the field, neither player can cast spells",
+  GS8_4: "All your monsters +13 ATK (this turn) · +2 ATK (lasting)",
+  GS9_2: "Restore 16 of your HP. Discard 1 life-aspect spell from your hand: your max HP +15",
+  STARTER_TRASH: "Exile this card from the game (thins your deck)", STARTER_CHEST: "Mana 1: open the treasure chest",
+  STARTER_MANA: "Mana 3: max mana +1",
+  TGE1: "[Origin] tribe synergy (Summon 2)", TGE2: "[Origin] tribe synergy", TGE3: "[Origin] tribe synergy",
+  TGE4: "[Origin] On summon: draw 2 cards",
+  TGE5: "[Origin] On summon: draw 1 — if it's a monster, set a chosen enemy monster's ATK to 2",
+  TGE6: "[Origin] On summon: draw 1 — if it's a monster, you may buy any Origin card of cost 5+ by paying its mana",
+  TGE7: "[Origin] Aura: all your 'Origin' monsters +3/+3",
+};
+// tribe monsters share one text
+for (const id of ["TSO2","TSO3","TSO5"]) TEXTS[id] = "[Solitary] tribe synergy";
+for (const id of ["TPO2","TPO3","TPO5"]) TEXTS[id] = "[Devour] tribe synergy";
+for (const id of ["TAR2","TAR3","TAR5"]) TEXTS[id] = "[Aristocrat] tribe synergy";
+
+const PREFIX_EN: Record<string, string> = {
+  "고대의": "Ancient", "심연의": "Abyssal", "강철의": "Steel", "화염의": "Flame", "서리의": "Frost",
+  "폭풍의": "Storm", "황금의": "Golden", "저주받은": "Cursed", "신성한": "Sacred", "그림자": "Shadow",
+  "용암의": "Magma", "천공의": "Sky", "피의": "Blood", "비취의": "Jade", "흑요석": "Obsidian",
+  "은빛": "Silver", "파멸의": "Doom", "여명의": "Dawn", "심판의": "Judgment", "광휘의": "Radiant",
+  "태초의": "Primordial", "무한의": "Infinite", "공허의": "Void", "붕괴의": "Collapse",
+};
+const NOUN_EN: Record<string, string> = {
+  "광전사": "Berserker", "약탈자": "Raider", "맹수": "Beast", "수호자": "Guardian", "성벽": "Rampart",
+  "거인": "Giant", "기사": "Knight", "용병": "Mercenary", "전사": "Warrior", "드레이크": "Drake",
+  "폭격수": "Bomber", "화염술사": "Pyromancer", "사제": "Priest", "수도승": "Monk", "치유사": "Healer",
+  "정찰병": "Scout", "탐색자": "Seeker", "사냥꾼": "Hunter", "주술사": "Shaman", "저주술사": "Hexer",
+  "마녀": "Witch", "지휘관": "Commander", "장군": "General", "대장": "Captain", "파괴자": "Destroyer",
+  "해체자": "Dismantler", "공성병": "Siegebreaker", "반격": "Counter", "반사막": "Mirror Veil",
+  "방어 태세": "Defense Stance", "빙결": "Freeze", "생명의 빛": "Light of Life", "수호막": "Ward",
+  "예리함": "Keen Edge", "전군 강화": "Rally", "차단막": "Barrier", "천벌": "Punishment",
+  "통찰": "Insight", "포식": "Devour", "화염구": "Firebolt",
+};
+
+// generated-text pattern rules (applied top-down; first match wins)
+const RULES: [RegExp, string][] = [
+  // ---- passive keywords (v11) ----
+  [/^이도류$/, "Dual Wield"],
+  [/^도발$/, "Taunt"],
+  [/^기합$/, "Guts"],
+  [/^부패$/, "Decay"],
+  [/^암습$/, "Infiltrate"],
+  [/^매 턴 시작 시 자신 체력 \+(\d+) 회복 · 도발$/, "At the start of each turn: restore $1 of your HP · Taunt"],
+  [/^\[시초\] 동족 시너지 · 소환 코스트 (\d+)$/, "[Origin] tribe synergy. Summon cost $1"],
+  [/^\[시초\] 동족 시너지$/, "[Origin] tribe synergy"],
+  [/^\[시초\] 소환시 자신 최대 체력 \+(\d+)$/, "[Origin] On summon: your max HP +$1"],
+  [/^\[시초\] 소환시 자신 최대 체력 -(\d+)$/, "[Origin] On summon: your max HP -$1"],
+  [/^—$/, "—"],
+  [/^공격 몬스터 파괴 \+ (\d+)%로 그 몬스터의 최대 체력만큼 자신 체력 회복$/, "Destroy the attacker + $1% chance to restore your HP equal to its max HP"],
+  [/^공격 몬스터 파괴 \+ (\d+)%로 자신 필드에 소생\(소유권 이동\)$/, "Destroy the attacker + $1% chance to revive it on YOUR field"],
+  [/^공격 몬스터 파괴 \+ 공격력 (\d+) 이하 상대 몬스터 전멸$/, "Destroy the attacker + wipe all enemy monsters with ATK $1 or less"],
+  [/^공격 몬스터 파괴 \+ 공격력 절반 반사$/, "Destroy the attacker + reflect half its ATK"],
+  [/^공격 몬스터 파괴 \+ 상대 전체 공격력 -(\d+)\(이번 턴\)$/, "Destroy the attacker + all enemy monsters -$1 ATK (this turn)"],
+  [/^공격 몬스터 파괴 \+ 상대 체력에 (\d+) 데미지$/, "Destroy the attacker + $1 damage to the opponent"],
+  [/^공격 몬스터 파괴 \+ 자신 체력 (\d+) 회복$/, "Destroy the attacker + restore $1 of your HP"],
+  [/^공격 무효 \+ (\d+)장 드로우$/, "Negate the attack + draw $1"],
+  [/^공격 무효 \+ 공격측 함정 (\d+)장 파괴 \+ (\d+)장 드로우$/, "Negate the attack + destroy $1 attacker trap + draw $2"],
+  [/^공격 무효 \+ 공격측에 (\d+) 데미지$/, "Negate the attack + $1 damage to the attacker's owner"],
+  [/^공격 무효 \+ 상대 몬스터 전체 체력 -(\d+)$/, "Negate the attack + all enemy monsters -$1 HP"],
+  [/^공격 무효 \+ 상대 함정·영구마법 (\d+)장 파괴$/, "Negate the attack + destroy $1 enemy traps/enchantments"],
+  [/^공격 무효 \+ 자신 몬스터 전체 체력 \+(\d+) \+ (\d+)장 드로우$/, "Negate the attack + all your monsters +$1 HP + draw $2"],
+  [/^공격 무효 \+ 최대 마나 \+(\d+)$/, "Negate the attack + max mana +$1"],
+  [/^공격 무효 \+ 최대 마나 -(\d+)로 상대 몬스터 최대 (\d+)체 파괴$/, "Negate the attack + max mana -$1 to destroy up to $2 enemy monsters"],
+  [/^공격 절반 \+ 공격측에 (\d+) 데미지$/, "Halve the attack + $1 damage to the attacker's owner"],
+  [/^공격할 때마다 자신의 공격력 -(\d+)\(지속\)$/, "Each time it attacks: its ATK -$1 (lasting)"],
+  [/^공격해온 몬스터의 공격력만큼 반사$/, "Reflect the attacking monster's full ATK"],
+  [/^매 턴 마나 (\d+)로 이 몬스터의 체력 \+(\d+), 자신 체력 \+(\d+) 회복$/, "Each turn, pay $1 mana: this monster +$2 HP, restore $3 of your HP"],
+  [/^매 턴 시작 시 공격력 \+(\d+)\(지속\)$/, "At the start of each turn: +$1 ATK (lasting)"],
+  [/^매 턴 시작 시 이 몬스터의 체력 \+(\d+)\(지속\)$/, "At the start of each turn: this monster +$1 HP (lasting)"],
+  [/^매 턴 시작 시 상대 체력에 (\d+) 데미지$/, "At the start of each turn: $1 damage to the opponent"],
+  [/^매 턴 시작 시 자신 체력 \+(\d+) 회복$/, "At the start of each turn: restore $1 of your HP"],
+  [/^상대 체력에 (\d+) 데미지 \(상대 체력 (\d+) 이하면 사용 불가\)$/, "Deal $1 damage (unusable if opponent HP <= $2)"],
+  [/^상대 체력에 (\d+) 데미지 \(자신 필드 몬스터 (\d+)체 이하일 때만\)$/, "Deal $1 damage (only with $2 or fewer monsters on your field)"],
+  [/^상대 체력에 (\d+) 데미지 \+ 자신 체력 (\d+) 회복$/, "Deal $1 damage + restore $2 of your HP"],
+  [/^상대 체력에 (\d+) 데미지 \+ 카드 (\d+)장 드로우$/, "Deal $1 damage + draw $2"],
+  [/^상대 체력에 (\d+) 데미지 · 사용 시 (\d+)%로 상대 덱 맨 위 (\d+)장 제외$/, "Deal $1 damage. $2% chance to exile the top $3 card(s) of the enemy deck"],
+  [/^상대 체력에 (\d+) 데미지, (\d+)% 확률로 상대 최대 마나 -(\d+)$/, "Deal $1 damage, $2% chance of enemy max mana -$3"],
+  [/^상대 체력에 (\d+) 데미지, (\d+)% 확률로 자신 최대 마나 -(\d+)$/, "Deal $1 damage, $2% chance of YOUR max mana -$3"],
+  [/^상대 체력에 (\d+) 데미지$/, "Deal $1 damage to the opponent"],
+  [/^상대 플레이어에게 데미지를 입힐 때마다 \+(\d+)\/\+(\d+)\(지속\)$/, "Whenever it damages the opponent: +$1/+$2 (lasting)"],
+  [/^상시: 몬스터를 소환할 때 그 몬스터 공격력 \+(\d+)$/, "Aura: monsters you summon gain +$1 ATK"],
+  [/^상시: 자신 필드의 아군 몬스터 체력 \+(\d+)$/, "Aura: your monsters have +$1 HP"],
+  [/^소환시 (\d+)%로 자신을 복제 소환$/, "On summon: $1% chance to clone itself"],
+  [/^소환시: (\d+)장 드로우$/, "On summon: draw $1"],
+  [/^소환시: 공격력 (\d+) 이하 상대 몬스터 전멸$/, "On summon: wipe all enemy monsters with ATK $1 or less"],
+  [/^소환시: 덱에서 랜덤 몬스터 (\d+)체 무료 소환$/, "On summon: summon $1 random monster(s) from your deck for free"],
+  [/^소환시: 마나 (\d+) 지불 → (\d+)\/(\d+) '무한의 기사' 소환$/, "On summon: pay $1 mana -> summon a $2/$3 Infinite Knight"],
+  [/^소환시: 상대 체력 홀수면 (\d+) 데미지, 짝수면 (\d+)장 드로우$/, "On summon: if enemy HP is odd, $1 damage; if even, draw $2"],
+  [/^소환시: 상대 체력에 (\d+) 데미지$/, "On summon: deal $1 damage to the opponent"],
+  [/^소환시: 상대 함정 (\d+)장 파괴, 성공 시 (\d+)장 드로우$/, "On summon: destroy $1 enemy trap; if successful, draw $2"],
+  [/^소환시: 상대에 (\d+) 데미지 \+ 상대 함정 (\d+)장 파괴$/, "On summon: $1 damage + destroy $2 enemy trap(s)"],
+  [/^소환시: 상대에 (\d+) 데미지 \+ 최대 마나 \+(\d+)\. 매 턴 패의 보물상자를 묘지로 보내면 (\d+)장 드로우$/, "On summon: $1 damage + max mana +$2. Each turn, discard a chest from hand to draw $3"],
+  [/^소환시: 상대에 (\d+) 데미지\. 이후 상대는 매 턴 (\d+) 데미지\(중첩 불가\)$/, "On summon: $1 damage. The opponent then takes $2 damage each turn (doesn't stack)"],
+  [/^소환시: 적 몬스터 1체의 체력 -(\d+)\(지속\)$/, "On summon: 1 enemy monster -$1 HP (lasting)"],
+  [/^소환시: 자신 체력 (\d+) 회복$/, "On summon: restore $1 of your HP"],
+  [/^소환시: 자신 최대 체력 \+(\d+), 최대 마나 \+(\d+)$/, "On summon: your max HP +$1, max mana +$2"],
+  [/^아군 몬스터 (\d+)체 이상이면 공격력 \+(\d+)$/, "ATK +$2 while you control $1+ monsters"],
+  [/^아군 전체 공격력 \+(\d+) · (\d+)%로 (\d+)코스트 이하 몬스터 무작위 소환$/, "All your monsters +$1 ATK. $2% chance to summon a random monster of cost $3 or less"],
+  [/^아군 전체 공격력 \+(\d+)\(이번 턴\) · 이번 턴 종료 후 공격력 \+(\d+)\(지속\)$/, "All your monsters +$1 ATK (this turn), then +$2 ATK (lasting)"],
+  [/^아군 전체 공격력 \+(\d+)\(이번 턴\)$/, "All your monsters +$1 ATK (this turn)"],
+  [/^이 카드가 필드에 있는 한 상대 최대 마나 -(\d+)$/, "While on the field: enemy max mana -$1"],
+  [/^자신 몬스터 (\d+)체 공격력 \+(\d+)\(이번 턴\)$/, "Give +$2 ATK to $1 of your monsters (this turn)"],
+  [/^자신 체력 (\d+) 회복 · 상대 몬스터 (\d+)체 \+ 마법\/함정 (\d+)장 파괴$/, "Restore $1 of your HP. Destroy $2 enemy monster + $3 spell/trap"],
+  [/^자신 체력 (\d+) 회복 · 이 카드 (\d+)번째 사용부터 피격 시마다 자신 체력 \+(\d+)$/, "Restore $1 of your HP. From use #$2 of this monster: restore $3 of your HP whenever you're hit"],
+  [/^자신 체력 (\d+) 회복 · 자신 최대 마나가 (\d+) 이하면 자신 체력 완전 회복$/, "Restore $1 of your HP. If your max mana is $2 or less: fully restore your HP"],
+  [/^자신 체력 (\d+) 회복 · 자신 체력 (\d+) 이상이면 자신 최대 체력 \+(\d+)$/, "Restore $1 of your HP. If your HP is $2+: your max HP +$3"],
+  [/^자신 체력 (\d+) 회복 · 패의 '생명의 빛' (\d+)장 묘지로 보내면 자신 최대 체력 \+(\d+)$/, "Restore $1 of your HP. Discard $2 'Light of Life' from hand: your max HP +$3"],
+  [/^자신 체력 (\d+) 회복, (\d+)% 확률로 자신 최대 체력 \+(\d+)$/, "Restore $1 of your HP, $2% chance of max HP +$3"],
+  [/^카드 (\d+)장 드로우 · (\d+)%로 상대 몬스터\/함정\/마법 (\d+)장 무작위 파괴$/, "Draw $1 cards. $2% chance to destroy $3 random enemy monster/trap/spell"],
+  [/^카드 (\d+)장 드로우 · 자신 최대 체력 (\d+) 이상이면 (\d+)장 추가$/, "Draw $1 cards. If your max HP is $2+: draw $3 more"],
+  [/^카드 (\d+)장 드로우$/, "Draw $1 cards"],
+  [/^코스트(\d+) 이상 카드를 버릴 때마다 상대 함정 (\d+)장 파괴$/, "Whenever you discard a card of cost $1+: destroy $2 enemy trap(s)"],
+  [/^한 턴에 (\d+)번 공격할 수 있다$/, "Can attack $1 times per turn"],
+];
+
+const ROMAN = [" II", " III", " IV", " V", " VI"];
+function genNameEn(ko: string): string | undefined {
+  let suffix = "";
+  for (const r of ROMAN) if (ko.endsWith(r)) { suffix = r; ko = ko.slice(0, -r.length); break; }
+  for (const p of Object.keys(PREFIX_EN)) {
+    if (ko.startsWith(p)) {
+      const noun = ko.slice(p.length).trim();
+      const n = NOUN_EN[noun];
+      if (n) return `${PREFIX_EN[p]} ${n}${suffix}`;
+    }
+  }
+  return undefined;
+}
+function genTextEn(ko: string): string | undefined {
+  // split off a trailing "(시전 N)" / "(소환 N)"
+  const m = ko.match(/^(.*?)\s*\((시전|소환) (\d+)\)$/);
+  const body = m ? m[1] : ko;
+  const cast = m ? ` (${m[2] === "소환" ? "Summon" : "Cast"} ${m[3]})` : "";
+  for (const [re, en] of RULES) {
+    if (re.test(body)) return body.replace(re, en) + cast;
+  }
+  return undefined;
+}
+
+
+// ---- DICE CONVERSION (v22): explicit EN texts for converted cards (bypass pattern rules) ----
+Object.assign(TEXTS, {
+  TRICKROOM: "For 2 turns both fields swap every monster's ATK and MAX HP (damage taken stays; a monster dies if max HP falls to or below it) · While swapped, HP buffs raise ATK and ATK buffs raise HP · Gains carry over",
+  DRAGON_EGG: "【Passive】Cannot attack · Hatch 8 turns (both), durability 6 (enemy hits take 1) · Hatch with durability left → Black/Red/Blue Dragon",
+  BEAST_EGG: "【Passive】Cannot attack · Hatch 10 turns (both), durability 7 (enemy hits take 1) · Hatch with durability left → the Divine Beast",
+  GUILD_HALL: "【Passive】+1 count when your 'Assassin' or it hits the enemy · Every 3: 14 damage · Destroyed: counts lost",
+  ANCIENT_CIV: "【Lasts 13 Turns】After 13 turns: max mana -1, add a 'Dragon Egg' or 'Divine Beast Egg' to hand · Then destroyed",
+  VAMP_BUTLER: "【Passive】+1 count when it attacks a monster · Every 3: summon 'Apprentice Vampire' · Counts as 'Vampire'",
+  ELDER_ELF_KING: "【Requires】a 'High Elf' in your graveyard, max HP 99+ · 【On Summon】summon 2 High Elves, then your 'High Elf' +15 ATK",
+  DIVINE: "【On Summon】max mana +15 · +1 draw each turn (permanent) · Destroy 3 chosen cards (either side)",
+  TRIAL_AREA: "【Permanent】take 6 damage on cast · Each turn: add a Cull to your graveyard, then exile ≤2 cards from it",
+  ASSASSIN4: "【On Summon】destroy ALL enemy set traps · 【Requires】Novice, Adept and Elite Assassins in your field/deck/graveyard",
+  MIMIC_KING: "【On Summon】+1/+1 per exiled 'Mimic' card of yours · 6+ exiled: summon a Master Mimic",
+  MIMIC_KING2: "【On Summon】+1/+1 per 'Mimic' card in your field/graveyard/exile · 6+ exiled: summon a Master Mimic",
+  ORIGIN_MIMIC: "【On Summon】+2/+2 per 'Mimic' card in your field/graveyard/exile · 8+ exiled: destroy ≤2 enemy traps",
+  D_BLACK: "【On Summon】send ≤8 of the enemy's exiled cards to their graveyard · All enemy monsters -3 HP (lasting)",
+  FATE_WHEEL: "【Permanent】You may reroll a dice card's result (once per turn)",
+  CHOSEN_KNIGHT: "【Passive】+1/+1 per 2 exiled 'Culls' of yours · When it damages the enemy, add a Cull to your graveyard",
+  SHATTER: "Take 5 damage · All monsters on both fields drop to 1 MAX HP (lasting; damage cleared; not Eggs)",
+  AMBUSH: "【Requires】enemy max mana exactly 4 · Deal 7 damage, take 3 damage · Exiled after use",
+  COUNTERCALC: "【Requires】enemy max mana 6- · Destroy 1 enemy enchantment",
+  TRIBE_PACT: "【Permanent】tribe synergy is doubled · No synergy by turn 40: max mana -2 and take 12 damage",
+  BLOOD_RITE: "【Lasts 14 Turns】both players heal instead of taking spell damage · Destroyed after 14 turns",
+  MIMIC2: "【Passive】While this monster is out, neither player can use Treasure Chests (Attune - Arcane still works)",
+  PRAYER: "【Requires】max mana 12-, your HP below 80% of max, no other card this turn · Your HP restored to 80% of max",
+  MEDITATE: "【Requires】your HP below 80% of max, no other card this turn · Your HP restored to 80% of max",
+  CHOSEN_MAGE: "【Passive】+1/+1 per 2 exiled 'Culls' · (Optional) each turn: 1 exiled 'Cull' → graveyard, deal 6 damage",
+  FORESIGHT: "【Permanent】at max mana 10+: max mana +2 and destroy this monster · 【Requires】no other 'Foresight' of yours in play",
+  WORLD_BLESS: "【Permanent】both players: max mana +1 each turn · The caster rolls 2 dice: on 8+, max mana +2 more",
+  VAMP4: "Cast a 'Blood Magic': summon a Supreme Vampire (once) · Your max HP +50% of the damage it deals",
+  GM8_2: "On summon: roll a die — on 4+, clone itself (Summon 3)",
+  GT5_2: "Destroy the attacker + roll a die: on 5+, restore your HP equal to its max HP",
+  GT5_3: "Destroy the attacker + roll 2 dice: on a total of 7+, revive it on YOUR field",
+  T4: "Destroy the attacking monster + roll a die: on 5+, deal its ATK to the opponent",
+  AJIN: "Max mana +1 — roll a die: on 4+, add an Attune to your graveyard",
+  ND3: "Draw 3 cards — roll a die: on 5+, draw 2 more (Cast 1)",
+  ND5: "Draw 5 cards — roll a die: on 6, max mana +1 (Cast 2)",
+  GS5_0: "Deal 10 damage — roll 2 dice: on a total of 11+, enemy max mana -1",
+  GS10_3: "Draw 6 cards + your max HP +3 (Cast 1)",
+  GS6_2: "Restore 13 of your HP — roll a die: on 6, your max HP +5",
+  GS7_0: "Deal 16 damage — roll a die: on 6, YOUR max mana -1",
+  GS8_0: "Deal 14 damage — roll a die: on 4+, exile the top card of the enemy deck",
+  GS8_3: "Draw 5 cards — roll 2 dice: on a total of 7+, destroy 1 random enemy monster/trap/spell (Cast 2)",
+  GS8_5: "All your monsters +7 ATK — roll a die: on 6, summon a random monster of cost 6 or less",
+  TIMEWARP: "Roll 2 dice — on a total of 6+, skip the opponent's next turn (Cast 12)",
+  LIFE_CYCLE: "Enchantment: whenever you restore HP, roll a die — on 6, max mana +1 (Cast 2)",
+  WORLD_SEED: "Enchantment: at the start of each of your turns, roll a die — on 5+, max mana +1",
+  LUCKY_CHEST: "Roll 2 dice — 2·3: max mana +3 & draw 2 / 4·5: dud (Master Mimic 10/3 on enemy field) / 6-8: max mana +1 / 9-11: your max HP +8 / 12: your max HP +12",
+  GUILD_CHEST: "Roll 2 dice — 2·3: max mana +3 / 4: +1 draw at turn start (permanent; fails if your spell zone is full) / 5·6: max mana +2 / 7: max mana +1 / 8: your max HP +10 / 9·10: Novice & Adept Assassins on enemy field / 11·12: Novice, Adept & Elite Assassins on enemy field + take 10 damage (Cast 3)",
+  // ---- v30 text unification: cards whose English had fallen back to Korean, or had drifted ----
+  GS7_2: "Your HP +13 · From the 3rd cast: your HP +5 whenever you are attacked",
+  GT8_0: "Negate the attack + all your monsters +4 HP (lasting) + draw 1 card",
+  GT8_1: "Negate the attack + all enemy monsters -4 HP (lasting)",
+  GM8_3: "On summon: 4 damage · The opponent then takes 1 damage each turn (doesn't stack)",
+  GM9_3: "On summon: 7 damage + max mana +1 · Each turn, discard a chest from hand to draw 4",
+  INFERNO: "Enchantment: each of your turns, 6 damage to you · 5 damage to the opponent",
+  NWIPE: "【Requires】no monsters on your field · Destroy all enemy traps & enchantments, then take 5 damage",
+  HERMIT: "【Requires】no monsters on your field · Fully restore your HP + your max HP +15",
+  CHOSEN_AREA: "【Requires】25+ of your 'Culls' exiled · Win the game immediately",
+  BLOOD_SECRET: "Take 9 damage · Destroy 1 of your 'Vampire' monsters · If it dies, max mana +3, your max HP +10",
+  FORBIDDEN: "Your HP -15, max mana -2 · On 4-6: summon the rest of one tribe on your field (Origin excluded)",
+});
+
+/**
+ * English house style (rule R8): TCG shorthand, not prose. English ran ~40% longer
+ * than Korean/Japanese because it spelled conditions out with relative clauses, so
+ * it was the language that got shrunk and clipped on small cards.
+ *   - sentences become ` · ` separated clauses
+ *   - "deal N damage to the opponent" -> "deal N damage" (the opponent is the default)
+ *   - "restore N of your HP" -> "your HP +N"
+ * Meaning-preserving only — nothing here drops information.
+ */
+const EN_SHORTEN: Array<[RegExp, string | ((...a: string[]) => string)]> = [
+  [/\.\s+/g, " · "],
+  [/(deal|Deal)\s+(\d+)\s+damage\s+to\s+the\s+opponent/g, "$1 $2 damage"],
+  [/(restore|Restore)\s+(\d+)\s+of\s+your\s+HP/g, (_m: string, r: string, n: string) => (r === "Restore" ? "Your" : "your") + ` HP +${n}`],
+  [/\bat the start of each (?:of your )?turns?\b/gi, "each turn"],
+  [/\bAt the start of each (?:of your )?turns?:\s*/g, ""],
+  [/\bthe attacking monster\b/g, "the attacker"],
+  [/\bthe opponent's field\b/g, "the enemy field"],
+  [/\byour own field\b/g, "your field"],
+  [/\bof cast cost (\d+) or less\b/g, "of cast cost $1-"],
+  [/\bwith ATK (\d+) or less\b/g, "with ATK $1-"],
+  [/\bmonsters? of cost (\d+) or less\b/g, "monster of cost $1-"],
+  [/\bwhile you control (\d+)\+ monsters\b/g, "with $1+ monsters"],
+  [/\bboth players' turns\b/g, "both turns"],
+  [/\bEnemy monster attacks only consume 1 durability\b/g, "Enemy attacks consume only 1 durability"],
+  [/\bIf hatching completes with durability left,?\s*/g, "Hatches with durability left → "],
+  // recurring bloat — all meaning-preserving
+  [/\bexiled from the game\b/g, "exiled"],
+  [/\bExiled from the game after use\b/g, "Exiled after use"],
+  [/\bfrom the game\b/g, ""],
+  [/'([^']+)'-family cards?\b/g, "'$1' cards"],
+  [/\bUsable only while the opponent's max mana is exactly (\d+)\b/g, "【Requires】enemy max mana exactly $1"],
+  [/\bUsable only while the opponent's max mana is (\d+) or less\b/g, "【Requires】enemy max mana $1-"],
+  [/\bthe opponent's\b/g, "the enemy"],
+  [/\bto the opponent\b/g, "to the enemy"],
+  [/\baccumulated damage\b/g, "damage taken"],
+  [/\beach time\b/g, "when"],
+  [/\bEach time\b/g, "When"],
+  [/\bup to (\d+)\b/g, "≤$1"],
+  [/\bor less\b/g, "-"],
+  [/\ball enemy monsters\b/g, "all enemy mons"],
+  [/\s+·\s+·\s+/g, " · "],
+  [/\s{2,}/g, " "],
+];
+function shortenEn(s: string): string {
+  let out = s;
+  for (const [re, rep] of EN_SHORTEN) out = typeof rep === "string" ? out.replace(re, rep) : out.replace(re, rep as (s: string, ...a: string[]) => string);
+  return out.replace(/\s*·\s*$/, "").trim();
+}
+
+// ---- TRAP REWORK (v30): explicit EN texts for the new gimmick traps ----
+Object.assign(NAMES, {
+  NT_NULL6: "Mana Backflow",
+  NT_SNARE: "Trap Within a Trap",
+});
+Object.assign(TEXTS, {
+  T10: "Destroy the attacking monster + restore 4 HP",
+  GT9_3: "【When Attacked】Needs monsters on your field · Steal the attacker; give away your cheapest monster (cannot act)",
+  GT10_0: "【When Attacked】Halve the attack; all your monsters strike the attacker for their total ATK (piercing)",
+  GT12_0: "【When Attacked】Only vs lethal damage · Negate + end enemy turn · Heal half max HP (3 uses) + draw +4 next turn",
+  GT5_4: "【When Attacked】Negate the attack and destroy the attacker · Roll a die: on 4+, exile it",
+  GT8_5: "【On Enemy Spell】The opponent gains 1 Brand counter · Each turn they roll a die per Brand counter and take that damage",
+  GT6_1: "【On Enemy Buy】Roll a die: on 4+, exile the bought card, deal its cost as damage and gain that much max HP",
+  GT11_1: "【On Direct Attack】Negate the attack · The opponent cannot attack you directly this turn",
+  GT12_1: "【Countdown 3】Fires 3 turns after set · Take 5 damage, their max mana +1, destroy every card on the field",
+  GT11_0: "【When Attacked】Negate the attack; take 1 damage · A first-trigger die roll sets how many more uses it has",
+  NT_NULL6: "【On Enemy Spell】Negate the 2nd spell the opponent casts in one turn; their max mana -1",
+  NT_SNARE: "【On Trap Destruction】Negate an enemy effect that destroys your set traps; 10 damage · Re-sets itself",
+});
+
+// ---- TRAP REWORK (v30, part 2): baseline traps turned into gimmicks ----
+Object.assign(TEXTS, {
+  T8: "【When Attacked】Put 2 counters on the attacking monster",
+  T9: "【When Attacked】Negate the attack and return the attacker to its owner's hand",
+  T6: "【When Attacked】Destroy the attacking monster and deal damage equal to its cost",
+  GT5_1: "【When Attacked】Negate the attack · Enemy monsters cannot attack for the rest of this turn",
+  NT_NULL4: "【On Enemy Spell】Negate a spell of cost 4 or less and add a copy of it to your hand",
+  GT6_2: "【When Attacked】Destroy the attacking monster; the opponent draws 2 fewer cards next turn",
+});
+
+// ---- COUNTER + WINE (v31): names & explicit EN texts ----
+Object.assign(NAMES, {
+  GUILD_CO: "Trade Guild", SLUM: "Slums", MERCH1: "Apprentice Merchant", MERCH2: "Royal Merchant",
+  GRAPE: "Grape", GRAPE2: "Fine Grape", BREWING: "Brewing", WINE: "Wine", DARK_MERCHANT: "Black Market Dealer",
+});
+Object.assign(TEXTS, {
+  GUILD_CO: "1 counter per your turn · At 20, add a Black Market Dealer to hand · No duplicates",
+  SLUM: "Roll a die and put that many counters on your Trade Guild",
+  MERCH1: "【On Summon】Put 3 counters on your Trade Guild",
+  MERCH2: "【On Summon】Put 8 counters on your Trade Guild",
+  GRAPE: "Your max HP +2",
+  GRAPE2: "Your max HP +8",
+  BREWING: "For your next 6 turns, grapes in hand become counters (Grape 1, Fine 3) · Expires: gain that many Wine",
+  WINE: "Your max HP +18 · Draw 2 cards",
+  DARK_MERCHANT: "Buy any 1 card from the entire card pool by paying its cost",
+});
+
+// ---- TRIBE REWORK (v32): names & explicit EN texts ----
+Object.assign(NAMES, {
+  TPO1: "Starving Whelp", TSO1: "The Recluse", TAR1: "Aristocrat's Butler",
+  TDE1: "Demon Scout", TDE2: "Demon Warrior", TDE3: "Demon Berserker", TDE4: "Demon King",
+  COLLUSION: "Collusion",
+});
+Object.assign(TEXTS, {
+  TPO1: "【On Summon】Return 1 enemy monster of cost 2 or less to hand · 【Requires】Enemy monsters of cost 2 or less in play",
+  TPO2: "【Passive】+1/+1 per cost of each monster this one destroys",
+  TPO3: "【Passive】Roll a die whenever enemy monsters die: on 5+, summon a copy to your field",
+  TPO5: "【On Summon】Destroy 1 enemy monster of cost 3-4 · If it dies, max mana +1",
+  TSO1: "After summoning, you cannot summon other monsters for your next 3 turns",
+  TSO2: "【On Summon】If you have at most 1 other card on the field (monsters or spells), +3/+3",
+  TSO3: "【On Summon】If your graveyard holds no monsters, draw 4 cards",
+  TSO5: "【Requires】No non-Solitary monsters on your field",
+  TAR1: "【Passive】+1 draw at the start of your turns",
+  TAR2: "【Passive】Enemy monsters of cost 2 or less cannot attack",
+  TAR3: "【Passive】The opponent cannot set trap cards",
+  TAR5: "【Passive】Enemy monsters of cost 6 or less cannot attack this one; while it lives, no direct attacks",
+  TDE1: "Your max mana -1 for your next 5 turns · 【Requires】Max mana 5 or more",
+  TDE2: "【Requires】Your max mana is at least 5 · 【Passive】Your max mana -2 (never below 3)",
+  TDE3: "【Each Turn】Roll a die: on 1-3, your max mana -1; on 4-6, -2 (never below 3)",
+  TDE4: "【Requires】Your max mana ≥5＋non-King Demon in deck · 【On Summon】Your max mana =3 · 【Passive】Your max mana cannot grow",
+  COLLUSION: "Negate attacks on your tribe monsters; kill the attacker · Max mana -1: gain 1 card of the tribe",
+});
+
+// ---- MIMIC/VOID EXPANSION (v33) ----
+Object.assign(NAMES, {
+  DUNGEON_FLOOR: "Dungeon Depths", GEM_RAIN: "Gem Rain", MIMIC_LAIR: "Mimic Hideout",
+  VOID_FRUIT: "Fruit of the Void", VOID_APOSTLE: "Apostle of the Void",
+});
+Object.assign(TEXTS, {
+  DUNGEON_FLOOR: "Max mana -1 (floor 3) · Summon Mimics equal to a die roll · Needs enemy max mana 7+",
+  GEM_RAIN: "Permanent: All Mimic-family monsters on the field get ATK +3",
+  MIMIC_LAIR: "【On Your Mimic's Death】2 damage per your exiled Mimic-family card",
+  VOID_FRUIT: "Permanent: At the start of your turns, gain max HP equal to your exiled card count",
+  VOID_APOSTLE: "【On Summon】Take 13 damage; +1/+1 per exiled card · Each turn: die 1 deals you 10 damage and kills it",
+});
+
+// ---- SPELL OVERHAUL (v34) ----
+Object.assign(NAMES, {
+  GOLIATH_HUNT: "Giant Killing", GLASS_BAN: "Change of Strategy", SHATTER: "Earthquake",
+  DECAY_CRAFT: "Concealed Arms Works", CASINO: "Casino",
+});
+Object.assign(TEXTS, {
+  CULL_FARM: "Permanent: gain a Cull to hand at the start of your turns (Cast 1)",
+  DISARM2: "Destroy 2 enchantments (either side) (Cast 1)",
+  DISARM3: "Destroy 1 enemy enchantment and exile it (Cast 1)",
+  HPS_SOIL: "Permanent: monsters you summon get HP +2 (Cast 1)",
+  INCUBATOR: "Reduce the counter of one of your Eggs by 5 turns (Cast 1)",
+  EXILE_NUKE1: "1 damage per your exiled card (Cast 2)",
+  LEVY: "Summon three 2/2 Soldiers (Cast 2)",
+  SNIPE2: "Destroy all monsters with 2 HP or less (either side) (Cast 2)",
+  WALLBREAK2: "Destroy all monsters with ATK 2 or less (either side) (Cast 2)",
+  S13: "Deal 11 damage to the opponent",
+  S4: "Draw 4 cards (Cast 1) · Once per turn",
+  ND2: "Draw 2 cards + restore 3 of your HP (Cast 1)",
+  HPS_OATH: "All your monsters get HP +6",
+  HPS_GRAFT: "One of your monsters gets HP +6 (Cast 1)",
+  HPS_BOULDER: "One of your monsters gets HP +12 · It gains Taunt (Cast 4)",
+  GENESIS_MAGIC: "All your Origin monsters get +5/+5 (Cast 0)",
+  E1: "For 4 turns the opponent cannot summon monsters of cost 3 or less",
+  E3: "For your next 4 turns, draw 1 extra card · Max mana +1 the turn after it ends",
+  GREED_PRICE: "Summon 2 Mimics (3/2) · Exile 5 more Mimics from the game",
+  INFERNO: "Permanent: each of your turns, 5 damage to you, 7 damage to the opponent (Cast 1)",
+  AHEUK: "Enemy max mana -1 · If you control no monsters, -2 more",
+  NWIPE: "Only while your field is empty · Destroy all enemy traps and enchantments",
+  SLAY_ART: "Permanent: every hit a player takes deals 3 extra damage",
+  SNIPE1: "Destroy 1 monster with 3 HP or less (either side) (Cast 1)",
+  WALLBREAK1: "Destroy 1 monster with ATK 2 or less (either side) (Cast 1)",
+  INQUISITION: "6 damage per tribe monster in the enemy deck, graveyard and field (Cast 2)",
+  AMBUSH: "Only while enemy max mana is 4 · Deal 8 damage, take 3 · Exiled after use",
+  NEGOTIATE: "Enemy max mana +1 · The opponent cannot set traps for 2 turns",
+  HERMIT: "Only with an empty field · Fully heal + max HP +15 · 5 uses per game (Cast 7)",
+  GOLIATH_HUNT: "Destroy 1 monster with max HP 10 or more (either side)",
+  GLASS_BAN: "Permanent: monsters whose ATK and HP differ by 4 or more cannot attack (Cast 2)",
+  DECAY_CRAFT: "Grant Decay to 2 of your monsters · Put 1 counter on every enemy monster",
+  PURGE_TOUCH: "Exile 1 card from your graveyard + draw 1 card · Remove all your Brand counters (Cast 1)",
+  S3: "One of your non-tribe monsters gets ATK +3",
+  S6: "Take any 1 card from your deck to hand (Cast 1)",
+  LIFE_CYCLE: "Permanent: when you heal or gain max HP, roll a die — on 4+, max mana +1 (Cast 2)",
+  PAIN_HARVEST: "Permanent: whenever the opponent takes damage, gain 2 exiled Culls (Cast 2)",
+  NHEAL: "Permanent: whenever either player summons, enemy max HP +4 and your max HP +8 (Cast 2)",
+  MAJESTY_RITE: "Your max mana -1 · Grant Majesty to one of your monsters",
+  MEDITATE: "Only while your max mana is 11 or less · Fully heal; gain 1 Brand counter",
+  MASSACRE: "Your max mana -1 · Destroy all enemy monsters",
+  S12: "Roll a die: on 5+, put 1 Brand counter on the opponent",
+  S14: "Fully heal every monster on the field · Restore 5 of your HP",
+  S1: "Roll a die — 1-2: 3 damage / 3-4: enemy next-turn mana -1 / 5-6: no enemy summons of cost 3 or less next turn",
+  S5: "The opponent's next offer shrinks to 2 cards and cannot be rerolled (Cast 2)",
+  SX2: "Choose and destroy 1 set trap · Roll a die: on 5+, exile it from the game",
+  HANDRESET: "Discard your hand and draw 5 cards (Cast 1)",
+  FORBIDDEN: "Your HP becomes 1 · Roll a die: on 5+, summon the rest of one tribe · Needs a non-Origin tribe",
+  GENESIS_SONG: "Summon 2 random Origin monsters from your deck or graveyard (Cast 1)",
+  MULTI_CULTURE: "Only with 2+ different tribes on your field · All your tribe monsters get ATK +6",
+  ND3: "Roll 2 dice; the opponent predicts one number · If both dice miss the guess, max mana +4",
+  ND5: "Grant Aura to all your monsters (Cast 4)",
+  GS5_3: "16 damage per Demonkin monster in the enemy deck, graveyard and field (Cast 2)",
+  GS6_4: "If the opponent has a Brand counter, put 3 more Brand counters on them (Cast 3)",
+  RUNE2: "Only if half your deck or more is spells · Max mana +8",
+  RUNE3: "Permanent: only if half your deck or more is spells · Your spells fire one extra time for free",
+  WORLD_BLESS: "Permanent: both players gain max mana +1 at turn start · +4 on your turns if your deck holds Elf cards (Cast 4)",
+  GS8_0: "Exile any 1 card of your choice from the enemy deck",
+  TIMEWARP: "Roll a die: on 4+, skip the opponent's next turn (Cast 10)",
+  GAMBLE: "Roll 10 dice — 1-2: take 8 / 3-4: deal 5 / 5: summon a Mana Golem / 6: summon 3 Glass Cannons (Cast 3)",
+  LIFE_SANCTUM: "Permanent: each of your turns, all your monsters get HP +2 (Cast 2)",
+  LUCKY_CHEST: "Roll 2 dice — 2·3: max mana +3 & draw 2 / 4·5: dud (Master Mimic 12/6 on enemy field) / 6-8: max mana +1 / 9-11: max HP +8 / 12: max HP +12",
+  CASINO: "Each die roll adds a counter; at 12, roll the Casino die — 1-2: take 10 / 3-4: deal 30 / 5-6: enemy max mana becomes 3",
+});
+
+// ---- DECK-THINNING STARTERS (v35) ----
+Object.assign(NAMES, { REFRESH_HAND: "Refresh", FOCUS: "Selective Focus" });
+Object.assign(TEXTS, {
+  REFRESH_HAND: "Draw 1 card · Exile up to 2 cards from your hand",
+  FOCUS: "Exile up to 3 cards from your deck and graveyard",
+});
+
+/** Attach nameEn/textEn to every card (explicit map -> generator dictionaries -> Korean fallback). */
+// ---- v36 MONSTER OVERHAUL: explicit EN names/texts ----
+Object.assign(NAMES, {
+  VITAL2: "World Tree Devotee", VITAL3: "World Tree Keeper", VITAL4: "Rally King",
+  NGA3: "Golem Strike Squad", NGA4: "Blade Fiend", NWL3: "Guardian Golem", MANA_GIANT: "Giant Golem",
+  TGE3: "Origin Guardian", TGE4: "Origin Arbiter", TGE5: "Origin Spirit",
+  GM6_0: "Dragon", GM6_1: "Dimensional Jailer", GM6_7: "General", INFKNIGHT: "Knight",
+  GUILD_HALL: "Assassins' Guild Branch", GUILD_HQ: "Assassins' Guild HQ",
+  WORLD_TREE: "World Tree", CURSE: "Curse", ORIGIN_RITE: "Origin Rite",
+  DRAGON_RIDER: "Dragon Rider", ANTIQUE_DK: "Antique Dragon Knight",
+});
+Object.assign(TEXTS, {
+  TGE1: "Cannot attack · Hatches in 4 turns, durability 2 (-1 per hit) · Then a cost 7- Origin (not Egg)",
+  NMD2: "On summon: draw 2 cards",
+  TGE2: "[Origin] On summon: another Origin monster on your field ATK +2 (lasting)",
+  VAMP_BUTLER: "Passive: +1 count whenever this monster attacks · Every 3, summon an Apprentice Vampire · Counts as a Vampire",
+  VITAL2: "On summon: your max HP +4",
+  CASINO: "Each die rolled adds 1 counter; at 12, Casino die — ①② you take 30 / ③④ 30 to the opponent / ⑤ 40 to the opponent / ⑥ enemy max mana becomes 3",
+  EGG_HUNTER: "Passive: when this monster attacks an Egg, it consumes 6 counters",
+  EGG_MASTER: "On summon: all Eggs on your field gain 5 counters",
+  GOLEM2: "Passive: whenever a monster on your field dies, this monster gains 1 counter",
+  M10: "Passive: max mana +1 per other Golem monster on your field",
+  M7: "【Passive】Kill an enemy monster by attack: 1 extra attack/turn · 【Each Turn】Turn start: die ≥5, take 3 damage",
+  M9: "On summon: 1 counter · On your turn, spend a counter to refresh the offer without mana",
+  NGA3: "On summon: if another Golem monster is on your field, this monster gains 3 counters",
+  NHEX: "Each turn: with 10+ spells in your deck, roll a die: on 5+, add 3 Curses to the enemy graveyard",
+  NT_SEAL3: "Passive: neither player can cast spells of cast cost 4 or less",
+  NWL3: "Passive: whenever this monster is attacked, it gains 1 counter",
+  TGE3: "[Origin] On summon: you take 3 damage",
+  RUST_SLUG: "On summon: counter on every enemy monster · When Decay kills one: max mana +1, your max HP +5",
+  TSO3: "On summon: if your graveyard has no monster cards, draw 6 cards",
+  VITAL3: "On summon: your max HP +6 · Passive: whenever you play a World Tree or Elf card, your max HP +5",
+  ELITE: "On summon: if your deck+graveyard is 10 cards or less, summon two 2/2 Soldiers",
+  HORDE: "On summon: all Soldiers and Knights on your field ATK +4 (lasting)",
+  M11: "On summon: with 2+ allied monsters, summon a 4/4 Knight",
+  NGA4: "On summon: you take 6 damage · Cannot choose its target; monsters on your own field are targets too",
+  NMD4: "On summon: buy any card from your offers of the last 5 turns (refreshes included) for its mana",
+  TGE4: "[Origin] On summon: once per game, the opponent gains 1 Brand counter per Origin card in your deck",
+  TRAPSMITH: "On summon: +2/+2 per trap in your deck, graveyard and set zone · Passive: traps cost 1 less to buy",
+  VITAL4: "Passive: Soldiers and Knights on your field gain Guts",
+  GM5_2: "Passive: monsters you summon get +2 HP",
+  GOLEM3: "Summonable only with another Golem monster in your field, deck, hand or graveyard",
+  MANA_GIANT: "Each turn: with 2+ other Golem kinds in your deck, your max HP +10",
+  NT_SEAL5: "Passive: neither player can cast spells of cast cost 6 or less",
+  TGE5: "[Origin] On summon: deploy Origin Rite on your field",
+  ASSASSIN3: "Summonable only with another Assassin card in your deck",
+  GM6_0: "On summon: bury this + a Soldier → Dragon Rider · or this + a Knight → Antique Dragon Knight",
+  GM6_1: "On summon: move up to 8 of the enemy's exiled cards to your exile zone",
+  GM6_7: "On summon: summon a 4/4 Knight · Passive: when the opponent summons a monster, roll a die: on 4+, summon a Knight",
+  GM6_8: "On summon: destroy 2 enemy traps; if fewer, exile 1 graveyard card at random · On death: a 2/2 Soldier",
+  HIGH_ELF: "Summonable only while your max HP is 99 or higher",
+  NMD6: "On summon: draw 5 cards · Passive: with 13+ spells in your deck, spells cost 1 less to cast",
+  CHOSEN_ARCHER: "Passive: ATK +2 per 2 exiled Culls · Attacking an enemy monster with 15+ HP destroys it outright",
+  CHOSEN_KNIGHT: "Passive: +1/+1 per 2 exiled Culls · Whenever this monster attacks, exile 2 Culls",
+  CHOSEN_ROGUE: "Passive: ATK +2 per 2 exiled Culls · On a direct hit, set 1 trap from deck or graveyard for free",
+  CHOSEN_MAGE: "Passive: +1/+1 per 2 exiled Culls · Each turn (optional): return 1 exiled Cull to your graveyard and deal 8 damage",
+  ELDER_ELF_KING: "【Requires】an Elf, High Elf or Dark Elf in deck and max HP 99+ · 【On Summon】destroy all cards on the enemy field",
+  LEGEND_GAMBLER: "Each turn: roll 3 dice vs a guess · Hit: max mana +4, max HP +35 or kill 2 enemy cards (all with Gambler)",
+  TGE7: "[Origin] Passive: all your Origin monsters +4/+4",
+  ASSASSIN4: "【Requires】3+ distinct other Assassins in deck · 【On Summon】opponent gets 3 Brand counters, destroy their set traps",
+  GAMBLE: "Roll 10 dice — ①② you take 8 / ③④ 5 to the opponent / ⑤ summon a Mana Golem / ⑥ summon 3 Golem Strike Squads",
+  GUILD_HQ: "【Passive】When an Assassin hits the opponent: 1 Brand counter · 【Each Turn】A night market sells any Assassin card",
+  WORLD_TREE: "【Passive】+1 counter when your max HP rises · 【Each Turn】Spend 1 counter: heal all your monsters, your HP to 80%",
+  CURSE: "You take 1 damage",
+  ORIGIN_RITE: "Permanent: Summon an Origin (not Guardian): destroy 1 enemy card · If none, opponent gets 1 Brand counter",
+  DRAGON_RIDER: "The 2nd attack has half ATK (rounded down)",
+  ANTIQUE_DK: "—",
+});
+
+// ---- v37 CASTLE + TRAP REWORK: explicit EN names/texts ----
+Object.assign(NAMES, {
+  NT_NULL3: "Mana Block I", NT_NULL4: "Conscription", LEVY: "Muster",
+  CASTLE: "Castle", ACID_RAIN: "Acid Rain", BUDGET: "Operating Budget", EXPANSION: "Expansion", LAND_GRANT: "Land Grant",
+  TREASON: "Treason", STRONG_ACID: "Strong Acid Rain", ROTTEN_GROUND: "Rotten Ground", UNBRAND: "Unbranding", WAR_DECL: "Declaration of War",
+});
+Object.assign(TEXTS, {
+  NMD6: "Passive: with 13+ spells in your deck, spells cost 1 less to cast",
+  NGA4: "Cannot choose its target; monsters on your own field are targets too",
+  ELITE: "On summon: with 10 or fewer cards in your deck, summon two 2/2 Soldiers",
+  GM6_0: "On summon: bury with a Soldier → Dragon Rider, or with a Knight → Antique Dragon Knight · Both: you choose",
+  GAMBLE: "Roll 10 dice: on a total of 40+, max mana +3",
+  LEVY: "Summon three 2/2 Soldiers to your field",
+  GRAPE2: "Your max HP +4",
+  WINE: "Draw 1 card · Your max HP +6",
+  COUNTERCALC: "Usable only while the opponent's max mana is 7 or less · Destroy 1 enemy enchantment",
+  TRIBE_PACT: "Permanent: tribe monsters cost 1 less to buy (min 1) · No tribe synergy by turn 45: you lose",
+  T1: "【On Enemy Attune】Roll a die: on 3+, negate the Attune; their max HP +5",
+  T8: "【When Attacked】Put 2 counters on up to 3 enemy monsters, the attacker first",
+  T2: "Negate 1 spell of cast cost 4- (not Chest/Attune) · 5- with Mana Block I in deck",
+  T3: "Destroy a summoned enemy monster of cost 5- with HP 10-",
+  T9: "【When Attacked】Negate the attack · 3 damage to the attacker",
+  T10: "【When Attacked】When your Devour-tribe monster is attacked · Negate + destroy the attacker; cost 5- → exile it",
+  T11: "【When Attacked】Negate the attack · Move 1 cost 2- card from the enemy graveyard to yours",
+  T12: "【When Attacked】Only vs a cost 5- attacker · Negate + return it to hand · Your Castle gains 5 counters",
+  NT_NULL4: "【When Attacked】Summon Soldiers (2/2) equal to the attacker's cost",
+  T4: "【When Attacked】Negate the attack · The opponent gains 1 Brand counter",
+  T6: "【When Attacked】Negate · Both call a face, roll a die · Brand counters: their hit, you get 1; yours, they get 3",
+  T13: "【When Attacked】Negate · 3 random picks among the opponent and all monsters: 12 damage each (no pierce)",
+  GT11_1: "【When Attacked】Negate the attack · This turn the opponent can no longer attack with cost 4+ monsters",
+  GT5_0: "【When Attacked】Redirect the attack to another enemy monster (piercing applies)",
+  GT5_1: "【When Attacked】Negate + destroy the attacker · If its ATK is 4+, the opponent gains 1 Brand counter",
+  GT5_4: "【When Attacked】Negate the attack · One of your monsters +12 HP (lasting)",
+  GT9_2: "【When Attacked】Destroy your attacked monster, then destroy 2 enemy monsters",
+  GT10_0: "【When Attacked】Negate the attack · With a Castle on your field, summon as many Knights (4/4) as possible",
+  GT11_0: "【When Attacked】Negate the attack · Deploy 1 Guild Network on your field",
+  GT6_1: "【On Enemy Buy】Roll a die: on 5+, exile the bought card · 3+ with a Castle on your field",
+  CASTLE: "【On Summon】2 counters · 【Passive】Spend 1 to negate an attack · No cost 5+ summons · +1 per Soldier/Knight summoned",
+  ACID_RAIN: "Permanent: whenever an enemy monster dies to Decay, the opponent gains 1 Brand counter",
+  BUDGET: "Roll a die: on 2+, summon a Soldier (2/2) to your field",
+  EXPANSION: "Only with a Castle on your field · Your Castle gains 5 counters",
+  LAND_GRANT: "Only with a Castle on your field · Summon 1 cost 3- Aristocrat-tribe card to your field",
+  TREASON: "Only if the enemy has a Castle · Destroy all cards on the enemy field, they get 3 Brand counters",
+  STRONG_ACID: "Permanent: 2 counters on every enemy monster · Enemy dies to Decay: 7 damage + 1 Brand counter",
+  ROTTEN_GROUND: "Permanent: every monster summoned gets 2 counters",
+  UNBRAND: "Remove all Brand counters from both players",
+  WAR_DECL: "【When Attacked】When your Castle is attacked · Summon three Knights (4/4) to your field",
+});
+
+// ---- v38 ----
+Object.assign(NAMES, { NGA3: "Warrior Golem", DEMON_REALM: "Demon Realm", AEM: "Antique Enhance Magic", KNIGHT_TEACH: "Golem King's Teaching", DUNGEON: "Living Dungeon", NL_SECRET: "Nightlord's Secret Art" });
+Object.assign(TEXTS, {
+  DEMON_REALM: "Permanent: the effects of Demonkin monsters you summon are all negated",
+  AEM: "Only with 2 different Golem cards in your deck · 2 Golem monsters on your field ATK +7 (lasting)",
+  KNIGHT_TEACH: "All your monsters gain Guts · Those that already have it gain 3 counters",
+  DUNGEON: "Passive: monsters without Guts or Evade attack with ATK 1",
+  NL_SECRET: "Give Infiltrate or Evade to 1 monster · 2 of your Assassins ATK +3 (lasting)",
+});
+
+// ---- v39 주술사 계열 ----
+Object.assign(NAMES, { NHEX: "Apprentice Hexer", HEXER1: "Novice Hexer", HEXER2: "Adept Hexer", HEXER3: "Master Hexer", HEXER4: "Grand Hexer - Keloid" });
+Object.assign(TEXTS, {
+  HEXER1: "On summon: with 8+ spells in your deck, roll a die: on 5+, add 3 Curses to the enemy graveyard",
+  HEXER2: "On summon: with 10+ spells in your deck, roll a die: on 4+, add 4 Curses to the enemy graveyard",
+  HEXER3: "On summon: 13+ spells: die 3+ adds 5 Curses to their graveyard · Passive: enemy spell: +1 Curse to their graveyard",
+  HEXER4: "Passive: enemy spell: die 3+ negates it · Your Hexers ATK +5 · 【Requires】15+ spells, at least half your deck",
+});
+
+// ---- v41 ----
+Object.assign(NAMES, { WASH_DEVICE: "Purge Unit", SORTER: "Sorter", COLOSSEUM_REST: "Colosseum Lounge", COLOSSEUM: "Colosseum", UNBRANDER: "Unbrander", STRATAGEM: "Stratagem", LAWLESS: "Lawless Zone", RIFT: "Dimensional Rift" });
+Object.assign(TEXTS, {
+  WASH_DEVICE: "Destroy every enemy monster with Decay · The enemy gains that many Brand counters",
+  SORTER: "On summon: exile 3 Culls from the game · Passive: whenever you exile a Cull, exile 1 more Cull",
+  COLOSSEUM_REST: "Permanent: at the start of your turn, max HP +1 per Cull you have exiled from the game",
+  COLOSSEUM: "Permanent: at the start of your turn, with 8+ of your Culls exiled, summon 1 Chosen monster of your choice",
+  UNBRANDER: "On summon: if you have a Brand counter, remove 1 of your Brand counters",
+  STRATAGEM: "Only with 6+ of your monsters · Negate the attack · Destroy up to 3 enemy monsters of cost 6-",
+  LAWLESS: "Permanent: on cast, every monster on the field has its HP set to 1 · Every summoned monster's HP becomes 1",
+  RIFT: "Permanent: whenever a card is added to your exile zone, your max HP +5",
+});
+// ---- v41b ----
+Object.assign(NAMES, { FREE_REWARD: "Price of Nothing", NO_PAIN: "No Pain No Gain", ORIGIN_QUEST: "Quest for Origins", BEGINNER_MIND: "Beginner's Mind", VOID_RITE: "Dimensional Rite", SPACE_RITE: "Spatial Rite", LUCKY_ECHO: "Echo of Fortune", SORTER_LAW: "Law of Selection", BUYOUT: "Buyout", SAMSARA: "Samsara", PENANCE: "Price of Penance", PACK_INSTINCT: "Pack Instinct", MIND_BURST: "Mind Burst", RICH_HABIT: "Habit of the Rich" });
+Object.assign(TEXTS, {
+  FREE_REWARD: "Permanent: whenever you play a cost-0 card, draw a card",
+  NO_PAIN: "Permanent: whenever you take damage, roll a die: on a 6, max mana +1",
+  ORIGIN_QUEST: "Draw a card per cost-0 card on the field",
+  BEGINNER_MIND: "【Requires】An empty hand · Draw 4 cards",
+  VOID_RITE: "Give Void to every monster on the field",
+  SPACE_RITE: "Only with 6+ enemy field cards · For 3 turns the enemy cannot summon monsters or cast spells",
+  LUCKY_ECHO: "Permanent: whenever a die you roll shows a 6, 6 damage to the opponent",
+  SORTER_LAW: "Only with a deck of 8 cards or fewer · Negate the attack · Destroy 2 cards on the enemy field",
+  BUYOUT: "Only if you bought 2 copies of the same card this turn · Max mana +1",
+  SAMSARA: "【Turn Start】If your monster died last turn, summon one of them to your field",
+  PENANCE: "Per Brand counter you have: max mana +2, max HP +10",
+  PACK_INSTINCT: "Only with 2+ monsters of the same name on your field · Those monsters get +2/+2 (lasting)",
+  MIND_BURST: "Remove all counters from your field · The opponent takes 4 damage per counter",
+  RICH_HABIT: "Permanent: at your turn start with 4+ cards in hand, max HP +6 · with 6+, also max mana +1",
+});
+
+// ---- v44: approved reworks after trap retirement ----
+Object.assign(TEXTS, {
+  TAR3: "—",
+  GM6_8: "On death: summon a Soldier (2/2)",
+  ORIGIN_MIMIC: "On summon: +2/+2 per 'Mimic' card in your field/graveyard/exile",
+  ASSASSIN4: "【Requires】3+ distinct other Assassins in deck · 【On Summon】opponent gets 3 Brand counters",
+  CHOSEN_ROGUE: "Passive: ATK +2 per 2 exiled Culls",
+});
+
+// ---- v49 ----
+Object.assign(TEXTS, {
+  TGE4: "【On Summon】Once/game: another Origin card in your deck (excluding this instance): opponent Brand +1",
+  WORLD_CARE: "【Passive】Max 1 on your field · 【Each Turn】At your turn start: your max HP +3",
+  ANCIENT_CIV: "【Lasts 9 Turns】After 9 turns: max mana -1, add a 'Dragon Egg' or 'Divine Beast Egg' to hand · Then destroyed",
+});
+
+export function applyEnglish(pools: Array<Record<string, CardDef>>): void {
+  for (const pool of pools) {
+    for (const id of Object.keys(pool)) {
+      const c = pool[id];
+      if (c.quest || c.quick) continue; // v45 cards carry authored translations
+      c.nameEn = NAMES[id] ?? genNameEn(c.name) ?? c.name;
+      const en = TEXTS[id] ?? genTextEn(c.text);
+      c.textEn = en ? shortenEn(en) : c.text;
+    }
+  }
+}

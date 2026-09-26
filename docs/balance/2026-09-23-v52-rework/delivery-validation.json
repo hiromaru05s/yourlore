@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "selectedPlanAttempts": 819648,
+  "studyAttempts": 819648,
+  "superseded": 0,
+  "tableRows": {
+    "market-ranking.md": 282,
+    "starter-ranking.md": 33,
+    "generated-cards.md": 29,
+    "combos.md": 64
+  },
+  "localLinksChecked": true,
+  "heldCardsUnranked": true,
+  "reportVersion": "v52"
+}

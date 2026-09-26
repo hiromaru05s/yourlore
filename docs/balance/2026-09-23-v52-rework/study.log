@@ -1,0 +1,130 @@
+Started packages 0 workers 1
+Started packages 1 workers 2
+Started packages 2 workers 3
+Started packages 3 workers 4
+Started packages 4 workers 5
+Started packages 5 workers 6
+Started packages 6 workers 7
+Started packages 7 workers 8
+Completed packages 6
+Started baseline 0 workers 8
+Completed packages 0
+Completed packages 2
+Completed packages 4
+Started baseline 1 workers 6
+Started baseline 2 workers 7
+Started baseline 3 workers 8
+Completed packages 1
+Completed packages 5
+Started baseline 4 workers 7
+Started baseline 5 workers 8
+Completed packages 3
+Completed packages 7
+Started baseline 6 workers 7
+Started baseline 7 workers 8
+Started baseline 0 workers 1
+Started baseline 1 workers 2
+Started baseline 2 workers 3
+Started baseline 3 workers 4
+Started baseline 4 workers 5
+Started baseline 5 workers 6
+Started baseline 6 workers 7
+Started baseline 7 workers 8
+Started baseline 0 workers 1
+Started baseline 1 workers 2
+Started baseline 2 workers 3
+Started baseline 3 workers 4
+Started baseline 4 workers 5
+Started baseline 5 workers 6
+Started baseline 6 workers 7
+Started baseline 7 workers 8
+Started coverage 0 workers 9
+Started coverage 1 workers 10
+Completed coverage 0
+Completed coverage 1
+Started coverage 2 workers 9
+Started coverage 3 workers 10
+Completed baseline 4
+Completed baseline 5
+Completed coverage 2
+Completed coverage 3
+Started coverage 4 workers 7
+Started coverage 5 workers 8
+Started coverage 6 workers 9
+Started coverage 7 workers 10
+Completed baseline 1
+Completed baseline 0
+Completed baseline 6
+Completed baseline 7
+Started combos 0 workers 7
+Started combos 1 workers 8
+Started combos 2 workers 9
+Started combos 3 workers 10
+Completed baseline 2
+Completed baseline 3
+Started combos 4 workers 9
+Started combos 5 workers 10
+Completed coverage 4
+Completed coverage 5
+Started combos 6 workers 9
+Started combos 7 workers 10
+Completed coverage 7
+Started tactical 0 workers 10
+Completed coverage 6
+Started tactical 1 workers 10
+Completed combos 0
+Started tactical 2 workers 10
+Completed combos 1
+Started tactical 3 workers 10
+Completed combos 2
+Completed combos 3
+Started tactical 4 workers 9
+Started tactical 5 workers 10
+Completed combos 4
+Completed combos 5
+Started tactical 6 workers 9
+Started tactical 7 workers 10
+Completed combos 6
+Completed combos 7
+Completed tactical 4
+Completed tactical 0
+Completed tactical 5
+Started supplement 0 workers 6
+Started supplement 1 workers 7
+Started supplement 2 workers 8
+Started supplement 3 workers 9
+Started focused 0 workers 10
+Completed tactical 1
+Completed tactical 7
+Completed focused 0
+Completed tactical 6
+Completed tactical 3
+Completed tactical 2
+Completed supplement 2
+Completed supplement 3
+Completed supplement 1
+Completed supplement 0
+Running ['python3', 'harness/verify-study.py']
+{"passed": true, "rawGames": 773696, "selectedAttempts": 773696, "superseded": 0, "finished": 770926, "unfinished": 2770, "reasons": {"stepcap": 2757, "rejected-attack": 13}, "groups": {"baseline": 478336, "combos": 131072, "coverage": 110784, "packages": 48384, "tactical": 5120}, "selectedGroups": {"baseline": 478336, "combos": 131072, "coverage": 110784, "packages": 48384, "tactical": 5120}, "selectedPurchasePrioritiesLegal": true, "supersededAudit": null, "planEquality": true, "uniqueIds": true, "sourceUnchanged": true, "bundleHashesMatch": true}
+Running ['python3', 'harness/analyze-deep.py', '.']
+{"attempted": 773696, "finished": 770926, "failed": 2770, "counts": {"baseline:market": 288768, "baseline:starter": 135168, "baseline:build": 14400, "baseline:observe": 40000, "combos:factor": 131072, "coverage:market": 72192, "coverage:starter": 33792, "coverage:build": 4800, "packages:build": 48384, "tactical-control:market": 1536, "tactical-control:starter": 1024, "tactical:market": 1536, "tactical:starter": 1024}, "bad": {"baseline:market": 1067, "baseline:starter": 406, "baseline:build": 28, "baseline:observe": 152, "combos:factor": 432, "coverage:market": 418, "coverage:build": 12, "coverage:starter": 161, "packages:build": 62, "tactical-control:starter": 9, "tactical:starter": 9, "tactical-control:market": 10, "tactical:market": 4}, "reasons": {"stepcap": 2757, "rejected-attack": 13}, "endings": {"baseline:market": {"hp": 260033, "turncap": 22707, "special": 4961}, "baseline:starter": {"hp": 126665, "turncap": 6136, "special": 1961}, "baseline:build": {"hp": 13460, "turncap": 716, "special": 196}, "baseline:observe": {"hp": 37571, "turncap": 1710, "special": 567}, "combos:factor": {"hp": 122869, "turncap": 5628, "special": 2143}, "coverage:market": {"hp": 64462, "turncap": 5021, "special": 2291}, "coverage:starter": {"hp": 31331, "turncap": 1528, "special": 772}, "coverage:build": {"hp": 4400, "turncap": 201, "special": 187}, "packages:build": {"hp": 46579, "turncap": 1730, "special": 13}, "tactical-control:market": {"hp": 1413, "turncap": 89, "special": 24}, "tactical-control:starter": {"hp": 955, "turncap": 60}, "tactical:market": {"hp": 1420, "turncap": 87, "special": 25}, "tactical:starter": {"hp": 944, "turncap": 61, "special": 10}}, "turns": {"baseline:market": {"mean": 29.279571499577685, "median": 26}, "baseline:starter": {"mean": 26.824512844867247, "median": 24.0}, "baseline:build": {"mean": 27.528179794043975, "median": 25.0}, "baseline:observe": {"mean": 26.445718731178477, "median": 23.0}, "combos:factor": {"mean": 26.04150336803429, "median": 23.0}, "coverage:market": {"mean": 28.834968094295984, "median": 26.0}, "coverage:starter": {"mean": 26.987065505039993, "median": 24}, "coverage:build": {"mean": 27.030492898913952, "median": 24.0}, "packages:build": {"mean": 21.40660568685071, "median": 17.0}, "tactical-control:market": {"mean": 26.690039318479684, "median": 23.5}, "tactical-control:starter": {"mean": 26.151724137931033, "median": 23}, "tactical:market": {"mean": 26.483681462140993, "median": 23.0}, "tactical:starter": {"mean": 25.86600985221675, "median": 22}}, "firstPlayerScore": {"baseline:market": 0.5009089297569351, "baseline:starter": 0.5205844377495139, "baseline:build": 0.5142290564987476, "baseline:observe": 0.513074683798434, "combos:factor": 0.5131429883649724, "coverage:market": 0.4956321230529161, "coverage:starter": 0.5226279325622194, "coverage:build": 0.518796992481203, "packages:build": 0.5381503249037706, "tactical-control:market": 0.4908256880733945, "tactical-control:starter": 0.4600985221674877, "tactical:market": 0.48825065274151436, "tactical:starter": 0.4689655172413793}, "observationGames": 39848, "observedMaxHp": {"mean": 69.66771230676571, "maximum": 2754}, "completeDataset": true}
+Running ['python3', 'harness/analyze-supplement.py']
+card-policy DISCOVERY_LARGE 40.08 -> 40.08 delta 0.0 CI -1.1 1.1 q 1
+card-policy EROSION 46.88 -> 46.88 delta 0.0 CI -1.54 1.54 q 1
+card-policy POISON_MASTER 40.87 -> 59.52 delta 18.65 CI 13.05 24.25 q 2.7153324555890777e-10
+card-policy SOUL_HARVEST 29.69 -> 29.69 delta 0.0 CI 0.0 0.0 q 1
+policy BLACK_HARVEST 27.46 -> 77.46 delta 50.0 CI 47.09 52.91 q 2.1194186617931713e-248
+policy DRAW_BURN 12.05 -> 8.28 delta -3.77 CI -4.95 -2.59 q 4.718784843661739e-10
+policy FIRE_DOUBLE 57.46 -> 60.33 delta 2.86 CI 1.01 4.71 q 0.002406423679774709
+policy POISON_CONTROL 10.69 -> 21.27 delta 10.58 CI 8.32 12.83 q 7.186544915817882e-20
+recipe BLACK_NOVA_KEY 27.38 -> 73.36 delta 45.98 CI 42.16 49.8 q 1.892045386414467e-122
+recipe BLACK_NO_REVERSE 27.08 -> 53.42 delta 26.34 CI 21.67 31.01 q 2.862394406853822e-28
+recipe DRAW_BURN_AGGRO 11.69 -> 40.93 delta 29.24 CI 25.88 32.59 q 6.135697370326285e-65
+recipe DRAW_BURN_ELF 11.03 -> 71.16 delta 60.13 CI 56.94 63.33 q 1.5605823928912646e-296
+recipe DRAW_BURN_LEAN 11.9 -> 17.64 delta 5.74 CI 3.6 7.88 q 1.4661577646776617e-07
+recipe FARM_ARMY 33.82 -> 47.84 delta 14.03 CI 10.65 17.4 q 3.85104461568308e-16
+recipe FIRE_LEAN 30.9 -> 46.72 delta 15.82 CI 13.15 18.49 q 5.221432911837087e-31
+recipe MERC_CASINO_ELF 22.2 -> 67.64 delta 45.44 CI 42.28 48.6 q 8.790816637802667e-174
+recipe MERC_CASINO_LEAN 23.28 -> 51.49 delta 28.21 CI 25.09 31.33 q 7.530542020187894e-70
+recipe POISON_LEAN 12.03 -> 31.54 delta 19.51 CI 16.67 22.34 q 2.578152992414891e-41
+COMPLETE: games verified and statistics saved

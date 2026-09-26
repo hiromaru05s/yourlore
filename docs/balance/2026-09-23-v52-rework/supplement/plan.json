@@ -1,0 +1,204 @@
+{
+  "count": 43264,
+  "variants": {
+    "BLACK_NO_REVERSE": {
+      "control": "BLACK_HARVEST",
+      "deck": [
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "FORESIGHT",
+        "STARTER_CHEST",
+        "STARTER_CHEST",
+        "STARTER_CHEST"
+      ],
+      "route": [
+        "BLACK_ALICE",
+        "BLACK_ELSA",
+        "SOUL_HARVEST"
+      ],
+      "description": "リバースとカースを外し、魔術師の呪いから収穫へ"
+    },
+    "BLACK_NOVA_KEY": {
+      "control": "BLACK_HARVEST",
+      "deck": [
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "FORESIGHT",
+        "STARTER_CHEST",
+        "STARTER_CHEST",
+        "STARTER_CHEST"
+      ],
+      "route": [
+        "BLACK_NOVA",
+        "BLACK_CURSE",
+        "SOUL_HARVEST",
+        "BLACK_ALICE",
+        "BLACK_ELSA"
+      ],
+      "description": "ノヴァをカースの購入条件に使う。通常BOTはノヴァを発動しない"
+    },
+    "DRAW_BURN_LEAN": {
+      "control": "DRAW_BURN",
+      "deck": [
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "FORESIGHT",
+        "STARTER_CHEST",
+        "STARTER_CHEST",
+        "STARTER_CHEST"
+      ],
+      "route": [
+        "EROSION",
+        "DISCOVERY_LARGE",
+        "DISCOVERY"
+      ],
+      "description": "摩耗とドローに絞り、仕込みとダブルアップを省く"
+    },
+    "DRAW_BURN_AGGRO": {
+      "control": "DRAW_BURN",
+      "deck": [
+        "AMBUSH",
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "GHOST",
+        "GHOST",
+        "TRUMPET",
+        "STARTER_CHEST"
+      ],
+      "route": [
+        "EROSION",
+        "DISCOVERY_LARGE",
+        "DISCOVERY_SMALL"
+      ],
+      "description": "序盤を攻撃型スターターで支える"
+    },
+    "DRAW_BURN_ELF": {
+      "control": "DRAW_BURN",
+      "deck": [
+        "ELF_HAVEN",
+        "HALF_ELF",
+        "HALF_ELF",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_CHEST",
+        "STARTER_CHEST"
+      ],
+      "route": [
+        "VITAL3",
+        "EROSION",
+        "DISCOVERY_LARGE"
+      ],
+      "description": "エルフの耐久基盤に摩耗・ドローを組み込む"
+    },
+    "MERC_CASINO_LEAN": {
+      "control": "MERC_CASINO",
+      "deck": [
+        "CASINO",
+        "FORESIGHT",
+        "GHOST",
+        "STARTER_CHEST",
+        "STARTER_CHEST",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH"
+      ],
+      "route": [
+        "MERCENARY",
+        "MERC_MASTER",
+        "MERC_ART"
+      ],
+      "description": "ギャンブラー・運命の輪・イカサマを省く"
+    },
+    "MERC_CASINO_ELF": {
+      "control": "MERC_CASINO",
+      "deck": [
+        "CASINO",
+        "ELF_HAVEN",
+        "HALF_ELF",
+        "FORESIGHT",
+        "STARTER_CHEST",
+        "STARTER_CHEST",
+        "STARTER_TRASH",
+        "STARTER_TRASH"
+      ],
+      "route": [
+        "VITAL3",
+        "MERCENARY",
+        "MERC_MASTER",
+        "MERC_ART"
+      ],
+      "description": "カジノの自傷に耐えるエルフ基盤"
+    },
+    "FIRE_LEAN": {
+      "control": "FIRE_BURN",
+      "deck": [
+        "AMBUSH",
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "GHOST",
+        "GHOST",
+        "TRUMPET",
+        "STARTER_CHEST"
+      ],
+      "route": [
+        "FIRE_BALL",
+        "FIRE_ZONE",
+        "FIRE_ART"
+      ],
+      "description": "メテオとマスターを外した低コスト炎"
+    },
+    "FARM_ARMY": {
+      "control": "MERCHANT_FARM",
+      "deck": [
+        "BREWING",
+        "CASTLE",
+        "TRUMPET",
+        "STARTER_CHEST",
+        "STARTER_CHEST",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH"
+      ],
+      "route": [
+        "FARM_KEEPER",
+        "ADVANCE",
+        "M11"
+      ],
+      "description": "かかし生成から全体強化へ"
+    },
+    "POISON_LEAN": {
+      "control": "POISON_CONTROL",
+      "deck": [
+        "GHOST",
+        "GHOST",
+        "TRUMPET",
+        "GUILD_HALL",
+        "FLAME",
+        "STARTER_TRASH",
+        "STARTER_CHEST",
+        "STARTER_CHEST"
+      ],
+      "route": [
+        "POISON_MASTER",
+        "ANESTHESIA"
+      ],
+      "description": "腐敗クエスト等を外し除去役に絞る"
+    }
+  },
+  "policyRoutes": [
+    "POISON_CONTROL",
+    "BLACK_HARVEST",
+    "DRAW_BURN",
+    "FIRE_DOUBLE"
+  ],
+  "notes": "Adaptive follow-up after primary route results and deterministic BOT diagnostic findings; separate from preregistered primary ranking."
+}

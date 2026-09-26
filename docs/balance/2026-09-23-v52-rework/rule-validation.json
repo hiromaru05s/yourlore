@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "checks": [
+    "14 rework suites",
+    "36 expansion suites",
+    "5 legacy behavior suites",
+    "client and server typecheck",
+    "production build",
+    "16 native clone equality cases",
+    "200 cached reducer equality cases"
+  ],
+  "implementationCommit": "1477896",
+  "logs": {
+    "rework-tests.log": "ef6ead016a39f853e0daa3a3776aaf26b442757cc23b4a8a94b2baf16e777f6d",
+    "expansion-tests.log": "ef428b3b904fda936bed85565febb1c68920620f9f76ec894dec9f6cf0ed340c",
+    "regression-tests.log": "e6f9a43f0282a88276fa22562dd3209f33100024c8da0119a4acac87e873b46d",
+    "typecheck.log": "7c877aadd2e0a3760912e30c374ae1b592b78bfcf3661ba8414238f482806e26",
+    "build.log": "679dd364b8eb8c6c4aedc45f580756148c629ea68fd8611e2041886ec785a6f7"
+  }
+}

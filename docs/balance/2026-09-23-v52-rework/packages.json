@@ -1,0 +1,246 @@
+{
+  "DEMON_RUSH": {
+    "deck": "RAMP",
+    "route": [
+      "TDE3",
+      "TDE3"
+    ]
+  },
+  "DEMON_KING": {
+    "deck": "RAMP",
+    "route": [
+      "TDE1",
+      "TDE4"
+    ]
+  },
+  "DEMON_REALM": {
+    "deck": "RAMP",
+    "route": [
+      "DEMON_REALM",
+      "TDE1",
+      "TDE4"
+    ]
+  },
+  "DEMON_TRIO": {
+    "deck": "RAMP",
+    "route": [
+      "DEMON_REALM",
+      "TDE1",
+      "TDE2",
+      "TDE3",
+      "TDE4"
+    ]
+  },
+  "ELF_ENGINE": {
+    "deck": "ELF",
+    "route": [
+      "VITAL3",
+      "WORLD_HEART",
+      "ELF"
+    ]
+  },
+  "RIFT_ENGINE": {
+    "deck": "RIFT",
+    "route": [
+      "Q_RIFT",
+      "SORTER"
+    ]
+  },
+  "ASSASSIN_CHAIN": {
+    "deck": "ASSASSIN",
+    "route": [
+      "ASSASSIN1",
+      "ASSASSIN2",
+      "ASSASSIN3",
+      "ASSASSIN4"
+    ]
+  },
+  "GOLEM_CHAIN": {
+    "deck": "MIDRANGE",
+    "route": [
+      "GOLEM1",
+      "GOLEM2",
+      "GOLEM3"
+    ]
+  },
+  "ORIGIN_CHAIN": {
+    "deck": "RAMP",
+    "route": [
+      "TGE1",
+      "TGE2",
+      "TGE3",
+      "TGE4"
+    ]
+  },
+  "WARLORD_CASTLE": {
+    "deck": "CASTLE",
+    "route": [
+      "M11",
+      "QUICK_MUSTER"
+    ]
+  },
+  "CASINO_ENGINE": {
+    "deck": "CASINO",
+    "route": [
+      "LUCKY_ECHO",
+      "LEGEND_GAMBLER"
+    ]
+  },
+  "MERCHANT_ENGINE": {
+    "deck": "MERCHANT",
+    "route": [
+      "GRAPE2"
+    ]
+  },
+  "EGG_ENGINE": {
+    "deck": "EGG",
+    "route": [
+      "EGG_MASTER",
+      "INCUBATOR"
+    ]
+  },
+  "AGGRO_ENGINE": {
+    "deck": "AGGRO",
+    "route": [
+      "NGA4",
+      "M7"
+    ]
+  },
+  "MERC_CASINO": {
+    "deck": "CASINO",
+    "route": [
+      "MERCENARY",
+      "MERC_ART",
+      "MERC_LEADER",
+      "MERC_MASTER",
+      "Q_CHEAT"
+    ]
+  },
+  "MERC_ARMY": {
+    "deck": "CASTLE",
+    "route": [
+      "MERCENARY",
+      "MERC_ART",
+      "MERC_LEADER",
+      "MERC_MASTER",
+      "ADVANCE"
+    ]
+  },
+  "FIRE_BURN": {
+    "deck": "AGGRO",
+    "route": [
+      "FIRE_ARROW",
+      "FIRE_BALL",
+      "FIRE_ZONE",
+      "FIRE_METEOR",
+      "FIRE_MASTER"
+    ]
+  },
+  "FIRE_DOUBLE": {
+    "deck": "RAMP",
+    "route": [
+      "FIRE_ARROW",
+      "FIRE_ART",
+      "DOUBLE_UP",
+      "FIRE_ZONE",
+      "FIRE_METEOR"
+    ]
+  },
+  "BLACK_HARVEST": {
+    "deck": "RAMP",
+    "route": [
+      "BLACK_REVERSE",
+      "BLACK_ALICE",
+      "BLACK_CURSE",
+      "SOUL_HARVEST",
+      "BLACK_ELSA"
+    ]
+  },
+  "BLACK_REVERSE_FIRE": {
+    "deck": "RAMP",
+    "route": [
+      "BLACK_REVERSE",
+      "FIRE_BALL",
+      "DOUBLE_UP",
+      "FIRE_ARROW",
+      "BLACK_ALICE"
+    ]
+  },
+  "DRAW_BURN": {
+    "deck": "RAMP",
+    "route": [
+      "DISCOVERY_SMALL",
+      "DISCOVERY",
+      "DISCOVERY_LARGE",
+      "EROSION",
+      "PREPARATION",
+      "DOUBLE_UP"
+    ]
+  },
+  "DRAW_GROWTH": {
+    "deck": "ELF",
+    "route": [
+      "DISCOVERY_SMALL",
+      "DISCOVERY_LARGE",
+      "GROWTH",
+      "PREPARATION",
+      "VITAL3"
+    ]
+  },
+  "ASSASSIN_EXPANDED": {
+    "deck": "ASSASSIN",
+    "route": [
+      "ASSASSIN1",
+      "ROGUE_ART",
+      "ASSASSIN_SQUAD",
+      "GUILD_CHEST",
+      "ASSASSIN2"
+    ]
+  },
+  "CASTLE_GUNNER": {
+    "deck": "CASTLE",
+    "route": [
+      "INTERCEPT",
+      "REINFORCE",
+      "STABLE",
+      "ADVANCE",
+      "M11"
+    ]
+  },
+  "MIMIC_HIDEOUT": {
+    "deck": "DUNGEON",
+    "route": [
+      "GREED_PRICE",
+      "QUICK_MIMIC",
+      "MIMIC_KING2",
+      "MIMIC_LORD"
+    ]
+  },
+  "INFINITY_CULL": {
+    "deck": "CULL",
+    "route": [
+      "FIRE_BALL",
+      "FIRE_ARROW",
+      "BLACK_INFINITY",
+      "DOUBLE_UP"
+    ]
+  },
+  "MERCHANT_FARM": {
+    "deck": "MERCHANT",
+    "route": [
+      "FARM_KEEPER",
+      "GRAPE2",
+      "Q_TOWN",
+      "MERCENARY"
+    ]
+  },
+  "POISON_CONTROL": {
+    "deck": "DECAY",
+    "route": [
+      "POISON_MASTER",
+      "Q_DECAY",
+      "QUICK_POISON",
+      "ANESTHESIA"
+    ]
+  }
+}

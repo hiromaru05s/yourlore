@@ -1,0 +1,84 @@
+// ============================================================
+// LORE — WebSocket protocol shared by client and server.
+// The server is authoritative: clients send Actions, receive
+// redacted GameState snapshots + event streams to animate.
+// ============================================================
+import type { Action, CardInst, GameEvent, GameState, Side } from "./types";
+
+// ---- matchmaking (Matchmaker Durable Object) ----
+export type QueueClientMsg =
+  | { type: "queue" }
+  | { type: "ping" }   // keepalive — idle edge/NAT timeouts kill silent queue sockets (same as game socket)
+  | { type: "cancel" };
+
+export type QueueServerMsg =
+  | { type: "pong" }
+  | { type: "queued"; position: number }
+  | { type: "matched"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null }
+  | { type: "error"; message: string };
+
+// ---- in-game (GameRoom Durable Object) ----
+export type GameClientMsg =
+  | { type: "action"; action: Action }
+  | { type: "ready" }
+  | { type: "startReady" } // ranked market-preview: this player wants to start early
+  | { type: "ping" };
+
+export type GameServerMsg =
+  | { type: "init"; you: Side; state: GameState; events: GameEvent[] }
+  | { type: "update"; state: GameState; events: GameEvent[] }
+  | { type: "opponentLeft" }
+  | { type: "oppConn"; connected: boolean; deadline?: number } // opponent dropped / came back; deadline = epoch ms when the forfeit fires
+  | { type: "voided"; message?: string }    // match cancelled (opponent never joined) — no rank change
+  | { type: "preview"; until: number | null; market: CardInst[] } // ranked pre-game: study the fixed market (until=null → waiting for opponent)
+  | { type: "rankResult"; before: number; after: number } // ranked game settled — this player's MMR before/after
+  | { type: "error"; message: string }
+  | { type: "pong" };
+
+/**
+ * Redact a full server-side GameState into the view a given player may see.
+ * Hides opponent hand/deck contents and face-down trap identities so an
+ * authoritative server never leaks hidden information to a client.
+ */
+export function redactFor(state: GameState, you: Side): GameState {
+  const g: GameState = structuredClone(state);
+  g._wheelSnap = null; // 운명의 수레바퀴 스냅샷은 서버 전용 (클라 불필요 + 숨김정보 보호)
+  g.rng = 0; // PRNG state is server-only — leaking it lets a client replay mulberry32 and predict every future roll/shuffle
+  // your own deck CONTENTS are yours to see, but its ORDER is hidden information
+  // (you don't know your next draw) — ship it in canonical order instead.
+  const me = g.players[you];
+  me.deck = [...me.deck].sort((a, b) => a.cost - b.cost || a.id.localeCompare(b.id) || a.uid.localeCompare(b.uid));
+  const opp = g.players[1 - you];
+  const placeholder = (uid: string): GameState["players"][0]["hand"][0] => ({
+    uid, id: "HIDDEN", t: "mon", cost: 0, name: "", text: "",
+  });
+  // The opponent deck viewer receives only identities that have become public.
+  // Once learned, a physical card remains listed even if it returns to hand/deck.
+  const known = new Map((opp.revealedCards ?? []).map((c) => [c.uid, c.id]));
+  const currentlyPublic: CardInst[] = [
+    ...opp.discard,
+    ...(opp.field as CardInst[]),
+    ...opp.enchants.map((e) => e.card),
+    ...(opp.quests ?? []).map(q => q.card),
+    ...(opp.removed ?? []),
+  ];
+  for (const card of currentlyPublic) {
+    if (!(card as CardInst & { token?: boolean }).token) known.set(card.uid, card.id);
+  }
+  opp.collection = [...known.values()];
+  opp.hand = opp.hand.map((c) => placeholder(c.uid));
+  const choosingEnemyDeck = g.pending?.kind === 'cardChoice' && (g.pending.owner ?? g.cur) === you && ['Q_CHEAT', 'CREATION'].includes(g.pending.reason);
+  opp.deck = choosingEnemyDeck
+    ? [...opp.deck].sort((a, b) => a.cost - b.cost || a.id.localeCompare(b.id) || a.uid.localeCompare(b.uid))
+    : opp.deck.map((c) => placeholder(c.uid));
+  // discard is public (purchases are shown in the log too); only hand/deck/traps hidden.
+  // 정보상(infoDealer)은 첫 발동으로 정체가 공개된 채 필드에 남는 다회용 함정 — 정체와 남은
+  // 카운터를 그대로 노출한다. 카운트다운(doomsday) 등 미발동 함정의 cnt는 정체가 새므로 숨긴다.
+  opp.traps = opp.traps.map((t) => (t.card.react === "infoDealer" && t.cnt != null
+    ? { card: structuredClone(t.card), cnt: t.cnt }
+    : { card: placeholder(t.card.uid) }));
+  // opponent's offered supply is only visible on their own turn
+  if (g.cur === you) opp.supply = opp.supply.map((c) => (c ? placeholder(c.uid) : null));
+  opp.supplyHist = []; // 기록자(v36) 이력은 본인 전용
+  return g;
+}

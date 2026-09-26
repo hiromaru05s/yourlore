@@ -1,0 +1,155 @@
+{
+  "before": "v51",
+  "after": "v52",
+  "changed": {
+    "M11": {
+      "textEn": {
+        "before": "【On Summon】with 2+ allied monsters, summon a 4/4 Knight",
+        "after": "【On Summon】If you control at least 2 other monsters, summon 1 Knight (4/4)."
+      },
+      "textJa": {
+        "before": "【召喚時】味方モンスター2体以上なら騎士(4/4)1体を召喚",
+        "after": "【召喚時】このモンスター以外の味方モンスターが2体以上いるなら、騎士(4/4)1体を召喚"
+      },
+      "text": {
+        "before": "【소환시】아군 몬스터 2체 이상이면 기사(4/4) 1체를 소환",
+        "after": "【소환시】이 몬스터 외 아군 몬스터가 2체 이상이면 기사(4/4) 1체를 소환"
+      }
+    },
+    "AJIN": {
+      "play": {
+        "before": null,
+        "after": 2
+      }
+    },
+    "LUCKY_CHEST": {
+      "textEn": {
+        "before": "Roll 2 dice — 2·3: max mana +3 & draw 2 cards / 4·5: dud (Master Mimic 12/6 on enemy field) / 6-8: max mana +1 / 9-11: max HP +8 / 12: max HP +12",
+        "after": "Roll 2 dice — 2·3: max mana +3 & draw 2 cards / 4·5: dud (Mimic 3/2 on enemy field) / 6-8: max mana +1 / 9-11: max HP +8 / 12: max HP +12"
+      },
+      "textJa": {
+        "before": "ダイス2個の合計 — 2·3: 最大マナ+3・カード2枚ドロー / 4·5: ハズレ(相手の場にマスターミミック12/6) / 6~8: 最大マナ+1 / 9~11: 最大体力+8 / 12: 最大体力+12",
+        "after": "ダイス2個の合計 — 2·3: 最大マナ+3・カード2枚ドロー / 4·5: ハズレ(相手の場にミミック3/2) / 6~8: 最大マナ+1 / 9~11: 最大体力+8 / 12: 最大体力+12"
+      },
+      "text": {
+        "before": "주사위 2개 합계 — 2·3: 최대 마나+3·카드 2장 드로우 / 4·5: 꽝(상대 필드에 마스터 미믹 12/6) / 6~8: 최대 마나+1 / 9~11: 최대 체력+8 / 12: 최대 체력+12",
+        "after": "주사위 2개 합계 — 2·3: 최대 마나+3·카드 2장 드로우 / 4·5: 꽝(상대 필드에 미믹 3/2) / 6~8: 최대 마나+1 / 9~11: 최대 체력+8 / 12: 최대 체력+12"
+      }
+    },
+    "ELF_HAVEN": {
+      "textEn": {
+        "before": "【Permanent】'World Tree' cards cost 0 to buy/cast (3/turn) · Buy one from the offer: your max HP +10",
+        "after": "【Permanent】'World Tree' cards cost 0 to buy/cast (3/turn) · Buy one from the offer: your max HP +5"
+      },
+      "textJa": {
+        "before": "【永続】「世界樹」カードの購入/発動コスト0 (購入はターン3枚) · 提示で「世界樹」購入時、自分の最大体力+10",
+        "after": "【永続】「世界樹」カードの購入/発動コスト0 (購入はターン3枚) · 提示で「世界樹」購入時、自分の最大体力+5"
+      },
+      "text": {
+        "before": "【영구】'세계수' 카드의 구매/시전 코스트 0 (턴당 3장) · 제시에서 '세계수' 구매 시 자신 최대 체력 +10",
+        "after": "【영구】'세계수' 카드의 구매/시전 코스트 0 (턴당 3장) · 제시에서 '세계수' 구매 시 자신 최대 체력 +5"
+      }
+    },
+    "DEMON_REALM": {
+      "textEn": {
+        "before": "【Permanent】the effects of Demonkin monsters you summon are all negated",
+        "after": "【Permanent】Negate all effects and keywords of your Demonkin in play and those you summon later."
+      },
+      "textJa": {
+        "before": "【永続】自分が召喚する「魔族」モンスターの効果を全て無効化",
+        "after": "【永続】発動時に自分の場にいる魔族と、以後自分が召喚する魔族の効果・キーワード能力を全て無効化"
+      },
+      "text": {
+        "before": "【영구】자신이 소환하는 '마족' 몬스터의 효과를 모두 무효화",
+        "after": "【영구】발동 시 자신 필드의 마족 및 이후 소환하는 마족의 효과·키워드 능력을 전부 무효화"
+      }
+    },
+    "CREATION": {
+      "textEn": {
+        "before": "Draw 1, restore 1 HP · Creation to your grave · 【10+ Creations in Rift】Copy 1 enemy deck card to your grave",
+        "after": "Draw 1, restore 1 HP · Creation to your grave · 【10+ Creations in Rift】Copy 1 enemy deck card to your grave · 【Same name: 3 uses/own turn】"
+      },
+      "textJa": {
+        "before": "カード1枚ドロー、自分の体力1回復 · 自分の墓地に創造1枚生成 · 【自分のリフトに創造10枚以上】相手デッキから1枚選び複製を自分の墓地へ",
+        "after": "カード1枚ドロー、自分の体力1回復 · 自分の墓地に創造1枚生成 · 【自分のリフトに創造10枚以上】相手デッキから1枚選び複製を自分の墓地へ · 【同名合計：自分の各ターン3回まで】"
+      },
+      "maxUsesPerTurn": {
+        "before": null,
+        "after": 3
+      },
+      "text": {
+        "before": "카드 1장 드로우, 자신 체력 1 회복 · 묘지에 창조 1장 · 【리프트에 창조 10장 이상】상대 덱 카드 1장 선택 복제, 자신 묘지로",
+        "after": "카드 1장 드로우, 자신 체력 1 회복 · 묘지에 창조 1장 · 【리프트에 창조 10장 이상】상대 덱 카드 1장 선택 복제, 자신 묘지로 · 【동명 합계: 자신의 턴마다 3회까지】"
+      }
+    },
+    "SOUL_HARVEST": {
+      "textEn": {
+        "before": "Deal 7 damage to the opponent per Curse in their deck composition.",
+        "after": "Deal 4 damage to the opponent per Curse in their deck composition."
+      },
+      "textJa": {
+        "before": "相手のデッキ構成にある呪い1枚につき相手プレイヤーに7ダメージ",
+        "after": "相手のデッキ構成にある呪い1枚につき相手プレイヤーに4ダメージ"
+      },
+      "text": {
+        "before": "상대 덱 구성의 저주 1장당 상대 플레이어에게 7 데미지.",
+        "after": "상대 덱 구성의 저주 1장당 상대 플레이어에게 4 데미지."
+      }
+    },
+    "DISCOVERY_SMALL": {
+      "textEn": {
+        "before": "Draw 2 cards.",
+        "after": "Draw 2 cards · 【Same name: 1 use/own turn】"
+      },
+      "textJa": {
+        "before": "カード2枚ドロー",
+        "after": "カード2枚ドロー · 【同名合計：自分の各ターン1回まで】"
+      },
+      "maxUsesPerTurn": {
+        "before": null,
+        "after": 1
+      },
+      "text": {
+        "before": "카드 2장 드로우.",
+        "after": "카드 2장 드로우 · 【동명 합계: 자신의 턴마다 1회까지】"
+      }
+    },
+    "DISCOVERY": {
+      "textEn": {
+        "before": "Draw 3 cards · Draw 1 more if you already drew an extra card this turn.",
+        "after": "Draw 3 cards · Draw 1 more if you already drew an extra card this turn · 【Same name: 1 use/own turn】"
+      },
+      "textJa": {
+        "before": "カード3枚ドロー · このターン既に追加ドローしていればさらに1枚",
+        "after": "カード3枚ドロー · このターン既に追加ドローしていればさらに1枚 · 【同名合計：自分の各ターン1回まで】"
+      },
+      "maxUsesPerTurn": {
+        "before": null,
+        "after": 1
+      },
+      "text": {
+        "before": "카드 3장 드로우 · 이번 턴 이미 추가 드로우했다면 1장 더.",
+        "after": "카드 3장 드로우 · 이번 턴 이미 추가 드로우했다면 1장 더 · 【동명 합계: 자신의 턴마다 1회까지】"
+      }
+    },
+    "DISCOVERY_LARGE": {
+      "textEn": {
+        "before": "Draw 4 cards · Draw 2 more if you already drew an extra card this turn.",
+        "after": "Draw 4 cards · Draw 2 more if you already drew an extra card this turn · 【Same name: 1 use/own turn】"
+      },
+      "textJa": {
+        "before": "カード4枚ドロー · このターン既に追加ドローしていればさらに2枚",
+        "after": "カード4枚ドロー · このターン既に追加ドローしていればさらに2枚 · 【同名合計：自分の各ターン1回まで】"
+      },
+      "maxUsesPerTurn": {
+        "before": null,
+        "after": 1
+      },
+      "text": {
+        "before": "카드 4장 드로우 · 이번 턴 이미 추가 드로우했다면 2장 더.",
+        "after": "카드 4장 드로우 · 이번 턴 이미 추가 드로우했다면 2장 더 · 【동명 합계: 자신의 턴마다 1회까지】"
+      }
+    }
+  },
+  "poolsUnchanged": true
+}

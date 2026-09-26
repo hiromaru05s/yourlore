@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "implementationCommit": "1477896ef4be8777ed1afc610784c27df10ad97c",
+  "workingSourceEqualsFrozenSource": true,
+  "commitSourceEqualsFrozenSource": true,
+  "checked": [
+    "tests/quest-quick.mjs",
+    "tests/balance-v49.mjs",
+    "tests/half-elf-v48.mjs",
+    "tests/expansion-v50.mjs",
+    "tests/balance-v47.mjs",
+    "tests/balance-v52.mjs",
+    "tests/trap-removal.mjs",
+    "client/src/shared/cards.en.ts",
+    "client/src/shared/cardNames.flavor.ts",
+    "client/src/shared/questQuickCards.ts",
+    "client/src/shared/bot.ts",
+    "client/src/shared/engine.ts",
+    "client/src/shared/types.ts",
+    "client/src/shared/expansionCards.ts",
+    "client/src/shared/botNetWeights.ts",
+    "client/src/shared/cards.ts",
+    "client/src/shared/protocol.ts",
+    "client/src/shared/botFeatures.ts",
+    "client/src/shared/botNet.ts",
+    "client/src/shared/cardEval.ts",
+    "client/src/shared/logEn.ts",
+    "client/src/shared/cardText.ts"
+  ]
+}
