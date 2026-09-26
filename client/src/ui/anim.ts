@@ -482,9 +482,9 @@ export async function animateReshuffle(side:ViewSide,count:number):Promise<void>
 }
 
 /** Native card face throughout travel and landing, with a dimensional flip. */
-export async function animateDraw(handEl: HTMLElement | null, count: number, side: ViewSide = "me"): Promise<void> {
+export async function animateDraw(handEl: HTMLElement | null, count: number, side: ViewSide = "me", signal?:AbortSignal): Promise<void> {
   const deck = document.getElementById(side === "me" ? "pile-myDeck" : "pile-oppDeck");
-  if (!handEl || !deck || count <= 0 || fxSkip || document.hidden ||
+  if (!handEl || !deck || count <= 0 || fxSkip || document.hidden || signal?.aborted ||
       matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const cards = Array.from(handEl.querySelectorAll<HTMLElement>(side === "me" ? ".card" : ".card--back"));
   const incoming = cards.slice(-Math.min(count, 6)).filter(n => n.getBoundingClientRect().width > 0);
@@ -492,6 +492,7 @@ export async function animateDraw(handEl: HTMLElement | null, count: number, sid
   if (!origin.width || !incoming.length) return;
   const abort = new AbortController();
   const cancel = (): void => abort.abort();
+  signal?.addEventListener('abort',cancel,{once:true});
   const cancelled = new Promise<void>(resolve => abort.signal.addEventListener('abort', () => resolve(), { once: true }));
   const visibility = new Map(incoming.map(node => [node, node.style.visibility]));
   const restore = (node: HTMLElement): void => { node.style.visibility = visibility.get(node) ?? ''; };
@@ -510,6 +511,7 @@ export async function animateDraw(handEl: HTMLElement | null, count: number, sid
   } catch { /* Unavailable module: reveal the resting cards. */ }
   finally {
     clearTimeout(deadline); cancel(); fxWaiters.delete(cancel);
+    signal?.removeEventListener('abort',cancel);
     window.removeEventListener('resize', cancel);
     document.removeEventListener('visibilitychange', cancel);
     incoming.forEach(restore);

@@ -212,6 +212,8 @@ export interface GameState {
   /** server-stamped remaining ms for the current turn (online only); lets a reconnecting
       client resume the turn clock instead of restarting it from full. */
   turnLeftMs?: number;
+  /** Present only for new rooms' first turn. Null startsAt means asset preparation. */
+  opening?: {startsAt:number|null;playableAt:number|null;serverNow:number};
   /** server-stamped full turn length in ms (online only): ranked 50s / casual 90s.
       drives the timer ring's full-scale so it drains correctly regardless of mode. */
   turnTotalMs?: number;

@@ -20,6 +20,7 @@ import { createGame, reduce, actingSide, effectChoices } from "../../client/src/
 import { redactFor } from "../../client/src/shared/protocol";
 import { BALANCE_VERSION } from "../../client/src/shared/cards";
 import { settleRanked } from "./rank";
+import { DUEL_OPENING_MS, OPENING_PREPARE_MS, OPENING_LEAD_MS } from "../../client/src/shared/opening";
 
 interface PlayerRef { id: string; name: string; sleeve?: string | null; deck?: string | null; }
 
@@ -60,6 +61,7 @@ interface RoomData {
   /** ms epoch when the room was provisioned — recorded as matches.created_at so
       the admin dashboard can chart real game duration (ended_at − created_at). */
   startedAt: number;
+  opening?: {capable:[boolean,boolean];ready:[boolean,boolean];prepareBy:number|null;startsAt:number|null};
 }
 
 const TURN_MS_RANKED = 50000; // ranked: tighter clock
@@ -122,6 +124,7 @@ export class GameRoom {
         previewDone: r.previewDone ?? true, // pre-existing rooms are already in-game → no preview
         startReady: r.startReady ?? [false, false],
         initSent: r.initSent ?? [true, true],
+        opening: r.opening,
         startedAt: r.startedAt ?? Date.now(), // old blobs: degrade to duration≈0 (excluded by admin query)
       };
     }
@@ -159,6 +162,7 @@ export class GameRoom {
         startReady: [false, false],
         initSent: [false, false],
         startedAt: Date.now(),
+        opening: {capable:[false,false],ready:[false,false],prepareBy:null,startsAt:null},
       };
       this.persist();
       void this.state.storage.setAlarm(this.room.joinBy!).catch(() => { /* best effort */ });
@@ -248,7 +252,17 @@ export class GameRoom {
     try { msg = JSON.parse(String(message)); } catch { return; }
 
     if (msg.type === "ping") { try { this.send(ws, { type: "pong" }); } catch { /* dropped */ } return; } // autoResponse fallback
+    if (att.gen !== room.gen[att.side]) return;
+    if (msg.type === "openingReady") {
+      if (!room.game.over && room.opening && room.previewDone) {
+        room.opening.ready[att.side] = true;
+        await this.state.storage.put("room", room);
+        if (room.readied.every(Boolean) && room.opening.ready.every(Boolean)) await this.startOpening();
+      }
+      return;
+    }
     if (msg.type === "ready") {
+      if (room.opening && room.opening.startsAt == null) room.opening.capable[att.side] = msg.openingVersion === 1;
       room.readied[att.side] = true;
       if (room.readied[0] && room.readied[1]) room.joinBy = null; // both joined → no join-timeout void
       // a reconnect cancels this side's pending forfeit and un-pauses the opponent
@@ -271,6 +285,10 @@ export class GameRoom {
         return;
       }
 
+      if (room.opening && room.opening.startsAt == null && room.readied.every(Boolean)) {
+        await this.prepareOpening();
+        return;
+      }
       // normal start (non-ranked) or a mid-game reconnect resync
       this.persist();
       this.sendInit(att.side);
@@ -282,7 +300,7 @@ export class GameRoom {
       if (room.previewDone) return;
       room.startReady[att.side] = true;
       this.persist();
-      if (room.startReady[0] && room.startReady[1]) this.endPreview(); // both agreed → begin now
+      if (room.startReady[0] && room.startReady[1]) await this.endPreview(); // both agreed → begin now
       return;
     }
     if (msg.type === "action") await this.handleAction(att.side, msg.action);
@@ -317,9 +335,9 @@ export class GameRoom {
       else void this.state.storage.deleteAlarm();
       return;
     }
-    const times = [...room.forfeitAt, room.joinBy, room.previewUntil].filter((t): t is number => t != null);
+    const times = [...room.forfeitAt, room.joinBy, room.previewUntil, room.opening?.prepareBy].filter((t): t is number => t != null);
     // authoritative turn clock: arm the force-end deadline for the running turn
-    if (!room.game.over && room.previewDone && room.readied[0] && room.readied[1]) {
+    if (!room.game.over && room.previewDone && room.readied[0] && room.readied[1] && (!room.opening || room.opening.startsAt != null)) {
       times.push(room.turnStartAt + turnMsFor(room.ranked) + (room.turnBonusMs || 0) + TURN_ENFORCE_GRACE_MS);
     }
     if (times.length) void this.state.storage.setAlarm(Math.min(...times)).catch(() => { /* best effort */ });
@@ -349,9 +367,11 @@ export class GameRoom {
 
     // ---- ranked preview auto-start: 15s elapsed with no mutual early-start → begin the game ----
     if (room.previewUntil != null && room.previewUntil <= now + 250 && !room.previewDone) {
-      this.endPreview(); // persists + re-arms the alarm and sends init to both
+      await this.endPreview(); // persists + re-arms the alarm and sends init to both
       return;
     }
+
+    if (room.opening?.prepareBy != null && room.opening.prepareBy <= now && bothJoined && room.previewDone) await this.startOpening();
 
     // process due forfeits in DEADLINE order: if both sides are due in one (late)
     // alarm firing, the side that disconnected FIRST forfeits — not side 0 by index.
@@ -378,7 +398,7 @@ export class GameRoom {
     // ---- server-side turn timeout: force-end a turn the active client never ended.
     // The clock was previously display-only — a stalled or modified client on its
     // turn could freeze the opponent forever (no action → no forfeit, no end).
-    if (!room.game.over && room.previewDone && bothJoined) {
+    if (!room.game.over && room.previewDone && bothJoined && (!room.opening || room.opening.startsAt != null)) {
       const dl = room.turnStartAt + turnMsFor(room.ranked) + (room.turnBonusMs || 0) + TURN_ENFORCE_GRACE_MS;
       if (dl <= now + 250) {
         const prevTurn = room.game.turn, prevCur = room.game.cur;
@@ -418,6 +438,8 @@ export class GameRoom {
     const room = this.room!;
     const g = room.game;
     if (g.over) return;
+    // No gameplay before both players have joined, studied the market and reached the shared start.
+    if (action.type !== "surrender" && (!room.readied.every(Boolean) || !room.previewDone || (room.opening && (room.opening.startsAt == null || Date.now() < room.turnStartAt)))) return;
     // authorization
     if (action.type === "surrender") {
       if (action.player !== side) return;
@@ -459,7 +481,12 @@ export class GameRoom {
     const s = redactFor(this.room!.game, side) as GameState & { turnLeftMs?: number; turnTotalMs?: number; sleeves?: [string | null, string | null] };
     const total = turnMsFor(this.room!.ranked) + (this.room!.turnBonusMs || 0);
     s.turnTotalMs = total;
-    s.turnLeftMs = Math.max(0, total - (Date.now() - this.room!.turnStartAt));
+    s.turnLeftMs = Math.min(total, Math.max(0, total - (Date.now() - this.room!.turnStartAt)));
+    if (this.room!.opening && s.turn === 1) {
+      const startsAt=this.room!.opening.startsAt;
+      s.opening={startsAt,playableAt:startsAt==null?null:startsAt+DUEL_OPENING_MS,serverNow:Date.now()};
+      if(startsAt==null)s.turnLeftMs=total;
+    }
     const pl = this.room!.players;
     s.sleeves = ["default", "default"];
     return s;
@@ -486,15 +513,40 @@ export class GameRoom {
   }
 
   /** End the ranked market-preview phase → the game truly begins (coin toss happens client-side on init). */
-  private endPreview(): void {
+  private async endPreview(): Promise<void> {
     const room = this.room;
     if (!room || room.previewDone) return;
     room.previewDone = true;
     room.previewUntil = null;
-    room.turnStartAt = Date.now(); room.turnBonusMs = 0; // fresh turn-1 clock (don't count the preview seconds)
+    if(room.opening){await this.prepareOpening();return;}
+    room.turnStartAt = Date.now(); room.turnBonusMs = 0; // legacy room
     this.persist();
     this.syncAlarm();
     for (const s of [0, 1] as Side[]) this.sendInit(s);
+  }
+
+  /** Resource readiness is bounded and persisted; repeated messages never restart it. */
+  private async prepareOpening(): Promise<void> {
+    const room=this.room!;const opening=room.opening;
+    if(!opening||opening.startsAt!=null||!room.readied.every(Boolean)||!room.previewDone)return;
+    if(!opening.capable.every(Boolean)) {
+      // Old clients do not understand the preparation handshake.
+      delete room.opening;room.turnStartAt=Date.now();
+    } else if(opening.prepareBy==null) opening.prepareBy=Date.now()+OPENING_PREPARE_MS;
+    await this.state.storage.put("room",room);
+    this.syncAlarm();
+    for(const side of [0,1] as Side[])this.sendInit(side);
+    if(room.opening?.ready.every(Boolean))await this.startOpening();
+  }
+
+  private async startOpening(): Promise<void> {
+    const room=this.room!;const opening=room.opening;
+    if(!opening||opening.startsAt!=null||!room.readied.every(Boolean)||!room.previewDone||room.game.over)return;
+    opening.startsAt=Date.now()+OPENING_LEAD_MS;opening.prepareBy=null;
+    room.turnStartAt=opening.startsAt+DUEL_OPENING_MS;room.turnBonusMs=0;
+    await this.state.storage.put("room",room);
+    this.syncAlarm();
+    for(const side of [0,1] as Side[])this.sendInit(side);
   }
 
   private async recordResult(): Promise<void> {

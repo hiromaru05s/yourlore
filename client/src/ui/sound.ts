@@ -73,6 +73,10 @@ export function initSound(): void {
 }
 
 export function getSfxVolume(): number { return volume; }
+/** Scoped presentation audio uses the same unlocked context and volume bus. */
+export function getSfxBus():{context:AudioContext;master:GainNode}|null {
+  return unlocked&&ctx&&master?{context:ctx,master}:null;
+}
 export function setSfxVolume(v: number): void {
   volume = Math.min(1, Math.max(0, v));
   try { localStorage.setItem(LS_KEY, String(volume)); } catch { /* ignore */ }

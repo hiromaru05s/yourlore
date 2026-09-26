@@ -1,3 +1,5 @@
+import {playDuelOpening,warmOpening} from "../ui/duelOpeningDirector";
+import {waitForDuel} from "../ui/duelReadiness";
 import {releaseMonster} from '../ui/fieldLayout';
 import { paintDuelClock } from '../ui/duelClock';
 // ============================================================
@@ -20,7 +22,6 @@ import { cardPicker, cardPickerMulti, confirmDialog, treasureModal, winModal, cl
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { sfx, type SfxName } from "../ui/sound";
-import { avatarHtml } from "../ui/social";
 import { tierOf, tierLabel } from "../ui/tier";
 import { t, getLang, cardName, onLangChange } from "../i18n";
 import { diceRollAnim, cancelDiceAnimations } from "../ui/dice";
@@ -72,9 +73,18 @@ export abstract class BaseController implements BoardHandlers {
   private lastEndTurnAt = 0;   // 턴종료 연타 가드: 마지막 endTurn 제출 시각
   private purgePicks: string[] | null = null; // multi-select purge: remaining queued picks
   private autoTarget: string | null = null; // drag-to-attack: defender chosen before the pending exists
+  private openingRoot:HTMLElement;
+  private openingAbort=new AbortController();
+  private openingActive=false;
+  private openingAssets:Promise<void>|null=null;
+  private openingWait:HTMLElement|null=null;
+  private serverOffset=0;
+  protected get openingLocked():boolean { return this.openingActive || (!!this.state?.opening && (this.state.opening.playableAt==null || Date.now()-this.serverOffset<this.state.opening.playableAt)); }
+  protected openingPrepared():void {}
   protected introShown = false; // coin-toss reveal plays once at game start
 
   constructor(root: HTMLElement, you: Side, exits: ControllerExits) {
+    this.openingRoot=root;
     this.you = you;
     this.exits = exits;
     this.view = new GameView(root, you, this);
@@ -149,6 +159,8 @@ export abstract class BaseController implements BoardHandlers {
   // ---- apply a reduce result: queued so batches play back one at a time ----
   protected applyResult(res: ReduceResult, animate = true): void {
     const prev = this.state ?? res.state;
+    if(res.state.opening)this.serverOffset=Date.now()-res.state.opening.serverNow;
+    if(res.state.over||res.state.turn>1)this.openingAbort.abort();
     this.view.syncTurn(res.state);
     this.state = res.state; // logical state advances immediately (input guards etc.)
     const gen = ++this.fxGen;
@@ -522,14 +534,24 @@ export abstract class BaseController implements BoardHandlers {
   }
 
   private afterApply(res: ReduceResult): void {
-    this.syncTimer();
-    // coin-toss intro: reveal who won the toss for the first turn (once, at game start)
+    if(this.state.over)this.releaseOpening();
     if (!this.introShown && this.state && this.state.turn === 1 && !this.state.over) {
+      const opening=this.state.opening;
+      if(opening?.startsAt===null){
+        const game=this.openingRoot.querySelector<HTMLElement>('.game');if(game){game.inert=true;game.classList.add('opening-hands');}
+        if(!this.openingWait){this.openingWait=document.createElement('div');this.openingWait.className='opening-wait';this.openingWait.setAttribute('role','status');this.openingWait.textContent=getLang()==='ja'?'対戦相手の準備を待っています':getLang()==='en'?'Waiting for your opponent':'상대 준비를 기다리는 중';document.body.append(this.openingWait);}
+        void this.prepareOpeningAssets().then(()=>{if(!this.dead&&!this.openingAbort.signal.aborted)this.openingPrepared();});
+        return;
+      }
       this.introShown = true;
-      this.showCoinToss(this.state.cur);
-      return;
+      // Rejoins into an already playable turn (and old servers) skip the cinematic.
+      if(this.state.mode!=='online'||opening?.playableAt!=null&&Date.now()-this.serverOffset<opening.playableAt){
+        this.openingActive=true;void this.showCoinToss(this.state.cur);return;
+      }
+      this.releaseOpening();
     }
-    if (document.querySelector('.cointoss-ov,.opening-hands') && !this.state.over) return;
+    if(this.openingActive&&!this.state.over)return;
+    this.syncTimer();
     // max-mana growth cue (mid-turn gains too)
     const mm = this.state?.players?.[this.you]?.maxMana ?? 0;
     if (this.prevMaxMana && mm > this.prevMaxMana) sfx("mana");
@@ -740,50 +762,55 @@ export abstract class BaseController implements BoardHandlers {
     paintDuelClock(el, s, total, mine);
   }
 
-  /** Coin-toss reveal at game start: a two-headed coin — each face is a player's
-      profile avatar — flips and lands on the face of whoever goes first. */
-  private async showCoinToss(firstSide: Side): Promise<void> {
-    const game=document.querySelector<HTMLElement>(".game");game?.classList.add("opening-hands");
-    // The board starts fully assembled.
-    if(this.dead){game?.classList.remove("opening-hands");return;}
-    const iAmFirst = firstSide === this.you;
-    const firstName = firstSide === this.you ? COIN_ME.name : COIN_OPP.name;
-    const heads = iAmFirst; // heads face = ME; land on heads if I'm first, else on OPP (tails)
-    // "Celestial Eye Compass" coin: the avatar sits in a circular mask UNDER a
-    // transparent ring-frame PNG (front = my face, back = opponent's face), so
-    // the compass ornaments wrap around the portrait.
-    const face = (p: CoinProfile, frame: string) =>
-      `<span class="ct-avatar-mask">${avatarHtml(p.avatar || (p===COIN_ME?"SEEKER_BLUE":"SEEKER_RED"), p.name, 96)}</span><img class="ct-frame" src="${frame}" alt="" draggable="false">`;
-    const ov = document.createElement("div");
-    ov.className = "cointoss-ov coin-loading";
-    ov.innerHTML = `
-      <div class="cointoss">
-        <div class="ct-coin ${heads ? "to-heads" : "to-tails"}">
-          <div class="ct-face ct-heads">${face(COIN_ME, "/ui/coin-toss/coin-option-1-front.png")}</div>
-          <div class="ct-face ct-tails">${face(COIN_OPP, "/ui/coin-toss/coin-option-1-back.png")}</div>
-        </div>
-        <div class="ct-caption">
-          <div class="ct-head">${t("coin.title")}</div>
-          <div class="ct-result">${iAmFirst ? t("coin.youFirst") : `${firstName} ${t("coin.oppFirst")}`}</div>
-        </div>
-      </div>`;
-    document.body.appendChild(ov);
-    try { const {mountCoinScene}=await import('../ui/coinScene');await mountCoinScene(ov.querySelector<HTMLElement>('.ct-coin')!,heads); } catch { /* CSS coin remains available without GPU. */ } finally {ov.classList.remove("coin-loading");}
-    if(this.dead){ov.remove();return;}
-    sfx("coin");
-    setTimeout(() => sfx(iAmFirst ? "turn" : "pop"), 1700);
-    setTimeout(() => { ov.classList.add("out"); setTimeout(async () => {
-      ov.remove();
-      if (this.dead || this.state.over) return;
-      A.turnBanner(this.state.cur === this.you, this.state.turn);
-      try {
-        if (this.state.turn === 1) {
+  private prepareOpeningAssets():Promise<void>{
+    if(this.openingAssets)return this.openingAssets;
+    this.openingAssets=(async()=>{
+      let timer:ReturnType<typeof setTimeout>|undefined;
+      let cancel=()=>{};
+      const cancelled=new Promise<void>(resolve=>{cancel=resolve;this.openingAbort.signal.addEventListener('abort',cancel,{once:true});});
+      try{await Promise.race([Promise.all([waitForDuel(this.openingRoot),warmOpening()]),new Promise<void>(r=>{timer=setTimeout(r,6000);}),cancelled]);}
+      finally{clearTimeout(timer);this.openingAbort.signal.removeEventListener('abort',cancel);}
+    })();return this.openingAssets;
+  }
+
+  private releaseOpening():void{
+    this.openingWait?.remove();this.openingWait=null;
+    const game=this.openingRoot.querySelector<HTMLElement>('.game');
+    if(game){game.inert=false;game.classList.remove('opening-hands');}
+  }
+
+  private async showCoinToss(firstSide:Side):Promise<void>{
+    const game=this.openingRoot.querySelector<HTMLElement>('.game');
+    if(game){game.inert=true;game.classList.add('opening-hands');}
+    try{
+      await this.prepareOpeningAssets();
+      if(this.dead||this.state.over||this.openingAbort.signal.aborted)return;
+      this.openingWait?.remove();this.openingWait=null;
+      const opening=this.state.opening,startsAt=opening?.startsAt;
+      await playDuelOpening({root:this.openingRoot,me:{...COIN_ME,name:this.state.players[this.you].name},opp:{...COIN_OPP,name:this.state.players[(1-this.you) as Side].name},firstIsMe:firstSide===this.you,signal:this.openingAbort.signal,
+        elapsed:startsAt!=null?()=>Date.now()-this.serverOffset-startsAt:undefined,
+        onDeal:async signal=>{
           game?.classList.remove('opening-hands');
-          await Promise.all([A.animateDraw(document.getElementById('hand'),3,'me'),A.animateDraw(document.getElementById('oppHand'),3,'opp')]);
-        }
-      } catch (error) { console.error('[opening draw]', error); }
-      if (!this.dead) this.afterApply({ state: this.state, events: [] });
-    }, 350); }, 2800);
+          await Promise.all([A.animateDraw(document.getElementById('hand'),3,'me',signal),A.animateDraw(document.getElementById('oppHand'),3,'opp',signal)]);
+        },
+      });
+      if(opening?.playableAt!=null){this.state.turnLeftMs=Math.max(0,(this.state.turnTotalMs??90000)-Math.max(0,Date.now()-this.serverOffset-opening.playableAt));}
+    }catch(error){
+      console.error('[duel opening]',error);
+      // A failed renderer cannot move the authoritative first-turn deadline.
+      const remaining=(this.state.opening?.playableAt??0)-(Date.now()-this.serverOffset);
+      if(remaining>0&&!this.openingAbort.signal.aborted)await new Promise<void>(resolve=>{
+        const finish=()=>{clearTimeout(timer);this.openingAbort.signal.removeEventListener('abort',finish);resolve();};
+        const timer=setTimeout(finish,remaining);this.openingAbort.signal.addEventListener('abort',finish,{once:true});
+      });
+    }
+    finally{
+      this.openingActive=false;this.releaseOpening();
+      if(!this.dead&&!this.state.over){
+        if(this.state.turn===1)A.turnBanner(this.state.cur===this.you,1);
+        this.afterApply({state:this.state,events:[]});
+      }
+    }
   }
 
   private turnToast(text: string, size: "big" | "small", ms: number): void {
@@ -876,6 +903,7 @@ export abstract class BaseController implements BoardHandlers {
 
   destroy(): void {
     this.dead = true;
+    this.openingAbort.abort();this.releaseOpening();
     this.clearQuickFaces();
     A.setFxSkip(true);
     cancelDiceAnimations();
@@ -914,7 +942,7 @@ export class LocalController extends BaseController {
   }
 
   protected submit(action: Action): void {
-    if (this.state.over) return;
+    if (this.state.over || action.type!=="surrender"&&this.openingLocked) return;
     // input is never locked during playback — so out-of-turn clicks (e.g. on a
     // stale board while the bot's turn plays out) must be rejected here
     if (action.type !== "surrender" && this.state.cur !== this.you) return;

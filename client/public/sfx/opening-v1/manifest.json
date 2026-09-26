@@ -1,0 +1,65 @@
+{
+  "sourceCommit": "dd855a4",
+  "author": "LORE original procedural sound design",
+  "sounds": {
+    "duel-start": [
+      {
+        "file": "duel-start.mp3",
+        "seconds": 3.4,
+        "peakDb": -5.11,
+        "rmsDb": -19.16,
+        "sha256": "3f198b185c8eebceead811138bf33064433fc738724d4879da8ee19f399f3b14"
+      }
+    ],
+    "coin": [
+      {
+        "file": "coin.mp3",
+        "seconds": 2.2,
+        "peakDb": -10.26,
+        "rmsDb": -29.04,
+        "sha256": "b6440534e6a599c4fcbdde133e6e716ff08d52623a66c2aeef5ca2ed41cfa204"
+      }
+    ],
+    "impact": [
+      {
+        "file": "impact-1.mp3",
+        "seconds": 0.68,
+        "peakDb": -5.11,
+        "rmsDb": -21.68,
+        "sha256": "48c14c75d434479225865b91faf5045fe6dd40d8d032764a0e2ff22b3c4b7318"
+      }
+    ],
+    "turn": [
+      {
+        "file": "turn.mp3",
+        "seconds": 1.1,
+        "peakDb": -7.37,
+        "rmsDb": -23.64,
+        "sha256": "d1adc0bc8dbdfed2b84495b34fe8257b7d95be9ef491adab7df5b247397ce139"
+      }
+    ],
+    "draw": [
+      {
+        "file": "draw-1.mp3",
+        "seconds": 0.46,
+        "peakDb": -12.01,
+        "rmsDb": -30.72,
+        "sha256": "d91ce1f4e65855bbcdd77597cbc2407c7257c637d70c9a658ce50bf4247fcb48"
+      },
+      {
+        "file": "draw-2.mp3",
+        "seconds": 0.46,
+        "peakDb": -13.99,
+        "rmsDb": -30.51,
+        "sha256": "1b769a02533a72f2afa6b0b8b7e204a2bd0e08f777472a55a27891afe45d39ba"
+      },
+      {
+        "file": "draw-3.mp3",
+        "seconds": 0.46,
+        "peakDb": -12.74,
+        "rmsDb": -30.34,
+        "sha256": "6ef78598c0868e047c37fcbbd3bd7062ac3d1b58058f136da3607de88ca51314"
+      }
+    ]
+  }
+}

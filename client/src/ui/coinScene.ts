@@ -20,7 +20,7 @@ export function coinPose(t:number,heads:boolean){
   let lift=0;if(t<.42)lift=5.5*(1-(t/.42)**2);else for(const [a,b,h] of [[.42,.71,.75],[.71,.9,.23],[.9,1,.035]])if(t<=b){const u=(t-a)/(b-a);lift=4*h*u*(1-u);break;}
   return {q,y:support+lift,lift};
 }
-async function faceTexture(face:HTMLElement):Promise<T.Texture>{
+export async function faceTexture(face:HTMLElement):Promise<T.Texture>{
   const c=document.createElement('canvas');c.width=c.height=512;const ctx=c.getContext('2d')!;ctx.fillStyle='#17273d';ctx.fillRect(0,0,512,512);
   const load=(url:string)=>new Promise<HTMLImageElement>((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=reject;i.src=url;});
   const sprite=face.querySelector<HTMLElement>('.seeker-sprite'),img=face.querySelector<HTMLImageElement>('.ct-avatar-mask img');

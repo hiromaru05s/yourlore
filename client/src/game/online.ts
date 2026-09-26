@@ -45,7 +45,7 @@ export class OnlineController extends BaseController {
 
   private connect(): void {
     this.sock = new Sock<GameServerMsg, GameClientMsg>(`/ws/room/${this.roomId}`, {
-      onOpen: () => { this.openedAt = Date.now(); this.lastMsgAt = Date.now(); this.sock.send({ type: "ready" }); this.startHb(); },
+      onOpen: () => { this.openedAt = Date.now(); this.lastMsgAt = Date.now(); this.sock.send({ type: "ready", openingVersion:1 }); this.startHb(); },
       onMessage: (msg) => { this.lastMsgAt = Date.now(); this.onServer(msg); },
       onClose: () => this.onSockClose(),
     });
@@ -124,9 +124,10 @@ export class OnlineController extends BaseController {
   // the same hand/market index twice, and after the first play shifted the array
   // the second played/bought whichever card slid into that slot. Cleared on every
   // init/update; the 2.5s failsafe covers a lost echo.
+  protected openingPrepared():void { this.sock.send({type:"openingReady"}); }
   private echoLockAt = 0;
   protected submit(action: Action): void {
-    if (!this.started || this.state?.over) return;
+    if (!this.started || this.state?.over || action.type!=="surrender"&&this.openingLocked) return;
     const locking = action.type === "play" || action.type === "buyMarket" || action.type === "buySupply"
       || action.type === "attack" || action.type === "refresh" || action.type === "endTurn";
     if (locking) {

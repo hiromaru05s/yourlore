@@ -1,0 +1,39 @@
+.duel-opening { position:fixed;inset:0;z-index:130;isolation:isolate;overflow:hidden;pointer-events:auto;color:#f3eadb;font-family:Georgia,'Yu Mincho',serif; }
+.duel-opening-veil { position:absolute;inset:0;background:radial-gradient(ellipse at 50% 38%,#101c326e 0%,#040a16eb 82%);pointer-events:none; }
+.duel-opening-lines { position:absolute;inset:12% 5%;border-top:1px solid #c7ad7955;border-bottom:1px solid #c7ad7933;pointer-events:none; }
+.duel-opening-lines::before { content:'';position:absolute;inset:14% 20%;border:1px solid #e4c99a26;transform:rotate(-24deg); }
+.opening-player { position:absolute;left:0;top:0;transform-origin:center;overflow:hidden;border:1px solid #d6bf8d;box-shadow:0 28px 65px #0009,0 0 0 5px #080f1a,0 0 0 6px #b198643d;will-change:transform,width,height; }
+.opening-art { position:absolute;inset:0;background-size:200% 100%;background-position:left center;background-repeat:no-repeat; }
+.opening-player::after { content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,#e0f3ff1a,transparent 30%,transparent 65%,#0106126b);box-shadow:inset 0 0 40px #03091255; }
+.opening-player.is-me { border-color:#a4c4e7; }
+.opening-player.is-opp { border-color:#d8a795; }
+.opening-name { position:absolute;left:0;top:0;text-align:center;font-size:clamp(16px,2.1vw,29px);font-weight:400;letter-spacing:.12em;max-width:38vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 3px 12px #000; }
+.opening-name small { display:block;font-family:system-ui,sans-serif;font-size:10px;letter-spacing:.35em;color:#c7b78f;margin-bottom:10px; }
+.opening-center { position:absolute;top:47%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none; }
+.opening-center img { display:block;width:clamp(50px,8vw,108px);height:80px;object-fit:contain;margin:auto;filter:drop-shadow(0 0 20px #d8bd784a); }
+.opening-center span { display:block;font-size:clamp(12px,1.6vw,21px);letter-spacing:.5em;margin-top:18px;text-indent:.5em;color:#e2d1a8; }
+.opening-result { position:absolute;left:50%;top:43%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;text-shadow:0 3px 12px #040813;min-width:240px; }
+.opening-result strong { display:block;font-size:clamp(24px,3vw,43px);font-weight:400;letter-spacing:.18em;color:#fff2cf; }
+.opening-result span { display:block;font-family:system-ui,sans-serif;font-size:13px;color:#f1e1bd;letter-spacing:.15em;margin-top:12px; }
+.opening-result::before,.opening-result::after { content:'';display:block;height:1px;background:linear-gradient(90deg,transparent,#e8c482,transparent);margin:18px auto;max-width:320px; }
+.opening-skip { position:absolute;right:max(24px,env(safe-area-inset-right));bottom:max(22px,env(safe-area-inset-bottom));border:1px solid #e1c69255;background:#09111ed9;color:#e4dbc9;padding:10px 18px;font:12px system-ui,sans-serif;letter-spacing:.12em;cursor:pointer; }
+.opening-skip:focus-visible { outline:2px solid #b8dbff;outline-offset:4px; }
+.opening-fallback-coin { position:absolute;width:86px;height:86px;border-radius:50%;border:5px double #c9ab70;background:#14263c;box-shadow:0 8px 13px #0005;overflow:hidden; }
+.opening-fallback-coin .avatar,.opening-fallback-coin .seeker-sprite { width:100%!important;height:100%!important;display:block; }
+.opening-faces { position:absolute;left:-10000px;top:0;width:100px;height:100px;visibility:hidden; }
+.opening-faces .ct-face { position:relative; }
+.game.duel-intro-active .pt-ring { visibility:hidden; }
+.game.duel-intro-active.intro-docked .pt-ring { visibility:visible; }
+.game.duel-intro-active .mp-clock { visibility:hidden; }
+.game.duel-intro-active.intro-first-me #portraitMe .pt-ring,.game.duel-intro-active.intro-first-opp #portraitOpp .pt-ring { filter:drop-shadow(0 0 15px #ffe1a0); }
+.game.duel-intro-active #hand,.game.duel-intro-active #oppHand { visibility:hidden; }
+.game.duel-intro-active.intro-dealing #hand,.game.duel-intro-active.intro-dealing #oppHand { visibility:visible; }
+.opening-wait { position:fixed;z-index:132;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 22px;background:#09111ee8;color:#e9ddc5;border:1px solid #bba67666;font:13px system-ui,sans-serif;pointer-events:none;text-align:center; }
+@media(max-width:600px) {
+ .opening-center { top:48%; }
+ .opening-center img { height:45px; }
+ .opening-center span { margin-top:8px; }
+ .opening-name { max-width:85vw; }
+ .opening-result { top:49%; }
+ .opening-skip { right:14px;bottom:14px; }
+}

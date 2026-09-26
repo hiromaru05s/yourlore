@@ -7,6 +7,7 @@ import '../styles/card.css';
 import '../styles/game-overlays.css';
 import '../styles/game.css';
 import '../styles/screens.css';
+import '../styles/duel-opening.css';
 import { cardPickerMulti } from '../ui/modal';
 import { turnBanner, manaSurge, exileCard, animateDraw, animateReshuffle } from '../ui/anim';
 import { LocalController } from '../game/controller';
@@ -22,7 +23,9 @@ import type { CardInst, FieldMon } from '../shared/types';
 if (import.meta.env.DEV) {
   setLang('ja');
   localStorage.setItem('lore_help_callout_seen',new Date().toISOString().slice(0,10));
-  if (new URLSearchParams(location.search).has('live')) {
+  if (new URLSearchParams(location.search).has('opening')) {
+    void import('./openingLab').then(m=>m.mountOpeningLab(document.getElementById('app')!));
+  } else if (new URLSearchParams(location.search).has('live')) {
     setMyAvatar('SEEKER_BLUE');setOppAvatar('SEEKER_RED');
     const controller=new LocalController(document.getElementById('app')!,{onHome:()=>location.reload(),onRematch:()=>location.reload()},'シーカー',undefined,'easy');
     const stop=startBoardLayout();

@@ -19,9 +19,11 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
   const label=document.createElement('span');label.textContent=getLang()==='ja'?'対戦の準備中':getLang()==='en'?'Preparing your duel':'대전 준비 중';
   const track=document.createElement('div');track.className='duel-load-track';track.setAttribute('aria-hidden','true');track.append(document.createElement('i'));loader.append(mark,label,track);root.append(loader);
   root.classList.add('duel-preparing');root.setAttribute('aria-busy','true');
-  const task=(async()=>{
+  let expired=false;let timeout:ReturnType<typeof setTimeout>|undefined;
+  const work=(async()=>{
     await mount;
-    while(root.isConnected&&root.dataset.boardRendered!=="true")await new Promise<void>(r=>requestAnimationFrame(()=>r()));
+    while(!expired&&root.isConnected&&root.dataset.boardRendered!=="true")await new Promise<void>(r=>requestAnimationFrame(()=>r()));
+    if(expired||!root.isConnected)return;
     const urls=new Set([...coinImages,...['base-mon','base-spell','base-quest','field-mon','field-spell','field-quest','cost','attack','health'].map(n=>`/art/biblion/modular/${n}.png`)]);
     for(const el of root.querySelectorAll<HTMLElement>('*')){
       if(el instanceof HTMLImageElement){if(el.currentSrc||el.src)urls.add(el.currentSrc||el.src);el.loading='eager';}
@@ -31,11 +33,12 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
     await Promise.all([document.fonts.ready,...[...urls].map(decode),import('./coinScene'),import('./paperDraw')]);
     // Decode the actual image nodes too (not only a separate preloader object).
     await Promise.all([...root.querySelectorAll('img')].map(img=>img.decode().catch(()=>{})));
-    while(root.isConnected&&root.dataset.sceneReady!=='true'&&root.dataset.tableState!=='fallback')await new Promise<void>(r=>requestAnimationFrame(()=>r()));
+    while(!expired&&root.isConnected&&root.dataset.sceneReady!=='true'&&root.dataset.tableState!=='fallback')await new Promise<void>(r=>requestAnimationFrame(()=>r()));
     // Two paints allow decoded DOM images and compositing layers to commit.
     for(let i=0;i<2;i++)await new Promise<void>(r=>requestAnimationFrame(()=>r()));
     root.dataset.preloadedImages=String(urls.size);
-  })().finally(()=>{root.classList.remove('duel-preparing');root.removeAttribute('aria-busy');loader.remove();});
+  })();
+  const task=Promise.race([work,new Promise<void>(r=>{timeout=setTimeout(()=>{expired=true;r();},6000);})]).catch(()=>{}).finally(()=>{clearTimeout(timeout);root.classList.remove('duel-preparing');root.removeAttribute('aria-busy');loader.remove();});
   readiness.set(root,task);
 }
 /** Warm public furniture and the coin while the player is still in the lobby. */
