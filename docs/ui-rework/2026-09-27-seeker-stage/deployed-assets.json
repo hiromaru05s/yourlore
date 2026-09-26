@@ -1,0 +1,35 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "assets": [
+    {
+      "path": "/index.html",
+      "bytes": 1182,
+      "sha256": "b60e626ad02318ce3d3e71c638ff258f0ab6ba3e313511ab4988b8b9734b0d7b"
+    },
+    {
+      "path": "/art/lounge/stage-v1/stage.png",
+      "bytes": 2561274,
+      "sha256": "85ff3e33626b505162d591c74f54baefdfda7c736c7ca8ab444d35a10f5410d0"
+    },
+    {
+      "path": "/art/lounge/stage-v1/sigil.png",
+      "bytes": 1996219,
+      "sha256": "165cab065f588223f957379308eeb6b5f456a1322ccfa6388f438872a937be45"
+    },
+    {
+      "path": "/assets/main-QZH4xeVx.js",
+      "bytes": 1124065,
+      "sha256": "baaae373daf8a62793f74a16246dce5f5b84224deeb0d5074b9f945a7075dad8"
+    },
+    {
+      "path": "/assets/three.module-BVF9cvqC.js",
+      "bytes": 605419,
+      "sha256": "148815b6c641f0b707c7cc5e5e0aa5493781081115b8ac0f3ecb94cf43846cc0"
+    },
+    {
+      "path": "/assets/main-BHoU2wJP.css",
+      "bytes": 251638,
+      "sha256": "add998fa11ce30927d8740c8668120375e4efadebceb84d9ad34a202c470d90b"
+    }
+  ]
+}

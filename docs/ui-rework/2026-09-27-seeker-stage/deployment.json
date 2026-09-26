@@ -1,0 +1,69 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "workerVersion": "994054ed-334c-4ba0-b999-9fd0ebda5690",
+  "sourceCommit": "49d55fb9d61e3423cdf269d81c04020f0c88bafb",
+  "implementationCommit": "5daa145",
+  "integratedCommits": [
+    "1477896",
+    "8b37408",
+    "6290a1b"
+  ],
+  "deployedAt": "2026-09-26T23:18:10.366Z",
+  "productionDeployed": false,
+  "backendChangedByThisUI": false,
+  "preservedUntrackedFiles": "/Users/hiromaru05s/.codex/outputs/lore-seeker-stage-20260927-preserved/manifest.json",
+  "validation": {
+    "typecheck": true,
+    "build": true,
+    "uiFlowStates": 31,
+    "responsiveHome": [
+      "1280x720",
+      "844x390",
+      "390x844",
+      "320x568"
+    ],
+    "cardWidths": [
+      1586,
+      1024,
+      390,
+      320
+    ],
+    "rankRegression": true,
+    "settlementRegression": true,
+    "usesApiAndWebSocketFixtures": true,
+    "origin": "https://test.yourlore.xyz",
+    "assets": [
+      {
+        "path": "/index.html",
+        "bytes": 1182,
+        "sha256": "b60e626ad02318ce3d3e71c638ff258f0ab6ba3e313511ab4988b8b9734b0d7b"
+      },
+      {
+        "path": "/art/lounge/stage-v1/stage.png",
+        "bytes": 2561274,
+        "sha256": "85ff3e33626b505162d591c74f54baefdfda7c736c7ca8ab444d35a10f5410d0"
+      },
+      {
+        "path": "/art/lounge/stage-v1/sigil.png",
+        "bytes": 1996219,
+        "sha256": "165cab065f588223f957379308eeb6b5f456a1322ccfa6388f438872a937be45"
+      },
+      {
+        "path": "/assets/main-QZH4xeVx.js",
+        "bytes": 1124065,
+        "sha256": "baaae373daf8a62793f74a16246dce5f5b84224deeb0d5074b9f945a7075dad8"
+      },
+      {
+        "path": "/assets/three.module-BVF9cvqC.js",
+        "bytes": 605419,
+        "sha256": "148815b6c641f0b707c7cc5e5e0aa5493781081115b8ac0f3ecb94cf43846cc0"
+      },
+      {
+        "path": "/assets/main-BHoU2wJP.css",
+        "bytes": 251638,
+        "sha256": "add998fa11ce30927d8740c8668120375e4efadebceb84d9ad34a202c470d90b"
+      }
+    ]
+  }
+}
