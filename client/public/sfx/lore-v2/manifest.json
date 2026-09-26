@@ -1,0 +1,316 @@
+{
+  "author": "LORE original procedural sound design",
+  "sampleRate": 44100,
+  "channels": 2,
+  "seed": 9232026,
+  "sounds": {
+    "click": [
+      {
+        "file": "click-1.mp3",
+        "seconds": 0.28,
+        "peakDb": -15.26,
+        "rmsDb": -30.42,
+        "sha256": "cef94fd48d9706477dbdd790f3bc7dba984d9c5ae57ea7a6bbfbd4a1fe2e7c76"
+      },
+      {
+        "file": "click-2.mp3",
+        "seconds": 0.28,
+        "peakDb": -15.3,
+        "rmsDb": -30.37,
+        "sha256": "ec73a1847531131894f5fd82f46ca57aab86cd66dbd02ebe84bfec50607d5e1c"
+      },
+      {
+        "file": "click-3.mp3",
+        "seconds": 0.28,
+        "peakDb": -15.22,
+        "rmsDb": -30.6,
+        "sha256": "3ca07907b25f4fd08a057c17f4c9b8015e78a0aa932fa013a51efe85be4426c7"
+      }
+    ],
+    "pop": [
+      {
+        "file": "pop.mp3",
+        "seconds": 0.43,
+        "peakDb": -16.35,
+        "rmsDb": -32.4,
+        "sha256": "b12fa88c769e7ae1d36bbed02a4e85bb449e67055fda35b7ac8c3d40d0935ca4"
+      }
+    ],
+    "play": [
+      {
+        "file": "play.mp3",
+        "seconds": 0.8,
+        "peakDb": -6.88,
+        "rmsDb": -25.44,
+        "sha256": "1d5bee0fb3e25b7e7edbdc8eddca08a7ad19f3230001b950da2f7047bb21b98d"
+      }
+    ],
+    "draw": [
+      {
+        "file": "draw-1.mp3",
+        "seconds": 0.46,
+        "peakDb": -12.01,
+        "rmsDb": -30.72,
+        "sha256": "d91ce1f4e65855bbcdd77597cbc2407c7257c637d70c9a658ce50bf4247fcb48"
+      },
+      {
+        "file": "draw-2.mp3",
+        "seconds": 0.46,
+        "peakDb": -13.99,
+        "rmsDb": -30.51,
+        "sha256": "1b769a02533a72f2afa6b0b8b7e204a2bd0e08f777472a55a27891afe45d39ba"
+      },
+      {
+        "file": "draw-3.mp3",
+        "seconds": 0.46,
+        "peakDb": -12.74,
+        "rmsDb": -30.34,
+        "sha256": "6ef78598c0868e047c37fcbbd3bd7062ac3d1b58058f136da3607de88ca51314"
+      }
+    ],
+    "summon": [
+      {
+        "file": "summon.mp3",
+        "seconds": 1.15,
+        "peakDb": -5.11,
+        "rmsDb": -24.17,
+        "sha256": "a9a9c8e58074470c46c8988e6e264c29ff7d171712aece4e6a46dabcbe415ef6"
+      }
+    ],
+    "attack": [
+      {
+        "file": "attack-1.mp3",
+        "seconds": 0.52,
+        "peakDb": -8.19,
+        "rmsDb": -23.78,
+        "sha256": "c45adea41fcfbfa7c2ddbd55ba7399a4837087e4108e1f0859d6c8882b62869a"
+      },
+      {
+        "file": "attack-2.mp3",
+        "seconds": 0.52,
+        "peakDb": -8.57,
+        "rmsDb": -23.64,
+        "sha256": "66c2ed85084654bd12a5d9585dca5bc107fecd86854a78cfe2987fccc25948df"
+      },
+      {
+        "file": "attack-3.mp3",
+        "seconds": 0.52,
+        "peakDb": -7.61,
+        "rmsDb": -23.69,
+        "sha256": "2ef7f8efbf5bd0a1ced5bf63e14d891a0a6f7ebc61fb75cebbb4cb651cebdabd"
+      }
+    ],
+    "impact": [
+      {
+        "file": "impact-1.mp3",
+        "seconds": 0.68,
+        "peakDb": -5.11,
+        "rmsDb": -21.68,
+        "sha256": "48c14c75d434479225865b91faf5045fe6dd40d8d032764a0e2ff22b3c4b7318"
+      },
+      {
+        "file": "impact-2.mp3",
+        "seconds": 0.68,
+        "peakDb": -5.11,
+        "rmsDb": -20.77,
+        "sha256": "f0b83c24658a6338c15b92527d9509f65826b75574b129a35e42ee469a443b37"
+      },
+      {
+        "file": "impact-3.mp3",
+        "seconds": 0.68,
+        "peakDb": -5.11,
+        "rmsDb": -21.08,
+        "sha256": "be2bae013657a5db5b1d2caf33e8ec18e7dcfb6dd5edbe1670b981efd1d309bf"
+      }
+    ],
+    "damage": [
+      {
+        "file": "damage.mp3",
+        "seconds": 0.55,
+        "peakDb": -5.11,
+        "rmsDb": -20.13,
+        "sha256": "5e916e718d9db1c6889dd0203932b21770f3f2ee1cfc0f173c194de9ac12b2b5"
+      }
+    ],
+    "heal": [
+      {
+        "file": "heal.mp3",
+        "seconds": 1.25,
+        "peakDb": -8.48,
+        "rmsDb": -23.87,
+        "sha256": "b8e9174761136359416d7e987d2668ecda5ac9b898b223fc818c26f11a5fff80"
+      }
+    ],
+    "death": [
+      {
+        "file": "death.mp3",
+        "seconds": 1.15,
+        "peakDb": -5.28,
+        "rmsDb": -21.2,
+        "sha256": "e27c5b337cc8f999c1bee4378a13fadeae75fed67ada9627ed138db700448682"
+      }
+    ],
+    "trapSet": [
+      {
+        "file": "trapSet.mp3",
+        "seconds": 0.65,
+        "peakDb": -10.65,
+        "rmsDb": -26.03,
+        "sha256": "508a916265da1f1ef3bf901336d70154f253cdf36413bd764110696616db40cd"
+      }
+    ],
+    "trap": [
+      {
+        "file": "trap.mp3",
+        "seconds": 0.95,
+        "peakDb": -5.48,
+        "rmsDb": -21.96,
+        "sha256": "bc28f17759dc41d9d9135fc0c318e17755c9063a8c178a12b83bb6279ebbd7e4"
+      }
+    ],
+    "buy": [
+      {
+        "file": "buy.mp3",
+        "seconds": 0.85,
+        "peakDb": -8.81,
+        "rmsDb": -24.35,
+        "sha256": "b3680947b65f7fad7f8169c4e2caec0a4f5c9e5a232bbcb4fec5d7c9dc99ea96"
+      }
+    ],
+    "mana-pay": [
+      {
+        "file": "mana-pay.mp3",
+        "seconds": 0.85,
+        "peakDb": -8.18,
+        "rmsDb": -24.2,
+        "sha256": "3a212df0abad64677b96e6f5625b6e7bb863f8640ab0fd0879c17b9a41ac0fc1"
+      }
+    ],
+    "coin": [
+      {
+        "file": "coin.mp3",
+        "seconds": 2.2,
+        "peakDb": -10.26,
+        "rmsDb": -29.04,
+        "sha256": "b6440534e6a599c4fcbdde133e6e716ff08d52623a66c2aeef5ca2ed41cfa204"
+      }
+    ],
+    "mana": [
+      {
+        "file": "mana.mp3",
+        "seconds": 1.4,
+        "peakDb": -6.85,
+        "rmsDb": -24.43,
+        "sha256": "67443a6bb9c5400c67ca93ba7190028db731e258aff9b2a812518db4e277a6d9"
+      }
+    ],
+    "maxhp": [
+      {
+        "file": "maxhp.mp3",
+        "seconds": 1.3,
+        "peakDb": -9.3,
+        "rmsDb": -24.26,
+        "sha256": "51b6f0ca8aec7250bac2bd167085b30545be01fae784ecf581dd231ae50af549"
+      }
+    ],
+    "turn": [
+      {
+        "file": "turn.mp3",
+        "seconds": 1.1,
+        "peakDb": -7.37,
+        "rmsDb": -23.64,
+        "sha256": "d1adc0bc8dbdfed2b84495b34fe8257b7d95be9ef491adab7df5b247397ce139"
+      }
+    ],
+    "match": [
+      {
+        "file": "match.mp3",
+        "seconds": 1.2,
+        "peakDb": -7.21,
+        "rmsDb": -23.77,
+        "sha256": "be3ab60cae8e9a9532d94fc28c4493e460c24d2db6650184a545a0411d5123ed"
+      }
+    ],
+    "win": [
+      {
+        "file": "win.mp3",
+        "seconds": 3.6,
+        "peakDb": -5.11,
+        "rmsDb": -18.3,
+        "sha256": "de5c4b521488c939a2c0235b04997b980c2b29eb7817648a080c98463eabb30f"
+      }
+    ],
+    "lose": [
+      {
+        "file": "lose.mp3",
+        "seconds": 3.4,
+        "peakDb": -5.11,
+        "rmsDb": -17.7,
+        "sha256": "ea8fcde8d9b1019db1f479424eb44ae11840737832bd6ae407d130764e684d57"
+      }
+    ],
+    "drawGame": [
+      {
+        "file": "drawGame.mp3",
+        "seconds": 2.3,
+        "peakDb": -5.11,
+        "rmsDb": -19.07,
+        "sha256": "b7cd5a014e3a03ac5400586bfe1245c6c6494943d74f27dc450656e3edbe025d"
+      }
+    ],
+    "error": [
+      {
+        "file": "error.mp3",
+        "seconds": 0.45,
+        "peakDb": -15.26,
+        "rmsDb": -32.69,
+        "sha256": "b48fac37d9cd3a9e9618bb6140455181516d2c638910632aaafe25dce781d4e1"
+      }
+    ],
+    "facehit": [
+      {
+        "file": "facehit.mp3",
+        "seconds": 0.8,
+        "peakDb": -5.11,
+        "rmsDb": -22.0,
+        "sha256": "177bb11c9e9e58c1e68dea2c1d106c254b238d69097aa880cc20279b73e34e1c"
+      }
+    ],
+    "mimic": [
+      {
+        "file": "mimic.mp3",
+        "seconds": 0.9,
+        "peakDb": -5.16,
+        "rmsDb": -21.76,
+        "sha256": "a1763038ed2f196107781e07590a477c4bd29fce237c4efb62507945f777bf30"
+      }
+    ],
+    "void": [
+      {
+        "file": "void.mp3",
+        "seconds": 1.85,
+        "peakDb": -5.77,
+        "rmsDb": -22.98,
+        "sha256": "9a8d2a2740fe0c37ac8b9530db40edf8b46e0bb9efc4b60f72179247c0ea21aa"
+      }
+    ],
+    "shuffle": [
+      {
+        "file": "shuffle.mp3",
+        "seconds": 1.5,
+        "peakDb": -6.47,
+        "rmsDb": -24.0,
+        "sha256": "d1277ab28cc9439d9b27000dfe9626df034e6b620497a7704e00d228d112d8a4"
+      }
+    ],
+    "duel-start": [
+      {
+        "file": "duel-start.mp3",
+        "seconds": 3.4,
+        "peakDb": -5.11,
+        "rmsDb": -19.16,
+        "sha256": "3f198b185c8eebceead811138bf33064433fc738724d4879da8ee19f399f3b14"
+      }
+    ]
+  }
+}

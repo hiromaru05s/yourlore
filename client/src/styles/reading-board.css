@@ -143,3 +143,5 @@
 
 /* Compact cards have no transform transition on snapshot insertion. */
 :is(#app,.reading-board).reading-board .game:not(.hand-open) #hand .card{transition:opacity .12s;animation:none;}
+/* Both labels use the aperture anchor, not the lower corner of its hit box. */
+:is(#app,.reading-board).reading-board .rift-label{left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);white-space:nowrap;font-size:clamp(8px,calc(var(--board-meter)*.013),12px);color:#e4d5fb;text-shadow:0 1px 4px #060211,0 0 6px #170d29;}

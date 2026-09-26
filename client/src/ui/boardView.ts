@@ -666,6 +666,7 @@ export class GameView {
       let done = false;
       let mode: "reorder" | "attack" = "reorder";
       let hot: HTMLElement | null = null; // currently highlighted attack target
+      let pointer={x:sx,y:sy};
 
       const others = (): DOMRect[] =>
         ([...zone.children] as HTMLElement[])
@@ -684,25 +685,30 @@ export class GameView {
         const el = document.elementFromPoint(x, y) as HTMLElement | null;
         return {
           mon: (el?.closest("#oppRow .zone-mon .card") as HTMLElement | null) ?? null,
-          portrait: (el?.closest("#portraitOpp") as HTMLElement | null) ?? null,
+          portrait: (el?.closest("#portraitOpp .pt-ring,#portraitOpp .pt-vitals") as HTMLElement | null) ?? null,
         };
       };
 
       const place = (x: number, y: number): void => {
         if (!started) return;
+        pointer={x,y};
         const zr = zone.getBoundingClientRect();
         const t = o.canAttack ? targetAt(x, y) : { mon: null, portrait: null };
         // above my own monster row = aiming at the opponent
-        mode = o.canAttack && (!!t.mon || !!t.portrait || y < zr.top - 10 || (y < sy-12 && Math.abs(y-sy)>Math.abs(x-sx)*.65)) ? "attack" : "reorder";
+        mode = o.canAttack && (!!t.mon || !!t.portrait || (mode === "attack" && y < zr.top + zr.height*.6) || y < zr.top - 10 || (y < sy-12 && Math.abs(y-sy)>Math.abs(x-sx)*.65)) ? "attack" : "reorder";
         card.classList.toggle('is-aiming',mode==='attack');
         card.classList.toggle('is-dragging',mode==='reorder');
         if (mode === "attack") {
           if(ghost)ghost.style.display='none';
-          if(!aim)aim=createAttackAim();
+          if(!aim)aim=createAttackAim(()=>{
+            if(!card.isConnected)return null;const target=targetAt(pointer.x,pointer.y),valid=!!target.mon||!!target.portrait&&(!o.oppHasMon||o.directOnly);
+            const a=card.getBoundingClientRect(),b=(target.mon??(target.portrait?document.querySelector('#portraitOpp .pt-ring'):null))?.getBoundingClientRect();
+            return {x:a.left+a.width/2,y:a.top+a.height*.4,tx:b?b.left+b.width/2:pointer.x,ty:b?b.top+b.height/2:pointer.y,valid,blocked:!!target.portrait&&!valid};
+          });
           if (marker) marker.style.display = "none";
           const valid=!!t.mon || (!!t.portrait && (!o.oppHasMon || o.directOnly));
           setHot(valid ? t.mon ?? t.portrait : null);
-          const a=card.getBoundingClientRect(),b=(t.portrait?.querySelector('.avatar')??hot)?.getBoundingClientRect();
+          const a=card.getBoundingClientRect(),b=(t.portrait?document.querySelector('#portraitOpp .pt-ring'):hot)?.getBoundingClientRect();
           aim.update(a.left+a.width/2,a.top+a.height*.4,b?b.left+b.width/2:x,b?b.top+b.height/2:y,valid,!!t.portrait&&!valid);
           return;
         }
@@ -729,6 +735,8 @@ export class GameView {
         window.removeEventListener("pointerup", onUp);
         window.removeEventListener("pointercancel", cleanup);
         window.removeEventListener("blur", cleanup);
+        window.removeEventListener("resize", cleanup);
+        document.removeEventListener("visibilitychange", cleanup);
         window.removeEventListener("keydown", onKey);
         const idx=this.cleanups.indexOf(cleanup);if(idx>=0)this.cleanups.splice(idx,1);
       };
@@ -775,6 +783,8 @@ export class GameView {
       window.addEventListener("pointerup", onUp);
       window.addEventListener("pointercancel", cleanup);
       window.addEventListener("blur", cleanup);
+      window.addEventListener("resize", cleanup);
+      document.addEventListener("visibilitychange", cleanup);
       window.addEventListener("keydown", onKey);
       this.cleanups.push(cleanup);
     });
@@ -1072,6 +1082,8 @@ export class GameView {
         window.removeEventListener("pointerup", onUp, true);
         window.removeEventListener("pointercancel", cleanup);
         window.removeEventListener("blur", cleanup);
+        window.removeEventListener("resize", cleanup);
+        document.removeEventListener("visibilitychange", cleanup);
       };
       const onMove = (ev: PointerEvent): void => {
         if (done || ev.pointerId !== e.pointerId) return;
@@ -1155,6 +1167,8 @@ export class GameView {
       window.addEventListener("pointerup", onUp, true);
       window.addEventListener("pointercancel", cleanup);
       window.addEventListener("blur", cleanup);
+      window.addEventListener("resize", cleanup);
+      document.addEventListener("visibilitychange", cleanup);
     });
     card.onclick = (e) => {
       e.stopPropagation();

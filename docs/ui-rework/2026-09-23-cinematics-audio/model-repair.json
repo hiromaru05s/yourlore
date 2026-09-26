@@ -1,0 +1,766 @@
+{
+  "board.glb": {
+    "before": {
+      "sha256": "9b0f27bf83163512a55b43da6957798196967c787b9942bf4f2c6b90b6f1ca14",
+      "bytes": 5015640,
+      "primitives": 5,
+      "triangles": 72000,
+      "anchors": {
+        "ANCHOR_deck_opponent": {
+          "translation": [
+            0.5400000214576721,
+            0,
+            -0.24500000476837158
+          ]
+        },
+        "ANCHOR_deck_player": {
+          "translation": [
+            0.5400000214576721,
+            0,
+            0.24500000476837158
+          ]
+        },
+        "ANCHOR_end_turn": {
+          "translation": [
+            0.699999988079071,
+            0.014999999664723873,
+            0
+          ]
+        },
+        "ANCHOR_field_opponent": {
+          "translation": [
+            0,
+            0.0007999999797903001,
+            -0.20499999821186066
+          ]
+        },
+        "ANCHOR_field_player": {
+          "translation": [
+            0,
+            0.0007999999797903001,
+            0.20499999821186066
+          ]
+        },
+        "ANCHOR_hand_opponent": {
+          "translation": [
+            0.3499999940395355,
+            0.054999999701976776,
+            -0.4000000059604645
+          ]
+        },
+        "ANCHOR_hand_player": {
+          "translation": [
+            0.3499999940395355,
+            0.054999999701976776,
+            0.4000000059604645
+          ]
+        },
+        "ANCHOR_mana_opponent": {
+          "translation": [
+            -0.28999999165534973,
+            0.012000000104308128,
+            -0.4050000011920929
+          ]
+        },
+        "ANCHOR_mana_player": {
+          "translation": [
+            -0.28999999165534973,
+            0.012000000104308128,
+            0.4050000011920929
+          ]
+        },
+        "ANCHOR_market_fixed_1": {
+          "translation": [
+            -0.21699999272823334,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_2": {
+          "translation": [
+            -0.09700000286102295,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_3": {
+          "translation": [
+            0.023000000044703484,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_4": {
+          "translation": [
+            0.14300000667572021,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_5": {
+          "translation": [
+            0.2630000114440918,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_6": {
+          "translation": [
+            0.382999986410141,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_7": {
+          "translation": [
+            0.503000020980835,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_supply_1": {
+          "translation": [
+            -0.5920000076293945,
+            0.021800000220537186,
+            0
+          ]
+        },
+        "ANCHOR_market_supply_2": {
+          "translation": [
+            -0.47699999809265137,
+            0.021800000220537186,
+            0
+          ]
+        },
+        "ANCHOR_market_supply_3": {
+          "translation": [
+            -0.3619999885559082,
+            0.021800000220537186,
+            0
+          ]
+        },
+        "ANCHOR_portrait_opponent": {
+          "translation": [
+            0,
+            0.012000000104308128,
+            -0.38499999046325684
+          ]
+        },
+        "ANCHOR_portrait_player": {
+          "translation": [
+            0,
+            0.012000000104308128,
+            0.38499999046325684
+          ]
+        },
+        "ANCHOR_reroll": {
+          "translation": [
+            -0.6940000057220459,
+            0.020999999716877937,
+            0
+          ]
+        },
+        "ANCHOR_rift_opponent": {
+          "translation": [
+            0.7250000238418579,
+            0.012000000104308128,
+            -0.24500000476837158
+          ]
+        },
+        "ANCHOR_rift_player": {
+          "translation": [
+            0.7250000238418579,
+            0.012000000104308128,
+            0.24500000476837158
+          ]
+        },
+        "ANCHOR_shelf_opponent": {
+          "translation": [
+            -0.5400000214576721,
+            0,
+            -0.24500000476837158
+          ]
+        },
+        "ANCHOR_shelf_player": {
+          "translation": [
+            -0.5400000214576721,
+            0,
+            0.24500000476837158
+          ]
+        }
+      }
+    },
+    "after": {
+      "sha256": "e3eaaa5db3ca1435483e8bb4d54e5431a636dbb3d178d3c23473349f591fbb70",
+      "bytes": 4851224,
+      "primitives": 5,
+      "triangles": 73910,
+      "anchors": {
+        "ANCHOR_deck_opponent": {
+          "translation": [
+            0.5400000214576721,
+            0,
+            -0.24500000476837158
+          ]
+        },
+        "ANCHOR_deck_player": {
+          "translation": [
+            0.5400000214576721,
+            0,
+            0.24500000476837158
+          ]
+        },
+        "ANCHOR_end_turn": {
+          "translation": [
+            0.699999988079071,
+            0.014999999664723873,
+            0
+          ]
+        },
+        "ANCHOR_field_opponent": {
+          "translation": [
+            0,
+            0.0007999999797903001,
+            -0.20499999821186066
+          ]
+        },
+        "ANCHOR_field_player": {
+          "translation": [
+            0,
+            0.0007999999797903001,
+            0.20499999821186066
+          ]
+        },
+        "ANCHOR_hand_opponent": {
+          "translation": [
+            0.3499999940395355,
+            0.054999999701976776,
+            -0.4000000059604645
+          ]
+        },
+        "ANCHOR_hand_player": {
+          "translation": [
+            0.3499999940395355,
+            0.054999999701976776,
+            0.4000000059604645
+          ]
+        },
+        "ANCHOR_mana_opponent": {
+          "translation": [
+            -0.28999999165534973,
+            0.012000000104308128,
+            -0.4050000011920929
+          ]
+        },
+        "ANCHOR_mana_player": {
+          "translation": [
+            -0.28999999165534973,
+            0.012000000104308128,
+            0.4050000011920929
+          ]
+        },
+        "ANCHOR_market_fixed_1": {
+          "translation": [
+            -0.21699999272823334,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_2": {
+          "translation": [
+            -0.09700000286102295,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_3": {
+          "translation": [
+            0.023000000044703484,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_4": {
+          "translation": [
+            0.14300000667572021,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_5": {
+          "translation": [
+            0.2630000114440918,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_6": {
+          "translation": [
+            0.382999986410141,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_7": {
+          "translation": [
+            0.503000020980835,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_supply_1": {
+          "translation": [
+            -0.5920000076293945,
+            0.021800000220537186,
+            0
+          ]
+        },
+        "ANCHOR_market_supply_2": {
+          "translation": [
+            -0.47699999809265137,
+            0.021800000220537186,
+            0
+          ]
+        },
+        "ANCHOR_market_supply_3": {
+          "translation": [
+            -0.3619999885559082,
+            0.021800000220537186,
+            0
+          ]
+        },
+        "ANCHOR_portrait_opponent": {
+          "translation": [
+            0,
+            0.012000000104308128,
+            -0.38499999046325684
+          ]
+        },
+        "ANCHOR_portrait_player": {
+          "translation": [
+            0,
+            0.012000000104308128,
+            0.38499999046325684
+          ]
+        },
+        "ANCHOR_reroll": {
+          "translation": [
+            -0.6940000057220459,
+            0.020999999716877937,
+            0
+          ]
+        },
+        "ANCHOR_rift_opponent": {
+          "translation": [
+            0.7250000238418579,
+            0.012000000104308128,
+            -0.24500000476837158
+          ]
+        },
+        "ANCHOR_rift_player": {
+          "translation": [
+            0.7250000238418579,
+            0.012000000104308128,
+            0.24500000476837158
+          ]
+        },
+        "ANCHOR_shelf_opponent": {
+          "translation": [
+            -0.5400000214576721,
+            0,
+            -0.24500000476837158
+          ]
+        },
+        "ANCHOR_shelf_player": {
+          "translation": [
+            -0.5400000214576721,
+            0,
+            0.24500000476837158
+          ]
+        }
+      }
+    }
+  },
+  "board-low.glb": {
+    "before": {
+      "sha256": "631d36a94064483558bf665abb7af181a0ffdf0818d37ced96e691c2be49093c",
+      "bytes": 1374148,
+      "primitives": 5,
+      "triangles": 23036,
+      "anchors": {
+        "ANCHOR_deck_opponent": {
+          "translation": [
+            0.5400000214576721,
+            0,
+            -0.24500000476837158
+          ]
+        },
+        "ANCHOR_deck_player": {
+          "translation": [
+            0.5400000214576721,
+            0,
+            0.24500000476837158
+          ]
+        },
+        "ANCHOR_end_turn": {
+          "translation": [
+            0.699999988079071,
+            0.014999999664723873,
+            0
+          ]
+        },
+        "ANCHOR_field_opponent": {
+          "translation": [
+            0,
+            0.0007999999797903001,
+            -0.20499999821186066
+          ]
+        },
+        "ANCHOR_field_player": {
+          "translation": [
+            0,
+            0.0007999999797903001,
+            0.20499999821186066
+          ]
+        },
+        "ANCHOR_hand_opponent": {
+          "translation": [
+            0.3499999940395355,
+            0.054999999701976776,
+            -0.4000000059604645
+          ]
+        },
+        "ANCHOR_hand_player": {
+          "translation": [
+            0.3499999940395355,
+            0.054999999701976776,
+            0.4000000059604645
+          ]
+        },
+        "ANCHOR_mana_opponent": {
+          "translation": [
+            -0.28999999165534973,
+            0.012000000104308128,
+            -0.4050000011920929
+          ]
+        },
+        "ANCHOR_mana_player": {
+          "translation": [
+            -0.28999999165534973,
+            0.012000000104308128,
+            0.4050000011920929
+          ]
+        },
+        "ANCHOR_market_fixed_1": {
+          "translation": [
+            -0.21699999272823334,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_2": {
+          "translation": [
+            -0.09700000286102295,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_3": {
+          "translation": [
+            0.023000000044703484,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_4": {
+          "translation": [
+            0.14300000667572021,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_5": {
+          "translation": [
+            0.2630000114440918,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_6": {
+          "translation": [
+            0.382999986410141,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_7": {
+          "translation": [
+            0.503000020980835,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_supply_1": {
+          "translation": [
+            -0.5920000076293945,
+            0.021800000220537186,
+            0
+          ]
+        },
+        "ANCHOR_market_supply_2": {
+          "translation": [
+            -0.47699999809265137,
+            0.021800000220537186,
+            0
+          ]
+        },
+        "ANCHOR_market_supply_3": {
+          "translation": [
+            -0.3619999885559082,
+            0.021800000220537186,
+            0
+          ]
+        },
+        "ANCHOR_portrait_opponent": {
+          "translation": [
+            0,
+            0.012000000104308128,
+            -0.38499999046325684
+          ]
+        },
+        "ANCHOR_portrait_player": {
+          "translation": [
+            0,
+            0.012000000104308128,
+            0.38499999046325684
+          ]
+        },
+        "ANCHOR_reroll": {
+          "translation": [
+            -0.6940000057220459,
+            0.020999999716877937,
+            0
+          ]
+        },
+        "ANCHOR_rift_opponent": {
+          "translation": [
+            0.7250000238418579,
+            0.012000000104308128,
+            -0.24500000476837158
+          ]
+        },
+        "ANCHOR_rift_player": {
+          "translation": [
+            0.7250000238418579,
+            0.012000000104308128,
+            0.24500000476837158
+          ]
+        },
+        "ANCHOR_shelf_opponent": {
+          "translation": [
+            -0.5400000214576721,
+            0,
+            -0.24500000476837158
+          ]
+        },
+        "ANCHOR_shelf_player": {
+          "translation": [
+            -0.5400000214576721,
+            0,
+            0.24500000476837158
+          ]
+        }
+      }
+    },
+    "after": {
+      "sha256": "06285a2e184955ec066f1faf237f85bb2f22c228e265aba31b1c792cff956f94",
+      "bytes": 1552460,
+      "primitives": 5,
+      "triangles": 32338,
+      "anchors": {
+        "ANCHOR_deck_opponent": {
+          "translation": [
+            0.5400000214576721,
+            0,
+            -0.24500000476837158
+          ]
+        },
+        "ANCHOR_deck_player": {
+          "translation": [
+            0.5400000214576721,
+            0,
+            0.24500000476837158
+          ]
+        },
+        "ANCHOR_end_turn": {
+          "translation": [
+            0.699999988079071,
+            0.014999999664723873,
+            0
+          ]
+        },
+        "ANCHOR_field_opponent": {
+          "translation": [
+            0,
+            0.0007999999797903001,
+            -0.20499999821186066
+          ]
+        },
+        "ANCHOR_field_player": {
+          "translation": [
+            0,
+            0.0007999999797903001,
+            0.20499999821186066
+          ]
+        },
+        "ANCHOR_hand_opponent": {
+          "translation": [
+            0.3499999940395355,
+            0.054999999701976776,
+            -0.4000000059604645
+          ]
+        },
+        "ANCHOR_hand_player": {
+          "translation": [
+            0.3499999940395355,
+            0.054999999701976776,
+            0.4000000059604645
+          ]
+        },
+        "ANCHOR_mana_opponent": {
+          "translation": [
+            -0.28999999165534973,
+            0.012000000104308128,
+            -0.4050000011920929
+          ]
+        },
+        "ANCHOR_mana_player": {
+          "translation": [
+            -0.28999999165534973,
+            0.012000000104308128,
+            0.4050000011920929
+          ]
+        },
+        "ANCHOR_market_fixed_1": {
+          "translation": [
+            -0.21699999272823334,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_2": {
+          "translation": [
+            -0.09700000286102295,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_3": {
+          "translation": [
+            0.023000000044703484,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_4": {
+          "translation": [
+            0.14300000667572021,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_5": {
+          "translation": [
+            0.2630000114440918,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_6": {
+          "translation": [
+            0.382999986410141,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_fixed_7": {
+          "translation": [
+            0.503000020980835,
+            0.015799999237060547,
+            0
+          ]
+        },
+        "ANCHOR_market_supply_1": {
+          "translation": [
+            -0.5920000076293945,
+            0.021800000220537186,
+            0
+          ]
+        },
+        "ANCHOR_market_supply_2": {
+          "translation": [
+            -0.47699999809265137,
+            0.021800000220537186,
+            0
+          ]
+        },
+        "ANCHOR_market_supply_3": {
+          "translation": [
+            -0.3619999885559082,
+            0.021800000220537186,
+            0
+          ]
+        },
+        "ANCHOR_portrait_opponent": {
+          "translation": [
+            0,
+            0.012000000104308128,
+            -0.38499999046325684
+          ]
+        },
+        "ANCHOR_portrait_player": {
+          "translation": [
+            0,
+            0.012000000104308128,
+            0.38499999046325684
+          ]
+        },
+        "ANCHOR_reroll": {
+          "translation": [
+            -0.6940000057220459,
+            0.020999999716877937,
+            0
+          ]
+        },
+        "ANCHOR_rift_opponent": {
+          "translation": [
+            0.7250000238418579,
+            0.012000000104308128,
+            -0.24500000476837158
+          ]
+        },
+        "ANCHOR_rift_player": {
+          "translation": [
+            0.7250000238418579,
+            0.012000000104308128,
+            0.24500000476837158
+          ]
+        },
+        "ANCHOR_shelf_opponent": {
+          "translation": [
+            -0.5400000214576721,
+            0,
+            -0.24500000476837158
+          ]
+        },
+        "ANCHOR_shelf_player": {
+          "translation": [
+            -0.5400000214576721,
+            0,
+            0.24500000476837158
+          ]
+        }
+      }
+    }
+  }
+}

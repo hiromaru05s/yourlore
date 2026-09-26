@@ -44,6 +44,7 @@ try {
   const abort=new AbortController();let landed=false;
   const draw=drawPaperCards({cards:[node],origin,sleeve:'/back.webp',reveal,signal:abort.signal,onLand:()=>{landed=true;}});
   if(!reveal)assert.equal(document.querySelectorAll('.native-draw-layer .private-art').length,0);
+  assert.equal(document.querySelector('.native-draw-card').style.display,'none','unstarted fronts must not flash at the screen origin');
   abort.abort();
   await Promise.race([draw,new Promise((_,reject)=>{const timer=setTimeout(()=>reject(new Error('cancelled decode leaked')),150);timer.unref();})]);
   assert.equal(document.querySelectorAll('.native-draw-layer').length,0);assert.equal(landed,false);

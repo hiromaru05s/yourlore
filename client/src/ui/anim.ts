@@ -1,4 +1,5 @@
-import {mountDuelOutcome} from './duelOutcome';
+import type {HandLayout} from './handGeometry';
+import {mountDuelOutcome,OUTCOME_DURATION} from './duelOutcome';
 import {reserveMonster} from './fieldLayout';
 import {attackPlan,attackPose,ATTACK_DURATION_MS} from './attackVisual';
 import {runAttackTimeline} from './attackMotion';
@@ -469,6 +470,7 @@ export async function animateReshuffle(side:ViewSide,count:number):Promise<void>
   fxWaiters.add(cancel);window.addEventListener('resize',cancel,{once:true});document.addEventListener('visibilitychange',cancel,{once:true});
   const deadline=setTimeout(cancel,4300);
   try {
+    sfx('shuffle');
     await Promise.race([cancelled,moveOnBoard({kind:'shuffle',source:shelf,target:deck,count,signal:abort.signal})]);
   } catch { /* Keep the state pipeline alive on an unavailable GPU/module. */ }
   finally {
@@ -482,14 +484,14 @@ export async function animateReshuffle(side:ViewSide,count:number):Promise<void>
 }
 
 /** Native card face throughout travel and landing, with a dimensional flip. */
-export async function animateDraw(handEl: HTMLElement | null, count: number, side: ViewSide = "me", signal?:AbortSignal): Promise<void> {
+export async function animateDraw(handEl: HTMLElement | null, count: number, side: ViewSide = "me", options:{uids?:string[];previousHand?:HandLayout;durationScale?:number;signal?:AbortSignal}={}): Promise<void> {
+  const signal=options.signal;
   const deck = document.getElementById(side === "me" ? "pile-myDeck" : "pile-oppDeck");
   if (!handEl || !deck || count <= 0 || fxSkip || document.hidden || signal?.aborted ||
       matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const cards = Array.from(handEl.querySelectorAll<HTMLElement>(side === "me" ? ".card" : ".card--back"));
-  const incoming = cards.slice(-Math.min(count, 6)).filter(n => n.getBoundingClientRect().width > 0);
-  const origin = (deck.querySelector('.pile-draw-anchor') || deck.querySelector('.pile-card') || deck).getBoundingClientRect();
-  if (!origin.width || !incoming.length) return;
+  const incoming = (options.uids?cards.filter(n=>options.uids!.includes(n.dataset.uid??'')):cards.slice(-Math.min(count, 6))).slice(-6).filter(n => n.getBoundingClientRect().width > 0);
+  if (!incoming.length) return;
   const abort = new AbortController();
   const cancel = (): void => abort.abort();
   signal?.addEventListener('abort',cancel,{once:true});
@@ -501,14 +503,20 @@ export async function animateDraw(handEl: HTMLElement | null, count: number, sid
   document.addEventListener('visibilitychange', cancel, { once: true });
   incoming.forEach(node => { node.style.visibility = 'hidden'; });
   pileFlash(deck.id);
-  const deadline = setTimeout(cancel, 4200);
+  const deadline = setTimeout(cancel, 800+2400*(options.durationScale??1));
   try {
+    // Board render creates the projected pile anchor before the 3D scene paints
+    // its bounds. Hide arrivals now, then give that projection one frame to settle.
+    await Promise.race([cancelled,new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()))]);
+    const origin=[deck.querySelector('.pile-draw-anchor'),deck.querySelector('.pile-card'),deck]
+      .map(node=>node?.getBoundingClientRect()).find(rect=>rect&&rect.width>0&&rect.height>0);
+    if(!origin||abort.signal.aborted)return;
     await Promise.race([cancelled, import('./paperDraw').then(async ({ drawPaperCards }) => {
       if (abort.signal.aborted || fxSkip || !handEl.isConnected) return;
       await drawPaperCards({ cards: incoming, origin, sleeve: deck.dataset.sleeve || FRAME_BACK,
-        reveal: side === 'me', signal: abort.signal, onLand: node=>{restore(node);if(deck.dataset.openingCount!=null){deck.dataset.count=String(Math.max(Number(deck.dataset.openingCount),Number(deck.dataset.count)-1));const c=deck.querySelector('.pile-count');if(c)c.textContent=deck.dataset.count;}} });
+        reveal: side === 'me', signal: abort.signal, previousHand:options.previousHand,durationScale:options.durationScale, onLand: node=>{restore(node);if(deck.dataset.openingCount!=null){deck.dataset.count=String(Math.max(Number(deck.dataset.openingCount),Number(deck.dataset.count)-1));const c=deck.querySelector('.pile-count');if(c)c.textContent=deck.dataset.count;}} });
     })]);
-  } catch { /* Unavailable module: reveal the resting cards. */ }
+  } catch (error) { if(import.meta.env.DEV)console.warn("Draw presentation failed",error); /* Reveal the resting cards. */ }
   finally {
     clearTimeout(deadline); cancel(); fxWaiters.delete(cancel);
     signal?.removeEventListener('abort',cancel);
@@ -845,14 +853,14 @@ export function manaDrop(side: ViewSide, amount: number): void {
 }
 
 /**
- * Archive verdict (~1.55s): portrait light fragments, an engraved book seal,
+ * Archive verdict (~3.3s): a gilded book opens or seals its final chapter,
  * and the result with its cause. Reduced motion uses a short static verdict.
  */
 export async function deathShatter(loserSide: ViewSide, won: boolean, cause: string | null): Promise<void> {
   if(fxSkip)return;
   const portrait=document.querySelector<HTMLElement>(loserSide==='me'?'#portraitMe .pt-ring':'#portraitOpp .pt-ring');
   const dispose=mountDuelOutcome(portrait,won,cause);
-  try{await wait(matchMedia('(prefers-reduced-motion:reduce)').matches?250:1550);}finally{dispose();}
+  try{await wait(matchMedia('(prefers-reduced-motion:reduce)').matches?250:OUTCOME_DURATION);}finally{dispose();}
 }
 
 /** Floating "결과 보기" button while reviewing the log after the game ends. */
@@ -901,7 +909,7 @@ export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<voi
   try{
     if(!reduced){
       try{const {swallowRiftCard}=await import('./riftScene');
-        const completed=await boardMotionScope(async signal=>{await swallowRiftCard(node,target,start,signal,()=>{started=true;});return !signal.aborted;},5000);
+        const completed=await boardMotionScope(async signal=>{await swallowRiftCard(node,target,start,signal,()=>{started=true;sfx('void');});return !signal.aborted;},5000);
         if(!completed)return;
       }catch(error){ console.warn('[Rift animation]',error); }
       if(started||fxSkip)return;

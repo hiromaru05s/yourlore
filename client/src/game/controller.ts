@@ -1,3 +1,4 @@
+import {captureHandLayout,arrivingHandUids} from '../ui/handGeometry';
 import {playDuelOpening,warmOpening} from "../ui/duelOpeningDirector";
 import {waitForDuel} from "../ui/duelReadiness";
 import {releaseMonster} from '../ui/fieldLayout';
@@ -50,6 +51,7 @@ export abstract class BaseController implements BoardHandlers {
   protected exits: ControllerExits;
   private quickFaces: {card:CardInst;side:A.ViewSide;node:HTMLElement}[] = [];
   private winShown = false;
+  private outcomePlayed = false;
   private dead = false;
   private queue: Promise<void> = Promise.resolve();
   private unsubLang: () => void;
@@ -263,7 +265,7 @@ export abstract class BaseController implements BoardHandlers {
       // sound per event
       let sn: SfxName | undefined;
       if (e.type === "summon") sn = e.id === "MIMIC" ? "mimic" : "summon";      // Mimic token has its own cue
-      else sn = ({ hit: "impact", destroy: "death", draw: "draw", playSpell: "play", trapReveal: "trap", trapSet: "trapSet" } as Partial<Record<GameEvent["type"], SfxName>>)[e.type];
+      else sn = ({ hit: "impact", destroy: "death", playSpell: "play", trapReveal: "trap", trapSet: "trapSet" } as Partial<Record<GameEvent["type"], SfxName>>)[e.type];
       if (sn) sfx(sn);
       else if (e.type === "damage" && e.player === this.you) sfx("damage");
       else if (e.type === "heal" && e.player === this.you) sfx("heal");
@@ -463,11 +465,13 @@ export abstract class BaseController implements BoardHandlers {
         if(atk||hp)statFeedbackMs=Math.max(statFeedbackMs,atk&&hp?2100:1500);
       }
     }
+    const handLayouts=[draws[this.you]>0?captureHandLayout(document.getElementById('hand')):undefined,
+      draws[1-this.you]>0?captureHandLayout(document.getElementById('oppHand')):undefined];
     this.view.render(res.state);
     // ghosts overlap the freshly-rendered real cards — drop them next frame
     requestAnimationFrame(() => {ghosts.forEach((g) => g.el.remove());spellGhosts.forEach(g=>g.remove());});
     await Promise.all(([0, 1] as Side[]).map(player => draws[player] > 0
-      ? A.animateDraw(document.getElementById(player === this.you ? "hand" : "oppHand"), draws[player], sideOf(player))
+      ? A.animateDraw(document.getElementById(player === this.you ? "hand" : "oppHand"), draws[player], sideOf(player),{previousHand:handLayouts[player===this.you?0:1],uids:player===this.you?arrivingHandUids(prev.players[player].hand,res.state.players[player].hand,draws[player]):undefined})
       : Promise.resolve()));
 
     // Pending targets can span multiple reducer batches. Keep the face until the last choice,
@@ -485,6 +489,7 @@ export abstract class BaseController implements BoardHandlers {
       const loser = (1 - res.state.winner) as Side;
       const cause = lastKill ? (getLang() === "ja" ? lastKill.srcJa ?? lastKill.srcKo : getLang() === "en" ? logToEn(lastKill.srcKo ?? "") : lastKill.srcKo) : null;
       await wait(250);
+      this.outcomePlayed = true;
       await A.deathShatter(sideOf(loser), won, this.stripHtml(cause ?? "") || null);
     }
   }
@@ -791,7 +796,7 @@ export abstract class BaseController implements BoardHandlers {
         elapsed:startsAt!=null?()=>Date.now()-this.serverOffset-startsAt:undefined,
         onDeal:async signal=>{
           game?.classList.remove('opening-hands');
-          await Promise.all([A.animateDraw(document.getElementById('hand'),3,'me',signal),A.animateDraw(document.getElementById('oppHand'),3,'opp',signal)]);
+          await Promise.all([A.animateDraw(document.getElementById('hand'),3,'me',{signal}),A.animateDraw(document.getElementById('oppHand'),3,'opp',{signal})]);
         },
       });
       if(opening?.playableAt!=null){this.state.turnLeftMs=Math.max(0,(this.state.turnTotalMs??90000)-Math.max(0,Date.now()-this.serverOffset-opening.playableAt));}
@@ -848,7 +853,7 @@ export abstract class BaseController implements BoardHandlers {
     if (this.winShown || !this.state.over) return;
     this.winShown = true;
     const won: boolean | null = this.state.winner == null ? null : this.state.winner === this.you;
-    if (won != null) sfx(won ? "win" : "lose");
+    if (!this.outcomePlayed) sfx(won===null ? "drawGame" : won ? "win" : "lose");
     // bot games are client-local — report the result for analytics (online games are recorded server-side)
     if (this.state.mode === "bot") void api.trackBot(won);
     aCapture("game_end", { mode: this.state.mode, won, turns: this.state.turn });

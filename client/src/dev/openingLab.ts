@@ -23,7 +23,7 @@ export async function mountOpeningLab(root:HTMLElement):Promise<void>{
     const gen=++generation;active.abort();await running;if(gen!==generation)return;
     active=new AbortController();view.render(state);
     running=playDuelOpening({root,me:{name:'シーカー',avatar:'SEEKER_BLUE'},opp:{name:'シーカー',avatar:'SEEKER_RED'},firstIsMe:first,signal:active.signal,sampleMs,
-      onDeal:signal=>Promise.all([animateDraw(document.getElementById('hand'),3,'me',signal),animateDraw(document.getElementById('oppHand'),3,'opp',signal)]).then(()=>{})});
+      onDeal:signal=>Promise.all([animateDraw(document.getElementById('hand'),3,'me',{signal}),animateDraw(document.getElementById('oppHand'),3,'opp',{signal})]).then(()=>{})});
     await running;
   };
   add('再生',()=>void launch());add('先攻 / 後攻',()=>{first=!first;void launch();});

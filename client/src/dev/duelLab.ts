@@ -8,8 +8,13 @@ import '../styles/game-overlays.css';
 import '../styles/game.css';
 import '../styles/screens.css';
 import '../styles/duel-opening.css';
+import {createAttackAim} from '../ui/attackAim';
+import {initSound,sfx,SFX_NAMES} from '../ui/sound';
+import {playDuelOpening} from '../ui/duelOpening';
+import {mountDuelOutcome} from '../ui/duelOutcome';
 import { cardPickerMulti } from '../ui/modal';
 import { turnBanner, manaSurge, exileCard, animateDraw, animateReshuffle } from '../ui/anim';
+import { captureHandLayout } from '../ui/handGeometry';
 import { LocalController } from '../game/controller';
 import { paintDuelClock } from '../ui/duelClock';
 import { createGame } from '../shared/engine';
@@ -21,7 +26,7 @@ import { hpFeedback, ghostSummon, revealSpell } from '../ui/anim';
 import type { CardInst, FieldMon } from '../shared/types';
 
 if (import.meta.env.DEV) {
-  setLang('ja');
+  setLang('ja');initSound();
   localStorage.setItem('lore_help_callout_seen',new Date().toISOString().slice(0,10));
   if (new URLSearchParams(location.search).has('opening')) {
     void import('./openingLab').then(m=>m.mountOpeningLab(document.getElementById('app')!));
@@ -70,8 +75,31 @@ if (import.meta.env.DEV) {
     add('虚無魔法プレイ',async()=>{await revealSpell(inst('STARTER_TRASH'),'me','vanish');});
     add('手札の開閉',()=>{view.setHandOpen(!document.querySelector('.game')?.classList.contains('hand-open'));});
     add('手札10枚',()=>{g.players[0].hand=mons.slice(0,10).map(c=>inst(c.id));render();});
-    add('ドロー3枚',async()=>{await animateDraw(document.getElementById('hand'),3,'me');});
+    let drawing=false;
+    const drawPreview=async(count:number,durationScale=1,side:'me'|'opp'='me',existing=3)=>{
+      if(drawing)return;drawing=true;
+      try{
+        const p=g.players[side==='me'?0:1],hand=document.getElementById(side==='me'?'hand':'oppHand');
+        p.hand=p.hand.slice(0,existing);render();
+        const previousHand=captureHandLayout(hand),incoming=mons.slice(3,3+count).map(c=>inst(c.id));
+        p.hand.push(...incoming);render();
+        await animateDraw(hand,count,side,{previousHand,uids:side==='me'?incoming.map(c=>c.uid):undefined,durationScale});
+      }finally{drawing=false;}
+    };
+    add('ドロー1枚',()=>drawPreview(1));
+    add('ドロー3枚',()=>drawPreview(3));
+    add('ドロー6枚',()=>drawPreview(6));
+    add('ドロー低速',()=>{void drawPreview(1,4);});
+    add('相手ドロー',()=>drawPreview(3,1,'opp'));
+    add('拡大手札ドロー',()=>{view.setHandOpen(true);void drawPreview(3,3);});
+    add('空手札ドロー',()=>drawPreview(3,1,'me',0));
     add('デッキ再構成',async()=>{await animateReshuffle('me',g.players[0].discard.length);render();});
+    add('勝利演出',()=>{const stop=mountDuelOutcome(null,true,null);setTimeout(stop,6500);});
+    add('敗北演出',()=>{const stop=mountDuelOutcome(null,false,null);setTimeout(stop,6500);});
+    add('デュエル開始',()=>{void playDuelOpening({name:'シーカー',avatar:'SEEKER_BLUE'},{name:'対戦相手',avatar:'SEEKER_RED'},true,4000);});
+    add('攻撃矢印',()=>{const start=performance.now(),aim=createAttackAim(()=>{const a=document.querySelector('#meRow .zone-mon .card')?.getBoundingClientRect(),targets=[...document.querySelectorAll('#oppRow .zone-mon .card')],b=targets[Math.floor((performance.now()-start)/1600)%targets.length]?.getBoundingClientRect();return a&&b?{x:a.left+a.width/2,y:a.top+a.height*.4,tx:b.left+b.width/2,ty:b.top+b.height/2,valid:true,blocked:false}:null;});setTimeout(()=>aim.remove(),8000);});
+    const sounds=document.createElement('select');sounds.setAttribute('aria-label','効果音');for(const name of SFX_NAMES){const option=document.createElement('option');option.value=name;option.textContent=name;sounds.append(option);}panel.append(sounds);
+    add('効果音を試聴',()=>sfx(sounds.value as typeof SFX_NAMES[number]));
     add('自分のターン',()=>{g.cur=0;render();});
     document.body.append(panel);
   }
