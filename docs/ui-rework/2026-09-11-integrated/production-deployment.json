@@ -1,0 +1,26 @@
+{
+  "environment": "production",
+  "url": "https://yourlore.xyz/",
+  "worker": "lore-server",
+  "sourceCommit": "f32029b437746277d1dd47ead97fa8678e8e6ad8",
+  "sourceTreeCommit": "1ebd5c75fd7bcaa9f01797d4055b7f7530ab63d9",
+  "version": "4df105c9-eb5f-4d20-ba85-6c56d6600113",
+  "previousVersion": "4de58e67-23a5-49e3-8fcf-6b9c05363a30",
+  "promotedStagingVersion": "d4d7f160-6311-453c-8937-5f7adf6abb21",
+  "balanceVersion": "v48",
+  "artVersion": "20260910-theme-identity-v3",
+  "build": "Existing previously validated staging build; all 1407 local file hashes matched staging verification before promotion",
+  "databaseMigrationsApplied": false,
+  "qualityAuditProposalsImplemented": false,
+  "browserSmoke": {
+    "tool": "CUA",
+    "page": "https://yourlore.xyz/",
+    "visible": "LORE logo, login form and Google login button",
+    "javascriptErrors": [],
+    "authenticatedDuelPlayed": false
+  },
+  "httpProbeNote": "Python urllib probe returned 403. Normal curl probes to root, www, admin and public geo API returned 200; CUA browser startup succeeded.",
+  "verifiedAssets": 1407,
+  "allAssetHashesMatch": true,
+  "verifiedAt": "2026-09-11T02:08:55.778994+00:00"
+}

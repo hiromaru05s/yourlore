@@ -1,0 +1,22 @@
+[
+  {
+    "url": "https://yourlore.xyz/",
+    "result": "200 text/html",
+    "exit": 0
+  },
+  {
+    "url": "https://www.yourlore.xyz/",
+    "result": "200 text/html",
+    "exit": 0
+  },
+  {
+    "url": "https://admin.yourlore.xyz/",
+    "result": "200 text/html",
+    "exit": 0
+  },
+  {
+    "url": "https://yourlore.xyz/api/geo",
+    "result": "200 application/json",
+    "exit": 0
+  }
+]
