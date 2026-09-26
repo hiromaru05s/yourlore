@@ -10,13 +10,13 @@ export function playDuelOpening(me:Profile,opp:Profile,firstIsMe:boolean,preview
  const host=document.createElement('div');host.className='cointoss-ov duel-opening';host.setAttribute('role','status');
  const banner=document.createElement('div');banner.className='opening-heading';banner.innerHTML='<span>THE ARCHIVE AWAKENS</span><strong>LORE</strong>';
  const pair=document.createElement('div');pair.className='opening-pair';
- for(const [p,isMe] of [[me,true],[opp,false]] as const){const figure=document.createElement('div');figure.className='opening-player '+(isMe?'is-me':'is-opp')+(isMe===firstIsMe?' is-first':'');
+ for(const [p,isMe] of [[me,true],[opp,false]] as const){const figure=document.createElement('div');figure.className='ceremony-opening-player '+(isMe?'is-me':'is-opp')+(isMe===firstIsMe?' is-first':'');
   const art=document.createElement('div');art.className='opening-portrait';art.innerHTML=avatarHtml(p.avatar||(isMe?'SEEKER_BLUE':'SEEKER_RED'),p.name,180);
   const frame=document.createElement('img');frame.src=isMe?'/ui/coin-toss/coin-option-1-front.png':'/ui/coin-toss/coin-option-1-back.png';frame.alt='';frame.className='opening-frame';
   const name=document.createElement('strong');name.textContent=p.name;
   figure.append(art,frame,name);pair.append(figure);
  }
- const result=document.createElement('div');result.className='opening-result';result.textContent=firstIsMe?t('coin.youFirst'):opp.name+' '+t('coin.oppFirst');
+ const result=document.createElement('div');result.className='ceremony-opening-result';result.textContent=firstIsMe?t('coin.youFirst'):opp.name+' '+t('coin.oppFirst');
  host.append(banner,pair,result);document.body.append(host);const disposeScene=mountCeremony(host,'opening');sfx('duel-start');
  return new Promise(resolve=>{
   let dead=false;const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;

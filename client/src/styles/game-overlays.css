@@ -756,8 +756,8 @@
 
 /* Ceremony: material depth above, restrained engraved typography below. */
 .duel-outcome{background:radial-gradient(ellipse at 50% 42%,#21415ca6,#050c19f2 82%);}
-.duel-outcome:before,.duel-opening:before{content:"";position:absolute;inset:22px;border:1px solid #d9c39530;clip-path:polygon(0 0,18% 0,18% 1px,82% 1px,82% 0,100% 0,100% 100%,82% 100%,82% calc(100% - 1px),18% calc(100% - 1px),18% 100%,0 100%);pointer-events:none;}
-.duel-outcome .ceremony-canvas,.duel-opening .ceremony-canvas{position:absolute;inset:0;width:100%;height:78%;pointer-events:none;}
+.duel-outcome:before,.duel-opening:not(.duel-opening-v1):before{content:"";position:absolute;inset:22px;border:1px solid #d9c39530;clip-path:polygon(0 0,18% 0,18% 1px,82% 1px,82% 0,100% 0,100% 100%,82% 100%,82% calc(100% - 1px),18% calc(100% - 1px),18% 100%,0 100%);pointer-events:none;}
+.duel-outcome .ceremony-canvas,.duel-opening:not(.duel-opening-v1) .ceremony-canvas{position:absolute;inset:0;width:100%;height:78%;pointer-events:none;}
 .duel-outcome .ceremony-canvas{height:80%;}
 .duel-outcome .outcome-copy{position:absolute;top:61%;left:5%;right:5%;max-width:90%;animation:verdictEtch .75s .75s both;}
 .duel-outcome .ceremony-space{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);}
@@ -766,27 +766,27 @@
 .duel-outcome.is-defeat .outcome-copy h1{background-image:linear-gradient(#e9e9f5,#879ab8 60%,#c4bedb);}
 .duel-outcome .outcome-eyebrow{letter-spacing:.45em;opacity:.8;}
 .outcome-copy:before,.outcome-copy:after{content:"";display:block;height:1px;width:min(410px,75vw);margin:14px auto;background:linear-gradient(90deg,transparent,#c9b282aa,transparent);}
-.duel-opening.cointoss-ov{display:block;background:radial-gradient(ellipse at 50% 45%,#1736519c,#070f1beb);pointer-events:auto;overflow:hidden;z-index:1500;}
+.duel-opening:not(.duel-opening-v1).cointoss-ov{display:block;background:radial-gradient(ellipse at 50% 45%,#1736519c,#070f1beb);pointer-events:auto;overflow:hidden;z-index:1500;}
 .opening-heading{position:absolute;top:7%;left:0;right:0;text-align:center;color:#e5d2a5;animation:verdictEtch .7s .15s both;}
 .opening-heading span{display:block;font:9px/1.5 Georgia,serif;letter-spacing:.5em;opacity:.7;}
 .opening-heading strong{display:block;font:500 clamp(26px,5vw,48px)/1.2 Georgia,serif;letter-spacing:.38em;text-indent:.38em;margin-top:8px;}
 .opening-pair{position:absolute;inset:0;pointer-events:none;}
-.opening-player{position:absolute;top:36%;width:clamp(130px,21vw,255px);aspect-ratio:1;left:9%;animation:seekerEnterLeft .9s .1s cubic-bezier(.16,1,.3,1) both;}
-.opening-player.is-opp{left:auto;right:9%;animation-name:seekerEnterRight;}
+.ceremony-opening-player{position:absolute;top:36%;width:clamp(130px,21vw,255px);aspect-ratio:1;left:9%;animation:seekerEnterLeft .9s .1s cubic-bezier(.16,1,.3,1) both;}
+.ceremony-opening-player.is-opp{left:auto;right:9%;animation-name:seekerEnterRight;}
 .opening-portrait{position:absolute;inset:13.5%;border-radius:50%;overflow:hidden;background:#112033;box-shadow:0 0 60px #468ac030;}
 .opening-portrait .seeker-sprite{width:100%!important;height:100%!important;}
 .opening-portrait img{width:100%;height:100%;object-fit:cover;}
 .opening-frame{position:absolute;width:100%;height:100%;inset:0;object-fit:contain;filter:drop-shadow(0 12px 12px #0009);}
-.opening-player>strong{position:absolute;top:105%;left:-10%;right:-10%;font-size:clamp(13px,1.5vw,20px);letter-spacing:.12em;text-align:center;color:#e4dfd5;}
+.ceremony-opening-player>strong{position:absolute;top:105%;left:-10%;right:-10%;font-size:clamp(13px,1.5vw,20px);letter-spacing:.12em;text-align:center;color:#e4dfd5;}
 .opening-order{display:none;}
-.opening-player.is-first .opening-frame{animation:firstSeeker 1s 1.5s both;}
-.opening-result{position:absolute;left:0;right:0;bottom:14%;text-align:center;color:#e9d6a6;font:500 clamp(17px,2.5vw,28px)/1.4 Georgia,serif;letter-spacing:.13em;animation:verdictEtch .65s 1.6s both;}
+.ceremony-opening-player.is-first .opening-frame{animation:firstSeeker 1s 1.5s both;}
+.ceremony-opening-result{position:absolute;left:0;right:0;bottom:14%;text-align:center;color:#e9d6a6;font:500 clamp(17px,2.5vw,28px)/1.4 Georgia,serif;letter-spacing:.13em;animation:verdictEtch .65s 1.6s both;}
 .modal.outcome-result:before{content:"";position:absolute;inset:12px;border:1px solid #b6a37140;pointer-events:none;clip-path:polygon(0 0,15% 0,15% 1%,85% 1%,85% 0,100% 0,100% 100%,85% 100%,85% 99%,15% 99%,15% 100%,0 100%);}
 @keyframes verdictEtch{from{opacity:0;transform:translateY(8px);filter:blur(4px)}to{opacity:1;transform:none;filter:blur(0)}}
 @keyframes seekerEnterLeft{from{opacity:0;transform:translateX(-80px) rotate(-12deg) scale(.8)}to{opacity:1;transform:none}}
 @keyframes seekerEnterRight{from{opacity:0;transform:translateX(80px) rotate(12deg) scale(.8)}to{opacity:1;transform:none}}
 @keyframes firstSeeker{0%{filter:drop-shadow(0 12px 12px #0009)}35%{filter:drop-shadow(0 0 28px #86cfff)}100%{filter:drop-shadow(0 0 10px #73bcec77)}}
-@media(max-width:600px){.opening-player{top:53%;width:132px;left:8%}.opening-player.is-opp{right:8%}.duel-opening .ceremony-canvas{height:67%}.opening-result{bottom:10%}.opening-heading{top:8%}.duel-outcome .outcome-copy{top:60%}.duel-outcome .outcome-subtitle{font-size:11px;letter-spacing:.05em}}
-@media(prefers-reduced-motion:reduce){.opening-heading,.opening-player,.opening-result,.opening-player.is-first .opening-frame,.duel-outcome .outcome-copy{animation:none!important;}}
+@media(max-width:600px){.ceremony-opening-player{top:53%;width:132px;left:8%}.ceremony-opening-player.is-opp{right:8%}.duel-opening:not(.duel-opening-v1) .ceremony-canvas{height:67%}.ceremony-opening-result{bottom:10%}.opening-heading{top:8%}.duel-outcome .outcome-copy{top:60%}.duel-outcome .outcome-subtitle{font-size:11px;letter-spacing:.05em}}
+@media(prefers-reduced-motion:reduce){.opening-heading,.ceremony-opening-player,.ceremony-opening-result,.ceremony-opening-player.is-first .opening-frame,.duel-outcome .outcome-copy{animation:none!important;}}
 .opening-portrait .avatar{width:100%!important;height:100%!important;border:0;box-shadow:none;}
-@media(max-width:600px){.duel-opening .ceremony-canvas{top:13%;height:46%;}}
+@media(max-width:600px){.duel-opening:not(.duel-opening-v1) .ceremony-canvas{top:13%;height:46%;}}

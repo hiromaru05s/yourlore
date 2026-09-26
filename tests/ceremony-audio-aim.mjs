@@ -29,6 +29,6 @@ try{
  api.setSfxVolume(0);const silent=starts;api.sfx('win');await flush();assert.equal(starts,silent);api.setSfxVolume(.65);api.setSfxVolume(NaN);assert.equal(api.getSfxVolume(),.65);assert.equal(localStorage.getItem('lore_sfx'),'.65'.replace(/^\./,'0.'));
  // Removing an opening (navigation) resolves its promise, even without WebGL.
  globalThis.matchMedia=()=>({matches:false});
- const opening=api.playDuelOpening({name:'<unsafe>',avatar:null},{name:'Other',avatar:null},true);assert(document.querySelector('.duel-opening'));assert.equal(document.querySelector('.opening-player strong').textContent,'<unsafe>');document.querySelector('.duel-opening').remove();await opening;assert.equal(document.querySelectorAll('.cointoss-ov').length,0);
+ const opening=api.playDuelOpening({name:'<unsafe>',avatar:null},{name:'Other',avatar:null},true);assert(document.querySelector('.duel-opening'));assert.equal(document.querySelector('.ceremony-opening-player strong').textContent,'<unsafe>');document.querySelector('.duel-opening').remove();await opening;assert.equal(document.querySelectorAll('.cointoss-ov').length,0);
  console.log('PASS: 58,176 aim samples; rail-aligned cutter bounds; 28 cues / 36 clips / '+Math.round(bytes/1024)+' KiB; gesture unlock, decode cache, rate limit, polyphony, mute and cancelled opening');
 }finally{await rm(dir,{recursive:true,force:true});dom.window.close();}

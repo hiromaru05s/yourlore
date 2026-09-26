@@ -27,7 +27,7 @@ export async function warmOpening():Promise<void>{
 export async function playDuelOpening(o:OpeningOptions):Promise<void>{
   if(o.signal.aborted)return;
   const game=o.root.querySelector<HTMLElement>('.game');
-  const host=document.createElement('div');host.className='duel-opening cointoss-ov';
+  const host=document.createElement('div');host.className='duel-opening duel-opening-v1 cointoss-ov';
   // Override legacy .cointoss-ov layout/backdrop; the veil is sampled by our clock.
   host.style.cssText='display:block;background:none;backdrop-filter:none;animation:none';
   host.setAttribute('role','region');host.setAttribute('aria-label',label('デュエル開幕','Duel opening','듀얼 시작'));

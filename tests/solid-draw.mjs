@@ -33,6 +33,14 @@ try{
   delay=true;const pending=animateDraw(document.getElementById('hand'),1,'me',{uids:['new']});
   while(!release)await new Promise(r=>setTimeout(r,1));cancel();await pending;release=null;assert(cards.every(n=>n.style.visibility===''));setFxSkip(false);
  }
+ // The merged opening uses an external abort while the solid arrival is active.
+ const openingAbort=new AbortController();delay=true;
+ const openingDraw=animateDraw(document.getElementById('hand'),1,'me',{uids:['new'],signal:openingAbort.signal});
+ while(!release)await new Promise(r=>setTimeout(r,1));openingAbort.abort();await openingDraw;release=null;
+ assert(calls.at(-1).signal.aborted);assert(cards.every(n=>n.style.visibility===''));
+ const beforeAborted=calls.length;
+ await animateDraw(document.getElementById('hand'),1,'me',{signal:openingAbort.signal});
+ assert.equal(calls.length,beforeAborted);
  assert.deepEqual(arrivingHandUids([{uid:'kept'},{uid:'used'}],[{uid:'kept'},{uid:'drawn'}],3),['drawn']);
  assert.deepEqual(arrivingHandUids([],[{uid:'drawn'}],0),[]);
  // Volume must remain visible edge-on, and terminate exactly on the native face.

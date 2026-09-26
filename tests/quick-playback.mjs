@@ -24,7 +24,7 @@ const mocks={
  'boardView':'export class GameView{}',
  'log':'export class GameLog{};export const logToText=s=>s;',
  'modal':'export const cardPicker=()=>{},cardPickerMulti=()=>{},confirmDialog=()=>{},treasureModal=()=>{},winModal=()=>{},closeOverlay=()=>{},closeTreasureNotices=()=>{};',
- 'sound':'export const sfx=()=>{};',
+ 'sound':'export const sfx=()=>{};export const getSfxBus=()=>null;',
  'dice':'export const diceRollAnim=()=>{},cancelDiceAnimations=()=>{};',
  'duelClock':'export const paintDuelClock=()=>{};',
  'social':'export const avatarHtml=()=>"";',
