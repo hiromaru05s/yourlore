@@ -4,10 +4,9 @@
 import type { App, Screen } from "../router";
 import type { BotDifficulty } from "../shared/bot";
 import { api } from "../net/api";
-import { t, onLangChange, esc, cardName } from "../i18n";
+import { t, onLangChange, esc } from "../i18n";
 import { tierChipHtml } from "../ui/tier";
-import { mountFriends } from "./friends";
-import { DB, STARTERS, sanitizeDecks } from "../shared/cards";
+import { sanitizeDecks } from "../shared/cards";
 import { artUrl } from "../ui/cardArt";
 import { homeIcon, type HomeIcon } from "../ui/homeIcons";
 
@@ -19,25 +18,25 @@ export function mountHome(app: App): Screen {
   const store=sanitizeDecks(u?.decks ?? null);
   wrap.innerHTML = `
     <section class="lounge-home-main">
-      <section class="lounge-play">
-        <div id="myTier" class="lounge-rank-info">${t("lb.season")} —</div>
-        <h2>${t("home.ranked.title")}</h2>
-        <button class="lounge-play-button" id="ranked">${homeIcon("home")}<strong>${t("home.enterDuel")}</strong>${homeIcon("arrow")}</button>
-        <div class="lounge-secondary-modes"><button id="online">${homeIcon("duel")}${t("home.online.title")}</button><button id="bot">${homeIcon("bot")}${t("home.bot.title")}</button></div>
+      <section class="lounge-play" aria-label="${esc(t("home.ranked.title"))}">
+        <div id="myTier" class="lounge-rank-info" aria-live="polite">${t("lb.season")} —</div>
+        <button class="lounge-play-button" id="ranked"><strong>${t("home.ranked.title")}</strong><span>${t("home.enterDuel")}</span></button>
+        <div class="lounge-secondary-modes"><button id="online">${homeIcon("duel")}<span>${t("home.online.title")}</span></button><button id="bot">${homeIcon("bot")}<span>${t("home.bot.title")}</span></button></div>
       </section>
-      <section class="lounge-active-deck"><div><h3>${t("deck.inuse")} · ${t("deck.slot").replace("{n}",String(store.sel+1))}</h3><div class="lounge-deck-preview">${["STARTER_MANA",...store.list[store.sel].cards].slice(0,5).map(id=>`<img src="${artUrl.sm(id)}" alt="${esc(cardName({...(STARTERS[id]??DB[id]),uid:id}))}" loading="lazy">`).join("")}</div></div><div class="lounge-deck-actions"><button class="btn btn-gold" id="deck">${homeIcon("deck")}${t("home.deck.title")}</button><button class="btn btn-ghost" id="profile">${homeIcon("profile")}${t("profile.title")}</button></div></section>
-    </section><button class="lounge-friends-toggle" id="friendsToggle" aria-expanded="false" aria-controls="homeFriendsAside">${t("friends.title")} ↑</button><aside id="homeFriendsAside" class="lounge-home-friends"><div class="lounge-friends-heading"><h2>${t("friends.title")}</h2><button class="btn btn-ghost" id="allFriends">${t("cards.f.all")} ›</button></div><div id="homeFriends"></div></aside>`;
+      <button class="lounge-active-deck" id="deck" aria-label="${esc(t("home.deck.title"))}">
+        <span class="lounge-deck-preview" aria-hidden="true">${["STARTER_MANA",...store.list[store.sel].cards].slice(0,3).map(id=>`<img src="${artUrl.sm(id)}" alt="" loading="lazy">`).join("")}</span>
+        <span class="lounge-deck-label"><small>${t("deck.inuse")}</small><strong>${t("deck.slot").replace("{n}",String(store.sel+1))}</strong><span>${t("home.deck.title")}</span></span>${homeIcon("arrow")}
+      </button>
+    </section>`;
   app.root.appendChild(wrap);
   const q=(id:string)=>wrap.querySelector<HTMLButtonElement>('#'+id)!;
   q('ranked').onclick=()=>app.rankedLobby(); q('online').onclick=()=>app.onlineLobby();
-  q('bot').onclick=()=>showBotDifficultyModal(app); q('deck').onclick=()=>app.deck(); q('profile').onclick=()=>app.profile();q('allFriends').onclick=()=>app.friends();
-  q('friendsToggle').onclick=()=>{const open=wrap.querySelector('#homeFriendsAside')!.classList.toggle('is-open');q('friendsToggle').setAttribute('aria-expanded',String(open));q('friendsToggle').textContent=t('friends.title')+(open?' ↓':' ↑');};
-  const friends=mountFriends(app,wrap.querySelector<HTMLElement>('#homeFriends')!,true);
+  q('bot').onclick=()=>showBotDifficultyModal(app); q('deck').onclick=()=>app.deck();
   let disposed=false;
   void api.rankMe().then(r=>{if(disposed)return;const el=wrap.querySelector<HTMLElement>('#myTier')!;el.innerHTML=r?`${tierChipHtml(r.tier,r.mmr)} <small>${r.season} · #${r.rank}</small>`:t('lobby.connerr');});
   if(u && u.id!=='local-guest-user') void api.me().then(fresh=>{if(!disposed&&fresh?.id===u.id&&app.user?.id===u.id) { app.user=fresh; document.dispatchEvent(new Event("lore:user")); }}).catch(()=>{});
   const unsub=onLangChange(()=>app.home());
-  return {destroy:()=>{disposed=true;unsub();friends.destroy?.();}};
+  return {destroy:()=>{disposed=true;unsub();}};
 }
 
 /** BOT match difficulty picker. Dims + blurs HOME behind a focused center modal. */

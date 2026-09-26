@@ -12,6 +12,7 @@ import "./styles/screens.css";
 import "./styles/mobile.css";
 import "./styles/lounge.css";
 import "./styles/loungeGame.css";
+import "./styles/loungeStage.css";
 import { App } from "./router";
 import { initLang } from "./i18n";
 import { initAnalytics } from "./net/analytics";

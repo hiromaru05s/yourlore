@@ -1,0 +1,16 @@
+[
+  {
+    "id": "stage",
+    "prompt": "Create a production background illustration asset for LORE game HOME, landscape 16:9, preferably 2048x1152. Reference is the approved home concept. Reconstruct ONLY the cinematic character and environment behind its UI: preserve exactly the red seeker's amber eyes, pale blond long high ponytail with burgundy ribbon, side braid, red cape, navy high-neck outfit and white page-shaped skirt, holding a fan of burgundy cards. Her face at x34% y24%, upper body and flowing hair across left 60%, cropped at thighs at bottom. Preserve magnificent luminous blue-white library windows, eye-compass motifs, warm books and candles, magical paper fragments. Keep RIGHT 40% calm dark navy library scenery so separate live controls can overlay. Absolutely REMOVE ALL UI, logo, letters, numbers, captions, buttons, frames, rank crests, bottom dock and top HUD. Fill removed areas with continuous scenery. No writing on background. Premium detailed Japanese fantasy anime illustration, bright beautiful face, silver light, blue magical atmosphere, layered spatial depth. Full bleed image, not mockup.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-a80fb865-4ca9-4899-adb1-7a6f1e4d8db9.png",
+    "runtime": "client/public/art/lounge/stage-v1/stage.png",
+    "sha256": "85ff3e33626b505162d591c74f54baefdfda7c736c7ca8ab444d35a10f5410d0"
+  },
+  {
+    "id": "sigil",
+    "prompt": "Create ONE production game UI sprite: an ornate circular ranked-duel button frame for original fantasy TCG LORE, inspired by the main right-hand blue circular button in reference. Isolated circular compass medallion centered on a genuinely transparent background, square canvas. Silver bevelled thin metal frame, ivory highlights, small restrained gold fittings, pointed compass tips, subtle blue crystals, blue mana glowing around rim. Inner circle dark midnight sapphire glass with subtle cosmic blue wisps, calm empty central 65% area for live Japanese text, small LORE eye motif near top INSIDE disk. Crown-like rank crest must NOT appear, as rank is dynamic and rendered separately. Symmetric, exquisite premium Japanese card-game UI asset, highly readable silhouette. Absolutely no words, text, numerals, letters, logos, backdrop, rectangular panel, multiple sprites, or mockup. Keep complete outer tips and glow inside canvas with 7% transparent safety margin.",
+    "source": "/Users/hiromaru05s/.codex/generated_images/01a0c135-61a9-7cd1-91da-e582012b80b0/exec-f054ac05-9f17-4da5-8043-616b70187576.png",
+    "runtime": "client/public/art/lounge/stage-v1/sigil.png",
+    "sha256": "165cab065f588223f957379308eeb6b5f456a1322ccfa6388f438872a937be45"
+  }
+]

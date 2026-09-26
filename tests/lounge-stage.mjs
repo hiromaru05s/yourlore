@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
 const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5202';
-const out=process.env.LORE_TEST_OUTPUT||'docs/ui-rework/2026-09-21-game-polish/checks';await fs.mkdir(out,{recursive:true});
+const out=process.env.LORE_TEST_OUTPUT||'docs/ui-rework/2026-09-27-seeker-stage/checks';await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true});const page=await browser.newPage({viewport:{width:1586,height:992}});
 const errors=[],checks=[];page.on('pageerror',e=>errors.push(e.message));
 let logged=true,saveCount=0,inquiryFail=true;
@@ -29,6 +29,7 @@ await page.route('**/api/**',async r=>{const path=new URL(r.request().url()).pat
  else if(path==='/api/rewards/claimed')data={keys:[],credits:840};
  await r.fulfill({contentType:'application/json',body:JSON.stringify(data)});
 });
+await page.routeWebSocket('**/ws/**',ws=>{ws.onMessage(raw=>{try{if(JSON.parse(String(raw)).type==='queue')ws.send(JSON.stringify({type:'queued'}));}catch{}});});
 const shot=async name=>{await page.waitForTimeout(350);await page.screenshot({path:`${out}/${name}.png`,fullPage:false});checks.push(name);};
 const nav=async key=>{await page.locator(`[data-nav="${key}"]`).click();};
 try{
@@ -37,6 +38,9 @@ try{
  await page.locator('img.lore-icon').evaluateAll(imgs=>Promise.all(imgs.map(i=>i.decode())));
  assert.equal(await page.locator('.lounge-rail svg').count(),0);
  await shot('home-final');
+ for(const id of ['ranked','online']){await page.locator('#'+id).click();await page.waitForSelector('.lounge-lobby');await shot('queue-'+id);await page.locator('#cancel').click();await page.waitForSelector('.lounge-home');}
+ for(const [width,height] of [[1280,720],[844,390],[390,844],[320,568]]){await page.setViewportSize({width,height});const bounds=await page.evaluate(()=>{const r=document.querySelector('#ranked').getBoundingClientRect(),d=document.querySelector('.lounge-rail').getBoundingClientRect();return {rankTop:r.top,rankBottom:r.bottom,dockTop:d.top,navCount:document.querySelectorAll('[data-nav]').length,bg:getComputedStyle(document.querySelector('.lounge-shell')).backgroundRepeat};});assert.equal(bounds.navCount,7);assert.equal(bounds.bg,'no-repeat');assert(bounds.rankBottom<=bounds.dockTop,JSON.stringify({width,height,...bounds}));await shot('home-'+width+'x'+height);}
+ await page.setViewportSize({width:1586,height:992});
  await nav('cards');await page.waitForSelector('#grid .card');
  for(const [width,height] of [[1586,992],[1024,768],[390,844],[320,568]]){
   await page.setViewportSize({width,height});await page.waitForTimeout(200);
@@ -46,11 +50,11 @@ try{
   await shot(`cards-bottom-${width}`);
   await page.locator('#search').fill('存在しないカード');assert.equal(await page.locator('#grid .card').count(),0);assert(await page.locator('.cards-empty').isVisible());await shot(`cards-empty-${width}`);await page.locator('#search').fill('');
  }
- await page.setViewportSize({width:390,height:844});await nav('home');await shot('home-mobile-final');await page.locator('.lounge-menu').click();await shot('navigation-mobile');await page.keyboard.press('Escape');
+ await page.setViewportSize({width:390,height:844});await nav('home');await shot('home-mobile-final');await page.locator('.lounge-menu').click();const menuBox=await page.locator('#loungeUtilities').boundingBox();assert(menuBox&&menuBox.y>=0&&menuBox.y+menuBox.height<760,JSON.stringify(menuBox));await shot('navigation-mobile');await page.keyboard.press('Escape');
  await nav('deck');await page.waitForSelector('#deckCur .card');await shot('deck-mobile-final');await page.locator('#watchTab').click();await page.waitForSelector('#watchPool .card');await shot('watch-mobile-final');
  await page.setViewportSize({width:1586,height:992});await page.locator('[data-profile]').click();await page.waitForSelector('#avaBtn');await shot('profile-final');await page.locator('[data-tab="settings"]').click();await shot('settings-final');
- await nav('friends');await page.waitForSelector('.fr-row');await shot('friends-final');await nav('shop');await shot('shop-final');await nav('leaderboard');await shot('ranking-final');
+ await nav('friends');await page.waitForSelector('.fr-row');await shot('friends-final');await nav('shop');await shot('shop-final');await nav('leaderboard');await shot('ranking-final');await nav('tutorial');await shot('guide-final');await nav('home');await page.locator('#bot').click();await shot('bot-picker');await page.keyboard.press('Escape');assert.equal(await page.locator('.overlay').count(),0);
  const names=['home','duel','bot','deck','cards','trophy','friends','shop','book','gift','mail','settings','shard','profile','sleeve','menu','check','close','arrow','search','bell','sound','language','history','edit'];
  const icons=await page.evaluate(async names=>Promise.all(names.map(async name=>{const i=new Image();i.src='/art/lounge/icons/v2/'+name+'.png';await i.decode();return {name,width:i.naturalWidth,height:i.naturalHeight};})),names);assert.equal(icons.length,25);
- assert.deepEqual(errors,[]);await fs.writeFile(out+'/game-polish-report.json',JSON.stringify({checks,icons,errors},null,2));console.log('PASS catalog boundary/empty/scroll at 4 sizes, 25 PNG icons, navigation and visual states');
+ await page.setViewportSize({width:320,height:568});await nav('home');await shot('home-small');assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await page.locator('.lounge-menu').click();await page.locator('[data-inquiry]').click();await shot('inquiry-small');await page.keyboard.press('Escape');await page.keyboard.press('Escape');logged=false;await page.reload();await page.waitForSelector('.lounge-login');await shot('login-small');await page.setViewportSize({width:1586,height:992});await shot('login-desktop');assert.deepEqual(errors,[]);await fs.writeFile(out+'/stage-report.json',JSON.stringify({checks,icons,errors},null,2));console.log('PASS catalog boundary/empty/scroll at 4 sizes, 25 PNG icons, navigation and visual states');
 }finally{await browser.close();}

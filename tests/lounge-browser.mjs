@@ -30,11 +30,11 @@ await page.route('**/api/**',async r=>{const path=new URL(r.request().url()).pat
  await r.fulfill({contentType:'application/json',body:JSON.stringify(data)});
 });
 const shot=async name=>{await page.waitForTimeout(350);await page.screenshot({path:`${out}/${name}.png`,fullPage:false});checks.push(name);};
-const nav=async key=>{if(await page.locator('.lounge-menu').isVisible())await page.locator('.lounge-menu').click();await page.locator(`[data-nav="${key}"]`).click();};
+const nav=async key=>{await page.locator(`[data-nav="${key}"]`).click();};
 try{
- await page.goto(origin);await page.waitForSelector('.lounge-home');await page.waitForSelector('.fr-row');await shot('01-home');
+ await page.goto(origin);await page.waitForSelector('.lounge-home');await shot('01-home');
  await page.locator('#bot').click();await shot('10-bot');await page.keyboard.press('Escape');assert.equal(await page.locator('.bot-diff').count(),0);
- await page.locator('[data-invite]').click();await page.waitForSelector('#invLink');await shot('20-referral');await page.locator('#invClose').click();
+ await page.locator('.lounge-menu').click();await page.locator('[data-invite]').click();await page.waitForSelector('#invLink');await shot('20-referral');await page.locator('#invClose').click();
  await page.locator('[data-inquiry]').click();await page.locator('#inqTitle').fill('UI test');await page.locator('#inqBody').fill('Testing form recovery');await page.locator('#inqSend').click();await page.waitForSelector('.inq-msg.err');assert.equal(await page.locator('#inqBody').inputValue(),'Testing form recovery');await shot('21-inquiry-error');await page.locator('#inqSend').click();await page.waitForSelector('.inq-done');await shot('21-inquiry-success');await page.locator('#inqOk').click();
  await nav('deck');await page.waitForSelector('#deckCur .card');await shot('05-deck');
  await page.locator('#deckCur .card').nth(1).click();assert(await page.locator('#save').isDisabled());await nav('cards');await page.waitForSelector('.overlay');await page.locator('.modal-row .btn-ghost').click();assert.equal(await page.locator('.deck-panel').count(),1);
@@ -47,7 +47,7 @@ try{
  await page.locator('[data-profile]').click();await page.waitForSelector('#avaBtn');await shot('14-profile');await page.locator('#renameBtn').click();await page.waitForSelector('#renameCancel');await shot('22-rename');await page.locator('#renameCancel').click();await page.locator('#avaBtn').click();await shot('22-avatar');await page.locator('#avaClose').click();
  await page.locator('[data-tab="h2h"]').click();await shot('15-head-to-head');await page.locator('[data-tab="sleeves"]').click();await shot('16-sleeves');await page.locator('[data-tab="settings"]').click();await shot('17-settings');assert(!await page.locator('.bill-plan').textContent().then(x=>x.includes('$7')));
  await nav('shop');await page.waitForSelector('.shop-empty');await shot('18-shop');await nav('tutorial');await page.waitForSelector('.tut-steps');assert.equal(await page.locator('.tut-steps li').count(),9);await shot('19-guide');
- await page.setViewportSize({width:390,height:844});await nav('home');await shot('23-mobile-home');await page.locator('#friendsToggle').click();await shot('23-mobile-friends');await page.locator('#friendsToggle').click();await nav('deck');await shot('24-mobile-deck');
+ await page.setViewportSize({width:390,height:844});await nav('home');await shot('23-mobile-home');await nav('friends');await shot('23-mobile-friends');await nav('deck');await shot('24-mobile-deck');
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);assert(!overflow,'mobile horizontal overflow');
  await nav('cards');await shot('24-mobile-cards');await page.locator('[data-profile]').click();await page.waitForSelector('[data-tab="settings"]');await page.locator('[data-tab="settings"]').click();await shot('24-mobile-settings');
  await page.locator('#logout').click();await page.waitForSelector('.modal');await page.locator('.modal .btn-primary').click();await page.waitForSelector('.lounge-login');await page.setViewportSize({width:1586,height:992});await shot('02-login');

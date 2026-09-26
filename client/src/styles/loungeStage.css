@@ -1,0 +1,173 @@
+/* Seeker stage: shared game-client chrome, scoped away from duel and card faces. */
+.lounge-shell {
+  --rail:0px; --bar:86px; --dock:96px;
+  --stage-line:#9cafc8; --stage-light:#eef4ff;
+  color:#e9eff9; background-size:cover; background-repeat:no-repeat; background-position:center;
+  background-image:linear-gradient(#06132b60,#031024a8),url('/art/lounge/v1/library.png');
+}
+.lounge-shell::after { content:''; position:absolute; inset:0; pointer-events:none; box-shadow:inset 0 0 100px #01081588; }
+.lounge-topbar { left:0; height:var(--bar); padding:10px 28px; gap:16px; border:0; background:linear-gradient(#030b1bd9,transparent); box-shadow:none; }
+.lounge-topbar .lounge-brand { width:150px; height:60px; margin:0; padding:0; border:0; flex:none; }
+.lounge-topbar .lounge-brand::after { display:none; }
+.lounge-topbar .lounge-brand img { width:100%; filter:drop-shadow(0 3px 7px #0008); }
+.lounge-topbar .lounge-location { display:none; }
+.lounge-topbar .lounge-user { order:1; margin:0 auto 0 0; padding:5px 18px!important; border:0!important; background:linear-gradient(90deg,#06152acf,transparent)!important; }
+.lounge-topbar .lounge-balance { order:2; border-color:#98b2d466!important; background:#07142bc4!important; border-radius:4px; }
+.lounge-topbar>[data-settings] { order:3; display:flex; border:1px solid #9eb0c077; background:#08182bcc; border-radius:50%; }
+.lounge-topbar .lounge-menu { order:4; display:flex!important; width:44px; height:44px; justify-content:center; border:1px solid #9eb0c077; border-radius:50%; background:#08182bcc; }
+.lounge-rail { inset:auto 20px max(12px,env(safe-area-inset-bottom)); width:auto; height:calc(var(--dock) - 20px); padding:0 14px; transform:none; border:3px double #b5c5d8; border-radius:15px 3px; background:linear-gradient(110deg,#07182ef5,#102a46f5 50%,#061328f5); box-shadow:inset 0 0 0 3px #071022,inset 0 1px 15px #a2d8ff36,0 8px 20px #000a; }
+.lounge-rail nav { display:flex; align-items:stretch; overflow:visible; }
+.lounge-rail nav button { flex:1; min-width:0; min-height:0!important; margin:0!important; padding:5px 8px!important; display:flex; flex-direction:column; justify-content:center; gap:2px!important; border:0!important; border-right:1px solid #acc6e22b!important; font-size:13px; color:#e4ebf6; background:none; text-align:center; }
+.lounge-rail nav button:last-child { border-right:0!important; }
+.lounge-rail nav .lore-icon { width:36px; height:36px; }
+.lounge-rail nav button[aria-current] { background:radial-gradient(ellipse at bottom,#328cd178,transparent 80%); box-shadow:inset 0 -2px #c5eeff; color:white; }
+.lounge-rail nav button[aria-current]::after { right:auto; top:-5px; width:7px; height:7px; background:#b5eaff; }
+.lounge-rail nav button:hover { background:linear-gradient(transparent,#327db250); }
+.lounge-rail-bottom { display:none; position:fixed; top:80px; right:24px; width:220px; padding:8px; border:3px double #a2b2cc; background:#09192ef7; box-shadow:0 15px 50px #0009; }
+.is-menu-open .lounge-rail-bottom { display:block; }
+.lounge-shell.is-menu-open .lounge-rail { transform:none; box-shadow:inset 0 0 0 3px #071022,0 8px 20px #000a; }
+.lounge-content { inset:var(--bar) 0 var(--dock); scrollbar-color:#7696bc #071428; }
+.lounge-content>.screen { padding:12px 4vw 26px; min-height:100%; }
+.lounge-content :is(.panel,.tut,.cards),body.lounge-active .modal {
+  --paper:#ecf2fc; --paper-dim:#becbe0; --paper-faint:#9caec9;
+  --brass:#a7c4e4; --brass-hi:#e1efff; --brass-dim:#6d87a7;
+  --ink-0:#061225; --ink-1:#0b1c32; --ink-2:#142b46; --ink-3:#1d3c5e;
+  --line:#6583a752; --good:#72d9b5; --vermil-hi:#ffa6a6; --blue:#8fcdff;
+  color:var(--paper); background:radial-gradient(ellipse at 50% 0,#254974ba,transparent 70%),linear-gradient(120deg,#09162bf5,#0e223af7);
+  border:3px double #8ca4c0; border-radius:10px 2px; box-shadow:inset 0 0 0 3px #040e21,0 12px 32px #0008; backdrop-filter:blur(14px);
+}
+.lounge-content :is(h2,h3),body.lounge-active .modal h2 { color:#e8f0ff; }
+.lounge-content :is(.tut-head,.cards-head,.deck-head,.lb-head) { background:linear-gradient(100deg,#152f4b,#0a1930); border-bottom:3px double #91a7c0; box-shadow:0 4px 14px #0004; }
+.lounge-content :is(.tut-head,.cards-head,.deck-head,.lb-head) h2 { color:#f0f5ff; }
+.lounge-content :is(.btn,.chip,.deck-tab,.pf-tab),body.lounge-active .modal .btn { background:linear-gradient(#203c5a,#0b1c32); color:#e5edfa; border:1px solid #829bb9; border-radius:4px; box-shadow:inset 0 1px #c5e6ff40,inset 0 -3px #0004,0 3px 7px #0004; text-shadow:0 1px 2px #000; }
+.lounge-content :is(.btn-gold,.btn-primary,.chip.is-on,.deck-tab.is-on,.pf-tab.is-active),body.lounge-active .modal :is(.btn-gold,.btn-primary) { background:linear-gradient(145deg,#2b76b6,#163d71 65%,#10284c); border-color:#bedbfa; color:white; box-shadow:inset 0 0 0 2px #07172b,inset 0 0 0 3px #8bbce270,0 0 14px #4b9fe12e; }
+.lounge-content .btn-danger { color:#ffb5b7; border-color:#ab6878; }
+.lounge-content :is(.input,.cards-search,.deck-watch-search,select),body.lounge-active .modal :is(.input,select) { background:#06152be8; color:#eef5ff; border-color:#6d88ac; box-shadow:inset 0 3px 8px #0005; }
+.lounge-content input::placeholder,body.lounge-active .modal input::placeholder { color:#8fa6c4; }
+.lounge-content :is(.deck-note,.deck-msg,.cards-hint,.lb-season,.set-desc,.pf-loading,.lounge-queue-rule,.lounge-rank-rules),body.lounge-active .modal p,body.lounge-active .inv-desc { color:#b6c9e2; }
+.lounge-content :is(.tut-sec,.fr-row,.pf-match,.lb-row) { border-color:#7b9bb337; }
+.lounge-content .fr-row,.lounge-content .lb-row:nth-child(2n):not(.lb-columns) { background:#86baff08; }
+.lounge-content .fr-state.online,.lounge-content .fr-state.on { color:#7edbbe; }
+.lounge-content .tier-chip { color:#cce5ff; }
+.lounge-content .lb-columns { color:#b7cae2; background:#07172f; border-color:#7491b23d; }
+.lounge-content .lb-me { background:#183c60; color:#e4f1ff; border-color:#84b5df; }
+.lounge-content .lb-rank b { color:#eff6ff; }
+.lounge-content .deck-cur { background:radial-gradient(ellipse,#284771,#07182e); border-color:#829dbb; }
+.lounge-content .deck-slot { border-color:#748eab; background:#06132888; }
+.lounge-content .deck-local-tabs { border-color:#7f97b35c; }
+.lounge-content .deck-local-tabs button { color:#b1c8e5; }
+.lounge-content .deck-local-tabs button[aria-selected=true] { color:white; border-color:#9cd7ff; background:linear-gradient(transparent,#2c639244); }
+.lounge-content .pf-overview>.pf-card { background:radial-gradient(ellipse at top,#284872,#0b1a30); border-color:#839bb9; box-shadow:inset 0 0 20px #071529; }
+.lounge-content .pf-stat { background:linear-gradient(#1c3655,#0d1f35); border-color:#7e9abf; }
+.lounge-content .pf-stat b,.lounge-content .pf-stat .tier-chip { color:#eff6ff; }
+.lounge-content .pf-stat span { color:#b6cae4; }
+.lounge-content :is(.bill-plan,.sl-tile,.shop-item,.lounge-guide-nav) { background:#17304b; border-color:#7792b4; }
+.lounge-content .shop-empty { background:linear-gradient(#07192dc7,#091a31ed),url('/art/lounge/v1/library.png') center/cover; color:#cadbf0; }
+.lounge-content .shop-empty::before { content:''; height:90px; background:url('/art/lounge/icons/v2/shop.png') center/contain no-repeat; }
+.lounge-content .lounge-guide-nav a { color:#d3e7fc; background:#102542; border-color:#718aac; }
+.lounge-content .tut-steps li { background:linear-gradient(#1d3958,#0e223c); border-color:#7291b5; box-shadow:inset 0 1px #e0f3ff20; }
+.lounge-content :is(.tut-rules-h,.tut-step-r),.lounge-content .tut-sec table { color:#c7e3ff; }
+.lounge-content .tut-sec :is(th,td) { border-color:#748cac77; }
+/* Inventory is a single continuous surface with a separately scrolling card tray. */
+.lounge-cards .lounge-content { padding:12px 4vw 20px; }
+.lounge-cards .cards-grid { background:radial-gradient(ellipse at 50% 0,#294569,#0a192e 80%); scrollbar-color:#698bb5 #09172d; }
+.lounge-cards :is(.cards-filters,.cards-hint) { background:#10253e; border-color:#6b8db154; }
+.lounge-cards .cards-grid .card:hover { box-shadow:0 0 0 2px #d1edff,0 0 24px #7dc7ff70; }
+/* Full-screen character scene. All labels, rank and deck data remain live HTML. */
+.lounge-home,.lounge-login,.lounge-lobby { background-image:url('/art/lounge/stage-v1/stage.png'); background-position:center; }
+.lounge-home .lounge-content { overflow:auto; }
+.lounge-content>.lounge-home-screen { display:flex; height:100%; min-height:530px; padding:0 4vw 12px; }
+.lounge-home-main { width:42%; max-width:620px; min-height:0; margin-left:auto; padding:0; display:flex; flex-direction:column; justify-content:center; gap:10px; }
+.lounge-play { width:100%; margin:0; padding:0; background:none; }
+.lounge-rank-info { min-height:36px; flex-wrap:wrap; gap:8px; text-shadow:0 2px 8px #000; }
+.lounge-rank-info .tier-chip { color:#ffe8af; border-color:#bacde4; background:#0b1c36df; }
+.lounge-rank-info small { color:#d5e7fa; background:#071529cc; padding:4px 10px; border-radius:20px; }
+.lounge-play-button { width:min(100%,370px); aspect-ratio:1; min-height:0; margin:0 auto; padding:0; position:relative; border:0; border-radius:50%; background:url('/art/lounge/stage-v1/sigil.png') center/contain no-repeat; box-shadow:none; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; transition:filter .2s,transform .2s; filter:drop-shadow(0 5px 20px #0006); }
+.lounge-play-button strong { font-size:clamp(24px,2.8vw,40px); letter-spacing:.03em; margin-top:27%; text-shadow:0 2px 6px #000,0 0 18px #000; }
+.lounge-play-button>span { font-size:12px; color:#c7e7ff; letter-spacing:.12em; }
+.lounge-play-button:hover { background:url('/art/lounge/stage-v1/sigil.png') center/contain no-repeat; filter:brightness(1.2) drop-shadow(0 0 15px #76bcff88); transform:scale(1.025); }
+.lounge-play-button:active { transform:scale(.97); box-shadow:none; }
+.lounge-secondary-modes { margin:0 auto; gap:12px; max-width:450px; }
+.lounge-secondary-modes button { min-height:57px; border:3px double #b5c6dc; border-radius:28px 4px; background:linear-gradient(145deg,#193756f2,#07162cf7); color:#f0f5ff; box-shadow:inset 0 1px #dcefff44,0 5px 13px #0007; font-size:14px; }
+.lounge-secondary-modes button:hover { filter:brightness(1.2); }
+.lounge-active-deck { display:flex; align-items:center; width:100%; gap:20px; padding:10px 20px; text-align:left; min-height:90px; background:linear-gradient(100deg,#0b1a31f5,#183553ed); border:3px double #afc3dd; border-radius:6px 24px 6px 6px; color:#edf5ff; }
+.lounge-active-deck:hover { border-color:#e1f4ff; filter:brightness(1.1); }
+.lounge-deck-preview { display:flex; gap:0; padding-left:10px; flex:none; }
+.lounge-deck-preview img { width:45px; height:64px; border:1px solid #b9c9e2; margin-left:-10px; object-fit:cover; box-shadow:0 3px 8px #0008; }
+.lounge-deck-preview img:first-child { transform:rotate(-8deg); }.lounge-deck-preview img:last-child { transform:rotate(8deg); }
+.lounge-deck-label { display:flex; flex-direction:column; gap:3px; min-width:0; flex:1; }
+.lounge-deck-label small { color:#b4cbe4; font-size:11px; }.lounge-deck-label strong { font:20px var(--serif,serif); }.lounge-deck-label>span { font-size:11px; color:#acc8e6; }
+.lounge-active-deck>.lore-icon { width:24px; height:24px; }
+/* Login, queue and dialogs use the same stage materials. */
+.lounge-login .lounge-content { inset:0; }.lounge-login .auth-card::before { content:''; height:70px; background:url('/art/brand/lore-logo-transparent.png') center/contain no-repeat; }
+.lounge-login .auth-tabs button { color:#bfd1e8; }.lounge-login .auth-or span { background:#10243e; }.lounge-login .login-help { background:#06172c; }
+.lounge-lobby .lounge-content>.screen { justify-items:end; padding-right:7vw; }.lounge-lobby .auth-card { max-width:500px; background:#0b1c34ee; }
+.lounge-queue-time { color:#d1ecff; }.lounge-lobby .spinner { border:0; box-shadow:none; background:url('/art/lounge/stage-v1/sigil.png') center/contain; width:150px; height:150px; }.lounge-lobby .spinner .lore-icon { visibility:hidden; }
+body.lounge-active .diff-card { background:linear-gradient(#213f60,#0b1d33); color:#dfedff; border-color:#8da9c8; box-shadow:inset 0 0 12px #528ac326; }body.lounge-active .diff-card:hover { background:linear-gradient(#315d86,#132e4a); }
+body.lounge-active .zoom-wrap { background:#0b1a30; border-color:#b2c9e5; }
+body.lounge-active .inspect-heading { background:#102742; border-color:#9ab6d6; }body.lounge-active .inspect-heading h1 { color:#ecf4ff; }
+body.lounge-active .zoom-details { background:linear-gradient(120deg,#10213a,#172e4a); color:#d8e7fc; --paper:#e5efff; --paper-dim:#b5cce8; --paper-faint:#9fb7d5; --brass-hi:#b5dcff; }
+body.lounge-active .zoom-details .card-rules { color:#d7e6fa; }body.lounge-active .zoom-tribe { background:#25415f; color:#e1efff; }
+body.lounge-active .inspect-type { color:#aec8e5; }
+.lounge-content>.screen { animation:stage-arrive .24s ease-out; }
+@keyframes stage-arrive { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:translateY(0); } }
+@media(min-width:851px) and (max-height:760px) {
+  .lounge-shell { --bar:70px; --dock:82px; }.lounge-rail { height:62px; }.lounge-rail nav .lore-icon { width:29px; height:29px; }
+  .lounge-content>.lounge-home-screen { min-height:430px; }.lounge-play-button { width:260px; }.lounge-play-button strong { font-size:27px; }.lounge-home-main { gap:6px; }.lounge-secondary-modes button { min-height:46px; }.lounge-active-deck { min-height:74px; padding:6px 15px; }.lounge-deck-preview img { height:54px; width:38px; }
+}
+@media(max-width:850px) {
+  .lounge-shell { --bar:72px; --dock:84px; }.lounge-topbar { padding:8px 14px; gap:10px; }.lounge-topbar .lounge-brand { width:100px; height:50px; }.lounge-topbar .lounge-user { padding:4px 8px!important; }.lounge-user small { display:none; }
+  .lounge-rail { inset:auto 8px max(8px,env(safe-area-inset-bottom)); padding:0 4px; height:66px; transform:none; width:auto; }.lounge-rail nav button { font-size:11px; padding:4px 1px!important; }.lounge-rail nav .lore-icon { width:30px; height:30px; }.lounge-rail-bottom { top:70px; right:12px; }
+  .lounge-content>.screen { padding:10px 14px 20px; }.lounge-cards .lounge-content { padding:10px 12px; }
+  .lounge-content>.lounge-home-screen { padding:0 4vw 12px; min-height:490px; }.lounge-home-main { width:49%; }.lounge-play-button { width:290px; max-width:100%; }.lounge-play-button strong { font-size:26px; }.lounge-secondary-modes { gap:6px; }.lounge-secondary-modes button { font-size:12px; gap:4px; }.lounge-secondary-modes .lore-icon { width:23px; height:23px; }.lounge-active-deck { padding:10px; gap:12px; }.lounge-deck-preview img { width:34px; height:49px; }.lounge-deck-label strong { font-size:17px; }
+  .lounge-content .deck-head { background:linear-gradient(#173553,#0b1a31); }
+  .lounge-lobby .lounge-content>.screen { padding:20px; justify-items:center; }
+}
+@media(max-width:600px) {
+  .lounge-shell { --bar:66px; --dock:78px; }.lounge-topbar { padding:7px 10px; gap:7px; }.lounge-topbar .lounge-brand { width:74px; }.lounge-topbar .lounge-user { padding:3px 5px!important; gap:7px; }.lounge-user b { max-width:90px; font-size:11px; }.lounge-user .avatar { width:28px!important; height:28px!important; }.lounge-topbar .lounge-balance { min-width:0; padding:4px 6px!important; gap:3px!important; }.lounge-balance .lore-icon { width:20px; height:24px; }.lounge-topbar>[data-settings] { display:none; }.lounge-topbar .lounge-menu { width:34px; height:34px; }.lounge-menu .lore-icon { width:22px; height:22px; }
+  .lounge-rail { height:62px; }.lounge-rail nav button { font-size:9px; line-height:1.3; }.lounge-rail nav .lore-icon { width:27px; height:27px; }
+  .lounge-home { background-position:36% top; background-size:auto 74%; background-repeat:no-repeat; background-color:#07152c; }
+  .lounge-home::after { box-shadow:inset 0 -180px 100px -70px #07152c; }
+  .lounge-content>.lounge-home-screen { min-height:640px; height:100%; padding:0 16px 14px; position:relative; z-index:1; }
+  .lounge-home-main { width:100%; max-width:none; justify-content:flex-end; margin:0; gap:10px; padding-top:240px; }
+  .lounge-play { display:flex; flex-direction:column; align-items:center; }.lounge-rank-info { align-self:flex-end; font-size:12px; min-height:28px; gap:4px; }.lounge-rank-info small { font-size:10px; }
+  .lounge-play-button { width:210px; margin:-8px 0 -10px auto; }.lounge-play-button strong { font-size:23px; }.lounge-play-button>span { font-size:10px; }
+  .lounge-secondary-modes { width:100%; }.lounge-secondary-modes button { min-height:47px; font-size:13px; }.lounge-active-deck { min-height:76px; padding:9px 15px; }.lounge-deck-preview img { width:36px; height:51px; }
+  .lounge-login { background-position:34% top; }.lounge-login .lounge-content>.screen { justify-content:center; padding:160px 18px 30px; background:linear-gradient(transparent,#051125bc); }.lounge-login .auth-card { padding:26px; }
+  .lounge-content .cards-head { gap:10px; }.lounge-content .cards-head h2 { font-size:20px; }.lounge-content .cards-filters { padding:8px 10px 0; }.lounge-content .cards-hint { padding:6px 10px; }.lounge-content .cards-grid { padding:18px 8px; }
+}
+@media(max-width:360px) { .lounge-user b { max-width:58px; }.lounge-topbar .lounge-brand { width:61px; }.lounge-content .cards-grid .card { --cw:112px; --ch:175px; }.lounge-rail nav button { font-size:8px; } }
+@media(prefers-reduced-motion:reduce) { .lounge-shell *, .lounge-shell *::before, .lounge-shell *::after { animation:none!important; transition:none!important; } }
+
+/* Specificity matches the legacy rail selectors; keep every dock label on one line. */
+.lounge-rail nav button:not(.lounge-brand) { font-size:13px; }
+.lounge-rail nav button span { white-space:nowrap; }
+@media(max-width:850px) { .lounge-rail nav button:not(.lounge-brand) { font-size:11px; } }
+@media(max-width:600px) { .lounge-rail nav button:not(.lounge-brand) { font-size:9px; letter-spacing:0; } }
+@media(max-width:360px) { .lounge-rail nav button:not(.lounge-brand) { font-size:8px; } }
+@media(max-width:600px) and (max-height:700px) {
+ .lounge-content>.lounge-home-screen { min-height:0; }
+ .lounge-home-main { padding-top:0; gap:6px; }
+ .lounge-play-button { width:160px; margin:0 0 -6px auto; }
+ .lounge-play-button strong { font-size:19px; }
+ .lounge-play-button>span { display:none; }
+ .lounge-active-deck { min-height:64px; padding:6px 12px; }
+ .lounge-deck-preview img { height:44px; width:31px; }
+ .lounge-secondary-modes button { min-height:44px; font-size:12px; }
+}
+@media(min-width:480px) and (max-height:520px) {
+ .lounge-shell { --bar:58px; --dock:66px; }
+ .lounge-rail { height:54px; bottom:6px; }
+ .lounge-rail nav .lore-icon { width:24px; height:24px; }
+ .lounge-topbar .lounge-brand { height:40px; }
+ .lounge-content>.lounge-home-screen { min-height:0; padding:0 3vw 8px; }
+ .lounge-home-main { width:60%; padding:0; display:grid; grid-template-columns:1fr 1.1fr; grid-template-rows:28px auto auto; align-content:center; gap:4px 12px; }
+ .lounge-play { display:contents; }
+ .lounge-rank-info { grid-column:1/-1; font-size:11px; }
+ .lounge-play-button { grid-column:1; grid-row:2/4; width:170px; max-width:100%; margin:0 auto; }
+ .lounge-play-button strong { font-size:20px; }.lounge-play-button>span { display:none; }
+ .lounge-secondary-modes { grid-column:2; grid-row:2; display:flex; flex-direction:column; width:100%; gap:5px; }
+ .lounge-secondary-modes button { min-height:37px; font-size:12px; }
+ .lounge-active-deck { grid-column:2; grid-row:3; min-height:57px; padding:5px 9px; gap:8px; }
+ .lounge-deck-preview img { width:25px; height:37px; }.lounge-deck-label strong { font-size:14px; }.lounge-deck-label>span { display:none; }
+}

@@ -25,12 +25,13 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     shell.querySelectorAll(':scope > .lounge-rail, :scope > .lounge-topbar').forEach(n=>n.remove());
     if(page==='login') return;
     const rail=document.createElement('aside'); rail.className='lounge-rail'; rail.id='loungeNavigation';
-    rail.innerHTML=`<button class="lounge-brand" data-home aria-label="LORE HOME"><img src="/art/brand/lore-logo-transparent.png" alt="LORE"></button><nav aria-label="${esc(t('home.navigation'))}">${nav.map(([key,icon,label])=>`<button data-nav="${key}" ${key===page?'aria-current="page"':''}>${homeIcon(icon)}<span>${t(label)}</span></button>`).join('')}</nav><div class="lounge-rail-bottom"><button data-invite>${homeIcon('gift')}<span>${t('invite.title')}</span></button><button data-inquiry>${homeIcon('mail')}<span>${t('home.inquiry.title')}</span></button></div>`;
+    rail.innerHTML=`<nav aria-label="${esc(t('home.navigation'))}">${nav.map(([key,icon,label])=>`<button data-nav="${key}" ${key===page?'aria-current="page"':''}>${homeIcon(icon)}<span>${t(label)}</span></button>`).join('')}</nav><div class="lounge-rail-bottom" id="loungeUtilities"><button data-utility-settings>${homeIcon('settings')}<span>${t('home.settings')}</span></button><button data-invite>${homeIcon('gift')}<span>${t('invite.title')}</span></button><button data-inquiry>${homeIcon('mail')}<span>${t('home.inquiry.title')}</span></button></div>`;
     const top=document.createElement('header'); top.className='lounge-topbar';
-    top.innerHTML=`<button class="lounge-menu" aria-controls="loungeNavigation" aria-expanded="false" aria-label="${esc(t('home.navigation'))}">${homeIcon('menu')}</button><span class="lounge-location">${page==='profile'?t('profile.title'):page==='lobby'?t('mode.ranked'):t(nav.find(n=>n[0]===page)?.[2]??'home.title')}</span><button class="lounge-user" data-profile>${avatarHtml(user?.avatar,user?.display??'P',38)}<span><b>${esc(user?.display??'PLAYER')}</b><small>${t('home.seekerLevel')} ${seekerLevel(user?.wins??0,user?.losses??0).level}</small></span></button><button class="lounge-balance" data-shop>${homeIcon('shard')}<span><small>${t('home.shards')}</small><b>${(user?.credits??0).toLocaleString()}</b></span></button><button data-settings aria-label="${esc(t('home.settings'))}">${homeIcon('settings')}</button>`;
+    top.innerHTML=`<button class="lounge-brand" data-home aria-label="LORE HOME"><img src="/art/brand/lore-logo-transparent.png" alt="LORE"></button><button class="lounge-menu" aria-controls="loungeUtilities" aria-expanded="${shell.classList.contains('is-menu-open')}" aria-label="${esc(t('home.navigation'))}">${homeIcon('menu')}</button><span class="lounge-location">${page==='profile'?t('profile.title'):page==='lobby'?t('mode.ranked'):t(nav.find(n=>n[0]===page)?.[2]??'home.title')}</span><button class="lounge-user" data-profile>${avatarHtml(user?.avatar,user?.display??'P',38)}<span><b>${esc(user?.display??'PLAYER')}</b><small>${t('home.seekerLevel')} ${seekerLevel(user?.wins??0,user?.losses??0).level}</small></span></button><button class="lounge-balance" data-shop>${homeIcon('shard')}<span><small>${t('home.shards')}</small><b>${(user?.credits??0).toLocaleString()}</b></span></button><button data-settings aria-label="${esc(t('home.settings'))}">${homeIcon('settings')}</button>`;
     shell.prepend(rail,top);
-    rail.querySelector<HTMLButtonElement>('[data-home]')!.onclick=()=>app.home();
+    top.querySelector<HTMLButtonElement>('[data-home]')!.onclick=()=>app.home();
     nav.forEach(([key,,,go])=>{rail.querySelector<HTMLButtonElement>(`[data-nav="${key}"]`)!.onclick=go;});
+    rail.querySelector<HTMLButtonElement>('[data-utility-settings]')!.onclick=()=>app.settings();
     rail.querySelector<HTMLButtonElement>('[data-invite]')!.onclick=()=>void showInviteModal();
     rail.querySelector<HTMLButtonElement>('[data-inquiry]')!.onclick=showInquiryModal;
     top.querySelector<HTMLButtonElement>('[data-profile]')!.onclick=()=>app.profile();
@@ -41,9 +42,6 @@ export function mountLounge(app: App, page: LoungePage): () => void {
   shell.append(content); app.root.append(shell); paint();
   const off=onLangChange(paint);
   document.addEventListener('lore:user',paint);
-  const media=window.matchMedia('(max-width:850px)');
-  const updateRail=()=>{const rail=shell.querySelector<HTMLElement>('.lounge-rail');if(rail)rail.inert=media.matches&&!shell.classList.contains('is-menu-open');};
-  const menuObserver=new MutationObserver(updateRail);menuObserver.observe(shell,{attributes:true,attributeFilter:['class'],childList:true});media.addEventListener('change',updateRail);updateRail();
   // All existing dialogs share keyboard/focus behavior without duplicating network flows.
   const seen=new WeakSet<HTMLElement>(); const previous=new Map<HTMLElement,HTMLElement|null>();
   const enhance=()=>{
@@ -59,7 +57,7 @@ export function mountLounge(app: App, page: LoungePage): () => void {
   const observer=new MutationObserver(enhance);observer.observe(document.body,{childList:true,subtree:true});enhance();
   const keyboard=(e:KeyboardEvent)=>{
     const ovs=Array.from(document.querySelectorAll<HTMLElement>('.overlay'));const ov=ovs.at(-1);
-    if(!ov){if(e.key==='Escape')shell.classList.remove('is-menu-open');return;}
+    if(!ov){if(e.key==='Escape'){shell.classList.remove('is-menu-open');shell.querySelector('.lounge-menu')?.setAttribute('aria-expanded','false');}return;}
     if(e.key==='Escape'){
       const close=ov.querySelector<HTMLButtonElement>('[id$="Cancel"],[id$="Close"],#wchNo,#chNo,.modal-row .btn-ghost');
       if(close){e.preventDefault();close.click();}return;
@@ -72,5 +70,5 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     }
   };
   document.addEventListener('keydown',keyboard);
-  return ()=>{off();document.removeEventListener("lore:user",paint);menuObserver.disconnect();media.removeEventListener("change",updateRail);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
+  return ()=>{off();document.removeEventListener("lore:user",paint);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
 }
