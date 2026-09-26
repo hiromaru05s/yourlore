@@ -1,3 +1,4 @@
+import {captureHandLayout,arrivingHandUids} from '../ui/handGeometry';
 import {waitForDuel} from '../ui/duelReadiness';
 import {releaseMonster} from '../ui/fieldLayout';
 import { paintDuelClock } from '../ui/duelClock';
@@ -453,11 +454,13 @@ export abstract class BaseController implements BoardHandlers {
         if(atk||hp)statFeedbackMs=Math.max(statFeedbackMs,atk&&hp?2100:1500);
       }
     }
+    const handLayouts=[draws[this.you]>0?captureHandLayout(document.getElementById('hand')):undefined,
+      draws[1-this.you]>0?captureHandLayout(document.getElementById('oppHand')):undefined];
     this.view.render(res.state);
     // ghosts overlap the freshly-rendered real cards — drop them next frame
     requestAnimationFrame(() => {ghosts.forEach((g) => g.el.remove());spellGhosts.forEach(g=>g.remove());});
     await Promise.all(([0, 1] as Side[]).map(player => draws[player] > 0
-      ? A.animateDraw(document.getElementById(player === this.you ? "hand" : "oppHand"), draws[player], sideOf(player))
+      ? A.animateDraw(document.getElementById(player === this.you ? "hand" : "oppHand"), draws[player], sideOf(player),{previousHand:handLayouts[player===this.you?0:1],uids:player===this.you?arrivingHandUids(prev.players[player].hand,res.state.players[player].hand,draws[player]):undefined})
       : Promise.resolve()));
 
     // Pending targets can span multiple reducer batches. Keep the face until the last choice,
