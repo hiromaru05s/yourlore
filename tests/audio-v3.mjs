@@ -31,7 +31,12 @@ try{
  // Cold arrivals over 90 ms are dropped, not played behind the animation.
  pending=new Promise(r=>release=r);a.sfx('attack');time+=100;release();pending=null;await flush();assert.equal(starts.length,0);
  await a.warmSounds();const fetched=fetches;time+=1000;
- a.sfx('impact');a.sfx('impact');assert.equal(starts.length,1);assert(starts[0].buffer.name.includes('/lore-v3/impact-1.mp3'));
+ a.sfx('impact');a.sfx('impact');assert.equal(starts.length,1);assert(starts[0].buffer.name.includes('/lore-v4/impact-1.mp3'));
+ // The approved click/confirmation bank is kept exactly; only duel cues change.
+ for(const name of ['click','pop','error'])assert(a.soundUrls(name).every(u=>u.includes('/lore-v3/')));
+ for(const name of a.SFX_NAMES.filter(n=>!['click','pop','error'].includes(n)))assert(a.soundUrls(name).every(u=>u.includes('/lore-v4/')));
+ a.stopSounds();time+=1000;a.sfx('attack');const sweep=starts.at(-1);a.sfx('impact');assert(stops.includes(sweep),'landing fades the outgoing attack sweep');
+ time+=1000;a.sfx('mana');a.sfx('draw');const battle=starts.slice(-3);a.sfx('win');assert(battle.every(v=>stops.includes(v)),'outcome clears lingering battle voices');
  // UI remains subordinate to an outcome; no more than eight concurrent voices.
  for(const name of a.SFX_NAMES){time+=501;a.sfx(name);assert(starts.length-stops.length<=8);}
  assert.equal(fetches,fetched,'only one download per URL');

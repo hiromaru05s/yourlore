@@ -1,12 +1,13 @@
-/** Recorded paper/wood/cloth, with restrained glass reserved for magic. */
+/** Designed fantasy duel sounds; keep the approved UI recordings unchanged. */
 export const SFX_NAMES=['click','play','summon','attack','impact','damage','heal','death','trapSet','trap','draw','buy','mana','turn','win','lose','drawGame','match','error','coin','pop','facehit','mimic','mana-pay','void','shuffle','duel-start','discard','coinToss','coinLand','diceRoll','diceLand'] as const;
 export type SfxName=typeof SFX_NAMES[number];
-const ROOT='/sfx/lore-v3/',VARIANTS=new Set<SfxName>(['click','draw','attack','impact']);
+const UI=new Set<SfxName>(['click','pop','error']),VARIANTS=new Set<SfxName>(['click','draw','attack','impact']);
 type Family='ui'|'paper'|'combat'|'magic'|'ceremony';
 interface Policy {family:Family;gap:number;priority:number;}
 const policy=(name:SfxName):Policy=>{
- if(['click','pop','error'].includes(name))return {family:'ui',gap:90,priority:0};
- if(['draw','discard','shuffle','play','trapSet','buy','coin','mana-pay'].includes(name))return {family:'paper',gap:name==='draw'?65:120,priority:1};
+ if(UI.has(name))return {family:'ui',gap:90,priority:0};
+ if(['draw','discard','shuffle','trapSet','buy','coin','mana-pay'].includes(name))return {family:'paper',gap:name==='draw'?65:120,priority:1};
+ if(name==='play')return {family:'magic',gap:120,priority:2};
  if(['mana','heal'].includes(name))return {family:'magic',gap:280,priority:2};
  if(['win','lose','drawGame','duel-start','match'].includes(name))return {family:'ceremony',gap:500,priority:4};
  return {family:'combat',gap:65,priority:3};
@@ -16,9 +17,9 @@ let volume=.7;try{const v=parseFloat(localStorage.getItem('lore_sfx')??'');if(Nu
 let ctx:AudioContext|null=null,master:GainNode|null=null,installed=false,unlocked=false,epoch=0;
 const encoded=new Map<string,Promise<ArrayBuffer>>(),decoded=new Map<string,Promise<AudioBuffer>>(),ready=new Map<string,AudioBuffer>();
 const last=new Map<SfxName,number>(),cycle=new Map<SfxName,number>();
-interface Voice {source:AudioBufferSourceNode;gain:GainNode;family:Family;priority:number;finish:()=>void;}
+interface Voice {name:SfxName;source:AudioBufferSourceNode;gain:GainNode;family:Family;priority:number;finish:()=>void;}
 const active=new Set<Voice>();
-export const soundUrls=(name:SfxName)=>Array.from({length:VARIANTS.has(name)?3:1},(_,i)=>ROOT+name+(VARIANTS.has(name)?'-'+(i+1):'')+'.mp3');
+export const soundUrls=(name:SfxName)=>Array.from({length:VARIANTS.has(name)?3:1},(_,i)=>`/sfx/lore-v${UI.has(name)?3:4}/`+name+(VARIANTS.has(name)?'-'+(i+1):'')+'.mp3');
 function bytes(url:string){let p=encoded.get(url);if(!p){p=fetch(url).then(r=>{if(!r.ok)throw new Error('sound unavailable');return r.arrayBuffer();}).catch(e=>{encoded.delete(url);throw e;});encoded.set(url,p);}return p;}
 function buffer(url:string){let p=decoded.get(url);if(!p){p=bytes(url).then(b=>ctx!.decodeAudioData(b.slice(0))).then(b=>{ready.set(url,b);return b;}).catch(e=>{decoded.delete(url);throw e;});decoded.set(url,p);}return p;}
 function unlock(){
@@ -65,13 +66,19 @@ export function sfx(name:SfxName,options:SoundOptions={}):void{
  const url=urls[i%urls.length],audio=ctx,bus=master,generation=epoch;
  const play=(buf:AudioBuffer)=>{
   if(generation!==epoch||options.signal?.aborted||volume<=0||document.hidden||audio.state!=='running'||performance.now()-now>90)return;
+  // A hit replaces its travelling sweep; outcome audio clears the preceding battle.
+  // Keep the direct sound transient intact instead of compressing the entire mix.
+  for(const voice of [...active]){
+   if((['impact','facehit'].includes(name)&&voice.name==='attack')||
+      (p.family==='ceremony'&&voice.family!=='ui'))fadeOut(voice);
+  }
   const siblings=[...active].filter(v=>v.family===p.family);
   if(siblings.length>=LIMIT[p.family])fadeOut(siblings[0]);
   if(active.size>=8){const oldest=[...active].sort((a,b)=>a.priority-b.priority)[0];if(oldest.priority>p.priority)return;fadeOut(oldest);}
   const source=audio.createBufferSource(),gain=audio.createGain();source.buffer=buf;gain.gain.value=1;
   source.connect(gain).connect(bus);
   const abort=()=>fadeOut(voice);
-  const voice:Voice={source,gain,...p,finish:()=>{active.delete(voice);options.signal?.removeEventListener('abort',abort);source.disconnect();gain.disconnect();}};
+  const voice:Voice={name,source,gain,...p,finish:()=>{active.delete(voice);options.signal?.removeEventListener('abort',abort);source.disconnect();gain.disconnect();}};
   source.onended=voice.finish;active.add(voice);options.signal?.addEventListener('abort',abort,{once:true});source.start();
  };
  const cached=ready.get(url);if(cached)play(cached);else void buffer(url).then(play).catch(()=>{});

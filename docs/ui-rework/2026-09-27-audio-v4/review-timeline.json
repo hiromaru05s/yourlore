@@ -1,0 +1,91 @@
+{
+  "duration": 31,
+  "bgm": "poised-opening.mp3 at 12 seconds; gain .147",
+  "sfxGain": 0.49,
+  "events": [
+    {
+      "at": 0.5,
+      "cue": "click"
+    },
+    {
+      "at": 1.5,
+      "cue": "draw"
+    },
+    {
+      "at": 1.8,
+      "cue": "draw"
+    },
+    {
+      "at": 2.1,
+      "cue": "draw"
+    },
+    {
+      "at": 3.3,
+      "cue": "summon"
+    },
+    {
+      "at": 5.4,
+      "cue": "attack"
+    },
+    {
+      "at": 5.64,
+      "cue": "impact"
+    },
+    {
+      "at": 7.2,
+      "cue": "attack"
+    },
+    {
+      "at": 7.44,
+      "cue": "facehit"
+    },
+    {
+      "at": 9.0,
+      "cue": "mana"
+    },
+    {
+      "at": 11.7,
+      "cue": "heal"
+    },
+    {
+      "at": 14.4,
+      "cue": "play"
+    },
+    {
+      "at": 15.4,
+      "cue": "damage"
+    },
+    {
+      "at": 17.0,
+      "cue": "trapSet"
+    },
+    {
+      "at": 18.3,
+      "cue": "trap"
+    },
+    {
+      "at": 20.0,
+      "cue": "death"
+    },
+    {
+      "at": 21.5,
+      "cue": "void"
+    },
+    {
+      "at": 23.2,
+      "cue": "discard"
+    },
+    {
+      "at": 24.8,
+      "cue": "diceRoll"
+    },
+    {
+      "at": 25.75,
+      "cue": "diceLand"
+    },
+    {
+      "at": 27.0,
+      "cue": "win"
+    }
+  ]
+}

@@ -1,17 +1,17 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {chromium} from '/tmp/lore-opening-tools/node_modules/playwright/index.mjs';
-const origin=process.env.LORE_TEST_ORIGIN||'http://localhost:5211',out=process.env.LORE_TEST_OUTPUT||'docs/ui-rework/2026-09-27-audio/checks';
+const origin=process.env.LORE_TEST_ORIGIN||'http://localhost:5211',out=process.env.LORE_TEST_OUTPUT||'docs/ui-rework/2026-09-27-audio-v4/checks';
 const browser=await chromium.launch({channel:'chrome',headless:true,args:['--disable-quic']});
 const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
 try{
  await page.route('**/audio-fixture.html',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><button id="unlock">音声テスト</button>'}));
  await page.goto(origin+'/audio-fixture.html');
- const files=JSON.parse(await fs.readFile('client/public/sfx/lore-v3/manifest.json','utf8')).sounds;
+ const files=JSON.parse(await fs.readFile('client/public/sfx/lore-v4/manifest.json','utf8')).sounds;
  const clips=await page.evaluate(async files=>{
   const decoder=new AudioContext(),report=[];window.qaClipNames=new Map();window.qaFingerprint=b=>{const x=b.getChannelData(0);let h=0;for(let i=0;i<128;i++)h=(h*31+Math.round(x[Math.floor(i*x.length/128)]*1e7))|0;return b.length+':'+h;};
   for(const [name,rows] of Object.entries(files))for(const clip of rows){
-   const r=await fetch('/sfx/lore-v3/'+clip.file);if(!r.ok)throw Error(clip.file+' unavailable');const b=await decoder.decodeAudioData(await r.arrayBuffer());
+   const r=await fetch(clip.url);if(!r.ok)throw Error(clip.file+' unavailable');const b=await decoder.decodeAudioData(await r.arrayBuffer());
    window.qaClipNames.set(window.qaFingerprint(b),name);
    const offline=new OfflineAudioContext(2,b.length,44100),source=offline.createBufferSource();source.buffer=b;source.connect(offline.destination);source.start();const pcm=await offline.startRendering();let peak=0,energy=0;for(const x of pcm.getChannelData(0)){peak=Math.max(peak,Math.abs(x));energy+=x*x;}
    report.push({name,file:clip.file,channels:b.numberOfChannels,duration:b.duration,peak,rms:Math.sqrt(energy/b.length)});

@@ -1,0 +1,550 @@
+{
+  "version": 4,
+  "sampleRate": 44100,
+  "channels": 2,
+  "preservedUiVersion": 3,
+  "sounds": {
+    "click": [
+      {
+        "file": "click-1.mp3",
+        "seconds": 0.13,
+        "peakDb": -16.02,
+        "rmsDb": -37.19,
+        "sources": [
+          "casino-audio/card-place-1.ogg"
+        ],
+        "sha256": "07f683303b5915ccc3ca981991f484618f0f432fcc9e857b657031a3f1b6c798",
+        "url": "/sfx/lore-v3/click-1.mp3"
+      },
+      {
+        "file": "click-2.mp3",
+        "seconds": 0.13,
+        "peakDb": -16.0,
+        "rmsDb": -39.72,
+        "sources": [
+          "casino-audio/card-place-2.ogg"
+        ],
+        "sha256": "dd42639f2a79b39e78ab1ffea4cb87ec75f6c8e46f1c20b2820a4e5e01e9201c",
+        "url": "/sfx/lore-v3/click-2.mp3"
+      },
+      {
+        "file": "click-3.mp3",
+        "seconds": 0.13,
+        "peakDb": -16.0,
+        "rmsDb": -39.23,
+        "sources": [
+          "casino-audio/card-place-3.ogg"
+        ],
+        "sha256": "adb0c6069f70f2e20fa6f3c3d29a9fc394aea7aabc95d64f203c75a6da4fa7d1",
+        "url": "/sfx/lore-v3/click-3.mp3"
+      }
+    ],
+    "pop": [
+      {
+        "file": "pop.mp3",
+        "seconds": 0.22,
+        "peakDb": -15.99,
+        "rmsDb": -37.95,
+        "sources": [
+          "casino-audio/card-slide-1.ogg"
+        ],
+        "sha256": "2a1d0899df83a343d64a36be7f42e8694bd68500d108d5d92ca09e4991fc6c7d",
+        "url": "/sfx/lore-v3/pop.mp3"
+      }
+    ],
+    "error": [
+      {
+        "file": "error.mp3",
+        "seconds": 0.22,
+        "peakDb": -12.0,
+        "rmsDb": -34.06,
+        "sources": [
+          "rpg-audio/bookClose.ogg"
+        ],
+        "sha256": "ef85c141ed1aaf75ea4d890aa92b1f2c18c35c801dd34fbae77f67d8b938664c",
+        "url": "/sfx/lore-v3/error.mp3"
+      }
+    ],
+    "play": [
+      {
+        "file": "play.mp3",
+        "url": "/sfx/lore-v4/play.mp3",
+        "seconds": 1.12,
+        "peakDb": -10.89,
+        "rmsDb": -26.29,
+        "sources": [
+          "jaggedstone/magical_1_0.ogg",
+          "rubberduck/book_02.ogg"
+        ],
+        "sha256": "791a20961b3033b77e0e4a803a3fed1aaec9763712ded6313f085c8ce7048c18"
+      }
+    ],
+    "summon": [
+      {
+        "file": "summon.mp3",
+        "url": "/sfx/lore-v4/summon.mp3",
+        "seconds": 1.26,
+        "peakDb": -7.34,
+        "rmsDb": -24.69,
+        "sources": [
+          "jaggedstone/magical_2.ogg",
+          "jaggedstone/magical_5.ogg",
+          "rubberduck/spell_fire_06.ogg"
+        ],
+        "sha256": "88e942db13b3e8a1aaa3f684ef8c0302cd5224ffd99b0c5545ad6709d91f0883"
+      }
+    ],
+    "attack": [
+      {
+        "file": "attack-1.mp3",
+        "url": "/sfx/lore-v4/attack-1.mp3",
+        "seconds": 0.36,
+        "peakDb": -10.0,
+        "rmsDb": -32.84,
+        "sources": [
+          "jaggedstone/magical_7_0.ogg",
+          "rubberduck/blade_01.ogg"
+        ],
+        "sha256": "89a4ce8cd13a20bbb1f664a9db749f4a33a8dbedda33f30eb3ecde36520468a7"
+      },
+      {
+        "file": "attack-2.mp3",
+        "url": "/sfx/lore-v4/attack-2.mp3",
+        "seconds": 0.36,
+        "peakDb": -10.0,
+        "rmsDb": -29.86,
+        "sources": [
+          "jaggedstone/magical_7_0.ogg",
+          "rubberduck/blade_02.ogg"
+        ],
+        "sha256": "4958198424b2628015554b0b061c6aee5961442728ad89f95b2f0b550dad97b7"
+      },
+      {
+        "file": "attack-3.mp3",
+        "url": "/sfx/lore-v4/attack-3.mp3",
+        "seconds": 0.36,
+        "peakDb": -10.0,
+        "rmsDb": -33.33,
+        "sources": [
+          "jaggedstone/magical_7_0.ogg",
+          "rubberduck/blade_03.ogg"
+        ],
+        "sha256": "d170d5877d0deade87c124d09a58d3f455062787a898f8b2f1087fa10917bff9"
+      }
+    ],
+    "impact": [
+      {
+        "file": "impact-1.mp3",
+        "url": "/sfx/lore-v4/impact-1.mp3",
+        "seconds": 0.64,
+        "peakDb": -8.0,
+        "rmsDb": -28.07,
+        "sources": [
+          "jaggedstone/magical_5.ogg",
+          "rubberduck/metal_01.ogg",
+          "rubberduck/spell_fire_06.ogg"
+        ],
+        "sha256": "0762ecc0fb221a07c65050989127b571d58610dc9faa1905fb6a761cbb0207d1"
+      },
+      {
+        "file": "impact-2.mp3",
+        "url": "/sfx/lore-v4/impact-2.mp3",
+        "seconds": 0.64,
+        "peakDb": -8.0,
+        "rmsDb": -26.79,
+        "sources": [
+          "jaggedstone/magical_5.ogg",
+          "rubberduck/metal_01.ogg",
+          "rubberduck/spell_fire_04.ogg"
+        ],
+        "sha256": "117d3fb03cb0783da2b36d0a9866f75ad3df2673730c08af3f809bd9b2f51ca1"
+      },
+      {
+        "file": "impact-3.mp3",
+        "url": "/sfx/lore-v4/impact-3.mp3",
+        "seconds": 0.64,
+        "peakDb": -8.0,
+        "rmsDb": -27.09,
+        "sources": [
+          "jaggedstone/magical_5.ogg",
+          "rubberduck/metal_01.ogg",
+          "rubberduck/spell_02.ogg"
+        ],
+        "sha256": "956dd87725d1ff287f8fb573e5b57ab720f99fc8095d124d12c187111c1598d5"
+      }
+    ],
+    "damage": [
+      {
+        "file": "damage.mp3",
+        "url": "/sfx/lore-v4/damage.mp3",
+        "seconds": 0.66,
+        "peakDb": -8.54,
+        "rmsDb": -28.75,
+        "sources": [
+          "jaggedstone/magical_5.ogg",
+          "rubberduck/metal_01.ogg",
+          "rubberduck/spell_fire_06.ogg"
+        ],
+        "sha256": "76dcbc789f8b588e04b6ad6f31957b8601bdb41e68e8bf2824ba9c6d4a7c8837"
+      }
+    ],
+    "heal": [
+      {
+        "file": "heal.mp3",
+        "url": "/sfx/lore-v4/heal.mp3",
+        "seconds": 1.85,
+        "peakDb": -13.06,
+        "rmsDb": -27.17,
+        "sources": [
+          "jaggedstone/magical_3.ogg",
+          "jaggedstone/magical_6_0.ogg"
+        ],
+        "sha256": "dd6f0b7530aa34276d512148f19f04cb264c618c3722d5aa10be182de7330493"
+      }
+    ],
+    "death": [
+      {
+        "file": "death.mp3",
+        "url": "/sfx/lore-v4/death.mp3",
+        "seconds": 1.1,
+        "peakDb": -13.24,
+        "rmsDb": -28.27,
+        "sources": [
+          "jaggedstone/magical_4.ogg",
+          "jaggedstone/magical_7_0.ogg"
+        ],
+        "sha256": "ce52182bca9fa96ba7e5c98ad1db72a8de2f379a92633bd254c16fddfa2cc251"
+      }
+    ],
+    "trapSet": [
+      {
+        "file": "trapSet.mp3",
+        "url": "/sfx/lore-v4/trapSet.mp3",
+        "seconds": 0.55,
+        "peakDb": -11.32,
+        "rmsDb": -30.3,
+        "sources": [
+          "jaggedstone/magical_4.ogg",
+          "rubberduck/chain_02.ogg"
+        ],
+        "sha256": "715c5313c25a48ec3a61b7a3b7506ade8a304d0de4813de70064ed885f0dad39"
+      }
+    ],
+    "trap": [
+      {
+        "file": "trap.mp3",
+        "url": "/sfx/lore-v4/trap.mp3",
+        "seconds": 1.18,
+        "peakDb": -12.9,
+        "rmsDb": -25.7,
+        "sources": [
+          "jaggedstone/magical_4.ogg",
+          "jaggedstone/magical_7_0.ogg",
+          "rubberduck/chain_02.ogg"
+        ],
+        "sha256": "78a196432571c56c9dc6543dc3c6e473b314885ff81fb6ed8d6bfb17f7bca270"
+      }
+    ],
+    "draw": [
+      {
+        "file": "draw-1.mp3",
+        "url": "/sfx/lore-v4/draw-1.mp3",
+        "seconds": 0.25,
+        "peakDb": -19.7,
+        "rmsDb": -40.45,
+        "sources": [
+          "kenney/casino-audio/card-slide-2.ogg"
+        ],
+        "sha256": "7df2bd8907703d443858f4508cf5121af5ed60aa19fc634ec6b2ba8ca2a47f34"
+      },
+      {
+        "file": "draw-2.mp3",
+        "url": "/sfx/lore-v4/draw-2.mp3",
+        "seconds": 0.25,
+        "peakDb": -16.62,
+        "rmsDb": -40.26,
+        "sources": [
+          "kenney/casino-audio/card-slide-3.ogg"
+        ],
+        "sha256": "9b350cfd4350b7749025dfb05e912c23be340e257bc9caff099b8a9562120f7e"
+      },
+      {
+        "file": "draw-3.mp3",
+        "url": "/sfx/lore-v4/draw-3.mp3",
+        "seconds": 0.25,
+        "peakDb": -15.0,
+        "rmsDb": -39.71,
+        "sources": [
+          "kenney/casino-audio/card-slide-4.ogg"
+        ],
+        "sha256": "7b76afc4859cdef231025e8da3949d55a7ad3360a2d956875ea80f2aa9f60b05"
+      }
+    ],
+    "buy": [
+      {
+        "file": "buy.mp3",
+        "url": "/sfx/lore-v4/buy.mp3",
+        "seconds": 0.72,
+        "peakDb": -12.0,
+        "rmsDb": -37.55,
+        "sources": [
+          "jaggedstone/magical_3.ogg",
+          "rubberduck/item_coins_02.ogg"
+        ],
+        "sha256": "a995b5936355723735e13d71500519a4c3c5ce7cf20bc76c2e05e917513beeec"
+      }
+    ],
+    "mana": [
+      {
+        "file": "mana.mp3",
+        "url": "/sfx/lore-v4/mana.mp3",
+        "seconds": 1.48,
+        "peakDb": -9.55,
+        "rmsDb": -24.03,
+        "sources": [
+          "jaggedstone/magical_3.ogg",
+          "jaggedstone/magical_6_0.ogg",
+          "rubberduck/item_gem_01.ogg"
+        ],
+        "sha256": "14f8cad80083c93adecbe2cb4779e3022dcdb00d58eec639e3aef6828488eff8"
+      }
+    ],
+    "turn": [
+      {
+        "file": "turn.mp3",
+        "url": "/sfx/lore-v4/turn.mp3",
+        "seconds": 0.85,
+        "peakDb": -13.25,
+        "rmsDb": -27.69,
+        "sources": [
+          "jaggedstone/magical_1_0.ogg",
+          "jaggedstone/magical_3.ogg"
+        ],
+        "sha256": "69892e6d0164b2bb7629ece9094fe717f9489b0910fe56b78e512d8efaca2bb0"
+      }
+    ],
+    "win": [
+      {
+        "file": "win.mp3",
+        "url": "/sfx/lore-v4/win.mp3",
+        "seconds": 2.75,
+        "peakDb": -9.53,
+        "rmsDb": -25.76,
+        "sources": [
+          "jaggedstone/magical_3.ogg",
+          "jaggedstone/magical_6_0.ogg"
+        ],
+        "sha256": "a9b276deee3a49276eee5fe817375005cb0dc00e54a4ed4074c1a30a78779358"
+      }
+    ],
+    "lose": [
+      {
+        "file": "lose.mp3",
+        "url": "/sfx/lore-v4/lose.mp3",
+        "seconds": 2.25,
+        "peakDb": -14.21,
+        "rmsDb": -28.34,
+        "sources": [
+          "jaggedstone/magical_4.ogg",
+          "jaggedstone/magical_7_0.ogg"
+        ],
+        "sha256": "835ca8864978ade6b9d1a0a717aa89c4391a864e67ac894684d5bfb14aa0a991"
+      }
+    ],
+    "drawGame": [
+      {
+        "file": "drawGame.mp3",
+        "url": "/sfx/lore-v4/drawGame.mp3",
+        "seconds": 2.0,
+        "peakDb": -12.92,
+        "rmsDb": -27.93,
+        "sources": [
+          "jaggedstone/magical_1_0.ogg",
+          "jaggedstone/magical_6_0.ogg"
+        ],
+        "sha256": "4d57b0bfa63f17f5f60a4fccb8d1cc9b27a9c8fd413819ce358db6ba0cc5dd82"
+      }
+    ],
+    "match": [
+      {
+        "file": "match.mp3",
+        "url": "/sfx/lore-v4/match.mp3",
+        "seconds": 1.3,
+        "peakDb": -9.67,
+        "rmsDb": -25.44,
+        "sources": [
+          "jaggedstone/magical_1_0.ogg",
+          "jaggedstone/magical_3.ogg"
+        ],
+        "sha256": "ef16d12aca0f83a819e21930a5f708c4b0f6be035599c00a60973593930bf878"
+      }
+    ],
+    "coin": [
+      {
+        "file": "coin.mp3",
+        "url": "/sfx/lore-v4/coin.mp3",
+        "seconds": 0.48,
+        "peakDb": -12.0,
+        "rmsDb": -39.66,
+        "sources": [
+          "rubberduck/item_coins_01.ogg"
+        ],
+        "sha256": "1c68676856e96bca4ad8010d39a45e332a4da8e42842e742baa952a08151932b"
+      }
+    ],
+    "facehit": [
+      {
+        "file": "facehit.mp3",
+        "url": "/sfx/lore-v4/facehit.mp3",
+        "seconds": 0.85,
+        "peakDb": -6.29,
+        "rmsDb": -25.33,
+        "sources": [
+          "jaggedstone/magical_4.ogg",
+          "jaggedstone/magical_5.ogg",
+          "rubberduck/metal_01.ogg",
+          "rubberduck/spell_fire_06.ogg"
+        ],
+        "sha256": "dd6e5c95ee9e1f7cd5fdc355302a303e91d9cd7fa6d18aa1ae411e28ec5f876a"
+      }
+    ],
+    "mimic": [
+      {
+        "file": "mimic.mp3",
+        "url": "/sfx/lore-v4/mimic.mp3",
+        "seconds": 1.3,
+        "peakDb": -12.23,
+        "rmsDb": -26.07,
+        "sources": [
+          "jaggedstone/magical_4.ogg",
+          "jaggedstone/magical_7_0.ogg",
+          "rubberduck/chain_02.ogg"
+        ],
+        "sha256": "2812ac022c89e63119ebffb7e0eb196e3636b0822f509ac65e40e54c17379645"
+      }
+    ],
+    "mana-pay": [
+      {
+        "file": "mana-pay.mp3",
+        "url": "/sfx/lore-v4/mana-pay.mp3",
+        "seconds": 0.55,
+        "peakDb": -15.62,
+        "rmsDb": -31.03,
+        "sources": [
+          "jaggedstone/magical_3.ogg",
+          "rubberduck/item_gem_01.ogg"
+        ],
+        "sha256": "cd2155620f8ffd012ef6700c8506c2459ee6e5e1a0e931defd80eb1de99fa1a3"
+      }
+    ],
+    "void": [
+      {
+        "file": "void.mp3",
+        "url": "/sfx/lore-v4/void.mp3",
+        "seconds": 1.22,
+        "peakDb": -13.25,
+        "rmsDb": -28.72,
+        "sources": [
+          "jaggedstone/magical_4.ogg",
+          "jaggedstone/magical_7_0.ogg",
+          "rubberduck/book_03.ogg"
+        ],
+        "sha256": "c8ecefc911ef949d43343f071cd5fc84de701dcb2ce1ecc725addfab4f68c2ba"
+      }
+    ],
+    "shuffle": [
+      {
+        "file": "shuffle.mp3",
+        "url": "/sfx/lore-v4/shuffle.mp3",
+        "seconds": 0.8,
+        "peakDb": -14.0,
+        "rmsDb": -42.68,
+        "sources": [
+          "kenney/casino-audio/card-shuffle.ogg"
+        ],
+        "sha256": "a1fc8cff1012794662312c988407e2cc1fdb95f2723dd107823af2be2a8254a1"
+      }
+    ],
+    "duel-start": [
+      {
+        "file": "duel-start.mp3",
+        "url": "/sfx/lore-v4/duel-start.mp3",
+        "seconds": 1.65,
+        "peakDb": -9.86,
+        "rmsDb": -26.46,
+        "sources": [
+          "jaggedstone/magical_1_0.ogg",
+          "jaggedstone/magical_3.ogg",
+          "rubberduck/spell_fire_06.ogg"
+        ],
+        "sha256": "e036516dabff573ca13e81c9d1f151b4e572c56e74369833849b9db4ff4b2062"
+      }
+    ],
+    "discard": [
+      {
+        "file": "discard.mp3",
+        "url": "/sfx/lore-v4/discard.mp3",
+        "seconds": 0.49,
+        "peakDb": -13.0,
+        "rmsDb": -39.04,
+        "sources": [
+          "kenney/casino-audio/card-slide-5.ogg",
+          "rubberduck/book_01.ogg"
+        ],
+        "sha256": "5374c7345af4a776531f71387d808e0ad37b683f7985a2fb76d45d6072ab8ef5"
+      }
+    ],
+    "coinToss": [
+      {
+        "file": "coinToss.mp3",
+        "url": "/sfx/lore-v4/coinToss.mp3",
+        "seconds": 0.32,
+        "peakDb": -13.0,
+        "rmsDb": -34.85,
+        "sources": [
+          "rubberduck/item_coins_03.ogg"
+        ],
+        "sha256": "fd5a9fcc079f64bd5d580eeaa107dc911d53a55963d41701ceec29eafa6f0591"
+      }
+    ],
+    "coinLand": [
+      {
+        "file": "coinLand.mp3",
+        "url": "/sfx/lore-v4/coinLand.mp3",
+        "seconds": 0.42,
+        "peakDb": -10.0,
+        "rmsDb": -36.11,
+        "sources": [
+          "rubberduck/item_coins_01.ogg"
+        ],
+        "sha256": "151ba60e14c1c94228794ceb51f81185c7704832d54ea296fa4095a390f60a53"
+      }
+    ],
+    "diceRoll": [
+      {
+        "file": "diceRoll.mp3",
+        "url": "/sfx/lore-v4/diceRoll.mp3",
+        "seconds": 1.08,
+        "peakDb": -12.0,
+        "rmsDb": -42.47,
+        "sources": [
+          "kenney/casino-audio/dice-throw-2.ogg"
+        ],
+        "sha256": "7006253d46ada8012df63bd01041d4b443e6ace6a6c8d01516edf7dbb006d723"
+      }
+    ],
+    "diceLand": [
+      {
+        "file": "diceLand.mp3",
+        "url": "/sfx/lore-v4/diceLand.mp3",
+        "seconds": 0.28,
+        "peakDb": -11.0,
+        "rmsDb": -40.39,
+        "sources": [
+          "kenney/casino-audio/chip-lay-2.ogg"
+        ],
+        "sha256": "5eb66364c7386a168b6114fa7beb96021de52413c128bce0dc47adb58e1a0b8c"
+      }
+    ]
+  }
+}
