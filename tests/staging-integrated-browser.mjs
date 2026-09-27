@@ -3,10 +3,11 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
-const origin='https://test.yourlore.xyz',out='docs/releases/2026-09-27-integrated';
+const origin='https://test.yourlore.xyz',out=process.env.LORE_TEST_OUTPUT||'docs/releases/2026-09-27-integrated';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const paths=['/index.html','/art/lounge/stage-v1/stage.png','/art/lounge/stage-v1/sigil.png'];
 for(const f of await fs.readdir('client/dist/assets'))if(/\.(js|css)$/.test(f))paths.push('/assets/'+f);
+for(const name of ['log','sound','help','surrender'])paths.push('/ui/duel-controls/v1/'+name+'.png');
 for(const dir of ['sfx/lore-v2','sfx/opening-v1'])for(const f of await fs.readdir('client/dist/'+dir))if(f.endsWith('.mp3'))paths.push('/'+dir+'/'+f);
 const assets=[];
 for(const path of paths){const r=await fetch(origin+path);assert.equal(r.status,200,path);const remote=Buffer.from(await r.arrayBuffer()),local=await fs.readFile('client/dist'+path);assert.equal(hash(remote),hash(local),path);assets.push({path,bytes:local.length,sha256:hash(local)});}
@@ -25,6 +26,7 @@ try{
  assert.equal(await page.locator('.game').evaluate(e=>e.inert),false);
  assert(await page.locator('#hand .card').count()>=3);assert.equal(await page.locator('.native-draw-layer').count(),0);
  await page.screenshot({path:out+'/staging-bot.png'});
+ for(const id of ['logTab','muteBtn','helpBtn','giveupBtn']){assert.equal(await page.locator('#'+id+' img').evaluate(e=>e.complete&&e.naturalWidth===256),true);assert.equal(await page.locator('#'+id).evaluate(e=>getComputedStyle(e).backgroundImage),'none');}
  assert.deepEqual(errors,[]);assert.deepEqual(failed,[]);
  const report={origin,assets,anonymousLiveLogin:true,deployedBotOpening:true,botAuthApiFixture:true,authenticatedOnlineMatch:false,errors,failed};
  await fs.writeFile(out+'/staging-verification.json',JSON.stringify(report,null,2)+'\n');console.log('PASS:',assets.length,'deployed asset hashes, live anonymous login, built BOT opening and input restoration (fixture login/API)');

@@ -49,7 +49,7 @@ try{
   assert(log.indexOf('generated:2')<log.indexOf('finish'));
   assert(log.indexOf('render')<log.indexOf('finish'));
  }
- {const g=fresh();g.market[0]=card('QUICK_ATTUNE');const log=await play(controller(),g,reduce(g,{type:'buyMarket',i:0}));assert(log.indexOf('manaSurge')<log.indexOf('finish'));assert(log.indexOf('maxHpSurge')<log.indexOf('finish'));}
+ {const g=fresh();g.market[0]=card('QUICK_ATTUNE');const log=await play(controller(),g,reduce(g,{type:'buyMarket',i:0}));assert(log.indexOf('render')<log.indexOf('manaSurge'),'crystal state must render before the shared gain clock starts');assert(log.indexOf('manaSurge')<log.indexOf('finish'));assert(log.indexOf('maxHpSurge')<log.indexOf('finish'));}
  {const g=fresh();g.market[0]=card('QUICK_ATTUNE');const c=controller();let release;pendingMana=new Promise(r=>release=r);trace.length=0;
   const playing=c.playEvents(g,reduce(g,{type:'buyMarket',i:0}));for(let i=0;i<30;i++)await Promise.resolve();
   assert(trace.includes('manaSurge'));assert(!trace.includes('finish'),'source must await actual effect completion');release();await playing;pendingMana=null;assert(trace.includes('finish'));

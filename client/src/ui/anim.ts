@@ -1,3 +1,4 @@
+import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
 import type {HandLayout} from './handGeometry';
 import {mountDuelOutcome,OUTCOME_DURATION} from './duelOutcome';
 import {reserveMonster} from './fieldLayout';
@@ -814,11 +815,38 @@ function gainLabel(anchor: DOMRect, text: string, cls: string): HTMLElement {
   return lb;
 }
 
-/** A 1.4s refractive sweep anchored to the actual crystal tray. */
+/** One shared impact: readout, added crystals, refraction and sound land together. */
 export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
-  if(amount<=0||fxSkip)return;
-  playBiblionFx('mana',()=>{const cluster=document.getElementById('hpbar-'+side)?.closest('.pcluster');return (cluster?.querySelector('.mana-crystals')||cluster?.querySelector('.pt-mana')||cluster?.querySelector('.pips'))?.getBoundingClientRect()??null;});
-  await wait(1400);
+  if(amount<=0||fxSkip||document.hidden)return;
+  const cluster=document.getElementById('hpbar-'+side)?.closest('.pcluster');
+  const el=cluster?.querySelector<HTMLElement>('.pt-mana');if(!el)return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){sfx('mana');return;}
+  const start=performance.now(),fromMax=Number(el.dataset.previousMaximum??el.dataset.maximum),fromMana=Number(el.dataset.previousMana??el.dataset.mana);
+  const maximum=Number(el.dataset.maximum),current=Number(el.dataset.mana);
+  el.dataset.gainStart=String(start);el.dataset.gainFromMax=String(fromMax);el.dataset.gainFromMana=String(fromMana);
+  const stop=playBiblionFx('mana',()=>el.isConnected?el.getBoundingClientRect():null,undefined,start);
+  const readout=el.querySelector<HTMLElement>('.mana-readout b'),max=el.querySelector<HTMLElement>('.pt-mana-max');
+  const crystals=[...el.querySelectorAll<HTMLElement>('.mana-crystal')];let sounded=false,frame=0;
+  const label=document.createElement('span');label.className='mana-gain-label';label.textContent=`+${amount}`;label.setAttribute('aria-hidden','true');el.append(label);
+  await new Promise<void>(resolve=>{
+    let done=false;
+    const finish=()=>{if(done)return;done=true;cancelAnimationFrame(frame);stop();fxWaiters.delete(finish);document.removeEventListener('visibilitychange',finish);
+      if(readout)readout.textContent=String(current);if(max)max.textContent='/'+maximum;
+      crystals.forEach(c=>{c.style.removeProperty('opacity');c.style.removeProperty('transform');});
+      label.remove();delete el.dataset.gainStart;delete el.dataset.gainPhase;el.style.removeProperty('--mana-bloom');resolve();};
+    fxWaiters.add(finish);document.addEventListener('visibilitychange',finish,{once:true});
+    const tick=()=>{
+      const age=performance.now()-start;if(fxSkip||document.hidden||!el.isConnected||age>=MANA_GAIN_MS){finish();return;}
+      const impact=age>=MANA_GAIN_IMPACT_MS;el.dataset.gainPhase=impact?'bloom':'gather';
+      if(readout)readout.textContent=String(impact?current:fromMana);if(max)max.textContent='/'+(impact?maximum:fromMax);
+      if(impact&&!sounded){sounded=true;sfx('mana');}
+      const pose=manaGainPose(age);el.style.setProperty('--mana-bloom',String(pose.glow));
+      label.style.opacity=String(impact?Math.min(1,(age-MANA_GAIN_IMPACT_MS)/90)*(1-Math.max(0,(age-1050)/450)):0);
+      label.style.transform=`translate(-50%,${-Math.max(0,age-MANA_GAIN_IMPACT_MS)/90}px)`;
+      crystals.forEach((c,i)=>{if(i<fromMax)return;const p=manaGainPose(age,i-fromMax,maximum-fromMax);c.style.opacity=p.visible?'1':'0';c.style.transform=`scale(${p.scale})`;});
+      frame=requestAnimationFrame(tick);
+    };tick();
+  });
 }
 
 /** Rich "max HP increased" celebration around the HP bar (~2s). */

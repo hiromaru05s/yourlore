@@ -1,0 +1,54 @@
+{
+  "generator": "built-in image_gen",
+  "packaging": "Original alpha PNG retained; runtime PNG resized to 256 px with sips",
+  "assets": [
+    {
+      "file": "client/public/ui/duel-controls/v1/help.png",
+      "width": 256,
+      "height": 256,
+      "alpha": true,
+      "sha256": "a7e77a6b44b5b022507043042b48599cbf2b4a6587abc7faa931c110c3050cb4",
+      "bytes": 114712,
+      "sourceFile": "docs/ui-rework/2026-09-27-rift-mana-controls/generated/help.png",
+      "sourceWidth": 1254,
+      "sourceHeight": 1254,
+      "sourceSha256": "be3552f0e3b388681d282fdadb3b6ecf5727639988b7d652ca233c42d4179cd3"
+    },
+    {
+      "file": "client/public/ui/duel-controls/v1/log.png",
+      "width": 256,
+      "height": 256,
+      "alpha": true,
+      "sha256": "118fee086fd7b1ea8199c20fab403c7b2e85d1ae2ec90d5286ae544b005ad0be",
+      "bytes": 97563,
+      "sourceFile": "docs/ui-rework/2026-09-27-rift-mana-controls/generated/log.png",
+      "sourceWidth": 1254,
+      "sourceHeight": 1254,
+      "sourceSha256": "6e9d7c8d91e226f71123cbee5a4a962f6fe28cf77d7bd42fa82099743cc39652"
+    },
+    {
+      "file": "client/public/ui/duel-controls/v1/sound.png",
+      "width": 256,
+      "height": 256,
+      "alpha": true,
+      "sha256": "d18613216c8ca36c97fbe55de37f24bf3a78487b5de121f92664dac9b52a0244",
+      "bytes": 96043,
+      "sourceFile": "docs/ui-rework/2026-09-27-rift-mana-controls/generated/sound.png",
+      "sourceWidth": 1254,
+      "sourceHeight": 1254,
+      "sourceSha256": "6ab680a6ef364ce0ccd97c5c2a3f108b9a6f0b75086aea3d1bb179b8fc040a44"
+    },
+    {
+      "file": "client/public/ui/duel-controls/v1/surrender.png",
+      "width": 256,
+      "height": 256,
+      "alpha": true,
+      "sha256": "0fc53019f94f6a19d1b430ca467c40da0506602ccfec1e03190935970e98cdd5",
+      "bytes": 104041,
+      "sourceFile": "docs/ui-rework/2026-09-27-rift-mana-controls/generated/surrender.png",
+      "sourceWidth": 1254,
+      "sourceHeight": 1254,
+      "sourceSha256": "4371958e8553404200d13f69daeb3337de1967c5e7d4b673ad06ae5315330f4a"
+    }
+  ]
+}

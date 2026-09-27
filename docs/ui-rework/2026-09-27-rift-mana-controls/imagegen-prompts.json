@@ -1,0 +1,25 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "name": "log",
+      "prompt": "Use case: stylized-concept. Asset type: production game UI button sprite for LORE, the Biblion magic library card game. Generate ONE finished square button, front-on orthographic, centered, occupying 88% of the canvas, on genuinely transparent background. The entire button is a compact rounded-square dark midnight blue enamel and ink-wood inset plaque, thin warm ivory silver bevel and very restrained aged champagne brass corner notches. Premium hand-painted game prop, subtle believable shallow relief, matte, crisp simple silhouette readable at 32 pixels. A single large engraved pale ivory icon in its center. Quiet and refined, matching a blue-black wooden duel table with white silver inlays. No glow cloud, no particles, no gems, no ornate wings, no text, no letters, no watermark, no surrounding scene. Icon: an open ledger with three short engraved record lines, recognizable duel log",
+      "output": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-c1ed26d9-82da-4067-9d95-6b5ce09e3b07.png"
+    },
+    {
+      "name": "sound",
+      "prompt": "Use case: stylized-concept. Asset type: production game UI button sprite for LORE, the Biblion magic library card game. Generate ONE finished square button, front-on orthographic, centered, occupying 88% of the canvas, on genuinely transparent background. The entire button is a compact rounded-square dark midnight blue enamel and ink-wood inset plaque, thin warm ivory silver bevel and very restrained aged champagne brass corner notches. Premium hand-painted game prop, subtle believable shallow relief, matte, crisp simple silhouette readable at 32 pixels. A single large engraved pale ivory icon in its center. Quiet and refined, matching a blue-black wooden duel table with white silver inlays. No glow cloud, no particles, no gems, no ornate wings, no text, no letters, no watermark, no surrounding scene. Icon: a small acoustic bell with two restrained soundwave arcs, recognizable sound settings",
+      "output": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-832a6151-2a29-4bec-b2d8-d64396352086.png"
+    },
+    {
+      "name": "help",
+      "prompt": "Use case: stylized-concept. Asset type: production game UI button sprite for LORE, the Biblion magic library card game. Generate ONE finished square button, front-on orthographic, centered, occupying 88% of the canvas, on genuinely transparent background. The entire button is a compact rounded-square dark midnight blue enamel and ink-wood inset plaque, thin warm ivory silver bevel and very restrained aged champagne brass corner notches. Premium hand-painted game prop, subtle believable shallow relief, matte, crisp simple silhouette readable at 32 pixels. A single large engraved pale ivory icon in its center. Quiet and refined, matching a blue-black wooden duel table with white silver inlays. No glow cloud, no particles, no gems, no ornate wings, no text, no letters, no watermark, no surrounding scene. Icon: an open instruction book with a small four-point compass star above its spine, recognizable controls guide",
+      "output": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-6f06d305-396c-49ea-a50f-54d4c6d8e015.png"
+    },
+    {
+      "name": "surrender",
+      "prompt": "Use case: stylized-concept. Asset type: production game UI button sprite for LORE, the Biblion magic library card game. Generate ONE finished square button, front-on orthographic, centered, occupying 88% of the canvas, on genuinely transparent background. The entire button is a compact rounded-square dark midnight blue enamel and ink-wood inset plaque, thin warm ivory silver bevel and very restrained aged champagne brass corner notches. Premium hand-painted game prop, subtle believable shallow relief, matte, crisp simple silhouette readable at 32 pixels. A single large engraved pale ivory icon in its center. Quiet and refined, matching a blue-black wooden duel table with white silver inlays. No glow cloud, no particles, no gems, no ornate wings, no text, no letters, no watermark, no surrounding scene. Icon: a lowered plain cloth pennant on a short staff, recognizable surrender flag; subdued ivory, no red danger color",
+      "output": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-b36f9e01-d175-4078-acc4-362ae0704421.png"
+    }
+  ]
+}

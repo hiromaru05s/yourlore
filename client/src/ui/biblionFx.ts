@@ -1,3 +1,4 @@
+import {MANA_GAIN_MS} from './manaGainTiming';
 import {drawManaGain} from './manaGain';
 import {drawAttackVisual,ATTACK_DURATION_MS} from './attackVisual';
 import {projectedPlacement} from './boardProjection';
@@ -6,7 +7,7 @@ import {drawToonPlay,TOON_PLAY_DURATION,disposeToonPlayVisual} from './toonPlayV
 /** Target-local Biblion VFX. All geometry is procedural; no labels or stat changes. */
 export type BiblionEffect = 'mana' | 'attack' | 'purchase' | 'heal' | 'spell' | 'summon-charge' | 'summon-impact' | 'quest' | 'quick' | 'enchant' | 'enchant-place';
 export type FxRect = Pick<DOMRect, 'left' | 'top' | 'width' | 'height'>;
-export const EFFECT_DURATION: Record<BiblionEffect, number> = {attack:ATTACK_DURATION_MS/1000,purchase:MANA_PURCHASE_DURATION,mana:1.4,heal:1.65,enchant:1.4,...TOON_PLAY_DURATION};
+export const EFFECT_DURATION: Record<BiblionEffect, number> = {attack:ATTACK_DURATION_MS/1000,purchase:MANA_PURCHASE_DURATION,mana:MANA_GAIN_MS/1000,heal:1.65,enchant:1.4,...TOON_PLAY_DURATION};
 const TAU=Math.PI*2;
 const clamp=(x:number)=>Math.max(0,Math.min(1,x));
 const smooth=(x:number)=>{x=clamp(x);return x*x*(3-2*x);};

@@ -63,7 +63,6 @@ export abstract class BaseController implements BoardHandlers {
   private timerInt: number | null = null;
   private warned25 = false;
   private toastEl: HTMLElement | null = null;
-  private prevMaxMana = 0;
   // bot/tutorial (and casual online fallback) use a 90s turn; online games get the
   // authoritative length from the server via g.turnTotalMs (ranked 50s / casual 90s).
   private static readonly LOCAL_TURN_SECS = 90;
@@ -443,14 +442,15 @@ export abstract class BaseController implements BoardHandlers {
     }
 
     // ---- state-diff celebrations: max mana / max HP gains ----
-    // Fire-and-forget: the surge plays OVER the re-rendered board, so the
-    // numbers/pips update immediately instead of waiting out the celebration.
+    // Render authoritative targets first, then start the shared visual clock.
+    // Only presentation waits; resource values in game state are already final.
     const effectFinishes:Promise<void>[]=[];
+    const manaGains:Array<{side:A.ViewSide;amount:number}>=[];
     for (const pl of [0, 1] as Side[]) {
       if (this.dead) return;
       const dMana = res.state.players[pl].maxMana - prev.players[pl].maxMana;
       const dHp = res.state.players[pl].maxHp - prev.players[pl].maxHp;
-      if (dMana > 0) effectFinishes.push(A.manaSurge(sideOf(pl), dMana));
+      if (dMana > 0) manaGains.push({side:sideOf(pl),amount:dMana});
       else if (dMana < 0) A.manaDrop(sideOf(pl), -dMana);
       if (dHp > 0) { effectFinishes.push(A.maxHpSurge(sideOf(pl), dHp)); sfx("maxhp"); }
     }
@@ -468,6 +468,7 @@ export abstract class BaseController implements BoardHandlers {
     const handLayouts=[draws[this.you]>0?captureHandLayout(document.getElementById('hand')):undefined,
       draws[1-this.you]>0?captureHandLayout(document.getElementById('oppHand')):undefined];
     this.view.render(res.state);
+    for(const gain of manaGains)effectFinishes.push(A.manaSurge(gain.side,gain.amount));
     // ghosts overlap the freshly-rendered real cards — drop them next frame
     requestAnimationFrame(() => {ghosts.forEach((g) => g.el.remove());spellGhosts.forEach(g=>g.remove());});
     await Promise.all(([0, 1] as Side[]).map(player => draws[player] > 0
@@ -482,6 +483,8 @@ export abstract class BaseController implements BoardHandlers {
       const finished=this.quickFaces.splice(0);
       await Promise.all(finished.map(x=>A.finishQuickSpell(x.node,x.side)));
     }
+
+    await Promise.all(effectFinishes);
 
     // ---- death sequence: HP orb shatters + cause of death, before the result modal ----
     if (res.state.over && res.state.winner != null && !this.winShown) {
@@ -557,10 +560,6 @@ export abstract class BaseController implements BoardHandlers {
     }
     if(this.openingActive&&!this.state.over)return;
     this.syncTimer();
-    // max-mana growth cue (mid-turn gains too)
-    const mm = this.state?.players?.[this.you]?.maxMana ?? 0;
-    if (this.prevMaxMana && mm > this.prevMaxMana) sfx("mana");
-    this.prevMaxMana = mm;
     if (res.state !== this.state) return; // a newer batch is queued — let it drive follow-ups
     const g = this.state;
     if (g.over) { this.showWin(); return; }

@@ -107,10 +107,10 @@ export class GameView {
         <div class="topbar">
           <div class="brand"><div class="mark"></div><h1>LORE</h1></div>
           <div class="turn-info" id="turnInfo"></div>
-          <button class="btn btn-danger giveup-btn" id="giveupBtn"><svg class="gv-flag" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M6 2a1 1 0 0 1 1 1v.6h10.3a.7.7 0 0 1 .58 1.1L16.4 8l1.48 3.3a.7.7 0 0 1-.58 1.1H7V21a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1z"/></svg><span class="gv-label">${t("game.surrender")}</span></button>
+          <button class="giveup-btn utility-control" id="giveupBtn" title="${t("game.surrender")}" aria-label="${t("game.surrender")}"><img src="/ui/duel-controls/v1/surrender.png" alt="" draggable="false"><span class="gv-label">${t("game.surrender")}</span></button>
         </div>
-        <button class="mute-fab" id="muteBtn" title="${t("game.mute")}" aria-label="${t("game.mute")}"></button>
-        <button class="help-fab" id="helpBtn" title="${t("help.title")}" aria-label="${t("help.title")}"><span class="hf-ico">?</span><span class="hf-label">${t("help.open")}</span></button>
+        <button class="mute-fab utility-control" id="muteBtn" title="${t("game.mute")}" aria-label="${t("game.mute")}"></button>
+        <button class="help-fab utility-control" id="helpBtn" title="${t("help.title")}" aria-label="${t("help.title")}"><img src="/ui/duel-controls/v1/help.png" alt="" draggable="false"><span class="hf-label">${t("help.open")}</span></button>
         <div class="stage">
           <div class="board-col">
             <div class="pcluster pcluster--opp">
@@ -142,7 +142,7 @@ export class GameView {
              The backdrop guarantees a tap anywhere outside the drawer closes it,
              whatever is (or isn't) under the finger. -->
         <div class="log-backdrop" id="logBackdrop"></div>
-        <button class="log-tab" id="logTab" aria-label="log">${t("game.log")}</button>
+        <button class="log-tab utility-control" id="logTab" title="${t("game.log")}" aria-label="${t("game.log")}"><img src="/ui/duel-controls/v1/log.png" alt="" draggable="false"><span class="log-label">${t("game.log")}</span></button>
         <div class="panel logpanel" id="logPanel">
           <div class="panel-title" id="logTitle">${t("game.log")}</div>
           <div class="log" id="log"></div>
@@ -179,10 +179,8 @@ export class GameView {
     }
     helpBtn.onclick = () => { dismissCallout(true); showControlsHelp(); };
     const muteBtn = this.q("muteBtn") as HTMLButtonElement;
-    const SPK_ON = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.6a4 4 0 010 6.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
-    const SPK_OFF = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
     let lastVol = getSfxVolume() || 0.7;
-    const paintMute = () => { const m = getSfxVolume() <= 0; muteBtn.innerHTML = m ? SPK_OFF : SPK_ON; muteBtn.classList.toggle("muted", m); };
+    const paintMute = () => { const m = getSfxVolume() <= 0; muteBtn.innerHTML = `<img src="/ui/duel-controls/v1/sound.png" alt="" draggable="false"><span class="sound-label">${t("settings.sound")}</span><i class="mute-mark" aria-hidden="true">×</i>`; muteBtn.classList.toggle("muted", m);muteBtn.setAttribute('aria-label',t('settings.sound.volume'));muteBtn.title=t('settings.sound.volume'); };
     const volPop = document.createElement("div");
     volPop.className = "vol-pop";
     volPop.innerHTML = `<input type="range" min="0" max="100" step="5" aria-label="volume">`;
@@ -216,6 +214,7 @@ export class GameView {
     const applyLog = () => {
       gameEl.classList.toggle("log-open", logOpen);
       this.q("logTab").classList.toggle("on", logOpen);
+      this.q("logTab").setAttribute("aria-expanded",String(logOpen));
     };
     const setLog = (open: boolean) => {
       if (logOpen === open) return;
@@ -374,7 +373,9 @@ export class GameView {
     this.q("endBtn").innerHTML = `<span class="end-turn-label">${this.root.dataset.readingTurn==='player' ? "END\nTURN" : "ENEMY\nTURN"}</span>`;
     const gvl = this.q("giveupBtn").querySelector(".gv-label"); if (gvl) gvl.textContent = t("game.surrender");
     this.q("logTitle").textContent = t("game.log");
-    this.q("logTab").textContent = t("game.log");
+    for(const [id,key] of [['logTab','game.log'],['giveupBtn','game.surrender'],['helpBtn','help.open'],['muteBtn','settings.sound']] as const){
+      const button=this.q(id);const label=button.querySelector('span');if(label)label.textContent=t(key);button.setAttribute('aria-label',t(key));button.setAttribute('title',t(key));
+    }
 
     // Hearthstone-style center portraits (opp top / me bottom)
     this.renderPortrait(this.q("portraitOpp"), opp, false);
@@ -954,15 +955,16 @@ export class GameView {
     const emax = effMaxMana(p);
     const hp = Math.max(0, p.hp);
     const hpPct = hp / p.maxHp * 100;
-    const previousMax=el.querySelectorAll(".mana-crystal").length;
-    const crystals = Array.from({ length: Math.min(MAX_MANA, Math.max(0, emax)) }, (_, i) => `<i class="mana-crystal${i < p.mana ? " is-lit" : ""}${previousMax>0&&i>=previousMax?" is-gained":""}" aria-hidden="true"></i>`).join("");
+    const oldMana=el.querySelector<HTMLElement>('.pt-mana');
+    const previousMax=Number(oldMana?.dataset.maximum??emax),previousMana=Number(oldMana?.dataset.mana??p.mana);
+    const crystals = Array.from({ length: Math.min(MAX_MANA, Math.max(0, emax)) }, (_, i) => `<i class="mana-crystal${i < p.mana ? " is-lit" : ""}" aria-hidden="true"></i>`).join("");
     const avatar = isMe ? MY_AVATAR : OPP_AVATAR;
     const seeker = avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE" ? avatar : isMe ? "SEEKER_BLUE" : "SEEKER_RED";
     el.innerHTML = `
       <span class="pt-vitals"><span class="pt-hp" title="HP ${hp}/${p.maxHp}"><span class="pt-hp-ico">HP</span><b id="hp-${sd}">${hp}</b><span class="pt-hp-max">/${p.maxHp}</span></span>
       <span class="pt-hpbar hpbar" id="hpbar-${sd}" role="meter" aria-label="HP" aria-valuemin="0" aria-valuemax="${p.maxHp}" aria-valuenow="${hp}"><i style="width:${Math.min(100, hpPct)}%"></i></span></span>
       <span class="pt-ring">${avatarHtml(seeker, p.name, 100)}</span>
-      <span class="pt-mana pips" data-mana="${p.mana}" data-maximum="${emax}" aria-label="${t("game.mana")} ${p.mana}/${emax}"><span class="mana-readout"><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span><span class="mana-crystals" style="--mana-rows:${Math.max(1,Math.ceil(Math.min(MAX_MANA,emax)/10))}">${crystals}</span></span>
+      <span class="pt-mana pips" data-mana="${p.mana}" data-maximum="${emax}" data-previous-maximum="${previousMax}" data-previous-mana="${previousMana}" aria-label="${t("game.mana")} ${p.mana}/${emax}"><span class="mana-readout"><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span><span class="mana-crystals" style="--mana-rows:${Math.max(1,Math.ceil(Math.min(MAX_MANA,emax)/10))}">${crystals}</span></span>
       ${(p.brand ?? 0) > 0 ? `<span class="pt-brand" title="${esc(t("game.brandTip").replace("{n}", String(p.brand)))}">${t("game.brand")} <b>${p.brand}</b></span>` : ""}
       <span class="pt-name">${esc(p.name)}</span>`;
   }

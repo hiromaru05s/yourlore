@@ -1,0 +1,46 @@
+{
+  "origin": "http://127.0.0.1:5211",
+  "samples": [
+    {
+      "button": "マナ増加",
+      "portrait": "Me",
+      "gatherSamples": 24,
+      "bloomSamples": 48,
+      "from": 8,
+      "to": 10
+    },
+    {
+      "button": "相手マナ増加",
+      "portrait": "Opp",
+      "gatherSamples": 23,
+      "bloomSamples": 48,
+      "from": 8,
+      "to": 10
+    },
+    {
+      "button": "マナ増加",
+      "portrait": "Me",
+      "gatherSamples": 23,
+      "bloomSamples": 48,
+      "from": 10,
+      "to": 12
+    }
+  ],
+  "viewports": [
+    1280,
+    1920,
+    390,
+    844
+  ],
+  "errors": [],
+  "checks": [
+    "player/opponent gain readouts and physical crystal counts share impact",
+    "ten-to-twelve crystal row transition",
+    "generated plaques at four sizes",
+    "log drawer",
+    "volume/mute",
+    "controls help",
+    "reduced motion",
+    "fast-forward restores counters and jewels"
+  ]
+}

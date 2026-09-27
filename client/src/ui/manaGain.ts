@@ -1,22 +1,24 @@
+import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS} from './manaGainTiming';
 import type {FxRect} from './biblionFx';
 const clamp=(x:number)=>Math.max(0,Math.min(1,x));
 const smooth=(a:number,b:number,t:number)=>{const q=clamp((t-a)/(b-a));return q*q*(3-2*q);};
 /** Three folded streams gather at the real crystal, a short refraction peak,
  * then crescent fragments open and dissolve. No substitute jewel or numbers. */
 export function drawManaGain(c:CanvasRenderingContext2D,r:FxRect,age:number){
- const t=age/1.4;if(t<=0||t>=1)return;
- const u=Math.max(12,Math.min(36,r.height*1.3)),x=r.left+r.width*.64,y=r.top+r.height*.52;
+ const milliseconds=age*1000;const impact=MANA_GAIN_IMPACT_MS;
+ const t=milliseconds<=impact?milliseconds/impact*.48:.48+(milliseconds-impact)/(MANA_GAIN_MS-impact)*.52;if(t<=0||t>=1)return;
+ const u=Math.max(12,Math.min(64,r.height*1.65)),x=r.left+r.width*.64,y=r.top+r.height*.52;
  c.save();
  const gather=smooth(0,.5,t);
  for(let j=0;j<3;j++){
-  const p=clamp((t-j*.045)/.48);if(p>=1)continue;const a=j*Math.PI*2/3-.8,rad=u*(1.5*(1-p)**.65+.05);
+  const p=clamp(t/.48);if(p>=1)continue;const a=j*Math.PI*2/3-.8,rad=u*(1.5*(1-p)**.65+.05);
   const px=x+Math.cos(a+p*.7)*rad,py=y+Math.sin(a+p*.7)*rad*.7-u*.14;
   const tail=u*(.8-.55*p),thick=u*.13*Math.sin(Math.PI*p);
   c.save();c.translate(px,py);c.rotate(a+p*.7+Math.PI/2);c.globalAlpha=Math.sin(Math.PI*p);
   for(let k=0;k<3;k++){const w=thick*(1-k*.3);c.beginPath();c.moveTo(0,-tail);c.bezierCurveTo(-w*2,-tail*.35,-w,tail*.35,0,tail*.5);c.bezierCurveTo(w*1.2,tail*.10,w,-tail*.45,0,-tail);c.fillStyle=['#176cc5','#58baff','#e0f7ff'][k];c.fill();}c.restore();
  }
  const flash=Math.exp(-(((t-.48)/.07)**2));if(flash>.01){
-  const g=c.createRadialGradient(x,y,0,x,y,u);g.addColorStop(0,'#d8f7ff');g.addColorStop(.22,'#61c4ff88');g.addColorStop(1,'#328ce800');c.globalAlpha=flash*.7;c.fillStyle=g;c.fillRect(x-u,y-u,u*2,u*2);
+  const g=c.createRadialGradient(x,y,0,x,y,u);g.addColorStop(0,'#d8f7ff');g.addColorStop(.22,'#61c4ff88');g.addColorStop(1,'#328ce800');c.globalAlpha=flash*.92;c.fillStyle=g;c.fillRect(x-u,y-u,u*2,u*2);
   c.globalAlpha=flash;c.fillStyle='#e5fbff';c.beginPath();c.moveTo(x,y-u*.7);c.lineTo(x+u*.07,y-u*.06);c.lineTo(x+u*.62,y);c.lineTo(x+u*.07,y+u*.06);c.lineTo(x,y+u*.7);c.lineTo(x-u*.07,y+u*.06);c.lineTo(x-u*.62,y);c.lineTo(x-u*.07,y-u*.06);c.closePath();c.fill();
  }
  const spread=smooth(.47,.96,t),fade=1-spread;

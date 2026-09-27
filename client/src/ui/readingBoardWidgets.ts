@@ -1,3 +1,4 @@
+import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
 import {mountRiftApertures} from './riftAperture';
 import * as T from 'three';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -6,9 +7,9 @@ import {addCrystalOptics} from './readingCrystalOptics';
 /** Geometry-only UI; the original native buttons retain keyboard/game authority. */
 export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
  const group=new T.Group();group.name='Reading board 02 05 06';scene.add(group);
- const apertures=mountRiftApertures(root);let shadowDirty=true;
+ const apertures=mountRiftApertures(group);let shadowDirty=true;
  const templates:T.Group[]=[];const owned:T.Material[]=[];const geometries:T.BufferGeometry[]=[];
- const manas:Array<{root:T.Group;batches:Record<'ready'|'spent',T.InstancedMesh[]>;key:string;side:string;maximum:number;current:number;gainStart:number;gainFrom:number}>=[];
+ const manas:Array<{root:T.Group;batches:Record<'ready'|'spent',T.InstancedMesh[]>;key:string;side:string;maximum:number;current:number}>=[];
  let dead=false,ready=false,turn:T.Group|undefined,reroll:T.Group|undefined,turnCap:T.Object3D|undefined,rerollCap:T.Object3D|undefined,arrows:T.Object3D|undefined,enamel:T.MeshStandardMaterial|undefined;
  let hover='',pressed='',last=performance.now(),rerollTime=-10000,turnTime=-10000,animateUntil=0,lastState='',displayEnemy=false;
  const segments:T.Mesh[]=[];const rerollMaterials:Array<{material:T.MeshStandardMaterial;color:T.Color}>=[];
@@ -41,7 +42,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
      mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);mana.add(mesh);batches[state].push(mesh);
     });
    }
-   manas.push({root:mana,batches,key:'',side,maximum:0,current:0,gainStart:-10000,gainFrom:0});
+   manas.push({root:mana,batches,key:'',side,maximum:0,current:0});
   }
   turn=button;turn.position.set(.7,.015,0);timer.position.copy(turn.position);group.add(turn,timer);
   turnCap=turn.getObjectByName('PRESS_CAP');turn.traverse(o=>{if(o instanceof T.Mesh&&o.material instanceof T.MeshStandardMaterial&&o.material.name.startsWith('Turn enamel'))enamel=o.material;});
@@ -57,16 +58,21 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
  root.addEventListener('pointerover',over);root.addEventListener('pointerdown',down);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);root.addEventListener('click',click,true);
  function tick(now:number){
   if(dead)return false;const scale=readingScale();group.scale.setScalar(scale);
-  apertures.tick(now);
-  if(!ready)return false;
+  const riftChanged=apertures.tick(now);
+  if(!ready)return riftChanged;
   const dt=Math.min(.06,(now-last)/1000);last=now;let changed=false;
   for(const material of opticalMaterials)material.attenuationDistance=Number(material.userData.authoredAttenuation)*scale;
   for(const mana of manas){
    const el=root.querySelector<HTMLElement>(`#portrait${mana.side} .pt-mana`);if(!el)continue;
-   const maximum=Math.min(30,Math.max(0,Number(el.dataset.maximum)||0)),current=Math.max(0,Number(el.dataset.mana)||0);
-   const key=el.dataset.mana+':'+el.dataset.maximum,newState=key!==mana.key;
-   if(newState){if(mana.key&&(maximum>mana.maximum||current>mana.current)){mana.gainStart=now;mana.gainFrom=Math.min(mana.maximum,mana.current);}mana.key=key;mana.maximum=maximum;mana.current=current;shadowDirty=true;}
-   const gain=Math.max(0,(now-mana.gainStart)/1100),animating=gain<1;
+   const start=Number(el.dataset.gainStart??-10000),age=now-start;
+   const animating=age>=0&&age<MANA_GAIN_MS;
+   const before=animating&&age<MANA_GAIN_IMPACT_MS;
+   const targetMaximum=Math.min(30,Math.max(0,Number(el.dataset.maximum)||0));
+   const maximum=before?Number(el.dataset.gainFromMax):targetMaximum;
+   const current=before?Number(el.dataset.gainFromMana):Math.max(0,Number(el.dataset.mana)||0);
+   const gainFrom=Number(el.dataset.gainFromMax??targetMaximum);
+   const key=current+':'+maximum,newState=key!==mana.key;
+   if(newState){mana.key=key;mana.maximum=maximum;mana.current=current;shadowDirty=true;}
    if(!newState&&!animating)continue;changed=true;if(animating)shadowDirty=true;
    const counts={ready:0,spent:0},matrix=new T.Matrix4(),q=new T.Quaternion();
    const rows=maximum<=10?1:maximum<=20?2:3;
@@ -74,8 +80,9 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
     const small=rows===1?Math.min(1,(.226/maximum-.003)/.02954):rows===2?.57:.46;
     const x=rows===1?(i-(maximum-1)/2)*Math.min(.045,.226/maximum):(i%10-4.5)*.023;
     const z=rows===1?0:(Math.floor(i/10)-(rows-1)/2)*(rows===2?.026:.019);
-    const t=Math.min(1,Math.max(0,(gain-(i-mana.gainFrom)*.025)/.66)),bloom=animating&&i>=mana.gainFrom?Math.sin(Math.PI*t):0;
-    q.setFromAxisAngle(new T.Vector3(0,1,0),bloom*.035);matrix.compose(new T.Vector3(x,.0038*(1-small)+.002*bloom,z),q,new T.Vector3().setScalar(small*(1+.025*bloom)));
+    const gained=animating&&i>=gainFrom,pose=manaGainPose(age,i-gainFrom,targetMaximum-gainFrom);
+    q.setFromAxisAngle(new T.Vector3(0,1,0),gained?pose.glow*.06:0);
+    matrix.compose(new T.Vector3(x,.0038*(1-small)+(gained?pose.lift:0),z),q,new T.Vector3().setScalar(small*(gained?Math.max(.0001,pose.scale):1)));
     const state=i<current?'ready':'spent',index=counts[state]++;mana.batches[state].forEach(m=>m.setMatrixAt(index,matrix));
    }
    for(const state of ['ready','spent'] as const)for(const mesh of mana.batches[state]){mesh.count=counts[state];mesh.visible=mesh.count>0;mesh.instanceMatrix.needsUpdate=true;if(mesh.count){mesh.computeBoundingSphere();mesh.computeBoundingBox();}}
@@ -101,7 +108,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
 
   const state=`${enemy}:${end?.disabled}:${refresh?.disabled}`;
   if(state!==lastState){animateUntil=now+500;lastState=state;}
-  return changed||now<animateUntil||t<1;
+  return riftChanged||changed||now<animateUntil||t<1;
  }
  return {tick,takeShadowUpdate(){const value=shadowDirty;shadowDirty=false;return value;},warm(render:()=>void){
   const wasVisible=group.visible,rerollVisible=reroll?.visible;
