@@ -25,3 +25,13 @@ SHA-256: `73ca490d1cf64c2c80885c3329eba4f2b82be397f3b23d6eb01a5c73a46688ca`。
 ブラウザのオンラインWebSocketはテスト用スタブ。認証済み実オンライン対戦はこの検証範囲に含まない。
 
 再実行: Viteを5191番で起動し、`PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node docs/ui-rework/2026-09-27-opening-music/browser-check.mjs`。接続先は `LORE_TEST_ORIGIN` で変更可能。
+
+## 統合・ステージング
+
+並行作業の最終main `9f18d0d` に本変更を `b0ce8f7` として取り込み。
+`https://test.yourlore.xyz/?v=b0ce8f7` へ反映済み。
+Worker version: `e46a04ab-4144-4090-97b9-0c65ac6bc629`。
+公開index・参照JS/CSS・3曲の計7ファイルでビルド出力とSHA-256一致。
+公開画面から実BOT対戦を起動し、開幕曲の自然終了→対戦曲、7秒コイントス、音量0.147、対戦曲末3秒待機を確認。ページ例外なし。
+アカウント/APIのみ明示的fixture。配信アプリ、BOT処理、音源再生は実物。productionへのデプロイなし。
+再実行は `tests/opening-music-staging-browser.mjs`、結果は `staging/browser.json`。

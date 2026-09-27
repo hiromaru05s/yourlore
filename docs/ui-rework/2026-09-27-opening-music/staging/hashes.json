@@ -1,0 +1,37 @@
+[
+  {
+    "path": "/index.html",
+    "bytes": 1210,
+    "sha256": "c095bdc89cc62572f45c421f09e1624392c5d4f0fd064db6667da7f79f4d7c65"
+  },
+  {
+    "path": "/assets/main-DzAh6AF3.js",
+    "bytes": 1161316,
+    "sha256": "d8d516f96130ec230af9cf4b14a902a60c9eec7efd62ce48c7c6632a5696fd62"
+  },
+  {
+    "path": "/assets/three.module-CEKDySQ-.js",
+    "bytes": 609214,
+    "sha256": "a668f4d0a8c405e1087278ecac79dc0a950ae007a00ec79b005685c19ea35120"
+  },
+  {
+    "path": "/assets/main-KBRVRgOB.css",
+    "bytes": 287898,
+    "sha256": "46ade09d5a79ad1a46a33955e362ca3cf795e0a8b653ee1cb26940bdf8b18ec2"
+  },
+  {
+    "path": "/music/clash-of-blades.mp3",
+    "bytes": 180393,
+    "sha256": "73ca490d1cf64c2c80885c3329eba4f2b82be397f3b23d6eb01a5c73a46688ca"
+  },
+  {
+    "path": "/music/poised-opening.mp3",
+    "bytes": 1485919,
+    "sha256": "ccfb693a92823b80ce15386ab82226e02c2fdcff5378c84e726d24af481e4a15"
+  },
+  {
+    "path": "/music/yohaku-to-zankyo.mp3",
+    "bytes": 5118916,
+    "sha256": "1f5855ccd4adcb2bc2c4315be93695352a54ad75f273b3920c82eac2cf28200c"
+  }
+]
