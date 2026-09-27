@@ -1,0 +1,26 @@
+{
+  "verifiedAt": "2026-09-27T09:07:00.941250+00:00",
+  "runtimeCommit": "353dc72713a3d7b51fe793afb54dac7fdd0f555d",
+  "worker": "lore-server-staging",
+  "versionId": "6f995b48-658b-43e7-8f48-b3aea5c0104c",
+  "url": "https://test.yourlore.xyz/?v=353dc72",
+  "database": "lore-db-staging",
+  "migration": "0015_furniture_cosmetics.sql",
+  "verifiedColumn": [
+    {
+      "cid": 19,
+      "name": "furniture",
+      "type": "TEXT",
+      "notnull": 0,
+      "dflt_value": null,
+      "pk": 0
+    }
+  ],
+  "staticAssets": {
+    "report": "staging-checks/asset-hashes.json",
+    "allHashesMatch": true
+  },
+  "browser": "staging-checks/browser-report.json",
+  "browserScope": "Deployed static application with explicit fixture account/API responses; not a real authenticated online match. Actual server SQL and engine/controller verified locally.",
+  "productionDeployed": false
+}

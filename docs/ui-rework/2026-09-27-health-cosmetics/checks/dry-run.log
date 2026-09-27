@@ -4,13 +4,13 @@
 ✨ Read 1956 files from the assets directory /Users/hiromaru05s/Desktop/LORE_TCG/client/dist
 Total Upload: 1049.85 KiB / gzip: 226.06 KiB
 Your Worker has access to the following bindings:
-Binding                                                                Resource                  
-env.MATCHMAKER (Matchmaker)                                            Durable Object            
-env.GAME_ROOM (GameRoom)                                               Durable Object            
-env.DB (lore-db-staging)                                               D1 Database               
-env.ASSETS                                                             Assets                    
-env.APP_ORIGIN ("*")                                                   Environment Variable      
-env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")      Environment Variable      
-env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")          Environment Variable      
+Binding                                                                Resource
+env.MATCHMAKER (Matchmaker)                                            Durable Object
+env.GAME_ROOM (GameRoom)                                               Durable Object
+env.DB (lore-db-staging)                                               D1 Database
+env.ASSETS                                                             Assets
+env.APP_ORIGIN ("*")                                                   Environment Variable
+env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")      Environment Variable
+env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")          Environment Variable
 
 --dry-run: exiting now.

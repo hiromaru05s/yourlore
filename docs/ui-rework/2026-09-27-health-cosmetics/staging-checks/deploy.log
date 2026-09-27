@@ -1,0 +1,46 @@
+
+ ⛅️ wrangler 4.130.0 (update available 4.141.0)
+───────────────────────────────────────────────
+🌀 Building list of assets...
+✨ Read 1956 files from the assets directory /Users/hiromaru05s/Desktop/LORE_TCG/client/dist
+🌀 Starting asset upload...
+🌀 Found 18 new or modified static assets to upload. Proceeding with upload...
++ /index.html
++ /assets/paperDraw-nnz36NeC.js.map
++ /cosmetics/v2/sleeve-verdant.webp
++ /cosmetics/v2/sleeve-astral.webp
++ /assets/duelScene-CRt5TnJT.js.map
++ /assets/main-KBRVRgOB.css
++ /assets/riftScene-8VhhU9DK.js
++ /assets/riftScene-8VhhU9DK.js.map
++ /cosmetics/v2/sleeve-crimson.webp
++ /cosmetics/v2/material-verdant.webp
++ /cosmetics/v2/material-ivory.webp
++ /assets/main-DMK1vD4L.js
++ /assets/paperDraw-nnz36NeC.js
++ /assets/duelScene-CRt5TnJT.js
++ /cosmetics/v2/sleeve-ivory.webp
++ /cosmetics/v2/material-crimson.webp
++ /cosmetics/v2/material-astral.webp
++ /assets/main-DMK1vD4L.js.map
+Uploaded 6 of 18 assets
+Uploaded 12 of 18 assets
+Uploaded 18 of 18 assets
+✨ Success! Uploaded 18 files (1875 already uploaded) (2.08 sec)
+
+Total Upload: 1049.85 KiB / gzip: 226.06 KiB
+Worker Startup Time: 41 ms
+Your Worker has access to the following bindings:
+Binding                                                                Resource
+env.MATCHMAKER (Matchmaker)                                            Durable Object
+env.GAME_ROOM (GameRoom)                                               Durable Object
+env.DB (lore-db-staging)                                               D1 Database
+env.ASSETS                                                             Assets
+env.APP_ORIGIN ("*")                                                   Environment Variable
+env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")      Environment Variable
+env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")          Environment Variable
+
+Uploaded lore-server-staging (7.91 sec)
+Deployed lore-server-staging triggers (1.79 sec)
+  test.yourlore.xyz (custom domain)
+Current Version ID: 6f995b48-658b-43e7-8f48-b3aea5c0104c

@@ -27,3 +27,5 @@ Built-in `image_gen` mode, eight independent outputs. `imagegen-manifest.json` c
 Staging only: `lore-server-staging`, `test.yourlore.xyz`, `lore-db-staging`. Migration `0015_furniture_cosmetics.sql` adds nullable `users.furniture`; ownership reuses the existing JSON cosmetics list in `users.sleeves`. Apply this migration before the new worker. No production deployment is authorized.
 
 Wrangler flags were checked against https://developers.cloudflare.com/d1/wrangler-commands/ and the installed CLI. Deployment/version and remote verification are recorded separately. Browser fixture tests do not establish a real authenticated online match.
+
+Staging deployment completed: runtime commit `353dc72`, Worker version `6f995b48-658b-43e7-8f48-b3aea5c0104c`. The remote staging schema includes `furniture`; every built JS/CSS/index and all eight new image assets match local SHA-256. Deployed browser checks passed for zero-loader navigation, passive search/descriptions, and eight free claims/equipment using fixture API responses. See `deployment.json` and `staging-checks/`. Production was not changed.

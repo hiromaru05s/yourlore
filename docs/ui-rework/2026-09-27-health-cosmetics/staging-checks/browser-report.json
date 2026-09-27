@@ -1,0 +1,9 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checks": [
+    "all menu artwork prepared once; navigation never mounts a loading screen",
+    "explicit passive filter and icon-only card rule tags",
+    "eight zero-shard claims, no credit change, sleeve + paired furniture equipment"
+  ],
+  "errors": []
+}
