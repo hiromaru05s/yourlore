@@ -25,7 +25,7 @@ function draw(actor:Actor,now:number){
  const age=now-actor.start;
  // Ping-pong the idle sequence: a continuous hair cycle without a 15→0 jump.
  const phase=(age%duration.idle)/duration.idle;
- const frame=reduced()?0:actor.action==='idle'?(phase<.5?phase*30:(1-phase)*30):smooth(age/duration[actor.action])*15;
+ const frame=reduced()?0:actor.action==='idle'?((1-Math.cos(phase*Math.PI*2))*7.5):smooth(age/duration[actor.action])*15;
  if(!paintFrame(ctx,atlas(actor.color,actor.action),frame))return;
  const blend=reduced()?1:smooth((now-actor.blendStart)/220);
  if(blend<1){ctx.globalAlpha=1-blend;ctx.drawImage(actor.previous,0,0);ctx.globalAlpha=1;}
