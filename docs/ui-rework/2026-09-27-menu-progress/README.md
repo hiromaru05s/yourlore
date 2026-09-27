@@ -29,3 +29,9 @@
 - Build retains the pre-existing large JS chunk warning; no new dependencies or database migrations.
 
 Deployment is restricted to `lore-server-staging` / `test.yourlore.xyz` / `lore-db-staging`. Production promotion is reserved for the user's manual review and approval.
+
+## Final staging result and remaining limit
+
+Runtime commit `9496f80`, worker version `14ef7923-ef90-4dbb-9a06-354a730872de`. All requested menu checks passed on this build. All 28 deployed asset hashes match; real anonymous login and BOT opening/input restoration passed (BOT API/authentication is a fixture).
+
+Cold-start timing remains variable: one network diagnostic completed the loading gate within roughly 12 seconds, but the final integrated BOT run took 109,704 ms to reach the opening, and earlier attempts exceeded 120 seconds. Network diagnostics show HTTP 200 responses with slowly arriving bodies, not JavaScript exceptions. This does not establish that the network alone is responsible, nor that loading performance is solved. Progress and the cover remain visible until resources are ready. The earlier timeout is retained under `diagnostics/`; it is not hidden by the passing result. Production has not been deployed.

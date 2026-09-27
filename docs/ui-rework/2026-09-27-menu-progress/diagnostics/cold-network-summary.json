@@ -1,0 +1,105 @@
+{
+  "environment": "Headless Chrome, staging assets, fixture authenticated API",
+  "sourceCommit": "9496f80",
+  "snapshots": [
+    {
+      "elapsed": 37929,
+      "loader": "対戦の準備中9%画像の準備 4 / 79",
+      "pending": 101,
+      "finished": 50,
+      "bytesInFlight": 429613,
+      "pendingWith200": 97
+    },
+    {
+      "elapsed": 47933,
+      "loader": "対戦の準備中10%画像の準備 5 / 79",
+      "pending": 100,
+      "finished": 51,
+      "bytesInFlight": 1034294,
+      "pendingWith200": 98
+    },
+    {
+      "elapsed": 57938,
+      "loader": "対戦の準備中14%画像の準備 9 / 79",
+      "pending": 96,
+      "finished": 55,
+      "bytesInFlight": 1139061,
+      "pendingWith200": 94
+    },
+    {
+      "elapsed": 67946,
+      "loader": "対戦の準備中14%画像の準備 9 / 79",
+      "pending": 96,
+      "finished": 55,
+      "bytesInFlight": 2202815,
+      "pendingWith200": 94
+    },
+    {
+      "elapsed": 77953,
+      "loader": "対戦の準備中16%画像の準備 11 / 79",
+      "pending": 95,
+      "finished": 56,
+      "bytesInFlight": 1632442,
+      "pendingWith200": 93
+    },
+    {
+      "elapsed": 87960,
+      "loader": "対戦の準備中18%画像の準備 13 / 79",
+      "pending": 94,
+      "finished": 57,
+      "bytesInFlight": 829206,
+      "pendingWith200": 92
+    },
+    {
+      "elapsed": 97968,
+      "loader": "対戦の準備中20%画像の準備 14 / 79",
+      "pending": 93,
+      "finished": 58,
+      "bytesInFlight": 1232756,
+      "pendingWith200": 91
+    },
+    {
+      "elapsed": 107973,
+      "loader": "対戦の準備中20%画像の準備 14 / 79",
+      "pending": 93,
+      "finished": 58,
+      "bytesInFlight": 2067395,
+      "pendingWith200": 91
+    },
+    {
+      "elapsed": 117979,
+      "loader": "対戦の準備中22%画像の準備 16 / 79",
+      "pending": 92,
+      "finished": 59,
+      "bytesInFlight": 1398419,
+      "pendingWith200": 90
+    },
+    {
+      "elapsed": 127984,
+      "loader": "対戦の準備中23%画像の準備 17 / 79",
+      "pending": 91,
+      "finished": 60,
+      "bytesInFlight": 1363972,
+      "pendingWith200": 89
+    },
+    {
+      "elapsed": 137990,
+      "loader": "対戦の準備中26%画像の準備 20 / 79",
+      "pending": 86,
+      "finished": 65,
+      "bytesInFlight": 610691,
+      "pendingWith200": 84
+    },
+    {
+      "elapsed": 147994,
+      "loader": "対戦の準備中27%画像の準備 21 / 79",
+      "pending": 85,
+      "finished": 66,
+      "bytesInFlight": 1017626,
+      "pendingWith200": 83
+    }
+  ],
+  "finished": 66,
+  "finishedBytes": 18918643,
+  "failed": []
+}

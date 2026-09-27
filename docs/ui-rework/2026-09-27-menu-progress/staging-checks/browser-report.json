@@ -1,0 +1,493 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checks": [
+    "five deck names persisted through API and reload; home uses active name; HTML escaped",
+    {
+      "deck": {
+        "viewport": [
+          1440,
+          900
+        ],
+        "height": 385.3125,
+        "cardCount": 33,
+        "full": 2,
+        "partial": 1,
+        "rows": [
+          {
+            "top": 367.6875,
+            "bottom": 508.3125,
+            "width": 90,
+            "height": 140.625
+          },
+          {
+            "top": 528.3125,
+            "bottom": 668.9375,
+            "width": 90,
+            "height": 140.625
+          },
+          {
+            "top": 688.9375,
+            "bottom": 829.5625,
+            "width": 90,
+            "height": 140.625
+          },
+          {
+            "top": 849.5625,
+            "bottom": 990.1875,
+            "width": 90,
+            "height": 140.625
+          },
+          {
+            "top": 1010.1875,
+            "bottom": 1150.8125,
+            "width": 90,
+            "height": 140.625
+          }
+        ],
+        "grid": {
+          "top": 357.6875,
+          "bottom": 743
+        },
+        "scrollable": true
+      }
+    },
+    {
+      "catalog": {
+        "viewport": [
+          1440,
+          900
+        ],
+        "height": 430,
+        "cardCount": 96,
+        "full": 3,
+        "partial": 1,
+        "rows": [
+          {
+            "top": 310,
+            "bottom": 419.375,
+            "width": 70,
+            "height": 109.375
+          },
+          {
+            "top": 431.375,
+            "bottom": 540.75,
+            "width": 70,
+            "height": 109.375
+          },
+          {
+            "top": 552.75,
+            "bottom": 662.125,
+            "width": 70,
+            "height": 109.375
+          },
+          {
+            "top": 674.125,
+            "bottom": 783.5,
+            "width": 70,
+            "height": 109.375
+          },
+          {
+            "top": 795.5,
+            "bottom": 904.875,
+            "width": 70,
+            "height": 109.375
+          }
+        ],
+        "grid": {
+          "top": 298,
+          "bottom": 728
+        },
+        "scrollable": true
+      }
+    },
+    {
+      "deck": {
+        "viewport": [
+          1280,
+          720
+        ],
+        "height": 235.3125,
+        "cardCount": 33,
+        "full": 2,
+        "partial": 1,
+        "rows": [
+          {
+            "top": 351.6875,
+            "bottom": 426.6875,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 446.6875,
+            "bottom": 521.6875,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 541.6875,
+            "bottom": 616.6875,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 636.6875,
+            "bottom": 711.6875,
+            "width": 48,
+            "height": 75
+          }
+        ],
+        "grid": {
+          "top": 341.6875,
+          "bottom": 577
+        },
+        "scrollable": true
+      }
+    },
+    {
+      "catalog": {
+        "viewport": [
+          1280,
+          720
+        ],
+        "height": 280,
+        "cardCount": 96,
+        "full": 3,
+        "partial": 1,
+        "rows": [
+          {
+            "top": 294,
+            "bottom": 369,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 381,
+            "bottom": 456,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 468,
+            "bottom": 543,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 555,
+            "bottom": 630,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 642,
+            "bottom": 717,
+            "width": 48,
+            "height": 75
+          }
+        ],
+        "grid": {
+          "top": 282,
+          "bottom": 562
+        },
+        "scrollable": true
+      }
+    },
+    {
+      "deck": {
+        "viewport": [
+          390,
+          844
+        ],
+        "height": 281,
+        "cardCount": 33,
+        "full": 2,
+        "partial": 1,
+        "rows": [
+          {
+            "top": 447,
+            "bottom": 542.3125,
+            "width": 61,
+            "height": 95.3125
+          },
+          {
+            "top": 562.3125,
+            "bottom": 657.625,
+            "width": 61,
+            "height": 95.3125
+          },
+          {
+            "top": 677.625,
+            "bottom": 772.9375,
+            "width": 61,
+            "height": 95.3125
+          },
+          {
+            "top": 792.9375,
+            "bottom": 888.25,
+            "width": 61,
+            "height": 95.3125
+          },
+          {
+            "top": 908.25,
+            "bottom": 1003.5625,
+            "width": 61,
+            "height": 95.3125
+          }
+        ],
+        "grid": {
+          "top": 439,
+          "bottom": 720
+        },
+        "scrollable": true
+      }
+    },
+    {
+      "catalog": {
+        "viewport": [
+          390,
+          844
+        ],
+        "height": 409,
+        "cardCount": 96,
+        "full": 3,
+        "partial": 1,
+        "rows": [
+          {
+            "top": 309,
+            "bottom": 413.6875,
+            "width": 67,
+            "height": 104.6875
+          },
+          {
+            "top": 425.6875,
+            "bottom": 530.375,
+            "width": 67,
+            "height": 104.6875
+          },
+          {
+            "top": 542.375,
+            "bottom": 647.0625,
+            "width": 67,
+            "height": 104.6875
+          },
+          {
+            "top": 659.0625,
+            "bottom": 763.75,
+            "width": 67,
+            "height": 104.6875
+          },
+          {
+            "top": 775.75,
+            "bottom": 880.4375,
+            "width": 67,
+            "height": 104.6875
+          }
+        ],
+        "grid": {
+          "top": 299,
+          "bottom": 708
+        },
+        "scrollable": true
+      }
+    },
+    {
+      "deck": {
+        "viewport": [
+          844,
+          390
+        ],
+        "height": 111,
+        "cardCount": 33,
+        "full": 1,
+        "partial": 1,
+        "rows": [
+          {
+            "top": 188,
+            "bottom": 263,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 283,
+            "bottom": 358,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 378,
+            "bottom": 453,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 473,
+            "bottom": 548,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 568,
+            "bottom": 643,
+            "width": 48,
+            "height": 75
+          }
+        ],
+        "grid": {
+          "top": 184,
+          "bottom": 295
+        },
+        "scrollable": true
+      }
+    },
+    {
+      "catalog": {
+        "viewport": [
+          844,
+          390
+        ],
+        "height": 139,
+        "cardCount": 96,
+        "full": 1,
+        "partial": 1,
+        "rows": [
+          {
+            "top": 172,
+            "bottom": 247,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 259,
+            "bottom": 334,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 346,
+            "bottom": 421,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 433,
+            "bottom": 508,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 520,
+            "bottom": 595,
+            "width": 48,
+            "height": 75
+          }
+        ],
+        "grid": {
+          "top": 160,
+          "bottom": 299
+        },
+        "scrollable": true
+      }
+    },
+    {
+      "deck": {
+        "viewport": [
+          320,
+          568
+        ],
+        "height": 129.609375,
+        "cardCount": 33,
+        "full": 1,
+        "partial": 1,
+        "rows": [
+          {
+            "top": 325.390625,
+            "bottom": 400.390625,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 420.390625,
+            "bottom": 495.390625,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 515.390625,
+            "bottom": 590.390625,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 610.390625,
+            "bottom": 685.390625,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 705.390625,
+            "bottom": 780.390625,
+            "width": 48,
+            "height": 75
+          }
+        ],
+        "grid": {
+          "top": 317.390625,
+          "bottom": 447
+        },
+        "scrollable": true
+      }
+    },
+    {
+      "catalog": {
+        "viewport": [
+          320,
+          568
+        ],
+        "height": 133.00003051757812,
+        "cardCount": 96,
+        "full": 1,
+        "partial": 1,
+        "rows": [
+          {
+            "top": 309.00970458984375,
+            "bottom": 384.0097351074219,
+            "width": 48,
+            "height": 75.00003051757812
+          },
+          {
+            "top": 396.0097351074219,
+            "bottom": 471.0097351074219,
+            "width": 48,
+            "height": 75
+          },
+          {
+            "top": 483.0097351074219,
+            "bottom": 558.009765625,
+            "width": 48,
+            "height": 75.00003051757812
+          },
+          {
+            "top": 570.009765625,
+            "bottom": 645.0097045898438,
+            "width": 48,
+            "height": 74.99993896484375
+          },
+          {
+            "top": 657.0097045898438,
+            "bottom": 732.0097045898438,
+            "width": 48,
+            "height": 75
+          }
+        ],
+        "grid": {
+          "top": 299.00970458984375,
+          "bottom": 432.0097351074219
+        },
+        "scrollable": true
+      }
+    },
+    "ranked default and independent normal/BOT stats + histories",
+    "all seven current-page icon variants decode"
+  ],
+  "errors": []
+}

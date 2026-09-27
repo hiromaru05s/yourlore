@@ -1,0 +1,10 @@
+{
+  "message": "page.waitForSelector: Timeout 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.screen-loader') to be detached\u001b[22m\n\u001b[2m    123 × locator resolved to visible <div role=\"status\" aria-live=\"polite\" class=\"screen-loader game-loading\">…</div>\u001b[22m\n",
+  "loader": [
+    "書庫を開いています88%画像の準備 17 / 18"
+  ],
+  "fonts": "loaded",
+  "images": [],
+  "sourceCommit": "04e9e1c",
+  "note": "Shop background timeout before replacing the last legacy PNG; final menu verification subsequently passed."
+}

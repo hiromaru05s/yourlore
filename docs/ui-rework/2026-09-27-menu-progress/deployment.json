@@ -1,0 +1,15 @@
+{
+  "sourceCommit": "9496f803a2aca5ff0f1b9aa2483230272e96e77e",
+  "worker": "lore-server-staging",
+  "version": "14ef7923-ef90-4dbb-9a06-354a730872de",
+  "url": "https://test.yourlore.xyz/?v=9496f80",
+  "database": "lore-db-staging",
+  "productionDeployed": false,
+  "pushedBranches": [
+    "main",
+    "codex/menu-progress-20260927"
+  ],
+  "verification": "staging-checks/staging-verification.json",
+  "menuVerification": "staging-checks/browser-report.json",
+  "coldStartLimit": "Variable; final BOT opening 109704ms, earlier 120s timeout; see README and diagnostics."
+}

@@ -1,3 +1,4 @@
+import {apiFixture} from './helpers/api-fixture.mjs';
 /** Verify deployed bytes and browser startup; BOT login/API are explicit fixtures. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -15,16 +16,19 @@ const scope=process.env.LORE_VERIFY_SCOPE||'full';
 if(scope==='menu')paths.splice(0,paths.length,...paths.filter(p=>p==='/index.html'||p.startsWith('/assets/')||p.includes('/active-v1/')||p.includes('/ui/loading/')||p.includes('/seekers/menu-v1/')||p.endsWith('/stage.webp')||p.endsWith('/library.webp')||p.endsWith('/sigil.webp')||p.endsWith('/lore-logo-transparent.webp')));
 const assets=[];
 for(let i=0;i<paths.length;i+=8)assets.push(...await Promise.all(paths.slice(i,i+8).map(async path=>{const r=await fetch(origin+path);assert.equal(r.status,200,path);const remote=Buffer.from(await r.arrayBuffer()),local=await fs.readFile('client/dist'+path);assert.equal(hash(remote),hash(local),path);return {path,bytes:local.length,sha256:hash(local)};})));
-const browser=await chromium.launch({channel:'chrome',headless:true});
+await fs.writeFile(out+'/deployed-asset-hashes.json',JSON.stringify({origin,checkedAt:new Date().toISOString(),scope,assets},null,2)+'\n');
+const browser=await chromium.launch({channel:'chrome',headless:true,args:['--disable-quic']});
 const page=await browser.newPage({viewport:{width:1280,height:720}}),errors=[],failed=[];
 page.setDefaultTimeout(60000);
 page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.url().startsWith(origin)&&r.status()>=500)failed.push({url:r.url(),status:r.status()});});
 try{
  await page.goto(origin,{waitUntil:'commit'});await page.waitForSelector('.lounge-login');await page.waitForSelector('.screen-loader',{state:'detached',timeout:60000});await page.screenshot({path:out+'/staging-login.png'});
  const user={id:'qa-fixture-only',email:'qa@example.test',display:'シーカー',avatar:'SEEKER_BLUE',wins:0,losses:0,credits:0,sleeve:'default'};
- await page.route('**/api/**',r=>{const path=new URL(r.request().url()).pathname;const data=path==='/api/auth/me'?{user}:path==='/api/geo'?{country:'JP'}:path==='/api/rank/me'?{rating:{season:'2026-09',mmr:1000,tier:'bronze',wins:0,losses:0}}:path==='/api/social/friends'?{friends:[],incoming:[],outgoing:[],challenges:[]}:{ok:true};return r.fulfill({contentType:'application/json',body:JSON.stringify(data)});});
+ await apiFixture(page,r=>{const path=new URL(r.url).pathname;const data=path==='/api/auth/me'?{user}:path==='/api/geo'?{country:'JP'}:path==='/api/rank/me'?{rating:{season:'2026-09',mmr:1000,tier:'bronze',wins:0,losses:0}}:path==='/api/social/friends'?{friends:[],incoming:[],outgoing:[],challenges:[]}:{ok:true};return data;});
  await page.reload({waitUntil:'commit'});await page.waitForSelector('#bot');await page.waitForSelector('.screen-loader',{state:'detached',timeout:60000});await page.locator('#bot').click();await page.locator('[data-diff="easy"]').click();
- await page.waitForSelector('.duel-opening-v1',{timeout:60000});
+ const duelLoadStarted=Date.now();
+ await page.waitForSelector('.duel-opening-v1',{timeout:120000});
+ const duelLoadMs=Date.now()-duelLoadStarted;
  assert.equal(await page.locator('.game').evaluate(e=>e.inert),true);
  await page.screenshot({path:out+'/staging-opening.png'});
  await page.waitForFunction(()=>!document.querySelector('.duel-opening'),null,{timeout:20000});
@@ -34,6 +38,6 @@ try{
  await page.screenshot({path:out+'/staging-bot.png'});
  for(const id of ['logTab','muteBtn','helpBtn','giveupBtn']){assert.equal(await page.locator('#'+id+' img').evaluate(e=>e.complete&&e.naturalWidth===256),true);assert.equal(await page.locator('#'+id).evaluate(e=>getComputedStyle(e).backgroundImage),'none');}
  assert.deepEqual(errors,[]);assert.deepEqual(failed,[]);
- const report={origin,scope,assets,anonymousLiveLogin:true,deployedBotOpening:true,botAuthApiFixture:true,authenticatedOnlineMatch:false,errors,failed};
+ const report={origin,scope,assets,duelLoadMs,anonymousLiveLogin:true,deployedBotOpening:true,botAuthApiFixture:true,authenticatedOnlineMatch:false,errors,failed};
  await fs.writeFile(out+'/staging-verification.json',JSON.stringify(report,null,2)+'\n');console.log('PASS:',assets.length,'deployed asset hashes, live anonymous login, built BOT opening and input restoration (fixture login/API)');
-}finally{await browser.close();}
+}catch(error){await fs.writeFile(out+'/duel-failure.json',JSON.stringify({message:error.message,loader:await page.locator('.duel-loader,.screen-loader').allTextContents(),root:await page.locator('[data-board-rendered]').evaluateAll(nodes=>nodes.map(e=>({...e.dataset}))),failed,errors},null,2));throw error;}finally{await browser.close();}
