@@ -1,0 +1,20 @@
+{
+  "runtimeCommit": "8646b9de7636dfd6255faebd9dac04dccee509f9",
+  "verifiedAt": "2026-09-27T10:06:30.860101+00:00",
+  "worker": "lore-server-staging",
+  "workerVersion": "bec2f475-278c-44ee-bbab-ef65eaa01efd",
+  "url": "https://test.yourlore.xyz/?v=8646b9d",
+  "productionChanged": false,
+  "databaseMigration": null,
+  "hashes": "staging-checks/hashes.json",
+  "matchedAssets": 56,
+  "audioClips": 40,
+  "browser": "staging-checks/integrated-browser.json",
+  "fixtureBoundary": "Real deployed static app, real music and Web Audio playback. Account/API responses are explicit fixtures; no real authenticated online match claim.",
+  "commits": {
+    "soundBankAndMixer": "786d189",
+    "homeMusic": "5664d47",
+    "fastForwardAudio": "e77e6db",
+    "battleMusic": "8646b9d"
+  }
+}

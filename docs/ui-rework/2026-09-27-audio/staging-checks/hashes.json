@@ -1,0 +1,394 @@
+[
+  {
+    "file": "assets/GLTFLoader-Bcaky_l1.js",
+    "status": 200,
+    "sha256": "15327d51872b8836553c1eb5f79cbac909b66fee8fdbaf089c864d94456f41af",
+    "bytes": 44849,
+    "match": true
+  },
+  {
+    "file": "index.html",
+    "status": 200,
+    "sha256": "21c330c4f36dce56eaac522a04c769072762b596709b81f28d5dfbfa0c8d493c",
+    "bytes": 1210,
+    "match": true
+  },
+  {
+    "file": "music/poised-opening.mp3",
+    "status": 200,
+    "sha256": "ccfb693a92823b80ce15386ab82226e02c2fdcff5378c84e726d24af481e4a15",
+    "bytes": 1485919,
+    "match": true
+  },
+  {
+    "file": "music/yohaku-to-zankyo.mp3",
+    "status": 200,
+    "sha256": "1f5855ccd4adcb2bc2c4315be93695352a54ad75f273b3920c82eac2cf28200c",
+    "bytes": 5118916,
+    "match": true
+  },
+  {
+    "file": "assets/cardSurface-BlJCF1Wv.js",
+    "status": 200,
+    "sha256": "776568b26326a7fcb0e0bec5480a01f6f52fece163bc48e0716639cac18ca5ee",
+    "bytes": 7746,
+    "match": true
+  },
+  {
+    "file": "assets/RoomEnvironment-Bm_uhgLE.js",
+    "status": 200,
+    "sha256": "09ef8cc6f0fd42539499d70aa8f044645ff12da477f6023696d77444e1b0f14f",
+    "bytes": 2109,
+    "match": true
+  },
+  {
+    "file": "assets/ceremonyScene-BdJ6wPnH.js",
+    "status": 200,
+    "sha256": "235caa6e54f3de7b186bf34ff29078082acf76d4ee8e8f3c3ee4233506f77841",
+    "bytes": 8979,
+    "match": true
+  },
+  {
+    "file": "assets/diceScene-DCzZWdeH.js",
+    "status": 200,
+    "sha256": "a2b3c50d76eb359e3b53d595f8880f1eaaa5e065e28823322d52e9dac733060e",
+    "bytes": 8259,
+    "match": true
+  },
+  {
+    "file": "assets/main-CEHnpal5.js",
+    "status": 200,
+    "sha256": "900733e6034aab901bb4c09b251f399804018247c033dd25162b60d58bb17ed2",
+    "bytes": 1160512,
+    "match": true
+  },
+  {
+    "file": "assets/paperDraw-ClpG52PY.js",
+    "status": 200,
+    "sha256": "c5e7cb2d07f6031c05076c0a63e40222334029716b63427368a31e040e468091",
+    "bytes": 9530,
+    "match": true
+  },
+  {
+    "file": "assets/main-KBRVRgOB.css",
+    "status": 200,
+    "sha256": "46ade09d5a79ad1a46a33955e362ca3cf795e0a8b653ee1cb26940bdf8b18ec2",
+    "bytes": 287898,
+    "match": true
+  },
+  {
+    "file": "assets/duelScene-BDrlBQEf.js",
+    "status": 200,
+    "sha256": "66b879d4b802fb4ddaf2bafca2003930f4f0807bf66586d56a7b97bad10d51c7",
+    "bytes": 40586,
+    "match": true
+  },
+  {
+    "file": "assets/tablePreview-2Rkra2Ey.css",
+    "status": 200,
+    "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+    "bytes": 1870,
+    "match": true
+  },
+  {
+    "file": "assets/three.module-CEKDySQ-.js",
+    "status": 200,
+    "sha256": "a668f4d0a8c405e1087278ecac79dc0a950ae007a00ec79b005685c19ea35120",
+    "bytes": 609214,
+    "match": true
+  },
+  {
+    "file": "assets/riftScene-BGC-sWdI.js",
+    "status": 200,
+    "sha256": "d8414c3d6376e700aa7d2ec6a3686efebe7aadb7cc64064993ae60df1a846ef3",
+    "bytes": 8702,
+    "match": true
+  },
+  {
+    "file": "assets/tablePreview-CDKSm7Zu.js",
+    "status": 200,
+    "sha256": "2b81fbb762795470831fab796cecfa41264d5f78560381eaf55eea2c7d2d5e2f",
+    "bytes": 25300,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/attack-2.mp3",
+    "status": 200,
+    "sha256": "54cf9e64b3b51d66bb0be61552f14f819c8b10c77abc997eb4d3efe0df147d69",
+    "bytes": 4869,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/attack-1.mp3",
+    "status": 200,
+    "sha256": "3c9d5c851d90419affafdcc98ab9fb60f8f302b952d7f2ae9db4c3b2af9ffee8",
+    "bytes": 5183,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/attack-3.mp3",
+    "status": 200,
+    "sha256": "81a18c8350b0f148cbcf719c02a20a8e5ed9ba1badb99a47de6236fa66773d12",
+    "bytes": 5416,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/buy.mp3",
+    "status": 200,
+    "sha256": "58faa08b37e2879aab1c3c751d0b244af9910beddbf3c9cef01df7a6b3d29133",
+    "bytes": 4448,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/click-2.mp3",
+    "status": 200,
+    "sha256": "dd42639f2a79b39e78ab1ffea4cb87ec75f6c8e46f1c20b2820a4e5e01e9201c",
+    "bytes": 2548,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/click-1.mp3",
+    "status": 200,
+    "sha256": "07f683303b5915ccc3ca981991f484618f0f432fcc9e857b657031a3f1b6c798",
+    "bytes": 2339,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/coin.mp3",
+    "status": 200,
+    "sha256": "945e937063051c82fdc61d7595cc38d30baf63c0633ffef83772516bb35c7923",
+    "bytes": 4344,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/click-3.mp3",
+    "status": 200,
+    "sha256": "adb0c6069f70f2e20fa6f3c3d29a9fc394aea7aabc95d64f203c75a6da4fa7d1",
+    "bytes": 2653,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/coinToss.mp3",
+    "status": 200,
+    "sha256": "a275e52d67e40059f70386cfcad6f14aa47223a39808ba3fbd1421e4a2e167a1",
+    "bytes": 2650,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/coinLand.mp3",
+    "status": 200,
+    "sha256": "ff6ceba9cfac85e83fa00ba3c1829410fb21be3cf58fe0669c1e7f5d89c98ebb",
+    "bytes": 2649,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/damage.mp3",
+    "status": 200,
+    "sha256": "0171a66dfaeef21dfb1a99db3d36bb76668ad9dee6ce3f71f898ac473a168200",
+    "bytes": 3403,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/death.mp3",
+    "status": 200,
+    "sha256": "276e43c4f52fe7335d5618e95a6784359df04dcb6b9939abf82be5f752576659",
+    "bytes": 6250,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/diceLand.mp3",
+    "status": 200,
+    "sha256": "5e198b9d6b61f78c6b8aaa8320339ae5cbb7311346a6b9e7d984fd3ef9d3bd11",
+    "bytes": 2129,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/diceRoll.mp3",
+    "status": 200,
+    "sha256": "9f270713990c8ada19d36c78c7b2fd7d97837fe01a1b94ccf70f2091e0e580c7",
+    "bytes": 6162,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/draw-1.mp3",
+    "status": 200,
+    "sha256": "724d44b1fcc593122fab9e974da80e36e5e5163173bdc46226d0b498d11e5b46",
+    "bytes": 2493,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/discard.mp3",
+    "status": 200,
+    "sha256": "f794ff29c9bff04a2776c2bd802d8308b2c605732e127d0e96041b7131dc4b7a",
+    "bytes": 4450,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/draw-3.mp3",
+    "status": 200,
+    "sha256": "2b540a8e028580199578f30cb77f3a223a3d1b1231dbf6fd783c682a6752da53",
+    "bytes": 3328,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/draw-2.mp3",
+    "status": 200,
+    "sha256": "78bdece57486e0cda96a4861b320e5d1119aa4999ef91c64d8df1f30a60037ed",
+    "bytes": 2597,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/drawGame.mp3",
+    "status": 200,
+    "sha256": "1e01c4cc2c21c3be8b84cde93f6b2fe0539a0b976f44d1243ef8029a8ae5ab7a",
+    "bytes": 9806,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/duel-start.mp3",
+    "status": 200,
+    "sha256": "63eec3093675a6bd833731c2c3fda7d193b9ee34fbbfa19f8f9ce7d9a0b4baad",
+    "bytes": 8428,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/error.mp3",
+    "status": 200,
+    "sha256": "ef85c141ed1aaf75ea4d890aa92b1f2c18c35c801dd34fbae77f67d8b938664c",
+    "bytes": 2312,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/facehit.mp3",
+    "status": 200,
+    "sha256": "44af2f589107cfd40a4f1386ce2358f46f4fd9e99293eed7458923f7efe07791",
+    "bytes": 3820,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/impact-1.mp3",
+    "status": 200,
+    "sha256": "702bbb48408de0ba3b2c1b8f68041c64bc8fd5b6d0fe204d4ead4940373b3f02",
+    "bytes": 3326,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/heal.mp3",
+    "status": 200,
+    "sha256": "effe79c7eca91fba347ac485931d87a55a2bdd5973e33abbb9bb17000cf0ce5e",
+    "bytes": 7546,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/impact-3.mp3",
+    "status": 200,
+    "sha256": "5134502e42a5b9d754a025dc09eaf5f9518e0f4e60f9652529575e96600f0c5b",
+    "bytes": 3641,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/impact-2.mp3",
+    "status": 200,
+    "sha256": "70b68d24f6f31ae065773ef9777461b920a44980f0de6400641b8a681dd9f7bf",
+    "bytes": 3405,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/mana-pay.mp3",
+    "status": 200,
+    "sha256": "60c8eee62c972c4e742f16747cfad47fb547083c23c96f7611b32ee0a5d08fa6",
+    "bytes": 2857,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/lose.mp3",
+    "status": 200,
+    "sha256": "34685537c1caae5994591160af2622ccf5c0f92a053e35f545b0a1298fefe141",
+    "bytes": 10168,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/match.mp3",
+    "status": 200,
+    "sha256": "812c5107144295086dd3bb6b1735b2399e84473d60cefb309c106eb7df0db326",
+    "bytes": 5279,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/mana.mp3",
+    "status": 200,
+    "sha256": "1c653729dc4bc348f5fa9268a58f1526e310d63ada78ff155a188e07530014d9",
+    "bytes": 6842,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/play.mp3",
+    "status": 200,
+    "sha256": "7ee1b4d93cd78cf0515f71575760a87ee728a03a34bee66ecc23a0793d4e6577",
+    "bytes": 5883,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/mimic.mp3",
+    "status": 200,
+    "sha256": "ed6ad8ff29c3b6a93a2cded6aee9aed56ce3739a849eb11ab0df1a9a256e61b4",
+    "bytes": 5280,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/pop.mp3",
+    "status": 200,
+    "sha256": "2a1d0899df83a343d64a36be7f42e8694bd68500d108d5d92ca09e4991fc6c7d",
+    "bytes": 2129,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/shuffle.mp3",
+    "status": 200,
+    "sha256": "ac8dc6826e175598c5cdfa3859154ad1ede2402df53537cfd9ce170c1a343a9e",
+    "bytes": 12355,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/trap.mp3",
+    "status": 200,
+    "sha256": "ed6ad8ff29c3b6a93a2cded6aee9aed56ce3739a849eb11ab0df1a9a256e61b4",
+    "bytes": 5280,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/summon.mp3",
+    "status": 200,
+    "sha256": "b92a0a1818d7ba1bd7b710e4ee19e171664a607aa6611f0c7234c8b41ce059b9",
+    "bytes": 5123,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/turn.mp3",
+    "status": 200,
+    "sha256": "dd20c5d7b31626c058d108419be2c4f8717a9a16db18794b39eaece2d700dfde",
+    "bytes": 4135,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/trapSet.mp3",
+    "status": 200,
+    "sha256": "ef66e83599fb28ed05637f758c940df6512e8c5ce1259b4c3cb61583bacbf87a",
+    "bytes": 4893,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/void.mp3",
+    "status": 200,
+    "sha256": "15311ca394cc83389fdafa0149b3fae152f692e87ce936ae147fa1b3ba22aa55",
+    "bytes": 8567,
+    "match": true
+  },
+  {
+    "file": "sfx/lore-v3/win.mp3",
+    "status": 200,
+    "sha256": "ad5ed0c2b204d4fe6c9aa6b904a071a55dfc2cb1f6024cecbd2e5a2c4cb454c9",
+    "bytes": 13917,
+    "match": true
+  }
+]

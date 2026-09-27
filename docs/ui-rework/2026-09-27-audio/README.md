@@ -4,7 +4,7 @@
 
 The v2 bank repeatedly layered generated glass notes and low resonances onto unrelated actions. Runtime inspection also found two contact sounds for one attack (the animation and following hit/damage event), summon audio preceding the card's landing, and a separate opening player/cache that bypassed the shared voice budget. The opening deal additionally voiced the same cards already handled by paperDraw.
 
-The active bank is now `/sfx/lore-v3/`: **32 cues, 40 stereo MP3s, approximately 227 KiB**. UI, cards, books, cloth, wood, chips and dice use edited physical recordings. Glass is reserved for mana, healing, turn announcements and outcomes; mana has a short ascending release, healing a lower, softer pair. Repeated UI/card actions are shorter, quieter and drier than combat. There is no new oscillator/noise layer. Old published banks remain as historical assets, but active application code does not request them.
+The active bank is now `/sfx/lore-v3/`: **32 cues, 40 stereo MP3s, approximately 198 KiB**. UI, cards, books, cloth, wood, chips and dice use edited physical recordings. Glass is reserved for mana, healing, turn announcements and outcomes; mana has a short ascending release, healing a lower, softer pair. Repeated UI/card actions are shorter, quieter and drier than combat. There is no new oscillator/noise layer. Old published banks remain as historical assets, but active application code does not request them.
 
 - UI confirmation replaces the generic button click from the same action. The volume preview uses a short UI sound instead of the old coin sequence.
 - Attack launch/contact are owned by the movement timeline. Only the exact subsequent hit already voiced at contact is suppressed. Counterattack, piercing, spell damage and both players' healing remain audible; zero-value events are silent.
@@ -40,4 +40,10 @@ node tests/audio-v3-browser.mjs
 - Mixer: mute/unmute while decoding, navigation cancellation, late decode deadline, shared opening cancellation, priority/polyphony, UI coalescing, exact attack/counter/piercing event ownership.
 - Real BaseController/browser: monster attack produces one attack + one impact, direct attack one attack + one face-hit, opponent healing sounds, summon starts within 40 ms of the landing VFX.
 - Existing ceremony/aim and quick-spell playback suites; first-screen loading stays usable while sound requests are deliberately held.
-- Staging records will be stored alongside these checks. No production deployment.
+- Staging records are stored in `staging-checks/`. Browser account/API responses are explicit fixtures; static app code, MP3 files and Web Audio playback are real. No production deployment.
+
+## Concurrent requested music changes integrated
+
+Home track `余白と残響` and battle track `poised opening` were provided in a separate user task and merged here. Battle music applies to normal/ranked/BOT games, at 60% of the home music gain, with three seconds of silence after the track ends. Both respect the shared volume/mute setting and release on leaving the screen. The integrated browser check measured 3005.7 ms from real media end to restart, and verified that input/volume changes do not shorten the gap. Online controllers used a WebSocket fixture; this is not an authenticated online match verification.
+
+Final staging deployment: runtime `8646b9d`, Worker version `bec2f475-278c-44ee-bbab-ef65eaa01efd`. All 56 selected built application/audio files match SHA-256. The deployed home plays BGM, stops it on navigation and resumes exactly one track on return; UI sounds use only lore-v3. See `deployment.json`.

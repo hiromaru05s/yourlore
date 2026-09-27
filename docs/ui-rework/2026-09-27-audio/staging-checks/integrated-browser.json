@@ -1,0 +1,23 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "duration": 217.96,
+  "starts": 2,
+  "audioRequests": [
+    "https://test.yourlore.xyz/sfx/lore-v3/click-1.mp3",
+    "https://test.yourlore.xyz/sfx/lore-v3/click-2.mp3",
+    "https://test.yourlore.xyz/music/yohaku-to-zankyo.mp3",
+    "https://test.yourlore.xyz/sfx/lore-v3/click-3.mp3",
+    "https://test.yourlore.xyz/sfx/lore-v3/pop.mp3",
+    "https://test.yourlore.xyz/sfx/lore-v3/error.mp3",
+    "https://test.yourlore.xyz/music/yohaku-to-zankyo.mp3"
+  ],
+  "errors": [],
+  "checks": [
+    "deployed real home BGM plays",
+    "home departure releases BGM source",
+    "home revisit creates one playing track",
+    "deployed UI clicks trigger real Web Audio",
+    "only v3 SFX requested"
+  ],
+  "account": "explicit API fixture; deployed static app and real audio assets"
+}

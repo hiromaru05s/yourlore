@@ -1,0 +1,3 @@
+PASS [
+  'all 40 deployed MP3s decode to stereo and render non-silent PCM in real Chrome Web Audio'
+]

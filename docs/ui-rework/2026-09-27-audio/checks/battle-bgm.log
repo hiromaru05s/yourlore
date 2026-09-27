@@ -1,0 +1,20 @@
+{
+  "result": "PASS",
+  "modes": [
+    "normal",
+    "ranked",
+    "BOT"
+  ],
+  "gapMs": 3005.7000000476837,
+  "checks": [
+    "real MP3 playback in all three game modes",
+    "60% home volume",
+    "3-second silence despite interactions",
+    "immediate in-board volume/mute",
+    "visibility pause/resume",
+    "destroy during gap cancels restart",
+    "return home without overlap",
+    "tutorial excluded"
+  ],
+  "errors": []
+}

@@ -1,0 +1,39 @@
+⛅️ wrangler 4.130.0
+────────────────────
+🌀 Building list of assets...
+✨ Read 2002 files from the assets directory /Users/hiromaru05s/Desktop/LORE_TCG/client/dist
+🌀 Starting asset upload...
+🌀 Found 12 new or modified static assets to upload. Proceeding with upload...
++ /index.html
++ /assets/paperDraw-ClpG52PY.js
++ /assets/diceScene-DCzZWdeH.js.map
++ /assets/main-CEHnpal5.js
++ /assets/diceScene-DCzZWdeH.js
++ /assets/paperDraw-ClpG52PY.js.map
++ /assets/duelScene-BDrlBQEf.js
++ /music/poised-opening.mp3
++ /assets/riftScene-BGC-sWdI.js
++ /assets/riftScene-BGC-sWdI.js.map
++ /assets/duelScene-BDrlBQEf.js.map
++ /assets/main-CEHnpal5.js.map
+Uploaded 4 of 12 assets
+Uploaded 8 of 12 assets
+Uploaded 12 of 12 assets
+✨ Success! Uploaded 12 files (1925 already uploaded) (6.81 sec)
+
+Total Upload: 1049.85 KiB / gzip: 226.06 KiB
+Worker Startup Time: 38 ms
+Your Worker has access to the following bindings:
+Binding                                                                Resource
+env.MATCHMAKER (Matchmaker)                                            Durable Object
+env.GAME_ROOM (GameRoom)                                               Durable Object
+env.DB (lore-db-staging)                                               D1 Database
+env.ASSETS                                                             Assets
+env.APP_ORIGIN ("*")                                                   Environment Variable
+env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")      Environment Variable
+env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")          Environment Variable
+
+Uploaded lore-server-staging (13.59 sec)
+Deployed lore-server-staging triggers (2.22 sec)
+  test.yourlore.xyz (custom domain)
+Current Version ID: bec2f475-278c-44ee-bbab-ef65eaa01efd

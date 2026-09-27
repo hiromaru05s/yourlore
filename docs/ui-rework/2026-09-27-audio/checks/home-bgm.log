@@ -1,0 +1,16 @@
+{
+  "result": "PASS",
+  "duration": 217.96,
+  "checks": [
+    "no music request before artwork ready",
+    "autoplay gesture retry",
+    "real MP3 decoding and playback",
+    "loop wraps at track end",
+    "volume and mute",
+    "hide pauses / reveal resumes",
+    "BOT entry stops and releases source",
+    "return home starts one track",
+    "destroy releases every track"
+  ],
+  "errors": []
+}
