@@ -321,7 +321,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     const vol = body().querySelector("#vol") as HTMLInputElement;
     const volVal = body().querySelector("#volVal") as HTMLElement;
     vol.oninput = () => { setSfxVolume(Number(vol.value) / 100); volVal.textContent = `${vol.value}%`; };
-    vol.onchange = () => sfx("coin");
+    vol.onchange = () => sfx("pop");
     (body().querySelector("#volTest") as HTMLElement).onclick = () => sfx("impact");
 
     // language (persists to this device; re-renders the whole screen via onLangChange)

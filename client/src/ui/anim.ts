@@ -161,7 +161,7 @@ async function landCard(node: HTMLElement, to: DOMRect, fade = false): Promise<v
 export const fieldPlacement = projectedPlacement;
 /** Morph the reveal into its actual field face during one continuous flight.
  * The landing face stays until the controller replaces it with the same DOM. */
-async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElement,heavy=false):Promise<HTMLElement> {
+async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElement,heavy=false,landingSound:'summon'|'mimic'='summon'):Promise<HTMLElement> {
   if(!target.isConnected || !reveal.isConnected)return face;
   const from=reveal.getBoundingClientRect();
   const w=target.offsetWidth,h=target.offsetHeight;
@@ -196,7 +196,8 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   await wait(duration);
   moving.cancel();old.cancel();reveal.remove();face.style.transform=fieldPlacement(target,w,h).toString();
   if(!fxSkip){
-    if(heavy&&!reduced){sfx('impact');playBiblionFx('summon-impact',face.getBoundingClientRect());
+    if(heavy)sfx(landingSound);
+    if(heavy&&!reduced){playBiblionFx('summon-impact',face.getBoundingClientRect());
       window.dispatchEvent(new CustomEvent('lore:summon-impact',{detail:face.getBoundingClientRect()}));
       const objects=[face];
       const shakes=objects.map(el=>el.animate([{translate:'0 0'},{translate:'0 3px',offset:.12},{translate:'-1px -2px',offset:.3},{translate:'1px 1px',offset:.55},{translate:'0 0'}],{duration:240,easing:'ease-out'}));
@@ -237,7 +238,7 @@ export async function summonFromHand(card: CardInst, uid: string, side: ViewSide
   if (!from || !to || !target) { summonIn(uid); return; }
   const ghost = floatAt(cardEl(card, {size:"hand"}), from); target.style.visibility = "hidden";
   let face:HTMLElement|undefined;
-  try { await focusCard(ghost, side); face=await flyIntoSlot(ghost,target,target.cloneNode(true) as HTMLElement,true); }
+  try { await focusCard(ghost, side); face=await flyIntoSlot(ghost,target,target.cloneNode(true) as HTMLElement,true,card.id==='MIMIC'?'mimic':'summon'); }
   finally { ghost.remove(); face?.remove(); target.style.visibility = ""; }
 }
 /** Public hand-to-shelf movement, including the end-turn overflow picker. */
@@ -399,7 +400,7 @@ export async function attackStrike(uid:string,targetUid:string|null,defender:Vie
   const source=byUid(uid);
   const target=targetUid?byUid(targetUid):document.querySelector<HTMLElement>(defender==='me'?'#portraitMe .avatar':'#portraitOpp .avatar');
   if(!source||!target||fxSkip)return;
-  if(matchMedia('(prefers-reduced-motion:reduce)').matches){onImpact?.();await wait(100);return;}
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches){sfx(targetUid?'impact':'facehit');onImpact?.();await wait(100);return;}
   const from=source.getBoundingClientRect(),to=target.getBoundingClientRect();
   const w=source.offsetWidth,h=source.offsetHeight;if(!w||!h)return;
   const start=fieldPlacement(source,w,h),plan=attackPlan(from,to);
@@ -753,7 +754,7 @@ export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: nu
   const node = floatAt(cardEl(card, { size: "hand", fullArt:true }), from);
   try {
     await focusCard(node, side);
-    const face=await flyIntoSlot(node,target,cardEl(card,{field:true}),true);
+    const face=await flyIntoSlot(node,target,cardEl(card,{field:true}),true,card.id==='MIMIC'?'mimic':'summon');
     // Hand the exact landing face to the lane before another summon opens space.
     face.removeAttribute('style');face.classList.remove('fx-field-ghost','fx-card-flight');
     target.replaceWith(face);return face;

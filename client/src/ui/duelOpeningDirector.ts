@@ -112,7 +112,7 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
       fallback.style.left=`${x-43}px`;fallback.style.top=`${y-43-Math.sin(Math.PI*clamp((visual-2350)/1500))*65}px`;
       fallback.style.transform=`rotateY(${(1-clamp((visual-2350)/1500))*1080}deg)`;
       if(!fast&&o.sampleMs==null){
-        for(const [at,key] of [[180,'rise'],[2350,'toss'],[2980,'land'],[3850,'reveal'],[4450,'deal'],[4610,'deal'],[4770,'deal']] as const)
+        for(const [at,key] of [[180,'rise'],[2350,'toss'],[2980,'land'],[3850,'reveal']] as const)
           if(last<at&&ms>=at&&ms-at<150)audio.play(key);
       }
       last=ms;

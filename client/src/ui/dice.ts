@@ -41,22 +41,21 @@ export async function diceRollAnim(rolls:number[],opts:DiceOpts):Promise<void>{
   document.addEventListener('keydown',key,true);
   const hidden=()=>{if(document.hidden)abort.abort();};document.addEventListener('visibilitychange',hidden);
   try{
-    sfx('play');
     if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
       row.classList.add('is-loading');
       scene=await Promise.race([import('./diceScene').then(({mountDiceScene})=>mountDiceScene(row,rolls,!!opts.casino,abort.signal)).catch(()=>null),skipped.then(()=>null)]);
       row.classList.remove('is-loading');
       if(scene)await Promise.race([scene.finished,skipped]);
-      else if(!abort.signal.aborted)await pause(350);
+      else if(!abort.signal.aborted){sfx('diceRoll',{signal:abort.signal});await pause(350);}
     }
     if(abort.signal.aborted)return;
     ov.classList.add('is-settled');
-    sfx('pop');
+    sfx('diceLand',{signal:abort.signal});
     const sum=rolls.reduce((a,b)=>a+b,0),lang=getLang();
     cap.textContent=rolls.length>1?`${rolls.join(' + ')} = ${sum}`:String(sum);
     if(opts.need!=null){
       const ok=!!opts.success;ov.classList.add(ok?'win':'fail');
-      const verdict=document.createElement('span');verdict.className='d3-verdict';verdict.textContent=`${opts.need}+ · `+(ok?(lang==='ja'?'成功':lang==='en'?'Success':'성공'):(lang==='ja'?'失敗':lang==='en'?'Fail':'실패'));cap.append(verdict);if(ok)sfx('mana');
+      const verdict=document.createElement('span');verdict.className='d3-verdict';verdict.textContent=`${opts.need}+ · `+(ok?(lang==='ja'?'成功':lang==='en'?'Success':'성공'):(lang==='ja'?'失敗':lang==='en'?'Fail':'실패'));cap.append(verdict);if(ok)sfx('pop',{signal:abort.signal});
     }
     await pause(560);if(!abort.signal.aborted){ov.classList.add('out');await pause(140);}
   }finally{abort.abort();active.delete(abort);scene?.dispose();clearTimeout(timer);document.removeEventListener('visibilitychange',hidden);document.removeEventListener('keydown',key,true);ov.remove();}

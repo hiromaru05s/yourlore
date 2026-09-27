@@ -1,0 +1,322 @@
+[
+  {
+    "file": "click-1.mp3",
+    "duration": 0.13,
+    "peakDb": -16.03,
+    "activeRmsDb": -31.94,
+    "onsetMs": 27.9,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "click-2.mp3",
+    "duration": 0.13,
+    "peakDb": -15.96,
+    "activeRmsDb": -36.16,
+    "onsetMs": 1.8,
+    "tailPeak": 0.0001281543227378279
+  },
+  {
+    "file": "click-3.mp3",
+    "duration": 0.13,
+    "peakDb": -16.0,
+    "activeRmsDb": -36.96,
+    "onsetMs": 1.6,
+    "tailPeak": 0.00021394476061686873
+  },
+  {
+    "file": "pop.mp3",
+    "duration": 0.22,
+    "peakDb": -16.0,
+    "activeRmsDb": -29.0,
+    "onsetMs": 2.2,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "error.mp3",
+    "duration": 0.22,
+    "peakDb": -11.99,
+    "activeRmsDb": -28.6,
+    "onsetMs": 3.4,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "draw-1.mp3",
+    "duration": 0.3,
+    "peakDb": -17.44,
+    "activeRmsDb": -28.0,
+    "onsetMs": 2.2,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "draw-2.mp3",
+    "duration": 0.3,
+    "peakDb": -13.73,
+    "activeRmsDb": -27.96,
+    "onsetMs": 5.7,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "draw-3.mp3",
+    "duration": 0.3,
+    "peakDb": -11.85,
+    "activeRmsDb": -29.01,
+    "onsetMs": 5.7,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "discard.mp3",
+    "duration": 0.341,
+    "peakDb": -11.9,
+    "activeRmsDb": -29.74,
+    "onsetMs": 5.1,
+    "tailPeak": 0.0018566821236163378
+  },
+  {
+    "file": "play.mp3",
+    "duration": 0.46,
+    "peakDb": -9.99,
+    "activeRmsDb": -32.25,
+    "onsetMs": 2.0,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "summon.mp3",
+    "duration": 0.65,
+    "peakDb": -6.99,
+    "activeRmsDb": -23.49,
+    "onsetMs": 4.4,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "attack-1.mp3",
+    "duration": 0.33,
+    "peakDb": -9.98,
+    "activeRmsDb": -28.36,
+    "onsetMs": 6.0,
+    "tailPeak": 0.0004762524040415883
+  },
+  {
+    "file": "attack-2.mp3",
+    "duration": 0.33,
+    "peakDb": -9.97,
+    "activeRmsDb": -26.09,
+    "onsetMs": 22.0,
+    "tailPeak": 3.0243731998780277e-06
+  },
+  {
+    "file": "attack-3.mp3",
+    "duration": 0.33,
+    "peakDb": -10.69,
+    "activeRmsDb": -24.99,
+    "onsetMs": 1.8,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "impact-1.mp3",
+    "duration": 0.37,
+    "peakDb": -11.0,
+    "activeRmsDb": -23.01,
+    "onsetMs": 1.7,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "impact-2.mp3",
+    "duration": 0.37,
+    "peakDb": -10.64,
+    "activeRmsDb": -23.0,
+    "onsetMs": 1.7,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "impact-3.mp3",
+    "duration": 0.37,
+    "peakDb": -11.37,
+    "activeRmsDb": -22.98,
+    "onsetMs": 1.7,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "facehit.mp3",
+    "duration": 0.49,
+    "peakDb": -9.3,
+    "activeRmsDb": -23.0,
+    "onsetMs": 0.9,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "damage.mp3",
+    "duration": 0.4,
+    "peakDb": -13.05,
+    "activeRmsDb": -25.02,
+    "onsetMs": 1.7,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "death.mp3",
+    "duration": 0.6,
+    "peakDb": -10.86,
+    "activeRmsDb": -28.15,
+    "onsetMs": 8.2,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "trapSet.mp3",
+    "duration": 0.36,
+    "peakDb": -11.99,
+    "activeRmsDb": -32.01,
+    "onsetMs": 65.0,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "trap.mp3",
+    "duration": 0.66,
+    "peakDb": -8.01,
+    "activeRmsDb": -24.31,
+    "onsetMs": 4.3,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "mimic.mp3",
+    "duration": 0.66,
+    "peakDb": -8.01,
+    "activeRmsDb": -24.31,
+    "onsetMs": 4.3,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "buy.mp3",
+    "duration": 0.49,
+    "peakDb": -10.01,
+    "activeRmsDb": -27.94,
+    "onsetMs": 3.3,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "coin.mp3",
+    "duration": 0.45,
+    "peakDb": -10.01,
+    "activeRmsDb": -27.94,
+    "onsetMs": 3.3,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "mana-pay.mp3",
+    "duration": 0.37,
+    "peakDb": -14.61,
+    "activeRmsDb": -27.98,
+    "onsetMs": 1.2,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "mana.mp3",
+    "duration": 0.91,
+    "peakDb": -10.26,
+    "activeRmsDb": -24.0,
+    "onsetMs": 0.2,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "heal.mp3",
+    "duration": 1.05,
+    "peakDb": -11.96,
+    "activeRmsDb": -26.0,
+    "onsetMs": 10.2,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "turn.mp3",
+    "duration": 0.52,
+    "peakDb": -9.92,
+    "activeRmsDb": -31.3,
+    "onsetMs": 3.2,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "match.mp3",
+    "duration": 0.79,
+    "peakDb": -9.92,
+    "activeRmsDb": -30.6,
+    "onsetMs": 3.2,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "void.mp3",
+    "duration": 0.88,
+    "peakDb": -11.07,
+    "activeRmsDb": -33.13,
+    "onsetMs": 15.8,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "shuffle.mp3",
+    "duration": 0.94,
+    "peakDb": -12.12,
+    "activeRmsDb": -36.07,
+    "onsetMs": 8.7,
+    "tailPeak": 3.2501702662557364e-05
+  },
+  {
+    "file": "duel-start.mp3",
+    "duration": 1.32,
+    "peakDb": -9.14,
+    "activeRmsDb": -25.25,
+    "onsetMs": 2.9,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "win.mp3",
+    "duration": 2.3,
+    "peakDb": -8.95,
+    "activeRmsDb": -25.15,
+    "onsetMs": 6.6,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "lose.mp3",
+    "duration": 1.75,
+    "peakDb": -11.84,
+    "activeRmsDb": -27.0,
+    "onsetMs": 6.6,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "drawGame.mp3",
+    "duration": 1.5,
+    "peakDb": -11.25,
+    "activeRmsDb": -27.0,
+    "onsetMs": 6.6,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "coinToss.mp3",
+    "duration": 0.28,
+    "peakDb": -12.11,
+    "activeRmsDb": -30.62,
+    "onsetMs": 0.8,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "coinLand.mp3",
+    "duration": 0.33,
+    "peakDb": -11.56,
+    "activeRmsDb": -24.04,
+    "onsetMs": 3.3,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "diceRoll.mp3",
+    "duration": 1.08,
+    "peakDb": -11.02,
+    "activeRmsDb": -32.7,
+    "onsetMs": 2.3,
+    "tailPeak": 0.0
+  },
+  {
+    "file": "diceLand.mp3",
+    "duration": 0.2,
+    "peakDb": -13.01,
+    "activeRmsDb": -29.38,
+    "onsetMs": 3.2,
+    "tailPeak": 0.0
+  }
+]

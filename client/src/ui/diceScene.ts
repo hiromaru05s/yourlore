@@ -1,5 +1,6 @@
 /** Real beveled dice with generated enamel and geometric, authoritative pips. */
 import * as T from 'three';
+import {sfx} from './sound';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 export const DICE_ENAMEL='/art/biblion/arcana/dice-enamel.webp';
@@ -107,6 +108,7 @@ export async function mountDiceScene(host:HTMLElement,rolls:number[],casino:bool
     clearTimeout(timeout);if(dead||signal.aborted)return null;
     const warm=new T.WebGLRenderTarget(32,32);renderer.setRenderTarget(warm);
     try{renderer.render(scene,camera);}finally{renderer.setRenderTarget(null);warm.dispose();}
+    sfx('diceRoll',{signal});
     const start=performance.now(),vw=innerWidth,vh=innerHeight;
     const halfView=distance*Math.tan(Math.PI/12)*camera.aspect;
     const tick=(now:number)=>{

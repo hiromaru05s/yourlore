@@ -1,0 +1,62 @@
+[
+  {
+    "at": 0.0,
+    "cue": "click-1"
+  },
+  {
+    "at": 0.68,
+    "cue": "draw-1"
+  },
+  {
+    "at": 1.53,
+    "cue": "shuffle"
+  },
+  {
+    "at": 3.02,
+    "cue": "summon"
+  },
+  {
+    "at": 4.22,
+    "cue": "attack-1"
+  },
+  {
+    "at": 5.1,
+    "cue": "impact-1"
+  },
+  {
+    "at": 6.02,
+    "cue": "facehit"
+  },
+  {
+    "at": 7.06,
+    "cue": "mana"
+  },
+  {
+    "at": 8.52,
+    "cue": "heal"
+  },
+  {
+    "at": 10.12,
+    "cue": "trap"
+  },
+  {
+    "at": 11.33,
+    "cue": "discard"
+  },
+  {
+    "at": 12.22,
+    "cue": "diceRoll"
+  },
+  {
+    "at": 13.85,
+    "cue": "duel-start"
+  },
+  {
+    "at": 15.72,
+    "cue": "win"
+  },
+  {
+    "at": 18.57,
+    "cue": "lose"
+  }
+]

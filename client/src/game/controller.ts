@@ -25,7 +25,8 @@ import * as A from "../ui/anim";
 import { cardPicker, cardPickerMulti, confirmDialog, treasureModal, winModal, closeOverlay, closeTreasureNotices } from "../ui/modal";
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
-import { sfx, type SfxName } from "../ui/sound";
+import { sfx, stopSounds } from "../ui/sound";
+import {EventSound} from "../ui/eventSound";
 import { tierOf, tierLabel } from "../ui/tier";
 import { t, getLang, cardName, onLangChange } from "../i18n";
 import { diceRollAnim, cancelDiceAnimations } from "../ui/dice";
@@ -250,6 +251,7 @@ export abstract class BaseController implements BoardHandlers {
       }
     }
     const events = res.events;
+    const eventSound = new EventSound();
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
     const spellGhosts:HTMLElement[]=[];
@@ -269,13 +271,8 @@ export abstract class BaseController implements BoardHandlers {
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
-      // sound per event
-      let sn: SfxName | undefined;
-      if (e.type === "summon") sn = e.id === "MIMIC" ? "mimic" : "summon";      // Mimic token has its own cue
-      else sn = ({ hit: "impact", destroy: "death", playSpell: "play", trapReveal: "trap", trapSet: "trapSet" } as Partial<Record<GameEvent["type"], SfxName>>)[e.type];
-      if (sn) sfx(sn);
-      else if (e.type === "damage" && e.player === this.you) sfx("damage");
-      else if (e.type === "heal" && e.player === this.you) sfx("heal");
+      const cue = eventSound.cue(e);
+      if(cue)sfx(cue);
       switch (e.type) {
         case "enchantActivate":
           A.enchantActivation(e.uid);
@@ -318,7 +315,7 @@ export abstract class BaseController implements BoardHandlers {
         case "attack": {
           // The shared attack timeline owns launch/contact cues and local target recoil.
           const defender = sideOf((1 - e.player) as Side);
-          await A.attackStrike(e.uid, e.targetUid, defender);
+          await A.attackStrike(e.uid, e.targetUid, defender,()=>eventSound.contact(e.targetUid,(1-e.player) as Side));
           break;
         }
         case "hit":
@@ -917,6 +914,7 @@ export abstract class BaseController implements BoardHandlers {
   destroy(): void {
     this.disposeHandDiscard?.();
     this.dead = true;
+    stopSounds();
     this.openingAbort.abort();this.releaseOpening();
     this.clearQuickFaces();
     A.setFxSkip(true);

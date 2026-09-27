@@ -1,0 +1,331 @@
+{
+  "origin": "http://localhost:5211",
+  "checks": [
+    "all 40 deployed MP3s decode to stereo and render non-silent PCM in real Chrome Web Audio",
+    "all 32 gameplay cues play through real shared AudioContext; opening cancellation and mute end every source",
+    "actual BaseController: one contact cue per attack, opponent healing audible, summon sound within 40 ms of landing VFX"
+  ],
+  "clips": [
+    {
+      "name": "click",
+      "file": "click-1.mp3",
+      "channels": 2,
+      "duration": 0.13,
+      "peak": 0.1570250689983368,
+      "rms": 0.013229767692131317
+    },
+    {
+      "name": "click",
+      "file": "click-2.mp3",
+      "channels": 2,
+      "duration": 0.13,
+      "peak": 0.15917199850082397,
+      "rms": 0.009856205889180838
+    },
+    {
+      "name": "click",
+      "file": "click-3.mp3",
+      "channels": 2,
+      "duration": 0.13,
+      "peak": 0.1572667807340622,
+      "rms": 0.010426115450114647
+    },
+    {
+      "name": "pop",
+      "file": "pop.mp3",
+      "channels": 2,
+      "duration": 0.22,
+      "peak": 0.1572033017873764,
+      "rms": 0.012065190641077405
+    },
+    {
+      "name": "error",
+      "file": "error.mp3",
+      "channels": 2,
+      "duration": 0.22,
+      "peak": 0.2513682246208191,
+      "rms": 0.018989930838348
+    },
+    {
+      "name": "draw",
+      "file": "draw-1.mp3",
+      "channels": 2,
+      "duration": 0.3,
+      "peak": 0.13030622899532318,
+      "rms": 0.01323123471885313
+    },
+    {
+      "name": "draw",
+      "file": "draw-2.mp3",
+      "channels": 2,
+      "duration": 0.3,
+      "peak": 0.20254011452198029,
+      "rms": 0.01320700641266102
+    },
+    {
+      "name": "draw",
+      "file": "draw-3.mp3",
+      "channels": 2,
+      "duration": 0.3,
+      "peak": 0.2514340579509735,
+      "rms": 0.01648856623636971
+    },
+    {
+      "name": "discard",
+      "file": "discard.mp3",
+      "channels": 2,
+      "duration": 0.3406458333333333,
+      "peak": 0.2447536289691925,
+      "rms": 0.01450381686585795
+    },
+    {
+      "name": "play",
+      "file": "play.mp3",
+      "channels": 2,
+      "duration": 0.46,
+      "peak": 0.310651570558548,
+      "rms": 0.01609789555824207
+    },
+    {
+      "name": "summon",
+      "file": "summon.mp3",
+      "channels": 2,
+      "duration": 0.65,
+      "peak": 0.44723597168922424,
+      "rms": 0.033651879626672994
+    },
+    {
+      "name": "attack",
+      "file": "attack-1.mp3",
+      "channels": 2,
+      "duration": 0.33,
+      "peak": 0.314026802778244,
+      "rms": 0.03261591092165293
+    },
+    {
+      "name": "attack",
+      "file": "attack-2.mp3",
+      "channels": 2,
+      "duration": 0.33,
+      "peak": 0.31714490056037903,
+      "rms": 0.042349534701773064
+    },
+    {
+      "name": "attack",
+      "file": "attack-3.mp3",
+      "channels": 2,
+      "duration": 0.33,
+      "peak": 0.2832375168800354,
+      "rms": 0.04307412602185421
+    },
+    {
+      "name": "impact",
+      "file": "impact-1.mp3",
+      "channels": 2,
+      "duration": 0.37,
+      "peak": 0.28190574049949646,
+      "rms": 0.040016515527606655
+    },
+    {
+      "name": "impact",
+      "file": "impact-2.mp3",
+      "channels": 2,
+      "duration": 0.37,
+      "peak": 0.2935905456542969,
+      "rms": 0.03888464158061488
+    },
+    {
+      "name": "impact",
+      "file": "impact-3.mp3",
+      "channels": 2,
+      "duration": 0.37,
+      "peak": 0.2701265513896942,
+      "rms": 0.04234047902243276
+    },
+    {
+      "name": "facehit",
+      "file": "facehit.mp3",
+      "channels": 2,
+      "duration": 0.49,
+      "peak": 0.3428126871585846,
+      "rms": 0.04550066979093322
+    },
+    {
+      "name": "damage",
+      "file": "damage.mp3",
+      "channels": 2,
+      "duration": 0.4,
+      "peak": 0.2225639671087265,
+      "rms": 0.030551167766272955
+    },
+    {
+      "name": "death",
+      "file": "death.mp3",
+      "channels": 2,
+      "duration": 0.6,
+      "peak": 0.2863849401473999,
+      "rms": 0.02846257714294273
+    },
+    {
+      "name": "trapSet",
+      "file": "trapSet.mp3",
+      "channels": 2,
+      "duration": 0.36,
+      "peak": 0.25012487173080444,
+      "rms": 0.013364777552487477
+    },
+    {
+      "name": "trap",
+      "file": "trap.mp3",
+      "channels": 2,
+      "duration": 0.66,
+      "peak": 0.3926856219768524,
+      "rms": 0.028460629944996062
+    },
+    {
+      "name": "mimic",
+      "file": "mimic.mp3",
+      "channels": 2,
+      "duration": 0.66,
+      "peak": 0.3926856219768524,
+      "rms": 0.028460629944996062
+    },
+    {
+      "name": "buy",
+      "file": "buy.mp3",
+      "channels": 2,
+      "duration": 0.49,
+      "peak": 0.3151611089706421,
+      "rms": 0.0142908477399594
+    },
+    {
+      "name": "coin",
+      "file": "coin.mp3",
+      "channels": 2,
+      "duration": 0.45,
+      "peak": 0.3151611089706421,
+      "rms": 0.014912476601235947
+    },
+    {
+      "name": "mana-pay",
+      "file": "mana-pay.mp3",
+      "channels": 2,
+      "duration": 0.37,
+      "peak": 0.18567462265491486,
+      "rms": 0.018201339813469965
+    },
+    {
+      "name": "mana",
+      "file": "mana.mp3",
+      "channels": 2,
+      "duration": 0.91,
+      "peak": 0.3060987889766693,
+      "rms": 0.033664750886021375
+    },
+    {
+      "name": "heal",
+      "file": "heal.mp3",
+      "channels": 2,
+      "duration": 1.05,
+      "peak": 0.25180166959762573,
+      "rms": 0.028562857408499787
+    },
+    {
+      "name": "turn",
+      "file": "turn.mp3",
+      "channels": 2,
+      "duration": 0.52,
+      "peak": 0.3105788826942444,
+      "rms": 0.011674301598645312
+    },
+    {
+      "name": "match",
+      "file": "match.mp3",
+      "channels": 2,
+      "duration": 0.79,
+      "peak": 0.310577392578125,
+      "rms": 0.009230573363460243
+    },
+    {
+      "name": "void",
+      "file": "void.mp3",
+      "channels": 2,
+      "duration": 0.88,
+      "peak": 0.27838000655174255,
+      "rms": 0.015000680093806298
+    },
+    {
+      "name": "shuffle",
+      "file": "shuffle.mp3",
+      "channels": 2,
+      "duration": 0.94,
+      "peak": 0.2461341768503189,
+      "rms": 0.009305221301330008
+    },
+    {
+      "name": "duel-start",
+      "file": "duel-start.mp3",
+      "channels": 2,
+      "duration": 1.32,
+      "peak": 0.34748440980911255,
+      "rms": 0.023079171658511234
+    },
+    {
+      "name": "win",
+      "file": "win.mp3",
+      "channels": 2,
+      "duration": 2.3,
+      "peak": 0.3566305339336395,
+      "rms": 0.027709130530503306
+    },
+    {
+      "name": "lose",
+      "file": "lose.mp3",
+      "channels": 2,
+      "duration": 1.75,
+      "peak": 0.2559327185153961,
+      "rms": 0.02238303282015379
+    },
+    {
+      "name": "drawGame",
+      "file": "drawGame.mp3",
+      "channels": 2,
+      "duration": 1.5,
+      "peak": 0.2737590968608856,
+      "rms": 0.02663659752839997
+    },
+    {
+      "name": "coinToss",
+      "file": "coinToss.mp3",
+      "channels": 2,
+      "duration": 0.28,
+      "peak": 0.23560062050819397,
+      "rms": 0.008360067304127477
+    },
+    {
+      "name": "coinLand",
+      "file": "coinLand.mp3",
+      "channels": 2,
+      "duration": 0.33,
+      "peak": 0.2591603398323059,
+      "rms": 0.014465491096840305
+    },
+    {
+      "name": "diceRoll",
+      "file": "diceRoll.mp3",
+      "channels": 2,
+      "duration": 1.08,
+      "peak": 0.26729679107666016,
+      "rms": 0.005349630572633458
+    },
+    {
+      "name": "diceLand",
+      "file": "diceLand.mp3",
+      "channels": 2,
+      "duration": 0.2,
+      "peak": 0.20902694761753082,
+      "rms": 0.00892362987171451
+    }
+  ],
+  "errors": []
+}
