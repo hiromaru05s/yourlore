@@ -1,3 +1,4 @@
+import {warmSounds} from './sound';
 import {loadingScreen} from './loadingScreen';
 import {loungeText} from './loungeText';
 import {decodeAsset,waitAssets} from './assetReadiness';
@@ -44,6 +45,7 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
 let warming:Promise<void>|undefined;
 export function warmDuel():Promise<void>{
   return warming??=(async()=>{
+    void warmSounds();
     const low=matchMedia('(max-width:700px)').matches;
     const urls=[...['board','market','supply'].map(n=>`${n}${low?'-low':''}.glb`),...['deck-place','shelf'].map(n=>`${n}${low?'-lod1':''}.glb`),'mana-tray.glb','mana-counter.glb','mana-crystal-ready.glb','mana-crystal-spent.glb','crystal-optics.json','turn-button.glb','timer-inserts.glb','reroll-button.glb'].map(n=>READING_ASSETS+n);
     await Promise.allSettled([...urls.map(async url=>{const r=await fetch(url);if(r.ok)await r.arrayBuffer();}),...[logo,...coinImages].map(decode),import('./duelScene')]);

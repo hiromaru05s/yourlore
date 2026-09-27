@@ -14,14 +14,20 @@ function unlock(){
  if(typeof AudioContext==='undefined')return;
  try{if(!ctx){ctx=new AudioContext();master=ctx.createGain();master.gain.value=volume*volume;const limiter=ctx.createDynamicsCompressor();limiter.threshold.value=-10;limiter.knee.value=8;limiter.ratio.value=5;limiter.attack.value=.003;limiter.release.value=.16;master.connect(limiter).connect(ctx.destination);}
  unlocked=true;if(ctx.state==='suspended')void ctx.resume().catch(()=>{});
- for(const name of SFX_NAMES)for(const url of soundUrls(name))void buffer(url).catch(()=>{});
+ for(const url of encoded.keys())void buffer(url).catch(()=>{});
  }catch{/* Audio availability never blocks gameplay. */}
 }
 export function initSound(){
  if(installed)return;installed=true;
- for(const name of SFX_NAMES)for(const url of soundUrls(name))void bytes(url).catch(()=>{});
+ document.addEventListener('lore:screen-ready',()=>{void warmSounds(['click','pop','error']);},{once:true});
  document.addEventListener('pointerdown',unlock,{once:true,capture:true});document.addEventListener('keydown',unlock,{once:true,capture:true});
  document.addEventListener('visibilitychange',()=>{if(document.hidden)stopSounds();});
+}
+/** Keep bulk audio off the boot critical path and limit background requests. */
+export async function warmSounds(names:readonly SfxName[]=SFX_NAMES):Promise<void>{
+ const urls=names.flatMap(soundUrls);let index=0;
+ const worker=async()=>{while(index<urls.length){const url=urls[index++];try{if(ctx)await buffer(url);else await bytes(url);}catch{/* Optional sound never blocks a scene. */}}};
+ await Promise.all([worker(),worker()]);
 }
 export function stopSounds(){for(const voice of active){try{voice.stop();}catch{}}active.clear();}
 export function getSfxVolume(){return volume;}

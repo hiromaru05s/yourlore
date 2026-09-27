@@ -1,0 +1,46 @@
+
+ ⛅️ wrangler 4.130.0 (update available 4.141.0)
+───────────────────────────────────────────────
+🌀 Building list of assets...
+✨ Read 1941 files from the assets directory /Users/hiromaru05s/Desktop/LORE_TCG/client/dist
+🌀 Starting asset upload...
+🌀 Found 18 new or modified static assets to upload. Proceeding with upload...
++ /index.html
++ /assets/paperDraw-D4iW_7gN.js.map
++ /art/lounge/icons/active-v1/friends.webp
++ /art/lounge/icons/active-v1/cards.webp
++ /assets/duelScene-Bk8gGkGs.js
++ /assets/main-B2Dro82N.css
++ /assets/riftScene-D-P3xmfV.js
++ /art/lounge/icons/active-v1/home.webp
++ /art/lounge/icons/active-v1/shop.webp
++ /art/lounge/icons/active-v1/book.webp
++ /ui/loading/v1/runner.webp
++ /assets/main-CSGXAmeW.js
++ /assets/paperDraw-D4iW_7gN.js
++ /assets/riftScene-D-P3xmfV.js.map
++ /art/lounge/icons/active-v1/deck.webp
++ /art/lounge/icons/active-v1/trophy.webp
++ /assets/duelScene-Bk8gGkGs.js.map
++ /assets/main-CSGXAmeW.js.map
+Uploaded 6 of 18 assets
+Uploaded 12 of 18 assets
+Uploaded 18 of 18 assets
+✨ Success! Uploaded 18 files (1863 already uploaded) (2.85 sec)
+
+Total Upload: 1048.23 KiB / gzip: 224.86 KiB
+Worker Startup Time: 38 ms
+Your Worker has access to the following bindings:
+Binding                                                                Resource                  
+env.MATCHMAKER (Matchmaker)                                            Durable Object            
+env.GAME_ROOM (GameRoom)                                               Durable Object            
+env.DB (lore-db-staging)                                               D1 Database               
+env.ASSETS                                                             Assets                    
+env.APP_ORIGIN ("*")                                                   Environment Variable      
+env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")      Environment Variable      
+env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")          Environment Variable      
+
+Uploaded lore-server-staging (8.39 sec)
+Deployed lore-server-staging triggers (1.75 sec)
+  test.yourlore.xyz (custom domain)
+Current Version ID: 73cf5a86-cbe3-43e7-8eb2-0a75abfa8a33

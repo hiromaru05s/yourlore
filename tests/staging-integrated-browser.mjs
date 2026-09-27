@@ -17,10 +17,10 @@ const browser=await chromium.launch({channel:'chrome',headless:true});
 const page=await browser.newPage({viewport:{width:1280,height:720}}),errors=[],failed=[];
 page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.url().startsWith(origin)&&r.status()>=500)failed.push({url:r.url(),status:r.status()});});
 try{
- await page.goto(origin);await page.waitForSelector('.lounge-login');await page.screenshot({path:out+'/staging-login.png'});
+ await page.goto(origin,{waitUntil:'commit'});await page.waitForSelector('.lounge-login');await page.waitForSelector('.screen-loader',{state:'detached',timeout:45000});await page.screenshot({path:out+'/staging-login.png'});
  const user={id:'qa-fixture-only',email:'qa@example.test',display:'シーカー',avatar:'SEEKER_BLUE',wins:0,losses:0,credits:0,sleeve:'default'};
  await page.route('**/api/**',r=>{const path=new URL(r.request().url()).pathname;const data=path==='/api/auth/me'?{user}:path==='/api/geo'?{country:'JP'}:path==='/api/rank/me'?{rating:{season:'2026-09',mmr:1000,tier:'bronze',wins:0,losses:0}}:path==='/api/social/friends'?{friends:[],incoming:[],outgoing:[],challenges:[]}:{ok:true};return r.fulfill({contentType:'application/json',body:JSON.stringify(data)});});
- await page.reload();await page.waitForSelector('#bot');await page.locator('#bot').click();await page.locator('[data-diff="easy"]').click();
+ await page.reload({waitUntil:'commit'});await page.waitForSelector('#bot');await page.waitForSelector('.screen-loader',{state:'detached',timeout:45000});await page.locator('#bot').click();await page.locator('[data-diff="easy"]').click();
  await page.waitForSelector('.duel-opening-v1',{timeout:20000});
  assert.equal(await page.locator('.game').evaluate(e=>e.inert),true);
  await page.screenshot({path:out+'/staging-opening.png'});
