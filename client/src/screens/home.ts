@@ -9,6 +9,7 @@ import { tierChipHtml } from "../ui/tier";
 import { sanitizeDecks } from "../shared/cards";
 import { artUrl } from "../ui/cardArt";
 import { homeIcon, type HomeIcon } from "../ui/homeIcons";
+import { startHomeMusic } from "../ui/homeMusic";
 
 
 export function mountHome(app: App): Screen {
@@ -29,6 +30,7 @@ export function mountHome(app: App): Screen {
       </button>
     </section>`;
   app.root.appendChild(wrap);
+  const stopMusic = startHomeMusic();
   const q=(id:string)=>wrap.querySelector<HTMLButtonElement>('#'+id)!;
   q('ranked').onclick=()=>app.rankedLobby(); q('online').onclick=()=>app.onlineLobby();
   q('bot').onclick=()=>showBotDifficultyModal(app); q('deck').onclick=()=>app.deck();
@@ -36,7 +38,7 @@ export function mountHome(app: App): Screen {
   void api.rankMe().then(r=>{if(disposed)return;const el=wrap.querySelector<HTMLElement>('#myTier')!;el.innerHTML=r?`${tierChipHtml(r.tier,r.mmr)} <small>${r.season} · #${r.rank}</small>`:t('lobby.connerr');});
   if(u && u.id!=='local-guest-user') void api.me().then(fresh=>{if(!disposed&&fresh?.id===u.id&&app.user?.id===u.id) { app.user=fresh; document.dispatchEvent(new Event("lore:user")); }}).catch(()=>{});
   const unsub=onLangChange(()=>app.home());
-  return {destroy:()=>{disposed=true;unsub();}};
+  return {destroy:()=>{disposed=true;unsub();stopMusic();}};
 }
 
 /** BOT match difficulty picker. Dims + blurs HOME behind a focused center modal. */
