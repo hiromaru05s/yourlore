@@ -14,7 +14,7 @@ import type {
   DiceSource,
   Action, CardDef, CardInst, Enchant, FieldMon, GameEvent, GameState, PlayerState, ReduceResult, Side, TrapSet, QuestEvent,
 } from "./types";
-import { ALL_IDS, BUYABLE_POOL, DB, STARTERS, TRIBES, DEFAULT_DECK_8, RANDOM_CARDS, sanitizeDeck, hasPassive, PASSIVES , isChestCard, enchantHasTurnCountdown } from "./cards";
+import { ALL_IDS, BUYABLE_POOL, DB, STARTERS, TRIBES, DEFAULT_DECK_8, sanitizeDeck, hasPassive, PASSIVES , isChestCard, enchantHasTurnCountdown } from "./cards";
 
 // ---------- deterministic PRNG (mulberry32) ----------
 function rand(g: GameState): number {
@@ -990,15 +990,6 @@ function bloodSecretDestroy(_g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon
   addHealth(ctx, p, 10);
 
   ctx.log(`  └ 체력 +10 (${p.hp})`, `  └ 体力+10 (${p.hp})`);
-}
-
-/** 운명의 수레바퀴: 주사위 결과 확인 후 재굴림 여부를 묻는 pending 생성. */
-function offerReroll(g: GameState, ctx: Ctx, card: CardInst): void {
-  if (!g._wheelSnap) return;
-  if (g.over || g.pending) { g._wheelSnap = null; return; } // 스펠이 자체 pending을 열었으면 재굴림 생략
-  enchantKindFx(g,ctx.ev,"fateWheel",g.players[g.cur]);
-  g.pending = { kind: "reroll", hint: `운명의 수레바퀴 — ${cn(card)} 의 결과를 다시 굴릴 수 있다`, hintJa: `運命の輪 — ${cn(card)} の結果を振り直せる`, reason: "reroll", allowCancel: true };
-  ctx.ev.push({ type: "needTarget", pending: g.pending });
 }
 
 /** "피의 마법" 발동 후 트리거: 피의 축제(마나) + 흡혈귀 진화(각 1회). */
@@ -4041,12 +4032,6 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   if (!card) return;
   const blocked=playBlockReason(g,g.cur,card);
   if(blocked){ctx.log(blocked.ko,blocked.ja);return;}
-  // 운명의 수레바퀴: 주사위·확률 카드 시전 직전 스냅샷 (재굴림용, 매턴 1회)
-  if (card.t === "spell" && RANDOM_CARDS.has(card.id) && !p.wheelUsed && p.enchants.some((e) => e.card.ench === "fateWheel")) {
-    const snap = structuredClone(g);
-    snap._wheelSnap = null;
-    g._wheelSnap = { state: snap, idx };
-  }
 
   if (card.t === "starter") {
     // Starters (컬/보물상자/어튠) are spell-type cards played from hand → they are subject to
@@ -4182,7 +4167,6 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
         try { customSpell(g, ctx, card); } finally { spellDepth--; if (blood) bloodDepth--; runeEchoDepth--; }
         if (blood) bloodTriggers(g, ctx, p);
       }
-      offerReroll(g, ctx, card);
       return;
     }
     const a = card.act, v = card.val || 0, v2 = card.val2 || 0;
@@ -4263,7 +4247,6 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       try { applySpell(g, ctx, card); } finally { spellDepth--; if (blood) bloodDepth--; runeEchoDepth--; }
       if (blood) bloodTriggers(g, ctx, p);
     }
-    offerReroll(g, ctx, card);
     return;
   }
   if (card.t === "trap") {
@@ -4713,20 +4696,6 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
         ctx.log("  └ 마나가 부족해 구매하지 못함", "  └ マナが足りず購入できない");
       }
     }
-  } else if (pending.kind === "reroll") {
-    // 운명의 수레바퀴: uid "re" = 재굴림, null/기타 = 결과 유지
-    const snap = g._wheelSnap;
-    g._wheelSnap = null;
-    if (uid === "re" && snap && snap.state) {
-      ctx.log(`<span class="dmg">운명의 수레바퀴!</span> 결과를 되감고 다시 굴린다…`, `<span class="dmg">運命の輪！</span> 結果を巻き戻して振り直す…`);
-      const s = structuredClone(snap.state) as GameState;
-      for (const k of Object.keys(g)) if (!(k in (s as unknown as Record<string, unknown>))) delete (g as unknown as Record<string, unknown>)[k];
-      Object.assign(g, s);
-      g._wheelSnap = null;
-      g.rng = (g.rng + 0x9e3779b9) >>> 0; // 시드 점프 → 새 결과
-      g.players[g.cur].wheelUsed = true;  // 매턴 1회
-      playFromHand(g, ctx, snap.idx);
-    }
   }
 }
 
@@ -4929,7 +4898,56 @@ function resolveQuests(g: GameState, ctx: Ctx, automaticOnly = false): void {
 // ============================================================
 // main reducer
 // ============================================================
+/** Reroll the action that actually produced a die roll, including starters and
+ * target/choice resolution. Keep the result until accepted; replay from BEFORE
+ * that action so mana, damage, summons and quest/casino counters are not doubled. */
 export function reduce(prev: GameState, action: Action): ReduceResult {
+  if (!prev.over && prev.pending?.kind === "reroll" && (action.type === "pick" || action.type === "chooseTarget")) {
+    const snap = prev._wheelSnap;
+    if (action.uid !== null && action.uid !== "re") return { state: structuredClone(prev), events: [] };
+    if (action.uid === "re" && snap?.state) {
+      const before = structuredClone(snap.state) as GameState;
+      before._wheelSnap = null;
+      before.rng = (before.rng + 0x9e3779b9) >>> 0;
+      before.players[before.cur].wheelUsed = true;
+      // idx supports rooms persisted by versions before action-based rerolls.
+      const replay = snap.action ?? { type: "play" as const, idx: snap.idx! };
+      const result = reduce(before, replay);
+      result.events.unshift({type:"log",html:"운명의 수레바퀴! 결과를 되감고 다시 굴린다…",htmlJa:"運命の輪！結果を巻き戻して振り直す…"});
+      return result;
+    }
+    const state = structuredClone(prev);
+    state._wheelSnap = null;
+    state.pending = snap?.outcome?.pending ?? null;
+    if (snap?.outcome) Object.assign(state, {over:snap.outcome.over,phase:snap.outcome.phase,winner:snap.outcome.winner});
+    const events:GameEvent[]=[];
+    if (state.pending) events.push({type:"needTarget",pending:state.pending});
+    if (state.over && state.winner !== null) events.push({type:"win",winner:state.winner});
+    return {state,events};
+  }
+  const result = reduceEffects(prev, action);
+  const owner = prev.cur, player = prev.players[owner];
+  const eligible = ["play", "pick", "chooseTarget", "attack"].includes(action.type);
+  const die = result.events.find(e => e.type === "dice" && e.player === owner && e.source.player === owner && e.source.id);
+  if (!prev.over && eligible && (prev.pending?.owner ?? owner) === owner && result.state.cur === owner
+      && !player.wheelUsed && player.enchants.some(e=>e.card.ench === "fateWheel") && die?.type === "dice") {
+    const g = result.state;
+    const before = structuredClone(prev); before._wheelSnap = null;
+    g._wheelSnap = {state:before,action:structuredClone(action),outcome:{pending:g.pending,over:g.over,phase:g.phase,winner:g.winner}};
+    const source = DB[die.source.id!] ?? STARTERS[die.source.id!];
+    const name = source ? cn(source) : die.source.id!;
+    // Do not finish a lethal result or open its follow-up picker before the
+    // player has chosen whether to keep it. The authoritative room sees main.
+    g.over = false; g.winner = null; g.phase = "main";
+    g.pending = {kind:"reroll",owner,hint:`운명의 수레바퀴 — ${name} 의 결과를 다시 굴릴 수 있다`,hintJa:`運命の輪 — ${name} の結果を振り直せる`,reason:"reroll",allowCancel:true};
+    result.events = result.events.filter(e=>e.type!=="win" && e.type!=="needTarget");
+    enchantKindFx(g,result.events,"fateWheel",g.players[owner]);
+    result.events.push({type:"needTarget",pending:g.pending});
+  }
+  return result;
+}
+
+function reduceEffects(prev: GameState, action: Action): ReduceResult {
   // 유령(GHOST) 트리거용: 액션 전 양측 최대 마나/체력 기록 → 액션 후 diff 검사
   const pre = prev.players.map((pl) => ({ mm: pl.maxMana, mh: pl.hp, rm: (pl.removed ?? []).length, cull: cullExiled(pl) }));
   const res = reduceCore(prev, action);

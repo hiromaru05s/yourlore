@@ -1,0 +1,10 @@
+{
+  "origin": "http://localhost:5216",
+  "checks": [
+    "actual controller chest play opens Fate Wheel dialog",
+    "keep closes and preserves resolved result without duplicate reward",
+    "reroll replays dice once, consumes one card and closes dialog",
+    "subsequent same-turn chest has no second reroll"
+  ],
+  "errors": []
+}

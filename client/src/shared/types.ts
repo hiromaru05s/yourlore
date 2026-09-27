@@ -207,7 +207,12 @@ export interface GameState {
   mode: "bot" | "online";
   trickLeft?: number; // 트릭룸: 남은 턴 수 (매 턴 시작마다 -1, 0이면 반전 해제)
   /** 운명의 수레바퀴: 재굴림용 시전 직전 스냅샷 — redactFor가 양쪽 모두에서 제거(클라 불필요) */
-  _wheelSnap?: { state: unknown; idx: number } | null;
+  _wheelSnap?: {
+    state: unknown;
+    action?: Action;
+    idx?: number; // legacy persisted rooms
+    outcome?: {pending: Pending | null; over: boolean; phase: GameState["phase"]; winner: Side | null};
+  } | null;
   /** server-stamped remaining ms for the current turn (online only); lets a reconnecting
       client resume the turn clock instead of restarting it from full. */
   turnLeftMs?: number;
