@@ -109,6 +109,7 @@ export abstract class BaseController implements BoardHandlers {
   /** The player acted — fast-forward any still-playing batches so input never waits. */
   protected fastForward(): void {
     this.skipGen = this.fxGen;
+    stopSounds();
     A.setFxSkip(true);
     cancelDiceAnimations();
     closeTreasureNotices();
@@ -272,7 +273,7 @@ export abstract class BaseController implements BoardHandlers {
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
       const cue = eventSound.cue(e);
-      if(cue)sfx(cue);
+      if(cue&&!A.isFxSkipped())sfx(cue);
       switch (e.type) {
         case "enchantActivate":
           A.enchantActivation(e.uid);
@@ -323,7 +324,7 @@ export abstract class BaseController implements BoardHandlers {
           await wait(110);
           break;
         case "dice":
-          if (!diceDone.has(i)) {
+          if (!diceDone.has(i)&&!A.isFxSkipped()) {
             diceDone.add(i);
             await diceRollAnim(e.rolls, { need: e.need, success: e.success, mine: e.player === this.you, casino: e.variant === "casino", source: e.source, viewer: this.you });
           }
@@ -368,7 +369,7 @@ export abstract class BaseController implements BoardHandlers {
             for (let j = i + 1; j < events.length; j++) {
               const e2 = events[j];
               if (e2.type === "playSpell" || e2.type === "trapSet" || e2.type === "trapReveal" || e2.type === "buy" || e2.type === "turnHeader" || e2.type === "win") break;
-              if (e2.type === "dice" && !diceDone.has(j)) {
+              if (e2.type === "dice" && !diceDone.has(j)&&!A.isFxSkipped()) {
                 diceDone.add(j);
                 await diceRollAnim(e2.rolls, { need: e2.need, success: e2.success, mine: e2.player === this.you, casino: e2.variant === "casino", source: e2.source, viewer: this.you });
               }

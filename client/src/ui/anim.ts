@@ -31,6 +31,7 @@ const EASE = "cubic-bezier(.4,0,.2,1)";
 // all subsequent waits resolve immediately, so the stale batch jump-cuts to
 // its end state and the player's new action plays fresh.
 let fxSkip = false;
+export const isFxSkipped=()=>fxSkip;
 const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {

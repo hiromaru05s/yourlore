@@ -3,7 +3,7 @@
   "checks": [
     "all 40 deployed MP3s decode to stereo and render non-silent PCM in real Chrome Web Audio",
     "all 32 gameplay cues play through real shared AudioContext; opening cancellation and mute end every source",
-    "actual BaseController: one contact cue per attack, opponent healing audible, summon sound within 40 ms of landing VFX"
+    "actual BaseController: one contact cue per attack, opponent healing audible, summon sound within 40 ms of landing VFX, fast-forwarded damage/heal/dice stay silent"
   ],
   "clips": [
     {

@@ -26,7 +26,8 @@ try{
    window.qaStarts=0;window.qaLive=0;window.qaTrace=[];
    const start=AudioBufferSourceNode.prototype.start;
    AudioBufferSourceNode.prototype.start=function(...args){window.qaStarts++;window.qaLive++;window.qaTrace.push({cue:qaClipNames.get(qaFingerprint(this.buffer)),at:performance.now()});this.addEventListener('ended',()=>window.qaLive--,{once:true});return start.apply(this,args);};
-   window.s=await import('/src/ui/sound.ts');window.o=await import('/src/ui/openingSound.ts');s.initSound();
+   const controllerSource=await (await fetch('/src/game/controller.ts')).text();const soundUrl=controllerSource.match(/from "([^"]*\/sound\.ts[^"]*)"/)[1];
+   window.s=await import(soundUrl);window.o=await import('/src/ui/openingSound.ts');s.initSound();
   });
   await page.click('#unlock');await page.evaluate(()=>s.warmSounds());
   const result=await page.evaluate(async()=>{
@@ -57,10 +58,11 @@ try{
    s.stopSounds();qaTrace=[];let impactAt;const listener=()=>impactAt=performance.now();window.addEventListener('lore:summon-impact',listener,{once:true});
    const next=structuredClone(c.state);next.players[0].field.push(qaMon('audio-new'));await c.playEvents(c.state,{state:next,events:[{type:'summon',player:0,uid:'audio-new',id:'ELF'}]});
    const summon=qaTrace.find(x=>x.cue==='summon');window.removeEventListener('lore:summon-impact',listener);
-   c.destroy();qaStopLayout();return {monster,face,heal,summonOffset:impactAt!=null&&summon?Math.abs(impactAt-summon.at):null};
+   c.fastForward();const skipped=await run([{type:'damage',player:1,amount:4},{type:'heal',player:0,amount:3},{type:'dice',player:0,rolls:[6]}]);
+   c.destroy();qaStopLayout();return {monster,face,heal,skipped,summonOffset:impactAt!=null&&summon?Math.abs(impactAt-summon.at):null};
   });
-  assert.deepEqual(battle.monster,['attack','impact']);assert.deepEqual(battle.face,['attack','facehit']);assert.deepEqual(battle.heal,['heal']);assert(battle.summonOffset!=null&&battle.summonOffset<40,JSON.stringify(battle));
-  checks.push('actual BaseController: one contact cue per attack, opponent healing audible, summon sound within 40 ms of landing VFX');
+  assert.deepEqual(battle.monster,['attack','impact']);assert.deepEqual(battle.face,['attack','facehit']);assert.deepEqual(battle.heal,['heal']);assert.deepEqual(battle.skipped,[]);assert(battle.summonOffset!=null&&battle.summonOffset<40,JSON.stringify(battle));
+  checks.push('actual BaseController: one contact cue per attack, opponent healing audible, summon sound within 40 ms of landing VFX, fast-forwarded damage/heal/dice stay silent');
 
  }
  assert.deepEqual(errors,[]);await fs.mkdir(out,{recursive:true});await fs.writeFile(out+'/audio-browser.json',JSON.stringify({origin,checks,clips,errors},null,2)+'\n');console.log('PASS',checks);

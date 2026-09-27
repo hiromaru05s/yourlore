@@ -11,7 +11,7 @@ The active bank is now `/sfx/lore-v3/`: **32 cues, 40 stereo MP3s, approximately
 - Summon/Mimic sounds trigger at actual card landing, including reduced-motion presentation.
 - Opening uses the same cache, volume and voice budget. Toss and landing have distinct physical cues. Duplicate scripted deal sounds were removed; card flight owns the deal audio.
 - Dice have dedicated roll/settle audio, starting after GPU preparation rather than before loading. The prior spell/pop/mana combination was removed. Discard uses a paper movement cue.
-- Eight active voices maximum, with per-family budgets and priority. Replaced/stopped voices fade over 35 ms. Pending decodes are invalidated on stop/mute/navigation; sounds arriving more than 90 ms late are dropped. Opening/dice scopes cancel their audio on skip. Sound fetches remain two at a time and outside initial artwork readiness.
+- Eight active voices maximum, with per-family budgets and priority. Replaced/stopped voices fade over 35 ms. Pending decodes are invalidated on stop/mute/navigation; sounds arriving more than 90 ms late are dropped. Opening/dice scopes cancel their audio on skip; fast-forwarded event batches stay silent and skip stale dice. Sound fetches remain two at a time and outside initial artwork readiness.
 
 ## Sources and rebuild
 
