@@ -4918,7 +4918,7 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
     }
     const state = structuredClone(prev);
     state._wheelSnap = null;
-    state.pending = snap?.outcome?.pending ?? null;
+    state.pending = structuredClone(snap?.outcome?.pending ?? null);
     if (snap?.outcome) Object.assign(state, {over:snap.outcome.over,phase:snap.outcome.phase,winner:snap.outcome.winner});
     const events:GameEvent[]=[];
     if (state.pending) events.push({type:"needTarget",pending:state.pending});

@@ -29,7 +29,7 @@ try {
  {const g=fresh();g.players[0].deck=Array.from({length:8},()=>card('S1'));const r=play(g,'HEXER1');assert(dice(r).length);assert.equal(r.state.pending?.kind,'reroll');assert.equal(re(r).state.players[0].field.length,1);}
  // A choice can produce dice and THEN another required choice. Preserve/resume it.
  {const g=fresh();const m=mon('LEGEND_GAMBLER');g.players[0].field=[m];g.pending={kind:'giantShop',reason:'gamblerGuess',allowCancel:false,hint:'guess',hintJa:'予測',data:{uid:m.uid}};
-  const r=reduce(g,{type:'pick',uid:'2'});assert.equal(r.state.pending.kind,'reroll');assert.equal(r.state._wheelSnap.outcome.pending?.reason,'gamblerPick');assert.equal(keep(r).state.pending?.reason,'gamblerPick');assert.equal(re(r).state.players[0].wheelUsed,true);assert.notEqual(re(r).state.pending?.kind,'reroll');}
+  const r=reduce(g,{type:'pick',uid:'2'});assert.equal(r.state.pending.kind,'reroll');assert.equal(r.state._wheelSnap.outcome.pending?.reason,'gamblerPick');assert.equal(keep(r).state.pending?.reason,'gamblerPick');assert.notEqual(keep(r).state.pending,r.state._wheelSnap.outcome.pending,'continuation must not alias prior state');assert.equal(re(r).state.players[0].wheelUsed,true);assert.notEqual(re(r).state.pending?.kind,'reroll');}
  // Casino and quest counters are counted only for the accepted roll, including on replay.
  {const g=fresh();const c=mon('CASINO');c.gcount=0;g.players[0].field=[c];const r=play(g,'STARTER_CHEST');assert.equal(r.state.players[0].field[0].gcount,1);assert.equal(keep(r).state.players[0].field[0].gcount,1);assert.equal(re(r).state.players[0].field[0].gcount,1);}
  // Lethal first results can be rerolled before the room settles the match.
