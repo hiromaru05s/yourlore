@@ -35,7 +35,21 @@ export function mountGame(app: App, opts: GameOpts): Screen {
       : { avatar: "SEEKER_RED", name: opts.mode === "tutorial" ? "TUTOR" : "BOT" },
   );
 
+  let stopMusic: (() => void) | undefined;
+  const startMusic = (elapsedMs?: number) => {
+    if (stopMusic || opts.mode === "tutorial") return;
+    stopMusic = startBackgroundMusic({
+      url: "/music/poised-opening.mp3",
+      gain: HOME_MUSIC_GAIN * .6,
+      gapMs: 3000,
+      intro: elapsedMs != null && elapsedMs < 6520
+        ? { url: "/music/clash-of-blades.mp3", durationSeconds: 6.52, offsetSeconds: Math.max(0, elapsedMs) / 1000 }
+        : undefined,
+    });
+  };
   const exits: ControllerExits = {
+    onOpeningStart: opts.mode === "tutorial" ? undefined : startMusic,
+    onBattleReady: () => startMusic(),
     onHome: () => (opts.mode === "tutorial" ? app.tutorial() : app.home()),
     // 랭크전 "다시하기"는 랭크 큐로 돌아가야 한다 (노말 큐로 새던 버그 수정)
     onRematch: () => (opts.mode === "bot" ? app.botGame(opts.difficulty) : opts.mode === "tutorial" ? app.tutorialGame() : opts.ranked ? app.rankedLobby() : app.onlineLobby()),
@@ -53,11 +67,6 @@ export function mountGame(app: App, opts: GameOpts): Screen {
   // fit-to-viewport board sizing — started AFTER the controller built the board
   // skeleton, because the solver measures the real rows (see ui/layout.ts).
   const stopLayout = startBoardLayout();
-  const stopMusic = opts.mode === "tutorial" ? undefined : startBackgroundMusic({
-    url: "/music/poised-opening.mp3",
-    gain: HOME_MUSIC_GAIN * .6,
-    gapMs: 3000,
-  });
 
   return { destroy: () => { stopMusic?.(); stopLayout(); ctrl.destroy(); } };
 }

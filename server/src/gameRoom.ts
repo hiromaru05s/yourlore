@@ -484,7 +484,7 @@ export class GameRoom {
     s.turnLeftMs = Math.min(total, Math.max(0, total - (Date.now() - this.room!.turnStartAt)));
     if (this.room!.opening && s.turn === 1) {
       const startsAt=this.room!.opening.startsAt;
-      s.opening={startsAt,playableAt:startsAt==null?null:startsAt+DUEL_OPENING_MS,serverNow:Date.now()};
+      s.opening={startsAt,playableAt:startsAt==null?null:this.room!.turnStartAt,serverNow:Date.now()};
       if(startsAt==null)s.turnLeftMs=total;
     }
     const pl = this.room!.players;

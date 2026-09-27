@@ -34,7 +34,7 @@ try{
   assert.equal(f.sockets[1].messages.at(-1).state.opening.startsAt,null);
   await f.send(0,{type:'openingReady'});assert.equal(f.saved().opening.startsAt,null);
   await f.send(1,{type:'openingReady'});
-  const starts=f.saved().opening.startsAt,playable=starts+5800;
+  const starts=f.saved().opening.startsAt,playable=starts+10450;
   assert.equal(starts,now+350);assert.equal(f.saved().turnStartAt,playable);
   for(const socket of f.sockets){const state=socket.messages.at(-1).state;assert.equal(state.opening.playableAt,playable);assert.equal(state.turnLeftMs,90000);assert.equal(state.rng,0);assert(state.players[1-socket.side].hand.every(c=>c.id==='HIDDEN'));}
   now+=500;await f.send(0,{type:'openingReady'});await f.send(0,{type:'ready',openingVersion:1});
@@ -63,6 +63,12 @@ try{
   assert.equal(ranked.saved().previewDone,true);assert.equal(ranked.saved().opening.prepareBy,now+8000);
   // The opening deadline participates in the existing single alarm schedule.
   ranked.room.room.forfeitAt[1]=now+1000;ranked.room.syncAlarm();assert.equal(ranked.alarm(),now+1000);
+
+  // A room started before this deploy keeps its persisted first-turn deadline.
+  const older=await fixture();await older.send(0,{type:'ready',openingVersion:1});await older.send(1,{type:'ready',openingVersion:1});
+  await older.send(0,{type:'openingReady'});await older.send(1,{type:'openingReady'});
+  older.room.room.turnStartAt=older.room.room.opening.startsAt+5800;
+  assert.equal(older.room.redact(0).opening.playableAt,older.room.room.turnStartAt,'deployment does not stretch an existing room deadline');
 
   const legacy=await fixture();await legacy.send(0,{type:'ready',openingVersion:1});await legacy.send(1,{type:'ready'});
   assert.equal(legacy.saved().opening,undefined,'mixed client versions do not deadlock');

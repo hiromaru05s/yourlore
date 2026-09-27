@@ -1,4 +1,4 @@
-import {DUEL_OPENING_MS,openingPhase} from '../shared/opening';
+import {DUEL_OPENING_MS,OPENING_DOCK_MS,OPENING_TOSS_MS,OPENING_REVEAL_MS,OPENING_DEAL_MS,openingPhase} from '../shared/opening';
 import {getLang,t} from '../i18n';
 import {avatarHtml} from './social';
 import {prepareOpeningCoin,type OpeningCoin} from './openingScene';
@@ -9,6 +9,7 @@ export interface OpeningOptions {
   /** Already adjusted to the authoritative server clock; negative during lead-in. */
   elapsed?:()=>number;
   onDeal:(signal:AbortSignal)=>Promise<void>;
+  onStart?:(elapsedMs:number)=>void;
   /** Developer preview only: a fixed sample does not advance or unlock a game. */
   sampleMs?:number;
 }
@@ -56,7 +57,7 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
   const fallback=document.createElement('div');fallback.className='opening-fallback-coin';fallback.innerHTML=avatarHtml((o.firstIsMe?o.me:o.opp).avatar||(o.firstIsMe?'SEEKER_BLUE':'SEEKER_RED'),'');host.append(fallback);
   game?.classList.add('duel-intro-active');document.body.append(host);
   const life=new AbortController();const props:{coin:OpeningCoin|null}={coin:null};let frame=0,dead=false,skipped=false,dealt=false,deal:Promise<void>=Promise.resolve();
-  const audio=openingAudio();let last=-1;
+  const audio=openingAudio();let last=-1,started=false;
   const stopAudio=()=>audio.stop();
   const skipIntro=()=>{skipped=true;stopAudio();life.abort();if(o.sampleMs!=null)release();};
   skip.onclick=skipIntro;
@@ -78,11 +79,12 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
     const elapsed=o.elapsed??(()=>performance.now()-start);
     const end=reduced&&!o.elapsed?1000:DUEL_OPENING_MS;
     const paint=(ms:number)=>{
+      if(!started&&ms>=0&&o.sampleMs==null){started=true;o.onStart?.(ms);}
       const fast=skipped||reduced;
-      const visual=fast?Math.max(3850,ms):ms;
+      const visual=fast?Math.max(OPENING_REVEAL_MS,ms):ms;
       host.dataset.openingPhase=openingPhase(ms);host.dataset.openingMs=String(Math.round(ms));
-      const dock=fast?1:smooth((visual-1650)/700), entrance=smooth((visual-120)/500);
-      veil.style.opacity=String(fast?.12:mix(.96,0,smooth((visual-1650)/900)));
+      const dock=fast?1:smooth((visual-OPENING_DOCK_MS)/700), entrance=smooth((visual-120)/500);
+      veil.style.opacity=String(fast?.12:mix(.96,0,smooth((visual-OPENING_DOCK_MS)/900)));
       lines.style.opacity=String((1-dock)*entrance*.8);center.style.opacity=String((1-dock)*entrance);
       const mobile=innerWidth<600;
       players.forEach(({holder,name,art},i)=>{
@@ -99,25 +101,25 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
         name.style.width=`${pw+40}px`;name.style.transform=`translate(${x-pw/2-20}px,${nameY}px)`;name.style.opacity=String((1-dock)*entrance);
       });
       game?.classList.toggle('intro-docked',dock===1);
-      const reveal=visual>=3850&&visual<4450||fast;
+      const reveal=visual>=OPENING_REVEAL_MS&&visual<OPENING_DEAL_MS||fast;
       result.setAttribute('aria-hidden',String(!reveal));
-      result.style.opacity=String(reveal?fast?1:Math.sin(Math.PI*clamp((visual-3850)/700)):0);
-      result.style.transform=`translate(-50%,-50%) scale(${mix(.94,1,smooth((visual-3850)/220))})`;
+      result.style.opacity=String(reveal?fast?1:Math.sin(Math.PI*clamp((visual-OPENING_REVEAL_MS)/700)):0);
+      result.style.transform=`translate(-50%,-50%) scale(${mix(.94,1,smooth((visual-OPENING_REVEAL_MS)/220))})`;
       game?.classList.toggle(o.firstIsMe?'intro-first-me':'intro-first-opp',reveal);
       const lane=game?.querySelector<HTMLElement>('#meRow .zone-mon')?.getBoundingClientRect();
       const x=lane&&lane.width>100?lane.left+lane.width*.5:innerWidth*.5,y=lane&&lane.height>35?lane.top+lane.height*.52:innerHeight*.68;
       const radius=Math.min(58,Math.max(28,innerWidth*.036));
-      props.coin?.paint(fast?-1:visual-2350,x,y,radius);
-      fallback.style.display=!props.coin&&!fast&&visual>=2350&&visual<4300?'block':'none';
-      fallback.style.left=`${x-43}px`;fallback.style.top=`${y-43-Math.sin(Math.PI*clamp((visual-2350)/1500))*65}px`;
-      fallback.style.transform=`rotateY(${(1-clamp((visual-2350)/1500))*1080}deg)`;
+      props.coin?.paint(fast?-1:visual-OPENING_TOSS_MS,x,y,radius);
+      fallback.style.display=!props.coin&&!fast&&visual>=OPENING_TOSS_MS&&visual<(OPENING_REVEAL_MS+450)?'block':'none';
+      fallback.style.left=`${x-43}px`;fallback.style.top=`${y-43-Math.sin(Math.PI*clamp((visual-OPENING_TOSS_MS)/1500))*65}px`;
+      fallback.style.transform=`rotateY(${(1-clamp((visual-OPENING_TOSS_MS)/1500))*1080}deg)`;
       if(!fast&&o.sampleMs==null){
-        for(const [at,key] of [[180,'rise'],[2350,'toss'],[2980,'land'],[3850,'reveal']] as const)
-          if(last<at&&ms>=at&&ms-at<150)audio.play(key);
+        for(const [at,key] of [[180,'rise'],[OPENING_TOSS_MS,'toss'],[(OPENING_TOSS_MS+630),'land'],[OPENING_REVEAL_MS,'reveal']] as const)
+          if(!(key==='rise'&&o.onStart)&&last<at&&ms>=at&&ms-at<150)audio.play(key);
       }
       last=ms;
-      if(o.sampleMs!=null&&ms>=4450)game?.classList.add('intro-dealing');
-      if(o.sampleMs==null&&!dealt&&(ms>=4450||fast)){
+      if(o.sampleMs!=null&&ms>=OPENING_DEAL_MS)game?.classList.add('intro-dealing');
+      if(o.sampleMs==null&&!dealt&&(ms>=OPENING_DEAL_MS||fast)){
         dealt=true;game?.classList.add('intro-dealing');
         if(!fast)deal=o.onDeal(life.signal).catch(()=>{});
       }

@@ -15,7 +15,7 @@ try{
     const bounds=await page.locator('.opening-player').evaluateAll(els=>els.map(el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom};}));
     for(const r of bounds){assert(r.left>=0&&r.right<=width+1);assert(r.top>=0&&r.bottom<=height+1);}
     sizes.push({width,height,bounds});await page.screenshot({style:'.opening-lab-controls{visibility:hidden!important}',path:`${out}/faceoff-${width}.png`});
-    await seek(3850);await page.screenshot({style:'.opening-lab-controls{visibility:hidden!important}',path:`${out}/coin-${width}.png`});
+    await seek(8500);await page.screenshot({style:'.opening-lab-controls{visibility:hidden!important}',path:`${out}/coin-${width}.png`});
     assert.equal(await page.locator('.opening-fallback-coin').evaluate(e=>getComputedStyle(e).display),'none','shared board coin is active');
   }
   await page.setViewportSize({width:1280,height:720});
@@ -23,16 +23,16 @@ try{
   await page.getByRole('button',{name:'再生',exact:true}).click();
   await page.waitForSelector('[data-opening-phase="deal"]');
   await page.screenshot({style:'.opening-lab-controls{visibility:hidden!important}',path:out+'/deal.png'});
-  await page.waitForFunction(()=>!document.querySelector('.duel-opening'),{timeout:10000});
+  await page.waitForFunction(()=>!document.querySelector('.duel-opening'),undefined,{timeout:15000});
   assert.equal(await page.locator('.native-draw-layer').count(),0);
   assert.equal(await page.locator('#hand .card').count(),3);assert.equal(await page.locator('#oppHand .card--back').count(),3);
   assert.equal(await page.locator('.duel-intro-active').count(),0);
-  await page.evaluate(()=>window.loreOpeningPreview.first(false));await seek(4050);
+  await page.evaluate(()=>window.loreOpeningPreview.first(false));await seek(8700);
   assert.match(await page.locator('.opening-result strong').textContent(),/相手/);
   await page.screenshot({style:'.opening-lab-controls{visibility:hidden!important}',path:out+'/opponent-first.png'});
   await page.getByRole('button',{name:'再生',exact:true}).click();await page.getByRole('button',{name:'スキップ',exact:true}).click();
   await page.waitForFunction(()=>!document.querySelector('.duel-opening'));
-  await seek(1900);await page.evaluate(()=>window.loreOpeningPreview.cancel());await page.waitForFunction(()=>!document.querySelector('.duel-opening'));
+  await seek(6500);await page.evaluate(()=>window.loreOpeningPreview.cancel());await page.waitForFunction(()=>!document.querySelector('.duel-opening'));
   await page.emulateMedia({reducedMotion:'reduce'});await page.getByRole('button',{name:'再生',exact:true}).click();await page.waitForFunction(()=>!document.querySelector('.duel-opening'));
   await page.emulateMedia({reducedMotion:'no-preference'});
   // Actual controller: timer begins after opening, skip cannot consume a hand or leave input inert.
@@ -59,7 +59,7 @@ try{
   await page.waitForFunction(()=>window.openingQA.c.prepared>0);
   assert.equal(await page.locator('.game').evaluate(e=>e.inert),true);
   assert.equal(await page.locator('.mp-clock[data-remaining]').count(),0);
-  await page.evaluate(()=>{const q=window.openingQA,s=structuredClone(q.state),now=Date.now()+500000;s.opening={startsAt:now+350,playableAt:now+6150,serverNow:now};q.c.feed(s);q.playableLocal=Date.now()+6150;});
+  await page.evaluate(()=>{const q=window.openingQA,s=structuredClone(q.state),now=Date.now()+500000;s.opening={startsAt:now+350,playableAt:now+10800,serverNow:now};q.c.feed(s);q.playableLocal=Date.now()+10800;});
   await page.waitForSelector('.duel-opening');await page.locator('.opening-skip').click();
   await page.waitForTimeout(100);
   assert.equal(await page.locator('.game').evaluate(e=>e.inert),true,'online skip must keep the shared start gate');
@@ -71,7 +71,7 @@ try{
   // WebGL unavailable: fallback, skip and input cleanup remain usable.
   const fallback=await context.newPage();await fallback.addInitScript(()=>{window.WebGL2RenderingContext=undefined;});
   fallback.on('pageerror',e=>errors.push(e.message));await fallback.goto(origin+'/duel-lab.html?opening');await fallback.waitForSelector('.duel-opening');
-  await fallback.evaluate(()=>window.loreOpeningPreview.seek(3200));await fallback.waitForFunction(()=>document.querySelector('.duel-opening')?.dataset.openingMs==='3200');
+  await fallback.evaluate(()=>window.loreOpeningPreview.seek(7850));await fallback.waitForFunction(()=>document.querySelector('.duel-opening')?.dataset.openingMs==='7850');
   assert.equal(await fallback.locator('.opening-fallback-coin').evaluate(e=>getComputedStyle(e).display),'block');
   await fallback.evaluate(()=>window.loreOpeningPreview.cancel());await fallback.waitForFunction(()=>!document.querySelector('.duel-opening'));await fallback.close();
   assert.deepEqual(errors,[]);

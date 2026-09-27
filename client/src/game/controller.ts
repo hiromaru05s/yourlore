@@ -34,6 +34,8 @@ import { diceRollAnim, cancelDiceAnimations } from "../ui/dice";
 export interface ControllerExits {
   onHome(): void;
   onRematch(): void;
+  onOpeningStart?(elapsedMs:number): void;
+  onBattleReady?(): void;
 }
 
 // ---- coin-toss profiles (set by the game screen at mount): the two coin faces ----
@@ -564,6 +566,7 @@ export abstract class BaseController implements BoardHandlers {
       this.releaseOpening();
     }
     if(this.openingActive&&!this.state.over)return;
+    if(!this.state.over)this.exits.onBattleReady?.();
     this.syncTimer();
     if (res.state !== this.state) return; // a newer batch is queued — let it drive follow-ups
     this.disposeHandDiscard?.();this.disposeHandDiscard=undefined;
@@ -799,6 +802,7 @@ export abstract class BaseController implements BoardHandlers {
       this.openingWait?.remove();this.openingWait=null;
       const opening=this.state.opening,startsAt=opening?.startsAt;
       await playDuelOpening({root:this.openingRoot,me:{...COIN_ME,name:this.state.players[this.you].name},opp:{...COIN_OPP,name:this.state.players[(1-this.you) as Side].name},firstIsMe:firstSide===this.you,signal:this.openingAbort.signal,
+        onStart:this.exits.onOpeningStart,
         elapsed:startsAt!=null?()=>Date.now()-this.serverOffset-startsAt:undefined,
         onDeal:async signal=>{
           game?.classList.remove('opening-hands');

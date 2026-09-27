@@ -9,19 +9,19 @@ try {
  await page.route('**/api/**',r=>r.fulfill({contentType:'application/json',body:'{}'}));
  await page.goto(origin+'/battle-bgm-check');
  await page.evaluate(async()=>{
-  window.tracks=[];const NativeAudio=window.Audio;
+  window.tracks=[];window.sockets=[];Object.defineProperty(window,'track',{get:()=>tracks.at(-1)});const NativeAudio=window.Audio;
   window.Audio=class extends NativeAudio {constructor(...args){super(...args);window.tracks.push(this);this.events=[];for(const name of ['ended','playing'])this.addEventListener(name,()=>this.events.push({name,at:performance.now()}));}};
   // Exercise the real online controller without contacting a server or entering matchmaking.
-  window.WebSocket=class {static OPEN=1;readyState=1;constructor(){setTimeout(()=>this.onopen?.(),0);}send(){}close(){this.readyState=3;this.onclose?.();}};
+  window.WebSocket=class {static OPEN=1;readyState=1;constructor(){sockets.push(this);setTimeout(()=>this.onopen?.(),0);}send(){}close(){this.readyState=3;this.onclose?.();}};
   for(const css of ['tokens','base','card','game-overlays','game','screens','reading-board','duel-opening'])await import('/src/styles/'+css+'.css');
   window.sound=await import('/src/ui/sound.ts');sound.setSfxVolume(.7);
-  const {mountGame}=await import('/src/screens/game.ts');
+  const {mountGame}=await import('/src/screens/game.ts');window.engine=await import('/src/shared/engine.ts');
   window.app={root:document.getElementById('app'),user:null,home(){},tutorial(){}};
-  window.mount=opts=>{window.screenHandle?.destroy();app.root.innerHTML='';window.screenHandle=mountGame(app,opts);window.track=tracks.at(-1);};
+  window.mount=opts=>{window.screenHandle?.destroy();app.root.innerHTML='';window.screenHandle=mountGame(app,opts);if(opts.mode==='online'){const state=engine.createGame({mode:'online',seed:12,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;state.turn=2;sockets.at(-1).onmessage({data:JSON.stringify({type:'init',state,events:[]})});}};
  });
  for(const opts of [{mode:'online',roomId:'bgm-normal-fixture',you:0,oppName:'QA',ranked:false},{mode:'online',roomId:'bgm-ranked-fixture',you:0,oppName:'QA',ranked:true},{mode:'bot',difficulty:'easy'}]){
   await page.evaluate(opts=>mount(opts),opts);
-  await page.waitForFunction(()=>track.currentTime>.05&&!track.paused);
+  await page.waitForFunction(()=>track?.currentSrc.endsWith('/music/poised-opening.mp3')&&track.currentTime>.05&&!track.paused);
   assert.equal(await page.evaluate(()=>track.currentSrc.endsWith('/music/poised-opening.mp3')),true);
   assert.equal(await page.evaluate(()=>track.loop),false,'gap is implemented with ended, not native loop');
   assert(Math.abs(await page.evaluate(()=>track.volume)-.147)<.0001,'60% of home gain at default volume');

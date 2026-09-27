@@ -1,3 +1,4 @@
+import {DUEL_OPENING_MS} from '../shared/opening';
 import {createGame} from '../shared/engine';
 import {GameView,setMyAvatar,setOppAvatar} from '../ui/boardView';
 import {startBoardLayout} from '../ui/layout';
@@ -18,7 +19,7 @@ export async function mountOpeningLab(root:HTMLElement):Promise<void>{
   panel.style.cssText='position:fixed;z-index:250;top:8px;left:50%;transform:translateX(-50%);display:flex;align-items:center;flex-wrap:wrap;justify-content:center;gap:8px;max-width:calc(100% - 24px);width:max-content;padding:10px 14px;background:#0b1424f2;border:1px solid #bba37666;border-radius:5px;color:#e9ddc7;font:12px system-ui';
   const add=(name:string,fn:()=>void)=>{const b=document.createElement('button');b.textContent=name;b.style.cssText='border:1px solid #cfb57866;color:#f0e5d0;background:#172840;padding:7px 12px;cursor:pointer';b.onclick=fn;panel.append(b);return b;};
   const time=document.createElement('span');time.textContent='0.00 s';time.style.minWidth='50px';
-  const scrub=document.createElement('input');scrub.type='range';scrub.min='0';scrub.max='5800';scrub.step='25';scrub.value='0';scrub.setAttribute('aria-label','開幕の再生位置');scrub.style.width='min(180px,40vw)';
+  const scrub=document.createElement('input');scrub.type='range';scrub.min='0';scrub.max=String(DUEL_OPENING_MS);scrub.step='25';scrub.value='0';scrub.setAttribute('aria-label','開幕の再生位置');scrub.style.width='min(180px,40vw)';
   const launch=async(sampleMs?:number)=>{
     const gen=++generation;active.abort();await running;if(gen!==generation)return;
     active=new AbortController();view.render(state);
