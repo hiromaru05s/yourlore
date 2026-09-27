@@ -22,8 +22,8 @@ try{
  assert.deepEqual([...Object.keys(manifest.sounds)].sort(),[...api.SFX_NAMES].sort());let bytes=0;
  for(const name of api.SFX_NAMES){const urls=api.soundUrls(name);assert.equal(urls.length,manifest.sounds[name].length);for(const [i,clip] of manifest.sounds[name].entries()){assert(urls[i].endsWith('/'+clip.file));const b=await readFile('client/public/sfx/lore-v2/'+clip.file);bytes+=b.length;assert.equal(createHash('sha256').update(b).digest('hex'),clip.sha256);assert(clip.peakDb<-1);assert(clip.seconds>0&&clip.seconds<5);}}
  assert(bytes<1024*1024);
- api.initSound();api.initSound();await flush();assert.equal(fetches,36);assert.equal(contextCount,0,'no AudioContext before user gesture');api.sfx('attack');await flush();assert.equal(starts,0);
- document.dispatchEvent(new Event('pointerdown'));await flush();assert.equal(contextCount,1);assert.equal(decoded,36);
+ api.initSound();api.initSound();await flush();assert.equal(fetches,0,'boot does not compete with scene artwork');document.dispatchEvent(new Event('lore:screen-ready'));await api.warmSounds(['click','pop','error']);assert.equal(fetches,5);assert.equal(contextCount,0,'no AudioContext before user gesture');api.sfx('attack');await flush();assert.equal(starts,0);
+ document.dispatchEvent(new Event('pointerdown'));await flush();assert.equal(contextCount,1);assert.equal(decoded,5);await api.warmSounds();assert.equal(fetches,36);assert.equal(decoded,36);
  api.sfx('attack');api.sfx('attack');await flush();assert.equal(starts,1,'same-frame event is deduplicated');
  for(const name of api.SFX_NAMES)api.sfx(name);await flush();assert(stops>0,'polyphony capped');assert.equal(decoded,36,'buffers decoded once');
  api.setSfxVolume(0);const silent=starts;api.sfx('win');await flush();assert.equal(starts,silent);api.setSfxVolume(.65);api.setSfxVolume(NaN);assert.equal(api.getSfxVolume(),.65);assert.equal(localStorage.getItem('lore_sfx'),'.65'.replace(/^\./,'0.'));
