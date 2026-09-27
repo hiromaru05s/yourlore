@@ -1,3 +1,4 @@
+import {passiveIcon} from './passiveIcon';
 // ============================================================
 // LORE — card DOM builder. One renderer for every card everywhere
 // (board / market / hand / pile / zoom) so sizing stays consistent.
@@ -45,7 +46,7 @@ export function decoratePassives(c: CardInst, txt: string): string {
     if (!p) continue;
     const name = lang === "ja" ? p.ja.name : lang === "en" ? p.en.name : p.ko.name;
     if (!name || !txt.includes(name)) continue;
-    txt = txt.split(name).join(`<span class="psv" data-psv="${k}">${name}</span>`);
+    txt = txt.split(name).join(passiveIcon(k));
   }
   return txt;
 }
@@ -293,13 +294,12 @@ export function cardRulesEl(c: CardInst): HTMLElement {
       eff.appendChild(cast);
     }
     if (keyChips.length) {
-      const lang2 = getLang();
       const row = el("div", "card-keys" + (txt && txt !== "—" ? "" : " card-keys--only"));
       for (const k of keyChips) {
         const pd = PASSIVES[k];
         if (!pd) continue;
         // data-psv keeps the zoom view's keyword panel highlight working
-        row.appendChild(el("span", "kw psv", lang2 === "ja" ? pd.ja.name : lang2 === "en" ? pd.en.name : pd.ko.name)).setAttribute("data-psv", k);
+        row.insertAdjacentHTML("beforeend",passiveIcon(k));
       }
       if (row.childElementCount) eff.appendChild(row);
     }
@@ -385,8 +385,8 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   if (c.t === "mon") {
     const a = opt.field && opt.owner ? effAtk(opt.owner, c as FieldMon, opt.game) : c.atk!;
     // v24 HP-combat: the shield slot shows CURRENT HP — on the field AND in zoom
-    // (v29: zoom used to show max HP, so a damaged monster read as healthy there).
-    // 최대 체력은 몬스터 칩에 표시하지 않는다 (숫자 하나 + 손상 시 빨간색만).
+    // (v29: zoom used to show HP, so a damaged monster read as healthy there).
+    // 체력은 몬스터 칩에 표시하지 않는다 (숫자 하나 + 손상 시 빨간색만).
     const fm = c as FieldMon;
     const onField = !!(opt.field && opt.owner);
     const isEgg = fm.hatch != null;
@@ -426,7 +426,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     const fm = c as FieldMon;
     // 1) 키워드 — 카드가 원래 가진 것 + 게임 중 부여된 것 (필드 타일에서만;
     //    손패/마켓/확대는 효과판의 키워드 칩 행이 같은 정보를 이미 보여준다)
-    if (opt.compactField || opt.field) {
+    {
       const innate = cardPassives(c);
       const granted = fm.passivesG ?? [];
       for (const k of [...new Set([...innate,...granted,...((fm.guts??0)>0?['guts']:[])])]) {
@@ -439,11 +439,6 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
         if(count>0){chip.append(el('b','',String(count)));chip.setAttribute('aria-label',`${nm} ${count}: ${description}`);}
         chip.dataset.psv = k;
         band.appendChild(chip);
-      }
-    } else if (opt.field && fm.passivesG?.length) {
-      for (const k of fm.passivesG) {
-        const nm = psvName(k);
-        if (nm) band.appendChild(el("span", "ec ec-p", nm));
       }
     }
     // 2) 카운터

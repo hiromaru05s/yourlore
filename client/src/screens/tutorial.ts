@@ -31,12 +31,12 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
   ko: [
     { icon: "🎯", h: "게임 목표", body: [
       "상대의 <b>체력</b>을 0으로 만들면 승리합니다.",
-      "<b>체력 회복</b>은 현재 최대 체력까지 회복합니다. <b>최대 체력 증가</b>는 최대치와 현재 체력을 같은 양만큼 늘립니다.",
+      "<b>체력 회복</b>은 현재 체력까지 회복합니다. <b>체력 증가</b>는 최대치와 현재 체력을 같은 양만큼 늘립니다.",
       "선공은 체력 <b>40</b>, 후공은 <b>45</b>로 시작해요. (후공이 조금 높은 건 선공의 템포 이점을 보정하기 위함입니다.)",
       "선공/후공은 매 게임 <b>코인토스</b>로 공정하게 정해집니다.",
     ] },
     { icon: "🔄", h: "턴의 흐름", body: [
-      "내 턴이 시작되면 ① <b>마나가 최대치까지 충전</b>되고 ② 카드를 <b>3장 드로우</b>합니다. (턴 종료 시 손패는 5장까지 이월 · 6장 이상이면 버릴 카드를 고릅니다, 시간 초과 시 오른쪽부터 폐기)",
+      "내 턴이 시작되면 ① <b>마나가 최대치까지 충전</b>되고 ② 카드를 <b>3장 드로우</b>합니다. (턴 종료 시 손패는 7장까지 이월 · 8장 이상이면 버릴 카드를 고릅니다, 시간 초과 시 오른쪽부터 폐기)",
       "그다음 마나가 닿는 한 자유롭게 행동합니다 — 몬스터 소환, 마법 시전, 공격, 카드 구매.",
       "<b>턴 종료</b>를 누르면 상대 턴으로 넘어갑니다. 손에 남은 카드는 <b>그대로 유지</b>되어 다음 턴에도 쓸 수 있어요.",
     ] },
@@ -60,7 +60,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "상대 몬스터를 치면 <b>데미지가 체력에 누적</b>됩니다. 체력이 0이 되면 파괴되고, 막타의 초과분은 상대 플레이어에게 <b>관통</b> 데미지로 들어갑니다.",
       "받은 데미지는 <b>사라지지 않습니다</b> — 필드의 몬스터는 방패 자리에 <b>남은 체력</b>이 표시되고, 다친 상태면 <b>빨간 숫자</b>로 보여요. 필드를 떠났다 돌아오면 체력이 초기화됩니다.",
       "공격해도 <b>반격 데미지는 받지 않습니다</b>.",
-      "체력을 깎는 효과로 <b>최대 체력이 남은 체력 이하</b>가 되면 그 몬스터는 파괴됩니다.",
+      "체력을 깎는 효과로 <b>체력이 남은 체력 이하</b>가 되면 그 몬스터는 파괴됩니다.",
       "상대 필드가 비어 있으면 체력을 <b>직접</b> 때립니다.",
       "한 번 공격한 몬스터는 그 턴엔 다시 공격할 수 없어요(일부 카드는 2회 공격 가능).",
     ] },
@@ -84,7 +84,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🎁", h: "보물상자", body: [
       "보물상자를 열면 <b>주사위 🎲</b>를 굴려 결과가 정해집니다:",
-      "<b>1</b> 꽝(상대 필드에 미믹 3/2) / <b>2·3</b> 체력 +3 / <b>4·5</b> 최대 마나 +1 / <b>6</b> 최대 체력 +5.",
+      "<b>1</b> 꽝(상대 필드에 미믹 3/2) / <b>2·3</b> 체력 +3 / <b>4·5</b> 최대 마나 +1 / <b>6</b> 체력 +5.",
       "보물상자 카드를 확대하면 이 주사위 표가 옆에 표시됩니다. 다른 확률 효과도 전부 주사위 판정입니다.",
     ] },
     { icon: "🏆", h: "승리 & 조작", body: [
@@ -98,12 +98,12 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
   ja: [
     { icon: "🎯", h: "ゲームの目的", body: [
       "相手の<b>体力</b>を0にすれば勝利です。",
-      "<b>体力回復</b>は現在の最大体力まで回復します。<b>最大体力増加</b>は上限を増やし、同じ量の体力も回復します。",
+      "<b>体力回復</b>は現在の体力まで回復します。<b>体力増加</b>は上限を増やし、同じ量の体力も回復します。",
       "先攻は体力<b>40</b>、後攻は<b>45</b>でスタート。(後攻が少し高いのは先攻のテンポ有利を補正するためです。)",
       "先攻/後攻は毎ゲーム<b>コイントス</b>で公平に決まります。",
     ] },
     { icon: "🔄", h: "ターンの流れ", body: [
-      "自分のターンになると ①<b>マナが最大まで回復</b>し ②カードを<b>3枚ドロー</b>します。(ターン終了時に持ち越せる手札は5枚まで · 6枚以上なら捨てるカードを選択、時間切れは右から破棄)",
+      "自分のターンになると ①<b>マナが最大まで回復</b>し ②カードを<b>3枚ドロー</b>します。(ターン終了時に持ち越せる手札は7枚まで · 8枚以上なら捨てるカードを選択、時間切れは右から破棄)",
       "その後はマナの続く限り自由に行動 — モンスター召喚、魔法発動、攻撃、カード購入。",
       "<b>ターン終了</b>を押すと相手のターンになります。手札の残りは<b>そのまま持ち越し</b>、次のターンも使えます。",
     ] },
@@ -127,7 +127,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "相手モンスターを攻撃すると<b>ダメージが体力に蓄積</b>します。体力が0になると破壊され、とどめの超過分は相手プレイヤーに<b>貫通</b>ダメージとして入ります。",
       "受けたダメージは<b>消えません</b> — 場のモンスターは盾の位置に<b>残り体力</b>が表示され、傷ついていると<b>赤い数字</b>になります。場を離れて戻ると体力はリセットされます。",
       "攻撃しても<b>反撃ダメージは受けません</b>。",
-      "体力を下げる効果で<b>最大体力が残り体力以下</b>になると、そのモンスターは破壊されます。",
+      "体力を下げる効果で<b>体力が残り体力以下</b>になると、そのモンスターは破壊されます。",
       "相手の場が空なら体力を<b>直接</b>攻撃します。",
       "一度攻撃したモンスターはそのターン再攻撃できません(一部カードは2回攻撃可能)。",
     ] },
@@ -145,7 +145,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🎁", h: "宝箱", body: [
       "宝箱を開けると<b>ダイス 🎲</b>を振って結果が決まります:",
-      "<b>1</b> ハズレ(相手の場にミミック3/2) / <b>2・3</b> 体力+3 / <b>4・5</b> 最大マナ+1 / <b>6</b> 最大体力+5。",
+      "<b>1</b> ハズレ(相手の場にミミック3/2) / <b>2・3</b> 体力+3 / <b>4・5</b> 最大マナ+1 / <b>6</b> 体力+5。",
       "宝箱カードを拡大すると、このダイス表が横に表示されます。他の確率効果もすべてダイス判定です。",
     ] },
     { icon: "🏷️", h: "効果の表記ルール", body: [
@@ -165,12 +165,12 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
   en: [
     { icon: "🎯", h: "Goal", body: [
       "Reduce your opponent's <b>HP</b> to 0 to win.",
-      "<b>Healing</b> restores HP up to your current maximum. <b>Increasing max HP</b> raises the maximum and restores the same amount of HP.",
+      "<b>Healing</b> restores HP up to your current maximum. <b>Increasing HP</b> raises the maximum and restores the same amount of HP.",
       "The first player starts at <b>40</b> HP, the second at <b>45</b>. (The extra HP offsets the first player's tempo advantage.)",
       "Who goes first is decided fairly by a <b>coin toss</b> each game.",
     ] },
     { icon: "🔄", h: "Turn Flow", body: [
-      "At the start of your turn: ① <b>mana refills to max</b> and ② you <b>draw 3 cards</b>. (You may carry over 5 cards at end of turn · with 6+ you choose what to discard; on timeout the rightmost go)",
+      "At the start of your turn: ① <b>mana refills to max</b> and ② you <b>draw 3 cards</b>. (You may carry over 7 cards at end of turn · with 8+ you choose what to discard; on timeout the rightmost go)",
       "Then act freely while your mana lasts — summon monsters, cast spells, attack, buy cards.",
       "Press <b>End Turn</b> to pass to the opponent. Cards left in your hand <b>stay</b> for your next turn.",
     ] },
@@ -194,7 +194,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "Attacking a monster deals <b>damage that accumulates on its HP</b>. At 0 HP it dies, and the killing blow's excess hits the opponent as <b>penetration</b> damage.",
       "Damage <b>does not wear off</b> — field monsters show their <b>remaining HP</b> in the shield slot, in <b>red</b> while wounded. HP resets if the card leaves the field.",
       "Attackers take <b>no retaliation damage</b>.",
-      "If an effect drops a monster's <b>max HP to its damage taken or below</b>, it is destroyed.",
+      "If an effect drops a monster's <b>HP to its damage taken or below</b>, it is destroyed.",
       "If the enemy field is empty, you hit their HP <b>directly</b>.",
       "Each monster attacks once per turn (a few cards can attack twice).",
     ] },
@@ -211,7 +211,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     ] },
     { icon: "🎁", h: "Treasure Chests", body: [
       "Opening a chest <b>rolls a die 🎲</b> to decide the outcome:",
-      "<b>1</b> Dud (a 3/2 Mimic on the enemy field) / <b>2·3</b> HP +3 / <b>4·5</b> Max mana +1 / <b>6</b> Max HP +5.",
+      "<b>1</b> Dud (a 3/2 Mimic on the enemy field) / <b>2·3</b> HP +3 / <b>4·5</b> Max mana +1 / <b>6</b> HP +5.",
       "Enlarge the chest card to see this die table. Every chance effect in the game is a dice roll.",
     ] },
     { icon: "🏷️", h: "Effect Notation", body: [

@@ -1,0 +1,122 @@
+[
+  {
+    "seed": 1,
+    "steps": 56,
+    "finished": true,
+    "turn": 12,
+    "hp": [
+      8,
+      -1
+    ]
+  },
+  {
+    "seed": 2,
+    "steps": 71,
+    "finished": true,
+    "turn": 14,
+    "hp": [
+      0,
+      7
+    ]
+  },
+  {
+    "seed": 3,
+    "steps": 278,
+    "finished": true,
+    "turn": 33,
+    "hp": [
+      0,
+      151
+    ]
+  },
+  {
+    "seed": 4,
+    "steps": 111,
+    "finished": true,
+    "turn": 18,
+    "hp": [
+      -1,
+      80
+    ]
+  },
+  {
+    "seed": 5,
+    "steps": 264,
+    "finished": true,
+    "turn": 36,
+    "hp": [
+      69,
+      -3
+    ]
+  },
+  {
+    "seed": 6,
+    "steps": 108,
+    "finished": true,
+    "turn": 15,
+    "hp": [
+      12,
+      -1
+    ]
+  },
+  {
+    "seed": 7,
+    "steps": 85,
+    "finished": true,
+    "turn": 12,
+    "hp": [
+      9,
+      -1
+    ]
+  },
+  {
+    "seed": 8,
+    "steps": 245,
+    "finished": true,
+    "turn": 32,
+    "hp": [
+      -3,
+      21
+    ]
+  },
+  {
+    "seed": 9,
+    "steps": 170,
+    "finished": true,
+    "turn": 23,
+    "hp": [
+      -1,
+      40
+    ]
+  },
+  {
+    "seed": 10,
+    "steps": 190,
+    "finished": true,
+    "turn": 32,
+    "hp": [
+      -9,
+      26
+    ]
+  },
+  {
+    "seed": 11,
+    "steps": 69,
+    "finished": true,
+    "turn": 13,
+    "hp": [
+      -1,
+      14
+    ]
+  },
+  {
+    "seed": 12,
+    "steps": 79,
+    "finished": true,
+    "turn": 14,
+    "hp": [
+      0,
+      95
+    ]
+  }
+]

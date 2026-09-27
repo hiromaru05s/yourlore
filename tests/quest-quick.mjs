@@ -25,9 +25,9 @@ try {
   assert.equal(frameFor('quest'),'/art/biblion/modular/base-quest.png');
 
   for (const from of ['buyMarket','buySupply']) {
-    let g=fresh();g=activate(g,'Q_WINTER');g=activate(g,'Q_MANA');const p=g.players[0];const mana=p.mana, hp=p.maxHp, mm=p.maxMana;
+    let g=fresh();g=activate(g,'Q_WINTER');g=activate(g,'Q_MANA');const p=g.players[0];const mana=p.mana, hp=p.hp, mm=p.maxMana;
     g=buy(g,'QUICK_ATTUNE',from);
-    assert.equal(g.players[0].mana,mana-4);assert.equal(g.players[0].maxMana,mm+1);assert.equal(g.players[0].maxHp,hp+2);
+    assert.equal(g.players[0].mana,mana-4);assert.equal(g.players[0].maxMana,mm+1);assert.equal(g.players[0].hp,hp+2);
     assert.equal(g.players[0].quests.find(q=>q.card.id==='Q_WINTER').progress,2);
     assert.equal(g.players[0].quests.find(q=>q.card.id==='Q_MANA').progress,1);
     assert.equal(g.players[0].removed.filter(c=>c.id==='QUICK_ATTUNE').length,1);
@@ -74,9 +74,9 @@ try {
     const count=after.removed.length;g=buy(g,'QUICK_GRIMOIRE');assert.equal(g.players[owner].removed.length,count+1);
   }
   // Generated Culls participate in existing Rift reactions.
-  {let g=activate(fresh(),'Q_RIFT');g.players[0].quests[0].progress=9;const rift=Object.values(DB).find(c=>c.ench==='rift');g.players[0].enchants=[{card:card(rift.id),turns:99}];const hp=g.players[0].maxHp;g=buy(g,'QUICK_GRIMOIRE');assert.equal(g.players[0].maxHp,hp+9*5);}
-  {let g=activate(fresh(),'Q_TORI');g=activate(g,'Q_WINTER');g.players[0].quests.find(q=>q.card.id==='Q_TORI').progress=4;const hp=g.players[0].maxHp,mm=g.players[0].maxMana;g=step(g,{type:'endTurn'});assert.equal(g.players[0].maxHp,hp+30);assert.equal(g.players[0].maxMana,mm+2);assert.equal(g.players[0].quests.length,0);}
-  {let g=activate(fresh(),'Q_TORI');g.players[0].hand=Array.from({length:7},()=>card('STARTER_TRASH'));g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,0);assert.equal(g.pending.reason,'handCap');g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,1);}
+  {let g=activate(fresh(),'Q_RIFT');g.players[0].quests[0].progress=9;const rift=Object.values(DB).find(c=>c.ench==='rift');g.players[0].enchants=[{card:card(rift.id),turns:99}];const hp=g.players[0].hp;g=buy(g,'QUICK_GRIMOIRE');assert.equal(g.players[0].hp,hp+9*5);}
+  {let g=activate(fresh(),'Q_TORI');g=activate(g,'Q_WINTER');g.players[0].quests.find(q=>q.card.id==='Q_TORI').progress=4;const hp=g.players[0].hp,mm=g.players[0].maxMana;g=step(g,{type:'endTurn'});assert.equal(g.players[0].hp,hp+30);assert.equal(g.players[0].maxMana,mm+2);assert.equal(g.players[0].quests.length,0);}
+  {let g=activate(fresh(),'Q_TORI');g.players[0].hand=Array.from({length:8},()=>card('STARTER_TRASH'));g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,0);assert.equal(g.pending.reason,'handCap');g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,1);}
   {let g=activate(fresh(),'Q_CASTLE');const castle=mon('CASTLE');g.players[0].field=[castle];for(let i=0;i<8;i++){g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,i+1);}g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests.length,0);assert.equal(g.players[0].field.filter(c=>c.id==='INFKNIGHT').length,3);}
   {let g=activate(fresh(),'Q_CASTLE');g.players[0].field=[mon('CASTLE')];g=step(g,{type:'endTurn'});g.players[0].field=[];g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,0);}
   {let g=activate(fresh(),'Q_DECAY');g.players[0].quests[0].progress=3;const enemy=mon('MIMIC');enemy.decayCnt=1;g.players[1].field=[enemy];g=buy(g,'QUICK_POISON');assert.equal(g.players[1].hp,100);g=pick(g,'invalid');assert(g.pending);g=pick(g,enemy.uid);assert.equal(g.players[0].quests.length,0);assert.equal(g.players[1].field.length,0);assert.equal(g.players[1].hp,67);}
@@ -108,7 +108,7 @@ try {
     const server = new GameRoom({}, {}); const sent=[];
     server.persist=()=>{}; server.syncAlarm=()=>{}; server.broadcast=events=>sent.push(events); server.sockFor=()=>null;
     const g=fresh();g.players[0].hand=[card('Q_TRIBE')];
-    server.room={game:g,turnStartAt:Date.now(),turnBonusMs:0};
+    server.room={readied:[true,true],previewDone:true,game:g,turnStartAt:Date.now(),turnBonusMs:0};
     await server.handleAction(0,{type:'play',idx:0});
     assert(sent[0].some(e=>e.type==='playSpell'&&e.id==='Q_TRIBE'));
     server.room.game.players[0].quests[0].progress=6;server.room.game.players[0].field=[mon('TAR3')];server.room.game.cur=1;

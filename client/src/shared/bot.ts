@@ -699,13 +699,12 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if ((c.id === "RUNE2" || c.id === "RUNE3") && !spellDeckHalf(p)) return false; // v34: 덱 절반 마법 조건
     if ((c.id === "DISARM1" || c.id === "DISARM2" || c.id === "DISARM3") && o.enchants.length === 0) return false;
     // don't waste heals at (near) full HP
-    if (c.act === "heal" && p.maxHp - p.hp < Math.min(c.val || 0, 6)) return false;
     // 어튠-마: needs a chest in hand (봉인 중에도 사용 가능 — 상자를 '여는' 게 아니라 소모)
     if (c.act === "chestToMana" && !p.hand.some((h) => h.star === "chest")) return false;
     // 길드 상자: 자해 10 리스크 — 체력 여유 필요
     if (c.id === "GUILD_CHEST" && p.hp <= 12) return false;
     // 안식 계열: "이번 턴 다른 플레이 없음" / "필드 비어있음" 조건
-    if (c.id === "MEDITATE" && (p.maxMana > 11 || p.hp >= p.maxHp)) return false; // v34
+    if (c.id === "MEDITATE" && (p.maxMana > 11 || p.hp >= 40)) return false; // v34
     if (c.id === "HERMIT" && (p.field.length > 0 || (p.uses["HERMIT"] || 0) >= 5)) return false;
     if (c.id === "MULTI_CULTURE" && new Set(p.field.filter((m) => m.tribe).map((m) => m.tribe)).size < 2) return false; // v34
     if (c.id === "GS6_4" && !(o.brand ?? 0)) return false; // 화맥 점화: 상대 낙인 필요
@@ -1155,7 +1154,7 @@ function autoTarget(g: GameState): Action {
     }
     if (pending.reason === "worldTree") { // 세계수: 체력이 80% 미만이거나 다친 몬스터가 있을 때만 발동
       const tree = p.field.find((m) => m.id === "WORLD_TREE" && (m.gcount || 0) > 0);
-      const worth = p.hp < Math.floor(p.maxHp * 0.8) || p.field.some((m) => (m.dmg || 0) > 0);
+      const worth = p.hp < 32 || p.field.some((m) => (m.dmg || 0) > 0);
       return { type: "chooseTarget", uid: tree && worth ? tree.uid : null };
     }
     // 지원 나팔의 exclude(중복 선택 불가)를 지켜야 무한 재무장 루프에 안 빠진다

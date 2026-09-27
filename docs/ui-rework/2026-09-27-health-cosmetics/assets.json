@@ -1,0 +1,42 @@
+[
+  {
+    "path": "client/public/cosmetics/v2/sleeve-astral.webp",
+    "bytes": 95418,
+    "sha256": "a591126786b67b26f1d3582d074391aa9da2ecdc324591392f01724feef011df"
+  },
+  {
+    "path": "client/public/cosmetics/v2/material-astral.webp",
+    "bytes": 147312,
+    "sha256": "2166df73355269f9e7795348d695c86d7a611a56ec972c0ce28f3a2485d8c3eb"
+  },
+  {
+    "path": "client/public/cosmetics/v2/sleeve-verdant.webp",
+    "bytes": 76034,
+    "sha256": "64dffc62e5886b3c11af27a286d2bfdc8d7474c85eb0ae79b8aea2bb663c6534"
+  },
+  {
+    "path": "client/public/cosmetics/v2/material-verdant.webp",
+    "bytes": 95624,
+    "sha256": "532439d08ccbd053fc67b66892dadf91fafee5b7a21a60b4e3e0c24d8809c379"
+  },
+  {
+    "path": "client/public/cosmetics/v2/sleeve-crimson.webp",
+    "bytes": 79912,
+    "sha256": "2187e188d8a764e346a041c4a1be6d3348c8c12d29e18f3ba200332fe8ac5c9d"
+  },
+  {
+    "path": "client/public/cosmetics/v2/material-crimson.webp",
+    "bytes": 119234,
+    "sha256": "2cad397c6bbfddd6799187ce1cd49a8675427d537ff1c556311dfeb5b47a7d6d"
+  },
+  {
+    "path": "client/public/cosmetics/v2/sleeve-ivory.webp",
+    "bytes": 87600,
+    "sha256": "0eff7bc80bf16abe2e1d548a7b28b27e263f74f55eff3919d3d4527f5c19360f"
+  },
+  {
+    "path": "client/public/cosmetics/v2/material-ivory.webp",
+    "bytes": 144832,
+    "sha256": "524de53be74f56ec914a3caaa0961473058f5ba1f1c2eb323621d5c011e352fe"
+  }
+]

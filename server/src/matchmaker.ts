@@ -10,7 +10,7 @@
 import type { Env } from "./env";
 import type { QueueClientMsg, QueueServerMsg } from "../../client/src/shared/protocol";
 
-interface Waiter { ws: WebSocket; id: string; name: string; avatar: string | null; sleeve: string | null; deck: string | null; ranked: boolean; mmr: number; since: number; }
+interface Waiter { ws: WebSocket; id: string; name: string; avatar: string | null; sleeve: string | null; furniture:string|null; deck: string | null; ranked: boolean; mmr: number; since: number; }
 
 const SWEEP_MS = 5000;
 const BAND_START = 100;
@@ -39,6 +39,7 @@ export class Matchmaker {
       name: url.searchParams.get("name") || "Player",
       avatar: url.searchParams.get("avatar") || null,
       sleeve: url.searchParams.get("sleeve") || null,
+      furniture:url.searchParams.get("furniture")||null,
       deck: url.searchParams.get("deck") || null,
       ranked: url.searchParams.get("mode") === "ranked",
       mmr: url.searchParams.has("mmr") && Number.isFinite(Number(url.searchParams.get("mmr"))) ? Math.max(0,Number(url.searchParams.get("mmr"))) : 1000,
@@ -159,7 +160,7 @@ export class Matchmaker {
     try {
       await stub.fetch("https://do/setup", {
         method: "POST",
-        body: JSON.stringify({ players: [{ id: a.id, name: a.name, sleeve: a.sleeve, deck: a.deck }, { id: b.id, name: b.name, sleeve: b.sleeve, deck: b.deck }], seed, ranked }),
+        body: JSON.stringify({ players: [{ id: a.id, name: a.name, sleeve: a.sleeve, furniture:a.furniture, deck: a.deck }, { id: b.id, name: b.name, sleeve: b.sleeve, furniture:b.furniture, deck: b.deck }], seed, ranked }),
       });
     } catch {
       if (a.ws.readyState === WebSocket.OPEN) try { this.send(a.ws, { type: "error", message: "방 생성 실패" }); } catch { /* dropped */ }

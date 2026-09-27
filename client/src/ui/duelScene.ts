@@ -56,7 +56,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
     for(const el of elements){
       const supply=el.classList.contains('market-sub--supply'),market=el.classList.contains('market-counter'),id=market?'market-base':supply?'supply-base':el.id,shelf=el.classList.contains('pile--shelf');
       if((market&&!furniture.has('market'))||(supply&&!furniture.has('supply')))continue;
-      const key=`${el.dataset.count}:${el.dataset.face}:${el.dataset.sleeve}:${furniture.revision}`;
+      const key=`${el.dataset.count}:${el.dataset.face}:${el.dataset.sleeve}:${el.dataset.material}:${furniture.revision}`;
       el.dataset.furniture=furniture.has(supply?'supply':market?'market':shelf?'shelf':'deck')?'blender':'fallback';
       let item=items.get(id);if(item?.key===key){item.element=el;if(shelf){const print=el.querySelector<HTMLElement>('.pile-print .card');el.dataset.surfaceReady=String(!!print);el.dataset.surfaceCard=print?.dataset.cardId||'';}continue;}
       if(item)removeItem(item);
@@ -64,12 +64,14 @@ export function mountDuelScene(root:HTMLElement):()=>void {
       if(market||supply)group.add(furniture.clone(supply?'supply':'market')!);
       else{
         const count=Number(el.dataset.count)||0;item.count=count;
-        item.pile=makePile(count,shelf,texture(el.dataset.sleeve!),undefined,furniture.clone(shelf?'shelf':'deck'));group.add(item.pile.group);
+        const model=furniture.clone(shelf?'shelf':'deck');
+        if(model&&el.dataset.material){const skin=texture(el.dataset.material);skin.flipY=false;model.traverse(o=>{if(o instanceof T.Mesh)for(const m of Array.isArray(o.material)?o.material:[o.material])if(m instanceof T.MeshStandardMaterial&&m.metalness<.7){m.map=skin;m.color.set(0xffffff);m.needsUpdate=true;}});}
+        item.pile=makePile(count,shelf,texture(el.dataset.sleeve!),undefined,model);group.add(item.pile.group);
         const print=el.querySelector<HTMLElement>('.pile-print .card');
         if(shelf){el.dataset.surfaceReady=String(!!print);el.dataset.surfaceCard=print?.dataset.cardId||'';}
       }
     }
-    const used=new Set(elements.flatMap(el=>[el.dataset.sleeve,el.dataset.face]).filter(Boolean));for(const [url,map] of textures)if(!used.has(url)){map.dispose();textures.delete(url);}
+    const used=new Set(elements.flatMap(el=>[el.dataset.sleeve,el.dataset.face,el.dataset.material]).filter(Boolean));for(const [url,map] of textures)if(!used.has(url)){map.dispose();textures.delete(url);}
     projectBoardDOM(root);keyLight.shadow.needsUpdate=true;
   }
   const motion=installSceneMotion(root,flightScene,items,texture,refresh,async()=>{

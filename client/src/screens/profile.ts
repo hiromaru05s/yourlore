@@ -1,3 +1,4 @@
+import {FURNITURE_LIST} from '../shared/cosmetics';
 import { homeIcon } from "../ui/homeIcons";
 import { loungeText } from "../ui/loungeText";
 import { confirmDialog } from "../ui/modal";
@@ -207,8 +208,8 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   // TAB: sleeves
   // ============================================================
   const renderSleeves = (_p: Profile): void => {
-    const owned = new Set(["default"]);
-    const equipped = "default";
+    const owned = new Set(_p.sleeves??["default"]);
+    const equipped = _p.sleeve||"default";
     body().innerHTML = `
       <section class="tut-sec sl-current">
         <h3><span class="tut-ico">${homeIcon("sleeve")}</span>${t("sleeve.current")}</h3>
@@ -237,6 +238,12 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         </div>
       </section>`;
 
+    const furnitureSection=document.createElement('section');furnitureSection.className='tut-sec';
+    furnitureSection.innerHTML='<h3>デッキ置き場 ＆ シェルフ</h3><div class="sl-grid">'+[{id:'default',ja:'デフォルト',en:'Default',ko:'기본',url:''},...FURNITURE_LIST].filter(c=>c.id==='default'||_p.furnitures?.includes(c.id)).map(c=>`<div class="sl-tile"><div class="sl-preview furniture-preview" style="${c.url?`background-image:url(${c.url})`:''}"></div><div>${c[getLang()]}</div><button class="btn btn-mini" data-furniture="${c.id}" ${(_p.furniture||'default')===c.id?'disabled':''}>${(_p.furniture||'default')===c.id?'装備中':'装備する'}</button></div>`).join('')+'</div>';
+    body().append(furnitureSection);
+    furnitureSection.querySelectorAll<HTMLButtonElement>('[data-furniture]').forEach(b=>b.onclick=()=>{
+      b.disabled=true;void api.updateMe({furniture:b.dataset.furniture!}).then(r=>{if(app.user)app.user.furniture=r.furniture;if(cached)cached.furniture=r.furniture;sfx('pop');renderSleeves(cached!);}).catch(e=>{b.disabled=false;alert((e as Error).message);});
+    });
     body().querySelectorAll("[data-eq]").forEach((btn) => {
       (btn as HTMLElement).onclick = () => {
         const id = (btn as HTMLElement).dataset.eq!;

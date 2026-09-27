@@ -129,8 +129,8 @@ export default {
     if (path === "/ws/queue") {
       const user = await getUser(env, req);
       const fwd = new URL(req.url);
-      for (const key of ["uid","name","avatar","sleeve","deck","mmr"]) fwd.searchParams.delete(key);
-      if (user) { fwd.searchParams.set("uid", user.id); fwd.searchParams.set("name", user.display); fwd.searchParams.set("avatar", user.avatar ?? ""); fwd.searchParams.set("sleeve", user.sleeve ?? ""); fwd.searchParams.set("deck", (user.deck ?? []).join(",")); }
+      for (const key of ["uid","name","avatar","sleeve","furniture","deck","mmr"]) fwd.searchParams.delete(key);
+      if (user) { fwd.searchParams.set("uid", user.id); fwd.searchParams.set("name", user.display); fwd.searchParams.set("avatar", user.avatar ?? ""); fwd.searchParams.set("sleeve", user.sleeve ?? ""); fwd.searchParams.set("furniture",user.furniture??""); fwd.searchParams.set("deck", (user.deck ?? []).join(",")); }
       // ranked queue: must be logged in; attach current MMR for band matching
       if (fwd.searchParams.get("mode") === "ranked") {
         if (!user) return new Response("unauthorized", { status: 401 });

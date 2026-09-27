@@ -49,7 +49,7 @@ export interface CardDef {
   textEn?: string; // English effect text (falls back to text)
 }
 
-export type QuestEvent = "dice" | "town" | "exile" | "opponentDamage" | "emptyTurn" | "maxHp" | "tribeSummon" | "castleTurn" | "decayKill" | "assassinHit" | "spellPlay";
+export type QuestEvent = "dice" | "town" | "exile" | "opponentDamage" | "emptyTurn" | "healthGain" | "tribeSummon" | "castleTurn" | "decayKill" | "assassinHit" | "spellPlay";
 export interface QuestState {
   card: CardInst;
   progress: number;
@@ -114,7 +114,6 @@ export interface PlayerState {
   name: string;
   isBot: boolean;
   hp: number;
-  maxHp: number;
   mana: number;
   maxMana: number;
   manaPenalty: number;
@@ -220,6 +219,7 @@ export interface GameState {
   /** each side's equipped card-back sleeve id (online only), so a client can render the
       OPPONENT's card backs with their chosen sleeve. index = Side. null = default back. */
   sleeves?: [string | null, string | null];
+  furnitures?: [string | null, string | null];
 }
 
 // --- Actions: the only way to mutate a GameState ---

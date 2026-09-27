@@ -1,3 +1,4 @@
+import {installHandDiscard} from '../ui/handDiscard';
 import {animateSeeker} from '../ui/seekerAnimation';
 import {prepareStateArtwork} from '../ui/stateArtwork';
 import {captureHandLayout,arrivingHandUids} from '../ui/handGeometry';
@@ -71,6 +72,7 @@ export abstract class BaseController implements BoardHandlers {
   private static readonly HAND_CAP_BONUS_SECS = 10; // v42: end-turn hand-discard choice
   private turnTotal = 90; // full length of the CURRENT turn (for the ring's full-scale)
   private turnStartedWall = 0; // wall-clock ms when the current turn's timer started (anti instant-skip)
+  private disposeHandDiscard:(()=>void)|undefined;
   private handCapBonusKey = ""; // v42: turn key that already received the +10s hand-discard bonus
   private multiPickerOpen = false; // a cardPickerMulti modal is showing (closed when its pending vanishes)
   private lastEndTurnAt = 0;   // 턴종료 연타 가드: 마지막 endTurn 제출 시각
@@ -183,6 +185,7 @@ export abstract class BaseController implements BoardHandlers {
 
   private async playResult(prev: GameState, res: ReduceResult, animate: boolean, gen: number): Promise<void> {
     if (this.dead) return;
+    this.disposeHandDiscard?.();this.disposeHandDiscard=undefined;
     // Hold the existing complete board until newly exposed card art is decoded.
     if(prev!==res.state){this.view.setPlaying(true);try{await prepareStateArtwork(res.state,this.you,this.openingRoot);}finally{if(!this.dead)this.view.setPlaying(false);}}
     if(this.dead)return;
@@ -331,16 +334,16 @@ export abstract class BaseController implements BoardHandlers {
         case "damage": {
           hpNow[e.player] -= e.amount;
           A.hpFeedback(sideOf(e.player), "dmg", e.amount);
-          A.hpBarSet(sideOf(e.player), hpNow[e.player], res.state.players[e.player].maxHp);
+          A.hpBarSet(sideOf(e.player), hpNow[e.player]);
           if (e.srcKo) lastKill = { srcKo: e.srcKo, srcJa: e.srcJa };
           await wait(140);
           break;
         }
         case "heal": {
-          const healed=Math.max(0,Math.min(e.amount,res.state.players[e.player].maxHp-hpNow[e.player]));
+          const healed=Math.max(0,e.amount);
           hpNow[e.player] += healed;
           if(healed>0)A.hpFeedback(sideOf(e.player), "heal", healed);
-          A.hpBarSet(sideOf(e.player), hpNow[e.player], res.state.players[e.player].maxHp);
+          A.hpBarSet(sideOf(e.player), hpNow[e.player]);
           await wait(130);
           break;
         }
@@ -446,7 +449,7 @@ export abstract class BaseController implements BoardHandlers {
       await A.exileGeneratedCards(generated,sideOf(pl));
     }
 
-    // ---- state-diff celebrations: max mana / max HP gains ----
+    // ---- state-diff celebrations: max mana / HP gains ----
     // Render authoritative targets first, then start the shared visual clock.
     // Only presentation waits; resource values in game state are already final.
     const effectFinishes:Promise<void>[]=[];
@@ -454,10 +457,8 @@ export abstract class BaseController implements BoardHandlers {
     for (const pl of [0, 1] as Side[]) {
       if (this.dead) return;
       const dMana = res.state.players[pl].maxMana - prev.players[pl].maxMana;
-      const dHp = res.state.players[pl].maxHp - prev.players[pl].maxHp;
       if (dMana > 0) manaGains.push({side:sideOf(pl),amount:dMana});
       else if (dMana < 0) A.manaDrop(sideOf(pl), -dMana);
-      if (dHp > 0) { effectFinishes.push(A.maxHpSurge(sideOf(pl), dHp)); sfx("maxhp"); }
     }
 
     if (this.dead) return;
@@ -567,6 +568,7 @@ export abstract class BaseController implements BoardHandlers {
     if(this.openingActive&&!this.state.over)return;
     this.syncTimer();
     if (res.state !== this.state) return; // a newer batch is queued — let it drive follow-ups
+    this.disposeHandDiscard?.();this.disposeHandDiscard=undefined;
     const g = this.state;
     if (g.over) { this.showWin(); return; }
     // 다중 선택 pending (대숙청 purge / 흑룡 oppRmz / 신수 oppBoard) — 모달에서 한 번에
@@ -577,6 +579,7 @@ export abstract class BaseController implements BoardHandlers {
       if (this.multiPickerOpen) { this.multiPickerOpen = false; closeOverlay(); } // v42: 시간 초과 자동 폐기 등으로 선택이 끝나면 모달도 닫는다
     }
     if (g.pending && actingSide(g) === this.you) {
+      if(g.pending.reason==='handCap'){this.disposeHandDiscard=installHandDiscard(this.view.root,Number(g.pending.data?.val)||1,uid=>this.submit({type:'pick',uid}));return;}
       if (g.pending.kind === "cardChoice") {
         cardPicker(g.pending.hintJa, effectChoices(g), uid => this.submit({ type: "pick", uid }), !!g.pending.allowCancel);
         return;
@@ -912,6 +915,7 @@ export abstract class BaseController implements BoardHandlers {
   private clearQuickFaces():void {this.quickFaces.splice(0).forEach(x=>x.node.remove());}
 
   destroy(): void {
+    this.disposeHandDiscard?.();
     this.dead = true;
     this.openingAbort.abort();this.releaseOpening();
     this.clearQuickFaces();

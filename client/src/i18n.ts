@@ -250,7 +250,7 @@ const D: Record<string, Entry> = {
   "fx.trap": { ko: "함정 발동!", ja: "罠発動！", en: "Trap Activated!" },
   "fx.destroyed": { ko: "파괴!", ja: "破壊！", en: "Destroyed!" },
   "fx.mana": { ko: "최대 마나", ja: "最大マナ", en: "Max Mana" },
-  "fx.maxhp": { ko: "최대 체력", ja: "最大体力", en: "Max HP" },
+  "fx.maxhp": { ko: "체력", ja: "体力", en: "HP" },
   "fx.opp": { ko: "상대", ja: "相手", en: "Opponent" },
   "fx.roll": { ko: "결과", ja: "結果", en: "Result" },
   "death.cause": { ko: "원인", ja: "原因", en: "Cause" },

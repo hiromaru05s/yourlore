@@ -16,7 +16,7 @@ if (import.meta.env.DEV) {
   api.profile = async () => ({id:'fixture',self:true,display:'シーカー',avatar,badge:null,created_at:Date.now(),wins:3,losses:1,recent:[]});
   api.updateMe = async patch => {
     avatar = patch.avatar || avatar; localStorage.setItem('lore_profile_lab_avatar',avatar);
-    return {ok:true,display:'シーカー',avatar,badge:null,stats_public:true,sleeve:'default'};
+    return {ok:true,display:'シーカー',avatar,badge:null,stats_public:true,sleeve:'default',furniture:'default'};
   };
   mountProfile({root:document.getElementById('app')!,user:{avatar},home:()=>{location.href='/duel-lab.html';}} as App);
 }

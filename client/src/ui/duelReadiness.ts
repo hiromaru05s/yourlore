@@ -24,6 +24,7 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
     if(expired||!root.isConnected)return;
     const urls=new Set(['/art/seekers/v2/mask-self.png','/art/seekers/v2/mask-opp.png',...['counter','dual','ambush','aura','void','guts','decay','majesty','taunt','evade','relic'].map(k=>`/ui/passives/v1/${k}.webp`),...seekerAssets,...coinImages,...['base-mon','base-spell','base-quest','field-mon','field-spell','field-quest','cost','attack','health'].map(n=>`/art/biblion/modular/${n}.png`)]);
     for(const el of root.querySelectorAll<HTMLElement>('*')){
+      if(el.dataset.material)urls.add(el.dataset.material);
       if(el instanceof HTMLImageElement){if(el.currentSrc||el.src)urls.add(el.currentSrc||el.src);el.loading='eager';el.fetchPriority='high';}
       for(const pseudo of [null,'::before','::after']){const style=getComputedStyle(el,pseudo);if(pseudo&&(style.content==='none'||style.content==='normal'))continue;for(const match of style.backgroundImage.matchAll(/url\(["']?(.*?)["']?\)/g))urls.add(match[1]);}
     }

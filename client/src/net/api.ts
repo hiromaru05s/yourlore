@@ -15,6 +15,7 @@ export interface User {
   credits: number;
   avatar?: string | null; // preset avatar (card id)
   badge?: string | null;  // equipped badge key
+  furniture?: string | null;
   sleeve?: string | null; // equipped card sleeve id ('default' when none)
   deck?: string[] | null; // 활성 덱 8장 카드 id (null = 기본덱 컬6+상자2)
   decks?: { sel: number; list: { cards: string[]; watch: string[] }[] } | null; // 덱 프리셋 5슬롯 + 마켓 알림이
@@ -114,11 +115,11 @@ export const api = {
   },
   // ---- social: profile / friends / challenges ----
   profile: (id?: string) => call<{ profile: Profile }>(`/social/profile${id ? `?id=${encodeURIComponent(id)}` : ""}`, undefined, "GET").then((r) => r.profile),
-  updateMe: (patch: { display?: string; avatar?: string; badge?: string; stats_public?: boolean; sleeve?: string }) =>
-    call<{ ok: true; display: string; avatar: string | null; badge: string | null; stats_public: boolean; sleeve: string }>("/social/me", patch),
+  updateMe: (patch: { display?: string; avatar?: string; badge?: string; stats_public?: boolean; sleeve?: string; furniture?: string }) =>
+    call<{ ok: true; display: string; avatar: string | null; badge: string | null; stats_public: boolean; sleeve: string; furniture: string }>("/social/me", patch),
   buySleeve: (id: string) => {
     if (isLocalDevAccount()) return Promise.resolve({ ok: true as const, ...buyLocalGuestSleeve(id) });
-    return call<{ ok: true; credits: number; sleeves: string[] }>("/social/buy-sleeve", { id });
+    return call<{ ok: true; credits: number; sleeves: string[]; furnitures:string[] }>("/social/buy-sleeve", { id });
   },
   friends: () => call<FriendsData>("/social/friends", undefined, "GET"),
   friendRequest: (q: string) => call<{ ok: true; display: string }>("/social/friends/request", { q }),
@@ -142,6 +143,8 @@ export interface Profile {
   badges?: string[]; // owned badge keys (self only)
   credits?: number;  // self only
   sleeve?: string;   // equipped sleeve id (self only)
+  furniture?: string;
+  furnitures?: string[];
   sleeves?: string[]; // owned sleeve ids incl. 'default' (self only)
   // per-mode W/L aggregates for the record filter (self only)
   byMode?: { ranked: { w: number; l: number }; online: { w: number; l: number }; bot: { w: number; l: number } };

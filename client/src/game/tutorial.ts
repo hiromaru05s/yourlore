@@ -86,7 +86,7 @@ export class TutorialController extends BaseController {
     });
     // bot is unkillable until the victory step, so earlier attacks/spells can't end
     // the lesson early; activateStep(8) drops its HP to a single finishing blow.
-    res.state.players[1].hp = res.state.players[1].maxHp = 999;
+    res.state.players[1].hp = 999;
     this.applyResult(res, false);
     this.buildCoach(root);
     this.glowTimer = window.setInterval(() => this.applyGlow(), 400);

@@ -56,9 +56,9 @@ const OVERRIDE: Record<string, { ko?: string; ja?: string; en?: string }> = {
     en: "[Origin] 【On Summon】draw 1 card · if it is a monster, you may buy 1 'Origin' card of cost 5+ for its mana",
   },
   SHATTER: {
-    ko: "자신에게 5 데미지 · 양 필드 몬스터 전체의 최대 체력을 1로 한다(지속, 누적 데미지 초기화, 알 제외)",
-    ja: "自分に5ダメージ · 両方の場のモンスター全体の最大体力を1にする(持続、蓄積ダメージはリセット、卵を除く)",
-    en: "You take 5 damage · All monsters (both fields): max HP becomes 1 (damage reset; no Eggs)",
+    ko: "자신에게 5 데미지 · 양 필드 몬스터 전체의 체력을 1로 한다(지속, 누적 데미지 초기화, 알 제외)",
+    ja: "自分に5ダメージ · 両方の場のモンスター全体の体力を1にする(持続、蓄積ダメージはリセット、卵を除く)",
+    en: "You take 5 damage · All monsters (both fields): HP becomes 1 (damage reset; no Eggs)",
   },
   DRAGON_EGG: {
     ko: "【상시】공격 불가 · 양측 턴 8턴 후 부화, 내구도 6(상대 공격당 -1) · 내구도가 남으면 용 1체 소환",
@@ -71,14 +71,14 @@ const OVERRIDE: Record<string, { ko?: string; ja?: string; en?: string }> = {
     en: "【Passive】Can't attack · Hatch: 10 turns (both) · Durability 7, -1 per hit; any left: Divine Beast",
   },
   BLOOD_SECRET: {
-    ko: "자신에게 9 데미지 · 자신 '흡혈귀' 계열 1체 파괴 · 파괴했다면 최대 마나 +3, 자신 최대 체력 +10",
-    ja: "自分に9ダメージ · 自分の場の「吸血鬼」系列1体を破壊 · 破壊できたら最大マナ+3、自分の最大体力+10",
-    en: "You take 9 damage · Destroy 1 'Vampire' you control · If it dies: max mana +3, your max HP +10",
+    ko: "자신에게 9 데미지 · 자신 '흡혈귀' 계열 1체 파괴 · 파괴했다면 최대 마나 +3, 자신 체력 +10",
+    ja: "自分に9ダメージ · 自分の場の「吸血鬼」系列1体を破壊 · 破壊できたら最大マナ+3、自分の体力+10",
+    en: "You take 9 damage · Destroy 1 'Vampire' you control · If it dies: max mana +3, your HP +10",
   },
   VAMP5: {
-    ko: "【소환시】상대에게 15 데미지, 자신 최대 체력 +30 · 이 몬스터가 상대에게 준 데미지만큼 자신 최대 체력 +",
-    ja: "【召喚時】相手に15ダメージ、自分の最大体力+30 · このモンスターが相手に与えたダメージだけ自分の最大体力+",
-    en: "【On Summon】15 damage to the opponent, your max HP +30 · Damage it deals the opponent adds to your max HP",
+    ko: "【소환시】상대에게 15 데미지, 자신 체력 +30 · 이 몬스터가 상대에게 준 데미지만큼 자신 체력 +",
+    ja: "【召喚時】相手に15ダメージ、自分の体力+30 · このモンスターが相手に与えたダメージだけ自分の体力+",
+    en: "【On Summon】15 damage to the opponent, your HP +30 · Damage it deals the opponent adds to your HP",
   },
   AMBUSH: {
     ko: "【조건】상대 최대 마나가 4일 때만 사용 가능 · 상대에게 7 데미지, 자신에게 3 데미지 · 사용 후 게임에서 제외",
@@ -86,9 +86,9 @@ const OVERRIDE: Record<string, { ko?: string; ja?: string; en?: string }> = {
     en: "【Requires】opponent's max mana exactly 4 · 7 damage to the opponent, you take 3 damage · Exiled after use",
   },
   TRICKROOM: {
-    ko: "【지속 2턴】양 필드 전 몬스터의 공격력·최대 체력 교환(데미지 유지) · 반전 중 상승은 반대 스탯에 적용, 종료 후 유지",
-    ja: "【持続2ターン】両方の場の全モンスターの攻撃力と最大体力を入れ替える(ダメージ維持) · 反転中の上昇は逆のステータスに適用、終了後も維持",
-    en: "【Lasts 2 Turns】Both fields: swap ATK and max HP (damage kept) · Buffs apply to the swapped stat and remain",
+    ko: "【지속 2턴】양 필드 전 몬스터의 공격력·현재 체력 교환 · 반전 중 상승은 반대 스탯에 적용, 종료 후 유지",
+    ja: "【持続2ターン】両方の場の全モンスターの攻撃力と現在体力を入れ替える · 反転中の上昇は逆のステータスに適用、終了後も維持",
+    en: "【Lasts 2 Turns】Both fields: swap ATK and current HP · Buffs apply to the swapped stat and remain",
   },
   CHOSEN_MAGE: {
     ko: "【상시】제외된 자신의 '컬' 2장당 +1/+1 · 【매턴】(선택) 제외된 '컬' 1장을 묘지로 되돌리고 상대에게 8 데미지",

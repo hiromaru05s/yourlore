@@ -1,4 +1,4 @@
-import {coverScreen} from './ui/assetReadiness';
+import {coverScreen,isMenuReady} from './ui/assetReadiness';
 import { mountLounge, type LoungePage } from "./ui/lounge";
 // ============================================================
 // LORE — tiny screen router + auth/session context.
@@ -88,7 +88,7 @@ export class App {
       this.leaveLounge?.(); this.leaveLounge = null;
       this.root.innerHTML = "";
       this.current = make();
-      if (page) { this.leaveLounge = mountLounge(this, page);const cover=coverScreen(this.root);this.cancelCover=cover.cancel;void cover.ready(); }
+      if (page) { this.leaveLounge = mountLounge(this, page);if(page==='login'||!isMenuReady()){const cover=coverScreen(this.root,page!=='login');this.cancelCover=cover.cancel;void cover.ready();} }
     };
     if (this.navigating) return;
     if (this.current?.beforeLeave) {

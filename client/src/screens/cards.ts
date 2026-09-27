@@ -1,3 +1,4 @@
+import {passiveIcon} from '../ui/passiveIcon';
 import {fitCardRows} from '../ui/cardDensity';
 import {revealCards} from '../ui/assetReadiness';
 import {loungeText} from '../ui/loungeText';
@@ -31,6 +32,7 @@ export function mountCards(app: App): Screen {
   let typeF: TypeFilter = "all";
   let costF = -1; // -1 = all
   let q = "";
+  const passiveFilters=new Set<string>();
   let page=0,revision=0;const pageSize=96;
 
   const wrap = document.createElement("div");
@@ -49,6 +51,7 @@ export function mountCards(app: App): Screen {
         <div class="chip-row" id="typeRow"></div>
         <div class="chip-row" id="costRow"></div>
       </div>
+      <details class="cards-advanced"><summary>${loungeText("詳細検索：パッシブ","Advanced: passives","상세 검색: 패시브")}</summary><div id="passiveFilters" class="passive-filters"></div></details>
       <div class="cards-hint">${t("cards.hint")}<button id="resetFilters">${loungeText("条件をリセット","Reset filters","필터 초기화")}</button></div>
       <div class="cards-grid" id="grid"></div><div class="collection-pager"><button id="prevPage" aria-label="${loungeText("前のページ","Previous page","이전 페이지")}">‹</button><span id="pageLabel" aria-live="polite"></span><button id="nextPage" aria-label="${loungeText("次のページ","Next page","다음 페이지")}">›</button></div>
     </div>`;
@@ -90,14 +93,21 @@ export function mountCards(app: App): Screen {
   addCost(-1, t("cards.cost.all"));
   costs.forEach((c) => addCost(c, String(c)));
 
+  const passiveButtons=Object.keys(PASSIVES).map(key=>{
+    const b=document.createElement('button');b.type='button';b.dataset.passive=key;b.setAttribute('aria-pressed','false');
+    b.innerHTML=passiveIcon(key)+`<span>${PASSIVES[key][getLang()].name}</span>`;
+    b.onclick=()=>{passiveFilters.has(key)?passiveFilters.delete(key):passiveFilters.add(key);page=0;render();};
+    wrap.querySelector('#passiveFilters')!.append(b);return b;
+  });
   const search = wrap.querySelector("#search") as HTMLInputElement;
   search.oninput = () => { q = search.value.trim().toLowerCase(); page=0; render(); };
 
   (wrap.querySelector('#prevPage') as HTMLButtonElement).onclick=()=>{page--;render();};
   (wrap.querySelector('#nextPage') as HTMLButtonElement).onclick=()=>{page++;render();};
-  (wrap.querySelector('#resetFilters') as HTMLButtonElement).onclick=()=>{typeF='all';costF=-1;q='';page=0;search.value='';render();};
+  (wrap.querySelector('#resetFilters') as HTMLButtonElement).onclick=()=>{typeF='all';costF=-1;q='';page=0;passiveFilters.clear();search.value='';render();};
   function render(): void {
     const version=++revision;
+    passiveButtons.forEach(b=>b.setAttribute("aria-pressed",String(passiveFilters.has(b.dataset.passive!))));
     typeChips.forEach((c) => c.el.classList.toggle("is-on", c.key === typeF));
     costChips.forEach((c) => c.el.classList.toggle("is-on", c.val === costF));
 
@@ -106,6 +116,7 @@ export function mountCards(app: App): Screen {
       if (typeF === "starter") { if (!(c.t === "starter" || c.noShop)) return false; }
       else if (typeF === "quick") { if (!c.quick) return false; }
       else if (typeF !== "all" && c.t !== typeF) return false;
+      if (passiveFilters.size && ![...passiveFilters].every(k=>cardPassives(c).includes(k))) return false;
       if (costF !== -1 && c.cost !== costF) return false;
       if(q && ![cardName(c),c.name,c.text,c.textJa,...cardPassives(c).map(k=>PASSIVES[k]?.[getLang()].name)].join(' ').toLowerCase().includes(q))return false;
       return true;

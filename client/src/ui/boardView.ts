@@ -1,3 +1,4 @@
+import {furnitureUrl} from '../shared/cosmetics';
 import {seekerPortrait} from './seekerAnimation';
 import {handFan} from './handFan';
 import {fieldPositions,settleField} from './fieldLayout';
@@ -37,6 +38,8 @@ export function setOppAvatar(a?: string | null): void { OPP_AVATAR = a; }
 // MY is set locally from app.user; OPP is refreshed per-render from the
 // server-synced state.sleeves, so the opponent's chosen sleeve shows too.
 let MY_SLEEVE = FRAME_BACK;
+let MY_FURNITURE:string|undefined;
+export function setMyFurniture(id?:string|null):void{MY_FURNITURE=furnitureUrl(id);}
 let OPP_SLEEVE = FRAME_BACK;
 export function setMySleeve(id?: string | null): void { MY_SLEEVE = sleeveUrl(id); }
 // 마켓 알림이: 활성 덱 프리셋의 워치리스트 — 마켓/제시에 뜨면 은은하게 표시
@@ -462,6 +465,7 @@ export class GameView {
     // 필드 오른쪽 더미 열: [묘지][덱] — 둘 다 정사각 타일과 "같은 폭", 높이는 카드 정상 비율
     // (폭을 타일에 맞추면 카드 비율상 한 줄보다 높아지므로 두 줄에 걸쳐 세운다.)
     const sortByCost = (cards: CardInst[]) => [...cards].sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
+    const material=isMe?MY_FURNITURE:furnitureUrl(g.furnitures?.[1-this.you]);
     const graveTop = p.discard[p.discard.length - 1];
     const graveArt = graveTop && graveTop.id !== "HIDDEN" ? artUrl.full(graveTop.id) : graveTop ? frameFor(graveTop.t) : null;
     const gravePile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, graveArt, graveTop ?? null, t("game.discard"),
@@ -473,6 +477,7 @@ export class GameView {
     const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, backFor(isMe), null, t("game.deck"),
       () => deckViewer(`${esc(p.name)} — ${t("deck.view")}`, collection, remaining, !isMe));
 
+    gravePile.dataset.material=material||"";deckPile.dataset.material=material||"";
     const block = document.createElement("div");
     block.className = "field-block" + (isMe ? " is-mine" : " is-opp") + (onTurn ? " is-turn" : "");
 
@@ -504,7 +509,7 @@ export class GameView {
       if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
       // zoom shows the monster's CURRENT atk/hp (buffs/mods applied) — and, when damaged,
-      // "현재/최대" exactly like the field tile (v29: the zoom used to show max HP only,
+      // "현재/최대" exactly like the field tile (v29: the zoom used to show HP only,
       // so a 4/20 monster read as a healthy 20 in the view players trade off).
       bindZoom(card, { ...m, atk: effAtk(p, m, g), def: effDef(p, m) }, { now: curHp(p, m), max: effDef(p, m) });
       // 드래그 = 공격(상대 몬스터/초상화로) + 내 필드 안에서는 순서 변경.
@@ -955,7 +960,6 @@ export class GameView {
     const sd = isMe ? "me" : "opp";
     const emax = effMaxMana(p);
     const hp = Math.max(0, p.hp);
-    const hpPct = hp / p.maxHp * 100;
     const oldPortrait=el.querySelector<HTMLCanvasElement>('.seeker-motion');
     const oldMana=el.querySelector<HTMLElement>('.pt-mana');
     const previousMax=Number(oldMana?.dataset.maximum??emax),previousMana=Number(oldMana?.dataset.mana??p.mana);
@@ -963,8 +967,8 @@ export class GameView {
     const avatar = isMe ? MY_AVATAR : OPP_AVATAR;
     const seeker = avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE" ? avatar : isMe ? "SEEKER_BLUE" : "SEEKER_RED";
     el.innerHTML = `
-      <span class="pt-vitals"><span class="pt-hp" title="HP ${hp}/${p.maxHp}"><span class="pt-hp-ico">HP</span><b id="hp-${sd}">${hp}</b><span class="pt-hp-max">/${p.maxHp}</span></span>
-      <span class="pt-hpbar hpbar" id="hpbar-${sd}" role="meter" aria-label="HP" aria-valuemin="0" aria-valuemax="${p.maxHp}" aria-valuenow="${hp}"><i style="width:${Math.min(100, hpPct)}%"></i></span></span>
+      <span class="pt-vitals"><span class="pt-hp" title="HP ${hp}"><span class="pt-hp-ico">HP</span><b id="hp-${sd}">${hp}</b></span>
+      </span>
       <span class="pt-ring">${avatarHtml(seeker, p.name, 100)}</span>
       <span class="pt-mana pips" data-mana="${p.mana}" data-maximum="${emax}" data-previous-maximum="${previousMax}" data-previous-mana="${previousMana}" aria-label="${t("game.mana")} ${p.mana}/${emax}"><span class="mana-readout"><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span><span class="mana-crystals" style="--mana-rows:${Math.max(1,Math.ceil(Math.min(MAX_MANA,emax)/10))}">${crystals}</span></span>
       ${(p.brand ?? 0) > 0 ? `<span class="pt-brand" title="${esc(t("game.brandTip").replace("{n}", String(p.brand)))}">${t("game.brand")} <b>${p.brand}</b></span>` : ""}

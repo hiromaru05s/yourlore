@@ -22,7 +22,7 @@ import { BALANCE_VERSION } from "../../client/src/shared/cards";
 import { settleRanked } from "./rank";
 import { DUEL_OPENING_MS, OPENING_PREPARE_MS, OPENING_LEAD_MS } from "../../client/src/shared/opening";
 
-interface PlayerRef { id: string; name: string; sleeve?: string | null; deck?: string | null; }
+interface PlayerRef { id: string; name: string; sleeve?: string | null; furniture?:string|null; deck?: string | null; }
 
 /** Everything the room needs — persisted so deploys/evictions/hibernation can't kill a live game. */
 interface RoomData {
@@ -488,7 +488,8 @@ export class GameRoom {
       if(startsAt==null)s.turnLeftMs=total;
     }
     const pl = this.room!.players;
-    s.sleeves = ["default", "default"];
+    s.sleeves = [this.room!.players[0].sleeve||"default",this.room!.players[1].sleeve||"default"];
+    s.furnitures = [this.room!.players[0].furniture||"default",this.room!.players[1].furniture||"default"];
     return s;
   }
 

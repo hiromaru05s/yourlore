@@ -10,8 +10,8 @@ const quick = (id: string, cost: number, nameJa: string, textJa: string): CardDe
 export const QUEST_QUICK_CARDS: CardDef[] = [
   quest('Q_RIFT', 2, 'リフト研究', '【条件】自分のカードを10枚ゲームから除外する。【報酬】新しいカル7枚を生成して自分のリフトへ追加する。', 'exile', 10),
   { ...quest('Q_BRAND', 2, '反撃の狼煙', '【条件】相手から累計40ダメージを受ける。【報酬】相手プレイヤーに烙印カウンターを1個付与する。', 'opponentDamage', 40), val: 1 },
-  quest('Q_TORI', 2, '精霊 - トリ', '【条件】自分の場にモンスターがいない状態で、自分のターンを5回終了する。【報酬】自分の最大体力+30。', 'emptyTurn', 5),
-  quest('Q_WINTER', 2, '精霊 - ウィンター', '【条件】自分の最大体力を累計30上昇させる。【報酬】自分の最大マナ+2。', 'maxHp', 30),
+  quest('Q_TORI', 2, '精霊 - トリ', '【条件】自分の場にモンスターがいない状態で、自分のターンを5回終了する。【報酬】自分の体力+30。', 'emptyTurn', 5),
+  quest('Q_WINTER', 2, '精霊 - ウィンター', '【条件】自分の体力を累計30上昇させる。【報酬】自分の最大マナ+2。', 'healthGain', 30),
   quest('Q_TRIBE', 3, '一族の誓い', '【条件】種族モンスターを6回召喚する。【報酬】自分の場の種族モンスターと同じ種族で、場にいない異なるモンスター1体を選び召喚する。', 'tribeSummon', 6),
   quest('Q_CASTLE', 3, '対攻城作戦', '【条件】自分の場に「城」が連続9ターン存在する（双方のターン終了時に数える）。【報酬】「騎士」3体を自分の場に召喚する。', 'castleTurn', 9),
   quest('Q_DECAY', 3, 'どくびし', '【条件】腐敗の効果で相手モンスターを4体破壊する。【報酬】相手プレイヤーに30ダメージ。', 'decayKill', 4),
@@ -24,7 +24,7 @@ export const QUEST_QUICK_CARDS: CardDef[] = [
   quick('QUICK_MUSTER', 3, '緊急召集', '自分の場に「城」がある場合のみ購入可能。「兵士」3体を自分の場に召喚する'),
   quick('QUICK_SORT', 3, '選別の掟', '自分のリフトにカルが10枚以上ある場合のみ購入可能。相手の場のカード1枚を選び破壊する'),
   quick('QUICK_REBIRTH', 3, '強制輪廻', '自分の墓地にモンスターがある場合のみ購入可能。そのうち1体を選び、コスト7以下なら虚無を付与して自分の場に召喚する'),
-  quick('QUICK_ATTUNE', 4, 'アチューン・瞬', '自分の最大マナ+1、最大体力+2'),
+  quick('QUICK_ATTUNE', 4, 'アチューン・瞬', '自分の最大マナ+1、体力+2'),
   quick('QUICK_GRIMOIRE', 2, '呪術魔法書', 'このターン、自分が手札からプレイする魔法カードのコスト-1'),
   quick('QUICK_ASSAULT', 2, '総攻撃', '自分の場の異なるモンスター2体を選び、このターンのみ攻撃力+2'),
 ];
@@ -33,8 +33,8 @@ export const QUEST_QUICK_CARDS: CardDef[] = [
 const LOCALIZED: Record<string, [string, string, string, string]> = {
   Q_RIFT: ['리프트 연구', '【조건】자신 카드 10장 게임에서 제외. 【보상】새로운 컬 7장을 생성해 자신 리프트에 추가.', 'Rift Research', 'Quest: Exile 10 of your cards. Reward: Create 7 new Culls in your Rift.'],
   Q_BRAND: ['반격의 봉화', '【조건】상대에게 누적 40 데미지를 받는다. 【보상】상대 플레이어에게 낙인 카운터 1개 부여.', 'Signal of Retaliation', 'Quest: Take 40 damage from your opponent. Reward: Give the opponent 1 Brand counter.'],
-  Q_TORI: ['정령 - 토리', '【조건】자신 필드에 몬스터가 없는 상태로 자신의 턴 5회 종료. 【보상】자신 최대 체력 +30.', 'Spirit - Tori', 'Quest: End 5 of your turns with no monsters on your field. Reward: Your max HP +30.'],
-  Q_WINTER: ['정령 - 윈터', '【조건】자신 최대 체력을 누적 30 올린다. 【보상】자신 최대 마나 +2.', 'Spirit - Winter', 'Quest: Increase your max HP by a total of 30. Reward: Your max mana +2.'],
+  Q_TORI: ['정령 - 토리', '【조건】자신 필드에 몬스터가 없는 상태로 자신의 턴 5회 종료. 【보상】자신 체력 +30.', 'Spirit - Tori', 'Quest: End 5 of your turns with no monsters on your field. Reward: Your HP +30.'],
+  Q_WINTER: ['정령 - 윈터', '【조건】자신 체력을 누적 30 올린다. 【보상】자신 최대 마나 +2.', 'Spirit - Winter', 'Quest: Increase your HP by a total of 30. Reward: Your max mana +2.'],
   Q_TRIBE: ['일족의 맹세', '【조건】종족 몬스터 6회 소환. 【보상】자신 필드의 종족과 같고 필드에 없는 다른 몬스터 1체 선택 소환.', 'Clan Oath', 'Quest: Summon tribal monsters 6 times. Reward: Choose and summon 1 missing monster of a tribe on your field.'],
   Q_CASTLE: ['대공성 작전', '【조건】자신 필드에 성이 연속 9턴 존재 (양쪽 턴 종료에 계산). 【보상】기사 3체 자신 필드에 소환.', 'Counter-Siege Operation', 'Quest: Keep your Castle for 9 consecutive turns (both sides). Reward: Summon 3 Knights on your field.'],
   Q_DECAY: ['독압정', '【조건】부패 효과로 상대 몬스터 4체 파괴. 【보상】상대 플레이어에게 30 데미지.', 'Toxic Spikes', 'Quest: Destroy 4 enemy monsters through Decay. Reward: Deal 30 damage to the opponent.'],
@@ -47,7 +47,7 @@ const LOCALIZED: Record<string, [string, string, string, string]> = {
   QUICK_MUSTER: ['긴급 소집', '【구매시】자신 필드에 성이 있을 때만 구매 가능. 병사 3체 자신 필드에 소환.', 'Emergency Muster', 'On purchase: Buy only with a Castle on your field. Summon 3 Soldiers on your field.'],
   QUICK_SORT: ['선별의 법칙', '【구매시】자신 리프트에 컬 10장 이상일 때만 구매 가능. 상대 필드 카드 1장 선택 파괴.', 'Law of Selection', 'On purchase: Buy only with at least 10 Culls in your Rift. Destroy 1 chosen enemy field card.'],
   QUICK_REBIRTH: ['강제 윤회', '【구매시】자신 묘지에 몬스터가 있어야 구매 가능. 1체 선택, 코스트 7 이하면 공허를 부여해 자신 필드에 소환.', 'Forced Rebirth', 'On purchase: Needs a graveyard monster. Choose 1; if cost ≤7, summon it to your field with Void.'],
-  QUICK_ATTUNE: ['어튠 - 순', '【구매시】자신 최대 마나 +1, 최대 체력 +2.', 'Attune - Flash', 'On purchase: Your max mana +1 and max HP +2.'],
+  QUICK_ATTUNE: ['어튠 - 순', '【구매시】자신 최대 마나 +1, 체력 +2.', 'Attune - Flash', 'On purchase: Your max mana +1 and HP +2.'],
   QUICK_GRIMOIRE: ['주술 마법서', '【구매시】이번 턴 자신이 패에서 사용하는 모든 마법 카드의 코스트 -1.', 'Sorcery Grimoire', 'On purchase: Your spells played from hand cost 1 less this turn.'],
   QUICK_ASSAULT: ['총공격', '【구매시】자신 필드의 서로 다른 몬스터 2체 선택, 이번 턴 공격력 +2.', 'All-Out Assault', 'On purchase: Give 2 different monsters on your field +2 ATK this turn.'],
 };

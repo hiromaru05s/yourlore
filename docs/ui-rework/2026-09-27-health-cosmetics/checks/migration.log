@@ -1,0 +1,52 @@
+
+ ⛅️ wrangler 4.130.0 (update available 4.141.0)
+───────────────────────────────────────────────
+Resource location: remote 
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1m⚠️ This process may take some time, during which your D1 database will be unavailable to serve queries.[0m
+
+
+🌀 Executing on remote database lore-db-staging (a7dfa4cf-2d90-4a9e-a9e1-2e69dcc4ddea):
+🌀 To execute on your local development database, remove the --remote flag from your wrangler command.
+Note: if the execution fails to complete, your DB will return to its original state and you can safely retry.
+├ Checking if file needs uploading
+│
+├ 🌀 Uploading a7dfa4cf-2d90-4a9e-a9e1-2e69dcc4ddea.3e965cd0de746c8f.sql
+│ 🌀 Uploading complete.
+│
+🌀 Starting import...
+🌀 Processed 1 queries.
+🚣 Executed 1 queries in 13.69ms (45 rows read, 1 rows written)
+   Database is currently at bookmark 000001b9-00000893-000050f3-7b853f85838df505c34d38e1ed58ffa3.
+[
+  {
+    "results": [
+      {
+        "Total queries executed": 1,
+        "Rows read": 45,
+        "Rows written": 1,
+        "Database size (MB)": "0.21"
+      }
+    ],
+    "success": true,
+    "finalBookmark": "000001b9-00000893-000050f3-7b853f85838df505c34d38e1ed58ffa3",
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "APAC",
+      "served_by_colo": "ICN",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 13.6859
+      },
+      "duration": 13.6859,
+      "changes": 1,
+      "last_row_id": 0,
+      "changed_db": true,
+      "size_after": 208896,
+      "rows_read": 45,
+      "rows_written": 1,
+      "num_tables": 15,
+      "total_attempts": 1
+    }
+  }
+]

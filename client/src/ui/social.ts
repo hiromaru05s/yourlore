@@ -16,7 +16,7 @@ export function avatarHtml(avatar: string | null | undefined, display: string, s
     return `<span class="avatar avatar-seeker" style="--avs:${size}px"><span class="seeker-sprite seeker-${color}" role="img" aria-label="${color === "red" ? "Red Seeker" : "Blue Seeker"}"></span></span>`;
   }
   const img = avatar && /^[A-Za-z0-9_]+$/.test(avatar)
-    ? `<img src="${artUrl.full(avatar)}" alt="" loading="lazy" onerror="this.remove()">`
+    ? `<img src="${artUrl.sm(avatar)}" alt="" loading="lazy" onerror="this.remove()">`
     : "";
   return `<span class="avatar" style="--avs:${size}px">${img}<span class="avatar-fb">${initial}</span></span>`;
 }

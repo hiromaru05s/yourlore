@@ -1,3 +1,4 @@
+import {passiveIcon} from './passiveIcon';
 import {animateSeeker} from './seekerAnimation';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
 import type {HandLayout} from './handGeometry';
@@ -589,7 +590,7 @@ export function zoomCard(c: CardInst, hp?: { now: number; max: number }, stateTe
       const p = PASSIVES[k];
       if (!p) return "";
       const loc = lang0 === "ja" ? p.ja : lang0 === "en" ? p.en : p.ko;
-      return `<div class="psv-item" data-psv="${k}"><b class="psv-name">${loc.name}</b><div class="psv-desc">${loc.desc}</div></div>`;
+      return `<div class="psv-item" data-psv="${k}"><b class="psv-name">${passiveIcon(k)}</b><div class="psv-desc">${loc.desc}</div></div>`;
     }).join("");
     details.appendChild(panel);
     // hover/탭 → 우측 설명 하이라이트 (카드 텍스트 안의 .psv 스팬과 연결)
@@ -796,16 +797,8 @@ export async function resultPopup(title: string, lines: string[], mine: boolean,
 }
 
 /** Live HP readout update during sequential playback (board re-renders later). */
-export function hpBarSet(side: ViewSide, hp: number, maxHp: number): void {
-  const num = document.getElementById("hp-" + side);
-  if (num) num.textContent = String(Math.max(0, hp));
-  const meter = document.getElementById("hpbar-" + side);
-  meter?.setAttribute("aria-valuenow", String(Math.max(0, hp)));
-  meter?.setAttribute("aria-valuemax", String(maxHp));
-  const max = document.querySelector(`#portrait${side === "me" ? "Me" : "Opp"} .pt-hp-max`);
-  if (max) max.textContent = `/${maxHp}`;
-  const fill = meter?.querySelector("i") as HTMLElement | null;
-  if (fill) fill.style.width = Math.max(0, Math.min(100, (Math.max(0, hp) / Math.max(1, maxHp)) * 100)) + "%";
+export function hpBarSet(side: ViewSide, hp: number): void {
+  const num=document.getElementById('hp-'+side);if(num)num.textContent=String(Math.max(0,hp));
 }
 
 function gainLabel(anchor: DOMRect, text: string, cls: string): HTMLElement {
@@ -853,7 +846,7 @@ export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
   });
 }
 
-/** Rich "max HP increased" celebration around the HP bar (~2s). */
+/** Rich "HP increased" celebration around the HP bar (~2s). */
 export async function maxHpSurge(side: ViewSide, amount: number): Promise<void> {
   if(amount>0&&!fxSkip)animateSeeker(side,'heal');
   const bar = document.getElementById("hpbar-" + side);

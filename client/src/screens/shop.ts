@@ -1,3 +1,4 @@
+import {COSMETICS,cosmetic} from '../shared/cosmetics';
 import { homeIcon } from "../ui/homeIcons";
 // ============================================================
 // LORE — Shop. Currently sells card sleeves for credits (1💎 each).
@@ -7,14 +8,7 @@ import { homeIcon } from "../ui/homeIcons";
 import type { App, Screen } from "../router";
 import { api } from "../net/api";
 import { t, onLangChange, getLang } from "../i18n";
-import { SLEEVE_LIST, SLEEVES } from "../shared/cards";
 import { sfx } from "../ui/sound";
-
-function sleeveName(id: string): string {
-  const s = SLEEVES[id]; if (!s) return id;
-  const lang = getLang();
-  return lang === "ja" ? s.ja : lang === "en" ? s.en : s.ko;
-}
 
 export function mountShop(app: App): Screen {
   const wrap = document.createElement("div");
@@ -35,8 +29,8 @@ export function mountShop(app: App): Screen {
         </div>
         <div class="tut-body">
           <section class="tut-sec">
-            <h3><span class="tut-ico">${homeIcon("sleeve")}</span>${t("shop.sleeves")}</h3>
-            <p class="set-desc">${t("shop.desc")}</p>
+            <h3><span class="tut-ico">${homeIcon("sleeve")}</span>スリーブ ＆ デッキ置き場・シェルフ</h3>
+            <p class="set-desc">各4種類。0シャードで受け取り、プロフィールから装備できます。</p>
             <div class="shop-grid" id="grid"></div>
           </section>
         </div>
@@ -47,7 +41,7 @@ export function mountShop(app: App): Screen {
 
   const renderGrid = (): void => {
     const grid = wrap.querySelector("#grid") as HTMLElement;
-    const buyable = SLEEVE_LIST.filter((s) => s.price > 0);
+    const buyable = COSMETICS;
     if (!buyable.length) {
       const lang = getLang();
       grid.innerHTML = `<p class="shop-empty">${lang === "ja" ? "現在販売中の商品はありません。" : lang === "en" ? "There are currently no items for sale." : "현재 판매 중인 상품이 없습니다."}</p>`;
@@ -57,8 +51,8 @@ export function mountShop(app: App): Screen {
       const has = owned.has(s.id);
       return `
         <div class="shop-item ${has ? "is-owned" : ""}">
-          <div class="sl-preview" style="background-image:url(${s.url})"></div>
-          <div class="sl-name">${sleeveName(s.id)}</div>
+          <div class="sl-preview ${s.kind==='furniture'?'furniture-preview':''}" style="background-image:url(${s.url})"></div>
+          <div class="sl-name">${s[getLang()]}</div>
           ${has
             ? `<button class="btn btn-mini btn-ghost" disabled>${homeIcon("check")} ${t("shop.owned")}</button>`
             : `<button class="btn btn-mini btn-gold" data-buy="${s.id}">${t("shop.buy")} ${homeIcon("shard")}${s.price}</button>`}
@@ -68,13 +62,13 @@ export function mountShop(app: App): Screen {
     grid.querySelectorAll("[data-buy]").forEach((btn) => {
       (btn as HTMLElement).onclick = () => {
         const id = (btn as HTMLElement).dataset.buy!;
-        const s = SLEEVES[id];
+        const s = cosmetic(id)!;
         if (credits < s.price) { sfx("error"); alert(t("shop.nocredit")); return; }
-        if (!confirm(`${sleeveName(id)} — ${s.price} ${t("home.shards")}\n${t("shop.buy.confirm")}`)) return;
+
         (btn as HTMLButtonElement).disabled = true;
         api.buySleeve(id).then((r) => {
           credits = r.credits;
-          owned = new Set(r.sleeves);
+          owned = new Set([...r.sleeves,...r.furnitures]);
           if (app.user) app.user.credits = r.credits;
           sfx("coin");
           (wrap.querySelector("#shopCredits") as HTMLElement).textContent = String(credits);
@@ -87,7 +81,7 @@ export function mountShop(app: App): Screen {
   // load current ownership + credits
   void api.profile().then((p) => {
     if (dead) return;
-    owned = new Set(p.sleeves ?? ["default"]);
+    owned = new Set([...(p.sleeves??["default"]),...(p.furnitures??[])]);
     credits = p.credits ?? credits;
     build();
   }).catch(() => { if (!dead) build(); });

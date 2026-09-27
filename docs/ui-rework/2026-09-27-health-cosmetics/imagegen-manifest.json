@@ -1,0 +1,50 @@
+[
+  {
+    "id": "astral",
+    "kind": "sleeve",
+    "prompt": "Use case: stylized-concept. Create one finished full-bleed portrait 2:3 card sleeve back artwork for LORE TCG, premium hand-painted dark fantasy magical library Biblion. cobalt blue and aged brass, a celestial astrolabe with a compass eye and star-map engraving. Thin elegant ornamental border, readable large central emblem, balanced symmetrical design, tactile materials, restrained magical glow. The entire canvas is the card back artwork, front-on flat view, edge-to-edge; no mockup, no text, no lettering, no watermark, no other cards, no characters, no modern objects. Consistent weathered materials, never plastic or glossy mobile game.",
+    "path": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-ae0bfea1-9f4d-4e37-a4fc-eeeeb5e9c6e6.png"
+  },
+  {
+    "id": "astral",
+    "kind": "material",
+    "prompt": "Use case: stylized-concept. Create one seamless square surface texture for a premium LORE TCG magical library card-deck holder and shelf material skin. cobalt blue and aged brass, a celestial astrolabe with a compass eye and star-map engraving. Dark tactile embossed bookbinding material, subtle repeating small engraved motifs distributed uniformly across entire image, edge-to-edge seamless tiling, no perspective, flat orthographic material albedo only, even neutral illumination. Fine aged metallic inlays with dark inset panels. No prominent central object, no shadows, no text, no letters, no watermark, no mockup, no furniture depiction. This image will be UV mapped onto existing 3D wooden and metal deck holder and shelf geometry.",
+    "path": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-25dc8c0e-f69f-49b1-84cc-3195063af48f.png"
+  },
+  {
+    "id": "verdant",
+    "kind": "sleeve",
+    "prompt": "Use case: stylized-concept. Create one finished full-bleed portrait 2:3 card sleeve back artwork for LORE TCG, premium hand-painted dark fantasy magical library Biblion. malachite green and blackened oak, curling leaves framing a closed grimoire and brass inlays. Thin elegant ornamental border, readable large central emblem, balanced symmetrical design, tactile materials, restrained magical glow. The entire canvas is the card back artwork, front-on flat view, edge-to-edge; no mockup, no text, no lettering, no watermark, no other cards, no characters, no modern objects. Consistent weathered materials, never plastic or glossy mobile game.",
+    "path": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-6cd14ce0-a21e-43a0-9ee8-ea7352035f8a.png"
+  },
+  {
+    "id": "verdant",
+    "kind": "material",
+    "prompt": "Use case: stylized-concept. Create one seamless square surface texture for a premium LORE TCG magical library card-deck holder and shelf material skin. malachite green and blackened oak, curling leaves framing a closed grimoire and brass inlays. Dark tactile embossed bookbinding material, subtle repeating small engraved motifs distributed uniformly across entire image, edge-to-edge seamless tiling, no perspective, flat orthographic material albedo only, even neutral illumination. Fine aged metallic inlays with dark inset panels. No prominent central object, no shadows, no text, no letters, no watermark, no mockup, no furniture depiction. This image will be UV mapped onto existing 3D wooden and metal deck holder and shelf geometry.",
+    "path": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-a099610a-b368-4470-b603-4b9d49360d8f.png"
+  },
+  {
+    "id": "crimson",
+    "kind": "sleeve",
+    "prompt": "Use case: stylized-concept. Create one finished full-bleed portrait 2:3 card sleeve back artwork for LORE TCG, premium hand-painted dark fantasy magical library Biblion. oxblood red leather and aged bronze, a wax-seal sun and restrained gothic tracery. Thin elegant ornamental border, readable large central emblem, balanced symmetrical design, tactile materials, restrained magical glow. The entire canvas is the card back artwork, front-on flat view, edge-to-edge; no mockup, no text, no lettering, no watermark, no other cards, no characters, no modern objects. Consistent weathered materials, never plastic or glossy mobile game.",
+    "path": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-24014a10-3757-4db6-8c39-5aa2ddfca0f1.png"
+  },
+  {
+    "id": "crimson",
+    "kind": "material",
+    "prompt": "Use case: stylized-concept. Create one seamless square surface texture for a premium LORE TCG magical library card-deck holder and shelf material skin. oxblood red leather and aged bronze, a wax-seal sun and restrained gothic tracery. Dark tactile embossed bookbinding material, subtle repeating small engraved motifs distributed uniformly across entire image, edge-to-edge seamless tiling, no perspective, flat orthographic material albedo only, even neutral illumination. Fine aged metallic inlays with dark inset panels. No prominent central object, no shadows, no text, no letters, no watermark, no mockup, no furniture depiction. This image will be UV mapped onto existing 3D wooden and metal deck holder and shelf geometry.",
+    "path": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-9f92ca01-3689-48e1-b20b-a2005ccd15c0.png"
+  },
+  {
+    "id": "ivory",
+    "kind": "sleeve",
+    "prompt": "Use case: stylized-concept. Create one finished full-bleed portrait 2:3 card sleeve back artwork for LORE TCG, premium hand-painted dark fantasy magical library Biblion. parchment ivory and tarnished silver, a moonlit crystal and elegant geometric bookbinding. Thin elegant ornamental border, readable large central emblem, balanced symmetrical design, tactile materials, restrained magical glow. The entire canvas is the card back artwork, front-on flat view, edge-to-edge; no mockup, no text, no lettering, no watermark, no other cards, no characters, no modern objects. Consistent weathered materials, never plastic or glossy mobile game.",
+    "path": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-d5ef7882-c376-4e47-96dc-b72d67440630.png"
+  },
+  {
+    "id": "ivory",
+    "kind": "material",
+    "prompt": "Use case: stylized-concept. Create one seamless square surface texture for a premium LORE TCG magical library card-deck holder and shelf material skin. parchment ivory and tarnished silver, a moonlit crystal and elegant geometric bookbinding. Dark tactile embossed bookbinding material, subtle repeating small engraved motifs distributed uniformly across entire image, edge-to-edge seamless tiling, no perspective, flat orthographic material albedo only, even neutral illumination. Fine aged metallic inlays with dark inset panels. No prominent central object, no shadows, no text, no letters, no watermark, no mockup, no furniture depiction. This image will be UV mapped onto existing 3D wooden and metal deck holder and shelf geometry.",
+    "path": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-e9264595-0d2d-46e1-9666-f793418c9ae8.png"
+  }
+]

@@ -1,4 +1,5 @@
-import { DECK_POOL, SLEEVES, type DeckStore, sanitizeDecks } from "../shared/cards";
+import {cosmetic} from '../shared/cosmetics';
+import { DECK_POOL, type DeckStore, sanitizeDecks } from "../shared/cards";
 
 const LOCAL_DECKS_KEY = "lore_local_dev_decks";
 export const LOCAL_GUEST_KEY = "lore_local_guest_login";
@@ -59,16 +60,16 @@ export function saveLocalGuestProfile(profile: LocalGuestProfile): LocalGuestPro
   return saved;
 }
 
-export function buyLocalGuestSleeve(id: string): { credits: number; sleeves: string[] } {
-  const sleeve = SLEEVES[id];
-  if (!sleeve || sleeve.price <= 0) throw new Error("구매할 수 없는 상품입니다.");
+export function buyLocalGuestSleeve(id: string): { credits: number; sleeves: string[]; furnitures:string[] } {
+  const sleeve = cosmetic(id);
+  if (!sleeve || sleeve.price < 0) throw new Error("구매할 수 없는 상품입니다.");
   const profile = loadLocalGuestProfile();
-  if (profile.sleeves.includes(id)) return { credits: profile.credits, sleeves: profile.sleeves };
+  if (profile.sleeves.includes(id)) return { credits: profile.credits, sleeves: profile.sleeves, furnitures:profile.sleeves.filter(id=>id.startsWith("furniture:")) };
   if (profile.credits < sleeve.price) throw new Error("크리스탈이 부족합니다.");
   profile.credits -= sleeve.price;
   profile.sleeves.push(id);
   const saved = saveLocalGuestProfile(profile);
-  return { credits: saved.credits, sleeves: saved.sleeves };
+  return { credits: saved.credits, sleeves: saved.sleeves,furnitures:saved.sleeves.filter(id=>id.startsWith("furniture:")) };
 }
 
 export function saveLocalDevDecks(raw: unknown): DeckStore {

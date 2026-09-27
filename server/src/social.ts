@@ -1,3 +1,4 @@
+import {cosmetic,ownedCosmetics} from '../../client/src/shared/cosmetics';
 // ============================================================
 // LORE server — social: profiles, friends, friendly challenges.
 //   · Profile: display rename / preset avatar / equipped badge /
@@ -48,10 +49,10 @@ export async function ownedBadges(env: Env, userId: string): Promise<string[]> {
   return out;
 }
 
-interface ProfileRow { id: string; display: string; avatar: string | null; badge: string | null; stats_public: number; wins: number; losses: number; created_at: number; credits: number; sleeve: string | null; sleeves: string | null; }
+interface ProfileRow { id: string; display: string; avatar: string | null; badge: string | null; stats_public: number; wins: number; losses: number; created_at: number; credits: number; sleeve: string | null; sleeves: string | null; furniture: string | null; }
 
 async function profileOf(env: Env, targetId: string, viewer: SessionUser | null): Promise<Response | Record<string, unknown> | null> {
-  const u = await env.DB.prepare(`SELECT id, display, avatar, badge, stats_public, wins, losses, created_at, credits, sleeve, sleeves FROM users WHERE id = ?`)
+  const u = await env.DB.prepare(`SELECT id, display, avatar, badge, stats_public, wins, losses, created_at, credits, sleeve, sleeves, furniture FROM users WHERE id = ?`)
     .bind(targetId).first<ProfileRow>();
   if (!u) return null;
   const self = viewer?.id === u.id;
@@ -90,8 +91,10 @@ async function profileOf(env: Env, targetId: string, viewer: SessionUser | null)
     ...(self ? {
       badges: await ownedBadges(env, u.id),
       credits: u.credits,
-      sleeve: "default",
-      sleeves: ["default"],
+      sleeve: u.sleeve || "default",
+      sleeves: ownedCosmetics(u.sleeves).filter(id=>!id.startsWith("furniture:")),
+      furniture: u.furniture || "default",
+      furnitures: ownedCosmetics(u.sleeves).filter(id=>id.startsWith("furniture:")||id==="default"),
       h2h: await h2hOf(env, u.id),
     } : {}),
   };
@@ -155,7 +158,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
   }
 
   if (path === "/social/me" && req.method === "POST") {
-    const body = (await req.json().catch(() => ({}))) as { display?: string; avatar?: string; badge?: string; stats_public?: boolean; sleeve?: string };
+    const body = (await req.json().catch(() => ({}))) as { display?: string; avatar?: string; badge?: string; stats_public?: boolean; sleeve?: string; furniture?: string };
     const sets: string[] = [];
     const args: unknown[] = [];
     if (typeof body.display === "string") {
@@ -174,21 +177,26 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
       sets.push("badge = ?"); args.push(body.badge || null);
     }
     if (typeof body.stats_public === "boolean") { sets.push("stats_public = ?"); args.push(body.stats_public ? 1 : 0); }
-    if (typeof body.sleeve === "string") {
-      const id = body.sleeve || "default";
-      if (id !== "default") return json(env, { error: "잘못된 슬리브" }, 400);
-      sets.push("sleeve = ?"); args.push(null);
+    for(const kind of ['sleeve','furniture'] as const){
+      const id=body[kind];if(typeof id!=='string')continue;
+      const row=await env.DB.prepare('SELECT sleeves FROM users WHERE id = ?').bind(user.id).first<{sleeves:string|null}>();
+      if(id!=='default'&&(!ownedCosmetics(row?.sleeves).includes(id)||cosmetic(id)?.kind!==kind))return json(env,{error:'未所持の商品です'},400);
+      sets.push(`${kind} = ?`);args.push(id==='default'?null:id);
     }
     if (!sets.length) return json(env, { error: "no changes" }, 400);
     await env.DB.prepare(`UPDATE users SET ${sets.join(", ")} WHERE id = ?`).bind(...args, user.id).run();
-    const u = await env.DB.prepare(`SELECT display, avatar, badge, stats_public, sleeve FROM users WHERE id = ?`).bind(user.id)
-      .first<{ display: string; avatar: string | null; badge: string | null; stats_public: number; sleeve: string | null }>();
-    return json(env, { ok: true, display: u?.display, avatar: u?.avatar, badge: u?.badge, stats_public: !!u?.stats_public, sleeve: "default" });
+    const u = await env.DB.prepare(`SELECT display, avatar, badge, stats_public, sleeve, furniture FROM users WHERE id = ?`).bind(user.id)
+      .first<{ display: string; avatar: string | null; badge: string | null; stats_public: number; sleeve: string | null; furniture: string | null }>();
+    return json(env, { ok: true, display: u?.display, avatar: u?.avatar, badge: u?.badge, stats_public: !!u?.stats_public, sleeve: u?.sleeve||"default", furniture:u?.furniture||"default" });
   }
 
-  // ---- legacy sleeve shop endpoint: no sleeves are sold anymore ----
-  if (path === "/social/buy-sleeve" && req.method === "POST") {
-    return json(env, { error: "판매가 종료된 상품입니다." }, 410);
+  // Free catalog claims are atomic/idempotent; the client never sets prices or ownership.
+  if ((path === '/social/buy-sleeve'||path==='/social/buy-cosmetic') && req.method === 'POST') {
+    const body=await req.json().catch(()=>({})) as {id?:string};const item=cosmetic(body.id||'');
+    if(!item||item.price!==0)return json(env,{error:'販売中の商品ではありません'},400);
+    await env.DB.prepare(`UPDATE users SET sleeves = json_insert(CASE WHEN json_valid(sleeves) AND json_type(sleeves) = 'array' THEN sleeves ELSE '[]' END, '$[#]', ?1) WHERE id = ?2 AND NOT EXISTS (SELECT 1 FROM json_each(CASE WHEN json_valid(sleeves) AND json_type(sleeves) = 'array' THEN sleeves ELSE '[]' END) WHERE value = ?1)`).bind(item.id,user.id).run();
+    const row=await env.DB.prepare('SELECT credits,sleeves FROM users WHERE id = ?').bind(user.id).first<{credits:number;sleeves:string|null}>();
+    const ids=ownedCosmetics(row?.sleeves);return json(env,{ok:true,credits:row?.credits??0,sleeves:ids.filter(id=>!id.startsWith('furniture:')),furnitures:ids.filter(id=>id==='default'||id.startsWith('furniture:'))});
   }
 
   // ---- friends ----
@@ -296,7 +304,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
       await env.DB.prepare(`UPDATE challenges SET status = 'declined' WHERE id = ?`).bind(ch.id).run();
       return json(env, { ok: true });
     }
-    const challenger = await env.DB.prepare(`SELECT id, display, sleeve, deck FROM users WHERE id = ?`).bind(ch.challenger).first<{ id: string; display: string; sleeve: string | null; deck: string | null }>();
+    const challenger = await env.DB.prepare(`SELECT id, display, sleeve, furniture, deck FROM users WHERE id = ?`).bind(ch.challenger).first<{ id: string; display: string; sleeve: string | null; furniture:string|null; deck: string | null }>();
     if (!challenger) return json(env, { error: "not found" }, 404);
     // provision a GameRoom exactly like the matchmaker does (친선전 → ranked=false)
     const roomId = crypto.randomUUID();
@@ -304,7 +312,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     const stub = env.GAME_ROOM.get(env.GAME_ROOM.idFromName(roomId));
     await stub.fetch("https://do/setup", {
       method: "POST",
-      body: JSON.stringify({ players: [{ id: challenger.id, name: challenger.display, sleeve: challenger.sleeve, deck: challenger.deck }, { id: user.id, name: user.display, sleeve: user.sleeve, deck: (user.deck ?? []).join(",") || null }], seed, ranked: false }),
+      body: JSON.stringify({ players: [{ id: challenger.id, name: challenger.display, sleeve: challenger.sleeve, furniture:challenger.furniture, deck: challenger.deck }, { id: user.id, name: user.display, sleeve: user.sleeve, furniture:user.furniture, deck: (user.deck ?? []).join(",") || null }], seed, ranked: false }),
     });
     await env.DB.prepare(`UPDATE challenges SET status = 'accepted', room_id = ? WHERE id = ?`).bind(roomId, ch.id).run();
     return json(env, { ok: true, roomId, you: 1, oppName: challenger.display });

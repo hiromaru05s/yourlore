@@ -22,7 +22,7 @@ import { DB, cardPassives } from "./cards";
 const DRAW = 3.0;    // a drawn card
 const HEAL = 0.55;   // 1 HP healed (worth less than 1 damage dealt)
 const MANA = 5.5;    // +1 max mana — compounds every later turn (top eval feature)
-const MAXHP = 0.45;  // +1 max HP
+const MAXHP = 0.45;  // +1 HP
 const KILL = 10;     // destroying an average blocker
 const NEGATE = 7;    // negating one attack
 const FIELD_TURNS = 4.5; // turns a summoned monster is expected to survive
@@ -56,7 +56,7 @@ function actValue(c: CardDef): number {
     case "chestToMana": return MANA * 0.6;
     case "incubate": return v * 1.6;
     case "wipeBack": return 8;
-    case "maxHpUp": return v * 0.9 + v2 * DRAW;   // 최대 체력은 회복 겸 성장
+    case "hpUp": return v * 0.9 + v2 * DRAW;   // 체력은 회복 겸 성장
     default: return c.act ? 5 : 0;
   }
 }
@@ -88,8 +88,8 @@ function summonValue(c: CardDef): number {
     case "burn": case "smite": return v;
     case "selfBurn": return -v * 0.6;           // self-damage is a real cost
     case "defDown": case "atkDown": return v * 1.1;
-    case "maxHpUp": return v * MAXHP;
-    case "maxHpMana": return MANA + v * MAXHP;
+    case "hpUp": return v * MAXHP;
+    case "hpMana": return MANA + v * MAXHP;
     case "drakeRamp": return MANA + v;
     case "burnBleed": return v + 4;
     case "burnBreak2": return v + 6;
@@ -251,9 +251,9 @@ function enchValue(c: CardDef): number {
   switch (c.ench) {
     case undefined: return 0;
     case "guild": return 7;    // 20턴 주기로 전 풀 구매권 — 느리지만 확정 가치
-    case "brewing": return 6;  // 포도 → 와인(최대 체력+18·2드로우) 변환
+    case "brewing": return 6;  // 포도 → 와인(체력+18·2드로우) 변환
     case "gemRain": return 5;   // 미믹 전체 공격력 +3
-    case "voidFruit": return 6; // 제외 수 비례 최대 체력 성장
+    case "voidFruit": return 6; // 제외 수 비례 체력 성장
     case "runeEcho": return 10;  // 마법 2회 발동 (덱 절반 마법 조건)
     case "sanctumField": return 5; // 매턴 아군 전체 체력 +2
     case "acidRain": return 4; case "strongAcid": return 12; case "rottenGround": return 3;
@@ -284,7 +284,7 @@ function enchValue(c: CardDef): number {
     case "tribeContract": return 3;
     case "trialArea": return -6 * HEAL + 4;        // 6 self-damage up front
     case "ancientCiv": return 3;
-    case "elfHaven": return 4; // v25: +10 max HP per World Tree offer buy
+    case "elfHaven": return 4; // v25: +10 HP per World Tree offer buy
     case "colosseumRest": return 6; case "colosseum": return 8; case "lawless": return 4; case "rift": return 6; // v41
     case "freeReward": return 4; case "painGain": return 5; case "spaceLock": return 12; case "luckyEcho": return 5; case "richHabit": return 6; // v41b
     default: return 4;
