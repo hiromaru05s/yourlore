@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="1260" viewBox="0 0 2048 1260">
+  <title>Biblion — flat eye and compass reading surface</title>
+  <desc>Ivory ground with quiet blue grey compass seals and champagne ink. Flat color only: no gradients, shadows, bevels or relief.</desc>
+  <rect width="2048" height="1260" fill="#e7e5df"/>
+  <defs>
+    <g id="compass" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <g stroke="#bcc3c2" stroke-width="2.4">
+        <circle r="229"/>
+        <path d="M-206-66A216 216 0 0 1-66-206M66-206A216 216 0 0 1 206-66M206 66A216 216 0 0 1 66 206M-66 206A216 216 0 0 1-206 66"/>
+        <circle r="168"/>
+        <path d="M0-196 23-149 0-126-23-149ZM196 0 149 23 126 0 149-23ZM0 196-23 149 0 126 23 149ZM-196 0-149-23-126 0-149 23Z"/>
+        <path d="M-115-115-149-149M115-115 149-149M115 115 149 149M-115 115-149 149"/>
+        <path d="M-135-151-151-151-151-135M135-151 151-151 151-135M151 135 151 151 135 151M-135 151-151 151-151 135"/>
+        <path d="M-105 0Q0-95 105 0Q0 95-105 0ZM-76 0Q0-62 76 0Q0 62-76 0Z"/>
+        <circle r="28"/><path d="M0-19 12 0 0 19-12 0Z"/>
+        <path d="M0-100V-75M0 75V100M-263 0H-245M245 0H263"/>
+      </g>
+      <g stroke="#c7bda5" stroke-width="2.7">
+        <path d="M-78-211A225 225 0 0 1 78-211M211-78A225 225 0 0 1 211 78M78 211A225 225 0 0 1-78 211M-211 78A225 225 0 0 1-211-78"/>
+        <path d="M0-251 8-237 0-223-8-237ZM251 0 237 8 223 0 237-8ZM0 251-8 237 0 223 8 237ZM-251 0-237-8-223 0-237 8Z"/>
+        <path d="M-284 0C-332-2-356-40-406-40H-484M284 0C332-2 356-40 406-40H484M-284 0C-332 2-356 40-406 40H-484M284 0C332 2 356 40 406 40H484"/>
+        <path d="M-405-27-433 0-405 27M405-27 433 0 405 27"/>
+      </g>
+    </g>
+    <g id="corner" fill="none" stroke="#c0b59d" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M0 152V32Q0 0 32 0H220M13 136V38Q13 13 38 13H204"/>
+      <path d="M0 91C47 91 35 33 91 33H163M33 0C33 51 91 35 91 91V137"/>
+      <path d="M33 91 62 62 91 91 62 120ZM62 76 77 91 62 106 47 91Z"/>
+      <path d="M109 33 128 52 109 71M33 109 52 128 71 109"/>
+      <path d="M176 0 190-7 204 0 190 7ZM0 124-7 138 0 152 7 138Z"/>
+    </g>
+  </defs>
+  <!-- Open central lanes; scale comes from two broad seals, not a tiny tiled pattern. -->
+  <use href="#compass" transform="translate(1103 323)"/>
+  <use href="#compass" transform="translate(1103 937) rotate(180)"/>
+  <g opacity=".72">
+    <use href="#corner" transform="translate(66 52)"/>
+    <use href="#corner" transform="translate(1982 52) scale(-1 1)"/>
+    <use href="#corner" transform="translate(66 1208) scale(1 -1)"/>
+    <use href="#corner" transform="translate(1982 1208) scale(-1 -1)"/>
+    <g fill="none" stroke="#c7bda5" stroke-width="2">
+      <path d="M296 52H740M1500 52H1740M296 1208H740M1500 1208H1740M66 254V536M66 724V1006M1982 254V536M1982 724V1006"/>
+      <path d="M740 52 766 39 792 52 766 65ZM1474 52 1448 39 1422 52 1448 65ZM740 1208 766 1195 792 1208 766 1221ZM1474 1208 1448 1195 1422 1208 1448 1221Z"/>
+    </g>
+  </g>
+</svg>
