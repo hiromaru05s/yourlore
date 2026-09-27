@@ -1,0 +1,29 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "workerVersion": "77840e5b-fae9-46ee-9131-42c2e82a3a18",
+  "sourceCommit": "b6720c8b566446c01c3eaaebc721212a2621e246",
+  "deployedAt": "2026-09-27T00:29:17.358879+00:00",
+  "productionDeployed": false,
+  "engineOrRulesChanged": false,
+  "serverChanged": false,
+  "changes": [
+    "full rail-interior Rift surface on both sides",
+    "shared 520 ms mana impact for resource text, crystals, VFX and sound",
+    "four generated utility button plaques"
+  ],
+  "localValidation": {
+    "typecheck": true,
+    "build": true,
+    "stagingDryRun": true,
+    "quickPlayback": true,
+    "duelUI": true,
+    "soundAimCeremony": true,
+    "openingServer": true,
+    "browserReport": "browser-report.json"
+  },
+  "assets": "assets.json",
+  "promptSet": "imagegen-prompts.json",
+  "remoteVerification": "staging-verification.json",
+  "authenticatedTwoPlayerMatch": false
+}

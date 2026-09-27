@@ -1,0 +1,326 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "assets": [
+    {
+      "path": "/index.html",
+      "bytes": 1182,
+      "sha256": "140dc1e43e0365e8a0beb4890d4a4e4a901f39c0452fb7f029afd767674ca7ed"
+    },
+    {
+      "path": "/art/lounge/stage-v1/stage.png",
+      "bytes": 2561274,
+      "sha256": "85ff3e33626b505162d591c74f54baefdfda7c736c7ca8ab444d35a10f5410d0"
+    },
+    {
+      "path": "/art/lounge/stage-v1/sigil.png",
+      "bytes": 1996219,
+      "sha256": "165cab065f588223f957379308eeb6b5f456a1322ccfa6388f438872a937be45"
+    },
+    {
+      "path": "/assets/GLTFLoader-DBmJySOJ.js",
+      "bytes": 44849,
+      "sha256": "e60453833ee1faeb40e420094c24a9490d0dd1ff65e27db126259deb271c5346"
+    },
+    {
+      "path": "/assets/RoomEnvironment-eeWwvemU.js",
+      "bytes": 2109,
+      "sha256": "db748a8894162a1926bbcba1e52afa325c67d3846fc192772cb9612fa82b4bba"
+    },
+    {
+      "path": "/assets/cardSurface-D6KcPjgd.js",
+      "bytes": 7746,
+      "sha256": "13942e9222f73c964ce51fc41bc7224671347acc37b733f63a5aa51e022e1a6a"
+    },
+    {
+      "path": "/assets/ceremonyScene-CI6OOem8.js",
+      "bytes": 8979,
+      "sha256": "850b1cf58c6a592094520da4717f654db980e9d7cdec60e84380b2986e45f9de"
+    },
+    {
+      "path": "/assets/diceScene-BZLvYB1V.js",
+      "bytes": 8193,
+      "sha256": "53b84cace4e4eed7128706baccef9553196f56bf6be7a5d9a4527bc697f0e698"
+    },
+    {
+      "path": "/assets/duelScene-Bk2FSwDa.js",
+      "bytes": 39202,
+      "sha256": "04c043dcc35adffbbb7c80e02ac89130b8874dacb0be20e7225e0db8a214925f"
+    },
+    {
+      "path": "/assets/main-BdPhHJln.css",
+      "bytes": 263306,
+      "sha256": "1692c057eb0b02045bbe0884411b913cc4d940298cb3c5afd7cddc2482df2fd5"
+    },
+    {
+      "path": "/assets/main-hJ5n-b7k.js",
+      "bytes": 1140728,
+      "sha256": "255c29c12ca7420691e321eef1ae94600d1fad0b47670733c45d4a31966999f2"
+    },
+    {
+      "path": "/assets/paperDraw-D-JMP3ec.js",
+      "bytes": 9530,
+      "sha256": "86d328da39467d1300e317f5b37f9ec4dea5b05832f460a2e5e5bd8353d5e6dd"
+    },
+    {
+      "path": "/assets/riftScene-W1Cj8jKp.js",
+      "bytes": 8702,
+      "sha256": "5bbbf655c1f28908ed4d75fd2f25f289a5758090926188947c6a287e5802098b"
+    },
+    {
+      "path": "/assets/tablePreview-2Rkra2Ey.css",
+      "bytes": 1870,
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4"
+    },
+    {
+      "path": "/assets/tablePreview-JbxEYgTW.js",
+      "bytes": 25300,
+      "sha256": "64f2fedafd5a9ca4ced45e1dce7e753b4137c2e83b1d10d1b527e1bdd9f18dd8"
+    },
+    {
+      "path": "/assets/three.module-PqEdhTH6.js",
+      "bytes": 609196,
+      "sha256": "84f1f6ce63adc59e9d6cd161c532daf3dbc083e6458c39469ddb854c2c7a9649"
+    },
+    {
+      "path": "/ui/duel-controls/v1/log.png",
+      "bytes": 97563,
+      "sha256": "118fee086fd7b1ea8199c20fab403c7b2e85d1ae2ec90d5286ae544b005ad0be"
+    },
+    {
+      "path": "/ui/duel-controls/v1/sound.png",
+      "bytes": 96043,
+      "sha256": "d18613216c8ca36c97fbe55de37f24bf3a78487b5de121f92664dac9b52a0244"
+    },
+    {
+      "path": "/ui/duel-controls/v1/help.png",
+      "bytes": 114712,
+      "sha256": "a7e77a6b44b5b022507043042b48599cbf2b4a6587abc7faa931c110c3050cb4"
+    },
+    {
+      "path": "/ui/duel-controls/v1/surrender.png",
+      "bytes": 104041,
+      "sha256": "0fc53019f94f6a19d1b430ca467c40da0506602ccfec1e03190935970e98cdd5"
+    },
+    {
+      "path": "/sfx/lore-v2/attack-1.mp3",
+      "bytes": 9482,
+      "sha256": "c45adea41fcfbfa7c2ddbd55ba7399a4837087e4108e1f0859d6c8882b62869a"
+    },
+    {
+      "path": "/sfx/lore-v2/attack-2.mp3",
+      "bytes": 9405,
+      "sha256": "66c2ed85084654bd12a5d9585dca5bc107fecd86854a78cfe2987fccc25948df"
+    },
+    {
+      "path": "/sfx/lore-v2/attack-3.mp3",
+      "bytes": 9536,
+      "sha256": "2ef7f8efbf5bd0a1ced5bf63e14d891a0a6f7ebc61fb75cebbb4cb651cebdabd"
+    },
+    {
+      "path": "/sfx/lore-v2/buy.mp3",
+      "bytes": 14179,
+      "sha256": "b3680947b65f7fad7f8169c4e2caec0a4f5c9e5a232bbcb4fec5d7c9dc99ea96"
+    },
+    {
+      "path": "/sfx/lore-v2/click-1.mp3",
+      "bytes": 4895,
+      "sha256": "cef94fd48d9706477dbdd790f3bc7dba984d9c5ae57ea7a6bbfbd4a1fe2e7c76"
+    },
+    {
+      "path": "/sfx/lore-v2/click-2.mp3",
+      "bytes": 4843,
+      "sha256": "ec73a1847531131894f5fd82f46ca57aab86cd66dbd02ebe84bfec50607d5e1c"
+    },
+    {
+      "path": "/sfx/lore-v2/click-3.mp3",
+      "bytes": 4947,
+      "sha256": "3ca07907b25f4fd08a057c17f4c9b8015e78a0aa932fa013a51efe85be4426c7"
+    },
+    {
+      "path": "/sfx/lore-v2/coin.mp3",
+      "bytes": 31261,
+      "sha256": "b6440534e6a599c4fcbdde133e6e716ff08d52623a66c2aeef5ca2ed41cfa204"
+    },
+    {
+      "path": "/sfx/lore-v2/damage.mp3",
+      "bytes": 8858,
+      "sha256": "5e916e718d9db1c6889dd0203932b21770f3f2ee1cfc0f173c194de9ac12b2b5"
+    },
+    {
+      "path": "/sfx/lore-v2/death.mp3",
+      "bytes": 20074,
+      "sha256": "e27c5b337cc8f999c1bee4378a13fadeae75fed67ada9627ed138db700448682"
+    },
+    {
+      "path": "/sfx/lore-v2/draw-1.mp3",
+      "bytes": 8913,
+      "sha256": "d91ce1f4e65855bbcdd77597cbc2407c7257c637d70c9a658ce50bf4247fcb48"
+    },
+    {
+      "path": "/sfx/lore-v2/draw-2.mp3",
+      "bytes": 8860,
+      "sha256": "1b769a02533a72f2afa6b0b8b7e204a2bd0e08f777472a55a27891afe45d39ba"
+    },
+    {
+      "path": "/sfx/lore-v2/draw-3.mp3",
+      "bytes": 8807,
+      "sha256": "6ef78598c0868e047c37fcbbd3bd7062ac3d1b58058f136da3607de88ca51314"
+    },
+    {
+      "path": "/sfx/lore-v2/drawGame.mp3",
+      "bytes": 37675,
+      "sha256": "b7cd5a014e3a03ac5400586bfe1245c6c6494943d74f27dc450656e3edbe025d"
+    },
+    {
+      "path": "/sfx/lore-v2/duel-start.mp3",
+      "bytes": 50922,
+      "sha256": "3f198b185c8eebceead811138bf33064433fc738724d4879da8ee19f399f3b14"
+    },
+    {
+      "path": "/sfx/lore-v2/error.mp3",
+      "bytes": 6667,
+      "sha256": "b48fac37d9cd3a9e9618bb6140455181516d2c638910632aaafe25dce781d4e1"
+    },
+    {
+      "path": "/sfx/lore-v2/facehit.mp3",
+      "bytes": 12768,
+      "sha256": "177bb11c9e9e58c1e68dea2c1d106c254b238d69097aa880cc20279b73e34e1c"
+    },
+    {
+      "path": "/sfx/lore-v2/heal.mp3",
+      "bytes": 19734,
+      "sha256": "b8e9174761136359416d7e987d2668ecda5ac9b898b223fc818c26f11a5fff80"
+    },
+    {
+      "path": "/sfx/lore-v2/impact-1.mp3",
+      "bytes": 10187,
+      "sha256": "48c14c75d434479225865b91faf5045fe6dd40d8d032764a0e2ff22b3c4b7318"
+    },
+    {
+      "path": "/sfx/lore-v2/impact-2.mp3",
+      "bytes": 10239,
+      "sha256": "f0b83c24658a6338c15b92527d9509f65826b75574b129a35e42ee469a443b37"
+    },
+    {
+      "path": "/sfx/lore-v2/impact-3.mp3",
+      "bytes": 10240,
+      "sha256": "be2bae013657a5db5b1d2caf33e8ec18e7dcfb6dd5edbe1670b981efd1d309bf"
+    },
+    {
+      "path": "/sfx/lore-v2/lose.mp3",
+      "bytes": 44541,
+      "sha256": "ea8fcde8d9b1019db1f479424eb44ae11840737832bd6ae407d130764e684d57"
+    },
+    {
+      "path": "/sfx/lore-v2/mana-pay.mp3",
+      "bytes": 14389,
+      "sha256": "3a212df0abad64677b96e6f5625b6e7bb863f8640ab0fd0879c17b9a41ac0fc1"
+    },
+    {
+      "path": "/sfx/lore-v2/mana.mp3",
+      "bytes": 22105,
+      "sha256": "67443a6bb9c5400c67ca93ba7190028db731e258aff9b2a812518db4e277a6d9"
+    },
+    {
+      "path": "/sfx/lore-v2/match.mp3",
+      "bytes": 17986,
+      "sha256": "be3ab60cae8e9a9532d94fc28c4493e460c24d2db6650184a545a0411d5123ed"
+    },
+    {
+      "path": "/sfx/lore-v2/maxhp.mp3",
+      "bytes": 19811,
+      "sha256": "51b6f0ca8aec7250bac2bd167085b30545be01fae784ecf581dd231ae50af549"
+    },
+    {
+      "path": "/sfx/lore-v2/mimic.mp3",
+      "bytes": 14907,
+      "sha256": "a1763038ed2f196107781e07590a477c4bd29fce237c4efb62507945f777bf30"
+    },
+    {
+      "path": "/sfx/lore-v2/play.mp3",
+      "bytes": 13080,
+      "sha256": "1d5bee0fb3e25b7e7edbdc8eddca08a7ad19f3230001b950da2f7047bb21b98d"
+    },
+    {
+      "path": "/sfx/lore-v2/pop.mp3",
+      "bytes": 6563,
+      "sha256": "b12fa88c769e7ae1d36bbed02a4e85bb449e67055fda35b7ac8c3d40d0935ca4"
+    },
+    {
+      "path": "/sfx/lore-v2/shuffle.mp3",
+      "bytes": 27145,
+      "sha256": "d1277ab28cc9439d9b27000dfe9626df034e6b620497a7704e00d228d112d8a4"
+    },
+    {
+      "path": "/sfx/lore-v2/summon.mp3",
+      "bytes": 16651,
+      "sha256": "a9a9c8e58074470c46c8988e6e264c29ff7d171712aece4e6a46dabcbe415ef6"
+    },
+    {
+      "path": "/sfx/lore-v2/trap.mp3",
+      "bytes": 15404,
+      "sha256": "bc28f17759dc41d9d9135fc0c318e17755c9063a8c178a12b83bb6279ebbd7e4"
+    },
+    {
+      "path": "/sfx/lore-v2/trapSet.mp3",
+      "bytes": 10736,
+      "sha256": "508a916265da1f1ef3bf901336d70154f253cdf36413bd764110696616db40cd"
+    },
+    {
+      "path": "/sfx/lore-v2/turn.mp3",
+      "bytes": 17283,
+      "sha256": "d1adc0bc8dbdfed2b84495b34fe8257b7d95be9ef491adab7df5b247397ce139"
+    },
+    {
+      "path": "/sfx/lore-v2/void.mp3",
+      "bytes": 32724,
+      "sha256": "9a8d2a2740fe0c37ac8b9530db40edf8b46e0bb9efc4b60f72179247c0ea21aa"
+    },
+    {
+      "path": "/sfx/lore-v2/win.mp3",
+      "bytes": 53582,
+      "sha256": "de5c4b521488c939a2c0235b04997b980c2b29eb7817648a080c98463eabb30f"
+    },
+    {
+      "path": "/sfx/opening-v1/coin.mp3",
+      "bytes": 31261,
+      "sha256": "b6440534e6a599c4fcbdde133e6e716ff08d52623a66c2aeef5ca2ed41cfa204"
+    },
+    {
+      "path": "/sfx/opening-v1/draw-1.mp3",
+      "bytes": 8913,
+      "sha256": "d91ce1f4e65855bbcdd77597cbc2407c7257c637d70c9a658ce50bf4247fcb48"
+    },
+    {
+      "path": "/sfx/opening-v1/draw-2.mp3",
+      "bytes": 8860,
+      "sha256": "1b769a02533a72f2afa6b0b8b7e204a2bd0e08f777472a55a27891afe45d39ba"
+    },
+    {
+      "path": "/sfx/opening-v1/draw-3.mp3",
+      "bytes": 8807,
+      "sha256": "6ef78598c0868e047c37fcbbd3bd7062ac3d1b58058f136da3607de88ca51314"
+    },
+    {
+      "path": "/sfx/opening-v1/duel-start.mp3",
+      "bytes": 50922,
+      "sha256": "3f198b185c8eebceead811138bf33064433fc738724d4879da8ee19f399f3b14"
+    },
+    {
+      "path": "/sfx/opening-v1/impact-1.mp3",
+      "bytes": 10187,
+      "sha256": "48c14c75d434479225865b91faf5045fe6dd40d8d032764a0e2ff22b3c4b7318"
+    },
+    {
+      "path": "/sfx/opening-v1/turn.mp3",
+      "bytes": 17283,
+      "sha256": "d1adc0bc8dbdfed2b84495b34fe8257b7d95be9ef491adab7df5b247397ce139"
+    }
+  ],
+  "anonymousLiveLogin": true,
+  "deployedBotOpening": true,
+  "botAuthApiFixture": true,
+  "authenticatedOnlineMatch": false,
+  "errors": [],
+  "failed": []
+}
