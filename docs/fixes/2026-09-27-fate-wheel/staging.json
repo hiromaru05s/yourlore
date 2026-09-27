@@ -1,0 +1,28 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "runtimeCommit": "c3233fe0d0c9abc5b2beeb14278d33d8ad655b6b",
+  "workerVersion": "ee24073d-598d-4851-ab15-3f305755771d",
+  "productionDeployed": false,
+  "assets": [
+    {
+      "path": "/index.html",
+      "status": 200,
+      "sha256": "a6570d060524af9b8b6250fac9933e3670424820b963e9420c2681c8d7e25cac"
+    },
+    {
+      "path": "/assets/main-Cd2vnPFg.js",
+      "status": 200,
+      "sha256": "7a7b2647a20558c8cbd1cb1665bc39f2a5f621d469a86e421fc17653c73dbe69"
+    },
+    {
+      "path": "/assets/three.module-CEKDySQ-.js",
+      "status": 200,
+      "sha256": "a668f4d0a8c405e1087278ecac79dc0a950ae007a00ec79b005685c19ea35120"
+    },
+    {
+      "path": "/assets/main-Egqx3qXe.css",
+      "status": 200,
+      "sha256": "e22e501bc42998ff62e0cbb4cc01947b6cc6b19f1518c565cf9f2c51a7675c26"
+    }
+  ]
+}
