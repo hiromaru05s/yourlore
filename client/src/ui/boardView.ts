@@ -1,3 +1,4 @@
+import {seekerPortrait} from './seekerAnimation';
 import {handFan} from './handFan';
 import {fieldPositions,settleField} from './fieldLayout';
 import {clearBiblionFx} from './biblionFx';
@@ -955,6 +956,7 @@ export class GameView {
     const emax = effMaxMana(p);
     const hp = Math.max(0, p.hp);
     const hpPct = hp / p.maxHp * 100;
+    const oldPortrait=el.querySelector<HTMLCanvasElement>('.seeker-motion');
     const oldMana=el.querySelector<HTMLElement>('.pt-mana');
     const previousMax=Number(oldMana?.dataset.maximum??emax),previousMana=Number(oldMana?.dataset.mana??p.mana);
     const crystals = Array.from({ length: Math.min(MAX_MANA, Math.max(0, emax)) }, (_, i) => `<i class="mana-crystal${i < p.mana ? " is-lit" : ""}" aria-hidden="true"></i>`).join("");
@@ -967,6 +969,8 @@ export class GameView {
       <span class="pt-mana pips" data-mana="${p.mana}" data-maximum="${emax}" data-previous-maximum="${previousMax}" data-previous-mana="${previousMana}" aria-label="${t("game.mana")} ${p.mana}/${emax}"><span class="mana-readout"><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span><span class="mana-crystals" style="--mana-rows:${Math.max(1,Math.ceil(Math.min(MAX_MANA,emax)/10))}">${crystals}</span></span>
       ${(p.brand ?? 0) > 0 ? `<span class="pt-brand" title="${esc(t("game.brandTip").replace("{n}", String(p.brand)))}">${t("game.brand")} <b>${p.brand}</b></span>` : ""}
       <span class="pt-name">${esc(p.name)}</span>`;
+    const portrait=oldPortrait??seekerPortrait(seeker==='SEEKER_RED'?'red':'blue');
+    el.querySelector('.avatar')?.replaceChildren(portrait);
   }
 
   /** MY hand — straight upright cards (no fan) in two states:

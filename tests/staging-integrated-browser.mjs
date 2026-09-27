@@ -6,6 +6,8 @@ const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const origin='https://test.yourlore.xyz',out=process.env.LORE_TEST_OUTPUT||'docs/releases/2026-09-27-integrated';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const paths=['/index.html','/art/lounge/stage-v1/stage.png','/art/lounge/stage-v1/sigil.png'];
+for(const dir of ['art/seekers/v2','ui/passives/v1'])for(const f of await fs.readdir('client/dist/'+dir))paths.push('/'+dir+'/'+f);
+paths.push('/art/lounge/stage-v1/stage.webp','/art/lounge/v1/library.webp');
 for(const f of await fs.readdir('client/dist/assets'))if(/\.(js|css)$/.test(f))paths.push('/assets/'+f);
 for(const name of ['log','sound','help','surrender'])paths.push('/ui/duel-controls/v1/'+name+'.png');
 for(const dir of ['sfx/lore-v2','sfx/opening-v1'])for(const f of await fs.readdir('client/dist/'+dir))if(f.endsWith('.mp3'))paths.push('/'+dir+'/'+f);
@@ -25,6 +27,7 @@ try{
  await page.waitForFunction(()=>!document.querySelector('.duel-opening'),null,{timeout:20000});
  assert.equal(await page.locator('.game').evaluate(e=>e.inert),false);
  assert(await page.locator('#hand .card').count()>=3);assert.equal(await page.locator('.native-draw-layer').count(),0);
+ assert.equal(await page.locator('.seeker-motion').count(),2);for(const c of await page.locator('.seeker-motion').all())assert.equal(await c.getAttribute('data-action'),'idle');
  await page.screenshot({path:out+'/staging-bot.png'});
  for(const id of ['logTab','muteBtn','helpBtn','giveupBtn']){assert.equal(await page.locator('#'+id+' img').evaluate(e=>e.complete&&e.naturalWidth===256),true);assert.equal(await page.locator('#'+id).evaluate(e=>getComputedStyle(e).backgroundImage),'none');}
  assert.deepEqual(errors,[]);assert.deepEqual(failed,[]);

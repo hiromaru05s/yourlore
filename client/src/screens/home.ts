@@ -54,9 +54,9 @@ function showBotDifficultyModal(app: App): void {
       <h2>${t("bot.diff.title")}</h2>
       <p class="bot-diff-sub">${t("bot.diff.sub")}</p>
       <div class="diff-grid">
-        ${tiers.map((x) => `
+        ${tiers.map((x,i) => `
           <button class="diff-card diff-${x.diff}" data-diff="${x.diff}">
-            <span class="diff-ico">${homeIcon(x.icon)}</span>
+            <span class="diff-rank">${["I","II","III","IV"][i]}</span><span class="diff-ico">${homeIcon(x.icon)}</span>
             <span class="diff-name">${t(`bot.diff.${x.diff}`)}</span>
             <span class="diff-desc">${t(`bot.diff.${x.diff}.desc`)}</span>
           </button>`).join("")}

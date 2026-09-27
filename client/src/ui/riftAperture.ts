@@ -17,7 +17,7 @@ export function mountRiftApertures(parent:T.Group){
   geometry.setAttribute('position',new T.Float32BufferAttribute(outline.flatMap(p=>[p.x,.014,p.y*sign]),3));
   geometry.setAttribute('uv',new T.Float32BufferAttribute(outline.flatMap(p=>[(p.x-minX)/w,(p.y-minY)/h]),2));
   geometry.setIndex(faces);geometry.computeVertexNormals();
-  const mesh=new T.Mesh(geometry,material);mesh.name=sign>0?'Rift player full aperture':'Rift opponent full aperture';parent.add(mesh);return mesh;
+  const mesh=new T.Mesh(geometry,material);mesh.layers.enable(2);mesh.name=sign>0?'Rift player full aperture':'Rift opponent full aperture';parent.add(mesh);return mesh;
  });
  let last=-Infinity;const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  return {tick(now:number){

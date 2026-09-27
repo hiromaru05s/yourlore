@@ -1,16 +1,13 @@
+import {decodeAsset,waitAssets} from './assetReadiness';
+import {seekerAssets} from './seekerAnimation';
 import {READING_ASSETS} from './readingBoardLayout';
 import { getLang } from '../i18n';
 /** Game content is revealed only after assets are decoded and the 3D scene has
  * painted. A slow/cold connection must never reveal intermediate furniture. */
 const readiness=new WeakMap<HTMLElement,Promise<void>>();
-const images=new Map<string,Promise<void>>();
 const logo='/art/brand/lore-logo-transparent.png';
 const coinImages=['/ui/coin-toss/coin-option-1-front.png','/ui/coin-toss/coin-option-1-back.png'];
-function decode(url:string):Promise<void>{
-  let task=images.get(url);
-  if(!task){const img=new Image();img.src=url;task=img.decode().then(()=>{}).catch(()=>{images.delete(url);});images.set(url,task);}
-  return task;
-}
+const decode=decodeAsset;
 export function waitForDuel(root:HTMLElement):Promise<void>{return readiness.get(root)??Promise.resolve();}
 export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
   if(!document.fonts||typeof HTMLImageElement==='undefined')return;
@@ -19,18 +16,18 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
   const label=document.createElement('span');label.textContent=getLang()==='ja'?'対戦の準備中':getLang()==='en'?'Preparing your duel':'대전 준비 중';
   const track=document.createElement('div');track.className='duel-load-track';track.setAttribute('aria-hidden','true');track.append(document.createElement('i'));loader.append(mark,label,track);root.append(loader);
   root.classList.add('duel-preparing');root.setAttribute('aria-busy','true');
-  let expired=false;let timeout:ReturnType<typeof setTimeout>|undefined;
+  const expired=false;
   const work=(async()=>{
     await mount;
     while(!expired&&root.isConnected&&root.dataset.boardRendered!=="true")await new Promise<void>(r=>requestAnimationFrame(()=>r()));
     if(expired||!root.isConnected)return;
-    const urls=new Set([...coinImages,...['base-mon','base-spell','base-quest','field-mon','field-spell','field-quest','cost','attack','health'].map(n=>`/art/biblion/modular/${n}.png`)]);
+    const urls=new Set(['/art/seekers/v2/mask-self.png','/art/seekers/v2/mask-opp.png',...['counter','dual','ambush','aura','void','guts','decay','majesty','taunt','evade','relic'].map(k=>`/ui/passives/v1/${k}.webp`),...seekerAssets,...coinImages,...['base-mon','base-spell','base-quest','field-mon','field-spell','field-quest','cost','attack','health'].map(n=>`/art/biblion/modular/${n}.png`)]);
     for(const el of root.querySelectorAll<HTMLElement>('*')){
       if(el instanceof HTMLImageElement){if(el.currentSrc||el.src)urls.add(el.currentSrc||el.src);el.loading='eager';}
       for(const pseudo of [null,'::before','::after'])for(const match of getComputedStyle(el,pseudo).backgroundImage.matchAll(/url\(["']?(.*?)["']?\)/g))urls.add(match[1]);
     }
     for(const url of [...urls])if(url.includes('/art/cards-sm/'))urls.add(url.replace('/art/cards-sm/','/art/cards/'));
-    await Promise.all([document.fonts.ready,...[...urls].map(decode),import('./ceremonyScene'),import('./paperDraw')]);
+    await Promise.all([document.fonts.ready,waitAssets([...urls],loader),import('./ceremonyScene'),import('./paperDraw')]);
     // Decode the actual image nodes too (not only a separate preloader object).
     await Promise.all([...root.querySelectorAll('img')].map(img=>img.decode().catch(()=>{})));
     while(!expired&&root.isConnected&&root.dataset.sceneReady!=='true'&&root.dataset.tableState!=='fallback')await new Promise<void>(r=>requestAnimationFrame(()=>r()));
@@ -38,7 +35,7 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
     for(let i=0;i<2;i++)await new Promise<void>(r=>requestAnimationFrame(()=>r()));
     root.dataset.preloadedImages=String(urls.size);
   })();
-  const task=Promise.race([work,new Promise<void>(r=>{timeout=setTimeout(()=>{expired=true;r();},6000);})]).catch(()=>{}).finally(()=>{clearTimeout(timeout);root.classList.remove('duel-preparing');root.removeAttribute('aria-busy');loader.remove();});
+  const task=work.finally(()=>{root.classList.remove('duel-preparing');root.removeAttribute('aria-busy');loader.remove();});
   readiness.set(root,task);
 }
 /** Warm public furniture and the opening portraits while the player is still in the lobby. */

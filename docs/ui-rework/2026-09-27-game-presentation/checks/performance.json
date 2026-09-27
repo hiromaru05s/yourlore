@@ -1,0 +1,20 @@
+{
+  "scene": {
+    "seconds": 6,
+    "paints": 3,
+    "fullPasses": 3,
+    "portalPasses": 72,
+    "cpuMs": 94.7,
+    "calls": 1,
+    "triangles": 2
+  },
+  "changes": {
+    "childList:SPAN#.tc-num": 6
+  },
+  "metrics": {
+    "LayoutDuration": 0.001751,
+    "RecalcStyleDuration": 0.093406,
+    "ScriptDuration": 0.178537,
+    "TaskDuration": 0.892116
+  }
+}

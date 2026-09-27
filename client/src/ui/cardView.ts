@@ -187,14 +187,7 @@ export function prefetchZoomArt(cardId: string, now = false): void {
 // Zoom art window ≈ 86.6% of the card: 346px at the 400px desktop size, 84vw*0.866
 // on phones.
 const ZOOM_SIZES = "(max-width: 860px) 73vw, 346px";
-const GALLERY_SIZES = [
-  "(max-width: 340px) 39vw",
-  "(max-width: 480px) 26vw",
-  "(max-width: 700px) 20vw",
-  "(max-width: 820px) 13vw",
-  "(max-width: 1000px) 11vw",
-  "92px",
-].join(", ");
+const GALLERY_SIZES = "(max-width:650px) 118px, 134px";
 
 /** Cards past this index in a gallery grid defer their art; the ones before it
  *  are (roughly) the first screenful and load immediately. */
@@ -436,10 +429,14 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     if (opt.compactField || opt.field) {
       const innate = cardPassives(c);
       const granted = fm.passivesG ?? [];
-      for (const k of [...innate, ...granted.filter((g) => !innate.includes(g))]) {
+      for (const k of [...new Set([...innate,...granted,...((fm.guts??0)>0?['guts']:[])])]) {
         const nm = psvName(k);
         if (!nm) continue;
-        const chip = el("span", "kw" + (granted.includes(k) ? " kw--granted" : ""), nm);
+        const chip = el("span", "kw passive-icon" + (granted.includes(k) ? " kw--granted" : ""));
+        const description=PASSIVES[k]?.[lang0].desc??'';chip.title=`${nm}: ${description}`;chip.setAttribute('role','img');chip.setAttribute('aria-label',chip.title);
+        const icon=document.createElement('img');icon.src=`/ui/passives/v1/${k}.webp`;icon.alt='';icon.decoding='async';chip.append(icon);
+        const count=k==='guts'?(fm.guts??0):k==='decay'?(fm.decayCnt??0):0;
+        if(count>0){chip.append(el('b','',String(count)));chip.setAttribute('aria-label',`${nm} ${count}: ${description}`);}
         chip.dataset.psv = k;
         band.appendChild(chip);
       }
@@ -460,8 +457,10 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
       band.appendChild(el("span", "ec ec-h", `${label('孵化','Hatch','부화')} ${eggH}`));
       band.appendChild(el("span", "ec ec-d", `${label('耐久','Durability','내구')} ${Math.max(0, eggD)}`));
     } else if (opt.field && c.aura !== "assassinGuild") {
-      if ((fm.guts ?? 0) > 0) band.appendChild(el("span", "ec ec-g", `${label('気合','Guts','기합')} ${fm.guts}`));
-      if ((fm.decayCnt ?? 0) > 0) band.appendChild(el("span", "ec ec-x", `${label('腐敗','Decay','부패')} ${fm.decayCnt}/3`));
+      if (!(opt.field||opt.compactField) && (fm.guts ?? 0) > 0) band.appendChild(el("span", "ec ec-g", `${label('気合','Guts','기합')} ${fm.guts}`));
+      if ((fm.decayCnt ?? 0) > 0 && !cardPassives(c).includes('decay') && !fm.passivesG?.includes('decay')) {
+        const chip=el('span','passive-icon');chip.title=`${psvName('decay')} ${fm.decayCnt}/3`;chip.setAttribute('role','img');chip.setAttribute('aria-label',chip.title);const image=document.createElement('img');image.src='/ui/passives/v1/decay.webp';image.alt='';chip.append(image,el('b','',String(fm.decayCnt)));band.append(chip);
+      }
     }
     if (band.childElementCount) node.appendChild(band);
   }

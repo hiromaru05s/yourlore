@@ -1,3 +1,4 @@
+import {animateSeeker} from './seekerAnimation';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
 import type {HandLayout} from './handGeometry';
 import {mountDuelOutcome,OUTCOME_DURATION} from './duelOutcome';
@@ -362,6 +363,7 @@ export function floatNum(anchor: Element | null, text: string, kind: "dmg" | "he
 }
 
 export function hpFeedback(side: ViewSide, kind: "dmg" | "heal", amount: number): void {
+  if(amount>0&&!fxSkip)animateSeeker(side,kind==='dmg'?'hurt':'heal');
   if (kind === "dmg" && amount > 0) {
     const portrait = document.getElementById(side === "me" ? "portraitMe" : "portraitOpp");
     portrait?.classList.remove("is-hurt");
@@ -392,6 +394,7 @@ export function lunge(uid: string, dir: "up" | "down"): void {
 
 /** Physical card attack: anticipation, accelerating contact, hit stop, recoil and a settled return. */
 export async function attackStrike(uid:string,targetUid:string|null,defender:ViewSide,onImpact?:()=>void):Promise<void>{
+  if(!fxSkip)animateSeeker(defender==='me'?'opp':'me','attack');
   const source=byUid(uid);
   const target=targetUid?byUid(targetUid):document.querySelector<HTMLElement>(defender==='me'?'#portraitMe .avatar':'#portraitOpp .avatar');
   if(!source||!target||fxSkip)return;
@@ -818,6 +821,7 @@ function gainLabel(anchor: DOMRect, text: string, cls: string): HTMLElement {
 /** One shared impact: readout, added crystals, refraction and sound land together. */
 export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
   if(amount<=0||fxSkip||document.hidden)return;
+  animateSeeker(side,'mana');
   const cluster=document.getElementById('hpbar-'+side)?.closest('.pcluster');
   const el=cluster?.querySelector<HTMLElement>('.pt-mana');if(!el)return;
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){sfx('mana');return;}
@@ -851,6 +855,7 @@ export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
 
 /** Rich "max HP increased" celebration around the HP bar (~2s). */
 export async function maxHpSurge(side: ViewSide, amount: number): Promise<void> {
+  if(amount>0&&!fxSkip)animateSeeker(side,'heal');
   const bar = document.getElementById("hpbar-" + side);
   if (!bar) return;
   const r = bar.getBoundingClientRect();

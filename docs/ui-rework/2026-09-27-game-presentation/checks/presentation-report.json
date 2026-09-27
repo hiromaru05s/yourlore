@@ -1,0 +1,19 @@
+{
+  "origin": "http://localhost:5211",
+  "checks": [
+    "centered ranked title, moving home, 4 bot tiers, explicit add/remove/save, deferred watch page, 24-card pages and passive search, 3 responsive sizes",
+    {
+      "scene": {
+        "seconds": 5,
+        "paints": 42,
+        "fullPasses": 42,
+        "portalPasses": 48,
+        "cpuMs": 123.9,
+        "calls": 1,
+        "triangles": 2
+      }
+    },
+    "all 8 action paths return to idle, both irregular masks cover full frame height, reduced motion"
+  ],
+  "errors": []
+}

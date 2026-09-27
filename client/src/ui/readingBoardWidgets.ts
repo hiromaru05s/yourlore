@@ -56,10 +56,11 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
  const up=()=>{pressed='';animateUntil=performance.now()+650;};
  const click=(e:Event)=>{const button=(e.target as Element).closest<HTMLButtonElement>('button');if(button?.disabled)return;const now=performance.now();if(id(e)==='refreshBtn')rerollTime=now;if(id(e)==='endBtn')turnTime=now;animateUntil=now+1000;};
  root.addEventListener('pointerover',over);root.addEventListener('pointerdown',down);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);root.addEventListener('click',click,true);
+ let clockSegments=-1;
  function tick(now:number){
   if(dead)return false;const scale=readingScale();group.scale.setScalar(scale);
-  const riftChanged=apertures.tick(now);
-  if(!ready)return riftChanged;
+
+  if(!ready)return false;
   const dt=Math.min(.06,(now-last)/1000);last=now;let changed=false;
   for(const material of opticalMaterials)material.attenuationDistance=Number(material.userData.authoredAttenuation)*scale;
   for(const mana of manas){
@@ -91,7 +92,8 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   const end=root.querySelector<HTMLButtonElement>('#endBtn'),refresh=root.querySelector<HTMLButtonElement>('#refreshBtn'),enemy=root.dataset.readingTurn!=='player';
   for(const m of rerollMaterials){color.copy(m.color);if(refresh?.disabled){const l=color.r*.2126+color.g*.7152+color.b*.0722;color.lerp(new T.Color(l,l,l),.8).multiplyScalar(.5);}else if(hover==='refreshBtn')color.multiplyScalar(1.12);m.material.color.lerp(color,1-Math.exp(-dt*18));}
   const clock=root.querySelector<HTMLElement>('.mp-clock.show'),remaining=clock?Math.min(1,Number(clock.dataset.remaining)/Math.max(1,Number(clock.dataset.total))):1;
-  segments.forEach((mesh,i)=>{mesh.material=i<Math.ceil(remaining*24)?lit:dark;});
+  const litCount=Math.ceil(remaining*24);if(litCount!==clockSegments){clockSegments=litCount;changed=true;}
+  segments.forEach((mesh,i)=>{mesh.material=i<litCount?lit:dark;});
   const turnAge=now-turnTime;displayEnemy=enemy;
   color.set(displayEnemy?0x492633:0x133042);if(hover==='endBtn'&&!end?.disabled)color.multiplyScalar(1.18);enamel?.color.lerp(color,1-Math.exp(-dt*18));
   color.set(displayEnemy?0xba6471:0x3daacb);lit.color.copy(color);lit.emissive.copy(color);
@@ -108,9 +110,9 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
 
   const state=`${enemy}:${end?.disabled}:${refresh?.disabled}`;
   if(state!==lastState){animateUntil=now+500;lastState=state;}
-  return riftChanged||changed||now<animateUntil||t<1;
+  return changed||now<animateUntil||t<1;
  }
- return {tick,takeShadowUpdate(){const value=shadowDirty;shadowDirty=false;return value;},warm(render:()=>void){
+ return {tick,tickRift:(now:number)=>apertures.tick(now),takeShadowUpdate(){const value=shadowDirty;shadowDirty=false;return value;},warm(render:()=>void){
   const wasVisible=group.visible,rerollVisible=reroll?.visible;
   const saved=manas.flatMap(m=>Object.values(m.batches).flat().map(mesh=>({mesh,count:mesh.count,visible:mesh.visible})));
   group.visible=true;if(reroll)reroll.visible=true;

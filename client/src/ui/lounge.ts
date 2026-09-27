@@ -39,6 +39,7 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     top.querySelector<HTMLButtonElement>('[data-settings]')!.onclick=()=>app.settings();
     top.querySelector<HTMLButtonElement>('.lounge-menu')!.onclick=e=>{const on=shell.classList.toggle('is-menu-open');(e.currentTarget as HTMLElement).setAttribute('aria-expanded',String(on));};
   };
+  if(page==='home'){const atmosphere=document.createElement('div');atmosphere.className='lounge-atmosphere';atmosphere.setAttribute('aria-hidden','true');atmosphere.innerHTML=Array.from({length:14},(_,i)=>`<i style="--x:${(i*37)%100}%;--y:${(i*23)%90+5}%;--d:${7+i%5}s;--delay:-${i*.8}s"></i>`).join('');shell.append(atmosphere);}
   shell.append(content); app.root.append(shell); paint();
   const off=onLangChange(paint);
   document.addEventListener('lore:user',paint);

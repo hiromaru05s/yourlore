@@ -1,3 +1,4 @@
+import {prepareStateArtwork} from '../ui/stateArtwork';
 import {captureHandLayout,arrivingHandUids} from '../ui/handGeometry';
 import {playDuelOpening,warmOpening} from "../ui/duelOpeningDirector";
 import {waitForDuel} from "../ui/duelReadiness";
@@ -181,6 +182,9 @@ export abstract class BaseController implements BoardHandlers {
 
   private async playResult(prev: GameState, res: ReduceResult, animate: boolean, gen: number): Promise<void> {
     if (this.dead) return;
+    // Hold the existing complete board until newly exposed card art is decoded.
+    if(prev!==res.state){this.view.setPlaying(true);try{await prepareStateArtwork(res.state,this.you,this.openingRoot);}finally{if(!this.dead)this.view.setPlaying(false);}}
+    if(this.dead)return;
     // batches older than the player's latest action jump-cut; fresh ones play normally
     A.setFxSkip(gen <= this.skipGen);
     this.consumeLogs(res.events);
@@ -772,7 +776,7 @@ export abstract class BaseController implements BoardHandlers {
       let timer:ReturnType<typeof setTimeout>|undefined;
       let cancel=()=>{};
       const cancelled=new Promise<void>(resolve=>{cancel=resolve;this.openingAbort.signal.addEventListener('abort',cancel,{once:true});});
-      try{await Promise.race([Promise.all([waitForDuel(this.openingRoot),warmOpening()]),new Promise<void>(r=>{timer=setTimeout(r,6000);}),cancelled]);}
+      try{await Promise.race([Promise.all([waitForDuel(this.openingRoot),warmOpening()]),cancelled]);}
       finally{clearTimeout(timer);this.openingAbort.signal.removeEventListener('abort',cancel);}
     })();return this.openingAssets;
   }

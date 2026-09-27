@@ -1,3 +1,4 @@
+import {revealCards} from '../ui/assetReadiness';
 import { homeIcon } from "../ui/homeIcons";
 import { loungeText } from "../ui/loungeText";
 // ============================================================
@@ -9,7 +10,7 @@ import type { App, Screen } from "../router";
 import { DB, STARTERS, DECK_POOL, DECK_SIZE, DECK_MAX_COPIES, DECK_SLOTS, WATCH_MAX, BUYABLE_POOL, sanitizeDecks, type DeckStore } from "../shared/cards";
 import type { CardDef, CardInst } from "../shared/types";
 import { cardEl } from "../ui/cardView";
-import { bindZoom } from "../ui/anim";
+import { bindZoom, zoomCard } from "../ui/anim";
 import { confirmDialog } from "../ui/modal";
 import { api } from "../net/api";
 import { t, cardName, onLangChange } from "../i18n";
@@ -31,14 +32,14 @@ export function mountDeck(app: App): Screen {
       <div class="deck-note">${t("deck.note")}</div>
       <div class="deck-local-tabs" role="tablist"><button id="editTab" role="tab" aria-selected="true">${t("deck.current")}</button><button id="watchTab" role="tab" aria-selected="false">${t("deck.watch.title")}</button></div>
       <section id="deckEditSection">
-      <div class="deck-cur-head"><span>${t("deck.current")} <b id="deckCount"></b></span><button class="btn btn-ghost deck-use" id="useBtn"></button></div>
+      <div class="deck-current-column"><div class="deck-cur-head"><span>${t("deck.current")} <b id="deckCount"></b></span><button class="btn btn-ghost deck-use" id="useBtn"></button></div>
       <div class="deck-cur" id="deckCur"></div>
-      <div class="deck-pool-head">${t("deck.pool")}</div>
-      <div class="deck-pool" id="deckPool"></div>
+      </div><div class="deck-candidate-column"><div class="deck-pool-head">${loungeText("追加するカードを選択（＋）","Choose cards to add (+)","추가할 카드 선택 (+)")}</div>
+      <div class="deck-pool" id="deckPool"></div></div>
       </section><section id="deckWatchSection" hidden><div class="deck-pool-head deck-watch-head">${homeIcon("bell")} ${t("deck.watch.title")} <b id="watchCount"></b></div>
       <div class="deck-note">${t("deck.watch.desc")}</div>
       <input class="deck-watch-search" id="watchSearch" placeholder="${t("deck.watch.search")}">
-      <div class="deck-pool deck-watchpool" id="watchPool"></div>
+      <div class="deck-pool deck-watchpool" id="watchPool"></div><div class="collection-pager"><button id="watchPrev">‹</button><span id="watchPage"></span><button id="watchNext">›</button></div>
       </section><div class="deck-msg" id="deckMsg" role="status" aria-live="polite"></div>
     </div>`;
   app.root.appendChild(wrap);
@@ -47,6 +48,7 @@ export function mountDeck(app: App): Screen {
   const store: DeckStore = sanitizeDecks(app.user?.decks ?? (app.user?.deck ? { sel: 0, list: [{ cards: app.user.deck, watch: [] }] } : null));
   let cur = store.sel; // 현재 편집 중인 슬롯 (store.sel = 게임에 사용되는 슬롯)
   let watchQ = "";
+  let watching=false,watchPage=0,watchRevision=0;
   let saved = JSON.stringify(store);
   let saving = false;
   let dead = false;
@@ -57,9 +59,11 @@ export function mountDeck(app: App): Screen {
   const saveBtn = q("save") as HTMLButtonElement, useBtn = q("useBtn") as HTMLButtonElement;
   const searchEl = q("watchSearch") as HTMLInputElement;
 
-  const setTab = (watching: boolean): void => {
+  const setTab = (next: boolean): void => {
+    watching=next;
     q("deckEditSection").hidden = watching; q("deckWatchSection").hidden = !watching;
     q("editTab").setAttribute("aria-selected", String(!watching)); q("watchTab").setAttribute("aria-selected", String(watching));
+    render();
   };
   q("editTab").onclick = () => setTab(false); q("watchTab").onclick = () => setTab(true);
   const inst = (id: string, uid: string): CardInst => ({ uid, ...structuredClone(def(id)) });
@@ -91,14 +95,23 @@ export function mountDeck(app: App): Screen {
     attune.classList.add("deck-fixed");
     attune.appendChild(Object.assign(document.createElement("div"), { className: "deck-fixed-tag", textContent: t("deck.fixed") }));
     bindZoom(attune, inst("STARTER_MANA", "fx_mana"));
-    curEl.appendChild(attune);
+    const entry=(card:HTMLElement,c:CardInst,fixed=false)=>{
+      const row=document.createElement('div');row.className='deck-entry';row.append(card);
+      const name=document.createElement('span');name.className='deck-entry-name';name.textContent=cardName(c);row.append(name);
+      const cost=document.createElement('small');cost.textContent=fixed?t('deck.fixed'):String(c.cost);row.append(cost);
+      const action=card.querySelector('button');if(action)row.append(action);
+      row.tabIndex=0;row.setAttribute('aria-label',cardName(c));row.onkeydown=e=>{if(e.target===row&&(e.key==='Enter'||e.key===' ')){e.preventDefault();zoomCard(c);}};
+      row.onclick=e=>{if(!(e.target as Element).closest('button'))zoomCard(c);};curEl.append(row);
+    };
+    entry(attune,inst('STARTER_MANA','fx_mana'),true);
     deck().forEach((id, i) => {
       const c = inst(id, "dk" + i);
       const el = cardEl(c, { size: "mkt", playable: true });
       el.title = t("deck.remove");
-      el.onclick = () => { deck().splice(i, 1); render(); };
+      const remove=document.createElement('button');remove.className='deck-card-action';remove.textContent='−';remove.setAttribute('aria-label',`${t('deck.remove')} ${cardName(c)}`);
+      remove.onclick=e=>{e.stopPropagation();deck().splice(i,1);render();};el.append(remove);
       bindZoom(el, c);
-      curEl.appendChild(el);
+      entry(el,c);
     });
     for (let k = deck().length; k < DECK_SIZE; k++) {
       const slot = document.createElement("div");
@@ -118,18 +131,23 @@ export function mountDeck(app: App): Screen {
       cnt.className = "deck-owned" + (n > 0 ? " has" : "");
       cnt.textContent = `${n}/${DECK_MAX_COPIES}`;
       el.appendChild(cnt);
-      if (!full) el.onclick = () => { deck().push(id); render(); };
+      const add=document.createElement('button');add.className='deck-card-action';add.textContent='+';add.disabled=full;add.setAttribute('aria-label',`${loungeText('追加','Add','추가')} ${cardName(c)}`);
+      add.onclick=e=>{e.stopPropagation();deck().push(id);render();};el.append(add);
+      el.onclick=()=>zoomCard(c);
       bindZoom(el, c);
       poolEl.appendChild(el);
     }
     // ---- 마켓 알림이 픽커 ----
     watchCountEl.textContent = `${watch().length}/${WATCH_MAX}`;
-    watchEl.innerHTML = "";
+    const watchVersion=++watchRevision,watchNodes:Node[]=[];
     let watchIdx = 0;
     const ql = watchQ.toLowerCase();
     const picked = WATCHABLE.filter((id) => watch().includes(id));
     const rest = WATCHABLE.filter((id) => !watch().includes(id) && (!ql || cardName({ uid: "", ...DB[id] }).toLowerCase().includes(ql) || DB[id].name.toLowerCase().includes(ql)));
-    for (const id of [...picked, ...rest]) {
+    const candidates=[...picked,...rest];const pages=Math.max(1,Math.ceil(candidates.length/24));watchPage=Math.min(watchPage,pages-1);
+    q('watchPage').textContent=`${watchPage+1} / ${pages}`;
+    (q('watchPrev') as HTMLButtonElement).disabled=watchPage===0;(q('watchNext') as HTMLButtonElement).disabled=watchPage===pages-1;
+    for (const id of watching?candidates.slice(watchPage*24,(watchPage+1)*24):[]) {
       const on = watch().includes(id);
       const c = inst(id, "w_" + id);
       const el = cardEl(c, { size: "mkt", playable: true, dim: !on && watch().length >= WATCH_MAX, lazyArt: watchIdx++ });
@@ -148,12 +166,14 @@ export function mountDeck(app: App): Screen {
         render();
       };
       bindZoom(el, c);
-      watchEl.appendChild(el);
+      watchNodes.push(el);
     }
+    if(watching)void revealCards(watchEl,watchNodes,()=>watchVersion===watchRevision);else watchEl.replaceChildren();
     saveBtn.disabled = saving || store.list.some(d => d.cards.length !== DECK_SIZE);
   };
 
-  searchEl.oninput = () => { watchQ = searchEl.value.trim(); render(); };
+  searchEl.oninput = () => { watchQ = searchEl.value.trim(); watchPage=0;render(); };
+  q('watchPrev').onclick=()=>{watchPage--;render();};q('watchNext').onclick=()=>{watchPage++;render();};
   useBtn.onclick = () => { void doSave(cur); };
 
   const doSave = async (selected = store.sel): Promise<void> => {
@@ -187,6 +207,6 @@ export function mountDeck(app: App): Screen {
       if (!dirty()) return true;
       return confirmDialog({title: loungeText("未保存の変更", "Unsaved changes", "저장하지 않은 변경"), body: loungeText("変更を破棄して移動しますか？", "Discard your changes and leave?", "변경을 취소하고 이동할까요?"), confirm: loungeText("破棄して移動", "Discard & leave", "취소하고 이동"), cancel: t("common.cancel")});
     },
-    destroy: () => { dead = true; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
+    destroy: () => { dead = true;watchRevision++; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
   };
 }

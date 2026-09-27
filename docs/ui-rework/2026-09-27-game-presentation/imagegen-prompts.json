@@ -1,0 +1,152 @@
+{
+  "mode": "built-in",
+  "originalRequest": "男女それぞれidle/被攻撃/攻撃/マナ増加/体力回復（最大体力増加を含む）の自然な16フレーム演出。LOREのパッシブごとに似合うアイコン。",
+  "assets": [
+    {
+      "color": "red",
+      "action": "idle",
+      "prompt": "Use case: stylized-concept. Production game portrait animation SPRITE SHEET, 2048 x 2048, exactly 4 columns x 4 rows, exactly SIXTEEN equal square cells, no gutters, no dividers, no text or numbering. Read left to right then top to bottom. The reference is the canon identity of LORE's female red Seeker, silver-blonde high ponytail/red ribbon/amber eyes/red shoulder cape/navy collar. Preserve face, hair, clothing, colors and proportions precisely.\nEvery cell is the SAME locked waist-up/upper torso portrait camera: full head and hair visible, eyes at 36% cell height, head centered x50%, shoulders fill lower width, body extends beyond bottom edge. Consistent scale and position across all frames. Three quarter face turned very slightly toward viewer left, upright neutral shoulders. Dark navy magical library ambience fills every pixel of each cell; opaque background, no transparency. Premium clean anime card-game painted art. Keep all body/hair inside each cell, no cross-cell effects.\nAnimation: One seamless gentle idle cycle: continuous soft breathing, loose hair locks and ponytail/braid sway in a very small breeze. Blink once at frames 8-10. Calm confident expression.\nCritical: these are successive small increments of ONE continuous animation, never separate illustrations or pose samples. Frame 1 and frame 16 must have identical neutral face, camera, silhouette and lighting so this joins other animations cleanly. Small smooth changes, no zoom, no camera shifts, no cutaways. Background identical each cell. No frame borders, no labels.",
+      "type": "seeker",
+      "key": "red-idle",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-96ab0788-184d-44d2-bfee-abf48f73a2f2.png"
+    },
+    {
+      "color": "red",
+      "action": "hurt",
+      "prompt": "Use case: stylized-concept. Production game portrait animation SPRITE SHEET, 2048 x 2048, exactly 4 columns x 4 rows, exactly SIXTEEN equal square cells, no gutters, no dividers, no text or numbering. Read left to right then top to bottom. The reference is the canon identity of LORE's female red Seeker, silver-blonde high ponytail/red ribbon/amber eyes/red shoulder cape/navy collar. Preserve face, hair, clothing, colors and proportions precisely.\nEvery cell is the SAME locked waist-up/upper torso portrait camera: full head and hair visible, eyes at 36% cell height, head centered x50%, shoulders fill lower width, body extends beyond bottom edge. Consistent scale and position across all frames. Three quarter face turned very slightly toward viewer left, upright neutral shoulders. Dark navy magical library ambience fills every pixel of each cell; opaque background, no transparency. Premium clean anime card-game painted art. Keep all body/hair inside each cell, no cross-cell effects.\nAnimation: A restrained hit reaction: neutral frames 1-3, shoulder recoils and eyes briefly wince frames 4-7, hair follows the recoil frames 6-10, eases fully back to neutral frames 14-16. No wounds.\nCritical: these are successive small increments of ONE continuous animation, never separate illustrations or pose samples. Frame 1 and frame 16 must have identical neutral face, camera, silhouette and lighting so this joins other animations cleanly. Small smooth changes, no zoom, no camera shifts, no cutaways. Background identical each cell. No frame borders, no labels.",
+      "type": "seeker",
+      "key": "red-hurt",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-5e93a5fa-c4ac-42f3-a4ec-9ce70059c96b.png"
+    },
+    {
+      "color": "red",
+      "action": "attack",
+      "prompt": "Use case: stylized-concept. Production game portrait animation SPRITE SHEET, 2048 x 2048, exactly 4 columns x 4 rows, exactly SIXTEEN equal square cells, no gutters, no dividers, no text or numbering. Read left to right then top to bottom. The reference is the canon identity of LORE's female red Seeker, silver-blonde high ponytail/red ribbon/amber eyes/red shoulder cape/navy collar. Preserve face, hair, clothing, colors and proportions precisely.\nEvery cell is the SAME locked waist-up/upper torso portrait camera: full head and hair visible, eyes at 36% cell height, head centered x50%, shoulders fill lower width, body extends beyond bottom edge. Consistent scale and position across all frames. Three quarter face turned very slightly toward viewer left, upright neutral shoulders. Dark navy magical library ambience fills every pixel of each cell; opaque background, no transparency. Premium clean anime card-game painted art. Keep all body/hair inside each cell, no cross-cell effects.\nAnimation: A decisive spell attack: neutral frames 1-3, raise the card hand slightly with focused eyes frames 4-7, cast toward camera with a small controlled gesture frames 8-10, return smoothly to neutral frames 14-16. Hair follows with overlap. No huge weapon.\nCritical: these are successive small increments of ONE continuous animation, never separate illustrations or pose samples. Frame 1 and frame 16 must have identical neutral face, camera, silhouette and lighting so this joins other animations cleanly. Small smooth changes, no zoom, no camera shifts, no cutaways. Background identical each cell. No frame borders, no labels.",
+      "type": "seeker",
+      "key": "red-attack",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-0f6ff674-5b53-4800-9f6d-9f90a2762e50.png"
+    },
+    {
+      "color": "red",
+      "action": "mana",
+      "prompt": "Use case: stylized-concept. Production game portrait animation SPRITE SHEET, 2048 x 2048, exactly 4 columns x 4 rows, exactly SIXTEEN equal square cells, no gutters, no dividers, no text or numbering. Read left to right then top to bottom. The reference is the canon identity of LORE's female red Seeker, silver-blonde high ponytail/red ribbon/amber eyes/red shoulder cape/navy collar. Preserve face, hair, clothing, colors and proportions precisely.\nEvery cell is the SAME locked waist-up/upper torso portrait camera: full head and hair visible, eyes at 36% cell height, head centered x50%, shoulders fill lower width, body extends beyond bottom edge. Consistent scale and position across all frames. Three quarter face turned very slightly toward viewer left, upright neutral shoulders. Dark navy magical library ambience fills every pixel of each cell; opaque background, no transparency. Premium clean anime card-game painted art. Keep all body/hair inside each cell, no cross-cell effects.\nAnimation: A pleased magical empowerment: neutral frames 1-3, subtle warm smile and inhale as cyan motes gather near chest frames 4-8, small pale cyan glow peaks frames 9-10, relaxed satisfied exhale back to neutral frames 14-16. Hair gently lifts and settles.\nCritical: these are successive small increments of ONE continuous animation, never separate illustrations or pose samples. Frame 1 and frame 16 must have identical neutral face, camera, silhouette and lighting so this joins other animations cleanly. Small smooth changes, no zoom, no camera shifts, no cutaways. Background identical each cell. No frame borders, no labels.",
+      "type": "seeker",
+      "key": "red-mana",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-4f417425-8c78-4753-97c5-84eb030eb7ca.png"
+    },
+    {
+      "color": "red",
+      "action": "heal",
+      "prompt": "Use case: stylized-concept. Production game portrait animation SPRITE SHEET, 2048 x 2048, exactly 4 columns x 4 rows, exactly SIXTEEN equal square cells, no gutters, no dividers, no text or numbering. Read left to right then top to bottom. The reference is the canon identity of LORE's female red Seeker, silver-blonde high ponytail/red ribbon/amber eyes/red shoulder cape/navy collar. Preserve face, hair, clothing, colors and proportions precisely.\nEvery cell is the SAME locked waist-up/upper torso portrait camera: full head and hair visible, eyes at 36% cell height, head centered x50%, shoulders fill lower width, body extends beyond bottom edge. Consistent scale and position across all frames. Three quarter face turned very slightly toward viewer left, upright neutral shoulders. Dark navy magical library ambience fills every pixel of each cell; opaque background, no transparency. Premium clean anime card-game painted art. Keep all body/hair inside each cell, no cross-cell effects.\nAnimation: A restorative animation: neutral frames 1-3, soften expression and close eyes while a restrained ivory-green light rises near chest frames 4-9, reopen eyes and return smoothly to neutral frames 14-16. Hair gently floats and settles.\nCritical: these are successive small increments of ONE continuous animation, never separate illustrations or pose samples. Frame 1 and frame 16 must have identical neutral face, camera, silhouette and lighting so this joins other animations cleanly. Small smooth changes, no zoom, no camera shifts, no cutaways. Background identical each cell. No frame borders, no labels.",
+      "type": "seeker",
+      "key": "red-heal",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-dea0c1aa-cf38-4493-b505-0ad33facaefb.png"
+    },
+    {
+      "color": "blue",
+      "action": "idle",
+      "prompt": "Use case: stylized-concept. Production game portrait animation SPRITE SHEET, 2048 x 2048, exactly 4 columns x 4 rows, exactly SIXTEEN equal square cells, no gutters, no dividers, no text or numbering. Read left to right then top to bottom. The reference is the canon identity of LORE's male blue Seeker, blue and cyan bangs/short rear braid/gold eyes/cobalt jacket/asymmetric white shoulder panel. Preserve face, hair, clothing, colors and proportions precisely.\nEvery cell is the SAME locked waist-up/upper torso portrait camera: full head and hair visible, eyes at 36% cell height, head centered x50%, shoulders fill lower width, body extends beyond bottom edge. Consistent scale and position across all frames. Three quarter face turned very slightly toward viewer left, upright neutral shoulders. Dark navy magical library ambience fills every pixel of each cell; opaque background, no transparency. Premium clean anime card-game painted art. Keep all body/hair inside each cell, no cross-cell effects.\nAnimation: One seamless gentle idle cycle: continuous soft breathing, loose hair locks and ponytail/braid sway in a very small breeze. Blink once at frames 8-10. Calm confident expression.\nCritical: these are successive small increments of ONE continuous animation, never separate illustrations or pose samples. Frame 1 and frame 16 must have identical neutral face, camera, silhouette and lighting so this joins other animations cleanly. Small smooth changes, no zoom, no camera shifts, no cutaways. Background identical each cell. No frame borders, no labels.",
+      "type": "seeker",
+      "key": "blue-idle",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-f69c3450-b3b9-4217-b4dd-6303525f0ac5.png"
+    },
+    {
+      "color": "blue",
+      "action": "hurt",
+      "prompt": "Use case: stylized-concept. Production game portrait animation SPRITE SHEET, 2048 x 2048, exactly 4 columns x 4 rows, exactly SIXTEEN equal square cells, no gutters, no dividers, no text or numbering. Read left to right then top to bottom. The reference is the canon identity of LORE's male blue Seeker, blue and cyan bangs/short rear braid/gold eyes/cobalt jacket/asymmetric white shoulder panel. Preserve face, hair, clothing, colors and proportions precisely.\nEvery cell is the SAME locked waist-up/upper torso portrait camera: full head and hair visible, eyes at 36% cell height, head centered x50%, shoulders fill lower width, body extends beyond bottom edge. Consistent scale and position across all frames. Three quarter face turned very slightly toward viewer left, upright neutral shoulders. Dark navy magical library ambience fills every pixel of each cell; opaque background, no transparency. Premium clean anime card-game painted art. Keep all body/hair inside each cell, no cross-cell effects.\nAnimation: A restrained hit reaction: neutral frames 1-3, shoulder recoils and eyes briefly wince frames 4-7, hair follows the recoil frames 6-10, eases fully back to neutral frames 14-16. No wounds.\nCritical: these are successive small increments of ONE continuous animation, never separate illustrations or pose samples. Frame 1 and frame 16 must have identical neutral face, camera, silhouette and lighting so this joins other animations cleanly. Small smooth changes, no zoom, no camera shifts, no cutaways. Background identical each cell. No frame borders, no labels.",
+      "type": "seeker",
+      "key": "blue-hurt",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-5d12e606-9c92-4c94-9d6b-7063ca721dcc.png"
+    },
+    {
+      "color": "blue",
+      "action": "attack",
+      "prompt": "Use case: stylized-concept. Production game portrait animation SPRITE SHEET, 2048 x 2048, exactly 4 columns x 4 rows, exactly SIXTEEN equal square cells, no gutters, no dividers, no text or numbering. Read left to right then top to bottom. The reference is the canon identity of LORE's male blue Seeker, blue and cyan bangs/short rear braid/gold eyes/cobalt jacket/asymmetric white shoulder panel. Preserve face, hair, clothing, colors and proportions precisely.\nEvery cell is the SAME locked waist-up/upper torso portrait camera: full head and hair visible, eyes at 36% cell height, head centered x50%, shoulders fill lower width, body extends beyond bottom edge. Consistent scale and position across all frames. Three quarter face turned very slightly toward viewer left, upright neutral shoulders. Dark navy magical library ambience fills every pixel of each cell; opaque background, no transparency. Premium clean anime card-game painted art. Keep all body/hair inside each cell, no cross-cell effects.\nAnimation: A decisive spell attack: neutral frames 1-3, raise the card hand slightly with focused eyes frames 4-7, cast toward camera with a small controlled gesture frames 8-10, return smoothly to neutral frames 14-16. Hair follows with overlap. No huge weapon.\nCritical: these are successive small increments of ONE continuous animation, never separate illustrations or pose samples. Frame 1 and frame 16 must have identical neutral face, camera, silhouette and lighting so this joins other animations cleanly. Small smooth changes, no zoom, no camera shifts, no cutaways. Background identical each cell. No frame borders, no labels.",
+      "type": "seeker",
+      "key": "blue-attack",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-481b8747-ecbd-4ab4-a0f6-871d2182571f.png"
+    },
+    {
+      "color": "blue",
+      "action": "mana",
+      "prompt": "Use case: stylized-concept. Production game portrait animation SPRITE SHEET, 2048 x 2048, exactly 4 columns x 4 rows, exactly SIXTEEN equal square cells, no gutters, no dividers, no text or numbering. Read left to right then top to bottom. The reference is the canon identity of LORE's male blue Seeker, blue and cyan bangs/short rear braid/gold eyes/cobalt jacket/asymmetric white shoulder panel. Preserve face, hair, clothing, colors and proportions precisely.\nEvery cell is the SAME locked waist-up/upper torso portrait camera: full head and hair visible, eyes at 36% cell height, head centered x50%, shoulders fill lower width, body extends beyond bottom edge. Consistent scale and position across all frames. Three quarter face turned very slightly toward viewer left, upright neutral shoulders. Dark navy magical library ambience fills every pixel of each cell; opaque background, no transparency. Premium clean anime card-game painted art. Keep all body/hair inside each cell, no cross-cell effects.\nAnimation: A pleased magical empowerment: neutral frames 1-3, subtle warm smile and inhale as cyan motes gather near chest frames 4-8, small pale cyan glow peaks frames 9-10, relaxed satisfied exhale back to neutral frames 14-16. Hair gently lifts and settles.\nCritical: these are successive small increments of ONE continuous animation, never separate illustrations or pose samples. Frame 1 and frame 16 must have identical neutral face, camera, silhouette and lighting so this joins other animations cleanly. Small smooth changes, no zoom, no camera shifts, no cutaways. Background identical each cell. No frame borders, no labels.",
+      "type": "seeker",
+      "key": "blue-mana",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-15ce02fe-6d6c-4992-b2c9-a9d25cbb8807.png"
+    },
+    {
+      "color": "blue",
+      "action": "heal",
+      "prompt": "Use case: stylized-concept. Production game portrait animation SPRITE SHEET, 2048 x 2048, exactly 4 columns x 4 rows, exactly SIXTEEN equal square cells, no gutters, no dividers, no text or numbering. Read left to right then top to bottom. The reference is the canon identity of LORE's male blue Seeker, blue and cyan bangs/short rear braid/gold eyes/cobalt jacket/asymmetric white shoulder panel. Preserve face, hair, clothing, colors and proportions precisely.\nEvery cell is the SAME locked waist-up/upper torso portrait camera: full head and hair visible, eyes at 36% cell height, head centered x50%, shoulders fill lower width, body extends beyond bottom edge. Consistent scale and position across all frames. Three quarter face turned very slightly toward viewer left, upright neutral shoulders. Dark navy magical library ambience fills every pixel of each cell; opaque background, no transparency. Premium clean anime card-game painted art. Keep all body/hair inside each cell, no cross-cell effects.\nAnimation: A restorative animation: neutral frames 1-3, soften expression and close eyes while a restrained ivory-green light rises near chest frames 4-9, reopen eyes and return smoothly to neutral frames 14-16. Hair gently floats and settles.\nCritical: these are successive small increments of ONE continuous animation, never separate illustrations or pose samples. Frame 1 and frame 16 must have identical neutral face, camera, silhouette and lighting so this joins other animations cleanly. Small smooth changes, no zoom, no camera shifts, no cutaways. Background identical each cell. No frame borders, no labels.",
+      "type": "seeker",
+      "key": "blue-heal",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-52c0b58f-6151-409b-be54-529e4c2c1b62.png"
+    },
+    {
+      "key": "counter",
+      "prompt": "Use case: stylized-concept. Single isolated LORE trading card game passive ability icon: a curved return arrow around an upright sword. Square 256x256 icon with genuine transparent background. One simple instantly readable ivory-silver and muted antique brass engraved symbol, a small navy enamel inset, subtle pale cyan accent, magical library artifact aesthetics. Centered motif occupies 85% of canvas, crisp broad silhouette readable at 24 pixels. No circular button, no decorative outer frame, no words, no labels, no letters, no background glow. Premium hand-painted game UI, restrained detail.",
+      "type": "passive",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-83c554cf-8011-4928-a0f1-b37aedbc2171.png"
+    },
+    {
+      "key": "dual",
+      "prompt": "Use case: stylized-concept. Single isolated LORE trading card game passive ability icon: two parallel crossed slender swords. Square 256x256 icon with genuine transparent background. One simple instantly readable ivory-silver and muted antique brass engraved symbol, a small navy enamel inset, subtle pale cyan accent, magical library artifact aesthetics. Centered motif occupies 85% of canvas, crisp broad silhouette readable at 24 pixels. No circular button, no decorative outer frame, no words, no labels, no letters, no background glow. Premium hand-painted game UI, restrained detail.",
+      "type": "passive",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-0dd4498a-fcd2-41e7-af1b-72fb89f69945.png"
+    },
+    {
+      "key": "ambush",
+      "prompt": "Use case: stylized-concept. Single isolated LORE trading card game passive ability icon: a dagger behind a crescent shadow. Square 256x256 icon with genuine transparent background. One simple instantly readable ivory-silver and muted antique brass engraved symbol, a small navy enamel inset, subtle pale cyan accent, magical library artifact aesthetics. Centered motif occupies 85% of canvas, crisp broad silhouette readable at 24 pixels. No circular button, no decorative outer frame, no words, no labels, no letters, no background glow. Premium hand-painted game UI, restrained detail.",
+      "type": "passive",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-d62a0c5c-3311-4aef-bd04-c6de77d1b224.png"
+    },
+    {
+      "key": "aura",
+      "prompt": "Use case: stylized-concept. Single isolated LORE trading card game passive ability icon: a luminous protective ring surrounding a tiny star. Square 256x256 icon with genuine transparent background. One simple instantly readable ivory-silver and muted antique brass engraved symbol, a small navy enamel inset, subtle pale cyan accent, magical library artifact aesthetics. Centered motif occupies 85% of canvas, crisp broad silhouette readable at 24 pixels. No circular button, no decorative outer frame, no words, no labels, no letters, no background glow. Premium hand-painted game UI, restrained detail.",
+      "type": "passive",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-ccd3e8ff-0e45-4d0d-adbc-d2f73e1b6d01.png"
+    },
+    {
+      "key": "void",
+      "prompt": "Use case: stylized-concept. Single isolated LORE trading card game passive ability icon: a page dissolving into a dark violet spiral. Square 256x256 icon with genuine transparent background. One simple instantly readable ivory-silver and muted antique brass engraved symbol, a small navy enamel inset, subtle pale cyan accent, magical library artifact aesthetics. Centered motif occupies 85% of canvas, crisp broad silhouette readable at 24 pixels. No circular button, no decorative outer frame, no words, no labels, no letters, no background glow. Premium hand-painted game UI, restrained detail.",
+      "type": "passive",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-7aca15f7-f094-4d14-9a7b-bb47e517b8e0.png"
+    },
+    {
+      "key": "guts",
+      "prompt": "Use case: stylized-concept. Single isolated LORE trading card game passive ability icon: an unbroken burning ivory heart. Square 256x256 icon with genuine transparent background. One simple instantly readable ivory-silver and muted antique brass engraved symbol, a small navy enamel inset, subtle pale cyan accent, magical library artifact aesthetics. Centered motif occupies 85% of canvas, crisp broad silhouette readable at 24 pixels. No circular button, no decorative outer frame, no words, no labels, no letters, no background glow. Premium hand-painted game UI, restrained detail.",
+      "type": "passive",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-4fb578d6-3331-4830-b2d7-36a5ec3953f1.png"
+    },
+    {
+      "key": "decay",
+      "prompt": "Use case: stylized-concept. Single isolated LORE trading card game passive ability icon: a withering leaf pierced by three small dark spots. Square 256x256 icon with genuine transparent background. One simple instantly readable ivory-silver and muted antique brass engraved symbol, a small navy enamel inset, subtle pale cyan accent, magical library artifact aesthetics. Centered motif occupies 85% of canvas, crisp broad silhouette readable at 24 pixels. No circular button, no decorative outer frame, no words, no labels, no letters, no background glow. Premium hand-painted game UI, restrained detail.",
+      "type": "passive",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-06df7024-3846-40f5-ac95-848763317835.png"
+    },
+    {
+      "key": "majesty",
+      "prompt": "Use case: stylized-concept. Single isolated LORE trading card game passive ability icon: a restrained three-point crown above an open book. Square 256x256 icon with genuine transparent background. One simple instantly readable ivory-silver and muted antique brass engraved symbol, a small navy enamel inset, subtle pale cyan accent, magical library artifact aesthetics. Centered motif occupies 85% of canvas, crisp broad silhouette readable at 24 pixels. No circular button, no decorative outer frame, no words, no labels, no letters, no background glow. Premium hand-painted game UI, restrained detail.",
+      "type": "passive",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-90a0fac3-302b-400a-89ca-6e0c6a20a8f9.png"
+    },
+    {
+      "key": "taunt",
+      "prompt": "Use case: stylized-concept. Single isolated LORE trading card game passive ability icon: a shield with an eye at its center. Square 256x256 icon with genuine transparent background. One simple instantly readable ivory-silver and muted antique brass engraved symbol, a small navy enamel inset, subtle pale cyan accent, magical library artifact aesthetics. Centered motif occupies 85% of canvas, crisp broad silhouette readable at 24 pixels. No circular button, no decorative outer frame, no words, no labels, no letters, no background glow. Premium hand-painted game UI, restrained detail.",
+      "type": "passive",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-0a45a26a-e113-44ff-a942-a5912d339f67.png"
+    },
+    {
+      "key": "evade",
+      "prompt": "Use case: stylized-concept. Single isolated LORE trading card game passive ability icon: a light feather sweeping past a curved arrow. Square 256x256 icon with genuine transparent background. One simple instantly readable ivory-silver and muted antique brass engraved symbol, a small navy enamel inset, subtle pale cyan accent, magical library artifact aesthetics. Centered motif occupies 85% of canvas, crisp broad silhouette readable at 24 pixels. No circular button, no decorative outer frame, no words, no labels, no letters, no background glow. Premium hand-painted game UI, restrained detail.",
+      "type": "passive",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-34afc3bb-4743-4ed9-98a6-530067d0c10d.png"
+    },
+    {
+      "key": "relic",
+      "prompt": "Use case: stylized-concept. Single isolated LORE trading card game passive ability icon: an ancient book clasp holding a blue crystal. Square 256x256 icon with genuine transparent background. One simple instantly readable ivory-silver and muted antique brass engraved symbol, a small navy enamel inset, subtle pale cyan accent, magical library artifact aesthetics. Centered motif occupies 85% of canvas, crisp broad silhouette readable at 24 pixels. No circular button, no decorative outer frame, no words, no labels, no letters, no background glow. Premium hand-painted game UI, restrained detail.",
+      "type": "passive",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-1c40ee39-1f20-4d9a-a997-eb0014117388.png"
+    }
+  ]
+}

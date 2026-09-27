@@ -151,7 +151,9 @@ assert(permanent.querySelector('.buff-infinity').src.endsWith('/modular/infinity
 assert(!permanent.querySelector('.buff-duration'));assert(!permanent.getAttribute('aria-label').includes('98'));
 const statusCard=cardEl({...mon,uid:'status-check',guts:2,decayCnt:1},{field:true,compactField:true,owner:g.players[0]});
 assert(!/\p{Extended_Pictographic}/u.test(statusCard.querySelector('.card-status').textContent));
-assert(statusCard.querySelector('.card-status').textContent.includes('気合 2'));
+assert(statusCard.querySelector('.passive-icon[data-psv=guts]').getAttribute('aria-label').includes('気合 2'));
+assert.equal(statusCard.querySelector('.passive-icon[data-psv=guts] img').getAttribute('src'),'/ui/passives/v1/guts.webp');
+assert(!statusCard.querySelector('.card-status').textContent.includes('気合'));
 // Without WebGL, draws must never hide cards or create a blocking overlay.
 const hand=document.getElementById('hand');
 await animateDraw(hand,2);

@@ -1,3 +1,5 @@
+import {revealCards} from '../ui/assetReadiness';
+import {loungeText} from '../ui/loungeText';
 import { homeIcon } from "../ui/homeIcons";
 // ============================================================
 // LORE — card list / gallery. Browse every card in card-UI form.
@@ -6,7 +8,7 @@ import { homeIcon } from "../ui/homeIcons";
 // ============================================================
 import type { App, Screen } from "../router";
 import type { CardInst, CardType } from "../shared/types";
-import { DB, STARTERS } from "../shared/cards";
+import { DB, STARTERS, cardPassives, PASSIVES } from "../shared/cards";
 import { cardEl } from "../ui/cardView";
 import { zoomCard } from "../ui/anim";
 import { t, cardName, onLangChange, getLang } from "../i18n";
@@ -28,6 +30,7 @@ export function mountCards(app: App): Screen {
   let typeF: TypeFilter = "all";
   let costF = -1; // -1 = all
   let q = "";
+  let page=0,revision=0;const pageSize=24;
 
   const wrap = document.createElement("div");
   wrap.className = "screen cards-screen";
@@ -45,8 +48,8 @@ export function mountCards(app: App): Screen {
         <div class="chip-row" id="typeRow"></div>
         <div class="chip-row" id="costRow"></div>
       </div>
-      <div class="cards-hint">${t("cards.hint")}</div>
-      <div class="cards-grid" id="grid"></div>
+      <div class="cards-hint">${t("cards.hint")}<button id="resetFilters">${loungeText("条件をリセット","Reset filters","필터 초기화")}</button></div>
+      <div class="cards-grid" id="grid"></div><div class="collection-pager"><button id="prevPage" aria-label="${loungeText("前のページ","Previous page","이전 페이지")}">‹</button><span id="pageLabel" aria-live="polite"></span><button id="nextPage" aria-label="${loungeText("次のページ","Next page","다음 페이지")}">›</button></div>
     </div>`;
   app.root.appendChild(wrap);
   wrap.querySelector(".cards-lang")!.appendChild(langSelectEl());
@@ -67,7 +70,7 @@ export function mountCards(app: App): Screen {
   const typeChips = typeDefs.map(([key, label]) => {
     const b = document.createElement("button");
     b.className = "chip"; b.textContent = label;
-    b.onclick = () => { typeF = key; render(); };
+    b.onclick = () => { typeF = key; page=0; render(); };
     typeRow.appendChild(b);
     return { key, el: b };
   });
@@ -78,7 +81,7 @@ export function mountCards(app: App): Screen {
   const addCost = (val: number, label: string) => {
     const b = document.createElement("button");
     b.className = "chip"; b.textContent = label;
-    b.onclick = () => { costF = val; render(); };
+    b.onclick = () => { costF = val; page=0; render(); };
     costRow.appendChild(b);
     costChips.push({ val, el: b });
   };
@@ -86,9 +89,13 @@ export function mountCards(app: App): Screen {
   costs.forEach((c) => addCost(c, String(c)));
 
   const search = wrap.querySelector("#search") as HTMLInputElement;
-  search.oninput = () => { q = search.value.trim().toLowerCase(); render(); };
+  search.oninput = () => { q = search.value.trim().toLowerCase(); page=0; render(); };
 
+  (wrap.querySelector('#prevPage') as HTMLButtonElement).onclick=()=>{page--;render();};
+  (wrap.querySelector('#nextPage') as HTMLButtonElement).onclick=()=>{page++;render();};
+  (wrap.querySelector('#resetFilters') as HTMLButtonElement).onclick=()=>{typeF='all';costF=-1;q='';page=0;search.value='';render();};
   function render(): void {
+    const version=++revision;
     typeChips.forEach((c) => c.el.classList.toggle("is-on", c.key === typeF));
     costChips.forEach((c) => c.el.classList.toggle("is-on", c.val === costF));
 
@@ -98,12 +105,15 @@ export function mountCards(app: App): Screen {
       else if (typeF === "quick") { if (!c.quick) return false; }
       else if (typeF !== "all" && c.t !== typeF) return false;
       if (costF !== -1 && c.cost !== costF) return false;
-      if (q && !cardName(c).toLowerCase().includes(q) && !c.name.toLowerCase().includes(q)) return false;
+      if(q && ![cardName(c),c.name,c.text,c.textJa,...cardPassives(c).map(k=>PASSIVES[k]?.[getLang()].name)].join(' ').toLowerCase().includes(q))return false;
       return true;
     });
 
     count.textContent = `${list.length}${t("cards.count")}`;
-    grid.innerHTML = "";
+    const pages=Math.max(1,Math.ceil(list.length/pageSize));page=Math.max(0,Math.min(page,pages-1));
+    (wrap.querySelector('#prevPage') as HTMLButtonElement).disabled=page===0;
+    (wrap.querySelector('#nextPage') as HTMLButtonElement).disabled=page===pages-1;
+    wrap.querySelector('#pageLabel')!.textContent=`${page+1} / ${pages}`;
     if (!list.length) {
       grid.innerHTML = `<div class="cards-empty">${t("cards.empty")}</div>`;
       return;
@@ -111,7 +121,7 @@ export function mountCards(app: App): Screen {
     const frag = document.createDocumentFragment();
     // lazyArt takes the index: the first screenful loads immediately (it is what
     // the player is looking at the moment they switch tabs), the rest defer.
-    list.forEach((c, i) => {
+    list.slice(page*pageSize,(page+1)*pageSize).forEach((c, i) => {
       const node = cardEl(c, { size: "mkt", lazyArt: i });
       node.style.cursor = "pointer";
       node.onclick = () => zoomCard(c);
@@ -119,12 +129,12 @@ export function mountCards(app: App): Screen {
       node.onkeydown = e => { if(e.key === "Enter" || e.key === " "){e.preventDefault();zoomCard(c);} };
       frag.appendChild(node);
     });
-    grid.appendChild(frag);
+    void revealCards(grid,Array.from(frag.childNodes),()=>version===revision);
   }
 
   (wrap.querySelector("#back") as HTMLElement).onclick = () => app.home();
   render();
 
   const unsub = onLangChange(() => app.cards());
-  return { destroy: unsub };
+  return { destroy: ()=>{revision++;unsub();} };
 }

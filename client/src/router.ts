@@ -1,3 +1,4 @@
+import {coverScreen} from './ui/assetReadiness';
 import { mountLounge, type LoungePage } from "./ui/lounge";
 // ============================================================
 // LORE — tiny screen router + auth/session context.
@@ -31,6 +32,7 @@ export class App {
   private current: Screen | null = null;
   private leaveLounge: (() => void) | null = null;
   private navigating = false;
+  private cancelCover:(()=>void)|undefined;
 
   constructor(root: HTMLElement) { this.root = root; }
 
@@ -81,11 +83,12 @@ export class App {
   // the mount fn appends to root, so it must run after innerHTML is cleared.)
   private swap(make: () => Screen, page?: LoungePage): void {
     const mount = () => {
+      this.cancelCover?.();
       this.current?.destroy?.();
       this.leaveLounge?.(); this.leaveLounge = null;
       this.root.innerHTML = "";
       this.current = make();
-      if (page) this.leaveLounge = mountLounge(this, page);
+      if (page) { this.leaveLounge = mountLounge(this, page);const cover=coverScreen(this.root);this.cancelCover=cover.cancel;void cover.ready(); }
     };
     if (this.navigating) return;
     if (this.current?.beforeLeave) {
