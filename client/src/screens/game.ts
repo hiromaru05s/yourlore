@@ -10,6 +10,7 @@ import { OnlineController } from "../game/online";
 import { setMarketWatch, setMyAvatar, setMySleeve, setMyFurniture, setOppAvatar } from "../ui/boardView";
 import { startBoardLayout } from "../ui/layout";
 import { setCoinProfiles } from "../game/controller";
+import { HOME_MUSIC_GAIN, startBackgroundMusic } from "../ui/backgroundMusic";
 
 type GameOpts =
   | { mode: "bot"; difficulty?: BotDifficulty }
@@ -52,6 +53,11 @@ export function mountGame(app: App, opts: GameOpts): Screen {
   // fit-to-viewport board sizing — started AFTER the controller built the board
   // skeleton, because the solver measures the real rows (see ui/layout.ts).
   const stopLayout = startBoardLayout();
+  const stopMusic = opts.mode === "tutorial" ? undefined : startBackgroundMusic({
+    url: "/music/poised-opening.mp3",
+    gain: HOME_MUSIC_GAIN * .6,
+    gapMs: 3000,
+  });
 
-  return { destroy: () => { stopLayout(); ctrl.destroy(); } };
+  return { destroy: () => { stopMusic?.(); stopLayout(); ctrl.destroy(); } };
 }

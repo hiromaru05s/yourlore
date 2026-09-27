@@ -52,7 +52,7 @@ function fadeOut(voice:Voice){
 /** Invalidate pending decodes as well as playing voices. Nothing leaks into the next scene. */
 export function stopSounds(){epoch++;last.clear();for(const voice of [...active])fadeOut(voice);}
 export function getSfxVolume(){return volume;}
-export function setSfxVolume(v:number){if(!Number.isFinite(v))return;volume=Math.max(0,Math.min(1,v));try{localStorage.setItem('lore_sfx',String(volume));}catch{}if(master&&ctx)master.gain.setTargetAtTime(volume*volume,ctx.currentTime,.015);if(!volume)stopSounds();}
+export function setSfxVolume(v:number){if(!Number.isFinite(v))return;volume=Math.max(0,Math.min(1,v));try{localStorage.setItem('lore_sfx',String(volume));}catch{}if(master&&ctx)master.gain.setTargetAtTime(volume*volume,ctx.currentTime,.015);if(!volume)stopSounds();document.dispatchEvent(new Event('lore:volume-change'));}
 export interface SoundOptions {signal?:AbortSignal;}
 export function sfx(name:SfxName,options:SoundOptions={}):void{
  if(!unlocked||!ctx||!master||volume<=0||document.hidden||options.signal?.aborted)return;
