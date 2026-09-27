@@ -1,0 +1,78 @@
+{
+  "origin": "https://test.yourlore.xyz/?v=178c31e",
+  "phases": [
+    {
+      "phase": "faceoff",
+      "ms": 0
+    },
+    {
+      "phase": "dock",
+      "ms": 6301
+    },
+    {
+      "phase": "toss",
+      "ms": 7002
+    },
+    {
+      "phase": "reveal",
+      "ms": 8503
+    },
+    {
+      "phase": "deal",
+      "ms": 9101
+    },
+    {
+      "phase": "ready",
+      "ms": 10451
+    }
+  ],
+  "introEnded": 20793.900000095367,
+  "battleStarted": 21020.5,
+  "battleVolume": 0.14699999999999996,
+  "activeTracks": 1,
+  "battleLoopGapMs": 3001.7000000476837,
+  "soundRequests": [
+    "/sfx/lore-v3/click-1.mp3",
+    "/sfx/lore-v3/click-2.mp3",
+    "/sfx/lore-v3/click-3.mp3",
+    "/sfx/lore-v3/pop.mp3",
+    "/sfx/lore-v3/error.mp3",
+    "/sfx/lore-v4/play.mp3",
+    "/sfx/lore-v4/duel-start.mp3",
+    "/sfx/lore-v4/coinToss.mp3",
+    "/sfx/lore-v4/summon.mp3",
+    "/sfx/lore-v4/attack-1.mp3",
+    "/sfx/lore-v4/coinLand.mp3",
+    "/sfx/lore-v4/attack-2.mp3",
+    "/sfx/lore-v4/attack-3.mp3",
+    "/sfx/lore-v4/turn.mp3",
+    "/sfx/lore-v4/impact-1.mp3",
+    "/sfx/lore-v4/draw-1.mp3",
+    "/sfx/lore-v4/impact-2.mp3",
+    "/sfx/lore-v4/draw-2.mp3",
+    "/sfx/lore-v4/impact-3.mp3",
+    "/sfx/lore-v4/draw-3.mp3",
+    "/sfx/lore-v4/damage.mp3",
+    "/sfx/lore-v4/heal.mp3",
+    "/sfx/lore-v4/death.mp3",
+    "/sfx/lore-v4/trapSet.mp3",
+    "/sfx/lore-v4/trap.mp3",
+    "/sfx/lore-v4/buy.mp3",
+    "/sfx/lore-v4/mana.mp3",
+    "/sfx/lore-v4/win.mp3",
+    "/sfx/lore-v4/lose.mp3",
+    "/sfx/lore-v4/drawGame.mp3",
+    "/sfx/lore-v4/match.mp3",
+    "/sfx/lore-v4/coin.mp3",
+    "/sfx/lore-v4/facehit.mp3",
+    "/sfx/lore-v4/mimic.mp3",
+    "/sfx/lore-v4/mana-pay.mp3",
+    "/sfx/lore-v4/void.mp3",
+    "/sfx/lore-v4/shuffle.mp3",
+    "/sfx/lore-v4/discard.mp3",
+    "/sfx/lore-v4/diceRoll.mp3",
+    "/sfx/lore-v4/diceLand.mp3"
+  ],
+  "errors": [],
+  "boundary": "Account/API fixture; deployed app, real BOT game and real audio playback"
+}

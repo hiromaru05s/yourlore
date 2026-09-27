@@ -1,0 +1,16 @@
+{
+  "runtimeCommit": "178c31e4824747ebd5c0ff49951dbd8e57e19487",
+  "url": "https://test.yourlore.xyz/?v=178c31e",
+  "worker": "lore-server-staging",
+  "workerVersion": "d8d90c19-b472-4e02-9834-d939cec97df3",
+  "environment": "staging",
+  "assetHashes": "staging/hashes.json",
+  "matchedFiles": 58,
+  "clipDecodeCheck": "staging/audio-browser.json",
+  "preservedUiFiles": 5,
+  "newDuelFiles": 35,
+  "music": "Existing three user-provided recordings retained",
+  "integratedBotCheck": "staging/browser.json",
+  "battleLoopGapMs": 3001.7000000476837,
+  "pageErrors": []
+}
