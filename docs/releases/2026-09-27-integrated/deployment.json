@@ -1,0 +1,40 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "workerVersion": "3bc2bee7-d572-4759-8d4f-f8f33fbdd5c4",
+  "sourceCommit": "57feec7164c01a8559cdddac7de2e443f1b6da90",
+  "recordedAt": "2026-09-27T00:01:13.564776+00:00",
+  "productionDeployed": false,
+  "integrated": {
+    "priorIntegratedBase": "f297070",
+    "balanceV52": "1477896",
+    "seekerMenus": "5daa145",
+    "presentation": "932a8ac",
+    "originalEquivalentPresentation": "dd855a4",
+    "solidDraw": "eb9b947",
+    "synchronizedOpening": "c673e4e",
+    "merge": "dadd378",
+    "integrationFixes": "57feec7"
+  },
+  "excluded": [
+    "archive-pre-lounge branches: saved historical working snapshots, superseded by current approved UI",
+    "untracked design exports, recordings and scratch artifacts: preserved in place"
+  ],
+  "verification": {
+    "typecheck": true,
+    "build": true,
+    "dryRun": true,
+    "openingServer": true,
+    "solidDrawWithExternalAbort": true,
+    "motionV2": true,
+    "duelUI": true,
+    "quickPlayback": true,
+    "ceremonyAudioAim": true,
+    "balanceV52": true,
+    "rank": true,
+    "settlement": true,
+    "localOpeningBrowser": "opening/browser-report.json",
+    "deployedMenuBrowser": "staging-menu/game-polish-report.json",
+    "authenticatedOnlineMatch": false
+  }
+}
