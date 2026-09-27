@@ -12,5 +12,19 @@
     "originalBytes": 1996219,
     "bytes": 182326,
     "sha256": "6e9f7492a8abdf0aba0be76417823f758a3b07d882a27b49dd825749b7f79aa7"
+  },
+  {
+    "source": "client/public/art/biblion/seeker-blue.png",
+    "runtime": "client/public/art/seekers/menu-v1/blue.webp",
+    "originalBytes": 2148692,
+    "bytes": 46460,
+    "sha256": "883bffde28c70eee71d1309bfa7191f0e4eb3b5df28f0002466522940bc192b2"
+  },
+  {
+    "source": "client/public/art/biblion/seeker-red.png",
+    "runtime": "client/public/art/seekers/menu-v1/red.webp",
+    "originalBytes": 2247659,
+    "bytes": 53898,
+    "sha256": "56579618dda3569ace594eec904eb5fd7b3a2d9df8cce4134c9cbd3507c1242c"
   }
 ]

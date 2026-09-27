@@ -3,13 +3,13 @@ import {loungeText} from './loungeText';
 import {getLang} from '../i18n';
 const decoded=new Map<string,Promise<void>>();
 export function decodeAsset(url:string):Promise<void>{
- let task=decoded.get(url);if(!task){const img=new Image();img.src=url;task=img.decode().then(()=>{}).catch(error=>{decoded.delete(url);throw error;});decoded.set(url,task);}return task;
+ let task=decoded.get(url);if(!task){const img=new Image();img.loading="eager";img.fetchPriority="high";img.src=url;task=img.decode().then(()=>{}).catch(error=>{decoded.delete(url);throw error;});decoded.set(url,task);}return task;
 }
 export function imageUrls(root:HTMLElement):string[]{
  const urls=new Set<string>();
  for(const el of [root,...root.querySelectorAll<HTMLElement>('*')]){
-  if(el instanceof HTMLImageElement){el.loading='eager';if(el.currentSrc||el.src)urls.add(el.currentSrc||el.src);}
-  for(const pseudo of [null,'::before','::after'])for(const m of getComputedStyle(el,pseudo).backgroundImage.matchAll(/url\(["']?(.*?)["']?\)/g))urls.add(m[1]);
+  if(el instanceof HTMLImageElement){el.loading='eager';el.fetchPriority='high';if(el.currentSrc||el.src)urls.add(el.currentSrc||el.src);}
+  for(const pseudo of [null,'::before','::after']){const style=getComputedStyle(el,pseudo);if(pseudo&&(style.content==='none'||style.content==='normal'))continue;for(const m of style.backgroundImage.matchAll(/url\(["']?(.*?)["']?\)/g))urls.add(m[1]);}
  }
  return [...urls];
 }

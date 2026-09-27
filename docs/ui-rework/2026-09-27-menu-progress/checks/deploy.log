@@ -2,26 +2,28 @@
  ⛅️ wrangler 4.130.0 (update available 4.141.0)
 ───────────────────────────────────────────────
 🌀 Building list of assets...
-✨ Read 1941 files from the assets directory /Users/hiromaru05s/Desktop/LORE_TCG/client/dist
+✨ Read 1943 files from the assets directory /Users/hiromaru05s/Desktop/LORE_TCG/client/dist
 🌀 Starting asset upload...
-🌀 Found 10 new or modified static assets to upload. Proceeding with upload...
+🌀 Found 12 new or modified static assets to upload. Proceeding with upload...
 + /index.html
-+ /assets/paperDraw-DElMSPqj.js.map
-+ /assets/duelScene-CXJ3gPKF.js.map
-+ /assets/main-BGfhR63j.js.map
-+ /assets/riftScene-BJlXry-1.js
-+ /assets/riftScene-BJlXry-1.js.map
-+ /assets/main-BHuL8O5z.css
-+ /assets/paperDraw-DElMSPqj.js
-+ /assets/duelScene-CXJ3gPKF.js
-+ /assets/main-BGfhR63j.js
-Uploaded 3 of 10 assets
-Uploaded 6 of 10 assets
-Uploaded 10 of 10 assets
-✨ Success! Uploaded 10 files (1871 already uploaded) (2.56 sec)
++ /assets/paperDraw-BgA1jqEZ.js.map
++ /assets/duelScene-BT2UT1w5.js
++ /assets/main-Df5QmVkx.css
++ /assets/riftScene-D4JlsueT.js
++ /assets/riftScene-D4JlsueT.js.map
++ /assets/duelScene-BT2UT1w5.js.map
++ /assets/main-CTayg36K.js
++ /assets/paperDraw-BgA1jqEZ.js
++ /art/brand/lore-logo-transparent.webp
++ /art/lounge/stage-v1/sigil.webp
++ /assets/main-CTayg36K.js.map
+Uploaded 4 of 12 assets
+Uploaded 8 of 12 assets
+Uploaded 12 of 12 assets
+✨ Success! Uploaded 12 files (1871 already uploaded) (2.65 sec)
 
 Total Upload: 1048.23 KiB / gzip: 224.86 KiB
-Worker Startup Time: 61 ms
+Worker Startup Time: 48 ms
 Your Worker has access to the following bindings:
 Binding                                                                Resource                  
 env.MATCHMAKER (Matchmaker)                                            Durable Object            
@@ -32,7 +34,7 @@ env.APP_ORIGIN ("*")                                                   Environme
 env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")      Environment Variable      
 env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")          Environment Variable      
 
-Uploaded lore-server-staging (8.32 sec)
-Deployed lore-server-staging triggers (2.12 sec)
+Uploaded lore-server-staging (11.07 sec)
+Deployed lore-server-staging triggers (4.11 sec)
   test.yourlore.xyz (custom domain)
-Current Version ID: eff6e8c5-7042-4641-a1bd-5871dcd2531b
+Current Version ID: da0e76eb-1c39-401b-8953-093466cd3745
