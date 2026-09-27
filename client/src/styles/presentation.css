@@ -67,3 +67,4 @@ body.lounge-active .bot-diff{width:min(940px,94vw);max-width:940px;background:li
 .lounge-login .auth-card::before{background-image:url('/art/brand/lore-logo-transparent.webp')}
 /* Menu portraits are small emblems; retain the full-resolution duel artwork. */
 .lounge-shell .seeker-blue{background-image:url('/art/seekers/menu-v1/blue.webp')}.lounge-shell .seeker-red{background-image:url('/art/seekers/menu-v1/red.webp')}
+.lounge-content .shop-empty{background-image:linear-gradient(#07192dc7,#091a31ed),url('/art/lounge/v1/library.webp')}
