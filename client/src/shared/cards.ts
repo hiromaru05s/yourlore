@@ -1,4 +1,4 @@
-import {COSMETICS} from './cosmetics';
+import {COSMETICS,equipmentId} from './cosmetics';
 import { EXPANSION_CARDS, COUNTER_IDS } from "./expansionCards";
 import { QUEST_QUICK_CARDS } from "./questQuickCards";
 // ============================================================
@@ -1229,18 +1229,18 @@ export function sanitizeDeck(ids: unknown): string[] {
 // ---- 덱 프리셋 (5슬롯) + 덱별 "마켓 알림이" 워치리스트 ----
 export const DECK_SLOTS = 5;
 export const WATCH_MAX = 12; // 알림이 최대 — 너무 많으면 하이라이트가 의미 없어짐
-export interface DeckPreset { cards: string[]; watch: string[]; name?: string }
+export interface DeckPreset { cards: string[]; watch: string[]; name?: string; sleeve: string; furniture: string }
 export function sanitizeDeckName(value: unknown): string {
   return typeof value === "string" ? Array.from(value.replace(/[\u0000-\u001f\u007f]/g, "").trim()).slice(0,24).join("") : "";
 }
 export interface DeckStore { sel: number; list: DeckPreset[] }
 /** 저장된 프리셋 묶음을 항상 유효한 형태(5슬롯, 각 8장, 알림이는 구매 가능 카드만)로 정규화. */
-export function sanitizeDecks(raw: unknown): DeckStore {
+export function sanitizeDecks(raw: unknown, legacy: {sleeve?:string|null;furniture?:string|null} = {}): DeckStore {
   const o = (raw && typeof raw === "object" ? raw : {}) as { sel?: unknown; list?: unknown };
   const listIn = Array.isArray(o.list) ? o.list : [];
   const list: DeckPreset[] = [];
   for (let i = 0; i < DECK_SLOTS; i++) {
-    const d = (listIn[i] ?? {}) as { cards?: unknown; watch?: unknown; name?: unknown };
+    const d = (listIn[i] ?? {}) as { cards?: unknown; watch?: unknown; name?: unknown; sleeve?:unknown; furniture?:unknown };
     const cards = sanitizeDeck(d.cards ?? DEFAULT_DECK_8);
     const wIn = Array.isArray(d.watch) ? d.watch : [];
     const watch: string[] = [];
@@ -1249,11 +1249,17 @@ export function sanitizeDecks(raw: unknown): DeckStore {
       if (!watch.includes(id) && watch.length < WATCH_MAX) watch.push(id);
     }
     const name = sanitizeDeckName(d.name);
-    list.push({ cards, watch, ...(name ? {name} : {}) });
+    list.push({ cards, watch, ...(name ? {name} : {}), sleeve:equipmentId(d.sleeve===undefined?legacy.sleeve:d.sleeve,'sleeve'), furniture:equipmentId(d.furniture===undefined?legacy.furniture:d.furniture,'furniture') });
   }
   let sel = typeof o.sel === "number" && Number.isFinite(o.sel) ? Math.floor(o.sel) : 0;
   if (sel < 0 || sel >= DECK_SLOTS) sel = 0;
   return { sel, list };
+}
+
+/** Legacy account-wide equipment is inherited by each unsaved slot once.
+ * Explicit per-deck defaults always win over the legacy account columns. */
+export function deckStoreForUser(user?:{decks?:unknown;deck?:string[]|null;sleeve?:string|null;furniture?:string|null}|null):DeckStore {
+ return sanitizeDecks(user?.decks??(user?.deck?{sel:0,list:[{cards:user.deck}]}:null),user??{});
 }
 
 // 주사위·확률 카드 (결과 팝업 + 운명의 수레바퀴 재굴림 대상)

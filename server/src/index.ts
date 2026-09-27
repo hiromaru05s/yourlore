@@ -5,7 +5,7 @@
 // ============================================================
 import type { Env } from "./env";
 import { corsHeaders, getUser, handleAuth } from "./auth";
-import { sanitizeDeck, sanitizeDecks } from "../../client/src/shared/cards";
+import {saveUserDecks} from "./decks";
 import { getRating, handleRank } from "./rank";
 import { handleGoogleOAuth } from "./oauth";
 import { handleInvite } from "./invite";
@@ -106,19 +106,9 @@ export default {
       const hdrs = { "content-type": "application/json", ...corsHeaders(env) };
       if (!user) return new Response(JSON.stringify({ error: "로그인이 필요합니다" }), { status: 401, headers: hdrs });
       const body = (await req.json().catch(() => ({}))) as { deck?: unknown; decks?: unknown };
-      let store;
-      if (body.decks !== undefined) {
-        store = sanitizeDecks(body.decks); // 5슬롯 전체 저장 (각 8장 + 알림이 검증)
-      } else {
-        // 레거시 단일 덱 저장 → 현재 선택 슬롯에 반영
-        store = sanitizeDecks(user.decks);
-        store.list[store.sel] = { cards: sanitizeDeck(body.deck), watch: store.list[store.sel].watch };
-      }
-      const active = store.list[store.sel].cards;
-      // deck(csv) = 활성 덱 캐시 — 매치메이커/친선전/봇전이 이 값을 그대로 사용
-      await env.DB.prepare(`UPDATE users SET decks = ?, deck = ? WHERE id = ?`)
-        .bind(JSON.stringify(store), active.join(","), user.id).run();
-      return new Response(JSON.stringify({ ok: true, decks: store, deck: active }), { headers: hdrs });
+      const result=await saveUserDecks(env,user,body);
+      if(!result)return new Response(JSON.stringify({error:"未所持の商品は装備できません"}),{status:400,headers:hdrs});
+      return new Response(JSON.stringify(result),{headers:hdrs});
     }
 
     if (path.startsWith("/api/")) {

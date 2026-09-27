@@ -1,3 +1,4 @@
+import {deckStoreForUser} from '../../client/src/shared/cards';
 // ============================================================
 // LORE server — email+password auth on D1.
 // Passwords: PBKDF2-SHA256 (salt:hash hex). Sessions: opaque
@@ -87,7 +88,9 @@ export async function getUser(env: Env, req: Request): Promise<SessionUser | nul
   if (!row || row.expires_at < Date.now()) return null;
   let decks: unknown = null;
   try { decks = row.decks ? JSON.parse(row.decks) : null; } catch { decks = null; }
-  return { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses, credits: row.credits, avatar: row.avatar, badge: row.badge, sleeve: row.sleeve||"default", furniture:row.furniture||"default", deck: row.deck ? row.deck.split(",") : null, decks };
+  const store=deckStoreForUser({decks,deck:row.deck?row.deck.split(','):null,sleeve:row.sleeve,furniture:row.furniture});
+  const active=store.list[store.sel];
+  return { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses, credits: row.credits, avatar: row.avatar, badge: row.badge, sleeve: active.sleeve, furniture:active.furniture, deck:active.cards, decks:store };
 }
 
 export async function createSession(env: Env, userId: string): Promise<string> {

@@ -1,3 +1,5 @@
+import {renderDeckAppearance} from '../ui/deckAppearance';
+import {isLocalDevAccount,loadLocalGuestProfile} from '../dev/localAccount';
 import {fitCardRows} from '../ui/cardDensity';
 import {revealCards} from '../ui/assetReadiness';
 import { homeIcon } from "../ui/homeIcons";
@@ -8,7 +10,7 @@ import { loungeText } from "../ui/loungeText";
 // 은은하게 표시된다. 저장은 서버(users.decks JSON + 활성 덱 csv 캐시).
 // ============================================================
 import type { App, Screen } from "../router";
-import { DB, STARTERS, DECK_POOL, DECK_SIZE, DECK_MAX_COPIES, DECK_SLOTS, WATCH_MAX, BUYABLE_POOL, sanitizeDecks, sanitizeDeckName, type DeckStore } from "../shared/cards";
+import { DB, STARTERS, DECK_POOL, DECK_SIZE, DECK_MAX_COPIES, DECK_SLOTS, WATCH_MAX, BUYABLE_POOL, deckStoreForUser, sanitizeDeckName, type DeckStore } from "../shared/cards";
 import type { CardDef, CardInst } from "../shared/types";
 import { cardEl } from "../ui/cardView";
 import { bindZoom, zoomCard } from "../ui/anim";
@@ -31,7 +33,7 @@ export function mountDeck(app: App): Screen {
       </div>
       <div class="deck-tabs" id="deckTabs"></div>
       <div class="deck-note">${t("deck.note")}</div>
-      <div class="deck-local-tabs" role="tablist"><button id="editTab" role="tab" aria-selected="true">${t("deck.current")}</button><button id="watchTab" role="tab" aria-selected="false">${t("deck.watch.title")}</button></div>
+      <div class="deck-local-tabs" role="tablist"><button id="editTab" role="tab" aria-selected="true">${t("deck.current")}</button><button id="watchTab" role="tab" aria-selected="false">${t("deck.watch.title")}</button><button id="appearanceTab" role="tab" aria-selected="false">${loungeText("外観","Appearance","외형")}</button></div>
       <section id="deckEditSection">
       <div class="deck-current-column"><div class="deck-cur-head"><span>${t("deck.current")} <b id="deckCount"></b></span><button class="btn btn-ghost deck-use" id="useBtn"></button></div>
       <div class="deck-cur" id="deckCur"></div>
@@ -41,15 +43,17 @@ export function mountDeck(app: App): Screen {
       <div class="deck-note">${t("deck.watch.desc")}</div>
       <input class="deck-watch-search" id="watchSearch" placeholder="${t("deck.watch.search")}">
       <div class="deck-pool deck-watchpool" id="watchPool"></div><div class="collection-pager"><button id="watchPrev">‹</button><span id="watchPage"></span><button id="watchNext">›</button></div>
-      </section><div class="deck-msg" id="deckMsg" role="status" aria-live="polite"></div>
+      </section><section id="deckAppearanceSection" hidden></section><div class="deck-msg" id="deckMsg" role="status" aria-live="polite"></div>
     </div>`;
   app.root.appendChild(wrap);
 
   // ---- 상태: 서버 저장분(프리셋 5슬롯) 로드, 없으면 기존 단일 덱을 1번 슬롯에 승계 ----
-  const store: DeckStore = sanitizeDecks(app.user?.decks ?? (app.user?.deck ? { sel: 0, list: [{ cards: app.user.deck, watch: [] }] } : null));
+  const store: DeckStore = deckStoreForUser(app.user);
   let cur = store.sel; // 현재 편집 중인 슬롯 (store.sel = 게임에 사용되는 슬롯)
   let watchQ = "";
+  let activeTab:'edit'|'watch'|'appearance'='edit';
   let watching=false,watchPage=0,watchRevision=0;
+  let owned:Set<string>|null=null,cosmeticError=false;
   let saved = JSON.stringify(store);
   let saving = false;
   let dead = false;
@@ -61,13 +65,15 @@ export function mountDeck(app: App): Screen {
   const saveBtn = q("save") as HTMLButtonElement, useBtn = q("useBtn") as HTMLButtonElement;
   const searchEl = q("watchSearch") as HTMLInputElement;
 
-  const setTab = (next: boolean): void => {
-    watching=next;
-    q("deckEditSection").hidden = watching; q("deckWatchSection").hidden = !watching;
-    q("editTab").setAttribute("aria-selected", String(!watching)); q("watchTab").setAttribute("aria-selected", String(watching));
+  const setTab = (next:typeof activeTab):void => {
+    activeTab=next;watching=next==='watch';
+    for(const key of ['edit','watch','appearance'] as const){
+      q('deck'+key[0].toUpperCase()+key.slice(1)+'Section').hidden=key!==next;
+      q(key+'Tab').setAttribute('aria-selected',String(key===next));
+    }
     render();
   };
-  q("editTab").onclick = () => setTab(false); q("watchTab").onclick = () => setTab(true);
+  q('editTab').onclick=()=>setTab('edit');q('watchTab').onclick=()=>setTab('watch');q('appearanceTab').onclick=()=>setTab('appearance');
   const inst = (id: string, uid: string): CardInst => ({ uid, ...structuredClone(def(id)) });
   const deck = (): string[] => store.list[cur].cards;
   const watch = (): string[] => store.list[cur].watch;
@@ -78,7 +84,7 @@ export function mountDeck(app: App): Screen {
 
   const render = (): void => {
     // 슬롯 탭
-    q("deckEditSection").inert = saving; q("deckWatchSection").inert = saving; tabsEl.inert = saving;
+    q("deckEditSection").inert = saving; q("deckWatchSection").inert = saving; q("deckAppearanceSection").inert = saving; tabsEl.inert = saving;
     tabsEl.innerHTML = "";
     for (let i = 0; i < DECK_SLOTS; i++) {
       const b = document.createElement("button");
@@ -180,6 +186,11 @@ export function mountDeck(app: App): Screen {
       watchNodes.push(el);
     }
     if(watching)void revealCards(watchEl,watchNodes,()=>watchVersion===watchRevision);else watchEl.replaceChildren();
+    if(activeTab==='appearance')renderDeckAppearance(q('deckAppearanceSection'),{
+      deck:store.list[cur],name:store.list[cur].name||t('deck.slot').replace('{n}',String(cur+1)),owned,error:cosmeticError,
+      onPick:(kind,id)=>{if(!owned?.has(id)||saving)return;store.list[cur][kind]=id;render();msgEl.textContent=loungeText('外観を変更しました。「保存」で確定します。','Appearance changed. Save to keep your changes.','외형을 변경했습니다. 저장해 주세요.');},
+      onShop:()=>app.shop(),onRetry:()=>{void loadOwned();},
+    });
     saveBtn.disabled = saving || store.list.some(d => d.cards.length !== DECK_SIZE);
   };
 
@@ -196,7 +207,7 @@ export function mountDeck(app: App): Screen {
       if (dead) return;
       Object.assign(store, r.decks);
       saved = JSON.stringify(store);
-      if (app.user) { app.user.decks = r.decks; app.user.deck = r.deck; }
+      if (app.user) { app.user.decks = r.decks; app.user.deck = r.deck; const active=r.decks.list[r.decks.sel];app.user.sleeve=active.sleeve;app.user.furniture=active.furniture; }
       msgEl.textContent = t("deck.saved");
     } catch (e) {
       msgEl.textContent = (e as Error).message || t("api.fail");
@@ -211,7 +222,13 @@ export function mountDeck(app: App): Screen {
   window.addEventListener("beforeunload", beforeUnload);
   const off = onLangChange(() => app.deck());
 
-  render();
+  const loadOwned=async()=>{
+    cosmeticError=false;
+    try {const profile=isLocalDevAccount()?loadLocalGuestProfile():await api.profile();if(dead)return;owned=new Set(['default',...(profile.sleeves??[]),...('furnitures' in profile?profile.furnitures??[]:[])]);}
+    catch {if(dead)return;cosmeticError=true;}
+    render();
+  };
+  render();void loadOwned();
   return {
     beforeLeave: async () => {
       if (saving) return false;

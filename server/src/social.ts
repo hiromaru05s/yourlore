@@ -1,3 +1,4 @@
+import {deckStoreForUser} from '../../client/src/shared/cards';
 import {cosmetic,ownedCosmetics} from '../../client/src/shared/cosmetics';
 // ============================================================
 // LORE server — social: profiles, friends, friendly challenges.
@@ -17,8 +18,7 @@ const CHALLENGE_TTL_MS = 90_000;
 const PRESENCE_ONLINE_MS = 70_000; // presence heartbeat is 30s — 70s covers 2 missed beats
 const MAX_FRIENDS = 100;
 
-// One universal card sleeve. Legacy ownership/equipment columns are retained
-// for schema compatibility but are no longer exposed or accepted by the game.
+// Owned cosmetics are account-wide; equipment is selected per deck.
 
 function json(env: Env, body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
@@ -304,15 +304,18 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
       await env.DB.prepare(`UPDATE challenges SET status = 'declined' WHERE id = ?`).bind(ch.id).run();
       return json(env, { ok: true });
     }
-    const challenger = await env.DB.prepare(`SELECT id, display, sleeve, furniture, deck FROM users WHERE id = ?`).bind(ch.challenger).first<{ id: string; display: string; sleeve: string | null; furniture:string|null; deck: string | null }>();
+    const challenger = await env.DB.prepare(`SELECT id, display, sleeve, furniture, deck, decks FROM users WHERE id = ?`).bind(ch.challenger).first<{ id: string; display: string; sleeve: string | null; furniture:string|null; deck: string | null; decks:string|null }>();
     if (!challenger) return json(env, { error: "not found" }, 404);
+    let presets:unknown=null;try{presets=JSON.parse(challenger.decks||'null');}catch{}
+    const challengerStore=deckStoreForUser({decks:presets,deck:challenger.deck?.split(','),sleeve:challenger.sleeve,furniture:challenger.furniture});
+    const equipped=challengerStore.list[challengerStore.sel];
     // provision a GameRoom exactly like the matchmaker does (친선전 → ranked=false)
     const roomId = crypto.randomUUID();
     const seed = crypto.getRandomValues(new Uint32Array(1))[0] >>> 0;
     const stub = env.GAME_ROOM.get(env.GAME_ROOM.idFromName(roomId));
     await stub.fetch("https://do/setup", {
       method: "POST",
-      body: JSON.stringify({ players: [{ id: challenger.id, name: challenger.display, sleeve: challenger.sleeve, furniture:challenger.furniture, deck: challenger.deck }, { id: user.id, name: user.display, sleeve: user.sleeve, furniture:user.furniture, deck: (user.deck ?? []).join(",") || null }], seed, ranked: false }),
+      body: JSON.stringify({ players: [{ id: challenger.id, name: challenger.display, sleeve: equipped.sleeve, furniture:equipped.furniture, deck: equipped.cards.join(",") }, { id: user.id, name: user.display, sleeve: user.sleeve, furniture:user.furniture, deck: (user.deck ?? []).join(",") || null }], seed, ranked: false }),
     });
     await env.DB.prepare(`UPDATE challenges SET status = 'accepted', room_id = ? WHERE id = ?`).bind(roomId, ch.id).run();
     return json(env, { ok: true, roomId, you: 1, oppName: challenger.display });

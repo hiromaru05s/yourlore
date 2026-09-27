@@ -35,8 +35,8 @@ let OPP_AVATAR: string | null | undefined;
 export function setOppAvatar(a?: string | null): void { OPP_AVATAR = a; }
 
 // each side's equipped card-sleeve URL — used for deck/hand/set-trap backs.
-// MY is set locally from app.user; OPP is refreshed per-render from the
-// server-synced state.sleeves, so the opponent's chosen sleeve shows too.
+// Local games use the active preset; online snapshots pin BOTH players to
+// their match-start equipment, including after reconnecting.
 let MY_SLEEVE = FRAME_BACK;
 let MY_FURNITURE:string|undefined;
 export function setMyFurniture(id?:string|null):void{MY_FURNITURE=furnitureUrl(id);}
@@ -371,6 +371,8 @@ export class GameView {
     if(g.turn>=this.turnSnapshot&&!this.endingTurn)this.syncTurn(g);
     // opponent's equipped sleeve (server-synced); falls back to default for bot/local games
     OPP_SLEEVE = sleeveUrl(g.sleeves?.[1 - this.you]);
+    if(g.sleeves)setMySleeve(g.sleeves[this.you]);
+    if(g.furnitures)setMyFurniture(g.furnitures[this.you]);
 
     this.q("turnInfo").innerHTML = `<span class="turn-badge"><span class="tb-label">${t("game.turn")}</span><span class="tb-num">${g.turn}</span></span><span class="turn-cur"><b>${t(myTurn ? "fx.yourturn" : "fx.oppturn")}</b></span>`;
     // refresh static labels (so a live language switch updates them)

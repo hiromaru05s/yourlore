@@ -1,3 +1,4 @@
+import type {DeckStore} from '../shared/cards';
 // ============================================================
 // LORE — auth/API client. Talks to the Worker over /api/*.
 // Sessions are cookie-based (credentials: include).
@@ -18,7 +19,7 @@ export interface User {
   furniture?: string | null;
   sleeve?: string | null; // equipped card sleeve id ('default' when none)
   deck?: string[] | null; // 활성 덱 8장 카드 id (null = 기본덱 컬6+상자2)
-  decks?: { sel: number; list: { cards: string[]; watch: string[] }[] } | null; // 덱 프리셋 5슬롯 + 마켓 알림이
+  decks?: DeckStore | null; // 덱 프리셋 5슬롯 + 마켓 알림이
 }
 
 export interface ClaimResult {
@@ -106,12 +107,12 @@ export const api = {
   claimedRewards: () => call<{ keys: string[]; credits: number }>("/rewards/claimed", undefined, "GET").catch(() => ({ keys: [] as string[], credits: 0 })),
   redeemCoupon: (code: string) => call<ClaimResult>("/rewards/coupon", { code }),
   // 덱 프리셋 저장 (덱 빌더: 5슬롯 + 마켓 알림이)
-  saveDecks: async (decks: { sel: number; list: { cards: string[]; watch: string[] }[] }) => {
+  saveDecks: async (decks: DeckStore) => {
     if (isLocalDevAccount()) {
       const saved = saveLocalDevDecks(decks);
       return { ok: true as const, decks: saved, deck: saved.list[saved.sel].cards };
     }
-    return call<{ ok: true; decks: { sel: number; list: { cards: string[]; watch: string[] }[] }; deck: string[] }>("/deck", { decks });
+    return call<{ ok: true; decks: DeckStore; deck: string[] }>("/deck", { decks });
   },
   // ---- social: profile / friends / challenges ----
   profile: (id?: string) => call<{ profile: Profile }>(`/social/profile${id ? `?id=${encodeURIComponent(id)}` : ""}`, undefined, "GET").then((r) => r.profile),

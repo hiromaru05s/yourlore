@@ -8,3 +8,7 @@ export const FURNITURE_LIST=COSMETICS.filter(c=>c.kind==='furniture');
 export const cosmetic=(id:string)=>COSMETICS.find(c=>c.id===id);
 export const furnitureUrl=(id:string|null|undefined)=>FURNITURE_LIST.find(c=>c.id===id)?.url;
 export function ownedCosmetics(raw:string|null|undefined):string[]{try{const ids=JSON.parse(raw||'[]');return ['default',...new Set<string>(Array.isArray(ids)?ids.filter((id:unknown)=>typeof id==='string'&&!!cosmetic(id)):[])];}catch{return ['default'];}}
+
+export function equipmentId(value:unknown,kind:Cosmetic['kind']):string {
+ return typeof value==='string'&&cosmetic(value)?.kind===kind?value:'default';
+}

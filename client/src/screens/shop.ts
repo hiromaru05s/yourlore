@@ -3,7 +3,7 @@ import { homeIcon } from "../ui/homeIcons";
 // ============================================================
 // LORE — Shop. Currently sells card sleeves for credits (1💎 each).
 // Server (social.ts /social/buy-sleeve) is authoritative on price &
-// ownership; purchased sleeves are equipped from the profile.
+// ownership; purchased cosmetics are equipped per deck in the deck builder.
 // ============================================================
 import type { App, Screen } from "../router";
 import { api } from "../net/api";
@@ -30,7 +30,7 @@ export function mountShop(app: App): Screen {
         <div class="tut-body">
           <section class="tut-sec">
             <h3><span class="tut-ico">${homeIcon("sleeve")}</span>スリーブ ＆ デッキ置き場・シェルフ</h3>
-            <p class="set-desc">各4種類。0シャードで受け取り、プロフィールから装備できます。</p>
+            <p class="set-desc">各4種類。0シャードで受け取り、デッキ構成の「外観」から、デッキごとに装備できます。</p>
             <div class="shop-grid" id="grid"></div>
           </section>
         </div>

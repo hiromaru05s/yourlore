@@ -1,3 +1,4 @@
+import {deckStoreForUser} from '../shared/cards';
 // ============================================================
 // LORE — game screen. Hosts a Local (vs bot) or Online controller.
 // ============================================================
@@ -22,10 +23,10 @@ export function mountGame(app: App, opts: GameOpts): Screen {
   app.root.appendChild(root);
   setMyAvatar(app.user?.avatar);  // my profile icon on the center-bottom portrait
   setOppAvatar(opts.mode === "online" ? opts.oppAvatar ?? null : null); // opp portrait (bot → initial)
-  setMySleeve(app.user?.sleeve); setMyFurniture(app.user?.furniture);  // apply my equipped card sleeve to my deck/set-trap backs
+  const decks=deckStoreForUser(app.user),activeDeck=decks.list[decks.sel];
+  setMySleeve(activeDeck.sleeve); setMyFurniture(activeDeck.furniture);  // apply my equipped card sleeve to my deck/set-trap backs
   // 마켓 알림이: 활성 덱 프리셋의 워치리스트를 인게임 마켓 하이라이트에 연결
-  const dks = app.user?.decks;
-  setMarketWatch(dks?.list?.[dks.sel]?.watch ?? null);
+  setMarketWatch(activeDeck.watch);
   // coin-toss faces = the two players' profile avatars (opponent falls back to initial)
   const ownSeeker = app.user?.avatar === "SEEKER_RED" ? "SEEKER_RED" : "SEEKER_BLUE";
   setCoinProfiles(
@@ -57,7 +58,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
 
   const ctrl =
     opts.mode === "bot"
-      ? new LocalController(root, exits, app.user?.display ?? "PLAYER 1", app.user?.deck ?? undefined, opts.difficulty ?? "hard")
+      ? new LocalController(root, exits, app.user?.display ?? "PLAYER 1", activeDeck.cards, opts.difficulty ?? "hard")
       : opts.mode === "tutorial"
         ? new TutorialController(root, exits, app.user?.display ?? "PLAYER", {
             onCredits: (c) => { if (app.user) app.user.credits = c; },

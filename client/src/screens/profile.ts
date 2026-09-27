@@ -1,11 +1,9 @@
-import {FURNITURE_LIST} from '../shared/cosmetics';
 import { homeIcon } from "../ui/homeIcons";
 import { loungeText } from "../ui/loungeText";
 import { confirmDialog } from "../ui/modal";
 // ============================================================
 // LORE — profile screen. For the signed-in user it's TABBED:
 //   · 프로필  — avatar / rename / badges / record / recent matches
-//   · 슬리브  — equip owned card sleeves (buy more in the Shop)
 //   · 설정    — SFX volume / privacy / coupon / billing / language / logout
 // Viewing ANOTHER player's profile shows the overview only (read-only,
 // honoring their stats_public setting).
@@ -15,7 +13,6 @@ import { api, type Profile } from "../net/api";
 import { t, onLangChange, getLang, setLang, type Lang } from "../i18n";
 import { tierChipHtml } from "../ui/tier";
 import { avatarHtml, avatarPresets } from "../ui/social";
-import { SLEEVE_LIST, sleeveUrl, SLEEVES } from "../shared/cards";
 import { getSfxVolume, setSfxVolume, sfx } from "../ui/sound";
 
 function esc(s: string): string { return s.replace(/[<>&"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" }[c]!)); }
@@ -25,13 +22,7 @@ function fmtDate(ts: number): string {
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
 }
 
-function sleeveName(id: string): string {
-  const s = SLEEVES[id]; if (!s) return id;
-  const lang = getLang();
-  return lang === "ja" ? s.ja : lang === "en" ? s.en : s.ko;
-}
-
-export type ProfileTab = "overview" | "h2h" | "sleeves" | "settings";
+export type ProfileTab = "overview" | "h2h" | "settings";
 type Tab = ProfileTab;
 type RecFilter = "ranked" | "online" | "bot";
 
@@ -59,7 +50,6 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         <div class="pf-tabs">
           <button class="pf-tab ${tab === "overview" ? "is-active" : ""}" data-tab="overview">${homeIcon("profile")} ${t("profile.tab.overview")}</button>
           <button class="pf-tab ${tab === "h2h" ? "is-active" : ""}" data-tab="h2h">${homeIcon("duel")} ${t("profile.tab.h2h")}</button>
-          <button class="pf-tab ${tab === "sleeves" ? "is-active" : ""}" data-tab="sleeves">${homeIcon("sleeve")} ${t("profile.tab.sleeves")}</button>
           <button class="pf-tab ${tab === "settings" ? "is-active" : ""}" data-tab="settings">${homeIcon("settings")} ${t("profile.tab.settings")}</button>
         </div>` : ""}
         <div class="tut-body" id="pbody"><div class="pf-loading">…</div></div>
@@ -90,7 +80,6 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     if (!cached) return;
     if (!cached.self || tab === "overview") renderOverview(cached);
     else if (tab === "h2h") renderH2H(cached);
-    else if (tab === "sleeves") renderSleeves(cached);
     else renderSettings(cached);
   };
 
@@ -201,59 +190,6 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
       </section>`;
     body().querySelectorAll(".h2h-row").forEach((el) => {
       (el as HTMLElement).onclick = () => { const id = (el as HTMLElement).dataset.id; if (id) app.profile(id); };
-    });
-  };
-
-  // ============================================================
-  // TAB: sleeves
-  // ============================================================
-  const renderSleeves = (_p: Profile): void => {
-    const owned = new Set(_p.sleeves??["default"]);
-    const equipped = _p.sleeve||"default";
-    body().innerHTML = `
-      <section class="tut-sec sl-current">
-        <h3><span class="tut-ico">${homeIcon("sleeve")}</span>${t("sleeve.current")}</h3>
-        <div class="sl-current-row">
-          <div class="sl-preview sl-preview-lg" style="background-image:url(${sleeveUrl(equipped)})"></div>
-          <div class="sl-current-meta">
-            <div class="sl-current-name">${sleeveName(equipped)}</div>
-            <div class="sl-current-tag">${homeIcon("check")} ${t("sleeve.equipped")}</div>
-          </div>
-        </div>
-      </section>
-      <section class="tut-sec">
-        <h3><span class="tut-ico">${homeIcon("sleeve")}</span>${t("sleeve.title")}</h3>
-        <div class="sl-grid">
-          ${SLEEVE_LIST.filter((s) => owned.has(s.id)).map((s) => {
-            const eq = s.id === equipped;
-            return `
-              <div class="sl-tile ${eq ? "is-eq" : ""}">
-                <div class="sl-preview" style="background-image:url(${s.url})"></div>
-                <div class="sl-name">${sleeveName(s.id)}</div>
-                ${eq
-                  ? `<button class="btn btn-mini btn-ghost" disabled>${t("sleeve.equipped")}</button>`
-                  : `<button class="btn btn-mini btn-gold" data-eq="${s.id}">${t("sleeve.equip")}</button>`}
-              </div>`;
-          }).join("")}
-        </div>
-      </section>`;
-
-    const furnitureSection=document.createElement('section');furnitureSection.className='tut-sec';
-    furnitureSection.innerHTML='<h3>デッキ置き場 ＆ シェルフ</h3><div class="sl-grid">'+[{id:'default',ja:'デフォルト',en:'Default',ko:'기본',url:''},...FURNITURE_LIST].filter(c=>c.id==='default'||_p.furnitures?.includes(c.id)).map(c=>`<div class="sl-tile"><div class="sl-preview furniture-preview" style="${c.url?`background-image:url(${c.url})`:''}"></div><div>${c[getLang()]}</div><button class="btn btn-mini" data-furniture="${c.id}" ${(_p.furniture||'default')===c.id?'disabled':''}>${(_p.furniture||'default')===c.id?'装備中':'装備する'}</button></div>`).join('')+'</div>';
-    body().append(furnitureSection);
-    furnitureSection.querySelectorAll<HTMLButtonElement>('[data-furniture]').forEach(b=>b.onclick=()=>{
-      b.disabled=true;void api.updateMe({furniture:b.dataset.furniture!}).then(r=>{if(app.user)app.user.furniture=r.furniture;if(cached)cached.furniture=r.furniture;sfx('pop');renderSleeves(cached!);}).catch(e=>{b.disabled=false;alert((e as Error).message);});
-    });
-    body().querySelectorAll("[data-eq]").forEach((btn) => {
-      (btn as HTMLElement).onclick = () => {
-        const id = (btn as HTMLElement).dataset.eq!;
-        void api.updateMe({ sleeve: id }).then((r) => {
-          if (app.user) app.user.sleeve = r.sleeve;
-          if (cached) cached.sleeve = r.sleeve;
-          sfx("pop");
-          renderSleeves(cached!);
-        }).catch((e) => alert((e as Error).message));
-      };
     });
   };
 
