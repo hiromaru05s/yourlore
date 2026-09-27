@@ -12,7 +12,7 @@ for(const f of await fs.readdir('client/dist/assets'))if(/\.(js|css)$/.test(f))p
 for(const name of ['log','sound','help','surrender'])paths.push('/ui/duel-controls/v1/'+name+'.png');
 for(const dir of ['sfx/lore-v2','sfx/opening-v1'])for(const f of await fs.readdir('client/dist/'+dir))if(f.endsWith('.mp3'))paths.push('/'+dir+'/'+f);
 const assets=[];
-for(const path of paths){const r=await fetch(origin+path);assert.equal(r.status,200,path);const remote=Buffer.from(await r.arrayBuffer()),local=await fs.readFile('client/dist'+path);assert.equal(hash(remote),hash(local),path);assets.push({path,bytes:local.length,sha256:hash(local)});}
+for(let i=0;i<paths.length;i+=8)assets.push(...await Promise.all(paths.slice(i,i+8).map(async path=>{const r=await fetch(origin+path);assert.equal(r.status,200,path);const remote=Buffer.from(await r.arrayBuffer()),local=await fs.readFile('client/dist'+path);assert.equal(hash(remote),hash(local),path);return {path,bytes:local.length,sha256:hash(local)};})));
 const browser=await chromium.launch({channel:'chrome',headless:true});
 const page=await browser.newPage({viewport:{width:1280,height:720}}),errors=[],failed=[];
 page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.url().startsWith(origin)&&r.status()>=500)failed.push({url:r.url(),status:r.status()});});

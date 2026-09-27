@@ -1,0 +1,12 @@
+{
+  "sourceCommit": "594184c053a1c738f5976135e964a2a08a214bda",
+  "environment": "staging",
+  "worker": "lore-server-staging",
+  "version": "ff42bc8f-e896-4c96-a74d-f2d023ed0faf",
+  "url": "https://test.yourlore.xyz",
+  "verifiedAt": "2026-09-27T01:41:24.220Z",
+  "assetHashesVerified": 88,
+  "anonymousLogin": true,
+  "botClientWithAuthFixtures": true,
+  "authenticatedOnlineMatch": false
+}

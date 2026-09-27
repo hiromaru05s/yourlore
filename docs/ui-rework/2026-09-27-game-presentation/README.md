@@ -34,3 +34,5 @@ The 21 generated runtime assets total 2,903,754 bytes. The two background files 
 - Deployed-byte and live-site verification is recorded separately in `staging-verification.json`. Authenticated online matches require real participants and are not claimed by the fixture tests.
 
 Staging only: `https://test.yourlore.xyz`. Previous Rift/mana/utility-button work is retained.
+
+Final staging source: `594184c053a1c738f5976135e964a2a08a214bda`; Worker version `ff42bc8f-e896-4c96-a74d-f2d023ed0faf`. 88 deployed asset SHA-256 hashes matched. Anonymous live login, fixture-authenticated BOT opening and restored input passed; both animated portraits were present. Current-mana refill also triggers the mana portrait animation.

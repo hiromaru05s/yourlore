@@ -4,11 +4,11 @@
     "centered ranked title, moving home, 4 bot tiers, explicit add/remove/save, deferred watch page, 24-card pages and passive search, 3 responsive sizes",
     {
       "scene": {
-        "seconds": 5,
-        "paints": 42,
-        "fullPasses": 42,
-        "portalPasses": 48,
-        "cpuMs": 123.9,
+        "seconds": 6.9,
+        "paints": 118,
+        "fullPasses": 118,
+        "portalPasses": 56,
+        "cpuMs": 182.3,
         "calls": 1,
         "triangles": 2
       }
