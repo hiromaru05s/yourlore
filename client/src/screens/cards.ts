@@ -1,3 +1,4 @@
+import {fitCardRows} from '../ui/cardDensity';
 import {revealCards} from '../ui/assetReadiness';
 import {loungeText} from '../ui/loungeText';
 import { homeIcon } from "../ui/homeIcons";
@@ -30,7 +31,7 @@ export function mountCards(app: App): Screen {
   let typeF: TypeFilter = "all";
   let costF = -1; // -1 = all
   let q = "";
-  let page=0,revision=0;const pageSize=24;
+  let page=0,revision=0;const pageSize=96;
 
   const wrap = document.createElement("div");
   wrap.className = "screen cards-screen";
@@ -55,6 +56,7 @@ export function mountCards(app: App): Screen {
   wrap.querySelector(".cards-lang")!.appendChild(langSelectEl());
 
   const grid = wrap.querySelector("#grid") as HTMLElement;
+  const stopDensity=fitCardRows(grid,3.3,12);
   const count = wrap.querySelector("#count") as HTMLElement;
   const typeRow = wrap.querySelector("#typeRow") as HTMLElement;
   const costRow = wrap.querySelector("#costRow") as HTMLElement;
@@ -136,5 +138,5 @@ export function mountCards(app: App): Screen {
   render();
 
   const unsub = onLangChange(() => app.cards());
-  return { destroy: ()=>{revision++;unsub();} };
+  return { destroy: ()=>{revision++;stopDensity();unsub();} };
 }

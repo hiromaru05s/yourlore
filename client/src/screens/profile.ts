@@ -32,7 +32,7 @@ function sleeveName(id: string): string {
 
 export type ProfileTab = "overview" | "h2h" | "sleeves" | "settings";
 type Tab = ProfileTab;
-type RecFilter = "all" | "ranked" | "online" | "bot";
+type RecFilter = "ranked" | "online" | "bot";
 
 export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab): Screen {
   const wrap = document.createElement("div");
@@ -42,7 +42,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   let dead = false;
   let cached: Profile | null = null;
   let tab: Tab = initialTab ?? "overview";
-  let recFilter: RecFilter = "all";
+  let recFilter: RecFilter = "ranked";
 
   const isSelf = (): boolean => !!cached?.self;
 
@@ -99,19 +99,13 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   const renderOverview = (p: Profile): void => {
     const modeLabel = (m: string) => m === "ranked" ? t("mode.ranked") : m === "bot" ? t("mode.bot") : t("mode.online");
     const resLabel = (r: string) => r === "win" ? t("modal.win") : r === "draw" ? t("modal.draw") : t("modal.lose");
-    // per-mode record for the selected filter (server aggregates; falls back to the all-time totals)
-    const bm = p.byMode;
-    const wl = (f: RecFilter): { w: number; l: number } => {
-      if (!bm) return { w: p.wins ?? 0, l: p.losses ?? 0 };
-      if (f === "all") return { w: bm.ranked.w + bm.online.w + bm.bot.w, l: bm.ranked.l + bm.online.l + bm.bot.l };
-      return { w: bm[f].w, l: bm[f].l };
-    };
-    const cur = wl(recFilter);
+    // Never substitute mixed lifetime totals for a selected match mode.
+    const cur = p.byMode?.[recFilter] ?? {w:0,l:0};
     const totalG = cur.w + cur.l;
     const rate = totalG ? Math.round((cur.w / totalG) * 100) : 0;
-    const showTier = recFilter === "all" || recFilter === "ranked";
-    const recent = (p.recent ?? []).filter((m) => recFilter === "all" || m.mode === recFilter);
-    const filterOpts: RecFilter[] = ["all", "ranked", "online", "bot"];
+    const showTier = recFilter === "ranked";
+    const recent = (p.recent ?? []).filter((m) => m.mode === recFilter);
+    const filterOpts: RecFilter[] = ["ranked", "online", "bot"];
 
     body().innerHTML = `
       <section class="tut-sec pf-card">
@@ -122,7 +116,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
               <span class="pf-name" id="pfName">${esc(p.display)}</span>
               ${p.self ? `<button class="btn btn-ghost btn-mini" id="renameBtn">${homeIcon("edit")} ${t("profile.rename")}</button>` : ""}
             </div>
-            <div class="pf-joined">${t("home.record")}${p.private ? "" : ` ${p.wins ?? 0}${t("home.win")} ${p.losses ?? 0}${t("home.loss")}`} · ${fmtDate(p.created_at)}~</div>
+            <div class="pf-joined">${t("home.record")}${p.private ? "" : ` ${modeLabel(recFilter)} · ${cur.w}${t("home.win")} ${cur.l}${t("home.loss")}`} · ${fmtDate(p.created_at)}~</div>
           </div>
         </div>
         <div class="pf-rename" id="renameRow" style="display:none">
@@ -134,9 +128,9 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
       <section class="tut-sec">
         <div class="pf-stats-head">
           <h3><span class="tut-ico">${homeIcon("trophy")}</span>${t("profile.stats")}</h3>
-          ${p.self ? `<div class="lang-select pf-filter"><select id="modeFilter">
+          <div class="lang-select pf-filter"><select id="modeFilter" aria-label="${t("profile.stats")}">
             ${filterOpts.map((f) => `<option value="${f}"${recFilter === f ? " selected" : ""}>${t(`profile.filter.${f}`)}</option>`).join("")}
-          </select></div>` : ""}
+          </select></div>
         </div>
         <div class="pf-stats">
           <div class="pf-stat"><b>${cur.w}</b><span>${t("home.win")}</span></div>
@@ -159,7 +153,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
       </section>`}
     `;
 
-    // mode filter (self only): re-render the overview with the chosen mode
+    // Mode filter: re-render the overview with the chosen mode
     (body().querySelector("#modeFilter") as HTMLSelectElement | null)?.addEventListener("change", (e) => {
       recFilter = (e.target as HTMLSelectElement).value as RecFilter;
       renderOverview(p);
@@ -399,8 +393,9 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
 export async function showProfileModal(userId: string): Promise<void> {
   let p: Profile;
   try { p = await api.profile(userId); } catch { return; }
-  const total = (p.wins ?? 0) + (p.losses ?? 0);
-  const rate = total ? Math.round(((p.wins ?? 0) / total) * 100) : 0;
+  const record = p.byMode?.ranked ?? {w:0,l:0};
+  const total = record.w + record.l;
+  const rate = total ? Math.round((record.w / total) * 100) : 0;
   const ov = document.createElement("div");
   ov.className = "overlay";
   ov.innerHTML = `
@@ -413,9 +408,9 @@ export async function showProfileModal(userId: string): Promise<void> {
       </div>
       ${p.private
         ? `<p style="margin-top:10px">${t("profile.private")}</p>`
-        : `<div class="pf-stats" style="margin-top:12px">
-            <div class="pf-stat"><b>${p.wins ?? 0}</b><span>${t("home.win")}</span></div>
-            <div class="pf-stat"><b>${p.losses ?? 0}</b><span>${t("home.loss")}</span></div>
+        : `<p>${t("mode.ranked")}</p><div class="pf-stats" style="margin-top:12px">
+            <div class="pf-stat"><b>${record.w}</b><span>${t("home.win")}</span></div>
+            <div class="pf-stat"><b>${record.l}</b><span>${t("home.loss")}</span></div>
             <div class="pf-stat"><b>${rate}%</b><span>${t("profile.winrate")}</span></div>
             <div class="pf-stat pf-stat-tier">${p.tier ? tierChipHtml(p.tier, p.mmr ?? undefined) : "—"}</div>
           </div>`}

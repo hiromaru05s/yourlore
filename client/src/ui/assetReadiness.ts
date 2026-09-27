@@ -1,3 +1,5 @@
+import {loadingScreen} from './loadingScreen';
+import {loungeText} from './loungeText';
 import {getLang} from '../i18n';
 const decoded=new Map<string,Promise<void>>();
 export function decodeAsset(url:string):Promise<void>{
@@ -12,9 +14,11 @@ export function imageUrls(root:HTMLElement):string[]{
  return [...urls];
 }
 /** A failed network request keeps an explicit retry surface, never broken art. */
-export async function waitAssets(urls:string[],host:HTMLElement):Promise<void>{
+export async function waitAssets(urls:string[],host:HTMLElement,onProgress?:(done:number,total:number)=>void):Promise<void>{
+ const unique=[...new Set(urls)],complete=new Set<string>();
+ onProgress?.(0,unique.length);
  while(host.isConnected){
-  const result=await Promise.allSettled(urls.map(decodeAsset));
+  const result=await Promise.allSettled(unique.map(async url=>{await decodeAsset(url);complete.add(url);onProgress?.(complete.size,unique.length);}));
   if(result.every(r=>r.status==='fulfilled'))return;
   await new Promise<void>(resolve=>{
    const retry=document.createElement('button');retry.className='asset-retry';retry.textContent=getLang()==='ja'?'画像の読み込みを再試行':getLang()==='ko'?'이미지 다시 불러오기':'Retry loading artwork';host.append(retry);
@@ -24,11 +28,10 @@ export async function waitAssets(urls:string[],host:HTMLElement):Promise<void>{
  }
 }
 export function coverScreen(root:HTMLElement):{ready:()=>Promise<void>;cancel:()=>void}{
- const cover=document.createElement('div');cover.className='screen-loader';cover.setAttribute('role','status');
- cover.innerHTML=`<img src="/art/brand/lore-logo-transparent.png" alt="LORE"><span>${getLang()==='ja'?'書庫を開いています':getLang()==='ko'?'서고를 여는 중':'Opening the library'}</span><i></i>`;
+ const loading=loadingScreen('screen-loader',loungeText('書庫を開いています','Opening the library','서고를 여는 중')),cover=loading.element;
  document.body.append(cover);root.inert=true;root.setAttribute('aria-busy','true');let cancelled=false;
  const cancel=()=>{cancelled=true;cover.remove();root.inert=false;root.removeAttribute('aria-busy');};
- return {cancel,ready:async()=>{await waitAssets(imageUrls(root),cover);if(cancelled)return;await document.fonts.ready;await Promise.all([...root.querySelectorAll('img')].map(i=>i.decode().catch(()=>{})));await new Promise<void>(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r())));cancel();}};
+ return {cancel,ready:async()=>{await waitAssets(imageUrls(root),cover,(done,total)=>loading.update(total?done/total*94:94,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`)));if(cancelled)return;loading.update(95,loungeText("画面を仕上げています","Finishing the scene","화면 마무리 중"));await document.fonts.ready;await Promise.all([...root.querySelectorAll('img')].map(i=>i.decode().catch(()=>{})));await new Promise<void>(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r())));loading.update(100,loungeText("準備完了","Ready","준비 완료"));cancel();}};
 }
 /** Swap a page of cards only after every image has decoded. Old cards stay visible. */
 export async function revealCards(grid:HTMLElement,nodes:Node[],current:()=>boolean):Promise<void>{

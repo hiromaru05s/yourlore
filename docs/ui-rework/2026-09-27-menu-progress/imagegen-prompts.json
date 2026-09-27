@@ -1,0 +1,69 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "key": "runner",
+      "prompt": "Use case: stylized-concept. Asset type: game loading animation sprite sheet. Reference image defines the character identity and costume. Create exactly 8 frames of this blue-haired young male seeker running towards the RIGHT in profile, classic beautiful 16-bit RPG pixel art, chunky crisp pixels, limited cobalt/ivory/navy/cyan palette, white boots, long ivory coat-tail and little cyan reading lantern, gold eye, short rear braid. Four columns by two rows, equally sized square cells on genuinely transparent alpha background, no grid lines. Each frame same character scale, same centered hip position, same floor baseline. Full body visible with margin in every cell. Continuous run cycle in row-major order: contact, down, passing, up, opposite contact, down, passing, up, frame8 seamlessly returns to frame1. Alternating leg and arm motion, coat tail and braid trailing left. No words or labels. Canvas 1536x768. Transparency required, no painted checkerboard.",
+      "referenced_image_paths": [
+        "/Users/hiromaru05s/Desktop/LORE_TCG/docs/characters/2026-09-07-approved/blue-reader.png"
+      ],
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-08dbaea1-0f65-40fc-96d8-610798ec2d8f.png"
+    },
+    {
+      "key": "home",
+      "prompt": "Use case: lighting-weather. Asset type: selected navigation icon for LORE fantasy card game. Input image is the edit target. Preserve EXACTLY its silhouette, orientation, proportions, shape, object, centered composition and ivory/brass materials. Change only lighting: illuminate all contour edges and crystal with crisp cyan-white magical light and a restrained turquoise halo, making a clearly selected luminous version. Fully transparent background with genuine alpha. No text, no surrounding button plate, no extra objects. Square image, ample transparent margin, match original scale.",
+      "referenced_image_paths": [
+        "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/lounge/icons/v2/home.png"
+      ],
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-b0fe7fd7-6fa1-4965-9267-fb40629ee1a6.png"
+    },
+    {
+      "key": "deck",
+      "prompt": "Use case: lighting-weather. Asset type: selected navigation icon for LORE fantasy card game. Input image is the edit target. Preserve EXACTLY its silhouette, orientation, proportions, shape, object, centered composition and ivory/brass materials. Change only lighting: illuminate all contour edges and crystal with crisp cyan-white magical light and a restrained turquoise halo, making a clearly selected luminous version. Fully transparent background with genuine alpha. No text, no surrounding button plate, no extra objects. Square image, ample transparent margin, match original scale.",
+      "referenced_image_paths": [
+        "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/lounge/icons/v2/deck.png"
+      ],
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-5d9fc3d8-e64d-41f2-ac84-5a1cf9f570e3.png"
+    },
+    {
+      "key": "cards",
+      "prompt": "Use case: lighting-weather. Asset type: selected navigation icon for LORE fantasy card game. Input image is the edit target. Preserve EXACTLY its silhouette, orientation, proportions, shape, object, centered composition and ivory/brass materials. Change only lighting: illuminate all contour edges and crystal with crisp cyan-white magical light and a restrained turquoise halo, making a clearly selected luminous version. Fully transparent background with genuine alpha. No text, no surrounding button plate, no extra objects. Square image, ample transparent margin, match original scale.",
+      "referenced_image_paths": [
+        "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/lounge/icons/v2/cards.png"
+      ],
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-02768926-774e-434b-941f-e2c3e51cf2c3.png"
+    },
+    {
+      "key": "trophy",
+      "prompt": "Use case: lighting-weather. Asset type: selected navigation icon for LORE fantasy card game. Input image is the edit target. Preserve EXACTLY its silhouette, orientation, proportions, shape, object, centered composition and ivory/brass materials. Change only lighting: illuminate all contour edges and crystal with crisp cyan-white magical light and a restrained turquoise halo, making a clearly selected luminous version. Fully transparent background with genuine alpha. No text, no surrounding button plate, no extra objects. Square image, ample transparent margin, match original scale.",
+      "referenced_image_paths": [
+        "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/lounge/icons/v2/trophy.png"
+      ],
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-7a82cc48-ba52-4648-ad04-fd78bad5f19c.png"
+    },
+    {
+      "key": "friends",
+      "prompt": "Use case: lighting-weather. Asset type: selected navigation icon for LORE fantasy card game. Input image is the edit target. Preserve EXACTLY its silhouette, orientation, proportions, shape, object, centered composition and ivory/brass materials. Change only lighting: illuminate all contour edges and crystal with crisp cyan-white magical light and a restrained turquoise halo, making a clearly selected luminous version. Fully transparent background with genuine alpha. No text, no surrounding button plate, no extra objects. Square image, ample transparent margin, match original scale.",
+      "referenced_image_paths": [
+        "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/lounge/icons/v2/friends.png"
+      ],
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-328e9949-76a3-4e88-9756-7acd1ee0c3a6.png"
+    },
+    {
+      "key": "shop",
+      "prompt": "Use case: lighting-weather. Asset type: selected navigation icon for LORE fantasy card game. Input image is the edit target. Preserve EXACTLY its silhouette, orientation, proportions, shape, object, centered composition and ivory/brass materials. Change only lighting: illuminate all contour edges and crystal with crisp cyan-white magical light and a restrained turquoise halo, making a clearly selected luminous version. Fully transparent background with genuine alpha. No text, no surrounding button plate, no extra objects. Square image, ample transparent margin, match original scale.",
+      "referenced_image_paths": [
+        "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/lounge/icons/v2/shop.png"
+      ],
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-567daf0f-8c77-45d6-9720-ab66005d41f4.png"
+    },
+    {
+      "key": "book",
+      "prompt": "Use case: lighting-weather. Asset type: selected navigation icon for LORE fantasy card game. Input image is the edit target. Preserve EXACTLY its silhouette, orientation, proportions, shape, object, centered composition and ivory/brass materials. Change only lighting: illuminate all contour edges and crystal with crisp cyan-white magical light and a restrained turquoise halo, making a clearly selected luminous version. Fully transparent background with genuine alpha. No text, no surrounding button plate, no extra objects. Square image, ample transparent margin, match original scale.",
+      "referenced_image_paths": [
+        "/Users/hiromaru05s/Desktop/LORE_TCG/client/public/art/lounge/icons/v2/book.png"
+      ],
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e023-a011-7011-aca3-850e7fd01f8f/exec-1ccf6f3b-408a-42f9-a548-7143481c4b55.png"
+    }
+  ]
+}

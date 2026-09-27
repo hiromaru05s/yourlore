@@ -1,7 +1,8 @@
+import {loadingScreen} from './loadingScreen';
+import {loungeText} from './loungeText';
 import {decodeAsset,waitAssets} from './assetReadiness';
 import {seekerAssets} from './seekerAnimation';
 import {READING_ASSETS} from './readingBoardLayout';
-import { getLang } from '../i18n';
 /** Game content is revealed only after assets are decoded and the 3D scene has
  * painted. A slow/cold connection must never reveal intermediate furniture. */
 const readiness=new WeakMap<HTMLElement,Promise<void>>();
@@ -11,14 +12,12 @@ const decode=decodeAsset;
 export function waitForDuel(root:HTMLElement):Promise<void>{return readiness.get(root)??Promise.resolve();}
 export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
   if(!document.fonts||typeof HTMLImageElement==='undefined')return;
-  const loader=document.createElement('div');loader.className='duel-loader';loader.setAttribute('role','status');loader.setAttribute('aria-live','polite');
-  const mark=document.createElement('img');mark.src=logo;mark.alt='LORE';mark.decoding='sync';
-  const label=document.createElement('span');label.textContent=getLang()==='ja'?'対戦の準備中':getLang()==='en'?'Preparing your duel':'대전 준비 중';
-  const track=document.createElement('div');track.className='duel-load-track';track.setAttribute('aria-hidden','true');track.append(document.createElement('i'));loader.append(mark,label,track);root.append(loader);
+  const loading=loadingScreen('duel-loader',loungeText('対戦の準備中','Preparing your duel','대전 준비 중')),loader=loading.element;root.append(loader);
   root.classList.add('duel-preparing');root.setAttribute('aria-busy','true');
   const expired=false;
   const work=(async()=>{
     await mount;
+    loading.update(3,loungeText("盤面を組み立てています","Building the board","보드 준비 중"));
     while(!expired&&root.isConnected&&root.dataset.boardRendered!=="true")await new Promise<void>(r=>requestAnimationFrame(()=>r()));
     if(expired||!root.isConnected)return;
     const urls=new Set(['/art/seekers/v2/mask-self.png','/art/seekers/v2/mask-opp.png',...['counter','dual','ambush','aura','void','guts','decay','majesty','taunt','evade','relic'].map(k=>`/ui/passives/v1/${k}.webp`),...seekerAssets,...coinImages,...['base-mon','base-spell','base-quest','field-mon','field-spell','field-quest','cost','attack','health'].map(n=>`/art/biblion/modular/${n}.png`)]);
@@ -27,12 +26,15 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
       for(const pseudo of [null,'::before','::after'])for(const match of getComputedStyle(el,pseudo).backgroundImage.matchAll(/url\(["']?(.*?)["']?\)/g))urls.add(match[1]);
     }
     for(const url of [...urls])if(url.includes('/art/cards-sm/'))urls.add(url.replace('/art/cards-sm/','/art/cards/'));
-    await Promise.all([document.fonts.ready,waitAssets([...urls],loader),import('./ceremonyScene'),import('./paperDraw')]);
+    await Promise.all([document.fonts.ready,waitAssets([...urls],loader,(done,total)=>loading.update(5+(total?done/total:1)*85,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`))),import('./ceremonyScene'),import('./paperDraw')]);
+    loading.update(92,loungeText("盤面と演出の最終準備","Preparing the board and effects","보드와 연출 마무리 중"));
     // Decode the actual image nodes too (not only a separate preloader object).
     await Promise.all([...root.querySelectorAll('img')].map(img=>img.decode().catch(()=>{})));
     while(!expired&&root.isConnected&&root.dataset.sceneReady!=='true'&&root.dataset.tableState!=='fallback')await new Promise<void>(r=>requestAnimationFrame(()=>r()));
+    loading.update(98,loungeText("もうすぐ始まります","Almost ready","곧 시작합니다"));
     // Two paints allow decoded DOM images and compositing layers to commit.
     for(let i=0;i<2;i++)await new Promise<void>(r=>requestAnimationFrame(()=>r()));
+    loading.update(100,loungeText("準備完了","Ready","준비 완료"));
     root.dataset.preloadedImages=String(urls.size);
   })();
   const task=work.finally(()=>{root.classList.remove('duel-preparing');root.removeAttribute('aria-busy');loader.remove();});

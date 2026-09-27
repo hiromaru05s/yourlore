@@ -61,11 +61,15 @@ async function profileOf(env: Env, targetId: string, viewer: SessionUser | null)
   const rating = await getRating(env, u.id).catch(() => null);
   const rank = rating ? await rankPosition(env,u.id,rating.season) : null;
   const matches = await env.DB.prepare(
-    `SELECT m.player_a, m.player_b, m.winner, m.mode, m.turns, m.created_at,
+    `WITH recent_by_mode AS (
+       SELECT *, ROW_NUMBER() OVER (PARTITION BY mode ORDER BY created_at DESC, id DESC) AS position
+       FROM matches WHERE (player_a = ?1 OR player_b = ?1) AND ended_at IS NOT NULL AND mode IN ('ranked','online','bot')
+     )
+     SELECT m.player_a, m.player_b, m.winner, m.mode, m.turns, m.created_at,
             ua.display AS da, ub.display AS db
-     FROM matches m LEFT JOIN users ua ON ua.id = m.player_a LEFT JOIN users ub ON ub.id = m.player_b
-     WHERE (m.player_a = ?1 OR m.player_b = ?1) AND m.ended_at IS NOT NULL
-     ORDER BY m.created_at DESC LIMIT 40`
+     FROM recent_by_mode m LEFT JOIN users ua ON ua.id = m.player_a LEFT JOIN users ub ON ub.id = m.player_b
+     WHERE m.position <= 40
+     ORDER BY m.created_at DESC`
   ).bind(u.id).all<{ player_a: string; player_b: string; winner: string | null; mode: string; turns: number | null; created_at: number; da: string | null; db: string | null }>();
   const recent = (matches.results ?? []).map((m) => ({
     mode: m.mode,
@@ -82,18 +86,18 @@ async function profileOf(env: Env, targetId: string, viewer: SessionUser | null)
     mmr: rating?.mmr ?? null,
     rank,
     recent,
+    byMode: await byModeOf(env, u.id),
     ...(self ? {
       badges: await ownedBadges(env, u.id),
       credits: u.credits,
       sleeve: "default",
       sleeves: ["default"],
-      byMode: await byModeOf(env, u.id),
       h2h: await h2hOf(env, u.id),
     } : {}),
   };
 }
 
-/** Per-mode W/L aggregates (self only) for the profile record filter. */
+/** Per-mode W/L aggregates (after profile privacy check) for the profile record filter. */
 async function byModeOf(env: Env, uid: string): Promise<Record<"ranked" | "online" | "bot", { w: number; l: number }>> {
   const out = { ranked: { w: 0, l: 0 }, online: { w: 0, l: 0 }, bot: { w: 0, l: 0 } };
   try {
@@ -102,11 +106,12 @@ async function byModeOf(env: Env, uid: string): Promise<Record<"ranked" | "onlin
               SUM(CASE WHEN winner = ?1 THEN 1 ELSE 0 END) AS w,
               SUM(CASE WHEN winner IS NOT NULL AND winner != ?1 THEN 1 ELSE 0 END) AS l
        FROM matches
-       WHERE (player_a = ?1 OR player_b = ?1) AND ended_at IS NOT NULL
+       WHERE (player_a = ?1 OR player_b = ?1) AND ended_at IS NOT NULL AND mode IN ('ranked','online','bot')
        GROUP BY mode`
     ).bind(uid).all<{ mode: string; w: number; l: number }>();
     for (const r of rows.results ?? []) {
-      const k = r.mode === "ranked" ? "ranked" : r.mode === "bot" ? "bot" : "online";
+      if (r.mode !== "ranked" && r.mode !== "online" && r.mode !== "bot") continue;
+      const k = r.mode;
       out[k] = { w: r.w ?? 0, l: r.l ?? 0 };
     }
   } catch { /* best effort */ }

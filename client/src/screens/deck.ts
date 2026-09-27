@@ -1,3 +1,4 @@
+import {fitCardRows} from '../ui/cardDensity';
 import {revealCards} from '../ui/assetReadiness';
 import { homeIcon } from "../ui/homeIcons";
 import { loungeText } from "../ui/loungeText";
@@ -7,13 +8,13 @@ import { loungeText } from "../ui/loungeText";
 // 은은하게 표시된다. 저장은 서버(users.decks JSON + 활성 덱 csv 캐시).
 // ============================================================
 import type { App, Screen } from "../router";
-import { DB, STARTERS, DECK_POOL, DECK_SIZE, DECK_MAX_COPIES, DECK_SLOTS, WATCH_MAX, BUYABLE_POOL, sanitizeDecks, type DeckStore } from "../shared/cards";
+import { DB, STARTERS, DECK_POOL, DECK_SIZE, DECK_MAX_COPIES, DECK_SLOTS, WATCH_MAX, BUYABLE_POOL, sanitizeDecks, sanitizeDeckName, type DeckStore } from "../shared/cards";
 import type { CardDef, CardInst } from "../shared/types";
 import { cardEl } from "../ui/cardView";
 import { bindZoom, zoomCard } from "../ui/anim";
 import { confirmDialog } from "../ui/modal";
 import { api } from "../net/api";
-import { t, cardName, onLangChange } from "../i18n";
+import { t, cardName, onLangChange, esc } from "../i18n";
 
 const def = (id: string): CardDef => STARTERS[id] ?? DB[id];
 
@@ -55,6 +56,7 @@ export function mountDeck(app: App): Screen {
 
   const q = (id: string): HTMLElement => wrap.querySelector("#" + id) as HTMLElement;
   const tabsEl = q("deckTabs"), curEl = q("deckCur"), poolEl = q("deckPool"), watchEl = q("watchPool");
+  const stopDensity=fitCardRows(poolEl,2.22,20);
   const countEl = q("deckCount"), watchCountEl = q("watchCount"), msgEl = q("deckMsg");
   const saveBtn = q("save") as HTMLButtonElement, useBtn = q("useBtn") as HTMLButtonElement;
   const searchEl = q("watchSearch") as HTMLInputElement;
@@ -81,10 +83,19 @@ export function mountDeck(app: App): Screen {
     for (let i = 0; i < DECK_SLOTS; i++) {
       const b = document.createElement("button");
       b.className = "deck-tab" + (i === cur ? " is-on" : "") + (i === store.sel ? " is-active" : "");
-      b.innerHTML = `${t("deck.slot").replace("{n}", String(i + 1))}${i === store.sel ? ` <span class="deck-star">${homeIcon("check")}</span>` : ""}`;
+      b.innerHTML = `<span class="deck-tab-name">${esc(store.list[i].name || t("deck.slot").replace("{n}", String(i + 1)))}</span>${i === store.sel ? ` <span class="deck-star">${homeIcon("check")}</span>` : ""}`;
+      b.title = store.list[i].name || t("deck.slot").replace("{n}", String(i + 1));
       b.onclick = () => { cur = i; watchQ = ""; searchEl.value = ""; render(); };
       tabsEl.appendChild(b);
     }
+    const rename=document.createElement('button');rename.className='deck-rename';rename.id='deckRename';rename.innerHTML=homeIcon('edit');rename.title=loungeText('デッキ名を変更','Rename deck','덱 이름 변경');rename.setAttribute('aria-label',rename.title);rename.disabled=saving;
+    rename.onclick=()=>{
+      const slot=cur,ov=document.createElement('div');ov.className='overlay';
+      ov.innerHTML=`<div class="modal"><h2>${rename.title}</h2><label for="deckNameInput">${loungeText('デッキ名（24文字まで）','Deck name (up to 24 characters)','덱 이름 (최대 24자)')}</label><input class="input" id="deckNameInput" maxlength="48" value="${esc(store.list[slot].name||'')}" placeholder="${t('deck.slot').replace('{n}',String(slot+1))}"><p class="set-desc">${loungeText('空欄で元の名前に戻せます。変更後は「保存」で確定します。','Leave blank to restore the default. Use Save to keep your changes.','비워 두면 기본 이름으로 돌아갑니다. 변경 후 저장해 주세요.')}</p><div class="modal-row"><button class="btn btn-ghost" id="deckRenameCancel">${t('common.cancel')}</button><button class="btn btn-gold" id="deckRenameApply">${t('common.confirm')}</button></div></div>`;
+      document.body.append(ov);const input=ov.querySelector<HTMLInputElement>('#deckNameInput')!;
+      const apply=()=>{const name=sanitizeDeckName(input.value);if(name)store.list[slot].name=name;else delete store.list[slot].name;ov.remove();render();msgEl.textContent=loungeText('デッキ名を変更しました。「保存」で確定します。','Deck renamed. Save to keep your changes.','덱 이름을 변경했습니다. 저장해 주세요.');};
+      ov.querySelector<HTMLButtonElement>('#deckRenameCancel')!.onclick=()=>ov.remove();ov.querySelector<HTMLButtonElement>('#deckRenameApply')!.onclick=apply;input.onkeydown=e=>{if(e.key==='Enter'&&!e.isComposing)apply();};input.oninput=()=>{input.value=Array.from(input.value).slice(0,24).join('');};input.focus();input.select();
+    };tabsEl.append(rename);
     useBtn.innerHTML = cur === store.sel ? `${homeIcon("check")} ${t("deck.inuse")}` : t("deck.use");
     useBtn.disabled = saving || cur === store.sel || store.list.some(d => d.cards.length !== DECK_SIZE);
 
@@ -207,6 +218,6 @@ export function mountDeck(app: App): Screen {
       if (!dirty()) return true;
       return confirmDialog({title: loungeText("未保存の変更", "Unsaved changes", "저장하지 않은 변경"), body: loungeText("変更を破棄して移動しますか？", "Discard your changes and leave?", "변경을 취소하고 이동할까요?"), confirm: loungeText("破棄して移動", "Discard & leave", "취소하고 이동"), cancel: t("common.cancel")});
     },
-    destroy: () => { dead = true;watchRevision++; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
+    destroy: () => { dead = true;stopDensity();watchRevision++; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
   };
 }

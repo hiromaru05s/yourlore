@@ -1228,7 +1228,10 @@ export function sanitizeDeck(ids: unknown): string[] {
 // ---- 덱 프리셋 (5슬롯) + 덱별 "마켓 알림이" 워치리스트 ----
 export const DECK_SLOTS = 5;
 export const WATCH_MAX = 12; // 알림이 최대 — 너무 많으면 하이라이트가 의미 없어짐
-export interface DeckPreset { cards: string[]; watch: string[] }
+export interface DeckPreset { cards: string[]; watch: string[]; name?: string }
+export function sanitizeDeckName(value: unknown): string {
+  return typeof value === "string" ? Array.from(value.replace(/[\u0000-\u001f\u007f]/g, "").trim()).slice(0,24).join("") : "";
+}
 export interface DeckStore { sel: number; list: DeckPreset[] }
 /** 저장된 프리셋 묶음을 항상 유효한 형태(5슬롯, 각 8장, 알림이는 구매 가능 카드만)로 정규화. */
 export function sanitizeDecks(raw: unknown): DeckStore {
@@ -1236,7 +1239,7 @@ export function sanitizeDecks(raw: unknown): DeckStore {
   const listIn = Array.isArray(o.list) ? o.list : [];
   const list: DeckPreset[] = [];
   for (let i = 0; i < DECK_SLOTS; i++) {
-    const d = (listIn[i] ?? {}) as { cards?: unknown; watch?: unknown };
+    const d = (listIn[i] ?? {}) as { cards?: unknown; watch?: unknown; name?: unknown };
     const cards = sanitizeDeck(d.cards ?? DEFAULT_DECK_8);
     const wIn = Array.isArray(d.watch) ? d.watch : [];
     const watch: string[] = [];
@@ -1244,7 +1247,8 @@ export function sanitizeDecks(raw: unknown): DeckStore {
       if (typeof id !== "string" || !DB[id] || DB[id].cost <= 0 || DB[id].noShop) continue;
       if (!watch.includes(id) && watch.length < WATCH_MAX) watch.push(id);
     }
-    list.push({ cards, watch });
+    const name = sanitizeDeckName(d.name);
+    list.push({ cards, watch, ...(name ? {name} : {}) });
   }
   let sel = typeof o.sel === "number" && Number.isFinite(o.sel) ? Math.floor(o.sel) : 0;
   if (sel < 0 || sel >= DECK_SLOTS) sel = 0;

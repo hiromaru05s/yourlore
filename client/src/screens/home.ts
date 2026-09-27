@@ -25,7 +25,7 @@ export function mountHome(app: App): Screen {
       </section>
       <button class="lounge-active-deck" id="deck" aria-label="${esc(t("home.deck.title"))}">
         <span class="lounge-deck-preview" aria-hidden="true">${["STARTER_MANA",...store.list[store.sel].cards].slice(0,3).map(id=>`<img src="${artUrl.sm(id)}" alt="" loading="lazy">`).join("")}</span>
-        <span class="lounge-deck-label"><small>${t("deck.inuse")}</small><strong>${t("deck.slot").replace("{n}",String(store.sel+1))}</strong><span>${t("home.deck.title")}</span></span>${homeIcon("arrow")}
+        <span class="lounge-deck-label"><small>${t("deck.inuse")}</small><strong>${esc(store.list[store.sel].name || t("deck.slot").replace("{n}",String(store.sel+1)))}</strong><span>${t("home.deck.title")}</span></span>${homeIcon("arrow")}
       </button>
     </section>`;
   app.root.appendChild(wrap);

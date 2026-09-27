@@ -6,7 +6,7 @@ const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const origin='https://test.yourlore.xyz',out=process.env.LORE_TEST_OUTPUT||'docs/releases/2026-09-27-integrated';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const paths=['/index.html','/art/lounge/stage-v1/stage.png','/art/lounge/stage-v1/sigil.png'];
-for(const dir of ['art/seekers/v2','ui/passives/v1'])for(const f of await fs.readdir('client/dist/'+dir))paths.push('/'+dir+'/'+f);
+for(const dir of ['art/seekers/v2','ui/passives/v1','art/lounge/icons/active-v1','ui/loading/v1'])for(const f of await fs.readdir('client/dist/'+dir))paths.push('/'+dir+'/'+f);
 paths.push('/art/lounge/stage-v1/stage.webp','/art/lounge/v1/library.webp');
 for(const f of await fs.readdir('client/dist/assets'))if(/\.(js|css)$/.test(f))paths.push('/assets/'+f);
 for(const name of ['log','sound','help','surrender'])paths.push('/ui/duel-controls/v1/'+name+'.png');
