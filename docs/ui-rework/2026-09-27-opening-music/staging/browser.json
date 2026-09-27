@@ -1,0 +1,36 @@
+{
+  "origin": "https://test.yourlore.xyz/?v=b0ce8f7",
+  "phases": [
+    {
+      "phase": "faceoff",
+      "ms": 0
+    },
+    {
+      "phase": "dock",
+      "ms": 6309
+    },
+    {
+      "phase": "toss",
+      "ms": 7009
+    },
+    {
+      "phase": "reveal",
+      "ms": 8510
+    },
+    {
+      "phase": "deal",
+      "ms": 9109
+    },
+    {
+      "phase": "ready",
+      "ms": 10459
+    }
+  ],
+  "introEnded": 41973,
+  "battleStarted": 42228.40000009537,
+  "battleVolume": 0.14699999999999996,
+  "activeTracks": 1,
+  "battleLoopGapMs": 3003.199999809265,
+  "errors": [],
+  "boundary": "Account/API fixture; deployed app, real BOT game and real audio playback"
+}
