@@ -1,0 +1,108 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "runtime": "adfc9f1",
+  "hashes": [
+    {
+      "file": "assets/RoomEnvironment-Bm_uhgLE.js",
+      "sha256": "09ef8cc6f0fd42539499d70aa8f044645ff12da477f6023696d77444e1b0f14f",
+      "match": true
+    },
+    {
+      "file": "assets/cardSurface-BlJCF1Wv.js",
+      "sha256": "776568b26326a7fcb0e0bec5480a01f6f52fece163bc48e0716639cac18ca5ee",
+      "match": true
+    },
+    {
+      "file": "index.html",
+      "sha256": "349fe2962df58e801683f03f1c66cae8a58f8ce2b08d341e59ad55345b9649a0",
+      "match": true
+    },
+    {
+      "file": "assets/GLTFLoader-Bcaky_l1.js",
+      "sha256": "15327d51872b8836553c1eb5f79cbac909b66fee8fdbaf089c864d94456f41af",
+      "match": true
+    },
+    {
+      "file": "assets/ceremonyScene-BdJ6wPnH.js",
+      "sha256": "235caa6e54f3de7b186bf34ff29078082acf76d4ee8e8f3c3ee4233506f77841",
+      "match": true
+    },
+    {
+      "file": "assets/diceScene-DCPiiV0d.js",
+      "sha256": "1aa1c4bed9f8b69878c83071e67f39bd27409966164ab8757549be3e11269dd9",
+      "match": true
+    },
+    {
+      "file": "assets/duelScene-Cqu29ioW.js",
+      "sha256": "4741007172d7b38b1c6d3da3e08b228d708f62a1226202154c4d964f2c695d3d",
+      "match": true
+    },
+    {
+      "file": "assets/main-DeuK9slB.js",
+      "sha256": "ae3f67ae8dd57be26e71d6445b4f5263fc66afdeeac9e170f8ae599aa9c0baf0",
+      "match": true
+    },
+    {
+      "file": "assets/riftScene-Chwyghym.js",
+      "sha256": "07945ef1e0dbb2c1c747df134317278261af4699f7fd61117f9a82a070e97e65",
+      "match": true
+    },
+    {
+      "file": "assets/paperDraw-BDWw1Plr.js",
+      "sha256": "ca0f6db60351987e17157e1c9a4f9215669ab9df02642d84d1ecb1a1c94b0c64",
+      "match": true
+    },
+    {
+      "file": "assets/tablePreview-2Rkra2Ey.css",
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+      "match": true
+    },
+    {
+      "file": "assets/main-Egqx3qXe.css",
+      "sha256": "e22e501bc42998ff62e0cbb4cc01947b6cc6b19f1518c565cf9f2c51a7675c26",
+      "match": true
+    },
+    {
+      "file": "assets/tablePreview-CDKSm7Zu.js",
+      "sha256": "2b81fbb762795470831fab796cecfa41264d5f78560381eaf55eea2c7d2d5e2f",
+      "match": true
+    },
+    {
+      "file": "assets/three.module-CEKDySQ-.js",
+      "sha256": "a668f4d0a8c405e1087278ecac79dc0a950ae007a00ec79b005685c19ea35120",
+      "match": true
+    },
+    {
+      "file": "models/reading-board/v1/board-low.glb",
+      "sha256": "3cc990dd3ebb8098145923441d715e0387427fa8b34a09d52c30b1836a45c951",
+      "match": true
+    },
+    {
+      "file": "models/reading-board/v1/board.glb",
+      "sha256": "819977348df8a342daffb20b7dd305296cee9118edf3f706cfde5239daac9d66",
+      "match": true
+    },
+    {
+      "file": "models/reading-board/v1/biblion-surface-v1.svg",
+      "sha256": "690a09ada01a189c937a2e958cc91702953af4b807baeb1155642cb5e43922ae",
+      "match": true
+    }
+  ],
+  "models": [
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/board.glb?revision=flat-biblion-20260927",
+      "status": 200
+    }
+  ],
+  "errors": [],
+  "boundary": "Account/API fixture; actual deployed client and BOT game",
+  "boardState": [
+    {
+      "tag": "DIV",
+      "id": "",
+      "classes": "reading-board board-projected duel-webgl market-model-ready supply-model-ready duel-table-ready",
+      "state": "ready"
+    }
+  ],
+  "workerVersion": "235402f7-02d6-4703-a0ef-c637730efa87"
+}

@@ -15,3 +15,7 @@
 production build成功。実際のBoardView／duelSceneを使用して1440×900の通常モデル、640×420の軽量モデルを表示。空のフィールドと両側7枚のフィールドを目視確認。ページ例外なし。再生成時に既存の頂点・法線・インデックスのバイナリ同一性を検査。
 
 `board-1440-empty.png` / `board-1440-full.png` / `board-640-empty.png` が確認画像。`assets.json` にサイズ、元データと出力のSHA-256、凹凸除去の記録を保存。
+
+## ステージング
+
+実装 `adfc9f1` をmainへ統合し、https://test.yourlore.xyz/?v=adfc9f1 に反映。Worker version `235402f7-02d6-4703-a0ef-c637730efa87`。配信アプリ・モデルのSHA-256一致を確認。公開アプリからBOT戦を起動し、実モデルがreadyになった盤面を `staging.png` に保存、目視確認。ページ例外なし。アカウント/APIのみfixture、アプリ・画像・モデル・BOT処理は配信された実物。
