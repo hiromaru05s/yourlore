@@ -7,10 +7,12 @@ const origin='https://test.yourlore.xyz',out=process.env.LORE_TEST_OUTPUT||'docs
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const paths=['/index.html','/art/lounge/stage-v1/stage.png','/art/lounge/stage-v1/sigil.png'];
 for(const dir of ['art/seekers/v2','ui/passives/v1','art/lounge/icons/active-v1','ui/loading/v1'])for(const f of await fs.readdir('client/dist/'+dir))paths.push('/'+dir+'/'+f);
-paths.push('/art/lounge/stage-v1/stage.webp','/art/lounge/v1/library.webp');
+paths.push('/art/lounge/stage-v1/stage.webp','/art/lounge/v1/library.webp','/art/lounge/stage-v1/sigil.webp','/art/brand/lore-logo-transparent.webp');
 for(const f of await fs.readdir('client/dist/assets'))if(/\.(js|css)$/.test(f))paths.push('/assets/'+f);
 for(const name of ['log','sound','help','surrender'])paths.push('/ui/duel-controls/v1/'+name+'.png');
 for(const dir of ['sfx/lore-v2','sfx/opening-v1'])for(const f of await fs.readdir('client/dist/'+dir))if(f.endsWith('.mp3'))paths.push('/'+dir+'/'+f);
+const scope=process.env.LORE_VERIFY_SCOPE||'full';
+if(scope==='menu')paths.splice(0,paths.length,...paths.filter(p=>p==='/index.html'||p.startsWith('/assets/')||p.includes('/active-v1/')||p.includes('/ui/loading/')||p.endsWith('/stage.webp')||p.endsWith('/library.webp')||p.endsWith('/sigil.webp')||p.endsWith('/lore-logo-transparent.webp')));
 const assets=[];
 for(let i=0;i<paths.length;i+=8)assets.push(...await Promise.all(paths.slice(i,i+8).map(async path=>{const r=await fetch(origin+path);assert.equal(r.status,200,path);const remote=Buffer.from(await r.arrayBuffer()),local=await fs.readFile('client/dist'+path);assert.equal(hash(remote),hash(local),path);return {path,bytes:local.length,sha256:hash(local)};})));
 const browser=await chromium.launch({channel:'chrome',headless:true});
@@ -31,6 +33,6 @@ try{
  await page.screenshot({path:out+'/staging-bot.png'});
  for(const id of ['logTab','muteBtn','helpBtn','giveupBtn']){assert.equal(await page.locator('#'+id+' img').evaluate(e=>e.complete&&e.naturalWidth===256),true);assert.equal(await page.locator('#'+id).evaluate(e=>getComputedStyle(e).backgroundImage),'none');}
  assert.deepEqual(errors,[]);assert.deepEqual(failed,[]);
- const report={origin,assets,anonymousLiveLogin:true,deployedBotOpening:true,botAuthApiFixture:true,authenticatedOnlineMatch:false,errors,failed};
+ const report={origin,scope,assets,anonymousLiveLogin:true,deployedBotOpening:true,botAuthApiFixture:true,authenticatedOnlineMatch:false,errors,failed};
  await fs.writeFile(out+'/staging-verification.json',JSON.stringify(report,null,2)+'\n');console.log('PASS:',assets.length,'deployed asset hashes, live anonymous login, built BOT opening and input restoration (fixture login/API)');
 }finally{await browser.close();}

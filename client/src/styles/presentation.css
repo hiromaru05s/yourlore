@@ -62,3 +62,6 @@ body.lounge-active .bot-diff{width:min(940px,94vw);max-width:940px;background:li
 @media(max-height:550px) and (min-width:651px){.lounge-cards .cards-filters{flex-direction:row}.lounge-cards .cards-filters .chip{min-height:24px;padding:3px 7px;font-size:10px}.lounge-content .deck-head{padding-top:2px;padding-bottom:2px}.lounge-content .deck-head .btn{min-height:28px}.lounge-content .deck-local-tabs button{min-height:24px;padding:2px 10px;font-size:11px}.lounge-content .deck-tab{min-height:26px}.lounge-content .deck-rename{height:28px}.lounge-content #deckPool{padding-top:4px;padding-bottom:12px}.lounge-content .deck-pool-head{min-height:20px;padding:1px 0;font-size:11px}}
 
 .lounge-login,.lounge-lobby{background-image:url('/art/lounge/stage-v1/stage.webp')}
+
+.lounge-play-button,.lounge-play-button:hover,.lounge-lobby .spinner{background-image:url('/art/lounge/stage-v1/sigil.webp')}
+.lounge-login .auth-card::before{background-image:url('/art/brand/lore-logo-transparent.webp')}

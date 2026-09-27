@@ -1,0 +1,16 @@
+[
+  {
+    "source": "client/public/art/brand/lore-logo-transparent.png",
+    "runtime": "client/public/art/brand/lore-logo-transparent.webp",
+    "originalBytes": 419188,
+    "bytes": 32540,
+    "sha256": "1f17f895cc940150240511250aca03274c5b4e61c740eac2ba0fb8002d8eeb8d"
+  },
+  {
+    "source": "client/public/art/lounge/stage-v1/sigil.png",
+    "runtime": "client/public/art/lounge/stage-v1/sigil.webp",
+    "originalBytes": 1996219,
+    "bytes": 182326,
+    "sha256": "6e9f7492a8abdf0aba0be76417823f758a3b07d882a27b49dd825749b7f79aa7"
+  }
+]

@@ -4,32 +4,24 @@
 🌀 Building list of assets...
 ✨ Read 1941 files from the assets directory /Users/hiromaru05s/Desktop/LORE_TCG/client/dist
 🌀 Starting asset upload...
-🌀 Found 18 new or modified static assets to upload. Proceeding with upload...
+🌀 Found 10 new or modified static assets to upload. Proceeding with upload...
 + /index.html
-+ /assets/paperDraw-D4iW_7gN.js.map
-+ /art/lounge/icons/active-v1/friends.webp
-+ /art/lounge/icons/active-v1/cards.webp
-+ /assets/duelScene-Bk8gGkGs.js
-+ /assets/main-B2Dro82N.css
-+ /assets/riftScene-D-P3xmfV.js
-+ /art/lounge/icons/active-v1/home.webp
-+ /art/lounge/icons/active-v1/shop.webp
-+ /art/lounge/icons/active-v1/book.webp
-+ /ui/loading/v1/runner.webp
-+ /assets/main-CSGXAmeW.js
-+ /assets/paperDraw-D4iW_7gN.js
-+ /assets/riftScene-D-P3xmfV.js.map
-+ /art/lounge/icons/active-v1/deck.webp
-+ /art/lounge/icons/active-v1/trophy.webp
-+ /assets/duelScene-Bk8gGkGs.js.map
-+ /assets/main-CSGXAmeW.js.map
-Uploaded 6 of 18 assets
-Uploaded 12 of 18 assets
-Uploaded 18 of 18 assets
-✨ Success! Uploaded 18 files (1863 already uploaded) (2.85 sec)
++ /assets/paperDraw-DElMSPqj.js.map
++ /assets/duelScene-CXJ3gPKF.js.map
++ /assets/main-BGfhR63j.js.map
++ /assets/riftScene-BJlXry-1.js
++ /assets/riftScene-BJlXry-1.js.map
++ /assets/main-BHuL8O5z.css
++ /assets/paperDraw-DElMSPqj.js
++ /assets/duelScene-CXJ3gPKF.js
++ /assets/main-BGfhR63j.js
+Uploaded 3 of 10 assets
+Uploaded 6 of 10 assets
+Uploaded 10 of 10 assets
+✨ Success! Uploaded 10 files (1871 already uploaded) (2.56 sec)
 
 Total Upload: 1048.23 KiB / gzip: 224.86 KiB
-Worker Startup Time: 38 ms
+Worker Startup Time: 61 ms
 Your Worker has access to the following bindings:
 Binding                                                                Resource                  
 env.MATCHMAKER (Matchmaker)                                            Durable Object            
@@ -40,7 +32,7 @@ env.APP_ORIGIN ("*")                                                   Environme
 env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")      Environment Variable      
 env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")          Environment Variable      
 
-Uploaded lore-server-staging (8.39 sec)
-Deployed lore-server-staging triggers (1.75 sec)
+Uploaded lore-server-staging (8.32 sec)
+Deployed lore-server-staging triggers (2.12 sec)
   test.yourlore.xyz (custom domain)
-Current Version ID: 73cf5a86-cbe3-43e7-8eb2-0a75abfa8a33
+Current Version ID: eff6e8c5-7042-4641-a1bd-5871dcd2531b

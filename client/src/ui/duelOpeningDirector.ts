@@ -33,7 +33,7 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
   host.setAttribute('role','region');host.setAttribute('aria-label',label('デュエル開幕','Duel opening','듀얼 시작'));
   const veil=document.createElement('div');veil.className='duel-opening-veil';
   const lines=document.createElement('div');lines.className='duel-opening-lines';
-  const center=document.createElement('div');center.className='opening-center';center.innerHTML='<img src="/art/brand/lore-logo-transparent.png" alt="LORE"><span>DUEL</span>';
+  const center=document.createElement('div');center.className='opening-center';center.innerHTML='<img src="/art/brand/lore-logo-transparent.webp" alt="LORE"><span>DUEL</span>';
   host.append(veil,lines,center);
   const players=[o.me,o.opp].map((p,i)=>{
     const holder=document.createElement('div');holder.className=`opening-player ${i?'is-opp':'is-me'}`;

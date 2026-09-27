@@ -7,12 +7,13 @@ import {READING_ASSETS} from './readingBoardLayout';
 /** Game content is revealed only after assets are decoded and the 3D scene has
  * painted. A slow/cold connection must never reveal intermediate furniture. */
 const readiness=new WeakMap<HTMLElement,Promise<void>>();
-const logo='/art/brand/lore-logo-transparent.png';
+const logo='/art/brand/lore-logo-transparent.webp';
 const coinImages=['/ui/coin-toss/coin-option-1-front.png','/ui/coin-toss/coin-option-1-back.png'];
 const decode=decodeAsset;
 export function waitForDuel(root:HTMLElement):Promise<void>{return readiness.get(root)??Promise.resolve();}
 export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
   if(!document.fonts||typeof HTMLImageElement==='undefined')return;
+  void warmSounds();
   const loading=loadingScreen('duel-loader',loungeText('対戦の準備中','Preparing your duel','대전 준비 중')),loader=loading.element;root.append(loader);
   root.classList.add('duel-preparing');root.setAttribute('aria-busy','true');
   const expired=false;
