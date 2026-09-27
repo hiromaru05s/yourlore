@@ -1,0 +1,9 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "runtimeCommit": "e339cb9c379d28605ec3984afcb532b6bf68f6e0",
+  "implementationCommit": "5329461",
+  "worker": "lore-server-staging",
+  "workerVersion": "502aab32-bdb5-4dc0-98ec-5d440c17f9f8",
+  "productionDeployed": false,
+  "databaseMigrationRequired": false
+}

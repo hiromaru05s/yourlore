@@ -1,0 +1,26 @@
+[
+  {
+    "path": "/index.html",
+    "status": 200,
+    "sha256": "40c6dc0d4f05287af017f3938dce879d67c536dfa674c1618e5a9a7d02d1d10f",
+    "bytes": 1210
+  },
+  {
+    "path": "/assets/main-B80u4HUX.js",
+    "status": 200,
+    "sha256": "0e5373d7a2af3f625dd9bf394aa91d64ebdcf29e0452059fe58655deafeb9809",
+    "bytes": 1162268
+  },
+  {
+    "path": "/assets/three.module-CEKDySQ-.js",
+    "status": 200,
+    "sha256": "a668f4d0a8c405e1087278ecac79dc0a950ae007a00ec79b005685c19ea35120",
+    "bytes": 609214
+  },
+  {
+    "path": "/assets/main-Egqx3qXe.css",
+    "status": 200,
+    "sha256": "e22e501bc42998ff62e0cbb4cc01947b6cc6b19f1518c565cf9f2c51a7675c26",
+    "bytes": 290142
+  }
+]

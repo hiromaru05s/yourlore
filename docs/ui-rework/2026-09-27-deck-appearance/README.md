@@ -17,3 +17,7 @@ The five presets store `sleeve` and `furniture` in the existing users.decks JSON
 - Browser API account fixtures are synthetic; server persistence is tested separately with real SQLite. No real-account authenticated online match is claimed.
 
 Local browser captures/reports are in checks/. Staging deployment evidence is recorded separately after deployment.
+
+## Staging
+
+Deployed runtime `e339cb9c379d28605ec3984afcb532b6bf68f6e0` to `test.yourlore.xyz`; Worker version `502aab32-bdb5-4dc0-98ec-5d440c17f9f8`. Deployed HTML and JS/CSS SHA-256 match the local build. The appearance browser test also passes against staging with fixture accounts and real deployed assets/BOT runtime; see staging/. No production deployment.
