@@ -351,9 +351,9 @@ export abstract class BaseController implements BoardHandlers {
           const def = DB[e.id] ?? STARTERS[e.id]; // 컬/어튠/보물상자 live in STARTERS
           if (def) {
             // Preserve the new public source UID so reactions during this batch can find its ghost.
-            const oldUids=new Set(prev.players[e.player].enchants.map(x=>x.card.uid));
+            const oldUids=new Set([...prev.players[e.player].enchants,...(prev.players[e.player].quests??[])].map(x=>x.card.uid));
             const shownUids=new Set(spellGhosts.map(x=>x.dataset.uid));
-            const placed=e.dest==='field'?res.state.players[e.player].enchants.find(x=>x.card.id===e.id&&!oldUids.has(x.card.uid)&&!shownUids.has(x.card.uid))?.card:undefined;
+            const placed=e.dest==='field'?[...res.state.players[e.player].enchants,...(res.state.players[e.player].quests??[])].find(x=>x.card.id===e.id&&!oldUids.has(x.card.uid)&&!shownUids.has(x.card.uid))?.card:undefined;
             if(def.quick){
               // A purchase and playSpell describe the same card: reveal it once and defer its exit.
               if(!this.quickFaces.some(x=>x.card.id===e.id&&x.side===sideOf(e.player))){

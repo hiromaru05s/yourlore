@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "checks": [
+    "Normal production clock replay",
+    "Concurrent both-side folds clean up",
+    "Hidden-document cancellation cleans up"
+  ],
+  "errors": []
+}

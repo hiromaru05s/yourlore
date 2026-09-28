@@ -1,0 +1,32 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     status: 500,
++     url: 'http://127.0.0.1:5290/api/geo'
++   },
++   {
++     status: 500,
++     url: 'http://127.0.0.1:5290/api/auth/me'
++   }
++ ]
+- []
+
+    at file:///private/tmp/lore-staging-orchestrator-20260929/tests/orchestrated-release-browser.mjs:52:37 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    { url: 'http://127.0.0.1:5290/api/geo', status: 500 },
+    { url: 'http://127.0.0.1:5290/api/auth/me', status: 500 }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

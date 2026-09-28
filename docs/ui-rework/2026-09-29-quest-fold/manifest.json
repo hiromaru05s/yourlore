@@ -1,0 +1,22 @@
+{
+  "selection": "Second draft #2: 光頁の折契",
+  "date": "2026-09-29",
+  "implemented": true,
+  "committed": false,
+  "deployed": false,
+  "baseHead": "e79d6a7f93d9e6b69e935be6c80d3464205501b3",
+  "files": {
+    "client/src/ui/questFold.ts": "bd7a29126a7f9049f052b73e94b723d45246604e4185e5171bbd59f8403ebc8a",
+    "client/src/ui/questFoldMaterial.ts": "bc85c90c6f4705b098edf2be9d2fe0f80a72fbeaabd140ed7fd5bcca1a3fff5b",
+    "client/src/ui/cardSurface.ts": "a53e5eb0d65c6af308a9f7526dd9dcaab0ea6f603dd67697915423809f4f3fb8",
+    "client/src/ui/anim.ts": "201f186219f2a687db1e2bfccd08bb91be4de6af8c3341c324e3e65b207f785b",
+    "client/src/game/controller.ts": "e3d64d35da035655f0f152fb4d13c9e758648dc21f7b106223cfa2a2b4b2b9c6",
+    "client/quest-play-lab.html": "1c487e0a60776626074db0b9e60fcb7b5ceab25739e669b98c8d537e9b1ce12a",
+    "client/src/dev/questPlayLab.ts": "29f98dca028b460c4f0936145f2266651e84a2a1756e5336c20246985bc1edab",
+    "tests/quest-fold-browser.mjs": "8560d5d864f77b96ee406c70e1fe946f7c00f90ff29f1595c989f2c6730f3a71",
+    "tests/quest-fold-lifecycle-browser.mjs": "20e13b6adba9f48b2d933ee61f3c7e3148763ad44b22fce50da55c4b750df328"
+  },
+  "functionalReport": "qa/report.json",
+  "remainingValidation": "qa/extra-report.json",
+  "visual": "Selected fold preserved; production peak and placement captures inspected, normal-speed production recording pending."
+}

@@ -10,7 +10,7 @@ function image(url: string): Promise<HTMLImageElement> {
   if (!pending) {
     pending = new Promise((resolve, reject) => {
       const img = new Image(); img.crossOrigin = 'anonymous';
-      const timeout=setTimeout(()=>reject(new Error('Card texture timeout')),2500);
+      const timeout=setTimeout(()=>reject(new Error('Card texture timeout: '+url)),2500);
       img.onload = () => {clearTimeout(timeout);resolve(img);}; img.onerror = () => {clearTimeout(timeout);reject(new Error('Card texture unavailable'));};
       img.src = url;
     });
@@ -58,7 +58,7 @@ export async function captureCardBack(sleeve:string,ratio=1/.64):Promise<CardSur
   paintSleeve(back.getContext('2d')!,await image(sleeve),pad,w,h);
   return {face:null,back};
 }
-export async function captureCardSurface(node: HTMLElement, sleeve: string, reveal: boolean): Promise<CardSurface> {
+export async function captureCardSurface(node: HTMLElement, sleeve: string, reveal: boolean, includeBack=true): Promise<CardSurface> {
   const r = node.getBoundingClientRect();
   const ratio = r.height / r.width;
   // Opponent path never reads, copies or requests a face or card identity.
@@ -66,7 +66,7 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
   const w = RESOLUTION, h = w * ratio, pad = w * CARD_PADDING;
   const back = canvas(w + pad*2, h + pad*2);
   const backCtx = back.getContext('2d')!;
-  const backImage = image(sleeve);
+  const backImage = includeBack?image(sleeve):Promise.resolve(null);
   const face = canvas(w + pad*2, h + pad*2), ctx = face.getContext('2d')!;
   const box = (el: Element) => {
     const b = el.getBoundingClientRect();
@@ -124,7 +124,7 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
   }
   await Promise.all([backImage, image(frameUrl), ...(art ? [image(art.currentSrc || art.src).catch(()=>null)] : [])]);
   for (const draw of layers) await draw();
-  paintSleeve(backCtx,await backImage,pad,w,h);
+  const sleeveImage=await backImage;if(sleeveImage)paintSleeve(backCtx,sleeveImage,pad,w,h);
   return { face, back };
 }
 
@@ -144,4 +144,30 @@ export async function capturePileSurface(node:HTMLElement,sleeve:string,preserve
     if(preserveDim&&node.classList.contains('is-dim')&&getComputedStyle(node).filter!=='none'&&result.face){const c=canvas(result.face.width,result.face.height),ctx=c.getContext('2d')!;ctx.filter='grayscale(1) brightness(.55) contrast(.9)';ctx.drawImage(result.face,0,0);result.face=c;}
     return result;
   }finally{host.remove();}
+}
+
+/** Capture the actual public quest tile at its native size, including the cost
+ * seal and localized progress. Padding is identical to captureCardSurface. */
+export async function captureQuestTile(node:HTMLElement):Promise<HTMLCanvasElement> {
+  const r=node.getBoundingClientRect(),w=768,h=w*r.height/r.width,pad=w*CARD_PADDING;
+  const out=canvas(w+pad*2,h+pad*2),c=out.getContext('2d')!;
+  const box=(el:Element)=>{const b=el.getBoundingClientRect();return {x:pad+(b.left-r.left)/r.width*w,y:pad+(b.top-r.top)/r.width*w,w:b.width/r.width*w,h:b.height/r.width*w};};
+  const frame=node.querySelector<HTMLElement>('.buff-frame')!,art=node.querySelector<HTMLElement>('.buff-art')!;
+  const cost=node.querySelector<HTMLElement>('.buff-cost')!,label=node.querySelector<HTMLElement>('.quest-progress')!;
+  const cb=box(cost),lb=box(label),ls=getComputedStyle(label),cs=getComputedStyle(cost);
+  const text=(value:string,b:ReturnType<typeof box>,style:CSSStyleDeclaration)=>{
+    c.save();c.font=`${style.fontWeight} ${parseFloat(style.fontSize)*w/r.width}px ${style.fontFamily}`;
+    c.textAlign='center';c.textBaseline='middle';c.fillStyle=style.color;c.shadowColor='#000';c.shadowBlur=3*w/r.width;c.shadowOffsetY=w/r.width;
+    c.fillText(value,b.x+b.w/2,b.y+b.h/2,b.w);c.restore();
+  };
+  const [fr,ar,seal]=await Promise.all([matte(urlOf(frame)!),image(urlOf(art)!),matte('/art/biblion/modular/cost.png')]);
+  c.drawImage(fr,pad,pad,w,h);c.save();
+  const path=document.querySelector('#celestial-field-spell path')?.getAttribute('d');
+  if(path){c.translate(pad,pad);c.scale(w,h);c.clip(new Path2D(path));c.scale(1/w,1/h);c.translate(-pad,-pad);}
+  const scale=Math.max(w/ar.naturalWidth,h/ar.naturalHeight),sw=w/scale,sh=h/scale;
+  c.drawImage(ar,(ar.naturalWidth-sw)/2,(ar.naturalHeight-sh)/2,sw,sh,pad,pad,w,h);c.restore();
+  c.drawImage(seal,cb.x,cb.y,cb.w,cb.h);text(cost.textContent||'',cb,cs);
+  const gradient=c.createLinearGradient(lb.x,0,lb.x+lb.w,0);gradient.addColorStop(0,'#231330dd');gradient.addColorStop(.5,'#38214bef');gradient.addColorStop(1,'#231330dd');
+  c.fillStyle=gradient;c.fillRect(lb.x,lb.y,lb.w,lb.h);c.fillStyle=ls.borderTopColor;c.fillRect(lb.x,lb.y,lb.w,parseFloat(ls.borderTopWidth)*w/r.width);
+  text(label.textContent||'',lb,ls);return out;
 }

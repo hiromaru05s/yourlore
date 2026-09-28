@@ -1,3 +1,4 @@
+import {foldQuestIntoSlot,nativeQuestGhost} from './questFold';
 import {passiveIcon} from './passiveIcon';
 import {animateSeeker} from './seekerAnimation';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
@@ -125,7 +126,8 @@ async function focusCard(node: HTMLElement, side: ViewSide): Promise<void> {
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const w = node.offsetWidth || 100;
   const h = node.offsetHeight || 156;
-  const scale = Math.min(innerHeight * .62 / h, innerWidth * .58 / w, 3.4);
+  const quest=node.dataset.cardType==='quest';
+  const scale = Math.min(innerHeight * (quest?.44:.62) / h, innerWidth * .58 / w, quest?240/w:3.4);
   // Rasterize at the reveal's final CSS size before animating. Upscaling a
   // hand-sized compositing layer makes the entire frame and its text blurry.
   const revealW=w*scale,revealH=h*scale;
@@ -219,8 +221,15 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
       const target=(slotIndex==null?zone?.querySelector('.slot'):zone?.children[Math.min(slotIndex,zone.children.length-1)]) as HTMLElement|null;
       if(target){
         const duration=enchantHasTurnCountdown(card)?`<span class="buff-duration"><span>${getLang()==='ja'?'残り':''}${card.val??1}</span></span>`:'<img class="buff-infinity" src="/art/biblion/modular/infinity.png" alt="">';
-        const face=await flyIntoSlot(node,target,card.t==='quest'?questTile(card):enchantmentTile(card,duration));
-        if(!fxSkip)playBiblionFx(card.t==='quest'?'quest':'enchant-place',face);
+        if(card.t==='quest'){
+          const face=questTile(card);
+          if(!fxSkip&&await boardMotionScope(signal=>foldQuestIntoSlot(node,target,face,signal),6500))return face.parentElement;
+          // Interrupted or unavailable renderer: preserve the native placed card.
+          if(!target.isConnected)return null;
+          return nativeQuestGhost(target,face);
+        }
+        const face=await flyIntoSlot(node,target,enchantmentTile(card,duration));
+        if(!fxSkip)playBiblionFx('enchant-place',face);
         return face;
       }
     } else if (dest === "discard") await landOnShelf(node,side,true);

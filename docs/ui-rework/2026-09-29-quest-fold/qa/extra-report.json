@@ -1,0 +1,11 @@
+{
+  "status": "blocked",
+  "reason": "Chrome launch timed out after 180000 ms, before loading the app. Repeated browser/host delays in this session.",
+  "unverified": [
+    "Additional normal-speed production recording",
+    "Concurrent both-side rendering",
+    "Hidden-document cancellation in the new renderer"
+  ],
+  "verified": "See report.json: 8 actual browser checks passed with a controlled clock. First production fold and landing were visually inspected from captures.",
+  "rerun": "node tests/quest-fold-lifecycle-browser.mjs"
+}

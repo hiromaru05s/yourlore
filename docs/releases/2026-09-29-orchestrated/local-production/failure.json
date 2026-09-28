@@ -1,0 +1,14 @@
+{
+  "message": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   {\n+     status: 500,\n+     url: 'http://127.0.0.1:5290/api/geo'\n+   },\n+   {\n+     status: 500,\n+     url: 'http://127.0.0.1:5290/api/auth/me'\n+   }\n+ ]\n- []\n",
+  "errors": [],
+  "serverErrors": [
+    {
+      "url": "http://127.0.0.1:5290/api/geo",
+      "status": 500
+    },
+    {
+      "url": "http://127.0.0.1:5290/api/auth/me",
+      "status": 500
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "pattern": "03 frost",
+  "checks": [
+    {
+      "name": "desktop",
+      "icons": 11,
+      "styles": {
+        "stroke": "rgb(214, 244, 255)",
+        "opacity": "0.9",
+        "filter": "drop-shadow(rgb(209, 241, 255) 0px 0px 1.2px) drop-shadow(rgba(148, 211, 228, 0.7) 0px 0px 3px)"
+      },
+      "errors": []
+    },
+    {
+      "name": "mobile",
+      "icons": 11,
+      "styles": {
+        "stroke": "rgb(214, 244, 255)",
+        "opacity": "0.9",
+        "filter": "drop-shadow(rgb(209, 241, 255) 0px 0px 1.2px) drop-shadow(rgba(148, 211, 228, 0.7) 0px 0px 3px)"
+      },
+      "errors": []
+    }
+  ],
+  "typecheck": "passed",
+  "build": "passed",
+  "names": "11 Japanese passive labels checked; halo present in every description",
+  "comparison": "5 alternatives retained; standard halo hidden when preview overlay is active",
+  "note": "A prior run during concurrent boardView edits saw myTurn is not defined; fresh desktop and mobile pages are clean."
+}
