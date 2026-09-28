@@ -1,0 +1,13 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "runtime": "4a6c042",
+  "state": "ready",
+  "models": [
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/board.glb?revision=recessed-rim-v3-20260929",
+      "status": 200
+    }
+  ],
+  "errors": [],
+  "boundary": "Account/API fixture; unchanged artwork/furniture served from local cache; deployed JS and new board loaded from staging"
+}

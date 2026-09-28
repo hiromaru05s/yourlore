@@ -20,3 +20,9 @@
 - v2比で通常モデル約88kB増、軽量版約20kB増。描画呼び出しは増えず、既存の盤面描画キャッシュを継続する。端末でのFPS改善を主張するものではない。
 
 実画面は `board-1440-empty.png`、`board-1440-full.png`、`board-640-empty.png`。モデルサイズ・ハッシュ・検査値は `assets.json`。
+
+## ステージング
+
+実装コミット `4a6c042` をmainへ統合し、https://test.yourlore.xyz/?v=4a6c042 へ反映。Worker version `b181a06c-db3c-4bf3-810a-9a405785c853`。
+
+公開17ファイル（JS/CSS、通常・軽量GLB、SVGなど）のSHA-256一致を確認。公開JSと新しいGLBを使った実BOT画面でモデルHTTP200／ready状態、ページ例外なしを確認し、`staging.png` を保存。アカウント/APIはfixture、変更していない画像・家具はローカルキャッシュを使用。新しい盤面とアプリJSはステージングから取得。本番への反映は行っていない。
