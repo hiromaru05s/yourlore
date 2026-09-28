@@ -1,0 +1,15 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "chunk": "/assets/riftScene-BjzSS5Br.js",
+  "variant": "inscription",
+  "duration": 2800,
+  "errors": [],
+  "requests": [
+    {
+      "url": "https://test.yourlore.xyz/assets/riftScene-BjzSS5Br.js",
+      "status": 200
+    }
+  ],
+  "cleanup": true,
+  "boundary": "Account/API fixtures and unchanged media cache. Deployed JS and current recessed board models loaded from staging. Real BOT board plus explicit invocation of deployed swallowRiftCard on a hand-card clone and persistent Rift anchor (BOT redraws are independent); not an authenticated online match or a natural exile trigger."
+}

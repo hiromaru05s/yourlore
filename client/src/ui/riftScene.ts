@@ -1,3 +1,5 @@
+import {playSilverRift} from './riftInkScene';
+import {FRAME_BACK} from '../shared/cards';
 import {RIFT_MOUNT,readingScale} from './readingBoardLayout';
 import {boardPoint} from './boardProjection';
 import {acquireVoidSurface,drawVoidSurface} from './voidSurface';
@@ -28,7 +30,8 @@ export async function swallowRiftCard(node:HTMLElement,target:HTMLElement,start:
  host.removeAttribute('id');host.classList.remove('fx-card-flight','cast-reveal','drag-ghost--hand');
  host.style.cssText=`position:fixed;left:-10000px;top:0;visibility:hidden;pointer-events:none;transform:none;width:${w}px;height:${h}px;--cw:${w}px;--ch:${h}px`;
  document.body.append(host);
- const sleeve=document.querySelector<HTMLElement>('.pile--deck')?.dataset.sleeve||'/art/frames/back.webp';
+ const side=target.id==='rift-opp'?'opp':'my';
+ const sleeve=document.querySelector<HTMLElement>(`#pile-${side}Deck`)?.dataset.sleeve||FRAME_BACK;
  let face:HTMLCanvasElement|undefined;
  // If texture capture fails, the DOM card still collapses locally under the same card-local vortex.
  let cancelCapture=()=>{};
@@ -42,6 +45,9 @@ export async function swallowRiftCard(node:HTMLElement,target:HTMLElement,start:
  const sourceWidth=Math.hypot(project(w,h/2).x-project(0,h/2).x,project(w,h/2).y-project(0,h/2).y);
  // Rasterizing a 1536px capture per triangle wastes work for a 30–180px board card.
  if(face){const small=document.createElement('canvas');small.width=Math.max(192,Math.min(384,Math.ceil(sourceWidth*3)));small.height=Math.round(small.width*face.height/face.width);const raster=small.getContext('2d');if(raster){raster.drawImage(face,0,0,small.width,small.height);face=small;}}
+ let notified=false;const started=()=>{if(!notified){notified=true;onStart();}};
+ if(face&&await playSilverRift(node,target,face,start,sink,signal,started))return;
+ if(signal.aborted||!node.isConnected||!target.isConnected)return;
  const dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);
  canvas.className='rift-fold-canvas rift-transmute-canvas';canvas.setAttribute('aria-hidden','true');
  const cols=sourceWidth<60?6:8,rows=sourceWidth<60?10:13,grid:{rest:Point;uv:Point}[]=[];
@@ -96,7 +102,7 @@ export async function swallowRiftCard(node:HTMLElement,target:HTMLElement,start:
     });
     if(ms===RIFT_DURATION){finish();return;}frame=requestAnimationFrame(tick);
    };
-   tick(begun);if(face)node.style.visibility='hidden';onStart();
+   tick(begun);if(face)node.style.visibility='hidden';started();
   });
  }finally{releaseVoid();cancelAnimationFrame(frame);signal.removeEventListener('abort',abort);canvas.remove();if(oldStyle===null)node.removeAttribute('style');else node.setAttribute('style',oldStyle);}
 }

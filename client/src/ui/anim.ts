@@ -937,7 +937,7 @@ export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<voi
   try{
     if(!reduced){
       try{const {swallowRiftCard}=await import('./riftScene');
-        const completed=await boardMotionScope(async signal=>{await swallowRiftCard(node,target,start,signal,()=>{started=true;sfx('void');});return !signal.aborted;},5000);
+        const completed=await boardMotionScope(async signal=>{await swallowRiftCard(node,target,start,signal,()=>{started=true;sfx('void');});return !signal.aborted;},7000);
         if(!completed)return;
       }catch(error){ console.warn('[Rift animation]',error); }
       if(started||fxSkip)return;

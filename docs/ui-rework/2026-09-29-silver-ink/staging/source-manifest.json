@@ -1,0 +1,43 @@
+{
+  "baseCommit": "7801cc3e9c6043fb6fb48016d8cb26aa97f3d336",
+  "checkout": "/Users/hiromaru05s/.codex/worktrees/silver-ink-staging/LORE_TCG",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "bfb72f3937a347709d21072220d2f9437decc694f630c9f214dc49232e315651"
+    },
+    {
+      "path": "docs/animation-quality-benchmark.md",
+      "sha256": "09a04d51b3a123947a888156d8a7015d3abc851727561251d6344c54256d081f"
+    },
+    {
+      "path": "docs/vfx-art-direction.md",
+      "sha256": "965e7e1af8d1f2208c9cf9fb8c7c95c31284742e944aa84d12029f2b26f5dc3e"
+    },
+    {
+      "path": "client/src/ui/riftScene.ts",
+      "sha256": "2a42f465cfa974717ad08902feccc5c1053814b80429fa3a64ff3f4fbfc13644"
+    },
+    {
+      "path": "client/src/ui/riftInkScene.ts",
+      "sha256": "4a66f50c5a7ba41c2f290246a7aeb7d995fe6e7da6b35fb23e12b6bc8dc5fc7f"
+    },
+    {
+      "path": "client/src/ui/riftInkMaterial.ts",
+      "sha256": "6ab93c61bf9563cc3f0b15b17a72147bd1cdac5d3246f92481bab457abb75831"
+    },
+    {
+      "path": "client/src/ui/riftInkRenderer.ts",
+      "sha256": "9ec414d43d32f0ffcd6b4d7ebe232ff4d5175af688687dbfb78a84770d976b77"
+    },
+    {
+      "path": "tests/rift-silver-browser.mjs",
+      "sha256": "f8cd572074d2ab48015c2db3583b92caea8a15970940e4842d749376e3a56697"
+    },
+    {
+      "path": "client/src/ui/anim.ts",
+      "sha256": "dd1e47c1ea5f6398660fdb45d0fdbc95aa940cc3a721b722ddcd01b514112e03"
+    }
+  ],
+  "initialBaseCommit": "27f5dd60a69dca64e89481fda1577b19a6417415"
+}

@@ -1,0 +1,14 @@
+{
+  "typecheck": "passed client and server",
+  "build": "passed; existing chunk-size warning",
+  "rift-transmute": "passed",
+  "quick-playback": "passed",
+  "rift-silver-browser": "passed on isolated source at port 5258",
+  "wranglerDryRun": "passed using 4.130.0, staging bindings",
+  "diffCheck": "passed",
+  "backendChanges": false,
+  "databaseMigrationsRun": false,
+  "initialBase": "27f5dd60a69dca64e89481fda1577b19a6417415",
+  "finalBase": "7801cc3e9c6043fb6fb48016d8cb26aa97f3d336",
+  "finalBaseTypecheckAndBuild": "passed"
+}

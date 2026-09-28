@@ -1,0 +1,35 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "workerVersion": "1f062553-96e8-449d-8e29-99411bd96f0c",
+  "sourceBase": "7801cc3e9c6043fb6fb48016d8cb26aa97f3d336",
+  "sourceManifest": "source-manifest.json",
+  "runtimeDelta": [
+    "client/src/ui/riftInkMaterial.ts",
+    "client/src/ui/riftInkRenderer.ts",
+    "client/src/ui/riftInkScene.ts",
+    "client/src/ui/riftScene.ts",
+    "client/src/ui/anim.ts: scope timeout 5000 to 7000 only"
+  ],
+  "mainBundle": "main-D4h3Qrqi.js",
+  "riftBundle": "riftScene-BjzSS5Br.js",
+  "preservedBoardRevision": "recessed-rim-v3-20260929",
+  "productionDeployed": false,
+  "backendChanged": false,
+  "databaseMigrated": false,
+  "initialDeployment": "f3bc7859-533a-4ac6-a132-97ca54955ef1",
+  "interveningBoardDeployment": "b181a06c-db3c-4bf3-810a-9a405785c853",
+  "verification": {
+    "checkedAt": "2026-09-28T20:29:58.107639+00:00",
+    "remoteFilesMatched": 16,
+    "latestBoardHashesPreserved": true,
+    "browser": "browser.json",
+    "activePhaseAssertions": [
+      800,
+      1500
+    ],
+    "visualFramesInspected": true,
+    "cleanup": true,
+    "pageErrors": []
+  }
+}
