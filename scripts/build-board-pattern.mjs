@@ -8,7 +8,7 @@ import {createHash} from 'node:crypto';
 import sharp from 'sharp';
 const base='client/public/models/reading-board/v1/';
 const sourceRef='d2ff0fee320c13e7d74e4eb2e4b101b37b59819b';
-const svg=await fs.readFile(base+'biblion-surface-v1.svg');
+const svg=await fs.readFile(base+'biblion-surface-v2.svg');
 const report=[];
 const hash=b=>createHash('sha256').update(b).digest('hex');
 for(const low of [false,true]){
@@ -20,7 +20,7 @@ for(const low of [false,true]){
  const material=g.materials.find(m=>m.name==='02_IvoryWeave');
  const tex=g.textures[material.pbrMetallicRoughness.baseColorTexture.index],image=g.images[tex.source];
  const png=await sharp(svg).resize(low?1024:2048,low?630:1260).png({compressionLevel:9,palette:true,colours:32}).toBuffer();
- chunks[image.bufferView]=png;image.mimeType='image/png';image.name='Biblion flat compass print';
+ chunks[image.bufferView]=png;image.mimeType='image/png';image.name='Biblion flowing flat border';
  delete material.normalTexture;delete material.occlusionTexture;
  delete material.pbrMetallicRoughness.metallicRoughnessTexture;
  material.pbrMetallicRoughness.roughnessFactor=.88;material.pbrMetallicRoughness.metallicFactor=0;
@@ -48,7 +48,7 @@ for(const low of [false,true]){
  for(const a of g.accessors)if(a.bufferView!=null)a.bufferView=viewMap.get(a.bufferView);
  for(const im of g.images)im.bufferView=viewMap.get(im.bufferView);
  let size=0;const output=[];g.bufferViews=viewIds.map(i=>{const bytes=chunks[i],pad=(4-bytes.length%4)%4;const v={...g.bufferViews[i],byteOffset:size,byteLength:bytes.length};output.push(bytes,Buffer.alloc(pad));size+=bytes.length+pad;return v;});
- g.buffers=[{byteLength:size}];g.asset.extras={...g.asset.extras,loreSurface:'biblion-flat-compass-v1',sourceRef};
+ g.buffers=[{byteLength:size}];g.asset.extras={...g.asset.extras,loreSurface:'biblion-flat-binding-v2',sourceRef};
  let json=Buffer.from(JSON.stringify(g));json=Buffer.concat([json,Buffer.alloc((4-json.length%4)%4,32)]);
  const header=Buffer.alloc(20),binaryHeader=Buffer.alloc(8);header.write('glTF');header.writeUInt32LE(2,4);header.writeUInt32LE(28+json.length+size,8);header.writeUInt32LE(json.length,12);header.write('JSON',16);binaryHeader.writeUInt32LE(size);binaryHeader.writeUInt32LE(0x004e4942,4);
  const glb=Buffer.concat([header,json,binaryHeader,...output]);await fs.writeFile(base+name,glb);
@@ -59,5 +59,5 @@ for(const low of [false,true]){
  }
  report.push({file:name,sourceRef,sourceSha256:hash(source),sha256:hash(glb),beforeBytes:source.length,afterBytes:glb.length,textureSize:low?[1024,630]:[2048,1260],surfaceVertices:vertices,geometryUnchanged:true,normalTexture:false,roughness:.88});
 }
-await fs.writeFile('docs/ui-rework/2026-09-27-board-pattern/assets.json',JSON.stringify({sourceSvgSha256:hash(svg),assets:report},null,2)+'\n');
+await fs.writeFile('docs/ui-rework/2026-09-29-board-border/assets.json',JSON.stringify({sourceSvgSha256:hash(svg),assets:report},null,2)+'\n');
 console.log(report);

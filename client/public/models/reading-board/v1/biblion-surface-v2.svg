@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="1260" viewBox="0 0 2048 1260">
+  <title>Biblion — flowing bookbinding border</title>
+  <desc>Flat warm ink follows the ivory board perimeter. Tapered quill and leaf forms echo the curved metal frame. The playing field remains open. No central emblem, shading, bevel, grain or relief.</desc>
+  <rect width="2048" height="1260" fill="#e7e5df"/>
+  <defs>
+    <g id="binding-corner">
+      <!-- A continuous frame, with the same broad sweep as the physical rim. -->
+      <path fill="#c6bca9" d="M29 596 35 244C36 106 92 42 237 39H951V42H239C98 45 42 107 42 245L34 596Z"/>
+      <path fill="#d3ccbf" d="M53 501 58 245C60 123 106 64 241 62H881V65H241C112 68 65 128 65 248L59 501Z"/>
+      <!-- Broad-to-fine silhouettes; these are ink, not raised metal. -->
+      <path fill="#beb19a" d="M63 408C78 334 84 298 115 243C157 169 210 124 296 104C222 135 197 167 177 205C153 251 164 275 142 302C119 329 91 343 63 408Z"/>
+      <path fill="#d0c7b6" d="M91 338C103 293 131 261 151 249C152 283 124 310 91 338Z"/>
+      <path fill="#beb19a" d="M148 219C176 153 235 106 323 87C365 78 402 77 448 81C354 89 294 105 250 137C215 162 191 196 148 219Z"/>
+      <path fill="#c6baa3" d="M213 160C255 127 318 112 377 119C398 122 418 129 431 142C384 130 355 137 315 155C349 127 303 129 275 138C253 145 234 154 213 160Z"/>
+      <path fill="#c4b8a0" d="M362 101C463 80 575 89 681 122C754 145 803 166 902 160C813 180 744 157 676 138C560 104 480 98 362 101Z"/>
+      <path fill="#d0c6b3" d="M520 120C594 120 641 145 689 170C735 194 779 202 838 199C773 212 721 199 673 177C619 151 581 133 520 120Z"/>
+      <path fill="#beb19a" d="M671 126C698 105 731 109 754 96C742 119 715 127 696 127C741 128 773 136 796 154C750 142 711 145 671 126Z"/>
+      <path fill="#c7bca5" d="M81 276C68 252 69 227 83 207C89 226 82 242 81 253C91 226 107 212 128 201C113 222 103 247 81 276Z"/>
+      <!-- Small curved terminals stay attached to the border, not the field. -->
+      <path fill="#bbae93" d="M427 40C455 42 470 56 492 65C468 62 446 54 427 40ZM503 41C529 42 550 51 571 51C548 56 526 56 503 41Z"/>
+    </g>
+  </defs>
+  <use href="#binding-corner"/>
+  <use href="#binding-corner" transform="translate(2048 0) scale(-1 1)"/>
+  <use href="#binding-corner" transform="translate(0 1260) scale(1 -1)"/>
+  <use href="#binding-corner" transform="translate(2048 1260) scale(-1 -1)"/>
+</svg>

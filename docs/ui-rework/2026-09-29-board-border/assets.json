@@ -1,0 +1,37 @@
+{
+  "sourceSvgSha256": "5be20732fac1cce03e3286662c9b9b94685d74354327248f14930bb2b79b6b72",
+  "assets": [
+    {
+      "file": "board.glb",
+      "sourceRef": "d2ff0fee320c13e7d74e4eb2e4b101b37b59819b",
+      "sourceSha256": "e3eaaa5db3ca1435483e8bb4d54e5431a636dbb3d178d3c23473349f591fbb70",
+      "sha256": "53a0459f246f0e3464620f01201dacaabfab22a9738c7726da6f0be30d4cfd5a",
+      "beforeBytes": 4851224,
+      "afterBytes": 3630048,
+      "textureSize": [
+        2048,
+        1260
+      ],
+      "surfaceVertices": 3222,
+      "geometryUnchanged": true,
+      "normalTexture": false,
+      "roughness": 0.88
+    },
+    {
+      "file": "board-low.glb",
+      "sourceRef": "d2ff0fee320c13e7d74e4eb2e4b101b37b59819b",
+      "sourceSha256": "06285a2e184955ec066f1faf237f85bb2f22c228e265aba31b1c792cff956f94",
+      "sha256": "2c07c84b13d8a389bfaa6fcef270a46514af136b2913b833ad63cb057896f951",
+      "beforeBytes": 1552460,
+      "afterBytes": 1330812,
+      "textureSize": [
+        1024,
+        630
+      ],
+      "surfaceVertices": 1350,
+      "geometryUnchanged": true,
+      "normalTexture": false,
+      "roughness": 0.88
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "state": "ready",
+    "errors": []
+  },
+  {
+    "viewport": {
+      "width": 640,
+      "height": 420
+    },
+    "state": "ready-low",
+    "errors": []
+  }
+]
