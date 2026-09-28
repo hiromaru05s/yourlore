@@ -1,0 +1,87 @@
+[
+  {
+    "file": "assets/cardSurface-BlJCF1Wv.js",
+    "sha256": "776568b26326a7fcb0e0bec5480a01f6f52fece163bc48e0716639cac18ca5ee",
+    "match": true
+  },
+  {
+    "file": "assets/RoomEnvironment-Bm_uhgLE.js",
+    "sha256": "09ef8cc6f0fd42539499d70aa8f044645ff12da477f6023696d77444e1b0f14f",
+    "match": true
+  },
+  {
+    "file": "assets/GLTFLoader-Bcaky_l1.js",
+    "sha256": "15327d51872b8836553c1eb5f79cbac909b66fee8fdbaf089c864d94456f41af",
+    "match": true
+  },
+  {
+    "file": "index.html",
+    "sha256": "3ca38e502f3bdf79d99aabb0e1124e728fe33a6c775266af1d6a380bbb9815d3",
+    "match": true
+  },
+  {
+    "file": "assets/ceremonyScene-BdJ6wPnH.js",
+    "sha256": "235caa6e54f3de7b186bf34ff29078082acf76d4ee8e8f3c3ee4233506f77841",
+    "match": true
+  },
+  {
+    "file": "assets/diceScene-DAKy3qJR.js",
+    "sha256": "94d0f7c8c87669c6e1ea5affb0c42b2f6a38afe57dc51c7aa0ac2866b7ba4125",
+    "match": true
+  },
+  {
+    "file": "assets/duelScene-BxH8HYsX.js",
+    "sha256": "7f6a70af9865a1a771908a3527e567a4289ac01e15debd484090a019d5732407",
+    "match": true
+  },
+  {
+    "file": "assets/main-BdM-1Ru6.js",
+    "sha256": "f8dfdb2e59bd03ae11d2635eb8ba3ef534f06016e35c7301aa4ebf6d89058c51",
+    "match": true
+  },
+  {
+    "file": "assets/tablePreview-2Rkra2Ey.css",
+    "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+    "match": true
+  },
+  {
+    "file": "assets/paperDraw-CwTefgI9.js",
+    "sha256": "01b2ae4db18b5a9f63c00cda2bdd10a6c66acebeafdc6dd6445f3abf16d141de",
+    "match": true
+  },
+  {
+    "file": "assets/riftScene-CLNLv5fa.js",
+    "sha256": "7f4623d62810b7b4dfae9df29d0259b14966cce796a46478fc0f205003f0bd3d",
+    "match": true
+  },
+  {
+    "file": "assets/main-Egqx3qXe.css",
+    "sha256": "e22e501bc42998ff62e0cbb4cc01947b6cc6b19f1518c565cf9f2c51a7675c26",
+    "match": true
+  },
+  {
+    "file": "assets/tablePreview-CDKSm7Zu.js",
+    "sha256": "2b81fbb762795470831fab796cecfa41264d5f78560381eaf55eea2c7d2d5e2f",
+    "match": true
+  },
+  {
+    "file": "assets/three.module-CEKDySQ-.js",
+    "sha256": "a668f4d0a8c405e1087278ecac79dc0a950ae007a00ec79b005685c19ea35120",
+    "match": true
+  },
+  {
+    "file": "models/reading-board/v1/board-low.glb",
+    "sha256": "2c07c84b13d8a389bfaa6fcef270a46514af136b2913b833ad63cb057896f951",
+    "match": true
+  },
+  {
+    "file": "models/reading-board/v1/board.glb",
+    "sha256": "53a0459f246f0e3464620f01201dacaabfab22a9738c7726da6f0be30d4cfd5a",
+    "match": true
+  },
+  {
+    "file": "models/reading-board/v1/biblion-surface-v2.svg",
+    "sha256": "5be20732fac1cce03e3286662c9b9b94685d74354327248f14930bb2b79b6b72",
+    "match": true
+  }
+]

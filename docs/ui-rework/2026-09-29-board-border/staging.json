@@ -1,0 +1,14 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "runtime": "03c5516",
+  "state": "ready",
+  "models": [
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/board.glb?revision=flat-binding-v2-20260929",
+      "status": 200
+    }
+  ],
+  "errors": [],
+  "boundary": "Account/API fixture; unchanged artwork/furniture served from local cache; deployed JS and new board loaded from staging",
+  "workerVersion": "a1056d33-d6bd-49a3-8fec-821ed1c2a726"
+}
