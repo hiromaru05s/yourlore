@@ -1,0 +1,36 @@
+{
+  "origin": "http://127.0.0.1:5217",
+  "checks": {
+    "localizedHeadings": 33,
+    "counters": [
+      {
+        "value": "1",
+        "size": "9.12px"
+      },
+      {
+        "value": "1",
+        "size": "6.2016px"
+      },
+      {
+        "value": "2",
+        "size": "9.12px"
+      },
+      {
+        "value": "2",
+        "size": "6.2016px"
+      }
+    ]
+  },
+  "viewports": [
+    "1440x900",
+    "390x844",
+    "844x390"
+  ],
+  "errors": [],
+  "assertions": [
+    "11 new SVG assets decode",
+    "33 localized passive names and hover associations",
+    "preview has no horizontal overflow",
+    "icons remain inside real board cards at three viewports"
+  ]
+}

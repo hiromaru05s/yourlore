@@ -99,8 +99,8 @@ paintDuelClock(clockMe,39,90,true);assert.equal(document.querySelector('.dialog-
 closeOverlay();assert(!document.querySelector('.dialog-clock'));
 assert.equal(document.querySelectorAll('.mana-crystal').length,60);
 assert.equal(document.querySelectorAll('#portraitMe .mana-crystal.is-lit').length,23);
-assert.equal(document.querySelector('#hpbar-me').getAttribute('aria-valuenow'),'20');
-assert.equal(document.querySelector('#hpbar-me i').style.width,'50%');
+assert.equal(document.querySelector('#hp-me').textContent,'20');
+assert.equal(document.querySelector('#hpbar-me'),null,'current-health UI has no maximum-health bar');
 assert.equal(document.querySelectorAll('#fixedMarket > .card').length,7);
 assert.equal(document.querySelectorAll('#supplyMarket > .card').length,3);
 assert.deepEqual([...document.querySelectorAll('#supplyMarket .mkt-stock')].map(e=>e.textContent),['×1','×1','×1']);
@@ -152,7 +152,7 @@ assert(!permanent.querySelector('.buff-duration'));assert(!permanent.getAttribut
 const statusCard=cardEl({...mon,uid:'status-check',guts:2,decayCnt:1},{field:true,compactField:true,owner:g.players[0]});
 assert(!/\p{Extended_Pictographic}/u.test(statusCard.querySelector('.card-status').textContent));
 assert(statusCard.querySelector('.passive-icon[data-psv=guts]').getAttribute('aria-label').includes('気合 2'));
-assert.equal(statusCard.querySelector('.passive-icon[data-psv=guts] img').getAttribute('src'),'/ui/passives/v1/guts.webp');
+assert.equal(statusCard.querySelector('.passive-icon[data-psv=guts] img').getAttribute('src'),'/ui/passives/v2/guts.svg');
 assert(!statusCard.querySelector('.card-status').textContent.includes('気合'));
 // Without WebGL, draws must never hide cards or create a blocking overlay.
 const hand=document.getElementById('hand');

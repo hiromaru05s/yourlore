@@ -413,10 +413,6 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   {
     const lang0 = getLang();
     const label = (ja:string, en:string, ko:string):string => lang0 === 'ja' ? ja : lang0 === 'en' ? en : ko;
-    const psvName = (k: string): string | null => {
-      const pd = PASSIVES[k];
-      return pd ? (lang0 === "ja" ? pd.ja.name : lang0 === "en" ? pd.en.name : pd.ko.name) : null;
-    };
     const band = el("div", "card-status");
     if (c.quick || c.t === "quest") {
       const chip = el("span", "kw", labels[typeIndex]);
@@ -430,15 +426,8 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
       const innate = cardPassives(c);
       const granted = fm.passivesG ?? [];
       for (const k of [...new Set([...innate,...granted,...((fm.guts??0)>0?['guts']:[])])]) {
-        const nm = psvName(k);
-        if (!nm) continue;
-        const chip = el("span", "kw passive-icon" + (granted.includes(k) ? " kw--granted" : ""));
-        const description=PASSIVES[k]?.[lang0].desc??'';chip.title=`${nm}: ${description}`;chip.setAttribute('role','img');chip.setAttribute('aria-label',chip.title);
-        const icon=document.createElement('img');icon.src=`/ui/passives/v1/${k}.webp`;icon.alt='';icon.decoding='async';chip.append(icon);
         const count=k==='guts'?(fm.guts??0):k==='decay'?(fm.decayCnt??0):0;
-        if(count>0){chip.append(el('b','',String(count)));chip.setAttribute('aria-label',`${nm} ${count}: ${description}`);}
-        chip.dataset.psv = k;
-        band.appendChild(chip);
+        band.insertAdjacentHTML('beforeend',passiveIcon(k,{count,granted:granted.includes(k)}));
       }
     }
     // 2) 카운터
@@ -454,7 +443,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     } else if (opt.field && c.aura !== "assassinGuild") {
       if (!(opt.field||opt.compactField) && (fm.guts ?? 0) > 0) band.appendChild(el("span", "ec ec-g", `${label('気合','Guts','기합')} ${fm.guts}`));
       if ((fm.decayCnt ?? 0) > 0 && !cardPassives(c).includes('decay') && !fm.passivesG?.includes('decay')) {
-        const chip=el('span','passive-icon');chip.title=`${psvName('decay')} ${fm.decayCnt}/3`;chip.setAttribute('role','img');chip.setAttribute('aria-label',chip.title);const image=document.createElement('img');image.src='/ui/passives/v1/decay.webp';image.alt='';chip.append(image,el('b','',String(fm.decayCnt)));band.append(chip);
+        band.insertAdjacentHTML('beforeend',passiveIcon('decay',{count:fm.decayCnt}));
       }
     }
     if (band.childElementCount) node.appendChild(band);

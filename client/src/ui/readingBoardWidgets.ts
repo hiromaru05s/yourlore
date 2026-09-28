@@ -1,3 +1,5 @@
+import {createTurnLights} from './turnLight';
+import {getTurnLightPreview,type TurnLightHandle} from './turnLightPreview';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
 import {mountRiftApertures} from './riftAperture';
 import * as T from 'three';
@@ -15,6 +17,8 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
  const segments:T.Mesh[]=[];const rerollMaterials:Array<{material:T.MeshStandardMaterial;color:T.Color}>=[];
  const lit=new T.MeshStandardMaterial({color:0x3daacb,emissive:0x3ba7cc,emissiveIntensity:.45,metalness:.1,roughness:.32}),dark=new T.MeshStandardMaterial({color:0x10202b,metalness:.2,roughness:.42});owned.push(lit,dark);
  const color=new T.Color();
+ let turnLights:TurnLightHandle|undefined;
+ const reducedTurnLight=matchMedia('(prefers-reduced-motion: reduce)');
  function releaseTemplate(object:T.Object3D){
   const geos=new Set<T.BufferGeometry>(),mats=new Set<T.Material>(),maps=new Set<T.Texture>();
   object.traverse(o=>{if(o instanceof T.Mesh){geos.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:[o.material]){mats.add(m);for(const value of Object.values(m))if(value instanceof T.Texture)maps.add(value);}}});
@@ -106,17 +110,23 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   if(turnPress||rerollPress||pressed)shadowDirty=true;
   if(end){end.dataset.physicalPhase=turnAge<120?'press':turnAge<710?'spin':'rest';const label=end.querySelector<HTMLElement>('.end-turn-label');if(label){label.style.opacity='1';const text=displayEnemy?'ENEMY\nTURN':'END\nTURN';if(label.textContent!==text)label.textContent=text;}}
   if(end)end.dataset.turnColor=displayEnemy?'red':'blue';
+  if(!turnLights&&turn){
+   const preview=import.meta.env.DEV?getTurnLightPreview():undefined;
+   turnLights=preview?preview(turn,segments,scene):createTurnLights(turn,segments,()=> 'porcelain',scene);
+   if(!preview)root.dataset.turnlight='porcelain';
+  }
+  if(turnLights)changed=turnLights.update({now,active:!enemy&&!!end&&!end.disabled,enemy,remaining,hover:!!end?.matches(':hover')||document.activeElement===end,pressed:pressed==='endBtn',reduced:reducedTurnLight.matches})||changed;
   group.visible=true;
 
   const state=`${enemy}:${end?.disabled}:${refresh?.disabled}`;
   if(state!==lastState){animateUntil=now+500;lastState=state;}
   return changed||now<animateUntil||t<1;
  }
- return {tick,tickRift:(now:number)=>apertures.tick(now),takeShadowUpdate(){const value=shadowDirty;shadowDirty=false;return value;},warm(render:()=>void){
+ return {tick,renderTurnLights(renderer:T.WebGLRenderer,camera:T.Camera){turnLights?.renderDisplay?.(renderer,camera);},tickRift:(now:number)=>apertures.tick(now),takeShadowUpdate(){const value=shadowDirty;shadowDirty=false;return value;},warm(render:()=>void){
   const wasVisible=group.visible,rerollVisible=reroll?.visible;
   const saved=manas.flatMap(m=>Object.values(m.batches).flat().map(mesh=>({mesh,count:mesh.count,visible:mesh.visible})));
   group.visible=true;if(reroll)reroll.visible=true;
   for(const {mesh,count} of saved){if(!count){mesh.setMatrixAt(0,new T.Matrix4());mesh.instanceMatrix.needsUpdate=true;mesh.count=1;}mesh.visible=true;}
   try{render();}finally{group.visible=wasVisible;if(reroll)reroll.visible=rerollVisible??true;for(const {mesh,count,visible} of saved){mesh.count=count;mesh.visible=visible;}}
- },setMarketMotion(height:number,z:number,visible:boolean){if(reroll){const s=readingScale();reroll.position.set(-.694,.016+height/s,z/s);reroll.visible=visible;}},get settled(){return ready;},dispose(){if(dead)return;dead=true;root.removeEventListener('pointerover',over);root.removeEventListener('pointerdown',down);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);root.removeEventListener('click',click,true);manas.forEach(m=>Object.values(m.batches).flat().forEach(b=>b.dispose()));geometries.forEach(g=>g.dispose());apertures.dispose();templates.forEach(releaseTemplate);owned.forEach(m=>m.dispose());group.removeFromParent();delete root.dataset.widgetsReady;}};
+ },setMarketMotion(height:number,z:number,visible:boolean){if(reroll){const s=readingScale();reroll.position.set(-.694,.016+height/s,z/s);reroll.visible=visible;}},get settled(){return ready;},dispose(){if(dead)return;dead=true;root.removeEventListener('pointerover',over);root.removeEventListener('pointerdown',down);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);root.removeEventListener('click',click,true);manas.forEach(m=>Object.values(m.batches).flat().forEach(b=>b.dispose()));geometries.forEach(g=>g.dispose());turnLights?.dispose();apertures.dispose();templates.forEach(releaseTemplate);owned.forEach(m=>m.dispose());group.removeFromParent();delete root.dataset.widgetsReady;delete root.dataset.turnlight;}};
 }

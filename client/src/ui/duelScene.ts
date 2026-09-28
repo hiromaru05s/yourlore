@@ -37,7 +37,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   const presentScene=new T.Scene(),presentCamera=new T.OrthographicCamera(-1,1,1,-1,0,1);
   const presentMaterial=new T.MeshBasicMaterial({map:cachedBoard.texture,depthTest:false,depthWrite:false,toneMapped:true,transparent:true,blending:T.NoBlending});
   const presentQuad=new T.Mesh(new T.PlaneGeometry(2,2),presentMaterial);presentScene.add(presentQuad);
-  const present=()=>{renderer.setRenderTarget(null);renderer.setViewport(0,0,width,height);renderer.render(presentScene,presentCamera);};
+  const present=()=>{renderer.setRenderTarget(null);renderer.setViewport(0,0,width,height);renderer.render(presentScene,presentCamera);widgets.renderTurnLights(renderer,camera);};
   const camera=new T.PerspectiveCamera();const table=createDuelTable(root,scene);const widgets=mountReadingWidgets(root,scene);
   let dead=false,dirty=true,flightActive=false,frame=0,last=0,width=0,height=0,lastPaint=0;
   let openingDirty=false;

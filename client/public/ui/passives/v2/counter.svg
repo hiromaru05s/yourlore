@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+<defs><linearGradient id="rim" x2=".3" y2="1"><stop stop-color="#d6c197"/><stop offset=".45" stop-color="#8b816b"/><stop offset="1" stop-color="#514d43"/></linearGradient><linearGradient id="enamel" x2="0" y2="1"><stop stop-color="#213b49"/><stop offset="1" stop-color="#08141e"/></linearGradient></defs>
+<path d="M6 .5h20L31.5 6v20L26 31.5H6L.5 26V6z" fill="#030a10"/>
+<path d="M6 1.5h20l4.5 4.5v20l-4.5 4.5H6L1.5 26V6z" fill="url(#rim)"/>
+<path d="M6.5 3h19L29 6.5v19L25.5 29h-19L3 25.5v-19z" fill="url(#enamel)"/>
+<path d="M7 4h18l3 3" fill="none" stroke="#ffffff" stroke-opacity=".13"/>
+<g transform="translate(5 5) scale(.91667)" fill="#f1c5a4" color="#f1c5a4"><path d="M9 2 1 9l8 7v-5h6a4 4 0 0 1 0 8h-3v4h3a8 8 0 0 0 0-16H9z"/></g>
+</svg>

@@ -592,7 +592,7 @@ export function zoomCard(c: CardInst, hp?: { now: number; max: number }, stateTe
       const p = PASSIVES[k];
       if (!p) return "";
       const loc = lang0 === "ja" ? p.ja : lang0 === "en" ? p.en : p.ko;
-      return `<div class="psv-item" data-psv="${k}"><b class="psv-name">${passiveIcon(k)}</b><div class="psv-desc">${loc.desc}</div></div>`;
+      return `<div class="psv-item" data-psv="${k}"><b class="psv-name">${passiveIcon(k)}<span>${loc.name}</span></b><div class="psv-desc">${loc.desc}</div></div>`;
     }).join("");
     details.appendChild(panel);
     // hover/탭 → 우측 설명 하이라이트 (카드 텍스트 안의 .psv 스팬과 연결)

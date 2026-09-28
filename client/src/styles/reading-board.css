@@ -145,3 +145,11 @@
 :is(#app,.reading-board).reading-board .game:not(.hand-open) #hand .card{transition:opacity .12s;animation:none;}
 /* Both labels use the aperture anchor, not the lower corner of its hit box. */
 :is(#app,.reading-board).reading-board .rift-label{left:50%;top:50%;bottom:auto;transform:translate(-50%,-50%);white-space:nowrap;font-size:clamp(8px,calc(var(--board-meter)*.013),12px);color:#e4d5fb;text-shadow:0 1px 4px #060211,0 0 6px #170d29;}
+
+/* Approved turn control: porcelain light, native input authority, projected touch target. */
+:is(#app,.reading-board).reading-board[data-turnlight] .game #endBtn{cursor:pointer;min-width:46px;min-height:48px;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:max(8px,calc(var(--board-meter)*.014));font-weight:600;}
+:is(#app,.reading-board).reading-board[data-turnlight] .game #endBtn:disabled{cursor:default;opacity:.68;}
+:is(#app,.reading-board).reading-board[data-turnlight=porcelain][data-reading-turn=player] #endBtn:not(:disabled){color:#142f40;text-shadow:0 1px 0 #e7faff99;}
+:is(#app,.reading-board).reading-board[data-turnlight] .game #endBtn:focus-visible{outline:2px solid #fcde85;outline-offset:4px;}
+:is(#app,.reading-board).reading-board[data-turnlight] .mid-aside .tc-num{font-variant-numeric:tabular-nums;font-size:max(8px,calc(var(--board-meter)*.011));text-shadow:0 1px 2px #000;}
+:is(#app,.reading-board).reading-board[data-turnlight] .mp-clock.warn .tc-num{color:#ffd2a1;font-weight:700;}

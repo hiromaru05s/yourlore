@@ -1,0 +1,39 @@
+{
+  "origin": "http://127.0.0.1:5260",
+  "results": [
+    {
+      "variant": "porcelain",
+      "keyboard": true,
+      "disabled": true,
+      "warning": true
+    },
+    {
+      "variant": "inscription",
+      "keyboard": true,
+      "disabled": true,
+      "warning": true
+    },
+    {
+      "variant": "prism",
+      "keyboard": true,
+      "disabled": true,
+      "warning": true
+    }
+  ],
+  "errors": [],
+  "failed": [],
+  "checks": [
+    "three materials compile",
+    "pause",
+    "slow playback",
+    "opponent and blocked states",
+    "0 and 4 seconds",
+    "light and dark surfaces",
+    "reduced motion stable",
+    "keyboard activation",
+    "four real board viewports",
+    "44px mobile hit target",
+    "normal duel defaults to approved porcelain without preview flags",
+    "adopted desktop/mobile input"
+  ]
+}

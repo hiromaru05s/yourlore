@@ -1,0 +1,37 @@
+/* The SVG owns the opaque enamel and metal rim, so every context has the same
+   contrast. No blend modes, backdrop blur, or art-dependent halo. */
+.passive-icon {
+  position: relative; display: inline-flex; flex: none; width: 28px; height: 28px;
+  padding: 0; border: 0; background: none; box-shadow: none;
+  vertical-align: middle; text-decoration: none; line-height: 1;
+  filter: drop-shadow(0 1px 1px #0009);
+}
+.passive-icon img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.card .card-status .passive-icon {
+  --passive-size: clamp(10px, calc(var(--cw, 120px) * .21), 34px);
+  width: var(--passive-size); height: var(--passive-size);
+  padding: 0; border: 0; background: none; box-shadow: none;
+}
+.card--field .card-status .passive-icon { --passive-size: clamp(16px, calc(var(--cw, 100px) * .24), 30px); }
+.card .card-status { top: auto; gap: 2px; align-items: center; flex-wrap: wrap-reverse; }
+.card--field .card-status { bottom: 23%; }
+.card .card-status .passive-icon::before { content: none; }
+/* A minted corner marks granted abilities; the silhouette stays unchanged. */
+.passive-icon.kw--granted::after {
+  content: ''; position: absolute; right: 0; top: 0; width: 23%; height: 23%;
+  background: #c1f2dc; border: 1px solid #234e46; transform: rotate(45deg);
+  box-shadow: 0 1px 2px #0008;
+}
+.passive-icon b {
+  position: absolute; right: -.15em; bottom: -.15em; min-width: .9em;
+  box-sizing: content-box; padding: 0 1px; border: 1px solid #bfac80; border-radius: 3px;
+  background: #08151f; color: #fff5d8;
+  font: 700 clamp(6px, calc(var(--passive-size, 28px) * .38), 11px)/1.1 system-ui, sans-serif;
+  text-align: center; text-shadow: none; box-shadow: 0 1px 2px #0009;
+}
+.card-keys .passive-icon { width: 30px; height: 30px; }
+.card-eff-txt .passive-icon { width: 1.65em; height: 1.65em; margin: 0 .12em; }
+.zoom-psv .psv-name .passive-icon { width: 30px; height: 30px; }
+.zoom-psv .psv-name { gap: 9px; }
+.passive-filters .passive-icon { width: 28px; height: 28px; }
+@media (forced-colors: active) { .passive-icon { outline: 1px solid CanvasText; } }

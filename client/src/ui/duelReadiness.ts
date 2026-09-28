@@ -4,6 +4,8 @@ import {loungeText} from './loungeText';
 import {decodeAsset,waitAssets} from './assetReadiness';
 import {seekerAssets} from './seekerAnimation';
 import {READING_ASSETS} from './readingBoardLayout';
+import {PASSIVE_KEYS} from '../shared/cards';
+import {passiveIconUrl} from './passiveIcon';
 /** Game content is revealed only after assets are decoded and the 3D scene has
  * painted. A slow/cold connection must never reveal intermediate furniture. */
 const readiness=new WeakMap<HTMLElement,Promise<void>>();
@@ -22,7 +24,7 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
     loading.update(3,loungeText("盤面を組み立てています","Building the board","보드 준비 중"));
     while(!expired&&root.isConnected&&root.dataset.boardRendered!=="true")await new Promise<void>(r=>requestAnimationFrame(()=>r()));
     if(expired||!root.isConnected)return;
-    const urls=new Set(['/art/seekers/v2/mask-self.png','/art/seekers/v2/mask-opp.png',...['counter','dual','ambush','aura','void','guts','decay','majesty','taunt','evade','relic'].map(k=>`/ui/passives/v1/${k}.webp`),...seekerAssets,...coinImages,...['base-mon','base-spell','base-quest','field-mon','field-spell','field-quest','cost','attack','health'].map(n=>`/art/biblion/modular/${n}.png`)]);
+    const urls=new Set(['/art/seekers/v2/mask-self.png','/art/seekers/v2/mask-opp.png',...PASSIVE_KEYS.map(passiveIconUrl),...seekerAssets,...coinImages,...['base-mon','base-spell','base-quest','field-mon','field-spell','field-quest','cost','attack','health'].map(n=>`/art/biblion/modular/${n}.png`)]);
     for(const el of root.querySelectorAll<HTMLElement>('*')){
       if(el.dataset.material)urls.add(el.dataset.material);
       if(el instanceof HTMLImageElement){if(el.currentSrc||el.src)urls.add(el.currentSrc||el.src);el.loading='eager';el.fetchPriority='high';}
