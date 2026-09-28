@@ -1,0 +1,3 @@
+(node:99303) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS v53: catalog, uncapped HP and events, current-health conditions, fixed recovery, current-health stat swap, 7-card carry and invalid/timeout picks, preload inventory, eight free server-authoritative idempotent claims and equipment

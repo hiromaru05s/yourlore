@@ -1,0 +1,199 @@
+{
+  "checked": 48,
+  "allHashesMatch": true,
+  "missingThumbnails": 0,
+  "assets": [
+    {
+      "file": "client/public/art/cards/APPRENTICE_ARMORER.webp",
+      "sha256": "7196798644e2b2c682cd7ac3a9f20bd7cc45897a0bf31ebea2492f054893f272"
+    },
+    {
+      "file": "client/public/art/cards-sm/APPRENTICE_ARMORER.webp",
+      "sha256": "310ceeb6791610eee495f74047fcb39c07abdac579796f57e683747377850df0"
+    },
+    {
+      "file": "client/public/art/cards-xs/APPRENTICE_ARMORER.webp",
+      "sha256": "6cab27445558866dfce341db5d64a1091a2ea04cbc54461537b6b7ff18a9dc08"
+    },
+    {
+      "file": "client/public/art/cards/VETERAN_ARMORER.webp",
+      "sha256": "8530d2ec33d869e7c0c8d9d2139c31690afad08136bc8c3ede5b37f9a5e06a3d"
+    },
+    {
+      "file": "client/public/art/cards-sm/VETERAN_ARMORER.webp",
+      "sha256": "78a511dd7181d283efd30cb56b7f2d19265df1e5a9a7c71ac938ea8c3b5f86a0"
+    },
+    {
+      "file": "client/public/art/cards-xs/VETERAN_ARMORER.webp",
+      "sha256": "81a7c335ec3a35ffd005973c148ec91aee95de16e152fb8068dad5d9cfde7f85"
+    },
+    {
+      "file": "client/public/art/cards/SALLY_WEAPONMASTER.webp",
+      "sha256": "1ed68794ec9c50216c7add61ffaa46a9732fa42de5410a9aeb11c3c8bf2eab69"
+    },
+    {
+      "file": "client/public/art/cards-sm/SALLY_WEAPONMASTER.webp",
+      "sha256": "c7b6dd559f5ceda5ee9538d470de73be4aa4a6c86914836580e0cea39683e57a"
+    },
+    {
+      "file": "client/public/art/cards-xs/SALLY_WEAPONMASTER.webp",
+      "sha256": "3635b57cbb8e83720fb4ffadf306d8152234bcd05d6d5fcf0e2103addf4ae327"
+    },
+    {
+      "file": "client/public/art/cards/PRIEST.webp",
+      "sha256": "7684404a2c3b96454bd51d45ada76901dceeec514b9a7ace9eed241d3fa7bfe0"
+    },
+    {
+      "file": "client/public/art/cards-sm/PRIEST.webp",
+      "sha256": "674842206f00928ad24936bebabfc710b8e7247d0753345f9bda9996f0c3b514"
+    },
+    {
+      "file": "client/public/art/cards-xs/PRIEST.webp",
+      "sha256": "2f8c862a2398762fdd5943b427665221cc33924579e4d16a8a08625329dff3ce"
+    },
+    {
+      "file": "client/public/art/cards/HIGH_PRIEST.webp",
+      "sha256": "30cc0d359cd599b47f8ff967f31da1b94cb2544de15188f1f59c4f78cc99609d"
+    },
+    {
+      "file": "client/public/art/cards-sm/HIGH_PRIEST.webp",
+      "sha256": "42898fbcf6a4dbdd8ff245a73710daf11d68d129469e21c19bebea41cf345d8f"
+    },
+    {
+      "file": "client/public/art/cards-xs/HIGH_PRIEST.webp",
+      "sha256": "0c8342806ebb8290b82769c445625af5701b18ef29d454c7f60d1254be9cd4a4"
+    },
+    {
+      "file": "client/public/art/cards/BLACKSMITH.webp",
+      "sha256": "31938ec47d8d86b5c465749fedf0cc4dcc83b504a88bf9bbf487f734f921affa"
+    },
+    {
+      "file": "client/public/art/cards-sm/BLACKSMITH.webp",
+      "sha256": "3a9aeb2c9e101aa7382f4b7503d908eac3e7312f4b519da9478043544c5a28c7"
+    },
+    {
+      "file": "client/public/art/cards-xs/BLACKSMITH.webp",
+      "sha256": "989e6d3270c5d40bd13bd19df26fc7cf3ebfbd499e95a25a0a654dc9b39f20b0"
+    },
+    {
+      "file": "client/public/art/cards/SHIELD_TITAN.webp",
+      "sha256": "945a068690f2862ea65f7a6e67d263651d139f1673aa996df24813f5279b2709"
+    },
+    {
+      "file": "client/public/art/cards-sm/SHIELD_TITAN.webp",
+      "sha256": "70b0f550a74404a170962413f62300be125530bc62aae530198471c4815c444f"
+    },
+    {
+      "file": "client/public/art/cards-xs/SHIELD_TITAN.webp",
+      "sha256": "191e473cd22080e43af93ece3ab0a39a8733e257f3f2c22512308d6dca0a5435"
+    },
+    {
+      "file": "client/public/art/cards/ARMOR_BREAK.webp",
+      "sha256": "6b23476123e79ff58b5becdfb4f984608599c37ebab8c7fe74ba2e784f3795cf"
+    },
+    {
+      "file": "client/public/art/cards-sm/ARMOR_BREAK.webp",
+      "sha256": "b38cf8d5c36bffde30b3e67a67b01bac98c58fb120f4a0c1a9e27653d0c80bcb"
+    },
+    {
+      "file": "client/public/art/cards-xs/ARMOR_BREAK.webp",
+      "sha256": "6d5763c9ca9226de56213a7d1913a7658672b672bc656decd53cb17a36bf63b8"
+    },
+    {
+      "file": "client/public/art/cards/SPEAR_AND_SHIELD.webp",
+      "sha256": "512e6bb1cddaaaffa4fe04a4dd4a96e10b8702d35646263333580bf175629568"
+    },
+    {
+      "file": "client/public/art/cards-sm/SPEAR_AND_SHIELD.webp",
+      "sha256": "4cbb5b5175d452ec2f0ad23bee9028388bd0be06270216569f1062c6bd4c0d6f"
+    },
+    {
+      "file": "client/public/art/cards-xs/SPEAR_AND_SHIELD.webp",
+      "sha256": "2ae6031567af52e6e354e19118d653d2d32c51eac067664bea92765fd7ffb802"
+    },
+    {
+      "file": "client/public/art/cards/SELECTED_SWORD.webp",
+      "sha256": "e2553a9d04779ab0816b30198e76ed8e45c5e4aa2b33f1641fc39aeabfafa7a5"
+    },
+    {
+      "file": "client/public/art/cards-sm/SELECTED_SWORD.webp",
+      "sha256": "76f59c47a3be9a4de2879974f711e75a0683ca530f7c085f1cd5674db93738b1"
+    },
+    {
+      "file": "client/public/art/cards-xs/SELECTED_SWORD.webp",
+      "sha256": "830271b9e909ffc6bd28f817b2220d2ef3249615c31e9c21f73680f350926680"
+    },
+    {
+      "file": "client/public/art/cards/SELECTED_SHIELD.webp",
+      "sha256": "142f4674954f138890bd0de37555695d87f5e5c99e2abacdd0042e75acfc048c"
+    },
+    {
+      "file": "client/public/art/cards-sm/SELECTED_SHIELD.webp",
+      "sha256": "b1f95631590d8471aa4289aed8e80b6464c17bc832b472b230622eb269ccd365"
+    },
+    {
+      "file": "client/public/art/cards-xs/SELECTED_SHIELD.webp",
+      "sha256": "c55d15c9f83a89cd4d384090b86f9041c1c7285552d1e66b8984865e50d5e6a2"
+    },
+    {
+      "file": "client/public/art/cards/WINE_COLLECTOR.webp",
+      "sha256": "4c8b26b3ab60987eca09cfab798d42252fd6b5bad483a0c58e377cb6ca95c787"
+    },
+    {
+      "file": "client/public/art/cards-sm/WINE_COLLECTOR.webp",
+      "sha256": "86ffa3fabc3c65c96ae581267dc2cf389a6410b83b13412ab0da89d669d8d58c"
+    },
+    {
+      "file": "client/public/art/cards-xs/WINE_COLLECTOR.webp",
+      "sha256": "f20a5c17d434d1cd388f3edcb981021163c6d36ef2022d51a7458f75f697aa03"
+    },
+    {
+      "file": "client/public/art/cards/DEFENSIVE_STANCE.webp",
+      "sha256": "6e1a023db8bb64c951ca88bb5612d82581758aa4334b2e2f64a25fac5ab5e8f3"
+    },
+    {
+      "file": "client/public/art/cards-sm/DEFENSIVE_STANCE.webp",
+      "sha256": "b35971e8603099a7d16ba9064fff5b8194194ea9f01df9dff91ec6e27fcb9831"
+    },
+    {
+      "file": "client/public/art/cards-xs/DEFENSIVE_STANCE.webp",
+      "sha256": "b9b9a14e5ae7f2ea36a26c2acbe3a3763a6a5f8848fb44a23ba2227f8c847757"
+    },
+    {
+      "file": "client/public/art/cards/IRON_WALL.webp",
+      "sha256": "bf624d67b9f1ffab34704dcc233349312bdb26ed2c55086507731f1f2eb3dea0"
+    },
+    {
+      "file": "client/public/art/cards-sm/IRON_WALL.webp",
+      "sha256": "52057298a8e3a930f9fe734e61957e5ec55cfd5bd734c528abbd57b4ccf117cb"
+    },
+    {
+      "file": "client/public/art/cards-xs/IRON_WALL.webp",
+      "sha256": "96d77f57b8093bba2f4fcd379f37e6b2e75d271e34cda21dd61eede712bd07f8"
+    },
+    {
+      "file": "client/public/art/cards/DESERTIFICATION.webp",
+      "sha256": "6b10c4f23bd300bcfcc581ad6827e8d593b5a95d8318a07339528d0b0c34fe05"
+    },
+    {
+      "file": "client/public/art/cards-sm/DESERTIFICATION.webp",
+      "sha256": "9b568f3b15153cb19cb61b9257a1f322e4bbe1d432adfccedd70025000e7dbc7"
+    },
+    {
+      "file": "client/public/art/cards-xs/DESERTIFICATION.webp",
+      "sha256": "17adb34a0cd3f557d4b324f9e1e07e0d87bac82bf87a671cf7d67a21a855b60f"
+    },
+    {
+      "file": "client/public/art/cards/NOURISHING_RAIN.webp",
+      "sha256": "fdc5159163ffa5b13de8fb2b3e251908a8d84c81945d624d64a698490c589724"
+    },
+    {
+      "file": "client/public/art/cards-sm/NOURISHING_RAIN.webp",
+      "sha256": "faa741c64ede12796ee4505ed260eeb258f115d28207f116f54ab269f15aabaa"
+    },
+    {
+      "file": "client/public/art/cards-xs/NOURISHING_RAIN.webp",
+      "sha256": "e9ba20b0252fd5f5c8bce6ada64ee83198c1ded6179cfcdfcea96669fd49db9c"
+    }
+  ]
+}

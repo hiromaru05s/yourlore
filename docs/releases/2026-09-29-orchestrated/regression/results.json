@@ -1,0 +1,58 @@
+[
+  {
+    "test": "dew-shield-v54",
+    "exitCode": 0
+  },
+  {
+    "test": "dew-shield-server",
+    "exitCode": 0
+  },
+  {
+    "test": "health-cosmetics-v53",
+    "exitCode": 0
+  },
+  {
+    "test": "balance-v52",
+    "exitCode": 0
+  },
+  {
+    "test": "expansion-v50",
+    "exitCode": 0
+  },
+  {
+    "test": "trap-related-rework",
+    "exitCode": 0
+  },
+  {
+    "test": "half-elf-v48",
+    "exitCode": 0
+  },
+  {
+    "test": "trap-removal",
+    "exitCode": 0
+  },
+  {
+    "test": "dice-source",
+    "exitCode": 0
+  },
+  {
+    "test": "quest-quick",
+    "exitCode": 0
+  },
+  {
+    "test": "quick-playback",
+    "exitCode": 0
+  },
+  {
+    "test": "duel-ui",
+    "exitCode": 0
+  },
+  {
+    "test": "connected-return-motion",
+    "exitCode": 0
+  },
+  {
+    "test": "portal-return-motion",
+    "exitCode": 0
+  }
+]

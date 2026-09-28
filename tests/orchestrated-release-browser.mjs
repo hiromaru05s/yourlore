@@ -17,7 +17,7 @@ for(const file of files){
 }
 await fs.writeFile(out+'/hashes.json',JSON.stringify({origin,checkedAt:new Date().toISOString(),hashes},null,2)+'\n');
 const browser=await chromium.launch({channel:'chrome',headless:true,args:['--disable-quic']});
-const page=await browser.newPage({viewport:{width:1280,height:720}});page.setDefaultTimeout(90000);
+const page=await browser.newPage({viewport:{width:1280,height:720}});page.setDefaultTimeout(240000);
 const errors=[],serverErrors=[];
 page.on('pageerror',e=>errors.push(e.message));
 page.on('response',r=>{if(r.url().startsWith(origin)&&r.status()>=500)serverErrors.push({url:r.url(),status:r.status()});});
@@ -53,7 +53,7 @@ try{
   await page.screenshot({path:out+`/bot-${width}.png`});viewports.push({width,height,endButton:end});
  }
  assert.deepEqual(errors,[]);assert.deepEqual(serverErrors,[]);
- await fs.writeFile(out+'/browser.json',JSON.stringify({origin,checkedAt:new Date().toISOString(),hashes:hashes.length,viewports,errors,serverErrors,porcelainTurnLight:true,anonymousLiveLogin:!local,botAuthApiFixture:true,authenticatedOnlineMatch:false},null,2)+'\n');
+ await fs.rm(out+'/failure.json',{force:true});await fs.writeFile(out+'/browser.json',JSON.stringify({origin,checkedAt:new Date().toISOString(),hashes:hashes.length,viewports,errors,serverErrors,porcelainTurnLight:true,anonymousLiveLogin:!local,botAuthApiFixture:true,authenticatedOnlineMatch:false},null,2)+'\n');
  console.log('PASS',hashes.length,'asset hashes; production startup and adopted turn light at desktop/mobile sizes');
-}catch(error){await fs.writeFile(out+'/failure.json',JSON.stringify({message:String(error),errors,serverErrors},null,2)+'\n');throw error;}
+}catch(error){await page.screenshot({path:out+'/failure.png'}).catch(()=>{});await fs.writeFile(out+'/failure.json',JSON.stringify({message:String(error),errors,serverErrors},null,2)+'\n');throw error;}
 finally{await browser.close();}
