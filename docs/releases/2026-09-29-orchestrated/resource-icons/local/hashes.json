@@ -1,0 +1,126 @@
+{
+  "origin": "http://127.0.0.1:5290",
+  "checkedAt": "2026-09-28T23:06:47.078Z",
+  "hashes": [
+    {
+      "file": "art/biblion/modular/health.png",
+      "sha256": "6914ca7d54cfc6cc0ca12a456acc56be9e9177402d5af2faf4152f0c6f6acfba"
+    },
+    {
+      "file": "art/biblion/modular/shield.png",
+      "sha256": "ee2d0a83663c5627d1ff412ed8e5a51559713159bf6867ff51739e757bc5e77a"
+    },
+    {
+      "file": "art/biblion/modular/dew.png",
+      "sha256": "07293bd99f76aaf73881b0022970d120f9e3baa6696a4cdb234a2161ef92f929"
+    },
+    {
+      "file": "index.html",
+      "sha256": "87b808aa7300582c98778bf0aea7af235152d65c1ce2628a5f7b741d66f547eb"
+    },
+    {
+      "file": "models/reading-board/v1/board.glb",
+      "sha256": "49f03268b42787028ce9d94560132dbd792230563aecf027172772df26d8fe89"
+    },
+    {
+      "file": "models/reading-board/v1/board-low.glb",
+      "sha256": "a83a28b600a65fb176e2d6a6e9892dd856df5edbdd8eb5a0a1b7655b83c9a860"
+    },
+    {
+      "file": "assets/GLTFLoader-C8ULEKVV.js",
+      "sha256": "273e9309037ab589149bf7f85f9d9143873ac14d54f4abe23a35aa2494b392c7"
+    },
+    {
+      "file": "assets/RoomEnvironment-CUV1UDrl.js",
+      "sha256": "0f5d6cd9b71c60eb18d27662dec38bea0096f90055c704cc317d2be4e3bce3b9"
+    },
+    {
+      "file": "assets/ceremonyScene-DfisBX8j.js",
+      "sha256": "44fca74b6ab0599ae6179bc9effba6a880122b041ee499b2d8113fd47315995a"
+    },
+    {
+      "file": "assets/diceScene-BNqAwNbl.js",
+      "sha256": "74f0e2cc763b185c0ff01344cbdf42641238265645d5aa54b442d6630f650f8a"
+    },
+    {
+      "file": "assets/duelScene-Ba8RxQNT.js",
+      "sha256": "94898a31204c1f47f2ec376b9e6d972f273c1cdce9b09417e4e130ff014e2113"
+    },
+    {
+      "file": "assets/main-B1YqrUZP.js",
+      "sha256": "5f4006611cac81cca324b95d0ec7ed0b809f8928c1360a7be99e084427bac5c6"
+    },
+    {
+      "file": "assets/main-BjRzvfW-.css",
+      "sha256": "46e1bfa256d5cbd283c7a2040e29f4077378c4da76750813fd30445cf4c8c868"
+    },
+    {
+      "file": "assets/paperDraw-Dhgj9gJJ.js",
+      "sha256": "802748f271cd6930298384edeef1d13980e47571cd47565a8afb3f11793418a9"
+    },
+    {
+      "file": "assets/riftScene-CYYRGb3z.js",
+      "sha256": "f32f610cfe1e8a9c0300651e8b8dfd49cce61364903330f61dcceafe8d3a09a0"
+    },
+    {
+      "file": "assets/tablePreview-2Rkra2Ey.css",
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4"
+    },
+    {
+      "file": "assets/tablePreview-BSds8wJB.js",
+      "sha256": "314b42e4b0712daa420389b69709b0c515d4f7adbe40f2597549937c770760e5"
+    },
+    {
+      "file": "assets/three.module-CDnng1u7.js",
+      "sha256": "1814d4141f5f0e26caf1a14ffeb67db56ff962be2e22906e15d2f2b7fd1d1759"
+    },
+    {
+      "file": "assets/voidSurface-BEtGeK0B.js",
+      "sha256": "e2fa8263520867070fd46a4a78a73fadc72b2578da4fb517af965bd70023845b"
+    },
+    {
+      "file": "ui/passives/v2/ambush.svg",
+      "sha256": "aad8dcd4407ea0c7e045dfbdbfeae070f5b588ece939bacd420d9883bfcd641b"
+    },
+    {
+      "file": "ui/passives/v2/aura.svg",
+      "sha256": "407583dbdc6197083880928648c1acfeef6ab0a55c05f4ad3ffc12f5a7313de2"
+    },
+    {
+      "file": "ui/passives/v2/counter.svg",
+      "sha256": "ae3e8a708cc82a2a6ff92b91c82ef27c374dc3dd54ef8861038339043fd91f27"
+    },
+    {
+      "file": "ui/passives/v2/decay.svg",
+      "sha256": "80218cb09a6448f855dd794563a2a5f6d6c1ce493faaab3543bcc7517621137e"
+    },
+    {
+      "file": "ui/passives/v2/dual.svg",
+      "sha256": "0136f88a285869dde9d841ef2bce7a1cfc78e6c9debd6bac4426710ce3717e4b"
+    },
+    {
+      "file": "ui/passives/v2/evade.svg",
+      "sha256": "a957e70cc6b1d7dd90ab0b5ba3a2820b817d7dd603f6c31a7b82b729ef8bf2ef"
+    },
+    {
+      "file": "ui/passives/v2/guts.svg",
+      "sha256": "dbd2e6abee5f877d06b2ca9e0dd6d355fdeefd98f82c14fd5055b03a0289f39c"
+    },
+    {
+      "file": "ui/passives/v2/majesty.svg",
+      "sha256": "8b1192681d8e0655785123120855b9adad4a942ca92e596124c55e160dcb8b94"
+    },
+    {
+      "file": "ui/passives/v2/relic.svg",
+      "sha256": "9300c964ee020f6e043dd9810af8e651614d04d8bc1247b656298d22c084116f"
+    },
+    {
+      "file": "ui/passives/v2/taunt.svg",
+      "sha256": "00cd5b948b93221d2ef7692adbdcc78eca07b89d114de3e0769716ad8a97acec"
+    },
+    {
+      "file": "ui/passives/v2/void.svg",
+      "sha256": "2c6cb4121a6fb22374662510a4b241eae4bf33a44032cf594295270c85978b9b"
+    }
+  ]
+}

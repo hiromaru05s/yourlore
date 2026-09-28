@@ -35,7 +35,7 @@ export function projectBoardDOM(root:HTMLElement):void {
     element.dataset.boardPlane=String(elevation);element.style.transformOrigin='0 0';
     element.style.transform=new DOMMatrix().translate(-rect.left,-rect.top).multiply(boardMatrix(rect.left,rect.top,elevation)).toString();
   }
-  root.querySelectorAll<HTMLElement>('.pt-ring,.pt-vitals').forEach(el=>{delete el.dataset.boardPlane;el.style.transform='none';});
+  root.querySelectorAll<HTMLElement>('.pt-ring,.pt-vitals,.pt-resources').forEach(el=>{delete el.dataset.boardPlane;el.style.transform='none';});
   // This child sits on a second physical plinth above the market. Preserve the
   // parent's 3D transform so its height is projected exactly once by our lens.
   root.querySelectorAll<HTMLElement>('.market-sub--supply').forEach(element=>{

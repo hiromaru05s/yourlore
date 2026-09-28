@@ -7,7 +7,7 @@ const origin=process.env.LORE_RELEASE_ORIGIN||'https://test.yourlore.xyz';
 const out=process.env.LORE_RELEASE_OUTPUT||'docs/releases/2026-09-29-orchestrated/staging';
 await fs.mkdir(out,{recursive:true});
 const hash=b=>createHash('sha256').update(b).digest('hex');
-const files=['index.html','models/reading-board/v1/board.glb','models/reading-board/v1/board-low.glb'];
+const files=['art/biblion/modular/health.png','art/biblion/modular/shield.png','art/biblion/modular/dew.png','index.html','models/reading-board/v1/board.glb','models/reading-board/v1/board-low.glb'];
 for(const dir of ['assets','ui/passives/v2'])for(const f of await fs.readdir('client/dist/'+dir))if(/\.(js|css|svg)$/.test(f))files.push(dir+'/'+f);
 const hashes=[];
 for(const file of files){
@@ -45,15 +45,28 @@ try{
  await page.waitForFunction(()=>document.querySelector('[data-turnlight=porcelain]'));
  assert.equal(await page.locator('.game').evaluate(e=>e.inert),false);
  const viewports=[];
- for(const [width,height] of [[1280,720],[390,844]]){
+ for(const [width,height] of [[1280,720],[1920,1080],[390,844],[844,390]]){
   await page.setViewportSize({width,height});await page.waitForTimeout(500);
   assert(await page.locator('#hp-me').count());
   assert.equal(await page.locator('#hpbar-me').count(),0);
   const end=await page.locator('#endBtn').boundingBox();assert(end&&end.width>=44&&end.height>=44);
-  await page.screenshot({path:out+`/bot-${width}.png`});viewports.push({width,height,endButton:end});
+  const resources=await page.locator('.portrait').evaluateAll(es=>es.map(e=>{
+   const rect=n=>{const r=n.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,cx:r.x+r.width/2,cy:r.y+r.height/2};};
+   return {id:e.id,hp:rect(e.querySelector('.pt-hp')),shield:rect(e.querySelector('.pt-shield')),dew:rect(e.querySelector('.pt-dew')),portrait:rect(e.querySelector('.pt-ring')),labels:[...e.querySelectorAll('.pt-resources>span')].map(n=>({aria:n.getAttribute('aria-label'),title:n.title,image:getComputedStyle(n).backgroundImage,value:n.querySelector('b').textContent}))};
+  }));
+  assert.equal(resources.length,2);
+  for(const r of resources){
+   assert(r.hp.cx<r.shield.cx&&r.shield.cx<r.dew.cx,'health / shield / Dew order');
+   assert(Math.abs(r.shield.cx-r.portrait.cx)<2,'shield centered on portrait');
+   assert(Math.max(r.hp.cy,r.shield.cy,r.dew.cy)-Math.min(r.hp.cy,r.shield.cy,r.dew.cy)<2,'counter row aligned');
+   assert(r.hp.x+r.hp.width<=r.shield.x+1&&r.shield.x+r.shield.width<=r.dew.x+1,'counter boxes do not overlap');
+   for(const icon of [r.hp,r.shield,r.dew])assert(icon.x>=-1&&icon.y>=-1&&icon.x+icon.width<=width+1&&icon.y+icon.height<=height+1,'counter inside viewport');
+   for(const label of r.labels)assert(label.aria&&label.title&&/\d/.test(label.value)&&/\/(shield|dew)\.png/.test(label.image),'counter value, image and accessible name');
+  }
+  await page.screenshot({path:out+`/bot-${width}.png`});viewports.push({width,height,endButton:end,resources});
  }
  assert.deepEqual(errors,[]);assert.deepEqual(serverErrors,[]);
  await fs.rm(out+'/failure.json',{force:true});await fs.writeFile(out+'/browser.json',JSON.stringify({origin,checkedAt:new Date().toISOString(),hashes:hashes.length,viewports,errors,serverErrors,porcelainTurnLight:true,anonymousLiveLogin:!local,botAuthApiFixture:true,authenticatedOnlineMatch:false},null,2)+'\n');
- console.log('PASS',hashes.length,'asset hashes; production startup and adopted turn light at desktop/mobile sizes');
+ console.log('PASS',hashes.length,'asset hashes; production startup, adopted turn light and resource icons at four viewport sizes');
 }catch(error){await page.screenshot({path:out+'/failure.png'}).catch(()=>{});await fs.writeFile(out+'/failure.json',JSON.stringify({message:String(error),errors,serverErrors},null,2)+'\n');throw error;}
 finally{await browser.close();}
