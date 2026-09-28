@@ -1,0 +1,13 @@
+{
+  "verifiedAt": "2026-09-28T22:53:39.761Z",
+  "url": "https://test.yourlore.xyz",
+  "jsPath": "/assets/main-DwHiiwrO.js",
+  "cssPath": "/assets/main-bDtGpwCC.css",
+  "sourceHashes": {
+    "ui/boardView.ts": "5b3137bee24851f3097f60a60f16f3037de5ed204f4be71a21a87d86f7a321b2",
+    "ui/handDiscard.ts": "34c3bac1344c7acd7d69579bd9ad1edf6ae8cbd19e8e6bca6eeccd31a07299ed"
+  },
+  "status": "passed",
+  "workerVersion": "366ec090-a02a-4b9e-b3fb-b1092746a3e8",
+  "releaseCommit": "1157300"
+}

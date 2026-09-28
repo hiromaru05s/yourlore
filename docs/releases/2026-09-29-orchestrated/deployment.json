@@ -1,0 +1,14 @@
+{
+  "target": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "version": "366ec090-a02a-4b9e-b3fb-b1092746a3e8",
+  "sourceCommit": "1157300",
+  "mainBundle": "main-DwHiiwrO.js",
+  "stylesheet": "main-bDtGpwCC.css",
+  "duelSceneBundle": "duelScene-BC7Yarn3.js",
+  "assetsUploaded": 84,
+  "assetsUnchanged": 1950,
+  "workerStartupMs": 63,
+  "productionDeployed": false,
+  "auth": "existing Wrangler OAuth login; saved API token failed before publication"
+}

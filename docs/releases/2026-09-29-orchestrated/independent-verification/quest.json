@@ -1,0 +1,41 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-09-28T22:53:51.311Z",
+  "status": "passed",
+  "main": "/assets/main-DwHiiwrO.js",
+  "questFoldPresent": true,
+  "localDist": "/private/tmp/lore-staging-orchestrator-20260929/client/dist",
+  "files": [
+    {
+      "url": "/assets/main-DwHiiwrO.js",
+      "sha256": "7e23dd3ed34f6b71c7dfe05aed4e7b867d7c41ebcbf409adfe742cdf54d74de0",
+      "bytes": 1229070
+    },
+    {
+      "url": "/assets/three.module-CDnng1u7.js",
+      "sha256": "1814d4141f5f0e26caf1a14ffeb67db56ff962be2e22906e15d2f2b7fd1d1759",
+      "bytes": 609232
+    },
+    {
+      "url": "/assets/main-bDtGpwCC.css",
+      "sha256": "1371e68a6c62a62247477d3310c8bc29eb0bd6ddeaac6aa276fb720ef9169869",
+      "bytes": 293027
+    },
+    {
+      "url": "/art/biblion/modular/field-quest.png",
+      "sha256": "629c040ab300300b8ded921807971a5e12ae1f1860a9a1d4a16ce7936b5d4046",
+      "bytes": 1248976
+    },
+    {
+      "url": "/art/biblion/modular/cost.png",
+      "sha256": "6a09eb84f3f6b8a44d05ed83d84f0bcae5663ad856e8239a832d1cb8450fc6ed",
+      "bytes": 1801208
+    },
+    {
+      "url": "/art/cards/Q_RIFT.webp",
+      "sha256": "fddb552346c7a04a5cb4c1ab647d360258a88b01c7ece7b9ab2e966aa2dda662",
+      "bytes": 176254
+    }
+  ],
+  "scope": "Published artifact identity and HTTP delivery. Live authenticated quest play is covered separately."
+}

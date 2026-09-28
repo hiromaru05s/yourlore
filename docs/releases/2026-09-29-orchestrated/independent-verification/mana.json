@@ -1,0 +1,35 @@
+{
+  "verifiedAtUTC": "2026-09-28T22:53:56Z",
+  "url": "https://test.yourlore.xyz/",
+  "htmlSha256": "1abef8a5782427eeae6ef039c711f0cacd609d4bd43f3afeb697e170a653651d",
+  "sources": {
+    "client/src/ui/manaFormation.ts": "0da38cf8082e3c2a0b3f82e52e0c000e135df7050991a4b05201f491719c2adb",
+    "client/src/ui/manaFacetVariants.ts": "b677c42838d83a7a3b0d5ad46817f9dd390649a9819e4e7c64f02c9e9fc10fb0",
+    "client/src/ui/manaFormationTypes.ts": "2e75ccd494074260e17f07f611ab229c5d8eeb6fff849d859bf0627526bede90",
+    "client/src/ui/manaFormationPreview.ts": "f7302d28941cf2162987d32472992568f90d17348be73e8430e4f5e8b60f58a7"
+  },
+  "assets": [
+    {
+      "url": "https://test.yourlore.xyz/assets/duelScene-BC7Yarn3.js",
+      "sha256": "561c6ea44f8d3aa51000cb45ee1b773cd809d8e635f8a75e0ea72735d12f26a7",
+      "bytes": 61396
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/main-DwHiiwrO.js",
+      "sha256": "7e23dd3ed34f6b71c7dfe05aed4e7b867d7c41ebcbf409adfe742cdf54d74de0",
+      "bytes": 1229070
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/main-bDtGpwCC.css",
+      "sha256": "1371e68a6c62a62247477d3310c8bc29eb0bd6ddeaac6aa276fb720ef9169869",
+      "bytes": 293027
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/three.module-CDnng1u7.js",
+      "sha256": "1814d4141f5f0e26caf1a14ffeb67db56ff962be2e22906e15d2f2b7fd1d1759",
+      "bytes": 609232
+    }
+  ],
+  "approvedEffect": "facet-swift",
+  "result": "pass"
+}

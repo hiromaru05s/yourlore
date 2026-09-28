@@ -1,0 +1,33 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-09-28T22:55:13.490Z",
+  "hashes": 27,
+  "viewports": [
+    {
+      "width": 1280,
+      "height": 720,
+      "endButton": {
+        "x": 1128.9012451171875,
+        "y": 320.16851806640625,
+        "width": 77.8306884765625,
+        "height": 67.0238037109375
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "endButton": {
+        "x": 330.596435546875,
+        "y": 397.22979736328125,
+        "width": 47.42498779296875,
+        "height": 45.780517578125
+      }
+    }
+  ],
+  "errors": [],
+  "serverErrors": [],
+  "porcelainTurnLight": true,
+  "anonymousLiveLogin": true,
+  "botAuthApiFixture": true,
+  "authenticatedOnlineMatch": false
+}

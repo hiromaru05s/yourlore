@@ -1,0 +1,56 @@
+{
+  "checkedAt": "2026-09-28T22:53:52.456Z",
+  "target": "https://test.yourlore.xyz",
+  "htmlStatus": 200,
+  "htmlReferencesCurrentMain": true,
+  "assets": [
+    {
+      "file": "/assets/main-DwHiiwrO.js",
+      "status": 200,
+      "localSha256": "7e23dd3ed34f6b71c7dfe05aed4e7b867d7c41ebcbf409adfe742cdf54d74de0",
+      "remoteSha256": "7e23dd3ed34f6b71c7dfe05aed4e7b867d7c41ebcbf409adfe742cdf54d74de0",
+      "match": true
+    },
+    {
+      "file": "/assets/three.module-CDnng1u7.js",
+      "status": 200,
+      "localSha256": "1814d4141f5f0e26caf1a14ffeb67db56ff962be2e22906e15d2f2b7fd1d1759",
+      "remoteSha256": "1814d4141f5f0e26caf1a14ffeb67db56ff962be2e22906e15d2f2b7fd1d1759",
+      "match": true
+    },
+    {
+      "file": "/assets/main-bDtGpwCC.css",
+      "status": 200,
+      "localSha256": "1371e68a6c62a62247477d3310c8bc29eb0bd6ddeaac6aa276fb720ef9169869",
+      "remoteSha256": "1371e68a6c62a62247477d3310c8bc29eb0bd6ddeaac6aa276fb720ef9169869",
+      "match": true
+    },
+    {
+      "file": "/assets/duelScene-BC7Yarn3.js",
+      "status": 200,
+      "localSha256": "561c6ea44f8d3aa51000cb45ee1b773cd809d8e635f8a75e0ea72735d12f26a7",
+      "remoteSha256": "561c6ea44f8d3aa51000cb45ee1b773cd809d8e635f8a75e0ea72735d12f26a7",
+      "match": true
+    },
+    {
+      "file": "/models/reading-board/v1/turn-button.glb",
+      "status": 200,
+      "localSha256": "3ef75f96930bccc37201e31b9970e5a863d4e4c1adeb0a37f0dbbcbf97038252",
+      "remoteSha256": "3ef75f96930bccc37201e31b9970e5a863d4e4c1adeb0a37f0dbbcbf97038252",
+      "match": true
+    },
+    {
+      "file": "/models/reading-board/v1/timer-inserts.glb",
+      "status": 200,
+      "localSha256": "fb5a1978a9d10139991f109f9f81c641c717f627b5681a8b283f0aa4ca9f90c5",
+      "remoteSha256": "fb5a1978a9d10139991f109f9f81c641c717f627b5681a8b283f0aa4ca9f90c5",
+      "match": true
+    }
+  ],
+  "allMatched": true,
+  "workerVersion": "366ec090-a02a-4b9e-b3fb-b1092746a3e8",
+  "sourceCommit": "1157300",
+  "coordinatorTask": "01a0e9ed-c169-7b33-9251-2c7173f0fd51",
+  "selectedVariant": "porcelain",
+  "verificationScope": "Remote HTML and six asset SHA-256 checks; integrated local BOT screenshots reviewed; authenticated multiplayer not checked by this task."
+}

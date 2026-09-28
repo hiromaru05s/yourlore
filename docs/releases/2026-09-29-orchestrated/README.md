@@ -45,4 +45,21 @@ fixtures. Real GameRoom tests are local; no authenticated online staging match i
 claimed. Functional checks and visual approval are separate; the selected designs
 retain their source-task approvals.
 
-Deployment receipt and remote commit will be recorded after publication.
+Published successfully from source commit `1157300` to staging only. Worker version
+`366ec090-a02a-4b9e-b3fb-b1092746a3e8`; see `deployment.json`.
+Remote main contains the integrated release. Subsequent commits only record QA.
+Integrated mana playback also passes both sides, actual skip-button cancellation,
+reduced motion, and DEV comparison/default restoration (`mana-integration-report.json`).
+
+
+All seven source owners independently verified their public assets/source against
+the combined release; reports are under `independent-verification/`. Dew artwork
+matches all 48 manifest hashes and the public main bundle contains all 16 new IDs.
+The coordinator's live staging test passed 27 hashes, anonymous login, BOT startup
+with account API fixtures, both desktop/mobile viewports, and zero page/server
+errors (`staging/browser.json`). Its deployed screenshots were inspected.
+
+Local main was advanced while preserving uncommitted comparison work. Before/after
+hashes and backups are stored locally at
+`/tmp/lore-orchestrator-20260929/main-before-sync/`. Shared files were merged with
+both runtime changes and existing DEV hooks retained; no broad add/reset was used.

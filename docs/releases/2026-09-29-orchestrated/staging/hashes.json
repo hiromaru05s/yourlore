@@ -1,0 +1,114 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-09-28T22:53:51.653Z",
+  "hashes": [
+    {
+      "file": "index.html",
+      "sha256": "1abef8a5782427eeae6ef039c711f0cacd609d4bd43f3afeb697e170a653651d"
+    },
+    {
+      "file": "models/reading-board/v1/board.glb",
+      "sha256": "49f03268b42787028ce9d94560132dbd792230563aecf027172772df26d8fe89"
+    },
+    {
+      "file": "models/reading-board/v1/board-low.glb",
+      "sha256": "a83a28b600a65fb176e2d6a6e9892dd856df5edbdd8eb5a0a1b7655b83c9a860"
+    },
+    {
+      "file": "assets/GLTFLoader-C8ULEKVV.js",
+      "sha256": "273e9309037ab589149bf7f85f9d9143873ac14d54f4abe23a35aa2494b392c7"
+    },
+    {
+      "file": "assets/RoomEnvironment-CUV1UDrl.js",
+      "sha256": "0f5d6cd9b71c60eb18d27662dec38bea0096f90055c704cc317d2be4e3bce3b9"
+    },
+    {
+      "file": "assets/ceremonyScene-DfisBX8j.js",
+      "sha256": "44fca74b6ab0599ae6179bc9effba6a880122b041ee499b2d8113fd47315995a"
+    },
+    {
+      "file": "assets/diceScene-CDDWnKME.js",
+      "sha256": "c8b311931b4706f10ecf77d771a6f2d69231e10e7435bb1e424958a35ac1c8fd"
+    },
+    {
+      "file": "assets/duelScene-BC7Yarn3.js",
+      "sha256": "561c6ea44f8d3aa51000cb45ee1b773cd809d8e635f8a75e0ea72735d12f26a7"
+    },
+    {
+      "file": "assets/main-DwHiiwrO.js",
+      "sha256": "7e23dd3ed34f6b71c7dfe05aed4e7b867d7c41ebcbf409adfe742cdf54d74de0"
+    },
+    {
+      "file": "assets/main-bDtGpwCC.css",
+      "sha256": "1371e68a6c62a62247477d3310c8bc29eb0bd6ddeaac6aa276fb720ef9169869"
+    },
+    {
+      "file": "assets/paperDraw-C7FanPuB.js",
+      "sha256": "9a526da3706a3f0b3875735154ebbfb492594c10f97aaff941bb01ef62d68302"
+    },
+    {
+      "file": "assets/riftScene-BfstrLIc.js",
+      "sha256": "71c06dfa91b1a4be6d18cb8187b7ec9479688a619a3256a1d72b5a77e29dafcb"
+    },
+    {
+      "file": "assets/tablePreview-2Rkra2Ey.css",
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4"
+    },
+    {
+      "file": "assets/tablePreview-BSds8wJB.js",
+      "sha256": "314b42e4b0712daa420389b69709b0c515d4f7adbe40f2597549937c770760e5"
+    },
+    {
+      "file": "assets/three.module-CDnng1u7.js",
+      "sha256": "1814d4141f5f0e26caf1a14ffeb67db56ff962be2e22906e15d2f2b7fd1d1759"
+    },
+    {
+      "file": "assets/voidSurface-BEtGeK0B.js",
+      "sha256": "e2fa8263520867070fd46a4a78a73fadc72b2578da4fb517af965bd70023845b"
+    },
+    {
+      "file": "ui/passives/v2/ambush.svg",
+      "sha256": "aad8dcd4407ea0c7e045dfbdbfeae070f5b588ece939bacd420d9883bfcd641b"
+    },
+    {
+      "file": "ui/passives/v2/aura.svg",
+      "sha256": "407583dbdc6197083880928648c1acfeef6ab0a55c05f4ad3ffc12f5a7313de2"
+    },
+    {
+      "file": "ui/passives/v2/counter.svg",
+      "sha256": "ae3e8a708cc82a2a6ff92b91c82ef27c374dc3dd54ef8861038339043fd91f27"
+    },
+    {
+      "file": "ui/passives/v2/decay.svg",
+      "sha256": "80218cb09a6448f855dd794563a2a5f6d6c1ce493faaab3543bcc7517621137e"
+    },
+    {
+      "file": "ui/passives/v2/dual.svg",
+      "sha256": "0136f88a285869dde9d841ef2bce7a1cfc78e6c9debd6bac4426710ce3717e4b"
+    },
+    {
+      "file": "ui/passives/v2/evade.svg",
+      "sha256": "a957e70cc6b1d7dd90ab0b5ba3a2820b817d7dd603f6c31a7b82b729ef8bf2ef"
+    },
+    {
+      "file": "ui/passives/v2/guts.svg",
+      "sha256": "dbd2e6abee5f877d06b2ca9e0dd6d355fdeefd98f82c14fd5055b03a0289f39c"
+    },
+    {
+      "file": "ui/passives/v2/majesty.svg",
+      "sha256": "8b1192681d8e0655785123120855b9adad4a942ca92e596124c55e160dcb8b94"
+    },
+    {
+      "file": "ui/passives/v2/relic.svg",
+      "sha256": "9300c964ee020f6e043dd9810af8e651614d04d8bc1247b656298d22c084116f"
+    },
+    {
+      "file": "ui/passives/v2/taunt.svg",
+      "sha256": "00cd5b948b93221d2ef7692adbdcc78eca07b89d114de3e0769716ad8a97acec"
+    },
+    {
+      "file": "ui/passives/v2/void.svg",
+      "sha256": "2c6cb4121a6fb22374662510a4b241eae4bf33a44032cf594295270c85978b9b"
+    }
+  ]
+}
