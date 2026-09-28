@@ -1,0 +1,16 @@
+{
+  "base": "e79d6a7f93d9e6b69e935be6c80d3464205501b3",
+  "userAuthorization": "2026-09-29 latest user request: ステージングにあげて",
+  "selected": "facet-swift",
+  "files": {
+    "client/src/ui/manaFormation.ts": "0da38cf8082e3c2a0b3f82e52e0c000e135df7050991a4b05201f491719c2adb",
+    "client/src/ui/manaFacetVariants.ts": "b677c42838d83a7a3b0d5ad46817f9dd390649a9819e4e7c64f02c9e9fc10fb0",
+    "client/src/ui/manaFormationTypes.ts": "2e75ccd494074260e17f07f611ab229c5d8eeb6fff849d859bf0627526bede90",
+    "client/src/ui/manaFormationPreview.ts": "f7302d28941cf2162987d32472992568f90d17348be73e8430e4f5e8b60f58a7",
+    "client/src/ui/anim.ts": "fbc93f1d8d42d0f113655e6239ff976ea35aec1bd4c261c4adec1617e82b72fc",
+    "client/src/ui/readingBoardWidgets.ts": "67f0a3dee7bc84179c61da350fb85dbb45a172b2d6dd6025d60817aa77373253",
+    "client/src/ui/duelScene.ts": "9f376c8f8c59916ad6eec7b92318e2c49b78ed97a600733daceb7bb136d269b5"
+  },
+  "validationSource": "/Users/hiromaru05s/Desktop/LORE_TCG/docs/vfx-prototypes/2026-09-29-mana-facet-convergence/adoption/browser-report.json",
+  "scope": "Mana runtime only; no dev fixtures, unrelated styles, server, card rules, quest or turn-light changes. Shared-file snapshots are based on e79d6a7 and must be merged, not copied over integrated files."
+}

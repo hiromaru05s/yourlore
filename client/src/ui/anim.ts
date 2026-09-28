@@ -1,4 +1,5 @@
 import {foldQuestIntoSlot,nativeQuestGhost} from './questFold';
+import {getManaFormation} from './manaFormationPreview';
 import {passiveIcon} from './passiveIcon';
 import {animateSeeker} from './seekerAnimation';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
@@ -826,13 +827,13 @@ function gainLabel(anchor: DOMRect, text: string, cls: string): HTMLElement {
 export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
   if(amount<=0||fxSkip||document.hidden)return;
   animateSeeker(side,'mana');
-  const cluster=document.getElementById('hpbar-'+side)?.closest('.pcluster');
-  const el=cluster?.querySelector<HTMLElement>('.pt-mana');if(!el)return;
+  const el=document.querySelector<HTMLElement>(`#portrait${side==='me'?'Me':'Opp'} .pt-mana`);if(!el)return;
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){sfx('mana');return;}
   const start=performance.now(),fromMax=Number(el.dataset.previousMaximum??el.dataset.maximum),fromMana=Number(el.dataset.previousMana??el.dataset.mana);
   const maximum=Number(el.dataset.maximum),current=Number(el.dataset.mana);
+  const formation=el.closest('[data-widgets-ready="true"]')&&!el.closest('[data-table-state="fallback"]')?getManaFormation():undefined,duration=formation?.duration??MANA_GAIN_MS,impactAt=formation?.impact??MANA_GAIN_IMPACT_MS;
   el.dataset.gainStart=String(start);el.dataset.gainFromMax=String(fromMax);el.dataset.gainFromMana=String(fromMana);
-  const stop=playBiblionFx('mana',()=>el.isConnected?el.getBoundingClientRect():null,undefined,start);
+  const stop=formation?()=>{}:playBiblionFx('mana',()=>el.isConnected?el.getBoundingClientRect():null,undefined,start);
   const readout=el.querySelector<HTMLElement>('.mana-readout b'),max=el.querySelector<HTMLElement>('.pt-mana-max');
   const crystals=[...el.querySelectorAll<HTMLElement>('.mana-crystal')];let sounded=false,frame=0;
   const label=document.createElement('span');label.className='mana-gain-label';label.textContent=`+${amount}`;label.setAttribute('aria-hidden','true');el.append(label);
@@ -844,13 +845,13 @@ export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
       label.remove();delete el.dataset.gainStart;delete el.dataset.gainPhase;el.style.removeProperty('--mana-bloom');resolve();};
     fxWaiters.add(finish);document.addEventListener('visibilitychange',finish,{once:true});
     const tick=()=>{
-      const age=performance.now()-start;if(fxSkip||document.hidden||!el.isConnected||age>=MANA_GAIN_MS){finish();return;}
-      const impact=age>=MANA_GAIN_IMPACT_MS;el.dataset.gainPhase=impact?'bloom':'gather';
+      const age=performance.now()-start;if(fxSkip||document.hidden||!el.isConnected||age>=duration){finish();return;}
+      const impact=age>=impactAt;el.dataset.gainPhase=impact?'bloom':'gather';
       if(readout)readout.textContent=String(impact?current:fromMana);if(max)max.textContent='/'+(impact?maximum:fromMax);
       if(impact&&!sounded){sounded=true;sfx('mana');}
-      const pose=manaGainPose(age);el.style.setProperty('--mana-bloom',String(pose.glow));
-      label.style.opacity=String(impact?Math.min(1,(age-MANA_GAIN_IMPACT_MS)/90)*(1-Math.max(0,(age-1050)/450)):0);
-      label.style.transform=`translate(-50%,${-Math.max(0,age-MANA_GAIN_IMPACT_MS)/90}px)`;
+      const pose=manaGainPose(age);el.style.setProperty('--mana-bloom',String(formation?0:pose.glow));
+      label.style.opacity=String(impact?Math.min(1,(age-impactAt)/90)*(1-Math.max(0,(age-duration+450)/450)):0);
+      label.style.transform=`translate(-50%,${-Math.max(0,age-impactAt)/90}px)`;
       crystals.forEach((c,i)=>{if(i<fromMax)return;const p=manaGainPose(age,i-fromMax,maximum-fromMax);c.style.opacity=p.visible?'1':'0';c.style.transform=`scale(${p.scale})`;});
       frame=requestAnimationFrame(tick);
     };tick();

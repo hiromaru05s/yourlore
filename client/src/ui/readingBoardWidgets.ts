@@ -1,5 +1,6 @@
 import {createTurnLights} from './turnLight';
 import {getTurnLightPreview,type TurnLightHandle} from './turnLightPreview';
+import {getManaFormation,manaSlotLayout,type FormationHandle} from './manaFormationPreview';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
 import {mountRiftApertures} from './riftAperture';
 import * as T from 'three';
@@ -11,7 +12,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
  const group=new T.Group();group.name='Reading board 02 05 06';scene.add(group);
  const apertures=mountRiftApertures(group);let shadowDirty=true;
  const templates:T.Group[]=[];const owned:T.Material[]=[];const geometries:T.BufferGeometry[]=[];
- const manas:Array<{root:T.Group;batches:Record<'ready'|'spent',T.InstancedMesh[]>;key:string;side:string;maximum:number;current:number}>=[];
+ const manas:Array<{root:T.Group;batches:Record<'ready'|'spent',T.InstancedMesh[]>;key:string;side:string;maximum:number;current:number;formation?:{key:string;handles:FormationHandle[]}}>=[];
  let dead=false,ready=false,turn:T.Group|undefined,reroll:T.Group|undefined,turnCap:T.Object3D|undefined,rerollCap:T.Object3D|undefined,arrows:T.Object3D|undefined,enamel:T.MeshStandardMaterial|undefined;
  let hover='',pressed='',last=performance.now(),rerollTime=-10000,turnTime=-10000,animateUntil=0,lastState='',displayEnemy=false;
  const segments:T.Mesh[]=[];const rerollMaterials:Array<{material:T.MeshStandardMaterial;color:T.Color}>=[];
@@ -70,28 +71,42 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   for(const mana of manas){
    const el=root.querySelector<HTMLElement>(`#portrait${mana.side} .pt-mana`);if(!el)continue;
    const start=Number(el.dataset.gainStart??-10000),age=now-start;
-   const animating=age>=0&&age<MANA_GAIN_MS;
-   const before=animating&&age<MANA_GAIN_IMPACT_MS;
+   const preview=getManaFormation();
+   const animating=age>=0&&age<(preview?.duration??MANA_GAIN_MS);
+   const forming=!!preview&&animating;
+   const before=animating&&age<(preview?.impact??MANA_GAIN_IMPACT_MS);
    const targetMaximum=Math.min(30,Math.max(0,Number(el.dataset.maximum)||0));
-   const maximum=before?Number(el.dataset.gainFromMax):targetMaximum;
+   const maximum=forming?targetMaximum:before?Number(el.dataset.gainFromMax):targetMaximum;
    const current=before?Number(el.dataset.gainFromMana):Math.max(0,Number(el.dataset.mana)||0);
    const gainFrom=Number(el.dataset.gainFromMax??targetMaximum);
-   const key=current+':'+maximum,newState=key!==mana.key;
+   const formationKey=forming?`${start}:${preview!.id}:${targetMaximum}`:'';
+   let formationChanged=false;
+   if(mana.formation?.key!==formationKey){
+    if(mana.formation){mana.formation.handles.forEach(h=>h.dispose());mana.formation=undefined;formationChanged=true;}
+    if(forming){mana.formation={key:formationKey,handles:[]};
+     for(let i=gainFrom;i<targetMaximum;i++)mana.formation.handles.push(preview!.create({parent:mana.root,parts:mana.batches[i<Number(el.dataset.mana)?'ready':'spent'],slot:i,maximum:targetMaximum,ordinal:i-gainFrom,count:targetMaximum-gainFrom}));
+     formationChanged=true;
+    }
+   }
+   mana.formation?.handles.forEach(h=>h.update(age,scale));
+   el.dataset.manaFormation=preview?.id??'original';
+   el.dataset.formingCrystals=String(mana.formation?.handles.length??0);
+   if(mana.formation)el.dataset.formationProgress=String(mana.formation.handles[0]?.group.userData.progress??1);else delete el.dataset.formationProgress;
+   const key=current+':'+maximum,newState=key!==mana.key||formationChanged;
    if(newState){mana.key=key;mana.maximum=maximum;mana.current=current;shadowDirty=true;}
    if(!newState&&!animating)continue;changed=true;if(animating)shadowDirty=true;
    const counts={ready:0,spent:0},matrix=new T.Matrix4(),q=new T.Quaternion();
-   const rows=maximum<=10?1:maximum<=20?2:3;
    for(let i=0;i<maximum;i++){
-    const small=rows===1?Math.min(1,(.226/maximum-.003)/.02954):rows===2?.57:.46;
-    const x=rows===1?(i-(maximum-1)/2)*Math.min(.045,.226/maximum):(i%10-4.5)*.023;
-    const z=rows===1?0:(Math.floor(i/10)-(rows-1)/2)*(rows===2?.026:.019);
-    const gained=animating&&i>=gainFrom,pose=manaGainPose(age,i-gainFrom,targetMaximum-gainFrom);
+    if(forming&&i>=gainFrom)continue;
+    const final=manaSlotLayout(i,maximum);
+    if(forming&&i<gainFrom){const old=manaSlotLayout(i,gainFrom),t=Math.min(1,Math.max(0,age/360)),ease=t*t*(3-2*t);final.x=old.x+(final.x-old.x)*ease;final.y=old.y+(final.y-old.y)*ease;final.z=old.z+(final.z-old.z)*ease;final.scale=old.scale+(final.scale-old.scale)*ease;}
+    const gained=!forming&&animating&&i>=gainFrom,pose=manaGainPose(age,i-gainFrom,targetMaximum-gainFrom);
     q.setFromAxisAngle(new T.Vector3(0,1,0),gained?pose.glow*.06:0);
-    matrix.compose(new T.Vector3(x,.0038*(1-small)+(gained?pose.lift:0),z),q,new T.Vector3().setScalar(small*(gained?Math.max(.0001,pose.scale):1)));
+    matrix.compose(new T.Vector3(final.x,final.y+(gained?pose.lift:0),final.z),q,new T.Vector3().setScalar(final.scale*(gained?Math.max(.0001,pose.scale):1)));
     const state=i<current?'ready':'spent',index=counts[state]++;mana.batches[state].forEach(m=>m.setMatrixAt(index,matrix));
    }
    for(const state of ['ready','spent'] as const)for(const mesh of mana.batches[state]){mesh.count=counts[state];mesh.visible=mesh.count>0;mesh.instanceMatrix.needsUpdate=true;if(mesh.count){mesh.computeBoundingSphere();mesh.computeBoundingBox();}}
-   el.dataset.crystalsReady=String(counts.ready);el.dataset.crystalsSpent=String(counts.spent);
+   el.dataset.crystalsReady=String(counts.ready+(forming&&!before?Math.max(0,Math.min(targetMaximum,Number(el.dataset.mana))-gainFrom):0));el.dataset.crystalsSpent=String(counts.spent+(forming&&!before?Math.max(0,targetMaximum-Math.max(gainFrom,Number(el.dataset.mana))):0));
   }
   const end=root.querySelector<HTMLButtonElement>('#endBtn'),refresh=root.querySelector<HTMLButtonElement>('#refreshBtn'),enemy=root.dataset.readingTurn!=='player';
   for(const m of rerollMaterials){color.copy(m.color);if(refresh?.disabled){const l=color.r*.2126+color.g*.7152+color.b*.0722;color.lerp(new T.Color(l,l,l),.8).multiplyScalar(.5);}else if(hover==='refreshBtn')color.multiplyScalar(1.12);m.material.color.lerp(color,1-Math.exp(-dt*18));}
@@ -128,5 +143,5 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   group.visible=true;if(reroll)reroll.visible=true;
   for(const {mesh,count} of saved){if(!count){mesh.setMatrixAt(0,new T.Matrix4());mesh.instanceMatrix.needsUpdate=true;mesh.count=1;}mesh.visible=true;}
   try{render();}finally{group.visible=wasVisible;if(reroll)reroll.visible=rerollVisible??true;for(const {mesh,count,visible} of saved){mesh.count=count;mesh.visible=visible;}}
- },setMarketMotion(height:number,z:number,visible:boolean){if(reroll){const s=readingScale();reroll.position.set(-.694,.016+height/s,z/s);reroll.visible=visible;}},get settled(){return ready;},dispose(){if(dead)return;dead=true;root.removeEventListener('pointerover',over);root.removeEventListener('pointerdown',down);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);root.removeEventListener('click',click,true);manas.forEach(m=>Object.values(m.batches).flat().forEach(b=>b.dispose()));geometries.forEach(g=>g.dispose());turnLights?.dispose();apertures.dispose();templates.forEach(releaseTemplate);owned.forEach(m=>m.dispose());group.removeFromParent();delete root.dataset.widgetsReady;delete root.dataset.turnlight;}};
+ },setMarketMotion(height:number,z:number,visible:boolean){if(reroll){const s=readingScale();reroll.position.set(-.694,.016+height/s,z/s);reroll.visible=visible;}},get settled(){return ready;},dispose(){if(dead)return;dead=true;root.removeEventListener('pointerover',over);root.removeEventListener('pointerdown',down);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);root.removeEventListener('click',click,true);manas.forEach(m=>{m.formation?.handles.forEach(h=>h.dispose());Object.values(m.batches).flat().forEach(b=>b.dispose());});geometries.forEach(g=>g.dispose());turnLights?.dispose();apertures.dispose();templates.forEach(releaseTemplate);owned.forEach(m=>m.dispose());group.removeFromParent();delete root.dataset.widgetsReady;delete root.dataset.turnlight;}};
 }
