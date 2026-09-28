@@ -264,7 +264,7 @@ export class GameView {
     // Clicking anywhere outside the expanded hand collapses it back. ----
     const collapse = (e: PointerEvent) => {
       if (!document.body.contains(this.root)) return;      // screen was swapped
-      if (!this.handOpen) return;
+      if (!this.handOpen || this.root.classList.contains('choosing-discard')) return;
       const el = e.target as HTMLElement | null;
       if (el?.closest("#hand") || el?.closest(".zoom-overlay")) return; // zoom close ≠ hand close
       this.setHandOpen(false);
@@ -987,6 +987,8 @@ export class GameView {
   private renderHand(g: GameState, me: PlayerState, myTurn: boolean): void {
     // Preserve an in-flight pointer session across authoritative board renders.
     const handEl = this.q("hand");
+    const discarding = myTurn && g.pending?.reason === 'handCap';
+    if (discarding) this.setHandOpen(true);
     const old=new Map([...handEl.querySelectorAll<HTMLElement>(':scope > .card')].map(el=>[el.dataset.uid,el]));
     const keep=new Set(me.hand.map(c=>c.uid));
     for(const [uid,node] of old)if(!keep.has(uid!))node.remove();
@@ -994,17 +996,18 @@ export class GameView {
       const pc = playCost(c, me);
       const blocked=playBlockReason(g,this.you,c);
       const aff = myTurn && !g.pending && !blocked;
-      const key=JSON.stringify([c,pc,aff,blocked,getLang()]);
+      const key=JSON.stringify([c,pc,aff,blocked,discarding,getLang()]);
       let card=old.get(c.uid);
       if(!card||card.dataset.handSnapshot!==key){
-        const next=cardEl(c,{size:'hand',playable:aff,dim:!aff,costOverride:pc});
+        const next=cardEl(c,{size:'hand',playable:aff,dim:!aff&&!discarding,costOverride:pc});
         next.dataset.handSnapshot=key;
         this.bindHandCard(next,c);
         if(card)card.replaceWith(next);
         card=next;
       }
       card.classList.remove('is-played');
-      if(!aff)card.dataset.blockReason=!myTurn?t('play.block.turn'):g.pending?t('play.block.pending'):me.mana<pc?t('play.block.mana'):(getLang()==='ja'?blocked?.ja:getLang()==='ko'?blocked?.ko:null)||t('play.block.cond');
+      if(!aff&&!discarding)card.dataset.blockReason=!myTurn?t('play.block.turn'):g.pending?t('play.block.pending'):me.mana<pc?t('play.block.mana'):(getLang()==='ja'?blocked?.ja:getLang()==='ko'?blocked?.ko:null)||t('play.block.cond');
+      else delete card.dataset.blockReason;
       card.style.setProperty("--hi", String(idx));
       card.style.zIndex = String(me.hand.length - idx);
       const position=handEl.children[idx];

@@ -1,0 +1,206 @@
+[
+  {
+    "width": 1280,
+    "status": "passed",
+    "checks": [
+      "full color with zero mana",
+      "grab cursor without blocked tooltip",
+      "expanded hand",
+      "shelf highlight",
+      "cancel drag",
+      "touch drop or mouse drop",
+      "remaining count 3 → 2 → 1",
+      "keyboard completion",
+      "cleanup"
+    ],
+    "state": {
+      "cards": [
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        }
+      ],
+      "open": true,
+      "target": "3px"
+    },
+    "errors": []
+  },
+  {
+    "width": 390,
+    "status": "passed",
+    "checks": [
+      "full color with zero mana",
+      "grab cursor without blocked tooltip",
+      "expanded hand",
+      "shelf highlight",
+      "cancel drag",
+      "touch drop or mouse drop",
+      "remaining count 3 → 2 → 1",
+      "keyboard completion",
+      "cleanup"
+    ],
+    "state": {
+      "cards": [
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        }
+      ],
+      "open": true,
+      "target": "3px"
+    },
+    "errors": []
+  }
+]
