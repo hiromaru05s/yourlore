@@ -1,8 +1,7 @@
-import {reformVeil} from './reformVeil';
-import {pileCenter,pileFace,marketHeight,STOCK_THICKNESS} from './readingBoardLayout';
+import {pileCenter,marketHeight,STOCK_THICKNESS} from './readingBoardLayout';
 import {boardPoint} from './boardProjection';
 import * as T from 'three';
-import {reformState,REFORM_DURATION} from './deckReform';
+import {playMaterialReturn} from './shelfReturn';
 import {bindBoardMotion,type BoardMotion} from './boardMotion';
 import {cardStock,type PileModel} from './pileModels';
 import {boardLens,layoutRect,cardUnit,screenToBoard} from './boardProjection';
@@ -59,44 +58,23 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
     }
     if(req.kind==='shuffle'){
       const src=items.get(req.source.id),dest=items.get(req.target.id);if(!src?.pile||!dest?.pile)return false;
-      const a=layoutRect(req.source),b=layoutRect(req.target),count=req.count;
+      const count=req.count;
       let face:T.CanvasTexture|undefined;
       const print=req.source.querySelector<HTMLElement>('.pile-print .card');
       if(print){try{const surface=await capturePileSurface(print,req.source.dataset.sleeve!);if(surface.face){face=new T.CanvasTexture(surface.face);face.colorSpace=T.SRGBColorSpace;}}catch{}}
       if(req.signal.aborted||disposed){face?.dispose();return false;}
-      type Surface={material:T.MeshBasicMaterial|T.MeshStandardMaterial;color:T.Color};
-      const build=(shelf:boolean)=>{
-        const group=new T.Group(),surfaces:Surface[]=[],n=Math.min(count,shelf?12:20),height=Math.max(0,Math.min(count,40)-1)*STOCK_THICKNESS;
-        for(let i=0;i<n;i++){
-          const card=cardStock(texture((shelf?req.source:req.target).dataset.sleeve!),shelf&&i===n-1?face:undefined,shelf&&i<n-1);card.rotation.x=-Math.PI/2;
-          card.position.y=pileCenter(1,shelf)+(n<=1?0:i/(n-1)*height);group.add(card);
-          card.traverse(o=>{if(o instanceof T.Mesh)for(const material of Array.isArray(o.material)?o.material:[o.material])if(material instanceof T.MeshBasicMaterial||material instanceof T.MeshStandardMaterial){material.transparent=true;surfaces.push({material,color:material.color.clone()});}});
-        }
-        group.scale.setScalar(unit);scene.add(group);return {group,surfaces};
-      };
-      const source=build(true),target=build(false),sparkGroup=new T.Group();scene.add(sparkGroup);
-      source.group.position.set(a.left+a.width/2-cx,0,a.top+a.height/2-cy);target.group.position.set(b.left+b.width/2-cx,0,b.top+b.height/2-cy);sparkGroup.position.copy(target.group.position);
-      const sparks=Array.from({length:12},(_,i)=>{const m=new T.Mesh(new T.OctahedronGeometry(unit*.012,0),new T.MeshBasicMaterial({color:i%3?0xace3ff:0xffffff,transparent:true,depthWrite:false,blending:T.AdditiveBlending,toneMapped:false}));sparkGroup.add(m);return m;});
-      const coat=(actor:typeof source,charge:number,opacity:number)=>{actor.group.visible=opacity>.001;for(const {material,color} of actor.surfaces){material.color.copy(color).lerp(new T.Color('#c4eaff'),charge*.4);material.opacity=opacity;if(material instanceof T.MeshStandardMaterial){material.emissive.set('#a8deff');material.emissiveIntensity=charge*.85;}else if(material.map){material.color.lerp(new T.Color('#c6f5ff'),charge*.4);}}};
-      const veil=(actor:typeof source,shelf:boolean)=>{const v=reformVeil(unit);v.mesh.position.copy(actor.group.position);v.mesh.position.y=unit*(pileFace(count,shelf)+.006);scene.add(v.mesh);return v;};
-      const sourceVeil=veil(source,true),targetVeil=veil(target,false);
-      coat(target,0,0);
+      // The game gets an independent clock; the lab supplies its own scrubbable clock.
+      const abort=new AbortController(),stop=()=>abort.abort();
+      req.signal.addEventListener('abort',stop,{once:true});cancels.add(stop);
+      window.addEventListener('resize',stop,{once:true});
       try{
-      await warm();if(disposed||req.signal.aborted)return false;
-      req.source.classList.add('is-shuffling');req.target.classList.add('is-shuffling');
-      await timeline(reduced?100:REFORM_DURATION,req.signal,t=>{
-        const state=reformState(t);root.dataset.shufflePhase=state.phase;
-        coat(source,state.sourceCharge,state.sourceAlpha);coat(target,state.destinationCharge,state.destinationAlpha);
-        sourceVeil.update(state.sourceCharge,state.sourceAlpha*.96,t);targetVeil.update(state.destinationCharge,state.destinationAlpha*.98,t);
-        const burst=state.burst,travel=sat((t-.59)/.38);sparks.forEach((m,i)=>{const angle=i*2.399;m.position.set(Math.cos(angle)*unit*(.25+travel*.8),unit*(pileCenter(count,false)+.12+Math.sin(travel*Math.PI)*.4),Math.sin(angle)*unit*(.38+travel*.7));m.scale.set(.45*burst,(1.3+travel)*burst,.45*burst);m.rotation.z=angle;m.material.opacity=burst*.85;});
-      });
-      if(disposed||req.signal.aborted)return false;
-      req.target.dataset.count=String(count);req.source.dataset.count='0';req.source.querySelector('.pile-print')?.remove();delete req.source.dataset.face;
-      for(const e of [req.source,req.target]){const c=e.querySelector('.pile-count');if(c)c.textContent=e.dataset.count!;}
-      refresh();
-      }finally{[source.group,target.group,sparkGroup].forEach(dispose);sourceVeil.dispose();targetVeil.dispose();face?.dispose();req.source.classList.remove('is-shuffling');req.target.classList.remove('is-shuffling');delete root.dataset.shufflePhase;}
-      return true;
+        const args={root,scene,source:req.source,target:req.target,count,unit,cx,cy,texture,face,signal:abort.signal,warm,refresh};
+        return await playMaterialReturn(args);
+      }finally{
+        req.signal.removeEventListener('abort',stop);cancels.delete(stop);window.removeEventListener('resize',stop);face?.dispose();
+      }
     }
+
     // Opening furniture flights were retired; the board starts fully assembled.
     return true;
   });
