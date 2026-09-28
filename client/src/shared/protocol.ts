@@ -67,7 +67,8 @@ export function redactFor(state: GameState, you: Side): GameState {
     if (!(card as CardInst & { token?: boolean }).token) known.set(card.uid, card.id);
   }
   opp.collection = [...known.values()];
-  opp.hand = opp.hand.map((c) => placeholder(c.uid));
+  const revealingHand = g.pending?.kind === 'cardChoice' && g.pending.reason === 'HIGH_ELF_HAND' && (g.pending.owner ?? g.cur) === you;
+  if (!revealingHand) opp.hand = opp.hand.map((c) => placeholder(c.uid));
   const choosingEnemyDeck = g.pending?.kind === 'cardChoice' && (g.pending.owner ?? g.cur) === you && ['Q_CHEAT', 'CREATION'].includes(g.pending.reason);
   opp.deck = choosingEnemyDeck
     ? [...opp.deck].sort((a, b) => a.cost - b.cost || a.id.localeCompare(b.id) || a.uid.localeCompare(b.uid))

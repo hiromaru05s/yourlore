@@ -19,6 +19,8 @@ const FIELD = { ko: "text", ja: "textJa", en: "textEn" };
 
 // R8 budgets — measured against the text WITHOUT tags/keyword chips, because
 // those render as separate rows and do not compete for sentence space.
+// v54 multi-effect cards retain every required rule; their detail panel uses separate clauses.
+const EXTENDED_RULE_IDS = new Set(['ELF_HAVEN','ELF','DARK_ELF','HIGH_ELF','ELDER_ELF_KING','WORLD_TREE','VETERAN_ARMORER','SHIELD_TITAN','WINE_COLLECTOR']);
 const LEN_LIMIT = { ko: 62, ja: 62, en: 96 };
 
 const TAG_RE = /【[^】]*】/g;
@@ -94,8 +96,9 @@ for (const c of cards) {
     if (c.t === "mon" && /이 카드|このカード|\bthis card\b/i.test(s)) bad("R5-self-ref", c.id, lang, s);
 
     // R8 — length budget (dice tables are exempt: they render as rows).
-    if (!isDiceTable(s) && bare(s).length > LEN_LIMIT[lang]) {
-      bad("R8-too-long", c.id, lang, `${bare(s).length}/${LEN_LIMIT[lang]} — ${s}`);
+    const budget = LEN_LIMIT[lang] * (EXTENDED_RULE_IDS.has(c.id) ? 3 : 1);
+    if (!isDiceTable(s) && (bare(s).length > budget || (EXTENDED_RULE_IDS.has(c.id) && s.split(/\s+·\s+/).some(clause => bare(clause).length > LEN_LIMIT[lang])))) {
+      bad("R8-too-long", c.id, lang, `${bare(s).length}/${budget} — ${s}`);
     }
 
     // R1 — ` · ` is the ONLY clause separator. A bare ` / ` outside a dice table

@@ -1,3 +1,4 @@
+import { DEW_SHIELD_CARDS, DEW_SHIELD_STARTERS, applyDewShieldRework, localizeDewShieldCards } from './dewShieldCards';
 import {COSMETICS,equipmentId} from './cosmetics';
 import { EXPANSION_CARDS, COUNTER_IDS } from "./expansionCards";
 import { QUEST_QUICK_CARDS } from "./questQuickCards";
@@ -1053,9 +1054,9 @@ export const PASSIVES: Record<string, { ko: PassiveDef; ja: PassiveDef; en: Pass
 export const PASSIVE_KEYS = Object.keys(PASSIVES);
 
 /** 카드가 가진 패시브 키 목록 — 명시(passive 배열) + 기존 필드에서 유도(mult/directOnly/ward/exileOnDestroy). */
-export function cardPassives(c: Partial<CardDef>): string[] {
+export function cardPassives(c: Partial<CardDef> & {conditionalPassives?: string[]}): string[] {
   const out: string[] = [];
-  const has = (k: string): boolean => !!c.passive?.includes(k);
+  const has = (k: string): boolean => !!c.passive?.includes(k) || !!c.conditionalPassives?.includes(k);
   if ((c.mult ?? 1) >= 2 || has("dual")) out.push("dual");
   if (c.directOnly || has("ambush")) out.push("ambush");
   if (c.aura === "ward" || has("aura")) out.push("aura");
@@ -1064,11 +1065,11 @@ export function cardPassives(c: Partial<CardDef>): string[] {
   return out;
 }
 /** 런타임 패시브 판정 — 카드 자체 + 게임 중 부여된 패시브(passivesG)까지 포함. */
-export function hasPassive(c: Partial<CardDef> & { passivesG?: string[] }, key: string): boolean {
+export function hasPassive(c: Partial<CardDef> & { passivesG?: string[]; conditionalPassives?: string[] }, key: string): boolean {
   // Persisted grants of retired keywords no longer confer an ability.
   if (!Object.hasOwn(PASSIVES, key)) return false;
   if (c.passivesG?.includes(key)) return true;
-  return cardPassives(c).includes(key);
+  return (c.conditionalPassives ?? []).includes(key) || cardPassives(c).includes(key);
 }
 
 // ============================================================
@@ -2330,12 +2331,18 @@ Object.assign(DB.DEMON_REALM, {
   textEn: "Permanent: Negate all effects and keywords of your Demonkin in play and those you summon later." });
 // v53: health is unbounded; old percentage/full player heals use explicit targets.
 const HEALTH_RULES:Record<string,{text:string;textJa:string;textEn:string}>={
- MEDITATE:{text:'자신 최대 마나 11 이하, 체력 40 미만일 때만 · 자신 체력을 40까지 회복하고 낙인 카운터 1개',textJa:'【条件】自分の最大マナ11以下、体力40未満 · 自分の体力を40まで回復し、烙印カウンター1個',textEn:'Requires max mana at most 11 and HP below 40. Restore your HP to 40; gain 1 Brand.'},
- HERMIT:{text:'자신 필드에 몬스터가 없을 때만 · 자신 체력을 40까지 회복한 후 체력 +15 · 게임당 5회',textJa:'【条件】自分の場にモンスターがいない · 自分の体力を40まで回復後、体力+15 · ゲーム中5回まで',textEn:'Requires no monsters on your field. Restore your HP up to 40, then gain 15 HP. Up to 5 uses per game.'},
+ MEDITATE:{text:'【조건】자신 최대 마나 11 이하, 체력 40 미만일 때만 · 자신 체력을 40까지 회복하고 낙인 카운터 1개',textJa:'【条件】自分の最大マナ11以下、体力40未満 · 自分の体力を40まで回復し、烙印カウンター1個',textEn:'【Requires】Max mana at most 11 and HP below 40. Restore your HP to 40; gain 1 Brand.'},
+ HERMIT:{text:'【조건】자신 필드에 몬스터가 없을 때만 · 자신 체력을 40까지 회복한 후 체력 +15 · 게임당 5회',textJa:'【条件】自分の場にモンスターがいない · 自分の体力を40まで回復後、体力+15 · ゲーム中5回まで',textEn:'【Requires】No monsters on your field. Restore your HP up to 40, then gain +15 HP. Up to 5 uses per game.'},
  GS8_2:{text:'자신 체력 +14 · 최대 마나 10 이하면 자신의 체력을 40까지 회복',textJa:'自分の体力+14 · 最大マナ10以下なら、さらに体力を40まで回復',textEn:'Gain 14 HP. If your max mana is at most 10, then restore your HP up to 40.'},
  WORLD_TREE:{text:'자신 체력이 증가하면 카운터 1개 · 매턴 카운터 1개로 아군 몬스터의 받은 데미지를 제거하고 자신의 체력을 32까지 회복',textJa:'【常時】自分の体力が増えるとカウンター1個 · 【毎ターン】カウンター1個で味方モンスターの蓄積ダメージを取り除き、自分の体力を32まで回復',textEn:'Gain a counter when your HP increases. Each turn: spend 1 counter to remove damage from allied monsters and restore your HP up to 32.'}
 };
 for(const [id,text] of Object.entries(HEALTH_RULES))if(DB[id])Object.assign(DB[id],text);
+for (const c of DEW_SHIELD_CARDS) DB[c.id] = c;
+DECK_POOL.push(...DEW_SHIELD_STARTERS);
+applyDewShieldRework(DB);
+localizeDewShieldCards(DB);
+DB.VAMP4.textEn = "【Passive】Blood Magic: summon Supreme Vampire once · gain HP equal to 50% of enemy damage dealt.";
+for (const lang of ['ko', 'ja', 'en'] as const) CHEST_ODDS[lang].rows = CHEST_ODDS[lang].rows.map(s => s.replace('+7', '+5'));
 standardizeCardTexts(
   [DB, STARTERS as unknown as Record<string, CardDef>],
   // keyword names for rule R3 (they move to the chip row) — injected so cardText.ts
@@ -2448,7 +2455,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v53"; // approved ten-card post-expansion rework
+export const BALANCE_VERSION = "v54"; // Dew / Shield expansion and World Tree rework
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관
@@ -2528,3 +2535,5 @@ export function sleeveUrl(id: string | null | undefined): string { return SLEEVE
 export function enchantHasTurnCountdown(card: CardDef): boolean {
   return !!card.ench && (card.val ?? 1) < 99;
 }
+
+RANDOM_CARDS.add("VITAL2"); // v54: follower summon rolls once for dew.

@@ -974,6 +974,10 @@ export class GameView {
       <span class="pt-ring">${avatarHtml(seeker, p.name, 100)}</span>
       <span class="pt-mana pips" data-mana="${p.mana}" data-maximum="${emax}" data-previous-maximum="${previousMax}" data-previous-mana="${previousMana}" aria-label="${t("game.mana")} ${p.mana}/${emax}"><span class="mana-readout"><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span><span class="mana-crystals" style="--mana-rows:${Math.max(1,Math.ceil(Math.min(MAX_MANA,emax)/10))}">${crystals}</span></span>
       ${(p.brand ?? 0) > 0 ? `<span class="pt-brand" title="${esc(t("game.brandTip").replace("{n}", String(p.brand)))}">${t("game.brand")} <b>${p.brand}</b></span>` : ""}
+      <span class="pt-resources" aria-label="${t('game.dew')} ${p.dew ?? 0}, ${t('game.shield')} ${p.shield ?? 0}">
+        <span class="pt-dew" title="${esc(t('game.dewTip'))}">${t('game.dew')} <b>${p.dew ?? 0}</b></span>
+        <span class="pt-shield" title="${esc(t('game.shieldTip'))}">${t('game.shield')} <b>${p.shield ?? 0}</b></span>
+      </span>
       <span class="pt-name">${esc(p.name)}</span>`;
     const portrait=oldPortrait??seekerPortrait(seeker==='SEEKER_RED'?'red':'blue');
     el.querySelector('.avatar')?.replaceChildren(portrait);

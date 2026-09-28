@@ -47,7 +47,13 @@ export async function loadCards({ includeStarters = false } = {}) {
     .replaceAll('from "./cards"', 'from "./cards.mjs"')
     .replaceAll("from './cards'", 'from "./cards.mjs"');
   const flavorNamesJs = transpileTs(flavorNamesSource);
+  for (const name of ['dewShieldCards','cosmetics']) {
+    const src=await fs.readFile(path.join(rootDir, `client/src/shared/${name}.ts`), 'utf8');
+    await fs.writeFile(path.join(cacheDir, `${name}.mjs`), transpileTs(src));
+  }
   const cardsJs = transpileTs(source)
+    .replaceAll("from './dewShieldCards'", 'from "./dewShieldCards.mjs"')
+    .replaceAll("from './cosmetics'", 'from "./cosmetics.mjs"')
     .replaceAll('from "./expansionCards"', 'from "./expansionCards.mjs"')
     .replaceAll('from "./questQuickCards"', 'from "./questQuickCards.mjs"')
     .replaceAll('from "./cards.en"', 'from "./cards.en.mjs"')

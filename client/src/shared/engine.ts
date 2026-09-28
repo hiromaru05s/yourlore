@@ -122,10 +122,9 @@ export function effMaxMana(p: PlayerState): number {
   // 다양한 문화: while active, +1 max mana per non-시초 tribe monster you control
   const culture = p.enchants.some((e) => e.card.ench === "cultureMana")
     ? p.field.filter((m) => m.tribe && m.tribe !== "시초").length : 0;
-  const heart = p.enchants.filter((e) => e.card.ench === "growHpMana").length * 2; // 세계수의 심장: 장당 -2
   // The King also blocks temporary maximum-mana bonuses from field effects.
   const bonus = maxManaGrowthBlocked(p) ? 0 : aura + culture;
-  let total = p.maxMana + bonus - heart - p.manaPenalty;
+  let total = p.maxMana + bonus - p.manaPenalty;
   // 마족 전사(demonTax2): 필드에 있는 동안 -2/장 — 단 이 차감으로 3 밑으로는 내려가지 않는다
   const demonTax = p.field.filter((m) => m.aura === "demonTax2").length * 2;
   if (demonTax > 0) total = Math.max(Math.min(total, 3), total - demonTax);
@@ -190,7 +189,7 @@ export function effAtk(p: PlayerState, m: FieldMon, g?: Pick<GameState, "players
   if (m.tribe === "시초") a += p.field.filter((x) => x.aura === "originLord").reduce((s2, x) => s2 + (x.val || 3), 0);
   // 특급 주술사 켈로이드(v39 hexBoss): 자신 필드의 '주술사' 계열 전체 공격력 +5 (켈로이드 1체당)
   if (isHexer(m)) a += p.field.filter((x) => x.aura === "hexBoss").reduce((s2, x) => s2 + (x.val || 5), 0);
-  return Math.max(0, a + mercBuff(p, m));
+  return Math.max(0, a + mercBuff(p, m) + elfTreeBonus(p, m));
 }
 export function effDef(p: PlayerState, m: FieldMon): number {
   // 은빛 성벽(wallDef): +val to every friendly monster's defense while on field
@@ -199,7 +198,7 @@ export function effDef(p: PlayerState, m: FieldMon): number {
   const cull = m.condAtk === "cullPlus" ? Math.floor(cullExiled(p) / 2) : 0; // 선택받은 검사/마법사: 컬 2장당 +1/+1
   // 시초의 군주(originLord): 자신 필드의 모든 시초 몬스터 +3/+3 (군주 1장당)
   const lord = m.tribe === "시초" ? p.field.filter((x) => x.aura === "originLord").reduce((s2, x) => s2 + (x.val || 3), 0) : 0;
-  return Math.max(1, m.def! + (m.defMod || 0) + wall + hpb + cull + lord + mercBuff(p, m));
+  return Math.max(1, m.def! + (m.defMod || 0) + wall + hpb + cull + lord + mercBuff(p, m) + elfTreeBonus(p, m));
 }
 /** v24 HP-combat: a monster's CURRENT HP - HP (effDef) minus accumulated damage. */
 export function curHp(p: PlayerState, m: FieldMon): number {
@@ -383,6 +382,46 @@ function sweepRelics(g: GameState, ctx: Ctx): void {
   }
 }
 
+/** Resource updates resolve synchronously; shield gain is one trigger, regardless of amount. */
+function gainDew(ctx: Ctx, p: PlayerState, amount: number): void {
+  if (amount <= 0) return;
+  p.dew = (p.dew ?? 0) + amount;
+  ctx.log(`${p.name}: 이슬 +${amount} (${p.dew})`, `${p.name}: 雫+${amount} (${p.dew})`);
+}
+function gainShield(g: GameState, ctx: Ctx, p: PlayerState, amount: number, source?: FieldMon): void {
+  if (amount <= 0) return;
+  const doubles = p.enchants.filter(e => e.card.ench === 'doubleShield').length
+    + p.field.filter(m => m.aura === 'doubleShieldOther' && m.uid !== source?.uid).length;
+  amount *= 2 ** doubles;
+  p.shield = (p.shield ?? 0) + amount;
+  p.shieldExpiresTurn = side(g, p) === g.cur ? g.turn + 1 : g.turn;
+  if (side(g, p) !== g.cur) p.shieldOpponentPeak = Math.max(p.shieldOpponentPeak ?? 0, p.shield);
+  ctx.log(`${p.name}: 실드 +${amount} (${p.shield})`, `${p.name}: シールド+${amount} (${p.shield})`);
+  for (const m of p.field) if (m.aura === 'shieldDew') gainDew(ctx, p, m.val2 ?? 0);
+}
+function breakShield(ctx: Ctx, p: PlayerState, amount = Infinity): void {
+  const lost = Math.min(p.shield ?? 0, amount);
+  p.shield = Math.max(0, (p.shield ?? 0) - lost);
+  if (lost) ctx.log(`${p.name}: 실드 -${lost}`, `${p.name}: シールド-${lost}`);
+}
+export function isWorldTreeCard(c: Pick<CardDef, 'name' | 'nameJa'>): boolean { return /세계수|世界樹/.test(c.name + (c.nameJa ?? '')); }
+export function isElfCard(c: Pick<CardDef, 'name' | 'nameJa'>): boolean { return /엘프|エルフ/.test(c.name + (c.nameJa ?? '')); }
+function elfTreeBonus(p: PlayerState, m: FieldMon): number {
+  const mult = m.id === 'ELF' ? 1 : m.id === 'HIGH_ELF' ? 2 : m.id === 'ELDER_ELF_KING' ? 4 : 0;
+  return mult * new Set([...p.field, ...p.enchants.map(e => e.card), ...(p.quests ?? []).map(q => q.card)].filter(isWorldTreeCard).map(c => c.id)).size;
+}
+function refreshDewPassives(g: GameState): void {
+  for (const p of g.players) for (const m of p.field) {
+    if (m.id !== 'DARK_ELF') continue;
+    m.conditionalPassives = [];
+    if (p.field.some(x => /용병|傭兵/.test(x.name + (x.nameJa ?? '')))) m.conditionalPassives.push('evade');
+    if (p.field.some(x => x.tribe === '마족')) m.conditionalPassives.push('aura');
+  }
+}
+function havenPurchase(_g: GameState, ctx: Ctx, p: PlayerState, c: CardInst): void {
+  if (isWorldTreeCard(c) || isElfCard(c)) for (const e of p.enchants) if (e.card.ench === 'elfHaven') gainDew(ctx, p, 1);
+}
+
 interface Ctx {
   side(p:PlayerState):Side;
   ev: GameEvent[];
@@ -421,6 +460,11 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     return drawn;
   };
   const heal = (p: PlayerState, amt: number): void => {
+    if (amt <= 0) return;
+    const foe = g.players[1 - side(g, p)];
+    const doubles = g.players.reduce((n, pl) => n + pl.field.filter(m => m.id === 'ELF').length, 0);
+    const halves = foe.field.filter(m => m.id === 'HIGH_ELF').length;
+    amt = Math.floor(amt * 2 ** (doubles - halves));
     if (amt <= 0) return;
     p.hp += amt;
     advanceQuest(p,"healthGain",amt);
@@ -471,6 +515,9 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       log(`  └ 흡혈 술식: 피의 마법 데미지 무효`, `  └ 吸血術式: 血の魔法のダメージ無効`);
       return;
     }
+    const absorbed = Math.min(target.shield ?? 0, amt);
+    if (absorbed > 0) { breakShield(ctx, target, absorbed); amt -= absorbed; }
+    if (amt <= 0) return;
     if (spellDepth > 0) spellDamageRecorded(g, Math.min(Math.max(0, target.hp), amt));
     target.hp -= amt;
     if (source !== side(g, target)) advanceQuest(target, "opponentDamage", amt);
@@ -511,6 +558,11 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     const i = owner.field.findIndex((x) => x.uid === m.uid);
     if (i >= 0) {
       const dead = owner.field.splice(i, 1)[0];
+      refreshDewPassives(g);
+      if (dead.id === 'ELDER_ELF_KING' && (owner.dew ?? 0) >= 15) {
+        owner.dew! -= 15;
+        dealDamage(g.players[1 - side(g, owner)], 30, cn(dead), cn(dead), side(g, owner));
+      }
       if (dead.id === 'FIRE_MASTER') queueExpansionChoice(g, owner, 'FIRE_MASTER', '手札に加えるファイアー魔法を最大2枚選択', { left: 2 });
       // 폭풍의 광전사(drainMana): restore the opponent's max mana it was draining
       if (dead.aura === "drainMana") { const opp2 = g.players[0] === owner ? g.players[1] : g.players[0]; addMaxMana(opp2, (dead.drained ?? (dead.val || 3))); }
@@ -561,6 +613,8 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
 // ============================================================
 function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
   const p = g.players[g.cur];
+  const shieldOwner = g.players[1 - g.cur];
+  shieldOwner.shieldOpponentPeak = shieldOwner.shield ?? 0;
   const skips = (p.skipTurns ?? 0) + (p.skipNext ? 1 : 0);
   if (!first && skips > 0) { // 시공간 조작: queued skips stack
     p.skipTurns = Math.max(0, skips - 1);
@@ -632,6 +686,9 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
       ctx.log(`  └ 최후의 보루: ${bn}장 추가 드로우`, `  └ 最後の砦: ${bn}枚追加ドロー`);
     }
   }
+  // Recover using the amount held at turn start, before this turn's new Dew.
+  const dewRecovery = (p.dew ?? 0) * 2 ** p.field.filter(m => m.id === 'WORLD_TREE').length;
+  if (dewRecovery > 0) ctx.heal(p, dewRecovery);
   spellDepth++;
   try { tickEnchants(g, ctx, p); } finally { spellDepth--; }
   if (!g.over) tickBleed(ctx, p);
@@ -823,14 +880,10 @@ function tickTurnFx(g: GameState, ctx: Ctx, p: PlayerState): void {
         ctx.ev.push({ type: "needTarget", pending: g.pending });
         break;
       }
-      case "worldTree": { // 세계수(v36): 카운터를 소모해 아군 몬스터 체력 전회복 + 자신 체력 80%까지 (매턴 1회, 선택)
-        if (g.pending || (m.gcount || 0) <= 0) break;
-        g.pending = { kind: "myMon", reason: "worldTree", allowCancel: true, data: {},
-          hint: `세계수 — 카운터 1개를 소모해 발동하려면 세계수를 선택 (남은 카운터 ${m.gcount} · 취소 가능)`,
-          hintJa: `世界樹 — カウンター1個を消費して発動するには世界樹を選択 (残り${m.gcount} · キャンセル可)` };
-        ctx.ev.push({ type: "needTarget", pending: g.pending });
+      case "worldTree": gainDew(ctx, p, 3); break;
+      case "weaponmaster":
+        for (const other of p.field) if (/장비 장인|装備職人/.test(other.name + (other.nameJa ?? ''))) gainShield(g, ctx, p, 5, m);
         break;
-      }
     }
   }
 }
@@ -1129,8 +1182,10 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
       }
       // v49: 세계수의 보살핌 — 자신의 턴 시작마다 체력 +3 (동량 회복 포함)
       if (e.card.ench === "worldCare" && ownerTurn && !g.over) {
-        addHealth(ctx, pl, 3);
-        ctx.log(`<span class="t">${cn(e.card)}</span> 체력 +3 (${pl.hp})`, `<span class="t">${cn(e.card)}</span> 体力 +3 (${pl.hp})`);
+        gainDew(ctx, pl, 1);
+      }
+      if (e.card.ench === 'worldHeart' && ownerTurn && !g.over) {
+        gainDew(ctx, pl, 2); ctx.heal(pl, 2);
       }
       // 선견지명: 최대 마나 10 이상이 되면 +2 후 자괴 (필드를 떠나면 게임에서 제외) (v19: 9→10)
       if (e.card.ench === "foresight" && !g.over && pl.maxMana >= 10) {
@@ -1219,6 +1274,7 @@ function endTurn(g: GameState, ctx: Ctx, force = false): void {
       return;
     }
   }
+  for (const m of p.field) if (m.id === 'SHIELD_TITAN') gainShield(g, ctx, p, 10, m);
   expansionEnd(g, ctx, p);
   if (g.over) return;
   if (!p.field.length) advanceQuest(p, "emptyTurn");
@@ -1275,6 +1331,8 @@ function endTurn(g: GameState, ctx: Ctx, force = false): void {
     }
     return;
   }
+  o.previousOpponentShieldPeak = Math.max(o.shieldOpponentPeak ?? 0, o.shield ?? 0);
+  if (o.shieldExpiresTurn != null && o.shieldExpiresTurn <= g.turn) breakShield(ctx, o);
   g.turn++; g.cur = (1 - g.cur) as Side;
   beginTurn(g, ctx, false);
 }
@@ -1319,7 +1377,11 @@ function trySnare(g: GameState, ctx: Ctx, victim: PlayerState): boolean {
   return true;
 }
 
-function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: string | null): void {
+function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: string | null, treeStage = 0): void {
+  if (treeStage === 0 && (g.players[g.cur].dew ?? 0)>0 && g.players[g.cur].field.some(m=>m.id==='WORLD_TREE')) {
+    offerEffectChoice(g,ctx,g.players[g.cur],'WORLD_TREE_ATTACK','雫1で攻撃力+6（永続）しますか？',{attackerUid:att.uid,targetUid});
+    return;
+  }
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];
   let atk = effAtk(p, att, g);
@@ -1334,10 +1396,10 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     ctx.destroyMonster(owner, mm);
   };
 
-  if (o.defendHeal > 0) ctx.heal(o, o.defendHeal); // GS7_2: heal the defender each time they're attacked
+  if (treeStage < 2 && o.defendHeal > 0) ctx.heal(o, o.defendHeal); // GS7_2: heal the defender each time they're attacked
 
-  // ---- 도발(taunt): 다른 아군 몬스터가 공격받을 때 50%로 도발 몬스터가 대신 맞는다 ----
-  if (targetUid !== null) {
+  // ---- 도발(taunt): other allied monster may redirect the attack ----
+  if (treeStage < 2 && targetUid !== null) {
     const orig = o.field.find((m) => m.uid === targetUid);
     const taunts = o.field.filter((m) => m.uid !== targetUid && m.hatch == null && hasPassive(m, "taunt"));
     const tauntRollIndex = ctx.ev.length;
@@ -1348,6 +1410,10 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       targetUid = tnt.uid;
       ctx.log(`  └ <span class="dmg">도발!</span> ${cn(tnt)} 이(가) 대신 공격을 받는다`, `  └ <span class="dmg">挑発！</span> ${cn(tnt)} が代わりに攻撃を受ける`);
     }
+  }
+  if (treeStage < 2 && targetUid !== null && o.field.some(m=>m.uid===targetUid) && (o.dew ?? 0)>0 && o.field.some(m=>m.id==='WORLD_TREE')) {
+    offerEffectChoice(g,ctx,o,'WORLD_TREE_DEFEND','雫1で被攻撃モンスターの体力+6（永続）しますか？',{attackerUid:att.uid,targetUid});
+    return;
   }
   // ---- 회피(evade): 공격받은 몬스터가 주사위 1~3이면 공격 무효 ----
   if (targetUid !== null) {
@@ -1501,7 +1567,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     const killable = cands.filter((x) => atk >= curHp(p, x)).sort((a2, b2) => (effAtk(p, b2, g) + effDef(p, b2)) - (effAtk(p, a2, g) + effDef(p, a2)));
     const dec = killable[0] ?? [...cands].sort((a2, b2) => (effAtk(p, b2, g) + effDef(p, b2)) - (effAtk(p, a2, g) + effDef(p, a2)))[0];
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격이 ${cn(dec)} 에게 향한다`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃が ${cn(dec)} に向かう`);
-    resolveFriendlyFire(g, ctx, att, dec, true);
+    resolveFriendlyFire(g, ctx, att, dec, true, 1);
     return;
   }
   // 용암 함정(lavaPit): 무효 + 파괴 · 공격력 4 이상이면 상대 낙인 +1
@@ -2119,8 +2185,12 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
 }
 
 /** 검귀(v36 berserk): 자신 필드의 몬스터를 공격 — HP 전투 규칙 그대로(누적·기합), 관통 없음. */
-function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: FieldMon, pierce = false): void {
+function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: FieldMon, pierce = false, treeStage = 0): void {
   const p = g.players[g.cur];
+  if (treeStage < 2 && (p.dew ?? 0)>0 && p.field.some(m=>m.id==='WORLD_TREE')) {
+    offerEffectChoice(g,ctx,p,treeStage===0?'WORLD_TREE_ATTACK':'WORLD_TREE_DEFEND','雫1で永続強化しますか？',{attackerUid:att.uid,targetUid:target.uid,friendly:true,pierce});
+    return;
+  }
   const atk = effAtk(p, att, g);
   const counter = hasPassive(target, "counter") ? Math.ceil(effAtk(p, target, g) / 2) : 0;
   ctx.ev.push({ type: "attack", player: side(g, p), uid: att.uid, targetUid: target.uid });
@@ -2158,6 +2228,50 @@ function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
   const o = g.players[1 - g.cur];
   const v = m.val || 0, v2 = m.val2 || 0;
   switch (m.onSummon) {
+    case 'shield': gainShield(g, ctx, p, v, m); break;
+    case 'armorer': {
+      const data = {sourceUid:m.uid,sourceId:m.id,shield:v,buff:v2};
+      if (m.id === 'VETERAN_ARMORER' && castleOf(p)) {
+        gainShield(g, ctx, p, v, m);
+        queueExpansionChoice(g, p, 'ARMORER_TARGET', '強化する自分の他のモンスターを選択', data);
+      } else queueExpansionChoice(g, p, 'ARMORER_MODE', 'シールド獲得または他のモンスター強化を選択', data);
+      break;
+    }
+    case 'wineCollector': {
+      const wines = p.hand.filter(c => c.id === 'WINE').slice(0,2);
+      if (wines.length === 2) {
+        p.hand = p.hand.filter(c => !wines.some(w => w.uid === c.uid)); rmz(p).push(...wines);
+        p.hand.push(inst(g, 'DARK_MERCHANT'));
+        p.field = p.field.filter(x => x.uid !== m.uid); rmz(p).push(resetInst(m));
+        ctx.log('와인 2장과 수집가를 리프트로, 암상인을 패로', 'ワイン2枚とコレクターをリフトへ、闇商人を手札へ');
+      }
+      break;
+    }
+    case 'dewBeliever': {
+      ctx.heal(p,3);
+      const {rolls} = diceRoll(g,ctx.ev,side(g,p),{id:m.id,player:side(g,p)},1,5);
+      if (rolls[0] >= 5) gainDew(ctx,p,1);
+      break;
+    }
+    case 'darkElfDew':
+      p.dew = Math.max(0,(p.dew ?? 0)-4);
+      if ((o.shield ?? 0)>0) ctx.dealDamage(o,10,cn(m),cn(m),side(g,p));
+      break;
+    case 'elfDew':
+      gainDew(ctx,p,2);
+      if (o.field.some(foe=>effAtk(o,foe,g)>=9 && !hasPassive(foe,'aura'))) queueExpansionChoice(g,p,'ELF_DESTROY','破壊する攻撃力9以上の相手モンスター1体を選択');
+      break;
+    case 'highElfDew':
+      // The private hand is exposed only while this owner's choice is pending.
+      queueExpansionChoice(g,p,'HIGH_ELF_HAND','相手の手札を確認し、除外するカードを3枚まで選択（終了可）',{left:3});
+      break;
+    case 'elderDew':
+      for (const foe of [...o.field]) { if(g.over) break; ctx.destroyMonster(o,foe); }
+      while (o.enchants.length) binEnch(g,ctx,o,o.enchants.shift()!.card);
+      for (const t of o.traps.splice(0)) o.discard.push(t.card);
+      for (const q of (o.quests ?? []).splice(0)) o.discard.push(q.card);
+      if (!g.over) gainDew(ctx,p,2*(p.dew ?? 0));
+      break;
     case "draw": { const n = ctx.drawN(p, v); ctx.log(`  └ 소환 효과: ${n}장 드로우`, `  └ 召喚効果: ${n}枚ドロー`); break; }
     case "burn": ctx.dealDamage(o, v, `${cn(m)} 소환`, `${cn(m)} 召喚`); break;
     case "sorterSummon": { // 선별자(v41): 컬 3장 제외 (상시 효과의 추가 제외는 reduce() 후처리)
@@ -2822,6 +2936,13 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
   const v = card.val || 0, v2 = card.val2 || 0;
   if (card.act === "expansion") { expansionSpell(g, ctx, card); return; }
   switch (card.act) {
+    case 'dew': gainDew(ctx,p,v); break;
+    case 'desertification': o.dew=0; ctx.log('상대 이슬을 0으로', '相手の雫を0にする'); break;
+    case 'cullShield': gainShield(g,ctx,p,cullExiled(p)); break;
+    case 'golemShield': gainShield(g,ctx,p,v+v2*new Set(p.field.filter(isGolem).map(m=>m.id)).size); break;
+    case 'armorBreak': { const branded=(o.shield ?? 0)>=10; breakShield(ctx,o,9); if(branded)o.brand=(o.brand ?? 0)+1; break; }
+    case 'spearShield': if ((o.shield ?? 0)<p.field.reduce((n,m)=>n+effAtk(p,m,g),0))breakShield(ctx,o); break;
+    case 'cullSword': queueExpansionChoice(g,p,'SELECTED_SWORD','このターン攻撃力を上げる自分のモンスターを選択',{amount:cullExiled(p)}); break;
     case "dmg": ctx.dealDamage(o, v, cn(card), cn(card)); break;
     case "originQuest": { // 기원의 탐구(v41b): 필드의 코스트 0 카드(양측 몬스터·영구마법 + 자신 세트 함정) 1장당 1드로우
       const n0 = g.players.reduce((s2, pl) => s2 + pl.field.filter((m) => (m.cost ?? 0) === 0).length + pl.enchants.filter((e) => (e.card.cost ?? 0) === 0).length, 0) + p.traps.filter((t) => (t.card.cost ?? 0) === 0).length;
@@ -3689,7 +3810,7 @@ function openTreasure(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): v
   const roll = tr[0]; // v24: 1·2 꽝 / 3·4 체력+7 / 5·6 최대 마나+1
   let txt = "", txtJa = "", kind = "";
   if (roll >= 5) { addMaxMana(p, 1); txt = "🎲 " + roll + " → 최대 마나 +1"; txtJa = "🎲 " + roll + " → 最大マナ +1"; kind = "mana"; }
-  else if (roll >= 3) { addHealth(ctx, p, 7); txt = "🎲 " + roll + " → 체력 +7"; txtJa = "🎲 " + roll + " → 体力 +7"; kind = "maxhp"; }
+  else if (roll >= 3) { ctx.heal(p, 5); txt = "🎲 " + roll + " → 체력 +5"; txtJa = "🎲 " + roll + " → 体力 +5"; kind = "maxhp"; }
   else {
     // 꽝(dud): spawn a Mimic (3/2) on the OPPONENT's field — the risk of cracking chests
     const o = g.players[0] === p ? g.players[1] : g.players[0];
@@ -3899,13 +4020,13 @@ function treeKeeperTrigger(_g: GameState, ctx: Ctx, p: PlayerState, card: CardIn
   if (!(nm.includes("세계수") || nm.includes("엘프"))) return;
   const n = p.field.filter((m) => m.aura === "treeKeeper" && m.uid !== exceptUid).length;
   if (!n) return;
-  addHealth(ctx, p, 5 * n);
-
-  ctx.log(`  └ 세계수의 파수꾼: 체력 +${5 * n} (${p.hp})`, `  └ 世界樹の守り人: 体力+${5 * n} (${p.hp})`);
+  gainDew(ctx, p, n);
 }
 /** Summon precondition check (암살자 상급/특급). */
 export function summonReqMet(p: PlayerState, card: CardInst, o?: PlayerState): boolean {
   if (!card.summonReq) return true;
+  if (/^dew\d+$/.test(card.summonReq)) return (p.dew ?? 0) >= Number(card.summonReq.slice(3));
+  if (card.summonReq === 'shield20') return (p.previousOpponentShieldPeak ?? 0) >= 20;
   // ---- v32 종족 조건 ----
   if (card.summonReq === "preyLow2") return !!o && o.field.some((m) => (m.cost ?? 0) <= 2); // 굶주린 새끼짐승
   if (card.summonReq === "soloOnly") return !p.field.some((m) => m.tribe !== "고독");        // 고독한 방랑자
@@ -3920,7 +4041,7 @@ export function summonReqMet(p: PlayerState, card: CardInst, o?: PlayerState): b
   }
   // ---- v15 엘프/엘더 킹 소환 조건 ----
   if (card.summonReq === "hp65") return p.hp >= 65;
-  if (card.summonReq === "darkElf") return p.hp >= 65 && !p.field.some((m) => (m.name || "").includes("엘프"));
+  if (card.summonReq === "darkElf") return (p.dew ?? 0) >= 4 && !p.field.some(m => m.id !== 'DARK_ELF' && isElfCard(m));
   if (card.summonReq === "hp99") return p.hp >= 99;
   // v36: 엘더 킹 — 덱 구성에 엘프/하이엘프/다크 엘프 중 1장 + 체력 99+
   if (card.summonReq === "elderKing") return p.hp >= 99 && deckComp(p).some((c) => c.id === "ELF" || c.id === "HIGH_ELF" || c.id === "DARK_ELF");
@@ -3938,6 +4059,7 @@ export function summonReqMet(p: PlayerState, card: CardInst, o?: PlayerState): b
 /** Read-only pre-payment legality shared by the reducer and hand affordances. */
 export function playBlockReason(g:GameState, who:Side, card:CardInst):{ko:string;ja:string}|null {
   const p=g.players[who],o0=g.players[1-who];
+  if (o0.field.some(m => m.id === 'ELDER_ELF_KING') && (p.playsTurn ?? 0) >= 3) return {ko:'이번 턴 카드 3장까지',ja:'このターンにプレイできるカードは3枚までです'};
   const xb = expansionBlock(g, p, card); if (xb) return {ko: xb, ja: xb};
   if(p.mana<playCost(card,p))return {ko:'마나가 부족합니다',ja:'マナが不足しています'};
   if(card.quick)return {ko:'구매 시 발동하는 카드입니다',ja:'購入時に発動するカードです'};
@@ -4439,16 +4561,6 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       tm.atkMod = (tm.atkMod || 0) + (d.val || 2);
       ctx.log(`<span class="t">${p.name}</span> → ${cn(tm)} 공격력 +${d.val || 2}(지속)`, `<span class="t">${p.name}</span> → ${cn(tm)} 攻撃力+${d.val || 2}(持続)`);
     }
-    else if (pending.reason === "worldTree") { // 세계수(v36): 카운터 1개 소모 → 아군 몬스터 체력 전회복 + 자신 체력 80%까지
-      if (tm.id !== "WORLD_TREE" || (tm.gcount || 0) <= 0) { g.pending = pending; return; }
-      tm.gcount = (tm.gcount || 1) - 1;
-      let fixed = 0;
-      p.field.forEach((x) => { if ((x.dmg || 0) > 0) { x.dmg = 0; fixed++; } });
-      const target = 32;
-      const healed = Math.max(0, target - p.hp);
-      if (healed > 0) ctx.heal(p, healed);
-      ctx.log(`<span class="t">${cn(tm)}</span> 발동 — 아군 몬스터 ${fixed}체 체력 전회복, 자신 체력 ${healed} 회복 (${p.hp}) · 남은 카운터 ${tm.gcount}`, `<span class="t">${cn(tm)}</span> 発動 — 味方モンスター${fixed}体の体力全回復, 自分の体力${healed}回復 (${p.hp}) · 残りカウンター${tm.gcount}`);
-    }
     else if (pending.reason === "chosenMage") { // 선택받은 마법사: 제외된 컬 1장 → 묘지, 상대에게 8뎀 (v36)
       if (tm.id !== "CHOSEN_MAGE" || (d.fired ?? []).includes(tm.uid)) { g.pending = pending; return; }
       const list = rmz(p);
@@ -4728,6 +4840,7 @@ export function purchaseAllowed(g: GameState, p: PlayerState, c: CardInst): bool
   if (c.id === 'EMPTY_MIND' && deckComp(p).filter(x => x.t === 'spell').length < 9) return false;
   if (c.id === 'BLACK_CURSE' && !deckComp(p).some(x => isBlack(x) && x.id !== c.id)) return false;
   if (!c.quick) return true;
+  if (g.players[1-side(g,p)].field.some(m => m.id === 'ELDER_ELF_KING') && (p.playsTurn ?? 0) >= 3) return false;
   const o = g.players[1 - side(g, p)];
   if (p.spellSealTurn || spaceLocked(g, p) || g.players.some(pl => pl.field.some(m => m.aura === "sealAll")) || sealLowBlocks(g, playCost(c, p))) return false;
   if (p.spellCastCap != null && (p.spellsCastTurn ?? 0) >= p.spellCastCap) return false;
@@ -4747,6 +4860,7 @@ export function purchaseAllowed(g: GameState, p: PlayerState, c: CardInst): bool
 export function effectChoices(g: GameState): CardInst[] {
   const pending = g.pending;
   if (pending?.kind !== "cardChoice") return [];
+  const dewOptions = dewShieldChoices(g); if (dewOptions !== null) return dewOptions;
   const extra = expansionChoices(g); if (extra !== null) return extra;
   const p = g.players[actingSide(g)], o = g.players[1 - actingSide(g)];
   switch (pending.reason) {
@@ -4782,6 +4896,7 @@ function effectSummon(g: GameState, ctx: Ctx, p: PlayerState, id: string, card?:
 function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
   const pending = g.pending!;
   const p = g.players[actingSide(g)], o = g.players[1 - actingSide(g)];
+  if (resolveDewShieldChoice(g,ctx,uid)) return;
   const choices = effectChoices(g);
   if (!choices.length) { g.pending = null; return; }
   const card = choices.find(c => c.uid === uid);
@@ -5027,15 +5142,12 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
       }
     }
   }
-  // 세계수(v36): 자신의 체력이 늘어날 때마다 카운터 +1
-  for (const s5 of [0, 1] as Side[]) {
-    const pl5 = g2.players[s5];
-    if (res.events.some(e=>e.type==='heal'&&e.player===s5&&e.amount>0)) for (const wt of pl5.field) if (wt.id === "WORLD_TREE") wt.gcount = (wt.gcount || 0) + 1;
-  }
   settle();
   sweepRelics(g2, makeCtx(g2, res.events as GameEvent[])); // v40: 신기는 제외되지 않는다
   drainExpansionChoices(g2, questCtx);
   normalizeManaCaps(g2);
+  refreshDewPassives(g2);
+  recheckDeaths(g2, questCtx);
   rememberPublicCards(g2);
   return res;
 }
@@ -5044,6 +5156,7 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
   const g: GameState = structuredClone(prev);
   const ev: GameEvent[] = [];
   const ctx = makeCtx(g, ev);
+  refreshDewPassives(g);
   // 운명의 수레바퀴 스냅샷은 재굴림 응답 대기 중에만 유효 — 그 외 액션에선 정리
   if (!g.pending || g.pending.kind !== "reroll") g._wheelSnap = null;
 
@@ -5082,6 +5195,7 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
         p.mana -= bc; if (!bought.quick) p.discard.push(bought); p.boughtCount++; p.taxFlag = true; p.buys[card.id] = (p.buys[card.id] || 0) + 1; (p.buysTurn ??= {})[card.id] = (p.buysTurn[card.id] || 0) + 1;
         ctx.log(`<span class="t">${p.name}</span> 고정 마켓 ${cn(card)} 구매 (${bc}) <span class="muted">[${card.quick ? "게임에서 제외" : "묘지로"}]</span>`, `<span class="t">${p.name}</span> 固定マーケット ${cn(card)} 購入 (${bc}) <span class="muted">[${card.quick ? "ゲームから除外" : "墓地へ"}]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "market", i: action.i, id: card.id });
+        havenPurchase(g, ctx, p, bought);
         consumeMarketStock(g, ctx, action.i); // v40: 재고 -1, 소진 시 슬롯 교체
         if (bought.quick) resolveQuick(g, ctx, p, bought);
         tryToll(g, ctx, p, bought); // 통행세: 구매 반응
@@ -5102,11 +5216,7 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
         p.mana -= bc; if (!bought.quick) p.discard.push(bought); p.supply[action.i] = null; p.boughtCount++; p.taxFlag = true; p.buys[card.id] = (p.buys[card.id] || 0) + 1; (p.buysTurn ??= {})[card.id] = (p.buysTurn[card.id] || 0) + 1;
         ctx.log(`<span class="t">${p.name}</span> 제시 마켓 ${cn(card)} 구매 (${bc}) <span class="muted">[${card.quick ? "게임에서 제외" : "묘지로"}]</span>`, `<span class="t">${p.name}</span> 提示マーケット ${cn(card)} 購入 (${bc}) <span class="muted">[${card.quick ? "ゲームから除外" : "墓地へ"}]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "supply", i: action.i, id: card.id });
-        // v52: World Tree supply purchases increase HP and heal by 5.
-        if ((card.name || "").includes("세계수") && p.enchants.some((e) => e.card.ench === "elfHaven")) {
-          addHealth(ctx, p, 5);
-          ctx.log(`  └ 엘프의 쉼터: 체력 +5 (${p.hp})`, `  └ エルフの憩い場: 体力+5 (${p.hp})`);
-        }
+        havenPurchase(g, ctx, p, bought);
         if (bought.quick) resolveQuick(g, ctx, p, bought);
         tryToll(g, ctx, p, bought); // 통행세: 구매 반응
       }
@@ -5352,4 +5462,67 @@ function expansionChoiceResolve(g: GameState, ctx: Ctx, q: NonNullable<GameState
     case 'FIRE_BALL': spellDepth++; try { if (card.uid.startsWith('player-')) ctx.dealDamage(g.players[Number(card.uid.slice(-1))], 6, cn(DB.FIRE_BALL), cn(DB.FIRE_BALL), side(g, p)); else { const owner = p.field.some(m => m.uid === card.uid) ? p : o; monsterDamage(g, ctx, owner, card as FieldMon, 6); } } finally { spellDepth--; } return true;
     default: return false;
   }
+}
+
+
+function dewOption(sourceId: string, uid: string, ja: string, ko: string, en: string): CardInst {
+  return {...DB[sourceId],uid,name:ko,nameJa:ja,nameEn:en,text:ko,textJa:ja,textEn:en,cost:0,t:'spell'};
+}
+function dewShieldChoices(g: GameState): CardInst[] | null {
+  const q=g.pending!; const p=g.players[actingSide(g)],o=g.players[1-actingSide(g)];
+  const source=String(q.data?.sourceId ?? 'WORLD_TREE');
+  switch(q.reason){
+    case 'ARMORER_MODE': return [dewOption(source,'shield',`シールド${q.data?.shield}を得る`,'실드 획득','Gain Shield'),
+      ...(p.field.some(m=>m.uid!==q.data?.sourceUid)?[dewOption(source,'buff',`他の味方を+${q.data?.buff}/+${q.data?.buff}`,'다른 아군 강화','Buff another ally')]:[])];
+    case 'ELF_DESTROY': return o.field.filter(m=>effAtk(o,m,g)>=9 && !hasPassive(m,'aura'));
+    case 'ARMORER_TARGET': return p.field.filter(m=>m.uid!==q.data?.sourceUid);
+    case 'SELECTED_SWORD': return p.field;
+    case 'WORLD_TREE_ATTACK': case 'WORLD_TREE_DEFEND': return [
+      dewOption('WORLD_TREE','pass','使用せず続ける','사용하지 않고 계속','Continue without spending'),
+      dewOption('WORLD_TREE','grow','雫1を消費して永続強化','이슬 1 소비, 영구 강화','Spend 1 Dew: permanent +6')];
+    case 'HIGH_ELF_HAND': return [dewOption('HIGH_ELF','done','確認を終える','확인 종료','Finish inspection'),...o.hand];
+    default:return null;
+  }
+}
+function resolveDewShieldChoice(g: GameState, ctx: Ctx, uid: string | null): boolean {
+  const q=g.pending!; const options=dewShieldChoices(g); if(options===null)return false;
+  const p=g.players[actingSide(g)],o=g.players[1-actingSide(g)];
+  if(uid===null && ['WORLD_TREE_ATTACK','WORLD_TREE_DEFEND','HIGH_ELF_HAND'].includes(q.reason))uid=q.reason==='HIGH_ELF_HAND'?'done':'pass';
+  const chosen=options.find(c=>c.uid===uid); if(!chosen)return true;
+  if(q.reason==='HIGH_ELF_HAND' && uid!=='done' && hasPassive(chosen,'relic')) {ctx.log('신기는 제외할 수 없습니다','神器はゲームから除外できません');return true;}
+  g.pending=null;
+  switch(q.reason){
+    case 'ARMORER_MODE':
+      if(uid==='shield')gainShield(g,ctx,p,Number(q.data?.shield),p.field.find(m=>m.uid===q.data?.sourceUid));
+      else queueExpansionChoice(g,p,'ARMORER_TARGET','強化する自分の他のモンスターを選択',q.data);
+      break;
+    case 'ARMORER_TARGET': {
+      const m=chosen as FieldMon;
+      const special=q.data?.sourceId==='VETERAN_ARMORER' && /병사|기사|포격병|용병|兵士|騎士|砲撃兵|傭兵/.test(m.name+(m.nameJa ?? ''));
+      const n=special?3:Number(q.data?.buff);m.atkMod+=n;m.defMod+=n;break;
+    }
+    case 'ELF_DESTROY':ctx.destroyMonster(o,chosen as FieldMon);break;
+    case 'SELECTED_SWORD':(chosen as FieldMon).tempAtk+=Number(q.data?.amount ?? 0);break;
+    case 'HIGH_ELF_HAND': {
+      if(uid!=='done') {o.hand=o.hand.filter(c=>c.uid!==uid);rmz(o).push(chosen);}
+      const left=Number(q.data?.left ?? 3)-1;
+      if(uid!=='done' && left>0 && o.hand.some(c=>!hasPassive(c,'relic')))queueExpansionChoice(g,p,'HIGH_ELF_HAND',`相手手札からあと${left}枚まで除外（終了可）`,{left});
+      else {breakShield(ctx,o);gainDew(ctx,p,p.dew ?? 0);}
+      break;
+    }
+    case 'WORLD_TREE_ATTACK':case 'WORLD_TREE_DEFEND': {
+      const attacker=g.players[g.cur].field.find(m=>m.uid===q.data?.attackerUid);
+      const targetUid=(q.data?.targetUid ?? null) as string|null;
+      if(!attacker)break;
+      const target=q.reason==='WORLD_TREE_ATTACK'?attacker:p.field.find(m=>m.uid===targetUid);
+      if(uid==='grow' && target && (p.dew ?? 0)>0 && p.field.some(m=>m.id==='WORLD_TREE')) {
+        p.dew!--; if(q.reason==='WORLD_TREE_ATTACK')target.atkMod+=6;else target.defMod+=6;
+      }
+      const stage=q.reason==='WORLD_TREE_ATTACK'?1:2;
+      if(q.data?.friendly) {const ally=p.field.find(m=>m.uid===targetUid);if(ally)resolveFriendlyFire(g,ctx,attacker,ally,Boolean(q.data?.pierce),stage);}
+      else resolveAttackCore(g,ctx,attacker,targetUid,stage);
+      break;
+    }
+  }
+  return true;
 }

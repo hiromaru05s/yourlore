@@ -1,0 +1,5 @@
+
+> lore-tcg@0.1.0 art:check
+> node scripts/check-card-art.mjs --include-starters
+
+Card art: 360/360 present

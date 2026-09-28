@@ -1,0 +1,130 @@
+[
+  {
+    "id": "APPRENTICE_ARMORER",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-49d3371e-0e2f-4a51-a774-e94296c56510.png",
+    "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration, landscape 1472x1344 canvas. No card frame, lettering, numbers, logo or watermark. Premium hand-painted dark-fantasy PC game concept art, confident brush texture, grounded materials and dramatic chiaroscuro, strong silhouette readable as thumbnail. A record held in the Biblion magic library. Blackened oak, weathered stone, aged brass, parchment ivory, candle amber with restrained cobalt or malachite magic. Central 80% safe area. Avoid glossy mobile-game 3D, plastic, anime, modern objects. One young apprentice armorer, humble leather apron and simple tools, carefully fitting a small iron shield on a castle workshop anvil. One person only, compact modest physique, warm forge light, tangible hammered iron.",
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "output": "client/public/art/cards/APPRENTICE_ARMORER.webp"
+  },
+  {
+    "id": "VETERAN_ARMORER",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-80f14610-a203-446b-a64a-fcd15afbf6af.png",
+    "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration, landscape 1472x1344 canvas. No card frame, lettering, numbers, logo or watermark. Premium hand-painted dark-fantasy PC game concept art, confident brush texture, grounded materials and dramatic chiaroscuro, strong silhouette readable as thumbnail. A record held in the Biblion magic library. Blackened oak, weathered stone, aged brass, parchment ivory, candle amber with restrained cobalt or malachite magic. Central 80% safe area. Avoid glossy mobile-game 3D, plastic, anime, modern objects. One seasoned master armorer in a castle forge inspecting a finely reinforced knight's breastplate and shield, authoritative weathered face, worn leather apron, intricate purposeful steel joints. One person, strong silhouette.",
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "output": "client/public/art/cards/VETERAN_ARMORER.webp"
+  },
+  {
+    "id": "SALLY_WEAPONMASTER",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-9ca5d30d-7f27-4a12-8d40-58e211657c6a.png",
+    "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration, landscape 1472x1344 canvas. No card frame, lettering, numbers, logo or watermark. Premium hand-painted dark-fantasy PC game concept art, confident brush texture, grounded materials and dramatic chiaroscuro, strong silhouette readable as thumbnail. A record held in the Biblion magic library. Blackened oak, weathered stone, aged brass, parchment ivory, candle amber with restrained cobalt or malachite magic. Central 80% safe area. Avoid glossy mobile-game 3D, plastic, anime, modern objects. Sally the Weaponmaster, one formidable adult woman master weaponsmith in practical heavy steel armor, carrying an immense forged shield and masterwork weapon, castle armory, poised strength, cobalt reflections, grounded imposing presence.",
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "output": "client/public/art/cards/SALLY_WEAPONMASTER.webp"
+  },
+  {
+    "id": "PRIEST",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-c05da5a1-ac6f-415b-9a0e-ddb70dc719f1.png",
+    "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration, landscape 1472x1344 canvas. No card frame, lettering, numbers, logo or watermark. Premium hand-painted dark-fantasy PC game concept art, confident brush texture, grounded materials and dramatic chiaroscuro, strong silhouette readable as thumbnail. A record held in the Biblion magic library. Blackened oak, weathered stone, aged brass, parchment ivory, candle amber with restrained cobalt or malachite magic. Central 80% safe area. Avoid glossy mobile-game 3D, plastic, anime, modern objects. One gentle temple priest wearing restrained ivory robes, sheltering a small sacred malachite dew vessel beneath a translucent shield-shaped ward, dim stone chapel, calm protective presence, no crowd.",
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "output": "client/public/art/cards/PRIEST.webp"
+  },
+  {
+    "id": "HIGH_PRIEST",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-19e3da0a-9274-4013-a26e-44fc9cd0b370.png",
+    "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration, landscape 1472x1344 canvas. No card frame, lettering, numbers, logo or watermark. Premium hand-painted dark-fantasy PC game concept art, confident brush texture, grounded materials and dramatic chiaroscuro, strong silhouette readable as thumbnail. A record held in the Biblion magic library. Blackened oak, weathered stone, aged brass, parchment ivory, candle amber with restrained cobalt or malachite magic. Central 80% safe area. Avoid glossy mobile-game 3D, plastic, anime, modern objects. One high priest with layered ivory and aged-brass vestments, commanding a substantial faceted protective ward around a sacred chalice overflowing with emerald dew, stone sanctuary, powerful serene silhouette.",
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "output": "client/public/art/cards/HIGH_PRIEST.webp"
+  },
+  {
+    "id": "BLACKSMITH",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-35a7ec33-c443-408b-a6d7-1528b6872516.png",
+    "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration, landscape 1472x1344 canvas. No card frame, lettering, numbers, logo or watermark. Premium hand-painted dark-fantasy PC game concept art, confident brush texture, grounded materials and dramatic chiaroscuro, strong silhouette readable as thumbnail. A record held in the Biblion magic library. Blackened oak, weathered stone, aged brass, parchment ivory, candle amber with restrained cobalt or malachite magic. Central 80% safe area. Avoid glossy mobile-game 3D, plastic, anime, modern objects. Spell artwork: an unoccupied castle smithy, a glowing iron shield clamped on a black anvil, a second concentric layer of physical steel magically fusing to its surface. Forge coals and purposeful tools. No people, bodies, faces or hands.",
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "output": "client/public/art/cards/BLACKSMITH.webp"
+  },
+  {
+    "id": "SHIELD_TITAN",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-d71ddbff-87e0-4571-a827-c40a1c56ba02.png",
+    "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration, landscape 1472x1344 canvas. No card frame, lettering, numbers, logo or watermark. Premium hand-painted dark-fantasy PC game concept art, confident brush texture, grounded materials and dramatic chiaroscuro, strong silhouette readable as thumbnail. A record held in the Biblion magic library. Blackened oak, weathered stone, aged brass, parchment ivory, candle amber with restrained cobalt or malachite magic. Central 80% safe area. Avoid glossy mobile-game 3D, plastic, anime, modern objects. One colossal shield titan, monumental stone and iron guardian with an enormous tower shield grown into its armor, massive grounded low stance, a castle wall dwarfed beneath it, restrained cobalt seams, defensive power and huge endurance.",
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "output": "client/public/art/cards/SHIELD_TITAN.webp"
+  },
+  {
+    "id": "ARMOR_BREAK",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-8968f986-b623-4a82-9150-f23820195913.png",
+    "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration, landscape 1472x1344 canvas. No card frame, lettering, numbers, logo or watermark. Premium hand-painted dark-fantasy PC game concept art, confident brush texture, grounded materials and dramatic chiaroscuro, strong silhouette readable as thumbnail. A record held in the Biblion magic library. Blackened oak, weathered stone, aged brass, parchment ivory, candle amber with restrained cobalt or malachite magic. Central 80% safe area. Avoid glossy mobile-game 3D, plastic, anime, modern objects. Spell artwork: close view of an empty heavy iron shield splitting along a forceful structural fracture, ruptured protective cobalt layer, dark stone backdrop, splintering metal clearly visible. No people, bodies, faces or hands.",
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "output": "client/public/art/cards/ARMOR_BREAK.webp"
+  },
+  {
+    "id": "SPEAR_AND_SHIELD",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-219c0ff7-4f6f-4d14-8d76-36baf0a6896c.png",
+    "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration, landscape 1472x1344 canvas. No card frame, lettering, numbers, logo or watermark. Premium hand-painted dark-fantasy PC game concept art, confident brush texture, grounded materials and dramatic chiaroscuro, strong silhouette readable as thumbnail. A record held in the Biblion magic library. Blackened oak, weathered stone, aged brass, parchment ivory, candle amber with restrained cobalt or malachite magic. Central 80% safe area. Avoid glossy mobile-game 3D, plastic, anime, modern objects. Spell artwork: a powerful brass-tipped spear piercing a freestanding iron shield, clear point of contact and shattered shield structure, dark castle armory backdrop. Only artifacts, no people, bodies, faces or hands.",
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "output": "client/public/art/cards/SPEAR_AND_SHIELD.webp"
+  },
+  {
+    "id": "SELECTED_SWORD",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-50581632-54da-47f6-9b9d-48474963d801.png",
+    "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration, landscape 1472x1344 canvas. No card frame, lettering, numbers, logo or watermark. Premium hand-painted dark-fantasy PC game concept art, confident brush texture, grounded materials and dramatic chiaroscuro, strong silhouette readable as thumbnail. A record held in the Biblion magic library. Blackened oak, weathered stone, aged brass, parchment ivory, candle amber with restrained cobalt or malachite magic. Central 80% safe area. Avoid glossy mobile-game 3D, plastic, anime, modern objects. Starter artwork: one carefully selected elegant steel sword on a worn Biblion reading table, faint discarded parchment fragments resolving into its honed edge, beautiful restrained cobalt reflection. No people, faces or hands.",
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "output": "client/public/art/cards/SELECTED_SWORD.webp"
+  },
+  {
+    "id": "SELECTED_SHIELD",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-6d34217e-fdfa-4de1-ba42-8d511cb7345f.png",
+    "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration, landscape 1472x1344 canvas. No card frame, lettering, numbers, logo or watermark. Premium hand-painted dark-fantasy PC game concept art, confident brush texture, grounded materials and dramatic chiaroscuro, strong silhouette readable as thumbnail. A record held in the Biblion magic library. Blackened oak, weathered stone, aged brass, parchment ivory, candle amber with restrained cobalt or malachite magic. Central 80% safe area. Avoid glossy mobile-game 3D, plastic, anime, modern objects. Starter artwork: one finely selected iron shield on a worn Biblion artifact pedestal, parchment fragments resolving into reinforced silver metal at the rim, protective cobalt sheen, distinct broad silhouette. No people, faces or hands.",
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "output": "client/public/art/cards/SELECTED_SHIELD.webp"
+  },
+  {
+    "id": "WINE_COLLECTOR",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-b0e0e871-2c1a-4ac0-8920-56e37a785f61.png",
+    "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration, landscape 1472x1344 canvas. No card frame, lettering, numbers, logo or watermark. Premium hand-painted dark-fantasy PC game concept art, confident brush texture, grounded materials and dramatic chiaroscuro, strong silhouette readable as thumbnail. A record held in the Biblion magic library. Blackened oak, weathered stone, aged brass, parchment ivory, candle amber with restrained cobalt or malachite magic. Central 80% safe area. Avoid glossy mobile-game 3D, plastic, anime, modern objects. One eccentric wine collector in worn dark velvet inspecting exactly two wine bottles, mysterious merchant ledger on a cellar table, oxblood glass and candle amber, shrewd expression, one human only.",
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "output": "client/public/art/cards/WINE_COLLECTOR.webp"
+  },
+  {
+    "id": "DEFENSIVE_STANCE",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-5d870a40-7495-4579-ad63-277c581386e8.png",
+    "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration, landscape 1472x1344 canvas. No card frame, lettering, numbers, logo or watermark. Premium hand-painted dark-fantasy PC game concept art, confident brush texture, grounded materials and dramatic chiaroscuro, strong silhouette readable as thumbnail. A record held in the Biblion magic library. Blackened oak, weathered stone, aged brass, parchment ivory, candle amber with restrained cobalt or malachite magic. Central 80% safe area. Avoid glossy mobile-game 3D, plastic, anime, modern objects. Spell artwork: a low close view of interlocking stone golem shield plates assembling into a compact protective barricade, clear material mechanism, restrained cobalt ward at seams, rough grey stone. No humans, faces or hands.",
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "output": "client/public/art/cards/DEFENSIVE_STANCE.webp"
+  },
+  {
+    "id": "IRON_WALL",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-0337a90a-6358-42f0-a3fd-fa7af86a195e.png",
+    "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration, landscape 1472x1344 canvas. No card frame, lettering, numbers, logo or watermark. Premium hand-painted dark-fantasy PC game concept art, confident brush texture, grounded materials and dramatic chiaroscuro, strong silhouette readable as thumbnail. A record held in the Biblion magic library. Blackened oak, weathered stone, aged brass, parchment ivory, candle amber with restrained cobalt or malachite magic. Central 80% safe area. Avoid glossy mobile-game 3D, plastic, anime, modern objects. Spell artwork: enormous riveted iron plates locking into an unbroken defensive wall, golem-carved stone foundations, heavy material weight, restrained cobalt energy sealing the joints. No humans, faces or hands.",
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "output": "client/public/art/cards/IRON_WALL.webp"
+  },
+  {
+    "id": "DESERTIFICATION",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-0eed5379-da10-4dbd-aa06-fcf524a85071.png",
+    "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration, landscape 1472x1344 canvas. No card frame, lettering, numbers, logo or watermark. Premium hand-painted dark-fantasy PC game concept art, confident brush texture, grounded materials and dramatic chiaroscuro, strong silhouette readable as thumbnail. A record held in the Biblion magic library. Blackened oak, weathered stone, aged brass, parchment ivory, candle amber with restrained cobalt or malachite magic. Central 80% safe area. Avoid glossy mobile-game 3D, plastic, anime, modern objects. Spell artwork: the last emerald dew drop evaporating above a cracked dry basin entwined with withering world-tree roots, living moss turning to ochre sand along a readable boundary, desolate warm light. No people, faces or hands.",
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "output": "client/public/art/cards/DESERTIFICATION.webp"
+  },
+  {
+    "id": "NOURISHING_RAIN",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-3f7d26ca-5c4c-455e-9db0-a9029a69088f.png",
+    "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration, landscape 1472x1344 canvas. No card frame, lettering, numbers, logo or watermark. Premium hand-painted dark-fantasy PC game concept art, confident brush texture, grounded materials and dramatic chiaroscuro, strong silhouette readable as thumbnail. A record held in the Biblion magic library. Blackened oak, weathered stone, aged brass, parchment ivory, candle amber with restrained cobalt or malachite magic. Central 80% safe area. Avoid glossy mobile-game 3D, plastic, anime, modern objects. Starter spell artwork: one small weathered life chalice on a Biblion reading table, gentle rain gathering a luminous emerald dew drop above it, a tender leaf sprouting beside the base, calm renewing light. No people, faces or hands.",
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "output": "client/public/art/cards/NOURISHING_RAIN.webp"
+  }
+]

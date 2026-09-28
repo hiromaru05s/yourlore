@@ -73,7 +73,7 @@ const OVERRIDE: Record<string, { ko?: string; ja?: string; en?: string }> = {
   BLOOD_SECRET: {
     ko: "자신에게 9 데미지 · 자신 '흡혈귀' 계열 1체 파괴 · 파괴했다면 최대 마나 +3, 자신 체력 +10",
     ja: "自分に9ダメージ · 自分の場の「吸血鬼」系列1体を破壊 · 破壊できたら最大マナ+3、自分の体力+10",
-    en: "You take 9 damage · Destroy 1 'Vampire' you control · If it dies: max mana +3, your HP +10",
+    en: "Take 9 damage · Destroy 1 allied 'Vampire' · If it dies: max mana +3, restore 10 HP",
   },
   VAMP5: {
     ko: "【소환시】상대에게 15 데미지, 자신 체력 +30 · 이 몬스터가 상대에게 준 데미지만큼 자신 체력 +",

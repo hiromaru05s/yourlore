@@ -59,6 +59,7 @@ try {
     if (id === 'TAR3') { delete expected.aura; expected.passive = []; }
     if (id === 'GM6_8') delete expected.onSummon;
     if (id === 'CHOSEN_ROGUE') delete expected.attackFx;
+    if (id === 'HIGH_ELF') { expected.summonReq='dew10'; expected.onSummon='highElfDew'; }
     const current = JSON.parse(JSON.stringify(DB[id]));
     // v50 adds Counter without restoring any retired trap abilities.
     if (current.passive?.includes("counter")) expected.passive = [...(expected.passive ?? []), "counter"];
@@ -131,9 +132,9 @@ try {
   assert.equal(playCost(inst('S13'), g.players[0]), (DB.S13.play ?? DB.S13.cost) - 1);
 
   g = fresh();
-  const maxHp = g.players[0].maxHp, enemyHp = g.players[1].hp;
+  const health = g.players[0].hp, enemyHp = g.players[1].hp;
   g = summon(g, 'VAMP5');
-  assert.equal(g.players[0].maxHp, maxHp + 30);
+  assert.equal(g.players[0].hp, health + 30);
   assert.equal(g.players[1].hp, enemyHp - 15);
   // An old saved immunity grant must no longer block destruction.
   Object.assign(g.players[0].field[0], legacyAbility);

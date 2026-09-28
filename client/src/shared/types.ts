@@ -85,6 +85,7 @@ export interface FieldMon extends CardInst {
   trickSwapped?: boolean; // 트릭룸: 공/방 반전 적용 중
   dmg?: number; // v24 HP-combat: accumulated damage taken (current HP = effDef - dmg); cleared when the card leaves the field
   gcount?: number; // 누적 카운트 (암살자 길드 / 뱀파이어 집사 흡혈 카운트)
+  conditionalPassives?: string[]; // recomputed from live field, never permanent
   passivesG?: string[]; // 게임 중 부여된 패시브 (암기 제작→부패, 각인 비술→위엄)
   guts?: number; // 기합: 남은 기합 토큰 (전투 파괴를 1회 무효화)
   drained?: number; // drainMana 아우라가 실제로 깎은 상대 최대 마나 (사망 시 이만큼만 복원 — 바닥 클램프 비대칭 방지)
@@ -114,6 +115,12 @@ export interface PlayerState {
   name: string;
   isBot: boolean;
   hp: number;
+  dew?: number; // persistent healing resource; not consumed by turn-start recovery
+  shield?: number; // temporary HP, active immediately
+  shieldExpiresTurn?: number; // expires after this opponent turn finishes
+  shieldOpponentPeak?: number; // peak during the current opponent turn
+  previousOpponentShieldPeak?: number; // most recent completed opponent turn
+
   mana: number;
   maxMana: number;
   manaPenalty: number;

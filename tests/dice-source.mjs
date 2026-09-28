@@ -1,13 +1,14 @@
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import {mkdtemp,rm} from 'node:fs/promises';
-import {execFileSync} from 'node:child_process';
+import {readFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 const dir=await mkdtemp(path.join(tmpdir(),'lore-dice-source-'));
 try{
  const shared=path.resolve('client/src/shared');
- const baseline=execFileSync('git',['show','cffc130:client/src/shared/engine.ts'],{encoding:'utf8'});
+ // Compare identical current rules with and without visual source metadata.
+ const baseline=(await readFile(path.join(shared,'engine.ts'),'utf8')).replace('export function reduce(', 'function attributedReduce(')+'\nexport function reduce(...args: Parameters<typeof attributedReduce>) { const result=attributedReduce(...args); for(const event of result.events) if(event.type==="dice") delete (event as any).source; return result; }';
  await build({stdin:{contents:baseline+'\nexport {DB,STARTERS} from "./cards";',resolveDir:shared,loader:'ts'},bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'before.mjs')});
  await build({stdin:{contents:'export * from "./engine";export {DB,STARTERS} from "./cards";',resolveDir:shared,loader:'ts'},bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'after.mjs')});
  const before=await import(path.join(dir,'before.mjs')),after=await import(path.join(dir,'after.mjs'));

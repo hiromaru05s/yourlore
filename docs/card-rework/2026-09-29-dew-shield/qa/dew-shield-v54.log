@@ -1,0 +1,33 @@
+PASS catalog and starters
+PASS Dew persists and heals only at own next turn
+PASS priest triggers on own summon, expiry and recovery
+PASS two priest types fire once each per gain
+PASS shield immediate self damage, overflow, no health damage event on full absorb
+PASS multipliers stack and titan excludes its own grant
+PASS previous opponent peak survives shield loss and lasts one own turn
+PASS armor break uses pre-destruction threshold
+PASS spear strict comparison
+PASS golem count is distinct ids
+PASS armorer cannot target itself and rejects bogus picks
+PASS veteran castle both effects and family +3
+PASS Sally independent triggers for each armorer
+PASS selected sword void and temporary attack
+PASS wine collector all-or-nothing and exile
+PASS desertification void
+PASS World Care, Heart and Tree exact tick and removed drawback
+PASS keeper play triggers and both market purchase paths
+PASS Dew summon gates ignore health
+PASS dark elf condition, shield damage and conditional passive removal
+PASS Elf threshold destruction, distinct trees scaling and healing multipliers
+PASS High Elf private inspection, optional stop, up to three, shield removal and double Dew
+PASS Elder wipe, Dew triple, play limit and death cost
+PASS World Tree attacker and defender can independently accept, buffs permanent, attack once
+PASS World Tree decline spends nothing and cannot deadlock
+PASS Elf selects exactly one eligible enemy and respects Aura
+PASS High Elf reveals protected relic but BOT finishes without illegal removal
+PASS healing multipliers stack and round down; opposing trees do not buff own Elf
+PASS skipped opponent turn still expires shield and records peak
+PASS Sally summon modes and High Priest printed stats
+PASS friendly attacks offer permanent growth once on each side of the exchange
+PASS Follower dice attribution and chest healing are exact across seeds
+PASS 32 Dew/Shield scenario groups

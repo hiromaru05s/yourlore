@@ -1,0 +1,214 @@
+[
+  {
+    "id": "APPRENTICE_ARMORER",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-31750fbe-d481-4a1e-a15c-aa1f2a753dae.png",
+    "prompt": "Use case: stylized-concept. Produce one new finished illustration for LORE TCG, near-square landscape 1472x1344, artwork only. Input images are STYLE references from this same game's approved card set, not subjects to copy. Match their illustrated fantasy visual language: deliberate fine contour lines, clearly drawn expressive anime-inspired faces, simplified graceful shapes, broad clean colored shadow planes, light painterly background detail, luminous breathable daylight and restrained highlights. Characters must look DRAWN, never like live actors with a painterly filter. No realistic skin pores, photographic facial anatomy, cinematic photorealism, gritty dark oil painting, glossy 3D rendering or excessive microtexture. Rich refined fantasy illustration with an easily readable focal silhouette, central 80% safe. No card frame, text, typography, logos or watermarks. Do not add a library or compass to every scene. Match the reference art's abstraction, not realism. Subject: One young apprentice armorer with an earnest simplified drawn face and short chestnut hair, navy rolled sleeves and ivory leather apron, testing a small silver-blue shield with a wooden mallet at a sunlit castle workshop bench. Modest equipment, light white-stone arches, blue cloth and warm wooden tools; daylight amber forge accent. One person, waist-up, crafted silhouette.",
+    "references": [
+      "SOLDIER2",
+      "VITAL2"
+    ],
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "revision": 2,
+    "output": "client/public/art/cards/APPRENTICE_ARMORER.webp"
+  },
+  {
+    "id": "VETERAN_ARMORER",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-98f44366-a611-46be-a0a8-2f5339a4f492.png",
+    "prompt": "Use case: stylized-concept. Produce one new finished illustration for LORE TCG, near-square landscape 1472x1344, artwork only. Input images are STYLE references from this same game's approved card set, not subjects to copy. Match their illustrated fantasy visual language: deliberate fine contour lines, clearly drawn expressive anime-inspired faces, simplified graceful shapes, broad clean colored shadow planes, light painterly background detail, luminous breathable daylight and restrained highlights. Characters must look DRAWN, never like live actors with a painterly filter. No realistic skin pores, photographic facial anatomy, cinematic photorealism, gritty dark oil painting, glossy 3D rendering or excessive microtexture. Rich refined fantasy illustration with an easily readable focal silhouette, central 80% safe. No card frame, text, typography, logos or watermarks. Do not add a library or compass to every scene. Match the reference art's abstraction, not realism. Subject: One seasoned middle-aged armorer with swept gray hair, a short stylized beard and strong drawn eyebrows, navy linen sleeves and an ivory reinforced apron. Confidently presenting a polished silver shield and articulated knight armor at a bright castle armory. Brass rivets, cobalt enamel, restrained golden trim, white stone and warm workshop wood. Clearly older and more expert than the apprentice, not a realistic portrait.",
+    "references": [
+      "SOLDIER2",
+      "VITAL2"
+    ],
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "revision": 2,
+    "output": "client/public/art/cards/VETERAN_ARMORER.webp"
+  },
+  {
+    "id": "SALLY_WEAPONMASTER",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-25aa8654-14f2-43b6-b814-dee98e3f13f3.png",
+    "prompt": "Use case: stylized-concept. Produce one new finished illustration for LORE TCG, near-square landscape 1472x1344, artwork only. Input images are STYLE references from this same game's approved card set, not subjects to copy. Match their illustrated fantasy visual language: deliberate fine contour lines, clearly drawn expressive anime-inspired faces, simplified graceful shapes, broad clean colored shadow planes, light painterly background detail, luminous breathable daylight and restrained highlights. Characters must look DRAWN, never like live actors with a painterly filter. No realistic skin pores, photographic facial anatomy, cinematic photorealism, gritty dark oil painting, glossy 3D rendering or excessive microtexture. Rich refined fantasy illustration with an easily readable focal silhouette, central 80% safe. No card frame, text, typography, logos or watermarks. Do not add a library or compass to every scene. Match the reference art's abstraction, not realism. Subject: Sally, one powerful adult woman weaponsmith hero with flowing dark auburn hair in a practical tied braid, sharp confident drawn anime-style eyes, navy and ivory workshop armor with silver and restrained gold plates. Dynamic three-quarter pose holding an extraordinary broad silver shield and mastercrafted sword, sunlit castle forge balcony, blue banners. Strong believable but stylized silhouette, elegant not bulky realistic armor. One person.",
+    "references": [
+      "SOLDIER2",
+      "VITAL2"
+    ],
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "revision": 2,
+    "output": "client/public/art/cards/SALLY_WEAPONMASTER.webp"
+  },
+  {
+    "id": "PRIEST",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-8c59e45a-3a76-4251-87b0-6939ad859399.png",
+    "prompt": "Use case: stylized-concept. Produce one new finished illustration for LORE TCG, near-square landscape 1472x1344, artwork only. Input images are STYLE references from this same game's approved card set, not subjects to copy. Match their illustrated fantasy visual language: deliberate fine contour lines, clearly drawn expressive anime-inspired faces, simplified graceful shapes, broad clean colored shadow planes, light painterly background detail, luminous breathable daylight and restrained highlights. Characters must look DRAWN, never like live actors with a painterly filter. No realistic skin pores, photographic facial anatomy, cinematic photorealism, gritty dark oil painting, glossy 3D rendering or excessive microtexture. Rich refined fantasy illustration with an easily readable focal silhouette, central 80% safe. No card frame, text, typography, logos or watermarks. Do not add a library or compass to every scene. Match the reference art's abstraction, not realism. Subject: One gentle young adult priest with clean drawn facial features, short ash hair and serene eyes, ivory and pale blue layered robes, holding a small vessel of golden dew under a clear faceted blue protective ward. Airy small sanctuary with white stone, growing vines, diffuse daylight. Modest quiet figure with graceful designed folds. One person, no photographic face.",
+    "references": [
+      "SOLDIER2",
+      "VITAL2"
+    ],
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "revision": 2,
+    "output": "client/public/art/cards/PRIEST.webp"
+  },
+  {
+    "id": "HIGH_PRIEST",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-1af4fea1-8eda-4d7a-82d3-0addbf75ae73.png",
+    "prompt": "Use case: stylized-concept. Produce one new finished illustration for LORE TCG, near-square landscape 1472x1344, artwork only. Input images are STYLE references from this same game's approved card set, not subjects to copy. Match their illustrated fantasy visual language: deliberate fine contour lines, clearly drawn expressive anime-inspired faces, simplified graceful shapes, broad clean colored shadow planes, light painterly background detail, luminous breathable daylight and restrained highlights. Characters must look DRAWN, never like live actors with a painterly filter. No realistic skin pores, photographic facial anatomy, cinematic photorealism, gritty dark oil painting, glossy 3D rendering or excessive microtexture. Rich refined fantasy illustration with an easily readable focal silhouette, central 80% safe. No card frame, text, typography, logos or watermarks. Do not add a library or compass to every scene. Match the reference art's abstraction, not realism. Subject: One dignified older high priest with long silver hair and refined drawn facial features, flowing ivory/navy vestments with restrained old gold leaf-shaped embroidery, raising a staff as a broad pale-blue protective veil shelters a vessel of golden dew. Sunlit sanctuary with blue glass and climbing foliage, elegant large robe silhouette, higher rank visibly richer than simple priest. One person, clearly illustrated.",
+    "references": [
+      "SOLDIER2",
+      "VITAL2"
+    ],
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "revision": 2,
+    "output": "client/public/art/cards/HIGH_PRIEST.webp"
+  },
+  {
+    "id": "BLACKSMITH",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-b5362b0a-94a0-4430-87c7-f755d661b389.png",
+    "prompt": "Use case: stylized-concept. Produce one new finished illustration for LORE TCG, near-square landscape 1472x1344, artwork only. Input images are STYLE references from this same game's approved card set, not subjects to copy. Match their illustrated fantasy visual language: deliberate fine contour lines, clearly drawn expressive anime-inspired faces, simplified graceful shapes, broad clean colored shadow planes, light painterly background detail, luminous breathable daylight and restrained highlights. Characters must look DRAWN, never like live actors with a painterly filter. No realistic skin pores, photographic facial anatomy, cinematic photorealism, gritty dark oil painting, glossy 3D rendering or excessive microtexture. Rich refined fantasy illustration with an easily readable focal silhouette, central 80% safe. No card frame, text, typography, logos or watermarks. Do not add a library or compass to every scene. Match the reference art's abstraction, not realism. Subject: Magic card depicting a beautiful CASTLE FORGE WORKSHOP, no person: a chunky silver-blue shield resting on a clean anvil, a second translucent blue shield-shaped layer forming against its surface to signify doubled protection, hammer and tongs nearby, warm small fire in furnace, white stone open arch letting in blue daylight, navy fabric, warm wood. Stylized drawn object illustration, simplified reflective planes, not a photo of a forge.",
+    "references": [
+      "SOLDIER2",
+      "GOLEM1"
+    ],
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "revision": 2,
+    "output": "client/public/art/cards/BLACKSMITH.webp"
+  },
+  {
+    "id": "SHIELD_TITAN",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-d78355f3-0f01-4fc4-b5fd-218c238cbb98.png",
+    "prompt": "Use case: stylized-concept. Produce one new finished illustration for LORE TCG, near-square landscape 1472x1344, artwork only. Input images are STYLE references from this same game's approved card set, not subjects to copy. Match their illustrated fantasy visual language: deliberate fine contour lines, clearly drawn expressive anime-inspired faces, simplified graceful shapes, broad clean colored shadow planes, light painterly background detail, luminous breathable daylight and restrained highlights. Characters must look DRAWN, never like live actors with a painterly filter. No realistic skin pores, photographic facial anatomy, cinematic photorealism, gritty dark oil painting, glossy 3D rendering or excessive microtexture. Rich refined fantasy illustration with an easily readable focal silhouette, central 80% safe. No card frame, text, typography, logos or watermarks. Do not add a library or compass to every scene. Match the reference art's abstraction, not realism. Subject: One colossal shield-bearing guardian golem, immense broad silhouette with an oversized heavy tower shield, weathered ivory ceramic slabs, dark basalt seams, bronze mechanical joints and turquoise chest core; head a simple narrow nonhuman visor. A sunlit quarry fortress landscape emphasizes monumental scale. Deliberately sculpted graphic block forms and illustrated clear edge lines; dignified protective stance, not a human knight, not a photoreal robot. Preserve same family as reference golem.",
+    "references": [
+      "GOLEM1",
+      "SOLDIER2"
+    ],
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "revision": 2,
+    "output": "client/public/art/cards/SHIELD_TITAN.webp"
+  },
+  {
+    "id": "ARMOR_BREAK",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-f25f4d31-4b0b-4afd-b61e-4d0d8bd21bfe.png",
+    "prompt": "Use case: stylized-concept. Produce one new finished illustration for LORE TCG, near-square landscape 1472x1344, artwork only. Input images are STYLE references from this same game's approved card set, not subjects to copy. Match their illustrated fantasy visual language: deliberate fine contour lines, clearly drawn expressive anime-inspired faces, simplified graceful shapes, broad clean colored shadow planes, light painterly background detail, luminous breathable daylight and restrained highlights. Characters must look DRAWN, never like live actors with a painterly filter. No realistic skin pores, photographic facial anatomy, cinematic photorealism, gritty dark oil painting, glossy 3D rendering or excessive microtexture. Rich refined fantasy illustration with an easily readable focal silhouette, central 80% safe. No card frame, text, typography, logos or watermarks. Do not add a library or compass to every scene. Match the reference art's abstraction, not realism. Subject: Spell phenomenon, no humans: a broad blue translucent shield visibly cracking into a small number of bold angular plates as a sharp warm-gold impact drives through its center. Behind it a distant stylized pale castle wall and cobalt sky. The broken shield silhouette is the focal subject. Beautiful hand-drawn fantasy effect with clean crystalline shapes and painted shadows, restrained fragments, not a realistic explosion.",
+    "references": [
+      "SOLDIER2",
+      "GOLEM1"
+    ],
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "revision": 2,
+    "output": "client/public/art/cards/ARMOR_BREAK.webp"
+  },
+  {
+    "id": "SPEAR_AND_SHIELD",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-f36777c2-7c10-4969-9219-c7f5272517ae.png",
+    "prompt": "Use case: stylized-concept. Produce one new finished illustration for LORE TCG, near-square landscape 1472x1344, artwork only. Input images are STYLE references from this same game's approved card set, not subjects to copy. Match their illustrated fantasy visual language: deliberate fine contour lines, clearly drawn expressive anime-inspired faces, simplified graceful shapes, broad clean colored shadow planes, light painterly background detail, luminous breathable daylight and restrained highlights. Characters must look DRAWN, never like live actors with a painterly filter. No realistic skin pores, photographic facial anatomy, cinematic photorealism, gritty dark oil painting, glossy 3D rendering or excessive microtexture. Rich refined fantasy illustration with an easily readable focal silhouette, central 80% safe. No card frame, text, typography, logos or watermarks. Do not add a library or compass to every scene. Match the reference art's abstraction, not realism. Subject: Spell illustration without people: one elegant long silver spear with a navy pennant cleaves a blue enchanted round shield at the point of contact. Both silhouettes easily distinguishable, deliberate diagonal composition over sunlit ivory castle paving, a concise arc of gold light marks the break. Clean drawn contours and stylized faceted colors, not weapon photography, no floating UI icon.",
+    "references": [
+      "SOLDIER2",
+      "GOLEM1"
+    ],
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "revision": 2,
+    "output": "client/public/art/cards/SPEAR_AND_SHIELD.webp",
+    "edgeRepair": {
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-07f5a7e6-bf05-41eb-8835-4863af9fa468.png",
+      "prompt": "Preserve composition; fill transparent top and bottom edges with continuing painted sky, castle and ground. Opaque full-bleed rectangle."
+    }
+  },
+  {
+    "id": "SELECTED_SWORD",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-307ee834-4482-409c-ac3e-138796d6cb2e.png",
+    "prompt": "Use case: stylized-concept. Produce one new finished illustration for LORE TCG, near-square landscape 1472x1344, artwork only. Input images are STYLE references from this same game's approved card set, not subjects to copy. Match their illustrated fantasy visual language: deliberate fine contour lines, clearly drawn expressive anime-inspired faces, simplified graceful shapes, broad clean colored shadow planes, light painterly background detail, luminous breathable daylight and restrained highlights. Characters must look DRAWN, never like live actors with a painterly filter. No realistic skin pores, photographic facial anatomy, cinematic photorealism, gritty dark oil painting, glossy 3D rendering or excessive microtexture. Rich refined fantasy illustration with an easily readable focal silhouette, central 80% safe. No card frame, text, typography, logos or watermarks. Do not add a library or compass to every scene. Match the reference art's abstraction, not realism. Subject: Starter relic art without people or hands: one refined silver sword with a navy-wrapped hilt and pale-gold fittings resting on an ivory stone ledge, several violet-black paperlike void shards dissolve into its edge and form a thin amethyst luminous blade extension. Airy blue-white magical setting, clean designed shape and inked edge lines, stylized rich painted fantasy illustration. One sword main focus, no letters or compass.",
+    "references": [
+      "SOLDIER2",
+      "WORLD_CARE"
+    ],
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "revision": 2,
+    "output": "client/public/art/cards/SELECTED_SWORD.webp"
+  },
+  {
+    "id": "SELECTED_SHIELD",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-df08f732-bdea-425c-b3c6-8d948ab33419.png",
+    "prompt": "Use case: stylized-concept. Produce one new finished illustration for LORE TCG, near-square landscape 1472x1344, artwork only. Input images are STYLE references from this same game's approved card set, not subjects to copy. Match their illustrated fantasy visual language: deliberate fine contour lines, clearly drawn expressive anime-inspired faces, simplified graceful shapes, broad clean colored shadow planes, light painterly background detail, luminous breathable daylight and restrained highlights. Characters must look DRAWN, never like live actors with a painterly filter. No realistic skin pores, photographic facial anatomy, cinematic photorealism, gritty dark oil painting, glossy 3D rendering or excessive microtexture. Rich refined fantasy illustration with an easily readable focal silhouette, central 80% safe. No card frame, text, typography, logos or watermarks. Do not add a library or compass to every scene. Match the reference art's abstraction, not realism. Subject: Starter relic art without people or hands: one broad elegant ivory-silver shield with navy inlays and warm gold fittings resting on a pale stone ledge. Several violet-black paperlike void shards dissolve into its edges and create one protective translucent lavender outer shell. Airy blue-white setting, clearly drawn ornament, large readable shape, same visual family as castle soldier shield, not realistic product render.",
+    "references": [
+      "SOLDIER2",
+      "WORLD_CARE"
+    ],
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "revision": 2,
+    "output": "client/public/art/cards/SELECTED_SHIELD.webp"
+  },
+  {
+    "id": "WINE_COLLECTOR",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-c8d8943f-aeee-4bc2-a591-b43dce071213.png",
+    "prompt": "Use case: stylized-concept. Produce one new finished illustration for LORE TCG, near-square landscape 1472x1344, artwork only. Input images are STYLE references from this same game's approved card set, not subjects to copy. Match their illustrated fantasy visual language: deliberate fine contour lines, clearly drawn expressive anime-inspired faces, simplified graceful shapes, broad clean colored shadow planes, light painterly background detail, luminous breathable daylight and restrained highlights. Characters must look DRAWN, never like live actors with a painterly filter. No realistic skin pores, photographic facial anatomy, cinematic photorealism, gritty dark oil painting, glossy 3D rendering or excessive microtexture. Rich refined fantasy illustration with an easily readable focal silhouette, central 80% safe. No card frame, text, typography, logos or watermarks. Do not add a library or compass to every scene. Match the reference art's abstraction, not realism. Subject: One whimsical refined adult wine collector with neatly swept brown hair, a small stylized moustache and inquisitive drawn eyes, ivory shirt, navy vest and burgundy scarf, holding exactly two elegant dark wine bottles toward a small violet magical aperture on a wooden tasting counter. Sunlit vineyard shop with pale walls and warm shelves, lively designed silhouette and illustrated face, no text labels, no sinister realistic merchant.",
+    "references": [
+      "SOLDIER2",
+      "VITAL2"
+    ],
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "revision": 2,
+    "output": "client/public/art/cards/WINE_COLLECTOR.webp"
+  },
+  {
+    "id": "DEFENSIVE_STANCE",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-efed56ec-37c7-43d4-863e-96682ec7dc12.png",
+    "prompt": "Use case: stylized-concept. Produce one new finished illustration for LORE TCG, near-square landscape 1472x1344, artwork only. Input images are STYLE references from this same game's approved card set, not subjects to copy. Match their illustrated fantasy visual language: deliberate fine contour lines, clearly drawn expressive anime-inspired faces, simplified graceful shapes, broad clean colored shadow planes, light painterly background detail, luminous breathable daylight and restrained highlights. Characters must look DRAWN, never like live actors with a painterly filter. No realistic skin pores, photographic facial anatomy, cinematic photorealism, gritty dark oil painting, glossy 3D rendering or excessive microtexture. Rich refined fantasy illustration with an easily readable focal silhouette, central 80% safe. No card frame, text, typography, logos or watermarks. Do not add a library or compass to every scene. Match the reference art's abstraction, not realism. Subject: Spell card without people: two distinctly designed ivory-stone golems taking a protective low braced stance, their heavy arms overlapping into one translucent blue shield-shaped barrier. Turquoise cores and copper joints, sunlit quarry with cream rock and blue sky. Focus on the readable defensive arrangement and simple clean magical shield; hand-drawn stylized block forms, painted environment. Do not make a photoreal robot scene.",
+    "references": [
+      "GOLEM1",
+      "SOLDIER2"
+    ],
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "revision": 2,
+    "output": "client/public/art/cards/DEFENSIVE_STANCE.webp"
+  },
+  {
+    "id": "IRON_WALL",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-27fe27b8-cf4a-4af8-a85a-349e28c029cc.png",
+    "prompt": "Use case: stylized-concept. Produce one new finished illustration for LORE TCG, near-square landscape 1472x1344, artwork only. Input images are STYLE references from this same game's approved card set, not subjects to copy. Match their illustrated fantasy visual language: deliberate fine contour lines, clearly drawn expressive anime-inspired faces, simplified graceful shapes, broad clean colored shadow planes, light painterly background detail, luminous breathable daylight and restrained highlights. Characters must look DRAWN, never like live actors with a painterly filter. No realistic skin pores, photographic facial anatomy, cinematic photorealism, gritty dark oil painting, glossy 3D rendering or excessive microtexture. Rich refined fantasy illustration with an easily readable focal silhouette, central 80% safe. No card frame, text, typography, logos or watermarks. Do not add a library or compass to every scene. Match the reference art's abstraction, not realism. Subject: Spell card without people: monumental wall assembled from several enormous interlocking ivory ceramic golem shield plates, copper joints, dark basalt grooves and turquoise cores. One continuous soft azure protective surface along the front, a sunlit quarry fortress behind. Bold graphic monumental geometry, warm ivory and cobalt, drawn contour edges and broad painted shadows. Protection and unyielding weight readable, no human castle guards.",
+    "references": [
+      "GOLEM1",
+      "SOLDIER2"
+    ],
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "revision": 2,
+    "output": "client/public/art/cards/IRON_WALL.webp"
+  },
+  {
+    "id": "DESERTIFICATION",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-a4d937f5-5092-4a8d-aebd-b8bf8a55cc3f.png",
+    "prompt": "Use case: stylized-concept. Produce one new finished illustration for LORE TCG, near-square landscape 1472x1344, artwork only. Input images are STYLE references from this same game's approved card set, not subjects to copy. Match their illustrated fantasy visual language: deliberate fine contour lines, clearly drawn expressive anime-inspired faces, simplified graceful shapes, broad clean colored shadow planes, light painterly background detail, luminous breathable daylight and restrained highlights. Characters must look DRAWN, never like live actors with a painterly filter. No realistic skin pores, photographic facial anatomy, cinematic photorealism, gritty dark oil painting, glossy 3D rendering or excessive microtexture. Rich refined fantasy illustration with an easily readable focal silhouette, central 80% safe. No card frame, text, typography, logos or watermarks. Do not add a library or compass to every scene. Match the reference art's abstraction, not realism. Subject: Spell card without humans: the roots of an immense cream-barked World Tree over a once-jade spring, golden dew droplets drying into fine pale sand before they reach the cracked basin. One side lush moss and emerald leaves, the advancing dry side warm ochre sand and brittle leaves. Clear transition from living water to desert, elegantly drawn organic contours, bright illustrated fantasy landscape, not a realistic disaster photograph.",
+    "references": [
+      "WORLD_CARE",
+      "VITAL2"
+    ],
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "revision": 2,
+    "output": "client/public/art/cards/DESERTIFICATION.webp"
+  },
+  {
+    "id": "NOURISHING_RAIN",
+    "sourcePath": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-d7a937a5-66be-4169-891f-cbd32bd7ecbf.png",
+    "prompt": "Use case: stylized-concept. Produce one new finished illustration for LORE TCG, near-square landscape 1472x1344, artwork only. Input images are STYLE references from this same game's approved card set, not subjects to copy. Match their illustrated fantasy visual language: deliberate fine contour lines, clearly drawn expressive anime-inspired faces, simplified graceful shapes, broad clean colored shadow planes, light painterly background detail, luminous breathable daylight and restrained highlights. Characters must look DRAWN, never like live actors with a painterly filter. No realistic skin pores, photographic facial anatomy, cinematic photorealism, gritty dark oil painting, glossy 3D rendering or excessive microtexture. Rich refined fantasy illustration with an easily readable focal silhouette, central 80% safe. No card frame, text, typography, logos or watermarks. Do not add a library or compass to every scene. Match the reference art's abstraction, not realism. Subject: Starter spell without people: gentle luminous golden dew falling with fine pale-blue rain onto a small fresh jade sprout among cream-white World Tree roots and white flowers, tiny jade pool with clean concentric ripples. Lush emerald canopy, warm golden sap, cool sky light, delicate deliberate drawn leaf shapes and richly painted airy background. One large dew droplet and sprout form the readable focal pair. No buildings, no text.",
+    "references": [
+      "WORLD_CARE",
+      "VITAL2"
+    ],
+    "tool": "image_gen",
+    "model": "not exposed by tool",
+    "revision": 2,
+    "output": "client/public/art/cards/NOURISHING_RAIN.webp"
+  }
+]

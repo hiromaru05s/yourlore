@@ -1,0 +1,10 @@
+{
+  "revision": 2,
+  "generatedCards": 16,
+  "validatedFiles": 48,
+  "checks": [
+    "sha256",
+    "dimensions",
+    "opaque full-bleed"
+  ]
+}

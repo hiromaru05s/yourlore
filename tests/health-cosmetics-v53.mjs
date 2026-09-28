@@ -10,7 +10,7 @@ const play=(g,id)=>{g.players[g.cur].hand.push(card(id));return reduce(g,{type:'
 assert.equal(HAND_CARRY,7);assert(!('maxHp' in fresh().players[0]));
 for(const c of [...Object.values(DB),...Object.values(STARTERS)])assert(!/最大体力|최대 체력|max(?:imum)? (?:hp|health)/i.test([c.text,c.textJa,c.textEn].join(' ')),c.id);
 for(const id of ['GRAPE','GRAPE2','WINE','VITAL2','VITAL3']){let g=fresh();g.players[0].hp=500;const gain=DB[id].val;const r=play(g,id);assert.equal(r.state.players[0].hp,500+gain,id);assert.equal(r.events.filter(e=>e.type==='heal').reduce((a,e)=>a+e.amount,0),gain,id);}
-for(const [id,n] of [['ELF',65],['HIGH_ELF',99]]){const g=fresh();g.players[0].hp=n;assert.equal(playBlockReason(g,0,card(id)),null);g.players[0].hp=n-1;g.players[0].maxHp=999;assert(playBlockReason(g,0,card(id)),id+' must use current health');}
+for(const [id,n] of [['ELF',4],['HIGH_ELF',10]]){const g=fresh();g.players[0].dew=n;assert.equal(playBlockReason(g,0,card(id)),null);g.players[0].dew=n-1;g.players[0].hp=999;assert(playBlockReason(g,0,card(id)),id+' must use Dew');}
 for(const hp of [10,40,80]){let g=fresh();g.players[0].hp=hp;g.players[0].maxMana=10;if(DB.GS8_2){g=play(g,'GS8_2').state;assert.equal(g.players[0].hp,Math.max(40,hp+14));}g=fresh();g.players[0].hp=hp;g=play(g,'HERMIT').state;assert.equal(g.players[0].hp,Math.max(40,hp)+15);}
 {let g=fresh();g.players[0].hp=4;g.players[0].maxMana=10;g=play(g,'MEDITATE').state;assert.equal(g.players[0].hp,40);assert.equal(g.players[0].brand,1);}
 {let g=fresh();const m=mon('M11');Object.assign(m,{atk:5,def:9,dmg:3});g.players[1].field=[m];g=play(g,'TRICKROOM').state;assert.equal(effAtk(g.players[1],g.players[1].field[0],g),6);assert.equal(curHp(g.players[1],g.players[1].field[0]),5);}

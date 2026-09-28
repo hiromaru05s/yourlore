@@ -1,0 +1,5 @@
+PASS [
+  'Dew and Shield counters visible on both portraits at desktop, portrait and landscape sizes',
+  'Armorer choice rendered and clicked through real controller',
+  'All 16 generated card illustrations decode at full expected resolution'
+]

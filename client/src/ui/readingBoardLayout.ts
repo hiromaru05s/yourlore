@@ -36,13 +36,15 @@ export function placeReadingBoard(root:HTMLElement):void {
   place(`#pile-${id==='me'?'my':'opp'}Disc`,-.54,sign*.245,.166,.232);
   place(`#rift-${id}`,RIFT_MOUNT.x,sign*RIFT_MOUNT.z,.125,.268);
   const p=id==='me'?'Me':'Opp';
-  const portraitTop=sign>0?Math.min(innerHeight-portraitSize-8,cy+s*.326):Math.max(8,cy-s*.326-portraitSize);
+  const portraitTop=sign>0?Math.min(innerHeight-portraitSize-38,cy+s*.326):Math.max(8,cy-s*.326-portraitSize);
   const ring=root.querySelector<HTMLElement>(`#portrait${p} .pt-ring`),hp=root.querySelector<HTMLElement>(`#portrait${p} .pt-vitals`);
   if(ring){ring.style.left=`${cx-portraitSize/2}px`;ring.style.top=`${portraitTop}px`;ring.style.width=ring.style.height=`${portraitSize}px`;}
   if(hp){hp.style.left=`${cx-portraitSize*.46}px`;hp.style.top=`${portraitTop+portraitSize*.65}px`;hp.style.width=`${portraitSize*.30}px`;hp.style.height=`${portraitSize*.36}px`;}
 
   place(`#portrait${p} .pt-mana`,-.345,sign*.397,.350,.077);
   place(`#portrait${p}>.pt-name,#portrait${p} .pt-name--vitals`,-.345,sign*.455,.34,.017);
+  const resources=root.querySelector<HTMLElement>(`#portrait${p} .pt-resources`);
+  if(resources){resources.style.left=`${cx-portraitSize*.48}px`;resources.style.top=`${Math.min(innerHeight-28,portraitTop+portraitSize*.97)}px`;resources.style.width=`${portraitSize*.96}px`;}
   place(`#portrait${p} .pt-brand`,-.09,sign*.335,.08,.028);
  }
  // Hand cards float over the board, outside the play lanes. They are not sockets.

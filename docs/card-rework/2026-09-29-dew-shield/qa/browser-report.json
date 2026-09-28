@@ -1,0 +1,91 @@
+{
+  "origin": "http://127.0.0.1:5200",
+  "checks": [
+    "Dew and Shield counters visible on both portraits at desktop, portrait and landscape sizes",
+    "Armorer choice rendered and clicked through real controller",
+    "All 16 generated card illustrations decode at full expected resolution"
+  ],
+  "assets": [
+    {
+      "id": "APPRENTICE_ARMORER",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "VETERAN_ARMORER",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "SALLY_WEAPONMASTER",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "PRIEST",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "HIGH_PRIEST",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "BLACKSMITH",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "SHIELD_TITAN",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "ARMOR_BREAK",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "SPEAR_AND_SHIELD",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "SELECTED_SWORD",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "SELECTED_SHIELD",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "WINE_COLLECTOR",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "DEFENSIVE_STANCE",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "IRON_WALL",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "DESERTIFICATION",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "NOURISHING_RAIN",
+      "width": 1472,
+      "height": 1344
+    }
+  ],
+  "errors": []
+}

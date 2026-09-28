@@ -166,7 +166,6 @@ export function candidates(g: GameState): Action[] {
         .filter((m) => !(pend.reason === "grantMajesty" && hasPassive(m, "majesty")))
         .filter((m) => !(pend.reason === "emberBuff" && m.tribe !== "시초")) // 시초의 불씨: 시초만
         .filter((m) => !(pend.reason === "golemBuff" && !isGolem(m))) // 앤티크 인핸스 매직: 골램만
-        .filter((m) => !(pend.reason === "worldTree" && (m.id !== "WORLD_TREE" || (m.gcount || 0) <= 0))) // 세계수: 카운터 있는 세계수만
         .forEach((m) => push(m.uid));
       if (pend.allowCancel) push(null);
     }
@@ -495,7 +494,7 @@ function strongValueEval(g: GameState, s: Side): number {
   const pressure = (potentialFace(p, o) - potentialFace(o, p)) / 45;
   const board = ((myAtk - opAtk) * 0.55 + (myDef - opDef) * 0.2 + (p.field.length - o.field.length) * 1.4) / 35;
   const resources = ((p.hand.length - o.hand.length) * 0.7 + (p.maxMana - o.maxMana) * 0.9 + (p.traps.length - o.traps.length) * 0.5) / 18;
-  const hp = (p.hp - o.hp) / 90;
+  const hp = (p.hp + (p.shield ?? 0)*0.6 + (p.dew ?? 0)*2 - o.hp - (o.shield ?? 0)*0.6 - (o.dew ?? 0)*2) / 90;
   const eggPressure = (eggProg(p) - eggProg(o)) / 30;
   return clamp01(base + 0.025 * pressure + 0.018 * board + 0.012 * resources + 0.01 * hp + 0.01 * eggPressure);
 }
@@ -511,7 +510,7 @@ function potentialFace(p: PlayerState, o: PlayerState): number {
     const k = defs.findIndex((d) => a > d);
     if (k >= 0) { total += a - defs[k]; defs.splice(k, 1); }
   }
-  return total;
+  return Math.max(0,total-(o.shield ?? 0));
 }
 
 function eggProg(p: PlayerState): number {
@@ -589,11 +588,11 @@ function actionCanWin(g: GameState, a: Action): boolean {
   const p = g.players[g.cur], o = g.players[1 - g.cur];
   if (a.type === "play") {
     const c = p.hand[a.idx];
-    return !!c && (c.act === "dmg" || c.act === "siphon") && (c.val || 0) >= o.hp;
+    return !!c && (c.act === "dmg" || c.act === "siphon") && (c.val || 0) >= o.hp+(o.shield ?? 0);
   }
   if (a.type === "attack") {
     const m = p.field.find((x) => x.uid === a.uid);
-    return !!m && (m.directOnly || o.field.length === 0) && effAtk(p, m, g) >= o.hp;
+    return !!m && (m.directOnly || o.field.length === 0) && effAtk(p, m, g) >= o.hp+(o.shield ?? 0);
   }
   return false;
 }
@@ -613,6 +612,9 @@ export function greedyDecide(g: GameState, useLethal = true): Action {
   if (g.pending?.kind === "cardChoice") {
     const pool = effectChoices(g).filter(c => g.pending?.reason !== "QUICK_REBIRTH" || c.cost <= 7);
     const owner = g.pending.owner ?? g.cur;
+    if (g.pending.reason === 'WORLD_TREE_ATTACK' || g.pending.reason === 'WORLD_TREE_DEFEND') return {type:'pick',uid:(g.players[owner].dew ?? 0)>0?'grow':'pass'};
+    if (g.pending.reason === 'HIGH_ELF_HAND') return {type:'pick',uid:[...pool].filter(c=>c.uid!=='done' && !hasPassive(c,'relic')).sort((a,b)=>cardPower(b)-cardPower(a))[0]?.uid ?? 'done'};
+    if (g.pending.reason === 'ARMORER_MODE') {const ally=g.players[owner];return {type:'pick',uid:ally.hp+(ally.shield ?? 0)<25||!pool.some(c=>c.uid==='buff')?'shield':'buff'};}
     if (g.pending.reason === 'FIRE_BALL') { const reversed = g.players.some(p => p.enchants.some(e => e.card.ench === 'blackReverse')); return { type: 'pick', uid: `player-${reversed ? owner : 1-owner}` }; }
     if (g.pending.reason === 'FIRE_ZONE') return { type: 'pick', uid: [...pool].sort((a,b) => cardPower(a)-cardPower(b))[0]?.uid ?? null };
     const best = [...pool].sort((a, b) => cardPower(b) - cardPower(a))[0] ?? effectChoices(g)[0];
@@ -1151,11 +1153,6 @@ function autoTarget(g: GameState): Action {
       const excl = (pending.data?.excl as string[] | undefined) ?? [];
       const t0 = [...p.field].filter((m) => m.tribe === "시초" && !excl.includes(m.uid)).sort((x, y) => effAtk(p, y, g) - effAtk(p, x, g))[0];
       return { type: "chooseTarget", uid: t0 ? t0.uid : null };
-    }
-    if (pending.reason === "worldTree") { // 세계수: 체력이 80% 미만이거나 다친 몬스터가 있을 때만 발동
-      const tree = p.field.find((m) => m.id === "WORLD_TREE" && (m.gcount || 0) > 0);
-      const worth = p.hp < 32 || p.field.some((m) => (m.dmg || 0) > 0);
-      return { type: "chooseTarget", uid: tree && worth ? tree.uid : null };
     }
     // 지원 나팔의 exclude(중복 선택 불가)를 지켜야 무한 재무장 루프에 안 빠진다
     const excl = (pending.data?.excl as string[] | undefined) ?? [];
