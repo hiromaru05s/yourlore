@@ -63,3 +63,16 @@ Local main was advanced while preserving uncommitted comparison work. Before/aft
 hashes and backups are stored locally at
 `/tmp/lore-orchestrator-20260929/main-before-sync/`. Shared files were merged with
 both runtime changes and existing DEV hooks retained; no broad add/reset was used.
+
+
+## Latest follow-up: portrait resource icons
+
+The additional shield/Dew icon request is included in source commit `480612a`.
+Both generated transparent PNGs match the existing health badge. Full-board
+integration found and fixed a projection-transform discrepancy that was absent
+from the isolated portrait fixture. Production BOT tests cover both sides at four
+viewport sizes. See `resource-icons/README.md` for the fix and test boundaries.
+
+Latest staging Worker: `b30bccdc-c32c-4bf7-ab42-f678a771191e`.
+The seven earlier changes remain included. The earlier Worker version above is
+historical deployment evidence. `resource-icons/deployment.json` is the latest receipt.

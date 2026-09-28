@@ -1,0 +1,13 @@
+{
+  "target": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "version": "b30bccdc-c32c-4bf7-ab42-f678a771191e",
+  "sourceCommit": "480612a",
+  "mainBundle": "main-B1YqrUZP.js",
+  "stylesheet": "main-BjRzvfW-.css",
+  "duelSceneBundle": "duelScene-Ba8RxQNT.js",
+  "assetsUploaded": 14,
+  "assetsUnchanged": 2022,
+  "workerStartupMs": 105,
+  "productionDeployed": false
+}

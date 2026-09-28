@@ -18,3 +18,9 @@ models. Account endpoints use fixtures; it does not claim an online 2-player mat
 Client/server typecheck, build and existing duel UI regression pass. Source reports
 cover zero counters and 3-/4-digit values. Local and staging reports below are final
 only when their `browser.json` exists without a failure report.
+
+Public staging verification passed all 30 hashes and four full-board viewports,
+with zero page/server errors (`staging/browser.json`). An independent source-owner
+check confirmed both PNG hashes and the projection fix in the public source map
+(`independent-verification.json`). Published source: `480612a`, Worker version
+`b30bccdc-c32c-4bf7-ab42-f678a771191e`.

@@ -1,0 +1,453 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-09-28T23:11:42.424Z",
+  "hashes": 30,
+  "viewports": [
+    {
+      "width": 1280,
+      "height": 720,
+      "endButton": {
+        "x": 1128.9012451171875,
+        "y": 320.16851806640625,
+        "width": 77.8306884765625,
+        "height": 67.0238037109375
+      },
+      "resources": [
+        {
+          "id": "portraitOpp",
+          "hp": {
+            "x": 575.40625,
+            "y": 99.25,
+            "width": 42.109375,
+            "height": 50.53125,
+            "cx": 596.4609375,
+            "cy": 124.515625
+          },
+          "shield": {
+            "x": 618.9375,
+            "y": 99.25,
+            "width": 42.125,
+            "height": 50.53125,
+            "cx": 640,
+            "cy": 124.515625
+          },
+          "dew": {
+            "x": 662.453125,
+            "y": 99.25,
+            "width": 42.125,
+            "height": 50.53125,
+            "cx": 683.515625,
+            "cy": 124.515625
+          },
+          "portrait": {
+            "x": 569.796875,
+            "y": 8,
+            "width": 140.390625,
+            "height": 140.390625,
+            "cx": 639.9921875,
+            "cy": 78.1953125
+          },
+          "labels": [
+            {
+              "aria": "シールド 0",
+              "title": "体力より先にダメージを吸収。次の相手ターン終了時に消滅します。",
+              "image": "url(\"https://test.yourlore.xyz/art/biblion/modular/shield.png\")",
+              "value": "0"
+            },
+            {
+              "aria": "雫 0",
+              "title": "自分のターン開始時、雫の数だけ体力を回復。雫は消費されません。",
+              "image": "url(\"https://test.yourlore.xyz/art/biblion/modular/dew.png\")",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "id": "portraitMe",
+          "hp": {
+            "x": 575.40625,
+            "y": 632.859375,
+            "width": 42.109375,
+            "height": 50.53125,
+            "cx": 596.4609375,
+            "cy": 658.125
+          },
+          "shield": {
+            "x": 618.9375,
+            "y": 632.859375,
+            "width": 42.125,
+            "height": 50.53125,
+            "cx": 640,
+            "cy": 658.125
+          },
+          "dew": {
+            "x": 662.453125,
+            "y": 632.859375,
+            "width": 42.125,
+            "height": 50.53125,
+            "cx": 683.515625,
+            "cy": 658.125
+          },
+          "portrait": {
+            "x": 569.796875,
+            "y": 541.59375,
+            "width": 140.390625,
+            "height": 140.390625,
+            "cx": 639.9921875,
+            "cy": 611.7890625
+          },
+          "labels": [
+            {
+              "aria": "シールド 0",
+              "title": "体力より先にダメージを吸収。次の相手ターン終了時に消滅します。",
+              "image": "url(\"https://test.yourlore.xyz/art/biblion/modular/shield.png\")",
+              "value": "0"
+            },
+            {
+              "aria": "雫 0",
+              "title": "自分のターン開始時、雫の数だけ体力を回復。雫は消費されません。",
+              "image": "url(\"https://test.yourlore.xyz/art/biblion/modular/dew.png\")",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "endButton": {
+        "x": 1693.2823486328125,
+        "y": 480.32257080078125,
+        "width": 116.6962890625,
+        "height": 100.48687744140625
+      },
+      "resources": [
+        {
+          "id": "portraitOpp",
+          "hp": {
+            "x": 863.390625,
+            "y": 144.5,
+            "width": 63,
+            "height": 75.59375,
+            "cx": 894.890625,
+            "cy": 182.296875
+          },
+          "shield": {
+            "x": 928.5,
+            "y": 144.5,
+            "width": 63,
+            "height": 75.59375,
+            "cx": 960,
+            "cy": 182.296875
+          },
+          "dew": {
+            "x": 993.59375,
+            "y": 144.5,
+            "width": 63,
+            "height": 75.59375,
+            "cx": 1025.09375,
+            "cy": 182.296875
+          },
+          "portrait": {
+            "x": 855,
+            "y": 8,
+            "width": 210,
+            "height": 210,
+            "cx": 960,
+            "cy": 113
+          },
+          "labels": [
+            {
+              "aria": "シールド 0",
+              "title": "体力より先にダメージを吸収。次の相手ターン終了時に消滅します。",
+              "image": "url(\"https://test.yourlore.xyz/art/biblion/modular/shield.png\")",
+              "value": "0"
+            },
+            {
+              "aria": "雫 0",
+              "title": "自分のターン開始時、雫の数だけ体力を回復。雫は消費されません。",
+              "image": "url(\"https://test.yourlore.xyz/art/biblion/modular/dew.png\")",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "id": "portraitMe",
+          "hp": {
+            "x": 863.390625,
+            "y": 968.5,
+            "width": 63,
+            "height": 75.59375,
+            "cx": 894.890625,
+            "cy": 1006.296875
+          },
+          "shield": {
+            "x": 928.5,
+            "y": 968.5,
+            "width": 63,
+            "height": 75.59375,
+            "cx": 960,
+            "cy": 1006.296875
+          },
+          "dew": {
+            "x": 993.59375,
+            "y": 968.5,
+            "width": 63,
+            "height": 75.59375,
+            "cx": 1025.09375,
+            "cy": 1006.296875
+          },
+          "portrait": {
+            "x": 855,
+            "y": 832,
+            "width": 210,
+            "height": 210,
+            "cx": 960,
+            "cy": 937
+          },
+          "labels": [
+            {
+              "aria": "シールド 0",
+              "title": "体力より先にダメージを吸収。次の相手ターン終了時に消滅します。",
+              "image": "url(\"https://test.yourlore.xyz/art/biblion/modular/shield.png\")",
+              "value": "0"
+            },
+            {
+              "aria": "雫 0",
+              "title": "自分のターン開始時、雫の数だけ体力を回復。雫は消費されません。",
+              "image": "url(\"https://test.yourlore.xyz/art/biblion/modular/dew.png\")",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "endButton": {
+        "x": 330.596435546875,
+        "y": 397.22979736328125,
+        "width": 47.42498779296875,
+        "height": 45.780517578125
+      },
+      "resources": [
+        {
+          "id": "portraitOpp",
+          "hp": {
+            "x": 147.15625,
+            "y": 311.671875,
+            "width": 31.1875,
+            "height": 37.4375,
+            "cx": 162.75,
+            "cy": 330.390625
+          },
+          "shield": {
+            "x": 179.390625,
+            "y": 311.671875,
+            "width": 31.203125,
+            "height": 37.4375,
+            "cx": 194.9921875,
+            "cy": 330.390625
+          },
+          "dew": {
+            "x": 211.625,
+            "y": 311.671875,
+            "width": 31.203125,
+            "height": 37.4375,
+            "cx": 227.2265625,
+            "cy": 330.390625
+          },
+          "portrait": {
+            "x": 143,
+            "y": 244.078125,
+            "width": 104,
+            "height": 104,
+            "cx": 195,
+            "cy": 296.078125
+          },
+          "labels": [
+            {
+              "aria": "シールド 0",
+              "title": "体力より先にダメージを吸収。次の相手ターン終了時に消滅します。",
+              "image": "url(\"https://test.yourlore.xyz/art/biblion/modular/shield.png\")",
+              "value": "0"
+            },
+            {
+              "aria": "雫 0",
+              "title": "自分のターン開始時、雫の数だけ体力を回復。雫は消費されません。",
+              "image": "url(\"https://test.yourlore.xyz/art/biblion/modular/dew.png\")",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "id": "portraitMe",
+          "hp": {
+            "x": 147.15625,
+            "y": 563.515625,
+            "width": 31.1875,
+            "height": 37.4375,
+            "cx": 162.75,
+            "cy": 582.234375
+          },
+          "shield": {
+            "x": 179.390625,
+            "y": 563.515625,
+            "width": 31.203125,
+            "height": 37.4375,
+            "cx": 194.9921875,
+            "cy": 582.234375
+          },
+          "dew": {
+            "x": 211.625,
+            "y": 563.515625,
+            "width": 31.203125,
+            "height": 37.4375,
+            "cx": 227.2265625,
+            "cy": 582.234375
+          },
+          "portrait": {
+            "x": 143,
+            "y": 495.90625,
+            "width": 104,
+            "height": 104,
+            "cx": 195,
+            "cy": 547.90625
+          },
+          "labels": [
+            {
+              "aria": "シールド 0",
+              "title": "体力より先にダメージを吸収。次の相手ターン終了時に消滅します。",
+              "image": "url(\"https://test.yourlore.xyz/art/biblion/modular/shield.png\")",
+              "value": "0"
+            },
+            {
+              "aria": "雫 0",
+              "title": "自分のターン開始時、雫の数だけ体力を回復。雫は消費されません。",
+              "image": "url(\"https://test.yourlore.xyz/art/biblion/modular/dew.png\")",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "endButton": {
+        "x": 690.5365600585938,
+        "y": 168.4594268798828,
+        "width": 51.74713134765625,
+        "height": 46.18434143066406
+      },
+      "resources": [
+        {
+          "id": "portraitOpp",
+          "hp": {
+            "x": 387.015625,
+            "y": 57.421875,
+            "width": 22.8125,
+            "height": 27.375,
+            "cx": 398.421875,
+            "cy": 71.109375
+          },
+          "shield": {
+            "x": 410.578125,
+            "y": 57.421875,
+            "width": 22.8125,
+            "height": 27.375,
+            "cx": 421.984375,
+            "cy": 71.109375
+          },
+          "dew": {
+            "x": 434.140625,
+            "y": 57.421875,
+            "width": 22.8125,
+            "height": 27.375,
+            "cx": 445.546875,
+            "cy": 71.109375
+          },
+          "portrait": {
+            "x": 383.96875,
+            "y": 8,
+            "width": 76.046875,
+            "height": 76.046875,
+            "cx": 421.9921875,
+            "cy": 46.0234375
+          },
+          "labels": [
+            {
+              "aria": "シールド 0",
+              "title": "体力より先にダメージを吸収。次の相手ターン終了時に消滅します。",
+              "image": "url(\"https://test.yourlore.xyz/art/biblion/modular/shield.png\")",
+              "value": "0"
+            },
+            {
+              "aria": "雫 0",
+              "title": "自分のターン開始時、雫の数だけ体力を回復。雫は消費されません。",
+              "image": "url(\"https://test.yourlore.xyz/art/biblion/modular/dew.png\")",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "id": "portraitMe",
+          "hp": {
+            "x": 387.015625,
+            "y": 325.375,
+            "width": 22.8125,
+            "height": 27.375,
+            "cx": 398.421875,
+            "cy": 339.0625
+          },
+          "shield": {
+            "x": 410.578125,
+            "y": 325.375,
+            "width": 22.8125,
+            "height": 27.375,
+            "cx": 421.984375,
+            "cy": 339.0625
+          },
+          "dew": {
+            "x": 434.140625,
+            "y": 325.375,
+            "width": 22.8125,
+            "height": 27.375,
+            "cx": 445.546875,
+            "cy": 339.0625
+          },
+          "portrait": {
+            "x": 383.96875,
+            "y": 275.9375,
+            "width": 76.046875,
+            "height": 76.046875,
+            "cx": 421.9921875,
+            "cy": 313.9609375
+          },
+          "labels": [
+            {
+              "aria": "シールド 0",
+              "title": "体力より先にダメージを吸収。次の相手ターン終了時に消滅します。",
+              "image": "url(\"https://test.yourlore.xyz/art/biblion/modular/shield.png\")",
+              "value": "0"
+            },
+            {
+              "aria": "雫 0",
+              "title": "自分のターン開始時、雫の数だけ体力を回復。雫は消費されません。",
+              "image": "url(\"https://test.yourlore.xyz/art/biblion/modular/dew.png\")",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "serverErrors": [],
+  "porcelainTurnLight": true,
+  "anonymousLiveLogin": true,
+  "botAuthApiFixture": true,
+  "authenticatedOnlineMatch": false
+}
