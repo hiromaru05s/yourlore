@@ -1,0 +1,19 @@
+{
+  "tool": "image_gen",
+  "model": "not exposed",
+  "reference": "client/public/art/biblion/modular/health.png",
+  "outputs": [
+    {
+      "id": "shield",
+      "prompt": "Create ONE transparent PNG game UI counter icon for LORE, using the attached health badge only as a STYLE REFERENCE. A front-facing heraldic SHIELD badge, ivory enamel outer rim, restrained warm gold bevels and tiny four-point stars like the reference, with a deep slate BLUE smooth inset. The inset must be empty and spacious for an independent numeric HTML overlay. Stylized hand-painted fantasy UI, crisp clear edges, simplified broad shapes legible at 40px, matching the reference's material and trim thickness. Compact symmetric shield silhouette with gently angular shoulders and a bottom point. Center exactly on a square canvas, entire icon visible with 5% transparent margin. ACTUAL transparent alpha background, no backdrop, no floor, no shadow outside the silhouette. No digits, no letters, no additional symbols in the center, no mockup, only one isolated shield counter.",
+      "file": "client/public/art/biblion/modular/shield.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-52b9978e-db07-4383-bda9-65b5fe3dee79.png"
+    },
+    {
+      "id": "dew",
+      "prompt": "Create ONE transparent PNG game UI counter icon for LORE, using the attached health badge only as a STYLE REFERENCE. A front-facing upright WATER DROPLET shaped badge, point at top and broad rounded lower body, ivory enamel outer rim with restrained warm gold bevels and small four-point star accent near the top, like the reference's trim. A deep emerald/teal smooth inset, slight illustrated jewel highlights confined to edges. The large lower central inset must stay empty and dark enough for an independent white numeric HTML overlay. Stylized hand-painted fantasy UI, crisp clear outline, broad simple shape legible at 40px, same material and visual weight as reference. Center exactly on square canvas, entire icon visible with 5% transparent margin. ACTUAL transparent alpha background, no backdrop, no floor, no external shadow. No digits, no text, no center emblem, no mockup, only one isolated water-droplet counter.",
+      "file": "client/public/art/biblion/modular/dew.png",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a0e9ce-0b6e-73d1-a6f0-94e24976769a/exec-b81202e3-31ad-4c9d-971f-6d07671b8b91.png"
+    }
+  ]
+}

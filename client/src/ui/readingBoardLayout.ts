@@ -44,7 +44,7 @@ export function placeReadingBoard(root:HTMLElement):void {
   place(`#portrait${p} .pt-mana`,-.345,sign*.397,.350,.077);
   place(`#portrait${p}>.pt-name,#portrait${p} .pt-name--vitals`,-.345,sign*.455,.34,.017);
   const resources=root.querySelector<HTMLElement>(`#portrait${p} .pt-resources`);
-  if(resources){resources.style.left=`${cx-portraitSize*.48}px`;resources.style.top=`${Math.min(innerHeight-28,portraitTop+portraitSize*.97)}px`;resources.style.width=`${portraitSize*.96}px`;}
+  if(resources){resources.style.left=`${cx-portraitSize*.15}px`;resources.style.top=`${portraitTop+portraitSize*.65}px`;resources.style.width=`${portraitSize*.61}px`;resources.style.height=`${portraitSize*.36}px`;}
   place(`#portrait${p} .pt-brand`,-.09,sign*.335,.08,.028);
  }
  // Hand cards float over the board, outside the play lanes. They are not sockets.

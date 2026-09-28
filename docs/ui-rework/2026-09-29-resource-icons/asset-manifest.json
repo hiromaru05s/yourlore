@@ -1,0 +1,16 @@
+[
+  {
+    "file": "client/public/art/biblion/modular/shield.png",
+    "width": 512,
+    "height": 512,
+    "sha256": "ee2d0a83663c5627d1ff412ed8e5a51559713159bf6867ff51739e757bc5e77a",
+    "alpha": true
+  },
+  {
+    "file": "client/public/art/biblion/modular/dew.png",
+    "width": 512,
+    "height": 512,
+    "sha256": "07293bd99f76aaf73881b0022970d120f9e3baa6696a4cdb234a2161ef92f929",
+    "alpha": true
+  }
+]
