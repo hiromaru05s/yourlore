@@ -9,28 +9,28 @@
 
 vite v5.4.21 building for production...
 transforming...
-✓ 182 modules transformed.
+✓ 185 modules transformed.
 rendering chunks...
 computing gzip size...
 dist/index.html                              1.20 kB │ gzip:   0.64 kB
 dist/table-preview.html                      1.51 kB │ gzip:   0.87 kB
 dist/assets/tablePreview-2Rkra2Ey.css        1.87 kB │ gzip:   0.85 kB
-dist/assets/main-Drj4Pqh0.css              337.90 kB │ gzip:  70.93 kB
+dist/assets/main-Dll2E2Ws.css              339.16 kB │ gzip:  71.23 kB
 dist/assets/RoomEnvironment-XX58V7Xx.js      2.11 kB │ gzip:   0.92 kB │ map:     8.61 kB
 dist/assets/voidSurface-BvPkw2Ai.js          2.95 kB │ gzip:   1.52 kB │ map:     5.43 kB
-dist/assets/diceScene-BEMjWYPz.js            8.26 kB │ gzip:   3.86 kB │ map:    31.69 kB
+dist/assets/diceScene-CuKJXeBu.js            8.26 kB │ gzip:   3.86 kB │ map:    31.69 kB
 dist/assets/ceremonyScene-CJ_amyty.js        8.98 kB │ gzip:   3.99 kB │ map:    24.36 kB
-dist/assets/paperDraw-DrUTkk_T.js            9.53 kB │ gzip:   4.36 kB │ map:    28.43 kB
-dist/assets/crownOutcome-BV4wMBeK.js        13.74 kB │ gzip:   6.07 kB │ map:    41.97 kB
+dist/assets/paperDraw-C0Tf3EGx.js            9.53 kB │ gzip:   4.36 kB │ map:    28.43 kB
+dist/assets/crownOutcome-CyDLh8bb.js        13.74 kB │ gzip:   6.07 kB │ map:    41.97 kB
 dist/assets/tablePreview-Bbt3qVfB.js        24.96 kB │ gzip:   7.24 kB │ map:    80.98 kB
-dist/assets/riftScene-Rld8RBZw.js           28.06 kB │ gzip:  11.38 kB │ map:    74.24 kB
+dist/assets/riftScene-CgiYR8CS.js           28.06 kB │ gzip:  11.38 kB │ map:    74.24 kB
 dist/assets/GLTFLoader-AEMP8Cz1.js          44.85 kB │ gzip:  13.55 kB │ map:   242.57 kB
-dist/assets/duelScene-COigewoK.js           61.90 kB │ gzip:  24.60 kB │ map:   173.29 kB
+dist/assets/duelScene-DhVdwDc9.js           61.90 kB │ gzip:  24.60 kB │ map:   173.29 kB
 dist/assets/three.module-oapt2zHx.js       609.24 kB │ gzip: 156.08 kB │ map: 2,955.50 kB
-dist/assets/main-CgLVfTRg.js             1,064.53 kB │ gzip: 417.88 kB │ map: 2,697.98 kB
+dist/assets/main-E8lqqcei.js             1,070.50 kB │ gzip: 420.21 kB │ map: 2,718.89 kB
 
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
 - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
-✓ built in 3.22s
+✓ built in 3.48s

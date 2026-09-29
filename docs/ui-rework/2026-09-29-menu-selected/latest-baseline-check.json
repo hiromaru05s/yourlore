@@ -1,0 +1,12 @@
+{
+  "version": "2b15cfc8-5724-4513-a1d3-7ff8e5a91b42",
+  "sourceManifest": "../2026-09-29-hand-condition-golden/source-manifest.json",
+  "unchangedProductionSources": 187,
+  "allMatch": true,
+  "changedMenuSources": [
+    "client/src/screens/home.ts",
+    "client/src/screens/leaderboard.ts",
+    "client/src/screens/shop.ts",
+    "client/src/ui/lounge.ts"
+  ]
+}
