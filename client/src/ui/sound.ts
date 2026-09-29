@@ -1,5 +1,5 @@
 /** Designed fantasy duel sounds; keep the approved UI recordings unchanged. */
-export const SFX_NAMES=['click','play','summon','attack','impact','damage','heal','death','trapSet','trap','draw','buy','mana','turn','win','lose','drawGame','match','error','coin','pop','facehit','mimic','mana-pay','void','shuffle','duel-start','discard','coinToss','coinLand','diceRoll','diceLand'] as const;
+export const SFX_NAMES=['click','play','summon','attack','impact','damage','heal','death','trapSet','trap','draw','buy','mana','turn','win','lose','drawGame','match','error','coin','pop','facehit','mimic','mana-pay','void','shuffle','duel-start','discard','coinToss','coinLand','diceRoll','diceLand','rankUp','rankDown','rankPromote'] as const;
 export type SfxName=typeof SFX_NAMES[number];
 const UI=new Set<SfxName>(['click','pop','error']),VARIANTS=new Set<SfxName>(['click','draw','attack','impact']);
 type Family='ui'|'paper'|'combat'|'magic'|'ceremony';
@@ -9,7 +9,7 @@ const policy=(name:SfxName):Policy=>{
  if(['draw','discard','shuffle','trapSet','buy','coin','mana-pay'].includes(name))return {family:'paper',gap:name==='draw'?65:120,priority:1};
  if(name==='play')return {family:'magic',gap:120,priority:2};
  if(['mana','heal'].includes(name))return {family:'magic',gap:280,priority:2};
- if(['win','lose','drawGame','duel-start','match'].includes(name))return {family:'ceremony',gap:500,priority:4};
+ if(['win','lose','drawGame','duel-start','match','rankUp','rankDown','rankPromote'].includes(name))return {family:'ceremony',gap:500,priority:4};
  return {family:'combat',gap:65,priority:3};
 };
 const LIMIT:Record<Family,number>={ui:1,paper:3,combat:3,magic:2,ceremony:1};
