@@ -35,7 +35,7 @@ try{
  await page.goto(origin);await page.waitForSelector('.lounge-home');
  assert(!/ビブリオン魔導図書館|BIBLION|THE GRAND LIBRARY/.test(await page.locator('body').innerText()));
  await page.locator('img.lore-icon').evaluateAll(imgs=>Promise.all(imgs.map(i=>i.decode())));
- assert.equal(await page.locator('.lounge-rail svg').count(),0);
+ assert.equal(await page.locator('.lounge-rail nav .horizon-glyph svg').count(),7);
  await shot('home-final');
  await nav('cards');await page.waitForSelector('#grid .card');
  for(const [width,height] of [[1586,992],[1024,768],[390,844],[320,568]]){

@@ -1,0 +1,117 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "version": "9b9f8c21-2353-434e-964b-6e1be22b17fe",
+  "mergeCommit": "7029b6c",
+  "utc": "2026-09-29T11:01:40.738Z",
+  "preservedOverlay": "preserved-staging-source.json",
+  "checked": 15,
+  "allMatched": true,
+  "productionDeployed": false,
+  "files": [
+    {
+      "path": "assets/ceremonyScene-CJ_amyty.js",
+      "status": 200,
+      "sha256": "1139d888608ab58ecdc015d42cff620586271229ff8cc28e646e493fe68ac03e",
+      "remote": "1139d888608ab58ecdc015d42cff620586271229ff8cc28e646e493fe68ac03e",
+      "match": true
+    },
+    {
+      "path": "assets/RoomEnvironment-XX58V7Xx.js",
+      "status": 200,
+      "sha256": "418df499f3cd81c5cd6fc1735b6a38523ef820941f232d33f5bd35d5d0a3ce4a",
+      "remote": "418df499f3cd81c5cd6fc1735b6a38523ef820941f232d33f5bd35d5d0a3ce4a",
+      "match": true
+    },
+    {
+      "path": "assets/GLTFLoader-AEMP8Cz1.js",
+      "status": 200,
+      "sha256": "a134d072200aa544cf4e6e7256436b3153bcd09c8f2ca419b346090a0b36150e",
+      "remote": "a134d072200aa544cf4e6e7256436b3153bcd09c8f2ca419b346090a0b36150e",
+      "match": true
+    },
+    {
+      "path": "index.html",
+      "status": 200,
+      "sha256": "7a1147f0718e295d7e053d7330576a631b90fdb806ce7881aa8fab67ff387707",
+      "remote": "7a1147f0718e295d7e053d7330576a631b90fdb806ce7881aa8fab67ff387707",
+      "match": true
+    },
+    {
+      "path": "assets/crownOutcome-DY_I2UX1.js",
+      "status": 200,
+      "sha256": "e508a14f6bd5d98e61aece0eb2a37810d8fe98547860488e4e9d56e7ceaec9d7",
+      "remote": "e508a14f6bd5d98e61aece0eb2a37810d8fe98547860488e4e9d56e7ceaec9d7",
+      "match": true
+    },
+    {
+      "path": "assets/diceScene-CjWbG_6i.js",
+      "status": 200,
+      "sha256": "722314e72e026abb4a37c7af33337da48bf1dbdf979541d31633f87be12b929a",
+      "remote": "722314e72e026abb4a37c7af33337da48bf1dbdf979541d31633f87be12b929a",
+      "match": true
+    },
+    {
+      "path": "assets/duelScene-Dqc2K4zU.js",
+      "status": 200,
+      "sha256": "fed083883302cfa7fd909629a05cca1e50e9c27faa91022e6bf68887977d6876",
+      "remote": "fed083883302cfa7fd909629a05cca1e50e9c27faa91022e6bf68887977d6876",
+      "match": true
+    },
+    {
+      "path": "assets/main-ClAiVWQn.css",
+      "status": 200,
+      "sha256": "885109755f9aba0ae202492669961080348ef99452bbb8f72c176d6703137671",
+      "remote": "885109755f9aba0ae202492669961080348ef99452bbb8f72c176d6703137671",
+      "match": true
+    },
+    {
+      "path": "assets/tablePreview-2Rkra2Ey.css",
+      "status": 200,
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+      "remote": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+      "match": true
+    },
+    {
+      "path": "assets/paperDraw-BdrEmemy.js",
+      "status": 200,
+      "sha256": "16c64c98e8d036038765ddadd32417bc78e10a08dd4f02d96522a542873d5ad9",
+      "remote": "16c64c98e8d036038765ddadd32417bc78e10a08dd4f02d96522a542873d5ad9",
+      "match": true
+    },
+    {
+      "path": "assets/riftScene-nveBIcCY.js",
+      "status": 200,
+      "sha256": "065afd4ac39aa54aa04c7f73f2755db15cf90a6d9c1ee50ed1c21c3aea7a9492",
+      "remote": "065afd4ac39aa54aa04c7f73f2755db15cf90a6d9c1ee50ed1c21c3aea7a9492",
+      "match": true
+    },
+    {
+      "path": "assets/main-KPmMPAwZ.js",
+      "status": 200,
+      "sha256": "2d9959adc4a8406665a42c6d6ac6d035ff85afebd55112b3bb76ba7d61496f59",
+      "remote": "2d9959adc4a8406665a42c6d6ac6d035ff85afebd55112b3bb76ba7d61496f59",
+      "match": true
+    },
+    {
+      "path": "assets/tablePreview-Bbt3qVfB.js",
+      "status": 200,
+      "sha256": "c74ccb4cccf697e1826a3a5bf623a7e1bba4b3fa4965dc9d61c84874cb95b441",
+      "remote": "c74ccb4cccf697e1826a3a5bf623a7e1bba4b3fa4965dc9d61c84874cb95b441",
+      "match": true
+    },
+    {
+      "path": "assets/voidSurface-BvPkw2Ai.js",
+      "status": 200,
+      "sha256": "e8616f036f42357784307adde9cf5ff42d2c547dafa175bd6deeda8cdb93d7a1",
+      "remote": "e8616f036f42357784307adde9cf5ff42d2c547dafa175bd6deeda8cdb93d7a1",
+      "match": true
+    },
+    {
+      "path": "assets/three.module-oapt2zHx.js",
+      "status": 200,
+      "sha256": "f060866cb85d98b55adc0d38bdde124d7d5a4f40b7872696535fffd2b699bec8",
+      "remote": "f060866cb85d98b55adc0d38bdde124d7d5a4f40b7872696535fffd2b699bec8",
+      "match": true
+    }
+  ]
+}

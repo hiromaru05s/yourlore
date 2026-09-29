@@ -1,0 +1,20 @@
+{
+  "base": "586c17c790913e4377189a1f47c18d80c50f95f3",
+  "checkout": "/Users/hiromaru05s/.codex/worktrees/deck-cards-staging/LORE_TCG",
+  "scope": [
+    "client/src/main.ts",
+    "client/src/screens/cards.ts",
+    "client/src/screens/deck.ts",
+    "client/src/styles/passives.css",
+    "client/src/styles/deckWorkspace.css",
+    "client/src/styles/cardsWorkspace.css"
+  ],
+  "sha256": {
+    "client/src/main.ts": "263043167c813a1c6118e00a5f80676058790f78c872dd5c8e7dced3e1e1e5d6",
+    "client/src/screens/cards.ts": "dde097fd0f03a01defbd3c1fafa9ba659956868ba8df92eb16d28da85f37dbae",
+    "client/src/screens/deck.ts": "3316548cff235f526f64c702b4c82a2abe31e91406527a212a1113375eeca112",
+    "client/src/styles/passives.css": "43a03c04ba9e362d1d261d52b4f5b0701a00a75681d255cde42a28b39776a7e3",
+    "client/src/styles/deckWorkspace.css": "9db958541f3b7cece3e973038b16808d4e1885b177c8579b9ce9575b54da92d5",
+    "client/src/styles/cardsWorkspace.css": "306127881e1a1e89a666c6cf43355bf3053a436b6525fb135a2d90f31e88b75d"
+  }
+}
