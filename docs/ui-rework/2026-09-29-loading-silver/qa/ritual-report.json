@@ -1,0 +1,16 @@
+{
+  "checks": [
+    "Two uninterrupted cycles; progress stays at 42 until work completes",
+    "1280 desktop, 390 and 320 phones, 844 landscape fit without horizontal overflow",
+    "Reduced motion has no running ritual animations",
+    "Concurrent loaders stay independent; progress is monotonic and capped; removal cancels animations",
+    "Quarter-speed playback recorded",
+    "No browser runtime errors"
+  ],
+  "result": {
+    "monotonic": true,
+    "independent": true,
+    "capped": true,
+    "detached": true
+  }
+}

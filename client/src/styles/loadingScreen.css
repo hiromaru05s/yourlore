@@ -1,0 +1,33 @@
+/* A rigid silver-engraved card is lifted, read by light, then seated again.
+   All surfaces share one 5.6s CSS clock. No image fetches, RAF, or GPU contexts. */
+.game-loading.game-loading{gap:14px;overflow:auto;padding:28px 16px;box-sizing:border-box;background:radial-gradient(ellipse at 50% 44%,#1a344a 0,#0b1929 38%,#040b15 78%);color:#d5e6f6;letter-spacing:.1em;font:14px Georgia,'Yu Mincho',serif}
+.game-loading>.loading-logo{width:min(44vw,210px);height:auto;flex:none}
+.game-loading .loading-title{margin-top:5px;font-size:14px;letter-spacing:.15em}
+.loading-ritual{position:relative;width:320px;max-width:85vw;height:256px;flex:none;isolation:isolate;--ritual-duration:5.6s}
+.loading-deck{position:absolute;inset:0;perspective:850px;perspective-origin:50% 35%}
+.loading-card{position:absolute;width:132px;height:192px;left:calc(50% - 66px);top:32px;border:1px solid #a7bcc9;border-radius:9px;box-sizing:border-box;overflow:hidden;background:repeating-linear-gradient(116deg,#c9e9ff05 0 1px,transparent 1px 5px),radial-gradient(ellipse at 35% 15%,#335367,#112336 50%,#080f1c);box-shadow:1px 2px 0 #758995,2px 4px 0 #23394a,3px 6px 0 #81929a,4px 8px 0 #132130,6px 16px 20px #0007;transform-origin:50% 80%;color:#b1c4ce}
+.loading-card svg{width:100%;height:100%;display:block;stroke:currentColor;stroke-width:1;stroke-linejoin:round;stroke-linecap:round}
+.sigil-border{stroke:#bccbd0;stroke-width:1.2}.sigil-filigree{stroke:#a8babf;stroke-width:.7}.sigil-axis{stroke:#657f91;stroke-width:.6}.sigil-dial{stroke:#7896a8}.sigil-etch{stroke:#c8dade;stroke-width:1.1}.sigil-script{stroke:#8ca5b3;stroke-width:1.2}
+.loading-card--under{transform:translate(-32px,15px) rotateX(32deg) rotateZ(-19deg);filter:brightness(.58);animation:loadingUnder var(--ritual-duration) ease-in-out infinite}
+.loading-card--middle{transform:translate(29px,11px) rotateX(32deg) rotateZ(16deg);filter:brightness(.72);animation:loadingMiddle var(--ritual-duration) ease-in-out infinite}
+.loading-card--hero{transform:translateY(7px) rotateX(28deg) rotateZ(-4deg);animation:loadingLift var(--ritual-duration) cubic-bezier(.45,0,.22,1) infinite}
+.loading-inscription{position:absolute;inset:0;color:#edffff;clip-path:inset(100% 0 0);filter:drop-shadow(0 0 3px #91dfff);animation:loadingEtch var(--ritual-duration) ease-in-out infinite}
+.loading-inscription :is(.sigil-border,.sigil-filigree,.sigil-axis,.sigil-dial,.sigil-etch,.sigil-script){stroke:currentColor}
+.loading-inscription .sigil-axis{opacity:.4}.loading-inscription .sigil-dial{opacity:.65}
+.loading-sheen{position:absolute;inset:-30%;background:linear-gradient(118deg,transparent 35%,#b4e9ff04 43%,#d9f9ff30 49%,#fff7 50%,#c8ebff12 52%,transparent 60%);transform:translateX(-85%);mix-blend-mode:screen;animation:loadingSheen var(--ritual-duration) ease-in-out infinite}
+.loading-plinth{position:absolute;left:28px;right:28px;bottom:7px;height:43px;border-radius:50%;background:radial-gradient(ellipse,#0009 0,#0004 44%,transparent 70%);animation:loadingShadow var(--ritual-duration) ease-in-out infinite}
+.loading-contact{position:absolute;bottom:29px;left:82px;right:82px;height:2px;background:linear-gradient(90deg,transparent,#b9eaff,transparent);transform:scaleX(.45);opacity:.18;box-shadow:0 0 12px 3px #8cd6ff38;animation:loadingContact var(--ritual-duration) ease-in-out infinite}
+.game-loading .loading-progress{width:min(300px,76vw);display:flex;align-items:center;gap:16px;margin-top:3px}
+.loading-progress progress{appearance:none;width:100%;height:3px;border:0;border-radius:3px;overflow:hidden;background:#8199ac25}
+.loading-progress progress::-webkit-progress-bar{background:#8199ac25}.loading-progress progress::-webkit-progress-value{background:linear-gradient(90deg,#477491,#ddf7ff);border-radius:3px}.loading-progress progress::-moz-progress-bar{background:linear-gradient(90deg,#477491,#ddf7ff);border-radius:3px}
+.loading-progress b{min-width:42px;text-align:right;color:#e8faff;font:16px Georgia,serif;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.game-loading .loading-phase{color:#97adbd;font:11px sans-serif;letter-spacing:.04em;min-height:16px;text-align:center;max-width:85vw}
+@keyframes loadingLift{0%,12%,100%{transform:translateY(7px) rotateX(28deg) rotateZ(-4deg)}36%,60%{transform:translateY(-20px) rotateX(7deg) rotateY(-9deg) rotateZ(2deg)}80%,90%{transform:translateY(7px) rotateX(28deg) rotateZ(-4deg)}}
+@keyframes loadingUnder{0%,12%,85%,100%{transform:translate(-32px,15px) rotateX(32deg) rotateZ(-19deg)}40%,60%{transform:translate(-40px,17px) rotateX(35deg) rotateZ(-23deg)}}
+@keyframes loadingMiddle{0%,12%,85%,100%{transform:translate(29px,11px) rotateX(32deg) rotateZ(16deg)}40%,60%{transform:translate(37px,14px) rotateX(35deg) rotateZ(21deg)}}
+@keyframes loadingEtch{0%,15%{clip-path:inset(100% 0 0);opacity:.2}38%{clip-path:inset(0 0 0);opacity:.9}55%{clip-path:inset(0 0 0);opacity:1}76%,100%{clip-path:inset(0 0 100%);opacity:.3}}
+@keyframes loadingSheen{0%,23%{transform:translateX(-85%)}58%,100%{transform:translateX(85%)}}
+@keyframes loadingShadow{0%,12%,85%,100%{transform:scaleX(.8);opacity:.9}40%,60%{transform:scaleX(1.1);opacity:.5}}
+@keyframes loadingContact{0%,15%,100%{transform:scaleX(.45);opacity:.18}38%,60%{transform:scaleX(.7);opacity:.35}80%{transform:scaleX(1);opacity:.85}90%{transform:scaleX(.65);opacity:.3}}
+@media(max-height:600px){.game-loading.game-loading{gap:8px;padding:16px}.game-loading>.loading-logo{width:130px}.loading-ritual{height:194px;width:260px}.loading-deck{transform:scale(.75);transform-origin:50% 10%}.loading-plinth{bottom:0}.loading-contact{bottom:17px}.game-loading .loading-title{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.loading-ritual *{animation:none!important}.loading-card--hero{transform:translateY(-8px) rotateX(12deg)}.loading-inscription{clip-path:inset(0);opacity:.5}.loading-sheen{display:none}}

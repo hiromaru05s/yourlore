@@ -1,0 +1,12 @@
+<!doctype html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LORE — loading preview</title><style>body{margin:0;background:#040b15}.preview-controls{position:fixed;z-index:40000;bottom:12px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;color:#b6c9d5;font:12px sans-serif;white-space:nowrap}.preview-controls button{background:#152c3f;border:1px solid #637a8d;color:#d9e8f2;padding:7px 12px;border-radius:4px}.preview-controls input{width:100px}body.paused .loading-ritual *{animation-play-state:paused!important}</style></head><body><script type="module">
+import './src/styles/presentation.css';
+import {loadingScreen} from './src/ui/loadingScreen.ts';
+const loading=loadingScreen('screen-loader','ビブリオンの記録を準備しています');
+document.body.append(loading.element);loading.update(42,'画像の準備 42 / 100');
+const controls=document.createElement('div');controls.className='preview-controls';controls.innerHTML='<button id="pause">一時停止</button><button id="slow">0.25×</button><label>進捗 <input type="range" min="42" max="100" value="42"></label>';
+document.body.append(controls);
+controls.querySelector('#pause').onclick=e=>{document.body.classList.toggle('paused');e.target.textContent=document.body.classList.contains('paused')?'再生':'一時停止'};
+controls.querySelector('#slow').onclick=e=>{const slow=e.target.textContent==='0.25×';document.querySelector('.loading-ritual').style.setProperty('--ritual-duration',slow?'22.4s':'5.6s');e.target.textContent=slow?'1×':'0.25×'};
+controls.querySelector('input').oninput=e=>loading.update(+e.target.value,`画像の準備 ${e.target.value} / 100`);
+window.loadingPreview=loading;
+</script></body></html>

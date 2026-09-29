@@ -14,6 +14,6 @@ export function menuAssetUrls():string[]{
   ...Object.keys(PASSIVES).map(passiveIconUrl),
   ...SLEEVE_LIST.map(s=>s.url),...FURNITURE_LIST.map(s=>s.url),
   '/art/brand/lore-logo-transparent.webp','/art/lounge/stage-v1/stage.webp','/art/lounge/stage-v1/sigil.webp','/art/lounge/v1/library.webp',
-  '/art/seekers/menu-v1/blue.webp','/art/seekers/menu-v1/red.webp','/ui/loading/v1/runner.webp',
+  '/art/seekers/menu-v1/blue.webp','/art/seekers/menu-v1/red.webp',
  ])];
 }

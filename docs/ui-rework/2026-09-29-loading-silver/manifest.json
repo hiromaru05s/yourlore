@@ -1,0 +1,12 @@
+{
+  "status": "local implementation; not deployed",
+  "files": {
+    "client/src/ui/loadingScreen.ts": "8d6760764884c9a6f67a004d7d44b51fb9385029d34ed7aa4c1274da817f2a4a",
+    "client/src/ui/loadingSigil.ts": "09402c73c919f8b40302ef349058e97b82ccd64b7e8b51271d8c24a58cca7bf9",
+    "client/src/ui/menuAssets.ts": "7bffa257aef747d92f8b49f29515c573601296ade65a57ac09cd1b7d43b84a29",
+    "client/src/styles/loadingScreen.css": "43bbb3694c68b7e0e3c08e8d7c64bd71a54b9696e17e1310c5d11c92f3bc342a",
+    "client/loading-lab.html": "ec4a9425f7eea343edad6c88742a53753a2257787f661a3239b5334c0242c7ed",
+    "tests/loading-silver-browser.mjs": "6c14b19c0281e35171cf753927d72a933cf3ef3849d9e7bb86a50bf3e457a203",
+    "tests/presentation-loading-browser.mjs": "78bc2ecaf0c6741bf8fb144f417967ad47822d13fb7ba252742a1d424c822cca"
+  }
+}

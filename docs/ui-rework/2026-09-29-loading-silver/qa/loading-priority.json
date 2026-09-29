@@ -1,0 +1,1 @@
+{"checks":["login becomes usable while sound requests are deliberately held","zero audio requests before the screen is decoded","only two background audio requests at a time","login uses compressed WebP stage"]}
