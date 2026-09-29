@@ -1,0 +1,16 @@
+/* Approved study 02, revision 03: golden twin orbit, including all protruding seals. */
+.has-play-condition{isolation:isolate}
+.hand-condition-effect{position:absolute;inset:0;z-index:8;pointer-events:none}
+.hand-condition-effect svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;animation:hcond-enter 160ms ease-out both}
+.hand-condition-effect .hcond-aura,.hand-condition-effect .hcond-ground,.hand-condition-effect .hcond-base,.hand-condition-effect .hcond-stream,.hand-condition-effect .hcond-core{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.hcond-aura{stroke:#ffbd20;stroke-width:23;opacity:.72;filter:blur(4px)}
+.hcond-ground{stroke:#a15a02;stroke-width:16;opacity:.82}
+.hcond-base{stroke:#ffbd20;stroke-width:12}
+.hcond-stream{stroke:#fffbe8;animation:hcond-orbit 2300ms linear infinite}
+.hcond-core{stroke:#fffbe8;stroke-width:2.4;opacity:.88}
+@keyframes hcond-orbit{from{stroke-dashoffset:var(--orbit-start)}to{stroke-dashoffset:calc(var(--orbit-start) - 100px)}}
+@keyframes hcond-enter{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.hand-condition-effect svg{animation:none}.hcond-stream{animation:none;visibility:hidden}}
+/* Keep payment/turn dimming on the card contents, while the condition cue retains its meaning. */
+.game .card.has-play-condition.is-dim,.game .card.has-play-condition.is-dim:hover{filter:none!important}
+.game .card.has-play-condition.is-dim > :not(.hand-condition-effect){opacity:.55}
