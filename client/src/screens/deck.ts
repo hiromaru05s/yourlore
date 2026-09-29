@@ -1,6 +1,5 @@
 import {renderDeckAppearance} from '../ui/deckAppearance';
 import {isLocalDevAccount,loadLocalGuestProfile} from '../dev/localAccount';
-import {fitCardRows} from '../ui/cardDensity';
 import {revealCards} from '../ui/assetReadiness';
 import { homeIcon } from "../ui/homeIcons";
 import { loungeText } from "../ui/loungeText";
@@ -31,9 +30,11 @@ export function mountDeck(app: App): Screen {
         <h2>${t("deck.title")}</h2>
         <button class="btn btn-gold" id="save">${t("deck.save")}</button>
       </div>
+      <div class="deck-controls">
       <div class="deck-tabs" id="deckTabs"></div>
-      <div class="deck-note">${t("deck.note")}</div>
       <div class="deck-local-tabs" role="tablist"><button id="editTab" role="tab" aria-selected="true">${t("deck.current")}</button><button id="watchTab" role="tab" aria-selected="false">${t("deck.watch.title")}</button><button id="appearanceTab" role="tab" aria-selected="false">${loungeText("外観","Appearance","외형")}</button></div>
+      </div>
+      <div class="deck-note">${t("deck.note")}</div>
       <section id="deckEditSection">
       <div class="deck-current-column"><div class="deck-cur-head"><span>${t("deck.current")} <b id="deckCount"></b></span><button class="btn btn-ghost deck-use" id="useBtn"></button></div>
       <div class="deck-cur" id="deckCur"></div>
@@ -60,7 +61,6 @@ export function mountDeck(app: App): Screen {
 
   const q = (id: string): HTMLElement => wrap.querySelector("#" + id) as HTMLElement;
   const tabsEl = q("deckTabs"), curEl = q("deckCur"), poolEl = q("deckPool"), watchEl = q("watchPool");
-  const stopDensity=fitCardRows(poolEl,2.22,20);
   const countEl = q("deckCount"), watchCountEl = q("watchCount"), msgEl = q("deckMsg");
   const saveBtn = q("save") as HTMLButtonElement, useBtn = q("useBtn") as HTMLButtonElement;
   const searchEl = q("watchSearch") as HTMLInputElement;
@@ -235,6 +235,6 @@ export function mountDeck(app: App): Screen {
       if (!dirty()) return true;
       return confirmDialog({title: loungeText("未保存の変更", "Unsaved changes", "저장하지 않은 변경"), body: loungeText("変更を破棄して移動しますか？", "Discard your changes and leave?", "변경을 취소하고 이동할까요?"), confirm: loungeText("破棄して移動", "Discard & leave", "취소하고 이동"), cancel: t("common.cancel")});
     },
-    destroy: () => { dead = true;stopDensity();watchRevision++; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
+    destroy: () => { dead = true;watchRevision++; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
   };
 }

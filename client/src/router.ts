@@ -1,5 +1,6 @@
 import {coverScreen,isMenuReady} from './ui/assetReadiness';
 import { mountLounge, type LoungePage } from "./ui/lounge";
+import { startHomeMusic } from "./ui/homeMusic";
 // ============================================================
 // LORE — tiny screen router + auth/session context.
 // ============================================================
@@ -26,12 +27,16 @@ import { LOCAL_GUEST_KEY, canUseLocalGuest, loadLocalDevDecks, loadLocalGuestPro
 
 export interface Screen { destroy?(): void; beforeLeave?(): Promise<boolean>; }
 
+const HOME_MUSIC_PAGES = new Set<LoungePage>(["home", "deck", "cards", "leaderboard", "friends", "shop", "tutorial"]);
+
 export class App {
   root: HTMLElement;
   user: User | null = null;
   private current: Screen | null = null;
   private leaveLounge: (() => void) | null = null;
+  private stopHomeMusic: (() => void) | null = null;
   private navigating = false;
+  private homeEntranceShown = false;
   private cancelCover:(()=>void)|undefined;
 
   constructor(root: HTMLElement) { this.root = root; }
@@ -86,9 +91,19 @@ export class App {
       this.cancelCover?.();
       this.current?.destroy?.();
       this.leaveLounge?.(); this.leaveLounge = null;
+      const keepHomeMusic = page !== undefined && HOME_MUSIC_PAGES.has(page);
+      if (!keepHomeMusic) { this.stopHomeMusic?.(); this.stopHomeMusic = null; }
       this.root.innerHTML = "";
       this.current = make();
-      if (page) { this.leaveLounge = mountLounge(this, page);if(page==='login'||!isMenuReady()){const cover=coverScreen(this.root,page!=='login');this.cancelCover=cover.cancel;void cover.ready();} }
+      if (keepHomeMusic && !this.stopHomeMusic) this.stopHomeMusic = startHomeMusic();
+      if (page) {
+        this.leaveLounge = mountLounge(this, page);
+        const entrance=page==='home'&&!this.homeEntranceShown;
+        if(page==='login'||!isMenuReady()||entrance){
+          const cover=coverScreen(this.root,page!=='login',entrance);this.cancelCover=cover.cancel;
+          void cover.ready().then(ready=>{if(ready&&entrance)this.homeEntranceShown=true;});
+        }
+      }
     };
     if (this.navigating) return;
     if (this.current?.beforeLeave) {

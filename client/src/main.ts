@@ -15,6 +15,8 @@ import "./styles/lounge.css";
 import "./styles/loungeGame.css";
 import "./styles/loungeStage.css";
 import "./styles/presentation.css";
+import "./styles/deckWorkspace.css";
+import "./styles/cardsWorkspace.css";
 import { App } from "./router";
 import { initLang } from "./i18n";
 import { initAnalytics } from "./net/analytics";

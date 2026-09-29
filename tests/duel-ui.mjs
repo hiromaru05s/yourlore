@@ -17,7 +17,12 @@ globalThis.matchMedia=()=>({matches:false,addEventListener(){},removeEventListen
 globalThis.ResizeObserver=class{observe(){} unobserve(){} disconnect(){}};
 const temp=await mkdtemp(path.join(tmpdir(),'lore-ui-'));
 const entry=`export { BaseController } from './client/src/game/controller'; export { cardEl, cardRulesEl } from './client/src/ui/cardView'; export { zoomCard, closeZoom, revealSpell, setFxSkip, animateDraw } from './client/src/ui/anim'; export { paintDuelClock } from './client/src/ui/duelClock'; export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { cardPickerMulti, closeOverlay } from './client/src/ui/modal'; export { deckBucket } from './client/src/ui/duelMaterials'; export { createGame, reduce, ST_MAX, FIELD_MAX } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
-await build({stdin:{contents:entry,resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:path.join(temp,'ui.mjs')});
+await build({stdin:{contents:entry,resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:path.join(temp,'ui.mjs'),plugins:[{name:'dom-only-monster-renderer',setup(b){
+ // JSDOM has no Canvas or DOMMatrix. Exercise the real renderer separately in
+ // monster-adoption-browser.mjs; this suite checks game DOM and interaction.
+ b.onResolve({filter:/monster\/runtime$/},()=>({path:'monster-runtime',namespace:'dom-test'}));
+ b.onLoad({filter:/.*/,namespace:'dom-test'},()=>({contents:'export const syncMonsterStates=()=>{},clearMonsterStates=()=>{},setMonsterSkip=()=>{},monsterRect=()=>null,playMonster=async()=>false;',loader:'js'}));
+}}]});
 const {cardEl,cardRulesEl,zoomCard,closeZoom,BaseController,animateDraw,cardPickerMulti,closeOverlay,deckBucket,reduce,ST_MAX,FIELD_MAX,revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
 setLang('ja');
 // Clock values and accessibility survive the absence of a GPU, reconnect totals and expiry.

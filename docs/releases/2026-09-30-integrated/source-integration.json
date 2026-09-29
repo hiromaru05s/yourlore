@@ -1,0 +1,64 @@
+{
+  "base": "c4e5fbcd4886b03032d4f499e4d62c6d3f191559",
+  "deployedBaseline": "fde89197-243e-4ea0-9751-f6e0a0f276a1",
+  "recoveredFrom": "codex/rank-sfx-staging-20260929",
+  "files": [
+    {
+      "path": "client/src/main.ts",
+      "sha256": "263043167c813a1c6118e00a5f80676058790f78c872dd5c8e7dced3e1e1e5d6"
+    },
+    {
+      "path": "client/src/router.ts",
+      "sha256": "a82cd8332952d7a336e039dfdcb6da4d658210349c8470d479cbf96be2b2cc1a"
+    },
+    {
+      "path": "client/src/screens/cards.ts",
+      "sha256": "dde097fd0f03a01defbd3c1fafa9ba659956868ba8df92eb16d28da85f37dbae"
+    },
+    {
+      "path": "client/src/screens/deck.ts",
+      "sha256": "3316548cff235f526f64c702b4c82a2abe31e91406527a212a1113375eeca112"
+    },
+    {
+      "path": "client/src/styles/cardsWorkspace.css",
+      "sha256": "306127881e1a1e89a666c6cf43355bf3053a436b6525fb135a2d90f31e88b75d"
+    },
+    {
+      "path": "client/src/styles/deckWorkspace.css",
+      "sha256": "9db958541f3b7cece3e973038b16808d4e1885b177c8579b9ce9575b54da92d5"
+    },
+    {
+      "path": "client/src/styles/homeEntrance.css",
+      "sha256": "92ae12e8f7f3f81b1fd704f03f08c4e050ad0d5edbfb65a7d9352abbaff27015"
+    },
+    {
+      "path": "client/src/styles/passives.css",
+      "sha256": "43a03c04ba9e362d1d261d52b4f5b0701a00a75681d255cde42a28b39776a7e3"
+    },
+    {
+      "path": "client/src/styles/presentation.css",
+      "sha256": "74d2ba7f735b2e901216085d2eb9285bda19000ac2c6d7d8ced29201809d1fbd"
+    },
+    {
+      "path": "client/src/ui/assetReadiness.ts",
+      "sha256": "c3961d3f4dbfeb89a199272f875a0d91b26c81b1dfa04ca75186116ee5154da7"
+    },
+    {
+      "path": "client/src/ui/homeEntrance.ts",
+      "sha256": "1446407515dfde466a0784210895d3687b63b3e7cba0b9776124fbe548c59ba3"
+    },
+    {
+      "path": "client/src/ui/homeEntranceMotion.ts",
+      "sha256": "a8ae2e57cd81dc26801d01fa58129befcaa52cea8ffaf65901f015877e8197ad"
+    },
+    {
+      "path": "client/src/ui/homeMusic.ts",
+      "sha256": "960b6f8082894f3a0fd0c58d0141be4113a3a1b1cc4e869db80dfd3afddc5ff0"
+    }
+  ],
+  "excludedDevelopmentOnly": [
+    "client/src/ui/manaGain.ts: development preview override",
+    "client/src/ui/sceneMotion.ts: development shelfReturn preview"
+  ],
+  "scope": "All previously deployed runtime changes. Ongoing unapproved prototypes remain in original workspace."
+}

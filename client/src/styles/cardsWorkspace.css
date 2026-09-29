@@ -1,0 +1,69 @@
+/* Browse first: search and types stay visible; detailed filters open over the grid. */
+.lounge-cards { --bar: 64px; --dock: 72px; }
+.lounge-cards .lounge-topbar { padding: 4px 20px; }
+.lounge-cards .lounge-brand { width: 120px; height: 48px; }
+.lounge-cards .lounge-rail { height: 60px; bottom: 4px; }
+.lounge-cards .lounge-rail nav .lore-icon { width: 32px; height: 32px; }
+.lounge-cards .lounge-content { padding: 4px 16px 8px; }
+.lounge-cards .cards { max-width: none; }
+.lounge-cards .cards-head { min-height: 46px; padding: 6px 14px; gap: 8px 20px; }
+.lounge-cards .cards-head h2 { margin: 0; font-size: 18px; letter-spacing: .04em; gap: 8px; }
+.lounge-cards .cards-head h2 .lore-icon { width: 24px; height: 28px; }
+.lounge-cards .cards-head-r { flex: 1 1 220px; }
+.lounge-cards .lounge-search { max-width: 400px; gap: 6px; }
+.lounge-cards .lounge-search .lore-icon { width: 20px; height: 20px; }
+.lounge-cards .cards-search { max-width: none; height: 32px; padding: 5px 9px; font-size: 12px; }
+.lounge-cards .cards-lang select { height: 32px; padding: 4px 8px; font-size: 12px; }
+.lounge-cards .cards-head :is(input, select) { min-height: 0; }
+.lounge-cards .cards-toolbar { position: relative; z-index: 4; display: flex; align-items: center; gap: 12px; flex: none; padding: 6px 14px; border-bottom: 1px solid #809fb140; }
+.lounge-cards #typeRow { flex: 1; min-width: 0; flex-wrap: nowrap; gap: 5px; overflow-x: auto; scrollbar-width: thin; padding: 0; }
+.lounge-cards .cards-toolbar .chip { flex: none; padding: 5px 10px; min-height: 30px; font-size: 11px; }
+.lounge-cards .cards-advanced { position: static; flex: none; }
+.lounge-cards .cards-advanced summary { padding: 6px 10px; min-height: 30px; font-size: 12px; border: 1px solid #829bb9; border-radius: 4px; background: #102c46; color: #e5edfa; }
+.lounge-cards .cards-advanced[open] summary { border-color: #b5e2ff; background: #204b70; }
+.lounge-cards #activeFilterCount { margin-left: 6px; padding: 1px 5px; border-radius: 8px; background: #a7dcff; color: #10283b; font-weight: 700; }
+.lounge-cards .cards-filter-panel { position: absolute; top: calc(100% - 2px); right: 10px; width: min(620px, calc(100% - 20px)); max-height: min(420px, calc(100dvh - var(--bar) - var(--dock) - 120px)); overflow: auto; overscroll-behavior: contain; padding: 14px; border: 1px solid #8ba7c1; border-radius: 6px; background: #0c2036; box-shadow: 0 10px 30px #000a; }
+.lounge-cards .cards-filter-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; font-size: 12px; color: #d9e9f7; }
+.lounge-cards .cards-filter-heading:not(:first-child) { margin-top: 16px; }
+.lounge-cards #resetFilters { padding: 4px; border: 0; background: none; color: #b6d9f0; text-decoration: underline; cursor: pointer; font-size: 11px; }
+.lounge-cards #costRow { flex-wrap: wrap; gap: 5px; overflow: visible; padding: 0; }
+.lounge-cards .passive-filters { position: static; max-width: none; padding: 0; gap: 6px; border: 0; background: none; box-shadow: none; }
+.lounge-cards .passive-filters button { min-height: 36px; padding: 4px 8px; font-size: 11px; }
+.lounge-cards .passive-filters .passive-icon { width: 24px; height: 24px; }
+.lounge-cards #grid { --collection-card-width: clamp(88px, 7vw, 116px); grid-template-columns: repeat(auto-fill, minmax(var(--collection-card-width), 1fr)); gap: 16px 14px; padding: 12px 14px 18px; }
+.lounge-cards .collection-pager { padding: 4px 14px; gap: 14px; min-height: 36px; }
+.lounge-cards .collection-pager button { width: 36px; height: 26px; font-size: 20px; }
+.lounge-cards .collection-pager .cards-hint { flex: 1; margin: 0; padding: 0; border: 0; background: none; font-size: 10px; }
+.lounge-cards .cards-filter-panel :focus-visible { outline: 2px solid #b5e2ff; outline-offset: 2px; }
+
+@media (max-width: 650px) {
+  .lounge-cards { --bar: 54px; --dock: 58px; }
+  .lounge-cards .lounge-topbar { padding: 3px 10px; }
+  .lounge-cards .lounge-brand { width: 68px; height: 36px; }
+  .lounge-cards .lounge-rail { height: 52px; }
+  .lounge-cards .lounge-rail nav .lore-icon { width: 28px; height: 28px; }
+  .lounge-cards .lounge-content { padding: 2px 6px 4px; }
+  .lounge-cards .cards-head { padding: 5px 8px; gap: 4px; }
+  .lounge-cards .cards-head h2 { font-size: 15px; }
+  .lounge-cards .cards-head h2 .lore-icon { width: 20px; height: 24px; }
+  .lounge-cards .cards-count { font-size: 10px; }
+  .lounge-cards .cards-head-r { flex: 1 0 100%; margin: 0; gap: 6px; }
+  .lounge-cards .lounge-search { max-width: none; }
+  .lounge-cards .cards-search, .lounge-cards .cards-lang select { height: 30px; font-size: 11px; }
+  .lounge-cards .cards-toolbar { padding: 4px 8px; gap: 6px; }
+  .lounge-cards .cards-toolbar .chip { padding: 4px 7px; min-height: 28px; font-size: 10px; }
+  .lounge-cards .cards-advanced summary { padding: 5px 7px; min-height: 28px; font-size: 11px; }
+  .lounge-cards .cards-filter-panel { right: 5px; width: calc(100% - 10px); padding: 10px; }
+  .lounge-cards #grid { --collection-card-width: clamp(76px, 20vw, 96px); gap: 14px 10px; padding: 10px 10px 16px; }
+  .lounge-cards .collection-pager { padding: 3px 8px; gap: 10px; min-height: 32px; }
+  .lounge-cards .collection-pager .cards-hint { font-size: 9px; }
+}
+@media (min-width: 651px) and (max-height: 600px) {
+  .lounge-cards { --bar: 44px; --dock: 48px; }
+  .lounge-cards .lounge-brand { height: 36px; width: 95px; }
+  .lounge-cards .lounge-rail { height: 44px; bottom: 0; }
+  .lounge-cards .lounge-rail nav .lore-icon { width: 24px; height: 24px; }
+  .lounge-cards .cards-head { padding-block: 3px; min-height: 38px; }
+  .lounge-cards .cards-toolbar { padding-block: 3px; }
+  .lounge-cards #grid { --collection-card-width: 80px; }
+}

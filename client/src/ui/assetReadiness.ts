@@ -1,3 +1,4 @@
+import {playHomeEntrance} from './homeEntrance';
 import {menuAssetUrls} from './menuAssets';
 import {loadingScreen} from './loadingScreen';
 import {loungeText} from './loungeText';
@@ -36,11 +37,24 @@ export async function waitAssets(urls:string[],host:HTMLElement,onProgress?:(don
   });
  }
 }
-export function coverScreen(root:HTMLElement,preloadMenu=false):{ready:()=>Promise<void>;cancel:()=>void}{
+export function coverScreen(root:HTMLElement,preloadMenu=false,homeEntrance=false):{ready:()=>Promise<boolean>;cancel:()=>void}{
  const loading=loadingScreen('screen-loader',loungeText('書庫を開いています','Opening the library','서고를 여는 중')),cover=loading.element;
- document.body.append(cover);root.inert=true;root.setAttribute('aria-busy','true');let cancelled=false;
- const cancel=()=>{cancelled=true;cover.remove();root.inert=false;root.removeAttribute('aria-busy');};
- return {cancel,ready:async()=>{await waitAssets([...imageUrls(root),...(preloadMenu?menuAssetUrls():[])],cover,(done,total)=>loading.update(total?done/total*94:94,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`)));if(cancelled)return;loading.update(95,loungeText("画面を仕上げています","Finishing the scene","화면 마무리 중"));await document.fonts.ready;await Promise.all([...root.querySelectorAll('img')].map(i=>i.decode().catch(()=>{})));await new Promise<void>(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r())));if(preloadMenu)menuReady=true;loading.update(100,loungeText("準備完了","Ready","준비 완료"));cancel();document.dispatchEvent(new Event("lore:screen-ready"));}};
+ document.body.append(cover);root.inert=true;root.setAttribute('aria-busy','true');const abort=new AbortController();
+ const release=()=>{cover.remove();root.inert=false;root.removeAttribute('aria-busy');};
+ const cancel=()=>{abort.abort();release();};
+ return {cancel,ready:async()=>{
+  await waitAssets([...imageUrls(root),...(preloadMenu?menuAssetUrls():[])],cover,(done,total)=>loading.update(total?done/total*94:94,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`)));
+  if(abort.signal.aborted)return false;
+  loading.update(95,loungeText("画面を仕上げています","Finishing the scene","화면 마무리 중"));
+  await document.fonts.ready;await Promise.all([...root.querySelectorAll('img')].map(i=>i.decode().catch(()=>{})));
+  await new Promise<void>(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r())));
+  if(abort.signal.aborted)return false;
+  if(preloadMenu)menuReady=true;
+  loading.update(100,loungeText("準備完了","Ready","준비 완료"));
+  if(homeEntrance)await playHomeEntrance(root,cover,abort.signal);
+  if(abort.signal.aborted)return false;
+  release();document.dispatchEvent(new Event("lore:screen-ready"));return true;
+ }};
 }
 /** Swap a page of cards only after every image has decoded. Old cards stay visible. */
 export async function revealCards(grid:HTMLElement,nodes:Node[],current:()=>boolean):Promise<void>{

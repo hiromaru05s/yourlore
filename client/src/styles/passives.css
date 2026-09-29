@@ -22,6 +22,9 @@
 .card--field .card-status .passive-icon { --passive-size: clamp(16px, calc(var(--cw, 100px) * .24), 30px); }
 .card .card-status { top: auto; gap: 2px; align-items: center; flex-wrap: wrap-reverse; }
 .card--field .card-status { bottom: 23%; }
+/* In inspection, reserve the lower combat-seal area even when passives wrap.
+   Override the ordinary full-card 7% band without changing hand/field layout. */
+.zoom-overlay .card:not(.card--field) .card-status { bottom: 20%; }
 .card .card-status .passive-icon::before { content: none; }
 /* A minted corner marks granted abilities; the silhouette stays unchanged. */
 .passive-icon.kw--granted::after {

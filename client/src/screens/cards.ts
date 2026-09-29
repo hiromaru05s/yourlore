@@ -1,5 +1,4 @@
 import {passiveIcon} from '../ui/passiveIcon';
-import {fitCardRows} from '../ui/cardDensity';
 import {revealCards} from '../ui/assetReadiness';
 import {loungeText} from '../ui/loungeText';
 import { homeIcon } from "../ui/homeIcons";
@@ -47,22 +46,33 @@ export function mountCards(app: App): Screen {
           <div class="cards-lang"></div>
         </div>
       </div>
-      <div class="cards-filters">
+      <div class="cards-toolbar">
         <div class="chip-row" id="typeRow"></div>
-        <div class="chip-row" id="costRow"></div>
+        <details class="cards-advanced"><summary>${loungeText("絞り込み","Filters","필터")}<span id="activeFilterCount" hidden></span></summary>
+          <div class="cards-filter-panel">
+            <div class="cards-filter-heading"><strong>${loungeText("コスト","Cost","코스트")}</strong><button id="resetFilters">${loungeText("条件をリセット","Reset filters","필터 초기화")}</button></div>
+            <div class="chip-row" id="costRow"></div>
+            <div class="cards-filter-heading"><strong>${loungeText("パッシブ","Passives","패시브")}</strong></div>
+            <div id="passiveFilters" class="passive-filters"></div>
+          </div>
+        </details>
       </div>
-      <details class="cards-advanced"><summary>${loungeText("詳細検索：パッシブ","Advanced: passives","상세 검색: 패시브")}</summary><div id="passiveFilters" class="passive-filters"></div></details>
-      <div class="cards-hint">${t("cards.hint")}<button id="resetFilters">${loungeText("条件をリセット","Reset filters","필터 초기화")}</button></div>
-      <div class="cards-grid" id="grid"></div><div class="collection-pager"><button id="prevPage" aria-label="${loungeText("前のページ","Previous page","이전 페이지")}">‹</button><span id="pageLabel" aria-live="polite"></span><button id="nextPage" aria-label="${loungeText("次のページ","Next page","다음 페이지")}">›</button></div>
+      <div class="cards-grid" id="grid"></div><div class="collection-pager"><span class="cards-hint">${t("cards.hint")}</span><button id="prevPage" aria-label="${loungeText("前のページ","Previous page","이전 페이지")}">‹</button><span id="pageLabel" aria-live="polite"></span><button id="nextPage" aria-label="${loungeText("次のページ","Next page","다음 페이지")}">›</button></div>
     </div>`;
   app.root.appendChild(wrap);
   wrap.querySelector(".cards-lang")!.appendChild(langSelectEl());
 
   const grid = wrap.querySelector("#grid") as HTMLElement;
-  const stopDensity=fitCardRows(grid,3.3,12);
   const count = wrap.querySelector("#count") as HTMLElement;
   const typeRow = wrap.querySelector("#typeRow") as HTMLElement;
   const costRow = wrap.querySelector("#costRow") as HTMLElement;
+  const advanced=wrap.querySelector<HTMLDetailsElement>('.cards-advanced')!;
+  const closeFilters=(event:PointerEvent):void=>{if(!advanced.contains(event.target as Node))advanced.open=false;};
+  const escapeFilters=(event:KeyboardEvent):void=>{
+    if(event.key==='Escape'&&advanced.open){advanced.open=false;advanced.querySelector('summary')!.focus();}
+  };
+  document.addEventListener('pointerdown',closeFilters);
+  wrap.addEventListener('keydown',escapeFilters);
 
   // ---- type chips ----
   const typeDefs: [TypeFilter, string][] = [
@@ -108,8 +118,11 @@ export function mountCards(app: App): Screen {
   function render(): void {
     const version=++revision;
     passiveButtons.forEach(b=>b.setAttribute("aria-pressed",String(passiveFilters.has(b.dataset.passive!))));
-    typeChips.forEach((c) => c.el.classList.toggle("is-on", c.key === typeF));
-    costChips.forEach((c) => c.el.classList.toggle("is-on", c.val === costF));
+    typeChips.forEach((c) => {c.el.classList.toggle("is-on", c.key === typeF);c.el.setAttribute('aria-pressed',String(c.key===typeF));});
+    costChips.forEach((c) => {c.el.classList.toggle("is-on", c.val === costF);c.el.setAttribute('aria-pressed',String(c.val===costF));});
+    const activeCount=passiveFilters.size+(costF===-1?0:1);
+    const filterCount=wrap.querySelector<HTMLElement>('#activeFilterCount')!;
+    filterCount.hidden=activeCount===0;filterCount.textContent=String(activeCount);
 
     const list = ALL.filter((c) => {
       // "스타터" 탭 = 컬/보물상자/어튠 + 덱 구성 전용(noShop) 스타팅 카드 전부
@@ -149,5 +162,5 @@ export function mountCards(app: App): Screen {
   render();
 
   const unsub = onLangChange(() => app.cards());
-  return { destroy: ()=>{revision++;stopDensity();unsub();} };
+  return { destroy: ()=>{revision++;document.removeEventListener('pointerdown',closeFilters);wrap.removeEventListener('keydown',escapeFilters);unsub();} };
 }
