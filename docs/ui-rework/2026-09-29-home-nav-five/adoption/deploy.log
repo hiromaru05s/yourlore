@@ -33,14 +33,14 @@ Uploaded 18 of 18 assets
 Total Upload: 1090.35 KiB / gzip: 234.89 KiB
 Worker Startup Time: 47 ms
 Your Worker has access to the following bindings:
-Binding                                                                Resource                  
-env.MATCHMAKER (Matchmaker)                                            Durable Object            
-env.GAME_ROOM (GameRoom)                                               Durable Object            
-env.DB (lore-db-staging)                                               D1 Database               
-env.ASSETS                                                             Assets                    
-env.APP_ORIGIN ("*")                                                   Environment Variable      
-env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")      Environment Variable      
-env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")          Environment Variable      
+Binding                                                                Resource
+env.MATCHMAKER (Matchmaker)                                            Durable Object
+env.GAME_ROOM (GameRoom)                                               Durable Object
+env.DB (lore-db-staging)                                               D1 Database
+env.ASSETS                                                             Assets
+env.APP_ORIGIN ("*")                                                   Environment Variable
+env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")      Environment Variable
+env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")          Environment Variable
 
 Uploaded lore-server-staging (14.46 sec)
 Deployed lore-server-staging triggers (2.19 sec)
