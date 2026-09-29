@@ -20,9 +20,13 @@ export function mountHome(app: App): Screen {
   wrap.innerHTML = `
     <section class="lounge-home-main">
       <section class="lounge-play" aria-label="${esc(t("home.ranked.title"))}">
+        <div class="lounge-mode-tabs" role="group" aria-label="${esc(loungeText('対戦モード','Duel mode','대전 모드'))}">
+          <button id="rankedMode" aria-pressed="true">${loungeText('ランク','Ranked','랭크')}</button>
+          <button id="online" aria-pressed="false">${loungeText('ノーマル','Casual','일반')}</button>
+          <button id="bot" aria-pressed="false">BOT</button>
+        </div>
+        <button class="lounge-play-button" id="ranked"><small aria-hidden="true">DUEL</small><strong>${t("home.ranked.title")}</strong><span>${t("home.enterDuel")} →</span></button>
         <button id="myTier" class="lounge-rank-info" aria-live="polite" aria-label="${t("lb.title")}">${t("lb.season")} —</button>
-        <button class="lounge-play-button" id="ranked"><strong>${t("home.ranked.title")}</strong><span>${t("home.enterDuel")}</span></button>
-        <div class="lounge-secondary-modes"><button id="online">${homeIcon("duel")}<span>${t("home.online.title")}</span></button><button id="bot">${homeIcon("bot")}<span>${t("home.bot.title")}</span></button></div>
       </section>
       <button class="lounge-active-deck" id="deck" aria-label="${esc(t("home.deck.title"))}">
         <span class="lounge-deck-preview" aria-hidden="true">${["STARTER_MANA",...store.list[store.sel].cards].slice(0,3).map(id=>`<img src="${artUrl.sm(id)}" alt="" loading="lazy">`).join("")}</span>
@@ -31,8 +35,17 @@ export function mountHome(app: App): Screen {
     </section>`;
   app.root.appendChild(wrap);
   const q=(id:string)=>wrap.querySelector<HTMLButtonElement>('#'+id)!;
-  q('ranked').onclick=()=>app.rankedLobby(); q('online').onclick=()=>app.onlineLobby();
-  q('bot').onclick=()=>showBotDifficultyModal(app); q('deck').onclick=()=>app.deck();
+  let mode: 'ranked'|'online'|'bot'='ranked';
+  const selectMode=(next:typeof mode)=>{
+    mode=next;
+    for(const [id,key] of [['rankedMode','ranked'],['online','online'],['bot','bot']])q(id).setAttribute('aria-pressed',String(mode===key));
+    q('ranked').querySelector('strong')!.textContent=t(`home.${mode}.title`);
+    wrap.querySelector('.lounge-play')!.setAttribute('aria-label',t(`home.${mode}.title`));
+  };
+  q('rankedMode').onclick=()=>selectMode('ranked');
+  q('online').onclick=()=>selectMode('online');q('bot').onclick=()=>selectMode('bot');
+  q('ranked').onclick=()=>mode==='ranked'?app.rankedLobby():mode==='online'?app.onlineLobby():showBotDifficultyModal(app);
+  q('deck').onclick=()=>app.deck();
   q('myTier').onclick=()=>app.leaderboard();
   let disposed=false;
   const loadRank = () => void api.rankMe().then(r=>{

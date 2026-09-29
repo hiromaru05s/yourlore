@@ -1,4 +1,5 @@
 import '../styles/loungeHorizon.css';
+import '../styles/loungeSelectedMenu.css';
 import {loungeNavGlyph} from './loungeNavGlyphs';
 import {mountLoungeNavMotion} from './loungeNavMotion';
 import type { App } from '../router';
@@ -18,7 +19,7 @@ export function mountLounge(app: App, page: LoungePage): () => void {
   document.body.classList.add('lounge-active');
   const content = document.createElement('main'); content.className='lounge-content'; content.id='loungeContent';
   content.append(...Array.from(app.root.childNodes));
-  const shell=document.createElement('div'); shell.className=`lounge-shell lounge-${page}${page==='login'?'':' horizon-nav'}`;
+  const shell=document.createElement('div'); shell.className=`lounge-shell lounge-${page}${page==='login'?'':' horizon-nav selected-menu'}`;
   const nav: [LoungePage, HomeIcon, string, ()=>void][] = [
     ['home','home','home.title',()=>app.home()],['deck','deck','home.nav.deck',()=>app.deck()],
     ['cards','cards','home.nav.cards',()=>app.cards()],['leaderboard','trophy','home.nav.ranking',()=>app.leaderboard()],
@@ -34,7 +35,7 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     const rail=document.createElement('aside'); rail.className='lounge-rail'; rail.id='loungeNavigation';
     rail.innerHTML=`<nav aria-label="${esc(t('home.navigation'))}">${nav.map(([key,,label],index)=>`<button data-nav="${key}" ${key===page?'aria-current="page"':''}>${loungeNavGlyph(index)}<span>${t(label)}</span></button>`).join('')}</nav><div class="lounge-rail-bottom" id="loungeUtilities"><button data-utility-settings>${homeIcon('settings')}<span>${t('home.settings')}</span></button><button data-invite>${homeIcon('gift')}<span>${t('invite.title')}</span></button><button data-inquiry>${homeIcon('mail')}<span>${t('home.inquiry.title')}</span></button></div>`;
     const top=document.createElement('header'); top.className='lounge-topbar';
-    top.innerHTML=`<button class="lounge-brand" data-home aria-label="LORE HOME"><img src="/art/brand/lore-logo-transparent.webp" alt="LORE"></button><button class="lounge-menu" aria-controls="loungeUtilities" aria-expanded="${shell.classList.contains('is-menu-open')}" aria-label="${esc(t('home.navigation'))}">${homeIcon('menu')}</button><span class="lounge-location">${page==='profile'?t('profile.title'):page==='lobby'?t('mode.ranked'):t(nav.find(n=>n[0]===page)?.[2]??'home.title')}</span><button class="lounge-user" data-profile>${avatarHtml(user?.avatar,user?.display??'P',38)}<span><b>${esc(user?.display??'PLAYER')}</b><small>${t('home.seekerLevel')} ${seekerLevel(user?.wins??0,user?.losses??0).level}</small></span></button><button class="lounge-balance" data-shop>${homeIcon('shard')}<span><small>${t('home.shards')}</small><b>${(user?.credits??0).toLocaleString()}</b></span></button>`;
+    top.innerHTML=`<button class="lounge-brand" data-home aria-label="LORE HOME"><img src="/art/brand/lore-logo-transparent.webp" alt="LORE"></button><button class="lounge-menu" aria-controls="loungeUtilities" aria-expanded="${shell.classList.contains('is-menu-open')}" aria-label="${esc(t('home.navigation'))}"><span class="menu-stroke" aria-hidden="true"></span><span class="menu-stroke" aria-hidden="true"></span></button><span class="lounge-location">${page==='profile'?t('profile.title'):page==='lobby'?t('mode.ranked'):t(nav.find(n=>n[0]===page)?.[2]??'home.title')}</span><button class="lounge-user" data-profile>${avatarHtml(user?.avatar,user?.display??'P',38)}<span><b>${esc(user?.display??'PLAYER')}</b><small>${t('home.seekerLevel')} ${seekerLevel(user?.wins??0,user?.losses??0).level}</small></span></button><button class="lounge-balance" data-shop><span class="balance-glyph" aria-hidden="true">◇</span><span><small>${t('home.shards')}</small><b>${(user?.credits??0).toLocaleString()}</b></span></button>`;
     shell.prepend(rail,top);
     stopNavMotion=mountLoungeNavMotion(rail.querySelector('nav')!,lastLoungePage.get(app));
     lastLoungePage.set(app,page);

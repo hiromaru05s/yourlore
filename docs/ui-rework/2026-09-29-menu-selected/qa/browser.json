@@ -1,0 +1,60 @@
+{
+  "measurements": [
+    {
+      "page": "home",
+      "width": 1280,
+      "logo": 640,
+      "mainOverflow": false,
+      "overflow": false,
+      "selected": 1
+    },
+    {
+      "page": "leaderboard",
+      "width": 1280,
+      "logo": 640,
+      "mainOverflow": false,
+      "overflow": false,
+      "selected": 1
+    },
+    {
+      "page": "shop",
+      "width": 1280,
+      "logo": 640,
+      "mainOverflow": false,
+      "overflow": false,
+      "selected": 1
+    },
+    {
+      "page": "home",
+      "width": 320,
+      "logo": 160,
+      "mainOverflow": false,
+      "overflow": false,
+      "selected": 1
+    },
+    {
+      "page": "leaderboard",
+      "width": 320,
+      "logo": 160,
+      "mainOverflow": false,
+      "overflow": false,
+      "selected": 1
+    },
+    {
+      "page": "shop",
+      "width": 320,
+      "logo": 160,
+      "mainOverflow": false,
+      "overflow": false,
+      "selected": 1
+    }
+  ],
+  "fixtures": true,
+  "modeSelection": true,
+  "botDifficulty": true,
+  "cosmeticSelection": true,
+  "cosmeticFixtureAcquisition": true,
+  "categorySwitch": true,
+  "english320": true,
+  "menu": true
+}

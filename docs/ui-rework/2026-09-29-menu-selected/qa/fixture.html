@@ -1,0 +1,14 @@
+<!doctype html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Selected menu integration QA — fixtures</title></head><body><div id="app"></div><script type="module">
+import {api} from '/src/net/api.ts';
+if(import.meta.env.DEV){
+ localStorage.setItem('lore_lang',new URLSearchParams(location.search).get('lang')||'ja');
+ const rank={season:'2026-09',rank:26,tier:'gold',mmr:1184,wins:47,losses:19};
+ api.me=async()=>({id:'local-guest-user',display:'シーカー',credits:840,wins:47,losses:19,avatar:'M1'});
+ api.rankMe=async()=>rank;
+ api.leaderboard=async()=>({season:'2026-09',entries:Array.from({length:12},(_,i)=>({rank:i+1,display:['Aster','Lunaria','Shion','Noctis'][i%4],tier:'master',mmr:1820-i*18,wins:80-i,losses:20+i}))});
+ let sleeves=['default','astral'],furnitures=[],credits=840;
+ api.profile=async()=>({display:'シーカー',sleeves,furnitures,credits,wins:47,losses:19});
+ api.buySleeve=async(id)=>{(id.startsWith('furniture:')?furnitures:sleeves).push(id);return {sleeves,furnitures,credits}};
+ await import('/src/main.ts');
+}
+</script></body></html>
