@@ -6,6 +6,7 @@ import { rankEmblem } from './rankEmblem';
 import { applyEmblemPose, assembledPose, arrivingPose, departingPose, RANK_REVEAL_START, RANK_PROMOTION_END } from './rankEmblemMotion';
 import { loungeText as tr } from './loungeText';
 import { esc } from '../i18n';
+import { sfx, warmSounds } from './sound';
 
 export function progressLabel(mmr: number, tier: string): string {
   const p = rankProgress(mmr);
@@ -34,8 +35,9 @@ export class RankPresentation {
   private retry?: () => void;
   private slow = false;
   private finish?: () => void;
-  private hidden = () => { if (document.hidden) this.finish?.(); };
-  constructor() { document.addEventListener('visibilitychange',this.hidden); }
+  private soundAbort?: AbortController;
+  private hidden = () => { if (document.hidden) { this.soundAbort?.abort(); this.finish?.(); } };
+  constructor() { document.addEventListener('visibilitychange',this.hidden); void warmSounds(['rankUp','rankDown','rankPromote']); }
   set(change:RankChange):void {
     if (this.disposed || this.change) return; // duplicate/reconnect notification
     if (![change.before,change.after].every(n=>Number.isFinite(n)&&n>=0)) return;
@@ -85,11 +87,19 @@ export class RankPresentation {
         sessionStorage.setItem('lore_rank_seen', JSON.stringify([...seen.filter(id=>id!==c.matchId), c.matchId].slice(-50)));
       } catch { /* storage can be unavailable; per-controller guard still applies */ }
     }
-    if(this.played||document.hidden||matchMedia('(prefers-reduced-motion: reduce)').matches){this.played=true;complete();return;}
-    this.played=true;this.finish=complete;const start=performance.now();
+    if(this.played||document.hidden){this.played=true;complete();return;}
+    this.soundAbort=new AbortController();const soundOptions={signal:this.soundAbort.signal};
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches){
+      this.played=true;complete();
+      if(direction>0)sfx('rankPromote',soundOptions);else if(delta)sfx(delta>0?'rankUp':'rankDown',soundOptions);
+      return;
+    }
+    this.played=true;this.finish=complete;const start=performance.now();let ratingSound=false,promotionSound=false;
     const tick=(now:number)=>{
       if(!el.isConnected){this.detach();return;}
       const time=now-start, p=Math.max(0,Math.min(1,(time-500)/1600));
+      if(!ratingSound&&time>=500){ratingSound=true;if(delta&&time<2100)sfx(delta>0?'rankUp':'rankDown',soundOptions);}
+      if(!promotionSound&&time>=2700){promotionSound=true;if(direction>0&&time<3700)sfx('rankPromote',soundOptions);}
       const eased=p*p*(3-2*p);paint(Math.round(c.before+delta*eased));
       el.dataset.phase=time<500?'inscribe':time<2100?'count':'reveal';
       const reveal=time-RANK_REVEAL_START;
@@ -105,6 +115,6 @@ export class RankPresentation {
       if(time>=(changed?RANK_PROMOTION_END:3000)){complete();return;}this.frame=requestAnimationFrame(tick);
     };this.frame=requestAnimationFrame(tick);
   }
-  private detach():void {cancelAnimationFrame(this.frame);this.frame=0;this.finish=undefined;this.observer?.disconnect();this.observer=undefined;this.el=undefined;}
+  private detach():void {this.soundAbort?.abort();this.soundAbort=undefined;cancelAnimationFrame(this.frame);this.frame=0;this.finish=undefined;this.observer?.disconnect();this.observer=undefined;this.el=undefined;}
   destroy():void {this.disposed=true;this.detach();document.removeEventListener('visibilitychange',this.hidden);}
 }

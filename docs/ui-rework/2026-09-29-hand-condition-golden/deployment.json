@@ -1,0 +1,17 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "version": "2b15cfc8-5724-4513-a1d3-7ff8e5a91b42",
+  "variant": "02 golden twin, revision 03",
+  "implementationCommit": "3925fa44",
+  "baselineVersion": "4ee808c5-a55d-41a1-ae2c-3d41b7e5453c",
+  "firstDeployment": "18629084-caf7-4ee4-bd53-8250ffacbe45",
+  "parallelDeploymentReconciled": true,
+  "verifiedAt": "2026-09-29T13:20:28.543649+00:00",
+  "assetsMatched": 15,
+  "browserChecksPassed": 11,
+  "browserErrors": [],
+  "browserBoundary": "Built application, production router/OnlineController/GameView; authentication and WebSocket state are fixtures, not a real authenticated online match.",
+  "productionDeployed": false,
+  "databaseMigrated": false
+}

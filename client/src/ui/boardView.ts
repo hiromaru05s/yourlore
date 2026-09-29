@@ -1,5 +1,6 @@
 import {furnitureUrl} from '../shared/cosmetics';
 import {seekerPortrait} from './seekerAnimation';
+import {HandConditionHighlights} from './handCondition';
 import {handFan} from './handFan';
 import {fieldPositions,settleField} from './fieldLayout';
 import {clearBiblionFx} from './biblionFx';
@@ -10,7 +11,7 @@ import {prepareDuel} from './duelReadiness';
 // All animation lives in anim.ts; this file only draws + binds.
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
-import { purchaseAllowed, freeBuyBlocked, playBlockReason } from "../shared/engine";
+import { purchaseAllowed, freeBuyBlocked, playBlockReason, cardPlayConditionMet } from "../shared/engine";
 import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem, marketStockOf } from "../shared/engine";
 import { enchantHasTurnCountdown, fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
@@ -79,6 +80,7 @@ export interface BoardHandlers {
 }
 
 export class GameView {
+  private handConditions = new HandConditionHighlights();
   private riftCounts = new Map<string, number>();
   root: HTMLElement;
   you: Side;
@@ -305,6 +307,7 @@ export class GameView {
     this.cancelHandDrag?.();
     this.disposeScene?.();
     this.statRise.dispose();
+    this.handConditions.dispose();
     clearBiblionFx(true);
     if (this.onLayout) window.removeEventListener("lore:layout", this.onLayout);
     for (const fn of this.cleanups.splice(0)) { try { fn(); } catch { /* already gone */ } }
@@ -996,6 +999,7 @@ export class GameView {
     const old=new Map([...handEl.querySelectorAll<HTMLElement>(':scope > .card')].map(el=>[el.dataset.uid,el]));
     const keep=new Set(me.hand.map(c=>c.uid));
     for(const [uid,node] of old)if(!keep.has(uid!))node.remove();
+    const conditionCards:HTMLElement[]=[];
     me.hand.forEach((c, idx) => {
       const pc = playCost(c, me);
       const blocked=playBlockReason(g,this.you,c);
@@ -1009,6 +1013,7 @@ export class GameView {
         if(card)card.replaceWith(next);
         card=next;
       }
+      if(!g.over && !discarding && cardPlayConditionMet(g,this.you,c)===true)conditionCards.push(card);
       card.classList.remove('is-played');
       if(!aff&&!discarding)card.dataset.blockReason=!myTurn?t('play.block.turn'):g.pending?t('play.block.pending'):me.mana<pc?t('play.block.mana'):(getLang()==='ja'?blocked?.ja:getLang()==='ko'?blocked?.ko:null)||t('play.block.cond');
       else delete card.dataset.blockReason;
@@ -1017,6 +1022,7 @@ export class GameView {
       const position=handEl.children[idx];
       if(position!==card)handEl.insertBefore(card,position??null);
     });
+    this.handConditions.sync(conditionCards);
     this.layoutHand();
   }
 
