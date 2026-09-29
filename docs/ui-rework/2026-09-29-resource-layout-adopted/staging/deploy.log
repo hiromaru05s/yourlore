@@ -1,0 +1,39 @@
+⛅️ wrangler 4.130.0 (update available 4.143.0)
+───────────────────────────────────────────────
+🌀 Building list of assets...
+✨ Read 2103 files from the assets directory /Users/hiromaru05s/.codex/worktrees/portrait-resource-layout/LORE_TCG/client/dist
+🌀 Starting asset upload...
+🌀 Found 12 new or modified static assets to upload. Proceeding with upload...
++ /index.html
++ /assets/riftScene-B0qG4s_1.js
++ /assets/duelScene-DSGgljUj.js
++ /assets/main-D4IOQeOx.css
++ /assets/diceScene-D__3z9Kp.js
++ /assets/paperDraw-ClCjt-xh.js.map
++ /assets/riftScene-B0qG4s_1.js.map
++ /assets/main-xtVtt2Xb.js
++ /assets/paperDraw-ClCjt-xh.js
++ /assets/diceScene-D__3z9Kp.js.map
++ /assets/duelScene-DSGgljUj.js.map
++ /assets/main-xtVtt2Xb.js.map
+Uploaded 4 of 12 assets
+Uploaded 8 of 12 assets
+Uploaded 12 of 12 assets
+✨ Success! Uploaded 12 files (2024 already uploaded) (14.66 sec)
+
+Total Upload: 1088.66 KiB / gzip: 234.55 KiB
+Worker Startup Time: 53 ms
+Your Worker has access to the following bindings:
+Binding                                                                Resource
+env.MATCHMAKER (Matchmaker)                                            Durable Object
+env.GAME_ROOM (GameRoom)                                               Durable Object
+env.DB (lore-db-staging)                                               D1 Database
+env.ASSETS                                                             Assets
+env.APP_ORIGIN ("*")                                                   Environment Variable
+env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")      Environment Variable
+env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")          Environment Variable
+
+Uploaded lore-server-staging (21.38 sec)
+Deployed lore-server-staging triggers (2.32 sec)
+  test.yourlore.xyz (custom domain)
+Current Version ID: af36537a-fa13-4c02-82e6-99fb77549087

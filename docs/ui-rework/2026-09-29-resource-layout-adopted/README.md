@@ -13,3 +13,9 @@
 - `staging-verify.mjs` は配信ファイルのSHA-256と、配信されたBOT盤面の配置を承認済み座標と照合する。ログイン/APIはfixtureのため、認証付きオンライン対戦の検証ではない。
 
 公開の記録は `staging/` に保存する。
+
+## ステージング公開完了
+
+main統合コミット `0fac254d5840a8309a306fc9b84ba76ac73f2d15` から `https://test.yourlore.xyz` へ公開。Worker version は `af36537a-fa13-4c02-82e6-99fb77549087`。
+
+配信19ファイルのSHA-256一致、公開版BOT対戦のPC・スマホ縦横で両プレイヤーの配置が承認案③と一致、画面内への収まり、ブラウザエラー0件を確認。`staging/verification.json` とスクリーンショットを保存。認証/APIのみfixtureで、本番環境には未デプロイ。

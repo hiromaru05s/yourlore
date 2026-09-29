@@ -1,0 +1,9 @@
+{
+  "sourceCommit": "0fac254d5840a8309a306fc9b84ba76ac73f2d15",
+  "url": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "workerVersion": "af36537a-fa13-4c02-82e6-99fb77549087",
+  "implementationCommit": "cff7374",
+  "wranglerVersion": "4.130.0",
+  "scope": "Approved portrait resource layout 3 for both players; staging only"
+}
