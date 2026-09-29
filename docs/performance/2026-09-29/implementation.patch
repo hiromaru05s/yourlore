@@ -1,0 +1,341 @@
+diff --git a/client/src/ui/duelScene.ts b/client/src/ui/duelScene.ts
+index d2b439d..d5fe2ee 100644
+--- a/client/src/ui/duelScene.ts
++++ b/client/src/ui/duelScene.ts
+@@ -18,7 +18,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
+   let renderer:T.WebGLRenderer;
+   try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{root.dataset.tableState='fallback';root.dataset.widgetsReady='fallback';return ()=>{};}
+   let flightRenderer:T.WebGLRenderer;
+-  try{flightRenderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{renderer.dispose();root.dataset.tableState='fallback';root.dataset.widgetsReady='fallback';return ()=>{};}
++  try{flightRenderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{renderer.dispose();renderer.forceContextLoss();root.dataset.tableState='fallback';root.dataset.widgetsReady='fallback';return ()=>{};}
+   renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5,Math.sqrt(2600000/(innerWidth*innerHeight))));renderer.setClearColor(0,0);renderer.autoClear=false;
+   renderer.toneMapping=T.AgXToneMapping;renderer.toneMappingExposure=1;
+   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
+@@ -47,7 +47,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
+   const furniture=loadLibraryAssets(()=>{dirty=true;});
+   const items=new Map<string,Item>(),textures=new Map<string,T.Texture>();const loading=new T.LoadingManager();let pendingTextures=0;loading.onStart=()=>{pendingTextures++;};loading.onLoad=()=>{pendingTextures=0;};const loader=new T.TextureLoader(loading);
+   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+-  function texture(url:string){let t=textures.get(url);if(!t){t=loader.load(url);t.colorSpace=T.SRGBColorSpace;t.anisotropy=4;textures.set(url,t);}return t;}
++  function texture(url:string){let t=textures.get(url);if(!t){t=loader.load(url,()=>{dirty=true;});t.colorSpace=T.SRGBColorSpace;t.anisotropy=4;textures.set(url,t);}return t;}
+   function mesh(g:T.BufferGeometry,m:T.Material|T.Material[],parent:T.Object3D,x=0,y=0,z=0){const a=new T.Mesh(g,m);a.position.set(x,y,z);parent.add(a);return a;}
+   function disposeObject(object:T.Object3D){const geos=new Set<T.BufferGeometry>(),mats=new Set<T.Material>();object.traverse(o=>{if(o instanceof T.Mesh){geos.add(o.geometry);(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>mats.add(m));}});geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());}
+   function removeItem(item:Item){scene.remove(item.group);disposeObject(item.group);}
+@@ -107,56 +107,60 @@ export function mountDuelScene(root:HTMLElement):()=>void {
+     flows.push({group,start:performance.now(),from,to});
+   };
+   window.addEventListener('lore:buff-flow',onFlow);
+-  let perfStart=0,perfFrames=0,perfMs=0,fullPasses=0,portalPasses=0;
++  let perfStart=0,perfFrames=0,perfMs=0,fullPasses=0,portalPasses=0,displayPasses=0,flightPasses=0;
++  let dustActive=false;
+   const diagnostics=new URLSearchParams(location.search).has("polish");
+   function render(now:number):void {
+     if(dead)return;frame=requestAnimationFrame(render);if(document.hidden||now-last<16)return;last=now;
+     if(!root.isConnected){dispose();return;}
+     if(width!==innerWidth||height!==innerHeight){width=innerWidth;height=innerHeight;const ratio=Math.min(devicePixelRatio||1,1.5,Math.sqrt(2600000/(width*height)));renderer.setPixelRatio(ratio);flightRenderer.setPixelRatio(ratio);renderer.setSize(width,height);flightRenderer.setSize(width,height);cachedBoard.setSize(Math.round(width*renderer.getPixelRatio()),Math.round(height*renderer.getPixelRatio()));dirty=true;}
+-    const widgetMotion=widgets.tick(now),boardMotion=motion.tick(now),riftMotion=widgets.tickRift(now);
+-    if(!dirty&&!openingDirty&&!widgetMotion&&!boardMotion&&!dusts.length&&!flows.length&&flightScene.children.length<=1&&!flightActive&&now-lastPaint<2000){
+-      if(riftMotion){
+-        const start=performance.now();renderer.setRenderTarget(cachedBoard);camera.layers.set(2);renderer.render(scene,camera);camera.layers.set(0);present();portalPasses++;perfMs+=performance.now()-start;
+-      }
+-      return;
+-    }
+-    openingDirty=false;
+-    lastPaint=now;const paintStart=performance.now();
+-    if(dirty){refresh();dirty=false;}
+-    const {focal,angle,cx,cy}=boardLens(width,height),unit=cardUnit(root);
+-    // Pixel-space world: keep the near plane close enough to resolve thin card stock.
+-    camera.fov=T.MathUtils.radToDeg(2*Math.atan(height/(2*focal)));camera.aspect=width/height;camera.near=focal*.25;camera.far=focal*3;
+-    camera.position.set(0,focal*Math.cos(angle),focal*Math.sin(angle));camera.lookAt(0,0,0);camera.updateProjectionMatrix();camera.updateMatrixWorld();
+-    keyLight.position.set(-unit/.110*.6,unit/.110,unit/.110*.5);const shadowCamera=keyLight.shadow.camera;shadowCamera.left=-width*.8;shadowCamera.right=width*.8;shadowCamera.top=height;shadowCamera.bottom=-height;shadowCamera.near=1;shadowCamera.far=height*5;shadowCamera.updateProjectionMatrix();
+-    table.resize(width,height,unit);
+-    if(widgets.takeShadowUpdate())keyLight.shadow.needsUpdate=true;
+-    if(boardMotion)keyLight.shadow.needsUpdate=true;
+-    for(const item of items.values()){
+-      const r=layoutRect(item.element);item.group.position.set(r.left+r.width/2-cx,0,r.top+r.height/2-cy);item.group.scale.setScalar(unit);
+-      if(item.supply){
+-        item.group.position.y=unit*(marketHeight(true)-.0008/.110);
+-      }else if(item.market){
+-        item.group.position.y=unit*(marketHeight()-.0008/.110);
+-      }else if(item.pile){
+-        item.pile.cards.visible=!item.element.classList.contains('is-shuffling');
+-        if(item.element.classList.contains('pile--shelf')&&item.element.querySelector('.pile-print')){const front=item.pile.top.getObjectByName('stock-front');if(front)front.visible=false;}
+-        if(item.entered){const t=clamp((now-item.entered)/480);item.pile.top.position.y=item.pile.top.userData.restY+.3*(1-t)**3;keyLight.shadow.needsUpdate=true;if(t===1)item.entered=undefined;}
+-        item.group.updateMatrixWorld(true);
+-        const point=item.pile.top.getWorldPosition(new T.Vector3()).project(camera),screen={x:(point.x+1)*width/2,y:(1-point.y)*height/2};
+-        const anchorPoint=screenToBoard(screen.x,screen.y);
+-        let anchor=item.element.querySelector<HTMLElement>('.pile-draw-anchor');if(!anchor){anchor=document.createElement('span');anchor.className='pile-draw-anchor';item.element.append(anchor);}
+-        anchor.style.cssText=`left:${anchorPoint.x-r.left-unit/2}px;top:${anchorPoint.y-r.top-unit/.64/2}px;width:${unit}px;height:${unit/.64}px`;
+-        if(!item.element.classList.contains('pile--3d-ready'))item.element.classList.add('pile--3d-ready');
++    const paintStart=performance.now();
++    const widgetMotion=widgets.tick(now),boardMotion=motion.tick(now),riftMotion=widgets.tickRift(now),displayMotion=widgets.takeDisplayUpdate();
++    const full=dirty||openingDirty||widgetMotion||(root.dataset.sceneReady!=='true'&&now-lastPaint>=2000);
++    const active=flightScene.children.length>1;
++    const overlay=!!(dusts.length||flows.length)||dustActive;
++    // Card flights own their renderer. Button emission and rifts own separate
++    // layers; none of these require re-rendering static glass and furniture.
++    if(full){
++      openingDirty=false;lastPaint=now;
++      if(dirty){refresh();dirty=false;}
++      const {focal,angle,cx,cy}=boardLens(width,height),unit=cardUnit(root);
++      // Pixel-space world: keep the near plane close enough to resolve thin card stock.
++      camera.fov=T.MathUtils.radToDeg(2*Math.atan(height/(2*focal)));camera.aspect=width/height;camera.near=focal*.25;camera.far=focal*3;
++      camera.position.set(0,focal*Math.cos(angle),focal*Math.sin(angle));camera.lookAt(0,0,0);camera.updateProjectionMatrix();camera.updateMatrixWorld();
++      keyLight.position.set(-unit/.110*.6,unit/.110,unit/.110*.5);const shadowCamera=keyLight.shadow.camera;shadowCamera.left=-width*.8;shadowCamera.right=width*.8;shadowCamera.top=height;shadowCamera.bottom=-height;shadowCamera.near=1;shadowCamera.far=height*5;shadowCamera.updateProjectionMatrix();
++      table.resize(width,height,unit);
++      if(widgets.takeShadowUpdate())keyLight.shadow.needsUpdate=true;
++      for(const item of items.values()){
++        const r=layoutRect(item.element);item.group.position.set(r.left+r.width/2-cx,0,r.top+r.height/2-cy);item.group.scale.setScalar(unit);
++        if(item.supply){
++          item.group.position.y=unit*(marketHeight(true)-.0008/.110);
++        }else if(item.market){
++          item.group.position.y=unit*(marketHeight()-.0008/.110);
++        }else if(item.pile){
++          item.pile.cards.visible=!item.element.classList.contains('is-shuffling');
++          if(item.element.classList.contains('pile--shelf')&&item.element.querySelector('.pile-print')){const front=item.pile.top.getObjectByName('stock-front');if(front)front.visible=false;}
++          if(item.entered){const t=clamp((now-item.entered)/480);item.pile.top.position.y=item.pile.top.userData.restY+.3*(1-t)**3;keyLight.shadow.needsUpdate=true;if(t===1)item.entered=undefined;}
++          item.group.updateMatrixWorld(true);
++          const point=item.pile.top.getWorldPosition(new T.Vector3()).project(camera),screen={x:(point.x+1)*width/2,y:(1-point.y)*height/2};
++          const anchorPoint=screenToBoard(screen.x,screen.y);
++          let anchor=item.element.querySelector<HTMLElement>('.pile-draw-anchor');if(!anchor){anchor=document.createElement('span');anchor.className='pile-draw-anchor';item.element.append(anchor);}
++          anchor.style.cssText=`left:${anchorPoint.x-r.left-unit/2}px;top:${anchorPoint.y-r.top-unit/.64/2}px;width:${unit}px;height:${unit/.64}px`;
++          if(!item.element.classList.contains('pile--3d-ready'))item.element.classList.add('pile--3d-ready');
++        }
++        item.group.position.y+=Number(item.group.userData.introHeight)||0;
++        item.group.position.z+=Number(item.group.userData.introZ)||0;
++        if(root.querySelector('.awaiting-board'))item.group.visible=false;
+       }
+-      item.group.position.y+=Number(item.group.userData.introHeight)||0;
+-      item.group.position.z+=Number(item.group.userData.introZ)||0;
+-      if(root.querySelector('.awaiting-board'))item.group.visible=false;
++      const marketItem=items.get('market-base');
++      if(marketItem)widgets.setMarketMotion(Number(marketItem.group.userData.introHeight)||0,Number(marketItem.group.userData.introZ)||0,marketItem.group.visible);
++      renderer.setRenderTarget(cachedBoard);renderer.setScissorTest(false);renderer.clear();renderer.render(scene,camera);
++      if(root.querySelector('.pt-mana[data-gain-start]'))getManaFormation()?.postprocess(renderer,cachedBoard);
++      fullPasses++;
++    }else if(riftMotion){
++      renderer.setRenderTarget(cachedBoard);camera.layers.set(2);renderer.render(scene,camera);camera.layers.set(0);portalPasses++;
+     }
+-    const marketItem=items.get('market-base');
+-    if(marketItem)widgets.setMarketMotion(Number(marketItem.group.userData.introHeight)||0,Number(marketItem.group.userData.introZ)||0,marketItem.group.visible);
+-    renderer.setRenderTarget(cachedBoard);renderer.setScissorTest(false);renderer.clear();renderer.render(scene,camera);
+-    if(root.querySelector('.pt-mana[data-gain-start]'))getManaFormation()?.postprocess(renderer,cachedBoard);
+-    fullPasses++;present();
++    if(full||riftMotion||displayMotion||overlay){present();displayPasses++;}
+     if(furniture.has('market')&&!root.classList.contains('market-model-ready'))root.classList.add('market-model-ready');
+     if(furniture.has('supply')&&!root.classList.contains('supply-model-ready'))root.classList.add('supply-model-ready');
+     if(dusts.length || flows.length){
+@@ -180,10 +184,13 @@ export function mountDuelScene(root:HTMLElement):()=>void {
+       renderer.render(dustScene,dustCamera);
+     }
+     canvas.dataset.dustCount=String(dusts.length);
+-    if(diagnostics){if(!perfStart)perfStart=now;perfFrames++;perfMs+=performance.now()-paintStart;if(now-perfStart>=5000){root.dataset.scenePerf=JSON.stringify({seconds:+((now-perfStart)/1000).toFixed(1),paints:perfFrames,fullPasses,portalPasses,cpuMs:+perfMs.toFixed(1),calls:renderer.info.render.calls,triangles:renderer.info.render.triangles});perfStart=now;perfFrames=0;perfMs=0;fullPasses=0;portalPasses=0;}}
+-    const active=flightScene.children.length>1;
+-    if(active||flightActive)flightRenderer.render(flightScene,camera);
++    dustActive=!!(dusts.length||flows.length);
++    if(active||flightActive||boardMotion){flightRenderer.render(flightScene,camera);flightPasses++;}
+     flightActive=active;
++    if(diagnostics){
++      if(!perfStart)perfStart=now;perfFrames++;perfMs+=performance.now()-paintStart;
++      if(now-perfStart>=5000){root.dataset.scenePerf=JSON.stringify({seconds:+((now-perfStart)/1000).toFixed(1),ticks:perfFrames,fullPasses,portalPasses,displayPasses,flightPasses,cpuMs:+perfMs.toFixed(1),calls:renderer.info.render.calls,triangles:renderer.info.render.triangles});perfStart=now;perfFrames=0;perfMs=0;fullPasses=0;portalPasses=0;displayPasses=0;flightPasses=0;}
++    }
+     if(!root.classList.contains('duel-webgl'))root.classList.add('duel-webgl');
+     if(root.dataset.sceneReady!=='true'&&furniture.settled&&widgets.settled&&pendingTextures===0&&root.dataset.tableState!=='loading'){
+       // Compile/upload hidden opening furniture offscreen too, so its first fall
+@@ -197,7 +204,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
+   const lost=(event:Event)=>{event.preventDefault();dispose();};canvas.addEventListener('webglcontextlost',lost);flightCanvas.addEventListener('webglcontextlost',lost);
+   function dispose(){
+     if(dead)return;dead=true;disposeOpening();root.dataset.tableState='fallback';motion.dispose();cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:summon-impact',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);flightCanvas.removeEventListener('webglcontextlost',lost);
+-    items.forEach(removeItem);textures.forEach(t=>t.dispose());table.dispose();furniture.dispose();widgets.dispose();disposeFormationBloom();keyLight.shadow.dispose();disposeObject(dustScene);dustMap.dispose();environment.dispose();cachedBoard.dispose();presentQuad.geometry.dispose();presentMaterial.dispose();renderer.dispose();canvas.remove();flightRenderer.dispose();flightCanvas.remove();
++    items.forEach(removeItem);textures.forEach(t=>t.dispose());table.dispose();furniture.dispose();widgets.dispose();disposeFormationBloom();keyLight.shadow.dispose();disposeObject(dustScene);dustMap.dispose();environment.dispose();cachedBoard.dispose();presentQuad.geometry.dispose();presentMaterial.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove();flightRenderer.dispose();flightRenderer.forceContextLoss();flightCanvas.remove();
+     root.querySelectorAll<HTMLElement>('.pile').forEach(el=>{el.classList.remove('pile--3d-ready');delete el.dataset.furniture;el.querySelector('.pile-draw-anchor')?.remove();});clearBoardProjection(root);root.classList.remove('duel-webgl','market-model-ready','supply-model-ready');
+   }
+   frame=requestAnimationFrame(render);return dispose;
+diff --git a/client/src/ui/readingBoardWidgets.ts b/client/src/ui/readingBoardWidgets.ts
+index bfa3a01..f2ac9ec 100644
+--- a/client/src/ui/readingBoardWidgets.ts
++++ b/client/src/ui/readingBoardWidgets.ts
+@@ -18,7 +18,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
+  const segments:T.Mesh[]=[];const rerollMaterials:Array<{material:T.MeshStandardMaterial;color:T.Color}>=[];
+  const lit=new T.MeshStandardMaterial({color:0x3daacb,emissive:0x3ba7cc,emissiveIntensity:.45,metalness:.1,roughness:.32}),dark=new T.MeshStandardMaterial({color:0x10202b,metalness:.2,roughness:.42});owned.push(lit,dark);
+  const color=new T.Color();
+- let turnLights:TurnLightHandle|undefined;
++ let turnLights:TurnLightHandle|undefined,displayDirty=false;
+  const reducedTurnLight=matchMedia('(prefers-reduced-motion: reduce)');
+  function releaseTemplate(object:T.Object3D){
+   const geos=new Set<T.BufferGeometry>(),mats=new Set<T.Material>(),maps=new Set<T.Texture>();
+@@ -57,9 +57,9 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
+   ready=true;root.dataset.widgetsReady='true';
+  })().catch(error=>{if(!dead){console.error('Reading board widgets failed',error);root.dataset.widgetsReady='fallback';ready=true;}});
+  const id=(event:Event)=>(event.target as Element)?.closest<HTMLElement>('#endBtn,#refreshBtn')?.id||'';
+- const over=(e:Event)=>{const next=id(e);if(next!==hover)animateUntil=performance.now()+500;hover=next;};const down=(e:Event)=>{const target=(e.target as Element)?.closest<HTMLButtonElement>('button');pressed=target&&!target.disabled?id(e):'';animateUntil=performance.now()+500;};
+- const up=()=>{pressed='';animateUntil=performance.now()+650;};
+- const click=(e:Event)=>{const button=(e.target as Element).closest<HTMLButtonElement>('button');if(button?.disabled)return;const now=performance.now();if(id(e)==='refreshBtn')rerollTime=now;if(id(e)==='endBtn')turnTime=now;animateUntil=now+1000;};
++ const over=(e:Event)=>{const next=id(e);if(next!==hover)animateUntil=performance.now()+500;hover=next;};const down=(e:Event)=>{const target=(e.target as Element)?.closest<HTMLButtonElement>('button'),next=target&&!target.disabled?id(e):'';if(!next)return;pressed=next;animateUntil=performance.now()+500;};
++ const up=()=>{if(!pressed)return;pressed='';animateUntil=performance.now()+650;};
++ const click=(e:Event)=>{const button=(e.target as Element).closest<HTMLButtonElement>('button'),control=id(e);if(!control||button?.disabled)return;const now=performance.now();if(control==='refreshBtn')rerollTime=now;if(control==='endBtn')turnTime=now;animateUntil=now+1000;};
+  root.addEventListener('pointerover',over);root.addEventListener('pointerdown',down);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);root.addEventListener('click',click,true);
+  let clockSegments=-1;
+  function tick(now:number){
+@@ -111,7 +111,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
+   const end=root.querySelector<HTMLButtonElement>('#endBtn'),refresh=root.querySelector<HTMLButtonElement>('#refreshBtn'),enemy=root.dataset.readingTurn!=='player';
+   for(const m of rerollMaterials){color.copy(m.color);if(refresh?.disabled){const l=color.r*.2126+color.g*.7152+color.b*.0722;color.lerp(new T.Color(l,l,l),.8).multiplyScalar(.5);}else if(hover==='refreshBtn')color.multiplyScalar(1.12);m.material.color.lerp(color,1-Math.exp(-dt*18));}
+   const clock=root.querySelector<HTMLElement>('.mp-clock.show'),remaining=clock?Math.min(1,Number(clock.dataset.remaining)/Math.max(1,Number(clock.dataset.total))):1;
+-  const litCount=Math.ceil(remaining*24);if(litCount!==clockSegments){clockSegments=litCount;changed=true;}
++  const litCount=Math.ceil(remaining*24);if(litCount!==clockSegments){clockSegments=litCount;if(turnLights?.renderDisplay)displayDirty=true;else changed=true;}
+   segments.forEach((mesh,i)=>{mesh.material=i<litCount?lit:dark;});
+   const turnAge=now-turnTime;displayEnemy=enemy;
+   color.set(displayEnemy?0x492633:0x133042);if(hover==='endBtn'&&!end?.disabled)color.multiplyScalar(1.18);enamel?.color.lerp(color,1-Math.exp(-dt*18));
+@@ -130,14 +130,18 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
+    turnLights=preview?preview(turn,segments,scene):createTurnLights(turn,segments,()=> 'porcelain',scene);
+    if(!preview)root.dataset.turnlight='porcelain';
+   }
+-  if(turnLights)changed=turnLights.update({now,active:!enemy&&!!end&&!end.disabled,enemy,remaining,hover:!!end?.matches(':hover')||document.activeElement===end,pressed:pressed==='endBtn',reduced:reducedTurnLight.matches})||changed;
++  if(turnLights){
++   const lightChanged=turnLights.update({now,active:!enemy&&!!end&&!end.disabled,enemy,remaining,hover:!!end?.matches(':hover')||document.activeElement===end,pressed:pressed==='endBtn',reduced:reducedTurnLight.matches});
++   // Display-layer emission does not invalidate the static HDR furniture cache.
++   if(turnLights.renderDisplay)displayDirty=lightChanged||displayDirty;else changed=lightChanged||changed;
++  }
+   group.visible=true;
+ 
+   const state=`${enemy}:${end?.disabled}:${refresh?.disabled}`;
+   if(state!==lastState){animateUntil=now+500;lastState=state;}
+   return changed||now<animateUntil||t<1;
+  }
+- return {tick,renderTurnLights(renderer:T.WebGLRenderer,camera:T.Camera){turnLights?.renderDisplay?.(renderer,camera);},tickRift:(now:number)=>apertures.tick(now),takeShadowUpdate(){const value=shadowDirty;shadowDirty=false;return value;},warm(render:()=>void){
++ return {tick,takeDisplayUpdate(){const value=displayDirty;displayDirty=false;return value;},renderTurnLights(renderer:T.WebGLRenderer,camera:T.Camera){turnLights?.renderDisplay?.(renderer,camera);},tickRift:(now:number)=>apertures.tick(now),takeShadowUpdate(){const value=shadowDirty;shadowDirty=false;return value;},warm(render:()=>void){
+   const wasVisible=group.visible,rerollVisible=reroll?.visible;
+   const saved=manas.flatMap(m=>Object.values(m.batches).flat().map(mesh=>({mesh,count:mesh.count,visible:mesh.visible})));
+   group.visible=true;if(reroll)reroll.visible=true;
+diff --git a/client/src/ui/riftInkMaterial.ts b/client/src/ui/riftInkMaterial.ts
+index c506c35..acdfa3a 100644
+--- a/client/src/ui/riftInkMaterial.ts
++++ b/client/src/ui/riftInkMaterial.ts
+@@ -121,7 +121,7 @@ export class RiftInkMaterial {
+  private gl:WebGLRenderingContext;
+  private program:WebGLProgram;
+  private cardTexture:WebGLTexture;
+- private face:HTMLCanvasElement|undefined;
++ private faces=new Map<HTMLCanvasElement,WebGLTexture>();
+  private time:WebGLUniformLocation|null;
+ 
+  private aspect:WebGLUniformLocation|null;
+@@ -147,10 +147,20 @@ export class RiftInkMaterial {
+   const gl=this.gl;if(gl.isContextLost())throw new Error('WebGL context lost');
+   const w=Math.max(224,Math.min(768,Math.ceil(size/32)*32)),h=Math.round(w*3.4/2.8);
+   if(this.canvas.width!==w||this.canvas.height!==h){this.canvas.width=w;this.canvas.height=h;}
+-  gl.viewport(0,0,w,h);gl.useProgram(this.program);gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,this.cardTexture);
+-  if(this.face!==face){gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,face);this.face=face;}
++  gl.viewport(0,0,w,h);gl.useProgram(this.program);gl.activeTexture(gl.TEXTURE0);
++  let texture=this.faces.get(face);
++  if(!texture){
++   // Simultaneous removals share the shader, but retain their immutable faces
++   // on the GPU instead of uploading every card again on every frame.
++   if(this.faces.size>=8){const [old,tx]=this.faces.entries().next().value!;this.faces.delete(old);if(tx!==this.cardTexture)gl.deleteTexture(tx);}
++   texture=this.faces.size===0?this.cardTexture:gl.createTexture()!;
++   gl.bindTexture(gl.TEXTURE_2D,texture);
++   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
++   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
++   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,face);this.faces.set(face,texture);
++  }else gl.bindTexture(gl.TEXTURE_2D,texture);
+   gl.uniform1f(this.time,ms);gl.uniform1f(this.aspect,aspect);gl.drawArrays(gl.TRIANGLES,0,6);return this.canvas;
+  }
+- forgetFace(){this.face=undefined;}
+- dispose(){const gl=this.gl;this.textures.forEach(t=>gl.deleteTexture(t));gl.deleteBuffer(this.buffer);gl.deleteProgram(this.program);gl.getExtension('WEBGL_lose_context')?.loseContext();}
++ forgetFace(){for(const texture of this.faces.values())if(texture!==this.cardTexture)this.gl.deleteTexture(texture);this.faces.clear();}
++ dispose(){this.forgetFace();const gl=this.gl;this.textures.forEach(t=>gl.deleteTexture(t));gl.deleteBuffer(this.buffer);gl.deleteProgram(this.program);gl.getExtension('WEBGL_lose_context')?.loseContext();}
+ }
+diff --git a/client/src/ui/riftInkScene.ts b/client/src/ui/riftInkScene.ts
+index caf721f..72da259 100644
+--- a/client/src/ui/riftInkScene.ts
++++ b/client/src/ui/riftInkScene.ts
+@@ -17,8 +17,12 @@ export async function playSilverRift(node:HTMLElement,target:HTMLElement,face:HT
+  const lc=local.getContext('2d')!;
+  const canvas=document.createElement('canvas'),c=canvas.getContext('2d')!;
+  canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);canvas.className='rift-fold-canvas rift-transmute-canvas rift-silver-ink-canvas';canvas.setAttribute('aria-hidden','true');canvas.dataset.variant='inscription';canvas.dataset.duration=String(SILVER_INK_DURATION);
+- const cols=8,rows=10,grid:{uv:Point;rest:Point}[]=[];
+- for(let y=0;y<=rows;y++)for(let x=0;x<=cols;x++)grid.push({uv:{x:x/cols*local.width,y:y/rows*local.height},rest:project(w/2+(x/cols-.5)*padded*2.8,h/2+(y/rows-.5)*padded*3.4)});
++ // Let the compositor project this single surface through the exact card
++ // matrix. Canvas2D's 160 clipped triangle copies approximated the same plane.
++ const surfaceMatrix=start.translate(w/2-padded*1.4,h/2-padded*1.7).scale(padded*2.8/local.width,padded*3.4/local.height);
++ local.className='rift-silver-source';local.setAttribute('aria-hidden','true');
++ local.style.cssText=`position:fixed;left:0;top:0;width:${local.width}px;height:${local.height}px;pointer-events:none;z-index:126;transform-origin:0 0;will-change:transform`;
++
+  let acquired:ReturnType<typeof acquireSilverInk>;
+  try{acquired=acquireSilverInk();}catch{return false;}
+  const style=node.getAttribute('style');let frame=0,finish=(_ok:boolean)=>{},ok=true;
+@@ -32,15 +36,14 @@ export async function playSilverRift(node:HTMLElement,target:HTMLElement,face:HT
+    c.save();c.globalAlpha=.17*s.lift*(1-s.collapse);c.fillStyle='#20102e';c.shadowColor='#281733';c.shadowBlur=screenWidth*.08;c.beginPath();c.ellipse(source.x,source.y+screenWidth*.35,screenWidth*.35,screenWidth*.08,0,0,Math.PI*2);c.fill();c.restore();
+    lc.setTransform(1,0,0,1,0,0);lc.clearRect(0,0,local.width,local.height);lc.translate(local.width/2,local.height/2);
+    acquired.renderer.draw(lc,face,{x:0,y:0},{x:0,y:0},unit,ms,{part:'source',heightRatio:ratio,lift:0,ground:false});
+-   const points=grid.map(v=>({x:v.rest.x,y:v.rest.y-lift*s.lift}));
+-   for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){const a=y*(cols+1)+x,b=a+1,d=a+cols+1,e=d+1;for(const ids of [[a,b,e],[a,e,d]])triangle(c,local,ids.map(i=>grid[i].uv),ids.map(i=>points[i]));}
+-  }
++   local.style.transform=new DOMMatrix().translate(0,-lift*s.lift).multiply(surfaceMatrix).toString();
++  }else local.hidden=true;
+   acquired.renderer.draw(c,face,source,sink,screenWidth,ms,{part:'transfer',lift});
+  }
+  try{
+   // Warm the shader before starting the animation clock or hiding the live card.
+   paint(0);if(invalid())return true;
+-  document.body.append(canvas);node.style.visibility='hidden';onStart();
++  document.body.append(canvas,local);node.style.visibility='hidden';onStart();
+   const begun=performance.now();
+   ok=await new Promise<boolean>(resolve=>{
+    let ended=false;finish=value=>{if(ended)return;ended=true;cancelAnimationFrame(frame);resolve(value);};
+@@ -48,14 +51,6 @@ export async function playSilverRift(node:HTMLElement,target:HTMLElement,face:HT
+    const tick=(now:number)=>{if(invalid()){finish(true);return;}const ms=Math.min(SILVER_INK_DURATION,Math.max(0,now-begun));try{paint(ms);}catch{finish(false);return;}if(ms===SILVER_INK_DURATION)finish(true);else frame=requestAnimationFrame(tick);};
+    frame=requestAnimationFrame(tick);
+   });
+- }catch{ok=false;}finally{cancelAnimationFrame(frame);signal.removeEventListener('abort',abort);canvas.remove();acquired.release();if(style===null)node.removeAttribute('style');else node.setAttribute('style',style);}
++ }catch{ok=false;}finally{cancelAnimationFrame(frame);signal.removeEventListener('abort',abort);canvas.remove();local.remove();acquired.release();if(style===null)node.removeAttribute('style');else node.setAttribute('style',style);}
+  return ok;
+ }
+-/** Texture triangles retain perspective without changing the card's initial silhouette. */
+-function triangle(c:CanvasRenderingContext2D,image:HTMLCanvasElement,src:Point[],dst:Point[]){
+- const [a,b,d]=src,[p,q,r]=dst,den=(b.x-a.x)*(d.y-a.y)-(d.x-a.x)*(b.y-a.y);
+- if(Math.abs((q.x-p.x)*(r.y-p.y)-(r.x-p.x)*(q.y-p.y))<.02)return;
+- const aa=((q.x-p.x)*(d.y-a.y)-(r.x-p.x)*(b.y-a.y))/den,bb=((q.y-p.y)*(d.y-a.y)-(r.y-p.y)*(b.y-a.y))/den,cc=((r.x-p.x)*(b.x-a.x)-(q.x-p.x)*(d.x-a.x))/den,dd=((r.y-p.y)*(b.x-a.x)-(q.y-p.y)*(d.x-a.x))/den;
+- c.save();c.beginPath();const center={x:(p.x+q.x+r.x)/3,y:(p.y+q.y+r.y)/3};
+- dst.forEach((v,i)=>{const dx=v.x-center.x,dy=v.y-center.y,l=Math.hypot(dx,dy)||1,x=v.x+dx/l*.25,y=v.y+dy/l*.25;i?c.lineTo(x,y):c.moveTo(x,y);});c.closePath();c.clip();c.transform(aa,bb,cc,dd,p.x-aa*a.x-cc*a.y,p.y-bb*a.x-dd*a.y);c.drawImage(image,0,0);c.restore();
+-}
+diff --git a/client/src/ui/turnLight.ts b/client/src/ui/turnLight.ts
+index 576ef66..dc4d2d2 100644
+--- a/client/src/ui/turnLight.ts
++++ b/client/src/ui/turnLight.ts
+@@ -118,6 +118,8 @@ export function createTurnLights(turn:T.Group,segments:T.Mesh[],getVariant:()=>T
+  const displayTargets:T.Object3D[]=[];
+  const displayLayer=3;
+  const depthMaterial=displayScene?new T.MeshBasicMaterial({colorWrite:false}):undefined;
++ const depthCamera=new T.Camera(),crop=new T.Matrix4(),savedViewport=new T.Vector4();
++ depthCamera.matrixAutoUpdate=false;depthCamera.matrixWorldAutoUpdate=false;
+  const displayBounds=new T.Box3(),corner=new T.Vector3(),displaySize=new T.Vector2(),savedScissor=new T.Vector4();
+  if(displayScene){
+   const isolate=(o:T.Object3D)=>{savedLayers.set(o,o.layers.mask);o.layers.set(displayLayer);};
+@@ -142,7 +144,7 @@ export function createTurnLights(turn:T.Group,segments:T.Mesh[],getVariant:()=>T
+   const paint=changed||(!s.reduced&&s.active&&s.now-lastPaint>=32);if(paint)lastPaint=s.now;return paint;
+  },renderDisplay:displayScene?(renderer,camera)=>{
+   const mask=camera.layers.mask,override=displayScene.overrideMaterial,scissorTest=renderer.getScissorTest(),shadows=renderer.shadowMap.enabled;
+-  renderer.getScissor(savedScissor);renderer.getSize(displaySize);displayBounds.setFromObject(turn);
++  renderer.getScissor(savedScissor);renderer.getViewport(savedViewport);renderer.getSize(displaySize);displayBounds.setFromObject(turn);
+   let left=1,right=-1,bottom=1,top=-1;
+   for(const x of [displayBounds.min.x,displayBounds.max.x])for(const y of [displayBounds.min.y,displayBounds.max.y])for(const z of [displayBounds.min.z,displayBounds.max.z]){
+    corner.set(x,y,z).project(camera);left=Math.min(left,corner.x);right=Math.max(right,corner.x);bottom=Math.min(bottom,corner.y);top=Math.max(top,corner.y);
+@@ -153,9 +155,15 @@ export function createTurnLights(turn:T.Group,segments:T.Mesh[],getVariant:()=>T
+    renderer.setScissor(x,y,Math.max(1,w),Math.max(1,h));renderer.setScissorTest(true);renderer.clearDepth();renderer.shadowMap.enabled=false;
+    // Rebuild only the local socket's depth, retaining furniture occlusion when
+    // the cap presses down. The cached board's color is never drawn again.
+-   camera.layers.set(0);displayScene.overrideMaterial=depthMaterial!;renderer.render(displayScene,camera);
+-   displayScene.overrideMaterial=override;camera.layers.set(displayLayer);renderer.render(displayScene,camera);
+-  }finally{camera.layers.mask=mask;displayScene.overrideMaterial=override;renderer.shadowMap.enabled=shadows;renderer.setScissor(savedScissor);renderer.setScissorTest(scissorTest);}
++   // Scissoring alone still submits every mesh on the board. A matching
++   // cropped frustum also culls geometry outside this small socket region.
++   const cw=Math.max(1,w),ch=Math.max(1,h);
++   crop.set(displaySize.x/cw,0,0,(displaySize.x-2*x-cw)/cw,0,displaySize.y/ch,0,(displaySize.y-2*y-ch)/ch,0,0,1,0,0,0,0,1);
++   depthCamera.matrixWorld.copy(camera.matrixWorld);depthCamera.matrixWorldInverse.copy(camera.matrixWorldInverse);
++   depthCamera.projectionMatrix.multiplyMatrices(crop,camera.projectionMatrix);depthCamera.projectionMatrixInverse.copy(depthCamera.projectionMatrix).invert();
++   depthCamera.layers.set(0);displayScene.overrideMaterial=depthMaterial!;renderer.setViewport(x,y,cw,ch);renderer.render(displayScene,depthCamera);
++   renderer.setViewport(savedViewport);displayScene.overrideMaterial=override;camera.layers.set(displayLayer);renderer.render(displayScene,camera);
++  }finally{camera.layers.mask=mask;displayScene.overrideMaterial=override;renderer.shadowMap.enabled=shadows;renderer.setViewport(savedViewport);renderer.setScissor(savedScissor);renderer.setScissorTest(scissorTest);}
+  }:undefined,dispose(){
+   depthMaterial?.dispose();
+   for(const [object,mask] of savedLayers)object.layers.mask=mask;

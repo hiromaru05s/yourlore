@@ -1,0 +1,10 @@
+Production default passed
+Default board ready
+PASS [
+  'Me default formation/readout/completion',
+  'Opp default formation/readout/completion',
+  'cancellation',
+  'reduced motion',
+  'legacy comparison remains available',
+  'clearing override restores approved default'
+]

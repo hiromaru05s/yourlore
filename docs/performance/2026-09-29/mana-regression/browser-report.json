@@ -1,0 +1,14 @@
+{
+  "productionDefault": "facet-swift",
+  "duration": 1630,
+  "impact": 1020,
+  "checks": [
+    "Me default formation/readout/completion",
+    "Opp default formation/readout/completion",
+    "cancellation",
+    "reduced motion",
+    "legacy comparison remains available",
+    "clearing override restores approved default"
+  ],
+  "errors": []
+}

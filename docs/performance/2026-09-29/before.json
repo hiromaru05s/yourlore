@@ -1,0 +1,47 @@
+{
+  "samples": [
+    {
+      "width": 1280,
+      "height": 900,
+      "gpuCalls": {
+        "duel-objects-3d": 61961,
+        "offscreen": 59
+      },
+      "frames": 275,
+      "p50": 16.69999999999709,
+      "p95": 33.30000000000291,
+      "scene": "{\"seconds\":5,\"paints\":94,\"fullPasses\":94,\"portalPasses\":12,\"cpuMs\":1474.2,\"calls\":32,\"triangles\":14196}",
+      "metrics": {
+        "TaskDuration": 2.769984,
+        "ScriptDuration": 1.949959,
+        "LayoutDuration": 0.001755,
+        "RecalcStyleDuration": 0.203339,
+        "LayoutCount": 5,
+        "RecalcStyleCount": 944,
+        "JSHeapUsedSize": -4066956
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "gpuCalls": {
+        "offscreen": 60,
+        "duel-objects-3d": 61318
+      },
+      "frames": 269,
+      "p50": 16.69999999999709,
+      "p95": 33.400000000001455,
+      "scene": "{\"seconds\":5,\"paints\":147,\"fullPasses\":147,\"portalPasses\":28,\"cpuMs\":1604.2,\"calls\":32,\"triangles\":14196}",
+      "metrics": {
+        "TaskDuration": 2.345729,
+        "ScriptDuration": 1.6477790000000003,
+        "LayoutDuration": 0.006000999999999999,
+        "RecalcStyleDuration": 0.199112,
+        "LayoutCount": 5,
+        "RecalcStyleCount": 852,
+        "JSHeapUsedSize": 1820880
+      }
+    }
+  ],
+  "errors": []
+}

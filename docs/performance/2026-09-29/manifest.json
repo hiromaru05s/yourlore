@@ -1,0 +1,11 @@
+{
+  "scope": "Local working checkout; no deployment by this task",
+  "baseCommit": "790e74d5c0a0adf379a26f5745f13eb51d6f92cd",
+  "files": {
+    "client/src/ui/duelScene.ts": "98aa70845bbea736e39f565b08c577446a3618f208f6c388f13e7b02a9bc1b2b",
+    "client/src/ui/readingBoardWidgets.ts": "0baaf954174bf69624522d338f26e6bf35a277a97cb2a28b825a3f5fbde5b742",
+    "client/src/ui/turnLight.ts": "a1a26138e50b3fa2fcb083a29157ba997c4df116e6fbcca6ac162c3dd23a536f",
+    "client/src/ui/riftInkScene.ts": "0f10af8cc764a20b392cd8b9a8fb9c3e1837aed935b5f660e284b8ef731f14fe",
+    "client/src/ui/riftInkMaterial.ts": "e77e180dd1f55bc9efe88b12f7f0225136307704c0db6c097aa66dbcc4146f91"
+  }
+}

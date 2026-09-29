@@ -1,0 +1,15 @@
+PASS [
+  'ドロー3枚',
+  '相手ドロー',
+  'デッキ再構成',
+  'マナ増加',
+  '相手マナ増加',
+  '場から虚無',
+  '手札から虚無',
+  'simultaneous mana counts',
+  'mobile ドロー3枚',
+  'mobile デッキ再構成',
+  'mobile 場から虚無',
+  'reduced motion return',
+  'renderer context disposal'
+]

@@ -1,0 +1,18 @@
+Asset hashes verified 14
+Root loaded
+Menu ready
+BOT selected
+Scene ready
+Silver projection probe {
+  before: {
+    width: 81,
+    height: 119,
+    frame: 'url("https://test.yourlore.xyz/art/biblion/modular/base-spell.png")',
+    hidden: false
+  },
+  seen: [
+    'rift-fold-canvas rift-transmute-canvas rift-silver-ink-canvas',
+    'rift-silver-source'
+  ]
+}
+PASS 14 deployed asset hashes, desktop/mobile BOT idle budget, optimized silver-ink projection and cleanup

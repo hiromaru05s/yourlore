@@ -1,0 +1,101 @@
+{
+  "method": "Identical geometry, lights, camera, phase, state and 64/90 timer. Direct gallery render vs cached-board presentation plus isolated display pass. RGBA readback at 256 square, full and cropped viewports.",
+  "results": [
+    {
+      "view": 0.085,
+      "variant": "porcelain",
+      "active": true,
+      "meanChannelError": 0.000316619873046875,
+      "maxChannelError": 1,
+      "channelsOver3": 0
+    },
+    {
+      "view": 0.085,
+      "variant": "porcelain",
+      "active": false,
+      "meanChannelError": 0.000347137451171875,
+      "maxChannelError": 1,
+      "channelsOver3": 0
+    },
+    {
+      "view": 0.085,
+      "variant": "inscription",
+      "active": true,
+      "meanChannelError": 0.00032806396484375,
+      "maxChannelError": 1,
+      "channelsOver3": 0
+    },
+    {
+      "view": 0.085,
+      "variant": "inscription",
+      "active": false,
+      "meanChannelError": 0.000347137451171875,
+      "maxChannelError": 1,
+      "channelsOver3": 0
+    },
+    {
+      "view": 0.085,
+      "variant": "prism",
+      "active": true,
+      "meanChannelError": 0.000324249267578125,
+      "maxChannelError": 1,
+      "channelsOver3": 0
+    },
+    {
+      "view": 0.085,
+      "variant": "prism",
+      "active": false,
+      "meanChannelError": 0.000347137451171875,
+      "maxChannelError": 1,
+      "channelsOver3": 0
+    },
+    {
+      "view": 0.25,
+      "variant": "porcelain",
+      "active": true,
+      "meanChannelError": 0.000026702880859375,
+      "maxChannelError": 1,
+      "channelsOver3": 0
+    },
+    {
+      "view": 0.25,
+      "variant": "porcelain",
+      "active": false,
+      "meanChannelError": 0.000026702880859375,
+      "maxChannelError": 1,
+      "channelsOver3": 0
+    },
+    {
+      "view": 0.25,
+      "variant": "inscription",
+      "active": true,
+      "meanChannelError": 0.000026702880859375,
+      "maxChannelError": 1,
+      "channelsOver3": 0
+    },
+    {
+      "view": 0.25,
+      "variant": "inscription",
+      "active": false,
+      "meanChannelError": 0.000026702880859375,
+      "maxChannelError": 1,
+      "channelsOver3": 0
+    },
+    {
+      "view": 0.25,
+      "variant": "prism",
+      "active": true,
+      "meanChannelError": 0.00002288818359375,
+      "maxChannelError": 1,
+      "channelsOver3": 0
+    },
+    {
+      "view": 0.25,
+      "variant": "prism",
+      "active": false,
+      "meanChannelError": 0.000026702880859375,
+      "maxChannelError": 1,
+      "channelsOver3": 0
+    }
+  ]
+}
