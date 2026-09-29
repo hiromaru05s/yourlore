@@ -1,0 +1,10 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "version": "73a20ead-b3fc-4c18-96c2-446cb63f5338",
+  "commit": "b0ee27df2f11fd24e3247c078138640c9577babb",
+  "publishedUtc": "2026-09-29T04:17:29.252934+00:00",
+  "command": "wrangler 4.130.0 deploy -c server/wrangler.toml --env staging",
+  "scope": "Approved crown 01 victory/defeat; includes portrait resource layout 3 and existing loading/rendering optimizations. Production not deployed.",
+  "preExistingModifiedFilesPreserved": 16
+}

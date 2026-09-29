@@ -1,0 +1,99 @@
+{
+  "passed": true,
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-09-29T04:17:56.559Z",
+  "assets": [
+    {
+      "file": "index.html",
+      "sha256": "da182366922380be65b5244dc56e085cb19d5c4879d754858f34f69a45e2dbe5"
+    },
+    {
+      "file": "assets/GLTFLoader-AEMP8Cz1.js",
+      "sha256": "a134d072200aa544cf4e6e7256436b3153bcd09c8f2ca419b346090a0b36150e"
+    },
+    {
+      "file": "assets/RoomEnvironment-XX58V7Xx.js",
+      "sha256": "418df499f3cd81c5cd6fc1735b6a38523ef820941f232d33f5bd35d5d0a3ce4a"
+    },
+    {
+      "file": "assets/ceremonyScene-CJ_amyty.js",
+      "sha256": "1139d888608ab58ecdc015d42cff620586271229ff8cc28e646e493fe68ac03e"
+    },
+    {
+      "file": "assets/crownOutcome-CkPu0t9S.js",
+      "sha256": "93a329cca0f998c528879a04ddc195ff9fdb45a8cca4c0e1948120e033232406"
+    },
+    {
+      "file": "assets/diceScene-BWVu4qtD.js",
+      "sha256": "8f60722b586e0de8f30d56b46ab1c31497abe6d9f47051f2ba1803f29227cbc5"
+    },
+    {
+      "file": "assets/duelScene-CZfCbKfw.js",
+      "sha256": "0d8484574884ef830af6651b7262330010a37e22b1ab2533238bd6de2e2bfac3"
+    },
+    {
+      "file": "assets/main-D4IOQeOx.css",
+      "sha256": "525dcfee767e7dd75e66da8f55e756f2d10f3a301d06d40292961145bb4018e6"
+    },
+    {
+      "file": "assets/main-DbDrSWnt.js",
+      "sha256": "4e225d87f453c3907b49c18cda93824c85cb68eec347965241823bdab923177f"
+    },
+    {
+      "file": "assets/paperDraw-BQlhMjBg.js",
+      "sha256": "94cf9b25a3055f7590ee47c75449966766ed123a08b7fdc7bce578aceebfeeab"
+    },
+    {
+      "file": "assets/riftScene-CcKykjjs.js",
+      "sha256": "a629f20f13a5a355952ddda8a06524ebc286341dca3ee4e51c179dcfa5c24a36"
+    },
+    {
+      "file": "assets/tablePreview-2Rkra2Ey.css",
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4"
+    },
+    {
+      "file": "assets/tablePreview-Bbt3qVfB.js",
+      "sha256": "c74ccb4cccf697e1826a3a5bf623a7e1bba4b3fa4965dc9d61c84874cb95b441"
+    },
+    {
+      "file": "assets/three.module-oapt2zHx.js",
+      "sha256": "f060866cb85d98b55adc0d38bdde124d7d5a4f40b7872696535fffd2b699bec8"
+    },
+    {
+      "file": "assets/voidSurface-BvPkw2Ai.js",
+      "sha256": "e8616f036f42357784307adde9cf5ff42d2c547dafa175bd6deeda8cdb93d7a1"
+    },
+    {
+      "file": "art/biblion/modular/health.png",
+      "sha256": "6914ca7d54cfc6cc0ca12a456acc56be9e9177402d5af2faf4152f0c6f6acfba"
+    },
+    {
+      "file": "art/biblion/modular/shield.png",
+      "sha256": "ee2d0a83663c5627d1ff412ed8e5a51559713159bf6867ff51739e757bc5e77a"
+    },
+    {
+      "file": "art/biblion/modular/dew.png",
+      "sha256": "07293bd99f76aaf73881b0022970d120f9e3baa6696a4cdb234a2161ef92f929"
+    }
+  ],
+  "naturalBotSurrender": true,
+  "samples": [
+    {
+      "width": 1440,
+      "height": 1000,
+      "side": "opp"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "side": "opp"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "side": "me"
+    }
+  ],
+  "errors": [],
+  "boundary": "Deployed assets and public BOT surrender lifecycle verified. API/account responses are fixtures. Opponent view invoked via deployed module on the actual board, not an authenticated online match."
+}
