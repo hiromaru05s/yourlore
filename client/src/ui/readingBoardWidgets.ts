@@ -18,7 +18,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
  const segments:T.Mesh[]=[];const rerollMaterials:Array<{material:T.MeshStandardMaterial;color:T.Color}>=[];
  const lit=new T.MeshStandardMaterial({color:0x3daacb,emissive:0x3ba7cc,emissiveIntensity:.45,metalness:.1,roughness:.32}),dark=new T.MeshStandardMaterial({color:0x10202b,metalness:.2,roughness:.42});owned.push(lit,dark);
  const color=new T.Color();
- let turnLights:TurnLightHandle|undefined;
+ let turnLights:TurnLightHandle|undefined,displayDirty=false;
  const reducedTurnLight=matchMedia('(prefers-reduced-motion: reduce)');
  function releaseTemplate(object:T.Object3D){
   const geos=new Set<T.BufferGeometry>(),mats=new Set<T.Material>(),maps=new Set<T.Texture>();
@@ -57,9 +57,9 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   ready=true;root.dataset.widgetsReady='true';
  })().catch(error=>{if(!dead){console.error('Reading board widgets failed',error);root.dataset.widgetsReady='fallback';ready=true;}});
  const id=(event:Event)=>(event.target as Element)?.closest<HTMLElement>('#endBtn,#refreshBtn')?.id||'';
- const over=(e:Event)=>{const next=id(e);if(next!==hover)animateUntil=performance.now()+500;hover=next;};const down=(e:Event)=>{const target=(e.target as Element)?.closest<HTMLButtonElement>('button');pressed=target&&!target.disabled?id(e):'';animateUntil=performance.now()+500;};
- const up=()=>{pressed='';animateUntil=performance.now()+650;};
- const click=(e:Event)=>{const button=(e.target as Element).closest<HTMLButtonElement>('button');if(button?.disabled)return;const now=performance.now();if(id(e)==='refreshBtn')rerollTime=now;if(id(e)==='endBtn')turnTime=now;animateUntil=now+1000;};
+ const over=(e:Event)=>{const next=id(e);if(next!==hover)animateUntil=performance.now()+500;hover=next;};const down=(e:Event)=>{const target=(e.target as Element)?.closest<HTMLButtonElement>('button'),next=target&&!target.disabled?id(e):'';if(!next)return;pressed=next;animateUntil=performance.now()+500;};
+ const up=()=>{if(!pressed)return;pressed='';animateUntil=performance.now()+650;};
+ const click=(e:Event)=>{const button=(e.target as Element).closest<HTMLButtonElement>('button'),control=id(e);if(!control||button?.disabled)return;const now=performance.now();if(control==='refreshBtn')rerollTime=now;if(control==='endBtn')turnTime=now;animateUntil=now+1000;};
  root.addEventListener('pointerover',over);root.addEventListener('pointerdown',down);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);root.addEventListener('click',click,true);
  let clockSegments=-1;
  function tick(now:number){
@@ -111,7 +111,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   const end=root.querySelector<HTMLButtonElement>('#endBtn'),refresh=root.querySelector<HTMLButtonElement>('#refreshBtn'),enemy=root.dataset.readingTurn!=='player';
   for(const m of rerollMaterials){color.copy(m.color);if(refresh?.disabled){const l=color.r*.2126+color.g*.7152+color.b*.0722;color.lerp(new T.Color(l,l,l),.8).multiplyScalar(.5);}else if(hover==='refreshBtn')color.multiplyScalar(1.12);m.material.color.lerp(color,1-Math.exp(-dt*18));}
   const clock=root.querySelector<HTMLElement>('.mp-clock.show'),remaining=clock?Math.min(1,Number(clock.dataset.remaining)/Math.max(1,Number(clock.dataset.total))):1;
-  const litCount=Math.ceil(remaining*24);if(litCount!==clockSegments){clockSegments=litCount;changed=true;}
+  const litCount=Math.ceil(remaining*24);if(litCount!==clockSegments){clockSegments=litCount;if(turnLights?.renderDisplay)displayDirty=true;else changed=true;}
   segments.forEach((mesh,i)=>{mesh.material=i<litCount?lit:dark;});
   const turnAge=now-turnTime;displayEnemy=enemy;
   color.set(displayEnemy?0x492633:0x133042);if(hover==='endBtn'&&!end?.disabled)color.multiplyScalar(1.18);enamel?.color.lerp(color,1-Math.exp(-dt*18));
@@ -130,14 +130,18 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
    turnLights=preview?preview(turn,segments,scene):createTurnLights(turn,segments,()=> 'porcelain',scene);
    if(!preview)root.dataset.turnlight='porcelain';
   }
-  if(turnLights)changed=turnLights.update({now,active:!enemy&&!!end&&!end.disabled,enemy,remaining,hover:!!end?.matches(':hover')||document.activeElement===end,pressed:pressed==='endBtn',reduced:reducedTurnLight.matches})||changed;
+  if(turnLights){
+   const lightChanged=turnLights.update({now,active:!enemy&&!!end&&!end.disabled,enemy,remaining,hover:!!end?.matches(':hover')||document.activeElement===end,pressed:pressed==='endBtn',reduced:reducedTurnLight.matches});
+   // Display-layer emission does not invalidate the static HDR furniture cache.
+   if(turnLights.renderDisplay)displayDirty=lightChanged||displayDirty;else changed=lightChanged||changed;
+  }
   group.visible=true;
 
   const state=`${enemy}:${end?.disabled}:${refresh?.disabled}`;
   if(state!==lastState){animateUntil=now+500;lastState=state;}
   return changed||now<animateUntil||t<1;
  }
- return {tick,renderTurnLights(renderer:T.WebGLRenderer,camera:T.Camera){turnLights?.renderDisplay?.(renderer,camera);},tickRift:(now:number)=>apertures.tick(now),takeShadowUpdate(){const value=shadowDirty;shadowDirty=false;return value;},warm(render:()=>void){
+ return {tick,takeDisplayUpdate(){const value=displayDirty;displayDirty=false;return value;},renderTurnLights(renderer:T.WebGLRenderer,camera:T.Camera){turnLights?.renderDisplay?.(renderer,camera);},tickRift:(now:number)=>apertures.tick(now),takeShadowUpdate(){const value=shadowDirty;shadowDirty=false;return value;},warm(render:()=>void){
   const wasVisible=group.visible,rerollVisible=reroll?.visible;
   const saved=manas.flatMap(m=>Object.values(m.batches).flat().map(mesh=>({mesh,count:mesh.count,visible:mesh.visible})));
   group.visible=true;if(reroll)reroll.visible=true;

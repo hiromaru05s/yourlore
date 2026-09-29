@@ -17,8 +17,12 @@ export async function playSilverRift(node:HTMLElement,target:HTMLElement,face:HT
  const lc=local.getContext('2d')!;
  const canvas=document.createElement('canvas'),c=canvas.getContext('2d')!;
  canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);canvas.className='rift-fold-canvas rift-transmute-canvas rift-silver-ink-canvas';canvas.setAttribute('aria-hidden','true');canvas.dataset.variant='inscription';canvas.dataset.duration=String(SILVER_INK_DURATION);
- const cols=8,rows=10,grid:{uv:Point;rest:Point}[]=[];
- for(let y=0;y<=rows;y++)for(let x=0;x<=cols;x++)grid.push({uv:{x:x/cols*local.width,y:y/rows*local.height},rest:project(w/2+(x/cols-.5)*padded*2.8,h/2+(y/rows-.5)*padded*3.4)});
+ // Let the compositor project this single surface through the exact card
+ // matrix. Canvas2D's 160 clipped triangle copies approximated the same plane.
+ const surfaceMatrix=start.translate(w/2-padded*1.4,h/2-padded*1.7).scale(padded*2.8/local.width,padded*3.4/local.height);
+ local.className='rift-silver-source';local.setAttribute('aria-hidden','true');
+ local.style.cssText=`position:fixed;left:0;top:0;width:${local.width}px;height:${local.height}px;pointer-events:none;z-index:126;transform-origin:0 0;will-change:transform`;
+
  let acquired:ReturnType<typeof acquireSilverInk>;
  try{acquired=acquireSilverInk();}catch{return false;}
  const style=node.getAttribute('style');let frame=0,finish=(_ok:boolean)=>{},ok=true;
@@ -32,15 +36,14 @@ export async function playSilverRift(node:HTMLElement,target:HTMLElement,face:HT
    c.save();c.globalAlpha=.17*s.lift*(1-s.collapse);c.fillStyle='#20102e';c.shadowColor='#281733';c.shadowBlur=screenWidth*.08;c.beginPath();c.ellipse(source.x,source.y+screenWidth*.35,screenWidth*.35,screenWidth*.08,0,0,Math.PI*2);c.fill();c.restore();
    lc.setTransform(1,0,0,1,0,0);lc.clearRect(0,0,local.width,local.height);lc.translate(local.width/2,local.height/2);
    acquired.renderer.draw(lc,face,{x:0,y:0},{x:0,y:0},unit,ms,{part:'source',heightRatio:ratio,lift:0,ground:false});
-   const points=grid.map(v=>({x:v.rest.x,y:v.rest.y-lift*s.lift}));
-   for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){const a=y*(cols+1)+x,b=a+1,d=a+cols+1,e=d+1;for(const ids of [[a,b,e],[a,e,d]])triangle(c,local,ids.map(i=>grid[i].uv),ids.map(i=>points[i]));}
-  }
+   local.style.transform=new DOMMatrix().translate(0,-lift*s.lift).multiply(surfaceMatrix).toString();
+  }else local.hidden=true;
   acquired.renderer.draw(c,face,source,sink,screenWidth,ms,{part:'transfer',lift});
  }
  try{
   // Warm the shader before starting the animation clock or hiding the live card.
   paint(0);if(invalid())return true;
-  document.body.append(canvas);node.style.visibility='hidden';onStart();
+  document.body.append(canvas,local);node.style.visibility='hidden';onStart();
   const begun=performance.now();
   ok=await new Promise<boolean>(resolve=>{
    let ended=false;finish=value=>{if(ended)return;ended=true;cancelAnimationFrame(frame);resolve(value);};
@@ -48,14 +51,6 @@ export async function playSilverRift(node:HTMLElement,target:HTMLElement,face:HT
    const tick=(now:number)=>{if(invalid()){finish(true);return;}const ms=Math.min(SILVER_INK_DURATION,Math.max(0,now-begun));try{paint(ms);}catch{finish(false);return;}if(ms===SILVER_INK_DURATION)finish(true);else frame=requestAnimationFrame(tick);};
    frame=requestAnimationFrame(tick);
   });
- }catch{ok=false;}finally{cancelAnimationFrame(frame);signal.removeEventListener('abort',abort);canvas.remove();acquired.release();if(style===null)node.removeAttribute('style');else node.setAttribute('style',style);}
+ }catch{ok=false;}finally{cancelAnimationFrame(frame);signal.removeEventListener('abort',abort);canvas.remove();local.remove();acquired.release();if(style===null)node.removeAttribute('style');else node.setAttribute('style',style);}
  return ok;
-}
-/** Texture triangles retain perspective without changing the card's initial silhouette. */
-function triangle(c:CanvasRenderingContext2D,image:HTMLCanvasElement,src:Point[],dst:Point[]){
- const [a,b,d]=src,[p,q,r]=dst,den=(b.x-a.x)*(d.y-a.y)-(d.x-a.x)*(b.y-a.y);
- if(Math.abs((q.x-p.x)*(r.y-p.y)-(r.x-p.x)*(q.y-p.y))<.02)return;
- const aa=((q.x-p.x)*(d.y-a.y)-(r.x-p.x)*(b.y-a.y))/den,bb=((q.y-p.y)*(d.y-a.y)-(r.y-p.y)*(b.y-a.y))/den,cc=((r.x-p.x)*(b.x-a.x)-(q.x-p.x)*(d.x-a.x))/den,dd=((r.y-p.y)*(b.x-a.x)-(q.y-p.y)*(d.x-a.x))/den;
- c.save();c.beginPath();const center={x:(p.x+q.x+r.x)/3,y:(p.y+q.y+r.y)/3};
- dst.forEach((v,i)=>{const dx=v.x-center.x,dy=v.y-center.y,l=Math.hypot(dx,dy)||1,x=v.x+dx/l*.25,y=v.y+dy/l*.25;i?c.lineTo(x,y):c.moveTo(x,y);});c.closePath();c.clip();c.transform(aa,bb,cc,dd,p.x-aa*a.x-cc*a.y,p.y-bb*a.x-dd*a.y);c.drawImage(image,0,0);c.restore();
 }

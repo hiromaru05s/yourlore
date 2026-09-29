@@ -118,6 +118,8 @@ export function createTurnLights(turn:T.Group,segments:T.Mesh[],getVariant:()=>T
  const displayTargets:T.Object3D[]=[];
  const displayLayer=3;
  const depthMaterial=displayScene?new T.MeshBasicMaterial({colorWrite:false}):undefined;
+ const depthCamera=new T.Camera(),crop=new T.Matrix4(),savedViewport=new T.Vector4();
+ depthCamera.matrixAutoUpdate=false;depthCamera.matrixWorldAutoUpdate=false;
  const displayBounds=new T.Box3(),corner=new T.Vector3(),displaySize=new T.Vector2(),savedScissor=new T.Vector4();
  if(displayScene){
   const isolate=(o:T.Object3D)=>{savedLayers.set(o,o.layers.mask);o.layers.set(displayLayer);};
@@ -142,7 +144,7 @@ export function createTurnLights(turn:T.Group,segments:T.Mesh[],getVariant:()=>T
   const paint=changed||(!s.reduced&&s.active&&s.now-lastPaint>=32);if(paint)lastPaint=s.now;return paint;
  },renderDisplay:displayScene?(renderer,camera)=>{
   const mask=camera.layers.mask,override=displayScene.overrideMaterial,scissorTest=renderer.getScissorTest(),shadows=renderer.shadowMap.enabled;
-  renderer.getScissor(savedScissor);renderer.getSize(displaySize);displayBounds.setFromObject(turn);
+  renderer.getScissor(savedScissor);renderer.getViewport(savedViewport);renderer.getSize(displaySize);displayBounds.setFromObject(turn);
   let left=1,right=-1,bottom=1,top=-1;
   for(const x of [displayBounds.min.x,displayBounds.max.x])for(const y of [displayBounds.min.y,displayBounds.max.y])for(const z of [displayBounds.min.z,displayBounds.max.z]){
    corner.set(x,y,z).project(camera);left=Math.min(left,corner.x);right=Math.max(right,corner.x);bottom=Math.min(bottom,corner.y);top=Math.max(top,corner.y);
@@ -153,9 +155,15 @@ export function createTurnLights(turn:T.Group,segments:T.Mesh[],getVariant:()=>T
    renderer.setScissor(x,y,Math.max(1,w),Math.max(1,h));renderer.setScissorTest(true);renderer.clearDepth();renderer.shadowMap.enabled=false;
    // Rebuild only the local socket's depth, retaining furniture occlusion when
    // the cap presses down. The cached board's color is never drawn again.
-   camera.layers.set(0);displayScene.overrideMaterial=depthMaterial!;renderer.render(displayScene,camera);
-   displayScene.overrideMaterial=override;camera.layers.set(displayLayer);renderer.render(displayScene,camera);
-  }finally{camera.layers.mask=mask;displayScene.overrideMaterial=override;renderer.shadowMap.enabled=shadows;renderer.setScissor(savedScissor);renderer.setScissorTest(scissorTest);}
+   // Scissoring alone still submits every mesh on the board. A matching
+   // cropped frustum also culls geometry outside this small socket region.
+   const cw=Math.max(1,w),ch=Math.max(1,h);
+   crop.set(displaySize.x/cw,0,0,(displaySize.x-2*x-cw)/cw,0,displaySize.y/ch,0,(displaySize.y-2*y-ch)/ch,0,0,1,0,0,0,0,1);
+   depthCamera.matrixWorld.copy(camera.matrixWorld);depthCamera.matrixWorldInverse.copy(camera.matrixWorldInverse);
+   depthCamera.projectionMatrix.multiplyMatrices(crop,camera.projectionMatrix);depthCamera.projectionMatrixInverse.copy(depthCamera.projectionMatrix).invert();
+   depthCamera.layers.set(0);displayScene.overrideMaterial=depthMaterial!;renderer.setViewport(x,y,cw,ch);renderer.render(displayScene,depthCamera);
+   renderer.setViewport(savedViewport);displayScene.overrideMaterial=override;camera.layers.set(displayLayer);renderer.render(displayScene,camera);
+  }finally{camera.layers.mask=mask;displayScene.overrideMaterial=override;renderer.shadowMap.enabled=shadows;renderer.setViewport(savedViewport);renderer.setScissor(savedScissor);renderer.setScissorTest(scissorTest);}
  }:undefined,dispose(){
   depthMaterial?.dispose();
   for(const [object,mask] of savedLayers)object.layers.mask=mask;
