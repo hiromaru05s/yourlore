@@ -1,0 +1,42 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checks": [
+    {
+      "width": 1280,
+      "height": 720,
+      "motion": true,
+      "progressWhileHeld": 75,
+      "reduced": true,
+      "ready": true,
+      "oldRunnerRequests": 0,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "motion": true,
+      "progressWhileHeld": 75,
+      "reduced": true,
+      "ready": true,
+      "oldRunnerRequests": 0,
+      "errors": []
+    }
+  ],
+  "assets": [
+    {
+      "path": "/assets/main-D663MnFl.js",
+      "sha256": "5439af097592d9659033fa0f1888f54f43936066b6f6f15643201423fda66e61",
+      "matches": true
+    },
+    {
+      "path": "/assets/three.module-oapt2zHx.js",
+      "sha256": "f060866cb85d98b55adc0d38bdde124d7d5a4f40b7872696535fffd2b699bec8",
+      "matches": true
+    },
+    {
+      "path": "/assets/main-DGZlqDv1.css",
+      "sha256": "ff978c5812121504eac3bfcb2d336fe71f6885db99732a8ef24d1498ba742b63",
+      "matches": true
+    }
+  ]
+}

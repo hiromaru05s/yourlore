@@ -1,0 +1,53 @@
+
+ ⛅️ wrangler 4.130.0 (update available 4.143.0)
+───────────────────────────────────────────────
+🌀 Building list of assets...
+✨ Read 2103 files from the assets directory /Users/hiromaru05s/.codex/worktrees/loading-silver-staging/LORE_TCG/client/dist
+🌀 Starting asset upload...
+🌀 Found 25 new or modified static assets to upload. Proceeding with upload...
++ /index.html
++ /assets/voidSurface-BvPkw2Ai.js
++ /assets/RoomEnvironment-XX58V7Xx.js.map
++ /assets/ceremonyScene-CJ_amyty.js.map
++ /assets/paperDraw-BXZvDus2.js.map
++ /assets/duelScene-A6aqTjU5.js
++ /assets/duelScene-A6aqTjU5.js.map
++ /assets/three.module-oapt2zHx.js
++ /assets/three.module-oapt2zHx.js.map
++ /table-preview.html
++ /assets/voidSurface-BvPkw2Ai.js.map
++ /assets/ceremonyScene-CJ_amyty.js
++ /assets/tablePreview-Bbt3qVfB.js
++ /assets/diceScene-DS3n2dU0.js.map
++ /assets/riftScene-BRrXbIuF.js.map
++ /assets/GLTFLoader-AEMP8Cz1.js.map
++ /assets/main-D663MnFl.js
++ /assets/RoomEnvironment-XX58V7Xx.js
++ /assets/diceScene-DS3n2dU0.js
++ /assets/paperDraw-BXZvDus2.js
++ /assets/riftScene-BRrXbIuF.js
++ /assets/GLTFLoader-AEMP8Cz1.js
++ /assets/tablePreview-Bbt3qVfB.js.map
++ /assets/main-DGZlqDv1.css
++ /assets/main-D663MnFl.js.map
+Uploaded 8 of 25 assets
+Uploaded 17 of 25 assets
+Uploaded 25 of 25 assets
+✨ Success! Uploaded 25 files (2011 already uploaded) (4.28 sec)
+
+Total Upload: 1088.66 KiB / gzip: 234.55 KiB
+Worker Startup Time: 61 ms
+Your Worker has access to the following bindings:
+Binding                                                                Resource                  
+env.MATCHMAKER (Matchmaker)                                            Durable Object            
+env.GAME_ROOM (GameRoom)                                               Durable Object            
+env.DB (lore-db-staging)                                               D1 Database               
+env.ASSETS                                                             Assets                    
+env.APP_ORIGIN ("*")                                                   Environment Variable      
+env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")      Environment Variable      
+env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")          Environment Variable      
+
+Uploaded lore-server-staging (10.07 sec)
+Deployed lore-server-staging triggers (2.21 sec)
+  test.yourlore.xyz (custom domain)
+Current Version ID: c15bb0da-c1be-43e5-8d35-aeb97a0f9591

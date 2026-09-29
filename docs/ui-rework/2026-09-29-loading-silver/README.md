@@ -1,6 +1,6 @@
 # ビブリオンの銀紋 — ローディング置換
 
-2026-09-29。メニュー／対戦準備の共通 `loadingScreen` を更新。ローカル実装済み、未デプロイ。
+2026-09-29。メニュー／対戦準備の共通 `loadingScreen` を更新。ローカル実装とステージング公開済み。本番は未変更。
 
 ## 演出
 
@@ -50,3 +50,15 @@
 - `qa/size-*.png`, `qa/reduced.png`: サイズ／低減モーション。
 - `qa/loading-progress.png`: 実際の対戦準備画面。
 - `qa/*report.json`, `qa/loading-priority.json`: 検証結果。
+
+## ステージング公開（2026-09-29）
+
+- URL: https://test.yourlore.xyz/
+- ソース: `e5a6ffdcd2c582bfcf97cae717158cf8a6db63d9`。最新main `790e74d` にローディング `7c3d369` と描画最適化 `47f472f` を競合なしで統合。
+- Worker version: `c15bb0da-c1be-43e5-8d35-aeb97a0f9591`。
+- 分離したworktreeで型チェック・ビルド・対戦ローディングの遅延／再試行テストを再実行して成功。
+- 公開URLで1280×720／390×844のアニメーション、実進捗、低減モーション、完了後のログイン画面、旧runner要求なし、ブラウザ例外なしを確認。
+- 配信main JS／CSS／Three.jsをローカルdistとSHA-256照合し一致。
+- 認証済みオンライン対戦の検証ではない。読み込み中表示は背景画像要求を意図的に保留して確認。
+- 記録: `staging/deployment.json`、`staging/browser-report.json`、`staging/loading-{1280,390}.png`。
+- 保存済み環境API tokenでの初回要求は認証形式エラー。アップロード前に失敗したため、既存のWrangler OAuthログインで再実行し成功。設定／認証情報の変更なし。
