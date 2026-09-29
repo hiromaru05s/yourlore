@@ -1,0 +1,10 @@
+{
+  "selected": "01 crown",
+  "source": "/Users/hiromaru05s/Desktop/LORE_TCG/docs/vfx-prototypes/2026-09-29-shatter-five",
+  "files": {
+    "renderer.ts": "e8897b5ecd0a0150aed09cc1fc1b107963dbe553ffec1f728d6c4366ec9827c5",
+    "board.ts": "7ae5702875338754f2eb1028f833080ebb3d1794deaff00761c29896457d8028",
+    "preview.ts": "593eb2d187666039c5117fcf66170e265be4872fe92fe9c56fcaf234e89cd610",
+    "qa/crown-pair.mp4": "18358c22b2371a2643fc08f5c9f9313ceec97b932d6286e514ddbf280043a2aa"
+  }
+}

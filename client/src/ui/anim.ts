@@ -4,7 +4,7 @@ import {passiveIcon} from './passiveIcon';
 import {animateSeeker} from './seekerAnimation';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
 import type {HandLayout} from './handGeometry';
-import {mountDuelOutcome,OUTCOME_DURATION} from './duelOutcome';
+import {mountDuelOutcome,cancelDuelOutcome} from './duelOutcome';
 import {reserveMonster} from './fieldLayout';
 import {attackPlan,attackPose,ATTACK_DURATION_MS} from './attackVisual';
 import {runAttackTimeline} from './attackMotion';
@@ -38,7 +38,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on;
-  if(on)clearBiblionFx();
+  if(on){clearBiblionFx();cancelDuelOutcome();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -891,14 +891,14 @@ export function manaDrop(side: ViewSide, amount: number): void {
 }
 
 /**
- * Archive verdict (~3.3s): a gilded book opens or seals its final chapter,
- * and the result with its cause. Reduced motion uses a short static verdict.
+ * Approved crown fracture (5.4s): the entire portrait and counters share one surface.
+ * Cancellation also settles asynchronous preparation; reduced motion stays static.
  */
 export async function deathShatter(loserSide: ViewSide, won: boolean, cause: string | null): Promise<void> {
   if(fxSkip)return;
   const portrait=document.querySelector<HTMLElement>(loserSide==='me'?'#portraitMe .pt-ring':'#portraitOpp .pt-ring');
   const dispose=mountDuelOutcome(portrait,won,cause);
-  try{await wait(matchMedia('(prefers-reduced-motion:reduce)').matches?250:OUTCOME_DURATION);}finally{dispose();}
+  try{await dispose.finished;}finally{dispose();}
 }
 
 /** Floating "결과 보기" button while reviewing the log after the game ends. */

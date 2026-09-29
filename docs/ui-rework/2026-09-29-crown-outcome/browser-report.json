@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "records": [
+    {
+      "you": 0,
+      "loser": 1,
+      "hpDeath": true,
+      "side": "opp"
+    },
+    {
+      "you": 0,
+      "loser": 0,
+      "hpDeath": false,
+      "side": "me"
+    },
+    {
+      "you": 1,
+      "loser": 0,
+      "hpDeath": true,
+      "side": "opp"
+    }
+  ],
+  "approvedMotionIdenticalFrames": 14,
+  "checks": [
+    "terminal controller state",
+    "opponent and self, you=0 and you=1 mapping",
+    "early result notification gated",
+    "surrender preserves actual HP/resources",
+    "no old full-screen ceremony",
+    "skip/destroy/hidden/replacement/preparation abort cleanup",
+    "active mobile resize",
+    "reduced motion"
+  ],
+  "errors": []
+}

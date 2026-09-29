@@ -1,7 +1,4 @@
-import {t,getLang} from '../i18n';
-import {mountCeremony} from './ceremonyMount';
-import {sfx} from './sound';
-export const OUTCOME_DURATION=3300;
+export const OUTCOME_DURATION=5400;
 /** Native book/seal illustration shared by the cinematic and its result panel. */
 export function outcomeCrest(won:boolean|null):string {
  return `<svg class="outcome-crest" viewBox="0 0 320 240" fill="none" aria-hidden="true">
@@ -13,21 +10,17 @@ export function outcomeCrest(won:boolean|null):string {
  ${won===false?'<path d="m168 45-13 21 14 18-19 28 18 18-14 30" stroke="var(--outcome-ink)" stroke-width="5"/>':''}
  </g></svg>`;
 }
-let activeOutcome:(()=>void)|null=null;
-export function mountDuelOutcome(loser:HTMLElement|null,won:boolean,cause:string|null){
- activeOutcome?.();
- const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
- const host=document.createElement('div');host.className='duel-outcome '+(won?'is-victory':'is-defeat');host.setAttribute('role','status');host.setAttribute('aria-live','polite');
- const copy=document.createElement('div');copy.className='outcome-copy';
- const eyebrow=document.createElement('div');eyebrow.className='outcome-eyebrow';eyebrow.textContent='BIBLION · '+(won?'RECORD ASCENDANT':'RECORD SEALED');
- const crest=document.createElement('div');crest.className='ceremony-space';crest.innerHTML=outcomeCrest(won);
- const title=document.createElement('h1');title.textContent=t(won?'modal.win':'modal.lose');
- const subtitle=document.createElement('p');subtitle.className='outcome-subtitle';
- subtitle.textContent=getLang()==='ja'?(won?'その一頁が、新たな歴史になる。':'書を閉じて、次の物語へ。'):getLang()==='ko'?(won?'새로운 역사의 한 페이지.':'책을 덮고, 다음 이야기로.'):(won?'A new page in the archive.':'Close this chapter. Begin another.');
- copy.append(eyebrow,crest,title,subtitle);if(cause){const c=document.createElement('p');c.className='outcome-cause';c.textContent=cause;copy.append(c);}host.append(copy);document.body.append(host);
- const disposeScene=mountCeremony(host,won?'victory':'defeat');sfx(won?'win':'lose');
- const motion=loser&&!reduced?loser.animate([{filter:'brightness(1)',opacity:1},{filter:'brightness(2)',opacity:.85,offset:.2},{filter:'brightness(.65)',opacity:.45}],{duration:900,fill:'forwards'}):null;
- let dead=false;
- const dispose=()=>{if(dead)return;dead=true;disposeScene();motion?.cancel();host.remove();if(activeOutcome===dispose)activeOutcome=null;};
- activeOutcome=dispose;return dispose;
+export type OutcomeHandle=(()=>void)&{finished:Promise<void>};
+let activeOutcome:OutcomeHandle|null=null;
+export function cancelDuelOutcome():void {activeOutcome?.();}
+/** One owned lifetime covers module loading, texture preparation, playback and cleanup. */
+export function mountDuelOutcome(loser:HTMLElement|null,won:boolean,cause:string|null):OutcomeHandle {
+ activeOutcome?.();const abort=new AbortController();
+ const dispose=(()=>{abort.abort();if(activeOutcome===dispose)activeOutcome=null;}) as OutcomeHandle;
+ activeOutcome=dispose;
+ const timeout=window.setTimeout(dispose,12000);
+ const canceled=new Promise<void>(resolve=>abort.signal.addEventListener('abort',()=>resolve(),{once:true}));
+ dispose.finished=Promise.race([import('./crownOutcome').then(m=>abort.signal.aborted?undefined:m.playCrownOutcome(loser,won,cause,abort.signal)),canceled])
+  .catch(error=>{console.warn('[crown outcome]',error);}).finally(()=>{clearTimeout(timeout);dispose();});
+ return dispose;
 }

@@ -58,6 +58,7 @@ export abstract class BaseController implements BoardHandlers {
   private quickFaces: {card:CardInst;side:A.ViewSide;node:HTMLElement}[] = [];
   private winShown = false;
   private outcomePlayed = false;
+  private outcomePending = false;
   private dead = false;
   private queue: Promise<void> = Promise.resolve();
   private unsubLang: () => void;
@@ -168,6 +169,7 @@ export abstract class BaseController implements BoardHandlers {
   // ---- apply a reduce result: queued so batches play back one at a time ----
   protected applyResult(res: ReduceResult, animate = true): void {
     const prev = this.state ?? res.state;
+    if (animate && res.state.over && res.state.winner != null && !this.outcomePlayed) this.outcomePending = true;
     if(res.state.opening)this.serverOffset=Date.now()-res.state.opening.serverNow;
     if(res.state.over||res.state.turn>1)this.openingAbort.abort();
     this.view.syncTurn(res.state);
@@ -182,6 +184,7 @@ export abstract class BaseController implements BoardHandlers {
         // re-arms the bot (LocalController) and pending pickers. Skipping it for
         // this batch permanently froze bot games on one animation error.
         if (!this.dead && res.state === this.state) {
+          this.outcomePending = false;
           try { this.afterApply(res); } catch { this.maybeBot(); }
         }
       });
@@ -207,6 +210,7 @@ export abstract class BaseController implements BoardHandlers {
       await this.playEvents(prev, res);
     } finally {
       if (!this.dead) this.view.setPlaying(false);
+      if (res.state.over) this.outcomePending = false;
     }
     // 기합(guts): 전투 파괴를 토큰으로 버틴 순간은 보드만 봐서는 모른다 — 배지로 명시
     if (!this.dead) {
@@ -494,11 +498,12 @@ export abstract class BaseController implements BoardHandlers {
     await Promise.all(effectFinishes);
 
     // ---- death sequence: HP orb shatters + cause of death, before the result modal ----
-    if (res.state.over && res.state.winner != null && !this.winShown) {
+    if (res.state.over && res.state.winner != null && !this.winShown && !this.outcomePlayed) {
       const won = res.state.winner === this.you;
       const loser = (1 - res.state.winner) as Side;
       const cause = lastKill ? (getLang() === "ja" ? lastKill.srcJa ?? lastKill.srcKo : getLang() === "en" ? logToEn(lastKill.srcKo ?? "") : lastKill.srcKo) : null;
       await wait(250);
+      if (this.dead) return;
       this.outcomePlayed = true;
       await A.deathShatter(sideOf(loser), won, this.stripHtml(cause ?? "") || null);
     }
@@ -860,7 +865,7 @@ export abstract class BaseController implements BoardHandlers {
 
   protected showWin(): void {
     this.stopTimer();
-    if (this.winShown || !this.state.over) return;
+    if (this.winShown || !this.state.over || this.outcomePending) return;
     this.winShown = true;
     const won: boolean | null = this.state.winner == null ? null : this.state.winner === this.you;
     if (!this.outcomePlayed) sfx(won===null ? "drawGame" : won ? "win" : "lose");
