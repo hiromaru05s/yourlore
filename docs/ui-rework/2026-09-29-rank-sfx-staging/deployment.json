@@ -1,0 +1,45 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "workerVersion": "4ee808c5-a55d-41a1-ae2c-3d41b7e5453c",
+  "sourceCommit": "d854525",
+  "releaseCommit": "16c5a5e",
+  "preservedVersion": "079ae835-c739-49b5-a308-ed00c16ca762",
+  "assets": [
+    {
+      "path": "/assets/main-BB6JmHoj.css",
+      "bytes": 320237,
+      "sha256": "80da30ad394545366fcb334a08885841868357a5126bc77a55618c7fd68fd25d",
+      "matchesBuild": true
+    },
+    {
+      "path": "/assets/main-BhRAkPBb.js",
+      "bytes": 1253534,
+      "sha256": "edf9ef94bd1244444b0939fc1b7f743bfb621df87612a10dc1225cd2c19718db",
+      "matchesBuild": true
+    },
+    {
+      "path": "/assets/three.module-oapt2zHx.js",
+      "bytes": 609241,
+      "sha256": "f060866cb85d98b55adc0d38bdde124d7d5a4f40b7872696535fffd2b699bec8",
+      "matchesBuild": true
+    },
+    {
+      "path": "/sfx/lore-v4/rankUp.mp3",
+      "bytes": 12333,
+      "sha256": "2f14cdce453b49982ba9b253b4d23fca79fd1ec5935fa816e0a2a5aa672aa492",
+      "matchesBuild": true
+    },
+    {
+      "path": "/sfx/lore-v4/rankDown.mp3",
+      "bytes": 11949,
+      "sha256": "3d54a2cebdb9d768ae73d8862126b9a2eff8bea09988be020f467e4469fc845e",
+      "matchesBuild": true
+    },
+    {
+      "path": "/sfx/lore-v4/rankPromote.mp3",
+      "bytes": 20397,
+      "sha256": "239de0fb0bd14cd2c5db26a00615745079858b2213e25bc81b6549669f0fa4ad",
+      "matchesBuild": true
+    }
+  ]
+}

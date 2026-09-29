@@ -1,0 +1,11 @@
+{
+  "client/src/ui/rankEmblem.ts": "2889c2baf74b7ec96098a7899c521f7353af3e0e40686aa19bedc4b43a8e673c",
+  "client/src/ui/rankEmblemMotion.ts": "0a4eeff3b253f6a61eda7a2081e1646b01e3446b0e2743487d65de41e0202b7a",
+  "client/src/ui/rankPresentation.ts": "19e7b188459f7153c33f053b84716ea3be293f67b25298efdffe6da6dfcb224a",
+  "client/src/ui/sound.ts": "0d6f5312a6bb4eda9a8d7eaf721e0c20ddeac6582297c6293739885b21389ae4",
+  "client/src/styles/rank.css": "9a7965cc4d01b8fb1942c530112d9f3802971735ef08a9dadde048d4a77d90c7",
+  "client/src/dev/rankLab.ts": "686effb60ac5e944a1f9b7296e151787934ab3b2f1cd81bf554dd33551c210d5",
+  "server/src/rank.ts": "912960f570a3665347b11954b1f39d436132c1c5ef724e02a196b110914a6b80",
+  "server/src/gameRoom.ts": "4e302cd86fa513e506491ce9589a845023be59c6b314fa6eb8f0f76fac91875c",
+  "server/migrations/0016_ranked_standings.sql": "b141254ae328fd3bbd2a2d37dd24affb4bcc6616b0465929a3b5e6da27a4c4ee"
+}
