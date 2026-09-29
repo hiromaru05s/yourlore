@@ -1,0 +1,16 @@
+{
+  "errors": [],
+  "checks": [
+    "selected inscription variant in real exile",
+    "projected source both sides",
+    "public hand and hidden opponent sleeve without identity requests",
+    "three simultaneous generated cards share GPU",
+    "quick-spell completion",
+    "skip resize detached target hidden-tab cleanup",
+    "390px both sides",
+    "reduced motion",
+    "WebGL unavailable fallback"
+  ],
+  "renderer": "silver-ink",
+  "duration": 2800
+}

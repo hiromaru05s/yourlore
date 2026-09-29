@@ -1,0 +1,19 @@
+PASS public hashes 89
+PASS both real password logins
+Opened staging
+Menu passed deck
+Menu passed cards
+Menu passed leaderboard
+Menu passed friends
+Menu passed shop
+Menu passed tutorial
+Menu passed home
+Seeking HOME loop
+HOME loop passed
+Seeking battle loop
+PASS [
+  'all seven menus retain one playing BGM instance with native loop',
+  'real HOME audio crosses track end and loops',
+  'all menus fit desktop and 390px mobile',
+  'real BOT opening, HOME release, intro to battle, relative gain and three-second battle loop gap'
+]

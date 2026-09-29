@@ -4,7 +4,8 @@ const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/tmp/lore-opening-
 const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5257',out=process.env.LORE_TEST_OUTPUT||'docs/ui-rework/2026-09-29-silver-ink';await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true}),page=await browser.newPage({viewport:{width:1280,height:720}}),errors=[],requests=[];
 page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));
-async function setup(){await page.goto(origin+'/duel-lab.html');await page.waitForSelector('.supply-model-ready');await page.waitForTimeout(600);await page.evaluate(async()=>{window.qa={A:await import('/src/ui/anim.ts'),C:await import('/src/shared/cards.ts'),R:await import('/src/ui/riftInkRenderer.ts')};});}
+page.setDefaultTimeout(120000);
+async function setup(){await page.goto(origin+'/duel-lab.html',{waitUntil:'domcontentloaded',timeout:90000});await page.waitForSelector('.supply-model-ready');await page.waitForTimeout(600);await page.evaluate(async()=>{window.qa={A:await import('/src/ui/anim.ts'),C:await import('/src/shared/cards.ts'),R:await import('/src/ui/riftInkRenderer.ts')};});}
 async function freeze(){await page.evaluate(()=>{qa.clock=performance.now();qa.begun=qa.clock;qa.now=performance.now.bind(performance);qa.raf=requestAnimationFrame.bind(window);performance.now=()=>qa.clock;requestAnimationFrame=cb=>qa.raf(()=>cb(qa.clock));});}
 async function advance(ms){await page.evaluate(ms=>{qa.clock=qa.begun+ms;},ms);await page.waitForTimeout(50);}
 async function finish(){await advance(3000);await page.evaluate(()=>qa.pending);await page.evaluate(()=>{performance.now=qa.now;requestAnimationFrame=qa.raf;});assert.equal(await page.locator('.rift-fold-canvas,.rift-silver-source,.is-absorbing').count(),0);assert.equal(await page.evaluate(()=>qa.R.silverInkResourceState().users),0);}

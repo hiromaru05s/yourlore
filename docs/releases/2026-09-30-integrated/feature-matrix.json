@@ -1,0 +1,102 @@
+[
+  {
+    "feature": "Silver ink Rift",
+    "commit": "e79d6a7f",
+    "included": true
+  },
+  {
+    "feature": "Paired shelf return",
+    "commit": "44a89b40",
+    "included": true
+  },
+  {
+    "feature": "Facet mana formation",
+    "commit": "f389e74c",
+    "included": true
+  },
+  {
+    "feature": "Quest fold and frost passive",
+    "commit": "b3c8507d",
+    "included": true
+  },
+  {
+    "feature": "Passive emblems and porcelain turn light",
+    "commit": "57296dcd",
+    "included": true
+  },
+  {
+    "feature": "Dew Shield card expansion",
+    "commit": "8d3a9b30",
+    "included": true
+  },
+  {
+    "feature": "Discard hand highlight",
+    "commit": "4bbbed41",
+    "included": true
+  },
+  {
+    "feature": "Silver loading",
+    "commit": "7c3d369b",
+    "included": true
+  },
+  {
+    "feature": "Rendering optimization",
+    "commit": "47f472f1",
+    "included": true
+  },
+  {
+    "feature": "Portrait resources",
+    "commit": "0fac254d",
+    "included": true
+  },
+  {
+    "feature": "Crown outcome",
+    "commit": "b0ee27df",
+    "included": true
+  },
+  {
+    "feature": "Rank settlement",
+    "commit": "3c2cf59f",
+    "included": true
+  },
+  {
+    "feature": "Rank emblems",
+    "commit": "85dbc455",
+    "included": true
+  },
+  {
+    "feature": "Rank sound",
+    "commit": "d8545252",
+    "included": true
+  },
+  {
+    "feature": "Horizon navigation",
+    "commit": "676932b2",
+    "included": true
+  },
+  {
+    "feature": "Selected A03 B02 C01 menus",
+    "commit": "464b2e94",
+    "included": true
+  },
+  {
+    "feature": "Golden hand conditions",
+    "commit": "3925fa44",
+    "included": true
+  },
+  {
+    "feature": "Monster animation",
+    "commit": "7933a3b5",
+    "included": true
+  },
+  {
+    "feature": "Target recoil",
+    "commit": "24ef42a9",
+    "included": true
+  },
+  {
+    "feature": "HOME entrance, continuous menu music, deck and catalog workspace",
+    "commit": "9f17a17d",
+    "included": true
+  }
+]

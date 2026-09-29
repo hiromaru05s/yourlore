@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-09-29T23:49:49.354775+00:00",
+  "deployment": {
+    "id": "f79eea82-fd1d-46c2-99f0-aa5b9da75107",
+    "source": "wrangler",
+    "strategy": "percentage",
+    "annotations": {
+      "workers/message": "Reproducible integrated staging sources; prior 2030 public files preserved",
+      "workers/triggered_by": "deployment"
+    },
+    "versions": [
+      {
+        "version_id": "efadcb71-fa08-4fe7-a341-7004e4113a44",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-09-29T23:28:54.222421Z"
+  }
+}

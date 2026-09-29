@@ -1,0 +1,107 @@
+[
+  {
+    "test": "dew-shield-v54",
+    "exitCode": 0,
+    "seconds": 0.13
+  },
+  {
+    "test": "dew-shield-server",
+    "exitCode": 0,
+    "seconds": 0.11
+  },
+  {
+    "test": "health-cosmetics-v53",
+    "exitCode": 0,
+    "seconds": 0.17
+  },
+  {
+    "test": "quest-quick",
+    "exitCode": 0,
+    "seconds": 0.12
+  },
+  {
+    "test": "fate-wheel",
+    "exitCode": 0,
+    "seconds": 0.12
+  },
+  {
+    "test": "deck-appearance",
+    "exitCode": 0,
+    "seconds": 0.11
+  },
+  {
+    "test": "hand-condition-rules",
+    "exitCode": 0,
+    "seconds": 1.77
+  },
+  {
+    "test": "monster-animation-rules",
+    "exitCode": 0,
+    "seconds": 0.09
+  },
+  {
+    "test": "duel-opening-server",
+    "exitCode": 0,
+    "seconds": 0.13
+  },
+  {
+    "test": "opening-hands",
+    "exitCode": 0,
+    "seconds": 0.11
+  },
+  {
+    "test": "rank-emblem",
+    "exitCode": 0,
+    "seconds": 0.71
+  },
+  {
+    "test": "rank-sound",
+    "exitCode": 0,
+    "seconds": 0.82
+  },
+  {
+    "test": "lounge-settlement",
+    "exitCode": 0,
+    "seconds": 0.23
+  },
+  {
+    "test": "lounge-rank",
+    "exitCode": 0,
+    "seconds": 0.23
+  },
+  {
+    "test": "menu-selected",
+    "exitCode": 0,
+    "seconds": 0.81
+  },
+  {
+    "test": "lounge-horizon",
+    "exitCode": 0,
+    "seconds": 0.59
+  },
+  {
+    "test": "home-entrance-parity",
+    "exitCode": 0,
+    "seconds": 0.24
+  },
+  {
+    "test": "solid-draw",
+    "exitCode": 0,
+    "seconds": 0.97
+  },
+  {
+    "test": "rift-fold",
+    "exitCode": 0,
+    "seconds": 0.09
+  },
+  {
+    "test": "duel-ui",
+    "exitCode": 0,
+    "seconds": 86.54
+  },
+  {
+    "test": "quick-playback",
+    "exitCode": 0,
+    "seconds": 7.0
+  }
+]

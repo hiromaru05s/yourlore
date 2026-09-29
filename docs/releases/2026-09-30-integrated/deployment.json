@@ -1,0 +1,12 @@
+{
+  "url": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "version": "efadcb71-fa08-4fe7-a341-7004e4113a44",
+  "runtimeCommit": "9f17a17d891796aea9e40a744454b9657294f2d4",
+  "baselineVersion": "fde89197-243e-4ea0-9751-f6e0a0f276a1",
+  "baselinePublicFilesCompared": 2030,
+  "baselinePublicFilesDifferent": 0,
+  "productionDeployed": false,
+  "schemaMigrated": false,
+  "qaUsesTemporaryStagingAccounts": true
+}

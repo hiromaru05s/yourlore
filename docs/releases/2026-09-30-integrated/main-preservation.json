@@ -1,0 +1,11 @@
+{
+  "before": "c4e5fbcd4886b03032d4f499e4d62c6d3f191559",
+  "after": "9f17a17d891796aea9e40a744454b9657294f2d4",
+  "method": "ancestry-verified atomic fast-forward; index reset only; concurrent working files retained",
+  "concurrentChangesPreserved": [
+    "client/src/styles/homeEntrance.css",
+    "client/src/ui/homeEntrance.ts",
+    "tests/home-entrance-browser.mjs"
+  ],
+  "backup": "/var/folders/tt/p79qbyt14t14jwlfh80_l0v40000gn/T/lore-main-integration-backup-iqtfs82h"
+}

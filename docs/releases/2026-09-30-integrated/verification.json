@@ -1,0 +1,74 @@
+{
+  "scope": "All previously published staging changes at the start of this audit; 20 feature entries in feature-matrix.json",
+  "verifiedAt": "2026-09-29T23:55:08.550944+00:00",
+  "runtimeCommit": "9f17a17d891796aea9e40a744454b9657294f2d4",
+  "stagingUrl": "https://test.yourlore.xyz",
+  "stagingVersion": "efadcb71-fa08-4fe7-a341-7004e4113a44",
+  "typecheck": "passed",
+  "productionBuild": "passed",
+  "baselineParity": {
+    "publicFiles": 2030,
+    "different": 0,
+    "excludes": [
+      "source maps"
+    ]
+  },
+  "liveAssetHashes": {
+    "checked": 89,
+    "different": 0
+  },
+  "unitAndIntegrationSuites": {
+    "passed": 21,
+    "failed": 0,
+    "report": "checks/unit-results.json"
+  },
+  "browserReports": [
+    "monster/browser-report.json",
+    "home-entrance/browser-report.json",
+    "silver-ink/browser-report.json",
+    "hand-condition/browser-report.json",
+    "quest-fold/extra-report.json",
+    "live/browser.json"
+  ],
+  "liveBrowser": {
+    "realAuthentication": true,
+    "apiFixtures": false,
+    "viewportWidths": [
+      1280,
+      390
+    ],
+    "menuRoutes": 7,
+    "homeMusicContinuousAndNativeLoop": true,
+    "botOpeningAndBattleMusic": true,
+    "battleLoopGapMs": 3004.7999999523163,
+    "pageErrors": 0,
+    "failedResponses": 0
+  },
+  "online": {
+    "transport": "Real authenticated staging API and WebSockets",
+    "actions": 140,
+    "turns": 25,
+    "reconnectPassed": true,
+    "completed": true,
+    "completionPolicy": "Surrender after 140 actions if game is still running",
+    "errors": 0,
+    "report": "live/staging-online.json"
+  },
+  "qaCleanup": {
+    "remainingRowsAcross14Tables": 0,
+    "credentialsRemoved": true,
+    "report": "qa-cleanup.json"
+  },
+  "concurrentWork": {
+    "task": "ホーム周辺UIと演出を改修",
+    "taskId": "01a0ef76-a3d1-7c03-a746-b57ef9c29249",
+    "status": "New work started during this audit, preserved in original workspace for its own release; not included in this deployment"
+  },
+  "limits": [
+    "Verification covers the recorded scenarios, not every device or possible game state.",
+    "Online synchronization used real API/WebSocket clients; real browser gameplay coverage used BOT mode.",
+    "Visual sources are byte-identical to the previously published baseline; no new artistic approval is claimed.",
+    "No production deployment or database schema migration."
+  ],
+  "evidence": "Reports, logs and screenshots committed; larger raw recordings retained locally."
+}

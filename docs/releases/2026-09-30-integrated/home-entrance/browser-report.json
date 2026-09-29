@@ -1,0 +1,19 @@
+{
+  "origin": "http://127.0.0.1:5431",
+  "api": "fixture authenticated user; not real account login",
+  "errors": [],
+  "failed": [],
+  "checks": [
+    "real boot path waits for assets",
+    "approved 01 fan",
+    "home unlocks on finish",
+    "no replay on menu return",
+    "reload replays",
+    "keyboard skip restores focus",
+    "390px portrait",
+    "Escape skip",
+    "reduced motion",
+    "login to first home",
+    "mid-animation cancellation cleans up"
+  ]
+}

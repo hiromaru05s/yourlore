@@ -12,16 +12,16 @@ const {greedyDecide,candidates,actingSide}=await import('/tmp/lore-online-releas
 const api=async(i,path,body)=>{const res=await fetch(origin+'/api'+path,{method:body?'POST':'GET',headers:{'content-type':'application/json',cookie:'lore_session='+users[i].token},body:body?JSON.stringify(body):undefined});assert.equal(res.status,200,path);return res.json();};
 const {id}=await api(0,'/social/challenge',{user_id:users[1].id});
 const game=await api(1,'/social/challenge/respond',{id,accept:true});
-assert(game.roomId);await fs.writeFile('/tmp/lore-release-qa-room.json',JSON.stringify(game));
+assert(game.roomId);console.log('Created isolated friendly room');await fs.writeFile('/tmp/lore-release-qa-room.json',JSON.stringify(game));
 const peers=[],events=[],errors=[];let actions=0,reconnected=false;
 async function connect(i){
- const peer={ws:new WebSocket(origin.replace('https','wss')+'/ws/room/'+game.roomId,{headers:{cookie:'lore_session='+users[i].token}}),state:null,revision:0};
+ const peer={ws:new WebSocket(origin.replace('https','wss')+'/ws/room/'+game.roomId,{headers:{cookie:'lore_session='+users[i].token},family:4,handshakeTimeout:20000}),state:null,revision:0};
  peer.ws.on('message',raw=>{const m=JSON.parse(raw.toString());if(m.type==='error')errors.push(m.message);if(m.state){peer.state=m.state;peer.revision++;events.push(...(m.events||[]).map(e=>e.type));}});
  await new Promise((r,j)=>{peer.ws.once('open',r);peer.ws.once('error',j);});peer.ws.send(JSON.stringify({type:'ready'}));peers[i]=peer;await until(()=>!!peer.state);return peer;
 }
 async function until(test,ms=12000){const end=Date.now()+ms;while(!test()){if(Date.now()>end)throw Error('Staging response timeout');await new Promise(r=>setTimeout(r,80));}}
 try{
- await Promise.all([connect(0),connect(1)]);
+ await Promise.all([connect(0),connect(1)]);console.log('Both authenticated sockets ready');
  const openingHands=peers.map(p=>p.state.players.map(pl=>pl.hand.length));
  if(process.env.LORE_EXPECT_OPENING_HANDS)for(const counts of openingHands)assert.deepEqual(counts,[3,3]);
  for(const [i,p]of peers.entries()){

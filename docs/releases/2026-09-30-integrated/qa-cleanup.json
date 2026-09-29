@@ -1,0 +1,63 @@
+{
+  "scope": "Only two ephemeral qa-release users created for this run in lore-db-staging",
+  "checkedAt": "2026-09-29T23:50:51.855719+00:00",
+  "checks": [
+    {
+      "name": "ranked_results",
+      "remaining": 0
+    },
+    {
+      "name": "matches",
+      "remaining": 0
+    },
+    {
+      "name": "challenges",
+      "remaining": 0
+    },
+    {
+      "name": "friends",
+      "remaining": 0
+    },
+    {
+      "name": "invite_rewards",
+      "remaining": 0
+    },
+    {
+      "name": "ratings",
+      "remaining": 0
+    },
+    {
+      "name": "rewards",
+      "remaining": 0
+    },
+    {
+      "name": "user_days",
+      "remaining": 0
+    },
+    {
+      "name": "presence",
+      "remaining": 0
+    },
+    {
+      "name": "email_tokens",
+      "remaining": 0
+    },
+    {
+      "name": "sessions",
+      "remaining": 0
+    },
+    {
+      "name": "coupon_claims",
+      "remaining": 0
+    },
+    {
+      "name": "inquiries",
+      "remaining": 0
+    },
+    {
+      "name": "users",
+      "remaining": 0
+    }
+  ],
+  "credentialsRemoved": true
+}

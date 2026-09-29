@@ -1,0 +1,3 @@
+PASS real Worker routes + SQLite: five independent presets, legacy inheritance, explicit default, ownership/atomic save, name/watch preservation, auth/queue/friendly propagation, selected deck switching, credits unchanged
+(node:81291) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

@@ -1,0 +1,49 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "openingHands": [
+    [
+      3,
+      3
+    ],
+    [
+      3,
+      3
+    ]
+  ],
+  "roomId": "101f63f7-e298-4aab-a2f9-c8a514cefff5",
+  "actions": 140,
+  "turn": 25,
+  "reconnected": true,
+  "over": true,
+  "events": [
+    "draw",
+    "log",
+    "turnHeader",
+    "buy",
+    "playSpell",
+    "reshuffle",
+    "dice",
+    "summon",
+    "treasure",
+    "heal",
+    "attack",
+    "damage",
+    "needTarget",
+    "monsterActivate",
+    "hit",
+    "destroy",
+    "enchantActivate",
+    "win"
+  ],
+  "errors": [],
+  "checks": [
+    "two isolated authenticated users",
+    "friendly room creation",
+    "live authoritative actions",
+    "hidden opponent hand and RNG",
+    "public quest arrays",
+    "no traps in market",
+    "reconnect restores live state",
+    "completed match"
+  ]
+}
