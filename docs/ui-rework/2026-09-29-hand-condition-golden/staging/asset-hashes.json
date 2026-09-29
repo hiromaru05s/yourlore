@@ -1,0 +1,81 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "allMatched": true,
+  "assets": [
+    {
+      "path": "index.html",
+      "sha256": "b64f3fd330db86a4b22de646dd210f5599aefd5ed43f2667aa3e50c622e3538b",
+      "matched": true
+    },
+    {
+      "path": "assets/tablePreview-Bbt3qVfB.js",
+      "sha256": "c74ccb4cccf697e1826a3a5bf623a7e1bba4b3fa4965dc9d61c84874cb95b441",
+      "matched": true
+    },
+    {
+      "path": "assets/main-DbzgnTXH.css",
+      "sha256": "bb14012a7c19710c0b945cc69011fd8364a4776168bb8b904e8407d51d0f5981",
+      "matched": true
+    },
+    {
+      "path": "assets/three.module-oapt2zHx.js",
+      "sha256": "f060866cb85d98b55adc0d38bdde124d7d5a4f40b7872696535fffd2b699bec8",
+      "matched": true
+    },
+    {
+      "path": "assets/voidSurface-BvPkw2Ai.js",
+      "sha256": "e8616f036f42357784307adde9cf5ff42d2c547dafa175bd6deeda8cdb93d7a1",
+      "matched": true
+    },
+    {
+      "path": "assets/ceremonyScene-CJ_amyty.js",
+      "sha256": "1139d888608ab58ecdc015d42cff620586271229ff8cc28e646e493fe68ac03e",
+      "matched": true
+    },
+    {
+      "path": "assets/main-DrfuQaZo.js",
+      "sha256": "26f4ecd474164a6c2eff7e89953d99caf136c9c154730588013bca5a030539a2",
+      "matched": true
+    },
+    {
+      "path": "assets/riftScene-g482DwCh.js",
+      "sha256": "9ac381731ae936f2fbd3bd53dc1ace8ba3b3aed7cded91c9b4ca8547623924a7",
+      "matched": true
+    },
+    {
+      "path": "assets/paperDraw-DPlIhDP2.js",
+      "sha256": "b576da682ac8093681939dbacb894a047050532f352f210b5e7381010d7edd83",
+      "matched": true
+    },
+    {
+      "path": "assets/duelScene-DTdz3isp.js",
+      "sha256": "d8ba25b74ee0bd46ed4aeaeab42f22b7cd3e5e3a558254a0177d49a3aed97eec",
+      "matched": true
+    },
+    {
+      "path": "assets/RoomEnvironment-XX58V7Xx.js",
+      "sha256": "418df499f3cd81c5cd6fc1735b6a38523ef820941f232d33f5bd35d5d0a3ce4a",
+      "matched": true
+    },
+    {
+      "path": "assets/tablePreview-2Rkra2Ey.css",
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+      "matched": true
+    },
+    {
+      "path": "assets/diceScene-BNGevPY5.js",
+      "sha256": "83ba4f2065089a7263d3407ff22fff7c9384ace4898a6d4a7e5493922b39e703",
+      "matched": true
+    },
+    {
+      "path": "assets/GLTFLoader-AEMP8Cz1.js",
+      "sha256": "a134d072200aa544cf4e6e7256436b3153bcd09c8f2ca419b346090a0b36150e",
+      "matched": true
+    },
+    {
+      "path": "assets/crownOutcome-DvZAvZM8.js",
+      "sha256": "6b2ff9652612759a62f3996e61ac23fc8e4004218b68bb8342d14c4991c5091d",
+      "matched": true
+    }
+  ]
+}

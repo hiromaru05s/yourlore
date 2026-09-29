@@ -1,0 +1,19 @@
+{
+  "origin": "http://127.0.0.1:5294",
+  "status": "passed",
+  "checks": [
+    "unmet requirements and ordinary starter have no cue",
+    "authoritative update enables golden twin on two monsters, all four contour layers, own hand only",
+    "approved 2300 ms twin orbit moves continuously",
+    "mana shortage blocks play while condition cue remains colored",
+    "spell-specific activation condition also highlights frame and cost",
+    "falling below summon threshold removes monster cue",
+    "removed hand card releases effect",
+    "repeated state updates do not duplicate overlays",
+    "390 px viewport retains both indicators",
+    "reduced motion retains golden rim without orbit",
+    "game over for side zero clears hand cues"
+  ],
+  "errors": [],
+  "boundary": "Built application, production router/OnlineController/GameView; authentication and WebSocket state are fixtures, not a real authenticated online match."
+}
