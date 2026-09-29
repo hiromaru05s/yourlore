@@ -1,0 +1,24 @@
+{
+  "url": "https://test.yourlore.xyz/",
+  "version": "fde89197-243e-4ea0-9751-f6e0a0f276a1",
+  "sourceCommit": "24ef42a9",
+  "implementationCommit": "7933a3b5",
+  "buildCheckout": "/Users/hiromaru05s/.codex/worktrees/monster-animation-staging/LORE_TCG",
+  "verifiedAt": "2026-09-29T13:39:36.302901+00:00",
+  "selection": {
+    "summon": "B with dust B",
+    "ongoing": "C",
+    "attack": "A",
+    "activation": "B",
+    "buffs": "B",
+    "debuffs": "B",
+    "ready": "C + existing red pulse",
+    "blocked": "B final gray",
+    "destroy": "A fracture with shelf/rift routing"
+  },
+  "assetHashesMatched": 15,
+  "localBoardChecks": "passed",
+  "deployedBotFlow": "passed with account/API fixture; natural UI actions",
+  "productionDeployed": false,
+  "databaseMigrated": false
+}

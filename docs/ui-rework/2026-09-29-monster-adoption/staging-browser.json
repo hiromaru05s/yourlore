@@ -1,0 +1,18 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "requests": [
+    {
+      "url": "https://test.yourlore.xyz/assets/main-B84SAbzA.js",
+      "status": 200
+    }
+  ],
+  "seen": [
+    "summon:B",
+    "trigger:B",
+    "ready:C",
+    "attack:A",
+    "blocked:B"
+  ],
+  "errors": [],
+  "boundary": "Deployed JS/CSS and artwork loaded from staging; API-only account fixture with legal eight-Castle deck. Natural BOT controller input: hand drag → summon B → trigger B, ready C/green aura, click attack A → gray B. No authenticated online match was exercised."
+}

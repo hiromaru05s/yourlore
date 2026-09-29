@@ -1,0 +1,62 @@
+[
+  {
+    "file": "assets/ceremonyScene-Cbf5B16x.js",
+    "sha256": "69af4fec790b86bbd107a392d08ac8941799bd80c716426be5ec0da652f21866"
+  },
+  {
+    "file": "assets/RoomEnvironment-Dg4OOisb.js",
+    "sha256": "a3d4c746541d4e071cbea3e34f1a41fb352f4564ff5b65da1fa7c44d6b01058f"
+  },
+  {
+    "file": "assets/GLTFLoader-DqCMa9To.js",
+    "sha256": "026fcb02b73a6f968803745371b63e7b83958f5c9a5de8d701703388a71436e7"
+  },
+  {
+    "file": "index.html",
+    "sha256": "9738055fab8259229442588403ad7615fd3afe3af62771638b255d34ae07458c"
+  },
+  {
+    "file": "assets/diceScene-DmZdhj-9.js",
+    "sha256": "0ac685e8211ddbfbc803ea73202b5ea9f6c5c1bbeaf7c1b9826d9033eb51b329"
+  },
+  {
+    "file": "assets/duelScene-BTC9dTp_.js",
+    "sha256": "e7d8106a17cbd316971c1b77052c52d0db0bfaed8d90f1d869aae301e8d78dba"
+  },
+  {
+    "file": "assets/crownOutcome-CP2XoRBh.js",
+    "sha256": "3a9fd0f0387f7af3b575c2dd7626b0ecbf0634a63b3bf980472c3742b98dad14"
+  },
+  {
+    "file": "assets/main-B84SAbzA.js",
+    "sha256": "9642dd4f944f3c202bfce2022e7243566da46a4cf28de31c8f146954f95f81ce"
+  },
+  {
+    "file": "assets/tablePreview-2Rkra2Ey.css",
+    "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4"
+  },
+  {
+    "file": "assets/riftScene-D2ETWG8W.js",
+    "sha256": "bf76c09a127e9fffec484136cc7fe7c85de41785eb35128a2840366331776ebf"
+  },
+  {
+    "file": "assets/paperDraw-DPVmXFgN.js",
+    "sha256": "0b65a377eeecbb78c03862daf7c1a41838f18af877e2267a57e03579e67cb2ec"
+  },
+  {
+    "file": "assets/main-Dll2E2Ws.css",
+    "sha256": "3a101b14b5f038e79cb7d4a4da0f492b3cc9eb687e4a9b3eae58105a29aa49b9"
+  },
+  {
+    "file": "assets/tablePreview-CJCuoT-O.js",
+    "sha256": "4ca9f04c76de91bf7a76d6b183f44763ba234a0ab57d5d15869fe9d516f51fb4"
+  },
+  {
+    "file": "assets/voidSurface-DGIZPG9f.js",
+    "sha256": "9a518e2578ecb1da2fb4828334c8b8125406559d26937c590cd4a2b168529233"
+  },
+  {
+    "file": "assets/three.module-DJFzXWA5.js",
+    "sha256": "647399e8e92187c3fb10dc3ab0c46fa667d94cf8e9d84dc71a5d8adef86803be"
+  }
+]

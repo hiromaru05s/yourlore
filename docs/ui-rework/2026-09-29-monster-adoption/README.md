@@ -22,3 +22,9 @@ Lifecycle coverage: cancellation, fast-forward, resize, source removal, reduced 
 Build checkout: `/Users/hiromaru05s/.codex/worktrees/monster-animation-staging/LORE_TCG`. The previously deployed menu release `8cc5c974-8378-48fc-b95d-d490a28e4d7a` is preserved. Its 145 source-map entries were compared; only the five intended existing runtime modules differ, and bundled CSS is identical (`baseline-check.json`). Previously published overlay dependencies are retained in the release checkout, separately from this patch's commit (`preserved-staging-sources.json`).
 
 Validation: `npm run typecheck`, `npm run build`, `node tests/monster-animation-rules.mjs`, `node tests/monster-adoption-browser.mjs`. Build retains the existing large-chunk advisory. Staging deployment and deployed-browser results are recorded separately. No production deployment or database migration is part of this change.
+
+## Staging release
+
+Published to https://test.yourlore.xyz/ — version `fde89197-243e-4ea0-9751-f6e0a0f276a1`, source `24ef42a9`. All 15 deployed JS/CSS/entry files matched the build. Deployed BOT UI verified natural hand-drag summon B → activation B → ready C and green aura → attack A → persistent gray B, with no page errors. Account/API responses used a legal eight-Castle test deck; runtime JS/CSS/artwork came from staging. This verifies the client BOT flow, not authenticated online multiplayer.
+
+The first immediate asset check after the final upload encountered a transient 404. After propagation, a complete asset check and the full BOT flow both passed; the final reports are `staging-hashes.json` and `staging-browser.json`.
