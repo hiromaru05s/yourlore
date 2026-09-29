@@ -1,3 +1,4 @@
+import {monsterCanAttack} from '../shared/engine';
 import {furnitureUrl} from '../shared/cosmetics';
 import {seekerPortrait} from './seekerAnimation';
 import {HandConditionHighlights} from './handCondition';
@@ -506,7 +507,7 @@ export class GameView {
         && !(pending!.kind === "myMon" && pending!.reason === "golemBuff" && !isGolem(m)) // 앤티크 인핸스 매직: 골램만
         && !(pending!.kind === "myMon" && pending!.reason === "worldTree" && (m.id !== "WORLD_TREE" || (m.gcount || 0) <= 0)) // 세계수: 카운터 있는 세계수만
         && !(pending!.kind === "myMon" && (((pending!.data?.excl as string[] | undefined) ?? []).includes(m.uid))); // 지원 나팔: 이미 고른 몬스터는 중복 선택 불가
-      const canAttack = !(m.id === "ASSASSIN_SQUAD" && g.players[1 - g.players.indexOf(p)].hp < 11) && isMe && myTurn && !pending && !m.exhausted && !g.over && m.hatch == null; // 알은 공격 불가
+      const canAttack = isMe && myTurn && !pending && monsterCanAttack(g,p,m);
       // 카지노(v34): 카운터 배지 (12개마다 카지노 주사위)
       const countLabel = getLang() === 'ja' ? 'カウント' : getLang() === 'en' ? 'Count' : '카운트';
       const casinoBadge = m.aura === "casino" ? { badge: `${countLabel} ${m.gcount || 0}/12` } : m.id === "CASTLE" ? { badge: `${countLabel} ${m.gcount || 0}` } : {};
@@ -725,7 +726,7 @@ export class GameView {
           return;
         }
         aim?.remove();aim=null;
-        if(!ghost){ghost=card.cloneNode(true) as HTMLElement;ghost.className=card.className+' drag-ghost';ghost.classList.remove('is-attacker','is-aiming','is-dragging');ghost.style.width=`${card.offsetWidth}px`;ghost.style.height=`${card.offsetHeight}px`;document.body.append(ghost);}
+        if(!ghost){ghost=card.cloneNode(true) as HTMLElement;ghost.className=card.className+' drag-ghost';ghost.classList.remove('is-attacker','is-aiming','is-dragging');ghost.style.opacity='1';ghost.style.zIndex='2147483647';ghost.style.width=`${card.offsetWidth}px`;ghost.style.height=`${card.offsetHeight}px`;document.body.append(ghost);}
         ghost.style.display='';ghost.style.left=`${x}px`;ghost.style.top=`${y}px`;
         setHot(null);
         if (!marker) return;

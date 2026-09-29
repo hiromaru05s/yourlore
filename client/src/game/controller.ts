@@ -315,7 +315,7 @@ export abstract class BaseController implements BoardHandlers {
         case "destroy": {
           const gh = ghosts.get(e.uid);
           const exiled=res.state.players[e.player].removed?.find(c=>c.uid===e.uid);
-          if(exiled){await A.exileCard(exiled,sideOf(e.player),gh?.el??document.querySelector<HTMLElement>(`.card[data-uid="${e.uid}"]`));if(gh&&!gh.el.closest(".zone-mon"))gh.el.remove();ghosts.delete(e.uid);}
+          if(exiled){await (gh?A.ghostDie(gh.el,gh.side,true):A.destroyAnim(e.uid,sideOf(e.player),true));if(gh&&!gh.el.closest(".zone-mon"))gh.el.remove();ghosts.delete(e.uid);}
           else if (gh) { await A.ghostDie(gh.el, gh.side); ghosts.delete(e.uid); }
           else await A.destroyAnim(e.uid, sideOf(e.player));
           releaseMonster(e.uid);
@@ -325,9 +325,12 @@ export abstract class BaseController implements BoardHandlers {
         case "attack": {
           // The shared attack timeline owns launch/contact cues and local target recoil.
           const defender = sideOf((1 - e.player) as Side);
-          await A.attackStrike(e.uid, e.targetUid, defender,()=>eventSound.contact(e.targetUid,(1-e.player) as Side));
+          await A.attackStrike(e.uid, e.targetUid, defender,()=>eventSound.contact(e.targetUid,(1-e.player) as Side),res.state.players[e.player].field.find(m=>m.uid===e.uid)?.exhausted!==false);
           break;
         }
+        case "monsterActivate":
+          await A.monsterActivation(e.uid);
+          break;
         case "hit":
           A.monHit(e.uid);
           await wait(110);
@@ -473,9 +476,9 @@ export abstract class BaseController implements BoardHandlers {
     if(this.quickFaces.length)for(const pl of [0,1] as Side[]){
       for(const mon of res.state.players[pl].field){
         const old=prev.players[pl].field.find(m=>m.uid===mon.uid);if(!old)continue;
-        const atk=effAtk(res.state.players[pl],mon)>effAtk(prev.players[pl],old);
-        const hp=effDef(res.state.players[pl],mon)>effDef(prev.players[pl],old);
-        if(atk||hp)statFeedbackMs=Math.max(statFeedbackMs,atk&&hp?2100:1500);
+        const atk=effAtk(res.state.players[pl],mon,res.state)!==effAtk(prev.players[pl],old,prev);
+        const hp=effDef(res.state.players[pl],mon)!==effDef(prev.players[pl],old);
+        if(atk||hp)statFeedbackMs=Math.max(statFeedbackMs,1800);
       }
     }
     const handLayouts=[draws[this.you]>0?captureHandLayout(document.getElementById('hand')):undefined,
@@ -492,7 +495,7 @@ export abstract class BaseController implements BoardHandlers {
     // Pending targets can span multiple reducer batches. Keep the face until the last choice,
     // board update, draw and stat feedback have completed; do not change engine timing.
     if(this.quickFaces.length&&(!res.state.pending||res.state.over)){
-      // Dual stat rises stagger health by 600ms; source exit follows both arrows.
+      // Paired stat changes share the approved 1800 ms motion.
       await Promise.all([...effectFinishes,wait(statFeedbackMs)]);
       const finished=this.quickFaces.splice(0);
       await Promise.all(finished.map(x=>A.finishQuickSpell(x.node,x.side)));

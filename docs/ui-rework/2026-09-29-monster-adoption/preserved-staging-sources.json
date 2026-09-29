@@ -1,0 +1,329 @@
+{
+  "baseline": "/Users/hiromaru05s/.codex/worktrees/hand-condition-golden/LORE_TCG",
+  "files": [
+    {
+      "path": "client/src/dev/connectedReturnEffects.ts",
+      "sha256": "6b458f967db722e62f1af8a5071a78e9b8c7da9ff4114b28aa27ab143aeac7b7"
+    },
+    {
+      "path": "client/src/dev/connectedReturnMotion.ts",
+      "sha256": "2e790b70e7f455e07559e3cc6cd96793bdf43d48dcb7291dfac3d12c512fabde"
+    },
+    {
+      "path": "client/src/dev/connectedReturnPresets.ts",
+      "sha256": "8749adfc8af6218d169a0639016a0ee3a6408677303dc9f004a39684d0e698f4"
+    },
+    {
+      "path": "client/src/dev/duelLab.ts",
+      "sha256": "8e6fd8b42d761af1d89ea731e2281962507479121bb8bf06b77daf3c5295424a"
+    },
+    {
+      "path": "client/src/dev/gateReturnEffects.ts",
+      "sha256": "1853db02cfc4301dbb44f4b32e666ede14aabc4b25d66a81c076273bc2fad6c9"
+    },
+    {
+      "path": "client/src/dev/gateReturnPresets.ts",
+      "sha256": "89ba51352e9ecda8fe489f19346f74449cdd1d1e3680694a85a2ee0800bb4bcf"
+    },
+    {
+      "path": "client/src/dev/homeCardEntryLab.css",
+      "sha256": "ed13a4d1d8a179e06d597cc6fc21365557fb1e71dfb3c13b64ee2191737675f9"
+    },
+    {
+      "path": "client/src/dev/homeCardEntryLab.ts",
+      "sha256": "640dd40ce28191fba07a4c9f44d30dab401ce2c18616252eeb2e97a5d31633f1"
+    },
+    {
+      "path": "client/src/dev/homeCardEntryMotion.ts",
+      "sha256": "b61d33b02edb5ec6bb7e48015a224781203480b258382ed245339dc00f607bf3"
+    },
+    {
+      "path": "client/src/dev/homeCardEntryScene.css",
+      "sha256": "7054608bac6336fd9912272790216d1be3bf4c77d60c04d7e6b90ccbb9ae2c27"
+    },
+    {
+      "path": "client/src/dev/homeCardEntryScene.ts",
+      "sha256": "b5b480fa3b35182543f8eea6a6c39895dff10ea6243b3914b1dcb88e25468891"
+    },
+    {
+      "path": "client/src/dev/homeEntryLab.css",
+      "sha256": "1ae973d5cc19fc257668405d359ee88886c395333a9cfe5007662f5501967d26"
+    },
+    {
+      "path": "client/src/dev/homeEntryLab.ts",
+      "sha256": "affa95676bbe207b030c20cf908cf8912fb3fd7be83b772676d8361d5fb102be"
+    },
+    {
+      "path": "client/src/dev/homeEntryScene.css",
+      "sha256": "df5c86e730b6faa719aa7ab3289c1eba8e0bc51164452cf6decf778beae24b99"
+    },
+    {
+      "path": "client/src/dev/homeEntryScene.ts",
+      "sha256": "0b1634d0fd52d80c94ecb74ffe8494e42b00bd9adfc0ebac555b4afd9cdd79ef"
+    },
+    {
+      "path": "client/src/dev/homeNavFrames.ts",
+      "sha256": "ab37cf350e932f2f7bd1cc839706864ad1a128a9cbf34aa3a072cc0c8456982b"
+    },
+    {
+      "path": "client/src/dev/homeNavMotion.ts",
+      "sha256": "ebeb3ca5598f4141500e3686aa1f32bfd68c4a962a0577ba3d656c88cf9d9331"
+    },
+    {
+      "path": "client/src/dev/homeNavScene.ts",
+      "sha256": "058fa8a935ceaf8a717a4f0612279098b724bc0e7d9e547ad8a21121eec28585"
+    },
+    {
+      "path": "client/src/dev/homeNavVariants.css",
+      "sha256": "a59cf8fc8684f841d28813d174e848796ad842754ca79f28e952381e8416e57a"
+    },
+    {
+      "path": "client/src/dev/manaBoardLab.css",
+      "sha256": "075e7cd0fc7b69ddaca69934c39278b624fd73b2c69aa80a893730b399db14ea"
+    },
+    {
+      "path": "client/src/dev/manaBoardLab.ts",
+      "sha256": "2f795bb1b4ac1a9a57749ae3cd87e00ec1b71a870528e9e3c0aba67cc085ac44"
+    },
+    {
+      "path": "client/src/dev/manaFacetVariants.ts",
+      "sha256": "cd26bdb3b2d69c7fb9095ebbb499d3ff8b6197aa4964483be35cb043bd07b6a1"
+    },
+    {
+      "path": "client/src/dev/manaFormation.ts",
+      "sha256": "f4b10a4ac5aa86ee852a271c229fea2529aa26a761bee958db00e198cfd06e2d"
+    },
+    {
+      "path": "client/src/dev/manaGainVariants.ts",
+      "sha256": "76eb2704035cdc94fe2413bce106de16dbde11cb7fd943796b95a11b539394fb"
+    },
+    {
+      "path": "client/src/dev/manaLab.css",
+      "sha256": "cdc3417b36359cabfb408431f7cc06e1ad407ce7405234df30131224212f8f5b"
+    },
+    {
+      "path": "client/src/dev/manaLab.ts",
+      "sha256": "b81be6ee6ab40e08c7e7634009bb8cf205ee68dfd5b06daa1ba642827655ef8a"
+    },
+    {
+      "path": "client/src/dev/passiveHighlightEffects.css",
+      "sha256": "4a99992871573076768fa672a8c773d7a99a424bee4963bf8793b6e335b22ef7"
+    },
+    {
+      "path": "client/src/dev/passiveHighlightEffects.ts",
+      "sha256": "842a7ff88260b31e3b1feba131121d6560d55d41f493f48bc0b0dbdcd3d0bc43"
+    },
+    {
+      "path": "client/src/dev/passiveHighlightLab.css",
+      "sha256": "ff3c4d387430f9331b87095abd69b74ffb725bc195a4b70309a16bbf368116eb"
+    },
+    {
+      "path": "client/src/dev/passiveHighlightLab.ts",
+      "sha256": "523cbf14377a649c961683ee029dadfd8b2f6c40687b4b4b0d53a5ba4c19c7a6"
+    },
+    {
+      "path": "client/src/dev/passiveLab.ts",
+      "sha256": "88bbcf043807bae2ccce06d79c8d71bd8a0d378da439c1de4a6c3c2e8e852d94"
+    },
+    {
+      "path": "client/src/dev/portalReturnMotion.ts",
+      "sha256": "6ca7415c9666cb9f929d1c23bd68093ca6dcf517a6fe467c039455cd093ea7b0"
+    },
+    {
+      "path": "client/src/dev/portalReturnPresets.ts",
+      "sha256": "862f6cd5423aac258d5cfb04dfefffacfeb4f86608d70cab3d722f95611196f2"
+    },
+    {
+      "path": "client/src/dev/series-vfx-a/app.ts",
+      "sha256": "9ee71c3982b819f2e669998efb56fcb26a96b0ae03ca4bb8463c954940a815d0"
+    },
+    {
+      "path": "client/src/dev/series-vfx-a/board.ts",
+      "sha256": "547ba4d262e38dc4da799e9800873c8ed9d0ded62ca272c912c79277f9d26434"
+    },
+    {
+      "path": "client/src/dev/series-vfx-a/choreography.ts",
+      "sha256": "d3c323bb3dbdf3bb342cbd0a92c4cfca9603fb65491c15467c88923ff8f62eba"
+    },
+    {
+      "path": "client/src/dev/series-vfx-a/material.ts",
+      "sha256": "ba6908124e3f130989f0df104bb477c417e58aaa89f5a0dfe914b5164f10340f"
+    },
+    {
+      "path": "client/src/dev/series-vfx-a/render.ts",
+      "sha256": "39faa5e2bd8f073e7093dc91790ecba8e51bef113a5144a9e0c974fe78789063"
+    },
+    {
+      "path": "client/src/dev/series-vfx-a/style.css",
+      "sha256": "b975a3564f035b1133bb50eea4588d576a60e541d4c8bba85b2ef0e4d6d1e795"
+    },
+    {
+      "path": "client/src/dev/series-vfx-b/board.ts",
+      "sha256": "0cebd33d849fc35ecb171566381b310080682aecc2d756543089a8d975f133f9"
+    },
+    {
+      "path": "client/src/dev/series-vfx-b/catalog.ts",
+      "sha256": "67c0eff3ef550dddcc97207e5acb55fa432e2c54d27fdff4ead3ee992f3d5221"
+    },
+    {
+      "path": "client/src/dev/series-vfx-b/choreography.ts",
+      "sha256": "6ee4c6b87fcc017a03a82f230ada89e05ad32e0af066bad9a2ec25f519580ac9"
+    },
+    {
+      "path": "client/src/dev/series-vfx-b/forms.ts",
+      "sha256": "e8db34bf96b167b082b707ef93e155c03f9d7ce8074ea68e7a8da2cb32c10378"
+    },
+    {
+      "path": "client/src/dev/series-vfx-b/main.ts",
+      "sha256": "2a2bfea8f9902be1183040d0c23a636b4e17f0cd62a97a71da8fb64ceb8c1ab1"
+    },
+    {
+      "path": "client/src/dev/series-vfx-b/preview.css",
+      "sha256": "45e0a6a5763d88bb1e545c90cc7fa4cc0e33a9031329c483e9679f63d77773be"
+    },
+    {
+      "path": "client/src/dev/series-vfx-b/preview.ts",
+      "sha256": "7e79dfbc644fecfa4118cc7a744edda04d0a35c7ec4d846de2124435e9a7fe00"
+    },
+    {
+      "path": "client/src/dev/series-vfx-b/renderer.ts",
+      "sha256": "f585e4a6a25463400ff997d5c902b0479128a92bf19458a66bacf0cadaf84669"
+    },
+    {
+      "path": "client/src/dev/series-vfx-c/catalog.ts",
+      "sha256": "08cdc7dac4053a413ca3a3cf488876f250043ca7364fbfb57311cfbdf12da94c"
+    },
+    {
+      "path": "client/src/dev/series-vfx-c/main.ts",
+      "sha256": "3179bccce5f3af01c209a2a4b66ada1742cb796a6f0bb871ae6ea14860c48b34"
+    },
+    {
+      "path": "client/src/dev/series-vfx-c/renderer.ts",
+      "sha256": "9d3a20bc7f73a48a4e934d54f5321b7817badbcb9006a95af84dc93b14570317"
+    },
+    {
+      "path": "client/src/dev/series-vfx-c/style.css",
+      "sha256": "02bc2fbd4a4abe394bc79d8e4040343839957b1f7a6486f81f5987407691a407"
+    },
+    {
+      "path": "client/src/dev/series-vfx-d/board.ts",
+      "sha256": "f762a3621995b9e031b8cee31324bde1e779587d34388cd1574413dab26d7cd3"
+    },
+    {
+      "path": "client/src/dev/series-vfx-d/catalog.ts",
+      "sha256": "e011cb913495834529545293b4bde7e47969c0c8eb432f15f98ae09db801d5fb"
+    },
+    {
+      "path": "client/src/dev/series-vfx-d/main.ts",
+      "sha256": "325515417174c0ff0847a6121ba7b59da66739d397a8feb12749317a29291b39"
+    },
+    {
+      "path": "client/src/dev/series-vfx-d/renderer.ts",
+      "sha256": "4893abb7ddf00ed55af92e98ffa83bb5e21608c89f14b5704ac0010e5d1d444a"
+    },
+    {
+      "path": "client/src/dev/series-vfx-d/studio.ts",
+      "sha256": "f2e6442ede40ebaa5cdf6f80fe93874630d2d77214e4eb6db0a8cdaef63cbe08"
+    },
+    {
+      "path": "client/src/dev/series-vfx-d/style.css",
+      "sha256": "b3a5f006637697a4b91b72960ff85e63950602757af8c2edaef9ade9ed8f5db7"
+    },
+    {
+      "path": "client/src/dev/series-vfx-d/timeline.ts",
+      "sha256": "57f17a9e98539973a7cf220af6237f0e765b0d057397f447a442b323b9472fad"
+    },
+    {
+      "path": "client/src/dev/shelfReturnEffects.ts",
+      "sha256": "72c6bed97e8288bbd829a8b2e741ff86459365c20e3c4ea435b32b567accdf51"
+    },
+    {
+      "path": "client/src/dev/shelfReturnLab.css",
+      "sha256": "04ae950a31f38d8ad86492ee20760c7996e8dda6f5c9fea0dde7d3e803523927"
+    },
+    {
+      "path": "client/src/dev/shelfReturnLab.ts",
+      "sha256": "08ed64a7eab2c78c15c6555c3bc8af1e9981c8397d95f563d54328c7137a1494"
+    },
+    {
+      "path": "client/src/dev/turnLightBoardLab.css",
+      "sha256": "9aab31a315537834e116295e1bf82300326d490e1dd75988b8deeb53ae2035bf"
+    },
+    {
+      "path": "client/src/dev/turnLightBoardLab.ts",
+      "sha256": "fbddbdd6812f7eeb7f17c0daf8f4f87da37799078d2d8ea7fc753c1b150d8699"
+    },
+    {
+      "path": "client/src/dev/turnLightEffects.ts",
+      "sha256": "143a4f05c8abc2521ba75d340d8cf68f53d98e032d133bb2142070031a0c7068"
+    },
+    {
+      "path": "client/src/dev/turnLightLab.css",
+      "sha256": "e08e5699ac8e76bcb1e3a98976678bcc371571c7c06695d73f92741df640a0e4"
+    },
+    {
+      "path": "client/src/dev/turnLightLab.ts",
+      "sha256": "7a2077409d67c5bc92aa813fb8eab3490f24a095a512bb241558b3572a87b320"
+    },
+    {
+      "path": "client/src/main.ts",
+      "sha256": "263043167c813a1c6118e00a5f80676058790f78c872dd5c8e7dced3e1e1e5d6"
+    },
+    {
+      "path": "client/src/router.ts",
+      "sha256": "a82cd8332952d7a336e039dfdcb6da4d658210349c8470d479cbf96be2b2cc1a"
+    },
+    {
+      "path": "client/src/screens/cards.ts",
+      "sha256": "dde097fd0f03a01defbd3c1fafa9ba659956868ba8df92eb16d28da85f37dbae"
+    },
+    {
+      "path": "client/src/screens/deck.ts",
+      "sha256": "3316548cff235f526f64c702b4c82a2abe31e91406527a212a1113375eeca112"
+    },
+    {
+      "path": "client/src/styles/cardsWorkspace.css",
+      "sha256": "306127881e1a1e89a666c6cf43355bf3053a436b6525fb135a2d90f31e88b75d"
+    },
+    {
+      "path": "client/src/styles/deckWorkspace.css",
+      "sha256": "9db958541f3b7cece3e973038b16808d4e1885b177c8579b9ce9575b54da92d5"
+    },
+    {
+      "path": "client/src/styles/homeEntrance.css",
+      "sha256": "92ae12e8f7f3f81b1fd704f03f08c4e050ad0d5edbfb65a7d9352abbaff27015"
+    },
+    {
+      "path": "client/src/styles/passives.css",
+      "sha256": "43a03c04ba9e362d1d261d52b4f5b0701a00a75681d255cde42a28b39776a7e3"
+    },
+    {
+      "path": "client/src/styles/presentation.css",
+      "sha256": "74d2ba7f735b2e901216085d2eb9285bda19000ac2c6d7d8ced29201809d1fbd"
+    },
+    {
+      "path": "client/src/ui/assetReadiness.ts",
+      "sha256": "c3961d3f4dbfeb89a199272f875a0d91b26c81b1dfa04ca75186116ee5154da7"
+    },
+    {
+      "path": "client/src/ui/homeEntrance.ts",
+      "sha256": "1446407515dfde466a0784210895d3687b63b3e7cba0b9776124fbe548c59ba3"
+    },
+    {
+      "path": "client/src/ui/homeEntranceMotion.ts",
+      "sha256": "a8ae2e57cd81dc26801d01fa58129befcaa52cea8ffaf65901f015877e8197ad"
+    },
+    {
+      "path": "client/src/ui/homeMusic.ts",
+      "sha256": "960b6f8082894f3a0fd0c58d0141be4113a3a1b1cc4e869db80dfd3afddc5ff0"
+    },
+    {
+      "path": "client/src/ui/manaGain.ts",
+      "sha256": "57959b565d476100fe4dc591482c2e7621a0e138c3272400ec888d1d64e306f3"
+    },
+    {
+      "path": "client/src/ui/sceneMotion.ts",
+      "sha256": "c3c1ce3709fdfba85f35cef8aa998d26d3ed07f50564191df51ec15dbb81378a"
+    }
+  ]
+}

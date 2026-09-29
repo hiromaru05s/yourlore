@@ -804,6 +804,7 @@ function tickTurnFx(g: GameState, ctx: Ctx, p: PlayerState): void {
   for (const m of [...p.field]) {
     if (g.over) return;
     const v = m.val || 0, v2 = m.val2 || 0;
+    const activationIndex=ctx.ev.length,activationBefore=m.turnFx?JSON.stringify([p,o]):"";
     switch (m.turnFx) {
       case "growAtk": m.atkMod = (m.atkMod || 0) + v; ctx.log(`  └ ${cn(m)} 공격력 +${v}(지속)`, `  └ ${cn(m)} 攻撃力+${v}(持続)`); break;
       case "growDef": m.defMod = (m.defMod || 0) + v; ctx.log(`  └ ${cn(m)} 체력 +${v}(지속)`, `  └ ${cn(m)} 体力+${v}(持続)`); break;
@@ -885,6 +886,7 @@ function tickTurnFx(g: GameState, ctx: Ctx, p: PlayerState): void {
         for (const other of p.field) if (/장비 장인|装備職人/.test(other.name + (other.nameJa ?? ''))) gainShield(g, ctx, p, 5, m);
         break;
     }
+    if(m.turnFx&&(ctx.ev.length!==activationIndex||JSON.stringify([p,o])!==activationBefore))ctx.ev.splice(activationIndex,0,{type:"monsterActivate",player:(g.players[0]===p?0:1),uid:m.uid});
   }
 }
 
@@ -1240,6 +1242,19 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
 }
 function noAttackActive(g: GameState): boolean {
   return g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "noAttack"));
+}
+/** State-only eligibility for the board's persistent ready/exhausted presentation. */
+export function monsterCanAttack(g:GameState,p:PlayerState,m:FieldMon):boolean {
+  const o=g.players[g.players[0]===p?1:0];
+  if(g.over||m.exhausted||m.hatch!=null||noAttackActive(g))return false;
+  if(glassBanActive(g)&&Math.abs(effAtk(p,m,g)-curHp(p,m))>=4)return false;
+  if(o.field.some(x=>x.aura==='lowAtkBan')&&(m.cost??0)<=2)return false;
+  if(p.noHighAtkTurn&&(m.cost??0)>=4||m.id==='ASSASSIN_SQUAD'&&o.hp<11)return false;
+  if(m.summonedTurn===g.turn&&o.field.some(x=>hasPassive(x,'majesty')))return false;
+  const direct=!p.noDirectTurn&&!o.field.some(x=>x.aura==='eliteGuard');
+  if(!o.field.length||m.directOnly)return direct;
+  if(m.attackFx==='berserk'&&p.field.some(x=>x.uid!==m.uid))return true;
+  return o.field.some(x=>!(x.aura==='eliteGuard'&&(m.cost??0)<=6));
 }
 function summonBlockedLow(g: GameState, summoner: PlayerState, card: CardInst): boolean {
   if ((card.cost ?? 0) > 3) return false;
@@ -2131,6 +2146,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   }
   if (counterTarget && counterAmount > 0) counterHit(g, ctx, o, counterTarget, p, att, counterAmount);
   if (faceDmg && isAssassinCard(att)) advanceQuest(p, "assassinHit");
+  if(att.attackFx&&p.field.some(m=>m.uid===att.uid))ctx.ev.push({type:"monsterActivate",player:(g.players[0]===p?0:1),uid:att.uid});
   // per-attack effect (e.g. GM8_0: lose attack permanently) + multi-attack accounting
   if (att.attackFx === "atkDownOnAttack") { att.atkMod = (att.atkMod || 0) - (att.val || 0); ctx.log(`  └ ${cn(att)} 공격력 -${att.val}(지속)`, `  └ ${cn(att)} 攻撃力-${att.val}(持続)`); }
   // 흑요석 광전사(rampFace): +2/+2 permanently each time it damages the opponent player
@@ -2223,6 +2239,7 @@ function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: Fiel
 /** 주술사(v39 hexSummon) 주사위 성공 눈: 초급 5+ / 중급 4+ / 상급 3+ */
 const HEX_SUMMON_NEED: Record<string, number> = { HEXER1: 5, HEXER2: 4, HEXER3: 3 };
 function resolveOnSummon(g: GameState, ctx: Ctx, m: FieldMon): void {
+  if(m.onSummon)ctx.ev.push({type:"monsterActivate",player:g.cur,uid:m.uid});
   if (m.onSummon === 'expansion') { expansionSummon(g, ctx, g.players[g.cur], m); return; }
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];

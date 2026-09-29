@@ -253,6 +253,7 @@ export type Action =
 export type DiceSource = { player: Side } & ({ id: string; status?: never } | { status: "brand" | "solitude"; id?: never });
 
 export type GameEvent =
+  | { type: "monsterActivate"; player: Side; uid: string }
   | { type: "enchantActivate"; player: Side; uid: string; id: string }
   | { type: "log"; html: string; htmlJa: string }
   | { type: "turnHeader"; turn: number; name: string; isBot: boolean; player?: Side } // player: whose turn (log tinting)

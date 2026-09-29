@@ -1,3 +1,6 @@
+import {playMonster,setMonsterSkip,monsterRect} from './monster/runtime';
+import {pose as monsterPose} from './monster/catalog';
+import {placement as monsterPlacement} from './monster/actor';
 import {foldQuestIntoSlot,nativeQuestGhost} from './questFold';
 import {getManaFormation} from './manaFormationPreview';
 import {passiveIcon} from './passiveIcon';
@@ -6,8 +9,6 @@ import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
 import type {HandLayout} from './handGeometry';
 import {mountDuelOutcome,cancelDuelOutcome} from './duelOutcome';
 import {reserveMonster} from './fieldLayout';
-import {attackPlan,attackPose,ATTACK_DURATION_MS} from './attackVisual';
-import {runAttackTimeline} from './attackMotion';
 import {waitForDuel} from './duelReadiness';
 // ============================================================
 // LORE — animation helpers. Triggered by engine events; never
@@ -37,7 +38,7 @@ export const isFxSkipped=()=>fxSkip;
 const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
-  fxSkip = on;
+  fxSkip = on; setMonsterSkip(on);
   if(on){clearBiblionFx();cancelDuelOutcome();}
   if (on) for (const r of [...fxWaiters]) r();
 }
@@ -102,6 +103,7 @@ function floatAt(node: HTMLElement, rect: { left: number; top: number }): HTMLEl
   node.style.left = rect.left + "px";
   node.style.top = rect.top + "px";
   node.style.margin = "0";
+  node.style.opacity = "1";
   node.style.zIndex = "125";
   node.style.pointerEvents = "none";
   node.style.transition = "none";
@@ -181,7 +183,19 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const duration=reduced?120:heavy?960:620;
+  if(heavy){
+    face.style.zIndex='2147483647';reveal.style.zIndex='2147483647';
+    // Finish the hand reveal on the same flat board plane as approved summon B.
+    const r=monsterRect(target),p=monsterPose('summon','B',0,r,r,reduced);
+    const initial=monsterPlacement(r,p.x,p.y,p.angle,p.scale,p.z,p.rock);
+    const transfer=face.animate([{transform:start.toString(),opacity:0},{transform:initial.toString(),opacity:1}],{duration:reduced?80:300,easing:'cubic-bezier(.2,.7,.3,1)',fill:'both'});
+    const fade=reveal.animate([{opacity:1},{opacity:0}],{duration:reduced?80:220,fill:'both'});
+    await wait(reduced?80:300);transfer.cancel();fade.cancel();reveal.remove();
+    face.style.transform=initial.toString();
+    await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>{sfx(landingSound);window.dispatchEvent(new CustomEvent('lore:summon-impact',{detail:target.getBoundingClientRect()}));}}));
+    face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
+  const duration=reduced?120:620;
   const options:KeyframeAnimationOptions={duration,easing:'linear',fill:'both'};
   const hover=new DOMMatrix().translate(0,-Math.min(innerHeight*.18,w*1.35)).multiply(end).scale(1.06);
   const oldHover=new DOMMatrix().translate(0,-Math.min(innerHeight*.18,w*1.35)).multiply(oldEnd).scale(1.06);
@@ -397,7 +411,7 @@ export function pileFlash(id: string): void {
 
 export function summonIn(uid: string): void {
   const n = byUid(uid);
-  if (n) { n.classList.add("summon-in"); setTimeout(() => n.classList.remove("summon-in"), 430); }
+  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}));
 }
 
 export function lunge(uid: string, dir: "up" | "down"): void {
@@ -406,44 +420,15 @@ export function lunge(uid: string, dir: "up" | "down"): void {
 }
 
 /** Physical card attack: anticipation, accelerating contact, hit stop, recoil and a settled return. */
-export async function attackStrike(uid:string,targetUid:string|null,defender:ViewSide,onImpact?:()=>void):Promise<void>{
-  if(!fxSkip)animateSeeker(defender==='me'?'opp':'me','attack');
-  const source=byUid(uid);
-  const target=targetUid?byUid(targetUid):document.querySelector<HTMLElement>(defender==='me'?'#portraitMe .avatar':'#portraitOpp .avatar');
+export async function attackStrike(uid:string,targetUid:string|null,defender:ViewSide,onImpact?:()=>void,exhaust=true):Promise<void>{
+  const source=byUid(uid),target=targetUid?byUid(targetUid):document.querySelector<HTMLElement>(defender==='me'?'#portraitMe .avatar':'#portraitOpp .avatar');
   if(!source||!target||fxSkip)return;
-  if(matchMedia('(prefers-reduced-motion:reduce)').matches){sfx(targetUid?'impact':'facehit');onImpact?.();await wait(100);return;}
-  const from=source.getBoundingClientRect(),to=target.getBoundingClientRect();
-  const w=source.offsetWidth,h=source.offsetHeight;if(!w||!h)return;
-  const start=fieldPlacement(source,w,h),plan=attackPlan(from,to);
-  const moving=floatAt(source.cloneNode(true) as HTMLElement,{left:0,top:0});
-  moving.removeAttribute('data-uid');moving.removeAttribute('id');moving.classList.add('attack-flight');
-  moving.style.width=`${w}px`;moving.style.height=`${h}px`;moving.style.setProperty('--cw',`${w}px`);moving.style.setProperty('--ch',`${h}px`);moving.style.transformOrigin='0 0';
-  moving.style.visibility='visible';moving.style.transform=start.toString();
-  const visibility=source.style.visibility;source.style.visibility='hidden';
-  let recoil:Animation|undefined;
-  try{
-    await boardMotionScope(async signal=>{
-      const started=performance.now(),stopFx=playBiblionFx('attack',from,to,started);
-      try{
-        await runAttackTimeline({start:started,signal,
-          isAlive:()=>source.isConnected&&target.isConnected&&moving.isConnected,
-          paint:ms=>{
-            const pose=attackPose(plan,ms);
-            moving.dataset.attackPhase=pose.phase;moving.dataset.attackProgress=String(ms/ATTACK_DURATION_MS);
-            moving.style.transform=new DOMMatrix().translate(pose.x,pose.y).rotate(pose.turn).scale(pose.scale).translate(-plan.origin.x,-plan.origin.y).multiply(start).toString();
-          },
-          onLaunch:()=>sfx('attack'),
-          onImpact:()=>{
-            sfx(targetUid?'impact':'facehit');
-            const amount=Math.min(6,plan.u*.07),x=plan.nx*amount,y=plan.ny*amount;
-            recoil=target.animate([{translate:'0 0',filter:'brightness(1)'},{translate:`${x}px ${y}px`,filter:'brightness(1.24)',offset:.18},{translate:`${-x*.25}px ${-y*.25}px`,filter:'brightness(1.03)',offset:.55},{translate:'0 0',filter:'brightness(1)'}],{duration:280,easing:'ease-out'});
-            onImpact?.();
-          }
-        });
-      }finally{stopFx();}
-      return !signal.aborted;
-    },2500);
-  }finally{recoil?.cancel();moving.remove();source.style.visibility=visibility;}
+  animateSeeker(defender==='me'?'opp':'me','attack');sfx('attack');
+  await boardMotionScope(signal=>playMonster(source,'attack',{target,signal,exhaust,side:defender==='opp'?1:-1,onImpact:()=>{sfx(targetUid?'impact':'facehit');onImpact?.();}}));
+  if(exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');source.style.filter='grayscale(1) brightness(.57)';}
+}
+export async function monsterActivation(uid:string):Promise<void>{
+ const n=byUid(uid);if(n&&!fxSkip)await boardMotionScope(signal=>playMonster(n,'trigger',{signal,side:n.closest('#oppRow')?-1:1}));
 }
 
 export function monHit(uid: string): void {
@@ -763,6 +748,7 @@ export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: nu
   const target=reserveMonster(zone,card.uid);
   if (!target) return null;
   const node = floatAt(cardEl(card, { size: "hand", fullArt:true }), from);
+  node.style.zIndex="2147483647";
   try {
     await focusCard(node, side);
     const face=await flyIntoSlot(node,target,cardEl(card,{field:true}),true,card.id==='MIMIC'?'mimic':'summon');
@@ -773,27 +759,13 @@ export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: nu
 }
 
 /** Kill a summon ghost: death flash then fly a card frame to that side's discard. */
-export async function ghostDie(node: HTMLElement, side: ViewSide): Promise<void> {
-  const from = node.getBoundingClientRect();
-  node.classList.add("mdie");
-  await wait(320);
-  if(node.closest(".zone-mon"))node.style.visibility="hidden";else node.remove();
-  flyCardFrame(frameFor("mon"), from, rectOf("#" + discId(side)));
-  pileFlash(discId(side));
-  await wait(340);
+export async function ghostDie(node:HTMLElement,side:ViewSide,voided=false):Promise<void>{
+ const target=document.getElementById(voided?(side==='me'?'rift-me':'rift-opp'):discId(side));
+ if(target&&!fxSkip){await boardMotionScope(signal=>playMonster(node,'destroy',{variant:voided?'B':'A',destination:target.querySelector<HTMLElement>('.pile-print .card')??target,side:side==='me'?1:-1,signal}));if(!voided)pileFlash(discId(side));}
+ node.style.visibility='hidden';
 }
-
-/** Destroy a monster that exists on the CURRENT board (pre re-render). */
-export async function destroyAnim(uid: string, side: ViewSide): Promise<void> {
-  const n = byUid(uid);
-  if (!n) return;
-  const from = n.getBoundingClientRect();
-  n.classList.add("mdie");
-  await wait(320);
-  (n as HTMLElement).style.visibility = "hidden";
-  flyCardFrame(frameFor("mon"), from, rectOf("#" + discId(side)));
-  pileFlash(discId(side));
-  await wait(340);
+export async function destroyAnim(uid:string,side:ViewSide,voided=false):Promise<void>{
+ const n=byUid(uid);if(n)await ghostDie(n,side,voided);
 }
 
 /** Random-card outcome popup. Big center card for your plays, compact upper popup for the opponent's. */

@@ -1,0 +1,13 @@
+{
+  "baselineVersion": "8cc5c974-8378-48fc-b95d-d490a28e4d7a",
+  "baselineCheckout": "/tmp/lore-menu-a3-b2-c1-20260929",
+  "checkedSources": 145,
+  "changedSources": [
+    "client/src/shared/engine.ts",
+    "client/src/ui/anim.ts",
+    "client/src/ui/statRise.ts",
+    "client/src/ui/boardView.ts",
+    "client/src/game/controller.ts"
+  ],
+  "cssIdentical": true
+}
