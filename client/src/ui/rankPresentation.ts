@@ -3,6 +3,7 @@ import type { RankChange } from '../shared/rank';
 import { tierOf, TIERS } from '../shared/rank';
 import { TIER_META, tierLabel, rankProgress } from './tier';
 import { rankEmblem } from './rankEmblem';
+import { applyEmblemPose, assembledPose, arrivingPose, departingPose, RANK_REVEAL_START, RANK_PROMOTION_END } from './rankEmblemMotion';
 import { loungeText as tr } from './loungeText';
 import { esc } from '../i18n';
 
@@ -60,16 +61,18 @@ export class RankPresentation {
     const label=direction>0?tr('昇格','PROMOTED','승급'):direction<0?tr('ティア更新','TIER UPDATED','티어 변경'):tr('ランク更新','RANK UPDATED','랭크 갱신');
     el.className='win-rank rank-result';el.dataset.direction=delta>0?'up':delta<0?'down':'flat';
     el.innerHTML=`<div class="rank-result-header"><span>${tr('ランクマッチ','RANKED DUEL','랭크 매치')}</span><span>${esc(c.season??'')}</span></div>
-      <div class="rank-medal" style="--rank-metal:${TIER_META[before].color}"><div class="rank-old">${rankEmblem(before)}</div><div class="rank-new" style="--rank-metal:${TIER_META[after].color}">${rankEmblem(after)}</div><div class="rank-surface-light"></div></div>
+      <div class="rank-medal" style="--rank-metal:${TIER_META[before].color}"><div class="rank-old">${rankEmblem(before)}</div><div class="rank-new" style="--rank-metal:${TIER_META[after].color}">${rankEmblem(after)}</div></div>
       <div class="rank-tier-name">${tierLabel(before)}</div><div class="rank-score"><b>${c.before}</b><span>MMR</span><strong class="rank-delta">${delta>0?'+':delta===0?'±':''}${delta}</strong></div>
       <div class="rank-track"><i></i><span class="rank-track-head"></span></div>
       <div class="rank-target"></div><div class="rank-verdict" aria-live="polite"></div>
       <div class="rank-previous">${c.before} → ${c.after}${c.rankAfter?` · #${c.rankAfter}`:''}</div>`;
     const medal=el.querySelector<HTMLElement>('.rank-medal')!, score=el.querySelector('.rank-score b')!, fill=el.querySelector<HTMLElement>('.rank-track i')!, head=el.querySelector<HTMLElement>('.rank-track-head')!, target=el.querySelector('.rank-target')!, name=el.querySelector('.rank-tier-name')!, verdict=el.querySelector('.rank-verdict')!;
+    const oldCrest=medal.querySelector<HTMLElement>('.rank-old')!, newCrest=medal.querySelector<HTMLElement>('.rank-new')!;
+    applyEmblemPose(oldCrest,assembledPose());applyEmblemPose(newCrest,arrivingPose(0));
     const paint=(value:number)=>{score.textContent=String(value);const p=rankProgress(value);fill.style.width=`${p.fraction*100}%`;head.style.left=`${p.fraction*100}%`;target.textContent=progressLabel(value,value===c.after?after:tierOf(value));};
     const complete=()=>{
       cancelAnimationFrame(this.frame);this.frame=0;this.finish=undefined;
-      paint(c.after);medal.style.setProperty('--reveal','100%');el.style.setProperty('--rank-metal',TIER_META[after].color);
+      paint(c.after);oldCrest.style.visibility='hidden';newCrest.style.visibility='visible';applyEmblemPose(newCrest,assembledPose());el.style.setProperty('--rank-metal',TIER_META[after].color);
       name.textContent=tierLabel(after);el.dataset.phase='settled';
       verdict.textContent=changed?`${label} · ${tierLabel(after)}`:delta===0?tr('MMR変動なし','MMR unchanged','MMR 변동 없음'):label;
     };
@@ -89,9 +92,17 @@ export class RankPresentation {
       const time=now-start, p=Math.max(0,Math.min(1,(time-500)/1600));
       const eased=p*p*(3-2*p);paint(Math.round(c.before+delta*eased));
       el.dataset.phase=time<500?'inscribe':time<2100?'count':'reveal';
-      medal.style.setProperty('--reveal',`${Math.max(0,Math.min(1,(time-2100)/650))*100}%`);
-      if(time>=2100){name.textContent=tierLabel(after);el.style.setProperty('--rank-metal',TIER_META[after].color);}
-      if(time>=3000){complete();return;}this.frame=requestAnimationFrame(tick);
+      const reveal=time-RANK_REVEAL_START;
+      if(changed&&reveal>=0){
+        applyEmblemPose(oldCrest,departingPose(reveal));
+        applyEmblemPose(newCrest,arrivingPose(reveal-180,direction<0));
+      }else if(!changed){
+        // An ordinary gain leaves the emblem intact; only its gemstone responds.
+        const pulse=Math.sin(Math.max(0,Math.min(1,reveal/750))*Math.PI);
+        applyEmblemPose(oldCrest,{...assembledPose(),body:1+pulse*.035,light:pulse});
+      }
+      if(time>=(changed?2700:2100)){name.textContent=tierLabel(after);el.style.setProperty('--rank-metal',TIER_META[after].color);}
+      if(time>=(changed?RANK_PROMOTION_END:3000)){complete();return;}this.frame=requestAnimationFrame(tick);
     };this.frame=requestAnimationFrame(tick);
   }
   private detach():void {cancelAnimationFrame(this.frame);this.frame=0;this.finish=undefined;this.observer?.disconnect();this.observer=undefined;this.el=undefined;}

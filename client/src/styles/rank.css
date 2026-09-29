@@ -21,15 +21,24 @@ button.lounge-rank-info:focus-visible { outline:2px solid #cfebff; outline-offse
 .outcome-result.has-rank>p:has(+.modal-row) { display:none; }
 .outcome-result .rank-result { display:flex; flex-direction:column; align-items:center; margin:18px 0 0; padding:14px 20px 12px; background:radial-gradient(ellipse at 50% 35%,#25426190,transparent 60%),linear-gradient(120deg,#081323c0,#11273bbc); border:1px solid #88a2bf50; border-radius:3px; color:#f0f3f9; --rank-metal:#bed3e6; }
 .rank-result-header { width:100%; display:flex; justify-content:space-between; color:#b4cadf; font-size:10px; letter-spacing:.13em; }
-.rank-medal { position:relative; width:148px; height:154px; margin:0 auto; isolation:isolate; --reveal:0%; }
-.rank-medal .rank-emblem { width:100%; height:100%; }
+.rank-medal { position:relative; width:208px; height:192px; margin:0 auto; isolation:isolate; }
+.rank-medal .rank-emblem { width:100%; height:100%; filter:drop-shadow(0 7px 6px #0008); }
 .rank-old,.rank-new { position:absolute; inset:0; }
-.rank-new { clip-path:inset(calc(100% - var(--reveal)) 0 0); z-index:2; }
-.rank-old { clip-path:inset(0 0 var(--reveal)); }
-.rank-surface-light { position:absolute; inset:22% 25% 16%; background:linear-gradient(110deg,transparent 38%,#e2f4ff55 48%,#fff6db99 50%,transparent 60%); clip-path:polygon(50% 0,100% 15%,94% 70%,50% 100%,6% 70%,0 15%); opacity:0; pointer-events:none; z-index:3; }
-.rank-result[data-phase=inscribe] .rank-engraving>path:first-child { stroke-dasharray:1; animation:rank-inscribe .6s ease-out both; }
-.rank-result[data-phase=count] .rank-surface-light { animation:rank-metal-sweep 1.6s ease-in-out both; }
-.rank-result[data-phase=reveal] .rank-medal { animation:rank-seat .8s cubic-bezier(.2,.8,.2,1) both; }
+.rank-new { opacity:0; z-index:2; }
+.rank-body { transform-origin:120px 120px; transform:scale(var(--crest-body,1)); }
+.rank-wing-left { transform-origin:92px 124px; transform:rotate(var(--crest-wing,0deg)); }
+.rank-wing-right { transform-origin:148px 124px; transform:rotate(calc(-1 * var(--crest-wing,0deg))); }
+.rank-feather { transform-origin:90px 140px; }
+.rank-feather-1 { transform:rotate(calc(-1 * var(--crest-fan,0deg))); }
+.rank-feather-2 { transform:rotate(calc(-2 * var(--crest-fan,0deg))); }
+.rank-feather-3 { transform:rotate(calc(-2.6 * var(--crest-fan,0deg))); }
+.rank-frame { transform-origin:120px 120px; transform:scale(var(--crest-frame,1)); }
+.rank-core { transform-origin:120px 118px; transform:rotateY(var(--crest-core,0deg)); }
+.rank-crown { transform:translateY(var(--crest-crown,0px)); }
+.rank-base { transform:translateY(var(--crest-base,0px)); }
+.rank-core-light { opacity:calc(.16 + var(--crest-light,0) * .84); }
+.home-rank .rank-core-light,.rank-result[data-phase=settled] .rank-new .rank-core-light { animation:rank-gem-breathe 5s ease-in-out infinite; }
+@keyframes rank-gem-breathe { 0%,100%{opacity:.16} 50%{opacity:.58} }
 .rank-tier-name { font:600 21px/1.3 var(--serif,serif); color:var(--rank-metal); min-height:28px; }
 .rank-score { display:flex; gap:8px; align-items:baseline; justify-content:center; margin:8px 0 14px; font-family:var(--mono,monospace); }
 .rank-score>b { font-size:40px; line-height:1; font-weight:500; font-variant-numeric:tabular-nums; letter-spacing:-.04em; }
@@ -46,17 +55,14 @@ button.lounge-rank-info:focus-visible { outline:2px solid #cfebff; outline-offse
 .rank-tier-guide { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:18px; }
 .rank-tier-guide>div { display:flex; flex-direction:column; align-items:center; padding:8px; background:#08172c77; border:1px solid #adc7e32e; text-align:center; }
 .rank-tier-guide b { font-size:12px; color:var(--rank-metal); }.rank-tier-guide span { font-size:11px; }
-@keyframes rank-inscribe { from {stroke-dashoffset:1;opacity:.2} to {stroke-dashoffset:0;opacity:1} }
-@keyframes rank-metal-sweep { 0%{opacity:0;transform:translateY(16%)} 25%{opacity:.85} 100%{opacity:0;transform:translateY(-16%)} }
-@keyframes rank-seat { 0%{transform:translateY(-3px) scale(1.04)} 50%{transform:translateY(1px) scale(.99)} 100%{transform:none} }
 @media(max-width:600px) {
   button.lounge-rank-info { max-width:350px; align-self:center; }
   .home-rank { padding:5px 10px 5px 2px; }.home-rank>.rank-emblem {width:66px;height:68px;}
   .home-rank-copy>strong {font-size:17px;}.home-rank-copy b{font-size:18px;}.home-rank-copy{gap:3px;}.home-rank .rank-target{font-size:10px;}
-  .modal.outcome-result.has-rank{padding:18px 20px;}.outcome-result .rank-result{padding:12px 15px;}.rank-medal{width:126px;height:130px;}.rank-tier-name{font-size:19px;}.rank-score>b{font-size:35px;}
+  .modal.outcome-result.has-rank{padding:18px 20px;}.outcome-result .rank-result{padding:12px 15px;}.rank-medal{width:176px;height:164px;}.rank-tier-name{font-size:19px;}.rank-score>b{font-size:35px;}
   .rank-tier-guide {grid-template-columns:repeat(2,1fr);}
 }
 @media(max-height:660px) {
-  .modal.outcome-result.has-rank {padding:12px 22px;}.outcome-result.has-rank>h2{font-size:22px;}.outcome-result .rank-result{margin-top:8px;padding:9px 18px;}.rank-medal{width:94px;height:96px;}.rank-score{margin:4px 0 9px;}.rank-score>b{font-size:30px;}.outcome-result.has-rank .modal-row{margin-top:12px;}
+  .modal.outcome-result.has-rank {padding:12px 22px;}.outcome-result.has-rank>h2{font-size:22px;}.outcome-result .rank-result{margin-top:8px;padding:9px 18px;}.rank-medal{width:122px;height:112px;}.rank-score{margin:4px 0 9px;}.rank-score>b{font-size:30px;}.outcome-result.has-rank .modal-row{margin-top:12px;}
 }
-@media(prefers-reduced-motion:reduce) {.rank-result *, .rank-result *::before {animation:none!important;transition:none!important;}}
+@media(prefers-reduced-motion:reduce) {.rank-emblem *, .rank-result *, .rank-result *::before {animation:none!important;transition:none!important;}}

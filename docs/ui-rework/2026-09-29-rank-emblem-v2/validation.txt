@@ -1,0 +1,7 @@
+PASS node tests/rank-emblem.mjs
+PASS isolated client npm run typecheck
+PASS isolated client npm run build (175 modules; main-DgzVJMUW.js; main-Dn-bRjiC.css)
+PASS initial shared npm run typecheck and npm run build
+BLOCKED subsequent shared typecheck: unrelated in-progress series-vfx-c/entry.ts imports missing ./revision2/main
+PASS scoped git diff --check
+BROWSER gold promotion, GM victory result, 390x844 result, eight-tier gallery; no error logs

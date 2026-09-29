@@ -1,0 +1,8 @@
+{
+  "client/src/ui/rankEmblem.ts": "2889c2baf74b7ec96098a7899c521f7353af3e0e40686aa19bedc4b43a8e673c",
+  "client/src/ui/rankEmblemMotion.ts": "0a4eeff3b253f6a61eda7a2081e1646b01e3446b0e2743487d65de41e0202b7a",
+  "client/src/ui/rankPresentation.ts": "1f165757ac412eb26dcb6faf5f8790fbf503eec5aa8055421703d97acecada8d",
+  "client/src/styles/rank.css": "9a7965cc4d01b8fb1942c530112d9f3802971735ef08a9dadde048d4a77d90c7",
+  "client/src/dev/rankLab.ts": "519bf98d667a8d63501ddcab1a90cd3d340e25aaa2b32b9226a5a9fb5dc6a3d6",
+  "tests/rank-emblem.mjs": "d8037e42ee2cb393c73a333417111b26d8031b7f1d4b9130c008cf15201fe848"
+}
