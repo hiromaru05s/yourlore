@@ -121,7 +121,7 @@ export class RiftInkMaterial {
  private gl:WebGLRenderingContext;
  private program:WebGLProgram;
  private cardTexture:WebGLTexture;
- private face:HTMLCanvasElement|undefined;
+ private faces=new Map<HTMLCanvasElement,WebGLTexture>();
  private time:WebGLUniformLocation|null;
 
  private aspect:WebGLUniformLocation|null;
@@ -147,10 +147,20 @@ export class RiftInkMaterial {
   const gl=this.gl;if(gl.isContextLost())throw new Error('WebGL context lost');
   const w=Math.max(224,Math.min(768,Math.ceil(size/32)*32)),h=Math.round(w*3.4/2.8);
   if(this.canvas.width!==w||this.canvas.height!==h){this.canvas.width=w;this.canvas.height=h;}
-  gl.viewport(0,0,w,h);gl.useProgram(this.program);gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,this.cardTexture);
-  if(this.face!==face){gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,face);this.face=face;}
+  gl.viewport(0,0,w,h);gl.useProgram(this.program);gl.activeTexture(gl.TEXTURE0);
+  let texture=this.faces.get(face);
+  if(!texture){
+   // Simultaneous removals share the shader, but retain their immutable faces
+   // on the GPU instead of uploading every card again on every frame.
+   if(this.faces.size>=8){const [old,tx]=this.faces.entries().next().value!;this.faces.delete(old);if(tx!==this.cardTexture)gl.deleteTexture(tx);}
+   texture=this.faces.size===0?this.cardTexture:gl.createTexture()!;
+   gl.bindTexture(gl.TEXTURE_2D,texture);
+   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,face);this.faces.set(face,texture);
+  }else gl.bindTexture(gl.TEXTURE_2D,texture);
   gl.uniform1f(this.time,ms);gl.uniform1f(this.aspect,aspect);gl.drawArrays(gl.TRIANGLES,0,6);return this.canvas;
  }
- forgetFace(){this.face=undefined;}
- dispose(){const gl=this.gl;this.textures.forEach(t=>gl.deleteTexture(t));gl.deleteBuffer(this.buffer);gl.deleteProgram(this.program);gl.getExtension('WEBGL_lose_context')?.loseContext();}
+ forgetFace(){for(const texture of this.faces.values())if(texture!==this.cardTexture)this.gl.deleteTexture(texture);this.faces.clear();}
+ dispose(){this.forgetFace();const gl=this.gl;this.textures.forEach(t=>gl.deleteTexture(t));gl.deleteBuffer(this.buffer);gl.deleteProgram(this.program);gl.getExtension('WEBGL_lose_context')?.loseContext();}
 }
