@@ -1,0 +1,114 @@
+{
+  "url": "https://test.yourlore.xyz/",
+  "version": "8cc5c974-8378-48fc-b95d-d490a28e4d7a",
+  "sourceCommit": "4f4f2859",
+  "implementationCommit": "464b2e94",
+  "baselineVersion": "2b15cfc8-5724-4513-a1d3-7ff8e5a91b42",
+  "buildCheckout": "/private/tmp/lore-menu-a3-b2-c1-20260929",
+  "selection": {
+    "A": "03",
+    "B": "02",
+    "C": "01"
+  },
+  "verifiedAt": "2026-09-29T13:23:51.833Z",
+  "productionDeployed": false,
+  "databaseMigrated": false,
+  "assets": [
+    {
+      "path": "/index.html",
+      "status": 200,
+      "sha256": "18f72ff1d1409a702a60fb532751d466a32eae5f234476c8b1f59f25711289d6",
+      "matches": true
+    },
+    {
+      "path": "/table-preview.html",
+      "status": 200,
+      "sha256": "1db0d660f213870c79665e732aeed44de79e0796abf5e966244c1ffd3e3cd5d0",
+      "matches": true
+    },
+    {
+      "path": "/assets/GLTFLoader-AEMP8Cz1.js",
+      "status": 200,
+      "sha256": "a134d072200aa544cf4e6e7256436b3153bcd09c8f2ca419b346090a0b36150e",
+      "matches": true
+    },
+    {
+      "path": "/assets/RoomEnvironment-XX58V7Xx.js",
+      "status": 200,
+      "sha256": "418df499f3cd81c5cd6fc1735b6a38523ef820941f232d33f5bd35d5d0a3ce4a",
+      "matches": true
+    },
+    {
+      "path": "/assets/ceremonyScene-CJ_amyty.js",
+      "status": 200,
+      "sha256": "1139d888608ab58ecdc015d42cff620586271229ff8cc28e646e493fe68ac03e",
+      "matches": true
+    },
+    {
+      "path": "/assets/crownOutcome-CyDLh8bb.js",
+      "status": 200,
+      "sha256": "268a9f1dfa6214bdf7dbb1f5fef0827320e20d5ed66a86c9876ee040a2e56f42",
+      "matches": true
+    },
+    {
+      "path": "/assets/diceScene-CuKJXeBu.js",
+      "status": 200,
+      "sha256": "fac35655c5dd4d48ffd7e77770f1904b0bedc7ed74d7d82e4bea499d066d85c3",
+      "matches": true
+    },
+    {
+      "path": "/assets/duelScene-DhVdwDc9.js",
+      "status": 200,
+      "sha256": "fa999a745db6aca25a44dd1b2a0bfd45bb2c8a4385d22b2de2eff5cbffe51840",
+      "matches": true
+    },
+    {
+      "path": "/assets/main-Dll2E2Ws.css",
+      "status": 200,
+      "sha256": "3a101b14b5f038e79cb7d4a4da0f492b3cc9eb687e4a9b3eae58105a29aa49b9",
+      "matches": true
+    },
+    {
+      "path": "/assets/main-E8lqqcei.js",
+      "status": 200,
+      "sha256": "e76f0eea505e459fb04f04c62c002c97ff4249d235a49b02b27f951a8557a924",
+      "matches": true
+    },
+    {
+      "path": "/assets/paperDraw-C0Tf3EGx.js",
+      "status": 200,
+      "sha256": "08336b679bfafc0c650f455de7036e107e8b02d0faea9ef8193395003f08b22e",
+      "matches": true
+    },
+    {
+      "path": "/assets/riftScene-CgiYR8CS.js",
+      "status": 200,
+      "sha256": "c870e3cdb587969c385517504badc4dbff6dca0a02099e77aba1fa3e88366f17",
+      "matches": true
+    },
+    {
+      "path": "/assets/tablePreview-2Rkra2Ey.css",
+      "status": 200,
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4",
+      "matches": true
+    },
+    {
+      "path": "/assets/tablePreview-Bbt3qVfB.js",
+      "status": 200,
+      "sha256": "c74ccb4cccf697e1826a3a5bf623a7e1bba4b3fa4965dc9d61c84874cb95b441",
+      "matches": true
+    },
+    {
+      "path": "/assets/three.module-oapt2zHx.js",
+      "status": 200,
+      "sha256": "f060866cb85d98b55adc0d38bdde124d7d5a4f40b7872696535fffd2b699bec8",
+      "matches": true
+    },
+    {
+      "path": "/assets/voidSurface-BvPkw2Ai.js",
+      "status": 200,
+      "sha256": "e8616f036f42357784307adde9cf5ff42d2c547dafa175bd6deeda8cdb93d7a1",
+      "matches": true
+    }
+  ]
+}

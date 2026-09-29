@@ -1,0 +1,44 @@
+
+ ⛅️ wrangler 4.130.0 (update available 4.143.0)
+───────────────────────────────────────────────
+
+Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+🌀 Building list of assets...
+✨ Read 2108 files from the assets directory /private/tmp/lore-menu-a3-b2-c1-20260929/client/dist
+🌀 Starting asset upload...
+🌀 Found 14 new or modified static assets to upload. Proceeding with upload...
++ /index.html
++ /assets/crownOutcome-CyDLh8bb.js
++ /assets/diceScene-CuKJXeBu.js.map
++ /assets/riftScene-CgiYR8CS.js.map
++ /assets/main-E8lqqcei.js
++ /assets/diceScene-CuKJXeBu.js
++ /assets/riftScene-CgiYR8CS.js
++ /assets/crownOutcome-CyDLh8bb.js.map
++ /assets/duelScene-DhVdwDc9.js.map
++ /assets/main-E8lqqcei.js.map
++ /assets/paperDraw-C0Tf3EGx.js
++ /assets/paperDraw-C0Tf3EGx.js.map
++ /assets/duelScene-DhVdwDc9.js
++ /assets/main-Dll2E2Ws.css
+Uploaded 4 of 14 assets
+Uploaded 9 of 14 assets
+Uploaded 14 of 14 assets
+✨ Success! Uploaded 14 files (2027 already uploaded) (2.96 sec)
+
+Total Upload: 1092.36 KiB / gzip: 235.06 KiB
+Worker Startup Time: 54 ms
+Your Worker has access to the following bindings:
+Binding                                                                Resource
+env.MATCHMAKER (Matchmaker)                                            Durable Object
+env.GAME_ROOM (GameRoom)                                               Durable Object
+env.DB (lore-db-staging)                                               D1 Database
+env.ASSETS                                                             Assets
+env.APP_ORIGIN ("*")                                                   Environment Variable
+env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")      Environment Variable
+env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")          Environment Variable
+
+Uploaded lore-server-staging (10.20 sec)
+Deployed lore-server-staging triggers (2.52 sec)
+  test.yourlore.xyz (custom domain)
+Current Version ID: 8cc5c974-8378-48fc-b95d-d490a28e4d7a
