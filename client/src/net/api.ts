@@ -1,3 +1,4 @@
+import type { RankChange } from "../shared/rank";
 import type {DeckStore} from '../shared/cards';
 // ============================================================
 // LORE — auth/API client. Talks to the Worker over /api/*.
@@ -30,9 +31,10 @@ export interface ClaimResult {
 
 export interface ApiError extends Error { needVerify?: boolean }
 
-async function call<T>(path: string, body?: unknown, method = "POST"): Promise<T> {
+async function call<T>(path: string, body?: unknown, method = "POST", signal?: AbortSignal): Promise<T> {
   const res = await fetch("/api" + path, {
     method,
+    signal,
     credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: body ? JSON.stringify(body) : undefined,
@@ -78,6 +80,7 @@ export const api = {
   forgot: (email: string) => call<{ ok: true }>("/auth/forgot", { email }),
   resetPassword: (token: string, password: string) => call<{ ok: true }>("/auth/reset", { token, password }),
   me: () => call<{ user: User | null }>("/auth/me", undefined, "GET").then((r) => r.user).catch(() => null),
+  rankResult: (matchId: string) => call<{ result: RankChange | null }>("/rank/result?matchId=" + encodeURIComponent(matchId), undefined, "GET", AbortSignal.timeout(8000)).then(r => r.result),
   rankMe: () => call<{ rating: RankInfo | null }>("/rank/me", undefined, "GET").then((r) => r.rating).catch(() => null),
   trackBot: (won: boolean | null) => call<{ ok: boolean }>("/track/bot", { won: won === true, draw: won === null }).catch(() => null),
   inviteMe: () => call<{ code: string; limit: number; invites: { status: string; created_at: number; display: string }[] }>("/invite/me", undefined, "GET"),

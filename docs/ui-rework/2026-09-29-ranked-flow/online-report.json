@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": [
+    "authoritative eligibility, online win, duplicate WS receipt",
+    "finished reconnect never recounts seen match",
+    "you=1 loss, lost WS receipt, exact REST recovery"
+  ],
+  "errors": [],
+  "boundary": "Production OnlineController and browser WebSocket transport; server responses/REST are deterministic fixtures. Server settlement separately exercised against SQLite."
+}

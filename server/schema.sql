@@ -168,6 +168,10 @@ CREATE TABLE IF NOT EXISTS ranked_results (
   b_before INTEGER NOT NULL,
   a_after INTEGER NOT NULL,
   b_after INTEGER NOT NULL,
+  a_rank_before INTEGER,
+  b_rank_before INTEGER,
+  a_rank_after INTEGER,
+  b_rank_after INTEGER,
   applied INTEGER NOT NULL DEFAULT 0,
   created_at INTEGER NOT NULL
 );

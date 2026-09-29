@@ -10,6 +10,7 @@ const {calculateRating,settleRanked,getRating,rankPosition,handleRank,seasonKey,
 const sql=new DatabaseSync(':memory:');
 sql.exec(`CREATE TABLE users(id TEXT PRIMARY KEY,display TEXT);CREATE TABLE ratings(user_id TEXT,season TEXT,mmr INTEGER,wins INTEGER,losses INTEGER,peak_mmr INTEGER,updated_at INTEGER,final_rank INTEGER,final_tier TEXT,PRIMARY KEY(user_id,season));`);
 sql.exec(await readFile('server/migrations/0014_ranked_results.sql','utf8'));
+sql.exec(await readFile('server/migrations/0016_ranked_standings.sql','utf8'));
 let fail=false;
 class Stmt {
  constructor(query,args=[]){this.query=query;this.args=args;}
@@ -38,5 +39,22 @@ const response=await handleRank(env,new Request('https://local/rank/leaderboard?
 const october=await getRating(env,'tie-a','2026-10');assert.equal(october.mmr,1300);
 assert.equal(seasonKey(new Date('2026-12-31T23:59:59Z')),'2026-12');assert.equal(tierOf(1150),'gold');
 await assert.rejects(()=>settleRanked(env,'self','a','a','a',at));
-console.log('PASS: Elo, floor, draws, 8 duplicate settlements, concurrent rooms, atomic rollback/retry, tie ordering, soft reset, invalid participants');
+// GM eligibility crosses the top-25 boundary at settlement, preserved after ladder changes.
+for(let i=0;i<24;i++)add('leader-'+i,1800+i);
+add('gm-challenger',1595);
+const gmResult=await settleRanked(env,'gm-entry','gm-challenger','tie-a','gm-challenger',at);
+assert.equal(gmResult['gm-challenger'].tierBefore,'master');
+assert.equal(gmResult['gm-challenger'].tierAfter,'gm');
+assert.equal(gmResult['gm-challenger'].rankAfter,25);
+assert.equal(gmResult['tie-a'].tierBefore,'gm');
+assert.equal(gmResult['tie-a'].tierAfter,'master');
+add('late-leader',1900);
+assert.deepEqual(await settleRanked(env,'gm-entry','gm-challenger','tie-a','gm-challenger',at),gmResult,'history cannot change when ladder changes');
+const recover=async(user,match='gm-entry')=>{const r=await handleRank(env,new Request('https://local/rank/result?matchId='+match),'/rank/result',user&&{id:user});return {status:r.status,body:await r.json()};};
+assert.deepEqual((await recover('gm-challenger')).body.result,gmResult['gm-challenger']);
+assert.equal((await recover('a')).body.result,null,'unrelated users cannot read a result');
+assert.equal((await recover(null)).status,401);
+assert.equal((await recover('a','pending')).body.result,null);
+for(const [mmr,key] of [[0,'iron'],[1029,'iron'],[1030,'bronze'],[1090,'silver'],[1150,'gold'],[1250,'platinum'],[1400,'diamond'],[1550,'master']])assert.equal(tierOf(mmr),key);
+console.log('PASS: exact GM entry/exit, immutable snapshots, authenticated match recovery, all tier thresholds; Elo, floor, draws, 8 duplicate settlements, concurrent rooms, atomic rollback/retry, tie ordering, soft reset, invalid participants');
 sql.close();await rm(tmp,{recursive:true,force:true});

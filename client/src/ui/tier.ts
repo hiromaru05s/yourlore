@@ -2,6 +2,10 @@
 // LORE — tier presentation (labels + colors) shared by home,
 // leaderboard, and anywhere a tier badge is shown.
 // ============================================================
+import "../styles/rank.css";
+import { rankEmblem } from "./rankEmblem";
+import { TIERS } from "../shared/rank";
+export { tierOf } from "../shared/rank";
 import { getLang } from "../i18n";
 
 export const TIER_META: Record<string, { ko: string; ja: string; en: string; color: string }> = {
@@ -15,16 +19,6 @@ export const TIER_META: Record<string, { ko: string; ja: string; en: string; col
   gm:       { ko: "그랜드마스터", ja: "グランドマスター", en: "Grandmaster", color: "#ff7a4d" },
 };
 
-// tier cutoffs — must mirror server/src/rank.ts TIERS. (gm is top-25 MMR, not computable client-side.)
-const TIER_CUTS: [number, string][] = [
-  [1550, "master"], [1400, "diamond"], [1250, "platinum"], [1150, "gold"], [1090, "silver"], [1030, "bronze"], [0, "iron"],
-];
-/** tier key for a raw MMR value (local approximation; GM excluded). */
-export function tierOf(mmr: number): string {
-  for (const [min, key] of TIER_CUTS) if (mmr >= min) return key;
-  return "iron";
-}
-
 export function tierLabel(tier: string): string {
   const m = TIER_META[tier] ?? TIER_META.iron;
   const lang = getLang();
@@ -33,7 +27,14 @@ export function tierLabel(tier: string): string {
 
 /** Small colored tier chip element (used in home + leaderboard). */
 export function tierChipHtml(tier: string, mmr?: number): string {
-  const m = TIER_META[tier] ?? TIER_META.iron;
+  tier = TIER_META[tier] ? tier : "iron";
+  const m = TIER_META[tier];
   const label = tierLabel(tier);
-  return `<span class="tier-chip tier-${tier}" style="--tc:${m.color}">${label}${mmr != null ? ` <b>${mmr}</b>` : ""}</span>`;
+  return `<span class="tier-chip tier-${tier}" style="--tc:${m.color};--rank-metal:${m.color}">${rankEmblem(tier)}${label}${mmr != null ? ` <b>${mmr}</b>` : ""}</span>`;
+}
+
+export function rankProgress(mmr: number) {
+  const index = Math.max(0, TIERS.reduce((found, t, i) => mmr >= t.min ? i : found, 0));
+  const current = TIERS[index], next = TIERS[index + 1];
+  return { current, next, fraction: next ? Math.max(0, Math.min(1, (mmr-current.min)/(next.min-current.min))) : 1 };
 }

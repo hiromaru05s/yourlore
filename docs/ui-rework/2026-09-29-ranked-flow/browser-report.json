@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "checks": [
+    "promotion",
+    "defeat",
+    "demotion",
+    "gm",
+    "review and duplicate",
+    "late/draw/pending",
+    "mid-count exit",
+    "mobile/reduced motion/you=1",
+    "casual excluded"
+  ],
+  "errors": []
+}

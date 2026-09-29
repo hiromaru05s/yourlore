@@ -5,11 +5,11 @@ import type { App, Screen } from "../router";
 import type { BotDifficulty } from "../shared/bot";
 import { api } from "../net/api";
 import { t, onLangChange, esc } from "../i18n";
-import { tierChipHtml } from "../ui/tier";
+import { homeRankHtml } from "../ui/rankPresentation";
+import { loungeText } from "../ui/loungeText";
 import { sanitizeDecks } from "../shared/cards";
 import { artUrl } from "../ui/cardArt";
 import { homeIcon, type HomeIcon } from "../ui/homeIcons";
-import { startHomeMusic } from "../ui/homeMusic";
 
 
 export function mountHome(app: App): Screen {
@@ -20,7 +20,7 @@ export function mountHome(app: App): Screen {
   wrap.innerHTML = `
     <section class="lounge-home-main">
       <section class="lounge-play" aria-label="${esc(t("home.ranked.title"))}">
-        <div id="myTier" class="lounge-rank-info" aria-live="polite">${t("lb.season")} —</div>
+        <button id="myTier" class="lounge-rank-info" aria-live="polite" aria-label="${t("lb.title")}">${t("lb.season")} —</button>
         <button class="lounge-play-button" id="ranked"><strong>${t("home.ranked.title")}</strong><span>${t("home.enterDuel")}</span></button>
         <div class="lounge-secondary-modes"><button id="online">${homeIcon("duel")}<span>${t("home.online.title")}</span></button><button id="bot">${homeIcon("bot")}<span>${t("home.bot.title")}</span></button></div>
       </section>
@@ -30,15 +30,21 @@ export function mountHome(app: App): Screen {
       </button>
     </section>`;
   app.root.appendChild(wrap);
-  const stopMusic = startHomeMusic();
   const q=(id:string)=>wrap.querySelector<HTMLButtonElement>('#'+id)!;
   q('ranked').onclick=()=>app.rankedLobby(); q('online').onclick=()=>app.onlineLobby();
   q('bot').onclick=()=>showBotDifficultyModal(app); q('deck').onclick=()=>app.deck();
+  q('myTier').onclick=()=>app.leaderboard();
   let disposed=false;
-  void api.rankMe().then(r=>{if(disposed)return;const el=wrap.querySelector<HTMLElement>('#myTier')!;el.innerHTML=r?`${tierChipHtml(r.tier,r.mmr)} <small>${r.season} · #${r.rank}</small>`:t('lobby.connerr');});
+  const loadRank = () => void api.rankMe().then(r=>{
+    if(disposed)return;
+    const el=q('myTier');
+    el.innerHTML=r?homeRankHtml(r):loungeText('ティアを取得できませんでした · タップして再読み込み','Could not load rank · Tap to retry','티어를 불러오지 못했습니다 · 눌러서 재시도');
+    el.onclick=r?()=>app.leaderboard():loadRank;
+  });
+  loadRank();
   if(u && u.id!=='local-guest-user') void api.me().then(fresh=>{if(!disposed&&fresh?.id===u.id&&app.user?.id===u.id) { app.user=fresh; document.dispatchEvent(new Event("lore:user")); }}).catch(()=>{});
   const unsub=onLangChange(()=>app.home());
-  return {destroy:()=>{disposed=true;unsub();stopMusic();}};
+  return {destroy:()=>{disposed=true;unsub();}};
 }
 
 /** BOT match difficulty picker. Dims + blurs HOME behind a focused center modal. */

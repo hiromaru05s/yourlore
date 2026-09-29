@@ -7,6 +7,9 @@ import { loungeText } from "../ui/loungeText";
 import type { App, Screen } from "../router";
 import { api } from "../net/api";
 import { t, onLangChange } from "../i18n";
+import { TIERS } from "../shared/rank";
+import { rankEmblem } from "../ui/rankEmblem";
+import { TIER_META } from "../ui/tier";
 import { tierChipHtml, tierLabel } from "../ui/tier";
 
 export function mountLeaderboard(app: App): Screen {
@@ -20,7 +23,7 @@ export function mountLeaderboard(app: App): Screen {
         <h2>${t("lb.title")}</h2>
         <span class="lb-season" id="lbSeason"></span>
       </div>
-      <details class="lounge-rank-rules"><summary>${loungeText("MMRとシーズンについて", "MMR & seasons", "MMR과 시즌 안내")}</summary><p>${loungeText("初期MMRは1000。ランク対戦の結果と相手のMMRで増減します。同じMMR同士なら勝利 +18、敗北 −16、引き分け ±0。ノーマル・BOT・フレンド対戦では変動しません。毎月UTCの月初に、前月のMMRを1000へ半分戻して開始します。", "Start at 1000 MMR. Ranked results adjust your rating based on your opponent: equal ratings yield +18 for a win, −16 for a loss, 0 for a draw. Casual, BOT and friend matches do not change MMR. Each UTC month resets the previous month's MMR halfway toward 1000.", "초기 MMR은 1000입니다. 상대 MMR과 랭크 결과에 따라 변동하며, 동일 MMR 기준 승리 +18, 패배 −16, 무승부 0입니다. 일반·BOT·친선전은 MMR에 영향을 주지 않습니다. 매월 UTC 기준 지난달 MMR을 1000 방향으로 절반 초기화합니다.")}</p></details>
+      <details class="lounge-rank-rules"><summary>${loungeText("MMRとシーズンについて", "MMR & seasons", "MMR과 시즌 안내")}</summary><p>${loungeText("初期MMRは1000。ランク対戦の結果と相手のMMRで増減します。同じMMR同士なら勝利 +18、敗北 −16、引き分け ±0。ノーマル・BOT・フレンド対戦では変動しません。毎月UTCの月初に、前月のMMRを1000へ半分戻して開始します。", "Start at 1000 MMR. Ranked results adjust your rating based on your opponent: equal ratings yield +18 for a win, −16 for a loss, 0 for a draw. Casual, BOT and friend matches do not change MMR. Each UTC month resets the previous month's MMR halfway toward 1000.", "초기 MMR은 1000입니다. 상대 MMR과 랭크 결과에 따라 변동하며, 동일 MMR 기준 승리 +18, 패배 −16, 무승부 0입니다. 일반·BOT·친선전은 MMR에 영향을 주지 않습니다. 매월 UTC 기준 지난달 MMR을 1000 방향으로 절반 초기화합니다.")}</p><div class="rank-tier-guide">${[...TIERS,{key:"gm",min:1550}].map(tier=>`<div style="--rank-metal:${TIER_META[tier.key].color}">${rankEmblem(tier.key)}<b>${tierLabel(tier.key)}</b><span>${tier.min}+ MMR${tier.key==="gm"?" · TOP 25":""}</span></div>`).join("")}</div></details>
       <div class="lb-row lb-columns"><span>#</span><span>${loungeText("シーカー", "Seeker", "시커")}</span><span>${loungeText("ティア", "Tier", "티어")}</span><span>MMR</span><span>${t("home.record")}</span></div>
       <div class="lb-list" id="lbList"><div class="spinner"></div></div>
       <div class="lb-me" id="lbMe"></div>

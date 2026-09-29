@@ -212,6 +212,8 @@ export interface GameState {
   rng: number; // mutable PRNG state (mulberry32)
   uidSeq: number;
   mode: "bot" | "online";
+  /** Authoritative ladder eligibility for online result presentation. */
+  ranked?: boolean;
   trickLeft?: number; // 트릭룸: 남은 턴 수 (매 턴 시작마다 -1, 0이면 반전 해제)
   /** 운명의 수레바퀴: 재굴림용 시전 직전 스냅샷 — redactFor가 양쪽 모두에서 제거(클라 불필요) */
   _wheelSnap?: {

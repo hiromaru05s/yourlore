@@ -13,41 +13,17 @@ import type { Env, SessionUser } from "./env";
 import { corsHeaders } from "./auth";
 import { markInviteEarned } from "./invite";
 
-export const TIERS = [
-  { key: "iron", min: 0 },
-  { key: "bronze", min: 1030 },
-  { key: "silver", min: 1090 },
-  { key: "gold", min: 1150 },
-  { key: "platinum", min: 1250 },
-  { key: "diamond", min: 1400 },
-  { key: "master", min: 1550 },
-] as const;
-export type TierKey = (typeof TIERS)[number]["key"] | "gm";
-
-const START_MMR = 1000;
-const K = 32;
-const GM_TOP = 25;        // top N Masters = Grandmaster
-const MASTER_MIN = 1550;
+import { TIERS, START_MMR, tierOf, tierWithGm, calculateRating, type RankChange } from "../../client/src/shared/rank";
+export { TIERS, tierOf, tierWithGm, calculateRating } from "../../client/src/shared/rank";
+export type { TierKey, RankChange } from "../../client/src/shared/rank";
 const LB_DEFAULT_LIMIT = 100;
 const LB_MAX_LIMIT = 100;
-
 export function seasonKey(d = new Date()): string {
   return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
 }
 function prevSeasonKey(d = new Date()): string {
   return seasonKey(new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() - 1, 1)));
 }
-export function tierOf(mmr: number): TierKey {
-  let t: TierKey = "iron";
-  for (const x of TIERS) if (mmr >= x.min) t = x.key;
-  return t;
-}
-/** Final tier incl. GM: rank is the player's position on that season's ladder (1-based). */
-export function tierWithGm(mmr: number, rank: number): TierKey {
-  const base = tierOf(mmr);
-  return base === "master" && rank <= GM_TOP && mmr >= MASTER_MIN ? "gm" : base;
-}
-
 export interface RatingRow { user_id: string; season: string; mmr: number; wins: number; losses: number; peak_mmr: number; updated_at: number; }
 
 /** Get (or lazily create with soft reset) this season's rating row. */
@@ -63,18 +39,25 @@ export async function getRating(env: Env, userId: string, season = seasonKey()):
   return (await env.DB.prepare(`SELECT user_id, season, mmr, wins, losses, peak_mmr, updated_at FROM ratings WHERE user_id = ? AND season = ?`).bind(userId, season).first<RatingRow>())!;
 }
 
-/** before/after MMR for one player — surfaced to the client so the result screen can show ±delta. */
-export interface RankChange { before: number; after: number; }
-export type RankOutcome = Record<string, RankChange>; // keyed by user id
-
-/** Pure provisional rules: preserve the existing ladder thresholds and monthly reset. */
-export function calculateRating(a: number, b: number, score: 0 | 0.5 | 1): [number, number] {
-  const expected = 1 / (1 + Math.pow(10, (b - a) / 400));
-  const delta = score === 0.5 ? Math.round(K * (score - expected)) : score === 1 ? Math.max(1, Math.round(K * (1 - expected))) : -Math.max(1, Math.round(K * expected));
-  return [Math.max(0, a + delta + (score === 1 ? 2 : 0)), Math.max(0, b - delta + (score === 0 ? 2 : 0))];
+export type RankOutcome = Record<string, RankChange>;
+interface Settlement {
+  match_id: string; season: string;
+  a_id: string; b_id: string; a_before: number; b_before: number; a_after: number; b_after: number;
+  a_rank_before: number | null; b_rank_before: number | null;
+  a_rank_after: number | null; b_rank_after: number | null;
 }
-interface Settlement { a_id: string; b_id: string; a_before: number; b_before: number; a_after: number; b_after: number; }
-const outcomeOf = (r: Settlement): RankOutcome => ({[r.a_id]: {before:r.a_before,after:r.a_after},[r.b_id]:{before:r.b_before,after:r.b_after}});
+function outcomeOf(r: Settlement): RankOutcome {
+  const change = (side: "a" | "b"): RankChange => {
+    const before = r[`${side}_before`], after = r[`${side}_after`];
+    const rankBefore = r[`${side}_rank_before`] ?? undefined, rankAfter = r[`${side}_rank_after`] ?? undefined;
+    return { matchId: r.match_id, season: r.season, before, after, rankBefore, rankAfter,
+      tierBefore: rankBefore ? tierWithGm(before, rankBefore) : tierOf(before),
+      tierAfter: rankAfter ? tierWithGm(after, rankAfter) : tierOf(after) };
+  };
+  return { [r.a_id]: change("a"), [r.b_id]: change("b") };
+}
+// Run inside the settlement transaction, before/after BOTH players are updated.
+const standingSql = `(SELECT position FROM (SELECT user_id, ROW_NUMBER() OVER (ORDER BY mmr DESC, updated_at ASC, user_id ASC) AS position FROM ratings WHERE season=?) WHERE user_id=?)`;
 
 /** Ledger + both rating updates commit together. CAS retries resolve concurrent rooms. */
 export async function settleRanked(env: Env, matchId: string, aId: string, bId: string, winner: string | null, endedAt: number): Promise<RankOutcome> {
@@ -92,11 +75,13 @@ export async function settleRanked(env: Env, matchId: string, aId: string, bId: 
         SELECT ?,?,?,?,?,?,?,?,?,? WHERE EXISTS (SELECT 1 FROM ratings WHERE user_id=? AND season=? AND updated_at=?)
         AND EXISTS (SELECT 1 FROM ratings WHERE user_id=? AND season=? AND updated_at=?)`)
         .bind(matchId,season,aId,bId,winner,a.mmr,b.mmr,an,bn,endedAt,aId,season,a.updated_at,bId,season,b.updated_at),
+      env.DB.prepare(`UPDATE ranked_results SET a_rank_before=${standingSql}, b_rank_before=${standingSql} WHERE match_id=? AND applied=0`)
+        .bind(season,aId,season,bId,matchId),
       env.DB.prepare(`UPDATE ratings SET mmr=?, wins=wins+?, losses=losses+?, peak_mmr=MAX(peak_mmr,?), updated_at=? WHERE user_id=? AND season=? AND ${gate}`)
         .bind(an,winner===aId?1:0,winner===bId?1:0,an,stamp,aId,season,matchId),
       env.DB.prepare(`UPDATE ratings SET mmr=?, wins=wins+?, losses=losses+?, peak_mmr=MAX(peak_mmr,?), updated_at=? WHERE user_id=? AND season=? AND ${gate}`)
         .bind(bn,winner===bId?1:0,winner===aId?1:0,bn,stamp,bId,season,matchId),
-      env.DB.prepare(`UPDATE ranked_results SET applied=1 WHERE match_id=? AND applied=0`).bind(matchId),
+      env.DB.prepare(`UPDATE ranked_results SET a_rank_after=${standingSql}, b_rank_after=${standingSql}, applied=1 WHERE match_id=? AND applied=0`).bind(season,aId,season,bId,matchId),
     ]);
     const result = await env.DB.prepare(`SELECT * FROM ranked_results WHERE match_id = ? AND applied = 1`).bind(matchId).first<Settlement>();
     if (!result) continue;
@@ -121,6 +106,16 @@ function json(env: Env, body: unknown, status = 200): Response {
 
 export async function handleRank(env: Env, req: Request, path: string, user: SessionUser | null): Promise<Response> {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders(env) });
+
+  // Exact match recovery; never infer a match delta from the current /rank/me value.
+  if (path === "/rank/result" && req.method === "GET") {
+    if (!user) return json(env, { error: "unauthorized" }, 401);
+    const matchId = new URL(req.url).searchParams.get("matchId");
+    if (!matchId || matchId.length > 128) return json(env, { error: "invalid match" }, 400);
+    const row = await env.DB.prepare(`SELECT * FROM ranked_results WHERE match_id=? AND applied=1 AND (a_id=? OR b_id=?)`)
+      .bind(matchId,user.id,user.id).first<Settlement>();
+    return json(env, { result: row ? outcomeOf(row)[user.id] : null });
+  }
 
   // 시즌 리더보드 (기본: 현재 시즌; 과거 시즌은 최종 스냅샷)
   if (path === "/rank/leaderboard") {

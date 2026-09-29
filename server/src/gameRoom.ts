@@ -19,7 +19,7 @@ import type { GameClientMsg, GameServerMsg } from "../../client/src/shared/proto
 import { createGame, reduce, actingSide, effectChoices } from "../../client/src/shared/engine";
 import { redactFor } from "../../client/src/shared/protocol";
 import { BALANCE_VERSION } from "../../client/src/shared/cards";
-import { settleRanked } from "./rank";
+import { settleRanked, type RankOutcome } from "./rank";
 import { DUEL_OPENING_MS, OPENING_PREPARE_MS, OPENING_LEAD_MS } from "../../client/src/shared/opening";
 
 interface PlayerRef { id: string; name: string; sleeve?: string | null; furniture?:string|null; deck?: string | null; }
@@ -32,7 +32,7 @@ interface RoomData {
   readied: [boolean, boolean];
   recorded: boolean;
   resultAt?: number;
-  rankOutcome?: Record<string,{before:number;after:number}>;
+  rankOutcome?: RankOutcome;
   /** Ranked match — result also updates the seasonal Elo ladder. */
   ranked: boolean;
   /** Connection generation per side — a close from an older gen is a replaced socket, not a disconnect. */
@@ -480,6 +480,7 @@ export class GameRoom {
   private redact(side: Side): GameState {
     const s = redactFor(this.room!.game, side) as GameState & { turnLeftMs?: number; turnTotalMs?: number; sleeves?: [string | null, string | null] };
     const total = turnMsFor(this.room!.ranked) + (this.room!.turnBonusMs || 0);
+    s.ranked = this.room!.ranked;
     s.turnTotalMs = total;
     s.turnLeftMs = Math.min(total, Math.max(0, total - (Date.now() - this.room!.turnStartAt)));
     if (this.room!.opening && s.turn === 1) {
@@ -581,7 +582,7 @@ export class GameRoom {
         room.rankOutcome=outcome;
         for (const side of [0,1] as Side[]) {
           const ws=this.sockFor(side), change=outcome[room.players[side].id];
-          if (ws && change) try { this.send(ws,{type:"rankResult",before:change.before,after:change.after}); } catch { /* disconnected */ }
+          if (ws && change) try { this.send(ws,{type:"rankResult",...change}); } catch { /* disconnected */ }
         }
       }
       room.recorded = true;

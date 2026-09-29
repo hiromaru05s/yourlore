@@ -27,7 +27,8 @@ import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { sfx, stopSounds } from "../ui/sound";
 import {EventSound} from "../ui/eventSound";
-import { tierOf, tierLabel } from "../ui/tier";
+import { RankPresentation } from "../ui/rankPresentation";
+import type { RankChange } from "../shared/rank";
 import { t, getLang, cardName, onLangChange } from "../i18n";
 import { diceRollAnim, cancelDiceAnimations } from "../ui/dice";
 
@@ -56,6 +57,8 @@ export abstract class BaseController implements BoardHandlers {
   protected you: Side;
   protected exits: ControllerExits;
   private quickFaces: {card:CardInst;side:A.ViewSide;node:HTMLElement}[] = [];
+  protected ranked = false;
+  private rankPresentation = new RankPresentation();
   private winShown = false;
   private outcomePlayed = false;
   private outcomePending = false;
@@ -903,20 +906,18 @@ export abstract class BaseController implements BoardHandlers {
     if (el && !el.textContent?.includes(note)) el.innerHTML += `<br><span class="muted">${note}</span>`;
   }
 
-  /** Ranked MMR change on the result screen: "랭크 +18 · 1240 → 1258 (골드)". */
-  protected rankChange?: { before: number; after: number };
+  protected rankChange?: RankChange;
+  protected receiveRankChange(change: RankChange): void {
+    if (this.dead || this.rankChange) return;
+    this.rankChange = change;
+    this.rankPresentation.set(change);
+  }
+  protected retryRankResult(): void {}
+  protected rankResultPending(slow = false): void { this.rankPresentation.pending(slow); }
   protected renderRankDelta(): void {
-    if (!this.rankChange) return;
+    if (!this.ranked && !this.rankChange) return;
     const el = document.getElementById("winRankDelta");
-    if (!el) return;
-    const { before, after } = this.rankChange;
-    const d = after - before;
-    const sign = d > 0 ? "+" : ""; // negative already carries its own '-'
-    const cls = d > 0 ? "up" : d < 0 ? "down" : "flat";
-    const tBefore = tierOf(before), tAfter = tierOf(after);
-    const promo = tBefore !== tAfter ? ` <span class="rk-tier">${tierLabel(tAfter)}</span>` : "";
-    el.innerHTML = `<span class="rk-label">${t("rank.label")}</span> <span class="rk-delta rk-${cls}">${sign}${d}</span> <span class="rk-mmr">${before} → ${after}</span>${promo}`;
-    (el as HTMLElement).style.display = "";
+    if (el) this.rankPresentation.mount(el, () => this.retryRankResult());
   }
 
   private clearQuickFaces():void {this.quickFaces.splice(0).forEach(x=>x.node.remove());}
@@ -924,6 +925,7 @@ export abstract class BaseController implements BoardHandlers {
   destroy(): void {
     this.disposeHandDiscard?.();
     this.dead = true;
+    this.rankPresentation.destroy();
     stopSounds();
     this.openingAbort.abort();this.releaseOpening();
     this.clearQuickFaces();

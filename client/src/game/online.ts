@@ -1,3 +1,4 @@
+import { api } from "../net/api";
 // ============================================================
 // LORE — OnlineController. Authoritative server: we send Actions
 // and apply the redacted {state, events} snapshots it returns.
@@ -36,9 +37,10 @@ export class OnlineController extends BaseController {
     }, 5_000);
   };
 
-  constructor(root: HTMLElement, you: Side, roomId: string, exits: ControllerExits) {
+  constructor(root: HTMLElement, you: Side, roomId: string, exits: ControllerExits, ranked = false) {
     super(root, you, exits);
     this.roomId = roomId;
+    this.ranked = ranked;
     document.addEventListener("visibilitychange", this.onVisible);
     this.connect();
   }
@@ -70,7 +72,10 @@ export class OnlineController extends BaseController {
   }
 
   private onServer(msg: GameServerMsg): void {
-    if (msg.type === "init" || msg.type === "update") this.echoLockAt = 0; // server echoed — next action may go
+    if (msg.type === "init" || msg.type === "update") {
+      this.echoLockAt = 0;
+      if (msg.state.ranked != null) this.ranked = msg.state.ranked;
+    } // server echoed — next action may go
     if (msg.type === "init") {
       const firstInit = !this.started; // 이 클라이언트가 처음 받는 init (새로고침/크래시 복귀 포함)
       this.started = true;
@@ -78,14 +83,14 @@ export class OnlineController extends BaseController {
       this.preview?.close(); this.preview = undefined; // preview phase over → game begins (coin toss shows on turn 1)
       closeOverlay();
       this.applyResult({ state: msg.state, events: msg.events }, false);
-      if (this.state?.over) clearActiveGame(); // rejoined a game that already finished
+      if (this.state?.over) { clearActiveGame(); this.retryRankResult(); } // rejoined a game that already finished
       // 진행 중인 게임에 처음 합류(=크래시/탭 종료 후 복귀): 안심 배너 + 현황 파악 시간
       else if (firstInit && this.state && this.state.turn > 1) {
         void eventBanner(`↩ ${t("fx.resume")}`, `${t("game.turn")} ${this.state.turn}`, "info", 1700);
       }
     } else if (msg.type === "update") {
       this.applyResult({ state: msg.state, events: msg.events });
-      if (this.state?.over) { this.stopOppTicker(); this.banner(null); clearActiveGame(); } // game ended → nothing to rejoin
+      if (this.state?.over) { this.stopOppTicker(); this.banner(null); clearActiveGame(); this.retryRankResult(); } // game ended → nothing to rejoin
       else touchActiveGame(); // keep the rejoin record alive for games longer than its TTL
     } else if (msg.type === "oppConn") {
       if (msg.connected) {
@@ -113,11 +118,29 @@ export class OnlineController extends BaseController {
       this.preview.setUntil(msg.until);
     } else if (msg.type === "rankResult") {
       // ranked game settled — remember my MMR change and paint it onto the (already-open) result screen
-      this.rankChange = { before: msg.before, after: msg.after };
-      this.renderRankDelta();
+      this.receiveRankChange(msg);
+      clearTimeout(this.rankRecoveryTimer);
     } else if (msg.type === "error") {
       console.warn("[server]", msg.message);
     }
+  }
+
+  private rankRecoveryTimer?: ReturnType<typeof setTimeout>;
+  private rankRecoveryBusy = false;
+  private rankRecoveryAttempts = 0;
+  protected retryRankResult(): void {
+    if (!this.ranked || !this.state?.over || this.rankChange || this.closing || this.rankRecoveryBusy) return;
+    clearTimeout(this.rankRecoveryTimer);
+    this.rankRecoveryBusy = true;
+    this.rankResultPending();
+    void api.rankResult(this.roomId).then(result => {
+      if (result && !this.closing) this.receiveRankChange(result);
+    }).catch(() => {}).finally(() => {
+      this.rankRecoveryBusy = false;
+      if (this.closing || this.rankChange) return;
+      if (++this.rankRecoveryAttempts < 10) this.rankRecoveryTimer = setTimeout(() => this.retryRankResult(), 3000);
+      else { this.rankRecoveryAttempts = 0; this.rankResultPending(true); }
+    });
   }
 
   // one INDEX-BASED mutating action per server round-trip: a double-tap resolved
@@ -179,5 +202,5 @@ export class OnlineController extends BaseController {
     el.textContent = text;
   }
 
-  destroy(): void { this.closing = true; document.removeEventListener("visibilitychange", this.onVisible); this.stopHb(); this.stopOppTicker(); this.preview?.close(); this.preview = undefined; this.banner(null); this.sock?.close(); super.destroy(); }
+  destroy(): void { this.closing = true; clearTimeout(this.rankRecoveryTimer); document.removeEventListener("visibilitychange", this.onVisible); this.stopHb(); this.stopOppTicker(); this.preview?.close(); this.preview = undefined; this.banner(null); this.sock?.close(); super.destroy(); }
 }

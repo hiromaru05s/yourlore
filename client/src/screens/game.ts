@@ -63,7 +63,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
         ? new TutorialController(root, exits, app.user?.display ?? "PLAYER", {
             onCredits: (c) => { if (app.user) app.user.credits = c; },
           })
-        : new OnlineController(root, opts.you, opts.roomId, exits);
+        : new OnlineController(root, opts.you, opts.roomId, exits, opts.ranked);
 
   // fit-to-viewport board sizing — started AFTER the controller built the board
   // skeleton, because the solver measures the real rows (see ui/layout.ts).

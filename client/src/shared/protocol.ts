@@ -3,6 +3,7 @@
 // The server is authoritative: clients send Actions, receive
 // redacted GameState snapshots + event streams to animate.
 // ============================================================
+import type { RankChange } from "./rank";
 import type { Action, CardInst, GameEvent, GameState, Side } from "./types";
 
 // ---- matchmaking (Matchmaker Durable Object) ----
@@ -32,7 +33,7 @@ export type GameServerMsg =
   | { type: "oppConn"; connected: boolean; deadline?: number } // opponent dropped / came back; deadline = epoch ms when the forfeit fires
   | { type: "voided"; message?: string }    // match cancelled (opponent never joined) — no rank change
   | { type: "preview"; until: number | null; market: CardInst[] } // ranked pre-game: study the fixed market (until=null → waiting for opponent)
-  | { type: "rankResult"; before: number; after: number } // ranked game settled — this player's MMR before/after
+  | ({ type: "rankResult" } & RankChange) // ranked game settled — this player's MMR before/after
   | { type: "error"; message: string }
   | { type: "pong" };
 

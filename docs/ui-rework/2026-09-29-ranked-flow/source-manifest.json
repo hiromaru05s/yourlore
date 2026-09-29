@@ -1,0 +1,98 @@
+{
+  "files": [
+    {
+      "file": "client/src/shared/rank.ts",
+      "sha256": "1fca7950b1cda8cad91832e12fd70e3836212a0dcae743076f6d798033aea23b",
+      "matchesBrowserAndBuildSnapshot": true
+    },
+    {
+      "file": "client/src/shared/types.ts",
+      "sha256": "5531dbcdccaf7a43915ec154f731e2886e6843c9af6325309a54c6fde4b03be0",
+      "matchesBrowserAndBuildSnapshot": true
+    },
+    {
+      "file": "client/src/shared/protocol.ts",
+      "sha256": "7c663d7adaf57d10cee7180d6ea1e600c6a00d42ab09ac936e9160008c07b549",
+      "matchesBrowserAndBuildSnapshot": true
+    },
+    {
+      "file": "client/src/ui/rankEmblem.ts",
+      "sha256": "ff36b1f6f26cacaf58acacbf0132e0e369ae9c9123034125c4effe0629d57dd8",
+      "matchesBrowserAndBuildSnapshot": true
+    },
+    {
+      "file": "client/src/ui/rankPresentation.ts",
+      "sha256": "1b112453402a4b3b861c4b3a9cb4199b9e58ce68bf3f48e0c43fe3d8fcfe8124",
+      "matchesBrowserAndBuildSnapshot": true
+    },
+    {
+      "file": "client/src/ui/tier.ts",
+      "sha256": "a1dbd00d1b95f76f7caceb20fc8d0da867467a5dd8fd5739548d81adb2cc384c",
+      "matchesBrowserAndBuildSnapshot": true
+    },
+    {
+      "file": "client/src/styles/rank.css",
+      "sha256": "b87519d62525dc50733c6bfdc53bcc9a328eb0f6ce705cf991fe0a8136bc4052",
+      "matchesBrowserAndBuildSnapshot": true
+    },
+    {
+      "file": "client/src/screens/home.ts",
+      "sha256": "18214696108b923ca8c747623a5701fe5848120c298fecd55e85970624816cdb",
+      "matchesBrowserAndBuildSnapshot": true
+    },
+    {
+      "file": "client/src/screens/leaderboard.ts",
+      "sha256": "00350b8723614d678edad01c3eac85c2dad693191e065fc351a276888bd9897a",
+      "matchesBrowserAndBuildSnapshot": true
+    },
+    {
+      "file": "client/src/screens/game.ts",
+      "sha256": "0358d621d1c1a84cdbf875d88425e61e42f54478526836b3de71b2691b045a1a",
+      "matchesBrowserAndBuildSnapshot": true
+    },
+    {
+      "file": "client/src/game/controller.ts",
+      "sha256": "46c700234f7607c67dc688a9851d17fa6f6a3e0397461b8969f7a2c01b242197",
+      "matchesBrowserAndBuildSnapshot": true
+    },
+    {
+      "file": "client/src/game/online.ts",
+      "sha256": "b29c5eac8707cdf0a1b6dc1a8d4b2116c70da9b9ae946f08e26c631c04ae6835",
+      "matchesBrowserAndBuildSnapshot": true
+    },
+    {
+      "file": "client/src/net/api.ts",
+      "sha256": "1c0eb8e04736e4582cc771608b660e582ae9121f3d57e9fa8982709729d4724a",
+      "matchesBrowserAndBuildSnapshot": true
+    },
+    {
+      "file": "client/src/dev/rankLab.ts",
+      "sha256": "068b3dfdd2e1f8608f292d433bba8c92fcc4f5f5994d0ddba7b64cdd0a62a776",
+      "matchesBrowserAndBuildSnapshot": true
+    },
+    {
+      "file": "client/rank-lab.html",
+      "sha256": "4bd4cf2ba341b295b82ff5f926674699f029b464e7f2918ad0bf27cf99aa432f",
+      "matchesBrowserAndBuildSnapshot": true
+    },
+    {
+      "file": "server/src/rank.ts",
+      "sha256": "912960f570a3665347b11954b1f39d436132c1c5ef724e02a196b110914a6b80"
+    },
+    {
+      "file": "server/src/gameRoom.ts",
+      "sha256": "4e302cd86fa513e506491ce9589a845023be59c6b314fa6eb8f0f76fac91875c"
+    },
+    {
+      "file": "server/schema.sql",
+      "sha256": "00dd9bb7e3ab84fd0eae34a278d278ded93b5ca6f0dad74af964825ab6b6f64a"
+    },
+    {
+      "file": "server/migrations/0016_ranked_standings.sql",
+      "sha256": "b141254ae328fd3bbd2a2d37dd24affb4bcc6616b0465929a3b5e6da27a4c4ee"
+    }
+  ],
+  "validationRoot": "/private/tmp/lore-ranked-validation-20260929",
+  "preview": "http://127.0.0.1:5327/rank-lab.html",
+  "deployed": false
+}
