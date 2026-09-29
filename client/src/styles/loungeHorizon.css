@@ -1,0 +1,28 @@
+/* Approved Round 03 / 01: quiet monochrome navigation, one moving focus beam. */
+.lounge-shell.horizon-nav{--dock:124px}
+.lounge-shell.horizon-nav .lounge-rail{inset:auto 7vw max(20px,env(safe-area-inset-bottom));width:auto;height:86px;padding:0;border:0;border-radius:0;background:none;box-shadow:none!important;isolation:isolate}
+.lounge-shell.horizon-nav .lounge-rail::before{content:'';position:fixed;inset:auto 0 0;height:190px;background:linear-gradient(transparent,#040b17e8 66%,#040b17);z-index:-2;pointer-events:none}
+.lounge-shell.horizon-nav .lounge-rail nav{position:relative;height:100%;padding:0 0 10px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0;overflow:visible;isolation:isolate;border-bottom:1px solid #b6cedc25}
+.lounge-shell.horizon-nav .lounge-rail nav button:not(.lounge-brand){position:relative;min-width:0;width:100%;height:100%;min-height:44px!important;margin:0!important;padding:10px 4px!important;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px!important;border:0!important;border-radius:0;background:none!important;box-shadow:none!important;color:#aebacb;text-shadow:none;font-size:14px;line-height:1.4;font-weight:400;letter-spacing:.06em;transition:color 180ms ease;isolation:isolate;overflow:visible}
+.lounge-shell.horizon-nav .lounge-rail nav button::before,.lounge-shell.horizon-nav .lounge-rail nav button::after{display:none}
+.lounge-shell.horizon-nav .lounge-rail nav button:hover,.lounge-shell.horizon-nav .lounge-rail nav button[aria-current]{color:white}
+.lounge-shell.horizon-nav .lounge-rail nav button:focus-visible{outline:1px solid #cfedff;outline-offset:4px}
+.lounge-shell.horizon-nav .lounge-rail nav button>span:last-child{line-height:1.6;white-space:nowrap;position:relative;z-index:2}
+.horizon-glyph{width:30px;height:30px;flex:none;display:block;position:relative;z-index:2}
+.horizon-glyph svg{width:100%;height:100%;display:block}
+[aria-current] .horizon-glyph{filter:drop-shadow(0 0 9px #b1dfff55)}
+.horizon-cursor{position:absolute;bottom:-1px;top:-12px;background:linear-gradient(transparent,#87cce814);border-bottom:2px solid #c5eaff;pointer-events:none;z-index:0;transform-origin:left center}
+.horizon-cursor::after{content:'';position:absolute;width:5px;height:5px;bottom:-4px;left:calc(50% - 3px);background:#e2f6ff;transform:rotate(45deg)}
+@media(max-width:850px){
+ .lounge-shell.horizon-nav{--dock:105px}
+ .lounge-shell.horizon-nav .lounge-rail{left:16px;right:16px;bottom:max(14px,env(safe-area-inset-bottom));height:78px}
+ .lounge-shell.horizon-nav .lounge-rail nav{grid-template-columns:repeat(3,1fr) 1.22fr repeat(3,1fr)}
+ .lounge-shell.horizon-nav .lounge-rail nav button:not(.lounge-brand){font-size:10px;letter-spacing:0;gap:5px!important;padding:5px 0!important}
+ .horizon-glyph{width:25px;height:25px}
+}
+@media(max-width:360px){.lounge-shell.horizon-nav .lounge-rail{left:5px;right:5px}.lounge-shell.horizon-nav .lounge-rail nav button:not(.lounge-brand){font-size:9px}}
+@media(max-height:450px){.lounge-shell.horizon-nav{--dock:90px}.lounge-shell.horizon-nav .lounge-rail{height:68px;bottom:10px}}
+/* Longer translations retain their full labels without invading neighboring targets. */
+html:not([lang="ja"]):not([lang="ko"]) .horizon-nav .lounge-rail nav button>span:last-child{font-size:12px;letter-spacing:0}
+@media(max-width:850px){html:not([lang="ja"]):not([lang="ko"]) .horizon-nav .lounge-rail nav button>span:last-child{font-size:8px;white-space:normal;overflow-wrap:anywhere;line-height:1.25}}
+@media(prefers-reduced-motion:reduce){.horizon-nav .lounge-rail *{transition:none!important;animation:none!important}}
