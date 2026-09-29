@@ -1,5 +1,5 @@
 import {Actor} from './actor';
-import {duration, type Kind, type Variant, type Rect} from './catalog';
+import {duration,ease, type Kind, type Variant, type Rect} from './catalog';
 import {drawEffect, ongoingFilter} from './renderer';
 import {mountAnimationLayers} from './layers';
 import {projectedPlacement} from '../boardProjection';
@@ -10,7 +10,7 @@ let frame=0, skipped=false;
 const jobs=new Map<HTMLElement,Job>();
 const states=new Map<HTMLElement,{actor:Actor;opacity:string;root:HTMLElement}>();
 type Options={variant?:Variant;anchor?:HTMLElement;target?:HTMLElement;destination?:HTMLElement;side?:number;signal?:AbortSignal;onImpact?:()=>void;exhaust?:boolean;stats?:Actor['stats']};
-type Job={source:HTMLElement;actor:Actor;kind:Kind;variant:Variant;start:number;ms:number;r:Rect;target:Rect;destination?:Rect;options:Options;opacity:string;finish:(complete:boolean)=>void;impacted:boolean};
+type Job={source:HTMLElement;actor:Actor;kind:Kind;variant:Variant;start:number;ms:number;r:Rect;target:Rect;destination?:Rect;options:Options;opacity:string;finish:(complete:boolean)=>void;impacted:boolean;hit?:{actor:Actor;node:HTMLElement;opacity:string}};
 const reduced=()=>matchMedia('(prefers-reduced-motion:reduce)').matches;
 export function monsterRect(n:HTMLElement):Rect{const r=n.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2,w:r.width,h:r.height,matrix:projectedPlacement(n,r.width,r.height)};}
 function ensure(){if(!layers){layers=mountAnimationLayers(document.body,true);layers.root.setAttribute('aria-hidden','true');}return layers;}
@@ -32,7 +32,7 @@ function tick(now:number){
  frame=0;if(!layers)return;layers.begin(innerWidth,innerHeight);
  for(const [n,s] of states){
   if(!n.isConnected){removeState(n);continue;}
-  if(jobs.has(n)||n.classList.contains('is-dragging')||n.style.visibility==='hidden'||document.hidden){s.actor.hide();continue;}
+  if(jobs.has(n)||[...jobs.values()].some(j=>j.hit?.node===n)||n.classList.contains('is-dragging')||n.style.visibility==='hidden'||document.hidden){s.actor.hide();continue;}
   const r=monsterRect(n),ready=n.classList.contains('is-attacker'),blocked=!!n.dataset.monsterBlocked;
   const k=ready?'ready':blocked?'blocked':'aura',v=ready?'C':blocked?'B':'C',t=ready?(now%2200)/2200:blocked?1:(now%4400)/4400;
   s.actor.paint(k,v,t,r,r,reduced(),true,n.closest('#oppRow')?-1:1);s.actor.el.dataset.monsterKind=k;s.actor.el.dataset.monsterVariant=v;
@@ -53,6 +53,16 @@ function tick(now:number){
   const paintT=j.kind==='attack'&&o.exhaust===false?Math.min(t*j.ms,819)/2800:t;
   j.actor.paint(j.kind,j.variant,paintT,j.r,j.target,reduced(),true,o.side??1,j.destination);
   for(const pass of ['rear','front'] as const)drawEffect(pass==='rear'?layers.back:layers.foreground,j.kind,j.variant,paintT,j.r,j.target,{active:true,reduced:reduced(),side:o.side??1,destination:j.destination,pass});
+  if(j.kind==='attack'&&o.target?.matches('.card')&&!reduced()){
+   const at=paintT*2800/820,ct=270/820,hit=ease(ct,ct+.015,at)*(1-ease(ct+.05,ct+.22,at));
+   if(hit>0){
+    if(!j.hit){j.hit={actor:new Actor(o.target,layers.cards),node:o.target,opacity:o.target.style.opacity};o.target.style.opacity='0';}
+    states.get(o.target)?.actor.hide();
+    const a=j.hit.actor,tr=j.target,dx=tr.x-j.r.x,dy=tr.y-j.r.y,len=Math.hypot(dx,dy)||1;
+    a.paint('trigger','A',0,tr,tr,true);a.style(a.el,tr,tr.x+dx/len*j.r.w*.085*hit,tr.y+dy/len*j.r.w*.085*hit,0,1);
+    a.el.style.setProperty('filter',`brightness(${1+hit*.15})`,'important');a.el.dataset.monsterKind='contact';
+   }else if(j.hit){j.hit.actor.dispose();j.hit.node.style.opacity=j.hit.opacity;j.hit=undefined;}
+  }
   if(t>=1)j.finish(true);
  }
  if(jobs.size||states.size)schedule();else release();
@@ -69,7 +79,7 @@ export function playMonster(source:HTMLElement,kind:Kind,options:Options={}):Pro
  return new Promise(resolve=>{
   let settled=false;const abort=()=>finish(false);
   const timer=setTimeout(abort,6000);
-  const finish=(complete:boolean)=>{if(settled)return;settled=true;clearTimeout(timer);options.signal?.removeEventListener('abort',abort);actor.dispose();source.style.opacity=oldOpacity;jobs.delete(source);resolve(complete);release();};
+  const finish=(complete:boolean)=>{if(settled)return;settled=true;clearTimeout(timer);options.signal?.removeEventListener('abort',abort);actor.dispose();if(j.hit){j.hit.actor.dispose();j.hit.node.style.opacity=j.hit.opacity;}source.style.opacity=oldOpacity;jobs.delete(source);resolve(complete);release();};
   const j:Job={source,actor,kind,variant,start:performance.now(),ms:reduced()?100:kind==='attack'&&options.exhaust===false?820:duration(kind,variant),r,target:options.target?monsterRect(options.target):r,destination:dest,options,opacity:oldOpacity,finish,impacted:false};
   jobs.set(source,j);options.signal?.addEventListener('abort',abort,{once:true});schedule();
  });
