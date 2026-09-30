@@ -13,8 +13,8 @@ export function readingScale(width=innerWidth,height=innerHeight){return Math.mi
 /** Containers are display:contents, so placements have the viewport as offset parent. */
 export function placeReadingBoard(root:HTMLElement):void {
  const s=readingScale(),cx=innerWidth/2,cy=innerHeight/2;
- // Preserve the large desktop portrait; shorter windows need room for all
- // seven monsters without the center card covering the player's face.
+ // Opponent/default size. The player frame fits the space below the field
+ // independently so it cannot be pushed upward over monster stat seals.
  const portraitSize=Math.min(210,Math.max(104,s*.30),innerHeight*.195);root.style.setProperty('--portrait-size',`${portraitSize}px`);
  root.classList.add('reading-board');root.style.setProperty('--board-meter',`${s}px`);
  function place(selector:string,x:number,z:number,w:number,d:number,local=false){
@@ -36,15 +36,19 @@ export function placeReadingBoard(root:HTMLElement):void {
   place(`#pile-${id==='me'?'my':'opp'}Disc`,-.54,sign*.245,.166,.232);
   place(`#rift-${id}`,RIFT_MOUNT.x,sign*RIFT_MOUNT.z,.125,.268);
   const p=id==='me'?'Me':'Opp';
-  const portraitTop=sign>0?Math.min(innerHeight-portraitSize-38,cy+s*.326):Math.max(8,cy-s*.326-portraitSize);
+  // Keep the near frame behind the monster lane. Fit the frame plus the lowest
+  // hanging badge (shield: .65 + .135 + .36) instead of lifting it over cards.
+  const portraitTop=sign>0?cy+s*.31:Math.max(8,cy-s*.326-portraitSize);
+  const size=sign>0?Math.min(portraitSize,(innerHeight-8-portraitTop)/1.145):portraitSize;
+  root.querySelector<HTMLElement>(`#portrait${p}`)?.style.setProperty('--portrait-size',`${size}px`);
   const ring=root.querySelector<HTMLElement>(`#portrait${p} .pt-ring`),hp=root.querySelector<HTMLElement>(`#portrait${p} .pt-vitals`);
-  if(ring){ring.style.left=`${cx-portraitSize/2}px`;ring.style.top=`${portraitTop}px`;ring.style.width=ring.style.height=`${portraitSize}px`;}
-  if(hp){hp.style.left=`${cx-portraitSize*.46}px`;hp.style.top=`${portraitTop+portraitSize*.65}px`;hp.style.width=`${portraitSize*.30}px`;hp.style.height=`${portraitSize*.36}px`;}
+  if(ring){ring.style.left=`${cx-size/2}px`;ring.style.top=`${portraitTop}px`;ring.style.width=ring.style.height=`${size}px`;}
+  if(hp){hp.style.left=`${cx-size*.46}px`;hp.style.top=`${portraitTop+size*.65}px`;hp.style.width=`${size*.30}px`;hp.style.height=`${size*.36}px`;}
 
   place(`#portrait${p} .pt-mana`,-.345,sign*.397,.350,.077);
   place(`#portrait${p}>.pt-name,#portrait${p} .pt-name--vitals`,-.345,sign*.455,.34,.017);
   const resources=root.querySelector<HTMLElement>(`#portrait${p} .pt-resources`);
-  if(resources){resources.style.left=`${cx-portraitSize*.15}px`;resources.style.top=`${portraitTop+portraitSize*.65}px`;resources.style.width=`${portraitSize*.61}px`;resources.style.height=`${portraitSize*.36}px`;}
+  if(resources){resources.style.left=`${cx-size*.15}px`;resources.style.top=`${portraitTop+size*.65}px`;resources.style.width=`${size*.61}px`;resources.style.height=`${size*.36}px`;}
   place(`#portrait${p} .pt-brand`,-.09,sign*.335,.08,.028);
  }
  // Hand cards float over the board, outside the play lanes. They are not sockets.

@@ -1,0 +1,7 @@
+# Player portrait clearance
+
+The Dew/Shield feature commit `8d3a9b30` changed the self portrait bottom reserve from 8px to 38px, lifting it 30px. The viewport clamp could place the large portrait over the center monster's attack/health seals. Keep the self portrait below the monster lane and fit its size to the remaining height, including the full hanging shield badge (.65 + .135 + .36 portrait heights). Apply the fitted size to the frame, health and resources together. Reserve the same geometry when resources are zero, so gaining/losing them does not move the frame. The opponent position/size and monster layer policy are unchanged.
+
+At 1920×1037 the portrait top moves from 796.8px to 860.5px (about 64px lower). Short views reduce the self portrait size to keep all badges visible. Tall portrait views keep the original size.
+
+Validation: client/server typecheck and production build pass. `tests/player-portrait-clearance-browser.mjs` checks 72 combinations across 1920×1037, 1461×789, 1280×720, 1280×900, 844×390 and 390×844: 1/3/7 monsters, ready/exhausted, resources absent/present. Both native card seals and persistent rendered card seals clear the player frame by at least 7.5px. Health/shield/dew remain on-screen; resource changes and monster counts do not move the frame. Browser page errors: zero. Screenshots were visually inspected at desktop and landscape phone sizes. These are constructed game states through the real controller/board, not authenticated online matches.
