@@ -44,6 +44,7 @@ export function projectBoardDOM(root:HTMLElement):void {
   });
   root.querySelectorAll<HTMLElement>('.pile--shelf').forEach(el=>{const n=Number(el.dataset.count)||0;el.style.setProperty('--shelf-elevation',`${unit*pileFace(n,true)}px`);});
   root.classList.add('board-projected');
+  root.dispatchEvent(new Event('lore:board-projected',{bubbles:true}));
 }
 export function clearBoardProjection(root:HTMLElement):void {
   root.querySelectorAll<HTMLElement>('[data-board-plane]').forEach(el=>{delete el.dataset.boardPlane;el.style.removeProperty('transform');el.style.removeProperty('transform-origin');});

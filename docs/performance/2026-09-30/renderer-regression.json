@@ -1,0 +1,19 @@
+{
+  "parity": {
+    "cases": 720,
+    "maxMatrixError": 1.0000000000287557e-7
+  },
+  "idle": {
+    "reads": 0,
+    "clears": 0
+  },
+  "resizeMatrixError": 0.00011581901048884902,
+  "checks": [
+    "target highlighting wakes static card",
+    "resize recomputes cached projection",
+    "hidden/resume",
+    "removed source cleans actor",
+    "dispose releases layers"
+  ],
+  "errors": []
+}

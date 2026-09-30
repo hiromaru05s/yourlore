@@ -356,7 +356,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   // The frame has its name plaque; cost and combat seals are separate raster layers.
   node.appendChild(artEl(c.id, opt.fullArt, lazyFor(opt.lazyArt), opt.lazyArt !== undefined));
   const frameEl = el("div", "card-frame");
-  frameEl.style.backgroundImage = `url(${opt.compactField ? fieldFrameFor(c.t) : frameFor(c.t)})`;
+  frameEl.style.backgroundImage = `url(${opt.compactField ? fieldFrameFor(c.t) : frameFor(c.t,opt.fullArt)})`;
   node.appendChild(frameEl);
 
   if (opt.playable) node.classList.add("is-playable");

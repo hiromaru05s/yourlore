@@ -377,9 +377,9 @@
 .card .ad-def { width:var(--card-health-size,27%); left:auto; right:-4%; top:auto; bottom:-2%; }
 .card .ad-atk::before,.card .ad-def::before { content:none; }
 .seal-face { position:absolute; inset:0; background:center/100% 100% no-repeat; filter:url(#celestial-matte); }
-.card-cost .seal-face { background-image:url(/art/biblion/modular/cost.png); }
-.ad-atk .seal-face { background-image:url(/art/biblion/modular/attack.png); }
-.ad-def .seal-face { background-image:url(/art/biblion/modular/health.png); }
+.card-cost .seal-face { background-image:url(/art/biblion/modular/cost-ui.webp); }
+.ad-atk .seal-face { background-image:url(/art/biblion/modular/attack-ui.webp); }
+.ad-def .seal-face { background-image:url(/art/biblion/modular/health-ui.webp); }
 .seal-value { position:absolute; inset:15% 13% 19%; display:grid; place-items:center; line-height:1; font-variant-numeric:tabular-nums; font-family:Georgia,serif; letter-spacing:0; text-indent:0; }
 .ad-def .seal-value { inset:18% 18% 27%; }
 .card .ad-num--3d { font-size:.80em; }
@@ -389,7 +389,7 @@
 .card--field .card-status { bottom:22%; gap:1px; }
 .card--field .ad-num--3d { font-size:.74em; }
 .card .card-status .kw,.card .card-status .ec,.card .badge { position:relative; background:none; border:0; border-radius:0; box-shadow:none; isolation:isolate; color:#eae1ca; padding:2px 6px; line-height:1.35; text-shadow:0 1px 2px #000; }
-.card .card-status .kw::before,.card .card-status .ec::before,.card .badge::before { content:''; position:absolute; inset:0; z-index:-1; background:url(/art/biblion/modular/plaque.png) center/100% 100%; filter:url(#celestial-matte); }
+.card .card-status .kw::before,.card .card-status .ec::before,.card .badge::before { content:''; position:absolute; inset:0; z-index:-1; background:url(/art/biblion/modular/plaque-ui.webp) center/100% 100%; filter:url(#celestial-matte); }
 .card .badge { position:absolute; }
 
 /* Fit illustration to the art aperture, so the larger title does not crop faces. */

@@ -1,0 +1,107 @@
+{
+  "baseline": "9d6221f72f5bd47e35509718a480b3b326dfc364",
+  "startupConditions": {
+    "viewport": "390x844",
+    "dpr": 2,
+    "bandwidthMbps": 10,
+    "latencyMs": 40,
+    "cpuSlowdown": 4,
+    "cache": "fresh context each trial",
+    "encoding": "gzip JS/CSS/HTML; original images",
+    "api": "fixture",
+    "entrance": "normal complete animation included"
+  },
+  "startup": {
+    "before": {
+      "ms": 25826.0,
+      "requests": 796.0,
+      "bodyBytes": 26740407.0,
+      "tbt": 238.5
+    },
+    "after": {
+      "ms": 7985.0,
+      "requests": 52.0,
+      "bodyBytes": 4232345.5,
+      "tbt": 167.5
+    }
+  },
+  "renderer": [
+    {
+      "scene": "home",
+      "beforeMainThreadSeconds": 0.22451500000000002,
+      "afterMainThreadSeconds": 0.20014299999999996,
+      "beforeCounts": {},
+      "afterCounts": {},
+      "beforeP95FrameMs": 16.799999999999272,
+      "afterP95FrameMs": 16.799999999999272
+    },
+    {
+      "scene": "cards",
+      "beforeMainThreadSeconds": 0.06765100000000013,
+      "afterMainThreadSeconds": 0.05721899999999991,
+      "beforeCounts": {},
+      "afterCounts": {},
+      "beforeP95FrameMs": 16.799999999999272,
+      "afterP95FrameMs": 16.700000000000728
+    },
+    {
+      "scene": "blocked14",
+      "beforeMainThreadSeconds": 0.5352829999999998,
+      "afterMainThreadSeconds": 0.220364,
+      "beforeCounts": {
+        "drawImage:seeker-motion": 604,
+        "clearRect:offscreen": 604,
+        "rect": 4228,
+        "style": 4228,
+        "clearRect:stat-surface": 4228,
+        "drawImage:offscreen": 60
+      },
+      "afterCounts": {
+        "drawImage:seeker-motion": 600,
+        "drawImage:offscreen": 60
+      },
+      "beforeP95FrameMs": 16.700000000000728,
+      "afterP95FrameMs": 16.799999999999272
+    },
+    {
+      "scene": "ready7",
+      "beforeMainThreadSeconds": 0.7313290000000001,
+      "afterMainThreadSeconds": 0.6150159999999998,
+      "beforeCounts": {
+        "clearRect:offscreen": 604,
+        "rect": 4228,
+        "style": 4228,
+        "clearRect:stat-surface": 4228,
+        "drawImage:seeker-motion": 604,
+        "drawImage:offscreen": 60
+      },
+      "afterCounts": {
+        "drawImage:seeker-motion": 604,
+        "clearRect:offscreen": 302,
+        "drawImage:offscreen": 60
+      },
+      "beforeP95FrameMs": 16.799999999999272,
+      "afterP95FrameMs": 16.700000000000728
+    },
+    {
+      "scene": "ready7-cpu4",
+      "beforeMainThreadSeconds": 2.749486,
+      "afterMainThreadSeconds": 2.121699,
+      "beforeCounts": {
+        "drawImage:seeker-motion": 604,
+        "clearRect:offscreen": 604,
+        "rect": 4228,
+        "style": 4228,
+        "clearRect:stat-surface": 4228,
+        "drawImage:offscreen": 61
+      },
+      "afterCounts": {
+        "drawImage:seeker-motion": 604,
+        "drawImage:offscreen": 61,
+        "clearRect:offscreen": 302
+      },
+      "beforeP95FrameMs": 16.799999999999272,
+      "afterP95FrameMs": 16.700000000000728
+    }
+  ]
+}

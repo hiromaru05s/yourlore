@@ -1,0 +1,197 @@
+[
+  {
+    "name": "base-mon",
+    "sourceBytes": 1817892,
+    "uiBytes": 300102,
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "uiSize": [
+      512,
+      768
+    ]
+  },
+  {
+    "name": "base-spell",
+    "sourceBytes": 1830510,
+    "uiBytes": 289600,
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "uiSize": [
+      512,
+      768
+    ]
+  },
+  {
+    "name": "base-quest",
+    "sourceBytes": 1550609,
+    "uiBytes": 271106,
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "uiSize": [
+      512,
+      768
+    ]
+  },
+  {
+    "name": "base-trap",
+    "sourceBytes": 1713270,
+    "uiBytes": 290194,
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "uiSize": [
+      512,
+      768
+    ]
+  },
+  {
+    "name": "field-mon",
+    "sourceBytes": 1316420,
+    "uiBytes": 212580,
+    "sourceSize": [
+      1122,
+      1402
+    ],
+    "uiSize": [
+      512,
+      640
+    ]
+  },
+  {
+    "name": "field-spell",
+    "sourceBytes": 1407663,
+    "uiBytes": 222476,
+    "sourceSize": [
+      1122,
+      1402
+    ],
+    "uiSize": [
+      512,
+      640
+    ]
+  },
+  {
+    "name": "field-quest",
+    "sourceBytes": 1248976,
+    "uiBytes": 214834,
+    "sourceSize": [
+      1122,
+      1402
+    ],
+    "uiSize": [
+      512,
+      640
+    ]
+  },
+  {
+    "name": "field-trap",
+    "sourceBytes": 1457173,
+    "uiBytes": 231004,
+    "sourceSize": [
+      1122,
+      1402
+    ],
+    "uiSize": [
+      512,
+      640
+    ]
+  },
+  {
+    "name": "cost",
+    "sourceBytes": 1801208,
+    "uiBytes": 50962,
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "uiSize": [
+      256,
+      256
+    ]
+  },
+  {
+    "name": "attack",
+    "sourceBytes": 1841095,
+    "uiBytes": 57542,
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "uiSize": [
+      256,
+      256
+    ]
+  },
+  {
+    "name": "health",
+    "sourceBytes": 1781819,
+    "uiBytes": 51204,
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "uiSize": [
+      256,
+      256
+    ]
+  },
+  {
+    "name": "shield",
+    "sourceBytes": 295474,
+    "uiBytes": 52092,
+    "sourceSize": [
+      512,
+      512
+    ],
+    "uiSize": [
+      256,
+      256
+    ]
+  },
+  {
+    "name": "dew",
+    "sourceBytes": 244517,
+    "uiBytes": 44040,
+    "sourceSize": [
+      512,
+      512
+    ],
+    "uiSize": [
+      256,
+      256
+    ]
+  },
+  {
+    "name": "plaque",
+    "sourceBytes": 1147799,
+    "uiBytes": 13152,
+    "sourceSize": [
+      2172,
+      724
+    ],
+    "uiSize": [
+      256,
+      85
+    ]
+  },
+  {
+    "name": "infinity",
+    "sourceBytes": 1059493,
+    "uiBytes": 23432,
+    "sourceSize": [
+      1536,
+      1024
+    ],
+    "uiSize": [
+      256,
+      171
+    ]
+  }
+]
