@@ -1,0 +1,266 @@
+{
+  "at": "2026-09-30T01:55:00.904Z",
+  "origin": "https://test.yourlore.xyz",
+  "source": "0b06fea0a62f2546ca635b8445a0748ebf7a5d65",
+  "entrySha256": "959ccfd545a3068b36eddf135651d09e570dcb9e2d8713126289e6f8d611114d",
+  "results": [
+    {
+      "url": "/assets/main-DtFkZAV5.js",
+      "sha256": "dd3343d8ad9d8e5b536ac3010af1553cdc65ddb6cb11436ded228a7425b9bd72"
+    },
+    {
+      "url": "/assets/three.module-P6koxfW0.js",
+      "sha256": "7e207c000c88fdc73388a5737d6896fdb1d2af5c1d0e684780f9137968498d3e"
+    },
+    {
+      "url": "/assets/main-BgnjwBL-.css",
+      "sha256": "845d09e6bbf0a100c75bb3e53a38c73c5a91c8b9d9697828d68a4d1774392a80"
+    },
+    {
+      "cue": "click",
+      "url": "/sfx/lore-v3/click-1.mp3",
+      "sha256": "07f683303b5915ccc3ca981991f484618f0f432fcc9e857b657031a3f1b6c798",
+      "preserved": true
+    },
+    {
+      "cue": "click",
+      "url": "/sfx/lore-v3/click-2.mp3",
+      "sha256": "dd42639f2a79b39e78ab1ffea4cb87ec75f6c8e46f1c20b2820a4e5e01e9201c",
+      "preserved": true
+    },
+    {
+      "cue": "click",
+      "url": "/sfx/lore-v3/click-3.mp3",
+      "sha256": "adb0c6069f70f2e20fa6f3c3d29a9fc394aea7aabc95d64f203c75a6da4fa7d1",
+      "preserved": true
+    },
+    {
+      "cue": "pop",
+      "url": "/sfx/lore-v3/pop.mp3",
+      "sha256": "2a1d0899df83a343d64a36be7f42e8694bd68500d108d5d92ca09e4991fc6c7d",
+      "preserved": true
+    },
+    {
+      "cue": "error",
+      "url": "/sfx/lore-v3/error.mp3",
+      "sha256": "ef85c141ed1aaf75ea4d890aa92b1f2c18c35c801dd34fbae77f67d8b938664c",
+      "preserved": true
+    },
+    {
+      "cue": "coin",
+      "url": "/sfx/lore-v4/coin.mp3",
+      "sha256": "1c68676856e96bca4ad8010d39a45e332a4da8e42842e742baa952a08151932b",
+      "preserved": true
+    },
+    {
+      "cue": "match",
+      "url": "/sfx/lore-v4/match.mp3",
+      "sha256": "ef16d12aca0f83a819e21930a5f708c4b0f6be035599c00a60973593930bf878",
+      "preserved": true
+    },
+    {
+      "cue": "draw",
+      "url": "/sfx/lore-v4/draw-3.mp3",
+      "sha256": "7b76afc4859cdef231025e8da3949d55a7ad3360a2d956875ea80f2aa9f60b05",
+      "preserved": true
+    },
+    {
+      "cue": "buy",
+      "url": "/sfx/lore-v4/buy.mp3",
+      "sha256": "a995b5936355723735e13d71500519a4c3c5ce7cf20bc76c2e05e917513beeec",
+      "preserved": true
+    },
+    {
+      "cue": "attack",
+      "url": "/sfx/lore-v5/attack-1.mp3",
+      "sha256": "bd1c6280655f6567560d69ca76c84ed37ce332908d9f23ae9d1b5e8dba892a41",
+      "preserved": false
+    },
+    {
+      "cue": "attack",
+      "url": "/sfx/lore-v5/attack-2.mp3",
+      "sha256": "6f6ad2c379f58622a4558b97fac8945942482b59a7a303f31f14fc51aa18a025",
+      "preserved": false
+    },
+    {
+      "cue": "attack",
+      "url": "/sfx/lore-v5/attack-3.mp3",
+      "sha256": "48c5a0e623336e61008adf129e21ee6fb447a3f65e93d45fdd28332742d9aa34",
+      "preserved": false
+    },
+    {
+      "cue": "impact",
+      "url": "/sfx/lore-v5/impact-1.mp3",
+      "sha256": "528cb2d5e4fa20bdb5450aaa1a562adafc76ca6093f38fed9fe6e1a6199562f4",
+      "preserved": false
+    },
+    {
+      "cue": "impact",
+      "url": "/sfx/lore-v5/impact-2.mp3",
+      "sha256": "4d1a625175c122178697577cee65beaf3f5f7df7ad9a3eb2832f764537e65f5e",
+      "preserved": false
+    },
+    {
+      "cue": "impact",
+      "url": "/sfx/lore-v5/impact-3.mp3",
+      "sha256": "c41dfa64fd8917e78a6ece7a5d4c8435541b8e80d27f8def20371ea2ffc4a490",
+      "preserved": false
+    },
+    {
+      "cue": "facehit",
+      "url": "/sfx/lore-v5/facehit.mp3",
+      "sha256": "347e43fb8b4001689d9537025f4aca5688010c3cad5559f8010e74661b7c5bd3",
+      "preserved": false
+    },
+    {
+      "cue": "damage",
+      "url": "/sfx/lore-v5/damage.mp3",
+      "sha256": "9f4d0d13cfa20ca41ea88cb32f1c70df994a32db704d7268dd15c3fd4f793539",
+      "preserved": false
+    },
+    {
+      "cue": "summon",
+      "url": "/sfx/lore-v5/summon.mp3",
+      "sha256": "fe2afa82c41564825e02e1c4e78e216513c918aaee4790359766b32f45139e8f",
+      "preserved": false
+    },
+    {
+      "cue": "mimic",
+      "url": "/sfx/lore-v5/mimic.mp3",
+      "sha256": "3ec8a1296576884a8d055fb95fec93a71d2628b652fbb20ac48d5d3c715cebd9",
+      "preserved": false
+    },
+    {
+      "cue": "play",
+      "url": "/sfx/lore-v5/play.mp3",
+      "sha256": "640ac26d504636271f8acdc21f4238c5cf7e0cbe076faaa10ed85e2ca565f507",
+      "preserved": false
+    },
+    {
+      "cue": "heal",
+      "url": "/sfx/lore-v5/heal.mp3",
+      "sha256": "9c8b828a02b234d086f963c16247c03c5d41a4dae47d7d5b748796bfbf13d3cf",
+      "preserved": false
+    },
+    {
+      "cue": "death",
+      "url": "/sfx/lore-v5/death.mp3",
+      "sha256": "1c9978306ae76e7afa557bf4682c08345950815875a53811e93ef0ef4ad4abff",
+      "preserved": false
+    },
+    {
+      "cue": "trapSet",
+      "url": "/sfx/lore-v5/trapSet.mp3",
+      "sha256": "ab47b257abab166a155a2436b15672d88da568d5f743bf29e6b938d8d5b35049",
+      "preserved": false
+    },
+    {
+      "cue": "trap",
+      "url": "/sfx/lore-v5/trap.mp3",
+      "sha256": "e1cd8a5055dcb40ecd6b979f667cd9acdb11fb44567f0a784c06e925f5cdb812",
+      "preserved": false
+    },
+    {
+      "cue": "mana-pay",
+      "url": "/sfx/lore-v5/mana-pay.mp3",
+      "sha256": "f348aeff8aa5eaf3f5ba0d10e788e263b73af5cf1cbb9ddf904d626dcdccb671",
+      "preserved": false
+    },
+    {
+      "cue": "mana",
+      "url": "/sfx/lore-v5/mana.mp3",
+      "sha256": "cb8240be0aaa597e50872bc59d18370607d2c534a9e74dd55caf3e9b2b5cf7c3",
+      "preserved": false
+    },
+    {
+      "cue": "turn",
+      "url": "/sfx/lore-v5/turn.mp3",
+      "sha256": "b8b324e5350381528c5873eb81a9eab23835727990a04367d7948510ee791e9d",
+      "preserved": false
+    },
+    {
+      "cue": "win",
+      "url": "/sfx/lore-v5/win.mp3",
+      "sha256": "f1537029896503796f0e18cc1dde0e20e9771bd4c8e5fcbbd66c8cec19c5b47c",
+      "preserved": false
+    },
+    {
+      "cue": "lose",
+      "url": "/sfx/lore-v5/lose.mp3",
+      "sha256": "cac6c8e267a41416f0f3f2abe411d65886408e3b82cfd60ff78e6a107c0617b9",
+      "preserved": false
+    },
+    {
+      "cue": "drawGame",
+      "url": "/sfx/lore-v5/drawGame.mp3",
+      "sha256": "7659df416eef73e2e16ba85f0f42999cf2283f00bd3ce844ce8c2c2574a345c8",
+      "preserved": false
+    },
+    {
+      "cue": "void",
+      "url": "/sfx/lore-v5/void.mp3",
+      "sha256": "c60134097bac187f1312a9ce6a307bb5f8ff3f1e40bba8b38b77fcba4390277c",
+      "preserved": false
+    },
+    {
+      "cue": "shuffle",
+      "url": "/sfx/lore-v5/shuffle.mp3",
+      "sha256": "5fb2bada8743ea2b7f6ab1cd0a1bb286420ea4c76afa41c3861564afb7c53c1f",
+      "preserved": false
+    },
+    {
+      "cue": "duel-start",
+      "url": "/sfx/lore-v5/duel-start.mp3",
+      "sha256": "f4b5f5b6698b923c850f8082f30f7898cd5e0e2262f47a713bc655c2a1895032",
+      "preserved": false
+    },
+    {
+      "cue": "discard",
+      "url": "/sfx/lore-v5/discard.mp3",
+      "sha256": "4facdd3b85a3d55b8239d66d695646c90e3a0211eca28f55af2a00d244240237",
+      "preserved": false
+    },
+    {
+      "cue": "coinToss",
+      "url": "/sfx/lore-v5/coinToss.mp3",
+      "sha256": "dda13ce12a33be483e4e7bd1b7c5a1f76952a98bb8abb6c2e2a20a0aeee7d473",
+      "preserved": false
+    },
+    {
+      "cue": "coinLand",
+      "url": "/sfx/lore-v5/coinLand.mp3",
+      "sha256": "4932c579e96c6d2329f7aa0dc30c1da5d0711f46415fd064f56a17a47bee3066",
+      "preserved": false
+    },
+    {
+      "cue": "diceRoll",
+      "url": "/sfx/lore-v5/diceRoll.mp3",
+      "sha256": "7a1f83e87853c968ce398dc49bd604aa2f5b19b77a96728da9665bfb0723d21f",
+      "preserved": false
+    },
+    {
+      "cue": "diceLand",
+      "url": "/sfx/lore-v5/diceLand.mp3",
+      "sha256": "e1da74aa8c05c06d3ba173dd5fc8b67fedec966a5c02718ec94b2e77b30c275f",
+      "preserved": false
+    },
+    {
+      "cue": "rankUp",
+      "url": "/sfx/lore-v5/rankUp.mp3",
+      "sha256": "33d9233ea8f67687794d19c0df68d87fc39baa0c0b7242ce9b775aa5cef58466",
+      "preserved": false
+    },
+    {
+      "cue": "rankDown",
+      "url": "/sfx/lore-v5/rankDown.mp3",
+      "sha256": "234d5595b2251e562c805b1dfd027b55e25ff39c8183eda0153b36add948f08b",
+      "preserved": false
+    },
+    {
+      "cue": "rankPromote",
+      "url": "/sfx/lore-v5/rankPromote.mp3",
+      "sha256": "f1d16f9814ba5668ec9cbf3dd2da2039397133785e967e3c806ee86525990a40",
+      "preserved": false
+    }
+  ]
+}

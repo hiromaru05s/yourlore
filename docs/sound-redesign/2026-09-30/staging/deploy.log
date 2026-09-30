@@ -1,0 +1,82 @@
+
+ ⛅️ wrangler 4.130.0 (update available 4.144.0)
+───────────────────────────────────────────────
+
+Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+🌀 Building list of assets...
+✨ Read 2163 files from the assets directory /Users/hiromaru05s/.codex/worktrees/sfx-rebuild-preview/LORE_TCG/client/dist
+🌀 Starting asset upload...
+🌀 Found 52 new or modified static assets to upload. Proceeding with upload...
++ /index.html
++ /sfx/lore-v5/coinLand.mp3
++ /sfx/lore-v5/damage.mp3
++ /sfx/lore-v5/attack-2.mp3
++ /sfx/lore-v5/turn.mp3
++ /sfx/lore-v5/facehit.mp3
++ /sfx/lore-v5/diceRoll.mp3
++ /sfx/lore-v5/play.mp3
++ /sfx/lore-v5/duel-start.mp3
++ /sfx/lore-v5/lose.mp3
++ /sfx/lore-v5/rankPromote.mp3
++ /sfx/lore-v5/shuffle.mp3
++ /assets/crownOutcome-DDkbS2Pm.js
++ /assets/paperDraw-B_CWbmBQ.js.map
++ /assets/duelScene-BuSVq4rB.js
++ /assets/duelScene-BuSVq4rB.js.map
++ /assets/game-Bu0t2w4D.js.map
++ /assets/three.module-P6koxfW0.js.map
++ /sfx/lore-v5/diceLand.mp3
++ /sfx/lore-v5/impact-1.mp3
++ /sfx/lore-v5/rankDown.mp3
++ /sfx/lore-v5/attack-3.mp3
++ /sfx/lore-v5/rankUp.mp3
++ /sfx/lore-v5/impact-3.mp3
++ /sfx/lore-v5/mimic.mp3
++ /sfx/lore-v5/death.mp3
++ /sfx/lore-v5/mana.mp3
++ /assets/diceScene-B4flflLM.js
++ /sfx/lore-v5/drawGame.mp3
++ /sfx/lore-v5/heal.mp3
++ /sfx/lore-v5/manifest.json
++ /assets/diceScene-B4flflLM.js.map
++ /assets/riftScene-D8KGWFwI.js.map
++ /assets/GLTFLoader-Syrzv2H6.js.map
++ /assets/main-DtFkZAV5.js
++ /sfx/lore-v5/coinToss.mp3
++ /sfx/lore-v5/mana-pay.mp3
++ /sfx/lore-v5/impact-2.mp3
++ /sfx/lore-v5/attack-1.mp3
++ /sfx/lore-v5/trapSet.mp3
++ /sfx/lore-v5/trap.mp3
++ /sfx/lore-v5/discard.mp3
++ /sfx/lore-v5/void.mp3
++ /sfx/lore-v5/summon.mp3
++ /assets/RoomEnvironment-HFPuHeIy.js.map
++ /assets/paperDraw-B_CWbmBQ.js
++ /sfx/lore-v5/win.mp3
++ /assets/riftScene-D8KGWFwI.js
++ /assets/crownOutcome-DDkbS2Pm.js.map
++ /assets/tablePreview-BnKVBpGZ.js.map
++ /assets/game-Bu0t2w4D.js
++ /assets/main-DtFkZAV5.js.map
+Uploaded 17 of 52 assets
+Uploaded 34 of 52 assets
+Uploaded 52 of 52 assets
+✨ Success! Uploaded 52 files (2043 already uploaded) (2.70 sec)
+
+Total Upload: 1096.75 KiB / gzip: 236.18 KiB
+Worker Startup Time: 65 ms
+Your Worker has access to the following bindings:
+Binding                                                                Resource                  
+env.MATCHMAKER (Matchmaker)                                            Durable Object            
+env.GAME_ROOM (GameRoom)                                               Durable Object            
+env.DB (lore-db-staging)                                               D1 Database               
+env.ASSETS                                                             Assets                    
+env.APP_ORIGIN ("*")                                                   Environment Variable      
+env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")      Environment Variable      
+env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")          Environment Variable      
+
+Uploaded lore-server-staging (8.75 sec)
+Deployed lore-server-staging triggers (2.27 sec)
+  test.yourlore.xyz (custom domain)
+Current Version ID: 5dbe752d-556e-4174-85af-f6d7228d44ce
