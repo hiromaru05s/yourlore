@@ -16,8 +16,6 @@
 .opening-result strong { display:block;font-size:clamp(24px,3vw,43px);font-weight:400;letter-spacing:.18em;color:#fff2cf; }
 .opening-result span { display:block;font-family:system-ui,sans-serif;font-size:13px;color:#f1e1bd;letter-spacing:.15em;margin-top:12px; }
 .opening-result::before,.opening-result::after { content:'';display:block;height:1px;background:linear-gradient(90deg,transparent,#e8c482,transparent);margin:18px auto;max-width:320px; }
-.opening-skip { position:absolute;right:max(24px,env(safe-area-inset-right));bottom:max(22px,env(safe-area-inset-bottom));border:1px solid #e1c69255;background:#09111ed9;color:#e4dbc9;padding:10px 18px;font:12px system-ui,sans-serif;letter-spacing:.12em;cursor:pointer; }
-.opening-skip:focus-visible { outline:2px solid #b8dbff;outline-offset:4px; }
 .opening-fallback-coin { position:absolute;width:86px;height:86px;border-radius:50%;border:5px double #c9ab70;background:#14263c;box-shadow:0 8px 13px #0005;overflow:hidden; }
 .opening-fallback-coin .avatar,.opening-fallback-coin .seeker-sprite { width:100%!important;height:100%!important;display:block; }
 .opening-faces { position:absolute;left:-10000px;top:0;width:100px;height:100px;visibility:hidden; }
@@ -35,5 +33,4 @@
  .opening-center span { margin-top:8px; }
  .opening-name { max-width:85vw; }
  .opening-result { top:49%; }
- .opening-skip { right:14px;bottom:14px; }
 }

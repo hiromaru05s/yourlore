@@ -48,7 +48,6 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
   const result=document.createElement('div');result.className='opening-result';result.setAttribute('role','status');
   const title=document.createElement('strong');title.textContent=o.firstIsMe?t('coin.youFirst'):label('相手が先攻','Opponent goes first','상대 선공');
   const subtitle=document.createElement('span');subtitle.textContent=o.firstIsMe?o.me.name:o.opp.name;result.append(title,subtitle);host.append(result);
-  const skip=document.createElement('button');skip.type='button';skip.className='opening-skip';skip.textContent=label('スキップ','Skip','건너뛰기');host.append(skip);
   const faces=document.createElement('div');faces.className='opening-faces';faces.setAttribute('aria-hidden','true');
   for(const [p,i] of [[o.firstIsMe?o.me:o.opp,0],[o.firstIsMe?o.opp:o.me,1]] as const){
     const face=document.createElement('div');face.className='ct-face';face.innerHTML=`<span class="ct-avatar-mask">${avatarHtml(p.avatar||(p===o.me?'SEEKER_BLUE':'SEEKER_RED'),p.name,96)}</span><img class="ct-frame" src="/ui/coin-toss/coin-option-1-${i?'back':'front'}.png" alt="">`;faces.append(face);
@@ -60,7 +59,6 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
   const audio=openingAudio();let last=-1,started=false;
   const stopAudio=()=>audio.stop();
   const skipIntro=()=>{skipped=true;stopAudio();life.abort();if(o.sampleMs!=null)release();};
-  skip.onclick=skipIntro;
   const onResize=()=>{if(o.sampleMs==null)skipIntro();};
   const onHidden=()=>{if(document.hidden&&o.sampleMs==null)skipIntro();};
   window.addEventListener('resize',onResize);document.addEventListener('visibilitychange',onHidden);
@@ -123,7 +121,6 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
         dealt=true;game?.classList.add('intro-dealing');
         if(!fast)deal=o.onDeal(life.signal).catch(()=>{});
       }
-      skip.style.visibility=skipped?'hidden':'visible';
       if(skipped&&o.elapsed)subtitle.textContent=label('まもなく開始','Starting shortly','곧 시작합니다');
     };
     if(o.sampleMs!=null){paint(o.sampleMs);await aborted;}

@@ -120,10 +120,10 @@ g.cur=1;v.render(g);assert(document.querySelector('#refreshBtn').disabled);asser
 g.cur=0;g.players[0].supply[1]=null;v.render(g);assert.equal(document.querySelectorAll('#supplyMarket > *').length,3);assert.equal(document.querySelectorAll('#supplyMarket > .is-bought').length,1);
 assert.deepEqual(avatarPresets(),['SEEKER_RED','SEEKER_BLUE']);assert(avatarHtml('SEEKER_RED','A').includes('seeker-red'));
 for(const [w,h] of [[1920,1080],[1280,720],[1024,768],[390,844],[320,568],[844,390]]) {const m=solveBoard(w,h);assert(m.tile>=20&&m.mktH>=31);assert.equal(m.underPile,false);}
-// Complete type-specific PNG faces and live numeric overlays survive rendering.
+// Complete type-specific UI faces and live numeric overlays survive rendering.
 for (const card of document.querySelectorAll('.card[data-card-type]')) {
   const compact = card.matches('.card--field');
-  assert(card.querySelector('.card-frame').style.backgroundImage.includes(`${compact?'field':'base'}-${card.dataset.cardType}.png`));
+  assert(card.querySelector('.card-frame').style.backgroundImage.includes(`${compact?'field':'base'}-${card.dataset.cardType}-ui.webp`));
   for (const seal of card.querySelectorAll('.card-cost,.ad-atk,.ad-def')) { assert(seal.querySelector('.seal-value')); assert(seal.querySelector('.seal-face')); }
 }
 // New basic and nameless faces never embed rules; the inspector always does.
@@ -152,7 +152,7 @@ assert([...document.querySelectorAll('.buff-icon--trap .buff-cost')].every(e=>e.
 // UI classifies by definition, not a persisted 98/1-turn legacy value.
 g.players[0].enchants=[{card:{...DB.NHEAL,uid:'permanent-ui'},turns:98}];v.render(g);
 const permanent=document.querySelector('[data-uid="permanent-ui"]');
-assert(permanent.querySelector('.buff-infinity').src.endsWith('/modular/infinity.png'));
+assert(permanent.querySelector('.buff-infinity').src.endsWith('/modular/infinity-ui.webp'));
 assert(!permanent.querySelector('.buff-duration'));assert(!permanent.getAttribute('aria-label').includes('98'));
 const statusCard=cardEl({...mon,uid:'status-check',guts:2,decayCnt:1},{field:true,compactField:true,owner:g.players[0]});
 assert(!/\p{Extended_Pictographic}/u.test(statusCard.querySelector('.card-status').textContent));
@@ -188,7 +188,7 @@ for (const [width,height] of [[1280,720],[1920,1080]]) {
 qstate.players[0].hp=15;v.render(qstate);
 assert(document.querySelector('#fixedMarket .card[data-uid="quick-market"]').classList.contains('is-buyable'));
 const questFace=cardEl({...DB.Q_WINTER,uid:'quest-face'});
-assert(questFace.classList.contains('card--quest'));assert(questFace.querySelector('.card-frame').style.backgroundImage.includes('base-quest.png'));
+assert(questFace.classList.contains('card--quest'));assert(questFace.querySelector('.card-frame').style.backgroundImage.includes('base-quest-ui.webp'));
 v.destroy();
 document.getElementById('app').innerHTML='';
 // Regression through the real controller: first banner follows the coin; next turn announces once.
@@ -200,8 +200,8 @@ await new Promise(r=>setTimeout(r,20));
 assert(document.querySelector('.cointoss-ov'));
 assert(!document.querySelector('.fx-turnbanner'),'opening banner must not be obscured by coin');
 assert(!document.querySelector('.mp-clock[data-remaining]'),'first turn clock must wait for opening');
-click(document.querySelector('.opening-skip'));
-await new Promise(r=>setTimeout(r,100));
+assert.equal(document.querySelector('.opening-skip'),null);
+for(let i=0;i<130&&!document.querySelector('.fx-turnbanner');i++)await new Promise(r=>setTimeout(r,100));
 assert.equal(document.querySelector('.fx-turnbanner span')?.textContent,'あなたのターンです');
 const next=structuredClone(opening.state);next.cur=1;next.turn=2;next.pending=null;
 control.feed({state:next,events:[]});

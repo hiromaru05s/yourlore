@@ -30,15 +30,15 @@ try{
   await page.evaluate(()=>window.loreOpeningPreview.first(false));await seek(8700);
   assert.match(await page.locator('.opening-result strong').textContent(),/相手/);
   await page.screenshot({style:'.opening-lab-controls{visibility:hidden!important}',path:out+'/opponent-first.png'});
-  await page.getByRole('button',{name:'再生',exact:true}).click();await page.getByRole('button',{name:'スキップ',exact:true}).click();
+  await page.getByRole('button',{name:'再生',exact:true}).click();assert.equal(await page.locator('.opening-skip').count(),0);await page.keyboard.press('Escape');await page.keyboard.press('Space');await page.locator('.duel-opening').click({position:{x:8,y:8}});assert.equal(await page.locator('.duel-opening').count(),1);
   await page.waitForFunction(()=>!document.querySelector('.duel-opening'));
   await seek(6500);await page.evaluate(()=>window.loreOpeningPreview.cancel());await page.waitForFunction(()=>!document.querySelector('.duel-opening'));
   await page.emulateMedia({reducedMotion:'reduce'});await page.getByRole('button',{name:'再生',exact:true}).click();await page.waitForFunction(()=>!document.querySelector('.duel-opening'));
   await page.emulateMedia({reducedMotion:'no-preference'});
-  // Actual controller: timer begins after opening, skip cannot consume a hand or leave input inert.
+  // Actual controller: opening cannot be manually skipped; timer starts on natural completion.
   await page.goto(origin+'/duel-lab.html?live');await page.waitForSelector('.duel-opening');
   assert.equal(await page.locator('.game').evaluate(e=>e.inert),true);
-  await page.locator('.opening-skip').click();await page.waitForFunction(()=>!document.querySelector('.duel-opening'));
+  assert.equal(await page.locator('.opening-skip').count(),0);await page.keyboard.press('Escape');assert.equal(await page.locator('.duel-opening').count(),1);await page.waitForFunction(()=>!document.querySelector('.duel-opening'));
   assert.equal(await page.locator('.game').evaluate(e=>e.inert),false);
   assert(await page.locator('.mp-clock[data-remaining]').count()>0);
   assert.equal(await page.locator('.opening-hands').count(),0);
@@ -60,21 +60,21 @@ try{
   assert.equal(await page.locator('.game').evaluate(e=>e.inert),true);
   assert.equal(await page.locator('.mp-clock[data-remaining]').count(),0);
   await page.evaluate(()=>{const q=window.openingQA,s=structuredClone(q.state),now=Date.now()+500000;s.opening={startsAt:now+350,playableAt:now+10800,serverNow:now};q.c.feed(s);q.playableLocal=Date.now()+10800;});
-  await page.waitForSelector('.duel-opening');await page.locator('.opening-skip').click();
+  await page.waitForSelector('.duel-opening');assert.equal(await page.locator('.opening-skip').count(),0);await page.keyboard.press('Escape');
   await page.waitForTimeout(100);
-  assert.equal(await page.locator('.game').evaluate(e=>e.inert),true,'online skip must keep the shared start gate');
+  assert.equal(await page.locator('.game').evaluate(e=>e.inert),true,'online opening keeps the shared start gate');
   await page.waitForFunction(()=>!document.querySelector('.duel-opening'));
   const clock=await page.locator('.mp-clock[data-remaining]').first().getAttribute('data-remaining');
   assert(Number(clock)>=89&&Number(clock)<=90,'opening preserves full first turn');
   assert.equal(await page.locator('.game').evaluate(e=>e.inert),false);
   await page.evaluate(()=>{openingQA.c.dispose();openingQA.stop();});
-  // WebGL unavailable: fallback, skip and input cleanup remain usable.
+  // WebGL unavailable: fallback and input cleanup remain usable.
   const fallback=await context.newPage();await fallback.addInitScript(()=>{window.WebGL2RenderingContext=undefined;});
   fallback.on('pageerror',e=>errors.push(e.message));await fallback.goto(origin+'/duel-lab.html?opening');await fallback.waitForSelector('.duel-opening');
   await fallback.evaluate(()=>window.loreOpeningPreview.seek(7850));await fallback.waitForFunction(()=>document.querySelector('.duel-opening')?.dataset.openingMs==='7850');
   assert.equal(await fallback.locator('.opening-fallback-coin').evaluate(e=>getComputedStyle(e).display),'block');
   await fallback.evaluate(()=>window.loreOpeningPreview.cancel());await fallback.waitForFunction(()=>!document.querySelector('.duel-opening'));await fallback.close();
   assert.deepEqual(errors,[]);
-  await fs.writeFile(out+'/browser-report.json',JSON.stringify({sizes,errors,checks:['desktop/mobile portrait bounds','shared-camera coin','both first-player results','3-card delivery','abort and skip cleanup','reduced motion','real controller unlock and timer','online preparation and skip gate','500-second client/server clock offset','WebGL fallback']},null,2));
-  console.log('PASS: opening browser, four viewports, replay, both sides, skip/abort, reduced motion, local/online clocks, clock skew, WebGL fallback');
+  await fs.writeFile(out+'/browser-report.json',JSON.stringify({sizes,errors,checks:['desktop/mobile portrait bounds','shared-camera coin','both first-player results','3-card delivery','no skip button or keyboard/click bypass; abort cleanup','reduced motion','real controller unlock and timer','online preparation and natural completion gate','500-second client/server clock offset','WebGL fallback']},null,2));
+  console.log('PASS: opening browser, four viewports, replay, both sides, unskippable opening/abort, reduced motion, local/online clocks, clock skew, WebGL fallback');
 }finally{await context.close();await browser.close();}

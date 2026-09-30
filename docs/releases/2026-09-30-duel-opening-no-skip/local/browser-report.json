@@ -1,0 +1,89 @@
+{
+  "sizes": [
+    {
+      "width": 1280,
+      "height": 720,
+      "bounds": [
+        {
+          "left": 140.8000030517578,
+          "right": 550.3937530517578,
+          "top": 121.31199645996094,
+          "bottom": 555.4838714599609
+        },
+        {
+          "left": 729.5999755859375,
+          "right": 1139.1937255859375,
+          "top": 121.31199645996094,
+          "bottom": 555.4838714599609
+        }
+      ]
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "bounds": [
+        {
+          "left": 313.3999938964844,
+          "right": 723.4000244140625,
+          "top": 290.29998779296875,
+          "bottom": 724.8937377929688
+        },
+        {
+          "left": 1196.5999755859375,
+          "right": 1606.5999755859375,
+          "top": 290.29998779296875,
+          "bottom": 724.8937377929688
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "bounds": [
+        {
+          "left": 35.099998474121094,
+          "right": 261.2874984741211,
+          "top": 477.70001220703125,
+          "bottom": 703.8875122070312
+        },
+        {
+          "left": 128.6999969482422,
+          "right": 354.88751220703125,
+          "top": 114.77999877929688,
+          "bottom": 340.9674987792969
+        }
+      ]
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "bounds": [
+        {
+          "left": 114.77999877929688,
+          "right": 340.9674987792969,
+          "top": 63.41400146484375,
+          "bottom": 303.17962646484375
+        },
+        {
+          "left": 503.0199890136719,
+          "right": 729.20751953125,
+          "top": 63.41400146484375,
+          "bottom": 303.17962646484375
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "desktop/mobile portrait bounds",
+    "shared-camera coin",
+    "both first-player results",
+    "3-card delivery",
+    "no skip button or keyboard/click bypass; abort cleanup",
+    "reduced motion",
+    "real controller unlock and timer",
+    "online preparation and natural completion gate",
+    "500-second client/server clock offset",
+    "WebGL fallback"
+  ]
+}
