@@ -58,3 +58,15 @@ No production deployment or database migration is included. Staging verification
 ## Integrated verification
 
 Integrated audit runtime `cb571de9` in `19170fcf` without conflicts. Client/server typecheck, production build, 11 security regressions, monster/controller regression and production lazy tutorial/BOT/reload tests pass on the combined tree. Pending game cancellation also leaves no late-mounted game. Initial main JS after integration is 802.12 KB / 313.13 KB gzip.
+
+## Staging result
+
+Deployed integrated runtime `d3d6b5d9` to https://test.yourlore.xyz. Version `943dc063-5545-4992-95a9-608482d9e901` serves 100% of traffic. The deployment includes audit runtime `cb571de9` and all earlier requested UI fixes.
+
+- 34 deployed HTML/JS/CSS/shard/UI-raster hashes match the build.
+- Deployed HOME entrance and 32 menu states/interactions pass.
+- Deployed HOME and tutorial rules omit the game chunk; interactive tutorial loads, advances and exits; BOT opening and surrender complete; failed game download recovers through reload.
+- Deployed portraits retain HP and omit zero Shield/Dew icons.
+- Browser page errors: zero. These final browser checks use fixture accounts/APIs and real deployed frontend/local BOT gameplay. The preceding audit separately verified real online play and D1 on the unchanged server/runtime logic before this performance deployment.
+
+Evidence is in `staging/`. No production deployment or database migration was run.

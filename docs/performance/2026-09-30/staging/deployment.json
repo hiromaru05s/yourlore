@@ -1,0 +1,16 @@
+{
+  "id": "b9c7fbb5-8c70-4c22-9afc-3fcee677c5b2",
+  "source": "wrangler",
+  "strategy": "percentage",
+  "annotations": {
+    "workers/message": "d3d6b5d9 integrated HOME and battle rendering performance; includes cb571de9 audit fixes",
+    "workers/triggered_by": "deployment"
+  },
+  "versions": [
+    {
+      "version_id": "943dc063-5545-4992-95a9-608482d9e901",
+      "percentage": 100
+    }
+  ],
+  "created_on": "2026-09-30T00:39:23.645829Z"
+}

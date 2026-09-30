@@ -1,0 +1,12 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checks": [
+    "HOME does not download game/controller/BOT chunk",
+    "tutorial rules remain independent of the game chunk",
+    "lazy tutorial mounts, advances and disposes",
+    "BOT starts after lazy import, opening completes and surrender finishes",
+    "failed module download offers reload and recovers to HOME"
+  ],
+  "errors": [],
+  "boundary": "Production assets in Chrome with API fixture; local tutorial/BOT, not an authenticated online match."
+}
