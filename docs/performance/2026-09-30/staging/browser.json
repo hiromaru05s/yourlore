@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "origin": "https://test.yourlore.xyz",
+  "assetsChecked": 34,
+  "errors": [],
+  "checks": [
+    "deployed BOT board has no zero Shield/Dew icons on either player",
+    "HP remains visible",
+    "surrender outcome completes with resource icons absent"
+  ],
+  "boundary": "Deployed runtime and local BOT engine; account/API responses are fixtures. No live account mutation or authenticated online match."
+}
