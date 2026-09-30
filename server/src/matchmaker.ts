@@ -31,6 +31,7 @@ export class Matchmaker {
   async fetch(req: Request): Promise<Response> {
     if (req.headers.get("Upgrade") !== "websocket") return new Response("expected websocket", { status: 426 });
     const url = new URL(req.url);
+    if (!url.searchParams.get("uid")) return new Response("unauthorized", { status: 401 });
     const pair = new WebSocketPair();
     const client = pair[0], server = pair[1];
     const me: Waiter = {
@@ -61,7 +62,9 @@ export class Matchmaker {
 
   private onMsg(me: Waiter, e: MessageEvent): void {
     let msg: QueueClientMsg;
-    try { msg = JSON.parse(e.data as string); } catch { return; }
+    if (typeof e.data !== 'string' || e.data.length > 4096) return;
+    try { msg = JSON.parse(e.data); } catch { return; }
+    if (!msg || typeof msg !== 'object' || Array.isArray(msg)) return;
     if (msg.type === "ping") { try { this.send(me.ws, { type: "pong" }); } catch { /* dropped */ } return; }
     if (msg.type === "cancel") { this.remove(me.ws); return; }
     if (msg.type !== "queue") return;

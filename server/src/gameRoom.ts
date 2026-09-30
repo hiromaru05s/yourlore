@@ -16,11 +16,12 @@
 import type { Env } from "./env";
 import type { Action, GameEvent, GameState, Side } from "../../client/src/shared/types";
 import type { GameClientMsg, GameServerMsg } from "../../client/src/shared/protocol";
-import { createGame, reduce, actingSide, effectChoices } from "../../client/src/shared/engine";
+import { createGame, reduce, actingSide } from "../../client/src/shared/engine";
 import { redactFor } from "../../client/src/shared/protocol";
 import { BALANCE_VERSION } from "../../client/src/shared/cards";
 import { settleRanked, type RankOutcome } from "./rank";
 import { DUEL_OPENING_MS, OPENING_PREPARE_MS, OPENING_LEAD_MS } from "../../client/src/shared/opening";
+import { isClientMessage, resolveTurnTimeout } from "./gameInput";
 
 interface PlayerRef { id: string; name: string; sleeve?: string | null; furniture?:string|null; deck?: string | null; }
 
@@ -136,7 +137,9 @@ export class GameRoom {
     await this.restore();
 
     // provisioning call from the matchmaker
-    if (url.pathname.endsWith("/setup")) {
+    if (url.pathname === "/setup") {
+      if (req.method !== "POST") return new Response("method not allowed", { status: 405 });
+      if (this.room) return new Response("already provisioned", { status: 409 });
       const body = (await req.json()) as { players: [PlayerRef, PlayerRef]; seed: number; ranked?: boolean };
       const res = createGame({
         mode: "online",
@@ -249,7 +252,8 @@ export class GameRoom {
     const att = this.att(ws);
     if (!room || !att) return;
     let msg: GameClientMsg;
-    try { msg = JSON.parse(String(message)); } catch { return; }
+    if (typeof message !== "string" || message.length > 4096) return;
+    try { const value: unknown = JSON.parse(message); if (!isClientMessage(value)) return; msg = value; } catch { return; }
 
     if (msg.type === "ping") { try { this.send(ws, { type: "pong" }); } catch { /* dropped */ } return; } // autoResponse fallback
     if (att.gen !== room.gen[att.side]) return;
@@ -402,20 +406,7 @@ export class GameRoom {
       const dl = room.turnStartAt + turnMsFor(room.ranked) + (room.turnBonusMs || 0) + TURN_ENFORCE_GRACE_MS;
       if (dl <= now + 250) {
         const prevTurn = room.game.turn, prevCur = room.game.cur;
-        let st = room.game;
-        const evs: GameEvent[] = [];
-        // Resolve mandatory public quest/quick choices on timeout before ending the turn.
-        for (let i = 0; i < 64 && st.pending?.kind === "cardChoice"; i++) {
-          const r = reduce(st, { type: "pick", uid: effectChoices(st)[0]?.uid ?? null });
-          evs.push(...r.events); st = r.state;
-        }
-        // cancel any pending choice first so endTurn is accepted (try both verbs)
-        for (const verb of ["pick", "chooseTarget"] as const) {
-          if (!st.pending) break;
-          const r = reduce(st, { type: verb, uid: null } as Action);
-          if (r.state !== st) { evs.push(...r.events); st = r.state; }
-        }
-        if (!st.over) { const r = reduce(st, { type: "endTurn" }); evs.push(...r.events); st = r.state; }
+        const { state: st, events: evs } = resolveTurnTimeout(room.game);
         room.game = st;
         if (st.turn !== prevTurn || st.cur !== prevCur) {
           room.turnStartAt = Date.now(); room.turnBonusMs = 0;

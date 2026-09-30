@@ -1,0 +1,15 @@
+STATE http://127.0.0.1:5461/ [] []
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 120000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-diff=easy]')[22m
+
+    at /private/tmp/lore-production-audit-20260930/tests/deck-appearance-browser.mjs:16:122 {
+  log: [ "  - waiting for locator('[data-diff=easy]')" ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.22.3

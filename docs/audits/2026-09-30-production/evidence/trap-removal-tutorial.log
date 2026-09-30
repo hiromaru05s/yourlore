@@ -1,0 +1,12 @@
+file:///private/var/folders/tt/p79qbyt14t14jwlfh80_l0v40000gn/T/lore-trap-tutorial-9tneyJ/tutorial.mjs:58277
+    if (el2 instanceof HTMLImageElement) {
+                       ^
+
+ReferenceError: HTMLImageElement is not defined
+    at imageUrls (file:///private/var/folders/tt/p79qbyt14t14jwlfh80_l0v40000gn/T/lore-trap-tutorial-9tneyJ/tutorial.mjs:58277:24)
+    at revealCards (file:///private/var/folders/tt/p79qbyt14t14jwlfh80_l0v40000gn/T/lore-trap-tutorial-9tneyJ/tutorial.mjs:58334:20)
+    at render2 (file:///private/var/folders/tt/p79qbyt14t14jwlfh80_l0v40000gn/T/lore-trap-tutorial-9tneyJ/tutorial.mjs:67593:10)
+    at mountCards (file:///private/var/folders/tt/p79qbyt14t14jwlfh80_l0v40000gn/T/lore-trap-tutorial-9tneyJ/tutorial.mjs:67596:3)
+    at file:///private/tmp/lore-production-audit-20260930/tests/trap-removal-tutorial.mjs:82:21
+
+Node.js v22.22.3

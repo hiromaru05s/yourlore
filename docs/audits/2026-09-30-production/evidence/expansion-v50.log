@@ -1,0 +1,37 @@
+PASS catalog: all requested counter recipients, localized 48 additions, no token market
+PASS lethal counter, half rounding, no recursion or piercing
+PASS cavalry suppresses counter
+PASS counter respects guts and capture is immutable
+PASS intercept conditional and temporary reinforcements
+PASS gunner end hit, farm and exact-name mimic hunter
+PASS stable selection invalid UID does not consume, cavalry and advance
+PASS mercenary summon counts and doubled dice progress
+PASS guildmaster start trigger and casino dice
+PASS dice quest completion, enemy deck selection and redaction
+PASS town has three distinct requirements observed across both players
+PASS dominion next three hand cards exactly one including zero cost
+PASS poison master adds three counters without damage
+PASS quick hellfire existing brand bonus, curse copy and aid gate
+PASS empty mind buy/play gates and creation self replication/copy
+PASS rogue training costs/allies and squad attack cutoff shared with bot
+PASS mimic king replacement removes old scaling and deploys hideout
+PASS reverse redirects once, game cap and black mage triggers
+PASS infinity gate and prevented damage creates exact number of culls
+PASS black nova, curse prerequisites, curse payload and soul harvest
+PASS anesthesia prevents earthquake/magma and expires with turn
+PASS fireball choice and doubling including recoil, arrow packets, meteor discounts
+PASS fire zone exiles hand, prior fire bonus and no zone bypass
+PASS fire master death selects two cards even on opponent turn
+PASS discovery bonuses count actual cards; growth and erosion once per extra card
+PASS normal draw excluded, preparation bonus counted and persisted
+PASS all additions can pass through reducer with legal bot choices
+PASS duration: Preparation draws seven times without inheriting E3 mana reward
+PASS duration: Reverse expires after six owner starts, Infinity never blocks combat
+PASS Double Up and Infinity include persistent spell damage
+PASS counter evasion and immunity, no magic trigger, no direct attack counter
+PASS squad directly attacks through occupied field at 11+ HP
+PASS Guild Chest replaces all 9-12 outcomes with four draws if Assassin present
+PASS repeat direct hits by one monster do not satisfy three-monster aid
+PASS Fireball bot chooses the other target under Reverse, serializable choices persist
+PASS Anesthesia prevents damage, not Giant Slayer destruction
+PASS 36 v50 behavior suites

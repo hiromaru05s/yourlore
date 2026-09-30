@@ -1,0 +1,7 @@
+PASS [
+  'two authoritative sockets',
+  'opponent choice ownership and rejection',
+  'hibernation/reconnect resumes defending choice',
+  'private hand view opens and closes',
+  'turn timeout declines optional spend and progresses'
+]

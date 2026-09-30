@@ -1,0 +1,2288 @@
+{
+  "before": {
+    "players": [
+      {
+        "id": "a",
+        "name": "A",
+        "isBot": false,
+        "hp": 40,
+        "mana": 6,
+        "maxMana": 8,
+        "manaPenalty": 0,
+        "nextPenalty": 0,
+        "deck": [],
+        "hand": [
+          {
+            "uid": "u9",
+            "id": "STARTER_CHEST",
+            "t": "starter",
+            "cost": 1,
+            "name": "보물상자",
+            "text": "보물상자를 연다",
+            "star": "chest",
+            "nameJa": "宝箱",
+            "textJa": "宝箱を開く",
+            "nameEn": "Treasure Chest",
+            "textEn": "open the treasure chest"
+          },
+          {
+            "uid": "u8",
+            "id": "STARTER_CHEST",
+            "t": "starter",
+            "cost": 1,
+            "name": "보물상자",
+            "text": "보물상자를 연다",
+            "star": "chest",
+            "nameJa": "宝箱",
+            "textJa": "宝箱を開く",
+            "nameEn": "Treasure Chest",
+            "textEn": "open the treasure chest"
+          },
+          {
+            "uid": "u1",
+            "id": "STARTER_MANA",
+            "t": "starter",
+            "cost": 3,
+            "name": "어튠",
+            "text": "최대 마나 +1",
+            "star": "mana",
+            "passive": [
+              "relic"
+            ],
+            "nameJa": "アチューン",
+            "textJa": "最大マナ+1",
+            "nameEn": "Attune",
+            "textEn": "max mana +1"
+          },
+          {
+            "uid": "u77",
+            "id": "MERC_ART",
+            "nameJa": "傭兵術",
+            "name": "용병술",
+            "nameEn": "Mercenary Arts",
+            "cost": 2,
+            "textJa": "【永続】自分の傭兵の効果が2回発動(重複なし) · デッキ構成に傭兵2種以上: 自分の傭兵全体+3/+3",
+            "text": "【영구】자신 용병 효과 2회 발동(중첩 불가) · 덱 구성에 용병 2종 이상: 자신 용병 전체 +3/+3",
+            "textEn": "【Permanent】Your Mercenary effects twice (no stacking) · Own 2+ Mercenary types: your Mercenaries +3/+3",
+            "t": "spell",
+            "act": "expansion",
+            "ench": "mercArt",
+            "val": 99
+          }
+        ],
+        "discard": [],
+        "exile": [],
+        "field": [
+          {
+            "uid": "u42",
+            "id": "MIMIC_LORD",
+            "t": "mon",
+            "cost": 2,
+            "atk": 0,
+            "def": 1,
+            "onSummon": "mimicLord",
+            "name": "미믹 리더",
+            "nameJa": "ミミックリーダー",
+            "text": "【소환시】자신을 제외한 양측 필드의 '미믹' 계열 1체당 +3/+3",
+            "textJa": "【召喚時】自身を除く両者の場の「ミミック」系1体につき+3/+3",
+            "passive": [
+              "counter"
+            ],
+            "nameEn": "Mimic Leader",
+            "textEn": "【On Summon】+3/+3 per 'Mimic'-family monster on either field (excluding itself)",
+            "exhausted": true,
+            "tempAtk": 0,
+            "atkMod": 3,
+            "defMod": 3,
+            "summonedTurn": 7,
+            "attacksUsed": 1
+          },
+          {
+            "uid": "u33",
+            "id": "MIMIC_LORD",
+            "t": "mon",
+            "cost": 2,
+            "atk": 0,
+            "def": 1,
+            "onSummon": "mimicLord",
+            "name": "미믹 리더",
+            "nameJa": "ミミックリーダー",
+            "text": "【소환시】자신을 제외한 양측 필드의 '미믹' 계열 1체당 +3/+3",
+            "textJa": "【召喚時】自身を除く両者の場の「ミミック」系1体につき+3/+3",
+            "passive": [
+              "counter"
+            ],
+            "nameEn": "Mimic Leader",
+            "textEn": "【On Summon】+3/+3 per 'Mimic'-family monster on either field (excluding itself)",
+            "exhausted": true,
+            "tempAtk": 0,
+            "atkMod": 3,
+            "defMod": 3,
+            "summonedTurn": 9,
+            "attacksUsed": 1
+          },
+          {
+            "uid": "u43",
+            "id": "MIMIC_LORD",
+            "t": "mon",
+            "cost": 2,
+            "atk": 0,
+            "def": 1,
+            "onSummon": "mimicLord",
+            "name": "미믹 리더",
+            "nameJa": "ミミックリーダー",
+            "text": "【소환시】자신을 제외한 양측 필드의 '미믹' 계열 1체당 +3/+3",
+            "textJa": "【召喚時】自身を除く両者の場の「ミミック」系1体につき+3/+3",
+            "passive": [
+              "counter"
+            ],
+            "nameEn": "Mimic Leader",
+            "textEn": "【On Summon】+3/+3 per 'Mimic'-family monster on either field (excluding itself)",
+            "exhausted": true,
+            "tempAtk": 0,
+            "atkMod": 6,
+            "defMod": 6,
+            "summonedTurn": 11,
+            "attacksUsed": 1
+          },
+          {
+            "uid": "u32",
+            "id": "ASSASSIN1",
+            "t": "mon",
+            "cost": 2,
+            "name": "초급 암살자",
+            "nameJa": "初級アサシン",
+            "atk": 4,
+            "def": 1,
+            "directOnly": true,
+            "text": "",
+            "textJa": "",
+            "nameEn": "Novice Assassin",
+            "textEn": "",
+            "exhausted": true,
+            "tempAtk": 0,
+            "atkMod": 0,
+            "defMod": 0,
+            "summonedTurn": 15,
+            "attacksUsed": 1
+          }
+        ],
+        "traps": [],
+        "supply": [
+          {
+            "uid": "u82",
+            "id": "TAR3",
+            "t": "mon",
+            "cost": 3,
+            "atk": 2,
+            "def": 3,
+            "tribe": "귀족",
+            "name": "몰락한 기사",
+            "nameJa": "没落した騎士",
+            "text": "—",
+            "textJa": "—",
+            "passive": [
+              "counter"
+            ],
+            "nameEn": "Fallen Knight",
+            "textEn": "—"
+          },
+          {
+            "uid": "u83",
+            "id": "CHOSEN_ROGUE",
+            "t": "mon",
+            "cost": 7,
+            "atk": 0,
+            "def": 4,
+            "condAtk": "cullAtk2",
+            "directOnly": true,
+            "passive": [
+              "evade",
+              "counter"
+            ],
+            "name": "선택받은 도적",
+            "nameJa": "選ばれし盗賊",
+            "text": "【상시】제외된 자신의 '컬' 2장당 공격력 +2",
+            "textJa": "【常時】除外された自分の「カル」2枚につき攻撃力+2",
+            "nameEn": "Chosen Rogue",
+            "textEn": "【Passive】ATK +2 per 2 exiled Culls"
+          },
+          {
+            "uid": "u84",
+            "id": "QUICK_SORT",
+            "t": "spell",
+            "quick": true,
+            "cost": 3,
+            "name": "선별의 법칙",
+            "nameJa": "選別の掟",
+            "text": "【구매시】자신 리프트에 컬 10장 이상일 때만 구매 가능 · 상대 필드 카드 1장 선택 파괴.",
+            "textJa": "【購入時】自分のリフトにカルが10枚以上ある場合のみ購入可能 · 相手の場のカード1枚を選び破壊する",
+            "nameEn": "Law of Selection",
+            "textEn": "【Purchase】 Buy only with at least 10 Culls in your Rift · Destroy 1 chosen enemy field card."
+          }
+        ],
+        "boughtCount": 5,
+        "taxFlag": true,
+        "enchants": [],
+        "tribesFired": [],
+        "bonusDrawPerm": 0,
+        "bleed": 0,
+        "uses": {
+          "STARTER_TRASH": 6,
+          "STARTER_MANA": 2,
+          "MIMIC_LORD": 4,
+          "STARTER_CHEST": 4,
+          "ASSASSIN1": 4
+        },
+        "buys": {
+          "ASSASSIN1": 1,
+          "MIMIC_LORD": 3,
+          "MERC_ART": 1
+        },
+        "usesTurn": {},
+        "playsTurn": 1,
+        "freeBuysTurn": 0,
+        "removed": [
+          {
+            "uid": "u4",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u7",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u2",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u6",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u3",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u5",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u73",
+            "id": "MIMIC",
+            "t": "mon",
+            "cost": 0,
+            "name": "미믹",
+            "atk": 3,
+            "def": 2,
+            "text": "보물상자 꽝으로 상대 필드에 소환된다",
+            "nameJa": "ミミック",
+            "textJa": "宝箱のハズレで相手の場に召喚される",
+            "passive": [
+              "void",
+              "counter"
+            ],
+            "nameEn": "Mimic",
+            "textEn": "Summoned to the enemy field by a failed treasure chest",
+            "token": true
+          },
+          {
+            "uid": "u81",
+            "id": "MIMIC",
+            "t": "mon",
+            "cost": 0,
+            "name": "미믹",
+            "atk": 3,
+            "def": 2,
+            "text": "보물상자 꽝으로 상대 필드에 소환된다",
+            "nameJa": "ミミック",
+            "textJa": "宝箱のハズレで相手の場に召喚される",
+            "passive": [
+              "void",
+              "counter"
+            ],
+            "nameEn": "Mimic",
+            "textEn": "Summoned to the enemy field by a failed treasure chest",
+            "token": true
+          }
+        ],
+        "revealedCards": [
+          {
+            "uid": "u32",
+            "id": "ASSASSIN1"
+          },
+          {
+            "uid": "u33",
+            "id": "MIMIC_LORD"
+          },
+          {
+            "uid": "u4",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u7",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u2",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u42",
+            "id": "MIMIC_LORD"
+          },
+          {
+            "uid": "u43",
+            "id": "MIMIC_LORD"
+          },
+          {
+            "uid": "u6",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u3",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u1",
+            "id": "STARTER_MANA"
+          },
+          {
+            "uid": "u5",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u8",
+            "id": "STARTER_CHEST"
+          },
+          {
+            "uid": "u9",
+            "id": "STARTER_CHEST"
+          },
+          {
+            "uid": "u77",
+            "id": "MERC_ART"
+          }
+        ],
+        "supplyShrink": 0,
+        "defendHeal": 0,
+        "manaGainNext": 0,
+        "skipNext": false,
+        "skipTurns": 0,
+        "supplyHist": [
+          {
+            "turn": 1,
+            "ids": [
+              "EARTHQUAKE",
+              "ROGUE_ART",
+              "ASSASSIN1"
+            ]
+          },
+          {
+            "turn": 3,
+            "ids": [
+              "BLOOD_ANGER",
+              "MAGMA_RAIN",
+              "ANESTHESIA"
+            ]
+          },
+          {
+            "turn": 5,
+            "ids": [
+              "M9",
+              "TGE1",
+              "BLOOD_FEST"
+            ]
+          },
+          {
+            "turn": 7,
+            "ids": [
+              "BEGINNER_MIND",
+              "BUYOUT",
+              "EARTHQUAKE"
+            ]
+          },
+          {
+            "turn": 9,
+            "ids": [
+              "STABLE",
+              "Q_TRIBE",
+              "GM5_3"
+            ]
+          },
+          {
+            "turn": 11,
+            "ids": [
+              "NT_SEAL5",
+              "SORTER",
+              "BUYOUT"
+            ]
+          },
+          {
+            "turn": 13,
+            "ids": [
+              "MERC_ART",
+              "TDE3",
+              "TREASON"
+            ]
+          },
+          {
+            "turn": 15,
+            "ids": [
+              "TAR3",
+              "CHOSEN_ROGUE",
+              "QUICK_SORT"
+            ]
+          }
+        ],
+        "expansion": {
+          "turn": 15,
+          "extraDraw": 0,
+          "firePlayed": [],
+          "fireDiscount": 0,
+          "dominion": 0,
+          "lastDirectHits": 0,
+          "lastDirectTurn": 14
+        },
+        "buysTurn": {},
+        "spellSealTurn": false,
+        "wheelUsed": false,
+        "trapBlockTurn": false,
+        "trapBlockNext": false,
+        "lowSummonBanTurn": false,
+        "lowSummonBanNext": false,
+        "refreshBlockTurn": false,
+        "refreshBlockNext": false,
+        "spellsCastTurn": 0,
+        "spellDiscountTurn": 0,
+        "noDirectTurn": false,
+        "noHighAtkTurn": false,
+        "shieldOpponentPeak": 0,
+        "previousOpponentShieldPeak": 0,
+        "drawPenaltyNext": 0,
+        "openingDrawReady": false,
+        "destroyedLog": [
+          {
+            "id": "MIMIC_LORD",
+            "turn": 8
+          },
+          {
+            "id": "ASSASSIN1",
+            "turn": 10
+          },
+          {
+            "id": "ASSASSIN1",
+            "turn": 12
+          },
+          {
+            "id": "MIMIC",
+            "turn": 12
+          },
+          {
+            "id": "ASSASSIN1",
+            "turn": 14
+          },
+          {
+            "id": "MIMIC",
+            "turn": 14
+          }
+        ]
+      },
+      {
+        "id": "b",
+        "name": "B",
+        "isBot": false,
+        "hp": 12,
+        "mana": 0,
+        "maxMana": 5,
+        "manaPenalty": 0,
+        "nextPenalty": 0,
+        "deck": [],
+        "hand": [
+          {
+            "uid": "u10",
+            "id": "STARTER_MANA",
+            "t": "starter",
+            "cost": 3,
+            "name": "어튠",
+            "text": "최대 마나 +1",
+            "star": "mana",
+            "passive": [
+              "relic"
+            ],
+            "nameJa": "アチューン",
+            "textJa": "最大マナ+1",
+            "nameEn": "Attune",
+            "textEn": "max mana +1"
+          },
+          {
+            "uid": "u18",
+            "id": "STARTER_CHEST",
+            "t": "starter",
+            "cost": 1,
+            "name": "보물상자",
+            "text": "보물상자를 연다",
+            "star": "chest",
+            "nameJa": "宝箱",
+            "textJa": "宝箱を開く",
+            "nameEn": "Treasure Chest",
+            "textEn": "open the treasure chest"
+          }
+        ],
+        "discard": [
+          {
+            "uid": "u17",
+            "id": "STARTER_CHEST",
+            "t": "starter",
+            "cost": 1,
+            "name": "보물상자",
+            "text": "보물상자를 연다",
+            "star": "chest",
+            "nameJa": "宝箱",
+            "textJa": "宝箱を開く",
+            "nameEn": "Treasure Chest",
+            "textEn": "open the treasure chest"
+          },
+          {
+            "uid": "u37",
+            "id": "MIMIC_HUNTER",
+            "nameJa": "ミミックハンター",
+            "name": "미믹 헌터",
+            "nameEn": "Mimic Hunter",
+            "cost": 3,
+            "textJa": "【自分のターン終了時】両方の場の「ミミック」を全て破壊",
+            "text": "【자신 턴 종료】 양쪽 필드의 미믹을 모두 파괴.",
+            "textEn": "【Your Turn End】 destroy all Mimics on both fields (the base Mimic only).",
+            "t": "mon",
+            "atk": 3,
+            "def": 4,
+            "onSummon": "expansion"
+          },
+          {
+            "uid": "u38",
+            "id": "GOLEM1",
+            "t": "mon",
+            "cost": 1,
+            "atk": 1,
+            "def": 2,
+            "passive": [
+              "guts"
+            ],
+            "name": "병사 골램",
+            "nameJa": "兵士ゴーレム",
+            "text": "",
+            "textJa": "",
+            "nameEn": "Soldier Golem",
+            "textEn": ""
+          }
+        ],
+        "exile": [],
+        "field": [
+          {
+            "uid": "u54",
+            "id": "HEXER3",
+            "t": "mon",
+            "cost": 5,
+            "atk": 3,
+            "def": 6,
+            "passive": [
+              "aura"
+            ],
+            "onSummon": "hexSummon",
+            "val": 13,
+            "val2": 5,
+            "aura": "hexCurseOnSpell",
+            "name": "상급 주술사",
+            "nameJa": "上級呪術師",
+            "text": "【소환시】마법 13장 이상·주사위 3 이상 시 상대 묘지에 '저주' 5장 · 【상시】상대 마법마다 상대 묘지에 '저주' 1장",
+            "textJa": "【召喚時】魔法13枚以上·ダイス3以上なら相手の墓地に「呪い」5枚 · 【常時】相手の魔法ごとに相手の墓地に「呪い」1枚",
+            "nameEn": "Master Hexer",
+            "textEn": "【On Summon】13+ spells: die 3+ adds 5 Curses to their graveyard · 【Passive】enemy spell: +1 Curse to their graveyard",
+            "exhausted": false,
+            "tempAtk": 0,
+            "atkMod": 0,
+            "defMod": 0,
+            "summonedTurn": 8,
+            "attacksUsed": 0
+          }
+        ],
+        "traps": [],
+        "supply": [
+          {
+            "uid": "u78",
+            "id": "LIFE_CYCLE",
+            "t": "spell",
+            "cost": 3,
+            "play": 2,
+            "ench": "healMana",
+            "val": 99,
+            "name": "생명의 순환",
+            "nameJa": "生命の循環",
+            "text": "【영구】자신이 체력을 회복하거나 체력을 얻으면 주사위를 굴려 4 이상이면 최대 마나 +1",
+            "textJa": "【永続】自分が体力を回復するか体力を得るたびダイスを振り4以上なら最大マナ+1",
+            "nameEn": "Cycle of Life",
+            "textEn": "【Permanent】when you heal or gain HP, roll a die: on 4+, max mana +1"
+          },
+          {
+            "uid": "u79",
+            "id": "TPO1",
+            "t": "mon",
+            "cost": 1,
+            "atk": 0,
+            "def": 1,
+            "tribe": "포식",
+            "summonReq": "preyLow2",
+            "onSummon": "preyBounce",
+            "name": "굶주린 새끼짐승",
+            "nameJa": "飢えた仔獣",
+            "text": "【소환시】코스트 2 이하 상대 몬스터 1체를 패로 되돌린다 · 【조건】상대 필드에 코스트 2 이하 몬스터가 있어야 소환 가능",
+            "textJa": "【召喚時】コスト2以下の相手モンスター1体を手札に戻す · 【条件】相手の場にコスト2以下のモンスターがいる時のみ召喚可能",
+            "passive": [
+              "counter"
+            ],
+            "nameEn": "Starving Whelp",
+            "textEn": "【On Summon】Return 1 enemy monster of cost 2- to hand · 【Requires】Enemy monster of cost 2- in play"
+          },
+          {
+            "uid": "u80",
+            "id": "S12",
+            "t": "spell",
+            "cost": 3,
+            "name": "강철맥 각인",
+            "text": "주사위를 굴려 5 이상이면 상대에게 낙인 카운터 1개 부여",
+            "nameJa": "鋼脈刻印",
+            "textJa": "ダイスを振り5以上なら相手に烙印カウンター1個を付与",
+            "nameEn": "Steelvein Inscription",
+            "textEn": "Roll a die: on 5+, put 1 Brand counter on the opponent"
+          }
+        ],
+        "boughtCount": 3,
+        "taxFlag": true,
+        "enchants": [],
+        "tribesFired": [],
+        "bonusDrawPerm": 0,
+        "bleed": 0,
+        "uses": {
+          "STARTER_TRASH": 6,
+          "STARTER_MANA": 1,
+          "HEXER3": 1,
+          "MIMIC_HUNTER": 3,
+          "GOLEM1": 3,
+          "STARTER_CHEST": 3
+        },
+        "buys": {
+          "MIMIC_HUNTER": 1,
+          "GOLEM1": 1,
+          "HEXER3": 1
+        },
+        "usesTurn": {},
+        "playsTurn": 3,
+        "freeBuysTurn": 0,
+        "removed": [
+          {
+            "uid": "u16",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u12",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u11",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u14",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u15",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u13",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          }
+        ],
+        "revealedCards": [
+          {
+            "uid": "u37",
+            "id": "MIMIC_HUNTER"
+          },
+          {
+            "uid": "u38",
+            "id": "GOLEM1"
+          },
+          {
+            "uid": "u16",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u12",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u10",
+            "id": "STARTER_MANA"
+          },
+          {
+            "uid": "u11",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u54",
+            "id": "HEXER3"
+          },
+          {
+            "uid": "u14",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u15",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u13",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u17",
+            "id": "STARTER_CHEST"
+          },
+          {
+            "uid": "u18",
+            "id": "STARTER_CHEST"
+          }
+        ],
+        "supplyShrink": 0,
+        "defendHeal": 0,
+        "manaGainNext": 0,
+        "skipNext": false,
+        "skipTurns": 0,
+        "supplyHist": [
+          {
+            "turn": 1,
+            "ids": [
+              "KIN_CALL",
+              "VAMP_PACT2",
+              "WINE_COLLECTOR"
+            ]
+          },
+          {
+            "turn": 2,
+            "ids": [
+              "QUICK_POISON",
+              "MIMIC_HUNTER",
+              "TSO2"
+            ]
+          },
+          {
+            "turn": 4,
+            "ids": [
+              "MERCENARY",
+              "QUICK_SURVIVAL",
+              "M12"
+            ]
+          },
+          {
+            "turn": 6,
+            "ids": [
+              "Q_WINTER",
+              "HEXER3",
+              "S8"
+            ]
+          },
+          {
+            "turn": 8,
+            "ids": [
+              "VOID_RITE",
+              "WINE_COLLECTOR",
+              "SLAY_ART"
+            ]
+          },
+          {
+            "turn": 10,
+            "ids": [
+              "VOID_APOSTLE",
+              "GENESIS_MAGIC",
+              "TPO5"
+            ]
+          },
+          {
+            "turn": 12,
+            "ids": [
+              "TAR2",
+              "NT_SEAL5",
+              "FIRE_METEOR"
+            ]
+          },
+          {
+            "turn": 14,
+            "ids": [
+              "LIFE_CYCLE",
+              "TPO1",
+              "S12"
+            ]
+          }
+        ],
+        "openingDrawReady": false,
+        "shieldOpponentPeak": 0,
+        "expansion": {
+          "turn": 14,
+          "extraDraw": 0,
+          "firePlayed": [],
+          "fireDiscount": 0,
+          "dominion": 0,
+          "lastDirectHits": 1,
+          "lastDirectTurn": 13,
+          "directHitTurn": 15,
+          "directHits": [
+            "u32"
+          ]
+        },
+        "previousOpponentShieldPeak": 0,
+        "buysTurn": {},
+        "spellSealTurn": false,
+        "wheelUsed": false,
+        "trapBlockTurn": false,
+        "trapBlockNext": false,
+        "lowSummonBanTurn": false,
+        "lowSummonBanNext": false,
+        "refreshBlockTurn": false,
+        "refreshBlockNext": false,
+        "spellsCastTurn": 0,
+        "spellDiscountTurn": 0,
+        "noDirectTurn": false,
+        "noHighAtkTurn": false,
+        "drawPenaltyNext": 0,
+        "destroyedLog": [
+          {
+            "id": "MIMIC_HUNTER",
+            "turn": 11
+          },
+          {
+            "id": "GOLEM1",
+            "turn": 11
+          },
+          {
+            "id": "MIMIC_HUNTER",
+            "turn": 13
+          },
+          {
+            "id": "GOLEM1",
+            "turn": 13
+          },
+          {
+            "id": "MIMIC_HUNTER",
+            "turn": 15
+          },
+          {
+            "id": "GOLEM1",
+            "turn": 15
+          }
+        ]
+      }
+    ],
+    "cur": 0,
+    "turn": 15,
+    "phase": "main",
+    "pending": null,
+    "over": false,
+    "winner": null,
+    "market": [
+      {
+        "uid": "u19",
+        "id": "GAMBLE",
+        "t": "spell",
+        "cost": 4,
+        "act": "dmg",
+        "name": "육면의 변덕",
+        "nameJa": "六面の気まぐれ",
+        "text": "주사위를 10번 굴려 합계가 40 이상이면 최대 마나 +3",
+        "textJa": "ダイスを10回振り合計が40以上なら最大マナ+3",
+        "play": 3,
+        "nameEn": "Six-Faced Whim",
+        "textEn": "Roll 10 dice: on a total of 40+, max mana +3"
+      },
+      {
+        "uid": "u20",
+        "id": "RUNE2",
+        "t": "spell",
+        "cost": 5,
+        "name": "룬 학문 - 중급",
+        "nameJa": "ルーン学問 - 中級",
+        "text": "자신 덱의 절반 이상이 마법일 때만 발동 · 최대 마나 +8",
+        "textJa": "自分のデッキの半分以上が魔法の時のみ発動 · 最大マナ+8",
+        "nameEn": "Runecraft - Adept",
+        "textEn": "Only if half your deck or more is spells · Max mana +8"
+      },
+      {
+        "uid": "u21",
+        "id": "KNIGHT_TEACH",
+        "t": "spell",
+        "cost": 3,
+        "name": "골램 킹의 가르침",
+        "nameJa": "ゴーレムキングの教え",
+        "text": "자신 필드의 모든 몬스터에 '기합' 부여 · 이미 기합이 있으면 카운터 3개",
+        "textJa": "自分の場の全モンスターに「気合」を付与 · 既に気合があればカウンター3個",
+        "nameEn": "Golem King's Teaching",
+        "textEn": "All your monsters gain Guts · Those that already have it gain 3 counters"
+      },
+      {
+        "uid": "u22",
+        "id": "TAR1",
+        "t": "mon",
+        "cost": 1,
+        "atk": 0,
+        "def": 1,
+        "tribe": "귀족",
+        "aura": "pageDraw",
+        "name": "귀족의 집사",
+        "nameJa": "貴族の執事",
+        "text": "【상시】자신의 턴 시작시 드로우 +1",
+        "textJa": "【常時】自分のターン開始時ドロー+1",
+        "nameEn": "Aristocrat's Butler",
+        "textEn": "【Passive】+1 draw at the start of your turns"
+      },
+      {
+        "uid": "u44",
+        "id": "NL_SECRET",
+        "t": "spell",
+        "cost": 3,
+        "name": "나이트로드의 비기",
+        "nameJa": "ナイトロードの秘技",
+        "text": "자신 몬스터 1체에 암습·회피 중 1개 부여 · 자신의 '암살자' 2체의 공격력 +3(지속)",
+        "textJa": "自分のモンスター1体に暗襲・回避の1つを付与 · 自分の「アサシン」2体の攻撃力+3(持続)",
+        "nameEn": "Nightlord's Secret Art",
+        "textEn": "Give Infiltrate or Evade to 1 monster · 2 of your Assassins ATK +3 (lasting)"
+      },
+      {
+        "uid": "u24",
+        "id": "GOLEM1",
+        "t": "mon",
+        "cost": 1,
+        "atk": 1,
+        "def": 2,
+        "passive": [
+          "guts"
+        ],
+        "name": "병사 골램",
+        "nameJa": "兵士ゴーレム",
+        "text": "",
+        "textJa": "",
+        "nameEn": "Soldier Golem",
+        "textEn": ""
+      },
+      {
+        "uid": "u25",
+        "id": "GM5_2",
+        "t": "mon",
+        "cost": 5,
+        "name": "강철의 전사",
+        "nameJa": "鋼鉄の戦士",
+        "atk": 5,
+        "def": 6,
+        "text": "【상시】몬스터 소환 시 그 몬스터의 체력 +2",
+        "textJa": "【常時】モンスター召喚時、そのモンスターの体力+2",
+        "aura": "summonBuff",
+        "val": 2,
+        "passive": [
+          "counter"
+        ],
+        "nameEn": "Steel Warrior",
+        "textEn": "【Passive】monsters you summon get +2 HP"
+      }
+    ],
+    "dmgTally": [
+      38,
+      10
+    ],
+    "rng": 175830318080,
+    "uidSeq": 84,
+    "mode": "bot",
+    "marketStock": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      2,
+      3
+    ],
+    "_wheelSnap": null
+  },
+  "action": {
+    "type": "play",
+    "idx": 3
+  },
+  "events": [
+    {
+      "type": "log",
+      "html": "  └ <b class=\"log-card\" data-card=\"HEXER3\">상급 주술사</b>: <span class=\"dmg\">A 묘지에 저주 1장</span>",
+      "htmlJa": "  └ <b class=\"log-card\" data-card=\"HEXER3\">상급 주술사</b>: <span class=\"dmg\">A の墓地に呪い1枚</span>"
+    },
+    {
+      "type": "log",
+      "html": "<span class=\"t\">A</span> <b class=\"log-card\" data-card=\"MERC_ART\">용병술</b> 발동 (지속 영구)",
+      "htmlJa": "<span class=\"t\">A</span> <b class=\"log-card\" data-card=\"MERC_ART\">용병술</b> 発動 (永続)"
+    },
+    {
+      "type": "playSpell",
+      "player": 0,
+      "id": "MERC_ART",
+      "dest": "field"
+    }
+  ],
+  "after": {
+    "players": [
+      {
+        "id": "a",
+        "name": "A",
+        "isBot": false,
+        "hp": 40,
+        "mana": 4,
+        "maxMana": 8,
+        "manaPenalty": 0,
+        "nextPenalty": 0,
+        "deck": [],
+        "hand": [
+          {
+            "uid": "u9",
+            "id": "STARTER_CHEST",
+            "t": "starter",
+            "cost": 1,
+            "name": "보물상자",
+            "text": "보물상자를 연다",
+            "star": "chest",
+            "nameJa": "宝箱",
+            "textJa": "宝箱を開く",
+            "nameEn": "Treasure Chest",
+            "textEn": "open the treasure chest"
+          },
+          {
+            "uid": "u8",
+            "id": "STARTER_CHEST",
+            "t": "starter",
+            "cost": 1,
+            "name": "보물상자",
+            "text": "보물상자를 연다",
+            "star": "chest",
+            "nameJa": "宝箱",
+            "textJa": "宝箱を開く",
+            "nameEn": "Treasure Chest",
+            "textEn": "open the treasure chest"
+          },
+          {
+            "uid": "u1",
+            "id": "STARTER_MANA",
+            "t": "starter",
+            "cost": 3,
+            "name": "어튠",
+            "text": "최대 마나 +1",
+            "star": "mana",
+            "passive": [
+              "relic"
+            ],
+            "nameJa": "アチューン",
+            "textJa": "最大マナ+1",
+            "nameEn": "Attune",
+            "textEn": "max mana +1"
+          }
+        ],
+        "discard": [
+          {
+            "uid": "u77",
+            "id": "MERC_ART",
+            "nameJa": "傭兵術",
+            "name": "용병술",
+            "nameEn": "Mercenary Arts",
+            "cost": 2,
+            "textJa": "【永続】自分の傭兵の効果が2回発動(重複なし) · デッキ構成に傭兵2種以上: 自分の傭兵全体+3/+3",
+            "text": "【영구】자신 용병 효과 2회 발동(중첩 불가) · 덱 구성에 용병 2종 이상: 자신 용병 전체 +3/+3",
+            "textEn": "【Permanent】Your Mercenary effects twice (no stacking) · Own 2+ Mercenary types: your Mercenaries +3/+3",
+            "t": "spell",
+            "act": "expansion",
+            "ench": "mercArt",
+            "val": 99
+          }
+        ],
+        "exile": [],
+        "field": [
+          {
+            "uid": "u42",
+            "id": "MIMIC_LORD",
+            "t": "mon",
+            "cost": 2,
+            "atk": 0,
+            "def": 1,
+            "onSummon": "mimicLord",
+            "name": "미믹 리더",
+            "nameJa": "ミミックリーダー",
+            "text": "【소환시】자신을 제외한 양측 필드의 '미믹' 계열 1체당 +3/+3",
+            "textJa": "【召喚時】自身を除く両者の場の「ミミック」系1体につき+3/+3",
+            "passive": [
+              "counter"
+            ],
+            "nameEn": "Mimic Leader",
+            "textEn": "【On Summon】+3/+3 per 'Mimic'-family monster on either field (excluding itself)",
+            "exhausted": true,
+            "tempAtk": 0,
+            "atkMod": 3,
+            "defMod": 3,
+            "summonedTurn": 7,
+            "attacksUsed": 1
+          },
+          {
+            "uid": "u33",
+            "id": "MIMIC_LORD",
+            "t": "mon",
+            "cost": 2,
+            "atk": 0,
+            "def": 1,
+            "onSummon": "mimicLord",
+            "name": "미믹 리더",
+            "nameJa": "ミミックリーダー",
+            "text": "【소환시】자신을 제외한 양측 필드의 '미믹' 계열 1체당 +3/+3",
+            "textJa": "【召喚時】自身を除く両者の場の「ミミック」系1体につき+3/+3",
+            "passive": [
+              "counter"
+            ],
+            "nameEn": "Mimic Leader",
+            "textEn": "【On Summon】+3/+3 per 'Mimic'-family monster on either field (excluding itself)",
+            "exhausted": true,
+            "tempAtk": 0,
+            "atkMod": 3,
+            "defMod": 3,
+            "summonedTurn": 9,
+            "attacksUsed": 1
+          },
+          {
+            "uid": "u43",
+            "id": "MIMIC_LORD",
+            "t": "mon",
+            "cost": 2,
+            "atk": 0,
+            "def": 1,
+            "onSummon": "mimicLord",
+            "name": "미믹 리더",
+            "nameJa": "ミミックリーダー",
+            "text": "【소환시】자신을 제외한 양측 필드의 '미믹' 계열 1체당 +3/+3",
+            "textJa": "【召喚時】自身を除く両者の場の「ミミック」系1体につき+3/+3",
+            "passive": [
+              "counter"
+            ],
+            "nameEn": "Mimic Leader",
+            "textEn": "【On Summon】+3/+3 per 'Mimic'-family monster on either field (excluding itself)",
+            "exhausted": true,
+            "tempAtk": 0,
+            "atkMod": 6,
+            "defMod": 6,
+            "summonedTurn": 11,
+            "attacksUsed": 1
+          },
+          {
+            "uid": "u32",
+            "id": "ASSASSIN1",
+            "t": "mon",
+            "cost": 2,
+            "name": "초급 암살자",
+            "nameJa": "初級アサシン",
+            "atk": 4,
+            "def": 1,
+            "directOnly": true,
+            "text": "",
+            "textJa": "",
+            "nameEn": "Novice Assassin",
+            "textEn": "",
+            "exhausted": true,
+            "tempAtk": 0,
+            "atkMod": 0,
+            "defMod": 0,
+            "summonedTurn": 15,
+            "attacksUsed": 1
+          }
+        ],
+        "traps": [],
+        "supply": [
+          {
+            "uid": "u82",
+            "id": "TAR3",
+            "t": "mon",
+            "cost": 3,
+            "atk": 2,
+            "def": 3,
+            "tribe": "귀족",
+            "name": "몰락한 기사",
+            "nameJa": "没落した騎士",
+            "text": "—",
+            "textJa": "—",
+            "passive": [
+              "counter"
+            ],
+            "nameEn": "Fallen Knight",
+            "textEn": "—"
+          },
+          {
+            "uid": "u83",
+            "id": "CHOSEN_ROGUE",
+            "t": "mon",
+            "cost": 7,
+            "atk": 0,
+            "def": 4,
+            "condAtk": "cullAtk2",
+            "directOnly": true,
+            "passive": [
+              "evade",
+              "counter"
+            ],
+            "name": "선택받은 도적",
+            "nameJa": "選ばれし盗賊",
+            "text": "【상시】제외된 자신의 '컬' 2장당 공격력 +2",
+            "textJa": "【常時】除外された自分の「カル」2枚につき攻撃力+2",
+            "nameEn": "Chosen Rogue",
+            "textEn": "【Passive】ATK +2 per 2 exiled Culls"
+          },
+          {
+            "uid": "u84",
+            "id": "QUICK_SORT",
+            "t": "spell",
+            "quick": true,
+            "cost": 3,
+            "name": "선별의 법칙",
+            "nameJa": "選別の掟",
+            "text": "【구매시】자신 리프트에 컬 10장 이상일 때만 구매 가능 · 상대 필드 카드 1장 선택 파괴.",
+            "textJa": "【購入時】自分のリフトにカルが10枚以上ある場合のみ購入可能 · 相手の場のカード1枚を選び破壊する",
+            "nameEn": "Law of Selection",
+            "textEn": "【Purchase】 Buy only with at least 10 Culls in your Rift · Destroy 1 chosen enemy field card."
+          }
+        ],
+        "boughtCount": 5,
+        "taxFlag": true,
+        "enchants": [
+          {
+            "card": {
+              "uid": "u77",
+              "id": "MERC_ART",
+              "nameJa": "傭兵術",
+              "name": "용병술",
+              "nameEn": "Mercenary Arts",
+              "cost": 2,
+              "textJa": "【永続】自分の傭兵の効果が2回発動(重複なし) · デッキ構成に傭兵2種以上: 自分の傭兵全体+3/+3",
+              "text": "【영구】자신 용병 효과 2회 발동(중첩 불가) · 덱 구성에 용병 2종 이상: 자신 용병 전체 +3/+3",
+              "textEn": "【Permanent】Your Mercenary effects twice (no stacking) · Own 2+ Mercenary types: your Mercenaries +3/+3",
+              "t": "spell",
+              "act": "expansion",
+              "ench": "mercArt",
+              "val": 99
+            },
+            "turns": 99,
+            "bornTurn": 15
+          }
+        ],
+        "tribesFired": [],
+        "bonusDrawPerm": 0,
+        "bleed": 0,
+        "uses": {
+          "STARTER_TRASH": 6,
+          "STARTER_MANA": 2,
+          "MIMIC_LORD": 4,
+          "STARTER_CHEST": 4,
+          "ASSASSIN1": 4,
+          "MERC_ART": 1
+        },
+        "buys": {
+          "ASSASSIN1": 1,
+          "MIMIC_LORD": 3,
+          "MERC_ART": 1
+        },
+        "usesTurn": {
+          "MERC_ART": 1
+        },
+        "playsTurn": 2,
+        "freeBuysTurn": 0,
+        "removed": [
+          {
+            "uid": "u4",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u7",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u2",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u6",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u3",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u5",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u73",
+            "id": "MIMIC",
+            "t": "mon",
+            "cost": 0,
+            "name": "미믹",
+            "atk": 3,
+            "def": 2,
+            "text": "보물상자 꽝으로 상대 필드에 소환된다",
+            "nameJa": "ミミック",
+            "textJa": "宝箱のハズレで相手の場に召喚される",
+            "passive": [
+              "void",
+              "counter"
+            ],
+            "nameEn": "Mimic",
+            "textEn": "Summoned to the enemy field by a failed treasure chest",
+            "token": true
+          },
+          {
+            "uid": "u81",
+            "id": "MIMIC",
+            "t": "mon",
+            "cost": 0,
+            "name": "미믹",
+            "atk": 3,
+            "def": 2,
+            "text": "보물상자 꽝으로 상대 필드에 소환된다",
+            "nameJa": "ミミック",
+            "textJa": "宝箱のハズレで相手の場に召喚される",
+            "passive": [
+              "void",
+              "counter"
+            ],
+            "nameEn": "Mimic",
+            "textEn": "Summoned to the enemy field by a failed treasure chest",
+            "token": true
+          }
+        ],
+        "revealedCards": [
+          {
+            "uid": "u32",
+            "id": "ASSASSIN1"
+          },
+          {
+            "uid": "u33",
+            "id": "MIMIC_LORD"
+          },
+          {
+            "uid": "u4",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u7",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u2",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u42",
+            "id": "MIMIC_LORD"
+          },
+          {
+            "uid": "u43",
+            "id": "MIMIC_LORD"
+          },
+          {
+            "uid": "u6",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u3",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u1",
+            "id": "STARTER_MANA"
+          },
+          {
+            "uid": "u5",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u8",
+            "id": "STARTER_CHEST"
+          },
+          {
+            "uid": "u9",
+            "id": "STARTER_CHEST"
+          },
+          {
+            "uid": "u77",
+            "id": "MERC_ART"
+          }
+        ],
+        "supplyShrink": 0,
+        "defendHeal": 0,
+        "manaGainNext": 0,
+        "skipNext": false,
+        "skipTurns": 0,
+        "supplyHist": [
+          {
+            "turn": 1,
+            "ids": [
+              "EARTHQUAKE",
+              "ROGUE_ART",
+              "ASSASSIN1"
+            ]
+          },
+          {
+            "turn": 3,
+            "ids": [
+              "BLOOD_ANGER",
+              "MAGMA_RAIN",
+              "ANESTHESIA"
+            ]
+          },
+          {
+            "turn": 5,
+            "ids": [
+              "M9",
+              "TGE1",
+              "BLOOD_FEST"
+            ]
+          },
+          {
+            "turn": 7,
+            "ids": [
+              "BEGINNER_MIND",
+              "BUYOUT",
+              "EARTHQUAKE"
+            ]
+          },
+          {
+            "turn": 9,
+            "ids": [
+              "STABLE",
+              "Q_TRIBE",
+              "GM5_3"
+            ]
+          },
+          {
+            "turn": 11,
+            "ids": [
+              "NT_SEAL5",
+              "SORTER",
+              "BUYOUT"
+            ]
+          },
+          {
+            "turn": 13,
+            "ids": [
+              "MERC_ART",
+              "TDE3",
+              "TREASON"
+            ]
+          },
+          {
+            "turn": 15,
+            "ids": [
+              "TAR3",
+              "CHOSEN_ROGUE",
+              "QUICK_SORT"
+            ]
+          }
+        ],
+        "expansion": {
+          "turn": 15,
+          "extraDraw": 0,
+          "firePlayed": [],
+          "fireDiscount": 0,
+          "dominion": 0,
+          "lastDirectHits": 0,
+          "lastDirectTurn": 14
+        },
+        "buysTurn": {},
+        "spellSealTurn": false,
+        "wheelUsed": false,
+        "trapBlockTurn": false,
+        "trapBlockNext": false,
+        "lowSummonBanTurn": false,
+        "lowSummonBanNext": false,
+        "refreshBlockTurn": false,
+        "refreshBlockNext": false,
+        "spellsCastTurn": 1,
+        "spellDiscountTurn": 0,
+        "noDirectTurn": false,
+        "noHighAtkTurn": false,
+        "shieldOpponentPeak": 0,
+        "previousOpponentShieldPeak": 0,
+        "drawPenaltyNext": 0,
+        "openingDrawReady": false,
+        "destroyedLog": [
+          {
+            "id": "MIMIC_LORD",
+            "turn": 8
+          },
+          {
+            "id": "ASSASSIN1",
+            "turn": 10
+          },
+          {
+            "id": "ASSASSIN1",
+            "turn": 12
+          },
+          {
+            "id": "MIMIC",
+            "turn": 12
+          },
+          {
+            "id": "ASSASSIN1",
+            "turn": 14
+          },
+          {
+            "id": "MIMIC",
+            "turn": 14
+          }
+        ]
+      },
+      {
+        "id": "b",
+        "name": "B",
+        "isBot": false,
+        "hp": 12,
+        "mana": 0,
+        "maxMana": 5,
+        "manaPenalty": 0,
+        "nextPenalty": 0,
+        "deck": [],
+        "hand": [
+          {
+            "uid": "u10",
+            "id": "STARTER_MANA",
+            "t": "starter",
+            "cost": 3,
+            "name": "어튠",
+            "text": "최대 마나 +1",
+            "star": "mana",
+            "passive": [
+              "relic"
+            ],
+            "nameJa": "アチューン",
+            "textJa": "最大マナ+1",
+            "nameEn": "Attune",
+            "textEn": "max mana +1"
+          },
+          {
+            "uid": "u18",
+            "id": "STARTER_CHEST",
+            "t": "starter",
+            "cost": 1,
+            "name": "보물상자",
+            "text": "보물상자를 연다",
+            "star": "chest",
+            "nameJa": "宝箱",
+            "textJa": "宝箱を開く",
+            "nameEn": "Treasure Chest",
+            "textEn": "open the treasure chest"
+          }
+        ],
+        "discard": [
+          {
+            "uid": "u17",
+            "id": "STARTER_CHEST",
+            "t": "starter",
+            "cost": 1,
+            "name": "보물상자",
+            "text": "보물상자를 연다",
+            "star": "chest",
+            "nameJa": "宝箱",
+            "textJa": "宝箱を開く",
+            "nameEn": "Treasure Chest",
+            "textEn": "open the treasure chest"
+          },
+          {
+            "uid": "u37",
+            "id": "MIMIC_HUNTER",
+            "nameJa": "ミミックハンター",
+            "name": "미믹 헌터",
+            "nameEn": "Mimic Hunter",
+            "cost": 3,
+            "textJa": "【自分のターン終了時】両方の場の「ミミック」を全て破壊",
+            "text": "【자신 턴 종료】 양쪽 필드의 미믹을 모두 파괴.",
+            "textEn": "【Your Turn End】 destroy all Mimics on both fields (the base Mimic only).",
+            "t": "mon",
+            "atk": 3,
+            "def": 4,
+            "onSummon": "expansion"
+          },
+          {
+            "uid": "u38",
+            "id": "GOLEM1",
+            "t": "mon",
+            "cost": 1,
+            "atk": 1,
+            "def": 2,
+            "passive": [
+              "guts"
+            ],
+            "name": "병사 골램",
+            "nameJa": "兵士ゴーレム",
+            "text": "",
+            "textJa": "",
+            "nameEn": "Soldier Golem",
+            "textEn": ""
+          }
+        ],
+        "exile": [],
+        "field": [
+          {
+            "uid": "u54",
+            "id": "HEXER3",
+            "t": "mon",
+            "cost": 5,
+            "atk": 3,
+            "def": 6,
+            "passive": [
+              "aura"
+            ],
+            "onSummon": "hexSummon",
+            "val": 13,
+            "val2": 5,
+            "aura": "hexCurseOnSpell",
+            "name": "상급 주술사",
+            "nameJa": "上級呪術師",
+            "text": "【소환시】마법 13장 이상·주사위 3 이상 시 상대 묘지에 '저주' 5장 · 【상시】상대 마법마다 상대 묘지에 '저주' 1장",
+            "textJa": "【召喚時】魔法13枚以上·ダイス3以上なら相手の墓地に「呪い」5枚 · 【常時】相手の魔法ごとに相手の墓地に「呪い」1枚",
+            "nameEn": "Master Hexer",
+            "textEn": "【On Summon】13+ spells: die 3+ adds 5 Curses to their graveyard · 【Passive】enemy spell: +1 Curse to their graveyard",
+            "exhausted": false,
+            "tempAtk": 0,
+            "atkMod": 0,
+            "defMod": 0,
+            "summonedTurn": 8,
+            "attacksUsed": 0
+          }
+        ],
+        "traps": [],
+        "supply": [
+          {
+            "uid": "u78",
+            "id": "LIFE_CYCLE",
+            "t": "spell",
+            "cost": 3,
+            "play": 2,
+            "ench": "healMana",
+            "val": 99,
+            "name": "생명의 순환",
+            "nameJa": "生命の循環",
+            "text": "【영구】자신이 체력을 회복하거나 체력을 얻으면 주사위를 굴려 4 이상이면 최대 마나 +1",
+            "textJa": "【永続】自分が体力を回復するか体力を得るたびダイスを振り4以上なら最大マナ+1",
+            "nameEn": "Cycle of Life",
+            "textEn": "【Permanent】when you heal or gain HP, roll a die: on 4+, max mana +1"
+          },
+          {
+            "uid": "u79",
+            "id": "TPO1",
+            "t": "mon",
+            "cost": 1,
+            "atk": 0,
+            "def": 1,
+            "tribe": "포식",
+            "summonReq": "preyLow2",
+            "onSummon": "preyBounce",
+            "name": "굶주린 새끼짐승",
+            "nameJa": "飢えた仔獣",
+            "text": "【소환시】코스트 2 이하 상대 몬스터 1체를 패로 되돌린다 · 【조건】상대 필드에 코스트 2 이하 몬스터가 있어야 소환 가능",
+            "textJa": "【召喚時】コスト2以下の相手モンスター1体を手札に戻す · 【条件】相手の場にコスト2以下のモンスターがいる時のみ召喚可能",
+            "passive": [
+              "counter"
+            ],
+            "nameEn": "Starving Whelp",
+            "textEn": "【On Summon】Return 1 enemy monster of cost 2- to hand · 【Requires】Enemy monster of cost 2- in play"
+          },
+          {
+            "uid": "u80",
+            "id": "S12",
+            "t": "spell",
+            "cost": 3,
+            "name": "강철맥 각인",
+            "text": "주사위를 굴려 5 이상이면 상대에게 낙인 카운터 1개 부여",
+            "nameJa": "鋼脈刻印",
+            "textJa": "ダイスを振り5以上なら相手に烙印カウンター1個を付与",
+            "nameEn": "Steelvein Inscription",
+            "textEn": "Roll a die: on 5+, put 1 Brand counter on the opponent"
+          }
+        ],
+        "boughtCount": 3,
+        "taxFlag": true,
+        "enchants": [],
+        "tribesFired": [],
+        "bonusDrawPerm": 0,
+        "bleed": 0,
+        "uses": {
+          "STARTER_TRASH": 6,
+          "STARTER_MANA": 1,
+          "HEXER3": 1,
+          "MIMIC_HUNTER": 3,
+          "GOLEM1": 3,
+          "STARTER_CHEST": 3
+        },
+        "buys": {
+          "MIMIC_HUNTER": 1,
+          "GOLEM1": 1,
+          "HEXER3": 1
+        },
+        "usesTurn": {},
+        "playsTurn": 3,
+        "freeBuysTurn": 0,
+        "removed": [
+          {
+            "uid": "u16",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u12",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u11",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u14",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u15",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          },
+          {
+            "uid": "u13",
+            "id": "STARTER_TRASH",
+            "t": "starter",
+            "cost": 0,
+            "name": "컬",
+            "text": "이 카드를 게임에서 제외(덱 압축)",
+            "star": "trash",
+            "nameJa": "カル",
+            "textJa": "このカードをゲームから除外(デッキ圧縮)",
+            "nameEn": "Cull",
+            "textEn": "Exile this card (thins your deck)"
+          }
+        ],
+        "revealedCards": [
+          {
+            "uid": "u37",
+            "id": "MIMIC_HUNTER"
+          },
+          {
+            "uid": "u38",
+            "id": "GOLEM1"
+          },
+          {
+            "uid": "u16",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u12",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u10",
+            "id": "STARTER_MANA"
+          },
+          {
+            "uid": "u11",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u54",
+            "id": "HEXER3"
+          },
+          {
+            "uid": "u14",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u15",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u13",
+            "id": "STARTER_TRASH"
+          },
+          {
+            "uid": "u17",
+            "id": "STARTER_CHEST"
+          },
+          {
+            "uid": "u18",
+            "id": "STARTER_CHEST"
+          }
+        ],
+        "supplyShrink": 0,
+        "defendHeal": 0,
+        "manaGainNext": 0,
+        "skipNext": false,
+        "skipTurns": 0,
+        "supplyHist": [
+          {
+            "turn": 1,
+            "ids": [
+              "KIN_CALL",
+              "VAMP_PACT2",
+              "WINE_COLLECTOR"
+            ]
+          },
+          {
+            "turn": 2,
+            "ids": [
+              "QUICK_POISON",
+              "MIMIC_HUNTER",
+              "TSO2"
+            ]
+          },
+          {
+            "turn": 4,
+            "ids": [
+              "MERCENARY",
+              "QUICK_SURVIVAL",
+              "M12"
+            ]
+          },
+          {
+            "turn": 6,
+            "ids": [
+              "Q_WINTER",
+              "HEXER3",
+              "S8"
+            ]
+          },
+          {
+            "turn": 8,
+            "ids": [
+              "VOID_RITE",
+              "WINE_COLLECTOR",
+              "SLAY_ART"
+            ]
+          },
+          {
+            "turn": 10,
+            "ids": [
+              "VOID_APOSTLE",
+              "GENESIS_MAGIC",
+              "TPO5"
+            ]
+          },
+          {
+            "turn": 12,
+            "ids": [
+              "TAR2",
+              "NT_SEAL5",
+              "FIRE_METEOR"
+            ]
+          },
+          {
+            "turn": 14,
+            "ids": [
+              "LIFE_CYCLE",
+              "TPO1",
+              "S12"
+            ]
+          }
+        ],
+        "openingDrawReady": false,
+        "shieldOpponentPeak": 0,
+        "expansion": {
+          "turn": 14,
+          "extraDraw": 0,
+          "firePlayed": [],
+          "fireDiscount": 0,
+          "dominion": 0,
+          "lastDirectHits": 1,
+          "lastDirectTurn": 13,
+          "directHitTurn": 15,
+          "directHits": [
+            "u32"
+          ]
+        },
+        "previousOpponentShieldPeak": 0,
+        "buysTurn": {},
+        "spellSealTurn": false,
+        "wheelUsed": false,
+        "trapBlockTurn": false,
+        "trapBlockNext": false,
+        "lowSummonBanTurn": false,
+        "lowSummonBanNext": false,
+        "refreshBlockTurn": false,
+        "refreshBlockNext": false,
+        "spellsCastTurn": 0,
+        "spellDiscountTurn": 0,
+        "noDirectTurn": false,
+        "noHighAtkTurn": false,
+        "drawPenaltyNext": 0,
+        "destroyedLog": [
+          {
+            "id": "MIMIC_HUNTER",
+            "turn": 11
+          },
+          {
+            "id": "GOLEM1",
+            "turn": 11
+          },
+          {
+            "id": "MIMIC_HUNTER",
+            "turn": 13
+          },
+          {
+            "id": "GOLEM1",
+            "turn": 13
+          },
+          {
+            "id": "MIMIC_HUNTER",
+            "turn": 15
+          },
+          {
+            "id": "GOLEM1",
+            "turn": 15
+          }
+        ]
+      }
+    ],
+    "cur": 0,
+    "turn": 15,
+    "phase": "main",
+    "pending": null,
+    "over": false,
+    "winner": null,
+    "market": [
+      {
+        "uid": "u19",
+        "id": "GAMBLE",
+        "t": "spell",
+        "cost": 4,
+        "act": "dmg",
+        "name": "육면의 변덕",
+        "nameJa": "六面の気まぐれ",
+        "text": "주사위를 10번 굴려 합계가 40 이상이면 최대 마나 +3",
+        "textJa": "ダイスを10回振り合計が40以上なら最大マナ+3",
+        "play": 3,
+        "nameEn": "Six-Faced Whim",
+        "textEn": "Roll 10 dice: on a total of 40+, max mana +3"
+      },
+      {
+        "uid": "u20",
+        "id": "RUNE2",
+        "t": "spell",
+        "cost": 5,
+        "name": "룬 학문 - 중급",
+        "nameJa": "ルーン学問 - 中級",
+        "text": "자신 덱의 절반 이상이 마법일 때만 발동 · 최대 마나 +8",
+        "textJa": "自分のデッキの半分以上が魔法の時のみ発動 · 最大マナ+8",
+        "nameEn": "Runecraft - Adept",
+        "textEn": "Only if half your deck or more is spells · Max mana +8"
+      },
+      {
+        "uid": "u21",
+        "id": "KNIGHT_TEACH",
+        "t": "spell",
+        "cost": 3,
+        "name": "골램 킹의 가르침",
+        "nameJa": "ゴーレムキングの教え",
+        "text": "자신 필드의 모든 몬스터에 '기합' 부여 · 이미 기합이 있으면 카운터 3개",
+        "textJa": "自分の場の全モンスターに「気合」を付与 · 既に気合があればカウンター3個",
+        "nameEn": "Golem King's Teaching",
+        "textEn": "All your monsters gain Guts · Those that already have it gain 3 counters"
+      },
+      {
+        "uid": "u22",
+        "id": "TAR1",
+        "t": "mon",
+        "cost": 1,
+        "atk": 0,
+        "def": 1,
+        "tribe": "귀족",
+        "aura": "pageDraw",
+        "name": "귀족의 집사",
+        "nameJa": "貴族の執事",
+        "text": "【상시】자신의 턴 시작시 드로우 +1",
+        "textJa": "【常時】自分のターン開始時ドロー+1",
+        "nameEn": "Aristocrat's Butler",
+        "textEn": "【Passive】+1 draw at the start of your turns"
+      },
+      {
+        "uid": "u44",
+        "id": "NL_SECRET",
+        "t": "spell",
+        "cost": 3,
+        "name": "나이트로드의 비기",
+        "nameJa": "ナイトロードの秘技",
+        "text": "자신 몬스터 1체에 암습·회피 중 1개 부여 · 자신의 '암살자' 2체의 공격력 +3(지속)",
+        "textJa": "自分のモンスター1体に暗襲・回避の1つを付与 · 自分の「アサシン」2体の攻撃力+3(持続)",
+        "nameEn": "Nightlord's Secret Art",
+        "textEn": "Give Infiltrate or Evade to 1 monster · 2 of your Assassins ATK +3 (lasting)"
+      },
+      {
+        "uid": "u24",
+        "id": "GOLEM1",
+        "t": "mon",
+        "cost": 1,
+        "atk": 1,
+        "def": 2,
+        "passive": [
+          "guts"
+        ],
+        "name": "병사 골램",
+        "nameJa": "兵士ゴーレム",
+        "text": "",
+        "textJa": "",
+        "nameEn": "Soldier Golem",
+        "textEn": ""
+      },
+      {
+        "uid": "u25",
+        "id": "GM5_2",
+        "t": "mon",
+        "cost": 5,
+        "name": "강철의 전사",
+        "nameJa": "鋼鉄の戦士",
+        "atk": 5,
+        "def": 6,
+        "text": "【상시】몬스터 소환 시 그 몬스터의 체력 +2",
+        "textJa": "【常時】モンスター召喚時、そのモンスターの体力+2",
+        "aura": "summonBuff",
+        "val": 2,
+        "passive": [
+          "counter"
+        ],
+        "nameEn": "Steel Warrior",
+        "textEn": "【Passive】monsters you summon get +2 HP"
+      }
+    ],
+    "dmgTally": [
+      38,
+      10
+    ],
+    "rng": 175830318080,
+    "uidSeq": 85,
+    "mode": "bot",
+    "marketStock": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      2,
+      3
+    ],
+    "_wheelSnap": null
+  }
+}

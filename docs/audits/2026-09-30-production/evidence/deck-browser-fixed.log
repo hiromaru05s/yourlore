@@ -1,0 +1,5 @@
+PASS [
+  'per-deck selection persists independently; legacy appearance inherited, explicit defaults retained, unowned themes locked',
+  'Use this deck saves active preset with both cosmetic selections',
+  'profile equipment tab removed; shop points to deck builder; actual BOT board uses selected deck sleeve and matching holder/shelf'
+]

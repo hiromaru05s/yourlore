@@ -1,0 +1,286 @@
+{
+  "baseline": "9d6221f72f5bd47e35509718a480b3b326dfc364",
+  "recordedAt": "2026-09-30T00:27:12.780Z",
+  "worktrees": [
+    {
+      "worktree": "/Users/hiromaru05s/Desktop/LORE_TCG",
+      "HEAD": "9d6221f72f5bd47e35509718a480b3b326dfc364",
+      "branch": "refs/heads/main",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-battle-bgm-20260927",
+      "HEAD": "8c98d461c85f226d3e4d0cd39bf8a21bb8892a3e",
+      "branch": "refs/heads/codex/battle-bgm-20260927",
+      "inBaseline": false
+    },
+    {
+      "worktree": "/private/tmp/lore-board-border-20260929",
+      "HEAD": "27f5dd60a69dca64e89481fda1577b19a6417415",
+      "branch": "refs/heads/codex/board-border-pattern-20260929",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-board-carved-20260929",
+      "HEAD": "7801cc3e9c6043fb6fb48016d8cb26aa97f3d336",
+      "branch": "refs/heads/codex/board-carved-rim-20260929",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-board-pattern-20260927",
+      "HEAD": "ee0aeebfdab1e10be7548d50192e5ce305a37f53",
+      "branch": "refs/heads/codex/board-pattern-20260927",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-deck-cosmetics-20260927",
+      "HEAD": "637d5928bf427fd7f434cb6dc7f77d6044144e52",
+      "branch": "refs/heads/codex/deck-cosmetics-20260927",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-duel-audio-v4-20260927",
+      "HEAD": "d2ff0fee320c13e7d74e4eb2e4b101b37b59819b",
+      "branch": "refs/heads/codex/duel-audio-v4-20260927",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-fate-wheel-20260927",
+      "HEAD": "4b5945e2b52ea91c501535cc99b6aea9f492b8a6",
+      "branch": "refs/heads/codex/fate-wheel-fix-20260927",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-grounded-staging-20260910",
+      "HEAD": "c0ef2913540947c13acf5af7f73655aec05a40b8",
+      "branch": "refs/heads/codex/grounded-board-staging-20260910",
+      "prunable": "gitdir file points to non-existent location",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-hand-discard-release",
+      "HEAD": "57db203f975c9c4ab922d20ed089a71554407007",
+      "branch": "refs/heads/codex/hand-discard-highlight",
+      "inBaseline": false
+    },
+    {
+      "worktree": "/private/tmp/lore-hand-staging-20260910",
+      "HEAD": "90c7c137b0efcd3d113a452fad679776d50dcbcd",
+      "branch": "refs/heads/codex/duel-hand-dice-staging-20260910",
+      "prunable": "gitdir file points to non-existent location",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-home-bgm-20260927",
+      "HEAD": "c89716a3e2933dcc9d026e64132bbd3dc1835c03",
+      "branch": "refs/heads/codex/home-bgm-20260927",
+      "inBaseline": false
+    },
+    {
+      "worktree": "/private/tmp/lore-home-nav-horizon-20260929",
+      "HEAD": "5bafcc7650340617173f89a732496fc865a90c06",
+      "branch": "refs/heads/codex/home-nav-horizon-20260929",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-integrated-20260911",
+      "HEAD": "6290a1b724f802dc98a57c05ee17cb5ac1614074",
+      "branch": "refs/heads/codex/integrated-staging-20260911",
+      "prunable": "gitdir file points to non-existent location",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-menu-a3-b2-c1-20260929",
+      "HEAD": "22918879795f196dbb9a5348149dad9dc5a3ddeb",
+      "branch": "refs/heads/codex/menu-a3-b2-c1-20260929",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-menu-player-ui-staging",
+      "HEAD": "9d6221f72f5bd47e35509718a480b3b326dfc364",
+      "branch": "refs/heads/codex/menu-player-ui-staging-20260930",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-opening-music-20260927",
+      "HEAD": "f527cfbc360205145c0747b763def93b91da9e83",
+      "branch": "refs/heads/codex/opening-music-20260927",
+      "inBaseline": false
+    },
+    {
+      "worktree": "/private/tmp/lore-paired-return-staging-20260929",
+      "HEAD": "7a97dd22a4866fc49fe4f21a17b8704a300a9f45",
+      "branch": "refs/heads/codex/paired-return-staging-20260929",
+      "inBaseline": false
+    },
+    {
+      "worktree": "/private/tmp/lore-performance-20260930",
+      "HEAD": "9d6221f72f5bd47e35509718a480b3b326dfc364",
+      "branch": "refs/heads/codex/performance-staging-20260930",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-production-audit-20260930",
+      "HEAD": "9d6221f72f5bd47e35509718a480b3b326dfc364",
+      "branch": "refs/heads/codex/production-audit-20260930",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-quest-fold-staging-20260929",
+      "HEAD": "e79d6a7f93d9e6b69e935be6c80d3464205501b3",
+      "branch": "refs/heads/codex/quest-fold-staging-20260929",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-rank-sfx-release-20260929",
+      "HEAD": "16c5a5e76ab6a32094fc259c14d5446c45b6cf63",
+      "branch": "refs/heads/codex/rank-sfx-staging-20260929",
+      "inBaseline": false
+    },
+    {
+      "worktree": "/private/tmp/lore-reading-staging-20260921",
+      "HEAD": "dd855a4410d307befe108fb8874ac0f732f76840",
+      "branch": "refs/heads/codex/reading-board-staging-20260921",
+      "prunable": "gitdir file points to non-existent location",
+      "inBaseline": false
+    },
+    {
+      "worktree": "/private/tmp/lore-solid-draw-20260927",
+      "HEAD": "eb9b9474b5a8ca15cab45fa71e57f419b91bea40",
+      "branch": "refs/heads/codex/solid-draw-20260927",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/private/tmp/lore-staging-orchestrator-20260929",
+      "HEAD": "790e74d5c0a0adf379a26f5745f13eb51d6f92cd",
+      "branch": "refs/heads/codex/staging-orchestrator-20260929",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/.codex/worktrees/animation-perf-staging/LORE_TCG",
+      "HEAD": "47f472f17f51c2aae1f2997fe953cad03965beb8",
+      "branch": "refs/heads/codex/animation-perf-staging-20260929",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/.codex/worktrees/crown-outcome-staging/LORE_TCG",
+      "HEAD": "586c17c790913e4377189a1f47c18d80c50f95f3",
+      "branch": "refs/heads/codex/crown-outcome-staging",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/.codex/worktrees/deck-cards-staging/LORE_TCG",
+      "HEAD": "586c17c790913e4377189a1f47c18d80c50f95f3",
+      "detached": true,
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/.codex/worktrees/dew-shield-expansion/LORE_TCG",
+      "HEAD": "68c82518033ed667c2ca093c522f89b11d14a074",
+      "branch": "refs/heads/codex/dew-shield-expansion-20260929",
+      "inBaseline": false
+    },
+    {
+      "worktree": "/Users/hiromaru05s/.codex/worktrees/hand-condition-golden/LORE_TCG",
+      "HEAD": "85dbc455116421e8d278496cb79f9ae20c65bb5c",
+      "detached": true,
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/.codex/worktrees/home-entry-silver-fan/LORE_TCG",
+      "HEAD": "3c2cf59f56440c2d2b346157f263a43a4eda421a",
+      "detached": true,
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/.codex/worktrees/loading-silver-staging/LORE_TCG",
+      "HEAD": "37081ecf77369214e7859903fe3338bbc59a189a",
+      "branch": "refs/heads/codex/loading-silver-staging-20260929",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/.codex/worktrees/monster-animation-staging/LORE_TCG",
+      "HEAD": "4f4f285927bbc9e87581536363c56b5f1354d522",
+      "detached": true,
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/.codex/worktrees/portrait-resource-icons/LORE_TCG",
+      "HEAD": "41637290db80f1e4d7f7fc1657debac818397a55",
+      "branch": "refs/heads/codex/portrait-resource-icons-20260929",
+      "inBaseline": false
+    },
+    {
+      "worktree": "/Users/hiromaru05s/.codex/worktrees/portrait-resource-layout/LORE_TCG",
+      "HEAD": "dca4fc63e0a03e2cc30ba9f9130e95c58c8d3360",
+      "branch": "refs/heads/codex/portrait-resource-layout",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/.codex/worktrees/silver-ink-staging/LORE_TCG",
+      "HEAD": "e79d6a7f93d9e6b69e935be6c80d3464205501b3",
+      "detached": true,
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/.codex/worktrees/staging-integration-audit/LORE_TCG",
+      "HEAD": "d4add2ccca4cb939b9dc9915bb6394bb5b9f1c17",
+      "branch": "refs/heads/codex/staging-integration-20260930",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/Desktop/LORE_TCG-art-theme-revision",
+      "HEAD": "f297070d1b5295717873f3c95c7ff6397f29d331",
+      "branch": "refs/heads/codex/card-art-theme-revision-20260910",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/Desktop/LORE_TCG-balance-v47",
+      "HEAD": "f297070d1b5295717873f3c95c7ff6397f29d331",
+      "branch": "refs/heads/codex/balance-v47-20260910",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/Desktop/LORE_TCG-counter-expansion",
+      "HEAD": "f297070d1b5295717873f3c95c7ff6397f29d331",
+      "branch": "refs/heads/codex/counter-expansion-20260921",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/Desktop/LORE_TCG-lounge",
+      "HEAD": "f297070d1b5295717873f3c95c7ff6397f29d331",
+      "branch": "refs/heads/codex/biblion-lounge-20260921",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/Desktop/LORE_TCG-mimic-art-staging",
+      "HEAD": "f297070d1b5295717873f3c95c7ff6397f29d331",
+      "branch": "refs/heads/codex/mimic-art-staging-20260904",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/Desktop/LORE_TCG-trap-removal",
+      "HEAD": "f297070d1b5295717873f3c95c7ff6397f29d331",
+      "branch": "refs/heads/codex/remove-trap-cards-20260909",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/Desktop/LORE_TCG/.worktrees/balance",
+      "HEAD": "f297070d1b5295717873f3c95c7ff6397f29d331",
+      "branch": "refs/heads/work/balance",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/Desktop/LORE_TCG/.worktrees/bot-ranking",
+      "HEAD": "f297070d1b5295717873f3c95c7ff6397f29d331",
+      "branch": "refs/heads/work/bot-ranking",
+      "inBaseline": true
+    },
+    {
+      "worktree": "/Users/hiromaru05s/Desktop/LORE_TCG/.worktrees/ui-rework",
+      "HEAD": "f297070d1b5295717873f3c95c7ff6397f29d331",
+      "branch": "refs/heads/work/ui-rework",
+      "inBaseline": true
+    }
+  ]
+}

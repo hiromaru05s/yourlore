@@ -4271,7 +4271,10 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     p.uses[card.id] = (p.uses[card.id] || 0) + 1;             // game-long usage count
     if (card.maxUsesPerTurn == null) p.usesTurn[card.id] = (p.usesTurn[card.id] || 0) + 1;
     if (card.ench) {
-      p.discard.pop(); // stays on the field instead of going to discard
+      // Cast reactions may append curses (HEXER3) after this card. Move the
+      // actual spell, never the last discard, or one UID occupies two zones.
+      const discarded = p.discard.findIndex(c => c.uid === card.uid);
+      if (discarded >= 0) p.discard.splice(discarded, 1);
       p.enchants.push({ card, turns: card.val || 1, bornTurn: g.turn });
       const perm = (card.val || 0) >= 99;
       ctx.log(`<span class="t">${p.name}</span> ${cn(card)} 발동 (지속 ${perm ? "영구" : `${card.val}턴`})`, `<span class="t">${p.name}</span> ${cn(card)} 発動 (${perm ? "永続" : `持続${card.val}ターン`})`);

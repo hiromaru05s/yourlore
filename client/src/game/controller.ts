@@ -972,7 +972,7 @@ export class LocalController extends BaseController {
     if (this.state.over || action.type!=="surrender"&&this.openingLocked) return;
     // input is never locked during playback — so out-of-turn clicks (e.g. on a
     // stale board while the bot's turn plays out) must be rejected here
-    if (action.type !== "surrender" && this.state.cur !== this.you) return;
+    if (action.type !== "surrender" && actingSide(this.state) !== this.you) return;
     this.applyResult(reduce(this.state, action));
   }
 

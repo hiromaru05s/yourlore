@@ -1,0 +1,266 @@
+{
+  "baseline": "9d6221f72f5bd47e35509718a480b3b326dfc364",
+  "findings": [
+    {
+      "id": "A01",
+      "urgency": "A",
+      "title": "内部ルーム作成処理を公開URLから実行できる",
+      "files": "server/src/index.ts; server/src/gameRoom.ts",
+      "detail": "公開ルーム下位パスへPOSTすると任意の参加者・seed・ranked条件で作成できた。入力経路を単一IDのWebSocketに限定し、setupは完全一致・POST限定・一度だけにした。",
+      "status": "修正・ローカル回帰成功",
+      "evidence": "security-before.json / security-after.json"
+    },
+    {
+      "id": "A02",
+      "urgency": "A",
+      "title": "非公開の手札・山札順を物理UIDで復元できる",
+      "files": "client/src/shared/protocol.ts",
+      "detail": "HIDDENでもUIDがrevealedCardsと一致し、既知カードの手札位置・次のドローを追跡できた。非公開ゾーンを匿名スロットUIDにし、正当な手札/山札閲覧効果は実UIDを保持。",
+      "status": "修正・ローカル回帰成功",
+      "evidence": "security-before.json / security-after.json"
+    },
+    {
+      "id": "A03",
+      "urgency": "A",
+      "title": "必須選択が残るとサーバーの時間切れでもターンが終わらない",
+      "files": "server/src/gameRoom.ts; server/src/gameInput.ts",
+      "detail": "oppMon/myMon/giantShop等のキャンセル不可選択をnullで消せず10秒ずつ永久延長。実エンジンで合法対象を順に解決し、対象消失時も期限を閉じる。手札上限は既存の右端破棄を維持。",
+      "status": "修正・ローカル回帰成功",
+      "evidence": "security-after.json / final-dew-shield-server.log"
+    },
+    {
+      "id": "A04",
+      "urgency": "A",
+      "title": "BOTの攻撃中に人間の防御選択が拒否される",
+      "files": "client/src/game/controller.ts",
+      "detail": "WORLD_TREE_DEFENDのownerは人間でもcurはBOT。LocalControllerがcurのみで判定していた。actingSideで選択権を判定し、通常の手番外操作は拒否する。",
+      "status": "修正・ブラウザ回帰成功",
+      "evidence": "runtime/report.json"
+    },
+    {
+      "id": "A05",
+      "urgency": "A",
+      "title": "呪い反応中の永続魔法が墓地と場に二重存在する",
+      "files": "client/src/shared/engine.ts",
+      "detail": "HEXER3が呪いを墓地末尾に追加した後、discard.pop()が魔法ではなく呪いを削除。魔法のUIDで移動させ、生成された呪いを保存する。初回seed 32/168/171で検出。",
+      "status": "修正・ローカル回帰成功",
+      "evidence": "duplicate-uid.json / security-after.json / engine-first-pass.json"
+    },
+    {
+      "id": "A06",
+      "urgency": "A",
+      "title": "報酬の残高更新失敗で未払いのまま取得済みになる",
+      "files": "server/src/rewards.ts",
+      "detail": "取得記録と加算が別commit。加算失敗後は再試行しても0。記録と加算をD1 batch内で確定し、重複支払いも防ぐ。",
+      "status": "修正・障害注入成功",
+      "evidence": "security-before.json / security-after.json"
+    },
+    {
+      "id": "A07",
+      "urgency": "A",
+      "title": "クーポン上限超過と失敗時の永久未払い",
+      "files": "server/src/rewards.ts",
+      "detail": "在庫の事前SELECTと消費が別処理なのでmax_uses=1でも並行2件が200。消費資格をtransaction中に再確認し、claim/残高/使用数を同時確定。",
+      "status": "修正・並行/障害注入成功",
+      "evidence": "security-before.json / security-after.json"
+    },
+    {
+      "id": "A08",
+      "urgency": "A",
+      "title": "未ログイン接続がカジュアル対戦枠を消費できる",
+      "files": "server/src/index.ts; server/src/matchmaker.ts",
+      "detail": "匿名queueは参加できるがroomはログイン必須。認証済みの相手まで成立しない対戦へ送られる。queueも認証必須に統一。",
+      "status": "修正・ローカル回帰成功",
+      "evidence": "security-after.json"
+    },
+    {
+      "id": "B01",
+      "urgency": "B",
+      "title": "ログイン/登録・匿名問い合わせに十分な濫用制限がない",
+      "files": "server/src/auth.ts; server/src/index.ts",
+      "detail": "ログイン試行回数・最大入力長/IP制限なし。問い合わせはログイン時だけ10件/時。メール再送には60秒制限がある。アプリ外WAFの保護は未確認。",
+      "status": "未対応",
+      "evidence": "ソース確認"
+    },
+    {
+      "id": "B02",
+      "urgency": "B",
+      "title": "REST入力の型不正が400ではなく例外になる",
+      "files": "server/src/auth.ts; server/src/social.ts",
+      "detail": "email/q等を型検査せずtrim。数値/配列/nullのpayloadに対する統一バリデーションと上限がない。",
+      "status": "未対応",
+      "evidence": "ソース確認"
+    },
+    {
+      "id": "B03",
+      "urgency": "B",
+      "title": "同じフレンド対戦招待の並行承諾で別ルームができる",
+      "files": "server/src/social.ts",
+      "detail": "pendingをSELECT→room作成→UPDATEするため、二重承諾を原子的に取得していない。claim状態/同一roomIdと再試行設計が必要。",
+      "status": "未対応・並行成立の静的指摘",
+      "evidence": "ソース確認"
+    },
+    {
+      "id": "B04",
+      "urgency": "B",
+      "title": "マッチング成立中の再queue・複数タブの排他が不足",
+      "files": "server/src/matchmaker.ts",
+      "detail": "pairのawait中に同じsocketを再queue可能。アカウント単位の一意待機/対戦予約、flood guard、setup応答status確認がない。",
+      "status": "未対応・負荷試験未実施",
+      "evidence": "ソース確認"
+    },
+    {
+      "id": "B05",
+      "urgency": "B",
+      "title": "進行中の永続化/アラーム失敗を黙って捨てる",
+      "files": "server/src/gameRoom.ts",
+      "detail": "persistや一部setAlarmがcatchで無視される。障害後の状態整合性・再試行・通知が不足。結果精算には別途再試行があり既存回帰は成功。",
+      "status": "未対応",
+      "evidence": "final-lounge-settlement.log / ソース確認"
+    },
+    {
+      "id": "B06",
+      "urgency": "B",
+      "title": "前面VFXと確認ダイアログのレイヤー優先順位が逆転",
+      "files": "client/src/ui/monster/layers.ts; client/src/styles/base.css",
+      "detail": "VFX=2147483647、overlay=150。確認画面が表示されてもVFXは上に描かれる。pointer-events:noneにより操作は可能。UI・選択・結果・VFXの共通レイヤー規約が必要。",
+      "status": "実盤面で確認・未対応",
+      "evidence": "layers/report.json / layers/dialog-during-vfx.png"
+    },
+    {
+      "id": "B07",
+      "urgency": "B",
+      "title": "画像/通常APIの待ち時間に上限がなく読み込みで止まり得る",
+      "files": "client/src/ui/assetReadiness.ts; client/src/net/api.ts",
+      "detail": "decode/fetchの大部分にtimeoutなし。失敗応答では再試行UIが出るが、応答しない通信はPromiseが完了しない。切断中の再開・キャンセル試験が不足。",
+      "status": "未対応・静的指摘",
+      "evidence": "ソース確認"
+    },
+    {
+      "id": "B08",
+      "urgency": "B",
+      "title": "静止カード再描画と起動画像/JSの負荷",
+      "files": "client/src/ui/monster/runtime.ts; client/src/ui/menuAssets.ts",
+      "detail": "基準SHAでは静止カードにも常時RAF、DOM計測/Canvas消去。main JS約1.10MB raw。別セッションが最適化中で、こちらでは未完成変更を取り込まない。",
+      "status": "別セッション対応中・最終SHAで再確認",
+      "evidence": "build.log / 他タスクの現行worktree"
+    },
+    {
+      "id": "B09",
+      "urgency": "B",
+      "title": "現行回帰と過去仕様テストが混在し全体テストを一括実行できない",
+      "files": "tests; package.json",
+      "detail": "46本の自動抽出試験で41成功/5失敗。v47/v49は後続ルールとの差分、ceremony音声集合の差分、DOMグローバル不足、旧固定パス。deck試験の旧BOT導線は今回更新して成功。",
+      "status": "deck導線のみ修正・残り未対応",
+      "evidence": "baseline-tests.json / 各失敗log / deck-browser-fixed.log"
+    },
+    {
+      "id": "B10",
+      "urgency": "B",
+      "title": "依存パッケージに既知の脆弱性",
+      "files": "package-lock.json",
+      "detail": "npm audit全体9件（high7/moderate2）、omit-devはundici high1。後者はjsdom由来のNode用経路で、配信ブラウザ/Workerが脆弱機能を使用する証拠は未確認。依存分類の整理と更新が必要。",
+      "status": "未対応・到達性を区別",
+      "evidence": "npm-audit-runtime.json / npm-audit-all.json"
+    },
+    {
+      "id": "B11",
+      "urgency": "B",
+      "title": "CIと全セッション共通の配信排他・SHAガードがない",
+      "files": "package.json; scripts/deploy.sh",
+      "detail": "リポジトリに.githubのCI定義なし。今回手動で最新main/配信versionを再確認するが、将来の古いworktree再配信を自動阻止する仕組みではない。",
+      "status": "今回の配信では手動ガード",
+      "evidence": "sha-matrix.json / staging-before.json"
+    },
+    {
+      "id": "B12",
+      "urgency": "B",
+      "title": "初期DB作成コマンドだけでは現在のschemaがそろわない",
+      "files": "server/schema.sql; server/migrations; server/package.json",
+      "detail": "schema.sqlにfurnitureなし。db:initはschemaのみを適用し、現在のgetUserはfurnitureをSELECT。新環境は追加migration手順を要する。既存stagingはログイン成功。",
+      "status": "未対応・新規環境の再現性不足",
+      "evidence": "securityテストDB準備 / ソース確認"
+    },
+    {
+      "id": "B13",
+      "urgency": "B",
+      "title": "障害検知と運用上の合格証拠が不足",
+      "files": "server/wrangler.toml; client/src/net/socket.ts",
+      "detail": "observability設定なし。socketのJSON処理とonMessage例外を同じcatchで無視。エラー率/切断率/精算滞留の監視、同時接続負荷・復元訓練の証拠がない。外部設定は未確認。",
+      "status": "未対応・運用監査範囲の限界",
+      "evidence": "ソース確認"
+    },
+    {
+      "id": "B14",
+      "urgency": "B",
+      "title": "stagingでGoogleログイン/メール確認・再設定をE2E検証できない",
+      "files": "server/src/oauth.ts; server/src/email.ts",
+      "detail": "stagingのsecret名はAUTH_SECRETのみ。本番にはGOOGLE_CLIENT_SECRETとRESEND_API_KEYがあることを読取確認したが、実際のOAuth/配送は未検証。stagingの登録は自動認証扱い。",
+      "status": "設定/別途E2Eが必要",
+      "evidence": "secret値は収集・保存せず名前のみ確認"
+    },
+    {
+      "id": "B15",
+      "urgency": "B",
+      "title": "固定URL画像/音声の7日キャッシュと上書き更新",
+      "files": "client/public/_headers",
+      "detail": "/art,/ui,/sfxを7日キャッシュ。コメントは名前変更前提だが固定名を更新する運用も可能。既存ブラウザで旧素材が残るため内容hash付きURL/版管理を統一する。",
+      "status": "未対応・配信ハッシュ一致だけでは既存cacheを保証しない",
+      "evidence": "_headers / final live hashes"
+    },
+    {
+      "id": "B16",
+      "urgency": "B",
+      "title": "不正なWebSocket JSONでhandler例外",
+      "files": "server/src/gameInput.ts; server/src/gameRoom.ts; server/src/matchmaker.ts",
+      "detail": "null/action欠落/型不正を受理していた。型・サイズ・action引数を検査し、状態を変更せず破棄する。",
+      "status": "今回修正済み",
+      "evidence": "security-before.json / security-after.json"
+    },
+    {
+      "id": "B17",
+      "urgency": "B",
+      "title": "管理secret未設定時に文字列undefinedが認証値になる",
+      "files": "server/src/rank.ts",
+      "detail": "AUTH_SECRETが未設定の場合Bearer undefinedを比較していた。設定済みstaging/本番では再現しないが、新環境をfail closedへ修正。",
+      "status": "今回修正済み",
+      "evidence": "security-after.json"
+    },
+    {
+      "id": "C01",
+      "urgency": "C",
+      "title": "CORSのwildcardとcredentials=trueの不整合",
+      "files": "server/src/auth.ts; server/wrangler.toml",
+      "detail": "現状同一originのため動作するが、別originのcredential付API用途では許可されない設定。不要ならCORSを削減し、必要ならallowlist化。",
+      "status": "未対応",
+      "evidence": "ソース確認"
+    },
+    {
+      "id": "C02",
+      "urgency": "C",
+      "title": "モーダルのキーボード/支援技術対応が不十分",
+      "files": "client/src/ui/modal.ts",
+      "detail": "確認modalにrole/dialog、aria-modal、focus移動/復帰、focus trapの明示実装がない。主要フローをキーボードと実端末の支援技術で検証する。",
+      "status": "未対応",
+      "evidence": "ソース確認"
+    },
+    {
+      "id": "C03",
+      "urgency": "C",
+      "title": "言語とエラーメッセージの統一不足",
+      "files": "server/src/auth.ts; server/src/email.ts; client/src/net/serverMsg.ts",
+      "detail": "API/メールは韓国語または英語が中心。日本語UIの翻訳マッピング外エラーと配送画面を点検する必要がある。",
+      "status": "未対応",
+      "evidence": "ソース確認"
+    },
+    {
+      "id": "C04",
+      "urgency": "C",
+      "title": "公開ビルドにsourcemapと開発用previewが残る",
+      "files": "client/vite.config.ts",
+      "detail": "sourcemap:true、table-previewを本番入力に含む。即時の秘密漏えいは確認していないが、公開用途を明示して配信対象を限定する。",
+      "status": "未対応",
+      "evidence": "build-fixed.log / ソース確認"
+    }
+  ]
+}

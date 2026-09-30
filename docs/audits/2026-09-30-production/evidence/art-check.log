@@ -1,0 +1,7 @@
+
+> lore-tcg@0.1.0 art:check
+> node scripts/check-card-art.mjs
+
+Card art: 357/357 present
+Missing/stale thumbnails (357): M1/cards-sm, M2/cards-sm, M3/cards-sm, M4/cards-sm, M5/cards-sm, M6/cards-sm, M7/cards-sm, M8/cards-sm, M9/cards-sm, M10/cards-sm, M11/cards-sm, M12/cards-sm, S1/cards-sm, S10/cards-sm, S3/cards-sm, S4/cards-sm, S5/cards-sm, S8/cards-sm, S6/cards-sm, S7/cards-sm, …
+Run: npm run art:thumbs

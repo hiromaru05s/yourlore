@@ -1,0 +1,75 @@
+{
+  "status": "passed",
+  "comparisons": 21420,
+  "legalityParity": false,
+  "inventory": [
+    {
+      "id": "TSO5",
+      "condition": "soloOnly"
+    },
+    {
+      "id": "ASSASSIN3",
+      "condition": "assassinKin"
+    },
+    {
+      "id": "ASSASSIN4",
+      "condition": "assassinTrio"
+    },
+    {
+      "id": "GOLEM3",
+      "condition": "golemKin"
+    },
+    {
+      "id": "ELF",
+      "condition": "dew4"
+    },
+    {
+      "id": "DARK_ELF",
+      "condition": "darkElf"
+    },
+    {
+      "id": "HIGH_ELF",
+      "condition": "dew10"
+    },
+    {
+      "id": "ELDER_ELF_KING",
+      "condition": "dew12"
+    },
+    {
+      "id": "TPO1",
+      "condition": "preyLow2"
+    },
+    {
+      "id": "TDE1",
+      "condition": "mm5"
+    },
+    {
+      "id": "TDE2",
+      "condition": "mm5"
+    },
+    {
+      "id": "TDE4",
+      "condition": "demonKing"
+    },
+    {
+      "id": "WORLD_TREE",
+      "condition": "dew8"
+    },
+    {
+      "id": "HEXER4",
+      "condition": "hexBoss"
+    },
+    {
+      "id": "SHIELD_TITAN",
+      "condition": "shield20"
+    }
+  ],
+  "checks": [
+    "mana independent",
+    "no cue for ordinary cards",
+    "no hidden opponent deck signal",
+    "spell condition true/false",
+    "all summon requirement types use engine predicate",
+    "read-only evaluation"
+  ]
+}

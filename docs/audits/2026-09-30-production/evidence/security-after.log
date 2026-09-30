@@ -1,0 +1,37 @@
+(node:94147) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{
+  name: 'public room route cannot provision a ranked room',
+  passed: true
+}
+{
+  name: 'anonymous matchmaking cannot consume an authenticated opponent',
+  passed: true
+}
+{
+  name: 'missing admin secret never authorizes season finalization',
+  passed: true
+}
+{ name: 'setup is single-use and POST-only', passed: true }
+{
+  name: 'hidden hand and draw order cannot be correlated with known card UIDs',
+  passed: true
+}
+{
+  name: 'malformed socket input cannot throw or mutate authoritative state',
+  passed: true
+}
+{ name: 'mandatory target timeout advances the turn', passed: true }
+{
+  name: 'enchantment cast preserves triggered curse and unique physical identity',
+  passed: true
+}
+{
+  name: 'reward credit failure rolls back claim and retry grants once',
+  passed: true
+}
+{
+  name: 'coupon cap remains one under concurrent redemption',
+  passed: true
+}
+{ name: 'coupon write failure rolls back redemption', passed: true }

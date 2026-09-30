@@ -1,0 +1,36 @@
+
+> lore-tcg@0.1.0 build
+> node scripts/guard-design.mjs && npm --workspace client run build
+
+✓ guard-design: ok
+
+> lore-client@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v5.4.21 building for production...
+transforming...
+✓ 191 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                              1.20 kB │ gzip:   0.65 kB
+dist/table-preview.html                      1.51 kB │ gzip:   0.87 kB
+dist/assets/tablePreview-2Rkra2Ey.css        1.87 kB │ gzip:   0.85 kB
+dist/assets/main-BF7NjVr-.css              351.94 kB │ gzip:  73.31 kB
+dist/assets/RoomEnvironment-Dg4OOisb.js      2.11 kB │ gzip:   0.93 kB │ map:     8.61 kB
+dist/assets/voidSurface-DGIZPG9f.js          2.95 kB │ gzip:   1.53 kB │ map:     5.43 kB
+dist/assets/diceScene-CtxYa10K.js            8.26 kB │ gzip:   3.87 kB │ map:    31.69 kB
+dist/assets/ceremonyScene-Cbf5B16x.js        8.97 kB │ gzip:   3.99 kB │ map:    24.36 kB
+dist/assets/paperDraw-C7XuoB0s.js            9.53 kB │ gzip:   4.36 kB │ map:    28.43 kB
+dist/assets/crownOutcome-qbz6vTqh.js        13.74 kB │ gzip:   6.07 kB │ map:    41.97 kB
+dist/assets/tablePreview-CJCuoT-O.js        24.96 kB │ gzip:   7.24 kB │ map:    80.98 kB
+dist/assets/riftScene-CBDkTt8U.js           28.06 kB │ gzip:  11.38 kB │ map:    74.24 kB
+dist/assets/GLTFLoader-DqCMa9To.js          44.85 kB │ gzip:  13.55 kB │ map:   242.57 kB
+dist/assets/duelScene-DAuucuDw.js           61.90 kB │ gzip:  24.61 kB │ map:   173.09 kB
+dist/assets/three.module-DJFzXWA5.js       609.24 kB │ gzip: 156.09 kB │ map: 2,955.50 kB
+dist/assets/main-CDvAfeuk.js             1,101.78 kB │ gzip: 432.96 kB │ map: 2,817.85 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 2.77s

@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "checks": [
+    "hidden tab settles exact value",
+    "session receipt deduplication",
+    "detached DOM cancels RAF"
+  ]
+}

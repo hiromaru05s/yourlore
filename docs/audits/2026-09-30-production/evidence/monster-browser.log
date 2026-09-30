@@ -1,0 +1,29 @@
+PASS [
+  { resources: [ [Object], [Object], [Object], [Object], [Object] ] },
+  {
+    persistent: {
+      layer: '16',
+      stage: true,
+      portraitLayer: '18',
+      opacity: '0',
+      clickable: true,
+      clones: 2
+    }
+  },
+  'field state retains hit-testing and visible reorder drag',
+  'summon B + dust B and activation B through controller',
+  'attack foreground returns to persistent field layer below portrait',
+  'multi-attack returns ready; exactly one contact callback',
+  'simultaneous +3/+4 shows actual values, not prototype +2',
+  'paired debuff B',
+  'ordinary combat damage does not play HP debuff',
+  'destruction to shelf',
+  'destruction to rift',
+  'cleanup abort',
+  'cleanup resize',
+  'cleanup skip',
+  'cleanup removed',
+  'reduced-motion completion and single contact',
+  '390px opponent activation / no horizontal overflow',
+  'board disposal removes compositor'
+]

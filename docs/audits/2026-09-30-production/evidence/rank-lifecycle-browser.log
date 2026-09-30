@@ -1,0 +1,5 @@
+PASS lifecycle [
+  'hidden tab settles exact value',
+  'session receipt deduplication',
+  'detached DOM cancels RAF'
+]
