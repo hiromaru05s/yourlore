@@ -9,7 +9,7 @@ import { homeRankHtml } from "../ui/rankPresentation";
 import { loungeText } from "../ui/loungeText";
 import { sanitizeDecks } from "../shared/cards";
 import { artUrl } from "../ui/cardArt";
-import { homeIcon, type HomeIcon } from "../ui/homeIcons";
+import { homeIcon } from "../ui/homeIcons";
 
 
 export function mountHome(app: App): Screen {
@@ -62,27 +62,26 @@ export function mountHome(app: App): Screen {
 
 /** BOT match difficulty picker. Dims + blurs HOME behind a focused center modal. */
 function showBotDifficultyModal(app: App): void {
-  const tiers: { diff: BotDifficulty; icon: HomeIcon }[] = [
-    { diff: "easy", icon: "book" },
-    { diff: "normal", icon: "duel" },
-    { diff: "hard", icon: "bot" },
-    { diff: "hell", icon: "home" },
-  ];
+  const tiers: BotDifficulty[] = ["easy", "normal", "hard", "hell"];
   const ov = document.createElement("div");
   ov.className = "overlay bot-diff-ov";
   ov.innerHTML = `
-    <div class="modal bot-diff">
-      <h2>${t("bot.diff.title")}</h2>
-      <p class="bot-diff-sub">${t("bot.diff.sub")}</p>
+    <div class="modal support-dialog bot-diff">
+      <header class="support-dialog-heading">
+        <span class="menu-eyebrow">BOT DUEL</span>
+        <h2>${t("bot.diff.title")}</h2>
+        <p class="bot-diff-sub">${t("bot.diff.sub")}</p>
+      </header>
       <div class="diff-grid">
-        ${tiers.map((x,i) => `
-          <button class="diff-card diff-${x.diff}" data-diff="${x.diff}">
-            <span class="diff-rank">${["I","II","III","IV"][i]}</span><span class="diff-ico">${homeIcon(x.icon)}</span>
-            <span class="diff-name">${t(`bot.diff.${x.diff}`)}</span>
-            <span class="diff-desc">${t(`bot.diff.${x.diff}.desc`)}</span>
+        ${tiers.map((diff,i) => `
+          <button type="button" class="diff-card diff-${diff}" data-diff="${diff}">
+            <span class="diff-rank" aria-hidden="true">${["I","II","III","IV"][i]}</span>
+            <span class="diff-copy"><span class="diff-name">${t(`bot.diff.${diff}`)}</span><span class="diff-desc">${t(`bot.diff.${diff}.desc`)}</span></span>
+            <span class="diff-strength" aria-hidden="true">${[0,1,2,3].map(n=>`<i${n<=i?' class="is-lit"':''}></i>`).join('')}</span>
+            <span class="diff-arrow" aria-hidden="true">↗</span>
           </button>`).join("")}
       </div>
-      <div class="modal-row"><button class="btn btn-ghost btn-block" id="diffCancel">${t("common.cancel")}</button></div>
+      <div class="modal-row diff-footer"><p>${loungeText("選択すると対戦が始まります。","Choose a difficulty to begin.","난이도를 선택하면 대전이 시작됩니다.")}</p><button class="btn btn-ghost" id="diffCancel">${t("common.cancel")}</button></div>
     </div>`;
   document.body.appendChild(ov);
   const close = () => ov.remove();

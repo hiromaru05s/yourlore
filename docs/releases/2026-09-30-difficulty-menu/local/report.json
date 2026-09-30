@@ -1,0 +1,16 @@
+{
+  "origin": "http://127.0.0.1:5310",
+  "checks": [
+    "ja-1280 has four ordered rows, no raster art or horizontal overflow",
+    "ja-1920 has four ordered rows, no raster art or horizontal overflow",
+    "ja-390 has four ordered rows, no raster art or horizontal overflow",
+    "ja-320 has four ordered rows, no raster art or horizontal overflow",
+    "ja-844 has four ordered rows, no raster art or horizontal overflow",
+    "hover, keyboard focus, Escape/focus restoration, cancel and backdrop dismissal",
+    "en-320 has four ordered rows, no raster art or horizontal overflow",
+    "ko-320 has four ordered rows, no raster art or horizontal overflow",
+    "each row calls the original matching BOT difficulty"
+  ],
+  "errors": [],
+  "boundary": "API/account fixtures; local callback mapping or deployed BOT smoke."
+}
