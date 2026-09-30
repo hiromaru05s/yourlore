@@ -1,0 +1,14 @@
+[
+  {
+    "check": "typecheck",
+    "exitCode": 0
+  },
+  {
+    "check": "build",
+    "exitCode": 0
+  },
+  {
+    "check": "lifecycle",
+    "exitCode": 0
+  }
+]

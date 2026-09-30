@@ -307,8 +307,10 @@ export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | n
   if(fxSkip)return null;
   const destination = card.quick ? (side === "me" ? "rift-me" : "rift-opp") : discId(side);
   const to = rectOf("#" + destination);
-  if (!src || !to) { if(card.quick)return revealSpell(card,side,"vanish",undefined,true);pileFlash(destination); return null; }
+  if (!src || !to) { sfx('buy');if(card.quick)return revealSpell(card,side,"vanish",undefined,true);pileFlash(destination); return null; }
   if(paidMana>0){await purchaseMana(side,src);if(fxSkip)return null;}
+  // The purchase is authoritative here. Free cards confirm too; payment is separate.
+  sfx('buy');
   if(source){
     // Remove the last-stock face before any texture work or lift. Keep its slot
     // geometry stable until the authoritative board render replaces the market.
@@ -345,7 +347,7 @@ export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | n
 /** Mana moves from the payer's crystals into the purchase before the card leaves its slot. */
 async function purchaseMana(side:ViewSide,target:DOMRect):Promise<void>{
   if(fxSkip)return;
-  const cluster=document.getElementById('hpbar-'+side)?.closest('.pcluster');
+  const cluster=document.getElementById(side==='me'?'portraitMe':'portraitOpp');
   const source=cluster?.querySelector<HTMLElement>('.mana-crystals')??cluster?.querySelector<HTMLElement>('.pips');
   if(!source)return;
   const stop=playBiblionFx('purchase',source.getBoundingClientRect(),target);

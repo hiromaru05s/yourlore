@@ -1,0 +1,643 @@
+{
+  "version": 5,
+  "status": "staging adoption authorized 2026-09-30",
+  "sampleRate": 44100,
+  "sounds": {
+    "click": [
+      {
+        "file": "click-1.mp3",
+        "seconds": 0.13,
+        "peakDb": -16.02,
+        "rmsDb": -37.19,
+        "sources": [
+          "casino-audio/card-place-1.ogg"
+        ],
+        "sha256": "07f683303b5915ccc3ca981991f484618f0f432fcc9e857b657031a3f1b6c798",
+        "url": "/sfx/lore-v3/click-1.mp3",
+        "decision": "keep home/approved recording"
+      },
+      {
+        "file": "click-2.mp3",
+        "seconds": 0.13,
+        "peakDb": -16.0,
+        "rmsDb": -39.72,
+        "sources": [
+          "casino-audio/card-place-2.ogg"
+        ],
+        "sha256": "dd42639f2a79b39e78ab1ffea4cb87ec75f6c8e46f1c20b2820a4e5e01e9201c",
+        "url": "/sfx/lore-v3/click-2.mp3",
+        "decision": "keep home/approved recording"
+      },
+      {
+        "file": "click-3.mp3",
+        "seconds": 0.13,
+        "peakDb": -16.0,
+        "rmsDb": -39.23,
+        "sources": [
+          "casino-audio/card-place-3.ogg"
+        ],
+        "sha256": "adb0c6069f70f2e20fa6f3c3d29a9fc394aea7aabc95d64f203c75a6da4fa7d1",
+        "url": "/sfx/lore-v3/click-3.mp3",
+        "decision": "keep home/approved recording"
+      }
+    ],
+    "pop": [
+      {
+        "file": "pop.mp3",
+        "seconds": 0.22,
+        "peakDb": -15.99,
+        "rmsDb": -37.95,
+        "sources": [
+          "casino-audio/card-slide-1.ogg"
+        ],
+        "sha256": "2a1d0899df83a343d64a36be7f42e8694bd68500d108d5d92ca09e4991fc6c7d",
+        "url": "/sfx/lore-v3/pop.mp3",
+        "decision": "keep home/approved recording"
+      }
+    ],
+    "error": [
+      {
+        "file": "error.mp3",
+        "seconds": 0.22,
+        "peakDb": -12.0,
+        "rmsDb": -34.06,
+        "sources": [
+          "rpg-audio/bookClose.ogg"
+        ],
+        "sha256": "ef85c141ed1aaf75ea4d890aa92b1f2c18c35c801dd34fbae77f67d8b938664c",
+        "url": "/sfx/lore-v3/error.mp3",
+        "decision": "keep home/approved recording"
+      }
+    ],
+    "coin": [
+      {
+        "file": "coin.mp3",
+        "url": "/sfx/lore-v4/coin.mp3",
+        "seconds": 0.48,
+        "peakDb": -12.0,
+        "rmsDb": -39.66,
+        "sources": [
+          "rubberduck/item_coins_01.ogg"
+        ],
+        "sha256": "1c68676856e96bca4ad8010d39a45e332a4da8e42842e742baa952a08151932b",
+        "decision": "keep home/approved recording"
+      }
+    ],
+    "match": [
+      {
+        "file": "match.mp3",
+        "url": "/sfx/lore-v4/match.mp3",
+        "seconds": 1.3,
+        "peakDb": -9.67,
+        "rmsDb": -25.44,
+        "sources": [
+          "jaggedstone/magical_1_0.ogg",
+          "jaggedstone/magical_3.ogg"
+        ],
+        "sha256": "ef16d12aca0f83a819e21930a5f708c4b0f6be035599c00a60973593930bf878",
+        "decision": "keep home/approved recording"
+      }
+    ],
+    "draw": [
+      {
+        "file": "draw-3.mp3",
+        "url": "/sfx/lore-v4/draw-3.mp3",
+        "seconds": 0.25,
+        "peakDb": -15.0,
+        "rmsDb": -39.71,
+        "sources": [
+          "kenney/casino-audio/card-slide-4.ogg"
+        ],
+        "sha256": "7b76afc4859cdef231025e8da3949d55a7ad3360a2d956875ea80f2aa9f60b05",
+        "decision": "keep approved draw 3 only"
+      }
+    ],
+    "buy": [
+      {
+        "file": "buy.mp3",
+        "url": "/sfx/lore-v4/buy.mp3",
+        "seconds": 0.72,
+        "peakDb": -12.0,
+        "rmsDb": -37.55,
+        "sources": [
+          "jaggedstone/magical_3.ogg",
+          "rubberduck/item_coins_02.ogg"
+        ],
+        "sha256": "a995b5936355723735e13d71500519a4c3c5ce7cf20bc76c2e05e917513beeec",
+        "decision": "keep home/approved recording"
+      }
+    ],
+    "attack": [
+      {
+        "file": "attack-1.mp3",
+        "url": "/sfx/lore-v5/attack-1.mp3",
+        "seconds": 0.25,
+        "peakDb": -13.95,
+        "rmsDb": -30.01,
+        "sha256": "bd1c6280655f6567560d69ca76c84ed37ce332908d9f23ae9d1b5e8dba892a41",
+        "sources": [
+          "new/swishes/swish-5.wav",
+          "original: shaped air texture"
+        ],
+        "decision": "rebuilt",
+        "description": "短い風切り。接触前の動きだけを伝える。"
+      },
+      {
+        "file": "attack-2.mp3",
+        "url": "/sfx/lore-v5/attack-2.mp3",
+        "seconds": 0.25,
+        "peakDb": -16.31,
+        "rmsDb": -29.94,
+        "sha256": "6f6ad2c379f58622a4558b97fac8945942482b59a7a303f31f14fc51aa18a025",
+        "sources": [
+          "new/swishes/swish-7.wav",
+          "original: shaped air texture"
+        ],
+        "decision": "rebuilt",
+        "description": "短い風切り。接触前の動きだけを伝える。"
+      },
+      {
+        "file": "attack-3.mp3",
+        "url": "/sfx/lore-v5/attack-3.mp3",
+        "seconds": 0.25,
+        "peakDb": -12.87,
+        "rmsDb": -30.05,
+        "sha256": "48c5a0e623336e61008adf129e21ee6fb447a3f65e93d45fdd28332742d9aa34",
+        "sources": [
+          "new/swishes/swish-9.wav",
+          "original: shaped air texture"
+        ],
+        "decision": "rebuilt",
+        "description": "短い風切り。接触前の動きだけを伝える。"
+      }
+    ],
+    "impact": [
+      {
+        "file": "impact-1.mp3",
+        "url": "/sfx/lore-v5/impact-1.mp3",
+        "seconds": 0.29,
+        "peakDb": -9.38,
+        "rmsDb": -26.74,
+        "sha256": "528cb2d5e4fa20bdb5450aaa1a562adafc76ca6093f38fed9fe6e1a6199562f4",
+        "sources": [
+          "impact-sounds/impactPunch_medium_001.ogg",
+          "new/thwack/thwack-03.wav",
+          "original: damped impact body"
+        ],
+        "decision": "rebuilt",
+        "description": "鋭い打撃の芯と小さな低域。カード同士の接触。"
+      },
+      {
+        "file": "impact-2.mp3",
+        "url": "/sfx/lore-v5/impact-2.mp3",
+        "seconds": 0.29,
+        "peakDb": -8.38,
+        "rmsDb": -25.91,
+        "sha256": "4d1a625175c122178697577cee65beaf3f5f7df7ad9a3eb2832f764537e65f5e",
+        "sources": [
+          "impact-sounds/impactPunch_medium_001.ogg",
+          "new/thwack/thwack-02.wav",
+          "original: damped impact body"
+        ],
+        "decision": "rebuilt",
+        "description": "鋭い打撃の芯と小さな低域。カード同士の接触。"
+      },
+      {
+        "file": "impact-3.mp3",
+        "url": "/sfx/lore-v5/impact-3.mp3",
+        "seconds": 0.29,
+        "peakDb": -8.0,
+        "rmsDb": -25.93,
+        "sha256": "c41dfa64fd8917e78a6ece7a5d4c8435541b8e80d27f8def20371ea2ffc4a490",
+        "sources": [
+          "impact-sounds/impactPunch_medium_001.ogg",
+          "new/thwack/thwack-06.wav",
+          "original: damped impact body"
+        ],
+        "decision": "rebuilt",
+        "description": "鋭い打撃の芯と小さな低域。カード同士の接触。"
+      }
+    ],
+    "facehit": [
+      {
+        "file": "facehit.mp3",
+        "url": "/sfx/lore-v5/facehit.mp3",
+        "seconds": 0.4,
+        "peakDb": -10.28,
+        "rmsDb": -27.26,
+        "sha256": "347e43fb8b4001689d9537025f4aca5688010c3cad5559f8010e74661b7c5bd3",
+        "sources": [
+          "impact-sounds/impactPunch_medium_001.ogg",
+          "impact-sounds/impactSoft_heavy_000.ogg",
+          "new/thwack/thwack-03.wav",
+          "original: damped impact body"
+        ],
+        "decision": "rebuilt",
+        "description": "命中より太い低中域の打撃。シーカーへ通った攻撃。"
+      }
+    ],
+    "damage": [
+      {
+        "file": "damage.mp3",
+        "url": "/sfx/lore-v5/damage.mp3",
+        "seconds": 0.3,
+        "peakDb": -13.43,
+        "rmsDb": -28.9,
+        "sha256": "9f4d0d13cfa20ca41ea88cb32f1c70df994a32db704d7268dd15c3fd4f793539",
+        "sources": [
+          "impact-sounds/impactPunch_medium_001.ogg",
+          "new/thwack/thwack-03.wav",
+          "original: damped impact body"
+        ],
+        "decision": "rebuilt",
+        "description": "短く詰まった鈍い打撃。効果による精神力ダメージ。"
+      }
+    ],
+    "summon": [
+      {
+        "file": "summon.mp3",
+        "url": "/sfx/lore-v5/summon.mp3",
+        "seconds": 0.58,
+        "peakDb": -7.61,
+        "rmsDb": -28.13,
+        "sha256": "fe2afa82c41564825e02e1c4e78e216513c918aaee4790359766b32f45139e8f",
+        "sources": [
+          "new/thwack/thwack-10.wav",
+          "original: damped impact body",
+          "original: damped resonator",
+          "original: shaped air texture",
+          "rpg-audio/bookPlace2.ogg"
+        ],
+        "decision": "rebuilt",
+        "description": "低い着地の芯に、短い空気の広がり。場へ実体が来る重さ。"
+      }
+    ],
+    "mimic": [
+      {
+        "file": "mimic.mp3",
+        "url": "/sfx/lore-v5/mimic.mp3",
+        "seconds": 0.46,
+        "peakDb": -12.41,
+        "rmsDb": -30.35,
+        "sha256": "3ec8a1296576884a8d055fb95fec93a71d2628b652fbb20ac48d5d3c715cebd9",
+        "sources": [
+          "new/thwack/thwack-05.wav",
+          "original: damped impact body",
+          "rpg-audio/bookOpen.ogg",
+          "rpg-audio/metalLatch.ogg"
+        ],
+        "decision": "rebuilt",
+        "description": "木の箱・留め具が跳ね、重く着地する。"
+      }
+    ],
+    "play": [
+      {
+        "file": "play.mp3",
+        "url": "/sfx/lore-v5/play.mp3",
+        "seconds": 0.42,
+        "peakDb": -10.0,
+        "rmsDb": -34.39,
+        "sha256": "640ac26d504636271f8acdc21f4238c5cf7e0cbe076faaa10ed85e2ca565f507",
+        "sources": [
+          "original: damped resonator",
+          "original: shaped air texture",
+          "rpg-audio/bookFlip2.ogg"
+        ],
+        "decision": "rebuilt",
+        "description": "カードのフリップと短い発動の抜け。長い魔法音は使わない。"
+      }
+    ],
+    "heal": [
+      {
+        "file": "heal.mp3",
+        "url": "/sfx/lore-v5/heal.mp3",
+        "seconds": 0.78,
+        "peakDb": -17.37,
+        "rmsDb": -30.9,
+        "sha256": "9c8b828a02b234d086f963c16247c03c5d41a4dae47d7d5b748796bfbf13d3cf",
+        "sources": [
+          "original: damped resonator",
+          "original: shaped air texture"
+        ],
+        "decision": "rebuilt",
+        "description": "柔らかい上昇の余韻。硬い打撃成分を入れない。"
+      }
+    ],
+    "death": [
+      {
+        "file": "death.mp3",
+        "url": "/sfx/lore-v5/death.mp3",
+        "seconds": 0.42,
+        "peakDb": -10.0,
+        "rmsDb": -33.18,
+        "sha256": "1c9978306ae76e7afa557bf4682c08345950815875a53811e93ef0ef4ad4abff",
+        "sources": [
+          "casino-audio/card-shove-2.ogg",
+          "new/thwack/thwack-04.wav",
+          "original: shaped air texture"
+        ],
+        "decision": "rebuilt",
+        "description": "砕ける短い打撃から紙の消失へ落とす。"
+      }
+    ],
+    "trapSet": [
+      {
+        "file": "trapSet.mp3",
+        "url": "/sfx/lore-v5/trapSet.mp3",
+        "seconds": 0.25,
+        "peakDb": -14.59,
+        "rmsDb": -36.12,
+        "sha256": "ab47b257abab166a155a2436b15672d88da568d5f743bf29e6b938d8d5b35049",
+        "sources": [
+          "casino-audio/card-place-4.ogg",
+          "rpg-audio/metalLatch.ogg"
+        ],
+        "decision": "rebuilt",
+        "description": "カードを伏せ、留め具が小さく締まる。"
+      }
+    ],
+    "trap": [
+      {
+        "file": "trap.mp3",
+        "url": "/sfx/lore-v5/trap.mp3",
+        "seconds": 0.4,
+        "peakDb": -13.25,
+        "rmsDb": -29.98,
+        "sha256": "e1cd8a5055dcb40ecd6b979f667cd9acdb11fb44567f0a784c06e925f5cdb812",
+        "sources": [
+          "new/swishes/swish-4.wav",
+          "new/thwack/thwack-03.wav",
+          "rpg-audio/metalLatch.ogg"
+        ],
+        "decision": "rebuilt",
+        "description": "鋭い解除のスナップと短い振り抜き。"
+      }
+    ],
+    "mana-pay": [
+      {
+        "file": "mana-pay.mp3",
+        "url": "/sfx/lore-v5/mana-pay.mp3",
+        "seconds": 0.25,
+        "peakDb": -16.66,
+        "rmsDb": -36.49,
+        "sha256": "f348aeff8aa5eaf3f5ba0d10e788e263b73af5cf1cbb9ddf904d626dcdccb671",
+        "sources": [
+          "casino-audio/chip-lay-2.ogg",
+          "interface-sounds/glass_001.ogg",
+          "original: shaped air texture"
+        ],
+        "decision": "rebuilt",
+        "description": "小さな結晶の接触と短い抜け。逆再生の長い唸りを除いた。"
+      }
+    ],
+    "mana": [
+      {
+        "file": "mana.mp3",
+        "url": "/sfx/lore-v5/mana.mp3",
+        "seconds": 0.65,
+        "peakDb": -13.58,
+        "rmsDb": -29.15,
+        "sha256": "cb8240be0aaa597e50872bc59d18370607d2c534a9e74dd55caf3e9b2b5cf7c3",
+        "sources": [
+          "interface-sounds/glass_001.ogg",
+          "original: damped resonator",
+          "original: shaped air texture"
+        ],
+        "decision": "rebuilt",
+        "description": "結晶の到達から上へ開く短い共鳴。"
+      }
+    ],
+    "turn": [
+      {
+        "file": "turn.mp3",
+        "url": "/sfx/lore-v5/turn.mp3",
+        "seconds": 0.43,
+        "peakDb": -18.6,
+        "rmsDb": -31.43,
+        "sha256": "b8b324e5350381528c5873eb81a9eab23835727990a04367d7948510ee791e9d",
+        "sources": [
+          "original: damped resonator"
+        ],
+        "decision": "rebuilt",
+        "description": "控えめな木質2音で自分の番を知らせる。"
+      }
+    ],
+    "win": [
+      {
+        "file": "win.mp3",
+        "url": "/sfx/lore-v5/win.mp3",
+        "seconds": 1.65,
+        "peakDb": -15.6,
+        "rmsDb": -28.78,
+        "sha256": "f1537029896503796f0e18cc1dde0e20e9771bd4c8e5fcbbd66c8cec19c5b47c",
+        "sources": [
+          "original: damped impact body",
+          "original: damped resonator"
+        ],
+        "decision": "rebuilt",
+        "description": "明るく開く短い決着のフレーズ。"
+      }
+    ],
+    "lose": [
+      {
+        "file": "lose.mp3",
+        "url": "/sfx/lore-v5/lose.mp3",
+        "seconds": 1.3,
+        "peakDb": -18.3,
+        "rmsDb": -31.92,
+        "sha256": "cac6c8e267a41416f0f3f2abe411d65886408e3b82cfd60ff78e6a107c0617b9",
+        "sources": [
+          "original: damped impact body",
+          "original: damped resonator"
+        ],
+        "decision": "rebuilt",
+        "description": "低い着地から音程が沈む短い決着。"
+      }
+    ],
+    "drawGame": [
+      {
+        "file": "drawGame.mp3",
+        "url": "/sfx/lore-v5/drawGame.mp3",
+        "seconds": 1.1,
+        "peakDb": -17.67,
+        "rmsDb": -31.56,
+        "sha256": "7659df416eef73e2e16ba85f0f42999cf2283f00bd3ce844ce8c2c2574a345c8",
+        "sources": [
+          "original: damped resonator"
+        ],
+        "decision": "rebuilt",
+        "description": "上昇も下降もしない落ち着いた区切り。"
+      }
+    ],
+    "void": [
+      {
+        "file": "void.mp3",
+        "url": "/sfx/lore-v5/void.mp3",
+        "seconds": 0.54,
+        "peakDb": -15.44,
+        "rmsDb": -32.3,
+        "sha256": "c60134097bac187f1312a9ce6a307bb5f8ff3f1e40bba8b38b77fcba4390277c",
+        "sources": [
+          "casino-audio/card-shove-2.ogg",
+          "new/swishes/swish-9.wav",
+          "original: shaped air texture"
+        ],
+        "decision": "rebuilt",
+        "description": "短い吸引が細くなって閉じる。"
+      }
+    ],
+    "shuffle": [
+      {
+        "file": "shuffle.mp3",
+        "url": "/sfx/lore-v5/shuffle.mp3",
+        "seconds": 0.7,
+        "peakDb": -14.0,
+        "rmsDb": -41.9,
+        "sha256": "5fb2bada8743ea2b7f6ab1cd0a1bb286420ea4c76afa41c3861564afb7c53c1f",
+        "sources": [
+          "casino-audio/card-shuffle.ogg"
+        ],
+        "decision": "rebuilt",
+        "description": "カード束を混ぜる紙音。長い余韻なし。"
+      }
+    ],
+    "duel-start": [
+      {
+        "file": "duel-start.mp3",
+        "url": "/sfx/lore-v5/duel-start.mp3",
+        "seconds": 0.85,
+        "peakDb": -19.13,
+        "rmsDb": -30.97,
+        "sha256": "f4b5f5b6698b923c850f8082f30f7898cd5e0e2262f47a713bc655c2a1895032",
+        "sources": [
+          "original: damped impact body",
+          "original: damped resonator"
+        ],
+        "decision": "rebuilt",
+        "description": "低い区切りと短い上昇。通常開始BGMとは別の予備SE。"
+      }
+    ],
+    "discard": [
+      {
+        "file": "discard.mp3",
+        "url": "/sfx/lore-v5/discard.mp3",
+        "seconds": 0.3,
+        "peakDb": -14.0,
+        "rmsDb": -39.34,
+        "sha256": "4facdd3b85a3d55b8239d66d695646c90e3a0211eca28f55af2a00d244240237",
+        "sources": [
+          "casino-audio/card-place-2.ogg",
+          "casino-audio/card-slide-5.ogg"
+        ],
+        "decision": "rebuilt",
+        "description": "一枚を滑らせて置く軽い紙音。"
+      }
+    ],
+    "coinToss": [
+      {
+        "file": "coinToss.mp3",
+        "url": "/sfx/lore-v5/coinToss.mp3",
+        "seconds": 0.23,
+        "peakDb": -16.95,
+        "rmsDb": -45.06,
+        "sha256": "dda13ce12a33be483e4e7bd1b7c5a1f76952a98bb8abb6c2e2a20a0aeee7d473",
+        "sources": [
+          "casino-audio/chips-collide-1.ogg"
+        ],
+        "decision": "rebuilt",
+        "description": "硬貨を弾く短い金属のきらめき。"
+      }
+    ],
+    "coinLand": [
+      {
+        "file": "coinLand.mp3",
+        "url": "/sfx/lore-v5/coinLand.mp3",
+        "seconds": 0.27,
+        "peakDb": -16.43,
+        "rmsDb": -44.31,
+        "sha256": "4932c579e96c6d2329f7aa0dc30c1da5d0711f46415fd064f56a17a47bee3066",
+        "sources": [
+          "casino-audio/chip-lay-1.ogg",
+          "casino-audio/chips-collide-1.ogg"
+        ],
+        "decision": "rebuilt",
+        "description": "卓上へ硬貨が触れる小さな打点。"
+      }
+    ],
+    "diceRoll": [
+      {
+        "file": "diceRoll.mp3",
+        "url": "/sfx/lore-v5/diceRoll.mp3",
+        "seconds": 0.78,
+        "peakDb": -14.0,
+        "rmsDb": -48.44,
+        "sha256": "7a1f83e87853c968ce398dc49bd604aa2f5b19b77a96728da9665bfb0723d21f",
+        "sources": [
+          "casino-audio/dice-throw-2.ogg"
+        ],
+        "decision": "rebuilt",
+        "description": "ダイスが短く転がる物理音。"
+      }
+    ],
+    "diceLand": [
+      {
+        "file": "diceLand.mp3",
+        "url": "/sfx/lore-v5/diceLand.mp3",
+        "seconds": 0.2,
+        "peakDb": -14.47,
+        "rmsDb": -42.02,
+        "sha256": "e1da74aa8c05c06d3ba173dd5fc8b67fedec966a5c02718ec94b2e77b30c275f",
+        "sources": [
+          "casino-audio/chip-lay-2.ogg"
+        ],
+        "decision": "rebuilt",
+        "description": "ダイスが止まる硬い一打。"
+      }
+    ],
+    "rankUp": [
+      {
+        "file": "rankUp.mp3",
+        "url": "/sfx/lore-v5/rankUp.mp3",
+        "seconds": 0.4,
+        "peakDb": -18.78,
+        "rmsDb": -31.09,
+        "sha256": "33d9233ea8f67687794d19c0df68d87fc39baa0c0b7242ce9b775aa5cef58466",
+        "sources": [
+          "original: damped resonator"
+        ],
+        "decision": "rebuilt",
+        "description": "短く上がる木質の2音。"
+      }
+    ],
+    "rankDown": [
+      {
+        "file": "rankDown.mp3",
+        "url": "/sfx/lore-v5/rankDown.mp3",
+        "seconds": 0.42,
+        "peakDb": -18.26,
+        "rmsDb": -31.34,
+        "sha256": "234d5595b2251e562c805b1dfd027b55e25ff39c8183eda0153b36add948f08b",
+        "sources": [
+          "original: damped resonator"
+        ],
+        "decision": "rebuilt",
+        "description": "短く下がる木質の2音。"
+      }
+    ],
+    "rankPromote": [
+      {
+        "file": "rankPromote.mp3",
+        "url": "/sfx/lore-v5/rankPromote.mp3",
+        "seconds": 0.88,
+        "peakDb": -18.79,
+        "rmsDb": -30.37,
+        "sha256": "f1d16f9814ba5668ec9cbf3dd2da2039397133785e967e3c806ee86525990a40",
+        "sources": [
+          "original: damped resonator"
+        ],
+        "decision": "rebuilt",
+        "description": "4段階で上がる短い昇格音。"
+      }
+    ]
+  }
+}
