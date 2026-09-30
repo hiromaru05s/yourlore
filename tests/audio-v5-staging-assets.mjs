@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
-const origin='https://test.yourlore.xyz',out='docs/sound-redesign/2026-09-30/staging';
+const origin='https://test.yourlore.xyz',out=process.env.LORE_TEST_OUTPUT||'docs/sound-redesign/2026-09-30/staging';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const remote=async url=>{const response=await fetch(origin+url);assert(response.ok,url+' HTTP '+response.status);return Buffer.from(await response.arrayBuffer());};
 const html=await fs.readFile('client/dist/index.html');assert.equal(hash(await remote('/')),hash(html),'entry HTML equals built file');
