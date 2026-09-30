@@ -1,0 +1,14 @@
+{
+  "id": "5d51e0bb-07f2-4b50-b26b-6dc596553a36",
+  "annotations": {
+    "workers/message": "f8743461 simplify settings invite inquiry menu icons",
+    "workers/triggered_by": "deployment"
+  },
+  "versions": [
+    {
+      "version_id": "6d11ce96-00e4-4d29-a9cd-4397f20736ea",
+      "percentage": 100
+    }
+  ],
+  "created_on": "2026-09-30T01:13:51.48918Z"
+}

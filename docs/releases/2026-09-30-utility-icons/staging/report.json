@@ -1,0 +1,11 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checks": [
+    "visible three SVG icons, no raster emblem, 44px targets and bounded popup at 1280",
+    "visible three SVG icons, no raster emblem, 44px targets and bounded popup at 390",
+    "visible three SVG icons, no raster emblem, 44px targets and bounded popup at 320",
+    "focus, Escape dismissal and all three action handlers retained"
+  ],
+  "errors": [],
+  "boundary": "API/account fixtures; no real inquiry or invite sent."
+}
