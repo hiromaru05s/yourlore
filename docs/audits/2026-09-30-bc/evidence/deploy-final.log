@@ -1,0 +1,236 @@
+
+> lore-tcg@0.1.0 deploy:staging
+> node scripts/deploy-guard.mjs staging
+
+From https://github.com/hiromaru05s/yourlore
+ * branch              main       -> FETCH_HEAD
+Preparing worktree (detached HEAD 54fdfc99)
+Updating files:  29% (1670/5570)
+Updating files:  30% (1671/5570)
+Updating files:  31% (1727/5570)
+Updating files:  32% (1783/5570)
+Updating files:  33% (1839/5570)
+Updating files:  34% (1894/5570)
+Updating files:  35% (1950/5570)
+Updating files:  36% (2006/5570)
+Updating files:  37% (2061/5570)
+Updating files:  38% (2117/5570)
+Updating files:  39% (2173/5570)
+Updating files:  40% (2228/5570)
+Updating files:  41% (2284/5570)
+Updating files:  42% (2340/5570)
+Updating files:  43% (2396/5570)
+Updating files:  44% (2451/5570)
+Updating files:  45% (2507/5570)
+Updating files:  46% (2563/5570)
+Updating files:  47% (2618/5570)
+Updating files:  48% (2674/5570)
+Updating files:  49% (2730/5570)
+Updating files:  50% (2785/5570)
+Updating files:  50% (2818/5570)
+Updating files:  51% (2841/5570)
+Updating files:  52% (2897/5570)
+Updating files:  53% (2953/5570)
+Updating files:  54% (3008/5570)
+Updating files:  55% (3064/5570)
+Updating files:  56% (3120/5570)
+Updating files:  57% (3175/5570)
+Updating files:  58% (3231/5570)
+Updating files:  58% (3285/5570)
+Updating files:  59% (3287/5570)
+Updating files:  60% (3342/5570)
+Updating files:  61% (3398/5570)
+Updating files:  62% (3454/5570)
+Updating files:  63% (3510/5570)
+Updating files:  64% (3565/5570)
+Updating files:  65% (3621/5570)
+Updating files:  66% (3677/5570)
+Updating files:  67% (3732/5570)
+Updating files:  68% (3788/5570)
+Updating files:  69% (3844/5570)
+Updating files:  70% (3899/5570)
+Updating files:  71% (3955/5570)
+Updating files:  72% (4011/5570)
+Updating files:  72% (4016/5570)
+Updating files:  73% (4067/5570)
+Updating files:  74% (4122/5570)
+Updating files:  75% (4178/5570)
+Updating files:  76% (4234/5570)
+Updating files:  77% (4289/5570)
+Updating files:  78% (4345/5570)
+Updating files:  79% (4401/5570)
+Updating files:  80% (4456/5570)
+Updating files:  81% (4512/5570)
+Updating files:  81% (4520/5570)
+Updating files:  82% (4568/5570)
+Updating files:  83% (4624/5570)
+Updating files:  84% (4679/5570)
+Updating files:  85% (4735/5570)
+Updating files:  86% (4791/5570)
+Updating files:  87% (4846/5570)
+Updating files:  88% (4902/5570)
+Updating files:  89% (4958/5570)
+Updating files:  90% (5013/5570)
+Updating files:  91% (5069/5570)
+Updating files:  92% (5125/5570)
+Updating files:  92% (5171/5570)
+Updating files:  93% (5181/5570)
+Updating files:  94% (5236/5570)
+Updating files:  95% (5292/5570)
+Updating files:  96% (5348/5570)
+Updating files:  97% (5403/5570)
+Updating files:  98% (5459/5570)
+Updating files:  99% (5515/5570)
+Updating files: 100% (5570/5570)
+Updating files: 100% (5570/5570), done.
+
+added 102 packages, and audited 105 packages in 4s
+
+found 0 vulnerabilities
+
+> lore-tcg@0.1.0 typecheck
+> npm --workspace client run typecheck && npm --workspace server run typecheck
+
+
+> lore-client@0.1.0 typecheck
+> tsc --noEmit
+
+
+> lore-server@0.1.0 typecheck
+> tsc --noEmit
+
+
+> lore-tcg@0.1.0 test:production
+> node scripts/test-production.mjs
+
+PASS tests/attack-vfx.mjs
+PASS tests/audio-v3.mjs
+PASS tests/balance-v52.mjs
+PASS tests/biblion-vfx.mjs
+PASS tests/connected-return-motion.mjs
+PASS tests/dew-shield-v54.mjs
+PASS tests/dice-model.mjs
+PASS tests/dice-source.mjs
+PASS tests/duel-ui.mjs
+PASS tests/expansion-v50.mjs
+PASS tests/fate-wheel.mjs
+PASS tests/grounded-motion.mjs
+PASS tests/half-elf-v48.mjs
+PASS tests/hand-condition-rules.mjs
+PASS tests/health-cosmetics-v53.mjs
+PASS tests/home-entrance-parity.mjs
+PASS tests/library-furniture-model.mjs
+PASS tests/lounge-horizon.mjs
+PASS tests/lounge-rank.mjs
+PASS tests/lounge-settlement.mjs
+PASS tests/menu-records.mjs
+PASS tests/menu-selected.mjs
+PASS tests/monster-animation-rules.mjs
+PASS tests/motion-v2.mjs
+PASS tests/opening-hands.mjs
+PASS tests/paper-card.mjs
+PASS tests/pile-stock.mjs
+PASS tests/portal-return-motion.mjs
+PASS tests/purchase-vfx.mjs
+PASS tests/quest-quick.mjs
+PASS tests/quick-playback.mjs
+PASS tests/rank-emblem.mjs
+PASS tests/rank-sound.mjs
+PASS tests/release-furniture-model.mjs
+PASS tests/rift-fold.mjs
+PASS tests/rift-transmute.mjs
+PASS tests/solid-draw.mjs
+PASS tests/stagecraft-models.mjs
+PASS tests/stat-rise.mjs
+PASS tests/trap-related-rework.mjs
+PASS tests/trap-removal.mjs
+PASS tests/ceremony-audio-aim.mjs
+PASS tests/trap-removal-tutorial.mjs
+PASS tests/production-security.mjs
+PASS tests/production-bc.mjs
+PASS tests/duel-opening-server.mjs
+PASS tests/dew-shield-server.mjs
+47/47 passed; historical/browser scopes are explicit in production-suite.json
+
+> lore-tcg@0.1.0 build
+> node scripts/guard-design.mjs && npm --workspace client run build
+
+✓ guard-design: ok
+
+> lore-client@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 190 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                              1.13 kB │ gzip:   0.62 kB
+dist/assets/game-pMfcEDtF.css                1.26 kB │ gzip:   0.49 kB
+dist/assets/main-DqVLKpFa.css              353.89 kB │ gzip:  73.42 kB
+dist/assets/handGeometry-Bz96hXgQ.js         0.95 kB │ gzip:   0.53 kB
+dist/assets/RoomEnvironment-CTP8R9ux.js      2.06 kB │ gzip:   0.88 kB
+dist/assets/voidSurface-BK4r_d6v.js          2.90 kB │ gzip:   1.49 kB
+dist/assets/diceScene-CFPq-JxN.js            8.18 kB │ gzip:   3.82 kB
+dist/assets/ceremonyScene-eZL_HmCM.js        8.93 kB │ gzip:   3.96 kB
+dist/assets/paperDraw-5JQPRAPL.js            9.50 kB │ gzip:   4.34 kB
+dist/assets/crownOutcome-KU5-Ho4G.js        13.76 kB │ gzip:   6.01 kB
+dist/assets/riftScene-DOXKPBMA.js           28.08 kB │ gzip:  11.33 kB
+dist/assets/duelScene-CbJNcybj.js          106.88 kB │ gzip:  38.25 kB
+dist/assets/game-CK6qGhcD.js               311.78 kB │ gzip: 124.07 kB
+dist/assets/main-Cgsw9hHX.js             1,601.80 kB │ gzip: 470.62 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 4.01s
+From https://github.com/hiromaru05s/yourlore
+ * branch              main       -> FETCH_HEAD
+
+ ⛅️ wrangler 4.144.0
+────────────────────
+
+Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+🌀 Building list of assets...
+✨ Read 2144 files from the assets directory /private/var/folders/tt/p79qbyt14t14jwlfh80_l0v40000gn/T/lore-release-iJLHU4/client/dist
+🌀 Starting asset upload...
+🌀 Found 14 new or modified static assets to upload. Proceeding with upload...
++ /assets/handGeometry-Bz96hXgQ.js
++ /assets/RoomEnvironment-CTP8R9ux.js
++ /assets/ceremonyScene-eZL_HmCM.js
++ /assets/riftScene-DOXKPBMA.js
++ /assets/main-DqVLKpFa.css
++ /index.html
++ /assets/voidSurface-BK4r_d6v.js
++ /assets/paperDraw-5JQPRAPL.js
++ /assets/duelScene-CbJNcybj.js
++ /assets/main-Cgsw9hHX.js
++ /assets/game-pMfcEDtF.css
++ /assets/diceScene-CFPq-JxN.js
++ /assets/crownOutcome-KU5-Ho4G.js
++ /assets/game-CK6qGhcD.js
+Uploaded 5 of 14 assets
+Uploaded 9 of 14 assets
+Uploaded 14 of 14 assets
+✨ Success! Uploaded 14 files (2062 already uploaded) (1.52 sec)
+
+Total Upload: 1100.89 KiB / gzip: 237.49 KiB
+Worker Startup Time: 54 ms
+Your Worker has access to the following bindings:
+Binding                                                                    Resource
+env.MATCHMAKER (Matchmaker)                                                Durable Object
+env.GAME_ROOM (GameRoom)                                                   Durable Object
+env.DB (lore-db-staging)                                                   D1 Database
+env.AUTH_RATE_LIMITER (30 requests/60s)                                    Rate Limit
+env.INQUIRY_RATE_LIMITER (5 requests/60s)                                  Rate Limit
+env.ASSETS                                                                 Assets
+env.APP_ORIGIN ("*")                                                       Environment Variable
+env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")          Environment Variable
+env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")              Environment Variable
+
+Uploaded lore-server-staging (7.09 sec)
+Deployed lore-server-staging triggers (1.30 sec)
+  test.yourlore.xyz (custom domain)
+Current Version ID: 4b71de4f-861f-4b78-b925-a80fe864a037
+Deployed committed snapshot 54fdfc991deb1589cf9817aa299d2ad4f7f78e45 staging

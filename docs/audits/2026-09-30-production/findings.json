@@ -80,7 +80,9 @@
       "files": "server/src/auth.ts; server/src/index.ts",
       "detail": "ログイン試行回数・最大入力長/IP制限なし。問い合わせはログイン時だけ10件/時。メール再送には60秒制限がある。アプリ外WAFの保護は未確認。",
       "status": "未対応",
-      "evidence": "ソース確認"
+      "evidence": "ソース確認",
+      "followUpStatus": "対応・staging配信済み",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B02",
@@ -89,7 +91,9 @@
       "files": "server/src/auth.ts; server/src/social.ts",
       "detail": "email/q等を型検査せずtrim。数値/配列/nullのpayloadに対する統一バリデーションと上限がない。",
       "status": "未対応",
-      "evidence": "ソース確認"
+      "evidence": "ソース確認",
+      "followUpStatus": "対応・staging配信済み",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B03",
@@ -98,7 +102,9 @@
       "files": "server/src/social.ts",
       "detail": "pendingをSELECT→room作成→UPDATEするため、二重承諾を原子的に取得していない。claim状態/同一roomIdと再試行設計が必要。",
       "status": "未対応・並行成立の静的指摘",
-      "evidence": "ソース確認"
+      "evidence": "ソース確認",
+      "followUpStatus": "対応・staging配信済み",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B04",
@@ -107,7 +113,9 @@
       "files": "server/src/matchmaker.ts",
       "detail": "pairのawait中に同じsocketを再queue可能。アカウント単位の一意待機/対戦予約、flood guard、setup応答status確認がない。",
       "status": "未対応・負荷試験未実施",
-      "evidence": "ソース確認"
+      "evidence": "ソース確認",
+      "followUpStatus": "対応・staging配信済み",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B05",
@@ -116,7 +124,9 @@
       "files": "server/src/gameRoom.ts",
       "detail": "persistや一部setAlarmがcatchで無視される。障害後の状態整合性・再試行・通知が不足。結果精算には別途再試行があり既存回帰は成功。",
       "status": "未対応",
-      "evidence": "final-lounge-settlement.log / ソース確認"
+      "evidence": "final-lounge-settlement.log / ソース確認",
+      "followUpStatus": "対応・staging配信済み",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B06",
@@ -125,7 +135,9 @@
       "files": "client/src/ui/monster/layers.ts; client/src/styles/base.css",
       "detail": "VFX=2147483647、overlay=150。確認画面が表示されてもVFXは上に描かれる。pointer-events:noneにより操作は可能。UI・選択・結果・VFXの共通レイヤー規約が必要。",
       "status": "実盤面で確認・未対応",
-      "evidence": "layers/report.json / layers/dialog-during-vfx.png"
+      "evidence": "layers/report.json / layers/dialog-during-vfx.png",
+      "followUpStatus": "対応・staging配信済み",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B07",
@@ -134,7 +146,9 @@
       "files": "client/src/ui/assetReadiness.ts; client/src/net/api.ts",
       "detail": "decode/fetchの大部分にtimeoutなし。失敗応答では再試行UIが出るが、応答しない通信はPromiseが完了しない。切断中の再開・キャンセル試験が不足。",
       "status": "未対応・静的指摘",
-      "evidence": "ソース確認"
+      "evidence": "ソース確認",
+      "followUpStatus": "対応・staging配信済み",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B08",
@@ -143,7 +157,9 @@
       "files": "client/src/ui/monster/runtime.ts; client/src/ui/menuAssets.ts",
       "detail": "基準SHAでは静止カードにも常時RAF、DOM計測/Canvas消去、main JS約1.10MB raw。別セッションの最適化をd3d6b5d9へ統合済み。静止描画キャッシュ、game遅延ロード、WebP派生素材を追加。監査修正を含むsourcesで再typecheck/build/securityと配信hash一致を確認。",
       "status": "別セッションで修正・統合/配信済み",
-      "evidence": "docs/performance/2026-09-30 / integrated-staging-hashes.json / security-integrated.json"
+      "evidence": "docs/performance/2026-09-30 / integrated-staging-hashes.json / security-integrated.json",
+      "followUpStatus": "既存対応を保持・再検証",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B09",
@@ -152,7 +168,9 @@
       "files": "tests; package.json",
       "detail": "46本の自動抽出試験で41成功/5失敗。v47/v49は後続ルールとの差分、ceremony音声集合の差分、DOMグローバル不足、旧固定パス。deck試験の旧BOT導線は今回更新して成功。",
       "status": "deck導線のみ修正・残り未対応",
-      "evidence": "baseline-tests.json / 各失敗log / deck-browser-fixed.log"
+      "evidence": "baseline-tests.json / 各失敗log / deck-browser-fixed.log",
+      "followUpStatus": "対応・staging配信済み",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B10",
@@ -161,7 +179,9 @@
       "files": "package-lock.json",
       "detail": "npm audit全体9件（high7/moderate2）、omit-devはundici high1。後者はjsdom由来のNode用経路で、配信ブラウザ/Workerが脆弱機能を使用する証拠は未確認。依存分類の整理と更新が必要。",
       "status": "未対応・到達性を区別",
-      "evidence": "npm-audit-runtime.json / npm-audit-all.json"
+      "evidence": "npm-audit-runtime.json / npm-audit-all.json",
+      "followUpStatus": "対応・staging配信済み",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B11",
@@ -170,7 +190,9 @@
       "files": "package.json; scripts/deploy.sh",
       "detail": "リポジトリに.githubのCI定義なし。今回手動で最新main/配信versionを再確認するが、将来の古いworktree再配信を自動阻止する仕組みではない。",
       "status": "今回の配信では手動ガード",
-      "evidence": "sha-matrix.json / staging-before.json"
+      "evidence": "sha-matrix.json / staging-before.json",
+      "followUpStatus": "部分対応",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B12",
@@ -179,7 +201,9 @@
       "files": "server/schema.sql; server/migrations; server/package.json",
       "detail": "schema.sqlにfurnitureなし。db:initはschemaのみを適用し、現在のgetUserはfurnitureをSELECT。新環境は追加migration手順を要する。既存stagingはログイン成功。",
       "status": "未対応・新規環境の再現性不足",
-      "evidence": "securityテストDB準備 / ソース確認"
+      "evidence": "securityテストDB準備 / ソース確認",
+      "followUpStatus": "対応・staging配信済み",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B13",
@@ -188,7 +212,9 @@
       "files": "server/wrangler.toml; client/src/net/socket.ts",
       "detail": "observability設定なし。socketのJSON処理とonMessage例外を同じcatchで無視。エラー率/切断率/精算滞留の監視、同時接続負荷・復元訓練の証拠がない。外部設定は未確認。",
       "status": "未対応・運用監査範囲の限界",
-      "evidence": "ソース確認"
+      "evidence": "ソース確認",
+      "followUpStatus": "部分対応",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B14",
@@ -197,7 +223,9 @@
       "files": "server/src/oauth.ts; server/src/email.ts",
       "detail": "stagingのsecret名はAUTH_SECRETのみ。本番にはGOOGLE_CLIENT_SECRETとRESEND_API_KEYがあることを読取確認したが、実際のOAuth/配送は未検証。stagingの登録は自動認証扱い。",
       "status": "設定/別途E2Eが必要",
-      "evidence": "secret値は収集・保存せず名前のみ確認"
+      "evidence": "secret値は収集・保存せず名前のみ確認",
+      "followUpStatus": "今回は変更しない",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B15",
@@ -206,7 +234,9 @@
       "files": "client/public/_headers",
       "detail": "/art,/ui,/sfxを7日キャッシュ。コメントは名前変更前提だが固定名を更新する運用も可能。既存ブラウザで旧素材が残るため内容hash付きURL/版管理を統一する。",
       "status": "未対応・配信ハッシュ一致だけでは既存cacheを保証しない",
-      "evidence": "_headers / final live hashes"
+      "evidence": "_headers / final live hashes",
+      "followUpStatus": "対応・staging配信済み",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B16",
@@ -215,7 +245,9 @@
       "files": "server/src/gameInput.ts; server/src/gameRoom.ts; server/src/matchmaker.ts",
       "detail": "null/action欠落/型不正を受理していた。型・サイズ・action引数を検査し、状態を変更せず破棄する。",
       "status": "今回修正済み",
-      "evidence": "security-before.json / security-after.json"
+      "evidence": "security-before.json / security-after.json",
+      "followUpStatus": "既存対応を保持・再検証",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B17",
@@ -224,7 +256,9 @@
       "files": "server/src/rank.ts",
       "detail": "AUTH_SECRETが未設定の場合Bearer undefinedを比較していた。設定済みstaging/本番では再現しないが、新環境をfail closedへ修正。",
       "status": "今回修正済み",
-      "evidence": "security-after.json"
+      "evidence": "security-after.json",
+      "followUpStatus": "既存対応を保持・再検証",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "B18",
@@ -233,7 +267,9 @@
       "files": "server/src/gameRoom.ts:334",
       "detail": "精算済み終局ではalarmを削除するだけでroomの永続storageは削除しない。対戦ごとに残り続けるため、再接続/監査に必要な保存期間と削除方針を定める必要がある。今回のQA対戦も匿名テストIDを持つ終了roomが残る。",
       "status": "未対応・静的確認",
-      "evidence": "syncAlarm / recordResult / QA cleanup inspection"
+      "evidence": "syncAlarm / recordResult / QA cleanup inspection",
+      "followUpStatus": "今回は変更しない",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "C01",
@@ -242,7 +278,9 @@
       "files": "server/src/auth.ts; server/wrangler.toml",
       "detail": "現状同一originのため動作するが、別originのcredential付API用途では許可されない設定。不要ならCORSを削減し、必要ならallowlist化。",
       "status": "未対応",
-      "evidence": "ソース確認"
+      "evidence": "ソース確認",
+      "followUpStatus": "対応・staging配信済み",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "C02",
@@ -251,7 +289,9 @@
       "files": "client/src/ui/modal.ts",
       "detail": "確認modalにrole/dialog、aria-modal、focus移動/復帰、focus trapの明示実装がない。主要フローをキーボードと実端末の支援技術で検証する。",
       "status": "未対応",
-      "evidence": "ソース確認"
+      "evidence": "ソース確認",
+      "followUpStatus": "対応・staging配信済み",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "C03",
@@ -260,7 +300,9 @@
       "files": "server/src/auth.ts; server/src/email.ts; client/src/net/serverMsg.ts",
       "detail": "API/メールは韓国語または英語が中心。日本語UIの翻訳マッピング外エラーと配送画面を点検する必要がある。",
       "status": "未対応",
-      "evidence": "ソース確認"
+      "evidence": "ソース確認",
+      "followUpStatus": "部分対応",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     },
     {
       "id": "C04",
@@ -269,7 +311,11 @@
       "files": "client/vite.config.ts",
       "detail": "sourcemap:true、table-previewを本番入力に含む。即時の秘密漏えいは確認していないが、公開用途を明示して配信対象を限定する。",
       "status": "未対応",
-      "evidence": "build-fixed.log / ソース確認"
+      "evidence": "build-fixed.log / ソース確認",
+      "followUpStatus": "対応・staging配信済み",
+      "followUpEvidence": "../2026-09-30-bc/REPORT.md"
     }
-  ]
+  ],
+  "followUpReport": "../2026-09-30-bc/REPORT.md",
+  "statusScope": "status and original evidence retain the initial audit; followUpStatus records B/C follow-up."
 }

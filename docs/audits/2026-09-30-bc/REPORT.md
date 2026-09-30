@@ -45,10 +45,25 @@
 - [Cloudflare Rate Limiting仕様](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/)、[Workers Logs設定](https://developers.cloudflare.com/workers/observability/logs/workers-logs/) を確認して設定した。
 - CIのbranch protection/必須check設定、外部からの生のwrangler配信禁止はこのリポジトリ内変更だけでは強制できない。
 
-配信SHA、統合SHA、実ステージングの結果はrelease.jsonとevidenceへ追記する。本番配信は行わない。
+## 配信・検証結果
+
+- 監査修正runtime **`54fdfc991deb1589cf9817aa299d2ad4f7f78e45`** をmainへpush・統合し、[ステージング](https://test.yourlore.xyz)へ配信済み。version **`4b71de4f-861f-4b78-b925-a80fe864a037`**。本番には配信していない。
+- 配信ガード内で型検査・現行47回帰・buildが成功。[配信ログ](evidence/deploy-final.log)、[中断時の子process/lock/snapshot解放](evidence/deploy-interruption.json)。依存監査は0件。
+- このruntimeで公開103ファイルのhash一致、現行41音源のhash一致を確認。[配信ファイル](evidence/live/hashes.json)、[音源](evidence/staging-sounds.json)。
+- 実認証した2ユーザーで招待の同時承諾が同じroomへ解決し、98操作・18ターン・再接続・正常終局まで成功。[実対戦](evidence/staging-online.json)。BOT fixtureとは分けている。
+- PC/390pxで7メニュー、HOMEの実BGMループ、BOT開始から対戦BGMへの移行と約3秒のループ間隔を確認。[ブラウザ](evidence/live/browser.json)。
+- 実APIで型不正400、過大本文413、問い合わせ429/Retry-After、固定asset再検証cache、map404、CORSを確認。[API・headers](evidence/staging-hardening.json)。rate limitは地域内の近似値で、初回の即時burstでは429にならず、間隔を設けた再試験で確認した。厳密な全世界quotaとしては扱わない。
+- 検証用2アカウントと関連レコードはstagingの14テーブルで残数0を確認。資格情報ファイルも削除。完了した対戦DOはB18の判断に従い保持。[後始末](evidence/qa-cleanup.json)。
+- 最終SHA関係と、後続サウンド変更を含む配信の独立照合は [release.json](release.json) に記録する。上記54fdfc99での実対戦結果を後続SHAで再実施した結果に読み替えない。
 
 ## 並行SHAの取り込み
 
 - 初期基準5d62092bに、792bbf27のプレイヤー枠位置調整を取り込んだ。
 - 配信前に共有mainのみへ先行していた効果音v5（1bfea19b/0b06fea0/e2f21172）を検出し、配信処理を中断して統合。音源と承認済みdraw-3固定を保持し、音声回帰もv5 manifestで照合する。
 - 配信ガードはremoteだけでなくlocal mainの祖先関係、配信versionの変化も検査するよう追加した。
+
+- 証跡整理中の後続main `0e82212e`（0ダメージ接触抑制・魔法音v6）も取り込み。配信は音声担当タスクへ一本化し、こちらは旧SHAを再配信しない。新規audio-contact-rulesを一括回帰へ追加した。
+
+- 後続`0e82212e`は音声担当が共有ガード経由でversion **`7543a42d-8416-4138-a09f-ede0dc4b67c7`**へ配信。こちらで型検査/build、現行41音源を含む公開142ファイルのhash一致を独立確認。[最新配信](evidence/staging-integrated.json)、[142ファイル照合](evidence/integrated-hashes.json)。
+
+- 最終統合ソースで **48/48回帰成功**。新規の0ダメージ接触ルール試験も一括実行へ追加。[48件結果](evidence/suite-v6.json)、[ログ](evidence/suite-v6.log)。最終証跡commitの変更範囲はdocs/testsのみでruntimeを変えない。

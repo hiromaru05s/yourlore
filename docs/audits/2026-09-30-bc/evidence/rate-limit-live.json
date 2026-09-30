@@ -1,0 +1,47 @@
+{
+  "scope": "Malformed requests only; no inquiry rows created",
+  "rows": [
+    {
+      "status": 400,
+      "ray": "a42fac8b3a260f99-EWR",
+      "retry": null,
+      "body": "{\"error\":\"invalid request\"}"
+    },
+    {
+      "status": 400,
+      "ray": "a42fac8ffe100f99-EWR",
+      "retry": null,
+      "body": "{\"error\":\"invalid request\"}"
+    },
+    {
+      "status": 400,
+      "ray": "a42fac93792b0f99-EWR",
+      "retry": null,
+      "body": "{\"error\":\"invalid request\"}"
+    },
+    {
+      "status": 400,
+      "ray": "a42fac96fb7c0f99-EWR",
+      "retry": null,
+      "body": "{\"error\":\"invalid request\"}"
+    },
+    {
+      "status": 400,
+      "ray": "a42fac9a7de10f99-EWR",
+      "retry": null,
+      "body": "{\"error\":\"invalid request\"}"
+    },
+    {
+      "status": 400,
+      "ray": "a42fac9df8720f99-EWR",
+      "retry": null,
+      "body": "{\"error\":\"invalid request\"}"
+    },
+    {
+      "status": 429,
+      "ray": "a42faca1cb430f99-EWR",
+      "retry": "60",
+      "body": "{\"error\":\"rate limited\"}"
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+{
+  "source": "0e82212e92b566858c16c2de983c02e3538eba1b",
+  "suiteManifestChange": "Adds existing audio-contact-rules to current suite",
+  "passed": 48,
+  "total": 48,
+  "results": [
+    {
+      "file": "tests/attack-vfx.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/audio-contact-rules.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/audio-v3.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/balance-v52.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/biblion-vfx.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/connected-return-motion.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/dew-shield-v54.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/dice-model.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/dice-source.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/duel-ui.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/expansion-v50.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/fate-wheel.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/grounded-motion.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/half-elf-v48.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/hand-condition-rules.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/health-cosmetics-v53.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/home-entrance-parity.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/library-furniture-model.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/lounge-horizon.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/lounge-rank.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/lounge-settlement.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/menu-records.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/menu-selected.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/monster-animation-rules.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/motion-v2.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/opening-hands.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/paper-card.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/pile-stock.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/portal-return-motion.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/purchase-vfx.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/quest-quick.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/quick-playback.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/rank-emblem.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/rank-sound.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/release-furniture-model.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/rift-fold.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/rift-transmute.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/solid-draw.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/stagecraft-models.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/stat-rise.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/trap-related-rework.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/trap-removal.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/ceremony-audio-aim.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/trap-removal-tutorial.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/production-security.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/production-bc.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/duel-opening-server.mjs",
+      "passed": true
+    },
+    {
+      "file": "tests/dew-shield-server.mjs",
+      "passed": true
+    }
+  ]
+}

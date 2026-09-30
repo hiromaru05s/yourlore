@@ -1,0 +1,100 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-09-30T02:07:39.186Z",
+  "authenticated": true,
+  "apiFixtures": false,
+  "checks": [
+    "all seven menus retain one playing BGM instance with native loop",
+    "real HOME audio crosses track end and loops",
+    "all menus fit desktop and 390px mobile",
+    "real BOT opening, HOME release, intro to battle, relative gain and three-second battle loop gap"
+  ],
+  "routes": [
+    {
+      "name": "deck",
+      "tracks": [
+        {
+          "paused": false,
+          "time": 0.595617,
+          "loop": true,
+          "src": "/music/yohaku-to-zankyo.mp3"
+        }
+      ]
+    },
+    {
+      "name": "cards",
+      "tracks": [
+        {
+          "paused": false,
+          "time": 3.294075,
+          "loop": true,
+          "src": "/music/yohaku-to-zankyo.mp3"
+        }
+      ]
+    },
+    {
+      "name": "leaderboard",
+      "tracks": [
+        {
+          "paused": false,
+          "time": 8.298979,
+          "loop": true,
+          "src": "/music/yohaku-to-zankyo.mp3"
+        }
+      ]
+    },
+    {
+      "name": "friends",
+      "tracks": [
+        {
+          "paused": false,
+          "time": 8.996934,
+          "loop": true,
+          "src": "/music/yohaku-to-zankyo.mp3"
+        }
+      ]
+    },
+    {
+      "name": "shop",
+      "tracks": [
+        {
+          "paused": false,
+          "time": 9.586942,
+          "loop": true,
+          "src": "/music/yohaku-to-zankyo.mp3"
+        }
+      ]
+    },
+    {
+      "name": "tutorial",
+      "tracks": [
+        {
+          "paused": false,
+          "time": 11.904222,
+          "loop": true,
+          "src": "/music/yohaku-to-zankyo.mp3"
+        }
+      ]
+    },
+    {
+      "name": "home",
+      "tracks": [
+        {
+          "paused": false,
+          "time": 12.347606,
+          "loop": true,
+          "src": "/music/yohaku-to-zankyo.mp3"
+        }
+      ]
+    }
+  ],
+  "battle": {
+    "volume": 0.14699999999999996,
+    "active": [
+      "/music/poised-opening.mp3"
+    ],
+    "loopGapMs": 3014.2999999523163
+  },
+  "errors": [],
+  "failed": []
+}

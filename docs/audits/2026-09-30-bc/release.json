@@ -1,0 +1,94 @@
+{
+  "baseline": "5d62092b",
+  "auditRuntime": "54fdfc991deb1589cf9817aa299d2ad4f7f78e45",
+  "stagingOrigin": "https://test.yourlore.xyz",
+  "auditDeployment": {
+    "id": "ae4ae496-beee-40db-9717-f6833400f081",
+    "source": "wrangler",
+    "strategy": "percentage",
+    "author_email": "maruru836818@gmail.com",
+    "annotations": {
+      "workers/message": "54fdfc991deb1589cf9817aa299d2ad4f7f78e45 guarded release",
+      "workers/triggered_by": "deployment"
+    },
+    "versions": [
+      {
+        "version_id": "4b71de4f-861f-4b78-b925-a80fe864a037",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-09-30T02:04:12.650569Z"
+  },
+  "concurrentIncluded": [
+    "792bbf27",
+    "1bfea19b",
+    "0b06fea0",
+    "e2f21172"
+  ],
+  "subsequentIntegratedSource": "0e82212e92b566858c16c2de983c02e3538eba1b",
+  "counts": {
+    "newlyAddressed": 14,
+    "previouslyAddressed": 3,
+    "partial": 3,
+    "unchanged": 2
+  },
+  "remaining": [
+    "B11",
+    "B13",
+    "B14",
+    "B18",
+    "C03"
+  ],
+  "auditRuntimeEvidence": {
+    "nodeSuites": 47,
+    "typecheck": true,
+    "build": true,
+    "publicHashes": 103,
+    "soundHashes": 41,
+    "authenticatedMatchActions": 98,
+    "turns": 18,
+    "reconnected": true,
+    "completedMatch": true,
+    "realBgmAndSevenMenuChecks": true,
+    "realInputRateCacheCorsChecks": true
+  },
+  "ci": {
+    "active": false,
+    "reason": "GitHub rejected workflow creation because current push token lacks workflow scope",
+    "preparedDefinition": "production-checks.yml"
+  },
+  "qaCleanup": "evidence/qa-cleanup.json",
+  "productionDeployed": false,
+  "coverageBoundary": [
+    "Real authenticated match and seven-menu BGM checks were performed on auditRuntime, not automatically attributed to later sound commits.",
+    "No global exact rate quota, load/failover certification, physical iOS/Android certification, or live OAuth/email E2E.",
+    "Concurrent unpublished shared workspace modifications remain untouched."
+  ],
+  "latestIntegratedDeployment": {
+    "id": "b5bc73db-5926-4b4d-bf51-162c40e938df",
+    "source": "wrangler",
+    "strategy": "percentage",
+    "author_email": "maruru836818@gmail.com",
+    "annotations": {
+      "workers/message": "0e82212e92b566858c16c2de983c02e3538eba1b guarded release",
+      "workers/triggered_by": "deployment"
+    },
+    "versions": [
+      {
+        "version_id": "7543a42d-8416-4138-a09f-ede0dc4b67c7",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-09-30T02:16:36.907213Z"
+  },
+  "latestIntegratedVerification": {
+    "source": "0e82212e92b566858c16c2de983c02e3538eba1b",
+    "publicHashMatches": 142,
+    "includesAll41SoundClips": true,
+    "typecheck": true,
+    "build": true,
+    "authenticatedMatchReplayed": false,
+    "sourceIsDescendantOfAuditRuntime": true,
+    "nodeSuites": 48
+  }
+}

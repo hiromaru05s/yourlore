@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "signal": "SIGINT",
+  "exitCode": 1,
+  "childTerminated": true,
+  "sharedLockRemoved": true,
+  "snapshotWorktreeRemoved": true,
+  "remote": "temporary local bare fixture",
+  "stagingTouched": false
+}

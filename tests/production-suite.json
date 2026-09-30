@@ -1,6 +1,7 @@
 {
   "current": [
     "tests/attack-vfx.mjs",
+    "tests/audio-contact-rules.mjs",
     "tests/audio-v3.mjs",
     "tests/balance-v52.mjs",
     "tests/biblion-vfx.mjs",

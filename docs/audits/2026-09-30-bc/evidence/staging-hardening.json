@@ -1,0 +1,42 @@
+{
+  "checks": [
+    {
+      "path": "/api/auth/login",
+      "status": 400
+    },
+    {
+      "path": "/api/social/friends/request",
+      "status": 400
+    },
+    {
+      "path": "/api/auth/login",
+      "status": 413
+    }
+  ],
+  "inquiryStatuses": [
+    400,
+    400,
+    400,
+    400,
+    400,
+    400,
+    429
+  ],
+  "rateLimitBoundary": "Regional approximate limiter; initial immediate burst did not reach 429, paced requests confirmed 429/Retry-After. Not an exact global quota.",
+  "cache": [
+    {
+      "path": "/sfx/lore-v5/attack-1.mp3",
+      "control": "public, max-age=0, must-revalidate"
+    },
+    {
+      "path": "/music/yohaku-to-zankyo.mp3",
+      "control": "public, max-age=0, must-revalidate"
+    },
+    {
+      "path": "/art/biblion/modular/base-mon-ui.webp",
+      "control": "public, max-age=0, must-revalidate"
+    }
+  ],
+  "sourceMapStatus": 404,
+  "cors": "same-origin; no wildcard credential headers"
+}
