@@ -1,0 +1,9 @@
+{
+  "result": {
+    "hadLoader": true,
+    "canLeave": true,
+    "children": 0,
+    "game": false
+  },
+  "errors": []
+}

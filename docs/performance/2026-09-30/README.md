@@ -30,7 +30,7 @@ The 14-card sample previously made 4,228 geometry reads, 4,228 computed-style re
 |---|---|---|
 | Startup artwork | Load shared chrome and visible destination assets; remove all-card/all-cosmetic preload | Two production cold comparisons; 33 menu interactions and entrance regression |
 | Initial JavaScript | Load game/controllers/BOT weights at battle entry; isolate tutorial metadata | Production HOME/rules do not fetch game chunk; tutorial advances; BOT plays opening and finishes surrender |
-| Load failure/lifecycle | Pending screen can be destroyed; failed module fetch offers full reload | Production failed-download recovery |
+| Load failure/lifecycle | Pending screen can be destroyed; failed module fetch offers full reload | Production failed-download recovery; cancellation before import resolves leaves no mounted game |
 | Card frames and seals | Resized lossless WebP derivatives (512px frames, 256px seals) | All originals retained; full-art zoom uses original frame; browser board/menu inspection |
 | Persistent card states | Cache geometry until projection/resize/scroll/source mutation, sleep static states and hidden tabs | Static counters zero; resize alignment; highlight invalidation; removal/disposal |
 | Actor transforms | Reuse DOM references and matrix operations; avoid repeated style-string setup and empty stat clears | 720 supported pose cases; matching canvas pixels/filters/fragment styles; matrix serialization difference ≤ 1e−7 |
@@ -54,3 +54,7 @@ Functional tests and visual checks are separate: transform/effect parity and lif
 Raw profiles, additional PNGs and playback video are retained in the isolated worktree; selected screenshots and JSON evidence are committed. Account/API responses in browser checks are fixtures. Authenticated online/network/security coverage belongs to the separately integrated production audit.
 
 No production deployment or database migration is included. Staging verification is recorded after integration and deployment.
+
+## Integrated verification
+
+Integrated audit runtime `cb571de9` in `19170fcf` without conflicts. Client/server typecheck, production build, 11 security regressions, monster/controller regression and production lazy tutorial/BOT/reload tests pass on the combined tree. Pending game cancellation also leaves no late-mounted game. Initial main JS after integration is 802.12 KB / 313.13 KB gzip.
