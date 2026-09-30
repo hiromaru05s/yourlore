@@ -1,0 +1,153 @@
+{
+  "commit": "f2c1e37b70d75d9ed092be38b3631dce93647f5e",
+  "sources": [
+    {
+      "file": "client/public/art/biblion/modular/attack-ui.webp",
+      "sha256": "6ebebcf00558aa5f710c7a84541806483a6d9bf8084c59387e1bd0df820e4af6"
+    },
+    {
+      "file": "client/public/art/biblion/modular/base-mon-ui.webp",
+      "sha256": "33a96ef6985139b2d8f85a2d6d2d953ea0e44460318e252d635b4bf71b728043"
+    },
+    {
+      "file": "client/public/art/biblion/modular/base-quest-ui.webp",
+      "sha256": "aa6006a29ce1a186180cd330947b60052ff0c797ab02ef1651f383610aa8ab38"
+    },
+    {
+      "file": "client/public/art/biblion/modular/base-spell-ui.webp",
+      "sha256": "ad2c8acfbc974629258c9fc65115504e6649f02f0a656dc0952fa41f65e020aa"
+    },
+    {
+      "file": "client/public/art/biblion/modular/base-trap-ui.webp",
+      "sha256": "7ad4caab9dc879719b767237c52eb0cc3c3c0f5a9fa7b6d042694419d5a87455"
+    },
+    {
+      "file": "client/public/art/biblion/modular/cost-ui.webp",
+      "sha256": "e042c8c39aa78d9788a96339d7dcec76e346949adc4e515de5bd757f91f2f5d2"
+    },
+    {
+      "file": "client/public/art/biblion/modular/dew-ui.webp",
+      "sha256": "a3153f1c85c711b30e69045e46ac08d3a37c24db4e21b8e85fd1dcd0e3e597aa"
+    },
+    {
+      "file": "client/public/art/biblion/modular/field-mon-ui.webp",
+      "sha256": "ecfd0f90f7825a45e7f9ed28e8e2ad13b87ab0e69cd053c03a59e0bc6079f238"
+    },
+    {
+      "file": "client/public/art/biblion/modular/field-quest-ui.webp",
+      "sha256": "dd59d5661620ec94d54c0e3e52323e31f9ae879e8b6e7df2e2b64cbe5e5fd07c"
+    },
+    {
+      "file": "client/public/art/biblion/modular/field-spell-ui.webp",
+      "sha256": "85800bc78a0b94370cf08ba2b00741fb8c32f0de4632e004748e0416e209d5a6"
+    },
+    {
+      "file": "client/public/art/biblion/modular/field-trap-ui.webp",
+      "sha256": "ac5adf04169672da658c2c0dae36b81c9cb58af0b307682fd66495db078ea64a"
+    },
+    {
+      "file": "client/public/art/biblion/modular/health-ui.webp",
+      "sha256": "6002f9a278afedd5b859b6f320fde6044b65ece45085abef62919d8bad16a337"
+    },
+    {
+      "file": "client/public/art/biblion/modular/infinity-ui.webp",
+      "sha256": "e00e0f6020a91c80baa1ca959b2af09b25d464d81120e8790ce1d4f6033e824a"
+    },
+    {
+      "file": "client/public/art/biblion/modular/plaque-ui.webp",
+      "sha256": "35817c3e11101ae1457101ab4f5d43c3a13bcd5e06215bdac7edd7e5bd685f6c"
+    },
+    {
+      "file": "client/public/art/biblion/modular/shield-ui.webp",
+      "sha256": "72216a220af6a18ee62133b4baae236bfeb046c7236e3d49089f18bdeb6c2b7d"
+    },
+    {
+      "file": "client/src/game/tutorial.ts",
+      "sha256": "5ed853625702cf2fc9c9092957172ac2a07f5319e0be4fcb12fc5f30a605d2f8"
+    },
+    {
+      "file": "client/src/router.ts",
+      "sha256": "ee2adabad8d736230e296167bf0182782ce40f185fa455172fe560734ec94729"
+    },
+    {
+      "file": "client/src/screens/game.ts",
+      "sha256": "027da05f0850410bd3a177933b6ec33e313e79ddac1793ccb722f6cf18062c88"
+    },
+    {
+      "file": "client/src/screens/lazyGame.ts",
+      "sha256": "ecd46b58cea5bb7a4b0a5ff3ca61098ac665dc56029fd89c3911f8340f089a22"
+    },
+    {
+      "file": "client/src/screens/tutorial.ts",
+      "sha256": "fb837a6f17e6710faaf3db5e4532e057c167eebca48c52a004782cd70d24cdfe"
+    },
+    {
+      "file": "client/src/shared/cards.ts",
+      "sha256": "c62fed2442dd1519293a84d760840883ce64e815a9e09ce74cbf9fc7cbede73b"
+    },
+    {
+      "file": "client/src/shared/tutorialSteps.ts",
+      "sha256": "8b25a8cf6a8cdf73e439b09f21ec0f6d71b24198b17fce6ade43fff17ee43ccc"
+    },
+    {
+      "file": "client/src/styles/card.css",
+      "sha256": "494f20284f3d472753f08b587b0c4ba1c3f65257527435ab803ef6e9720f27b6"
+    },
+    {
+      "file": "client/src/styles/game.css",
+      "sha256": "ad455c424bc81ca2459adffd96837f83b341a1c434427e5ac3cef547b7355b1c"
+    },
+    {
+      "file": "client/src/styles/reading-board.css",
+      "sha256": "3655825acfe153679d1eb69e4a2e40f8407f3583813531c391604b65be080e25"
+    },
+    {
+      "file": "client/src/ui/anim.ts",
+      "sha256": "34c098a2e6df2eaa3aeb4b34644a3d1bc076e6414e55a4190ddc98d1f78b6d0d"
+    },
+    {
+      "file": "client/src/ui/assetReadiness.ts",
+      "sha256": "fa4b3accef2ac1cd0f0a976b695ed16bb7dc2307077bd60e2e1eca68e81d4a2f"
+    },
+    {
+      "file": "client/src/ui/boardProjection.ts",
+      "sha256": "bdf12a28051128396c4b2b7968919d8d34dd2d7f8f2246d1a49f0e29ed90a0ef"
+    },
+    {
+      "file": "client/src/ui/boardView.ts",
+      "sha256": "ab98c5451ad1ea7bd36699b8757bd3c9f8e33e345199a7d0c6f099bbd06588c2"
+    },
+    {
+      "file": "client/src/ui/cardSurface.ts",
+      "sha256": "447cdef01d169992532a367d90391696b9fbbb8a036f41b781aee38e66c0df28"
+    },
+    {
+      "file": "client/src/ui/cardView.ts",
+      "sha256": "42483a9fe5da61068bdc350f7705c2a86e08772be499ef305e51715f570fb3ac"
+    },
+    {
+      "file": "client/src/ui/duelReadiness.ts",
+      "sha256": "fbf07fa18a5a638063a19070b8a34c83f85e4538b12625dab2b96813c4d2f09e"
+    },
+    {
+      "file": "client/src/ui/menuAssets.ts",
+      "sha256": "8e16c19dfc68bacc8ff39fe51d6d025898ac906b8e429dd8496d183359464570"
+    },
+    {
+      "file": "client/src/ui/monster/actor.ts",
+      "sha256": "69c4ad51ca87919b42ace0e7d5141fad0106d6c4f64abaee897fa7c319320390"
+    },
+    {
+      "file": "client/src/ui/monster/layers.ts",
+      "sha256": "4223db83f086f0c374643b805d38f141e929e7f058c3eec276997273c3b9da28"
+    },
+    {
+      "file": "client/src/ui/monster/runtime.ts",
+      "sha256": "1bcb85ea37c4f6c7bc45428502ef7d0c855292182bde71185fae3dcb68a2f850"
+    },
+    {
+      "file": "scripts/build-ui-rasters.py",
+      "sha256": "c362aa85fea6143f6ff1be869e37b396f8ccd8401421f46bbba1e3d38a09690f"
+    }
+  ]
+}

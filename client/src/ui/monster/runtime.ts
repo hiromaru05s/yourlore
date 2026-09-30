@@ -8,12 +8,14 @@ import {projectedPlacement} from '../boardProjection';
 type Layers=ReturnType<typeof mountAnimationLayers>;
 let layers:Layers|undefined;
 const fieldLayers=new Map<HTMLElement,Layers>();
+const observers=new Map<HTMLElement,MutationObserver>();
+const motion=matchMedia('(prefers-reduced-motion:reduce)');
 let frame=0, skipped=false;
 const jobs=new Map<HTMLElement,Job>();
-const states=new Map<HTMLElement,{actor:Actor;opacity:string;root:HTMLElement;layer:Layers}>();
+const states=new Map<HTMLElement,{actor:Actor;opacity:string;root:HTMLElement;layer:Layers;rect?:Rect;dirty:boolean}>();
 type Options={variant?:Variant;anchor?:HTMLElement;target?:HTMLElement;destination?:HTMLElement;side?:number;signal?:AbortSignal;onImpact?:()=>void;exhaust?:boolean;stats?:Actor['stats']};
 type Job={source:HTMLElement;actor:Actor;kind:Kind;variant:Variant;start:number;ms:number;r:Rect;target:Rect;destination?:Rect;options:Options;opacity:string;finish:(complete:boolean)=>void;impacted:boolean;hit?:{actor:Actor;node:HTMLElement;opacity:string}};
-const reduced=()=>matchMedia('(prefers-reduced-motion:reduce)').matches;
+const reduced=()=>motion.matches;
 export function monsterRect(n:HTMLElement):Rect{const r=n.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2,w:r.width,h:r.height,matrix:projectedPlacement(n,r.width,r.height)};}
 function ensure(){if(!layers){layers=mountAnimationLayers(document.body,true);layers.root.setAttribute('aria-hidden','true');}return layers;}
 function ensureField(root:HTMLElement){
@@ -21,40 +23,63 @@ function ensureField(root:HTMLElement){
  if(!layer){layer=mountAnimationLayers(root.querySelector<HTMLElement>('.stage')??root,false,'field');layer.root.setAttribute('aria-hidden','true');fieldLayers.set(root,layer);}
  return layer;
 }
-function schedule(){if(!frame)frame=requestAnimationFrame(tick);}
+function schedule(){if(!frame&&!document.hidden)frame=requestAnimationFrame(tick);}
+function invalidateGeometry(){for(const s of states.values()){s.rect=undefined;s.dirty=true;}schedule();}
+function observeField(root:HTMLElement){
+ let observer=observers.get(root);
+ if(!observer){observer=new MutationObserver(records=>{
+  for(const record of records){const n=record.target as HTMLElement,s=states.get(n);if(s){s.dirty=true;if(record.type==='attributes'&&record.attributeName==='style')s.rect=undefined;}}
+  for(const [n] of states)if(!n.isConnected)removeState(n);
+  release();schedule();
+ });observers.set(root,observer);}
+ observer.disconnect();
+ for(const [n,s] of states)if(s.root===root)observer.observe(n,{attributes:true,attributeFilter:['class','style','data-monster-aura','data-monster-blocked']});
+ for(const zone of root.querySelectorAll('.zone-mon'))observer.observe(zone,{childList:true});
+}
 function removeState(n:HTMLElement){const s=states.get(n);if(!s)return;s.actor.dispose();n.style.opacity=s.opacity;states.delete(n);}
 export function syncMonsterStates(root:HTMLElement){
  for(const [n,s] of states)if(s.root===root||!n.isConnected)removeState(n);
  if(!root.isConnected){release();return;}
  for(const n of root.querySelectorAll<HTMLElement>('.zone-mon .card[data-uid]')){
   if(!n.classList.contains('is-attacker')&&!n.dataset.monsterAura&&!n.dataset.monsterBlocked)continue;
-  const layer=ensureField(root),actor=new Actor(n,layer.cards);states.set(n,{actor,root,layer,opacity:n.style.opacity});n.style.opacity='0';
+  const layer=ensureField(root),actor=new Actor(n,layer.cards);states.set(n,{actor,root,layer,opacity:n.style.opacity,dirty:true});n.style.opacity='0';
  }
- release();if(states.size)schedule();
+ if([...states.values()].some(s=>s.root===root))observeField(root);release();if(states.size)schedule();
 }
 export function clearMonsterStates(root:HTMLElement){for(const j of [...jobs.values()])if(root.contains(j.source))j.finish(false);for(const [n,s] of states)if(s.root===root)removeState(n);release();}
 export function setMonsterSkip(value:boolean){skipped=value;if(value)for(const j of [...jobs.values()])j.finish(false);}
 function release(){
- for(const [root,layer] of fieldLayers)if(![...states.values()].some(s=>s.root===root)){layer.dispose();fieldLayers.delete(root);}
+ for(const [root,layer] of fieldLayers)if(![...states.values()].some(s=>s.root===root)){layer.dispose();fieldLayers.delete(root);observers.get(root)?.disconnect();observers.delete(root);}
  if(!jobs.size){layers?.dispose();layers=undefined;}
  if(!states.size&&!jobs.size){cancelAnimationFrame(frame);frame=0;}
 }
 function tick(now:number){
- frame=0;const active=layers;active?.begin(innerWidth,innerHeight);
- for(const layer of fieldLayers.values())layer.begin(innerWidth,innerHeight);
+ frame=0;if(document.hidden)return;
+ const active=layers;active?.begin(innerWidth,innerHeight);
+ // Measure all dirty sources before touching clone styles. Idle geometry stays cached
+ // until board projection, resize, scrolling, rendering or source style changes.
+ for(const [n,s] of states)if(n.isConnected&&!s.rect)s.rect=monsterRect(n);
+ const hidden=new Set<HTMLElement>(jobs.keys());for(const job of jobs.values())if(job.hit)hidden.add(job.hit.node);
+ const readyLayers=new Set<Layers>();for(const [n,s] of states)if(n.classList.contains('is-attacker')||s.dirty)readyLayers.add(s.layer);
+ for(const layer of readyLayers)layer.begin(innerWidth,innerHeight);
+ let animated=false;
  for(const [n,s] of states){
   if(!n.isConnected){removeState(n);continue;}
-  if(jobs.has(n)||[...jobs.values()].some(j=>j.hit?.node===n)||n.classList.contains('is-dragging')||n.style.visibility==='hidden'||document.hidden){s.actor.hide();continue;}
-  const r=monsterRect(n),ready=n.classList.contains('is-attacker'),blocked=!!n.dataset.monsterBlocked;
+  if(hidden.has(n)||n.classList.contains('is-dragging')||n.style.visibility==='hidden'){s.actor.hide();s.dirty=true;continue;}
+  const r=s.rect!,ready=n.classList.contains('is-attacker'),blocked=!!n.dataset.monsterBlocked;
+  const dynamic=!reduced()&&(ready||!!n.dataset.monsterAura);animated||=dynamic;
+  if(!s.dirty&&!dynamic){if(ready)drawEffect(s.layer.foreground,'ready','C',0,r,r,{active:true,reduced:true,side:n.closest('#oppRow')?-1:1,pass:'front'});continue;}
+  s.dirty=false;
+  const side=n.closest('#oppRow')?-1:1;
   const k=ready?'ready':blocked?'blocked':'aura',v=ready?'C':blocked?'B':'C',t=ready?(now%2200)/2200:blocked?1:(now%4400)/4400;
-  s.actor.paint(k,v,t,r,r,reduced(),true,n.closest('#oppRow')?-1:1);s.actor.el.dataset.monsterKind=k;s.actor.el.dataset.monsterVariant=v;
+  s.actor.paint(k,v,t,r,r,reduced(),true,side);s.actor.el.dataset.monsterKind=k;s.actor.el.dataset.monsterVariant=v;
   if(n.dataset.monsterAura){
    if(!ready&&!blocked)s.actor.el.style.setProperty('filter',ongoingFilter('C',t,reduced()),'important');
    else {const f=s.actor.el.style.filter;s.actor.el.style.setProperty('filter',`${f} ${ongoingFilter('C',(now%4400)/4400,reduced()).replace('drop-shadow(0 2px 4px #0009)','')}`,'important');}
   }
   for(const cls of ['is-aiming','is-atk-target','is-targetable'])s.actor.el.classList.toggle(cls,n.classList.contains(cls));
   if(n.classList.contains('is-atk-target')||n.classList.contains('is-targetable'))s.actor.el.style.setProperty('filter',s.actor.el.style.filter+' drop-shadow(0 0 5px #ff7955)','important');
-  if(ready)drawEffect(s.layer.foreground,'ready','C',t,r,r,{active:true,reduced:reduced(),side:n.closest('#oppRow')?-1:1,pass:'front'});
+  if(ready)drawEffect(s.layer.foreground,'ready','C',t,r,r,{active:true,reduced:reduced(),side,pass:'front'});
  }
  for(const j of [...jobs.values()]){
   if(!active)break;
@@ -78,7 +103,7 @@ function tick(now:number){
   }
   if(t>=1)j.finish(true);
  }
- release();if(jobs.size||states.size)schedule();
+ release();if(jobs.size||animated)schedule();
 }
 export function playMonster(source:HTMLElement,kind:Kind,options:Options={}):Promise<boolean>{
  jobs.get(source)?.finish(false);
@@ -98,4 +123,8 @@ export function playMonster(source:HTMLElement,kind:Kind,options:Options={}):Pro
  });
 }
 window.addEventListener('resize',()=>{for(const j of [...jobs.values()])j.finish(false);});
-document.addEventListener('visibilitychange',()=>{if(document.hidden)for(const j of [...jobs.values()])j.finish(false);});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){for(const j of [...jobs.values()])j.finish(false);cancelAnimationFrame(frame);frame=0;}else invalidateGeometry();});
+window.addEventListener('resize',invalidateGeometry);
+document.addEventListener('scroll',invalidateGeometry,true);
+document.addEventListener('lore:board-projected',invalidateGeometry);
+motion.addEventListener('change',invalidateGeometry);

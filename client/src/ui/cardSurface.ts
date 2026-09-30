@@ -119,7 +119,7 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
   }
   for (const label of node.querySelectorAll<HTMLElement>('.card-status .ec,.card-status .kw,.badge')) {
     const b = box(label);
-    layers.push(async () => { ctx.drawImage(await matte('/art/biblion/modular/plaque.png'), b.x,b.y,b.w,b.h); });
+    layers.push(async () => { ctx.drawImage(await matte('/art/biblion/modular/plaque-ui.webp'), b.x,b.y,b.w,b.h); });
     layers.push(drawText(label));
   }
   await Promise.all([backImage, image(frameUrl), ...(art ? [image(art.currentSrc || art.src).catch(()=>null)] : [])]);
@@ -160,7 +160,7 @@ export async function captureQuestTile(node:HTMLElement):Promise<HTMLCanvasEleme
     c.textAlign='center';c.textBaseline='middle';c.fillStyle=style.color;c.shadowColor='#000';c.shadowBlur=3*w/r.width;c.shadowOffsetY=w/r.width;
     c.fillText(value,b.x+b.w/2,b.y+b.h/2,b.w);c.restore();
   };
-  const [fr,ar,seal]=await Promise.all([matte(urlOf(frame)!),image(urlOf(art)!),matte('/art/biblion/modular/cost.png')]);
+  const [fr,ar,seal]=await Promise.all([matte(urlOf(frame)!),image(urlOf(art)!),matte('/art/biblion/modular/cost-ui.webp')]);
   c.drawImage(fr,pad,pad,w,h);c.save();
   const path=document.querySelector('#celestial-field-spell path')?.getAttribute('d');
   if(path){c.translate(pad,pad);c.scale(w,h);c.clip(new Path2D(path));c.scale(1/w,1/h);c.translate(-pad,-pad);}

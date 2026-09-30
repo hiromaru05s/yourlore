@@ -235,7 +235,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
       const zone=document.querySelector(side==='me'?'#meRow .zone-st':'#oppRow .zone-st');
       const target=(slotIndex==null?zone?.querySelector('.slot'):zone?.children[Math.min(slotIndex,zone.children.length-1)]) as HTMLElement|null;
       if(target){
-        const duration=enchantHasTurnCountdown(card)?`<span class="buff-duration"><span>${getLang()==='ja'?'残り':''}${card.val??1}</span></span>`:'<img class="buff-infinity" src="/art/biblion/modular/infinity.png" alt="">';
+        const duration=enchantHasTurnCountdown(card)?`<span class="buff-duration"><span>${getLang()==='ja'?'残り':''}${card.val??1}</span></span>`:'<img class="buff-infinity" src="/art/biblion/modular/infinity-ui.webp" alt="">';
         if(card.t==='quest'){
           const face=questTile(card);
           if(!fxSkip&&await boardMotionScope(signal=>foldQuestIntoSlot(node,target,face,signal),6500))return face.parentElement;

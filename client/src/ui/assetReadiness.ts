@@ -37,13 +37,14 @@ export async function waitAssets(urls:string[],host:HTMLElement,onProgress?:(don
   });
  }
 }
-export function coverScreen(root:HTMLElement,preloadMenu=false,homeEntrance=false):{ready:()=>Promise<boolean>;cancel:()=>void}{
+export const hasUnloadedAssets=(urls:string[])=>urls.some(url=>!loaded.has(canonical(url)));
+export function coverScreen(root:HTMLElement,preloadMenu=false,homeEntrance=false,screenAssets=imageUrls(root)):{ready:()=>Promise<boolean>;cancel:()=>void}{
  const loading=loadingScreen('screen-loader',loungeText('書庫を開いています','Opening the library','서고를 여는 중')),cover=loading.element;
  document.body.append(cover);root.inert=true;root.setAttribute('aria-busy','true');const abort=new AbortController();
  const release=()=>{cover.remove();root.inert=false;root.removeAttribute('aria-busy');};
  const cancel=()=>{abort.abort();release();};
  return {cancel,ready:async()=>{
-  await waitAssets([...imageUrls(root),...(preloadMenu?menuAssetUrls():[])],cover,(done,total)=>loading.update(total?done/total*94:94,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`)));
+  await waitAssets([...screenAssets,...(preloadMenu?menuAssetUrls():[])],cover,(done,total)=>loading.update(total?done/total*94:94,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`)));
   if(abort.signal.aborted)return false;
   loading.update(95,loungeText("画面を仕上げています","Finishing the scene","화면 마무리 중"));
   await document.fonts.ready;await Promise.all([...root.querySelectorAll('img')].map(i=>i.decode().catch(()=>{})));

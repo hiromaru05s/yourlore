@@ -7,7 +7,7 @@ import { homeIcon } from "../ui/homeIcons";
 import type { App, Screen } from "../router";
 import { t, getLang, onLangChange } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
-import { TUT_STEPS } from "../game/tutorial";
+import { TUT_STEPS } from "../shared/tutorialSteps";
 import { api } from "../net/api";
 import { PASSIVES } from "../shared/cards";
 

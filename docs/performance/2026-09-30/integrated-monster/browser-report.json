@@ -1,0 +1,125 @@
+{
+  "checks": [
+    {
+      "resources": [
+        {
+          "shield": 0,
+          "dew": 0,
+          "value": [
+            {
+              "shield": null,
+              "dew": null,
+              "container": false,
+              "dewColumn": null
+            },
+            {
+              "shield": null,
+              "dew": null,
+              "container": false,
+              "dewColumn": null
+            }
+          ]
+        },
+        {
+          "shield": 3,
+          "dew": 0,
+          "value": [
+            {
+              "shield": "3",
+              "dew": null,
+              "container": true,
+              "dewColumn": null
+            },
+            {
+              "shield": "3",
+              "dew": null,
+              "container": true,
+              "dewColumn": null
+            }
+          ]
+        },
+        {
+          "shield": 0,
+          "dew": 5,
+          "value": [
+            {
+              "shield": null,
+              "dew": "5",
+              "container": true,
+              "dewColumn": "2"
+            },
+            {
+              "shield": null,
+              "dew": "5",
+              "container": true,
+              "dewColumn": "2"
+            }
+          ]
+        },
+        {
+          "shield": 12,
+          "dew": 8,
+          "value": [
+            {
+              "shield": "12",
+              "dew": "8",
+              "container": true,
+              "dewColumn": "2"
+            },
+            {
+              "shield": "12",
+              "dew": "8",
+              "container": true,
+              "dewColumn": "2"
+            }
+          ]
+        },
+        {
+          "shield": 0,
+          "dew": 0,
+          "value": [
+            {
+              "shield": null,
+              "dew": null,
+              "container": false,
+              "dewColumn": null
+            },
+            {
+              "shield": null,
+              "dew": null,
+              "container": false,
+              "dewColumn": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "persistent": {
+        "layer": "16",
+        "stage": true,
+        "portraitLayer": "18",
+        "opacity": "0",
+        "clickable": true,
+        "clones": 2
+      }
+    },
+    "field state retains hit-testing and visible reorder drag",
+    "summon B + dust B and activation B through controller",
+    "attack foreground returns to persistent field layer below portrait",
+    "multi-attack returns ready; exactly one contact callback",
+    "simultaneous +3/+4 shows actual values, not prototype +2",
+    "paired debuff B",
+    "ordinary combat damage does not play HP debuff",
+    "destruction to shelf",
+    "destruction to rift",
+    "cleanup abort",
+    "cleanup resize",
+    "cleanup skip",
+    "cleanup removed",
+    "reduced-motion completion and single contact",
+    "390px opponent activation / no horizontal overflow",
+    "board disposal removes compositor"
+  ],
+  "errors": []
+}

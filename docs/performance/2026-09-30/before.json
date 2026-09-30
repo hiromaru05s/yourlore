@@ -1,0 +1,570 @@
+{
+  "boot": {
+    "ms": 5293,
+    "requests": 943,
+    "bytes": 34183870,
+    "largest": [
+      {
+        "url": "http://127.0.0.1:5311/art/biblion/modular/base-spell.png",
+        "bytes": 1830510
+      },
+      {
+        "url": "http://127.0.0.1:5311/art/biblion/modular/base-mon.png",
+        "bytes": 1817892
+      },
+      {
+        "url": "http://127.0.0.1:5311/art/biblion/modular/base-trap.png",
+        "bytes": 1713270
+      },
+      {
+        "url": "http://127.0.0.1:5311/node_modules/.vite/deps/chunk-NPY2FSU6.js?v=5f83272a",
+        "bytes": 1669579
+      },
+      {
+        "url": "http://127.0.0.1:5311/art/biblion/modular/base-quest.png",
+        "bytes": 1550609
+      },
+      {
+        "url": "http://127.0.0.1:5311/src/shared/engine.ts",
+        "bytes": 1248327
+      },
+      {
+        "url": "http://127.0.0.1:5311/src/shared/cards.ts",
+        "bytes": 822764
+      },
+      {
+        "url": "http://127.0.0.1:5311/src/shared/botNetWeights.ts",
+        "bytes": 376390
+      },
+      {
+        "url": "http://127.0.0.1:5311/art/lounge/v1/library.webp",
+        "bytes": 370834
+      },
+      {
+        "url": "http://127.0.0.1:5311/art/lounge/stage-v1/stage.webp",
+        "bytes": 310306
+      },
+      {
+        "url": "http://127.0.0.1:5311/src/shared/bot.ts",
+        "bytes": 234283
+      },
+      {
+        "url": "http://127.0.0.1:5311/src/ui/boardView.ts",
+        "bytes": 221179
+      },
+      {
+        "url": "https://fonts.googleapis.com/css2?family=Alegreya:wght@500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;600;700;800&display=swap",
+        "bytes": 212610
+      },
+      {
+        "url": "http://127.0.0.1:5311/src/i18n.ts",
+        "bytes": 211916
+      },
+      {
+        "url": "http://127.0.0.1:5311/src/shared/cards.en.ts",
+        "bytes": 201478
+      }
+    ],
+    "images": 772
+  },
+  "samples": [
+    {
+      "name": "home",
+      "cpu": 1,
+      "frames": 301,
+      "p50": 16.69999999999891,
+      "p95": 16.799999999999272,
+      "over50": 0,
+      "longTasks": [],
+      "counts": {},
+      "canvasPixels": 0,
+      "nodes": 240,
+      "metrics": {
+        "TaskDuration": 0.22451500000000002,
+        "ScriptDuration": 0.007563999999999987,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.08669899999999997,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 301
+      },
+      "top": [
+        {
+          "fn": "(idle)",
+          "url": "",
+          "line": -1,
+          "hits": 3777
+        },
+        {
+          "fn": "(program)",
+          "url": "",
+          "line": -1,
+          "hits": 158
+        },
+        {
+          "fn": "tick",
+          "url": "",
+          "line": 0,
+          "hits": 4
+        }
+      ]
+    },
+    {
+      "name": "cards",
+      "cpu": 1,
+      "frames": 302,
+      "p50": 16.69999999999891,
+      "p95": 16.799999999999272,
+      "over50": 0,
+      "longTasks": [],
+      "counts": {},
+      "canvasPixels": 0,
+      "nodes": 2132,
+      "metrics": {
+        "TaskDuration": 0.06765100000000013,
+        "ScriptDuration": 0.007417999999999994,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0
+      },
+      "top": [
+        {
+          "fn": "(idle)",
+          "url": "",
+          "line": -1,
+          "hits": 3919
+        },
+        {
+          "fn": "(program)",
+          "url": "",
+          "line": -1,
+          "hits": 40
+        },
+        {
+          "fn": "tick",
+          "url": "",
+          "line": 0,
+          "hits": 1
+        },
+        {
+          "fn": "requestAnimationFrame",
+          "url": "",
+          "line": -1,
+          "hits": 1
+        }
+      ]
+    },
+    {
+      "name": "blocked14",
+      "cpu": 1,
+      "frames": 302,
+      "p50": 16.699999999999818,
+      "p95": 16.700000000000728,
+      "over50": 0,
+      "longTasks": [],
+      "counts": {
+        "drawImage:seeker-motion": 604,
+        "clearRect:offscreen": 604,
+        "rect": 4228,
+        "style": 4228,
+        "clearRect:stat-surface": 4228,
+        "drawImage:offscreen": 60
+      },
+      "canvasPixels": 4883811,
+      "nodes": 1020,
+      "metrics": {
+        "TaskDuration": 0.5352829999999998,
+        "ScriptDuration": 0.25299099999999997,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.200216,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 4240
+      },
+      "top": [
+        {
+          "fn": "(idle)",
+          "url": "",
+          "line": -1,
+          "hits": 3558
+        },
+        {
+          "fn": "getBoundingClientRect",
+          "url": "",
+          "line": -1,
+          "hits": 126
+        },
+        {
+          "fn": "(program)",
+          "url": "",
+          "line": -1,
+          "hits": 65
+        },
+        {
+          "fn": "layoutRect",
+          "url": "http://127.0.0.1:5311/src/ui/boardProjection.ts",
+          "line": 6,
+          "hits": 20
+        },
+        {
+          "fn": "style",
+          "url": "http://127.0.0.1:5311/src/ui/monster/actor.ts",
+          "line": 47,
+          "hits": 16
+        },
+        {
+          "fn": "tick",
+          "url": "http://127.0.0.1:5311/src/ui/monster/runtime.ts",
+          "line": 79,
+          "hits": 15
+        },
+        {
+          "fn": "toString",
+          "url": "",
+          "line": -1,
+          "hits": 11
+        },
+        {
+          "fn": "tick",
+          "url": "http://127.0.0.1:5311/src/ui/readingBoardWidgets.ts",
+          "line": 169,
+          "hits": 10
+        },
+        {
+          "fn": "render",
+          "url": "http://127.0.0.1:5311/src/ui/duelScene.ts",
+          "line": 259,
+          "hits": 6
+        },
+        {
+          "fn": "",
+          "url": "http://127.0.0.1:5311/src/ui/monster/actor.ts",
+          "line": 7,
+          "hits": 5
+        },
+        {
+          "fn": "multiply",
+          "url": "",
+          "line": -1,
+          "hits": 5
+        },
+        {
+          "fn": "(garbage collector)",
+          "url": "",
+          "line": -1,
+          "hits": 5
+        },
+        {
+          "fn": "boardMatrix",
+          "url": "http://127.0.0.1:5311/src/ui/boardProjection.ts",
+          "line": 21,
+          "hits": 4
+        },
+        {
+          "fn": "drawElements",
+          "url": "",
+          "line": -1,
+          "hits": 4
+        },
+        {
+          "fn": "paint",
+          "url": "http://127.0.0.1:5311/src/ui/monster/actor.ts",
+          "line": 52,
+          "hits": 3
+        },
+        {
+          "fn": "setProperty",
+          "url": "",
+          "line": -1,
+          "hits": 3
+        },
+        {
+          "fn": "matchMedia",
+          "url": "",
+          "line": -1,
+          "hits": 3
+        },
+        {
+          "fn": "multiplyMatrices",
+          "url": "http://127.0.0.1:5311/node_modules/.vite/deps/chunk-NPY2FSU6.js?v=5f83272a",
+          "line": 5550,
+          "hits": 3
+        }
+      ]
+    },
+    {
+      "name": "ready7",
+      "cpu": 1,
+      "frames": 302,
+      "p50": 16.69999999999891,
+      "p95": 16.799999999999272,
+      "over50": 0,
+      "longTasks": [],
+      "counts": {
+        "clearRect:offscreen": 604,
+        "rect": 4228,
+        "style": 4228,
+        "clearRect:stat-surface": 4228,
+        "drawImage:seeker-motion": 604,
+        "drawImage:offscreen": 60
+      },
+      "canvasPixels": 4883811,
+      "nodes": 1023,
+      "metrics": {
+        "TaskDuration": 0.7313290000000001,
+        "ScriptDuration": 0.25659200000000004,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.21862200000000004,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 4543
+      },
+      "top": [
+        {
+          "fn": "(idle)",
+          "url": "",
+          "line": -1,
+          "hits": 3439
+        },
+        {
+          "fn": "(program)",
+          "url": "",
+          "line": -1,
+          "hits": 202
+        },
+        {
+          "fn": "getBoundingClientRect",
+          "url": "",
+          "line": -1,
+          "hits": 172
+        },
+        {
+          "fn": "layoutRect",
+          "url": "http://127.0.0.1:5311/src/ui/boardProjection.ts",
+          "line": 6,
+          "hits": 23
+        },
+        {
+          "fn": "style",
+          "url": "http://127.0.0.1:5311/src/ui/monster/actor.ts",
+          "line": 47,
+          "hits": 20
+        },
+        {
+          "fn": "tick",
+          "url": "http://127.0.0.1:5311/src/ui/monster/runtime.ts",
+          "line": 79,
+          "hits": 10
+        },
+        {
+          "fn": "toString",
+          "url": "",
+          "line": -1,
+          "hits": 10
+        },
+        {
+          "fn": "(garbage collector)",
+          "url": "",
+          "line": -1,
+          "hits": 7
+        },
+        {
+          "fn": "boardMatrix",
+          "url": "http://127.0.0.1:5311/src/ui/boardProjection.ts",
+          "line": 21,
+          "hits": 6
+        },
+        {
+          "fn": "paint",
+          "url": "http://127.0.0.1:5311/src/ui/monster/actor.ts",
+          "line": 52,
+          "hits": 5
+        },
+        {
+          "fn": "",
+          "url": "http://127.0.0.1:5311/src/ui/monster/actor.ts",
+          "line": 7,
+          "hits": 5
+        },
+        {
+          "fn": "tick",
+          "url": "http://127.0.0.1:5311/src/ui/readingBoardWidgets.ts",
+          "line": 169,
+          "hits": 5
+        },
+        {
+          "fn": "monsterRect",
+          "url": "http://127.0.0.1:5311/src/ui/monster/runtime.ts",
+          "line": 11,
+          "hits": 4
+        },
+        {
+          "fn": "matchMedia",
+          "url": "",
+          "line": -1,
+          "hits": 4
+        },
+        {
+          "fn": "multiply",
+          "url": "",
+          "line": -1,
+          "hits": 3
+        },
+        {
+          "fn": "setProgram",
+          "url": "http://127.0.0.1:5311/node_modules/.vite/deps/chunk-NPY2FSU6.js?v=5f83272a",
+          "line": 42363,
+          "hits": 3
+        },
+        {
+          "fn": "getParameters",
+          "url": "http://127.0.0.1:5311/node_modules/.vite/deps/chunk-NPY2FSU6.js?v=5f83272a",
+          "line": 36113,
+          "hits": 3
+        },
+        {
+          "fn": "updateMatrixWorld",
+          "url": "http://127.0.0.1:5311/node_modules/.vite/deps/chunk-NPY2FSU6.js?v=5f83272a",
+          "line": 7264,
+          "hits": 3
+        }
+      ]
+    },
+    {
+      "name": "ready7-cpu4",
+      "cpu": 4,
+      "frames": 302,
+      "p50": 16.69999999999891,
+      "p95": 16.799999999999272,
+      "over50": 0,
+      "longTasks": [],
+      "counts": {
+        "drawImage:seeker-motion": 604,
+        "clearRect:offscreen": 604,
+        "rect": 4228,
+        "style": 4228,
+        "clearRect:stat-surface": 4228,
+        "drawImage:offscreen": 61
+      },
+      "canvasPixels": 4883811,
+      "nodes": 1023,
+      "metrics": {
+        "TaskDuration": 2.749486,
+        "ScriptDuration": 0.9405749999999999,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.8439220000000001,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 4544
+      },
+      "top": [
+        {
+          "fn": "(idle)",
+          "url": "",
+          "line": -1,
+          "hits": 1909
+        },
+        {
+          "fn": "(program)",
+          "url": "",
+          "line": -1,
+          "hits": 855
+        },
+        {
+          "fn": "getBoundingClientRect",
+          "url": "",
+          "line": -1,
+          "hits": 661
+        },
+        {
+          "fn": "layoutRect",
+          "url": "http://127.0.0.1:5311/src/ui/boardProjection.ts",
+          "line": 6,
+          "hits": 103
+        },
+        {
+          "fn": "style",
+          "url": "http://127.0.0.1:5311/src/ui/monster/actor.ts",
+          "line": 47,
+          "hits": 71
+        },
+        {
+          "fn": "tick",
+          "url": "http://127.0.0.1:5311/src/ui/monster/runtime.ts",
+          "line": 79,
+          "hits": 46
+        },
+        {
+          "fn": "paint",
+          "url": "http://127.0.0.1:5311/src/ui/monster/actor.ts",
+          "line": 52,
+          "hits": 31
+        },
+        {
+          "fn": "placement",
+          "url": "http://127.0.0.1:5311/src/ui/monster/actor.ts",
+          "line": 2,
+          "hits": 22
+        },
+        {
+          "fn": "toString",
+          "url": "",
+          "line": -1,
+          "hits": 22
+        },
+        {
+          "fn": "boardMatrix",
+          "url": "http://127.0.0.1:5311/src/ui/boardProjection.ts",
+          "line": 21,
+          "hits": 21
+        },
+        {
+          "fn": "setProperty",
+          "url": "",
+          "line": -1,
+          "hits": 17
+        },
+        {
+          "fn": "querySelector",
+          "url": "",
+          "line": -1,
+          "hits": 15
+        },
+        {
+          "fn": "(garbage collector)",
+          "url": "",
+          "line": -1,
+          "hits": 15
+        },
+        {
+          "fn": "getParameters",
+          "url": "http://127.0.0.1:5311/node_modules/.vite/deps/chunk-NPY2FSU6.js?v=5f83272a",
+          "line": 36113,
+          "hits": 14
+        },
+        {
+          "fn": "getProgram",
+          "url": "http://127.0.0.1:5311/node_modules/.vite/deps/chunk-NPY2FSU6.js?v=5f83272a",
+          "line": 42260,
+          "hits": 12
+        },
+        {
+          "fn": "tick",
+          "url": "http://127.0.0.1:5311/src/ui/readingBoardWidgets.ts",
+          "line": 169,
+          "hits": 11
+        },
+        {
+          "fn": "clearRect",
+          "url": "",
+          "line": -1,
+          "hits": 10
+        },
+        {
+          "fn": "",
+          "url": "http://127.0.0.1:5311/src/ui/monster/actor.ts",
+          "line": 7,
+          "hits": 10
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

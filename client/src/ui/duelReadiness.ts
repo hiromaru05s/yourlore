@@ -24,13 +24,12 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
     loading.update(3,loungeText("盤面を組み立てています","Building the board","보드 준비 중"));
     while(!expired&&root.isConnected&&root.dataset.boardRendered!=="true")await new Promise<void>(r=>requestAnimationFrame(()=>r()));
     if(expired||!root.isConnected)return;
-    const urls=new Set(['/art/seekers/v2/mask-self.png','/art/seekers/v2/mask-opp.png',...PASSIVE_KEYS.map(passiveIconUrl),...seekerAssets,...coinImages,...['base-mon','base-spell','base-quest','field-mon','field-spell','field-quest','cost','attack','health','shield','dew'].map(n=>`/art/biblion/modular/${n}.png`)]);
+    const urls=new Set(['/art/seekers/v2/mask-self.png','/art/seekers/v2/mask-opp.png',...PASSIVE_KEYS.map(passiveIconUrl),...seekerAssets,...coinImages,...['base-mon','base-spell','base-quest','field-mon','field-spell','field-quest','cost','attack','health','shield','dew'].map(n=>`/art/biblion/modular/${n}-ui.webp`)]);
     for(const el of root.querySelectorAll<HTMLElement>('*')){
       if(el.dataset.material)urls.add(el.dataset.material);
       if(el instanceof HTMLImageElement){if(el.currentSrc||el.src)urls.add(el.currentSrc||el.src);el.loading='eager';el.fetchPriority='high';}
       for(const pseudo of [null,'::before','::after']){const style=getComputedStyle(el,pseudo);if(pseudo&&(style.content==='none'||style.content==='normal'))continue;for(const match of style.backgroundImage.matchAll(/url\(["']?(.*?)["']?\)/g))urls.add(match[1]);}
     }
-    for(const url of [...urls])if(url.includes('/art/cards-sm/'))urls.add(url.replace('/art/cards-sm/','/art/cards/'));
     await Promise.all([document.fonts.ready,waitAssets([...urls],loader,(done,total)=>loading.update(5+(total?done/total:1)*85,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`))),import('./ceremonyScene'),import('./paperDraw')]);
     loading.update(92,loungeText("盤面と演出の最終準備","Preparing the board and effects","보드와 연출 마무리 중"));
     // Decode the actual image nodes too (not only a separate preloader object).

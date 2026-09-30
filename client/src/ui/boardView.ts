@@ -569,7 +569,7 @@ export class GameView {
         : (lang === 'ja' ? '永続魔法' : lang === 'en' ? 'Permanent spell' : '지속 마법');
       const stateText = state + (e.cnt ? ` · ×${e.cnt}` : '');
       const durationUi = rem == null
-        ? `<img class="buff-infinity" src="/art/biblion/modular/infinity.png" alt="${lang === 'ja' ? '無期限' : lang === 'en' ? 'Permanent' : '무기한'}">${e.cnt ? `<span class="buff-counter">×${e.cnt}</span>` : ''}`
+        ? `<img class="buff-infinity" src="/art/biblion/modular/infinity-ui.webp" alt="${lang === 'ja' ? '無期限' : lang === 'en' ? 'Permanent' : '무기한'}">${e.cnt ? `<span class="buff-counter">×${e.cnt}</span>` : ''}`
         : `<span class="buff-duration" aria-label="${stateText}"><span>${bits.join(' ')}</span></span>`;
       const card = enchantmentTile(e.card,durationUi);
       card.tabIndex = 0;

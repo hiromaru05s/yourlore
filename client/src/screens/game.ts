@@ -13,7 +13,7 @@ import { startBoardLayout } from "../ui/layout";
 import { setCoinProfiles } from "../game/controller";
 import { HOME_MUSIC_GAIN, startBackgroundMusic } from "../ui/backgroundMusic";
 
-type GameOpts =
+export type GameOpts =
   | { mode: "bot"; difficulty?: BotDifficulty }
   | { mode: "tutorial" }
   | { mode: "online"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null; ranked?: boolean };
