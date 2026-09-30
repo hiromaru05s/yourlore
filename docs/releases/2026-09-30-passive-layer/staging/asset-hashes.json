@@ -1,0 +1,74 @@
+[
+  {
+    "path": "index.html",
+    "sha256": "4dfa801510ff4bf769dd6e683fa51df4ecaf34146079710a362df36e8f38a5e1"
+  },
+  {
+    "path": "assets/GLTFLoader-Syrzv2H6.js",
+    "sha256": "2f2c07c5e1667828ac6ed137482609a00fcc1f2ccf35d0c95d3e10a8ef05513b"
+  },
+  {
+    "path": "assets/RoomEnvironment-HFPuHeIy.js",
+    "sha256": "8028bee0dc42a8507613207d1a6cedbb15a4070a0b5b81db67274f558b572a95"
+  },
+  {
+    "path": "assets/ceremonyScene-DPpqOm6o.js",
+    "sha256": "3c636864d3e9415132976e32822f3a9d93287b1918614bb43cc2c17c79f533f3"
+  },
+  {
+    "path": "assets/crownOutcome-DvoAFMV3.js",
+    "sha256": "458301b5d9f3cdb7ffb04e061a2d909a76070af2e4d88b6a0e97132b0d1eccc0"
+  },
+  {
+    "path": "assets/diceScene-CNGgjxuy.js",
+    "sha256": "d56aca697aa1f891dbf5b28f814ec11041a4a08e15dffbbce564b5994abfde58"
+  },
+  {
+    "path": "assets/duelScene-CJLfMtO5.js",
+    "sha256": "f86a3243693c1c49a01716efd3101b52b39a87c74c7172054ab35bfd380e9aa1"
+  },
+  {
+    "path": "assets/game-DI7euPJ1.js",
+    "sha256": "cff50495fbb5b2c5de741321f31fc840e3b478e02bffc2fdd3f0ebfaed552262"
+  },
+  {
+    "path": "assets/game-LT5DhiTq.css",
+    "sha256": "614ef75c487cc9d45b5f150a3a4b16e49676369583dd17c2f9153af07e721680"
+  },
+  {
+    "path": "assets/handGeometry-Bz96hXgQ.js",
+    "sha256": "e827771a1eeb612f6feb91db5ef595bb57a150b164e607b1cbc4cf0a33d7264a"
+  },
+  {
+    "path": "assets/main-BgnjwBL-.css",
+    "sha256": "845d09e6bbf0a100c75bb3e53a38c73c5a91c8b9d9697828d68a4d1774392a80"
+  },
+  {
+    "path": "assets/main-ChxQ7jzN.js",
+    "sha256": "e27eb8b4a18c89e6c7918af3412ac758657b8cf0e8aad9ee6b65d9ed0af5c1dc"
+  },
+  {
+    "path": "assets/paperDraw-BllehG9z.js",
+    "sha256": "9833409b77534911eadea2436dc5fa8d320e3891f1bfda9d8877182581776cec"
+  },
+  {
+    "path": "assets/riftScene-5Yd-ZsWA.js",
+    "sha256": "bf2834900cc54b4175475bf72b4865ca74528856c80ca1820428f3c3f91672ce"
+  },
+  {
+    "path": "assets/tablePreview-2Rkra2Ey.css",
+    "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4"
+  },
+  {
+    "path": "assets/tablePreview-BnKVBpGZ.js",
+    "sha256": "83596ae775500920eb429aa74fe9a122722b796553565e91b33454363f5cc4a1"
+  },
+  {
+    "path": "assets/three.module-P6koxfW0.js",
+    "sha256": "7e207c000c88fdc73388a5737d6896fdb1d2af5c1d0e684780f9137968498d3e"
+  },
+  {
+    "path": "assets/voidSurface-BI34zy95.js",
+    "sha256": "46e0bd799c75cb17befb52747ef31eb48b7ff896027d756e073e81df9da1b3ef"
+  }
+]
