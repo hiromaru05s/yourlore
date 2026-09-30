@@ -325,7 +325,7 @@ export abstract class BaseController implements BoardHandlers {
         case "attack": {
           // The shared attack timeline owns launch/contact cues and local target recoil.
           const defender = sideOf((1 - e.player) as Side);
-          await A.attackStrike(e.uid, e.targetUid, defender,()=>eventSound.contact(e.targetUid,(1-e.player) as Side),res.state.players[e.player].field.find(m=>m.uid===e.uid)?.exhausted!==false);
+          await A.attackStrike(e.uid, e.targetUid, defender,()=>eventSound.contact(e.targetUid,(1-e.player) as Side,e.contactDamage!==0),res.state.players[e.player].field.find(m=>m.uid===e.uid)?.exhausted!==false,e.contactDamage);
           break;
         }
         case "monsterActivate":

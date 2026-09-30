@@ -10,7 +10,7 @@ const assets=[...html.toString().matchAll(/(?:src|href)="(\/assets\/[^"?]+)"/g)]
 const results=[];for(const url of assets){const local=await fs.readFile('client/dist'+url),actual=hash(await remote(url));assert.equal(actual,hash(local),url);results.push({url,sha256:actual});}
 const manifest=JSON.parse(await fs.readFile('client/public/sfx/lore-v5/manifest.json','utf8'));
 assert.deepEqual(JSON.parse((await remote('/sfx/lore-v5/manifest.json')).toString()),manifest);
-for(const [cue,clips]of Object.entries(manifest.sounds))for(const clip of clips){const actual=hash(await remote(clip.url));assert.equal(actual,clip.sha256,clip.url);results.push({cue,url:clip.url,sha256:actual,preserved:!clip.url.includes('/lore-v5/')});}
+for(const [cue,clips]of Object.entries(manifest.sounds))for(const clip of clips){const actual=hash(await remote(clip.url));assert.equal(actual,clip.sha256,clip.url);results.push({cue,url:clip.url,sha256:actual,preserved:/\/lore-v[34]\//.test(clip.url)});}
 assert.equal(results.filter(x=>x.cue).length,41);assert.equal(results.filter(x=>x.preserved).length,9);
 await fs.mkdir(out,{recursive:true});await fs.writeFile(out+'/assets.json',JSON.stringify({at:new Date().toISOString(),origin,source:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),entrySha256:hash(html),results},null,2)+'\n');
 console.log('PASS deployed entry, JS/CSS, manifest and all 41 sound hashes; nine approved recordings unchanged');

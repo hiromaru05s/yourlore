@@ -53,6 +53,9 @@ try{
   const battle=await page.evaluate(async()=>{
    const c=qaController,run=async events=>{s.stopSounds();qaTrace=[];await c.playEvents(c.state,{state:structuredClone(c.state),events});return qaTrace.map(x=>x.cue);};
    const monster=await run([{type:'attack',player:0,uid:'audio-a',targetUid:'audio-b'},{type:'hit',uid:'audio-b'}]);
+   const zeroFace=await run([{type:'attack',player:0,uid:'audio-a',targetUid:null,contactDamage:0}]);
+   const zeroMonster=await run([{type:'attack',player:0,uid:'audio-a',targetUid:'audio-b',contactDamage:0},{type:'hit',uid:'audio-b'}]);
+   const blockedThenDamage=await run([{type:'attack',player:0,uid:'audio-a',targetUid:null,contactDamage:0},{type:'damage',player:1,amount:2}]);
    const face=await run([{type:'attack',player:0,uid:'audio-a',targetUid:null},{type:'damage',player:1,amount:4}]);
    const heal=await run([{type:'heal',player:1,amount:4}]);
    s.stopSounds();qaTrace=[];let impactAt;const listener=()=>impactAt=performance.now();window.addEventListener('lore:summon-impact',listener,{once:true});
@@ -62,9 +65,10 @@ try{
    s.stopSounds();qaTrace=[];await A.buyReveal(qaMon('paid-buy'),'me',new DOMRect(160,240,80,120),undefined,0,2);const paidBuy=qaTrace.map(x=>x.cue);
    s.stopSounds();qaTrace=[];await A.buyReveal(qaMon('free-buy'),'me',null,undefined,0,0);const freeBuy=qaTrace.map(x=>x.cue);
    c.fastForward();const skipped=await run([{type:'damage',player:1,amount:4},{type:'heal',player:0,amount:3},{type:'dice',player:0,rolls:[6]}]);
-   c.destroy();qaStopLayout();return {monster,face,heal,skipped,paidBuy,freeBuy,summonOffset:impactAt!=null&&summon?Math.abs(impactAt-summon.at):null};
+   c.destroy();qaStopLayout();return {zeroFace,zeroMonster,blockedThenDamage,monster,face,heal,skipped,paidBuy,freeBuy,summonOffset:impactAt!=null&&summon?Math.abs(impactAt-summon.at):null};
   });
-  assert.deepEqual(battle.monster,['attack','impact']);assert.deepEqual(battle.face,['attack','facehit']);assert.deepEqual(battle.heal,['heal']);assert.deepEqual(battle.skipped,[]);assert.deepEqual(battle.paidBuy,['mana-pay','buy']);assert.deepEqual(battle.freeBuy,['buy']);assert(battle.summonOffset!=null&&battle.summonOffset<40,JSON.stringify(battle));
+  assert.deepEqual(battle.zeroFace,['attack']);assert.deepEqual(battle.zeroMonster,['attack']);assert.deepEqual(battle.blockedThenDamage,['attack','damage']);assert.deepEqual(battle.monster,['attack','impact']);assert.deepEqual(battle.face,['attack','facehit']);assert.deepEqual(battle.heal,['heal']);assert.deepEqual(battle.skipped,[]);assert.deepEqual(battle.paidBuy,['mana-pay','buy']);assert.deepEqual(battle.freeBuy,['buy']);assert(battle.summonOffset!=null&&battle.summonOffset<40,JSON.stringify(battle));
+  checks.push('Zero/prevented contact has sweep only; later independent damage stays audible');
   checks.push('Paid purchase: mana-pay then buy; free purchase: buy only');
   checks.push('actual BaseController: one contact cue per attack, opponent healing audible, summon sound within 40 ms of landing VFX, fast-forwarded damage/heal/dice stay silent');
 

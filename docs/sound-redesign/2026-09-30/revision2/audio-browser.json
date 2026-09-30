@@ -1,0 +1,341 @@
+{
+  "origin": "http://127.0.0.1:5338",
+  "checks": [
+    "all 41 local MP3s decode to stereo and render non-silent PCM in real Chrome Web Audio",
+    "all 35 gameplay cues play through real shared AudioContext; opening cancellation and mute end every source",
+    "Zero/prevented contact has sweep only; later independent damage stays audible",
+    "Paid purchase: mana-pay then buy; free purchase: buy only",
+    "actual BaseController: one contact cue per attack, opponent healing audible, summon sound within 40 ms of landing VFX, fast-forwarded damage/heal/dice stay silent"
+  ],
+  "clips": [
+    {
+      "name": "click",
+      "file": "click-1.mp3",
+      "channels": 2,
+      "duration": 0.13,
+      "peak": 0.1562556028366089,
+      "rms": 0.018570489838670688
+    },
+    {
+      "name": "click",
+      "file": "click-2.mp3",
+      "channels": 2,
+      "duration": 0.13,
+      "peak": 0.019688492640852928,
+      "rms": 0.0028278448036474484
+    },
+    {
+      "name": "click",
+      "file": "click-3.mp3",
+      "channels": 2,
+      "duration": 0.13,
+      "peak": 0.028078315779566765,
+      "rms": 0.004181943750318728
+    },
+    {
+      "name": "pop",
+      "file": "pop.mp3",
+      "channels": 2,
+      "duration": 0.22,
+      "peak": 0.15488344430923462,
+      "rms": 0.01691481599891515
+    },
+    {
+      "name": "error",
+      "file": "error.mp3",
+      "channels": 2,
+      "duration": 0.22,
+      "peak": 0.25103750824928284,
+      "rms": 0.026827395265604893
+    },
+    {
+      "name": "coin",
+      "file": "coin.mp3",
+      "channels": 2,
+      "duration": 0.48,
+      "peak": 0.20395250618457794,
+      "rms": 0.013032432154333855
+    },
+    {
+      "name": "match",
+      "file": "match.mp3",
+      "channels": 2,
+      "duration": 1.3,
+      "peak": 0.3275630474090576,
+      "rms": 0.07187323398629808
+    },
+    {
+      "name": "draw",
+      "file": "draw-3.mp3",
+      "channels": 2,
+      "duration": 0.25,
+      "peak": 0.12196331471204758,
+      "rms": 0.012515177955767096
+    },
+    {
+      "name": "buy",
+      "file": "buy.mp3",
+      "channels": 2,
+      "duration": 0.72,
+      "peak": 0.24938435852527618,
+      "rms": 0.019132078285408183
+    },
+    {
+      "name": "attack",
+      "file": "attack-1.mp3",
+      "channels": 2,
+      "duration": 0.25,
+      "peak": 0.1998140513896942,
+      "rms": 0.04264305367079845
+    },
+    {
+      "name": "attack",
+      "file": "attack-2.mp3",
+      "channels": 2,
+      "duration": 0.25,
+      "peak": 0.1493854522705078,
+      "rms": 0.04291652361786032
+    },
+    {
+      "name": "attack",
+      "file": "attack-3.mp3",
+      "channels": 2,
+      "duration": 0.25,
+      "peak": 0.2285556197166443,
+      "rms": 0.04237109265816865
+    },
+    {
+      "name": "impact",
+      "file": "impact-1.mp3",
+      "channels": 2,
+      "duration": 0.29,
+      "peak": 0.3401305079460144,
+      "rms": 0.062272774718743026
+    },
+    {
+      "name": "impact",
+      "file": "impact-2.mp3",
+      "channels": 2,
+      "duration": 0.29,
+      "peak": 0.37784940004348755,
+      "rms": 0.06854888246703195
+    },
+    {
+      "name": "impact",
+      "file": "impact-3.mp3",
+      "channels": 2,
+      "duration": 0.29,
+      "peak": 0.3972039520740509,
+      "rms": 0.06792561047225006
+    },
+    {
+      "name": "facehit",
+      "file": "facehit.mp3",
+      "channels": 2,
+      "duration": 0.4,
+      "peak": 0.30519360303878784,
+      "rms": 0.058685963221359924
+    },
+    {
+      "name": "damage",
+      "file": "damage.mp3",
+      "channels": 2,
+      "duration": 0.3,
+      "peak": 0.21418647468090057,
+      "rms": 0.04850761756224418
+    },
+    {
+      "name": "summon",
+      "file": "summon.mp3",
+      "channels": 2,
+      "duration": 0.58,
+      "peak": 0.4177234470844269,
+      "rms": 0.05307466736914296
+    },
+    {
+      "name": "mimic",
+      "file": "mimic.mp3",
+      "channels": 2,
+      "duration": 0.46,
+      "peak": 0.24171093106269836,
+      "rms": 0.04021285953324713
+    },
+    {
+      "name": "play",
+      "file": "play.mp3",
+      "channels": 2,
+      "duration": 0.64,
+      "peak": 0.272650808095932,
+      "rms": 0.05081026330123673
+    },
+    {
+      "name": "heal",
+      "file": "heal.mp3",
+      "channels": 2,
+      "duration": 0.78,
+      "peak": 0.133467897772789,
+      "rms": 0.03824697336720646
+    },
+    {
+      "name": "death",
+      "file": "death.mp3",
+      "channels": 2,
+      "duration": 0.42,
+      "peak": 0.2871040105819702,
+      "rms": 0.02370163953876816
+    },
+    {
+      "name": "trapSet",
+      "file": "trapSet.mp3",
+      "channels": 2,
+      "duration": 0.25,
+      "peak": 0.15768754482269287,
+      "rms": 0.01434106051766031
+    },
+    {
+      "name": "trap",
+      "file": "trap.mp3",
+      "channels": 2,
+      "duration": 0.4,
+      "peak": 0.20694728195667267,
+      "rms": 0.04185585693085846
+    },
+    {
+      "name": "mana-pay",
+      "file": "mana-pay.mp3",
+      "channels": 2,
+      "duration": 0.25,
+      "peak": 0.1271168738603592,
+      "rms": 0.019371088543216137
+    },
+    {
+      "name": "mana",
+      "file": "mana.mp3",
+      "channels": 2,
+      "duration": 0.65,
+      "peak": 0.20574422180652618,
+      "rms": 0.0466376354912326
+    },
+    {
+      "name": "turn",
+      "file": "turn.mp3",
+      "channels": 2,
+      "duration": 0.43,
+      "peak": 0.11718568205833435,
+      "rms": 0.03618014790457726
+    },
+    {
+      "name": "win",
+      "file": "win.mp3",
+      "channels": 2,
+      "duration": 1.65,
+      "peak": 0.16540448367595673,
+      "rms": 0.049134019786294565
+    },
+    {
+      "name": "lose",
+      "file": "lose.mp3",
+      "channels": 2,
+      "duration": 1.3,
+      "peak": 0.12171294540166855,
+      "rms": 0.03424172163738541
+    },
+    {
+      "name": "drawGame",
+      "file": "drawGame.mp3",
+      "channels": 2,
+      "duration": 1.1,
+      "peak": 0.13048464059829712,
+      "rms": 0.035563515676690645
+    },
+    {
+      "name": "void",
+      "file": "void.mp3",
+      "channels": 2,
+      "duration": 0.54,
+      "peak": 0.16345924139022827,
+      "rms": 0.03217485991232907
+    },
+    {
+      "name": "shuffle",
+      "file": "shuffle.mp3",
+      "channels": 2,
+      "duration": 0.7,
+      "peak": 0.17895571887493134,
+      "rms": 0.007571881832927757
+    },
+    {
+      "name": "duel-start",
+      "file": "duel-start.mp3",
+      "channels": 2,
+      "duration": 0.85,
+      "peak": 0.11055024713277817,
+      "rms": 0.03807246870451029
+    },
+    {
+      "name": "discard",
+      "file": "discard.mp3",
+      "channels": 2,
+      "duration": 0.3,
+      "peak": 0.17274558544158936,
+      "rms": 0.013529552788135788
+    },
+    {
+      "name": "coinToss",
+      "file": "coinToss.mp3",
+      "channels": 2,
+      "duration": 0.23,
+      "peak": 0.12374851107597351,
+      "rms": 0.005316135872846986
+    },
+    {
+      "name": "coinLand",
+      "file": "coinLand.mp3",
+      "channels": 2,
+      "duration": 0.27,
+      "peak": 0.1425546556711197,
+      "rms": 0.0069511450227441145
+    },
+    {
+      "name": "diceRoll",
+      "file": "diceRoll.mp3",
+      "channels": 2,
+      "duration": 0.78,
+      "peak": 0.15057340264320374,
+      "rms": 0.004750534049372937
+    },
+    {
+      "name": "diceLand",
+      "file": "diceLand.mp3",
+      "channels": 2,
+      "duration": 0.2,
+      "peak": 0.13052760064601898,
+      "rms": 0.008551760149005891
+    },
+    {
+      "name": "rankUp",
+      "file": "rankUp.mp3",
+      "channels": 2,
+      "duration": 0.4,
+      "peak": 0.1142524853348732,
+      "rms": 0.037493485923190274
+    },
+    {
+      "name": "rankDown",
+      "file": "rankDown.mp3",
+      "channels": 2,
+      "duration": 0.42,
+      "peak": 0.12182038277387619,
+      "rms": 0.03656881575008317
+    },
+    {
+      "name": "rankPromote",
+      "file": "rankPromote.mp3",
+      "channels": 2,
+      "duration": 0.88,
+      "peak": 0.11437752842903137,
+      "rms": 0.03986408505346816
+    }
+  ],
+  "errors": []
+}

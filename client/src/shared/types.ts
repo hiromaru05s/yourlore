@@ -258,8 +258,8 @@ export type GameEvent =
   | { type: "log"; html: string; htmlJa: string }
   | { type: "turnHeader"; turn: number; name: string; isBot: boolean; player?: Side } // player: whose turn (log tinting)
   | { type: "summon"; player: Side; uid: string; id?: string } // id: card id (drives the summon ghost when the monster dies in the same batch)
-  | { type: "attack"; player: Side; uid: string; targetUid: string | null }
-  | { type: "hit"; uid: string }
+  | { type: "attack"; player: Side; uid: string; targetUid: string | null; contactDamage?: number }
+  | { type: "hit"; uid: string; amount?: number }
   | { type: "damage"; player: Side; amount: number; srcKo?: string; srcJa?: string } // src: what dealt it (death-cause display)
   | { type: "heal"; player: Side; amount: number }
   | { type: "destroy"; player: Side; uid: string; id?: string }

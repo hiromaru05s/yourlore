@@ -1393,6 +1393,9 @@ function trySnare(g: GameState, ctx: Ctx, victim: PlayerState): boolean {
 }
 
 function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: string | null, treeStage = 0): void {
+  // Presentation metadata comes from resolution, including traps, prevention and shields.
+  const attackEvent = [...ctx.ev].reverse().find((e): e is Extract<GameEvent,{type:'attack'}> => e.type === 'attack' && e.uid === att.uid);
+  if (attackEvent) attackEvent.contactDamage = 0;
   if (treeStage === 0 && (g.players[g.cur].dew ?? 0)>0 && g.players[g.cur].field.some(m=>m.id==='WORLD_TREE')) {
     offerEffectChoice(g,ctx,g.players[g.cur],'WORLD_TREE_ATTACK','雫1で攻撃力+6（永続）しますか？',{attackerUid:att.uid,targetUid});
     return;
@@ -1423,6 +1426,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       const rollEvent = ctx.ev[tauntRollIndex];
       if (rollEvent?.type === "dice") rollEvent.source = { id: tnt.id, player: side(g, o) };
       targetUid = tnt.uid;
+      if (attackEvent) attackEvent.targetUid = targetUid;
       ctx.log(`  └ <span class="dmg">도발!</span> ${cn(tnt)} 이(가) 대신 공격을 받는다`, `  └ <span class="dmg">挑発！</span> ${cn(tnt)} が代わりに攻撃を受ける`);
     }
   }
@@ -2063,17 +2067,19 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     const hpBefore = o.hp;
     ctx.dealDamage(o, atk, `${cn(att)} 의 직접 공격`, `${cn(att)} の直接攻撃`);
     dealtFace = Math.max(0, hpBefore - o.hp); faceDmg = dealtFace > 0;
+    if (attackEvent) attackEvent.contactDamage = dealtFace;
     if (o.hp < hpBefore) { const x = xstate(o); if (x.directHitTurn !== g.turn) { x.directHitTurn = g.turn; x.directHits = []; } (x.directHits ??= []).push(att.uid); }
   } else {
     const target = o.field.find((m) => m.uid === targetUid);
     if (target?.immuneDamageTurn === g.turn && !(att.attackFx === "giantSlayer" && curHp(o, target) >= 15)) {
-      ctx.ev.push({ type: 'hit', uid: target.uid });
+      ctx.ev.push({ type: 'hit', uid: target.uid, amount: 0 });
       ctx.log('마취: 데미지 무효', '麻酔: ダメージ無効');
     } else if (target && target.hatch != null) {
       // 알: 전투 데미지를 받지 않고 카운터만 소모 (관통 없음). 에그헌터는 val(4) 소모.
       const chomp = att.aura === "eggHunter" ? (att.val || 4) : 1;
       target.dur = (target.dur ?? 0) - chomp;
-      ctx.ev.push({ type: "hit", uid: target.uid });
+      if (attackEvent) attackEvent.contactDamage = chomp;
+      ctx.ev.push({ type: "hit", uid: target.uid, amount: chomp });
       ctx.log(
         `<span class="t">${p.name}</span> ${cn(att)} → ${cn(target)} 공격! 내구도 -${chomp} (남은 내구도 ${Math.max(0, target.dur)})`,
         `<span class="t">${p.name}</span> ${cn(att)} → ${cn(target)} 攻撃! 耐久-${chomp} (残り耐久${Math.max(0, target.dur)})`,
@@ -2085,11 +2091,12 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     } else if (target && target.id === "CASTLE" && atk >= 1 && (target.gcount || 0) > 0) {
       // 성(v37): 데미지 1 이상의 공격을 카운터 1개로 무효화
       target.gcount = (target.gcount || 1) - 1;
-      ctx.ev.push({ type: "hit", uid: target.uid });
+      ctx.ev.push({ type: "hit", uid: target.uid, amount: 0 });
       ctx.log(`<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → ${cn(target)} — <span class="good">카운터 1개 소모, 공격 무효</span> (남은 ${target.gcount})`, `<span class="t">${p.name}</span> ${cn(att)}(攻${atk}) → ${cn(target)} — <span class="good">カウンター1個消費、攻撃無効</span> (残り${target.gcount})`);
     } else if (target && att.attackFx === "giantSlayer" && curHp(o, target) >= 15) {
+      if (attackEvent) attackEvent.contactDamage = curHp(o, target);
       // 선택받은 궁수(v36): 체력 15 이상의 상대 몬스터는 무조건 파괴 (기합 무시 · 관통 없음)
-      ctx.ev.push({ type: "hit", uid: target.uid });
+      ctx.ev.push({ type: "hit", uid: target.uid, amount: curHp(o, target) });
       ctx.log(`<span class="t">${p.name}</span> ${cn(att)} → ${cn(target)}(체력 ${curHp(o, target)}) <span class="dmg">거인 사냥 — 무조건 파괴</span>`, `<span class="t">${p.name}</span> ${cn(att)} → ${cn(target)}(体力${curHp(o, target)}) <span class="dmg">巨人狩り — 無条件破壊</span>`);
       target.guts = 0;
       ctx.destroyMonster(o, target);
@@ -2101,7 +2108,8 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       // blow's overflow pierces to the player, exactly like the old 관통.
       const maxHp = effDef(o, target);
       const before = Math.max(0, maxHp - (target.dmg || 0));
-      ctx.ev.push({ type: "hit", uid: target.uid });
+      if (attackEvent) attackEvent.contactDamage = Math.max(0, Math.min(atk, before - ((target.guts || 0) > 0 ? 1 : 0)));
+      ctx.ev.push({ type: "hit", uid: target.uid, amount: Math.max(0, Math.min(atk, before - ((target.guts || 0) > 0 ? 1 : 0))) });
       if (atk <= 0) {
         ctx.log(
           `<span class="t">${p.name}</span> ${cn(att)}(공0) → ${cn(target)} <span class="muted">통하지 않음</span>`,
@@ -2209,8 +2217,9 @@ function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: Fiel
   }
   const atk = effAtk(p, att, g);
   const counter = hasPassive(target, "counter") ? Math.ceil(effAtk(p, target, g) / 2) : 0;
-  ctx.ev.push({ type: "attack", player: side(g, p), uid: att.uid, targetUid: target.uid });
-  ctx.ev.push({ type: "hit", uid: target.uid });
+  const contactDamage = target.immuneDamageTurn === g.turn ? 0 : target.hatch != null ? 1 : Math.max(0, Math.min(atk, curHp(p,target) - ((target.guts || 0) > 0 ? 1 : 0)));
+  ctx.ev.push({ type: "attack", player: side(g, p), uid: att.uid, targetUid: target.uid, contactDamage });
+  ctx.ev.push({ type: "hit", uid: target.uid, amount: contactDamage });
   if (target.immuneDamageTurn === g.turn) { /* damage prevention still allows counter */ } else if (target.hatch != null) {
     target.dur = (target.dur ?? 0) - 1;
     ctx.log(`<span class="t">${p.name}</span> ${cn(att)} → 아군 ${cn(target)} 공격! 내구도 -1 (남은 ${Math.max(0, target.dur)})`, `<span class="t">${p.name}</span> ${cn(att)} → 味方 ${cn(target)} 攻撃! 耐久-1 (残り${Math.max(0, target.dur)})`);
@@ -5350,7 +5359,7 @@ function monsterDamage(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon, 
   if (!owner.field.includes(m) || amount <= 0 || m.immuneDamageTurn === g.turn) return false;
   if (spellDepth > 0 && g.players.some(p => p.enchants.some(e => e.card.ench === 'doubleUp'))) amount *= 2;
   if (spellDepth > 0) spellDamageRecorded(g, Math.min(curHp(owner, m), amount));
-  ctx.ev.push({ type: 'hit', uid: m.uid });
+  ctx.ev.push({ type: 'hit', uid: m.uid, amount: m.hatch != null ? 1 : Math.max(0, Math.min(amount, curHp(owner,m) - (combat && (m.guts ?? 0) > 0 ? 1 : 0))) });
   if (m.hatch != null) { m.dur = (m.dur ?? 0) - 1; if (m.dur <= 0) ctx.destroyMonster(owner, m); return !owner.field.includes(m); }
   const hp = curHp(owner, m);
   if (amount >= hp && combat && (m.guts ?? 0) > 0) { m.guts!--; m.dmg = effDef(owner, m) - 1; }

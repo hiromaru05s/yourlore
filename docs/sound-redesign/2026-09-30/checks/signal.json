@@ -175,11 +175,11 @@
     {
       "name": "play",
       "file": "play.mp3",
-      "seconds": 0.42,
-      "peakDb": -10.0,
-      "rmsDb": -34.36,
-      "onsetMs": 1.86,
-      "sha256": "640ac26d504636271f8acdc21f4238c5cf7e0cbe076faaa10ed85e2ca565f507"
+      "seconds": 0.64,
+      "peakDb": -10.88,
+      "rmsDb": -28.47,
+      "onsetMs": 0.88,
+      "sha256": "5c014a2ad4dc0191db97119b34e7d5339158f4bc0c39ce4896fa1aba0fdf47d0"
     },
     {
       "name": "heal",

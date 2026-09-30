@@ -422,11 +422,11 @@ export function lunge(uid: string, dir: "up" | "down"): void {
 }
 
 /** Physical card attack: anticipation, accelerating contact, hit stop, recoil and a settled return. */
-export async function attackStrike(uid:string,targetUid:string|null,defender:ViewSide,onImpact?:()=>void,exhaust=true):Promise<void>{
+export async function attackStrike(uid:string,targetUid:string|null,defender:ViewSide,onImpact?:()=>void,exhaust=true,contactDamage=1):Promise<void>{
   const source=byUid(uid),target=targetUid?byUid(targetUid):document.querySelector<HTMLElement>(defender==='me'?'#portraitMe .avatar':'#portraitOpp .avatar');
   if(!source||!target||fxSkip)return;
   animateSeeker(defender==='me'?'opp':'me','attack');sfx('attack');
-  await boardMotionScope(signal=>playMonster(source,'attack',{target,signal,exhaust,side:defender==='opp'?1:-1,onImpact:()=>{sfx(targetUid?'impact':'facehit');onImpact?.();}}));
+  await boardMotionScope(signal=>playMonster(source,'attack',{target,signal,exhaust,side:defender==='opp'?1:-1,onImpact:()=>{if(contactDamage>0)sfx(targetUid?'impact':'facehit');onImpact?.();}}));
   if(exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');source.style.filter='grayscale(1) brightness(.57)';}
 }
 export async function monsterActivation(uid:string):Promise<void>{

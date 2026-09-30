@@ -1,6 +1,6 @@
 {
   "version": 5,
-  "status": "staging adoption authorized 2026-09-30",
+  "status": "staging bank with spell revision 2",
   "sampleRate": 44100,
   "sounds": {
     "click": [
@@ -293,18 +293,16 @@
     "play": [
       {
         "file": "play.mp3",
-        "url": "/sfx/lore-v5/play.mp3",
-        "seconds": 0.42,
-        "peakDb": -10.0,
-        "rmsDb": -34.39,
-        "sha256": "640ac26d504636271f8acdc21f4238c5cf7e0cbe076faaa10ed85e2ca565f507",
+        "url": "/sfx/lore-v6/play.mp3",
+        "seconds": 0.64,
+        "peakDb": -11,
+        "rmsDb": -28.44,
+        "sha256": "5c014a2ad4dc0191db97119b34e7d5339158f4bc0c39ce4896fa1aba0fdf47d0",
         "sources": [
-          "original: damped resonator",
-          "original: shaped air texture",
-          "rpg-audio/bookFlip2.ogg"
+          "original: rising harmonic bloom and filtered air"
         ],
-        "decision": "rebuilt",
-        "description": "カードのフリップと短い発動の抜け。長い魔法音は使わない。"
+        "decision": "rebuilt spell onset revision 2",
+        "description": "短い吸気から柔らかく広がる魔力の発動。紙音・高い通知音・打撃なし。"
       }
     ],
     "heal": [

@@ -1,0 +1,46 @@
+[
+  {
+    "name": "zero face",
+    "contactDamage": 0
+  },
+  {
+    "name": "positive face",
+    "contactDamage": 3
+  },
+  {
+    "name": "full shield",
+    "contactDamage": 0
+  },
+  {
+    "name": "partial shield",
+    "contactDamage": 2
+  },
+  {
+    "name": "zero monster",
+    "contactDamage": 0
+  },
+  {
+    "name": "positive monster",
+    "contactDamage": 3
+  },
+  {
+    "name": "immune monster",
+    "contactDamage": 0
+  },
+  {
+    "name": "castle prevention",
+    "contactDamage": 0
+  },
+  {
+    "name": "guts at one HP",
+    "contactDamage": 0
+  },
+  {
+    "name": "egg durability with zero ATK",
+    "contactDamage": 1
+  },
+  {
+    "name": "lethal with piercing",
+    "contactDamage": 2
+  }
+]

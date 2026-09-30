@@ -14,10 +14,10 @@ const groups:Record<string,SfxName[]>={
  'HOMEの音・維持':['click','pop','error','coin','match'],
 };
 const kept=new Set<SfxName>(['click','pop','error','coin','match','draw','buy']);
-const oldUrls=(name:SfxName)=>name==='draw'?['/sfx/lore-v4/draw-3.mp3']:Array.from({length:['click','attack','impact'].includes(name)?3:1},(_,i)=>`/sfx/lore-v${['click','pop','error'].includes(name)?3:4}/${name}${['click','attack','impact'].includes(name)?'-'+(i+1):''}.mp3`);
+const oldUrls=(name:SfxName)=>name==='play'?['/sfx/lore-v5/play.mp3']:name==='draw'?['/sfx/lore-v4/draw-3.mp3']:Array.from({length:['click','attack','impact'].includes(name)?3:1},(_,i)=>`/sfx/lore-v${['click','pop','error'].includes(name)?3:4}/${name}${['click','attack','impact'].includes(name)?'-'+(i+1):''}.mp3`);
 const esc=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const root=document.getElementById('sound-review')!;
-root.innerHTML=`<header><small>LORE / SOUND REVIEW · 2026.09.30</small><h1>TCGの効果音、作り直しました。</h1><p>攻撃・着弾・召喚を聞き分けられる、短く芯のある音へ。<br>HOMEの音は維持。Drawは③のみ、Buyは承認された音を購入に接続。</p><div class="review-stats"><span><b>28</b>種類を再制作</span><span><b>35</b>種類の割当を確認</span><span><b>STAGING</b>反映済み</span></div></header>
+root.innerHTML=`<header><small>LORE / SOUND REVIEW · 2026.09.30</small><h1>TCGの効果音、作り直しました。</h1><p>攻撃・着弾・召喚を聞き分けられる、短く芯のある音へ。<br>HOMEの音は維持。Drawは③のみ。魔法音を再制作し、0ダメージの攻撃では強い着弾音を省略。</p><div class="review-stats"><span><b>28</b>種類を再制作</span><span><b>35</b>種類の割当を確認</span><span><b>STAGING</b>反映済み</span></div></header>
 <div class="review-controls"><div><label>試聴音量 <input id="volume" type="range" min="0" max="100" value="70"><output id="volume-label">70%</output></label><button id="stop">■ 停止</button><input id="search" type="search" placeholder="音・シーンを検索" aria-label="音・シーンを検索"></div><p id="status" role="status" aria-live="polite">音を準備しています…</p></div>
 <section class="review-chain"><small>連続試聴</small><h2>一連の動作で確認する</h2><p>召喚 → ドロー③ → 攻撃 → 命中 → 直接攻撃 → 支払い → 購入。同じ順序に旧／新の音源を並べた比較です。旧実装の再現や実戦録画ではありません。</p><div><button data-chain="new">▶ 新音の連続試聴</button><button data-chain="old">▶ 旧音の連続試聴</button><label><input type="checkbox" id="bgm"> 対戦BGMを重ねる</label></div><div id="timeline" aria-label="再生中のシーン"></div></section>
 <div class="review-tabs"><button data-filter="all" aria-pressed="true">すべて</button><button data-filter="new" aria-pressed="false">作り直した音</button><button data-filter="keep" aria-pressed="false">維持する音</button></div><section id="catalog"></section>

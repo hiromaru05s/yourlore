@@ -1,0 +1,20 @@
+{
+  "version": 6,
+  "sounds": {
+    "play": [
+      {
+        "file": "play.mp3",
+        "url": "/sfx/lore-v6/play.mp3",
+        "seconds": 0.64,
+        "peakDb": -11,
+        "rmsDb": -28.44,
+        "sha256": "5c014a2ad4dc0191db97119b34e7d5339158f4bc0c39ce4896fa1aba0fdf47d0",
+        "sources": [
+          "original: rising harmonic bloom and filtered air"
+        ],
+        "decision": "rebuilt spell onset revision 2",
+        "description": "短い吸気から柔らかく広がる魔力の発動。紙音・高い通知音・打撃なし。"
+      }
+    ]
+  }
+}

@@ -5,12 +5,12 @@ import type {SfxName} from './sound';
 export class EventSound {
  private hit:string|null=null;
  private player:Side|null=null;
- contact(targetUid:string|null,defender:Side){this.hit=targetUid;this.player=targetUid?null:defender;}
+ contact(targetUid:string|null,defender:Side,damaging=true){this.hit=targetUid;this.player=targetUid||!damaging?null:defender;}
  cue(e:GameEvent):SfxName|undefined{
   if(e.type==='attack'||e.type==='playSpell'){this.hit=null;this.player=null;}
   if(e.type==='hit'){
    if(e.uid===this.hit){this.hit=null;return;}
-   return 'impact';
+   return e.amount===0?undefined:'impact';
   }
   if(e.type==='damage'){
    if(e.player===this.player){this.player=null;return;}
