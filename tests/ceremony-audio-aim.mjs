@@ -18,8 +18,8 @@ try{
  // All quadrants, near-zero drag and reverse-direction movement: no backward tangent.
  for(const distance of [0,.001,2,8,22,80,500,2000])for(let degrees=0;degrees<360;degrees+=5){const a={x:371,y:615},v={x:Math.cos(degrees*Math.PI/180),y:Math.sin(degrees*Math.PI/180)},b={x:a.x+v.x*distance,y:a.y+v.y*distance},curve=api.aimCurve(a,b);assert.deepEqual(curve.point(0),a);assert.deepEqual(curve.point(1),b);let previous=-1;for(let i=0;i<=100;i++){const t=i/100,p=curve.point(t),tangent=curve.tangent(t),projection=(p.x-a.x)*v.x+(p.y-a.y)*v.y;assert(Object.values(p).every(Number.isFinite));assert(projection>=previous-1e-8);if(distance>.001)assert(tangent.x*v.x+tangent.y*v.y>0);previous=projection;}}
  const outline=api.riftOutline();assert(outline.length>100);assert(Math.min(...outline.map(p=>p[1]))<.065);assert(Math.max(...outline.map(p=>p[1]))>.39);assert(api.RIFT_DEPTHS[0]<-.041);
- const manifest=JSON.parse(await readFile('client/public/sfx/lore-v4/manifest.json','utf8'));
- assert.deepEqual([...Object.keys(manifest.sounds), 'rankUp','rankDown','rankPromote'].sort(),[...api.SFX_NAMES].sort());let bytes=0;
+ const manifest=JSON.parse(await readFile('client/public/sfx/lore-v5/manifest.json','utf8'));
+ assert.deepEqual([...Object.keys(manifest.sounds)].sort(),[...api.SFX_NAMES].sort());let bytes=0;
  for(const name of Object.keys(manifest.sounds)){const urls=api.soundUrls(name);assert.equal(urls.length,manifest.sounds[name].length);for(const [i,clip] of manifest.sounds[name].entries()){assert.equal(urls[i],clip.url);const b=await readFile('client/public'+clip.url);bytes+=b.length;assert.equal(createHash('sha256').update(b).digest('hex'),clip.sha256);assert(clip.peakDb<-1);assert(clip.seconds>0&&clip.seconds<5);}}
  assert(bytes<1024*1024);
  api.initSound();api.initSound();await flush();assert.equal(fetches,0,'boot does not compete with scene artwork');document.dispatchEvent(new Event('lore:screen-ready'));await api.warmSounds(['click','pop','error']);assert.equal(fetches,5);assert.equal(contextCount,0,'no AudioContext before user gesture');api.sfx('attack');await flush();assert.equal(starts,0);
@@ -30,5 +30,5 @@ try{
  // Removing an opening (navigation) resolves its promise, even without WebGL.
  globalThis.matchMedia=()=>({matches:false});
  const opening=api.playDuelOpening({name:'<unsafe>',avatar:null},{name:'Other',avatar:null},true);assert(document.querySelector('.duel-opening'));assert.equal(document.querySelector('.ceremony-opening-player strong').textContent,'<unsafe>');document.querySelector('.duel-opening').remove();await opening;assert.equal(document.querySelectorAll('.cointoss-ov').length,0);
- console.log('PASS: 58,176 aim samples; rail-aligned cutter bounds; '+api.SFX_NAMES.length+' cues (legacy manifest verified; rank cues covered separately) / '+Math.round(bytes/1024)+' KiB; gesture unlock, decode cache, rate limit, polyphony, mute and cancelled opening');
+ console.log('PASS: 58,176 aim samples; rail-aligned cutter bounds; '+api.SFX_NAMES.length+' cues (current manifest SHA256 verified) / '+Math.round(bytes/1024)+' KiB; gesture unlock, decode cache, rate limit, polyphony, mute and cancelled opening');
 }finally{await rm(dir,{recursive:true,force:true});dom.window.close();}

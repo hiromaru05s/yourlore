@@ -16,7 +16,7 @@
 | B08 | 前セッションの静止描画cache、遅延gameロード、画像最適化を保持。 | 既存対応 |
 | B09 | `npm run test:production`で現在有効なNode回帰を一括実行。v47/v49は古いルールの履歴として明示、ブラウザ試験は別枠。現行の音声cue・WebP・ページ分割・DOM環境にテストを更新。 | 対応 |
 | B10 | Vite 7 / Wrangler 4へ更新、jsdomを開発依存へ移動、transitive修正版をlock。別worktree専用node_modulesで確認し、他セッションの依存は変更しない。 | 対応 |
-| B11 | CI定義は導入用ファイルとして保存（GitHubのworkflow権限不足で追加拒否）。配信コマンドは全worktree共通lock、最新gh/mainとの完全SHA一致、追跡ファイルの変更なしを要求。commitから隔離snapshotを作りnpm ci→型検査→回帰→build、直前にmainを再確認する。生のwrangler実行や別PCまで強制する仕組みではない。 | 部分対応 |
+| B11 | CI定義は導入用ファイルとして保存（GitHubのworkflow権限不足で追加拒否）。配信コマンドは全worktree共通lock、最新gh/mainとの完全SHA一致、追跡ファイルの変更なしを要求。commitから隔離snapshotを作りnpm ci→型検査→回帰→build、直前にremote/local mainと現在の配信versionを再確認する。中断時は子process/lockを解放する。生のwrangler実行や別PCまで強制する仕組みではない。 | 部分対応 |
 | B12 | bootstrap schemaへfurnitureを追加。空DBからgetUserが成功する回帰。既存DBへの不要なALTERは実行しない。 | 対応 |
 | B13 | Workers logsを有効化し、保存/alarm/queue失敗を固定event名で記録。socket handlerの例外をJSON破損と一緒に握り潰さない。自動invocation URLログは無効化し、本文・cookie・tokenを独自ログへ出さない。通知先/SLO、同時接続負荷、region/DB障害復旧訓練は未実施。 | 部分対応 |
 | B14 | OAuthクライアント・メール送信のstaging設定とE2Eは未実施。本番secretを流用せず、実配送先・callback設定の確認が必要。 | 今回は変更しない |
@@ -46,3 +46,9 @@
 - CIのbranch protection/必須check設定、外部からの生のwrangler配信禁止はこのリポジトリ内変更だけでは強制できない。
 
 配信SHA、統合SHA、実ステージングの結果はrelease.jsonとevidenceへ追記する。本番配信は行わない。
+
+## 並行SHAの取り込み
+
+- 初期基準5d62092bに、792bbf27のプレイヤー枠位置調整を取り込んだ。
+- 配信前に共有mainのみへ先行していた効果音v5（1bfea19b/0b06fea0/e2f21172）を検出し、配信処理を中断して統合。音源と承認済みdraw-3固定を保持し、音声回帰もv5 manifestで照合する。
+- 配信ガードはremoteだけでなくlocal mainの祖先関係、配信versionの変化も検査するよう追加した。
