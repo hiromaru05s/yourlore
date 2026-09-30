@@ -1,0 +1,16 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checks": [
+    "ja-1280 has four ordered rows, no raster art or horizontal overflow",
+    "ja-1920 has four ordered rows, no raster art or horizontal overflow",
+    "ja-390 has four ordered rows, no raster art or horizontal overflow",
+    "ja-320 has four ordered rows, no raster art or horizontal overflow",
+    "ja-844 has four ordered rows, no raster art or horizontal overflow",
+    "hover, keyboard focus, Escape/focus restoration, cancel and backdrop dismissal",
+    "en-320 has four ordered rows, no raster art or horizontal overflow",
+    "ko-320 has four ordered rows, no raster art or horizontal overflow",
+    "deployed Easy selection starts BOT and completes unskippable opening"
+  ],
+  "errors": [],
+  "boundary": "API/account fixtures; local callback mapping or deployed BOT smoke."
+}

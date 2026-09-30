@@ -1,0 +1,14 @@
+{
+  "id": "58ad66d6-cb98-40df-a2bb-8656f92fed00",
+  "annotations": {
+    "workers/message": "a2dd8c7c quiet BOT difficulty menu aligned with HOME",
+    "workers/triggered_by": "deployment"
+  },
+  "versions": [
+    {
+      "version_id": "82ab06c5-73aa-43c6-aa92-6c4341f7aca2",
+      "percentage": 100
+    }
+  ],
+  "created_on": "2026-09-30T01:20:21.797183Z"
+}
