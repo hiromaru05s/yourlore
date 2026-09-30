@@ -1,0 +1,37 @@
+{
+  "baseMain": "9d6221f72f5bd47e35509718a480b3b326dfc364",
+  "runtimeCommit": "cb571de90719ab770cee2fc056590287bf05ac01",
+  "branch": "codex/production-audit-20260930",
+  "mainIntegration": "fast-forward; no force push",
+  "stagingUrl": "https://test.yourlore.xyz",
+  "deployment": {
+    "id": "f07b6f52-af0b-4f28-a628-f4d2481a901c",
+    "source": "wrangler",
+    "strategy": "percentage",
+    "author_email": "maruru836818@gmail.com",
+    "annotations": {
+      "workers/message": "cb571de9 production audit A fixes",
+      "workers/triggered_by": "deployment"
+    },
+    "versions": [
+      {
+        "version_id": "9e676b8c-ddd2-4512-8b3a-9a7f5a562c58",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-09-30T00:35:15.525022Z"
+  },
+  "localEngine": {
+    "cards": 357,
+    "cardCases": 714,
+    "games": 200,
+    "resolved": 200,
+    "steps": 34475,
+    "stalls": [],
+    "errors": [],
+    "timeouts": 0
+  },
+  "publicHashCount": 89,
+  "qaStatus": "live browser and online checks in progress",
+  "productionDeployed": false
+}

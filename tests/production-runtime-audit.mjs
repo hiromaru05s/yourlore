@@ -1,4 +1,4 @@
-import assert from 'node:assert/strict';import {writeFile,mkdir} from 'node:fs/promises';import {chromium} from '/tmp/lore-opening-tools/node_modules/playwright/index.mjs';
+import assert from 'node:assert/strict';import {writeFile,mkdir} from 'node:fs/promises';const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/tmp/lore-opening-tools/node_modules/playwright/index.mjs');
 const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5461',out=process.env.LORE_TEST_OUTPUT||'docs/audits/2026-09-30-production/evidence/runtime';await mkdir(out,{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true});const page=await browser.newPage({viewport:{width:1280,height:900}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
 try{

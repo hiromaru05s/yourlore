@@ -7,8 +7,8 @@
       "title": "内部ルーム作成処理を公開URLから実行できる",
       "files": "server/src/index.ts; server/src/gameRoom.ts",
       "detail": "公開ルーム下位パスへPOSTすると任意の参加者・seed・ranked条件で作成できた。入力経路を単一IDのWebSocketに限定し、setupは完全一致・POST限定・一度だけにした。",
-      "status": "修正・ローカル回帰成功",
-      "evidence": "security-before.json / security-after.json"
+      "status": "修正・ローカル回帰成功・staging配信済み・実API回帰成功",
+      "evidence": "security-before.json / security-after.json / staging-security.json"
     },
     {
       "id": "A02",
@@ -16,7 +16,7 @@
       "title": "非公開の手札・山札順を物理UIDで復元できる",
       "files": "client/src/shared/protocol.ts",
       "detail": "HIDDENでもUIDがrevealedCardsと一致し、既知カードの手札位置・次のドローを追跡できた。非公開ゾーンを匿名スロットUIDにし、正当な手札/山札閲覧効果は実UIDを保持。",
-      "status": "修正・ローカル回帰成功",
+      "status": "修正・ローカル回帰成功・staging配信済み",
       "evidence": "security-before.json / security-after.json"
     },
     {
@@ -25,7 +25,7 @@
       "title": "必須選択が残るとサーバーの時間切れでもターンが終わらない",
       "files": "server/src/gameRoom.ts; server/src/gameInput.ts",
       "detail": "oppMon/myMon/giantShop等のキャンセル不可選択をnullで消せず10秒ずつ永久延長。実エンジンで合法対象を順に解決し、対象消失時も期限を閉じる。手札上限は既存の右端破棄を維持。",
-      "status": "修正・ローカル回帰成功",
+      "status": "修正・ローカル回帰成功・staging配信済み",
       "evidence": "security-after.json / final-dew-shield-server.log"
     },
     {
@@ -34,7 +34,7 @@
       "title": "BOTの攻撃中に人間の防御選択が拒否される",
       "files": "client/src/game/controller.ts",
       "detail": "WORLD_TREE_DEFENDのownerは人間でもcurはBOT。LocalControllerがcurのみで判定していた。actingSideで選択権を判定し、通常の手番外操作は拒否する。",
-      "status": "修正・ブラウザ回帰成功",
+      "status": "修正・ブラウザ回帰成功・staging配信済み",
       "evidence": "runtime/report.json"
     },
     {
@@ -43,7 +43,7 @@
       "title": "呪い反応中の永続魔法が墓地と場に二重存在する",
       "files": "client/src/shared/engine.ts",
       "detail": "HEXER3が呪いを墓地末尾に追加した後、discard.pop()が魔法ではなく呪いを削除。魔法のUIDで移動させ、生成された呪いを保存する。初回seed 32/168/171で検出。",
-      "status": "修正・ローカル回帰成功",
+      "status": "修正・ローカル回帰成功・staging配信済み",
       "evidence": "duplicate-uid.json / security-after.json / engine-first-pass.json"
     },
     {
@@ -52,8 +52,8 @@
       "title": "報酬の残高更新失敗で未払いのまま取得済みになる",
       "files": "server/src/rewards.ts",
       "detail": "取得記録と加算が別commit。加算失敗後は再試行しても0。記録と加算をD1 batch内で確定し、重複支払いも防ぐ。",
-      "status": "修正・障害注入成功",
-      "evidence": "security-before.json / security-after.json"
+      "status": "修正・障害注入成功・staging配信済み・実API回帰成功",
+      "evidence": "security-before.json / security-after.json / staging-security.json"
     },
     {
       "id": "A07",
@@ -61,8 +61,8 @@
       "title": "クーポン上限超過と失敗時の永久未払い",
       "files": "server/src/rewards.ts",
       "detail": "在庫の事前SELECTと消費が別処理なのでmax_uses=1でも並行2件が200。消費資格をtransaction中に再確認し、claim/残高/使用数を同時確定。",
-      "status": "修正・並行/障害注入成功",
-      "evidence": "security-before.json / security-after.json"
+      "status": "修正・並行/障害注入成功・staging配信済み・実API回帰成功",
+      "evidence": "security-before.json / security-after.json / staging-security.json"
     },
     {
       "id": "A08",
@@ -70,8 +70,8 @@
       "title": "未ログイン接続がカジュアル対戦枠を消費できる",
       "files": "server/src/index.ts; server/src/matchmaker.ts",
       "detail": "匿名queueは参加できるがroomはログイン必須。認証済みの相手まで成立しない対戦へ送られる。queueも認証必須に統一。",
-      "status": "修正・ローカル回帰成功",
-      "evidence": "security-after.json"
+      "status": "修正・ローカル回帰成功・staging配信済み・実API回帰成功",
+      "evidence": "security-after.json / staging-security.json"
     },
     {
       "id": "B01",
@@ -225,6 +225,15 @@
       "detail": "AUTH_SECRETが未設定の場合Bearer undefinedを比較していた。設定済みstaging/本番では再現しないが、新環境をfail closedへ修正。",
       "status": "今回修正済み",
       "evidence": "security-after.json"
+    },
+    {
+      "id": "B18",
+      "urgency": "B",
+      "title": "終了済み対戦ルームの保存期限・削除処理がない",
+      "files": "server/src/gameRoom.ts:334",
+      "detail": "精算済み終局ではalarmを削除するだけでroomの永続storageは削除しない。対戦ごとに残り続けるため、再接続/監査に必要な保存期間と削除方針を定める必要がある。今回のQA対戦も匿名テストIDを持つ終了roomが残る。",
+      "status": "未対応・静的確認",
+      "evidence": "syncAlarm / recordResult / QA cleanup inspection"
     },
     {
       "id": "C01",

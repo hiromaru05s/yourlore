@@ -1,0 +1,362 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-09-30T00:36:06.671Z",
+  "hashes": [
+    {
+      "file": "assets/crownOutcome-BbcPrzoM.js",
+      "sha256": "f4afe034fe5d6ccc9f0267c9c03753537959240aef2ec08bce8e45e1a8a17cf2"
+    },
+    {
+      "file": "assets/diceScene-DvAgTil1.js",
+      "sha256": "2133b646d7f65e215b1e1c10d838787d592596b01c028852b20279e5b035d45e"
+    },
+    {
+      "file": "assets/ceremonyScene-Cbf5B16x.js",
+      "sha256": "69af4fec790b86bbd107a392d08ac8941799bd80c716426be5ec0da652f21866"
+    },
+    {
+      "file": "index.html",
+      "sha256": "d8a3fade759700e39cd3ba709e16cba6e67534aa1c2a10b1fa80a2708c0e4d06"
+    },
+    {
+      "file": "assets/RoomEnvironment-Dg4OOisb.js",
+      "sha256": "a3d4c746541d4e071cbea3e34f1a41fb352f4564ff5b65da1fa7c44d6b01058f"
+    },
+    {
+      "file": "assets/GLTFLoader-DqCMa9To.js",
+      "sha256": "026fcb02b73a6f968803745371b63e7b83958f5c9a5de8d701703388a71436e7"
+    },
+    {
+      "file": "assets/tablePreview-2Rkra2Ey.css",
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4"
+    },
+    {
+      "file": "assets/riftScene-BnoZAvbx.js",
+      "sha256": "9160777b9648dd0f235b91368a31d247dc6811de908cf08b5a45bd8bb5659cf1"
+    },
+    {
+      "file": "assets/paperDraw-CTkSIK5a.js",
+      "sha256": "8a834e4960e88ddf5d30bc011b1d0ae2dc3701ea8cc06197384d1453e1a7cc3c"
+    },
+    {
+      "file": "assets/duelScene-CGPMXXZo.js",
+      "sha256": "4e9e479a4ce9f29379e08c1066de3910ec63a1e27bbb1f0658d6a3556a4d9723"
+    },
+    {
+      "file": "assets/main-BF7NjVr-.css",
+      "sha256": "a201b5c63bd7ced850beb8c98517a6bd1db964ea4ee76e4c41187b2e306c7cee"
+    },
+    {
+      "file": "assets/main-OOUfW-A6.js",
+      "sha256": "88ce28066eb87c8ca0213c0cce42b1174e68ce0cf57809f335e6bc1f736a2886"
+    },
+    {
+      "file": "assets/voidSurface-DGIZPG9f.js",
+      "sha256": "9a518e2578ecb1da2fb4828334c8b8125406559d26937c590cd4a2b168529233"
+    },
+    {
+      "file": "assets/tablePreview-CJCuoT-O.js",
+      "sha256": "4ca9f04c76de91bf7a76d6b183f44763ba234a0ab57d5d15869fe9d516f51fb4"
+    },
+    {
+      "file": "assets/three.module-DJFzXWA5.js",
+      "sha256": "647399e8e92187c3fb10dc3ab0c46fa667d94cf8e9d84dc71a5d8adef86803be"
+    },
+    {
+      "file": "music/clash-of-blades.mp3",
+      "sha256": "73ca490d1cf64c2c80885c3329eba4f2b82be397f3b23d6eb01a5c73a46688ca"
+    },
+    {
+      "file": "music/poised-opening.mp3",
+      "sha256": "ccfb693a92823b80ce15386ab82226e02c2fdcff5378c84e726d24af481e4a15"
+    },
+    {
+      "file": "music/yohaku-to-zankyo.mp3",
+      "sha256": "1f5855ccd4adcb2bc2c4315be93695352a54ad75f273b3920c82eac2cf28200c"
+    },
+    {
+      "file": "ui/passives/v2/dual.svg",
+      "sha256": "0136f88a285869dde9d841ef2bce7a1cfc78e6c9debd6bac4426710ce3717e4b"
+    },
+    {
+      "file": "ui/passives/v2/evade.svg",
+      "sha256": "a957e70cc6b1d7dd90ab0b5ba3a2820b817d7dd603f6c31a7b82b729ef8bf2ef"
+    },
+    {
+      "file": "ui/passives/v2/counter.svg",
+      "sha256": "ae3e8a708cc82a2a6ff92b91c82ef27c374dc3dd54ef8861038339043fd91f27"
+    },
+    {
+      "file": "ui/passives/v2/ambush.svg",
+      "sha256": "aad8dcd4407ea0c7e045dfbdbfeae070f5b588ece939bacd420d9883bfcd641b"
+    },
+    {
+      "file": "ui/passives/v2/decay.svg",
+      "sha256": "80218cb09a6448f855dd794563a2a5f6d6c1ce493faaab3543bcc7517621137e"
+    },
+    {
+      "file": "ui/passives/v2/aura.svg",
+      "sha256": "407583dbdc6197083880928648c1acfeef6ab0a55c05f4ad3ffc12f5a7313de2"
+    },
+    {
+      "file": "ui/passives/v2/void.svg",
+      "sha256": "2c6cb4121a6fb22374662510a4b241eae4bf33a44032cf594295270c85978b9b"
+    },
+    {
+      "file": "sfx/lore-v4/attack-1.mp3",
+      "sha256": "89a4ce8cd13a20bbb1f664a9db749f4a33a8dbedda33f30eb3ecde36520468a7"
+    },
+    {
+      "file": "ui/passives/v2/relic.svg",
+      "sha256": "9300c964ee020f6e043dd9810af8e651614d04d8bc1247b656298d22c084116f"
+    },
+    {
+      "file": "ui/passives/v2/majesty.svg",
+      "sha256": "8b1192681d8e0655785123120855b9adad4a942ca92e596124c55e160dcb8b94"
+    },
+    {
+      "file": "ui/passives/v2/guts.svg",
+      "sha256": "dbd2e6abee5f877d06b2ca9e0dd6d355fdeefd98f82c14fd5055b03a0289f39c"
+    },
+    {
+      "file": "ui/passives/v2/taunt.svg",
+      "sha256": "00cd5b948b93221d2ef7692adbdcc78eca07b89d114de3e0769716ad8a97acec"
+    },
+    {
+      "file": "sfx/lore-v4/coinLand.mp3",
+      "sha256": "151ba60e14c1c94228794ceb51f81185c7704832d54ea296fa4095a390f60a53"
+    },
+    {
+      "file": "sfx/lore-v4/coinToss.mp3",
+      "sha256": "fd5a9fcc079f64bd5d580eeaa107dc911d53a55963d41701ceec29eafa6f0591"
+    },
+    {
+      "file": "sfx/lore-v4/attack-2.mp3",
+      "sha256": "4958198424b2628015554b0b061c6aee5961442728ad89f95b2f0b550dad97b7"
+    },
+    {
+      "file": "sfx/lore-v4/buy.mp3",
+      "sha256": "a995b5936355723735e13d71500519a4c3c5ce7cf20bc76c2e05e917513beeec"
+    },
+    {
+      "file": "sfx/lore-v4/coin.mp3",
+      "sha256": "1c68676856e96bca4ad8010d39a45e332a4da8e42842e742baa952a08151932b"
+    },
+    {
+      "file": "sfx/lore-v4/attack-3.mp3",
+      "sha256": "d170d5877d0deade87c124d09a58d3f455062787a898f8b2f1087fa10917bff9"
+    },
+    {
+      "file": "sfx/lore-v4/discard.mp3",
+      "sha256": "5374c7345af4a776531f71387d808e0ad37b683f7985a2fb76d45d6072ab8ef5"
+    },
+    {
+      "file": "sfx/lore-v4/draw-1.mp3",
+      "sha256": "7df2bd8907703d443858f4508cf5121af5ed60aa19fc634ec6b2ba8ca2a47f34"
+    },
+    {
+      "file": "sfx/lore-v4/diceLand.mp3",
+      "sha256": "5eb66364c7386a168b6114fa7beb96021de52413c128bce0dc47adb58e1a0b8c"
+    },
+    {
+      "file": "sfx/lore-v4/damage.mp3",
+      "sha256": "76dcbc789f8b588e04b6ad6f31957b8601bdb41e68e8bf2824ba9c6d4a7c8837"
+    },
+    {
+      "file": "sfx/lore-v4/diceRoll.mp3",
+      "sha256": "7006253d46ada8012df63bd01041d4b443e6ace6a6c8d01516edf7dbb006d723"
+    },
+    {
+      "file": "sfx/lore-v4/death.mp3",
+      "sha256": "ce52182bca9fa96ba7e5c98ad1db72a8de2f379a92633bd254c16fddfa2cc251"
+    },
+    {
+      "file": "sfx/lore-v4/facehit.mp3",
+      "sha256": "dd6e5c95ee9e1f7cd5fdc355302a303e91d9cd7fa6d18aa1ae411e28ec5f876a"
+    },
+    {
+      "file": "sfx/lore-v4/heal.mp3",
+      "sha256": "dd6f0b7530aa34276d512148f19f04cb264c618c3722d5aa10be182de7330493"
+    },
+    {
+      "file": "sfx/lore-v4/drawGame.mp3",
+      "sha256": "4d57b0bfa63f17f5f60a4fccb8d1cc9b27a9c8fd413819ce358db6ba0cc5dd82"
+    },
+    {
+      "file": "sfx/lore-v4/draw-2.mp3",
+      "sha256": "9b350cfd4350b7749025dfb05e912c23be340e257bc9caff099b8a9562120f7e"
+    },
+    {
+      "file": "sfx/lore-v4/draw-3.mp3",
+      "sha256": "7b76afc4859cdef231025e8da3949d55a7ad3360a2d956875ea80f2aa9f60b05"
+    },
+    {
+      "file": "sfx/lore-v4/duel-start.mp3",
+      "sha256": "e036516dabff573ca13e81c9d1f151b4e572c56e74369833849b9db4ff4b2062"
+    },
+    {
+      "file": "sfx/lore-v4/mana-pay.mp3",
+      "sha256": "cd2155620f8ffd012ef6700c8506c2459ee6e5e1a0e931defd80eb1de99fa1a3"
+    },
+    {
+      "file": "sfx/lore-v4/mana.mp3",
+      "sha256": "14f8cad80083c93adecbe2cb4779e3022dcdb00d58eec639e3aef6828488eff8"
+    },
+    {
+      "file": "sfx/lore-v4/impact-3.mp3",
+      "sha256": "956dd87725d1ff287f8fb573e5b57ab720f99fc8095d124d12c187111c1598d5"
+    },
+    {
+      "file": "sfx/lore-v4/impact-1.mp3",
+      "sha256": "0762ecc0fb221a07c65050989127b571d58610dc9faa1905fb6a761cbb0207d1"
+    },
+    {
+      "file": "sfx/lore-v4/impact-2.mp3",
+      "sha256": "117d3fb03cb0783da2b36d0a9866f75ad3df2673730c08af3f809bd9b2f51ca1"
+    },
+    {
+      "file": "sfx/lore-v4/lose.mp3",
+      "sha256": "835ca8864978ade6b9d1a0a717aa89c4391a864e67ac894684d5bfb14aa0a991"
+    },
+    {
+      "file": "sfx/lore-v4/rankPromote.mp3",
+      "sha256": "239de0fb0bd14cd2c5db26a00615745079858b2213e25bc81b6549669f0fa4ad"
+    },
+    {
+      "file": "sfx/lore-v4/rankUp.mp3",
+      "sha256": "2f14cdce453b49982ba9b253b4d23fca79fd1ec5935fa816e0a2a5aa672aa492"
+    },
+    {
+      "file": "sfx/lore-v4/play.mp3",
+      "sha256": "791a20961b3033b77e0e4a803a3fed1aaec9763712ded6313f085c8ce7048c18"
+    },
+    {
+      "file": "sfx/lore-v4/mimic.mp3",
+      "sha256": "2812ac022c89e63119ebffb7e0eb196e3636b0822f509ac65e40e54c17379645"
+    },
+    {
+      "file": "sfx/lore-v4/rankDown.mp3",
+      "sha256": "3d54a2cebdb9d768ae73d8862126b9a2eff8bea09988be020f467e4469fc845e"
+    },
+    {
+      "file": "sfx/lore-v4/match.mp3",
+      "sha256": "ef16d12aca0f83a819e21930a5f708c4b0f6be035599c00a60973593930bf878"
+    },
+    {
+      "file": "sfx/lore-v4/turn.mp3",
+      "sha256": "69892e6d0164b2bb7629ece9094fe717f9489b0910fe56b78e512d8efaca2bb0"
+    },
+    {
+      "file": "sfx/lore-v4/void.mp3",
+      "sha256": "c8ecefc911ef949d43343f071cd5fc84de701dcb2ce1ecc725addfab4f68c2ba"
+    },
+    {
+      "file": "sfx/lore-v4/trap.mp3",
+      "sha256": "78a196432571c56c9dc6543dc3c6e473b314885ff81fb6ed8d6bfb17f7bca270"
+    },
+    {
+      "file": "sfx/lore-v4/shuffle.mp3",
+      "sha256": "a1fc8cff1012794662312c988407e2cc1fdb95f2723dd107823af2be2a8254a1"
+    },
+    {
+      "file": "sfx/lore-v4/trapSet.mp3",
+      "sha256": "715c5313c25a48ec3a61b7a3b7506ade8a304d0de4813de70064ed885f0dad39"
+    },
+    {
+      "file": "sfx/lore-v4/summon.mp3",
+      "sha256": "88e942db13b3e8a1aaa3f684ef8c0302cd5224ffd99b0c5545ad6709d91f0883"
+    },
+    {
+      "file": "sfx/opening-v1/draw-3.mp3",
+      "sha256": "6ef78598c0868e047c37fcbbd3bd7062ac3d1b58058f136da3607de88ca51314"
+    },
+    {
+      "file": "sfx/opening-v1/duel-start.mp3",
+      "sha256": "3f198b185c8eebceead811138bf33064433fc738724d4879da8ee19f399f3b14"
+    },
+    {
+      "file": "sfx/opening-v1/draw-1.mp3",
+      "sha256": "d91ce1f4e65855bbcdd77597cbc2407c7257c637d70c9a658ce50bf4247fcb48"
+    },
+    {
+      "file": "sfx/opening-v1/draw-2.mp3",
+      "sha256": "1b769a02533a72f2afa6b0b8b7e204a2bd0e08f777472a55a27891afe45d39ba"
+    },
+    {
+      "file": "sfx/lore-v4/win.mp3",
+      "sha256": "a9b276deee3a49276eee5fe817375005cb0dc00e54a4ed4074c1a30a78779358"
+    },
+    {
+      "file": "sfx/opening-v1/coin.mp3",
+      "sha256": "b6440534e6a599c4fcbdde133e6e716ff08d52623a66c2aeef5ca2ed41cfa204"
+    },
+    {
+      "file": "sfx/opening-v1/turn.mp3",
+      "sha256": "d1adc0bc8dbdfed2b84495b34fe8257b7d95be9ef491adab7df5b247397ce139"
+    },
+    {
+      "file": "art/biblion/modular/base-quest.png",
+      "sha256": "9374a4abe21dd11e21906e9cc23f63c1035eea9a991df1b551366a27f5efcf33"
+    },
+    {
+      "file": "art/biblion/modular/base-spell.png",
+      "sha256": "d682c2cfda42bc024bc2297b6d24ef11d3e0992d062e72c72212273267e17237"
+    },
+    {
+      "file": "art/biblion/modular/base-mon.png",
+      "sha256": "c35c03edede377527f414e8afd5b0c98acbbc4ff4947eb25a3aa1bee64789be1"
+    },
+    {
+      "file": "sfx/opening-v1/impact-1.mp3",
+      "sha256": "48c14c75d434479225865b91faf5045fe6dd40d8d032764a0e2ff22b3c4b7318"
+    },
+    {
+      "file": "art/biblion/modular/attack.png",
+      "sha256": "9566dd25dfccb213af69d12cd39b3990ecd91fa0f2f4b7c7a8de640a468adb25"
+    },
+    {
+      "file": "art/biblion/modular/field-spell.png",
+      "sha256": "9e5aed39ff327fac00ef53ffcf66e5804bc82a69de37123743f0e12a1945204e"
+    },
+    {
+      "file": "art/biblion/modular/field-quest.png",
+      "sha256": "629c040ab300300b8ded921807971a5e12ae1f1860a9a1d4a16ce7936b5d4046"
+    },
+    {
+      "file": "art/biblion/modular/dew.png",
+      "sha256": "07293bd99f76aaf73881b0022970d120f9e3baa6696a4cdb234a2161ef92f929"
+    },
+    {
+      "file": "art/biblion/modular/field-mon.png",
+      "sha256": "c45b49828a7b663bd7358b7058d0005647c582695156598baf1dfcd6b994ce0d"
+    },
+    {
+      "file": "art/biblion/modular/cost.png",
+      "sha256": "6a09eb84f3f6b8a44d05ed83d84f0bcae5663ad856e8239a832d1cb8450fc6ed"
+    },
+    {
+      "file": "art/biblion/modular/base-trap.png",
+      "sha256": "dc6d00acf275ca51b6eae2ee8745433a8f7487bd3b12d9651511244bb328023b"
+    },
+    {
+      "file": "art/biblion/modular/shield.png",
+      "sha256": "ee2d0a83663c5627d1ff412ed8e5a51559713159bf6867ff51739e757bc5e77a"
+    },
+    {
+      "file": "art/biblion/modular/plaque.png",
+      "sha256": "c1c9e4f52b1b07a4ecf4c07f61849db9631a2496b014a2be453695c1c6538227"
+    },
+    {
+      "file": "art/biblion/modular/infinity.png",
+      "sha256": "a179cd5f5ac26db0c102bfc22fe7d278bc21a20146a860acef5e8bae9343fd2f"
+    },
+    {
+      "file": "art/biblion/modular/health.png",
+      "sha256": "6914ca7d54cfc6cc0ca12a456acc56be9e9177402d5af2faf4152f0c6f6acfba"
+    },
+    {
+      "file": "art/biblion/modular/field-trap.png",
+      "sha256": "472d7726adca9f17e45f390b21c7c7e64c78efa8bff79a008572c27918660d43"
+    }
+  ]
+}

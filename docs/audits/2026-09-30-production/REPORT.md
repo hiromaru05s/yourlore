@@ -10,7 +10,7 @@
 
 ## 全件一覧
 
-A 8件 / B 17件 / C 4件、計29件。詳細は機械可読な [findings.json](findings.json) にも保存。
+A 8件 / B 18件 / C 4件、計30件。詳細は機械可読な [findings.json](findings.json) にも保存。
 
 ### 緊急度A
 
@@ -46,6 +46,7 @@ A 8件 / B 17件 / C 4件、計29件。詳細は機械可読な [findings.json](
 | B15 | **固定URL画像/音声の7日キャッシュと上書き更新**<br>/art,/ui,/sfxを7日キャッシュ。コメントは名前変更前提だが固定名を更新する運用も可能。既存ブラウザで旧素材が残るため内容hash付きURL/版管理を統一する。<br>`client/public/_headers` | 未対応・配信ハッシュ一致だけでは既存cacheを保証しない | _headers / final live hashes |
 | B16 | **不正なWebSocket JSONでhandler例外**<br>null/action欠落/型不正を受理していた。型・サイズ・action引数を検査し、状態を変更せず破棄する。<br>`server/src/gameInput.ts; server/src/gameRoom.ts; server/src/matchmaker.ts` | 今回修正済み | security-before.json / security-after.json |
 | B17 | **管理secret未設定時に文字列undefinedが認証値になる**<br>AUTH_SECRETが未設定の場合Bearer undefinedを比較していた。設定済みstaging/本番では再現しないが、新環境をfail closedへ修正。<br>`server/src/rank.ts` | 今回修正済み | security-after.json |
+| B18 | **終了済み対戦ルームの保存期限・削除処理がない**<br>精算済み終局ではalarmを削除するだけでroomの永続storageは削除しない。対戦ごとに残り続けるため、再接続/監査に必要な保存期間と削除方針を定める必要がある。今回のQA対戦も匿名テストIDを持つ終了roomが残る。<br>`server/src/gameRoom.ts:334` | 未対応・静的確認 | syncAlarm / recordResult / QA cleanup inspection |
 
 ### 緊急度C
 
@@ -56,10 +57,12 @@ A 8件 / B 17件 / C 4件、計29件。詳細は機械可読な [findings.json](
 | C03 | **言語とエラーメッセージの統一不足**<br>API/メールは韓国語または英語が中心。日本語UIの翻訳マッピング外エラーと配送画面を点検する必要がある。<br>`server/src/auth.ts; server/src/email.ts; client/src/net/serverMsg.ts` | 未対応 | ソース確認 |
 | C04 | **公開ビルドにsourcemapと開発用previewが残る**<br>sourcemap:true、table-previewを本番入力に含む。即時の秘密漏えいは確認していないが、公開用途を明示して配信対象を限定する。<br>`client/vite.config.ts` | 未対応 | build-fixed.log / ソース確認 |
 
+A8件はruntime `cb571de90719ab770cee2fc056590287bf05ac01` でmainへ統合し、stagingへ配信済み。A01/A06/A07/A08は実APIでも再確認し、報酬/クーポンの重複・上限が守られることを実D1で確認した。障害注入のrollback検証はローカルのみ。
+
 ## 検査範囲と結果
 
 - サーバー: 認証/セッション、OAuth、メールtoken、招待、管理API、ソーシャル/フレンド対戦、デッキ/所持品、報酬/クーポン、matchmaker、GameRoom、rank精算と再試行。
-- ルール: 現行DB 357定義×両side=714 smokeケース。前提条件により発動できないカードも含むため「全能力・全組合せ合格」とは数えない。200 seed対戦で有限値・非負mana・UID一意性・終局を検査。最終数値は [engine-audit.json](evidence/engine-audit.json)。
+- ルール: 現行DB 357定義×両side=714 smokeケース。前提条件により発動できないカードも含むため「全能力・全組合せ合格」とは数えない。200 seed対戦で有限値・非負mana・UID一意性・終局を検査。最終結果は200/200終局、34,475操作、停止/不変条件違反0。詳細は [engine-audit.json](evidence/engine-audit.json)。
 - 初回対戦でseed 32/168/171のUID二重存在を発見。原因はA05。初回結果は [engine-first-pass.json](evidence/engine-first-pass.json)、再現状態は [duplicate-uid.json](evidence/duplicate-uid.json)。
 - 従来46本は41成功/5失敗。失敗を隠して成功扱いしない。[全結果](evidence/baseline-tests.json)。修正後の現行ルール/サーバー/精算/デッキ等16本は全成功。[結果](evidence/final-regressions.json)。
 - A修正と付随する防御は [security-after.json](evidence/security-after.json) の独立チェック、[BOT防御選択](evidence/runtime/report.json) で確認。D1障害注入はSQLite adapterで、実CloudflareのDB障害を起こしたものではない。
@@ -91,3 +94,7 @@ A 8件 / B 17件 / C 4件、計29件。詳細は機械可読な [findings.json](
 - [Cloudflare D1 batchのtransaction/rollback仕様](https://developers.cloudflare.com/d1/worker-api/d1-database/)
 - [Durable Object State](https://developers.cloudflare.com/durable-objects/api/state/)
 - [Workers best practices](https://developers.cloudflare.com/workers/best-practices/workers-best-practices/)
+
+## 再実行
+
+Node 22以上（node:sqlite）とnpm依存が必要。ルートで `node tests/production-security.mjs`、`node tests/production-engine-audit.mjs` を実行する。ブラウザ試験はChromeとPlaywrightを用意し `PLAYWRIGHT_MODULE` にPlaywrightのESMエントリを指定する。`production-runtime-audit.mjs` はViteが5461で起動済みであること、`production-layers-audit.mjs` は5462が空いていることが前提。staging試験は個別作成したQAアカウントの認証ファイルと、専用のmax_uses=1/amount=7クーポンを必要とする。通常ユーザーのアカウントでは実行しない。
