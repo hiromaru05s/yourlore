@@ -85,10 +85,9 @@
   color: #ffffff14; font-size: 1.8em;
 }
 .card-art:has(img)::after { content: none; }
-/* Non-field cards (hand / market / zoom) show the same band for GRANTED passives
-   and egg counters; innate keywords live in the effect plate's chip row there. */
+/* Passive icons/counters sit above artwork, below the numeric seals (z-index 5). */
 .card-status {
-  position: absolute; left: 6%; right: 6%; top: 56%; z-index: 6;
+  position: absolute; left: 6%; right: 6%; top: 56%; z-index: 4;
   display: flex; flex-wrap: wrap; justify-content: center; gap: 0.14em 0.2em; pointer-events: none;
 }
 .card-status .ec, .card-status .kw {
@@ -323,7 +322,7 @@
    shape as the zoom view's .card-keys chips, so a monster reads the same way
    on the board as it does enlarged. */
 .card--field .card-status {
-  position: absolute; left: 3%; right: 3%; bottom: 27.5%; z-index: 6;
+  position: absolute; left: 3%; right: 3%; bottom: 27.5%; z-index: 4;
   display: flex; flex-wrap: wrap-reverse; justify-content: center; align-items: center;
   gap: 2px; pointer-events: none;
 }

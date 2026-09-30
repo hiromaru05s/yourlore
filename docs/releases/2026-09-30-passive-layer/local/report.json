@@ -1,0 +1,71 @@
+{
+  "origin": "http://127.0.0.1:5310",
+  "choice": {
+    "id": "ANTIQUE_DK",
+    "name": "앤티크 드래곤 나이트",
+    "count": 6
+  },
+  "checks": [
+    {
+      "width": 1280,
+      "bandZ": "4",
+      "probes": [
+        {
+          "seal": ".ad-atk",
+          "point": {
+            "x": 52.296875,
+            "y": 323.203125
+          },
+          "beforePassiveOnTop": true,
+          "afterSealOnTop": true,
+          "sealZ": "5"
+        },
+        {
+          "seal": ".ad-def",
+          "point": {
+            "x": 107.703125,
+            "y": 323.203125
+          },
+          "beforePassiveOnTop": true,
+          "afterSealOnTop": true,
+          "sealZ": "5"
+        }
+      ],
+      "icons": 6
+    },
+    {
+      "width": 390,
+      "bandZ": "4",
+      "probes": [
+        {
+          "seal": ".ad-atk",
+          "point": {
+            "x": 33.4375,
+            "y": 303.3046875
+          },
+          "beforePassiveOnTop": true,
+          "afterSealOnTop": true,
+          "sealZ": "5"
+        },
+        {
+          "seal": ".ad-def",
+          "point": {
+            "x": 82.0625,
+            "y": 303.3046875
+          },
+          "beforePassiveOnTop": true,
+          "afterSealOnTop": true,
+          "sealZ": "5"
+        }
+      ],
+      "icons": 6
+    }
+  ],
+  "zoom": {
+    "status": "4",
+    "atk": "5",
+    "hp": "5"
+  },
+  "errors": [],
+  "boundary": "Real gallery and inspection with API/account fixtures; temporary pointer-event probes verify paint order at natural overlap points."
+}
