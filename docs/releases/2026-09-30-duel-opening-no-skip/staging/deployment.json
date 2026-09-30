@@ -1,0 +1,14 @@
+{
+  "id": "c1d20db7-a958-495b-8e97-4b30e8364fa2",
+  "annotations": {
+    "workers/message": "b7c083ed remove manual duel opening skip; retain timing and cleanup",
+    "workers/triggered_by": "deployment"
+  },
+  "versions": [
+    {
+      "version_id": "2dca000f-bde1-4fa4-be2a-4e2ede0e5f76",
+      "percentage": 100
+    }
+  ],
+  "created_on": "2026-09-30T00:44:56.6753Z"
+}

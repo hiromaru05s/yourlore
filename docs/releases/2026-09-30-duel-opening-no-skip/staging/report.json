@@ -1,0 +1,86 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "assets": [
+    {
+      "file": "index.html",
+      "sha256": "8f709a22d1976e40dc5ec6f97a9ef4ff0aec9eb088b6cbccba8d3e166193b365"
+    },
+    {
+      "file": "assets/GLTFLoader-Syrzv2H6.js",
+      "sha256": "2f2c07c5e1667828ac6ed137482609a00fcc1f2ccf35d0c95d3e10a8ef05513b"
+    },
+    {
+      "file": "assets/RoomEnvironment-HFPuHeIy.js",
+      "sha256": "8028bee0dc42a8507613207d1a6cedbb15a4070a0b5b81db67274f558b572a95"
+    },
+    {
+      "file": "assets/ceremonyScene-DPpqOm6o.js",
+      "sha256": "3c636864d3e9415132976e32822f3a9d93287b1918614bb43cc2c17c79f533f3"
+    },
+    {
+      "file": "assets/crownOutcome-DhwpDHgB.js",
+      "sha256": "4bc66949db12f21112f35ea84bada30408df32f1a69badc99ef66eeb77b3dec0"
+    },
+    {
+      "file": "assets/diceScene-ClP1Ruyv.js",
+      "sha256": "d4e9246eb8344b0f158573deb8207d3c5c6d7dfff786561cd2a8d1e3fa68ba39"
+    },
+    {
+      "file": "assets/duelScene-D-TJ9B56.js",
+      "sha256": "9a9263e6a57f36585b5b8cb720eb29571fb5f6bab5d20d570ca046522c6f2948"
+    },
+    {
+      "file": "assets/game-CDlY8SiU.js",
+      "sha256": "0d362c31b72cfc31f862e2df9671c3dfbb1fff4873925a258a539d44e8c53a8d"
+    },
+    {
+      "file": "assets/game-LT5DhiTq.css",
+      "sha256": "614ef75c487cc9d45b5f150a3a4b16e49676369583dd17c2f9153af07e721680"
+    },
+    {
+      "file": "assets/handGeometry-Bz96hXgQ.js",
+      "sha256": "e827771a1eeb612f6feb91db5ef595bb57a150b164e607b1cbc4cf0a33d7264a"
+    },
+    {
+      "file": "assets/main-CR-KzvRq.css",
+      "sha256": "abc58395637fa9a071cd9cd6d7ac7885ca073eb756c9e844fabcde67b7c953c3"
+    },
+    {
+      "file": "assets/main-Dd27mH7b.js",
+      "sha256": "71393feae583706d9c82adbdd1ef8afb1dc29689b04dfb8c568ba91267cefb21"
+    },
+    {
+      "file": "assets/paperDraw-B8DK4kqB.js",
+      "sha256": "f8e3669fc47c8ebed84e142ae8bbd458f886aee77abab3c7f08d11ac4e905edf"
+    },
+    {
+      "file": "assets/riftScene-R--54jKR.js",
+      "sha256": "9cfd33171189621fa81334b434112f8f7e66307c1a03bad168dfe45ae8984f2f"
+    },
+    {
+      "file": "assets/tablePreview-2Rkra2Ey.css",
+      "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4"
+    },
+    {
+      "file": "assets/tablePreview-BnKVBpGZ.js",
+      "sha256": "83596ae775500920eb429aa74fe9a122722b796553565e91b33454363f5cc4a1"
+    },
+    {
+      "file": "assets/three.module-P6koxfW0.js",
+      "sha256": "7e207c000c88fdc73388a5737d6896fdb1d2af5c1d0e684780f9137968498d3e"
+    },
+    {
+      "file": "assets/voidSurface-BI34zy95.js",
+      "sha256": "46e0bd799c75cb17befb52747ef31eb48b7ff896027d756e073e81df9da1b3ef"
+    }
+  ],
+  "openingObservedMs": 10941,
+  "checks": [
+    "no skip button",
+    "Escape/Space/click cannot bypass opening",
+    "board locked until natural completion",
+    "hand and clock present after completion"
+  ],
+  "errors": [],
+  "boundary": "Deployed frontend/local BOT; API/account fixture."
+}
