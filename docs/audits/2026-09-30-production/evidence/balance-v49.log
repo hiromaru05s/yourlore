@@ -1,0 +1,19 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+100 !== 103
+
+    at file:///private/tmp/lore-production-audit-20260930/tests/balance-v49.mjs:56:12
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 100,
+  expected: 103,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

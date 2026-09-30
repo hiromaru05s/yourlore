@@ -1,0 +1,23 @@
+{
+  "cards": 357,
+  "cardCases": 714,
+  "games": 197,
+  "resolved": 197,
+  "steps": 34116,
+  "stalls": [],
+  "errors": [
+    {
+      "seed": 32,
+      "error": "duplicate physical UID\n\n16 !== 17\n"
+    },
+    {
+      "seed": 168,
+      "error": "duplicate physical UID\n\n39 !== 40\n"
+    },
+    {
+      "seed": 171,
+      "error": "duplicate physical UID\n\n12 !== 13\n"
+    }
+  ],
+  "timeouts": 0
+}

@@ -1,0 +1,10 @@
+{
+  status: 'passed',
+  checks: [
+    'source UID for summon/turn/attack effects',
+    'summon precedes activation',
+    'multi-attack remains ready',
+    'actual attack debuff remains engine-owned',
+    'exhaustion/hatch/no-attack/no-high/no-direct/low-cost/elite-guard eligibility'
+  ]
+}

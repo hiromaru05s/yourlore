@@ -1,0 +1,59 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    'attack',
+    'buy',
+    'click',
+    'coin',
+...
+    'pop',
+-   'rankDown',
+-   'rankPromote',
+-   'rankUp',
+    'shuffle',
+    'summon',
+    'trap',
+    'trapSet',
+    'turn',
+
+    at file:///private/tmp/lore-production-audit-20260930/tests/ceremony-audio-aim.mjs:22:9 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'attack',   'buy',        'click',
+    'coin',     'coinLand',   'coinToss',
+    'damage',   'death',      'diceLand',
+    'diceRoll', 'discard',    'draw',
+    'drawGame', 'duel-start', 'error',
+    'facehit',  'heal',       'impact',
+    'lose',     'mana',       'mana-pay',
+    'match',    'mimic',      'play',
+    'pop',      'shuffle',    'summon',
+    'trap',     'trapSet',    'turn',
+    'void',     'win'
+  ],
+  expected: [
+    'attack',   'buy',        'click',
+    'coin',     'coinLand',   'coinToss',
+    'damage',   'death',      'diceLand',
+    'diceRoll', 'discard',    'draw',
+    'drawGame', 'duel-start', 'error',
+    'facehit',  'heal',       'impact',
+    'lose',     'mana',       'mana-pay',
+    'match',    'mimic',      'play',
+    'pop',      'rankDown',   'rankPromote',
+    'rankUp',   'shuffle',    'summon',
+    'trap',     'trapSet',    'turn',
+    'void',     'win'
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

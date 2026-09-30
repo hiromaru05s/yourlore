@@ -169,7 +169,7 @@ export async function handleRank(env: Env, req: Request, path: string, user: Ses
   // 사용: POST /api/rank/finalize[?season=YYYY-MM]  헤더 Authorization: Bearer <AUTH_SECRET>
   if (path === "/rank/finalize" && req.method === "POST") {
     const auth = req.headers.get("Authorization") || "";
-    if (auth !== `Bearer ${env.AUTH_SECRET}`) return json(env, { error: "unauthorized" }, 401);
+    if (!env.AUTH_SECRET || auth !== `Bearer ${env.AUTH_SECRET}`) return json(env, { error: "unauthorized" }, 401);
     const url = new URL(req.url);
     const season = (url.searchParams.get("season") || prevSeasonKey()).slice(0, 7);
     if (season >= seasonKey()) return json(env, { error: "진행 중인 시즌은 확정할 수 없습니다." }, 400);

@@ -1,0 +1,15 @@
+PASS v52 catalog and purchase/play costs
+PASS DISCOVERY_SMALL same copy recycling, different copy, persistence, next turn reset
+PASS DISCOVERY same copy recycling, different copy, persistence, next turn reset
+PASS DISCOVERY_LARGE same copy recycling, different copy, persistence, next turn reset
+PASS Discovery limits independent and chain bonus preserved
+PASS Creation new instances cannot bypass cap and healing loop ends
+PASS negated cast still consumes same-name use
+PASS Warlord requires two OTHER allies
+PASS Harvest counts deck composition, 4 per Curse
+PASS AJIN costs 2 and still increases max mana
+PASS Lucky Chest dud outcomes 4 and 5 summon only ordinary Mimic
+PASS Realm suppresses base/granted keywords on entry and existing allies only
+PASS v54 Haven grants Dew from either market
+PASS all three language descriptions agree
+PASS 14 v52 rework suites

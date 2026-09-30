@@ -1,0 +1,8 @@
+
+> lore-tcg@0.1.0 text:check
+> node scripts/check-card-text.mjs
+
+card text: 360 cards × 3 languages
+
+total violations: 0
+all card text follows docs/card-text-style.md

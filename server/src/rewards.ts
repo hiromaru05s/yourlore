@@ -46,18 +46,17 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
   // POST /rewards/claim { key } → grant once; always returns the fresh balance
   if (path === "/rewards/claim" && req.method === "POST") {
     const body = (await req.json().catch(() => ({}))) as { key?: string };
-    const key = body.key || "";
-    const amount = REWARDS[key];
+    const key = typeof body?.key === 'string' ? body.key : '';
+    const amount = Object.hasOwn(REWARDS,key) ? REWARDS[key] : 0;
     if (!amount) return json(env, { error: "unknown reward" }, 400);
 
-    const ins = await env.DB.prepare(
-      `INSERT OR IGNORE INTO rewards (user_id, key, amount, created_at) VALUES (?,?,?,?)`
-    ).bind(user.id, key, amount, Date.now()).run();
+    // D1 batch is a transaction. changes() refers to the preceding INSERT in
+    // this batch, so duplicate claims cannot pay and failed payments roll back.
+    const [ins] = await env.DB.batch([
+      env.DB.prepare(`INSERT OR IGNORE INTO rewards (user_id, key, amount, created_at) VALUES (?,?,?,?)`).bind(user.id,key,amount,Date.now()),
+      env.DB.prepare(`UPDATE users SET credits = credits + ? WHERE id = ? AND changes() = 1`).bind(amount,user.id),
+    ]);
     const granted = (ins.meta?.changes ?? 0) > 0;
-    if (granted) {
-      await env.DB.prepare(`UPDATE users SET credits = credits + ? WHERE id = ?`)
-        .bind(amount, user.id).run();
-    }
     const row = await env.DB.prepare(`SELECT credits FROM users WHERE id = ?`)
       .bind(user.id).first<{ credits: number }>();
     return json(env, { granted, amount: granted ? amount : 0, credits: row?.credits ?? 0 });
@@ -66,20 +65,24 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
   // POST /rewards/coupon { code } → redeem a coupon code (once per user; server-side caps)
   if (path === "/rewards/coupon" && req.method === "POST") {
     const body = (await req.json().catch(() => ({}))) as { code?: string };
-    const code = (body.code || "").trim().toUpperCase().slice(0, 32);
+    const code = (typeof body?.code === 'string' ? body.code : '').trim().toUpperCase().slice(0, 32);
     if (!code) return json(env, { error: "쿠폰 코드를 입력하세요." }, 400);
     const c = await env.DB.prepare(`SELECT code, amount, max_uses, uses, expires_at FROM coupons WHERE code = ?`)
       .bind(code).first<{ code: string; amount: number; max_uses: number | null; uses: number; expires_at: number | null }>();
     if (!c) return json(env, { error: "존재하지 않는 쿠폰입니다." }, 404);
     if (c.expires_at != null && c.expires_at < Date.now()) return json(env, { error: "만료된 쿠폰입니다." }, 410);
     if (c.max_uses != null && c.uses >= c.max_uses) return json(env, { error: "소진된 쿠폰입니다." }, 410);
-    const ins = await env.DB.prepare(`INSERT OR IGNORE INTO coupon_claims (code, user_id, created_at) VALUES (?,?,?)`)
-      .bind(code, user.id, Date.now()).run();
-    if ((ins.meta?.changes ?? 0) === 0) return json(env, { error: "이미 사용한 쿠폰입니다." }, 409);
-    await env.DB.batch([
-      env.DB.prepare(`UPDATE coupons SET uses = uses + 1 WHERE code = ?`).bind(code),
-      env.DB.prepare(`UPDATE users SET credits = credits + ? WHERE id = ?`).bind(c.amount, user.id),
+    const [ins] = await env.DB.batch([
+      env.DB.prepare(`INSERT OR IGNORE INTO coupon_claims (code,user_id,created_at)
+        SELECT code,?,? FROM coupons WHERE code=? AND (max_uses IS NULL OR uses<max_uses) AND (expires_at IS NULL OR expires_at>=?)`)
+        .bind(user.id,Date.now(),code,Date.now()),
+      env.DB.prepare(`UPDATE users SET credits = credits + (SELECT amount FROM coupons WHERE code=?) WHERE id=? AND changes()=1`).bind(code,user.id),
+      env.DB.prepare(`UPDATE coupons SET uses = uses + 1 WHERE code = ? AND changes()=1`).bind(code),
     ]);
+    if ((ins.meta?.changes ?? 0) === 0) {
+      const prior=await env.DB.prepare(`SELECT 1 AS claimed FROM coupon_claims WHERE code=? AND user_id=?`).bind(code,user.id).first();
+      return json(env,{error:prior ? '이미 사용한 쿠폰입니다.' : '소진되었거나 만료된 쿠폰입니다.'},prior ? 409 : 410);
+    }
     const row = await env.DB.prepare(`SELECT credits FROM users WHERE id = ?`).bind(user.id).first<{ credits: number }>();
     return json(env, { granted: true, amount: c.amount, credits: row?.credits ?? 0 });
   }

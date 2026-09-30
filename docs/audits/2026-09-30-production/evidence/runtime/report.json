@@ -1,0 +1,7 @@
+{
+  "checks": [
+    "human owns defending choice during BOT turn",
+    "ordinary out-of-turn human actions rejected"
+  ],
+  "errors": []
+}

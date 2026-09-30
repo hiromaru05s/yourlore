@@ -1,0 +1,66 @@
+[
+  {
+    "test": "balance-v52",
+    "exit": 0
+  },
+  {
+    "test": "dew-shield-v54",
+    "exit": 0
+  },
+  {
+    "test": "expansion-v50",
+    "exit": 0
+  },
+  {
+    "test": "fate-wheel",
+    "exit": 0
+  },
+  {
+    "test": "hand-condition-rules",
+    "exit": 0
+  },
+  {
+    "test": "health-cosmetics-v53",
+    "exit": 0
+  },
+  {
+    "test": "opening-hands",
+    "exit": 0
+  },
+  {
+    "test": "quest-quick",
+    "exit": 0
+  },
+  {
+    "test": "trap-removal",
+    "exit": 0
+  },
+  {
+    "test": "duel-opening-server",
+    "exit": 0
+  },
+  {
+    "test": "dew-shield-server",
+    "exit": 0
+  },
+  {
+    "test": "lounge-rank",
+    "exit": 0
+  },
+  {
+    "test": "lounge-settlement",
+    "exit": 0
+  },
+  {
+    "test": "monster-animation-rules",
+    "exit": 0
+  },
+  {
+    "test": "duel-ui",
+    "exit": 0
+  },
+  {
+    "test": "deck-appearance",
+    "exit": 0
+  }
+]

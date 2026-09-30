@@ -1,0 +1,4 @@
+(node:94620) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+match_settlement_retry room-1 Error: injected rank outage
+PASS: real GameRoom settlement, telemetry/rank partial outage, alarm retry, duplicate/restarted room, concurrent callbacks, casual exclusion, no-contest exclusion

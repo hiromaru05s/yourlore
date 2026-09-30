@@ -1,0 +1,1 @@
+PASS: GLB geometry, units, mounts, cavity, bounds and draw/triangle budgets [{"name":"shelf","bytes":115852,"triangles":1564,"draws":3},{"name":"shelf-low","bytes":54272,"triangles":628,"draws":1},{"name":"market","bytes":96872,"triangles":1044,"draws":3},{"name":"market-low","bytes":43864,"triangles":452,"draws":1}]

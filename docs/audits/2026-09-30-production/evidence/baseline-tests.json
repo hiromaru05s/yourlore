@@ -1,0 +1,232 @@
+[
+  {
+    "test": "tests/attack-vfx.mjs",
+    "exit": 0,
+    "seconds": 0.09
+  },
+  {
+    "test": "tests/audio-v3.mjs",
+    "exit": 0,
+    "seconds": 0.4
+  },
+  {
+    "test": "tests/balance-v47.mjs",
+    "exit": 1,
+    "seconds": 0.1
+  },
+  {
+    "test": "tests/balance-v49.mjs",
+    "exit": 1,
+    "seconds": 0.09
+  },
+  {
+    "test": "tests/balance-v52.mjs",
+    "exit": 0,
+    "seconds": 0.11
+  },
+  {
+    "test": "tests/biblion-vfx.mjs",
+    "exit": 0,
+    "seconds": 0.09
+  },
+  {
+    "test": "tests/ceremony-audio-aim.mjs",
+    "exit": 1,
+    "seconds": 0.3
+  },
+  {
+    "test": "tests/connected-return-motion.mjs",
+    "exit": 0,
+    "seconds": 0.29
+  },
+  {
+    "test": "tests/dew-shield-v54.mjs",
+    "exit": 0,
+    "seconds": 0.11
+  },
+  {
+    "test": "tests/dice-model.mjs",
+    "exit": 0,
+    "seconds": 0.09
+  },
+  {
+    "test": "tests/dice-source.mjs",
+    "exit": 0,
+    "seconds": 1.28
+  },
+  {
+    "test": "tests/duel-polish-browser.mjs",
+    "exit": 1,
+    "seconds": 0.02
+  },
+  {
+    "test": "tests/duel-ui.mjs",
+    "exit": 0,
+    "seconds": 0.83
+  },
+  {
+    "test": "tests/expansion-v50.mjs",
+    "exit": 0,
+    "seconds": 0.17
+  },
+  {
+    "test": "tests/fate-wheel.mjs",
+    "exit": 0,
+    "seconds": 0.09
+  },
+  {
+    "test": "tests/grounded-motion.mjs",
+    "exit": 0,
+    "seconds": 0.07
+  },
+  {
+    "test": "tests/half-elf-v48.mjs",
+    "exit": 0,
+    "seconds": 0.09
+  },
+  {
+    "test": "tests/hand-condition-rules.mjs",
+    "exit": 0,
+    "seconds": 1.53
+  },
+  {
+    "test": "tests/health-cosmetics-v53.mjs",
+    "exit": 0,
+    "seconds": 0.12
+  },
+  {
+    "test": "tests/home-entrance-parity.mjs",
+    "exit": 0,
+    "seconds": 0.18
+  },
+  {
+    "test": "tests/library-furniture-model.mjs",
+    "exit": 0,
+    "seconds": 0.03
+  },
+  {
+    "test": "tests/lounge-horizon.mjs",
+    "exit": 0,
+    "seconds": 0.4
+  },
+  {
+    "test": "tests/lounge-rank.mjs",
+    "exit": 0,
+    "seconds": 0.08
+  },
+  {
+    "test": "tests/lounge-settlement.mjs",
+    "exit": 0,
+    "seconds": 0.08
+  },
+  {
+    "test": "tests/menu-records.mjs",
+    "exit": 0,
+    "seconds": 0.1
+  },
+  {
+    "test": "tests/menu-selected.mjs",
+    "exit": 0,
+    "seconds": 0.43
+  },
+  {
+    "test": "tests/monster-animation-rules.mjs",
+    "exit": 0,
+    "seconds": 0.09
+  },
+  {
+    "test": "tests/motion-v2.mjs",
+    "exit": 0,
+    "seconds": 0.82
+  },
+  {
+    "test": "tests/opening-hands.mjs",
+    "exit": 0,
+    "seconds": 0.09
+  },
+  {
+    "test": "tests/paper-card.mjs",
+    "exit": 0,
+    "seconds": 0.07
+  },
+  {
+    "test": "tests/pile-stock.mjs",
+    "exit": 0,
+    "seconds": 0.09
+  },
+  {
+    "test": "tests/portal-return-motion.mjs",
+    "exit": 0,
+    "seconds": 0.6
+  },
+  {
+    "test": "tests/purchase-vfx.mjs",
+    "exit": 0,
+    "seconds": 0.05
+  },
+  {
+    "test": "tests/quest-quick.mjs",
+    "exit": 0,
+    "seconds": 0.11
+  },
+  {
+    "test": "tests/quick-playback.mjs",
+    "exit": 0,
+    "seconds": 0.14
+  },
+  {
+    "test": "tests/rank-emblem.mjs",
+    "exit": 0,
+    "seconds": 0.36
+  },
+  {
+    "test": "tests/rank-sound.mjs",
+    "exit": 0,
+    "seconds": 0.33
+  },
+  {
+    "test": "tests/release-furniture-model.mjs",
+    "exit": 0,
+    "seconds": 0.03
+  },
+  {
+    "test": "tests/rift-fold.mjs",
+    "exit": 0,
+    "seconds": 0.04
+  },
+  {
+    "test": "tests/rift-transmute.mjs",
+    "exit": 0,
+    "seconds": 0.05
+  },
+  {
+    "test": "tests/solid-draw.mjs",
+    "exit": 0,
+    "seconds": 0.85
+  },
+  {
+    "test": "tests/stagecraft-models.mjs",
+    "exit": 0,
+    "seconds": 0.14
+  },
+  {
+    "test": "tests/stat-rise.mjs",
+    "exit": 0,
+    "seconds": 0.08
+  },
+  {
+    "test": "tests/trap-related-rework.mjs",
+    "exit": 0,
+    "seconds": 0.09
+  },
+  {
+    "test": "tests/trap-removal-tutorial.mjs",
+    "exit": 1,
+    "seconds": 0.46
+  },
+  {
+    "test": "tests/trap-removal.mjs",
+    "exit": 0,
+    "seconds": 0.46
+  }
+]

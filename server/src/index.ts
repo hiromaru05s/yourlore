@@ -118,6 +118,9 @@ export default {
     // ---- matchmaking socket ----
     if (path === "/ws/queue") {
       const user = await getUser(env, req);
+      // Room entry requires an account too. Anonymous waiters otherwise consume
+      // real opponents and can never enter the rooms they are paired into.
+      if (!user) return new Response("unauthorized", { status: 401 });
       const fwd = new URL(req.url);
       for (const key of ["uid","name","avatar","sleeve","furniture","deck","mmr"]) fwd.searchParams.delete(key);
       if (user) { fwd.searchParams.set("uid", user.id); fwd.searchParams.set("name", user.display); fwd.searchParams.set("avatar", user.avatar ?? ""); fwd.searchParams.set("sleeve", user.sleeve ?? ""); fwd.searchParams.set("furniture",user.furniture??""); fwd.searchParams.set("deck", (user.deck ?? []).join(",")); }
@@ -133,7 +136,10 @@ export default {
 
     // ---- game room socket ----
     if (path.startsWith("/ws/room/")) {
-      const roomId = decodeURIComponent(path.slice("/ws/room/".length));
+      // Never forward a public subpath to the DO's internal provisioning route.
+      const roomId = path.slice("/ws/room/".length);
+      if (!/^[A-Za-z0-9_-]{1,128}$/.test(roomId)) return new Response("invalid room", { status: 400 });
+      if (req.method !== "GET" || req.headers.get("Upgrade")?.toLowerCase() !== "websocket") return new Response("expected websocket", { status: 426 });
       const user = await getUser(env, req);
       if (!user) return new Response("unauthorized", { status: 401 });
       const fwd = new URL(req.url);

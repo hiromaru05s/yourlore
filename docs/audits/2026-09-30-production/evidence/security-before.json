@@ -1,0 +1,44 @@
+{
+  "checks": [
+    {
+      "name": "public room route cannot provision a ranked room",
+      "passed": false,
+      "error": "The expression evaluated to a falsy value:\n\n  assert(res.status>=400)\n"
+    },
+    {
+      "name": "setup is single-use and POST-only",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n200 !== 409\n"
+    },
+    {
+      "name": "hidden hand and draw order cannot be correlated with known card UIDs",
+      "passed": false,
+      "error": "The expression evaluated to a falsy value:\n\n  assert(!hidden.players[1].hand.some(c=>c.uid==='known-elf'))\n"
+    },
+    {
+      "name": "malformed socket input cannot throw or mutate authoritative state",
+      "passed": false,
+      "error": "Cannot read properties of null (reading 'type')"
+    },
+    {
+      "name": "mandatory target timeout advances the turn",
+      "passed": false,
+      "error": "oppMon must not stall"
+    },
+    {
+      "name": "reward credit failure rolls back claim and retry grants once",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n0 !== 50\n"
+    },
+    {
+      "name": "coupon cap remains one under concurrent redemption",
+      "passed": false,
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    200,\n+   200\n-   410\n  ]\n"
+    },
+    {
+      "name": "coupon write failure rolls back redemption",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n409 !== 200\n"
+    }
+  ]
+}

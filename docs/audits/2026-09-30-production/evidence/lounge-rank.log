@@ -1,0 +1,3 @@
+(node:91056) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS: exact GM entry/exit, immutable snapshots, authenticated match recovery, all tier thresholds; Elo, floor, draws, 8 duplicate settlements, concurrent rooms, atomic rollback/retry, tie ordering, soft reset, invalid participants
