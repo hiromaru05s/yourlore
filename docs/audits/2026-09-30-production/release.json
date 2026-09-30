@@ -32,6 +32,65 @@
     "timeouts": 0
   },
   "publicHashCount": 89,
-  "qaStatus": "live browser and online checks in progress",
-  "productionDeployed": false
+  "qaStatus": "passed; two accounts and related D1 rows removed; completed DO fixture retained (B18)",
+  "productionDeployed": false,
+  "qaEvidence": [
+    "evidence/staging-security.json",
+    "evidence/staging-online.json",
+    "evidence/live/browser.json",
+    "evidence/live/hashes.json",
+    "evidence/qa-cleanup.json"
+  ],
+  "integratedRuntimeCommit": "d3d6b5d9a9c96789d753a6903dadac34fc3a76e9",
+  "integratedDeployment": {
+    "id": "b9c7fbb5-8c70-4c22-9afc-3fcee677c5b2",
+    "source": "wrangler",
+    "strategy": "percentage",
+    "author_email": "maruru836818@gmail.com",
+    "annotations": {
+      "workers/message": "d3d6b5d9 integrated HOME and battle rendering performance; includes cb571de9 audit fixes",
+      "workers/triggered_by": "deployment"
+    },
+    "versions": [
+      {
+        "version_id": "943dc063-5545-4992-95a9-608482d9e901",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-09-30T00:39:23.645829Z"
+  },
+  "integrationBoundary": "Full authenticated/live audit ran on cb571de9. The subsequent performance release d3d6b5d9 contains cb571de9. Audit agent re-ran typecheck/build/security on combined sources and compared deployed client hashes. Performance task separately verifies deployed BOT UI with API fixtures.",
+  "integratedPublicHashCount": 33,
+  "integratedLayers": {
+    "checks": [
+      "simultaneous two-side activation completes",
+      "three consecutive attacks complete without transient residue",
+      "dialog remains clickable while visual compositor is above it",
+      {
+        "width": 1280,
+        "overflow": false,
+        "field": "16",
+        "portrait": "18"
+      },
+      {
+        "width": 390,
+        "overflow": false,
+        "field": "16",
+        "portrait": "18"
+      },
+      {
+        "width": 844,
+        "overflow": false,
+        "field": "16",
+        "portrait": "18"
+      }
+    ],
+    "policy": {
+      "foreground": 2147483647,
+      "dialog": 150,
+      "pointerEvents": "none",
+      "overlayCount": 1
+    },
+    "errors": []
+  }
 }

@@ -36,7 +36,7 @@ A 8件 / B 18件 / C 4件、計30件。詳細は機械可読な [findings.json](
 | B05 | **進行中の永続化/アラーム失敗を黙って捨てる**<br>persistや一部setAlarmがcatchで無視される。障害後の状態整合性・再試行・通知が不足。結果精算には別途再試行があり既存回帰は成功。<br>`server/src/gameRoom.ts` | 未対応 | final-lounge-settlement.log / ソース確認 |
 | B06 | **前面VFXと確認ダイアログのレイヤー優先順位が逆転**<br>VFX=2147483647、overlay=150。確認画面が表示されてもVFXは上に描かれる。pointer-events:noneにより操作は可能。UI・選択・結果・VFXの共通レイヤー規約が必要。<br>`client/src/ui/monster/layers.ts; client/src/styles/base.css` | 実盤面で確認・未対応 | layers/report.json / layers/dialog-during-vfx.png |
 | B07 | **画像/通常APIの待ち時間に上限がなく読み込みで止まり得る**<br>decode/fetchの大部分にtimeoutなし。失敗応答では再試行UIが出るが、応答しない通信はPromiseが完了しない。切断中の再開・キャンセル試験が不足。<br>`client/src/ui/assetReadiness.ts; client/src/net/api.ts` | 未対応・静的指摘 | ソース確認 |
-| B08 | **静止カード再描画と起動画像/JSの負荷**<br>基準SHAでは静止カードにも常時RAF、DOM計測/Canvas消去。main JS約1.10MB raw。別セッションが最適化中で、こちらでは未完成変更を取り込まない。<br>`client/src/ui/monster/runtime.ts; client/src/ui/menuAssets.ts` | 別セッション対応中・最終SHAで再確認 | build.log / 他タスクの現行worktree |
+| B08 | **静止カード再描画と起動画像/JSの負荷**<br>基準SHAでは静止カードにも常時RAF、DOM計測/Canvas消去、main JS約1.10MB raw。別セッションの最適化をd3d6b5d9へ統合済み。静止描画キャッシュ、game遅延ロード、WebP派生素材を追加。監査修正を含むsourcesで再typecheck/build/securityと配信hash一致を確認。<br>`client/src/ui/monster/runtime.ts; client/src/ui/menuAssets.ts` | 別セッションで修正・統合/配信済み | docs/performance/2026-09-30 / integrated-staging-hashes.json / security-integrated.json |
 | B09 | **現行回帰と過去仕様テストが混在し全体テストを一括実行できない**<br>46本の自動抽出試験で41成功/5失敗。v47/v49は後続ルールとの差分、ceremony音声集合の差分、DOMグローバル不足、旧固定パス。deck試験の旧BOT導線は今回更新して成功。<br>`tests; package.json` | deck導線のみ修正・残り未対応 | baseline-tests.json / 各失敗log / deck-browser-fixed.log |
 | B10 | **依存パッケージに既知の脆弱性**<br>npm audit全体9件（high7/moderate2）、omit-devはundici high1。後者はjsdom由来のNode用経路で、配信ブラウザ/Workerが脆弱機能を使用する証拠は未確認。依存分類の整理と更新が必要。<br>`package-lock.json` | 未対応・到達性を区別 | npm-audit-runtime.json / npm-audit-all.json |
 | B11 | **CIと全セッション共通の配信排他・SHAガードがない**<br>リポジトリに.githubのCI定義なし。今回手動で最新main/配信versionを再確認するが、将来の古いworktree再配信を自動阻止する仕組みではない。<br>`package.json; scripts/deploy.sh` | 今回の配信では手動ガード | sha-matrix.json / staging-before.json |
@@ -80,7 +80,7 @@ A8件はruntime `cb571de90719ab770cee2fc056590287bf05ac01` でmainへ統合し�
 
 - 共有checkoutの未コミット変更を監査へコピーせず、専用worktreeで修正。変更のない既存UI/VFXを古いbranchのtreeで上書きしない。
 - [46 worktreeのSHA行列](evidence/sha-matrix.json) は祖先関係を記録。祖先でない9先端を「機能未反映」とは判定しない。過去の統合はcherry-pick/選択取り込みを含み、[既存feature matrix](../../releases/2026-09-30-integrated/feature-matrix.json) と現行回帰で確認。
-- 描画・起動最適化タスクへ重複ファイル/配信競合の情報を共有。リリース直前のremote main・現行staging versionを再読し、統合してから配信する。
+- 描画・起動最適化タスクへ重複ファイル/配信競合の情報を共有。監査版cb571de9を先に配信・実通信検証した後、最適化側がその全修正を含むd3d6b5d9を配信。監査側も最新mainをmergeし、両者の変更を保持した。統合版typecheck/build/security 11件と配信hashは監査側で再確認した。
 - 本番への配信は依頼範囲外で実施しない。本番secretは名前の存在だけを読取確認した。
 
 ## 検証限界
@@ -98,3 +98,9 @@ A8件はruntime `cb571de90719ab770cee2fc056590287bf05ac01` でmainへ統合し�
 ## 再実行
 
 Node 22以上（node:sqlite）とnpm依存が必要。ルートで `node tests/production-security.mjs`、`node tests/production-engine-audit.mjs` を実行する。ブラウザ試験はChromeとPlaywrightを用意し `PLAYWRIGHT_MODULE` にPlaywrightのESMエントリを指定する。`production-runtime-audit.mjs` はViteが5461で起動済みであること、`production-layers-audit.mjs` は5462が空いていることが前提。staging試験は個別作成したQAアカウントの認証ファイルと、専用のmax_uses=1/amount=7クーポンを必要とする。通常ユーザーのアカウントでは実行しない。
+
+## 配信後の実測と後片付け
+
+- 監査版cb571de9: [89配信hash一致](evidence/live/hashes.json)、[実ログイン/全7メニュー/BGM/BOT](evidence/live/browser.json)、[2ユーザー実オンライン](evidence/staging-online.json)、[実D1並行報酬](evidence/staging-security.json) が成功。APIモックなし。オンラインは140操作/26ターン、再接続・終局成功。HOME実ループ、戦闘音量0.147、再生間隔3001.9ms。
+- 後続の最適化統合版d3d6b5d9を監査側にも取り込み、[security 11件](evidence/security-integrated.json)を再確認。[後続配信hash 33件](evidence/integrated-staging-hashes.json) と [統合後のレイヤー連続再生](evidence/layers-integrated/report.json) はこの統合版に対応する。実認証を伴う全フローを後続版で再度走らせたという意味ではない。
+- [後片付け](evidence/qa-cleanup.json): 専用QA2アカウントと関連D1データを削除し、15テーブルの該当行0を再確認。認証ファイルも削除した。終了済みQA roomのDurable Object storageは既存APIでは削除できず保持されるため、B18として明記した。

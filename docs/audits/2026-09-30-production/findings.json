@@ -141,9 +141,9 @@
       "urgency": "B",
       "title": "静止カード再描画と起動画像/JSの負荷",
       "files": "client/src/ui/monster/runtime.ts; client/src/ui/menuAssets.ts",
-      "detail": "基準SHAでは静止カードにも常時RAF、DOM計測/Canvas消去。main JS約1.10MB raw。別セッションが最適化中で、こちらでは未完成変更を取り込まない。",
-      "status": "別セッション対応中・最終SHAで再確認",
-      "evidence": "build.log / 他タスクの現行worktree"
+      "detail": "基準SHAでは静止カードにも常時RAF、DOM計測/Canvas消去、main JS約1.10MB raw。別セッションの最適化をd3d6b5d9へ統合済み。静止描画キャッシュ、game遅延ロード、WebP派生素材を追加。監査修正を含むsourcesで再typecheck/build/securityと配信hash一致を確認。",
+      "status": "別セッションで修正・統合/配信済み",
+      "evidence": "docs/performance/2026-09-30 / integrated-staging-hashes.json / security-integrated.json"
     },
     {
       "id": "B09",

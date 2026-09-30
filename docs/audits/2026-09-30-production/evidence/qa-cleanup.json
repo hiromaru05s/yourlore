@@ -1,0 +1,67 @@
+{
+  "isolatedUsersRemoved": 2,
+  "remainingD1Rows": [
+    {
+      "qa_table": "sessions",
+      "remaining": 0
+    },
+    {
+      "qa_table": "friends",
+      "remaining": 0
+    },
+    {
+      "qa_table": "challenges",
+      "remaining": 0
+    },
+    {
+      "qa_table": "rewards",
+      "remaining": 0
+    },
+    {
+      "qa_table": "coupon_claims",
+      "remaining": 0
+    },
+    {
+      "qa_table": "matches",
+      "remaining": 0
+    },
+    {
+      "qa_table": "presence",
+      "remaining": 0
+    },
+    {
+      "qa_table": "user_days",
+      "remaining": 0
+    },
+    {
+      "qa_table": "invite_rewards",
+      "remaining": 0
+    },
+    {
+      "qa_table": "email_tokens",
+      "remaining": 0
+    },
+    {
+      "qa_table": "ratings",
+      "remaining": 0
+    },
+    {
+      "qa_table": "ranked_results",
+      "remaining": 0
+    },
+    {
+      "qa_table": "inquiries",
+      "remaining": 0
+    },
+    {
+      "qa_table": "users",
+      "remaining": 0
+    },
+    {
+      "qa_table": "coupons",
+      "remaining": 0
+    }
+  ],
+  "durableObject": "One completed QA room remains in persistent storage; no deletion endpoint exists. See B18.",
+  "productionDataTouched": false
+}
