@@ -1,0 +1,39 @@
+
+> lore-tcg@0.1.0 build
+> node scripts/guard-design.mjs && npm --workspace client run build
+
+✓ guard-design: ok
+
+> lore-client@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v5.4.21 building for production...
+transforming...
+✓ 193 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                            1.20 kB │ gzip:   0.64 kB
+dist/table-preview.html                    1.51 kB │ gzip:   0.87 kB
+dist/assets/game-LT5DhiTq.css              1.26 kB │ gzip:   0.49 kB
+dist/assets/tablePreview-2Rkra2Ey.css      1.87 kB │ gzip:   0.85 kB
+dist/assets/main-BgnjwBL-.css            354.09 kB │ gzip:  73.46 kB
+dist/assets/handGeometry-Bz96hXgQ.js       1.00 kB │ gzip:   0.57 kB │ map:     3.32 kB
+dist/assets/RoomEnvironment-HFPuHeIy.js    2.12 kB │ gzip:   0.93 kB │ map:     8.59 kB
+dist/assets/voidSurface-BI34zy95.js        2.95 kB │ gzip:   1.53 kB │ map:     5.43 kB
+dist/assets/diceScene-B4flflLM.js          8.26 kB │ gzip:   3.87 kB │ map:    31.67 kB
+dist/assets/ceremonyScene-DPpqOm6o.js      8.98 kB │ gzip:   3.99 kB │ map:    24.36 kB
+dist/assets/paperDraw-B_CWbmBQ.js          9.57 kB │ gzip:   4.38 kB │ map:    28.43 kB
+dist/assets/crownOutcome-DDkbS2Pm.js      13.74 kB │ gzip:   6.07 kB │ map:    41.97 kB
+dist/assets/tablePreview-BnKVBpGZ.js      24.96 kB │ gzip:   7.24 kB │ map:    80.96 kB
+dist/assets/riftScene-D8KGWFwI.js         28.07 kB │ gzip:  11.38 kB │ map:    74.24 kB
+dist/assets/GLTFLoader-Syrzv2H6.js        44.85 kB │ gzip:  13.55 kB │ map:   242.52 kB
+dist/assets/duelScene-BuSVq4rB.js         61.99 kB │ gzip:  24.66 kB │ map:   173.08 kB
+dist/assets/game-Bu0t2w4D.js             303.96 kB │ gzip: 124.14 kB │ map:   741.69 kB
+dist/assets/three.module-P6koxfW0.js     609.24 kB │ gzip: 156.09 kB │ map: 2,955.47 kB
+dist/assets/main-DtFkZAV5.js             803.24 kB │ gzip: 313.53 kB │ map: 2,082.29 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 2.98s

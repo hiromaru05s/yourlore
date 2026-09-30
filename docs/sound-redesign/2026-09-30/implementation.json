@@ -1,0 +1,13 @@
+{
+  "baseCommit": "792bbf27",
+  "scope": "main integrated; staging deployed; production unchanged",
+  "sources": {
+    "client/src/ui/sound.ts": "b568d1c482c24d4d074599d8a5e085bb69dafc59c36050ac8ecc56873020cfbd",
+    "client/src/ui/anim.ts": "38cba6a4180d880f57544b72c0a4e01febf37a89a12d1c4723de0343120177d2",
+    "client/src/dev/soundReview.ts": "fcd7821cbdf32cf3dad0630c0b19b0aa27d9a92c6708731991eb484560ee6082",
+    "client/src/dev/soundReview.css": "3c783b5a9f10c852bd81d9fafe9d81b0a303b7e24230386ee931ad2e80a14dc6",
+    "scripts/audio/build_lore_sfx_v5.py": "e840c14d74a6b6eb574d3ce49ce6b3bdc4374c9c2dce04bfb0826ffc527c2622"
+  },
+  "deployedSourceCommit": "0b06fea0",
+  "workerVersion": "5dbe752d-556e-4174-85af-f6d7228d44ce"
+}

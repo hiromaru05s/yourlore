@@ -1,0 +1,55 @@
+{
+  "license": "CC0-1.0",
+  "packs": [
+    {
+      "author": "artisticdude",
+      "url": "https://opengameart.org/content/swishes-sound-pack"
+    },
+    {
+      "author": "Jordan Irwin (AntumDeluge)",
+      "url": "https://opengameart.org/content/thwack-sounds"
+    }
+  ],
+  "usedFiles": [
+    {
+      "path": "swishes/swish-4.wav",
+      "sha256": "0060f4a7040edce4cc50d1daa10a9cb76764128a942e4688339e69cd1d5d784c"
+    },
+    {
+      "path": "swishes/swish-5.wav",
+      "sha256": "4db41f2d2f97caf94627be05ff2870217fecc86534cf30f2aab413b847a0d50a"
+    },
+    {
+      "path": "swishes/swish-7.wav",
+      "sha256": "e6de737a34de16afed094d6170d7679149022f149e0a8356d2f029b0e8f4a4d7"
+    },
+    {
+      "path": "swishes/swish-9.wav",
+      "sha256": "123883f006ce55feecbff11eea5f87c4493df4399989983037144570a23723c1"
+    },
+    {
+      "path": "thwack/thwack-02.wav",
+      "sha256": "ce97b3a0bd775841c895150b8d563ca05ecf9d56211565c54a5497f04ce83545"
+    },
+    {
+      "path": "thwack/thwack-03.wav",
+      "sha256": "9c36a279381bb7d984fb0e4cb2bd075ad8c9736524af1d950a1e08b03aee2b29"
+    },
+    {
+      "path": "thwack/thwack-04.wav",
+      "sha256": "c291a29f21797a2d8bb8d3d4f607bbd781c40cc3bf2a37e592de679aa6477102"
+    },
+    {
+      "path": "thwack/thwack-05.wav",
+      "sha256": "d44be9cdae2e30bfa4eda5dbb183e6b584470d4d439d5e7e12e3dd0890c5aa8f"
+    },
+    {
+      "path": "thwack/thwack-06.wav",
+      "sha256": "1d3683c158a93fe2d0451634b684a6383a6e0e8d5b521a6096ca34a7a6c72daa"
+    },
+    {
+      "path": "thwack/thwack-10.wav",
+      "sha256": "9b69981665fcbf8bb76c9709ce23e00a6f9a70ed9939690ec20d6e812f5b36c2"
+    }
+  ]
+}

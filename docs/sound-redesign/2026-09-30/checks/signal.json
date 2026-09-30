@@ -1,0 +1,374 @@
+{
+  "scope": "Signal validation; not subjective listening approval",
+  "clips": [
+    {
+      "name": "click",
+      "file": "click-1.mp3",
+      "seconds": 0.13,
+      "peakDb": -16.03,
+      "rmsDb": -37.18,
+      "onsetMs": 23.88,
+      "sha256": "07f683303b5915ccc3ca981991f484618f0f432fcc9e857b657031a3f1b6c798"
+    },
+    {
+      "name": "click",
+      "file": "click-2.mp3",
+      "seconds": 0.13,
+      "peakDb": -15.96,
+      "rmsDb": -39.72,
+      "onsetMs": 1.7,
+      "sha256": "dd42639f2a79b39e78ab1ffea4cb87ec75f6c8e46f1c20b2820a4e5e01e9201c"
+    },
+    {
+      "name": "click",
+      "file": "click-3.mp3",
+      "seconds": 0.13,
+      "peakDb": -16.0,
+      "rmsDb": -39.23,
+      "onsetMs": 1.38,
+      "sha256": "adb0c6069f70f2e20fa6f3c3d29a9fc394aea7aabc95d64f203c75a6da4fa7d1"
+    },
+    {
+      "name": "pop",
+      "file": "pop.mp3",
+      "seconds": 0.22,
+      "peakDb": -16.0,
+      "rmsDb": -37.97,
+      "onsetMs": 1.84,
+      "sha256": "2a1d0899df83a343d64a36be7f42e8694bd68500d108d5d92ca09e4991fc6c7d"
+    },
+    {
+      "name": "error",
+      "file": "error.mp3",
+      "seconds": 0.22,
+      "peakDb": -11.99,
+      "rmsDb": -34.06,
+      "onsetMs": 3.24,
+      "sha256": "ef85c141ed1aaf75ea4d890aa92b1f2c18c35c801dd34fbae77f67d8b938664c"
+    },
+    {
+      "name": "coin",
+      "file": "coin.mp3",
+      "seconds": 0.48,
+      "peakDb": -11.97,
+      "rmsDb": -39.66,
+      "onsetMs": 2.02,
+      "sha256": "1c68676856e96bca4ad8010d39a45e332a4da8e42842e742baa952a08151932b"
+    },
+    {
+      "name": "match",
+      "file": "match.mp3",
+      "seconds": 1.3,
+      "peakDb": -9.67,
+      "rmsDb": -25.44,
+      "onsetMs": 4.01,
+      "sha256": "ef16d12aca0f83a819e21930a5f708c4b0f6be035599c00a60973593930bf878"
+    },
+    {
+      "name": "draw",
+      "file": "draw-3.mp3",
+      "seconds": 0.25,
+      "peakDb": -15.14,
+      "rmsDb": -39.77,
+      "onsetMs": 8.44,
+      "sha256": "7b76afc4859cdef231025e8da3949d55a7ad3360a2d956875ea80f2aa9f60b05"
+    },
+    {
+      "name": "buy",
+      "file": "buy.mp3",
+      "seconds": 0.72,
+      "peakDb": -11.97,
+      "rmsDb": -37.52,
+      "onsetMs": 2.09,
+      "sha256": "a995b5936355723735e13d71500519a4c3c5ce7cf20bc76c2e05e917513beeec"
+    },
+    {
+      "name": "attack",
+      "file": "attack-1.mp3",
+      "seconds": 0.25,
+      "peakDb": -13.95,
+      "rmsDb": -29.97,
+      "onsetMs": 7.41,
+      "sha256": "bd1c6280655f6567560d69ca76c84ed37ce332908d9f23ae9d1b5e8dba892a41"
+    },
+    {
+      "name": "attack",
+      "file": "attack-2.mp3",
+      "seconds": 0.25,
+      "peakDb": -16.35,
+      "rmsDb": -29.96,
+      "onsetMs": 5.28,
+      "sha256": "6f6ad2c379f58622a4558b97fac8945942482b59a7a303f31f14fc51aa18a025"
+    },
+    {
+      "name": "attack",
+      "file": "attack-3.mp3",
+      "seconds": 0.25,
+      "peakDb": -12.81,
+      "rmsDb": -30.04,
+      "onsetMs": 5.85,
+      "sha256": "48c5a0e623336e61008adf129e21ee6fb447a3f65e93d45fdd28332742d9aa34"
+    },
+    {
+      "name": "impact",
+      "file": "impact-1.mp3",
+      "seconds": 0.29,
+      "peakDb": -9.35,
+      "rmsDb": -26.75,
+      "onsetMs": 0.34,
+      "sha256": "528cb2d5e4fa20bdb5450aaa1a562adafc76ca6093f38fed9fe6e1a6199562f4"
+    },
+    {
+      "name": "impact",
+      "file": "impact-2.mp3",
+      "seconds": 0.29,
+      "peakDb": -8.3,
+      "rmsDb": -25.92,
+      "onsetMs": 0.29,
+      "sha256": "4d1a625175c122178697577cee65beaf3f5f7df7ad9a3eb2832f764537e65f5e"
+    },
+    {
+      "name": "impact",
+      "file": "impact-3.mp3",
+      "seconds": 0.29,
+      "peakDb": -7.98,
+      "rmsDb": -25.93,
+      "onsetMs": 0.39,
+      "sha256": "c41dfa64fd8917e78a6ece7a5d4c8435541b8e80d27f8def20371ea2ffc4a490"
+    },
+    {
+      "name": "facehit",
+      "file": "facehit.mp3",
+      "seconds": 0.4,
+      "peakDb": -10.3,
+      "rmsDb": -27.27,
+      "onsetMs": 0.29,
+      "sha256": "347e43fb8b4001689d9537025f4aca5688010c3cad5559f8010e74661b7c5bd3"
+    },
+    {
+      "name": "damage",
+      "file": "damage.mp3",
+      "seconds": 0.3,
+      "peakDb": -13.34,
+      "rmsDb": -28.92,
+      "onsetMs": 0.34,
+      "sha256": "9f4d0d13cfa20ca41ea88cb32f1c70df994a32db704d7268dd15c3fd4f793539"
+    },
+    {
+      "name": "summon",
+      "file": "summon.mp3",
+      "seconds": 0.58,
+      "peakDb": -7.54,
+      "rmsDb": -28.12,
+      "onsetMs": 0.27,
+      "sha256": "fe2afa82c41564825e02e1c4e78e216513c918aaee4790359766b32f45139e8f"
+    },
+    {
+      "name": "mimic",
+      "file": "mimic.mp3",
+      "seconds": 0.46,
+      "peakDb": -12.12,
+      "rmsDb": -30.33,
+      "onsetMs": 0.93,
+      "sha256": "3ec8a1296576884a8d055fb95fec93a71d2628b652fbb20ac48d5d3c715cebd9"
+    },
+    {
+      "name": "play",
+      "file": "play.mp3",
+      "seconds": 0.42,
+      "peakDb": -10.0,
+      "rmsDb": -34.36,
+      "onsetMs": 1.86,
+      "sha256": "640ac26d504636271f8acdc21f4238c5cf7e0cbe076faaa10ed85e2ca565f507"
+    },
+    {
+      "name": "heal",
+      "file": "heal.mp3",
+      "seconds": 0.78,
+      "peakDb": -17.34,
+      "rmsDb": -30.9,
+      "onsetMs": 0.18,
+      "sha256": "9c8b828a02b234d086f963c16247c03c5d41a4dae47d7d5b748796bfbf13d3cf"
+    },
+    {
+      "name": "death",
+      "file": "death.mp3",
+      "seconds": 0.42,
+      "peakDb": -10.07,
+      "rmsDb": -33.17,
+      "onsetMs": 2.0,
+      "sha256": "1c9978306ae76e7afa557bf4682c08345950815875a53811e93ef0ef4ad4abff"
+    },
+    {
+      "name": "trapSet",
+      "file": "trapSet.mp3",
+      "seconds": 0.25,
+      "peakDb": -14.73,
+      "rmsDb": -36.13,
+      "onsetMs": 1.47,
+      "sha256": "ab47b257abab166a155a2436b15672d88da568d5f743bf29e6b938d8d5b35049"
+    },
+    {
+      "name": "trap",
+      "file": "trap.mp3",
+      "seconds": 0.4,
+      "peakDb": -13.28,
+      "rmsDb": -29.98,
+      "onsetMs": 25.42,
+      "sha256": "e1cd8a5055dcb40ecd6b979f667cd9acdb11fb44567f0a784c06e925f5cdb812"
+    },
+    {
+      "name": "mana-pay",
+      "file": "mana-pay.mp3",
+      "seconds": 0.25,
+      "peakDb": -16.67,
+      "rmsDb": -36.51,
+      "onsetMs": 0.09,
+      "sha256": "f348aeff8aa5eaf3f5ba0d10e788e263b73af5cf1cbb9ddf904d626dcdccb671"
+    },
+    {
+      "name": "mana",
+      "file": "mana.mp3",
+      "seconds": 0.65,
+      "peakDb": -13.58,
+      "rmsDb": -29.15,
+      "onsetMs": 0.09,
+      "sha256": "cb8240be0aaa597e50872bc59d18370607d2c534a9e74dd55caf3e9b2b5cf7c3"
+    },
+    {
+      "name": "turn",
+      "file": "turn.mp3",
+      "seconds": 0.43,
+      "peakDb": -18.6,
+      "rmsDb": -31.43,
+      "onsetMs": 0.18,
+      "sha256": "b8b324e5350381528c5873eb81a9eab23835727990a04367d7948510ee791e9d"
+    },
+    {
+      "name": "win",
+      "file": "win.mp3",
+      "seconds": 1.65,
+      "peakDb": -15.6,
+      "rmsDb": -28.78,
+      "onsetMs": 0.23,
+      "sha256": "f1537029896503796f0e18cc1dde0e20e9771bd4c8e5fcbbd66c8cec19c5b47c"
+    },
+    {
+      "name": "lose",
+      "file": "lose.mp3",
+      "seconds": 1.3,
+      "peakDb": -18.29,
+      "rmsDb": -31.92,
+      "onsetMs": 0.2,
+      "sha256": "cac6c8e267a41416f0f3f2abe411d65886408e3b82cfd60ff78e6a107c0617b9"
+    },
+    {
+      "name": "drawGame",
+      "file": "drawGame.mp3",
+      "seconds": 1.1,
+      "peakDb": -17.67,
+      "rmsDb": -31.56,
+      "onsetMs": 0.27,
+      "sha256": "7659df416eef73e2e16ba85f0f42999cf2283f00bd3ce844ce8c2c2574a345c8"
+    },
+    {
+      "name": "void",
+      "file": "void.mp3",
+      "seconds": 0.54,
+      "peakDb": -15.43,
+      "rmsDb": -32.31,
+      "onsetMs": 13.38,
+      "sha256": "c60134097bac187f1312a9ce6a307bb5f8ff3f1e40bba8b38b77fcba4390277c"
+    },
+    {
+      "name": "shuffle",
+      "file": "shuffle.mp3",
+      "seconds": 0.7,
+      "peakDb": -14.07,
+      "rmsDb": -41.89,
+      "onsetMs": 8.14,
+      "sha256": "5fb2bada8743ea2b7f6ab1cd0a1bb286420ea4c76afa41c3861564afb7c53c1f"
+    },
+    {
+      "name": "duel-start",
+      "file": "duel-start.mp3",
+      "seconds": 0.85,
+      "peakDb": -19.13,
+      "rmsDb": -30.97,
+      "onsetMs": 0.18,
+      "sha256": "f4b5f5b6698b923c850f8082f30f7898cd5e0e2262f47a713bc655c2a1895032"
+    },
+    {
+      "name": "discard",
+      "file": "discard.mp3",
+      "seconds": 0.3,
+      "peakDb": -13.94,
+      "rmsDb": -39.32,
+      "onsetMs": 8.5,
+      "sha256": "4facdd3b85a3d55b8239d66d695646c90e3a0211eca28f55af2a00d244240237"
+    },
+    {
+      "name": "coinToss",
+      "file": "coinToss.mp3",
+      "seconds": 0.23,
+      "peakDb": -16.93,
+      "rmsDb": -45.08,
+      "onsetMs": 1.45,
+      "sha256": "dda13ce12a33be483e4e7bd1b7c5a1f76952a98bb8abb6c2e2a20a0aeee7d473"
+    },
+    {
+      "name": "coinLand",
+      "file": "coinLand.mp3",
+      "seconds": 0.27,
+      "peakDb": -16.44,
+      "rmsDb": -44.36,
+      "onsetMs": 2.27,
+      "sha256": "4932c579e96c6d2329f7aa0dc30c1da5d0711f46415fd064f56a17a47bee3066"
+    },
+    {
+      "name": "diceRoll",
+      "file": "diceRoll.mp3",
+      "seconds": 0.78,
+      "peakDb": -13.95,
+      "rmsDb": -48.45,
+      "onsetMs": 1.86,
+      "sha256": "7a1f83e87853c968ce398dc49bd604aa2f5b19b77a96728da9665bfb0723d21f"
+    },
+    {
+      "name": "diceLand",
+      "file": "diceLand.mp3",
+      "seconds": 0.2,
+      "peakDb": -14.47,
+      "rmsDb": -42.0,
+      "onsetMs": 2.2,
+      "sha256": "e1da74aa8c05c06d3ba173dd5fc8b67fedec966a5c02718ec94b2e77b30c275f"
+    },
+    {
+      "name": "rankUp",
+      "file": "rankUp.mp3",
+      "seconds": 0.4,
+      "peakDb": -18.78,
+      "rmsDb": -31.09,
+      "onsetMs": 0.16,
+      "sha256": "33d9233ea8f67687794d19c0df68d87fc39baa0c0b7242ce9b775aa5cef58466"
+    },
+    {
+      "name": "rankDown",
+      "file": "rankDown.mp3",
+      "seconds": 0.42,
+      "peakDb": -18.27,
+      "rmsDb": -31.35,
+      "onsetMs": 0.18,
+      "sha256": "234d5595b2251e562c805b1dfd027b55e25ff39c8183eda0153b36add948f08b"
+    },
+    {
+      "name": "rankPromote",
+      "file": "rankPromote.mp3",
+      "seconds": 0.88,
+      "peakDb": -18.79,
+      "rmsDb": -30.37,
+      "onsetMs": 0.2,
+      "sha256": "f1d16f9814ba5668ec9cbf3dd2da2039397133785e967e3c806ee86525990a40"
+    }
+  ]
+}
