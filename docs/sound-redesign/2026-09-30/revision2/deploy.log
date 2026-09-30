@@ -1,0 +1,48 @@
+
+ ⛅️ wrangler 4.130.0 (update available 4.144.0)
+───────────────────────────────────────────────
+
+Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+🌀 Building list of assets...
+✨ Read 2166 files from the assets directory /Users/hiromaru05s/.codex/worktrees/sfx-rebuild-preview/LORE_TCG/client/dist
+🌀 Starting asset upload...
+🌀 Found 18 new or modified static assets to upload. Proceeding with upload...
++ /sfx/lore-v6/manifest.json
++ /assets/paperDraw-DXwKAGB1.js
++ /sfx/lore-v5/manifest.json
++ /assets/diceScene-CcJLyKWe.js.map
++ /assets/riftScene-84vHfZzs.js.map
++ /assets/game-DTthu8P2.js.map
++ /index.html
++ /sfx/lore-v6/play.mp3
++ /assets/riftScene-84vHfZzs.js
++ /assets/crownOutcome-Df9cERNK.js.map
++ /assets/duelScene-BDVxp6z3.js.map
++ /assets/main-4Jo05aLx.js
++ /assets/diceScene-CcJLyKWe.js
++ /assets/crownOutcome-Df9cERNK.js
++ /assets/paperDraw-DXwKAGB1.js.map
++ /assets/duelScene-BDVxp6z3.js
++ /assets/game-DTthu8P2.js
++ /assets/main-4Jo05aLx.js.map
+Uploaded 6 of 18 assets
+Uploaded 12 of 18 assets
+Uploaded 18 of 18 assets
+✨ Success! Uploaded 18 files (2079 already uploaded) (2.37 sec)
+
+Total Upload: 1097.71 KiB / gzip: 236.38 KiB
+Worker Startup Time: 51 ms
+Your Worker has access to the following bindings:
+Binding                                                                Resource                  
+env.MATCHMAKER (Matchmaker)                                            Durable Object            
+env.GAME_ROOM (GameRoom)                                               Durable Object            
+env.DB (lore-db-staging)                                               D1 Database               
+env.ASSETS                                                             Assets                    
+env.APP_ORIGIN ("*")                                                   Environment Variable      
+env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")      Environment Variable      
+env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")          Environment Variable      
+
+Uploaded lore-server-staging (9.15 sec)
+Deployed lore-server-staging triggers (2.27 sec)
+  test.yourlore.xyz (custom domain)
+Current Version ID: ec9b2bd3-1d68-4250-bdbe-0264cdf57ed3

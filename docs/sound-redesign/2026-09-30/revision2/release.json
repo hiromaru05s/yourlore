@@ -1,0 +1,10 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "worker": "lore-server-staging",
+  "source": "0e82212e92b566858c16c2de983c02e3538eba1b",
+  "version": "7543a42d-8416-4138-a09f-ede0dc4b67c7",
+  "integratedAudit": "54fdfc99",
+  "regressions": "47/47 passed in guarded deploy",
+  "productionChanged": false,
+  "scope": "Public asset verification and account-fixture local BOT playback; no authenticated PvP claim"
+}

@@ -10,3 +10,13 @@
 生成: `python scripts/audio/build_spell_sfx_v6.py`。v5を再生成した場合も、このスクリプトを最後に実行すると採用manifestの魔法音がv6になる。
 
 検証: rules.jsonは11ケースで旧エンジンとのゲーム状態一致を確認。audio-v3の音声ライフサイクル、expansion-v50の36シナリオ、型チェック、ビルド、実Controllerの0ダメージと正のダメージ再生を確認。聴感の採用判断と機能検証は別。
+
+## ステージング検証完了
+
+- 配信元: 0e82212e92b566858c16c2de983c02e3538eba1b。並行B/C修正54fdfc99を包含。
+- Worker version: 7543a42d-8416-4138-a09f-ede0dc4b67c7。共有ガードで47/47回帰・型・buildを通過。
+- `staging/assets.json`: 公開HTML/JS/CSS/manifest/全41音源のハッシュ一致。
+- `staging/CASTLE/browser.json`: 公開BOTで城を手札から召喚し、攻0で直接攻撃。再生トレースはattackのみ、facehit/impact/damageなし。
+- `staging/FLAME/browser.json`: 公開BOTで火花をドラッグしてプレイ。v6/play.mp3のPCM fingerprintが、runningのAudioContextで再生されたことを確認。
+- APIアカウントはfixture。認証付きオンライン対人戦および人間の聴感評価とは別。
+- `deploy.log`は統合前の先行配信。最終配信証跡は`guarded-deploy.log` / `release.json`。本番変更なし。

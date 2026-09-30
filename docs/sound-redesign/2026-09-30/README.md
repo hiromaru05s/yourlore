@@ -1,5 +1,7 @@
 # LORE 効果音 v5
 
+最新の追補: [0ダメージと魔法音の再修正](revision2/README.md)。魔法のみv6音源を採用。
+
 ローカルプレビュー: http://127.0.0.1:5338/sound-review.html
 
 2026-09-30: ユーザーが試聴待ちを省略し、完了後のステージング反映を指示。最新main（792bbf27）の盤面修正を含めて統合・検証し、test.yourlore.xyzへ反映済み。本番公開は対象外。
@@ -64,6 +66,7 @@
 
 ```sh
 python scripts/audio/build_lore_sfx_v5.py  # numpy / scipy / ffmpeg
+python scripts/audio/build_spell_sfx_v6.py  # 最新の魔法音とmanifestを適用
 python scripts/audio/check_lore_sfx_v5.py
 npm --workspace client run dev -- --host 127.0.0.1 --port 5338 --strictPort
 node tests/audio-v5-browser.mjs
