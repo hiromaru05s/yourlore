@@ -40,17 +40,18 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
 
   // ---- shell (head + optional tab bar + body) ----
   const build = (): void => {
+    wrap.dataset.profileTab = tab;
     wrap.innerHTML = `
       <div class="tut">
         <div class="tut-head">
           <button class="btn btn-ghost" id="back">← ${t("common.back")}</button>
-          <h2>${t("profile.title")}</h2>
+          <div class="support-heading"><span class="menu-eyebrow">${tab === "settings" ? "PREFERENCES" : "SEEKER PROFILE"}</span><h2>${t(tab === "settings" ? "home.settings" : "profile.title")}</h2><p class="menu-subtitle">${tab === "settings" ? loungeText("音・言語・公開範囲を、あなたに合わせて。", "Make LORE your own.", "소리, 언어, 공개 범위를 설정하세요.") : loungeText("デュエルの記録と、シーカーの現在地。", "Your duels, your progress.", "듀얼 기록과 시커의 현재 위치.")}</p></div>
         </div>
         ${isSelf() ? `
         <div class="pf-tabs">
-          <button class="pf-tab ${tab === "overview" ? "is-active" : ""}" data-tab="overview">${homeIcon("profile")} ${t("profile.tab.overview")}</button>
-          <button class="pf-tab ${tab === "h2h" ? "is-active" : ""}" data-tab="h2h">${homeIcon("duel")} ${t("profile.tab.h2h")}</button>
-          <button class="pf-tab ${tab === "settings" ? "is-active" : ""}" data-tab="settings">${homeIcon("settings")} ${t("profile.tab.settings")}</button>
+          <button class="pf-tab ${tab === "overview" ? "is-active" : ""}" data-tab="overview" aria-pressed="${tab === "overview"}">${homeIcon("profile")} ${t("profile.tab.overview")}</button>
+          <button class="pf-tab ${tab === "h2h" ? "is-active" : ""}" data-tab="h2h" aria-pressed="${tab === "h2h"}">${homeIcon("duel")} ${t("profile.tab.h2h")}</button>
+          <button class="pf-tab ${tab === "settings" ? "is-active" : ""}" data-tab="settings" aria-pressed="${tab === "settings"}">${homeIcon("settings")} ${t("profile.tab.settings")}</button>
         </div>` : ""}
         <div class="tut-body" id="pbody"><div class="pf-loading">…</div></div>
       </div>`;
@@ -211,7 +212,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
       <section class="tut-sec">
         <h3><span class="tut-ico">${homeIcon("language")}</span>${t("settings.language")}</h3>
         <div class="set-row">
-          <label class="set-label">${t("settings.language")}</label>
+          <label class="set-label" for="langSel">${t("settings.language")}</label>
           <div class="lang-select"><select id="langSel">
             <option value="ko"${getLang() === "ko" ? " selected" : ""}>한국어</option>
             <option value="ja"${getLang() === "ja" ? " selected" : ""}>日本語</option>
@@ -223,7 +224,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
       <section class="tut-sec">
         <h3><span class="tut-ico">${homeIcon("home")}</span>${t("settings.privacy")}</h3>
         <div class="set-row">
-          <label class="set-label">${t("settings.privacy.public")}</label>
+          <label class="set-label" for="pub">${t("settings.privacy.public")}</label>
           <label class="switch"><input type="checkbox" id="pub" ${p.stats_public !== false ? "checked" : ""}><span class="slider"></span></label>
         </div>
         <p class="set-desc">${t("settings.privacy.desc")}</p>
@@ -231,7 +232,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
       <section class="tut-sec">
         <h3><span class="tut-ico">${homeIcon("gift")}</span>${t("settings.coupon")}</h3>
         <div class="set-row fr-add">
-          <input class="input" id="coupon" placeholder="${t("settings.coupon.ph")}" maxlength="32" style="text-transform:uppercase">
+          <input class="input" id="coupon" aria-label="${t("settings.coupon")}" placeholder="${t("settings.coupon.ph")}" maxlength="32" style="text-transform:uppercase">
           <button class="btn btn-gold" id="couponGo">${t("settings.coupon.apply")}</button>
         </div>
         <div class="fr-add-msg" id="couponMsg"></div>

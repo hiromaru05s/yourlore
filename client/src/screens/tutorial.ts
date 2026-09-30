@@ -1,3 +1,4 @@
+import { loungeText } from "../ui/loungeText";
 import { homeIcon } from "../ui/homeIcons";
 // ============================================================
 // LORE — tutorial / how-to-play screen (bilingual KO/JA).
@@ -240,12 +241,15 @@ export function mountTutorial(app: App): Screen {
     <div class="tut">
       <div class="tut-head">
         <button class="btn btn-ghost" id="back">← ${t("tutorial.back")}</button>
-        <h2>${t("tutorial.title")}</h2>
+        <div class="support-heading"><span class="menu-eyebrow">HOW TO PLAY</span><h2>${t("tutorial.title")}</h2><p class="menu-subtitle">${loungeText("最初の一手から、デュエルを学ぶ。", "Learn the duel, one move at a time.", "첫 수부터 듀얼을 배워 보세요.")}</p></div>
       </div>
       <div class="tut-body">
         <section class="tut-sec tut-inter">
           <h3><span class="tut-ico">${homeIcon("duel")}</span>${t("tutorial.inter.title")}</h3>
           <p>${t("tutorial.inter.desc")}</p>
+          <div class="tut-cta">
+            <button class="btn btn-primary" id="startInter">${t("tutorial.inter.start")}</button>
+          </div>
           <ol class="tut-steps">
             ${TUT_STEPS.map((s, i) => `
               <li data-key="${s.key}">
@@ -254,9 +258,7 @@ export function mountTutorial(app: App): Screen {
                 <span class="tut-step-r">+${s.reward} ${homeIcon("shard")}</span>
               </li>`).join("")}
           </ol>
-          <div class="tut-cta">
-            <button class="btn btn-primary" id="startInter">${t("tutorial.inter.start")}</button>
-          </div>
+
         </section>
         <h3 class="tut-rules-h">${t("tutorial.rules")}</h3>
         ${secs.map((s) => `
@@ -271,8 +273,13 @@ export function mountTutorial(app: App): Screen {
     </div>`;
   app.root.appendChild(wrap);
   const contents = document.createElement("nav"); contents.className="lounge-guide-nav"; contents.setAttribute("aria-label",t("tutorial.rules"));
-  wrap.querySelectorAll<HTMLElement>(".tut-sec").forEach((section,i)=>{section.id="guide-section-"+i; const a=document.createElement("a");a.href="#"+section.id;a.textContent=section.querySelector("h3")?.textContent??String(i+1);a.onclick=e=>{e.preventDefault();section.scrollIntoView({block:"start",behavior:"smooth"});};contents.append(a);});
-  wrap.querySelector(".tut-body")?.prepend(contents);
+  wrap.querySelectorAll<HTMLElement>(".tut-sec").forEach((section,i)=>{section.id="guide-section-"+i; const a=document.createElement("a");a.href="#"+section.id;a.textContent=section.querySelector("h3")?.textContent??String(i+1);a.onclick=e=>{e.preventDefault();section.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"instant":"smooth"});};contents.append(a);});
+  const index = document.createElement("details"); index.className = "guide-index";
+  const summary = document.createElement("summary"); summary.textContent = t("tutorial.rules");
+  index.append(summary, contents); wrap.querySelector(".tut-head")?.after(index);
+  const compact = matchMedia("(max-width:850px)");
+  const sizeIndex = () => { index.open = !compact.matches; };
+  sizeIndex(); compact.addEventListener("change", sizeIndex);
 
   wrap.querySelector(".topright-lang")!.appendChild(langSelectEl());
   (wrap.querySelector("#back") as HTMLElement).onclick = () => app.home();
@@ -290,5 +297,5 @@ export function mountTutorial(app: App): Screen {
   });
 
   const unsub = onLangChange(() => app.tutorial());
-  return { destroy: unsub };
+  return { destroy: () => { unsub(); compact.removeEventListener("change", sizeIndex); } };
 }

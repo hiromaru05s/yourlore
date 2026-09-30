@@ -98,13 +98,13 @@ export function showInquiryModal(): void {
   const ov = document.createElement("div");
   ov.className = "overlay";
   ov.innerHTML = `
-    <div class="modal inquiry-box" style="min-width:340px;max-width:460px">
-      <h2>${homeIcon("mail")} ${t("inquiry.modal.title")}</h2>
-      <label class="field-label">${t("inquiry.field.title")}</label>
+    <div class="modal support-dialog inquiry-box">
+      <header class="support-dialog-heading"><span class="menu-eyebrow">SUPPORT</span><h2>${t("inquiry.modal.title")}</h2></header>
+      <label class="field-label" for="inqTitle">${t("inquiry.field.title")}</label>
       <input class="input" id="inqTitle" maxlength="100" placeholder="${t("inquiry.ph.title")}">
-      <label class="field-label">${t("inquiry.field.body")}</label>
+      <label class="field-label" for="inqBody">${t("inquiry.field.body")}</label>
       <textarea class="input inq-textarea" id="inqBody" maxlength="2000" rows="6" placeholder="${t("inquiry.ph.body")}"></textarea>
-      <div class="inq-msg" id="inqMsg"></div>
+      <div class="inq-msg" id="inqMsg" role="status"></div>
       <div class="modal-row">
         <button class="btn btn-ghost" id="inqCancel">${t("common.cancel")}</button>
         <button class="btn btn-gold" id="inqSend">${t("inquiry.send")}</button>
@@ -128,10 +128,11 @@ export function showInquiryModal(): void {
     void api.sendInquiry(title, body).then(() => {
       const box = ov.querySelector(".inquiry-box") as HTMLElement;
       box.innerHTML = `
-        <h2>${homeIcon("mail")} ${t("inquiry.modal.title")}</h2>
-        <div class="inq-done">${homeIcon("check")} ${t("inquiry.sent")}</div>
+        <header class="support-dialog-heading"><span class="menu-eyebrow">SUPPORT</span><h2>${t("inquiry.modal.title")}</h2></header>
+        <div class="inq-done" role="status">${homeIcon("check")} ${t("inquiry.sent")}</div>
         <div class="modal-row"><button class="btn btn-gold btn-block" id="inqOk">${t("common.confirm")}</button></div>`;
       (box.querySelector("#inqOk") as HTMLElement).onclick = close;
+      (box.querySelector("#inqOk") as HTMLElement).focus();
     }).catch(() => {
       sendBtn.disabled = false;
       sendBtn.textContent = t("inquiry.send");
@@ -151,16 +152,16 @@ export async function showInviteModal(): Promise<void> {
   ov.className = "overlay";
   const stLabel = (s: string) => s === "earned" ? t("invite.status.earned") : s === "paid" ? t("invite.status.paid") : t("invite.status.pending");
   ov.innerHTML = `
-    <div class="modal invite-box" style="min-width:340px;max-width:420px">
-      <h2>${homeIcon("gift")} ${t("invite.title")}</h2>
+    <div class="modal support-dialog invite-box">
+      <header class="support-dialog-heading"><span class="menu-eyebrow">INVITE A FRIEND</span><h2>${t("invite.title")}</h2></header>
       <div class="inv-desc">${t("invite.desc")}</div>
-      <label class="field-label">${t("invite.link")} (${data.invites.length}/${data.limit})</label>
+      <div class="invite-progress"><span>${loungeText("招待人数", "Friends invited", "초대한 친구")}</span><strong>${data.invites.length}<small> / ${data.limit}</small></strong></div><label class="field-label" for="invLink">${t("invite.link")}</label>
       <div class="invite-link-row">
         <input class="input" id="invLink" readonly value="${link}">
         <button class="btn btn-gold" id="invCopy">${t("invite.copy")}</button>
       </div>
       <div class="invite-list">
-        ${data.invites.length === 0 ? `<div class="inv-row" style="justify-content:center;color:var(--paper-faint)">${t("invite.empty")}</div>`
+        ${data.invites.length === 0 ? `<div class="inv-row inv-empty">${t("invite.empty")}</div>`
           : data.invites.map((v) => `<div class="inv-row"><span>${v.display.replace(/[<>&]/g, "")}</span><span class="inv-st ${v.status}">${stLabel(v.status)}</span></div>`).join("")}
       </div>
       <div class="inv-note">${t("invite.note")}</div>

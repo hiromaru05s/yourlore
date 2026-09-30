@@ -1,0 +1,6 @@
+Generator: built-in image_gen (transparent PNG)
+Source: shard-source.png
+Runtime asset: client/public/art/lounge/icons/shard-simple-v1.png
+Processing: sips -Z 128; alpha preserved.
+
+Use case: stylized-concept. Asset type: a single small currency icon for LORE fantasy card game UI. Create exactly ONE simple elongated crystal shard, silver-white with muted ice-blue facets and a dark blue edge. Crisp elegant silhouette, slightly asymmetrical pointed top and tapered bottom, only three broad facets, restrained flat painterly game UI rendering. Centered isolated object occupying 80 percent of a square canvas. Must remain recognizable at 24 pixels. Genuine transparent background with alpha, PNG. No frame, no square tile, no diamond outline around it, no text, no particles, no extra gems, no glow halo, no cast shadow, no gold. Quiet sophisticated navy and silver game interface aesthetic.

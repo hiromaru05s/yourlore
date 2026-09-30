@@ -1,5 +1,4 @@
 import {loadingSigil} from './loadingSigil';
-import {loungeText} from './loungeText';
 import {entranceEase as ease,entranceOut as out,silverFanPose} from './homeEntranceMotion';
 import '../styles/homeEntrance.css';
 
@@ -23,25 +22,20 @@ export function playHomeEntrance(root:HTMLElement,cover:HTMLElement,signal:Abort
  const face=loadingSigil();
  stage.innerHTML=Array.from({length:7},(_,i)=>`<div class="home-entrance-card" data-card="${i}"><div class="home-entrance-face front">${face}<div class="home-entrance-etch">${face}</div><div class="home-entrance-sheen"></div></div><div class="home-entrance-face back">${face}</div></div>`).join('');
  const cards=[...stage.querySelectorAll<HTMLElement>('.home-entrance-card')].map(el=>({el,etch:el.querySelector<HTMLElement>('.home-entrance-etch')!,sheen:el.querySelector<HTMLElement>('.home-entrance-sheen')!}));
- const skip=document.createElement('button');skip.className='home-entrance-skip';skip.textContent=loungeText('スキップ','Skip','건너뛰기');
- document.body.append(veil,stage,skip);
+ document.body.append(veil,stage);
  return new Promise(resolve=>{
   let frame=0,finished=false,elapsed=0,last=performance.now();
-  const wasFocused=document.activeElement;
   const finish=()=>{
    if(finished)return;finished=true;cancelAnimationFrame(frame);
-   window.removeEventListener('resize',resize);window.removeEventListener('pagehide',finish);document.removeEventListener('visibilitychange',visibility);document.removeEventListener('keydown',keyboard);motion.removeEventListener('change',finish);signal.removeEventListener('abort',finish);
-   const restoreFocus=document.activeElement===skip;
-   stage.remove();veil.remove();skip.remove();
+   window.removeEventListener('resize',resize);window.removeEventListener('pagehide',finish);document.removeEventListener('visibilitychange',visibility);motion.removeEventListener('change',finish);signal.removeEventListener('abort',finish);
+   stage.remove();veil.remove();
    for(const {el,style} of preserved){if(style===null)el.removeAttribute('style');else el.setAttribute('style',style);}
    loaderAnimations.forEach(a=>a.cancel());
    resolve();
-   if(restoreFocus&&!signal.aborted)queueMicrotask(()=>{if(root.isConnected&&!root.inert){const focus=wasFocused instanceof HTMLElement&&root.contains(wasFocused)?wasFocused:root.querySelector<HTMLElement>('#ranked');focus?.focus({preventScroll:true});}});
   };
-  const keyboard=(e:KeyboardEvent)=>{if(e.key==='Escape'){e.preventDefault();finish();}};
   const visibility=()=>{last=performance.now();};
   const resize=()=>{const old=cover.style.transform;cover.style.transform='none';const r=sourceCard.getBoundingClientRect();source={x:r.x+r.width/2,y:r.y+r.height/2,scale:r.width/180};cover.style.transform=old;};
-  skip.onclick=finish;document.addEventListener('keydown',keyboard);document.addEventListener('visibilitychange',visibility);window.addEventListener('resize',resize);window.addEventListener('pagehide',finish,{once:true});motion.addEventListener('change',finish);signal.addEventListener('abort',finish,{once:true});
+  document.addEventListener('visibilitychange',visibility);window.addEventListener('resize',resize);window.addEventListener('pagehide',finish,{once:true});motion.addEventListener('change',finish);signal.addEventListener('abort',finish,{once:true});
   const paint=(t:number)=>{
    stage.dataset.elapsed=String(Math.round(t*1000));
    if(motion.matches){stage.hidden=true;veil.style.opacity='0';cover.style.opacity=String(1-ease(0,.25,t));return;}

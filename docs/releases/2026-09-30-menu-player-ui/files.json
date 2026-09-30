@@ -1,0 +1,18 @@
+[
+  "client/src/screens/home.ts",
+  "client/src/screens/profile.ts",
+  "client/src/screens/tutorial.ts",
+  "client/src/styles/loungeSupport.css",
+  "client/src/styles/loungeHorizon.css",
+  "client/src/styles/homeEntrance.css",
+  "client/src/ui/homeEntrance.ts",
+  "client/src/ui/homeIcons.ts",
+  "client/src/ui/lounge.ts",
+  "client/public/art/lounge/icons/shard-simple-v1.png",
+  "tests/home-entrance-browser.mjs",
+  "client/src/ui/monster/layers.ts",
+  "client/src/ui/monster/runtime.ts",
+  "client/src/ui/boardView.ts",
+  "client/src/styles/reading-board.css",
+  "tests/monster-adoption-browser.mjs"
+]

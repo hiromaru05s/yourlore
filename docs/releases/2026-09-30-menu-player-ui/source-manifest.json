@@ -1,0 +1,18 @@
+{
+  "client/src/screens/home.ts": "bef3c6ace916d08d37b15bde2e3b8e3de0ec888e798e91cb4669ba614c5d29ae",
+  "client/src/screens/profile.ts": "2ae362adb48c68b8793e4d1bb21227952817f4e38f4d4fb7d3d2f33965f059ab",
+  "client/src/screens/tutorial.ts": "1f9636244d665ec35012a89ecc97ded37b3c84d6b412e509c9cb113709c67c26",
+  "client/src/styles/loungeSupport.css": "2aeaf1be16928a258287a9ecf5b5aac8b427e32060c54644d1afe454b495ad41",
+  "client/src/styles/loungeHorizon.css": "ba745389e83ca9aa5e7527b4e31d7eb9d0b721b3ea738be87b14610376ef3593",
+  "client/src/styles/homeEntrance.css": "16b575051f0101b2e0ba0560e0ab9fa2af35d9e106650fb8cbdd83077fed929b",
+  "client/src/ui/homeEntrance.ts": "6e9ede090b2f5e96c1eb01f9a1af2d0d27a44f40afcdf346d4a44883db10e472",
+  "client/src/ui/homeIcons.ts": "2b4403e67a90e71ca7bc5020306784654705385eebf92442398f17672acab27b",
+  "client/src/ui/lounge.ts": "e5638ba42a3501f962ee7079f06f31111d660f036099650fb2e96b839f0d4061",
+  "client/public/art/lounge/icons/shard-simple-v1.png": "4d0a2660053b784390f03a29c790d0727aea70150f65ec4f54e6d2a66a177ccb",
+  "tests/home-entrance-browser.mjs": "f2c75828e46f0e06ee219944211a3fd6a89b9a258846d21ce0a85127e3bd5747",
+  "client/src/ui/monster/layers.ts": "3f41a9533ee33dd3588312b618d46f22527a118a8f28b1fbbc2edafa223685db",
+  "client/src/ui/monster/runtime.ts": "254b41ebd81ec158de7fa01c2769ad11ba1774a2af7f97b89b3ae85f1b9d3874",
+  "client/src/ui/boardView.ts": "938d120dd3628ce0377b066775414fab78a864ff09c109e76fc8c8facd449750",
+  "client/src/styles/reading-board.css": "d85de7fbd7e47fea9d0e728699a2a44081dcbda190f93e9df87ac881abefdff6",
+  "tests/monster-adoption-browser.mjs": "24a3ca98ef4b893ef85ee6d719e750e08511ac5fae062be495a0027b4b8ab1b4"
+}
