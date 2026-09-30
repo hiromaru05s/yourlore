@@ -12,3 +12,13 @@ const paths = [
 export function loungeNavGlyph(index:number):string {
   return `<span class="horizon-glyph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square" stroke-linejoin="miter">${paths[index]??paths[0]}</svg></span>`;
 }
+
+/** Secondary menu actions share the quiet line work of the main navigation. */
+const utilityPaths = {
+  settings: '<path d="M10 7v7m0 6v13M20 7v16m0 6v4M30 7v3m0 6v17"/><path d="M6 14h8v6H6zM16 23h8v6h-8zM26 10h8v6h-8z"/>',
+  invite: '<path d="M8 18h24v15H8zM6 12h28v6H6zM20 12v21"/><path d="M20 12c-3-8-10-9-10-4 0 4 6 4 10 4Zm0 0c3-8 10-9 10-4 0 4-6 4-10 4Z"/>',
+  inquiry: '<path d="M5 10h30v21H5zM5 10l15 12 15-12M5 31l10-10m20 10L25 21"/>',
+} as const;
+export function loungeUtilityGlyph(action:keyof typeof utilityPaths):string {
+  return `<span class="lounge-utility-glyph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square" stroke-linejoin="miter" focusable="false">${utilityPaths[action]}</svg></span>`;
+}

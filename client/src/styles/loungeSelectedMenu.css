@@ -13,6 +13,10 @@
 .selected-menu .lounge-topbar .lounge-menu{order:3;width:36px;height:44px;border:0;background:none;box-shadow:none;border-radius:0;display:flex!important;flex-direction:column;align-items:flex-start;justify-content:center;gap:6px}
 .selected-menu .menu-stroke{display:block;width:22px;height:1px;background:#dde7eb}.selected-menu .menu-stroke:last-child{width:14px}
 .selected-menu .lounge-rail-bottom{border:1px solid #b3cddd45;border-radius:0;background:#091725f5;box-shadow:0 15px 40px #0007}
+.selected-menu .lounge-utility-glyph{display:block;width:26px;height:26px;flex:0 0 26px;color:#c8bd9f}
+.selected-menu .lounge-utility-glyph svg{display:block;width:100%;height:100%}
+.selected-menu .lounge-rail-bottom button:hover{background:#bdcedc0d}
+.selected-menu .lounge-rail-bottom button:focus-visible{outline:1px solid #c8bd9f;outline-offset:-3px}
 .selected-menu.lounge-home{background-image:linear-gradient(90deg,transparent 28%,#04102080 70%,#041020cf),url('/art/lounge/stage-v1/stage.webp')}
 .selected-menu.lounge-home .lounge-content>.lounge-home-screen{min-height:0;height:100%;padding:6px 4vw 16px}
 .selected-menu .lounge-home-main{width:395px;max-width:46%;gap:8px;justify-content:center;margin-left:auto}
