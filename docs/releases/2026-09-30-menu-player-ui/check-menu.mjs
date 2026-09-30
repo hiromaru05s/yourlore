@@ -23,7 +23,7 @@ return r.fulfill({contentType:'application/json',body:JSON.stringify(data)});
 async function shot(name){await page.screenshot({path:`${out}/${name}.png`,timeout:90000});checks.push(name);const overflow=await page.evaluate(()=>[...document.querySelectorAll('.lounge-content,.support-dialog')].filter(e=>e.scrollWidth>e.clientWidth+2).map(e=>({class:e.className,scroll:e.scrollWidth,width:e.clientWidth})));if(overflow.length)overflows.push({name,overflow});}
 async function utility(name){if(await page.locator('[data-'+name+']').isHidden())await page.locator('.lounge-menu').click();await page.locator('[data-'+name+']').click();}
 try{
-await page.goto(origin);await page.waitForSelector('.lounge-home');await page.waitForSelector('.screen-loader',{state:'detached',timeout:180000});
+await page.goto(origin,{waitUntil:'domcontentloaded',timeout:180000});await page.waitForSelector('.lounge-home');await page.waitForSelector('.screen-loader',{state:'detached',timeout:180000});
 for(const [w,h] of [[1280,800],[390,844],[320,568],[844,390]]){
 await page.setViewportSize({width:w,height:h});await page.locator('[data-nav=home]').click();await page.waitForSelector('#ranked');await shot('home-'+w);
 const centered=await page.locator('#ranked').evaluate(e=>{const r=e.getBoundingClientRect(),t=e.querySelector('strong').getBoundingClientRect();return {x:Math.abs(t.x+t.width/2-r.x-r.width/2),y:Math.abs(t.y+t.height/2-r.y-r.height*.52)}});assert(centered.x<2&&centered.y<2,JSON.stringify(centered));
@@ -47,5 +47,5 @@ await page.waitForFunction(()=>Number(document.querySelector('.home-entrance-sta
 await page.waitForFunction(()=>window.menuEntranceDone,{timeout:20000});assert.equal(await page.locator('#app').evaluate(e=>e.inert),false);await shot('entrance-nav-complete');
 const samples=await page.evaluate(()=>window.menuEntranceSamples);const moving=samples.filter(s=>s.elapsed>=1900);assert(moving.some(s=>s.rail!=='none'));assert.equal(new Set(moving.map(s=>JSON.stringify(s.shade))).size,1,'shade stays fixed throughout navigation reveal');assert.equal(await page.locator('.lounge-rail').evaluate(e=>getComputedStyle(e,'::before').content),'none');await fs.writeFile(out+'/entrance-shade-samples.json',JSON.stringify(samples,null,2));
 }
-assert(updates>0);assert.deepEqual(errors,[]);assert.deepEqual(overflows,[]);await fs.writeFile(out+'/report.json',JSON.stringify({origin,checks,errors,overflows,updates,api:'Local intercepted API fixtures; no real message or account writes'},null,2));console.log('PASS',checks.length,'screens and interactions');
+assert(updates>0);assert.deepEqual(errors,[]);assert.deepEqual(overflows,[]);await fs.rm(out+'/failure.json',{force:true});await fs.rm(out+'/failure.png',{force:true});await fs.writeFile(out+'/report.json',JSON.stringify({origin,checks,errors,overflows,updates,api:'Local intercepted API fixtures; no real message or account writes'},null,2));console.log('PASS',checks.length,'screens and interactions');
 } catch(e){await page.screenshot({path:out+'/failure.png'});await fs.writeFile(out+'/failure.json',JSON.stringify({error:String(e),errors,overflows},null,2));throw e;}finally{await browser.close();}

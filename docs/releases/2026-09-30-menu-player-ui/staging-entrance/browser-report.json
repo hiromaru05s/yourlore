@@ -1,0 +1,18 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "api": "fixture authenticated user; not real account login",
+  "errors": [],
+  "failed": [],
+  "checks": [
+    "real boot path waits for assets",
+    "approved 01 fan",
+    "home unlocks on finish",
+    "no replay on menu return",
+    "reload replays",
+    "skip control removed",
+    "390px portrait",
+    "Escape does not skip; natural completion unlocks",
+    "reduced motion",
+    "login to first home"
+  ]
+}

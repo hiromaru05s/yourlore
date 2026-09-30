@@ -1,0 +1,14 @@
+{
+  "id": "701b6439-677e-4075-990b-419852d3471e",
+  "versions": [
+    {
+      "version_id": "1091a0b4-18b6-4ff9-9b33-fd1c2e571325",
+      "percentage": 100
+    }
+  ],
+  "created_on": "2026-09-30T00:02:41.46209Z",
+  "annotations": {
+    "workers/message": "97dc64e8 menu and player UI integration",
+    "workers/triggered_by": "deployment"
+  }
+}

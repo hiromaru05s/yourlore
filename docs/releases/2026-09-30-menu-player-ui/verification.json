@@ -1,0 +1,19 @@
+{
+  "runtimeCommit": "97dc64e8",
+  "integratedBase": "d4add2cc",
+  "stagingUrl": "https://test.yourlore.xyz",
+  "stagingVersion": "1091a0b4-18b6-4ff9-9b33-fd1c2e571325",
+  "trafficPercent": 100,
+  "verifiedAt": "2026-09-30T00:05:29.332504+00:00",
+  "typecheck": "passed client and server",
+  "build": "passed production and design guard",
+  "localMenuStates": 33,
+  "stagingMenuStates": 32,
+  "localMonsterAndResourceChecks": 18,
+  "localAndStagingHomeEntrance": "passed",
+  "deployedAssetHashes": 16,
+  "deployedBotZeroResourcesAndOutcome": "passed",
+  "accountApi": "fixtures; not authenticated online verification",
+  "unrelatedWorkingChanges": "preserved, checked before and after main integration",
+  "productionDeployed": false
+}

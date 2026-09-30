@@ -1,0 +1,66 @@
+[
+  {
+    "file": "index.html",
+    "sha256": "a5ca5813ea03c8924054da0dd5b117c4dff57b97a233c0257308cde0b3e1ca72"
+  },
+  {
+    "file": "assets/GLTFLoader-DqCMa9To.js",
+    "sha256": "026fcb02b73a6f968803745371b63e7b83958f5c9a5de8d701703388a71436e7"
+  },
+  {
+    "file": "assets/RoomEnvironment-Dg4OOisb.js",
+    "sha256": "a3d4c746541d4e071cbea3e34f1a41fb352f4564ff5b65da1fa7c44d6b01058f"
+  },
+  {
+    "file": "assets/ceremonyScene-Cbf5B16x.js",
+    "sha256": "69af4fec790b86bbd107a392d08ac8941799bd80c716426be5ec0da652f21866"
+  },
+  {
+    "file": "assets/crownOutcome-qbz6vTqh.js",
+    "sha256": "bd8b21e9b7be06c00f09bec1aeed88def7e7ce0b5ba430e1c5d15abdcb86a35f"
+  },
+  {
+    "file": "assets/diceScene-CtxYa10K.js",
+    "sha256": "8b01bb5d5f694f96b495540e795136c2f21de737635826bf60bdcfe1c20b8336"
+  },
+  {
+    "file": "assets/duelScene-DAuucuDw.js",
+    "sha256": "4eea9c0ce580e0f4a016fd3932cc4d6ea8cc907312883a0163371ef86c299113"
+  },
+  {
+    "file": "assets/main-BF7NjVr-.css",
+    "sha256": "a201b5c63bd7ced850beb8c98517a6bd1db964ea4ee76e4c41187b2e306c7cee"
+  },
+  {
+    "file": "assets/main-CDvAfeuk.js",
+    "sha256": "e81f6e58bb6f952383cf3ddd627080cce62ca538a5e001274ca0095e5b232611"
+  },
+  {
+    "file": "assets/paperDraw-C7XuoB0s.js",
+    "sha256": "4d7370132eb9a7c2facb259498b917f9f7816f08fd0d0fe5cf79220232678753"
+  },
+  {
+    "file": "assets/riftScene-CBDkTt8U.js",
+    "sha256": "75ee86256c0c8ff7ba4914f961a622f3f63545be7af926cf69c0112cf6555b7b"
+  },
+  {
+    "file": "assets/tablePreview-2Rkra2Ey.css",
+    "sha256": "ca853172670b5baf396e1aab496a87d0d7a9aba84403c1c02548521867de0ff4"
+  },
+  {
+    "file": "assets/tablePreview-CJCuoT-O.js",
+    "sha256": "4ca9f04c76de91bf7a76d6b183f44763ba234a0ab57d5d15869fe9d516f51fb4"
+  },
+  {
+    "file": "assets/three.module-DJFzXWA5.js",
+    "sha256": "647399e8e92187c3fb10dc3ab0c46fa667d94cf8e9d84dc71a5d8adef86803be"
+  },
+  {
+    "file": "assets/voidSurface-DGIZPG9f.js",
+    "sha256": "9a518e2578ecb1da2fb4828334c8b8125406559d26937c590cd4a2b168529233"
+  },
+  {
+    "file": "art/lounge/icons/shard-simple-v1.png",
+    "sha256": "4d0a2660053b784390f03a29c790d0727aea70150f65ec4f54e6d2a66a177ccb"
+  }
+]
