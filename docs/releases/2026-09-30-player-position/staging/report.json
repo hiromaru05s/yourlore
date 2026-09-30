@@ -1,0 +1,52 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "requests": [
+    {
+      "url": "https://test.yourlore.xyz/assets/main-CNG8vqy9.js",
+      "status": 200
+    }
+  ],
+  "seen": [
+    "summon:B",
+    "trigger:B",
+    "ready:C",
+    "attack:A",
+    "blocked:B"
+  ],
+  "checks": [
+    {
+      "w": 1461,
+      "h": 789,
+      "seals": 4,
+      "clearance": 21.16741943359375,
+      "hpBottom": 773.2634887695312,
+      "ringTop": 654.6875
+    },
+    {
+      "w": 1280,
+      "h": 720,
+      "seals": 4,
+      "clearance": 19.16162109375,
+      "hpBottom": 704.5580444335938,
+      "ringTop": 590.6875
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "seals": 4,
+      "clearance": 10.7122802734375,
+      "hpBottom": 378.4080810546875,
+      "ringTop": 323.609375
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "seals": 4,
+      "clearance": 7.516021728515625,
+      "hpBottom": 604.088134765625,
+      "ringTop": 492.28125
+    }
+  ],
+  "errors": [],
+  "boundary": "Deployed frontend, API account fixture, natural local BOT summon and attack. No authenticated online play."
+}
