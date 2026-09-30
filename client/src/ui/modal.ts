@@ -11,21 +11,37 @@ import { TRIBES } from "../shared/cards";
 import { t, getLang } from "../i18n";
 
 let root: HTMLElement | null = null;
+let returnFocus:HTMLElement|null=null;
+let releaseFocus:()=>void=()=>{};
+let dialogSerial=0;
 function getRoot(): HTMLElement {
   if (!root) { root = document.createElement("div"); root.id = "overlayRoot"; document.body.appendChild(root); }
   return root;
 }
 const notices=new Map<HTMLElement,ReturnType<typeof setTimeout>>();
 export function closeTreasureNotices():void {notices.forEach((timer,node)=>{clearTimeout(timer);node.remove();});notices.clear();}
-export function closeOverlay(): void { getRoot().innerHTML = ""; }
+export function closeOverlay(): void {
+ releaseFocus();getRoot().innerHTML='';if(returnFocus?.isConnected)returnFocus.focus();returnFocus=null;
+}
 
 function mount(node: HTMLElement): void {
+  if(!getRoot().children.length)returnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
+  releaseFocus();
+  node.setAttribute('role','dialog');node.setAttribute('aria-modal','true');node.tabIndex=-1;
+  const title=node.querySelector('h2');if(title){title.id ||= 'lore-dialog-'+(++dialogSerial);node.setAttribute('aria-labelledby',title.id);}
+  const focusables=()=>[...node.querySelectorAll<HTMLElement>('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex="0"]')].filter(el=>el.getClientRects().length>0);
+  const focus=()=>{(focusables()[0]??node).focus();};
+  const keys=(event:KeyboardEvent)=>{if(event.key!=='Tab')return;const items=focusables(),at=items.indexOf(document.activeElement as HTMLElement);event.preventDefault();(items.length?items[(at+(event.shiftKey?-1:1)+items.length)%items.length]:node).focus();};
+  const keepFocus=(event:FocusEvent)=>{if(node.isConnected&&!node.contains(event.target as Node))focus();};
+  document.addEventListener('keydown',keys);document.addEventListener('focusin',keepFocus);
+  releaseFocus=()=>{document.removeEventListener('keydown',keys);document.removeEventListener('focusin',keepFocus);};
   const ov = document.createElement("div");
   ov.className = "overlay";
   if (!node.classList.contains("outcome-result") && document.querySelector(".game .mp-clock.show")) { node.classList.add("duel-dialog"); attachDuelClock(node); }
   ov.appendChild(node);
   getRoot().innerHTML = "";
   getRoot().appendChild(ov);
+  focus();
 }
 
 /** YES/NO confirm. Resolves true on confirm. */
@@ -44,6 +60,7 @@ export function confirmDialog(opts: { title: string; body?: string; confirm: str
     const settle = (v: boolean): void => { if (done) return; done = true; obs?.disconnect(); resolve(v); };
     no.onclick = () => { settle(false); closeOverlay(); };
     yes.onclick = () => { settle(true); closeOverlay(); };
+    m.addEventListener("keydown",e=>{if(e.key==="Escape"){e.preventDefault();no.click();}});
     row.append(no, yes);
     mount(m);
     // Another modal can EVICT this one (mount() wipes the overlay root — e.g. the

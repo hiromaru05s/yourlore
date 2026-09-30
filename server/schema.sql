@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
   avatar      TEXT,                       -- 프리셋 아바타 (카드 id)
   badge       TEXT,                       -- 장착 뱃지 키 (보유 여부는 서버가 계산)
   stats_public INTEGER NOT NULL DEFAULT 1, -- 프로필 전적 공개 여부
+  furniture   TEXT,                       -- equipped deck-holder
   sleeve      TEXT,                       -- 장착 카드 슬리브 id (null = 'default')
   sleeves     TEXT,                       -- 구매 소유한 슬리브 id csv (default는 항상 무료 보유)
   deck        TEXT,                       -- 활성 덱 8장 카드 id csv (null = 기본덱 컬6+상자2; 어튠 1장은 항상 고정)

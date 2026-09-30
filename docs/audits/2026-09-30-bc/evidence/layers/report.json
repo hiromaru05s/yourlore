@@ -1,0 +1,32 @@
+{
+  "checks": [
+    "simultaneous two-side activation completes",
+    "three consecutive attacks complete without transient residue",
+    "dialog remains clickable while visual compositor is above it",
+    {
+      "width": 1280,
+      "overflow": false,
+      "field": "16",
+      "portrait": "18"
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "field": "16",
+      "portrait": "18"
+    },
+    {
+      "width": 844,
+      "overflow": false,
+      "field": "16",
+      "portrait": "18"
+    }
+  ],
+  "policy": {
+    "foreground": 127,
+    "dialog": 150,
+    "pointerEvents": "none",
+    "overlayCount": 1
+  },
+  "errors": []
+}

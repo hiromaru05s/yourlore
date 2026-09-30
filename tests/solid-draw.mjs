@@ -6,7 +6,7 @@ import {JSDOM} from 'jsdom';
 const dir=await mkdtemp(tmpdir()+'/lore-solid-draw-');
 const dom=new JSDOM('<div id="pile-myDeck"><i class="pile-draw-anchor"></i></div><div id="hand"><div class="card" data-uid="old"></div><div class="card" data-uid="new"></div></div>',{url:'http://localhost',pretendToBeVisual:true});
 for(const k of ['window','document','HTMLElement','Element','Node','localStorage','navigator','Image'])Object.defineProperty(globalThis,k,{value:dom.window[k],configurable:true});
-globalThis.matchMedia=()=>({matches:false});
+globalThis.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
 let painted=false,delay=false,release;
 globalThis.requestAnimationFrame=cb=>setTimeout(()=>{painted=true;cb(performance.now());},0);
 globalThis.cancelAnimationFrame=clearTimeout;

@@ -1,0 +1,18 @@
+{
+  "checks": [
+    "modal role/name, initial focus, Tab/Shift+Tab trap, Escape cancellation and restored focus",
+    "replaced confirmation settles false",
+    "hung API aborts",
+    "hung image decode expires and retry succeeds",
+    "cancelled loader resolves without residue"
+  ],
+  "network": {
+    "timedOut": true,
+    "bodyTimedOut": true,
+    "failed": true,
+    "canRetry": true,
+    "cancelled": true,
+    "loadingCovers": 0
+  },
+  "errors": []
+}

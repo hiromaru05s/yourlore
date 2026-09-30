@@ -2,6 +2,8 @@
 // LORE server — environment bindings (see wrangler.toml)
 // ============================================================
 export interface Env {
+  AUTH_RATE_LIMITER?: {limit(input:{key:string}):Promise<{success:boolean}>};
+  INQUIRY_RATE_LIMITER?: {limit(input:{key:string}):Promise<{success:boolean}>};
   DB: D1Database;
   MATCHMAKER: DurableObjectNamespace;
   GAME_ROOM: DurableObjectNamespace;

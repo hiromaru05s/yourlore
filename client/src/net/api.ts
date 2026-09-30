@@ -32,20 +32,28 @@ export interface ClaimResult {
 export interface ApiError extends Error { needVerify?: boolean }
 
 async function call<T>(path: string, body?: unknown, method = "POST", signal?: AbortSignal): Promise<T> {
+  const controller=new AbortController();
+  const abort=()=>controller.abort();signal?.addEventListener('abort',abort,{once:true});if(signal?.aborted)abort();
+  const timeout=setTimeout(abort,20000);
+  try {
   const res = await fetch("/api" + path, {
     method,
-    signal,
+    signal:controller.signal,
     credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: body ? JSON.stringify(body) : undefined,
   });
-  const data = (await res.json().catch(() => ({}))) as { error?: string; needVerify?: boolean } & T;
+  const data = (await res.json().catch(error => {if(controller.signal.aborted)throw error;return {};})) as { error?: string; needVerify?: boolean } & T;
   if (!res.ok) {
     const err = new Error(data?.error ? localizeServerMsg(data.error) : t("api.fail").replace("{n}", String(res.status))) as ApiError;
     err.needVerify = !!data?.needVerify;
     throw err;
   }
   return data;
+  } catch(error) {
+    if(controller.signal.aborted&&!signal?.aborted)throw new Error(localizeServerMsg('request timed out'));
+    throw error;
+  } finally {clearTimeout(timeout);signal?.removeEventListener('abort',abort);}
 }
 
 export interface RankInfo {

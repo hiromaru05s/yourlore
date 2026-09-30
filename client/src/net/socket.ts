@@ -21,7 +21,9 @@ export class Sock<TIn = unknown, TOut = unknown> {
     this.ws.onclose = () => this.handlers.onClose?.();
     this.ws.onerror = () => this.handlers.onError?.();
     this.ws.onmessage = (e) => {
-      try { this.handlers.onMessage?.(JSON.parse(e.data) as TIn); } catch { /* ignore malformed */ }
+      let message:TIn;
+      try { message=JSON.parse(e.data) as TIn; } catch { console.warn('socket_invalid_json'); return; }
+      this.handlers.onMessage?.(message);
     };
   }
 

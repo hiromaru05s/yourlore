@@ -3,6 +3,7 @@
 // traffic (/ws/queue, /ws/room/:id) to the Durable Objects,
 // attaching the authenticated user's identity.
 // ============================================================
+import {guardRequest} from "./requestGuard";
 import type { Env } from "./env";
 import { corsHeaders, getUser, handleAuth } from "./auth";
 import {saveUserDecks} from "./decks";
@@ -19,6 +20,9 @@ export { Matchmaker, GameRoom };
 
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
+    const guarded = await guardRequest(req,env);
+    if (guarded instanceof Response) return guarded;
+    req=guarded;
     const url = new URL(req.url);
     const path = url.pathname;
     const onAdminHost = url.hostname.startsWith("admin."); // isolated admin origin

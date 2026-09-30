@@ -2,7 +2,7 @@
   "name": "lore-tcg",
   "version": "0.1.0",
   "private": true,
-  "description": "LORE — deckbuild x TCG hybrid. Cloudflare-hosted (Pages + Workers + Durable Objects + D1).",
+  "description": "LORE \u2014 deckbuild x TCG hybrid. Cloudflare-hosted (Pages + Workers + Durable Objects + D1).",
   "workspaces": [
     "client",
     "server"
@@ -16,12 +16,16 @@
     "art:prompts": "node scripts/export-card-art-prompts.mjs",
     "art:generate": "node scripts/generate-card-art.mjs",
     "server:dev": "npm --workspace server run dev",
-    "deploy": "npm run build && wrangler deploy -c server/wrangler.toml",
-    "deploy:staging": "npm run build && wrangler deploy -c server/wrangler.toml --env staging",
+    "deploy": "node scripts/deploy-guard.mjs production",
+    "deploy:staging": "node scripts/deploy-guard.mjs staging",
     "text:check": "node scripts/check-card-text.mjs",
-    "art:thumbs": "node scripts/build-card-thumbs.mjs"
+    "art:thumbs": "node scripts/build-card-thumbs.mjs",
+    "test:production": "node scripts/test-production.mjs"
   },
   "devDependencies": {
-    "wrangler": "^3.95.0"
+    "wrangler": "^4.144.0"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }

@@ -8,12 +8,15 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 
 const dom = new JSDOM('<div id="app"></div>', { url: 'http://localhost', pretendToBeVisual: true });
-for (const k of ['window', 'document', 'HTMLElement', 'Element', 'Node', 'localStorage', 'navigator', 'DOMRect', 'CustomEvent', 'Event', 'Image']) {
+for (const k of ['window', 'document', 'location', 'HTMLElement', 'HTMLImageElement', 'Element', 'Node', 'localStorage', 'navigator', 'DOMRect', 'CustomEvent', 'Event', 'Image']) {
   Object.defineProperty(globalThis, k, { value: dom.window[k], configurable: true });
 }
 dom.window.Range.prototype.getBoundingClientRect = () => new dom.window.DOMRect();
 dom.window.Range.prototype.getClientRects = () => [];
-globalThis.getComputedStyle = dom.window.getComputedStyle.bind(dom.window);
+globalThis.getComputedStyle = el=>dom.window.getComputedStyle(el);
+dom.window.HTMLImageElement.prototype.decode=()=>Promise.resolve();
+// Canvas visuals are covered by the browser renderer suites.
+dom.window.HTMLCanvasElement.prototype.getContext=()=>null;
 globalThis.requestAnimationFrame = cb => setTimeout(() => cb(performance.now()), 0);
 globalThis.cancelAnimationFrame = clearTimeout;
 globalThis.innerWidth = 1280; globalThis.innerHeight = 720;
@@ -37,6 +40,11 @@ try {
       export { closeOverlay } from './client/src/ui/modal';
       export { REWARDS } from './server/src/rewards';
     ` }, bundle: true, format: 'esm', platform: 'node', outfile: path.join(temp, 'tutorial.mjs'),
+    plugins:[{name:'dom-only-monster-renderer',setup(b){
+      // This suite verifies tutorial rules/rewards/DOM. Canvas parity has real-browser coverage.
+      b.onResolve({filter:/monster\/runtime$/},()=>({path:'monster-runtime',namespace:'dom-test'}));
+      b.onLoad({filter:/.*/,namespace:'dom-test'},()=>({contents:'export const syncMonsterStates=()=>{},clearMonsterStates=()=>{},setMonsterSkip=()=>{},monsterRect=()=>null,playMonster=async()=>false;',loader:'js'}));
+    }}],
   });
   const { TutorialController, TUT_STEPS, mountTutorial, mountCards, DB, STARTERS, buyCost, effAtk, api, setLang, t, closeOverlay, REWARDS } = await import(path.join(temp, 'tutorial.mjs'));
   const activeKeys = ['tuto:1', 'tuto:2', 'tuto:3', 'tuto:4', 'tuto:5', 'tuto:6', 'tuto:8', 'tuto:9', 'tuto:10'];
@@ -80,17 +88,20 @@ try {
     }
     screen.destroy(); root.innerHTML = '';
     const gallery = mountCards({ root, home: noop, cards: noop });
+    await tick();
     const chips = [...root.querySelectorAll('#typeRow .chip')];
     assert.equal(chips.length, 6);
     assert(!chips.some(el => /罠|함정|Trap/.test(el.textContent)));
     const definitions = [...Object.values(DB), ...Object.values(STARTERS)];
     const rendered = () => [...root.querySelectorAll('#grid > .card')];
-    assert.equal(rendered().length, definitions.length);
+    const allPages=async()=>{const ids=[];for(let n=0;n<20;n++){await tick();ids.push(...rendered().map(el=>el.dataset.cardId));if(root.querySelector('#nextPage').disabled)break;root.querySelector('#nextPage').click();}return ids.sort();};
+    assert.deepEqual(await allPages(),definitions.map(c=>c.id).sort());
     assert(rendered().every(el => el.dataset.cardType !== 'trap'));
     for (const [index, type] of ['all', 'mon', 'spell', 'quick', 'quest', 'starter'].entries()) {
       chips[index].click();
+      await tick();
       const expected = definitions.filter(c => type === 'all' || (type === 'quick' ? c.quick : type === 'starter' ? c.t === 'starter' || c.noShop : c.t === type));
-      assert.equal(rendered().length, expected.length, `${lang}: ${type} filter retains its cards`);
+      assert.deepEqual(await allPages(), expected.map(c=>c.id).sort(), `${lang}: ${type} filter retains all paginated cards`);
     }
     gallery.destroy(); root.innerHTML = '';
   }

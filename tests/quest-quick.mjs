@@ -22,7 +22,7 @@ try {
   assert.equal(Object.values(DB).filter(c=>c.t==='quest').length,11);
   assert.equal(Object.values(DB).filter(c=>c.quick).length,13);
   assert(Object.values(DB).filter(c=>c.quick).every(c=>c.t==='spell'));
-  assert.equal(frameFor('quest'),'/art/biblion/modular/base-quest.png');
+  assert.equal(frameFor('quest'),'/art/biblion/modular/base-quest-ui.webp');
 
   for (const from of ['buyMarket','buySupply']) {
     let g=fresh();g=activate(g,'Q_WINTER');g=activate(g,'Q_MANA');const p=g.players[0];const mana=p.mana, hp=p.hp, mm=p.maxMana;

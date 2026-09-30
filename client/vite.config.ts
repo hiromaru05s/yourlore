@@ -13,11 +13,11 @@ export default defineConfig({
   build: {
     target: "es2022",
     outDir: "dist",
-    sourcemap: true,
+    sourcemap: false,
     rollupOptions: {
       input: {
         main: new URL('./index.html', import.meta.url).pathname,
-        tablePreview: new URL('./table-preview.html', import.meta.url).pathname,
+        ...(process.env.LORE_BUILD_PREVIEW === '1' ? {tablePreview: new URL('./table-preview.html', import.meta.url).pathname} : {}),
       },
     },
   },

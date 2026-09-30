@@ -184,7 +184,7 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(heavy){
-    face.style.zIndex='2147483647';reveal.style.zIndex='2147483647';
+    face.style.zIndex='135';reveal.style.zIndex='135';
     // Finish the hand reveal on the same flat board plane as approved summon B.
     const r=monsterRect(target),p=monsterPose('summon','B',0,r,r,reduced);
     const initial=monsterPlacement(r,p.x,p.y,p.angle,p.scale,p.z,p.rock);
@@ -748,7 +748,7 @@ export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: nu
   const target=reserveMonster(zone,card.uid);
   if (!target) return null;
   const node = floatAt(cardEl(card, { size: "hand", fullArt:true }), from);
-  node.style.zIndex="2147483647";
+  node.style.zIndex="135";
   try {
     await focusCard(node, side);
     const face=await flyIntoSlot(node,target,cardEl(card,{field:true}),true,card.id==='MIMIC'?'mimic':'summon');

@@ -1,3 +1,4 @@
+import {withDeadline} from '../net/deadline';
 import {playHomeEntrance} from './homeEntrance';
 import {menuAssetUrls} from './menuAssets';
 import {loadingScreen} from './loadingScreen';
@@ -9,7 +10,7 @@ const canonical=(url:string)=>new URL(url,location.href).href;
 let menuReady=false;
 export const isMenuReady=()=>menuReady;
 export function decodeAsset(url:string):Promise<void>{
- url=canonical(url);let task=decoded.get(url);if(!task){const img=new Image();img.loading="eager";img.fetchPriority="high";img.src=url;task=img.decode().then(()=>{loaded.add(url);}).catch(error=>{decoded.delete(url);throw error;});decoded.set(url,task);}return task;
+ url=canonical(url);let task=decoded.get(url);if(!task){const img=new Image();img.loading="eager";img.fetchPriority="high";img.src=url;task=withDeadline(img.decode()).then(()=>{loaded.add(url);}).catch(error=>{img.src="";decoded.delete(url);throw error;});decoded.set(url,task);}return task;
 }
 export function imageUrls(root:HTMLElement):string[]{
  const urls=new Set<string>();
@@ -20,16 +21,16 @@ export function imageUrls(root:HTMLElement):string[]{
  return [...urls];
 }
 /** A failed network request keeps an explicit retry surface, never broken art. */
-export async function waitAssets(urls:string[],host:HTMLElement,onProgress?:(done:number,total:number)=>void):Promise<void>{
+export async function waitAssets(urls:string[],host:HTMLElement,onProgress?:(done:number,total:number)=>void,signal?:AbortSignal):Promise<void>{
  const unique=[...new Set(urls)],complete=new Set<string>();
  onProgress?.(0,unique.length);
- while(host.isConnected){
+ while(host.isConnected&&!signal?.aborted){
   const remaining=unique.filter(url=>!complete.has(url));
   const result=await Promise.allSettled(Array.from({length:Math.min(8,remaining.length)},async()=>{
-   let error:unknown;while(remaining.length){const url=remaining.shift()!;try{await decodeAsset(url);complete.add(url);onProgress?.(complete.size,unique.length);}catch(e){error=e;}}
+   let error:unknown;while(remaining.length&&host.isConnected&&!signal?.aborted){const url=remaining.shift()!;try{await withDeadline(decodeAsset(url),20000,signal);complete.add(url);onProgress?.(complete.size,unique.length);}catch(e){error=e;}}
    if(error)throw error;
   }));
-  if(result.every(r=>r.status==='fulfilled'))return;
+  if(result.every(r=>r.status==='fulfilled')||!host.isConnected||signal?.aborted)return;
   await new Promise<void>(resolve=>{
    const retry=document.createElement('button');retry.className='asset-retry';retry.textContent=getLang()==='ja'?'画像の読み込みを再試行':getLang()==='ko'?'이미지 다시 불러오기':'Retry loading artwork';host.append(retry);
    const observer=new MutationObserver(()=>{if(!host.isConnected)finish();});observer.observe(document.body,{subtree:true,childList:true});
@@ -44,10 +45,10 @@ export function coverScreen(root:HTMLElement,preloadMenu=false,homeEntrance=fals
  const release=()=>{cover.remove();root.inert=false;root.removeAttribute('aria-busy');};
  const cancel=()=>{abort.abort();release();};
  return {cancel,ready:async()=>{
-  await waitAssets([...screenAssets,...(preloadMenu?menuAssetUrls():[])],cover,(done,total)=>loading.update(total?done/total*94:94,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`)));
+  await waitAssets([...screenAssets,...(preloadMenu?menuAssetUrls():[])],cover,(done,total)=>loading.update(total?done/total*94:94,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`)),abort.signal);
   if(abort.signal.aborted)return false;
   loading.update(95,loungeText("画面を仕上げています","Finishing the scene","화면 마무리 중"));
-  await document.fonts.ready;await Promise.all([...root.querySelectorAll('img')].map(i=>i.decode().catch(()=>{})));
+  await withDeadline(document.fonts.ready,20000,abort.signal).catch(()=>{});await Promise.all([...root.querySelectorAll('img')].map(i=>withDeadline(i.decode()).catch(()=>{})));
   await new Promise<void>(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r())));
   if(abort.signal.aborted)return false;
   if(preloadMenu)menuReady=true;
@@ -61,6 +62,6 @@ export function coverScreen(root:HTMLElement,preloadMenu=false,homeEntrance=fals
 export async function revealCards(grid:HTMLElement,nodes:Node[],current:()=>boolean):Promise<void>{
  const tray=document.createElement('div');tray.className='asset-tray';tray.append(...nodes);grid.append(tray);grid.setAttribute('aria-busy','true');
  await waitAssets(imageUrls(tray),grid);
- await Promise.all([...tray.querySelectorAll('img')].map(i=>i.decode().catch(()=>{})));
+ await Promise.all([...tray.querySelectorAll('img')].map(i=>withDeadline(i.decode()).catch(()=>{})));
  if(current()&&grid.isConnected){grid.replaceChildren(...Array.from(tray.childNodes));grid.removeAttribute('aria-busy');grid.scrollTop=0;}else tray.remove();
 }

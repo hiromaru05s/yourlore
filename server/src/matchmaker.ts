@@ -10,7 +10,7 @@
 import type { Env } from "./env";
 import type { QueueClientMsg, QueueServerMsg } from "../../client/src/shared/protocol";
 
-interface Waiter { ws: WebSocket; id: string; name: string; avatar: string | null; sleeve: string | null; furniture:string|null; deck: string | null; ranked: boolean; mmr: number; since: number; }
+interface Waiter { ws: WebSocket; id: string; name: string; avatar: string | null; sleeve: string | null; furniture:string|null; deck: string | null; ranked: boolean; mmr: number; since: number; phase?:'pairing'|'matched'; messages?:number[]; }
 
 const SWEEP_MS = 5000;
 const BAND_START = 100;
@@ -20,6 +20,7 @@ const BAND_ANY_MS = 90_000;
 
 export class Matchmaker {
   private env: Env;
+  private connections = new Map<string,Waiter>();
   private casual: Waiter | null = null;
   private ranked: Waiter[] = [];
   private sweep: ReturnType<typeof setInterval> | null = null;
@@ -32,6 +33,8 @@ export class Matchmaker {
     if (req.headers.get("Upgrade") !== "websocket") return new Response("expected websocket", { status: 426 });
     const url = new URL(req.url);
     if (!url.searchParams.get("uid")) return new Response("unauthorized", { status: 401 });
+    const account=url.searchParams.get('uid')!;
+    if(this.connections.has(account))return new Response('queue already connected',{status:409});
     const pair = new WebSocketPair();
     const client = pair[0], server = pair[1];
     const me: Waiter = {
@@ -46,6 +49,7 @@ export class Matchmaker {
       mmr: url.searchParams.has("mmr") && Number.isFinite(Number(url.searchParams.get("mmr"))) ? Math.max(0,Number(url.searchParams.get("mmr"))) : 1000,
       since: 0,
     };
+    this.connections.set(account,me);
     server.accept();
     server.addEventListener("message", (e) => this.onMsg(me, e));
     server.addEventListener("close", () => this.remove(server));
@@ -55,18 +59,22 @@ export class Matchmaker {
   private send(ws: WebSocket, msg: QueueServerMsg): void { ws.send(JSON.stringify(msg)); }
 
   private remove(ws: WebSocket): void {
+    for(const [id,w] of this.connections)if(w.ws===ws&&w.phase!=='pairing')this.connections.delete(id);
     if (this.casual?.ws === ws) this.casual = null;
     this.ranked = this.ranked.filter((w) => w.ws !== ws);
     this.syncSweep();
   }
 
   private onMsg(me: Waiter, e: MessageEvent): void {
+    const now=Date.now();me.messages=(me.messages??[]).filter(t=>now-t<10000);me.messages.push(now);
+    if(me.messages.length>60){me.ws.close(1008,'rate limit');this.remove(me.ws);return;}
     let msg: QueueClientMsg;
     if (typeof e.data !== 'string' || e.data.length > 4096) return;
     try { msg = JSON.parse(e.data); } catch { return; }
     if (!msg || typeof msg !== 'object' || Array.isArray(msg)) return;
     if (msg.type === "ping") { try { this.send(me.ws, { type: "pong" }); } catch { /* dropped */ } return; }
-    if (msg.type === "cancel") { this.remove(me.ws); return; }
+    if(me.phase)return;
+    if (msg.type === "cancel") { this.remove(me.ws); me.ws.close(1000,'cancelled'); return; }
     if (msg.type !== "queue") return;
 
     if (me.ranked) { this.enqueueRanked(me); return; }
@@ -152,7 +160,11 @@ export class Matchmaker {
   private async pair(a: Waiter, b: Waiter): Promise<void> {
     // Both sockets must be live at commit time. If one vanished (lag/close) between selection
     // and now, abort and requeue the survivor — never create a phantom one-sided match.
+    a.phase=b.phase='pairing';
     if (a.ws.readyState !== WebSocket.OPEN || b.ws.readyState !== WebSocket.OPEN) {
+      a.phase=b.phase=undefined;
+      if(a.ws.readyState!==WebSocket.OPEN)this.remove(a.ws);
+      if(b.ws.readyState!==WebSocket.OPEN)this.remove(b.ws);
       this.requeue(a.ws.readyState === WebSocket.OPEN ? a : b);
       return;
     }
@@ -161,15 +173,23 @@ export class Matchmaker {
     const ranked = a.ranked && b.ranked;
     const stub = this.env.GAME_ROOM.get(this.env.GAME_ROOM.idFromName(roomId));
     try {
-      await stub.fetch("https://do/setup", {
+      const setup=await stub.fetch("https://do/setup", {
         method: "POST",
         body: JSON.stringify({ players: [{ id: a.id, name: a.name, sleeve: a.sleeve, furniture:a.furniture, deck: a.deck }, { id: b.id, name: b.name, sleeve: b.sleeve, furniture:b.furniture, deck: b.deck }], seed, ranked }),
       });
+      if(!setup.ok)throw new Error('room setup failed');
     } catch {
+      a.phase=b.phase=undefined;
+      if(a.ws.readyState!==WebSocket.OPEN)this.remove(a.ws);
+      if(b.ws.readyState!==WebSocket.OPEN)this.remove(b.ws);
+      console.error('matchmaker_setup_failed');
       if (a.ws.readyState === WebSocket.OPEN) try { this.send(a.ws, { type: "error", message: "방 생성 실패" }); } catch { /* dropped */ }
       if (b.ws.readyState === WebSocket.OPEN) try { this.send(b.ws, { type: "error", message: "방 생성 실패" }); } catch { /* dropped */ }
       return;
     }
+    a.phase=b.phase='matched';
+    if(a.ws.readyState!==WebSocket.OPEN)this.remove(a.ws);
+    if(b.ws.readyState!==WebSocket.OPEN)this.remove(b.ws);
     // room exists; if a "matched" send fails the room's join-timeout voids it (no rank), so this is safe
     try { this.send(a.ws, { type: "matched", roomId, you: 0, oppName: b.name, oppAvatar: b.avatar }); } catch { /* dropped */ }
     try { this.send(b.ws, { type: "matched", roomId, you: 1, oppName: a.name, oppAvatar: a.avatar }); } catch { /* dropped */ }

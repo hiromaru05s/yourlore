@@ -726,7 +726,7 @@ export class GameView {
           return;
         }
         aim?.remove();aim=null;
-        if(!ghost){ghost=card.cloneNode(true) as HTMLElement;ghost.className=card.className+' drag-ghost';ghost.classList.remove('is-attacker','is-aiming','is-dragging');ghost.style.opacity='1';ghost.style.zIndex='2147483647';ghost.style.width=`${card.offsetWidth}px`;ghost.style.height=`${card.offsetHeight}px`;document.body.append(ghost);}
+        if(!ghost){ghost=card.cloneNode(true) as HTMLElement;ghost.className=card.className+' drag-ghost';ghost.classList.remove('is-attacker','is-aiming','is-dragging');ghost.style.opacity='1';ghost.style.zIndex='135';ghost.style.width=`${card.offsetWidth}px`;ghost.style.height=`${card.offsetHeight}px`;document.body.append(ghost);}
         ghost.style.display='';ghost.style.left=`${x}px`;ghost.style.top=`${y}px`;
         setHot(null);
         if (!marker) return;
@@ -1123,7 +1123,7 @@ export class GameView {
           ghost.classList.remove('is-played', 'is-dragging', 'tilt-live');
           // A hand card has inline z-index 0..N. That must never override the
           // drag layer: low-index cards otherwise disappear behind the board.
-          ghost.style.zIndex = '2000';
+          ghost.style.zIndex = '135';
           ghost.style.visibility = 'visible';
           ghost.style.opacity = '1';
           // Field-sized silhouette, with hand aspect ratio and proportional seals.

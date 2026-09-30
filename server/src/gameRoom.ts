@@ -98,8 +98,10 @@ export class GameRoom {
     this.env = env;
   }
 
-  private persist(): void {
-    if (this.room) void this.state.storage.put("room", this.room).catch(() => { /* best effort */ });
+  private async persist(): Promise<void> {
+    if (!this.room) return;
+    try { await this.state.storage.put("room", this.room); }
+    catch { this.room=null; console.error('room_persistence_failed'); throw new Error('room persistence failed'); }
   }
 
   private async restore(): Promise<RoomData | null> {
@@ -167,8 +169,8 @@ export class GameRoom {
         startedAt: Date.now(),
         opening: {capable:[false,false],ready:[false,false],prepareBy:null,startsAt:null},
       };
-      this.persist();
-      void this.state.storage.setAlarm(this.room.joinBy!).catch(() => { /* best effort */ });
+      await this.persist();
+      await this.state.storage.setAlarm(this.room.joinBy!);
       return new Response("ok");
     }
 
@@ -201,8 +203,8 @@ export class GameRoom {
     const hadPendingForfeit = room.forfeitAt[sd] != null;
     room.forfeitAt[sd] = null;
     room.gen[sd]++;
-    this.persist();
-    this.syncAlarm();
+    await this.persist();
+    await this.syncAlarm();
     for (const old of this.state.getWebSockets(String(sd))) {
       try { old.close(1000, "replaced"); } catch { /* already gone */ }
     }
@@ -271,7 +273,7 @@ export class GameRoom {
       if (room.readied[0] && room.readied[1]) room.joinBy = null; // both joined → no join-timeout void
       // a reconnect cancels this side's pending forfeit and un-pauses the opponent
       if (room.forfeitAt[att.side] != null) { room.forfeitAt[att.side] = null; }
-      this.syncAlarm();
+      await this.syncAlarm();
       const other = this.sockFor((1 - att.side) as Side);
       if (other) { try { this.send(other, { type: "oppConn", connected: true }); } catch { /* dropped */ } }
 
@@ -279,8 +281,8 @@ export class GameRoom {
       // Arm the 15s auto-start deadline once BOTH have joined; players may skip it via startReady.
       if (!room.previewDone) {
         const bothIn = room.readied[0] && room.readied[1];
-        if (bothIn && room.previewUntil == null) { room.previewUntil = Date.now() + PREVIEW_MS; this.syncAlarm(); }
-        this.persist();
+        if (bothIn && room.previewUntil == null) { room.previewUntil = Date.now() + PREVIEW_MS; await this.syncAlarm(); }
+        await this.persist();
         const targets: Side[] = bothIn ? [0, 1] : [att.side];
         for (const s of targets) {
           const w = this.sockFor(s);
@@ -294,8 +296,8 @@ export class GameRoom {
         return;
       }
       // normal start (non-ranked) or a mid-game reconnect resync
-      this.persist();
-      this.sendInit(att.side);
+      await this.persist();
+      await this.sendInit(att.side);
       const outcome=room.rankOutcome?.[room.players[att.side].id];
       if (room.game.over && outcome) this.send(ws,{type:"rankResult",...outcome});
       return;
@@ -303,7 +305,7 @@ export class GameRoom {
     if (msg.type === "startReady") {
       if (room.previewDone) return;
       room.startReady[att.side] = true;
-      this.persist();
+      await this.persist();
       if (room.startReady[0] && room.startReady[1]) await this.endPreview(); // both agreed → begin now
       return;
     }
@@ -326,17 +328,18 @@ export class GameRoom {
     // deadline so their client can show a live countdown instead of a vague wait
     const other = this.sockFor((1 - att.side) as Side);
     if (other) { try { this.send(other, { type: "oppConn", connected: false, deadline: room.forfeitAt[att.side]! }); } catch { /* dropped */ } }
-    this.persist();
-    this.syncAlarm();
+    await this.persist();
+    await this.syncAlarm();
   }
 
   /** Keep the storage alarm pointed at the earliest pending deadline (forfeit or join). */
-  private syncAlarm(): void {
+  private async syncAlarm(): Promise<void> {
+    try {
     const room = this.room;
     if (!room) return;
     if (room.game.over) {
-      if (!room.recorded) void this.state.storage.setAlarm(Date.now() + 5000);
-      else void this.state.storage.deleteAlarm();
+      if (!room.recorded) await this.state.storage.setAlarm(Date.now() + 5000);
+      else await this.state.storage.deleteAlarm();
       return;
     }
     const times = [...room.forfeitAt, room.joinBy, room.previewUntil, room.opening?.prepareBy].filter((t): t is number => t != null);
@@ -344,14 +347,15 @@ export class GameRoom {
     if (!room.game.over && room.previewDone && room.readied[0] && room.readied[1] && (!room.opening || room.opening.startsAt != null)) {
       times.push(room.turnStartAt + turnMsFor(room.ranked) + (room.turnBonusMs || 0) + TURN_ENFORCE_GRACE_MS);
     }
-    if (times.length) void this.state.storage.setAlarm(Math.min(...times)).catch(() => { /* best effort */ });
-    else void this.state.storage.deleteAlarm().catch(() => { /* best effort */ });
+    if (times.length) await this.state.storage.setAlarm(Math.min(...times));
+    else await this.state.storage.deleteAlarm();
+      } catch { this.room=null;console.error('room_alarm_failed');throw new Error('room alarm failed'); }
   }
 
   async alarm(): Promise<void> {
     const room = await this.restore();
     if (!room) return;
-    if (room.game.over) { await this.recordResult(); this.syncAlarm(); return; }
+    if (room.game.over) { await this.recordResult(); await this.syncAlarm(); return; }
     const now = Date.now();
     const bothJoined = room.readied[0] && room.readied[1];
 
@@ -364,8 +368,8 @@ export class GameRoom {
         const ws = this.sockFor(s);
         if (ws) { try { this.send(ws, { type: "voided", message: "상대가 참가하지 않아 매칭이 취소되었습니다 (점수 변동 없음)" }); } catch { /* dropped */ } }
       }
-      this.persist();
-      this.syncAlarm();
+      await this.persist();
+      await this.syncAlarm();
       return;
     }
 
@@ -419,8 +423,8 @@ export class GameRoom {
       }
     }
 
-    this.persist();
-    this.syncAlarm();
+    await this.persist();
+    await this.syncAlarm();
   }
 
   // -------- game logic (unchanged) --------
@@ -445,9 +449,9 @@ export class GameRoom {
     // cur) is essential: a skip (e.g. TIMEWARP) runs endTurn twice, so cur returns to the same
     // player while turn advances by 2 — checking cur alone would leave a stale turnStartAt,
     // making the resumed turn's clock read ~0 and instantly auto-end (cascading turn skips).
-    if (res.state.turn !== prevTurn || res.state.cur !== prevCur) { room.turnStartAt = Date.now(); room.turnBonusMs = 0; this.syncAlarm(); } // re-arm the turn-timeout alarm
-    else if (res.state.pending?.reason === "handCap" && !room.turnBonusMs) { room.turnBonusMs = HAND_CAP_BONUS_MS; this.syncAlarm(); } // v42: +10s to choose the discards
-    this.persist();
+    if (res.state.turn !== prevTurn || res.state.cur !== prevCur) { room.turnStartAt = Date.now(); room.turnBonusMs = 0; await this.syncAlarm(); } // re-arm the turn-timeout alarm
+    else if (res.state.pending?.reason === "handCap" && !room.turnBonusMs) { room.turnBonusMs = HAND_CAP_BONUS_MS; await this.syncAlarm(); } // v42: +10s to choose the discards
+    await this.persist();
     // A rejected play (condition not met, sealed, etc.) produces only "log" events and
     // no state advance. Don't broadcast it to the OPPONENT — otherwise their client logs
     // the blocked attempt and their timer blinks, leaking that the actor spammed a card.
@@ -495,13 +499,13 @@ export class GameRoom {
   }
 
   /** Send the opening snapshot to a side; the initEvents (draw animations) ride along only once. */
-  private sendInit(side: Side): void {
+  private async sendInit(side: Side): Promise<void> {
     const room = this.room!;
     const ws = this.sockFor(side);
     if (!ws) return;
     const events = room.initSent[side] ? [] : room.initEvents;
     room.initSent[side] = true;
-    this.persist();
+    await this.persist();
     try { this.send(ws, { type: "init", you: side, state: this.redact(side), events }); } catch { /* dropped */ }
   }
 
@@ -513,9 +517,9 @@ export class GameRoom {
     room.previewUntil = null;
     if(room.opening){await this.prepareOpening();return;}
     room.turnStartAt = Date.now(); room.turnBonusMs = 0; // legacy room
-    this.persist();
-    this.syncAlarm();
-    for (const s of [0, 1] as Side[]) this.sendInit(s);
+    await this.persist();
+    await this.syncAlarm();
+    for (const s of [0, 1] as Side[]) await this.sendInit(s);
   }
 
   /** Resource readiness is bounded and persisted; repeated messages never restart it. */
@@ -527,8 +531,8 @@ export class GameRoom {
       delete room.opening;room.turnStartAt=Date.now();
     } else if(opening.prepareBy==null) opening.prepareBy=Date.now()+OPENING_PREPARE_MS;
     await this.state.storage.put("room",room);
-    this.syncAlarm();
-    for(const side of [0,1] as Side[])this.sendInit(side);
+    await this.syncAlarm();
+    for(const side of [0,1] as Side[])await this.sendInit(side);
     if(room.opening?.ready.every(Boolean))await this.startOpening();
   }
 
@@ -538,8 +542,8 @@ export class GameRoom {
     opening.startsAt=Date.now()+OPENING_LEAD_MS;opening.prepareBy=null;
     room.turnStartAt=opening.startsAt+DUEL_OPENING_MS;room.turnBonusMs=0;
     await this.state.storage.put("room",room);
-    this.syncAlarm();
-    for(const side of [0,1] as Side[])this.sendInit(side);
+    await this.syncAlarm();
+    for(const side of [0,1] as Side[])await this.sendInit(side);
   }
 
   private async recordResult(): Promise<void> {

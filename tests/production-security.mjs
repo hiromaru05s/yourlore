@@ -67,7 +67,7 @@ function dbFixture(){
  return {DB,sqlite,fail(value){failCredits=value}};
 }
 const schema=await readFile('server/schema.sql','utf8');
-async function creditFixture(){const f=dbFixture();f.sqlite.exec(schema);f.sqlite.exec('ALTER TABLE users ADD COLUMN furniture TEXT');for(const id of ['qa-a','qa-b']){f.sqlite.prepare('INSERT INTO users (id,email,password,display,created_at,verified) VALUES (?,?,?,?,?,1)').run(id,id+'@example.test','fixture',id,Date.now());f.sqlite.prepare('INSERT INTO sessions (token,user_id,created_at,expires_at) VALUES (?,?,?,?)').run(id,id,Date.now(),Date.now()+100000);}return f;}
+async function creditFixture(){const f=dbFixture();f.sqlite.exec(schema);for(const id of ['qa-a','qa-b']){f.sqlite.prepare('INSERT INTO users (id,email,password,display,created_at,verified) VALUES (?,?,?,?,?,1)').run(id,id+'@example.test','fixture',id,Date.now());f.sqlite.prepare('INSERT INTO sessions (token,user_id,created_at,expires_at) VALUES (?,?,?,?)').run(id,id,Date.now(),Date.now()+100000);}return f;}
 const claim=(f,path,body,id='qa-a')=>handleRewards({DB:f.DB,APP_ORIGIN:'*'},new Request('https://local'+path,{method:'POST',headers:{cookie:'lore_session='+id},body:JSON.stringify(body)}),path);
 await test('reward credit failure rolls back claim and retry grants once',async()=>{
  const f=await creditFixture();try{f.fail(true);await assert.rejects(claim(f,'/rewards/claim',{key:'tuto:1'}));f.fail(false);const res=await (await claim(f,'/rewards/claim',{key:'tuto:1'})).json();assert.equal(res.credits,50);const again=await (await claim(f,'/rewards/claim',{key:'tuto:1'})).json();assert.equal(again.granted,false);assert.equal(again.credits,50);}finally{f.sqlite.close()}

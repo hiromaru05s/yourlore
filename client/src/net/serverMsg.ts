@@ -7,7 +7,13 @@
 // ============================================================
 import { getLang } from "../i18n";
 
-const M: Record<string, { ja: string; en: string }> = {
+const M: Record<string, { ja: string; en: string; ko?:string }> = {
+  "rate limited": {"ja": "操作が多すぎます。1分ほど待って再試行してください。", "en": "Too many requests. Try again in a minute.", "ko": "요청이 너무 많습니다. 잠시 후 다시 시도해주세요."},
+  "invalid request": {"ja": "入力内容を確認してください。", "en": "Check your input.", "ko": "입력 내용을 확인해주세요."},
+  "request too large": {"ja": "入力が長すぎます。", "en": "Input is too long.", "ko": "입력 내용이 너무 깁니다."},
+  "request timed out": {"ja": "通信がタイムアウトしました。接続を確認して再試行してください。", "en": "Request timed out. Check your connection and retry.", "ko": "요청 시간이 초과되었습니다. 연결을 확인하고 다시 시도해주세요."},
+  "challenge changed; retry": {"ja": "対戦申請が更新されました。再試行してください。", "en": "Challenge changed. Please retry.", "ko": "대전 신청이 변경되었습니다. 다시 시도해주세요."},
+  "room setup failed; retry": {"ja": "対戦の準備に失敗しました。再試行してください。", "en": "Room setup failed. Please retry.", "ko": "대전 준비에 실패했습니다. 다시 시도해주세요."},
   // auth
   "올바른 이메일이 아닙니다.": { ja: "正しいメールアドレスではありません。", en: "That's not a valid email." },
   "비밀번호는 6자 이상이어야 합니다.": { ja: "パスワードは6文字以上にしてください。", en: "Password must be at least 6 characters." },
@@ -48,7 +54,7 @@ const M: Record<string, { ja: string; en: string }> = {
 /** Translate a known Korean server message to the current UI language. */
 export function localizeServerMsg(ko: string): string {
   const lang = getLang();
-  if (lang === "ko") return ko;
+  if (lang === "ko") return M[ko.trim()]?.ko ?? ko;
   const e = M[ko.trim()];
   return e ? e[lang] : ko;
 }

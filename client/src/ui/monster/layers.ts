@@ -2,7 +2,7 @@
  * Shadows stay behind the animated card, not behind unrelated board elements.
  * Never cut ordinary card/UI silhouettes out of either effect pass.
  */
-export const ANIMATION_LAYER = { root: 2147483647, rear: 1, cards: 2, front: 3 } as const;
+export const ANIMATION_LAYER = { root: 127, rear: 1, cards: 2, front: 3 } as const;
 // Persistent field states share the stage with portrait (18) and HP (22).
 export const FIELD_STATE_LAYER = 16;
 export function mountAnimationLayers(host:HTMLElement, fullscreen=false,policy:'foreground'|'field'='foreground'){

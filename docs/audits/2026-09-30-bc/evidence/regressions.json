@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "bounded typed API input and regional rate limit",
+    "same-origin CORS omits wildcard credentials",
+    "fresh schema supports authenticated furniture projection",
+    "concurrent challenge acceptance creates one recoverable room",
+    "failed challenge setup can retry same identity",
+    "queue account reservation, repeated messages and setup failure",
+    "failed persistence/alarm never broadcasts uncommitted turn"
+  ]
+}

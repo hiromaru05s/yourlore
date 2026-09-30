@@ -43,6 +43,7 @@ async function verifyPassword(password: string, stored: string): Promise<boolean
 
 // ---- responses / cookies ----
 export function corsHeaders(env: Env): Record<string, string> {
+  if (!env.APP_ORIGIN || env.APP_ORIGIN === "*") return {}; // same-origin app; never wildcard credentials
   return {
     "Access-Control-Allow-Origin": env.APP_ORIGIN,
     "Access-Control-Allow-Credentials": "true",

@@ -1,0 +1,1 @@
+{"checks":["published clean snapshot accepted","tracked dirty tree rejected","unpublished SHA rejected","parallel deployment lock rejected"]}
