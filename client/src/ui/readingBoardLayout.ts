@@ -13,8 +13,7 @@ export function readingScale(width=innerWidth,height=innerHeight){return Math.mi
 /** Containers are display:contents, so placements have the viewport as offset parent. */
 export function placeReadingBoard(root:HTMLElement):void {
  const s=readingScale(),cx=innerWidth/2,cy=innerHeight/2;
- // Opponent/default size. The player frame fits the space below the field
- // independently so it cannot be pushed upward over monster stat seals.
+ // Both portraits keep the same size, including their attached resource badges.
  const portraitSize=Math.min(210,Math.max(104,s*.30),innerHeight*.195);root.style.setProperty('--portrait-size',`${portraitSize}px`);
  root.classList.add('reading-board');root.style.setProperty('--board-meter',`${s}px`);
  function place(selector:string,x:number,z:number,w:number,d:number,local=false){
@@ -36,10 +35,11 @@ export function placeReadingBoard(root:HTMLElement):void {
   place(`#pile-${id==='me'?'my':'opp'}Disc`,-.54,sign*.245,.166,.232);
   place(`#rift-${id}`,RIFT_MOUNT.x,sign*RIFT_MOUNT.z,.125,.268);
   const p=id==='me'?'Me':'Opp';
-  // Keep the near frame behind the monster lane. Fit the frame plus the lowest
-  // hanging badge (shield: .65 + .135 + .36) instead of lifting it over cards.
-  const portraitTop=sign>0?cy+s*.31:Math.max(8,cy-s*.326-portraitSize);
-  const size=sign>0?Math.min(portraitSize,(innerHeight-8-portraitTop)/1.145):portraitSize;
+  // Fit the near frame and hanging badges by shifting their shared anchor;
+  // shrinking only this side makes the player's portrait smaller than the opponent's.
+  // Shield is lowest: .65 anchor + .135 badge offset + .36 badge height.
+  const size=portraitSize;
+  const portraitTop=sign>0?Math.min(cy+s*.31,innerHeight-8-size*1.145):Math.max(8,cy-s*.326-size);
   root.querySelector<HTMLElement>(`#portrait${p}`)?.style.setProperty('--portrait-size',`${size}px`);
   const ring=root.querySelector<HTMLElement>(`#portrait${p} .pt-ring`),hp=root.querySelector<HTMLElement>(`#portrait${p} .pt-vitals`);
   if(ring){ring.style.left=`${cx-size/2}px`;ring.style.top=`${portraitTop}px`;ring.style.width=ring.style.height=`${size}px`;}
