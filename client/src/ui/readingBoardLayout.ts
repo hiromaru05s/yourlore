@@ -35,20 +35,20 @@ export function placeReadingBoard(root:HTMLElement):void {
   place(`#pile-${id==='me'?'my':'opp'}Disc`,-.54,sign*.245,.166,.232);
   place(`#rift-${id}`,RIFT_MOUNT.x,sign*RIFT_MOUNT.z,.125,.268);
   const p=id==='me'?'Me':'Opp';
-  // Fit the near frame and hanging badges by shifting their shared anchor;
-  // shrinking only this side makes the player's portrait smaller than the opponent's.
-  // Shield is lowest: .65 anchor + .135 badge offset + .36 badge height.
+  // Match the far/near edge clearance. Counters stay within the frame height,
+  // so the player no longer needs extra space beneath the portrait.
   const size=portraitSize;
-  const portraitTop=sign>0?Math.min(cy+s*.31,innerHeight-8-size*1.145):Math.max(8,cy-s*.326-size);
+  const farTop=Math.max(2,cy-s*.326-size);
+  const portraitTop=sign>0?innerHeight-farTop-size:farTop;
   root.querySelector<HTMLElement>(`#portrait${p}`)?.style.setProperty('--portrait-size',`${size}px`);
   const ring=root.querySelector<HTMLElement>(`#portrait${p} .pt-ring`),hp=root.querySelector<HTMLElement>(`#portrait${p} .pt-vitals`);
   if(ring){ring.style.left=`${cx-size/2}px`;ring.style.top=`${portraitTop}px`;ring.style.width=ring.style.height=`${size}px`;}
-  if(hp){hp.style.left=`${cx-size*.46}px`;hp.style.top=`${portraitTop+size*.65}px`;hp.style.width=`${size*.30}px`;hp.style.height=`${size*.36}px`;}
+  if(hp){hp.style.left=`${cx-size*.58}px`;hp.style.top=`${portraitTop+size*.06}px`;hp.style.width=`${size*.30}px`;hp.style.height=`${size*.36}px`;}
 
   place(`#portrait${p} .pt-mana`,-.345,sign*.397,.350,.077);
   place(`#portrait${p}>.pt-name,#portrait${p} .pt-name--vitals`,-.345,sign*.455,.34,.017);
   const resources=root.querySelector<HTMLElement>(`#portrait${p} .pt-resources`);
-  if(resources){resources.style.left=`${cx-size*.15}px`;resources.style.top=`${portraitTop+size*.65}px`;resources.style.width=`${size*.61}px`;resources.style.height=`${size*.36}px`;}
+  if(resources){resources.style.left=`${cx-size*.5}px`;resources.style.top=`${portraitTop}px`;resources.style.width=resources.style.height=`${size}px`;}
   place(`#portrait${p} .pt-brand`,-.09,sign*.335,.08,.028);
  }
  // Hand cards float over the board, outside the play lanes. They are not sockets.
