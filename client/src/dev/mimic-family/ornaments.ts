@@ -1,5 +1,6 @@
 import * as T from 'three';import {ease} from '../mimic-four/rig';import type {FamilyId} from './catalog';
-const gold=new T.MeshStandardMaterial({color:0xa7833c,metalness:.68,roughness:.34});
+const gold=new T.MeshStandardMaterial({color:0xd9caa4,metalness:.28,roughness:.48,bumpScale:.38});
+export const metalReady=new Promise<void>((resolve,reject)=>new T.TextureLoader().load('/art/vfx/mimic-family/engraved-brass.png',texture=>{texture.colorSpace=T.SRGBColorSpace;texture.wrapS=texture.wrapT=T.RepeatWrapping;texture.anisotropy=4;gold.map=texture;gold.bumpMap=texture;gold.needsUpdate=true;resolve();},undefined,reject));
 const dark=new T.MeshStandardMaterial({color:0x302825,roughness:.83});
 const enamel=new T.MeshStandardMaterial({color:0xdfc998,roughness:.44});
 const gem=new T.MeshPhysicalMaterial({color:0x162b51,metalness:.28,roughness:.19,clearcoat:.55});
@@ -7,10 +8,20 @@ const amber=new T.MeshPhysicalMaterial({color:0xeea225,emissive:0x9b3a00,emissiv
 function mesh(g:T.BufferGeometry,m:T.Material){return new T.Mesh(g,m);}
 function rod(a:T.Vector3,b:T.Vector3,r:number,mat:T.Material){const d=b.clone().sub(a),m=mesh(new T.CylinderGeometry(r,r*1.15,d.length(),10),mat);m.position.copy(a).add(b).multiplyScalar(.5);m.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),d.normalize());return m;}
 function crown(){
- const g=new T.Group(),s=new T.Shape();s.moveTo(-32,0);s.lineTo(32,0);s.lineTo(34,26);s.lineTo(23,15);s.lineTo(16,29);s.lineTo(8,17);s.lineTo(0,37);s.lineTo(-8,17);s.lineTo(-16,29);s.lineTo(-23,15);s.lineTo(-34,26);s.closePath();
- g.add(mesh(new T.ExtrudeGeometry(s,{depth:5,bevelEnabled:true,bevelSegments:2,steps:1,bevelSize:1,bevelThickness:1}),gold));
- for(let i=-2;i<=2;i++){const inset=mesh(new T.OctahedronGeometry(i===0?4.5:3.2),gem);inset.position.set(i*12,8,7);inset.scale.y=1.4;g.add(inset);}
- for(let i=-4;i<=4;i++){const dot=mesh(new T.SphereGeometry(.9,8,6),enamel);dot.position.set(i*7,2,6);g.add(dot);}
+ const g=new T.Group(),band=mesh(new T.CylinderGeometry(31,29,13,64,1,true),gold);band.position.y=5;band.scale.z=.56;g.add(band);
+ for(const y of [0,11]){const rim=mesh(new T.TorusGeometry(30,1.5,8,64),gold);rim.rotation.x=Math.PI/2;rim.scale.y=.56;rim.position.y=y;g.add(rim);}
+ for(let i=0;i<9;i++){
+  const theta=i/9*Math.PI*2,petal=new T.Group(),s=new T.Shape();
+  s.moveTo(-7,0);s.bezierCurveTo(-8,8,-4,10,-3,13);s.bezierCurveTo(-8,13,-7,20,-3,18);s.quadraticCurveTo(-3,25,0,29);s.quadraticCurveTo(3,25,3,18);s.bezierCurveTo(7,20,8,13,3,13);s.bezierCurveTo(4,10,8,8,7,0);s.closePath();
+  const geo=new T.ExtrudeGeometry(s,{depth:2,bevelEnabled:true,bevelSegments:3,steps:1,bevelSize:.65,bevelThickness:.6});
+  const uv=geo.getAttribute('uv')as T.BufferAttribute;for(let j=0;j<uv.count;j++)uv.setXY(j,uv.getX(j)/28+.5,uv.getY(j)/32);
+  petal.add(mesh(geo,gold));
+  const bezel=mesh(new T.TorusGeometry(3.6,.8,8,18),gold);bezel.position.set(0,7,3);bezel.scale.y=1.3;petal.add(bezel);
+  const jewel=mesh(new T.OctahedronGeometry(2.8),gem);jewel.position.set(0,7,3.4);jewel.scale.set(.9,1.3,.7);petal.add(jewel);
+  const rib=new T.CatmullRomCurve3([new T.Vector3(0,11,3),new T.Vector3(0,20,3),new T.Vector3(0,27,2)]);petal.add(mesh(new T.TubeGeometry(rib,12,.55,6,false),gold));
+  petal.position.set(Math.sin(theta)*30,8,Math.cos(theta)*16.8);petal.rotation.y=theta;g.add(petal);
+ }
+ for(let i=0;i<24;i++){const a=i/24*Math.PI*2,dot=mesh(new T.SphereGeometry(.85,8,6),enamel);dot.position.set(Math.sin(a)*30,1,Math.cos(a)*17);g.add(dot);}
  return g;
 }
 function key(){const g=new T.Group(),ring=mesh(new T.TorusGeometry(6,1.7,8,18),gold);ring.position.y=12;g.add(ring);g.add(rod(new T.Vector3(0,6,0),new T.Vector3(0,-22,0),1.5,gold));for(let i=0;i<2;i++){const bit=mesh(new T.BoxGeometry(6,2.5,3),gold);bit.position.set(3,-15-i*6,0);g.add(bit);}return g;}
@@ -42,12 +53,12 @@ export class Ornaments{
    k.position.set(sign<0?7:173,-(190+Math.floor(i/2)*49),4);k.scale.set(sign*extend,extend,extend);k.rotation.z=reduced?0:sign*(v===3?Math.sin(time*.008+i)*.3:.12)*extend;
   }
   if(this.id==='MIMIC_KING'){
-   this.crown.position.set(90,gap*.54+3,7);this.crown.scale.setScalar(spread*(v===1?1.12:1));this.crown.rotation.y=reduced?0:v===3?Math.sin(time*.004)*.5:Math.sin(time*.003)*.12;this.crown.rotation.z=v===3?Math.sin(time*.004)*.1:0;
+   this.crown.position.set(90,gap*.54-9,7);this.crown.scale.setScalar(spread*(v===1?1.12:1));this.crown.rotation.y=reduced?0:v===3?Math.sin(time*.004)*.5:Math.sin(time*.003)*.12;this.crown.rotation.z=v===3?Math.sin(time*.004)*.1:0;
    for(const [i,m]of this.tusks.entries()){m.position.set(i===0?22:158,-(140+gap*.46),7);m.scale.setScalar(spread*(v===2?1.3:1));m.rotation.z=(i===0?-1:1)*.12;}
   }
   if(this.id==='MIMIC_KING2'){
    const tip=spine[59],carry=ease(1370,1860,time)*(1-ease(2060,2250,time));
-   if(v===1){this.crown.position.copy(tip).lerp(new T.Vector3(90,gap*.54+3,12),carry);this.crown.scale.setScalar(spread*(.55+carry*.5));}
+   if(v===1){this.crown.position.copy(tip).lerp(new T.Vector3(90,gap*.54-9,12),carry);this.crown.scale.setScalar(spread*(.55+carry*.5));}
    else if(v===2){this.crown.position.set(90,gap*.54+16+Math.sin(time*.004)*6,12);this.crown.scale.setScalar(spread*1.1);}
    else{this.crown.position.copy(spine[51]);this.crown.position.z+=8;this.crown.scale.setScalar(spread*.62);}
    this.crown.rotation.z=reduced?0:Math.sin(time*.005)*.25;this.crown.rotation.y=reduced?0:Math.sin(time*.004)*.4;

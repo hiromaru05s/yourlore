@@ -1,5 +1,6 @@
 import {FamilyMatter} from './matter';
 import {familyPose,clock} from './motion';
+import {ease} from '../mimic-four/rig';
 import {currentId,duration} from './catalog';
 export {patterns} from './catalog';
 import {MimicRig as ApprovedRig} from '../mimic-four/rig';
@@ -18,7 +19,7 @@ const amberFangs=new Image();amberFangs.src='/art/vfx/mimic-family/amber-fangs.p
 const loaded=Promise.all([...images,cavityImage,amberFangs].map(i=>i.decode()));
 export class MimicRig extends ApprovedRig{
  private surface:HTMLCanvasElement;private tongues:FamilyMatter;private variant=1;private secondLid:HTMLElement|null=null;
- constructor(card:HTMLElement,variant=1){super(card);this.variant=variant;this.tongues=new FamilyMatter(currentId,variant);this.surface=this.node.querySelector('canvas')!;this.surface.parentElement!.append(this.tongues.canvas);if(currentId==='MIMIC_KING2'){this.secondLid=this.surface.parentElement!.children[1].cloneNode(true)as HTMLElement;this.secondLid.style.zIndex='1';this.surface.parentElement!.append(this.secondLid);}}
+ constructor(card:HTMLElement,variant=1){super(card);this.variant=variant;this.tongues=new FamilyMatter(currentId,variant);this.surface=this.node.querySelector('canvas')!;this.surface.parentElement!.append(this.tongues.canvas);if(currentId==='MIMIC_KING2'&&variant===2){this.secondLid=this.surface.parentElement!.children[1].cloneNode(true)as HTMLElement;this.secondLid.style.zIndex='1';this.secondLid.style.clipPath='inset(52px 16px 0px 16px)';this.surface.parentElement!.append(this.secondLid);}}
  override async ready(){await Promise.all([super.ready(),loaded,this.tongues.ready]);}
  override dispose(){this.tongues.dispose();super.dispose();}
 
@@ -49,6 +50,15 @@ export class MimicRig extends ApprovedRig{
     const top=edge(x,true),bottom=edge(x,false),nextTop=edge(x+w,true),nextBottom=edge(x+w,false);
     const upperY=Math.min(top.y,nextTop.y)-2,lowerY=Math.max(bottom.y,nextBottom.y)+2;
     c.drawImage(texture,i*texture.width/strips,0,texture.width/strips,texture.height,x-.3,upperY,w+.6,Math.max(.1,lowerY-upperY));
+   }
+   if(currentId==='ORIGIN_MIMIC'){
+    const t=clock(time,currentId),v=this.variant;
+    const awaken=ease(v===3?900:720,v===2?1510:1240,t)*(1-ease(2030,2330,t));
+    const pulse=awaken*(.64+.36*Math.sin(t*(v===2?.010:.006))**2);
+    // Modulate the painted core and folded walls in-place, within the real jaw aperture.
+    c.fillStyle=`rgba(12,3,0,${.42*(1-awaken)})`;c.fillRect(0,0,180,300);
+    const light=c.createRadialGradient(90,mid,2,90,mid,75);light.addColorStop(0,`rgba(255,191,64,${pulse*.38})`);light.addColorStop(.35,`rgba(228,111,23,${pulse*.2})`);light.addColorStop(1,'rgba(100,30,0,0)');
+    c.globalCompositeOperation='screen';c.fillStyle=light;c.fillRect(0,0,180,300);c.globalCompositeOperation='source-over';
    }
    c.globalAlpha=p.open;
   // Each gum-and-fang strip is rigidly attached to its original jaw seam.

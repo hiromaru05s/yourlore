@@ -248,7 +248,7 @@
     },
     {
       "path": "client/src/dev/animation-review/main.ts",
-      "sha256": "6bb3f31442e23ecb1f8e9d054f51b31fe1468f48fd291c78b53cd09cd8528a69",
+      "sha256": "5ddbe262b94ba2094a10b4b1a15362712fb88a64cba00019b69fd1c227d8752b",
       "tracked": false
     },
     {
@@ -503,7 +503,7 @@
     },
     {
       "path": "client/src/dev/mimic-family/matter.ts",
-      "sha256": "8447c13ddaa4acbf5389e2cf0425e896aab500903f24e8978a6130a034547907",
+      "sha256": "b62637375c080eb2f1b7b360aeee36af25d40baa8368f0e45a48b5d28db224e3",
       "tracked": false
     },
     {
@@ -513,12 +513,12 @@
     },
     {
       "path": "client/src/dev/mimic-family/ornaments.ts",
-      "sha256": "8852370858c8b6004b20e0002ad519c9f96d7f5ae10e73cef615f11d40ab5c20",
+      "sha256": "2703ef3e450dcc13b3f62b4d477533b65dc5a5e1ae65e874a1927599b8db442f",
       "tracked": false
     },
     {
       "path": "client/src/dev/mimic-family/rig.ts",
-      "sha256": "f58a7693edb3d0226332f936c4d2eb776272e0bf27d9350ee8bed2f58a6f5231",
+      "sha256": "de76b7f0ff9eba8e7469040e9f807016d4ad2bf9ba3aca16040a418d6134f2bf",
       "tracked": false
     },
     {
@@ -1579,6 +1579,11 @@
     {
       "path": "docs/vfx-prototypes/2026-09-27-rift-five/preview.ts",
       "sha256": "19272ff5d199b72843505b65b04ffe96c73aa2e10c4f89f9296620e8a0adc89a",
+      "tracked": false
+    },
+    {
+      "path": "client/public/art/vfx/mimic-family/engraved-brass.png",
+      "sha256": "ea8538e27880e394d3e8fad0db75a691f5d127bdabfd9aa31dfeb301f91336b7",
       "tracked": false
     }
   ],

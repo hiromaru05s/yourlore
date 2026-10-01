@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {ease} from '../mimic-four/rig';
 import {ids} from './catalog';import type {FamilyId} from './catalog';
-import {Ornaments} from './ornaments';
+import {Ornaments,metalReady} from './ornaments';
 
 const SEGMENTS=64,SIDES=16;
 export function tongueSpine(time:number,_index:number,reduced=false,id:FamilyId='MIMIC_LORD',variant=1){
@@ -27,7 +27,7 @@ export class FamilyMatter{
  readonly canvas:HTMLCanvasElement;
  private renderer:T.WebGLRenderer;
  private scene=new T.Scene();
- private camera=new T.OrthographicCamera(-55,235,110,-370,.1,1000);
+ private camera=new T.OrthographicCamera(-55,235,190,-370,.1,1000);
  private meshes:T.Mesh<T.BufferGeometry,T.MeshPhysicalMaterial>[]=[];
  private texture:T.Texture;
  private disposed=false;
@@ -35,10 +35,10 @@ export class FamilyMatter{
  private ornaments:Ornaments;
  constructor(private id:FamilyId,private variant:number){
   this.renderer=new T.WebGLRenderer({alpha:true,antialias:true,premultipliedAlpha:true,preserveDrawingBuffer:true});
-  this.renderer.setSize(290,480,false);this.renderer.setPixelRatio(2);this.renderer.setClearColor(0,0);
+  this.renderer.setSize(290,560,false);this.renderer.setPixelRatio(2);this.renderer.setClearColor(0,0);
   this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.0;
   this.canvas=this.renderer.domElement;this.canvas.dataset.dynamicTongues='independent-family-mesh';
-  this.canvas.style.cssText='position:absolute;width:290px;height:480px;left:-55px;top:-110px;z-index:3;pointer-events:none;';
+  this.canvas.style.cssText='position:absolute;width:290px;height:560px;left:-55px;top:-190px;z-index:3;pointer-events:none;';
   this.camera.position.z=500;this.scene.add(new T.HemisphereLight(0xffe2c4,0x27121b,2));
   const key=new T.DirectionalLight(0xffdec5,3.2);key.position.set(-100,180,220);this.scene.add(key);
   const fill=new T.DirectionalLight(0x9eadd0,.55);fill.position.set(150,-50,130);this.scene.add(fill);
@@ -51,7 +51,7 @@ export class FamilyMatter{
     texture.offset.set(.435,.16);texture.repeat.set(.125,.14);texture.anisotropy=4;
     this.meshes.forEach(m=>{m.material.map=texture;m.material.bumpMap=texture;m.material.needsUpdate=true;});resolve();
    },undefined,reject);
-  }).then(()=>{if(!this.disposed){this.draw(1400,100);this.draw(0,0);}});
+  }).then(()=>metalReady).then(()=>{if(!this.disposed){this.draw(1400,100);this.draw(0,0);}});
   for(let j=0;j<1;j++){
    const count=(SEGMENTS+1)*(SIDES+1),geometry=new T.BufferGeometry();
    geometry.setAttribute('position',new T.BufferAttribute(new Float32Array(count*3),3).setUsage(T.DynamicDrawUsage));
