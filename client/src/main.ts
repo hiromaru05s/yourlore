@@ -17,6 +17,7 @@ import "./styles/loungeStage.css";
 import "./styles/presentation.css";
 import "./styles/deckWorkspace.css";
 import "./styles/cardsWorkspace.css";
+import "./styles/menuApproved.css";
 import { App } from "./router";
 import { initLang } from "./i18n";
 import { initAnalytics } from "./net/analytics";

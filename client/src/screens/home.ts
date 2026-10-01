@@ -60,36 +60,44 @@ export function mountHome(app: App): Screen {
   return {destroy:()=>{disposed=true;unsub();}};
 }
 
-/** BOT match difficulty picker. Dims + blurs HOME behind a focused center modal. */
+/** Challenge cards select a difficulty; the separate start action begins a duel. */
 function showBotDifficultyModal(app: App): void {
+  if(document.querySelector('.bot-diff-ov'))return;
   const tiers: BotDifficulty[] = ["easy", "normal", "hard", "hell"];
+  const captions = [loungeText('ルールに慣れる','Learn the rules','규칙 익히기'),loungeText('基本戦術を試す','Try your tactics','기본 전술 시험'),loungeText('先読みを競う','Think ahead','수 읽기 대결'),loungeText('最強AIに挑む','Challenge the strongest','최강 AI에 도전')];
+  const store=sanitizeDecks(app.user?.decks ?? null),activeDeck=store.list[store.sel];
+  let selected:BotDifficulty='normal';
+  const previousFocus=document.activeElement as HTMLElement|null;
   const ov = document.createElement("div");
   ov.className = "overlay bot-diff-ov";
   ov.innerHTML = `
-    <div class="modal support-dialog bot-diff">
+    <div class="modal support-dialog bot-diff bot-challenge" role="dialog" aria-modal="true" aria-labelledby="challengeTitle">
       <header class="support-dialog-heading">
         <span class="menu-eyebrow">BOT DUEL</span>
-        <h2>${t("bot.diff.title")}</h2>
-        <p class="bot-diff-sub">${t("bot.diff.sub")}</p>
+        <h2 id="challengeTitle">${t("bot.diff.title")}</h2>
+        <button class="challenge-back" id="diffCancel">← ${t('common.back')}</button>
       </header>
-      <div class="diff-grid">
+      <div class="diff-grid" role="group" aria-label="${t('bot.diff.title')}">
         ${tiers.map((diff,i) => `
-          <button type="button" class="diff-card diff-${diff}" data-diff="${diff}">
-            <span class="diff-rank" aria-hidden="true">${["I","II","III","IV"][i]}</span>
-            <span class="diff-copy"><span class="diff-name">${t(`bot.diff.${diff}`)}</span><span class="diff-desc">${t(`bot.diff.${diff}.desc`)}</span></span>
-            <span class="diff-strength" aria-hidden="true">${[0,1,2,3].map(n=>`<i${n<=i?' class="is-lit"':''}></i>`).join('')}</span>
-            <span class="diff-arrow" aria-hidden="true">↗</span>
+          <button type="button" class="diff-card diff-${diff}" data-diff="${diff}" aria-pressed="${diff===selected}">
+            <span class="challenge-selected">${loungeText('選択中','SELECTED','선택됨')}</span>
+            <span class="challenge-art" aria-hidden="true"><img src="/art/lounge/stage-v1/sigil.webp" alt=""><span>${["I","II","III","IV"][i]}</span></span>
+            <span class="diff-name">${t(`bot.diff.${diff}`)}</span><span class="challenge-caption">${captions[i]}</span>
           </button>`).join("")}
       </div>
-      <div class="modal-row diff-footer"><p>${loungeText("選択すると対戦が始まります。","Choose a difficulty to begin.","난이도를 선택하면 대전이 시작됩니다.")}</p><button class="btn btn-ghost" id="diffCancel">${t("common.cancel")}</button></div>
+      <div class="challenge-footer"><div class="challenge-deck"><img src="${artUrl.sm('STARTER_MANA')}" alt=""><span><small>${t('deck.inuse')}</small><strong>${esc(activeDeck.name||t('deck.slot').replace('{n}',String(store.sel+1)))}</strong></span></div><p id="challengeDescription" aria-live="polite"></p><button class="challenge-start" id="diffStart"></button></div>
     </div>`;
   document.body.appendChild(ov);
-  const close = () => ov.remove();
+  const update=()=>{ov.querySelectorAll<HTMLButtonElement>('[data-diff]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.diff===selected)));ov.querySelector('#challengeDescription')!.textContent=t(`bot.diff.${selected}.desc`);ov.querySelector('#diffStart')!.textContent=loungeText(`${t(`bot.diff.${selected}`)}で開始 →`,`Start ${t(`bot.diff.${selected}`)} →`,`${t(`bot.diff.${selected}`)} 시작 →`);};
+  const close = () => {ov.remove();previousFocus?.focus();};
   (ov.querySelector("#diffCancel") as HTMLElement).onclick = close;
   ov.onclick = (e) => { if (e.target === ov) close(); };
   ov.querySelectorAll<HTMLButtonElement>(".diff-card").forEach((b) => {
-    b.onclick = () => { close(); app.botGame(b.dataset.diff as BotDifficulty); };
+    b.onclick = () => { selected=b.dataset.diff as BotDifficulty;update(); };
   });
+  (ov.querySelector('#diffStart') as HTMLButtonElement).onclick=()=>{close();app.botGame(selected);};
+  ov.onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();close();}if(e.key==='Tab'){const buttons=[...ov.querySelectorAll<HTMLButtonElement>('button')],at=buttons.indexOf(document.activeElement as HTMLButtonElement);e.preventDefault();buttons[(at+(e.shiftKey?-1:1)+buttons.length)%buttons.length].focus();}};
+  update();ov.querySelector<HTMLButtonElement>('[aria-pressed=true]')!.focus();
 }
 
 /** 문의 모달: 제목+본문 → /api/inquiry → 어드민 대시보드 '문의' 탭. */

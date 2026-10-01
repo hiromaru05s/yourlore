@@ -47,7 +47,8 @@
     "tests/production-security.mjs",
     "tests/production-bc.mjs",
     "tests/duel-opening-server.mjs",
-    "tests/dew-shield-server.mjs"
+    "tests/dew-shield-server.mjs",
+    "tests/deck-hand-editor.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
