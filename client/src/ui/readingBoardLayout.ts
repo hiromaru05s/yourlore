@@ -1,11 +1,12 @@
+import {CARD_THICKNESS_SCALE,STOCK_THICKNESS} from './cardThickness';
+export {STOCK_THICKNESS} from './cardThickness';
 /** Meter-authored 01–06 mounts. Every DOM hit area uses the same model-space units. */
 export const READING_ASSETS='/models/reading-board/v1/';
 export const CARD_METERS=.110;
 // ANCHOR_rift_player/opponent from board.glb, shared by visuals and hit targets.
 export const RIFT_MOUNT={x:.725,z:.245,height:.012};
-export const STOCK_THICKNESS=.0008/CARD_METERS;
 export const marketHeight=(supply=false)=>(supply?.0218:.0158)/CARD_METERS;
-export const pileCenter=(count:number,shelf:boolean)=>((shelf?.009:.0088)+.0004+Math.max(0,Math.min(count,40)-1)*.0008)/CARD_METERS;
+export const pileCenter=(count:number,shelf:boolean)=>((shelf?.009:.0088)+(.5+Math.max(0,Math.min(count,40)-1))*.0008*CARD_THICKNESS_SCALE)/CARD_METERS;
 export const pileFace=(count:number,shelf:boolean)=>pileCenter(count,shelf)+STOCK_THICKNESS/2;
 /** Fill the viewport with the table; portraits overlap its outer rim rather
  * than reserving two extra rows outside it. Keep the near rim on screen. */

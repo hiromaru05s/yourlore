@@ -1,3 +1,4 @@
+import {DRAW_THICKNESS_RATIO} from './cardThickness';
 import * as T from 'three';
 const FOCAL=1200;
 const Y=new T.Matrix4().makeScale(1,-1,1);
@@ -11,7 +12,7 @@ export function stockMatrix(p:StockPose,width:number,height:number){
   .scale(new T.Vector3(p.scale,p.scale,p.scale));
  return css.premultiply(Y).multiply(Y);
 }
-export function createStockGeometry(w:number,h:number,depth=w*.024){
+export function createStockGeometry(w:number,h:number,depth=w*DRAW_THICKNESS_RATIO){
  const x=-w/2,y=-h/2,r=w*.052,s=new T.Shape();
  s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);
  const bevel=w*.004,g=new T.ExtrudeGeometry(s,{depth:depth-bevel*2,bevelEnabled:true,bevelSize:bevel,bevelThickness:bevel,bevelSegments:2,steps:1,curveSegments:4});
@@ -38,7 +39,7 @@ export function acquireDrawStage():DrawStage|null{
  const disposeObject=(group:T.Group)=>{group.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line){o.geometry.dispose();(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{if(m!==paper&&m!==edge&&m!==ink)m.dispose();});}});scene.remove(group);owners.delete(group);};
  const stage:DrawStage={
   add(w,h){const group=new T.Group();group.matrixAutoUpdate=false;group.visible=false;scene.add(group);owners.add(group);
-   const depth=w*.024,body=new T.Mesh(createStockGeometry(w,h,depth),[edge,paper]);body.castShadow=true;group.add(body);
+   const depth=w*DRAW_THICKNESS_RATIO,body=new T.Mesh(createStockGeometry(w,h,depth),[edge,paper]);body.castShadow=true;group.add(body);
    // A dark, fine laminated seam makes the material read at grazing angles.
    const pts: T.Vector3[]=[];const r=w*.052;for(const [cx,cy,a] of [[w/2-r,h/2-r,0],[-w/2+r,h/2-r,90],[-w/2+r,-h/2+r,180],[w/2-r,-h/2+r,270]])for(let i=0;i<=5;i++){const angle=(a+i*18)*Math.PI/180;pts.push(new T.Vector3(cx+r*Math.cos(angle),cy+r*Math.sin(angle),-depth*.52));}
    const seam=new T.LineLoop(new T.BufferGeometry().setFromPoints(pts),ink);group.add(seam);

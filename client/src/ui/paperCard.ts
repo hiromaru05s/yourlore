@@ -1,3 +1,4 @@
+import {PAPER_CARD_HALF_THICKNESS} from './cardThickness';
 import * as T from 'three';
 import { CARD_PADDING, type CardSurface } from './cardSurface';
 
@@ -48,9 +49,9 @@ export class PaperCard {
       this.parts.push({mesh,rest:new Float32Array(geometry.getAttribute('position').array)});this.group.add(mesh);return mesh;
     };
     const mat=(map:T.Texture,side:T.Side) => new T.MeshBasicMaterial({map,side,transparent:true,alphaTest:.025,toneMapped:false});
-    const front=new T.PlaneGeometry(pw,ph,24,40);front.translate(0,0,.0075);
+    const front=new T.PlaneGeometry(pw,ph,24,40);front.translate(0,0,PAPER_CARD_HALF_THICKNESS);
     add(front,mat(texture(surface.face ?? surface.back),T.FrontSide));
-    const back=new T.PlaneGeometry(pw,ph,24,40);back.translate(0,0,-.0075);
+    const back=new T.PlaneGeometry(pw,ph,24,40);back.translate(0,0,-PAPER_CARD_HALF_THICKNESS);
     // Looking at the reverse must not mirror sleeve lettering.
     const uv=back.getAttribute('uv');for(let i=0;i<uv.count;i++)uv.setX(i,1-uv.getX(i));
     add(back,mat(texture(surface.back),T.BackSide));
@@ -70,7 +71,7 @@ export class PaperCard {
     // Subdivide straight edge spans as well, so the edge follows the surface bend.
     const perimeter:T.Vector2[]=[];
     outline.forEach((p,i)=>{const q=outline[(i+1)%outline.length],steps=Math.max(1,Math.ceil(p.distanceTo(q)/.04));for(let j=0;j<steps;j++)perimeter.push(p.clone().lerp(q,j/steps));});
-    perimeter.forEach(p=>vertices.push(p.x,p.y,-.0075,p.x,p.y,.0075));
+    perimeter.forEach(p=>vertices.push(p.x,p.y,-PAPER_CARD_HALF_THICKNESS,p.x,p.y,PAPER_CARD_HALF_THICKNESS));
     for(let i=0;i<perimeter.length;i++){const a=i*2,b=((i+1)%perimeter.length)*2;indices.push(a,b,a+1,b,b+1,a+1);}
     const edge=new T.BufferGeometry();edge.setAttribute('position',new T.Float32BufferAttribute(vertices,3));edge.setIndex(indices);edge.computeVertexNormals();
     add(edge,new T.MeshStandardMaterial({color:0xd3c5a7,roughness:.85,side:T.DoubleSide}));
