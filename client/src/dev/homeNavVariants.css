@@ -1,0 +1,114 @@
+html{--nav-speed:1}
+/* Round 03. Layout and motion studies; deliberately isolated from the live UI. */
+html:not([data-nav-design="0"]) .lounge-shell {--dock:124px}
+html:not([data-nav-design="0"]) .lounge-rail {inset:auto 40px max(20px,env(safe-area-inset-bottom));width:auto;height:94px;padding:0;border:0;border-radius:0;background:none;box-shadow:none!important;isolation:isolate}
+html:not([data-nav-design="0"]) .lounge-rail::before {content:'';position:absolute;inset:-60px -40px -24px;z-index:-2;background:linear-gradient(transparent,#040b17ed 68%);pointer-events:none}
+html:not([data-nav-design="0"]) .lounge-rail nav {position:relative;height:100%;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0;overflow:visible;isolation:isolate}
+html:not([data-nav-design="0"]) .lounge-rail nav button:not(.lounge-brand) {position:relative;min-width:0;width:100%;height:100%;min-height:44px!important;margin:0!important;padding:10px 4px!important;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px!important;border:0!important;border-radius:0;background:none!important;box-shadow:none!important;color:#aebacb;text-shadow:none;font-size:14px;line-height:1.4;font-weight:400;letter-spacing:.06em;transition:color calc(180ms * var(--nav-speed)) ease;isolation:isolate;overflow:visible}
+html:not([data-nav-design="0"]) .lounge-rail nav button::before,html:not([data-nav-design="0"]) .lounge-rail nav button::after {display:none}
+html:not([data-nav-design="0"]) .lounge-rail nav button:hover {color:#fff}
+html:not([data-nav-design="0"]) .lounge-rail nav button[aria-current] {color:#fff}
+html:not([data-nav-design="0"]) .lounge-rail nav button:focus-visible {outline:1px solid #cfedff;outline-offset:4px}
+html:not([data-nav-design="0"]) .lounge-rail nav .nav-copy {display:flex;flex-direction:column;align-items:center;gap:2px;white-space:nowrap;position:relative;z-index:2}
+.nav-label{line-height:1.6}.nav-copy small{font:8px/1.5 Georgia,serif;letter-spacing:.2em;opacity:.56}.nav-glyph{width:30px;height:30px;flex:none;display:block;position:relative;z-index:2}.nav-glyph svg{width:100%;height:100%;display:block}.nav-number{display:none;font-style:normal}.nav-art{display:none}.nav-cursor{position:absolute;top:0;bottom:0;pointer-events:none;z-index:0;transform-origin:left center}
+/* 01: a shared beam below seven quiet monochrome symbols. */
+html[data-nav-design="1"] .lounge-rail{left:7vw;right:7vw;height:86px}
+html[data-nav-design="1"] .lounge-rail nav{border-bottom:1px solid #b6cedc25;padding-bottom:10px}
+html[data-nav-design="1"] .nav-cursor{bottom:-1px;top:-12px;background:linear-gradient(transparent,#87cce814);border-bottom:2px solid #c5eaff}
+html[data-nav-design="1"] .nav-cursor::after{content:'';position:absolute;width:5px;height:5px;bottom:-4px;left:calc(50% - 3px);background:#e2f6ff;transform:rotate(45deg)}
+html[data-nav-design="1"] .nav-copy small{display:none}
+html[data-nav-design="1"] [aria-current] .nav-glyph{filter:drop-shadow(0 0 9px #b1dfff55)}
+/* 02: cut-paper geometry and bold type; only the selected slot carries the accent. */
+html[data-nav-design="2"] .lounge-rail{left:32px;right:32px;height:102px;bottom:18px}
+html[data-nav-design="2"] .lounge-rail nav{gap:6px;transform:skewY(-1.1deg)}
+html[data-nav-design="2"] .lounge-rail nav button:not(.lounge-brand){flex-direction:row;gap:9px!important;align-items:center;color:#bdcadd;font-weight:700;font-size:17px;letter-spacing:-.04em;transform:skewY(1.1deg)}
+html[data-nav-design="2"] .lounge-rail nav button[aria-current]{color:#071a34}
+html[data-nav-design="2"] .nav-cursor{background:#edf1dc;clip-path:polygon(10% 0,100% 0,90% 100%,0 100%);top:3px;bottom:3px;box-shadow:inset 0 -8px #91d9ef}
+html[data-nav-design="2"] .nav-copy small{font:8px/1.5 sans-serif;letter-spacing:.16em;opacity:.6}
+html[data-nav-design="2"] .nav-glyph{width:26px;height:26px}
+html[data-nav-design="2"] .nav-number{display:block;position:absolute;top:4px;right:18px;font:italic 38px/.9 Georgia,serif;opacity:.1;z-index:1}
+/* 03: the archive index. One flat ivory surface with a charcoal selection block. */
+html[data-nav-design="3"] .lounge-rail{height:88px;left:4vw;right:4vw;bottom:25px;background:#e4dfcc;box-shadow:0 8px 28px #0006!important}
+html[data-nav-design="3"] .lounge-rail::after{content:'';position:absolute;inset:4px;border-top:1px solid #33382d48;border-bottom:1px solid #33382d48;pointer-events:none}
+html[data-nav-design="3"] .lounge-rail nav{padding:10px 9px;gap:7px;background:repeating-linear-gradient(0deg,transparent 0 3px,#393c3010 3px 4px)}
+html[data-nav-design="3"] .lounge-rail nav button:not(.lounge-brand){color:#53584e;flex-direction:row;gap:9px!important;font-size:13px}
+html[data-nav-design="3"] .lounge-rail nav button[aria-current]{color:#f2eedc}
+html[data-nav-design="3"] .nav-cursor{top:10px;bottom:10px;background:#343c39}
+html[data-nav-design="3"] .nav-glyph{width:27px;height:27px}
+html[data-nav-design="3"] .nav-copy small{font:7px/1.5 monospace;letter-spacing:.1em}
+html[data-nav-design="3"] .lounge-rail nav button:focus-visible{outline-color:#73866d;outline-offset:1px}
+/* 04: cinematic type held in the scene; no repeated frames or large emblems. */
+html[data-nav-design="4"] .lounge-rail{height:98px;left:6vw;right:6vw;bottom:24px}
+html[data-nav-design="4"] .lounge-rail nav{grid-template-columns:repeat(3,1.18fr) repeat(4,1fr)}
+html[data-nav-design="4"] .lounge-rail nav button:not(.lounge-brand){font-family:'Yu Mincho','Hiragino Mincho ProN',serif;font-size:20px;color:#bbc0c4;letter-spacing:.14em}
+html[data-nav-design="4"] .lounge-rail nav button[aria-current]{color:#f4edda}
+html[data-nav-design="4"] .nav-glyph{display:none}
+html[data-nav-design="4"] .nav-copy small{font:9px/2 Georgia,serif;letter-spacing:.26em;opacity:.48}
+html[data-nav-design="4"] .nav-cursor{top:17px;bottom:14px;background:linear-gradient(110deg,transparent,#c6b99015,transparent)}
+html[data-nav-design="4"] .nav-cursor::before,html[data-nav-design="4"] .nav-cursor::after{content:'';position:absolute;width:7px;height:9px;border-color:#c8bea0;border-style:solid;top:calc(50% - 8px)}
+html[data-nav-design="4"] .nav-cursor::before{left:5px;border-width:1px 0 0 1px}.nav-cursor::after{pointer-events:none}
+html[data-nav-design="4"] .nav-cursor::after{right:5px;border-width:0 1px 1px 0}
+/* 05: illustrations belong to one continuous reel; titles sit on quiet dark footers. */
+html[data-nav-design="5"] .lounge-shell{--dock:156px}
+html[data-nav-design="5"] .lounge-rail{height:120px;left:38px;right:38px;bottom:16px}
+html[data-nav-design="5"] .lounge-rail nav{gap:5px}
+html[data-nav-design="5"] .lounge-rail nav button:not(.lounge-brand){justify-content:flex-end;padding:10px 4px!important;overflow:hidden;color:#d4dbe2}
+html[data-nav-design="5"] .nav-art{display:block;position:absolute;inset:0;background-size:cover;background-position:center 32%;filter:grayscale(.95) brightness(.55);opacity:.5;z-index:-2;transition:filter calc(320ms * var(--nav-speed)),opacity calc(320ms * var(--nav-speed))}
+html[data-nav-design="5"] .lounge-rail nav button::before{display:block;content:'';position:absolute;inset:0;background:linear-gradient(transparent,#06101ee8 78%);z-index:-1}
+html[data-nav-design="5"] .lounge-rail nav button[aria-current] .nav-art{filter:grayscale(0) brightness(.95);opacity:1}
+html[data-nav-design="5"] .nav-glyph{display:none}
+html[data-nav-design="5"] .nav-label{font:16px/1.5 'Yu Mincho','Hiragino Mincho ProN',serif;letter-spacing:.14em}
+html[data-nav-design="5"] .nav-copy small{font-size:8px;letter-spacing:.24em}
+html[data-nav-design="5"] .nav-number{display:block;position:absolute;left:10px;top:9px;font:10px/1 Georgia,serif;color:#f3ebd1;opacity:.55}
+html[data-nav-design="5"] .nav-cursor{z-index:3;border-top:2px solid #d6eaff;border-bottom:1px solid #d6eaff;top:0;bottom:0;pointer-events:none}
+@media(max-width:850px){
+ html:not([data-nav-design="0"]) .lounge-shell{--dock:105px}
+ html:not([data-nav-design="0"]) .lounge-rail{left:12px;right:12px;bottom:max(14px,env(safe-area-inset-bottom));height:78px}
+ html:not([data-nav-design="0"]) .lounge-rail nav{grid-template-columns:repeat(3,1fr) 1.22fr repeat(3,1fr)}
+ html:not([data-nav-design="0"]) .lounge-rail nav button:not(.lounge-brand){font-size:10px;letter-spacing:0;gap:5px!important;padding:5px 0!important;flex-direction:column}
+ .nav-glyph{width:25px;height:25px}.nav-copy small{display:none}
+ html[data-nav-design="1"] .lounge-rail{left:16px;right:16px}
+ html[data-nav-design="2"] .lounge-rail{left:5px;right:5px}
+ html[data-nav-design="2"] .lounge-rail nav{gap:0}
+ html[data-nav-design="2"] .nav-cursor{clip-path:polygon(10% 0,100% 0,90% 100%,0 100%);box-shadow:inset 0 -4px #91d9ef}
+ html[data-nav-design="2"] .nav-number{font-size:24px;right:5px;top:2px}
+ html[data-nav-design="3"] .lounge-rail{left:10px;right:10px}
+ html[data-nav-design="3"] .lounge-rail nav{padding:8px 4px;gap:1px}
+ html[data-nav-design="3"] .nav-cursor{top:8px;bottom:8px}
+ html[data-nav-design="3"] .nav-glyph{width:24px;height:24px}
+ html[data-nav-design="4"] .lounge-rail{left:9px;right:9px}
+ html[data-nav-design="4"] .lounge-rail nav button:not(.lounge-brand){font-size:12px;letter-spacing:0}
+ html[data-nav-design="4"] .nav-copy small{display:block;font-size:5px;letter-spacing:.03em;line-height:2.5}
+ html[data-nav-design="4"] .nav-cursor{top:14px;bottom:11px}
+ html[data-nav-design="4"] .nav-cursor::before{left:0;top:4px}
+ html[data-nav-design="4"] .nav-cursor::after{right:0;top:auto;bottom:5px}
+ html[data-nav-design="5"] .lounge-rail{left:5px;right:5px;height:90px;bottom:12px}
+ html[data-nav-design="5"] .lounge-shell{--dock:115px}
+ html[data-nav-design="5"] .lounge-rail nav{gap:2px}
+ html[data-nav-design="5"] .nav-label{font-size:10px;letter-spacing:0}
+ html[data-nav-design="5"] .nav-number{left:5px;font-size:8px}
+ html[data-nav-design="5"] .lounge-rail nav button:not(.lounge-brand){padding-bottom:10px!important}
+}
+@media(max-width:360px){
+ html:not([data-nav-design="0"]) .lounge-rail{left:5px;right:5px}
+ html:not([data-nav-design="0"]) .lounge-rail nav button:not(.lounge-brand){font-size:9px}
+ html[data-nav-design="4"] .lounge-rail nav button:not(.lounge-brand){font-size:10px}
+ html[data-nav-design="5"] .nav-label{font-size:9px}
+}
+@media(max-height:450px){html:not([data-nav-design="0"]) .lounge-shell{--dock:90px}html:not([data-nav-design="0"]) .lounge-rail{height:68px;bottom:10px}}
+.lounge-atmosphere{animation:none!important}
+.nav-strip .lounge-shell{background:linear-gradient(#06132750,#050d1bb0),url('/art/lounge/stage-v1/stage.webp') center 82%/cover!important}
+.nav-strip .lounge-atmosphere,.nav-strip .lounge-content,.nav-strip .lounge-topbar{display:none}
+.nav-strip:not([data-nav-design="0"]) .lounge-rail{height:100px;bottom:18px}
+.nav-strip[data-nav-design="5"] .lounge-rail{height:124px}
+.nav-reduced .lounge-rail *{transition:none!important;animation:none!important}
+@media(prefers-reduced-motion:reduce){.lounge-rail *{transition:none!important;animation:none!important}}
+html[data-nav-design="3"] .lounge-rail::before{background:none}
+html[data-nav-design="2"] .lounge-rail nav button[aria-current]{font-size:23px;letter-spacing:-.06em}
+html[data-nav-design="5"] .nav-art{filter:grayscale(.85) brightness(.82);opacity:.78}
+@media(max-width:850px){html[data-nav-design="2"] .lounge-rail nav button[aria-current]{font-size:11px;letter-spacing:0}}
+@media(max-width:360px){html[data-nav-design="2"] .lounge-rail nav button[aria-current]{font-size:9px}}
+/* The vignette belongs to the screen, so its edges never read as a panel. */
+html:not([data-nav-design="0"]) .lounge-rail::before{position:fixed;inset:auto 0 0;height:190px;background:linear-gradient(transparent,#040b17e8 66%,#040b17)}
+html[data-nav-design="3"] .lounge-rail::before{background:none}
+html[data-nav-design="2"] .nav-label{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Kaku Gothic ProN',sans-serif;font-weight:750}

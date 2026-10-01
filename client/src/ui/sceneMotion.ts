@@ -69,6 +69,10 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       window.addEventListener('resize',stop,{once:true});
       try{
         const args={root,scene,source:req.source,target:req.target,count,unit,cx,cy,texture,face,signal:abort.signal,warm,refresh};
+        if(import.meta.env.DEV&&root.dataset.shelfReturnVariant){
+          const {playShelfReturn}=await import('../dev/shelfReturnEffects');
+          return await playShelfReturn(args);
+        }
         return await playMaterialReturn(args);
       }finally{
         req.signal.removeEventListener('abort',stop);cancels.delete(stop);window.removeEventListener('resize',stop);face?.dispose();

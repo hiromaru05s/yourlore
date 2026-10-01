@@ -1,0 +1,2 @@
+.turn-light-controls{position:fixed;top:12px;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 30px);z-index:220;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;padding:8px;background:#111e2bed;border:1px solid #547184;border-radius:8px;font:12px sans-serif;}
+.turn-light-controls :is(button,select,a){background:#243c4b;border:1px solid #7394a5;color:#eff7f7;padding:7px 9px;border-radius:4px;cursor:pointer;text-decoration:none;}

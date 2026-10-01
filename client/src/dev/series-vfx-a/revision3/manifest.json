@@ -1,0 +1,742 @@
+[
+  {
+    "id": "S01",
+    "name": "アサシン／ギルド",
+    "cards": [
+      "ASSASSIN1",
+      "ASSASSIN2",
+      "ASSASSIN3",
+      "ASSASSIN4",
+      "ASSASSIN_SQUAD",
+      "GUILD_HALL",
+      "GUILD_HQ",
+      "GUILD_EYE",
+      "NL_SECRET",
+      "ROGUE_ART",
+      "Q_ASSASSIN"
+    ],
+    "scope": "共通登場／初・中・上級の強弱／ナイトロード登場／スカッドの増援／ギルドの設置・反応",
+    "state": "2案再生可"
+  },
+  {
+    "id": "S05",
+    "name": "黒魔法／黒魔術師",
+    "cards": [
+      "BLACK_REVERSE",
+      "BLACK_INFINITY",
+      "BLACK_NOVA",
+      "BLACK_CURSE",
+      "BLACK_ELSA",
+      "BLACK_ALICE",
+      "SOUL_HARVEST",
+      "QUICK_CURSE"
+    ],
+    "scope": "共通詠唱／リバース・インフィニティの結界／ノヴァ／カース／エルサ・アリス召喚／魂の収穫",
+    "state": "2案再生可"
+  },
+  {
+    "id": "S11",
+    "name": "呪術師／呪い",
+    "cards": [
+      "NHEX",
+      "HEXER1",
+      "HEXER2",
+      "HEXER3",
+      "HEXER4",
+      "CURSE",
+      "QUICK_GRIMOIRE"
+    ],
+    "scope": "見習い・初・中・上級の召喚差分／ケロイドの特別召喚／呪い生成・注入／呪術魔法書",
+    "state": "2案再生可"
+  },
+  {
+    "id": "S13",
+    "name": "吸血鬼",
+    "cards": [
+      "VAMP1",
+      "VAMP2",
+      "VAMP3",
+      "VAMP4",
+      "VAMP5",
+      "VAMP_BUTLER",
+      "VAMP_PACT",
+      "VAMP_PACT2",
+      "VAMP_WARD"
+    ],
+    "scope": "見習い→初級→中級→上級→特級の追加召喚／執事のカウンター召喚／契約・破壊防止",
+    "state": "2案再生可"
+  },
+  {
+    "id": "S14",
+    "name": "血の魔法",
+    "cards": [
+      "BLOOD1",
+      "BLOOD_JOY",
+      "BLOOD_ANGER",
+      "BLOOD_SORROW",
+      "BLOOD_PLEASURE",
+      "BLOOD_SECRET",
+      "BLOOD_FEST",
+      "BLOOD_SHIELD",
+      "BLOOD_RITE"
+    ],
+    "scope": "自傷を伴う共通詠唱／喜・怒・哀・楽・秘術・ブラッドドロー差分／祝祭・吸血術式・血鬼術",
+    "state": "2案再生可"
+  },
+  {
+    "id": "S17",
+    "name": "孤独",
+    "cards": [
+      "TSO1",
+      "TSO2",
+      "TSO3",
+      "TSO5"
+    ],
+    "scope": "隠遁者・狼・狩人・放浪者の召喚／孤立条件成立／2種シナジー",
+    "state": "2案再生可"
+  },
+  {
+    "id": "S20",
+    "name": "魔族",
+    "cards": [
+      "TDE1",
+      "TDE2",
+      "TDE3",
+      "TDE4",
+      "DEMON_REALM"
+    ],
+    "scope": "斥候・戦士・狂戦士の召喚／魔王降臨／魔界展開／2・3・4種シナジー",
+    "state": "2案再生可"
+  },
+  {
+    "id": "S28",
+    "name": "ルーン学問",
+    "cards": [
+      "RUNE1",
+      "RUNE2",
+      "RUNE3"
+    ],
+    "scope": "初級・中級・上級の共通詠唱差分／破壊・マナ増幅・魔法再発動",
+    "state": "2案再生可"
+  },
+  {
+    "id": "S29",
+    "name": "知識／発見／創造",
+    "cards": [
+      "NMD2",
+      "NMD6",
+      "M3",
+      "S10",
+      "S4",
+      "S6",
+      "ND2",
+      "E3",
+      "DISCOVERY_SMALL",
+      "DISCOVERY",
+      "DISCOVERY_LARGE",
+      "PREPARATION",
+      "EROSION",
+      "GROWTH",
+      "EMPTY_MIND",
+      "CREATION",
+      "BEGINNER_MIND"
+    ],
+    "scope": "知識系の詠唱／小さな発見・発見・大きな発見／創造の生成・複製／探書の精霊・大賢者召喚",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A002",
+    "name": "通常魔法の発動",
+    "cards": [],
+    "scope": "プレイ→詠唱→対象へ作用→墓地へ",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A003",
+    "name": "永続・持続魔法の展開",
+    "cards": [],
+    "scope": "詠唱→魔法ゾーンへ配置→常在表示",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A005",
+    "name": "クエストの設置",
+    "cards": [],
+    "scope": "公開配置→条件表示→進行開始",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A009",
+    "name": "墓地からの蘇生",
+    "cards": [
+      "QUICK_REBIRTH"
+    ],
+    "scope": "墓地→場、虚無付与を伴う",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A015",
+    "name": "魔法・クエストの破壊／除去",
+    "cards": [
+      "DISARM1",
+      "DISARM2",
+      "DISARM3",
+      "QUICK_SORT"
+    ],
+    "scope": "対象の場札が崩れて移動",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A021",
+    "name": "破壊時の後続効果",
+    "cards": [
+      "GM6_8",
+      "FIRE_MASTER"
+    ],
+    "scope": "退場→兵士召喚／魔法回収などを順に表示",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A022",
+    "name": "召喚・発動できない時",
+    "cards": [],
+    "scope": "条件不足／封鎖／場満杯を短く表示。成功演出は出さない",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A035",
+    "name": "攻撃時吸血",
+    "cards": [
+      "VAMP4",
+      "VAMP5"
+    ],
+    "scope": "命中→体力が攻撃者側へ戻る",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A043",
+    "name": "烙印の付与／蓄積",
+    "cards": [
+      "S12",
+      "ASSASSIN4",
+      "QUICK_HELLFIRE",
+      "BLACK_ELSA"
+    ],
+    "scope": "プレイヤーに印を追加→継続表示",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A044",
+    "name": "烙印の定期発動",
+    "cards": [
+      "S12",
+      "ASSASSIN4"
+    ],
+    "scope": "ターン開始→烙印の個数分ダイス→自傷",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A045",
+    "name": "烙印解除",
+    "cards": [
+      "UNBRAND",
+      "UNBRANDER",
+      "PURGE_TOUCH"
+    ],
+    "scope": "印1個を消す／全て消す",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A046",
+    "name": "暗襲",
+    "cards": [
+      "ASSASSIN1",
+      "NL_SECRET"
+    ],
+    "scope": "プレイヤーへ向かう専用攻撃経路／能力付与",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A048",
+    "name": "威厳",
+    "cards": [
+      "MAJESTY_RITE",
+      "TDE4"
+    ],
+    "scope": "獲得・登場→相手の新規召喚への攻撃制限→解除",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A055",
+    "name": "能力・効果の無効化",
+    "cards": [
+      "DEMON_REALM"
+    ],
+    "scope": "魔族のキーワードと効果が消える",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A056",
+    "name": "一時的なダメージ無効",
+    "cards": [
+      "ANESTHESIA"
+    ],
+    "scope": "付与→被弾防止→ターン終了で解除",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A057",
+    "name": "吸血鬼の破壊防止",
+    "cards": [
+      "VAMP_WARD"
+    ],
+    "scope": "破壊を遮る→場に残る",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A066",
+    "name": "自傷・体力1化",
+    "cards": [
+      "BLOOD1",
+      "FORBIDDEN",
+      "BLACK_NOVA"
+    ],
+    "scope": "支払いとしての損傷／ノヴァ等の体力設定",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A071",
+    "name": "最大マナ増加封鎖",
+    "cards": [
+      "TDE4"
+    ],
+    "scope": "封鎖開始→増加できない反応→封鎖源退場",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A073",
+    "name": "マナ消費3倍",
+    "cards": [
+      "TDE4"
+    ],
+    "scope": "魔族4種成立→コスト増加の常在表示",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A077",
+    "name": "ダメージを回復へ変換",
+    "cards": [
+      "BLOOD_RITE"
+    ],
+    "scope": "着弾前の変換→体力回復",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A078",
+    "name": "血の魔法の自傷防止",
+    "cards": [
+      "BLOOD_SHIELD"
+    ],
+    "scope": "自傷コストの損傷だけを防ぐ",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A079",
+    "name": "ダメージの相手側転送",
+    "cards": [
+      "BLACK_REVERSE"
+    ],
+    "scope": "リバース結界→被害の向きが逆になる",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A081",
+    "name": "モンスター召喚制限",
+    "cards": [
+      "E1",
+      "S1",
+      "TSO1",
+      "SPACE_RITE",
+      "CASTLE"
+    ],
+    "scope": "低コスト禁止／場の数制限／一定期間封鎖",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A082",
+    "name": "攻撃制限",
+    "cards": [
+      "E2",
+      "GLASS_BAN",
+      "TAR2",
+      "TAR5"
+    ],
+    "scope": "全攻撃不可／特定コスト・数値条件／直接攻撃保護",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A083",
+    "name": "魔法使用制限",
+    "cards": [
+      "NT_SEAL3",
+      "NT_SEAL5",
+      "TDE3",
+      "SPACE_RITE"
+    ],
+    "scope": "低コスト封印／使用枚数制限／全面封鎖",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A084",
+    "name": "魔法の無効化",
+    "cards": [
+      "HEXER4"
+    ],
+    "scope": "呪術師判定→魔法を打ち消す",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A085",
+    "name": "ターンスキップ",
+    "cards": [
+      "TIMEWARP",
+      "BLACK_NOVA"
+    ],
+    "scope": "予約の印→対象ターンを飛ばす",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A091",
+    "name": "カース・呪術師の呪い注入",
+    "cards": [
+      "BLACK_CURSE",
+      "BLACK_ELSA",
+      "BLACK_ALICE",
+      "HEXER1",
+      "HEXER2",
+      "HEXER3"
+    ],
+    "scope": "生成元→相手墓地に呪いカード追加",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A092",
+    "name": "呪いの使用による自傷",
+    "cards": [
+      "CURSE"
+    ],
+    "scope": "呪いカード発動→持ち主の体力減少",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A093",
+    "name": "リフトの呪いから再生成",
+    "cards": [
+      "QUICK_CURSE"
+    ],
+    "scope": "リフトの呪い参照→相手墓地へ新しい呪い",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A094",
+    "name": "呪い・種族・除外枚数に応じた大ダメージ",
+    "cards": [
+      "SOUL_HARVEST",
+      "INQUISITION",
+      "GS5_3",
+      "EXILE_NUKE1",
+      "EXILE_NUKE2"
+    ],
+    "scope": "集積した対象を示す→砲撃・収穫・審問",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A095",
+    "name": "黒魔術師の黒魔法連動",
+    "cards": [
+      "BLACK_ELSA",
+      "BLACK_ALICE"
+    ],
+    "scope": "黒魔法発動→エルサの烙印／アリスのマナ",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A096",
+    "name": "ナイトロード降臨",
+    "cards": [
+      "ASSASSIN4"
+    ],
+    "scope": "専用召喚→烙印3個付与",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A097",
+    "name": "アサシンスカッド増援",
+    "cards": [
+      "ASSASSIN_SQUAD"
+    ],
+    "scope": "登場→中級アサシン召喚→味方全体に回避",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A098",
+    "name": "ギルド支部の蓄積攻撃",
+    "cards": [
+      "GUILD_HALL"
+    ],
+    "scope": "アサシン命中→カウンター蓄積→14ダメージ",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A099",
+    "name": "ギルド本部の連動と夜市",
+    "cards": [
+      "GUILD_HQ"
+    ],
+    "scope": "アサシン命中→烙印／ターン開始→夜市",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A113",
+    "name": "吸血鬼の血魔法連動召喚",
+    "cards": [
+      "VAMP1",
+      "VAMP2",
+      "VAMP3",
+      "VAMP4"
+    ],
+    "scope": "元の吸血鬼から次段階を追加召喚。元カードも場に残る",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A114",
+    "name": "特級吸血鬼の登場",
+    "cards": [
+      "VAMP5"
+    ],
+    "scope": "特別召喚→相手ダメージ＋自分体力増加",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A115",
+    "name": "吸血執事の追加召喚",
+    "cards": [
+      "VAMP_BUTLER"
+    ],
+    "scope": "攻撃カウンター3個→見習い吸血鬼",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A116",
+    "name": "血の秘術の生贄",
+    "cards": [
+      "BLOOD_SECRET"
+    ],
+    "scope": "自傷→味方吸血鬼の破壊→マナ・体力獲得",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A134",
+    "name": "創造の生成・複製",
+    "cards": [
+      "CREATION"
+    ],
+    "scope": "ドロー・回復→墓地に創造生成／閾値で相手カード複製",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A136",
+    "name": "ルーン学問による再発動",
+    "cards": [
+      "RUNE3"
+    ],
+    "scope": "魔法が解決→マナなしで再発動",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A139",
+    "name": "通常・追加ドロー",
+    "cards": [
+      "S10",
+      "DISCOVERY",
+      "DISCOVERY_LARGE"
+    ],
+    "scope": "デッキから手札へ／複数枚／追加ドローの連動",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A140",
+    "name": "デッキサーチ",
+    "cards": [
+      "S6"
+    ],
+    "scope": "デッキから選択→手札へ",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A141",
+    "name": "墓地回収",
+    "cards": [
+      "S8"
+    ],
+    "scope": "墓地から選択→手札へ",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A142",
+    "name": "手札の一括交換",
+    "cards": [
+      "HANDRESET"
+    ],
+    "scope": "手札を捨てる→新しい5枚を引く",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A143",
+    "name": "カードの生成・複製",
+    "cards": [
+      "CULL_FARM",
+      "BLACK_CURSE",
+      "CREATION"
+    ],
+    "scope": "手札／墓地へ新しいカードを出現させる",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A158",
+    "name": "永続魔法の誘発",
+    "cards": [
+      "NHEAL",
+      "EROSION",
+      "GROWTH"
+    ],
+    "scope": "発動元の場札を強調→対象の効果へ接続",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A159",
+    "name": "持続魔法の期間減少・満了",
+    "cards": [
+      "E3",
+      "BREWING",
+      "ANCIENT_CIV"
+    ],
+    "scope": "残り期間更新→終了→後続効果／退場",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A160",
+    "name": "ターン開始・終了の誘発",
+    "cards": [
+      "GM5_3",
+      "MERC_MASTER",
+      "WORLD_CARE"
+    ],
+    "scope": "発動する場札→回復・ダメージ・召喚等の順序",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A161",
+    "name": "条件成立・使用回数上限",
+    "cards": [
+      "CREATION",
+      "DISCOVERY",
+      "BLACK_REVERSE"
+    ],
+    "scope": "発動可能になった短い合図／使い切り表示",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A163",
+    "name": "効果不発・対象なし",
+    "cards": [],
+    "scope": "成功演出へ進めず短く終了を示す",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A164",
+    "name": "孤独2種シナジー",
+    "cards": [
+      "TSO1",
+      "TSO2",
+      "TSO3",
+      "TSO5"
+    ],
+    "scope": "種族カード同士の接続→相手の場上限2体",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A167",
+    "name": "魔族2種シナジー",
+    "cards": [
+      "TDE1",
+      "TDE2"
+    ],
+    "scope": "段階成立→相手魔法使用2枚まで",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A168",
+    "name": "魔族3種シナジー",
+    "cards": [
+      "TDE1",
+      "TDE2",
+      "TDE3"
+    ],
+    "scope": "段階成立→相手魔法使用不可",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A169",
+    "name": "魔族4種シナジー",
+    "cards": [
+      "TDE1",
+      "TDE2",
+      "TDE3",
+      "TDE4"
+    ],
+    "scope": "4種接続→相手マナ消費3倍",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A175",
+    "name": "多種族契約の期限敗北",
+    "cards": [
+      "TRIBE_PACT"
+    ],
+    "scope": "期限到達→シナジー未達成→敗北",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A176",
+    "name": "禁断の術式の種族一斉召喚",
+    "cards": [
+      "FORBIDDEN"
+    ],
+    "scope": "体力1→ダイス成功／失敗→不足種族を召喚",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A178",
+    "name": "クエスト進行",
+    "cards": [],
+    "scope": "設置後の条件達成ごとに進捗更新",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A179",
+    "name": "クエスト達成と報酬",
+    "cards": [],
+    "scope": "目標到達→達成表示→報酬の共通演出へ接続",
+    "state": "2案再生可"
+  },
+  {
+    "id": "A180",
+    "name": "クエスト進行のリセット",
+    "cards": [
+      "Q_CASTLE"
+    ],
+    "scope": "城が消えた場合などの継続条件消失",
+    "state": "2案再生可"
+  }
+]

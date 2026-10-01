@@ -1,0 +1,900 @@
+[
+  {
+    "id": "S01",
+    "name": "アサシン／ギルド",
+    "cardIds": [
+      "ASSASSIN1",
+      "ASSASSIN2",
+      "ASSASSIN3",
+      "ASSASSIN4",
+      "ASSASSIN_SQUAD",
+      "GUILD_HALL",
+      "GUILD_HQ",
+      "GUILD_EYE",
+      "NL_SECRET",
+      "ROGUE_ART",
+      "Q_ASSASSIN"
+    ],
+    "animation": "共通登場／初・中・上級の強弱／ナイトロード登場／スカッドの増援／ギルドの設置・反応",
+    "owner": "A",
+    "ideaSeeds": [
+      "影の縫い目から実体化",
+      "刃状の影がカード面を組み上げる"
+    ]
+  },
+  {
+    "id": "S05",
+    "name": "黒魔法／黒魔術師",
+    "cardIds": [
+      "BLACK_REVERSE",
+      "BLACK_INFINITY",
+      "BLACK_NOVA",
+      "BLACK_CURSE",
+      "BLACK_ELSA",
+      "BLACK_ALICE",
+      "SOUL_HARVEST",
+      "QUICK_CURSE"
+    ],
+    "animation": "共通詠唱／リバース・インフィニティの結界／ノヴァ／カース／エルサ・アリス召喚／魂の収穫",
+    "owner": "A",
+    "ideaSeeds": [
+      "黒い鏡面の反転と亀裂",
+      "文字を侵食する墨が効果の形へ流れる"
+    ]
+  },
+  {
+    "id": "S11",
+    "name": "呪術師／呪い",
+    "cardIds": [
+      "NHEX",
+      "HEXER1",
+      "HEXER2",
+      "HEXER3",
+      "HEXER4",
+      "CURSE",
+      "QUICK_GRIMOIRE"
+    ],
+    "animation": "見習い・初・中・上級の召喚差分／ケロイドの特別召喚／呪い生成・注入／呪術魔法書",
+    "owner": "A",
+    "ideaSeeds": [
+      "呪符の文字が対象へ転写",
+      "カード面から呪糸が編まれる"
+    ]
+  },
+  {
+    "id": "S13",
+    "name": "吸血鬼",
+    "cardIds": [
+      "VAMP1",
+      "VAMP2",
+      "VAMP3",
+      "VAMP4",
+      "VAMP5",
+      "VAMP_BUTLER",
+      "VAMP_PACT",
+      "VAMP_PACT2",
+      "VAMP_WARD"
+    ],
+    "animation": "見習い→初級→中級→上級→特級の追加召喚／執事のカウンター召喚／契約・破壊防止",
+    "owner": "A",
+    "ideaSeeds": [
+      "血管状の光が次段階のカードへ分岐",
+      "血の薄膜が新しい肖像を写し取る"
+    ]
+  },
+  {
+    "id": "S14",
+    "name": "血の魔法",
+    "cardIds": [
+      "BLOOD1",
+      "BLOOD_JOY",
+      "BLOOD_ANGER",
+      "BLOOD_SORROW",
+      "BLOOD_PLEASURE",
+      "BLOOD_SECRET",
+      "BLOOD_FEST",
+      "BLOOD_SHIELD",
+      "BLOOD_RITE"
+    ],
+    "animation": "自傷を伴う共通詠唱／喜・怒・哀・楽・秘術・ブラッドドロー差分／祝祭・吸血術式・血鬼術",
+    "owner": "A",
+    "ideaSeeds": [
+      "血の筆致が効果を描く",
+      "脈動する液膜が代償と報酬をつなぐ"
+    ]
+  },
+  {
+    "id": "S17",
+    "name": "孤独",
+    "cardIds": [
+      "TSO1",
+      "TSO2",
+      "TSO3",
+      "TSO5"
+    ],
+    "animation": "隠遁者・狼・狩人・放浪者の召喚／孤立条件成立／2種シナジー",
+    "owner": "A",
+    "ideaSeeds": [
+      "周囲の気配が収束して一体を際立たせる",
+      "傷んだカード面の光が一筋だけ残る"
+    ]
+  },
+  {
+    "id": "S20",
+    "name": "魔族",
+    "cardIds": [
+      "TDE1",
+      "TDE2",
+      "TDE3",
+      "TDE4",
+      "DEMON_REALM"
+    ],
+    "animation": "斥候・戦士・狂戦士の召喚／魔王降臨／魔界展開／2・3・4種シナジー",
+    "owner": "A",
+    "ideaSeeds": [
+      "封印の亀裂から魔力がにじむ",
+      "鎧と角の紋様が重圧で刻まれる"
+    ]
+  },
+  {
+    "id": "S28",
+    "name": "ルーン学問",
+    "cardIds": [
+      "RUNE1",
+      "RUNE2",
+      "RUNE3"
+    ],
+    "animation": "初級・中級・上級の共通詠唱差分／破壊・マナ増幅・魔法再発動",
+    "owner": "A",
+    "ideaSeeds": [
+      "刻印の筆順で術式が完成",
+      "カードの文字列が立体的に折れて魔法へ"
+    ]
+  },
+  {
+    "id": "S29",
+    "name": "知識／発見／創造",
+    "cardIds": [
+      "NMD2",
+      "NMD6",
+      "M3",
+      "S10",
+      "S4",
+      "S6",
+      "ND2",
+      "E3",
+      "DISCOVERY_SMALL",
+      "DISCOVERY",
+      "DISCOVERY_LARGE",
+      "PREPARATION",
+      "EROSION",
+      "GROWTH",
+      "EMPTY_MIND",
+      "CREATION",
+      "BEGINNER_MIND"
+    ],
+    "animation": "知識系の詠唱／小さな発見・発見・大きな発見／創造の生成・複製／探書の精霊・大賢者召喚",
+    "owner": "A",
+    "ideaSeeds": [
+      "書頁の余白から絵柄が発見される",
+      "書庫の光片が新しいカード面に定着"
+    ]
+  },
+  {
+    "id": "A002",
+    "name": "通常魔法の発動",
+    "stages": "プレイ→詠唱→対象へ作用→墓地へ",
+    "cardIds": [],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "共通プレイ・召喚・退場"
+  },
+  {
+    "id": "A003",
+    "name": "永続・持続魔法の展開",
+    "stages": "詠唱→魔法ゾーンへ配置→常在表示",
+    "cardIds": [],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "共通プレイ・召喚・退場"
+  },
+  {
+    "id": "A005",
+    "name": "クエストの設置",
+    "stages": "公開配置→条件表示→進行開始",
+    "cardIds": [],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "共通プレイ・召喚・退場"
+  },
+  {
+    "id": "A009",
+    "name": "墓地からの蘇生",
+    "stages": "墓地→場、虚無付与を伴う",
+    "cardIds": [
+      "QUICK_REBIRTH"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "共通プレイ・召喚・退場"
+  },
+  {
+    "id": "A015",
+    "name": "魔法・クエストの破壊／除去",
+    "stages": "対象の場札が崩れて移動",
+    "cardIds": [
+      "DISARM1",
+      "DISARM2",
+      "DISARM3",
+      "QUICK_SORT"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "共通プレイ・召喚・退場"
+  },
+  {
+    "id": "A021",
+    "name": "破壊時の後続効果",
+    "stages": "退場→兵士召喚／魔法回収などを順に表示",
+    "cardIds": [
+      "GM6_8",
+      "FIRE_MASTER"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "共通プレイ・召喚・退場"
+  },
+  {
+    "id": "A022",
+    "name": "召喚・発動できない時",
+    "stages": "条件不足／封鎖／場満杯を短く表示。成功演出は出さない",
+    "cardIds": [],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "共通プレイ・召喚・退場"
+  },
+  {
+    "id": "A035",
+    "name": "攻撃時吸血",
+    "stages": "命中→体力が攻撃者側へ戻る",
+    "cardIds": [
+      "VAMP4",
+      "VAMP5"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "戦闘"
+  },
+  {
+    "id": "A043",
+    "name": "烙印の付与／蓄積",
+    "stages": "プレイヤーに印を追加→継続表示",
+    "cardIds": [
+      "S12",
+      "ASSASSIN4",
+      "QUICK_HELLFIRE",
+      "BLACK_ELSA"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "能力・状態・カウンター"
+  },
+  {
+    "id": "A044",
+    "name": "烙印の定期発動",
+    "stages": "ターン開始→烙印の個数分ダイス→自傷",
+    "cardIds": [
+      "S12",
+      "ASSASSIN4"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "能力・状態・カウンター"
+  },
+  {
+    "id": "A045",
+    "name": "烙印解除",
+    "stages": "印1個を消す／全て消す",
+    "cardIds": [
+      "UNBRAND",
+      "UNBRANDER",
+      "PURGE_TOUCH"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "能力・状態・カウンター"
+  },
+  {
+    "id": "A046",
+    "name": "暗襲",
+    "stages": "プレイヤーへ向かう専用攻撃経路／能力付与",
+    "cardIds": [
+      "ASSASSIN1",
+      "NL_SECRET"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "能力・状態・カウンター"
+  },
+  {
+    "id": "A048",
+    "name": "威厳",
+    "stages": "獲得・登場→相手の新規召喚への攻撃制限→解除",
+    "cardIds": [
+      "MAJESTY_RITE",
+      "TDE4"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "能力・状態・カウンター"
+  },
+  {
+    "id": "A055",
+    "name": "能力・効果の無効化",
+    "stages": "魔族のキーワードと効果が消える",
+    "cardIds": [
+      "DEMON_REALM"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "能力・状態・カウンター"
+  },
+  {
+    "id": "A056",
+    "name": "一時的なダメージ無効",
+    "stages": "付与→被弾防止→ターン終了で解除",
+    "cardIds": [
+      "ANESTHESIA"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "能力・状態・カウンター"
+  },
+  {
+    "id": "A057",
+    "name": "吸血鬼の破壊防止",
+    "stages": "破壊を遮る→場に残る",
+    "cardIds": [
+      "VAMP_WARD"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "能力・状態・カウンター"
+  },
+  {
+    "id": "A066",
+    "name": "自傷・体力1化",
+    "stages": "支払いとしての損傷／ノヴァ等の体力設定",
+    "cardIds": [
+      "BLOOD1",
+      "FORBIDDEN",
+      "BLACK_NOVA"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換"
+  },
+  {
+    "id": "A071",
+    "name": "最大マナ増加封鎖",
+    "stages": "封鎖開始→増加できない反応→封鎖源退場",
+    "cardIds": [
+      "TDE4"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換"
+  },
+  {
+    "id": "A073",
+    "name": "マナ消費3倍",
+    "stages": "魔族4種成立→コスト増加の常在表示",
+    "cardIds": [
+      "TDE4"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換"
+  },
+  {
+    "id": "A077",
+    "name": "ダメージを回復へ変換",
+    "stages": "着弾前の変換→体力回復",
+    "cardIds": [
+      "BLOOD_RITE"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換"
+  },
+  {
+    "id": "A078",
+    "name": "血の魔法の自傷防止",
+    "stages": "自傷コストの損傷だけを防ぐ",
+    "cardIds": [
+      "BLOOD_SHIELD"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換"
+  },
+  {
+    "id": "A079",
+    "name": "ダメージの相手側転送",
+    "stages": "リバース結界→被害の向きが逆になる",
+    "cardIds": [
+      "BLACK_REVERSE"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換"
+  },
+  {
+    "id": "A081",
+    "name": "モンスター召喚制限",
+    "stages": "低コスト禁止／場の数制限／一定期間封鎖",
+    "cardIds": [
+      "E1",
+      "S1",
+      "TSO1",
+      "SPACE_RITE",
+      "CASTLE"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換"
+  },
+  {
+    "id": "A082",
+    "name": "攻撃制限",
+    "stages": "全攻撃不可／特定コスト・数値条件／直接攻撃保護",
+    "cardIds": [
+      "E2",
+      "GLASS_BAN",
+      "TAR2",
+      "TAR5"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換"
+  },
+  {
+    "id": "A083",
+    "name": "魔法使用制限",
+    "stages": "低コスト封印／使用枚数制限／全面封鎖",
+    "cardIds": [
+      "NT_SEAL3",
+      "NT_SEAL5",
+      "TDE3",
+      "SPACE_RITE"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換"
+  },
+  {
+    "id": "A084",
+    "name": "魔法の無効化",
+    "stages": "呪術師判定→魔法を打ち消す",
+    "cardIds": [
+      "HEXER4"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換"
+  },
+  {
+    "id": "A085",
+    "name": "ターンスキップ",
+    "stages": "予約の印→対象ターンを飛ばす",
+    "cardIds": [
+      "TIMEWARP",
+      "BLACK_NOVA"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換"
+  },
+  {
+    "id": "A091",
+    "name": "カース・呪術師の呪い注入",
+    "stages": "生成元→相手墓地に呪いカード追加",
+    "cardIds": [
+      "BLACK_CURSE",
+      "BLACK_ELSA",
+      "BLACK_ALICE",
+      "HEXER1",
+      "HEXER2",
+      "HEXER3"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚"
+  },
+  {
+    "id": "A092",
+    "name": "呪いの使用による自傷",
+    "stages": "呪いカード発動→持ち主の体力減少",
+    "cardIds": [
+      "CURSE"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚"
+  },
+  {
+    "id": "A093",
+    "name": "リフトの呪いから再生成",
+    "stages": "リフトの呪い参照→相手墓地へ新しい呪い",
+    "cardIds": [
+      "QUICK_CURSE"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚"
+  },
+  {
+    "id": "A094",
+    "name": "呪い・種族・除外枚数に応じた大ダメージ",
+    "stages": "集積した対象を示す→砲撃・収穫・審問",
+    "cardIds": [
+      "SOUL_HARVEST",
+      "INQUISITION",
+      "GS5_3",
+      "EXILE_NUKE1",
+      "EXILE_NUKE2"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚"
+  },
+  {
+    "id": "A095",
+    "name": "黒魔術師の黒魔法連動",
+    "stages": "黒魔法発動→エルサの烙印／アリスのマナ",
+    "cardIds": [
+      "BLACK_ELSA",
+      "BLACK_ALICE"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚"
+  },
+  {
+    "id": "A096",
+    "name": "ナイトロード降臨",
+    "stages": "専用召喚→烙印3個付与",
+    "cardIds": [
+      "ASSASSIN4"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚"
+  },
+  {
+    "id": "A097",
+    "name": "アサシンスカッド増援",
+    "stages": "登場→中級アサシン召喚→味方全体に回避",
+    "cardIds": [
+      "ASSASSIN_SQUAD"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚"
+  },
+  {
+    "id": "A098",
+    "name": "ギルド支部の蓄積攻撃",
+    "stages": "アサシン命中→カウンター蓄積→14ダメージ",
+    "cardIds": [
+      "GUILD_HALL"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚"
+  },
+  {
+    "id": "A099",
+    "name": "ギルド本部の連動と夜市",
+    "stages": "アサシン命中→烙印／ターン開始→夜市",
+    "cardIds": [
+      "GUILD_HQ"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚"
+  },
+  {
+    "id": "A113",
+    "name": "吸血鬼の血魔法連動召喚",
+    "stages": "元の吸血鬼から次段階を追加召喚。元カードも場に残る",
+    "cardIds": [
+      "VAMP1",
+      "VAMP2",
+      "VAMP3",
+      "VAMP4"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚"
+  },
+  {
+    "id": "A114",
+    "name": "特級吸血鬼の登場",
+    "stages": "特別召喚→相手ダメージ＋自分体力増加",
+    "cardIds": [
+      "VAMP5"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚"
+  },
+  {
+    "id": "A115",
+    "name": "吸血執事の追加召喚",
+    "stages": "攻撃カウンター3個→見習い吸血鬼",
+    "cardIds": [
+      "VAMP_BUTLER"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚"
+  },
+  {
+    "id": "A116",
+    "name": "血の秘術の生贄",
+    "stages": "自傷→味方吸血鬼の破壊→マナ・体力獲得",
+    "cardIds": [
+      "BLOOD_SECRET"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚"
+  },
+  {
+    "id": "A134",
+    "name": "創造の生成・複製",
+    "stages": "ドロー・回復→墓地に創造生成／閾値で相手カード複製",
+    "cardIds": [
+      "CREATION"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚"
+  },
+  {
+    "id": "A136",
+    "name": "ルーン学問による再発動",
+    "stages": "魔法が解決→マナなしで再発動",
+    "cardIds": [
+      "RUNE3"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚"
+  },
+  {
+    "id": "A139",
+    "name": "通常・追加ドロー",
+    "stages": "デッキから手札へ／複数枚／追加ドローの連動",
+    "cardIds": [
+      "S10",
+      "DISCOVERY",
+      "DISCOVERY_LARGE"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "手札・市場・ダイス・継続効果"
+  },
+  {
+    "id": "A140",
+    "name": "デッキサーチ",
+    "stages": "デッキから選択→手札へ",
+    "cardIds": [
+      "S6"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "手札・市場・ダイス・継続効果"
+  },
+  {
+    "id": "A141",
+    "name": "墓地回収",
+    "stages": "墓地から選択→手札へ",
+    "cardIds": [
+      "S8"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "手札・市場・ダイス・継続効果"
+  },
+  {
+    "id": "A142",
+    "name": "手札の一括交換",
+    "stages": "手札を捨てる→新しい5枚を引く",
+    "cardIds": [
+      "HANDRESET"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "手札・市場・ダイス・継続効果"
+  },
+  {
+    "id": "A143",
+    "name": "カードの生成・複製",
+    "stages": "手札／墓地へ新しいカードを出現させる",
+    "cardIds": [
+      "CULL_FARM",
+      "BLACK_CURSE",
+      "CREATION"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "手札・市場・ダイス・継続効果"
+  },
+  {
+    "id": "A158",
+    "name": "永続魔法の誘発",
+    "stages": "発動元の場札を強調→対象の効果へ接続",
+    "cardIds": [
+      "NHEAL",
+      "EROSION",
+      "GROWTH"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "手札・市場・ダイス・継続効果"
+  },
+  {
+    "id": "A159",
+    "name": "持続魔法の期間減少・満了",
+    "stages": "残り期間更新→終了→後続効果／退場",
+    "cardIds": [
+      "E3",
+      "BREWING",
+      "ANCIENT_CIV"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "手札・市場・ダイス・継続効果"
+  },
+  {
+    "id": "A160",
+    "name": "ターン開始・終了の誘発",
+    "stages": "発動する場札→回復・ダメージ・召喚等の順序",
+    "cardIds": [
+      "GM5_3",
+      "MERC_MASTER",
+      "WORLD_CARE"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "手札・市場・ダイス・継続効果"
+  },
+  {
+    "id": "A161",
+    "name": "条件成立・使用回数上限",
+    "stages": "発動可能になった短い合図／使い切り表示",
+    "cardIds": [
+      "CREATION",
+      "DISCOVERY",
+      "BLACK_REVERSE"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "手札・市場・ダイス・継続効果"
+  },
+  {
+    "id": "A163",
+    "name": "効果不発・対象なし",
+    "stages": "成功演出へ進めず短く終了を示す",
+    "cardIds": [],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "手札・市場・ダイス・継続効果"
+  },
+  {
+    "id": "A164",
+    "name": "孤独2種シナジー",
+    "stages": "種族カード同士の接続→相手の場上限2体",
+    "cardIds": [
+      "TSO1",
+      "TSO2",
+      "TSO3",
+      "TSO5"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "種族シナジー・特殊勝敗"
+  },
+  {
+    "id": "A167",
+    "name": "魔族2種シナジー",
+    "stages": "段階成立→相手魔法使用2枚まで",
+    "cardIds": [
+      "TDE1",
+      "TDE2"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "種族シナジー・特殊勝敗"
+  },
+  {
+    "id": "A168",
+    "name": "魔族3種シナジー",
+    "stages": "段階成立→相手魔法使用不可",
+    "cardIds": [
+      "TDE1",
+      "TDE2",
+      "TDE3"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "種族シナジー・特殊勝敗"
+  },
+  {
+    "id": "A169",
+    "name": "魔族4種シナジー",
+    "stages": "4種接続→相手マナ消費3倍",
+    "cardIds": [
+      "TDE1",
+      "TDE2",
+      "TDE3",
+      "TDE4"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "種族シナジー・特殊勝敗"
+  },
+  {
+    "id": "A175",
+    "name": "多種族契約の期限敗北",
+    "stages": "期限到達→シナジー未達成→敗北",
+    "cardIds": [
+      "TRIBE_PACT"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "種族シナジー・特殊勝敗"
+  },
+  {
+    "id": "A176",
+    "name": "禁断の術式の種族一斉召喚",
+    "stages": "体力1→ダイス成功／失敗→不足種族を召喚",
+    "cardIds": [
+      "FORBIDDEN"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "種族シナジー・特殊勝敗"
+  },
+  {
+    "id": "A178",
+    "name": "クエスト進行",
+    "stages": "設置後の条件達成ごとに進捗更新",
+    "cardIds": [],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "クエスト共通"
+  },
+  {
+    "id": "A179",
+    "name": "クエスト達成と報酬",
+    "stages": "目標到達→達成表示→報酬の共通演出へ接続",
+    "cardIds": [],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "クエスト共通"
+  },
+  {
+    "id": "A180",
+    "name": "クエスト進行のリセット",
+    "stages": "城が消えた場合などの継続条件消失",
+    "cardIds": [
+      "Q_CASTLE"
+    ],
+    "owner": "A",
+    "scope": "two-variant-preview",
+    "category": "クエスト共通"
+  }
+]

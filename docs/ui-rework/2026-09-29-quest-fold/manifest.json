@@ -2,8 +2,8 @@
   "selection": "Second draft #2: 光頁の折契",
   "date": "2026-09-29",
   "implemented": true,
-  "committed": false,
-  "deployed": false,
+  "committed": true,
+  "deployed": true,
   "baseHead": "e79d6a7f93d9e6b69e935be6c80d3464205501b3",
   "files": {
     "client/src/ui/questFold.ts": "bd7a29126a7f9049f052b73e94b723d45246604e4185e5171bbd59f8403ebc8a",
@@ -17,6 +17,11 @@
     "tests/quest-fold-lifecycle-browser.mjs": "20e13b6adba9f48b2d933ee61f3c7e3148763ad44b22fce50da55c4b750df328"
   },
   "functionalReport": "qa/report.json",
-  "remainingValidation": "qa/extra-report.json",
-  "visual": "Selected fold preserved; production peak and placement captures inspected, normal-speed production recording pending."
+  "remainingValidation": null,
+  "visual": "Selected fold preserved; production peak, placement captures, and normal-speed integrated continuous-playback sheet inspected.",
+  "deploymentEnvironment": "staging",
+  "productionDeployed": false,
+  "deploymentRecord": "staging/deployment.json",
+  "sourceSnapshotScope": "files records the pre-integration implementation snapshot; deployed source is identified by deploymentRecord",
+  "integrationFunctionalReport": "qa/integration-extra-report.json"
 }

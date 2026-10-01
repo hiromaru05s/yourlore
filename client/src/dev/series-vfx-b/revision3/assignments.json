@@ -1,0 +1,810 @@
+[
+  {
+    "id": "S02",
+    "name": "エルフ",
+    "cardIds": [
+      "HALF_ELF",
+      "ELF",
+      "DARK_ELF",
+      "HIGH_ELF",
+      "ELDER_ELF_KING",
+      "ELF_HAVEN"
+    ],
+    "animation": "通常召喚／ハーフ・ダーク・ハイの差分／エルダーハイエルフキングの特別召喚／憩い場展開",
+    "owner": "B",
+    "ideaSeeds": [
+      "葉脈が絵柄へ成長",
+      "風にほどけた葉が輪郭を編む"
+    ],
+    "r2Status": "redo_backlog",
+    "kind": "series"
+  },
+  {
+    "id": "S03",
+    "name": "世界樹",
+    "cardIds": [
+      "WORLD_TREE",
+      "WORLD_SEED",
+      "WORLD_HEART",
+      "WORLD_CARE",
+      "WORLD_BLESS",
+      "VITAL2",
+      "VITAL3",
+      "QUICK_WORLD"
+    ],
+    "animation": "種・心臓・慈しみ・祝福の展開／信徒・守り人召喚／世界樹本体の登場／回復連動",
+    "owner": "B",
+    "ideaSeeds": [
+      "木目と根がカード面へ脈動",
+      "樹液の膜が結晶状の葉へ展開"
+    ],
+    "r2Status": "redo_backlog",
+    "kind": "series"
+  },
+  {
+    "id": "S09",
+    "name": "ドラゴン／竜騎士",
+    "cardIds": [
+      "GM6_0",
+      "M7",
+      "GM5_3",
+      "DRAGON_EGG",
+      "D_BLACK",
+      "D_RED",
+      "D_BLUE",
+      "DRAGON_RIDER",
+      "ANTIQUE_DK"
+    ],
+    "animation": "通常竜・ドレイク召喚／卵からの孵化／黒竜・赤竜・青竜の差分／ドラゴンライダー・ドラゴンナイト合体召喚",
+    "owner": "B",
+    "ideaSeeds": [
+      "鱗の輪郭を伝う発光と翼圧",
+      "竜影がカード絵へ沈み込んで実体化"
+    ],
+    "r2Status": "redo_backlog",
+    "kind": "series"
+  },
+  {
+    "id": "S10",
+    "name": "神獣／孵化支援",
+    "cardIds": [
+      "BEAST_EGG",
+      "DIVINE",
+      "EGG_HUNTER",
+      "EGG_MASTER",
+      "INCUBATOR",
+      "INCUBATOR_S",
+      "ANCIENT_CIV"
+    ],
+    "animation": "神獣の卵設置／神獣孵化・降臨／孵化器・高級孵化器／孵化マスター・エッグハンター",
+    "owner": "B",
+    "ideaSeeds": [
+      "白い殻の内側から神紋が開く",
+      "毛並みと角の光が層状に現れる"
+    ],
+    "r2Status": "redo_backlog",
+    "kind": "series"
+  },
+  {
+    "id": "S16",
+    "name": "始原",
+    "cardIds": [
+      "TGE1",
+      "TGE2",
+      "TGE3",
+      "TGE4",
+      "TGE5",
+      "TGE6",
+      "TGE7",
+      "ORIGIN_MIMIC",
+      "GENESIS_SONG",
+      "GENESIS_MAGIC",
+      "ORIGIN_RITE"
+    ],
+    "animation": "始原共通召喚／卵・火種・守護者・裁判官・精霊・巨人・君主・ミミックの差分／始原の術式展開",
+    "owner": "B",
+    "ideaSeeds": [
+      "古層の紋様がカード面で再構成",
+      "原初の核から絵柄の輪郭が再生"
+    ],
+    "r2Status": "redo_backlog",
+    "kind": "series"
+  },
+  {
+    "id": "S18",
+    "name": "捕食",
+    "cardIds": [
+      "TPO1",
+      "TPO2",
+      "TPO3",
+      "TPO5"
+    ],
+    "animation": "仔獣・獣・追跡者・捕食者の召喚／捕食による成長／2種シナジー",
+    "owner": "B",
+    "ideaSeeds": [
+      "牙状の輪郭で力を噛み取り吸収",
+      "獣の影が対象の残光を取り込む"
+    ],
+    "r2Status": "redo_backlog",
+    "kind": "series"
+  },
+  {
+    "id": "S19",
+    "name": "貴族",
+    "cardIds": [
+      "TAR1",
+      "TAR2",
+      "TAR3",
+      "TAR5",
+      "LAND_GRANT"
+    ],
+    "animation": "執事・没落貴族・騎士・領主の召喚／領土付与による登場／2種シナジー",
+    "owner": "B",
+    "ideaSeeds": [
+      "紋章の凹凸が金属光で起動",
+      "封蝋と布の折り目から権威が展開"
+    ],
+    "r2Status": "redo_backlog",
+    "kind": "series"
+  },
+  {
+    "id": "S26",
+    "name": "商会／商人／市場",
+    "cardIds": [
+      "GUILD_CO",
+      "SLUM",
+      "MERCH1",
+      "MERCH2",
+      "DARK_MERCHANT",
+      "MARKET_CRISIS",
+      "S5",
+      "NMD4",
+      "M9",
+      "BUYOUT",
+      "RICH_HABIT",
+      "DOMINION"
+    ],
+    "animation": "商会展開／商人登場／商会カウンター蓄積・闇商人獲得／特殊マーケット・更新・支配",
+    "owner": "B",
+    "ideaSeeds": [
+      "帳簿の文字が実体カードへ転写",
+      "交易印と硬貨状の金属片が商品を運ぶ"
+    ],
+    "r2Status": "redo_backlog",
+    "kind": "series"
+  },
+  {
+    "id": "S27",
+    "name": "ぶどう／醸造／農場",
+    "cardIds": [
+      "GRAPE",
+      "GRAPE2",
+      "WINE",
+      "BREWING",
+      "FARM_KEEPER",
+      "TOKEN00",
+      "SCARECROW"
+    ],
+    "animation": "ぶどう・高品質ぶどうの使用／醸造の設置・熟成・ワイン生成／農場管理者・かかし召喚",
+    "owner": "B",
+    "ideaSeeds": [
+      "果汁と木目が熟成してワインへ",
+      "蔓と色層の変化で収穫から醸造を描く"
+    ],
+    "r2Status": "redo_backlog",
+    "kind": "series"
+  },
+  {
+    "id": "A006",
+    "name": "効果による単体召喚",
+    "stages": "発動元から場へ登場。手札プレイと区別",
+    "cardIds": [
+      "BUDGET",
+      "VAMP_PACT"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "共通プレイ・召喚・退場",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A008",
+    "name": "デッキ・墓地からの召喚",
+    "stages": "元ゾーンからカードが出て召喚",
+    "cardIds": [
+      "GENESIS_SONG"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "共通プレイ・召喚・退場",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A010",
+    "name": "破壊対象の複製召喚",
+    "stages": "相手の破壊→コピー生成→自分の場へ",
+    "cardIds": [
+      "TPO3"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "共通プレイ・召喚・退場",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A016",
+    "name": "場から手札へ戻す",
+    "stages": "対象が縮小して持ち主の手札へ",
+    "cardIds": [
+      "TPO1"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "共通プレイ・召喚・退場",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A047",
+    "name": "オーラ",
+    "stages": "獲得→常在表示→対象外のフィードバック→消失",
+    "cardIds": [
+      "ND5",
+      "DRAGON_EGG",
+      "DIVINE"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "能力・状態・カウンター",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A053",
+    "name": "一般カウンターの獲得／閾値到達／消費",
+    "stages": "商会・カジノ・城・世界樹・ギルド等、アイコンは対象別",
+    "cardIds": [
+      "GUILD_CO",
+      "CASINO",
+      "CASTLE",
+      "WORLD_TREE",
+      "GUILD_HALL"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "能力・状態・カウンター",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A060",
+    "name": "モンスター最大体力アップ",
+    "stages": "単体／全体→現在体力表示と連動",
+    "cardIds": [
+      "HPS_SCALE",
+      "HPS_GRAFT",
+      "HPS_OATH"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A061",
+    "name": "攻撃力・体力の同時アップ",
+    "stages": "同時強化／種族・同名・シリーズ限定の強化",
+    "cardIds": [
+      "PACK_INSTINCT",
+      "GENESIS_MAGIC",
+      "TGE7"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A064",
+    "name": "モンスターの蓄積ダメージ回復",
+    "stages": "傷を取り除く。最大体力アップとは別",
+    "cardIds": [
+      "S14",
+      "WORLD_TREE"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A065",
+    "name": "プレイヤーの体力増加・回復",
+    "stages": "通常増加／指定値まで回復／両プレイヤー",
+    "cardIds": [
+      "GRAPE",
+      "MEDITATE",
+      "HERMIT",
+      "BLOOD_JOY"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A072",
+    "name": "購入・発動コスト軽減／0化／1化",
+    "stages": "値が切り替わる→消費枠・期間の終了",
+    "cardIds": [
+      "ELF_HAVEN",
+      "FIRE_ART",
+      "FIRE_MASTER",
+      "DOMINION",
+      "QUICK_GRIMOIRE"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A075",
+    "name": "強化・常在効果の終了",
+    "stages": "ターン終了／発動元退場で数値・表示が戻る",
+    "cardIds": [
+      "S7",
+      "TGE7",
+      "GEM_RAIN"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "数値変化・制限・変換",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A105",
+    "name": "卵の待機・孵化進行",
+    "stages": "始原／ドラゴン／神獣、残りターン更新",
+    "cardIds": [
+      "TGE1",
+      "DRAGON_EGG",
+      "BEAST_EGG"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A106",
+    "name": "卵の被弾・耐久減少・破壊",
+    "stages": "殻への命中→亀裂→耐久切れなら破壊",
+    "cardIds": [
+      "TGE1",
+      "DRAGON_EGG",
+      "BEAST_EGG",
+      "EGG_HUNTER"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A107",
+    "name": "孵化器による加速／孵化マスターの延長",
+    "stages": "残りターンを減らす／増やす",
+    "cardIds": [
+      "INCUBATOR",
+      "INCUBATOR_S",
+      "EGG_MASTER"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A108",
+    "name": "始原の卵の孵化",
+    "stages": "殻の除外→選ばれた始原が登場",
+    "cardIds": [
+      "TGE1"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A109",
+    "name": "ドラゴンの卵の孵化",
+    "stages": "殻の除外→黒竜・赤竜・青竜の3分岐",
+    "cardIds": [
+      "DRAGON_EGG"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A110",
+    "name": "神獣の卵の孵化・降臨",
+    "stages": "殻の除外→神獣登場→マナ増加→対象破壊",
+    "cardIds": [
+      "BEAST_EGG",
+      "DIVINE"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A111",
+    "name": "黒竜・赤竜・青竜の召喚時効果",
+    "stages": "黒:リフト帰還＋全体弱化／赤:直接ダメージ／青:体力増加",
+    "cardIds": [
+      "D_BLACK",
+      "D_RED",
+      "D_BLUE"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A112",
+    "name": "ドラゴン合体召喚",
+    "stages": "ドラゴン＋兵士または騎士を墓地へ→上位竜騎士",
+    "cardIds": [
+      "GM6_0",
+      "DRAGON_RIDER",
+      "ANTIQUE_DK"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A123",
+    "name": "エルフキングの登場・盤面破壊",
+    "stages": "特別召喚→相手の場を一掃",
+    "cardIds": [
+      "ELDER_ELF_KING"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A124",
+    "name": "世界樹の回復循環",
+    "stages": "体力増加→カウンター獲得→味方回復と自分32まで回復",
+    "cardIds": [
+      "WORLD_TREE"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A125",
+    "name": "ハーフエルフの場展開",
+    "stages": "召喚→世界樹条件確認→慈しみ展開",
+    "cardIds": [
+      "HALF_ELF"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A130",
+    "name": "商会の闇商人獲得",
+    "stages": "20カウンター到達→消費→闇商人を手札へ",
+    "cardIds": [
+      "GUILD_CO"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A131",
+    "name": "醸造の熟成・ワイン生成",
+    "stages": "ぶどう消費→熟成カウンター→期間終了→ワイン獲得",
+    "cardIds": [
+      "BREWING"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A132",
+    "name": "農場管理者のかかし召喚",
+    "stages": "醸造の存在→ターン終了にかかし2体",
+    "cardIds": [
+      "FARM_KEEPER"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A133",
+    "name": "古代文明の発掘",
+    "stages": "残り期間→終了→卵選択→手札追加→元魔法破壊",
+    "cardIds": [
+      "ANCIENT_CIV"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A137",
+    "name": "捕食による成長",
+    "stages": "相手を破壊→コストに応じた能力吸収",
+    "cardIds": [
+      "TPO2"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A138",
+    "name": "始原の精霊と術式",
+    "stages": "精霊召喚→術式展開→以後の始原召喚に連動した破壊・烙印",
+    "cardIds": [
+      "TGE5",
+      "ORIGIN_RITE"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "シリーズ固有の効果・大型召喚",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A146",
+    "name": "カード購入",
+    "stages": "市場のカード→取得先、マナ消費、在庫変化",
+    "cardIds": [],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "手札・市場・ダイス・継続効果",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A147",
+    "name": "提示マーケット更新",
+    "stages": "古い提示退場→新しい提示出現",
+    "cardIds": [
+      "M9"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "手札・市場・ダイス・継続効果",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A148",
+    "name": "固定マーケット全更新・売切補充",
+    "stages": "7枚交換／売切スロット補充",
+    "cardIds": [
+      "MARKET_CRISIS"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "手札・市場・ダイス・継続効果",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A149",
+    "name": "市場制限",
+    "stages": "次ターン提示枚数減少・更新封鎖→解除",
+    "cardIds": [
+      "S5"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "手札・市場・ダイス・継続効果",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A150",
+    "name": "特殊購入・交換画面",
+    "stages": "記録者／闇商人／始原の巨人／ナイトマーケット",
+    "cardIds": [
+      "NMD4",
+      "DARK_MERCHANT",
+      "TGE6",
+      "GUILD_HQ"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "手札・市場・ダイス・継続効果",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A151",
+    "name": "無料購入権／割引の消費",
+    "stages": "権利付与→利用→残数・条件表示",
+    "cardIds": [
+      "M9",
+      "ELF_HAVEN",
+      "KIN_CALL",
+      "TRIBE_PACT"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "手札・市場・ダイス・継続効果",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A165",
+    "name": "捕食2種シナジー",
+    "stages": "種族カード同士の接続→相手に18ダメージ",
+    "cardIds": [
+      "TPO1",
+      "TPO2",
+      "TPO3",
+      "TPO5"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "種族シナジー・特殊勝敗",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A166",
+    "name": "貴族2種シナジー",
+    "stages": "種族カード同士の接続→相手最大マナ-2",
+    "cardIds": [
+      "TAR1",
+      "TAR2",
+      "TAR3",
+      "TAR5"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "種族シナジー・特殊勝敗",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A170",
+    "name": "始原2種シナジー",
+    "stages": "段階成立→体力+15",
+    "cardIds": [
+      "TGE1",
+      "TGE2"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "種族シナジー・特殊勝敗",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A171",
+    "name": "始原3種シナジー",
+    "stages": "段階成立→体力+40",
+    "cardIds": [
+      "TGE1",
+      "TGE2",
+      "TGE3"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "種族シナジー・特殊勝敗",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A172",
+    "name": "始原4種シナジー",
+    "stages": "段階成立→体力+70",
+    "cardIds": [
+      "TGE1",
+      "TGE2",
+      "TGE3",
+      "TGE4"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "種族シナジー・特殊勝敗",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A173",
+    "name": "始原6種の特殊勝利",
+    "stages": "6種接続→完成→勝利演出へ",
+    "cardIds": [
+      "TGE1",
+      "TGE2",
+      "TGE3",
+      "TGE4",
+      "TGE5",
+      "TGE6"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "種族シナジー・特殊勝敗",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "A181",
+    "name": "城下町の3条件成立",
+    "stages": "兵士・カジノ・ワインを個別に埋める",
+    "cardIds": [
+      "Q_TOWN"
+    ],
+    "owner": "B",
+    "scope": "two-variant-preview",
+    "category": "クエスト共通",
+    "r2Status": "redo_backlog",
+    "kind": "cue"
+  },
+  {
+    "id": "N001",
+    "name": "雫の獲得・保持・ターン開始回復",
+    "owner": "B",
+    "kind": "state"
+  },
+  {
+    "id": "N002",
+    "name": "シールドの獲得・吸収・残量・期限消失",
+    "owner": "B",
+    "kind": "state"
+  }
+]
