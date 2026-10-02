@@ -24,19 +24,19 @@ const POLL_CHALLENGE_MS = 2000;
 
 export function mountFriends(app: App, host?: HTMLElement, compact = false): Screen {
   const wrap = document.createElement("div");
-  wrap.className = "screen tut-screen";
+  wrap.className = "screen tut-screen friends-screen";
   wrap.innerHTML = `
     <div class="topright-lang"></div>
     <div class="tut">
       <div class="tut-head">
         <button class="btn btn-ghost" id="back">← ${t("common.back")}</button>
-        <h2>${t("friends.title")}</h2>
+        <h2 class="menu-sr-title">${t("friends.title")}</h2>
       </div>
       <div class="tut-body">
-        <section class="tut-sec">
+        <section class="tut-sec fr-add-section">
           <h3><span class="tut-ico">${homeIcon("friends")}</span>${t("friends.add")}</h3>
           <div class="fr-add">
-            <input class="input" id="frq" placeholder="${t("friends.add.ph")}" maxlength="80">
+            <input class="input" id="frq" aria-label="${t("friends.add.ph")}" placeholder="${t("friends.add.ph")}" maxlength="80">
             <button class="btn btn-gold" id="frAdd">${t("friends.add")}</button>
           </div>
           <div class="fr-add-msg" id="frMsg"></div>
@@ -88,13 +88,13 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
   const render = (d: FriendsData): void => {
     lists.innerHTML = `
       ${d.incoming.length ? `
-      <section class="tut-sec">
+      <section class="tut-sec fr-incoming">
         <h3><span class="tut-ico">${homeIcon("mail")}</span>${t("friends.incoming")}</h3>
         ${d.incoming.map((f) => row(f, `
           <button class="btn btn-mini btn-gold" data-acc="${f.id}">${t("friends.accept")}</button>
           <button class="btn btn-mini btn-ghost" data-dec="${f.id}">${t("friends.decline")}</button>`)).join("")}
       </section>` : ""}
-      <section class="tut-sec">
+      <section class="tut-sec fr-roster">
         <h3><span class="tut-ico">${homeIcon("friends")}</span>${t("friends.title")} (${d.friends.length})</h3>
         ${d.friends.length === 0 ? `<p>${t("friends.empty")}</p>`
           : d.friends.map((f) => row(f, `
@@ -103,7 +103,7 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
             <button class="btn btn-mini btn-ghost fr-x" data-rm="${f.id}" aria-label="${esc(t("friends.remove"))}">${homeIcon("close")}</button>`)).join("")}
       </section>
       ${d.outgoing.length ? `
-      <section class="tut-sec">
+      <section class="tut-sec fr-outgoing">
         <h3><span class="tut-ico">${homeIcon("mail")}</span>${t("friends.outgoing")}</h3>
         ${d.outgoing.map((f) => row(f, "")).join("")}
       </section>` : ""}

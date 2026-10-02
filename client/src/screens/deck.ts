@@ -25,16 +25,13 @@ export function mountDeck(app: App): Screen {
   wrap.innerHTML = `
     <div class="screen-brand"><div class="mark"></div><h1>LORE</h1></div>
     <div class="panel deck-panel">
-      <div class="deck-head">
+      <h2 class="menu-sr-title">${t("deck.title")}</h2>
+      <nav class="deck-tabs" id="deckTabs" aria-label="${t('deck.title')}"></nav>
+      <div class="deck-controls">
         <button class="btn btn-ghost" id="back">← ${t("common.back")}</button>
-        <h2>${t("deck.title")}</h2>
+        <div class="deck-local-tabs" role="tablist"><button id="editTab" role="tab" aria-selected="true">${t("deck.current")}</button><button id="watchTab" role="tab" aria-selected="false">${t("deck.watch.title")}</button><button id="appearanceTab" role="tab" aria-selected="false">${loungeText("外観","Appearance","외형")}</button></div>
         <button class="deck-confirm" id="save"><span aria-hidden="true">✓</span> ${loungeText('デッキを確定','Confirm deck','덱 확정')}</button>
       </div>
-      <div class="deck-controls">
-      <div class="deck-tabs" id="deckTabs"></div>
-      <div class="deck-local-tabs" role="tablist"><button id="editTab" role="tab" aria-selected="true">${t("deck.current")}</button><button id="watchTab" role="tab" aria-selected="false">${t("deck.watch.title")}</button><button id="appearanceTab" role="tab" aria-selected="false">${loungeText("外観","Appearance","외형")}</button></div>
-      </div>
-      <div class="deck-note">${loungeText('アチューン1枚固定 ＋ 自由枠8枚','1 fixed Attune + 8 cards of your choice','어튠 1장 고정 + 자유 8장')}</div>
       <section id="deckEditSection">
       <div class="deck-current-column"><div class="deck-cur-head"><span>${t("deck.current")} <b id="deckCount"></b></span><button class="btn btn-ghost deck-use" id="useBtn"></button></div>
       <div class="deck-cur" id="deckCur"></div><div class="deck-hand-help"><span id="deckHint" role="status"></span><button id="deckUndo">${loungeText('元に戻す','Undo','되돌리기')}</button></div>

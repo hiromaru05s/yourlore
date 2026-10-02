@@ -40,7 +40,7 @@ export function mountCards(app: App): Screen {
     <div class="cards">
       <div class="cards-head">
         <button class="btn btn-ghost" id="back">← ${t("cards.back")}</button>
-        <h2>${homeIcon("cards")}${t("cards.title")} <span class="cards-count" id="count"></span></h2>
+        <h2 class="menu-sr-title">${t("cards.title")}</h2>
         <div class="cards-head-r">
           <label class="lounge-search">${homeIcon("search")}<input aria-label="${t("cards.search")}" class="cards-search" id="search" type="text" placeholder="${t("cards.search")}" /></label>
           <div class="cards-lang"></div>
@@ -57,7 +57,7 @@ export function mountCards(app: App): Screen {
           </div>
         </details>
       </div>
-      <div class="cards-grid" id="grid"></div><div class="collection-pager"><span class="cards-hint">${t("cards.hint")}</span><button id="prevPage" aria-label="${loungeText("前のページ","Previous page","이전 페이지")}">‹</button><span id="pageLabel" aria-live="polite"></span><button id="nextPage" aria-label="${loungeText("次のページ","Next page","다음 페이지")}">›</button></div>
+      <div class="cards-grid" id="grid"></div><div class="collection-pager"><span class="cards-count" id="count"></span><span class="cards-hint">${t("cards.hint")}</span><button id="prevPage" aria-label="${loungeText("前のページ","Previous page","이전 페이지")}">‹</button><span id="pageLabel" aria-live="polite"></span><button id="nextPage" aria-label="${loungeText("次のページ","Next page","다음 페이지")}">›</button></div>
     </div>`;
   app.root.appendChild(wrap);
   wrap.querySelector(".cards-lang")!.appendChild(langSelectEl());
