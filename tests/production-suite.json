@@ -50,7 +50,8 @@
     "tests/dew-shield-server.mjs",
     "tests/deck-hand-editor.mjs",
     "tests/turn-banner.mjs",
-    "tests/opening-approved.mjs"
+    "tests/opening-approved.mjs",
+    "tests/mimic-approved.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
