@@ -9,9 +9,10 @@ export async function mountBoard(){
  const style=document.createElement('style');style.textContent='.help-callout,.battle-tools,.game-help-callout,.btn-surrender{display:none!important}';document.head.append(style);
  for(const t of THEMES)SLEEVES[t.id]={id:t.id,url:asset(t,'back.webp'),ja:t.name,en:t.en,ko:t.name,price:0};
  setLang('ja');setMyAvatar('SEEKER_BLUE');setOppAvatar('SEEKER_RED');
- const materials=createAtelierMaterials();
- if(params.get('auditQuality')==='current')Object.defineProperty(materials,'pixelRatio',{get:()=>Math.min(devicePixelRatio||1,1.5,Math.sqrt(2600000/(innerWidth*innerHeight)))});
- if(params.get('auditQuality')==='native')Object.assign(materials,{pixelRatio:Math.min(devicePixelRatio||1,2)});
+ const materials=createAtelierMaterials();let focusZoom=1;
+ Object.defineProperty(materials,'pixelRatio',{configurable:true,get:()=>focusZoom>1?Math.min((devicePixelRatio||1)*focusZoom,Math.sqrt(12000000/(innerWidth*innerHeight))):undefined});
+ if(params.get('auditQuality')==='current')Object.defineProperty(materials,'pixelRatio',{configurable:true,get:()=>Math.min(devicePixelRatio||1,1.5,Math.sqrt(2600000/(innerWidth*innerHeight)))});
+ if(params.get('auditQuality')==='native')Object.defineProperty(materials,'pixelRatio',{value:Math.min(devicePixelRatio||1,2)});
  const runtime=params.get('runtime')==='1';const unregister=runtime?()=>materials.dispose():registerCosmeticPreview(root,materials);
  class PreviewController extends BaseController{submit(){/* Sample match is read-only. */} show(g:GameState){this.state=g;this.view.render(g);}}
  const ctl=new PreviewController(root,0,{onHome(){},onRematch(){}}),stop=startBoardLayout();
@@ -41,7 +42,7 @@ export async function mountBoard(){
   finally{busy=false;delete root.dataset.replay;parent.postMessage({type:'atelier-replay',busy:false,kind},location.origin);}
  }
  root.dataset.thickness=String(CARD_THICKNESS_SCALE);
- const message=(e:MessageEvent)=>{if(e.origin!==location.origin||e.source!==parent||!['atelier-state','atelier-action'].includes(e.data?.type))return;if(e.data.type==='atelier-action'){if(ACTIONS.includes(e.data.action))void replay(e.data.action);return;}if(busy)return;const n=e.data.state;if(!n||!['default',...THEMES.map(t=>t.id)].includes(n.set)||!['self','opponent','both'].includes(n.side)||![0,1,8,12,40].includes(n.count))return;void apply({set:n.set,side:n.side,motion:!!n.motion,count:n.count,dense:!!n.dense,time:typeof n.time==='number'?n.time:undefined});};
+ const message=(e:MessageEvent)=>{if(e.origin!==location.origin||e.source!==parent||!['atelier-state','atelier-action','atelier-focus'].includes(e.data?.type))return;if(e.data.type==='atelier-focus'){focusZoom=e.data.zoom===2.6?2.6:1;window.dispatchEvent(new Event('lore:render-density'));return;}if(e.data.type==='atelier-action'){if(ACTIONS.includes(e.data.action))void replay(e.data.action);return;}if(busy)return;const n=e.data.state;if(!n||!['default',...THEMES.map(t=>t.id)].includes(n.set)||!['self','opponent','both'].includes(n.side)||![0,1,8,12,40].includes(n.count))return;void apply({set:n.set,side:n.side,motion:!!n.motion,count:n.count,dense:!!n.dense,time:typeof n.time==='number'?n.time:undefined});};
  window.addEventListener('message',message);
  Object.assign(window,{atelier:{apply,info:()=>materials.info(),state:()=>state,controller:ctl,replay,dimensions:()=>({scale:CARD_THICKNESS_SCALE,stock:STOCK_THICKNESS,draw:DRAW_THICKNESS_RATIO})}});
  parent.postMessage({type:'atelier-ready'},location.origin);

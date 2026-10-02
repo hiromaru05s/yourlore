@@ -31,7 +31,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   const pmrem=new T.PMREMGenerator(renderer),room=new RoomEnvironment(),environment=pmrem.fromScene(room,.04);room.dispose();pmrem.dispose();
   const flightPmrem=new T.PMREMGenerator(flightRenderer),flightRoom=new RoomEnvironment(),flightEnvironment=flightPmrem.fromScene(flightRoom,.04);flightRoom.dispose();flightPmrem.dispose();
   const flightScene=new T.Scene();
-  flightRenderer.setPixelRatio(cosmeticPreview?.pixelRatio??flightPixelRatio());flightRenderer.setClearColor(0,0);flightRenderer.toneMapping=T.NoToneMapping;
+  flightRenderer.setPixelRatio(Math.min(cosmeticPreview?.pixelRatio??flightPixelRatio(),2));flightRenderer.setClearColor(0,0);flightRenderer.toneMapping=T.NoToneMapping;
   const flightCanvas=flightRenderer.domElement;flightCanvas.className='board-flight-canvas';flightCanvas.setAttribute('aria-hidden','true');document.body.append(flightCanvas);
   flightScene.environment=flightEnvironment.texture;flightScene.environmentIntensity=.55;flightScene.add(new T.AmbientLight(0xffffff,1.5));
   const scene=new T.Scene();scene.environment=environment.texture;scene.environmentIntensity=.55;
@@ -93,6 +93,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
     try{flightRenderer.render(flightScene,camera);}finally{flightRenderer.setRenderTarget(null);warm.dispose();}
   });
   const observer=new MutationObserver(records=>{if(records.some(r=>!(r.target instanceof Element&&r.target.closest('.tc-num,.pt-name,.pt-vitals,.mana-readout'))&&(r.type==='childList'||r.oldValue!==(r.target as Element).getAttribute(r.attributeName!))))dirty=true;});observer.observe(root,{childList:true,subtree:true,attributes:true,attributeOldValue:true,attributeFilter:['class','data-count','data-sleeve','data-face','data-material']});
+  const onDensity=()=>{width=0;dirty=true;};window.addEventListener('lore:render-density',onDensity);
   const onLayout=()=>{dirty=true;};window.addEventListener('lore:layout',onLayout);
   const dustScene=new T.Scene(), dustCamera=new T.PerspectiveCamera(45,1,1,4000);
   const dustMap=dustTexture();
@@ -122,7 +123,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   function render(now:number):void {
     if(dead)return;frame=requestAnimationFrame(render);if(document.hidden||now-last<16)return;last=now;
     if(!root.isConnected){dispose();return;}
-    if(width!==innerWidth||height!==innerHeight){width=innerWidth;height=innerHeight;const ratio=rasterRatio();renderer.setPixelRatio(ratio);flightRenderer.setPixelRatio(cosmeticPreview?.pixelRatio??flightPixelRatio());renderer.setSize(width,height);flightRenderer.setSize(width,height);cachedBoard.samples=ratio>1.5||width*height*ratio*ratio>3000000?0:2;cachedBoard.setSize(Math.round(width*renderer.getPixelRatio()),Math.round(height*renderer.getPixelRatio()));dirty=true;}
+    if(width!==innerWidth||height!==innerHeight){width=innerWidth;height=innerHeight;const ratio=rasterRatio();renderer.setPixelRatio(ratio);flightRenderer.setPixelRatio(Math.min(cosmeticPreview?.pixelRatio??flightPixelRatio(),2));renderer.setSize(width,height);flightRenderer.setSize(width,height);cachedBoard.samples=ratio>1.5||width*height*ratio*ratio>3000000?0:2;cachedBoard.setSize(Math.round(width*renderer.getPixelRatio()),Math.round(height*renderer.getPixelRatio()));dirty=true;}
     const paintStart=performance.now();
     const widgetMotion=widgets.tick(now),boardMotion=motion.tick(now),riftMotion=widgets.tickRift(now),displayMotion=widgets.takeDisplayUpdate();
     const cosmeticMotion=cosmeticPreview?.tick(now)??false;
@@ -213,7 +214,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   }
   const lost=(event:Event)=>{event.preventDefault();dispose();};canvas.addEventListener('webglcontextlost',lost);flightCanvas.addEventListener('webglcontextlost',lost);
   function dispose(){
-    if(dead)return;dead=true;disposeOpening();root.dataset.tableState='fallback';motion.dispose();cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:summon-impact',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);flightCanvas.removeEventListener('webglcontextlost',lost);
+    if(dead)return;dead=true;disposeOpening();root.dataset.tableState='fallback';motion.dispose();cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:render-density',onDensity);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:summon-impact',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);flightCanvas.removeEventListener('webglcontextlost',lost);
     items.forEach(removeItem);cosmeticPreview?.dispose();textures.forEach(t=>t.dispose());table.dispose();furniture.dispose();widgets.dispose();disposeFormationBloom();keyLight.shadow.dispose();disposeObject(dustScene);dustMap.dispose();environment.dispose();flightEnvironment.dispose();cachedBoard.dispose();presentQuad.geometry.dispose();presentMaterial.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove();flightRenderer.dispose();flightRenderer.forceContextLoss();flightCanvas.remove();
     root.querySelectorAll<HTMLElement>('.pile').forEach(el=>{el.classList.remove('pile--3d-ready');delete el.dataset.furniture;el.querySelector('.pile-draw-anchor')?.remove();});clearBoardProjection(root);root.classList.remove('duel-webgl','market-model-ready','supply-model-ready');
   }
