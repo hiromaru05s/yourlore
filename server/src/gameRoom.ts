@@ -20,7 +20,7 @@ import { createGame, reduce, actingSide } from "../../client/src/shared/engine";
 import { redactFor } from "../../client/src/shared/protocol";
 import { BALANCE_VERSION } from "../../client/src/shared/cards";
 import { settleRanked, type RankOutcome } from "./rank";
-import { DUEL_OPENING_MS, OPENING_PREPARE_MS, OPENING_LEAD_MS } from "../../client/src/shared/opening";
+import { DUEL_OPENING_MS, OPENING_PREPARE_MS, OPENING_LEAD_MS, OPENING_VERSION } from "../../client/src/shared/opening";
 import { isClientMessage, resolveTurnTimeout } from "./gameInput";
 
 interface PlayerRef { id: string; name: string; sleeve?: string | null; furniture?:string|null; deck?: string | null; }
@@ -62,7 +62,7 @@ interface RoomData {
   /** ms epoch when the room was provisioned — recorded as matches.created_at so
       the admin dashboard can chart real game duration (ended_at − created_at). */
   startedAt: number;
-  opening?: {capable:[boolean,boolean];ready:[boolean,boolean];prepareBy:number|null;startsAt:number|null};
+  opening?: {version?:number;capable:[boolean,boolean];ready:[boolean,boolean];prepareBy:number|null;startsAt:number|null};
 }
 
 const TURN_MS_RANKED = 50000; // ranked: tighter clock
@@ -167,7 +167,7 @@ export class GameRoom {
         startReady: [false, false],
         initSent: [false, false],
         startedAt: Date.now(),
-        opening: {capable:[false,false],ready:[false,false],prepareBy:null,startsAt:null},
+        opening: {version:OPENING_VERSION,capable:[false,false],ready:[false,false],prepareBy:null,startsAt:null},
       };
       await this.persist();
       await this.state.storage.setAlarm(this.room.joinBy!);
@@ -268,7 +268,7 @@ export class GameRoom {
       return;
     }
     if (msg.type === "ready") {
-      if (room.opening && room.opening.startsAt == null) room.opening.capable[att.side] = msg.openingVersion === 1;
+      if (room.opening && room.opening.startsAt == null) room.opening.capable[att.side] = msg.openingVersion === OPENING_VERSION;
       room.readied[att.side] = true;
       if (room.readied[0] && room.readied[1]) room.joinBy = null; // both joined → no join-timeout void
       // a reconnect cancels this side's pending forfeit and un-pauses the opponent
@@ -526,8 +526,8 @@ export class GameRoom {
   private async prepareOpening(): Promise<void> {
     const room=this.room!;const opening=room.opening;
     if(!opening||opening.startsAt!=null||!room.readied.every(Boolean)||!room.previewDone)return;
-    if(!opening.capable.every(Boolean)) {
-      // Old clients do not understand the preparation handshake.
+    if(opening.version!==OPENING_VERSION||!opening.capable.every(Boolean)) {
+      // Mixed/older clients keep the legacy immediate-start path; never use a mismatched cinematic clock.
       delete room.opening;room.turnStartAt=Date.now();
     } else if(opening.prepareBy==null) opening.prepareBy=Date.now()+OPENING_PREPARE_MS;
     await this.state.storage.put("room",room);
@@ -540,7 +540,8 @@ export class GameRoom {
     const room=this.room!;const opening=room.opening;
     if(!opening||opening.startsAt!=null||!room.readied.every(Boolean)||!room.previewDone||room.game.over)return;
     opening.startsAt=Date.now()+OPENING_LEAD_MS;opening.prepareBy=null;
-    room.turnStartAt=opening.startsAt+DUEL_OPENING_MS;room.turnBonusMs=0;
+    // Pending pre-release rooms may still have v1 clients and an already-armed alarm.
+    room.turnStartAt=opening.startsAt+(opening.version===OPENING_VERSION?DUEL_OPENING_MS:10450);room.turnBonusMs=0;
     await this.state.storage.put("room",room);
     await this.syncAlarm();
     for(const side of [0,1] as Side[])await this.sendInit(side);

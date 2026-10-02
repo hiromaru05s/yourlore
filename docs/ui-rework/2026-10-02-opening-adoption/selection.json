@@ -1,0 +1,38 @@
+{
+  "status": "user-approved",
+  "approvedOn": "2026-10-02",
+  "userDecision": "０１でOK。FIX。",
+  "opening": {
+    "source": "docs/vfx-prototypes/2026-10-02-opening-light-five",
+    "variant": 3,
+    "name": "光膜",
+    "key": "CAUSTIC"
+  },
+  "result": {
+    "source": "docs/vfx-prototypes/2026-10-02-opening-order-six",
+    "variant": 1,
+    "rendererIndex": 0,
+    "name": "余白の宣告",
+    "key": "DECLARATION"
+  },
+  "flow": [
+    "キャラクター対面・衝突",
+    "VSの光膜からコイントス",
+    "先攻・後攻の決定表示",
+    "盤面へ復帰"
+  ],
+  "contract": {
+    "battleStartBanner": false,
+    "battleStartSound": false,
+    "turnStartNotification": "separate animation; not invoked by this preview",
+    "durationSeconds": 5.58
+  },
+  "scope": "Visual selection fixed. Local prototype; runtime integration and deployment not performed.",
+  "sha256": {
+    "renderer.ts": "396a3e92c25e8ab4f78c492bd89488326e81ea5e69d06f5f31ee184ad0e48cbd",
+    "result.ts": "a01d21cb7483ea71fca0baad51125aada57ddf4fa4380fd553a7e67d6dc43c3f",
+    "coin.ts": "a561db1140c24902ee4b12389f1ae2efef356c996234e48d37fec14f16f81d35",
+    "light.ts": "ad622c03197d1d90c78b20b7140dd1bb20a96ed830b93cba53e2e22dce784cae",
+    "preview.ts": "13ea425eca06b6b5786171b9ab9e05ff453ac438a8fee6e324b58f8d045e9517"
+  }
+}

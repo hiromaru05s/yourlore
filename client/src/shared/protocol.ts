@@ -21,7 +21,7 @@ export type QueueServerMsg =
 // ---- in-game (GameRoom Durable Object) ----
 export type GameClientMsg =
   | { type: "action"; action: Action }
-  | { type: "ready"; openingVersion?:1 }
+  | { type: "ready"; openingVersion?:1|2 }
   | { type: "openingReady" }
   | { type: "startReady" } // ranked market-preview: this player wants to start early
   | { type: "ping" };

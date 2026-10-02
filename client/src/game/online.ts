@@ -1,3 +1,4 @@
+import {OPENING_VERSION} from '../shared/opening';
 import { api } from "../net/api";
 // ============================================================
 // LORE — OnlineController. Authoritative server: we send Actions
@@ -47,7 +48,7 @@ export class OnlineController extends BaseController {
 
   private connect(): void {
     this.sock = new Sock<GameServerMsg, GameClientMsg>(`/ws/room/${this.roomId}`, {
-      onOpen: () => { this.openedAt = Date.now(); this.lastMsgAt = Date.now(); this.sock.send({ type: "ready", openingVersion:1 }); this.startHb(); },
+      onOpen: () => { this.openedAt = Date.now(); this.lastMsgAt = Date.now(); this.sock.send({ type: "ready", openingVersion:OPENING_VERSION }); this.startHb(); },
       onMessage: (msg) => { this.lastMsgAt = Date.now(); this.onServer(msg); },
       onClose: () => this.onSockClose(),
     });
