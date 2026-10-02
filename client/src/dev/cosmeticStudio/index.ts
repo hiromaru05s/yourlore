@@ -1,5 +1,7 @@
 import {THEMES,asset} from './themes';
-if(new URLSearchParams(location.search).has('inspect')){
+if(new URLSearchParams(location.search).has('audit')){
+ void import('./audit').then(m=>m.mountAudit());
+}else if(new URLSearchParams(location.search).has('inspect')){
  void import('./inspection').then(m=>m.mountInspection());
 }else if(new URLSearchParams(location.search).has('board')){
  void import('./board').then(m=>m.mountBoard());

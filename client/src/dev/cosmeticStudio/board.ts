@@ -9,7 +9,9 @@ export async function mountBoard(){
  const style=document.createElement('style');style.textContent='.help-callout,.battle-tools,.game-help-callout,.btn-surrender{display:none!important}';document.head.append(style);
  for(const t of THEMES)SLEEVES[t.id]={id:t.id,url:asset(t,'back.webp'),ja:t.name,en:t.en,ko:t.name,price:0};
  setLang('ja');setMyAvatar('SEEKER_BLUE');setOppAvatar('SEEKER_RED');
- const materials=createAtelierMaterials(),unregister=registerCosmeticPreview(root,materials);
+ const materials=createAtelierMaterials();
+ if(params.get('auditQuality')==='native')Object.assign(materials,{pixelRatio:Math.min(devicePixelRatio||1,2)});
+ const unregister=registerCosmeticPreview(root,materials);
  class PreviewController extends BaseController{submit(){/* Sample match is read-only. */} show(g:GameState){this.state=g;this.view.render(g);}}
  const ctl=new PreviewController(root,0,{onHome(){},onRematch(){}}),stop=startBoardLayout();
  const g=createGame({mode:'bot',seed:41,starting:0,p0:{id:'atelier-self',name:'自分'},p1:{id:'atelier-opponent',name:'相手'}}).state;

@@ -16,17 +16,19 @@ import {boardLens,cardUnit,layoutRect,projectBoardDOM,clearBoardProjection,scree
 type Item={group:T.Group;key:string;element:HTMLElement;market:boolean;supply:boolean;pile?:PileModel;count?:number;entered?:number;surface?:T.Texture;disposeCosmetic?:()=>void};
 const clamp=(n:number)=>Math.min(1,Math.max(0,n));
 export function mountDuelScene(root:HTMLElement):()=>void {
+  const cosmeticPreview=getCosmeticPreview(root);
+  const rasterRatio=()=>cosmeticPreview?.pixelRatio??Math.min(devicePixelRatio||1,1.5,Math.sqrt(2600000/(innerWidth*innerHeight)));
   let renderer:T.WebGLRenderer;
   try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{root.dataset.tableState='fallback';root.dataset.widgetsReady='fallback';return ()=>{};}
   let flightRenderer:T.WebGLRenderer;
   try{flightRenderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{renderer.dispose();renderer.forceContextLoss();root.dataset.tableState='fallback';root.dataset.widgetsReady='fallback';return ()=>{};}
-  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5,Math.sqrt(2600000/(innerWidth*innerHeight))));renderer.setClearColor(0,0);renderer.autoClear=false;
+  renderer.setPixelRatio(rasterRatio());renderer.setClearColor(0,0);renderer.autoClear=false;
   renderer.toneMapping=T.AgXToneMapping;renderer.toneMappingExposure=1;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
   const canvas=renderer.domElement;canvas.className='duel-objects-3d';canvas.setAttribute('aria-hidden','true');root.append(canvas);
   const pmrem=new T.PMREMGenerator(renderer),room=new RoomEnvironment(),environment=pmrem.fromScene(room,.04);room.dispose();pmrem.dispose();
   const flightScene=new T.Scene();
-  flightRenderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5,Math.sqrt(2600000/(innerWidth*innerHeight))));flightRenderer.setClearColor(0,0);flightRenderer.toneMapping=T.NoToneMapping;
+  flightRenderer.setPixelRatio(rasterRatio());flightRenderer.setClearColor(0,0);flightRenderer.toneMapping=T.NoToneMapping;
   const flightCanvas=flightRenderer.domElement;flightCanvas.className='board-flight-canvas';flightCanvas.setAttribute('aria-hidden','true');document.body.append(flightCanvas);
   flightScene.add(new T.AmbientLight(0xffffff,1.5));
   const scene=new T.Scene();scene.environment=environment.texture;scene.environmentIntensity=.55;
@@ -35,7 +37,6 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   const fill=new T.DirectionalLight(0xc4daff,.7);fill.position.set(800,700,-800);scene.add(fill);
   // Keep color AND depth between portal-only frames: metal rails still occlude
   // the rift, while the costly board/glass/shadow pass runs only when needed.
-  const cosmeticPreview=getCosmeticPreview(root);
   const cachedBoard=new T.WebGLRenderTarget(1,1,{depthBuffer:true,samples:2,type:T.HalfFloatType});
   if(cosmeticPreview)cachedBoard.depthTexture=new T.DepthTexture(1,1,T.UnsignedIntType);
   cachedBoard.texture.colorSpace=T.LinearSRGBColorSpace;
@@ -118,7 +119,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   function render(now:number):void {
     if(dead)return;frame=requestAnimationFrame(render);if(document.hidden||now-last<16)return;last=now;
     if(!root.isConnected){dispose();return;}
-    if(width!==innerWidth||height!==innerHeight){width=innerWidth;height=innerHeight;const ratio=Math.min(devicePixelRatio||1,1.5,Math.sqrt(2600000/(width*height)));renderer.setPixelRatio(ratio);flightRenderer.setPixelRatio(ratio);renderer.setSize(width,height);flightRenderer.setSize(width,height);cachedBoard.setSize(Math.round(width*renderer.getPixelRatio()),Math.round(height*renderer.getPixelRatio()));dirty=true;}
+    if(width!==innerWidth||height!==innerHeight){width=innerWidth;height=innerHeight;const ratio=rasterRatio();renderer.setPixelRatio(ratio);flightRenderer.setPixelRatio(ratio);renderer.setSize(width,height);flightRenderer.setSize(width,height);cachedBoard.setSize(Math.round(width*renderer.getPixelRatio()),Math.round(height*renderer.getPixelRatio()));dirty=true;}
     const paintStart=performance.now();
     const widgetMotion=widgets.tick(now),boardMotion=motion.tick(now),riftMotion=widgets.tickRift(now),displayMotion=widgets.takeDisplayUpdate();
     const cosmeticMotion=cosmeticPreview?.tick(now)??false;
