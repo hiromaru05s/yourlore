@@ -86,5 +86,20 @@ and PNGs are local QA artifacts; the compact JSON reports are versioned.
 
 ## Release
 
+Staging: https://test.yourlore.xyz/
+
+- Deployed source: `49f1b8bc40c63c1546d8bbf137ed61a824987f76`.
+- Worker version: `9ebf3c29-de8c-4691-b121-6945355fe417`.
+- Guarded committed snapshot passed typecheck, 52/52 production tests and build.
+- 21 deployed HTML/JS/CSS files exactly match the verified local build (SHA-256).
+- Deployed BOT board passed desktop/mobile cached-draw budget; no page errors.
+- Deployed silver-ink source projection, normal completion and cleanup passed.
+- Authentication/API responses were fixtures; no authenticated online-match claim.
+
+The staging browser helper was updated for the adopted BOT challenge/start flow.
+Its old `--disable-quic` override stalled artwork loading in this environment;
+using Chrome's standard transport completed the same live-origin checks.
+`staging/initial-network-failure.json` preserves that unsuccessful attempt.
+
 Staging deployment and deployed-asset/BOT verification are recorded in `staging/`.
-Production is outside this release.
+Production was not deployed.
