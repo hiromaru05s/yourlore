@@ -1,0 +1,37 @@
+{
+  "selected_on": "2026-10-02",
+  "user_confirmation": "１でいい。確定。",
+  "status": "design_approved",
+  "variant": "recall",
+  "name": "還流の封印",
+  "opening": {
+    "variant": "veil",
+    "name": "紺影の魔眼",
+    "preserved_through_ms": 1500
+  },
+  "closing": {
+    "start_ms": 1500,
+    "end_ms": 2320,
+    "order": [
+      "左右の曲線と表面紋を魔眼へ回収",
+      "刻印環を回転させて収束",
+      "瞳を閉じて残光を収める"
+    ]
+  },
+  "sides": [
+    "me",
+    "opp"
+  ],
+  "unselected": [
+    "spiral"
+  ],
+  "runtime_integrated": true,
+  "source_sha256": {
+    "docs/vfx-prototypes/2026-10-02-sigil-exit-two/render.ts": "837f153499ebe41488ce7785d4f0d7db2d79a01cc4f990f0e50a7e4c1af86fb8",
+    "docs/vfx-prototypes/2026-10-02-sigil-five/render.ts": "1170adfe7d152ba648c12f12ae13e52270857c76d28ca8847804fc2cca750c76"
+  },
+  "frozen_references": {
+    "docs/vfx-prototypes/2026-10-02-sigil-exit-two/render.ts": "docs/vfx-prototypes/2026-10-02-turn-sigil-adoption/references/2026-10-02-sigil-exit-two/render.ts",
+    "docs/vfx-prototypes/2026-10-02-sigil-five/render.ts": "docs/vfx-prototypes/2026-10-02-turn-sigil-adoption/references/2026-10-02-sigil-five/render.ts"
+  }
+}

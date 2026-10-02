@@ -1,3 +1,4 @@
+import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {playMonster,setMonsterSkip,monsterRect} from './monster/runtime';
 import {pose as monsterPose} from './monster/catalog';
 import {placement as monsterPlacement} from './monster/actor';
@@ -39,7 +40,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on);
-  if(on){clearBiblionFx();cancelDuelOutcome();}
+  if(on){clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -694,16 +695,9 @@ export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; ma
 // ============================================================
 import { t as tt } from "../i18n";
 
-/** Center-screen announcement (e.g. "함정 발동!"). */
-/** Turn-start banner: a slim ribbon sweeping across mid-screen ("자신의 턴" / "상대 턴"). */
+/** Selected arcane turn announcement; keeps the controller event contract. */
 export function turnBanner(mine: boolean, turn?: number): void {
-  document.querySelectorAll(".fx-turnbanner").forEach((n) => n.remove());
-  const b = document.createElement("div");
-  b.className = "fx-turnbanner" + (mine ? " mine" : " opp");
-  b.setAttribute('role', 'status'); b.setAttribute('aria-live', 'polite');
-  b.innerHTML = `<span>${mine ? t("fx.yourturn") : t("fx.oppturn")}</span>${turn == null ? "" : `<small>TURN ${turn}</small>`}`;
-  document.body.appendChild(b);
-  setTimeout(() => { b.classList.add("out"); setTimeout(() => b.remove(), 320); }, mine ? 1900 : 1500);
+  if (!fxSkip) mountTurnBanner(mine, turn);
 }
 
 /** One-shot pill above a field monster ("💢 기합 발동!") — state changes the board can't show. */
