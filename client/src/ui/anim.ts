@@ -1,3 +1,5 @@
+import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
+import {isMimic,focusScale,type MimicId} from './mimic/selection';
 import {playMonster,setMonsterSkip,monsterRect} from './monster/runtime';
 import {pose as monsterPose} from './monster/catalog';
 import {placement as monsterPlacement} from './monster/actor';
@@ -39,7 +41,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on);
-  if(on){clearBiblionFx();cancelDuelOutcome();}
+  if(on){clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -122,7 +124,7 @@ function backEl(side: ViewSide = "me"): HTMLElement {
 
 /** The card takes focus across the screen, then returns to its destination.
  * All waits use the existing fast-forward mechanism; the overlay never takes input. */
-async function focusCard(node: HTMLElement, side: ViewSide): Promise<void> {
+async function focusCard(node: HTMLElement, side: ViewSide, mimicId?:MimicId): Promise<void> {
   if (fxSkip) return;
   const veil = document.createElement("div"); veil.className = "cast-veil";
   document.body.appendChild(veil);
@@ -130,10 +132,10 @@ async function focusCard(node: HTMLElement, side: ViewSide): Promise<void> {
   const w = node.offsetWidth || 100;
   const h = node.offsetHeight || 156;
   const quest=node.dataset.cardType==='quest';
-  const scale = Math.min(innerHeight * (quest?.44:.62) / h, innerWidth * .58 / w, quest?240/w:3.4);
+  const scale = mimicId ? 180*focusScale(mimicId)/w : Math.min(innerHeight * (quest?.44:.62) / h, innerWidth * .58 / w, quest?240/w:3.4);
   // Rasterize at the reveal's final CSS size before animating. Upscaling a
   // hand-sized compositing layer makes the entire frame and its text blurry.
-  const revealW=w*scale,revealH=h*scale;
+  const revealW=w*scale,revealH=mimicId?280*focusScale(mimicId):h*scale;
   node.style.width=`${revealW}px`;node.style.height=`${revealH}px`;
   node.style.setProperty('--cw',`${revealW}px`);node.style.setProperty('--ch',`${revealH}px`);
   node.querySelectorAll<HTMLElement>('[style]').forEach(el=>{if(el.style.fontSize.endsWith('px'))el.style.fontSize=`${parseFloat(el.style.fontSize)*scale}px`;});
@@ -145,7 +147,7 @@ async function focusCard(node: HTMLElement, side: ViewSide): Promise<void> {
     await raf();
     node.style.transition = reduced ? "none" : `left .42s cubic-bezier(.16,1,.3,1), top .42s cubic-bezier(.16,1,.3,1), transform .5s cubic-bezier(.16,1,.3,1)`;
     node.style.left = `${(innerWidth - w * scale) / 2}px`;
-    node.style.top = `${(innerHeight - h * scale) / 2}px`;
+    node.style.top = `${(innerHeight - revealH) / 2 + (mimicId?(mimicId==='MIMIC_KING'||mimicId==='MIMIC_KING2'?25:-10):0)}px`;
     node.style.transform = "perspective(1400px) rotateX(0deg) rotateY(0deg) scale(1)";
     await wait(reduced ? 120 : side === "opp" ? 640 : 480);
   } finally { veil.remove(); node.classList.remove("cast-reveal"); }
@@ -258,12 +260,25 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   } finally { if(!held)node.remove(); }
   return null;
 }
+/** Both hand plays and engine-generated summon events share this selected reveal. */
+async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise<void>{
+ const id=card.id;
+ // Fetch the optional renderer while the unchanged hand reveal is moving.
+ const module=isMimic(id)&&!fxSkip?import('./mimic/runtime').catch(()=>null):null;
+ await focusCard(node,side,isMimic(id)?id:undefined);
+ if(!module||!isMimic(id)||fxSkip||document.hidden)return;
+ await boardMotionScope(async signal=>{
+  const renderer=await module;
+  if(!renderer||signal.aborted)return false;
+  return renderer.playMimic(node,cardEl(card,{size:'hand',fullArt:true}),id,signal);
+ },16000);
+}
 export async function summonFromHand(card: CardInst, uid: string, side: ViewSide): Promise<void> {
   const from = fromRect(side, takeOrigin(side)); const target = byUid(uid); const to = rectOf(target);
   if (!from || !to || !target) { summonIn(uid); return; }
-  const ghost = floatAt(cardEl(card, {size:"hand"}), from); target.style.visibility = "hidden";
+  const ghost = floatAt(cardEl(card, {size:"hand",fullArt:isMimic(card.id)}), from); target.style.visibility = "hidden";
   let face:HTMLElement|undefined;
-  try { await focusCard(ghost, side); face=await flyIntoSlot(ghost,target,target.cloneNode(true) as HTMLElement,true,card.id==='MIMIC'?'mimic':'summon'); }
+  try { await focusSummon(ghost, card, side); face=await flyIntoSlot(ghost,target,target.cloneNode(true) as HTMLElement,true,card.id==='MIMIC'?'mimic':'summon'); }
   finally { ghost.remove(); face?.remove(); target.style.visibility = ""; }
 }
 /** Public hand-to-shelf movement, including the end-turn overflow picker. */
@@ -694,16 +709,9 @@ export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; ma
 // ============================================================
 import { t as tt } from "../i18n";
 
-/** Center-screen announcement (e.g. "함정 발동!"). */
-/** Turn-start banner: a slim ribbon sweeping across mid-screen ("자신의 턴" / "상대 턴"). */
+/** Selected arcane turn announcement; keeps the controller event contract. */
 export function turnBanner(mine: boolean, turn?: number): void {
-  document.querySelectorAll(".fx-turnbanner").forEach((n) => n.remove());
-  const b = document.createElement("div");
-  b.className = "fx-turnbanner" + (mine ? " mine" : " opp");
-  b.setAttribute('role', 'status'); b.setAttribute('aria-live', 'polite');
-  b.innerHTML = `<span>${mine ? t("fx.yourturn") : t("fx.oppturn")}</span>${turn == null ? "" : `<small>TURN ${turn}</small>`}`;
-  document.body.appendChild(b);
-  setTimeout(() => { b.classList.add("out"); setTimeout(() => b.remove(), 320); }, mine ? 1900 : 1500);
+  if (!fxSkip) mountTurnBanner(mine, turn);
 }
 
 /** One-shot pill above a field monster ("💢 기합 발동!") — state changes the board can't show. */
@@ -752,7 +760,7 @@ export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: nu
   const node = floatAt(cardEl(card, { size: "hand", fullArt:true }), from);
   node.style.zIndex="135";
   try {
-    await focusCard(node, side);
+    await focusSummon(node, card, side);
     const face=await flyIntoSlot(node,target,cardEl(card,{field:true}),true,card.id==='MIMIC'?'mimic':'summon');
     // Hand the exact landing face to the lane before another summon opens space.
     face.removeAttribute('style');face.classList.remove('fx-field-ghost','fx-card-flight');

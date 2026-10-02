@@ -1,0 +1,11 @@
+/** Hand-authored registration paths for ASSASSIN4.webp (832 × 759).
+ * These trace cloth, steel and foreground depth in the actual painting.
+ * No edge detection, full-card deformation or generic rune geometry. */
+export const paths={
+ cloth:'M134 45 C223 60 282 65 336 106 L388 143 L464 162 C477 176 470 201 488 219 L548 231 L584 218 L573 250 L531 266 L520 302 L557 331 L591 319 L600 344 L554 365 L525 353 L522 331 L494 336 L474 293 L447 258 L427 221 L387 192 L364 150 L309 129 L260 115 L240 136 L209 116 L172 135 L182 105 L139 108 L150 86 Z M324 275 L369 301 L406 325 L434 347 L466 367 L513 383 L539 414 L575 444 L558 473 L521 436 L491 413 L459 414 L423 389 L391 368 L360 344 L317 317 L272 291 L249 296 L277 272 Z M124 181 L171 171 L219 167 L256 180 L241 199 L207 207 L170 229 L129 237 L85 262 L98 235 L129 207 Z',
+ steel:'M108 220 L126 233 L120 239 L55 286 L16 312 L38 278 L80 240 Z M600 500 L609 509 L634 548 L670 599 L655 580 L617 537 L594 509 Z',
+ figure:'M262 80 C304 69 370 91 408 110 L458 120 L493 119 L535 102 L567 106 L588 138 L594 176 L578 211 L557 223 L582 259 L603 287 L615 327 L640 359 L634 416 L615 438 L636 467 L648 495 L615 502 L582 472 L565 423 L544 406 L525 423 L538 472 L556 524 L528 546 L487 530 L454 514 L430 525 L403 548 L372 585 L330 640 L333 671 L313 703 L253 714 L197 706 L193 685 L223 662 L256 648 L267 610 L288 560 L301 511 L321 466 L352 430 L369 399 L326 379 L283 349 L246 313 L205 293 L160 271 L127 243 L135 209 L175 181 L208 144 Z',
+ front:'M211 757 L286 589 L330 483 L396 444 L451 432 L520 474 L562 568 L596 710 L583 759 Z M544 126 L580 145 L588 182 L570 209 L537 232 L500 216 L487 184 L509 146 Z',
+};
+export function maskTexture(){const c=document.createElement('canvas');c.width=832;c.height=759;const x=c.getContext('2d')!;x.fillStyle='#000';x.fillRect(0,0,832,759);x.globalCompositeOperation='lighter';for(const[k,color]of [['cloth','#ff0000'],['steel','#00ff00'],['figure','#0000ff']]as const){x.fillStyle=color;x.fill(new Path2D(paths[k]));}return c;}
+export function svgMasks(){return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 832 759"><path fill="#b1343d" d="${paths.cloth}"/><path fill="#bcdfe7" d="${paths.steel}"/><path fill="none" stroke="#698cc0" stroke-width="3" d="${paths.figure}"/></svg>`;}

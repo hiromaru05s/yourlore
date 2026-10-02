@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 const dir=await mkdtemp(path.join(tmpdir(),'lore-vfx-'));
 try{
- await build({stdin:{contents:"export * from './client/src/shared/engine';export {DB} from './client/src/shared/cards';export {createAttackRiseTracker} from './client/src/ui/statRiseChanges';export {drawBiblionEffect,EFFECT_DURATION} from './client/src/ui/biblionFx';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'test.mjs')});
+ await build({stdin:{contents:"export * from './client/src/shared/engine';export {DB} from './client/src/shared/cards';export {createAttackRiseTracker} from './client/src/ui/statRiseChanges';export {drawBiblionEffect,EFFECT_DURATION} from './client/src/ui/biblionFx';",resolveDir:process.cwd()},bundle:true,define:{'import.meta.env.DEV':'false'},platform:'node',format:'esm',outfile:path.join(dir,'test.mjs')});
  const {createGame,reduce,DB,createAttackRiseTracker,drawBiblionEffect,EFFECT_DURATION}=await import(path.join(dir,'test.mjs'));
  const fresh=()=>{const g=createGame({mode:'online',seed:42,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.turn=2;g.cur=0;g.pending=null;for(const p of g.players)Object.assign(p,{field:[],enchants:[],quests:[],traps:[],hand:[],deck:[],discard:[],removed:[],hp:30,maxHp:40,mana:10,maxMana:10});return g;};
  const ench=(kind,uid)=>({card:{...Object.values(DB).find(c=>c.ench===kind),uid},turns:4,bornTurn:0});

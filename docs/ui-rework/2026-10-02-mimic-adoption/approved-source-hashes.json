@@ -1,0 +1,18 @@
+{
+  "client/src/dev/mimic-four/rig.ts": "4067648b5337ffc1274a74308e9d8836b61f9790b67788079fb03e785882c71c",
+  "client/src/dev/mimic-cavity-three/rig.ts": "936235a383563015bed2da7c28dd5604a1329de6d24080c46898a1079db112dc",
+  "client/src/dev/master-mimic/rig.ts": "b00315586741b506a0dd3090e52a789f447bbbe561c57c4bf1a1a905e8713652",
+  "client/src/dev/master-mimic/tongues.ts": "f913c9a3bde02c729f960b9fc84214e568f13a8e5429c9b72d8b97eb2deb79cd",
+  "client/src/dev/mimic-family/motion.ts": "b94086039d8a9d7b4d6f3015ad17e48e03e052371e15ff1d426ba95129750ac9",
+  "client/src/dev/mimic-family/rig.ts": "de76b7f0ff9eba8e7469040e9f807016d4ad2bf9ba3aca16040a418d6134f2bf",
+  "client/src/dev/mimic-family/matter.ts": "b62637375c080eb2f1b7b360aeee36af25d40baa8368f0e45a48b5d28db224e3",
+  "client/src/dev/mimic-family/ornaments.ts": "ed1bec1be265fcd96c251c241c129baad14effe7153a16a82bf9913e17e8d348",
+  "client/src/dev/mimic-family/royal-motion.ts": "d1add0db7fe9c3fcde6eb0283523d085b6cef2b5d87bbd2a98bf7563e02666f6",
+  "client/src/dev/mimic-family/royal-rig.ts": "7fe874ea5dcc8eea5feb8a1f436f54850bba4fa2b122e3305e26b216840e5353",
+  "client/src/dev/mimic-family/royal-matter.ts": "91e06f457a0ce3c996b0f0f7b11483aed372ede56cac7a53655035255f8daa64",
+  "client/src/dev/mimic-family/royal-ornaments.ts": "3c3facdaa9b1857bc3d276679dfcdd492b21e2ab04bec7161a9a9725f276c9ee",
+  "client/public/art/vfx/mimic-cavity-r3/02-moist-cheeks.png": "22fa617e4bf552f0e4b8bf0677c3130aed83e27622c83a473bd1ce8205e494d5",
+  "client/public/art/vfx/mimic-mouth-r2/01-reference-ivory.png": "071ded450edd9552b95616de8a689fa32664d1d0f8063f010c693a99a01f711e",
+  "client/public/art/vfx/mimic-mouth-r2/04-predator-fangs.png": "6e93f0cc321ce45b3b0ca66311a7c348714dea530f9e1c0b99122f5afce88572",
+  "client/public/art/vfx/mimic-family/engraved-brass.png": "ea8538e27880e394d3e8fad0db75a691f5d127bdabfd9aa31dfeb301f91336b7"
+}

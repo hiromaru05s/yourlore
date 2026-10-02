@@ -25,20 +25,17 @@ export function mountDeck(app: App): Screen {
   wrap.innerHTML = `
     <div class="screen-brand"><div class="mark"></div><h1>LORE</h1></div>
     <div class="panel deck-panel">
-      <div class="deck-head">
-        <button class="btn btn-ghost" id="back">← ${t("common.back")}</button>
-        <h2>${t("deck.title")}</h2>
-        <button class="btn btn-gold" id="save">${t("deck.save")}</button>
-      </div>
+      <h2 class="menu-sr-title">${t("deck.title")}</h2>
+      <nav class="deck-tabs" id="deckTabs" aria-label="${t('deck.title')}"></nav>
       <div class="deck-controls">
-      <div class="deck-tabs" id="deckTabs"></div>
-      <div class="deck-local-tabs" role="tablist"><button id="editTab" role="tab" aria-selected="true">${t("deck.current")}</button><button id="watchTab" role="tab" aria-selected="false">${t("deck.watch.title")}</button><button id="appearanceTab" role="tab" aria-selected="false">${loungeText("外観","Appearance","외형")}</button></div>
+        <button class="btn btn-ghost" id="back">← ${t("common.back")}</button>
+        <div class="deck-local-tabs" role="tablist"><button id="editTab" role="tab" aria-selected="true">${t("deck.current")}</button><button id="watchTab" role="tab" aria-selected="false">${t("deck.watch.title")}</button><button id="appearanceTab" role="tab" aria-selected="false">${loungeText("外観","Appearance","외형")}</button></div>
+        <button class="deck-confirm" id="save"><span aria-hidden="true">✓</span> ${loungeText('デッキを確定','Confirm deck','덱 확정')}</button>
       </div>
-      <div class="deck-note">${t("deck.note")}</div>
       <section id="deckEditSection">
       <div class="deck-current-column"><div class="deck-cur-head"><span>${t("deck.current")} <b id="deckCount"></b></span><button class="btn btn-ghost deck-use" id="useBtn"></button></div>
-      <div class="deck-cur" id="deckCur"></div>
-      </div><div class="deck-candidate-column"><div class="deck-pool-head">${loungeText("追加するカードを選択（＋）","Choose cards to add (+)","추가할 카드 선택 (+)")}</div>
+      <div class="deck-cur" id="deckCur"></div><div class="deck-hand-help"><span id="deckHint" role="status"></span><button id="deckUndo">${loungeText('元に戻す','Undo','되돌리기')}</button></div>
+      </div><div class="deck-candidate-column"><div class="deck-pool-head"><div class="deck-pool-types" id="poolTypes"></div><label class="deck-pool-search">${homeIcon('search')}<input id="poolSearch" aria-label="${t('cards.search')}" placeholder="${t('cards.search')}"></label></div>
       <div class="deck-pool" id="deckPool"></div></div>
       </section><section id="deckWatchSection" hidden><div class="deck-pool-head deck-watch-head">${homeIcon("bell")} ${t("deck.watch.title")} <b id="watchCount"></b></div>
       <div class="deck-note">${t("deck.watch.desc")}</div>
@@ -58,6 +55,10 @@ export function mountDeck(app: App): Screen {
   let saved = JSON.stringify(store);
   let saving = false;
   let dead = false;
+  let pending: string | null = null;
+  let undo: string[] | null = null;
+  let poolType: 'all' | 'mon' | 'spell' = 'all';
+  let poolQuery = '';
 
   const q = (id: string): HTMLElement => wrap.querySelector("#" + id) as HTMLElement;
   const tabsEl = q("deckTabs"), curEl = q("deckCur"), poolEl = q("deckPool"), watchEl = q("watchPool");
@@ -66,6 +67,7 @@ export function mountDeck(app: App): Screen {
   const searchEl = q("watchSearch") as HTMLInputElement;
 
   const setTab = (next:typeof activeTab):void => {
+    pending = null;
     activeTab=next;watching=next==='watch';
     for(const key of ['edit','watch','appearance'] as const){
       q('deck'+key[0].toUpperCase()+key.slice(1)+'Section').hidden=key!==next;
@@ -91,7 +93,7 @@ export function mountDeck(app: App): Screen {
       b.className = "deck-tab" + (i === cur ? " is-on" : "") + (i === store.sel ? " is-active" : "");
       b.innerHTML = `<span class="deck-tab-name">${esc(store.list[i].name || t("deck.slot").replace("{n}", String(i + 1)))}</span>${i === store.sel ? ` <span class="deck-star">${homeIcon("check")}</span>` : ""}`;
       b.title = store.list[i].name || t("deck.slot").replace("{n}", String(i + 1));
-      b.onclick = () => { cur = i; watchQ = ""; searchEl.value = ""; render(); };
+      b.onclick = () => { cur = i; pending = null; undo = null; watchQ = ""; searchEl.value = ""; render(); };
       tabsEl.appendChild(b);
     }
     const rename=document.createElement('button');rename.className='deck-rename';rename.id='deckRename';rename.innerHTML=homeIcon('edit');rename.title=loungeText('デッキ名を変更','Rename deck','덱 이름 변경');rename.setAttribute('aria-label',rename.title);rename.disabled=saving;
@@ -106,54 +108,65 @@ export function mountDeck(app: App): Screen {
     useBtn.disabled = saving || cur === store.sel || store.list.some(d => d.cards.length !== DECK_SIZE);
 
     countEl.textContent = `${deck().length + 1} / ${DECK_SIZE + 1}`;
+    q('deckHint').textContent = pending
+      ? loungeText(`${cardName(inst(pending,''))}と入れ替えるカードを選択`, `Choose a card to replace with ${cardName(inst(pending,''))}`, `${cardName(inst(pending,''))}(으)로 교체할 카드를 선택`)
+      : loungeText('候補をタップで追加 · 手札をタップで外す','Tap a candidate to add · Tap a hand card to remove','후보를 눌러 추가 · 손패를 눌러 제거');
+    (q('deckUndo') as HTMLButtonElement).disabled = saving || (!undo && !pending);
+    curEl.classList.toggle('is-replacing', !!pending);
     // ---- 현재 덱: 어튠(고정) + 8장 ----
     curEl.innerHTML = "";
     const attune = cardEl(inst("STARTER_MANA", "fx_mana"), { size: "mkt" });
     attune.classList.add("deck-fixed");
-    attune.appendChild(Object.assign(document.createElement("div"), { className: "deck-fixed-tag", textContent: t("deck.fixed") }));
-    bindZoom(attune, inst("STARTER_MANA", "fx_mana"));
-    const entry=(card:HTMLElement,c:CardInst,fixed=false)=>{
-      const row=document.createElement('div');row.className='deck-entry';row.append(card);
-      const name=document.createElement('span');name.className='deck-entry-name';name.textContent=cardName(c);row.append(name);
-      const cost=document.createElement('small');cost.textContent=fixed?t('deck.fixed'):String(c.cost);row.append(cost);
-      const action=card.querySelector('button');if(action)row.append(action);
-      row.tabIndex=0;row.setAttribute('aria-label',cardName(c));row.onkeydown=e=>{if(e.target===row&&(e.key==='Enter'||e.key===' ')){e.preventDefault();zoomCard(c);}};
-      row.onclick=e=>{if(!(e.target as Element).closest('button'))zoomCard(c);};curEl.append(row);
+    const entry=(card:HTMLElement,c:CardInst,index:number,fixed=false)=>{
+      const row=document.createElement('div');row.className='deck-entry'+(fixed?' is-fixed':'');
+      row.style.setProperty('--hand-turn',`${(index-4)*2}deg`);row.style.setProperty('--hand-lift',`${Math.abs(index-4)*2}px`);
+      row.style.setProperty('--hand-layer',String(index+1));row.append(card);
+      const activate=()=>{if(saving)return;if(fixed){zoomCard(c);return;}undo=[...deck()];if(pending){deck()[index-1]=pending;pending=null;}else deck().splice(index-1,1);render();};
+      card.tabIndex=0;card.setAttribute('role','button');
+      card.setAttribute('aria-label',`${cardName(c)} · ${fixed?t('deck.fixed'):pending?loungeText('入れ替え','Replace','교체'):t('deck.remove')}`);
+      card.onclick=activate;card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();activate();}};
+      if(fixed){const lock=document.createElement('span');lock.className='deck-attune-lock';lock.innerHTML=`<span class="deck-lock-glyph" aria-hidden="true"></span><span>${t('deck.fixed')}</span>`;row.append(lock);}
+      else {const detail=document.createElement('button');detail.className='deck-hand-detail';detail.textContent=loungeText('詳細','Details','상세');detail.setAttribute('aria-label',`${cardName(c)} · ${detail.textContent}`);detail.onclick=()=>zoomCard(c);row.append(detail);}
+      curEl.append(row);
     };
-    entry(attune,inst('STARTER_MANA','fx_mana'),true);
+    entry(attune,inst('STARTER_MANA','fx_mana'),0,true);
     deck().forEach((id, i) => {
       const c = inst(id, "dk" + i);
       const el = cardEl(c, { size: "mkt", playable: true });
-      el.title = t("deck.remove");
-      const remove=document.createElement('button');remove.className='deck-card-action';remove.textContent='−';remove.setAttribute('aria-label',`${t('deck.remove')} ${cardName(c)}`);
-      remove.onclick=e=>{e.stopPropagation();deck().splice(i,1);render();};el.append(remove);
-      bindZoom(el, c);
-      entry(el,c);
+      entry(el,c,i+1);
     });
     for (let k = deck().length; k < DECK_SIZE; k++) {
       const slot = document.createElement("div");
-      slot.className = "deck-slot";
+      slot.className = "deck-slot deck-entry";
       slot.textContent = "+";
       curEl.appendChild(slot);
     }
     // ---- 스타팅 풀 ----
     poolEl.innerHTML = "";
+    q('poolTypes').replaceChildren();
+    for(const [type,label] of [['all',t('cards.f.all')],['mon',t('cards.f.mon')],['spell',t('cards.f.spell')]] as const){
+      const b=document.createElement('button');b.textContent=label;b.setAttribute('aria-pressed',String(poolType===type));b.onclick=()=>{poolType=type;render();};q('poolTypes').append(b);
+    }
     let poolIdx = 0;
     for (const id of DECK_POOL) {
       const c = inst(id, "pool_" + id);
+      if(poolType!=='all' && (poolType==='mon'?c.t!=='mon':c.t==='mon'))continue;
+      if(poolQuery && ![cardName(c),c.name].join(' ').toLowerCase().includes(poolQuery))continue;
       const n = countOf(id);
-      const full = deck().length >= DECK_SIZE || n >= DECK_MAX_COPIES;
+      const full = n >= DECK_MAX_COPIES;
       const el = cardEl(c, { size: "mkt", playable: !full, dim: full, lazyArt: poolIdx++ });
       const cnt = document.createElement("div");
       cnt.className = "deck-owned" + (n > 0 ? " has" : "");
       cnt.textContent = `${n}/${DECK_MAX_COPIES}`;
       el.appendChild(cnt);
-      const add=document.createElement('button');add.className='deck-card-action';add.textContent='+';add.disabled=full;add.setAttribute('aria-label',`${loungeText('追加','Add','추가')} ${cardName(c)}`);
-      add.onclick=e=>{e.stopPropagation();deck().push(id);render();};el.append(add);
-      el.onclick=()=>zoomCard(c);
-      bindZoom(el, c);
-      poolEl.appendChild(el);
+      const choose=()=>{if(saving||full)return;if(deck().length<DECK_SIZE){undo=[...deck()];deck().push(id);pending=null;}else pending=pending===id?null:id;render();};
+      el.tabIndex=full?-1:0;el.setAttribute('role','button');el.setAttribute('aria-disabled',String(full));el.setAttribute('aria-label',`${cardName(c)} · ${loungeText('追加・入れ替え','Add or replace','추가 또는 교체')}`);
+      el.classList.toggle('is-candidate',pending===id);el.onclick=choose;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();}};
+      const add=document.createElement('span');add.className='deck-card-action';add.textContent='+';add.setAttribute('aria-hidden','true');el.append(add);
+      const tile=document.createElement('div');tile.className='deck-pool-tile';tile.append(el);
+      const detail=document.createElement('button');detail.className='deck-pool-detail';detail.textContent=loungeText('詳細','Details','상세');detail.setAttribute('aria-label',`${cardName(c)} · ${detail.textContent}`);detail.onclick=()=>zoomCard(c);tile.append(detail);poolEl.append(tile);
     }
+    if(!poolEl.children.length)poolEl.textContent=t('cards.empty');
     // ---- 마켓 알림이 픽커 ----
     watchCountEl.textContent = `${watch().length}/${WATCH_MAX}`;
     const watchVersion=++watchRevision,watchNodes:Node[]=[];
@@ -195,12 +208,14 @@ export function mountDeck(app: App): Screen {
   };
 
   searchEl.oninput = () => { watchQ = searchEl.value.trim(); watchPage=0;render(); };
+  (q('poolSearch') as HTMLInputElement).oninput=e=>{poolQuery=(e.target as HTMLInputElement).value.trim().toLowerCase();render();};
+  q('deckUndo').onclick=()=>{if(pending)pending=null;else if(undo){store.list[cur].cards=[...undo];undo=null;}render();};
   q('watchPrev').onclick=()=>{watchPage--;render();};q('watchNext').onclick=()=>{watchPage++;render();};
   useBtn.onclick = () => { void doSave(cur); };
 
   const doSave = async (selected = store.sel): Promise<void> => {
     if (saving || store.list.some(d => d.cards.length !== DECK_SIZE)) return;
-    saving = true; render();
+    pending = null;saving = true; render();
     msgEl.textContent = "…";
     try {
       const r = await api.saveDecks({ ...store, sel: selected });

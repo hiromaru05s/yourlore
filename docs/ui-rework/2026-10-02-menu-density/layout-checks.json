@@ -1,0 +1,34 @@
+[
+  {
+    "size": {
+      "width": 1280,
+      "height": 720
+    },
+    "fullRows": 2,
+    "height": 277.125
+  },
+  {
+    "size": {
+      "width": 1024,
+      "height": 600
+    },
+    "fullRows": 2,
+    "height": 226.375
+  },
+  {
+    "size": {
+      "width": 375,
+      "height": 667
+    },
+    "fullRows": 2,
+    "height": 275.375
+  },
+  {
+    "size": {
+      "width": 390,
+      "height": 844
+    },
+    "fullRows": 2,
+    "height": 355
+  }
+]

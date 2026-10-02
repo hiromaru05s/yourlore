@@ -961,7 +961,7 @@ export class GameView {
     rb.onclick = () => this.h.onRefresh();
   }
 
-  /** Portrait counters: health lower-left, shield lower-center, Dew lower-right. */
+  /** Portrait counters: health upper-left, shield lower-left, Dew upper-right. */
   private renderPortrait(el: HTMLElement, p: PlayerState, isMe: boolean): void {
     const sd = isMe ? "me" : "opp";
     const emax = effMaxMana(p);

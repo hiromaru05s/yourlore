@@ -1,0 +1,122 @@
+{
+  "checks": [
+    {
+      "id": "MIMIC",
+      "side": 0,
+      "route": "engine summon event",
+      "result": "passed"
+    },
+    {
+      "id": "MIMIC2",
+      "side": 0,
+      "route": "engine summon event",
+      "result": "passed"
+    },
+    {
+      "id": "MIMIC_LORD",
+      "side": 0,
+      "route": "engine summon event",
+      "result": "passed"
+    },
+    {
+      "id": "AWAKENED_MIMIC",
+      "side": 0,
+      "route": "engine summon event",
+      "result": "passed"
+    },
+    {
+      "id": "MIMIC_KING",
+      "side": 0,
+      "route": "engine summon event",
+      "result": "passed"
+    },
+    {
+      "id": "MIMIC_KING2",
+      "side": 0,
+      "route": "engine summon event",
+      "result": "passed"
+    },
+    {
+      "id": "MIMIC",
+      "side": 1,
+      "route": "engine summon event",
+      "result": "passed"
+    },
+    {
+      "id": "MIMIC2",
+      "side": 1,
+      "route": "engine summon event",
+      "result": "passed"
+    },
+    {
+      "id": "MIMIC_LORD",
+      "side": 1,
+      "route": "engine summon event",
+      "result": "passed"
+    },
+    {
+      "id": "AWAKENED_MIMIC",
+      "side": 1,
+      "route": "engine summon event",
+      "result": "passed"
+    },
+    {
+      "id": "MIMIC_KING",
+      "side": 1,
+      "route": "engine summon event",
+      "result": "passed"
+    },
+    {
+      "id": "MIMIC_KING2",
+      "side": 1,
+      "route": "engine summon event",
+      "result": "passed"
+    },
+    {
+      "case": "hand API",
+      "result": "passed"
+    },
+    {
+      "case": "skip",
+      "result": "passed"
+    },
+    {
+      "case": "resize",
+      "result": "passed"
+    },
+    {
+      "case": "hidden",
+      "result": "passed"
+    },
+    {
+      "case": "destroy",
+      "result": "passed"
+    },
+    {
+      "case": "mobile reduced motion",
+      "result": "passed"
+    },
+    {
+      "case": "WebGL fallback",
+      "result": "passed"
+    }
+  ],
+  "errors": [],
+  "requests": [
+    "vfx/mimic-cavity-r3/02-moist-cheeks.png",
+    "vfx/mimic-mouth-r2/01-reference-ivory.png",
+    "vfx/mimic-mouth-r2/01-reference-ivory.png",
+    "vfx/mimic-mouth-r2/04-predator-fangs.png",
+    "vfx/mimic-mouth-r2/01-reference-ivory.png",
+    "vfx/mimic-family/engraved-brass.png",
+    "vfx/mimic-family/engraved-brass.png",
+    "vfx/mimic-family/engraved-brass.png",
+    "vfx/mimic-mouth-r2/01-reference-ivory.png",
+    "vfx/mimic-mouth-r2/01-reference-ivory.png",
+    "vfx/mimic-family/engraved-brass.png",
+    "vfx/mimic-cavity-r3/02-moist-cheeks.png",
+    "vfx/mimic-mouth-r2/04-predator-fangs.png",
+    "vfx/mimic-family/engraved-brass.png"
+  ],
+  "status": "passed"
+}

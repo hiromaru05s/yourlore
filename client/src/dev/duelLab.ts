@@ -1,3 +1,4 @@
+import {mountTurnLightBoardLab} from './turnLightBoardLab';
 import {animateSeeker} from '../ui/seekerAnimation';
 import "../styles/reading-board.css";
 /// <reference types="vite/client" />
@@ -26,6 +27,7 @@ import { startBoardLayout } from '../ui/layout';
 import { setLang } from '../i18n';
 import { hpFeedback, ghostSummon, revealSpell } from '../ui/anim';
 import type { CardInst, FieldMon } from '../shared/types';
+import {mountManaBoardLab} from './manaBoardLab';
 
 if (import.meta.env.DEV) {
   setLang('ja');initSound();
@@ -67,13 +69,25 @@ if (import.meta.env.DEV) {
   const view = new GameView(document.getElementById('app')!,0,handlers);
   function render(){view.render(g);}
   render();
+  let remaining=90;
+  const tick=()=>paintDuelClock(document.getElementById('clock-me')!, remaining,90,g.cur===0);
   if(polish){
     const panel=document.createElement('div');panel.dataset.polishControls='true';
     panel.style.cssText='position:fixed;top:8px;left:48px;right:90px;z-index:200;display:flex;flex-wrap:wrap;gap:5px;font:12px sans-serif';
     const add=(label:string,action:()=>void|Promise<void>)=>{const button=document.createElement('button');button.textContent=label;button.style.cssText='padding:6px 9px;background:#182837;color:#e4eafa;border:1px solid #627d91;border-radius:4px';button.onclick=async()=>{button.disabled=true;try{await action();}finally{button.disabled=false;}};panel.append(button);};
-    const gainMana=async(side:0|1)=>{const p=g.players[side];if(p.maxMana>=30){p.maxMana=8;p.mana=6;render();await new Promise(r=>setTimeout(r,120));}const before=p.maxMana;p.maxMana=Math.min(30,p.maxMana+2);p.mana=Math.min(p.maxMana,p.mana+3);render();await manaSurge(side?'opp':'me',p.maxMana-before);};
+    const gainMana=async(side:0|1|'both')=>{
+      const sides: (0|1)[]=side==='both'?[0,1]:[side];
+      if(sides.some(s=>g.players[s].maxMana>=30)){
+        for(const s of sides){const p=g.players[s];if(p.maxMana>=30){p.maxMana=8;p.mana=6;}}
+        render();await new Promise(r=>setTimeout(r,120));
+      }
+      const amounts=sides.map(s=>{const p=g.players[s],before=p.maxMana;p.maxMana=Math.min(30,p.maxMana+2);p.mana=Math.min(p.maxMana,p.mana+3);return p.maxMana-before;});
+      // Render both changes once, so simultaneous effects keep connected anchors.
+      render();await Promise.all(sides.map((s,i)=>manaSurge(s?'opp':'me',amounts[i])));
+    };
     for(const side of ['me','opp'] as const)for(const action of ['idle','hurt','attack','mana','heal'] as const)add(`${side} ${action}`,()=>animateSeeker(side,action));
     add('マナ増加',()=>gainMana(0));add('相手マナ増加',()=>gainMana(1));
+    if(new URLSearchParams(location.search).has('mana'))mountManaBoardLab(panel,gainMana);
     add('演出スキップ',()=>{setFxSkip(true);setFxSkip(false);});
     add('場から虚無',async()=>{const p=g.players[0],card=p.field[0];const source=document.querySelector<HTMLElement>('#myField .card')??document.querySelector<HTMLElement>('#meRow .zone-mon .card');if(card&&source){try{await exileCard(card,'me',source);}finally{source.style.visibility='';render();}}});
     add('手札から虚無',async()=>{const card=g.players[0].hand[0],source=document.querySelector<HTMLElement>('#hand .card');if(card&&source){try{await exileCard(card,'me',source);}finally{source.style.visibility='';render();}}});
@@ -107,9 +121,8 @@ if (import.meta.env.DEV) {
     add('効果音を試聴',()=>sfx(sounds.value as typeof SFX_NAMES[number]));
     add('自分のターン',()=>{g.cur=0;render();});
     document.body.append(panel);
+    mountTurnLightBoardLab(document.getElementById('app')!,panel,enemy=>{g.cur=enemy?1:0;render();tick();},seconds=>{remaining=seconds;tick();});
   }
-  let remaining=90;
-  const tick=()=>paintDuelClock(document.getElementById('clock-me')!, remaining,90,true);
   tick();
   if(new URLSearchParams(location.search).has('discard')) cardPickerMulti('捨てるカードを3枚選択',g.players[0].hand,3,()=>{},{exact:true});
   setInterval(()=>{remaining=remaining>0?remaining-1:90;tick();},1000);

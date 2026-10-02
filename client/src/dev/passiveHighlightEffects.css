@@ -1,0 +1,48 @@
+/* Preview-only: every light follows the existing 32px chamfered plate. */
+.passive-icon[data-highlight] > .passive-halo { display: none; }
+.passive-icon[data-highlight] { isolation: isolate; }
+.passive-icon[data-highlight] > img { position: relative; z-index: 1; }
+.passive-icon[data-highlight] > b,.passive-icon[data-highlight]::after { z-index: 4; }
+.psv-light { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: var(--highlight-strength, 1); }
+.psv-light svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.psv-light path { fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.psv-light .ph-bed { stroke: #020b13; stroke-width: 3.3; opacity: .85; }
+.psv-light .ph-rim { stroke: #eaf5f6; stroke-width: .85; opacity: .7; }
+.psv-light .ph-upper,.psv-light .ph-lower,.psv-light .ph-corners { opacity: 0; }
+.ph-sheen { position: absolute; inset: 3%; opacity: 0; pointer-events: none;
+ clip-path: polygon(16% 0,84% 0,100% 16%,100% 84%,84% 100%,16% 100%,0 84%,0 16%); }
+
+/* 01: a dark keyline then a narrow silver edge, strongest at the top bevel. */
+[data-highlight=silver] .ph-rim { stroke: #d7e9ee; opacity: .86; filter: drop-shadow(0 0 .65px #effbff99); }
+[data-highlight=silver] .ph-upper { stroke: #fcf6df; stroke-width: 1.15; opacity: .95; }
+
+/* 02: asymmetric gold light grounded at the bottom edge; face remains dark. */
+[data-highlight=gold] .ph-rim { stroke: #e9c990; opacity: .64; }
+[data-highlight=gold] .ph-lower { stroke: #ffe7ad; stroke-width: 1.35; opacity: .96;
+ filter: drop-shadow(0 1px 1.5px #f5bd66) drop-shadow(0 1.3px 3px #df9b3980); }
+[data-highlight=gold] .ph-upper { stroke: #f6e8c6; stroke-width: .7; opacity: .45; }
+
+/* 03: cool halo outside the plate, with the dark contact line left intact. */
+[data-highlight=frost] .ph-rim { stroke: #d6f4ff; stroke-width: 1; opacity: .9;
+ filter: drop-shadow(0 0 1.2px #d1f1ff) drop-shadow(0 0 3px #94d3e4b3); }
+[data-highlight=frost] .ph-bed { stroke-width: 4; opacity: .95; }
+
+/* 04: only the two chamfered corners catch light, no free-floating sparkles. */
+[data-highlight=corners] .ph-rim { stroke: #dbc9a3; opacity: .42; stroke-width: .65; }
+[data-highlight=corners] .ph-corners { stroke: #fff6dd; stroke-width: 1.5; opacity: 1;
+ filter: drop-shadow(0 0 1px #f9e5b6b3); }
+
+/* 05: stable readable rim throughout; a shallow reflection travels over enamel.
+   0–15% rest, 15–45% travel, 45–65% settle, 65–100% rest. */
+[data-highlight=sheen] .ph-rim { stroke: #e4e8cd; opacity: .78; filter: drop-shadow(0 0 1px #c6dfdd80); }
+[data-highlight=sheen] .ph-upper { stroke: #fff5d5; stroke-width: 1.1; animation: passive-bevel 4.8s ease-in-out infinite; }
+[data-highlight=sheen] .ph-sheen { opacity: 1; background: linear-gradient(115deg,transparent 39%,#e8f9ff00 43%,#e8f9ff24 48%,#fff9df44 50%,#e8f9ff14 54%,transparent 59%); background-size: 350% 100%; animation: passive-sheen 4.8s cubic-bezier(.35,0,.25,1) infinite; }
+@keyframes passive-sheen { 0%,15% {background-position:110% 0;opacity:0} 22%{opacity:.8} 40%{opacity:.8} 48%,100%{background-position:-10% 0;opacity:0} }
+@keyframes passive-bevel { 0%,15%,70%,100%{opacity:.25} 30%{opacity:.85} 50%{opacity:.5} }
+.highlights-off .psv-light { visibility: hidden; }
+.highlights-paused .psv-light * { animation-play-state: paused !important; }
+.highlights-slow .psv-light * { animation-duration: 9.6s !important; }
+@media(prefers-reduced-motion:reduce){
+ [data-highlight=sheen] .ph-sheen { animation:none;opacity:0; }
+ [data-highlight=sheen] .ph-upper { animation:none;opacity:.65; }
+}

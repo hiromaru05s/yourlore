@@ -31,3 +31,13 @@ node node_modules/vite/bin/vite.js client --host 127.0.0.1 --port 5265 --strictP
 - 最終画像: `qa/peak-*.png`、`qa/rest-*.png`、`qa/mobile-peak.png`。カード本体と刻印が同じ折れに従うことを目視。`peak.png` 等の無接尾辞画像は拡大率調整前の検討記録。
 - `qa/extra-report.json`: 通常速度の追加録画・両側同時再生・非表示中断の追加検査はChrome起動が180秒でタイムアウトし未完了。機能検証8項目の成功を、これらの成功や商用ゲーム同等の品質認定として扱わない。統合先で再確認する。
 - 未コミット。公開なし。
+
+## ステージング依頼後の追加確認
+
+統合タスク側で通常速度・両陣営同時・非表示中断の3項目が成功。`qa/integration-extra-report.json` と `qa/integration-continuous-playback.jpg` を保存。questFold.ts と questFoldMaterial.ts のSHA-256が採用版と同一であることを再確認した。公開は統合タスク `01a0e9ed-c169-7b33-9251-2c7173f0fd51` が担当し、配信結果は `staging/` に記録する。
+
+## ステージング公開
+
+2026-09-29 JST、統合リリース `115730049bd664b4f82e2a16328139994f7fd4e8` として https://test.yourlore.xyz へ公開。Worker version は `366ec090-a02a-4b9e-b3fb-b1092746a3e8`。本番には未公開。
+
+独立検証で公開JS/CSS・クエスト枠・コスト枠・Q_RIFTアートのHTTP 200と確定distとのSHA256一致、および公開main内のquest-fold-canvasを確認。証跡は `staging/verification.json` と `staging/deployment.json`。公開環境で認証後のクエスト発動を再操作したものではなく、通常速度・双方同時・中断の実動作は同一ソースの統合QAで検証済み。

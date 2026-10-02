@@ -2,9 +2,16 @@ import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS} from './manaGainTiming';
 import type {FxRect} from './biblionFx';
 const clamp=(x:number)=>Math.max(0,Math.min(1,x));
 const smooth=(a:number,b:number,t:number)=>{const q=clamp((t-a)/(b-a));return q*q*(3-2*q);};
+type ManaRenderer=(c:CanvasRenderingContext2D,r:FxRect,age:number)=>void;
+let previewRenderer:ManaRenderer|undefined;
+/** Development fixture only; production always uses the approved effect. */
+export function setManaGainPreviewRenderer(renderer?:ManaRenderer){
+ if(import.meta.env.DEV)previewRenderer=renderer;
+}
 /** Three folded streams gather at the real crystal, a short refraction peak,
  * then crescent fragments open and dissolve. No substitute jewel or numbers. */
 export function drawManaGain(c:CanvasRenderingContext2D,r:FxRect,age:number){
+ if(import.meta.env.DEV&&previewRenderer){previewRenderer(c,r,age);return;}
  const milliseconds=age*1000;const impact=MANA_GAIN_IMPACT_MS;
  const t=milliseconds<=impact?milliseconds/impact*.48:.48+(milliseconds-impact)/(MANA_GAIN_MS-impact)*.52;if(t<=0||t>=1)return;
  const u=Math.max(12,Math.min(64,r.height*1.65)),x=r.left+r.width*.64,y=r.top+r.height*.52;

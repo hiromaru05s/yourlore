@@ -815,6 +815,7 @@ export abstract class BaseController implements BoardHandlers {
       await playDuelOpening({root:this.openingRoot,me:{...COIN_ME,name:this.state.players[this.you].name},opp:{...COIN_OPP,name:this.state.players[(1-this.you) as Side].name},firstIsMe:firstSide===this.you,signal:this.openingAbort.signal,
         onStart:this.exits.onOpeningStart,
         elapsed:startsAt!=null?()=>Date.now()-this.serverOffset-startsAt:undefined,
+        durationMs:startsAt!=null&&opening?.playableAt!=null?opening.playableAt-startsAt:undefined,
         onDeal:async signal=>{
           game?.classList.remove('opening-hands');
           await Promise.all([A.animateDraw(document.getElementById('hand'),3,'me',{signal}),A.animateDraw(document.getElementById('oppHand'),3,'opp',{signal})]);

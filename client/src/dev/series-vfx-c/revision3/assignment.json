@@ -1,0 +1,803 @@
+{
+  "families": [
+    {
+      "id": "S04",
+      "name": "ファイアー魔法／炎術師",
+      "cardIds": [
+        "FIRE_BALL",
+        "FIRE_ARROW",
+        "FIRE_ZONE",
+        "FIRE_METEOR",
+        "FIRE_ART",
+        "FIRE_MASTER"
+      ],
+      "animation": "共通詠唱／火球・3連射・範囲炎・8連メテオ／連続使用の強化／ファイアーマスター召喚",
+      "owner": "C",
+      "ideaSeeds": [
+        "表面を走る火脈から噴出",
+        "熱で剥離した薄片が炎の主形状に変わる"
+      ],
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "S06",
+      "name": "アチューン",
+      "cardIds": [
+        "STARTER_MANA",
+        "AHEUK",
+        "AJIN",
+        "AMA",
+        "QUICK_ATTUNE"
+      ],
+      "animation": "通常・黒・真・魔・瞬の発動差分／最大マナ変化／神器による除外防止",
+      "owner": "C",
+      "ideaSeeds": [
+        "カード刻印の共鳴がマナへ流入",
+        "幾何学の結晶面が組み替わる"
+      ],
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "S08",
+      "name": "ゴーレム",
+      "cardIds": [
+        "GOLEM1",
+        "GOLEM2",
+        "GOLEM3",
+        "M10",
+        "NGA3",
+        "NWL3",
+        "MANA_GIANT",
+        "AEM",
+        "KNIGHT_TEACH",
+        "MIND_BURST"
+      ],
+      "animation": "兵士・リーダー・マナ・戦士・ガーディアンの共通召喚差分／キング・ジャイアントの大型召喚／気合充填",
+      "owner": "C",
+      "ideaSeeds": [
+        "石板とルーンが重く噛み合う",
+        "金属の継ぎ目に魔力が充填され起動"
+      ],
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "S12",
+      "name": "選ばれし／コロシアム",
+      "cardIds": [
+        "CHOSEN_KNIGHT",
+        "CHOSEN_MAGE",
+        "CHOSEN_ARCHER",
+        "CHOSEN_ROGUE",
+        "CHOSEN_AREA",
+        "COLOSSEUM",
+        "COLOSSEUM_REST",
+        "SORTER",
+        "QUICK_SORT"
+      ],
+      "animation": "共通召喚＋剣士・魔法使い・弓手・盗賊の4差分／カル数による力の流入／コロシアムからの召喚／領域完成",
+      "owner": "C",
+      "ideaSeeds": [
+        "リフト由来の力が職業紋へ集束",
+        "試練の刻印が割れて武器の輪郭が立つ"
+      ],
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "S21",
+      "name": "城／兵士／騎士／砲撃兵",
+      "cardIds": [
+        "CASTLE",
+        "SOLDIER2",
+        "INFKNIGHT",
+        "GUNNER",
+        "HEAVY_GUNNER",
+        "CAVALRY",
+        "M11",
+        "GM5_2",
+        "GM6_7",
+        "GM6_8",
+        "VITAL4",
+        "HORDE",
+        "ELITE",
+        "LEVY",
+        "BUDGET",
+        "EXPANSION",
+        "TREASON",
+        "INTERCEPT",
+        "REINFORCE",
+        "STABLE",
+        "ADVANCE",
+        "QUICK_MUSTER",
+        "Q_CASTLE",
+        "Q_TOWN"
+      ],
+      "animation": "城の設置／兵士・騎士・砲撃兵・大砲兵・騎馬兵／複数体召集／指揮官登場／城防御",
+      "owner": "C",
+      "ideaSeeds": [
+        "盾・旗・砲身の輪郭が組み上がる",
+        "軍旗の布が部隊カードへ展開"
+      ],
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "S22",
+      "name": "傭兵",
+      "cardIds": [
+        "MERCENARY",
+        "MERC_LEADER",
+        "MERC_MASTER",
+        "MERC_ART"
+      ],
+      "animation": "傭兵・リーダー・ギルドマスターの召喚／兵士の増援／カジノ連動ダイス／傭兵術",
+      "owner": "C",
+      "ideaSeeds": [
+        "契約刻印を押して増援を呼ぶ",
+        "金属札が隊列として組み上がる"
+      ],
+      "r2Status": "redo_backlog"
+    }
+  ],
+  "cues": [
+    {
+      "id": "A001",
+      "name": "通常モンスター召喚",
+      "stages": "手札から移動→着地→登場→召喚効果へ接続",
+      "cardIds": [],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "共通プレイ・召喚・退場",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A007",
+      "name": "複数体・連続召喚",
+      "stages": "1体ずつの登場と全体のまとまり",
+      "cardIds": [
+        "LEVY",
+        "SCARECROW",
+        "REINFORCE",
+        "QUICK_MUSTER"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "共通プレイ・召喚・退場",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A012",
+      "name": "期限付き召喚と期限退場",
+      "stages": "召喚→残存表示→相手ターン終了で破壊",
+      "cardIds": [
+        "REINFORCE"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "共通プレイ・召喚・退場",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A013",
+      "name": "モンスターの破壊",
+      "stages": "被弾・破壊効果→崩壊→墓地移動",
+      "cardIds": [],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "共通プレイ・召喚・退場",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A023",
+      "name": "モンスターへの通常攻撃",
+      "stages": "予備動作→接近→接触→帰還",
+      "cardIds": [],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "戦闘",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A024",
+      "name": "プレイヤーへの直接攻撃",
+      "stages": "攻撃元→相手シーカー→命中",
+      "cardIds": [],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "戦闘",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A025",
+      "name": "モンスター被弾",
+      "stages": "命中・揺れ・体力減少",
+      "cardIds": [],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "戦闘",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A026",
+      "name": "プレイヤー被弾",
+      "stages": "命中・体力減少・シーカー反応",
+      "cardIds": [],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "戦闘",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A027",
+      "name": "貫通ダメージ",
+      "stages": "モンスターの被弾からプレイヤーへ抜ける",
+      "cardIds": [],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "戦闘",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A028",
+      "name": "二刀流の2回目の攻撃",
+      "stages": "再攻撃可能表示→2回目の攻撃",
+      "cardIds": [
+        "DRAGON_RIDER",
+        "ANTIQUE_DK"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "戦闘",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A029",
+      "name": "撃破後の追加攻撃",
+      "stages": "撃破→再行動の解放",
+      "cardIds": [
+        "M7"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "戦闘",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A030",
+      "name": "反撃",
+      "stages": "被弾した側から攻撃者へ返撃。倒された場合も区別",
+      "cardIds": [
+        "INFKNIGHT",
+        "GOLEM2",
+        "D_RED"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "戦闘",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A031",
+      "name": "反撃無効",
+      "stages": "騎馬兵が返撃を受けないことの短い反応",
+      "cardIds": [
+        "CAVALRY"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "戦闘",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A032",
+      "name": "味方を巻き込むランダム攻撃",
+      "stages": "攻撃先決定→味方または敵への攻撃",
+      "cardIds": [
+        "NGA4"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "戦闘",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A033",
+      "name": "特定条件での即時撃破",
+      "stages": "弓手の攻撃対象が条件を満たすと破壊",
+      "cardIds": [
+        "CHOSEN_ARCHER"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "戦闘",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A034",
+      "name": "城の防御",
+      "stages": "カウンター消費→攻撃無効化",
+      "cardIds": [
+        "CASTLE"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "戦闘",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A036",
+      "name": "ターン終了時の砲撃",
+      "stages": "砲撃元→抽選した相手→着弾",
+      "cardIds": [
+        "GUNNER",
+        "HEAVY_GUNNER"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "戦闘",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A037",
+      "name": "気合の付与／補充",
+      "stages": "能力獲得→気合トークン追加。複数補充も同じ基本形",
+      "cardIds": [
+        "GOLEM1",
+        "NGA3",
+        "KNIGHT_TEACH",
+        "VITAL4"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "能力・状態・カウンター",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A038",
+      "name": "気合の発動／消費",
+      "stages": "致命傷→トークン消費→体力1で耐える",
+      "cardIds": [
+        "GOLEM1",
+        "GOLEM2",
+        "NWL3"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "能力・状態・カウンター",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A049",
+      "name": "挑発",
+      "stages": "ダイス判定→成功時に攻撃先を引き受ける／失敗",
+      "cardIds": [
+        "HPS_BOULDER"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "能力・状態・カウンター",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A050",
+      "name": "回避",
+      "stages": "能力付与→ダイス判定→成功時すり抜け／失敗",
+      "cardIds": [
+        "ROGUE_ART",
+        "NL_SECRET"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "能力・状態・カウンター",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A054",
+      "name": "被弾・味方死亡による気合蓄積",
+      "stages": "被弾／味方退場の発生元からゴーレムへ",
+      "cardIds": [
+        "NWL3",
+        "GOLEM2"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "能力・状態・カウンター",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A059",
+      "name": "攻撃力アップ",
+      "stages": "単体／全体、永続／このターンだけ、条件成立",
+      "cardIds": [
+        "S3",
+        "S7",
+        "GS5_4",
+        "ADVANCE"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "数値変化・制限・変換",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A062",
+      "name": "攻撃力ダウン",
+      "stages": "単体／全体／ダンジョン攻撃時1化",
+      "cardIds": [
+        "M12",
+        "WEAKEN_ALL",
+        "DUNGEON"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "数値変化・制限・変換",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A063",
+      "name": "モンスター体力ダウン・1化",
+      "stages": "数値減少／体力を1に設定",
+      "cardIds": [
+        "M6",
+        "D_BLACK",
+        "SHATTER",
+        "LAWLESS"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "数値変化・制限・変換",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A067",
+      "name": "最大マナ増加",
+      "stages": "上限が増える／継続オーラ由来も区別",
+      "cardIds": [
+        "STARTER_MANA",
+        "M10"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "数値変化・制限・変換",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A068",
+      "name": "最大マナ減少・指定値化",
+      "stages": "減少／3に変更／一時低下の復帰",
+      "cardIds": [
+        "AHEUK",
+        "TDE1",
+        "TDE4",
+        "CASINO"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "数値変化・制限・変換",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A069",
+      "name": "使用可能マナの消費／ターン補充",
+      "stages": "購入・発動支払い／ターン開始",
+      "cardIds": [],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "数値変化・制限・変換",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A070",
+      "name": "次ターンの使用可能マナ減少",
+      "stages": "予約→次ターンの反映→終了",
+      "cardIds": [
+        "S1"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "数値変化・制限・変換",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A074",
+      "name": "攻撃力と現在体力の交換",
+      "stages": "盤面の全対象を交換→持続→解除",
+      "cardIds": [
+        "TRICKROOM"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "数値変化・制限・変換",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A076",
+      "name": "ダメージの増幅／追加",
+      "stages": "元のダメージ→2倍・追加分を明示",
+      "cardIds": [
+        "DOUBLE_UP",
+        "D_RED",
+        "SLAY_ART"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "数値変化・制限・変換",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A086",
+      "name": "ファイアーボール",
+      "stages": "自傷→狙った1対象へ火球→爆発",
+      "cardIds": [
+        "FIRE_BALL"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "シリーズ固有の効果・大型召喚",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A087",
+      "name": "ファイアーアロー",
+      "stages": "自傷→ランダム対象への3連射",
+      "cardIds": [
+        "FIRE_ARROW"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "シリーズ固有の効果・大型召喚",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A088",
+      "name": "ファイアーゾーン",
+      "stages": "手札除外→敵全体の炎→既使用条件で強化差分",
+      "cardIds": [
+        "FIRE_ZONE"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "シリーズ固有の効果・大型召喚",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A089",
+      "name": "ファイアーメテオ",
+      "stages": "最大マナ減少→ランダム対象への8連着弾",
+      "cardIds": [
+        "FIRE_METEOR"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "シリーズ固有の効果・大型召喚",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A090",
+      "name": "地震・マグマの雨",
+      "stages": "両者のモンスターへの範囲攻撃。地震は同名2枚を区別",
+      "cardIds": [
+        "EARTHQUAKE",
+        "MAGMA_RAIN",
+        "SHATTER"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "シリーズ固有の効果・大型召喚",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A100",
+      "name": "選ばれし4種類の召喚",
+      "stages": "同じ登場骨格＋剣・魔法・弓・盗賊の4差分",
+      "cardIds": [
+        "CHOSEN_KNIGHT",
+        "CHOSEN_MAGE",
+        "CHOSEN_ARCHER",
+        "CHOSEN_ROGUE"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "シリーズ固有の効果・大型召喚",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A101",
+      "name": "選ばれしのカル連動強化",
+      "stages": "除外カルが増減→対象の能力値が変化",
+      "cardIds": [
+        "CHOSEN_KNIGHT",
+        "CHOSEN_MAGE",
+        "CHOSEN_ARCHER",
+        "CHOSEN_ROGUE"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "シリーズ固有の効果・大型召喚",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A102",
+      "name": "選ばれし剣士の攻撃連動",
+      "stages": "攻撃→カル2枚除外→強化の反映",
+      "cardIds": [
+        "CHOSEN_KNIGHT"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "シリーズ固有の効果・大型召喚",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A103",
+      "name": "選ばれし魔法使いの射撃",
+      "stages": "カルをリフトから戻す→相手に8ダメージ",
+      "cardIds": [
+        "CHOSEN_MAGE"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "シリーズ固有の効果・大型召喚",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A104",
+      "name": "コロシアムの選択召喚",
+      "stages": "条件達成→4種類の選択→召喚",
+      "cardIds": [
+        "COLOSSEUM"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "シリーズ固有の効果・大型召喚",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A122",
+      "name": "ゴーレムの気合集積と放出",
+      "stages": "部隊合流・被弾・味方死亡→充填／精神放出術で一斉消費",
+      "cardIds": [
+        "NGA3",
+        "NWL3",
+        "GOLEM2",
+        "MIND_BURST"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "シリーズ固有の効果・大型召喚",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A126",
+      "name": "城の増設・領土付与",
+      "stages": "カウンター増加／貴族の特殊召喚",
+      "cardIds": [
+        "EXPANSION",
+        "LAND_GRANT"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "シリーズ固有の効果・大型召喚",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A127",
+      "name": "反逆罪",
+      "stages": "敵の城条件→相手の場を一掃→烙印",
+      "cardIds": [
+        "TREASON"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "シリーズ固有の効果・大型召喚",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A128",
+      "name": "馬小屋での騎馬兵召喚",
+      "stages": "騎士を破壊→騎馬兵の登場",
+      "cardIds": [
+        "STABLE"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "シリーズ固有の効果・大型召喚",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A129",
+      "name": "傭兵の兵士召喚とカジノ連動",
+      "stages": "兵士増援→3・5・10個ダイス／傭兵術で再発動",
+      "cardIds": [
+        "MERCENARY",
+        "MERC_LEADER",
+        "MERC_MASTER",
+        "MERC_ART"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "シリーズ固有の効果・大型召喚",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A162",
+      "name": "効果の対象選択・決定",
+      "stages": "起点→対象の候補表示→決定→効果着弾",
+      "cardIds": [],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "手札・市場・ダイス・継続効果",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A174",
+      "name": "選ばれし領域の特殊勝利",
+      "stages": "除外カル25枚条件→領域発動→勝利",
+      "cardIds": [
+        "CHOSEN_AREA"
+      ],
+      "owner": "C",
+      "scope": "two-variant-preview",
+      "category": "種族シナジー・特殊勝敗",
+      "r2Status": "redo_backlog"
+    },
+    {
+      "id": "A177",
+      "name": "通常勝利・敗北・引き分け",
+      "stages": "決着の原因→シーカー反応→結果",
+      "cardIds": [],
+      "owner": "C",
+      "scope": "existing-integration-check",
+      "category": "種族シナジー・特殊勝敗",
+      "r2Status": "existing_integration_audit"
+    },
+    {
+      "id": "A182",
+      "name": "対戦開始",
+      "stages": "盤面登場→シーカー対面→先後決定→初期手札",
+      "cardIds": [],
+      "owner": "C",
+      "scope": "existing-integration-check",
+      "category": "対戦全体・操作の補助（カード効果とは別枠）",
+      "r2Status": "existing_integration_audit"
+    },
+    {
+      "id": "A183",
+      "name": "ターン交代",
+      "stages": "終了→交代→開始時効果",
+      "cardIds": [],
+      "owner": "C",
+      "scope": "existing-integration-check",
+      "category": "対戦全体・操作の補助（カード効果とは別枠）",
+      "r2Status": "existing_integration_audit"
+    },
+    {
+      "id": "A184",
+      "name": "攻撃対象の照準",
+      "stages": "ドラッグ開始→対象への照準→キャンセル／決定",
+      "cardIds": [],
+      "owner": "C",
+      "scope": "existing-integration-check",
+      "category": "対戦全体・操作の補助（カード効果とは別枠）",
+      "r2Status": "existing_integration_audit"
+    },
+    {
+      "id": "A185",
+      "name": "カードの操作",
+      "stages": "ホバー・選択・ドラッグ・拡大・場の並べ替え",
+      "cardIds": [],
+      "owner": "C",
+      "scope": "existing-integration-check",
+      "category": "対戦全体・操作の補助（カード効果とは別枠）",
+      "r2Status": "existing_integration_audit"
+    },
+    {
+      "id": "A186",
+      "name": "連続発動の共通制御",
+      "stages": "同時発動の整理／早送り／中断／動きを減らす設定",
+      "cardIds": [],
+      "owner": "C",
+      "scope": "existing-integration-check",
+      "category": "対戦全体・操作の補助（カード効果とは別枠）",
+      "r2Status": "existing_integration_audit"
+    }
+  ]
+}

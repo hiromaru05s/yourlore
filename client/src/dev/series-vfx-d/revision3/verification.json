@@ -1,0 +1,470 @@
+{
+  "material": {
+    "S07/MIMIC": [
+      1,
+      2
+    ],
+    "S07/MIMIC2": [
+      1,
+      2
+    ],
+    "S07/MIMIC_LORD": [
+      1,
+      2
+    ],
+    "S07/AWAKENED_MIMIC": [
+      1,
+      2
+    ],
+    "S07/MIMIC_KING": [
+      1,
+      2
+    ],
+    "S07/MIMIC_KING2": [
+      1,
+      2
+    ],
+    "S07/ORIGIN_MIMIC": [
+      1,
+      2
+    ],
+    "S07/DUNGEON": [
+      1,
+      2
+    ],
+    "S07/DUNGEON_FLOOR": [
+      1,
+      2
+    ],
+    "S07/GEM_RAIN": [
+      1,
+      2
+    ],
+    "S07/GREED_PRICE": [
+      1,
+      2
+    ],
+    "S07/MIMIC_HIDEOUT": [
+      1,
+      2
+    ],
+    "S07/MIMIC_HUNTER": [
+      1,
+      2
+    ],
+    "S07/QUICK_MIMIC": [
+      1,
+      2
+    ],
+    "S07/QUICK_SURVIVAL": [
+      1,
+      2
+    ],
+    "S15/STARTER_TRASH": [
+      1,
+      2
+    ],
+    "S15/CULL_FLOOD": [
+      1,
+      2
+    ],
+    "S15/PAIN_HARVEST": [
+      1,
+      2
+    ],
+    "S15/CULL_FARM": [
+      1,
+      2
+    ],
+    "S15/PURGE_ALL": [
+      1,
+      2
+    ],
+    "A144/AMA": [
+      1,
+      2
+    ],
+    "A144/HANDRESET": [
+      1,
+      2
+    ],
+    "A145/ORIGIN_QUEST": [
+      1,
+      2
+    ],
+    "A152/STARTER_CHEST": [
+      1,
+      2
+    ],
+    "A152/LUCKY_CHEST": [
+      1,
+      2
+    ],
+    "A152/GUILD_CHEST": [
+      1,
+      2
+    ],
+    "A153/GAMBLER": [
+      1,
+      2
+    ],
+    "A153/GAMBLE": [
+      1,
+      2
+    ],
+    "A153/S1": [
+      1,
+      2
+    ],
+    "A154/ND3": [
+      1,
+      2
+    ],
+    "A154/LEGEND_GAMBLER": [
+      1,
+      2
+    ],
+    "A155/CASINO": [
+      1,
+      2
+    ],
+    "A156/FATE_WHEEL": [
+      1,
+      2
+    ],
+    "A157/LUCKY_ECHO": [
+      1,
+      2
+    ],
+    "A157/Q_CHEAT": [
+      1,
+      2
+    ],
+    "A157/NO_PAIN": [
+      1,
+      2
+    ],
+    "S15/EXILE_NUKE1": [
+      1,
+      2
+    ],
+    "S15/EXILE_NUKE2": [
+      1,
+      2
+    ],
+    "S15/FURNACE": [
+      1,
+      2
+    ],
+    "S15/PURGE_TOUCH": [
+      1,
+      2
+    ],
+    "S15/SCRAPPER": [
+      1,
+      2
+    ],
+    "S15/CROSSROADS": [
+      1,
+      2
+    ],
+    "S15/TRIAL_AREA": [
+      1,
+      2
+    ],
+    "S15/VOID_FRUIT": [
+      1,
+      2
+    ],
+    "S15/VOID_APOSTLE": [
+      1,
+      2
+    ],
+    "S15/REFRESH_HAND": [
+      1,
+      2
+    ],
+    "S15/FOCUS": [
+      1,
+      2
+    ],
+    "S15/RIFT": [
+      1,
+      2
+    ],
+    "S15/FREE_REWARD": [
+      1,
+      2
+    ],
+    "S15/ORIGIN_QUEST": [
+      1,
+      2
+    ],
+    "S15/VOID_RITE": [
+      1,
+      2
+    ],
+    "S15/Q_RIFT": [
+      1,
+      2
+    ],
+    "S23/RUST_SHROOM": [
+      1,
+      2
+    ],
+    "S23/RUST_SLUG": [
+      1,
+      2
+    ],
+    "S23/POISON_MASTER": [
+      1,
+      2
+    ],
+    "S23/DECAY_CRAFT": [
+      1,
+      2
+    ],
+    "S23/ACID_RAIN": [
+      1,
+      2
+    ],
+    "S23/STRONG_ACID": [
+      1,
+      2
+    ],
+    "S23/ROTTEN_GROUND": [
+      1,
+      2
+    ],
+    "S23/QUICK_POISON": [
+      1,
+      2
+    ],
+    "S23/Q_DECAY": [
+      1,
+      2
+    ],
+    "S24/GAMBLER": [
+      1,
+      2
+    ],
+    "S24/LEGEND_GAMBLER": [
+      1,
+      2
+    ],
+    "S24/CASINO": [
+      1,
+      2
+    ],
+    "S24/GAMBLE": [
+      1,
+      2
+    ],
+    "S24/ND3": [
+      1,
+      2
+    ],
+    "S24/FATE_WHEEL": [
+      1,
+      2
+    ],
+    "S24/LUCKY_ECHO": [
+      1,
+      2
+    ],
+    "S24/NO_PAIN": [
+      1,
+      2
+    ],
+    "S24/Q_CHEAT": [
+      1,
+      2
+    ],
+    "S25/STARTER_CHEST": [
+      1,
+      2
+    ],
+    "S25/LUCKY_CHEST": [
+      1,
+      2
+    ],
+    "S25/GUILD_CHEST": [
+      1,
+      2
+    ],
+    "A004/QUICK_MIMIC": [
+      1,
+      2
+    ],
+    "A004/QUICK_SURVIVAL": [
+      1,
+      2
+    ],
+    "A004/QUICK_POISON": [
+      1,
+      2
+    ],
+    "A004/QUICK_REBIRTH": [
+      1,
+      2
+    ],
+    "A011/STARTER_CHEST": [
+      1,
+      2
+    ],
+    "A011/LUCKY_CHEST": [
+      1,
+      2
+    ],
+    "A011/GUILD_CHEST": [
+      1,
+      2
+    ],
+    "A014/MIMIC": [
+      1,
+      2
+    ],
+    "A014/SOLDIER2": [
+      1,
+      2
+    ],
+    "A014/TOKEN00": [
+      1,
+      2
+    ],
+    "A017/STARTER_TRASH": [
+      1
+    ],
+    "A017/FOCUS": [
+      1
+    ],
+    "A017/PURGE_TOUCH": [
+      1
+    ],
+    "A017/Q_ASSASSIN": [
+      1
+    ],
+    "A018/QUICK_MIMIC": [
+      1
+    ],
+    "A018/Q_RIFT": [
+      1
+    ],
+    "A018/GREED_PRICE": [
+      1
+    ],
+    "A019/D_BLACK": [
+      1,
+      2
+    ],
+    "A019/CHOSEN_MAGE": [
+      1,
+      2
+    ],
+    "A020/GM6_1": [
+      1,
+      2
+    ],
+    "A039/DECAY_CRAFT": [
+      1,
+      2
+    ],
+    "A040/QUICK_POISON": [
+      1,
+      2
+    ],
+    "A040/RUST_SLUG": [
+      1,
+      2
+    ],
+    "A040/POISON_MASTER": [
+      1,
+      2
+    ],
+    "A041/RUST_SHROOM": [
+      1,
+      2
+    ],
+    "A041/POISON_MASTER": [
+      1,
+      2
+    ],
+    "A042/RUST_SHROOM": [
+      1,
+      2
+    ],
+    "A042/RUST_SLUG": [
+      1,
+      2
+    ],
+    "A042/ACID_RAIN": [
+      1,
+      2
+    ],
+    "A042/STRONG_ACID": [
+      1,
+      2
+    ],
+    "A051/VOID_RITE": [
+      1,
+      2
+    ],
+    "A051/QUICK_REBIRTH": [
+      1,
+      2
+    ],
+    "A052/STARTER_MANA": [
+      1,
+      2
+    ],
+    "A058/MIMIC2": [
+      1,
+      2
+    ],
+    "A080/BLACK_INFINITY": [
+      1,
+      2
+    ],
+    "A117/AWAKENED_MIMIC": [
+      1,
+      2
+    ],
+    "A117/QUICK_MIMIC": [
+      1,
+      2
+    ],
+    "A117/DUNGEON_FLOOR": [
+      1,
+      2
+    ],
+    "A118/MIMIC_KING": [
+      1,
+      2
+    ],
+    "A119/MIMIC_KING2": [
+      1,
+      2
+    ],
+    "A120/MIMIC_HIDEOUT": [
+      1,
+      2
+    ],
+    "A121/MIMIC_HUNTER": [
+      1,
+      2
+    ],
+    "A135/SORTER": [
+      1,
+      2
+    ]
+  },
+  "fixed": [
+    "A017/Q_ASSASSIN/1",
+    "A018/Q_RIFT/1",
+    "A017/STARTER_TRASH/1",
+    "A017/FOCUS/1",
+    "A017/PURGE_TOUCH/1",
+    "A018/QUICK_MIMIC/1",
+    "A018/GREED_PRICE/1"
+  ]
+}

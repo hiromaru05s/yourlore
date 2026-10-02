@@ -1,0 +1,118 @@
+[
+  {
+    "id": "01-reference-ivory",
+    "url": "/art/vfx/mimic-mouth-r2/01-reference-ivory.png",
+    "width": 1254,
+    "height": 1254,
+    "upper": [
+      59,
+      107,
+      1136,
+      230
+    ],
+    "lower": [
+      53,
+      449,
+      1146,
+      205
+    ],
+    "tongue": [
+      397,
+      701,
+      466,
+      513
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "generatedSource": "/Users/hiromaru05s/.codex/generated_images/01a0e26b-f8de-75b1-aa36-d21e45120c05/exec-d4ecc615-ed71-4398-b3e8-690c1317a313.png"
+  },
+  {
+    "id": "02-ridged-bone",
+    "url": "/art/vfx/mimic-mouth-r2/02-ridged-bone.png",
+    "width": 1254,
+    "height": 1254,
+    "upper": [
+      65,
+      90,
+      1125,
+      262
+    ],
+    "lower": [
+      49,
+      453,
+      1157,
+      194
+    ],
+    "tongue": [
+      404,
+      718,
+      451,
+      498
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "generatedSource": "/Users/hiromaru05s/.codex/generated_images/01a0e26b-f8de-75b1-aa36-d21e45120c05/exec-5f0ac8fa-8202-47f2-9c85-a7283142caeb.png"
+  },
+  {
+    "id": "03-moist-flesh",
+    "url": "/art/vfx/mimic-mouth-r2/03-moist-flesh.png",
+    "width": 1254,
+    "height": 1254,
+    "upper": [
+      70,
+      87,
+      1118,
+      240
+    ],
+    "lower": [
+      65,
+      420,
+      1124,
+      196
+    ],
+    "tongue": [
+      430,
+      661,
+      395,
+      532
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "generatedSource": "/Users/hiromaru05s/.codex/generated_images/01a0e26b-f8de-75b1-aa36-d21e45120c05/exec-8f8830f3-d924-4422-8fb2-46ccb83bdc05.png"
+  },
+  {
+    "id": "04-predator-fangs",
+    "url": "/art/vfx/mimic-mouth-r2/04-predator-fangs.png",
+    "width": 1254,
+    "height": 1254,
+    "upper": [
+      50,
+      84,
+      1152,
+      265
+    ],
+    "lower": [
+      74,
+      415,
+      1104,
+      230
+    ],
+    "tongue": [
+      417,
+      671,
+      421,
+      527
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "generatedSource": "/Users/hiromaru05s/.codex/generated_images/01a0e26b-f8de-75b1-aa36-d21e45120c05/exec-09d636dc-ff5f-4298-8184-4f2a8da56c74.png"
+  }
+]
