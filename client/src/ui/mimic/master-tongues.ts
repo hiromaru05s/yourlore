@@ -2,6 +2,7 @@ import * as T from 'three';
 import {ease} from './motion';
 
 const SEGMENTS=64,SIDES=16;
+const rings=Array.from({length:SIDES+1},(_,k)=>{const angle=k/SIDES*Math.PI*2;return {cos:Math.cos(angle),sin:Math.sin(angle),ridge:1-.13*Math.exp(-Math.pow(Math.cos(angle)/.2,2))};});
 export function tongueSpine(time:number,index:number,reduced=false){
  const delay=index*105,reach=ease(960+delay,1280+delay,time)*(1-ease(1670+delay,2030+delay,time));
  const sign=index===0?-1:1;
@@ -28,6 +29,7 @@ export class DynamicTongues{
  private meshes:T.Mesh<T.BufferGeometry,T.MeshPhysicalMaterial>[]=[];
  private texture:T.Texture;
  private disposed=false;
+ private tangent=new T.Vector3();private across=new T.Vector3();private depth=new T.Vector3();private vertex=new T.Vector3();
  readonly ready:Promise<void>;
  constructor(){
   this.renderer=new T.WebGLRenderer({alpha:true,antialias:true,premultipliedAlpha:true,preserveDrawingBuffer:false});
@@ -47,7 +49,7 @@ export class DynamicTongues{
     texture.offset.set(.435,.16);texture.repeat.set(.125,.14);texture.anisotropy=4;
     this.meshes.forEach(m=>{m.material.map=texture;m.material.bumpMap=texture;m.material.needsUpdate=true;});resolve();
    },undefined,reject);
-  }).then(()=>{if(!this.disposed){this.draw(1400,100);this.draw(0,0);}});
+  }).then(async()=>{if(this.disposed)return;this.draw(1400,100,false,false);await this.renderer.compileAsync(this.scene,this.camera);if(!this.disposed){this.draw(1400,100);this.draw(0,0);}});
   for(let j=0;j<2;j++){
    const count=(SEGMENTS+1)*(SIDES+1),geometry=new T.BufferGeometry();
    geometry.setAttribute('position',new T.BufferAttribute(new Float32Array(count*3),3).setUsage(T.DynamicDrawUsage));
@@ -63,7 +65,7 @@ export class DynamicTongues{
    const mesh=new T.Mesh(geometry,material);mesh.frustumCulled=false;this.scene.add(mesh);this.meshes.push(mesh);
   }
  }
- draw(time:number,gap:number,reduced=false){
+ draw(time:number,gap:number,reduced=false,render=true){
   if(this.disposed)return;
   for(let index=0;index<2;index++){
    const {points,reach}=tongueSpine(time,index,reduced),mesh=this.meshes[index];mesh.visible=reach>.015&&gap>3;
@@ -72,20 +74,19 @@ export class DynamicTongues{
    const rootShift=(gap-100)*.12;
    for(let i=0;i<=SEGMENTS;i++){
     const u=i/SEGMENTS,point=points[i];
-    const tangent=points[Math.min(SEGMENTS,i+1)].clone().sub(points[Math.max(0,i-1)]).normalize();
-    const across=new T.Vector3(-tangent.y,tangent.x,0).normalize();
-    const depth=new T.Vector3().crossVectors(tangent,across).normalize();
+    const tangent=this.tangent.copy(points[Math.min(SEGMENTS,i+1)]).sub(points[Math.max(0,i-1)]).normalize();
+    const across=this.across.set(-tangent.y,tangent.x,0).normalize();
+    const depth=this.depth.crossVectors(tangent,across).normalize();
     const radius=(index===0?12.5:11.5)*Math.pow(1-u,.58)*ease(0,.1,u)*Math.min(1,reach*4)+.16;
     for(let k=0;k<=SIDES;k++){
-     const angle=k/SIDES*Math.PI*2;
-     const ridge=1-.13*Math.exp(-Math.pow(Math.cos(angle)/.2,2));
-     const v=point.clone().addScaledVector(across,Math.cos(angle)*radius).addScaledVector(depth,Math.sin(angle)*radius*.47*ridge);
+     const {cos,sin,ridge}=rings[k];
+     const v=this.vertex.copy(point).addScaledVector(across,cos*radius).addScaledVector(depth,sin*radius*.47*ridge);
      positions.setXYZ(i*(SIDES+1)+k,v.x,v.y-rootShift,v.z);
     }
    }
    positions.needsUpdate=true;mesh.geometry.computeVertexNormals();
   }
-  this.renderer.render(this.scene,this.camera);
+  if(render)this.renderer.render(this.scene,this.camera);
  }
  dispose(){if(this.disposed)return;this.disposed=true;this.meshes.forEach(m=>{m.geometry.dispose();m.material.dispose();});this.texture.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.canvas.remove();}
 }

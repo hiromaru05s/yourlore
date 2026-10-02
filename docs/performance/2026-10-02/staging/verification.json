@@ -1,0 +1,117 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-10-02T11:54:20.479Z",
+  "assets": [
+    {
+      "file": "index.html",
+      "sha256": "98e2029297616dc2efdd366ca4da28c2cc87402d868d81b1ac0633ecc5c95db2"
+    },
+    {
+      "file": "assets/BufferGeometryUtils-Baez16NA.js",
+      "sha256": "6e085b5d6482dd79bc90b08f14d129f96e5618a832017693f325e49adcf76a49"
+    },
+    {
+      "file": "assets/RoomEnvironment-DIu0B03x.js",
+      "sha256": "f712691c9b709bcc2b3837f9069f64644d8eafd1a6ea694917b3558b0850d316"
+    },
+    {
+      "file": "assets/ceremonyScene-ChrpEFuB.js",
+      "sha256": "860cda4513a61dda87dd62b2aa1ec7cac35fad4fb000351158c463d1852b5d36"
+    },
+    {
+      "file": "assets/crownOutcome-DaCxdczi.js",
+      "sha256": "1448d86f6454514753e92c41683b8a450e9edf6fa0176ec62384080d364018a8"
+    },
+    {
+      "file": "assets/diceScene-D7l2MtnH.js",
+      "sha256": "509f58a397e970153dca1623d5a23f7943a8db23b0b7e1c4e6210bda6bb23791"
+    },
+    {
+      "file": "assets/duelScene-DnNU0AVw.js",
+      "sha256": "2aaa13f7fb5c4cc69a6efc83797c9dd87aa96370a62bc87ffa16afd90a792144"
+    },
+    {
+      "file": "assets/family-matter-DCtFFotJ.js",
+      "sha256": "4a945d6664cc3b0d4354ef0340eb1c3ff74a4630273bb3e8f2a2d038606e1205"
+    },
+    {
+      "file": "assets/game-D3DzjRMW.js",
+      "sha256": "3f98f58c1fdaba4351233eabbde45085fa5f38124cf23751afe67ae6be5b3240"
+    },
+    {
+      "file": "assets/game-pMfcEDtF.css",
+      "sha256": "834708ab76534934347cff47b156f4228bd9c7904902eda69088e255db0cdc94"
+    },
+    {
+      "file": "assets/handGeometry-Bz96hXgQ.js",
+      "sha256": "aa57e7f2da29c273b4f2adfb686fe19dbae04ee09c5e9ce37b735341357b6d01"
+    },
+    {
+      "file": "assets/main-CuAa8-B9.js",
+      "sha256": "53a1974f429e8c2aa4c2a41bc3bdac704aecd2a6286ce6d164dce4a05e52255c"
+    },
+    {
+      "file": "assets/main-Oi7FSbLs.css",
+      "sha256": "d9b7428d7946f225d76a83491d75d5e5db13bedb31ef0ccc8c2bdf36a4dbd682"
+    },
+    {
+      "file": "assets/master-tongues-bbxpG5qf.js",
+      "sha256": "2afcb28ab276cef66250578be96bc683702b1dc19fe775233b9ba77d9c43e289"
+    },
+    {
+      "file": "assets/ornaments-C_ONw0Lq.js",
+      "sha256": "30bcb11d0dd7ecdb3965dd0ab1c176b554a479c2a730feb9b19f7d3e9dba12ba"
+    },
+    {
+      "file": "assets/paperDraw-DgDYA9xe.js",
+      "sha256": "b399886e124f95ddda3fb970e36959d64cbacf0a759ffb72c6ec12868045a934"
+    },
+    {
+      "file": "assets/renderer-yoqkxDfu.js",
+      "sha256": "b00ddbef4e352ae79ef5dffa24d6f5d4e9f3147e5c8e8bb17ccc4cdde5eb8714"
+    },
+    {
+      "file": "assets/riftScene-Bf-4Vu-2.js",
+      "sha256": "384bc146e12b5b41e77c4ef7fe6d322094601523926a69d439c800599364cb43"
+    },
+    {
+      "file": "assets/royal-matter-BMSr3__f.js",
+      "sha256": "f004682b2932d1d6fe7cb89759b9c67128075067239737a03d7e1142f1b09af4"
+    },
+    {
+      "file": "assets/runtime-CogZlO76.js",
+      "sha256": "7d915676d15a0c53759c227880eae9727213b9bd8e929257e9d7c73cd5fb854a"
+    },
+    {
+      "file": "assets/voidSurface-B0z1Ag-E.js",
+      "sha256": "e466c3d6ecc3f5abcc095c1ebbac569d4d7360ef9843e3acdb438a095a0182f9"
+    }
+  ],
+  "samples": [
+    {
+      "width": 1280,
+      "height": 900,
+      "gpuCalls": {
+        "duel-objects-3d": 7903,
+        "offscreen": 60
+      },
+      "frames": 301,
+      "p95": 16.799999999995634,
+      "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":0,\"portalPasses\":60,\"displayPasses\":181,\"flightPasses\":0,\"cpuMs\":167.2,\"calls\":32,\"triangles\":14196}"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "gpuCalls": {
+        "offscreen": 61,
+        "duel-objects-3d": 8448
+      },
+      "frames": 301,
+      "p95": 16.700000000004366,
+      "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":2,\"portalPasses\":59,\"displayPasses\":181,\"flightPasses\":0,\"cpuMs\":148.1,\"calls\":32,\"triangles\":14196}"
+    }
+  ],
+  "optimizedSilverProjection": true,
+  "errors": [],
+  "boundary": "Real deployed assets and built BOT board. Authentication/API responses are fixtures. Silver ink invoked through the deployed swallowRiftCard export on a public hand clone; not an authenticated online match or natural exile event."
+}

@@ -1,3 +1,4 @@
+import {batchOrnament} from './batch';
 import * as T from 'three';import {ease} from './motion';import type {FamilyId} from './selection';
 const gold=new T.MeshStandardMaterial({color:0xd9caa4,metalness:.28,roughness:.48,bumpScale:.38});
 const loadMetal=()=>new Promise<void>((resolve,reject)=>new T.TextureLoader().load('/art/vfx/mimic-family/engraved-brass.png',texture=>{texture.colorSpace=T.SRGBColorSpace;texture.wrapS=texture.wrapT=T.RepeatWrapping;texture.anisotropy=4;gold.map=texture;gold.bumpMap=texture;gold.needsUpdate=true;resolve();},undefined,reject));
@@ -23,9 +24,9 @@ export function crown(){
   petal.position.set(Math.sin(theta)*30,8,Math.cos(theta)*16.8);petal.rotation.y=theta;g.add(petal);
  }
  for(let i=0;i<24;i++){const a=i/24*Math.PI*2,dot=mesh(new T.SphereGeometry(.85,8,6),enamel);dot.position.set(Math.sin(a)*30,1,Math.cos(a)*17);g.add(dot);}
- return g;
+ return batchOrnament(g);
 }
-function claw(){const g=new T.Group();g.add(rod(new T.Vector3(0,0,0),new T.Vector3(15,-9,0),5,dark));const cuff=mesh(new T.SphereGeometry(5.5,12,8),gold);cuff.position.set(15,-9,0);g.add(cuff);for(let i=-1;i<=1;i++){const curve=new T.CatmullRomCurve3([new T.Vector3(14,-9,i*3),new T.Vector3(24,-13,i*5),new T.Vector3(29,-26,i*4)]);const geometry=new T.TubeGeometry(curve,16,2.6,8,false),pos=geometry.getAttribute('position')as T.BufferAttribute;for(let j=0;j<=16;j++){const p=curve.getPointAt(j/16),f=1-j/16*.96;for(let k=0;k<=8;k++){const ix=j*9+k;pos.setXYZ(ix,p.x+(pos.getX(ix)-p.x)*f,p.y+(pos.getY(ix)-p.y)*f,p.z+(pos.getZ(ix)-p.z)*f);}}geometry.computeVertexNormals();g.add(mesh(geometry,gold));}return g;}
+function claw(){const g=new T.Group();g.add(rod(new T.Vector3(0,0,0),new T.Vector3(15,-9,0),5,dark));const cuff=mesh(new T.SphereGeometry(5.5,12,8),gold);cuff.position.set(15,-9,0);g.add(cuff);for(let i=-1;i<=1;i++){const curve=new T.CatmullRomCurve3([new T.Vector3(14,-9,i*3),new T.Vector3(24,-13,i*5),new T.Vector3(29,-26,i*4)]);const geometry=new T.TubeGeometry(curve,16,2.6,8,false),pos=geometry.getAttribute('position')as T.BufferAttribute;for(let j=0;j<=16;j++){const p=curve.getPointAt(j/16),f=1-j/16*.96;for(let k=0;k<=8;k++){const ix=j*9+k;pos.setXYZ(ix,p.x+(pos.getX(ix)-p.x)*f,p.y+(pos.getY(ix)-p.y)*f,p.z+(pos.getZ(ix)-p.z)*f);}}geometry.computeVertexNormals();g.add(mesh(geometry,gold));}return batchOrnament(g);}
 export class Ornaments {
  private root=new T.Group();private claws:T.Group[]=[];
  constructor(scene:T.Scene,id:FamilyId,_variant:number){

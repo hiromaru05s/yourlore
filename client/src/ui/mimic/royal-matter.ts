@@ -4,6 +4,7 @@ import {royalPose,windowAt,type RoyalId} from './motion';
 import {RoyalOrnaments} from './royal-ornaments';
 
 const SEGMENTS=64,SIDES=16;
+const rings=Array.from({length:SIDES+1},(_,k)=>{const angle=k/SIDES*Math.PI*2;return {cos:Math.cos(angle),sin:Math.sin(angle),ridge:1-.13*Math.exp(-Math.pow(Math.cos(angle)/.2,2))};});
 export function tongueSpine(time:number,_index:number,reduced=false,id:RoyalId='MIMIC_KING'){
  const p=royalPose(time,id,reduced),second=id==='MIMIC_KING2';
  const reach=windowAt(time,second?800:1050,second?1170:1450,2290,2630)*ease(0,35,p.gap);
@@ -26,6 +27,7 @@ export class RoyalMatter{
  private meshes:T.Mesh<T.BufferGeometry,T.MeshPhysicalMaterial>[]=[];
  private texture:T.Texture;
  private disposed=false;
+ private tangent=new T.Vector3();private across=new T.Vector3();private depth=new T.Vector3();private vertex=new T.Vector3();
  readonly ready:Promise<void>;
  private ornaments:RoyalOrnaments;
  constructor(private id:RoyalId){
@@ -46,7 +48,7 @@ export class RoyalMatter{
     texture.offset.set(.435,.16);texture.repeat.set(.125,.14);texture.anisotropy=4;
     this.meshes.forEach(m=>{m.material.map=texture;m.material.bumpMap=texture;m.material.needsUpdate=true;});resolve();
    },undefined,reject);
-  }).then(()=>this.ornaments.ready).then(()=>{if(!this.disposed){this.draw(1400,100);this.draw(0,0);}});
+  }).then(()=>this.ornaments.ready).then(async()=>{if(this.disposed)return;this.draw(1400,100,false,false);await this.renderer.compileAsync(this.scene,this.camera);if(!this.disposed){this.draw(1400,100);this.draw(0,0);}});
   for(let j=0;j<1;j++){
    const count=(SEGMENTS+1)*(SIDES+1),geometry=new T.BufferGeometry();
    geometry.setAttribute('position',new T.BufferAttribute(new Float32Array(count*3),3).setUsage(T.DynamicDrawUsage));
@@ -63,29 +65,29 @@ export class RoyalMatter{
   }
   this.ornaments=new RoyalOrnaments(this.scene,id);
  }
- draw(time:number,gap:number,reduced=false){
+ draw(time:number,gap:number,reduced=false,render=true){
   if(this.disposed)return;
+  const spine=tongueSpine(time,0,reduced,this.id);
   for(let index=0;index<1;index++){
-   const {points,reach}=tongueSpine(time,index,reduced,this.id),mesh=this.meshes[index];mesh.visible=reach>.015&&gap>3;
+   const {points,reach}=spine,mesh=this.meshes[index];mesh.visible=reach>.015&&gap>3;
    if(!mesh.visible)continue;
    const positions=mesh.geometry.getAttribute('position')as T.BufferAttribute;
    const rootShift=0;
    for(let i=0;i<=SEGMENTS;i++){
     const u=i/SEGMENTS,point=points[i];
-    const tangent=points[Math.min(SEGMENTS,i+1)].clone().sub(points[Math.max(0,i-1)]).normalize();
-    const across=new T.Vector3(-tangent.y,tangent.x,0).normalize();
-    const depth=new T.Vector3().crossVectors(tangent,across).normalize();
+    const tangent=this.tangent.copy(points[Math.min(SEGMENTS,i+1)]).sub(points[Math.max(0,i-1)]).normalize();
+    const across=this.across.set(-tangent.y,tangent.x,0).normalize();
+    const depth=this.depth.crossVectors(tangent,across).normalize();
     const radius=(this.id==='MIMIC_KING2'?19:18)*Math.pow(1-u,.58)*ease(0,.1,u)*Math.min(1,reach*4)+.16;
     for(let k=0;k<=SIDES;k++){
-     const angle=k/SIDES*Math.PI*2;
-     const ridge=1-.13*Math.exp(-Math.pow(Math.cos(angle)/.2,2));
-     const v=point.clone().addScaledVector(across,Math.cos(angle)*radius).addScaledVector(depth,Math.sin(angle)*radius*.47*ridge);
+     const {cos,sin,ridge}=rings[k];
+     const v=this.vertex.copy(point).addScaledVector(across,cos*radius).addScaledVector(depth,sin*radius*.47*ridge);
      positions.setXYZ(i*(SIDES+1)+k,v.x,v.y-rootShift,v.z);
     }
    }
    positions.needsUpdate=true;mesh.geometry.computeVertexNormals();
   }
-  this.ornaments.draw(time,royalPose(time,this.id,reduced),reduced,tongueSpine(time,0,reduced,this.id).points);this.renderer.render(this.scene,this.camera);
+  this.ornaments.draw(time,royalPose(time,this.id,reduced),reduced,spine.points);if(render)this.renderer.render(this.scene,this.camera);
  }
  dispose(){if(this.disposed)return;this.disposed=true;this.ornaments.dispose();this.meshes.forEach(m=>{m.geometry.dispose();m.material.dispose();});this.texture.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.canvas.remove();}
 }

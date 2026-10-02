@@ -1,0 +1,12 @@
+{
+  "normalBothSides": true,
+  "simultaneous": {
+    "results": [
+      true,
+      true
+    ],
+    "restored": true,
+    "remaining": 0
+  },
+  "errors": []
+}
