@@ -1,3 +1,4 @@
+import {renderQuality,setRenderQuality} from '../ui/renderDensity';
 import { homeIcon } from "../ui/homeIcons";
 import { loungeText } from "../ui/loungeText";
 import { confirmDialog } from "../ui/modal";
@@ -254,6 +255,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         </div>
       </section>`;
 
+    const qualitySection=document.createElement('section');qualitySection.className='tut-sec';qualitySection.innerHTML=`<h3>${loungeText('描画品質','Graphics','그래픽')}</h3><div class="set-row"><label class="set-label" for="renderQuality">${loungeText('盤面の精細さ','Board detail','보드 선명도')}</label><select id="renderQuality"><option value="balanced">${loungeText('高精細（推奨）','Crisp (recommended)','고해상도 (권장)')}</option><option value="economy">${loungeText('軽量','Economy','경량')}</option></select></div><p class="set-desc">${loungeText('この端末に保存し、次の対戦から適用します。','Saved on this device. Applies to the next match.','이 기기에 저장되며 다음 대전부터 적용됩니다.')}</p>`;body().children[0].after(qualitySection);const quality=qualitySection.querySelector<HTMLSelectElement>('select')!;quality.value=renderQuality();quality.onchange=()=>setRenderQuality(quality.value);
     // volume
     const vol = body().querySelector("#vol") as HTMLInputElement;
     const volVal = body().querySelector("#volVal") as HTMLElement;

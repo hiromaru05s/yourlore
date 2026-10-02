@@ -10,8 +10,9 @@ export async function mountBoard(){
  for(const t of THEMES)SLEEVES[t.id]={id:t.id,url:asset(t,'back.webp'),ja:t.name,en:t.en,ko:t.name,price:0};
  setLang('ja');setMyAvatar('SEEKER_BLUE');setOppAvatar('SEEKER_RED');
  const materials=createAtelierMaterials();
+ if(params.get('auditQuality')==='current')Object.defineProperty(materials,'pixelRatio',{get:()=>Math.min(devicePixelRatio||1,1.5,Math.sqrt(2600000/(innerWidth*innerHeight)))});
  if(params.get('auditQuality')==='native')Object.assign(materials,{pixelRatio:Math.min(devicePixelRatio||1,2)});
- const unregister=registerCosmeticPreview(root,materials);
+ const runtime=params.get('runtime')==='1';const unregister=runtime?()=>materials.dispose():registerCosmeticPreview(root,materials);
  class PreviewController extends BaseController{submit(){/* Sample match is read-only. */} show(g:GameState){this.state=g;this.view.render(g);}}
  const ctl=new PreviewController(root,0,{onHome(){},onRematch(){}}),stop=startBoardLayout();
  const g=createGame({mode:'bot',seed:41,starting:0,p0:{id:'atelier-self',name:'自分'},p1:{id:'atelier-opponent',name:'相手'}}).state;
@@ -24,6 +25,7 @@ export async function mountBoard(){
   const theme=THEMES.find(t=>t.id===next.set)??null,version=++serial;await materials.select(theme,next.side);if(version!==serial)return;
   state={...next,time:undefined};materials.setMotion(next.motion);if(next.time!==undefined)materials.seek(next.time);
   g.sleeves=[theme&&(next.side==='self'||next.side==='both')?theme.id:'default',theme&&(next.side==='opponent'||next.side==='both')?theme.id:'default'];
+  g.furnitures=g.sleeves?.map(id=>id==='default'?'default':'furniture:'+id) as [string,string];
   for(const [i,p]of g.players.entries()){
    p.hand=hands.map(card);p.deck=Array.from({length:next.count},()=>card('ELF'));p.discard=Array.from({length:next.count?Math.min(next.count,12):0},()=>card('HALF_ELF'));
    p.field=monsters.slice(i?1:0,(i?1:0)+(next.dense?7:2)).map(c=>({...card(c.id),atk:c.atk!,def:c.def!,dmg:0,exhausted:true,tempAtk:0,atkMod:0,defMod:0,summonedTurn:0}) as FieldMon);

@@ -17,7 +17,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: new URL('./index.html', import.meta.url).pathname,
-        ...(process.env.LORE_BUILD_PREVIEW === '1' ? {tablePreview: new URL('./table-preview.html', import.meta.url).pathname,cosmeticStudio:new URL('./cosmetic-studio.html',import.meta.url).pathname} : {}),
+        cosmeticStudio: new URL('./cosmetic-studio.html',import.meta.url).pathname,
+        ...(process.env.LORE_BUILD_PREVIEW === '1' ? {tablePreview: new URL('./table-preview.html', import.meta.url).pathname} : {}),
       },
     },
   },

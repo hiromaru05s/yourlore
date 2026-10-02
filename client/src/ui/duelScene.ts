@@ -1,3 +1,5 @@
+import {createEquippedCosmetics} from './cosmetics/runtime';
+import {boardPixelRatio,flightPixelRatio} from './renderDensity';
 import {getCosmeticPreview} from './cosmeticPreviewBridge';
 import {disposeFormationBloom} from './manaFormation';
 import {getManaFormation} from './manaFormationPreview';
@@ -16,21 +18,22 @@ import {boardLens,cardUnit,layoutRect,projectBoardDOM,clearBoardProjection,scree
 type Item={group:T.Group;key:string;element:HTMLElement;market:boolean;supply:boolean;pile?:PileModel;count?:number;entered?:number;surface?:T.Texture;disposeCosmetic?:()=>void};
 const clamp=(n:number)=>Math.min(1,Math.max(0,n));
 export function mountDuelScene(root:HTMLElement):()=>void {
-  const cosmeticPreview=getCosmeticPreview(root);
-  const rasterRatio=()=>cosmeticPreview?.pixelRatio??Math.min(devicePixelRatio||1,1.5,Math.sqrt(2600000/(innerWidth*innerHeight)));
+  const cosmeticPreview=getCosmeticPreview(root)??createEquippedCosmetics(root);
+  const rasterRatio=()=>cosmeticPreview?.pixelRatio??boardPixelRatio(innerWidth,innerHeight);
   let renderer:T.WebGLRenderer;
-  try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{root.dataset.tableState='fallback';root.dataset.widgetsReady='fallback';return ()=>{};}
+  try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{cosmeticPreview.dispose();root.dataset.tableState='fallback';root.dataset.widgetsReady='fallback';return ()=>{};}
   let flightRenderer:T.WebGLRenderer;
-  try{flightRenderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{renderer.dispose();renderer.forceContextLoss();root.dataset.tableState='fallback';root.dataset.widgetsReady='fallback';return ()=>{};}
+  try{flightRenderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{cosmeticPreview.dispose();renderer.dispose();renderer.forceContextLoss();root.dataset.tableState='fallback';root.dataset.widgetsReady='fallback';return ()=>{};}
   renderer.setPixelRatio(rasterRatio());renderer.setClearColor(0,0);renderer.autoClear=false;
   renderer.toneMapping=T.AgXToneMapping;renderer.toneMappingExposure=1;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
   const canvas=renderer.domElement;canvas.className='duel-objects-3d';canvas.setAttribute('aria-hidden','true');root.append(canvas);
   const pmrem=new T.PMREMGenerator(renderer),room=new RoomEnvironment(),environment=pmrem.fromScene(room,.04);room.dispose();pmrem.dispose();
+  const flightPmrem=new T.PMREMGenerator(flightRenderer),flightRoom=new RoomEnvironment(),flightEnvironment=flightPmrem.fromScene(flightRoom,.04);flightRoom.dispose();flightPmrem.dispose();
   const flightScene=new T.Scene();
-  flightRenderer.setPixelRatio(rasterRatio());flightRenderer.setClearColor(0,0);flightRenderer.toneMapping=T.NoToneMapping;
+  flightRenderer.setPixelRatio(cosmeticPreview?.pixelRatio??flightPixelRatio());flightRenderer.setClearColor(0,0);flightRenderer.toneMapping=T.NoToneMapping;
   const flightCanvas=flightRenderer.domElement;flightCanvas.className='board-flight-canvas';flightCanvas.setAttribute('aria-hidden','true');document.body.append(flightCanvas);
-  flightScene.add(new T.AmbientLight(0xffffff,1.5));
+  flightScene.environment=flightEnvironment.texture;flightScene.environmentIntensity=.55;flightScene.add(new T.AmbientLight(0xffffff,1.5));
   const scene=new T.Scene();scene.environment=environment.texture;scene.environmentIntensity=.55;
   // Match the approved component preview lighting; avoid washing out sapphire and navy.
   const keyLight=new T.DirectionalLight(0xffeed9,2.3);keyLight.castShadow=true;keyLight.shadow.mapSize.set(2048,2048);keyLight.shadow.bias=-.0002;keyLight.shadow.normalBias=.35;keyLight.shadow.autoUpdate=false;scene.add(keyLight);
@@ -51,7 +54,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   const furniture=loadLibraryAssets(()=>{dirty=true;});
   const items=new Map<string,Item>(),textures=new Map<string,T.Texture>();const loading=new T.LoadingManager();let pendingTextures=0;loading.onStart=()=>{pendingTextures++;};loading.onLoad=()=>{pendingTextures=0;};const loader=new T.TextureLoader(loading);
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-  function texture(url:string){let t=textures.get(url);if(!t){t=loader.load(url,()=>{dirty=true;});t.colorSpace=T.SRGBColorSpace;t.anisotropy=4;textures.set(url,t);}return t;}
+  function texture(url:string){let t=textures.get(url);if(!t){t=loader.load(url,()=>{dirty=true;});t.userData.url=url;t.colorSpace=T.SRGBColorSpace;t.anisotropy=8;textures.set(url,t);}return t;}
   function mesh(g:T.BufferGeometry,m:T.Material|T.Material[],parent:T.Object3D,x=0,y=0,z=0){const a=new T.Mesh(g,m);a.position.set(x,y,z);parent.add(a);return a;}
   function disposeObject(object:T.Object3D){const geos=new Set<T.BufferGeometry>(),mats=new Set<T.Material>();object.traverse(o=>{if(o instanceof T.Mesh){geos.add(o.geometry);(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>mats.add(m));}});geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());}
   function removeItem(item:Item){item.disposeCosmetic?.();scene.remove(item.group);disposeObject(item.group);}
@@ -89,7 +92,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
     const warm=new T.WebGLRenderTarget(64,64);flightRenderer.setRenderTarget(warm);
     try{flightRenderer.render(flightScene,camera);}finally{flightRenderer.setRenderTarget(null);warm.dispose();}
   });
-  const observer=new MutationObserver(records=>{if(records.some(r=>!(r.target instanceof Element&&r.target.closest('.tc-num,.pt-name,.pt-vitals,.mana-readout'))&&(r.type==='childList'||r.oldValue!==(r.target as Element).getAttribute(r.attributeName!))))dirty=true;});observer.observe(root,{childList:true,subtree:true,attributes:true,attributeOldValue:true,attributeFilter:['class','data-count','data-sleeve','data-face']});
+  const observer=new MutationObserver(records=>{if(records.some(r=>!(r.target instanceof Element&&r.target.closest('.tc-num,.pt-name,.pt-vitals,.mana-readout'))&&(r.type==='childList'||r.oldValue!==(r.target as Element).getAttribute(r.attributeName!))))dirty=true;});observer.observe(root,{childList:true,subtree:true,attributes:true,attributeOldValue:true,attributeFilter:['class','data-count','data-sleeve','data-face','data-material']});
   const onLayout=()=>{dirty=true;};window.addEventListener('lore:layout',onLayout);
   const dustScene=new T.Scene(), dustCamera=new T.PerspectiveCamera(45,1,1,4000);
   const dustMap=dustTexture();
@@ -119,7 +122,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   function render(now:number):void {
     if(dead)return;frame=requestAnimationFrame(render);if(document.hidden||now-last<16)return;last=now;
     if(!root.isConnected){dispose();return;}
-    if(width!==innerWidth||height!==innerHeight){width=innerWidth;height=innerHeight;const ratio=rasterRatio();renderer.setPixelRatio(ratio);flightRenderer.setPixelRatio(ratio);renderer.setSize(width,height);flightRenderer.setSize(width,height);cachedBoard.setSize(Math.round(width*renderer.getPixelRatio()),Math.round(height*renderer.getPixelRatio()));dirty=true;}
+    if(width!==innerWidth||height!==innerHeight){width=innerWidth;height=innerHeight;const ratio=rasterRatio();renderer.setPixelRatio(ratio);flightRenderer.setPixelRatio(cosmeticPreview?.pixelRatio??flightPixelRatio());renderer.setSize(width,height);flightRenderer.setSize(width,height);cachedBoard.samples=ratio>1.5||width*height*ratio*ratio>3000000?0:2;cachedBoard.setSize(Math.round(width*renderer.getPixelRatio()),Math.round(height*renderer.getPixelRatio()));dirty=true;}
     const paintStart=performance.now();
     const widgetMotion=widgets.tick(now),boardMotion=motion.tick(now),riftMotion=widgets.tickRift(now),displayMotion=widgets.takeDisplayUpdate();
     const cosmeticMotion=cosmeticPreview?.tick(now)??false;
@@ -211,7 +214,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   const lost=(event:Event)=>{event.preventDefault();dispose();};canvas.addEventListener('webglcontextlost',lost);flightCanvas.addEventListener('webglcontextlost',lost);
   function dispose(){
     if(dead)return;dead=true;disposeOpening();root.dataset.tableState='fallback';motion.dispose();cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:summon-impact',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);flightCanvas.removeEventListener('webglcontextlost',lost);
-    items.forEach(removeItem);cosmeticPreview?.dispose();textures.forEach(t=>t.dispose());table.dispose();furniture.dispose();widgets.dispose();disposeFormationBloom();keyLight.shadow.dispose();disposeObject(dustScene);dustMap.dispose();environment.dispose();cachedBoard.dispose();presentQuad.geometry.dispose();presentMaterial.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove();flightRenderer.dispose();flightRenderer.forceContextLoss();flightCanvas.remove();
+    items.forEach(removeItem);cosmeticPreview?.dispose();textures.forEach(t=>t.dispose());table.dispose();furniture.dispose();widgets.dispose();disposeFormationBloom();keyLight.shadow.dispose();disposeObject(dustScene);dustMap.dispose();environment.dispose();flightEnvironment.dispose();cachedBoard.dispose();presentQuad.geometry.dispose();presentMaterial.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove();flightRenderer.dispose();flightRenderer.forceContextLoss();flightCanvas.remove();
     root.querySelectorAll<HTMLElement>('.pile').forEach(el=>{el.classList.remove('pile--3d-ready');delete el.dataset.furniture;el.querySelector('.pile-draw-anchor')?.remove();});clearBoardProjection(root);root.classList.remove('duel-webgl','market-model-ready','supply-model-ready');
   }
   frame=requestAnimationFrame(render);return dispose;

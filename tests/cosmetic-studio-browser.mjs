@@ -22,7 +22,7 @@ try{
   const state=await page.evaluate(()=>({info:atelier.info(),sleeves:atelier.controller.state.sleeves,piles:[...document.querySelectorAll('.pile--deck,.pile--shelf')].map(p=>({id:p.id,material:p.dataset.atelierMaterial,sleeve:p.dataset.sleeve}))}));
   assert.deepEqual(state.sleeves,side==='self'?[set,'default']:['default',set]);assert.equal(state.piles.length,4);
   for(const pile of state.piles)assert.equal(pile.material,pile.id.startsWith(side==='self'?'pile-my':'pile-opp')?set:'default');
-  assert.deepEqual(await rects(),baseline,'equipping cosmetics must preserve board geometry');assert.equal(state.info.textures,3);assert.equal(state.info.surfaces,sets.indexOf(set)>5?5:0);
+  assert.deepEqual(await rects(),baseline,'equipping cosmetics must preserve board geometry');assert.equal(state.info.textures,6);assert.equal(state.info.surfaces,sets.indexOf(set)>5?5:0);
   await page.screenshot({path:path.join(out,`${set}-${side}.jpg`),type:'jpeg',quality:91});rows.push({set,side,...state});console.log('PASS',set,side);
  }
  for(const count of [0,1,12,40]){await apply(page,{set:'porcelain',side:'both',count,dense:true});assert.equal(await page.locator('.pile--deck').first().getAttribute('data-count'),String(count));await page.screenshot({path:path.join(out,`pile-${count}-dense.jpg`),type:'jpeg',quality:90});}
@@ -33,7 +33,7 @@ try{
   for(const side of ['self','opponent'])for(const time of [0,2,4]){await apply(page,{side,motion:false,time});await page.screenshot({path:path.join(out,`${set}-${side}-phase${time}.png`)});}
   await page.emulateMedia({reducedMotion:'reduce'});await apply(page,{side:'both',motion:true});assert.equal(await page.evaluate(()=>atelier.info().motion),false);const phase=await page.evaluate(()=>atelier.info().phase);await page.waitForTimeout(450);assert.equal(await page.evaluate(()=>atelier.info().phase),phase);await page.emulateMedia({reducedMotion:'no-preference'});
  }
- await page.evaluate(async()=>{await Promise.all(['amber','tidal','garnet','nocturne'].map(set=>atelier.apply({...atelier.state(),set})));});await page.waitForTimeout(700);assert.equal(await page.evaluate(()=>atelier.info().theme),'nocturne');assert.equal(await page.evaluate(()=>atelier.info().textures),3);
+ await page.evaluate(async()=>{await Promise.all(['amber','tidal','garnet','nocturne'].map(set=>atelier.apply({...atelier.state(),set})));});await page.waitForTimeout(700);assert.equal(await page.evaluate(()=>atelier.info().theme),'nocturne');assert.equal(await page.evaluate(()=>atelier.info().textures),6);
  await apply(page,{set:'default',side:'both'});assert.equal(await page.evaluate(()=>atelier.info().textures),0);assert.equal(await page.evaluate(()=>atelier.info().surfaces),0);
  await page.goto(origin+'/cosmetic-studio.html');let frame=await(await page.waitForSelector('#board')).contentFrame();await frame.waitForSelector('[data-scene-ready=true]',{timeout:90000});await page.waitForTimeout(1000);
  await page.locator('[data-set=emberheart]').click();await page.locator('[data-side=opponent]').click();await frame.waitForFunction(()=>atelier.info().theme==='emberheart'&&atelier.info().wearer==='opponent');

@@ -1,6 +1,6 @@
 /** Reproducible 2K master materials; original generated sleeve PNGs are retained. */
 import fs from 'node:fs/promises';import path from 'node:path';import sharp from 'sharp';import {transform} from 'esbuild';import {createHash} from 'node:crypto';
-const {code}=await transform(await fs.readFile('client/src/dev/cosmeticStudio/themes.ts','utf8'),{loader:'ts',format:'esm'});
+const {code}=await transform(await fs.readFile('client/src/shared/atelierThemes.ts','utf8'),{loader:'ts',format:'esm'});
 const {THEMES}=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
 const source='docs/cosmetics/2026-10-02-eight-sets/source',web='client/public/cosmetics/atelier-v1';
 function motif(k){

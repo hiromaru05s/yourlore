@@ -1,0 +1,334 @@
+{
+  "passed": true,
+  "rows": [
+    {
+      "quality": "current",
+      "size": "595x540",
+      "canvas": [
+        {
+          "w": 892,
+          "h": 810,
+          "cssW": 595,
+          "cssH": 540
+        },
+        {
+          "w": 892,
+          "h": 810,
+          "cssW": 595,
+          "cssH": 540
+        }
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "w": 49.209716796875,
+          "h": 62.35749816894531,
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "w": 59.920249938964844,
+          "h": 73.0682373046875,
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "w": 51.586181640625,
+          "h": 68.12542724609375,
+          "sleeve": "/cosmetics/atelier-v1/tidal/back.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "w": 62.806915283203125,
+          "h": 79.82684326171875,
+          "sleeve": "/cosmetics/atelier-v1/tidal/back.webp"
+        }
+      ],
+      "scale": 1
+    },
+    {
+      "quality": "current",
+      "size": "1280x720",
+      "canvas": [
+        {
+          "w": 1920,
+          "h": 1080,
+          "cssW": 1280,
+          "cssH": 720
+        },
+        {
+          "w": 1920,
+          "h": 1080,
+          "cssW": 1280,
+          "cssH": 720
+        }
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "w": 108.51129150390625,
+          "h": 130.6942901611328,
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "w": 131.9461669921875,
+          "h": 153.12303161621094,
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "w": 117.3802490234375,
+          "h": 150.7119140625,
+          "sleeve": "/cosmetics/atelier-v1/tidal/back.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "w": 142.695068359375,
+          "h": 176.57614135742188,
+          "sleeve": "/cosmetics/atelier-v1/tidal/back.webp"
+        }
+      ],
+      "scale": 1
+    },
+    {
+      "quality": "current",
+      "size": "1920x1080",
+      "canvas": [
+        {
+          "w": 2149,
+          "h": 1209,
+          "cssW": 1920,
+          "cssH": 1080
+        },
+        {
+          "w": 2149,
+          "h": 1209,
+          "cssW": 1920,
+          "cssH": 1080
+        }
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "w": 162.7880859375,
+          "h": 196.04139709472656,
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "w": 197.90213012695312,
+          "h": 229.72055053710938,
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "w": 176.0809326171875,
+          "h": 226.037353515625,
+          "sleeve": "/cosmetics/atelier-v1/tidal/back.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "w": 214.0071258544922,
+          "h": 264.87249755859375,
+          "sleeve": "/cosmetics/atelier-v1/tidal/back.webp"
+        }
+      ],
+      "scale": 1
+    },
+    {
+      "quality": "native",
+      "size": "595x540",
+      "canvas": [
+        {
+          "w": 1190,
+          "h": 1080,
+          "cssW": 595,
+          "cssH": 540
+        },
+        {
+          "w": 1190,
+          "h": 1080,
+          "cssW": 595,
+          "cssH": 540
+        }
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "w": 49.209716796875,
+          "h": 62.35749816894531,
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "w": 59.920249938964844,
+          "h": 73.0682373046875,
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "w": 51.586181640625,
+          "h": 68.12542724609375,
+          "sleeve": "/cosmetics/atelier-v1/tidal/back.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "w": 62.806915283203125,
+          "h": 79.82684326171875,
+          "sleeve": "/cosmetics/atelier-v1/tidal/back.webp"
+        }
+      ],
+      "scale": 1
+    },
+    {
+      "quality": "native",
+      "size": "1280x720",
+      "canvas": [
+        {
+          "w": 2560,
+          "h": 1440,
+          "cssW": 1280,
+          "cssH": 720
+        },
+        {
+          "w": 2560,
+          "h": 1440,
+          "cssW": 1280,
+          "cssH": 720
+        }
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "w": 108.51129150390625,
+          "h": 130.6942901611328,
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "w": 131.9461669921875,
+          "h": 153.12303161621094,
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "w": 117.3802490234375,
+          "h": 150.7119140625,
+          "sleeve": "/cosmetics/atelier-v1/tidal/back.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "w": 142.695068359375,
+          "h": 176.57614135742188,
+          "sleeve": "/cosmetics/atelier-v1/tidal/back.webp"
+        }
+      ],
+      "scale": 1
+    },
+    {
+      "quality": "native",
+      "size": "1920x1080",
+      "canvas": [
+        {
+          "w": 3840,
+          "h": 2160,
+          "cssW": 1920,
+          "cssH": 1080
+        },
+        {
+          "w": 3840,
+          "h": 2160,
+          "cssW": 1920,
+          "cssH": 1080
+        }
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "w": 162.7880859375,
+          "h": 196.04139709472656,
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "w": 197.90213012695312,
+          "h": 229.72055053710938,
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "w": 176.0809326171875,
+          "h": 226.037353515625,
+          "sleeve": "/cosmetics/atelier-v1/tidal/back.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "w": 214.0071258544922,
+          "h": 264.87249755859375,
+          "sleeve": "/cosmetics/atelier-v1/tidal/back.webp"
+        }
+      ],
+      "scale": 1
+    },
+    {
+      "set": "silverflow",
+      "snapshots": [
+        {
+          "theme": "silverflow",
+          "wearer": "self",
+          "motion": false,
+          "surfaces": 5,
+          "phase": 0,
+          "textures": 6
+        },
+        {
+          "theme": "silverflow",
+          "wearer": "self",
+          "motion": false,
+          "surfaces": 5,
+          "phase": 2,
+          "textures": 6
+        },
+        {
+          "theme": "silverflow",
+          "wearer": "self",
+          "motion": false,
+          "surfaces": 5,
+          "phase": 4,
+          "textures": 6
+        }
+      ]
+    },
+    {
+      "set": "emberheart",
+      "snapshots": [
+        {
+          "theme": "emberheart",
+          "wearer": "self",
+          "motion": false,
+          "surfaces": 5,
+          "phase": 0,
+          "textures": 6
+        },
+        {
+          "theme": "emberheart",
+          "wearer": "self",
+          "motion": false,
+          "surfaces": 5,
+          "phase": 2,
+          "textures": 6
+        },
+        {
+          "theme": "emberheart",
+          "wearer": "self",
+          "motion": false,
+          "surfaces": 5,
+          "phase": 4,
+          "textures": 6
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,639 @@
+{
+  "rows": [
+    {
+      "set": "nocturne",
+      "side": "self",
+      "info": {
+        "theme": "nocturne",
+        "wearer": "self",
+        "motion": false,
+        "surfaces": 0,
+        "phase": 2,
+        "textures": 6
+      },
+      "sleeves": [
+        "nocturne",
+        "default"
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "material": "nocturne",
+          "sleeve": "/cosmetics/atelier-v1/nocturne/back.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "material": "nocturne",
+          "sleeve": "/cosmetics/atelier-v1/nocturne/back.webp"
+        }
+      ]
+    },
+    {
+      "set": "nocturne",
+      "side": "opponent",
+      "info": {
+        "theme": "nocturne",
+        "wearer": "opponent",
+        "motion": false,
+        "surfaces": 0,
+        "phase": 2,
+        "textures": 6
+      },
+      "sleeves": [
+        "default",
+        "nocturne"
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "material": "nocturne",
+          "sleeve": "/cosmetics/atelier-v1/nocturne/back.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "material": "nocturne",
+          "sleeve": "/cosmetics/atelier-v1/nocturne/back.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        }
+      ]
+    },
+    {
+      "set": "porcelain",
+      "side": "self",
+      "info": {
+        "theme": "porcelain",
+        "wearer": "self",
+        "motion": false,
+        "surfaces": 0,
+        "phase": 2,
+        "textures": 6
+      },
+      "sleeves": [
+        "porcelain",
+        "default"
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "material": "porcelain",
+          "sleeve": "/cosmetics/atelier-v1/porcelain/back.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "material": "porcelain",
+          "sleeve": "/cosmetics/atelier-v1/porcelain/back.webp"
+        }
+      ]
+    },
+    {
+      "set": "porcelain",
+      "side": "opponent",
+      "info": {
+        "theme": "porcelain",
+        "wearer": "opponent",
+        "motion": false,
+        "surfaces": 0,
+        "phase": 2,
+        "textures": 6
+      },
+      "sleeves": [
+        "default",
+        "porcelain"
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "material": "porcelain",
+          "sleeve": "/cosmetics/atelier-v1/porcelain/back.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "material": "porcelain",
+          "sleeve": "/cosmetics/atelier-v1/porcelain/back.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        }
+      ]
+    },
+    {
+      "set": "garnet",
+      "side": "self",
+      "info": {
+        "theme": "garnet",
+        "wearer": "self",
+        "motion": false,
+        "surfaces": 0,
+        "phase": 2,
+        "textures": 6
+      },
+      "sleeves": [
+        "garnet",
+        "default"
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "material": "garnet",
+          "sleeve": "/cosmetics/atelier-v1/garnet/back.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "material": "garnet",
+          "sleeve": "/cosmetics/atelier-v1/garnet/back.webp"
+        }
+      ]
+    },
+    {
+      "set": "garnet",
+      "side": "opponent",
+      "info": {
+        "theme": "garnet",
+        "wearer": "opponent",
+        "motion": false,
+        "surfaces": 0,
+        "phase": 2,
+        "textures": 6
+      },
+      "sleeves": [
+        "default",
+        "garnet"
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "material": "garnet",
+          "sleeve": "/cosmetics/atelier-v1/garnet/back.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "material": "garnet",
+          "sleeve": "/cosmetics/atelier-v1/garnet/back.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        }
+      ]
+    },
+    {
+      "set": "verdigris",
+      "side": "self",
+      "info": {
+        "theme": "verdigris",
+        "wearer": "self",
+        "motion": false,
+        "surfaces": 0,
+        "phase": 2,
+        "textures": 6
+      },
+      "sleeves": [
+        "verdigris",
+        "default"
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "material": "verdigris",
+          "sleeve": "/cosmetics/atelier-v1/verdigris/back.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "material": "verdigris",
+          "sleeve": "/cosmetics/atelier-v1/verdigris/back.webp"
+        }
+      ]
+    },
+    {
+      "set": "verdigris",
+      "side": "opponent",
+      "info": {
+        "theme": "verdigris",
+        "wearer": "opponent",
+        "motion": false,
+        "surfaces": 0,
+        "phase": 2,
+        "textures": 6
+      },
+      "sleeves": [
+        "default",
+        "verdigris"
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "material": "verdigris",
+          "sleeve": "/cosmetics/atelier-v1/verdigris/back.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "material": "verdigris",
+          "sleeve": "/cosmetics/atelier-v1/verdigris/back.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        }
+      ]
+    },
+    {
+      "set": "amber",
+      "side": "self",
+      "info": {
+        "theme": "amber",
+        "wearer": "self",
+        "motion": false,
+        "surfaces": 0,
+        "phase": 2,
+        "textures": 6
+      },
+      "sleeves": [
+        "amber",
+        "default"
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "material": "amber",
+          "sleeve": "/cosmetics/atelier-v1/amber/back.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "material": "amber",
+          "sleeve": "/cosmetics/atelier-v1/amber/back.webp"
+        }
+      ]
+    },
+    {
+      "set": "amber",
+      "side": "opponent",
+      "info": {
+        "theme": "amber",
+        "wearer": "opponent",
+        "motion": false,
+        "surfaces": 0,
+        "phase": 2,
+        "textures": 6
+      },
+      "sleeves": [
+        "default",
+        "amber"
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "material": "amber",
+          "sleeve": "/cosmetics/atelier-v1/amber/back.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "material": "amber",
+          "sleeve": "/cosmetics/atelier-v1/amber/back.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        }
+      ]
+    },
+    {
+      "set": "tidal",
+      "side": "self",
+      "info": {
+        "theme": "tidal",
+        "wearer": "self",
+        "motion": false,
+        "surfaces": 0,
+        "phase": 2,
+        "textures": 6
+      },
+      "sleeves": [
+        "tidal",
+        "default"
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "material": "tidal",
+          "sleeve": "/cosmetics/atelier-v1/tidal/back.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "material": "tidal",
+          "sleeve": "/cosmetics/atelier-v1/tidal/back.webp"
+        }
+      ]
+    },
+    {
+      "set": "tidal",
+      "side": "opponent",
+      "info": {
+        "theme": "tidal",
+        "wearer": "opponent",
+        "motion": false,
+        "surfaces": 0,
+        "phase": 2,
+        "textures": 6
+      },
+      "sleeves": [
+        "default",
+        "tidal"
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "material": "tidal",
+          "sleeve": "/cosmetics/atelier-v1/tidal/back.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "material": "tidal",
+          "sleeve": "/cosmetics/atelier-v1/tidal/back.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        }
+      ]
+    },
+    {
+      "set": "silverflow",
+      "side": "self",
+      "info": {
+        "theme": "silverflow",
+        "wearer": "self",
+        "motion": false,
+        "surfaces": 5,
+        "phase": 2,
+        "textures": 6
+      },
+      "sleeves": [
+        "silverflow",
+        "default"
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "material": "silverflow",
+          "sleeve": "/cosmetics/atelier-v1/silverflow/back.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "material": "silverflow",
+          "sleeve": "/cosmetics/atelier-v1/silverflow/back.webp"
+        }
+      ]
+    },
+    {
+      "set": "silverflow",
+      "side": "opponent",
+      "info": {
+        "theme": "silverflow",
+        "wearer": "opponent",
+        "motion": false,
+        "surfaces": 5,
+        "phase": 2,
+        "textures": 6
+      },
+      "sleeves": [
+        "default",
+        "silverflow"
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "material": "silverflow",
+          "sleeve": "/cosmetics/atelier-v1/silverflow/back.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "material": "silverflow",
+          "sleeve": "/cosmetics/atelier-v1/silverflow/back.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        }
+      ]
+    },
+    {
+      "set": "emberheart",
+      "side": "self",
+      "info": {
+        "theme": "emberheart",
+        "wearer": "self",
+        "motion": false,
+        "surfaces": 5,
+        "phase": 2,
+        "textures": 6
+      },
+      "sleeves": [
+        "emberheart",
+        "default"
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "material": "emberheart",
+          "sleeve": "/cosmetics/atelier-v1/emberheart/back.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "material": "emberheart",
+          "sleeve": "/cosmetics/atelier-v1/emberheart/back.webp"
+        }
+      ]
+    },
+    {
+      "set": "emberheart",
+      "side": "opponent",
+      "info": {
+        "theme": "emberheart",
+        "wearer": "opponent",
+        "motion": false,
+        "surfaces": 5,
+        "phase": 2,
+        "textures": 6
+      },
+      "sleeves": [
+        "default",
+        "emberheart"
+      ],
+      "piles": [
+        {
+          "id": "pile-oppDeck",
+          "material": "emberheart",
+          "sleeve": "/cosmetics/atelier-v1/emberheart/back.webp"
+        },
+        {
+          "id": "pile-oppDisc",
+          "material": "emberheart",
+          "sleeve": "/cosmetics/atelier-v1/emberheart/back.webp"
+        },
+        {
+          "id": "pile-myDeck",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        },
+        {
+          "id": "pile-myDisc",
+          "material": "default",
+          "sleeve": "/frames/sleeve_default.webp"
+        }
+      ]
+    }
+  ],
+  "metrics": [
+    {
+      "set": "silverflow",
+      "seconds": 5,
+      "ticks": 301,
+      "fullPasses": 0,
+      "portalPasses": 60,
+      "displayPasses": 301,
+      "flightPasses": 0,
+      "cpuMs": 204.5,
+      "calls": 10,
+      "triangles": 20692
+    },
+    {
+      "set": "emberheart",
+      "seconds": 5,
+      "ticks": 301,
+      "fullPasses": 0,
+      "portalPasses": 61,
+      "displayPasses": 301,
+      "flightPasses": 0,
+      "cpuMs": 215.7,
+      "calls": 10,
+      "triangles": 20692
+    }
+  ],
+  "errors": []
+}

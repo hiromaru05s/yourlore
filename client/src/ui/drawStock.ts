@@ -1,3 +1,4 @@
+import {flightPixelRatio} from './renderDensity';
 import {DRAW_THICKNESS_RATIO} from './cardThickness';
 import * as T from 'three';
 const FOCAL=1200;
@@ -18,14 +19,14 @@ export function createStockGeometry(w:number,h:number,depth=w*DRAW_THICKNESS_RAT
  const bevel=w*.004,g=new T.ExtrudeGeometry(s,{depth:depth-bevel*2,bevelEnabled:true,bevelSize:bevel,bevelThickness:bevel,bevelSegments:2,steps:1,curveSegments:4});
  g.translate(0,0,-depth+bevel);return g;
 }
-interface DrawStage {add(w:number,h:number):{update(p:StockPose,visible:boolean,glow:number):void;remove():void};render():void;release():void;}
+interface DrawStage {add(w:number,h:number,accent?:string):{update(p:StockPose,visible:boolean,glow:number):void;remove():void};render():void;release():void;}
 let shared:{stage:DrawStage;refs:number}|null=null;
 /** One small scene shared by simultaneous player/opponent draws; no art textures. */
 export function acquireDrawStage():DrawStage|null{
  if(shared){shared.refs++;return shared.stage;}
  if(typeof WebGL2RenderingContext==='undefined')return null;
  let renderer:T.WebGLRenderer;try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return null;}
- const width=innerWidth,height=innerHeight;renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.setSize(width,height);renderer.setClearColor(0,0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1;
+ const width=innerWidth,height=innerHeight;renderer.setPixelRatio(flightPixelRatio());renderer.setSize(width,height);renderer.setClearColor(0,0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1;
  renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;
  const canvas=renderer.domElement;canvas.className='draw-stock-canvas';canvas.setAttribute('aria-hidden','true');canvas.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:125';document.body.append(canvas);
  const scene=new T.Scene(),camera=new T.PerspectiveCamera(2*Math.atan(height/(2*FOCAL))*180/Math.PI,width/height,1,3000);camera.position.z=FOCAL;
@@ -38,12 +39,12 @@ export function acquireDrawStage():DrawStage|null{
  let disposed=false;const owners=new Set<T.Group>();
  const disposeObject=(group:T.Group)=>{group.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line){o.geometry.dispose();(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{if(m!==paper&&m!==edge&&m!==ink)m.dispose();});}});scene.remove(group);owners.delete(group);};
  const stage:DrawStage={
-  add(w,h){const group=new T.Group();group.matrixAutoUpdate=false;group.visible=false;scene.add(group);owners.add(group);
+  add(w,h,accent){const group=new T.Group();group.matrixAutoUpdate=false;group.visible=false;scene.add(group);owners.add(group);
    const depth=w*DRAW_THICKNESS_RATIO,body=new T.Mesh(createStockGeometry(w,h,depth),[edge,paper]);body.castShadow=true;group.add(body);
    // A dark, fine laminated seam makes the material read at grazing angles.
    const pts: T.Vector3[]=[];const r=w*.052;for(const [cx,cy,a] of [[w/2-r,h/2-r,0],[-w/2+r,h/2-r,90],[-w/2+r,-h/2+r,180],[w/2-r,-h/2+r,270]])for(let i=0;i<=5;i++){const angle=(a+i*18)*Math.PI/180;pts.push(new T.Vector3(cx+r*Math.cos(angle),cy+r*Math.sin(angle),-depth*.52));}
    const seam=new T.LineLoop(new T.BufferGeometry().setFromPoints(pts),ink);group.add(seam);
-   const rimMat=new T.LineBasicMaterial({color:0xa1e9ff,transparent:true,opacity:0,blending:T.AdditiveBlending,depthWrite:false});const rim=new T.LineLoop(new T.BufferGeometry().setFromPoints(pts.map(p=>new T.Vector3(p.x,p.y,.03))),rimMat);group.add(rim);
+   const rimMat=new T.LineBasicMaterial({color:accent??0xa1e9ff,transparent:true,opacity:0,blending:T.AdditiveBlending,depthWrite:false});const rim=new T.LineLoop(new T.BufferGeometry().setFromPoints(pts.map(p=>new T.Vector3(p.x,p.y,.03))),rimMat);group.add(rim);
    return {update(p,visible,glow){if(disposed)return;group.visible=visible;group.matrix.copy(stockMatrix(p,width,height));rimMat.opacity=glow*.8;},remove(){if(owners.has(group))disposeObject(group);}};
   },
   render(){if(!disposed)renderer.render(scene,camera);},
