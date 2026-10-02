@@ -42,14 +42,16 @@ export class MimicRig {
   this.top.style.transform=`translateY(${-p.gap*p.upper}px) rotate(${p.topAngle}deg) scaleY(${1-p.open*.08})`;
   this.bottom.style.transform=`translateY(${p.gap*(1-p.upper)}px) rotate(${p.bottomAngle}deg) scaleY(${1-p.open*.035})`;
   const normal=this.id==='MIMIC';this.shadow.style.transform=`scale(${1+p.open*(normal?.22:.27)},${1-p.open*(normal?.25:.28)})`;this.shadow.style.opacity=String(.5+p.open*(normal?.2:.22));
-  this.paintMouth(time,reduced);this.matter?.draw(t,p.gap,reduced);
+  this.paintMouth(time,reduced,p);this.matter?.draw(t,p.gap,reduced);
   for(const [i,foil]of this.foils.entries()){const sweep=(t-510)/1500*240-i*30;foil.style.opacity=String(p.light*(reduced?.3:.6));foil.style.maskImage=`linear-gradient(115deg,transparent ${sweep-60}%,#000 ${sweep-30}%,#000 ${sweep}%,transparent ${sweep+40}%)`;}
  }
  dispose(){if(this.disposed)return;this.disposed=true;this.matter?.dispose();this.node.remove();}
- private paintMouth(time:number,reduced:boolean){
-  const p=this.pose(time,reduced),c=this.canvas.getContext('2d')!,a=this.atlas,image=this.teeth!;
+ private paintMouth(time:number,reduced:boolean,p:ReturnType<MimicRig['pose']>){
+  const c=this.canvas.getContext('2d')!,a=this.atlas,image=this.teeth!;
   c.setTransform(2,0,0,2,60,120);c.clearRect(-30,-60,240,400);if(p.gap<.05||!image.complete)return;
-  const edge=(x:number,upper:boolean)=>{const angle=(upper?p.topAngle:p.bottomAngle)*Math.PI/180;return{x:90+(x-90)*Math.cos(angle),y:140+(upper?-p.gap*p.upper:p.gap*(1-p.upper))+(x-90)*Math.sin(angle)};};
+  const topAngle=p.topAngle*Math.PI/180,bottomAngle=p.bottomAngle*Math.PI/180;
+  const topCos=Math.cos(topAngle),topSin=Math.sin(topAngle),bottomCos=Math.cos(bottomAngle),bottomSin=Math.sin(bottomAngle);
+  const edge=(x:number,upper:boolean)=>({x:90+(x-90)*(upper?topCos:bottomCos),y:140+(upper?-p.gap*p.upper:p.gap*(1-p.upper))+(x-90)*(upper?topSin:bottomSin)});
   const tl=edge(3,true),tr=edge(177,true),bl=edge(3,false),br=edge(177,false),mid=(tl.y+tr.y+bl.y+br.y)/4;
   // Preserve the approved aperture silhouette; only its interior paint changes.
   c.save();c.beginPath();c.moveTo(tl.x,tl.y);c.lineTo(tr.x,tr.y);c.bezierCurveTo(170,mid-5,170,mid+7,br.x,br.y);c.lineTo(bl.x,bl.y);c.bezierCurveTo(9,mid+7,9,mid-5,tl.x,tl.y);c.closePath();

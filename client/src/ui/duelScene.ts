@@ -183,7 +183,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
       }
       renderer.render(dustScene,dustCamera);
     }
-    canvas.dataset.dustCount=String(dusts.length);
+    if(canvas.dataset.dustCount!==String(dusts.length))canvas.dataset.dustCount=String(dusts.length);
     dustActive=!!(dusts.length||flows.length);
     if(active||flightActive||boardMotion){flightRenderer.render(flightScene,camera);flightPasses++;}
     flightActive=active;

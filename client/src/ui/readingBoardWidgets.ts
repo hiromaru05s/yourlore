@@ -17,7 +17,9 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
  let hover='',pressed='',last=performance.now(),rerollTime=-10000,turnTime=-10000,animateUntil=0,lastState='',displayEnemy=false;
  const segments:T.Mesh[]=[];const rerollMaterials:Array<{material:T.MeshStandardMaterial;color:T.Color}>=[];
  const lit=new T.MeshStandardMaterial({color:0x3daacb,emissive:0x3ba7cc,emissiveIntensity:.45,metalness:.1,roughness:.32}),dark=new T.MeshStandardMaterial({color:0x10202b,metalness:.2,roughness:.42});owned.push(lit,dark);
- const color=new T.Color();
+ const color=new T.Color(),gray=new T.Color();
+ const data=(el:HTMLElement,key:string,value:string)=>{if(el.dataset[key]!==value)el.dataset[key]=value;};
+ const css=(el:HTMLElement,key:string,value:string)=>{if(el.style.getPropertyValue(key)!==value)el.style.setProperty(key,value);};
  let turnLights:TurnLightHandle|undefined,displayDirty=false;
  const reducedTurnLight=matchMedia('(prefers-reduced-motion: reduce)');
  function releaseTemplate(object:T.Object3D){
@@ -89,9 +91,9 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
     }
    }
    mana.formation?.handles.forEach(h=>h.update(age,scale));
-   el.dataset.manaFormation=preview?.id??'original';
-   el.dataset.formingCrystals=String(mana.formation?.handles.length??0);
-   if(mana.formation)el.dataset.formationProgress=String(mana.formation.handles[0]?.group.userData.progress??1);else delete el.dataset.formationProgress;
+   data(el,'manaFormation',preview?.id??'original');
+   data(el,'formingCrystals',String(mana.formation?.handles.length??0));
+   if(mana.formation)el.dataset.formationProgress=String(mana.formation.handles[0]?.group.userData.progress??1);else if(el.dataset.formationProgress!==undefined)delete el.dataset.formationProgress;
    const key=current+':'+maximum,newState=key!==mana.key||formationChanged;
    if(newState){mana.key=key;mana.maximum=maximum;mana.current=current;shadowDirty=true;}
    if(!newState&&!animating)continue;changed=true;if(animating)shadowDirty=true;
@@ -109,7 +111,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
    el.dataset.crystalsReady=String(counts.ready+(forming&&!before?Math.max(0,Math.min(targetMaximum,Number(el.dataset.mana))-gainFrom):0));el.dataset.crystalsSpent=String(counts.spent+(forming&&!before?Math.max(0,targetMaximum-Math.max(gainFrom,Number(el.dataset.mana))):0));
   }
   const end=root.querySelector<HTMLButtonElement>('#endBtn'),refresh=root.querySelector<HTMLButtonElement>('#refreshBtn'),enemy=root.dataset.readingTurn!=='player';
-  for(const m of rerollMaterials){color.copy(m.color);if(refresh?.disabled){const l=color.r*.2126+color.g*.7152+color.b*.0722;color.lerp(new T.Color(l,l,l),.8).multiplyScalar(.5);}else if(hover==='refreshBtn')color.multiplyScalar(1.12);m.material.color.lerp(color,1-Math.exp(-dt*18));}
+  for(const m of rerollMaterials){color.copy(m.color);if(refresh?.disabled){const l=color.r*.2126+color.g*.7152+color.b*.0722;color.lerp(gray.setRGB(l,l,l),.8).multiplyScalar(.5);}else if(hover==='refreshBtn')color.multiplyScalar(1.12);m.material.color.lerp(color,1-Math.exp(-dt*18));}
   const clock=root.querySelector<HTMLElement>('.mp-clock.show'),remaining=clock?Math.min(1,Number(clock.dataset.remaining)/Math.max(1,Number(clock.dataset.total))):1;
   const litCount=Math.ceil(remaining*24);if(litCount!==clockSegments){clockSegments=litCount;if(turnLights?.renderDisplay)displayDirty=true;else changed=true;}
   segments.forEach((mesh,i)=>{mesh.material=i<litCount?lit:dark;});
@@ -119,12 +121,12 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   const pressDepth=(age:number)=>age<0||age>=620?0:age<120?Math.sin(age/120*Math.PI/2):age<230?1:(1-(age-230)/390)**2;
   const turnPress=pressDepth(turnAge),rerollPress=pressDepth(now-rerollTime);
   const spin=Math.min(1,Math.max(0,(turnAge-190)/520));const rotation=2*Math.PI*(spin*spin*(3-2*spin));
-  if(turnCap){turnCap.position.y=-.006*Math.max(turnPress,pressed==='endBtn'?.7:0);turnCap.rotation.y=rotation;end?.style.setProperty('--cap-press',`${turnCap.position.y*scale}px`);end?.style.setProperty('--cap-turn',`${-rotation}rad`);}
-  if(rerollCap){rerollCap.position.y=-.0045*Math.max(rerollPress,pressed==='refreshBtn'?.7:0);if(refresh){refresh.dataset.physicalPhase=now-rerollTime<120?'press':now-rerollTime<620?'spin':'rest';refresh.style.setProperty('--cap-press',`${rerollCap.position.y*scale}px`);}}
+  if(turnCap){turnCap.position.y=-.006*Math.max(turnPress,pressed==='endBtn'?.7:0);turnCap.rotation.y=rotation;if(end){css(end,'--cap-press',`${turnCap.position.y*scale}px`);css(end,'--cap-turn',`${-rotation}rad`);}}
+  if(rerollCap){rerollCap.position.y=-.0045*Math.max(rerollPress,pressed==='refreshBtn'?.7:0);if(refresh){data(refresh,'physicalPhase',now-rerollTime<120?'press':now-rerollTime<620?'spin':'rest');css(refresh,'--cap-press',`${rerollCap.position.y*scale}px`);}}
   const t=Math.min(1,Math.max(0,(now-rerollTime-120)/500)),target=2*Math.PI*(1-(1-t)**3);if(arrows)arrows.rotation.y=target;
   if(turnPress||rerollPress||pressed)shadowDirty=true;
-  if(end){end.dataset.physicalPhase=turnAge<120?'press':turnAge<710?'spin':'rest';const label=end.querySelector<HTMLElement>('.end-turn-label');if(label){label.style.opacity='1';const text=displayEnemy?'ENEMY\nTURN':'END\nTURN';if(label.textContent!==text)label.textContent=text;}}
-  if(end)end.dataset.turnColor=displayEnemy?'red':'blue';
+  if(end){data(end,'physicalPhase',turnAge<120?'press':turnAge<710?'spin':'rest');const label=end.querySelector<HTMLElement>('.end-turn-label');if(label){if(label.style.opacity!=='1')label.style.opacity='1';const text=displayEnemy?'ENEMY\nTURN':'END\nTURN';if(label.textContent!==text)label.textContent=text;}}
+  if(end)data(end,'turnColor',displayEnemy?'red':'blue');
   if(!turnLights&&turn){
    const preview=import.meta.env.DEV?getTurnLightPreview():undefined;
    turnLights=preview?preview(turn,segments,scene):createTurnLights(turn,segments,()=> 'porcelain',scene);

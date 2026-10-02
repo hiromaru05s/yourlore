@@ -1,0 +1,904 @@
+{
+  "report": [
+    {
+      "id": "MIMIC2",
+      "maxVertexError": 0,
+      "maxNormalError": 0,
+      "snapshots": [
+        {
+          "time": 0,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 640,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 1000,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 1,
+          "afterCalls": 1,
+          "trianglesBefore": 2048,
+          "trianglesAfter": 2048
+        },
+        {
+          "time": 1400,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 2,
+          "afterCalls": 2,
+          "trianglesBefore": 4096,
+          "trianglesAfter": 4096
+        },
+        {
+          "time": 1800,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 2,
+          "afterCalls": 2,
+          "trianglesBefore": 4096,
+          "trianglesAfter": 4096
+        },
+        {
+          "time": 2200,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 2700,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 0,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 640,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 1000,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 1,
+          "afterCalls": 1,
+          "trianglesBefore": 2048,
+          "trianglesAfter": 2048
+        },
+        {
+          "time": 1400,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 2,
+          "afterCalls": 2,
+          "trianglesBefore": 4096,
+          "trianglesAfter": 4096
+        },
+        {
+          "time": 1800,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 2,
+          "afterCalls": 2,
+          "trianglesBefore": 4096,
+          "trianglesAfter": 4096
+        },
+        {
+          "time": 2200,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 2700,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        }
+      ],
+      "times": {
+        "before": [
+          55.09999990463257,
+          58.799999952316284,
+          59.09999990463257,
+          55.40000009536743,
+          51.90000009536743,
+          52.10000014305115
+        ],
+        "after": [
+          43.700000047683716,
+          42.5,
+          47.200000047683716,
+          46.799999952316284,
+          41.40000009536743,
+          41.69999980926514
+        ]
+      }
+    },
+    {
+      "id": "MIMIC_LORD",
+      "maxVertexError": 0,
+      "maxNormalError": 0,
+      "snapshots": [
+        {
+          "time": 0,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 640,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 1000,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 1400,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 1,
+          "afterCalls": 1,
+          "trianglesBefore": 2048,
+          "trianglesAfter": 2048
+        },
+        {
+          "time": 1800,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 1,
+          "afterCalls": 1,
+          "trianglesBefore": 2048,
+          "trianglesAfter": 2048
+        },
+        {
+          "time": 2200,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 1,
+          "afterCalls": 1,
+          "trianglesBefore": 2048,
+          "trianglesAfter": 2048
+        },
+        {
+          "time": 2700,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 0,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 640,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 1000,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 1400,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 1,
+          "afterCalls": 1,
+          "trianglesBefore": 2048,
+          "trianglesAfter": 2048
+        },
+        {
+          "time": 1800,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 1,
+          "afterCalls": 1,
+          "trianglesBefore": 2048,
+          "trianglesAfter": 2048
+        },
+        {
+          "time": 2200,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 1,
+          "afterCalls": 1,
+          "trianglesBefore": 2048,
+          "trianglesAfter": 2048
+        },
+        {
+          "time": 2700,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        }
+      ],
+      "times": {
+        "before": [
+          22.59999990463257,
+          20.799999952316284,
+          20.40000009536743,
+          20.40000009536743,
+          20.200000047683716,
+          20.40000009536743
+        ],
+        "after": [
+          17.40000009536743,
+          16.200000047683716,
+          16,
+          16.199999809265137,
+          16.299999952316284,
+          16.09999990463257
+        ]
+      }
+    },
+    {
+      "id": "AWAKENED_MIMIC",
+      "maxVertexError": 0,
+      "maxNormalError": 0,
+      "snapshots": [
+        {
+          "time": 0,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 640,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 20,
+          "afterCalls": 8,
+          "trianglesBefore": 3904,
+          "trianglesAfter": 3904
+        },
+        {
+          "time": 1000,
+          "reduced": false,
+          "meanChannelError": 7.69704433497537e-7,
+          "changedChannels": 7.69704433497537e-7,
+          "maxChannelError": 1,
+          "beforeCalls": 20,
+          "afterCalls": 8,
+          "trianglesBefore": 3904,
+          "trianglesAfter": 3904
+        },
+        {
+          "time": 1400,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 21,
+          "afterCalls": 9,
+          "trianglesBefore": 5952,
+          "trianglesAfter": 5952
+        },
+        {
+          "time": 1800,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 21,
+          "afterCalls": 9,
+          "trianglesBefore": 5952,
+          "trianglesAfter": 5952
+        },
+        {
+          "time": 2200,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 21,
+          "afterCalls": 9,
+          "trianglesBefore": 5952,
+          "trianglesAfter": 5952
+        },
+        {
+          "time": 2700,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 0,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        },
+        {
+          "time": 640,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 20,
+          "afterCalls": 8,
+          "trianglesBefore": 3904,
+          "trianglesAfter": 3904
+        },
+        {
+          "time": 1000,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 20,
+          "afterCalls": 8,
+          "trianglesBefore": 3904,
+          "trianglesAfter": 3904
+        },
+        {
+          "time": 1400,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 21,
+          "afterCalls": 9,
+          "trianglesBefore": 5952,
+          "trianglesAfter": 5952
+        },
+        {
+          "time": 1800,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 21,
+          "afterCalls": 9,
+          "trianglesBefore": 5952,
+          "trianglesAfter": 5952
+        },
+        {
+          "time": 2200,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 21,
+          "afterCalls": 9,
+          "trianglesBefore": 5952,
+          "trianglesAfter": 5952
+        },
+        {
+          "time": 2700,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 0,
+          "afterCalls": 0,
+          "trianglesBefore": 0,
+          "trianglesAfter": 0
+        }
+      ],
+      "times": {
+        "before": [
+          29.800000190734863,
+          25.200000047683716,
+          24.799999952316284,
+          25.799999952316284,
+          26.09999990463257,
+          27.40000009536743
+        ],
+        "after": [
+          19.199999809265137,
+          18,
+          17.90000009536743,
+          17.700000047683716,
+          20.200000047683716,
+          19.90000009536743
+        ]
+      }
+    },
+    {
+      "id": "MIMIC_KING",
+      "maxVertexError": 0,
+      "maxNormalError": 0,
+      "snapshots": [
+        {
+          "time": 0,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 2,
+          "afterCalls": 2,
+          "trianglesBefore": 4,
+          "trianglesAfter": 4
+        },
+        {
+          "time": 640,
+          "reduced": false,
+          "meanChannelError": 2.106504887091338e-7,
+          "changedChannels": 2.106504887091338e-7,
+          "maxChannelError": 1,
+          "beforeCalls": 67,
+          "afterCalls": 7,
+          "trianglesBefore": 20328,
+          "trianglesAfter": 20328
+        },
+        {
+          "time": 1000,
+          "reduced": false,
+          "meanChannelError": 2.106504887091338e-7,
+          "changedChannels": 2.106504887091338e-7,
+          "maxChannelError": 1,
+          "beforeCalls": 67,
+          "afterCalls": 7,
+          "trianglesBefore": 20328,
+          "trianglesAfter": 20328
+        },
+        {
+          "time": 1400,
+          "reduced": false,
+          "meanChannelError": 6.319514661274014e-7,
+          "changedChannels": 6.319514661274014e-7,
+          "maxChannelError": 1,
+          "beforeCalls": 68,
+          "afterCalls": 8,
+          "trianglesBefore": 22376,
+          "trianglesAfter": 22376
+        },
+        {
+          "time": 1800,
+          "reduced": false,
+          "meanChannelError": 0.0000018958543983822042,
+          "changedChannels": 0.0000016852039096730705,
+          "maxChannelError": 2,
+          "beforeCalls": 68,
+          "afterCalls": 8,
+          "trianglesBefore": 22376,
+          "trianglesAfter": 22376
+        },
+        {
+          "time": 2200,
+          "reduced": false,
+          "meanChannelError": 0.000002317155375800472,
+          "changedChannels": 0.0000021065048870913382,
+          "maxChannelError": 2,
+          "beforeCalls": 68,
+          "afterCalls": 8,
+          "trianglesBefore": 22376,
+          "trianglesAfter": 22376
+        },
+        {
+          "time": 2700,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 67,
+          "afterCalls": 7,
+          "trianglesBefore": 20328,
+          "trianglesAfter": 20328
+        },
+        {
+          "time": 0,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 2,
+          "afterCalls": 2,
+          "trianglesBefore": 4,
+          "trianglesAfter": 4
+        },
+        {
+          "time": 640,
+          "reduced": true,
+          "meanChannelError": 2.106504887091338e-7,
+          "changedChannels": 2.106504887091338e-7,
+          "maxChannelError": 1,
+          "beforeCalls": 67,
+          "afterCalls": 7,
+          "trianglesBefore": 20328,
+          "trianglesAfter": 20328
+        },
+        {
+          "time": 1000,
+          "reduced": true,
+          "meanChannelError": 0.000004634310751600944,
+          "changedChannels": 0.00000442366026289181,
+          "maxChannelError": 2,
+          "beforeCalls": 67,
+          "afterCalls": 7,
+          "trianglesBefore": 20328,
+          "trianglesAfter": 20328
+        },
+        {
+          "time": 1400,
+          "reduced": true,
+          "meanChannelError": 0.0000016852039096730705,
+          "changedChannels": 0.0000016852039096730705,
+          "maxChannelError": 1,
+          "beforeCalls": 68,
+          "afterCalls": 8,
+          "trianglesBefore": 22376,
+          "trianglesAfter": 22376
+        },
+        {
+          "time": 1800,
+          "reduced": true,
+          "meanChannelError": 0.0000021065048870913382,
+          "changedChannels": 0.0000018958543983822042,
+          "maxChannelError": 2,
+          "beforeCalls": 68,
+          "afterCalls": 8,
+          "trianglesBefore": 22376,
+          "trianglesAfter": 22376
+        },
+        {
+          "time": 2200,
+          "reduced": true,
+          "meanChannelError": 6.319514661274014e-7,
+          "changedChannels": 6.319514661274014e-7,
+          "maxChannelError": 1,
+          "beforeCalls": 68,
+          "afterCalls": 8,
+          "trianglesBefore": 22376,
+          "trianglesAfter": 22376
+        },
+        {
+          "time": 2700,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 67,
+          "afterCalls": 7,
+          "trianglesBefore": 20328,
+          "trianglesAfter": 20328
+        }
+      ],
+      "times": {
+        "before": [
+          32.5,
+          29.299999952316284,
+          29.40000009536743,
+          32.59999990463257,
+          32.799999952316284,
+          32.5
+        ],
+        "after": [
+          18.299999952316284,
+          16.5,
+          16.40000009536743,
+          18,
+          18.200000047683716,
+          18.40000009536743
+        ]
+      }
+    },
+    {
+      "id": "MIMIC_KING2",
+      "maxVertexError": 0,
+      "maxNormalError": 0,
+      "snapshots": [
+        {
+          "time": 0,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 2,
+          "afterCalls": 2,
+          "trianglesBefore": 4,
+          "trianglesAfter": 4
+        },
+        {
+          "time": 640,
+          "reduced": false,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 65,
+          "afterCalls": 5,
+          "trianglesBefore": 18536,
+          "trianglesAfter": 18536
+        },
+        {
+          "time": 1000,
+          "reduced": false,
+          "meanChannelError": 0.0000027384563532187396,
+          "changedChannels": 0.0000014745534209639367,
+          "maxChannelError": 4,
+          "beforeCalls": 66,
+          "afterCalls": 6,
+          "trianglesBefore": 20584,
+          "trianglesAfter": 20584
+        },
+        {
+          "time": 1400,
+          "reduced": false,
+          "meanChannelError": 0.0000016852039096730705,
+          "changedChannels": 0.0000016852039096730705,
+          "maxChannelError": 1,
+          "beforeCalls": 66,
+          "afterCalls": 6,
+          "trianglesBefore": 20584,
+          "trianglesAfter": 20584
+        },
+        {
+          "time": 1800,
+          "reduced": false,
+          "meanChannelError": 0.000005266262217728345,
+          "changedChannels": 0.0000027384563532187396,
+          "maxChannelError": 7,
+          "beforeCalls": 66,
+          "afterCalls": 6,
+          "trianglesBefore": 20584,
+          "trianglesAfter": 20584
+        },
+        {
+          "time": 2200,
+          "reduced": false,
+          "meanChannelError": 0.0000061088641725648805,
+          "changedChannels": 0.000005898213683855747,
+          "maxChannelError": 2,
+          "beforeCalls": 66,
+          "afterCalls": 6,
+          "trianglesBefore": 20584,
+          "trianglesAfter": 20584
+        },
+        {
+          "time": 2700,
+          "reduced": false,
+          "meanChannelError": 2.106504887091338e-7,
+          "changedChannels": 2.106504887091338e-7,
+          "maxChannelError": 1,
+          "beforeCalls": 65,
+          "afterCalls": 5,
+          "trianglesBefore": 18536,
+          "trianglesAfter": 18536
+        },
+        {
+          "time": 0,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 2,
+          "afterCalls": 2,
+          "trianglesBefore": 4,
+          "trianglesAfter": 4
+        },
+        {
+          "time": 640,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 65,
+          "afterCalls": 5,
+          "trianglesBefore": 18536,
+          "trianglesAfter": 18536
+        },
+        {
+          "time": 1000,
+          "reduced": true,
+          "meanChannelError": 0.0000012639029322548029,
+          "changedChannels": 0.0000012639029322548029,
+          "maxChannelError": 1,
+          "beforeCalls": 66,
+          "afterCalls": 6,
+          "trianglesBefore": 20584,
+          "trianglesAfter": 20584
+        },
+        {
+          "time": 1400,
+          "reduced": true,
+          "meanChannelError": 0.0000014745534209639367,
+          "changedChannels": 0.0000014745534209639367,
+          "maxChannelError": 1,
+          "beforeCalls": 66,
+          "afterCalls": 6,
+          "trianglesBefore": 20584,
+          "trianglesAfter": 20584
+        },
+        {
+          "time": 1800,
+          "reduced": true,
+          "meanChannelError": 0.0000018958543983822042,
+          "changedChannels": 0.0000014745534209639367,
+          "maxChannelError": 3,
+          "beforeCalls": 66,
+          "afterCalls": 6,
+          "trianglesBefore": 20584,
+          "trianglesAfter": 20584
+        },
+        {
+          "time": 2200,
+          "reduced": true,
+          "meanChannelError": 8.426019548365352e-7,
+          "changedChannels": 8.426019548365352e-7,
+          "maxChannelError": 1,
+          "beforeCalls": 66,
+          "afterCalls": 6,
+          "trianglesBefore": 20584,
+          "trianglesAfter": 20584
+        },
+        {
+          "time": 2700,
+          "reduced": true,
+          "meanChannelError": 0,
+          "changedChannels": 0,
+          "maxChannelError": 0,
+          "beforeCalls": 65,
+          "afterCalls": 5,
+          "trianglesBefore": 18536,
+          "trianglesAfter": 18536
+        }
+      ],
+      "times": {
+        "before": [
+          36.40000009536743,
+          35.299999952316284,
+          35,
+          40.40000009536743,
+          39.5,
+          40.09999990463257
+        ],
+        "after": [
+          21.700000047683716,
+          20,
+          21,
+          22.59999990463257,
+          22.90000009536743,
+          22.799999952316284
+        ]
+      }
+    }
+  ],
+  "mouth": {
+    "cases": 84,
+    "pixelDifference": 0
+  },
+  "errors": []
+}
