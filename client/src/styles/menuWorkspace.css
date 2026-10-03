@@ -1,5 +1,8 @@
 /* Navigation supplies the page name; reserve the workspace for cards and people. */
 .lounge-content .menu-sr-title{position:absolute!important;width:1px;height:1px;padding:0!important;margin:-1px!important;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+/* Shared CSS can precede lounge.css in multi-entry builds. Keep the deck's
+   height definite so size containment cannot collapse the starter pool. */
+.lounge-deck .lounge-content>.deck-screen{height:100%;min-height:0}
 .lounge-deck .deck-panel{display:grid;grid-template-columns:116px minmax(0,1fr);grid-template-rows:38px minmax(0,1fr) auto;gap:6px 18px;max-width:none}
 .lounge-deck .deck-panel>.deck-tabs{grid-column:1;grid-row:1/-1;display:flex;flex-direction:column;justify-content:flex-start;gap:8px;margin:0;padding:6px 12px 0 0;border-right:1px solid #aecada30;overflow:auto}
 .lounge-deck .deck-tab{flex:none;min-height:46px;padding:9px 8px;text-align:left;display:flex;align-items:center;gap:4px;border-bottom:0;border-left:2px solid transparent}
@@ -12,12 +15,12 @@
 .lounge-deck .deck-local-tabs button{min-height:34px;padding:4px 10px}
 .lounge-deck .deck-confirm{min-height:34px;padding:5px 18px;font-size:12px}
 .lounge-deck .deck-panel>section{grid-column:2;grid-row:2;min-width:0;min-height:0}
-.lounge-deck .deck-msg{grid-column:2;grid-row:3;padding:0}
+.lounge-deck .deck-msg{grid-column:2;grid-row:3;padding:0;margin:0;min-height:20px}
 .lounge-deck #deckEditSection{overflow:hidden;gap:4px;padding:0}
 .lounge-deck .deck-current-column{flex:none;padding:0 0 4px}
 .lounge-deck .deck-cur-head{min-height:24px;font-size:11px}
 .lounge-deck .deck-use{min-height:24px;padding:2px 7px}
-.lounge-deck #deckCur{--hand-card:clamp(62px,9.5vh,106px);padding:6px 12px 27px;grid-template-rows:none}
+.lounge-deck #deckCur{--hand-card:clamp(62px,9.5vh,106px);padding:6px 12px 27px;margin:0;grid-template-rows:none}
 .lounge-deck .deck-hand-help{min-height:24px;padding:0;font-size:10px}
 .lounge-deck #deckUndo{min-height:24px;padding:2px 7px}
 .lounge-deck .deck-candidate-column{flex:1;min-height:0;container-type:size}
