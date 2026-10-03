@@ -1039,6 +1039,13 @@ export class GameView {
   /** Per-state overlap steps (CSS picks the var by .hand-open on .game).
    *  Measured against the REAL card width, and re-run on every layout solve —
    *  the solver's settle passes resize cards after the first render. */
+  /** Re-seat the remaining cards as soon as an overflow drop is accepted. */
+  reflowHand(): void {
+    const cards=[...this.q('hand').querySelectorAll<HTMLElement>(':scope > .card')];
+    cards.forEach((card,i)=>{card.style.setProperty('--hi',String(i));card.style.zIndex=String(cards.length-i);});
+    this.layoutHand();
+  }
+
   private layoutHand(): void {
     const handEl = this.root.querySelector("#hand") as HTMLElement | null;
     if (!handEl) return;
