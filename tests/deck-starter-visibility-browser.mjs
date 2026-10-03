@@ -48,7 +48,8 @@ try{
  await page.locator('#watchTab').click();
  assert.equal(await page.locator('#deckEditSection').isVisible(),false);
  await page.locator('#editTab').click();assert((await measure()).visibleRows>=2);
- await page.locator('#poolSearch').fill('アチューン');
+ const candidateName=await page.locator('#deckPool .card-name').first().textContent();
+ await page.locator('#poolSearch').fill(candidateName);
  assert((await page.locator('#deckPool .card').count())>0);
  await page.locator('#poolSearch').fill('');
  await page.locator('#deckPool').evaluate(el=>{el.scrollTop=el.scrollHeight;});
