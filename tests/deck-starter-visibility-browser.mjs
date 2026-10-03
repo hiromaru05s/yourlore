@@ -38,7 +38,7 @@ try{
   await page.setViewportSize({width,height});
   await page.locator('#save').click();
   await page.waitForFunction(()=>document.querySelector('#deckMsg').textContent.includes('保存完了'));
-  const layout=await measure();checks.push({width,height,...layout});
+  const layout=await measure();checks.push({viewport:{width,height},...layout});
   assert(layout.total>20,'Starter candidates must be populated');
   assert(layout.visibleRows>=2,`${width}x${height}: ${JSON.stringify(layout)}`);
   assert(layout.bottom<=layout.navTop+1,'The pool must stay above navigation');
