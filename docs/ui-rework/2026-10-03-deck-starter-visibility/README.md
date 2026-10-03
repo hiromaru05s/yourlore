@@ -4,7 +4,7 @@ The staging build clipped the deck starter pool to 15.125px at 1280×720. All 36
 
 With the cosmetic studio as a second Vite entry, `presentation.css` is emitted into shared CSS loaded before the main entry's lounge styles. The equally specific `.lounge-content > .screen { height:auto }` overrides `.lounge-content > .deck-screen { height:100% }`. Size containment then prevents the candidate pool from establishing the missing height. The development server's CSS order does not reproduce this regression.
 
-`menuWorkspace.css` now owns the deck screen height with a deck-scoped selector. It also explicitly resets the hand tray's inherited bottom margin and the save message's spacing, preserving two complete candidate rows while a save result is visible. The approved hand layout, fixed Attune, card art, filters and navigation remain intact.
+`menuWorkspace.css` now owns the deck screen height with a deck-scoped selector. It also explicitly resets the hand tray's inherited bottom margin and the save message's spacing, and lets the short-desktop candidate width shrink below its previous 50px floor so a save result can coexist with two complete rows. The approved hand layout, fixed Attune, card art, filters and navigation remain intact.
 
 Regression check (against the complete multi-entry build):
 

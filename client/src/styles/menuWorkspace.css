@@ -108,7 +108,7 @@
  .lounge-deck #deckCur{--hand-card:50px}
  .lounge-deck .deck-hand-help{min-height:20px}
  .lounge-deck #deckUndo{min-height:20px}
- .lounge-deck #deckPool{--collection-card-width:clamp(50px,min(9.5vh,calc((100cqh - 108px)*.32)),106px)}
+ .lounge-deck #deckPool{--collection-card-width:clamp(40px,min(9.5vh,calc((100cqh - 108px)*.32)),106px)}
 }
 @media(max-width:650px) and (max-height:700px){
  .lounge-deck .deck-controls{flex-wrap:nowrap;gap:4px}.lounge-deck .deck-local-tabs{width:auto;flex:1}.lounge-deck .deck-local-tabs button{flex:none}

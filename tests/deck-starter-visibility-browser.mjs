@@ -27,6 +27,12 @@ const measure=()=>page.evaluate(()=>{
 });
 try{
  await page.goto(origin,{waitUntil:'domcontentloaded'});await page.locator('[data-nav=deck]').click();
+ for(let attempt=0;attempt<3;attempt++){
+  await page.waitForFunction(()=>!document.querySelector('.screen-loader')||document.querySelector('.screen-loader .asset-retry'));
+  if(!await page.locator('.screen-loader').count())break;
+  console.log('Retrying timed-out artwork loading',attempt+1);
+  await page.locator('.screen-loader .asset-retry').click();
+ }
  await page.locator('.screen-loader').waitFor({state:'detached'});
  for(const [width,height] of [[1280,720],[1024,600],[390,844],[375,667]]){
   await page.setViewportSize({width,height});
@@ -50,4 +56,8 @@ try{
  assert.deepEqual(errors,[]);
  await fs.writeFile(`${out}/report.json`,JSON.stringify({origin,checks,errors},null,2)+'\n');
  console.log('PASS: built starter pool, two full rows at four sizes with save status, tab return, search, scrolling',checks);
+}catch(error){
+ console.error('Browser failure',errors,await page.locator('.screen-loader').allTextContents());
+ await page.screenshot({path:`${out}/failure.png`,timeout:10000}).catch(()=>{});
+ throw error;
 }finally{await browser.close();}
