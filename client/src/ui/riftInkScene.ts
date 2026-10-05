@@ -16,7 +16,7 @@ export async function playSilverRift(node:HTMLElement,target:HTMLElement,face:HT
  const local=document.createElement('canvas');local.width=Math.ceil(unit*2.8);local.height=Math.ceil(unit*3.4);
  const lc=local.getContext('2d')!;
  const canvas=document.createElement('canvas'),c=canvas.getContext('2d')!;
- canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);canvas.className='rift-fold-canvas rift-transmute-canvas rift-silver-ink-canvas';canvas.setAttribute('aria-hidden','true');canvas.dataset.variant='inscription';canvas.dataset.duration=String(SILVER_INK_DURATION);
+ canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);canvas.className='rift-fold-canvas rift-transmute-canvas rift-silver-ink-canvas';canvas.setAttribute('aria-hidden','true');canvas.dataset.variant='twin-script';canvas.dataset.duration=String(SILVER_INK_DURATION);
  // Let the compositor project this single surface through the exact card
  // matrix. Canvas2D's 160 clipped triangle copies approximated the same plane.
  const surfaceMatrix=start.translate(w/2-padded*1.4,h/2-padded*1.7).scale(padded*2.8/local.width,padded*3.4/local.height);

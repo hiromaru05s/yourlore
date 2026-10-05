@@ -1,0 +1,25 @@
+{
+  "clock": "native requestAnimationFrame; no watchdog override",
+  "runs": [
+    {
+      "side": "me",
+      "totalMsIncludingCapture": 3344.2000000476837,
+      "frames": 165,
+      "effectMs": 2802.0,
+      "firstProgress": 0,
+      "lastProgress": 0.997,
+      "maxFrameGapMs": 34.0,
+      "variant": "twin-script"
+    },
+    {
+      "side": "opp",
+      "totalMsIncludingCapture": 2903.7999999523163,
+      "frames": 162,
+      "effectMs": 2810.5999999046326,
+      "firstProgress": 0,
+      "lastProgress": 0.996,
+      "maxFrameGapMs": 51.5,
+      "variant": "twin-script"
+    }
+  ]
+}
