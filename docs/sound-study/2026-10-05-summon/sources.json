@@ -1,0 +1,34 @@
+{
+  "license": "CC0-1.0 source assets; original editing",
+  "sources": {
+    "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/bookClose.ogg": "81e976532565f4372abd14e83d2684195fa548d0a28d345de221e56052454f32",
+    "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth1.ogg": "ddb93a3671233f95da0e0b10367f082f7eb42fa6caaddcf776410aa8833c747d",
+    "docs/ui-rework/2026-09-27-audio/sources/casino-audio/card-place-3.ogg": "1d988631a6e5201ed1bb0d728f2e43a3ec79401258426858793598044ac95841",
+    "docs/ui-rework/2026-09-27-audio/sources/impact-sounds/impactWood_light_000.ogg": "eb45e35b4bed784d3f120de4afec4b0d6ac09d9e143cce8cfcb7d739e1b1f3c3",
+    "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/bookPlace2.ogg": "831874e8fd142d4d0a03ff009f1f83966338a7878c0f6f38c613ae5b80dd731e",
+    "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth3.ogg": "a48632d17a4f1416541d261a32a31612e01267144c407fa3ecab3ff410f0085b",
+    "docs/ui-rework/2026-09-27-audio/sources/impact-sounds/impactSoft_heavy_000.ogg": "49e7ca88743fca974bb8676ea138b751cfd8f9033b5e7af8736c2a215d6edbc1",
+    "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/book_03.ogg": "f72e4af8172ae98eaa350892072120e79eb87f91448b99aeaaf1febe070fbb2e",
+    "docs/ui-rework/2026-09-27-audio/sources/casino-audio/chips-collide-2.ogg": "2a10c5ff4b2fbaa55a317fc258ddce3fec85bd26db2d3c2ad298b3b33ce23bc6",
+    "docs/sound-redesign/2026-09-30/sources/swishes/swish-7.wav": "e6de737a34de16afed094d6170d7679149022f149e0a8356d2f029b0e8f4a4d7",
+    "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth2.ogg": "8a7451193c38bc05483aec25dd193e163a15d44cf7fff04ac7912573231b0201",
+    "docs/ui-rework/2026-09-27-audio/sources/casino-audio/card-shove-2.ogg": "8e95c1d3ae94b5b91bc663432ad7c3bf4e03a541c22ec10fa51c65fe0e29054b",
+    "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/bookFlip2.ogg": "3409042acbfaebc24c1a6327dc073e36f9250841712e96c5040da566a97df73c",
+    "docs/ui-rework/2026-09-27-audio/sources/interface-sounds/glass_001.ogg": "183eebee20eb0a532b0b85104d139cbf2673eb66d95c3cc733ac9ea98362e7e8",
+    "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/item_gem_01.ogg": "8a5d2964febb0c69cc4df2ee5257d173f2cae6960d9534df0001dbf356f27028",
+    "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/metalLatch.ogg": "ba9ba60b172b3ebc131a940f25793cd2e207aca7af73dc80d637277f060f1708",
+    "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/metal_01.ogg": "433d7adf123f9de425047f6dec3f7b4da510c0fd0208d4893a22be8bd22d9e34",
+    "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/book_02.ogg": "a3f87cfd37a452231a05ceebf746ae2459849c2e20f7b244e4a9b7dbc1d9e76b",
+    "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth4.ogg": "e7ab9a6c4466dea874196c61f59bf1da05cfe58748f42fadd695d441a154a99b",
+    "docs/ui-rework/2026-09-27-audio/sources/casino-audio/card-slide-5.ogg": "8638ab0c17f029aded0e27a4f9b9bb9f8c621b19a6e9975e855cb40ea63e2201",
+    "docs/sound-redesign/2026-09-30/sources/swishes/swish-13.wav": "698230ba3fe05a68c18d68cd6b3a07fb98e6c1198bb1a4238592ee9912c02c77"
+  },
+  "references": [
+    "https://kenney.nl/assets/rpg-audio",
+    "https://kenney.nl/assets/casino-audio",
+    "https://kenney.nl/assets/impact-sounds",
+    "https://kenney.nl/assets/interface-sounds",
+    "https://opengameart.org/content/swishes-sound-pack",
+    "https://opengameart.org/node/86018"
+  ]
+}
