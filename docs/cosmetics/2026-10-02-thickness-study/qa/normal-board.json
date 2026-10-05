@@ -1,0 +1,101 @@
+{
+  "checks": [
+    "Cold start holds the logo/loading cover until all six components and card images are ready",
+    "Model/button projection alignment and common card sizes at four viewport sizes",
+    "Live mana values/available/spent crystals at 0, 4, 10, 11, 20, 21 and 30",
+    "Clicking the physical reroll disk spends one mana and replaces only the three offers",
+    "Zero-mana reroll disabled; opposing turn disables end button and changes its label/timer",
+    "Actual fixed-market purchase flies in front, lands on the new shelf, retains full-resolution native face",
+    "Real collapsed-hand drag plays Attune away from spell slots and updates the 3D mana display",
+    "First and second actual monster summons have nonzero landing targets and settle in the centered lane",
+    "Persistent spell lands in a dimensioned status slot without covering the avatar",
+    "Shared shuffle renderer carries stock from the authored shelf floor to the low deck pad and cleans up",
+    "Physical END TURN hit area advances the actual game",
+    "Leaving the duel removes both renderer canvases and model resources"
+  ],
+  "resolutions": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "unit": 122.7906976744186,
+      "controls": [
+        {
+          "selector": "#endBtn",
+          "delta": 0.4825015420336611,
+          "inside": true
+        },
+        {
+          "selector": "#refreshBtn",
+          "delta": 0.2156005614940948,
+          "inside": true
+        }
+      ],
+      "shelfWidth": 123,
+      "deckWidth": 123,
+      "marketWidth": 123
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "unit": 81.86046511627906,
+      "controls": [
+        {
+          "selector": "#endBtn",
+          "delta": 0.349958691210134,
+          "inside": true
+        },
+        {
+          "selector": "#refreshBtn",
+          "delta": 0.19234681632758993,
+          "inside": true
+        }
+      ],
+      "shelfWidth": 82,
+      "deckWidth": 82,
+      "marketWidth": 82
+    },
+    {
+      "width": 1814,
+      "height": 1274,
+      "unit": 116.01162790697676,
+      "controls": [
+        {
+          "selector": "#endBtn",
+          "delta": 0.3665424732511636,
+          "inside": true
+        },
+        {
+          "selector": "#refreshBtn",
+          "delta": 0.21618005393433595,
+          "inside": true
+        }
+      ],
+      "shelfWidth": 116,
+      "deckWidth": 116,
+      "marketWidth": 116
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "unit": 24.941860465116278,
+      "controls": [
+        {
+          "selector": "#endBtn",
+          "delta": 0.11283025458108763,
+          "inside": true
+        },
+        {
+          "selector": "#refreshBtn",
+          "delta": 0.006666380103585249,
+          "inside": true
+        }
+      ],
+      "shelfWidth": 25,
+      "deckWidth": 25,
+      "marketWidth": 25
+    }
+  ],
+  "errors": [],
+  "requests": [],
+  "passed": true
+}

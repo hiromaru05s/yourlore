@@ -1,0 +1,126 @@
+{
+  "passed": true,
+  "rows": [
+    {
+      "set": "nocturne",
+      "side": "self",
+      "passed": true
+    },
+    {
+      "set": "nocturne",
+      "side": "opponent",
+      "passed": true
+    },
+    {
+      "set": "porcelain",
+      "side": "self",
+      "passed": true
+    },
+    {
+      "set": "porcelain",
+      "side": "opponent",
+      "passed": true
+    },
+    {
+      "set": "garnet",
+      "side": "self",
+      "passed": true
+    },
+    {
+      "set": "garnet",
+      "side": "opponent",
+      "passed": true
+    },
+    {
+      "set": "verdigris",
+      "side": "self",
+      "passed": true
+    },
+    {
+      "set": "verdigris",
+      "side": "opponent",
+      "passed": true
+    },
+    {
+      "set": "amber",
+      "side": "self",
+      "passed": true
+    },
+    {
+      "set": "amber",
+      "side": "opponent",
+      "passed": true
+    },
+    {
+      "set": "tidal",
+      "side": "self",
+      "passed": true
+    },
+    {
+      "set": "tidal",
+      "side": "opponent",
+      "passed": true
+    },
+    {
+      "set": "silverflow",
+      "side": "self",
+      "passed": true
+    },
+    {
+      "set": "silverflow",
+      "side": "opponent",
+      "passed": true
+    },
+    {
+      "set": "emberheart",
+      "side": "self",
+      "passed": true
+    },
+    {
+      "set": "emberheart",
+      "side": "opponent",
+      "passed": true
+    },
+    {
+      "viewport": [
+        595,
+        540
+      ],
+      "canvas": {
+        "width": 1190,
+        "height": 1080
+      }
+    },
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "canvas": {
+        "width": 2560,
+        "height": 1440
+      }
+    },
+    {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "canvas": {
+        "width": 3265,
+        "height": 1837
+      }
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "canvas": {
+        "width": 780,
+        "height": 1688
+      }
+    }
+  ],
+  "errors": []
+}

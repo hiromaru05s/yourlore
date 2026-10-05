@@ -1,3 +1,4 @@
+import {sleeveMaterial} from './cosmetics/sleeve';
 import {pileCenter,STOCK_THICKNESS} from './readingBoardLayout';
 /** Blender furniture mounting and reusable thin, rounded card stock. */
 import * as T from 'three';
@@ -23,7 +24,7 @@ export function cardStock(map:T.Texture, face?:T.Texture, edgesOnly=false):T.Gro
     const padded=!back&&!!face;
     const geo=padded?new T.PlaneGeometry(1+2*CARD_PADDING,RATIO+2*CARD_PADDING):new T.ShapeGeometry(shape,4),p=geo.getAttribute('position'),uv=geo.getAttribute('uv');
     if(!padded)for(let i=0;i<p.count;i++)uv.setXY(i,p.getX(i)+.5,p.getY(i)/RATIO+.5);
-    const mesh=new T.Mesh(geo,new T.MeshBasicMaterial({map:texture,toneMapped:false,transparent:padded,alphaTest:padded?.025:0}));
+    const mesh=new T.Mesh(geo,padded?new T.MeshBasicMaterial({map:texture,toneMapped:false,transparent:true,alphaTest:.025}):sleeveMaterial(texture));
     mesh.name=back?'stock-back':'stock-front';
     mesh.position.z=(back?-1:1)*STOCK_THICKNESS/2;if(back)mesh.rotation.y=Math.PI;
     mesh.castShadow=true;mesh.receiveShadow=true;g.add(mesh);
@@ -43,8 +44,9 @@ export function makePile(count:number,shelf:boolean,sleeve:T.Texture,face?:T.Tex
   if(!shelf){
     const n=Math.min(count,20),height=Math.max(0,Math.min(count,40)-1)*STOCK_THICKNESS;
     for(let i=0;i<n;i++){
-      const card=cardStock(sleeve);card.rotation.x=-Math.PI/2;
-      card.position.set(0,pileCenter(1,false)+(n<=1?0:i/(n-1)*height),0);cards.add(card);top=card;
+      // Only the exposed card needs printed faces; buried cards retain physical edges.
+      const card=cardStock(sleeve,undefined,i<n-1);card.rotation.x=-Math.PI/2;
+      card.position.set(0,pileCenter(1,false)+(n<=1?0:i/(n-1)*height),0);card.traverse(o=>{if(o instanceof T.Mesh)for(const m of Array.isArray(o.material)?o.material:[o.material])m.userData.atelierResting=true;});cards.add(card);top=card;
     }
     if(!n)top.position.y=pileCenter(1,false);
   }else{
@@ -52,7 +54,7 @@ export function makePile(count:number,shelf:boolean,sleeve:T.Texture,face?:T.Tex
     for(let j=0;j<n;j++){
       const card=cardStock(sleeve,j===n-1?face:undefined,!face || j<n-1);card.rotation.x=-Math.PI/2;
       card.position.set(0,pileCenter(1,true)+(n<=1?0:j/(n-1)*height),0);
-      cards.add(card);top=card;
+      card.traverse(o=>{if(o instanceof T.Mesh)for(const m of Array.isArray(o.material)?o.material:[o.material])m.userData.atelierResting=true;});cards.add(card);top=card;
     }
     if(!n)top.position.set(0,pileCenter(1,true),0);
   }

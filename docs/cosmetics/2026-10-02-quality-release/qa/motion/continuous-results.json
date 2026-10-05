@@ -1,0 +1,82 @@
+[
+  {
+    "set": "silverflow",
+    "side": "self",
+    "initial": {
+      "theme": "silverflow",
+      "wearer": "self",
+      "motion": true,
+      "surfaces": 5,
+      "phase": 0.652300000047684,
+      "textures": 6
+    },
+    "idle": {
+      "theme": "silverflow",
+      "wearer": "self",
+      "motion": true,
+      "surfaces": 5,
+      "phase": 9.668500000047693,
+      "textures": 6
+    }
+  },
+  {
+    "set": "silverflow",
+    "side": "opponent",
+    "initial": {
+      "theme": "silverflow",
+      "wearer": "opponent",
+      "motion": true,
+      "surfaces": 5,
+      "phase": 0.6720000000000002,
+      "textures": 6
+    },
+    "idle": {
+      "theme": "silverflow",
+      "wearer": "opponent",
+      "motion": true,
+      "surfaces": 5,
+      "phase": 9.671600000000016,
+      "textures": 6
+    }
+  },
+  {
+    "set": "emberheart",
+    "side": "self",
+    "initial": {
+      "theme": "emberheart",
+      "wearer": "self",
+      "motion": true,
+      "surfaces": 5,
+      "phase": 0.6278,
+      "textures": 6
+    },
+    "idle": {
+      "theme": "emberheart",
+      "wearer": "self",
+      "motion": true,
+      "surfaces": 5,
+      "phase": 9.627400000000023,
+      "textures": 6
+    }
+  },
+  {
+    "set": "emberheart",
+    "side": "opponent",
+    "initial": {
+      "theme": "emberheart",
+      "wearer": "opponent",
+      "motion": true,
+      "surfaces": 5,
+      "phase": 0.7065000000953678,
+      "textures": 6
+    },
+    "idle": {
+      "theme": "emberheart",
+      "wearer": "opponent",
+      "motion": true,
+      "surfaces": 5,
+      "phase": 9.706200000095377,
+      "textures": 6
+    }
+  }
+]

@@ -1,3 +1,4 @@
+import {themeFromUrl} from '../shared/atelierThemes';
 import {COSMETICS,cosmetic} from '../shared/cosmetics';
 import { loungeText } from "../ui/loungeText";
 import { homeIcon } from "../ui/homeIcons";
@@ -66,8 +67,8 @@ export function mountShop(app: App): Screen {
         </div>`;
     }).join("");
 
-    const current=cosmetic(selected)!;
-    wrap.querySelector('#shopSelection')!.innerHTML=`<img src="${current.url}" alt=""><div><small>${loungeText('プレビュー中','Preview','미리보기')}</small><strong>${esc(current[getLang()])}</strong><span>${owned.has(current.id)?t('shop.owned'):current.price+' '+t('home.shards')}</span></div>`;
+    const current=cosmetic(selected)!,theme=themeFromUrl(current.url);
+    wrap.querySelector('#shopSelection')!.innerHTML=`<img src="${current.url}" alt=""><div><small>${loungeText('プレビュー中','Preview','미리보기')}</small><strong>${esc(current[getLang()])}</strong><span>${owned.has(current.id)?t('shop.owned'):current.price+' '+t('home.shards')}</span>${theme?`<a class="btn btn-mini" href="/cosmetic-studio.html?set=${theme.id}&side=self" target="_blank" rel="noopener">${loungeText('実盤面で見る ↗','View on board ↗','보드에서 보기 ↗')}</a>`:''}</div>`;
     grid.querySelectorAll<HTMLButtonElement>('[data-preview]').forEach(button=>button.onclick=()=>{selected=button.dataset.preview!;renderGrid();grid.querySelector<HTMLButtonElement>(`[data-preview="${selected}"]`)?.focus({preventScroll:true})});
     grid.querySelectorAll("[data-buy]").forEach((btn) => {
       (btn as HTMLElement).onclick = () => {
