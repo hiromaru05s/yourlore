@@ -8,7 +8,7 @@ import {startBoardLayout} from '../../ui/layout';
 import {waitForDuel} from '../../ui/duelReadiness';
 import {setMyAvatar,setOppAvatar} from '../../ui/boardView';
 import {setLang} from '../../i18n';
-import {initSound,warmSounds,setSfxVolume,stopSounds} from '../../ui/sound';
+import {initSound,warmSounds,setSfxVolume,stopSounds,soundUrls} from '../../ui/sound';
 import {setFxSkip} from '../../ui/anim';
 const files=import.meta.glob('./assets/*.mp3',{eager:true,query:'?url',import:'default'}) as Record<string,string>;
 const clips=new Map<string,AudioBuffer>();
@@ -64,6 +64,6 @@ async function play(id:string,card:string,volume:number,isMono:boolean){
  if(token!==epoch)return;controller.show(result.state);ready=true;post('再生完了 · 発動音のみ候補へ差し替え',true);
 }
 window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent||e.data?.kind!=='spell-review')return;const d=e.data;if(d.action==='stop'){void cancel().then(()=>{ready=true;post('停止しました。');});}else if(d.action==='volume')setSfxVolume(d.volume);else if(d.action==='play'&&clips.has(d.id)&&['FLAME','FORESIGHT'].includes(d.card)){void play(d.id,d.card,d.volume,d.mono).catch(error=>{ready=true;parent.postMessage({kind:'spell-scene',ready,message:String(error),error:true},location.origin);});}});
-void(async()=>{initSound();controller.show(fixture());await Promise.all([waitForDuel(document.querySelector('#app')!),...manifest.map(async c=>{clips.set(c.id,await decoder.decodeAudioData(await(await fetch(files['./assets/'+c.file])).arrayBuffer()));}),fetch('/sfx/lore-v6/play.mp3').then(r=>r.arrayBuffer()).then(b=>decoder.decodeAudioData(b)).then(b=>{original=fingerprint(b)})]);await decoder.close();ready=true;post('準備完了 · 候補の「実盤面」を押してください。');})().catch(e=>post(String(e)));
+void(async()=>{initSound();controller.show(fixture());await Promise.all([waitForDuel(document.querySelector('#app')!),...manifest.map(async c=>{clips.set(c.id,await decoder.decodeAudioData(await(await fetch(files['./assets/'+c.file])).arrayBuffer()));}),fetch(soundUrls('play')[0]).then(r=>r.arrayBuffer()).then(b=>decoder.decodeAudioData(b)).then(b=>{original=fingerprint(b)})]);await decoder.close();ready=true;post('準備完了 · 候補の「実盤面」を押してください。');})().catch(e=>post(String(e)));
 Object.assign(window,{spellSoundQA:{trace,clips,controller,get ready(){return ready}}});
 window.addEventListener('pagehide',()=>{void cancel();controller.destroy();stopLayout();AudioBufferSourceNode.prototype.start=start;Object.defineProperty(AudioBufferSourceNode.prototype,'buffer',bufferProperty);});

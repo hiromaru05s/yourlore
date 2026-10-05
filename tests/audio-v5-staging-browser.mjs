@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import assert from 'node:assert/strict';
-import {chromium} from '/tmp/lore-opening-tools/node_modules/playwright/index.mjs';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 import {apiFixture} from './helpers/api-fixture.mjs';
 const cardId=process.env.LORE_AUDIO_CARD||'CASTLE',spell=cardId==='FLAME';
 const origin=process.env.LORE_TEST_ORIGIN||'https://test.yourlore.xyz',out=process.env.LORE_TEST_OUTPUT||'docs/sound-redesign/2026-09-30/revision2/staging/'+cardId;

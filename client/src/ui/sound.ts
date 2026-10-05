@@ -20,7 +20,7 @@ const encoded=new Map<string,Promise<ArrayBuffer>>(),decoded=new Map<string,Prom
 const last=new Map<SfxName,number>(),cycle=new Map<SfxName,number>();
 interface Voice {name:SfxName;source:AudioBufferSourceNode;gain:GainNode;family:Family;priority:number;finish:()=>void;}
 const active=new Set<Voice>();
-export const soundUrls=(name:SfxName)=>name==='play'?['/sfx/lore-v6/play.mp3']:name==='draw'?['/sfx/lore-v4/draw-3.mp3']:Array.from({length:VARIANTS.has(name)?3:1},(_,i)=>`/sfx/lore-v${UI.has(name)?3:PRESERVED_V4.has(name)?4:5}/`+name+(VARIANTS.has(name)?'-'+(i+1):'')+'.mp3');
+export const soundUrls=(name:SfxName)=>name==='play'?['/sfx/lore-v7/play.mp3']:name==='draw'?['/sfx/lore-v4/draw-3.mp3']:Array.from({length:VARIANTS.has(name)?3:1},(_,i)=>`/sfx/lore-v${UI.has(name)?3:PRESERVED_V4.has(name)?4:5}/`+name+(VARIANTS.has(name)?'-'+(i+1):'')+'.mp3');
 function bytes(url:string){let p=encoded.get(url);if(!p){p=fetch(url).then(r=>{if(!r.ok)throw new Error('sound unavailable');return r.arrayBuffer();}).catch(e=>{encoded.delete(url);throw e;});encoded.set(url,p);}return p;}
 function buffer(url:string){let p=decoded.get(url);if(!p){p=bytes(url).then(b=>ctx!.decodeAudioData(b.slice(0))).then(b=>{ready.set(url,b);return b;}).catch(e=>{decoded.delete(url);throw e;});decoded.set(url,p);}return p;}
 function unlock(){

@@ -47,7 +47,7 @@ try{
  time+=1000;a.sfx('click');a.sfx('pop');assert.equal(starts.length-stops.length,1,'confirmation replaces generic click');a.stopSounds();
  let aborted=new AbortController();aborted.abort();const count=starts.length;a.sfx('diceRoll',{signal:aborted.signal});assert.equal(starts.length,count);
  a.sfx('mana');document.dispatchEvent(new Event('visibilitychange'));a.setSfxVolume(0);assert.equal(starts.length-stops.length,0);
- assert.deepEqual(a.soundUrls('play'),['/sfx/lore-v6/play.mp3']);
+ assert.deepEqual(a.soundUrls('play'),['/sfx/lore-v7/play.mp3']);
  const e=new a.EventSound();
  assert.equal(e.cue({type:"hit",uid:"immune",amount:0}),undefined,"prevented hit without preceding animation is silent");
  e.contact(null,1,false);assert.equal(e.cue({type:'damage',player:1,amount:2}),'damage','zero contact must not swallow later effect damage');

@@ -1,5 +1,5 @@
 import fs from 'node:fs/promises';import assert from 'node:assert/strict';const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
-const out='docs/sound-study/2026-10-03/qa';await fs.mkdir(out,{recursive:true});
+const out=process.env.LORE_TEST_OUTPUT||'docs/sound-study/2026-10-03/qa';await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true,args:['--disable-quic']});
 const page=await browser.newPage({viewport:{width:1440,height:1050}});page.setDefaultTimeout(90000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
 await page.addInitScript(()=>{window.qaActive=0;window.qaStarts=0;const start=AudioBufferSourceNode.prototype.start;AudioBufferSourceNode.prototype.start=function(...a){window.qaActive++;window.qaStarts++;this.addEventListener('ended',()=>window.qaActive--,{once:true});return start.apply(this,a);};});
