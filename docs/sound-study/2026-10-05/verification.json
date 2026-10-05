@@ -1,0 +1,28 @@
+{
+  "source": "f5744953a6ea23bf7571d489afb6e728228e9c15",
+  "adoptionCommit": "f818d06f008a3beb5da4700236f0c90de03cd41c",
+  "deployment": "1ffa6f4a-6c7c-4701-a739-ef1611cf13f7",
+  "versions": [
+    {
+      "version_id": "483822d6-0eb6-4ef9-ad2c-12591b08b26c",
+      "percentage": 100
+    }
+  ],
+  "checks": {
+    "typecheck": true,
+    "regressionSuites": "53/53",
+    "build": true,
+    "stagingAssetHashes": 43,
+    "selectedPreviewByteIdentical": true,
+    "naturalBotSpellPlayback": true
+  },
+  "spellTrace": [
+    {
+      "fingerprint": "23040:1156819823",
+      "at": 30802.900000095367,
+      "state": "running",
+      "cue": "play"
+    }
+  ],
+  "boundary": "Public staging app and natural local BOT actions; account/API fixture. AudioBufferSource start with decoded PCM fingerprints and running AudioContext; not human listening or authenticated online PvP."
+}

@@ -1,0 +1,13 @@
+import fs from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const origin='https://test.yourlore.xyz';
+const hash=b=>createHash('sha256').update(b).digest('hex');
+const bank=JSON.parse(await fs.readFile('client/public/sfx/lore-v5/manifest.json','utf8'));
+const expected=new Map(Object.values(bank.sounds).flat().map(c=>[c.url,c.sha256]));
+for(const url of ['/sfx/lore-v5/manifest.json','/sfx/lore-v7/manifest.json'])expected.set(url,hash(await fs.readFile('client/public'+url)));
+const pending=[...expected],checks=[];
+await Promise.all(Array.from({length:4},async()=>{while(pending.length){const [url,sha256]=pending.shift();const response=await fetch(origin+url,{cache:'no-store'});assert.equal(response.status,200,url);const b=Buffer.from(await response.arrayBuffer());assert.equal(hash(b),sha256,url);checks.push({url,sha256,bytes:b.length});}}));
+assert.equal(bank.sounds.play[0].sha256,hash(await fs.readFile('client/src/dev/spell-sound-five/assets/01-silk.mp3')));
+await fs.writeFile(new URL('./staging-assets.json',import.meta.url),JSON.stringify({origin,checkedAt:new Date().toISOString(),checks:checks.sort((a,b)=>a.url.localeCompare(b.url))},null,2)+'\n');
+console.log('PASS staging audio hashes and selected preview identity:',checks.length);

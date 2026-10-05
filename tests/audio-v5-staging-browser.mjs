@@ -17,8 +17,8 @@ try{
   const start=AudioBufferSourceNode.prototype.start;AudioBufferSourceNode.prototype.start=function(...args){audioStarts.push({fingerprint:audioFingerprint(this.buffer),at:performance.now(),state:this.context.state});return start.apply(this,args);};
  });
  await page.goto(origin+'/?v=sound-v5',{waitUntil:'commit'});await page.waitForSelector('.lounge-home');await page.waitForSelector('.screen-loader',{state:'detached'});
- await page.locator('#bot').click();await page.locator('#ranked').click();await page.locator('[data-diff=easy]').click();console.log('BOT opening');
- await page.waitForSelector('.duel-table-ready');await page.waitForSelector('.duel-loader',{state:'detached'});await page.waitForSelector('.duel-opening',{state:'detached'});await page.waitForSelector(`#hand [data-card-id=${cardId}]`);console.log('BOT ready');
+ await page.locator('#bot').click();await page.locator('#ranked').click();await page.locator('[data-diff=easy]').click();await page.locator('#diffStart').click();console.log('BOT opening');
+ await page.waitForSelector('[data-scene-ready=true]');await page.waitForSelector('.duel-loader',{state:'detached'});await page.waitForSelector('.duel-opening',{state:'detached'});await page.waitForSelector(`#hand [data-card-id=${cardId}]`);console.log('BOT ready');
  const names=await page.evaluate(async sounds=>{const decoder=new AudioContext(),names={};for(const [name,clips]of Object.entries(sounds))for(const clip of clips){const response=await fetch(clip.url);const buffer=await decoder.decodeAudioData(await response.arrayBuffer());names[audioFingerprint(buffer)]=name;}await decoder.close();window.soundNames=names;return names;},manifest.sounds);
  await page.locator(`#hand [data-card-id=${cardId}]`).first().hover();await page.waitForTimeout(180);
  let box=await page.locator(`#hand [data-card-id=${cardId}]`).first().boundingBox();await page.mouse.click(box.x+box.width/2,box.y+box.height*.35);await page.waitForTimeout(150);

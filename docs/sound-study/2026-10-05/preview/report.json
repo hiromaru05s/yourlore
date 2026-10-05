@@ -1,0 +1,105 @@
+{
+  "clips": [
+    {
+      "id": "01-silk",
+      "sha256": "43ecb1a276bcaa1ddaa3a2a6fe9ecd5ea598e9b8009f206ae1d1a88511e67888",
+      "energy200Db": -28.49
+    },
+    {
+      "id": "02-air",
+      "sha256": "f4caff91529eb99002984c18d0744767ef4d1aa9305afb0f2f869ad2b172bd91",
+      "energy200Db": -28.5
+    },
+    {
+      "id": "03-crystal",
+      "sha256": "ea4684a47f759c21dbce87b011a9667cb8250f0a38847402801aff4a92290944",
+      "energy200Db": -28.5
+    },
+    {
+      "id": "04-spark",
+      "sha256": "ad3e352c78faa3efcd8811ef2a92844c4ebfd871e78fc4effca3071cd5bdbe49",
+      "energy200Db": -28.47
+    },
+    {
+      "id": "05-sigil",
+      "sha256": "b2f9d748271f4e1803b7e9bff260d615dd1fcd9713944a0809d902d1299c3790",
+      "energy200Db": -28.51
+    }
+  ],
+  "scenes": [
+    {
+      "id": "01-silk",
+      "trace": [
+        {
+          "selected": "01-silk",
+          "at": 45225.59999990463,
+          "fingerprint": "23040:1156819823"
+        }
+      ]
+    },
+    {
+      "id": "02-air",
+      "trace": [
+        {
+          "selected": "02-air",
+          "at": 47523.59999990463,
+          "fingerprint": "27360:918207527"
+        }
+      ]
+    },
+    {
+      "id": "03-crystal",
+      "trace": [
+        {
+          "selected": "03-crystal",
+          "at": 49514.700000047684,
+          "fingerprint": "30720:-1644697397"
+        }
+      ]
+    },
+    {
+      "id": "04-spark",
+      "trace": [
+        {
+          "selected": "04-spark",
+          "at": 51402.5,
+          "fingerprint": "26400:-1942345474"
+        }
+      ]
+    },
+    {
+      "id": "05-sigil",
+      "trace": [
+        {
+          "selected": "05-sigil",
+          "at": 53435.89999985695,
+          "fingerprint": "34560:-1466793254"
+        }
+      ]
+    }
+  ],
+  "sizes": [
+    {
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "width": 320,
+      "scroll": 320
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "five distinct samples",
+    "energy matched within .2 dB",
+    "five single controls and original",
+    "three repetitions",
+    "stop cancels BGM and sequence",
+    "all five sequence completes",
+    "mono",
+    "five actual controller spell casts",
+    "persistent spell with BGM",
+    "320/390/1440 layout",
+    "mobile scene playback and auto scroll"
+  ]
+}
