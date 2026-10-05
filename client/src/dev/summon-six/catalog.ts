@@ -13,5 +13,5 @@ export function motion(v:number,ms:number,reduced=false){
  const hit=designs[Math.min(v,5)].hit;if(reduced)return{lift:0,tilt:0,scale:1,hit};
  const q=clamp(ms/hit),drop=v===2?ease(.32,1,q)**2:v===4?q*q*q:ease(.02,1,q),age=Math.max(0,(ms-hit)/420);
  const bounce=ms>hit?Math.sin(Math.min(1,age)*Math.PI)*Math.exp(-age*4):0;
- return{lift:(1-drop)*[.43,.5,.66,.38,.53,.46][v]+bounce*[.025,.04,.016,.018,.01,.025][v],tilt:(1-drop)*[1,-2,1.5,-3,0,2][v],scale:1+(1-drop)*.018,hit};
+ return{lift:(1-drop)*[.43,.5,.66,.38,.53,.46][v]+bounce*[.025,.04,.016,.018,.01,.025][v],tilt:0,scale:1,hit};
 }

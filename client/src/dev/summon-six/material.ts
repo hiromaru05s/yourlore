@@ -9,21 +9,24 @@ void main(){
  vec2 p=(uv-.5)*vec2(3.8,-3.8);float t=age; if(t<0.||t>1.8){gl_FragColor=vec4(0.);return;}
  float spread=1.-exp(-t*4.2),fade=1.-smoothstep(.35,1.65,t);float density=0.,rim=0.;
  // A coherent pressure front originates at the rectangular contact perimeter.
- for(int i=0;i<10;i++){
-  float fi=float(i),side=mod(fi,2.)*2.-1.,seed=hash(vec2(fi,kind+3.));
-  float theta=fi*2.399963;float along=sin(theta);float delay=seed*.06;float a=max(0.,t-delay);
-  float go=1.-exp(-a*(kind==4.?7.:3.8));float reach=kind==0.?.43:kind==1.?.44:kind==2.?.34:kind==3.?.52:kind==4.?.65:.36;
-  // Ground-hugging lobes expand from the card's contact footprint.
-  vec2 normal=vec2(cos(theta),sin(theta)*.34);
-  vec2 center=vec2(normal.x*(.43+reach*go),.63+normal.y*(.20+go*.48));
-  vec2 size=vec2(.20+.15*go,.105+.085*go);
-  if(kind==0.){size=vec2(.24,.038+.025*go);center.y=.67+normal.y*(.17+go*.34);}
-  if(kind==1.){size=vec2(.19,.15)*(.7+go);center.y-=sin(a*2.)*.10;}
-  if(kind==2.){size*=.74;center.y+=a*.035;}
-  if(kind==3.){size=vec2(.32,.045);center.y+=sin(go*4.+fi)*.055;}
-  if(kind==4.){size=vec2(.17,.075);center.y=.68+normal.y*(.19+go*.70);}
-  if(kind==5.){size=vec2(.17,.09);center.y-=a*.055;}
-  vec2 q=(p-center)/size;float angle=atan(q.y,q.x),r=length(q);
+ for(int i=0;i<12;i++){
+  float fi=float(i),edge=mod(fi,4.),seed=hash(vec2(fi,kind+3.));
+  float side=mod(edge,2.)*2.-1.,along=(floor(fi/4.)-1.)*.55;
+  vec2 normal=edge<2.?vec2(side,0.):vec2(0.,side);
+  vec2 tangent=vec2(-normal.y,normal.x);
+  vec2 anchor=edge<2.?vec2(side*.5,along):vec2(along*.62,side*.75);
+  float a=max(0.,t-seed*.035),go=1.-exp(-a*(kind==4.?7.:3.8));
+  float reach=kind==0.?.25:kind==1.?.29:kind==2.?.21:kind==3.?.32:kind==4.?.42:.24;
+  vec2 center=anchor+normal*(.012+reach*go);
+  vec2 size=vec2(.075+.08*go,.16+.08*go);
+  if(kind==0.)size=vec2(.035+.04*go,.22);
+  if(kind==1.)size=vec2(.13,.20)*(.7+go*.5);
+  if(kind==2.)size*=.72;
+  if(kind==3.){size=vec2(.045,.28);center+=tangent*sin(go*4.+fi)*.04;}
+  if(kind==4.)size=vec2(.055,.20);
+  if(kind==5.)size=vec2(.09,.14);
+  vec2 delta=p-center;vec2 q=vec2(dot(delta,normal),dot(delta,tangent))/size;
+  float angle=atan(q.y,q.x),r=length(q);
   float curl=angle+a*(kind==1.?3.:1.1)+fi;
   vec2 flow=q*.55+vec2(sin(curl),cos(curl))*.25;
   float n=fb(flow*2.+vec2(fi*7.,-a*.8));

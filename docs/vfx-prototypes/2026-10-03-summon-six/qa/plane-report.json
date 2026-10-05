@@ -1,0 +1,33 @@
+{
+  "checks": [
+    "6 variants × 6 sampled times saved",
+    "all six detail selections",
+    "current/original/new comparison",
+    "real GameView board ready",
+    "board side 0 variant 1: one source replaced",
+    "board side 0 variant 2: one source replaced",
+    "board side 0 variant 3: one source replaced",
+    "board side 0 variant 4: one source replaced",
+    "board side 0 variant 5: one source replaced",
+    "board side 0 variant 6: one source replaced",
+    "board side 1 variant 1: one source replaced",
+    "board side 1 variant 2: one source replaced",
+    "board side 1 variant 3: one source replaced",
+    "board side 1 variant 4: one source replaced",
+    "board side 1 variant 5: one source replaced",
+    "board side 1 variant 6: one source replaced",
+    "card starts above board",
+    "height is zero at contact",
+    "no translation within the board plane",
+    "contact shadow plane remains fixed",
+    "entire card face matches the ground matrix at contact",
+    "three simultaneous cards",
+    "end restores all original cards",
+    "leaving board disposes iframe",
+    "reduced motion is static",
+    "continuous clock advances",
+    "pause freezes clock",
+    "normal-speed continuous recording saved"
+  ],
+  "errors": []
+}
