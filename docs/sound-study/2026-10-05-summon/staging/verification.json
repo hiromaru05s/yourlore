@@ -1,0 +1,24 @@
+{
+  "source": "d4aca95b2b63c9d7d9c010e05b70aed947489789",
+  "worker": "7a7531d4-2ab1-4812-9787-5fd23f0adacb",
+  "selection": "04-air",
+  "selectedPreviewIdentical": true,
+  "magic01Preserved": true,
+  "productionTests": {
+    "passed": 54,
+    "total": 54
+  },
+  "assetHashes": {
+    "passed": 44,
+    "total": 44
+  },
+  "naturalBrowserPlayback": {
+    "verified": false,
+    "reason": "Three attempts stopped before scene-ready; third run reached 70/70 artwork with 36 warmed public images and two UI retries. No page errors.",
+    "reports": [
+      "initial-artwork-timeout/failure.json",
+      "second-artwork-timeout/failure.json",
+      "CASTLE/failure.json"
+    ]
+  }
+}

@@ -2,13 +2,13 @@ import fs from 'node:fs/promises';
 import assert from 'node:assert/strict';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 import {apiFixture} from './helpers/api-fixture.mjs';
-const cardId=process.env.LORE_AUDIO_CARD||'CASTLE',spell=cardId==='FLAME';
+const cardId=process.env.LORE_AUDIO_CARD||'CASTLE',spell=cardId==='FLAME',warmArtwork=process.env.LORE_AUDIO_WARM_ARTWORK==='1';
 const origin=process.env.LORE_TEST_ORIGIN||'https://test.yourlore.xyz',out=process.env.LORE_TEST_OUTPUT||'docs/sound-redesign/2026-09-30/revision2/staging/'+cardId;
 await fs.mkdir(out,{recursive:true});
 const manifest=JSON.parse(await fs.readFile('client/public/sfx/lore-v5/manifest.json','utf8'));
 const browser=await chromium.launch({channel:'chrome',headless:true,args:['--disable-quic']});
 const page=await browser.newPage({viewport:{width:1461,height:789}});page.setDefaultTimeout(90000);
-const errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.url().includes('/sfx/'))requests.push(new URL(r.url()).pathname);});
+const errors=[],requests=[],networkFailures=[];page.on('requestfailed',r=>networkFailures.push({url:r.url(),error:r.failure()?.errorText}));page.on('response',r=>{if(r.status()>=400)networkFailures.push({url:r.url(),status:r.status()});});page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.url().includes('/sfx/'))requests.push(new URL(r.url()).pathname);});
 try{
  await apiFixture(page,r=>{const p=new URL(r.url).pathname;if(p==='/api/auth/me')return {user:{id:'sound-stage-qa',display:'SOUND QA',avatar:'SEEKER_BLUE',credits:0,deck:Array(8).fill(cardId)}};if(p==='/api/geo')return {country:'JP'};if(p==='/api/rank/me')return {rating:{season:'2026-09',tier:'bronze',mmr:1000}};return {ok:true};});
  await page.addInitScript(()=>{
@@ -17,7 +17,14 @@ try{
   const start=AudioBufferSourceNode.prototype.start;AudioBufferSourceNode.prototype.start=function(...args){audioStarts.push({fingerprint:audioFingerprint(this.buffer),at:performance.now(),state:this.context.state});return start.apply(this,args);};
  });
  await page.goto(origin+'/?v=sound-v5',{waitUntil:'commit'});await page.waitForSelector('.lounge-home');await page.waitForSelector('.screen-loader',{state:'detached'});
+ if(warmArtwork){
+  const urls=[...['red','blue'].flatMap(c=>['idle','hurt','attack','mana','heal'].map(a=>`/art/seekers/v2/${c}-${a}.webp`)),...['self','opp'].map(s=>`/art/seekers/v2/mask-${s}.png`),...(await fs.readdir('client/public/ui/passives/v2')).filter(f=>f.endsWith('.svg')).map(f=>'/ui/passives/v2/'+f),...['front','back'].map(s=>`/ui/coin-toss/coin-option-1-${s}.png`),...['base-mon','base-spell','base-quest','field-mon','field-spell','field-quest','cost','attack','health','shield','dew'].map(n=>`/art/biblion/modular/${n}-ui.webp`)];
+  await page.evaluate(async urls=>{const pending=[...urls];window.warmedArtwork=[];await Promise.all(Array.from({length:4},async()=>{while(pending.length){const img=new Image();img.src=pending.shift();await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Artwork warmup timeout: '+img.src)),30000);img.decode().then(()=>{clearTimeout(timer);resolve();},e=>{clearTimeout(timer);reject(e);});});warmedArtwork.push(img);}}));},urls);console.log('Public artwork cache warmed',urls.length);
+ }
  await page.locator('#bot').click();await page.locator('#ranked').click();await page.locator('[data-diff=easy]').click();await page.locator('#diffStart').click();console.log('BOT opening');
+ // Use the visible artwork retry action when artwork loading fails.
+ const retry=page.getByRole('button',{name:'画像の読み込みを再試行',exact:true});let artworkRetries=0;
+ for(;artworkRetries<2;artworkRetries++){await Promise.race([page.locator('[data-scene-ready=true]').waitFor(),retry.waitFor()]);if(await page.locator('[data-scene-ready=true]').count())break;await retry.click();}
  await page.waitForSelector('[data-scene-ready=true]');await page.waitForSelector('.duel-loader',{state:'detached'});await page.waitForSelector('.duel-opening',{state:'detached'});await page.waitForSelector(`#hand [data-card-id=${cardId}]`);console.log('BOT ready');
  const names=await page.evaluate(async sounds=>{const decoder=new AudioContext(),names={};for(const [name,clips]of Object.entries(sounds))for(const clip of clips){const response=await fetch(clip.url);const buffer=await decoder.decodeAudioData(await response.arrayBuffer());names[audioFingerprint(buffer)]=name;}await decoder.close();window.soundNames=names;return names;},manifest.sounds);
  await page.locator(`#hand [data-card-id=${cardId}]`).first().hover();await page.waitForTimeout(180);
@@ -34,6 +41,6 @@ try{
  if(!spell)assert.deepEqual(trace.slice(beforeAttack).filter(x=>['attack','impact','facehit','damage'].includes(x.cue)).map(x=>x.cue),cardId==='CASTLE'?['attack']:['attack','facehit']);
  assert(!requests.some(u=>/\/draw-[12]\.mp3$/.test(u)));assert(requests.includes('/sfx/lore-v4/draw-3.mp3'));
  assert.deepEqual(errors,[]);await page.screenshot({path:out+'/battle.png'});
- await fs.writeFile(out+'/browser.json',JSON.stringify({origin,trace,requests:[...new Set(requests)],errors,boundary:'Public staging app and natural local BOT actions; account/API fixture. AudioBufferSource start with decoded PCM fingerprints and running AudioContext; not human listening or authenticated online PvP.'},null,2)+'\n');
+ await fs.writeFile(out+'/browser.json',JSON.stringify({origin,trace,requests:[...new Set(requests)],errors,networkFailures,artworkRetries,warmArtwork,boundary:'Public staging app and natural local BOT actions; account/API fixture. AudioBufferSource start with decoded PCM fingerprints and running AudioContext; not human listening or authenticated online PvP.'},null,2)+'\n');
  console.log('PASS staging',cardId,spell?'new spell sound':'damage-aware attack contact');
-}catch(e){await page.screenshot({path:out+'/failure.png'});await fs.writeFile(out+'/failure.json',JSON.stringify({error:e.stack,errors,requests,starts:await page.evaluate(()=>window.audioStarts)},null,2));throw e;}finally{await browser.close();}
+}catch(e){await page.screenshot({path:out+'/failure.png'});await fs.writeFile(out+'/failure.json',JSON.stringify({error:e.stack,errors,requests,networkFailures,warmArtwork,starts:await page.evaluate(()=>window.audioStarts)},null,2));throw e;}finally{await browser.close();}
