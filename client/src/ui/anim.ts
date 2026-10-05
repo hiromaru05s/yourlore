@@ -1,8 +1,7 @@
 import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {isMimic,focusScale,type MimicId} from './mimic/selection';
-import {playMonster,setMonsterSkip,monsterRect} from './monster/runtime';
-import {pose as monsterPose} from './monster/catalog';
-import {placement as monsterPlacement} from './monster/actor';
+import {playMonster,setMonsterSkip} from './monster/runtime';
+import {summonPlacement} from './summon/runtime';
 import {foldQuestIntoSlot,nativeQuestGhost} from './questFold';
 import {getManaFormation} from './manaFormationPreview';
 import {passiveIcon} from './passiveIcon';
@@ -187,43 +186,22 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(heavy){
     face.style.zIndex='135';reveal.style.zIndex='135';
-    // Finish the hand reveal on the same flat board plane as approved summon B.
-    const r=monsterRect(target),p=monsterPose('summon','B',0,r,r,reduced);
-    const initial=monsterPlacement(r,p.x,p.y,p.angle,p.scale,p.z,p.rock);
+    // Transfer directly into the selected card-parallel landing, without a second impact.
+    const initial=summonPlacement(target,w,h,0,reduced);
     const transfer=face.animate([{transform:start.toString(),opacity:0},{transform:initial.toString(),opacity:1}],{duration:reduced?80:300,easing:'cubic-bezier(.2,.7,.3,1)',fill:'both'});
     const fade=reveal.animate([{opacity:1},{opacity:0}],{duration:reduced?80:220,fill:'both'});
     await wait(reduced?80:300);transfer.cancel();fade.cancel();reveal.remove();
     face.style.transform=initial.toString();
-    await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>{sfx(landingSound);window.dispatchEvent(new CustomEvent('lore:summon-impact',{detail:target.getBoundingClientRect()}));}}));
+    await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}));
     face.style.transform=fieldPlacement(target,w,h).toString();return face;
   }
   const duration=reduced?120:620;
   const options:KeyframeAnimationOptions={duration,easing:'linear',fill:'both'};
-  const hover=new DOMMatrix().translate(0,-Math.min(innerHeight*.18,w*1.35)).multiply(end).scale(1.06);
-  const oldHover=new DOMMatrix().translate(0,-Math.min(innerHeight*.18,w*1.35)).multiply(oldEnd).scale(1.06);
-  if(heavy&&!reduced&&!fxSkip)playBiblionFx('summon-charge',target);
-  const moving=face.animate(heavy&&!reduced?[
-    {transform:start.toString(),opacity:0,easing:'cubic-bezier(.16,.8,.25,1)'},
-    {transform:hover.toString(),opacity:1,offset:.4},
-    {transform:hover.toString(),opacity:1,offset:.6,easing:'cubic-bezier(.7,0,1,.4)'},
-    {transform:end.toString(),opacity:1},
-  ]:[{transform:start.toString(),opacity:0},{transform:end.toString(),opacity:1}],options);
-  const old=reveal.animate(heavy&&!reduced?[
-    {transform:oldStart.toString(),opacity:1,easing:'cubic-bezier(.16,.8,.25,1)'},
-    {transform:oldHover.toString(),opacity:0,offset:.4},
-    {transform:oldEnd.toString(),opacity:0},
-  ]:[{transform:oldStart.toString(),opacity:1},{transform:oldEnd.toString(),opacity:0}],options);
+  const moving=face.animate([{transform:start.toString(),opacity:0},{transform:end.toString(),opacity:1}],options);
+  const old=reveal.animate([{transform:oldStart.toString(),opacity:1},{transform:oldEnd.toString(),opacity:0}],options);
   await wait(duration);
   moving.cancel();old.cancel();reveal.remove();face.style.transform=fieldPlacement(target,w,h).toString();
-  if(!fxSkip){
-    if(heavy)sfx(landingSound);
-    if(heavy&&!reduced){playBiblionFx('summon-impact',face.getBoundingClientRect());
-      window.dispatchEvent(new CustomEvent('lore:summon-impact',{detail:face.getBoundingClientRect()}));
-      const objects=[face];
-      const shakes=objects.map(el=>el.animate([{translate:'0 0'},{translate:'0 3px',offset:.12},{translate:'-1px -2px',offset:.3},{translate:'1px 1px',offset:.55},{translate:'0 0'}],{duration:240,easing:'ease-out'}));
-      await wait(240);shakes.forEach(a=>a.cancel());
-    }else summonDust(face.getBoundingClientRect());
-  }
+  if(!fxSkip)summonDust(face.getBoundingClientRect());
   return face;
 }
 export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish",slotIndex?:number,deferVanish=false): Promise<HTMLElement|null> {

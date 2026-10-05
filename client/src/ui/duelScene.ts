@@ -101,13 +101,13 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   const onDust=(event:Event):void=>{
     if(reduced.matches)return;
     const rect=(event as CustomEvent<DOMRect>).detail;
-    const heavy=event.type==='lore:summon-impact';
+    const heavy=false; // Generic pile/spell arrivals only; summon owns its entire effect.
     const group=createDust(dustMap,heavy);dustScene.add(group);
     // Bound concurrent opening impacts without changing gameplay timing.
     if(dusts.length>=16){const old=dusts.shift()!;dustScene.remove(old.group);disposeObject(old.group);}
     dusts.push({group,start:performance.now(),rect,heavy});
   };
-  window.addEventListener('lore:summon-dust',onDust);window.addEventListener('lore:summon-impact',onDust);
+  window.addEventListener('lore:summon-dust',onDust);
   const flows:Array<{group:T.Group;start:number;from:DOMRect;to:DOMRect}>=[];
   const onFlow=(event:Event):void=>{
     if(reduced.matches)return;
@@ -214,7 +214,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   }
   const lost=(event:Event)=>{event.preventDefault();dispose();};canvas.addEventListener('webglcontextlost',lost);flightCanvas.addEventListener('webglcontextlost',lost);
   function dispose(){
-    if(dead)return;dead=true;disposeOpening();root.dataset.tableState='fallback';motion.dispose();cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:render-density',onDensity);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:summon-impact',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);flightCanvas.removeEventListener('webglcontextlost',lost);
+    if(dead)return;dead=true;disposeOpening();root.dataset.tableState='fallback';motion.dispose();cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:render-density',onDensity);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);flightCanvas.removeEventListener('webglcontextlost',lost);
     items.forEach(removeItem);cosmeticPreview?.dispose();textures.forEach(t=>t.dispose());table.dispose();furniture.dispose();widgets.dispose();disposeFormationBloom();keyLight.shadow.dispose();disposeObject(dustScene);dustMap.dispose();environment.dispose();flightEnvironment.dispose();cachedBoard.dispose();presentQuad.geometry.dispose();presentMaterial.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove();flightRenderer.dispose();flightRenderer.forceContextLoss();flightCanvas.remove();
     root.querySelectorAll<HTMLElement>('.pile').forEach(el=>{el.classList.remove('pile--3d-ready');delete el.dataset.furniture;el.querySelector('.pile-draw-anchor')?.remove();});clearBoardProjection(root);root.classList.remove('duel-webgl','market-model-ready','supply-model-ready');
   }

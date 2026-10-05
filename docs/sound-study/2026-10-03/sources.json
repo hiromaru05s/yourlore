@@ -1,0 +1,24 @@
+{
+  "license": "CC0-1.0 source assets; original editing",
+  "sources": {
+    "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth1.ogg": "ddb93a3671233f95da0e0b10367f082f7eb42fa6caaddcf776410aa8833c747d",
+    "docs/ui-rework/2026-09-27-audio/sources/casino-audio/card-place-3.ogg": "1d988631a6e5201ed1bb0d728f2e43a3ec79401258426858793598044ac95841",
+    "docs/sound-redesign/2026-09-30/sources/swishes/swish-11.wav": "9e81d548d8215fbb36f7a41b5771d4b52c2fd02fbb9b5ff9a4c65118fd88ee4d",
+    "docs/sound-redesign/2026-09-30/sources/swishes/swish-7.wav": "e6de737a34de16afed094d6170d7679149022f149e0a8356d2f029b0e8f4a4d7",
+    "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth2.ogg": "8a7451193c38bc05483aec25dd193e163a15d44cf7fff04ac7912573231b0201",
+    "docs/sound-redesign/2026-09-30/sources/swishes/swish-3.wav": "55b100e2c67fa43dad8510e31e85bbd51a68d5ce84a6e0259e21e19030083e24",
+    "docs/sound-redesign/2026-09-30/sources/swishes/swish-10.wav": "4f7381a76f280d3f36f962ac3f44f16f77eec44797f30715d063c81ea3859024",
+    "docs/ui-rework/2026-09-27-audio/sources/interface-sounds/glass_001.ogg": "183eebee20eb0a532b0b85104d139cbf2673eb66d95c3cc733ac9ea98362e7e8",
+    "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/spell_fire_06.ogg": "66fa753e8033d08f3837d6ef1706b0450297db68c0d4b21782a03fd9ae960d63",
+    "docs/sound-redesign/2026-09-30/sources/swishes/swish-4.wav": "0060f4a7040edce4cc50d1daa10a9cb76764128a942e4688339e69cd1d5d784c",
+    "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/spell_fire_04.ogg": "64d653cd0cc6eb71bb45a1dfbba29eaa769ed5b663cce275082d6971e4f2ca8e",
+    "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/item_gem_01.ogg": "8a5d2964febb0c69cc4df2ee5257d173f2cae6960d9534df0001dbf356f27028",
+    "docs/sound-redesign/2026-09-30/sources/swishes/swish-13.wav": "698230ba3fe05a68c18d68cd6b3a07fb98e6c1198bb1a4238592ee9912c02c77",
+    "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/bookPlace2.ogg": "831874e8fd142d4d0a03ff009f1f83966338a7878c0f6f38c613ae5b80dd731e"
+  },
+  "references": [
+    "https://kenney.nl/assets",
+    "https://opengameart.org/content/swishes-sound-pack",
+    "https://opengameart.org/node/86018"
+  ]
+}

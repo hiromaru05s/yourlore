@@ -1,0 +1,25 @@
+import {Renderer} from './renderer';import {designs} from './catalog';
+const save=async(name:string,body:Blob|string)=>{const r=await fetch('/__summon-evidence/plane-'+name,{method:'POST',body});if(!r.ok)throw Error('Save failed '+r.status);};
+const wait=(n:number)=>new Promise(r=>setTimeout(r,n));
+export async function run(renderer:Renderer,face:HTMLCanvasElement,status:HTMLElement){
+ const api=(window as any).summonLab;const report:{checks:string[];errors:string[]}={checks:[],errors:[]};const check=(value:boolean,label:string)=>{if(!value)throw Error(label);report.checks.push(label);};
+ const canvas=document.createElement('canvas');canvas.width=1440;canvas.height=990;const c=canvas.getContext('2d')!;
+ function paint(ms:number){c.fillStyle='#eeeae2';c.fillRect(0,0,1440,990);c.fillStyle='#252c2a';c.font='26px Georgia';c.fillText('LORE / SUMMON — SIX MATERIAL STUDIES',34,45);c.font='13px sans-serif';c.fillText('2026.10.05 / FACE CONTACT  •  LOCAL PREVIEW / 未採用  •  '+(ms/1000).toFixed(2)+' s',35,72);for(let i=0;i<6;i++){const x=(i%3)*480,y=Math.floor(i/3)*430+100;c.strokeStyle='#cbc7bc';c.strokeRect(x,y,480,430);c.font='18px sans-serif';c.fillStyle='#333a35';c.fillText(`${i+1}  ${designs[i].name}`,x+25,y+35);c.font='10px sans-serif';c.fillStyle='#7b7e73';c.fillText(designs[i].en,x+25,y+53);renderer.draw(c,face,i,ms,x+240,y+235,158);c.font='12px sans-serif';c.fillStyle='#646b60';c.fillText(designs[i].note,x+25,y+403,428);}}
+ try{
+  if(new URLSearchParams(location.search).has('frames')){
+   api.pause();for(let i=0;i<=60;i++){paint(i*1000/24);await save('motion-'+String(i).padStart(3,'0')+'.png',await new Promise<Blob>(r=>canvas.toBlob(b=>r(b!))));status.textContent=`連続フレーム保存 ${i+1} / 61`;}
+   await save('frame-record.json',JSON.stringify({frames:61,fps:24,duration:61/24}));status.textContent='連続フレーム61枚を保存しました。';return;
+  }
+  api.pause();api.setMode('grid');for(const t of [0,500,900,1250,1900,2500]){api.seek(t);paint(t);await save('six-'+t+'.png',await new Promise<Blob>(r=>canvas.toBlob(b=>r(b!))));}check(true,'6 variants × 6 sampled times saved');
+  api.setMode('detail');for(let v=0;v<6;v++){api.seek(1000,v);await wait(50);}check(true,'all six detail selections');
+  api.setMode('before');api.seek(1000);check(document.querySelectorAll('[data-before]').length===3,'current/original/new comparison');
+  api.setMode('board');const f=document.querySelector('iframe')!;let board:any;for(let i=0;i<150;i++){board=(f.contentWindow as any)?.summonBoard;if(board?.state.ready)break;await wait(200);}check(!!board?.state.ready,'real GameView board ready');
+  for(const side of [0,1])for(let v=0;v<6;v++){api.setSide(side);api.seek(1000,v);await wait(100);check(board.state.hidden===1&&board.state.rigs===1,`board side ${side} variant ${v+1}: one source replaced`);}
+  api.setMulti(false);api.setSide(0);api.seek(0,0);await wait(120);const initial=board.state.planes[0];check(initial.height>0,'card starts above board');api.seek(designs[0].hit,0);await wait(120);const landed=board.state.planes[0];check(landed.height===0,'height is zero at contact');check(initial.x===landed.x&&initial.y===landed.y,'no translation within the board plane');check(initial.ground===landed.ground,'contact shadow plane remains fixed');check(landed.card===landed.ground,'entire card face matches the ground matrix at contact');
+  api.setMulti(true);api.seek(950);await wait(120);check(board.state.hidden===3&&board.state.rigs===3,'three simultaneous cards');api.seek(2500);await wait(120);check(board.state.hidden===0&&board.state.rigs===0,'end restores all original cards');
+  api.seek(900);api.setMode('grid');await wait(100);check(f.getAttribute('src')==='about:blank','leaving board disposes iframe');
+  api.reduce(true);check(!api.state.playing&&api.state.ms===2500,'reduced motion is static');api.reduce(false);
+  api.seek(0);api.play();await wait(350);check(api.state.ms>0,'continuous clock advances');api.pause();const frozen=api.state.ms;await wait(100);check(api.state.ms===frozen,'pause freezes clock');
+  status.textContent='連続再生を記録しています…';paint(0);const stream=canvas.captureStream(30);const recorder=new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp9',videoBitsPerSecond:5000000}),chunks:BlobPart[]=[];recorder.ondataavailable=e=>chunks.push(e.data);const stopped=new Promise<Blob>(resolve=>recorder.onstop=()=>resolve(new Blob(chunks,{type:'video/webm'})));recorder.start();const start=performance.now();await new Promise<void>(resolve=>{function tick(now:number){const elapsed=now-start;paint(Math.min(2500,elapsed));if(elapsed<2800)requestAnimationFrame(tick);else resolve();}requestAnimationFrame(tick);});recorder.stop();await save('six-continuous.webm',await stopped);stream.getTracks().forEach(t=>t.stop());report.checks.push('normal-speed continuous recording saved');api.seek(1000);status.textContent=`検証完了：${report.checks.length}項目。6案の静止画と連続動画を保存しました。`;
+ }catch(e){report.errors.push(String(e));status.textContent='検証エラー: '+String(e);}await save('report.json',JSON.stringify(report,null,2));
+}

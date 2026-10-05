@@ -1,3 +1,4 @@
+import {playSlateSummon,cancelSummons,cancelSummon} from '../summon/runtime';
 import {Actor} from './actor';
 import {duration,ease, type Kind, type Variant, type Rect} from './catalog';
 import {drawEffect, ongoingFilter} from './renderer';
@@ -46,8 +47,8 @@ export function syncMonsterStates(root:HTMLElement){
  }
  if([...states.values()].some(s=>s.root===root))observeField(root);release();if(states.size)schedule();
 }
-export function clearMonsterStates(root:HTMLElement){for(const j of [...jobs.values()])if(root.contains(j.source))j.finish(false);for(const [n,s] of states)if(s.root===root)removeState(n);release();}
-export function setMonsterSkip(value:boolean){skipped=value;if(value)for(const j of [...jobs.values()])j.finish(false);}
+export function clearMonsterStates(root:HTMLElement){cancelSummons(root);for(const j of [...jobs.values()])if(root.contains(j.source))j.finish(false);for(const [n,s] of states)if(s.root===root)removeState(n);release();}
+export function setMonsterSkip(value:boolean){skipped=value;if(value)cancelSummons();if(value)for(const j of [...jobs.values()])j.finish(false);}
 function release(){
  for(const [root,layer] of fieldLayers)if(![...states.values()].some(s=>s.root===root)){layer.dispose();fieldLayers.delete(root);observers.get(root)?.disconnect();observers.delete(root);}
  if(!jobs.size){layers?.dispose();layers=undefined;}
@@ -85,7 +86,7 @@ function tick(now:number){
   if(!active)break;
   if(!j.source.isConnected||document.hidden||j.options.signal?.aborted){j.finish(false);continue;}
   const t=Math.min(1,(now-j.start)/j.ms),o=j.options;
-  const impact=j.kind==='attack'?270:j.kind==='summon'?506:Infinity;
+  const impact=j.kind==='attack'?270:Infinity;
   if(!j.impacted&&(now-j.start>=impact||reduced())){j.impacted=true;o.onImpact?.();}
   // Multi-attack returns to its ready state without a false exhausted interval.
   const paintT=j.kind==='attack'&&o.exhaust===false?Math.min(t*j.ms,819)/2800:t;
@@ -106,8 +107,9 @@ function tick(now:number){
  release();if(jobs.size||animated)schedule();
 }
 export function playMonster(source:HTMLElement,kind:Kind,options:Options={}):Promise<boolean>{
- jobs.get(source)?.finish(false);
+ cancelSummon(source);jobs.get(source)?.finish(false);
  if(skipped||!source.isConnected||options.signal?.aborted)return Promise.resolve(false);
+ if(kind==='summon')return playSlateSummon(source,options);
  const r=monsterRect(options.anchor??source);if(!r.w||!r.h)return Promise.resolve(false);
  const variant=options.variant??(kind==='attack'?'A':kind==='aura'||kind==='ready'?'C':'B');
  if(kind==='destroy'&&!options.destination)return Promise.resolve(false);

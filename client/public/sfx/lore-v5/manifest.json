@@ -1,6 +1,6 @@
 {
   "version": 5,
-  "status": "staging bank with spell revision 2",
+  "status": "active bank with user-selected spell 01 (lore-v7)",
   "sampleRate": 44100,
   "sounds": {
     "click": [
@@ -292,17 +292,54 @@
     ],
     "play": [
       {
+        "id": "01-silk",
+        "number": "01",
+        "title": "シルクの封印",
+        "description": "布の短い擦過 → 小さな締まり。乾いた、控えめな発動。",
+        "character": "最短・乾いた質感",
         "file": "play.mp3",
-        "url": "/sfx/lore-v6/play.mp3",
-        "seconds": 0.64,
-        "peakDb": -11,
-        "rmsDb": -28.44,
-        "sha256": "5c014a2ad4dc0191db97119b34e7d5339158f4bc0c39ce4896fa1aba0fdf47d0",
-        "sources": [
-          "original: rising harmonic bloom and filtered air"
+        "seconds": 0.48,
+        "peakDb": -8.1,
+        "energy200Db": -28.49,
+        "onsetMs": 6.69,
+        "centroidHz": 843,
+        "sha256": "43ecb1a276bcaa1ddaa3a2a6fe9ecd5ea598e9b8009f206ae1d1a88511e67888",
+        "layers": [
+          {
+            "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth1.ogg",
+            "at": 0,
+            "gain": 0.85,
+            "rate": 1.2,
+            "lo": 200,
+            "hi": 5800,
+            "d": 0.24
+          },
+          {
+            "file": "docs/ui-rework/2026-09-27-audio/sources/casino-audio/card-place-3.ogg",
+            "at": 0.045,
+            "gain": 0.13,
+            "rate": 0.82,
+            "lo": 180,
+            "hi": 3400,
+            "d": 0.15
+          },
+          {
+            "file": "docs/sound-redesign/2026-09-30/sources/swishes/swish-11.wav",
+            "at": 0.04,
+            "gain": 0.3,
+            "rate": 0.95,
+            "lo": 750,
+            "hi": 5700,
+            "d": 0.3
+          }
         ],
-        "decision": "rebuilt spell onset revision 2",
-        "description": "短い吸気から柔らかく広がる魔力の発動。紙音・高い通知音・打撃なし。"
+        "url": "/sfx/lore-v7/play.mp3",
+        "decision": "User selected 01 silk on 2026-10-05; byte-identical preview adoption",
+        "sources": [
+          "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth1.ogg",
+          "docs/ui-rework/2026-09-27-audio/sources/casino-audio/card-place-3.ogg",
+          "docs/sound-redesign/2026-09-30/sources/swishes/swish-11.wav"
+        ]
       }
     ],
     "heal": [
