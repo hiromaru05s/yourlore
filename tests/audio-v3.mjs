@@ -36,7 +36,7 @@ try{
  for(const name of ['click','pop','error'])assert(a.soundUrls(name).every(u=>u.includes('/lore-v3/')));
  for(const name of ['coin','match','buy'])assert.deepEqual(a.soundUrls(name),[`/sfx/lore-v4/${name}.mp3`]);
  assert.deepEqual(a.soundUrls('draw'),['/sfx/lore-v4/draw-3.mp3']);
- for(const name of a.SFX_NAMES.filter(n=>!['click','pop','error','coin','match','buy','draw','play'].includes(n)))assert(a.soundUrls(name).every(u=>u.includes('/lore-v5/')));
+ for(const name of a.SFX_NAMES.filter(n=>!['click','pop','error','coin','match','buy','draw','play','summon'].includes(n)))assert(a.soundUrls(name).every(u=>u.includes('/lore-v5/')));
  for(let i=0;i<5;i++){time+=100;a.sfx('draw');assert(starts.at(-1).buffer.name.endsWith('/draw-3.mp3'),'draw never cycles to rejected variants');}
  a.stopSounds();time+=1000;a.sfx('attack');const sweep=starts.at(-1);a.sfx('impact');assert(stops.includes(sweep),'landing fades the outgoing attack sweep');
  time+=1000;a.sfx('mana');a.sfx('draw');const battle=starts.slice(-3);a.sfx('win');assert(battle.every(v=>stops.includes(v)),'outcome clears lingering battle voices');
@@ -48,6 +48,7 @@ try{
  let aborted=new AbortController();aborted.abort();const count=starts.length;a.sfx('diceRoll',{signal:aborted.signal});assert.equal(starts.length,count);
  a.sfx('mana');document.dispatchEvent(new Event('visibilitychange'));a.setSfxVolume(0);assert.equal(starts.length-stops.length,0);
  assert.deepEqual(a.soundUrls('play'),['/sfx/lore-v7/play.mp3']);
+ assert.deepEqual(a.soundUrls('summon'),['/sfx/lore-v8/summon.mp3']);
  const e=new a.EventSound();
  assert.equal(e.cue({type:"hit",uid:"immune",amount:0}),undefined,"prevented hit without preceding animation is silent");
  e.contact(null,1,false);assert.equal(e.cue({type:'damage',player:1,amount:2}),'damage','zero contact must not swallow later effect damage');
