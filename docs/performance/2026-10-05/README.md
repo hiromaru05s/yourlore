@@ -77,3 +77,13 @@ Local typecheck, production suite (54/54), and build passed. Source SHA and
 deployed asset verification are recorded below after upload. Staging uses the existing guarded snapshot
 release; production is outside this request. Browser checks use fixture API/game
 state and do not claim an authenticated online match.
+
+- Released source: `d4e1453997c81213ad33dcc4b8130fb8cd85efc8` (optimization `67eedfcf`, plus current main including selected summon audio).
+- Worker version: `6d8bc0c8-07fa-4832-9b17-536669fcecb4`, 100% staging.
+- Guarded snapshot: typecheck, 54/54 production suites, build passed again.
+- [Staging](https://test.yourlore.xyz): all 38 built HTML/JS/CSS hashes match.
+- Deployed BOT board at 1280×900 and 390×844: no page errors, idle draw budget passed.
+- Deployed Rift projection created and cleaned up its source/transfer canvases.
+- Deployed spell scene on a public spell-card clone: first mask has three pixel readbacks; repeated mask has zero; both scenes dispose their canvases.
+- Exact source/version, asset hashes and browser samples: `staging/deployment.json` and `staging/verification.json`.
+- Follow-up commits containing only tests/reports do not require redeployment; deployed application source remains the SHA above.

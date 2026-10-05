@@ -1,0 +1,23 @@
+{
+  "environment": "staging",
+  "origin": "https://test.yourlore.xyz",
+  "source": "d4e1453997c81213ad33dcc4b8130fb8cd85efc8",
+  "optimizationCommit": "67eedfcf",
+  "id": "8adb9bc4-3aa7-4317-8922-22a1cce36df8",
+  "created_on": "2026-10-05T03:32:03.028291Z",
+  "versions": [
+    {
+      "version_id": "6d8bc0c8-07fa-4832-9b17-536669fcecb4",
+      "percentage": 100
+    }
+  ],
+  "annotations": {
+    "workers/message": "d4e1453997c81213ad33dcc4b8130fb8cd85efc8 guarded release",
+    "workers/triggered_by": "deployment"
+  },
+  "validation": {
+    "typecheck": true,
+    "productionSuites": "54/54",
+    "build": true
+  }
+}

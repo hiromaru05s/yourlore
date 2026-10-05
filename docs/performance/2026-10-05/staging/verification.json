@@ -1,0 +1,198 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-10-05T03:53:47.765Z",
+  "assets": [
+    {
+      "file": "index.html",
+      "sha256": "272916aabb8b427d2fedda8b8acfc48cd717063b3d9b359f746bbfc3b2455bb8"
+    },
+    {
+      "file": "assets/BufferGeometryUtils-Dt1ZoHXm.js",
+      "sha256": "f4a8eb1df64676843eb52265aa00dd16b45ec59710286d17b41ea04fcfda92e4"
+    },
+    {
+      "file": "assets/RoomEnvironment-CljGZMnC.js",
+      "sha256": "15d975a3af4f90adb95981578a3777d1abe902835cf08687dd40813844821092"
+    },
+    {
+      "file": "assets/atelierThemes-DM29k3s-.js",
+      "sha256": "95d1fa7ec28362a982bf7d4430da039a377b73a37609306bf599ca8bc7810c97"
+    },
+    {
+      "file": "assets/audit-Ch-vlPRj.js",
+      "sha256": "53fcc623e3b2b9ac71ac9b74dd522f3e77f45ae7853baa8ac8284d4d4e6a1930"
+    },
+    {
+      "file": "assets/board-D8cpR13B.js",
+      "sha256": "3b220c006e66db88305bac04df6cfaa5ffd1a99eb7f0828c6acbb8c82577fbd4"
+    },
+    {
+      "file": "assets/board-UDApamK7.css",
+      "sha256": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22"
+    },
+    {
+      "file": "assets/ceremonyScene-ClnFqjYR.js",
+      "sha256": "b0c117a6304a4f08d9895b5a71cfc86e7b02a224fc28bd965a75216a3525c7d3"
+    },
+    {
+      "file": "assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "sha256": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700"
+    },
+    {
+      "file": "assets/cosmeticStudio-BDJCqJNq.js",
+      "sha256": "c253b9e80585b04ca9078df1ba6b68f7c396f003955b6b96c3004ddcff2f1bfc"
+    },
+    {
+      "file": "assets/crownOutcome-Cd90N0tm.js",
+      "sha256": "201f97831b4b02ff567a2392f53d7ac0dd7ec7bcc41b6b077eb959910109831e"
+    },
+    {
+      "file": "assets/diceScene-y9oIHEh1.js",
+      "sha256": "535c9737cb1c33fd52012389d4e901bee3d580f492b8c2bf2b1492ec5033ccd1"
+    },
+    {
+      "file": "assets/duelScene-DXG3Jrph.js",
+      "sha256": "5fb3d98fee7b89beb5b32993f1d2ffa59ff5ee36841fa0580507e2c63e11d8f6"
+    },
+    {
+      "file": "assets/family-matter-Zu12CDAs.js",
+      "sha256": "d2211ca59574fd24920f390d30effe3393ab5e8cca899c9c04f1dab4d3a10dde"
+    },
+    {
+      "file": "assets/game-DwQONITT.js",
+      "sha256": "1170e2b79df3062e478c528336c551492f34bc20c9506db80850f119e0879827"
+    },
+    {
+      "file": "assets/handGeometry-Bz96hXgQ.js",
+      "sha256": "aa57e7f2da29c273b4f2adfb686fe19dbae04ee09c5e9ce37b735341357b6d01"
+    },
+    {
+      "file": "assets/inspection-DCBNQ5tG.js",
+      "sha256": "1b4d7e1441354dd536afe1215aad9b56225e0795023f93d5738ae3056fcb75bd"
+    },
+    {
+      "file": "assets/layout-DPkR2mny.js",
+      "sha256": "6406f962eaccc67a478f9002d8bc7de6893019bc2e2f44209f22a16afa058481"
+    },
+    {
+      "file": "assets/layout-pMfcEDtF.css",
+      "sha256": "834708ab76534934347cff47b156f4228bd9c7904902eda69088e255db0cdc94"
+    },
+    {
+      "file": "assets/main-BDpRd2px.css",
+      "sha256": "03766858e4629d2d6974cbc03b3ebf580ede339771837ed106164d83743fe091"
+    },
+    {
+      "file": "assets/main-C4HwgJT_.js",
+      "sha256": "bdee32e8688b83586d2519761c8c8d6ccdf2c52a25bdba4de96d1d650ed4fe8d"
+    },
+    {
+      "file": "assets/master-tongues-tSZ88qCq.js",
+      "sha256": "5aa6f51b7f21c781f111e0360eae866a2ebde88917ee90d3af1b54a295b42433"
+    },
+    {
+      "file": "assets/materials-Cdvqwovy.js",
+      "sha256": "185263000bae5c6b5b4709f9adddc8a8fe13663f4fdd4ebb6e64c8b5461792cb"
+    },
+    {
+      "file": "assets/modal-CG24Sw4s.js",
+      "sha256": "08b887cb5c6b11316859c0220efafcbe38f7cb45f44ff1a3d1c1181b4de31dcb"
+    },
+    {
+      "file": "assets/modal-DNzmBYTt.css",
+      "sha256": "30b27cd0a30b5b2893a1cf44ce6a64fc21d50665d79d580ff3890f14f5280044"
+    },
+    {
+      "file": "assets/ornaments-jpMqA1i1.js",
+      "sha256": "0be2740748b9bc814b558ff32ec0ed4140095369b0a3b3ac426cf1979647ef96"
+    },
+    {
+      "file": "assets/paperDraw-CNrf6xDb.js",
+      "sha256": "33cbbceef932e75a66a5372e5c562e90132ad8c26aa5ef3ee5641fa1dbd8b7d2"
+    },
+    {
+      "file": "assets/pileModels-rIXB25-L.js",
+      "sha256": "b14a95155439644702abdbf8a496b93d0a7d2fa14b757607482382f09af3978f"
+    },
+    {
+      "file": "assets/renderDensity-eCqR3GeM.js",
+      "sha256": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699"
+    },
+    {
+      "file": "assets/renderer-C3aNmhqB.js",
+      "sha256": "158b9253c40391b3f307c40c0594bcefc9fbbf7bedc7ce24a2fda02ef363de72"
+    },
+    {
+      "file": "assets/riftScene-B_dDaj0y.js",
+      "sha256": "a75f010fcd3b6cdace273d1990a33ee31f7c0598e98dfae12c6b1e0cbc05c95a"
+    },
+    {
+      "file": "assets/royal-matter-2dLVmzwp.js",
+      "sha256": "18c595e613f2b4fb67538d563ecdeb11324afcd9aa44247f179613803130fd72"
+    },
+    {
+      "file": "assets/runtime-Cyp3ElYQ.js",
+      "sha256": "621e4e15f4b694437c487208a27decca8aa6adeed74861a7fa6b02696f6f4339"
+    },
+    {
+      "file": "assets/scene-05QjOBWj.js",
+      "sha256": "59a2863d45f63c03938b5930aa3930b852561b06e7ec7ff61876be383c3e4d51"
+    },
+    {
+      "file": "assets/sleeve-uLS5R9da.js",
+      "sha256": "bdf26dba524486006f2867246b59aba6bbd6a6c6f887e758c3bdd0274d6b3175"
+    },
+    {
+      "file": "assets/studio-CmgKc6nL.css",
+      "sha256": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e"
+    },
+    {
+      "file": "assets/three.module-HSEuXwnV.js",
+      "sha256": "9474ef0dd05ab5312be9b1d2dd046b24b1e8778a5a30119c2327defc13dc143f"
+    },
+    {
+      "file": "assets/voidSurface-DsekZ1vI.js",
+      "sha256": "66f594e0460386d7880b6ed9e3912fa4ced1a7a31b1e84244960223c3d7c8519"
+    }
+  ],
+  "samples": [
+    {
+      "width": 1280,
+      "height": 900,
+      "gpuCalls": {
+        "duel-objects-3d": 7860,
+        "offscreen": 60
+      },
+      "frames": 301,
+      "p95": 16.799999999999272,
+      "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":0,\"portalPasses\":61,\"displayPasses\":181,\"flightPasses\":0,\"cpuMs\":227.2,\"calls\":32,\"triangles\":14196}"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "gpuCalls": {
+        "offscreen": 60,
+        "duel-objects-3d": 8400
+      },
+      "frames": 301,
+      "p95": 16.700000000000728,
+      "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":0,\"portalPasses\":60,\"displayPasses\":180,\"flightPasses\":0,\"cpuMs\":220.3,\"calls\":32,\"triangles\":14196}"
+    }
+  ],
+  "optimizedSilverProjection": true,
+  "spellMaskCache": {
+    "samples": [
+      {
+        "maskReadbacks": 3,
+        "canvases": 1
+      },
+      {
+        "maskReadbacks": 0,
+        "canvases": 1
+      }
+    ],
+    "remaining": 0
+  },
+  "errors": [],
+  "boundary": "Real deployed assets and built BOT board. Authentication/API responses are fixtures. Silver ink invoked through the deployed swallowRiftCard export on a public hand clone; not an authenticated online match or natural exile event. Spell cache probe uses deployed createFrameScene on a public spell-card clone; it is distinct from the natural spell lifecycle covered by local board playback."
+}

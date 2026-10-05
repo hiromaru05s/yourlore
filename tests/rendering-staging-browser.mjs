@@ -36,5 +36,18 @@ try{
   finally{observer.disconnect();copy.remove();anchor.remove();}
  },riftBundle);
  console.log('Silver projection probe',ink);assert(ink.seen.includes('rift-silver-source'),JSON.stringify(ink));assert.equal(await page.locator('.rift-silver-source,.rift-silver-ink-canvas').count(),0);
- assert.deepEqual(errors,[]);await fs.writeFile(out+'/verification.json',JSON.stringify({origin,checkedAt:new Date().toISOString(),assets,samples,optimizedSilverProjection:true,errors,boundary:'Real deployed assets and built BOT board. Authentication/API responses are fixtures. Silver ink invoked through the deployed swallowRiftCard export on a public hand clone; not an authenticated online match or natural exile event.'},null,2));console.log('PASS',assets.length,'deployed asset hashes, desktop/mobile BOT idle budget, optimized silver-ink projection and cleanup');
+ const spellBundle=files.find(f=>/^assets\/scene-.*\.js$/.test(f));let spell;
+ if(spellBundle){
+  spell=await page.evaluate(async bundle=>{
+   const {createFrameScene}=await import('/'+bundle),source=document.querySelector('.card--spell');if(!source)throw Error('No public spell card for deployed mask probe');
+   const copy=source.cloneNode(true);copy.removeAttribute('id');copy.style.cssText='position:fixed;left:400px;top:170px;width:180px;height:270px;--cw:180px;--ch:270px;transform:none;z-index:150';document.body.append(copy);
+   const get=CanvasRenderingContext2D.prototype.getImageData;let reads=0;
+   CanvasRenderingContext2D.prototype.getImageData=function(...args){if(this.canvas.width===768&&this.canvas.height===1200)reads++;return get.apply(this,args);};
+   const samples=[];
+   try{for(let i=0;i<2;i++){const before=reads,scene=await createFrameScene(copy);try{scene.draw(1000,false);samples.push({maskReadbacks:reads-before,canvases:copy.querySelectorAll('.spell-frame-resonance').length});}finally{scene.dispose();}}return {samples,remaining:copy.querySelectorAll('.spell-frame-resonance').length};}
+   finally{CanvasRenderingContext2D.prototype.getImageData=get;copy.remove();}
+  },spellBundle);
+  assert.equal(spell.samples[0].maskReadbacks,3);assert.equal(spell.samples[1].maskReadbacks,0);assert(spell.samples.every(s=>s.canvases===1));assert.equal(spell.remaining,0);console.log('Deployed spell mask cache and cleanup verified',spell);
+ }
+ assert.deepEqual(errors,[]);await fs.writeFile(out+'/verification.json',JSON.stringify({origin,checkedAt:new Date().toISOString(),assets,samples,optimizedSilverProjection:true,spellMaskCache:spell,errors,boundary:'Real deployed assets and built BOT board. Authentication/API responses are fixtures. Silver ink invoked through the deployed swallowRiftCard export on a public hand clone; not an authenticated online match or natural exile event.'},null,2));console.log('PASS',assets.length,'deployed asset hashes, desktop/mobile BOT idle budget, optimized silver-ink projection and cleanup');
 }catch(error){await page.screenshot({path:out+'/failure.png'});await fs.writeFile(out+'/failure.json',JSON.stringify({error:error.message,url:page.url(),body:(await page.locator('body').innerText()).slice(0,5000),errors},null,2));throw error;}finally{await browser.close();}
