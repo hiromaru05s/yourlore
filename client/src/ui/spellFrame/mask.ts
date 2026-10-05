@@ -1,5 +1,12 @@
 import {CanvasTexture,LinearFilter,Texture} from 'three';
 
+// Keep a small CPU-only cache; each scene owns and disposes its GPU texture.
+// Exact stencil geometry is part of the key so transformed/resized cards cannot
+// reuse a mask with a different cost seal. Idle pages retain no mask surfaces.
+const surfaces=new Map<string,HTMLCanvasElement>();
+let idle:ReturnType<typeof setTimeout>|undefined;
+const textureFor=(canvas:HTMLCanvasElement)=>{const texture=new CanvasTexture(canvas);texture.minFilter=LinearFilter;texture.magFilter=LinearFilter;texture.generateMipmaps=false;return texture;};
+
 /** The mask is registered to the actual raster frame, not a rounded rectangle. */
 export async function makeFrameMask(card:HTMLElement):Promise<Texture>{
  const url=/url\(["']?(.*?)["']?\)/.exec(getComputedStyle(card.querySelector('.card-frame')!).backgroundImage)?.[1];
@@ -7,6 +14,13 @@ export async function makeFrameMask(card:HTMLElement):Promise<Texture>{
  const img=new Image();img.src=url;
  let timeout:ReturnType<typeof setTimeout>|undefined;
  try{await Promise.race([img.decode(),new Promise<never>((_,reject)=>{timeout=setTimeout(()=>reject(Error('Frame decode timeout')),2000);})]);}finally{clearTimeout(timeout);}
+ const artPath=document.querySelector('#celestial-base-spell path')?.getAttribute('d');
+ const box=card.getBoundingClientRect();
+ const seals=Array.from(card.querySelectorAll('.card-cost'),el=>{const b=el.getBoundingClientRect();return [(b.x-box.x)/box.width,(b.y-box.y)/box.height,b.width/box.width,b.height/box.height];});
+ const key=JSON.stringify([url,artPath,seals]);
+ clearTimeout(idle);idle=setTimeout(()=>surfaces.clear(),30000);
+ const cached=surfaces.get(key);
+ if(cached){surfaces.delete(key);surfaces.set(key,cached);return textureFor(cached);}
  const w=768,h=1200,c=document.createElement('canvas');c.width=w;c.height=h;
  const ctx=c.getContext('2d',{willReadFrequently:true})!;ctx.drawImage(img,0,0,w,h);
  const pixels=ctx.getImageData(0,0,w,h),d=pixels.data,mask=new Float32Array(w*h);
@@ -20,12 +34,8 @@ export async function makeFrameMask(card:HTMLElement):Promise<Texture>{
  // Preserve the exact illustration silhouette and cost seal above the frame.
  const stencil=document.createElement('canvas');stencil.width=w;stencil.height=h;
  const s=stencil.getContext('2d')!;s.fillStyle='white';
- const artPath=document.querySelector('#celestial-base-spell path')?.getAttribute('d');
  if(artPath){s.save();s.scale(w,h);s.fill(new Path2D(artPath));s.restore();}
- const box=card.getBoundingClientRect();
- for(const el of card.querySelectorAll('.card-cost')){
-  const b=el.getBoundingClientRect();s.fillRect((b.x-box.x)/box.width*w,(b.y-box.y)/box.height*h,b.width/box.width*w,b.height/box.height*h);
- }
+ for(const [x,y,width,height] of seals)s.fillRect(x*w,y*h,width*w,height*h);
  const cut=s.getImageData(0,0,w,h).data;
  const mono=ctx.createImageData(w,h);
  for(let p=0;p<mask.length;p++){
@@ -49,6 +59,7 @@ export async function makeFrameMask(card:HTMLElement):Promise<Texture>{
   packed.data[i+2]=hd[i];packed.data[i+3]=255;
  }
  ctx.putImageData(packed,0,0);
- const texture=new CanvasTexture(c);texture.minFilter=LinearFilter;texture.magFilter=LinearFilter;texture.generateMipmaps=false;
- return texture;
+ if(surfaces.size>=4)surfaces.delete(surfaces.keys().next().value!);
+ surfaces.set(key,c);
+ return textureFor(c);
 }

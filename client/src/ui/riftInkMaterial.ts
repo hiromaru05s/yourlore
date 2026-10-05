@@ -39,6 +39,12 @@ void main(){
  vec2 st=vec2(local.x+.5,.5-local.y/aspect);
  vec4 tex=faceAt(st);
  float a=tex.a;
+ vec3 violet=vec3(.31,.19,.49),lavender=vec3(.63,.49,.80),white=vec3(.91,.87,1.);
+ float pulse=exp(-pow((ms-790.)/180.,2.))*.8+exp(-pow((ms-1200.)/130.,2.))*.35;
+ vec3 premul=vec3(0.);float alpha=0.;
+ // Only the card contributes this material. Preserve the separate contour halo
+ // and folded laminae below, including their transparent-space emission.
+ if(a>0.&&alive>=.006){
  vec2 drift=vec2(t*.18,-t*.27),nuv=local*5.;
  float n=fbm(nuv+vec2(fbm(nuv+drift),fbm(nuv-drift+7.))*1.6+drift);
  float n2=fbm(nuv*2.3+vec2(-t*.14,t*.2));
@@ -47,8 +53,6 @@ void main(){
  float progress=coat*1.5-.15;
  float reveal=1.-smoothstep(progress-.14,progress+.10,n+local.y*.18);
  float front=exp(-abs(n+local.y*.18-progress)*28.);
- float pulse=exp(-pow((ms-790.)/180.,2.))*.8+exp(-pow((ms-1200.)/130.,2.))*.35;
- vec3 violet=vec3(.31,.19,.49),lavender=vec3(.63,.49,.80),white=vec3(.91,.87,1.);
  float etch=texture2D(engraving,clamp(st,vec2(.001),vec2(.999))).r;
  vec2 px=vec2(.004,.0027);
  float cardEdge=max(max(a-alphaAt(st+vec2(px.x,0.)),a-alphaAt(st-vec2(px.x,0.))),max(a-alphaAt(st+vec2(0.,px.y)),a-alphaAt(st-vec2(0.,px.y))));
@@ -76,8 +80,9 @@ void main(){
  color=mix(color,color*.9+white*fiber*.008,open);
  float cardAlpha=a*step(.006,alive)*mix(1.,architecture,open);
 
- vec3 premul=color*cardAlpha;
- float alpha=cardAlpha;
+ premul=color*cardAlpha;
+ alpha=cardAlpha;
+ }
  // Emission follows the actual card alpha contour, including the carved frame.
  float nearby=max(max(alphaAt(st+vec2(.018,0.)),alphaAt(st-vec2(.018,0.))),max(alphaAt(st+vec2(0.,.012)),alphaAt(st-vec2(0.,.012))));
  float rim=max(0.,nearby-a)*charge*(1.-swirl)*(.45+pulse*.4)*step(.006,alive);
@@ -90,6 +95,7 @@ void main(){
  vec2 fluidP=p/max(.025,scale);float fr=length(fluidP),fa=atan(fluidP.y,fluidP.x);
  float twist=fa-fr*5.5+t*2.3+swirl*3.;
  vec3 flowPremul=vec3(0.);float flowA=0.;
+ if(grow>0.){
  for(int j=0;j<5;j++){
   float k=float(j),angle=twist+k*1.256;
   float curl=sin(angle*2.+k*.6)*.05+sin(angle*5.-t*.6+k)*.012;
@@ -108,6 +114,7 @@ void main(){
   flowA=flowA+(1.-flowA)*layerA;
   float gl=exp(-d*d*.12)*gate*grow*.014*grazing;
   flowPremul+=lavender*gl+white*ed*grow*.20;flowA=max(flowA,max(gl,ed*grow*.35));
+ }
  }
  premul=premul*(1.-flowA)+flowPremul;alpha=alpha+(1.-alpha)*flowA;
  // A small light pulse at the collapse point, never a full-screen flash.

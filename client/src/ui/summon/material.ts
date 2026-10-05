@@ -26,7 +26,10 @@ void main(){
   if(kind==4.)size=vec2(.055,.20);
   if(kind==5.)size=vec2(.09,.14);
   vec2 delta=p-center;vec2 q=vec2(dot(delta,normal),dot(delta,tangent))/size;
-  float angle=atan(q.y,q.x),r=length(q);
+  // fb() is in [0,1], so the outer smoothstep edge is at most 1.85.
+  // Outside it both density and relief are exactly zero; keep every visible sample.
+  float r=length(q);if(r>=1.85)continue;
+  float angle=atan(q.y,q.x);
   float curl=angle+a*(kind==1.?3.:1.1)+fi;
   vec2 flow=q*.55+vec2(sin(curl),cos(curl))*.25;
   float n=fb(flow*2.+vec2(fi*7.,-a*.8));
@@ -46,9 +49,19 @@ void main(){
  gl_FragColor=vec4(color,alpha*.74);
 }`;
 export class DustMaterial{
- readonly canvas=document.createElement('canvas');private gl:WebGLRenderingContext;private p:WebGLProgram;private b:WebGLBuffer;
+ readonly canvas=document.createElement('canvas');private gl:WebGLRenderingContext;private p:WebGLProgram;private b:WebGLBuffer;private age:WebGLUniformLocation|null;private kind:WebGLUniformLocation|null;
  constructor(){const g=this.canvas.getContext('webgl',{alpha:true,premultipliedAlpha:false,antialias:false,preserveDrawingBuffer:true});if(!g)throw Error('WebGL is unavailable');this.gl=g;
- const shader=(type:number,src:string)=>{const s=g.createShader(type)!;g.shaderSource(s,src);g.compileShader(s);if(!g.getShaderParameter(s,g.COMPILE_STATUS))throw Error(g.getShaderInfoLog(s)||'shader');return s;};const vs=shader(g.VERTEX_SHADER,vertex),fs=shader(g.FRAGMENT_SHADER,fragment);this.p=g.createProgram()!;g.attachShader(this.p,vs);g.attachShader(this.p,fs);g.linkProgram(this.p);g.deleteShader(vs);g.deleteShader(fs);if(!g.getProgramParameter(this.p,g.LINK_STATUS))throw Error(g.getProgramInfoLog(this.p)||'link');g.useProgram(this.p);this.b=g.createBuffer()!;g.bindBuffer(g.ARRAY_BUFFER,this.b);g.bufferData(g.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),g.STATIC_DRAW);const at=g.getAttribLocation(this.p,'position');g.enableVertexAttribArray(at);g.vertexAttribPointer(at,2,g.FLOAT,false,0,0);}
- draw(kind:number,age:number,front:boolean,size:number){const g=this.gl;const n=Math.max(256,Math.min(680,Math.round(size)));if(this.canvas.width!==n){this.canvas.width=this.canvas.height=n;}g.viewport(0,0,n,n);g.useProgram(this.p);g.uniform1f(g.getUniformLocation(this.p,'age'),age);g.uniform1f(g.getUniformLocation(this.p,'kind'),kind);g.uniform1f(g.getUniformLocation(this.p,'front'),front?1:0);g.drawArrays(g.TRIANGLES,0,6);return this.canvas;}
+ const shader=(type:number,src:string)=>{const s=g.createShader(type)!;g.shaderSource(s,src);g.compileShader(s);if(!g.getShaderParameter(s,g.COMPILE_STATUS))throw Error(g.getShaderInfoLog(s)||'shader');return s;};const vs=shader(g.VERTEX_SHADER,vertex),fs=shader(g.FRAGMENT_SHADER,fragment);this.p=g.createProgram()!;g.attachShader(this.p,vs);g.attachShader(this.p,fs);g.linkProgram(this.p);g.deleteShader(vs);g.deleteShader(fs);if(!g.getProgramParameter(this.p,g.LINK_STATUS))throw Error(g.getProgramInfoLog(this.p)||'link');g.useProgram(this.p);this.b=g.createBuffer()!;g.bindBuffer(g.ARRAY_BUFFER,this.b);g.bufferData(g.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),g.STATIC_DRAW);const at=g.getAttribLocation(this.p,'position');g.enableVertexAttribArray(at);g.vertexAttribPointer(at,2,g.FLOAT,false,0,0);this.age=g.getUniformLocation(this.p,'age');this.kind=g.getUniformLocation(this.p,'kind');}
+ draw(kind:number,age:number,_front:boolean,size:number){const g=this.gl;const n=Math.max(256,Math.min(680,Math.round(size)));if(this.canvas.width!==n){this.canvas.width=this.canvas.height=n;}g.viewport(0,0,n,n);g.useProgram(this.p);g.uniform1f(this.age,age);g.uniform1f(this.kind,kind);g.drawArrays(g.TRIANGLES,0,6);return this.canvas;}
+ isContextLost(){return this.gl.isContextLost();}
  dispose(){this.gl.deleteBuffer(this.b);this.gl.deleteProgram(this.p);this.gl.getExtension('WEBGL_lose_context')?.loseContext();}
+}
+
+// All callers copy the result into their own Canvas2D plane before the next
+// draw. Concurrent summons can share one shader/context without sharing faces.
+let shared:DustMaterial|undefined,users=0,idle:ReturnType<typeof setTimeout>|undefined;
+export function acquireDustMaterial(){
+ clearTimeout(idle);if(shared?.isContextLost()){shared.dispose();shared=undefined;}shared??=new DustMaterial();users++;
+ const material=shared;let released=false;
+ return {material,release(){if(released)return;released=true;if(--users===0)idle=setTimeout(()=>{shared?.dispose();shared=undefined;},30000);}};
 }

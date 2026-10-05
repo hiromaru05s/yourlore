@@ -1,0 +1,64 @@
+{
+  "checks": [
+    "six summons across both sides share one GPU context; three contacts per batch, originals restored",
+    "summon cleanup abort",
+    "summon cleanup skip",
+    "summon cleanup resize",
+    "summon cleanup hidden",
+    "390px summon both sides",
+    "reduced motion",
+    "normal and quick spells both sides through real reveal and finish paths"
+  ],
+  "samples": [
+    {
+      "name": "three-summons-side-0",
+      "frames": 158,
+      "p95": 16.800000000000182,
+      "over50": 0
+    },
+    {
+      "name": "three-summons-side-1",
+      "frames": 153,
+      "p95": 16.800000000000182,
+      "over50": 0
+    },
+    {
+      "name": "rift-me",
+      "frames": 171,
+      "p95": 16.700000000000728,
+      "over50": 0
+    },
+    {
+      "name": "rift-opp",
+      "frames": 170,
+      "p95": 16.700000000000728,
+      "over50": 0
+    },
+    {
+      "name": "mobile-spell-0-S1",
+      "frames": 257,
+      "p95": 16.799999999999955,
+      "over50": 0
+    },
+    {
+      "name": "mobile-spell-0-QUICK_POISON",
+      "frames": 417,
+      "p95": 16.799999999999272,
+      "over50": 0
+    },
+    {
+      "name": "mobile-spell-1-S1",
+      "frames": 267,
+      "p95": 16.799999999999272,
+      "over50": 0
+    },
+    {
+      "name": "mobile-spell-1-QUICK_POISON",
+      "frames": 425,
+      "p95": 16.799999999999272,
+      "over50": 0
+    }
+  ],
+  "summonContexts": 1,
+  "errors": []
+}

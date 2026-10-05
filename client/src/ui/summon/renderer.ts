@@ -1,4 +1,4 @@
-import {DustMaterial} from './material';
+import {acquireDustMaterial} from './material';
 import {clamp,ease,motion,designs,DURATION} from './catalog';
 import {dustTexture,dustPose} from '../impactDust';
 import {drawContactDust} from '../monster/renderer';
@@ -8,8 +8,8 @@ const rand=(i:number)=>{const n=Math.sin(i*127.1+311.7)*43758.5453;return n-Math
 /** Orthographic review camera. X/Y is the tabletop; Z is height normal to it. */
 export const REVIEW_PLANE={angle:-14*Math.PI/180,compression:.58};
 export class Renderer{
- private relief=new Map<HTMLCanvasElement,HTMLCanvasElement>();private dust=new DustMaterial();private original=dustTexture();private tinted:HTMLCanvasElement[]=[];
- constructor(){for(const color of ['#b4a38a','#8c7c65']){const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d')!;x.drawImage(this.original.image as HTMLCanvasElement,0,0);x.globalCompositeOperation='source-in';x.fillStyle=color;x.fillRect(0,0,128,128);this.tinted.push(c);}}
+ private relief=new Map<HTMLCanvasElement,HTMLCanvasElement>();private dust=acquireDustMaterial();private original:ReturnType<typeof dustTexture>|undefined;private tinted:HTMLCanvasElement[]=[];
+ private prepareLegacyDust(){if(this.original)return;this.original=dustTexture();for(const color of ['#b4a38a','#8c7c65']){const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d')!;x.drawImage(this.original.image as HTMLCanvasElement,0,0);x.globalCompositeOperation='source-in';x.fillStyle=color;x.fillRect(0,0,128,128);this.tinted.push(c);}}
  /** Board callers render independent ground/card planes, then project the card's Z height with boardMatrix. */
  draw(c:C,face:HTMLCanvasElement,v:number,ms:number,x:number,y:number,w:number,reduced=false,pass:Pass='all',studio=true){
   const baseline=v>5,m=motion(baseline?1:v,ms,reduced);if(baseline){m.hit=506;m.lift=reduced?0:.34*(1-ease(33,506,ms));}
@@ -20,8 +20,8 @@ export class Renderer{
    // A rectangular shadow is the projection of the entire face, directly below it.
    c.save();c.globalAlpha=.13+.15*(1-clamp(m.lift/.7));c.fillStyle='#252927';c.shadowColor='#252927';c.shadowBlur=w*(.012+m.lift*.14);c.beginPath();c.roundRect(-.49,-.74,.98,1.48,.045);c.fill();c.restore();
    if(studio){c.save();c.strokeStyle='#8b938347';c.lineWidth=.005;c.setLineDash([.025,.035]);c.strokeRect(-.51,-.76,1.02,1.52);c.restore();}
-   if(!reduced&&!baseline&&age>=0&&ms<DURATION){c.drawImage(this.dust.draw(v,age,false,Math.min(480,w*2.5)),-1.9,-1.9,3.8,3.8);this.fragments(c,v,age,false);this.fragments(c,v,age,true);}
-   if(!reduced&&baseline&&age>=0&&age<1.9){for(let i=0;i<64;i++){const p=dustPose(age/1.9,i,true,100);if(p.opacity<=0)continue;c.save();c.translate(p.x/100,.75-p.y/100);c.rotate(p.rotation);c.globalAlpha=p.opacity;if(i<32)c.drawImage(this.tinted[i%3?0:1],-p.size/200,-p.size*.72/200,p.size/100,p.size*.72/100);else{c.fillStyle='#8c785b';c.fillRect(-p.size/200,-p.size/200,p.size/100,p.size/100);}c.restore();}}
+   if(!reduced&&!baseline&&age>=0&&ms<DURATION){c.drawImage(this.dust.material.draw(v,age,false,Math.min(480,w*2.5)),-1.9,-1.9,3.8,3.8);this.fragments(c,v,age,false);this.fragments(c,v,age,true);}
+   if(!reduced&&baseline&&age>=0&&age<1.9){this.prepareLegacyDust();for(let i=0;i<64;i++){const p=dustPose(age/1.9,i,true,100);if(p.opacity<=0)continue;c.save();c.translate(p.x/100,.75-p.y/100);c.rotate(p.rotation);c.globalAlpha=p.opacity;if(i<32)c.drawImage(this.tinted[i%3?0:1],-p.size/200,-p.size*.72/200,p.size/100,p.size*.72/100);else{c.fillStyle='#8c785b';c.fillRect(-p.size/200,-p.size/200,p.size/100,p.size/100);}c.restore();}}
    if(v===7&&!reduced){for(const layer of ['rear','front'] as const)drawContactDust(c,{x:0,y:0,w:1,h:1.5},'B',ms/1500,layer);}
    c.restore();
   }
@@ -53,5 +53,5 @@ export class Renderer{
    c.restore();
   }
  }
- dispose(){this.dust.dispose();this.original.dispose();this.tinted=[];this.relief.clear();}
+ dispose(){this.dust.release();this.original?.dispose();this.tinted=[];this.relief.clear();}
 }

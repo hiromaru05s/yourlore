@@ -1,0 +1,407 @@
+{
+  "boot": {},
+  "samples": [
+    {
+      "name": "blocked14",
+      "cpu": 1,
+      "frames": 302,
+      "p50": 16.699999999999818,
+      "p95": 16.800000000000182,
+      "over50": 0,
+      "longTasks": [],
+      "counts": {
+        "drawImage:seeker-motion": 604,
+        "drawImage:offscreen": 60
+      },
+      "canvasPixels": 3587087,
+      "nodes": 1020,
+      "metrics": {
+        "TaskDuration": 0.19805800000000007,
+        "ScriptDuration": 0.14467299999999994,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0
+      },
+      "top": [
+        {
+          "fn": "(idle)",
+          "url": "",
+          "line": -1,
+          "hits": 3843
+        },
+        {
+          "fn": "(program)",
+          "url": "",
+          "line": -1,
+          "hits": 45
+        },
+        {
+          "fn": "querySelector",
+          "url": "",
+          "line": -1,
+          "hits": 8
+        },
+        {
+          "fn": "tick",
+          "url": "http://127.0.0.1:5311/src/ui/seekerAnimation.ts",
+          "line": 59,
+          "hits": 4
+        },
+        {
+          "fn": "render",
+          "url": "http://127.0.0.1:5311/src/ui/duelScene.ts",
+          "line": 280,
+          "hits": 4
+        },
+        {
+          "fn": "bindVertexArray",
+          "url": "",
+          "line": -1,
+          "hits": 4
+        },
+        {
+          "fn": "projectObject",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 42151,
+          "hits": 4
+        },
+        {
+          "fn": "draw",
+          "url": "http://127.0.0.1:5311/src/ui/seekerAnimation.ts",
+          "line": 35,
+          "hits": 3
+        },
+        {
+          "fn": "getProgram",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 42321,
+          "hits": 3
+        },
+        {
+          "fn": "setFromEuler",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 1614,
+          "hits": 3
+        },
+        {
+          "fn": "WebGLRenderer.renderBufferDirect",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 41861,
+          "hits": 2
+        },
+        {
+          "fn": "setup",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 32647,
+          "hits": 2
+        },
+        {
+          "fn": "getParameters",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 36174,
+          "hits": 2
+        },
+        {
+          "fn": "setValueV3f",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 34868,
+          "hits": 2
+        },
+        {
+          "fn": "refreshMaterialUniforms",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 40379,
+          "hits": 2
+        },
+        {
+          "fn": "sort",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 36741,
+          "hits": 2
+        },
+        {
+          "fn": "projectObject",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 42151,
+          "hits": 2
+        },
+        {
+          "fn": "tick",
+          "url": "http://127.0.0.1:5311/src/ui/readingBoardWidgets.ts",
+          "line": 175,
+          "hits": 2
+        }
+      ]
+    },
+    {
+      "name": "ready7",
+      "cpu": 1,
+      "frames": 301,
+      "p50": 16.69999999999891,
+      "p95": 16.700000000000728,
+      "over50": 0,
+      "longTasks": [],
+      "counts": {
+        "clearRect:offscreen": 301,
+        "drawImage:seeker-motion": 600,
+        "drawImage:offscreen": 60
+      },
+      "canvasPixels": 3587087,
+      "nodes": 1023,
+      "metrics": {
+        "TaskDuration": 0.488815,
+        "ScriptDuration": 0.182118,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.074057,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 302
+      },
+      "top": [
+        {
+          "fn": "(idle)",
+          "url": "",
+          "line": -1,
+          "hits": 3629
+        },
+        {
+          "fn": "(program)",
+          "url": "",
+          "line": -1,
+          "hits": 241
+        },
+        {
+          "fn": "tick",
+          "url": "http://127.0.0.1:5311/src/ui/monster/runtime.ts",
+          "line": 115,
+          "hits": 15
+        },
+        {
+          "fn": "paint",
+          "url": "http://127.0.0.1:5311/src/ui/monster/actor.ts",
+          "line": 72,
+          "hits": 11
+        },
+        {
+          "fn": "setProperty",
+          "url": "",
+          "line": -1,
+          "hits": 5
+        },
+        {
+          "fn": "",
+          "url": "http://127.0.0.1:5311/src/ui/monster/actor.ts",
+          "line": 7,
+          "hits": 4
+        },
+        {
+          "fn": "drawImage",
+          "url": "",
+          "line": -1,
+          "hits": 4
+        },
+        {
+          "fn": "placement",
+          "url": "http://127.0.0.1:5311/src/ui/monster/actor.ts",
+          "line": 2,
+          "hits": 3
+        },
+        {
+          "fn": "setProperty",
+          "url": "",
+          "line": -1,
+          "hits": 3
+        },
+        {
+          "fn": "toString",
+          "url": "",
+          "line": -1,
+          "hits": 3
+        },
+        {
+          "fn": "tick",
+          "url": "http://127.0.0.1:5311/src/ui/readingBoardWidgets.ts",
+          "line": 175,
+          "hits": 3
+        },
+        {
+          "fn": "(garbage collector)",
+          "url": "",
+          "line": -1,
+          "hits": 3
+        },
+        {
+          "fn": "",
+          "url": "http://127.0.0.1:5311/src/ui/monster/rendererBase.ts",
+          "line": 94,
+          "hits": 2
+        },
+        {
+          "fn": "getParameters",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 36174,
+          "hits": 2
+        },
+        {
+          "fn": "arraysEqual",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 34825,
+          "hits": 2
+        },
+        {
+          "fn": "bindVertexArray",
+          "url": "",
+          "line": -1,
+          "hits": 2
+        },
+        {
+          "fn": "updateMatrixWorld",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 7264,
+          "hits": 2
+        },
+        {
+          "fn": "querySelector",
+          "url": "",
+          "line": -1,
+          "hits": 2
+        }
+      ]
+    },
+    {
+      "name": "ready7-cpu4",
+      "cpu": 4,
+      "frames": 302,
+      "p50": 16.69999999999891,
+      "p95": 16.799999999999272,
+      "over50": 0,
+      "longTasks": [],
+      "counts": {
+        "drawImage:seeker-motion": 604,
+        "clearRect:offscreen": 302,
+        "drawImage:offscreen": 61
+      },
+      "canvasPixels": 3587087,
+      "nodes": 1023,
+      "metrics": {
+        "TaskDuration": 1.5192579999999998,
+        "ScriptDuration": 0.54155,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.24849400000000002,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 303
+      },
+      "top": [
+        {
+          "fn": "(idle)",
+          "url": "",
+          "line": -1,
+          "hits": 2905
+        },
+        {
+          "fn": "(program)",
+          "url": "",
+          "line": -1,
+          "hits": 826
+        },
+        {
+          "fn": "tick",
+          "url": "http://127.0.0.1:5311/src/ui/monster/runtime.ts",
+          "line": 115,
+          "hits": 36
+        },
+        {
+          "fn": "setProperty",
+          "url": "",
+          "line": -1,
+          "hits": 18
+        },
+        {
+          "fn": "placement",
+          "url": "http://127.0.0.1:5311/src/ui/monster/actor.ts",
+          "line": 2,
+          "hits": 15
+        },
+        {
+          "fn": "toString",
+          "url": "",
+          "line": -1,
+          "hits": 14
+        },
+        {
+          "fn": "paint",
+          "url": "http://127.0.0.1:5311/src/ui/monster/actor.ts",
+          "line": 72,
+          "hits": 12
+        },
+        {
+          "fn": "getParameters",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 36174,
+          "hits": 9
+        },
+        {
+          "fn": "setProgram",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 42424,
+          "hits": 7
+        },
+        {
+          "fn": "bindVertexArray",
+          "url": "",
+          "line": -1,
+          "hits": 7
+        },
+        {
+          "fn": "updateMatrixWorld",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 7264,
+          "hits": 7
+        },
+        {
+          "fn": "projectObject",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 42151,
+          "hits": 7
+        },
+        {
+          "fn": "querySelector",
+          "url": "",
+          "line": -1,
+          "hits": 7
+        },
+        {
+          "fn": "(garbage collector)",
+          "url": "",
+          "line": -1,
+          "hits": 7
+        },
+        {
+          "fn": "updateMatrixWorld",
+          "url": "http://127.0.0.1:5311/@fs/tmp/lore-vite-perf-audit-cache/deps/chunk-KIIQWKVG.js?v=500a7d8c",
+          "line": 7264,
+          "hits": 6
+        },
+        {
+          "fn": "querySelector",
+          "url": "",
+          "line": -1,
+          "hits": 6
+        },
+        {
+          "fn": "setProperty",
+          "url": "",
+          "line": -1,
+          "hits": 6
+        },
+        {
+          "fn": "",
+          "url": "http://127.0.0.1:5311/src/ui/monster/actor.ts",
+          "line": 7,
+          "hits": 6
+        }
+      ]
+    }
+  ],
+  "errors": []
+}
