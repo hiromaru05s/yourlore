@@ -1,3 +1,4 @@
+import {createRiftEngraving} from './riftInkGlyphs';
 /** A shared GPU surface. Card albedo, alpha, engraving, emissive flow and ink share one UV field. */
 const vertex=`attribute vec2 position;varying vec2 uv;void main(){uv=position*.5+.5;gl_Position=vec4(position,0.,1.);}`;
 const fragment=`
@@ -6,7 +7,6 @@ varying vec2 uv;
 uniform sampler2D card;
 uniform sampler2D engraving;
 uniform float clockMs;
-const float mode=1.;
 uniform float aspect;
 float sat(float x){return clamp(x,0.,1.);}
 float ease(float a,float b,float x){float t=sat((x-a)/(b-a));return t*t*(3.-2.*t);}
@@ -20,8 +20,8 @@ vec4 faceAt(vec2 p){return texture2D(card,clamp(p,vec2(.001),vec2(.999)))*step(0
 void main(){
  float ms=clockMs,t=ms*.001;
  float charge=ease(100.,720.,ms),coat=ease(620.,1150.,ms),ink=ease(860.,1320.,ms);
- float start=mode<.5?1020.:mode<1.5?1110.:mode<2.5?1010.:mode<3.5?960.:1190.;
- float swirl=ease(start,1870.,ms),collapse=ease(mode>3.5?1770.:1660.,1990.,ms),alive=1.-collapse;
+ float start=1110.;
+ float swirl=ease(start,1870.,ms),collapse=ease(1660.,1990.,ms),alive=1.-collapse;
  vec2 p=(uv-.5)*vec2(2.8,-3.4);p=rot(-.035*charge)*p;
  float rad=length(p),ang=atan(p.y,p.x),scale=pow(max(.0001,alive),.67);
  float rf=rad/scale;
@@ -29,6 +29,10 @@ void main(){
  float roundness=ease(0.,.48,swirl),lo=rf,hi=rf+3.5;
  for(int i=0;i<9;i++){float mid=(lo+hi)*.5;float mapped=mix(mid,.53*(1.-exp(-mid/.53*1.45)),roundness);if(mapped<rf)lo=mid;else hi=mid;}
  float orig=mix(rf,(lo+hi)*.5,step(.0001,roundness));
+ // Material-specific folding changes the silhouette without moving the source center.
+ float fold=swirl*(1.-collapse);
+ orig*=1.+fold*.18*sin(ang*2.+t*.4);
+
  float angle=ang-swirl*4.5-swirl*4.2*(1.-sat(orig));
  vec2 local=vec2(cos(angle),sin(angle))*orig;
  local.x/=1.-charge*.04;local.y/=1.-charge*.04;
@@ -44,32 +48,34 @@ void main(){
  float reveal=1.-smoothstep(progress-.14,progress+.10,n+local.y*.18);
  float front=exp(-abs(n+local.y*.18-progress)*28.);
  float pulse=exp(-pow((ms-790.)/180.,2.))*.8+exp(-pow((ms-1200.)/130.,2.))*.35;
- vec3 violet=vec3(.43,.13,.80),lavender=vec3(.73,.39,1.0),white=vec3(.94,.84,1.);
- if(mode>1.5&&mode<2.5){lavender=vec3(.57,.49,1.);white=vec3(.82,.94,1.);}
- if(mode>2.5&&mode<3.5){violet=vec3(.58,.12,.82);lavender=vec3(.87,.36,1.);}
- float etch=texture2D(engraving,st).r;
+ vec3 violet=vec3(.31,.19,.49),lavender=vec3(.63,.49,.80),white=vec3(.91,.87,1.);
+ float etch=texture2D(engraving,clamp(st,vec2(.001),vec2(.999))).r;
  vec2 px=vec2(.004,.0027);
  float cardEdge=max(max(a-alphaAt(st+vec2(px.x,0.)),a-alphaAt(st-vec2(px.x,0.))),max(a-alphaAt(st+vec2(0.,px.y)),a-alphaAt(st-vec2(0.,px.y))));
  float dx=lum(faceAt(st+vec2(px.x,0.)).rgb)-lum(faceAt(st-vec2(px.x,0.)).rgb);
  float dy=lum(faceAt(st+vec2(0.,px.y)).rgb)-lum(faceAt(st-vec2(0.,px.y)).rgb);
  float artDetail=sat(length(vec2(dx,dy))*3.);
  float band=pow(sat(1.-abs(local.y+.68-t*.75)*6.),3.);
- float pattern=ridges*.65+fine*.32;
- if(mode>.5&&mode<1.5)pattern=ridges*.06+etch*(1.15+.35*sin(t*2.+local.y*4.))+artDetail*band*.28;
- if(mode>1.5&&mode<2.5){vec2 cells=st*vec2(38.,56.);float star=step(.94,hash(floor(cells)))*pow(sat(1.-length(fract(cells)-.5)*2.),3.);pattern=ridges*.20+fine*.14+star*4.;}
- if(mode>2.5&&mode<3.5)pattern=pow(sat(1.-abs(fbm(nuv+vec2(0.,t*1.5))-.48)*11.),3.)*.95+fine*.3;
- if(mode>3.5)pattern=pow(sat(1.-abs(n-.50)*23.),5.)*1.6+artDetail*.25+fine*.2;
+ float pattern=ridges*.06+etch*(1.15+.35*sin(t*2.+local.y*4.))+artDetail*band*.28;
  vec3 base=tex.rgb;
  // Keep the illustration legible under the first energy pass, then coat it with liquid ink.
  vec3 charged=base*vec3(.72,.49,1.08)+violet*.12;
  vec3 inkColor=mix(vec3(.012,.004,.028),vec3(.10,.035,.17),n)*(.55+.45*ridges);
  vec3 color=mix(base,charged,charge*.55);
  color=mix(color,inkColor,reveal*ink);
- color+=lavender*(pattern*(.20+coat*.40)+artDetail*band*.25)*charge;
- float frontStrength=mode<.5?.65:mode<1.5?.16:mode<2.5?.23:mode<3.5?.45:.85;
+ color+=lavender*(pattern*(.16+coat*.24)+artDetail*band*.25)*charge;
+ float frontStrength=.16;
  color+=white*(front*frontStrength+cardEdge*(.5+pulse)*1.8+band*.20)*charge*(1.-swirl*.7);
  color+=white*pattern*pulse*.38;
- float cardAlpha=a*step(.006,alive);
+
+ float open=ease(.06,.72,swirl);
+ float f=local.y*26.+sin(local.x*9.+t)*1.6;
+ float fiber=pow(.5+.5*sin(f*3.14159),10.);
+ float cuts=smoothstep(.10,.90,fbm(local*4.+vec2(0.,t*.15)));
+ float architecture=.12+cuts*.20;
+ color=mix(color,color*.9+white*fiber*.008,open);
+ float cardAlpha=a*step(.006,alive)*mix(1.,architecture,open);
+
  vec3 premul=color*cardAlpha;
  float alpha=cardAlpha;
  // Emission follows the actual card alpha contour, including the carved frame.
@@ -79,35 +85,31 @@ void main(){
  float broad=max(max(alphaAt(st+vec2(.045,0.)),alphaAt(st-vec2(.045,0.))),max(alphaAt(st+vec2(0.,.03)),alphaAt(st-vec2(0.,.03))));
  float halo=max(0.,broad-a)*charge*(1.-swirl)*.12*step(.006,alive);
  premul+=violet*halo;alpha=max(alpha,halo);
- // Ink tendrils are continuous broad surfaces with eroded edges, specular ridges and an opaque core.
- float grow=ease(760.,1160.,ms)*(1.-ease(1900.,2020.,ms));
- vec2 fluidP=p/max(.06,scale);float fr=length(fluidP),fa=atan(fluidP.y,fluidP.x);
+ // Folded laminae share the card's shrinking coordinate field.
+ float grow=ease(950.,1280.,ms)*(1.-ease(1940.,2020.,ms));
+ vec2 fluidP=p/max(.025,scale);float fr=length(fluidP),fa=atan(fluidP.y,fluidP.x);
  float twist=fa-fr*5.5+t*2.3+swirl*3.;
- vec2 polar=vec2(cos(twist),sin(twist))*(2.2+fr*3.);
- float flow=fbm(polar+vec2(t*.12,-t*.34));
- float edgeWave=sin(twist*3.+flow*3.1)*.095+sin(twist*5.-t*.5)*.04;
- float radius=.46+edgeWave;
- if(mode>2.5&&mode<3.5)radius+=pow(max(0.,sin(twist*6.+flow*4.)),5.)*.22;
- if(mode>.5&&mode<1.5)radius+=sin(twist*2.)*.025;
- float shell=1.-smoothstep(radius-.035,radius+.025,fr);
- float inner=smoothstep(.16,.32,fr);
- float shape=shell*inner;
- float cut=sin(twist*3.+flow*2.)*.5+.5;
- shape*=smoothstep(.14,.25,cut+flow*.21);
- float fineFlow=fbm(polar*2.7+flow*2.-t*.2);
- float ridge=pow(sat(1.-abs(fineFlow-.49)*19.),4.);
- float sheen=pow(max(0.,sin(twist*2.+flow*5.-.7)),8.);
- float edge=exp(-abs(fr-radius)*105.);
- float layered=smoothstep(.32,.63,flow);
- vec3 inkBody=mix(vec3(.026,.010,.043),vec3(.31,.14,.43),layered);
- inkBody+=lavender*(ridge*.35+sheen*.40)+white*edge*.67;
- float flowAlpha=shape*grow;
- // Front/back depth is implied by alternating illuminated crests; a dark center is retained.
- float frontLayer=smoothstep(-.2,.5,sin(fa*2.+t));
- float over=flowAlpha*(.5+.5*frontLayer);
- premul=premul*(1.-over)+inkBody*over;alpha=alpha+(1.-alpha)*over;
- float glow=exp(-abs(fr-radius)*17.)*grow*.14*(.5+sheen);
- premul+=lavender*glow;alpha=max(alpha,glow*.7);
+ vec3 flowPremul=vec3(0.);float flowA=0.;
+ for(int j=0;j<5;j++){
+  float k=float(j),angle=twist+k*1.256;
+  float curl=sin(angle*2.+k*.6)*.05+sin(angle*5.-t*.6+k)*.012;
+  float radius=.24+k*.058+curl,width=.014+k*.002;
+  float gate=smoothstep(.12,.75,.5+.5*sin(angle*2.+k)),opacity=.92;
+  width*=2.8;opacity=.54;radius+=sin(angle+t*.65)*.036;
+  float d=(fr-radius)/width,body=exp(-d*d*1.1)*gate;
+  float ed=exp(-pow((d-.61)*9.,2.))*gate;
+  float micro=(.65*noise(vec2(angle*12.+k,fr*170.-t*.5))+.35*noise(vec2(angle*23.-k,fr*310.+t*.7)));
+  float threads=pow(.5+.5*sin(fr*780.+angle*6.+micro*6.),12.);
+  float grazing=pow(.5+.5*sin(angle+k*.7),5.);
+  vec3 baseInk=mix(vec3(.03,.018,.06),vec3(.37,.24,.51),sat(d*.3+.4));
+  vec3 surface=baseInk+lavender*(threads*.35+micro*.16)+white*(ed*1.55+grazing*body*.55);
+  float layerA=body*opacity*grow*(.55+.45*micro);
+  flowPremul=flowPremul*(1.-layerA)+surface*layerA;
+  flowA=flowA+(1.-flowA)*layerA;
+  float gl=exp(-d*d*.12)*gate*grow*.014*grazing;
+  flowPremul+=lavender*gl+white*ed*grow*.20;flowA=max(flowA,max(gl,ed*grow*.35));
+ }
+ premul=premul*(1.-flowA)+flowPremul;alpha=alpha+(1.-alpha)*flowA;
  // A small light pulse at the collapse point, never a full-screen flash.
  float pinch=exp(-pow((ms-1940.)/42.,2.));
  float glint=exp(-abs(p.x)*45.-abs(p.y)*9.)*pinch;
@@ -123,7 +125,6 @@ export class RiftInkMaterial {
  private cardTexture:WebGLTexture;
  private faces=new Map<HTMLCanvasElement,WebGLTexture>();
  private time:WebGLUniformLocation|null;
-
  private aspect:WebGLUniformLocation|null;
  private textures:WebGLTexture[]=[];
  private buffer:WebGLBuffer;
@@ -136,10 +137,7 @@ export class RiftInkMaterial {
   const texture=(unit:number)=>{const tx=gl.createTexture()!;this.textures.push(tx);gl.activeTexture(gl.TEXTURE0+unit);gl.bindTexture(gl.TEXTURE_2D,tx);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);return tx;};
   this.cardTexture=texture(0);gl.uniform1i(gl.getUniformLocation(program,'card'),0);
   texture(1);gl.uniform1i(gl.getUniformLocation(program,'engraving'),1);
-  const etch=document.createElement('canvas');etch.width=512;etch.height=768;const c=etch.getContext('2d')!;c.fillStyle='black';c.fillRect(0,0,512,768);c.strokeStyle='white';c.lineWidth=1.5;
-  for(const x of [66,446]){c.beginPath();c.moveTo(x,104);c.bezierCurveTo(x-20,250,x+20,490,x,664);c.stroke();for(let j=0;j<10;j++){const y=132+j*52;c.beginPath();c.moveTo(x-8,y-9);c.lineTo(x+7,y);c.lineTo(x-8,y+9);c.lineTo(x-3,y);c.stroke();}}
-  for(let i=0;i<3;i++){c.beginPath();c.ellipse(256,360,98+i*13,180+i*17,0,0,Math.PI*2);c.stroke();}
-  for(let j=0;j<18;j++){const a=j*Math.PI/9;c.save();c.translate(256+Math.cos(a)*113,360+Math.sin(a)*200);c.rotate(a);c.beginPath();c.moveTo(-4,-7);c.lineTo(3,0);c.lineTo(-4,7);c.moveTo(3,0);c.lineTo(9,0);c.stroke();c.restore();}
+  const etch=createRiftEngraving();
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,etch);
   this.time=gl.getUniformLocation(program,'clockMs');this.aspect=gl.getUniformLocation(program,'aspect');
  }
