@@ -24,3 +24,12 @@ LORE_PLAYWRIGHT=/path/to/playwright/index.mjs node tests/cards-layout-browser.mj
 - 2550×1288、1920×1080、1280×720、1024×600、844×390、650×800、390×844、375×667、320×640で、左右のカード／バッジ切れ0、カード重なり0、一覧の横オーバーフロー0。
 - 縦スクロール、ページ送り、スターター絞り込み、検索空状態、Enterキーによる拡大、日英韓表示を確認。
 - スクリーンショットを目視確認。ユーザーの見た目承認とは別。詳細は `local-report.json`。
+
+## ステージング反映
+
+- 修正コミット: `82353b31`。並行作業のmainを統合した公開ソース: `f5744953a6ea23bf7571d489afb6e728228e9c15`。
+- `npm run deploy:staging` の既存ガード経由で公開。型チェック・ビルド・53/53回帰テスト成功。
+- Worker version: `483822d6-0eb6-4ef9-ad2c-12591b08b26c`。
+- `https://test.yourlore.xyz` の配信済み画面でも、同じ9サイズ・各操作・日英韓表示が成功。認証APIのみfixture。`staging-report.json` を参照。
+- 公開HTMLと生成assetsの37/37ファイルでSHA-256一致。`asset-parity.json` を参照。
+- PC・スマホの配信画面を目視確認。ユーザーによる見た目承認は未取得。本番公開・オンライン対戦検証は今回の範囲外。
