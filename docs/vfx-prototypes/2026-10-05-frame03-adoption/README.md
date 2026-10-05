@@ -20,3 +20,13 @@
 本体関数を呼ぶローカルfixture: `/spell-frame-qa.html`。通常魔法と相手側クイック魔法を実GameView上で連続再生・撮影。画像は `runtime-me.jpg`, `runtime-opp-quick.jpg`, `runtime-mobile.jpg`（390×844 iframe）。ブラウザの中断ボタンで発光canvasが消えて処理完了することも確認。これは認証済みオンライン対戦の証明ではない。
 
 ステージングのSHA・Workerバージョン・配信ファイル一致は公開後の記録に記載。選定済みデザインの本体接続であり、未選定の01/02/04/05/06は含めない。
+
+## ステージング反映
+
+- 演出変更コミット: `8b58cffeaf2a5f5bd07779e8d203feb2d8e695d3`。
+- 公開ソース: `d4aca95b2b63c9d7d9c010e05b70aed947489789`。同時進行の召喚音変更に03が統合され、共通デプロイガードから公開された。演出コードは8b58cffeから差分なし。
+- Worker: `lore-server-staging`, version `7a7531d4-2ab1-4812-9787-5fd23f0adacb`。
+- 型チェック・ビルド・回帰54/54成功。初回は既存dice-source/duel-uiが端末高負荷中にtimeoutし、公開前に中断。個別再実行と統合版全54件で通過した。
+- 公開ビルドのindex、全JS/CSSチャンク、実魔法フレーム画像の39ファイルについて配信SHA-256一致。
+- ステージングの未ログイン画面が表示され、ブラウザconsole error 0。認証済みオンライン対戦は今回の検証範囲外。
+- 証跡: `staging/asset-parity.json`, `staging/validation.json`, `staging/deployment.json`, `staging/login.jpg`。

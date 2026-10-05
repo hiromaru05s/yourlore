@@ -1,0 +1,415 @@
+[
+  {
+    "id": "01-felt",
+    "number": "01",
+    "title": "フェルトの着地",
+    "description": "柔らかい「トフッ」。接地を短く伝え、すぐ引く。",
+    "character": "柔らかい・最短",
+    "fit": "共通音候補",
+    "file": "01-felt.mp3",
+    "seconds": 0.36,
+    "peakDb": -8.28,
+    "energy200Db": -27.51,
+    "onsetMs": 1.72,
+    "centroidHz": 481,
+    "sha256": "82c4acfefde0c4f10860285751479c260b1e1a9e7f6ecefb0ec68097e39c13a3",
+    "layers": [
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/bookClose.ogg",
+        "at": 0,
+        "gain": 0.7,
+        "rate": 0.8,
+        "lo": 120,
+        "hi": 2400,
+        "d": 0.2
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth1.ogg",
+        "at": 0.015,
+        "gain": 0.5,
+        "rate": 0.88,
+        "lo": 400,
+        "hi": 3800,
+        "d": 0.22
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/casino-audio/card-place-3.ogg",
+        "at": 0,
+        "gain": 0.14,
+        "lo": 600,
+        "hi": 3200,
+        "d": 0.13
+      }
+    ]
+  },
+  {
+    "id": "02-wood",
+    "number": "02",
+    "title": "木の封印",
+    "description": "木に触れる明確な「コトッ」と、ごく短い擦れ。",
+    "character": "乾いた・輪郭が明確",
+    "fit": "共通音候補",
+    "file": "02-wood.mp3",
+    "seconds": 0.44,
+    "peakDb": -9.39,
+    "energy200Db": -27.51,
+    "onsetMs": 0.2,
+    "centroidHz": 434,
+    "sha256": "402ff0fce1027776d79a8ab382963db1e201932189f9fb8904c2f3f67a28b96d",
+    "layers": [
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/impact-sounds/impactWood_light_000.ogg",
+        "at": 0,
+        "gain": 0.65,
+        "rate": 0.83,
+        "lo": 150,
+        "hi": 4300,
+        "d": 0.22
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/bookPlace2.ogg",
+        "at": 0.024,
+        "gain": 0.32,
+        "rate": 0.9,
+        "lo": 140,
+        "hi": 2400,
+        "d": 0.26
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth3.ogg",
+        "at": 0.05,
+        "gain": 0.22,
+        "lo": 500,
+        "hi": 4300,
+        "d": 0.23
+      }
+    ]
+  },
+  {
+    "id": "03-slate",
+    "number": "03",
+    "title": "石板の据え付け",
+    "description": "低い接地と細かな擦れ。重さが盤面に落ち着く。",
+    "character": "重い・粗い表面",
+    "fit": "石板演出に合わせた候補",
+    "file": "03-slate.mp3",
+    "seconds": 0.54,
+    "peakDb": -9.66,
+    "energy200Db": -27.5,
+    "onsetMs": 0.48,
+    "centroidHz": 1139,
+    "sha256": "8038edb0b1f9180daf5d5c298e9963499e20301fe768d307f2a60d0d04118cb8",
+    "layers": [
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/impact-sounds/impactSoft_heavy_000.ogg",
+        "at": 0,
+        "gain": 0.7,
+        "rate": 0.75,
+        "lo": 100,
+        "hi": 1800,
+        "d": 0.32
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/book_03.ogg",
+        "at": 0.012,
+        "gain": 0.45,
+        "rate": 0.72,
+        "lo": 400,
+        "hi": 3700,
+        "d": 0.34
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/casino-audio/chips-collide-2.ogg",
+        "at": 0.052,
+        "gain": 0.13,
+        "rate": 0.66,
+        "lo": 700,
+        "hi": 4200,
+        "d": 0.22
+      }
+    ]
+  },
+  {
+    "id": "04-air",
+    "number": "04",
+    "title": "空気のクッション",
+    "description": "「ボフッ」と空気が押し出され、軽く抜ける。",
+    "character": "丸い・空気の広がり",
+    "fit": "共通音候補",
+    "file": "04-air.mp3",
+    "seconds": 0.5,
+    "peakDb": -12.03,
+    "energy200Db": -27.5,
+    "onsetMs": 4.29,
+    "centroidHz": 303,
+    "sha256": "33c371f170aee355367c055556618ec6328b2aec35e449a080aa3e1bea9b7bbf",
+    "layers": [
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/bookClose.ogg",
+        "at": 0,
+        "gain": 0.3,
+        "rate": 0.68,
+        "lo": 110,
+        "hi": 1600,
+        "d": 0.19
+      },
+      {
+        "file": "docs/sound-redesign/2026-09-30/sources/swishes/swish-7.wav",
+        "at": 0,
+        "gain": 0.68,
+        "rate": 1.12,
+        "lo": 220,
+        "hi": 5500,
+        "d": 0.34
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth2.ogg",
+        "at": 0.055,
+        "gain": 0.28,
+        "rate": 0.78,
+        "lo": 300,
+        "hi": 2500,
+        "d": 0.29
+      }
+    ]
+  },
+  {
+    "id": "05-paper",
+    "number": "05",
+    "title": "紙束の展開",
+    "description": "紙が重なって着地し、端が短くほどける。",
+    "character": "紙の面・軽い二段",
+    "fit": "共通音候補",
+    "file": "05-paper.mp3",
+    "seconds": 0.47,
+    "peakDb": -12.69,
+    "energy200Db": -27.47,
+    "onsetMs": 0.09,
+    "centroidHz": 1880,
+    "sha256": "78d4689f66d029c0cb8deb91abb316ff6904bceb650c3439180f411f62f0fb5b",
+    "layers": [
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/casino-audio/card-shove-2.ogg",
+        "at": 0,
+        "gain": 0.6,
+        "rate": 0.8,
+        "lo": 350,
+        "hi": 6000,
+        "d": 0.2
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/bookFlip2.ogg",
+        "at": 0.045,
+        "gain": 0.45,
+        "rate": 0.9,
+        "lo": 750,
+        "hi": 5200,
+        "d": 0.27
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/bookPlace2.ogg",
+        "at": 0,
+        "gain": 0.22,
+        "rate": 0.72,
+        "lo": 110,
+        "hi": 1300,
+        "d": 0.18
+      }
+    ]
+  },
+  {
+    "id": "06-crystal",
+    "number": "06",
+    "title": "水晶の芯",
+    "description": "柔らかい接地の中に、細い透明感を残す。",
+    "character": "小さな共鳴・澄んだ質感",
+    "fit": "明るい召喚寄り",
+    "file": "06-crystal.mp3",
+    "seconds": 0.61,
+    "peakDb": -10.22,
+    "energy200Db": -27.51,
+    "onsetMs": 5.17,
+    "centroidHz": 930,
+    "sha256": "9bd69dc3c75ac2fccf006c27968079e92f90900556a930a905871491faf61da0",
+    "layers": [
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/bookClose.ogg",
+        "at": 0,
+        "gain": 0.45,
+        "rate": 0.9,
+        "lo": 150,
+        "hi": 2200,
+        "d": 0.19
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/interface-sounds/glass_001.ogg",
+        "at": 0.005,
+        "gain": 0.31,
+        "rate": 0.65,
+        "lo": 850,
+        "hi": 4900,
+        "d": 0.29
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/item_gem_01.ogg",
+        "at": 0.055,
+        "gain": 0.2,
+        "rate": 0.83,
+        "lo": 700,
+        "hi": 4200,
+        "d": 0.38
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth1.ogg",
+        "at": 0.02,
+        "gain": 0.27,
+        "lo": 400,
+        "hi": 3000,
+        "d": 0.24
+      }
+    ]
+  },
+  {
+    "id": "07-bronze",
+    "number": "07",
+    "title": "青銅の留め具",
+    "description": "短い「カチャッ」を布の重さで包む。",
+    "character": "金属の締まり・短い余韻",
+    "fit": "装甲・機構寄り",
+    "file": "07-bronze.mp3",
+    "seconds": 0.43,
+    "peakDb": -7.2,
+    "energy200Db": -27.49,
+    "onsetMs": 12.27,
+    "centroidHz": 1242,
+    "sha256": "344c761871d259f2f3b32ee2e414ee9adb44e5ec93618f877f4cd3100f2fb122",
+    "layers": [
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/metalLatch.ogg",
+        "at": 0,
+        "gain": 0.35,
+        "rate": 0.72,
+        "lo": 350,
+        "hi": 4000,
+        "d": 0.2
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/metal_01.ogg",
+        "at": 0.01,
+        "gain": 0.2,
+        "rate": 0.68,
+        "lo": 280,
+        "hi": 2400,
+        "d": 0.26
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth2.ogg",
+        "at": 0,
+        "gain": 0.55,
+        "rate": 0.82,
+        "lo": 150,
+        "hi": 2700,
+        "d": 0.24
+      }
+    ]
+  },
+  {
+    "id": "08-dust",
+    "number": "08",
+    "title": "砂塵の着地",
+    "description": "低い接地から、細かな「サッ」が周囲へ逃げる。",
+    "character": "細かな摩擦・乾いた散り",
+    "fit": "土・砂塵寄り",
+    "file": "08-dust.mp3",
+    "seconds": 0.52,
+    "peakDb": -6.9,
+    "energy200Db": -27.54,
+    "onsetMs": 1.36,
+    "centroidHz": 2087,
+    "sha256": "ec3186b4d2cc6f94842f3b8a90482d7a7a05dc5d13af7fc9b80b9ac9f04a381f",
+    "layers": [
+      {
+        "file": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/book_02.ogg",
+        "at": 0,
+        "gain": 0.5,
+        "rate": 0.79,
+        "lo": 180,
+        "hi": 3500,
+        "d": 0.25
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth4.ogg",
+        "at": 0.015,
+        "gain": 0.68,
+        "rate": 1.13,
+        "lo": 900,
+        "hi": 5800,
+        "d": 0.32
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/casino-audio/card-slide-5.ogg",
+        "at": 0.075,
+        "gain": 0.25,
+        "rate": 0.67,
+        "lo": 1400,
+        "hi": 4800,
+        "d": 0.25
+      }
+    ]
+  },
+  {
+    "id": "09-arcane",
+    "number": "09",
+    "title": "魔力の定着",
+    "description": "接地の後に低い質感がふくらみ、静かに収まる。",
+    "character": "接地から広がる・長め",
+    "fit": "魔力感を強める候補",
+    "file": "09-arcane.mp3",
+    "seconds": 0.7,
+    "peakDb": -12.46,
+    "energy200Db": -27.49,
+    "onsetMs": 2.4,
+    "centroidHz": 505,
+    "sha256": "f6c00418e3f451ed2376fd69e07864cc52d7807e68a98083e6c32e890bba9c7a",
+    "layers": [
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/bookPlace2.ogg",
+        "at": 0,
+        "gain": 0.5,
+        "rate": 0.69,
+        "lo": 110,
+        "hi": 1800,
+        "d": 0.24
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/item_gem_01.ogg",
+        "at": 0.035,
+        "gain": 0.26,
+        "rate": 0.55,
+        "lo": 300,
+        "hi": 2600,
+        "d": 0.44,
+        "reverse": true,
+        "attack": 0.06
+      },
+      {
+        "file": "docs/sound-redesign/2026-09-30/sources/swishes/swish-13.wav",
+        "at": 0.025,
+        "gain": 0.35,
+        "rate": 0.8,
+        "lo": 320,
+        "hi": 4100,
+        "d": 0.42
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth3.ogg",
+        "at": 0.1,
+        "gain": 0.22,
+        "rate": 0.6,
+        "lo": 180,
+        "hi": 2400,
+        "d": 0.4
+      }
+    ]
+  }
+]

@@ -1,0 +1,177 @@
+{
+  "clips": [
+    {
+      "id": "01-felt",
+      "sha256": "82c4acfefde0c4f10860285751479c260b1e1a9e7f6ecefb0ec68097e39c13a3",
+      "energy200Db": -27.51
+    },
+    {
+      "id": "02-wood",
+      "sha256": "402ff0fce1027776d79a8ab382963db1e201932189f9fb8904c2f3f67a28b96d",
+      "energy200Db": -27.51
+    },
+    {
+      "id": "03-slate",
+      "sha256": "8038edb0b1f9180daf5d5c298e9963499e20301fe768d307f2a60d0d04118cb8",
+      "energy200Db": -27.5
+    },
+    {
+      "id": "04-air",
+      "sha256": "33c371f170aee355367c055556618ec6328b2aec35e449a080aa3e1bea9b7bbf",
+      "energy200Db": -27.5
+    },
+    {
+      "id": "05-paper",
+      "sha256": "78d4689f66d029c0cb8deb91abb316ff6904bceb650c3439180f411f62f0fb5b",
+      "energy200Db": -27.47
+    },
+    {
+      "id": "06-crystal",
+      "sha256": "9bd69dc3c75ac2fccf006c27968079e92f90900556a930a905871491faf61da0",
+      "energy200Db": -27.51
+    },
+    {
+      "id": "07-bronze",
+      "sha256": "344c761871d259f2f3b32ee2e414ee9adb44e5ec93618f877f4cd3100f2fb122",
+      "energy200Db": -27.49
+    },
+    {
+      "id": "08-dust",
+      "sha256": "ec3186b4d2cc6f94842f3b8a90482d7a7a05dc5d13af7fc9b80b9ac9f04a381f",
+      "energy200Db": -27.54
+    },
+    {
+      "id": "09-arcane",
+      "sha256": "f6c00418e3f451ed2376fd69e07864cc52d7807e68a98083e6c32e890bba9c7a",
+      "energy200Db": -27.49
+    }
+  ],
+  "scenes": [
+    {
+      "id": "01-felt",
+      "trace": [
+        {
+          "selected": "01-felt",
+          "at": 27769.5,
+          "fingerprint": "17280:380623707",
+          "impactMs": 805
+        }
+      ]
+    },
+    {
+      "id": "02-wood",
+      "trace": [
+        {
+          "selected": "02-wood",
+          "at": 31285.799999952316,
+          "fingerprint": "21120:236395409",
+          "impactMs": 802
+        }
+      ]
+    },
+    {
+      "id": "03-slate",
+      "trace": [
+        {
+          "selected": "03-slate",
+          "at": 34769.09999990463,
+          "fingerprint": "25920:-1191615239",
+          "impactMs": 802
+        }
+      ]
+    },
+    {
+      "id": "04-air",
+      "trace": [
+        {
+          "selected": "04-air",
+          "at": 38252.200000047684,
+          "fingerprint": "24000:-285708329",
+          "impactMs": 799
+        }
+      ]
+    },
+    {
+      "id": "05-paper",
+      "trace": [
+        {
+          "selected": "05-paper",
+          "at": 41752.200000047684,
+          "fingerprint": "22560:627398713",
+          "impactMs": 803
+        }
+      ]
+    },
+    {
+      "id": "06-crystal",
+      "trace": [
+        {
+          "selected": "06-crystal",
+          "at": 45235.299999952316,
+          "fingerprint": "29280:-306104576",
+          "impactMs": 802
+        }
+      ]
+    },
+    {
+      "id": "07-bronze",
+      "trace": [
+        {
+          "selected": "07-bronze",
+          "at": 48718.799999952316,
+          "fingerprint": "20640:2087415049",
+          "impactMs": 802
+        }
+      ]
+    },
+    {
+      "id": "08-dust",
+      "trace": [
+        {
+          "selected": "08-dust",
+          "at": 52201,
+          "fingerprint": "24960:520169531",
+          "impactMs": 803
+        }
+      ]
+    },
+    {
+      "id": "09-arcane",
+      "trace": [
+        {
+          "selected": "09-arcane",
+          "at": 55684.89999985695,
+          "fingerprint": "33600:-1207406146",
+          "impactMs": 804
+        }
+      ]
+    }
+  ],
+  "sizes": [
+    {
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "width": 320,
+      "scroll": 320
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "nine unique recordings",
+    "energy within .2 dB",
+    "nine single controls",
+    "original single and board",
+    "three repetitions",
+    "nine sequence",
+    "cancel sequence and BGM",
+    "nine real summon landing callbacks",
+    "stop during landing",
+    "large card on opponent side",
+    "BGM and mono",
+    "mobile auto scroll",
+    "320/390/1440 layout"
+  ],
+  "boundary": "Preview fixture through real engine/controller/adopted slate summon; buffer substitution confined to preview iframe. Functional verification, not subjective listening approval."
+}

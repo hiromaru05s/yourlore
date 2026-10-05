@@ -1,6 +1,6 @@
 {
   "version": 5,
-  "status": "active bank with user-selected spell 01 (lore-v7)",
+  "status": "active bank with user-selected spell 01 (lore-v7) and summon 04 (lore-v8)",
   "sampleRate": 44100,
   "sounds": {
     "click": [
@@ -255,21 +255,55 @@
     ],
     "summon": [
       {
+        "id": "04-air",
+        "number": "04",
+        "title": "空気のクッション",
+        "description": "「ボフッ」と空気が押し出され、軽く抜ける。",
+        "character": "丸い・空気の広がり",
+        "fit": "共通音候補",
         "file": "summon.mp3",
-        "url": "/sfx/lore-v5/summon.mp3",
-        "seconds": 0.58,
-        "peakDb": -7.61,
-        "rmsDb": -28.13,
-        "sha256": "fe2afa82c41564825e02e1c4e78e216513c918aaee4790359766b32f45139e8f",
-        "sources": [
-          "new/thwack/thwack-10.wav",
-          "original: damped impact body",
-          "original: damped resonator",
-          "original: shaped air texture",
-          "rpg-audio/bookPlace2.ogg"
+        "seconds": 0.5,
+        "peakDb": -12.03,
+        "energy200Db": -27.5,
+        "onsetMs": 4.29,
+        "centroidHz": 303,
+        "sha256": "33c371f170aee355367c055556618ec6328b2aec35e449a080aa3e1bea9b7bbf",
+        "layers": [
+          {
+            "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/bookClose.ogg",
+            "at": 0,
+            "gain": 0.3,
+            "rate": 0.68,
+            "lo": 110,
+            "hi": 1600,
+            "d": 0.19
+          },
+          {
+            "file": "docs/sound-redesign/2026-09-30/sources/swishes/swish-7.wav",
+            "at": 0,
+            "gain": 0.68,
+            "rate": 1.12,
+            "lo": 220,
+            "hi": 5500,
+            "d": 0.34
+          },
+          {
+            "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth2.ogg",
+            "at": 0.055,
+            "gain": 0.28,
+            "rate": 0.78,
+            "lo": 300,
+            "hi": 2500,
+            "d": 0.29
+          }
         ],
-        "decision": "rebuilt",
-        "description": "低い着地の芯に、短い空気の広がり。場へ実体が来る重さ。"
+        "url": "/sfx/lore-v8/summon.mp3",
+        "decision": "User selected 04 air on 2026-10-05; byte-identical preview adoption",
+        "sources": [
+          "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/bookClose.ogg",
+          "docs/sound-redesign/2026-09-30/sources/swishes/swish-7.wav",
+          "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth2.ogg"
+        ]
       }
     ],
     "mimic": [

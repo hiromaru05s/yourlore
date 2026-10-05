@@ -1,0 +1,54 @@
+{
+  "error": "page.waitForSelector: Timeout 90000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-scene-ready=true]') to be visible\u001b[22m\n\n    at /Users/hiromaru05s/.codex/worktrees/sfx-rebuild-preview/LORE_TCG/tests/audio-v5-staging-browser.mjs:28:13",
+  "errors": [],
+  "requests": [
+    "/sfx/lore-v3/click-1.mp3",
+    "/sfx/lore-v3/click-2.mp3",
+    "/sfx/lore-v3/click-3.mp3",
+    "/sfx/lore-v3/pop.mp3",
+    "/sfx/lore-v3/error.mp3",
+    "/sfx/lore-v5/rankUp.mp3",
+    "/sfx/lore-v5/rankDown.mp3",
+    "/sfx/lore-v7/play.mp3",
+    "/sfx/lore-v5/duel-start.mp3",
+    "/sfx/lore-v5/coinToss.mp3",
+    "/sfx/lore-v8/summon.mp3",
+    "/sfx/lore-v5/rankPromote.mp3",
+    "/sfx/lore-v5/attack-1.mp3",
+    "/sfx/lore-v5/coinLand.mp3",
+    "/sfx/lore-v5/attack-2.mp3",
+    "/sfx/lore-v4/draw-3.mp3"
+  ],
+  "networkFailures": [
+    {
+      "url": "https://test.yourlore.xyz/music/yohaku-to-zankyo.mp3",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://test.yourlore.xyz/frames/sleeve_default.webp",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "starts": [
+    {
+      "fingerprint": "3120:-617122990",
+      "at": 93931.60000014305,
+      "state": "running"
+    },
+    {
+      "fingerprint": "3120:1801223150",
+      "at": 94354.40000009537,
+      "state": "running"
+    },
+    {
+      "fingerprint": "3120:1787256568",
+      "at": 161031.5,
+      "state": "running"
+    },
+    {
+      "fingerprint": "3120:-617122990",
+      "at": 192446.90000009537,
+      "state": "running"
+    }
+  ]
+}

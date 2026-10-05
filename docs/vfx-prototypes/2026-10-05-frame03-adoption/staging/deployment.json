@@ -1,0 +1,17 @@
+{
+  "id": "43507eb4-2e2c-442f-9ff5-2d8325685255",
+  "source": "wrangler",
+  "strategy": "percentage",
+  "author_email": "maruru836818@gmail.com",
+  "annotations": {
+    "workers/message": "d4aca95b2b63c9d7d9c010e05b70aed947489789 guarded release",
+    "workers/triggered_by": "deployment"
+  },
+  "versions": [
+    {
+      "version_id": "7a7531d4-2ab1-4812-9787-5fd23f0adacb",
+      "percentage": 100
+    }
+  ],
+  "created_on": "2026-10-05T03:15:33.507801Z"
+}
