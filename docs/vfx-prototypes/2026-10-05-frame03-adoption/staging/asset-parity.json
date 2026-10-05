@@ -1,0 +1,281 @@
+{
+  "source": "d4aca95b2b63c9d7d9c010e05b70aed947489789",
+  "spellChange": "8b58cffeaf2a5f5bd07779e8d203feb2d8e695d3",
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-10-05T03:16:33.012Z",
+  "files": [
+    {
+      "file": "assets/BufferGeometryUtils-Dt1ZoHXm.js",
+      "bytes": 4857,
+      "sha256": "f4a8eb1df64676843eb52265aa00dd16b45ec59710286d17b41ea04fcfda92e4",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/audit-Ch-vlPRj.js",
+      "bytes": 5451,
+      "sha256": "53fcc623e3b2b9ac71ac9b74dd522f3e77f45ae7853baa8ac8284d4d4e6a1930",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/RoomEnvironment-CljGZMnC.js",
+      "bytes": 2068,
+      "sha256": "15d975a3af4f90adb95981578a3777d1abe902835cf08687dd40813844821092",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/atelierThemes-DM29k3s-.js",
+      "bytes": 3739,
+      "sha256": "95d1fa7ec28362a982bf7d4430da039a377b73a37609306bf599ca8bc7810c97",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/board-DmONKYKT.js",
+      "bytes": 5407,
+      "sha256": "4a44c794b44d34e2bf76a0d87a1ae6d5f46c6d9316fd4e44277cde8af4693159",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "index.html",
+      "bytes": 1528,
+      "sha256": "18cc9e1c88e884edb27400caf3d48e4877b93d17a0bb08667f10a23c13211ad8",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/ceremonyScene-ClnFqjYR.js",
+      "bytes": 8933,
+      "sha256": "b0c117a6304a4f08d9895b5a71cfc86e7b02a224fc28bd965a75216a3525c7d3",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/crownOutcome-CJwgvMKn.js",
+      "bytes": 13830,
+      "sha256": "bfdee421ff682d82dfd3fa221372edf0ce7be1a49bf7111b7076cb316f28a552",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "bytes": 125,
+      "sha256": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/board-UDApamK7.css",
+      "bytes": 2167,
+      "sha256": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/cosmeticStudio-DHP9Mvp3.js",
+      "bytes": 10970,
+      "sha256": "df3db4bedbdd88dd7013c5d5c588804260b35f86e9e4c3252a01eccd04ad1bbb",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/diceScene-BEilQSbl.js",
+      "bytes": 8252,
+      "sha256": "5142053f405677fef84638c09b3655b08e5b8b76ba2d0d231633c7c2e670a280",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/family-matter-8TPntqfp.js",
+      "bytes": 4338,
+      "sha256": "52b936223ec698826cb3ea6bddcd9a5f06178d93f190dfadbe08ef82674fa6a1",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/inspection-DCBNQ5tG.js",
+      "bytes": 25004,
+      "sha256": "1b4d7e1441354dd536afe1215aad9b56225e0795023f93d5738ae3056fcb75bd",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/game-f4y4oGgv.js",
+      "bytes": 11922,
+      "sha256": "4c96c2d90bb0a1fa569f6ced5ed26deaaee00c4824beb5196c99fdec987f9463",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/handGeometry-Bz96hXgQ.js",
+      "bytes": 945,
+      "sha256": "aa57e7f2da29c273b4f2adfb686fe19dbae04ee09c5e9ce37b735341357b6d01",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/duelScene-DeAo1OuN.js",
+      "bytes": 61854,
+      "sha256": "fc5cc0b16ba33bfec013b657af2bf0188414f3cf7e8a919e4b8ea801183dfe0f",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/layout-BqFJty6C.js",
+      "bytes": 295954,
+      "sha256": "eadd25a582367332cc7aac0a93c2eef99246684b50ceb5848d811f83d6d7a133",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/layout-pMfcEDtF.css",
+      "bytes": 1263,
+      "sha256": "834708ab76534934347cff47b156f4228bd9c7904902eda69088e255db0cdc94",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/master-tongues-CNXWcXj4.js",
+      "bytes": 4012,
+      "sha256": "a0ba2f1348474f1636215fa5d6b5d022676ec537f08b5ee1b32e7e6f7de16320",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/materials-Cdvqwovy.js",
+      "bytes": 9060,
+      "sha256": "185263000bae5c6b5b4709f9adddc8a8fe13663f4fdd4ebb6e64c8b5461792cb",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/main-DGlQoDq8.js",
+      "bytes": 129722,
+      "sha256": "3708dcb89b4691940927d20244e6920c37c1a90d9a16bd03fc6d661d26ca2355",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/main-BDpRd2px.css",
+      "bytes": 147749,
+      "sha256": "03766858e4629d2d6974cbc03b3ebf580ede339771837ed106164d83743fe091",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/modal-CFBlJZnW.js",
+      "bytes": 886581,
+      "sha256": "a22df02fee633f9db293a69a3cefe321de28e73248c08fb2fd219e85ab221a67",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/ornaments-znr-Zpwp.js",
+      "bytes": 3924,
+      "sha256": "db8c56d456d2623b3a1a03148623e74229a8b9c6c39d3e4a939174cfc5668228",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/renderDensity-eCqR3GeM.js",
+      "bytes": 545,
+      "sha256": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/renderer-CNk7DHey.js",
+      "bytes": 18679,
+      "sha256": "d385f117ce962873276e37f1479db22cd41342eae17c371de79913f03f00c6b0",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/paperDraw-BCLBYLAr.js",
+      "bytes": 9715,
+      "sha256": "3937cfbf4fb96e597a25fc1811d59e32ec6a3f6159711fdfa7482728f52ab17b",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/pileModels-rIXB25-L.js",
+      "bytes": 47260,
+      "sha256": "b14a95155439644702abdbf8a496b93d0a7d2fa14b757607482382f09af3978f",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/modal-DNzmBYTt.css",
+      "bytes": 232978,
+      "sha256": "30b27cd0a30b5b2893a1cf44ce6a64fc21d50665d79d580ff3890f14f5280044",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/sleeve-uLS5R9da.js",
+      "bytes": 3129,
+      "sha256": "bdf26dba524486006f2867246b59aba6bbd6a6c6f887e758c3bdd0274d6b3175",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/studio-CmgKc6nL.css",
+      "bytes": 8771,
+      "sha256": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/scene-BRxxTMUO.js",
+      "bytes": 6060,
+      "sha256": "ee3c47fe545f7491ca9457169046b52708379abe4650e4ab6327ca9491a63d25",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/runtime-ZIL12m5E.js",
+      "bytes": 10206,
+      "sha256": "f28deedf68037ed99aa7719ed6ceee724f55c19016380a4f3700066485f5849b",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/royal-matter-C_gUCHH_.js",
+      "bytes": 6324,
+      "sha256": "071c4c65fe06e18220f45b3eef670ffa4c1db74355cae40e4e5ae4826b1ccc91",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/riftScene-DHrHRzYI.js",
+      "bytes": 28640,
+      "sha256": "7a2f4f94bb3a850ad25879343e2be0253a11448e5db66541942304931029b343",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/voidSurface-DsekZ1vI.js",
+      "bytes": 2898,
+      "sha256": "66f594e0460386d7880b6ed9e3912fa4ced1a7a31b1e84244960223c3d7c8519",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "art/biblion/modular/base-spell-ui.webp",
+      "bytes": 289600,
+      "sha256": "ad2c8acfbc974629258c9fc65115504e6649f02f0a656dc0952fa41f65e020aa",
+      "status": 200,
+      "match": true
+    },
+    {
+      "file": "assets/three.module-HSEuXwnV.js",
+      "bytes": 617432,
+      "sha256": "9474ef0dd05ab5312be9b1d2dd046b24b1e8778a5a30119c2327defc13dc143f",
+      "status": 200,
+      "match": true
+    }
+  ]
+}
