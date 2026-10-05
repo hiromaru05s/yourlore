@@ -1,0 +1,253 @@
+[
+  {
+    "id": "01-silk",
+    "number": "01",
+    "title": "シルクの封印",
+    "description": "布の短い擦過 → 小さな締まり。乾いた、控えめな発動。",
+    "character": "最短・乾いた質感",
+    "file": "01-silk.mp3",
+    "seconds": 0.48,
+    "peakDb": -8.1,
+    "energy200Db": -28.49,
+    "onsetMs": 6.69,
+    "centroidHz": 843,
+    "sha256": "43ecb1a276bcaa1ddaa3a2a6fe9ecd5ea598e9b8009f206ae1d1a88511e67888",
+    "layers": [
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth1.ogg",
+        "at": 0,
+        "gain": 0.85,
+        "rate": 1.2,
+        "lo": 200,
+        "hi": 5800,
+        "d": 0.24
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/casino-audio/card-place-3.ogg",
+        "at": 0.045,
+        "gain": 0.13,
+        "rate": 0.82,
+        "lo": 180,
+        "hi": 3400,
+        "d": 0.15
+      },
+      {
+        "file": "docs/sound-redesign/2026-09-30/sources/swishes/swish-11.wav",
+        "at": 0.04,
+        "gain": 0.3,
+        "rate": 0.95,
+        "lo": 750,
+        "hi": 5700,
+        "d": 0.3
+      }
+    ]
+  },
+  {
+    "id": "02-air",
+    "number": "02",
+    "title": "エア・リリース",
+    "description": "空気をひと押しして抜ける。音程を主張しない発動。",
+    "character": "滑らかな一動作",
+    "file": "02-air.mp3",
+    "seconds": 0.57,
+    "peakDb": -14.76,
+    "energy200Db": -28.5,
+    "onsetMs": 6.21,
+    "centroidHz": 295,
+    "sha256": "f4caff91529eb99002984c18d0744767ef4d1aa9305afb0f2f869ad2b172bd91",
+    "layers": [
+      {
+        "file": "docs/sound-redesign/2026-09-30/sources/swishes/swish-7.wav",
+        "at": 0,
+        "gain": 0.8,
+        "rate": 0.82,
+        "lo": 240,
+        "hi": 7400,
+        "d": 0.35
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth2.ogg",
+        "at": 0.018,
+        "gain": 0.35,
+        "rate": 0.69,
+        "lo": 280,
+        "hi": 2700,
+        "d": 0.35
+      },
+      {
+        "file": "docs/sound-redesign/2026-09-30/sources/swishes/swish-3.wav",
+        "at": 0.13,
+        "gain": 0.16,
+        "rate": 1.6,
+        "lo": 1200,
+        "hi": 6800,
+        "d": 0.2
+      }
+    ]
+  },
+  {
+    "id": "03-crystal",
+    "number": "03",
+    "title": "クリスタルの展開",
+    "description": "微細なガラスの重なり → 短いきらめき。旋律にはしない。",
+    "character": "明るい粒状の質感",
+    "file": "03-crystal.mp3",
+    "seconds": 0.64,
+    "peakDb": -13.33,
+    "energy200Db": -28.5,
+    "onsetMs": 2.7,
+    "centroidHz": 1516,
+    "sha256": "ea4684a47f759c21dbce87b011a9667cb8250f0a38847402801aff4a92290944",
+    "layers": [
+      {
+        "file": "docs/sound-redesign/2026-09-30/sources/swishes/swish-10.wav",
+        "at": 0,
+        "gain": 0.38,
+        "rate": 1.1,
+        "lo": 650,
+        "hi": 5300,
+        "d": 0.26
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/interface-sounds/glass_001.ogg",
+        "at": 0.014,
+        "gain": 0.33,
+        "rate": 1.18,
+        "lo": 1300,
+        "hi": 7600,
+        "d": 0.31
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/interface-sounds/glass_001.ogg",
+        "at": 0.028,
+        "gain": 0.28,
+        "rate": 0.87,
+        "lo": 1300,
+        "hi": 7600,
+        "d": 0.31
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/interface-sounds/glass_001.ogg",
+        "at": 0.043,
+        "gain": 0.17,
+        "rate": 1.43,
+        "lo": 1300,
+        "hi": 7600,
+        "d": 0.31
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/interface-sounds/glass_001.ogg",
+        "at": 0.067,
+        "gain": 0.14,
+        "rate": 0.69,
+        "lo": 1300,
+        "hi": 7600,
+        "d": 0.31
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth1.ogg",
+        "at": 0.055,
+        "gain": 0.22,
+        "rate": 0.8,
+        "lo": 400,
+        "hi": 2500,
+        "d": 0.3
+      }
+    ]
+  },
+  {
+    "id": "04-spark",
+    "number": "04",
+    "title": "スパークの解放",
+    "description": "細かい火花 → 小さな放出。輪郭のある発動。",
+    "character": "密度のある短い破裂",
+    "file": "04-spark.mp3",
+    "seconds": 0.55,
+    "peakDb": -10.79,
+    "energy200Db": -28.47,
+    "onsetMs": 0.82,
+    "centroidHz": 4027,
+    "sha256": "ad3e352c78faa3efcd8811ef2a92844c4ebfd871e78fc4effca3071cd5bdbe49",
+    "layers": [
+      {
+        "file": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/spell_fire_06.ogg",
+        "at": 0,
+        "gain": 0.7,
+        "rate": 1.3,
+        "lo": 300,
+        "hi": 7200,
+        "d": 0.36
+      },
+      {
+        "file": "docs/sound-redesign/2026-09-30/sources/swishes/swish-4.wav",
+        "at": 0.025,
+        "gain": 0.29,
+        "rate": 1.35,
+        "lo": 600,
+        "hi": 5400,
+        "d": 0.25
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/spell_fire_04.ogg",
+        "at": 0.115,
+        "gain": 0.2,
+        "rate": 1.55,
+        "lo": 1700,
+        "hi": 6500,
+        "d": 0.17
+      }
+    ]
+  },
+  {
+    "id": "05-sigil",
+    "number": "05",
+    "title": "深いシジル",
+    "description": "低く擦れる質感 → 奥行きのある短い余韻。",
+    "character": "低め・落ち着いた重さ",
+    "file": "05-sigil.mp3",
+    "seconds": 0.72,
+    "peakDb": -11.44,
+    "energy200Db": -28.51,
+    "onsetMs": 21.97,
+    "centroidHz": 463,
+    "sha256": "b2f9d748271f4e1803b7e9bff260d615dd1fcd9713944a0809d902d1299c3790",
+    "layers": [
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/cloth2.ogg",
+        "at": 0,
+        "gain": 0.75,
+        "rate": 0.48,
+        "lo": 140,
+        "hi": 3400,
+        "d": 0.47
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/item_gem_01.ogg",
+        "at": 0.018,
+        "gain": 0.32,
+        "rate": 0.48,
+        "lo": 210,
+        "hi": 2300,
+        "d": 0.43
+      },
+      {
+        "file": "docs/sound-redesign/2026-09-30/sources/swishes/swish-13.wav",
+        "at": 0.07,
+        "gain": 0.33,
+        "rate": 0.6,
+        "lo": 250,
+        "hi": 3600,
+        "d": 0.43
+      },
+      {
+        "file": "docs/ui-rework/2026-09-27-audio/sources/rpg-audio/bookPlace2.ogg",
+        "at": 0.015,
+        "gain": 0.07,
+        "rate": 0.65,
+        "lo": 120,
+        "hi": 950,
+        "d": 0.18
+      }
+    ]
+  }
+]
