@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "rows": [
+    {
+      "scale": 1,
+      "side": "self",
+      "action": "draw",
+      "w": 172.797,
+      "thickness": 4.15
+    },
+    {
+      "scale": 1,
+      "side": "opponent",
+      "action": "draw",
+      "w": 72.5625,
+      "thickness": 1.74
+    },
+    {
+      "scale": 3,
+      "side": "self",
+      "action": "draw",
+      "w": 172.797,
+      "thickness": 12.44
+    },
+    {
+      "scale": 3,
+      "side": "opponent",
+      "action": "draw",
+      "w": 72.5625,
+      "thickness": 5.22
+    }
+  ],
+  "errors": []
+}

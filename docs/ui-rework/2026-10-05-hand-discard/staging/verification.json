@@ -1,0 +1,16 @@
+{
+  "source": "4bc45195463e161abf60881f170f104597233545",
+  "origin": "https://test.yourlore.xyz",
+  "version": "04893a6a-b506-45ec-88e2-f7add0c21222",
+  "status": "verified",
+  "checks": {
+    "productionSuite": "52/52",
+    "localBrowserScenarios": 4,
+    "servedFilesSha256": 37,
+    "stagingDiscardCount": 2,
+    "duplicateDiscardFlights": 0,
+    "immediateReflow": true,
+    "order": "discard and reflow complete -> opponent shelf-to-deck complete -> draw"
+  },
+  "boundary": "Unmodified deployed bundles and normal BOT actions; API account fixture, not authenticated two-player play."
+}

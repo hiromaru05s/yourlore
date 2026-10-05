@@ -1,0 +1,427 @@
+[
+  {
+    "width": 1280,
+    "motion": "no-preference",
+    "timeline": [
+      {
+        "type": "flight-start",
+        "uid": "discard-test-0",
+        "t": 5288.599999904633
+      },
+      {
+        "type": "flight-end",
+        "uid": "discard-test-0",
+        "t": 6101.399999856949
+      },
+      {
+        "type": "flight-start",
+        "uid": "discard-test-1",
+        "t": 6146.200000047684
+      },
+      {
+        "type": "flight-end",
+        "uid": "discard-test-1",
+        "t": 6533.700000047684
+      },
+      {
+        "type": "flight-start",
+        "uid": "discard-test-5",
+        "t": 6589
+      },
+      {
+        "type": "flight-end",
+        "uid": "discard-test-5",
+        "t": 7101.399999856949
+      },
+      {
+        "type": "draw-start",
+        "t": 7196.5
+      }
+    ],
+    "status": "passed",
+    "checks": [
+      "full color with zero mana",
+      "grab cursor without blocked tooltip",
+      "expanded hand",
+      "shelf highlight",
+      "cancel drag",
+      "touch drop or mouse drop",
+      "remaining count 3 → 2 → 1",
+      "keyboard discard",
+      "last-card drag before opponent draw",
+      "immediate concurrent reflow",
+      "no duplicate flight",
+      "interrupted snapshot restores hand",
+      "teardown cleanup"
+    ],
+    "state": {
+      "cards": [
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        }
+      ],
+      "open": true,
+      "target": "3px"
+    },
+    "errors": []
+  },
+  {
+    "width": 390,
+    "motion": "no-preference",
+    "timeline": [
+      {
+        "type": "flight-start",
+        "uid": "discard-test-0",
+        "t": 3681.7999999523163
+      },
+      {
+        "type": "flight-end",
+        "uid": "discard-test-0",
+        "t": 4225.399999856949
+      },
+      {
+        "type": "flight-start",
+        "uid": "discard-test-1",
+        "t": 4260.5
+      },
+      {
+        "type": "flight-end",
+        "uid": "discard-test-1",
+        "t": 4641.399999856949
+      },
+      {
+        "type": "flight-start",
+        "uid": "discard-test-5",
+        "t": 4676
+      },
+      {
+        "type": "flight-end",
+        "uid": "discard-test-5",
+        "t": 5175
+      },
+      {
+        "type": "draw-start",
+        "t": 5225.699999809265
+      }
+    ],
+    "status": "passed",
+    "checks": [
+      "full color with zero mana",
+      "grab cursor without blocked tooltip",
+      "expanded hand",
+      "shelf highlight",
+      "cancel drag",
+      "touch drop or mouse drop",
+      "remaining count 3 → 2 → 1",
+      "keyboard discard",
+      "last-card drag before opponent draw",
+      "immediate concurrent reflow",
+      "no duplicate flight",
+      "interrupted snapshot restores hand",
+      "teardown cleanup"
+    ],
+    "state": {
+      "cards": [
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        }
+      ],
+      "open": true,
+      "target": "3px"
+    },
+    "errors": []
+  },
+  {
+    "width": 390,
+    "motion": "reduce",
+    "timeline": [
+      {
+        "type": "flight-start",
+        "uid": "discard-test-0",
+        "t": 3937.800000190735
+      },
+      {
+        "type": "flight-end",
+        "uid": "discard-test-0",
+        "t": 4111.300000190735
+      },
+      {
+        "type": "flight-start",
+        "uid": "discard-test-1",
+        "t": 4179.900000095367
+      },
+      {
+        "type": "flight-end",
+        "uid": "discard-test-1",
+        "t": 4180.200000047684
+      },
+      {
+        "type": "flight-start",
+        "uid": "discard-test-5",
+        "t": 4239.700000047684
+      },
+      {
+        "type": "flight-end",
+        "uid": "discard-test-5",
+        "t": 4350
+      }
+    ],
+    "status": "passed",
+    "checks": [
+      "full color with zero mana",
+      "grab cursor without blocked tooltip",
+      "expanded hand",
+      "shelf highlight",
+      "cancel drag",
+      "touch drop or mouse drop",
+      "remaining count 3 → 2 → 1",
+      "keyboard discard",
+      "last-card drag before opponent draw",
+      "immediate concurrent reflow",
+      "no duplicate flight",
+      "interrupted snapshot restores hand",
+      "teardown cleanup"
+    ],
+    "state": {
+      "cards": [
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        },
+        {
+          "dim": false,
+          "filter": "none",
+          "opacity": "1",
+          "cursor": "grab",
+          "blocked": false,
+          "playable": false
+        }
+      ],
+      "open": true,
+      "target": "3px"
+    },
+    "errors": []
+  }
+]

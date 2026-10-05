@@ -1,0 +1,25 @@
+{
+  "environment": "staging",
+  "origin": "https://test.yourlore.xyz",
+  "source": "fdf3a00ff0325912da1cf71b6408042a581b58ab",
+  "deploymentId": "56cebf5e-7445-4348-8cf6-0298150fbb50",
+  "versions": [
+    {
+      "version_id": "d19115bb-8f30-40aa-bb72-44046bb7106b",
+      "percentage": 100
+    }
+  ],
+  "annotation": "fdf3a00ff0325912da1cf71b6408042a581b58ab guarded release",
+  "createdAt": "2026-10-02T12:12:12.696642Z",
+  "guard": "scripts/deploy-guard.mjs staging",
+  "checks": {
+    "typecheck": "passed",
+    "productionTests": "52/52",
+    "build": "passed",
+    "deployedAssetHashes": "110/110",
+    "studioControls": "passed",
+    "botDesktopMobile": "passed with API fixtures"
+  },
+  "productionDeployed": false,
+  "verification": "staging/verification.json"
+}

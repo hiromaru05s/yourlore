@@ -1,0 +1,56 @@
+
+> lore-tcg@0.1.0 build
+> node scripts/guard-design.mjs && npm --workspace client run build
+
+✓ guard-design: ok
+
+> lore-client@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 206 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/cosmetic-studio.html                         0.63 kB │ gzip:   0.42 kB
+dist/index.html                                   1.62 kB │ gzip:   0.73 kB
+dist/table-preview.html                           1.84 kB │ gzip:   0.91 kB
+dist/assets/layout-pMfcEDtF.css                   1.26 kB │ gzip:   0.49 kB
+dist/assets/tablePreview-yNSUOsHt.css             1.87 kB │ gzip:   0.85 kB
+dist/assets/board-UDApamK7.css                    2.17 kB │ gzip:   0.89 kB
+dist/assets/studio-Bu0Hm8-e.css                   7.89 kB │ gzip:   2.45 kB
+dist/assets/main-CnuBzyBe.css                   121.29 kB │ gzip:  24.72 kB
+dist/assets/modal-30IrH8mt.css                  232.60 kB │ gzip:  49.93 kB
+dist/assets/cosmeticPreviewBridge-Dp0XOZ5G.js     0.13 kB │ gzip:   0.12 kB
+dist/assets/modulepreload-polyfill-B5Qt9EMX.js    0.71 kB │ gzip:   0.40 kB
+dist/assets/handGeometry-Bz96hXgQ.js              0.95 kB │ gzip:   0.53 kB
+dist/assets/preload-helper-BXl3LOEh.js            1.11 kB │ gzip:   0.65 kB
+dist/assets/RoomEnvironment-hT1tWctX.js           2.07 kB │ gzip:   0.89 kB
+dist/assets/voidSurface-l8Q1duac.js               2.90 kB │ gzip:   1.49 kB
+dist/assets/pileModels-D0hH7F3F.js                3.26 kB │ gzip:   1.58 kB
+dist/assets/board-3BfOaLxA.js                     4.89 kB │ gzip:   2.45 kB
+dist/assets/inspection-D-lJOwPk.js                5.40 kB │ gzip:   2.77 kB
+dist/assets/tablePreview-DdoVz-ez.js              5.62 kB │ gzip:   2.95 kB
+dist/assets/audit-BcPyh2ho.js                     5.63 kB │ gzip:   3.03 kB
+dist/assets/materials-Ca-rNfbc.js                 5.98 kB │ gzip:   2.85 kB
+dist/assets/diceScene-CnP7Egsw.js                 8.28 kB │ gzip:   3.88 kB
+dist/assets/ceremonyScene-Ca2bERwt.js             8.92 kB │ gzip:   3.96 kB
+dist/assets/cardSurface-PRSOctVR.js               9.03 kB │ gzip:   3.86 kB
+dist/assets/paperDraw-BtkCfoKz.js                 9.60 kB │ gzip:   4.40 kB
+dist/assets/cosmeticStudio-G1HvUvEu.js           11.96 kB │ gzip:   5.19 kB
+dist/assets/game-BNWL4i6A.js                     11.96 kB │ gzip:   4.41 kB
+dist/assets/crownOutcome-gIh-S-nx.js             13.87 kB │ gzip:   6.07 kB
+dist/assets/OrbitControls-BI1qyQVn.js            19.73 kB │ gzip:   4.46 kB
+dist/assets/riftScene-BLbFi47P.js                28.19 kB │ gzip:  11.38 kB
+dist/assets/GLTFLoader-5ZIcKkl8.js               44.76 kB │ gzip:  13.51 kB
+dist/assets/duelScene-DbT1x0Nw.js                59.52 kB │ gzip:  23.78 kB
+dist/assets/main-CWC2DbDZ.js                    125.29 kB │ gzip:  44.32 kB
+dist/assets/layout-BJqSsDPa.js                  300.60 kB │ gzip: 120.77 kB
+dist/assets/three.module-DQxYO4CV.js            608.31 kB │ gzip: 155.53 kB
+dist/assets/modal-CWO59Ab_.js                   859.22 kB │ gzip: 267.68 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 7.33s

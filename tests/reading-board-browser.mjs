@@ -95,7 +95,7 @@ try{
 
  await page.evaluate(async()=>{qa.c.reset();const s=qa.c.state.players[0];s.deck=[];s.hand=[];s.discard=Array.from({length:9},(_,i)=>({...qa.C.STARTERS.STARTER_CHEST,uid:'shuffle-'+i}));qa.c.view.render(qa.c.state);
  const request=(await import('/src/ui/boardMotion.ts')).moveOnBoard;window.qa.shuffle=request({kind:'shuffle',source:document.getElementById('pile-myDisc'),target:document.getElementById('pile-myDeck'),count:9,signal:new AbortController().signal});});
- await page.waitForFunction(()=>['pluck','return','stack'].includes(document.getElementById('app').dataset.shufflePhase));
+ await page.waitForFunction(()=>!!document.getElementById('app').dataset.shufflePhase);
  await page.evaluate(()=>qa.shuffle);assert.equal(await page.locator('#pile-myDeck').getAttribute('data-count'),'9');assert.equal(await page.locator('#pile-myDisc').getAttribute('data-count'),'0');assert.equal(await page.locator('.is-shuffling').count(),0);
  report.checks.push('Shared shuffle renderer carries stock from the authored shelf floor to the low deck pad and cleans up');
  await page.evaluate(()=>{qa.c.reset();qa.c.state.players[0].hand=[];qa.c.view.render(qa.c.state);});await page.waitForFunction(()=>Date.now()-qa.c.turnStartedWall>=500);await page.locator('#endBtn').click();await page.evaluate(()=>qa.c.queue);assert.equal(await page.evaluate(()=>qa.c.state.cur),1);

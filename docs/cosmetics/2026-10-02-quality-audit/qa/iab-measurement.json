@@ -1,0 +1,26 @@
+{
+  "source": "Existing user IAB tab 3, observed with CUA before audit changes",
+  "outerCss": [
+    644,
+    674
+  ],
+  "devicePixelRatio": 2,
+  "iframeCss": [
+    595,
+    540.7265625
+  ],
+  "boardCanvas": [
+    892,
+    810
+  ],
+  "boardCanvasCss": [
+    595,
+    540
+  ],
+  "myDeckProjectedCss": [
+    51.5947265625,
+    68.13333129882812
+  ],
+  "thickness": 3,
+  "theme": "tidal"
+}
