@@ -4,7 +4,7 @@ import {handCardMatrix} from './handGeometry';
 
 /** Keep the real hand on the board. Pointer capture supports mouse and touch;
  * keyboard users can focus a card and press Delete/Enter for the same flight. */
-export function installHandDiscard(root:HTMLElement,count:number,pick:(uid:string)=>void,reflow:()=>void):()=>void {
+export function installHandDiscard(root:HTMLElement,count:number,pick:(uid:string)=>void,reflow:()=>Promise<void>):()=>void {
  const hand=root.querySelector<HTMLElement>('#hand'),target=root.querySelector<HTMLElement>('#pile-myDisc');
  if(!hand||!target)return ()=>{};
  const hint=document.createElement('div');hint.className='hand-discard-hint';hint.setAttribute('role','status');hint.textContent=loungeText(`あと${count}枚、墓地へドラッグ（手札は7枚まで）`,`Drag ${count} card(s) to the graveyard (keep 7)`,`${count}장을 묘지로 드래그 (최대 7장)`);root.append(hint);
@@ -35,9 +35,9 @@ export function installHandDiscard(root:HTMLElement,count:number,pick:(uid:strin
   const duration=matchMedia('(prefers-reduced-motion:reduce)').matches?0:360;
   const landing=new DOMMatrix().translate(to.left+to.width/2,to.top+to.height/2).rotate(-12).scale(Math.min(to.width/width,.35)).translate(-width/2,-height/2);
   // Remove the slot now, while the held card is still flying to the shelf.
-  source.remove();reflow();sfx('discard');
+  source.remove();const alignment=reflow();sfx('discard');
   flight=node.animate([{transform:node.style.transform,opacity:1},{transform:landing.toString(),opacity:0}],{duration,easing:'cubic-bezier(.22,.65,.3,1)',fill:'forwards'});
-  await flight.finished.catch(()=>{});
+  await Promise.all([flight.finished.catch(()=>{}),alignment]);
   if(dead)return;
   submitted=true;reset();
   // The next turn (and its draw) cannot start until this single flight lands.

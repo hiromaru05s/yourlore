@@ -1040,10 +1040,17 @@ export class GameView {
    *  Measured against the REAL card width, and re-run on every layout solve —
    *  the solver's settle passes resize cards after the first render. */
   /** Re-seat the remaining cards as soon as an overflow drop is accepted. */
-  reflowHand(): void {
+  reflowHand(): Promise<void> {
     const cards=[...this.q('hand').querySelectorAll<HTMLElement>(':scope > .card')];
     cards.forEach((card,i)=>{card.style.setProperty('--hi',String(i));card.style.zIndex=String(cards.length-i);});
     this.layoutHand();
+    // Flush layout so these are the transitions just started by re-seating the
+    // fan. Decorative CSS animations may loop forever; only await transitions.
+    const hand=this.q('hand');
+    void hand.offsetWidth;
+    return Promise.all(hand.getAnimations({subtree:true})
+      .filter(animation=>animation instanceof CSSTransition)
+      .map(animation=>animation.finished.catch(()=>{}))).then(()=>{});
   }
 
   private layoutHand(): void {
