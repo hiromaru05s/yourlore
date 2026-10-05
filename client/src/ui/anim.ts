@@ -1,3 +1,4 @@
+import {playSpellFrame,cancelSpellFrames} from './spellFrame/runtime';
 import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {isMimic,focusScale,type MimicId} from './mimic/selection';
 import {playMonster,setMonsterSkip} from './monster/runtime';
@@ -40,7 +41,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on);
-  if(on){clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -210,6 +211,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   let held=false;
   try {
     await focusCard(node, side);
+    if(card.t==='spell'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
     if (to && dest === "field" && (card.ench || card.t === "quest")) {
       const zone=document.querySelector(side==='me'?'#meRow .zone-st':'#oppRow .zone-st');
@@ -227,9 +229,8 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
         if(!fxSkip)playBiblionFx('enchant-place',face);
         return face;
       }
-    } else if (dest === "discard") await landOnShelf(node,side,true);
+    } else if (dest === "discard") await landOnShelf(node,side);
     else if(dest === "vanish") {
-      if(card.quick&&!fxSkip)playBiblionFx('quick',node);
       if(deferVanish&&!fxSkip){await parkQuickSpell(node,side);held=true;return node;}
       await absorbIntoRift(node,side);
     }
@@ -327,7 +328,8 @@ export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | n
       node.dataset.quickPhase='reveal';
       await focusCard(node,side);
       if(fxSkip)return null;
-      playBiblionFx('quick',node);
+      await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
+      if(fxSkip)return null;
       await parkQuickSpell(node,side);held=true;return node;
     }
     await raf();
@@ -883,12 +885,11 @@ async function boardMotionScope(run:(signal:AbortSignal)=>Promise<boolean>,deadl
   try{return await Promise.race([run(abort.signal),new Promise<boolean>(r=>abort.signal.addEventListener('abort',()=>r(false),{once:true}))]);}
   finally{clearTimeout(timer);cancel();fxWaiters.delete(cancel);window.removeEventListener('resize',cancel);document.removeEventListener('visibilitychange',cancel);}
 }
-async function landOnShelf(node:HTMLElement,side:ViewSide,spell=false):Promise<void>{
+async function landOnShelf(node:HTMLElement,side:ViewSide):Promise<void>{
   const target=document.getElementById(discId(side));if(!target||fxSkip)return;
-  let current:DOMRect|null=null,started=false;
-  const moved=await boardMotionScope(signal=>moveOnBoard({kind:'arrival',target,card:node,signal,onFrame:spell?r=>{current=r;if(!started&&!fxSkip){started=true;playBiblionFx('spell',()=>current);}}:undefined}));
+  const moved=await boardMotionScope(signal=>moveOnBoard({kind:'arrival',target,card:node,signal}));
   if(!moved&&!fxSkip){
-    const r=(target.querySelector('.pile-card')||target).getBoundingClientRect();if(spell&&!fxSkip)playBiblionFx('spell',node);await landCard(node,r);
+    const r=(target.querySelector('.pile-card')||target).getBoundingClientRect();await landCard(node,r);
     // Fallback stays visible until the authoritative board replaces it.
     const copy=node.cloneNode(true) as HTMLElement;copy.classList.add('pile-arrival-fallback');document.body.append(copy);
     const observer=new MutationObserver(()=>{if(!target.isConnected){copy.remove();observer.disconnect();}});

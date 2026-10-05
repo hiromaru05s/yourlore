@@ -1,0 +1,10 @@
+{
+  "runtimeSource": "c26524d4981299b59abe8222b5995a94dd207637",
+  "includesPreviousMain": "f5744953a6ea23bf7571d489afb6e728228e9c15",
+  "canonicalDirtyFilesPreserved": 6,
+  "canonicalDirtyDiffSha256": "ca7b7182eb888c9f4964cabdc088abc3f117fd51be4fb211649b51c845debba4",
+  "prototypeReference": "2eceb799",
+  "selectedVariant": "02 membrane / twin-script",
+  "deployedSource": "323cfab774df84b3f4eecd4ba782ace94afd38d6",
+  "workerVersion": "463caed5-57b6-48d5-84f4-c2c2815ba40a"
+}

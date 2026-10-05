@@ -1,0 +1,40 @@
+{
+  "source": "323cfab774df84b3f4eecd4ba782ace94afd38d6",
+  "origin": "https://test.yourlore.xyz",
+  "results": [
+    {
+      "side": "me",
+      "frames": 170,
+      "phases": [
+        "浮上",
+        "カード発光",
+        "銀紋の流墨",
+        "リフトへの軌跡",
+        "到着"
+      ],
+      "variants": [
+        "twin-script"
+      ],
+      "started": 1,
+      "overlays": 0
+    },
+    {
+      "side": "opp",
+      "frames": 169,
+      "phases": [
+        "浮上",
+        "カード発光",
+        "銀紋の流墨",
+        "リフトへの軌跡",
+        "到着"
+      ],
+      "variants": [
+        "twin-script"
+      ],
+      "started": 1,
+      "overlays": 0
+    }
+  ],
+  "errors": [],
+  "boundary": "Deployed assets and shared Rift scene executed on live BOT board with cloned card sources. Account/API fixture; no authenticated online match or account mutation."
+}
