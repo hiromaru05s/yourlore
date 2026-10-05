@@ -1,0 +1,77 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "broken": false,
+  "picks": [
+    {
+      "uid": "u6",
+      "n": 9,
+      "started": 70280.10000014305,
+      "during": {
+        "count": 8,
+        "flight": true
+      }
+    },
+    {
+      "uid": "u7",
+      "n": 8,
+      "started": 71245.10000014305,
+      "during": {
+        "count": 7,
+        "flight": true
+      }
+    }
+  ],
+  "events": [
+    {
+      "type": "draw-start",
+      "t": 30322.900000095367
+    },
+    {
+      "type": "draw-start",
+      "t": 44464.60000014305
+    },
+    {
+      "type": "draw-start",
+      "t": 47078.5
+    },
+    {
+      "type": "draw-start",
+      "t": 68038.60000014305
+    },
+    {
+      "type": "flight-start",
+      "uid": "u6",
+      "t": 70132.20000004768
+    },
+    {
+      "type": "flight-end",
+      "uid": "u6",
+      "t": 70697.40000009537
+    },
+    {
+      "type": "flight-start",
+      "uid": "u7",
+      "t": 71059.40000009537
+    },
+    {
+      "type": "flight-end",
+      "uid": "u7",
+      "t": 71640
+    },
+    {
+      "type": "shuffle-start",
+      "t": 72321.79999995232
+    },
+    {
+      "type": "shuffle-end",
+      "t": 74396.29999995232
+    },
+    {
+      "type": "draw-start",
+      "t": 74473.29999995232
+    }
+  ],
+  "duplicates": [],
+  "errors": [],
+  "boundary": "Unmodified deployed bundles and normal BOT actions; API account fixture, not authenticated two-player play."
+}

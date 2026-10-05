@@ -1,0 +1,119 @@
+{
+  "origin": "http://127.0.0.1:5398",
+  "broken": false,
+  "picks": [
+    {
+      "uid": "u7",
+      "n": 9,
+      "started": 36532.09999990463,
+      "during": {
+        "count": 8,
+        "flight": true
+      }
+    },
+    {
+      "uid": "u1",
+      "n": 8,
+      "started": 37466.59999990463,
+      "during": {
+        "count": 7,
+        "flight": true
+      }
+    },
+    {
+      "uid": "u3",
+      "n": 9,
+      "started": 56073.5,
+      "during": {
+        "count": 8,
+        "flight": true
+      }
+    },
+    {
+      "uid": "u9",
+      "n": 8,
+      "started": 56825.299999952316,
+      "during": {
+        "count": 7,
+        "flight": true
+      }
+    }
+  ],
+  "events": [
+    {
+      "type": "draw-start",
+      "t": 28894.299999952316
+    },
+    {
+      "type": "draw-start",
+      "t": 30879
+    },
+    {
+      "type": "draw-start",
+      "t": 34332.5
+    },
+    {
+      "type": "flight-start",
+      "uid": "u7",
+      "t": 36404.40000009537
+    },
+    {
+      "type": "flight-end",
+      "uid": "u7",
+      "t": 36944.299999952316
+    },
+    {
+      "type": "flight-start",
+      "uid": "u1",
+      "t": 37205.40000009537
+    },
+    {
+      "type": "flight-end",
+      "uid": "u1",
+      "t": 37842
+    },
+    {
+      "type": "draw-start",
+      "t": 37903.200000047684
+    },
+    {
+      "type": "draw-start",
+      "t": 53223.5
+    },
+    {
+      "type": "flight-start",
+      "uid": "u3",
+      "t": 55319.59999990463
+    },
+    {
+      "type": "flight-end",
+      "uid": "u3",
+      "t": 56491.200000047684
+    },
+    {
+      "type": "flight-start",
+      "uid": "u9",
+      "t": 56682.5
+    },
+    {
+      "type": "flight-end",
+      "uid": "u9",
+      "t": 57207.90000009537
+    },
+    {
+      "type": "shuffle-start",
+      "t": 57450.299999952316
+    },
+    {
+      "type": "shuffle-end",
+      "t": 59539
+    },
+    {
+      "type": "draw-start",
+      "t": 72068.09999990463
+    }
+  ],
+  "duplicates": [],
+  "errors": [],
+  "boundary": "Unmodified deployed bundles and normal BOT actions; API account fixture, not authenticated two-player play."
+}

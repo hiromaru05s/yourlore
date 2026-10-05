@@ -80,6 +80,7 @@ export abstract class BaseController implements BoardHandlers {
   private turnTotal = 90; // full length of the CURRENT turn (for the ring's full-scale)
   private turnStartedWall = 0; // wall-clock ms when the current turn's timer started (anti instant-skip)
   private disposeHandDiscard:(()=>void)|undefined;
+  private presentedHandDiscards=new Set<string>();
   private handCapBonusKey = ""; // v42: turn key that already received the +10s hand-discard bonus
   private multiPickerOpen = false; // a cardPickerMulti modal is showing (closed when its pending vanishes)
   private lastEndTurnAt = 0;   // 턴종료 연타 가드: 마지막 endTurn 제출 시각
@@ -172,6 +173,14 @@ export abstract class BaseController implements BoardHandlers {
   // ---- apply a reduce result: queued so batches play back one at a time ----
   protected applyResult(res: ReduceResult, animate = true): void {
     const prev = this.state ?? res.state;
+    // Bind completed local flights to their authoritative removal batch, not
+    // whichever queued snapshot happens to play next (online echoes may lag).
+    const presentedHandDiscards=new Set<string>();
+    const hand=new Set(res.state.players[this.you].hand.map(c=>c.uid));
+    for(const uid of this.presentedHandDiscards)if(!hand.has(uid)){
+      presentedHandDiscards.add(uid);this.presentedHandDiscards.delete(uid);
+    }
+    if(res.state.turn!==prev.turn||res.state.over)this.presentedHandDiscards.clear();
     if (animate && res.state.over && res.state.winner != null && !this.outcomePlayed) this.outcomePending = true;
     if(res.state.opening)this.serverOffset=Date.now()-res.state.opening.serverNow;
     if(res.state.over||res.state.turn>1)this.openingAbort.abort();
@@ -179,7 +188,7 @@ export abstract class BaseController implements BoardHandlers {
     this.state = res.state; // logical state advances immediately (input guards etc.)
     const gen = ++this.fxGen;
     this.queue = this.queue
-      .then(() => this.playResult(prev, res, animate, gen))
+      .then(() => this.playResult(prev, res, animate, gen, presentedHandDiscards))
       .catch((err) => {
         console.error("[playback]", err);
         this.clearQuickFaces();
@@ -193,7 +202,7 @@ export abstract class BaseController implements BoardHandlers {
       });
   }
 
-  private async playResult(prev: GameState, res: ReduceResult, animate: boolean, gen: number): Promise<void> {
+  private async playResult(prev: GameState, res: ReduceResult, animate: boolean, gen: number, presentedHandDiscards:Set<string>): Promise<void> {
     if (this.dead) return;
     this.disposeHandDiscard?.();this.disposeHandDiscard=undefined;
     // Hold the existing complete board until newly exposed card art is decoded.
@@ -210,7 +219,7 @@ export abstract class BaseController implements BoardHandlers {
     }
     this.view.setPlaying(true);
     try {
-      await this.playEvents(prev, res);
+      await this.playEvents(prev, res, presentedHandDiscards);
     } finally {
       if (!this.dead) this.view.setPlaying(false);
       if (res.state.over) this.outcomePending = false;
@@ -250,7 +259,7 @@ export abstract class BaseController implements BoardHandlers {
   }
 
   /** Play a batch of events one at a time on the OLD board, then re-render. */
-  private async playEvents(prev: GameState, res: ReduceResult): Promise<void> {
+  private async playEvents(prev: GameState, res: ReduceResult, presentedHandDiscards:Set<string>): Promise<void> {
     // Cards that left my hand must disappear from it IMMEDIATELY — seeing a
     // card fly onto the field while its copy still sits in the hand is confusing.
     // (The hand itself only re-renders after the whole batch has played out.)
@@ -434,6 +443,8 @@ export abstract class BaseController implements BoardHandlers {
       for(const c of res.state.players[pl].discard){
         if(!inHand.has(c.uid)||previousDiscard.has(c.uid))continue;
         const n=played.get(c.id)||0;if(n){played.set(c.id,n-1);continue;}
+        // The picker already landed this exact card before submitting the pick.
+        if(pl===this.you&&presentedHandDiscards.has(c.uid))continue;
         await A.discardFromHand(c,sideOf(pl));
       }
     }
@@ -591,7 +602,13 @@ export abstract class BaseController implements BoardHandlers {
       if (this.multiPickerOpen) { this.multiPickerOpen = false; closeOverlay(); } // v42: 시간 초과 자동 폐기 등으로 선택이 끝나면 모달도 닫는다
     }
     if (g.pending && actingSide(g) === this.you) {
-      if(g.pending.reason==='handCap'){this.disposeHandDiscard=installHandDiscard(this.view.root,Number(g.pending.data?.val)||1,uid=>this.submit({type:'pick',uid}));return;}
+      if(g.pending.reason==='handCap'){
+        this.disposeHandDiscard=installHandDiscard(this.view.root,Number(g.pending.data?.val)||1,uid=>{
+          this.presentedHandDiscards.add(uid);
+          this.submit({type:'pick',uid});
+        },()=>this.view.reflowHand());
+        return;
+      }
       if (g.pending.kind === "cardChoice") {
         cardPicker(g.pending.hintJa, effectChoices(g), uid => this.submit({ type: "pick", uid }), !!g.pending.allowCancel);
         return;

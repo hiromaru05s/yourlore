@@ -1,0 +1,45 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "id": "nocturne",
+      "prompt": "Use case: stylized-concept. Production asset: premium fantasy trading card sleeve BACK texture, vertical 2:3 approximate aspect, full-bleed rectangular artwork flat front-facing orthographic, no scene, no mockup, no margins, no text or numbers. Design 01 'Nocturne Atlas': very dark midnight indigo enamel and bookcloth, a beautifully precise celestial astrolabe engraved in aged pale silver, one dominant eight-point compass star in the center, fine concentric astronomical arcs, subtle small constellation pinpoints. Luxurious modern fantasy collectible, controlled ornament, balanced large dark negative space, extremely crisp fine engraved edges, physically believable subtle silver relief and satin highlights, delicate restrained corner detailing. Important motif within central 80%. Symmetric cardback composition, no figures, no letters, no huge glow, no thick gold frame. Highest detail, designed to stay readable at small size. Image should itself be the complete opaque card-back print.",
+      "path": "/Users/hiromaru05s/.codex/generated_images/01a0ef76-a3d1-7c03-a746-b57ef9c29249/exec-961adfc7-9dc0-4592-a45e-3f4c9eb9f279.png"
+    },
+    {
+      "id": "porcelain",
+      "prompt": "Use case: stylized-concept. Production image: complete fantasy TCG card BACK artwork, flat frontal orthographic portrait, full bleed, opaque, no environment, no margins, no text. Exact requested canvas 2048x3200 portrait. 'Porcelain Iris': exquisite ivory-white porcelain with a central sculptural iris flower, translucent mother-of-pearl petals arranged in a precise art-nouveau silhouette, platinum-silver slender stems and veins, quiet pale mineral-blue recessed enamel. A few elegant elongated arch lines, subtle porcelain crazing visible close up, beautifully controlled opalescent and satin highlights. Main iris centered within 80 percent, large clean pale negative space, very delicate narrow perimeter engraving. Distinctive sophisticated collectible design, realistic luxury material study with fantasy craftsmanship, crisp details. Avoid gold filigree clutter, jewels everywhere, lettering, perspective, shadows outside card, neon, icons, collage.",
+      "path": "/Users/hiromaru05s/.codex/generated_images/01a0ef76-a3d1-7c03-a746-b57ef9c29249/exec-19dbe2f3-358b-4e7a-855e-9f70caf3eba0.png"
+    },
+    {
+      "id": "garnet",
+      "prompt": "Use case: stylized-concept. Production image: complete premium fantasy TCG card BACK artwork, full bleed opaque portrait rectangle, flat straight-on orthographic texture, requested 2048x3200. 'Garnet Covenant': rich black cherry lacquer, one beautifully carved garnet-red falcon with swept wings forming a striking long pointed heraldic silhouette, weathered rose bronze inlay, intricate but sparse micro-engraved feathers, a restrained dark crimson gemstone set into the chest. Black-red silk lower field, fine asymmetric upward diagonal bronze inlay behind the falcon, slender elegant perimeter metal tracing. Large negative space, strong single motif readable when tiny, crisp material details. No text, no letters, no numbers, no logos, no floating object, no mockup, no collage, no background outside card, no huge glow, no chunky gold frame. High-end painterly-realistic fantasy collectible craftsmanship.",
+      "path": "/Users/hiromaru05s/.codex/generated_images/01a0ef76-a3d1-7c03-a746-b57ef9c29249/exec-d95deae7-0d1e-4909-be90-14ebe6bda6f2.png"
+    },
+    {
+      "id": "verdigris",
+      "prompt": "Use case: stylized-concept. Make a production fantasy TCG sleeve BACK texture. Full bleed opaque portrait rectangle, flat straight-on orthographic artwork, desired 2048x3200. 'Verdigris Herbarium': botanical illustration engraved in oxidized copper on deep forest-green leather, two elegant asymmetric curling fern fronds framing a single luminescent green seed cabochon, fine fern leaf ribs, subtle embossed leather grain, warm muted copper with verdigris patina in recessed seams. Refined artisan bookbinding with spacious quiet dark green fields, delicate corner leaf engraving and very thin perimeter rules. Bold recognizable botanical silhouette but intricate close-up craft; soft directional material highlights, no external shadow. No text, letters, numbers, collage, environment, mockup, thick frame, giant glow, clutter.",
+      "path": "/Users/hiromaru05s/.codex/generated_images/01a0ef76-a3d1-7c03-a746-b57ef9c29249/exec-5d988c6b-aea0-46c2-a47b-55b086dce3b7.png"
+    },
+    {
+      "id": "amber",
+      "prompt": "Use case: stylized-concept. High-quality full bleed opaque fantasy TCG card BACK artwork, flat front-facing texture, portrait 2048x3200 requested. 'Amber Reliquary': a tall hexagonal honey amber window set into dark walnut and restrained antique brass, within the amber one exquisite miniature ginkgo leaf fossil, warm transparent depth and tiny trapped flecks, architectural Art Deco brass ribs taper into quiet black-brown negative space above and below. Center motif occupies 55 percent, narrow precise corner inlay, tactile dark wood satin finish with visible fine grain. Premium museum object atmosphere, restrained warm light in the amber, crystal-clear close detail, strong legibility small. No lettering, text, numbers, logo, product mockup, perspective, hands, outer scenery, oversized frame, noisy ornaments.",
+      "path": "/Users/hiromaru05s/.codex/generated_images/01a0ef76-a3d1-7c03-a746-b57ef9c29249/exec-0a3b9f0b-4fd5-4505-aacd-6f5db6e52709.png"
+    },
+    {
+      "id": "tidal",
+      "prompt": "Use case: stylized-concept. Production fantasy TCG card BACK texture, full bleed opaque portrait rectangle, flat front view, 2048x3200 requested. 'Tidal Glass': an elegant nautilus shell spiral cut from translucent blue sea glass, silver lamellar fins and sculpted concentric growth lines, rich deep petrol-blue center receding into a pale blue-green nacre edge. Flowing silver waves curve behind the shell into vertical art-nouveau lines, restrained fine silver perimeter, spacious dark teal enamel field. A premium crafted ornamental book cover, realistic glass thickness and satin silver detail, beautiful clear silhouette even small, subtly luminous without neon. Main motif centered within 80 percent. No letters, words, numbers, borders outside the artwork, scene, mockup, hands, collage, chunky frame, confetti or excessive jewels.",
+      "path": "/Users/hiromaru05s/.codex/generated_images/01a0ef76-a3d1-7c03-a746-b57ef9c29249/exec-4dc06fd9-fc9d-41eb-890e-61848511e1ce.png"
+    },
+    {
+      "id": "silverflow",
+      "prompt": "Use case: stylized-concept. Production fantasy TCG animated-material sleeve BASE image. Complete full bleed opaque flat orthographic card-back print, portrait 2048x3200 requested. 'Living Silver': polished blue-black obsidian inlaid with organically branching liquid-silver veins. Central long elegant quill made of silver intaglio feather barbs bends into a flowing S-shaped ribbon of metal ink, its individual fine veins connect into a sparse network of silver rivulets across the black stone. Strong central quill silhouette. Sharply rendered pale silver engraving, matte dark stone voids, blue-grey metallic internal reflections. Quiet generous negative space, thin subtle perimeter inlay. This still artwork will have the silver inlay locally illuminated by a software mask, so keep the silver clean neutral and bright against dark stone, no baked broad glow. Sophisticated physical material, no separate particles, text, numerals, card front, perspective, shadows outside card, background scene, mockup or collage.",
+      "path": "/Users/hiromaru05s/.codex/generated_images/01a0ef76-a3d1-7c03-a746-b57ef9c29249/exec-c44d7b47-95d6-4abe-a597-b34c1b534376.png"
+    },
+    {
+      "id": "emberheart",
+      "prompt": "Use case: stylized-concept. Production fantasy TCG animated-material sleeve BASE image. Full bleed opaque rectangular print, flat straight-on orthographic, portrait 2048x3200 requested. 'Ember Heart': a vertical black obsidian heart-like faceted mineral seed held by four understated warm bronze clasps, fine narrow branching orange ember fissures visible inside the dark mineral and continuing sparsely into the surrounding black ceramic. Central mineral elongated diamond teardrop silhouette, tangible faceted bevels and satin soot-black ceramic, bronze perimeter incisions. Orange luminous lines occupy only a small portion of the image and will be locally animated later; no flames outside the object, no halo. Strong dark negative space, rich physical depth, exquisite subtle metalwork, high-end fantasy collectible art, extremely crisp. No text, lettering, numbers, perspective, hands, environment, mockup, collage, thick gold frame or oversized glow.",
+      "path": "/Users/hiromaru05s/.codex/generated_images/01a0ef76-a3d1-7c03-a746-b57ef9c29249/exec-7bf54683-17aa-4f41-8e46-2aba4fd8fe81.png"
+    }
+  ]
+}

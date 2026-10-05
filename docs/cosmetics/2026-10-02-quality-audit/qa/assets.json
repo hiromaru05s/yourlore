@@ -1,0 +1,98 @@
+[
+  {
+    "id": "nocturne",
+    "native": [
+      1024,
+      1536
+    ],
+    "delivery": [
+      1024,
+      1600
+    ],
+    "bytes": 651374
+  },
+  {
+    "id": "porcelain",
+    "native": [
+      1003,
+      1568
+    ],
+    "delivery": [
+      1024,
+      1600
+    ],
+    "bytes": 394150
+  },
+  {
+    "id": "garnet",
+    "native": [
+      1003,
+      1568
+    ],
+    "delivery": [
+      1024,
+      1600
+    ],
+    "bytes": 471750
+  },
+  {
+    "id": "verdigris",
+    "native": [
+      1003,
+      1568
+    ],
+    "delivery": [
+      1024,
+      1600
+    ],
+    "bytes": 772692
+  },
+  {
+    "id": "amber",
+    "native": [
+      1003,
+      1568
+    ],
+    "delivery": [
+      1024,
+      1600
+    ],
+    "bytes": 512386
+  },
+  {
+    "id": "tidal",
+    "native": [
+      1003,
+      1568
+    ],
+    "delivery": [
+      1024,
+      1600
+    ],
+    "bytes": 550114
+  },
+  {
+    "id": "silverflow",
+    "native": [
+      1003,
+      1568
+    ],
+    "delivery": [
+      1024,
+      1600
+    ],
+    "bytes": 554860
+  },
+  {
+    "id": "emberheart",
+    "native": [
+      1003,
+      1568
+    ],
+    "delivery": [
+      1024,
+      1600
+    ],
+    "bytes": 317628
+  }
+]

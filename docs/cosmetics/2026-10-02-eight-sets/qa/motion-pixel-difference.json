@@ -1,0 +1,30 @@
+[
+  {
+    "set": "silverflow",
+    "side": "self",
+    "changedChannelFraction": 0.03394047619047619,
+    "meanChannelDelta": 0.9860238095238095,
+    "maxChannelDelta": 97
+  },
+  {
+    "set": "silverflow",
+    "side": "opponent",
+    "changedChannelFraction": 0.027271062271062272,
+    "meanChannelDelta": 0.7921611721611722,
+    "maxChannelDelta": 97
+  },
+  {
+    "set": "emberheart",
+    "side": "self",
+    "changedChannelFraction": 0.0045,
+    "meanChannelDelta": 0.0662202380952381,
+    "maxChannelDelta": 65
+  },
+  {
+    "set": "emberheart",
+    "side": "opponent",
+    "changedChannelFraction": 0.0038156288156288155,
+    "meanChannelDelta": 0.055036630036630035,
+    "maxChannelDelta": 66
+  }
+]

@@ -1,0 +1,362 @@
+[
+  {
+    "path": "/cosmetics/atelier-v1/amber/back-low.webp",
+    "bytes": 105320,
+    "sha256": "16f0d70132577a9e9bf7d1ae4a431ddb90446998d055aa502c94ba6b458d6e30"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/amber/back.webp",
+    "bytes": 512386,
+    "sha256": "6cb65ca50e2415cc55e7b593396774cff846c1898cf356fd8e45acb266ef73f4"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/amber/body.webp",
+    "bytes": 68256,
+    "sha256": "861dc586ec3c4ee5f4aa813d4925c6129e074a319931a6ce3001cd01911db568"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/amber/finish-mask.svg",
+    "bytes": 356,
+    "sha256": "2dd009afc5ade3bb886939a52724a707791e54737112f9a50a12d782382bdbb0"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/amber/inlay-mask.webp",
+    "bytes": 3278,
+    "sha256": "d6ebb1a5ba27d179226fd41db2f0b85da330789ebfa9d935cdf0da043758689f"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/amber/lining.webp",
+    "bytes": 323200,
+    "sha256": "7a6a56fae311354caac627af11f793c1e0631cb239ad1564a8ea5c168bb4c0f9"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/amber/surface-normal.webp",
+    "bytes": 75514,
+    "sha256": "3ad50aa21bc55bea28a048ce828bbc8ec968492894d919e14ff47115216295e7"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/amber/surface-roughness.webp",
+    "bytes": 8820,
+    "sha256": "31693fe3fe0329ea8d90628f2f9a8cdc5fe1ade653dcf42a093c9343b2142eee"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/amber/thumbnail.webp",
+    "bytes": 24890,
+    "sha256": "79af4c01c2d23b44522881217a154647d27a4fc1c0446c270a1081650f5b03f1"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/emberheart/back-low.webp",
+    "bytes": 56346,
+    "sha256": "92fd6078f9e3cbe779d1bbea096e44c6811afb17bb4a9cb54dd645185f543d39"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/emberheart/back.webp",
+    "bytes": 317628,
+    "sha256": "8370635b791a03555b35a7f742c4ff9ed70b27292149563c4b7efa9c349b4364"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/emberheart/body.webp",
+    "bytes": 50254,
+    "sha256": "95758165accf5571fd8b8a9a4c2afffff137d038930e8c66044bb3b4d1265745"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/emberheart/finish-mask.svg",
+    "bytes": 356,
+    "sha256": "2dd009afc5ade3bb886939a52724a707791e54737112f9a50a12d782382bdbb0"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/emberheart/inlay-mask.webp",
+    "bytes": 3094,
+    "sha256": "8328feefafcc84b6060416ee0db0639ce5d337e5e33b29159facff0fd35b4fdb"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/emberheart/lining.webp",
+    "bytes": 197872,
+    "sha256": "868e1b12a803b9b14e442b51ffe373d83d4081026ffa87e20beaad90448b9287"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/emberheart/surface-normal.webp",
+    "bytes": 38956,
+    "sha256": "f4ba875cd6d385ee424d16cd2b8420e7782e70e29594a86a7f949bdf95dd0848"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/emberheart/surface-roughness.webp",
+    "bytes": 6852,
+    "sha256": "7e8c72ce8aa83a6cf6a6244c09e4c977f635d7f1885e1c78be371b9348bcc345"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/emberheart/thumbnail.webp",
+    "bytes": 13450,
+    "sha256": "0709fbc485a4526fc815b6188b90e6b75d694c38d21c1fbe8e455a764dd12808"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/garnet/back-low.webp",
+    "bytes": 102466,
+    "sha256": "29fc6d457e69cb1f20ad46afb261acd69cb6b8447099cb61321cfe16362a255b"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/garnet/back.webp",
+    "bytes": 471750,
+    "sha256": "517ae8773e31f5c15fed7f99f9095e053a08d702af812c81a347a221c11eeccd"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/garnet/body.webp",
+    "bytes": 53708,
+    "sha256": "1cec77738147d37b501f2228495537270a2e332136c6b9352b2f9609a0b598b9"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/garnet/finish-mask.svg",
+    "bytes": 356,
+    "sha256": "2dd009afc5ade3bb886939a52724a707791e54737112f9a50a12d782382bdbb0"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/garnet/inlay-mask.webp",
+    "bytes": 3100,
+    "sha256": "d8e57301e8280ecf70ae621a887455074d9a177eea8a64cdbe6023d7f692d8e3"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/garnet/lining.webp",
+    "bytes": 295848,
+    "sha256": "d4af686662af6898701e9d32d5496a919e2f159ea8b073d096565fb14720ccb6"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/garnet/surface-normal.webp",
+    "bytes": 2456,
+    "sha256": "2ad0e3b2ef13949ce4d144ff08a5f7e0d9a9dcb412776bcce81e5876049d44b7"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/garnet/surface-roughness.webp",
+    "bytes": 1116,
+    "sha256": "39318b322c8e4137595132e1e73db2521911fe7b4f63657d9d1416745edb12d0"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/garnet/thumbnail.webp",
+    "bytes": 25026,
+    "sha256": "30621d7b899c706847d592f3b8bb79825050b2bf9f75cdaf97d0e27637875bde"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/nocturne/back-low.webp",
+    "bytes": 131022,
+    "sha256": "5a2d9154c9ec7f489704c379d2101758cdc8ebc05685f898cd38a2cda29fc3e9"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/nocturne/back.webp",
+    "bytes": 651374,
+    "sha256": "d87c8a277b552588f523ac6f7af038a5871d02fa70b15eccc4c0bf1f7b674eba"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/nocturne/body.webp",
+    "bytes": 76534,
+    "sha256": "a5a3315bef07fe63bcca18eed153814ea166b473374b171755750baf7ad15425"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/nocturne/finish-mask.svg",
+    "bytes": 356,
+    "sha256": "2dd009afc5ade3bb886939a52724a707791e54737112f9a50a12d782382bdbb0"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/nocturne/inlay-mask.webp",
+    "bytes": 3452,
+    "sha256": "01b081d6c35bafe6d8feac0ae3d6e62874a43dbc10c75a7858643a64ac37493a"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/nocturne/lining.webp",
+    "bytes": 459358,
+    "sha256": "f6535865c2bee1bf46bd6c68a931deeb211da9d32abe5f5626a905e9cc02f3c7"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/nocturne/surface-normal.webp",
+    "bytes": 75514,
+    "sha256": "3ad50aa21bc55bea28a048ce828bbc8ec968492894d919e14ff47115216295e7"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/nocturne/surface-roughness.webp",
+    "bytes": 8820,
+    "sha256": "31693fe3fe0329ea8d90628f2f9a8cdc5fe1ade653dcf42a093c9343b2142eee"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/nocturne/thumbnail.webp",
+    "bytes": 29352,
+    "sha256": "008ce77bd20505a6d79b3747c7c1e2b94e2356dcc3e1ab9bd521fca9c705c50f"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/porcelain/back-low.webp",
+    "bytes": 81966,
+    "sha256": "968bfb18e5a5f9d0c60a37144d39237c0194d995f8d28849b6bb3357aa3ec492"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/porcelain/back.webp",
+    "bytes": 394150,
+    "sha256": "20b2aa0d7e9f8fe636fba6d82668cfe43bb711109e20679223e4b7f1a49a30af"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/porcelain/body.webp",
+    "bytes": 12742,
+    "sha256": "8b8c345b1fd928144ea592bbbff2969640976d7e0c833a775374c2b6edc87093"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/porcelain/finish-mask.svg",
+    "bytes": 356,
+    "sha256": "2dd009afc5ade3bb886939a52724a707791e54737112f9a50a12d782382bdbb0"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/porcelain/inlay-mask.webp",
+    "bytes": 3436,
+    "sha256": "64333e9526ff4dc50113bc49e6782347fe33ac1d1191a502a945baf4fad3bb06"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/porcelain/lining.webp",
+    "bytes": 263404,
+    "sha256": "3f1b3578dc8d22b243b399fcca221a23f5468783a30e285be74ea27f5428c482"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/porcelain/surface-normal.webp",
+    "bytes": 2456,
+    "sha256": "2ad0e3b2ef13949ce4d144ff08a5f7e0d9a9dcb412776bcce81e5876049d44b7"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/porcelain/surface-roughness.webp",
+    "bytes": 1126,
+    "sha256": "ae166ffeb710681f20505efdd26b89f670a7d93628ab3345f970734bd437d512"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/porcelain/thumbnail.webp",
+    "bytes": 21470,
+    "sha256": "e431697acebf99814d6b5e64507fb7f5f3fecc0087f384309907f3b86c1640f6"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/silverflow/back-low.webp",
+    "bytes": 123082,
+    "sha256": "aeaf9688ef02eb0637854f1b2b08b0d77b95981171cf85db7baa77c91e475d69"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/silverflow/back.webp",
+    "bytes": 554860,
+    "sha256": "05b5af928dac5105f980492ccc0bd6a3d358cf70f434fab56f4a60b11ec0af92"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/silverflow/body.webp",
+    "bytes": 43906,
+    "sha256": "d03f6279c940161b174f46cc4b3d138c0921d58a9e7cf4a5dfc7517245db4d9c"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/silverflow/finish-mask.svg",
+    "bytes": 356,
+    "sha256": "2dd009afc5ade3bb886939a52724a707791e54737112f9a50a12d782382bdbb0"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/silverflow/inlay-mask.webp",
+    "bytes": 3244,
+    "sha256": "3244a256556e4aecb3365545443dda8de3cc900ff74454e68907b4041b7dd8b7"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/silverflow/lining.webp",
+    "bytes": 348874,
+    "sha256": "f1962d3dc967b9b1dfea643d5406730e56d4e806842c39f3f33bec59638c3ee6"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/silverflow/surface-normal.webp",
+    "bytes": 38956,
+    "sha256": "f4ba875cd6d385ee424d16cd2b8420e7782e70e29594a86a7f949bdf95dd0848"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/silverflow/surface-roughness.webp",
+    "bytes": 6852,
+    "sha256": "7e8c72ce8aa83a6cf6a6244c09e4c977f635d7f1885e1c78be371b9348bcc345"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/silverflow/thumbnail.webp",
+    "bytes": 30934,
+    "sha256": "04df38409d7e90776234b0aa6e01903216b1c97c873487b7e5d04aa5cba0db45"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/tidal/back-low.webp",
+    "bytes": 125084,
+    "sha256": "8115ad23a8e431d40c3dd5bf2bedd82ad639bd55cb4a29fe93031040e05917d8"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/tidal/back.webp",
+    "bytes": 550114,
+    "sha256": "8a50801f15d429a5d2ed474be091cb6795c424b220da322d4d557edffd72a995"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/tidal/body.webp",
+    "bytes": 42200,
+    "sha256": "a4ef9ef486f3a723dacbfbf64cd3e2c82600c64c9ba9adfed2521005dc300c77"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/tidal/finish-mask.svg",
+    "bytes": 356,
+    "sha256": "2dd009afc5ade3bb886939a52724a707791e54737112f9a50a12d782382bdbb0"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/tidal/inlay-mask.webp",
+    "bytes": 3490,
+    "sha256": "3ffec83ca6cb3f8333fb417549f51fcbb5a31c8016b7b437895033394de77776"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/tidal/lining.webp",
+    "bytes": 350882,
+    "sha256": "df15cada4d5de949efef951bc5723240c73ec9b7c8418155e4b6779aaf626c54"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/tidal/surface-normal.webp",
+    "bytes": 1414,
+    "sha256": "90f5823e2f34f4b245d15ce28efdbf6c5efd0bd8eb21d96b9f528b601adcb4f4"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/tidal/surface-roughness.webp",
+    "bytes": 596,
+    "sha256": "7080d83350006d595072ca05d96778e8c9f600f32d39f760e6a5be27881de37f"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/tidal/thumbnail.webp",
+    "bytes": 31410,
+    "sha256": "200a8e629f5677cb7eed2ef03cc86ead943826ef722b93d1a482bf8a239f5bd2"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/verdigris/back-low.webp",
+    "bytes": 162414,
+    "sha256": "8ad37d9c0857e3acb6af73286eff4a2d3824341b5874c995215ead68e79646bb"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/verdigris/back.webp",
+    "bytes": 772692,
+    "sha256": "d7c1e430a5d6933ec139b3018d84ac1ea1110200eaf82c5095126c5836763a12"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/verdigris/body.webp",
+    "bytes": 67236,
+    "sha256": "2d27846c3dd154a955149b9f9c82253aaff388a004297097cee3ed626f59ecdb"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/verdigris/finish-mask.svg",
+    "bytes": 356,
+    "sha256": "2dd009afc5ade3bb886939a52724a707791e54737112f9a50a12d782382bdbb0"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/verdigris/inlay-mask.webp",
+    "bytes": 3266,
+    "sha256": "0b688b296de32b0d580f4e060562daf4bf019cfbc718e243d0ea77f3a701ffcc"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/verdigris/lining.webp",
+    "bytes": 465308,
+    "sha256": "f02ddd6756e3d9bc9fa8b67ebd1d236816bc0f960238058c7e7e676c2e4f1c3b"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/verdigris/surface-normal.webp",
+    "bytes": 145074,
+    "sha256": "489d9caba029953ef0a83a90a2c18df487aad5797bce268e65be9a9badd1f058"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/verdigris/surface-roughness.webp",
+    "bytes": 15868,
+    "sha256": "e19ae93a50fdbbb9fcce2b7a7028cf8458371bdb8a626a0b27af70e207b8f330"
+  },
+  {
+    "path": "/cosmetics/atelier-v1/verdigris/thumbnail.webp",
+    "bytes": 32830,
+    "sha256": "a1caed75281bc2743ddace57931b5f54c09ac23eef754f8ed50c6ade4e86e796"
+  }
+]

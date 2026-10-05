@@ -1,0 +1,50 @@
+{
+  "origin": "http://127.0.0.1:5189",
+  "checks": [
+    {
+      "height": 257.125,
+      "total": 36,
+      "visibleRows": 2,
+      "bottom": 604,
+      "navTop": 650,
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "height": 205.875,
+      "total": 36,
+      "visibleRows": 2,
+      "bottom": 500,
+      "navTop": 546,
+      "viewport": {
+        "width": 1024,
+        "height": 600
+      }
+    },
+    {
+      "height": 346,
+      "total": 36,
+      "visibleRows": 2,
+      "bottom": 736,
+      "navTop": 774,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "height": 280.875,
+      "total": 36,
+      "visibleRows": 2,
+      "bottom": 575,
+      "navTop": 613,
+      "viewport": {
+        "width": 375,
+        "height": 667
+      }
+    }
+  ],
+  "errors": []
+}

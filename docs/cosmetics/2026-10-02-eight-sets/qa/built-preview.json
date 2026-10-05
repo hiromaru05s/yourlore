@@ -1,0 +1,12 @@
+{
+  "info": {
+    "theme": "silverflow",
+    "wearer": "opponent",
+    "motion": true,
+    "surfaces": 5,
+    "phase": 1.766500000000001,
+    "textures": 3
+  },
+  "errors": [],
+  "passed": true
+}

@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';import fs from 'node:fs/promises';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
+const origin=process.env.STUDIO_ORIGIN||'http://127.0.0.1:5336',out=process.env.STUDIO_QA_OUT||'/tmp/lore-cosmetic-runtime';await fs.mkdir(out,{recursive:true});const browser=await chromium.launch({channel:'chrome',headless:true}),errors=[],rows=[];
+try{const p=await browser.newPage({viewport:{width:1280,height:720},deviceScaleFactor:2});p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text())});p.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url())});
+ await p.goto(origin+'/cosmetic-studio.html?board=1&runtime=1&set=tidal&polish=1');await p.waitForSelector('[data-scene-ready=true]',{timeout:90000});
+ for(const set of ['nocturne','porcelain','garnet','verdigris','amber','tidal','silverflow','emberheart'])for(const side of ['self','opponent']){
+  await p.evaluate(({set,side})=>atelier.apply({set,side,count:8,dense:false,motion:true}),{set,side});const selector=side==='self'?'#pile-myDeck':'#pile-oppDeck';await p.waitForFunction(({selector,set})=>document.querySelector(selector)?.dataset.atelierMaterial===set,{selector,set});await p.waitForTimeout(250);
+  await p.screenshot({path:`${out}/${set}-${side}.jpg`,type:'jpeg',quality:92});
+  if(['silverflow','emberheart','tidal'].includes(set))for(const action of ['draw','purchase','shuffle']){await p.evaluate(a=>{window.flight=atelier.replay(a)},action);if(action==='draw'){await p.waitForSelector('.draw-stock-back[data-atelier-sleeve]',{timeout:15000});assert.equal(await p.locator('.draw-stock-back').first().getAttribute('data-atelier-sleeve'),set);await p.screenshot({path:`${out}/${set}-${side}-draw.jpg`,type:'jpeg',quality:92});}await p.evaluate(()=>window.flight);assert.equal(await p.locator('.native-draw-layer,.draw-stock-canvas').count(),0);}
+  rows.push({set,side,passed:true});console.log('PASS runtime',set,side);
+ }
+ // Independently equipped furniture and sleeves must not recolor one another.
+ await p.evaluate(()=>{const c=atelier.controller,g=c.state;g.sleeves=['silverflow','emberheart'];g.furnitures=['furniture:porcelain','furniture:verdigris'];c.show(g);});await p.waitForFunction(()=>document.querySelector('#pile-myDeck')?.dataset.atelierMaterial==='porcelain'&&document.querySelector('#pile-oppDeck')?.dataset.atelierMaterial==='verdigris');assert((await p.locator('#pile-myDeck').getAttribute('data-sleeve')).includes('/silverflow/'));
+ for(const [width,height]of[[595,540],[1280,720],[1920,1080],[390,844]]){await p.setViewportSize({width,height});await p.waitForTimeout(400);const c=await p.locator('.duel-objects-3d').evaluate(e=>({width:e.width,height:e.height})),ratio=Math.min(2,Math.sqrt(6000000/(width*height)));assert(Math.abs(c.width-width*ratio)<=1);assert(Math.abs(c.height-height*ratio)<=1);rows.push({viewport:[width,height],canvas:c});}
+ await p.emulateMedia({reducedMotion:'reduce'});await p.setViewportSize({width:1280,height:720});await p.evaluate(()=>atelier.apply({set:'silverflow',side:'both',count:8,dense:false,motion:true}));await p.waitForTimeout(500);await p.evaluate(()=>atelier.replay('draw'));assert.equal(await p.locator('.native-draw-layer,.draw-stock-canvas').count(),0);
+ assert.deepEqual(errors,[]);await fs.writeFile(out+'/runtime-results.json',JSON.stringify({passed:true,rows,errors},null,2));
+}finally{await browser.close();if(errors.length)console.error(errors.slice(0,4));}
