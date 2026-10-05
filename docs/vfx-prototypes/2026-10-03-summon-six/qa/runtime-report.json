@@ -1,0 +1,32 @@
+{
+  "checks": [
+    "side 0: full face contact matrix",
+    "slate renderer mounted",
+    "single source replacement; no old summon actor",
+    "side 0: completes",
+    "exactly one contact callback",
+    "card restored and canvas released",
+    "side 1: full face contact matrix",
+    "slate renderer mounted",
+    "single source replacement; no old summon actor",
+    "side 1: completes",
+    "exactly one contact callback",
+    "card restored and canvas released",
+    "slate renderer mounted",
+    "three concurrent summons",
+    "slate renderer mounted",
+    "cleanup abort",
+    "slate renderer mounted",
+    "cleanup skip",
+    "slate renderer mounted",
+    "cleanup resize",
+    "slate renderer mounted",
+    "cleanup clear",
+    "abort while capturing",
+    "late capture cannot resurrect a cancelled summon",
+    "slate renderer mounted",
+    "hand reveal uses slate and cleans up",
+    "no legacy 3D summon impact events"
+  ],
+  "errors": []
+}
