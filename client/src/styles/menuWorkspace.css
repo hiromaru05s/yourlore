@@ -30,12 +30,16 @@
 .lounge-deck #deckPool{--collection-card-width:clamp(56px,min(9.5vh,calc((100cqh - 108px)*.32)),106px);gap:8px 16px;padding:8px 8px 6px;overflow:auto;flex:1}
 .lounge-deck .deck-pool-detail{padding:2px 8px;min-height:22px}
 /* Search shares one row with type filters on desktop. Count moves to the footer. */
-.lounge-cards .cards{display:grid;grid-template-columns:minmax(0,1fr) minmax(310px,38%);grid-template-rows:42px minmax(0,1fr) 32px}
+.lounge-cards .cards{display:grid;grid-template-columns:minmax(0,1fr) minmax(310px,38%);grid-template-rows:minmax(42px,auto) minmax(0,1fr) 32px;min-width:0}
 .lounge-cards .cards-head{grid-column:2;grid-row:1;min-height:0;padding:0 6px;gap:0;margin:0}
 .lounge-cards .cards-head-r{flex:1;min-width:0;margin:0;gap:8px}
 .lounge-cards .cards-toolbar{grid-column:1;grid-row:1;padding:0;gap:6px;min-width:0}
 .lounge-cards .cards-toolbar .chip{padding:5px 7px;font-size:11px}
-.lounge-cards #grid{grid-column:1/-1;grid-row:2;padding-top:12px}
+.lounge-cards #grid{grid-column:1/-1;grid-row:2;min-width:0;grid-template-columns:repeat(auto-fill,minmax(var(--collection-card-width),1fr));gap:20px 16px;padding:16px 16px 22px;overflow-x:hidden;overflow-y:auto}
+/* Keep the face and its track on the same size token even when shared build
+   chunks load older lounge card rules later. Leave room for protruding badges. */
+.lounge-cards #grid>.card{--cw:var(--collection-card-width);--ch:calc(var(--cw)/.64)}
+.lounge-cards #typeRow{flex-wrap:wrap;overflow:visible}
 .lounge-cards .collection-pager{grid-column:1/-1;grid-row:3;min-height:32px}
 .lounge-cards .cards-count{margin:0;font-size:11px;white-space:nowrap;color:#b6cddd}
 /* Friends: one open roster with a quiet side area for requests. */
@@ -72,7 +76,7 @@
 .lounge-friends :is(.fr-incoming,.fr-outgoing) .fr-row{flex-wrap:wrap;padding:12px 0}
 .lounge-friends :is(.fr-incoming,.fr-outgoing) .fr-actions{margin-left:auto}
 .lounge-friends :is(button,input):focus-visible{outline:2px solid #bdddeb;outline-offset:3px}
-@media(max-width:900px){.lounge-cards .cards{grid-template-columns:minmax(0,1fr);grid-template-rows:38px 36px minmax(0,1fr) 32px}.lounge-cards .cards-head{grid-column:1;grid-row:1}.lounge-cards .cards-toolbar{grid-row:2}.lounge-cards #grid{grid-row:3}.lounge-cards .collection-pager{grid-row:4}.lounge-friends .friends-screen .tut-body{grid-template-columns:minmax(0,1fr) 260px;gap:20px}.lounge-friends .fr-actions{gap:4px}.lounge-friends .fr-roster .fr-row{flex-wrap:wrap}.lounge-friends .fr-roster .fr-actions{margin-left:auto}}
+@media(max-width:900px){.lounge-cards .cards{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(38px,auto) auto minmax(0,1fr) 32px}.lounge-cards .cards-head{grid-column:1;grid-row:1}.lounge-cards .cards-toolbar{grid-row:2}.lounge-cards #grid{grid-row:3}.lounge-cards .collection-pager{grid-row:4}.lounge-friends .friends-screen .tut-body{grid-template-columns:minmax(0,1fr) 260px;gap:20px}.lounge-friends .fr-actions{gap:4px}.lounge-friends .fr-roster .fr-row{flex-wrap:wrap}.lounge-friends .fr-roster .fr-actions{margin-left:auto}}
 @media(max-width:650px){
  .lounge-deck .lounge-content>.deck-screen{padding:4px 6px}
  .lounge-deck .deck-panel{grid-template-columns:58px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;gap:4px 8px}
