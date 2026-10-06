@@ -6,5 +6,14 @@ const toolbar=document.createElement('div');toolbar.style.cssText='position:fixe
 const status=toolbar.querySelector('#status')!,play=toolbar.querySelector<HTMLButtonElement>('#play')!;let fixture:ReturnType<typeof makeFixture>,busy=false;
 function setup(){const side=Number(toolbar.querySelector<HTMLSelectElement>('[aria-label="陣営"]')!.value) as 0|1,card=toolbar.querySelector<HTMLSelectElement>('[aria-label="魔法"]')!.value;fixture=makeFixture({item:card==='S1'?'spell-frame':'A004',card,variant:1,side,outcome:'hit',reduced:false,background:'light'});view.render(structuredClone(fixture.before));view.setHandOpen(false);clearMonsterStates(app);return side;}
 const side=setup();void side;const stop=startBoardLayout();void waitForDuel(app).then(()=>status.textContent='READY');
-play.onclick=async()=>{if(busy)return;busy=true;play.disabled=true;setFxSkip(false);const side=setup();status.textContent='RUNNING';try{const held=await revealSpell(fixture.source,side===0?'me':'opp',fixture.source.quick?'vanish':'discard',undefined,!!fixture.source.quick);if(held)await finishQuickSpell(held,side===0?'me':'opp');view.render(structuredClone(fixture.after));clearMonsterStates(app);status.textContent='COMPLETE';}finally{busy=false;play.disabled=false;}};
+const timing=document.createElement('output');timing.id='timing';timing.style.cssText='position:fixed;bottom:8px;left:12px;z-index:1000;background:#101b29;color:white;padding:8px;font-size:12px';document.body.append(timing);
+play.onclick=async()=>{
+ if(busy)return;busy=true;play.disabled=true;setFxSkip(false);const side=setup();status.textContent='RUNNING';timing.textContent='';
+ const start=performance.now();let first=0,last=0;const phases=new Set<string>();let sample=0;
+ const inspect=()=>{const canvas=document.querySelector<HTMLCanvasElement>('canvas.spell-frame-resonance');if(canvas){if(!first)first=performance.now();phases.add(canvas.dataset.phase??'');}else if(first&&!last)last=performance.now();};
+ const observer=new MutationObserver(inspect);observer.observe(document.body,{childList:true,subtree:true});
+ const tick=()=>{inspect();sample=requestAnimationFrame(tick);};sample=requestAnimationFrame(tick);
+ try{const held=await revealSpell(fixture.source,side===0?'me':'opp',fixture.source.quick?'vanish':'discard',undefined,!!fixture.source.quick);if(held)await finishQuickSpell(held,side===0?'me':'opp');view.render(structuredClone(fixture.after));clearMonsterStates(app);status.textContent='COMPLETE';}
+ finally{inspect();observer.disconnect();cancelAnimationFrame(sample);const report={side,card:fixture.source.id,onsetMs:Math.round(first-start),frameMs:Math.round(last-first),totalMs:Math.round(performance.now()-start),phases:[...phases],overlays:document.querySelectorAll('canvas.spell-frame-resonance').length};timing.textContent=JSON.stringify(report);busy=false;play.disabled=false;}
+};
 toolbar.querySelector<HTMLButtonElement>('#skip')!.onclick=()=>{setFxSkip(true);status.textContent='SKIPPED';};toolbar.querySelectorAll('select').forEach(s=>s.onchange=()=>{if(!busy)setup();});window.addEventListener('pagehide',()=>{setFxSkip(true);stop();view.destroy();},{once:true});

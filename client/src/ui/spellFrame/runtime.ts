@@ -1,5 +1,9 @@
 import {FRAME_DURATION} from './shader';
 import type {FrameScene} from './scene';
+/** Preserve the approved shader timeline while halving gameplay time. */
+export const SPELL_FRAME_RATE=2;
+/** Start fetching during the card reveal; no canvas or GPU resources yet. */
+export function warmSpellFrame(){void import('./scene').catch(()=>{});}
 const active=new Map<HTMLElement,()=>void>();
 export function cancelSpellFrames(){for(const cancel of [...active.values()])cancel();}
 /** Cancellation also settles async loading, before a canvas can become visible. */
@@ -13,7 +17,7 @@ export function playSpellFrame(card:HTMLElement,signal?:AbortSignal):Promise<boo
   const abort=()=>finish(false),hidden=()=>{if(document.hidden)abort();};
   const deadline=setTimeout(abort,6000);
   active.set(card,abort);signal?.addEventListener('abort',abort,{once:true});document.addEventListener('visibilitychange',hidden);window.addEventListener('pagehide',abort);window.addEventListener('resize',abort);
-  const tick=(now:number)=>{if(done)return;if(!card.isConnected||signal?.aborted||document.hidden){abort();return;}try{const elapsed=Math.min(FRAME_DURATION,now-start);scene!.draw(elapsed,reduced);if(elapsed>=FRAME_DURATION)finish(true);else frame=requestAnimationFrame(tick);}catch{abort();}};
+  const tick=(now:number)=>{if(done)return;if(!card.isConnected||signal?.aborted||document.hidden){abort();return;}try{const elapsed=Math.min(FRAME_DURATION,(now-start)*SPELL_FRAME_RATE);scene!.draw(elapsed,reduced);if(elapsed>=FRAME_DURATION)finish(true);else frame=requestAnimationFrame(tick);}catch{abort();}};
   void import('./scene').then(m=>done?null:m.createFrameScene(card)).then(result=>{if(!result)return;if(done){result.dispose();return;}scene=result;start=performance.now();tick(start);}).catch(abort);
  });
 }

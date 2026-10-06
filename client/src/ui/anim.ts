@@ -1,4 +1,4 @@
-import {playSpellFrame,cancelSpellFrames} from './spellFrame/runtime';
+import {playSpellFrame,cancelSpellFrames,warmSpellFrame,SPELL_FRAME_RATE} from './spellFrame/runtime';
 import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {isMimic,focusScale,type MimicId} from './mimic/selection';
 import {playMonster,setMonsterSkip} from './monster/runtime';
@@ -123,7 +123,7 @@ function backEl(side: ViewSide = "me"): HTMLElement {
 
 /** The card takes focus across the screen, then returns to its destination.
  * All waits use the existing fast-forward mechanism; the overlay never takes input. */
-async function focusCard(node: HTMLElement, side: ViewSide, mimicId?:MimicId): Promise<void> {
+async function focusCard(node: HTMLElement, side: ViewSide, mimicId?:MimicId,playbackRate=1): Promise<void> {
   if (fxSkip) return;
   const veil = document.createElement("div"); veil.className = "cast-veil";
   document.body.appendChild(veil);
@@ -144,11 +144,11 @@ async function focusCard(node: HTMLElement, side: ViewSide, mimicId?:MimicId): P
   node.classList.toggle("fx-opp-cast", side === "opp");
   try {
     await raf();
-    node.style.transition = reduced ? "none" : `left .42s cubic-bezier(.16,1,.3,1), top .42s cubic-bezier(.16,1,.3,1), transform .5s cubic-bezier(.16,1,.3,1)`;
+    node.style.transition = reduced ? "none" : `left ${.42/playbackRate}s cubic-bezier(.16,1,.3,1), top ${.42/playbackRate}s cubic-bezier(.16,1,.3,1), transform ${.5/playbackRate}s cubic-bezier(.16,1,.3,1)`;
     node.style.left = `${(innerWidth - w * scale) / 2}px`;
     node.style.top = `${(innerHeight - revealH) / 2 + (mimicId?(mimicId==='MIMIC_KING'||mimicId==='MIMIC_KING2'?25:-10):0)}px`;
     node.style.transform = "perspective(1400px) rotateX(0deg) rotateY(0deg) scale(1)";
-    await wait(reduced ? 120 : side === "opp" ? 640 : 480);
+    await wait((reduced ? 120 : side === "opp" ? 640 : 480)/playbackRate);
   } finally { veil.remove(); node.classList.remove("cast-reveal"); }
 }
 function summonDust(rect: DOMRect): void {
@@ -209,7 +209,8 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   const node = floatAt(cardEl(card, {size:"hand"}), from);
   let held=false;
   try {
-    await focusCard(node, side);
+    if(card.t==='spell'&&!fxSkip)warmSpellFrame();
+    await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:1);
     if(card.t==='spell'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
     if (to && dest === "field" && (card.ench || card.t === "quest")) {
@@ -325,7 +326,8 @@ export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | n
     if(card.quick){
       // The controller owns this face until effect playback (including choices) completes.
       node.dataset.quickPhase='reveal';
-      await focusCard(node,side);
+      if(!fxSkip)warmSpellFrame();
+      await focusCard(node,side,undefined,SPELL_FRAME_RATE);
       if(fxSkip)return null;
       await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
       if(fxSkip)return null;

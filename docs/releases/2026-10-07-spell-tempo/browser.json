@@ -1,0 +1,49 @@
+{
+  "results": [
+    {
+      "side": 0,
+      "card": "S1",
+      "onsetMs": 722,
+      "frameMs": 1667,
+      "totalMs": 3107,
+      "phases": [
+        "ignition",
+        "spread",
+        "settle"
+      ],
+      "overlays": 0
+    },
+    {
+      "side": 1,
+      "card": "QUICK_POISON",
+      "onsetMs": 917,
+      "frameMs": 1628,
+      "totalMs": 6775,
+      "phases": [
+        "",
+        "ignition",
+        "spread",
+        "settle"
+      ],
+      "overlays": 0
+    },
+    {
+      "side": 0,
+      "card": "S1",
+      "onsetMs": 610,
+      "frameMs": 1641,
+      "totalMs": 2836,
+      "phases": [
+        "",
+        "ignition",
+        "spread",
+        "settle"
+      ],
+      "overlays": 0,
+      "viewport": "390x844"
+    }
+  ],
+  "skipRemovedCanvas": true,
+  "errors": [],
+  "boundary": "Local GameView fixture. Initial Vite cold run onset 4184ms/frame 1681ms under host load; warmed runs listed. No authenticated online match."
+}
