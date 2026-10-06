@@ -24,7 +24,7 @@ export async function warmOpening():Promise<void>{
   })]);
 }
 
-/** Approved Caustic → Declaration. Turn banners remain owned by the controller. */
+/** Approved Caustic → Lumen Weave. Turn banners remain owned by the controller. */
 export async function playDuelOpening(o:OpeningOptions):Promise<void>{
   if(o.signal.aborted)return;
   const game=o.root.querySelector<HTMLElement>('.game');
