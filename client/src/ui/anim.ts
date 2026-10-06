@@ -6,7 +6,6 @@ import {summonPlacement} from './summon/runtime';
 import {foldQuestIntoSlot,nativeQuestGhost} from './questFold';
 import {getManaFormation} from './manaFormationPreview';
 import {passiveIcon} from './passiveIcon';
-import {animateSeeker} from './seekerAnimation';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
 import type {HandLayout} from './handGeometry';
 import {mountDuelOutcome,cancelDuelOutcome} from './duelOutcome';
@@ -387,15 +386,8 @@ export function floatNum(anchor: Element | null, text: string, kind: "dmg" | "he
 }
 
 export function hpFeedback(side: ViewSide, kind: "dmg" | "heal", amount: number): void {
-  if(amount>0&&!fxSkip)animateSeeker(side,kind==='dmg'?'hurt':'heal');
-  if (kind === "dmg" && amount > 0) {
-    const portrait = document.getElementById(side === "me" ? "portraitMe" : "portraitOpp");
-    portrait?.classList.remove("is-hurt");
-    if (portrait) { void portrait.offsetWidth; portrait.classList.add("is-hurt"); setTimeout(() => portrait.classList.remove("is-hurt"), 680); }
-  }
   const bar = document.getElementById("hpbar-" + side);
   const num = document.getElementById("hp-" + side);
-  if(kind==='heal'&&amount>0&&!fxSkip)playBiblionFx('heal',()=>document.querySelector(side==='me'?'#portraitMe .pt-ring':'#portraitOpp .pt-ring')?.getBoundingClientRect()??null);
   if (bar && kind==='dmg') { bar.classList.add("shake"); setTimeout(() => bar.classList.remove("shake"), 400); }
   if (num) { num.classList.add(kind === "dmg" ? "hp-hit" : "hp-heal"); setTimeout(() => num.classList.remove("hp-hit", "hp-heal"), 450); }
   if(kind==='dmg')floatNum(bar || num, "-" + amount, kind);
@@ -420,7 +412,7 @@ export function lunge(uid: string, dir: "up" | "down"): void {
 export async function attackStrike(uid:string,targetUid:string|null,defender:ViewSide,onImpact?:()=>void,exhaust=true,contactDamage=1):Promise<void>{
   const source=byUid(uid),target=targetUid?byUid(targetUid):document.querySelector<HTMLElement>(defender==='me'?'#portraitMe .avatar':'#portraitOpp .avatar');
   if(!source||!target||fxSkip)return;
-  animateSeeker(defender==='me'?'opp':'me','attack');sfx('attack');
+  sfx('attack');
   await boardMotionScope(signal=>playMonster(source,'attack',{target,signal,exhaust,side:defender==='opp'?1:-1,onImpact:()=>{if(contactDamage>0)sfx(targetUid?'impact':'facehit');onImpact?.();}}));
   if(exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');source.style.filter='grayscale(1) brightness(.57)';}
 }
@@ -788,7 +780,6 @@ function gainLabel(anchor: DOMRect, text: string, cls: string): HTMLElement {
 /** One shared impact: readout, added crystals, refraction and sound land together. */
 export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
   if(amount<=0||fxSkip||document.hidden)return;
-  animateSeeker(side,'mana');
   const el=document.querySelector<HTMLElement>(`#portrait${side==='me'?'Me':'Opp'} .pt-mana`);if(!el)return;
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){sfx('mana');return;}
   const start=performance.now(),fromMax=Number(el.dataset.previousMaximum??el.dataset.maximum),fromMana=Number(el.dataset.previousMana??el.dataset.mana);
@@ -822,7 +813,6 @@ export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
 
 /** Rich "HP increased" celebration around the HP bar (~2s). */
 export async function maxHpSurge(side: ViewSide, amount: number): Promise<void> {
-  if(amount>0&&!fxSkip)animateSeeker(side,'heal');
   const bar = document.getElementById("hpbar-" + side);
   if (!bar) return;
   const r = bar.getBoundingClientRect();

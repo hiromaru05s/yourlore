@@ -1,5 +1,4 @@
 import {installHandDiscard} from '../ui/handDiscard';
-import {animateSeeker} from '../ui/seekerAnimation';
 import {prepareStateArtwork} from '../ui/stateArtwork';
 import {captureHandLayout,arrivingHandUids} from '../ui/handGeometry';
 import {playDuelOpening,warmOpening} from "../ui/duelOpeningDirector";
@@ -496,7 +495,6 @@ export abstract class BaseController implements BoardHandlers {
       draws[1-this.you]>0?captureHandLayout(document.getElementById('oppHand')):undefined];
     this.view.render(res.state);
     for(const gain of manaGains)effectFinishes.push(A.manaSurge(gain.side,gain.amount));
-    for(const pl of [0,1] as Side[])if(res.state.players[pl].mana>prev.players[pl].mana&&!manaGains.some(g=>g.side===sideOf(pl)))animateSeeker(sideOf(pl),'mana');
     // ghosts overlap the freshly-rendered real cards — drop them next frame
     requestAnimationFrame(() => {ghosts.forEach((g) => g.el.remove());spellGhosts.forEach(g=>g.remove());});
     await Promise.all(([0, 1] as Side[]).map(player => draws[player] > 0

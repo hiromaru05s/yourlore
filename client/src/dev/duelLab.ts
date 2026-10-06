@@ -1,5 +1,4 @@
 import {mountTurnLightBoardLab} from './turnLightBoardLab';
-import {animateSeeker} from '../ui/seekerAnimation';
 import "../styles/reading-board.css";
 /// <reference types="vite/client" />
 /** Development-only visual fixture. Not an entry point of the production build. */
@@ -85,7 +84,6 @@ if (import.meta.env.DEV) {
       // Render both changes once, so simultaneous effects keep connected anchors.
       render();await Promise.all(sides.map((s,i)=>manaSurge(s?'opp':'me',amounts[i])));
     };
-    for(const side of ['me','opp'] as const)for(const action of ['idle','hurt','attack','mana','heal'] as const)add(`${side} ${action}`,()=>animateSeeker(side,action));
     add('マナ増加',()=>gainMana(0));add('相手マナ増加',()=>gainMana(1));
     if(new URLSearchParams(location.search).has('mana'))mountManaBoardLab(panel,gainMana);
     add('演出スキップ',()=>{setFxSkip(true);setFxSkip(false);});

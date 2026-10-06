@@ -1,0 +1,25 @@
+{
+  "samples": 304,
+  "changes": [],
+  "checks": [
+    "idle 4.5 seconds",
+    "me hurt/heal/attack/mana/rerender",
+    "opp hurt/heal/attack/mana/rerender"
+  ],
+  "portraits": [
+    {
+      "sameNode": true,
+      "frame": "0.00",
+      "animation": "static",
+      "visible": true
+    },
+    {
+      "sameNode": true,
+      "frame": "0.00",
+      "animation": "static",
+      "visible": true
+    }
+  ],
+  "actionAssets": [],
+  "errors": []
+}
