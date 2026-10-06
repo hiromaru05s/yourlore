@@ -14,3 +14,11 @@
 - ローカルGameViewで連続再生、相手クイック、390×844、途中中断を確認。実測発光時間1628–1667ms、残存canvas 0、console error 0。詳細はbrowser.json。
 - 初回のVite開発用コールド読み込みでは開始4184ms（端末負荷・開発モジュール取得を含む）。開始待ちの設定値とブラウザ実測は別物として記録。公開ビルドの全体テスト・配信一致は公開後に追記。
 - 認証済みオンライン対戦は今回の検証範囲外。
+
+## ステージング公開
+
+- source: `4eeabe2b4f1472dbab05f26e12e948d3a97ccb47`
+- Worker version: `5cb9dac2-ba9b-4827-822d-32b34b7e85e0` / `lore-server-staging`
+- deploy-guardの独立コミットスナップショットで型チェック・54/54テスト・ビルドを完了して公開。
+- index、全JS/CSSチャンク、魔法フレーム画像の39ファイルでSHA-256配信一致。
+- 公開後の未ログイン画面表示とconsole error 0を確認（staging.jpg）。
