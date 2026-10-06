@@ -1,0 +1,22 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "assets": 40,
+  "samples": 227,
+  "changes": 0,
+  "portraits": [
+    {
+      "animation": "static",
+      "action": "idle",
+      "frame": "0.00"
+    },
+    {
+      "animation": "static",
+      "action": "idle",
+      "frame": "0.00"
+    }
+  ],
+  "actionAssets": [],
+  "errors": [],
+  "botAuthApiFixture": true,
+  "authenticatedOnlineMatch": false
+}
