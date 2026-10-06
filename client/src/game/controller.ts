@@ -493,7 +493,9 @@ export abstract class BaseController implements BoardHandlers {
     }
     const handLayouts=[draws[this.you]>0?captureHandLayout(document.getElementById('hand')):undefined,
       draws[1-this.you]>0?captureHandLayout(document.getElementById('oppHand')):undefined];
-    this.view.render(res.state);
+    // Stat animations belong to this batch too: automatic follow-ups must not
+    // replace their source cards before all targets finish their shared motion.
+    effectFinishes.push(this.view.render(res.state));
     for(const gain of manaGains)effectFinishes.push(A.manaSurge(gain.side,gain.amount));
     // ghosts overlap the freshly-rendered real cards — drop them next frame
     requestAnimationFrame(() => {ghosts.forEach((g) => g.el.remove());spellGhosts.forEach(g=>g.remove());});
