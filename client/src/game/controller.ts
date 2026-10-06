@@ -59,7 +59,6 @@ export abstract class BaseController implements BoardHandlers {
   protected ranked = false;
   private rankPresentation = new RankPresentation();
   private winShown = false;
-  private outcomePlayed = false;
   private outcomePending = false;
   private dead = false;
   private queue: Promise<void> = Promise.resolve();
@@ -180,7 +179,7 @@ export abstract class BaseController implements BoardHandlers {
       presentedHandDiscards.add(uid);this.presentedHandDiscards.delete(uid);
     }
     if(res.state.turn!==prev.turn||res.state.over)this.presentedHandDiscards.clear();
-    if (animate && res.state.over && res.state.winner != null && !this.outcomePlayed) this.outcomePending = true;
+    if (animate && res.state.over && res.state.winner != null) this.outcomePending = true;
     if(res.state.opening)this.serverOffset=Date.now()-res.state.opening.serverNow;
     if(res.state.over||res.state.turn>1)this.openingAbort.abort();
     this.view.syncTurn(res.state);
@@ -279,7 +278,6 @@ export abstract class BaseController implements BoardHandlers {
     const fieldCount: [number, number] = [prev.players[0].field.length, prev.players[1].field.length];
     const hpNow: [number, number] = [prev.players[0].hp, prev.players[1].hp];
     const draws = [0, 0];
-    let lastKill: { srcKo?: string; srcJa?: string } | null = null;
     const diceDone = new Set<number>(); // dice events already animated (pre-rolled ahead of a result popup)
 
     for (let i = 0; i < events.length; i++) {
@@ -353,7 +351,6 @@ export abstract class BaseController implements BoardHandlers {
           hpNow[e.player] -= e.amount;
           A.hpFeedback(sideOf(e.player), "dmg", e.amount);
           A.hpBarSet(sideOf(e.player), hpNow[e.player]);
-          if (e.srcKo) lastKill = { srcKo: e.srcKo, srcJa: e.srcJa };
           await wait(140);
           break;
         }
@@ -511,17 +508,6 @@ export abstract class BaseController implements BoardHandlers {
     }
 
     await Promise.all(effectFinishes);
-
-    // ---- death sequence: HP orb shatters + cause of death, before the result modal ----
-    if (res.state.over && res.state.winner != null && !this.winShown && !this.outcomePlayed) {
-      const won = res.state.winner === this.you;
-      const loser = (1 - res.state.winner) as Side;
-      const cause = lastKill ? (getLang() === "ja" ? lastKill.srcJa ?? lastKill.srcKo : getLang() === "en" ? logToEn(lastKill.srcKo ?? "") : lastKill.srcKo) : null;
-      await wait(250);
-      if (this.dead) return;
-      this.outcomePlayed = true;
-      await A.deathShatter(sideOf(loser), won, this.stripHtml(cause ?? "") || null);
-    }
   }
 
   /** Plain-text log lines describing the effect right after events[idx] (for result popups). */
@@ -890,7 +876,7 @@ export abstract class BaseController implements BoardHandlers {
     if (this.winShown || !this.state.over || this.outcomePending) return;
     this.winShown = true;
     const won: boolean | null = this.state.winner == null ? null : this.state.winner === this.you;
-    if (!this.outcomePlayed) sfx(won===null ? "drawGame" : won ? "win" : "lose");
+    sfx(won===null ? "drawGame" : won ? "win" : "lose");
     // bot games are client-local — report the result for analytics (online games are recorded server-side)
     if (this.state.mode === "bot") void api.trackBot(won);
     aCapture("game_end", { mode: this.state.mode, won, turns: this.state.turn });
