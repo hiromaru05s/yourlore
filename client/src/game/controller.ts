@@ -1,3 +1,4 @@
+import {persistentShelfExits} from './shelfExits';
 import {installHandDiscard} from '../ui/handDiscard';
 import {prepareStateArtwork} from '../ui/stateArtwork';
 import {captureHandLayout,arrivingHandUids} from '../ui/handGeometry';
@@ -320,10 +321,11 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "destroy": {
           const gh = ghosts.get(e.uid);
+          const shelved=res.state.players[e.player].discard.some(c=>c.uid===e.uid);
           const exiled=res.state.players[e.player].removed?.find(c=>c.uid===e.uid);
           if(exiled){await (gh?A.ghostDie(gh.el,gh.side,true):A.destroyAnim(e.uid,sideOf(e.player),true));if(gh&&!gh.el.closest(".zone-mon"))gh.el.remove();ghosts.delete(e.uid);}
-          else if (gh) { await A.ghostDie(gh.el, gh.side); ghosts.delete(e.uid); }
-          else await A.destroyAnim(e.uid, sideOf(e.player));
+          else if (gh) { await A.ghostDie(gh.el, gh.side,false,shelved); ghosts.delete(e.uid); }
+          else await A.destroyAnim(e.uid, sideOf(e.player),false,shelved);
           releaseMonster(e.uid);
           fieldCount[e.player] = Math.max(0, fieldCount[e.player] - 1);
           break;
@@ -429,6 +431,12 @@ export abstract class BaseController implements BoardHandlers {
           break; // log / turnHeader / win / needTarget — no board animation
       }
     }
+
+    // Expiry and removal of public spells/quests often emit logs rather than destroy.
+    await Promise.all(persistentShelfExits(prev,res.state,events).map(async({player,card})=>{
+      if(!A.isFxSkipped())sfx('death');
+      await A.destroyAnim(card.uid,sideOf(player));
+    }));
 
     // Overflow picks emit logs only; animate the public zone delta before commit.
     for(const pl of [0,1] as Side[]){

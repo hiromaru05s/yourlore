@@ -54,7 +54,8 @@
     "tests/opening-approved.mjs",
     "tests/mimic-approved.mjs",
     "tests/slate-summon.mjs",
-    "tests/spell-frame.mjs"
+    "tests/spell-frame.mjs",
+    "tests/mana-destruction.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
