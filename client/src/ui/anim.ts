@@ -1,4 +1,5 @@
 import type {ElementalEvent,Playback} from './elemental/runtime';
+import {flyPersistentIntoSlot} from './persistentFlight';
 import {playSpellFrame,cancelSpellFrames,warmSpellFrame,SPELL_FRAME_RATE} from './spellFrame/runtime';
 import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {isMimic,focusScale,type MimicId} from './mimic/selection';
@@ -210,9 +211,10 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   const node = floatAt(cardEl(card, {size:"hand"}), from);
   let held=false;
   try {
-    if(card.t==='spell'&&!fxSkip)warmSpellFrame();
+    const persistent=dest==='field'&&!!card.ench;
+    if(card.t==='spell'&&!persistent&&!fxSkip)warmSpellFrame();
     await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:1);
-    if(card.t==='spell'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
+    if(card.t==='spell'&&!persistent&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
     if (to && dest === "field" && (card.ench || card.t === "quest")) {
       const zone=document.querySelector(side==='me'?'#meRow .zone-st':'#oppRow .zone-st');
@@ -226,9 +228,10 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
           if(!target.isConnected)return null;
           return nativeQuestGhost(target,face);
         }
-        const face=await flyIntoSlot(node,target,enchantmentTile(card,duration));
-        if(!fxSkip)playBiblionFx('enchant-place',face);
-        return face;
+        const face=enchantmentTile(card,duration);
+        if(!fxSkip&&await boardMotionScope(signal=>flyPersistentIntoSlot(node,target,face,signal),6500))return face.parentElement;
+        if(!target.isConnected)return null;
+        return nativeQuestGhost(target,face);
       }
     } else if (dest === "discard") {if(deferVanish&&!fxSkip){await parkQuickSpell(node,side);held=true;return node;}await landOnShelf(node,side);}
     else if(dest === "vanish") {
