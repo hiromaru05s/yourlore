@@ -1,3 +1,4 @@
+import { playIntent, needsCastReview, targetOwner } from '../shared/playIntent';
 import {playStatusGrant,warmStatusGrants} from '../ui/statusGrant/runtime';
 import { botNpc, pickNpcDeck } from "../shared/botNpcs";
 import {synergyTier} from '../ui/tribePresentation/selection';
@@ -27,7 +28,7 @@ import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog, logToText } from "../ui/log";
 import * as A from "../ui/anim";
-import { cardPicker, cardPickerMulti, confirmDialog, treasureModal, winModal, closeOverlay, closeTreasureNotices } from "../ui/modal";
+import { reviewCast, cardPicker, cardPickerMulti, confirmDialog, treasureModal, winModal, closeOverlay, closeTreasureNotices } from "../ui/modal";
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { sfx, stopSounds } from "../ui/sound";
@@ -130,10 +131,25 @@ export abstract class BaseController implements BoardHandlers {
   // ---- BoardHandlers ----
   // Hand plays are looked up by uid (not index): the on-screen hand can be a
   // batch behind the logical state, and uids stay correct where indices drift.
-  onPlay(uid: string) {
+  private castReviewState: GameState | null = null;
+  async onPlay(uid: string) {
     this.fastForward();
-    const idx = this.state.players[this.you].hand.findIndex((c) => c.uid === uid);
-    if (idx >= 0) this.submit({ type: "play", idx });
+    const before=this.state;
+    if(this.dead || before.over || before.pending || before.cur!==this.you || this.castReviewState)return;
+    const idx=before.players[this.you].hand.findIndex(c=>c.uid===uid),card=before.players[this.you].hand[idx];
+    if(!card)return;
+    if(needsCastReview(before,this.you,card)) {
+      this.castReviewState=before;
+      const plan=playIntent(before,this.you,card);
+      const targets=await reviewCast(before,this.you,card,plan);
+      this.castReviewState=null;
+      if(targets===null || this.dead || this.state!==before)return;
+      this.submit({type:'play',idx,sourceUid:uid,...(plan?{targets}:{})});
+    } else this.submit({type:'play',idx,sourceUid:uid});
+  }
+  private choiceOwner(g:GameState,uid:string):string {
+    const owner=targetOwner(g,uid);if(owner===null)return '';
+    return getLang()==='ja'?(owner===this.you?'自分':'相手'):getLang()==='ko'?(owner===this.you?'자신':'상대'):(owner===this.you?'You':'Opponent');
   }
   onBlockedPlay(uid: string) {
     const g = this.state; if (!g || g.over) return;
@@ -154,9 +170,23 @@ export abstract class BaseController implements BoardHandlers {
   }
   onBlockedAttack() { this.cantPlayToast(t("attack.block.guarded")); }
   onReorder(from: number, to: number) { this.fastForward(); this.submit({ type: "reorder", from, to }); }
-  onChooseTarget(uid: string | null) { this.fastForward(); this.submit({ type: this.state.pending?.kind === "seek" || this.state.pending?.kind === "recall" ? "pick" : "chooseTarget", uid } as Action); }
-  onBuyMarket(i: number) { this.fastForward(); this.submit({ type: "buyMarket", i }); }
-  onBuySupply(i: number) { this.fastForward(); this.submit({ type: "buySupply", i }); }
+  async onChooseTarget(uid: string | null) {
+    this.fastForward();const before=this.state;
+    if(uid!==null && before.pending?.kind==='oppMon' && before.pending.reason!=='attack' && targetOwner(before,uid)===this.you) {
+      const yes=await confirmDialog({title:getLang()==='ja'?'自分のモンスターを対象にします':getLang()==='ko'?'자신의 몬스터를 대상으로 합니다':'Target your own monster',confirm:t('picker.confirm'),cancel:t('common.cancel'),danger:true});
+      if(!yes||this.dead||this.state!==before)return;
+    }
+    this.submit({ type: before.pending?.kind === "seek" || before.pending?.kind === "recall" ? "pick" : "chooseTarget", uid } as Action);
+  }
+  onBuyMarket(i: number) { void this.reviewPurchase('buyMarket',i); }
+  onBuySupply(i: number) { void this.reviewPurchase('buySupply',i); }
+  private async reviewPurchase(type:'buyMarket'|'buySupply',i:number) {
+    this.fastForward();const before=this.state;
+    if(this.dead||before.over||before.pending||before.cur!==this.you||this.castReviewState)return;
+    const c=type==='buyMarket'?before.market[i]:before.players[this.you].supply[i];
+    if(c?.quick){this.castReviewState=before;const result=await reviewCast(before,this.you,c,null,true);this.castReviewState=null;if(result===null||this.dead||this.state!==before)return;}
+    this.submit({type,i});
+  }
   onRefresh() { this.fastForward(); this.submit({ type: "refresh" }); }
   onEndTurn() {
     // 연타 가드 — 빠른 더블/트리플 클릭이 (봇 턴이 순식간에 끝난 뒤) 방금 시작된
@@ -191,6 +221,7 @@ export abstract class BaseController implements BoardHandlers {
     if(res.state.over||res.state.turn>1)this.openingAbort.abort();
     this.view.syncTurn(res.state);
     this.state = res.state; // logical state advances immediately (input guards etc.)
+    if(this.castReviewState && this.castReviewState!==this.state && document.querySelector(".cast-review"))closeOverlay();
     const gen = ++this.fxGen;
     this.queue = this.queue
       .then(() => this.playResult(prev, res, animate, gen, presentedHandDiscards))
@@ -649,6 +680,7 @@ export abstract class BaseController implements BoardHandlers {
     if (res.state !== this.state) return; // a newer batch is queued — let it drive follow-ups
     this.disposeHandDiscard?.();this.disposeHandDiscard=undefined;
     const g = this.state;
+    if(this.castReviewState && this.castReviewState!==g && document.querySelector('.cast-review'))closeOverlay();
     if (g.over) { this.showWin(); return; }
     // 다중 선택 pending (대숙청 purge / 흑룡 oppRmz / 신수 oppBoard) — 모달에서 한 번에
     // 고른 뒤 1장씩 순차 제출한다 (엔진 프로토콜은 그대로 1장씩 pick)
@@ -666,7 +698,8 @@ export abstract class BaseController implements BoardHandlers {
         return;
       }
       if (g.pending.kind === "cardChoice") {
-        cardPicker(g.pending.hintJa, effectChoices(g), uid => this.submit({ type: "pick", uid }), !!g.pending.allowCancel);
+        const pending=g.pending;
+        cardPicker(getLang()==='ja'?pending.hintJa:getLang()==='en'?logToEn(pending.hint):pending.hint, effectChoices(g), uid => {if(this.state===g)this.submit({ type: "pick", uid });}, !!pending.allowCancel, {confirm:true,label:uid=>this.choiceOwner(g,uid)});
         return;
       }
       if (multiKind) {
@@ -684,7 +717,7 @@ export abstract class BaseController implements BoardHandlers {
         if (g.pending.kind === "purge") {
           // 시련의 영역(trialExile): 묘지에서만 · 리프레시: 패에서만
           const zone = g.pending.data?.zone;
-          pool = (zone === "hand" ? [...me.hand] : zone === "discard" ? [...me.discard] : [...me.deck, ...me.discard]).sort((a, b) => a.cost - b.cost);
+          pool = (zone === "hand" ? [...me.hand] : zone === "discard" ? [...me.discard] : [...me.deck, ...me.discard]).filter(c=>handCap||!hasPassive(c,"relic")).sort((a, b) => a.cost - b.cost);
         }
         else if (g.pending.kind === "oppRmz") pool = [...(opp.removed ?? [])].sort((a, b) => a.cost - b.cost);
         else { // oppBoard: 상대 몬스터(아우라 제외) + 세트 함정(뒷면) + 영구마법 · 필터: noMon(함정·영구마법만) / trapOnly / enchOnly · anySide면 내 필드도 대상
@@ -712,7 +745,7 @@ export abstract class BaseController implements BoardHandlers {
           if (!uids.length) { if (!handCap) this.submit({ type: "pick", uid: null }); else this.afterApply({ state: this.state, events: [] }); return; } // 아무것도 안 고름 = 취소 (handCap은 다시 묻는다)
           this.purgePicks = uids.slice(1);
           this.submit({ type: "pick", uid: uids[0] });
-        }, { exact: handCap });
+        }, { exact: handCap, label:uid=>this.choiceOwner(g,uid) });
         return;
       }
       if (g.pending.kind === "giantShop") {
@@ -728,7 +761,7 @@ export abstract class BaseController implements BoardHandlers {
           : ids.filter((id) => defOf(id) && (free || (defOf(id).cost <= me.mana && purchaseAllowed(g, me, { ...defOf(id), uid: id })))).map((id) => ({ uid: id, ...defOf(id) }));
         const hint = getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint;
         if (!pool.length) { this.submit({ type: "pick", uid: null }); return; }
-        cardPicker(hint, pool, (uid) => this.submit({ type: "pick", uid }));
+        cardPicker(hint, pool, (uid) => {if(this.state===g)this.submit({ type: "pick", uid });},g.pending.allowCancel,{confirm:true});
         return;
       }
       if (g.pending.kind === "reroll") {

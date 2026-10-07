@@ -1,14 +1,16 @@
+import { buyCost, playCost } from '../shared/engine';
+import { automaticCastTargets, targetOwner, type PlayIntent } from '../shared/playIntent';
 import {outcomeCrest} from './duelOutcome';
 // ============================================================
 // LORE — overlays: generic modal, confirm (surrender), win,
 // treasure reveal, and the seek/recall card picker.
 // ============================================================
-import type { CardInst } from "../shared/types";
+import type { CardInst, GameState, Side } from "../shared/types";
 import { attachDuelClock } from "./duelClock";
 import { cardEl } from "./cardView";
 import { bindZoom } from "./anim";
 import { TRIBES } from "../shared/cards";
-import { t, getLang } from "../i18n";
+import { t, getLang, cardName, cardText } from "../i18n";
 
 let root: HTMLElement | null = null;
 let returnFocus:HTMLElement|null=null;
@@ -196,21 +198,29 @@ export function showControlsHelp(): void {
 }
 
 /** Seek/Recall picker. Calls onPick with chosen uid (or null on cancel). */
-export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string | null) => void, allowCancel = true): void {
+export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string | null) => void, allowCancel = true, opts: { confirm?: boolean; label?: (uid:string)=>string } = {}): void {
   const m = document.createElement("div");
   m.className = "modal picker-modal"; m.style.maxWidth = "720px";
   m.innerHTML = `<h2 style="font-size:14px">${title}</h2><div class="picker-grid" style="display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:16px 0;max-height:54vh;overflow:auto"></div><div class="modal-row"></div>`;
   const grid = m.querySelector(".picker-grid")!;
+  let selected: string | null = null;
+  const ok = document.createElement('button'); ok.className='btn btn-gold'; ok.textContent=t('picker.confirm'); ok.disabled=true;
+  ok.onclick=()=>{if(selected){closeOverlay();onPick(selected);}};
   pool.forEach((c, i) => {
     const card = cardEl(c, { playable: true, lazyArt: i });
-    card.onclick = () => { closeOverlay(); onPick(c.uid); };
+    card.onclick = () => {
+      if(!opts.confirm){closeOverlay();onPick(c.uid);return;}
+      selected=c.uid;grid.querySelectorAll('.is-picked').forEach(el=>el.classList.remove('is-picked'));card.classList.add('is-picked');ok.disabled=false;
+    };
+    if(opts.label){const label=document.createElement('div');label.textContent=opts.label(c.uid);label.className='picker-owner';const wrap=document.createElement('div');wrap.append(label,card);grid.append(wrap);}
     bindZoom(card, c); // 우클릭 / 길게 누르면 확대
-    grid.appendChild(card);
+    if(!opts.label) grid.appendChild(card);
   });
+  if(opts.confirm) m.querySelector(".modal-row")!.appendChild(ok);
   const cancel = document.createElement("button");
   cancel.className = "btn btn-ghost"; cancel.textContent = t("common.cancel");
   cancel.onclick = () => { closeOverlay(); onPick(null); };
-  if (allowCancel) m.querySelector(".modal-row")!.appendChild(cancel);
+  if (allowCancel) { m.querySelector(".modal-row")!.appendChild(cancel); m.addEventListener("keydown",e=>{if(e.key==="Escape")cancel.click();}); }
   mount(m);
 }
 
@@ -220,7 +230,7 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
  * submits them to the engine one at a time (the protocol is unchanged).
  */
 /** opts.exact (v42 손패 이월): 정확히 max장 골라야 확정 가능 · 취소 버튼 없음 */
-export function cardPickerMulti(title: string, pool: CardInst[], max: number, onDone: (uids: string[]) => void, opts: { exact?: boolean } = {}): void {
+export function cardPickerMulti(title: string, pool: CardInst[], max: number, onDone: (uids: string[]) => void, opts: { exact?: boolean; label?: (uid:string)=>string } = {}): void {
   const m = document.createElement("div");
   m.className = "modal picker-modal"; m.style.maxWidth = "720px";
   m.innerHTML =
@@ -245,7 +255,7 @@ export function cardPickerMulti(title: string, pool: CardInst[], max: number, on
       paint();
     };
     bindZoom(card, c); // 우클릭 / 길게 누르면 확대
-    grid.appendChild(card);
+    if(opts.label){const wrap=document.createElement('div'),label=document.createElement('div');label.textContent=opts.label(c.uid);label.className='picker-owner';wrap.append(label,card);grid.append(wrap);}else grid.appendChild(card);
   });
   const ok = document.createElement("button");
   ok.className = "btn btn-gold";
@@ -254,6 +264,7 @@ export function cardPickerMulti(title: string, pool: CardInst[], max: number, on
   cancel.className = "btn btn-ghost"; cancel.textContent = t("common.cancel");
   cancel.onclick = () => { closeOverlay(); onDone([]); };
   if (opts.exact) m.querySelector(".modal-row")!.append(ok); else m.querySelector(".modal-row")!.append(ok, cancel);
+  if(!opts.exact)m.addEventListener("keydown",e=>{if(e.key==="Escape")cancel.click();});
   paint();
   mount(m);
 }
@@ -300,4 +311,58 @@ export function deckViewer(title: string, composition: CardInst[], remaining: Ca
   close.onclick = () => closeOverlay();
   m.querySelector(".modal-row")!.appendChild(close);
   mount(m);
+}
+
+
+/** Local pre-cast review. Closing/replacing the dialog is a cancellation, not a
+ * game action. Choices are sent together with the cast only after confirmation. */
+export function reviewCast(g: GameState, owner: Side, source: CardInst, intent: PlayIntent | null, purchase = false): Promise<string[] | null> {
+  return new Promise(resolve => {
+    const ja=getLang()==='ja',ko=getLang()==='ko';
+    const m=document.createElement('div');m.className='modal picker-modal cast-review';
+    Object.assign(m.style,{maxWidth:'720px',width:'min(720px, 94vw)',maxHeight:'90dvh',overflowY:'auto',boxSizing:'border-box'});
+    const heading=document.createElement('h2');heading.textContent=cardName(source);
+    const rules=document.createElement('p');rules.textContent=cardText(source);rules.style.whiteSpace='pre-line';
+    const note=document.createElement('p');note.className='cast-review-note';
+    note.textContent=ja?`消費マナ ${purchase?buyCost(g.players[owner],source):playCost(source,g.players[owner])} · 確定するまでカード・マナは消費しません。`
+      :ko?`소비 마나 ${purchase?buyCost(g.players[owner],source):playCost(source,g.players[owner])} · 확정 전에는 카드와 마나를 소비하지 않습니다.`
+      :`Mana ${purchase?buyCost(g.players[owner],source):playCost(source,g.players[owner])} · No card or mana is spent until you confirm.`;
+    const grid=document.createElement('div');grid.className='picker-grid';Object.assign(grid.style,{display:'flex',gap:'9px',flexWrap:'wrap',justifyContent:'center'});
+    const caution=document.createElement('p');caution.className='cast-review-caution';caution.setAttribute('aria-live','polite');
+    const selection=document.createElement('p');selection.className='cast-review-selection';selection.setAttribute('aria-live','polite');
+    const row=document.createElement('div');row.className='modal-row';
+    const cancel=document.createElement('button');cancel.className='btn btn-ghost';cancel.textContent=t('common.cancel');
+    const ok=document.createElement('button');ok.className='btn btn-gold';ok.textContent=purchase?(ja?'購入して発動':ko?'구매 후 발동':'Buy and cast'):(ja?'発動を確定':ko?'발동 확정':'Confirm cast');
+    const picked:string[]=[];let settled=false;let observer:MutationObserver|undefined;
+    const settle=(value:string[]|null)=>{if(settled)return;settled=true;observer?.disconnect();resolve(value);};
+    const paint=()=>{
+      ok.disabled=!!intent && (intent.min>0 && picked.length<intent.min);
+      if(intent)ok.textContent=picked.length?(ja?'この対象で発動':ko?'이 대상으로 발동':'Cast on selected targets'):(ja?'対象を選ばず発動':ko?'대상 없이 발동':'Cast without targets');
+      selection.textContent=intent?(intent.pool.length?(ja?`対象 ${picked.length} / ${intent.max} · 選び直し・キャンセル可`:ko?`대상 ${picked.length} / ${intent.max} · 재선택 또는 취소 가능`:`Targets ${picked.length} / ${intent.max} · Change selection or cancel`):(ja?'選べる対象がありません。カードは使用されていません。':ko?'선택 가능한 대상이 없습니다. 카드는 사용되지 않았습니다.':'No legal targets. The card has not been played.')):'';
+      const harmful=picked.filter(uid=>source.id==='SELECTED_SWORD'?targetOwner(g,uid)!==owner:
+        ['destroyMon','destroyEnch','destroyTrap','bloodShower','FIRE_BALL','STABLE','bloodSecret'].includes(intent?.reason??'')&&targetOwner(g,uid)===owner);
+      caution.textContent=harmful.length?(source.id==='SELECTED_SWORD'?(ja?'相手のモンスターを強化します。':ko?'상대 몬스터를 강화합니다.':'This will strengthen an opposing monster.'):(ja?'自分のカードまたは自分自身を対象にします。':ko?'자신의 카드 또는 자신을 대상으로 합니다.':'This targets your own card or yourself.')):'';
+      grid.querySelectorAll<HTMLElement>('[data-choice]').forEach(el=>{const selected=picked.includes(el.dataset.choice!);el.classList.toggle('is-picked',selected);el.setAttribute('aria-pressed',String(selected));});
+    };
+    intent?.pool.forEach((c,i)=>{
+      const side=targetOwner(g,c.uid),isOwn=side===owner;
+      const wrap=document.createElement('div');wrap.className='cast-choice';
+      const label=document.createElement('div');label.className='picker-owner';label.textContent=side===null?'':ja?(isOwn?'自分':'相手'):ko?(isOwn?'자신':'상대'):(isOwn?'You':'Opponent');
+      const card=cardEl(c,{playable:true,lazyArt:i,...(side!==null&&g.players[side].field.some(m=>m.uid===c.uid)?{field:true,owner:g.players[side],game:g}:{})});
+      card.dataset.choice=c.uid;card.setAttribute('role','button');card.setAttribute('aria-label',`${label.textContent} ${cardName(c)}`);card.tabIndex=0;
+      const choose=()=>{const at=picked.indexOf(c.uid);if(at>=0)picked.splice(at,1);else if(intent.max===1)picked.splice(0,picked.length,c.uid);else if(picked.length<intent.max)picked.push(c.uid);paint();};
+      card.onclick=choose;card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();}};bindZoom(card,c);
+      wrap.append(label,card);grid.append(wrap);
+    });
+    if(!intent)for(const c of automaticCastTargets(g,owner,source)) {
+      const own=targetOwner(g,c.uid)===owner,wrap=document.createElement('div'),label=document.createElement('p');
+      label.textContent=ja?`自動で破壊される対象（${own?'自分':'相手'}）`:ko?`자동 파괴 대상 (${own?'자신':'상대'})`:`Automatic destruction target (${own?'You':'Opponent'})`;
+      wrap.append(label,cardEl(c,{lazyArt:0}));grid.append(wrap);
+    }
+    cancel.onclick=()=>{settle(null);closeOverlay();};
+    ok.onclick=()=>{if(!ok.disabled){settle([...picked]);closeOverlay();}};
+    m.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();cancel.click();}});
+    row.append(cancel,ok);m.append(heading,rules,note,selection,caution,grid,row);paint();mount(m);
+    observer=new MutationObserver(()=>{if(!m.isConnected)settle(null);});observer.observe(getRoot(),{childList:true});
+  });
 }

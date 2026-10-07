@@ -29,7 +29,7 @@ const mocks={
  'rankPresentation':'export class RankPresentation {destroy(){} cancel(){} receive(){}}',
  'boardView':'export class GameView{}',
  'log':'export class GameLog{};export const logToText=s=>s;',
- 'modal':'export const cardPicker=()=>{},cardPickerMulti=()=>{},confirmDialog=()=>{},treasureModal=()=>{},winModal=()=>{},closeOverlay=()=>{},closeTreasureNotices=()=>{};',
+ 'modal':'export const reviewCast=async()=>null;export const cardPicker=()=>{},cardPickerMulti=()=>{},confirmDialog=()=>{},treasureModal=()=>{},winModal=()=>{},closeOverlay=()=>{},closeTreasureNotices=()=>{};',
  'sound':'export const sfx=()=>{},stopSounds=()=>{},warmSounds=async()=>{};',
  'dice':'export const diceRollAnim=()=>{},cancelDiceAnimations=()=>{};',
  'duelClock':'export const paintDuelClock=()=>{};',

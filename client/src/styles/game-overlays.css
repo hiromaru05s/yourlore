@@ -818,3 +818,9 @@
 @media(max-width:850px){.zoom-details .card-effect-section + .card-effect-section{margin-top:18px;padding-top:14px}}
 .zoom-details .card-effect-body{font-weight:400}
 .zoom-details .card-effect-body:lang(ko),.zoom-details .dr-fx:lang(ko){word-break:keep-all;overflow-wrap:anywhere}
+
+/* Cast review keeps allegiance and irreversible choices readable before payment. */
+.cast-review .picker-grid { padding: 8px; }
+.picker-owner { font-size: 12px; font-weight: 700; text-align: center; margin: 0 0 8px; }
+.cast-review-caution:not(:empty) { color: #ffd4b9; background: #7b281d66; border-left: 3px solid #f4a16c; padding: 9px 12px; border-radius: 4px; }
+.cast-review .modal-row { position: sticky; bottom: 0; padding: 12px 0 0; }

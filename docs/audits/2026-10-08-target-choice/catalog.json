@@ -1,0 +1,2723 @@
+{
+  "count": 360,
+  "counts": {
+    "existing-rules": 269,
+    "precast-review": 54,
+    "precast-target": 24,
+    "purchase-review": 13
+  },
+  "note": "Empty-field baseline; conditional choices/reactions evaluated again against live public state.",
+  "cards": [
+    {
+      "id": "M1",
+      "nameJa": "スパーク・インプ",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "—"
+    },
+    {
+      "id": "M2",
+      "nameJa": "ストーン・パップ",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "—"
+    },
+    {
+      "id": "M3",
+      "nameJa": "ダスト・スカウト",
+      "type": "mon",
+      "onSummon": "draw",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】カードを1枚引く。"
+    },
+    {
+      "id": "M4",
+      "nameJa": "ブレード・ヘア",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "—"
+    },
+    {
+      "id": "M5",
+      "nameJa": "アイアン・シェル",
+      "type": "mon",
+      "onSummon": "selfBurn",
+      "route": "precast-review",
+      "effectJa": "【召喚時】自分に2ダメージを与える。"
+    },
+    {
+      "id": "M6",
+      "nameJa": "ツイン・ファング",
+      "type": "mon",
+      "onSummon": "defDown",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】相手モンスター1体を選び、その体力-2（持続）。"
+    },
+    {
+      "id": "M7",
+      "nameJa": "エンバー・ドレイク",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【攻撃時】このモンスターの攻撃で相手モンスターを破壊したら、このターンに1回だけ追加で攻撃できる。\n\n【自分ターン開始時】ダイス1個を振り、5以上なら自分に3ダメージを与える。"
+    },
+    {
+      "id": "M8",
+      "nameJa": "グローブ・ウォーデン",
+      "type": "mon",
+      "onSummon": "heal",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の体力を1回復する。"
+    },
+    {
+      "id": "M9",
+      "nameJa": "レリック・ハンター",
+      "type": "mon",
+      "onSummon": "refreshToken",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分にカウンター1個を付与する（提示更新用）。\n\n【自分のターン中】自分のターン中、そのカウンター1個を消費して提示マーケットをマナなしで更新できる。このモンスターが場を離れても、未使用のカウンターは残る。"
+    },
+    {
+      "id": "M10",
+      "nameJa": "マナ・ゴーレム",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【場にいる間】自分の場の、このモンスター以外の「ゴーレム」系モンスター1体につき、自分の最大マナ+1。"
+    },
+    {
+      "id": "M11",
+      "nameJa": "ウォーロード",
+      "type": "mon",
+      "onSummon": "warlordKnight",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の場に他のモンスターが2体以上いれば、「騎士」1体を自分の場に召喚する。"
+    },
+    {
+      "id": "M12",
+      "nameJa": "タイタン・ゲート",
+      "type": "mon",
+      "onSummon": "atkDown",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】相手モンスター1体を選び、その攻撃力-1（持続）。"
+    },
+    {
+      "id": "S1",
+      "nameJa": "三撃の火種",
+      "type": "spell",
+      "act": "dmg",
+      "route": "existing-rules",
+      "effectJa": "【発動時】ダイス1個を振る — 1-2: 相手に3ダメージを与える / 3-4: 次の相手ターン開始時に得るマナ-1 / 5-6: 相手は次のターン、購入コスト3以下のモンスターを召喚できない。"
+    },
+    {
+      "id": "S10",
+      "nameJa": "青藍の書庫",
+      "type": "spell",
+      "act": "draw",
+      "route": "existing-rules",
+      "effectJa": "【発動時】カードを2枚引く。"
+    },
+    {
+      "id": "S3",
+      "nameJa": "刃の囁き",
+      "type": "spell",
+      "act": "buffPerm",
+      "route": "precast-target",
+      "reason": "buffPerm",
+      "effectJa": "【発動時】種族を持たない自分の場のモンスター1体を選び、その攻撃力+3（持続）。"
+    },
+    {
+      "id": "S4",
+      "nameJa": "双月の啓示",
+      "type": "spell",
+      "act": "draw",
+      "route": "existing-rules",
+      "effectJa": "【発動時】カードを4枚引く。\n\n【回数制限】同名カード合計で自分の各ターン1回まで使用できる。"
+    },
+    {
+      "id": "S5",
+      "nameJa": "マーケット・クラッシュ",
+      "type": "spell",
+      "act": "crash",
+      "route": "existing-rules",
+      "effectJa": "【発動時】次の相手ターンの提示を最大2枚にし、提示更新を封じる。"
+    },
+    {
+      "id": "S8",
+      "nameJa": "リコール",
+      "type": "spell",
+      "act": "recall",
+      "route": "precast-target",
+      "reason": "recall",
+      "effectJa": "【発動時】自分の墓地から、このカード以外のカードを1枚まで選び、自分の手札に加える。"
+    },
+    {
+      "id": "S6",
+      "nameJa": "運命の糸",
+      "type": "spell",
+      "act": "seek",
+      "route": "precast-target",
+      "reason": "seek",
+      "effectJa": "【発動時】自分のデッキからカードを1枚まで選び、自分の手札に加える。"
+    },
+    {
+      "id": "S7",
+      "nameJa": "戦場の脈動",
+      "type": "spell",
+      "act": "buffAllTurn",
+      "route": "existing-rules",
+      "effectJa": "【発動時】このターン終了まで、現在自分の場にいる全モンスターの攻撃力+3。"
+    },
+    {
+      "id": "S12",
+      "nameJa": "鋼脈刻印",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】ダイス1個を振る。5以上なら、相手に烙印カウンター1個を付与する。"
+    },
+    {
+      "id": "S13",
+      "nameJa": "星墓の落下",
+      "type": "spell",
+      "act": "dmg",
+      "route": "existing-rules",
+      "effectJa": "【発動時】相手に11ダメージを与える。"
+    },
+    {
+      "id": "S14",
+      "nameJa": "大地の祝福",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】両方の場の、卵以外の全モンスターの蓄積ダメージを取り除く。自分の体力を5回復する。"
+    },
+    {
+      "id": "S15",
+      "nameJa": "ルーン爆裂",
+      "type": "spell",
+      "act": "destroyMon",
+      "route": "precast-target",
+      "reason": "destroyMon",
+      "effectJa": "【発動時】両方の場から購入コスト8以下のモンスターを1体まで選んで破壊する。"
+    },
+    {
+      "id": "MIMIC",
+      "nameJa": "ミミック",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【補足】宝箱のハズレで相手の場に召喚される。"
+    },
+    {
+      "id": "E1",
+      "nameJa": "封鎖令",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【場にある間】相手は購入コスト3以下のモンスターを召喚できない。\n\n【期間】自分のターン開始を4回迎えると終了する。"
+    },
+    {
+      "id": "E2",
+      "nameJa": "平和協定",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【場にある間】両プレイヤーのモンスターは攻撃できない。\n\n【期間】双方のターン開始を合計4回迎えると終了する。"
+    },
+    {
+      "id": "E3",
+      "nameJa": "知識の泉",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】追加でカードを1枚引く（4回）。4回目の処理後にこの魔法は終了する。その次の自分ターン開始時、自分の最大マナ+1。"
+    },
+    {
+      "id": "TSO2",
+      "nameJa": "孤独な狼",
+      "type": "mon",
+      "onSummon": "hermitBuff",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の場の他のモンスターと永続魔法が合計1枚以下なら、このモンスターの攻撃力+3・体力+3（持続）。"
+    },
+    {
+      "id": "TSO5",
+      "nameJa": "孤独な放浪者",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【召喚条件】自分の場に孤独種族以外のモンスターがいない時のみ召喚可能。"
+    },
+    {
+      "id": "TPO2",
+      "nameJa": "飢えた獣",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【相手モンスター破壊時】このモンスターが攻撃・反撃で相手モンスターを破壊するたび、破壊したモンスターの購入コスト分、このモンスターの攻撃力と体力を増やす（持続）。"
+    },
+    {
+      "id": "TPO5",
+      "nameJa": "捕食者",
+      "type": "mon",
+      "onSummon": "preyExec",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】相手の購入コスト3～4のモンスターのうち、攻撃力と印刷体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。破壊できたら自分の最大マナ+1。"
+    },
+    {
+      "id": "TAR2",
+      "nameJa": "没落貴族",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【場にいる間】相手の場の購入コスト2以下のモンスターは攻撃できない。"
+    },
+    {
+      "id": "TAR5",
+      "nameJa": "貴族領主",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【場にいる間】相手の購入コスト6以下のモンスターはこのモンスターを攻撃できない。相手の全モンスターは自分を直接攻撃できない。"
+    },
+    {
+      "id": "ND2",
+      "nameJa": "予知のルーン",
+      "type": "spell",
+      "act": "draw",
+      "route": "existing-rules",
+      "effectJa": "【発動時】カードを2枚引く。自分の体力を3回復する。"
+    },
+    {
+      "id": "ND3",
+      "nameJa": "賢者の予言",
+      "type": "spell",
+      "act": "draw",
+      "route": "existing-rules",
+      "effectJa": "【発動時】相手がダイス1個を振り予測値を決める。自分がダイス2個を振り、両方の出目が予測値と異なれば自分の最大マナ+4。"
+    },
+    {
+      "id": "ND5",
+      "nameJa": "古代の知識",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分の場の全モンスターに「オーラ」を付与（持続）。"
+    },
+    {
+      "id": "NMD2",
+      "nameJa": "探書の精霊",
+      "type": "mon",
+      "onSummon": "draw",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】カードを2枚引く。"
+    },
+    {
+      "id": "NMD4",
+      "nameJa": "記録者",
+      "type": "mon",
+      "onSummon": "chronicler",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の提示マーケットの直近10ターン分（双方通算）の履歴（更新分を含む）からカード1枚を選び、マナを払って購入できる。"
+    },
+    {
+      "id": "NMD6",
+      "nameJa": "大賢者",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【場にいる間】自分のデッキ構成に魔法が13枚以上あれば、自分の魔法の発動コスト-1（最低0）。"
+    },
+    {
+      "id": "NGA3",
+      "nameJa": "戦士ゴーレム",
+      "type": "mon",
+      "onSummon": "golemSquad",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の場に他の「ゴーレム」系モンスターがいれば、このモンスターに気合用カウンター3個を付与する。"
+    },
+    {
+      "id": "NGA4",
+      "nameJa": "剣鬼",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【攻撃時】攻撃対象をランダムに決める（このモンスター以外の味方モンスターも候補に含む）。"
+    },
+    {
+      "id": "NWL3",
+      "nameJa": "ガーディアンゴーレム",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【攻撃ダメージを受けた後】このモンスターが攻撃で1以上のダメージを受け、気合を消費せずに生き残ると、カウンター1個を得る（気合に使用）。"
+    },
+    {
+      "id": "NHEX",
+      "nameJa": "見習い呪術師",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。"
+    },
+    {
+      "id": "AHEUK",
+      "nameJa": "アチューン・黒",
+      "type": "spell",
+      "act": "manaDown",
+      "route": "existing-rules",
+      "effectJa": "【発動時】相手の最大マナ-1。自分の場にモンスターがいなければ、相手の最大マナをさらに1減らす。"
+    },
+    {
+      "id": "AJIN",
+      "nameJa": "アチューン・真",
+      "type": "spell",
+      "act": "manaUpGain",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分の最大マナ+1。ダイス1個を振り、4以上なら新しい「アチューン」1枚を自分の墓地に追加する。"
+    },
+    {
+      "id": "AMA",
+      "nameJa": "アチューン・魔",
+      "type": "spell",
+      "act": "chestToMana",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分の手札の「宝箱」1枚を自動で自分の墓地へ送る。送った場合、自分の最大マナ+1。"
+    },
+    {
+      "id": "NHEAL",
+      "nameJa": "生命の加護",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【どちらかが召喚した時】どちらかがモンスターを召喚するたび、相手の体力を4回復するし、自分の体力を8回復する。"
+    },
+    {
+      "id": "GM5_0",
+      "nameJa": "古代の狂戦士",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】このモンスターの攻撃力+2（持続）。"
+    },
+    {
+      "id": "GM5_2",
+      "nameJa": "鋼鉄の戦士",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【自分が召喚した時】自分がモンスターを召喚するたび、そのモンスターの体力+2（持続）。"
+    },
+    {
+      "id": "GM5_3",
+      "nameJa": "業火のドレイク",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】相手に3ダメージを与える。"
+    },
+    {
+      "id": "GS5_3",
+      "nameJa": "呪文書の解読",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】相手のデッキ・墓地・場にある「魔族」モンスター1枚につき、相手プレイヤーに16ダメージを与える。"
+    },
+    {
+      "id": "GS5_4",
+      "nameJa": "聖剣の一閃",
+      "type": "spell",
+      "act": "buffTurn",
+      "route": "precast-target",
+      "reason": "buffTurn",
+      "effectJa": "【発動時】自分の場のモンスター1体を選び、このターン終了までその攻撃力+8。"
+    },
+    {
+      "id": "GM6_0",
+      "nameJa": "ドラゴン",
+      "type": "mon",
+      "onSummon": "dragonFuse",
+      "route": "precast-review",
+      "effectJa": "【召喚時】自分の場に「兵士」か「騎士」がいれば、その1体とこのモンスターを素材にして、次のモンスターを自分の場に召喚する。両方ある場合はどちらを素材にするか選ぶ。\n兵士を使う：ドラゴンライダー1体。\n騎士を使う：アンティークドラゴンナイト1体。\n素材は自分の墓地へ送る。トークン・虚無の素材は自分のリフトへ送る。"
+    },
+    {
+      "id": "GM6_1",
+      "nameJa": "次元幽閉者",
+      "type": "mon",
+      "onSummon": "jailer",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】相手のリフトからカードを8枚まで選び、自分のリフトへ移す。"
+    },
+    {
+      "id": "GM6_7",
+      "nameJa": "将軍",
+      "type": "mon",
+      "onSummon": "generalKnight",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】「騎士」（攻撃力4・体力4）1体を自分の場に召喚する。\n\n【相手が召喚した時】相手がモンスターを召喚するたびダイス1個を振り、4以上なら「騎士」1体を自分の場に召喚する。"
+    },
+    {
+      "id": "GM6_8",
+      "nameJa": "虚空の攻城兵",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【破壊時】「兵士」1体を自分の場に召喚する。"
+    },
+    {
+      "id": "GS6_4",
+      "nameJa": "火脈点火",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】相手に烙印カウンターが1個以上あれば、相手に烙印カウンター3個を追加する。"
+    },
+    {
+      "id": "GS8_0",
+      "nameJa": "銀月砲",
+      "type": "spell",
+      "act": "dmg",
+      "route": "precast-review",
+      "effectJa": "【発動時】相手のデッキからカード1枚を選び、相手のリフトへ送ってよい。"
+    },
+    {
+      "id": "INFKNIGHT",
+      "nameJa": "騎士",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "—"
+    },
+    {
+      "id": "NT_SEAL3",
+      "nameJa": "沈黙の番人",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【場にいる間】両プレイヤーは発動コスト4以下の魔法を使用できない。"
+    },
+    {
+      "id": "NT_SEAL5",
+      "nameJa": "沈黙の巨神",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【場にいる間】両プレイヤーは発動コスト6以下の魔法を使用できない。"
+    },
+    {
+      "id": "TSO3",
+      "nameJa": "孤独な狩人",
+      "type": "mon",
+      "onSummon": "gravePure",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の墓地にモンスターカードがなければカードを6枚引く。"
+    },
+    {
+      "id": "TPO3",
+      "nameJa": "飢えた追跡者",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【相手モンスター破壊時】相手モンスターが破壊されるたび、ダイス1個を振る。5以上なら、そのモンスターの複製1体を自分の場に召喚する。"
+    },
+    {
+      "id": "TAR3",
+      "nameJa": "没落した騎士",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "—"
+    },
+    {
+      "id": "TGE1",
+      "nameJa": "始原の卵",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【卵】攻撃できない。\n\n【耐久】カウンター2個で登場し、攻撃・ダメージを受けるたび1個失う（0個で破壊）。\n\n【孵化まで】双方のターン開始を4回数え、残り0の自分ターン開始時に孵化する。\n\n【孵化時】孵化時、この卵を自分のリフトへ送り、卵以外の購入コスト7以下の「始原」モンスターからランダムに1体を自分の場に召喚する。"
+    },
+    {
+      "id": "TGE2",
+      "nameJa": "始原の火種",
+      "type": "mon",
+      "onSummon": "originEmber",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の場の他の「始原」モンスター1体を選び、その攻撃力+2（持続）。"
+    },
+    {
+      "id": "TGE3",
+      "nameJa": "始原の守護者",
+      "type": "mon",
+      "onSummon": "selfBurn",
+      "route": "precast-review",
+      "effectJa": "【召喚時】自分に3ダメージを与える。"
+    },
+    {
+      "id": "TGE4",
+      "nameJa": "始原の裁判官",
+      "type": "mon",
+      "onSummon": "originArbiter",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】ゲーム中、同名カードを初めて召喚した時だけ判定する。自分のデッキ構成にこの個体以外の「始原」カードがあれば、相手に烙印カウンター1個を付与する。同名の別個体も数える。\n最初の召喚で条件を満たさなくても、2回目以降の召喚では発動しない。"
+    },
+    {
+      "id": "TGE5",
+      "nameJa": "始原の精霊",
+      "type": "mon",
+      "onSummon": "originRite",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】「始原の術式」を自分の場に展開する。"
+    },
+    {
+      "id": "TGE6",
+      "nameJa": "始原の巨人",
+      "type": "mon",
+      "onSummon": "giantDraw",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】カードを1枚引く。引いたカードがモンスターなら、購入コスト5以上の「始原」カード1枚を選び、マナを払って購入できる。"
+    },
+    {
+      "id": "TGE7",
+      "nameJa": "始原の君主",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【場にいる間】自分の場の全ての「始原」モンスターの攻撃力+4・体力+4（自身を含む）。"
+    },
+    {
+      "id": "HANDRESET",
+      "nameJa": "忘却の新札",
+      "type": "spell",
+      "act": "draw",
+      "route": "precast-review",
+      "effectJa": "【発動時】自分の手札を全て自分の墓地へ送る。カードを5枚引く。"
+    },
+    {
+      "id": "TIMEWARP",
+      "nameJa": "時空間操作",
+      "type": "spell",
+      "act": "dmg",
+      "route": "existing-rules",
+      "effectJa": "【発動時】ダイス1個を振り4以上なら次の相手のターンをスキップする。"
+    },
+    {
+      "id": "INFERNO",
+      "nameJa": "地獄",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【自分ターン開始時】自分に5ダメージを与える。相手に7ダメージを与える。"
+    },
+    {
+      "id": "GAMBLE",
+      "nameJa": "六面の気まぐれ",
+      "type": "spell",
+      "act": "dmg",
+      "route": "existing-rules",
+      "effectJa": "【発動時】ダイス1個を10回振る。出目の合計が40以上なら、自分の最大マナ+3。"
+    },
+    {
+      "id": "ASSASSIN1",
+      "nameJa": "初級アサシン",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": ""
+    },
+    {
+      "id": "ASSASSIN2",
+      "nameJa": "中級アサシン",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": ""
+    },
+    {
+      "id": "ASSASSIN3",
+      "nameJa": "上級アサシン",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【召喚条件】自分のデッキ構成に同名以外の「アサシン」系カードがある時のみ召喚可能。"
+    },
+    {
+      "id": "ASSASSIN4",
+      "nameJa": "特級アサシン - ナイトロード",
+      "type": "mon",
+      "onSummon": "nightlord",
+      "route": "existing-rules",
+      "effectJa": "【召喚条件】自分のデッキ構成に、このカードと同名でない「アサシン」系カードが3種類以上ある。\n\n【召喚時】相手に烙印カウンター3個を付与する。"
+    },
+    {
+      "id": "RUNE1",
+      "nameJa": "ルーン学問 - 初級",
+      "type": "spell",
+      "act": "destroyMon",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】相手の場に購入コスト5以上のモンスターがいる。\n\n【発動時】その中で攻撃力と印刷体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。"
+    },
+    {
+      "id": "RUNE2",
+      "nameJa": "ルーン学問 - 中級",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】自分のデッキ・手札・墓地の合計枚数の半分以上が魔法またはスターター。\n\n【発動時】自分の最大マナ+8。"
+    },
+    {
+      "id": "RUNE3",
+      "nameJa": "ルーン学問 - 上級",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】自分のデッキ・手札・墓地の合計枚数の半分以上が魔法またはスターター。\n\n【場にある間】自分が手札から使った単発魔法の処理後、選択待ちがなければ、同じ魔法の効果をマナなしでもう1回処理する（重複しない）。"
+    },
+    {
+      "id": "GENESIS_SONG",
+      "nameJa": "始原の歌",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分のデッキ・墓地から「始原」モンスターをランダムに2体、自分の場に召喚する。"
+    },
+    {
+      "id": "GENESIS_MAGIC",
+      "nameJa": "始原の魔法",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分の場の全ての「始原」モンスターの攻撃力+4・体力+4（持続）。"
+    },
+    {
+      "id": "KIN_CALL",
+      "nameJa": "同族の呼び声",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【場にある間】自分の場に種族モンスターがいれば、マーケットの種族カード購入コスト-2(最低1)。"
+    },
+    {
+      "id": "MULTI_CULTURE",
+      "nameJa": "多様な文化",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】自分の場に異なる種族のモンスターが2種類以上いる。\n\n【発動時】自分の場の全ての種族モンスターの攻撃力+6（持続）。"
+    },
+    {
+      "id": "SLAY_ART",
+      "nameJa": "殺生の極意",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【場にある間】どちらかのプレイヤーが受ける各ダメージを3増やす（モンスターへのダメージは増えない）。"
+    },
+    {
+      "id": "BLOOD1",
+      "nameJa": "血の魔法 - ブラッドドロー",
+      "type": "spell",
+      "act": "draw",
+      "route": "precast-review",
+      "effectJa": "【発動時】カードを6枚引く。自分に15ダメージを与える。"
+    },
+    {
+      "id": "DISARM1",
+      "nameJa": "最初の螺子抜き",
+      "type": "spell",
+      "act": "destroyEnch",
+      "route": "precast-target",
+      "reason": "destroyEnch",
+      "effectJa": "【発動条件】相手の場に永続魔法がある。\n\n【発動時】両方の場から永続魔法を1枚まで選んで破壊する。"
+    },
+    {
+      "id": "DISARM2",
+      "nameJa": "青銅解剖図",
+      "type": "spell",
+      "act": "destroyEnch",
+      "route": "precast-target",
+      "reason": "destroyEnch",
+      "effectJa": "【発動条件】相手の場に永続魔法がある。\n\n【発動時】両方の場から永続魔法を2枚まで選んで破壊する。"
+    },
+    {
+      "id": "DISARM3",
+      "nameJa": "魔法研究機関",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】相手の場に永続魔法がある。\n\n【発動時】相手の永続魔法1枚をランダムに破壊し、墓地の代わりに相手のリフトへ送る。"
+    },
+    {
+      "id": "FORBIDDEN",
+      "nameJa": "禁断の術式",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動条件】自分の場に「始原」以外の種族モンスターがいる。\n\n【発動時】自分の体力を1にする（ダメージではない）。ダイス1個を振り、5以上なら自分の場の「始原」以外の種族をランダムに1つ決め、その種族で自分の場にいないモンスターを1種類につき1体、自分の場に召喚する。"
+    },
+    {
+      "id": "LUCKY_CHEST",
+      "nameJa": "幸運の宝箱",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】ダイス2個の合計 — 2-3: 自分の最大マナ+3、カードを2枚引く / 4-5: 相手の場に「ミミック」（攻撃力3・体力2）1体を召喚する / 6-8: 自分の最大マナ+1 / 9-11: 自分の体力を8回復する / 12: 自分の体力を12回復する。"
+    },
+    {
+      "id": "MIMIC2",
+      "nameJa": "マスターミミック",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【場にいる間】このモンスターが場にいる限り両者は宝箱を使用できない (アチューン・魔は可能)。"
+    },
+    {
+      "id": "GUILD_CHEST",
+      "nameJa": "アサシンギルドの宝箱",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】ダイス2個の合計（自分の場に「アサシン」系カードがあれば、9-12は代わりにカードを4枚引く） — 2-3: 自分の最大マナ+3 / 4: 自分の場に「ギルドの情報網」を展開（自分ターン開始時に追加でカードを1枚引く） / 5-6: 自分の最大マナ+2 / 7: 自分の最大マナ+1 / 8: 自分の体力を10回復する / 9-10: 相手の場に「初級アサシン」「中級アサシン」を各1体召喚する / 11-12: 相手の場に「初級アサシン」「中級アサシン」「上級アサシン」を各1体召喚し、自分に10ダメージを与える。"
+    },
+    {
+      "id": "GUILD_EYE",
+      "nameJa": "ギルドの情報網",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】追加でカードを1枚引く。"
+    },
+    {
+      "id": "CATALYST",
+      "nameJa": "亀裂の触媒",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】自分に4ダメージを与える。その後、自分の最大マナ+1。"
+    },
+    {
+      "id": "WORLD_SEED",
+      "nameJa": "世界樹の種",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】ダイス1個を振り、5以上なら自分の最大マナ+1。"
+    },
+    {
+      "id": "MANA_GIANT",
+      "nameJa": "ジャイアントゴーレム",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】自分のデッキ構成に「ジャイアントゴーレム」以外の「ゴーレム」系モンスターが2種類以上あれば、自分の体力を10回復する。"
+    },
+    {
+      "id": "HOURGLASS",
+      "nameJa": "時の砂時計",
+      "type": "spell",
+      "act": "manaUp",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分の最大マナ+2。その後、カードを2枚引く。"
+    },
+    {
+      "id": "LIFE_CYCLE",
+      "nameJa": "生命の循環",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分の回復時】自分が体力を回復するか体力を得るたび、ダイス1個を振る。4以上なら、自分の最大マナ+1。"
+    },
+    {
+      "id": "LIFE_SANCTUM",
+      "nameJa": "生命の聖域",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】自分の場の全モンスターの体力+2（持続）。"
+    },
+    {
+      "id": "WORLD_HEART",
+      "nameJa": "世界樹の心臓",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】雫2を得て、自分の体力を2回復する。"
+    },
+    {
+      "id": "MEDITATE",
+      "nameJa": "瞑想",
+      "type": "spell",
+      "act": "heal",
+      "route": "precast-review",
+      "effectJa": "【発動条件】自分の最大マナが11以下で、自分の体力が40未満。\n\n【発動時】自分の体力が40になる量だけ回復する。自分に烙印カウンター1個を付与する。"
+    },
+    {
+      "id": "HERMIT",
+      "nameJa": "隠遁の安息",
+      "type": "spell",
+      "act": "heal",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】自分の場にモンスターがいない。\n\n【発動時】自分の体力が40未満なら、40になるまで回復する。その後、現在の体力にかかわらず、自分の体力を15回復する。\n\n【回数制限】同名カード合計でゲーム中5回まで。"
+    },
+    {
+      "id": "WORLD_BLESS",
+      "nameJa": "世界樹の祝福",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【双方のターン開始時】そのターンのプレイヤーの最大マナ+1。自分のターンで、自分のデッキ・手札・墓地に「エルフ」系カードがあれば、+1の代わりに+4。"
+    },
+    {
+      "id": "GLASS_BAN",
+      "nameJa": "戦略変更",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【場にある間】両方の場で、現在の攻撃力と現在体力の差が4以上あるモンスターは攻撃できない。"
+    },
+    {
+      "id": "SHATTER",
+      "nameJa": "地震",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】自分に5ダメージを与える。両方の場の、卵以外の全モンスターの最大体力を1にし、蓄積ダメージを取り除く（持続）。"
+    },
+    {
+      "id": "SCARECROW",
+      "nameJa": "かかし召集",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】かかし(0/1)3体を自分の場に召喚する。"
+    },
+    {
+      "id": "LEVY",
+      "nameJa": "召集",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】兵士(2/2)3体を自分の場に召喚する。"
+    },
+    {
+      "id": "INQUISITION",
+      "nameJa": "異端審問",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】相手のデッキ・墓地・場にある種族を持つモンスター1枚につき、相手プレイヤーに6ダメージを与える。"
+    },
+    {
+      "id": "MIMIC_LORD",
+      "nameJa": "ミミックリーダー",
+      "type": "mon",
+      "onSummon": "mimicLord",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】両方の場の、このモンスター以外の「ミミック」系モンスター1体につき、このモンスターの攻撃力+3・体力+3（持続）。"
+    },
+    {
+      "id": "AWAKENED_MIMIC",
+      "nameJa": "覚醒ミミック",
+      "type": "mon",
+      "onSummon": "awakenMimic",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の場に「ミミック」(3/2)2体を召喚する。"
+    },
+    {
+      "id": "MIMIC_KING",
+      "nameJa": "ミミックキング",
+      "type": "mon",
+      "onSummon": "mimicKing",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分のリフトの「ミミック」系カード1枚につき、このモンスターの攻撃力+1・体力+1（持続）。6枚以上あれば「マスターミミック」1体を自分の場に召喚する。"
+    },
+    {
+      "id": "VITAL2",
+      "nameJa": "世界樹の信徒",
+      "type": "mon",
+      "onSummon": "dewBeliever",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の体力を3回復する。その後ダイスを1回振り、5以上なら雫1を得る。"
+    },
+    {
+      "id": "VITAL3",
+      "nameJa": "世界樹の守り人",
+      "type": "mon",
+      "onSummon": "heal",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の体力を5回復する。\n\n【カード使用時】自分が「世界樹」「エルフ」系カードをプレイするたび、雫1を得る。"
+    },
+    {
+      "id": "VITAL4",
+      "nameJa": "鼓舞王",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の場の「兵士」「騎士」のうち、気合を持たない各モンスターに、気合と気合用カウンター1個を付与する（持続）。\n\n【自分が召喚した時】後から召喚する「兵士」「騎士」にも、気合を持たなければ同じ処理を行う。付与済みの気合とカウンターは、このモンスターが場を離れても残る。"
+    },
+    {
+      "id": "CULL_FLOOD",
+      "nameJa": "カルの洗礼",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】新しい「カル」4枚を自分の墓地に追加する。自分のデッキ・墓地からカードを合計3枚まで選んで自分のリフトへ送る。"
+    },
+    {
+      "id": "PAIN_HARVEST",
+      "nameJa": "苦痛の収穫",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【相手がダメージを受けた時】相手プレイヤーがダメージを受けるたび、新しい「カル」2枚を自分のリフトに追加する。"
+    },
+    {
+      "id": "CULL_FARM",
+      "nameJa": "カル栽培",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】新しい「カル」1枚を自分の手札に加える。"
+    },
+    {
+      "id": "PURGE_ALL",
+      "nameJa": "大粛清",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】自分のデッキ・墓地からカードを好きな枚数選び、自分のリフトへ送る（0枚でもよい）。"
+    },
+    {
+      "id": "EXILE_NUKE1",
+      "nameJa": "虚空砲撃",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分のリフトにあるカード枚数×1ダメージを相手に与える。"
+    },
+    {
+      "id": "EXILE_NUKE2",
+      "nameJa": "虚空大崩壊",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分のリフトにあるカード枚数×2ダメージを相手に与える。"
+    },
+    {
+      "id": "GOLIATH_HUNT",
+      "nameJa": "ジャイアントキリング",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】相手の場に現在体力10以上のモンスターがいる。\n\n【発動時】その中で攻撃力と最大体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。"
+    },
+    {
+      "id": "DOUBLE_EXEC",
+      "nameJa": "二重処刑",
+      "type": "spell",
+      "act": "destroyMon",
+      "route": "precast-target",
+      "reason": "destroyMon",
+      "effectJa": "【発動時】両方の場のモンスターから合計2体まで選んで破壊する。"
+    },
+    {
+      "id": "MASSACRE",
+      "nameJa": "大虐殺",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】自分の最大マナ-1。相手の場のモンスターを全て破壊する。"
+    },
+    {
+      "id": "MIMIC_KING2",
+      "nameJa": "ミミックキング2世",
+      "type": "mon",
+      "onSummon": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分のリフトにミミック系6枚以上なら「ミミックの隠れ家」を展開する。"
+    },
+    {
+      "id": "ORIGIN_MIMIC",
+      "nameJa": "始原のミミック",
+      "type": "mon",
+      "onSummon": "originMimic",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の場・墓地・リフトにある「ミミック」系モンスター1枚につき、このモンスターの攻撃力+2・体力+2（持続、自身を含む）。"
+    },
+    {
+      "id": "GREED_PRICE",
+      "nameJa": "強欲の代価",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】「ミミック」2体を自分の場に召喚する。新しい「ミミック」5枚を自分のリフトに追加する。"
+    },
+    {
+      "id": "MARKET_CRISIS",
+      "nameJa": "経済危機",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】固定マーケット7枚を全て更新する。"
+    },
+    {
+      "id": "TOKEN00",
+      "nameJa": "かかし",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【補足】このモンスターはトークン。破壊されると墓地の代わりに自分のリフトへ行く。"
+    },
+    {
+      "id": "SOLDIER2",
+      "nameJa": "兵士",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【補足】このモンスターはトークン。破壊されると墓地の代わりに自分のリフトへ行く。"
+    },
+    {
+      "id": "FURNACE",
+      "nameJa": "溶鉱炉",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】自分の墓地で購入コストが最も低いカード1枚を、自動で自分のリフトへ送る（同値なら墓地の先頭を優先）。"
+    },
+    {
+      "id": "PURGE_TOUCH",
+      "nameJa": "浄化の手",
+      "type": "spell",
+      "act": "exilePick",
+      "route": "precast-target",
+      "reason": "exilePick",
+      "effectJa": "【発動条件】自分の墓地にカードがある。\n\n【発動時】自分の烙印カウンターを全て取り除く。自分の墓地からカードを1枚まで選び、自分のリフトへ送る。送った場合、カードを1枚引く。"
+    },
+    {
+      "id": "SCRAPPER",
+      "nameJa": "スクラップ収集家",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】自分のデッキ・墓地に購入コスト1以下のカードが合計2枚以上ある。\n\n【発動時】そのうち2枚を自動で自分のリフトへ送る（墓地、デッキの順）。自分の最大マナ+1。"
+    },
+    {
+      "id": "HORDE",
+      "nameJa": "軍団の旗手",
+      "type": "mon",
+      "onSummon": "hordeRally",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の場の全ての「兵士」「騎士」の攻撃力+4(持続)。"
+    },
+    {
+      "id": "ELITE",
+      "nameJa": "精鋭騎士団長",
+      "type": "mon",
+      "onSummon": "eliteSoldiers",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】デッキ構成が10枚以下なら兵士(2/2)2体を召喚する。"
+    },
+    {
+      "id": "WALLBREAK1",
+      "nameJa": "城壁破砕",
+      "type": "spell",
+      "act": "destroyMon",
+      "route": "precast-review",
+      "effectJa": "【発動時】両方の場の攻撃力2以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。"
+    },
+    {
+      "id": "WALLBREAK2",
+      "nameJa": "攻城崩壊",
+      "type": "spell",
+      "act": "destroyMon",
+      "route": "precast-review",
+      "effectJa": "【発動時】相手の場の攻撃力2以下のモンスターを全て破壊する。"
+    },
+    {
+      "id": "SNIPE1",
+      "nameJa": "狙撃",
+      "type": "spell",
+      "act": "destroyMon",
+      "route": "precast-review",
+      "effectJa": "【発動時】両方の場の現在体力3以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。"
+    },
+    {
+      "id": "SNIPE2",
+      "nameJa": "一斉射撃",
+      "type": "spell",
+      "act": "destroyMon",
+      "route": "precast-review",
+      "effectJa": "【発動時】相手の場の現在体力2以下のモンスターを全て破壊する。"
+    },
+    {
+      "id": "DRAGON_EGG",
+      "nameJa": "ドラゴンの卵",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【卵】攻撃できない。\n\n【耐久】カウンター6個で登場し、攻撃・ダメージを受けるたび1個失う（0個で破壊）。\n\n【孵化まで】双方のターン開始を8回数え、残り0の自分ターン開始時に孵化する。\n\n【孵化時】孵化時、この卵を自分のリフトへ送り、「黒竜」「赤竜」「青竜」からランダムに1体を自分の場に召喚する。"
+    },
+    {
+      "id": "BEAST_EGG",
+      "nameJa": "神獣の卵",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【卵】攻撃できない。\n\n【耐久】カウンター7個で登場し、攻撃・ダメージを受けるたび1個失う（0個で破壊）。\n\n【孵化まで】双方のターン開始を10回数え、残り0の自分ターン開始時に孵化する。\n\n【孵化時】孵化時、この卵を自分のリフトへ送り、「神獣」1体を自分の場に召喚する。"
+    },
+    {
+      "id": "D_BLACK",
+      "nameJa": "黒竜",
+      "type": "mon",
+      "onSummon": "blackDragon",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】相手の場の全モンスターの体力-3（持続）。その後、相手のリフトからカードを8枚まで選び、相手の墓地へ戻す。"
+    },
+    {
+      "id": "D_RED",
+      "nameJa": "赤竜",
+      "type": "mon",
+      "onSummon": "burn",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】相手に15ダメージを与える。\n\n【場にいる間】自分の魔法が相手にダメージを与えるたび+3追加ダメージ。"
+    },
+    {
+      "id": "D_BLUE",
+      "nameJa": "青竜",
+      "type": "mon",
+      "onSummon": "blueDragon",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の体力を20回復する。\n\n【自分ターン開始時】相手の場のモンスター1体につき、自分の体力を1回復する。"
+    },
+    {
+      "id": "DIVINE",
+      "nameJa": "神獣",
+      "type": "mon",
+      "onSummon": "divine",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の最大マナ+15。以後、自分ターン開始時のドロー+1（このモンスターが場を離れても続く）。両方の場のモンスター・永続魔法から合計3枚まで選んで破壊する。"
+    },
+    {
+      "id": "EGG_HUNTER",
+      "nameJa": "エッグハンター",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【攻撃時】このモンスターが卵を攻撃した場合、その卵のカウンターを通常の1個の代わりに6個減らす。"
+    },
+    {
+      "id": "INCUBATOR",
+      "nameJa": "高級孵化器",
+      "type": "spell",
+      "act": "incubate",
+      "route": "precast-target",
+      "reason": "incubate",
+      "effectJa": "【発動時】自分の場の卵を1体まで選び、孵化までの残りターンを5減らす（最低0）。0になれば直ちに孵化する。"
+    },
+    {
+      "id": "EGG_MASTER",
+      "nameJa": "孵化マスター",
+      "type": "mon",
+      "onSummon": "eggMaster",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の場の全ての卵にカウンターを5個ずつ追加する（孵化までの残りターンは変わらない）。"
+    },
+    {
+      "id": "BLOOD_JOY",
+      "nameJa": "血の魔法 - 喜",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】自分に6ダメージを与える。相手と自分は体力を12得る。"
+    },
+    {
+      "id": "BLOOD_ANGER",
+      "nameJa": "血の魔法 - 怒",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】自分に10ダメージを与える。両方の場の全モンスターは攻撃力+3(持続)。"
+    },
+    {
+      "id": "BLOOD_SORROW",
+      "nameJa": "血の魔法 - 哀",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】自分に12ダメージを与える。自分の墓地で購入コストが最も高いカード1枚を、自動で自分のリフトへ送る（同値なら墓地の先頭を優先）。"
+    },
+    {
+      "id": "BLOOD_PLEASURE",
+      "nameJa": "血の魔法 - 楽",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】自分に14ダメージを与える。自分の最大マナ+1。"
+    },
+    {
+      "id": "VAMP_PACT",
+      "nameJa": "吸血契約",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】自分に6ダメージを与える。「見習い吸血鬼」を自分の場に召喚する。"
+    },
+    {
+      "id": "BLOOD_FEST",
+      "nameJa": "血の祝祭",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【血の魔法の発動時】自分が「血の魔法」をプレイするたび、自分の最大マナ+1。"
+    },
+    {
+      "id": "BLOOD_SHIELD",
+      "nameJa": "吸血術式",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【場にある間】自分は「血の魔法」によるダメージを受けない。"
+    },
+    {
+      "id": "VAMP_WARD",
+      "nameJa": "吸血の極意",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【場にある間】両方の場の全ての「吸血鬼」系モンスターは破壊されない。"
+    },
+    {
+      "id": "VAMP_PACT2",
+      "nameJa": "吸血刻印契約",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】自分に15ダメージを与える。「初級吸血鬼」を自分の場に召喚する。"
+    },
+    {
+      "id": "VAMP_BUTLER",
+      "nameJa": "ヴァンパイア執事",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【攻撃後】このモンスターの攻撃後、このモンスターにカウンター1個を置く。3個以上になると全て取り除き、「見習い吸血鬼」1体を自分の場に召喚する。\n\n【補足】このモンスターは「吸血鬼」系として扱う。"
+    },
+    {
+      "id": "BLOOD_SECRET",
+      "nameJa": "血の魔法 - 秘術",
+      "type": "spell",
+      "route": "precast-target",
+      "reason": "bloodSecret",
+      "effectJa": "【発動条件】自分の場に「吸血鬼」系モンスターがいる。\n\n【発動時】自分に9ダメージを与える。自分の場の「吸血鬼」系モンスター1体を選んで破壊する。破壊できたら自分の最大マナ+3、自分の体力を10回復する。"
+    },
+    {
+      "id": "VAMP1",
+      "nameJa": "見習い吸血鬼",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【血の魔法の発動時】自分が「血の魔法」を発動した時、「初級吸血鬼」1体を自分の場に召喚する（この個体が場にいる間1回）。"
+    },
+    {
+      "id": "VAMP2",
+      "nameJa": "初級吸血鬼",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【血の魔法の発動時】自分が「血の魔法」を発動した時、「中級吸血鬼」1体を自分の場に召喚する（この個体が場にいる間1回）。"
+    },
+    {
+      "id": "VAMP3",
+      "nameJa": "中級吸血鬼",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【血の魔法の発動時】自分が「血の魔法」を発動した時、「上級吸血鬼」1体を自分の場に召喚する（この個体が場にいる間1回）。"
+    },
+    {
+      "id": "VAMP4",
+      "nameJa": "上級吸血鬼",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【血の魔法の発動時】自分が「血の魔法」を発動した時、「特級吸血鬼」1体を自分の場に召喚する（この個体が場にいる間1回）。\n\n【攻撃時】このモンスターの攻撃で相手プレイヤーに与えたダメージの半分、自分の体力を回復する（端数切り捨て）。"
+    },
+    {
+      "id": "VAMP5",
+      "nameJa": "特級吸血鬼",
+      "type": "mon",
+      "onSummon": "vampLord",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】相手に15ダメージを与える。自分の体力を30回復する。\n\n【攻撃時】このモンスターの攻撃で相手プレイヤーに与えたダメージと同じ量、自分の体力を回復する。"
+    },
+    {
+      "id": "FLAME",
+      "nameJa": "火種の負債",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】相手に2ダメージ、自分に1ダメージを与える。"
+    },
+    {
+      "id": "GHOST",
+      "nameJa": "幽霊",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【相手の回復時】相手が体力を回復するたび、このモンスターの攻撃力+1（持続）。\n\n【行動の終了後】1回の行動で相手の最大マナが増えた場合、自分に2ダメージを与える。その行動で相手が回復した場合も、自分に2ダメージ（それぞれ行動ごとに1回）。"
+    },
+    {
+      "id": "BLOOD_RITE",
+      "nameJa": "血鬼術",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【場にある間】両プレイヤーへの魔法ダメージを無効にし、受けるはずだった量だけそのプレイヤーの体力を回復する。\n\n【期間】双方のターンが合計14ターン経過したターン開始時にこの魔法を破壊する。\n\n【破壊時】破壊されたこの魔法は墓地の代わりに自分のリフトへ送る。"
+    },
+    {
+      "id": "WEAKEN_ALL",
+      "nameJa": "弱化術式",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【設置上限】この魔法は両方の場を合わせて最大2枚まで存在できる。\n\n【場にある間】両方の場の全モンスターの攻撃力-2（後から場に出るものも含む）。この魔法が場を離れると、この減少はなくなる。\n\n【破壊時】この魔法を墓地の代わりに自分のリフトへ送る。"
+    },
+    {
+      "id": "GUILD_HALL",
+      "nameJa": "アサシンギルド支部",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【相手への攻撃命中時】自分の「アサシン」系モンスターかこのモンスターの攻撃で相手プレイヤーにダメージを与えるたび、このモンスターにカウンター1個を置く。3個以上になると全て取り除き、相手に14ダメージを与える。"
+    },
+    {
+      "id": "FATE_WHEEL",
+      "nameJa": "運命の輪",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【出目を確認した後】自分のダイス結果を確認後、その行動のダイス1個を振り直せる（自分の各ターン1回）。\n\n【破壊時】この魔法を墓地の代わりに自分のリフトへ送る。"
+    },
+    {
+      "id": "COUNTERCALC",
+      "nameJa": "逆算",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】相手の最大マナが7以下で、相手の場に永続魔法がある。\n\n【発動時】相手の永続魔法1枚をランダムに破壊する。"
+    },
+    {
+      "id": "AMBUSH",
+      "nameJa": "奇襲",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動条件】相手の最大マナが4。\n\n【発動時】相手に8ダメージを与える。自分に3ダメージを与える。この魔法を自分のリフトへ送る。"
+    },
+    {
+      "id": "TRUMPET",
+      "nameJa": "支援ラッパ",
+      "type": "spell",
+      "route": "precast-target",
+      "reason": "buffTurn",
+      "effectJa": "【発動時】自分の場から異なる個体を3体まで選び、このターン終了までそれぞれの攻撃力+1（同名可）。"
+    },
+    {
+      "id": "FORESIGHT",
+      "nameJa": "先見の明",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】自分の場に「先見の明」がない。\n\n【双方のターン開始時】自分の最大マナが10以上なら、自分の最大マナ+2、この魔法を自分のリフトへ送る。\n\n【破壊時】墓地の代わりに自分のリフトへ送る。"
+    },
+    {
+      "id": "TRICKROOM",
+      "nameJa": "トリックルーム",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】両方の場の全モンスターの攻撃力と現在体力を入れ替える。双方のターン開始を合計2回迎えると元に戻す（効果中に登場したモンスターも対象）。効果中の強化は終了後、反対のステータスに残る。"
+    },
+    {
+      "id": "INCUBATOR_S",
+      "nameJa": "孵化器",
+      "type": "spell",
+      "act": "incubate",
+      "route": "precast-target",
+      "reason": "incubate",
+      "effectJa": "【発動時】自分の場の卵を1体まで選び、孵化までの残りターンを2減らす（最低0）。0になれば直ちに孵化する。"
+    },
+    {
+      "id": "TRIBE_PACT",
+      "nameJa": "多種族契約",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【場にある間】自分の種族モンスターの購入コスト-1（最低1）。\n\n【自分ターン開始時】ゲームの通算45ターン目以降の自分ターン開始時、まだ自分が種族シナジーを1回も発動していなければ敗北する。"
+    },
+    {
+      "id": "GOLEM1",
+      "nameJa": "兵士ゴーレム",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": ""
+    },
+    {
+      "id": "GOLEM2",
+      "nameJa": "リーダーゴーレム",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【味方モンスター破壊時】自分の場のモンスターが倒れるたびこのモンスターにカウンター1個（気合に使用）。"
+    },
+    {
+      "id": "GOLEM3",
+      "nameJa": "ゴーレムキング",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【召喚条件】自分の場・デッキ・手札・墓地に同名以外の「ゴーレム」系モンスターがいる時のみ召喚可能。"
+    },
+    {
+      "id": "DECAY_CRAFT",
+      "nameJa": "暗器製造",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分の場のモンスターを2体まで選び、「腐敗」を付与する（持続）。"
+    },
+    {
+      "id": "RUST_SLUG",
+      "nameJa": "ラストキャップ・スラッグ",
+      "type": "mon",
+      "onSummon": "decayAll",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。\n\n【相手の腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分の最大マナ+1、自分の体力を5回復する（同名は重複しない）。"
+    },
+    {
+      "id": "MAJESTY_RITE",
+      "nameJa": "刻印秘術",
+      "type": "spell",
+      "route": "precast-target",
+      "reason": "grantMajesty",
+      "effectJa": "【発動時】自分の最大マナ-1。自分の場のモンスター1体を選び、「威厳」を付与する（持続）。"
+    },
+    {
+      "id": "CROSSROADS",
+      "nameJa": "選択の岐路",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】新しい「カル」2枚を自分の墓地に追加する。"
+    },
+    {
+      "id": "CHOSEN_KNIGHT",
+      "nameJa": "選ばれし剣士",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【場にいる間】自分のリフトの「カル」2枚につき、このモンスターの攻撃力+1・体力+1。\n\n【攻撃後】自分の「カル」2枚を自動でリフトへ送る（墓地、デッキ、手札の順）。"
+    },
+    {
+      "id": "CHOSEN_MAGE",
+      "nameJa": "選ばれし魔法使い",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【場にいる間】自分のリフトの「カル」2枚につき、このモンスターの攻撃力+1・体力+1。\n\n【自分ターン開始時】自分のリフトの「カル」1枚を自分の墓地へ戻してよい。戻した場合、相手に8ダメージ（各個体、各自分ターン1回）。"
+    },
+    {
+      "id": "CHOSEN_ARCHER",
+      "nameJa": "選ばれし弓手",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【場にいる間】自分のリフトの「カル」2枚につき、このモンスターの攻撃力+2。\n\n【攻撃時】攻撃対象の相手モンスターの現在体力が15以上なら、そのモンスターを破壊する。"
+    },
+    {
+      "id": "CHOSEN_ROGUE",
+      "nameJa": "選ばれし盗賊",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【場にいる間】自分のリフトの「カル」2枚につき、このモンスターの攻撃力+2。"
+    },
+    {
+      "id": "RUST_SHROOM",
+      "nameJa": "ラストマッシュルーム",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【相手の腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分の最大マナ+1（同名は重複しない）。"
+    },
+    {
+      "id": "CHOSEN_AREA",
+      "nameJa": "選ばれし領域",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】自分のリフトに「カル」が25枚以上ある。\n\n【発動時】自分は直ちに勝利する。"
+    },
+    {
+      "id": "TRIAL_AREA",
+      "nameJa": "試練の領域",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】自分に6ダメージを与える。\n\n【自分ターン開始時】新しい「カル」1枚を自分の墓地に追加する。その後、自分の墓地からカードを2枚まで選び、自分のリフトへ送る。"
+    },
+    {
+      "id": "ANCIENT_CIV",
+      "nameJa": "古代文明",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】発動後、双方通算で9ターン以上経過していれば、次の全てを行う。\n自分の最大マナを1減らす。新しい「ドラゴンの卵」か「神獣の卵」1枚を選んで自分の手札に加える。この魔法を破壊する。"
+    },
+    {
+      "id": "GAMBLER",
+      "nameJa": "ギャンブラー",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】ダイス1個を振り、4以上なら自分の最大マナ+1。"
+    },
+    {
+      "id": "ELF_HAVEN",
+      "nameJa": "エルフの憩い場",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【場にある間】自分の「世界樹」系カードの購入・発動コストは0。\n\n【回数制限】自分が「世界樹」系カードを購入できるのは、自分の各ターンに合計3枚まで。\n\n【カード購入時】自分が「世界樹」系または「エルフ」系カードを購入するたび、自分は雫1を得る。"
+    },
+    {
+      "id": "HALF_ELF",
+      "nameJa": "ハーフエルフ",
+      "type": "mon",
+      "onSummon": "halfElf",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の場に「世界樹」系カードがあれば、「世界樹の慈しみ」を自分の場に展開する。\n\n【場にいる間】どちらかの場に「世界樹」系カードがあれば、このモンスターの攻撃力+3。"
+    },
+    {
+      "id": "LEGEND_GAMBLER",
+      "nameJa": "伝説のギャンブラー",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】1～6から出目を1つ予測し、ダイス3個を振る。1個以上が的中した場合、次から一つを選んで行う。\n自分の最大マナ+4。\n自分の体力を35回復する。\n相手の場のモンスター・永続魔法から毎回ランダムに1枚を選んで破壊する処理を2回行う。\n的中し、かつ自分のデッキ構成に「ギャンブラー」がある場合は、選ばず全てを上から順に行う。"
+    },
+    {
+      "id": "ELF",
+      "nameJa": "エルフ",
+      "type": "mon",
+      "onSummon": "elfDew",
+      "route": "existing-rules",
+      "effectJa": "【召喚条件】自分の雫4以上。\n\n【召喚時】雫2を得て、相手の攻撃力9以上のモンスター1体を選んで破壊する。\n\n【場にいる間】自分の場の異なる「世界樹」系カード1種類につき、このモンスターの攻撃力+1・体力+1。両プレイヤーの回復量2倍。"
+    },
+    {
+      "id": "DARK_ELF",
+      "nameJa": "ダークエルフ",
+      "type": "mon",
+      "onSummon": "darkElfDew",
+      "route": "existing-rules",
+      "effectJa": "【召喚条件】雫4以上で、自分の場に「ダークエルフ」以外の「エルフ」系モンスターがいない。\n\n【召喚時】雫4消費。相手にシールドがあれば相手に10ダメージを与える。\n\n【場にいる間】自分の場に「傭兵」系がいれば回避、「魔族」がいればオーラを得る。"
+    },
+    {
+      "id": "HIGH_ELF",
+      "nameJa": "ハイエルフ",
+      "type": "mon",
+      "onSummon": "highElfDew",
+      "route": "existing-rules",
+      "effectJa": "【召喚条件】自分の雫が10以上ある。\n\n【召喚時】相手の手札を全て見て、カードを3枚まで選び、相手のリフトへ送る。その後、相手のシールドを全て破壊し、自分の雫を2倍にする。\n\n【場にいる間】自分の場の「世界樹」系カード1種類につき、このモンスターの攻撃力+2・体力+2。相手の回復量を半分にする（端数切り捨て）。"
+    },
+    {
+      "id": "ELDER_ELF_KING",
+      "nameJa": "エルダーハイエルフキング",
+      "type": "mon",
+      "onSummon": "elderDew",
+      "route": "existing-rules",
+      "effectJa": "【召喚条件】自分の雫12以上。\n\n【召喚時】相手の場のモンスター・永続魔法・クエストを全て破壊し、自分の雫を3倍にする。\n\n【場にいる間】自分の場の異なる「世界樹」系カード1種類につき、このモンスターの攻撃力+4・体力+4。相手がターン中にプレイできるカードは最大3枚。\n\n【破壊時】自分の雫が15以上あれば、雫15を消費して相手に30ダメージを与える。"
+    },
+    {
+      "id": "WORLD_CARE",
+      "nameJa": "世界樹の慈しみ",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【設置上限】自分の場に最大1枚。\n\n【自分ターン開始時】雫1を得る。"
+    },
+    {
+      "id": "HPS_SCALE",
+      "nameJa": "鋼の鱗",
+      "type": "spell",
+      "act": "buffPerm",
+      "route": "precast-target",
+      "reason": "buffPerm",
+      "effectJa": "【発動時】自分の場のモンスター1体を選び、その体力+3（持続）。"
+    },
+    {
+      "id": "HPS_GRAFT",
+      "nameJa": "生命の接ぎ木",
+      "type": "spell",
+      "act": "buffPerm",
+      "route": "precast-target",
+      "reason": "buffPerm",
+      "effectJa": "【発動時】自分の場のモンスター1体を選び、その体力+6（持続）。"
+    },
+    {
+      "id": "HPS_OATH",
+      "nameJa": "守護の誓い",
+      "type": "spell",
+      "act": "buffAllDef",
+      "route": "existing-rules",
+      "effectJa": "【発動時】現在、自分の場にいる全モンスターの体力+6（持続）。"
+    },
+    {
+      "id": "HPS_SOIL",
+      "nameJa": "生命の土壌",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分が召喚した時】自分がモンスターを召喚するたび、そのモンスターの体力+2(持続)。"
+    },
+    {
+      "id": "HPS_BOULDER",
+      "nameJa": "巨岩の加護",
+      "type": "spell",
+      "act": "buffPerm",
+      "route": "precast-target",
+      "reason": "buffPerm",
+      "effectJa": "【発動時】自分の場のモンスター1体を選び、その体力+12（持続）。そのモンスターに「挑発」を付与する（持続）。"
+    },
+    {
+      "id": "GUILD_CO",
+      "nameJa": "商会",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】自分の場に「商会」がない。\n\n【自分ターン開始時】この魔法にカウンター1個を置く。この魔法のカウンター20個ごとに20個を取り除き、新しい「闇商人」1枚を自分の手札に加える。"
+    },
+    {
+      "id": "SLUM",
+      "nameJa": "スラム街",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】自分の場に「商会」がある。\n\n【発動時】ダイス1個を振り、その出目と同じ数のカウンターを自分の「商会」に置く。"
+    },
+    {
+      "id": "GRAPE",
+      "nameJa": "ぶどう",
+      "type": "spell",
+      "act": "hpUp",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分の体力を2回復する。"
+    },
+    {
+      "id": "BREWING",
+      "nameJa": "醸造",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】自分の手札の「ぶどう」「高品質ぶどう」を全て自分の墓地へ送る。送った「ぶどう」1枚につき1個、「高品質ぶどう」1枚につき3個、この魔法にカウンターを置く。\n\n【期間】発動後、6回目の自分ターン開始時に上の処理を行った後、この魔法のカウンター数と同じ枚数の新しい「ワイン」を自分の手札に加え、この魔法を自分の墓地へ送る。"
+    },
+    {
+      "id": "MERCH1",
+      "nameJa": "見習い商人",
+      "type": "mon",
+      "onSummon": "guildCnt",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の場の「商会」にカウンター3個を置く。"
+    },
+    {
+      "id": "MERCH2",
+      "nameJa": "王都の商売人",
+      "type": "mon",
+      "onSummon": "guildCnt",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の場の「商会」にカウンター8個を置く。"
+    },
+    {
+      "id": "GRAPE2",
+      "nameJa": "高品質ぶどう",
+      "type": "spell",
+      "act": "hpUp",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分の体力を4回復する。"
+    },
+    {
+      "id": "WINE",
+      "nameJa": "ワイン",
+      "type": "spell",
+      "act": "hpUp",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分の体力を6回復する。カードを1枚引く。"
+    },
+    {
+      "id": "DARK_MERCHANT",
+      "nameJa": "闇商人",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】購入可能なカード一覧からカード1枚を選び、購入コスト分のマナを払って購入してよい。"
+    },
+    {
+      "id": "TPO1",
+      "nameJa": "飢えた仔獣",
+      "type": "mon",
+      "onSummon": "preyBounce",
+      "route": "existing-rules",
+      "effectJa": "【召喚条件】相手の場に購入コスト2以下のモンスターがいる。\n\n【召喚時】相手の場の、オーラを持たない購入コスト2以下のモンスター1体を選び、相手の手札に戻す。"
+    },
+    {
+      "id": "TSO1",
+      "nameJa": "隠遁者",
+      "type": "mon",
+      "onSummon": "soloLock",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】このターンを含め、双方通算6ターン後まで自分はモンスターを召喚できない（通常は自分の3ターン後の開始時に解除）。"
+    },
+    {
+      "id": "TAR1",
+      "nameJa": "貴族の執事",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】自分ターン開始時のドロー+1（このモンスターが場にいる間）。"
+    },
+    {
+      "id": "TDE1",
+      "nameJa": "魔族の斥候",
+      "type": "mon",
+      "onSummon": "manaDebt5",
+      "route": "existing-rules",
+      "effectJa": "【召喚条件】自分の最大マナが5以上。\n\n【召喚時】自分の最大マナ-1。双方通算10ターン後のターン開始時に、自分の最大マナ+1（このモンスターが場を離れても戻る）。"
+    },
+    {
+      "id": "TDE2",
+      "nameJa": "魔族の戦士",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【召喚条件】自分の最大マナが5以上。\n\n【場にいる間】自分の最大マナ-2(最低3)。"
+    },
+    {
+      "id": "TDE3",
+      "nameJa": "魔族の狂戦士",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】ダイス1個を振る。1～3なら自分の最大マナを1減らし、4～6なら2減らす。この効果では3未満にならない。"
+    },
+    {
+      "id": "TDE4",
+      "nameJa": "魔王",
+      "type": "mon",
+      "onSummon": "manaSet3",
+      "route": "existing-rules",
+      "effectJa": "【召喚条件】自分の最大マナが5以上で、自分のデッキ構成に「魔王」以外の「魔族」モンスターがいる。\n\n【召喚時】自分の最大マナを3にする。\n\n【場にいる間】自分の最大マナは増えない。"
+    },
+    {
+      "id": "DUNGEON_FLOOR",
+      "nameJa": "ダンジョン最下層",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動条件】相手の最大マナが7以上。\n\n【発動時】自分の最大マナ-1（この効果では3未満にならない）。ダイス1個を振り、その出目と同じ数の「ミミック」を自分の場に召喚する。"
+    },
+    {
+      "id": "GEM_RAIN",
+      "nameJa": "宝石の雨",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【場にある間】場の全ての「ミミック」系モンスターの攻撃力+3。"
+    },
+    {
+      "id": "VOID_FRUIT",
+      "nameJa": "虚無の果実",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】自分のリフトのカード1枚につき、自分の体力を1回復する。"
+    },
+    {
+      "id": "VOID_APOSTLE",
+      "nameJa": "虚無空間の使徒",
+      "type": "mon",
+      "onSummon": "voidApostle",
+      "route": "precast-review",
+      "effectJa": "【召喚時】自分に13ダメージを与える。自分のリフトのカード1枚につき、このモンスターの攻撃力+1・体力+1（持続）。\n\n【自分ターン開始時】ダイス1個を振り、1なら自分に10ダメージを与え、このモンスターを破壊する。"
+    },
+    {
+      "id": "CASINO",
+      "nameJa": "カジノ",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【ダイスを振った時】どちらかがダイス1個を振るたび、このモンスターにカウンター1個を置く（カジノダイスは除く）。\n\n【カジノダイス】12個ごとに12個を消費してカジノダイス1個を振る — 1-2: 自分に30ダメージを与える / 3-4: 相手に30ダメージを与える / 5: 相手に40ダメージを与える / 6: 相手の最大マナを3にする。"
+    },
+    {
+      "id": "REFRESH_HAND",
+      "nameJa": "リフレッシュ",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】カードを1枚引く。その後、自分の手札からカードを2枚まで選び、自分のリフトへ送る。"
+    },
+    {
+      "id": "FOCUS",
+      "nameJa": "選択と集中",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】自分のデッキ・墓地からカードを合計3枚まで選び、自分のリフトへ送る。"
+    },
+    {
+      "id": "GUILD_HQ",
+      "nameJa": "アサシンギルド本部",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【相手への攻撃命中時】自分の「アサシン」系モンスターか「アサシンギルド支部」の攻撃で相手プレイヤーにダメージを与えるたび、相手に烙印カウンター1個を付与する。\n\n【自分ターン開始時】ナイトマーケットから「アサシン」系カード1枚を選び、マナを払って購入できる。"
+    },
+    {
+      "id": "WORLD_TREE",
+      "nameJa": "世界樹",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【召喚条件】自分の雫が8以上。\n\n【場にいる間】自分の雫によるターン開始時の回復量を2倍にする。\n\n【味方の攻撃時】自分のモンスターが攻撃する時、雫1を消費してそのモンスターの攻撃力+6（持続）にしてよい。\n\n【味方が攻撃される時】自分のモンスターが攻撃される時、雫1を消費してそのモンスターの体力+6（持続）にしてよい。\n\n【自分ターン開始時】自分は雫3を得る。"
+    },
+    {
+      "id": "CURSE",
+      "nameJa": "呪い",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】自分に1ダメージを与える。"
+    },
+    {
+      "id": "ORIGIN_RITE",
+      "nameJa": "始原の術式",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分が召喚した時】自分が「始原の守護者」以外の「始原」モンスターを召喚するたび、相手の場の、オーラを持たないモンスターと永続魔法からランダムに1枚を破壊する。対象がなければ代わりに相手に烙印カウンター1個を付与する。\n\n【破壊時】この魔法を自分のリフトへ送る。"
+    },
+    {
+      "id": "DRAGON_RIDER",
+      "nameJa": "ドラゴンライダー",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【場にいる間】2回目の攻撃は攻撃力半分(切り下げ)。"
+    },
+    {
+      "id": "ANTIQUE_DK",
+      "nameJa": "アンティークドラゴンナイト",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "—"
+    },
+    {
+      "id": "CASTLE",
+      "nameJa": "城",
+      "type": "mon",
+      "onSummon": "castleInit",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】このモンスターにカウンター2個を置く。\n\n【攻撃を受ける時】このモンスターが攻撃を受ける時、このモンスターのカウンター1個を消費してその攻撃を無効にする。\n\n【場にいる間】自分は購入コスト5以上のモンスターを召喚できない。\n\n【自分が召喚した時】自分が「兵士」「騎士」を召喚するたび、このモンスターにカウンター1個を置く。"
+    },
+    {
+      "id": "ACID_RAIN",
+      "nameJa": "酸性雨",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【相手の腐敗破壊時】相手モンスターが腐敗で破壊されるたび相手に烙印カウンター1個を付与する。"
+    },
+    {
+      "id": "BUDGET",
+      "nameJa": "運営予算",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】ダイス1個を振り2以上なら兵士(2/2)1体を自分の場に召喚する。"
+    },
+    {
+      "id": "EXPANSION",
+      "nameJa": "増設",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】自分の場に「城」がある。\n\n【発動時】自分の「城」にカウンター5個を置く。"
+    },
+    {
+      "id": "LAND_GRANT",
+      "nameJa": "領土付与",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動条件】自分の場に「城」がある。\n\n【発動時】カード一覧から購入コスト3以下の「貴族」モンスター1体を選び、新たに自分の場に召喚してよい。"
+    },
+    {
+      "id": "TREASON",
+      "nameJa": "反逆罪",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】相手の場に「城」がある。\n\n【発動時】相手の場の全モンスターと全永続魔法を破壊する（クエストは除く）。相手に烙印カウンター3個を付与する。"
+    },
+    {
+      "id": "STRONG_ACID",
+      "nameJa": "強酸性雨",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】相手の場の、卵以外の全モンスターにカウンター2個を付与する（腐敗の処理）。\n\n【相手の腐敗破壊時】腐敗で相手モンスターが破壊されるたび、相手に7ダメージを与え、相手に烙印カウンター1個を付与する。"
+    },
+    {
+      "id": "ROTTEN_GROUND",
+      "nameJa": "腐敗した土地",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【どちらかが召喚した時】どちらかが卵以外のモンスターを召喚するたび、そのモンスターにカウンター2個を付与する（腐敗の処理）。"
+    },
+    {
+      "id": "UNBRAND",
+      "nameJa": "徐印",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】相手と自分の烙印カウンターを全て取り除く。"
+    },
+    {
+      "id": "DEMON_REALM",
+      "nameJa": "魔界",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分の場の全ての「魔族」モンスターの効果・キーワード能力を無効にする。\n\n【自分が召喚した時】以後、自分が召喚する「魔族」モンスターにも同じ処理を行う。この無効化はこの魔法が場を離れても、そのモンスターが場にいる間続く。"
+    },
+    {
+      "id": "AEM",
+      "nameJa": "アンティークエンハンスマジック",
+      "type": "spell",
+      "route": "precast-target",
+      "reason": "golemBuff",
+      "effectJa": "【発動条件】自分のデッキ構成に「ゴーレム」系モンスターが2種類以上あり、自分の場にもいる。\n\n【発動時】自分の場の「ゴーレム」系モンスターを2体選び、各攻撃力+7（持続、1体しかいなければその1体）。"
+    },
+    {
+      "id": "KNIGHT_TEACH",
+      "nameJa": "ゴーレムキングの教え",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動時】現在自分の場にいる各モンスターに、次のいずれかを適用する。\n気合を持たない：気合と気合用カウンター1個を付与する（持続）。\n既に気合を持つ：気合用カウンターを3個追加する。"
+    },
+    {
+      "id": "DUNGEON",
+      "nameJa": "生きているダンジョン",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【場にいる間】両方の場の「気合」「回避」をどちらも持たないモンスターが攻撃する時、その攻撃の攻撃力を最大1にする。"
+    },
+    {
+      "id": "NL_SECRET",
+      "nameJa": "ナイトロードの秘技",
+      "type": "spell",
+      "route": "precast-target",
+      "reason": "nlTarget",
+      "effectJa": "【発動時】自分の場のモンスター1体を選び、「暗襲」か「回避」のどちらかを選んで付与する（持続）。自分の場の「アサシン」系モンスターを2体選び、各攻撃力+3（持続、1体しかいなければその1体）。"
+    },
+    {
+      "id": "HEXER1",
+      "nameJa": "初級呪術師",
+      "type": "mon",
+      "onSummon": "hexSummon",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分のデッキ構成に魔法が8枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。"
+    },
+    {
+      "id": "HEXER2",
+      "nameJa": "中級呪術師",
+      "type": "mon",
+      "onSummon": "hexSummon",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。4以上なら、新しい「呪い」4枚を相手の墓地に追加する。"
+    },
+    {
+      "id": "HEXER3",
+      "nameJa": "上級呪術師",
+      "type": "mon",
+      "onSummon": "hexSummon",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分のデッキ構成に魔法が13枚以上あれば、ダイス1個を振る。3以上なら、新しい「呪い」5枚を相手の墓地に追加する。\n\n【相手の魔法使用時】相手が魔法をプレイするたび、新しい「呪い」1枚を相手の墓地に追加する。"
+    },
+    {
+      "id": "HEXER4",
+      "nameJa": "特級呪術師 - ケロイド",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【召喚条件】自分のデッキ構成に魔法が15枚以上あり、全体の半分以上を占める。\n\n【相手の魔法使用時】相手が魔法を使用するたびダイス1個を振り、3以上ならその魔法を無効にする。\n\n【場にいる間】自分の場の全ての「呪術師」系モンスターの攻撃力+5。"
+    },
+    {
+      "id": "SORTER",
+      "nameJa": "選別者",
+      "type": "mon",
+      "onSummon": "sorterSummon",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の「カル」3枚を自動でリフトへ送る（墓地、デッキ、手札の順）。\n\n【自分のリフト追加時】自分のリフトに「カル」が追加されるたび、自分の「カル」1枚を同じ順で追加で送る（この追加分では再発動しない）。"
+    },
+    {
+      "id": "COLOSSEUM_REST",
+      "nameJa": "コロシアムの休憩場",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】自分のリフトの「カル」1枚につき、自分の体力を1回復する。"
+    },
+    {
+      "id": "COLOSSEUM",
+      "nameJa": "コロシアム",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】自分のリフトに「カル」が8枚以上あれば、「選ばれし」モンスターの一覧から1体を選び、新たに自分の場に召喚してよい。"
+    },
+    {
+      "id": "UNBRANDER",
+      "nameJa": "除印師",
+      "type": "mon",
+      "onSummon": "unbrand",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分に烙印カウンターがあれば自分の烙印カウンターを1個取り除く。"
+    },
+    {
+      "id": "LAWLESS",
+      "nameJa": "不法地帯",
+      "type": "spell",
+      "route": "precast-review",
+      "effectJa": "【発動時】両方の場の、卵以外の全モンスターの最大体力を1にし、蓄積ダメージを取り除く（持続）。\n\n【どちらかが召喚した時】後から召喚される卵以外のモンスターにも同じ処理を行う。"
+    },
+    {
+      "id": "RIFT",
+      "nameJa": "次元の裂け目",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分のリフト追加時】自分のリフトにカードが1枚追加されるたび、自分の体力を5回復する。"
+    },
+    {
+      "id": "FREE_REWARD",
+      "nameJa": "無償の対価",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【カード使用時】自分が購入コスト0のカードをプレイするたび、カードを1枚引く。"
+    },
+    {
+      "id": "NO_PAIN",
+      "nameJa": "ノーペインノーゲイン",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分がダメージを受けた時】自分がダメージを受けるたび、ダイス1個を振る。6なら、自分の最大マナ+1。"
+    },
+    {
+      "id": "ORIGIN_QUEST",
+      "nameJa": "起源の探究",
+      "type": "spell",
+      "act": "originQuest",
+      "route": "existing-rules",
+      "effectJa": "【発動時】両方の場の購入コスト0のモンスター・永続魔法1枚につき、カードを1枚引く。"
+    },
+    {
+      "id": "BEGINNER_MIND",
+      "nameJa": "初心",
+      "type": "spell",
+      "act": "beginnerMind",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】この魔法以外の自分の手札が0枚。\n\n【発動時】カードを4枚引く。"
+    },
+    {
+      "id": "VOID_RITE",
+      "nameJa": "次元術式",
+      "type": "spell",
+      "act": "voidAll",
+      "route": "precast-review",
+      "effectJa": "【発動時】両方の場の、卵以外の全モンスターに「虚無」を付与する（持続）。"
+    },
+    {
+      "id": "SPACE_RITE",
+      "nameJa": "空間術式",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】相手の場のモンスター・永続魔法が合計6枚以上。\n\n【場にある間】相手はモンスターを召喚できず、魔法を使用できない。\n\n【期間】自分のターン開始を3回迎えると終了する。"
+    },
+    {
+      "id": "LUCKY_ECHO",
+      "nameJa": "幸運の残響",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【ダイスを振った時】自分が振ったダイスの出目が6のたび相手に6ダメージを与える。この効果の処理中、自分のこの効果は再発動しない。"
+    },
+    {
+      "id": "BUYOUT",
+      "nameJa": "買い占め",
+      "type": "spell",
+      "act": "buyout",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】このターン、自分が同名カードを合計2枚以上購入している。\n\n【発動時】自分の最大マナ+1。"
+    },
+    {
+      "id": "PENANCE",
+      "nameJa": "苦行の対価",
+      "type": "spell",
+      "act": "penance",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分の烙印カウンター1個につき、自分の最大マナ+2、自分の体力を10回復する（カウンターは消費しない）。"
+    },
+    {
+      "id": "PACK_INSTINCT",
+      "nameJa": "群れの本能",
+      "type": "spell",
+      "act": "packInstinct",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】自分の場に同名モンスターが2体以上いる。\n\n【発動時】自分の場で同名が2体以上いるモンスター全ての攻撃力+2・体力+2（持続）。"
+    },
+    {
+      "id": "MIND_BURST",
+      "nameJa": "精神放出術",
+      "type": "spell",
+      "act": "mindBurst",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分の場の全モンスターから、気合に使うカウンターを全て取り除く。取り除いた合計数×4ダメージを相手に与える（それ以外のカウンターは取り除かない）。"
+    },
+    {
+      "id": "RICH_HABIT",
+      "nameJa": "富豪の習慣",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】開始時ドロー後、自分の手札が4枚以上なら自分の体力を6回復する。手札が6枚以上なら、さらに自分の最大マナ+1。"
+    },
+    {
+      "id": "Q_RIFT",
+      "nameJa": "リフト研究",
+      "type": "quest",
+      "route": "existing-rules",
+      "effectJa": "【クエスト】設置後、自分のリフトにカードが累計10枚追加される。\n\n【報酬】新しい「カル」7枚を自分のリフトに追加する。"
+    },
+    {
+      "id": "Q_BRAND",
+      "nameJa": "反撃の狼煙",
+      "type": "quest",
+      "route": "existing-rules",
+      "effectJa": "【クエスト】設置後、相手から累計40ダメージを受ける。\n\n【報酬】相手プレイヤーに烙印カウンターを1個付与する。"
+    },
+    {
+      "id": "Q_TORI",
+      "nameJa": "精霊 - トリ",
+      "type": "quest",
+      "route": "existing-rules",
+      "effectJa": "【クエスト】設置後、自分の場にモンスターがいない状態で、自分のターンを5回終了する。\n\n【報酬】自分の体力+30。"
+    },
+    {
+      "id": "Q_WINTER",
+      "nameJa": "精霊 - ウィンター",
+      "type": "quest",
+      "route": "existing-rules",
+      "effectJa": "【クエスト】設置後、自分の体力を累計30上昇させる。\n\n【報酬】自分の最大マナ+2。"
+    },
+    {
+      "id": "Q_TRIBE",
+      "nameJa": "一族の誓い",
+      "type": "quest",
+      "route": "existing-rules",
+      "effectJa": "【クエスト】設置後、自分が種族モンスターを累計6体召喚する。\n\n【報酬】自分の場にいる種族モンスターと同じ種族で、自分の場に同名がいないモンスター1体をカード一覧から選び、新たに自分の場に召喚する。"
+    },
+    {
+      "id": "Q_CASTLE",
+      "nameJa": "対攻城作戦",
+      "type": "quest",
+      "route": "existing-rules",
+      "effectJa": "【クエスト】設置後、自分の場の同じ個体の「城」を、双方のターン終了時に連続9回維持する。途中でその城が場を離れたり、別の個体に替わったりした場合は数え直す。\n\n【報酬】「騎士」3体を自分の場に召喚する。"
+    },
+    {
+      "id": "Q_DECAY",
+      "nameJa": "どくびし",
+      "type": "quest",
+      "route": "existing-rules",
+      "effectJa": "【クエスト】設置後、腐敗の効果で相手モンスターを4体破壊する。\n\n【報酬】相手プレイヤーに30ダメージを与える。"
+    },
+    {
+      "id": "Q_ASSASSIN",
+      "nameJa": "アサシンギルドの伝達",
+      "type": "quest",
+      "route": "existing-rules",
+      "effectJa": "【クエスト】設置後、自分の「アサシン」系モンスターの攻撃で相手プレイヤーに累計6回ダメージを与える（「アサシンギルド支部」の追加ダメージ発動も1回と数える）。\n\n【報酬】相手の場の、オーラを持たないモンスター・永続魔法・クエストから1枚を選び、相手のリフトへ送る。"
+    },
+    {
+      "id": "Q_MANA",
+      "nameJa": "マナ順応",
+      "type": "quest",
+      "route": "existing-rules",
+      "effectJa": "【クエスト】設置後、魔法カードを25回プレイする。\n\n【報酬】自分の最大マナ+4。"
+    },
+    {
+      "id": "QUICK_MIMIC",
+      "nameJa": "ミミックパーティー",
+      "type": "spell",
+      "route": "purchase-review",
+      "effectJa": "【購入時】「ミミック」1体を自分の場に召喚し、新たな「ミミック」2枚を自分のリフトに追加する。"
+    },
+    {
+      "id": "QUICK_SURVIVAL",
+      "nameJa": "生存をかけた戦い",
+      "type": "spell",
+      "route": "purchase-review",
+      "effectJa": "【購入条件】自分の体力が15以下。\n\n【購入時】「生きているダンジョン」1体を自分の場に召喚する。"
+    },
+    {
+      "id": "QUICK_POISON",
+      "nameJa": "ポイズン",
+      "type": "spell",
+      "route": "purchase-review",
+      "effectJa": "【購入条件】相手の場にオーラを持たないモンスターがいる。\n\n【購入時】そのモンスター1体を選び、カウンター2個を付与する（腐敗の処理）。"
+    },
+    {
+      "id": "QUICK_WORLD",
+      "nameJa": "世界樹の恵み",
+      "type": "spell",
+      "route": "purchase-review",
+      "effectJa": "【購入条件】自分の場に「エルフ」系または「世界樹」系のモンスター・永続魔法がある。\n\n【購入時】「世界樹の心臓」を自分の場に展開する。"
+    },
+    {
+      "id": "QUICK_MUSTER",
+      "nameJa": "緊急召集",
+      "type": "spell",
+      "route": "purchase-review",
+      "effectJa": "【購入条件】自分の場に「城」がある。\n\n【購入時】「兵士」3体を自分の場に召喚する。"
+    },
+    {
+      "id": "QUICK_SORT",
+      "nameJa": "選別の掟",
+      "type": "spell",
+      "route": "purchase-review",
+      "effectJa": "【購入条件】自分のリフトに「カル」が10枚以上ある。\n\n【購入時】相手の場の、オーラを持たないモンスター・永続魔法・クエストから1枚を選んで破壊する。"
+    },
+    {
+      "id": "QUICK_REBIRTH",
+      "nameJa": "強制輪廻",
+      "type": "spell",
+      "route": "purchase-review",
+      "effectJa": "【購入条件】自分の墓地にモンスターがいる。\n\n【購入時】自分の墓地のモンスター1体を選ぶ。購入コスト7以下なら「虚無」を付与して自分の場に召喚する（8以上なら何も起こらない）。"
+    },
+    {
+      "id": "QUICK_ATTUNE",
+      "nameJa": "アチューン・瞬",
+      "type": "spell",
+      "route": "purchase-review",
+      "effectJa": "【購入時】自分の最大マナ+1。自分は体力2を得る。"
+    },
+    {
+      "id": "QUICK_GRIMOIRE",
+      "nameJa": "呪術魔法書",
+      "type": "spell",
+      "route": "purchase-review",
+      "effectJa": "【購入時】このターン終了まで、自分が手札から使う魔法の発動コスト-1（最低0）。"
+    },
+    {
+      "id": "QUICK_ASSAULT",
+      "nameJa": "総攻撃",
+      "type": "spell",
+      "route": "purchase-review",
+      "effectJa": "【購入条件】自分の場にモンスターが2体以上いる。\n\n【購入時】自分の場の異なる個体2体を選び、このターン終了までそれぞれの攻撃力+2（同名可）。"
+    },
+    {
+      "id": "INTERCEPT",
+      "nameJa": "迎撃準備",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分の場に「砲撃兵」1体を召喚する。自分の場に「城」か「兵士」がいれば「大砲兵」1体も召喚する。"
+    },
+    {
+      "id": "REINFORCE",
+      "nameJa": "緊急応援",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【発動時】「騎士」「兵士」「砲撃兵」を1体ずつ自分の場に召喚する。次の相手ターン終了時に、この効果で召喚したモンスターを破壊する。"
+    },
+    {
+      "id": "GUNNER",
+      "nameJa": "砲撃兵",
+      "type": "mon",
+      "onSummon": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン終了時】相手プレイヤーと相手の場のモンスターからランダムに対象を1つ決め、1ダメージを与える。"
+    },
+    {
+      "id": "HEAVY_GUNNER",
+      "nameJa": "大砲兵",
+      "type": "mon",
+      "onSummon": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン終了時】相手プレイヤーと相手の場のモンスターからランダムに対象を1つ決め、2ダメージを与える。"
+    },
+    {
+      "id": "FARM_KEEPER",
+      "nameJa": "農場管理者",
+      "type": "mon",
+      "onSummon": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン終了時】自分の場に「醸造」があれば「かかし」2体を召喚する。"
+    },
+    {
+      "id": "MIMIC_HUNTER",
+      "nameJa": "ミミックハンター",
+      "type": "mon",
+      "onSummon": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン終了時】両方の場の「ミミック」を全て破壊する（同名カードのみ）。"
+    },
+    {
+      "id": "QUICK_HELLFIRE",
+      "nameJa": "獄炎",
+      "type": "spell",
+      "act": "expansion",
+      "route": "purchase-review",
+      "effectJa": "【購入時】相手に烙印カウンターがなければ1個、既にあれば2個を付与する。"
+    },
+    {
+      "id": "STABLE",
+      "nameJa": "馬小屋",
+      "type": "spell",
+      "act": "expansion",
+      "route": "precast-target",
+      "reason": "STABLE",
+      "effectJa": "【発動条件】自分の場に「騎士」系モンスターがいる。\n\n【発動時】自分の「騎士」系モンスター1体を選んで破壊する。破壊できたら「騎馬兵」1体を自分の場に召喚する。"
+    },
+    {
+      "id": "CAVALRY",
+      "nameJa": "騎馬兵",
+      "type": "mon",
+      "onSummon": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【場にいる間】このモンスターが受ける反撃を無効化する。"
+    },
+    {
+      "id": "MERCENARY",
+      "nameJa": "傭兵",
+      "type": "mon",
+      "onSummon": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス3個を振る。"
+    },
+    {
+      "id": "MERC_LEADER",
+      "nameJa": "傭兵リーダー",
+      "type": "mon",
+      "onSummon": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】「兵士」2体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス5個を振る。"
+    },
+    {
+      "id": "MERC_MASTER",
+      "nameJa": "傭兵ギルドマスター",
+      "type": "mon",
+      "onSummon": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】「兵士」2体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス10個を振る。\n\n【自分ターン開始時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス10個を振る。"
+    },
+    {
+      "id": "MERC_ART",
+      "nameJa": "傭兵術",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【場にある間】自分の「傭兵」系モンスターの召喚時・ターン開始時効果を2回行う（重複なし）。自分のデッキ構成に「傭兵」系が2種類以上あれば、自分の場の全ての「傭兵」系モンスターの攻撃力+3・体力+3。"
+    },
+    {
+      "id": "Q_CHEAT",
+      "nameJa": "イカサマ",
+      "type": "quest",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【クエスト】設置後、自分がダイスを累計20個振る。\n\n【報酬】相手のデッキからカード1枚を選び、相手のリフトへ送る。"
+    },
+    {
+      "id": "Q_TOWN",
+      "nameJa": "城下町",
+      "type": "quest",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【クエスト】設置後、「兵士」の召喚・「カジノ」の召喚・「ワイン」の使用がそれぞれ1回以上行われる（どちらのプレイヤーでも数える）。\n\n【報酬】新しい「支配」1枚を自分の手札に加える。"
+    },
+    {
+      "id": "DOMINION",
+      "nameJa": "支配",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【発動時】カードを3枚引く。このターン次に自分が手札から使うカード3枚の使用コストを1にする。相手の最大マナ-1、自分の最大マナ+1。"
+    },
+    {
+      "id": "POISON_MASTER",
+      "nameJa": "ポイズンマスター",
+      "type": "mon",
+      "onSummon": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【攻撃時】攻撃対象の相手モンスターにカウンター2個を追加で付与する（腐敗の処理）。"
+    },
+    {
+      "id": "ADVANCE",
+      "nameJa": "快進撃",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【発動時】現在、自分の場にいる全モンスターの攻撃力+2（持続）。「兵士」「騎士」「騎馬兵」はさらに+1。"
+    },
+    {
+      "id": "QUICK_AID",
+      "nameJa": "応急手当て",
+      "type": "spell",
+      "act": "expansion",
+      "route": "purchase-review",
+      "effectJa": "【購入条件】直前の相手ターンに、異なる個体の相手モンスター3体以上から直接攻撃のダメージを受けた（同名可）。\n\n【購入時】自分の体力を25回復する。"
+    },
+    {
+      "id": "EMPTY_MIND",
+      "nameJa": "無の境地",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【購入条件】自分のデッキ構成に魔法が9枚以上ある。\n\n【発動条件】このターン、自分が既に魔法を4枚以上プレイしている。\n\n【発動時】新しい「創造」1枚を自分の手札に加える。"
+    },
+    {
+      "id": "CREATION",
+      "nameJa": "創造",
+      "type": "spell",
+      "act": "expansion",
+      "route": "precast-review",
+      "effectJa": "【発動時】カードを1枚引き、自分の体力を1回復する。新しい「創造」1枚を自分の墓地に追加する。このカードを含め自分のリフトに「創造」が10枚以上あれば、相手のデッキからカード1枚を選び、その複製を自分の墓地に追加する。\n\n【回数制限】同名合計で自分の各ターン3回まで。"
+    },
+    {
+      "id": "ROGUE_ART",
+      "nameJa": "盗賊の心得",
+      "type": "spell",
+      "act": "expansion",
+      "route": "precast-target",
+      "reason": "ROGUE_ART",
+      "effectJa": "【コスト】自分の場に「アサシン」系モンスターがいれば、このカードの購入・発動コストは0。\n\n【発動時】自分の場に「アサシン」系モンスターがいれば、自分の場の全モンスターに回避を付与する（持続）。いなければ、自分の場のモンスター1体を選び、回避を付与する（持続）。"
+    },
+    {
+      "id": "MIMIC_HIDEOUT",
+      "nameJa": "ミミックの隠れ家",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン終了時】自分の場に「ミミック」系モンスターがいれば、「マスターミミック」1体を自分の場に召喚する。"
+    },
+    {
+      "id": "BLACK_REVERSE",
+      "nameJa": "黒魔法：リバース",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【場にある間】どちらかのプレイヤーへのダメージを、もう一方のプレイヤーに移す（モンスターへのダメージは対象外・重複なし）。\n\n【期間】自分のターン開始を6回迎えると終了する。\n\n【回数制限】各プレイヤー、同名合計でゲーム中2回まで。"
+    },
+    {
+      "id": "BLACK_INFINITY",
+      "nameJa": "黒魔法：インフィニティ",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【発動条件】このターン、両プレイヤーの魔法がプレイヤー・モンスターに与えたダメージが累計5以上。\n\n【場にある間】自分プレイヤーへの魔法ダメージを無効にし、防いだダメージ量と同じ枚数の新しい「カル」を自分のリフトに追加する。\n\n【期間】自分のターン開始を6回迎えると終了する。"
+    },
+    {
+      "id": "BLACK_NOVA",
+      "nameJa": "黒魔法：ノヴァ",
+      "type": "spell",
+      "act": "expansion",
+      "route": "precast-review",
+      "effectJa": "【発動条件】自分の場にモンスターがいない。\n\n【発動時】自分の体力を1にする。その後、次の相手ターンを1回スキップする。"
+    },
+    {
+      "id": "BLACK_CURSE",
+      "nameJa": "黒魔法：カース",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【購入条件】自分のデッキ構成に、同名以外の「黒魔法」がある。\n\n【発動時】新しい「呪い」5枚を相手の墓地に追加する。"
+    },
+    {
+      "id": "BLACK_ELSA",
+      "nameJa": "黒魔術師 - エルサ",
+      "type": "mon",
+      "onSummon": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】新しい「呪い」7枚を相手の墓地に追加する。\n\n【黒魔法の使用時】自分が「黒魔法」をプレイするたび、相手に烙印カウンター1個を付与する。"
+    },
+    {
+      "id": "BLACK_ALICE",
+      "nameJa": "黒魔術師 - アリス",
+      "type": "mon",
+      "onSummon": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】新しい「呪い」2枚を相手の墓地に追加する。\n\n【黒魔法の使用時】自分が「黒魔法」をプレイするたび、自分の最大マナ+1。"
+    },
+    {
+      "id": "QUICK_CURSE",
+      "nameJa": "消えない呪い",
+      "type": "spell",
+      "act": "expansion",
+      "route": "purchase-review",
+      "effectJa": "【購入時】相手のリフトの「呪い」1枚につき、新しい「呪い」1枚を相手の墓地に追加する。"
+    },
+    {
+      "id": "SOUL_HARVEST",
+      "nameJa": "魂の収穫",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【発動時】相手のデッキ構成にある呪い1枚につき相手プレイヤーに4ダメージを与える。"
+    },
+    {
+      "id": "ANESTHESIA",
+      "nameJa": "麻酔",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【発動時】このターン終了まで、現在自分の場にいる全モンスターが受けるダメージを無効にする（後から召喚するモンスターは対象外）。"
+    },
+    {
+      "id": "EARTHQUAKE",
+      "nameJa": "地震",
+      "type": "spell",
+      "act": "expansion",
+      "route": "precast-review",
+      "effectJa": "【発動時】両方の場のモンスター全体に4ダメージを与える。"
+    },
+    {
+      "id": "MAGMA_RAIN",
+      "nameJa": "マグマの雨",
+      "type": "spell",
+      "act": "expansion",
+      "route": "precast-review",
+      "effectJa": "【発動時】両方の場のモンスター全体に6ダメージを与える。"
+    },
+    {
+      "id": "FIRE_BALL",
+      "nameJa": "ファイアーボール",
+      "type": "spell",
+      "act": "expansion",
+      "route": "precast-target",
+      "reason": "FIRE_BALL",
+      "effectJa": "【発動時】自分に2ダメージを与える。どちらかのプレイヤー1人、またはどちらかの場のモンスター1体を選び、6ダメージを与える。"
+    },
+    {
+      "id": "FIRE_ARROW",
+      "nameJa": "ファイアーアロー",
+      "type": "spell",
+      "act": "expansion",
+      "route": "precast-review",
+      "effectJa": "【発動時】自分に1ダメージを与える。相手プレイヤーと相手の場のモンスターから毎回ランダムに対象を1つ決め、1ダメージを与える処理を3回行う。"
+    },
+    {
+      "id": "FIRE_ZONE",
+      "nameJa": "ファイアーゾーン",
+      "type": "spell",
+      "act": "expansion",
+      "route": "precast-target",
+      "reason": "FIRE_ZONE",
+      "effectJa": "【発動条件】この魔法以外に、除外できる自分の手札がある。\n\n【発動時】その手札1枚を選んで自分のリフトへ送る。相手の場の全モンスターと相手プレイヤーにそれぞれ5ダメージ（このターン既に自分がファイアー魔法をプレイしていれば、代わりに9ダメージ）。"
+    },
+    {
+      "id": "FIRE_METEOR",
+      "nameJa": "ファイアーメテオ",
+      "type": "spell",
+      "act": "expansion",
+      "route": "precast-review",
+      "effectJa": "【コスト】このターン既に他のファイアー魔法をプレイしていれば、発動コストを1にする。\n\n【発動時】自分の最大マナを1減らす。その後、相手プレイヤーと相手の場のモンスターから毎回ランダムに対象を1つ決め、2ダメージを与える処理を8回行う。"
+    },
+    {
+      "id": "FIRE_ART",
+      "nameJa": "炎術の極意",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【発動時】このターン自分のファイアー魔法の発動コスト-2(最低0)。"
+    },
+    {
+      "id": "FIRE_MASTER",
+      "nameJa": "ファイアーマスター",
+      "type": "mon",
+      "onSummon": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【場にいる間】自分の「ファイアー魔法」の発動コスト-2（最低0）。\n\n【破壊時】自分のデッキ・墓地から「ファイアー魔法」を合計2枚選び、手札に加える（1枚しかなければその1枚）。"
+    },
+    {
+      "id": "DOUBLE_UP",
+      "nameJa": "ダブルアップ",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【場にある間】両プレイヤーの魔法によるダメージが2倍(重複なし)。"
+    },
+    {
+      "id": "ASSASSIN_SQUAD",
+      "nameJa": "アサシンスカッド",
+      "type": "mon",
+      "onSummon": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分の場に他の「アサシン」系モンスターがいれば、「中級アサシン」1体を自分の場に召喚し、自分の場の全モンスターに「回避」を付与する（持続）。\n\n【攻撃条件】相手プレイヤーの体力が11以上。"
+    },
+    {
+      "id": "DISCOVERY_SMALL",
+      "nameJa": "小さな発見",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【発動時】カードを2枚引く。\n\n【回数制限】同名合計で自分の各ターン1回まで。"
+    },
+    {
+      "id": "DISCOVERY",
+      "nameJa": "発見",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【発動時】カードを3枚引く。この効果より前に、このターン自分が通常の開始時ドロー以外でカードを引いていれば、さらにカードを1枚引く。\n\n【回数制限】同名合計で自分の各ターン1回まで。"
+    },
+    {
+      "id": "DISCOVERY_LARGE",
+      "nameJa": "大きな発見",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【発動時】カードを4枚引く。この効果より前に、このターン自分が通常の開始時ドロー以外でカードを引いていれば、さらにカードを2枚引く。\n\n【回数制限】同名合計で自分の各ターン1回まで。"
+    },
+    {
+      "id": "PREPARATION",
+      "nameJa": "仕込み",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【自分ターン開始時】追加でカードを1枚引く（合計7回の後、この魔法を墓地へ送る）。"
+    },
+    {
+      "id": "EROSION",
+      "nameJa": "摩耗",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【追加ドロー時】自分のターン中、通常の開始時ドロー以外でカードを1枚引くたび、相手に1ダメージを与える。"
+    },
+    {
+      "id": "GROWTH",
+      "nameJa": "成長",
+      "type": "spell",
+      "act": "expansion",
+      "route": "existing-rules",
+      "effectJa": "【追加ドロー時】自分のターン中、通常の開始時ドロー以外でカードを1枚引くたび、自分の体力を1回復する。"
+    },
+    {
+      "id": "APPRENTICE_ARMORER",
+      "nameJa": "見習い装備職人",
+      "type": "mon",
+      "onSummon": "armorer",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】「自分がシールド4を得る」か「自分の場の他のモンスター1体を選び、攻撃力+1・体力+1（持続）」を選ぶ。"
+    },
+    {
+      "id": "VETERAN_ARMORER",
+      "nameJa": "熟練した装備職人",
+      "type": "mon",
+      "onSummon": "armorer",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】「自分がシールド10を得る」か「自分の場の他のモンスター1体を選び、攻撃力+2・体力+2（持続）」を選ぶ。自分の場に「城」があれば両方行う。強化対象が「兵士」「騎士」「砲撃兵」「傭兵」系なら、+2の代わりに攻撃力+3・体力+3。"
+    },
+    {
+      "id": "SALLY_WEAPONMASTER",
+      "nameJa": "サリィ - ウェポンマスター",
+      "type": "mon",
+      "onSummon": "armorer",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】「自分がシールド30を得る」か「自分の場の他のモンスター1体を選び、攻撃力+4・体力+4（持続）」を選ぶ。\n\n【自分ターン開始時】自分の場の「装備職人」1体ごとに、別々に自分がシールド5を得る。"
+    },
+    {
+      "id": "PRIEST",
+      "nameJa": "神官",
+      "type": "mon",
+      "onSummon": "shield",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分はシールド6を得る。\n\n【シールド獲得時】自分がシールドを得るたび、自分は雫2を得る。"
+    },
+    {
+      "id": "HIGH_PRIEST",
+      "nameJa": "高等神官",
+      "type": "mon",
+      "onSummon": "shield",
+      "route": "existing-rules",
+      "effectJa": "【召喚時】自分はシールド9を得る。\n\n【シールド獲得時】自分がシールドを得るたび、自分は雫3を得る。"
+    },
+    {
+      "id": "BLACKSMITH",
+      "nameJa": "鍛冶屋",
+      "type": "spell",
+      "route": "existing-rules",
+      "effectJa": "【場にある間】自分が得るシールド量が2倍になる。"
+    },
+    {
+      "id": "SHIELD_TITAN",
+      "nameJa": "盾の巨神",
+      "type": "mon",
+      "route": "existing-rules",
+      "effectJa": "【召喚条件】直前の相手ターン中にシールド20以上を保有した。\n\n【自分ターン終了時】シールド10を得る。\n\n【場にいる間】このモンスターの効果以外で自分が得るシールド量が2倍になる。"
+    },
+    {
+      "id": "ARMOR_BREAK",
+      "nameJa": "アーマーブレイク",
+      "type": "spell",
+      "act": "armorBreak",
+      "route": "existing-rules",
+      "effectJa": "【発動時】相手のシールドを9減らす（最低0）。この効果で減らす前の相手のシールドが10以上なら、相手に烙印カウンター1個を付与する。"
+    },
+    {
+      "id": "SPEAR_AND_SHIELD",
+      "nameJa": "矛と盾",
+      "type": "spell",
+      "act": "spearShield",
+      "route": "existing-rules",
+      "effectJa": "【発動時】相手のシールド量が自分の場の全モンスターの総攻撃力未満なら、相手のシールドを全て破壊する。"
+    },
+    {
+      "id": "SELECTED_SWORD",
+      "nameJa": "選りすぐりの剣",
+      "type": "spell",
+      "act": "cullSword",
+      "route": "precast-target",
+      "reason": "SELECTED_SWORD",
+      "effectJa": "【発動時】どちらかの場のモンスター1体を選び、自分のリフトの「カル」1枚につき、その攻撃力+1（このターン終了まで）。"
+    },
+    {
+      "id": "SELECTED_SHIELD",
+      "nameJa": "選りすぐりの盾",
+      "type": "spell",
+      "act": "cullShield",
+      "route": "precast-review",
+      "effectJa": "【発動時】自分のリフトの「カル」枚数と同じ量のシールドを自分が得る。"
+    },
+    {
+      "id": "WINE_COLLECTOR",
+      "nameJa": "ワインコレクター",
+      "type": "mon",
+      "onSummon": "wineCollector",
+      "route": "precast-review",
+      "effectJa": "【召喚時】自分の手札に「ワイン」が2枚以上あれば、次の全てを行う。\nそのうち2枚を自動で自分のリフトへ送る。新しい「闇商人」1枚を自分の手札に加える。このモンスターも自分のリフトへ送る。"
+    },
+    {
+      "id": "DEFENSIVE_STANCE",
+      "nameJa": "防御の姿勢",
+      "type": "spell",
+      "act": "golemShield",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分はシールドを3＋（自分の場の「ゴーレム」系モンスターの種類数×2）得る（合計を1回で獲得）。"
+    },
+    {
+      "id": "IRON_WALL",
+      "nameJa": "鉄壁",
+      "type": "spell",
+      "act": "golemShield",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分はシールドを6＋（自分の場の「ゴーレム」系モンスターの種類数×3）得る（合計を1回で獲得）。"
+    },
+    {
+      "id": "DESERTIFICATION",
+      "nameJa": "砂漠化",
+      "type": "spell",
+      "act": "desertification",
+      "route": "existing-rules",
+      "effectJa": "【発動時】相手の雫を0にする。"
+    },
+    {
+      "id": "NOURISHING_RAIN",
+      "nameJa": "潤う雨",
+      "type": "spell",
+      "act": "dew",
+      "route": "existing-rules",
+      "effectJa": "【発動時】自分は雫1を得る。"
+    },
+    {
+      "id": "STARTER_TRASH",
+      "nameJa": "カル",
+      "type": "starter",
+      "route": "existing-rules",
+      "effectJa": "【使用時】このカードを自分のリフトへ送る。"
+    },
+    {
+      "id": "STARTER_CHEST",
+      "nameJa": "宝箱",
+      "type": "starter",
+      "route": "precast-review",
+      "effectJa": "【使用時】ダイス1個を振る — 1-2: 相手の場に「ミミック」（攻撃力3・体力2）1体を召喚する / 3-4: 自分の体力を5回復する / 5-6: 自分の最大マナ+1。"
+    },
+    {
+      "id": "STARTER_MANA",
+      "nameJa": "アチューン",
+      "type": "starter",
+      "route": "existing-rules",
+      "effectJa": "【使用時】自分の最大マナ+1。"
+    }
+  ]
+}

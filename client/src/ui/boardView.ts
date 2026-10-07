@@ -15,7 +15,7 @@ import {prepareDuel} from './duelReadiness';
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { purchaseAllowed, freeBuyBlocked, playBlockReason, cardPlayConditionMet } from "../shared/engine";
-import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem, marketStockOf } from "../shared/engine";
+import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isVampFamily, isGolem, marketStockOf } from "../shared/engine";
 import { enchantHasTurnCountdown, fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
@@ -499,6 +499,8 @@ export class GameView {
       // 아우라(ward): 공격 대상으로는 지정 가능하지만 마법·몬스터 "효과"의 대상은 안 됨
       // 고급 부화기(incubate): 자신의 "알"만 선택 가능
       const targetableMon = targetableZone
+        && !(pending!.data?.sourceId === "S3" && m.tribe)
+        && !(pending!.reason === "bloodSecret" && !isVampFamily(m))
         && !(pending!.kind === "oppMon" && !isMe && pending!.reason !== "attack" && hasPassive(m, "aura")) // 아우라는 상대 효과만 차단 — 내 카드는 내 효과로 파괴 가능
         && !(pending!.kind === "oppMon" && pending!.reason === "decayMark" && m.hatch != null) // 카운터: 알 제외
         && !(pending!.kind === "oppMon" && pending!.reason === "destroyMon" && pending!.data?.maxCost != null && m.cost > (pending!.data.maxCost as number)) // 룬 파열: 코스트 캡

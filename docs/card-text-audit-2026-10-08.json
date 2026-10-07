@@ -8304,7 +8304,7 @@
         "en"
       ],
       "definitionSha256": "08953935696ddf945a9428d48565e8f0f253876a7fa0f62d6da64e155ec745ac",
-      "textSha256": "c24194109dada25142d0b270828059ceafd585b5931194d83fb848af9be22d60",
+      "textSha256": "9f345cb2b656461828d9bd5158e8b58d53426aff3db5584350d6669e0a22b8d5",
       "hooks": {
         "act": "cullSword"
       },
@@ -8314,10 +8314,11 @@
         "en": "Choose 1 monster on your field; it gets +1 ATK per Cull in your Rift until this turn ends"
       },
       "after": {
-        "ja": "【発動時】自分の場のモンスター1体を選び、自分のリフトの「カル」1枚につき、その攻撃力+1（このターン終了まで）。",
-        "ko": "【발동시】자신의 필드의 몬스터 1체를 선택해 자신의 리프트의 컬 1장당 그 공격력 +1(이번 턴 종료까지).",
-        "en": "【On Cast】Choose 1 monster on your field; it gets +1 ATK per Cull in your Rift until this turn ends."
-      }
+        "ja": "【発動時】どちらかの場のモンスター1体を選び、自分のリフトの「カル」1枚につき、その攻撃力+1（このターン終了まで）。",
+        "ko": "【발동시】어느 쪽 필드든 몬스터 1체를 선택해 자신의 리프트의 컬 1장당 그 공격력 +1(이번 턴 종료까지).",
+        "en": "【On Cast】Choose 1 monster on either field; it gets +1 ATK per Cull in your Rift until this turn ends."
+      },
+      "uxReview": "2026-10-08: allow either field per user request; enemy Aura excluded; expires at casting-turn end; pre-cast cancellation spends nothing."
     },
     "SELECTED_SHIELD": {
       "nameJa": "選りすぐりの盾",
