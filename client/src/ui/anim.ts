@@ -6,6 +6,7 @@ import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {isMimic,focusScale,type MimicId} from './mimic/selection';
 import {playMonster,setMonsterSkip} from './monster/runtime';
 import {summonPlacement} from './summon/runtime';
+import {isVerdant} from './verdant/selection';
 import {foldQuestIntoSlot,nativeQuestGhost,warmQuestPact} from './questFold';
 import {getManaFormation} from './manaFormationPreview';
 import {passiveIcon} from './passiveIcon';
@@ -191,12 +192,12 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   if(heavy){
     face.style.zIndex='135';reveal.style.zIndex='135';
     // Transfer directly into the selected card-parallel landing, without a second impact.
-    const initial=summonPlacement(target,w,h,0,reduced);
+    const initial=summonPlacement(target,w,h,0,reduced,face.dataset.cardId);
     const transfer=face.animate([{transform:start.toString(),opacity:0},{transform:initial.toString(),opacity:1}],{duration:reduced?80:300,easing:'cubic-bezier(.2,.7,.3,1)',fill:'both'});
     const fade=reveal.animate([{opacity:1},{opacity:0}],{duration:reduced?80:220,fill:'both'});
     await wait(reduced?80:300);transfer.cancel();fade.cancel();reveal.remove();
     face.style.transform=initial.toString();
-    await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}));
+    await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}),isVerdant(face.dataset.cardId)?10000:5000);
     face.style.transform=fieldPlacement(target,w,h).toString();return face;
   }
   const duration=reduced?120:620;
@@ -430,7 +431,7 @@ export function pileFlash(id: string): void {
 
 export function summonIn(uid: string): void {
   const n = byUid(uid);
-  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}));
+  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}),isVerdant(n.dataset.cardId)?10000:5000);
 }
 
 export function lunge(uid: string, dir: "up" | "down"): void {
