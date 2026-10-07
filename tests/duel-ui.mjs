@@ -118,6 +118,12 @@ click(document.querySelector('#refreshBtn'));assert.equal(rerolls,1);
 v.setHandOpen(true);assert(document.querySelector('.game.hand-open'));v.setHandOpen(false);assert(!document.querySelector('.game.hand-open'));
 g.cur=1;v.render(g);assert(document.querySelector('#refreshBtn').disabled);assert(document.querySelector('#endBtn').disabled);
 g.cur=0;g.players[0].supply[1]=null;v.render(g);assert.equal(document.querySelectorAll('#supplyMarket > *').length,3);assert.equal(document.querySelectorAll('#supplyMarket > .is-bought').length,1);
+// Attack targeting is indicated on cards without blocking the end-turn control.
+assert.equal(document.querySelector('.help-callout'),null);
+g.pending={kind:'oppMon',reason:'attack',hint:'',hintJa:'',allowCancel:true,data:{attackerUid:g.players[0].field[0]?.uid}};
+v.render(g);assert.equal(document.querySelector('#targetHint').style.display,'none');assert.equal(document.querySelector('#endBtn').disabled,false);
+g.pending={kind:'myMon',reason:'buffTurn',hint:'',hintJa:'',allowCancel:false};v.render(g);assert.equal(document.querySelector('#endBtn').disabled,true);
+g.pending=null;v.render(g);
 assert.deepEqual(avatarPresets(),['SEEKER_RED','SEEKER_BLUE']);assert(avatarHtml('SEEKER_RED','A').includes('seeker-red'));
 for(const [w,h] of [[1920,1080],[1280,720],[1024,768],[390,844],[320,568],[844,390]]) {const m=solveBoard(w,h);assert(m.tile>=20&&m.mktH>=31);assert.equal(m.underPile,false);}
 // Complete type-specific UI faces and live numeric overlays survive rendering.

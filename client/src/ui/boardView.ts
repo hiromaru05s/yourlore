@@ -1,6 +1,6 @@
 import { npcPortrait } from "../shared/botNpcs";
 import {prepareManaPurchase} from './manaPurchase';
-import {monsterCanAttack} from '../shared/engine';
+import {monsterCanAttack,monsterCanTarget} from '../shared/engine';
 import {furnitureUrl} from '../shared/cosmetics';
 import {seekerPortrait} from './seekerAnimation';
 import {HandConditionHighlights} from './handCondition';
@@ -165,29 +165,8 @@ export class GameView {
     (this.q("giveupBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
     // sound button (round button below the logo): click = volume slider popover
     // (ON/OFF만 있던 것을 인게임 볼륨 조절로 확장 — 슬라이더 0 = 음소거)
-    // 조작 방법 안내: 버튼을 은은히 빛내고, 하루 1회 말풍선으로 위치를 알려준다.
-    // ❌로 닫거나 도움말을 실제로 열면 그날은 다시 보이지 않는다 (localStorage 날짜 도장).
     const helpBtn = this.q("helpBtn") as HTMLButtonElement;
-    const CALLOUT_KEY = "lore_help_callout_seen";
-    const today = new Date().toISOString().slice(0, 10);
-    let seenDay = "";
-    try { seenDay = localStorage.getItem(CALLOUT_KEY) ?? ""; } catch { /* private mode */ }
-    let callout: HTMLElement | null = null;
-    const dismissCallout = (remember: boolean): void => {
-      callout?.remove(); callout = null;
-      helpBtn.classList.remove("is-callout");
-      if (remember) { try { localStorage.setItem(CALLOUT_KEY, today); } catch { /* ignore */ } }
-    };
-    if (seenDay !== today) {
-      helpBtn.classList.add("is-callout");
-      callout = document.createElement("div");
-      callout.className = "help-callout";
-      callout.innerHTML = `<span class="hc-text">${t("help.callout")}</span><button class="hc-close" aria-label="${t("common.cancel")}">✕</button>`;
-      (this.root.querySelector(".game") as HTMLElement).appendChild(callout);
-      (callout.querySelector(".hc-close") as HTMLButtonElement).onclick = (e) => { e.stopPropagation(); dismissCallout(true); };
-      callout.onclick = () => { dismissCallout(true); showControlsHelp(); };
-    }
-    helpBtn.onclick = () => { dismissCallout(true); showControlsHelp(); };
+    helpBtn.onclick = () => showControlsHelp();
     const muteBtn = this.q("muteBtn") as HTMLButtonElement;
     let lastVol = getSfxVolume() || 0.7;
     const paintMute = () => { const m = getSfxVolume() <= 0; muteBtn.innerHTML = `<img src="/ui/duel-controls/v1/sound.png" alt="" draggable="false"><span class="sound-label">${t("settings.sound")}</span><i class="mute-mark" aria-hidden="true">×</i>`; muteBtn.classList.toggle("muted", m);muteBtn.setAttribute('aria-label',t('settings.sound.volume'));muteBtn.title=t('settings.sound.volume'); };
@@ -431,7 +410,7 @@ export class GameView {
     this.renderMarket(g, me, myTurn);
     this.renderHand(g, me, myTurn);
 
-    (this.q("endBtn") as HTMLButtonElement).disabled = this.root.dataset.readingTurn!=='player' || !!pending;
+    (this.q("endBtn") as HTMLButtonElement).disabled = this.root.dataset.readingTurn!=='player' || (!!pending && pending.reason !== 'attack');
 
     // Warm the full-resolution art for everything enlargeable on this board, at
     // idle. A tap on a phone has no hover to hint from, so without this the
@@ -444,7 +423,7 @@ export class GameView {
 
     // target hint banner
     const hint = this.q("targetHint");
-    if (pending && myTurn && (pending.kind === "oppMon" || pending.kind === "myMon")) {
+    if (pending && pending.reason !== 'attack' && myTurn && (pending.kind === "oppMon" || pending.kind === "myMon")) {
       hint.style.display = "block";
       hint.innerHTML = `▸ ${getLang() === "ja" ? pending.hintJa : getLang() === "en" ? logToEn(pending.hint) : pending.hint}` + (pending.allowCancel ? ` &nbsp; <a id="cancelTarget" style="cursor:pointer">[${t("common.cancel")}]</a>` : "");
       const c = hint.querySelector("#cancelTarget") as HTMLElement | null;
@@ -499,6 +478,7 @@ export class GameView {
       // 아우라(ward): 공격 대상으로는 지정 가능하지만 마법·몬스터 "효과"의 대상은 안 됨
       // 고급 부화기(incubate): 자신의 "알"만 선택 가능
       const targetableMon = targetableZone
+        && (pending!.reason !== "attack" || g.players[g.cur].field.some(a => a.uid === pending!.data?.attackerUid && monsterCanTarget(g,g.players[g.cur],a,m)))
         && !(pending!.kind === "oppMon" && !isMe && pending!.reason !== "attack" && hasPassive(m, "aura")) // 아우라는 상대 효과만 차단 — 내 카드는 내 효과로 파괴 가능
         && !(pending!.kind === "oppMon" && pending!.reason === "decayMark" && m.hatch != null) // 카운터: 알 제외
         && !(pending!.kind === "oppMon" && pending!.reason === "destroyMon" && pending!.data?.maxCost != null && m.cost > (pending!.data.maxCost as number)) // 룬 파열: 코스트 캡
@@ -514,8 +494,9 @@ export class GameView {
       // 카지노(v34): 카운터 배지 (12개마다 카지노 주사위)
       const countLabel = getLang() === 'ja' ? 'カウント' : getLang() === 'en' ? 'Count' : '카운트';
       const casinoBadge = m.aura === "casino" ? { badge: `${countLabel} ${m.gcount || 0}/12` } : m.id === "CASTLE" ? { badge: `${countLabel} ${m.gcount || 0}` } : {};
-      const card = cardEl(m, { field: true, owner: p, game: g, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted, ...casinoBadge });
-      if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
+      const card = cardEl(m, { field: true, owner: p, game: g, attacker: canAttack, targetable: targetableMon, exhausted: isMe && myTurn && m.exhausted, ...casinoBadge });
+      if (pending?.reason === "attack" && isMe && myTurn && pending.data?.attackerUid === m.uid) card.onclick = () => this.h.onChooseTarget(null);
+      else if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
       // zoom shows the monster's CURRENT atk/hp (buffs/mods applied) — and, when damaged,
       // "현재/최대" exactly like the field tile (v29: the zoom used to show HP only,
