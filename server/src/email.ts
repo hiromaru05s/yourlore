@@ -36,12 +36,13 @@ export async function issueToken(env: Env, userId: string, kind: TokenKind): Pro
   if (recent && Date.now() - recent.created_at < RESEND_GAP_MS) return null;
   const token = [...crypto.getRandomValues(new Uint8Array(24))].map((x) => x.toString(16).padStart(2, "0")).join("");
   const now = Date.now();
-  await env.DB.batch([
-    env.DB.prepare(`DELETE FROM email_tokens WHERE user_id = ? AND kind = ?`).bind(userId, kind),
-    env.DB.prepare(`INSERT INTO email_tokens (token, user_id, kind, created_at, expires_at) VALUES (?,?,?,?,?)`)
+  const [, inserted] = await env.DB.batch([
+    env.DB.prepare(`DELETE FROM email_tokens WHERE user_id=? AND kind=? AND created_at<=?`).bind(userId, kind, now - RESEND_GAP_MS),
+    env.DB.prepare(`INSERT INTO email_tokens (token, user_id, kind, created_at, expires_at)
+      SELECT ?1,?2,?3,?4,?5 WHERE NOT EXISTS (SELECT 1 FROM email_tokens WHERE user_id=?2 AND kind=?3)`)
       .bind(token, userId, kind, now, now + TOKEN_TTL_MS),
   ]);
-  return token;
+  return inserted.meta.changes ? token : null;
 }
 
 /** Look up + consume-check a token. Does NOT delete it (caller deletes on success). */

@@ -146,6 +146,8 @@ export class GameRoom {
       if (req.method !== "POST") return new Response("method not allowed", { status: 405 });
       if (this.room) return new Response("already provisioned", { status: 409 });
       const body = (await req.json()) as { players: [PlayerRef, PlayerRef]; seed: number; ranked?: boolean; botId?: string };
+      // Reading the request body yields; a concurrent setup may have won meanwhile.
+      if (this.room) return new Response("already provisioned", { status: 409 });
       const bot = body.botId ? matchBot(body.botId) : undefined;
       if (body.botId && (!matchBotsEnabled(this.env) || !bot || body.players[1]?.id !== bot.id || body.players[0]?.id === bot.id)) return new Response('invalid test bot', {status:403});
       if (bot) body.players[1] = {id:bot.id,name:bot.name,deck:bot.deck.cards.join(',')};
@@ -271,7 +273,7 @@ export class GameRoom {
     if (msg.type === "openingReady") {
       if (!room.game.over && room.opening && room.previewDone) {
         room.opening.ready[att.side] = true;
-        await this.state.storage.put("room", room);
+        await this.persist();
         if (room.readied.every(Boolean) && room.opening.ready.every(Boolean)) await this.startOpening();
       }
       return;
@@ -381,6 +383,8 @@ export class GameRoom {
       room.joinBy = null;
       room.game.over = true; room.game.phase = "over"; room.game.winner = null;
       room.recorded = true; // no-contest — never touch the ladder
+      await this.persist();
+      await this.syncAlarm();
       for (const s of [0, 1] as Side[]) {
         const ws = this.sockFor(s);
         if (ws) { try { this.send(ws, { type: "voided", message: "상대가 참가하지 않아 매칭이 취소되었습니다 (점수 변동 없음)" }); } catch { /* dropped */ } }
@@ -410,6 +414,8 @@ export class GameRoom {
       // If the "winner" never actually joined, this was never a real game → void, don't award rank.
       if (!room.readied[winner]) { room.game.over = true; room.game.phase = "over"; room.game.winner = null; room.recorded = true; continue; }
       room.game.over = true; room.game.phase = "over"; room.game.winner = winner;
+      await this.persist();
+      await this.syncAlarm();
       const remaining = this.sockFor(winner);
       if (remaining) {
         try {
@@ -431,6 +437,8 @@ export class GameRoom {
         room.game = st;
         if (st.turn !== prevTurn || st.cur !== prevCur) {
           room.turnStartAt = Date.now(); room.turnBonusMs = 0;
+          await this.persist();
+          await this.syncAlarm();
           this.broadcast(evs);
         } else {
           // engine refused (unclearable pending) — retry in 10s instead of hot-looping
@@ -568,7 +576,7 @@ export class GameRoom {
       // Mixed/older clients keep the legacy immediate-start path; never use a mismatched cinematic clock.
       delete room.opening;room.turnStartAt=Date.now();
     } else if(opening.prepareBy==null) opening.prepareBy=Date.now()+OPENING_PREPARE_MS;
-    await this.state.storage.put("room",room);
+    await this.persist();
     await this.syncAlarm();
     for(const side of [0,1] as Side[])await this.sendInit(side);
     if(room.opening?.ready.every(Boolean))await this.startOpening();
@@ -580,7 +588,7 @@ export class GameRoom {
     opening.startsAt=Date.now()+OPENING_LEAD_MS;opening.prepareBy=null;
     // Pending pre-release rooms may still have v1 clients and an already-armed alarm.
     room.turnStartAt=opening.startsAt+(opening.version===OPENING_VERSION?DUEL_OPENING_MS:10450);room.turnBonusMs=0;
-    await this.state.storage.put("room",room);
+    await this.persist();
     await this.syncAlarm();
     for(const side of [0,1] as Side[])await this.sendInit(side);
   }
@@ -594,9 +602,9 @@ export class GameRoom {
   private async settleResult(): Promise<void> {
     const room = this.room;
     if (!room || room.recorded || !room.game.over) return;
-    if (!(room.readied[0] && room.readied[1])) { room.recorded = true; await this.state.storage.put("room",room); return; }
+    if (!(room.readied[0] && room.readied[1])) { room.recorded = true; await this.persist(); return; }
     room.resultAt ??= Date.now();
-    await this.state.storage.put("room",room);
+    await this.persist();
     // The DO id is stable across reconnects, eviction and retries.
     const matchId = this.state.id.toString();
     const winner = room.game.winner == null ? null : room.players[room.game.winner].id;
@@ -620,7 +628,7 @@ export class GameRoom {
         }
       }
       room.recorded = true;
-      await this.state.storage.put("room",room);
+      await this.persist();
     } catch (error) {
       room.recorded = false;
       console.error("match_settlement_retry", matchId, String(error));

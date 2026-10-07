@@ -22,8 +22,10 @@
 :is(#app,.reading-board).reading-board #supplyMarket{gap:calc(var(--board-meter)*.005);}
 :is(#app,.reading-board).reading-board .market-cards>.card,:is(#app,.reading-board).reading-board .market-cards>.slot{flex:0 0 var(--card-w);width:var(--card-w);height:var(--card-h);--cw:var(--card-w);--ch:var(--card-h);margin:0;}
 /* Saved older rooms can contain 4+8. Preserve every card without silently dropping stock. */
-:is(#app,.reading-board).reading-board #supplyMarket:has(>:nth-child(4)){gap:0;}
-:is(#app,.reading-board).reading-board #supplyMarket:has(>:nth-child(4))>:not(:first-child){margin-left:calc(var(--card-w)*-.24);}
+/* Presentation layers are not inventory: counting one as a fourth offer moves
+   the real cards and applies the legacy negative margin to the whole effect. */
+:is(#app,.reading-board).reading-board #supplyMarket:has(>:nth-child(4 of .card,.slot)){gap:0;}
+:is(#app,.reading-board).reading-board #supplyMarket:has(>:nth-child(4 of .card,.slot))>:is(.card,.slot):not(:first-child){margin-left:calc(var(--card-w)*-.24);}
 :is(#app,.reading-board).reading-board #fixedMarket:has(>:nth-child(8)){gap:0;}
 :is(#app,.reading-board).reading-board #fixedMarket:has(>:nth-child(8))>:not(:first-child){margin-left:calc(var(--card-w)*-.05);}
 :is(#app,.reading-board).reading-board .sub-head{position:absolute;display:block;right:auto;bottom:auto;transform:none;padding:0;z-index:5;}

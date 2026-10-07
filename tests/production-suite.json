@@ -73,7 +73,9 @@
     "tests/verdant-summon.mjs",
     "tests/critical-trigger-chains.mjs",
     "tests/status-grant.mjs",
+    "tests/dew-grant.mjs",
     "tests/duel-bugfix-oct08.mjs",
+    "tests/cross-system-oct08.mjs",
     "tests/combat-anchor.mjs"
   ],
   "historical": {
@@ -82,6 +84,8 @@
   },
   "browser": "All *-browser.mjs require Chrome/Playwright and run separately; not Node unit tests.",
   "timeoutMs": {
-    "tests/trap-removal-tutorial.mjs": 300000
+    "tests/trap-removal-tutorial.mjs": 300000,
+    "tests/dice-source.mjs": 600000,
+    "tests/duel-ui.mjs": 600000
   }
 }
