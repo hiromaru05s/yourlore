@@ -78,7 +78,9 @@ try {
   let g = fresh(); g.players[0].deck = Array.from({ length: 4 }, () => card('WEAKEN_ALL'));
   g.players[1].discard = Array.from({ length: 4 }, () => card('WEAKEN_ALL'));
   assert.equal(cardPlayConditionMet(g, 0, card('WEAKEN_ALL')), true);
-  for (const text of [DB.WEAKEN_ALL.text, DB.WEAKEN_ALL.textJa, DB.WEAKEN_ALL.textEn]) assert(text.includes('2'), 'all translations disclose cap');
+  assert(DB.WEAKEN_ALL.text.includes('양 필드 합계 최대 2장'), 'final Korean definition discloses the global cap');
+  assert(DB.WEAKEN_ALL.textJa.includes('両方の場を合わせて最大2枚'), 'final Japanese definition discloses the global cap');
+  assert(DB.WEAKEN_ALL.textEn.includes('At most 2 copies across both fields'), 'final English definition discloses the global cap');
 
   // The real authoritative WebSocket path and persisted room enforce the same cap.
   let saved;
