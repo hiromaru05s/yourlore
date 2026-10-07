@@ -43,3 +43,14 @@ contains the continuous recording. Renderer input coordinates confirm that the
 same invalid-copy setup reaches the intended card on both sides and screen
 sizes. The normal artwork and VFX drawing routines were not edited; this is a
 routing repair, not approval of a new visual design.
+
+Staging release: `cfa33bbf9f3a950a8f230303b71b362ef0404127`, Worker version
+`c337371c-6fbf-4aa1-9421-8ed2eac848df`, https://test.yourlore.xyz.
+The shared guarded release includes this fix plus concurrent accepted changes.
+All 80 production suites passed. All 45 served HTML/JS/CSS files match the local
+build of that exact source by SHA-256. The unmodified deployed controller passed
+8/8 attack/FIRE_ARROW cases across both sides at 1280 and 390px, with zero reads
+of hidden duplicate anchors, correct damage and no remaining transient effects.
+Run `tests/attack-origin-staging.mjs` to repeat the deployed regression. See
+`staging/deployment.json`, `staging/browser-report.json` and
+`staging/asset-parity.json` for the evidence.
