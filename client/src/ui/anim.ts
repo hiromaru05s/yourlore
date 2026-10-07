@@ -1,3 +1,5 @@
+import {selectedTribeSummon} from './tribePresentation/selection';
+import {playTribeSummon,cancelTribeSummons} from './tribePresentation/runtime';
 import {cancelTribeSynergy} from './tribeSynergy/runtime';
 import type {ElementalEvent,Playback} from './elemental/runtime';
 import {flyPersistentIntoSlot} from './persistentFlight';
@@ -44,7 +46,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on);
-  if(on){cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -188,6 +190,11 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(heavy&&selectedTribeSummon(face.dataset.cardId)){
+    face.style.visibility='hidden';
+    await boardMotionScope(signal=>playTribeSummon(face,{anchor:target,from,reveal,signal,onImpact:()=>sfx(landingSound)}));
+    reveal.remove();face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
   if(heavy){
     face.style.zIndex='135';reveal.style.zIndex='135';
     // Transfer directly into the selected card-parallel landing, without a second impact.

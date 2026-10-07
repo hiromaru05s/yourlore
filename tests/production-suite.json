@@ -64,6 +64,7 @@
     "tests/elemental-adoption.mjs",
     "tests/persistent-flight.mjs",
     "tests/tribe-synergy-rules.mjs",
+    "tests/tribe-presentation.mjs",
     "tests/golem-guts.mjs"
   ],
   "historical": {
