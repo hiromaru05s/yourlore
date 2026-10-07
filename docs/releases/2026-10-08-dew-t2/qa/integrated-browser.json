@@ -1,0 +1,56 @@
+{
+  "origin": "http://127.0.0.1:55171",
+  "checks": [
+    {
+      "kind": "rain",
+      "before": 0,
+      "owner": 0,
+      "frames": 86,
+      "sources": [
+        "status-source"
+      ],
+      "count": "1"
+    },
+    {
+      "kind": "rain",
+      "before": 5,
+      "owner": 1,
+      "frames": 86,
+      "sources": [
+        "status-source"
+      ],
+      "count": "6"
+    },
+    {
+      "kind": "heart",
+      "before": 5,
+      "owner": 0,
+      "frames": 76,
+      "sources": [
+        "heart"
+      ],
+      "count": "7"
+    },
+    {
+      "case": "mobile"
+    },
+    {
+      "case": "reduced-motion"
+    },
+    {
+      "case": "concurrency-cancel-fallback",
+      "live": 2,
+      "counts": [
+        "3",
+        "2"
+      ],
+      "after": "4",
+      "left": 0
+    },
+    {
+      "case": "destroy-during-playback"
+    }
+  ],
+  "errors": [],
+  "boundary": "Actual BaseController on GameView, driven by real reducer events. Not an authenticated two-player match."
+}
