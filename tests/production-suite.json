@@ -50,6 +50,7 @@
     "tests/trap-removal-tutorial.mjs",
     "tests/production-security.mjs",
     "tests/production-bc.mjs",
+    "tests/match-bots.mjs",
     "tests/duel-opening-server.mjs",
     "tests/dew-shield-server.mjs",
     "tests/deck-hand-editor.mjs",
