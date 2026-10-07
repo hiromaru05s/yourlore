@@ -1,5 +1,5 @@
 import {passiveIcon} from '../ui/passiveIcon';
-import {revealCards} from '../ui/assetReadiness';
+import {revealCards,cancelRevealCards} from '../ui/assetReadiness';
 import {loungeText} from '../ui/loungeText';
 import { homeIcon } from "../ui/homeIcons";
 // ============================================================
@@ -141,6 +141,7 @@ export function mountCards(app: App): Screen {
     (wrap.querySelector('#nextPage') as HTMLButtonElement).disabled=page===pages-1;
     wrap.querySelector('#pageLabel')!.textContent=`${page+1} / ${pages}`;
     if (!list.length) {
+      cancelRevealCards(grid);
       grid.innerHTML = `<div class="cards-empty">${t("cards.empty")}</div>`;
       return;
     }
@@ -162,5 +163,5 @@ export function mountCards(app: App): Screen {
   render();
 
   const unsub = onLangChange(() => app.cards());
-  return { destroy: ()=>{revision++;document.removeEventListener('pointerdown',closeFilters);wrap.removeEventListener('keydown',escapeFilters);unsub();} };
+  return { destroy: ()=>{revision++;cancelRevealCards(grid);document.removeEventListener('pointerdown',closeFilters);wrap.removeEventListener('keydown',escapeFilters);unsub();} };
 }

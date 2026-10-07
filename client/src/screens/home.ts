@@ -155,9 +155,10 @@ export function showInquiryModal(): void {
 }
 
 /** Invite-campaign modal: share link + invitee progress (max 3). */
-export async function showInviteModal(): Promise<void> {
+export async function showInviteModal(signal?:AbortSignal): Promise<void> {
   let data: Awaited<ReturnType<typeof api.inviteMe>>;
   try { data = await api.inviteMe(); } catch { return; }
+  if(signal?.aborted)return;
   const link = `${location.origin}/?ref=${data.code}`;
 
   const ov = document.createElement("div");

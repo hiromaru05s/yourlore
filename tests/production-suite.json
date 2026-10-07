@@ -77,7 +77,9 @@
     "tests/target-choice-ui.mjs",
     "tests/target-choice-server.mjs",
     "tests/dew-grant.mjs",
-    "tests/duel-bugfix-oct08.mjs"
+    "tests/duel-bugfix-oct08.mjs",
+    "tests/cross-system-oct08.mjs",
+    "tests/combat-anchor.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
@@ -85,6 +87,8 @@
   },
   "browser": "All *-browser.mjs require Chrome/Playwright and run separately; not Node unit tests.",
   "timeoutMs": {
-    "tests/trap-removal-tutorial.mjs": 300000
+    "tests/trap-removal-tutorial.mjs": 300000,
+    "tests/dice-source.mjs": 600000,
+    "tests/duel-ui.mjs": 600000
   }
 }
