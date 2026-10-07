@@ -1,3 +1,4 @@
+import {combatRect} from '../combatAnchor';
 import {playTribeSummon,cancelTribeSummons,cancelTribeSummon} from '../tribePresentation/runtime';
 import {selectedTribeSummon} from '../tribePresentation/selection';
 import {playRiftDestruction,cancelRiftDestruction} from '../riftDestruction/runtime';
@@ -116,7 +117,8 @@ export function playMonster(source:HTMLElement,kind:Kind,options:Options={}):Pro
  if(kind==='destroy'&&options.variant==='B'&&options.destination){removeState(source);release();return playRiftDestruction(source,options.destination,options.signal);}
  if(kind==='summon')return selectedTribeSummon(source.dataset.cardId)?playTribeSummon(source,options):playSlateSummon(source,options);
  if(kind==='destroy'&&options.variant==='A'&&options.mana!==false&&options.destination){removeState(source);release();return playManaDestruction(source,options.destination,options.signal);}
- const r=monsterRect(options.anchor??source);if(!r.w||!r.h)return Promise.resolve(false);
+ if(!combatRect(options.anchor??source)||(options.target&&!combatRect(options.target)))return Promise.resolve(false);
+ const r=monsterRect(options.anchor??source);
  const variant=options.variant??(kind==='attack'?'A':kind==='aura'||kind==='ready'?'C':'B');
  if(kind==='destroy'&&!options.destination)return Promise.resolve(false);
  const layer=ensure(),actor=new Actor(source,layer.cards);actor.stats=options.stats;actor.el.dataset.monsterKind=kind;actor.el.dataset.monsterVariant=variant;
