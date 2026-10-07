@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const base = process.env.LORE_TEST_URL || 'http://127.0.0.1:5187';
-const out = 'docs/characters/2026-10-07-bot-npcs/checks';
+const out = process.env.LORE_TEST_OUT || 'docs/characters/2026-10-07-bot-npcs/checks';
 await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });

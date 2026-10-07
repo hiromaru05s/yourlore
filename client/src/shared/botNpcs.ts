@@ -19,7 +19,7 @@ const C = "STARTER_TRASH", T = "STARTER_CHEST";
 /** NPC identity is independent of the deck rolled for each duel. */
 export const BOT_NPCS: readonly BotNpc[] = [
   {
-    id: "lumi", difficulty: "easy", avatar: "NPC_LUMI", portrait: "/art/npcs/v1/lumi.webp",
+    id: "lumi", difficulty: "easy", avatar: "NPC_LUMI", portrait: "/art/npcs/v2/lumi.webp",
     name: text("ルミ", "Lumi", "루미"), title: text("新米シーカー", "New Seeker", "새내기 시커"),
     style: text("エルフと基礎戦術", "Elves & fundamentals", "엘프와 기본 전술"),
     decks: [
@@ -29,7 +29,7 @@ export const BOT_NPCS: readonly BotNpc[] = [
     ],
   },
   {
-    id: "noel", difficulty: "normal", avatar: "NPC_NOEL", portrait: "/art/npcs/v1/noel.webp",
+    id: "noel", difficulty: "normal", avatar: "NPC_NOEL", portrait: "/art/npcs/v2/noel.webp",
     name: text("ノエル", "Noel", "노엘"), title: text("思索のシーカー", "Thoughtful Seeker", "사색의 시커"),
     style: text("マナを育てて展開", "Build mana, then develop", "마나를 키워 전개"),
     decks: [
@@ -39,7 +39,7 @@ export const BOT_NPCS: readonly BotNpc[] = [
     ],
   },
   {
-    id: "vera", difficulty: "hard", avatar: "NPC_VERA", portrait: "/art/npcs/v1/vera.webp",
+    id: "vera", difficulty: "hard", avatar: "NPC_VERA", portrait: "/art/npcs/v2/vera.webp",
     name: text("ヴェラ", "Vera", "베라"), title: text("果敢なシーカー", "Daring Seeker", "과감한 시커"),
     style: text("速攻と盤面の圧力", "Fast attacks & board pressure", "속공과 필드 압박"),
     decks: [
@@ -49,7 +49,7 @@ export const BOT_NPCS: readonly BotNpc[] = [
     ],
   },
   {
-    id: "sion", difficulty: "hell", avatar: "NPC_SION", portrait: "/art/npcs/v1/sion.webp",
+    id: "sion", difficulty: "hell", avatar: "NPC_SION", portrait: "/art/npcs/v2/sion.webp",
     name: text("シオン", "Sion", "시온"), title: text("熟練のシーカー", "Master Seeker", "숙련된 시커"),
     style: text("先読みと多彩な戦術", "Foresight & versatile tactics", "수 읽기와 다채로운 전술"),
     decks: [
