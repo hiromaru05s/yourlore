@@ -1,3 +1,4 @@
+import { npcPortrait } from "../shared/botNpcs";
 import {prepareManaPurchase} from './manaPurchase';
 import {monsterCanAttack} from '../shared/engine';
 import {furnitureUrl} from '../shared/cosmetics';
@@ -33,7 +34,7 @@ import { createBoardStatRise } from './statRise';
 // the local player's profile avatar (set by the game screen), shown on MY portrait
 let MY_AVATAR: string | null | undefined;
 export function setMyAvatar(a?: string | null): void { MY_AVATAR = a; }
-// the opponent's avatar (online games pass it in; bot games fall back to initial)
+// The opponent avatar comes from the online profile or local NPC roster.
 let OPP_AVATAR: string | null | undefined;
 export function setOppAvatar(a?: string | null): void { OPP_AVATAR = a; }
 
@@ -974,11 +975,12 @@ export class GameView {
     const previousMax=Number(oldMana?.dataset.maximum??emax),previousMana=Number(oldMana?.dataset.mana??p.mana);
     const crystals = Array.from({ length: Math.min(MAX_MANA, Math.max(0, emax)) }, (_, i) => `<i class="mana-crystal${i < p.mana ? " is-lit" : ""}" aria-hidden="true"></i>`).join("");
     const avatar = isMe ? MY_AVATAR : OPP_AVATAR;
+    const npc = npcPortrait(avatar);
     const seeker = avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE" ? avatar : isMe ? "SEEKER_BLUE" : "SEEKER_RED";
     el.innerHTML = `
       <span class="pt-vitals"><span class="pt-hp" title="HP ${hp}"><span class="pt-hp-ico">HP</span><b id="hp-${sd}">${hp}</b></span>
       </span>
-      <span class="pt-ring">${avatarHtml(seeker, p.name, 100)}</span>
+      <span class="pt-ring">${avatarHtml(npc ? avatar : seeker, p.name, 100)}</span>
       <span class="pt-mana pips" data-mana="${p.mana}" data-maximum="${emax}" data-previous-maximum="${previousMax}" data-previous-mana="${previousMana}" aria-label="${t("game.mana")} ${p.mana}/${emax}"><span class="mana-readout"><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span><span class="mana-crystals" style="--mana-rows:${Math.max(1,Math.ceil(Math.min(MAX_MANA,emax)/10))}">${crystals}</span></span>
       ${shield > 0 || dew > 0 || brand > 0 ? `<span class="pt-resources">
         ${shield > 0 ? `<span class="pt-shield" role="img" aria-label="${t('game.shield')} ${p.shield ?? 0}" title="${esc(t('game.shieldTip'))}" style="--resource-number-scale:${Math.min(.14,.32/String(p.shield ?? 0).length)}"><b id="shield-${sd}" aria-hidden="true">${shield}</b></span>` : ""}
@@ -986,8 +988,10 @@ export class GameView {
         ${brand > 0 ? `<span class="pt-brand" role="img" aria-label="${esc(t('game.brand'))} ${brand}" title="${esc(t('game.brandTip').replace('{n}', String(brand)))}" style="--resource-number-scale:${Math.min(.14,.32/String(brand).length)}"><b id="brand-${sd}" aria-hidden="true">${brand}</b></span>` : ""}
       </span>` : ""}
       <span class="pt-name">${esc(p.name)}</span>`;
-    const portrait=oldPortrait??seekerPortrait(seeker==='SEEKER_RED'?'red':'blue');
-    el.querySelector('.avatar')?.replaceChildren(portrait);
+    if (!npc) {
+      const portrait=oldPortrait??seekerPortrait(seeker==='SEEKER_RED'?'red':'blue');
+      el.querySelector('.avatar')?.replaceChildren(portrait);
+    }
   }
 
   /** MY hand — straight upright cards (no fan) in two states:

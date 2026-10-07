@@ -1,4 +1,5 @@
 import {playStatusGrant,warmStatusGrants} from '../ui/statusGrant/runtime';
+import { botNpc, pickNpcDeck } from "../shared/botNpcs";
 import {synergyTier} from '../ui/tribePresentation/selection';
 import {playTribeSynergy} from '../ui/tribeSynergy/runtime';
 import type {Playback} from '../ui/elemental/runtime';
@@ -10,18 +11,16 @@ import {playDuelOpening,warmOpening} from "../ui/duelOpeningDirector";
 import {waitForDuel} from "../ui/duelReadiness";
 import {releaseMonster} from '../ui/fieldLayout';
 import { paintDuelClock } from '../ui/duelClock';
-// ============================================================
-// LORE — game controllers.
+// =====================================================// LORE — game controllers.
 // BaseController turns engine events into log + animation + render.
 // Events play back SEQUENTIALLY (summon → trap → destroy …) so the
 // player can follow chains without reading the log.
 // LocalController reduces locally and drives the bot.
 // (OnlineController lives in ./online and reuses BaseController.)
-// ============================================================
-import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
+// =====================================================import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
 import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef } from "../shared/engine";
-import { botDecide, pickBotDeck, type BotDifficulty } from "../shared/bot";
+import { botDecide, type BotDifficulty } from "../shared/bot";
 import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog, logToText } from "../ui/log";
@@ -760,12 +759,10 @@ export abstract class BaseController implements BoardHandlers {
     this.maybeBot();
   }
 
-  // ============================================================
-  // turn timer — 50s/turn. Popups at 25s (1.5s) and a countdown from
+  // =====================================================  // turn timer — 50s/turn. Popups at 25s (1.5s) and a countdown from
   // 5s; the timer chip shakes at ≤5s; on 0 the active player's turn
   // auto-ends (online: only my own client submits, server validates).
-  // ============================================================
-  private syncTimer(): void {
+  // =====================================================  private syncTimer(): void {
     if (this.dead) return;
     const g = this.state;
     if (!g || g.over) { this.stopTimer(); return; }
@@ -1019,9 +1016,9 @@ export abstract class BaseController implements BoardHandlers {
   }
 }
 
-// ============================================================
-// LocalController — single device, you vs bot
-// ============================================================
+// =====================================================// LocalController — single device, you vs bot
+// =====================================================const lastNpcDecks = new Map<string, number>();
+
 export class LocalController extends BaseController {
   private botTimer = 0;
   private difficulty: BotDifficulty;
@@ -1029,11 +1026,13 @@ export class LocalController extends BaseController {
   constructor(root: HTMLElement, exits: ControllerExits, playerName = "PLAYER 1", deck?: string[], difficulty: BotDifficulty = "hard") {
     super(root, 0, exits);
     this.difficulty = difficulty;
-    const bot = pickBotDeck(); // roll a random archetype (deck + buy discipline) per game
+    const npc = botNpc(difficulty);
+    const { index, deck: bot } = pickNpcDeck(npc, lastNpcDecks.get(npc.id));
+    lastNpcDecks.set(npc.id, index);
     const res = createGame({
       mode: "bot",
       p0: { id: "local", name: playerName, deck },
-      p1: { id: "bot", name: bot.name, isBot: true, deck: bot.cards },
+      p1: { id: "bot", name: npc.name[getLang()], isBot: true, deck: bot.cards },
       starting: (Math.random() < 0.5 ? 0 : 1) as Side, // coin toss for first turn
     });
     res.state.players[1].botTune = bot.tune; // archetype-matched buy discipline (survives structuredClone in reduce)
