@@ -12,4 +12,4 @@
 
 通常速度の連続再生を録画し、実盤面の途中・着地画像を確認。ブラウザ検証のゲーム状態・アカウントAPIはfixtureで、認証済み2人オンライン対戦の証明ではない。既存の造形に新たな採用判断を加える変更ではなく、描画密度と位置同期の修正。
 
-ステージングの配信SHA・Worker版・アセット照合・配信版BOT起動は staging.json / staging-browser.json に記録する。
+ステージング配信済み: `d4b9b28411ce8f80ba426b2b7d6aa22753326c44`、Worker `99cc84ce-0958-490c-9ce6-fa6015ce9b34`。60/60ファイルのSHA-256一致、配信版BOTの起動と4種類のPNGフレーム先読みを確認。詳細は staging.json / staging-browser.json。連続再生のフレーム列は continuous-playback.jpg。
