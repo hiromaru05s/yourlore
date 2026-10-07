@@ -3,6 +3,8 @@
 // ============================================================
 import type { App, Screen } from "../router";
 import type { BotDifficulty } from "../shared/bot";
+import { BOT_NPCS, botNpc } from "../shared/botNpcs";
+import { getLang } from "../i18n";
 import { api } from "../net/api";
 import { t, onLangChange, esc } from "../i18n";
 import { homeRankHtml } from "../ui/rankPresentation";
@@ -44,7 +46,7 @@ export function mountHome(app: App): Screen {
   };
   q('rankedMode').onclick=()=>selectMode('ranked');
   q('online').onclick=()=>selectMode('online');q('bot').onclick=()=>selectMode('bot');
-  q('ranked').onclick=()=>mode==='ranked'?app.rankedLobby():mode==='online'?app.onlineLobby():showBotDifficultyModal(app);
+  q('ranked').onclick=()=>mode==='ranked'?app.rankedLobby():mode==='online'?app.onlineLobby():showBotNpcModal(app);
   q('deck').onclick=()=>app.deck();
   q('myTier').onclick=()=>app.leaderboard();
   let disposed=false;
@@ -60,35 +62,38 @@ export function mountHome(app: App): Screen {
   return {destroy:()=>{disposed=true;unsub();}};
 }
 
-/** Challenge cards select a difficulty; the separate start action begins a duel. */
-function showBotDifficultyModal(app: App): void {
+/** Character cards select an NPC; the separate start action begins a duel. */
+function showBotNpcModal(app: App): void {
   if(document.querySelector('.bot-diff-ov'))return;
-  const tiers: BotDifficulty[] = ["easy", "normal", "hard", "hell"];
-  const captions = [loungeText('ルールに慣れる','Learn the rules','규칙 익히기'),loungeText('基本戦術を試す','Try your tactics','기본 전술 시험'),loungeText('先読みを競う','Think ahead','수 읽기 대결'),loungeText('最強AIに挑む','Challenge the strongest','최강 AI에 도전')];
   const store=sanitizeDecks(app.user?.decks ?? null),activeDeck=store.list[store.sel];
   let selected:BotDifficulty='normal';
   const previousFocus=document.activeElement as HTMLElement|null;
   const ov = document.createElement("div");
   ov.className = "overlay bot-diff-ov";
   ov.innerHTML = `
-    <div class="modal support-dialog bot-diff bot-challenge" role="dialog" aria-modal="true" aria-labelledby="challengeTitle">
+    <div class="modal support-dialog bot-diff bot-challenge bot-npcs" role="dialog" aria-modal="true" aria-labelledby="challengeTitle">
       <header class="support-dialog-heading">
         <span class="menu-eyebrow">BOT DUEL</span>
-        <h2 id="challengeTitle">${t("bot.diff.title")}</h2>
+        <h2 id="challengeTitle">${loungeText("対戦相手を選ぶ","Choose your opponent","대전 상대 선택")}</h2>
         <button class="challenge-back" id="diffCancel">← ${t('common.back')}</button>
       </header>
-      <div class="diff-grid" role="group" aria-label="${t('bot.diff.title')}">
-        ${tiers.map((diff,i) => `
-          <button type="button" class="diff-card diff-${diff}" data-diff="${diff}" aria-pressed="${diff===selected}">
+      <div class="diff-grid" role="group" aria-label="${loungeText("対戦相手を選ぶ","Choose your opponent","대전 상대 선택")}">
+        ${BOT_NPCS.map(npc => `
+          <button type="button" class="diff-card diff-${npc.difficulty}" data-diff="${npc.difficulty}" aria-pressed="${npc.difficulty===selected}">
             <span class="challenge-selected">${loungeText('選択中','SELECTED','선택됨')}</span>
-            <span class="challenge-art" aria-hidden="true"><img src="/art/lounge/stage-v1/sigil.webp" alt=""><span>${["I","II","III","IV"][i]}</span></span>
-            <span class="diff-name">${t(`bot.diff.${diff}`)}</span><span class="challenge-caption">${captions[i]}</span>
+            <span class="challenge-art" aria-hidden="true"><img src="${npc.portrait}" alt=""></span>
+            <span class="npc-title">${esc(npc.title[getLang()])}</span><span class="diff-name">${esc(npc.name[getLang()])}</span><span class="npc-difficulty">${loungeText("難易度","Difficulty","난이도")} · ${t(`bot.diff.${npc.difficulty}`)}</span><span class="challenge-caption">${esc(npc.style[getLang()])}</span>
           </button>`).join("")}
       </div>
       <div class="challenge-footer"><div class="challenge-deck"><img src="${artUrl.sm('STARTER_MANA')}" alt=""><span><small>${t('deck.inuse')}</small><strong>${esc(activeDeck.name||t('deck.slot').replace('{n}',String(store.sel+1)))}</strong></span></div><p id="challengeDescription" aria-live="polite"></p><button class="challenge-start" id="diffStart"></button></div>
     </div>`;
   document.body.appendChild(ov);
-  const update=()=>{ov.querySelectorAll<HTMLButtonElement>('[data-diff]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.diff===selected)));ov.querySelector('#challengeDescription')!.textContent=t(`bot.diff.${selected}.desc`);ov.querySelector('#diffStart')!.textContent=loungeText(`${t(`bot.diff.${selected}`)}で開始 →`,`Start ${t(`bot.diff.${selected}`)} →`,`${t(`bot.diff.${selected}`)} 시작 →`);};
+  const update = () => {
+    const npc = botNpc(selected), name = npc.name[getLang()];
+    ov.querySelectorAll<HTMLButtonElement>('[data-diff]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.diff === selected)));
+    ov.querySelector('#challengeDescription')!.textContent = `${t(`bot.diff.${selected}.desc`)} ${loungeText('3種類のデッキを使い分けます。','Uses three different decks.','세 가지 덱을 사용합니다.')}`;
+    ov.querySelector('#diffStart')!.textContent = loungeText(`${name}と対戦 →`, `Duel ${name} →`, `${name}와 대전 →`);
+  };
   const close = () => {ov.remove();previousFocus?.focus();};
   (ov.querySelector("#diffCancel") as HTMLElement).onclick = close;
   ov.onclick = (e) => { if (e.target === ov) close(); };

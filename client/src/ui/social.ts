@@ -1,3 +1,4 @@
+import { npcPortrait } from "../shared/botNpcs";
 import { homeIcon } from "./homeIcons";
 import { artUrl } from "./cardArt";
 // ============================================================
@@ -15,7 +16,8 @@ export function avatarHtml(avatar: string | null | undefined, display: string, s
     const color = avatar === "SEEKER_RED" ? "red" : "blue";
     return `<span class="avatar avatar-seeker" style="--avs:${size}px"><span class="seeker-sprite seeker-${color}" role="img" aria-label="${color === "red" ? "Red Seeker" : "Blue Seeker"}"></span></span>`;
   }
-  const img = avatar && /^[A-Za-z0-9_]+$/.test(avatar)
+  const portrait = npcPortrait(avatar);
+  const img = portrait ? `<img src="${portrait}" alt="" onerror="this.remove()">` : avatar && /^[A-Za-z0-9_]+$/.test(avatar)
     ? `<img src="${artUrl.sm(avatar)}" alt="" loading="lazy" onerror="this.remove()">`
     : "";
   return `<span class="avatar" style="--avs:${size}px">${img}<span class="avatar-fb">${initial}</span></span>`;
