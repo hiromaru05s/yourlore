@@ -1,0 +1,13 @@
+{
+  "url": "https://test.yourlore.xyz",
+  "sourceCommit": "cfa33bbf9f3a950a8f230303b71b362ef0404127",
+  "fixCommit": "c09a19d2",
+  "deploymentId": "1abba441-4b97-413a-9b58-9f2da6cb0d11",
+  "versionId": "c337371c-6fbf-4aa1-9421-8ed2eac848df",
+  "guardedRelease": true,
+  "regressionSuites": "80/80",
+  "localBrowserCases": "12/12",
+  "deployedBrowserCases": "8/8",
+  "assetHashes": "45/45",
+  "scope": "staging only; controlled real-board fixtures, not authenticated online matchmaking"
+}
