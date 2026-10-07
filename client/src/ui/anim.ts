@@ -1,3 +1,4 @@
+import {combatCard,combatPortrait} from './combatAnchor';
 import {cancelDewGrants} from './dew/runtime';
 import {cancelStatusGrants} from './statusGrant/runtime';
 import {selectedTribeSummon} from './tribePresentation/selection';
@@ -451,7 +452,7 @@ export function lunge(uid: string, dir: "up" | "down"): void {
 
 /** Physical card attack: anticipation, accelerating contact, hit stop, recoil and a settled return. */
 export async function attackStrike(uid:string,targetUid:string|null,defender:ViewSide,onImpact?:()=>void,exhaust=true,contactDamage=1):Promise<void>{
-  const source=byUid(uid),target=targetUid?byUid(targetUid):document.querySelector<HTMLElement>(defender==='me'?'#portraitMe .avatar':'#portraitOpp .avatar');
+  const source=combatCard(uid),target=targetUid?combatCard(targetUid):combatPortrait(defender);
   if(!source||!target||fxSkip)return;
   sfx('attack');
   await boardMotionScope(signal=>playMonster(source,'attack',{target,signal,exhaust,side:defender==='opp'?1:-1,onImpact:()=>{if(contactDamage>0)sfx(targetUid?'impact':'facehit');onImpact?.();}}));

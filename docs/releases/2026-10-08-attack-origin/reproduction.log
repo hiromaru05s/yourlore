@@ -1,0 +1,2 @@
+REPRODUCED original FIRE_ARROW runtime: hidden duplicate target resolves to (0,0)
+PASS: live field lookup, zero/detached/nonfinite rejection, portrait fallback, renderer opacity, sparse random-hit routing/timing and cancellation
