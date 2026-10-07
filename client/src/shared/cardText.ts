@@ -3,10 +3,19 @@
 import type { CardDef } from "./types";
 import { CARD_EFFECT_TEXT } from "./cardEffectText";
 export { CARD_EFFECT_TEXT } from "./cardEffectText";
+export { CARD_EFFECT_HEADINGS } from "./cardEffectHeadings";
 export type KeywordNamesOf = (c: CardDef, lang: "ko" | "ja" | "en") => string[];
 
 // The board uses global-turn limits for these two enchantments.
 export const ENCH_TURN_LIMITS: Record<string, number> = { spellHeal: 14, ancientCiv: 9 };
+
+/** Only explicit authored paragraph boundaries create sections. */
+export function effectSections(text: string): { heading: string; body: string }[] {
+  return text.split(/\n\n/).filter(Boolean).map(block => {
+    const match = block.match(/^【([^】]+)】([\s\S]*)$/);
+    return match ? { heading: match[1], body: match[2].trim() } : { heading: '', body: block.trim() };
+  });
+}
 
 /** Shared by the renderer and checker; spaces around / distinguish rows from stat pairs. */
 export function parseDiceTable(txt: string): { head: string; rows: [string, string][] } | null {

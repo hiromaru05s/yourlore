@@ -20,7 +20,14 @@ try {
    if(raw.includes(' / ')) {
     assert.equal(e.querySelectorAll('.dr').length,raw.split(' / ').length,`${c.id}/${lang}: every dice row`);
     for(const row of e.querySelectorAll('.dr')) assert(row.querySelector('.dr-fx')?.textContent.trim());
+    const tableText=(e.querySelector('.card-dice-head')?.textContent??'')+[...e.querySelectorAll('.dr')].map(row=>row.querySelector('.dr-roll').textContent+':'+row.querySelector('.dr-fx').textContent).join('');
+    assert.equal(normalize(tableText),normalize(raw.replace(' — ','').replaceAll(' / ','')),`${c.id}/${lang}: every dice heading and outcome survives rendering`);
    }
+   const headings=[...raw.matchAll(/【([^】]+)】/g)].map(m=>m[1]);
+   assert.deepEqual([...e.querySelectorAll('.card-effect-section > h3')].map(h=>h.textContent),headings,`${c.id}/${lang}: all authored headings remain separate and in order`);
+   for(const key of e.querySelectorAll('.card-key-label')) assert(key.querySelector(':scope > span:last-child')?.textContent.trim(),`${c.id}/${lang}: keyword name visible beside icon`);
+   const glossary=e.querySelector('details.card-rule-notes');
+   if(glossary){assert(!glossary.open);assert(glossary.querySelector('summary')?.textContent.trim());}
    assert(!e.querySelector('.card-eff-txt .passive-icon'),`${c.id}/${lang}: keyword names in sentences remain text`);
    assert(!/シェルフ|셸프|\bshelf\b/i.test(e.textContent));
    count++;

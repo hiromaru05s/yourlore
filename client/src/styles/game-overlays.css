@@ -804,3 +804,17 @@
   .zoom-overlay .zoom-details { min-width:0; overflow:visible; padding:16px; font-size:16px; }
   .zoom-overlay .card-dice .dr { grid-template-columns:56px minmax(0,1fr); gap:10px; }
 }
+
+/* Authored rule sections keep requirements and independently triggered effects apart. */
+.zoom-details .card-effect-section + .card-effect-section{margin-top:20px;padding-top:16px;border-top:1px solid rgba(190,165,115,.18)}
+.zoom-details .card-effect-section .fx-tag{display:block;width:fit-content;margin:0 0 8px;padding:0;border:0;background:none;color:var(--gold-light,#d8c39a);font:600 .82em/1.4 var(--font-ui,sans-serif);letter-spacing:.03em}
+.zoom-details .card-effect-body{margin:0;font:inherit;line-height:1.75;white-space:normal;word-break:normal;overflow-wrap:break-word}
+.zoom-details .card-effect-body + .card-effect-body{margin-top:8px}
+.zoom-details .card-keys{display:flex;flex-wrap:wrap;gap:10px 16px;margin-bottom:20px}
+.zoom-details .card-key-label{display:inline-flex;align-items:center;gap:6px;font-size:.85em}
+.zoom-details .card-rule-notes summary{cursor:pointer;line-height:1.5;color:var(--gold-light,#d8c39a)}
+.zoom-details .card-rule-notes p{line-height:1.65}
+.zoom-details .card-dice-head{margin-bottom:12px}
+@media(max-width:850px){.zoom-details .card-effect-section + .card-effect-section{margin-top:18px;padding-top:14px}}
+.zoom-details .card-effect-body{font-weight:400}
+.zoom-details .card-effect-body:lang(ko),.zoom-details .dr-fx:lang(ko){word-break:keep-all;overflow-wrap:anywhere}

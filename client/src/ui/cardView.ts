@@ -9,7 +9,7 @@ import type { CardInst, FieldMon, PlayerState, GameState } from "../shared/types
 import { FRAME_BACK, PASSIVES, cardPassives, frameFor, fieldFrameFor } from "../shared/cards";
 import { curHp, effAtk, effDef, playCost } from "../shared/engine";
 import { cardName, cardText, getLang, t } from "../i18n";
-import { parseDiceTable } from "../shared/cardText";
+import { parseDiceTable, effectSections } from "../shared/cardText";
 import { cardEffectNotes } from "../shared/cardEffectNotes";
 
 /** Shared resting/flight face: switching from a cast to its spell slot must not
@@ -271,23 +271,34 @@ function artEl(cardId: string, full = false, lazy = false, gallery = false): HTM
   return art;
 }
 
+function ruleBlocks(text: string, className: string): HTMLElement {
+  const container = el('div', className);
+  for (const { heading, body } of effectSections(text)) {
+    const section = el('section', 'card-effect-section');
+    if (heading) {
+      section.setAttribute('aria-label', heading);
+      const label = el('h3', 'fx-tag'); label.textContent = heading; section.append(label);
+    }
+    for (const line of body.split('\n')) {
+      const p = el('p', 'card-effect-body'); p.textContent = line; section.append(p);
+    }
+    container.append(section);
+  }
+  return container;
+}
+
 /** Complete rules, including costs, keyword names and dice tables. Never fitted to card pixels. */
 export function cardRulesEl(c: CardInst): HTMLElement {
   const pc = playCost(c);
-  // 효과 텍스트: "(시전 N)"/"(소환 N)" 계열 표기는 배지로 대체되므로 제거하고, 구분자를 줄바꿈으로
-  const rawTxt = cardText(c).replace(/\s*\((?:시전|Cast|発動|소환|Summon|召喚)\s*\d+\)/g, "").trim();
-  // dice/chest cards are detected on the RAW text — the separators become newlines
-  // just below, which would destroy the " / " that delimits the outcome rows
+  const rawTxt = cardText(c).trim();
   const table = rawTxt && rawTxt !== "—" ? parseDiceTable(rawTxt) : null;
-  let txt = rawTxt
-    .replace(/ · /g, "\n")
-    .replace(/ \/ /g, "\n")
-    .trim();
+  const txt = rawTxt;
   const hasCast = c.t !== "starter" && pc !== c.cost;
   const keyChips = cardPassives(c);
   if ((txt && txt !== "—") || hasCast || keyChips.length) {
     const effCls = "card-rules";
     const eff = el("div", effCls);
+    eff.lang = getLang();
     if (hasCast) {
       // monsters are SUMMONED, spells/traps are CAST — label the play-cost badge accordingly
       const cast = el("div", "card-cast", `${t(c.t === "mon" ? "card.summon" : "card.cast")} ${pc}`);
@@ -300,27 +311,36 @@ export function cardRulesEl(c: CardInst): HTMLElement {
         const pd = PASSIVES[k];
         if (!pd) continue;
         // data-psv keeps the zoom view's keyword panel highlight working
-        row.insertAdjacentHTML("beforeend",passiveIcon(k));
+        const chip = el('span', 'card-key-label');
+        chip.insertAdjacentHTML('beforeend', passiveIcon(k));
+        const name = el('span'); name.textContent = pd[getLang()].name; chip.append(name);
+        row.append(chip);
       }
       if (row.childElementCount) eff.appendChild(row);
     }
     // Effect body follows the keyword labels.
     if (table) {
-      if (table.head) eff.appendChild(el("div", "card-dice-head", decorateTags(table.head)));
+      if (table.head) eff.appendChild(ruleBlocks(table.head, 'card-dice-head'));
       const tb = el("div", "card-dice");
+      tb.setAttribute('role', 'table');
+      tb.setAttribute('aria-label', {ja:'ダイスの結果',ko:'주사위 결과',en:'Dice results'}[getLang()]);
       for (const [roll, fx] of table.rows) {
         const row = el("div", "dr");
-        row.appendChild(el("span", "dr-roll", roll));
-        row.appendChild(el("span", "dr-fx", decorateTags(fx)));
+        row.setAttribute('role', 'row');
+        const label = el('span', 'dr-roll'); label.textContent = roll; label.setAttribute('role', 'rowheader');
+        const body = el('span', 'dr-fx'); body.textContent = fx; body.setAttribute('role', 'cell');
+        row.append(label, body);
         tb.appendChild(row);
       }
       eff.appendChild(tb);
     } else if (txt && txt !== "—") {
-      eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${decorateTags(txt)}</span>`));
+      eff.appendChild(ruleBlocks(txt, 'card-eff-txt'));
     }
     const notes = cardEffectNotes(c, getLang());
     if (notes.length) {
-      const glossary = el("div", "card-rule-notes");
+      const glossary = el("details", "card-rule-notes");
+      const summary = el('summary'); summary.textContent = {ja:'用語・共通ルール',ko:'용어·공통 규칙',en:'Terms and shared rules'}[getLang()];
+      glossary.append(summary);
       for (const text of notes) { const note = document.createElement('p'); note.textContent = text; glossary.append(note); }
       eff.append(glossary);
     }

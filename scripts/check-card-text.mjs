@@ -5,19 +5,10 @@ import { AUDIT_PATH, LOCALES, effects, mechanics, hash } from './card-text-audit
 
 const audit = JSON.parse(await fs.readFile(AUDIT_PATH, 'utf8'));
 const cards = await loadCards({ includeStarters: true });
-const { CARD_EFFECT_TEXT, parseDiceTable, cardPassives, PASSIVES, CARD_KEYWORD_TEXT } = await loadCardText();
+const { CARD_EFFECT_TEXT, CARD_EFFECT_HEADINGS, effectSections, parseDiceTable, cardPassives, PASSIVES, CARD_KEYWORD_TEXT } = await loadCardText();
 const problems = [];
 const fail = (id, rule, detail) => problems.push(`${id} ${rule}: ${detail}`);
-const tagRows = [
-  ['召喚条件','소환 조건','Summon Requirement'], ['発動条件','발동 조건','Play Requirement'],
-  ['購入条件','구매 조건','Purchase Requirement'], ['攻撃条件','공격 조건','Attack Requirement'],
-  ['召喚時','소환시','On Summon'], ['発動時','발동시','On Cast'], ['購入時','구매시','On Purchase'],
-  ['常時','상시','Passive'], ['永続','영구','Permanent'], ['破壊時','파괴시','On Destruction'],
-  ['自分ターン開始時','자신 턴 시작시','Your Turn Start'], ['自分ターン終了時','자신 턴 종료시','Your Turn End'],
-  ['双方のターン開始時','양쪽 턴 시작시','Either Turn Start'], ['攻撃時','공격시','On Attack'],
-  ['攻撃後','공격 후','After Attack'], ['クエスト','퀘스트','Quest'], ['報酬','보상','Reward'],
-  ['回数制限','횟수 제한','Use Limit'], ['卵','알','Egg'],
-];
+const tagRows = CARD_EFFECT_HEADINGS;
 const numberWords = { one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,twice:2,double:2,doubled:2,triple:3,tripled:3 };
 // Distinct magnitudes >=2 plus explicit zero. Singular articles and repeated
 // grammatical references differ across languages; quantities/targets are also
@@ -55,6 +46,11 @@ for (const c of cards) {
     if((s.match(/【/g)??[]).length!==(s.match(/】/g)??[]).length) fail(c.id,lang,'unbalanced tags');
     signatures.push(numbers(s)); timings.push(tags(s,lang,c.id));
     const table=parseDiceTable(s); tables.push(table ? table.rows.map(r=>r[0]).join('/') : 'none');
+    if(s.includes(' · ')) fail(c.id,lang,'legacy clause separator; author explicit paragraphs');
+    for (const section of effectSections(table?.head ?? s)) {
+      if(section.body.includes('【')) fail(c.id,lang,'independent heading must start a new paragraph');
+      if(section.heading && !section.body) fail(c.id,lang,'empty rule section');
+    }
     if(s.includes(' / ') && !table) fail(c.id,lang,'invalid dice result table');
   }
   if(new Set(signatures).size>1) fail(c.id,'numbers',LOCALES.map((l,i)=>`${l}=${signatures[i]}`).join(' '));

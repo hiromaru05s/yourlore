@@ -17,9 +17,19 @@ export function cardEffectNotes(card: CardDef, lang: EffectLocale): string[] {
     'Rift: the zone for exiled cards, separate from the graveyard. It does not refill your deck. Only effects that explicitly refer to it can move cards out.',
   );
   if (/[（(](?:持続|지속|lasting)[）)]/.test(text)) add(
-    '持続：変更を受けたモンスターが場を離れるまで続く。「常時」の強化は、その条件や発生源がなくなると終了する。',
-    '지속: 변경을 받은 몬스터가 필드를 떠날 때까지 유지된다. 상시 강화는 조건이나 발생원이 사라지면 끝난다.',
-    'Lasting: remains until the affected monster leaves the field. A passive bonus ends when its condition or source is no longer present.',
+    '持続：変更を受けたモンスターが場を離れるまで続く。「場にいる間／場にある間」の補正は、条件や発生源がなくなると終了する。',
+    '지속: 변경을 받은 몬스터가 필드를 떠날 때까지 유지된다. 필드에 있는 동안/놓인 동안의 보정은 조건이나 발생원이 사라지면 끝난다.',
+    'Lasting: remains until the affected monster leaves the field. A “While on the Field” or “While Deployed” bonus ends when its condition or source is no longer present.',
+  );
+  if (card.t === 'mon' || card.ench) add(
+    '場の効果：召喚時・破壊時などの記載に従って処理する。繰り返す効果は、このカードが場にある間に発動する。場を離れても続く効果は本文に明記する。',
+    '필드 효과: 소환시·파괴시 등 적힌 시점에 처리한다. 반복 효과는 이 카드가 필드에 있는 동안 발동한다. 필드를 떠나도 이어지는 효과는 본문에 명시한다.',
+    'Field effects resolve at the stated time, such as on summon or destruction. Recurring effects trigger while this card is on the field. Effects that continue after it leaves say so explicitly.',
+  );
+  if (/カウンター|카운터|counter/i.test(text)) add(
+    'カウンター：用途が異なるものは別々に数える。気合・腐敗・卵の耐久などのカウンターと、プレイヤーの烙印カウンターは共有しない。',
+    '카운터: 용도가 다르면 별도로 센다. 기합·부패·알의 내구 등에 쓰는 카운터와 플레이어의 낙인 카운터는 공유하지 않는다.',
+    'Counters with different uses are tracked separately. Guts, Decay, Egg durability, and a player’s Brand counters do not share a pool.',
   );
   if (card.quick) add(
     '即効魔法：購入すると手札に入らず、このカードをリフトに置いてから効果を処理する。無効にされてもリフトに残る。',
