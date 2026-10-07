@@ -2,7 +2,7 @@
 
 360枚 × 日本語・韓国語・英語 = 1080文面。生成専用カードとスターターを含む。実装照合後の文面を記録し、数値・対象・選択・処理順・期限・回数・ゾーンを確認した。機械チェックは意味の証明ではなく、翻訳欠落やレビュー後の変更の検出に使う。
 
-文面変更：323枚／885文面。残りも全件確認済み。
+文面変更：323枚／887文面。残りも全件確認済み。
 
 ## 主な訂正
 
@@ -377,9 +377,9 @@
 
 確認済み：表記改定（ja / ko / en）。実装キー：`{"aura":"gutsOnHit"}`。
 
-- **ja**：【常時】このモンスターは攻撃を受けるたびカウンター1個を得る（気合に使用）
-- **ko**：【상시】이 몬스터는 공격을 받을 때마다 카운터 1개를 얻는다(기합에 사용)
-- **en**：【Passive】Whenever this monster is attacked, it gains 1 counter (used by Guts)
+- **ja**：【常時】このモンスターが攻撃で1以上のダメージを受け、気合を消費せずに生き残ると、カウンター1個を得る（気合に使用）
+- **ko**：【상시】이 몬스터가 공격으로 1 이상의 데미지를 받고 기합을 소비하지 않고 살아남으면 카운터 1개를 얻는다(기합에 사용)
+- **en**：【Passive】After this monster takes at least 1 attack damage and survives without spending Guts, it gains 1 counter (used by Guts)
 
 ### NHEX — 見習い呪術師
 
@@ -1401,9 +1401,9 @@
 
 確認済み：表記改定（ja / ko / en）。実装キー：`{"ench":"weakenAll"}`。
 
-- **ja**：【永続】両方の場の全モンスターの攻撃力-2（後から場に出るものも含む） · この魔法が場を離れると、この減少はなくなる · 【破壊時】この魔法を墓地の代わりに自分のリフトへ送る
-- **ko**：【영구】양쪽 필드의 모든 몬스터 공격력 -2(나중에 등장하는 몬스터 포함) · 이 마법이 필드를 떠나면 이 감소는 사라진다 · 【파괴시】이 마법을 묘지 대신 자신 리프트로 보낸다
-- **en**：【Permanent】All monsters on both fields have -2 ATK, including later arrivals · This reduction ends when this spell leaves the field · 【On Destruction】Send this spell to your Rift instead of your graveyard
+- **ja**：【永続】この魔法は両方の場を合わせて最大2枚まで存在できる · 両方の場の全モンスターの攻撃力-2（後から場に出るものも含む） · この魔法が場を離れると、この減少はなくなる · 【破壊時】この魔法を墓地の代わりに自分のリフトへ送る
+- **ko**：【영구】이 마법은 양 필드 합계 최대 2장까지 존재 가능 · 양쪽 필드의 모든 몬스터 공격력 -2(나중에 등장하는 몬스터 포함) · 이 마법이 필드를 떠나면 이 감소는 사라진다 · 【파괴시】이 마법을 묘지 대신 자신 리프트로 보낸다
+- **en**：【Permanent】At most 2 copies across both fields · All monsters on both fields have -2 ATK, including later arrivals · This reduction ends when this spell leaves the field · 【On Destruction】Send this spell to your Rift instead of your graveyard
 
 ### GUILD_HALL — アサシンギルド支部
 
@@ -2183,11 +2183,11 @@
 
 ### LUCKY_ECHO — 幸運の残響
 
-確認済み：表記改定（en）。実装キー：`{"ench":"luckyEcho"}`。
+確認済み：表記改定（ja / ko / en）。実装キー：`{"ench":"luckyEcho"}`。
 
-- **ja**：【永続】自分が振ったダイスの出目が6のたび相手に6ダメージ
-- **ko**：【영구】자신이 굴린 주사위가 6일 때마다 상대에게 6 데미지
-- **en**：【Permanent】Whenever a die you roll shows a 6, 6 damage to the opponent
+- **ja**：【永続】自分が振ったダイスの出目が6のたび相手に6ダメージ · この効果の処理中、自分のこの効果は再発動しない
+- **ko**：【영구】자신이 굴린 주사위가 6일 때마다 상대에게 6 데미지 · 이 효과 처리 중 자신의 이 효과는 다시 발동하지 않는다
+- **en**：【Permanent】Whenever a die you roll shows a 6, deal 6 damage to the opponent · Your copies of this effect cannot trigger again while it is resolving
 
 ### BUYOUT — 買い占め
 

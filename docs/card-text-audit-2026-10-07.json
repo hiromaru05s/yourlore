@@ -7,7 +7,7 @@
     "en"
   ],
   "count": 360,
-  "engineSha256": "05935398a81059680dfb1cf055b41c226f55a770299f3ebd9b0b27cc10b08373",
+  "engineSha256": "49144f7c55e808ee834c02139d264f7d17eecaa19cc8221056ea4a0ed72ea459",
   "cards": {
     "M1": {
       "nameJa": "スパーク・インプ",
@@ -969,19 +969,19 @@
         "en"
       ],
       "definitionSha256": "2bf7cd19be7dac8711f1c0bcb61e94d6bd550493d1980f9f78c7f2822722e266",
-      "textSha256": "15b0d3b807c6594c21651ab83b28888f4f383477e420023f30dc23f133a4bf7d",
+      "textSha256": "a3be2712ea055ea005920cf4778574957cac59231a6aa5211f96e1fd036fb0df",
       "hooks": {
         "aura": "gutsOnHit"
       },
       "before": {
-        "ja": "【常時】このモンスターは攻撃を受けるたびカウンター1個を得る",
-        "ko": "【상시】이 몬스터는 공격을 받을 때마다 카운터 1개를 얻는다",
-        "en": "【Passive】whenever this monster is attacked, it gains 1 counter"
+        "ja": "【常時】このモンスターが攻撃で1以上のダメージを受け、気合を消費せず生き残ると気合カウンター1個を得る",
+        "ko": "【상시】이 몬스터가 공격으로 1 이상의 데미지를 받고 기합을 소모하지 않고 살아남으면 기합 카운터 1개를 얻는다",
+        "en": "【Passive】after this monster takes positive attack damage and survives without spending Guts, it gains 1 Guts counter"
       },
       "after": {
-        "ja": "【常時】このモンスターは攻撃を受けるたびカウンター1個を得る（気合に使用）",
-        "ko": "【상시】이 몬스터는 공격을 받을 때마다 카운터 1개를 얻는다(기합에 사용)",
-        "en": "【Passive】Whenever this monster is attacked, it gains 1 counter (used by Guts)"
+        "ja": "【常時】このモンスターが攻撃で1以上のダメージを受け、気合を消費せずに生き残ると、カウンター1個を得る（気合に使用）",
+        "ko": "【상시】이 몬스터가 공격으로 1 이상의 데미지를 받고 기합을 소비하지 않고 살아남으면 카운터 1개를 얻는다(기합에 사용)",
+        "en": "【Passive】After this monster takes at least 1 attack damage and survives without spending Guts, it gains 1 counter (used by Guts)"
       }
     },
     "NHEX": {
@@ -1070,7 +1070,7 @@
         "act": "chestToMana"
       },
       "before": {
-        "ja": "手札の宝箱1枚を捨て札へ → 最大マナ+1",
+        "ja": "手札の宝箱1枚を墓地へ → 最大マナ+1",
         "ko": "패의 보물상자 1장을 묘지로 → 최대 마나 +1",
         "en": "Discard a Treasure Chest from hand → max mana +1"
       },
@@ -3853,19 +3853,19 @@
         "en"
       ],
       "definitionSha256": "738bd1d340d8735c7f6f714a7d1666c4cfa76380a9b92e9bc33fb24e6660c57d",
-      "textSha256": "86278aba407450661a46e95fe434270ef2b35bc9586a5d21364b02e984885e9f",
+      "textSha256": "7d1385307bca1c43fdea975301093e1cce4e57ba5400727d5792dc9a9e5f87ce",
       "hooks": {
         "ench": "weakenAll"
       },
       "before": {
-        "ja": "【永続】両方の場の全モンスター攻撃力-2",
-        "ko": "【영구】양 필드의 모든 몬스터 공격력 -2",
-        "en": "【Permanent】all monsters on both fields have -2 ATK"
+        "ja": "【永続】両方の場の全モンスター攻撃力-2 · 存在できるのは両方の場を合わせて最大2枚",
+        "ko": "【영구】양 필드의 모든 몬스터 공격력 -2 · 양 필드 합계 최대 2장 존재 가능",
+        "en": "【Permanent】all monsters on both fields have -2 ATK · At most 2 copies across both fields"
       },
       "after": {
-        "ja": "【永続】両方の場の全モンスターの攻撃力-2（後から場に出るものも含む） · この魔法が場を離れると、この減少はなくなる · 【破壊時】この魔法を墓地の代わりに自分のリフトへ送る",
-        "ko": "【영구】양쪽 필드의 모든 몬스터 공격력 -2(나중에 등장하는 몬스터 포함) · 이 마법이 필드를 떠나면 이 감소는 사라진다 · 【파괴시】이 마법을 묘지 대신 자신 리프트로 보낸다",
-        "en": "【Permanent】All monsters on both fields have -2 ATK, including later arrivals · This reduction ends when this spell leaves the field · 【On Destruction】Send this spell to your Rift instead of your graveyard"
+        "ja": "【永続】この魔法は両方の場を合わせて最大2枚まで存在できる · 両方の場の全モンスターの攻撃力-2（後から場に出るものも含む） · この魔法が場を離れると、この減少はなくなる · 【破壊時】この魔法を墓地の代わりに自分のリフトへ送る",
+        "ko": "【영구】이 마법은 양 필드 합계 최대 2장까지 존재 가능 · 양쪽 필드의 모든 몬스터 공격력 -2(나중에 등장하는 몬스터 포함) · 이 마법이 필드를 떠나면 이 감소는 사라진다 · 【파괴시】이 마법을 묘지 대신 자신 리프트로 보낸다",
+        "en": "【Permanent】At most 2 copies across both fields · All monsters on both fields have -2 ATK, including later arrivals · This reduction ends when this spell leaves the field · 【On Destruction】Send this spell to your Rift instead of your graveyard"
       }
     },
     "GUILD_HALL": {
@@ -5316,7 +5316,7 @@
         "ko",
         "en"
       ],
-      "definitionSha256": "aff50a51940e18c847b2b6ceeae219780ce95e6b29aff94f8d489df6eb86d6b6",
+      "definitionSha256": "54364211d827eeada14ebfcc0f8934794286eefb742d53507efe724104568cee",
       "textSha256": "c0f09c3f9a700b3bf7c6ff866d01a4f92452743cc54ea23522eac007d31acba2",
       "hooks": {
         "turnFx": "worldTree",
@@ -6111,22 +6111,24 @@
       "nameJa": "幸運の残響",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "4401e84a3615a2bb439031361b9599c1daef23e3c41fe5e8af7705b90b345709",
-      "textSha256": "20bbffed558303da82f8f1524419a3601c986c728e07a68cc7fcdd838ef7f4f3",
+      "textSha256": "0a3b7b7e96620eeb238030173c0c9665473ef77afcb5dd38a5a1ef9574fedeb4",
       "hooks": {
         "ench": "luckyEcho"
       },
       "before": {
-        "ja": "【永続】自分が振ったダイスの出目が6のたび相手に6ダメージ",
-        "ko": "【영구】자신이 굴린 주사위가 6일 때마다 상대에게 6 데미지",
-        "en": "【Permanent】whenever a die you roll shows a 6, 6 damage to the opponent"
+        "ja": "【永続】自分が振ったダイスの出目が6のたび相手に6ダメージ。この効果の処理中は再発動しない",
+        "ko": "【영구】자신이 굴린 주사위가 6일 때마다 상대에게 6 데미지 · 이 효과 처리 중에는 다시 발동하지 않는다",
+        "en": "【Permanent】whenever a die you roll shows a 6, 6 damage to the opponent · Cannot trigger again while this effect is resolving"
       },
       "after": {
-        "ja": "【永続】自分が振ったダイスの出目が6のたび相手に6ダメージ",
-        "ko": "【영구】자신이 굴린 주사위가 6일 때마다 상대에게 6 데미지",
-        "en": "【Permanent】Whenever a die you roll shows a 6, 6 damage to the opponent"
+        "ja": "【永続】自分が振ったダイスの出目が6のたび相手に6ダメージ · この効果の処理中、自分のこの効果は再発動しない",
+        "ko": "【영구】자신이 굴린 주사위가 6일 때마다 상대에게 6 데미지 · 이 효과 처리 중 자신의 이 효과는 다시 발동하지 않는다",
+        "en": "【Permanent】Whenever a die you roll shows a 6, deal 6 damage to the opponent · Your copies of this effect cannot trigger again while it is resolving"
       }
     },
     "BUYOUT": {
@@ -7125,7 +7127,7 @@
         "ko",
         "en"
       ],
-      "definitionSha256": "6a19171a7d73778aa053a61c2548405af7e4e932c23961db218b95dfb7d69372",
+      "definitionSha256": "cf6aac527f1bcbac6239c229630cfb1e3d1381669f6c74cef0229a0f0ea96e17",
       "textSha256": "2226bafe020e61d6c9f1ba43fe242b09de344fe842b94ea763cc1df8970569a2",
       "hooks": {
         "onSummon": "expansion"
@@ -8491,5 +8493,5 @@
     }
   },
   "changedCards": 323,
-  "changedTexts": 885
+  "changedTexts": 887
 }
