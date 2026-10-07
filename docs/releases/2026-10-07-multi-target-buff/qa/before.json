@@ -1,0 +1,11 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: all three selected cards must animate together after the final pick\n\n1 !== 3\n",
+  "checks": [
+    {
+      "case": "trumpet-three",
+      "owner": 0,
+      "count": 1
+    }
+  ],
+  "errors": []
+}

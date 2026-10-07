@@ -14,7 +14,7 @@ import { parseDiceTable } from "../shared/cardText";
 /** Shared resting/flight face: switching from a cast to its spell slot must not
  * replace the artwork or frame at touchdown. Interaction is bound by GameView. */
 export function enchantmentTile(c:CardInst,durationUi:string):HTMLDivElement {
-  const tile=document.createElement('div');tile.className='buff-icon buff-icon--spell';tile.dataset.uid=c.uid;
+  const tile=document.createElement('div');tile.className='buff-icon buff-icon--spell';tile.dataset.uid=c.uid;tile.dataset.cardId=c.id;
   tile.innerHTML=`<span class="buff-frame" style="background-image:url(${fieldFrameFor('spell')})"></span><span class="buff-art" style="background-image:url(${artUrl.full(c.id)})"></span><span class="buff-cost" aria-hidden="true"><span>${c.cost}</span></span>${durationUi}`;
   return tile;
 }

@@ -24,7 +24,7 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
     loading.update(3,loungeText("盤面を組み立てています","Building the board","보드 준비 중"));
     while(!expired&&root.isConnected&&root.dataset.boardRendered!=="true")await new Promise<void>(r=>requestAnimationFrame(()=>r()));
     if(expired||!root.isConnected)return;
-    const urls=new Set(['/art/seekers/v2/mask-self.png','/art/seekers/v2/mask-opp.png',...PASSIVE_KEYS.map(passiveIconUrl),...seekerAssets,...coinImages,...['base-mon','base-spell','base-quest','field-mon','field-spell','field-quest','cost','attack','health','shield','dew'].map(n=>`/art/biblion/modular/${n}-ui.webp`)]);
+    const urls=new Set(['/art/biblion/modular/brand-seal-ui.png','/art/seekers/v2/mask-self.png','/art/seekers/v2/mask-opp.png',...PASSIVE_KEYS.map(passiveIconUrl),...seekerAssets,...coinImages,...['base-mon','base-spell','base-quest','field-mon','field-spell','field-quest','cost','attack','health','shield','dew'].map(n=>`/art/biblion/modular/${n}-ui.webp`)]);
     for(const el of root.querySelectorAll<HTMLElement>('*')){
       if(el.dataset.material)urls.add(el.dataset.material);
       if(el instanceof HTMLImageElement){if(el.currentSrc||el.src)urls.add(el.currentSrc||el.src);el.loading='eager';el.fetchPriority='high';}
