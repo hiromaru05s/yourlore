@@ -338,9 +338,9 @@ export abstract class BaseController implements BoardHandlers {
           const gh = ghosts.get(e.uid);
           const shelved=res.state.players[e.player].discard.some(c=>c.uid===e.uid);
           const exiled=res.state.players[e.player].removed?.find(c=>c.uid===e.uid);
-          if(exiled){await (gh?A.ghostDie(gh.el,gh.side,true):A.destroyAnim(e.uid,sideOf(e.player),true));if(gh&&!gh.el.closest(".zone-mon"))gh.el.remove();ghosts.delete(e.uid);}
-          else if (gh) { await A.ghostDie(gh.el, gh.side,false,shelved); ghosts.delete(e.uid); }
-          else await A.destroyAnim(e.uid, sideOf(e.player),false,shelved);
+          if(exiled){await (gh?A.ghostDie(gh.el,gh.side,true,false,e.cause==='decay'):A.destroyAnim(e.uid,sideOf(e.player),true,false,e.cause==='decay'));if(gh&&!gh.el.closest(".zone-mon"))gh.el.remove();ghosts.delete(e.uid);}
+          else if (gh) { await A.ghostDie(gh.el, gh.side,false,shelved,e.cause==='decay'); ghosts.delete(e.uid); }
+          else await A.destroyAnim(e.uid, sideOf(e.player),false,shelved,e.cause==='decay');
           releaseMonster(e.uid);
           fieldCount[e.player] = Math.max(0, fieldCount[e.player] - 1);
           };
