@@ -28,7 +28,6 @@
 .lounge-deck .deck-pool-types{gap:14px}
 .lounge-deck .deck-pool-types button{padding:5px 0;min-height:30px}
 .lounge-deck #deckPool{--collection-card-width:clamp(56px,min(9.5vh,calc((100cqh - 108px)*.32)),106px);gap:8px 16px;padding:8px 8px 6px;overflow:auto;flex:1}
-.lounge-deck .deck-pool-detail{padding:2px 8px;min-height:22px}
 /* Search shares one row with type filters on desktop. Count moves to the footer. */
 .lounge-cards .cards{display:grid;grid-template-columns:minmax(0,1fr) minmax(310px,38%);grid-template-rows:minmax(42px,auto) minmax(0,1fr) 32px;min-width:0}
 .lounge-cards .cards-head{grid-column:2;grid-row:1;min-height:0;padding:0 6px;gap:0;margin:0}
@@ -94,7 +93,6 @@
  .lounge-deck .deck-pool-types button{font-size:11px;min-height:28px}
  .lounge-deck .deck-pool-search{width:auto;flex:1 1 100%;margin:0}.lounge-deck .deck-pool-search input{width:100%;min-height:30px;padding:3px;font-size:16px}
  .lounge-deck #deckPool{--collection-card-width:clamp(56px,16vw,70px);grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 5px;padding:8px 5px;overflow:auto;flex:1}
- .lounge-deck .deck-pool-detail{min-height:24px;font-size:10px}
  .lounge-cards .cards-head-r{flex:1;gap:6px}.lounge-cards .cards-lang select{max-width:90px}.lounge-cards .cards-search{font-size:16px}
  .lounge-friends .friends-screen .tut{padding:16px}.lounge-friends .friends-screen .tut-body{display:flex;flex-direction:column;gap:26px}
  .lounge-friends .fr-add-section{order:0}.lounge-friends .fr-roster{order:1}.lounge-friends .fr-incoming{order:2}.lounge-friends .fr-outgoing{order:3}
