@@ -1,3 +1,6 @@
+import {selectedTribeSummon} from './tribePresentation/selection';
+import {playTribeSummon,cancelTribeSummons} from './tribePresentation/runtime';
+import {holdRiftTarget} from './riftActivity';
 import {cancelTribeSynergy} from './tribeSynergy/runtime';
 import type {ElementalEvent,Playback} from './elemental/runtime';
 import {flyPersistentIntoSlot} from './persistentFlight';
@@ -45,7 +48,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on);
-  if(on){cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -189,6 +192,11 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(heavy&&selectedTribeSummon(face.dataset.cardId)){
+    face.style.visibility='hidden';
+    await boardMotionScope(signal=>playTribeSummon(face,{anchor:target,from,reveal,signal,onImpact:()=>sfx(landingSound)}));
+    reveal.remove();face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
   if(heavy){
     face.style.zIndex='135';reveal.style.zIndex='135';
     // Transfer directly into the selected card-parallel landing, without a second impact.
@@ -918,11 +926,10 @@ async function landOnShelf(node:HTMLElement,side:ViewSide):Promise<void>{
     observer.observe(document.body,{subtree:true,childList:true});setTimeout(()=>{copy.remove();observer.disconnect();},5000);
   }
 }
-const riftUsers=new WeakMap<HTMLElement,number>();
 export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<void>{
   const target=document.getElementById(side==='me'?'rift-me':'rift-opp');if(!target||fxSkip)return;
   const a=node.getBoundingClientRect();
-  riftUsers.set(target,(riftUsers.get(target)??0)+1);target.classList.add('is-absorbing');
+  const releaseTarget=holdRiftTarget(target);
   const w=node.offsetWidth||a.width,h=node.offsetHeight||a.height;
   const start=node.style.transform.startsWith('matrix')?new DOMMatrix(node.style.transform):new DOMMatrix().translate(a.left,a.top).scale(a.width/w,a.height/h);
   const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -940,7 +947,7 @@ export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<voi
     const duration=reduced?100:350;
     const motion=node.animate([{transform:start.toString()},{transform:end.toString()}],{duration,easing:'cubic-bezier(.55,.02,.6,1)',fill:'forwards'});
     try{await wait(duration);}finally{motion.cancel();}
-  }finally{const left=(riftUsers.get(target)??1)-1;if(left>0)riftUsers.set(target,left);else{riftUsers.delete(target);target.classList.remove('is-absorbing');}}
+  }finally{releaseTarget();}
 }
 export async function exileCard(card:CardInst,side:ViewSide,source?:HTMLElement|null):Promise<void>{
   const r=source?.getBoundingClientRect()||rectOf('#'+discId(side));if(!r)return;

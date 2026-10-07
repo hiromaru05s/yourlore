@@ -64,10 +64,12 @@
     "tests/elemental-adoption.mjs",
     "tests/persistent-flight.mjs",
     "tests/tribe-synergy-rules.mjs",
+    "tests/tribe-presentation.mjs",
     "tests/golem-guts.mjs",
     "tests/zero-attack-rule.mjs",
     "tests/zero-attack-balance.mjs",
-    "tests/verdant-summon.mjs"
+    "tests/verdant-summon.mjs",
+    "tests/critical-trigger-chains.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",

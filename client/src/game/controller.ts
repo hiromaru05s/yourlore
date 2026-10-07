@@ -1,3 +1,4 @@
+import {synergyTier} from '../ui/tribePresentation/selection';
 import {playTribeSynergy} from '../ui/tribeSynergy/runtime';
 import type {Playback} from '../ui/elemental/runtime';
 import {persistentShelfExits} from './shelfExits';
@@ -322,10 +323,10 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "tribeSynergy": {
           const victory=e.tribe==='시초'&&e.threshold===6&&events.some(ev=>ev.type==='win'&&ev.winner===e.player);
-          // Only the two FIX selections are adopted; higher ordinary tiers await selection.
-          if(!A.isFxSkipped()&&(victory||e.threshold===2)){
+          // All approved ordinary stages clamp at 3; actual Origin victory has its own seal.
+          if(!A.isFxSkipped()){
             const nodes=e.uids.map(uid=>ghosts.get(uid)?.el??this.openingRoot.querySelector<HTMLElement>(`.zone-mon .card[data-uid="${CSS.escape(uid)}"]`)).filter((el):el is HTMLElement=>!!el);
-            await playTribeSynergy(nodes,victory);
+            await playTribeSynergy(nodes,victory,synergyTier(e.threshold));
           }
           break;
         }

@@ -834,7 +834,7 @@ Object.assign(TEXTS, {
   BEGINNER_MIND: "【Requires】An empty hand · Draw 4 cards",
   VOID_RITE: "Give Void to every monster on the field",
   SPACE_RITE: "Only with 6+ enemy field cards · For 3 turns the enemy cannot summon monsters or cast spells",
-  LUCKY_ECHO: "Permanent: whenever a die you roll shows a 6, 6 damage to the opponent",
+  LUCKY_ECHO: "Permanent: whenever a die you roll shows a 6, deal 6 damage to the opponent. Cannot trigger again while this effect is resolving",
   SORTER_LAW: "Only with a deck of 8 cards or fewer · Negate the attack · Destroy 2 cards on the enemy field",
   BUYOUT: "Only if you bought 2 copies of the same card this turn · Max mana +1",
   SAMSARA: "【Turn Start】If your monster died last turn, summon one of them to your field",
