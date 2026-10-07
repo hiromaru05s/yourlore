@@ -48,6 +48,9 @@ try{
  }
  verification.hold=true;const pending=play(source);cancelSummon(source);verification.release();assert.equal(await pending,false);await settle();verification.hold=false;
  const first=play(source);await settle();const second=play(source);await settle();assert.equal(await first,false);assert.equal(source.style.visibility,'hidden');cancelSummons();assert.equal(await second,false);assert.equal(source.style.visibility,'visible');
+ const other=source.cloneNode();other.id='other';document.body.append(other);
+ const simultaneous=[play(source,{anchor}),play(other,{anchor})];await settle();assert.equal(document.querySelectorAll('.verdant-summon').length,2);
+ cancelSummons(document.getElementById('root'));assert.deepEqual(await Promise.all(simultaneous),[false,false]);assert.equal(source.style.visibility,'visible');assert.equal(other.style.visibility,'visible');other.remove();
  verification.fail=true;const warn=console.warn;console.warn=()=>{};const before=impacts;assert.equal(await play(source,{onImpact:()=>impacts++}),false);console.warn=warn;assert.equal(impacts,before+1);assert.equal(source.style.visibility,'visible');
  assert.equal(frames.size,0);assert.equal(document.querySelectorAll('.verdant-summon').length,0);
  console.log('PASS five 02 selections, Half Elf 01, two no-animation FIXs, contact once, physical handoff, reduced motion, abort/root/single/resize/hidden/unlink, pending capture, replay, fallback and disposal');

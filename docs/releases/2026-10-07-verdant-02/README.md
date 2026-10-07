@@ -17,5 +17,6 @@
 
 - `tests/verdant-summon.mjs`: 選択、音の接地同期と一度だけの発火、表示復帰・中断・再発動・失敗時処理。
 - `tests/verdant-summon-browser.mjs`: 開発専用 `verdant-qa.html` 上で実 GameView と通常の召喚関数を使用。手札・生成召喚、両陣営、モバイル、低減モーション、スキップ。
+- `tests/verdant-normal-speed-browser.mjs`: 5 枚を実時間で連続再生。録画は `qa/normal-speed/selected-five.webm`、JavaScript エラーなし。途中フレームの検証と録画を分離している。
 - 描画の選定はユーザー承認済み R4 に基づく。テスト成功を新たな見た目の承認とは扱わない。
 - 開発用検証ページは通常の配信ビルドに含めない。ステージング配信とブラウザでの確認結果は公開後の記録を参照。
