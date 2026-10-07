@@ -16,6 +16,18 @@
 - `node tests/shop-preview-browser.mjs`: PASS。APIのみテストデータを使用し、商品画像・盤面・3D資産は実物をロード。
 - 全12組の見本、旧家具・Atelier家具・スリーブの独立した装備、新規タブなし、Esc・戻る、選択保持、390px・320pxの横はみ出しなし。
 - 画像を目視確認し、平たい台座と囲いのある墓地が対戦と同じ形になっていることを確認。動く家具の見本画像は静止画で、盤面プレビューでは通常の装備描画を使用。
-- 公開サイトへのデプロイ、認証済みアカウントの購入、見た目のユーザー承認は未実施。
+- ステージング反映済み。認証済みアカウントでの購入と見た目のユーザー承認は未実施。
 
 証拠: [検証結果](qa/results.json)、[ショップ](qa/shop-desktop.png)、[画面内の盤面](qa/board-desktop.png)、[拡大](qa/deck-closeup.png)、[320px墓地](qa/grave-320.png)。
+
+## ステージング反映（2026-10-08）
+
+[ステージング](https://test.yourlore.xyz) に `cfa33bbf9f3a950a8f230303b71b362ef0404127` が guarded release として配信されていることを確認。ショップ変更は `a002dc72` に含まれる。並行リリースが同じ最新mainを公開したため、二重デプロイは行わず公開結果を検証した。
+
+- Worker version: `c337371c-6fbf-4aa1-9421-8ed2eac848df`、100%。
+- 公開ファイル101点のSHA-256が検証用ビルドと一致。HTMLはcanonical redirectを追跡。
+- 公開されたコード・画像・モデルを用いるショップブラウザ検証PASS。APIのみテストデータで、実アカウントの購入確認ではない。
+- 12組の家具、旧4種、Atelier家具、スリーブ独立性、別タブなし、Esc・フォーカス復帰、選択保持、320px・390pxの横はみ出しなしを確認。
+- 作業元の並行編集はそのまま保持し、リリース専用worktreeから必要な差分のみmainへ統合。
+
+証拠: [リリース情報](staging/deployment.json)、[ファイル一致](staging/asset-parity.json)、[ブラウザ検証](staging/results.json)、[ショップ](staging/shop-desktop.png)、[盤面プレビュー](staging/board-desktop.png)。
