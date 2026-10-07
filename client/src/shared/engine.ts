@@ -1,3 +1,4 @@
+import { playIntent } from './playIntent';
 import {monsterActivation, observeMonsterEffect} from './monsterEffects';
 // ============================================================
 // LORE — pure game engine. No DOM, no timers, no Math.random.
@@ -1385,6 +1386,11 @@ function endTurn(g: GameState, ctx: Ctx, force = false): void {
     }
   }
   // v40: 손패는 유지된다 (구: 턴 종료시 전부 묘지로). 상한은 드로우 시점에 HAND_MAX로 관리.
+  for (const pl of g.players) for (const m of pl.field) {
+    const expired=(m.tempAtkExpiry??[]).filter(e=>e.turn<=g.turn);
+    m.tempAtk-=expired.reduce((n,e)=>n+e.amount,0);
+    if(m.tempAtkExpiry) m.tempAtkExpiry=m.tempAtkExpiry.filter(e=>e.turn>g.turn);
+  }
   p.field.forEach((m) => { m.exhausted = false; m.tempAtk = 0; m.attacksUsed = 0; });
   p.spellDiscountTurn = 0;
   p.noDirectTurn = false; // 천궁의 폐문: 턴 종료로 해제
@@ -3057,7 +3063,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case 'golemShield': gainShield(g,ctx,p,v+v2*new Set(p.field.filter(isGolem).map(m=>m.id)).size); break;
     case 'armorBreak': { const branded=(o.shield ?? 0)>=10; breakShield(ctx,o,9); if(branded)gainBrand(g, ctx, o, 1); break; }
     case 'spearShield': if ((o.shield ?? 0)<p.field.reduce((n,m)=>n+effAtk(p,m,g),0))breakShield(ctx,o); break;
-    case 'cullSword': queueExpansionChoice(g,p,'SELECTED_SWORD','このターン攻撃力を上げる自分のモンスターを選択',{amount:cullExiled(p)}); break;
+    case 'cullSword': queueExpansionChoice(g,p,'SELECTED_SWORD','このターン攻撃力を上げるモンスターを選択（両方の場・キャンセル可）',{amount:cullExiled(p)}); break;
     case "dmg": ctx.dealDamage(o, v, cn(card), cn(card)); break;
     case "originQuest": { // 기원의 탐구(v41b): 필드의 코스트 0 카드(양측 몬스터·영구마법 + 자신 세트 함정) 1장당 1드로우
       const n0 = g.players.reduce((s2, pl) => s2 + pl.field.filter((m) => (m.cost ?? 0) === 0).length + pl.enchants.filter((e) => (e.card.cost ?? 0) === 0).length, 0) + p.traps.filter((t) => (t.card.cost ?? 0) === 0).length;
@@ -3166,7 +3172,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
 // ============================================================
 // custom (bespoke) spell effects — dispatched by card id
 // ============================================================
-const CUSTOM_SPELLS = new Set<string>([
+export const CUSTOM_SPELLS = new Set<string>([
   "S1", "S5", "S7", "AMA_KEEP", "ND2", "ND3", "ND5", "GS5_0", "GS5_2", "GS6_0", "GS6_2", "GS6_3", "GS10_3",
   "GS7_0", "GS7_2", "GS8_0", "GS8_2", "GS8_3", "GS8_4", "GS8_5", "GS9_0", "GS9_2", "GS10_0", "GS10_1", "GS10_2",
   "HANDRESET", "TIMEWARP", "GAMBLE", "DICE8",
@@ -4238,9 +4244,9 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
   if (card.id === "COUNTERCALC") { applicable=true; if (o0.enchants.length === 0) { return reason("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); } }
   if (card.id === "AMBUSH") { applicable=true; if (o0.maxMana !== 4) { return reason("  └ 상대 최대 마나가 4가 아니라 사용 불가", "  └ 相手の最大マナが4ではないため使用不可"); } }
   if (card.id === "TRUMPET") { applicable=true; if (p.field.length === 0) { return reason("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); } }
-  if (card.id === "WALLBREAK1") { applicable=true; if (![...o0.field, ...p.field].some((m) => effAtk(o0, m, g) <= 2)) { return reason("  └ 공격력 2 이하 몬스터가 없습니다", "  └ 攻撃力2以下のモンスターがいません"); } }
+  if (card.id === "WALLBREAK1") { applicable=true; if (![p,o0].some(owner => owner.field.some(m => (owner===p || !hasPassive(m,'aura')) && effAtk(owner,m,g) <= 2))) { return reason("  └ 공격력 2 이하 몬스터가 없습니다", "  └ 攻撃力2以下のモンスターがいません"); } }
   if (card.id === "WALLBREAK2") { applicable=true; if (![p,o0].some(owner => owner.field.some(m => effAtk(owner,m,g) <= 2))) { return reason("  └ 공격력 2 이하 몬스터가 없습니다", "  └ 攻撃力2以下のモンスターがいません"); } }
-  if (card.id === "SNIPE1") { applicable=true; if (![...o0.field, ...p.field].some((m) => curHp(o0, m) <= 3)) { return reason("  └ 체력 3 이하 몬스터가 없습니다", "  └ 体力3以下のモンスターがいません"); } }
+  if (card.id === "SNIPE1") { applicable=true; if (![p,o0].some(owner => owner.field.some(m => (owner===p || !hasPassive(m,'aura')) && curHp(owner,m) <= 3))) { return reason("  └ 체력 3 이하 몬스터가 없습니다", "  └ 体力3以下のモンスターがいません"); } }
   if (card.id === "SNIPE2") { applicable=true; if (![p,o0].some(owner => owner.field.some(m => curHp(owner,m) <= 2))) { return reason("  └ 체력 2 이하 몬스터가 없습니다", "  └ 体力2以下のモンスターがいません"); } }
   if (card.id === "INQUISITION") { applicable=true; if (!o0.deck.some(c=>c.id==="HIDDEN") && ![...o0.deck, ...o0.discard, ...o0.field].some((m) => m.t === "mon" && m.tribe)) { return reason("  └ 상대에게 종족 몬스터가 없습니다", "  └ 相手に種族モンスターがいません"); } }
   if (card.id === "PURGE_ALL") { applicable=true; if (p.deck.length + p.discard.length === 0) { return reason("  └ 덱과 묘지가 비어 있습니다", "  └ デッキと墓地が空です"); } }
@@ -4481,7 +4487,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
         kind: "myMon",
         hint: a === "buffTurn" ? `공격력 +${v} 할 자신 몬스터 선택` : (v2 && !v ? `체력 +${v2} 할 자신 몬스터 선택` : "강화할 자신 몬스터 선택"),
         hintJa: a === "buffTurn" ? `攻撃 +${v} する自分のモンスターを選択` : (v2 && !v ? `体力 +${v2} する自分のモンスターを選択` : "強化する自分のモンスターを選択"),
-        reason: a, allowCancel: false, data: { val: v, val2: v2, ...(card.grantPassive ? { grant: card.grantPassive } : {}) },
+        reason: a, allowCancel: false, data: { sourceId: card.id, val: v, val2: v2, ...(card.grantPassive ? { grant: card.grantPassive } : {}) },
       };
       ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
     }
@@ -4621,7 +4627,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       }
     }
     else if (pending.reason === "setAtk2") { // 시초의 수호자: 대상 공격력을 2로 변경
-      tm.atk = 2; tm.atkMod = 0; tm.tempAtk = 0;
+      tm.atk = 2; tm.atkMod = 0; tm.tempAtk = 0; delete tm.tempAtkExpiry;
       ctx.log(`<span class="t">${p.name}</span> → ${cn(tm)} 의 공격력이 2가 된다`, `<span class="t">${p.name}</span> → ${cn(tm)} の攻撃力が2になる`);
     }
     else if (pending.reason === "decayMark") { // 러스트캡 슬러그: 카운터 1개 부여 (알 제외)
@@ -4650,7 +4656,8 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     }
   } else if (pending.kind === "myMon") {
     const tm = p.field.find((m) => m.uid === uid);
-    if (!tm) return;
+    if (!tm) { g.pending=pending; return; }
+    if (d.sourceId === "S3" && tm.tribe) { g.pending=pending; return; }
     if (pending.reason === "buffTurn") {
       const picked = d.excl ?? [];
       if (picked.includes(tm.uid)) { g.pending = pending; return; } // 지원 나팔: 이미 고른 몬스터는 중복 선택 불가 — 다시 고르게
@@ -4680,7 +4687,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       if (bv2 < 0) recheckDeaths(g, ctx);
     }
     else if (pending.reason === "incubate") {
-      if (tm.hatch == null) { ctx.log("  └ 알이 아닙니다", "  └ 卵ではありません"); return; }
+      if (tm.hatch == null) { g.pending=pending; ctx.log("  └ 알이 아닙니다", "  └ 卵ではありません"); return; }
       tm.hatch = Math.max(0, tm.hatch - ((d.val as number) || 5));
       ctx.log(`<span class="t">${p.name}</span> → ${cn(tm)} 카운터 -${d.val || 5} (남은 ${tm.hatch}턴)`, `<span class="t">${p.name}</span> → ${cn(tm)} カウンター-${d.val || 5} (残り${tm.hatch}ターン)`);
     }
@@ -5042,7 +5049,7 @@ export function effectChoices(g: GameState): CardInst[] {
   }
 }
 function offerEffectChoice(g: GameState, ctx: Ctx, p: PlayerState, reason: string, hintJa: string, data?: Record<string, unknown>): void {
-  g.pending = { kind: "cardChoice", owner: side(g, p), reason, hint: hintJa, hintJa, allowCancel: false, data };
+  g.pending = { kind: "cardChoice", owner: side(g, p), reason, hint: hintJa, hintJa, allowCancel: reason === "SELECTED_SWORD", data };
   if (!effectChoices(g).length) { g.pending = null; ctx.log("対象がないため効果は不発", "対象がないため効果は不発"); return; }
   ctx.ev.push({ type: "needTarget", pending: g.pending });
 }
@@ -5188,6 +5195,33 @@ function resolveQuests(g: GameState, ctx: Ctx, automaticOnly = false): void {
  * target/choice resolution. Keep the result until accepted; replay from BEFORE
  * that action so mana, damage, summons and quest/casino counters are not doubled. */
 export function reduce(prev: GameState, action: Action): ReduceResult {
+  // A reviewed cast commits its choices atomically. Cancellation happens before
+  // this action: no spell reactions, RNG, private information or costs to undo.
+  if (action.type === "play" && (action.sourceUid !== undefined || action.targets !== undefined)) {
+    const card = prev.players[prev.cur].hand[action.idx];
+    const unchanged = (): ReduceResult => ({state: structuredClone(prev), events: []});
+    if (prev.over || prev.pending || !card || card.uid !== action.sourceUid || playBlockReason(prev, prev.cur, card)) return unchanged();
+    const plan = playIntent(prev, prev.cur, card);
+    const targets = action.targets;
+    if (targets !== undefined && (!plan || !Array.isArray(targets) || targets.length < plan.min
+      || targets.length > plan.max || new Set(targets).size !== targets.length
+      || targets.some(uid => !plan.pool.some(c => c.uid === uid)))) return unchanged();
+    let result = reduce(prev, {type:"play", idx:action.idx});
+    if (targets && plan) {
+      for (const uid of targets) {
+        // Reactions/rerolls may replace or invalidate this choice. Never answer a
+        // different effect, or select an arbitrary substitute, on the user's behalf.
+        if (result.state.over || result.state.pending?.reason !== plan.reason) break;
+        const next = reduce(result.state, {type:"pick",uid});
+        result = {state:next.state, events:[...result.events,...next.events]};
+      }
+      if ((targets.length < plan.max || targets.length === 0) && result.state.pending?.reason === plan.reason && result.state.pending.allowCancel) {
+        const next=reduce(result.state,{type:"pick",uid:null});
+        result={state:next.state,events:[...result.events,...next.events]};
+      }
+    }
+    return result;
+  }
   if (!prev.over && prev.pending?.kind === "reroll" && (action.type === "pick" || action.type === "chooseTarget")) {
     const snap = prev._wheelSnap;
     if (action.uid !== null && action.uid !== "re") return { state: structuredClone(prev), events: [] };
@@ -5676,7 +5710,7 @@ function dewShieldChoices(g: GameState): CardInst[] | null {
       ...(p.field.some(m=>m.uid!==q.data?.sourceUid)?[dewOption(source,'buff',`他の味方を+${q.data?.buff}/+${q.data?.buff}`,'다른 아군 강화','Buff another ally')]:[])];
     case 'ELF_DESTROY': return o.field.filter(m=>effAtk(o,m,g)>=9 && !hasPassive(m,'aura'));
     case 'ARMORER_TARGET': return p.field.filter(m=>m.uid!==q.data?.sourceUid);
-    case 'SELECTED_SWORD': return p.field;
+    case 'SELECTED_SWORD': return [...p.field, ...o.field.filter(m => !hasPassive(m,'aura'))];
     case 'WORLD_TREE_ATTACK': case 'WORLD_TREE_DEFEND': return [
       dewOption('WORLD_TREE','pass','使用せず続ける','사용하지 않고 계속','Continue without spending'),
       dewOption('WORLD_TREE','grow','雫1を消費して永続強化','이슬 1 소비, 영구 강화','Spend 1 Dew: permanent +6')];
@@ -5688,6 +5722,7 @@ function resolveDewShieldChoice(g: GameState, ctx: Ctx, uid: string | null): boo
   const q=g.pending!; const options=dewShieldChoices(g); if(options===null)return false;
   const p=g.players[actingSide(g)],o=g.players[1-actingSide(g)];
   if(uid===null && ['WORLD_TREE_ATTACK','WORLD_TREE_DEFEND','HIGH_ELF_HAND'].includes(q.reason))uid=q.reason==='HIGH_ELF_HAND'?'done':'pass';
+  if (uid===null && q.reason==='SELECTED_SWORD') { g.pending=null; return true; }
   const chosen=options.find(c=>c.uid===uid); if(!chosen)return true;
   if(q.reason==='HIGH_ELF_HAND' && uid!=='done' && hasPassive(chosen,'relic')) {ctx.log('신기는 제외할 수 없습니다','神器はゲームから除外できません');return true;}
   g.pending=null;
@@ -5702,7 +5737,10 @@ function resolveDewShieldChoice(g: GameState, ctx: Ctx, uid: string | null): boo
       const n=special?3:Number(q.data?.buff);m.atkMod+=n;m.defMod+=n;break;
     }
     case 'ELF_DESTROY':ctx.destroyMonster(o,chosen as FieldMon);break;
-    case 'SELECTED_SWORD':(chosen as FieldMon).tempAtk+=Number(q.data?.amount ?? 0);break;
+    case 'SELECTED_SWORD': {
+      const m=chosen as FieldMon,amount=Number(q.data?.amount ?? 0);
+      m.tempAtk+=amount;(m.tempAtkExpiry??=[]).push({turn:g.turn,amount});break;
+    }
     case 'HIGH_ELF_HAND': {
       if(uid!=='done') {o.hand=o.hand.filter(c=>c.uid!==uid);rmz(o).push(chosen);}
       const left=Number(q.data?.left ?? 3)-1;

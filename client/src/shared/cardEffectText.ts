@@ -1753,9 +1753,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Destroy all enemy Shield if it is less than your monsters’ total ATK."
   },
   "SELECTED_SWORD": {
-    "ja": "【発動時】自分の場のモンスター1体を選び、自分のリフトの「カル」1枚につき、その攻撃力+1（このターン終了まで）。",
-    "ko": "【발동시】자신의 필드의 몬스터 1체를 선택해 자신의 리프트의 컬 1장당 그 공격력 +1(이번 턴 종료까지).",
-    "en": "【On Cast】Choose 1 monster on your field; it gets +1 ATK per Cull in your Rift until this turn ends."
+    "ja": "【発動時】どちらかの場のモンスター1体を選び、自分のリフトの「カル」1枚につき、その攻撃力+1（このターン終了まで）。",
+    "ko": "【발동시】어느 쪽 필드든 몬스터 1체를 선택해 자신의 리프트의 컬 1장당 그 공격력 +1(이번 턴 종료까지).",
+    "en": "【On Cast】Choose 1 monster on either field; it gets +1 ATK per Cull in your Rift until this turn ends."
   },
   "SELECTED_SHIELD": {
     "ja": "【発動時】自分のリフトの「カル」枚数と同じ量のシールドを自分が得る。",

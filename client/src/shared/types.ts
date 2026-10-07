@@ -74,6 +74,7 @@ export interface FieldMon extends CardInst {
   expireOpponentOf?: Side;
   exhausted: boolean;
   tempAtk: number; // temporary atk (cleared end of turn)
+  tempAtkExpiry?: { turn: number; amount: number }[]; // cross-side buffs expire on the casting turn
   atkMod: number; // permanent atk change
   defMod: number; // permanent def change
   summonedTurn: number;
@@ -238,7 +239,7 @@ export interface GameState {
 
 // --- Actions: the only way to mutate a GameState ---
 export type Action =
-  | { type: "play"; idx: number }
+  | { type: "play"; idx: number; sourceUid?: string; targets?: string[] }
   | { type: "buyMarket"; i: number }
   | { type: "buySupply"; i: number }
   | { type: "refresh" }
