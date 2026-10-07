@@ -253,7 +253,7 @@ export type Action =
 export type DiceSource = { player: Side } & ({ id: string; status?: never } | { status: "brand" | "solitude"; id?: never });
 
 export type GameEvent =
-  | { type: "statusGrant"; player: Side; resource: "shield" | "brand"; before: number; after: number }
+  | { type: "statusGrant"; player: Side; resource: "shield" | "brand" | "dew"; before: number; after: number; sourceUid?: string }
   | { type: "tribeSynergy"; player: Side; tribe: string; threshold: number; uids: string[] }
   | { type: "monsterActivate"; player: Side; uid: string }
   | { type: "enchantActivate"; player: Side; uid: string; id: string }

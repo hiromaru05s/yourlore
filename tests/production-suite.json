@@ -73,6 +73,7 @@
     "tests/verdant-summon.mjs",
     "tests/critical-trigger-chains.mjs",
     "tests/status-grant.mjs",
+    "tests/dew-grant.mjs",
     "tests/duel-bugfix-oct08.mjs",
     "tests/cross-system-oct08.mjs"
   ],

@@ -429,9 +429,11 @@ function sweepRelics(g: GameState, ctx: Ctx): void {
 }
 
 /** Resource updates resolve synchronously; shield gain is one trigger, regardless of amount. */
-function gainDew(ctx: Ctx, p: PlayerState, amount: number): void {
+function gainDew(ctx: Ctx, p: PlayerState, amount: number, sourceUid?: string): void {
   if (amount <= 0) return;
-  p.dew = (p.dew ?? 0) + amount;
+  const before = p.dew ?? 0;
+  p.dew = before + amount;
+  ctx.ev.push({type:"statusGrant",player:ctx.side(p),resource:"dew",before,after:p.dew,...(sourceUid?{sourceUid}:{})});
   ctx.log(`${p.name}: 이슬 +${amount} (${p.dew})`, `${p.name}: 雫+${amount} (${p.dew})`);
 }
 function gainBrand(g: GameState, ctx: Ctx, p: PlayerState, amount: number): void {
@@ -452,7 +454,7 @@ function gainShield(g: GameState, ctx: Ctx, p: PlayerState, amount: number, sour
   p.shieldExpiresTurn = side(g, p) === g.cur ? g.turn + 1 : g.turn;
   if (side(g, p) !== g.cur) p.shieldOpponentPeak = Math.max(p.shieldOpponentPeak ?? 0, p.shield);
   ctx.log(`${p.name}: 실드 +${amount} (${p.shield})`, `${p.name}: シールド+${amount} (${p.shield})`);
-  for (const m of p.field) if (m.aura === 'shieldDew' && (m.val2 ?? 0) > 0) { monsterActivation(g, ctx.ev, p, m); gainDew(ctx, p, m.val2 ?? 0); }
+  for (const m of p.field) if (m.aura === 'shieldDew' && (m.val2 ?? 0) > 0) { monsterActivation(g, ctx.ev, p, m); gainDew(ctx, p, m.val2 ?? 0, m.uid); }
 }
 function breakShield(ctx: Ctx, p: PlayerState, amount = Infinity): void {
   const lost = Math.min(p.shield ?? 0, amount);
@@ -474,7 +476,7 @@ function refreshDewPassives(g: GameState): void {
   }
 }
 function havenPurchase(_g: GameState, ctx: Ctx, p: PlayerState, c: CardInst): void {
-  if (isWorldTreeCard(c) || isElfCard(c)) for (const e of p.enchants) if (e.card.ench === 'elfHaven') gainDew(ctx, p, 1);
+  if (isWorldTreeCard(c) || isElfCard(c)) for (const e of p.enchants) if (e.card.ench === 'elfHaven') {enchantFx(_g,ctx.ev,p,e.card);gainDew(ctx, p, 1, e.card.uid);}
 }
 
 interface Ctx {
@@ -943,7 +945,7 @@ function tickTurnFx(g: GameState, ctx: Ctx, p: PlayerState): void {
         ctx.ev.push({ type: "needTarget", pending: g.pending });
         break;
       }
-      case "worldTree": gainDew(ctx, p, 3); break;
+      case "worldTree": gainDew(ctx, p, 3, m.uid); break;
       case "weaponmaster":
         for (const other of p.field) if (/장비 장인|装備職人/.test(other.name + (other.nameJa ?? ''))) gainShield(g, ctx, p, 5, m);
         break;
@@ -1250,10 +1252,10 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
       }
       // v49: 세계수의 보살핌 — 자신의 턴 시작마다 체력 +3 (동량 회복 포함)
       if (e.card.ench === "worldCare" && ownerTurn && !g.over) {
-        gainDew(ctx, pl, 1);
+        gainDew(ctx, pl, 1, e.card.uid);
       }
       if (e.card.ench === 'worldHeart' && ownerTurn && !g.over) {
-        gainDew(ctx, pl, 2); ctx.heal(pl, 2);
+        gainDew(ctx, pl, 2, e.card.uid); ctx.heal(pl, 2);
       }
       // 선견지명: 최대 마나 10 이상이 되면 +2 후 자괴 (필드를 떠나면 게임에서 제외) (v19: 9→10)
       if (e.card.ench === "foresight" && !g.over && pl.maxMana >= 10) {
@@ -2361,7 +2363,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
     case 'dewBeliever': {
       ctx.heal(p,3);
       const {rolls} = diceRoll(g,ctx.ev,side(g,p),{id:m.id,player:side(g,p)},1,5);
-      if (rolls[0] >= 5) gainDew(ctx,p,1);
+      if (rolls[0] >= 5) gainDew(ctx,p,1,m.uid);
       break;
     }
     case 'darkElfDew':
@@ -2369,19 +2371,19 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       if ((o.shield ?? 0)>0) ctx.dealDamage(o,10,cn(m),cn(m),side(g,p));
       break;
     case 'elfDew':
-      gainDew(ctx,p,2);
+      gainDew(ctx,p,2,m.uid);
       if (o.field.some(foe=>effAtk(o,foe,g)>=9 && !hasPassive(foe,'aura'))) queueExpansionChoice(g,p,'ELF_DESTROY','破壊する攻撃力9以上の相手モンスター1体を選択');
       break;
     case 'highElfDew':
       // The private hand is exposed only while this owner's choice is pending.
-      queueExpansionChoice(g,p,'HIGH_ELF_HAND','相手の手札を確認し、除外するカードを3枚まで選択（終了可）',{left:3});
+      queueExpansionChoice(g,p,'HIGH_ELF_HAND','相手の手札を確認し、除外するカードを3枚まで選択（終了可）',{left:3,sourceUid:m.uid});
       break;
     case 'elderDew':
       for (const foe of [...o.field]) { if(g.over) break; ctx.destroyMonster(o,foe); }
       while (o.enchants.length) binEnch(g,ctx,o,o.enchants.shift()!.card);
       for (const t of o.traps.splice(0)) o.discard.push(t.card);
       for (const q of (o.quests ?? []).splice(0)) o.discard.push(q.card);
-      if (!g.over) gainDew(ctx,p,2*(p.dew ?? 0));
+      if (!g.over) gainDew(ctx,p,2*(p.dew ?? 0),m.uid);
       break;
     case "draw": { const n = ctx.drawN(p, v); ctx.log(`  └ 소환 효과: ${n}장 드로우`, `  └ 召喚効果: ${n}枚ドロー`); break; }
     case "burn": ctx.dealDamage(o, v, `${cn(m)} 소환`, `${cn(m)} 召喚`); break;
@@ -4153,8 +4155,7 @@ function treeKeeperTrigger(g: GameState, ctx: Ctx, p: PlayerState, card: CardIns
   if (!(nm.includes("세계수") || nm.includes("엘프"))) return;
   const n = p.field.filter((m) => m.aura === "treeKeeper" && m.uid !== exceptUid).length;
   if (!n) return;
-  for (const m of p.field) if (m.aura === "treeKeeper" && m.uid !== exceptUid) monsterActivation(g, ctx.ev, p, m);
-  gainDew(ctx, p, n);
+  for (const m of p.field) if (m.aura === "treeKeeper" && m.uid !== exceptUid) {monsterActivation(g, ctx.ev, p, m);gainDew(ctx, p, 1, m.uid);}
 }
 /** Summon precondition check (암살자 상급/특급). */
 export function summonReqMet(p: PlayerState, card: CardInst, o?: PlayerState): boolean {
@@ -5705,8 +5706,8 @@ function resolveDewShieldChoice(g: GameState, ctx: Ctx, uid: string | null): boo
     case 'HIGH_ELF_HAND': {
       if(uid!=='done') {o.hand=o.hand.filter(c=>c.uid!==uid);rmz(o).push(chosen);}
       const left=Number(q.data?.left ?? 3)-1;
-      if(uid!=='done' && left>0 && o.hand.some(c=>!hasPassive(c,'relic')))queueExpansionChoice(g,p,'HIGH_ELF_HAND',`相手手札からあと${left}枚まで除外（終了可）`,{left});
-      else {breakShield(ctx,o);gainDew(ctx,p,p.dew ?? 0);}
+      if(uid!=='done' && left>0 && o.hand.some(c=>!hasPassive(c,'relic')))queueExpansionChoice(g,p,'HIGH_ELF_HAND',`相手手札からあと${left}枚まで除外（終了可）`,{left,sourceUid:q.data?.sourceUid});
+      else {breakShield(ctx,o);gainDew(ctx,p,p.dew ?? 0,typeof q.data?.sourceUid==='string'?q.data.sourceUid:undefined);}
       break;
     }
     case 'WORLD_TREE_ATTACK':case 'WORLD_TREE_DEFEND': {
