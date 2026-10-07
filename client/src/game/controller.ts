@@ -280,7 +280,8 @@ export abstract class BaseController implements BoardHandlers {
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
     const spellGhosts:HTMLElement[]=[];
     let statusSource:HTMLElement|undefined;
-    warmStatusGrants();
+    const hasStatusGrants=events.some(e=>e.type==='statusGrant');
+    if(hasStatusGrants)warmStatusGrants();
     const questCount=prev.players.map(p=>p.quests?.length??0);
     const buffCount=[prev.players[0].traps.length+prev.players[0].enchants.length,prev.players[1].traps.length+prev.players[1].enchants.length];
     // running counters for ghost slot placement + live HP readout
@@ -301,7 +302,7 @@ export abstract class BaseController implements BoardHandlers {
       const cue = eventSound.cue(e);
       if(cue&&!A.isFxSkipped())sfx(cue);
       if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
-      if(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon')statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
+      if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
       switch (e.type) {
         case 'statusGrant':
           if(!A.isFxSkipped())await playStatusGrant(sideOf(e.player),e.resource,e.before,e.after,statusSource);

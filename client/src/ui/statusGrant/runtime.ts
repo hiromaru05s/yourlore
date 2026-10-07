@@ -64,6 +64,8 @@ export function playStatusGrant(side:'me'|'opp',resource:Resource,before:number,
   }).catch(finish);
  });
 }
-window.addEventListener('resize',cancelStatusGrants);
-window.addEventListener('pagehide',cancelStatusGrants);
-document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelStatusGrants();});
+if(typeof window!=='undefined'){
+ window.addEventListener('resize',cancelStatusGrants);
+ window.addEventListener('pagehide',cancelStatusGrants);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelStatusGrants();});
+}
