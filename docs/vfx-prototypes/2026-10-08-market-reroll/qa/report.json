@@ -1,0 +1,98 @@
+{
+  "origin": "http://127.0.0.1:5268",
+  "checks": [
+    "Real reroll button: one mana, fixed offers unchanged, complete reveal and input restoration",
+    "Three normal-speed consecutive refreshes on the real board",
+    "Free token refresh animates without spending mana",
+    "Insufficient mana and blocked refresh leave no animation",
+    "Purchased empty slot and shortened two-card supply animate correctly",
+    "Repeated input fast-forwards and spends exactly once per accepted refresh",
+    "Opponent public refresh uses the shared controller path",
+    "Purchase, unchanged state and turn change are excluded",
+    "Old visible offer cannot buy a newly rolled card while artwork or playback is pending",
+    "1920, 1280 and 390px: projected cards stay inside viewport, no duplicate interaction UIDs",
+    "Resize mid-flight restores all offers",
+    "Reduced motion: short crossfade without rotation",
+    "Visibility change releases the effect",
+    "Teardown mid-flight removes layers",
+    "No-WebGL board retains the same DOM refresh and cleanup"
+  ],
+  "geometry": [
+    {
+      "width": 1920,
+      "scroll": 1920,
+      "tiles": [
+        {
+          "x": 197.2074432373047,
+          "right": 338.8541259765625,
+          "y": 441.51617431640625,
+          "bottom": 625.7353515625
+        },
+        {
+          "x": 328.1099548339844,
+          "right": 466.4983825683594,
+          "y": 441.51617431640625,
+          "bottom": 625.7353515625
+        },
+        {
+          "x": 459.0124816894531,
+          "right": 594.1426391601562,
+          "y": 441.51617431640625,
+          "bottom": 625.7353515625
+        }
+      ],
+      "uids": 0
+    },
+    {
+      "width": 1280,
+      "scroll": 1280,
+      "tiles": [
+        {
+          "x": 131.06895446777344,
+          "right": 225.5222930908203,
+          "y": 294.3016052246094,
+          "bottom": 417.1464538574219
+        },
+        {
+          "x": 219.03073120117188,
+          "right": 311.29437255859375,
+          "y": 294.3016052246094,
+          "bottom": 417.1464538574219
+        },
+        {
+          "x": 305.9696960449219,
+          "right": 396.069091796875,
+          "y": 294.3016052246094,
+          "bottom": 417.1464538574219
+        }
+      ],
+      "uids": 0
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "tiles": [
+        {
+          "x": 42.157630920410156,
+          "right": 68.128173828125,
+          "y": 401.9577941894531,
+          "bottom": 439.1296691894531
+        },
+        {
+          "x": 68.30731201171875,
+          "right": 94.10828399658203,
+          "y": 401.9577941894531,
+          "bottom": 439.1296691894531
+        },
+        {
+          "x": 95.46275329589844,
+          "right": 121.08763122558594,
+          "y": 401.9577941894531,
+          "bottom": 439.1296691894531
+        }
+      ],
+      "uids": 0
+    }
+  ],
+  "errors": []
+}
