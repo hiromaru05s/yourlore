@@ -5458,21 +5458,39 @@ function counterHit(g: GameState, ctx: Ctx, owner: PlayerState, defender: FieldM
   const killed = monsterDamage(g, ctx, attackerOwner, attacker, amount, true);
   if (killed && defender.aura === 'devourGrow' && owner.field.includes(defender)) { if (attacker.cost > 0) monsterActivation(g, ctx.ev, owner, defender); defender.atkMod += attacker.cost; defender.defMod += attacker.cost; }
 }
+/** Public presentation metadata records the targets already chosen by the reducer. */
+function elementalGroup(ctx:Ctx,p:Side,src:CardInst){
+ const event:Extract<GameEvent,{type:'elementalStart'}>={type:'elementalStart',group:`${src.uid}:${ctx.ev.length}`,player:p,id:src.id,uid:src.uid,targets:[]};
+ ctx.ev.push(event);const starts:number[]=[];
+ return {
+  hit(player:Side,uid:string|null,amount:number){const index=event.targets.length;event.targets.push({player,uid,amount});ctx.ev.push({type:'elementalImpact',group:event.group,index});starts.push(ctx.ev.length);},
+  end(){
+   // Player damage may be reflected. Follow the resolved public recipient, not a second draw.
+   event.targets.forEach((target,i)=>{const result=ctx.ev.slice(starts[i],starts[i+1]??ctx.ev.length).find(e=>target.uid===null?e.type==='damage':e.type==='hit'&&e.uid===target.uid);if(result?.type==='damage'){target.player=result.player;target.amount=result.amount;}else if(result?.type==='hit')target.amount=result.amount??target.amount;});
+   ctx.ev.push({type:'elementalEnd',group:event.group});
+  }
+ };
+
+}
 function randomEnemyDamage(g: GameState, ctx: Ctx, p: PlayerState, amount: number, hits: number, src: CardInst): void {
-  const o = g.players[1 - side(g, p)];
+  const other=(1-side(g,p)) as Side,o=g.players[other],fx=elementalGroup(ctx,side(g,p),src);
   for (let i = 0; i < hits && !g.over; i++) {
     const n = randInt(g, o.field.length + 1);
+    fx.hit(other,n===o.field.length?null:o.field[n].uid,amount);
     if (n === o.field.length) ctx.dealDamage(o, amount, cn(src), cn(src), side(g, p));
     else monsterDamage(g, ctx, o, o.field[n], amount);
   }
+  fx.end();
 }
 function areaDamage(g: GameState, ctx: Ctx, p: PlayerState, amount: number, both: boolean, src: CardInst): void {
-  const o = g.players[1 - side(g, p)];
-  for (const pl of both ? g.players : [o]) for (const m of [...pl.field]) {
+  const o = g.players[1 - side(g, p)],fx=src.id==='FIRE_ZONE'?elementalGroup(ctx,side(g,p),src):null;
+  try {
+   for (const pl of both ? g.players : [o]) for (const m of [...pl.field]) {
     if (g.over) return;
-    monsterDamage(g, ctx, pl, m, amount);
-  }
-  if (!both && !g.over) ctx.dealDamage(o, amount, cn(src), cn(src), side(g, p));
+    fx?.hit(side(g,pl),m.uid,amount);monsterDamage(g, ctx, pl, m, amount);
+   }
+   if (!both && !g.over){fx?.hit(side(g,o),null,amount);ctx.dealDamage(o, amount, cn(src), cn(src), side(g, p));}
+  }finally{fx?.end();}
 }
 function addCurses(g: GameState, p: PlayerState, n: number): void { for (let i = 0; i < n; i++) p.discard.push(inst(g, 'CURSE')); }
 function queueExpansionChoice(g: GameState, p: PlayerState, reason: string, hint: string, data?: Record<string, unknown>): void {
@@ -5563,9 +5581,9 @@ function expansionSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case 'ANESTHESIA': for (const m of p.field) m.immuneDamageTurn = g.turn; break;
     case 'EARTHQUAKE': areaDamage(g, ctx, p, 4, true, card); break;
     case 'MAGMA_RAIN': areaDamage(g, ctx, p, 6, true, card); break;
-    case 'FIRE_BALL': ctx.dealDamage(p, 2, cn(card), cn(card)); if (!g.over) queueExpansionChoice(g, p, card.id, '6ダメージを与えるプレイヤーかモンスターを選択'); break;
+    case 'FIRE_BALL': ctx.dealDamage(p, 2, cn(card), cn(card)); if (!g.over) queueExpansionChoice(g, p, card.id, '6ダメージを与えるプレイヤーかモンスターを選択', {sourceUid:card.uid}); break;
     case 'FIRE_ARROW': ctx.dealDamage(p, 1, cn(card), cn(card)); if (!g.over) randomEnemyDamage(g, ctx, p, 1, 3, card); break;
-    case 'FIRE_ZONE': queueExpansionChoice(g, p, card.id, '除外する手札1枚を選択', { damage: x.firePlayed.length > 1 ? 9 : 5 }); break;
+    case 'FIRE_ZONE': queueExpansionChoice(g, p, card.id, '除外する手札1枚を選択', { damage: x.firePlayed.length > 1 ? 9 : 5, sourceUid:card.uid }); break;
     case 'FIRE_METEOR': p.maxMana = Math.max(MIN_MANA, p.maxMana - 1); randomEnemyDamage(g, ctx, p, 2, 8, card); break;
     case 'FIRE_ART': x.fireDiscount += 2; break;
     case 'DISCOVERY_SMALL': ctx.drawN(p, 2); break;
@@ -5593,9 +5611,9 @@ function expansionChoiceResolve(g: GameState, ctx: Ctx, q: NonNullable<GameState
     case 'Q_CHEAT': o.deck.splice(o.deck.findIndex(c => c.uid === card.uid), 1); rmz(o).push(card); return true;
     case 'CREATION': p.discard.push(inst(g, card.id)); return true;
     case 'ROGUE_ART': (card as FieldMon).passivesG = [...new Set([...((card as FieldMon).passivesG ?? []), 'evade'])]; return true;
-    case 'FIRE_ZONE': p.hand.splice(p.hand.findIndex(c => c.uid === card.uid), 1); rmz(p).push(card); spellDepth++; try { areaDamage(g, ctx, p, Number(q.data?.damage ?? 5), false, inst(g, 'FIRE_ZONE')); } finally { spellDepth--; } return true;
+    case 'FIRE_ZONE': p.hand.splice(p.hand.findIndex(c => c.uid === card.uid), 1); rmz(p).push(card); spellDepth++; try { areaDamage(g, ctx, p, Number(q.data?.damage ?? 5), false, { ...inst(g, 'FIRE_ZONE'), uid:String(q.data?.sourceUid??'zone') }); } finally { spellDepth--; } return true;
     case 'FIRE_MASTER': { for (const zone of [p.deck,p.discard]) { const i = zone.findIndex(c => c.uid === card.uid); if (i >= 0) { p.hand.push(zone.splice(i, 1)[0]); break; } } if (Number(q.data?.left ?? 2) > 1) queueExpansionChoice(g, p, q.reason, '手札に加える2枚目のファイアー魔法を選択', { left: 1 }); return true; }
-    case 'FIRE_BALL': spellDepth++; try { if (card.uid.startsWith('player-')) ctx.dealDamage(g.players[Number(card.uid.slice(-1))], 6, cn(DB.FIRE_BALL), cn(DB.FIRE_BALL), side(g, p)); else { const owner = p.field.some(m => m.uid === card.uid) ? p : o; monsterDamage(g, ctx, owner, card as FieldMon, 6); } } finally { spellDepth--; } return true;
+    case 'FIRE_BALL': { const targetSide=(card.uid.startsWith('player-')?Number(card.uid.slice(-1)):p.field.some(m=>m.uid===card.uid)?side(g,p):side(g,o)) as Side;const fx=elementalGroup(ctx,side(g,p),{...DB.FIRE_BALL,uid:String(q.data?.sourceUid??'ball')});fx.hit(targetSide,card.uid.startsWith('player-')?null:card.uid,6);spellDepth++; try { if (card.uid.startsWith('player-')) ctx.dealDamage(g.players[Number(card.uid.slice(-1))], 6, cn(DB.FIRE_BALL), cn(DB.FIRE_BALL), side(g, p)); else { const owner = p.field.some(m => m.uid === card.uid) ? p : o; monsterDamage(g, ctx, owner, card as FieldMon, 6); } } finally { spellDepth--;fx.end(); } return true; }
     default: return false;
   }
 }
