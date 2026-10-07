@@ -15,7 +15,7 @@ const report=panel.querySelector('pre')!;const results:unknown[]=[];let busy=fal
 const sleep=(ms:number)=>new Promise(r=>setTimeout(r,ms));
 async function play(side:'me'|'opp',id='E3',interrupt=''){
  document.querySelectorAll('.fx-field-ghost').forEach(n=>n.remove());setFxSkip(interrupt==='skip');
- let seen=false,oldFrame=false,maxCanvases=0;const probe=setInterval(()=>{seen||=!!document.querySelector('.persistent-flight-canvas');oldFrame||=!!document.querySelector('.spell-frame-host');maxCanvases=Math.max(maxCanvases,document.querySelectorAll('.persistent-flight-canvas').length);},16);
+ let seen=false,oldFrame=false,maxCanvases=0;const probe=setInterval(()=>{seen||=!!document.querySelector('.persistent-flight-canvas');oldFrame||=!!document.querySelector('.spell-frame-resonance');maxCanvases=Math.max(maxCanvases,document.querySelectorAll('.persistent-flight-canvas').length);},16);
  const timer=interrupt==='abort'?setTimeout(()=>setFxSkip(true),700):interrupt==='resize'?setTimeout(()=>window.dispatchEvent(new Event('resize')),700):0;
  const begun=performance.now();const ghost=await revealSpell({...DB[id],uid:`flight-${side}-${id}`},side,'field',1);
  clearInterval(probe);clearTimeout(timer);setFxSkip(false);
