@@ -2954,7 +2954,7 @@
         "en"
       ],
       "definitionSha256": "c774b35eba03119905e2a23fa7555d12448aab4f9e091049db1d19d53f479c22",
-      "textSha256": "9880b343940927a06d314b7026e33bfb5468b478764d4c36f0d0909b1e916215",
+      "textSha256": "1ad9d6eeda510ab342993d82b93c4f7e3d39d4c0fe1feb16fb1ba847028b72a6",
       "hooks": {},
       "before": {
         "ja": "自分の最大マナ-1 · 相手のモンスターを全て破壊",
@@ -2962,9 +2962,9 @@
         "en": "Your max mana -1 · Destroy all enemy monsters"
       },
       "after": {
-        "ja": "【発動時】自分の最大マナ-1。相手のモンスターを全て破壊する。",
-        "ko": "【발동시】자신의 최대 마나 -1. 상대 몬스터를 전부 파괴한다.",
-        "en": "【On Cast】Your max mana -1. Destroy all enemy monsters."
+        "ja": "【発動時】自分の最大マナ-1。相手の場のモンスターを全て破壊する。",
+        "ko": "【발동시】자신의 최대 마나 -1. 상대 필드의 몬스터를 전부 파괴한다.",
+        "en": "【On Cast】Your max mana -1. Destroy all monsters on the enemy field."
       }
     },
     "MIMIC_KING2": {
@@ -4278,7 +4278,7 @@
         "en"
       ],
       "definitionSha256": "bacf9814bda537e59bda6cea583ba951a42cb3fe0f547e0203a179c1f6339a7f",
-      "textSha256": "907e1ae4eac96ca84b71b8ab82bdb952e9bc50d74ad18bfc565887868614ca20",
+      "textSha256": "19c2f8cd75536f06cf23c00dec32331ee58a9b4050671e5e2dd2cfc01613e5d5",
       "hooks": {},
       "before": {
         "ja": "相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理） · 自分のモンスターを2体まで選び、「腐敗」を付与する（持続）",
@@ -4286,9 +4286,9 @@
         "en": "Put 1 counter on each non-Egg enemy monster, applying Decay rules · Choose up to 2 of your monsters and give them Decay (lasting)"
       },
       "after": {
-        "ja": "【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分のモンスターを2体まで選び、「腐敗」を付与する（持続）。",
-        "ko": "【발동시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리). 자신의 몬스터를 최대 2체 선택해 부패 부여한다(지속).",
-        "en": "【On Cast】Put 1 counter on each non-Egg enemy monster, applying Decay rules. Choose up to 2 of your monsters and give them Decay (lasting)."
+        "ja": "【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分の場のモンスターを2体まで選び、「腐敗」を付与する（持続）。",
+        "ko": "【발동시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리). 자신의 필드의 몬스터를 최대 2체 선택해 부패 부여한다(지속).",
+        "en": "【On Cast】Put 1 counter on each non-Egg monster on the enemy field, applying Decay rules. Choose up to 2 monsters on your field and give them Decay (lasting)."
       }
     },
     "RUST_SLUG": {
@@ -4624,7 +4624,7 @@
         "en"
       ],
       "definitionSha256": "a6690307cd573069fe713f27457d847fa645e06c0fdb3c362f873c99c21f786f",
-      "textSha256": "9e175358a289d86f8734736bb5b1b8dccd1d9676cc30d635e53e599e2350104a",
+      "textSha256": "1c6679695b94c4f47e5f92a78b44c36f1b41c90ed2997aea241d0ec83e4d503a",
       "hooks": {
         "turnFx": "legendGambler"
       },
@@ -4634,9 +4634,9 @@
         "en": "【Your Turn Start】Predict 1 result from 1–6, then roll 3 dice · If at least 1 matches, choose: your max mana +4; restore 35 of your HP; or destroy 1 random enemy monster or persistent spell, twice · If your deck composition contains Gambler, apply all options in that order instead"
       },
       "after": {
-        "ja": "【自分ターン開始時】1～6から出目を1つ予測し、ダイス3個を振る。1個以上が的中した場合、次から一つを選んで行う。\n自分の最大マナ+4。\n自分の体力を35回復する。\n相手のモンスター・永続魔法から毎回ランダムに1枚を選んで破壊する処理を2回行う。\n的中し、かつ自分のデッキ構成に「ギャンブラー」がある場合は、選ばず全てを上から順に行う。",
-        "ko": "【자신 턴 시작시】1~6 중 눈 1개를 예측하고 주사위 3개를 굴린다. 1개 이상 적중하면 다음 중 하나를 선택해 처리한다.\n자신의 최대 마나 +4.\n자신의 체력을 35 회복한다.\n상대 몬스터·영구마법 중 매번 무작위로 1장을 선택해 파괴하는 처리를 2회 한다.\n적중했고 자신의 덱 구성에 도박꾼이 있으면 선택하지 않고 전부 위에서부터 순서대로 처리한다.",
-        "en": "【Your Turn Start】Predict a result from 1–6, then roll 3 dice. If at least 1 matches, choose one of the following.\nIncrease your max mana by 4.\nRestore 35 of your HP.\nDestroy 1 random enemy monster or persistent spell, twice, choosing again each time.\nIf a die matches and your deck composition contains Gambler, apply all options in the order above instead of choosing."
+        "ja": "【自分ターン開始時】1～6から出目を1つ予測し、ダイス3個を振る。1個以上が的中した場合、次から一つを選んで行う。\n自分の最大マナ+4。\n自分の体力を35回復する。\n相手の場のモンスター・永続魔法から毎回ランダムに1枚を選んで破壊する処理を2回行う。\n的中し、かつ自分のデッキ構成に「ギャンブラー」がある場合は、選ばず全てを上から順に行う。",
+        "ko": "【자신 턴 시작시】1~6 중 눈 1개를 예측하고 주사위 3개를 굴린다. 1개 이상 적중하면 다음 중 하나를 선택해 처리한다.\n자신의 최대 마나 +4.\n자신의 체력을 35 회복한다.\n상대 필드의 몬스터·영구마법 중 매번 무작위로 1장을 선택해 파괴하는 처리를 2회 한다.\n적중했고 자신의 덱 구성에 도박꾼이 있으면 선택하지 않고 전부 위에서부터 순서대로 처리한다.",
+        "en": "【Your Turn Start】Predict a result from 1–6, then roll 3 dice. If at least 1 matches, choose one of the following.\nIncrease your max mana by 4.\nRestore 35 of your HP.\nDestroy 1 random monster or persistent spell on the enemy field, twice, choosing again each time.\nIf a die matches and your deck composition contains Gambler, apply all options in the order above instead of choosing."
       }
     },
     "ELF": {
@@ -4820,7 +4820,7 @@
         "en"
       ],
       "definitionSha256": "769a25a670464259b3ddd28c197940f273e82a056ac8f154355e9868aa84378c",
-      "textSha256": "8e9c0495b8bca0723a5dbd06349fe1a8b1d994ce79d81ff211e4bdfd312e9603",
+      "textSha256": "ef3f56365d19ac4b69d37d3599aac2d109737f04a95d1364b05191dc8cfb7a6b",
       "hooks": {
         "act": "buffAllDef"
       },
@@ -4830,9 +4830,9 @@
         "en": "All your monsters get HP +6 (lasting)"
       },
       "after": {
-        "ja": "【発動時】自分のモンスター全体の体力+6(持続)。",
-        "ko": "【발동시】자신 몬스터 전체의 체력 +6(지속).",
-        "en": "【On Cast】All your monsters get HP +6 (lasting)."
+        "ja": "【発動時】現在、自分の場にいる全モンスターの体力+6（持続）。",
+        "ko": "【발동시】현재 자신의 필드에 있는 모든 몬스터의 체력 +6(지속).",
+        "en": "【On Cast】All monsters currently on your field get HP +6 (lasting)."
       }
     },
     "HPS_SOIL": {
@@ -7331,7 +7331,7 @@
         "en"
       ],
       "definitionSha256": "08d6abd214790e74cd18bae99e15451dc029db7d83e3ea0a099447d3935ce651",
-      "textSha256": "0208c09d93cb29b1b67cd6696cb7ee161857b26e31ae8a678680ecec149d316d",
+      "textSha256": "a13e347a7eb0591826ca6aef5650904e80b272b97d34c0c910867fcd05ea839e",
       "hooks": {
         "act": "expansion"
       },
@@ -7341,8 +7341,8 @@
         "en": "Your monsters gain +2 ATK permanently · Soldiers, Knights and Cavalry gain +1 more"
       },
       "after": {
-        "ja": "【発動時】自分のモンスター全体の攻撃力+2(持続)。「兵士」「騎士」「騎馬兵」はさらに+1。",
-        "ko": "【발동시】자신 몬스터 전체 공격력 +2(지속). 병사·기사·기마병은 추가 +1.",
+        "ja": "【発動時】現在、自分の場にいる全モンスターの攻撃力+2（持続）。「兵士」「騎士」「騎馬兵」はさらに+1。",
+        "ko": "【발동시】현재 자신의 필드에 있는 모든 몬스터의 공격력 +2(지속). 병사·기사·기마병은 추가 +1.",
         "en": "【On Cast】All monsters currently on your field get +2 ATK (lasting). Soldiers, Knights and Cavalry gain +1 more."
       }
     },

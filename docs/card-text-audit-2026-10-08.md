@@ -2325,15 +2325,15 @@
 
 **ja**
 
-> 【発動時】自分の最大マナ-1。相手のモンスターを全て破壊する。
+> 【発動時】自分の最大マナ-1。相手の場のモンスターを全て破壊する。
 
 **ko**
 
-> 【발동시】자신의 최대 마나 -1. 상대 몬스터를 전부 파괴한다.
+> 【발동시】자신의 최대 마나 -1. 상대 필드의 몬스터를 전부 파괴한다.
 
 **en**
 
-> 【On Cast】Your max mana -1. Destroy all enemy monsters.
+> 【On Cast】Your max mana -1. Destroy all monsters on the enemy field.
 
 
 ### MIMIC_KING2 — ミミックキング2世
@@ -3444,15 +3444,15 @@
 
 **ja**
 
-> 【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分のモンスターを2体まで選び、「腐敗」を付与する（持続）。
+> 【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分の場のモンスターを2体まで選び、「腐敗」を付与する（持続）。
 
 **ko**
 
-> 【발동시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리). 자신의 몬스터를 최대 2체 선택해 부패 부여한다(지속).
+> 【발동시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리). 자신의 필드의 몬스터를 최대 2체 선택해 부패 부여한다(지속).
 
 **en**
 
-> 【On Cast】Put 1 counter on each non-Egg enemy monster, applying Decay rules. Choose up to 2 of your monsters and give them Decay (lasting).
+> 【On Cast】Put 1 counter on each non-Egg monster on the enemy field, applying Decay rules. Choose up to 2 monsters on your field and give them Decay (lasting).
 
 
 ### RUST_SLUG — ラストキャップ・スラッグ
@@ -3759,7 +3759,7 @@
 > 【自分ターン開始時】1～6から出目を1つ予測し、ダイス3個を振る。1個以上が的中した場合、次から一つを選んで行う。
 > 自分の最大マナ+4。
 > 自分の体力を35回復する。
-> 相手のモンスター・永続魔法から毎回ランダムに1枚を選んで破壊する処理を2回行う。
+> 相手の場のモンスター・永続魔法から毎回ランダムに1枚を選んで破壊する処理を2回行う。
 > 的中し、かつ自分のデッキ構成に「ギャンブラー」がある場合は、選ばず全てを上から順に行う。
 
 **ko**
@@ -3767,7 +3767,7 @@
 > 【자신 턴 시작시】1~6 중 눈 1개를 예측하고 주사위 3개를 굴린다. 1개 이상 적중하면 다음 중 하나를 선택해 처리한다.
 > 자신의 최대 마나 +4.
 > 자신의 체력을 35 회복한다.
-> 상대 몬스터·영구마법 중 매번 무작위로 1장을 선택해 파괴하는 처리를 2회 한다.
+> 상대 필드의 몬스터·영구마법 중 매번 무작위로 1장을 선택해 파괴하는 처리를 2회 한다.
 > 적중했고 자신의 덱 구성에 도박꾼이 있으면 선택하지 않고 전부 위에서부터 순서대로 처리한다.
 
 **en**
@@ -3775,7 +3775,7 @@
 > 【Your Turn Start】Predict a result from 1–6, then roll 3 dice. If at least 1 matches, choose one of the following.
 > Increase your max mana by 4.
 > Restore 35 of your HP.
-> Destroy 1 random enemy monster or persistent spell, twice, choosing again each time.
+> Destroy 1 random monster or persistent spell on the enemy field, twice, choosing again each time.
 > If a die matches and your deck composition contains Gambler, apply all options in the order above instead of choosing.
 
 
@@ -3964,15 +3964,15 @@
 
 **ja**
 
-> 【発動時】自分のモンスター全体の体力+6(持続)。
+> 【発動時】現在、自分の場にいる全モンスターの体力+6（持続）。
 
 **ko**
 
-> 【발동시】자신 몬스터 전체의 체력 +6(지속).
+> 【발동시】현재 자신의 필드에 있는 모든 몬스터의 체력 +6(지속).
 
 **en**
 
-> 【On Cast】All your monsters get HP +6 (lasting).
+> 【On Cast】All monsters currently on your field get HP +6 (lasting).
 
 
 ### HPS_SOIL — 生命の土壌
@@ -6074,11 +6074,11 @@
 
 **ja**
 
-> 【発動時】自分のモンスター全体の攻撃力+2(持続)。「兵士」「騎士」「騎馬兵」はさらに+1。
+> 【発動時】現在、自分の場にいる全モンスターの攻撃力+2（持続）。「兵士」「騎士」「騎馬兵」はさらに+1。
 
 **ko**
 
-> 【발동시】자신 몬스터 전체 공격력 +2(지속). 병사·기사·기마병은 추가 +1.
+> 【발동시】현재 자신의 필드에 있는 모든 몬스터의 공격력 +2(지속). 병사·기사·기마병은 추가 +1.
 
 **en**
 

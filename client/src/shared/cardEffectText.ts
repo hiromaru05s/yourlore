@@ -633,9 +633,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Choose and destroy up to 2 monsters from either field combined."
   },
   "MASSACRE": {
-    "ja": "【発動時】自分の最大マナ-1。相手のモンスターを全て破壊する。",
-    "ko": "【발동시】자신의 최대 마나 -1. 상대 몬스터를 전부 파괴한다.",
-    "en": "【On Cast】Your max mana -1. Destroy all enemy monsters."
+    "ja": "【発動時】自分の最大マナ-1。相手の場のモンスターを全て破壊する。",
+    "ko": "【발동시】자신의 최대 마나 -1. 상대 필드의 몬스터를 전부 파괴한다.",
+    "en": "【On Cast】Your max mana -1. Destroy all monsters on the enemy field."
   },
   "MIMIC_KING2": {
     "ja": "【召喚時】自分のリフトにミミック系6枚以上なら「ミミックの隠れ家」を展開する。",
@@ -918,9 +918,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Summon Requirement】Summonable only with a Golem-family monster with a different name in your field, deck, hand or graveyard."
   },
   "DECAY_CRAFT": {
-    "ja": "【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分のモンスターを2体まで選び、「腐敗」を付与する（持続）。",
-    "ko": "【발동시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리). 자신의 몬스터를 최대 2체 선택해 부패 부여한다(지속).",
-    "en": "【On Cast】Put 1 counter on each non-Egg enemy monster, applying Decay rules. Choose up to 2 of your monsters and give them Decay (lasting)."
+    "ja": "【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分の場のモンスターを2体まで選び、「腐敗」を付与する（持続）。",
+    "ko": "【발동시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리). 자신의 필드의 몬스터를 최대 2체 선택해 부패 부여한다(지속).",
+    "en": "【On Cast】Put 1 counter on each non-Egg monster on the enemy field, applying Decay rules. Choose up to 2 monsters on your field and give them Decay (lasting)."
   },
   "RUST_SLUG": {
     "ja": "【召喚時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。\n\n【相手の腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分の最大マナ+1、自分の体力を5回復する（同名は重複しない）。",
@@ -993,9 +993,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】If you control a World Tree-family card, deploy World Tree's Care to your field.\n\n【While on the Field】If either player controls a World Tree-family card, this monster gets +3 ATK."
   },
   "LEGEND_GAMBLER": {
-    "ja": "【自分ターン開始時】1～6から出目を1つ予測し、ダイス3個を振る。1個以上が的中した場合、次から一つを選んで行う。\n自分の最大マナ+4。\n自分の体力を35回復する。\n相手のモンスター・永続魔法から毎回ランダムに1枚を選んで破壊する処理を2回行う。\n的中し、かつ自分のデッキ構成に「ギャンブラー」がある場合は、選ばず全てを上から順に行う。",
-    "ko": "【자신 턴 시작시】1~6 중 눈 1개를 예측하고 주사위 3개를 굴린다. 1개 이상 적중하면 다음 중 하나를 선택해 처리한다.\n자신의 최대 마나 +4.\n자신의 체력을 35 회복한다.\n상대 몬스터·영구마법 중 매번 무작위로 1장을 선택해 파괴하는 처리를 2회 한다.\n적중했고 자신의 덱 구성에 도박꾼이 있으면 선택하지 않고 전부 위에서부터 순서대로 처리한다.",
-    "en": "【Your Turn Start】Predict a result from 1–6, then roll 3 dice. If at least 1 matches, choose one of the following.\nIncrease your max mana by 4.\nRestore 35 of your HP.\nDestroy 1 random enemy monster or persistent spell, twice, choosing again each time.\nIf a die matches and your deck composition contains Gambler, apply all options in the order above instead of choosing."
+    "ja": "【自分ターン開始時】1～6から出目を1つ予測し、ダイス3個を振る。1個以上が的中した場合、次から一つを選んで行う。\n自分の最大マナ+4。\n自分の体力を35回復する。\n相手の場のモンスター・永続魔法から毎回ランダムに1枚を選んで破壊する処理を2回行う。\n的中し、かつ自分のデッキ構成に「ギャンブラー」がある場合は、選ばず全てを上から順に行う。",
+    "ko": "【자신 턴 시작시】1~6 중 눈 1개를 예측하고 주사위 3개를 굴린다. 1개 이상 적중하면 다음 중 하나를 선택해 처리한다.\n자신의 최대 마나 +4.\n자신의 체력을 35 회복한다.\n상대 필드의 몬스터·영구마법 중 매번 무작위로 1장을 선택해 파괴하는 처리를 2회 한다.\n적중했고 자신의 덱 구성에 도박꾼이 있으면 선택하지 않고 전부 위에서부터 순서대로 처리한다.",
+    "en": "【Your Turn Start】Predict a result from 1–6, then roll 3 dice. If at least 1 matches, choose one of the following.\nIncrease your max mana by 4.\nRestore 35 of your HP.\nDestroy 1 random monster or persistent spell on the enemy field, twice, choosing again each time.\nIf a die matches and your deck composition contains Gambler, apply all options in the order above instead of choosing."
   },
   "ELF": {
     "ja": "【召喚条件】自分の雫4以上。\n\n【召喚時】雫2を得て、相手の攻撃力9以上のモンスター1体を選んで破壊する。\n\n【場にいる間】自分の場の異なる「世界樹」系カード1種類につき、このモンスターの攻撃力+1・体力+1。両プレイヤーの回復量2倍。",
@@ -1033,9 +1033,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Choose 1 monster on your field; it gets +6 HP (lasting)."
   },
   "HPS_OATH": {
-    "ja": "【発動時】自分のモンスター全体の体力+6(持続)。",
-    "ko": "【발동시】자신 몬스터 전체의 체력 +6(지속).",
-    "en": "【On Cast】All your monsters get HP +6 (lasting)."
+    "ja": "【発動時】現在、自分の場にいる全モンスターの体力+6（持続）。",
+    "ko": "【발동시】현재 자신의 필드에 있는 모든 몬스터의 체력 +6(지속).",
+    "en": "【On Cast】All monsters currently on your field get HP +6 (lasting)."
   },
   "HPS_SOIL": {
     "ja": "【自分が召喚した時】自分がモンスターを召喚するたび、そのモンスターの体力+2(持続)。",
@@ -1553,8 +1553,8 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Attack】Put 2 additional counters on the enemy monster this monster attacks, applying Decay rules."
   },
   "ADVANCE": {
-    "ja": "【発動時】自分のモンスター全体の攻撃力+2(持続)。「兵士」「騎士」「騎馬兵」はさらに+1。",
-    "ko": "【발동시】자신 몬스터 전체 공격력 +2(지속). 병사·기사·기마병은 추가 +1.",
+    "ja": "【発動時】現在、自分の場にいる全モンスターの攻撃力+2（持続）。「兵士」「騎士」「騎馬兵」はさらに+1。",
+    "ko": "【발동시】현재 자신의 필드에 있는 모든 몬스터의 공격력 +2(지속). 병사·기사·기마병은 추가 +1.",
     "en": "【On Cast】All monsters currently on your field get +2 ATK (lasting). Soldiers, Knights and Cavalry gain +1 more."
   },
   "QUICK_AID": {
