@@ -1,5 +1,5 @@
 import type {GameState} from '../shared/types';
-import {effAtk,effDef,curHp,monsterCanAttack} from '../shared/engine';
+import {effAtk,effDef,curHp,monsterCanAttack,monsterOngoingActive} from '../shared/engine';
 import {playMonster,syncMonsterStates,clearMonsterStates} from './monster/runtime';
 import type {Kind} from './monster/catalog';
 
@@ -18,7 +18,7 @@ export function createBoardStatRise(root:HTMLElement){
    state.players.forEach((p,owner)=>p.field.forEach(m=>{
     const value={id:m.id,owner,atk:effAtk(p,m,state),def:effDef(p,m),hp:curHp(p,m)};next.set(m.uid,value);
     const n=[...root.querySelectorAll<HTMLElement>('.zone-mon .card[data-uid]')].find(n=>n.dataset.uid===m.uid);if(!n)return;
-    if(m.aura)n.dataset.monsterAura=m.aura;else delete n.dataset.monsterAura;
+    if(monsterOngoingActive(state,p,m))n.dataset.monsterAura=m.aura??m.condAtk??m.id;else delete n.dataset.monsterAura;
     const unable=!monsterCanAttack(state,p,m);
     if(unable){n.dataset.monsterBlocked='true';n.classList.remove('is-attacker');}else delete n.dataset.monsterBlocked;
     const old=previous.get(m.uid);if(!old||old.id!==m.id||old.owner!==owner||state.over)return;
