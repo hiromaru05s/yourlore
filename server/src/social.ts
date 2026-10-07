@@ -42,7 +42,7 @@ export async function ownedBadges(env: Env, userId: string): Promise<string[]> {
     for (let i = 1; i <= idx; i++) out.push(`tier:${TIERS[i].key}`); // iron 제외(기본값이라 뱃지 없음)
     if (r.gm) out.push("tier:gm");
   }
-  const tut = await env.DB.prepare(`SELECT 1 AS x FROM rewards WHERE user_id = ? AND key = 'tut:6'`).bind(userId).first();
+  const tut = await env.DB.prepare(`SELECT 1 AS x FROM rewards WHERE user_id = ? AND key IN ('tut:6','tuto:10')`).bind(userId).first();
   if (tut) out.push("tutorial");
   const inv = await env.DB.prepare(`SELECT 1 AS x FROM invite_rewards WHERE inviter_id = ? AND status IN ('earned','paid') LIMIT 1`).bind(userId).first();
   if (inv) out.push("invite");
@@ -245,8 +245,11 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     const cnt = await env.DB.prepare(`SELECT COUNT(*) AS n FROM friends WHERE (user_a = ?1 OR user_b = ?1) AND status = 'accepted'`)
       .bind(user.id).first<{ n: number }>();
     if ((cnt?.n ?? 0) >= MAX_FRIENDS) return json(env, { error: "친구는 최대 100명까지입니다." }, 400);
-    await env.DB.prepare(`INSERT INTO friends (user_a, user_b, status, created_at) VALUES (?,?,?,?)`)
-      .bind(user.id, target.id, "pending", now).run();
+    const inserted = await env.DB.prepare(`INSERT OR IGNORE INTO friends (user_a, user_b, status, created_at)
+      SELECT ?1,?2,'pending',?3 WHERE NOT EXISTS
+      (SELECT 1 FROM friends WHERE (user_a=?1 AND user_b=?2) OR (user_a=?2 AND user_b=?1))`)
+      .bind(user.id, target.id, now).run();
+    if (!inserted.meta.changes) return json(env, { error: "이미 요청이 진행 중입니다." }, 409);
     return json(env, { ok: true, display: target.display });
   }
 
@@ -254,8 +257,14 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     const body = (await req.json().catch(() => ({}))) as { user_id?: string; accept?: boolean };
     if (!body.user_id) return json(env, { error: "bad request" }, 400);
     if (body.accept) {
-      await env.DB.prepare(`UPDATE friends SET status = 'accepted' WHERE user_a = ? AND user_b = ? AND status = 'pending'`)
-        .bind(body.user_id, user.id).run();
+      const accepted = await env.DB.prepare(`UPDATE friends SET status='accepted' WHERE user_a=?1 AND user_b=?2 AND status='pending'
+        AND (SELECT COUNT(*) FROM friends WHERE (user_a=?1 OR user_b=?1) AND status='accepted') < ?3
+        AND (SELECT COUNT(*) FROM friends WHERE (user_a=?2 OR user_b=?2) AND status='accepted') < ?3`)
+        .bind(body.user_id,user.id,MAX_FRIENDS).run();
+      if (!accepted.meta.changes) {
+        const pending = await env.DB.prepare(`SELECT 1 FROM friends WHERE user_a=? AND user_b=? AND status='pending'`).bind(body.user_id,user.id).first();
+        if (pending) return json(env,{error:'친구는 최대 100명까지입니다.'},400);
+      }
     } else {
       await env.DB.prepare(`DELETE FROM friends WHERE user_a = ? AND user_b = ? AND status = 'pending'`)
         .bind(body.user_id, user.id).run();
