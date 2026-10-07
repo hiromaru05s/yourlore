@@ -48,6 +48,14 @@ try {
   g=step(g,{type:'pick',uid:g.players[0].field[1].uid});assert.deepEqual(g.pending,before);assert.equal(g.players[0].field[1].atkMod,0);
   g=step(g,{type:'pick',uid:g.players[0].field[0].uid});assert.equal(g.pending,null);assert.equal(g.players[0].field[0].atkMod,3);
  });
+ check('Automatic removal eligibility uses each target owner and excludes enemy Aura',()=>{
+  for(const id of ['WALLBREAK1','SNIPE1'])for(const boosted of [0,1]){
+   const g=fresh(),c=card(id),m=mon('M1');m.atk=1;m.def=2;m.condAtk='cullPlus';g.players[0].field=[m];g.players[boosted].removed=culls(4);g.players[0].hand=[c];
+   const eligible=boosted===1;assert.equal(E.automaticCastTargets(g,0,c).length,eligible?1:0);if(eligible)assert.equal(E.playBlockReason(g,0,c),null);
+   if(eligible){const r=reviewed(g,c);assert.equal(r.state.players[0].field.length,0);}else{assert(E.playBlockReason(g,0,c));assert.equal(reviewed(g,c).state.players[0].mana,30);}
+   const a=fresh(),enemy=mon('M1');enemy.atk=1;enemy.def=2;enemy.passive=['aura'];a.players[1].field=[enemy];assert(E.playBlockReason(a,0,c));
+  }
+ });
  check('Auto-target preview matches actual victim, including own-side and ties',()=>{
   for(const id of ['WALLBREAK1','SNIPE1'])for(const own of [false,true]){
    let g=fresh();const m=mon('M1');m.atk=1;m.def=2;g.players[own?0:1].field=[m];const c=card(id);g.players[0].hand=[c];

@@ -356,7 +356,7 @@ export function reviewCast(g: GameState, owner: Side, source: CardInst, intent: 
     });
     if(!intent)for(const c of automaticCastTargets(g,owner,source)) {
       const own=targetOwner(g,c.uid)===owner,wrap=document.createElement('div'),label=document.createElement('p');
-      label.textContent=ja?`自動処理の破壊対象（${own?'自分':'相手'}）`:ko?`자동 파괴 대상 (${own?'자신':'상대'})`:`Automatic destruction target (${own?'You':'Opponent'})`;
+      label.textContent=ja?`現在の盤面での自動処理の破壊対象（${own?'自分':'相手'}）`:ko?`현재 필드의 자동 파괴 대상 (${own?'자신':'상대'})`:`Current automatic destruction target (${own?'You':'Opponent'})`;
       wrap.append(label,cardEl(c,{lazyArt:0}));grid.append(wrap);
     }
     cancel.onclick=()=>{settle(null);closeOverlay();};

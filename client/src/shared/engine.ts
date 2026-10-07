@@ -4244,9 +4244,9 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
   if (card.id === "COUNTERCALC") { applicable=true; if (o0.enchants.length === 0) { return reason("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); } }
   if (card.id === "AMBUSH") { applicable=true; if (o0.maxMana !== 4) { return reason("  └ 상대 최대 마나가 4가 아니라 사용 불가", "  └ 相手の最大マナが4ではないため使用不可"); } }
   if (card.id === "TRUMPET") { applicable=true; if (p.field.length === 0) { return reason("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); } }
-  if (card.id === "WALLBREAK1") { applicable=true; if (![...o0.field, ...p.field].some((m) => effAtk(o0, m, g) <= 2)) { return reason("  └ 공격력 2 이하 몬스터가 없습니다", "  └ 攻撃力2以下のモンスターがいません"); } }
+  if (card.id === "WALLBREAK1") { applicable=true; if (![p,o0].some(owner => owner.field.some(m => (owner===p || !hasPassive(m,'aura')) && effAtk(owner,m,g) <= 2))) { return reason("  └ 공격력 2 이하 몬스터가 없습니다", "  └ 攻撃力2以下のモンスターがいません"); } }
   if (card.id === "WALLBREAK2") { applicable=true; if (![p,o0].some(owner => owner.field.some(m => effAtk(owner,m,g) <= 2))) { return reason("  └ 공격력 2 이하 몬스터가 없습니다", "  └ 攻撃力2以下のモンスターがいません"); } }
-  if (card.id === "SNIPE1") { applicable=true; if (![...o0.field, ...p.field].some((m) => curHp(o0, m) <= 3)) { return reason("  └ 체력 3 이하 몬스터가 없습니다", "  └ 体力3以下のモンスターがいません"); } }
+  if (card.id === "SNIPE1") { applicable=true; if (![p,o0].some(owner => owner.field.some(m => (owner===p || !hasPassive(m,'aura')) && curHp(owner,m) <= 3))) { return reason("  └ 체력 3 이하 몬스터가 없습니다", "  └ 体力3以下のモンスターがいません"); } }
   if (card.id === "SNIPE2") { applicable=true; if (![p,o0].some(owner => owner.field.some(m => curHp(owner,m) <= 2))) { return reason("  └ 체력 2 이하 몬스터가 없습니다", "  └ 体力2以下のモンスターがいません"); } }
   if (card.id === "INQUISITION") { applicable=true; if (!o0.deck.some(c=>c.id==="HIDDEN") && ![...o0.deck, ...o0.discard, ...o0.field].some((m) => m.t === "mon" && m.tribe)) { return reason("  └ 상대에게 종족 몬스터가 없습니다", "  └ 相手に種族モンスターがいません"); } }
   if (card.id === "PURGE_ALL") { applicable=true; if (p.deck.length + p.discard.length === 0) { return reason("  └ 덱과 묘지가 비어 있습니다", "  └ デッキと墓地が空です"); } }
