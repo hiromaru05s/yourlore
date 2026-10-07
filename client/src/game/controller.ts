@@ -1,3 +1,4 @@
+import {playTribeSynergy} from '../ui/tribeSynergy/runtime';
 import type {Playback} from '../ui/elemental/runtime';
 import {persistentShelfExits} from './shelfExits';
 import {installHandDiscard} from '../ui/handDiscard';
@@ -317,6 +318,15 @@ export abstract class BaseController implements BoardHandlers {
           }
           fieldCount[e.player]++;
           await wait(65);
+          break;
+        }
+        case "tribeSynergy": {
+          const victory=e.tribe==='시초'&&e.threshold===6&&events.some(ev=>ev.type==='win'&&ev.winner===e.player);
+          // Only the two FIX selections are adopted; higher ordinary tiers await selection.
+          if(!A.isFxSkipped()&&(victory||e.threshold===2)){
+            const nodes=e.uids.map(uid=>ghosts.get(uid)?.el??this.openingRoot.querySelector<HTMLElement>(`.zone-mon .card[data-uid="${CSS.escape(uid)}"]`)).filter((el):el is HTMLElement=>!!el);
+            await playTribeSynergy(nodes,victory);
+          }
           break;
         }
         case "trapSet":

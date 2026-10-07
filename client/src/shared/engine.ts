@@ -4046,6 +4046,7 @@ function checkTribe(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): void {
   }
 }
 function applyTribe(g: GameState, ctx: Ctx, p: PlayerState, o: PlayerState, tribe: string, n: number, mult = 1): void {
+  ctx.ev.push({type:"tribeSynergy",player:side(g,p),tribe,threshold:n,uids:p.field.filter(m=>m.tribe===tribe).map(m=>m.uid)});
   ctx.log(`<span class="good">[${tribeName(tribe, "ko")}] 동족 ${n}마리 시너지!</span>`, `<span class="good">[${tribeName(tribe, "ja")}] 同族 ${n}体シナジー!</span>`);
   const gainHp = (v: number): void => { addHealth(ctx, p, v); ctx.log(`  └ 체력 +${v} (${p.hp})`, `  └ 体力+${v} (${p.hp})`); };
   const gainMana = (v: number): void => { addMaxMana(p, v); ctx.log(`  └ 최대 마나 +${v} (${p.maxMana})`, `  └ 最大マナ+${v} (${p.maxMana})`); };

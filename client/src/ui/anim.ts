@@ -1,3 +1,4 @@
+import {cancelTribeSynergy} from './tribeSynergy/runtime';
 import type {ElementalEvent,Playback} from './elemental/runtime';
 import {flyPersistentIntoSlot} from './persistentFlight';
 import {playSpellFrame,cancelSpellFrames,warmSpellFrame,SPELL_FRAME_RATE} from './spellFrame/runtime';
@@ -43,7 +44,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on);
-  if(on){cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
