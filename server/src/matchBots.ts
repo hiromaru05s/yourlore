@@ -21,7 +21,7 @@ export async function ensureMatchBots(env: Env): Promise<void> {
   if (!matchBotsEnabled(env)) throw new Error('Match test bots disabled');
   await env.DB.batch(MATCH_BOTS.map(bot => env.DB.prepare(
     'INSERT OR IGNORE INTO users (id,email,password,display,created_at,verified,source,avatar,deck) VALUES (?,?,?,?,?,0,?,?,?)',
-  ).bind(bot.id, `${bot.id}@bots.invalid`, 'oauth:bot-disabled', bot.name, Date.now(), 'match-test-bot', bot.avatar, bot.deck.cards.join(','))));
+  ).bind(bot.id, `${bot.id}@bots.invalid`, 'bot-disabled', bot.name, Date.now(), 'match-test-bot', bot.avatar, bot.deck.cards.join(','))));
 }
 
 /** Strategy only sees the same hidden-information boundary as an online player.
