@@ -26,7 +26,7 @@ import {waitForDuel} from './duelReadiness';
 import type { CardInst } from "../shared/types";
 import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, cardPassives, enchantHasTurnCountdown } from "../shared/cards";
 import { cardEl, cardRulesEl, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
-import { t, getLang, cardText, cardName } from "../i18n";
+import { t, getLang, cardName } from "../i18n";
 
 import { sfx } from "./sound";
 import { moveOnBoard } from "./boardMotion";
@@ -598,13 +598,6 @@ export function zoomCard(c: CardInst, hp?: { now: number; max: number }, stateTe
   details.append(cardRulesEl(c));
   details.onclick = e => e.stopPropagation();
   wrap.appendChild(cardEl(c, { fullArt: true, ...(hp ? { hpNow: hp.now, hpMax: hp.max } : {}) }));
-  // "(지속)" 스탯 변화 카드: 필드에 있는 동안만 유지된다는 각주
-  if (/\((?:지속|持続|lasting)\)/.test(cardText(c))) {
-    const note = document.createElement("div");
-    note.className = "zoom-note";
-    note.textContent = t("card.dur.note");
-    details.appendChild(note);
-  }
   // 패시브 키워드 패널: 카드가 가진 패시브(부여분 포함)의 이름+설명을 우측에 표시.
   // 카드 텍스트의 키워드명을 hover(터치: 탭)하면 해당 설명이 하이라이트된다.
   const psvKeys = [...new Set([...cardPassives(c), ...(((c as { passivesG?: string[] }).passivesG) ?? [])])];

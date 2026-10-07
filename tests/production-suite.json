@@ -4,6 +4,8 @@
     "tests/audio-contact-rules.mjs",
     "tests/audio-v3.mjs",
     "tests/balance-v52.mjs",
+    "tests/card-wording.mjs",
+    "tests/card-wording-render.mjs",
     "tests/biblion-vfx.mjs",
     "tests/connected-return-motion.mjs",
     "tests/dew-shield-v54.mjs",

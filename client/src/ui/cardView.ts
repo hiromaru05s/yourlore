@@ -10,6 +10,7 @@ import { FRAME_BACK, PASSIVES, cardPassives, frameFor, fieldFrameFor } from "../
 import { curHp, effAtk, effDef, playCost } from "../shared/engine";
 import { cardName, cardText, getLang, t } from "../i18n";
 import { parseDiceTable } from "../shared/cardText";
+import { cardEffectNotes } from "../shared/cardEffectNotes";
 
 /** Shared resting/flight face: switching from a cast to its spell slot must not
  * replace the artwork or frame at touchdown. Interaction is bound by GameView. */
@@ -315,7 +316,13 @@ export function cardRulesEl(c: CardInst): HTMLElement {
       }
       eff.appendChild(tb);
     } else if (txt && txt !== "—") {
-      eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${decorateTags(decoratePassives(c, txt))}</span>`));
+      eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${decorateTags(txt)}</span>`));
+    }
+    const notes = cardEffectNotes(c, getLang());
+    if (notes.length) {
+      const glossary = el("div", "card-rule-notes");
+      for (const text of notes) { const note = document.createElement('p'); note.textContent = text; glossary.append(note); }
+      eff.append(glossary);
     }
     return eff;
   }

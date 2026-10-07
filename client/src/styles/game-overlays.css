@@ -790,3 +790,17 @@
 @media(prefers-reduced-motion:reduce){.opening-heading,.ceremony-opening-player,.ceremony-opening-result,.ceremony-opening-player.is-first .opening-frame,.duel-outcome .outcome-copy{animation:none!important;}}
 .opening-portrait .avatar{width:100%!important;height:100%!important;border:0;box-shadow:none;}
 @media(max-width:600px){.duel-opening:not(.duel-opening-v1) .ceremony-canvas{top:13%;height:46%;}}
+
+/* Full effects remain readable at every length; definitions are secondary, never clipped. */
+.zoom-details .card-rules { overflow-wrap:anywhere; min-width:0; }
+.zoom-details .card-rule-notes { margin-top:24px; border-top:1px solid #b9c0cd36; padding-top:12px; font-size:14px; line-height:1.8; opacity:.85; }
+.zoom-details .card-rule-notes p { margin:8px 0; }
+.zoom-details .fx-tag { margin-inline-end:.45em; font-weight:600; }
+@media(max-width:850px) {
+  .zoom-overlay .zoom-wrap { width:calc(100vw - 28px); height:auto; max-height:calc(100dvh - 28px); grid-template-columns:minmax(0,1fr); grid-template-rows:auto auto auto; gap:18px; overflow-y:auto; }
+  .zoom-overlay .inspect-heading { min-width:0; gap:10px; flex-wrap:wrap; }
+  .zoom-overlay .inspect-heading h1 { min-width:0; font-size:22px; overflow-wrap:anywhere; }
+  .zoom-overlay .zoom-wrap > .card { --cw:min(160px,40vw); --ch:calc(var(--cw) * 1.5625); justify-self:center; }
+  .zoom-overlay .zoom-details { min-width:0; overflow:visible; padding:16px; font-size:16px; }
+  .zoom-overlay .card-dice .dr { grid-template-columns:56px minmax(0,1fr); gap:10px; }
+}

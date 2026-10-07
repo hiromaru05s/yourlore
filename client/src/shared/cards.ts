@@ -12,6 +12,7 @@ import type { CardDef, CardType } from "./types";
 import { applyEnglish } from "./cards.en";
 import { applyFlavorCardNames } from "./cardNames.flavor";
 import { standardizeCardTexts } from "./cardText";
+import { applyKeywordText } from "./cardKeywordText";
 
 // ---------------- core set (cost 1–4) ----------------
 const CORE: Record<string, CardDef> = {
@@ -2343,12 +2344,8 @@ applyDewShieldRework(DB);
 localizeDewShieldCards(DB);
 DB.VAMP4.textEn = "【Passive】Blood Magic: summon Supreme Vampire once · gain HP equal to 50% of enemy damage dealt.";
 for (const lang of ['ko', 'ja', 'en'] as const) CHEST_ODDS[lang].rows = CHEST_ODDS[lang].rows.map(s => s.replace('+7', '+5'));
-standardizeCardTexts(
-  [DB, STARTERS as unknown as Record<string, CardDef>],
-  // keyword names for rule R3 (they move to the chip row) — injected so cardText.ts
-  // never has to import back from this module (see the note there).
-  (c, lang) => cardPassives(c).map((k) => PASSIVES[k]?.[lang]?.name).filter((n): n is string => !!n),
-);
+applyKeywordText(PASSIVES);
+standardizeCardTexts([DB, STARTERS as unknown as Record<string, CardDef>]);
 
 export const ALL_IDS = Object.keys(DB);
 // markets never offer cost-0 tokens or noShop(스타팅 전용) cards
