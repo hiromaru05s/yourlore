@@ -14,3 +14,5 @@ Validation:
 - Repository production suite, client/server type checks and committed-snapshot build run through `scripts/deploy-guard.mjs` before staging publication.
 
 Functional test results do not certify visual parity with Genshin. Browser fixtures exercise real rendering and controller paths, but do not constitute an authenticated online match.
+
+`approved-four.mp4` is a continuous 3.6 s comparison exported at 30 authored frames per second from the same renderer (108 frames). `frame-22.png`, `frame-40.png`, and `frame-62.png` document formation, contact and settling. This deterministic export is for visual inspection, not measured runtime FPS. The separate local runtime report records live browser playback; host load caused variable frame cadence, particularly in the BF3 capture.
