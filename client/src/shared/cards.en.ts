@@ -142,7 +142,7 @@ const TEXTS: Record<string, string> = {
   GHOST: "Infiltrate · Enemy max mana/HP up: YOU take 2 damage · Enemy heals: your 'Ghosts' +1 ATK (lasting)",
   NEGOTIATE: "Opponent's max mana +1 · The opponent cannot set traps next turn",
   BLOOD_RITE: "Permanent: both players take no spell damage and heal that amount instead · Destroyed 14 turns after activation · Void",
-  WEAKEN_ALL: "Permanent: all monsters on both fields have -2 ATK · Void",
+  WEAKEN_ALL: "Permanent: all monsters on both fields have -2 ATK · At most 2 copies across both fields · Void",
   GUILD_HALL: "Aura: gain a count whenever your 'Assassin' monsters or this monster damage the opponent · At 3 counts: deal 14 damage (count resets) · The count is lost if this monster is destroyed",
   MIMIC_PARTY: "Trap: when the opponent uses a Treasure Chest — summon 1 Mimic to their field and 2 Mimics to yours",
   FATE_WHEEL: "Permanent: after seeing a dice card's result, you may reroll it (once per turn) · Void",

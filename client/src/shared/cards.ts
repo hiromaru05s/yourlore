@@ -962,7 +962,7 @@ const NEW_CARDS10: CardDef[] = [
   { id: "BLOOD_RITE", t: "spell", cost: 2, ench: "spellHeal", val: 99, exileOnDestroy: true, noShop: true, name: "혈귀술", nameJa: "血鬼術",
     text: "영구: 양 플레이어는 마법으로 인한 데미지를 받지 않고 그 수치만큼 회복한다 · 파괴되면 게임에서 제외", textJa: "永続: 両プレイヤーは魔法によるダメージを受けず、その数値だけ回復する · 破壊されたらゲームから除外" },
   { id: "WEAKEN_ALL", t: "spell", cost: 2, ench: "weakenAll", val: 99, exileOnDestroy: true, noShop: true, name: "약화술식", nameJa: "弱化術式",
-    text: "영구: 양 필드의 모든 몬스터 공격력 -2 · 파괴되면 게임에서 제외", textJa: "永続: 両方の場の全モンスター攻撃力-2 · 破壊されたらゲームから除外" },
+    text: "영구: 양 필드의 모든 몬스터 공격력 -2 · 양 필드 합계 최대 2장까지 존재 가능 · 파괴되면 게임에서 제외", textJa: "永続: 両方の場の全モンスター攻撃力-2 · 両方の場を合わせて最大2枚まで存在できる · 破壊されたらゲームから除外" },
   { id: "GUILD_HALL", t: "mon", cost: 2, atk: 0, def: 2, aura: "assassinGuild", noShop: true, name: "암살자 길드", nameJa: "アサシンギルド",
     text: "상시: '암살자'나 이 몬스터가 상대 데미지 시 카운트 +1 · 3카운트마다 14 데미지 · 파괴 시 카운트 소멸",
     textJa: "常時: 「アサシン」かこのモンスターが相手にダメージ時カウント+1 · 3カウントごとに相手に14ダメージ · 破壊でカウント消滅" },
@@ -1994,7 +1994,7 @@ const NEW_CARDS36: CardDef[] = [
   { id: "GUILD_HQ", t: "mon", cost: 6, atk: 0, def: 12, aura: "assassinHQ", turnFx: "nightMarket", name: "암살자 길드 본부", nameJa: "アサシンギルド本部",
     text: "【상시】'암살자'가 상대를 때릴 때마다 상대에게 낙인 카운터 1개 · 【매턴】'암살자' 카드를 파는 나이트 마켓 개장",
     textJa: "【常時】「アサシン」が相手を叩くたび相手に烙印カウンター1個 · 【毎ターン】「アサシン」カードを売るナイトマーケット開店" },
-  { id: "WORLD_TREE", t: "mon", cost: 10, atk: 0, def: 25, passive: ["aura", "guts"], turnFx: "worldTree", name: "세계수", nameJa: "世界樹",
+  { id: "WORLD_TREE", t: "mon", cost: 10, atk: 1, def: 25, passive: ["aura", "guts"], turnFx: "worldTree", name: "세계수", nameJa: "世界樹",
     text: "【상시】자신 체력이 늘면 카운터 1개 · 【매턴】카운터 1개로 자신 몬스터 전체 전회복, 자신 체력을 80%로",
     textJa: "【常時】自分の体力が増えるとカウンター1個 · 【毎ターン】カウンター1個で自分のモンスター全体を全回復、自分の体力を80%に" },
   // ---- 토큰 (구매 불가) ----
@@ -2455,7 +2455,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v55"; // Monsters with 0 current ATK cannot declare attacks
+export const BALANCE_VERSION = "v56"; // Zero-ATK attack rule, Poison Master/World Tree ATK 1, Enfeebling Ritual cap 2
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

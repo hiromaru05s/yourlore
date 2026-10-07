@@ -55,6 +55,7 @@ try {
  }
  for(const id of ['CHOSEN_ARCHER','DRAGON_RIDER','M7','VAMP4','CHOSEN_KNIGHT']){
   const g=fresh(),p=g.players[0],m=mon(id);p.field=[m];g.players[1].field=[plain({def:id==='CHOSEN_ARCHER'?15:1})];
+  if(['CHOSEN_ARCHER','CHOSEN_KNIGHT'].includes(id))m.atkMod=1; // v55+: attack triggers require positive current ATK
   if(id==='DRAGON_RIDER')m.attacksUsed=1;if(id==='CHOSEN_KNIGHT')p.discard=[card('STARTER_TRASH'),card('STARTER_TRASH')];
   const start=reduce(g,{type:'attack',uid:m.uid});const r=start.state.pending?reduce(start.state,{type:'chooseTarget',uid:g.players[1].field[0].uid}):start;expect(r.events,m,1,'attack eligible '+id);
   if(['CHOSEN_ARCHER','DRAGON_RIDER'].includes(id))assert(r.events.findIndex(e=>e.type==='monsterActivate')<r.events.findIndex(e=>e.type==='attack'),'modifier precedes attack');
@@ -87,7 +88,7 @@ try {
  for(const id of ['FARM_KEEPER','MIMIC_HUNTER']){const g=fresh(),m=mon(id);g.players[0].field=[m];run('inactive-end:'+id,g,m,{type:'endTurn'},0);}
  {const g=fresh(),p=g.players[0],m=mon('BLACK_ALICE');p.field=[m];p.maxMana=30;p.hand=[card('BLACK_CURSE')];run('capped-mana',g,m,{type:'play',idx:0},0);}
  {const g=fresh(),p=g.players[0],m=mon('WORLD_TREE');p.field=[m,plain({uid:'attacker'})];p.dew=1;g.pending={kind:'cardChoice',owner:0,reason:'WORLD_TREE_ATTACK',data:{attackerUid:'attacker'},allowCancel:false};run('declined-world-tree',g,m,{type:'chooseTarget',uid:'pass'},0);}
- {const g=fresh(),p=g.players[0],m=mon('CHOSEN_KNIGHT');p.field=[m];p.discard=[card('STARTER_TRASH'),card('STARTER_TRASH')];g.players[1].field=[plain({atk:20,def:20,passive:['counter']})];g.pending={kind:'oppMon',reason:'attack',data:{attackerUid:m.uid},allowCancel:true};const r=run('post-attack-source-died',g,m,{type:'chooseTarget',uid:g.players[1].field[0].uid},1);assert(!r.state.players[0].field.some(x=>x.uid===m.uid));assert(r.events.findIndex(e=>e.type==='monsterActivate'&&e.uid===m.uid)<r.events.findIndex(e=>e.type==='destroy'&&e.uid===m.uid));}
+ {const g=fresh(),p=g.players[0],m=mon('CHOSEN_KNIGHT',{atkMod:1});p.field=[m];p.discard=[card('STARTER_TRASH'),card('STARTER_TRASH')];g.players[1].field=[plain({atk:20,def:20,passive:['counter']})];g.pending={kind:'oppMon',reason:'attack',data:{attackerUid:m.uid},allowCancel:true};const r=run('post-attack-source-died',g,m,{type:'chooseTarget',uid:g.players[1].field[0].uid},1);assert(!r.state.players[0].field.some(x=>x.uid===m.uid));assert(r.events.findIndex(e=>e.type==='monsterActivate'&&e.uid===m.uid)<r.events.findIndex(e=>e.type==='destroy'&&e.uid===m.uid));}
  // Every current effect definition can resolve in a bare and populated fixture.
  // This catches omitted legacy keys and verifies all activation UIDs are sources.
  let definitions=0;

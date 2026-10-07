@@ -39,8 +39,8 @@ try {
     return out;
   };
 
-  test('v55 and every base-zero monster: direct and targeted declaration', () => {
-    assert.equal(BALANCE_VERSION, 'v55');
+  test('v56 and every base-zero monster: direct and targeted declaration', () => {
+    assert.equal(BALANCE_VERSION, 'v56');
     for (const c of Object.values(DB).filter(c => c.t === 'mon' && c.atk === 0)) {
       for (const target of [false, true]) {
         const g = fresh(); g.players[0].field = [mon(c.id)];
@@ -94,7 +94,7 @@ try {
     }
   });
   test('World Tree cannot initiate its own attack growth at zero; positive ally still can', () => {
-    let g = fresh(); g.players[0].field = [mon('WORLD_TREE')]; g.players[0].dew = 3;
+    let g = fresh(); g.players[0].field = [Object.assign(mon('WORLD_TREE'), { atkMod: -1 })]; g.players[0].dew = 3;
     rejected(g);
     g.players[0].field.unshift(mon('M4'));
     g = reduce(g, { type: 'attack', uid: g.players[0].field[0].uid }).state;

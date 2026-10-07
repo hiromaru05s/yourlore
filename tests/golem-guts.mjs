@@ -14,12 +14,12 @@ const fresh=()=>{const g=createGame({mode:'online',seed:17,starting:0,p0:{id:'a'
 const step=(g,a)=>reduce(g,a).state;
 const play=(g,id)=>{g.players[g.cur].hand=[card(id)];return step(g,{type:'play',idx:0});};
 const setup=(id='NWL3')=>{let g=fresh();g.cur=1;g=play(g,id);assert.equal(g.players[1].field.at(-1).id,id);g.cur=0;return g;};
-const attack=(g,atk)=>{const a=mon('GOLEM1',{atk,def:100,guts:0});g.players[0].field=[a];const uid=g.players[1].field[0].uid;g=step(g,{type:'attack',uid:a.uid});if(g.pending?.reason==='attack')g=step(g,{type:'chooseTarget',uid});assert.equal(g.players[0].field[0].exhausted,true);return g;};
+const attack=(g,atk)=>{const a=mon('GOLEM1',{atk,def:100,guts:0});g.players[0].field=[a];const uid=g.players[1].field[0].uid;g=step(g,{type:'attack',uid:a.uid});if(g.pending?.reason==='attack')g=step(g,{type:'chooseTarget',uid});assert.equal(g.players[0].field[0].exhausted,atk>0);if(atk===0){assert.equal(g.pending,null);assert.equal(g.players[0].field[0].attacksUsed??0,0);}return g;};
 const report=[];
 const test=(name,fn)=>{fn();report.push(name);console.log('PASS',name);};
 test('Guardian spends its initial counter on a lethal hit, then dies',()=>{let g=setup();g=attack(g,9);assert.equal(g.players[1].field[0].guts,0);assert.equal(curHp(g.players[1],g.players[1].field[0]),1);g=attack(g,9);assert.equal(g.players[1].field.length,0);assert.equal(g.players[1].hp,9992);});
 test('Guardian at one HP and zero guts dies without regenerating',()=>{let g=setup();Object.assign(g.players[1].field[0],{guts:0,dmg:8});g=attack(g,1);assert.equal(g.players[1].field.length,0);});
-test('Zero attack never grants counters even after 100 attacks',()=>{let g=setup();for(let i=0;i<100;i++)g=attack(g,0);assert.equal(g.players[1].field[0].guts,1);assert.equal(curHp(g.players[1],g.players[1].field[0]),9);});
+test('Zero ATK attack attempts are blocked and never grant counters',()=>{let g=setup();for(let i=0;i<100;i++)g=attack(g,0);assert.equal(g.players[1].field[0].guts,1);assert.equal(curHp(g.players[1],g.players[1].field[0]),9);});
 test('Nonlethal hit gains one counter',()=>{let g=attack(setup(),1);assert.equal(g.players[1].field[0].guts,2);assert.equal(curHp(g.players[1],g.players[1].field[0]),8);});
 test('Other normal golems exhaust guts then die',()=>{for(const id of ['GOLEM1','GOLEM2','M10']){let g=setup(id);g=attack(g,20);assert.equal(g.players[1].field[0].guts,0,id);g=attack(g,20);assert.equal(g.players[1].field.length,0,id);}});
 test('Strike Squad gains only its one summon counter plus three with kin',()=>{for(const kin of [false,true]){let g=fresh();g.cur=1;if(kin)g=play(g,'GOLEM1');g=play(g,'NGA3');assert.equal(g.players[1].field.at(-1).guts,kin?4:1);}});
