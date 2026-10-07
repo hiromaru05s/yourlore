@@ -24,6 +24,7 @@ export function playIntent(g: GameState, owner: Side, c: CardInst): PlayIntent |
   switch (c.id) {
     // These IDs override their legacy act with automatic target rules.
     case 'WALLBREAK1': case 'SNIPE1': return null;
+    case 'FOCUS': case 'PURGE_ALL': return plan('purge',[...p.deck,...p.discard,c].filter(h=>!hasPassive(h,'relic')).sort((a,b)=>a.cost-b.cost||a.id.localeCompare(b.id)||a.uid.localeCompare(b.uid)),c.id==='FOCUS'?3:99,0);
     case 'SELECTED_SWORD': return plan(c.id, [...p.field, ...enemy]);
     case 'TRUMPET': return plan('buffTurn', p.field, 3, 0);
     case 'AEM': return plan('golemBuff', p.field.filter(isGolem), 2, 2);
@@ -48,7 +49,7 @@ export function playIntent(g: GameState, owner: Side, c: CardInst): PlayIntent |
     case 'destroyEnch': return plan(c.act, board(false, true), c.val || 1, 0);
     case 'seek': return plan(c.act, [...p.deck].sort((a,b) => a.cost-b.cost || a.id.localeCompare(b.id) || a.uid.localeCompare(b.uid)), 1, 0);
     case 'recall': return plan(c.act, p.discard.filter(h => h.uid !== c.uid), 1, 0);
-    case 'exilePick': return plan(c.act, p.discard.filter(h => !hasPassive(h,'relic')), 1, 0);
+    case 'exilePick': return plan(c.act, [...p.discard,c].filter(h => !hasPassive(h,'relic')), 1, 0);
     case 'incubate': return plan(c.act, p.field.filter(m => m.hatch != null), 1, 0);
     default: return null;
   }

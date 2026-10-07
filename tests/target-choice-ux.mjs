@@ -35,7 +35,7 @@ try {
  check('Stale source / forged / duplicate selections cannot spend or trigger effects',()=>{
   const g=fresh();const c=card('DOUBLE_EXEC');g.players[0].hand=[c];g.players[1].field=[mon('M1'),mon('M2')];
   for(const a of [{type:'play',idx:0,sourceUid:'stale',targets:[g.players[1].field[0].uid]},{type:'play',idx:0,sourceUid:c.uid,targets:['fake']},{type:'play',idx:0,sourceUid:c.uid,targets:[g.players[1].field[0].uid,g.players[1].field[0].uid]}])assert.deepEqual(E.reduce(g,a),{state:g,events:[]});
-  for(const targets of [true,{},[null],Array(33).fill('uid')])assert(!E.isClientMessage({type:'action',action:{type:'play',idx:0,sourceUid:c.uid,targets}}));
+  for(const targets of [true,{},[null],Array(100).fill('uid')])assert(!E.isClientMessage({type:'action',action:{type:'play',idx:0,sourceUid:c.uid,targets}}));
  });
  check('Optional zero targets is an explicit cast; mandatory Sword is not',()=>{
   const g=fresh();const c=card('S15');g.players[0].hand=[c];g.players[0].field=[mon('M1')];const r=reviewed(g,c,[]).state;assert.equal(r.pending,null);assert.equal(r.players[0].field.length,1);assert.equal(r.players[0].hand.length,0);
@@ -53,6 +53,10 @@ try {
    let g=fresh();const m=mon('M1');m.atk=1;m.def=2;g.players[own?0:1].field=[m];const c=card(id);g.players[0].hand=[c];
    assert.equal(E.automaticCastTargets(g,0,c)[0].uid,m.uid);g=step(g,{type:'play',idx:0});assert(!g.players[own?0:1].field.some(x=>x.uid===m.uid));
   }
+ });
+ check('Rune echo keeps its second Sword choice instead of silently cancelling it',()=>{
+  let g=fresh();g.players[0].removed=culls(4);g.players[0].field=[mon('M1')];g.players[0].enchants=[{card:card('RUNE3'),turns:99,bornTurn:0}];const c=card('SELECTED_SWORD');g.players[0].hand=[c];const uid=g.players[0].field[0].uid;
+  g=reviewed(g,c,[uid]).state;assert.equal(g.players[0].field[0].tempAtk,4);assert.equal(g.pending.reason,'SELECTED_SWORD');g=step(g,{type:'pick',uid});assert.equal(g.players[0].field[0].tempAtk,8);assert.equal(g.players[0].mana,29);
  });
  check('Zero shield and risky summon/chest/global effects are reviewed',()=>{const g=fresh();for(const id of ['SELECTED_SHIELD','M5','TGE3','VOID_APOSTLE','STARTER_CHEST','MAGMA_RAIN','HANDRESET','BLOOD_JOY','TRIAL_AREA'])assert(E.needsCastReview(g,0,card(id)),id);assert(!E.needsCastReview(g,0,card('STARTER_TRASH')));});
  // Every metadata-driven preselection must resolve exactly like the original

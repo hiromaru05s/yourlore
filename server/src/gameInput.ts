@@ -8,7 +8,7 @@ const uid = (v: unknown): v is string => typeof v === 'string' && v.length > 0 &
 function isAction(v: unknown): v is Action {
   if (!object(v)) return false;
   switch (v.type) {
-    case 'play': return index(v.idx) && (v.sourceUid === undefined || uid(v.sourceUid)) && (v.targets === undefined || Array.isArray(v.targets) && v.targets.length <= 32 && v.targets.every(uid));
+    case 'play': return index(v.idx) && (v.sourceUid === undefined || uid(v.sourceUid)) && (v.targets === undefined || Array.isArray(v.targets) && v.targets.length <= 99 && v.targets.every(uid));
     case 'buyMarket': case 'buySupply': return index(v.i);
     case 'attack': return uid(v.uid);
     case 'pick': case 'chooseTarget': return v.uid === null || uid(v.uid);

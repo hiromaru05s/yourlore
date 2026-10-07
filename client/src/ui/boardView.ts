@@ -8,10 +8,12 @@ import {handFan} from './handFan';
 import {fieldPositions,settleField} from './fieldLayout';
 import {clearBiblionFx} from './biblionFx';
 import {prepareDuel} from './duelReadiness';
-// =====================================================// LORE — board view. Renders the whole game from a GameState
+// ============================================================
+// LORE — board view. Renders the whole game from a GameState
 // (from the viewer's perspective) and wires interaction handlers.
 // All animation lives in anim.ts; this file only draws + binds.
-// =====================================================import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
+// ============================================================
+import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { purchaseAllowed, freeBuyBlocked, playBlockReason, cardPlayConditionMet } from "../shared/engine";
 import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isVampFamily, isGolem, marketStockOf } from "../shared/engine";
 import { enchantHasTurnCountdown, fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";

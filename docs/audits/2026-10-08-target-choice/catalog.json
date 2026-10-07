@@ -2,8 +2,8 @@
   "count": 360,
   "counts": {
     "existing-rules": 269,
-    "precast-review": 54,
-    "precast-target": 24,
+    "precast-review": 52,
+    "precast-target": 26,
     "purchase-review": 13
   },
   "note": "Empty-field baseline; conditional choices/reactions evaluated again against live public state.",
@@ -920,8 +920,9 @@
       "id": "PURGE_ALL",
       "nameJa": "大粛清",
       "type": "spell",
-      "route": "precast-review",
-      "effectJa": "【発動時】自分のデッキ・墓地からカードを好きな枚数選び、自分のリフトへ送る（0枚でもよい）。"
+      "route": "precast-target",
+      "effectJa": "【発動時】自分のデッキ・墓地からカードを好きな枚数選び、自分のリフトへ送る（0枚でもよい）。",
+      "reason": "purge"
     },
     {
       "id": "EXILE_NUKE1",
@@ -1738,8 +1739,9 @@
       "id": "FOCUS",
       "nameJa": "選択と集中",
       "type": "spell",
-      "route": "precast-review",
-      "effectJa": "【発動時】自分のデッキ・墓地からカードを合計3枚まで選び、自分のリフトへ送る。"
+      "route": "precast-target",
+      "effectJa": "【発動時】自分のデッキ・墓地からカードを合計3枚まで選び、自分のリフトへ送る。",
+      "reason": "purge"
     },
     {
       "id": "GUILD_HQ",

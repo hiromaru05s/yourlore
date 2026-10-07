@@ -1,5 +1,5 @@
 {
-  "origin": "http://127.0.0.1:5227",
+  "origin": "http://127.0.0.1:5228",
   "checks": [
     "4 responsive viewports, no horizontal overflow",
     "enemy-only sword selection, explicit warning and cancellation",
