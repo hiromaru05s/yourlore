@@ -30,7 +30,7 @@ export function projectBoardDOM(root:HTMLElement):void {
   if(typeof DOMMatrix==='undefined')return;
   placeReadingBoard(root);
   const unit=cardUnit(root);
-  const planes=[...root.querySelectorAll<HTMLElement>('.zone-row,.market-counter,.mid-aside,.pile,.rift-button,.pt-mana,.portrait>.pt-name,.pt-name--vitals,.pt-brand')].map(element=>({element,rect:layoutRect(element),elevation:(element.classList.contains('rift-button')?unit*RIFT_MOUNT.height/.110:element.classList.contains('market-counter')?unit*marketHeight():element.classList.contains('mid-aside')?unit*.028/.110:element.classList.contains('pt-ring')?unit*.009/.110:element.classList.contains('pt-mana')?unit*.0165/.110:0)+(Number(element.dataset.introHeight)||0)}));
+  const planes=[...root.querySelectorAll<HTMLElement>('.zone-row,.market-counter,.mid-aside,.pile,.rift-button,.pt-mana,.portrait>.pt-name,.pt-name--vitals')].map(element=>({element,rect:layoutRect(element),elevation:(element.classList.contains('rift-button')?unit*RIFT_MOUNT.height/.110:element.classList.contains('market-counter')?unit*marketHeight():element.classList.contains('mid-aside')?unit*.028/.110:element.classList.contains('pt-ring')?unit*.009/.110:element.classList.contains('pt-mana')?unit*.0165/.110:0)+(Number(element.dataset.introHeight)||0)}));
   for(const {element,rect,elevation} of planes){
     element.dataset.boardPlane=String(elevation);element.style.transformOrigin='0 0';
     element.style.transform=new DOMMatrix().translate(-rect.left,-rect.top).multiply(boardMatrix(rect.left,rect.top,elevation)).toString();

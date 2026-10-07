@@ -50,7 +50,6 @@ export function placeReadingBoard(root:HTMLElement):void {
   place(`#portrait${p}>.pt-name,#portrait${p} .pt-name--vitals`,-.345,sign*.455,.34,.017);
   const resources=root.querySelector<HTMLElement>(`#portrait${p} .pt-resources`);
   if(resources){resources.style.left=`${cx-size*.5}px`;resources.style.top=`${portraitTop}px`;resources.style.width=resources.style.height=`${size}px`;}
-  place(`#portrait${p} .pt-brand`,-.09,sign*.335,.08,.028);
  }
  // Hand cards float over the board, outside the play lanes. They are not sockets.
  const hand=root.querySelector<HTMLElement>('#hand'),opp=root.querySelector<HTMLElement>('#oppHand');
