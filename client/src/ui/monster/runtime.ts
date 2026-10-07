@@ -1,3 +1,4 @@
+import {playRiftDestruction,cancelRiftDestruction} from '../riftDestruction/runtime';
 import {playManaDestruction,cancelManaDestruction} from '../manaDestruction/runtime';
 import {playSlateSummon,cancelSummons,cancelSummon} from '../summon/runtime';
 import {Actor} from './actor';
@@ -48,8 +49,8 @@ export function syncMonsterStates(root:HTMLElement){
  }
  if([...states.values()].some(s=>s.root===root))observeField(root);release();if(states.size)schedule();
 }
-export function clearMonsterStates(root:HTMLElement){cancelManaDestruction(root);cancelSummons(root);for(const j of [...jobs.values()])if(root.contains(j.source))j.finish(false);for(const [n,s] of states)if(s.root===root)removeState(n);release();}
-export function setMonsterSkip(value:boolean){skipped=value;if(value){cancelSummons();cancelManaDestruction();}if(value)for(const j of [...jobs.values()])j.finish(false);}
+export function clearMonsterStates(root:HTMLElement){cancelRiftDestruction(root);cancelManaDestruction(root);cancelSummons(root);for(const j of [...jobs.values()])if(root.contains(j.source))j.finish(false);for(const [n,s] of states)if(s.root===root)removeState(n);release();}
+export function setMonsterSkip(value:boolean){skipped=value;if(value){cancelSummons();cancelRiftDestruction();cancelManaDestruction();}if(value)for(const j of [...jobs.values()])j.finish(false);}
 function release(){
  for(const [root,layer] of fieldLayers)if(![...states.values()].some(s=>s.root===root)){layer.dispose();fieldLayers.delete(root);observers.get(root)?.disconnect();observers.delete(root);}
  if(!jobs.size){layers?.dispose();layers=undefined;}
@@ -108,8 +109,9 @@ function tick(now:number){
  release();if(jobs.size||animated)schedule();
 }
 export function playMonster(source:HTMLElement,kind:Kind,options:Options={}):Promise<boolean>{
- cancelSummon(source);jobs.get(source)?.finish(false);
+ cancelRiftDestruction(source);cancelSummon(source);jobs.get(source)?.finish(false);
  if(skipped||!source.isConnected||options.signal?.aborted)return Promise.resolve(false);
+ if(kind==='destroy'&&options.variant==='B'&&options.destination){removeState(source);release();return playRiftDestruction(source,options.destination,options.signal);}
  if(kind==='summon')return playSlateSummon(source,options);
  if(kind==='destroy'&&options.variant==='A'&&options.mana!==false&&options.destination){removeState(source);release();return playManaDestruction(source,options.destination,options.signal);}
  const r=monsterRect(options.anchor??source);if(!r.w||!r.h)return Promise.resolve(false);
