@@ -68,6 +68,7 @@
     "tests/golem-guts.mjs",
     "tests/zero-attack-rule.mjs",
     "tests/zero-attack-balance.mjs",
+    "tests/verdant-summon.mjs",
     "tests/critical-trigger-chains.mjs",
     "tests/status-grant.mjs"
   ],

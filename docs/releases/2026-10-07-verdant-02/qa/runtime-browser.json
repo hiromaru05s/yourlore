@@ -1,0 +1,87 @@
+{
+  "results": [
+    {
+      "id": "ELF",
+      "side": 0,
+      "path": "direct",
+      "seen": {
+        "cardId": "ELF",
+        "variant": "2",
+        "time": "748"
+      }
+    },
+    {
+      "id": "DARK_ELF",
+      "side": 1,
+      "path": "direct",
+      "seen": {
+        "cardId": "DARK_ELF",
+        "variant": "2",
+        "time": "816"
+      }
+    },
+    {
+      "id": "HIGH_ELF",
+      "side": 0,
+      "path": "direct",
+      "seen": {
+        "cardId": "HIGH_ELF",
+        "variant": "2",
+        "time": "816"
+      }
+    },
+    {
+      "id": "ELDER_ELF_KING",
+      "side": 1,
+      "path": "direct",
+      "seen": {
+        "cardId": "ELDER_ELF_KING",
+        "variant": "2",
+        "time": "746"
+      }
+    },
+    {
+      "id": "WORLD_TREE",
+      "side": 0,
+      "path": "direct",
+      "seen": {
+        "cardId": "WORLD_TREE",
+        "variant": "2",
+        "time": "816"
+      }
+    },
+    {
+      "id": "HALF_ELF",
+      "side": 0,
+      "path": "direct",
+      "seen": {
+        "cardId": "HALF_ELF",
+        "variant": "1",
+        "time": "750"
+      }
+    },
+    {
+      "id": "ELF",
+      "side": 0,
+      "path": "hand",
+      "seen": {
+        "cardId": "ELF",
+        "variant": "2",
+        "time": "820"
+      }
+    },
+    {
+      "id": "WORLD_TREE",
+      "side": 1,
+      "path": "generated",
+      "seen": {
+        "cardId": "WORLD_TREE",
+        "variant": "2",
+        "time": "772"
+      }
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "boundary": "Local real GameView, production playMonster and hand/generated presentation paths, controlled browser clock for intermediate frames; no network match."
+}
