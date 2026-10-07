@@ -1322,6 +1322,11 @@ export function monsterCanAttack(g:GameState,p:PlayerState,m:FieldMon):boolean {
   if(m.attackFx==='berserk'&&p.field.some(x=>x.uid!==m.uid))return true;
   return o.field.some(x=>!(x.aura==='eliteGuard'&&(m.cost??0)<=6));
 }
+/** Legal opposing monster target; exhaustion of the defender is irrelevant. */
+export function monsterCanTarget(g:GameState,p:PlayerState,att:FieldMon,target:FieldMon):boolean {
+  return monsterCanAttack(g,p,att) && !att.directOnly
+    && !(target.aura==='eliteGuard' && (att.cost??0)<=6);
+}
 function summonBlockedLow(g: GameState, summoner: PlayerState, card: CardInst): boolean {
   if ((card.cost ?? 0) > 3) return false;
   const opp = g.players[0] === summoner ? g.players[1] : g.players[0];
@@ -3777,7 +3782,14 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       const isAtk = card.id === "WALLBREAK2";
       const lim = 2;
       let k = 0;
-      for (const mm of [...o.field]) if ((isAtk ? effAtk(o, mm, g) : curHp(o, mm)) <= lim) { ctx.destroyMonster(o, mm); k++; }
+      // Snapshot both sides before destruction changes auras or creates new monsters.
+      const targets = [o,p].flatMap(owner => owner.field.filter(mm =>
+        (isAtk ? effAtk(owner,mm,g) : curHp(owner,mm)) <= lim).map(mm => ({owner,mm})));
+      for (const {owner,mm} of targets) {
+        if (!owner.field.some(m => m.uid === mm.uid)) continue;
+        ctx.destroyMonster(owner,mm);
+        if (!owner.field.some(m => m.uid === mm.uid)) k++;
+      }
       ctx.log(`${tag(p, card)} ${isAtk ? "공격력" : "체력"} ${lim} 이하 몬스터 ${k}체 파괴`, `${tag(p, card)} ${isAtk ? "攻撃力" : "体力"}${lim}以下のモンスター${k}体を破壊`);
       break;
     }
@@ -4226,9 +4238,9 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
   if (card.id === "AMBUSH") { applicable=true; if (o0.maxMana !== 4) { return reason("  └ 상대 최대 마나가 4가 아니라 사용 불가", "  └ 相手の最大マナが4ではないため使用不可"); } }
   if (card.id === "TRUMPET") { applicable=true; if (p.field.length === 0) { return reason("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); } }
   if (card.id === "WALLBREAK1") { applicable=true; if (![...o0.field, ...p.field].some((m) => effAtk(o0, m, g) <= 2)) { return reason("  └ 공격력 2 이하 몬스터가 없습니다", "  └ 攻撃力2以下のモンスターがいません"); } }
-  if (card.id === "WALLBREAK2") { applicable=true; if (!o0.field.some((m) => effAtk(o0, m, g) <= 2)) { return reason("  └ 공격력 2 이하 적 몬스터가 없습니다", "  └ 攻撃力2以下の敵モンスターがいません"); } }
+  if (card.id === "WALLBREAK2") { applicable=true; if (![p,o0].some(owner => owner.field.some(m => effAtk(owner,m,g) <= 2))) { return reason("  └ 공격력 2 이하 몬스터가 없습니다", "  └ 攻撃力2以下のモンスターがいません"); } }
   if (card.id === "SNIPE1") { applicable=true; if (![...o0.field, ...p.field].some((m) => curHp(o0, m) <= 3)) { return reason("  └ 체력 3 이하 몬스터가 없습니다", "  └ 体力3以下のモンスターがいません"); } }
-  if (card.id === "SNIPE2") { applicable=true; if (!o0.field.some((m) => curHp(o0, m) <= 2)) { return reason("  └ 체력 2 이하 적 몬스터가 없습니다", "  └ 体力2以下の敵モンスターがいません"); } }
+  if (card.id === "SNIPE2") { applicable=true; if (![p,o0].some(owner => owner.field.some(m => curHp(owner,m) <= 2))) { return reason("  └ 체력 2 이하 몬스터가 없습니다", "  └ 体力2以下のモンスターがいません"); } }
   if (card.id === "INQUISITION") { applicable=true; if (!o0.deck.some(c=>c.id==="HIDDEN") && ![...o0.deck, ...o0.discard, ...o0.field].some((m) => m.t === "mon" && m.tribe)) { return reason("  └ 상대에게 종족 몬스터가 없습니다", "  └ 相手に種族モンスターがいません"); } }
   if (card.id === "PURGE_ALL") { applicable=true; if (p.deck.length + p.discard.length === 0) { return reason("  └ 덱과 묘지가 비어 있습니다", "  └ デッキと墓地が空です"); } }
   if (card.id === "GOLIATH_HUNT") { applicable=true; if (!o0.field.some((m) => curHp(o0, m) >= 10)) { return reason("  └ 체력 10 이상 적 몬스터가 없습니다", "  └ 体力10以上の敵モンスターがいません"); } }
@@ -5335,6 +5347,8 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
   const p = g.players[g.cur];
   if (action.type === "chooseTarget") { if (g.pending) resolveTarget(g, ctx, action.uid); return { state: g, events: ev }; }
   if (action.type === "pick") { if (g.pending) resolveTarget(g, ctx, action.uid); return { state: g, events: ev }; }
+  // Ending a turn also cancels its uncommitted attack selection, atomically online.
+  if (action.type === 'endTurn' && g.pending?.reason === 'attack' && g.pending.allowCancel) g.pending = null;
   // v42: 손패 이월 선택(handCap) 중의 endTurn = 시간 초과/강제 종료 → 오른쪽부터 자동 폐기 후 종료
   if (g.pending && !(action.type === "endTurn" && g.pending.reason === "handCap")) return { state: g, events: ev };
 
