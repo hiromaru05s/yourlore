@@ -11,13 +11,15 @@ import {playDuelOpening,warmOpening} from "../ui/duelOpeningDirector";
 import {waitForDuel} from "../ui/duelReadiness";
 import {releaseMonster} from '../ui/fieldLayout';
 import { paintDuelClock } from '../ui/duelClock';
-// =====================================================// LORE — game controllers.
+// ============================================================
+// LORE — game controllers.
 // BaseController turns engine events into log + animation + render.
 // Events play back SEQUENTIALLY (summon → trap → destroy …) so the
 // player can follow chains without reading the log.
 // LocalController reduces locally and drives the bot.
 // (OnlineController lives in ./online and reuses BaseController.)
-// =====================================================import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
+// ============================================================
+import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
 import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef } from "../shared/engine";
 import { botDecide, type BotDifficulty } from "../shared/bot";
@@ -759,10 +761,12 @@ export abstract class BaseController implements BoardHandlers {
     this.maybeBot();
   }
 
-  // =====================================================  // turn timer — 50s/turn. Popups at 25s (1.5s) and a countdown from
+  // ============================================================
+  // turn timer — 50s/turn. Popups at 25s (1.5s) and a countdown from
   // 5s; the timer chip shakes at ≤5s; on 0 the active player's turn
   // auto-ends (online: only my own client submits, server validates).
-  // =====================================================  private syncTimer(): void {
+  // ============================================================
+  private syncTimer(): void {
     if (this.dead) return;
     const g = this.state;
     if (!g || g.over) { this.stopTimer(); return; }
@@ -1016,8 +1020,10 @@ export abstract class BaseController implements BoardHandlers {
   }
 }
 
-// =====================================================// LocalController — single device, you vs bot
-// =====================================================const lastNpcDecks = new Map<string, number>();
+// ============================================================
+// LocalController — single device, you vs bot
+// ============================================================
+const lastNpcDecks = new Map<string, number>();
 
 export class LocalController extends BaseController {
   private botTimer = 0;
