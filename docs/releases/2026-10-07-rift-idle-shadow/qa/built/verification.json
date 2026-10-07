@@ -439,5 +439,6 @@
     }
   ],
   "errors": [],
-  "boundary": "Actual built or deployed assets on a BOT board; account/API responses are fixtures. No authenticated online match. Approved visual selection is 03 shadow veil."
+  "boundary": "Actual built or deployed assets on a BOT board; account/API responses are fixtures. No authenticated online match. Approved visual selection is 03 shadow veil.",
+  "source": "4a5b3003"
 }
