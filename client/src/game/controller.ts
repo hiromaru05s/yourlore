@@ -142,7 +142,7 @@ export abstract class BaseController implements BoardHandlers {
       const plan=playIntent(before,this.you,card);
       const targets=await reviewCast(before,this.you,card,plan);
       this.castReviewState=null;
-      if(targets===null || this.dead || this.state!==before)return;
+      if(targets===null || this.dead || this.state!==before){A.setPlayOrigin(null);return;}
       this.submit({type:'play',idx,sourceUid:uid,...(plan?{targets}:{})});
     } else this.submit({type:'play',idx,sourceUid:uid});
   }
