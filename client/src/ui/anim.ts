@@ -764,14 +764,15 @@ export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: nu
   } finally { node.remove(); }
 }
 
-/** Kill a summon ghost: death flash then fly a card frame to that side's discard. */
-export async function ghostDie(node:HTMLElement,side:ViewSide,voided=false,mana=true):Promise<void>{
+/** Complete a public-card death: decay dissolves in place; other causes retain their exit. */
+export async function ghostDie(node:HTMLElement,side:ViewSide,voided=false,mana=true,decay=false):Promise<void>{
  const target=document.getElementById(voided?(side==='me'?'rift-me':'rift-opp'):discId(side));
- if(target&&!fxSkip){await boardMotionScope(signal=>playMonster(node,'destroy',{variant:voided?'B':'A',mana,destination:target.querySelector<HTMLElement>('.pile-print .card')??target,side:side==='me'?1:-1,signal}),6500);if(!voided)pileFlash(discId(side));}
+ if(decay&&!fxSkip)await boardMotionScope(signal=>import('./decay/runtime').then(({playDecayDissolve})=>playDecayDissolve(node,{signal})),6500);
+ else if(target&&!fxSkip){await boardMotionScope(signal=>playMonster(node,'destroy',{variant:voided?'B':'A',mana,destination:target.querySelector<HTMLElement>('.pile-print .card')??target,side:side==='me'?1:-1,signal}),6500);if(!voided)pileFlash(discId(side));}
  node.style.visibility='hidden';
 }
-export async function destroyAnim(uid:string,side:ViewSide,voided=false,mana=true):Promise<void>{
- const n=byUid(uid);if(n)await ghostDie(n,side,voided,mana);
+export async function destroyAnim(uid:string,side:ViewSide,voided=false,mana=true,decay=false):Promise<void>{
+ const n=byUid(uid);if(n)await ghostDie(n,side,voided,mana,decay);
 }
 
 /** Random-card outcome popup. Big center card for your plays, compact upper popup for the opponent's. */
