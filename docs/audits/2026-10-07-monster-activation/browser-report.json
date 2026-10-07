@@ -1,0 +1,106 @@
+{
+  "origin": "http://127.0.0.1:5183",
+  "sha": "a5d44229c66d5d952021be9d75ad596fe5c35a06",
+  "checks": [
+    {
+      "label": "half-elf:none",
+      "frames": 300,
+      "maxTriggerActors": 1,
+      "names": [
+        "ハーフエルフ"
+      ],
+      "expectedEvents": 1,
+      "remaining": 0
+    },
+    {
+      "label": "half-elf:own",
+      "frames": 294,
+      "maxTriggerActors": 1,
+      "names": [
+        "ハーフエルフ"
+      ],
+      "expectedEvents": 1,
+      "remaining": 0
+    },
+    {
+      "label": "turn:hexCurse",
+      "frames": 91,
+      "maxTriggerActors": 1,
+      "names": [
+        "見習い呪術師"
+      ],
+      "expectedEvents": 1,
+      "remaining": 0
+    },
+    {
+      "label": "turn:giantGolem",
+      "frames": 91,
+      "maxTriggerActors": 1,
+      "names": [
+        "ジャイアントゴーレム"
+      ],
+      "expectedEvents": 1,
+      "remaining": 0
+    },
+    {
+      "label": "turn:gambler",
+      "frames": 202,
+      "maxTriggerActors": 1,
+      "names": [
+        "ギャンブラー"
+      ],
+      "expectedEvents": 1,
+      "remaining": 0
+    },
+    {
+      "label": "summon:GUNNER",
+      "frames": 295,
+      "maxTriggerActors": 1,
+      "names": [
+        "砲撃兵"
+      ],
+      "expectedEvents": 1,
+      "remaining": 0
+    },
+    {
+      "label": "end:GUNNER",
+      "frames": 8,
+      "maxTriggerActors": 0,
+      "names": [],
+      "expectedEvents": 0,
+      "remaining": 0
+    },
+    {
+      "label": "aura:inactive:NMD6",
+      "aura": "sageDiscount",
+      "clones": [
+        {
+          "kind": "ready",
+          "filter": "drop-shadow(rgba(0, 0, 0, 0.6) 0px 2px 4px) drop-shadow(rgba(255, 122, 77, 0.984) 0px 0px 8.87852px) drop-shadow(rgba(53, 154, 102, 0.46) 0px 0px 3.26619px)"
+        }
+      ]
+    },
+    {
+      "label": "aura:inactive:M10",
+      "aura": "manaGolem",
+      "clones": [
+        {
+          "kind": "ready",
+          "filter": "drop-shadow(rgba(0, 0, 0, 0.6) 0px 2px 4px) drop-shadow(rgba(255, 122, 77, 0.996) 0px 0px 8.98117px) drop-shadow(rgba(53, 154, 102, 0.475) 0px 0px 3.40795px)"
+        }
+      ]
+    },
+    {
+      "label": "aura:inactive:VITAL4",
+      "aura": "rallyGuts",
+      "clones": [
+        {
+          "kind": "ready",
+          "filter": "drop-shadow(rgba(0, 0, 0, 0.6) 0px 2px 4px) drop-shadow(rgb(255, 122, 77) 0px 0px 8.99432px) drop-shadow(rgba(53, 154, 102, 0.49) 0px 0px 3.55054px)"
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "boundary": "Local unchanged runtime controller and board. Real reducer states/events injected through cosmetic studio. Not an authenticated match or staging verification."
+}

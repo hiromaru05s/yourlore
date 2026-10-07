@@ -1,0 +1,15 @@
+{
+  "approvedPaintersUnchanged": true,
+  "rulesFixtures": 28,
+  "productionSuites": {
+    "passed": 62,
+    "total": 62
+  },
+  "browser": "four real-controller cases in browser-runtime.json",
+  "skipDuringCapture": {
+    "passed": true,
+    "liveAfter": 0,
+    "hiddenAfter": 0
+  },
+  "stagingAuthenticatedReplay": false
+}

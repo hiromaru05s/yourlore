@@ -261,7 +261,7 @@ const R: [RegExp, string][] = [
   [/이미 선택한 몬스터입니다|알이 아닙니다/g, "invalid target"],
   [/게임에서 제외/g, "exiled from the game"],
   [/덱에서 1장 선택/g, "pick 1 card from your deck"],
-  [/버린 패에서 1장 선택/g, "pick 1 card from your discard pile"],
+  [/(?:묘지|버린 패)에서 1장 선택/g, "pick 1 card from your graveyard"],
   [/체력 -(\d+) 할 적 몬스터 선택/g, "pick an enemy monster for HP -$1"],
   [/공격력? -(\d+) 할 적 몬스터 선택/g, "pick an enemy monster for ATK -$1"],
   [/공격력? \+(\d+) 할 자신 몬스터 선택/g, "pick your monster for ATK +$1"],
