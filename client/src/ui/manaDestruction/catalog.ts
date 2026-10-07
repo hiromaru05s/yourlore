@@ -12,4 +12,4 @@ export const smooth=(a:number,b:number,t:number)=>{const q=clamp((t-a)/(b-a));re
 export const lerp=(a:P,b:P,t:number):P=>({x:mix(a.x,b.x,t),y:mix(a.y,b.y,t)});
 export const quad=(x:number,y:number,w:number,h:number):Quad=>[{x:x-w/2,y:y-h/2},{x:x+w/2,y:y-h/2},{x:x+w/2,y:y+h/2},{x:x-w/2,y:y+h/2}];
 export const at=(q:Quad,x:number,y:number)=>lerp(lerp(q[0],q[1],x),lerp(q[3],q[2],x),y);
-export function phase(ms:number,v:V){return ms<60?'カード':ms<v.breakAt*.28?'光膜':ms<v.breakAt*.65?'内圧・溜め':ms<v.breakAt?'膨張・臨界':ms<v.joinAt-60?'光の破断':ms<v.joinAt?'一つの光へ':ms<v.arriveAt?'シェルフへ':ms<v.duration-40?'輪郭から復元':'復元完了';}
+export function phase(ms:number,v:V){return ms<60?'カード':ms<v.breakAt*.28?'光膜':ms<v.breakAt*.65?'内圧・溜め':ms<v.breakAt?'膨張・臨界':ms<v.joinAt-60?'光の破断':ms<v.joinAt?'一つの光へ':ms<v.arriveAt?'墓地へ':ms<v.duration-40?'輪郭から復元':'復元完了';}

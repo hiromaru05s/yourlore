@@ -6,7 +6,7 @@ import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {isMimic,focusScale,type MimicId} from './mimic/selection';
 import {playMonster,setMonsterSkip} from './monster/runtime';
 import {summonPlacement} from './summon/runtime';
-import {foldQuestIntoSlot,nativeQuestGhost} from './questFold';
+import {foldQuestIntoSlot,nativeQuestGhost,warmQuestPact} from './questFold';
 import {getManaFormation} from './manaFormationPreview';
 import {passiveIcon} from './passiveIcon';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
@@ -213,6 +213,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   const node = floatAt(cardEl(card, {size:"hand"}), from);
   let held=false;
   try {
+    if(card.t==='quest'&&!fxSkip)void warmQuestPact().catch(()=>{});
     const persistent=dest==='field'&&!!card.ench;
     if(card.t==='spell'&&!persistent&&!fxSkip)warmSpellFrame();
     await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:1);
@@ -225,7 +226,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
         const duration=enchantHasTurnCountdown(card)?`<span class="buff-duration"><span>${getLang()==='ja'?'残り':''}${card.val??1}</span></span>`:'<img class="buff-infinity" src="/art/biblion/modular/infinity-ui.webp" alt="">';
         if(card.t==='quest'){
           const face=questTile(card);
-          if(!fxSkip&&await boardMotionScope(signal=>foldQuestIntoSlot(node,target,face,signal),6500))return face.parentElement;
+          if(!fxSkip&&await boardMotionScope(signal=>foldQuestIntoSlot(node,target,face,signal),8500))return face.parentElement;
           // Interrupted or unavailable renderer: preserve the native placed card.
           if(!target.isConnected)return null;
           return nativeQuestGhost(target,face);

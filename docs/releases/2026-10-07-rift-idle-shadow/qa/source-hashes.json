@@ -1,0 +1,14 @@
+[
+  {
+    "file": "approved-material.ts",
+    "sha256": "52e81e0dd789b49c72185ad88b51ce5537ca17b18995cfd859b59a0734866f7b"
+  },
+  {
+    "file": "../../../client/src/ui/riftIdleMaterial.ts",
+    "sha256": "0116063b489e584d3648722a874deaecf5ef94ed053d04303ccfac2d9bb61801"
+  },
+  {
+    "file": "../../../client/src/ui/riftAperture.ts",
+    "sha256": "52b03c75f70de1f6661fa5781c138f28ece4295fd5de03e9e36b379f3af4c614"
+  }
+]

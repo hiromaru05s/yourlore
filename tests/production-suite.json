@@ -33,6 +33,7 @@
     "tests/purchase-air.mjs",
     "tests/purchase-vfx.mjs",
     "tests/quest-quick.mjs",
+    "tests/quest-pact.mjs",
     "tests/quick-playback.mjs",
     "tests/rank-emblem.mjs",
     "tests/rank-sound.mjs",
@@ -49,6 +50,7 @@
     "tests/trap-removal-tutorial.mjs",
     "tests/production-security.mjs",
     "tests/production-bc.mjs",
+    "tests/match-bots.mjs",
     "tests/duel-opening-server.mjs",
     "tests/dew-shield-server.mjs",
     "tests/deck-hand-editor.mjs",
@@ -61,7 +63,8 @@
     "tests/decay-dissolve.mjs",
     "tests/elemental-adoption.mjs",
     "tests/persistent-flight.mjs",
-    "tests/tribe-synergy-rules.mjs"
+    "tests/tribe-synergy-rules.mjs",
+    "tests/golem-guts.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
