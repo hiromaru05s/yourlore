@@ -1,4 +1,5 @@
 import { npcPortrait } from "../shared/botNpcs";
+import {prepareManaPurchase} from './manaPurchase';
 import {monsterCanAttack} from '../shared/engine';
 import {furnitureUrl} from '../shared/cosmetics';
 import {seekerPortrait} from './seekerAnimation';
@@ -102,6 +103,7 @@ export class GameView {
     delete this.root.dataset.sceneReady;delete this.root.dataset.boardRendered;delete this.root.dataset.preloadedImages;
     this.root.dataset.tableState=typeof WebGL2RenderingContext!=='undefined'?'loading':'fallback';
     this.buildSkeleton();
+    if(!matchMedia('(prefers-reduced-motion: reduce)').matches)void prepareManaPurchase();
     this.cleanups.push(installGameCursor(this.root));
     const mount=typeof WebGL2RenderingContext!=='undefined'
       ? import('./duelScene').then(({mountDuelScene})=>{if(!this.disposed)this.disposeScene=mountDuelScene(this.root);}).catch(()=>{this.root.dataset.tableState='fallback';})
@@ -364,7 +366,7 @@ export class GameView {
     this.root.dataset.readingTurn=g.cur===this.you&&!g.over?'player':'opponent';
   }
 
-  render(g: GameState): void {
+  render(g: GameState): Promise<void> {
     const fieldBefore=fieldPositions(this.root);
     const readyPiles=new Set([...this.root.querySelectorAll('.pile--3d-ready')].map(el=>el.id));
     const oldCards=new Map([...this.root.querySelectorAll<HTMLElement>('.card[data-uid]')].map(el=>[el.dataset.uid,{width:el.offsetWidth,fonts:[...el.querySelectorAll<HTMLElement>('.seal-value')].map(e=>({text:e.textContent,font:e.style.fontSize}))}]));
@@ -462,7 +464,7 @@ export class GameView {
     projectBoardDOM(this.root);
     this.root.dataset.boardRendered="true";
     settleField(this.root,fieldBefore);
-    this.statRise.update(g);
+    return this.statRise.update(g);
   }
 
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {
@@ -962,12 +964,12 @@ export class GameView {
     rb.onclick = () => this.h.onRefresh();
   }
 
-  /** Portrait counters: health upper-left, shield lower-left, Dew upper-right. */
+  /** Portrait counters: health upper-left, shield lower-left, Dew upper-right, Brand lower-right. */
   private renderPortrait(el: HTMLElement, p: PlayerState, isMe: boolean): void {
     const sd = isMe ? "me" : "opp";
     const emax = effMaxMana(p);
     const hp = Math.max(0, p.hp);
-    const shield = Math.max(0, p.shield ?? 0), dew = Math.max(0, p.dew ?? 0);
+    const shield = Math.max(0, p.shield ?? 0), dew = Math.max(0, p.dew ?? 0), brand = Math.max(0, p.brand ?? 0);
     const oldPortrait=el.querySelector<HTMLCanvasElement>('.seeker-motion');
     const oldMana=el.querySelector<HTMLElement>('.pt-mana');
     const previousMax=Number(oldMana?.dataset.maximum??emax),previousMana=Number(oldMana?.dataset.mana??p.mana);
@@ -980,10 +982,10 @@ export class GameView {
       </span>
       <span class="pt-ring">${avatarHtml(npc ? avatar : seeker, p.name, 100)}</span>
       <span class="pt-mana pips" data-mana="${p.mana}" data-maximum="${emax}" data-previous-maximum="${previousMax}" data-previous-mana="${previousMana}" aria-label="${t("game.mana")} ${p.mana}/${emax}"><span class="mana-readout"><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span><span class="mana-crystals" style="--mana-rows:${Math.max(1,Math.ceil(Math.min(MAX_MANA,emax)/10))}">${crystals}</span></span>
-      ${(p.brand ?? 0) > 0 ? `<span class="pt-brand" title="${esc(t("game.brandTip").replace("{n}", String(p.brand)))}">${t("game.brand")} <b>${p.brand}</b></span>` : ""}
-      ${shield > 0 || dew > 0 ? `<span class="pt-resources">
+      ${shield > 0 || dew > 0 || brand > 0 ? `<span class="pt-resources">
         ${shield > 0 ? `<span class="pt-shield" role="img" aria-label="${t('game.shield')} ${p.shield ?? 0}" title="${esc(t('game.shieldTip'))}" style="--resource-number-scale:${Math.min(.14,.32/String(p.shield ?? 0).length)}"><b id="shield-${sd}" aria-hidden="true">${shield}</b></span>` : ""}
         ${dew > 0 ? `<span class="pt-dew" role="img" aria-label="${t('game.dew')} ${p.dew ?? 0}" title="${esc(t('game.dewTip'))}" style="--resource-number-scale:${Math.min(.14,.32/String(p.dew ?? 0).length)}"><b id="dew-${sd}" aria-hidden="true">${dew}</b></span>` : ""}
+        ${brand > 0 ? `<span class="pt-brand" role="img" aria-label="${esc(t('game.brand'))} ${brand}" title="${esc(t('game.brandTip').replace('{n}', String(brand)))}" style="--resource-number-scale:${Math.min(.14,.32/String(brand).length)}"><b id="brand-${sd}" aria-hidden="true">${brand}</b></span>` : ""}
       </span>` : ""}
       <span class="pt-name">${esc(p.name)}</span>`;
     if (!npc) {

@@ -22,6 +22,7 @@ import { BALANCE_VERSION } from "../../client/src/shared/cards";
 import { settleRanked, type RankOutcome } from "./rank";
 import { DUEL_OPENING_MS, OPENING_PREPARE_MS, OPENING_LEAD_MS, OPENING_VERSION } from "../../client/src/shared/opening";
 import { isClientMessage, resolveTurnTimeout } from "./gameInput";
+import { matchBot, matchBotActions, matchBotsEnabled, MATCH_BOT_ACTION_MS } from './matchBots';
 
 interface PlayerRef { id: string; name: string; sleeve?: string | null; furniture?:string|null; deck?: string | null; }
 
@@ -63,6 +64,7 @@ interface RoomData {
       the admin dashboard can chart real game duration (ended_at − created_at). */
   startedAt: number;
   opening?: {version?:number;capable:[boolean,boolean];ready:[boolean,boolean];prepareBy:number|null;startsAt:number|null};
+  bot?: { id: string; side: Side; nextAt: number | null };
 }
 
 const TURN_MS_RANKED = 50000; // ranked: tighter clock
@@ -128,6 +130,7 @@ export class GameRoom {
         startReady: r.startReady ?? [false, false],
         initSent: r.initSent ?? [true, true],
         opening: r.opening,
+        bot: r.bot,
         startedAt: r.startedAt ?? Date.now(), // old blobs: degrade to duration≈0 (excluded by admin query)
       };
     }
@@ -142,7 +145,10 @@ export class GameRoom {
     if (url.pathname === "/setup") {
       if (req.method !== "POST") return new Response("method not allowed", { status: 405 });
       if (this.room) return new Response("already provisioned", { status: 409 });
-      const body = (await req.json()) as { players: [PlayerRef, PlayerRef]; seed: number; ranked?: boolean };
+      const body = (await req.json()) as { players: [PlayerRef, PlayerRef]; seed: number; ranked?: boolean; botId?: string };
+      const bot = body.botId ? matchBot(body.botId) : undefined;
+      if (body.botId && (!matchBotsEnabled(this.env) || !bot || body.players[1]?.id !== bot.id || body.players[0]?.id === bot.id)) return new Response('invalid test bot', {status:403});
+      if (bot) body.players[1] = {id:bot.id,name:bot.name,deck:bot.deck.cards.join(',')};
       const res = createGame({
         mode: "online",
         seed: body.seed,
@@ -154,7 +160,7 @@ export class GameRoom {
         players: body.players,
         game: res.state,
         initEvents: res.events,
-        readied: [false, false],
+        readied: [false, !!bot],
         joinBy: Date.now() + JOIN_GRACE_MS,
         recorded: false,
         ranked: body.ranked ?? false,
@@ -164,11 +170,13 @@ export class GameRoom {
         turnBonusMs: 0,
         previewUntil: null,
         previewDone: !(body.ranked ?? false), // ranked → run the 15s market preview; else start on ready
-        startReady: [false, false],
+        startReady: [false, !!bot],
         initSent: [false, false],
         startedAt: Date.now(),
-        opening: {version:OPENING_VERSION,capable:[false,false],ready:[false,false],prepareBy:null,startsAt:null},
+        opening: {version:OPENING_VERSION,capable:[false,!!bot],ready:[false,!!bot],prepareBy:null,startsAt:null},
+        bot: bot ? {id:bot.id,side:1,nextAt:null} : undefined,
       };
+      if (bot) this.room.game.players[1].botTune = {...bot.deck.tune};
       await this.persist();
       await this.state.storage.setAlarm(this.room.joinBy!);
       return new Response("ok");
@@ -183,6 +191,7 @@ export class GameRoom {
     const side = room.players.findIndex((p) => p.id === userId) as Side | -1;
     if (side === -1) return new Response("not a participant", { status: 403 });
     const sd = side as Side;
+    if (room.bot?.side === sd) return new Response('server controlled participant', {status:403});
 
     // heartbeat pings answered by the runtime without waking the object (exact-string match)
     this.state.setWebSocketAutoResponse(
@@ -343,6 +352,14 @@ export class GameRoom {
       return;
     }
     const times = [...room.forfeitAt, room.joinBy, room.previewUntil, room.opening?.prepareBy].filter((t): t is number => t != null);
+    if (room.bot) {
+      const bot = room.bot;
+      const canAct = room.readied.every(Boolean) && room.previewDone &&
+        (!room.opening || room.opening.startsAt != null) && room.forfeitAt[1-bot.side] == null && actingSide(room.game) === bot.side;
+      const next = canAct ? bot.nextAt ?? Math.max(Date.now(), room.turnStartAt) + MATCH_BOT_ACTION_MS : null;
+      if (next !== bot.nextAt) { bot.nextAt = next; await this.persist(); }
+      if (next != null) times.push(next);
+    }
     // authoritative turn clock: arm the force-end deadline for the running turn
     if (!room.game.over && room.previewDone && room.readied[0] && room.readied[1] && (!room.opening || room.opening.startsAt != null)) {
       times.push(room.turnStartAt + turnMsFor(room.ranked) + (room.turnBonusMs || 0) + TURN_ENFORCE_GRACE_MS);
@@ -423,11 +440,31 @@ export class GameRoom {
       }
     }
 
+    if (!room.game.over && room.bot?.nextAt != null && room.bot.nextAt <= now) await this.runBot();
     await this.persist();
     await this.syncAlarm();
   }
 
-  // -------- game logic (unchanged) --------
+  /** One public-information decision per durable alarm; resumes after hibernation. */
+  private async runBot(): Promise<void> {
+    const room = this.room!, bot = room.bot!;
+    bot.nextAt = null;
+    if (actingSide(room.game) !== bot.side || room.forfeitAt[1-bot.side] != null || Date.now() < room.turnStartAt) return;
+    for (const action of matchBotActions(room.game, bot.side)) {
+      // Engine validation uses the authoritative state, never the strategy's redacted copy.
+      const result = reduce(room.game, action);
+      if (result.state.turn === room.game.turn && result.state.cur === room.game.cur &&
+          !result.state.over && !result.events.some(event => event.type !== 'log') &&
+          JSON.stringify(result.state.pending) === JSON.stringify(room.game.pending)) continue;
+      await this.handleAction(bot.side, action);
+      return;
+    }
+    console.error('match_bot_no_action', bot.id, room.game.pending?.reason);
+    // The normal server turn timeout remains armed if an unknown future card has no valid choice.
+    bot.nextAt = Date.now() + 10000;
+  }
+
+  // -------- game logic --------
 
   private async handleAction(side: Side, action: Action): Promise<void> {
     const room = this.room!;
@@ -469,6 +506,7 @@ export class GameRoom {
     // persisted, permanently dropping the W/L + Elo + match row for the common
     // in-game ending (lethal/surrender). Awaiting keeps the object alive.
     if (room.game.over) await this.recordResult();
+    if (room.bot) await this.syncAlarm();
   }
 
   /** Redacted state for `side`, stamped with the turn's remaining/total ms (server-authoritative clock). */

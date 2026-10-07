@@ -56,9 +56,9 @@ async function play(){
  // Keep target.canvas parented to the actual card during shared mdie. Its
  // transform/opacity follow that node; never reveal an unmarked original.
  source?.canvas.remove();source=undefined;ctx.clearRect(0,0,canvas.width,canvas.height);
- api.phase='接触 → 既定の破壊 → シェルフ';
+ api.phase='接触 → 既定の破壊 → 墓地';
  for(const e of events)if(e.type==='destroy')await destroyAnim(e.uid,e.player===0?'me':'opp');
- if(run!==token)return;cleanup();view.render(structuredClone(after!));view.setHandOpen(false);busy=false;api.phase='結果確定 · ELF存続 / 対象はシェルフ';
+ if(run!==token)return;cleanup();view.render(structuredClone(after!));view.setHandOpen(false);busy=false;api.phase='結果確定 · ELF存続 / 対象は墓地';
 }
 const api={ready:false,reduced:matchMedia('(prefers-reduced-motion: reduce)').matches,phase:'素材を準備中',get busy(){return busy;},get time(){return time;},get variant(){return selectedVariant;},get evidence(){return {initEvents,events,before:baseline,after};},async choose(v:Variant,side:0|1=0){selectedVariant=v;if(owner!==side){owner=side;setupState();}await reset();},reset,seek,play,keys,lengths,dispose(){run++;cancelAnimationFrame(frame);finishLead?.();finishLead=undefined;setFxSkip(true);cleanup();canvas.remove();stopLayout();view.destroy();}};
 (window as any).seriesBR2Board=api;
