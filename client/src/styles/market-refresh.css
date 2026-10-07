@@ -1,0 +1,14 @@
+/* Keep the motion in the supply's own projected plane, including mobile. */
+#supplyMarket[data-market-refresh]{position:relative;transform-style:preserve-3d;}
+.market-refresh-layer{position:absolute;inset:0;pointer-events:none;transform-style:preserve-3d;}
+.market-refresh-tile{position:absolute;pointer-events:none;transform-style:preserve-3d;}
+.market-refresh-body{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform;}
+.market-refresh-front,.market-refresh-back{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.market-refresh-front{transform:translateZ(.35px);}
+.market-refresh-front>.card,.market-refresh-front>.slot{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;margin:0!important;transform:none!important;transition:none!important;}
+.market-refresh-front .mkt-stock,.market-refresh-front .watch-dot{display:none;}
+.market-refresh-front .card-art-img{transition:none;}
+.market-refresh-back{transform:rotateY(180deg) translateZ(.35px);background-size:100% 100%;background-repeat:no-repeat;border-radius:5%;background-color:#282335;box-shadow:inset 0 0 0 1px #c4a46b,inset 0 0 0 3px #231b29;}
+.market-refresh-back::after{content:'';position:absolute;inset:3%;border-radius:4%;background:linear-gradient(115deg,transparent 22%,#ffdf9626 42%,#fff7d66b 49%,#b9955526 53%,transparent 70%);opacity:var(--refresh-glint,0);}
+.market-refresh-edge{position:absolute;inset:1%;border:1px solid #d6b578;border-radius:5%;transform:translateZ(-.35px);opacity:var(--refresh-glint,0);pointer-events:none;}
+.market-refresh-shadow{position:absolute;inset:3% 1%;border-radius:8%;background:#191b25;filter:blur(3px);transform:translateZ(0);opacity:.23;}

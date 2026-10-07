@@ -7,6 +7,7 @@ import {playTribeSynergy} from '../ui/tribeSynergy/runtime';
 import type {Playback} from '../ui/elemental/runtime';
 import {persistentShelfExits} from './shelfExits';
 import {installHandDiscard} from '../ui/handDiscard';
+import {captureSupplyFaces,playSupplyRefresh,supplyWasRefreshed} from '../ui/marketRefresh';
 import {prepareStateArtwork} from '../ui/stateArtwork';
 import {captureHandLayout,arrivingHandUids} from '../ui/handGeometry';
 import {playDuelOpening,warmOpening} from "../ui/duelOpeningDirector";
@@ -85,6 +86,7 @@ export abstract class BaseController implements BoardHandlers {
   private turnTotal = 90; // full length of the CURRENT turn (for the ring's full-scale)
   private turnStartedWall = 0; // wall-clock ms when the current turn's timer started (anti instant-skip)
   private disposeHandDiscard:(()=>void)|undefined;
+  private marketRefresh:ReturnType<typeof playSupplyRefresh>|undefined;
   private presentedHandDiscards=new Set<string>();
   private handCapBonusKey = ""; // v42: turn key that already received the +10s hand-discard bonus
   private multiPickerOpen = false; // a cardPickerMulti modal is showing (closed when its pending vanishes)
@@ -120,6 +122,7 @@ export abstract class BaseController implements BoardHandlers {
 
   /** The player acted — fast-forward any still-playing batches so input never waits. */
   protected fastForward(): void {
+    this.marketRefresh?.cancel();
     this.skipGen = this.fxGen;
     stopSounds();
     A.setFxSkip(true);
@@ -182,6 +185,11 @@ export abstract class BaseController implements BoardHandlers {
   private async reviewPurchase(type:'buyMarket'|'buySupply',i:number) {
     this.fastForward();const before=this.state;
     if(this.dead||before.over||before.pending||before.cur!==this.you||this.castReviewState)return;
+    if(type==='buySupply') {
+      // Preserve the refresh guard: never buy a new offer through an old tile.
+      const shown=this.view.root.querySelector<HTMLElement>(`#supplyMarket > .card[data-sup-idx="${i}"]`);
+      if(!shown||shown.dataset.uid!==before.players[this.you].supply[i]?.uid)return;
+    }
     const c=type==='buyMarket'?before.market[i]:before.players[this.you].supply[i];
     if(c?.quick){this.castReviewState=before;const result=await reviewCast(before,this.you,c,null,true);this.castReviewState=null;if(result===null||this.dead||this.state!==before)return;}
     this.submit({type,i});
@@ -593,9 +601,14 @@ export abstract class BaseController implements BoardHandlers {
     }
     const handLayouts=[draws[this.you]>0?captureHandLayout(document.getElementById('hand')):undefined,
       draws[1-this.you]>0?captureHandLayout(document.getElementById('oppHand')):undefined];
+    const supplyFaces=!A.isFxSkipped()&&supplyWasRefreshed(prev,res.state)?captureSupplyFaces(this.view.root):undefined;
     // Stat animations belong to this batch too: automatic follow-ups must not
     // replace their source cards before all targets finish their shared motion.
     effectFinishes.push(this.view.render(res.state));
+    if(supplyFaces){
+      const refresh=playSupplyRefresh(this.view.root,supplyFaces);this.marketRefresh=refresh;
+      effectFinishes.push(refresh.done.finally(()=>{if(this.marketRefresh===refresh)this.marketRefresh=undefined;}));
+    }
     for(const gain of manaGains)effectFinishes.push(A.manaSurge(gain.side,gain.amount));
     // ghosts overlap the freshly-rendered real cards — drop them next frame
     requestAnimationFrame(() => {ghosts.forEach((g) => g.el.remove());spellGhosts.forEach(g=>g.remove());});
@@ -1024,6 +1037,7 @@ export abstract class BaseController implements BoardHandlers {
   private clearQuickFaces():void {this.elementalFaces.splice(0).forEach(x=>x.node.remove());this.quickFaces.splice(0).forEach(x=>x.node.remove());}
 
   destroy(): void {
+    this.marketRefresh?.cancel();
     this.disposeHandDiscard?.();
     this.dead = true;
     this.rankPresentation.destroy();
