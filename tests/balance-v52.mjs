@@ -13,7 +13,7 @@ try {
  const fresh=()=>{const g=createGame({mode:'online',seed:17,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;for(const p of g.players)Object.assign(p,{hand:[],deck:[],discard:[],removed:[],field:[],enchants:[],traps:[],quests:[],hp:40,maxHp:100,mana:20,maxMana:20,uses:{},usesTurn:{}});g.phase='main';g.turn=3;g.pending=null;return g;};
  const play=(g,id)=>{g.players[g.cur].hand.push(card(id));return reduce(g,{type:'play',idx:g.players[g.cur].hand.length-1}).state;};
  const test=(name,fn)=>{fn();passed++;console.log('PASS',name);};
- test('v52 catalog and purchase/play costs',()=>{assert.equal(BALANCE_VERSION,'v54');assert.equal(buyCost(fresh().players[0],card('AJIN')),4);assert.equal(playCost(card('AJIN'),fresh().players[0]),2);assert.equal(playCost(card('ELF_HAVEN'),fresh().players[0]),4);assert.deepEqual([DB.M11.atk,DB.M11.def],[5,3]);assert.deepEqual([DB.MIMIC2.atk,DB.MIMIC2.def],[12,6]);});
+ test('v52 catalog and purchase/play costs',()=>{assert.equal(BALANCE_VERSION,'v55');assert.equal(buyCost(fresh().players[0],card('AJIN')),4);assert.equal(playCost(card('AJIN'),fresh().players[0]),2);assert.equal(playCost(card('ELF_HAVEN'),fresh().players[0]),4);assert.deepEqual([DB.M11.atk,DB.M11.def],[5,3]);assert.deepEqual([DB.MIMIC2.atk,DB.MIMIC2.def],[12,6]);});
  for(const id of ['DISCOVERY_SMALL','DISCOVERY','DISCOVERY_LARGE'])test(id+' same copy recycling, different copy, persistence, next turn reset',()=>{
   let g=fresh();g.players[0].mana=0;g=play(g,id);assert.equal(g.players[0].usesTurn[id],1);assert(g.players[0].hand.some(c=>c.id===id));
   g.players[0].hand.push(card(id));g=JSON.parse(JSON.stringify(g));
