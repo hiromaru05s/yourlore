@@ -357,9 +357,16 @@ export abstract class BaseController implements BoardHandlers {
           }else await A.attackStrike(e.uid,e.targetUid,defender,()=>eventSound.contact(e.targetUid,(1-e.player) as Side,e.contactDamage!==0),exhaust,e.contactDamage);
           break;
         }
-        case "monsterActivate":
-          await A.monsterActivation(e.uid);
+        case "monsterActivate": {
+          // Several sources reacting to the same event should be visible together.
+          const uids = new Set([e.uid]);
+          while (events[i + 1]?.type === 'monsterActivate') {
+            const next = events[++i];
+            if (next.type === 'monsterActivate') uids.add(next.uid);
+          }
+          await Promise.all([...uids].map(uid => A.monsterActivation(uid)));
           break;
+        }
         case "hit":
           A.monHit(e.uid);
           if(!elemental.size)await wait(110);

@@ -24,6 +24,7 @@
     "tests/menu-records.mjs",
     "tests/menu-selected.mjs",
     "tests/monster-animation-rules.mjs",
+    "tests/monster-effect-activation.mjs",
     "tests/motion-v2.mjs",
     "tests/opening-hands.mjs",
     "tests/paper-card.mjs",
