@@ -363,7 +363,7 @@ export class GameView {
     this.root.dataset.readingTurn=g.cur===this.you&&!g.over?'player':'opponent';
   }
 
-  render(g: GameState): void {
+  render(g: GameState): Promise<void> {
     const fieldBefore=fieldPositions(this.root);
     const readyPiles=new Set([...this.root.querySelectorAll('.pile--3d-ready')].map(el=>el.id));
     const oldCards=new Map([...this.root.querySelectorAll<HTMLElement>('.card[data-uid]')].map(el=>[el.dataset.uid,{width:el.offsetWidth,fonts:[...el.querySelectorAll<HTMLElement>('.seal-value')].map(e=>({text:e.textContent,font:e.style.fontSize}))}]));
@@ -461,7 +461,7 @@ export class GameView {
     projectBoardDOM(this.root);
     this.root.dataset.boardRendered="true";
     settleField(this.root,fieldBefore);
-    this.statRise.update(g);
+    return this.statRise.update(g);
   }
 
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {

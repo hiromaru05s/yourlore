@@ -1,3 +1,4 @@
+import {persistentShelfExits} from './shelfExits';
 import {installHandDiscard} from '../ui/handDiscard';
 import {prepareStateArtwork} from '../ui/stateArtwork';
 import {captureHandLayout,arrivingHandUids} from '../ui/handGeometry';
@@ -320,10 +321,11 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "destroy": {
           const gh = ghosts.get(e.uid);
+          const shelved=res.state.players[e.player].discard.some(c=>c.uid===e.uid);
           const exiled=res.state.players[e.player].removed?.find(c=>c.uid===e.uid);
           if(exiled){await (gh?A.ghostDie(gh.el,gh.side,true):A.destroyAnim(e.uid,sideOf(e.player),true));if(gh&&!gh.el.closest(".zone-mon"))gh.el.remove();ghosts.delete(e.uid);}
-          else if (gh) { await A.ghostDie(gh.el, gh.side); ghosts.delete(e.uid); }
-          else await A.destroyAnim(e.uid, sideOf(e.player));
+          else if (gh) { await A.ghostDie(gh.el, gh.side,false,shelved); ghosts.delete(e.uid); }
+          else await A.destroyAnim(e.uid, sideOf(e.player),false,shelved);
           releaseMonster(e.uid);
           fieldCount[e.player] = Math.max(0, fieldCount[e.player] - 1);
           break;
@@ -430,6 +432,12 @@ export abstract class BaseController implements BoardHandlers {
       }
     }
 
+    // Expiry and removal of public spells/quests often emit logs rather than destroy.
+    await Promise.all(persistentShelfExits(prev,res.state,events).map(async({player,card})=>{
+      if(!A.isFxSkipped())sfx('death');
+      await A.destroyAnim(card.uid,sideOf(player));
+    }));
+
     // Overflow picks emit logs only; animate the public zone delta before commit.
     for(const pl of [0,1] as Side[]){
       const inHand=new Set(prev.players[pl].hand.map(c=>c.uid));
@@ -490,7 +498,9 @@ export abstract class BaseController implements BoardHandlers {
     }
     const handLayouts=[draws[this.you]>0?captureHandLayout(document.getElementById('hand')):undefined,
       draws[1-this.you]>0?captureHandLayout(document.getElementById('oppHand')):undefined];
-    this.view.render(res.state);
+    // Stat animations belong to this batch too: automatic follow-ups must not
+    // replace their source cards before all targets finish their shared motion.
+    effectFinishes.push(this.view.render(res.state));
     for(const gain of manaGains)effectFinishes.push(A.manaSurge(gain.side,gain.amount));
     // ghosts overlap the freshly-rendered real cards — drop them next frame
     requestAnimationFrame(() => {ghosts.forEach((g) => g.el.remove());spellGhosts.forEach(g=>g.remove());});

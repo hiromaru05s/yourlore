@@ -40,6 +40,7 @@
     "tests/solid-draw.mjs",
     "tests/stagecraft-models.mjs",
     "tests/stat-rise.mjs",
+    "tests/multi-target-buff.mjs",
     "tests/trap-related-rework.mjs",
     "tests/trap-removal.mjs",
     "tests/ceremony-audio-aim.mjs",
@@ -53,7 +54,8 @@
     "tests/opening-approved.mjs",
     "tests/mimic-approved.mjs",
     "tests/slate-summon.mjs",
-    "tests/spell-frame.mjs"
+    "tests/spell-frame.mjs",
+    "tests/mana-destruction.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
