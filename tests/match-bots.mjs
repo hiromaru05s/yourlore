@@ -3,8 +3,8 @@ import fs from 'node:fs/promises';
 import {build} from 'esbuild';
 import {DatabaseSync} from 'node:sqlite';
 const tmp=await fs.mkdtemp('/tmp/lore-match-bots-');
-await build({stdin:{contents:`export {Matchmaker} from './server/src/matchmaker'; export {GameRoom} from './server/src/gameRoom'; export * from './server/src/matchBots'; export {actingSide,reduce} from './client/src/shared/engine'; export {OPENING_VERSION} from './client/src/shared/opening';`,resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:tmp+'/test.mjs'});
-const {Matchmaker,GameRoom,MATCH_BOTS,ensureMatchBots,matchBotActions,actingSide,OPENING_VERSION}=await import(tmp+'/test.mjs');
+await build({stdin:{contents:`export {Matchmaker} from './server/src/matchmaker'; export {GameRoom} from './server/src/gameRoom'; export * from './server/src/matchBots'; export {actingSide,reduce} from './client/src/shared/engine'; export {OPENING_VERSION} from './client/src/shared/opening'; export {DB as CARDS} from './client/src/shared/cards';`,resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:tmp+'/test.mjs'});
+const {Matchmaker,GameRoom,MATCH_BOTS,ensureMatchBots,matchBotActions,actingSide,OPENING_VERSION,CARDS}=await import(tmp+'/test.mjs');
 let now=Date.now();const realNow=Date.now;Date.now=()=>now;
 globalThis.WebSocket={OPEN:1};
 const timers=new Set(),realSet=setInterval,realClear=clearInterval;
@@ -57,6 +57,14 @@ try{
  });
  await test('all ten profiles complete multi-turn gameplay without rejected-action loops',async()=>{
   for(let i=0;i<10;i++){const f=await fixture(false,i,100+i);await start(f);let steps=0;while(f.saved().game.turn<7&&!f.saved().game.over&&steps++<180){const g=f.saved().game;if(actingSide(g)===1){const deadline=f.alarm();assert(deadline!=null);now=Math.max(now+1,deadline);await f.room.alarm();}else{const action=g.pending?matchBotActions(g,0)[0]:{type:'endTurn'};await f.send({type:'action',action});now+=1500;}}assert(steps<180,`BOT ${i+1} made no progress`);assert(f.saved().game.turn>=7||f.saved().game.over);}
+ });
+ await test('BOT answers defender-owned choices during the human turn',async()=>{
+  const f=await fixture(false,0,22);await start(f);const g=f.room.room.game;g.turn=3;g.cur=0;g.pending=null;
+  let seq=0;const mon=id=>({...CARDS[id],uid:'choice-'+(++seq),dmg:0,exhausted:false,atkMod:0,defMod:0,tempAtk:0,summonedTurn:0});
+  for(const p of g.players)Object.assign(p,{hand:[],deck:[],field:[],enchants:[],traps:[],quests:[],dew:5,shield:12,hp:100,mana:30,maxMana:30});
+  g.players[0].field=[mon('M1'),mon('WORLD_TREE')];g.players[1].field=[mon('M2'),mon('WORLD_TREE')];g.players[1].field[0].def=30;
+  await f.send({type:'action',action:{type:'attack',uid:g.players[0].field[0].uid}});await f.send({type:'action',action:{type:'pick',uid:g.players[1].field[0].uid}});await f.send({type:'action',action:{type:'pick',uid:'grow'}});
+  assert.equal(f.saved().game.pending.owner,1);assert.equal(f.saved().game.cur,0);assert(f.saved().bot.nextAt>now);f.restore();now=f.alarm();await f.room.alarm();assert.equal(f.saved().game.pending,null);assert.equal(f.saved().game.players[1].field[0].defMod,6);assert.equal(f.saved().bot.nextAt,null,'return control to human');
  });
  await test('ranked result uses real exactly-once receipt and survives restore',async()=>{
   const f=await fixture(true);await start(f,true);await f.send({type:'action',action:{type:'surrender',player:0}});const receipt=f.ws.messages.find(m=>m.type==='rankResult');assert(receipt);assert(receipt.after<receipt.before);assert(f.saved().recorded);const count=db.prepare('SELECT COUNT(*) n FROM ranked_results WHERE match_id=?').get(f.id+'-room').n;assert.equal(count,1);const after=db.prepare('SELECT mmr FROM ratings WHERE user_id=?').get(f.id).mmr;f.restore();await f.room.alarm();await f.send({type:'ready',openingVersion:OPENING_VERSION});assert.equal(f.ws.messages.at(-1).type,'rankResult');assert.equal(db.prepare('SELECT mmr FROM ratings WHERE user_id=?').get(f.id).mmr,after);assert.equal(db.prepare('SELECT losses FROM users WHERE id=?').get(f.id).losses,1);
