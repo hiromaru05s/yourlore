@@ -4476,7 +4476,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       // 주의: 이 시점에 리콜 카드 자신이 이미 p.discard 에 들어가 있다(플레이 시 push).
       // 그래서 예전엔 묘지가 "비어 있어도" length>=1 이라 발동됐고, 자기 자신을 회수할 수도 있었다.
       if (!p.discard.some((c) => c.uid !== card.uid)) { ctx.log("  └ 묘지가 비어 있습니다", "  └ 墓地が空です"); return; }
-      g.pending = { kind: "recall", hint: "버린 패에서 1장 선택", hintJa: "捨て札から1枚選択", reason: "recall", allowCancel: true, data: { exclude: card.uid } };
+      g.pending = { kind: "recall", hint: "묘지에서 1장 선택", hintJa: "墓地から1枚選択", reason: "recall", allowCancel: true, data: { exclude: card.uid } };
       ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
     }
     if (a === "exilePick") {

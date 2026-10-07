@@ -35,10 +35,10 @@ export function military(b:Board,key:string,t:number):boolean{
   if(art){for(const e of [own,uid(1)]){buff(e,'atk',3,3200);buff(e,'def',3,3270)}}
   b.sceneLabel=startTurn?'自分のターン開始 → 兵士召喚':art?'傭兵の効果を2回発動':t<1000?'契約 → 傭兵召喚':'兵士召喚 → カジノのダイス';return true;
  }
- if(key==='A128'){const knight=uid(0),cavalry=uid(1);dieCoat(knight,1350);spawn(cavalry,1650);b.sceneLabel=t<1350?'騎士を選択':'騎士がシェルフへ → 騎馬兵召喚';return true;}
+ if(key==='A128'){const knight=uid(0),cavalry=uid(1);dieCoat(knight,1350);spawn(cavalry,1650);b.sceneLabel=t<1350?'騎士を選択':'騎士が墓地へ → 騎馬兵召喚';return true;}
  if(key==='A012'||key==='A007'){
   const enabled=id!=='QUICK_MUSTER'||b.condition;for(let j=0;j<3;j++){spawn(uid(j),450+j*430,enabled);if(key==='A012')dieCoat(uid(j),3500);}
-  b.sceneLabel=!enabled?'城がないため購入不可':t<3000?'3体を順番に召喚':key==='A012'?'相手ターン終了 → 3体をシェルフへ':'召喚完了';return true;
+  b.sceneLabel=!enabled?'城がないため購入不可':t<3000?'3体を順番に召喚':key==='A012'?'相手ターン終了 → 3体を墓地へ':'召喚完了';return true;
  }
  if(key==='A034'||key==='S21'&&id==='CASTLE'&&b.trigger==='block'){
   count(own,t<1600?2:1);panel(own,pulse(t,700,1500,2400));if(t>=1100&&t<1850)b.attack(enemy,own,t-1100);b.sceneLabel=t<1600?'攻撃を受け止める':'城のカウンター1個を消費 → ダメージ無効';return true;
@@ -53,7 +53,7 @@ export function military(b:Board,key:string,t:number):boolean{
  if(key==='castle-reward'){for(let j=0;j<3;j++)spawn(uid(j),1600+j*450,b.condition);b.sceneLabel=t<1400?'城の継続 8 → 9ターン':b.condition?'条件達成 → 騎士3体召喚':'城の不在で継続が途切れる';return true;}
  if(key==='town-reward'){spawn(uid(0),400);spawn(uid(1),1250);const wine=b.el('r3-town-wine');if(wine){wine.style.visibility=t<2050||!b.condition?'hidden':b.nativeDone.has('r3-town-wine')?'hidden':'';panel(wine,pulse(t,2050,2400,2800),t-2050);}const reward=b.el('r3-reward');spawn(reward,2950,b.condition);b.sceneLabel=t<1100?'兵士召喚を達成':t<1900?'カジノ召喚を達成':t<2800?'ワイン発動を達成':b.condition?'街づくり達成 → 支配を手札へ':'未達成 → 報酬なし';return true;}
  if(key==='A001'){spawn(source,180);b.sceneLabel='カードの表面から部材を起こして召喚';return true;}
- if(id==='GM6_8'&&b.trigger==='death'){dieCoat(source,1350);spawn(uid(1),1700);b.sceneLabel=t<1350?'将兵が致命傷を受ける':'将兵がシェルフへ → 兵士召喚';return true;}
+ if(id==='GM6_8'&&b.trigger==='death'){dieCoat(source,1350);spawn(uid(1),1700);b.sceneLabel=t<1350?'将兵が致命傷を受ける':'将兵が墓地へ → 兵士召喚';return true;}
  if(id==='GM6_7'&&b.trigger==='enemy-summon'){spawn(enemy,200);dice(1,1100,b.condition?5:2);spawn(uid(1),2100,b.condition);b.sceneLabel=b.condition?'相手召喚 → ダイス5 → 騎士召喚':'相手召喚 → ダイス2 → 召喚なし';return true;}
  spawn(source,150);
  if(id==='CASTLE'){count(source,t<900?0:t<2100?2:b.trigger==='ally-summon'?3:2);if(b.trigger==='ally-summon')spawn(uid(1),1600);}
