@@ -1,3 +1,4 @@
+import {holdRiftTarget} from '../riftActivity';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface,CARD_PADDING} from '../cardSurface';
 import {projectedPlacement,boardPoint} from '../boardProjection';
@@ -5,7 +6,6 @@ import {RIFT_MOUNT,readingScale} from '../readingBoardLayout';
 import {acquireObsidian,DURATION,state} from './renderer';
 
 const active=new Map<HTMLElement,()=>void>();
-const receivers=new Map<HTMLElement,number>();
 export function cancelRiftDestruction(root?:HTMLElement){for(const [node,cancel]of [...active])if(!root||root.contains(node))cancel();}
 /** Approved rich 01. One projected source surface continues into a screen-space transfer. */
 export function playRiftDestruction(node:HTMLElement,target:HTMLElement,signal?:AbortSignal):Promise<boolean>{
@@ -13,12 +13,12 @@ export function playRiftDestruction(node:HTMLElement,target:HTMLElement,signal?:
  if(signal?.aborted||document.hidden||!node.isConnected||!target.isConnected)return Promise.resolve(false);
  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return Promise.resolve(true);
  return new Promise(resolve=>{
-  let done=false,raf=0,hidden=false,receiving=false,release:(()=>void)|undefined,local:HTMLCanvasElement|undefined,canvas:HTMLCanvasElement|undefined,host:HTMLElement|undefined;
+  let done=false,raf=0,hidden=false,releaseTarget:(()=>void)|undefined,release:(()=>void)|undefined,local:HTMLCanvasElement|undefined,canvas:HTMLCanvasElement|undefined,host:HTMLElement|undefined;
   const visibility=node.style.visibility,width=innerWidth,height=innerHeight,begin=performance.now();
   const finish=(complete:boolean)=>{
    if(done)return;done=true;clearTimeout(deadline);cancelAnimationFrame(raf);local?.remove();canvas?.remove();host?.remove();release?.();
    if(hidden)node.style.visibility=visibility;
-   if(receiving){const n=(receivers.get(target)??1)-1;if(n)receivers.set(target,n);else{receivers.delete(target);target.classList.remove('is-absorbing');}}
+   releaseTarget?.();
    signal?.removeEventListener('abort',cancel);window.removeEventListener('resize',cancel);window.removeEventListener('pagehide',cancel);document.removeEventListener('visibilitychange',onHidden);
    if(active.get(node)===cancel)active.delete(node);
    window.dispatchEvent(new CustomEvent('lore:rift-destruction-finished',{detail:{complete,variant:'obsidian-01',elapsed:Math.round(performance.now()-begin)}}));resolve(complete);
@@ -50,7 +50,7 @@ export function playRiftDestruction(node:HTMLElement,target:HTMLElement,signal?:
    };
    // Compile/upload before the source disappears or the animation clock starts.
    paint(0);if(invalid()){cancel();return;}document.body.append(canvas,local);node.style.visibility='hidden';hidden=true;
-   receivers.set(target,(receivers.get(target)??0)+1);target.classList.add('is-absorbing');receiving=true;
+   releaseTarget=holdRiftTarget(target);
    const started=performance.now();
    const tick=(now:number)=>{if(invalid()){cancel();return;}try{const ms=Math.min(DURATION,now-started);paint(ms);if(ms===DURATION)finish(true);else raf=requestAnimationFrame(tick);}catch{cancel();}};
    raf=requestAnimationFrame(tick);

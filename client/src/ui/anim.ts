@@ -1,3 +1,4 @@
+import {holdRiftTarget} from './riftActivity';
 import {cancelTribeSynergy} from './tribeSynergy/runtime';
 import type {ElementalEvent,Playback} from './elemental/runtime';
 import {flyPersistentIntoSlot} from './persistentFlight';
@@ -917,11 +918,10 @@ async function landOnShelf(node:HTMLElement,side:ViewSide):Promise<void>{
     observer.observe(document.body,{subtree:true,childList:true});setTimeout(()=>{copy.remove();observer.disconnect();},5000);
   }
 }
-const riftUsers=new WeakMap<HTMLElement,number>();
 export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<void>{
   const target=document.getElementById(side==='me'?'rift-me':'rift-opp');if(!target||fxSkip)return;
   const a=node.getBoundingClientRect();
-  riftUsers.set(target,(riftUsers.get(target)??0)+1);target.classList.add('is-absorbing');
+  const releaseTarget=holdRiftTarget(target);
   const w=node.offsetWidth||a.width,h=node.offsetHeight||a.height;
   const start=node.style.transform.startsWith('matrix')?new DOMMatrix(node.style.transform):new DOMMatrix().translate(a.left,a.top).scale(a.width/w,a.height/h);
   const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -939,7 +939,7 @@ export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<voi
     const duration=reduced?100:350;
     const motion=node.animate([{transform:start.toString()},{transform:end.toString()}],{duration,easing:'cubic-bezier(.55,.02,.6,1)',fill:'forwards'});
     try{await wait(duration);}finally{motion.cancel();}
-  }finally{const left=(riftUsers.get(target)??1)-1;if(left>0)riftUsers.set(target,left);else{riftUsers.delete(target);target.classList.remove('is-absorbing');}}
+  }finally{releaseTarget();}
 }
 export async function exileCard(card:CardInst,side:ViewSide,source?:HTMLElement|null):Promise<void>{
   const r=source?.getBoundingClientRect()||rectOf('#'+discId(side));if(!r)return;
