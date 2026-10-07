@@ -1,0 +1,78 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "sha": "dbddbccd6fdbc13ecbab688e25199425ddfd8b7e",
+  "summon": {
+    "file": "assets/modal-D-zNFPca.js",
+    "name": "aR"
+  },
+  "cardEl": {
+    "file": "assets/modal-D-zNFPca.js",
+    "name": "y"
+  },
+  "results": [
+    {
+      "id": "ELF",
+      "side": "me",
+      "wrap": {
+        "cardId": "ELF",
+        "variant": "2",
+        "time": "744"
+      }
+    },
+    {
+      "id": "DARK_ELF",
+      "side": "opp",
+      "wrap": {
+        "cardId": "DARK_ELF",
+        "variant": "2",
+        "time": "748"
+      }
+    },
+    {
+      "id": "HIGH_ELF",
+      "side": "me",
+      "wrap": {
+        "cardId": "HIGH_ELF",
+        "variant": "2",
+        "time": "736"
+      }
+    },
+    {
+      "id": "ELDER_ELF_KING",
+      "side": "opp",
+      "wrap": {
+        "cardId": "ELDER_ELF_KING",
+        "variant": "2",
+        "time": "740"
+      }
+    },
+    {
+      "id": "WORLD_TREE",
+      "side": "me",
+      "wrap": {
+        "cardId": "WORLD_TREE",
+        "variant": "2",
+        "time": "744"
+      }
+    },
+    {
+      "id": "HALF_ELF",
+      "side": "opp",
+      "wrap": {
+        "cardId": "HALF_ELF",
+        "variant": "1",
+        "time": "748"
+      }
+    },
+    {
+      "id": "VITAL2",
+      "animation": "none"
+    },
+    {
+      "id": "VITAL3",
+      "animation": "none"
+    }
+  ],
+  "errors": [],
+  "boundary": "Deployed production playMonster and cardEl on a real BOT board. Account/API and temporary field cards are fixtures; engine summon conditions are not bypassed in an authenticated match. Normal hand/generated routes were tested locally. No authenticated online match or account mutation."
+}
