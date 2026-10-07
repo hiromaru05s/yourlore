@@ -35,3 +35,11 @@ targets, reduced motion and skip cleanup. It records actual renderer target
 coordinates and continuous video. Visual review and functional checks are
 reported separately in the release evidence; no authenticated online match is
 claimed.
+
+Local results: combat-anchor regression passed; 12 browser cases passed with no
+page errors or remaining transient effects; client/server typecheck passed;
+clean-install build passed after integration with shared main. `playback.mp4`
+contains the continuous recording. Renderer input coordinates confirm that the
+same invalid-copy setup reaches the intended card on both sides and screen
+sizes. The normal artwork and VFX drawing routines were not edited; this is a
+routing repair, not approval of a new visual design.
