@@ -1,0 +1,112 @@
+{
+  "parity": [
+    {
+      "w": 96,
+      "h": 160,
+      "t": 0,
+      "mae": 0,
+      "max": 0
+    },
+    {
+      "w": 96,
+      "h": 160,
+      "t": 0.25,
+      "mae": 0,
+      "max": 0
+    },
+    {
+      "w": 96,
+      "h": 160,
+      "t": 1,
+      "mae": 0,
+      "max": 0
+    },
+    {
+      "w": 96,
+      "h": 160,
+      "t": 2.5,
+      "mae": 0,
+      "max": 0
+    },
+    {
+      "w": 96,
+      "h": 160,
+      "t": 5,
+      "mae": 0,
+      "max": 0
+    },
+    {
+      "w": 96,
+      "h": 160,
+      "t": 10,
+      "mae": 0,
+      "max": 0
+    },
+    {
+      "w": 96,
+      "h": 160,
+      "t": 17,
+      "mae": 0,
+      "max": 0
+    },
+    {
+      "w": 192,
+      "h": 320,
+      "t": 0,
+      "mae": 0,
+      "max": 0
+    },
+    {
+      "w": 192,
+      "h": 320,
+      "t": 0.25,
+      "mae": 0,
+      "max": 0
+    },
+    {
+      "w": 192,
+      "h": 320,
+      "t": 1,
+      "mae": 0,
+      "max": 0
+    },
+    {
+      "w": 192,
+      "h": 320,
+      "t": 2.5,
+      "mae": 0,
+      "max": 0
+    },
+    {
+      "w": 192,
+      "h": 320,
+      "t": 5,
+      "mae": 0,
+      "max": 0
+    },
+    {
+      "w": 192,
+      "h": 320,
+      "t": 10,
+      "mae": 0,
+      "max": 0
+    },
+    {
+      "w": 192,
+      "h": 320,
+      "t": 17,
+      "mae": 0,
+      "max": 0
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "approved 03 pixel equality at 2 sizes x 7 times",
+    "30Hz gate",
+    "hidden pause/resume",
+    "reduced preference change repaint and freeze",
+    "resume after reduced",
+    "two mirrored apertures",
+    "idempotent disposal and 12 mount/dispose cycles"
+  ]
+}
