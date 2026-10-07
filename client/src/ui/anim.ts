@@ -1,3 +1,4 @@
+import {cancelStatusGrants} from './statusGrant/runtime';
 import {selectedTribeSummon} from './tribePresentation/selection';
 import {playTribeSummon,cancelTribeSummons} from './tribePresentation/runtime';
 import {holdRiftTarget} from './riftActivity';
@@ -47,7 +48,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on);
-  if(on){cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */

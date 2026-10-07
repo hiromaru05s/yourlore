@@ -434,13 +434,21 @@ function gainDew(ctx: Ctx, p: PlayerState, amount: number): void {
   p.dew = (p.dew ?? 0) + amount;
   ctx.log(`${p.name}: 이슬 +${amount} (${p.dew})`, `${p.name}: 雫+${amount} (${p.dew})`);
 }
+function gainBrand(g: GameState, ctx: Ctx, p: PlayerState, amount: number): void {
+  if (amount <= 0) return;
+  const before = p.brand ?? 0;
+  p.brand = before + amount;
+  ctx.ev.push({type:"statusGrant",player:side(g,p),resource:"brand",before,after:p.brand});
+}
 function gainShield(g: GameState, ctx: Ctx, p: PlayerState, amount: number, source?: FieldMon): void {
   if (amount <= 0) return;
   const doubles = p.enchants.filter(e => e.card.ench === 'doubleShield').length
     + p.field.filter(m => m.aura === 'doubleShieldOther' && m.uid !== source?.uid).length;
   for (const m of p.field) if (m.aura === 'doubleShieldOther' && m.uid !== source?.uid) monsterActivation(g, ctx.ev, p, m);
   amount *= 2 ** doubles;
-  p.shield = (p.shield ?? 0) + amount;
+  const before = p.shield ?? 0;
+  p.shield = before + amount;
+  ctx.ev.push({type:"statusGrant",player:side(g,p),resource:"shield",before,after:p.shield});
   p.shieldExpiresTurn = side(g, p) === g.cur ? g.turn + 1 : g.turn;
   if (side(g, p) !== g.cur) p.shieldOpponentPeak = Math.max(p.shieldOpponentPeak ?? 0, p.shield);
   ctx.log(`${p.name}: 실드 +${amount} (${p.shield})`, `${p.name}: シールド+${amount} (${p.shield})`);
@@ -1061,8 +1069,8 @@ function addDecay(g: GameState, ctx: Ctx, owner: PlayerState, tm: FieldMon, n: n
       // 산성비 / 강산성비(v37): 상대 몬스터가 부패로 파괴될 때마다 낙인 (+7 데미지)
       for (const e of foe.enchants) {
         if (g.over) break;
-        if (e.card.ench === "acidRain") {enchantFx(g,ctx.ev,foe,e.card); owner.brand = (owner.brand || 0) + 1; ctx.log(`  └ ${cn(e.card)}: ${owner.name} 에게 낙인 카운터 +1 (합계 ${owner.brand})`, `  └ ${cn(e.card)}: ${owner.name} に烙印カウンター+1 (計${owner.brand})`); }
-        if (e.card.ench === "strongAcid") {enchantFx(g,ctx.ev,foe,e.card); ctx.dealDamage(owner, 7, cn(e.card), cn(e.card)); if (!g.over) { owner.brand = (owner.brand || 0) + 1; ctx.log(`  └ ${cn(e.card)}: ${owner.name} 에게 낙인 카운터 +1 (합계 ${owner.brand})`, `  └ ${cn(e.card)}: ${owner.name} に烙印カウンター+1 (計${owner.brand})`); } }
+        if (e.card.ench === "acidRain") {enchantFx(g,ctx.ev,foe,e.card); gainBrand(g, ctx, owner, 1); ctx.log(`  └ ${cn(e.card)}: ${owner.name} 에게 낙인 카운터 +1 (합계 ${owner.brand})`, `  └ ${cn(e.card)}: ${owner.name} に烙印カウンター+1 (計${owner.brand})`); }
+        if (e.card.ench === "strongAcid") {enchantFx(g,ctx.ev,foe,e.card); ctx.dealDamage(owner, 7, cn(e.card), cn(e.card)); if (!g.over) { gainBrand(g, ctx, owner, 1); ctx.log(`  └ ${cn(e.card)}: ${owner.name} 에게 낙인 카운터 +1 (합계 ${owner.brand})`, `  └ ${cn(e.card)}: ${owner.name} に烙印カウンター+1 (計${owner.brand})`); } }
       }
       // 러스트캡 슬러그(v36): 부패로 상대 몬스터를 파괴하면 최대 마나 +1, 체력 +5
       if (!g.over && foe.field.some((m) => m.id === "RUST_SLUG")) {
@@ -1601,7 +1609,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   }
   // 매직 카운터(magicCounter): 무효 + 상대 낙인 +1
   if ((tc = takeTrap(g, ctx, o, "magicCounter"))) {
-    att.exhausted = true; p.brand = (p.brand || 0) + 1;
+    att.exhausted = true; gainBrand(g, ctx, p, 1);
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + ${p.name} 에게 낙인 카운터 +1 (합계 ${p.brand})`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + ${p.name} に烙印カウンター+1 (計${p.brand})`);
     return;
   }
@@ -1611,8 +1619,8 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     const gP = randInt(g, 6) + 1, gO = randInt(g, 6) + 1;
     const { rolls: mr } = diceRoll(g, ctx.ev, side(g, o), { id: tc.id, player: side(g, o) }, 1);
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 · 예상 ${p.name} ${gP} / ${o.name} ${gO} → 🎲 ${mr[0]}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 · 予想 ${p.name} ${gP} / ${o.name} ${gO} → 🎲 ${mr[0]}`);
-    if (mr[0] === gP) { o.brand = (o.brand || 0) + 1; ctx.log(`  └ ${p.name} 적중 — ${o.name} 에게 낙인 카운터 +1 (합계 ${o.brand})`, `  └ ${p.name} 的中 — ${o.name} に烙印カウンター+1 (計${o.brand})`); }
-    if (mr[0] === gO) { p.brand = (p.brand || 0) + 3; ctx.log(`  └ ${o.name} 적중 — ${p.name} 에게 낙인 카운터 +3 (합계 ${p.brand})`, `  └ ${o.name} 的中 — ${p.name} に烙印カウンター+3 (計${p.brand})`); }
+    if (mr[0] === gP) { gainBrand(g, ctx, o, 1); ctx.log(`  └ ${p.name} 적중 — ${o.name} 에게 낙인 카운터 +1 (합계 ${o.brand})`, `  └ ${p.name} 的中 — ${o.name} に烙印カウンター+1 (計${o.brand})`); }
+    if (mr[0] === gO) { gainBrand(g, ctx, p, 3); ctx.log(`  └ ${o.name} 적중 — ${p.name} 에게 낙인 카운터 +3 (합계 ${p.brand})`, `  └ ${o.name} 的中 — ${p.name} に烙印カウンター+3 (計${p.brand})`); }
     return;
   }
   // 낙뢰(lightning): 무효 + 상대 플레이어·상대 몬스터·자신 몬스터 중 무작위 3회, 각 12 데미지(관통 없음)
@@ -1654,7 +1662,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     const big = effAtk(p, att, g) >= 4;
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + ${cn(att)} 파괴${big ? ` + ${p.name} 에게 낙인 카운터 +1` : ""}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + ${cn(att)} 破壊${big ? ` + ${p.name} に烙印カウンター+1` : ""}`);
     trapKill(p, att);
-    if (big) p.brand = (p.brand || 0) + 1;
+    if (big) gainBrand(g, ctx, p, 1);
     return;
   }
   // 식탐(gluttony): 무효 + 자신 몬스터 1체 체력 +12(지속)
@@ -2020,7 +2028,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 상대의 '부패' 몬스터 ${rot.length}체 파괴`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 相手の「腐敗」モンスター${rot.length}体を破壊`);
     let nk = 0;
     for (const x of rot) { if (g.over) break; if (!p.field.some((y) => y.uid === x.uid)) continue; trapKill(p, x); if (!p.field.some((y) => y.uid === x.uid)) nk++; }
-    if (nk > 0 && !g.over) { p.brand = (p.brand || 0) + nk; ctx.log(`  └ ${p.name} 에게 낙인 카운터 +${nk} (합계 ${p.brand})`, `  └ ${p.name} に烙印カウンター+${nk} (計${p.brand})`); }
+    if (nk > 0 && !g.over) { gainBrand(g, ctx, p, nk); ctx.log(`  └ ${p.name} 에게 낙인 카운터 +${nk} (합계 ${p.brand})`, `  └ ${p.name} に烙印カウンター+${nk} (計${p.brand})`); }
     if (g.over) { att.exhausted = true; return; }
     if (!p.field.some((x) => x.uid === att.uid)) return; // 공격 몬스터가 파괴됨 — 공격 종료
   }
@@ -2254,7 +2262,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     for (const gm of p.field) {
       if (g.over) break;
       // 암살자 길드 본부(v36 assassinHQ): 암살자가 상대에게 데미지를 줄 때마다 낙인 카운터 +1
-      if (gm.aura === "assassinHQ") { monsterActivation(g, ctx.ev, p, gm); o.brand = (o.brand || 0) + 1; ctx.log(`  └ ${cn(gm)}: ${o.name} 에게 낙인 카운터 +1 (합계 ${o.brand})`, `  └ ${cn(gm)}: ${o.name} に烙印カウンター+1 (計${o.brand})`); continue; }
+      if (gm.aura === "assassinHQ") { monsterActivation(g, ctx.ev, p, gm); gainBrand(g, ctx, o, 1); ctx.log(`  └ ${cn(gm)}: ${o.name} 에게 낙인 카운터 +1 (합계 ${o.brand})`, `  └ ${cn(gm)}: ${o.name} に烙印カウンター+1 (計${o.brand})`); continue; }
       if (gm.aura !== "assassinGuild") continue;
       monsterActivation(g, ctx.ev, p, gm);
       gm.gcount = (gm.gcount || 0) + 1;
@@ -2797,7 +2805,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       if (once.includes("TGE4")) { ctx.log("  └ 이 게임에서 이미 발동함", "  └ このゲームで既に発動済み"); break; }
       once.push("TGE4");
       const n = Math.min(1, deckComp(p).filter((c) => c.tribe === "시초" && c.uid !== m.uid).length);
-      if (n > 0) { o.brand = (o.brand || 0) + n; ctx.log(`  └ 시초 ${n}장 → ${o.name} 에게 낙인 카운터 +${n} (합계 ${o.brand})`, `  └ 始原${n}枚 → ${o.name} に烙印カウンター+${n} (計${o.brand})`); }
+      if (n > 0) { gainBrand(g, ctx, o, n); ctx.log(`  └ 시초 ${n}장 → ${o.name} 에게 낙인 카운터 +${n} (합계 ${o.brand})`, `  └ 始原${n}枚 → ${o.name} に烙印カウンター+${n} (計${o.brand})`); }
       else ctx.log("  └ 덱 구성에 이번에 소환한 자신 외 시초 카드 없음", "  └ デッキ構成に今回召喚した自身以外の始原カードなし");
       break;
     }
@@ -2833,7 +2841,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       break;
     }
     case "nightlord": { // 특급 암살자: 상대 낙인 +3
-      o.brand = (o.brand || 0) + 3;
+      gainBrand(g, ctx, o, 3);
       ctx.log(`  └ ${o.name} 에게 낙인 카운터 +3 (합계 ${o.brand})`, `  └ ${o.name} に烙印カウンター+3 (計${o.brand})`);
       break;
     }
@@ -2965,7 +2973,7 @@ function tryBrandMagic(g: GameState, ctx: Ctx): void {
   const o = g.players[1 - g.cur];
   const t = takeTrap(g, ctx, o, "brandMagic");
   if (!t) return;
-  p.brand = (p.brand || 0) + 1;
+  gainBrand(g, ctx, p, 1);
   ctx.log(
     `  └ <span class="dmg">함정 ${cn(t)}!</span> ${p.name} 에게 낙인 카운터 +1 (합계 ${p.brand}) — 매 턴 시작시 낙인 카운터당 🎲 1개만큼 자해`,
     `  └ <span class="dmg">トラップ ${cn(t)}!</span> ${p.name} に烙印カウンター+1 (計${p.brand}) — 毎ターン開始時烙印カウンターごとに🎲1個分の自傷`,
@@ -3040,7 +3048,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case 'desertification': o.dew=0; ctx.log('상대 이슬을 0으로', '相手の雫を0にする'); break;
     case 'cullShield': gainShield(g,ctx,p,cullExiled(p)); break;
     case 'golemShield': gainShield(g,ctx,p,v+v2*new Set(p.field.filter(isGolem).map(m=>m.id)).size); break;
-    case 'armorBreak': { const branded=(o.shield ?? 0)>=10; breakShield(ctx,o,9); if(branded)o.brand=(o.brand ?? 0)+1; break; }
+    case 'armorBreak': { const branded=(o.shield ?? 0)>=10; breakShield(ctx,o,9); if(branded)gainBrand(g, ctx, o, 1); break; }
     case 'spearShield': if ((o.shield ?? 0)<p.field.reduce((n,m)=>n+effAtk(p,m,g),0))breakShield(ctx,o); break;
     case 'cullSword': queueExpansionChoice(g,p,'SELECTED_SWORD','このターン攻撃力を上げる自分のモンスターを選択',{amount:cullExiled(p)}); break;
     case "dmg": ctx.dealDamage(o, v, cn(card), cn(card)); break;
@@ -3379,7 +3387,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       if (o.traps.length && trySnare(g, ctx, o)) { /* 덫 속의 덫 */ }
       else for (const t of o.traps.splice(0)) { if (t.card.exileOnDestroy) rmz(o).push(t.card); else o.discard.push(t.card); }
       for (const e of o.enchants.splice(0)) binEnch(g, ctx, o, e.card);
-      o.brand = (o.brand || 0) + 3;
+      gainBrand(g, ctx, o, 3);
       ctx.log(`${tag(p, card)} <span class="dmg">상대 필드의 모든 카드 파괴</span> + ${o.name} 에게 낙인 카운터 +3 (합계 ${o.brand})`, `${tag(p, card)} <span class="dmg">相手の場の全カードを破壊</span> + ${o.name} に烙印カウンター+3 (計${o.brand})`);
       break;
     }
@@ -3663,7 +3671,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "S12": { // 강철맥 각인(v34): 🎲 5+면 상대에게 낙인 1개
       const { rolls: s12r } = diceRoll(g, ctx.ev, side(g, p), { id: card.id, player: side(g, p) }, 1, 5);
-      if (s12r[0] >= 5) { o.brand = (o.brand || 0) + 1; ctx.log(`${tag(p, card)} 🎲 ${s12r[0]} → 상대에게 낙인 카운터 +1 (${o.brand})`, `${tag(p, card)} 🎲 ${s12r[0]} → 相手に烙印カウンター+1 (${o.brand})`); }
+      if (s12r[0] >= 5) { gainBrand(g, ctx, o, 1); ctx.log(`${tag(p, card)} 🎲 ${s12r[0]} → 상대에게 낙인 카운터 +1 (${o.brand})`, `${tag(p, card)} 🎲 ${s12r[0]} → 相手に烙印カウンター+1 (${o.brand})`); }
       else ctx.log(`${tag(p, card)} 🎲 ${s12r[0]} 실패`, `${tag(p, card)} 🎲 ${s12r[0]} 失敗`);
       break;
     }
@@ -3687,7 +3695,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       break;
     }
     case "GS6_4": { // 화맥 점화(v34): 낙인 보유 상대에게 낙인 3개 추가 — 조건은 시전 전 검사
-      o.brand = (o.brand || 0) + 3;
+      gainBrand(g, ctx, o, 3);
       ctx.log(`${tag(p, card)} 상대에게 낙인 카운터 +3 (${o.brand})`, `${tag(p, card)} 相手に烙印カウンター+3 (${o.brand})`);
       break;
     }
@@ -3815,7 +3823,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case "MEDITATE": { // 명상(v34): 완전 회복 + 자신에게 낙인 1개
       const amt = Math.max(0,40 - p.hp);
       ctx.heal(p, amt);
-      p.brand = (p.brand || 0) + 1;
+      gainBrand(g, ctx, p, 1);
       ctx.log(`${tag(p, card)} 체력 ${amt} 회복 (${p.hp}) · 자신에게 낙인 카운터 +1 (${p.brand})`, `${tag(p, card)} 体力${amt}回復 (${p.hp}) · 自分に烙印カウンター+1 (${p.brand})`);
       break;
     }
@@ -3976,7 +3984,7 @@ function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): vo
       o.traps.forEach((_t, i) => pool.push(() => { if (o.traps[i] && !trySnare(g, ctx, o)) { const tr = o.traps.splice(i, 1)[0]; if (tr.card.exileOnDestroy) rmz(o).push(tr.card); else o.discard.push(tr.card); ctx.log(`  └ ${cn(e.card)}: 세트 함정 파괴 (정체: ${cn(tr.card)})`, `  └ ${cn(e.card)}: セットトラップ破壊 (正体: ${cn(tr.card)})`); } }));
       o.enchants.forEach((_e, i) => pool.push(() => { if (o.enchants[i]) { const ec = o.enchants[i].card; o.enchants.splice(i, 1); ctx.log(`  └ ${cn(e.card)}: 영구마법 ${cn(ec)} 파괴`, `  └ ${cn(e.card)}: 永続魔法 ${cn(ec)} 破壊`); binEnch(g, ctx, o, ec); } }));
       if (pool.length) pool[randInt(g, pool.length)]();
-      else { o.brand = (o.brand || 0) + 1; ctx.log(`  └ ${cn(e.card)}: 파괴할 카드 없음 → ${o.name} 에게 낙인 카운터 +1 (합계 ${o.brand})`, `  └ ${cn(e.card)}: 破壊するカードなし → ${o.name} に烙印カウンター+1 (計${o.brand})`); }
+      else { gainBrand(g, ctx, o, 1); ctx.log(`  └ ${cn(e.card)}: 파괴할 카드 없음 → ${o.name} 에게 낙인 카운터 +1 (합계 ${o.brand})`, `  └ ${cn(e.card)}: 破壊するカードなし → ${o.name} に烙印カウンター+1 (計${o.brand})`); }
     }
   }
 }
@@ -5115,7 +5123,7 @@ function resolveQuick(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): v
   tryBrandMagic(g, ctx); tryHexCurseOnSpell(g, ctx);
   if (g.over || tryNullSpell(g, ctx, card) || trySpellSteal(g, ctx, card) || trySecondNull(g, ctx, card) || tryAttuneJam(g, ctx, card) || tryHexBossNull(g, ctx, card)) return;
   switch (card.id) {
-    case 'QUICK_HELLFIRE': { const o = g.players[1 - side(g, p)]; o.brand = (o.brand ?? 0) + ((o.brand ?? 0) > 0 ? 2 : 1); break; }
+    case 'QUICK_HELLFIRE': { const o = g.players[1 - side(g, p)]; gainBrand(g, ctx, o, ((o.brand ?? 0) > 0 ? 2 : 1)); break; }
     case 'QUICK_AID': ctx.heal(p, 25); break;
     case 'QUICK_CURSE': { const o = g.players[1 - side(g, p)]; addCurses(g, o, rmz(o).filter(c => c.id === 'CURSE').length); break; }
     case 'QUICK_MIMIC': effectSummon(g, ctx, p, 'MIMIC'); rmz(p).push(inst(g, 'MIMIC'), inst(g, 'MIMIC')); break;
@@ -5147,7 +5155,7 @@ function resolveQuests(g: GameState, ctx: Ctx, automaticOnly = false): void {
         case 'Q_TOWN': p.hand.push(inst(g, 'DOMINION')); break;
         case 'Q_CHEAT': queueExpansionChoice(g, p, q.card.id, '除外する相手のデッキのカードを選択'); break;
         case 'Q_RIFT': for (let i = 0; i < 7; i++) rmz(p).push(starter(g, 'STARTER_TRASH')); break;
-        case 'Q_BRAND': { const o = g.players[1 - side(g, p)]; o.brand = (o.brand ?? 0) + q.card.val!; break; }
+        case 'Q_BRAND': { const o = g.players[1 - side(g, p)]; gainBrand(g, ctx, o, q.card.val!); break; }
         case 'Q_TORI': addHealth(ctx, p, 30); break;
         case 'Q_WINTER': addMaxMana(p, 2); break;
         case 'Q_MANA': addMaxMana(p, 4); break;
@@ -5568,7 +5576,7 @@ function expansionAfterPlay(g: GameState, ctx: Ctx, p: PlayerState, card: CardIn
   if (card.id === 'BLACK_REVERSE') x.reversePlays = (x.reversePlays ?? 0) + 1;
   if (card.id === 'WINE') townEvent(g, 'wine');
   if (isBlack(card)) for (const m of p.field) {
-    if (m.id === 'BLACK_ELSA') { monsterActivation(g, ctx.ev, p, m); const o = g.players[1 - side(g, p)]; o.brand = (o.brand ?? 0) + 1; }
+    if (m.id === 'BLACK_ELSA') { monsterActivation(g, ctx.ev, p, m); const o = g.players[1 - side(g, p)]; gainBrand(g, ctx, o, 1); }
     if (m.id === 'BLACK_ALICE') { const before = Math.min(MAX_MANA, p.maxMana); addMaxMana(p, 1); if (Math.min(MAX_MANA, p.maxMana) > before) monsterActivation(g, ctx.ev, p, m); }
   }
   // Keep the list of previously played Fire spells: spell resolution uses usesTurn (incremented later).

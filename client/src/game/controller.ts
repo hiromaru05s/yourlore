@@ -1,3 +1,4 @@
+import {playStatusGrant,warmStatusGrants} from '../ui/statusGrant/runtime';
 import {synergyTier} from '../ui/tribePresentation/selection';
 import {playTribeSynergy} from '../ui/tribeSynergy/runtime';
 import type {Playback} from '../ui/elemental/runtime';
@@ -277,6 +278,8 @@ export abstract class BaseController implements BoardHandlers {
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
     const spellGhosts:HTMLElement[]=[];
+    let statusSource:HTMLElement|undefined;
+    warmStatusGrants();
     const questCount=prev.players.map(p=>p.quests?.length??0);
     const buffCount=[prev.players[0].traps.length+prev.players[0].enchants.length,prev.players[1].traps.length+prev.players[1].enchants.length];
     // running counters for ghost slot placement + live HP readout
@@ -296,7 +299,12 @@ export abstract class BaseController implements BoardHandlers {
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
       const cue = eventSound.cue(e);
       if(cue&&!A.isFxSkipped())sfx(cue);
+      if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
+      if(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon')statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
       switch (e.type) {
+        case 'statusGrant':
+          if(!A.isFxSkipped())await playStatusGrant(sideOf(e.player),e.resource,e.before,e.after,statusSource);
+          break;
         case 'elementalStart': {
           let source=this.elementalFaces.find(f=>f.card.id===e.id&&f.side===sideOf(e.player))?.node;
           if(!source&&e.id.startsWith('FIRE_')&&DB[e.id]&&!A.isFxSkipped()){
@@ -315,7 +323,7 @@ export abstract class BaseController implements BoardHandlers {
           const card = this.findCard(res.state, e.uid) ?? this.defOf(e.id, e.uid);
           if (card) {
             const g = await A.ghostSummon(card, sideOf(e.player), fieldCount[e.player]);
-            if (g) ghosts.set(e.uid, { el: g, side: sideOf(e.player) });
+            if (g) {ghosts.set(e.uid, { el: g, side: sideOf(e.player) });statusSource=g;}
           }
           fieldCount[e.player]++;
           await wait(65);
@@ -404,6 +412,8 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "playSpell": {
+          const nextSpell=events.findIndex((next,j)=>j>i&&next.type==='playSpell');
+          const grants=events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='statusGrant');
           const def = DB[e.id] ?? STARTERS[e.id]; // 컬/어튠/보물상자 live in STARTERS
           if (def) {
             // Preserve the new public source UID so reactions during this batch can find its ghost.
@@ -421,11 +431,15 @@ export abstract class BaseController implements BoardHandlers {
                 const node=await A.revealSpell(card,sideOf(e.player),'vanish',undefined,true);
                 if(node){if(this.dead)node.remove();else this.quickFaces.push({card,side:sideOf(e.player),node});}
               }
+            }else if(e.dest==='discard'&&grants){
+              const face=await A.revealSpell({uid:'status-source',...def},sideOf(e.player),e.dest,undefined,true);
+              if(face){if(this.dead)face.remove();else{statusSource=face;this.elementalFaces.push({card:{uid:'status-source',...def},side:sideOf(e.player),node:face});}}
             }else{
               const face=await A.revealSpell(placed??{ uid: "fx", ...def }, sideOf(e.player), e.dest,buffCount[e.player]+(def.t==='quest'?questCount[e.player]:0));
               if(face){spellGhosts.push(face);if(def.t==='quest')questCount[e.player]++;else buffCount[e.player]++;}
             }
           }
+          statusSource= this.elementalFaces.find(x=>x.card.id===e.id)?.node??this.quickFaces.find(x=>x.card.id===e.id)?.node??spellGhosts.at(-1)??statusSource;
           // random-roll cards: roll the 3D dice first, THEN show the outcome popup
           if (def && RANDOM_CARDS.has(def.id) && !["FIRE_ARROW","FIRE_METEOR"].includes(def.id)) {
             for (let j = i + 1; j < events.length; j++) {
