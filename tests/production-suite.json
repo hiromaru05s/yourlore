@@ -56,7 +56,9 @@
     "tests/slate-summon.mjs",
     "tests/spell-frame.mjs",
     "tests/mana-destruction.mjs",
-    "tests/elemental-adoption.mjs"
+    "tests/decay-dissolve.mjs",
+    "tests/elemental-adoption.mjs",
+    "tests/persistent-flight.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
