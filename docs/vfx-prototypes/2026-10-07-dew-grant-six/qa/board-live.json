@@ -1,0 +1,62 @@
+[
+  {
+    "id": "DF1",
+    "progress": 1,
+    "playing": false,
+    "boardReady": true,
+    "frames": 58,
+    "meanDrawMs": 2.3758620558113885,
+    "studies": 6,
+    "count": 3
+  },
+  {
+    "id": "DF2",
+    "progress": 1,
+    "playing": false,
+    "boardReady": true,
+    "frames": 235,
+    "meanDrawMs": 2.7599999945214453,
+    "studies": 6,
+    "count": 3
+  },
+  {
+    "id": "DF3",
+    "progress": 1.1072222222928636,
+    "playing": true,
+    "boardReady": true,
+    "frames": 435,
+    "meanDrawMs": 2.769195400983438,
+    "studies": 6,
+    "count": 3
+  },
+  {
+    "id": "DA1",
+    "progress": 1.2380952380952377,
+    "playing": false,
+    "boardReady": true,
+    "frames": 553,
+    "meanDrawMs": 3.068716096188233,
+    "studies": 6,
+    "count": 8
+  },
+  {
+    "id": "DA2",
+    "progress": 1.0545098039402703,
+    "playing": false,
+    "boardReady": true,
+    "frames": 692,
+    "meanDrawMs": 3.461560694813039,
+    "studies": 6,
+    "count": 8
+  },
+  {
+    "id": "DA3",
+    "progress": 1.2113061224684445,
+    "playing": true,
+    "boardReady": true,
+    "frames": 874,
+    "meanDrawMs": 3.5278032046979297,
+    "studies": 6,
+    "count": 8
+  }
+]

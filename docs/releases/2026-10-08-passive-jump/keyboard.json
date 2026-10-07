@@ -1,0 +1,20 @@
+[
+  {
+    "keyPress": "Enter",
+    "focused": "zoom-passive-guts",
+    "tabFocus": {
+      "className": "inspect-close",
+      "label": "閉じる"
+    },
+    "closed": true
+  },
+  {
+    "keyPress": "Space",
+    "focused": "zoom-passive-guts",
+    "tabFocus": {
+      "className": "inspect-close",
+      "label": "閉じる"
+    },
+    "closed": true
+  }
+]
