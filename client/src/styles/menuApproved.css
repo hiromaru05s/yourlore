@@ -58,7 +58,7 @@ body.lounge-active .modal.bot-diff.bot-challenge .diff-name{display:block;font:2
 .lounge-deck #deckCur .deck-entry .card{--cw:var(--hand-card);--ch:calc(var(--cw)/.64);pointer-events:auto;filter:drop-shadow(0 6px 5px #0007);cursor:pointer}
 .lounge-deck #deckCur .deck-slot{display:grid;place-items:center;border:1px dashed #7192a760;border-radius:8px;color:#9cbacf}
 .lounge-deck #deckCur.is-replacing .deck-entry:not(.is-fixed) .card{outline:1px solid #b9d7e3;outline-offset:3px}
-.lounge-deck .deck-hand-detail{position:absolute;bottom:-25px;left:0;right:0;min-height:25px;padding:2px 0;border:0;background:none;color:#b8c9d6;font-size:10px;cursor:pointer}
+.lounge-deck .deck-hand-action{position:absolute;bottom:-25px;left:0;right:0;min-height:25px;padding:2px 0;border:0;background:none;color:#b8c9d6;font-size:19px;cursor:pointer}
 .lounge-deck .deck-attune-lock{position:absolute;z-index:5;left:8%;bottom:-21px;width:84%;height:25px;display:flex;align-items:center;justify-content:center;gap:6px;border-bottom:1px solid #abcddd;background:linear-gradient(90deg,transparent,#17384a 22%,#17384a 78%,transparent);color:#c6e0ed;font:10px Georgia,'Yu Mincho',serif;pointer-events:none}
 .lounge-deck .deck-attune-lock::before{content:'';position:absolute;left:50%;top:-7px;width:1px;height:7px;background:#b8d8e2}
 .lounge-deck .deck-lock-glyph{position:relative;width:10px;height:8px;border:1px solid currentColor;border-radius:1px;margin-top:4px}
@@ -77,8 +77,8 @@ body.lounge-active .modal.bot-diff.bot-challenge .diff-name{display:block;font:2
 .lounge-deck .deck-pool-search input{width:180px;min-height:32px;background:none;border:0;color:#e1edf6;font:12px sans-serif;padding:5px}
 .lounge-deck #deckPool{--collection-card-width:clamp(66px,10vh,116px);display:grid;grid-template-columns:repeat(auto-fill,minmax(calc(var(--collection-card-width) + 9px),1fr));gap:14px 18px;padding:8px 10px 14px;align-content:start;overflow:auto;background:none}
 .lounge-deck .deck-pool-tile{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
-.lounge-deck #deckPool .deck-card-action{display:grid;place-items:center;right:-4px;bottom:-5px;width:24px;height:24px;font-size:19px;pointer-events:none}
-.lounge-deck .deck-pool-detail{padding:4px 8px;min-height:25px;background:none;border:0;color:#b7ccdc;font-size:11px;cursor:pointer}
+.lounge-deck .deck-pool-face{position:relative}
+.lounge-deck #deckPool .deck-card-action{display:grid;place-items:center;right:-4px;bottom:-5px;width:24px;height:24px;font-size:19px;pointer-events:auto;padding:0}
 .lounge-deck #deckPool .is-candidate{outline:2px solid #cee7f5;outline-offset:3px}
 .lounge-deck .deck-msg:empty{display:none}
 .lounge-deck :is(button,[role=button],input):focus-visible{outline:2px solid #c6e6fb;outline-offset:3px}
@@ -105,7 +105,7 @@ body.lounge-active .modal.bot-diff.bot-challenge .diff-name{display:block;font:2
  .lounge-deck .deck-hand-help{font-size:10px;gap:4px}.lounge-deck .deck-candidate-column{flex:none;min-height:0}
  .lounge-deck .deck-pool-head{flex-wrap:wrap;gap:8px}.lounge-deck .deck-pool-search{width:100%;margin:0}.lounge-deck .deck-pool-search input{flex:1;min-width:0;font-size:16px}
  .lounge-deck #deckPool{--collection-card-width:clamp(60px,18vw,94px);grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 7px;padding:12px 5px 20px;overflow:visible;flex:none}
- .lounge-deck .deck-pool-detail,.lounge-deck .deck-hand-detail{min-height:28px;font-size:10px}
+ .lounge-deck .deck-hand-action{min-height:28px}
  .lounge-cards #grid{--collection-card-width:clamp(60px,18vw,94px);grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 8px;padding:14px 5px}
  .lounge-cards .cards-search{font-size:16px}.lounge-cards .cards-toolbar .chip{font-size:11px;padding:6px;min-height:34px}
 }
