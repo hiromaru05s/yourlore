@@ -1,3 +1,5 @@
+import type {ElementalEvent,Playback} from './elemental/runtime';
+import {flyPersistentIntoSlot} from './persistentFlight';
 import {playSpellFrame,cancelSpellFrames,warmSpellFrame,SPELL_FRAME_RATE} from './spellFrame/runtime';
 import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {isMimic,focusScale,type MimicId} from './mimic/selection';
@@ -210,9 +212,10 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   const node = floatAt(cardEl(card, {size:"hand"}), from);
   let held=false;
   try {
-    if(card.t==='spell'&&!fxSkip)warmSpellFrame();
+    const persistent=dest==='field'&&!!card.ench;
+    if(card.t==='spell'&&!persistent&&!fxSkip)warmSpellFrame();
     await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:1);
-    if(card.t==='spell'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
+    if(card.t==='spell'&&!persistent&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
     if (to && dest === "field" && (card.ench || card.t === "quest")) {
       const zone=document.querySelector(side==='me'?'#meRow .zone-st':'#oppRow .zone-st');
@@ -226,11 +229,12 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
           if(!target.isConnected)return null;
           return nativeQuestGhost(target,face);
         }
-        const face=await flyIntoSlot(node,target,enchantmentTile(card,duration));
-        if(!fxSkip)playBiblionFx('enchant-place',face);
-        return face;
+        const face=enchantmentTile(card,duration);
+        if(!fxSkip&&await boardMotionScope(signal=>flyPersistentIntoSlot(node,target,face,signal),6500))return face.parentElement;
+        if(!target.isConnected)return null;
+        return nativeQuestGhost(target,face);
       }
-    } else if (dest === "discard") await landOnShelf(node,side);
+    } else if (dest === "discard") {if(deferVanish&&!fxSkip){await parkQuickSpell(node,side);held=true;return node;}await landOnShelf(node,side);}
     else if(dest === "vanish") {
       if(deferVanish&&!fxSkip){await parkQuickSpell(node,side);held=true;return node;}
       await absorbIntoRift(node,side);
@@ -355,6 +359,24 @@ async function purchaseMana(side:ViewSide,target:DOMRect):Promise<void>{
     await wait(MANA_PURCHASE_CONTACT_MS);if(!fxSkip&&!document.hidden)sfx('mana-pay');
     await wait(MANA_PURCHASE_DURATION*1000-MANA_PURCHASE_CONTACT_MS);
   }finally{stop();}
+}
+
+export async function finishElementalSpell(node:HTMLElement,side:ViewSide):Promise<void>{
+ try{if(node.isConnected)await landOnShelf(node,side);}finally{node.remove();}
+}
+export async function beginElemental(event:ElementalEvent,you:0|1,source?:HTMLElement):Promise<Playback>{
+ const idle:Playback={impact:()=>Promise.resolve(),finished:Promise.resolve(),cancel(){}};
+ if(fxSkip)return idle;
+ const {startElemental}=await import('./elemental/runtime');if(fxSkip)return idle;
+ const playback=startElemental(event,you,source);
+ void boardMotionScope(async signal=>{signal.addEventListener('abort',playback.cancel,{once:true});await playback.finished;return !signal.aborted;},6500);
+ return playback;
+}
+export async function berserkStrike(uid:string,targetUid:string|null,player:0|1,you:0|1,targetPlayer:0|1,onImpact:()=>void,exhaust:boolean,amount=0):Promise<void>{
+ if(fxSkip)return;sfx('attack');
+ const playback=await beginElemental({type:'elementalStart',group:uid,player,id:'NGA4',uid,targets:[{player:targetPlayer,uid:targetUid,amount}]},you);
+ await playback.impact(0);if(!fxSkip){if(amount>0)sfx(targetUid?'impact':'facehit');onImpact();}await playback.finished;
+ const source=byUid(uid);if(source&&exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');source.style.filter='grayscale(1) brightness(.57)';}
 }
 
 /** Keep the revealed source readable at the board edge while its effect resolves. */
@@ -746,14 +768,15 @@ export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: nu
   } finally { node.remove(); }
 }
 
-/** Kill a summon ghost: death flash then fly a card frame to that side's discard. */
-export async function ghostDie(node:HTMLElement,side:ViewSide,voided=false,mana=true):Promise<void>{
+/** Complete a public-card death: decay dissolves in place; other causes retain their exit. */
+export async function ghostDie(node:HTMLElement,side:ViewSide,voided=false,mana=true,decay=false):Promise<void>{
  const target=document.getElementById(voided?(side==='me'?'rift-me':'rift-opp'):discId(side));
- if(target&&!fxSkip){await boardMotionScope(signal=>playMonster(node,'destroy',{variant:voided?'B':'A',mana,destination:target.querySelector<HTMLElement>('.pile-print .card')??target,side:side==='me'?1:-1,signal}),6500);if(!voided)pileFlash(discId(side));}
+ if(decay&&!fxSkip)await boardMotionScope(signal=>import('./decay/runtime').then(({playDecayDissolve})=>playDecayDissolve(node,{signal})),6500);
+ else if(target&&!fxSkip){await boardMotionScope(signal=>playMonster(node,'destroy',{variant:voided?'B':'A',mana,destination:target.querySelector<HTMLElement>('.pile-print .card')??target,side:side==='me'?1:-1,signal}),6500);if(!voided)pileFlash(discId(side));}
  node.style.visibility='hidden';
 }
-export async function destroyAnim(uid:string,side:ViewSide,voided=false,mana=true):Promise<void>{
- const n=byUid(uid);if(n)await ghostDie(n,side,voided,mana);
+export async function destroyAnim(uid:string,side:ViewSide,voided=false,mana=true,decay=false):Promise<void>{
+ const n=byUid(uid);if(n)await ghostDie(n,side,voided,mana,decay);
 }
 
 /** Random-card outcome popup. Big center card for your plays, compact upper popup for the opponent's. */
