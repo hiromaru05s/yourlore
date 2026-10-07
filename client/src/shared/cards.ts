@@ -1904,7 +1904,7 @@ const PATCH36: Record<string, Partial<CardDef>> = {
   NHEX: { atk: 1, def: 3, onSummon: undefined, val: undefined, turnFx: "hexCurse",
     text: "매 턴 시작 시 덱 구성에 마법이 10장 이상이면 주사위를 굴려 5 이상일 때 상대 묘지에 '저주' 3장", textJa: "毎ターン開始時 デッキ構成に魔法が10枚以上ならダイスを振り5以上で相手の墓地に「呪い」3枚" },
   NT_SEAL3: { atk: 1, def: 4, val: 4, text: "상시: 양 플레이어는 시전 코스트 4 이하 마법을 사용할 수 없다", textJa: "常時: 両プレイヤーは発動コスト4以下の魔法を使用できない" },
-  NWL3: { name: "가디언 골램", nameJa: "ガーディアンゴーレム", atk: 1, def: 9, aura: "gutsOnHit", text: "상시: 이 몬스터는 공격을 받을 때마다 카운터 1개를 얻는다", textJa: "常時: このモンスターは攻撃を受けるたびカウンター1個を得る" },
+  NWL3: { name: "가디언 골램", nameJa: "ガーディアンゴーレム", atk: 1, def: 9, aura: "gutsOnHit", text: "상시: 이 몬스터가 공격으로 1 이상의 데미지를 받고 기합을 소모하지 않고 살아남으면 기합 카운터 1개를 얻는다", textJa: "常時: このモンスターが攻撃で1以上のダメージを受け、気合を消費せず生き残ると気合カウンター1個を得る" },
   TGE3: { name: "시초의 수호자", nameJa: "始原の守護者", atk: 1, def: 11, onSummon: "selfBurn", val: 3, text: "[시초] 소환시: 자신에게 3 데미지", textJa: "[始原] 召喚時: 自分に3ダメージ" },
   RUST_SLUG: { atk: 1, def: 4, onSummon: "decayAll", text: "소환시: 상대 몬스터 전체에 카운터 1개 · 부패로 상대 몬스터를 파괴하면 최대 마나 +1, 자신 체력 +5",
     textJa: "召喚時: 相手モンスター全体にカウンター1個 · 腐敗で相手モンスターを破壊すると最大マナ+1、自分の体力+5" },
