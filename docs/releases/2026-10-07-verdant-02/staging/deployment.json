@@ -1,0 +1,14 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "source": "dbddbccd6fdbc13ecbab688e25199425ddfd8b7e",
+  "deploymentId": "ca446ba0-b982-40d0-9509-1732c2577792",
+  "versions": [
+    {
+      "version_id": "587714e2-d342-4050-97c9-20ac08eaa3ce",
+      "percentage": 100
+    }
+  ],
+  "message": "dbddbccd6fdbc13ecbab688e25199425ddfd8b7e guarded release",
+  "createdOn": "2026-10-07T02:26:58.923315Z",
+  "matchedAssets": 41
+}

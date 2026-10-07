@@ -1,0 +1,217 @@
+{
+  "boundary": "Real local controller and renderer with constructed player states; no authenticated online claims.",
+  "checks": [
+    {
+      "label": "烙印 12 / シールド 0 / 雫 0",
+      "portraits": [
+        {
+          "brand": "12",
+          "font": "19.656px",
+          "id": "portraitOpp",
+          "label": "烙印 12",
+          "rect": {
+            "bottom": 135.34375,
+            "height": 47.71875,
+            "left": 677.890625,
+            "right": 722.8125,
+            "top": 87.625,
+            "width": 44.921875,
+            "x": 677.890625,
+            "y": 87.625
+          },
+          "resources": 1
+        },
+        {
+          "brand": "12",
+          "font": "19.656px",
+          "id": "portraitMe",
+          "label": "烙印 12",
+          "rect": {
+            "bottom": 710.9375,
+            "height": 47.71875,
+            "left": 677.890625,
+            "right": 722.8125,
+            "top": 663.21875,
+            "width": 44.921875,
+            "x": 677.890625,
+            "y": 663.21875
+          },
+          "resources": 1
+        }
+      ]
+    },
+    {
+      "label": "烙印 0 / シールド 0 / 雫 0",
+      "portraits": [
+        {
+          "brand": null,
+          "font": null,
+          "id": "portraitOpp",
+          "resources": 0
+        },
+        {
+          "brand": null,
+          "font": null,
+          "id": "portraitMe",
+          "resources": 0
+        }
+      ]
+    },
+    {
+      "label": "烙印 123 / シールド 12 / 雫 8",
+      "portraits": [
+        {
+          "brand": "123",
+          "font": "14.976px",
+          "id": "portraitOpp",
+          "label": "烙印 123",
+          "rect": {
+            "bottom": 135.34375,
+            "height": 47.71875,
+            "left": 677.890625,
+            "right": 722.8125,
+            "top": 87.625,
+            "width": 44.921875,
+            "x": 677.890625,
+            "y": 87.625
+          },
+          "resources": 3
+        },
+        {
+          "brand": "123",
+          "font": "14.976px",
+          "id": "portraitMe",
+          "label": "烙印 123",
+          "rect": {
+            "bottom": 710.9375,
+            "height": 47.71875,
+            "left": 677.890625,
+            "right": 722.8125,
+            "top": 663.21875,
+            "width": 44.921875,
+            "x": 677.890625,
+            "y": 663.21875
+          },
+          "resources": 3
+        }
+      ]
+    },
+    {
+      "label": "烙印 1 / シールド 0 / 雫 8",
+      "portraits": [
+        {
+          "brand": "1",
+          "font": "19.656px",
+          "id": "portraitOpp",
+          "label": "烙印 1",
+          "rect": {
+            "bottom": 135.34375,
+            "height": 47.71875,
+            "left": 677.890625,
+            "right": 722.8125,
+            "top": 87.625,
+            "width": 44.921875,
+            "x": 677.890625,
+            "y": 87.625
+          },
+          "resources": 2
+        },
+        {
+          "brand": "1",
+          "font": "19.656px",
+          "id": "portraitMe",
+          "label": "烙印 1",
+          "rect": {
+            "bottom": 710.9375,
+            "height": 47.71875,
+            "left": 677.890625,
+            "right": 722.8125,
+            "top": 663.21875,
+            "width": 44.921875,
+            "x": 677.890625,
+            "y": 663.21875
+          },
+          "resources": 2
+        }
+      ]
+    },
+    {
+      "overflow": false,
+      "portraits": [
+        {
+          "font": "14.56px",
+          "id": "portraitOpp",
+          "rect": {
+            "bottom": 342.875,
+            "height": 35.359375,
+            "left": 223.078125,
+            "right": 256.34375,
+            "top": 307.515625,
+            "width": 33.265625,
+            "x": 223.078125,
+            "y": 307.515625
+          },
+          "shieldFont": "14.56px"
+        },
+        {
+          "font": "14.56px",
+          "id": "portraitMe",
+          "rect": {
+            "bottom": 594.703125,
+            "height": 35.359375,
+            "left": 223.078125,
+            "right": 256.34375,
+            "top": 559.34375,
+            "width": 33.265625,
+            "x": 223.078125,
+            "y": 559.34375
+          },
+          "shieldFont": "14.56px"
+        }
+      ],
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "overflow": false,
+      "portraits": [
+        {
+          "font": "10.647px",
+          "id": "portraitOpp",
+          "rect": {
+            "bottom": 74.21875,
+            "height": 25.84375,
+            "left": 442.515625,
+            "right": 466.84375,
+            "top": 48.375,
+            "width": 24.328125,
+            "x": 442.515625,
+            "y": 48.375
+          },
+          "shieldFont": "10.647px"
+        },
+        {
+          "font": "10.647px",
+          "id": "portraitMe",
+          "rect": {
+            "bottom": 384.15625,
+            "height": 25.84375,
+            "left": 442.515625,
+            "right": 466.84375,
+            "top": 358.3125,
+            "width": 24.328125,
+            "x": 442.515625,
+            "y": 358.3125
+          },
+          "shieldFont": "10.647px"
+        }
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    }
+  ]
+}

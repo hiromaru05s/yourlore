@@ -3,32 +3,17 @@
 .cant-toast {
   position: fixed; top: 26%; left: 50%; transform: translate(-50%, -50%);
   z-index: 200; pointer-events: none; display: inline-flex; align-items: center; gap: 9px;
-  padding: 12px 22px; border-radius: 12px; max-width: 80vw;
-  background: linear-gradient(180deg, #2a1210f2, #180c0bf2);
-  border: 1px solid var(--vermil); color: #ffdcd2;
+  padding: 10px 18px; border-radius: 2px; max-width: 80vw;
+  background: #202831ee;
+  border: 1px solid #a99a7655; color: #dfd5bd;
   font-size: 15px; font-weight: 600; letter-spacing: .01em; text-align: left;
-  box-shadow: 0 10px 34px #000b, 0 0 18px #d8542f44;
+  box-shadow: 0 3px 12px #0003;
   animation: cantPop .2s var(--ease);
 }
 .cant-toast .ct-x { flex: 0 0 auto; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--vermil); color: #fff; font-size: 11px; font-weight: 800; }
 .cant-toast.out { animation: cantOut .3s var(--ease) forwards; }
 @keyframes cantPop { from { opacity: 0; transform: translate(-50%,-50%) scale(.85) } to { opacity: 1; transform: translate(-50%,-50%) scale(1) } }
 @keyframes cantOut { to { opacity: 0; transform: translate(-50%,-62%) scale(.96) } }
-
-/* auto (non-clickable) center toast for timer warnings */
-.turn-toast {
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  z-index: 140; pointer-events: none;
-  font-family: var(--mono); font-weight: 800; letter-spacing: .06em;
-  color: #fff; background: #12060699; border: 1px solid var(--vermil); border-radius: 14px;
-  padding: 14px 30px; box-shadow: 0 8px 30px #000a, 0 0 24px #d8542f44;
-  animation: toastPop .25s var(--ease);
-}
-.turn-toast.big { font-size: 42px; padding: 10px 30px; }
-.turn-toast.small { font-size: 16px; }
-@keyframes toastPop { from { opacity: 0; transform: translate(-50%,-50%) scale(.8) } to { opacity: 1; transform: translate(-50%,-50%) scale(1) } }
-.turn-toast.out { animation: toastOut .3s var(--ease) forwards; }
-@keyframes toastOut { to { opacity: 0; transform: translate(-50%,-50%) scale(1.1) } }
 
 /* ---- coin toss (first-turn reveal) ---- */
 .cointoss-ov {
@@ -175,7 +160,7 @@
 .log-foot { padding: 10px 12px; border-top: 1px solid var(--line); }
 
 /* ---- target hint banner ---- */
-.target-hint { position: fixed; top: 52px; left: 50%; transform: translateX(-50%); z-index: 80; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: var(--vermil-hi); background: #1a0f0cdd; border: 1px solid var(--vermil); padding: 7px 16px; border-radius: 8px; box-shadow: 0 4px 18px #000a; }
+.target-hint { position: fixed; top: 52px; left: 50%; transform: translateX(-50%); z-index: 80; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: #dfd5bd; background: #202831ee; border: 1px solid #a99a7655; padding: 7px 16px; border-radius: 2px; box-shadow: 0 3px 12px #0003; }
 
 /* ============================================================
    animations driven by engine events
@@ -790,3 +775,31 @@
 @media(prefers-reduced-motion:reduce){.opening-heading,.ceremony-opening-player,.ceremony-opening-result,.ceremony-opening-player.is-first .opening-frame,.duel-outcome .outcome-copy{animation:none!important;}}
 .opening-portrait .avatar{width:100%!important;height:100%!important;border:0;box-shadow:none;}
 @media(max-width:600px){.duel-opening:not(.duel-opening-v1) .ceremony-canvas{top:13%;height:46%;}}
+
+/* Full effects remain readable at every length; definitions are secondary, never clipped. */
+.zoom-details .card-rules { overflow-wrap:anywhere; min-width:0; }
+.zoom-details .card-rule-notes { margin-top:24px; border-top:1px solid #b9c0cd36; padding-top:12px; font-size:14px; line-height:1.8; opacity:.85; }
+.zoom-details .card-rule-notes p { margin:8px 0; }
+.zoom-details .fx-tag { margin-inline-end:.45em; font-weight:600; }
+@media(max-width:850px) {
+  .zoom-overlay .zoom-wrap { width:calc(100vw - 28px); height:auto; max-height:calc(100dvh - 28px); grid-template-columns:minmax(0,1fr); grid-template-rows:auto auto auto; gap:18px; overflow-y:auto; }
+  .zoom-overlay .inspect-heading { min-width:0; gap:10px; flex-wrap:wrap; }
+  .zoom-overlay .inspect-heading h1 { min-width:0; font-size:22px; overflow-wrap:anywhere; }
+  .zoom-overlay .zoom-wrap > .card { --cw:min(160px,40vw); --ch:calc(var(--cw) * 1.5625); justify-self:center; }
+  .zoom-overlay .zoom-details { min-width:0; overflow:visible; padding:16px; font-size:16px; }
+  .zoom-overlay .card-dice .dr { grid-template-columns:56px minmax(0,1fr); gap:10px; }
+}
+
+/* Authored rule sections keep requirements and independently triggered effects apart. */
+.zoom-details .card-effect-section + .card-effect-section{margin-top:20px;padding-top:16px;border-top:1px solid rgba(190,165,115,.18)}
+.zoom-details .card-effect-section .fx-tag{display:block;width:fit-content;margin:0 0 8px;padding:0;border:0;background:none;color:var(--gold-light,#d8c39a);font:600 .82em/1.4 var(--font-ui,sans-serif);letter-spacing:.03em}
+.zoom-details .card-effect-body{margin:0;font:inherit;line-height:1.75;white-space:normal;word-break:normal;overflow-wrap:break-word}
+.zoom-details .card-effect-body + .card-effect-body{margin-top:8px}
+.zoom-details .card-keys{display:flex;flex-wrap:wrap;gap:10px 16px;margin-bottom:20px}
+.zoom-details .card-key-label{display:inline-flex;align-items:center;gap:6px;font-size:.85em}
+.zoom-details .card-rule-notes summary{cursor:pointer;line-height:1.5;color:var(--gold-light,#d8c39a)}
+.zoom-details .card-rule-notes p{line-height:1.65}
+.zoom-details .card-dice-head{margin-bottom:12px}
+@media(max-width:850px){.zoom-details .card-effect-section + .card-effect-section{margin-top:18px;padding-top:14px}}
+.zoom-details .card-effect-body{font-weight:400}
+.zoom-details .card-effect-body:lang(ko),.zoom-details .dr-fx:lang(ko){word-break:keep-all;overflow-wrap:anywhere}

@@ -44,7 +44,7 @@ export const DEW_SHIELD_STARTERS = ['SELECTED_SWORD', 'SELECTED_SHIELD', 'NOURIS
 export function applyDewShieldRework(db: Record<string, CardDef>): void {
   const patch = (id: string, textJa: string, changes: Partial<CardDef> = {}) => Object.assign(db[id], {text:textJa,textJa,textEn:textJa}, changes);
   patch('WORLD_CARE', '【常時】自分の場に最大1枚。【自分ターン開始時】雫1を得る');
-  patch('WORLD_TREE', '【条件】雫8以上。【常時】自分の雫による回復量2倍。自分のモンスターの攻撃時、任意で雫1を消費してその攻撃力+6（永続）。自分のモンスターの被攻撃時、任意で雫1を消費してその体力+6（永続）。【自分ターン開始時】雫3を得る', {atk:0,def:30,summonReq:'dew8',turnFx:'worldTree'});
+  patch('WORLD_TREE', '【条件】雫8以上。【常時】自分の雫による回復量2倍。自分のモンスターの攻撃時、任意で雫1を消費してその攻撃力+6（永続）。自分のモンスターの被攻撃時、任意で雫1を消費してその体力+6（永続）。【自分ターン開始時】雫3を得る', {atk:1,def:30,summonReq:'dew8',turnFx:'worldTree'});
   patch('VITAL2', '【召喚時】自分の体力3回復。その後ダイスを1回振り、5以上なら雫1を得る', {onSummon:'dewBeliever',val:3});
   patch('VITAL3', '【召喚時】自分の体力5回復。【常時】自分が「世界樹」「エルフ」系カードをプレイするたび、雫1を得る', {onSummon:'heal',val:5,aura:'treeKeeper'});
   patch('ELF_HAVEN', '【永続】「世界樹」カードの購入／発動コスト0（購入は自分の各ターン3枚まで）。自分が「世界樹」「エルフ」系カードを購入するたび、雫1を得る');

@@ -22,8 +22,8 @@
 //  · hell   — never blunders + value-net look-ahead search → 최강
 // ============================================================
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
-import { effectChoices, purchaseAllowed, playBlockReason } from "./engine";
-import { ST_MAX, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, effMaxMana, freeBuyBlocked, glassBanActive, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
+import { effectChoices, purchaseAllowed, playBlockReason, monsterCanAttack } from "./engine";
+import { ST_MAX, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, effMaxMana, freeBuyBlocked, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
 import { avgPower, cardPower } from "./cardEval";
 import { netEval, determinize } from "./botNet";
 import { DB, hasPassive } from "./cards";
@@ -221,17 +221,8 @@ export function candidates(g: GameState): Action[] {
   if (!noAtk) {
     const seenAtk = new Set<string>();
     p.field.forEach((m) => {
-      if (m.exhausted || (m.id === "ASSASSIN_SQUAD" && o.hp < 11)) return;
-      if (m.hatch != null) return; // 알은 공격 불가 (엔진이 거부 — 후보에서 제외해야 무한 재시도 안 함)
-      if (m.summonedTurn === g.turn && o.field.some((tm) => hasPassive(tm, "majesty"))) return;
+      if (!monsterCanAttack(g, p, m)) return;
       const a = effAtk(p, m, g);
-      if (glassBanActive(g) && Math.abs(effAtk(p, m, g) - effDef(p, m)) >= 4) return; // 전략 변경(v34)
-      if (o.field.some((tm) => tm.aura === "lowAtkBan") && (m.cost ?? 0) <= 2) return; // 몰락 귀족
-      const direct = m.directOnly || o.field.length === 0;
-      if (direct && (p.noDirectTurn || o.field.some((tm) => tm.aura === "eliteGuard"))) return; // 천궁의 폐문 / 귀족 영주
-      if (!direct && !o.field.some((tm) => !(tm.aura === "eliteGuard" && (m.cost ?? 0) <= 6))) return; // 공격 가능한 대상이 전무
-      const canLand = true; // v24 HP-combat: every attack lands (chip damage accumulates)
-      if (!canLand) return;
       const key = `${a}|${m.directOnly ? 1 : 0}`;
       if (seenAtk.has(key)) return;
       seenAtk.add(key);
@@ -370,7 +361,7 @@ function legalActions(g: GameState): Action[] {
   const noAtk = g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "noAttack"));
   if (!noAtk) {
     p.field.forEach((m) => {
-      if (!m.exhausted && !(m.id === "ASSASSIN_SQUAD" && o.hp < 11) && (!glassBanActive(g) || Math.abs(effAtk(p, m, g) - effDef(p, m)) < 4)) add({ type: "attack", uid: m.uid });
+      if (monsterCanAttack(g, p, m)) add({ type: "attack", uid: m.uid });
     });
   }
   p.supply.forEach((c, i) => { if (c && buyableByBot(p, c, g)) add({ type: "buySupply", i }); });
@@ -768,7 +759,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   const plan = facePlan(p, o, ready, spells, noAtk);
   if (plan.total >= o.hp) {
     if (plan.spellIdx !== null) return { type: "play", idx: plan.spellIdx };
-    if (plan.attackUid) return { type: "attack", uid: plan.attackUid };
+    if (plan.attackUid && p.field.some(m => m.uid === plan.attackUid && monsterCanAttack(g, p, m))) return { type: "attack", uid: plan.attackUid };
   }
 
   // 1.5) removal-lethal: if clearing the biggest blocker makes the swing lethal, do it now
@@ -800,9 +791,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   //    swing does nothing, so never chip into a bigger defense).
   //    Biggest attacker first: same kill, more penetration (관통) face damage.
   if (!noAtk) {
-    const ban = glassBanActive(g);
-    const lowBan = o.field.some((tm) => tm.aura === "lowAtkBan");
-    const canSwing = (m: FieldMon): boolean => (!ban || Math.abs(effAtk(p, m, g) - effDef(p, m)) < 4) && !(lowBan && (m.cost ?? 0) <= 2);
+    const canSwing = (m: FieldMon): boolean => monsterCanAttack(g, p, m);
     const eliteWall = o.field.some((tm) => tm.aura === "eliteGuard");
     const assassin = ready.find((m) => m.directOnly && canSwing(m) && !p.noDirectTurn && !eliteWall);
     if (assassin) return { type: "attack", uid: assassin.uid };
@@ -1017,9 +1006,8 @@ function lethalActions(g: GameState): Action[] {
   // Set traps are hidden information. Unless the search first removes them, do
   // not prove a lethal line by peeking at what the trap actually is.
   if (!noAtk && o.traps.length === 0) {
-    const ban = glassBanActive(g);
     [...p.field]
-      .filter((m) => !m.exhausted && !(m.id === "ASSASSIN_SQUAD" && o.hp < 11) && (!ban || Math.abs(effAtk(p, m, g) - effDef(p, m)) < 4))
+      .filter((m) => monsterCanAttack(g, p, m))
       .sort((a, b) => effAtk(p, b, g) - effAtk(p, a, g))
       .forEach((m) => add({ type: "attack", uid: m.uid }));
   }
