@@ -1,0 +1,256 @@
+{
+  "source": "a0ade5f481acbaac3e8cf42c231bf15ea6d8531e",
+  "golemFix": "54766dbc",
+  "workerVersion": "b4c447d9-c36e-4514-bea4-bd24cdf28de0",
+  "checkedAt": "2026-10-07T01:44:38.530Z",
+  "files": 41,
+  "matched": 41,
+  "results": [
+    {
+      "file": "assets/audit-Ch-vlPRj.js",
+      "status": 200,
+      "sha256": "53fcc623e3b2b9ac71ac9b74dd522f3e77f45ae7853baa8ac8284d4d4e6a1930",
+      "match": true
+    },
+    {
+      "file": "assets/BufferGeometryUtils-B3Pwz7I_.js",
+      "status": 200,
+      "sha256": "ed6dae32ed1340c153f263e88e5f0b42c4728511bc50b5f5a9381e205a86403f",
+      "match": true
+    },
+    {
+      "file": "assets/board-DF4LxME5.js",
+      "status": 200,
+      "sha256": "ddac77a9c4ad9a543ba4f71a2c2d3d1a4a4eff786655bf44bc5217562b32bf8d",
+      "match": true
+    },
+    {
+      "file": "assets/atelierThemes-DM29k3s-.js",
+      "status": 200,
+      "sha256": "95d1fa7ec28362a982bf7d4430da039a377b73a37609306bf599ca8bc7810c97",
+      "match": true
+    },
+    {
+      "file": "assets/RoomEnvironment-DrABbgCX.js",
+      "status": 200,
+      "sha256": "2a74ac17bc6d632cf13f3806c12d6d621e75ef78883817fac1a2cfbc0f431828",
+      "match": true
+    },
+    {
+      "file": "index.html",
+      "status": 200,
+      "sha256": "dbade2b2f7d526dce48cd6da9fcd2bbf832e07b5344663b9cfa41da2985a4a7d",
+      "match": true
+    },
+    {
+      "file": "assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "status": 200,
+      "sha256": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700",
+      "match": true
+    },
+    {
+      "file": "assets/board-UDApamK7.css",
+      "status": 200,
+      "sha256": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22",
+      "match": true
+    },
+    {
+      "file": "assets/diceScene-Bfmv6ewg.js",
+      "status": 200,
+      "sha256": "50389eedd3e733918b91a8986b2b37eed23a5459baca55cbff8791d44c75a6f1",
+      "match": true
+    },
+    {
+      "file": "assets/ceremonyScene-CKwAMZia.js",
+      "status": 200,
+      "sha256": "74b63dad2861012570585b097b3da57506e0846ea7fa21a5d84845c6608b2581",
+      "match": true
+    },
+    {
+      "file": "assets/cosmeticStudio-DQ79ziVk.js",
+      "status": 200,
+      "sha256": "bccff8884dbca264078698a075156bf21272b69c958c28b78aab427a53662e03",
+      "match": true
+    },
+    {
+      "file": "assets/duelScene-C4buzdpV.js",
+      "status": 200,
+      "sha256": "bcf3f45cfdf788d170192964836c14a61085241ff67e9bccc8f30af7da31908c",
+      "match": true
+    },
+    {
+      "file": "assets/inspection-BoJ6tl2n.js",
+      "status": 200,
+      "sha256": "dac72dfe3cfa10d95c3963cf9412c8a0dc1385448b3754447a0a865fdd992d9e",
+      "match": true
+    },
+    {
+      "file": "assets/game-CNQyAoa-.js",
+      "status": 200,
+      "sha256": "97f0a3e7539688189ee8136d5a8d0970d53e65d11740f3cf4971b3883d4df336",
+      "match": true
+    },
+    {
+      "file": "assets/family-matter--EJBmqV2.js",
+      "status": 200,
+      "sha256": "1f48b31dcb77fe11933fc436f9c3169e1e9fc1bdb62fae46732716fcd0362311",
+      "match": true
+    },
+    {
+      "file": "assets/layout-pMfcEDtF.css",
+      "status": 200,
+      "sha256": "834708ab76534934347cff47b156f4228bd9c7904902eda69088e255db0cdc94",
+      "match": true
+    },
+    {
+      "file": "assets/handGeometry-Bz96hXgQ.js",
+      "status": 200,
+      "sha256": "aa57e7f2da29c273b4f2adfb686fe19dbae04ee09c5e9ce37b735341357b6d01",
+      "match": true
+    },
+    {
+      "file": "assets/layout-Cn4cJpnJ.js",
+      "status": 200,
+      "sha256": "2bc7c81a284ce90d88f9303bc73b699bf2214f7d8b59b2477395f41a7d5df772",
+      "match": true
+    },
+    {
+      "file": "assets/master-tongues-CvkhbNms.js",
+      "status": 200,
+      "sha256": "36e13d89360cbc16085e8d1d5c452c259b8c11f470b800f5e8adf60d1b3cc98d",
+      "match": true
+    },
+    {
+      "file": "assets/materials-yI6V2vmU.js",
+      "status": 200,
+      "sha256": "6ef2c3db67145153286b0733f637888994440e3bff62ab161a29288a0b46d24f",
+      "match": true
+    },
+    {
+      "file": "assets/main-BDpRd2px.css",
+      "status": 200,
+      "sha256": "03766858e4629d2d6974cbc03b3ebf580ede339771837ed106164d83743fe091",
+      "match": true
+    },
+    {
+      "file": "assets/main-C9AZY84u.js",
+      "status": 200,
+      "sha256": "4f0c58070d7abf3b8958137e3206b771a735d64bd61f60d117408a2ae72030dc",
+      "match": true
+    },
+    {
+      "file": "assets/modal-Bee24TP5.css",
+      "status": 200,
+      "sha256": "42ff0e2d01f08cf87c23404fcf2756f83bd0bad699ea9e47e2e13ff2e6ce3153",
+      "match": true
+    },
+    {
+      "file": "assets/modal-Dm4jQtvY.js",
+      "status": 200,
+      "sha256": "9f84e31c012ea98f3bf4d097e99ad346caf21e335a4ec72dba6121ab1dfa622a",
+      "match": true
+    },
+    {
+      "file": "assets/renderDensity-eCqR3GeM.js",
+      "status": 200,
+      "sha256": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699",
+      "match": true
+    },
+    {
+      "file": "assets/pileModels-DVmmpdaH.js",
+      "status": 200,
+      "sha256": "de1ab9d052279e770f70f3611f639af0938d197814a78fa379d960577118fd07",
+      "match": true
+    },
+    {
+      "file": "assets/persistentFlightRenderer-CyFMPgpA.js",
+      "status": 200,
+      "sha256": "3abb694437ce4e97447a0eb3fa78a52354fee1c83e195a73f922d562f2e8776b",
+      "match": true
+    },
+    {
+      "file": "assets/paperDraw-Bs7AyxmD.js",
+      "status": 200,
+      "sha256": "c4c5076e04a6e2eb0c4ecfb1aa3e92b4d2045be2a99740a7ca6e390df4703346",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-5dTHYoLm.js",
+      "status": 200,
+      "sha256": "777ce6ea4d9abb9602211cf9fe6249a99615870dd02360e4c8d16e5183a0e6df",
+      "match": true
+    },
+    {
+      "file": "assets/ornaments-CqaBwgpl.js",
+      "status": 200,
+      "sha256": "7b1053313df2cb756aa3f4fa795e145cf5a026edeb0d1b8d3ee885612748ac09",
+      "match": true
+    },
+    {
+      "file": "assets/royal-matter-DAEdHerY.js",
+      "status": 200,
+      "sha256": "98bd8bbe5006720f8f41a7838c4b1c9c0838e6457a650e753bb8c53b38029e44",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-CR_AFrVW.js",
+      "status": 200,
+      "sha256": "e2f4206aa051d758c46b84eb1969d1b73601f04c11c1053bde6b6d2599dfcda7",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-CIs3CgkS.js",
+      "status": 200,
+      "sha256": "15e838f17620e1a036dc7229655223d8d627e7d91e9b950723602ab59c225b18",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-BC-mvBBO.js",
+      "status": 200,
+      "sha256": "0a516a3d3390fc9e5c8a9ea009bd6926ab46179f027397b1f1bf8159744528ed",
+      "match": true
+    },
+    {
+      "file": "assets/riftScene-CV2xuL8y.js",
+      "status": 200,
+      "sha256": "40b729b6764535a12c5460dbb055b6d89fb62dcb79c51873d7d739d248874fb6",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-CJmM42Q0.js",
+      "status": 200,
+      "sha256": "1b59c7d85dfe11de6b4a6242ff1a7a0347a217398e41bc1f519aaa6f924df7fe",
+      "match": true
+    },
+    {
+      "file": "assets/studio-CmgKc6nL.css",
+      "status": 200,
+      "sha256": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-Ch9eydv_.css",
+      "status": 200,
+      "sha256": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c",
+      "match": true
+    },
+    {
+      "file": "assets/sleeve-NwCk5aLT.js",
+      "status": 200,
+      "sha256": "d3a0e787f3a25f05d7b14c30508afacdd23ee78969c419e814fb375c4fd984b4",
+      "match": true
+    },
+    {
+      "file": "assets/scene-jQCCgcwL.js",
+      "status": 200,
+      "sha256": "87b5c581c055dda9e01ed9251672ac1c657e1b1b5eb0e8cb1027189477e88fac",
+      "match": true
+    },
+    {
+      "file": "assets/three.module-Cv9nTOXa.js",
+      "status": 200,
+      "sha256": "2a16c89ab1fe1616111ec96ab875efeddfcef0c52c38085da22a555eed3e378f",
+      "match": true
+    }
+  ]
+}

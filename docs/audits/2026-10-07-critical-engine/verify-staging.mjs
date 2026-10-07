@@ -1,0 +1,15 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const hash=b=>createHash('sha256').update(b).digest('hex');
+const root='client/dist',url='https://test.yourlore.xyz';
+const status=JSON.parse(execFileSync('npm',['exec','--','wrangler','deployments','status','-c','server/wrangler.toml','--env','staging','--json'],{encoding:'utf8'}));
+const files=['index.html',...(await fs.readdir(path.join(root,'assets'))).filter(f=>/\.(js|css)$/.test(f)).map(f=>'assets/'+f)];
+const report={source:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),deployment:status,checkedAt:new Date().toISOString(),files:files.length,matched:0,results:[]};
+let next=0;
+await Promise.all(Array.from({length:6},async()=>{for(;;){const i=next++;if(i>=files.length)return;const file=files[i],local=await fs.readFile(path.join(root,file));const response=await fetch(url+'/'+file,{cache:'no-store'});const remote=Buffer.from(await response.arrayBuffer());const match=response.ok&&hash(local)===hash(remote);report.results.push({file,status:response.status,sha256:hash(local),match});if(match)report.matched++;}}));
+report.results.sort((a,b)=>a.file.localeCompare(b.file));
+await fs.writeFile('docs/audits/2026-10-07-critical-engine/staging-final.json',JSON.stringify(report,null,2));
+console.log(JSON.stringify({source:report.source,files:report.files,matched:report.matched,deployment:status.id}));
+if(report.matched!==report.files)process.exitCode=1;
