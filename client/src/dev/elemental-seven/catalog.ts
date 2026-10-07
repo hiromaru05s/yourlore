@@ -8,16 +8,12 @@ export const entries:Entry[] = [
  {kind:'arrow',card:'FIRE_ARROW',name:'ファイアーアロー',en:'THREE EMBER LANCES',concept:'カード面から三本の炎槍 → 個別に射出 → 三回の着弾',duration:3600,hits:3,damage:1,accent:'#f8be79'},
  {kind:'meteor',card:'FIRE_METEOR',name:'ファイアーメテオ',en:'EIGHT FALLING SUNS',concept:'空へ立ち昇る熱 → 溶岩の核を持つ八つの隕石 → 連続爆燃',duration:5100,hits:8,damage:2,accent:'#ffa06c'},
  {kind:'ball',card:'FIRE_BALL',name:'ファイアーボール',en:'A SUN IN THE PALM',concept:'表面から炎を巻き上げる → 圧縮した火球 → 膨張と燃え残る煙',duration:3400,hits:1,damage:6,accent:'#ffbd73'},
- {kind:'zone',card:'FIRE_ZONE',name:'ファイアーゾーン',en:'FIELD OF CINDERS',concept:'カード面から地表へ流れる炎 → 敵陣全域が同時に噴炎 → 灰燼',duration:4100,hits:4,damage:5,accent:'#ed9b69'},
+ {kind:'zone',card:'FIRE_ZONE',name:'ファイアーゾーン',en:'FIELD OF CINDERS',concept:'カード面の蓄熱 → 敵陣全域が同時に噴炎 → 灰燼',duration:4100,hits:4,damage:5,accent:'#ed9b69'},
 ];
 export const entry=(id:string)=>entries.find(e=>e.kind===id)??entries[0];
-export const clamp=(x:number)=>Math.max(0,Math.min(1,x));
-export const ease=(x:number)=>{const u=clamp(x);return u*u*(3-2*u)};
-export const pulse=(t:number,a:number,b:number,c:number)=>ease((t-a)/(b-a))*(1-ease((t-b)/(c-b)));
-export const hash=(x:number)=>{const f=Math.sin(x*127.1+311.7)*43758.5453;return f-Math.floor(f)};
-export type Point={x:number;y:number};
-export type Anchor=Point&{w:number;h:number;el:HTMLElement};
-export interface Hit {target:number;at:number;amount:number;}
+export {clamp,ease,pulse,hash,rate} from '../../ui/elemental/catalog';
+export type {Point,Anchor,Hit} from '../../ui/elemental/catalog';
+import type {Hit} from '../../ui/elemental/catalog';
 /** Targets are resolved by the fixture, never randomized by the renderer.
  * Slots 0..2 are enemy monsters, 3 enemy player, 4 an allied monster. */
 export function hitPlan(e:Entry,friendly=false,heavy=false,enhanced=false,player=false):Hit[]{

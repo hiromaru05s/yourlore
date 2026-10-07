@@ -6,7 +6,7 @@ import {GameView,setMyAvatar,setOppAvatar} from '../../ui/boardView';
 import {startBoardLayout} from '../../ui/layout';
 import {waitForDuel} from '../../ui/duelReadiness';
 import {clearMonsterStates} from '../../ui/monster/runtime';
-import {entry,hitPlan,clamp,pulse,type Entry,type Anchor,type Hit} from './catalog';
+import {entry,hitPlan,clamp,pulse,rate,type Entry,type Anchor,type Hit} from './catalog';
 import {Effects} from './effects';
 import {CardMaterial} from './surface';
 // T13 is retired by v43. This isolated art fixture does not put it back in DB.
@@ -58,7 +58,7 @@ export class Stage {
   for(const[i,el]of this.targets.entries()){const total=this.hits.filter(h=>h.target===i&&time>=h.at).reduce((sum,h)=>sum+h.amount,0);const label=el.querySelector('.ad-def .seal-value')??el.querySelector('.pt-hp b')??el.querySelector('b');if(label&&i!==3){const id=['ELF','INFKNIGHT','MANA_GIANT','','ELF'][i];label.textContent=String((DB[id]?.def??0)+40-total)}if(i===3){const hp=this.board?document.getElementById((1-this.side)?'hp-opp':'hp-me'):el.querySelector('b');if(hp)hp.textContent=String(80-total)}}
   this.canvas.dataset.time=String(time);this.onTick();
  }
- play(){if(!this.ready||this.playing)return;if(this.time>=this.current.duration)this.seek(0);this.playing=true;this.last=performance.now();const tick=(now:number)=>{if(!this.playing||this.disposed)return;const delta=Math.min(100,now-this.last);this.last=now;const next=this.time+delta*this.speed;if(next>=this.current.duration){this.seek(this.current.duration);if(this.loop&&!this.reduced)this.seek(0);else{this.stop();return}}else this.seek(next);this.frame=requestAnimationFrame(tick)};this.frame=requestAnimationFrame(tick)}
+ play(){if(!this.ready||this.playing)return;if(this.time>=this.current.duration)this.seek(0);this.playing=true;this.last=performance.now();const tick=(now:number)=>{if(!this.playing||this.disposed)return;const delta=Math.min(100,now-this.last);this.last=now;const next=this.time+delta*this.speed*rate(this.current.kind);if(next>=this.current.duration){this.seek(this.current.duration);if(this.loop&&!this.reduced)this.seek(0);else{this.stop();return}}else this.seek(next);this.frame=requestAnimationFrame(tick)};this.frame=requestAnimationFrame(tick)}
  stop(){this.playing=false;cancelAnimationFrame(this.frame);this.frame=0;this.onTick()}
  reset(){this.stop();this.seek(0)}
  status(){return {kind:this.current.kind,ready:this.ready,time:this.time,playing:this.playing,renderer:this.fx.fire.available?'volume-webgl':'fallback-2d',hits:this.hits,sourceVisible:this.source?.isConnected,boardReady:this.board?this.root.dataset.sceneReady??this.root.dataset.tableState:'studio',overlays:document.querySelectorAll('.element-overlay').length}}

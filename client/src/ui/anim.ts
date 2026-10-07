@@ -1,3 +1,4 @@
+import type {ElementalEvent,Playback} from './elemental/runtime';
 import {playSpellFrame,cancelSpellFrames,warmSpellFrame,SPELL_FRAME_RATE} from './spellFrame/runtime';
 import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {isMimic,focusScale,type MimicId} from './mimic/selection';
@@ -229,7 +230,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
         if(!fxSkip)playBiblionFx('enchant-place',face);
         return face;
       }
-    } else if (dest === "discard") await landOnShelf(node,side);
+    } else if (dest === "discard") {if(deferVanish&&!fxSkip){await parkQuickSpell(node,side);held=true;return node;}await landOnShelf(node,side);}
     else if(dest === "vanish") {
       if(deferVanish&&!fxSkip){await parkQuickSpell(node,side);held=true;return node;}
       await absorbIntoRift(node,side);
@@ -351,6 +352,24 @@ async function purchaseMana(side:ViewSide,target:DOMRect):Promise<void>{
     await wait(530);if(!fxSkip&&!document.hidden)sfx('mana-pay');
     await wait(330);
   }finally{stop();}
+}
+
+export async function finishElementalSpell(node:HTMLElement,side:ViewSide):Promise<void>{
+ try{if(node.isConnected)await landOnShelf(node,side);}finally{node.remove();}
+}
+export async function beginElemental(event:ElementalEvent,you:0|1,source?:HTMLElement):Promise<Playback>{
+ const idle:Playback={impact:()=>Promise.resolve(),finished:Promise.resolve(),cancel(){}};
+ if(fxSkip)return idle;
+ const {startElemental}=await import('./elemental/runtime');if(fxSkip)return idle;
+ const playback=startElemental(event,you,source);
+ void boardMotionScope(async signal=>{signal.addEventListener('abort',playback.cancel,{once:true});await playback.finished;return !signal.aborted;},6500);
+ return playback;
+}
+export async function berserkStrike(uid:string,targetUid:string|null,player:0|1,you:0|1,targetPlayer:0|1,onImpact:()=>void,exhaust:boolean,amount=0):Promise<void>{
+ if(fxSkip)return;sfx('attack');
+ const playback=await beginElemental({type:'elementalStart',group:uid,player,id:'NGA4',uid,targets:[{player:targetPlayer,uid:targetUid,amount}]},you);
+ await playback.impact(0);if(!fxSkip){if(amount>0)sfx(targetUid?'impact':'facehit');onImpact();}await playback.finished;
+ const source=byUid(uid);if(source&&exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');source.style.filter='grayscale(1) brightness(.57)';}
 }
 
 /** Keep the revealed source readable at the board edge while its effect resolves. */

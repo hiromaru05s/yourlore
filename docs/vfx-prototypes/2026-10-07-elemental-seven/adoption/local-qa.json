@@ -1,0 +1,66 @@
+{
+  "checks": [
+    {
+      "id": "NGA4",
+      "owner": 0,
+      "hits": 1,
+      "duration": 1500,
+      "observed": 1538.5999999046326
+    },
+    {
+      "id": "GUNNER",
+      "owner": 0,
+      "hits": 1,
+      "duration": 3300,
+      "observed": 3339.5999999046326
+    },
+    {
+      "id": "HEAVY_GUNNER",
+      "owner": 1,
+      "hits": 1,
+      "duration": 3300,
+      "observed": 3330.7000000476837
+    },
+    {
+      "id": "FIRE_ARROW",
+      "owner": 0,
+      "hits": 3,
+      "duration": 3600,
+      "observed": 3646.2000000476837
+    },
+    {
+      "id": "FIRE_METEOR",
+      "owner": 1,
+      "hits": 8,
+      "duration": 5100,
+      "observed": 5147.299999952316
+    },
+    {
+      "id": "FIRE_BALL",
+      "owner": 0,
+      "hits": 1,
+      "duration": 3400,
+      "observed": 3450.2999999523163
+    },
+    {
+      "id": "FIRE_ZONE",
+      "owner": 1,
+      "hits": 3,
+      "duration": 4100,
+      "observed": 4129.799999952316
+    },
+    {
+      "case": "mobile-zone"
+    },
+    {
+      "case": "mid-sequence-destruction"
+    },
+    {
+      "case": "reduced-motion"
+    },
+    {
+      "case": "skip-flush"
+    }
+  ],
+  "errors": []
+}
