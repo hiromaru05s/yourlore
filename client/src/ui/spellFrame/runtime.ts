@@ -1,7 +1,7 @@
 import {FRAME_DURATION} from './shader';
 import type {FrameScene} from './scene';
-/** Preserve the approved shader timeline while halving gameplay time. */
-export const SPELL_FRAME_RATE=2;
+/** Preserve the approved shader timeline at 2.5x the previous 2x playback speed. */
+export const SPELL_FRAME_RATE=5;
 /** Start fetching during the card reveal; no canvas or GPU resources yet. */
 export function warmSpellFrame(){void import('./scene').catch(()=>{});}
 const active=new Map<HTMLElement,()=>void>();

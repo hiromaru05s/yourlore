@@ -253,16 +253,21 @@ export type Action =
 export type DiceSource = { player: Side } & ({ id: string; status?: never } | { status: "brand" | "solitude"; id?: never });
 
 export type GameEvent =
+  | { type: "statusGrant"; player: Side; resource: "shield" | "brand"; before: number; after: number }
+  | { type: "tribeSynergy"; player: Side; tribe: string; threshold: number; uids: string[] }
   | { type: "monsterActivate"; player: Side; uid: string }
   | { type: "enchantActivate"; player: Side; uid: string; id: string }
   | { type: "log"; html: string; htmlJa: string }
   | { type: "turnHeader"; turn: number; name: string; isBot: boolean; player?: Side } // player: whose turn (log tinting)
   | { type: "summon"; player: Side; uid: string; id?: string } // id: card id (drives the summon ghost when the monster dies in the same batch)
   | { type: "attack"; player: Side; uid: string; targetUid: string | null; contactDamage?: number }
+  | { type: "elementalStart"; group:string; player:Side; id:string; uid:string; targets:Array<{player:Side;uid:string|null;amount:number}> }
+  | { type: "elementalImpact"; group:string; index:number }
+  | { type: "elementalEnd"; group:string }
   | { type: "hit"; uid: string; amount?: number }
   | { type: "damage"; player: Side; amount: number; srcKo?: string; srcJa?: string } // src: what dealt it (death-cause display)
   | { type: "heal"; player: Side; amount: number }
-  | { type: "destroy"; player: Side; uid: string; id?: string }
+  | { type: "destroy"; player: Side; uid: string; id?: string; cause?: "decay" }
   | { type: "buy"; player: Side; from: "market" | "supply"; i: number; id: string }
   | { type: "marketRestock"; i: number; id: string } // v40: 고정 마켓 슬롯 매진 → 새 카드 입고
   | { type: "draw"; player: Side; count: number }

@@ -1,9 +1,17 @@
+import {cancelStatusGrants} from './statusGrant/runtime';
+import {selectedTribeSummon} from './tribePresentation/selection';
+import {playTribeSummon,cancelTribeSummons} from './tribePresentation/runtime';
+import {holdRiftTarget} from './riftActivity';
+import {cancelTribeSynergy} from './tribeSynergy/runtime';
+import type {ElementalEvent,Playback} from './elemental/runtime';
+import {flyPersistentIntoSlot} from './persistentFlight';
 import {playSpellFrame,cancelSpellFrames,warmSpellFrame,SPELL_FRAME_RATE} from './spellFrame/runtime';
 import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {isMimic,focusScale,type MimicId} from './mimic/selection';
 import {playMonster,setMonsterSkip} from './monster/runtime';
 import {summonPlacement} from './summon/runtime';
-import {foldQuestIntoSlot,nativeQuestGhost} from './questFold';
+import {isVerdant} from './verdant/selection';
+import {foldQuestIntoSlot,nativeQuestGhost,warmQuestPact} from './questFold';
 import {getManaFormation} from './manaFormationPreview';
 import {passiveIcon} from './passiveIcon';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
@@ -18,12 +26,13 @@ import {waitForDuel} from './duelReadiness';
 import type { CardInst } from "../shared/types";
 import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, cardPassives, enchantHasTurnCountdown } from "../shared/cards";
 import { cardEl, cardRulesEl, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
-import { t, getLang, cardText, cardName } from "../i18n";
+import { t, getLang, cardName } from "../i18n";
 
 import { sfx } from "./sound";
 import { moveOnBoard } from "./boardMotion";
 import { projectedPlacement } from "./boardProjection";
 import {playBiblionFx,clearBiblionFx} from './biblionFx';
+import {prepareManaPurchase,MANA_PURCHASE_CONTACT_MS,MANA_PURCHASE_DURATION} from './manaPurchase';
 
 export type ViewSide = "me" | "opp";
 
@@ -40,7 +49,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on);
-  if(on){cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -184,15 +193,20 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(heavy&&selectedTribeSummon(face.dataset.cardId)){
+    face.style.visibility='hidden';
+    await boardMotionScope(signal=>playTribeSummon(face,{anchor:target,from,reveal,signal,onImpact:()=>sfx(landingSound)}));
+    reveal.remove();face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
   if(heavy){
     face.style.zIndex='135';reveal.style.zIndex='135';
     // Transfer directly into the selected card-parallel landing, without a second impact.
-    const initial=summonPlacement(target,w,h,0,reduced);
+    const initial=summonPlacement(target,w,h,0,reduced,face.dataset.cardId);
     const transfer=face.animate([{transform:start.toString(),opacity:0},{transform:initial.toString(),opacity:1}],{duration:reduced?80:300,easing:'cubic-bezier(.2,.7,.3,1)',fill:'both'});
     const fade=reveal.animate([{opacity:1},{opacity:0}],{duration:reduced?80:220,fill:'both'});
     await wait(reduced?80:300);transfer.cancel();fade.cancel();reveal.remove();
     face.style.transform=initial.toString();
-    await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}));
+    await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}),isVerdant(face.dataset.cardId)?10000:5000);
     face.style.transform=fieldPlacement(target,w,h).toString();return face;
   }
   const duration=reduced?120:620;
@@ -209,9 +223,11 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   const node = floatAt(cardEl(card, {size:"hand"}), from);
   let held=false;
   try {
-    if(card.t==='spell'&&!fxSkip)warmSpellFrame();
+    if(card.t==='quest'&&!fxSkip)void warmQuestPact().catch(()=>{});
+    const persistent=dest==='field'&&!!card.ench;
+    if(card.t==='spell'&&!persistent&&!fxSkip)warmSpellFrame();
     await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:1);
-    if(card.t==='spell'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
+    if(card.t==='spell'&&!persistent&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
     if (to && dest === "field" && (card.ench || card.t === "quest")) {
       const zone=document.querySelector(side==='me'?'#meRow .zone-st':'#oppRow .zone-st');
@@ -220,16 +236,17 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
         const duration=enchantHasTurnCountdown(card)?`<span class="buff-duration"><span>${getLang()==='ja'?'残り':''}${card.val??1}</span></span>`:'<img class="buff-infinity" src="/art/biblion/modular/infinity-ui.webp" alt="">';
         if(card.t==='quest'){
           const face=questTile(card);
-          if(!fxSkip&&await boardMotionScope(signal=>foldQuestIntoSlot(node,target,face,signal),6500))return face.parentElement;
+          if(!fxSkip&&await boardMotionScope(signal=>foldQuestIntoSlot(node,target,face,signal),8500))return face.parentElement;
           // Interrupted or unavailable renderer: preserve the native placed card.
           if(!target.isConnected)return null;
           return nativeQuestGhost(target,face);
         }
-        const face=await flyIntoSlot(node,target,enchantmentTile(card,duration));
-        if(!fxSkip)playBiblionFx('enchant-place',face);
-        return face;
+        const face=enchantmentTile(card,duration);
+        if(!fxSkip&&await boardMotionScope(signal=>flyPersistentIntoSlot(node,target,face,signal),6500))return face.parentElement;
+        if(!target.isConnected)return null;
+        return nativeQuestGhost(target,face);
       }
-    } else if (dest === "discard") await landOnShelf(node,side);
+    } else if (dest === "discard") {if(deferVanish&&!fxSkip){await parkQuickSpell(node,side);held=true;return node;}await landOnShelf(node,side);}
     else if(dest === "vanish") {
       if(deferVanish&&!fxSkip){await parkQuickSpell(node,side);held=true;return node;}
       await absorbIntoRift(node,side);
@@ -346,11 +363,32 @@ async function purchaseMana(side:ViewSide,target:DOMRect):Promise<void>{
   const cluster=document.getElementById(side==='me'?'portraitMe':'portraitOpp');
   const source=cluster?.querySelector<HTMLElement>('.mana-crystals')??cluster?.querySelector<HTMLElement>('.pips');
   if(!source)return;
-  const stop=playBiblionFx('purchase',source.getBoundingClientRect(),target);
+  // Preparation races a skippable deadline: cold/failed assets never trap input.
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches)await Promise.race([prepareManaPurchase(),wait(800)]);
+  if(fxSkip||document.hidden)return;
+  const stop=playBiblionFx('purchase',()=>source.isConnected?source.getBoundingClientRect():null,target);
   try{
-    await wait(530);if(!fxSkip&&!document.hidden)sfx('mana-pay');
-    await wait(330);
+    await wait(MANA_PURCHASE_CONTACT_MS);if(!fxSkip&&!document.hidden)sfx('mana-pay');
+    await wait(MANA_PURCHASE_DURATION*1000-MANA_PURCHASE_CONTACT_MS);
   }finally{stop();}
+}
+
+export async function finishElementalSpell(node:HTMLElement,side:ViewSide):Promise<void>{
+ try{if(node.isConnected)await landOnShelf(node,side);}finally{node.remove();}
+}
+export async function beginElemental(event:ElementalEvent,you:0|1,source?:HTMLElement):Promise<Playback>{
+ const idle:Playback={impact:()=>Promise.resolve(),finished:Promise.resolve(),cancel(){}};
+ if(fxSkip)return idle;
+ const {startElemental}=await import('./elemental/runtime');if(fxSkip)return idle;
+ const playback=startElemental(event,you,source);
+ void boardMotionScope(async signal=>{signal.addEventListener('abort',playback.cancel,{once:true});await playback.finished;return !signal.aborted;},6500);
+ return playback;
+}
+export async function berserkStrike(uid:string,targetUid:string|null,player:0|1,you:0|1,targetPlayer:0|1,onImpact:()=>void,exhaust:boolean,amount=0):Promise<void>{
+ if(fxSkip)return;sfx('attack');
+ const playback=await beginElemental({type:'elementalStart',group:uid,player,id:'NGA4',uid,targets:[{player:targetPlayer,uid:targetUid,amount}]},you);
+ await playback.impact(0);if(!fxSkip){if(amount>0)sfx(targetUid?'impact':'facehit');onImpact();}await playback.finished;
+ const source=byUid(uid);if(source&&exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');source.style.filter='grayscale(1) brightness(.57)';}
 }
 
 /** Keep the revealed source readable at the board edge while its effect resolves. */
@@ -402,7 +440,7 @@ export function pileFlash(id: string): void {
 
 export function summonIn(uid: string): void {
   const n = byUid(uid);
-  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}));
+  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}),isVerdant(n.dataset.cardId)?10000:5000);
 }
 
 export function lunge(uid: string, dir: "up" | "down"): void {
@@ -560,13 +598,6 @@ export function zoomCard(c: CardInst, hp?: { now: number; max: number }, stateTe
   details.append(cardRulesEl(c));
   details.onclick = e => e.stopPropagation();
   wrap.appendChild(cardEl(c, { fullArt: true, ...(hp ? { hpNow: hp.now, hpMax: hp.max } : {}) }));
-  // "(지속)" 스탯 변화 카드: 필드에 있는 동안만 유지된다는 각주
-  if (/\((?:지속|持続|lasting)\)/.test(cardText(c))) {
-    const note = document.createElement("div");
-    note.className = "zoom-note";
-    note.textContent = t("card.dur.note");
-    details.appendChild(note);
-  }
   // 패시브 키워드 패널: 카드가 가진 패시브(부여분 포함)의 이름+설명을 우측에 표시.
   // 카드 텍스트의 키워드명을 hover(터치: 탭)하면 해당 설명이 하이라이트된다.
   const psvKeys = [...new Set([...cardPassives(c), ...(((c as { passivesG?: string[] }).passivesG) ?? [])])];
@@ -742,14 +773,15 @@ export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: nu
   } finally { node.remove(); }
 }
 
-/** Kill a summon ghost: death flash then fly a card frame to that side's discard. */
-export async function ghostDie(node:HTMLElement,side:ViewSide,voided=false):Promise<void>{
+/** Complete a public-card death: decay dissolves in place; other causes retain their exit. */
+export async function ghostDie(node:HTMLElement,side:ViewSide,voided=false,mana=true,decay=false):Promise<void>{
  const target=document.getElementById(voided?(side==='me'?'rift-me':'rift-opp'):discId(side));
- if(target&&!fxSkip){await boardMotionScope(signal=>playMonster(node,'destroy',{variant:voided?'B':'A',destination:target.querySelector<HTMLElement>('.pile-print .card')??target,side:side==='me'?1:-1,signal}));if(!voided)pileFlash(discId(side));}
+ if(decay&&!fxSkip)await boardMotionScope(signal=>import('./decay/runtime').then(({playDecayDissolve})=>playDecayDissolve(node,{signal})),6500);
+ else if(target&&!fxSkip){await boardMotionScope(signal=>playMonster(node,'destroy',{variant:voided?'B':'A',mana,destination:target.querySelector<HTMLElement>('.pile-print .card')??target,side:side==='me'?1:-1,signal}),6500);if(!voided)pileFlash(discId(side));}
  node.style.visibility='hidden';
 }
-export async function destroyAnim(uid:string,side:ViewSide,voided=false):Promise<void>{
- const n=byUid(uid);if(n)await ghostDie(n,side,voided);
+export async function destroyAnim(uid:string,side:ViewSide,voided=false,mana=true,decay=false):Promise<void>{
+ const n=byUid(uid);if(n)await ghostDie(n,side,voided,mana,decay);
 }
 
 /** Random-card outcome popup. Big center card for your plays, compact upper popup for the opponent's. */
@@ -888,11 +920,10 @@ async function landOnShelf(node:HTMLElement,side:ViewSide):Promise<void>{
     observer.observe(document.body,{subtree:true,childList:true});setTimeout(()=>{copy.remove();observer.disconnect();},5000);
   }
 }
-const riftUsers=new WeakMap<HTMLElement,number>();
 export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<void>{
   const target=document.getElementById(side==='me'?'rift-me':'rift-opp');if(!target||fxSkip)return;
   const a=node.getBoundingClientRect();
-  riftUsers.set(target,(riftUsers.get(target)??0)+1);target.classList.add('is-absorbing');
+  const releaseTarget=holdRiftTarget(target);
   const w=node.offsetWidth||a.width,h=node.offsetHeight||a.height;
   const start=node.style.transform.startsWith('matrix')?new DOMMatrix(node.style.transform):new DOMMatrix().translate(a.left,a.top).scale(a.width/w,a.height/h);
   const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -910,7 +941,7 @@ export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<voi
     const duration=reduced?100:350;
     const motion=node.animate([{transform:start.toString()},{transform:end.toString()}],{duration,easing:'cubic-bezier(.55,.02,.6,1)',fill:'forwards'});
     try{await wait(duration);}finally{motion.cancel();}
-  }finally{const left=(riftUsers.get(target)??1)-1;if(left>0)riftUsers.set(target,left);else{riftUsers.delete(target);target.classList.remove('is-absorbing');}}
+  }finally{releaseTarget();}
 }
 export async function exileCard(card:CardInst,side:ViewSide,source?:HTMLElement|null):Promise<void>{
   const r=source?.getBoundingClientRect()||rectOf('#'+discId(side));if(!r)return;
