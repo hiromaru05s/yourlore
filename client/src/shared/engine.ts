@@ -1301,10 +1301,10 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
 function noAttackActive(g: GameState): boolean {
   return g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "noAttack"));
 }
-/** State-only eligibility for the board's persistent ready/exhausted presentation. */
+/** Attack declaration eligibility shared by the board, bots and target confirmation. */
 export function monsterCanAttack(g:GameState,p:PlayerState,m:FieldMon):boolean {
   const o=g.players[g.players[0]===p?1:0];
-  if(g.over||m.exhausted||m.hatch!=null||noAttackActive(g))return false;
+  if(g.over||m.exhausted||m.hatch!=null||noAttackActive(g)||effAtk(p,m,g)<=0)return false;
   if(glassBanActive(g)&&Math.abs(effAtk(p,m,g)-curHp(p,m))>=4)return false;
   if(o.field.some(x=>x.aura==='lowAtkBan')&&(m.cost??0)<=2)return false;
   if(p.noHighAtkTurn&&(m.cost??0)>=4||m.id==='ASSASSIN_SQUAD'&&o.hp<11)return false;
@@ -4184,6 +4184,7 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
   if (card.id === "CHOSEN_AREA") { applicable=true; if (cullExiled(p) < 25) { return reason(`  └ 게임에서 제외된 컬이 ${cullExiled(p)}장 — 25장 이상이어야 발동 가능`, `  └ ゲームから除外されたカルが${cullExiled(p)}枚 — 25枚以上で発動可能`); } }
   if ((card.id === "DECAY_CRAFT" || card.id === "MAJESTY_RITE")) { applicable=true; if (p.field.length === 0) { return reason("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); } }
   if (card.id === "MAJESTY_RITE") { applicable=true; if (!p.field.some((m) => !hasPassive(m, "majesty"))) { return reason("  └ '위엄'을 부여할 수 있는 몬스터가 없습니다", "  └ 「威厳」を与えられるモンスターがいません"); } }
+  if (card.ench === "weakenAll") { applicable=true; if (weakenAllCount(g) >= 2) return reason("약화술식은 양 필드 합계 최대 2장까지 존재할 수 있습니다", "弱化術式は両方の場を合わせて最大2枚まで存在できます"); }
   if (card.ench === "foresight") { applicable=true; if (p.enchants.some((e) => e.card.ench === "foresight")) { return reason("  └ 자신 필드에 이미 '선견지명'이 있습니다", "  └ 自分の場に既に「先見の明」があります"); } }
   if (card.ench === "guild") { applicable=true; if (p.enchants.some((e) => e.card.ench === "guild")) { return reason("  └ 자신 필드에 이미 '상회'가 있습니다", "  └ 自分の場に既に「商会」があります"); } }
   if (card.id === "SLUM") { applicable=true; if (!p.enchants.some((e) => e.card.ench === "guild")) { return reason("  └ 자신 필드에 '상회'가 없습니다", "  └ 自分の場に「商会」がありません"); } }
@@ -4610,7 +4611,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     }
     else if (pending.reason === "attack") {
       const att = p.field.find((m) => m.uid === d.attackerUid);
-      if (att) {
+      if (att && monsterCanAttack(g, p, att)) {
         // 귀족 영주(eliteGuard): 코스트 6 이하 몬스터는 이 몬스터를 공격할 수 없다 — 재선택
         if (tm.aura === "eliteGuard" && (att.cost ?? 0) <= 6) { g.pending = pending; ctx.log(`  └ <span class="dmg">귀족 영주</span>: 코스트 6 이하는 공격할 수 없다`, `  └ <span class="dmg">貴族領主</span>: コスト6以下では攻撃できない`); return; }
         ctx.ev.push({ type: "attack", player: side(g, p), uid: att.uid, targetUid: tm.uid }); resolveAttackCore(g, ctx, att, tm.uid);
@@ -5365,6 +5366,8 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
       if (noAttackActive(g)) { ctx.log(`  └ <span class="dmg">평화 협정</span>: 공격 불가`, `  └ <span class="dmg">平和協定</span>: 攻撃不可`); break; }
       const m = p.field.find((x) => x.uid === action.uid);
       if (!m || m.exhausted) break;
+      // Check live ATK before targeting, attack triggers or World Tree growth.
+      if (effAtk(p, m, g) <= 0) { ctx.log(`  └ <span class="dmg">공격력이 0인 몬스터는 공격할 수 없습니다</span>`, `  └ <span class="dmg">攻撃力0のモンスターは攻撃できません</span>`); break; }
       if (m.hatch != null) { ctx.log(`  └ <span class="dmg">알은 공격할 수 없습니다</span>`, `  └ <span class="dmg">卵は攻撃できません</span>`); break; }
       if (glassBanActive(g) && Math.abs(effAtk(p, m, g) - curHp(p, m)) >= 4) { ctx.log(`  └ <span class="dmg">전략 변경</span>: 공격력과 체력의 차가 4 이상이면 공격 불가`, `  └ <span class="dmg">戦略変更</span>: 攻撃力と体力の差が4以上なら攻撃不可`); break; }
       const o = g.players[1 - g.cur];
