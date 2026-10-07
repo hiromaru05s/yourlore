@@ -1,0 +1,65 @@
+{
+  "cases": [
+    {
+      "width": 390,
+      "side": 0,
+      "result": {
+        "events": [
+          {
+            "type": "destroy",
+            "player": 0,
+            "uid": "obsidian-0-1",
+            "id": "ELF"
+          }
+        ],
+        "field": [
+          "obsidian-0-0",
+          "obsidian-0-2"
+        ],
+        "removed": [
+          "obsidian-0-1"
+        ],
+        "hp": 30
+      },
+      "frames": 147
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "result": {
+        "events": [
+          {
+            "type": "destroy",
+            "player": 1,
+            "uid": "obsidian-1-1",
+            "id": "ELF"
+          }
+        ],
+        "field": [
+          "obsidian-1-0",
+          "obsidian-1-2"
+        ],
+        "removed": [
+          "obsidian-1-1"
+        ],
+        "hp": 30
+      },
+      "frames": 146
+    }
+  ],
+  "lifecycle": {
+    "users": 2,
+    "after": {
+      "users": 0,
+      "allocated": true
+    },
+    "restored": true,
+    "overlays": 0,
+    "absorbing": false
+  },
+  "skip": true,
+  "reduced": true,
+  "resize": true,
+  "errors": [],
+  "boundary": "Actual engine reduce -> controller -> ghostDie -> playMonster -> GPU obsidian. Local board fixture, not an authenticated online match."
+}

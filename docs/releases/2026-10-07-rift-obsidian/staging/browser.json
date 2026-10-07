@@ -1,0 +1,34 @@
+{
+  "source": "b75e5ac9ede98cd7eb37ae2092a3599ee771d145",
+  "origin": "https://test.yourlore.xyz",
+  "route": {
+    "file": "assets/modal-CjLT6HBS.js",
+    "name": "bL"
+  },
+  "results": [
+    {
+      "side": "me",
+      "frames": 144,
+      "phases": [
+        "charge",
+        "pressure",
+        "fracture",
+        "transfer",
+        "arrival"
+      ]
+    },
+    {
+      "side": "opp",
+      "frames": 135,
+      "phases": [
+        "charge",
+        "pressure",
+        "fracture",
+        "transfer",
+        "arrival"
+      ]
+    }
+  ],
+  "errors": [],
+  "boundary": "Deployed production ghostDie export executed on a live BOT board with cloned field sources and an account/API fixture. Real engine/controller flow is separately tested locally. No authenticated online match or account mutation."
+}

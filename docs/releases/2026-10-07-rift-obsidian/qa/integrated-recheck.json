@@ -1,0 +1,6 @@
+{
+  "source": "b75e5ac9",
+  "desktopBothOwners": true,
+  "fullSequenceRetry": "During 1280-to-390 resizing under concurrent system load, the local test timed out waiting for the temporary effect overlay. A prior full viewport matrix passed; deployed desktop checks passed separately. A fresh mobile run is recorded separately when complete.",
+  "freshMobileRecheck": "Passed both owners and lifecycle; see mobile-recheck.json"
+}
