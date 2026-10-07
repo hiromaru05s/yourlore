@@ -1,4 +1,5 @@
 import { playIntent, needsCastReview, targetOwner } from '../shared/playIntent';
+import {playDewGrant,warmDewGrant} from '../ui/dew/runtime';
 import {playStatusGrant,warmStatusGrants} from '../ui/statusGrant/runtime';
 import { botNpc, pickNpcDeck } from "../shared/botNpcs";
 import {synergyTier} from '../ui/tribePresentation/selection';
@@ -310,7 +311,8 @@ export abstract class BaseController implements BoardHandlers {
     const spellGhosts:HTMLElement[]=[];
     let statusSource:HTMLElement|undefined;
     const hasStatusGrants=events.some(e=>e.type==='statusGrant');
-    if(hasStatusGrants)warmStatusGrants();
+    if(events.some(e=>e.type==='statusGrant'&&e.resource!=='dew'))warmStatusGrants();
+    if(events.some(e=>e.type==='statusGrant'&&e.resource==='dew'))warmDewGrant();
     const questCount=prev.players.map(p=>p.quests?.length??0);
     const buffCount=[prev.players[0].traps.length+prev.players[0].enchants.length,prev.players[1].traps.length+prev.players[1].enchants.length];
     // running counters for ghost slot placement + live HP readout
@@ -333,9 +335,14 @@ export abstract class BaseController implements BoardHandlers {
       if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
       if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
       switch (e.type) {
-        case 'statusGrant':
-          if(!A.isFxSkipped())await playStatusGrant(sideOf(e.player),e.resource,e.before,e.after,statusSource);
+        case 'statusGrant': {
+          const source=e.sourceUid?(ghosts.get(e.sourceUid)?.el??document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.sourceUid)}"]`)??undefined):statusSource;
+          if(!A.isFxSkipped()){
+            if(e.resource==='dew')await playDewGrant(sideOf(e.player),e.before,e.after,source);
+            else await playStatusGrant(sideOf(e.player),e.resource,e.before,e.after,source);
+          }
           break;
+        }
         case 'elementalStart': {
           let source=this.elementalFaces.find(f=>f.card.id===e.id&&f.side===sideOf(e.player))?.node;
           if(!source&&e.id.startsWith('FIRE_')&&DB[e.id]&&!A.isFxSkipped()){

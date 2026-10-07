@@ -76,6 +76,7 @@
     "tests/target-choice-ux.mjs",
     "tests/target-choice-ui.mjs",
     "tests/target-choice-server.mjs",
+    "tests/dew-grant.mjs",
     "tests/duel-bugfix-oct08.mjs"
   ],
   "historical": {
