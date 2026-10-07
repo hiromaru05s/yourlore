@@ -2177,7 +2177,7 @@ const NEW_CARDS41B: CardDef[] = [
   { id: "SPACE_RITE", t: "spell", cost: 2, ench: "spaceLock", val: 3, name: "공간 술식", nameJa: "空間術式",
     text: "상대 필드의 카드가 6장 이상일 때만 · 상대는 3턴 동안 몬스터 소환과 마법 사용이 불가", textJa: "相手の場のカードが6枚以上の時のみ · 相手は3ターンの間モンスターを召喚できず魔法も使用できない" },
   { id: "LUCKY_ECHO", t: "spell", cost: 1, ench: "luckyEcho", val: 99, name: "행운의 잔향", nameJa: "幸運の残響",
-    text: "영구: 자신이 굴린 주사위가 6일 때마다 상대에게 6 데미지", textJa: "永続: 自分が振ったダイスの出目が6のたび相手に6ダメージ" },
+    text: "영구: 자신이 굴린 주사위가 6일 때마다 상대에게 6 데미지. 이 효과 처리 중에는 다시 발동하지 않는다", textJa: "永続: 自分が振ったダイスの出目が6のたび相手に6ダメージ。この効果の処理中は再発動しない" },
   { id: "SORTER_LAW", t: "trap", cost: 2, play: 1, react: "sorterLaw", name: "선별의 규율", nameJa: "選別の掟",
     text: "덱 구성이 8장 이하일 때만 · 공격 무효 · 상대 필드의 카드 2장 파괴", textJa: "デッキ構成が8枚以下の時のみ · 攻撃無効 · 相手の場のカード2枚を破壊" },
   { id: "BUYOUT", t: "spell", cost: 1, act: "buyout", name: "매점", nameJa: "買い占め",

@@ -1078,7 +1078,7 @@ function addDecay(g: GameState, ctx: Ctx, owner: PlayerState, tm: FieldMon, n: n
 
 /** 흡혈귀 소환 (흡혈 계약 / 진화) — 토큰이지만 소환 효과(특급)는 발동한다. */
 function spawnVampire(g: GameState, ctx: Ctx, p: PlayerState, id: string): void {
-  if (!DB[id] || p.field.length >= FIELD_MAX) { ctx.log("  └ 몬스터 존이 가득 차 소환 실패", "  └ モンスターゾーンが満杯で召喚失敗"); return; }
+  if (!DB[id] || !effectSummonAllowed(g, p, DB[id])) { ctx.log("  └ 소환 제한으로 소환 실패", "  └ 召喚制限により召喚できない"); return; }
   const m: FieldMon = { uid: newUID(g), ...structuredClone(DB[id]), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn, token: true };
   applyFieldGlobals(g, m);
   p.field.push(m);
@@ -1113,7 +1113,7 @@ function bloodTriggers(g: GameState, ctx: Ctx, p: PlayerState): void {
   for (const m of [...p.field]) {
     if (g.over) return;
     if (m.evolveTo && !m.evolvedUsed && DB[m.evolveTo]) {
-      if (p.field.length >= FIELD_MAX) break; // 자리가 없으면 진화 보류 (1회 기회는 소모하지 않음)
+      if (!effectSummonAllowed(g, p, DB[m.evolveTo])) continue; // Blocked evolution retains its one-use allowance.
       monsterActivation(g, ctx.ev, p, m);
       m.evolvedUsed = true;
       ctx.log(`  └ ${cn(m)} 이(가) 피에 이끌린다…`, `  └ ${cn(m)} が血に導かれる…`);
@@ -1678,7 +1678,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   if ((tc = takeTrap(g, ctx, o, "rallyKnights"))) {
     att.exhausted = true;
     let kn = 0;
-    if (castleOf(o)) while (o.field.length < FIELD_MAX) { spawnToken(g, ctx, o, "INFKNIGHT"); kn++; }
+    if (castleOf(o)) for (let slot = o.field.length; slot < FIELD_MAX && !g.over; slot++) { if (!spawnToken(g, ctx, o, "INFKNIGHT")) break; kn++; }
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효${kn ? ` + 기사 ${kn}체 소환` : ""}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効${kn ? ` + 騎士${kn}体を召喚` : ""}`);
     return;
   }
@@ -2691,7 +2691,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       break;
     case "summonRandom": { // GM10_2
       const mons = p.deck.filter((c) => c.t === "mon");
-      if (mons.length) { const pick = mons[randInt(g, mons.length)]; const di = p.deck.findIndex((c) => c.uid === pick.uid); p.deck.splice(di, 1); spawnToken(g, ctx, p, pick.id, true); ctx.log(`  └ 덱에서 ${cn(pick)} 무료 소환`, `  └ デッキから ${cn(pick)} を無料召喚`); }
+      if (mons.length) { const pick = mons[randInt(g, mons.length)]; if (!effectSummonAllowed(g, p, pick)) break; const di = p.deck.findIndex((c) => c.uid === pick.uid); p.deck.splice(di, 1); spawnToken(g, ctx, p, pick.id, true); ctx.log(`  └ 덱에서 ${cn(pick)} 무료 소환`, `  └ デッキから ${cn(pick)} を無料召喚`); }
       else ctx.log("  └ 덱에 몬스터 없음", "  └ デッキにモンスターなし");
       break;
     }
@@ -2858,7 +2858,7 @@ function gamblerEffect(g: GameState, ctx: Ctx, p: PlayerState, key: string): voi
 /** 드래곤(v37) 융합 실행: 드래곤과 상대역을 묘지로 보내고 결과 토큰을 소환. */
 function doDragonFuse(g: GameState, ctx: Ctx, p: PlayerState, dragonUid: string, mateUid: string, outId: string): void {
   const dragon = p.field.find((x) => x.uid === dragonUid), mate = p.field.find((x) => x.uid === mateUid);
-  if (!dragon || !mate) { ctx.log("  └ 융합 불발", "  └ 融合不発"); return; }
+  if (!dragon || !mate || dragon.uid === mate.uid || !DB[outId] || !effectSummonAllowed(g, p, DB[outId], 2)) { ctx.log("  └ 융합 불발", "  └ 融合不発"); return; }
   for (const x of [mate, dragon]) {
     const i = p.field.findIndex((y) => y.uid === x.uid);
     if (i < 0) continue;
@@ -2876,9 +2876,8 @@ function doDragonFuse(g: GameState, ctx: Ctx, p: PlayerState, dragonUid: string,
  *  is a conjured token: exiled on death (see destroyMonster).
  *  종족 시너지는 발동한다 — 시초의 노래/금단의 술식처럼 토큰 소환으로 동족을
  *  완성하는 카드가 시너지를 못 터뜨리던 버그 수정 (2026-07-09). */
-function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string, fromDeck = false): void {
-  if (!DB[id]) return;
-  if (p.field.length >= FIELD_MAX) return; // monster zone full — cannot spawn more
+function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string, fromDeck = false): boolean {
+  if (!DB[id] || !effectSummonAllowed(g, p, DB[id])) return false;
 
   const m: FieldMon = { uid: newUID(g), ...structuredClone(DB[id]), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn, token: !fromDeck };
   m.onSummon = undefined; m.turnFx = undefined; // tokens don't re-trigger summon effects
@@ -2892,6 +2891,7 @@ function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string, fromDeck
   applyEnterAura(g, ctx, p, m);
   applySummonBuff(ctx, p, m);
   if (m.tribe && !g.over) checkTribe(g, ctx, p, m); // 동족 시너지는 소환 경로와 무관하게 판정
+  return true;
 }
 
 /** GM5_2: each monster YOU summon gains +val ATK from every summonBuff aura you control. */
@@ -3200,6 +3200,8 @@ export function diceSpecFor(pct: number): DiceSpec {
 function diceRollCasino(g: GameState, ev: GameEvent[], pl: Side, source: DiceSource): { rolls: number[]; sum: number; ok: boolean } {
   return diceRoll(g, ev, pl, source, 1, undefined, "casino");
 }
+// Track only the synchronous causal chain; unrelated rolls/actions can trigger again.
+const resolvingLuckyEcho = new WeakMap<GameState, Set<Side>>();
 function diceRoll(g: GameState, ev: GameEvent[], pl: Side, source: DiceSource, n: number, need?: number, variant?: "casino"): { rolls: number[]; sum: number; ok: boolean } {
   const rolls: number[] = [];
   for (let i = 0; i < n; i++) rolls.push(randInt(g, 6) + 1);
@@ -3214,12 +3216,19 @@ function diceRoll(g: GameState, ev: GameEvent[], pl: Side, source: DiceSource, n
   // 행운의 잔향(v41b luckyEcho): 자신이 굴린 주사위의 6 1개당 (장당) 상대에게 6 데미지
   const sixes = rolls.filter((r) => r === 6).length;
   const echoes = g.players[pl].enchants.filter((e) => e.card.ench === "luckyEcho").length;
-  if (sixes > 0 && echoes > 0 && !g.over) {
-    enchantKindFx(g,ev,"luckyEcho",g.players[pl]);
-    const c2 = makeCtx(g, ev);
-    const opp2 = g.players[1 - pl];
-    c2.log(`  └ <span class="t">행운의 잔향</span>: 🎲 6 ×${sixes} → ${opp2.name} 에게 ${6 * sixes * echoes} 데미지`, `  └ <span class="t">幸運の残響</span>: 🎲 6 ×${sixes} → ${opp2.name} に${6 * sixes * echoes}ダメージ`);
-    c2.dealDamage(opp2, 6 * sixes * echoes, "행운의 잔향", "幸運の残響");
+  const resolving = resolvingLuckyEcho.get(g) ?? new Set<Side>();
+  if (sixes > 0 && echoes > 0 && !g.over && !resolving.has(pl)) {
+    resolving.add(pl); resolvingLuckyEcho.set(g, resolving);
+    try {
+      enchantKindFx(g,ev,"luckyEcho",g.players[pl]);
+      const c2 = makeCtx(g, ev);
+      const opp2 = g.players[1 - pl];
+      c2.log(`  └ <span class="t">행운의 잔향</span>: 🎲 6 ×${sixes} → ${opp2.name} 에게 ${6 * sixes * echoes} 데미지`, `  └ <span class="t">幸運の残響</span>: 🎲 6 ×${sixes} → ${opp2.name} に${6 * sixes * echoes}ダメージ`);
+      c2.dealDamage(opp2, 6 * sixes * echoes, "행운의 잔향", "幸運の残響", pl);
+    } finally {
+      resolving.delete(pl);
+      if (!resolving.size) resolvingLuckyEcho.delete(g);
+    }
   }
   return { rolls, sum, ok };
 }
@@ -3441,6 +3450,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       for (let k2 = 0; k2 < 2 && cands.length; k2++) { // v34: 2체
         const ci2 = randInt(g, cands.length);
         const pick = cands.splice(ci2, 1)[0];
+        if (!effectSummonAllowed(g, p, pick.c)) continue;
         const arr = pick.pile === "deck" ? p.deck : p.discard;
         const idx2 = arr.findIndex((c) => c.uid === pick.c.uid);
         if (idx2 >= 0) arr.splice(idx2, 1);
@@ -4885,6 +4895,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     if (pending.reason === "samsaraPick") {
       if (!uid || !ids0.includes(uid) || !DB[uid]) { g.pending = pending; return; }
       if (p.field.length >= FIELD_MAX) { ctx.log("  └ 몬스터 존이 가득 차 소환 실패", "  └ モンスターゾーンが満杯で召喚失敗"); return; }
+      if (!effectSummonAllowed(g, p, DB[uid])) return;
       const gi = p.discard.findIndex((c) => c.id === uid);
       if (gi >= 0) p.discard.splice(gi, 1); // 묘지의 그 카드를 필드로 (없으면 토큰)
       ctx.log(`<span class="t">${p.name}</span> 윤회 → ${cn(DB[uid])} 소환`, `<span class="t">${p.name}</span> 輪廻 → ${cn(DB[uid])} 召喚`);
@@ -5014,9 +5025,16 @@ function offerEffectChoice(g: GameState, ctx: Ctx, p: PlayerState, reason: strin
   if (!effectChoices(g).length) { g.pending = null; ctx.log("対象がないため効果は不発", "対象がないため効果は不発"); return; }
   ctx.ev.push({ type: "needTarget", pending: g.pending });
 }
+function effectSummonAllowed(g: GameState, p: PlayerState, def: CardDef, leaving = 0): boolean {
+  const occupied = p.field.length - leaving;
+  return !g.over && occupied < FIELD_MAX && !spaceLocked(g, p)
+    && (p.summonLockUntil ?? 0) <= g.turn && (p.summonCap == null || occupied < p.summonCap)
+    && !summonBlockedLow(g, p, { ...def, uid: def.id }) && !(p.lowSummonBanTurn && def.cost <= 3)
+    && !(castleOf(p) && def.cost >= 5);
+}
 function effectSummon(g: GameState, ctx: Ctx, p: PlayerState, id: string, card?: CardInst): boolean {
   const def = card ?? DB[id];
-  if (!def || p.field.length >= FIELD_MAX || spaceLocked(g, p) || (p.summonLockUntil ?? 0) > g.turn || (p.summonCap != null && p.field.length >= p.summonCap) || summonBlockedLow(g, p, { ...def, uid: card?.uid ?? id }) || (p.lowSummonBanTurn && def.cost <= 3) || (castleOf(p) && def.cost >= 5)) return false;
+  if (!def || !effectSummonAllowed(g, p, def)) return false;
   if (card) {
     const cur = g.cur;
     g.cur = side(g, p);
