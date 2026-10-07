@@ -24,6 +24,7 @@ import { sfx } from "./sound";
 import { moveOnBoard } from "./boardMotion";
 import { projectedPlacement } from "./boardProjection";
 import {playBiblionFx,clearBiblionFx} from './biblionFx';
+import {prepareManaPurchase,MANA_PURCHASE_CONTACT_MS,MANA_PURCHASE_DURATION} from './manaPurchase';
 
 export type ViewSide = "me" | "opp";
 
@@ -346,10 +347,13 @@ async function purchaseMana(side:ViewSide,target:DOMRect):Promise<void>{
   const cluster=document.getElementById(side==='me'?'portraitMe':'portraitOpp');
   const source=cluster?.querySelector<HTMLElement>('.mana-crystals')??cluster?.querySelector<HTMLElement>('.pips');
   if(!source)return;
-  const stop=playBiblionFx('purchase',source.getBoundingClientRect(),target);
+  // Preparation races a skippable deadline: cold/failed assets never trap input.
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches)await Promise.race([prepareManaPurchase(),wait(800)]);
+  if(fxSkip||document.hidden)return;
+  const stop=playBiblionFx('purchase',()=>source.isConnected?source.getBoundingClientRect():null,target);
   try{
-    await wait(530);if(!fxSkip&&!document.hidden)sfx('mana-pay');
-    await wait(330);
+    await wait(MANA_PURCHASE_CONTACT_MS);if(!fxSkip&&!document.hidden)sfx('mana-pay');
+    await wait(MANA_PURCHASE_DURATION*1000-MANA_PURCHASE_CONTACT_MS);
   }finally{stop();}
 }
 

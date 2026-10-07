@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';import fs from 'node:fs/promises';import {createHash} from 'node:crypto';
+import {chromium} from '/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
+const origin=process.env.LORE_TEST_URL||'https://test.yourlore.xyz',out='docs/releases/2026-10-07-purchase-air/staging';await fs.mkdir(out,{recursive:true});
+const files=['index.html','cosmetic-studio.html','vfx/purchase-air/crystal-72.png','vfx/purchase-air/manifest.json',...(await fs.readdir('client/dist/assets')).filter(f=>/\.(js|css)$/.test(f)).map(f=>'assets/'+f)],hashes=[];const hash=b=>createHash('sha256').update(b).digest('hex');
+for(let i=0;i<files.length;i+=6)await Promise.all(files.slice(i,i+6).map(async file=>{const r=await fetch(origin+'/'+file);assert.equal(r.status,200,file);const sha256=hash(Buffer.from(await r.arrayBuffer()));assert.equal(sha256,hash(await fs.readFile('client/dist/'+file)),file);hashes.push({file,sha256});}));await fs.writeFile(out+'/asset-parity.json',JSON.stringify({origin,hashes},null,2));
+const browser=await chromium.launch({channel:'chrome',headless:true}),p=await browser.newPage({viewport:{width:1280,height:900}}),errors=[],checks=[];p.on('pageerror',e=>errors.push(e.message));p.setDefaultTimeout(90000);
+try{
+ await p.goto(origin+'/cosmetic-studio.html?board=1&runtime=1&set=default');await p.waitForFunction(()=>window.atelier&&document.querySelector('[data-scene-ready=true]'));await p.waitForSelector('.duel-loader',{state:'detached'});
+ for(const [width,height] of [[1280,900],[390,844]])for(const side of ['self','opponent']){
+  await p.setViewportSize({width,height});await p.evaluate(async side=>atelier.apply({...atelier.state(),side,set:'default'}),side);await p.waitForTimeout(180);
+  await p.evaluate(()=>{window.completed=false;window.samples=[];let active=true;const tick=()=>{const c=document.querySelector('.biblion-fx--front'),ctx=c?.getContext('2d'),a=ctx&&c.dataset.effects.includes('purchase')?ctx.getImageData(0,0,c.width,c.height).data:null;let n=0;if(a)for(let i=3;i<a.length;i+=4)if(a[i]>10)n++;samples.push(n);if(active)requestAnimationFrame(tick);};requestAnimationFrame(tick);window.playback=atelier.replay('purchase').then(()=>{active=false;completed=true;});});
+  await p.waitForTimeout(400);await p.screenshot({path:`${out}/purchase-${width}-${side}.png`});await p.waitForFunction(()=>window.completed);
+  const result=await p.evaluate(()=>({peak:Math.max(...samples),visibleFrames:samples.filter(n=>n>0).length,left:document.querySelector('.biblion-fx--front')?.dataset.effects,overflow:document.documentElement.scrollWidth>innerWidth}));assert(result.peak>20);assert(result.visibleFrames>3);assert.equal(result.left,'');assert.equal(result.overflow,false);checks.push({width,height,side,...result});
+ }
+ assert.deepEqual(errors,[]);await fs.writeFile(out+'/browser.json',JSON.stringify({passed:true,origin,checks,errors,boundary:'Unmodified deployed bundles; actual buyReveal via existing runtime cosmetic board fixture. No authenticated online match.'},null,2));console.log('PASS',hashes.length,'asset hashes and',checks.length,'deployed purchase runs');
+}catch(e){await p.screenshot({path:out+'/failure.png'});throw e;}finally{await browser.close();}

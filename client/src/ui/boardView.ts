@@ -1,3 +1,4 @@
+import {prepareManaPurchase} from './manaPurchase';
 import {monsterCanAttack} from '../shared/engine';
 import {furnitureUrl} from '../shared/cosmetics';
 import {seekerPortrait} from './seekerAnimation';
@@ -101,6 +102,7 @@ export class GameView {
     delete this.root.dataset.sceneReady;delete this.root.dataset.boardRendered;delete this.root.dataset.preloadedImages;
     this.root.dataset.tableState=typeof WebGL2RenderingContext!=='undefined'?'loading':'fallback';
     this.buildSkeleton();
+    if(!matchMedia('(prefers-reduced-motion: reduce)').matches)void prepareManaPurchase();
     this.cleanups.push(installGameCursor(this.root));
     const mount=typeof WebGL2RenderingContext!=='undefined'
       ? import('./duelScene').then(({mountDuelScene})=>{if(!this.disposed)this.disposeScene=mountDuelScene(this.root);}).catch(()=>{this.root.dataset.tableState='fallback';})

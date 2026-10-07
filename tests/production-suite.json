@@ -29,6 +29,7 @@
     "tests/paper-card.mjs",
     "tests/pile-stock.mjs",
     "tests/portal-return-motion.mjs",
+    "tests/purchase-air.mjs",
     "tests/purchase-vfx.mjs",
     "tests/quest-quick.mjs",
     "tests/quick-playback.mjs",
