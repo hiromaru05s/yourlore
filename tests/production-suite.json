@@ -33,6 +33,7 @@
     "tests/purchase-air.mjs",
     "tests/purchase-vfx.mjs",
     "tests/quest-quick.mjs",
+    "tests/quest-pact.mjs",
     "tests/quick-playback.mjs",
     "tests/rank-emblem.mjs",
     "tests/rank-sound.mjs",
