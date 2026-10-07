@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {chromium} from '/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
-const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5343',out='docs/releases/2026-10-07-purchase-air/qa';
+const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5343',out=process.env.LORE_TEST_OUT||'docs/releases/2026-10-07-purchase-air/qa';
 await fs.mkdir(out,{recursive:true});const browser=await chromium.launch({channel:'chrome',headless:true}),p=await browser.newPage({viewport:{width:1280,height:900}}),errors=[],checks=[];
 p.on('pageerror',e=>errors.push(e.message));p.setDefaultTimeout(90000);
 try{
@@ -46,6 +46,6 @@ try{
  await p.evaluate(()=>{controller.destroy();stopLayout();});assert.equal(await p.locator('.biblion-fx').count(),0);
  const reopened=await p.evaluate(async()=>{const ok=await payment.prepareManaPurchase();payment.disposeManaPurchase();return ok;});assert(reopened);checks.push('board teardown releases VFX; assets can reopen');
  const failurePage=await browser.newPage();await failurePage.route('**/purchase-fixture.html',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><div></div>'}));await failurePage.route('**/vfx/purchase-air/crystal-72.png',r=>r.abort());await failurePage.goto(origin+'/purchase-fixture.html');
- const failure=await failurePage.evaluate(async()=>{const m=await import('/src/ui/manaPurchase.ts');return m.prepareManaPurchase();});await failurePage.close();assert.equal(failure,false);checks.push('asset failure settles without throwing or deadlocking');
+ const failure=await failurePage.evaluate(async()=>{const m=await import('/src/ui/manaPurchase.ts');return m.prepareManaPurchase();});assert.equal(failure,false);const cancelled=await failurePage.evaluate(async()=>{const m=await import('/src/ui/manaPurchase.ts');const pending=m.prepareManaPurchase();m.disposeManaPurchase();return pending;});assert.equal(cancelled,false);await failurePage.close();checks.push('asset failure and pending-load disposal settle without throwing or deadlocking');
  assert.deepEqual(errors,[]);await fs.writeFile(out+'/browser.json',JSON.stringify({passed:true,checks,pixels,behavior,errors,fixture:'actual BaseController + buyReveal, local engine fixture; no authenticated online match'},null,2));console.log('PASS',checks.length,'browser checks');
 }finally{await browser.close();}
