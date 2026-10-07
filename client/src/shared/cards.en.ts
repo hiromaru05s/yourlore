@@ -703,7 +703,7 @@ Object.assign(TEXTS, {
   NGA3: "On summon: if another Golem monster is on your field, this monster gains 3 counters",
   NHEX: "Each turn: with 10+ spells in your deck, roll a die: on 5+, add 3 Curses to the enemy graveyard",
   NT_SEAL3: "Passive: neither player can cast spells of cast cost 4 or less",
-  NWL3: "Passive: whenever this monster is attacked, it gains 1 counter",
+  NWL3: "Passive: after this monster takes positive attack damage and survives without spending Guts, it gains 1 Guts counter",
   TGE3: "[Origin] On summon: you take 3 damage",
   RUST_SLUG: "On summon: counter on every enemy monster · When Decay kills one: max mana +1, your HP +5",
   TSO3: "On summon: if your graveyard has no monster cards, draw 6 cards",

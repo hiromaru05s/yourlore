@@ -2164,8 +2164,6 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       ctx.destroyMonster(o, target);
       killed = !o.field.some((x) => x.uid === target.uid);
     } else if (target) {
-      // 가디언 골램(v36 gutsOnHit): 공격을 받을 때마다 카운터 +1
-      if (target.aura === "gutsOnHit") { monsterActivation(g, ctx.ev, o, target); target.guts = (target.guts || 0) + 1; ctx.log(`  └ ${cn(target)} 카운터 +1 (${target.guts})`, `  └ ${cn(target)} カウンター+1 (${target.guts})`); }
       // v24 HP-combat: damage ACCUMULATES on monsters (no bounce-off). The killing
       // blow's overflow pierces to the player, exactly like the old 관통.
       const maxHp = effDef(o, target);
@@ -2207,6 +2205,9 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
         if (over > 0) { const hpBefore = o.hp; ctx.dealDamage(o, over, "관통", "貫通"); dealtFace = Math.max(0, hpBefore - o.hp); faceDmg = dealtFace > 0; }
       } else {
         target.dmg = (target.dmg || 0) + atk;
+        // Guardian earns a counter only after surviving positive attack damage without
+        // spending guts. Replenishing on lethal hits makes every later hit survivable.
+        if (target.aura === "gutsOnHit") { monsterActivation(g, ctx.ev, o, target); target.guts = (target.guts || 0) + 1; ctx.log(`  └ ${cn(target)} 카운터 +1 (${target.guts})`, `  └ ${cn(target)} カウンター+1 (${target.guts})`); }
         ctx.log(
           `<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → ${cn(target)} 에 ${atk} 데미지 <span class="muted">(체력 ${before - atk})</span>`,
           `<span class="t">${p.name}</span> ${cn(att)}(攻${atk}) → ${cn(target)} に${atk}ダメージ <span class="muted">(体力${before - atk})</span>`,
@@ -4475,7 +4476,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       // 주의: 이 시점에 리콜 카드 자신이 이미 p.discard 에 들어가 있다(플레이 시 push).
       // 그래서 예전엔 묘지가 "비어 있어도" length>=1 이라 발동됐고, 자기 자신을 회수할 수도 있었다.
       if (!p.discard.some((c) => c.uid !== card.uid)) { ctx.log("  └ 묘지가 비어 있습니다", "  └ 墓地が空です"); return; }
-      g.pending = { kind: "recall", hint: "버린 패에서 1장 선택", hintJa: "捨て札から1枚選択", reason: "recall", allowCancel: true, data: { exclude: card.uid } };
+      g.pending = { kind: "recall", hint: "묘지에서 1장 선택", hintJa: "墓地から1枚選択", reason: "recall", allowCancel: true, data: { exclude: card.uid } };
       ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
     }
     if (a === "exilePick") {

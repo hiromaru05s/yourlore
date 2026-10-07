@@ -34,7 +34,7 @@ export function mountShop(app: App): Screen {
         </div>
         <div class="tut-body">
           <section class="tut-sec">
-            <div class="shop-categories" role="group" aria-label="${esc(loungeText('外観の種類','Cosmetic type','외관 종류'))}"><button data-category="sleeve" aria-pressed="${category==='sleeve'}">${loungeText('スリーブ','Sleeves','슬리브')}</button><button data-category="furniture" aria-pressed="${category==='furniture'}">${loungeText('デッキ置き場・シェルフ','Deck & Shelf','덱・셸프')}</button></div>
+            <div class="shop-categories" role="group" aria-label="${esc(loungeText('外観の種類','Cosmetic type','외관 종류'))}"><button data-category="sleeve" aria-pressed="${category==='sleeve'}">${loungeText('スリーブ','Sleeves','슬리브')}</button><button data-category="furniture" aria-pressed="${category==='furniture'}">${loungeText('デッキ置き場・墓地','Deck & Graveyard','덱・묘지')}</button></div>
             <p class="set-desc">${loungeText('デッキ構成の「外観」から、デッキごとに装備できます。','Equip cosmetics for each deck from Appearance in the deck builder.','덱 구성의 「외관」에서 덱마다 장착할 수 있습니다.')}</p>
             <div class="shop-catalog"><div class="shop-grid" id="grid"></div><aside class="shop-selection" id="shopSelection" aria-live="polite"></aside></div>
           </section>
