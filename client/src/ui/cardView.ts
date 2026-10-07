@@ -288,7 +288,7 @@ function ruleBlocks(text: string, className: string): HTMLElement {
 }
 
 /** Complete rules, including costs, keyword names and dice tables. Never fitted to card pixels. */
-export function cardRulesEl(c: CardInst): HTMLElement {
+export function cardRulesEl(c: CardInst, onPassiveClick?: (key: string) => void): HTMLElement {
   const pc = playCost(c);
   const rawTxt = cardText(c).trim();
   const table = rawTxt && rawTxt !== "—" ? parseDiceTable(rawTxt) : null;
@@ -310,8 +310,14 @@ export function cardRulesEl(c: CardInst): HTMLElement {
       for (const k of keyChips) {
         const pd = PASSIVES[k];
         if (!pd) continue;
-        // data-psv keeps the zoom view's keyword panel highlight working
-        const chip = el('span', 'card-key-label');
+        const chip = el(onPassiveClick ? 'button' : 'span', 'card-key-label');
+        chip.dataset.psv = k;
+        if (onPassiveClick) {
+          chip.setAttribute('type', 'button');
+          const name = pd[getLang()].name;
+          chip.setAttribute('aria-label', {ja:`${name}の説明へ`,ko:`${name} 설명으로 이동`,en:`Go to ${name} description`}[getLang()]);
+          chip.onclick = e => { e.stopPropagation(); onPassiveClick(k); };
+        }
         chip.insertAdjacentHTML('beforeend', passiveIcon(k));
         const name = el('span'); name.textContent = pd[getLang()].name; chip.append(name);
         row.append(chip);

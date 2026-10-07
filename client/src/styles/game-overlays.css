@@ -797,6 +797,12 @@
 .zoom-details .card-effect-body + .card-effect-body{margin-top:8px}
 .zoom-details .card-keys{display:flex;flex-wrap:wrap;gap:10px 16px;margin-bottom:20px}
 .zoom-details .card-key-label{display:inline-flex;align-items:center;gap:6px;font-size:.85em}
+.zoom-details button.card-key-label{min-height:44px;max-width:100%;padding:4px 6px;border:0;border-radius:3px;background:transparent;color:inherit;font-family:inherit;line-height:1.4;text-align:start;cursor:pointer;box-shadow:none}
+.zoom-details button.card-key-label .passive-icon{cursor:inherit}
+.zoom-details button.card-key-label:hover,.zoom-details button.card-key-label:focus-visible{background:#e8c66a14;text-decoration:underline;text-underline-offset:3px}
+.zoom-details button.card-key-label:focus-visible{outline:2px solid #e4d19c;outline-offset:2px}
+.zoom-psv .psv-item{scroll-margin-block:16px}
+.zoom-psv .psv-item:focus{outline:2px solid #e4d19c;outline-offset:2px;background:#e8c66a14}
 .zoom-details .card-rule-notes summary{cursor:pointer;line-height:1.5;color:var(--gold-light,#d8c39a)}
 .zoom-details .card-rule-notes p{line-height:1.65}
 .zoom-details .card-dice-head{margin-bottom:12px}

@@ -595,11 +595,16 @@ export function zoomCard(c: CardInst, hp?: { now: number; max: number }, stateTe
   const details = document.createElement('section'); details.className = 'zoom-details'; details.tabIndex = 0;
   details.setAttribute('aria-label', getLang() === 'ja' ? 'カード効果と関連情報' : getLang() === 'en' ? 'Card rules and related information' : '카드 효과와 관련 정보');
   if (stateText) { const state = document.createElement('div'); state.className = 'inspect-state'; state.textContent = stateText; details.append(state); }
-  details.append(cardRulesEl(c));
+  details.append(cardRulesEl(c, key => {
+    const item = details.querySelector<HTMLElement>(`.zoom-psv .psv-item[data-psv="${key}"]`);
+    if (!item) return;
+    item.focus({ preventScroll: true });
+    item.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
+  }));
   details.onclick = e => e.stopPropagation();
   wrap.appendChild(cardEl(c, { fullArt: true, ...(hp ? { hpNow: hp.now, hpMax: hp.max } : {}) }));
   // 패시브 키워드 패널: 카드가 가진 패시브(부여분 포함)의 이름+설명을 우측에 표시.
-  // 카드 텍스트의 키워드명을 hover(터치: 탭)하면 해당 설명이 하이라이트된다.
+  // The rules header links each keyword's name and icon to its own explanation.
   const psvKeys = [...new Set([...cardPassives(c), ...(((c as { passivesG?: string[] }).passivesG) ?? [])])];
   if (psvKeys.length) {
     const lang0 = getLang();
@@ -609,17 +614,16 @@ export function zoomCard(c: CardInst, hp?: { now: number; max: number }, stateTe
       const p = PASSIVES[k];
       if (!p) return "";
       const loc = lang0 === "ja" ? p.ja : lang0 === "en" ? p.en : p.ko;
-      return `<div class="psv-item" data-psv="${k}"><b class="psv-name">${passiveIcon(k)}<span>${loc.name}</span></b><div class="psv-desc">${loc.desc}</div></div>`;
+      return `<div class="psv-item" id="zoom-passive-${k}" data-psv="${k}" tabindex="-1" role="group" aria-labelledby="zoom-passive-name-${k}"><b class="psv-name" id="zoom-passive-name-${k}">${passiveIcon(k)}<span>${loc.name}</span></b><div class="psv-desc">${loc.desc}</div></div>`;
     }).join("");
     details.appendChild(panel);
-    // hover/탭 → 우측 설명 하이라이트 (카드 텍스트 안의 .psv 스팬과 연결)
-    details.querySelectorAll<HTMLElement>(".psv").forEach((sp) => {
+    details.querySelectorAll<HTMLElement>(".card-key-label").forEach((sp) => {
       const key = sp.dataset.psv!;
       const item = panel.querySelector<HTMLElement>(`.psv-item[data-psv="${key}"]`);
       if (!item) return;
+      sp.setAttribute('aria-controls', item.id);
       sp.addEventListener("pointerenter", () => item.classList.add("hl"));
       sp.addEventListener("pointerleave", () => item.classList.remove("hl"));
-      sp.addEventListener("click", (e) => { e.stopPropagation(); item.classList.toggle("hl"); });
     });
   }
   if (c.tribe && TRIBES[c.tribe]) {
@@ -662,10 +666,13 @@ export function zoomCard(c: CardInst, hp?: { now: number; max: number }, stateTe
   ov.onkeydown = e => {
     if (e.key === 'Escape') { e.stopPropagation(); closeZoom(); }
     if (e.key === 'Tab') {
-      const focusable = Array.from(ov.querySelectorAll<HTMLElement>('button,[tabindex="0"]'));
+      const focusable = Array.from(ov.querySelectorAll<HTMLElement>('button,summary,[tabindex="0"]'));
       const first = focusable[0], last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+      // A keyword jump focuses a description after the last tab stop.
+      const afterLast = active && last && !!(last.compareDocumentPosition(active) & Node.DOCUMENT_POSITION_FOLLOWING);
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+      else if (!e.shiftKey && (active === last || afterLast)) { e.preventDefault(); first?.focus(); }
     }
   };
   close.focus({ preventScroll: true });
