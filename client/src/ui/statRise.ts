@@ -1,5 +1,5 @@
 import type {GameState} from '../shared/types';
-import {effAtk,effDef,curHp,monsterCanAttack,monsterOngoingActive} from '../shared/engine';
+import {effAtk,effDef,curHp,monsterCanAttack,monsterCanTarget,monsterOngoingActive} from '../shared/engine';
 import {playMonster,syncMonsterStates,clearMonsterStates} from './monster/runtime';
 import type {Kind} from './monster/catalog';
 
@@ -19,7 +19,11 @@ export function createBoardStatRise(root:HTMLElement){
     const value={id:m.id,owner,atk:effAtk(p,m,state),def:effDef(p,m),hp:curHp(p,m)};next.set(m.uid,value);
     const n=[...root.querySelectorAll<HTMLElement>('.zone-mon .card[data-uid]')].find(n=>n.dataset.uid===m.uid);if(!n)return;
     if(monsterOngoingActive(state,p,m))n.dataset.monsterAura=m.aura??m.condAtk??m.id;else delete n.dataset.monsterAura;
-    const unable=!monsterCanAttack(state,p,m);
+    const active=state.players[state.cur], attacking=state.pending?.reason==='attack';
+    const candidates=active.field.filter(a=>!attacking||a.uid===state.pending?.data?.attackerUid);
+    // Only the active player's cards use attack readiness. Defenders use target legality.
+    const unable=!state.over && (owner===state.cur ? !monsterCanAttack(state,p,m)
+      : candidates.some(a=>!a.exhausted && a.hatch==null) && !candidates.some(a=>monsterCanTarget(state,active,a,m)));
     if(unable){n.dataset.monsterBlocked='true';n.classList.remove('is-attacker');}else delete n.dataset.monsterBlocked;
     const old=previous.get(m.uid);if(!old||old.id!==m.id||old.owner!==owner||state.over)return;
     const da=value.atk-old.atk,dh=value.def-old.def;if(!da&&!dh)return;

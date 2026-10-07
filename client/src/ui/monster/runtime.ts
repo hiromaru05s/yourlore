@@ -34,12 +34,12 @@ function observeField(root:HTMLElement){
  let observer=observers.get(root);
  if(!observer){observer=new MutationObserver(records=>{
   for(const record of records){const n=record.target as HTMLElement,s=states.get(n);if(s){s.dirty=true;if(record.type==='attributes'&&record.attributeName==='style')s.rect=undefined;}}
-  for(const [n] of states)if(!n.isConnected)removeState(n);
+  for(const [n,s] of states){if(!n.isConnected)removeState(n);else {s.rect=undefined;s.dirty=true;}}
   release();schedule();
  });observers.set(root,observer);}
  observer.disconnect();
  for(const [n,s] of states)if(s.root===root)observer.observe(n,{attributes:true,attributeFilter:['class','style','data-monster-aura','data-monster-blocked']});
- for(const zone of root.querySelectorAll('.zone-mon'))observer.observe(zone,{childList:true});
+ for(const zone of root.querySelectorAll('.zone-mon'))observer.observe(zone,{childList:true,subtree:true,attributes:true,attributeFilter:['data-reserved-uid']});
 }
 function removeState(n:HTMLElement){const s=states.get(n);if(!s)return;s.actor.dispose();n.style.opacity=s.opacity;states.delete(n);}
 export function syncMonsterStates(root:HTMLElement){
@@ -47,7 +47,7 @@ export function syncMonsterStates(root:HTMLElement){
  if(!root.isConnected){release();return;}
  for(const n of root.querySelectorAll<HTMLElement>('.zone-mon .card[data-uid]')){
   if(!n.classList.contains('is-attacker')&&!n.dataset.monsterAura&&!n.dataset.monsterBlocked)continue;
-  const layer=ensureField(root),actor=new Actor(n,layer.cards);states.set(n,{actor,root,layer,opacity:n.style.opacity,dirty:true});n.style.opacity='0';
+  const layer=ensureField(root),actor=new Actor(n,layer.cards,2);states.set(n,{actor,root,layer,opacity:n.style.opacity,dirty:true});n.style.opacity='0';
  }
  if([...states.values()].some(s=>s.root===root))observeField(root);release();if(states.size)schedule();
 }
@@ -63,7 +63,7 @@ function tick(now:number){
  const active=layers;active?.begin(innerWidth,innerHeight);
  // Measure all dirty sources before touching clone styles. Idle geometry stays cached
  // until board projection, resize, scrolling, rendering or source style changes.
- for(const [n,s] of states)if(n.isConnected&&!s.rect)s.rect=monsterRect(n);
+ for(const [n,s] of states)if(n.isConnected&&(!s.rect||n.getAnimations().length)){s.rect=monsterRect(n);s.dirty=true;}
  const hidden=new Set<HTMLElement>(jobs.keys());for(const job of jobs.values())if(job.hit)hidden.add(job.hit.node);
  const readyLayers=new Set<Layers>();for(const [n,s] of states)if(n.classList.contains('is-attacker')||s.dirty)readyLayers.add(s.layer);
  for(const layer of readyLayers)layer.begin(innerWidth,innerHeight);
@@ -72,7 +72,7 @@ function tick(now:number){
   if(!n.isConnected){removeState(n);continue;}
   if(hidden.has(n)||n.classList.contains('is-dragging')||n.style.visibility==='hidden'){s.actor.hide();s.dirty=true;continue;}
   const r=s.rect!,ready=n.classList.contains('is-attacker'),blocked=!!n.dataset.monsterBlocked;
-  const dynamic=!reduced()&&(ready||!!n.dataset.monsterAura);animated||=dynamic;
+  const dynamic=n.getAnimations().length>0||!reduced()&&(ready||!!n.dataset.monsterAura);animated||=dynamic;
   if(!s.dirty&&!dynamic){if(ready)drawEffect(s.layer.foreground,'ready','C',0,r,r,{active:true,reduced:true,side:n.closest('#oppRow')?-1:1,pass:'front'});continue;}
   s.dirty=false;
   const side=n.closest('#oppRow')?-1:1;

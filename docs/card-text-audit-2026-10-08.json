@@ -3254,7 +3254,7 @@
         "en"
       ],
       "definitionSha256": "777893a188a8ad3b83396011f62111d49bc60326ca9f4cc1a40c3b7ec30bba0c",
-      "textSha256": "19ab5a3fb017539ae8ca6734929dae93c211c3d1333a370851902146ba236c25",
+      "textSha256": "d931acf7a0128a4e0254e3d8c2d48e3b6a2a1b4367ae1b83c15d3e146172fb62",
       "hooks": {
         "act": "destroyMon"
       },
@@ -3264,10 +3264,11 @@
         "en": "Destroy all enemy monsters with ATK 2 or less"
       },
       "after": {
-        "ja": "【発動時】相手の場の攻撃力2以下のモンスターを全て破壊する。",
-        "ko": "【발동시】상대의 필드의 공격력 2 이하 몬스터를 모두 파괴한다.",
-        "en": "【On Cast】Destroy all enemy monsters with ATK 2 or less."
-      }
+        "ja": "【発動時】両方の場の攻撃力2以下のモンスターを全て破壊する。",
+        "ko": "【발동시】양쪽 필드의 공격력 2 이하 몬스터를 모두 파괴한다.",
+        "en": "【On Cast】Destroy all monsters on either field with ATK 2 or less."
+      },
+      "uxReview": "Integrated d4b9b284 both-field removal; verified targeted regression and reviewed all 3 descriptions."
     },
     "SNIPE1": {
       "nameJa": "狙撃",
@@ -3302,7 +3303,7 @@
         "en"
       ],
       "definitionSha256": "dc8b08975d2a685b8c9117063383cd3c0716afec1db5a3ff2c64b8a0d58d4899",
-      "textSha256": "d17388089230d9f652900b041704a6eac19db455c55921e49cf95f9cd8379550",
+      "textSha256": "b3a5c454cb111f9221c5a42294f6a954bf5e3c0862c4bf00ca6d54c6cf8a384b",
       "hooks": {
         "act": "destroyMon"
       },
@@ -3312,10 +3313,11 @@
         "en": "Destroy all enemy monsters with current HP 2 or less"
       },
       "after": {
-        "ja": "【発動時】相手の場の現在体力2以下のモンスターを全て破壊する。",
-        "ko": "【발동시】상대의 필드의 현재 체력 2 이하 몬스터를 모두 파괴한다.",
-        "en": "【On Cast】Destroy all enemy monsters with current HP 2 or less."
-      }
+        "ja": "【発動時】両方の場の現在体力2以下のモンスターを全て破壊する。",
+        "ko": "【발동시】양쪽 필드의 현재 체력 2 이하 몬스터를 모두 파괴한다.",
+        "en": "【On Cast】Destroy all monsters on either field with current HP 2 or less."
+      },
+      "uxReview": "Integrated d4b9b284 both-field removal; verified targeted regression and reviewed all 3 descriptions."
     },
     "DRAGON_EGG": {
       "nameJa": "ドラゴンの卵",

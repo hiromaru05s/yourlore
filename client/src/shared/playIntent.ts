@@ -94,12 +94,14 @@ export function targetOwner(g: GameState, uid: string): Side | null {
 
 /** Show the exact publicly determined victim before an automatic removal cast. */
 export function automaticCastTargets(g: GameState, owner: Side, c: CardInst): CardInst[] {
-  if(c.id!=='WALLBREAK1'&&c.id!=='SNIPE1')return [];
+  if(!['WALLBREAK1','SNIPE1','WALLBREAK2','SNIPE2'].includes(c.id))return [];
+  const all=c.id==='WALLBREAK2'||c.id==='SNIPE2';
   const p=g.players[owner],o=g.players[1-owner];
   const candidates: {m:FieldMon;p:typeof p}[]=[];
   for(const pl of [o,p])for(const m of pl.field){
-    if(pl!==p&&hasPassive(m,'aura'))continue;
-    if(c.id==='WALLBREAK1'?effAtk(pl,m,g)<=2:curHp(pl,m)<=3)candidates.push({m,p:pl});
+    if(!all&&pl!==p&&hasPassive(m,'aura'))continue;
+    if(c.id.startsWith('WALLBREAK')?effAtk(pl,m,g)<=2:curHp(pl,m)<=(all?2:3))candidates.push({m,p:pl});
   }
+  if(all)return candidates.map(x=>x.m);
   return candidates.sort((a,b)=>effAtk(b.p,b.m,g)+effDef(b.p,b.m)-effAtk(a.p,a.m,g)-effDef(a.p,a.m)).slice(0,1).map(x=>x.m);
 }

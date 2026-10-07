@@ -1057,7 +1057,7 @@
       "type": "spell",
       "act": "destroyMon",
       "route": "precast-review",
-      "effectJa": "【発動時】相手の場の攻撃力2以下のモンスターを全て破壊する。"
+      "effectJa": "【発動時】両方の場の攻撃力2以下のモンスターを全て破壊する。"
     },
     {
       "id": "SNIPE1",
@@ -1073,7 +1073,7 @@
       "type": "spell",
       "act": "destroyMon",
       "route": "precast-review",
-      "effectJa": "【発動時】相手の場の現在体力2以下のモンスターを全て破壊する。"
+      "effectJa": "【発動時】両方の場の現在体力2以下のモンスターを全て破壊する。"
     },
     {
       "id": "DRAGON_EGG",

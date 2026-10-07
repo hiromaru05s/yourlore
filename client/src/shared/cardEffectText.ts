@@ -698,9 +698,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Automatically destroy the monster on either field with ATK 2 or less and the highest ATK plus max HP, excluding enemy Aura monsters; ties favor the enemy field, then field order."
   },
   "WALLBREAK2": {
-    "ja": "【発動時】相手の場の攻撃力2以下のモンスターを全て破壊する。",
-    "ko": "【발동시】상대의 필드의 공격력 2 이하 몬스터를 모두 파괴한다.",
-    "en": "【On Cast】Destroy all enemy monsters with ATK 2 or less."
+    "ja": "【発動時】両方の場の攻撃力2以下のモンスターを全て破壊する。",
+    "ko": "【발동시】양쪽 필드의 공격력 2 이하 몬스터를 모두 파괴한다.",
+    "en": "【On Cast】Destroy all monsters on either field with ATK 2 or less."
   },
   "SNIPE1": {
     "ja": "【発動時】両方の場の現在体力3以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
@@ -708,9 +708,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Automatically destroy the monster on either field with current HP 3 or less and the highest ATK plus max HP, excluding enemy Aura monsters; ties favor the enemy field, then field order."
   },
   "SNIPE2": {
-    "ja": "【発動時】相手の場の現在体力2以下のモンスターを全て破壊する。",
-    "ko": "【발동시】상대의 필드의 현재 체력 2 이하 몬스터를 모두 파괴한다.",
-    "en": "【On Cast】Destroy all enemy monsters with current HP 2 or less."
+    "ja": "【発動時】両方の場の現在体力2以下のモンスターを全て破壊する。",
+    "ko": "【발동시】양쪽 필드의 현재 체력 2 이하 몬스터를 모두 파괴한다.",
+    "en": "【On Cast】Destroy all monsters on either field with current HP 2 or less."
   },
   "DRAGON_EGG": {
     "ja": "【卵】攻撃できない。\n\n【耐久】カウンター6個で登場し、攻撃・ダメージを受けるたび1個失う（0個で破壊）。\n\n【孵化まで】双方のターン開始を8回数え、残り0の自分ターン開始時に孵化する。\n\n【孵化時】孵化時、この卵を自分のリフトへ送り、「黒竜」「赤竜」「青竜」からランダムに1体を自分の場に召喚する。",

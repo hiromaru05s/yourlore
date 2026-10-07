@@ -54,5 +54,9 @@ export function clearBoardProjection(root:HTMLElement):void {
 export function projectedPlacement(target:HTMLElement,width:number,height:number):DOMMatrix {
   const plane=target.closest<HTMLElement>('[data-board-plane]');
   if(!plane){const r=target.getBoundingClientRect();return new DOMMatrix().translate(r.left,r.top).scale(r.width/width,r.height/height);}
-  const r=layoutRect(target);return boardMatrix(r.left,r.top,Number(plane.dataset.boardPlane)||0).scale(r.width/width,r.height/height);
+  const r=layoutRect(target);
+  // Field centering uses a CSS translate animation, outside offsetLeft/offsetTop.
+  const translate=getComputedStyle(target).translate?.split(' ')??[];
+  const dx=parseFloat(translate[0])||0,dy=parseFloat(translate[1])||0;
+  return boardMatrix(r.left+dx,r.top+dy,Number(plane.dataset.boardPlane)||0).scale(r.width/width,r.height/height);
 }

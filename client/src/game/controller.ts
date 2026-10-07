@@ -77,8 +77,6 @@ export abstract class BaseController implements BoardHandlers {
   private timerKey = "";
   private timerLeft = 0;
   private timerInt: number | null = null;
-  private warned25 = false;
-  private toastEl: HTMLElement | null = null;
   // bot/tutorial (and casual online fallback) use a 90s turn; online games get the
   // authoritative length from the server via g.turnTotalMs (ranked 50s / casual 90s).
   private static readonly LOCAL_TURN_SECS = 90;
@@ -113,7 +111,7 @@ export abstract class BaseController implements BoardHandlers {
     this.unsubLang = onLangChange(() => { if (this.state) this.view.render(this.state); });
   }
 
-  private onKey = (e: KeyboardEvent) => { if (e.key === "Escape") A.closeZoom(); };
+  private onKey = (e: KeyboardEvent) => { if (e.key === "Escape") { A.closeZoom(); if(this.state?.pending?.reason === "attack" && this.state.cur === this.you)this.onChooseTarget(null); } };
 
   // ---- the only mutation entry point (subclass decides how) ----
   protected abstract submit(action: Action): void;
@@ -195,7 +193,7 @@ export abstract class BaseController implements BoardHandlers {
     const now = Date.now();
     if (now - this.lastEndTurnAt < 900) return;
     if (this.state?.cur === this.you && now - this.turnStartedWall < 500 && this.state.turn > 1) return;
-    if(!this.state||this.state.over||this.state.cur!==this.you||this.state.pending)return;
+    if(!this.state||this.state.over||this.state.cur!==this.you||(this.state.pending && this.state.pending.reason !== 'attack'))return;
     this.view.beginEndTurn();
     this.lastEndTurnAt = now;
     this.fastForward(); this.submit({ type: "endTurn" });
@@ -816,7 +814,6 @@ export abstract class BaseController implements BoardHandlers {
       this.timerLeft = g.turnLeftMs != null
         ? Math.max(1, Math.ceil(g.turnLeftMs / 1000))
         : this.turnTotal;
-      this.warned25 = this.timerLeft <= 25; // don't re-fire the 25s popup mid-turn on reconnect
       this.turnStartedWall = Date.now();    // guard against a stale ~0 clock instantly skipping the turn
       // a reconnect straight into the discard choice: the server clock already includes the bonus
       this.handCapBonusKey = g.pending?.reason === "handCap" ? key : "";
@@ -843,7 +840,6 @@ export abstract class BaseController implements BoardHandlers {
       const serverLeft = Math.max(1, Math.ceil(g.turnLeftMs / 1000));
       if (serverLeft < this.timerLeft - 3) {
         this.timerLeft = serverLeft;
-        this.warned25 = this.warned25 || serverLeft <= 25;
         this.renderTimer();
       }
     }
@@ -854,8 +850,6 @@ export abstract class BaseController implements BoardHandlers {
     this.timerLeft--;
     this.renderTimer();
     const s = this.timerLeft;
-    if (s === 25 && !this.warned25) { this.warned25 = true; this.turnToast(t("game.timer.sec").replace("{n}", String(s)), "small", 1500); }
-    else if (s <= 5 && s >= 1) this.turnToast(String(s), "big", 900);
     if (s <= 0) {
       // never auto-end within the first ~2s of a turn — a stale/near-zero clock (e.g. after a
       // skip or a reconnect) must not instantly skip the turn; give the player real time.
@@ -944,16 +938,6 @@ export abstract class BaseController implements BoardHandlers {
         this.afterApply({state:this.state,events:[]});
       }
     }
-  }
-
-  private turnToast(text: string, size: "big" | "small", ms: number): void {
-    this.toastEl?.remove();
-    const el = document.createElement("div");
-    el.className = `turn-toast ${size}`;
-    el.textContent = text;
-    document.body.appendChild(el);
-    this.toastEl = el;
-    setTimeout(() => { el.classList.add("out"); setTimeout(() => el.remove(), 300); }, ms);
   }
 
   /** Centered popup explaining why a card can't be played (condition not met, etc.). */
@@ -1045,7 +1029,6 @@ export abstract class BaseController implements BoardHandlers {
     document.querySelectorAll(".fx-turnbanner,.cointoss-ov,.fx-card-flight,.cast-veil").forEach(n => n.remove());
     this.stopTimer();
     this.view.destroy();
-    this.toastEl?.remove();
     A.closeZoom(); // a zoom left open would sit over the NEXT screen (its Esc handler dies below)
     document.removeEventListener("keydown", this.onKey);
     A.removeReviewFab();
