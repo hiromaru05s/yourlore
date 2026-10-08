@@ -20,15 +20,15 @@ try{
  await build({entryPoints:['client/src/ui/summon/runtime.ts'],bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'runtime.mjs'),plugins:[{name:'controlled-rendering',setup(b){
  b.onResolve({filter:/cardSurface$/},()=>({path:'capture',namespace:'test'}));
  b.onResolve({filter:/boardProjection$/},()=>({path:'projection',namespace:'test'}));
- b.onResolve({filter:/richRenderer$/},()=>({path:'renderer',namespace:'test'}));
+ b.onResolve({filter:/(richRenderer|studyRenderer)$/},()=>({path:'renderer',namespace:'test'}));
  b.onResolve({filter:/^\.\/renderer$/},a=>a.importer.endsWith('/verdant/runtime.ts')?{path:'renderer',namespace:'test'}:null);
- b.onLoad({filter:/.*/,namespace:'test'},a=>({contents:a.path==='capture'?`export async function captureCardSurface(){if(verification.hold)await new Promise(r=>verification.release=r);if(verification.fail)throw Error('Unavailable');return {face:document.createElement('canvas')};}`:a.path==='projection'?`const matrix={scale(){return this},toString(){return 'matrix(1,0,0,1,0,0)'}};export const boardMatrix=()=>matrix,projectedPlacement=()=>matrix,layoutRect=()=>({left:0,top:0,width:180,height:280});`:`class R{drawBoard(c,f,id,v,ms){verification.draws.push({id,v,ms});}draw(c,f,id,v,ms){verification.draws.push({id,v,ms});}dispose(){verification.disposed++;}}export {R as RichRenderer,R as Renderer};`}));
+ b.onLoad({filter:/.*/,namespace:'test'},a=>({contents:a.path==='capture'?`export async function captureCardSurface(){if(verification.hold)await new Promise(r=>verification.release=r);if(verification.fail)throw Error('Unavailable');return {face:document.createElement('canvas')};}`:a.path==='projection'?`const matrix={scale(){return this},toString(){return 'matrix(1,0,0,1,0,0)'}};export const boardMatrix=()=>matrix,projectedPlacement=()=>matrix,layoutRect=()=>({left:0,top:0,width:180,height:280});`:`class R{drawBoard(c,f,id,v,ms){verification.draws.push({id,v,ms});}draw(c,f,id,v,ms){verification.draws.push({id,v,ms});}dispose(){verification.disposed++;}}export {R as RichRenderer,R as StudyRenderer,R as Renderer};`}));
  }}]});
  const {playSlateSummon:play,cancelSummon,cancelSummons,summonPlacement}=await import(path.join(dir,'runtime.mjs'));
  const source=document.getElementById('source'),anchor=document.getElementById('anchor');let impacts=0;
  for(const id of ['ELF','DARK_ELF','HIGH_ELF','ELDER_ELF_KING','WORLD_TREE','HALF_ELF']){
   source.dataset.cardId=id;source.style.visibility='visible';const p=play(source,{anchor,onImpact:()=>impacts++});await settle();
-  assert.equal(document.querySelector('.verdant-summon').dataset.variant,id==='HALF_ELF'?'1':'2');assert.equal(document.querySelector('.slate-summon'),null);
+  assert.equal(document.querySelector('.verdant-summon').dataset.variant,id==='HALF_ELF'?'1':'4');assert.equal(document.querySelector('.slate-summon'),null);
   assert.equal(source.style.visibility,'hidden');const before=impacts;await advance(id==='HALF_ELF'?1992:2249);assert.equal(impacts,before);await advance(2);assert.equal(impacts,before+1);await advance(5000);
   assert.equal(await p,true);assert.equal(impacts,before+1);assert.equal(source.style.visibility,'visible');assert.equal(document.querySelector('.verdant-summon'),null);
   assert.equal(summonPlacement(anchor,180,280,0,false,id).toString(),'matrix(1,0,0,1,0,0)');
@@ -53,5 +53,5 @@ try{
  cancelSummons(document.getElementById('root'));assert.deepEqual(await Promise.all(simultaneous),[false,false]);assert.equal(source.style.visibility,'visible');assert.equal(other.style.visibility,'visible');other.remove();
  verification.fail=true;const warn=console.warn;console.warn=()=>{};const before=impacts;assert.equal(await play(source,{onImpact:()=>impacts++}),false);console.warn=warn;assert.equal(impacts,before+1);assert.equal(source.style.visibility,'visible');
  assert.equal(frames.size,0);assert.equal(document.querySelectorAll('.verdant-summon').length,0);
- console.log('PASS five 02 selections, Half Elf 01, two no-animation FIXs, contact once, physical handoff, reduced motion, abort/root/single/resize/hidden/unlink, pending capture, replay, fallback and disposal');
+ console.log('PASS five new 04 selections, Half Elf 01, two no-animation FIXs, contact once, physical handoff, reduced motion, abort/root/single/resize/hidden/unlink, pending capture, replay, fallback and disposal');
 }finally{await rm(dir,{recursive:true,force:true});dom.window.close();}

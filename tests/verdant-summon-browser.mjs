@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {chromium} from '/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
-const out='docs/releases/2026-10-07-verdant-02/qa',browser=await chromium.launch({channel:'chrome',headless:true});
+const out='docs/releases/2026-10-08-verdant-04/qa',browser=await chromium.launch({channel:'chrome',headless:true});
 const context=await browser.newContext({viewport:{width:1280,height:900}});
 const page=await context.newPage(),errors=[],warnings=[],results=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.text().includes('Native card fallback'))warnings.push(m.text());});
 page.setDefaultTimeout(60000);
@@ -9,8 +9,8 @@ try{
  await page.goto('http://127.0.0.1:5395/verdant-qa.html');await page.waitForFunction(()=>window.verdantQA?.ready);console.log('Board ready');const clockStart=Date.now();await page.clock.install({time:new Date(clockStart-60000)});await page.clock.pauseAt(new Date(clockStart));
  for(const [id,side,path] of [['ELF',0,'direct'],['DARK_ELF',1,'direct'],['HIGH_ELF',0,'direct'],['ELDER_ELF_KING',1,'direct'],['WORLD_TREE',0,'direct'],['HALF_ELF',0,'direct'],['ELF',0,'hand'],['WORLD_TREE',1,'generated']]){
   await page.evaluate(({id,side,path})=>{window.runDone=false;window.verdantQA.run(id,side,path).then(()=>window.runDone=true);},{id,side,path});
-  for(let step=0;step<80;step++){await page.clock.runFor(100);if(await page.locator('.verdant-summon').count())break;}await page.clock.runFor(750);
-  const seen=await page.locator('.verdant-summon').evaluate(n=>({...n.dataset}));assert.equal(seen.cardId,id);assert.equal(seen.variant,id==='HALF_ELF'?'1':'2');assert.equal(await page.locator('.slate-summon').count(),0);
+  await page.clock.runFor(100);await page.locator('.verdant-summon').waitFor({state:'attached',timeout:30000});await page.clock.runFor(750);
+  const seen=await page.locator('.verdant-summon').evaluate(n=>({...n.dataset}));assert.equal(seen.cardId,id);assert.equal(seen.variant,id==='HALF_ELF'?'1':'4');assert.equal(await page.locator('.slate-summon').count(),0);
   await page.screenshot({path:`${out}/${id}-${side}-${path}.png`});await page.clock.runFor(4500);await page.waitForFunction(()=>window.runDone);assert.equal(await page.locator('.verdant-summon').count(),0);results.push({id,side,path,seen});console.log('PASS',id,side,path);
  }
  await page.clock.resume();for(const id of ['VITAL2','VITAL3']){await page.evaluate(id=>window.verdantQA.run(id),id);assert.equal(await page.locator('.verdant-summon,.slate-summon').count(),0);}

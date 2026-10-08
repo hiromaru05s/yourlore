@@ -1,7 +1,7 @@
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
 import {boardMatrix,layoutRect,projectedPlacement} from '../boardProjection';
-import {RichRenderer} from './richRenderer';
+import {StudyRenderer as RichRenderer} from './studyRenderer';
 import {Renderer as HalfRenderer} from './renderer';
 import {CONTACT,DURATION,type Id} from './richCatalog';
 import {selections} from './selection';
