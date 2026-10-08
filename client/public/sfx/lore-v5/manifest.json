@@ -1,6 +1,6 @@
 {
   "version": 5,
-  "status": "active bank with user-selected spell 01 (lore-v7) and summon 04 (lore-v8)",
+  "status": "active bank with user-selected spell 01 (lore-v7) and summon 04 (lore-v8); selected Chosen Domain crown completion (chosen-v1)",
   "sampleRate": 44100,
   "sounds": {
     "click": [
@@ -706,6 +706,21 @@
         ],
         "decision": "rebuilt",
         "description": "4段階で上がる短い昇格音。"
+      }
+    ],
+    "chosenCrown": [
+      {
+        "file": "shakiin.mp3",
+        "seconds": 1.65,
+        "peakDb": -4.0,
+        "rmsDb": -22.7,
+        "sampleRate": 48000,
+        "sources": [
+          "original deterministic synthesis: scripts/audio/build_chosen_crown.py"
+        ],
+        "sha256": "59f6c135d12bfb87d9050e0f7368add3384035b863d8a1157b591d636faa6181",
+        "url": "/sfx/chosen-v1/shakiin.mp3",
+        "decision": "Selected crown: one cue at 2700ms completion light"
       }
     ]
   }
