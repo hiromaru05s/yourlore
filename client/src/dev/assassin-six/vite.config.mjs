@@ -1,0 +1,2 @@
+import {defineConfig} from 'vite';
+export default defineConfig({root:new URL('../../../',import.meta.url).pathname,server:{host:'127.0.0.1',port:5416,strictPort:true},build:{outDir:'dist-assassin-six',rollupOptions:{input:new URL('../../../assassin-six.html',import.meta.url).pathname}}});
