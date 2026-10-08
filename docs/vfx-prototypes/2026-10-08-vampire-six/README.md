@@ -64,3 +64,4 @@ node node_modules/vite/bin/vite.js --config client/src/dev/vampire-six/vite.conf
 - TypeScript全体チェック・専用Vite build通過。既存GameView/Threeを含むためチャンク容量の警告は残る。
 - `qa/six-continuous.mp4`: 30fps / 103フレーム / 3.433秒。動画を連続フレームにも展開して、各素材が被覆→開放→接地→収束することを確認。実時間FPSを示す録画ではない。
 - 描画の自己確認と、ユーザーによる見た目の選定は別。まだ案を採用済みとは扱っていない。
+- 最後の低速確認で接地後の棺蓋・薄片がカード面と同じ奥行きとなるちらつきを検出。高さに余裕を持たせ、棺の側面を含めてカード面との重なりを修正。最終画像・動画を再出力した。
