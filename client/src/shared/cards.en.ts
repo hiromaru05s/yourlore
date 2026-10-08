@@ -600,7 +600,7 @@ Object.assign(TEXTS, {
 
 // ---- SPELL OVERHAUL (v34) ----
 Object.assign(NAMES, {
-  GOLIATH_HUNT: "Giant Killing", GLASS_BAN: "Change of Strategy", SHATTER: "Earthquake",
+  GOLIATH_HUNT: "Giant Killing", GLASS_BAN: "Change of Strategy", SHATTER: "Shattering Tremor",
   DECAY_CRAFT: "Concealed Arms Works", CASINO: "Casino",
 });
 Object.assign(TEXTS, {

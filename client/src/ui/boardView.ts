@@ -1,3 +1,4 @@
+import { questProgressText } from '../shared/cardPresentation';
 import { npcPortrait } from "../shared/botNpcs";
 import {prepareManaPurchase} from './manaPurchase';
 import {monsterCanAttack,monsterCanTarget} from '../shared/engine';
@@ -503,7 +504,7 @@ export class GameView {
       // zoom shows the monster's CURRENT atk/hp (buffs/mods applied) — and, when damaged,
       // "현재/최대" exactly like the field tile (v29: the zoom used to show HP only,
       // so a 4/20 monster read as a healthy 20 in the view players trade off).
-      bindZoom(card, { ...m, atk: effAtk(p, m, g), def: effDef(p, m) }, { now: curHp(p, m), max: effDef(p, m) });
+      bindZoom(card, { ...m, atk: effAtk(p, m, g), def: effDef(p, m) }, { now: curHp(p, m), max: effDef(p, m), turn: g.turn });
       // 드래그 = 공격(상대 몬스터/초상화로) + 내 필드 안에서는 순서 변경.
       // 예전엔 몬스터가 2체 이상일 때만 드래그가 붙어서 1체일 땐 공격 드래그가 아예 없었다.
       if (isMe && myTurn && !pending && !g.over && (canAttack || p.field.length > 1)) {
@@ -573,10 +574,10 @@ export class GameView {
       const tile = questTile(q.card,q.progress);
       tile.tabIndex=0;tile.setAttribute("role","button");
       tile.dataset.uid = q.card.uid;
-      const progress = `${q.progress}/${q.card.quest?.target ?? 0}`;
-      tile.title = `${cardName(q.card)} · ${progress} · ${q.card.textJa ?? q.card.text}`;
-      tile.setAttribute("aria-label", `${cardName(q.card)} クエスト進捗 ${progress}`);
-      tile.onclick = () => zoomCard(q.card, undefined, `クエスト進捗 ${progress}`);
+      const progress = questProgressText(q.progress, q.card.quest?.target ?? 0, getLang());
+      tile.title = `${cardName(q.card)} · ${progress} · ${getLang() === "ja" ? q.card.textJa : getLang() === "en" ? q.card.textEn : q.card.text}`;
+      tile.setAttribute("aria-label", `${cardName(q.card)} ${progress}`);
+      tile.onclick = () => zoomCard(q.card, undefined, progress);
       tile.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();tile.click();}};
       sz.appendChild(tile);
     }

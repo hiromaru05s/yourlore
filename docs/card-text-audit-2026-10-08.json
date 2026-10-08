@@ -2531,14 +2531,14 @@
       }
     },
     "SHATTER": {
-      "nameJa": "地震",
+      "nameJa": "崩壊振動",
       "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "25e5d4581e6aa5689e7e498363286c87af50b56bcb89d5416a2ca8ba46e1cc9b",
+      "definitionSha256": "8b5f54c478703f13e3d4248c2bbff66b9125ec535879306643655a07e11bf57c",
       "textSha256": "44bc89e995f58daa06fd316e58f422d9ce5f4560cf61e4b293e958d80e669107",
       "hooks": {},
       "before": {
@@ -2550,7 +2550,8 @@
         "ja": "【発動時】自分に5ダメージを与える。両方の場の、卵以外の全モンスターの最大体力を1にし、蓄積ダメージを取り除く（持続）。",
         "ko": "【발동시】자신에게 5 데미지를 준다. 양쪽 필드의 알 이외 모든 몬스터의 최대 체력을 1로 만들고 누적 데미지를 제거한다(지속).",
         "en": "【On Cast】You take 5 damage. Set all non-Egg monsters' max HP on both fields to 1 and remove their accumulated damage (lasting)."
-      }
+      },
+      "namingReview": "2026-10-08: distinguish SHATTER from EARTHQUAKE in ja/ko/en; mechanics and effects unchanged"
     },
     "SCARECROW": {
       "nameJa": "かかし召集",

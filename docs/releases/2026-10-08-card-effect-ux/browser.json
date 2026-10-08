@@ -1,0 +1,294 @@
+{
+  "passiveJumps": [
+    {
+      "size": {
+        "width": 1280,
+        "height": 800
+      },
+      "lang": "ja",
+      "before": [
+        0,
+        0
+      ],
+      "after": [
+        0,
+        0
+      ],
+      "closeVisible": true,
+      "definitionBottom": 665.53125,
+      "definitionTop": 539.96875,
+      "focused": "zoom-passive-guts",
+      "headerBottom": 158,
+      "overflow": false,
+      "returnVisible": true
+    },
+    {
+      "size": {
+        "width": 1280,
+        "height": 800
+      },
+      "lang": "ko",
+      "before": [
+        0,
+        0
+      ],
+      "after": [
+        0,
+        0
+      ],
+      "closeVisible": true,
+      "definitionBottom": 666.34375,
+      "definitionTop": 565.96875,
+      "focused": "zoom-passive-guts",
+      "headerBottom": 158,
+      "overflow": false,
+      "returnVisible": true
+    },
+    {
+      "size": {
+        "width": 1280,
+        "height": 800
+      },
+      "lang": "en",
+      "before": [
+        0,
+        0
+      ],
+      "after": [
+        0,
+        0
+      ],
+      "closeVisible": true,
+      "definitionBottom": 665.71875,
+      "definitionTop": 540.15625,
+      "focused": "zoom-passive-guts",
+      "headerBottom": 158,
+      "overflow": false,
+      "returnVisible": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "lang": "ja",
+      "before": [
+        0,
+        0
+      ],
+      "after": [
+        9,
+        0
+      ],
+      "closeVisible": true,
+      "definitionBottom": 808.65625,
+      "definitionTop": 657.90625,
+      "focused": "zoom-passive-guts",
+      "headerBottom": 125,
+      "overflow": false,
+      "returnVisible": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "lang": "ko",
+      "before": [
+        0,
+        0
+      ],
+      "after": [
+        9,
+        0
+      ],
+      "closeVisible": true,
+      "definitionBottom": 808.65625,
+      "definitionTop": 657.90625,
+      "focused": "zoom-passive-guts",
+      "headerBottom": 125,
+      "overflow": false,
+      "returnVisible": true
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "lang": "en",
+      "before": [
+        0,
+        0
+      ],
+      "after": [
+        21,
+        0
+      ],
+      "closeVisible": true,
+      "definitionBottom": 809.03125,
+      "definitionTop": 633.09375,
+      "focused": "zoom-passive-guts",
+      "headerBottom": 137,
+      "overflow": false,
+      "returnVisible": true
+    },
+    {
+      "size": {
+        "width": 320,
+        "height": 640
+      },
+      "lang": "ja",
+      "before": [
+        0,
+        0
+      ],
+      "after": [
+        68,
+        0
+      ],
+      "closeVisible": true,
+      "definitionBottom": 605.46875,
+      "definitionTop": 404.34375,
+      "focused": "zoom-passive-guts",
+      "headerBottom": 125,
+      "overflow": false,
+      "returnVisible": true
+    },
+    {
+      "size": {
+        "width": 320,
+        "height": 640
+      },
+      "lang": "ko",
+      "before": [
+        0,
+        0
+      ],
+      "after": [
+        68,
+        0
+      ],
+      "closeVisible": true,
+      "definitionBottom": 605.28125,
+      "definitionTop": 429.34375,
+      "focused": "zoom-passive-guts",
+      "headerBottom": 125,
+      "overflow": false,
+      "returnVisible": true
+    },
+    {
+      "size": {
+        "width": 320,
+        "height": 640
+      },
+      "lang": "en",
+      "before": [
+        0,
+        0
+      ],
+      "after": [
+        80,
+        0
+      ],
+      "closeVisible": true,
+      "definitionBottom": 604.84375,
+      "definitionTop": 403.71875,
+      "focused": "zoom-passive-guts",
+      "headerBottom": 137,
+      "overflow": false,
+      "returnVisible": true
+    }
+  ],
+  "referenceAndState": [
+    {
+      "buttons": [
+        "効果本文へ戻る",
+        "×",
+        "腐敗"
+      ],
+      "case": "referenced ability",
+      "focused": "zoom-passive-decay",
+      "heading": "効果中の用語",
+      "language": "ja"
+    },
+    {
+      "case": "live counters and granted ability",
+      "decayState": "腐敗によるカウンター 2/3。このモンスターが腐敗を受けている状態。3個以上になると破壊され、持ち主に3ダメージ。腐敗を与える能力ではない。",
+      "keys": [
+        "taunt",
+        "evade",
+        "guts"
+      ],
+      "state": "現在の状態攻撃力0現在体力／最大体力1 / 2気合用カウンター0受けている腐敗腐敗によるカウンター 2/3。このモンスターが腐敗を受けている状態。3個以上になると破壊され、持ち主に3ダメージ。腐敗を与える能力ではない。攻撃無効用カウンター5攻撃力補正（ターン4終了まで）+3付与された能力（持続）回避 · 気合"
+    },
+    {
+      "buttons": [
+        "효과 본문으로",
+        "×",
+        "부패"
+      ],
+      "case": "referenced ability",
+      "focused": "zoom-passive-decay",
+      "heading": "효과에 나오는 용어",
+      "language": "ko"
+    },
+    {
+      "case": "live counters and granted ability",
+      "decayState": "부패로 받은 카운터 2/3. 이 몬스터가 부패를 받은 상태다. 3개 이상이면 파괴되고 소유자에게 3 데미지를 준다. 부패를 부여하는 능력이 아니다.",
+      "keys": [
+        "taunt",
+        "evade",
+        "guts"
+      ],
+      "state": "현재 상태공격력0현재 / 최대 체력1 / 2기합용 카운터0받은 부패부패로 받은 카운터 2/3. 이 몬스터가 부패를 받은 상태다. 3개 이상이면 파괴되고 소유자에게 3 데미지를 준다. 부패를 부여하는 능력이 아니다.공격 무효용 카운터5공격력 보정 (4턴 종료까지)+3부여받은 능력 (지속)회피 · 기합"
+    },
+    {
+      "buttons": [
+        "Back to effect",
+        "×",
+        "Decay"
+      ],
+      "case": "referenced ability",
+      "focused": "zoom-passive-decay",
+      "heading": "Terms used in this effect",
+      "language": "en"
+    },
+    {
+      "case": "live counters and granted ability",
+      "decayState": "Counters received from Decay: 2/3. At 3 or more, this monster is destroyed and its owner takes 3 damage. This is an applied status, not the ability to inflict Decay.",
+      "keys": [
+        "taunt",
+        "evade",
+        "guts"
+      ],
+      "state": "Current stateATK0Current / max HP1 / 2Counters for Guts0Applied DecayCounters received from Decay: 2/3. At 3 or more, this monster is destroyed and its owner takes 3 damage. This is an applied status, not the ability to inflict Decay.Counters for negating attacks5ATK modifier (until turn 4 ends)+3Granted abilities (lasting)Evade · Guts"
+    }
+  ],
+  "search": {
+    "count": "34 cards",
+    "overflow": false,
+    "placeholder": "Search names and effects…",
+    "query": "restore"
+  },
+  "filter": {
+    "cards": [
+      "ND5"
+    ],
+    "count": "1 cards",
+    "overflow": false,
+    "scope": "granted"
+  },
+  "history": {
+    "opened": {
+      "back": "← Previous card",
+      "closeVisible": true,
+      "title": "Dragon Rider"
+    },
+    "returned": {
+      "focus": "DRAGON_RIDER",
+      "overflow": false,
+      "scroll": 1019,
+      "title": "Dragon"
+    }
+  }
+}

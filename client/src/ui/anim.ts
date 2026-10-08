@@ -1,3 +1,5 @@
+import { cardTypeLabel, displayPassives, referencedPassives } from '../shared/cardPresentation';
+import { cardStateEl } from './cardState';
 import {cancelChosenVictory} from './chosenVictory/runtime';
 import {combatCard,combatPortrait} from './combatAnchor';
 import {cancelDewGrants} from './dew/runtime';
@@ -27,7 +29,7 @@ import {waitForDuel} from './duelReadiness';
 // touch game state, only the DOM.
 // ============================================================
 import type { CardInst } from "../shared/types";
-import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, cardPassives, enchantHasTurnCountdown } from "../shared/cards";
+import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, enchantHasTurnCountdown } from "../shared/cards";
 import { cardEl, cardRulesEl, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
 import { t, getLang, cardName } from "../i18n";
 
@@ -570,15 +572,41 @@ function miniCardGrid(ids: string[]): HTMLElement {
     if (!def) continue;
     const inst = { ...def, uid: `rel_${id}` } as CardInst;
     const mini = cardEl(inst);
-    mini.onclick = (e) => { e.stopPropagation(); zoomCard(inst); };
+    mini.tabIndex = 0; mini.setAttribute('role', 'button');
+    mini.onclick = (e) => { e.stopPropagation(); openRelatedCard(inst); };
+    mini.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); mini.click(); } };
     grid.appendChild(mini);
   }
   return grid;
 }
 
-// right-click to enlarge any card
-export function zoomCard(c: CardInst, hp?: { now: number; max: number }, stateText?: string): void {
+type ZoomSnapshot = { overlay: HTMLElement; focus: HTMLElement | null; scroll: {node:HTMLElement;top:number}[] };
+const zoomHistory: ZoomSnapshot[] = [];
+let zoomOpener: HTMLElement | null = null;
+function captureZoom(): ZoomSnapshot | null {
+  const overlay = document.getElementById('zoomOverlay');
+  return overlay ? { overlay, focus: document.activeElement as HTMLElement | null,
+    scroll: Array.from(overlay.querySelectorAll<HTMLElement>('.zoom-wrap,.zoom-details')).map(node=>({node,top:node.scrollTop})) } : null;
+}
+function openRelatedCard(c: CardInst): void {
+  const previous = captureZoom();
+  if (previous) { zoomHistory.push(previous); previous.overlay.remove(); }
+  renderZoom(c);
+}
+function backToPreviousCard(): void {
+  const previous = zoomHistory.pop(); if (!previous) return;
+  document.getElementById('zoomOverlay')?.remove(); document.body.append(previous.overlay);
+  previous.scroll.forEach(({node,top})=>{node.scrollTop=top;});
+  previous.focus?.focus({preventScroll:true});
+}
+
+// Public entry starts a new inspection; only related-card navigation keeps history.
+export function zoomCard(c: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string): void {
   closeZoom();
+  zoomOpener = document.activeElement as HTMLElement | null;
+  renderZoom(c, hp, stateText);
+}
+function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string): void {
   const ov = document.createElement("div");
   ov.className = "zoom-overlay";
   ov.id = "zoomOverlay";
@@ -589,18 +617,34 @@ export function zoomCard(c: CardInst, hp?: { now: number; max: number }, stateTe
   const heading = document.createElement('header'); heading.className = 'inspect-heading';
   const title = document.createElement('h1'); title.textContent = cardName(c);
   const type = document.createElement('span'); type.className = 'inspect-type';
-  const labels = getLang() === 'ja' ? ['モンスター','魔法','罠'] : getLang() === 'en' ? ['Monster','Spell','Trap'] : ['몬스터','마법','함정'];
-  type.textContent = labels[c.t === 'mon' ? 0 : c.t === 'trap' ? 2 : 1];
+  type.textContent = cardTypeLabel(c, getLang());
   const close = document.createElement('button'); close.className = 'inspect-close'; close.textContent = '×';
   close.setAttribute('aria-label', getLang() === 'ja' ? '閉じる' : getLang() === 'en' ? 'Close' : '닫기');
   close.onclick = closeZoom;
-  heading.append(title, type, close); wrap.append(heading);
+  if (zoomHistory.length) {
+    const back = document.createElement('button'); back.type='button'; back.className='inspect-back';
+    back.textContent={ja:'← 元のカード',ko:'← 이전 카드',en:'← Previous card'}[getLang()];
+    back.onclick=e=>{e.stopPropagation();backToPreviousCard();}; heading.append(back);
+  }
+  const returnToRules = document.createElement('button'); returnToRules.type='button'; returnToRules.className='inspect-return-rules'; returnToRules.hidden=true;
+  returnToRules.textContent={ja:'効果本文へ戻る',ko:'효과 본문으로',en:'Back to effect'}[getLang()];
+  heading.append(title, type, returnToRules, close); wrap.append(heading);
+  heading.onclick=e=>e.stopPropagation();
   const details = document.createElement('section'); details.className = 'zoom-details'; details.tabIndex = 0;
   details.setAttribute('aria-label', getLang() === 'ja' ? 'カード効果と関連情報' : getLang() === 'en' ? 'Card rules and related information' : '카드 효과와 관련 정보');
+  const currentState = cardStateEl(c, hp); if (currentState) details.append(currentState);
   if (stateText) { const state = document.createElement('div'); state.className = 'inspect-state'; state.textContent = stateText; details.append(state); }
   details.append(cardRulesEl(c, key => {
     const item = details.querySelector<HTMLElement>(`.zoom-psv .psv-item[data-psv="${key}"]`);
     if (!item) return;
+    const from = details.querySelector<HTMLElement>(`.card-key-label[data-psv="${key}"]`);
+    const scroll = [wrap, details].map(node=>({node,top:node.scrollTop}));
+    returnToRules.hidden=false;
+    returnToRules.onclick=e=>{
+      e.stopPropagation(); returnToRules.hidden=true;
+      scroll.forEach(({node,top})=>{node.scrollTop=top;}); from?.focus({preventScroll:true});
+    };
+    item.style.scrollMarginTop = `${getComputedStyle(wrap).overflowY === 'auto' ? heading.offsetHeight + 16 : 16}px`;
     item.focus({ preventScroll: true });
     item.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
   }));
@@ -608,12 +652,14 @@ export function zoomCard(c: CardInst, hp?: { now: number; max: number }, stateTe
   wrap.appendChild(cardEl(c, { fullArt: true, ...(hp ? { hpNow: hp.now, hpMax: hp.max } : {}) }));
   // 패시브 키워드 패널: 카드가 가진 패시브(부여분 포함)의 이름+설명을 우측에 표시.
   // The rules header links each keyword's name and icon to its own explanation.
-  const psvKeys = [...new Set([...cardPassives(c), ...(((c as { passivesG?: string[] }).passivesG) ?? [])])];
+  const ownedKeys = displayPassives(c);
+  const psvKeys = [...new Set([...ownedKeys, ...referencedPassives(c)])];
   if (psvKeys.length) {
     const lang0 = getLang();
     const panel = document.createElement("div");
     panel.className = "zoom-tribe zoom-psv";
-    panel.innerHTML = `<h3>${t("psv.title")}</h3>` + psvKeys.map((k) => {
+    const panelTitle = {ja:'能力・用語の説明',ko:'능력·용어 설명',en:'Ability and term definitions'}[lang0];
+    panel.innerHTML = `<h3>${panelTitle}</h3>` + psvKeys.map((k) => {
       const p = PASSIVES[k];
       if (!p) return "";
       const loc = lang0 === "ja" ? p.ja : lang0 === "en" ? p.en : p.ko;
@@ -667,9 +713,9 @@ export function zoomCard(c: CardInst, hp?: { now: number; max: number }, stateTe
   ov.oncontextmenu = (e) => { e.preventDefault(); closeZoom(); };
   document.body.appendChild(ov);
   ov.onkeydown = e => {
-    if (e.key === 'Escape') { e.stopPropagation(); closeZoom(); }
+    if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); zoomHistory.length ? backToPreviousCard() : closeZoom(); }
     if (e.key === 'Tab') {
-      const focusable = Array.from(ov.querySelectorAll<HTMLElement>('button,summary,[tabindex="0"]'));
+      const focusable = Array.from(ov.querySelectorAll<HTMLElement>('button,summary,[tabindex="0"]')).filter(node=>!node.closest('[hidden]'));
       const first = focusable[0], last = focusable[focusable.length - 1];
       const active = document.activeElement;
       // A keyword jump focuses a description after the last tab stop.
@@ -682,13 +728,16 @@ export function zoomCard(c: CardInst, hp?: { now: number; max: number }, stateTe
 }
 export function closeZoom(): void {
   document.getElementById("zoomOverlay")?.remove();
+  zoomHistory.length=0;
+  if (zoomOpener?.isConnected) zoomOpener.focus({preventScroll:true});
+  zoomOpener=null;
 }
 
 /**
  * Bind "enlarge" to an element: right-click on desktop, long-press on touch.
  * A long-press swallows the tap so it does NOT also play/attack with the card.
  */
-export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; max: number }, stateText?: string): void {
+export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string): void {
   el.oncontextmenu = (e) => { e.preventDefault(); zoomCard(card, hp, stateText); };
   // Intent, not speculation: by the time a pointer is resting on a card, a
   // right-click or a 380ms long-press is at most a few hundred ms away. Start

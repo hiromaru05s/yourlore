@@ -119,7 +119,7 @@ const D: Record<string, Entry> = {
   // card list / gallery
   "cards.title": { ko: "카드 리스트", ja: "カードリスト", en: "Card Gallery" },
   "cards.back": { ko: "뒤로", ja: "戻る", en: "Back" },
-  "cards.search": { ko: "이름 검색…", ja: "名前で検索…", en: "Search by name…" },
+  "cards.search": { ko: "카드명·효과 검색…", ja: "カード名・効果で検索…", en: "Search names and effects…" },
   "cards.count": { ko: "장", ja: "枚", en: " cards" },
   "cards.empty": { ko: "조건에 맞는 카드가 없습니다.", ja: "条件に合うカードがありません。", en: "No cards match the filters." },
   "cards.hint": { ko: "카드를 누르면 크게 볼 수 있어요.", ja: "カードをタップで拡大できます。", en: "Tap a card to enlarge it." },

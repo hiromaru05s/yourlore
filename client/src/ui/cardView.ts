@@ -11,6 +11,7 @@ import { curHp, effAtk, effDef, playCost } from "../shared/engine";
 import { cardName, cardText, getLang, t } from "../i18n";
 import { parseDiceTable, effectSections } from "../shared/cardText";
 import { cardEffectNotes } from "../shared/cardEffectNotes";
+import { cardTypeLabel, quickSpellRule, displayPassives, referencedPassives, decayStateDescription } from '../shared/cardPresentation';
 
 /** Shared resting/flight face: switching from a cast to its spell slot must not
  * replace the artwork or frame at touchdown. Interaction is bound by GameView. */
@@ -294,8 +295,9 @@ export function cardRulesEl(c: CardInst, onPassiveClick?: (key: string) => void)
   const table = rawTxt && rawTxt !== "—" ? parseDiceTable(rawTxt) : null;
   const txt = rawTxt;
   const hasCast = c.t !== "starter" && pc !== c.cost;
-  const keyChips = cardPassives(c);
-  if ((txt && txt !== "—") || hasCast || keyChips.length) {
+  const keyChips = displayPassives(c);
+  const references = referencedPassives(c).filter(k => !keyChips.includes(k));
+  if ((txt && txt !== "—") || hasCast || keyChips.length || references.length) {
     const effCls = "card-rules";
     const eff = el("div", effCls);
     eff.lang = getLang();
@@ -305,13 +307,18 @@ export function cardRulesEl(c: CardInst, onPassiveClick?: (key: string) => void)
       cast.title = t(c.t === "mon" ? "card.summon.tip" : "card.cast.tip");
       eff.appendChild(cast);
     }
-    if (keyChips.length) {
+    for (const [group, keys] of [['owned', keyChips], ['references', references]] as const) {
+      if (!keys.length) continue;
+      const groupLabel = el('div', 'card-key-heading');
+      groupLabel.textContent = group === 'owned' ? {ja:'このカードの能力',ko:'이 카드의 능력',en:'This card’s abilities'}[getLang()] : {ja:'効果中の用語',ko:'효과에 나오는 용어',en:'Terms used in this effect'}[getLang()];
+      eff.append(groupLabel);
       const row = el("div", "card-keys" + (txt && txt !== "—" ? "" : " card-keys--only"));
-      for (const k of keyChips) {
+      for (const k of keys) {
         const pd = PASSIVES[k];
         if (!pd) continue;
         const chip = el(onPassiveClick ? 'button' : 'span', 'card-key-label');
         chip.dataset.psv = k;
+        chip.dataset.abilityGroup = group;
         if (onPassiveClick) {
           chip.setAttribute('type', 'button');
           const name = pd[getLang()].name;
@@ -381,8 +388,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   node.dataset.uid = c.uid;
   node.dataset.cardId = c.id;
   node.dataset.cardType = c.t === "mon" ? "mon" : c.t === "trap" ? "trap" : c.t === "quest" ? "quest" : "spell";
-  const labels = getLang() === "ja" ? ["モンスター", "魔法", "罠", "クエスト", "クイック魔法"] : getLang() === "en" ? ["Monster", "Spell", "Trap", "Quest", "Quick spell"] : ["몬스터", "마법", "함정", "퀘스트", "퀵 마법"];
-  const typeIndex = c.t === "mon" ? 0 : c.t === "trap" ? 2 : c.t === "quest" ? 3 : c.quick ? 4 : 1;
+  const typeLabel = cardTypeLabel(c, getLang());
 
   if (opt.compactField) node.classList.add("card--field");
   // Complete raster face underneath the illustration and live typography.
@@ -413,7 +419,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const nm = cardName(c);
   const nameEl2 = el("div", "card-name" + (nm.length >= 9 ? " card-name--long" : ""), nm);
   if (!opt.compactField) node.appendChild(nameEl2);
-  node.setAttribute("aria-label", `${nm} · ${labels[typeIndex]} · ${cost}`);
+  node.setAttribute("aria-label", `${nm} · ${typeLabel} · ${cost}`);
 
   if (c.t === "mon") {
     const a = opt.field && opt.owner ? effAtk(opt.owner, c as FieldMon, opt.game) : c.atk!;
@@ -448,18 +454,18 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     const label = (ja:string, en:string, ko:string):string => lang0 === 'ja' ? ja : lang0 === 'en' ? en : ko;
     const band = el("div", "card-status");
     if (c.quick || c.t === "quest") {
-      const chip = el("span", "kw", labels[typeIndex]);
-      chip.title = c.quick ? label("購入時に1回だけ発動し、ゲームから除外", "Resolves once on purchase, then leaves the game", "구매시 1회 발동 후 게임에서 제외") : label("発動後から条件を数え、達成時に報酬を1回獲得", "Counts progress after activation; earn the reward once", "발동 후 조건을 세고 달성시 보상 1회 획득");
+      const chip = el("span", "kw", typeLabel);
+      chip.title = c.quick ? quickSpellRule(lang0) : label("発動後から条件を数え、達成時に報酬を1回獲得", "Counts progress after activation; earn the reward once", "발동 후 조건을 세고 달성시 보상 1회 획득");
       band.appendChild(chip);
     }
     const fm = c as FieldMon;
     // 1) 키워드 — 카드가 원래 가진 것 + 게임 중 부여된 것 (필드 타일에서만;
     //    손패/마켓/확대는 효과판의 키워드 칩 행이 같은 정보를 이미 보여준다)
     {
-      const innate = cardPassives(c);
+      const innate = displayPassives(c);
       const granted = fm.passivesG ?? [];
       for (const k of [...new Set([...innate,...granted,...((fm.guts??0)>0?['guts']:[])])]) {
-        const count=k==='guts'?(fm.guts??0):k==='decay'?(fm.decayCnt??0):0;
+        const count=k==='guts'?(fm.guts??0):0;
         band.insertAdjacentHTML('beforeend',passiveIcon(k,{count,granted:granted.includes(k)}));
       }
     }
@@ -473,11 +479,14 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
       const eggD = (c as { dur?: number }).dur ?? c.hatchDur ?? 4;
       band.appendChild(el("span", "ec ec-h", `${label('孵化','Hatch','부화')} ${eggH}`));
       band.appendChild(el("span", "ec ec-d", `${label('耐久','Durability','내구')} ${Math.max(0, eggD)}`));
-    } else if (opt.field && c.aura !== "assassinGuild") {
-      if (!(opt.field||opt.compactField) && (fm.guts ?? 0) > 0) band.appendChild(el("span", "ec ec-g", `${label('気合','Guts','기합')} ${fm.guts}`));
-      if ((fm.decayCnt ?? 0) > 0 && !cardPassives(c).includes('decay') && !fm.passivesG?.includes('decay')) {
-        band.insertAdjacentHTML('beforeend',passiveIcon('decay',{count:fm.decayCnt}));
-      }
+    }
+    if ((fm.decayCnt ?? 0) > 0) {
+      const status = el('span', 'ec ec-decay-state');
+      status.dataset.status = 'decay';
+      status.textContent = `${label('腐敗', 'Decay', '부패')} ${fm.decayCnt}/3`;
+      status.title = decayStateDescription(fm.decayCnt!, lang0);
+      status.setAttribute('aria-label', status.title);
+      band.append(status);
     }
     if (band.childElementCount) node.appendChild(band);
   }

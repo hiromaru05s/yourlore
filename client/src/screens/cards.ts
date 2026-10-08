@@ -1,3 +1,4 @@
+import { cardSearchText, passiveSearchKeys, type PassiveSearchScope } from '../shared/cardPresentation';
 import {passiveIcon} from '../ui/passiveIcon';
 import {revealCards,cancelRevealCards} from '../ui/assetReadiness';
 import {loungeText} from '../ui/loungeText';
@@ -9,7 +10,7 @@ import { homeIcon } from "../ui/homeIcons";
 // ============================================================
 import type { App, Screen } from "../router";
 import type { CardInst, CardType } from "../shared/types";
-import { DB, STARTERS, cardPassives, PASSIVES } from "../shared/cards";
+import { DB, STARTERS, PASSIVES } from "../shared/cards";
 import { cardEl } from "../ui/cardView";
 import { zoomCard } from "../ui/anim";
 import { t, cardName, onLangChange, getLang } from "../i18n";
@@ -32,6 +33,7 @@ export function mountCards(app: App): Screen {
   let costF = -1; // -1 = all
   let q = "";
   const passiveFilters=new Set<string>();
+  let passiveScope: PassiveSearchScope = 'owned';
   let page=0,revision=0;const pageSize=96;
 
   const wrap = document.createElement("div");
@@ -53,6 +55,11 @@ export function mountCards(app: App): Screen {
             <div class="cards-filter-heading"><strong>${loungeText("コスト","Cost","코스트")}</strong><button id="resetFilters">${loungeText("条件をリセット","Reset filters","필터 초기화")}</button></div>
             <div class="chip-row" id="costRow"></div>
             <div class="cards-filter-heading"><strong>${loungeText("パッシブ","Passives","패시브")}</strong></div>
+            <label class="passive-scope-label">${loungeText('パッシブとの関係','Ability relationship','능력과의 관계')}<select id="passiveScope">
+              <option value="owned">${loungeText('能力を持つ','Has the ability','능력을 가짐')}</option>
+              <option value="granted">${loungeText('能力を付与する','Grants the ability','능력을 부여함')}</option>
+              <option value="mentioned">${loungeText('効果で参照する','References in effect','효과에서 참조함')}</option>
+            </select></label>
             <div id="passiveFilters" class="passive-filters"></div>
           </div>
         </details>
@@ -109,12 +116,14 @@ export function mountCards(app: App): Screen {
     b.onclick=()=>{passiveFilters.has(key)?passiveFilters.delete(key):passiveFilters.add(key);page=0;render();};
     wrap.querySelector('#passiveFilters')!.append(b);return b;
   });
+  const scopeSelect=wrap.querySelector<HTMLSelectElement>('#passiveScope')!;
+  scopeSelect.onchange=()=>{passiveScope=scopeSelect.value as PassiveSearchScope;page=0;render();};
   const search = wrap.querySelector("#search") as HTMLInputElement;
-  search.oninput = () => { q = search.value.trim().toLowerCase(); page=0; render(); };
+  search.oninput = () => { q = search.value.trim().normalize('NFKC').toLocaleLowerCase(); page=0; render(); };
 
   (wrap.querySelector('#prevPage') as HTMLButtonElement).onclick=()=>{page--;render();};
   (wrap.querySelector('#nextPage') as HTMLButtonElement).onclick=()=>{page++;render();};
-  (wrap.querySelector('#resetFilters') as HTMLButtonElement).onclick=()=>{typeF='all';costF=-1;q='';page=0;passiveFilters.clear();search.value='';render();};
+  (wrap.querySelector('#resetFilters') as HTMLButtonElement).onclick=()=>{typeF='all';costF=-1;q='';page=0;passiveScope='owned';scopeSelect.value='owned';passiveFilters.clear();search.value='';render();};
   function render(): void {
     const version=++revision;
     passiveButtons.forEach(b=>b.setAttribute("aria-pressed",String(passiveFilters.has(b.dataset.passive!))));
@@ -129,9 +138,9 @@ export function mountCards(app: App): Screen {
       if (typeF === "starter") { if (!(c.t === "starter" || c.noShop)) return false; }
       else if (typeF === "quick") { if (!c.quick) return false; }
       else if (typeF !== "all" && c.t !== typeF) return false;
-      if (passiveFilters.size && ![...passiveFilters].every(k=>cardPassives(c).includes(k))) return false;
+      if (passiveFilters.size && ![...passiveFilters].every(k=>passiveSearchKeys(c,passiveScope).includes(k))) return false;
       if (costF !== -1 && c.cost !== costF) return false;
-      if(q && ![cardName(c),c.name,c.text,c.textJa,...cardPassives(c).map(k=>PASSIVES[k]?.[getLang()].name)].join(' ').toLowerCase().includes(q))return false;
+      if(q && !cardSearchText(c).includes(q))return false;
       return true;
     });
 
