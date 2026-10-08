@@ -1,4 +1,5 @@
 import {openShopBoardPreview} from '../ui/shopBoardPreview';
+import {mountShopGacha, type GachaVariant} from '../ui/shopGacha';
 import '../styles/shopPreview.css';
 import {COSMETICS,cosmetic} from '../shared/cosmetics';
 import { loungeText } from "../ui/loungeText";
@@ -13,13 +14,14 @@ import { api } from "../net/api";
 import { t, onLangChange, getLang, esc } from "../i18n";
 import { sfx } from "../ui/sound";
 
-export function mountShop(app: App): Screen {
+export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {}): Screen {
   const wrap = document.createElement("div");
   wrap.className = "screen tut-screen";
   app.root.appendChild(wrap);
 
   let dead = false;
   let closePreview:(()=>void)|undefined;
+  let destroyGacha:(()=>void)|undefined;
   let furnitureImages:Map<string,string>|undefined;
   let furnitureLoading=false, furnitureFailed=false;
   const furnitureArt=(id:string,selectedArt=false):string=>{
@@ -40,7 +42,7 @@ export function mountShop(app: App): Screen {
       paint();
     }).catch(()=>{furnitureFailed=true;paint();}).finally(()=>{furnitureLoading=false;});
   };
-  let category: 'sleeve'|'furniture'='sleeve';
+  let category: 'gacha'|'sleeve'|'furniture'='gacha';
   let selected=COSMETICS[0].id;
   const pending=new Set<string>();
   let owned = new Set<string>(["default"]);
@@ -48,6 +50,8 @@ export function mountShop(app: App): Screen {
 
   const build = (): void => {
     closePreview?.();closePreview=undefined;
+    destroyGacha?.();destroyGacha=undefined;
+    wrap.classList.toggle('shop-gacha-active',category==='gacha');
     wrap.innerHTML = `
       <div class="tut">
         <div class="tut-head">
@@ -57,20 +61,27 @@ export function mountShop(app: App): Screen {
         </div>
         <div class="tut-body">
           <section class="tut-sec">
-            <div class="shop-categories" role="group" aria-label="${esc(loungeText('外観の種類','Cosmetic type','외관 종류'))}"><button data-category="sleeve" aria-pressed="${category==='sleeve'}">${loungeText('スリーブ','Sleeves','슬리브')}</button><button data-category="furniture" aria-pressed="${category==='furniture'}">${loungeText('デッキ置き場・墓地','Deck & Graveyard','덱・묘지')}</button></div>
+            <div class="shop-categories" role="group" aria-label="${esc(loungeText('ショップのカテゴリ','Shop categories','상점 카테고리'))}"><button data-category="gacha" aria-pressed="${category==='gacha'}">${loungeText('ガチャ','Gacha','뽑기')}</button><button data-category="sleeve" aria-pressed="${category==='sleeve'}">${loungeText('スリーブ','Sleeves','슬리브')}</button><button data-category="furniture" aria-pressed="${category==='furniture'}">${loungeText('デッキ置き場・墓地','Deck & Graveyard','덱・묘지')}</button></div>
+            ${category==='gacha'?'<div id="shopGacha"></div>':`
             <p class="set-desc">${loungeText('デッキ構成の「外観」から、デッキごとに装備できます。','Equip cosmetics for each deck from Appearance in the deck builder.','덱 구성의 「외관」에서 덱마다 장착할 수 있습니다.')}</p>
             <div class="shop-catalog"><div class="shop-grid" id="grid"></div><aside class="shop-selection" id="shopSelection" aria-live="polite"></aside></div>
+            `}
           </section>
         </div>
       </div>`;
     (wrap.querySelector("#back") as HTMLElement).onclick = () => app.home();
     wrap.querySelectorAll<HTMLButtonElement>('[data-category]').forEach(button=>button.onclick=()=>{
-      category=button.dataset.category as typeof category;selected=COSMETICS.find(c=>c.kind===category)!.id;build();
+      category=button.dataset.category as typeof category;
+      if(category!=='gacha')selected=COSMETICS.find(c=>c.kind===category)!.id;
+      build();
+      wrap.querySelector<HTMLButtonElement>(`[data-category="${category}"]`)?.focus({preventScroll:true});
     });
-    renderGrid();
+    if(category==='gacha')destroyGacha=mountShopGacha(wrap.querySelector('#shopGacha')!,{variant:options.gachaVariant,credits});
+    else renderGrid();
   };
 
   const renderGrid = (): void => {
+    if(category==='gacha')return;
     const grid = wrap.querySelector("#grid") as HTMLElement;
     if(category==='furniture')loadFurniture();
     const buyable = COSMETICS.filter(c=>c.kind===category);
@@ -129,5 +140,5 @@ export function mountShop(app: App): Screen {
 
   build();
   const unsub = onLangChange(() => build());
-  return { destroy: () => { dead = true; closePreview?.(); unsub(); } };
+  return { destroy: () => { dead = true; closePreview?.(); destroyGacha?.(); unsub(); } };
 }
