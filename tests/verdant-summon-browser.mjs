@@ -8,8 +8,9 @@ page.setDefaultTimeout(60000);
 try{
  await page.goto('http://127.0.0.1:5395/verdant-qa.html');await page.waitForFunction(()=>window.verdantQA?.ready);console.log('Board ready');const clockStart=Date.now();await page.clock.install({time:new Date(clockStart-60000)});await page.clock.pauseAt(new Date(clockStart));
  for(const [id,side,path] of [['ELF',0,'direct'],['DARK_ELF',1,'direct'],['HIGH_ELF',0,'direct'],['ELDER_ELF_KING',1,'direct'],['WORLD_TREE',0,'direct'],['HALF_ELF',0,'direct'],['ELF',0,'hand'],['WORLD_TREE',1,'generated']]){
+  if(path!=='direct')await page.clock.resume();
   await page.evaluate(({id,side,path})=>{window.runDone=false;window.verdantQA.run(id,side,path).then(()=>window.runDone=true);},{id,side,path});
-  await page.clock.runFor(100);await page.locator('.verdant-summon').waitFor({state:'attached',timeout:30000});await page.clock.runFor(750);
+  if(path==='direct')await page.clock.runFor(100);await page.locator('.verdant-summon').waitFor({state:'attached',timeout:30000});if(path!=='direct')await page.clock.pauseAt(new Date(await page.evaluate(()=>Date.now())+100));await page.clock.runFor(750);
   const seen=await page.locator('.verdant-summon').evaluate(n=>({...n.dataset}));assert.equal(seen.cardId,id);assert.equal(seen.variant,id==='HALF_ELF'?'1':'4');assert.equal(await page.locator('.slate-summon').count(),0);
   await page.screenshot({path:`${out}/${id}-${side}-${path}.png`});await page.clock.runFor(4500);await page.waitForFunction(()=>window.runDone);assert.equal(await page.locator('.verdant-summon').count(),0);results.push({id,side,path,seen});console.log('PASS',id,side,path);
  }
