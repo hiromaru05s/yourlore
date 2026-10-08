@@ -1,3 +1,4 @@
+import {cancelChosenVictory} from './chosenVictory/runtime';
 import {combatCard,combatPortrait} from './combatAnchor';
 import {cancelDewGrants} from './dew/runtime';
 import {cancelStatusGrants} from './statusGrant/runtime';
@@ -51,7 +52,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on);
-  if(on){cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */

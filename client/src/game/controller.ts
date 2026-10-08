@@ -1,3 +1,4 @@
+import {isChosenVictory,playChosenVictory,warmChosenVictory} from '../ui/chosenVictory/runtime';
 import { playIntent, needsCastReview, targetOwner } from '../shared/playIntent';
 import {playDewGrant,warmDewGrant} from '../ui/dew/runtime';
 import {playStatusGrant,warmStatusGrants} from '../ui/statusGrant/runtime';
@@ -313,6 +314,7 @@ export abstract class BaseController implements BoardHandlers {
       }
     }
     const events = res.events;
+    if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
     const eventSound = new EventSound();
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
@@ -466,7 +468,10 @@ export abstract class BaseController implements BoardHandlers {
             const oldUids=new Set([...prev.players[e.player].enchants,...(prev.players[e.player].quests??[])].map(x=>x.card.uid));
             const shownUids=new Set(spellGhosts.map(x=>x.dataset.uid));
             const placed=e.dest==='field'?[...res.state.players[e.player].enchants,...(res.state.players[e.player].quests??[])].find(x=>x.card.id===e.id&&!oldUids.has(x.card.uid)&&!shownUids.has(x.card.uid))?.card:undefined;
-            if(['FIRE_ARROW','FIRE_METEOR','FIRE_BALL','FIRE_ZONE'].includes(def.id)){
+            if(def.id==='CHOSEN_AREA'&&isChosenVictory(events,e.player)){
+              const face=await A.revealSpell({uid:'chosen-source',...def},sideOf(e.player),e.dest,undefined,true);
+              try{if(!this.dead&&!A.isFxSkipped())await playChosenVictory(sideOf(e.player),face);}finally{face?.remove();}
+            }else if(['FIRE_ARROW','FIRE_METEOR','FIRE_BALL','FIRE_ZONE'].includes(def.id)){
               const card=prev.players[e.player].hand.find(c=>c.id===e.id)??{...def,uid:`elemental-${e.id}`};
               const node=await A.revealSpell(card,sideOf(e.player),e.dest,undefined,true);
               if(node){if(this.dead)node.remove();else this.elementalFaces.push({card,side:sideOf(e.player),node});}
