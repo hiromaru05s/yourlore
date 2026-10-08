@@ -16,6 +16,7 @@
     "tests/duel-ui.mjs",
     "tests/expansion-v50.mjs",
     "tests/fate-wheel.mjs",
+    "tests/graphics-capability.mjs",
     "tests/grounded-motion.mjs",
     "tests/half-elf-v48.mjs",
     "tests/hand-condition-rules.mjs",
