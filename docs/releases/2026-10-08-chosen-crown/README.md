@@ -14,3 +14,11 @@
 - 既存audio-v3、client typecheck、production build通過。盤面の代表フレームを目視確認。production suiteはガードで実行。
 - プレビュー `http://127.0.0.1:5420/chosen-crown-preview.html` は実GameView・実engine/controllerを使い、結果モーダルだけ省略するローカル固定盤面。DEV専用で配信ビルドに含めない。
 - ステージングの認証対戦はユーザーが後で確認する依頼のため実施しない。公開後はWorker/sourceと配信アセットの一致を確認する。
+
+## ステージング公開結果
+
+- 配信元: `1eeb6e3d5ec2185f5abd96cde4315f4ff2051049`、Worker: `lore-server-staging`、Version: `b67e0cdc-e9fe-4ff9-81ad-600a5f1278be`。
+- guarded deployment: client/server typecheck、81/81 production suite、design guard、buildを通過。
+- `staging-assets.json`: index、全JS/CSS、冠PNG、専用MP3、音声manifestの48ファイルでSHA-256一致。
+- 初回は音声manifestの登録漏れをテストが検出し、upload前に停止。登録して全チェックを再実行し、上記Versionを公開。
+- この記録と検証スクリプトのリダイレクト対応は公開後の証跡更新で、配信アプリを変更しない。認証対戦の確認はユーザーが後で実施。
