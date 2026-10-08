@@ -1,6 +1,6 @@
 {
   "version": 5,
-  "status": "active bank with user-selected spell 01 (lore-v7) and summon 04 (lore-v8); selected Chosen Domain crown completion (chosen-v1)",
+  "status": "active bank with user-selected spell 01 (lore-v7) and summon 04 (lore-v8); selected Chosen Domain crown completion (chosen-v2, user-selected sound 02)",
   "sampleRate": 44100,
   "sounds": {
     "click": [
@@ -710,17 +710,20 @@
     ],
     "chosenCrown": [
       {
-        "file": "shakiin.mp3",
-        "seconds": 1.65,
-        "peakDb": -4.0,
-        "rmsDb": -22.7,
+        "file": "heavy-blade.mp3",
+        "seconds": 1.8,
+        "peakDb": -5.28,
+        "energy200Db": -22.49,
         "sampleRate": 48000,
         "sources": [
-          "original deterministic synthesis: scripts/audio/build_chosen_crown.py"
+          "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/blade_03.ogg",
+          "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_heavy_002.ogg",
+          "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_medium_004.ogg",
+          "docs/sound-redesign/2026-09-30/sources/swishes/swish-7.wav"
         ],
-        "sha256": "59f6c135d12bfb87d9050e0f7368add3384035b863d8a1157b591d636faa6181",
-        "url": "/sfx/chosen-v1/shakiin.mp3",
-        "decision": "Selected crown: one cue at 2700ms completion light"
+        "sha256": "405c0d6a81ee7ffb41ebf4cc6f2c5af95b4790c791d1388e4edd84459835e330",
+        "url": "/sfx/chosen-v2/heavy-blade.mp3",
+        "decision": "User selected 02 重刃の確定 on 2026-10-08; one cue at 2700ms crown completion light"
       }
     ]
   }
