@@ -39,7 +39,7 @@ try {
       export { setLang, t } from './client/src/i18n';
       export { closeOverlay } from './client/src/ui/modal';
       export { REWARDS } from './server/src/rewards';
-    ` }, bundle: true, format: 'esm', platform: 'node', outfile: path.join(temp, 'tutorial.mjs'),
+    ` }, bundle: true, format: 'esm', platform: 'node', loader: {'.css':'empty'}, outfile: path.join(temp, 'tutorial.mjs'),
     plugins:[{name:'dom-only-monster-renderer',setup(b){
       // This suite verifies tutorial rules/rewards/DOM. Canvas parity has real-browser coverage.
       b.onResolve({filter:/monster\/runtime$/},()=>({path:'monster-runtime',namespace:'dom-test'}));
