@@ -1,0 +1,284 @@
+{
+  "at": "2026-10-08T03:22:21.101Z",
+  "base": "https://test.yourlore.xyz",
+  "total": 46,
+  "matched": 46,
+  "files": [
+    {
+      "file": "assets/atelierThemes-DM29k3s-.js",
+      "expected": "95d1fa7ec28362a982bf7d4430da039a377b73a37609306bf599ca8bc7810c97",
+      "actual": "95d1fa7ec28362a982bf7d4430da039a377b73a37609306bf599ca8bc7810c97",
+      "match": true
+    },
+    {
+      "file": "assets/audit-Ch-vlPRj.js",
+      "expected": "53fcc623e3b2b9ac71ac9b74dd522f3e77f45ae7853baa8ac8284d4d4e6a1930",
+      "actual": "53fcc623e3b2b9ac71ac9b74dd522f3e77f45ae7853baa8ac8284d4d4e6a1930",
+      "match": true
+    },
+    {
+      "file": "assets/baseFurniture-3nJQgiz1.js",
+      "expected": "81515cb058c53b7543ee683a56c49e5daf2dc20226e3b8a2d9de973646333eb2",
+      "actual": "81515cb058c53b7543ee683a56c49e5daf2dc20226e3b8a2d9de973646333eb2",
+      "match": true
+    },
+    {
+      "file": "assets/board-D-FfzzTs.js",
+      "expected": "5bb9e49f792cc30b1e6890294a1b6e39b8b6a6886d63cb19dcf808617c6d7c78",
+      "actual": "5bb9e49f792cc30b1e6890294a1b6e39b8b6a6886d63cb19dcf808617c6d7c78",
+      "match": true
+    },
+    {
+      "file": "assets/board-UDApamK7.css",
+      "expected": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22",
+      "actual": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22",
+      "match": true
+    },
+    {
+      "file": "assets/BufferGeometryUtils-Bff8SvXC.js",
+      "expected": "338d331814c32b924e87db438e91c84b0ff79f074f62af2ce0d0414dfe13cf2a",
+      "actual": "338d331814c32b924e87db438e91c84b0ff79f074f62af2ce0d0414dfe13cf2a",
+      "match": true
+    },
+    {
+      "file": "assets/catalogRender-CksmzE3Q.js",
+      "expected": "189cdd9e5f93c627c08f9c2555abb993e98f8f6b37602e5c6270b9e920c757c2",
+      "actual": "189cdd9e5f93c627c08f9c2555abb993e98f8f6b37602e5c6270b9e920c757c2",
+      "match": true
+    },
+    {
+      "file": "assets/ceremonyScene-Bq1qL18u.js",
+      "expected": "914b7d2511adf1ed03178d67e62461c05c7a85a288040b0db390dab51cbe01c3",
+      "actual": "914b7d2511adf1ed03178d67e62461c05c7a85a288040b0db390dab51cbe01c3",
+      "match": true
+    },
+    {
+      "file": "assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "expected": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700",
+      "actual": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700",
+      "match": true
+    },
+    {
+      "file": "assets/cosmeticStudio-Df_lzQz_.js",
+      "expected": "c50a9dc635eace2846e7dc669e5cdd7c87d640ed3889591fc65bdfbc22c1af5a",
+      "actual": "c50a9dc635eace2846e7dc669e5cdd7c87d640ed3889591fc65bdfbc22c1af5a",
+      "match": true
+    },
+    {
+      "file": "assets/diceScene-ta5hK4al.js",
+      "expected": "dae046cd6621b0258044cb1abe5f410e018d346e4e495986f6b4a97415271959",
+      "actual": "dae046cd6621b0258044cb1abe5f410e018d346e4e495986f6b4a97415271959",
+      "match": true
+    },
+    {
+      "file": "assets/duelScene-9W78R9lk.js",
+      "expected": "f150c0ba5e0aadccb021785143f09edf16f8e69378f70176b6304b53c50356a9",
+      "actual": "f150c0ba5e0aadccb021785143f09edf16f8e69378f70176b6304b53c50356a9",
+      "match": true
+    },
+    {
+      "file": "assets/family-matter-BpnyfaKD.js",
+      "expected": "12a195c6be30ed8784fac0d6026053381e04b35e67d179b3876c2cdc658e017e",
+      "actual": "12a195c6be30ed8784fac0d6026053381e04b35e67d179b3876c2cdc658e017e",
+      "match": true
+    },
+    {
+      "file": "assets/game-CqAedilW.js",
+      "expected": "b8ea599460d849004a16272e572cfef1ef8dfa803b4dd3e220399814dad0dbfe",
+      "actual": "b8ea599460d849004a16272e572cfef1ef8dfa803b4dd3e220399814dad0dbfe",
+      "match": true
+    },
+    {
+      "file": "assets/handGeometry-Bz96hXgQ.js",
+      "expected": "aa57e7f2da29c273b4f2adfb686fe19dbae04ee09c5e9ce37b735341357b6d01",
+      "actual": "aa57e7f2da29c273b4f2adfb686fe19dbae04ee09c5e9ce37b735341357b6d01",
+      "match": true
+    },
+    {
+      "file": "assets/inspection-DDQZqQB5.js",
+      "expected": "7cb277fb38709324dfc6c103105800b57a365ac0ed310a4fc3d8a73ad0999645",
+      "actual": "7cb277fb38709324dfc6c103105800b57a365ac0ed310a4fc3d8a73ad0999645",
+      "match": true
+    },
+    {
+      "file": "assets/layout-9XrvDEau.js",
+      "expected": "b351f40dbc29baf78b84672cb7a60be77781e5dbe76d2bd86984f2f46a754b4f",
+      "actual": "b351f40dbc29baf78b84672cb7a60be77781e5dbe76d2bd86984f2f46a754b4f",
+      "match": true
+    },
+    {
+      "file": "assets/layout-C3eY51DA.css",
+      "expected": "f217653022333feaa97266f973590ba24c3f7f25e2b8059f8eea00c3039ae067",
+      "actual": "f217653022333feaa97266f973590ba24c3f7f25e2b8059f8eea00c3039ae067",
+      "match": true
+    },
+    {
+      "file": "assets/libraryAssets-Lo5w8CLo.js",
+      "expected": "5da60f3f28cd05f9dd46c750fd3ad457228ad0ec4ad85f3f0ee9d9d94afbd4f3",
+      "actual": "5da60f3f28cd05f9dd46c750fd3ad457228ad0ec4ad85f3f0ee9d9d94afbd4f3",
+      "match": true
+    },
+    {
+      "file": "assets/main-CSJFWGNH.css",
+      "expected": "b81be8ddec94ba8496576880a3cae46649398416161d1cbf25e310416f5e0e4d",
+      "actual": "b81be8ddec94ba8496576880a3cae46649398416161d1cbf25e310416f5e0e4d",
+      "match": true
+    },
+    {
+      "file": "assets/main-EWysslxc.js",
+      "expected": "97b5a5ca4e9c6bb0ab7a44cec60cbe698695165c8fbadd4b9c49ab71e7fd7d86",
+      "actual": "97b5a5ca4e9c6bb0ab7a44cec60cbe698695165c8fbadd4b9c49ab71e7fd7d86",
+      "match": true
+    },
+    {
+      "file": "assets/master-tongues-BfLWQ6Hw.js",
+      "expected": "2a5a4c6be9bae29122a59a99e5187c92d219a9b993e88324425b687ebc8bb636",
+      "actual": "2a5a4c6be9bae29122a59a99e5187c92d219a9b993e88324425b687ebc8bb636",
+      "match": true
+    },
+    {
+      "file": "assets/materials-C-IHIJ7G.js",
+      "expected": "09490956edd48cff3563b7ec475e30feb09b362da96b44f7a9fbedfd372e88b0",
+      "actual": "09490956edd48cff3563b7ec475e30feb09b362da96b44f7a9fbedfd372e88b0",
+      "match": true
+    },
+    {
+      "file": "assets/modal-BxNeeaH4.js",
+      "expected": "75f559a3a64630391bd9babd4fe5d25a5db8f2d5ab9f6aad6a46e0da760bff55",
+      "actual": "75f559a3a64630391bd9babd4fe5d25a5db8f2d5ab9f6aad6a46e0da760bff55",
+      "match": true
+    },
+    {
+      "file": "assets/modal-cM8EengU.css",
+      "expected": "708a3c50bc8e0d4ec8aa8262e4c6acecbcdda371e68c72208c9d31b97f75cc07",
+      "actual": "708a3c50bc8e0d4ec8aa8262e4c6acecbcdda371e68c72208c9d31b97f75cc07",
+      "match": true
+    },
+    {
+      "file": "assets/ornaments-DK07aD-A.js",
+      "expected": "d0bbc22f938625ec44990ee21b1917532c781a31d992a43be8e9c017159fe030",
+      "actual": "d0bbc22f938625ec44990ee21b1917532c781a31d992a43be8e9c017159fe030",
+      "match": true
+    },
+    {
+      "file": "assets/paperDraw-DewVW4Uj.js",
+      "expected": "cc3778f5764df10875095019d732d9beb7ef64c5a6ff6a19c2caac554cf8de88",
+      "actual": "cc3778f5764df10875095019d732d9beb7ef64c5a6ff6a19c2caac554cf8de88",
+      "match": true
+    },
+    {
+      "file": "assets/persistentFlightRenderer-CI7EP7yB.js",
+      "expected": "3ac50e7189f28ec8352310b0f919b70ac59262916c08eac56f9e3f79274743ac",
+      "actual": "3ac50e7189f28ec8352310b0f919b70ac59262916c08eac56f9e3f79274743ac",
+      "match": true
+    },
+    {
+      "file": "assets/pileModels-BFky8Rny.js",
+      "expected": "ecc03a1fe706eef6eb2e9d1818a22f0b12dcab3363748bd8db8380fe4823172d",
+      "actual": "ecc03a1fe706eef6eb2e9d1818a22f0b12dcab3363748bd8db8380fe4823172d",
+      "match": true
+    },
+    {
+      "file": "assets/renderDensity-eCqR3GeM.js",
+      "expected": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699",
+      "actual": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-BWa8hBw8.js",
+      "expected": "a7ddf9bfdf1c45910a441f22caa974f41376a73ff2bea0fec312ec69adeab7c5",
+      "actual": "a7ddf9bfdf1c45910a441f22caa974f41376a73ff2bea0fec312ec69adeab7c5",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-DAeP3fKK.js",
+      "expected": "7cf6118fa6bcc42484d8cfd7198a1c597315963963339c65002a1104c137b0da",
+      "actual": "7cf6118fa6bcc42484d8cfd7198a1c597315963963339c65002a1104c137b0da",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-qmB09-dq.js",
+      "expected": "fe45474a0eb27724cf105671d3ad3fccb0b02572254fa9bad85fed21a3b12d94",
+      "actual": "fe45474a0eb27724cf105671d3ad3fccb0b02572254fa9bad85fed21a3b12d94",
+      "match": true
+    },
+    {
+      "file": "assets/riftScene-C8hbKBok.js",
+      "expected": "fb2a5fb0c58fa232d6104832d8fa2f517a6f05a042c286a41c9ab51664e73de2",
+      "actual": "fb2a5fb0c58fa232d6104832d8fa2f517a6f05a042c286a41c9ab51664e73de2",
+      "match": true
+    },
+    {
+      "file": "assets/RoomEnvironment-CGH_oTfT.js",
+      "expected": "7d4ccec1725d2317192bb5974e1d650fe34c46515288496eaa36bf083c5ada5c",
+      "actual": "7d4ccec1725d2317192bb5974e1d650fe34c46515288496eaa36bf083c5ada5c",
+      "match": true
+    },
+    {
+      "file": "assets/royal-matter-BPjiUOAN.js",
+      "expected": "0ca876455c08677b806467aee695f5d83143dbed8b26b2e492e0bb1e41666a9b",
+      "actual": "0ca876455c08677b806467aee695f5d83143dbed8b26b2e492e0bb1e41666a9b",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-BulF3lqz.js",
+      "expected": "70d48025cf1b7fbb164de9f78577820304c4aa8e9a53f9018684564877f80fd0",
+      "actual": "70d48025cf1b7fbb164de9f78577820304c4aa8e9a53f9018684564877f80fd0",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-Ch9eydv_.css",
+      "expected": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c",
+      "actual": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-Cw2lsPIh.js",
+      "expected": "a4a8a93722b9d8d150d1e6ee380e09cf9edaa42b4f98925c55fd9f2bf458db6c",
+      "actual": "a4a8a93722b9d8d150d1e6ee380e09cf9edaa42b4f98925c55fd9f2bf458db6c",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-DTL3z5d_.js",
+      "expected": "7ee2691ac656f81af9482bfdf96129f1546e29c3361d5a9209b24a4e82ef7b4c",
+      "actual": "7ee2691ac656f81af9482bfdf96129f1546e29c3361d5a9209b24a4e82ef7b4c",
+      "match": true
+    },
+    {
+      "file": "assets/scene-5oMue5Kf.js",
+      "expected": "b3f18f8651906635e9cd869d76e3c8306cf1962d53fe7aeb6bdacdc88a9a956b",
+      "actual": "b3f18f8651906635e9cd869d76e3c8306cf1962d53fe7aeb6bdacdc88a9a956b",
+      "match": true
+    },
+    {
+      "file": "assets/sleeve-Bn9UBi0H.js",
+      "expected": "b017ac0549fd0cb4855a6af9f31db9d5295db2daefaabb5f1d2039403774c877",
+      "actual": "b017ac0549fd0cb4855a6af9f31db9d5295db2daefaabb5f1d2039403774c877",
+      "match": true
+    },
+    {
+      "file": "assets/studio-CmgKc6nL.css",
+      "expected": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e",
+      "actual": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e",
+      "match": true
+    },
+    {
+      "file": "assets/three.module-Diy7Srxs.js",
+      "expected": "3a2b54326ae47b3988617956b6d9ca104e71020e2442d883f7d868bb7068dfe3",
+      "actual": "3a2b54326ae47b3988617956b6d9ca104e71020e2442d883f7d868bb7068dfe3",
+      "match": true
+    },
+    {
+      "file": "cosmetic-studio.html",
+      "expected": "2de939c2c1b515dcecde39b7f9f186dab1f08f2b45fd7f1c62d32f8bb664b29c",
+      "actual": "2de939c2c1b515dcecde39b7f9f186dab1f08f2b45fd7f1c62d32f8bb664b29c",
+      "match": true
+    },
+    {
+      "file": "index.html",
+      "expected": "ed8d86224de2b11d223763767d828df93ee67c0de49303a7df8839b574477fc3",
+      "actual": "ed8d86224de2b11d223763767d828df93ee67c0de49303a7df8839b574477fc3",
+      "match": true
+    }
+  ]
+}

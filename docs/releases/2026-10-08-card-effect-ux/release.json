@@ -1,0 +1,21 @@
+{
+  "source_sha": "2bbc7443dba992618411a6905ad0584a552de7dd",
+  "environment": "staging",
+  "url": "https://test.yourlore.xyz",
+  "deployment_id": "5ad9f74c-75d4-415e-9ac6-99d77475e4cc",
+  "worker_version": "59accba6-2b88-4024-982f-6792ceb7a58f",
+  "deployed_at": "2026-10-08T03:21:48.746084Z",
+  "guard_suite": {
+    "passed": 82,
+    "total": 82
+  },
+  "assets": {
+    "matched": 46,
+    "total": 46,
+    "verified_at": "2026-10-08T03:22:21.101Z"
+  },
+  "browser": {
+    "local": "Actual guest application and live-state fixtures; 3 languages and 3 viewport sizes.",
+    "staging": "Public login bootstrap with zero console errors; no authenticated online match."
+  }
+}

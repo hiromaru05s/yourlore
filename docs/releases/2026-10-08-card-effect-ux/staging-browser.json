@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-08T03:25:47.436Z",
+  "url": "https://test.yourlore.xyz/",
+  "title": "LORE — デッキビルド・デュエル",
+  "dom": "- main:\n  - combobox:\n    - option \"한국어\"\n    - option \"日本語\" [selected]\n    - option \"English\"\n  - button \"ログイン\"\n  - button \"新規登録\"\n  - generic: メールでログインしてください。\n  - generic: メールアドレス\n  - textbox \"メールアドレス\":\n    - /placeholder: you@example.com\n  - generic: パスワード\n  - textbox \"パスワード\":\n    - /placeholder: ••••••••\n  - button \"ログイン\"\n  - generic: ログインできませんか？\n  - generic: または\n  - button \"Googleで続行\":\n    - text: Googleで続行",
+  "errors": [],
+  "scope": "Public login bootstrap only; no authenticated staging match was executed."
+}
