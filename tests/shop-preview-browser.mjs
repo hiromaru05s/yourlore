@@ -12,7 +12,7 @@ await apiFixture(page,r=>{const path=new URL(r.url).pathname;if(path==='/api/aut
 try{
  await page.goto(origin);await page.locator('.lounge-home').waitFor();await page.waitForSelector('.screen-loader',{state:'detached'});await page.locator('[data-nav=shop]').click();console.log('Shop navigation');
  await page.locator('[data-category=furniture]').click();
- await page.waitForFunction(()=>document.querySelectorAll('.shop-furniture-preview img').length===12);
+ await page.waitForFunction(()=>document.querySelectorAll('.shop-furniture-preview img').length===14);
  assert.equal(await page.locator('.furniture-preview').count(),0);
  assert.equal(await page.locator('#shopSelection a[target="_blank"]').count(),0);
  await page.locator('[data-preview="furniture:porcelain"]').click();
@@ -47,5 +47,5 @@ try{
   assert(await page.locator('.shop-board-dialog').evaluate(e=>e.scrollWidth<=e.clientWidth));
   await page.locator('[data-close]').click();
  }
- assert.deepEqual(errors,[]);await fs.writeFile(out+'/results.json',JSON.stringify({passed:true,errors,checks:['12 actual model thumbnails','same-tab board and closeups','Escape and focus restoration','selection retained','legacy and atelier furniture','sleeves independent from furniture','320/390px no horizontal overflow']},null,2));console.log('PASS shop preview');
+ assert.deepEqual(errors,[]);await fs.writeFile(out+'/results.json',JSON.stringify({passed:true,errors,checks:['14 actual model thumbnails','same-tab board and closeups','Escape and focus restoration','selection retained','legacy and atelier furniture','sleeves independent from furniture','320/390px no horizontal overflow']},null,2));console.log('PASS shop preview');
 }catch(error){await page.screenshot({path:out+'/failure.png'}).catch(()=>{});console.error(errors);throw error;}finally{await browser.close();}
