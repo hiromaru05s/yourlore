@@ -30,6 +30,7 @@ import { projectBoardDOM } from './boardProjection';
 import { installGameCursor } from './gameCursor';
 import { createAttackAim } from './attackAim';
 import { createBoardStatRise } from './statRise';
+import {createRiftRecordCount,recordVariant} from './riftRecordCount';
 
 // the local player's profile avatar (set by the game screen), shown on MY portrait
 let MY_AVATAR: string | null | undefined;
@@ -613,8 +614,10 @@ export class GameView {
       if (previous != null && removed.length > previous) rbtn.classList.add("is-absorbing");
       this.riftCounts.set(rbtn.id, removed.length);
       rbtn.addEventListener("animationend", () => rbtn.classList.remove("is-absorbing"));
-      rbtn.innerHTML = `<span class="rift-sprite" aria-hidden="true"></span><span class="rift-label">${t("deck.removed")} <b>${removed.length}</b></span>`;
+      rbtn.innerHTML = '<span class="rift-sprite" aria-hidden="true"></span>';
+      rbtn.append(createRiftRecordCount(removed.length, previous, recordVariant(this.root.dataset.riftCountVariant)));
       rbtn.title = `${t("deck.removed")} ${removed.length}`;
+      rbtn.setAttribute('aria-label', rbtn.title);
       rbtn.onclick = () => cardPicker(`${esc(p.name)} — ${t("deck.removed")} (${removed.length})`, removed, () => { /* browse only */ });
       piles.appendChild(rbtn);
     }
