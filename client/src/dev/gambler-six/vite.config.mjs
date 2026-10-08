@@ -1,0 +1,2 @@
+import {defineConfig} from 'vite';
+export default defineConfig({root:new URL('../../../',import.meta.url).pathname,server:{host:'127.0.0.1',port:55009,strictPort:true,fs:{allow:['/Users/hiromaru05s/.codex/worktrees/gambler-summon-six/LORE_TCG','/Users/hiromaru05s/Desktop/LORE_TCG']}},build:{outDir:'../docs/vfx-prototypes/2026-10-08-gambler-six/build',rollupOptions:{input:new URL('../../../gambler-six.html',import.meta.url).pathname}}});
