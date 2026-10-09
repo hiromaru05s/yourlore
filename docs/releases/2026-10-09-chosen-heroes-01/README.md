@@ -16,3 +16,14 @@
 - production suiteへ上記lifecycleテストを登録。公開は `scripts/deploy-guard.mjs staging` で最新HEADのクリーンなsnapshotを再構築・全検査。
 
 実盤面検証はローカル固定状態と実際の描画経路を使ったfixture。認証済みオンライン対戦の実プレイ確認とは区別する。ステージング公開元・配信ハッシュは公開後の記録を参照。
+
+## ステージング反映結果
+
+- URL: https://test.yourlore.xyz/
+- 公開元: `fc1ec0c56d5cb0f2800232d94886271c7da1064e`（guarded release）
+- Worker version: `fe836101-ee87-47cc-a32e-4d0fde7cfa26`、100%配信
+- Deployment: `7f90c038-7742-4cc9-ad4c-8a761d4ac43c`（2026-10-09T08:29:41Z）
+- 独立snapshotで client/server typecheck、production suite **85/85成功**、production build成功。
+- 同じ公開元のローカルbuildと配信されたHTML・全JS/CSS・4職の武器PNGをSHA-256で照合し **50/50一致**。`qa/staging-parity.json`。
+- 公開ページをChromeで確認: HTTP 200、pageerror 0。`qa/staging-smoke.json`。
+- ローカルの実GameView描画経路のQAは成功。認証済みオンライン対戦で4職を召喚する実プレイは未実施。
