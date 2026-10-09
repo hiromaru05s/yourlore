@@ -234,27 +234,28 @@
     },
     "M11": {
       "nameJa": "ウォーロード",
-      "status": "reworded",
+      "status": "balance-v57-reviewed",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "c9397a40ba7f29c6c409bf2617d110b75682a67a816d854c9da0b8d8a0196e2b",
-      "textSha256": "ddc971f8a70fd9fb2c4b7c4f2cac95346d59e1e8ee0fefc03c76be55bea9d461",
+      "definitionSha256": "0ee300f588012cea2db9ecf0b351d6ac8c7f6d995223c9ee23d288099d248878",
+      "textSha256": "a168d69e4bd2cf12ddd175eab2d5ea6a6c568d1337423f408f4863c4c0b2285c",
       "hooks": {
         "onSummon": "warlordKnight"
       },
       "before": {
-        "ja": "【召喚時】自分の場に他のモンスターが2体以上いれば、「騎士」1体を自分の場に召喚する",
-        "ko": "【소환시】자신 필드에 다른 몬스터가 2체 이상이면 기사 1체를 자신 필드에 소환",
-        "en": "【On Summon】If you control at least 2 other monsters, summon 1 Knight to your field"
-      },
-      "after": {
         "ja": "【召喚時】自分の場に他のモンスターが2体以上いれば、「騎士」1体を自分の場に召喚する。",
         "ko": "【소환시】자신의 필드에 다른 몬스터가 2체 이상이면 기사 1체를 자신의 필드에 소환한다.",
         "en": "【On Summon】If you control at least 2 other monsters, summon 1 Knight to your field."
-      }
+      },
+      "after": {
+        "ja": "【召喚時】自分の場に他のモンスターが3体以上いれば、「騎士」1体を自分の場に召喚する。",
+        "ko": "【소환시】자신의 필드에 다른 몬스터가 3체 이상이면 기사 1체를 자신의 필드에 소환한다.",
+        "en": "【On Summon】If you control at least 3 other monsters, summon 1 Knight to your field."
+      },
+      "reviewedAt": "2026-10-09"
     },
     "M12": {
       "nameJa": "タイタン・ゲート",
@@ -946,51 +947,53 @@
     },
     "NGA3": {
       "nameJa": "戦士ゴーレム",
-      "status": "reworded",
+      "status": "balance-v57-reviewed",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "ce5233fd5b1a48b23b57298dd8fa141850e1e053770ae555a34fa300f3d0ba2b",
-      "textSha256": "4a75fd8444913b89a95e07c7ecda8fc9813c3861d66b9c44273b0af6354820ce",
+      "definitionSha256": "d2866ed403ab9114e4e723c273abaab80d88b35d4a0f8ee5be1ca0da4e992bbc",
+      "textSha256": "7323d4ea059901d4f0983bcf3c49ae7ffb77884398f7dc31d6cf613ee2a6188f",
       "hooks": {
         "onSummon": "golemSquad"
       },
       "before": {
-        "ja": "【召喚時】自分の場に他の「ゴーレム」系モンスターがいればこのモンスターにカウンター3個（気合に使用）",
-        "ko": "【소환시】자신 필드에 다른 '골램' 계열 몬스터가 있으면 이 몬스터에 카운터 3개(기합에 사용)",
-        "en": "【On Summon】If another Golem monster is on your field, this monster gains 3 counters (used by Guts)"
-      },
-      "after": {
         "ja": "【召喚時】自分の場に他の「ゴーレム」系モンスターがいれば、このモンスターに気合用カウンター3個を付与する。",
         "ko": "【소환시】자신의 필드에 다른 골렘 계열 몬스터가 있으면 이 몬스터에 기합용 카운터 3개를 부여한다.",
         "en": "【On Summon】If another Golem monster is on your field, this monster gains 3 counters (used by Guts)."
-      }
+      },
+      "after": {
+        "ja": "【召喚時】自分の場に他の「ゴーレム」系モンスターがいれば、このモンスターに気合用カウンター1個を付与する。",
+        "ko": "【소환시】자신의 필드에 다른 골렘 계열 몬스터가 있으면 이 몬스터에 기합용 카운터 1개를 부여한다.",
+        "en": "【On Summon】If another Golem monster is on your field, this monster gains 1 counter (used by Guts)."
+      },
+      "reviewedAt": "2026-10-09"
     },
     "NGA4": {
       "nameJa": "剣鬼",
-      "status": "reworded",
+      "status": "balance-v57-reviewed",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "025f0087a8202d769ba553dc1dc6d8165e28c7f8f318fc2777d184aaf6b7fcfe",
-      "textSha256": "948e318b697320aa732b865beced2d83e16572d9c2523e1e7f801275a4331e8c",
+      "definitionSha256": "f30fb65d682257c5b024cf6854698cc787c7237d7fd81516b8c88dfb0ac9ff2b",
+      "textSha256": "d77d6812077a4d695904bb2c4021e63f2246f7f030cc96e0fb6a6a67b67a23b8",
       "hooks": {
         "attackFx": "berserk"
       },
       "before": {
-        "ja": "【攻撃時】攻撃対象をランダムに決める（このモンスター以外の味方モンスターも候補に含む）",
-        "ko": "【공격시】공격 대상을 무작위로 정한다(이 몬스터 외 아군 몬스터도 후보에 포함)",
-        "en": "【On Attack】The attack target is chosen randomly, including your other monsters among eligible targets"
-      },
-      "after": {
         "ja": "【攻撃時】攻撃対象をランダムに決める（このモンスター以外の味方モンスターも候補に含む）。",
         "ko": "【공격시】공격 대상을 무작위로 정한다(이 몬스터 외 아군 몬스터도 후보에 포함).",
         "en": "【On Attack】The attack target is chosen randomly, including your other monsters among eligible targets."
-      }
+      },
+      "after": {
+        "ja": "【攻撃時】このモンスター以外の両方の場のモンスターと両プレイヤーから、攻撃可能な対象1つを毎回ランダムに選ぶ。直接攻撃禁止と「貴族領主」の攻撃制限に従う。\n\n【自分ターン終了時】攻撃可能なら、残っている攻撃回数を全て自動で行ってからターンを終了する。",
+        "ko": "【공격시】이 몬스터를 제외한 양쪽 필드의 몬스터와 양쪽 플레이어 중 공격 가능한 대상 1개를 매번 무작위로 선택한다. 직접 공격 금지와 귀족 영주의 공격 제한을 따른다.\n\n【자신 턴 종료시】공격 가능하면 남은 공격 횟수를 모두 자동으로 수행한 후 턴을 종료한다.",
+        "en": "【On Attack】Each attack randomly chooses 1 legal target among all other monsters on either field and both players. Direct-attack prohibitions and Aristocrat Lord attack restrictions still apply.\n\n【Your Turn End】If able to attack, automatically use all remaining attacks before ending your turn."
+      },
+      "reviewedAt": "2026-10-09"
     },
     "NWL3": {
       "nameJa": "ガーディアンゴーレム",
@@ -1304,50 +1307,48 @@
     },
     "GM6_7": {
       "nameJa": "将軍",
-      "status": "reworded",
+      "status": "balance-v57-reviewed",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "455c30d369a093d98f830764e99e855577fbaf0736b2e69ce5b1d47c13ee69f1",
-      "textSha256": "eef34d191a0bac433170d46cb1ce685e7b91ffecccb6551362091b5f63e0891f",
+      "textSha256": "46c09242f903917e72baf743c14e1a322429ca3de9ecc305d28fd01afbe54250",
       "hooks": {
         "onSummon": "generalKnight",
         "aura": "general"
       },
       "before": {
-        "ja": "【召喚時】「騎士」（攻撃力4・体力4）1体を自分の場に召喚する · 【常時】相手がモンスターを召喚するたびダイス1個を振り、4以上なら「騎士」1体を自分の場に召喚する",
-        "ko": "【소환시】기사(공격력 4, 체력 4) 1체를 자신 필드에 소환 · 【상시】상대가 몬스터를 소환할 때마다 주사위 1개를 굴려 4 이상이면 기사 1체를 자신 필드에 소환",
-        "en": "【On Summon】Summon 1 Knight (4 ATK, 4 HP) to your field · 【Passive】Whenever the opponent summons a monster, roll 1 die; on 4 or more, summon 1 Knight to your field"
-      },
-      "after": {
         "ja": "【召喚時】「騎士」（攻撃力4・体力4）1体を自分の場に召喚する。\n\n【相手が召喚した時】相手がモンスターを召喚するたびダイス1個を振り、4以上なら「騎士」1体を自分の場に召喚する。",
         "ko": "【소환시】기사(공격력 4, 체력 4) 1체를 자신의 필드에 소환한다.\n\n【상대가 소환할 때】상대가 몬스터를 소환할 때마다 주사위 1개를 굴려 4 이상이면 기사 1체를 자신의 필드에 소환한다.",
         "en": "【On Summon】Summon 1 Knight (4 ATK, 4 HP) to your field.\n\n【When the Opponent Summons】Whenever the opponent summons a monster, roll 1 die; on 4 or more, summon 1 Knight to your field."
-      }
+      },
+      "after": {
+        "ja": "【召喚時】自分の場に「城」「兵士」「騎士」「砲撃兵」「大砲兵」のいずれかがあれば、「騎士」2体を自分の場に召喚する。\n\n【相手が召喚した時】相手がモンスターを召喚するたび、ダイス1個を振る。6なら「兵士」1体を自分の場に召喚する。",
+        "ko": "【소환시】자신의 필드에 성·병사·기사·포격병·대포병 중 하나가 있으면 기사 2체를 자신의 필드에 소환한다.\n\n【상대가 소환할 때】상대가 몬스터를 소환할 때마다 주사위 1개를 굴린다. 6이면 병사 1체를 자신의 필드에 소환한다.",
+        "en": "【On Summon】If you control a Castle, Soldier, Knight, Gunner or Heavy Gunner, summon 2 Knights to your field.\n\n【When the Opponent Summons】Whenever the opponent summons a monster, roll 1 die. On 6, summon 1 Soldier to your field."
+      },
+      "reviewedAt": "2026-10-09"
     },
     "GM6_8": {
       "nameJa": "虚空の攻城兵",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "38b6a211735a9c9a1fdc8a917dbccb740a03aa104ea2541b18103569ece4fed6",
+      "status": "balance-v57-reviewed",
+      "changedLocales": [],
+      "definitionSha256": "b4fba4ada17c6fac0a0f7ab18b2edcba56abb8c238ec5907a6740261cffe6b5d",
       "textSha256": "db2ef71da11e087a71f1d8ed20c62213d2b7626e86b8e2d97c013505d2805a62",
       "hooks": {},
       "before": {
-        "ja": "【破壊時】「兵士」1体を自分の場に召喚する",
-        "ko": "【파괴시】병사 1체를 자신 필드에 소환",
-        "en": "【On Destruction】Summon 1 Soldier to your field"
+        "ja": "【破壊時】「兵士」1体を自分の場に召喚する。",
+        "ko": "【파괴시】병사 1체를 자신의 필드에 소환한다.",
+        "en": "【On Destruction】Summon 1 Soldier to your field."
       },
       "after": {
         "ja": "【破壊時】「兵士」1体を自分の場に召喚する。",
         "ko": "【파괴시】병사 1체를 자신의 필드에 소환한다.",
         "en": "【On Destruction】Summon 1 Soldier to your field."
-      }
+      },
+      "reviewedAt": "2026-10-09"
     },
     "GS6_4": {
       "nameJa": "火脈点火",
@@ -2717,28 +2718,28 @@
     },
     "VITAL3": {
       "nameJa": "世界樹の守り人",
-      "status": "reworded",
+      "status": "balance-v57-reviewed",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "7fcd73a6b9877698d27399da2a43f2b7b2ec56030fce54843f73f63a24c6e0e8",
-      "textSha256": "e1f1755b364c1b15b6d863676acf6a40050db372a765cdf63cb575ff9a7ee26e",
+      "definitionSha256": "3e07195b4be29c52ef97dfb46881c4ed01e6c61658eaabc55668e506af6fbdc0",
+      "textSha256": "9649f0566c13dc0cc48890bb8adf69925a5808350828a7ae2cc5355b77845039",
       "hooks": {
-        "onSummon": "heal",
         "aura": "treeKeeper"
       },
       "before": {
-        "ja": "【召喚時】自分の体力5回復 · 【常時】自分が「世界樹」「エルフ」系カードをプレイするたび、雫1を得る",
-        "ko": "【소환시】자신 체력 5 회복 · 【상시】세계수·엘프 계열 카드를 사용할 때마다 이슬 1 획득",
-        "en": "【On Summon】Restore 5 of your HP · 【Passive】Gain 1 Dew whenever you play a World Tree or Elf card"
-      },
-      "after": {
         "ja": "【召喚時】自分の体力を5回復する。\n\n【カード使用時】自分が「世界樹」「エルフ」系カードをプレイするたび、雫1を得る。",
         "ko": "【소환시】자신의 체력을 5 회복한다.\n\n【카드 사용시】세계수·엘프 계열 카드를 사용할 때마다 이슬 1 획득한다.",
         "en": "【On Summon】Restore 5 of your HP.\n\n【When a Card Is Played】Gain 1 Dew whenever you play a World Tree or Elf card."
-      }
+      },
+      "after": {
+        "ja": "【カード使用時】自分が「世界樹」「エルフ」系カードをプレイするたび、雫1を得る。",
+        "ko": "【카드 사용시】세계수·엘프 계열 카드를 사용할 때마다 이슬 1 획득한다.",
+        "en": "【When a Card Is Played】Gain 1 Dew whenever you play a World Tree or Elf card."
+      },
+      "reviewedAt": "2026-10-09"
     },
     "VITAL4": {
       "nameJa": "鼓舞王",
@@ -3200,27 +3201,28 @@
     },
     "ELITE": {
       "nameJa": "精鋭騎士団長",
-      "status": "reworded",
+      "status": "balance-v57-reviewed",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "8c7f965bb06cf7feaf58b97963d798c91cf97781a936fd439a5c4e546dad5dbc",
-      "textSha256": "404b7691555e88098878753ab60a9642d238de7864167ef755a5cfdbba4bc3db",
+      "definitionSha256": "5be01967f5626d6f8afec9e3b81883233bd8a16ea2906afc10e5b875f17303a1",
+      "textSha256": "33d014cb54a2464a5c291f128b5831af41908be070c3e0b47c945361297338bb",
       "hooks": {
         "onSummon": "eliteSoldiers"
       },
       "before": {
-        "ja": "【召喚時】デッキ構成が10枚以下なら兵士(2/2)2体を召喚",
-        "ko": "【소환시】덱 구성이 10장 이하면 병사(2/2) 2체를 소환",
-        "en": "【On Summon】With 10 or fewer cards in your deck composition, summon two 2/2 Soldiers"
-      },
-      "after": {
         "ja": "【召喚時】デッキ構成が10枚以下なら兵士(2/2)2体を召喚する。",
         "ko": "【소환시】덱 구성이 10장 이하면 병사(2/2) 2체를 소환한다.",
         "en": "【On Summon】With 10 or fewer cards in your deck composition, summon two 2/2 Soldiers."
-      }
+      },
+      "after": {
+        "ja": "【召喚時】デッキ構成が9枚以下なら兵士(2/2)2体を召喚する。",
+        "ko": "【소환시】덱 구성이 9장 이하면 병사(2/2) 2체를 소환한다.",
+        "en": "【On Summon】With 9 or fewer cards in your deck composition, summon two 2/2 Soldiers."
+      },
+      "reviewedAt": "2026-10-09"
     },
     "WALLBREAK1": {
       "nameJa": "城壁破砕",
@@ -5599,27 +5601,28 @@
     },
     "ACID_RAIN": {
       "nameJa": "酸性雨",
-      "status": "reworded",
+      "status": "balance-v57-reviewed",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "202fae7794e065eb68c563518a3165bb9ff3ebfe637fd175f6f85401788cfc68",
-      "textSha256": "f794d825076e7fe40cd31c16f274803bb6afae268bfa378d4089b7ddc210800c",
+      "definitionSha256": "1329af1a80426307f628ccd6b3c1b046245b78a6fa2cfc2a9d62584f5f38af8f",
+      "textSha256": "722d3f9c3366601b46b62825bdf6dfd8e86a318a3f7395f3d2379f28fd6f56aa",
       "hooks": {
         "ench": "acidRain"
       },
       "before": {
-        "ja": "【永続】相手モンスターが腐敗で破壊されるたび相手に烙印カウンター1個",
-        "ko": "【영구】상대 몬스터가 부패로 파괴될 때마다 상대에게 낙인 카운터 1개",
-        "en": "【Permanent】Whenever an enemy monster dies to Decay, the opponent gains 1 Brand counter"
-      },
-      "after": {
         "ja": "【相手の腐敗破壊時】相手モンスターが腐敗で破壊されるたび相手に烙印カウンター1個を付与する。",
         "ko": "【상대 부패 파괴시】상대 몬스터가 부패로 파괴될 때마다 상대에게 낙인 카운터 1개를 부여한다.",
         "en": "【Enemy Destroyed by Decay】Whenever an enemy monster dies to Decay, the opponent gains 1 Brand counter."
-      }
+      },
+      "after": {
+        "ja": "【相手の腐敗破壊時】相手モンスターが腐敗で破壊されるたび、ダイス1個を振る。4以上なら、相手に烙印カウンター1個を付与する。",
+        "ko": "【상대 부패 파괴시】상대 몬스터가 부패로 파괴될 때마다 주사위 1개를 굴린다. 4 이상이면 상대에게 낙인 카운터 1개를 부여한다.",
+        "en": "【Enemy Destroyed by Decay】Whenever an enemy monster is destroyed by Decay, roll 1 die. On 4 or more, give the opponent 1 Brand counter."
+      },
+      "reviewedAt": "2026-10-09"
     },
     "BUDGET": {
       "nameJa": "運営予算",
@@ -7150,27 +7153,28 @@
     },
     "MERC_LEADER": {
       "nameJa": "傭兵リーダー",
-      "status": "reworded",
+      "status": "balance-v57-reviewed",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "5bb0aaa639c19abc25e6b11ed71334a436f111e2ec78f06619b0d890a80b53ce",
-      "textSha256": "bdf5d32fee78c00778d5a501bcbbeb6776a829cc366ec416b486dc7279ec385a",
+      "textSha256": "60412e47f0fa2facf5a6cecd73e9eac525013915f297d049739450df9278103f",
       "hooks": {
         "onSummon": "expansion"
       },
       "before": {
-        "ja": "【召喚時】「兵士」2体を自分の場に召喚する · どちらかの場に「カジノ」があればダイス5個を振る",
-        "ko": "【소환시】병사 2체를 자신 필드에 소환 · 어느 쪽 필드에 카지노가 있으면 주사위 5개를 굴린다",
-        "en": "【On Summon】Summon 2 Soldiers to your field · If either player controls a Casino, roll 5 dice"
-      },
-      "after": {
         "ja": "【召喚時】「兵士」2体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス5個を振る。",
         "ko": "【소환시】병사 2체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 5개를 굴린다.",
         "en": "【On Summon】Summon 2 Soldiers to your field. If either player controls a Casino, roll 5 dice."
-      }
+      },
+      "after": {
+        "ja": "【召喚時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス5個を振る。",
+        "ko": "【소환시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 5개를 굴린다.",
+        "en": "【On Summon】Summon 1 Soldier to your field. If either player controls a Casino, roll 5 dice."
+      },
+      "reviewedAt": "2026-10-09"
     },
     "MERC_MASTER": {
       "nameJa": "傭兵ギルドマスター",

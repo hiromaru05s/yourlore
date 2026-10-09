@@ -419,7 +419,7 @@ export abstract class BaseController implements BoardHandlers {
           const defender = sideOf((1 - e.player) as Side);
           const attacker=this.findCard(prev,e.uid)??this.findCard(res.state,e.uid),exhaust=res.state.players[e.player].field.find(m=>m.uid===e.uid)?.exhausted!==false;
           if(attacker?.id==='NGA4'){
-            const targetPlayer=(e.targetUid&&prev.players[e.player].field.some(m=>m.uid===e.targetUid)?e.player:1-e.player) as Side;
+            const targetPlayer=e.targetPlayer ?? ((e.targetUid&&prev.players[e.player].field.some(m=>m.uid===e.targetUid)?e.player:1-e.player) as Side);
             await A.berserkStrike(e.uid,e.targetUid,e.player,this.you,targetPlayer,()=>eventSound.contact(e.targetUid,targetPlayer,e.contactDamage!==0),exhaust,e.contactDamage);
           }else await A.attackStrike(e.uid,e.targetUid,defender,()=>eventSound.contact(e.targetUid,(1-e.player) as Side,e.contactDamage!==0),exhaust,e.contactDamage);
           break;

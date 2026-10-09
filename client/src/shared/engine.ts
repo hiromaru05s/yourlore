@@ -986,6 +986,7 @@ function hatchEgg(g: GameState, ctx: Ctx, p: PlayerState, egg: FieldMon): void {
   applySummonBuff(ctx, p, m);
   resolveOnSummon(g, ctx, m); // 부화 몬스터의 소환 효과 발동 (흑룡 선택 pending 포함 — 주인 턴이라 안전)
   if (m.tribe && !g.over) checkTribe(g, ctx, p, m); // 시초의 알(v36): 부화한 시초 몬스터도 동족 시너지
+  reactGeneralSummon(g, ctx, p);
 }
 
 function weakenAllCount(g: GameState): number {
@@ -1072,7 +1073,12 @@ function addDecay(g: GameState, ctx: Ctx, owner: PlayerState, tm: FieldMon, n: n
       // 산성비 / 강산성비(v37): 상대 몬스터가 부패로 파괴될 때마다 낙인 (+7 데미지)
       for (const e of foe.enchants) {
         if (g.over) break;
-        if (e.card.ench === "acidRain") {enchantFx(g,ctx.ev,foe,e.card); gainBrand(g, ctx, owner, 1); ctx.log(`  └ ${cn(e.card)}: ${owner.name} 에게 낙인 카운터 +1 (합계 ${owner.brand})`, `  └ ${cn(e.card)}: ${owner.name} に烙印カウンター+1 (計${owner.brand})`); }
+        if (e.card.ench === "acidRain") {
+          enchantFx(g, ctx.ev, foe, e.card);
+          const { rolls, ok } = diceRoll(g, ctx.ev, side(g, foe), { id: e.card.id, player: side(g, foe) }, 1, 4);
+          if (ok && !g.over) gainBrand(g, ctx, owner, 1);
+          ctx.log(`  └ ${cn(e.card)} 🎲 ${rolls[0]} → ${ok ? '낙인 +1' : '실패'}`, `  └ ${cn(e.card)} 🎲 ${rolls[0]} → ${ok ? '烙印+1' : '失敗'}`);
+        }
         if (e.card.ench === "strongAcid") {enchantFx(g,ctx.ev,foe,e.card); ctx.dealDamage(owner, 7, cn(e.card), cn(e.card)); if (!g.over) { gainBrand(g, ctx, owner, 1); ctx.log(`  └ ${cn(e.card)}: ${owner.name} 에게 낙인 카운터 +1 (합계 ${owner.brand})`, `  └ ${cn(e.card)}: ${owner.name} に烙印カウンター+1 (計${owner.brand})`); } }
       }
       // 러스트캡 슬러그(v36): 부패로 상대 몬스터를 파괴하면 최대 마나 +1, 체력 +5
@@ -1101,6 +1107,7 @@ function spawnVampire(g: GameState, ctx: Ctx, p: PlayerState, id: string): void 
   applyEnterAura(g, ctx, p, m);
   applySummonBuff(ctx, p, m);
   resolveOnSummon(g, ctx, m); // 특급 흡혈귀의 소환시 효과도 발동
+  reactGeneralSummon(g, ctx, p);
 }
 
 /** 피의 마법 - 비술: 자신 흡혈귀 1체 파괴 시도 → 실제로 파괴됐을 때만 최대 마나 +3 / 체력 +10.
@@ -1312,6 +1319,19 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
 function noAttackActive(g: GameState): boolean {
   return g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "noAttack"));
 }
+/** Berserk includes both players even with monsters present; normal prohibitions still apply. */
+export function berserkTargets(g: GameState, p: PlayerState, m: FieldMon): { player: Side; uid: string | null }[] {
+  const own = side(g, p), enemy = (1 - own) as Side, o = g.players[enemy];
+  const targets: { player: Side; uid: string | null }[] = m.directOnly ? [] : [
+    ...o.field.filter(x => !(x.aura === 'eliteGuard' && (m.cost ?? 0) <= 6)).map(x => ({ player: enemy, uid: x.uid })),
+    ...p.field.filter(x => x.uid !== m.uid).map(x => ({ player: own, uid: x.uid })),
+  ];
+  if (!p.noDirectTurn) {
+    targets.push({ player: own, uid: null });
+    if (!o.field.some(x => x.aura === 'eliteGuard')) targets.push({ player: enemy, uid: null });
+  }
+  return targets;
+}
 /** Attack declaration eligibility shared by the board, bots and target confirmation. */
 export function monsterCanAttack(g:GameState,p:PlayerState,m:FieldMon):boolean {
   const o=g.players[g.players[0]===p?1:0];
@@ -1320,9 +1340,9 @@ export function monsterCanAttack(g:GameState,p:PlayerState,m:FieldMon):boolean {
   if(o.field.some(x=>x.aura==='lowAtkBan')&&(m.cost??0)<=2)return false;
   if(p.noHighAtkTurn&&(m.cost??0)>=4||m.id==='ASSASSIN_SQUAD'&&o.hp<11)return false;
   if(m.summonedTurn===g.turn&&o.field.some(x=>hasPassive(x,'majesty')))return false;
+  if(m.attackFx==='berserk')return berserkTargets(g,p,m).length>0;
   const direct=!p.noDirectTurn&&!o.field.some(x=>x.aura==='eliteGuard');
   if(!o.field.length||m.directOnly)return direct;
-  if(m.attackFx==='berserk'&&p.field.some(x=>x.uid!==m.uid))return true;
   return o.field.some(x=>!(x.aura==='eliteGuard'&&(m.cost??0)<=6));
 }
 /** Legal opposing monster target; exhaustion of the defender is irrelevant. */
@@ -1348,8 +1368,22 @@ export const MAX_TURNS = 60;
 /** 턴 종료. v42: 손패가 HAND_CARRY장을 넘으면 먼저 버릴 카드를 고르게 한다(pending handCap).
  *  force=true(시간 초과 · 턴 스킵 · 강제 종료)면 묻지 않고 오른쪽(마지막) 카드부터 버린다. */
 function endTurn(g: GameState, ctx: Ctx, force = false): void {
+  const endingAt = g.turn;
+  delete g.endingTurn;
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];
+  // A player cannot avoid the Fiend's remaining attacks by ending or timing out.
+  // Re-evaluate after each attack: counters, traps and damage can remove attackers.
+  for (const m of [...p.field]) {
+    while (m.attackFx === 'berserk' && p.field.includes(m) && monsterCanAttack(g, p, m)) {
+      const used = m.attacksUsed ?? 0;
+      resolveBerserkAttack(g, ctx, m);
+      if (g.over || g.turn !== endingAt) return;
+      if (g.pending) { g.endingTurn = { turn: endingAt, force }; return; }
+      // A committed attack cancelled by an effect still consumes its opportunity.
+      if ((m.attacksUsed ?? 0) === used && !m.exhausted) m.exhausted = true;
+    }
+  }
   if (p.hand.length > HAND_CARRY) {
     if (force || g.pending?.reason === "handCap") {
       const dumped: CardInst[] = [];
@@ -2306,7 +2340,7 @@ function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: Fiel
   const atk = effAtk(p, att, g);
   const counter = hasPassive(target, "counter") ? Math.ceil(effAtk(p, target, g) / 2) : 0;
   const contactDamage = target.immuneDamageTurn === g.turn ? 0 : target.hatch != null ? 1 : Math.max(0, Math.min(atk, curHp(p,target) - ((target.guts || 0) > 0 ? 1 : 0)));
-  ctx.ev.push({ type: "attack", player: side(g, p), uid: att.uid, targetUid: target.uid, contactDamage });
+  ctx.ev.push({ type: "attack", player: side(g, p), uid: att.uid, targetUid: target.uid, targetPlayer: side(g, p), contactDamage });
   ctx.ev.push({ type: "hit", uid: target.uid, amount: contactDamage });
   if (target.immuneDamageTurn === g.turn) { /* damage prevention still allows counter */ } else if (target.hatch != null) {
     target.dur = (target.dur ?? 0) - 1;
@@ -2328,6 +2362,38 @@ function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: Fiel
   att.attacksUsed = (att.attacksUsed || 0) + 1;
   if (att.attacksUsed >= (att.mult || 1)) att.exhausted = true;
   counterHit(g, ctx, p, target, p, att, counter);
+}
+
+function resolveFriendlyPlayerAttack(g: GameState, ctx: Ctx, att: FieldMon, treeStage = 0): void {
+  const p = g.players[g.cur];
+  if (treeStage === 0 && (p.dew ?? 0) > 0 && p.field.some(m => m.id === 'WORLD_TREE')) {
+    offerEffectChoice(g, ctx, p, 'WORLD_TREE_ATTACK', '雫1で攻撃力+6（永続）しますか？', { attackerUid: att.uid, targetUid: null, friendlyPlayer: true });
+    return;
+  }
+  let amount = effAtk(p, att, g);
+  if (amount > 1 && !hasPassive(att, 'guts') && !hasPassive(att, 'evade') && g.players.some(pl => pl.field.some(m => m.aura === 'dungeon'))) amount = 1;
+  const event: Extract<GameEvent, { type: 'attack' }> = { type: 'attack', player: g.cur, uid: att.uid, targetUid: null, targetPlayer: g.cur, contactDamage: 0 };
+  ctx.ev.push(event);
+  const hp = p.hp;
+  ctx.dealDamage(p, amount, `${cn(att)} 의 자신 플레이어 공격`, `${cn(att)} の自プレイヤーへの攻撃`, g.cur);
+  event.contactDamage = Math.max(0, hp - p.hp);
+  att.attacksUsed = (att.attacksUsed ?? 0) + 1;
+  if (att.attacksUsed >= (att.mult || 1)) att.exhausted = true;
+}
+
+function resolveBerserkAttack(g: GameState, ctx: Ctx, att: FieldMon): void {
+  const p = g.players[g.cur], pool = berserkTargets(g, p, att);
+  if (!pool.length) return;
+  const target = pool[randInt(g, pool.length)];
+  monsterActivation(g, ctx.ev, p, att);
+  ctx.log(`${cn(att)} 광란 — 대상 무작위`, `${cn(att)} 狂乱 — 対象ランダム`);
+  if (target.player === g.cur) {
+    if (target.uid === null) resolveFriendlyPlayerAttack(g, ctx, att);
+    else resolveFriendlyFire(g, ctx, att, p.field.find(m => m.uid === target.uid)!);
+  } else {
+    ctx.ev.push({ type: 'attack', player: g.cur, uid: att.uid, targetUid: target.uid, targetPlayer: target.player });
+    resolveAttackCore(g, ctx, att, target.uid);
+  }
 }
 
 // ============================================================
@@ -2756,8 +2822,8 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       ctx.log(`  └ 카운터 +1 (${p.refreshTokens}) — 이번 턴 중 마나 없이 제시 갱신 가능`, `  └ カウンター+1 (${p.refreshTokens}) — このターン中マナなしで提示更新可能`);
       break;
     }
-    case "golemSquad": { // 골램 특공부대: 다른 골램이 필드에 있으면 카운터 +3
-      if (p.field.some((x) => x.uid !== m.uid && isGolem(x))) { m.guts = (m.guts || 0) + 3; ctx.log(`  └ 골램 군단 합류 — 카운터 +3 (${m.guts})`, `  └ ゴーレム軍団合流 — カウンター+3 (${m.guts})`); }
+    case "golemSquad": { // 골램 특공부대: 다른 골램이 필드에 있으면 기합 카운터 +1
+      if (p.field.some((x) => x.uid !== m.uid && isGolem(x))) { m.guts = (m.guts || 0) + 1; ctx.log(`  └ 골램 군단 합류 — 기합 카운터 +1 (${m.guts})`, `  └ ゴーレム軍団合流 — 気合カウンター+1 (${m.guts})`); }
       else ctx.log("  └ 필드에 다른 골램 없음", "  └ 場に他のゴーレムなし");
       break;
     }
@@ -2781,10 +2847,10 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       ctx.log(`  └ 카운터 +${v || 2} (${m.gcount})`, `  └ カウンター+${v || 2} (${m.gcount})`);
       break;
     }
-    case "eliteSoldiers": { // 정예 기사단장: 덱 구성 10장 이하면 병사 2체 (v37: 덱 구성 = 덱·패·묘지·필드)
+    case "eliteSoldiers": { // 정예 기사단장: 덱 구성 9장 이하면 병사 2체 (v37: 덱 구성 = 덱·패·묘지·필드)
       const en2 = deckComp(p).length;
-      if (en2 <= 10) { spawnToken(g, ctx, p, "SOLDIER2"); spawnToken(g, ctx, p, "SOLDIER2"); ctx.log(`  └ 정예(${en2}장) 편성: 병사(2/2) 2체 소환`, `  └ 精鋭(${en2}枚)編成: 兵士(2/2)2体召喚`); }
-      else ctx.log(`  └ 덱+묘지 ${en2}장 — 정예 초과(10장)`, `  └ デッキ+墓地${en2}枚 — 精鋭超過(10枚)`);
+      if (en2 <= 9) { spawnToken(g, ctx, p, "SOLDIER2"); spawnToken(g, ctx, p, "SOLDIER2"); ctx.log(`  └ 정예(${en2}장) 편성: 병사(2/2) 2체 소환`, `  └ 精鋭(${en2}枚)編成: 兵士(2/2)2体召喚`); }
+      else ctx.log(`  └ 덱 구성 ${en2}장 — 정예 초과(9장)`, `  └ デッキ構成${en2}枚 — 精鋭超過(9枚)`);
       break;
     }
     case "hordeRally": { // 군단의 기수: 자신 필드의 병사·기사 전체 공격력 +4(지속)
@@ -2794,8 +2860,8 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       break;
     }
     case "warlordKnight": { // v52: exclude the summoned Warlord itself
-      if (p.field.filter(x => x.uid !== m.uid).length >= 2) { spawnToken(g, ctx, p, "INFKNIGHT"); ctx.log("  └ 군세 결집 — 기사(4/4) 소환", "  └ 軍勢結集 — 騎士(4/4)召喚"); }
-      else ctx.log("  └ 자신 외 아군 몬스터 2체 미만 — 불발", "  └ 自身以外の味方モンスター2体未満 — 不発");
+      if (p.field.filter(x => x.uid !== m.uid).length >= 3) { spawnToken(g, ctx, p, "INFKNIGHT"); ctx.log("  └ 군세 결집 — 기사(4/4) 소환", "  └ 軍勢結集 — 騎士(4/4)召喚"); }
+      else ctx.log("  └ 자신 외 아군 몬스터 3체 미만 — 불발", "  └ 自身以外の味方モンスター3体未満 — 不発");
       break;
     }
     case "chronicler": { // 기록자: 최근 5턴(자신 기준)의 제시 이력에서 원하는 카드를 마나로 구매
@@ -2841,8 +2907,12 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       doDragonFuse(g, ctx, p, m.uid, (soldier ?? knight)!.uid, soldier ? "DRAGON_RIDER" : "ANTIQUE_DK");
       break;
     }
-    case "generalKnight": { // 장군: 기사 1체
-      spawnToken(g, ctx, p, "INFKNIGHT"); ctx.log("  └ 기사(4/4) 소환", "  └ 騎士(4/4)召喚");
+    case "generalKnight": {
+      if (p.field.some(x => ['CASTLE', 'SOLDIER2', 'INFKNIGHT', 'GUNNER', 'HEAVY_GUNNER'].includes(x.id))) {
+        let n = 0;
+        for (let i = 0; i < 2 && !g.over; i++) if (spawnToken(g, ctx, p, "INFKNIGHT")) n++;
+        ctx.log(`  └ 기사(4/4) ${n}체 소환`, `  └ 騎士(4/4)${n}体召喚`);
+      }
       break;
     }
     case "elderWipe": { // 엘더 하이엘프 킹: 상대 필드의 카드 전부 파괴
@@ -2912,6 +2982,7 @@ function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string, fromDeck
   applyEnterAura(g, ctx, p, m);
   applySummonBuff(ctx, p, m);
   if (m.tribe && !g.over) checkTribe(g, ctx, p, m); // 동족 시너지는 소환 경로와 무관하게 판정
+  reactGeneralSummon(g, ctx, p);
   return true;
 }
 
@@ -4052,13 +4123,21 @@ function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): 
     ctx.log(`  └ <span class="dmg">함정 ${cn(pit)}!</span> ${cn(card)} 파괴`, `  └ <span class="dmg">トラップ ${cn(pit)}!</span> ${cn(card)} 破壊`);
     ctx.destroyMonster(p, m);
   }
-  // 장군(v36 general): 상대가 몬스터를 소환할 때마다 주사위 4+면 기사 1체
-  for (const gen of [...o.field]) {
-    if (g.over || gen.aura !== "general") continue;
-    monsterActivation(g, ctx.ev, o, gen);
-    const { rolls: gr, ok } = diceRoll(g, ctx.ev, side(g, o), { id: gen.id, player: side(g, o) }, 1, 4);
-    if (ok) { ctx.log(`  └ ${cn(gen)} 🎲 ${gr[0]} → 기사(4/4) 소환`, `  └ ${cn(gen)} 🎲 ${gr[0]} → 騎士(4/4)召喚`); spawnToken(g, ctx, o, "INFKNIGHT"); }
-    else ctx.log(`  └ ${cn(gen)} 🎲 ${gr[0]} → 실패`, `  └ ${cn(gen)} 🎲 ${gr[0]} → 失敗`);
+  reactGeneralSummon(g, ctx, p);
+}
+
+/** Each real summon, including tokens, gives opposing Generals one roll. */
+function reactGeneralSummon(g: GameState, ctx: Ctx, summoner: PlayerState): void {
+  const owner = g.players[1 - side(g, summoner)];
+  for (const gen of [...owner.field]) {
+    if (g.over) return;
+    if (gen.aura !== 'general' || !owner.field.some(m => m.uid === gen.uid)) continue;
+    monsterActivation(g, ctx.ev, owner, gen);
+    const { rolls, ok } = diceRoll(g, ctx.ev, side(g, owner), { id: gen.id, player: side(g, owner) }, 1, 6);
+    if (ok && !g.over) {
+      ctx.log(`  └ ${cn(gen)} 🎲 ${rolls[0]} → 병사(2/2) 소환`, `  └ ${cn(gen)} 🎲 ${rolls[0]} → 兵士(2/2)召喚`);
+      spawnToken(g, ctx, owner, 'SOLDIER2');
+    }
   }
 }
 
@@ -5380,8 +5459,11 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
   if (g.over) return { state: g, events: ev };
 
   const p = g.players[g.cur];
-  if (action.type === "chooseTarget") { if (g.pending) resolveTarget(g, ctx, action.uid); return { state: g, events: ev }; }
-  if (action.type === "pick") { if (g.pending) resolveTarget(g, ctx, action.uid); return { state: g, events: ev }; }
+  if (action.type === "chooseTarget" || action.type === "pick") {
+    if (g.pending) resolveTarget(g, ctx, action.uid);
+    if (!g.over && !g.pending && g.endingTurn?.turn === g.turn) endTurn(g, ctx, g.endingTurn.force);
+    return { state: g, events: ev };
+  }
   // Ending a turn also cancels its uncommitted attack selection, atomically online.
   if (action.type === 'endTurn' && g.pending?.reason === 'attack' && g.pending.allowCancel) g.pending = null;
   // v42: 손패 이월 선택(handCap) 중의 endTurn = 시간 초과/강제 종료 → 오른쪽부터 자동 폐기 후 종료
@@ -5456,27 +5538,12 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
         ctx.log(`  └ <span class="dmg">위엄</span>: 소환된 턴에는 공격할 수 없다`, `  └ <span class="dmg">威厳</span>: 召喚されたターンには攻撃できない`);
         break;
       }
-      // 천궁의 폐문(gateClose): 이번 턴 직접 공격 봉쇄
-      if (p.noDirectTurn && (o.field.length === 0 || m.directOnly)) { ctx.log(`  └ <span class="dmg">천궁의 폐문</span>: 이번 턴 직접 공격 불가`, `  └ <span class="dmg">天宮の閉門</span>: このターン直接攻撃不可`); break; }
-      // 귀족 영주(eliteGuard): 필드에 있는 한 직접 공격 불가
-      if ((o.field.length === 0 || m.directOnly) && o.field.some((x) => x.aura === "eliteGuard")) { ctx.log(`  └ <span class="dmg">귀족 영주</span>: 직접 공격 불가`, `  └ <span class="dmg">貴族領主</span>: 直接攻撃不可`); break; }
-      // 검귀(v36 berserk): 대상을 고를 수 없다 — 양측 필드의 몬스터(자신 제외) 중 무작위, 없으면 직접 공격
       if (m.attackFx === "berserk") {
-        const pool: Array<{ own: boolean; uid: string }> = [
-          ...o.field.filter((x) => !(x.aura === "eliteGuard" && (m.cost ?? 0) <= 6)).map((x) => ({ own: false, uid: x.uid })),
-          ...p.field.filter((x) => x.uid !== m.uid).map((x) => ({ own: true, uid: x.uid })),
-        ];
-        if (!pool.length) {
-          if (p.noDirectTurn || o.field.some((x) => x.aura === "eliteGuard")) { ctx.log(`  └ 직접 공격 불가`, `  └ 直接攻撃不可`); break; }
-          ev.push({ type: "attack", player: side(g, p), uid: m.uid, targetUid: null }); resolveAttackCore(g, ctx, m, null); break;
-        }
-        const pick = pool[randInt(g, pool.length)];
-        monsterActivation(g, ev, p, m);
-        ctx.log(`<span class="t">${p.name}</span> ${cn(m)} 광란 — 대상 무작위`, `<span class="t">${p.name}</span> ${cn(m)} 狂乱 — 対象ランダム`);
-        if (pick.own) { const tgt = p.field.find((x) => x.uid === pick.uid)!; resolveFriendlyFire(g, ctx, m, tgt); }
-        else { ev.push({ type: "attack", player: side(g, p), uid: m.uid, targetUid: pick.uid }); resolveAttackCore(g, ctx, m, pick.uid); }
+        if (monsterCanAttack(g, p, m)) resolveBerserkAttack(g, ctx, m);
         break;
       }
+      // Direct-attack restrictions for ordinary attacks.
+      if ((o.field.length === 0 || m.directOnly) && (p.noDirectTurn || o.field.some(x => x.aura === 'eliteGuard'))) break;
       // 암살자(directOnly): always attacks the opponent player directly, never a monster
       if (o.field.length === 0 || m.directOnly) { ev.push({ type: "attack", player: side(g, p), uid: m.uid, targetUid: null }); resolveAttackCore(g, ctx, m, null); }
       else { g.pending = { kind: "oppMon", hint: "공격할 적 몬스터 선택", hintJa: "攻撃する敵モンスターを選択", reason: "attack", allowCancel: true, data: { attackerUid: m.uid } }; ev.push({ type: "needTarget", pending: g.pending }); }
@@ -5583,7 +5650,7 @@ function drainExpansionChoices(g: GameState, ctx: Ctx): void {
   }
 }
 function mercEffect(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon, start: boolean): void {
-  const count = start || m.id === 'MERCENARY' ? 1 : 2;
+  const count = start || m.id !== 'MERC_MASTER' ? 1 : 2;
   const repeats = p.enchants.some(e => e.card.ench === 'mercArt') ? 2 : 1;
   for (let j = 0; j < repeats && !g.over; j++) {
     for (let i = 0; i < count; i++) effectSummon(g, ctx, p, 'SOLDIER2');
@@ -5758,7 +5825,8 @@ function resolveDewShieldChoice(g: GameState, ctx: Ctx, uid: string | null): boo
         p.dew!--; if(q.reason==='WORLD_TREE_ATTACK')target.atkMod+=6;else target.defMod+=6;
       }
       const stage=q.reason==='WORLD_TREE_ATTACK'?1:2;
-      if(q.data?.friendly) {const ally=p.field.find(m=>m.uid===targetUid);if(ally)resolveFriendlyFire(g,ctx,attacker,ally,Boolean(q.data?.pierce),stage);}
+      if(q.data?.friendlyPlayer) resolveFriendlyPlayerAttack(g,ctx,attacker,stage);
+      else if(q.data?.friendly) {const ally=p.field.find(m=>m.uid===targetUid);if(ally)resolveFriendlyFire(g,ctx,attacker,ally,Boolean(q.data?.pierce),stage);}
       else resolveAttackCore(g,ctx,attacker,targetUid,stage);
       break;
     }
