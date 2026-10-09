@@ -616,6 +616,8 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
   ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
   ov.setAttribute('aria-label', cardName(c));
   const heading = document.createElement('header'); heading.className = 'inspect-heading';
+  const headingCopy = document.createElement('div'); headingCopy.className = 'inspect-heading-copy';
+  const controls = document.createElement('div'); controls.className = 'inspect-controls';
   const title = document.createElement('h1'); title.textContent = cardName(c);
   const type = document.createElement('span'); type.className = 'inspect-type';
   type.textContent = cardTypeLabel(c, getLang());
@@ -625,11 +627,12 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
   if (zoomHistory.length) {
     const back = document.createElement('button'); back.type='button'; back.className='inspect-back';
     back.textContent={ja:'← 元のカード',ko:'← 이전 카드',en:'← Previous card'}[getLang()];
-    back.onclick=e=>{e.stopPropagation();backToPreviousCard();}; heading.append(back);
+    back.onclick=e=>{e.stopPropagation();backToPreviousCard();}; controls.append(back);
   }
   const returnToRules = document.createElement('button'); returnToRules.type='button'; returnToRules.className='inspect-return-rules'; returnToRules.hidden=true;
   returnToRules.textContent={ja:'効果本文へ戻る',ko:'효과 본문으로',en:'Back to effect'}[getLang()];
-  heading.append(title, type, returnToRules, close); wrap.append(heading);
+  headingCopy.append(title, type); controls.append(returnToRules, close);
+  heading.append(headingCopy, controls); wrap.append(heading);
   heading.onclick=e=>e.stopPropagation();
   const details = document.createElement('section'); details.className = 'zoom-details'; details.tabIndex = 0;
   details.setAttribute('aria-label', getLang() === 'ja' ? 'カード効果と関連情報' : getLang() === 'en' ? 'Card rules and related information' : '카드 효과와 관련 정보');
@@ -645,7 +648,7 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
       e.stopPropagation(); returnToRules.hidden=true;
       scroll.forEach(({node,top})=>{node.scrollTop=top;}); from?.focus({preventScroll:true});
     };
-    item.style.scrollMarginTop = `${getComputedStyle(wrap).overflowY === 'auto' ? heading.offsetHeight + 16 : 16}px`;
+    item.style.scrollMarginTop = `${getComputedStyle(wrap).overflowY === 'auto' ? controls.offsetHeight + 16 : 16}px`;
     item.focus({ preventScroll: true });
     item.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
   }));
