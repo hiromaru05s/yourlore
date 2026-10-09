@@ -1,11 +1,11 @@
-export const DURATION=3000;
+export const DURATION=3800;
 export const cards=['FIRE_MASTER','BLACK_ELSA','BLACK_ALICE'] as const;
 export const names=['ファイアーマスター','黒魔術師 エルサ','黒魔術師 アリス'];
 export const designs=[
- {name:'表皮の覚醒',en:'RISING MANTLE',note:'絵柄の輝きが縁へ伝わり、厚い膜が上へ伸びてほどける。'},
- {name:'双流の交織',en:'COUNTERCURRENT',note:'左右の表面が二本の帯へ変わり、前後を交差して面に還る。'},
- {name:'秘殻の開放',en:'OBSIDIAN SHELL',note:'カードに沿う光沢のある外殻が割れ、厚い断片が内側へ戻る。'},
- {name:'六葉の詠唱',en:'FOLDED INVOCATION',note:'絵柄を残す六枚の折面が段階的に開き、順番に閉じる。'},
- {name:'深圧の解放',en:'PRESSURE BLOOM',note:'四辺の魔力を中心へ圧縮し、遅れた一拍で曲面が開く。'},
- {name:'織影の顕現',en:'WOVEN APPARITION',note:'カード面がうねる織物へ伸び、端から順に再び定着する。'},
+ {name:'焔と影の立ち昇り',en:'VOLUMETRIC AWAKENING',note:'カードの縁から炎・煙が立ち昇る。内部の密度と光が変化する。'},
+ {name:'焼殻・黒曜の解放',en:'FRACTURED SEAL',note:'厚みのある不均等な殻が開き、影を落として盤面へ伏せる。'},
+ {name:'焦紙・呪符の解綴',en:'UNBOUND VELLUM',note:'三枚の紙が時間差でしなり、裏側を見せながらほどける。'},
+ {name:'溶火・影脈の還流',en:'VISCOUS CONJURATION',note:'丸い断面を持つ流体が張力を解き、先端まで遅れて戻る。'},
+ {name:'熔核・黒月の抱擁',en:'MOLTEN CORE / BLACK MOON',note:'炎術師は割れた熔石、黒魔術師は杖の黒月がカードを放す。'},
+ {name:'炎書・禁書の開帳',en:'THE LIVING GRIMOIRE',note:'実際のカード面が二枚にしなり、奥の魔力を解いて閉じ戻る。'},
 ];

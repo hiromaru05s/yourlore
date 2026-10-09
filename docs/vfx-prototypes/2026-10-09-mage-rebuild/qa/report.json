@@ -1,0 +1,883 @@
+{
+  "errors": [],
+  "variants": [
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 0,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "FIRE_MASTER",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 1,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 1,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "FIRE_MASTER",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 1,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 2,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "FIRE_MASTER",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 1,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 3,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "FIRE_MASTER",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 1,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 4,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "FIRE_MASTER",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 1,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 5,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "FIRE_MASTER",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 1,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 0,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "BLACK_ELSA",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 2,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 1,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "BLACK_ELSA",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 2,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 2,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "BLACK_ELSA",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 2,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 3,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "BLACK_ELSA",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 2,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 4,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "BLACK_ELSA",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 2,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 5,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "BLACK_ELSA",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 2,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 0,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "BLACK_ALICE",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 3,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 1,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "BLACK_ALICE",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 3,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 2,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "BLACK_ALICE",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 3,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 3,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "BLACK_ALICE",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 3,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 4,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "BLACK_ALICE",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 3,
+        "contact": 2260
+      }
+    },
+    {
+      "revision": 2,
+      "mode": "grid",
+      "variant": 5,
+      "ms": 1150,
+      "playing": false,
+      "reduced": false,
+      "side": 0,
+      "multi": false,
+      "card": "BLACK_ALICE",
+      "cameraView": "oblique",
+      "renderer": {
+        "renderer": "three-physical-volumetric-r2",
+        "disposed": false,
+        "textures": 3,
+        "contact": 2260
+      }
+    }
+  ],
+  "continuous": {
+    "revision": 2,
+    "mode": "grid",
+    "variant": 5,
+    "ms": 968.7000000029802,
+    "playing": true,
+    "reduced": false,
+    "side": 0,
+    "multi": false,
+    "card": "BLACK_ALICE",
+    "cameraView": "oblique",
+    "renderer": {
+      "renderer": "three-physical-volumetric-r2",
+      "disposed": false,
+      "textures": 3,
+      "contact": 2260
+    }
+  },
+  "overflow": [
+    {
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "width": 844,
+      "scroll": 844
+    },
+    {
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "width": 390,
+      "scroll": 390
+    }
+  ],
+  "boards": [
+    {
+      "card": "FIRE_MASTER",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 0,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "FIRE_MASTER",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 1,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "FIRE_MASTER",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 2,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "FIRE_MASTER",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 3,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "FIRE_MASTER",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 4,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "FIRE_MASTER",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 5,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "FIRE_MASTER",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 0,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "FIRE_MASTER",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 1,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "FIRE_MASTER",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 2,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "FIRE_MASTER",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 3,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "FIRE_MASTER",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 4,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "FIRE_MASTER",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 5,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ELSA",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 0,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ELSA",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 1,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ELSA",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 2,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ELSA",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 3,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ELSA",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 4,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ELSA",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 5,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ELSA",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 0,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ELSA",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 1,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ELSA",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 2,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ELSA",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 3,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ELSA",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 4,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ELSA",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 5,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ALICE",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 0,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ALICE",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 1,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ALICE",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 2,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ALICE",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 3,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ALICE",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 4,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ALICE",
+      "ready": true,
+      "revision": 2,
+      "side": 0,
+      "variant": 5,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ALICE",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 0,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ALICE",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 1,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ALICE",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 2,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ALICE",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 3,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ALICE",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 4,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    },
+    {
+      "card": "BLACK_ALICE",
+      "ready": true,
+      "revision": 2,
+      "side": 1,
+      "variant": 5,
+      "ms": 1150,
+      "multi": true,
+      "hidden": 3,
+      "rigs": 3,
+      "height": 46,
+      "disposed": false
+    }
+  ],
+  "end": {
+    "ready": true,
+    "revision": 2,
+    "card": "BLACK_ALICE",
+    "side": 1,
+    "variant": 5,
+    "ms": 3800,
+    "multi": true,
+    "hidden": 0,
+    "rigs": 0,
+    "height": 0,
+    "disposed": false
+  },
+  "reduced": {
+    "revision": 2,
+    "mode": "grid",
+    "variant": 1,
+    "ms": 3800,
+    "playing": false,
+    "reduced": true,
+    "side": 0,
+    "multi": false,
+    "card": "BLACK_ALICE",
+    "cameraView": "oblique",
+    "renderer": {
+      "renderer": "three-physical-volumetric-r2",
+      "disposed": false,
+      "textures": 3,
+      "contact": 2260
+    }
+  },
+  "disposal": {
+    "ready": true,
+    "revision": 2,
+    "card": "BLACK_ALICE",
+    "side": 0,
+    "variant": 1,
+    "ms": 1100,
+    "multi": false,
+    "hidden": 0,
+    "rigs": 0,
+    "height": 46,
+    "disposed": true
+  }
+}

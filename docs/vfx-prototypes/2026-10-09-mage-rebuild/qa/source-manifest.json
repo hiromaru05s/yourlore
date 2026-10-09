@@ -1,0 +1,14 @@
+{
+  "client/src/dev/mage-summon-six/board.ts": "cb34f8d8d18dbb09d8da612858a6712240fa83c03e57fd54f7617a419f6d4e09",
+  "client/src/dev/mage-summon-six/catalog.ts": "99a24fedf7eddb27b9ab80c0a3b4605f0c61770053fc458b516cc4a34540b309",
+  "client/src/dev/mage-summon-six/entry.ts": "2a2bfea8f9902be1183040d0c23a636b4e17f0cd62a97a71da8fb64ceb8c1ab1",
+  "client/src/dev/mage-summon-six/materials.ts": "9a4324113923b63d18dc54f2d7dc8dc99d4f204e0241594eaafc6bc682760501",
+  "client/src/dev/mage-summon-six/preview.ts": "d2074018e1b1c1dfaf53cb81cf9b9daebe51e616eae02a90d880237ef37eb51f",
+  "client/src/dev/mage-summon-six/renderer.ts": "7e6305cc14e688c0a04db958ff98e025a9825f68f8bfb1a0f986947d2478d80d",
+  "client/src/dev/mage-summon-six/style.css": "0725f6bf1c383d13ac9fdcb146b7774c4d81c34689864ab2b7cd0562c44f6268",
+  "client/src/dev/mage-summon-six/surface.ts": "0d241555bb3a64979e320fd1cf3e206167428ece0ddc45a41b1682eafdcd752c",
+  "client/src/dev/mage-summon-six/tsconfig.json": "cfc099a4823e930e89c7d5963477611e68e81d431d5b26791af5935b52483a80",
+  "client/src/dev/mage-summon-six/vite.config.mjs": "6155723ab7fc79e244c21f2602d9dcccb4701b6633c095e0404ab8ffde1ce0a6",
+  "client/src/dev/mage-summon-six/volume.ts": "3b7d79b253fab2651e5e0876565c9b5d9d730baf47e1801f605e8577a7c2e5e5",
+  "client/mage-summon-six.html": "c5ce57daf4ce459e4625bdd5a399fa58d9acd4118d5b81905b22d61c8bfa17f8"
+}
