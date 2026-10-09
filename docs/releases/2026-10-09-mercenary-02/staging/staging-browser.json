@@ -1,0 +1,43 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "sha": "fcbb553550a27845f68eae145b400e40a15a654b",
+  "summon": {
+    "file": "assets/modal-CYs-zYjG.js",
+    "name": "aY"
+  },
+  "cardEl": {
+    "file": "assets/modal-CYs-zYjG.js",
+    "name": "z"
+  },
+  "results": [
+    {
+      "id": "MERCENARY",
+      "side": "me",
+      "wrap": {
+        "cardId": "MERCENARY",
+        "variant": "2",
+        "time": "8"
+      }
+    },
+    {
+      "id": "MERC_LEADER",
+      "side": "opp",
+      "wrap": {
+        "cardId": "MERC_LEADER",
+        "variant": "2",
+        "time": "16"
+      }
+    },
+    {
+      "id": "MERC_MASTER",
+      "side": "me",
+      "wrap": {
+        "cardId": "MERC_MASTER",
+        "variant": "2",
+        "time": "8"
+      }
+    }
+  ],
+  "errors": [],
+  "boundary": "Deployed production playMonster and cardEl on a real BOT board. Account/API and temporary field cards are fixtures; engine summon conditions are not bypassed in an authenticated match. Normal hand/generated routes were tested locally. No authenticated online match or account mutation."
+}
