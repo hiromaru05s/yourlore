@@ -1,3 +1,5 @@
+import {isMercenary} from './mercenarySummon/selection';
+import {playMercenarySummon} from './mercenarySummon/runtime';
 import {isGambler} from './gamblerSummon/selection';
 import {isHexer} from './hexerSummon/selection';
 import {isGolem} from './golem/selection';
@@ -203,6 +205,11 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(heavy&&isMercenary(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playMercenarySummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
   if(heavy&&(isHexer(face.dataset.cardId)||isGambler(face.dataset.cardId))){
     face.style.visibility='hidden';reveal.remove();
     await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}),10000);
@@ -280,7 +287,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
 async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise<void>{
  const id=card.id;
  // Selected hexers begin in their renderer, without a raw DOM reveal or transfer.
- if(isHexer(id)||isGambler(id)){node.style.visibility='hidden';return;}
+ if(isMercenary(id)||isHexer(id)||isGambler(id)){node.style.visibility='hidden';return;}
  if(isGolem(id)){node.style.visibility='hidden';return;}
  // Fetch the optional renderer while the unchanged hand reveal is moving.
  const module=isMimic(id)&&!fxSkip?import('./mimic/runtime').catch(()=>null):null;
@@ -463,7 +470,7 @@ export function pileFlash(id: string): void {
 
 export function summonIn(uid: string): void {
   const n = byUid(uid);
-  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}),(isVerdant(n.dataset.cardId)||isHexer(n.dataset.cardId)||isGolem(n.dataset.cardId))?10000:5000);
+  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}),(isMercenary(n.dataset.cardId)||isVerdant(n.dataset.cardId)||isHexer(n.dataset.cardId)||isGolem(n.dataset.cardId))?10000:5000);
 }
 
 export function lunge(uid: string, dir: "up" | "down"): void {

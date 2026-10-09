@@ -1,0 +1,208 @@
+{
+  "results": [
+    {
+      "firstFrameAlreadyAnimated": {
+        "altered": 23310,
+        "visible": 24388
+      }
+    },
+    {
+      "id": "MERCENARY",
+      "side": 0,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 10695,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERCENARY",
+      "side": 0,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 30753,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERCENARY",
+      "side": 0,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 30753,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERCENARY",
+      "side": 1,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 9343,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERCENARY",
+      "side": 1,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 46351,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERCENARY",
+      "side": 1,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 46351,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERC_LEADER",
+      "side": 0,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 10695,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERC_LEADER",
+      "side": 0,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 30753,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERC_LEADER",
+      "side": 0,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 30753,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERC_LEADER",
+      "side": 1,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 9343,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERC_LEADER",
+      "side": 1,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 46351,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERC_LEADER",
+      "side": 1,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 46351,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERC_MASTER",
+      "side": 0,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 10695,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERC_MASTER",
+      "side": 0,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 30753,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERC_MASTER",
+      "side": 0,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 30753,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERC_MASTER",
+      "side": 1,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 9343,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERC_MASTER",
+      "side": 1,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 46351,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MERC_MASTER",
+      "side": 1,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 46351,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "reason": "skip",
+      "restored": true
+    },
+    {
+      "reason": "cancel",
+      "restored": true
+    },
+    {
+      "reason": "resize",
+      "restored": true
+    },
+    {
+      "mobile": true,
+      "reduced": true
+    }
+  ],
+  "errors": [],
+  "warnings": []
+}
