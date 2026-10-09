@@ -1,0 +1,34 @@
+[
+  {
+    "kind": "simultaneous",
+    "results": [
+      true,
+      true,
+      true
+    ],
+    "hits": 3,
+    "clean": true,
+    "restored": true
+  },
+  {
+    "kind": "replaced-before-capture",
+    "results": [
+      false,
+      true
+    ],
+    "hits": 1,
+    "clean": true,
+    "restored": true
+  },
+  {
+    "kind": "detached",
+    "result": false,
+    "clean": true
+  },
+  {
+    "kind": "resize",
+    "result": false,
+    "clean": true,
+    "restored": true
+  }
+]
