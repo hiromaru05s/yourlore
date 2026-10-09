@@ -1,12 +1,12 @@
-export const DURATION=3400;
+export const DURATION=2800;
 export const cards=[['ASSASSIN1','初級アサシン'],['ASSASSIN2','中級アサシン'],['ASSASSIN3','上級アサシン'],['ASSASSIN4','ナイトロード'],['ASSASSIN_SQUAD','アサシンスカッド']] as const;
 export const designs=[
- {name:'夜装の解放',en:'MANTLE / UNVEIL',note:'肩口から黒い外套がひらく。重い裾が遅れて返り、緋色の裏地を見せて収まる。'},
- {name:'鋼鱗の抜刀',en:'STEEL / UNSHEATHE',note:'表面を覆う鋼の鱗が順に起きる。硬い反射を走らせ、側面へ引き抜かれる。'},
- {name:'黒漆の脱皮',en:'LACQUER / PEEL',note:'密着した漆膜の端が巻き上がる。曲面の艶を残しながら絵柄が現れる。'},
- {name:'夜霧の実体化',en:'MIST / MATERIALIZE',note:'輪郭にまとった深い霧がねじれながら薄れ、静かにカードの実体へ戻る。'},
- {name:'緋紐の解き目',en:'CORD / RELEASE',note:'織り目のある結びがゆるむ。張力が端へ伝わり、紐がしなってほどける。'},
- {name:'夜鴉の羽衣',en:'FEATHER / UNFURL',note:'重なった羽弁が根元から順に開く。軸と羽筋の光を残して側面へ畳まれる。'}
+ {name:'影織りの帰還',en:'SILK / REFORM',note:'絵柄と枠が一続きの黒い帯へ細まり、しなった面がほどけて実体に戻る。'},
+ {name:'暗襲の一閃',en:'EDGE / FLASH',note:'カードそのものが一筋の刃影へ圧縮。一閃の鋭いピークから、すばやく面が開く。'},
+ {name:'濡影の浮上',en:'INK / SURFACE',note:'絵柄が粘る黒い影へ潰れ、濡れた反射を保ったまま輪郭からカードへ戻る。'},
+ {name:'煙影の凝集',en:'SMOKE / GATHER',note:'面がほぐれて曲がる煙影になる。残った筋から密度が戻り、絵柄がつながる。'},
+ {name:'銀縁の潜行',en:'VEIL / REVEAL',note:'絵柄が薄れ、元の枠と装甲の細部だけが残る。表面を走る境界から姿が戻る。'},
+ {name:'三影の帰陣',en:'STREAMS / CONVERGE',note:'同じ面が三筋の影流へほどけ、時間をかけて一枚へ戻る。スカッドは五筋。'}
 ];
 export const clamp=(n:number)=>Math.max(0,Math.min(1,n));
 export const ease=(a:number,b:number,n:number)=>{const t=clamp((n-a)/(b-a));return t*t*(3-2*t);};

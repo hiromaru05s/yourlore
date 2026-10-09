@@ -1,3 +1,5 @@
+> User rejected this revision on 2026-10-09. Rebuilt source-surface studies are in `../2026-10-09-assassin-six-r3/README.md`. This file preserves the rejected revision record.
+
 # Assassin summon — revision 02
 
 Local comparison: `http://127.0.0.1:5416/assassin-six.html`
