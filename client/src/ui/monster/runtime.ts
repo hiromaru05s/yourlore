@@ -1,3 +1,5 @@
+import {isGolem} from '../golem/selection';
+import {playGolem,cancelGolems,cancelGolem} from '../golem/runtime';
 import {combatRect} from '../combatAnchor';
 import {playTribeSummon,cancelTribeSummons,cancelTribeSummon} from '../tribePresentation/runtime';
 import {selectedTribeSummon} from '../tribePresentation/selection';
@@ -52,8 +54,8 @@ export function syncMonsterStates(root:HTMLElement){
  }
  if([...states.values()].some(s=>s.root===root))observeField(root);release();if(states.size)schedule();
 }
-export function clearMonsterStates(root:HTMLElement){cancelTribeSummons(root);cancelRiftDestruction(root);cancelManaDestruction(root);cancelSummons(root);for(const j of [...jobs.values()])if(root.contains(j.source))j.finish(false);for(const [n,s] of states)if(s.root===root)removeState(n);release();}
-export function setMonsterSkip(value:boolean){skipped=value;if(value){cancelTribeSummons();cancelSummons();cancelRiftDestruction();cancelManaDestruction();}if(value)for(const j of [...jobs.values()])j.finish(false);}
+export function clearMonsterStates(root:HTMLElement){cancelGolems(root);cancelTribeSummons(root);cancelRiftDestruction(root);cancelManaDestruction(root);cancelSummons(root);for(const j of [...jobs.values()])if(root.contains(j.source))j.finish(false);for(const [n,s] of states)if(s.root===root)removeState(n);release();}
+export function setMonsterSkip(value:boolean){skipped=value;if(value){cancelGolems();cancelTribeSummons();cancelSummons();cancelRiftDestruction();cancelManaDestruction();}if(value)for(const j of [...jobs.values()])j.finish(false);}
 function release(){
  for(const [root,layer] of fieldLayers)if(![...states.values()].some(s=>s.root===root)){layer.dispose();fieldLayers.delete(root);observers.get(root)?.disconnect();observers.delete(root);}
  if(!jobs.size){layers?.dispose();layers=undefined;}
@@ -112,9 +114,10 @@ function tick(now:number){
  release();if(jobs.size||animated)schedule();
 }
 export function playMonster(source:HTMLElement,kind:Kind,options:Options={}):Promise<boolean>{
- cancelTribeSummon(source);cancelRiftDestruction(source);cancelSummon(source);jobs.get(source)?.finish(false);
+ cancelGolem(source);cancelTribeSummon(source);cancelRiftDestruction(source);cancelSummon(source);jobs.get(source)?.finish(false);
  if(skipped||!source.isConnected||options.signal?.aborted)return Promise.resolve(false);
  if(kind==='destroy'&&options.variant==='B'&&options.destination){removeState(source);release();return playRiftDestruction(source,options.destination,options.signal);}
+ if(kind==='summon'&&isGolem(source.dataset.cardId))return playGolem(source,options);
  if(kind==='summon')return selectedTribeSummon(source.dataset.cardId)?playTribeSummon(source,options):playSlateSummon(source,options);
  if(kind==='destroy'&&options.variant==='A'&&options.mana!==false&&options.destination){removeState(source);release();return playManaDestruction(source,options.destination,options.signal);}
  if(!combatRect(options.anchor??source)||(options.target&&!combatRect(options.target)))return Promise.resolve(false);
