@@ -1,3 +1,4 @@
+import {isChosenHero} from './chosenSummon/selection';
 import { cardTypeLabel, displayPassives, referencedPassives } from '../shared/cardPresentation';
 import { cardStateEl } from './cardState';
 import {cancelChosenVictory} from './chosenVictory/runtime';
@@ -211,7 +212,7 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
     const fade=reveal.animate([{opacity:1},{opacity:0}],{duration:reduced?80:220,fill:'both'});
     await wait(reduced?80:300);transfer.cancel();fade.cancel();reveal.remove();
     face.style.transform=initial.toString();
-    await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}),isVerdant(face.dataset.cardId)?10000:5000);
+    await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}),(isVerdant(face.dataset.cardId)||isChosenHero(face.dataset.cardId))?10000:5000);
     face.style.transform=fieldPlacement(target,w,h).toString();return face;
   }
   const duration=reduced?120:620;
