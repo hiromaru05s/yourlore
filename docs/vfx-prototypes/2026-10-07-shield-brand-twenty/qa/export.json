@@ -1,0 +1,8 @@
+{
+  "fps": 30,
+  "clock": "deterministic authored time",
+  "renderer": "same as interactive preview",
+  "groups": 4,
+  "variants": 20,
+  "notPerformanceEvidence": true
+}

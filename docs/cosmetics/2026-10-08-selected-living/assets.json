@@ -1,0 +1,12 @@
+[
+  {
+    "path": "/cosmetics/living-v1/pressed-fern/art.png",
+    "bytes": 3734316,
+    "sha256": "20c7cdbfd716e49bcff76741afd7c9160b19f57703bdac562e12d88e688d888c"
+  },
+  {
+    "path": "/cosmetics/living-v1/azure-plume/art.png",
+    "bytes": 3198358,
+    "sha256": "83f48e73204ffc8415d04c0ea790ff8fc7c917473c93712f109fd6d51258b59e"
+  }
+]

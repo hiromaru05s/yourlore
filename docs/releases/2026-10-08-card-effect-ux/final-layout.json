@@ -1,0 +1,110 @@
+[
+  {
+    "size": {
+      "width": 1280,
+      "height": 800
+    },
+    "lang": "ja",
+    "closeVisible": true,
+    "focus": "zoom-passive-guts",
+    "overflow": false,
+    "targetVisible": true,
+    "returned": true
+  },
+  {
+    "size": {
+      "width": 1280,
+      "height": 800
+    },
+    "lang": "ko",
+    "closeVisible": true,
+    "focus": "zoom-passive-guts",
+    "overflow": false,
+    "targetVisible": true,
+    "returned": true
+  },
+  {
+    "size": {
+      "width": 1280,
+      "height": 800
+    },
+    "lang": "en",
+    "closeVisible": true,
+    "focus": "zoom-passive-guts",
+    "overflow": false,
+    "targetVisible": true,
+    "returned": true
+  },
+  {
+    "size": {
+      "width": 390,
+      "height": 844
+    },
+    "lang": "ja",
+    "closeVisible": true,
+    "focus": "zoom-passive-guts",
+    "overflow": false,
+    "targetVisible": true,
+    "returned": true
+  },
+  {
+    "size": {
+      "width": 390,
+      "height": 844
+    },
+    "lang": "ko",
+    "closeVisible": true,
+    "focus": "zoom-passive-guts",
+    "overflow": false,
+    "targetVisible": true,
+    "returned": true
+  },
+  {
+    "size": {
+      "width": 390,
+      "height": 844
+    },
+    "lang": "en",
+    "closeVisible": true,
+    "focus": "zoom-passive-guts",
+    "overflow": false,
+    "targetVisible": true,
+    "returned": true
+  },
+  {
+    "size": {
+      "width": 320,
+      "height": 640
+    },
+    "lang": "ja",
+    "closeVisible": true,
+    "focus": "zoom-passive-guts",
+    "overflow": false,
+    "targetVisible": true,
+    "returned": true
+  },
+  {
+    "size": {
+      "width": 320,
+      "height": 640
+    },
+    "lang": "ko",
+    "closeVisible": true,
+    "focus": "zoom-passive-guts",
+    "overflow": false,
+    "targetVisible": true,
+    "returned": true
+  },
+  {
+    "size": {
+      "width": 320,
+      "height": 640
+    },
+    "lang": "en",
+    "closeVisible": true,
+    "focus": "zoom-passive-guts",
+    "overflow": false,
+    "targetVisible": true,
+    "returned": true
+  }
+]

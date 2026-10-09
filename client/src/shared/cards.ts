@@ -12,6 +12,7 @@ import type { CardDef, CardType } from "./types";
 import { applyEnglish } from "./cards.en";
 import { applyFlavorCardNames } from "./cardNames.flavor";
 import { standardizeCardTexts } from "./cardText";
+import { applyKeywordText } from "./cardKeywordText";
 
 // ---------------- core set (cost 1–4) ----------------
 const CORE: Record<string, CardDef> = {
@@ -35,7 +36,7 @@ const CORE: Record<string, CardDef> = {
   S3: { id: "S3", t: "spell", cost: 2, name: "샤픈", text: "자신 몬스터 1체의 공격력 +3(이번 턴)", act: "buffTurn", val: 3 },
   S4: { id: "S4", t: "spell", cost: 2, name: "더블 드로우", text: "카드 3장 드로우 (시전 1)", act: "draw", val: 3, play: 1 },
   S5: { id: "S5", t: "spell", cost: 2, name: "마켓 크래시", text: "상대 제시 강제 갱신 + 1장 드로우 (시전 1)", act: "crash", val2: 1, play: 1 },
-  S8: { id: "S8", t: "spell", cost: 2, name: "리콜", text: "버린 패에서 1장을 패로", act: "recall" },
+  S8: { id: "S8", t: "spell", cost: 2, name: "리콜", text: "묘지에서 1장을 패로", act: "recall" },
   S11: { id: "S11", t: "spell", cost: 2, name: "파이어볼", text: "상대 체력에 4 데미지", act: "dmg", val: 4 },
   S6: { id: "S6", t: "spell", cost: 3, name: "시크", text: "덱에서 원하는 1장을 패로", act: "seek" },
   S7: { id: "S7", t: "spell", cost: 3, name: "오버로드", text: "자신 몬스터 전체의 공격력 +3(이번 턴)", act: "buffAllTurn", val: 3 },
@@ -256,7 +257,7 @@ const CORE_JA: Record<string, { name: string; text?: string }> = {
   S3: { name: "シャープン", text: "自分のモンスター1体の攻撃力+3(このターン)" },
   S4: { name: "ダブル・ドロー", text: "カード3枚ドロー (発動1)" },
   S5: { name: "マーケット・クラッシュ", text: "相手の提示を強制更新 + 1枚ドロー (発動1)" },
-  S8: { name: "リコール", text: "捨て札から1枚を手札へ" },
+  S8: { name: "リコール", text: "墓地から1枚を手札へ" },
   S11: { name: "ファイアボール", text: "相手の体力に4ダメージ" },
   S6: { name: "シーク", text: "デッキから好きな1枚を手札へ" },
   S7: { name: "オーバーロード", text: "自分のモンスター全体の攻撃力+3(このターン)" },
@@ -300,8 +301,8 @@ const CORE_JA: Record<string, { name: string; text?: string }> = {
   NHEX: { name: "小さな呪術師", text: "召喚時: 相手の体力に6ダメージ" },
   NSPR: { name: "水晶の精霊", text: "場にいる間 最大マナ+1, 召喚時2枚ドロー" },
   AHEUK: { name: "アチューン・黒", text: "相手の最大マナ-1。自分の場のモンスターが1体以下なら追加で-1 (発動4)" },
-  AJIN: { name: "アチューン・真", text: "最大マナ+1、捨て札にアチューンを1枚追加" },
-  AMA: { name: "アチューン・魔", text: "手札の宝箱1枚を捨て札へ → 最大マナ+1、1枚ドロー" },
+  AJIN: { name: "アチューン・真", text: "最大マナ+1、墓地にアチューンを1枚追加" },
+  AMA: { name: "アチューン・魔", text: "手札の宝箱1枚を墓地へ → 最大マナ+1、1枚ドロー" },
   NHEAL: { name: "生命の加護", text: "永続: モンスターを召喚するたびに自分の体力1回復" },
   NWIPE: { name: "浄化の爆発", text: "自分の場にモンスターがいない時のみ。相手の罠・魔法を全て破壊し自分に6ダメージ" },
   STARTER_TRASH: { name: "カル", text: "このカードをゲームから除外(デッキ圧縮)" },
@@ -429,8 +430,8 @@ const PATCH2: Record<string, Partial<CardDef>> = {
   S13: { val: 9, text: "상대 체력에 9 데미지", textJa: "相手の体力に9ダメージ" },
   E3: { play: 4, text: "자신의 4턴 동안 턴 시작시 1장 추가 드로우 · 종료 다음 턴 최대 마나 +1 (시전 4)", textJa: "自分の4ターンの間ターン開始時に1枚追加ドロー · 終了の翌ターン最大マナ+1 (発動4)" },
   NHEAL: { play: 2, text: "영구: 몬스터를 소환할 때마다 자신 체력 1 회복 (시전 2)", textJa: "永続: モンスターを召喚するたびに自分の体力1回復 (発動2)" },
-  AMA: { text: "패의 보물상자 1장을 묘지로 → 최대 마나 +1", textJa: "手札の宝箱1枚を捨て札へ → 最大マナ+1" },
-  AJIN: { text: "최대 마나 +1, 50% 확률로 묘지에 어튠 1장 추가", textJa: "最大マナ+1、50%で捨て札にアチューンを1枚追加" },
+  AMA: { text: "패의 보물상자 1장을 묘지로 → 최대 마나 +1", textJa: "手札の宝箱1枚を墓地へ → 最大マナ+1" },
+  AJIN: { text: "최대 마나 +1, 50% 확률로 묘지에 어튠 1장 추가", textJa: "最大マナ+1、50%で墓地にアチューンを1枚追加" },
   AHEUK: { play: 5, text: "상대 최대 마나 -1. 자신 필드 몬스터가 없으면 추가로 -1 (시전 5)", textJa: "相手の最大マナ-1。自分の場のモンスターがいなければ追加で-1 (発動5)" },
   NWIPE: { val: 5, text: "자신 필드에 몬스터가 없을 때만 발동 가능 · 상대 함정·마법 전부 파괴 후 자신 5 데미지", textJa: "自分の場にモンスターがいない時のみ発動可能 · 相手の罠・魔法を全て破壊し自分に5ダメージ" },
   ND2: { val: 2, val2: 2, play: 1, text: "카드 2장 드로우 + 자신 체력 2 회복 (시전 1)", textJa: "カード2枚ドロー + 自分の体力2回復 (発動1)" },
@@ -962,7 +963,7 @@ const NEW_CARDS10: CardDef[] = [
   { id: "BLOOD_RITE", t: "spell", cost: 2, ench: "spellHeal", val: 99, exileOnDestroy: true, noShop: true, name: "혈귀술", nameJa: "血鬼術",
     text: "영구: 양 플레이어는 마법으로 인한 데미지를 받지 않고 그 수치만큼 회복한다 · 파괴되면 게임에서 제외", textJa: "永続: 両プレイヤーは魔法によるダメージを受けず、その数値だけ回復する · 破壊されたらゲームから除外" },
   { id: "WEAKEN_ALL", t: "spell", cost: 2, ench: "weakenAll", val: 99, exileOnDestroy: true, noShop: true, name: "약화술식", nameJa: "弱化術式",
-    text: "영구: 양 필드의 모든 몬스터 공격력 -2 · 파괴되면 게임에서 제외", textJa: "永続: 両方の場の全モンスター攻撃力-2 · 破壊されたらゲームから除外" },
+    text: "영구: 양 필드의 모든 몬스터 공격력 -2 · 양 필드 합계 최대 2장 존재 가능 · 파괴되면 게임에서 제외", textJa: "永続: 両方の場の全モンスター攻撃力-2 · 存在できるのは両方の場を合わせて最大2枚 · 破壊されたらゲームから除外" },
   { id: "GUILD_HALL", t: "mon", cost: 2, atk: 0, def: 2, aura: "assassinGuild", noShop: true, name: "암살자 길드", nameJa: "アサシンギルド",
     text: "상시: '암살자'나 이 몬스터가 상대 데미지 시 카운트 +1 · 3카운트마다 14 데미지 · 파괴 시 카운트 소멸",
     textJa: "常時: 「アサシン」かこのモンスターが相手にダメージ時カウント+1 · 3カウントごとに相手に14ダメージ · 破壊でカウント消滅" },
@@ -1117,7 +1118,7 @@ const PATCH13: Record<string, Partial<CardDef>> = {
   EGG_HUNTER: { val: 4, text: "이 몬스터가 '알'을 공격하면 카운터를 4 소모시킨다", textJa: "このモンスターが「卵」を攻撃するとカウンターを4消費させる" },
   // ---- 영구마법 정리: 공허 표기 + 선견지명/혈귀술 너프 ----
   BLOOD_RITE: { text: "영구: 양 플레이어는 마법으로 인한 데미지를 받지 않고 그 수치만큼 회복한다 · 발동 14턴 후 이 카드는 파괴된다 · 공허", textJa: "永続: 両プレイヤーは魔法によるダメージを受けず、その数値だけ回復する · 発動14ターン後にこのカードは破壊される · 虚無" },
-  WEAKEN_ALL: { text: "영구: 양 필드의 모든 몬스터 공격력 -2 · 공허", textJa: "永続: 両方の場の全モンスター攻撃力-2 · 虚無" },
+  WEAKEN_ALL: { text: "영구: 양 필드의 모든 몬스터 공격력 -2 · 양 필드 합계 최대 2장 존재 가능 · 공허", textJa: "永続: 両方の場の全モンスター攻撃力-2 · 存在できるのは両方の場を合わせて最大2枚 · 虚無" },
   FATE_WHEEL: { text: "영구: 시전 시 자신의 최대 마나 -1 · 주사위·확률 카드의 결과를 보고 나서 다시 굴릴 수 있다 (매턴 1회) · 공허", textJa: "永続: 発動時に自分の最大マナ-1 · ダイス・確率カードの結果を見てから振り直せる (毎ターン1回) · 虚無" },
   FORESIGHT: { cost: 3, text: "영구: 자신의 최대 마나가 9 이상이 되면 최대 마나 +2 후 이 카드를 파괴한다 · 자신 필드에 '선견지명'이 없을 때만 발동 가능 · 공허", textJa: "永続: 自分の最大マナが9以上になると最大マナ+2してこのカードを破壊 · 自分の場に「先見の明」がない時のみ発動可能 · 虚無" },
   // ---- 공허 포격/대붕괴 너프: 시전비 인하 + 제외당 데미지 하향 ----
@@ -1364,7 +1365,7 @@ const DICE_TEXTS: Record<string, { ko: string; ja: string }> = {
   GT5_2: { ko: "공격 몬스터 파괴 + 주사위 5 이상이면 그 몬스터의 체력만큼 자신 체력 회복", ja: "攻撃モンスターを破壊 + ダイス5以上でそのモンスターの体力分、自分の体力を回復" },
   GT5_3: { ko: "공격 몬스터 파괴 + 주사위 2개 합계 7 이상이면 자신 필드에 소생(소유권 이동)", ja: "攻撃モンスターを破壊 + ダイス2個の合計7以上で自分の場に蘇生(所有権移動)" },
   T4: { ko: "공격 몬스터 파괴 + 주사위 5 이상이면 그 공격력만큼 상대에게 데미지", ja: "攻撃モンスターを破壊 + ダイス5以上でその攻撃力分を相手にダメージ" },
-  AJIN: { ko: "최대 마나 +1, 주사위 4 이상이면 묘지에 어튠 1장 추가", ja: "最大マナ+1、ダイス4以上で捨て札にアチューンを1枚追加" },
+  AJIN: { ko: "최대 마나 +1, 주사위 4 이상이면 묘지에 어튠 1장 추가", ja: "最大マナ+1、ダイス4以上で墓地にアチューンを1枚追加" },
   ND3: { ko: "카드 3장 드로우, 주사위 5 이상이면 2장 추가 (시전 1)", ja: "カード3枚ドロー、ダイス5以上で2枚追加 (発動1)" },
   ND5: { ko: "카드 5장 드로우, 주사위 6이면 최대 마나 +1 (시전 2)", ja: "カード5枚ドロー、ダイス6で最大マナ+1 (発動2)" },
   GS5_0: { ko: "상대 체력에 10 데미지, 주사위 2개 합계 11 이상이면 상대 최대 마나 -1", ja: "相手の体力に10ダメージ、ダイス2個の合計11以上で相手の最大マナ-1" },
@@ -1800,7 +1801,7 @@ const PATCH34: Record<string, Partial<CardDef>> = {
   HERMIT: { text: "자신 필드에 몬스터가 없을 때만 · 자신 체력 완전 회복 + 체력 +15 · 게임당 5회 (시전 7)", textJa: "自分の場にモンスターがいない時のみ · 体力全回復 + 体力+15 · ゲーム中5回まで (発動7)" },
   GOLIATH_HUNT: { name: "자이언트 킬링", nameJa: "ジャイアントキリング", text: "체력 10 이상의 몬스터 1체를 파괴(양측)", textJa: "体力10以上のモンスター1体を破壊(両方の場)" },
   GLASS_BAN: { name: "전략 변경", nameJa: "戦略変更", text: "영구: 공격력과 체력의 차가 4 이상인 몬스터는 공격할 수 없다 (시전 2)", textJa: "永続: 攻撃力と体力の差が4以上のモンスターは攻撃できない (発動2)" },
-  SHATTER: { name: "지진", nameJa: "地震", text: "자신에게 5 데미지 · 양 필드 전 몬스터의 체력이 1이 된다(지속, 누적 데미지 초기화, 알 제외) (시전 2)", textJa: "自分に5ダメージ · 両方の場の全モンスターの体力が1になる(持続、蓄積ダメージはリセット、卵を除く) (発動2)" },
+  SHATTER: { name: "붕괴 진동", nameJa: "崩壊振動", text: "자신에게 5 데미지 · 양 필드 전 몬스터의 체력이 1이 된다(지속, 누적 데미지 초기화, 알 제외) (시전 2)", textJa: "自分に5ダメージ · 両方の場の全モンスターの体力が1になる(持続、蓄積ダメージはリセット、卵を除く) (発動2)" },
   DECAY_CRAFT: { name: "암기 제조", nameJa: "暗器製造", text: "자신 몬스터 2체에 '부패' 부여 · 상대 필드의 모든 몬스터에 카운터 1개 부여", textJa: "自分のモンスター2体に「腐敗」を付与 · 相手の場の全モンスターにカウンターを1個付与" },
   PURGE_TOUCH: { text: "묘지에서 카드 1장을 골라 게임에서 제외 + 카드 1장 드로우 · 자신의 낙인 카운터를 모두 제거 (시전 1)", textJa: "墓地からカード1枚を選びゲームから除外 + カード1枚ドロー · 自分の烙印カウンターを全て取り除く (発動1)" },
   S3: { act: "buffPerm", val: 3, val2: 0, text: "종족이 아닌 자신 몬스터 1체의 공격력 +3(지속)", textJa: "種族ではない自分のモンスター1体の攻撃力+3(持続)" },
@@ -1904,7 +1905,7 @@ const PATCH36: Record<string, Partial<CardDef>> = {
   NHEX: { atk: 1, def: 3, onSummon: undefined, val: undefined, turnFx: "hexCurse",
     text: "매 턴 시작 시 덱 구성에 마법이 10장 이상이면 주사위를 굴려 5 이상일 때 상대 묘지에 '저주' 3장", textJa: "毎ターン開始時 デッキ構成に魔法が10枚以上ならダイスを振り5以上で相手の墓地に「呪い」3枚" },
   NT_SEAL3: { atk: 1, def: 4, val: 4, text: "상시: 양 플레이어는 시전 코스트 4 이하 마법을 사용할 수 없다", textJa: "常時: 両プレイヤーは発動コスト4以下の魔法を使用できない" },
-  NWL3: { name: "가디언 골램", nameJa: "ガーディアンゴーレム", atk: 1, def: 9, aura: "gutsOnHit", text: "상시: 이 몬스터는 공격을 받을 때마다 카운터 1개를 얻는다", textJa: "常時: このモンスターは攻撃を受けるたびカウンター1個を得る" },
+  NWL3: { name: "가디언 골램", nameJa: "ガーディアンゴーレム", atk: 1, def: 9, aura: "gutsOnHit", text: "상시: 이 몬스터가 공격으로 1 이상의 데미지를 받고 기합을 소모하지 않고 살아남으면 기합 카운터 1개를 얻는다", textJa: "常時: このモンスターが攻撃で1以上のダメージを受け、気合を消費せず生き残ると気合カウンター1個を得る" },
   TGE3: { name: "시초의 수호자", nameJa: "始原の守護者", atk: 1, def: 11, onSummon: "selfBurn", val: 3, text: "[시초] 소환시: 자신에게 3 데미지", textJa: "[始原] 召喚時: 自分に3ダメージ" },
   RUST_SLUG: { atk: 1, def: 4, onSummon: "decayAll", text: "소환시: 상대 몬스터 전체에 카운터 1개 · 부패로 상대 몬스터를 파괴하면 최대 마나 +1, 자신 체력 +5",
     textJa: "召喚時: 相手モンスター全体にカウンター1個 · 腐敗で相手モンスターを破壊すると最大マナ+1、自分の体力+5" },
@@ -1994,7 +1995,7 @@ const NEW_CARDS36: CardDef[] = [
   { id: "GUILD_HQ", t: "mon", cost: 6, atk: 0, def: 12, aura: "assassinHQ", turnFx: "nightMarket", name: "암살자 길드 본부", nameJa: "アサシンギルド本部",
     text: "【상시】'암살자'가 상대를 때릴 때마다 상대에게 낙인 카운터 1개 · 【매턴】'암살자' 카드를 파는 나이트 마켓 개장",
     textJa: "【常時】「アサシン」が相手を叩くたび相手に烙印カウンター1個 · 【毎ターン】「アサシン」カードを売るナイトマーケット開店" },
-  { id: "WORLD_TREE", t: "mon", cost: 10, atk: 0, def: 25, passive: ["aura", "guts"], turnFx: "worldTree", name: "세계수", nameJa: "世界樹",
+  { id: "WORLD_TREE", t: "mon", cost: 10, atk: 1, def: 25, passive: ["aura", "guts"], turnFx: "worldTree", name: "세계수", nameJa: "世界樹",
     text: "【상시】자신 체력이 늘면 카운터 1개 · 【매턴】카운터 1개로 자신 몬스터 전체 전회복, 자신 체력을 80%로",
     textJa: "【常時】自分の体力が増えるとカウンター1個 · 【毎ターン】カウンター1個で自分のモンスター全体を全回復、自分の体力を80%に" },
   // ---- 토큰 (구매 불가) ----
@@ -2177,7 +2178,7 @@ const NEW_CARDS41B: CardDef[] = [
   { id: "SPACE_RITE", t: "spell", cost: 2, ench: "spaceLock", val: 3, name: "공간 술식", nameJa: "空間術式",
     text: "상대 필드의 카드가 6장 이상일 때만 · 상대는 3턴 동안 몬스터 소환과 마법 사용이 불가", textJa: "相手の場のカードが6枚以上の時のみ · 相手は3ターンの間モンスターを召喚できず魔法も使用できない" },
   { id: "LUCKY_ECHO", t: "spell", cost: 1, ench: "luckyEcho", val: 99, name: "행운의 잔향", nameJa: "幸運の残響",
-    text: "영구: 자신이 굴린 주사위가 6일 때마다 상대에게 6 데미지", textJa: "永続: 自分が振ったダイスの出目が6のたび相手に6ダメージ" },
+    text: "영구: 자신이 굴린 주사위가 6일 때마다 상대에게 6 데미지. 이 효과 처리 중에는 다시 발동하지 않는다", textJa: "永続: 自分が振ったダイスの出目が6のたび相手に6ダメージ。この効果の処理中は再発動しない" },
   { id: "SORTER_LAW", t: "trap", cost: 2, play: 1, react: "sorterLaw", name: "선별의 규율", nameJa: "選別の掟",
     text: "덱 구성이 8장 이하일 때만 · 공격 무효 · 상대 필드의 카드 2장 파괴", textJa: "デッキ構成が8枚以下の時のみ · 攻撃無効 · 相手の場のカード2枚を破壊" },
   { id: "BUYOUT", t: "spell", cost: 1, act: "buyout", name: "매점", nameJa: "買い占め",
@@ -2343,12 +2344,8 @@ applyDewShieldRework(DB);
 localizeDewShieldCards(DB);
 DB.VAMP4.textEn = "【Passive】Blood Magic: summon Supreme Vampire once · gain HP equal to 50% of enemy damage dealt.";
 for (const lang of ['ko', 'ja', 'en'] as const) CHEST_ODDS[lang].rows = CHEST_ODDS[lang].rows.map(s => s.replace('+7', '+5'));
-standardizeCardTexts(
-  [DB, STARTERS as unknown as Record<string, CardDef>],
-  // keyword names for rule R3 (they move to the chip row) — injected so cardText.ts
-  // never has to import back from this module (see the note there).
-  (c, lang) => cardPassives(c).map((k) => PASSIVES[k]?.[lang]?.name).filter((n): n is string => !!n),
-);
+applyKeywordText(PASSIVES);
+standardizeCardTexts([DB, STARTERS as unknown as Record<string, CardDef>]);
 
 export const ALL_IDS = Object.keys(DB);
 // markets never offer cost-0 tokens or noShop(스타팅 전용) cards
@@ -2455,7 +2452,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v54"; // Dew / Shield expansion and World Tree rework
+export const BALANCE_VERSION = "v56"; // Zero-ATK attack rule, Poison Master/World Tree ATK 1, Enfeebling Ritual cap 2
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

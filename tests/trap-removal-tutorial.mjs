@@ -39,7 +39,7 @@ try {
       export { setLang, t } from './client/src/i18n';
       export { closeOverlay } from './client/src/ui/modal';
       export { REWARDS } from './server/src/rewards';
-    ` }, bundle: true, format: 'esm', platform: 'node', outfile: path.join(temp, 'tutorial.mjs'),
+    ` }, bundle: true, format: 'esm', platform: 'node', loader: {'.css':'empty'}, outfile: path.join(temp, 'tutorial.mjs'),
     plugins:[{name:'dom-only-monster-renderer',setup(b){
       // This suite verifies tutorial rules/rewards/DOM. Canvas parity has real-browser coverage.
       b.onResolve({filter:/monster\/runtime$/},()=>({path:'monster-runtime',namespace:'dom-test'}));
@@ -81,6 +81,8 @@ try {
     // The final section is generated from unchanged nontrap passive definitions.
     const lessonText = [...root.querySelectorAll('.tut-sec')].slice(0, -1).map(el => el.textContent).join(' ');
     assert(!/罠|함정|\btraps?\b/i.test(lessonText));
+    assert(/攻撃力が0|공격력이 0|0 current ATK/.test(lessonText), `${lang}: zero ATK rule in guide`);
+    assert(/攻撃力が0|공격력이 0|0 current ATK/.test(t('tut.s6.body')), `${lang}: zero ATK rule in coach`);
     assert(t('tutorial.inter.desc').includes('890'));
     for (const s of TUT_STEPS) {
       assert.notEqual(t(s.titleKey), s.titleKey);
@@ -163,6 +165,16 @@ try {
     checkCoach(5);
     play('S13');
     checkCoach(6);
+    const zero = { ...structuredClone(DB.TOKEN00), uid: 'tutorial-zero', exhausted: false, dmg: 0, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: 0 };
+    me().field.push(zero); controller.view.render(state());
+    const zeroCard = root.querySelector('[data-uid="tutorial-zero"]');
+    assert(zeroCard && !zeroCard.classList.contains('is-attacker'));
+    assert.equal(zeroCard.onclick, null, 'zero ATK cannot be clicked to attack');
+    controller.applyGlow();
+    assert(!zeroCard.classList.contains('tut-glow'), 'coach highlights eligible attackers only');
+    controller.act({ type: 'attack', uid: zero.uid });
+    checkCoach(6);
+    assert(!requests.includes('tuto:6'), 'rejected attack cannot claim tutorial reward');
     controller.act({ type: 'attack', uid: me().field.find(m => !m.exhausted).uid });
     checkCoach(7); // proceeds straight to synergy, no trap/end-turn demo
     play('TSO2');
@@ -198,6 +210,21 @@ try {
     controller.destroy(); controller = null; closeOverlay(); root.innerHTML = '';
     console.log(`PASS tutorial: ${scenario.name}`);
   }
+
+  api.claimReward = async () => ({ amount: 0, credits: 0, granted: false });
+  controller = new TestTutorial(root, { onHome: noop, onRematch: noop });
+  const zeroState = controller.snapshot(), zeroPlayer = zeroState.players[0];
+  zeroPlayer.field = [{ ...structuredClone(DB.TOKEN00), uid: 'zero-only', exhausted: false, dmg: 0, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: 0 }];
+  controller.activateStep(5);
+  assert(root.querySelector('#meRow .is-attacker'), 'zero-only field gets a valid tutorial attacker');
+  assert.equal(root.querySelector('[data-uid="zero-only"]').onclick, null);
+  zeroPlayer.field[0].atkMod = 1;
+  controller.view.render(zeroState);
+  assert(root.querySelector('[data-uid="zero-only"]').classList.contains('is-attacker'), 'buff restores attack UI');
+  zeroPlayer.field[0].atkMod = 0;
+  controller.view.render(zeroState);
+  assert(!root.querySelector('[data-uid="zero-only"]').classList.contains('is-attacker'), 'losing buff blocks attack UI');
+  controller.destroy(); controller = null; root.innerHTML = '';
 
   // The opponent still returns the turn when the player passes during any lesson.
   api.claimReward = async () => ({ amount: 0, credits: 0, granted: false });

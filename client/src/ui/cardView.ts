@@ -9,12 +9,14 @@ import type { CardInst, FieldMon, PlayerState, GameState } from "../shared/types
 import { FRAME_BACK, PASSIVES, cardPassives, frameFor, fieldFrameFor } from "../shared/cards";
 import { curHp, effAtk, effDef, playCost } from "../shared/engine";
 import { cardName, cardText, getLang, t } from "../i18n";
-import { parseDiceTable } from "../shared/cardText";
+import { parseDiceTable, effectSections } from "../shared/cardText";
+import { cardEffectNotes } from "../shared/cardEffectNotes";
+import { cardTypeLabel, quickSpellRule, displayPassives, referencedPassives, decayStateDescription } from '../shared/cardPresentation';
 
 /** Shared resting/flight face: switching from a cast to its spell slot must not
  * replace the artwork or frame at touchdown. Interaction is bound by GameView. */
 export function enchantmentTile(c:CardInst,durationUi:string):HTMLDivElement {
-  const tile=document.createElement('div');tile.className='buff-icon buff-icon--spell';tile.dataset.uid=c.uid;
+  const tile=document.createElement('div');tile.className='buff-icon buff-icon--spell';tile.dataset.uid=c.uid;tile.dataset.cardId=c.id;
   tile.innerHTML=`<span class="buff-frame" style="background-image:url(${fieldFrameFor('spell')})"></span><span class="buff-art" style="background-image:url(${artUrl.full(c.id)})"></span><span class="buff-cost" aria-hidden="true"><span>${c.cost}</span></span>${durationUi}`;
   return tile;
 }
@@ -270,52 +272,90 @@ function artEl(cardId: string, full = false, lazy = false, gallery = false): HTM
   return art;
 }
 
+function ruleBlocks(text: string, className: string): HTMLElement {
+  const container = el('div', className);
+  for (const { heading, body } of effectSections(text)) {
+    const section = el('section', 'card-effect-section');
+    if (heading) {
+      section.setAttribute('aria-label', heading);
+      const label = el('h3', 'fx-tag'); label.textContent = heading; section.append(label);
+    }
+    for (const line of body.split('\n')) {
+      const p = el('p', 'card-effect-body'); p.textContent = line; section.append(p);
+    }
+    container.append(section);
+  }
+  return container;
+}
+
 /** Complete rules, including costs, keyword names and dice tables. Never fitted to card pixels. */
-export function cardRulesEl(c: CardInst): HTMLElement {
+export function cardRulesEl(c: CardInst, onPassiveClick?: (key: string) => void): HTMLElement {
   const pc = playCost(c);
-  // 효과 텍스트: "(시전 N)"/"(소환 N)" 계열 표기는 배지로 대체되므로 제거하고, 구분자를 줄바꿈으로
-  const rawTxt = cardText(c).replace(/\s*\((?:시전|Cast|発動|소환|Summon|召喚)\s*\d+\)/g, "").trim();
-  // dice/chest cards are detected on the RAW text — the separators become newlines
-  // just below, which would destroy the " / " that delimits the outcome rows
+  const rawTxt = cardText(c).trim();
   const table = rawTxt && rawTxt !== "—" ? parseDiceTable(rawTxt) : null;
-  let txt = rawTxt
-    .replace(/ · /g, "\n")
-    .replace(/ \/ /g, "\n")
-    .trim();
+  const txt = rawTxt;
   const hasCast = c.t !== "starter" && pc !== c.cost;
-  const keyChips = cardPassives(c);
-  if ((txt && txt !== "—") || hasCast || keyChips.length) {
+  const keyChips = displayPassives(c);
+  const references = referencedPassives(c).filter(k => !keyChips.includes(k));
+  if ((txt && txt !== "—") || hasCast || keyChips.length || references.length) {
     const effCls = "card-rules";
     const eff = el("div", effCls);
+    eff.lang = getLang();
     if (hasCast) {
       // monsters are SUMMONED, spells/traps are CAST — label the play-cost badge accordingly
       const cast = el("div", "card-cast", `${t(c.t === "mon" ? "card.summon" : "card.cast")} ${pc}`);
       cast.title = t(c.t === "mon" ? "card.summon.tip" : "card.cast.tip");
       eff.appendChild(cast);
     }
-    if (keyChips.length) {
+    for (const [group, keys] of [['owned', keyChips], ['references', references]] as const) {
+      if (!keys.length) continue;
+      const groupLabel = el('div', 'card-key-heading');
+      groupLabel.textContent = group === 'owned' ? {ja:'このカードの能力',ko:'이 카드의 능력',en:'This card’s abilities'}[getLang()] : {ja:'効果中の用語',ko:'효과에 나오는 용어',en:'Terms used in this effect'}[getLang()];
+      eff.append(groupLabel);
       const row = el("div", "card-keys" + (txt && txt !== "—" ? "" : " card-keys--only"));
-      for (const k of keyChips) {
+      for (const k of keys) {
         const pd = PASSIVES[k];
         if (!pd) continue;
-        // data-psv keeps the zoom view's keyword panel highlight working
-        row.insertAdjacentHTML("beforeend",passiveIcon(k));
+        const chip = el(onPassiveClick ? 'button' : 'span', 'card-key-label');
+        chip.dataset.psv = k;
+        chip.dataset.abilityGroup = group;
+        if (onPassiveClick) {
+          chip.setAttribute('type', 'button');
+          const name = pd[getLang()].name;
+          chip.setAttribute('aria-label', {ja:`${name}の説明へ`,ko:`${name} 설명으로 이동`,en:`Go to ${name} description`}[getLang()]);
+          chip.onclick = e => { e.stopPropagation(); onPassiveClick(k); };
+        }
+        chip.insertAdjacentHTML('beforeend', passiveIcon(k));
+        const name = el('span'); name.textContent = pd[getLang()].name; chip.append(name);
+        row.append(chip);
       }
       if (row.childElementCount) eff.appendChild(row);
     }
     // Effect body follows the keyword labels.
     if (table) {
-      if (table.head) eff.appendChild(el("div", "card-dice-head", decorateTags(table.head)));
+      if (table.head) eff.appendChild(ruleBlocks(table.head, 'card-dice-head'));
       const tb = el("div", "card-dice");
+      tb.setAttribute('role', 'table');
+      tb.setAttribute('aria-label', {ja:'ダイスの結果',ko:'주사위 결과',en:'Dice results'}[getLang()]);
       for (const [roll, fx] of table.rows) {
         const row = el("div", "dr");
-        row.appendChild(el("span", "dr-roll", roll));
-        row.appendChild(el("span", "dr-fx", decorateTags(fx)));
+        row.setAttribute('role', 'row');
+        const label = el('span', 'dr-roll'); label.textContent = roll; label.setAttribute('role', 'rowheader');
+        const body = el('span', 'dr-fx'); body.textContent = fx; body.setAttribute('role', 'cell');
+        row.append(label, body);
         tb.appendChild(row);
       }
       eff.appendChild(tb);
     } else if (txt && txt !== "—") {
-      eff.appendChild(el("div", "card-eff-txt", `<span style="white-space:pre-line">${decorateTags(decoratePassives(c, txt))}</span>`));
+      eff.appendChild(ruleBlocks(txt, 'card-eff-txt'));
+    }
+    const notes = cardEffectNotes(c, getLang());
+    if (notes.length) {
+      const glossary = el("details", "card-rule-notes");
+      const summary = el('summary'); summary.textContent = {ja:'用語・共通ルール',ko:'용어·공통 규칙',en:'Terms and shared rules'}[getLang()];
+      glossary.append(summary);
+      for (const text of notes) { const note = document.createElement('p'); note.textContent = text; glossary.append(note); }
+      eff.append(glossary);
     }
     return eff;
   }
@@ -348,8 +388,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   node.dataset.uid = c.uid;
   node.dataset.cardId = c.id;
   node.dataset.cardType = c.t === "mon" ? "mon" : c.t === "trap" ? "trap" : c.t === "quest" ? "quest" : "spell";
-  const labels = getLang() === "ja" ? ["モンスター", "魔法", "罠", "クエスト", "クイック魔法"] : getLang() === "en" ? ["Monster", "Spell", "Trap", "Quest", "Quick spell"] : ["몬스터", "마법", "함정", "퀘스트", "퀵 마법"];
-  const typeIndex = c.t === "mon" ? 0 : c.t === "trap" ? 2 : c.t === "quest" ? 3 : c.quick ? 4 : 1;
+  const typeLabel = cardTypeLabel(c, getLang());
 
   if (opt.compactField) node.classList.add("card--field");
   // Complete raster face underneath the illustration and live typography.
@@ -380,7 +419,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const nm = cardName(c);
   const nameEl2 = el("div", "card-name" + (nm.length >= 9 ? " card-name--long" : ""), nm);
   if (!opt.compactField) node.appendChild(nameEl2);
-  node.setAttribute("aria-label", `${nm} · ${labels[typeIndex]} · ${cost}`);
+  node.setAttribute("aria-label", `${nm} · ${typeLabel} · ${cost}`);
 
   if (c.t === "mon") {
     const a = opt.field && opt.owner ? effAtk(opt.owner, c as FieldMon, opt.game) : c.atk!;
@@ -415,18 +454,18 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     const label = (ja:string, en:string, ko:string):string => lang0 === 'ja' ? ja : lang0 === 'en' ? en : ko;
     const band = el("div", "card-status");
     if (c.quick || c.t === "quest") {
-      const chip = el("span", "kw", labels[typeIndex]);
-      chip.title = c.quick ? label("購入時に1回だけ発動し、ゲームから除外", "Resolves once on purchase, then leaves the game", "구매시 1회 발동 후 게임에서 제외") : label("発動後から条件を数え、達成時に報酬を1回獲得", "Counts progress after activation; earn the reward once", "발동 후 조건을 세고 달성시 보상 1회 획득");
+      const chip = el("span", "kw", typeLabel);
+      chip.title = c.quick ? quickSpellRule(lang0) : label("発動後から条件を数え、達成時に報酬を1回獲得", "Counts progress after activation; earn the reward once", "발동 후 조건을 세고 달성시 보상 1회 획득");
       band.appendChild(chip);
     }
     const fm = c as FieldMon;
     // 1) 키워드 — 카드가 원래 가진 것 + 게임 중 부여된 것 (필드 타일에서만;
     //    손패/마켓/확대는 효과판의 키워드 칩 행이 같은 정보를 이미 보여준다)
     {
-      const innate = cardPassives(c);
+      const innate = displayPassives(c);
       const granted = fm.passivesG ?? [];
       for (const k of [...new Set([...innate,...granted,...((fm.guts??0)>0?['guts']:[])])]) {
-        const count=k==='guts'?(fm.guts??0):k==='decay'?(fm.decayCnt??0):0;
+        const count=k==='guts'?(fm.guts??0):0;
         band.insertAdjacentHTML('beforeend',passiveIcon(k,{count,granted:granted.includes(k)}));
       }
     }
@@ -440,11 +479,14 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
       const eggD = (c as { dur?: number }).dur ?? c.hatchDur ?? 4;
       band.appendChild(el("span", "ec ec-h", `${label('孵化','Hatch','부화')} ${eggH}`));
       band.appendChild(el("span", "ec ec-d", `${label('耐久','Durability','내구')} ${Math.max(0, eggD)}`));
-    } else if (opt.field && c.aura !== "assassinGuild") {
-      if (!(opt.field||opt.compactField) && (fm.guts ?? 0) > 0) band.appendChild(el("span", "ec ec-g", `${label('気合','Guts','기합')} ${fm.guts}`));
-      if ((fm.decayCnt ?? 0) > 0 && !cardPassives(c).includes('decay') && !fm.passivesG?.includes('decay')) {
-        band.insertAdjacentHTML('beforeend',passiveIcon('decay',{count:fm.decayCnt}));
-      }
+    }
+    if ((fm.decayCnt ?? 0) > 0) {
+      const status = el('span', 'ec ec-decay-state');
+      status.dataset.status = 'decay';
+      status.textContent = `${label('腐敗', 'Decay', '부패')} ${fm.decayCnt}/3`;
+      status.title = decayStateDescription(fm.decayCnt!, lang0);
+      status.setAttribute('aria-label', status.title);
+      band.append(status);
     }
     if (band.childElementCount) node.appendChild(band);
   }

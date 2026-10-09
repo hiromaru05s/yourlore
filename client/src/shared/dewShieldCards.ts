@@ -24,7 +24,7 @@ export const DEW_SHIELD_CARDS: CardDef[] = [
   card('SPEAR_AND_SHIELD', '창과 방패', '矛と盾', 'Spear and Shield', 2,
     '相手のシールド量が自分の場の全モンスターの総攻撃力未満なら、相手のシールドを全て破壊する', {act:'spearShield'}),
   card('SELECTED_SWORD', '엄선된 검', '選りすぐりの剣', 'Selected Sword', 1,
-    '自分が除外したカル1枚につき、自分のモンスター1体の攻撃力+1。この強化はターン終了時になくなる', {noShop:true,passive:['void'],act:'cullSword'}),
+    '自分が除外したカル1枚につき、どちらかの場のモンスター1体の攻撃力+1。この強化はターン終了時になくなる', {noShop:true,passive:['void'],act:'cullSword'}),
   card('SELECTED_SHIELD', '엄선된 방패', '選りすぐりの盾', 'Selected Shield', 1,
     '自分が除外したカルの枚数分、シールドを得る', {noShop:true,passive:['void'],act:'cullShield'}),
   card('WINE_COLLECTOR', '와인 수집가', 'ワインコレクター', 'Wine Collector', 2,
@@ -44,7 +44,7 @@ export const DEW_SHIELD_STARTERS = ['SELECTED_SWORD', 'SELECTED_SHIELD', 'NOURIS
 export function applyDewShieldRework(db: Record<string, CardDef>): void {
   const patch = (id: string, textJa: string, changes: Partial<CardDef> = {}) => Object.assign(db[id], {text:textJa,textJa,textEn:textJa}, changes);
   patch('WORLD_CARE', '【常時】自分の場に最大1枚。【自分ターン開始時】雫1を得る');
-  patch('WORLD_TREE', '【条件】雫8以上。【常時】自分の雫による回復量2倍。自分のモンスターの攻撃時、任意で雫1を消費してその攻撃力+6（永続）。自分のモンスターの被攻撃時、任意で雫1を消費してその体力+6（永続）。【自分ターン開始時】雫3を得る', {atk:0,def:30,summonReq:'dew8',turnFx:'worldTree'});
+  patch('WORLD_TREE', '【条件】雫8以上。【常時】自分の雫による回復量2倍。自分のモンスターの攻撃時、任意で雫1を消費してその攻撃力+6（永続）。自分のモンスターの被攻撃時、任意で雫1を消費してその体力+6（永続）。【自分ターン開始時】雫3を得る', {atk:1,def:30,summonReq:'dew8',turnFx:'worldTree'});
   patch('VITAL2', '【召喚時】自分の体力3回復。その後ダイスを1回振り、5以上なら雫1を得る', {onSummon:'dewBeliever',val:3});
   patch('VITAL3', '【召喚時】自分の体力5回復。【常時】自分が「世界樹」「エルフ」系カードをプレイするたび、雫1を得る', {onSummon:'heal',val:5,aura:'treeKeeper'});
   patch('ELF_HAVEN', '【永続】「世界樹」カードの購入／発動コスト0（購入は自分の各ターン3枚まで）。自分が「世界樹」「エルフ」系カードを購入するたび、雫1を得る');
@@ -65,7 +65,7 @@ const LOCALIZED: Record<string, [string, string]> = {
  SHIELD_TITAN:['【조건】직전 상대 턴 중 실드 20 이상 보유. 【자신 턴 종료】실드 10 획득. 【상시】이 몬스터 외 효과로 자신이 얻는 실드 양 2배','【Requires】Held 20+ Shield at any point during the last opponent turn. 【Your turn end】Gain 10 Shield. 【Constant】Double Shield you gain from sources other than this monster.'],
  ARMOR_BREAK:['상대 실드 9 파괴. 파괴 전 실드가 10 이상이면 상대 낙인 카운터 1개','Destroy 9 enemy Shield · If previously 10+, give them 1 Brand counter.'],
  SPEAR_AND_SHIELD:['상대 실드가 아군 전체 공격력 합계 미만이면 상대 실드 전부 파괴','Destroy all enemy Shield if it is less than your monsters’ total ATK.'],
- SELECTED_SWORD:['제외된 자신의 컬 1장당 아군 몬스터 1체 공격력 +1. 턴 종료시 해제','Give 1 allied monster +1 ATK for each of your exiled Culls · Until turn end.'],
+ SELECTED_SWORD:['제외된 자신의 컬 1장당 어느 쪽 필드든 몬스터 1체 공격력 +1. 턴 종료시 해제','Give 1 monster on either field +1 ATK for each of your exiled Culls · Until turn end.'],
  SELECTED_SHIELD:['제외된 자신의 컬 수만큼 실드 획득','Gain Shield equal to the number of your exiled Culls.'],
  WINE_COLLECTOR:['【소환시】패의 와인 2장을 리프트로 보내고 암상인을 패에 추가. 성공시 이 몬스터도 리프트로','【Summon】Send 2 Wines from hand to the Rift and add a Dark Merchant to hand. If successful, send this monster to the Rift too.'],
  DEFENSIVE_STANCE:['실드 3 획득. 아군 필드의 서로 다른 골렘 계열 1종당 추가 실드 2','Gain 3 Shield · Plus 2 for each distinct Golem monster on your field.'],

@@ -1,0 +1,46 @@
+{
+  "site": "https://test.yourlore.xyz",
+  "verifiedAt": "2026-10-07T23:52:05.966392+00:00",
+  "runtimeSource": "cfa33bbf9f3a950a8f230303b71b362ef0404127",
+  "featureFix": "1bf07e12",
+  "regressionSource": "ee54e992",
+  "deploymentId": "1abba441-4b97-413a-9b58-9f2da6cb0d11",
+  "versions": [
+    {
+      "version_id": "c337371c-6fbf-4aa1-9421-8ed2eac848df",
+      "percentage": 100
+    }
+  ],
+  "deploymentCreatedAt": "2026-10-07T23:38:30.554254Z",
+  "releaseMethod": "scripts/deploy-guard.mjs staging; shared integration release includes this feature",
+  "checks": {
+    "productionSuite": {
+      "passed": 80,
+      "total": 80
+    },
+    "targetSafetyScenarios": 18,
+    "targetPlanParityCards": 26,
+    "cardCatalog": 360,
+    "localBrowserViewports": [
+      "1280x800",
+      "390x844",
+      "320x640",
+      "844x390"
+    ],
+    "stagingBrowserViewports": [
+      "1280x900",
+      "390x844"
+    ],
+    "assetSha256": {
+      "passed": 45,
+      "total": 45
+    }
+  },
+  "boundaries": "Deployed BOT board startup, actual network frames, no help/countdown overlays. Authentication/API responses and Sword board are fixtures. Deployed controller submission is captured and evaluated with the matching source engine; no authenticated online match.",
+  "evidence": [
+    "staging/assets.json",
+    "staging/staging-browser.json",
+    "staging/suite-ee54e992.json",
+    "browser/report.json"
+  ]
+}

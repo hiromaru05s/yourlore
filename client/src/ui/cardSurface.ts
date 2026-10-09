@@ -146,15 +146,20 @@ export async function capturePileSurface(node:HTMLElement,sleeve:string,preserve
   }finally{host.remove();}
 }
 
-/** Capture the actual public quest tile at its native size, including the cost
+/** Capture the actual public persistent spell or quest tile at its native size, including the cost
  * seal and localized progress. Padding is identical to captureCardSurface. */
 export async function captureQuestTile(node:HTMLElement):Promise<HTMLCanvasElement> {
   const r=node.getBoundingClientRect(),w=768,h=w*r.height/r.width,pad=w*CARD_PADDING;
   const out=canvas(w+pad*2,h+pad*2),c=out.getContext('2d')!;
   const box=(el:Element)=>{const b=el.getBoundingClientRect();return {x:pad+(b.left-r.left)/r.width*w,y:pad+(b.top-r.top)/r.width*w,w:b.width/r.width*w,h:b.height/r.width*w};};
   const frame=node.querySelector<HTMLElement>('.buff-frame')!,art=node.querySelector<HTMLElement>('.buff-art')!;
-  const cost=node.querySelector<HTMLElement>('.buff-cost')!,label=node.querySelector<HTMLElement>('.quest-progress')!;
-  const cb=box(cost),lb=box(label),ls=getComputedStyle(label),cs=getComputedStyle(cost);
+  const cost=node.querySelector<HTMLElement>('.buff-cost')!,label=node.querySelector<HTMLElement>('.quest-progress');
+  const cb=box(cost),cs=getComputedStyle(cost);
+  const duration=node.querySelector<HTMLElement>('.buff-duration');
+  const infinity=node.querySelector<HTMLImageElement>('.buff-infinity');
+  const db=duration?box(duration):null,ds=duration?getComputedStyle(duration):null;
+  const ib=infinity?box(infinity):null;
+  const lb=label?box(label):null,ls=label?getComputedStyle(label):null;
   const text=(value:string,b:ReturnType<typeof box>,style:CSSStyleDeclaration)=>{
     c.save();c.font=`${style.fontWeight} ${parseFloat(style.fontSize)*w/r.width}px ${style.fontFamily}`;
     c.textAlign='center';c.textBaseline='middle';c.fillStyle=style.color;c.shadowColor='#000';c.shadowBlur=3*w/r.width;c.shadowOffsetY=w/r.width;
@@ -167,6 +172,14 @@ export async function captureQuestTile(node:HTMLElement):Promise<HTMLCanvasEleme
   const scale=Math.max(w/ar.naturalWidth,h/ar.naturalHeight),sw=w/scale,sh=h/scale;
   c.drawImage(ar,(ar.naturalWidth-sw)/2,(ar.naturalHeight-sh)/2,sw,sh,pad,pad,w,h);c.restore();
   c.drawImage(seal,cb.x,cb.y,cb.w,cb.h);text(cost.textContent||'',cb,cs);
+  if(!label||!lb||!ls){
+    if(infinity&&ib)c.drawImage(await matte(infinity.src),ib.x,ib.y,ib.w,ib.h);
+    if(duration&&db&&ds){
+      c.drawImage(await matte('/art/biblion/modular/plaque-ui.webp'),db.x,db.y-db.h*.15,db.w,db.h*1.3);
+      text(duration.textContent||'',db,ds);
+    }
+    return out;
+  }
   const gradient=c.createLinearGradient(lb.x,0,lb.x+lb.w,0);gradient.addColorStop(0,'#231330dd');gradient.addColorStop(.5,'#38214bef');gradient.addColorStop(1,'#231330dd');
   c.fillStyle=gradient;c.fillRect(lb.x,lb.y,lb.w,lb.h);c.fillStyle=ls.borderTopColor;c.fillRect(lb.x,lb.y,lb.w,parseFloat(ls.borderTopWidth)*w/r.width);
   text(label.textContent||'',lb,ls);return out;

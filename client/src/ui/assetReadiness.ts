@@ -34,7 +34,8 @@ export async function waitAssets(urls:string[],host:HTMLElement,onProgress?:(don
   await new Promise<void>(resolve=>{
    const retry=document.createElement('button');retry.className='asset-retry';retry.textContent=getLang()==='ja'?'画像の読み込みを再試行':getLang()==='ko'?'이미지 다시 불러오기':'Retry loading artwork';host.append(retry);
    const observer=new MutationObserver(()=>{if(!host.isConnected)finish();});observer.observe(document.body,{subtree:true,childList:true});
-   const finish=()=>{observer.disconnect();retry.remove();resolve();};retry.onclick=finish;
+   const finish=()=>{observer.disconnect();signal?.removeEventListener('abort',finish);retry.remove();resolve();};retry.onclick=finish;
+   signal?.addEventListener('abort',finish,{once:true});if(signal?.aborted||!host.isConnected)finish();
   });
  }
 }
@@ -58,10 +59,22 @@ export function coverScreen(root:HTMLElement,preloadMenu=false,homeEntrance=fals
   release();document.dispatchEvent(new Event("lore:screen-ready"));return true;
  }};
 }
-/** Swap a page of cards only after every image has decoded. Old cards stay visible. */
+const reveals=new WeakMap<HTMLElement,AbortController>();
+export function cancelRevealCards(grid:HTMLElement):void {
+ reveals.get(grid)?.abort();reveals.delete(grid);grid.removeAttribute('aria-busy');
+}
+/** Swap only the latest requested page; obsolete failed loads release their retry UI. */
 export async function revealCards(grid:HTMLElement,nodes:Node[],current:()=>boolean):Promise<void>{
+ cancelRevealCards(grid);
+ const abort=new AbortController();reveals.set(grid,abort);
  const tray=document.createElement('div');tray.className='asset-tray';tray.append(...nodes);grid.append(tray);grid.setAttribute('aria-busy','true');
- await waitAssets(imageUrls(tray),grid);
- await Promise.all([...tray.querySelectorAll('img')].map(i=>withDeadline(i.decode()).catch(()=>{})));
- if(current()&&grid.isConnected){grid.replaceChildren(...Array.from(tray.childNodes));grid.removeAttribute('aria-busy');grid.scrollTop=0;}else tray.remove();
+ try {
+  await waitAssets(imageUrls(tray),grid,undefined,abort.signal);
+  if(abort.signal.aborted)return;
+  await Promise.all([...tray.querySelectorAll('img')].map(i=>withDeadline(i.decode(),20000,abort.signal).catch(()=>{})));
+  if(!abort.signal.aborted&&current()&&grid.isConnected){grid.replaceChildren(...Array.from(tray.childNodes));grid.scrollTop=0;}
+ } finally {
+  tray.remove();
+  if(reveals.get(grid)===abort){reveals.delete(grid);grid.removeAttribute('aria-busy');}
+ }
 }

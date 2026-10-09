@@ -1,0 +1,704 @@
+[
+  {
+    "lang": "ja",
+    "id": "WORLD_TREE",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 5,
+    "title": "世界樹",
+    "viewport": [
+      390,
+      844
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "DRAGON_EGG",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 4,
+    "title": "ドラゴンの卵",
+    "viewport": [
+      390,
+      844
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "CASINO",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 4,
+    "sections": 2,
+    "title": "カジノ",
+    "viewport": [
+      390,
+      844
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "WINE_COLLECTOR",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 1,
+    "title": "ワインコレクター",
+    "viewport": [
+      390,
+      844
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "WORLD_TREE",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 5,
+    "title": "세계수",
+    "viewport": [
+      390,
+      844
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "DRAGON_EGG",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 4,
+    "title": "드래곤의 알",
+    "viewport": [
+      390,
+      844
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "CASINO",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 4,
+    "sections": 2,
+    "title": "카지노",
+    "viewport": [
+      390,
+      844
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "WINE_COLLECTOR",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 1,
+    "title": "와인 수집가",
+    "viewport": [
+      390,
+      844
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "WORLD_TREE",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 5,
+    "title": "World Tree",
+    "viewport": [
+      390,
+      844
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "DRAGON_EGG",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 4,
+    "title": "Dragon Egg",
+    "viewport": [
+      390,
+      844
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "CASINO",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 4,
+    "sections": 2,
+    "title": "Casino",
+    "viewport": [
+      390,
+      844
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "WINE_COLLECTOR",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 1,
+    "title": "Wine Collector",
+    "viewport": [
+      390,
+      844
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "WORLD_TREE",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 5,
+    "title": "世界樹",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "DRAGON_EGG",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 4,
+    "title": "ドラゴンの卵",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "CASINO",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 4,
+    "sections": 2,
+    "title": "カジノ",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "WINE_COLLECTOR",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 1,
+    "title": "ワインコレクター",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "ELDER_ELF_KING",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 4,
+    "title": "エルダーハイエルフキング",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "LEGEND_GAMBLER",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 1,
+    "title": "伝説のギャンブラー",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "GUILD_CHEST",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 7,
+    "sections": 1,
+    "title": "アサシンギルドの宝箱",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "WORLD_TREE",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 5,
+    "title": "세계수",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "DRAGON_EGG",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 4,
+    "title": "드래곤의 알",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "CASINO",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 4,
+    "sections": 2,
+    "title": "카지노",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "WINE_COLLECTOR",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 1,
+    "title": "와인 수집가",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "ELDER_ELF_KING",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 4,
+    "title": "엘더 하이엘프 킹",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "LEGEND_GAMBLER",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 1,
+    "title": "전설의 도박꾼",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "GUILD_CHEST",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 7,
+    "sections": 1,
+    "title": "암살자 길드의 보물상자",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "WORLD_TREE",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 5,
+    "title": "World Tree",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "DRAGON_EGG",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 4,
+    "title": "Dragon Egg",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "CASINO",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 4,
+    "sections": 2,
+    "title": "Casino",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "WINE_COLLECTOR",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 1,
+    "title": "Wine Collector",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "ELDER_ELF_KING",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 4,
+    "title": "Elder High Elf King",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "LEGEND_GAMBLER",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 1,
+    "title": "Legendary Gambler",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "GUILD_CHEST",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 7,
+    "sections": 1,
+    "title": "Assassin Guild's Chest",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "WORLD_TREE",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 5,
+    "title": "世界樹",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "DRAGON_EGG",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 4,
+    "title": "ドラゴンの卵",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "CASINO",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 4,
+    "sections": 2,
+    "title": "カジノ",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "WINE_COLLECTOR",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 1,
+    "title": "ワインコレクター",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "ELDER_ELF_KING",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 4,
+    "title": "エルダーハイエルフキング",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "LEGEND_GAMBLER",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 1,
+    "title": "伝説のギャンブラー",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "ja",
+    "id": "GUILD_CHEST",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 7,
+    "sections": 1,
+    "title": "アサシンギルドの宝箱",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "WORLD_TREE",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 5,
+    "title": "세계수",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "DRAGON_EGG",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 4,
+    "title": "드래곤의 알",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "CASINO",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 4,
+    "sections": 2,
+    "title": "카지노",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "WINE_COLLECTOR",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 1,
+    "title": "와인 수집가",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "ELDER_ELF_KING",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 4,
+    "title": "엘더 하이엘프 킹",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "LEGEND_GAMBLER",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 1,
+    "title": "전설의 도박꾼",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "ko",
+    "id": "GUILD_CHEST",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 7,
+    "sections": 1,
+    "title": "암살자 길드의 보물상자",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "WORLD_TREE",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 5,
+    "title": "World Tree",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "DRAGON_EGG",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 4,
+    "title": "Dragon Egg",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "CASINO",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 4,
+    "sections": 2,
+    "title": "Casino",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "WINE_COLLECTOR",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 1,
+    "title": "Wine Collector",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "ELDER_ELF_KING",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 4,
+    "title": "Elder High Elf King",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "LEGEND_GAMBLER",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 0,
+    "sections": 1,
+    "title": "Legendary Gambler",
+    "viewport": [
+      1280,
+      720
+    ]
+  },
+  {
+    "lang": "en",
+    "id": "GUILD_CHEST",
+    "bodySize": "16px",
+    "overflow": [],
+    "rows": 7,
+    "sections": 1,
+    "title": "Assassin Guild's Chest",
+    "viewport": [
+      1280,
+      720
+    ]
+  }
+]
