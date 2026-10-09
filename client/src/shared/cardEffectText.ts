@@ -53,9 +53,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【While on the Field】Your max mana +1 for each other Golem-family monster on your field."
   },
   "M11": {
-    "ja": "【召喚時】自分の場に他のモンスターが2体以上いれば、「騎士」1体を自分の場に召喚する。",
-    "ko": "【소환시】자신의 필드에 다른 몬스터가 2체 이상이면 기사 1체를 자신의 필드에 소환한다.",
-    "en": "【On Summon】If you control at least 2 other monsters, summon 1 Knight to your field."
+    "ja": "【召喚時】自分の場に他のモンスターが3体以上いれば、「騎士」1体を自分の場に召喚する。",
+    "ko": "【소환시】자신의 필드에 다른 몬스터가 3체 이상이면 기사 1체를 자신의 필드에 소환한다.",
+    "en": "【On Summon】If you control at least 3 other monsters, summon 1 Knight to your field."
   },
   "M12": {
     "ja": "【召喚時】相手モンスター1体を選び、その攻撃力-1（持続）。",
@@ -203,14 +203,14 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【While on the Field】If your deck composition contains at least 13 spells, your spells cost 1 less to cast, to a minimum of 0."
   },
   "NGA3": {
-    "ja": "【召喚時】自分の場に他の「ゴーレム」系モンスターがいれば、このモンスターに気合用カウンター3個を付与する。",
-    "ko": "【소환시】자신의 필드에 다른 골렘 계열 몬스터가 있으면 이 몬스터에 기합용 카운터 3개를 부여한다.",
-    "en": "【On Summon】If another Golem monster is on your field, this monster gains 3 counters (used by Guts)."
+    "ja": "【召喚時】自分の場に他の「ゴーレム」系モンスターがいれば、このモンスターに気合用カウンター1個を付与する。",
+    "ko": "【소환시】자신의 필드에 다른 골렘 계열 몬스터가 있으면 이 몬스터에 기합용 카운터 1개를 부여한다.",
+    "en": "【On Summon】If another Golem monster is on your field, this monster gains 1 counter (used by Guts)."
   },
   "NGA4": {
-    "ja": "【攻撃時】攻撃対象をランダムに決める（このモンスター以外の味方モンスターも候補に含む）。",
-    "ko": "【공격시】공격 대상을 무작위로 정한다(이 몬스터 외 아군 몬스터도 후보에 포함).",
-    "en": "【On Attack】The attack target is chosen randomly, including your other monsters among eligible targets."
+    "ja": "【攻撃時】このモンスター以外の両方の場のモンスターと両プレイヤーから、攻撃可能な対象1つを毎回ランダムに選ぶ。直接攻撃禁止と「貴族領主」の攻撃制限に従う。\n\n【自分ターン終了時】攻撃可能なら、残っている攻撃回数を全て自動で行ってからターンを終了する。",
+    "ko": "【공격시】이 몬스터를 제외한 양쪽 필드의 몬스터와 양쪽 플레이어 중 공격 가능한 대상 1개를 매번 무작위로 선택한다. 직접 공격 금지와 귀족 영주의 공격 제한을 따른다.\n\n【자신 턴 종료시】공격 가능하면 남은 공격 횟수를 모두 자동으로 수행한 후 턴을 종료한다.",
+    "en": "【On Attack】Each attack randomly chooses 1 legal target among all other monsters on either field and both players. Direct-attack prohibitions and Aristocrat Lord attack restrictions still apply.\n\n【Your Turn End】If able to attack, automatically use all remaining attacks before ending your turn."
   },
   "NWL3": {
     "ja": "【攻撃ダメージを受けた後】このモンスターが攻撃で1以上のダメージを受け、気合を消費せずに生き残ると、カウンター1個を得る（気合に使用）。",
@@ -278,9 +278,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】Choose up to 8 cards in the opponent's Rift and move them to your Rift."
   },
   "GM6_7": {
-    "ja": "【召喚時】「騎士」（攻撃力4・体力4）1体を自分の場に召喚する。\n\n【相手が召喚した時】相手がモンスターを召喚するたびダイス1個を振り、4以上なら「騎士」1体を自分の場に召喚する。",
-    "ko": "【소환시】기사(공격력 4, 체력 4) 1체를 자신의 필드에 소환한다.\n\n【상대가 소환할 때】상대가 몬스터를 소환할 때마다 주사위 1개를 굴려 4 이상이면 기사 1체를 자신의 필드에 소환한다.",
-    "en": "【On Summon】Summon 1 Knight (4 ATK, 4 HP) to your field.\n\n【When the Opponent Summons】Whenever the opponent summons a monster, roll 1 die; on 4 or more, summon 1 Knight to your field."
+    "ja": "【召喚時】自分の場に「城」「兵士」「騎士」「砲撃兵」「大砲兵」のいずれかがあれば、「騎士」2体を自分の場に召喚する。\n\n【相手が召喚した時】相手がモンスターを召喚するたび、ダイス1個を振る。6なら「兵士」1体を自分の場に召喚する。",
+    "ko": "【소환시】자신의 필드에 성·병사·기사·포격병·대포병 중 하나가 있으면 기사 2체를 자신의 필드에 소환한다.\n\n【상대가 소환할 때】상대가 몬스터를 소환할 때마다 주사위 1개를 굴린다. 6이면 병사 1체를 자신의 필드에 소환한다.",
+    "en": "【On Summon】If you control a Castle, Soldier, Knight, Gunner or Heavy Gunner, summon 2 Knights to your field.\n\n【When the Opponent Summons】Whenever the opponent summons a monster, roll 1 die. On 6, summon 1 Soldier to your field."
   },
   "GM6_8": {
     "ja": "【破壊時】「兵士」1体を自分の場に召喚する。",
@@ -583,9 +583,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】Restore 3 of your HP. Then roll 1 die; on 5 or more, gain 1 Dew."
   },
   "VITAL3": {
-    "ja": "【召喚時】自分の体力を5回復する。\n\n【カード使用時】自分が「世界樹」「エルフ」系カードをプレイするたび、雫1を得る。",
-    "ko": "【소환시】자신의 체력을 5 회복한다.\n\n【카드 사용시】세계수·엘프 계열 카드를 사용할 때마다 이슬 1 획득한다.",
-    "en": "【On Summon】Restore 5 of your HP.\n\n【When a Card Is Played】Gain 1 Dew whenever you play a World Tree or Elf card."
+    "ja": "【カード使用時】自分が「世界樹」「エルフ」系カードをプレイするたび、雫1を得る。",
+    "ko": "【카드 사용시】세계수·엘프 계열 카드를 사용할 때마다 이슬 1 획득한다.",
+    "en": "【When a Card Is Played】Gain 1 Dew whenever you play a World Tree or Elf card."
   },
   "VITAL4": {
     "ja": "【召喚時】自分の場の「兵士」「騎士」のうち、気合を持たない各モンスターに、気合と気合用カウンター1個を付与する（持続）。\n\n【自分が召喚した時】後から召喚する「兵士」「騎士」にも、気合を持たなければ同じ処理を行う。付与済みの気合とカウンターは、このモンスターが場を離れても残る。",
@@ -688,9 +688,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】All Soldiers and Knights on your field ATK +4 (lasting)."
   },
   "ELITE": {
-    "ja": "【召喚時】デッキ構成が10枚以下なら兵士(2/2)2体を召喚する。",
-    "ko": "【소환시】덱 구성이 10장 이하면 병사(2/2) 2체를 소환한다.",
-    "en": "【On Summon】With 10 or fewer cards in your deck composition, summon two 2/2 Soldiers."
+    "ja": "【召喚時】デッキ構成が9枚以下なら兵士(2/2)2体を召喚する。",
+    "ko": "【소환시】덱 구성이 9장 이하면 병사(2/2) 2체를 소환한다.",
+    "en": "【On Summon】With 9 or fewer cards in your deck composition, summon two 2/2 Soldiers."
   },
   "WALLBREAK1": {
     "ja": "【発動時】両方の場の攻撃力2以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
@@ -1198,9 +1198,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】Put 2 counters on this monster.\n\n【When Attacked】When this monster is attacked, spend 1 counter from this monster to negate the attack.\n\n【While on the Field】You cannot summon monsters of purchase cost 5 or more.\n\n【When You Summon】Whenever you summon a Soldier or Knight, put 1 counter on this monster."
   },
   "ACID_RAIN": {
-    "ja": "【相手の腐敗破壊時】相手モンスターが腐敗で破壊されるたび相手に烙印カウンター1個を付与する。",
-    "ko": "【상대 부패 파괴시】상대 몬스터가 부패로 파괴될 때마다 상대에게 낙인 카운터 1개를 부여한다.",
-    "en": "【Enemy Destroyed by Decay】Whenever an enemy monster dies to Decay, the opponent gains 1 Brand counter."
+    "ja": "【相手の腐敗破壊時】相手モンスターが腐敗で破壊されるたび、ダイス1個を振る。4以上なら、相手に烙印カウンター1個を付与する。",
+    "ko": "【상대 부패 파괴시】상대 몬스터가 부패로 파괴될 때마다 주사위 1개를 굴린다. 4 이상이면 상대에게 낙인 카운터 1개를 부여한다.",
+    "en": "【Enemy Destroyed by Decay】Whenever an enemy monster is destroyed by Decay, roll 1 die. On 4 or more, give the opponent 1 Brand counter."
   },
   "BUDGET": {
     "ja": "【発動時】ダイス1個を振り2以上なら兵士(2/2)1体を自分の場に召喚する。",
@@ -1518,9 +1518,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】Summon 1 Soldier to your field. If either player controls a Casino, roll 3 dice."
   },
   "MERC_LEADER": {
-    "ja": "【召喚時】「兵士」2体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス5個を振る。",
-    "ko": "【소환시】병사 2체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 5개를 굴린다.",
-    "en": "【On Summon】Summon 2 Soldiers to your field. If either player controls a Casino, roll 5 dice."
+    "ja": "【召喚時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス5個を振る。",
+    "ko": "【소환시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 5개를 굴린다.",
+    "en": "【On Summon】Summon 1 Soldier to your field. If either player controls a Casino, roll 5 dice."
   },
   "MERC_MASTER": {
     "ja": "【召喚時】「兵士」2体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス10個を振る。\n\n【自分ターン開始時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス10個を振る。",

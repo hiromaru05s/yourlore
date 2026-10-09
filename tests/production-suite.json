@@ -5,6 +5,7 @@
     "tests/audio-contact-rules.mjs",
     "tests/audio-v3.mjs",
     "tests/balance-v52.mjs",
+    "tests/balance-v57.mjs",
     "tests/card-wording.mjs",
     "tests/card-wording-render.mjs",
     "tests/card-effect-ux.mjs",
