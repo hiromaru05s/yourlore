@@ -22,3 +22,5 @@
 `qa/runtime-lifecycle.json`: 3枚同時、キャプチャ前の連続再発動、DOM切断、リサイズ。復元と後始末を確認。
 
 実GameViewと本番の召喚関数を使用するローカルfixture検証。認証済みオンライン対戦の証明ではない。公開情報・配信ハッシュはステージング完了後の記録に分離する。
+
+統合後に14ケースと4ライフサイクルを再検証。390×844でもケロイドの召喚イベント経路を実行し、firstTime=0 / firstPainted=true / rawFrames=0 / mounts=1 / clean=true / restored=true。型チェック、公開ビルド、統合先のgolem-shell回帰検証も成功。
