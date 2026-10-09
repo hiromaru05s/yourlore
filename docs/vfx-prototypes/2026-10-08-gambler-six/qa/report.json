@@ -1,0 +1,208 @@
+{
+  "checks": [
+    {
+      "card": "GAMBLER",
+      "side": 0,
+      "variant": 1,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "GAMBLER",
+      "side": 0,
+      "variant": 2,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "GAMBLER",
+      "side": 0,
+      "variant": 3,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "GAMBLER",
+      "side": 0,
+      "variant": 4,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "GAMBLER",
+      "side": 0,
+      "variant": 5,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "GAMBLER",
+      "side": 0,
+      "variant": 6,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "GAMBLER",
+      "side": 1,
+      "variant": 1,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "GAMBLER",
+      "side": 1,
+      "variant": 2,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "GAMBLER",
+      "side": 1,
+      "variant": 3,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "GAMBLER",
+      "side": 1,
+      "variant": 4,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "GAMBLER",
+      "side": 1,
+      "variant": 5,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "GAMBLER",
+      "side": 1,
+      "variant": 6,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "LEGEND_GAMBLER",
+      "side": 0,
+      "variant": 1,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "LEGEND_GAMBLER",
+      "side": 0,
+      "variant": 2,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "LEGEND_GAMBLER",
+      "side": 0,
+      "variant": 3,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "LEGEND_GAMBLER",
+      "side": 0,
+      "variant": 4,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "LEGEND_GAMBLER",
+      "side": 0,
+      "variant": 5,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "LEGEND_GAMBLER",
+      "side": 0,
+      "variant": 6,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "LEGEND_GAMBLER",
+      "side": 1,
+      "variant": 1,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "LEGEND_GAMBLER",
+      "side": 1,
+      "variant": 2,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "LEGEND_GAMBLER",
+      "side": 1,
+      "variant": 3,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "LEGEND_GAMBLER",
+      "side": 1,
+      "variant": 4,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "LEGEND_GAMBLER",
+      "side": 1,
+      "variant": 5,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "card": "LEGEND_GAMBLER",
+      "side": 1,
+      "variant": 6,
+      "peak": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "handClick": true
+    }
+  ],
+  "errors": [],
+  "viewports": [
+    1280,
+    390,
+    320
+  ],
+  "reduced": true,
+  "threeSimultaneous": true,
+  "boundary": "Local GameView fixture and dedicated preview player; no production engine routing or authenticated match."
+}

@@ -1,3 +1,5 @@
+import {isGambler} from '../gamblerSummon/selection';
+import {playGamblerSummon,cancelGamblerSummon,cancelGamblerSummons} from '../gamblerSummon/runtime';
 import {isHexer} from '../hexerSummon/selection';
 import {playHexerSummon,cancelHexerSummon,cancelHexerSummons} from '../hexerSummon/runtime';
 import {isChosenHero} from '../chosenSummon/selection';
@@ -16,18 +18,19 @@ const jobs=new Map<HTMLElement,{anchor:HTMLElement;cancel:()=>void}>();
 type Options={anchor?:HTMLElement;signal?:AbortSignal;onImpact?:()=>void};
 export function summonPlacement(target:HTMLElement,w:number,h:number,ms=0,reduced=false,cardId=target.dataset.cardId){
  if(isChosenHero(cardId))return chosenPlacement(target,w,h,ms,reduced);
- if(isHexer(cardId))return projectedPlacement(target,w,h);
+ if(isGambler(cardId)||isHexer(cardId))return projectedPlacement(target,w,h);
  if(isVerdant(cardId))return projectedPlacement(target,w,h);
  const m=motion(SUMMON_VARIANT,ms,reduced),plane=target.closest<HTMLElement>('[data-board-plane]');
  if(!plane)return projectedPlacement(target,w,h).translate(0,-m.lift*w);
  const r=layoutRect(target);
  return boardMatrix(r.left,r.top,(Number(plane.dataset.boardPlane)||0)+m.lift*r.width).scale(r.width/w,r.height/h);
 }
-export function cancelSummon(source:HTMLElement){jobs.get(source)?.cancel();cancelVerdant(source);cancelChosenSummon(source);cancelHexerSummon(source);}
-export function cancelSummons(root?:HTMLElement){cancelVerdants(root);cancelChosenSummons(root);cancelHexerSummons(root);for(const [source,j] of [...jobs])if(!root||root.contains(source)||root.contains(j.anchor))j.cancel();}
+export function cancelSummon(source:HTMLElement){jobs.get(source)?.cancel();cancelVerdant(source);cancelChosenSummon(source);cancelHexerSummon(source);cancelGamblerSummon(source);}
+export function cancelSummons(root?:HTMLElement){cancelGamblerSummons(root);cancelVerdants(root);cancelChosenSummons(root);cancelHexerSummons(root);for(const [source,j] of [...jobs])if(!root||root.contains(source)||root.contains(j.anchor))j.cancel();}
 
 export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<boolean>{
  cancelSummon(source);
+ if(isGambler(source.dataset.cardId))return playGamblerSummon(source,options);
  if(isHexer(source.dataset.cardId))return playHexerSummon(source,options);
  if(isChosenHero(source.dataset.cardId))return playChosenSummon(source,options);
  if(isVerdant(source.dataset.cardId))return playVerdant(source,source.dataset.cardId,options);
