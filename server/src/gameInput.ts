@@ -35,9 +35,14 @@ export function isClientMessage(v: unknown): v is GameClientMsg {
 export function resolveTurnTimeout(game: GameState): ReduceResult {
   let state = game;
   const events: ReduceResult['events'] = [];
-  for (let step = 0; step < 64 && state.pending && !state.over; step++) {
+  const turn = game.turn;
+  for (let step = 0; step < 128 && !state.over && state.turn === turn; step++) {
     const pending = state.pending;
-    if (pending.reason === 'handCap') break;
+    if (!pending || pending.reason === 'handCap') {
+      const result = reduce(state, { type: 'endTurn' });
+      state = result.state; events.push(...result.events);
+      continue;
+    }
     const p = state.players[state.cur], o = state.players[1 - state.cur];
     let choices: (string | null)[];
     if (pending.kind === 'cardChoice') choices = effectChoices(state).map(c => c.uid);
@@ -50,18 +55,17 @@ export function resolveTurnTimeout(game: GameState): ReduceResult {
     // null also keeps a fate-wheel outcome and declines optional resource spend.
     choices = [null, ...choices];
     let progressed = false;
+    const before = JSON.stringify(state);
     for (const target of choices) {
       const result = reduce(state, { type: 'pick', uid: target });
-      if (JSON.stringify(result.state.pending) === JSON.stringify(pending)) continue;
+      if (JSON.stringify(result.state) === before) continue;
       state = result.state; events.push(...result.events); progressed = true; break;
     }
-    if (!progressed) break;
+    if (!progressed) {
+      // Legacy invalid target sets must not freeze the opponent indefinitely.
+      state = structuredClone(state); state.pending = null;
+      events.push({type:'log',html:'시간 초과 — 미해결 선택 종료',htmlJa:'時間切れ — 未解決の選択を終了'});
+    }
   }
-  if (state.pending && state.pending.reason !== 'handCap' && !state.over) {
-    // Empty/legacy invalid target sets must not freeze the opponent indefinitely.
-    state = structuredClone(state); state.pending = null;
-    events.push({type:'log',html:'시간 초과 — 미해결 선택 종료',htmlJa:'時間切れ — 未解決の選択を終了'});
-  }
-  if (!state.over) { const result = reduce(state, { type: 'endTurn' }); state = result.state; events.push(...result.events); }
   return {state, events};
 }

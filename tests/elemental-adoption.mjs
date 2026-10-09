@@ -21,7 +21,11 @@ try{
  function compare(g,a){const old=baseline.reduce(g,a),now=current.reduce(g,a);assert.deepEqual(clean(now.state),clean(old.state));assert.deepEqual(clean(gameplayEvents(now.events)),clean(gameplayEvents(old.events)));for(const start of now.events.filter(e=>e.type==='elementalStart')){const impacts=now.events.filter(e=>e.type==='elementalImpact'&&e.group===start.group);assert.equal(impacts.length,start.targets.length);assert(now.events.some(e=>e.type==='elementalEnd'&&e.group===start.group));assert(!start.targets.some(t=>t.uid&&(!g.players.flatMap(p=>p.field).some(m=>m.uid===t.uid))));}cases++;return now;}
  for(const owner of [0,1])for(const seed of [1,7,17,58])for(const id of ['GUNNER','HEAVY_GUNNER','FIRE_ARROW','FIRE_METEOR','FIRE_BALL','FIRE_ZONE','NGA4']){
   const g=fresh(seed,owner);g.players[1-owner].field=[mon('ELF',1),mon('INFKNIGHT',30)];
-  if(id==='NGA4'){g.players[owner].field=[mon(id),mon('ELF')];compare(g,{type:'attack',uid:g.players[owner].field[0].uid});}
+  if(id==='NGA4'){
+   // v57 intentionally changes Berserk's rules; the frozen visual-only baseline no longer applies.
+   g.players[owner].field=[mon(id),mon('ELF')];const now=current.reduce(g,{type:'attack',uid:g.players[owner].field[0].uid});
+   const attack=now.events.find(e=>e.type==='attack');assert(attack);assert([0,1].includes(attack.targetPlayer));assert(attack.targetUid===null||g.players[attack.targetPlayer].field.some(m=>m.uid===attack.targetUid));cases++;
+  }
   else if(id.endsWith('GUNNER')){g.players[owner].field=[mon(id)];const res=compare(g,{type:'endTurn'});assert.equal(res.events.find(e=>e.type==='elementalStart').targets.length,1);}
   else{g.players[owner].hand=[card(id),card('STARTER_TRASH')];let res=compare(g,{type:'play',idx:0});if(res.state.pending)res=compare(res.state,{type:'pick',uid:id==='FIRE_ZONE'?g.players[owner].hand[1].uid:seed%2?'player-'+owner:g.players[1-owner].field[1].uid});const fx=res.events.find(e=>e.type==='elementalStart');assert(fx,id);assert.equal(fx.targets.length,id==='FIRE_ARROW'?3:id==='FIRE_METEOR'?8:id==='FIRE_ZONE'?3:1);}
  }
