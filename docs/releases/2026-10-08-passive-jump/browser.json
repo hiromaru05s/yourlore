@@ -1,0 +1,272 @@
+[
+  {
+    "size": {
+      "width": 1280,
+      "height": 720
+    },
+    "locale": "ja",
+    "hit": "name",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-guts",
+    "focused": "zoom-passive-guts",
+    "overflow": false,
+    "scroll": 471,
+    "scrollBox": "zoom-details",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 1280,
+      "height": 720
+    },
+    "locale": "ja",
+    "hit": "icon",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-aura",
+    "focused": "zoom-passive-aura",
+    "overflow": false,
+    "scroll": 471,
+    "scrollBox": "zoom-details",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 1280,
+      "height": 720
+    },
+    "locale": "ko",
+    "hit": "name",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-guts",
+    "focused": "zoom-passive-guts",
+    "overflow": false,
+    "scroll": 415,
+    "scrollBox": "zoom-details",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 1280,
+      "height": 720
+    },
+    "locale": "ko",
+    "hit": "icon",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-aura",
+    "focused": "zoom-passive-aura",
+    "overflow": false,
+    "scroll": 415,
+    "scrollBox": "zoom-details",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 1280,
+      "height": 720
+    },
+    "locale": "en",
+    "hit": "name",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-guts",
+    "focused": "zoom-passive-guts",
+    "overflow": false,
+    "scroll": 440,
+    "scrollBox": "zoom-details",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 1280,
+      "height": 720
+    },
+    "locale": "en",
+    "hit": "icon",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-aura",
+    "focused": "zoom-passive-aura",
+    "overflow": false,
+    "scroll": 440,
+    "scrollBox": "zoom-details",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 390,
+      "height": 844
+    },
+    "locale": "ja",
+    "hit": "name",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-guts",
+    "focused": "zoom-passive-guts",
+    "overflow": false,
+    "scroll": 575,
+    "scrollBox": "zoom-wrap",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 390,
+      "height": 844
+    },
+    "locale": "ja",
+    "hit": "icon",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-aura",
+    "focused": "zoom-passive-aura",
+    "overflow": false,
+    "scroll": 575,
+    "scrollBox": "zoom-wrap",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 390,
+      "height": 844
+    },
+    "locale": "ko",
+    "hit": "name",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-guts",
+    "focused": "zoom-passive-guts",
+    "overflow": false,
+    "scroll": 491,
+    "scrollBox": "zoom-wrap",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 390,
+      "height": 844
+    },
+    "locale": "ko",
+    "hit": "icon",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-aura",
+    "focused": "zoom-passive-aura",
+    "overflow": false,
+    "scroll": 491,
+    "scrollBox": "zoom-wrap",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 390,
+      "height": 844
+    },
+    "locale": "en",
+    "hit": "name",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-guts",
+    "focused": "zoom-passive-guts",
+    "overflow": false,
+    "scroll": 541,
+    "scrollBox": "zoom-wrap",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 390,
+      "height": 844
+    },
+    "locale": "en",
+    "hit": "icon",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-aura",
+    "focused": "zoom-passive-aura",
+    "overflow": false,
+    "scroll": 541,
+    "scrollBox": "zoom-wrap",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 320,
+      "height": 740
+    },
+    "locale": "ja",
+    "hit": "name",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-guts",
+    "focused": "zoom-passive-guts",
+    "overflow": false,
+    "scroll": 711,
+    "scrollBox": "zoom-wrap",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 320,
+      "height": 740
+    },
+    "locale": "ja",
+    "hit": "icon",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-aura",
+    "focused": "zoom-passive-aura",
+    "overflow": false,
+    "scroll": 711,
+    "scrollBox": "zoom-wrap",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 320,
+      "height": 740
+    },
+    "locale": "ko",
+    "hit": "name",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-guts",
+    "focused": "zoom-passive-guts",
+    "overflow": false,
+    "scroll": 686,
+    "scrollBox": "zoom-wrap",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 320,
+      "height": 740
+    },
+    "locale": "ko",
+    "hit": "icon",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-aura",
+    "focused": "zoom-passive-aura",
+    "overflow": false,
+    "scroll": 686,
+    "scrollBox": "zoom-wrap",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 320,
+      "height": 740
+    },
+    "locale": "en",
+    "hit": "name",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-guts",
+    "focused": "zoom-passive-guts",
+    "overflow": false,
+    "scroll": 761,
+    "scrollBox": "zoom-wrap",
+    "targetVisible": true
+  },
+  {
+    "size": {
+      "width": 320,
+      "height": 740
+    },
+    "locale": "en",
+    "hit": "icon",
+    "dialogOpen": true,
+    "expectedId": "zoom-passive-aura",
+    "focused": "zoom-passive-aura",
+    "overflow": false,
+    "scroll": 761,
+    "scrollBox": "zoom-wrap",
+    "targetVisible": true
+  }
+]

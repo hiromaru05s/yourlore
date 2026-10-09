@@ -1,0 +1,6 @@
+{
+  "url": "https://test.yourlore.xyz/",
+  "scope": "Public unauthenticated login bootstrap only; no authenticated match claimed",
+  "errors": [],
+  "state": "Browser tab: 5, Title: \"LORE — デッキビルド・デュエル\", URL: \"https://test.yourlore.xyz/\".\n1 AXWebArea LORE — デッキビルド・デュエル, URL: test.yourlore.xyz/\n\t2 container\n\t\t3 pop up button (collapsed, settable) Value: 日本語, Secondary Actions: Expand\n\t\t\t4 menu\n\t\t\t\t5 한국어\n\t\t\t\t6 (selected) 日本語\n\t\t\t\t7 English\n\t\t8 container card\n\t\t\t9 button ログイン\n\t\t\t10 button 新規登録\n\t\t\t11 text メールでログインしてください。\n\t\t\t12 text メールアドレス\n\t\t\t13 text field (settable) メールアドレス\n\t\t\t14 text パスワード\n\t\t\t15 text field (settable) パスワード\n\t\t\t16 button ログイン, ID: submit\n\t\t\t17 link Description: ログインできませんか？, ID: helpLink\n\t\t\t\t18 text ログインできませんか？\n\t\t\t19 text または\n\t\t\t20 button Googleで続行, ID: googleBtn\n\nThe focused UI element is 1 AXWebArea LORE — デッキビルド・デュエル, URL: test.yourlore.xyz/"
+}

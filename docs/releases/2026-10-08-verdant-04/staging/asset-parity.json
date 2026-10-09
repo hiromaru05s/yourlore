@@ -1,0 +1,204 @@
+{
+  "sha": "e7a50ba24b460b31cc181c67e11089706fd4dec4",
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-10-08T03:24:13.794Z",
+  "matched": 49,
+  "assets": [
+    {
+      "file": "assets/BufferGeometryUtils-CIee2MAd.js",
+      "sha256": "b3684dea624ea8dcf53632d6b419737490d21d18681abbf9914681e887120a73"
+    },
+    {
+      "file": "assets/RoomEnvironment-y89Iz8E4.js",
+      "sha256": "a9f5a99ddc0936689d2e6eb9c675e569861b6d9b88a438d4be4b5d3d7ac43614"
+    },
+    {
+      "file": "assets/atelierThemes-DM29k3s-.js",
+      "sha256": "95d1fa7ec28362a982bf7d4430da039a377b73a37609306bf599ca8bc7810c97"
+    },
+    {
+      "file": "assets/audit-Ch-vlPRj.js",
+      "sha256": "53fcc623e3b2b9ac71ac9b74dd522f3e77f45ae7853baa8ac8284d4d4e6a1930"
+    },
+    {
+      "file": "assets/baseFurniture-CROV8g-K.js",
+      "sha256": "94995bbd3d1376c4baf4d364fa2f23772184bee9008bbfab0b3d085a6f49d8ce"
+    },
+    {
+      "file": "assets/board-DBofYnng.js",
+      "sha256": "33ae9483ad52561358bbba43780988adc7f31472ac6aae4a16b1dc31218c440f"
+    },
+    {
+      "file": "assets/board-UDApamK7.css",
+      "sha256": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22"
+    },
+    {
+      "file": "assets/catalogRender-D_BzA5Gb.js",
+      "sha256": "6778fbe0e0e5d26269a8706aa2b590e312b9f8c7703ce8d908c9e6cc502617d0"
+    },
+    {
+      "file": "assets/ceremonyScene-DyXnKHem.js",
+      "sha256": "ded927fdd9c8d354e2854434c8cc05597b771945195c2925e944ebffcf1ab8ee"
+    },
+    {
+      "file": "assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "sha256": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700"
+    },
+    {
+      "file": "assets/cosmeticStudio-BC-GP365.js",
+      "sha256": "1868f19cdb613c97b596ce47b0ec84485b6cfcf62b3c63a5c66d0699f6f6b172"
+    },
+    {
+      "file": "assets/diceScene-RVvqXItf.js",
+      "sha256": "fac22be301555600ba06c088693d70942136e64c631e014b743213479be32179"
+    },
+    {
+      "file": "assets/duelScene-BpJmlOfU.js",
+      "sha256": "68a5980ec348a7cc0c1e36849708ef071ae33d521941e2401bed4ca8f3bf2128"
+    },
+    {
+      "file": "assets/family-matter-DnkirKkd.js",
+      "sha256": "becdfbecf60b9d3c49a9630a105ff0393542d04431c78ed51a0f5a7c8893c62d"
+    },
+    {
+      "file": "assets/game-OlnTtL6S.js",
+      "sha256": "0e234d80264126d6a0f63fd184453333513cc6449eeaa21a85ac4db57ff3f957"
+    },
+    {
+      "file": "assets/handGeometry-Bz96hXgQ.js",
+      "sha256": "aa57e7f2da29c273b4f2adfb686fe19dbae04ee09c5e9ce37b735341357b6d01"
+    },
+    {
+      "file": "assets/inspection-CELZmBuf.js",
+      "sha256": "bf3519849602ec199c87a4b1e5b7c70b264029e7789f8afa9385631b6466f2eb"
+    },
+    {
+      "file": "assets/layout-B7TvtxiV.js",
+      "sha256": "d22ffd73e21d57f34a3ee038327412a30139009e67b2fb2f6e96c75f4265b121"
+    },
+    {
+      "file": "assets/layout-C3eY51DA.css",
+      "sha256": "f217653022333feaa97266f973590ba24c3f7f25e2b8059f8eea00c3039ae067"
+    },
+    {
+      "file": "assets/libraryAssets-Dp_W9n6P.js",
+      "sha256": "2829f84b1e488dff7148461f69bcc2b0c025f77c3e40aace379bfaedc4eb5fbb"
+    },
+    {
+      "file": "assets/main-CSJFWGNH.css",
+      "sha256": "b81be8ddec94ba8496576880a3cae46649398416161d1cbf25e310416f5e0e4d"
+    },
+    {
+      "file": "assets/main-G3Shhosp.js",
+      "sha256": "a6497307f88d7c5dc25d06a8ef9bc2fd10ca8d5fde64c555e1a1657868451fb8"
+    },
+    {
+      "file": "assets/master-tongues-DUfCFfS0.js",
+      "sha256": "5b069f0dfb423f5d80390ffcbf83cebd15f6ff2c30868225372b3b280c46c296"
+    },
+    {
+      "file": "assets/materials-K_GsGH5g.js",
+      "sha256": "6a496343f091aa75cb5b9e1e59e9cee481fa1f48592eb11386cd673e01ed9aef"
+    },
+    {
+      "file": "assets/modal-B2zuWcAX.js",
+      "sha256": "3e9e965c321f25e7a8cc7991e6aec67974b1c8dce88a5d8744dcfa0fadbdc018"
+    },
+    {
+      "file": "assets/modal-cM8EengU.css",
+      "sha256": "708a3c50bc8e0d4ec8aa8262e4c6acecbcdda371e68c72208c9d31b97f75cc07"
+    },
+    {
+      "file": "assets/ornaments-Lo0b7UIl.js",
+      "sha256": "9fad477858e41507ed315966d960ce064c1a02d3f39b2a6c67235ac3b15b6e27"
+    },
+    {
+      "file": "assets/paperDraw-ngW1XduB.js",
+      "sha256": "61a435cb6acad2f0409caf981369157c2132226b2c3a5d05cca7b66d40b95853"
+    },
+    {
+      "file": "assets/persistentFlightRenderer-yARpwg3h.js",
+      "sha256": "6749d551e1d7c3061ad064b637774ac6243712b1df92bde020253dfd2d80c680"
+    },
+    {
+      "file": "assets/pileModels-Bo1MImhr.js",
+      "sha256": "b5dc921e31a32967996bec0217a83411f8e091c126a93bede6bca20841465dec"
+    },
+    {
+      "file": "assets/renderDensity-eCqR3GeM.js",
+      "sha256": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699"
+    },
+    {
+      "file": "assets/renderer-C6rFMK8d.js",
+      "sha256": "c6a98a8a76ce681302ede4629d20463bd988d913165d9c852e9387e33f19f36c"
+    },
+    {
+      "file": "assets/renderer-COHLaL_q.js",
+      "sha256": "0731250047d06bb3a106e8ef42b1a0f027fae38f876049c17dc7b2d80cd15e09"
+    },
+    {
+      "file": "assets/renderer-YBqZn3C7.js",
+      "sha256": "34596d4eb8a13be0860df1a3178853ab48010c2c665a1e1f4b5d480150ef2724"
+    },
+    {
+      "file": "assets/riftScene-Br2bMQwu.js",
+      "sha256": "341f9d00e6fef5aee43c572ef1fa277916bb54749f139aaf93d9f280bc465a5b"
+    },
+    {
+      "file": "assets/royal-matter-C3D_JvZk.js",
+      "sha256": "328502ba4b25f47f20d4e651c335872b49ac3671a08895b27391e057a35c1b92"
+    },
+    {
+      "file": "assets/runtime-CZHUvO5r.js",
+      "sha256": "0159187390165c99cf30c46feb1c979ef5f154fc3ea28b509299149b730b0b27"
+    },
+    {
+      "file": "assets/runtime-Ch9eydv_.css",
+      "sha256": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c"
+    },
+    {
+      "file": "assets/runtime-ZXKvje-y.js",
+      "sha256": "c478db50b5268cd97979ec90b3225dc7c97feaf98748fa8336506ab8493f9cb5"
+    },
+    {
+      "file": "assets/runtime-tXFq_bLz.js",
+      "sha256": "20f6bca8a9a4b614d46f70007ae1da6d634cfaa588a36751db4a37ec623ac6be"
+    },
+    {
+      "file": "assets/scene-BJZZW-Qy.js",
+      "sha256": "c8a042ec17c35c294575b5bb9b697164b96085f1207d72faa5da7f562040079b"
+    },
+    {
+      "file": "assets/sleeve-BcJ1PbhY.js",
+      "sha256": "bb2826e0d6b061ee674215811946eee909f04d86fd68100e0810c329d01f1cdd"
+    },
+    {
+      "file": "assets/studio-CmgKc6nL.css",
+      "sha256": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e"
+    },
+    {
+      "file": "assets/three.module-C0K8bErF.js",
+      "sha256": "34191b73464d12d84234e3349643a77cc0f02ece72f01e2e4b98fc8b17865d6e"
+    },
+    {
+      "file": "cardtest.html",
+      "sha256": "16d2dc9c2574099c50887859f0786436b6ccddd5e64b14d881b1c7e87f416d93"
+    },
+    {
+      "file": "cosmetic-studio.html",
+      "sha256": "e9b3e90295e4856262f16ca92d43f2f4ddba97dabd7535c25acb94c3e2b23850"
+    },
+    {
+      "file": "index.html",
+      "sha256": "d883ed20b3f652d756cf06bfdddf023ee702cd9bb00113eae5351113dec41448"
+    },
+    {
+      "file": "rift-concepts.html",
+      "sha256": "a18afdf4980837166ceb063df4021433f67ca8804b221f804e7d6ba46b865af9"
+    },
+    {
+      "file": "rift-purple-concepts.html",
+      "sha256": "43aab52e2df986343cc96426738472a0dba1480492288175ec72bc8b4cb493d7"
+    }
+  ]
+}

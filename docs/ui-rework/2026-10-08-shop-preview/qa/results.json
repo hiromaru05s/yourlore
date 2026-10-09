@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "errors": [],
+  "checks": [
+    "12 actual model thumbnails",
+    "same-tab board and closeups",
+    "Escape and focus restoration",
+    "selection retained",
+    "legacy and atelier furniture",
+    "sleeves independent from furniture",
+    "320/390px no horizontal overflow"
+  ]
+}

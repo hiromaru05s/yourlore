@@ -2,7 +2,7 @@ import {MANA_GAIN_MS} from './manaGainTiming';
 import {drawManaGain} from './manaGain';
 import {drawAttackVisual,ATTACK_DURATION_MS} from './attackVisual';
 import {projectedPlacement} from './boardProjection';
-import {drawManaPurchase,MANA_PURCHASE_DURATION} from './manaPurchase';
+import {drawManaPurchase,MANA_PURCHASE_DURATION,disposeManaPurchase} from './manaPurchase';
 import {drawToonPlay,TOON_PLAY_DURATION,disposeToonPlayVisual} from './toonPlayVisual';
 /** Target-local Biblion VFX. All geometry is procedural; no labels or stat changes. */
 export type BiblionEffect = 'mana' | 'attack' | 'purchase' | 'heal' | 'spell' | 'summon-charge' | 'summon-impact' | 'quest' | 'quick' | 'enchant' | 'enchant-place';
@@ -100,5 +100,5 @@ function onVisibility(){if(document.hidden)clearBiblionFx();}
 export function clearBiblionFx(dispose=false){
  cancelAnimationFrame(frame);frame=0;entries.length=0;
  for(const name of ['rear','front'] as const){const layer=layers[name];if(!layer)continue;layer.context.clearRect(0,0,layer.canvas.width,layer.canvas.height);layer.canvas.hidden=true;layer.canvas.dataset.effects='';if(dispose){layer.canvas.remove();delete layers[name];}}
- if(dispose){disposeToonPlayVisual();document.removeEventListener('visibilitychange',onVisibility);}
+ if(dispose){disposeManaPurchase();disposeToonPlayVisual();document.removeEventListener('visibilitychange',onVisibility);}
 }

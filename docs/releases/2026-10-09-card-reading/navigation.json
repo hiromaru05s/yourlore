@@ -1,0 +1,53 @@
+[
+  {
+    "lang": "ja",
+    "scale": 2,
+    "spacing": true,
+    "width": 320,
+    "reached": {
+      "active": true,
+      "animation": "none",
+      "background": "rgba(232, 198, 106, 0.08)",
+      "boxShadow": "none",
+      "color": "rgb(217, 239, 255)",
+      "controlsBottom": 129,
+      "panelBackground": "rgb(37, 65, 95)",
+      "top": 145
+    },
+    "returned": true
+  },
+  {
+    "lang": "ko",
+    "scale": 2,
+    "spacing": true,
+    "width": 320,
+    "reached": {
+      "active": true,
+      "animation": "none",
+      "background": "rgba(232, 198, 106, 0.08)",
+      "boxShadow": "none",
+      "color": "rgb(217, 239, 255)",
+      "controlsBottom": 87,
+      "panelBackground": "rgb(37, 65, 95)",
+      "top": 103
+    },
+    "returned": true
+  },
+  {
+    "lang": "en",
+    "scale": 2,
+    "spacing": true,
+    "width": 320,
+    "reached": {
+      "active": true,
+      "animation": "none",
+      "background": "rgba(232, 198, 106, 0.08)",
+      "boxShadow": "none",
+      "color": "rgb(217, 239, 255)",
+      "controlsBottom": 129,
+      "panelBackground": "rgb(37, 65, 95)",
+      "top": 145
+    },
+    "returned": true
+  }
+]

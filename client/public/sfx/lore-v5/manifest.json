@@ -1,6 +1,6 @@
 {
   "version": 5,
-  "status": "active bank with user-selected spell 01 (lore-v7) and summon 04 (lore-v8)",
+  "status": "active bank with user-selected spell 01 (lore-v7) and summon 04 (lore-v8); selected Chosen Domain crown completion (chosen-v2, user-selected sound 02)",
   "sampleRate": 44100,
   "sounds": {
     "click": [
@@ -706,6 +706,24 @@
         ],
         "decision": "rebuilt",
         "description": "4段階で上がる短い昇格音。"
+      }
+    ],
+    "chosenCrown": [
+      {
+        "file": "heavy-blade.mp3",
+        "seconds": 1.8,
+        "peakDb": -5.28,
+        "energy200Db": -22.49,
+        "sampleRate": 48000,
+        "sources": [
+          "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/blade_03.ogg",
+          "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_heavy_002.ogg",
+          "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_medium_004.ogg",
+          "docs/sound-redesign/2026-09-30/sources/swishes/swish-7.wav"
+        ],
+        "sha256": "405c0d6a81ee7ffb41ebf4cc6f2c5af95b4790c791d1388e4edd84459835e330",
+        "url": "/sfx/chosen-v2/heavy-blade.mp3",
+        "decision": "User selected 02 重刃の確定 on 2026-10-08; one cue at 2700ms crown completion light"
       }
     ]
   }

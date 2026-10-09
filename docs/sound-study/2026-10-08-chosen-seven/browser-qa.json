@@ -1,0 +1,101 @@
+{
+  "sequence": {
+    "events": [
+      {
+        "variant": 1,
+        "scheduled": 0.8603333333333334,
+        "visualTime": 2700,
+        "mode": "impact"
+      },
+      {
+        "variant": 2,
+        "scheduled": 4.124333333333333,
+        "visualTime": 2700,
+        "mode": "impact"
+      },
+      {
+        "variant": 3,
+        "scheduled": 7.393666666666666,
+        "visualTime": 2700,
+        "mode": "impact"
+      },
+      {
+        "variant": 4,
+        "scheduled": 10.657666666666668,
+        "visualTime": 2700,
+        "mode": "impact"
+      },
+      {
+        "variant": 5,
+        "scheduled": 13.927,
+        "visualTime": 2700,
+        "mode": "impact"
+      },
+      {
+        "variant": 6,
+        "scheduled": 17.191,
+        "visualTime": 2700,
+        "mode": "impact"
+      },
+      {
+        "variant": 7,
+        "scheduled": 20.460333333333335,
+        "visualTime": 2700,
+        "mode": "impact"
+      }
+    ],
+    "starts": [
+      {
+        "when": 0.8603333333333334,
+        "now": 0.005333333333333333,
+        "duration": 1.35
+      },
+      {
+        "when": 4.124333333333333,
+        "now": 3.2693333333333334,
+        "duration": 1.8
+      },
+      {
+        "when": 7.393666666666666,
+        "now": 6.538666666666667,
+        "duration": 1.55
+      },
+      {
+        "when": 10.657666666666668,
+        "now": 9.802666666666667,
+        "duration": 1.45
+      },
+      {
+        "when": 13.927,
+        "now": 13.072,
+        "duration": 1.6
+      },
+      {
+        "when": 17.191,
+        "now": 16.336,
+        "duration": 2.05
+      },
+      {
+        "when": 20.460333333333335,
+        "now": 19.605333333333334,
+        "duration": 0.95
+      }
+    ]
+  },
+  "flash": 2707.6666666666647,
+  "soundOnly": {
+    "when": 26.092333333333332,
+    "now": 26.037333333333333,
+    "duration": 1.55
+  },
+  "cancelled": {
+    "playing": false,
+    "stops": 4
+  },
+  "mobile": {
+    "width": 390,
+    "scroll": 390,
+    "choices": 7
+  },
+  "errors": []
+}

@@ -1,0 +1,63 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "frames": [
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-quest.png",
+      "status": 200
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-mon.png",
+      "status": 200
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-spell.png",
+      "status": 200
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-trap.png",
+      "status": 200
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-quest.png",
+      "status": 200
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-spell.png",
+      "status": 200
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-mon.png",
+      "status": 200
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-trap.png",
+      "status": 200
+    }
+  ],
+  "errors": [],
+  "dialogs": [
+    {
+      "left": 280,
+      "right": 1000,
+      "top": 184.28125,
+      "bottom": 715.71875,
+      "width": 1280,
+      "height": 900,
+      "overflow": false
+    },
+    {
+      "left": 11.703125,
+      "right": 378.296875,
+      "top": 135.875,
+      "bottom": 708.125,
+      "width": 390,
+      "height": 844,
+      "overflow": false
+    }
+  ],
+  "checks": [
+    "Sword dragged from hand opens pre-cast review",
+    "Deployed controller: enemy-only Sword selection, warning, zero-action cancel, atomic commit, desktop/mobile no overflow"
+  ],
+  "boundary": "Deployed BOT board startup, actual network frames, no help/countdown overlays. Authentication/API responses and Sword board are fixtures. Deployed controller submission is captured and evaluated with the matching source engine; no authenticated online match."
+}

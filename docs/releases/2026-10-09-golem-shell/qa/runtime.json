@@ -1,0 +1,448 @@
+{
+  "results": [
+    {
+      "firstStoneIndependentOfFace": {
+        "same": true,
+        "reveals": true
+      }
+    },
+    {
+      "id": "GOLEM1",
+      "side": 0,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 14833,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM1",
+      "side": 0,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 36998,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM1",
+      "side": 0,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 36998,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM1",
+      "side": 1,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 13307,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM1",
+      "side": 1,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 60509,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM1",
+      "side": 1,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 60509,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM2",
+      "side": 0,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 14949,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM2",
+      "side": 0,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 37181,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM2",
+      "side": 0,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 37181,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM2",
+      "side": 1,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 13429,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM2",
+      "side": 1,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 60933,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM2",
+      "side": 1,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 60933,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM3",
+      "side": 0,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 15050,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM3",
+      "side": 0,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 37349,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM3",
+      "side": 0,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 37349,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM3",
+      "side": 1,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 13534,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM3",
+      "side": 1,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 61311,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GOLEM3",
+      "side": 1,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 61311,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "M10",
+      "side": 0,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 14949,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "M10",
+      "side": 0,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 37181,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "M10",
+      "side": 0,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 37181,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "M10",
+      "side": 1,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 13429,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "M10",
+      "side": 1,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 60933,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "M10",
+      "side": 1,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 60933,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "NGA3",
+      "side": 0,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 14949,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "NGA3",
+      "side": 0,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 37181,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "NGA3",
+      "side": 0,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 37181,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "NGA3",
+      "side": 1,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 13429,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "NGA3",
+      "side": 1,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 60933,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "NGA3",
+      "side": 1,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 60933,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "NWL3",
+      "side": 0,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 14949,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "NWL3",
+      "side": 0,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 37181,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "NWL3",
+      "side": 0,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 37181,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "NWL3",
+      "side": 1,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 13429,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "NWL3",
+      "side": 1,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 60933,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "NWL3",
+      "side": 1,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 60933,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MANA_GIANT",
+      "side": 0,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 15092,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MANA_GIANT",
+      "side": 0,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 37363,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MANA_GIANT",
+      "side": 0,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 37363,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MANA_GIANT",
+      "side": 1,
+      "path": "direct",
+      "initial": {
+        "time": 0,
+        "pixels": 13568,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MANA_GIANT",
+      "side": 1,
+      "path": "hand",
+      "initial": {
+        "time": 0,
+        "pixels": 61419,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "MANA_GIANT",
+      "side": 1,
+      "path": "generated",
+      "initial": {
+        "time": 0,
+        "pixels": 61419,
+        "rawGhosts": 0
+      }
+    },
+    {
+      "reason": "skip",
+      "restored": true
+    },
+    {
+      "reason": "cancel",
+      "restored": true
+    },
+    {
+      "reason": "resize",
+      "restored": true
+    },
+    {
+      "mobile": true,
+      "reduced": true
+    }
+  ],
+  "errors": [],
+  "warnings": []
+}
