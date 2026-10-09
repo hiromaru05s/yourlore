@@ -2,12 +2,12 @@ export const cards = ['NHEX','HEXER1','HEXER2','HEXER3','HEXER4'] as const;
 export type Id = typeof cards[number];
 export const names = ['見習い呪術師','初級呪術師','中級呪術師','上級呪術師','ケロイド'];
 export const designs = [
- {name:'黒蝋の封解',en:'THE BROKEN SEAL',note:'絵柄の上を薄い黒蝋が伝い、亀裂を境に反り返る。重い蝋片が四辺へ溶け戻る。',material:'黒蝋 / 彫刻 / 低い反射'},
- {name:'呪糸の抜縫',en:'THE UNSTITCHING',note:'カード枠から伸びた銀紫の糸が面を縫い留める。張力を溜め、一針ずつ抜けて枠へ帰る。',material:'撚り糸 / 張力 / 細い金属光'},
- {name:'影絹の脱皮',en:'THE SHADOW SHROUD',note:'カードの左右から薄絹が沿って被さり、滑らかにめくれる。透ける襞が細い裾へほどける。',material:'薄絹 / 透過 / 波打つ襞'},
- {name:'呪脈の還流',en:'THE RETURNING VEINS',note:'カード面の細い溝から黒い呪液が盛り上がる。枝分かれした脈が、先端から面へ吸い戻る。',material:'黒い呪液 / 濡れた芯 / 毛細管'},
- {name:'黒曜の開扉',en:'THE OBSIDIAN FOLIO',note:'表面の細長い黒曜層が厚みを持ち、左右へ開く。薄片が順に折り畳まれ、枠へ沈む。',material:'黒曜石 / 切断面 / 狭い稜線'},
- {name:'呪札の折解',en:'THE FOLDED VOW',note:'枠の紋様が細い呪札へ伸び、四隅から面を封じる。折り目が連鎖し、札が枠へ収まる。',material:'古い繊維紙 / 架空の文字 / 折り目'},
+ {name:'紫墨の解呪',en:'LIVING INK',note:'刻まれた呪文から黒紫の膜が滲む。厚い縁がめくれ、細い刻印を残してカードへ帰る。',material:'流れる被膜 / 湿った反射 / 刻印'},
+ {name:'鎖印の解放',en:'UNBOUND',note:'カードの刻印が交差する鎖を結ぶ。引き絞られた鎖が中央から解け、四隅へ沈む。',material:'連なる金属 / 張力 / 解放'},
+ {name:'黒帷の開帳',en:'DARK REVELATION',note:'左右の枠から一枚ずつの黒い帷が立ち上がる。柔らかな襞と影が走り、絵柄が現れる。',material:'二枚の薄膜 / 移動する襞 / 透過'},
+ {name:'黒曜の再成',en:'REFORGED RECORD',note:'絵柄を保ったカード表面が細片に分かれて浮く。紫の亀裂が閉じ、元の一面へ戻る。',material:'絵柄を持つ薄片 / 亀裂 / 再成'},
+ {name:'血蝋の血判',en:'BLOOD PACT',note:'呪文の細い溝から血蝋が凝り、印が押し込まれる。封印は滲んで面へ染み戻る。',material:'血蝋 / 彫り込む印 / 毛細管'},
+ {name:'呪冠の降臨',en:'CROWN OF HEXES',note:'カードの四隅から黒い呪角が伸びる。高さと重みを持つ冠が、接地に合わせて枠へ沈む。',material:'黒い呪角 / 四隅の支点 / 重力'},
 ];
 export const clamp=(v:number)=>Math.max(0,Math.min(1,v));
 export const ease=(a:number,b:number,t:number)=>{const p=clamp((t-a)/(b-a));return p*p*(3-2*p);};
