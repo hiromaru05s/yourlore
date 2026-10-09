@@ -41,7 +41,7 @@ export function planFor(id:string,card:string,opt:Options):Plan{
  case 'fire':case 'A086':case 'A087':case 'A088':case 'A089':fire(card);break;
  case 'attune':
   if(card==='AHEUK'){buff('enemyMana',900,opt.boost?-2:-1,'mana');break;}
-  if(card==='AMA')add('move','hand','shelf',300,700,'宝箱をシェルフへ',{shape:'card'});
+  if(card==='AMA')add('move','hand','shelf',300,700,'宝箱を墓地へ',{shape:'card'});
   buff('mana',950,1,'mana');
   if(card==='AJIN'){add('dice','source','source',450,600,'ダイス判定',{count:1});if(opt.outcome)add('move','source','shelf',1600,700,'4以上：アチューンを追加',{shape:'card'});}
   if(card==='STARTER_MANA'){buff('mana',150,-3,'spend');add('shield','source','source',1700,700,'神器：除外されない',{shape:'relic'});}
@@ -52,7 +52,7 @@ export function planFor(id:string,card:string,opt:Options):Plan{
  case 'A001':summon();break;
  case 'A007':for(let i=0;i<3;i++)summon(('ally'+i) as Anchor,600+i*340,card==='SCARECROW'?'TOKEN00':card==='REINFORCE'?['INFKNIGHT','SOLDIER2','GUNNER'][i]:'SOLDIER2');break;
  case 'A012':for(let i=0;i<3;i++){summon(('ally'+i) as Anchor,500+i*220,['INFKNIGHT','SOLDIER2','GUNNER'][i]);add('mark','source',('ally'+i) as Anchor,1650,700,'相手ターン終了まで',{shape:'hourglass'});add('break',('ally'+i) as Anchor,'shelf',2800+i*120,1000,'期限到来で退場');}break;
- case 'A013':add('break','enemy0','shelf',650,1500,'表面から崩壊しシェルフへ');break;
+ case 'A013':add('break','enemy0','shelf',650,1500,'表面から崩壊し墓地へ');break;
  case 'A023':case 'A025':shot('ally0','enemy0');break;
  case 'A024':case 'A026':shot('ally0','opponent');break;
  case 'A027':shot('ally0','enemy0');shot('enemy0','opponent',1330,'pierce',2);break;

@@ -1,3 +1,5 @@
+import {livingFromUrl} from '../../shared/livingCosmetics';
+import {animatedMaterial} from './living/materials';
 import * as T from 'three';
 import {themeFromUrl,type AtelierTheme} from '../../shared/atelierThemes';
 export {themeFromUrl} from '../../shared/atelierThemes';
@@ -12,6 +14,8 @@ function finishMap(t:AtelierTheme){let map=maps.get(t.id);if(map)return map;cons
   const i=(y*size+x)*4;data[i]=Math.round(255*foil);data[i+1]=Math.round(255*(rough*(1-foil*.65)+n*.025));data[i+2]=Math.round(255*(.08+foil*.85));data[i+3]=255;}
  map=new T.DataTexture(data,size,size);map.wrapS=map.wrapT=T.ClampToEdgeWrapping;map.magFilter=T.LinearFilter;map.minFilter=T.LinearMipmapLinearFilter;map.generateMipmaps=true;map.needsUpdate=true;maps.set(t.id,map);return map;}
 export function sleeveMaterial(texture:T.Texture):T.Material{
+ const living=livingFromUrl(texture.userData.url||(texture.image as HTMLImageElement)?.currentSrc||(texture.image as HTMLImageElement)?.src);
+ if(living){const m=animatedMaterial(living.variant,false,texture);m.onBeforeRender=()=>{m.uniforms.time.value=matchMedia('(prefers-reduced-motion: reduce)').matches?0:performance.now()/1000;};return m;}
  const theme=themeFromUrl(texture.userData.url||(texture.image as HTMLImageElement)?.currentSrc||(texture.image as HTMLImageElement)?.src);if(!theme)return new T.MeshBasicMaterial({map:texture,toneMapped:false});
  const map=finishMap(theme),material=new T.MeshPhysicalMaterial({name:'atelier-sleeve-'+theme.id,map:texture,color:0xc5c9cf,roughnessMap:map,metalnessMap:map,roughness:1,metalness:.75,clearcoat:theme.surface==='leather'?.12:.8,clearcoatRoughness:.16,iridescence:theme.id==='porcelain'?.35:0,envMapIntensity:.75,bumpMap:map,bumpScale:.0008});
  if(theme.motion){

@@ -17,6 +17,7 @@ const lastLoungePage=new WeakMap<App,string>();
 
 /** Shared navigation around the existing screen, preserving its live handlers. */
 export function mountLounge(app: App, page: LoungePage): () => void {
+  const lifecycle=new AbortController();
   document.body.classList.add('lounge-active');
   const content = document.createElement('main'); content.className='lounge-content'; content.id='loungeContent';
   content.append(...Array.from(app.root.childNodes));
@@ -43,7 +44,7 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     top.querySelector<HTMLButtonElement>('[data-home]')!.onclick=()=>app.home();
     nav.forEach(([key,,,go])=>{rail.querySelector<HTMLButtonElement>(`[data-nav="${key}"]`)!.onclick=go;});
     rail.querySelector<HTMLButtonElement>('[data-utility-settings]')!.onclick=()=>app.settings();
-    rail.querySelector<HTMLButtonElement>('[data-invite]')!.onclick=()=>void showInviteModal();
+    rail.querySelector<HTMLButtonElement>('[data-invite]')!.onclick=()=>void showInviteModal(lifecycle.signal);
     rail.querySelector<HTMLButtonElement>('[data-inquiry]')!.onclick=showInquiryModal;
     top.querySelector<HTMLButtonElement>('[data-profile]')!.onclick=()=>app.profile();
     top.querySelector<HTMLButtonElement>('[data-shop]')!.onclick=()=>app.shop();
@@ -81,5 +82,5 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     }
   };
   document.addEventListener('keydown',keyboard);
-  return ()=>{stopNavMotion?.();off();document.removeEventListener("lore:user",paint);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
+  return ()=>{lifecycle.abort();stopNavMotion?.();off();document.removeEventListener("lore:user",paint);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
 }

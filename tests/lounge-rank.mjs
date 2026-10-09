@@ -19,7 +19,7 @@ class Stmt {
  async all(){return {results:sql.prepare(this.query).all(...this.args)};}
  async run(){return sql.prepare(this.query).run(...this.args);}
 }
-const env={DB:{prepare:q=>new Stmt(q),batch:async list=>{sql.exec('BEGIN');try{const out=[];for(const [i,s] of list.entries()){out.push(sql.prepare(s.query).run(...s.args));if(fail&&i===1){fail=false;throw Error('injected outage');}}sql.exec('COMMIT');return out;}catch(e){sql.exec('ROLLBACK');throw e;}}}};
+const env={GAME_ROOM:{idFromName:name=>({toString:()=> 'durable-'+name})},DB:{prepare:q=>new Stmt(q),batch:async list=>{sql.exec('BEGIN');try{const out=[];for(const [i,s] of list.entries()){out.push(sql.prepare(s.query).run(...s.args));if(fail&&i===1){fail=false;throw Error('injected outage');}}sql.exec('COMMIT');return out;}catch(e){sql.exec('ROLLBACK');throw e;}}}};
 const at=Date.UTC(2026,8,21),season='2026-09';
 const add=(id,mmr=1000)=>{sql.prepare('INSERT INTO users VALUES (?,?)').run(id,id);sql.prepare('INSERT INTO ratings VALUES (?,?,?,0,0,?,1,NULL,NULL)').run(id,season,mmr,mmr);};
 add('a');add('b');add('c');

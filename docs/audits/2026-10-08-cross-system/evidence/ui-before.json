@@ -1,0 +1,43 @@
+{
+  "checks": [
+    {
+      "name": "abort releases retry without removing host",
+      "passed": false,
+      "actual": {
+        "settled": false,
+        "retries": 1
+      },
+      "expected": {
+        "settled": true,
+        "retries": 0
+      }
+    },
+    {
+      "name": "new card filter cancels superseded page",
+      "passed": false,
+      "actual": {
+        "oldDone": false,
+        "retries": 0,
+        "content": "new page"
+      },
+      "expected": {
+        "oldDone": true,
+        "retries": 0,
+        "content": "new page"
+      }
+    },
+    {
+      "name": "late challenge acceptance cannot navigate away from new screen",
+      "passed": false,
+      "actual": {
+        "joined": 1,
+        "overlays": 0
+      },
+      "expected": {
+        "joined": 0,
+        "overlays": 0
+      }
+    }
+  ],
+  "errors": []
+}

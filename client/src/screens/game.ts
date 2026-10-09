@@ -1,3 +1,5 @@
+import { botNpc } from "../shared/botNpcs";
+import { getLang } from "../i18n";
 import {deckStoreForUser} from '../shared/cards';
 // ============================================================
 // LORE — game screen. Hosts a Local (vs bot) or Online controller.
@@ -21,8 +23,9 @@ export type GameOpts =
 export function mountGame(app: App, opts: GameOpts): Screen {
   const root = document.createElement("div");
   app.root.appendChild(root);
+  const npc = opts.mode === "bot" ? botNpc(opts.difficulty ?? "hard") : null;
   setMyAvatar(app.user?.avatar);  // my profile icon on the center-bottom portrait
-  setOppAvatar(opts.mode === "online" ? opts.oppAvatar ?? null : null); // opp portrait (bot → initial)
+  setOppAvatar(opts.mode === "online" ? opts.oppAvatar ?? null : npc?.avatar ?? null);
   const decks=deckStoreForUser(app.user),activeDeck=decks.list[decks.sel];
   setMySleeve(activeDeck.sleeve); setMyFurniture(activeDeck.furniture);  // apply my equipped card sleeve to my deck/set-trap backs
   // 마켓 알림이: 활성 덱 프리셋의 워치리스트를 인게임 마켓 하이라이트에 연결
@@ -33,7 +36,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     { avatar: ownSeeker, name: app.user?.display ?? "YOU" },
     opts.mode === "online"
       ? { avatar: opts.oppAvatar === "SEEKER_BLUE" ? "SEEKER_BLUE" : "SEEKER_RED", name: opts.oppName }
-      : { avatar: "SEEKER_RED", name: opts.mode === "tutorial" ? "TUTOR" : "BOT" },
+      : npc ? { avatar: npc.avatar, name: npc.name[getLang()] } : { avatar: "SEEKER_RED", name: "TUTOR" },
   );
 
   let stopMusic: (() => void) | undefined;

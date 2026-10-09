@@ -1,0 +1,464 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-10-07T01:40:14.173Z",
+  "assets": [
+    {
+      "file": "assets/atelierThemes-DM29k3s-.js",
+      "sha256": "95d1fa7ec28362a982bf7d4430da039a377b73a37609306bf599ca8bc7810c97"
+    },
+    {
+      "file": "assets/BufferGeometryUtils-B3Pwz7I_.js",
+      "sha256": "ed6dae32ed1340c153f263e88e5f0b42c4728511bc50b5f5a9381e205a86403f"
+    },
+    {
+      "file": "assets/RoomEnvironment-DrABbgCX.js",
+      "sha256": "2a74ac17bc6d632cf13f3806c12d6d621e75ef78883817fac1a2cfbc0f431828"
+    },
+    {
+      "file": "assets/audit-Ch-vlPRj.js",
+      "sha256": "53fcc623e3b2b9ac71ac9b74dd522f3e77f45ae7853baa8ac8284d4d4e6a1930"
+    },
+    {
+      "file": "assets/board-DF4LxME5.js",
+      "sha256": "ddac77a9c4ad9a543ba4f71a2c2d3d1a4a4eff786655bf44bc5217562b32bf8d"
+    },
+    {
+      "file": "index.html",
+      "sha256": "dbade2b2f7d526dce48cd6da9fcd2bbf832e07b5344663b9cfa41da2985a4a7d"
+    },
+    {
+      "file": "assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "sha256": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700"
+    },
+    {
+      "file": "assets/ceremonyScene-CKwAMZia.js",
+      "sha256": "74b63dad2861012570585b097b3da57506e0846ea7fa21a5d84845c6608b2581"
+    },
+    {
+      "file": "assets/board-UDApamK7.css",
+      "sha256": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22"
+    },
+    {
+      "file": "assets/duelScene-C4buzdpV.js",
+      "sha256": "bcf3f45cfdf788d170192964836c14a61085241ff67e9bccc8f30af7da31908c"
+    },
+    {
+      "file": "assets/cosmeticStudio-DQ79ziVk.js",
+      "sha256": "bccff8884dbca264078698a075156bf21272b69c958c28b78aab427a53662e03"
+    },
+    {
+      "file": "assets/diceScene-Bfmv6ewg.js",
+      "sha256": "50389eedd3e733918b91a8986b2b37eed23a5459baca55cbff8791d44c75a6f1"
+    },
+    {
+      "file": "assets/layout-pMfcEDtF.css",
+      "sha256": "834708ab76534934347cff47b156f4228bd9c7904902eda69088e255db0cdc94"
+    },
+    {
+      "file": "assets/handGeometry-Bz96hXgQ.js",
+      "sha256": "aa57e7f2da29c273b4f2adfb686fe19dbae04ee09c5e9ce37b735341357b6d01"
+    },
+    {
+      "file": "assets/game-CNQyAoa-.js",
+      "sha256": "97f0a3e7539688189ee8136d5a8d0970d53e65d11740f3cf4971b3883d4df336"
+    },
+    {
+      "file": "assets/inspection-BoJ6tl2n.js",
+      "sha256": "dac72dfe3cfa10d95c3963cf9412c8a0dc1385448b3754447a0a865fdd992d9e"
+    },
+    {
+      "file": "assets/family-matter--EJBmqV2.js",
+      "sha256": "1f48b31dcb77fe11933fc436f9c3169e1e9fc1bdb62fae46732716fcd0362311"
+    },
+    {
+      "file": "assets/layout-Cn4cJpnJ.js",
+      "sha256": "2bc7c81a284ce90d88f9303bc73b699bf2214f7d8b59b2477395f41a7d5df772"
+    },
+    {
+      "file": "assets/materials-yI6V2vmU.js",
+      "sha256": "6ef2c3db67145153286b0733f637888994440e3bff62ab161a29288a0b46d24f"
+    },
+    {
+      "file": "assets/main-C9AZY84u.js",
+      "sha256": "4f0c58070d7abf3b8958137e3206b771a735d64bd61f60d117408a2ae72030dc"
+    },
+    {
+      "file": "assets/main-BDpRd2px.css",
+      "sha256": "03766858e4629d2d6974cbc03b3ebf580ede339771837ed106164d83743fe091"
+    },
+    {
+      "file": "assets/modal-Bee24TP5.css",
+      "sha256": "42ff0e2d01f08cf87c23404fcf2756f83bd0bad699ea9e47e2e13ff2e6ce3153"
+    },
+    {
+      "file": "assets/master-tongues-CvkhbNms.js",
+      "sha256": "36e13d89360cbc16085e8d1d5c452c259b8c11f470b800f5e8adf60d1b3cc98d"
+    },
+    {
+      "file": "assets/modal-Dm4jQtvY.js",
+      "sha256": "9f84e31c012ea98f3bf4d097e99ad346caf21e335a4ec72dba6121ab1dfa622a"
+    },
+    {
+      "file": "assets/renderDensity-eCqR3GeM.js",
+      "sha256": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699"
+    },
+    {
+      "file": "assets/paperDraw-Bs7AyxmD.js",
+      "sha256": "c4c5076e04a6e2eb0c4ecfb1aa3e92b4d2045be2a99740a7ca6e390df4703346"
+    },
+    {
+      "file": "assets/pileModels-DVmmpdaH.js",
+      "sha256": "de1ab9d052279e770f70f3611f639af0938d197814a78fa379d960577118fd07"
+    },
+    {
+      "file": "assets/persistentFlightRenderer-CyFMPgpA.js",
+      "sha256": "3abb694437ce4e97447a0eb3fa78a52354fee1c83e195a73f922d562f2e8776b"
+    },
+    {
+      "file": "assets/ornaments-CqaBwgpl.js",
+      "sha256": "7b1053313df2cb756aa3f4fa795e145cf5a026edeb0d1b8d3ee885612748ac09"
+    },
+    {
+      "file": "assets/renderer-5dTHYoLm.js",
+      "sha256": "777ce6ea4d9abb9602211cf9fe6249a99615870dd02360e4c8d16e5183a0e6df"
+    },
+    {
+      "file": "assets/runtime-CIs3CgkS.js",
+      "sha256": "15e838f17620e1a036dc7229655223d8d627e7d91e9b950723602ab59c225b18"
+    },
+    {
+      "file": "assets/renderer-CR_AFrVW.js",
+      "sha256": "e2f4206aa051d758c46b84eb1969d1b73601f04c11c1053bde6b6d2599dfcda7"
+    },
+    {
+      "file": "assets/runtime-BC-mvBBO.js",
+      "sha256": "0a516a3d3390fc9e5c8a9ea009bd6926ab46179f027397b1f1bf8159744528ed"
+    },
+    {
+      "file": "assets/royal-matter-DAEdHerY.js",
+      "sha256": "98bd8bbe5006720f8f41a7838c4b1c9c0838e6457a650e753bb8c53b38029e44"
+    },
+    {
+      "file": "assets/runtime-CJmM42Q0.js",
+      "sha256": "1b59c7d85dfe11de6b4a6242ff1a7a0347a217398e41bc1f519aaa6f924df7fe"
+    },
+    {
+      "file": "assets/riftScene-CV2xuL8y.js",
+      "sha256": "40b729b6764535a12c5460dbb055b6d89fb62dcb79c51873d7d739d248874fb6"
+    },
+    {
+      "file": "assets/runtime-Ch9eydv_.css",
+      "sha256": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c"
+    },
+    {
+      "file": "assets/sleeve-NwCk5aLT.js",
+      "sha256": "d3a0e787f3a25f05d7b14c30508afacdd23ee78969c419e814fb375c4fd984b4"
+    },
+    {
+      "file": "assets/studio-CmgKc6nL.css",
+      "sha256": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e"
+    },
+    {
+      "file": "assets/scene-jQCCgcwL.js",
+      "sha256": "87b5c581c055dda9e01ed9251672ac1c657e1b1b5eb0e8cb1027189477e88fac"
+    },
+    {
+      "file": "assets/three.module-Cv9nTOXa.js",
+      "sha256": "2a16c89ab1fe1616111ec96ab875efeddfcef0c52c38085da22a555eed3e378f"
+    }
+  ],
+  "bounds": [
+    {
+      "id": "rift-opp",
+      "x": 1111.9271240234375,
+      "y": 140.5860137939453,
+      "w": 108.489990234375,
+      "h": 178.86131286621094
+    },
+    {
+      "id": "rift-me",
+      "x": 1142.768310546875,
+      "y": 477.2788391113281,
+      "w": 116.9842529296875,
+      "h": 203.46517944335938
+    }
+  ],
+  "motion": [
+    {
+      "at": 18532.799999952316,
+      "time": 18.531299999999998
+    },
+    {
+      "at": 18582.799999952316,
+      "time": 18.5813
+    },
+    {
+      "at": 18632.599999904633,
+      "time": 18.6312
+    },
+    {
+      "at": 18665.89999985695,
+      "time": 18.6646
+    },
+    {
+      "at": 18716.099999904633,
+      "time": 18.714599999999997
+    },
+    {
+      "at": 18765.699999809265,
+      "time": 18.764599999999998
+    },
+    {
+      "at": 18798.599999904633,
+      "time": 18.798
+    },
+    {
+      "at": 18849.099999904633,
+      "time": 18.847900000000003
+    },
+    {
+      "at": 18882.599999904633,
+      "time": 18.8813
+    },
+    {
+      "at": 18932.5,
+      "time": 18.9313
+    },
+    {
+      "at": 18982.699999809265,
+      "time": 18.9812
+    },
+    {
+      "at": 19015.799999952316,
+      "time": 19.014599999999998
+    },
+    {
+      "at": 19049.099999904633,
+      "time": 19.048
+    },
+    {
+      "at": 19099,
+      "time": 19.097900000000003
+    },
+    {
+      "at": 19132.39999985695,
+      "time": 19.1313
+    },
+    {
+      "at": 19182.299999952316,
+      "time": 19.1812
+    },
+    {
+      "at": 19215.699999809265,
+      "time": 19.214599999999997
+    },
+    {
+      "at": 19265.699999809265,
+      "time": 19.264599999999998
+    },
+    {
+      "at": 19315.699999809265,
+      "time": 19.3145
+    },
+    {
+      "at": 19349.099999904633,
+      "time": 19.347900000000003
+    },
+    {
+      "at": 19399.099999904633,
+      "time": 19.3979
+    },
+    {
+      "at": 19449.099999904633,
+      "time": 19.4479
+    },
+    {
+      "at": 19482.39999985695,
+      "time": 19.4813
+    }
+  ],
+  "reduced": [],
+  "resumed": [
+    {
+      "at": 23532.89999985695,
+      "time": 23.5311
+    },
+    {
+      "at": 23583,
+      "time": 23.581
+    },
+    {
+      "at": 23615.799999952316,
+      "time": 23.6144
+    },
+    {
+      "at": 23665.799999952316,
+      "time": 23.6644
+    },
+    {
+      "at": 23715.89999985695,
+      "time": 23.7144
+    },
+    {
+      "at": 23765.699999809265,
+      "time": 23.764400000000002
+    },
+    {
+      "at": 23815.799999952316,
+      "time": 23.814400000000003
+    },
+    {
+      "at": 23865.799999952316,
+      "time": 23.8644
+    },
+    {
+      "at": 23915.799999952316,
+      "time": 23.9144
+    },
+    {
+      "at": 23965.5,
+      "time": 23.964299999999998
+    },
+    {
+      "at": 23999.39999985695,
+      "time": 23.997799999999998
+    },
+    {
+      "at": 24049.5,
+      "time": 24.0477
+    },
+    {
+      "at": 24098.799999952316,
+      "time": 24.0977
+    },
+    {
+      "at": 24132.89999985695,
+      "time": 24.1311
+    },
+    {
+      "at": 24182.699999809265,
+      "time": 24.181
+    },
+    {
+      "at": 24232.599999904633,
+      "time": 24.231
+    },
+    {
+      "at": 24283,
+      "time": 24.2811
+    },
+    {
+      "at": 24332.799999952316,
+      "time": 24.331
+    },
+    {
+      "at": 24366,
+      "time": 24.3644
+    },
+    {
+      "at": 24416.199999809265,
+      "time": 24.4144
+    },
+    {
+      "at": 24466.099999904633,
+      "time": 24.4644
+    },
+    {
+      "at": 24516.099999904633,
+      "time": 24.5143
+    }
+  ],
+  "mobile": [
+    {
+      "at": 25465.699999809265,
+      "time": 25.464299999999998
+    },
+    {
+      "at": 25498.89999985695,
+      "time": 25.497700000000002
+    },
+    {
+      "at": 25548.89999985695,
+      "time": 25.5476
+    },
+    {
+      "at": 25582.39999985695,
+      "time": 25.581
+    },
+    {
+      "at": 25632.199999809265,
+      "time": 25.631
+    },
+    {
+      "at": 25682.299999952316,
+      "time": 25.681
+    },
+    {
+      "at": 25732.199999809265,
+      "time": 25.731
+    },
+    {
+      "at": 25782.299999952316,
+      "time": 25.781
+    },
+    {
+      "at": 25832.299999952316,
+      "time": 25.831
+    },
+    {
+      "at": 25882.299999952316,
+      "time": 25.881
+    },
+    {
+      "at": 25932.199999809265,
+      "time": 25.931
+    },
+    {
+      "at": 25982.299999952316,
+      "time": 25.980900000000002
+    },
+    {
+      "at": 26015.599999904633,
+      "time": 26.0143
+    },
+    {
+      "at": 26065.599999904633,
+      "time": 26.0643
+    },
+    {
+      "at": 26098.699999809265,
+      "time": 26.0977
+    },
+    {
+      "at": 26148.599999904633,
+      "time": 26.147599999999997
+    },
+    {
+      "at": 26199,
+      "time": 26.1977
+    },
+    {
+      "at": 26248.89999985695,
+      "time": 26.2476
+    },
+    {
+      "at": 26282.199999809265,
+      "time": 26.281
+    },
+    {
+      "at": 26332.199999809265,
+      "time": 26.331
+    },
+    {
+      "at": 26382.199999809265,
+      "time": 26.3809
+    },
+    {
+      "at": 26415.5,
+      "time": 26.4143
+    }
+  ],
+  "errors": [],
+  "boundary": "Actual built or deployed assets on a BOT board; account/API responses are fixtures. No authenticated online match. Approved visual selection is 03 shadow veil.",
+  "source": "a0ade5f481acbaac3e8cf42c231bf15ea6d8531e"
+}
