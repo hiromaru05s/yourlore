@@ -1,3 +1,5 @@
+import {isMage} from '../mageSummon/selection';
+import {playMageSummon,cancelMageSummon,cancelMageSummons} from '../mageSummon/runtime';
 import {isHexer} from '../hexerSummon/selection';
 import {playHexerSummon,cancelHexerSummon,cancelHexerSummons} from '../hexerSummon/runtime';
 import {isChosenHero} from '../chosenSummon/selection';
@@ -15,6 +17,7 @@ export const SUMMON_VARIANT=2;
 const jobs=new Map<HTMLElement,{anchor:HTMLElement;cancel:()=>void}>();
 type Options={anchor?:HTMLElement;signal?:AbortSignal;onImpact?:()=>void};
 export function summonPlacement(target:HTMLElement,w:number,h:number,ms=0,reduced=false,cardId=target.dataset.cardId){
+ if(isMage(cardId))return projectedPlacement(target,w,h);
  if(isChosenHero(cardId))return chosenPlacement(target,w,h,ms,reduced);
  if(isHexer(cardId))return projectedPlacement(target,w,h);
  if(isVerdant(cardId))return projectedPlacement(target,w,h);
@@ -23,11 +26,12 @@ export function summonPlacement(target:HTMLElement,w:number,h:number,ms=0,reduce
  const r=layoutRect(target);
  return boardMatrix(r.left,r.top,(Number(plane.dataset.boardPlane)||0)+m.lift*r.width).scale(r.width/w,r.height/h);
 }
-export function cancelSummon(source:HTMLElement){jobs.get(source)?.cancel();cancelVerdant(source);cancelChosenSummon(source);cancelHexerSummon(source);}
-export function cancelSummons(root?:HTMLElement){cancelVerdants(root);cancelChosenSummons(root);cancelHexerSummons(root);for(const [source,j] of [...jobs])if(!root||root.contains(source)||root.contains(j.anchor))j.cancel();}
+export function cancelSummon(source:HTMLElement){jobs.get(source)?.cancel();cancelMageSummon(source);cancelVerdant(source);cancelChosenSummon(source);cancelHexerSummon(source);}
+export function cancelSummons(root?:HTMLElement){cancelMageSummons(root);cancelVerdants(root);cancelChosenSummons(root);cancelHexerSummons(root);for(const [source,j] of [...jobs])if(!root||root.contains(source)||root.contains(j.anchor))j.cancel();}
 
 export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<boolean>{
  cancelSummon(source);
+ if(isMage(source.dataset.cardId))return playMageSummon(source,options);
  if(isHexer(source.dataset.cardId))return playHexerSummon(source,options);
  if(isChosenHero(source.dataset.cardId))return playChosenSummon(source,options);
  if(isVerdant(source.dataset.cardId))return playVerdant(source,source.dataset.cardId,options);
