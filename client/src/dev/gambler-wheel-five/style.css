@@ -2,3 +2,9 @@
 
 .legacy-link{color:#bfa885;font:12px system-ui;text-decoration:none;margin-left:12px}.designs em{font-size:9px}@media(max-width:700px){.designs{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .phase-controls{display:flex;align-items:center;gap:8px;margin:10px 0}.phase-controls span{font:11px system-ui;color:#ad9b82}.phase-controls button{font-size:11px;padding:8px 12px}@media(max-width:700px){.phase-controls{flex-wrap:wrap}.phase-controls button{padding:7px 9px}}
+
+/* Card capture imports the game's fixed-viewport CSS. Only the comparison
+   document should scroll; the embedded board keeps its own viewport layout. */
+html.gambler-wheel-preview{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto}
+html.gambler-wheel-preview body{height:auto;min-height:100vh;overflow:visible}
+html.gambler-wheel-preview #app{height:auto;min-height:100vh}
