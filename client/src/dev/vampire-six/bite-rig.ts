@@ -1,112 +1,103 @@
 import * as T from 'three';
 import {ease,rank,type Id} from './catalog';
 
+// One monotonically closing bite, followed by erosion while CLOSED. Never a second chomp.
 export const bites=[
- {hit:1120,hold:1240,release:1520},
- {hit:1260,hold:1430,release:1660},
- {hit:1100,hold:1410,release:1630},
- {hit:1050,hold:1700,release:1910},
- {hit:1390,hold:1520,release:1790},
- {hit:1420,hold:1630,release:1910},
+ {hit:1080,hold:1190,release:1470,snap:105},
+ {hit:1140,hold:1270,release:1530,snap:125},
+ {hit:1100,hold:1220,release:1490,snap:100},
+ {hit:1040,hold:1170,release:1410,snap:80},
+ {hit:1190,hold:1290,release:1580,snap:135},
+ {hit:1240,hold:1400,release:1660,snap:130},
 ];
 export function bitePose(v:number,ms:number){
- const b=bites[v],grow=ease(280,760,ms),close=ease(b.hit-170,b.hit,ms),open=ease(b.hold,b.release,ms);
- const pressure=ease(b.hit,b.hit+32,ms)*(1-open),wound=ease(b.hit,b.hit+60,ms)*(1-ease(2370,3030,ms));
- const retract=ease(b.release,b.release+300,ms),gap=(1-close)*48*ease(330,850,ms)+open*30;
- const yaw=v===2?-.52+ease(700,b.hit,ms)*.20:v===5?.12:0;
- const slide=v===2?ease(b.hit,b.hold,ms)*26:0;
- return {grow,close,open,pressure,wound,retract,gap,yaw,slide,hit:b.hit};
+ const b=bites[v],grow=ease(390,690,ms),u=T.MathUtils.clamp((ms-b.hit+b.snap)/b.snap,0,1),close=u*u*u;
+ const retract=ease(b.hold,b.release,ms),pressure=ease(b.hit,b.hit+22,ms)*(1-ease(b.hold+30,b.release,ms));
+ return {grow,close,open:0,pressure,wound:ease(b.hit,b.hit+40,ms)*(1-ease(1750,2110,ms)),retract,gap:52*(1-close),yaw:0,slide:0,hit:b.hit};
 }
-
-// Smooth elliptical canine with a curved body, a closed root, and a true pointed tip.
-// Generated geometry and physical shading only: no billboard or generated texture.
-function canine(length:number,radius:number,curve:number){
- const pos:number[]=[],col:number[]=[],indices:number[]=[],rings=40,sides=28;
+// A swept, pointed, solid blade with a raised ridge. Not a cone or a tooth photograph.
+// Root at y=0, tip at y=-length; the centre ridge catches a narrow red-white highlight.
+function fang(length:number,width:number,curve:number,faceted=false){
+ const p:number[]=[],colors:number[]=[],uv:number[]=[],idx:number[]=[],rings=32,sides=faceted?6:16;
  for(let i=0;i<=rings;i++){
-  const u=i/rings,rad=radius*Math.pow(1-u,.77)*(.10+.90*ease(0,.11,u));
-  const y=curve*(1-u)*(1-u)-Math.sin(u*Math.PI)*5,z=length*(1-u);
+  const u=i/rings,bulge=Math.pow(1-u,.82),cx=curve*u*u;
   for(let j=0;j<=sides;j++){
-   const a=j/sides*Math.PI*2,groove=1+.018*Math.sin(a*9+u*5)*Math.sin(u*Math.PI);
-   pos.push(Math.cos(a)*rad*groove,y+Math.sin(a)*rad*.70*groove,z);
-   const root=ease(0,.42,u),grain=.985+.015*Math.sin(a*21+u*71);
-   col.push((.64+.34*root)*grain,(.49+.47*root)*grain,(.34+.53*root)*grain);
-   if(i<rings&&j<sides){const n=i*(sides+1)+j;indices.push(n,n+sides+1,n+1,n+1,n+sides+1,n+sides+2);}
+   const a=j/sides*Math.PI*2,w=Math.cos(a),z=Math.sin(a),r=width*bulge;
+   p.push(cx+w*r,-u*length,z*r*.34+Math.sin(u*Math.PI)*3);
+   const ridge=Math.pow(Math.max(0,z),10),edge=Math.pow(Math.abs(w),9),tip=ease(.8,1,u);
+   colors.push(.54+.36*ridge+.10*tip,.009+.11*ridge+.08*tip,.025+.10*ridge+.07*tip);
+   uv.push(j/sides,u);
+   if(i<rings&&j<sides){const n=i*(sides+1)+j;idx.push(n,n+1,n+sides+1,n+1,n+sides+2,n+sides+1);}
+   // Edge shade is carried by the actual side faces, so it survives light backgrounds.
+   colors[colors.length-3]*=1-edge*.32;
   }
  }
- const root=pos.length/3;pos.push(0,curve,length);col.push(.6,.44,.3);
- for(let j=0;j<sides;j++)indices.push(root,j,j+1);
- const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(pos,3));g.setAttribute('color',new T.Float32BufferAttribute(col,3));g.setIndex(indices);g.computeVertexNormals();return g;
+ const cap=p.length/3;p.push(0,0,0);colors.push(.2,.001,.007);uv.push(.5,0);
+ for(let j=0;j<sides;j++)idx.push(cap,j+1,j);
+ const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setAttribute('color',new T.Float32BufferAttribute(colors,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();return g;
 }
-function tube(points:number[][],radius:number,mat:T.Material){const curve=new T.CatmullRomCurve3(points.map(p=>new T.Vector3(...p as [number,number,number])));return new T.Mesh(new T.TubeGeometry(curve,48,radius,12,false),mat);}
-
+const configs=[
+ {xs:[-42,42],lengths:[74,74],width:20,curve:19,angle:0,spread:1,depth:14},
+ {xs:[-63,-27,27,63],lengths:[49,77,77,49],width:17,curve:8,angle:0,spread:.88,depth:17},
+ {xs:[-44,44],lengths:[87,87],width:21,curve:25,angle:-.48,spread:.90,depth:16},
+ {xs:[-32,32],lengths:[93,93],width:12,curve:8,angle:.12,spread:.72,depth:12},
+ {xs:[-46,46],lengths:[80,80],width:27,curve:29,angle:.06,spread:1.05,depth:20},
+ {xs:[-68,-32,32,68],lengths:[51,90,90,51],width:20,curve:17,angle:0,spread:1.08,depth:20},
+];
+type Tooth={root:T.Group;row:number;x:number;length:number;index:number};
 export class BiteRig{
- readonly group=new T.Group();readonly ready=Promise.resolve();
- readonly points=Array.from({length:4},()=>new T.Vector2());
- readonly gaps=new T.Vector4();pressure=0;wound=0;count=2;lowerClearance=0;private lowerBounds=new T.Box3();
- private ivory=new T.MeshPhysicalMaterial({color:0xd8c5a5,envMapIntensity:.7,vertexColors:true,roughness:.26,metalness:0,clearcoat:.4,clearcoatRoughness:.17});
- private blood=new T.MeshPhysicalMaterial({color:0x650515,roughness:.2,metalness:.08,clearcoat:1,clearcoatRoughness:.13});
- private gum=new T.MeshPhysicalMaterial({color:0x2a0b14,roughness:.42,metalness:0,clearcoat:.28});
- private obsidian=new T.MeshPhysicalMaterial({color:0x170e19,roughness:.3,metalness:.30,clearcoat:.45});
- private silver=new T.MeshStandardMaterial({color:0xa99ca4,metalness:.88,roughness:.25});
- private glass=new T.MeshPhysicalMaterial({color:0x990a20,vertexColors:true,roughness:.13,metalness:.1,clearcoat:1,ior:1.48});
- private upper=new T.Group();private lower=new T.Group();private arch=new T.Group();private lowerArch=new T.Group();
- private fangs:T.Mesh[]=[];private lowerFangs:T.Mesh[]=[];private small:T.Mesh[]=[];private bloodBeads:T.Mesh[]=[];
- private liquidGeometry:T.BufferGeometry;private liquidBase:Float32Array;
- private threads:T.Mesh[]=[];private threadGeo:T.CylinderGeometry;
+ readonly group=new T.Group();readonly ready=Promise.resolve();readonly points=Array.from({length:4},()=>new T.Vector2());readonly gaps=new T.Vector4();
+ pressure=0;wound=0;count=4;lowerClearance=0;focus=0;impact=0;
+ private rigs:T.Group[]=[];private teeth:Tooth[][]=[];private bounds=new T.Box3();
+ private uniforms={growth:{value:0},erosion:{value:0},flash:{value:0}};
+ private red=new T.MeshPhysicalMaterial({color:0xff2443,vertexColors:true,envMapIntensity:.28,roughness:.36,metalness:.18,clearcoat:.42,clearcoatRoughness:.26,emissive:0x970b23,emissiveIntensity:.22});
+ private outline=new T.ShaderMaterial({side:T.BackSide,uniforms:this.uniforms,vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position+normal*1.1,1.);}`,fragmentShader:`varying vec2 vUv;uniform float growth,erosion;void main(){float front=vUv.y+.08*sin(vUv.x*18.+vUv.y*14.);if(vUv.y>growth||front<erosion*1.13)discard;gl_FragColor=vec4(.065,.001,.013,1.);}`});
+ private depth:T.MeshDepthMaterial;
  constructor(){
-  this.group.add(this.upper,this.lower);this.upper.add(this.arch);this.lower.add(this.lowerArch);
-  const shape=canine(76,13,24),short=canine(34,8,12);this.liquidGeometry=shape.clone();this.liquidBase=new Float32Array(shape.getAttribute('position').array);
-  for(let i=0;i<4;i++){const m=new T.Mesh(shape,this.ivory);m.castShadow=true;m.userData.solid=shape;this.upper.add(m);this.fangs.push(m);const l=new T.Mesh(short,this.ivory);l.rotation.x=Math.PI;l.castShadow=true;this.lower.add(l);this.lowerFangs.push(l);}
-  const upperPoints=[[-71,5,43],[-57,29,59],[-34,43,69],[0,50,73],[34,43,69],[57,29,59],[71,5,43]];
-  this.arch.add(tube(upperPoints,7,this.gum));
-  this.arch.add(tube(upperPoints.map(([x,y,z])=>[x,y+3,z+3]),1.1,this.obsidian));
-  const lowerPoints=[[-64,-8,-13],[-42,-28,-26],[0,-40,-31],[42,-28,-26],[64,-8,-13]];
-  this.lowerArch.add(tube(lowerPoints,5,this.obsidian));
-  for(const x of [-17,-5.5,5.5,17]){const m=new T.Mesh(canine(24,6,5),this.ivory);m.position.set(x,39,43);m.castShadow=true;this.arch.add(m);this.small.push(m);}
-  for(let i=0;i<4;i++){const bead=new T.Mesh(new T.SphereGeometry(1,20,14),this.blood);this.group.add(bead);this.bloodBeads.push(bead);}
-  // Reusable segmented cylinders follow the contact-to-fang path during suction.
-  this.threadGeo=new T.CylinderGeometry(1,1,1,8,1);
-  for(let i=0;i<32;i++){const m=new T.Mesh(this.threadGeo,this.blood);this.group.add(m);this.threads.push(m);}
+  const inject=(shader:{uniforms:any;vertexShader:string;fragmentShader:string})=>{
+   Object.assign(shader.uniforms,this.uniforms);
+   shader.vertexShader='varying vec2 toothUv;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ntoothUv=uv;');
+   shader.fragmentShader='varying vec2 toothUv;uniform float growth,erosion,flash;\n'+shader.fragmentShader.replace('#include <clipping_planes_fragment>',`#include <clipping_planes_fragment>
+   float front=toothUv.y+.08*sin(toothUv.x*18.+toothUv.y*14.);if(toothUv.y>growth||front<erosion*1.13)discard;`);
+   shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>','#include <emissivemap_fragment>\ntotalEmissiveRadiance+=vec3(.75,.10,.15)*flash;');
+  };
+  this.red.onBeforeCompile=inject;this.depth=new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking});this.depth.onBeforeCompile=inject;
+  for(let v=0;v<6;v++){
+   const cfg=configs[v],rig=new T.Group(),list:Tooth[]=[];this.group.add(rig);this.rigs.push(rig);
+   for(const row of [1,-1])for(let i=0;i<cfg.xs.length;i++){
+    const x=cfg.xs[i]+(row<0?9:0),length=cfg.lengths[i]*(row<0?.74:1),geometry=fang(length,cfg.width*(row<0?.78:1),-Math.sign(x)*cfg.curve,v===1||v===5);
+    const root=new T.Group(),mesh=new T.Mesh(geometry,this.red),edge=new T.Mesh(geometry,this.outline);mesh.castShadow=true;mesh.customDepthMaterial=this.depth;root.add(mesh,edge);root.userData.base=new Float32Array(geometry.getAttribute('position').array);rig.add(root);list.push({root,row,x,length,index:i});
+   }
+   this.teeth.push(list);
+  }
  }
  draw(id:Id,v:number,ms:number,h:number){
-  const p=bitePose(v,ms),royal=v===5,full=v===1||royal,liquid=v===4;
-  this.group.visible=ms>280&&ms<2260;this.group.position.z=h+2;
-  this.pressure=p.pressure;this.wound=p.wound;this.count=royal?4:2;
-  const yOffset=full?-112:0;
-  const life=p.grow*(1-p.retract),scale=(id==='VAMP_BUTLER'?.82:.76+rank(id)*.075);
-  this.upper.position.set(0,yOffset,p.gap*(1-p.retract)-p.pressure*2);this.upper.rotation.z=p.yaw;this.upper.rotation.x=full?-.20*(1-p.close+p.open):0;
-  this.lower.position.set(0,yOffset,-Math.min(17,p.gap*.38)*(1-p.retract));this.lower.rotation.z=p.yaw;this.lower.rotation.x=full?.24*(1-p.close+p.open):0;
-  this.upper.scale.set(1,1,scale);this.lower.scale.set(1,1,scale);
-  this.arch.visible=full;this.lowerArch.visible=full;
-  this.arch.scale.setScalar(Math.max(.001,life));this.lowerArch.scale.setScalar(Math.max(.001,life));
-  const attackLean=(1-p.close)*.18*(1-p.retract),fadeSize=Math.max(.001,life);
-  for(let i=0;i<4;i++){
-   const side=i%2?1:-1,outer=i>=2,x=side*(royal?(outer?58:24):34),y=(royal?(outer?4:31):24)-p.slide;
-   const fang=this.fangs[i];fang.visible=i<this.count;
-   fang.position.set(x,y,0);fang.rotation.set(-attackLean*(v===3?.4:1),side*attackLean*.55,0);
-   fang.scale.set(fadeSize*(royal&&outer?.8:1),fadeSize,fadeSize*(royal&&outer?.75:1));
-   fang.material=liquid?this.glass:this.ivory;if(liquid)fang.geometry=this.liquidGeometry;else fang.geometry=this.fangs[0].userData.solid;
-   const xx=x*Math.cos(p.yaw)-y*Math.sin(p.yaw),yy=x*Math.sin(p.yaw)+y*Math.cos(p.yaw)+yOffset;
-   this.points[i].set(xx,yy);this.gaps.setComponent(i,this.upper.position.z);
-   const low=this.lowerFangs[i];low.visible=full&&i<2;low.position.set(side*29,-18,0);low.scale.setScalar(fadeSize*.9);
-   const bead=this.bloodBeads[i];bead.visible=i<this.count&&p.wound>.001;
-   const wet=p.wound*(1-ease(1950,2360,ms));bead.position.set(xx,yy,.8);bead.scale.set(4.2*wet,5.6*wet,1.4*wet);
+  const p=bitePose(v,ms),b=bites[v],cfg=configs[v],active=ms>390&&ms<b.release;
+  this.group.visible=active;this.group.position.set(0,0,h+3);this.pressure=p.pressure;this.wound=p.wound;
+  this.focus=ease(370,640,ms)*(1-ease(b.hold+40,b.release+100,ms));
+  this.impact=ease(b.hit,b.hit+12,ms)*(1-ease(b.hit+24,b.hit+110,ms));
+  this.uniforms.growth.value=p.grow;this.uniforms.erosion.value=p.retract;this.uniforms.flash.value=this.impact*.5;
+  const tier=id==='VAMP_BUTLER'?.91:.90+rank(id)*.025;
+  this.rigs.forEach((r,i)=>r.visible=i===v);
+  const rig=this.rigs[v];rig.scale.setScalar(tier);rig.rotation.z=cfg.angle+(v===2?(1-p.close)*.18:0);
+  // A restrained outward anticipation; the final 80–135 ms closes only once.
+  const opening=p.gap*cfg.spread*(.72+.28*ease(640,b.hit-b.snap,ms));
+  for(const tooth of this.teeth[v]){
+   const {root,row,x,length,index}=tooth,upper=row===1;
+   const liquid=v===4?(1-p.close)*Math.sin(ms*.012+index)*1.6:0;
+   const fold=1-ease(b.hold+90,b.release,ms)*.25;
+   root.position.set(x,row*(length*fold+opening-6),(cfg.depth+(1-p.close)*12+liquid)*ease(390,700,ms));
+   root.rotation.set(0,0,upper?0:Math.PI);
+   if(!upper)root.position.x=-x; // rotation mirrors curvature as well as direction.
+   root.scale.set(1,fold,1);
+   if(v===4){const geo=(root.children[0] as T.Mesh).geometry as T.BufferGeometry,attr=geo.getAttribute('position') as T.BufferAttribute,base=root.userData.base as Float32Array;
+    for(let k=0;k<attr.count;k++){const xx=base[k*3],yy=base[k*3+1],zz=base[k*3+2],wave=Math.sin(yy*.09-ms*.011)*(1-p.close)*.13;attr.setXYZ(k,xx*(1+wave),yy,zz*(1-wave));}attr.needsUpdate=true;geo.computeVertexNormals();}
+
   }
-  if(liquid){const attr=this.liquidGeometry.getAttribute('position') as T.BufferAttribute,soft=1-ease(850,1190,ms);for(let i=0;i<attr.count;i++){const x=this.liquidBase[i*3],y=this.liquidBase[i*3+1],z=this.liquidBase[i*3+2],wave=Math.sin(z*.19-ms*.009)*soft;attr.setXYZ(i,x*(1+wave*.23),y+wave*2.5*Math.sin(z/76*Math.PI),z);}attr.needsUpdate=true;this.liquidGeometry.computeVertexNormals();}
-  this.lowerClearance=0;if(full&&this.group.visible&&life>.001){this.lower.updateWorldMatrix(true,true);this.lowerBounds.setFromObject(this.lower);const lift=Math.max(0,.4-this.lowerBounds.min.z);this.lower.position.z+=lift;this.lowerClearance=this.lowerBounds.min.z+lift;}
-  this.glass.color.setRGB(.36+ease(650,1100,ms)*.2,.012,.026);this.glass.roughness=.11+ease(800,1200,ms)*.12;
-  this.blood.color.set(id==='VAMP_BUTLER'?0x550f20:0x720416);
-  // A gradual silhouette collapse returns the jaw into its contact marks.
-  this.arch.children.forEach(o=>{if(o instanceof T.Mesh)o.material=royal?(o.geometry instanceof T.TubeGeometry?this.obsidian:this.ivory):(o.geometry instanceof T.TubeGeometry?this.gum:this.ivory);});
-  const suction=v===3?ease(p.hit+80,p.hit+210,ms)*(1-ease(1730,1930,ms)):liquid?ease(340,650,ms)*(1-ease(900,1250,ms)):0;
-  const upAxis=new T.Vector3(0,1,0);
-  for(let k=0;k<32;k++){
-   const m=this.threads[k],strand=Math.floor(k/8),seg=k%8,side=strand%2?1:-1,offset=strand>=2?1:0;
-   m.visible=suction>.001;if(!m.visible)continue;
-   const contact=this.points[strand%2];
-   const point=(u:number)=>new T.Vector3(contact.x+side*Math.sin(u*Math.PI)*(8+offset*5)*suction,contact.y+Math.sin(u*5-ms*.003+offset)*3*suction,-p.pressure*2+u*(p.gap*(1-p.retract)+48*life*scale));
-   const a=point(seg/8),b=point((seg+1)/8),d=b.clone().sub(a);m.position.copy(a).add(b).multiplyScalar(.5);m.quaternion.setFromUnitVectors(upAxis,d.clone().normalize());m.scale.set(.95*suction*(1-seg*.08),d.length(),.95*suction*(1-seg*.08));
-  }
+  // Contact accents lie under the dominant canine tips in the same local frame.
+  const a=rig.rotation.z;
+  for(let i=0;i<4;i++){const x=(i%2?1:-1)*30*tier,y=(i<2?1:-1)*7;this.points[i].set(x*Math.cos(a)-y*Math.sin(a),x*Math.sin(a)+y*Math.cos(a));this.gaps.setComponent(i,p.gap);}
+  this.lowerClearance=0;if(active){this.group.updateWorldMatrix(true,true);this.bounds.setFromObject(rig);this.lowerClearance=this.bounds.min.z;}
  }
- dispose(){const geometries=new Set<T.BufferGeometry>();this.group.traverse(o=>{if(o instanceof T.Mesh)geometries.add(o.geometry);});geometries.add(this.liquidGeometry);geometries.add(this.fangs[0].userData.solid);geometries.forEach(g=>g.dispose());[this.ivory,this.blood,this.gum,this.obsidian,this.silver,this.glass].forEach(m=>m.dispose());this.group.clear();}
+ dispose(){const geometries=new Set<T.BufferGeometry>();this.group.traverse(o=>{if(o instanceof T.Mesh)geometries.add(o.geometry);});geometries.forEach(g=>g.dispose());this.red.dispose();this.outline.dispose();this.depth.dispose();this.group.clear();}
 }
