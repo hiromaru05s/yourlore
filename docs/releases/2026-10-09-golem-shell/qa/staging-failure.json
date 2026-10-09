@@ -1,0 +1,24 @@
+{
+  "message": "locator.evaluate: Timeout 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-uid=\"golem-stage-MANA_GIANT\"]')\u001b[22m\n",
+  "errors": [],
+  "warnings": [
+    "Failed to load resource: the server responded with a status of 404 ()",
+    "THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.",
+    "Failed to load resource: the server responded with a status of 404 ()",
+    "THREE.sigmaRadians, 0.05, is too large and will clip, as it requested 25 samples when the maximum is set to 20",
+    "THREE.sigmaRadians, 0.05, is too large and will clip, as it requested 25 samples when the maximum is set to 20",
+    "THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.",
+    "THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.",
+    "THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.",
+    "THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.",
+    "THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.",
+    "THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.",
+    "THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."
+  ],
+  "state": {
+    "id": "MANA_GIANT",
+    "hidden": false,
+    "connected": true,
+    "complete": false
+  }
+}
