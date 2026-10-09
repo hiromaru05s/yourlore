@@ -58,3 +58,7 @@ node node_modules/vite/bin/vite.js --config client/src/dev/gambler-wheel-five/vi
 ## ソース
 
 `client/src/dev/gambler-wheel-five/` に閉じた試作。`geometry.ts` が体積と変形、`material.ts` が刻印と材質変化、`renderer.ts` が照明と描画、`board.ts` が手札からの実盤面フィクスチャ。既存6案には新版へのリンクだけ追加。
+
+## 採用更新（2026-10-09）
+
+ユーザーがギャンブラーに01、伝説のギャンブラーに02を指定。生カードの前段を除き、最初から材質変化済みの回転盤を描くよう変更した。現在の比較ページもこの開始時刻を共有する。上記の原収録は変更前の記録。[採用・検証記録](../../releases/2026-10-09-gambler-wheel/README.md)。
