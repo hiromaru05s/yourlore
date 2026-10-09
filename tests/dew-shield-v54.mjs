@@ -15,7 +15,7 @@ try {
  const end=g=>step(g,{type:'endTurn'});
  const ench=id=>({card:card(id),turns:99,bornTurn:0});
  function test(name,fn){fn();checks++;console.log('PASS',name);}
- test('catalog and starters',()=>{assert.equal(E.BALANCE_VERSION,'v54');for(const id of ['SELECTED_SWORD','SELECTED_SHIELD','NOURISHING_RAIN']){assert(E.DECK_POOL.includes(id));assert(!E.BUYABLE_POOL.includes(id));}assert.equal(DB.HIGH_PRIEST.atk,1);assert.equal(DB.HIGH_PRIEST.def,7);});
+ test('catalog and starters',()=>{assert.equal(E.BALANCE_VERSION,'v56');for(const id of ['SELECTED_SWORD','SELECTED_SHIELD','NOURISHING_RAIN']){assert(E.DECK_POOL.includes(id));assert(!E.BUYABLE_POOL.includes(id));}assert.equal(DB.HIGH_PRIEST.atk,1);assert.equal(DB.HIGH_PRIEST.def,7);});
  test('Dew persists and heals only at own next turn',()=>{let g=play(fresh(),'NOURISHING_RAIN');assert.equal(g.players[0].dew,1);g=end(g);assert.equal(g.players[0].hp,100);g=end(g);assert.equal(g.players[0].hp,101);assert.equal(g.players[0].dew,1);});
  test('priest triggers on own summon, expiry and recovery',()=>{let g=play(fresh(),'PRIEST');assert.equal(g.players[0].shield,6);assert.equal(g.players[0].dew,2);g=end(g);assert.equal(g.players[0].shield,6);g=end(g);assert.equal(g.players[0].shield,0);assert.equal(g.players[0].hp,102);assert.equal(g.players[0].previousOpponentShieldPeak,6);});
  test('two priest types fire once each per gain',()=>{let g=play(fresh(),'PRIEST');g=play(g,'HIGH_PRIEST');assert.equal(g.players[0].shield,15);assert.equal(g.players[0].dew,7);});

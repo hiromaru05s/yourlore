@@ -44,7 +44,6 @@
 .pt-mana-max { font-size:13px; }
 .mana-crystals { display:grid; grid-template-columns:repeat(10,1fr); gap:3px; }
 .pt-name { position:absolute; top:100%; left:50%; transform:translateX(-50%); font-size:9px; padding:2px 9px; max-width:150px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; background:#0c1b30df; border-radius:0 0 6px 6px; }
-.pt-brand { position:absolute; right:calc(100% + 15px); top:84%; font-size:10px; background:#522438; border:1px solid #b98873; padding:2px 5px; white-space:nowrap; }
 .pc-side { min-width:0; display:flex; align-items:flex-end; }
 .pc-side--r { padding-left:calc(clamp(95px,12vw,170px) + 24px); align-self:end; max-height:var(--pt); }
 .opp-hand { display:flex; align-items:center; gap:3px; position:relative; }

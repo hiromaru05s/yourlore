@@ -1,3 +1,4 @@
+import {npcPortrait} from "../../shared/botNpcs";
 import {resultScene,RESULT_TIMING} from './result';
 import {createOpeningCoin} from './coin';
 import {createOpeningLight} from './light';
@@ -13,13 +14,20 @@ const {initCoin,coinImage,disposeCoin}=createOpeningCoin();
 const {initLight,lightImage,disposeLight}=createOpeningLight();
 let disposed=false;
 let portraits:HTMLImageElement[]=[];let gpu=true;const hot=document.createElement("canvas");hot.width=hot.height=640;const hg=hot.getContext("2d")!;
-async function loadAssets(){
+const npcImages=new Map<string,HTMLImageElement>();
+async function loadAssets(avatars:readonly (string|null)[]=[]){
  portraits=await Promise.all(['blue','red'].map(c=>new Promise<HTMLImageElement>((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src='/art/biblion/seeker-'+c+'.png';}))).catch(()=>[]);
+ if(disposed)return false;
+ await Promise.all([...new Set(avatars)].map(async avatar=>{
+  const url=npcPortrait(avatar);if(!url||!avatar)return;
+  const image=new Image();image.src=url;
+  try{await image.decode();if(!disposed)npcImages.set(avatar,image);}catch{/* Keep the existing seeker fallback if artwork cannot load. */}
+ }));
  if(disposed)return false;
  try{initCoin();initLight();}catch{gpu=false;disposeCoin();disposeLight();}
  return gpu;
 }
-function dispose(){disposed=true;disposeCoin();disposeLight();portraits=[];}
+function dispose(){disposed=true;disposeCoin();disposeLight();portraits=[];npcImages.clear();}
 
 function draw(c:HTMLCanvasElement,time:number,o:Options){
  const g=c.getContext('2d')!,W=1280,H=W*c.height/c.width,M=H>1000,U=M?1.25:1;
@@ -31,7 +39,13 @@ function draw(c:HTMLCanvasElement,time:number,o:Options){
  const poly=(points:number[][],color:string)=>{g.beginPath();points.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));g.closePath();g.fillStyle=color;g.fill();};
  const text=(s:string,x:number,y:number,size:number,color=ivory,font='Georgia',spacing=0)=>{g.fillStyle=color;g.textBaseline='middle';g.font=`${font==='sans-serif'?'500':'400'} ${size}px ${font}`;g.textAlign='center';if(!spacing){g.fillText(s,x,y);return;}const letters=[...s],widths=letters.map(c=>g.measureText(c).width),total=widths.reduce((a,b)=>a+b,0)+spacing*(letters.length-1);let pos=x-total/2;g.textAlign='left';letters.forEach((ch,i)=>{g.fillText(ch,pos,y);pos+=widths[i]+spacing;});};
  const coin=(x:number,y:number,r:number,rx:number,ry:number,rz:number,alpha=1,heat=0)=>{if(r<1||alpha<.001)return;const im=coinImage(rx,ry,rz,o.first);g.save();g.globalAlpha*=alpha;if(im){const sz=r*2.82;g.drawImage(im,x-sz/2,y-sz/2,sz,sz);if(heat>0){hg.clearRect(0,0,640,640);hg.globalCompositeOperation='source-over';hg.drawImage(im,0,0);hg.globalCompositeOperation='source-in';hg.fillStyle='#fff3cd';hg.fillRect(0,0,640,640);hg.globalCompositeOperation='source-over';g.save();g.globalAlpha*=heat;g.globalCompositeOperation='screen';g.shadowColor='#ffe3a2';g.shadowBlur=20*heat;g.drawImage(hot,x-sz/2,y-sz/2,sz,sz);g.restore();}}else{g.translate(x,y);g.rotate(rz);g.scale(Math.max(.06,Math.abs(Math.cos(ry))),1);g.fillStyle='#bca273';g.beginPath();g.arc(0,0,r,0,7);g.fill();g.strokeStyle=ivory;g.lineWidth=3;g.stroke();text(o.first?'I':'II',0,0,r*.75,'#18252b');}g.restore();};
- const portrait=(side:number,x:number,y:number,w:number,h:number,zoom=1)=>{const avatar=o.avatars?.[side];const im=portraits[avatar==='SEEKER_RED'?1:avatar==='SEEKER_BLUE'?0:side];if(!im)return;const sw=im.height*.86,sh=Math.min(im.height,sw*h/w);g.drawImage(im,(im.height-sw)/2,(im.height-sh)*.35,sw,sh,x-w*zoom/2,y-h*zoom/2,w*zoom,h*zoom);};
+ const portrait=(side:number,x:number,y:number,w:number,h:number,zoom=1)=>{
+  const avatar=o.avatars?.[side],npc=avatar?npcImages.get(avatar):undefined;
+  const im=npc??portraits[avatar==='SEEKER_RED'?1:avatar==='SEEKER_BLUE'?0:side];if(!im)return;
+  const sw=npc?Math.min(im.width,im.height*w/h):im.height*.86;
+  const sh=npc?Math.min(im.height,im.width*h/w):Math.min(im.height,sw*h/w);
+  g.drawImage(im,npc?(im.width-sw)/2:(im.height-sw)/2,(im.height-sh)*.35,sw,sh,x-w*zoom/2,y-h*zoom/2,w*zoom,h*zoom);
+ };
  if(t>=v.duration)return;
  fill((1-boardReveal)*.99);
  if(o.reduced&&t<v.land){portrait(0,W*.26,H*.36,480,440);portrait(1,W*.74,H*.36,480,440);text('DUEL',cx,H*.73,70,gold,'Georgia',12);return;}

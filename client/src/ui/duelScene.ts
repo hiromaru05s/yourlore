@@ -1,4 +1,5 @@
 import {createEquippedCosmetics} from './cosmetics/runtime';
+import {applyFurnitureSkin} from './cosmetics/baseFurniture';
 import {boardPixelRatio,flightPixelRatio} from './renderDensity';
 import {getCosmeticPreview} from './cosmeticPreviewBridge';
 import {disposeFormationBloom} from './manaFormation';
@@ -74,7 +75,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
       else{
         const count=Number(el.dataset.count)||0;item.count=count;
         const model=furniture.clone(shelf?'shelf':'deck');
-        if(model&&el.dataset.material){const skin=texture(el.dataset.material);skin.flipY=false;model.traverse(o=>{if(o instanceof T.Mesh)for(const m of Array.isArray(o.material)?o.material:[o.material])if(m instanceof T.MeshStandardMaterial&&m.metalness<.7){m.map=skin;m.color.set(0xffffff);m.needsUpdate=true;}});}
+        if(model&&el.dataset.material)applyFurnitureSkin(model,texture(el.dataset.material));
         if(model)cosmeticPreview?.applyFurniture(model,el);
         item.pile=makePile(count,shelf,texture(el.dataset.sleeve!),undefined,model);group.add(item.pile.group);
         item.disposeCosmetic=cosmeticPreview?.decoratePile(item.pile,el);

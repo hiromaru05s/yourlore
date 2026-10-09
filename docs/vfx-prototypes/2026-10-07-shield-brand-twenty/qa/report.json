@@ -1,0 +1,299 @@
+{
+  "cases": [
+    {
+      "id": "SF1",
+      "counts": [
+        0,
+        0,
+        0,
+        6,
+        6,
+        6
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "SF2",
+      "counts": [
+        0,
+        0,
+        0,
+        0,
+        6,
+        6
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "SF3",
+      "counts": [
+        0,
+        0,
+        0,
+        0,
+        6,
+        6
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "SF4",
+      "counts": [
+        0,
+        0,
+        0,
+        0,
+        6,
+        6
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "SF5",
+      "counts": [
+        0,
+        0,
+        0,
+        0,
+        6,
+        6
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "SA1",
+      "counts": [
+        8,
+        8,
+        8,
+        14,
+        14,
+        14
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "SA2",
+      "counts": [
+        8,
+        8,
+        8,
+        8,
+        14,
+        14
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "SA3",
+      "counts": [
+        8,
+        8,
+        8,
+        14,
+        14,
+        14
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "SA4",
+      "counts": [
+        8,
+        8,
+        8,
+        8,
+        14,
+        14
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "SA5",
+      "counts": [
+        8,
+        8,
+        8,
+        8,
+        14,
+        14
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "BF1",
+      "counts": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "BF2",
+      "counts": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "BF3",
+      "counts": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "BF4",
+      "counts": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "BF5",
+      "counts": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "BA1",
+      "counts": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "BA2",
+      "counts": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "BA3",
+      "counts": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "BA4",
+      "counts": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "result": "pass"
+    },
+    {
+      "id": "BA5",
+      "counts": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "result": "pass"
+    }
+  ],
+  "errors": [],
+  "resources": [],
+  "viewports": [
+    {
+      "width": 320,
+      "overflow": 0,
+      "sides": 2,
+      "groups": 4
+    },
+    {
+      "width": 390,
+      "overflow": 0,
+      "sides": 2,
+      "groups": 4
+    },
+    {
+      "width": 844,
+      "overflow": 0,
+      "sides": 2,
+      "groups": 4
+    },
+    {
+      "width": 1280,
+      "overflow": 0,
+      "sides": 2,
+      "groups": 4
+    }
+  ],
+  "performance": [
+    {
+      "id": "SF2",
+      "progress": 0.30244444444444374,
+      "playing": true,
+      "boardReady": true,
+      "frames": 799,
+      "meanDrawMs": 1.4889862334474604,
+      "studies": 20,
+      "count": 0
+    }
+  ],
+  "suspended": {
+    "ready": true,
+    "disposed": false,
+    "active": false,
+    "id": "BA5",
+    "ms": 1326,
+    "side": 1,
+    "multi": true,
+    "hidden": 0,
+    "canvases": 2
+  },
+  "fallback": {
+    "webgl": true
+  },
+  "result": "pass"
+}

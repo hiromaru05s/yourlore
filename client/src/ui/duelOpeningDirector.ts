@@ -46,7 +46,7 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
   o.signal.addEventListener('abort',cancel,{once:true});document.addEventListener('visibilitychange',onHidden);window.addEventListener('resize',resize);
   try{
     // Asset failure must not bypass the server gate; the visible result can fall back to text.
-    const load=async()=>{if(!canvas.getContext('2d'))return;const module=await rendererModule();if(closed||o.signal.aborted)return;renderer=module.createOpeningRenderer();await renderer.loadAssets();if(closed||o.signal.aborted)return;const warm=document.createElement('canvas');warm.width=320;warm.height=180;for(const time of [1.4,3.22])renderer.draw(warm,time,{first:o.firstIsMe,light:false,reduced:false,board:true});};
+    const load=async()=>{if(!canvas.getContext('2d'))return;const module=await rendererModule();if(closed||o.signal.aborted)return;renderer=module.createOpeningRenderer();await renderer.loadAssets([o.me.avatar,o.opp.avatar]);if(closed||o.signal.aborted)return;const warm=document.createElement('canvas');warm.width=320;warm.height=180;for(const time of [1.4,3.22])renderer.draw(warm,time,{first:o.firstIsMe,light:false,reduced:false,board:true});};
     await Promise.race([load().catch(()=>{}),aborted,new Promise<void>(resolve=>{loadTimer=setTimeout(resolve,3000);})]);
     clearTimeout(loadTimer);if(o.signal.aborted)return;
     resize();const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;

@@ -17,7 +17,9 @@ import {setLang} from '../i18n';
 import {setFxSkip,revealSpell} from '../ui/anim';
 
 if(import.meta.env.DEV){
- setLang('ja');setMyAvatar('SEEKER_BLUE');setOppAvatar('SEEKER_RED');
+ const freeze=Number(new URLSearchParams(location.search).get('frame'));if(freeze){const raf=window.requestAnimationFrame.bind(window);window.requestAnimationFrame=callback=>raf(t=>{const canvas=document.querySelector<HTMLCanvasElement>('.quest-fold-canvas');if(canvas&&Number(canvas.dataset.time)>=freeze)return;callback(t);});}
+
+ setLang(new URLSearchParams(location.search).get('lang')==='en'?'en':'ja');setMyAvatar('SEEKER_BLUE');setOppAvatar('SEEKER_RED');
  class QuestController extends BaseController {
   seq=0;
   constructor(){super(document.querySelector('#app')!,0,{onHome:()=>{},onRematch:()=>{}});this.reset();}
@@ -39,8 +41,10 @@ if(import.meta.env.DEV){
  const select=document.createElement('select');select.setAttribute('aria-label','クエスト');for(const c of Object.values(DB).filter(c=>c.t==='quest')){const o=document.createElement('option');o.value=c.id;o.textContent=c.nameJa||c.id;select.append(o);}
  select.value='Q_RIFT';
  const side=document.createElement('select');side.setAttribute('aria-label','陣営');side.innerHTML='<option value="0">自分</option><option value="1">相手</option>';
- const button=document.createElement('button');button.textContent='② 光頁の折契をプレイ';button.onclick=()=>{controller.reset(Number(side.value) as Side,select.value);requestAnimationFrame(()=>controller.play());};
- controls.append(select,side,button);document.body.append(controls);
+ const button=document.createElement('button');button.textContent='① 紫墨の血判をプレイ';button.onclick=()=>{controller.reset(Number(side.value) as Side,select.value);requestAnimationFrame(()=>controller.play());};
+ const skip=document.createElement('button');skip.textContent='演出を中断';skip.onclick=()=>setFxSkip(true);
+ controls.append(select,side,button,skip);document.body.append(controls);
  (window as any).questPlay={controller,reset:(side:Side,id:string,n=0)=>controller.reset(side,id,n),play:()=>controller.play(),skip:()=>setFxSkip(true),direct:async(side:'me'|'opp',id='Q_RIFT')=>{const face=await revealSpell({...DB[id],uid:'direct-'+side},side,'field',0);face?.remove();}};
+ if(new URLSearchParams(location.search).has('qa'))void import('./questPactQa').then(m=>m.runQuestPactQa(controller));
  window.addEventListener('pagehide',()=>{stop();controller.destroy();},{once:true});
 }

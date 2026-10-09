@@ -17,5 +17,13 @@ try{
  restored.room.game.players[0].dew=10;restored.room.game.players[0].hand=[card('HIGH_ELF')];restored.room.game.players[1].hand=[card('M1'),card('M2')];await send(restored,0,{type:'play',idx:0});assert.equal(restored.room.game.pending.reason,'HIGH_ELF_HAND');assert.equal(sockets[0].messages.at(-1).state.players[1].hand[0].id,'M1');assert.equal(sockets[1].messages.at(-1).state.players[0].hand.length,0);await send(restored,1,{type:'pick',uid:'done'});assert.equal(restored.room.game.pending.reason,'HIGH_ELF_HAND');await send(restored,0,{type:'pick',uid:'done'});assert.equal(sockets[0].messages.at(-1).state.players[1].hand[0].id,'HIDDEN');
  // Timeout safely declines optional growth instead of spending the defending player's Dew.
  const st=restored.room.game;st.pending={kind:'cardChoice',reason:'WORLD_TREE_DEFEND',owner:1,allowCancel:false,hint:'',hintJa:'',data:{attackerUid:a,targetUid:t}};const before=st.players[1].dew;restored.room.turnStartAt=now-100000;await restored.alarm();assert.equal(restored.room.game.pending,null);assert.equal(restored.room.game.cur,1);assert(restored.room.game.players[1].dew>=before,'timeout spends no defending Dew');
- Date.now=realNow;const checks=['two authoritative sockets','opponent choice ownership and rejection','hibernation/reconnect resumes defending choice','private hand view opens and closes','turn timeout declines optional spend and progresses'];await mkdir('docs/card-rework/2026-09-29-dew-shield/qa',{recursive:true});await writeFile('docs/card-rework/2026-09-29-dew-shield/qa/server-report.json',JSON.stringify({checks},null,2));console.log('PASS',checks);
+ // Dew gain events reach both sockets with exact values; reconnect snapshots do not replay grants.
+ for(const owner of [0,1]){
+  const rain=structuredClone(g);rain.cur=owner;rain.pending=null;rain.phase='main';rain.over=false;
+  for(const p of rain.players)Object.assign(p,{field:[],enchants:[],traps:[],quests:[],hand:[],dew:0,mana:20,maxMana:20});
+  rain.players[owner].hand=[card('NOURISHING_RAIN')];restored.room.game=rain;
+  await send(restored,owner,{type:'play',idx:0});
+  for(const socket of sockets){const event=socket.messages.at(-1).events.find(e=>e.type==='statusGrant'&&e.resource==='dew');assert.deepEqual([event.player,event.before,event.after],[owner,0,1]);assert.equal(socket.messages.at(-1).state.players[owner].dew,1);}
+ }
+ Date.now=realNow;const checks=['Dew gains broadcast to both sockets for both owners','two authoritative sockets','opponent choice ownership and rejection','hibernation/reconnect resumes defending choice','private hand view opens and closes','turn timeout declines optional spend and progresses'];await mkdir('docs/card-rework/2026-09-29-dew-shield/qa',{recursive:true});await writeFile('docs/card-rework/2026-09-29-dew-shield/qa/server-report.json',JSON.stringify({checks},null,2));console.log('PASS',checks);
 }finally{await rm(dir,{recursive:true,force:true});}

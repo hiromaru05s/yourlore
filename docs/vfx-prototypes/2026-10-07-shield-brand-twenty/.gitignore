@@ -1,0 +1,4 @@
+qa/*.png
+!qa/page-390.png
+!qa/board-390-0-BF.png
+!qa/BF4-final.png

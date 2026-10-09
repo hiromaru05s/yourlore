@@ -43,6 +43,28 @@ try{
   assert(layout.visibleRows>=2,`${width}x${height}: ${JSON.stringify(layout)}`);
   assert(layout.bottom<=layout.navTop+1,'The pool must stay above navigation');
   console.log('layout',width,height,layout);
+  assert.equal(await page.locator('.deck-pool-detail,.deck-hand-detail').count(),0);
+  const handNames=()=>page.locator('#deckCur .card-name').allTextContents();
+  const before=await handNames();
+  await page.locator('#deckPool .card').first().click();
+  await page.locator('#zoomOverlay').waitFor({state:'visible'});
+  assert.deepEqual(await handNames(),before,'Candidate face only enlarges');
+  await page.screenshot({path:`${out}/zoom-${width}.png`});
+  await page.locator('.inspect-close').click();
+  await page.locator('#deckCur .deck-entry:not(.is-fixed) .card').first().click();
+  await page.locator('#zoomOverlay').waitFor({state:'visible'});
+  assert.deepEqual(await handNames(),before,'Hand face only enlarges');
+  await page.locator('.inspect-close').click();
+  await page.locator('#deckCur .deck-hand-action').first().click();
+  assert.equal((await handNames()).length,8);
+  await page.locator('#deckPool .deck-card-action:not(:disabled)').first().click();
+  assert.equal((await handNames()).length,9);assert.equal(await page.locator('#zoomOverlay').count(),0);
+  await page.locator('#deckPool .deck-card-action:not(:disabled)').first().click();
+  assert(await page.locator('#deckCur').evaluate(el=>el.classList.contains('is-replacing')));
+  await page.locator('#deckCur .deck-hand-action').first().click();
+  assert.equal((await handNames()).length,9);
+  assert.equal(await page.locator('#zoomOverlay').count(),0);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   await page.screenshot({path:`${out}/deck-${width}.png`});
  }
  await page.locator('#watchTab').click();

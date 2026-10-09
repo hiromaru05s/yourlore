@@ -1,0 +1,25 @@
+{
+  "checks": [
+    {
+      "name": "abort releases retry without removing host",
+      "passed": true
+    },
+    {
+      "name": "new card filter cancels superseded page",
+      "passed": true
+    },
+    {
+      "name": "late challenge acceptance cannot navigate away from new screen",
+      "passed": true
+    },
+    {
+      "name": "late invitation cannot cover the next screen",
+      "passed": true
+    },
+    {
+      "name": "friend action errors are shown without an unhandled rejection",
+      "passed": true
+    }
+  ],
+  "errors": []
+}
