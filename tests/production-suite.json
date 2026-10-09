@@ -84,7 +84,8 @@
     "tests/duel-bugfix-oct08.mjs",
     "tests/cross-system-oct08.mjs",
     "tests/combat-anchor.mjs",
-    "tests/chosen-heroes-summon.mjs"
+    "tests/chosen-heroes-summon.mjs",
+    "tests/golem-shell.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
