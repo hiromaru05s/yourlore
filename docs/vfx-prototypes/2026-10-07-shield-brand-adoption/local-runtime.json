@@ -1,0 +1,40 @@
+{
+  "origin": "http://127.0.0.1:5326",
+  "checks": [
+    {
+      "id": "SF3",
+      "frames": 111,
+      "elapsed": 2596,
+      "count": "3"
+    },
+    {
+      "id": "SA1",
+      "frames": 96,
+      "elapsed": 2095,
+      "count": "11"
+    },
+    {
+      "id": "BF3",
+      "frames": 22,
+      "elapsed": 2785,
+      "count": "1"
+    },
+    {
+      "id": "BA4",
+      "frames": 101,
+      "elapsed": 2340,
+      "count": "4"
+    },
+    {
+      "case": "mobile-390"
+    },
+    {
+      "case": "reduced-motion"
+    },
+    {
+      "case": "destroy-during-playback"
+    }
+  ],
+  "errors": [],
+  "boundary": "Actual BaseController and unmodified runtime board, driven by authoritative reducer fixtures; not an authenticated online match."
+}

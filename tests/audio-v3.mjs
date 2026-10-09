@@ -36,7 +36,7 @@ try{
  for(const name of ['click','pop','error'])assert(a.soundUrls(name).every(u=>u.includes('/lore-v3/')));
  for(const name of ['coin','match','buy'])assert.deepEqual(a.soundUrls(name),[`/sfx/lore-v4/${name}.mp3`]);
  assert.deepEqual(a.soundUrls('draw'),['/sfx/lore-v4/draw-3.mp3']);
- for(const name of a.SFX_NAMES.filter(n=>!['click','pop','error','coin','match','buy','draw','play','summon'].includes(n)))assert(a.soundUrls(name).every(u=>u.includes('/lore-v5/')));
+ for(const name of a.SFX_NAMES.filter(n=>!['click','pop','error','coin','match','buy','draw','play','summon','chosenCrown'].includes(n)))assert(a.soundUrls(name).every(u=>u.includes('/lore-v5/')));
  for(let i=0;i<5;i++){time+=100;a.sfx('draw');assert(starts.at(-1).buffer.name.endsWith('/draw-3.mp3'),'draw never cycles to rejected variants');}
  a.stopSounds();time+=1000;a.sfx('attack');const sweep=starts.at(-1);a.sfx('impact');assert(stops.includes(sweep),'landing fades the outgoing attack sweep');
  time+=1000;a.sfx('mana');a.sfx('draw');const battle=starts.slice(-3);a.sfx('win');assert(battle.every(v=>stops.includes(v)),'outcome clears lingering battle voices');

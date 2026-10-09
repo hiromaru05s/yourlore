@@ -12,7 +12,8 @@ export function settleField(root:ParentNode,previous:Map<string,number>){
 export function reserveMonster(zone:HTMLElement,uid:string){
  const old=fieldPositions(zone.parentElement!),target=zone.querySelector<HTMLElement>('.slot:not([data-reserved-uid])');
  if(!target)return null;
- target.dataset.reservedUid=uid;settleField(zone.parentElement!,old);return target;
+ target.dataset.reservedUid=uid;settleField(zone.parentElement!,old);
+ zone.dispatchEvent(new Event('lore:board-projected',{bubbles:true}));return target;
 }
 export function releaseMonster(uid:string){
  const node=[...document.querySelectorAll<HTMLElement>('.zone-mon > .card,.zone-mon > .slot')].find(e=>e.dataset.uid===uid||e.dataset.reservedUid===uid);

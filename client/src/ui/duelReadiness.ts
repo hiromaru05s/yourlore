@@ -4,7 +4,7 @@ import {loungeText} from './loungeText';
 import {decodeAsset,waitAssets} from './assetReadiness';
 import {seekerAssets} from './seekerAnimation';
 import {READING_ASSETS} from './readingBoardLayout';
-import {PASSIVE_KEYS} from '../shared/cards';
+import {PASSIVE_KEYS,frameFor,fieldFrameFor} from '../shared/cards';
 import {passiveIconUrl} from './passiveIcon';
 /** Game content is revealed only after assets are decoded and the 3D scene has
  * painted. A slow/cold connection must never reveal intermediate furniture. */
@@ -12,6 +12,10 @@ const readiness=new WeakMap<HTMLElement,Promise<void>>();
 const logo='/art/brand/lore-logo-transparent.webp';
 const coinImages=['/ui/coin-toss/coin-option-1-front.png','/ui/coin-toss/coin-option-1-back.png'];
 const decode=decodeAsset;
+// Include reveal masters too: fullArt uses PNG frames that are absent from the
+// resting board's computed styles. Preload every face type before dismissing the cover.
+export const duelCardAssets=[...(['mon','spell','quest','trap'] as const).flatMap(t=>[frameFor(t),frameFor(t,true),fieldFrameFor(t)]),
+ ...['cost','attack','health','shield','dew','plaque','infinity'].map(n=>`/art/biblion/modular/${n}-ui.webp`)];
 export function waitForDuel(root:HTMLElement):Promise<void>{return readiness.get(root)??Promise.resolve();}
 export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
   if(!document.fonts||typeof HTMLImageElement==='undefined')return;
@@ -24,7 +28,7 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
     loading.update(3,loungeText("盤面を組み立てています","Building the board","보드 준비 중"));
     while(!expired&&root.isConnected&&root.dataset.boardRendered!=="true")await new Promise<void>(r=>requestAnimationFrame(()=>r()));
     if(expired||!root.isConnected)return;
-    const urls=new Set(['/art/seekers/v2/mask-self.png','/art/seekers/v2/mask-opp.png',...PASSIVE_KEYS.map(passiveIconUrl),...seekerAssets,...coinImages,...['base-mon','base-spell','base-quest','field-mon','field-spell','field-quest','cost','attack','health','shield','dew'].map(n=>`/art/biblion/modular/${n}-ui.webp`)]);
+    const urls=new Set([...duelCardAssets,'/art/biblion/modular/brand-seal-ui.png','/art/seekers/v2/mask-self.png','/art/seekers/v2/mask-opp.png',...PASSIVE_KEYS.map(passiveIconUrl),...seekerAssets,...coinImages,...['base-mon','base-spell','base-quest','field-mon','field-spell','field-quest','cost','attack','health','shield','dew'].map(n=>`/art/biblion/modular/${n}-ui.webp`)]);
     for(const el of root.querySelectorAll<HTMLElement>('*')){
       if(el.dataset.material)urls.add(el.dataset.material);
       if(el instanceof HTMLImageElement){if(el.currentSrc||el.src)urls.add(el.currentSrc||el.src);el.loading='eager';el.fetchPriority='high';}
@@ -51,6 +55,6 @@ export function warmDuel():Promise<void>{
     void warmSounds();
     const low=matchMedia('(max-width:700px)').matches;
     const urls=[...['board','market','supply'].map(n=>`${n}${low?'-low':''}.glb`),...['deck-place','shelf'].map(n=>`${n}${low?'-lod1':''}.glb`),'mana-tray.glb','mana-counter.glb','mana-crystal-ready.glb','mana-crystal-spent.glb','crystal-optics.json','turn-button.glb','timer-inserts.glb','reroll-button.glb'].map(n=>READING_ASSETS+n);
-    await Promise.allSettled([...urls.map(async url=>{const r=await fetch(url);if(r.ok)await r.arrayBuffer();}),...[logo,...coinImages].map(decode),import('./duelScene')]);
+    await Promise.allSettled([...urls.map(async url=>{const r=await fetch(url);if(r.ok)await r.arrayBuffer();}),...[logo,...coinImages,...duelCardAssets].map(decode),import('./duelScene')]);
   })();
 }

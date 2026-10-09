@@ -1,0 +1,167 @@
+[
+  {
+    "locale": "ja",
+    "cardId": "MASSACRE",
+    "bodySize": "16px",
+    "overflow": [],
+    "title": "大虐殺",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "locale": "ja",
+    "cardId": "DECAY_CRAFT",
+    "bodySize": "16px",
+    "overflow": [],
+    "title": "暗器製造",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "locale": "ja",
+    "cardId": "LEGEND_GAMBLER",
+    "bodySize": "16px",
+    "overflow": [],
+    "title": "伝説のギャンブラー",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "locale": "ja",
+    "cardId": "HPS_OATH",
+    "bodySize": "16px",
+    "overflow": [],
+    "title": "守護の誓い",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "locale": "ja",
+    "cardId": "ADVANCE",
+    "bodySize": "16px",
+    "overflow": [],
+    "title": "快進撃",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "locale": "ko",
+    "cardId": "MASSACRE",
+    "bodySize": "16px",
+    "overflow": [],
+    "title": "대학살",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "locale": "ko",
+    "cardId": "DECAY_CRAFT",
+    "bodySize": "16px",
+    "overflow": [],
+    "title": "암기 제조",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "locale": "ko",
+    "cardId": "LEGEND_GAMBLER",
+    "bodySize": "16px",
+    "overflow": [],
+    "title": "전설의 도박꾼",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "locale": "ko",
+    "cardId": "HPS_OATH",
+    "bodySize": "16px",
+    "overflow": [],
+    "title": "수호의 맹세",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "locale": "ko",
+    "cardId": "ADVANCE",
+    "bodySize": "16px",
+    "overflow": [],
+    "title": "쾌진격",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "locale": "en",
+    "cardId": "MASSACRE",
+    "bodySize": "16px",
+    "overflow": [],
+    "title": "Massacre",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "locale": "en",
+    "cardId": "DECAY_CRAFT",
+    "bodySize": "16px",
+    "overflow": [],
+    "title": "Concealed Arms Works",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "locale": "en",
+    "cardId": "LEGEND_GAMBLER",
+    "bodySize": "16px",
+    "overflow": [],
+    "title": "Legendary Gambler",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "locale": "en",
+    "cardId": "HPS_OATH",
+    "bodySize": "16px",
+    "overflow": [],
+    "title": "Oath of Warding",
+    "viewport": [
+      320,
+      740
+    ]
+  },
+  {
+    "locale": "en",
+    "cardId": "ADVANCE",
+    "bodySize": "16px",
+    "overflow": [],
+    "title": "Triumphant Advance",
+    "viewport": [
+      320,
+      740
+    ]
+  }
+]

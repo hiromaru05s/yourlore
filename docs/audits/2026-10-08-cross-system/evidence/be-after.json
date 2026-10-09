@@ -1,0 +1,48 @@
+{
+  "checks": [
+    {
+      "name": "concurrent invite attribution respects three-person cap and ledger ownership",
+      "passed": true
+    },
+    {
+      "name": "current and legacy tutorial completion grant badge; incomplete lesson does not",
+      "passed": true
+    },
+    {
+      "name": "parallel room setup cannot reset an already provisioned game",
+      "passed": true
+    },
+    {
+      "name": "timeout write failure never sends an uncommitted board",
+      "passed": true
+    },
+    {
+      "name": "login returns equipped deck before home or BOT can start",
+      "passed": true
+    },
+    {
+      "name": "concurrent password reset consumes the token once",
+      "passed": true
+    },
+    {
+      "name": "concurrent resend retains the one token actually issued",
+      "passed": true
+    },
+    {
+      "name": "OAuth return rejects a backslash external redirect",
+      "passed": true
+    },
+    {
+      "name": "rank recovery resolves public room name to stored durable identity",
+      "passed": true
+    },
+    {
+      "name": "opposite simultaneous friend requests produce one relationship",
+      "passed": true
+    },
+    {
+      "name": "simultaneous friend acceptance cannot exceed either account limit",
+      "passed": true
+    }
+  ]
+}

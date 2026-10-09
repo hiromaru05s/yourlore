@@ -1,0 +1,98 @@
+{
+  "checks": [
+    {
+      "id": "CHOSEN_KNIGHT",
+      "side": 0,
+      "path": "direct",
+      "seen": {
+        "cardId": "CHOSEN_KNIGHT",
+        "variant": "1",
+        "time": "1210"
+      }
+    },
+    {
+      "id": "CHOSEN_KNIGHT",
+      "side": 1,
+      "path": "direct",
+      "seen": {
+        "cardId": "CHOSEN_KNIGHT",
+        "variant": "1",
+        "time": "1208"
+      }
+    },
+    {
+      "id": "CHOSEN_MAGE",
+      "side": 0,
+      "path": "direct",
+      "seen": {
+        "cardId": "CHOSEN_MAGE",
+        "variant": "1",
+        "time": "1204"
+      }
+    },
+    {
+      "id": "CHOSEN_MAGE",
+      "side": 1,
+      "path": "direct",
+      "seen": {
+        "cardId": "CHOSEN_MAGE",
+        "variant": "1",
+        "time": "1204"
+      }
+    },
+    {
+      "id": "CHOSEN_ARCHER",
+      "side": 0,
+      "path": "direct",
+      "seen": {
+        "cardId": "CHOSEN_ARCHER",
+        "variant": "1",
+        "time": "1239"
+      }
+    },
+    {
+      "id": "CHOSEN_ARCHER",
+      "side": 1,
+      "path": "direct",
+      "seen": {
+        "cardId": "CHOSEN_ARCHER",
+        "variant": "1",
+        "time": "1265"
+      }
+    },
+    {
+      "id": "CHOSEN_ROGUE",
+      "side": 0,
+      "path": "direct",
+      "seen": {
+        "cardId": "CHOSEN_ROGUE",
+        "variant": "1",
+        "time": "1203"
+      }
+    },
+    {
+      "id": "CHOSEN_ROGUE",
+      "side": 1,
+      "path": "direct",
+      "seen": {
+        "cardId": "CHOSEN_ROGUE",
+        "variant": "1",
+        "time": "1208"
+      }
+    },
+    {
+      "path": "hand",
+      "complete": true
+    },
+    {
+      "path": "generated",
+      "complete": true
+    }
+  ],
+  "multi": true,
+  "skip": true,
+  "reduced": true,
+  "errors": [],
+  "warnings": [],
+  "boundary": "Local GameView fixture using production routes; no authenticated online match."
+}

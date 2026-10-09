@@ -4,7 +4,7 @@ import './soundReview.css';
 
 interface Clip {url:string;file:string;seconds:number;description?:string;decision?:string;sha256:string;}
 interface Manifest {sounds:Record<SfxName,Clip[]>;}
-const labels:Record<SfxName,string>={click:'HOME・共通クリック',pop:'確認・選択',error:'操作エラー',match:'対戦成立・対戦通知',coin:'HOMEの購入・クーポン',attack:'攻撃の振り抜き',summon:'召喚の着地',impact:'カードへの命中',facehit:'シーカーへの直接攻撃',damage:'効果によるダメージ','mana-pay':'マナの支払い',buy:'マーケット購入',draw:'カードを引く',play:'魔法・カードの発動',mana:'最大マナ増加',heal:'精神力回復',death:'モンスターの破壊',mimic:'ミミック召喚',trapSet:'トラップを伏せる',trap:'トラップ発動',void:'リフトへの吸収',shuffle:'デッキの再シャッフル',discard:'手札超過の破棄',turn:'自分のターン',coinToss:'先攻コインを投げる',coinLand:'先攻コインの着地',diceRoll:'ダイスを振る',diceLand:'ダイス結果',win:'勝利',lose:'敗北',drawGame:'引き分け',rankUp:'MMR上昇',rankDown:'MMR下降',rankPromote:'ティア昇格','duel-start':'開始SE・予備'};
+const labels:Record<SfxName,string>={chosenCrown:"選ばれし領域の完成光",click:'HOME・共通クリック',pop:'確認・選択',error:'操作エラー',match:'対戦成立・対戦通知',coin:'HOMEの購入・クーポン',attack:'攻撃の振り抜き',summon:'召喚の着地',impact:'カードへの命中',facehit:'シーカーへの直接攻撃',damage:'効果によるダメージ','mana-pay':'マナの支払い',buy:'マーケット購入',draw:'カードを引く',play:'魔法・カードの発動',mana:'最大マナ増加',heal:'精神力回復',death:'モンスターの破壊',mimic:'ミミック召喚',trapSet:'トラップを伏せる',trap:'トラップ発動',void:'リフトへの吸収',shuffle:'デッキの再シャッフル',discard:'手札超過の破棄',turn:'自分のターン',coinToss:'先攻コインを投げる',coinLand:'先攻コインの着地',diceRoll:'ダイスを振る',diceLand:'ダイス結果',win:'勝利',lose:'敗北',drawGame:'引き分け',rankUp:'MMR上昇',rankDown:'MMR下降',rankPromote:'ティア昇格','duel-start':'開始SE・予備'};
 const groups:Record<string,SfxName[]>={
  'まず確認してほしい音':['attack','summon','impact','facehit','damage','mana-pay'],
  '指定どおり残す音':['draw','buy'],

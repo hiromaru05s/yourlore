@@ -1,4 +1,5 @@
 import {coverScreen,isMenuReady,imageUrls,hasUnloadedAssets} from './ui/assetReadiness';
+import {showGraphicsNotice} from './ui/graphicsNotice';
 import { mountLounge, type LoungePage } from "./ui/lounge";
 import { startHomeMusic } from "./ui/homeMusic";
 // ============================================================
@@ -38,6 +39,9 @@ export class App {
   private navigating = false;
   private homeEntranceShown = false;
   private cancelCover:(()=>void)|undefined;
+  private closeGraphicsNotice:(()=>void)|undefined;
+  private graphicsChecked = false;
+  private screenRevision = 0;
 
   constructor(root: HTMLElement) { this.root = root; }
 
@@ -88,6 +92,8 @@ export class App {
   // the mount fn appends to root, so it must run after innerHTML is cleared.)
   private swap(make: () => Screen, page?: LoungePage): void {
     const mount = () => {
+      const revision = ++this.screenRevision;
+      this.closeGraphicsNotice?.(); this.closeGraphicsNotice = undefined;
       this.cancelCover?.();
       this.current?.destroy?.();
       this.leaveLounge?.(); this.leaveLounge = null;
@@ -97,13 +103,18 @@ export class App {
       this.current = make();
       if (keepHomeMusic && !this.stopHomeMusic) this.stopHomeMusic = startHomeMusic();
       if (page) {
+        const checkGraphics = () => {
+          if (revision !== this.screenRevision || this.graphicsChecked || (page !== 'login' && page !== 'home')) return;
+          this.graphicsChecked = true;
+          this.closeGraphicsNotice = showGraphicsNotice();
+        };
         this.leaveLounge = mountLounge(this, page);
         const entrance=page==='home'&&!this.homeEntranceShown;
         const assets=imageUrls(this.root);
         if(page==='login'||!isMenuReady()||entrance||hasUnloadedAssets(assets)){
           const cover=coverScreen(this.root,page!=='login'&&!isMenuReady(),entrance,assets);this.cancelCover=cover.cancel;
-          void cover.ready().then(ready=>{if(ready&&entrance)this.homeEntranceShown=true;});
-        }
+          void cover.ready().then(ready=>{if(ready&&entrance)this.homeEntranceShown=true;if(ready)checkGraphics();});
+        } else checkGraphics();
       }
     };
     if (this.navigating) return;

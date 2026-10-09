@@ -1,31 +1,20 @@
-@font-face{font-family:RiftRecordSerif;src:url('/models/reading-board/v1/fonts/DejaVuSerif.ttf') format('truetype');font-display:swap}
-.rift-record-count{--record-size:100px;position:relative;display:block;width:var(--record-size);aspect-ratio:100/136;container-type:inline-size;isolation:isolate;pointer-events:none;filter:drop-shadow(1px 3px 2px #05020bb0)}
-.record-card{--record-depth:0;position:absolute;left:11%;top:24%;width:65%;height:73%;clip-path:polygon(4% 0,96% 0,100% 3%,100% 97%,96% 100%,4% 100%,0 97%,0 3%);border-radius:4%;background:linear-gradient(145deg,#c6b1bd 0%,#715a7e 19%,#ead4cb 23%,#5f456c 38%,#9e7b9a 67%,#e2d1bf 94%,#765676);transform:translate(calc(var(--record-depth)*6cqw),calc(var(--record-depth)*-9cqw)) rotate(calc(-8deg + var(--record-depth)*1.5deg));transform-origin:50% 90%;opacity:calc(1 - var(--record-depth)*.055)}
-.record-surface{position:absolute;inset:max(.7px,1.1cqw);clip-path:inherit;border-radius:inherit;background:radial-gradient(ellipse at 110% 0%,#76577b42,transparent 59%),linear-gradient(135deg,#231925,#110d18 50%,#23132c 100%);box-shadow:inset 1px 1px 2px #e0bcda35,inset -1px -2px 3px #000a}
-.record-surface::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(118deg,#d8cad502 0 1px,transparent 1px 4px),linear-gradient(145deg,transparent 30%,#eee5ff08 48%,transparent 52%);opacity:.7}
-.record-line{position:absolute;inset:4.5%;border:.7px solid #c6a5c941;border-radius:3%;box-shadow:0 0 0 .5px #0008}
-.record-reflection{position:absolute;inset:3%;border-radius:3%;background:linear-gradient(115deg,transparent 10%,#eadaf13a 30%,transparent 48%);opacity:0;pointer-events:none}
-.record-number{position:absolute;top:28%;left:4%;right:4%;font:italic 400 44cqw/1 Georgia,"Times New Roman",RiftRecordSerif,serif;font-variant-numeric:lining-nums tabular-nums;letter-spacing:-.07em;text-align:center;color:#f3e8de;text-shadow:0 -1px 0 #06030a,0 .5px 0 #fffbf477,1px 2px 2px #0009;transform:rotate(8deg)}
-.record-star{position:absolute;left:45%;top:77%;width:13%;height:12%;background:linear-gradient(135deg,#fff5e4,#b4a0bb);clip-path:polygon(50% 0,63% 36%,100% 50%,63% 62%,50% 100%,37% 63%,0 50%,37% 36%);opacity:.8;transform:rotate(8deg)}
-.rift-record-count[data-empty=true]{filter:saturate(.3) drop-shadow(1px 2px 1px #0008)}
-.rift-record-count[data-empty=true] .record-surface{background:linear-gradient(135deg,#17131cb0,#08060fbf)}
-.rift-record-count[data-empty=true] .record-number{color:#d5c9d5}
-.rift-record-count[data-variant=stepped] .record-card{left:12%;top:25%;width:64%;height:71%;transform:translate(calc(var(--record-depth)*3cqw),calc(var(--record-depth)*-10cqw)) rotate(-3deg);background:linear-gradient(145deg,#dce1e7,#585568 30%,#cbbbcf 55%,#5a5269 80%,#eee4dd)}
-.rift-record-count[data-variant=stepped] .record-surface{background:linear-gradient(120deg,#413446,#17131f 42%,#231d30);box-shadow:inset 1px 1px 2px #ece3f13d,inset -2px -2px 3px #000}
-.rift-record-count[data-variant=stepped] .record-number{font-style:normal;transform:rotate(3deg);color:#ece5ef}
-.rift-record-count[data-variant=stepped] .record-star{transform:rotate(3deg)}
-.rift-record-count[data-variant=glass] .record-card{left:10%;top:24%;transform:translate(calc(var(--record-depth)*4.5cqw),calc(var(--record-depth)*-6.5cqw)) rotate(calc(-9deg + var(--record-depth)*5deg));opacity:calc(1 - var(--record-depth)*.09);background:linear-gradient(145deg,#e3cfe6,#665774 25%,#ccb1df 65%,#f4deeb)}
-.rift-record-count[data-variant=glass] .record-surface{background:radial-gradient(ellipse at 0% 0%,#8d68a34f,transparent 75%),linear-gradient(125deg,#21182de6,#191321f2 45%,#382641c4)}
-.rift-record-count[data-variant=glass] .record-number{transform:rotate(9deg);color:#f1dce8}
-.rift-record-count[data-variant=glass] .record-star{transform:rotate(9deg)}
-.rift-record-count[data-change=gain] .record-front{animation:record-arrive calc(640ms * var(--record-speed,1)) cubic-bezier(.2,.7,.2,1)}
+@font-face{font-family:"LORE Rift Numerals";src:url('/fonts/rift-records/CormorantGaramond-Medium-numerals.ttf') format('truetype');font-weight:500;font-style:normal;font-display:block;unicode-range:U+0030-0039}
+.rift-record-count{--record-size:100px;position:relative;display:block;width:var(--record-size);aspect-ratio:112/180;pointer-events:none;isolation:isolate;filter:none}
+.rift-record-count .record-art{display:block;width:100%;height:100%;overflow:visible}
+.rift-record-count .record-number{font-family:"LORE Rift Numerals",Georgia,serif;font-weight:500;font-style:normal;font-synthesis:none;font-variant-numeric:lining-nums proportional-nums;letter-spacing:-.35px;paint-order:normal;text-shadow:none}
+.rift-record-count[data-empty=true]{filter:saturate(.55)}
+.rift-record-count[data-empty=true] .record-number{fill:#d5c9bf}
+.rift-record-count .record-reflection{opacity:0}
+.rift-record-count[data-change=gain] .record-front{animation:record-arrive calc(720ms * var(--record-speed,1)) cubic-bezier(.2,.7,.2,1)}
 .rift-record-count[data-change=gain] .record-reflection{animation:record-reflect calc(820ms * var(--record-speed,1)) ease-out}
 .rift-record-count[data-change=loss] .record-front{animation:record-settle calc(430ms * var(--record-speed,1)) ease-out}
-@keyframes record-arrive{0%{translate:0 -9%;filter:brightness(1.25)}42%{translate:0 1%;filter:brightness(1.05)}100%{translate:0 0;filter:brightness(1)}}
-@keyframes record-reflect{0%{opacity:0;translate:-18% 0}30%{opacity:.65}100%{opacity:0;translate:28% 0}}
-@keyframes record-settle{0%{translate:0 3%;filter:brightness(.85)}100%{translate:0 0;filter:brightness(1)}}
-/* Position belongs to the actual Rift button and shares its board projection. */
-.rift-button .rift-record-count{position:absolute;left:22%;top:74%;--record-size:clamp(30px,calc(var(--board-meter,650px)*.068),65px);transform:translate(-50%,-50%);z-index:4}
-#rift-opp .rift-record-count{top:26%}
-.rift-button:focus-visible .rift-record-count{outline:1px solid #cdb9d5;outline-offset:4px;border-radius:5px}
+@keyframes record-arrive{0%{translate:0 -5px;filter:brightness(1.13)}45%{translate:0 .7px;filter:brightness(1.02)}100%{translate:0 0;filter:brightness(1)}}
+@keyframes record-reflect{0%{opacity:0}35%{opacity:.7}100%{opacity:0}}
+@keyframes record-settle{0%{translate:0 2px}100%{translate:0 0}}
+.rift-record-window{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:4}
+.rift-button .rift-record-count{position:absolute;left:var(--record-position-x);top:var(--record-position-y);--record-size:calc(var(--board-meter,650px)*var(--record-world-width));transform:translate(-50%,-50%);z-index:4}
+.rift-button:focus-visible{outline:1px solid #cdb9d5;outline-offset:3px}
 @media(prefers-reduced-motion:reduce){.rift-record-count .record-card,.rift-record-count .record-reflection{animation:none!important}}
+
+/* The far aperture narrows toward the back sheets; keep their tips inside it. */
+.rift-record-window[data-side=opp] .record-card:not(.record-front){scale:.82;transform-origin:30px 54px;translate:0 4px}

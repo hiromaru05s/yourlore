@@ -40,7 +40,7 @@ export function effectFixture(cue:string,selected:string,owner:0|1):EffectFixtur
   else if(selected==='GUILD_HALL'){const attackers=[play('ASSASSIN2'),play('ASSASSIN2'),play('ASSASSIN2')];begin();for(const a of attackers){g.cur=owner;attack(a,null,'命中でカウンター蓄積、3個で消費');}}
   else{notes.push('現行世界樹は専用カウンターではなく雫を用いる。');begin();cycle('世界樹が雫3を獲得');}
  }else if(cue==='A111'){
-  play('M7',foe,'b-dragon-target');g.players[foe].removed=[card('M2','b-rift-return')];g.cur=owner;begin();cast();if(pending()?.reason==='blackDragon'){choose('b-rift-return','リフトから相手シェルフへ戻す');cancel();}
+  play('M7',foe,'b-dragon-target');g.players[foe].removed=[card('M2','b-rift-return')];g.cur=owner;begin();cast();if(pending()?.reason==='blackDragon'){choose('b-rift-return','リフトから相手墓地へ戻す');cancel();}
  }else if(cue==='A112'){
   play(selected==='ANTIQUE_DK'?'INFKNIGHT':'SOLDIER2',owner,'b-fusion-partner');begin();sourceUid='b-fusion-dragon';play('GM6_0',owner,sourceUid,'竜と兵士／騎士が合体');
  }else if(cue==='A123'){
@@ -54,7 +54,7 @@ export function effectFixture(cue:string,selected:string,owner:0|1):EffectFixtur
  else if(cue==='A133'){play('ANCIENT_CIV',owner,sourceUid);for(let i=0;i<4;i++)cycle();begin();cycle('古代文明の期間が終了し、卵を選ぶ');if(pending()?.reason==='civChoice')choose('DRAGON_EGG','選択した卵が手札に加わる');}
  else if(cue==='A137'){play('TPO2',owner,sourceUid);play('M7',foe,'b-prey');g.cur=owner;begin();attack(sourceUid,'b-prey','捕食したカードのコストを能力に取り込む');}
  else if(cue==='A138'){begin();if(selected==='TGE5')cast();else play('ORIGIN_RITE',owner,sourceUid);const was=record;record=false;play('M2',foe,'b-rite-target');record=was;g.cur=owner;play('TGE2',owner,'b-rite-trigger','始原の召喚から術式が反応');if(g.pending)choose('b-rite-target');}
- else if(cue==='A146'){g.players[owner].supply[0]=card('M7','b-buy');sourceUid='b-buy';begin();apply({type:'buySupply',i:0},'提示カードを購入しシェルフへ');}
+ else if(cue==='A146'){g.players[owner].supply[0]=card('M7','b-buy');sourceUid='b-buy';begin();apply({type:'buySupply',i:0},'提示カードを購入し墓地へ');}
  else if(cue==='A147'){play('M9',owner,sourceUid);begin();apply({type:'refresh'},'レリック・ハンターのカウンターで提示を更新');}
  else if(cue==='A148'){begin();cast();}
  else if(cue==='A149'){begin();cast();end('相手の提示が2枚になり更新が封じられる');apply({type:'refresh'},'更新禁止中の操作');end();end('次の相手ターンで制限が解除');}

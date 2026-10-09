@@ -3,32 +3,17 @@
 .cant-toast {
   position: fixed; top: 26%; left: 50%; transform: translate(-50%, -50%);
   z-index: 200; pointer-events: none; display: inline-flex; align-items: center; gap: 9px;
-  padding: 12px 22px; border-radius: 12px; max-width: 80vw;
-  background: linear-gradient(180deg, #2a1210f2, #180c0bf2);
-  border: 1px solid var(--vermil); color: #ffdcd2;
+  padding: 10px 18px; border-radius: 2px; max-width: 80vw;
+  background: #202831ee;
+  border: 1px solid #a99a7655; color: #dfd5bd;
   font-size: 15px; font-weight: 600; letter-spacing: .01em; text-align: left;
-  box-shadow: 0 10px 34px #000b, 0 0 18px #d8542f44;
+  box-shadow: 0 3px 12px #0003;
   animation: cantPop .2s var(--ease);
 }
 .cant-toast .ct-x { flex: 0 0 auto; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--vermil); color: #fff; font-size: 11px; font-weight: 800; }
 .cant-toast.out { animation: cantOut .3s var(--ease) forwards; }
 @keyframes cantPop { from { opacity: 0; transform: translate(-50%,-50%) scale(.85) } to { opacity: 1; transform: translate(-50%,-50%) scale(1) } }
 @keyframes cantOut { to { opacity: 0; transform: translate(-50%,-62%) scale(.96) } }
-
-/* auto (non-clickable) center toast for timer warnings */
-.turn-toast {
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  z-index: 140; pointer-events: none;
-  font-family: var(--mono); font-weight: 800; letter-spacing: .06em;
-  color: #fff; background: #12060699; border: 1px solid var(--vermil); border-radius: 14px;
-  padding: 14px 30px; box-shadow: 0 8px 30px #000a, 0 0 24px #d8542f44;
-  animation: toastPop .25s var(--ease);
-}
-.turn-toast.big { font-size: 42px; padding: 10px 30px; }
-.turn-toast.small { font-size: 16px; }
-@keyframes toastPop { from { opacity: 0; transform: translate(-50%,-50%) scale(.8) } to { opacity: 1; transform: translate(-50%,-50%) scale(1) } }
-.turn-toast.out { animation: toastOut .3s var(--ease) forwards; }
-@keyframes toastOut { to { opacity: 0; transform: translate(-50%,-50%) scale(1.1) } }
 
 /* ---- coin toss (first-turn reveal) ---- */
 .cointoss-ov {
@@ -175,7 +160,7 @@
 .log-foot { padding: 10px 12px; border-top: 1px solid var(--line); }
 
 /* ---- target hint banner ---- */
-.target-hint { position: fixed; top: 52px; left: 50%; transform: translateX(-50%); z-index: 80; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: var(--vermil-hi); background: #1a0f0cdd; border: 1px solid var(--vermil); padding: 7px 16px; border-radius: 8px; box-shadow: 0 4px 18px #000a; }
+.target-hint { position: fixed; top: 52px; left: 50%; transform: translateX(-50%); z-index: 80; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: #dfd5bd; background: #202831ee; border: 1px solid #a99a7655; padding: 7px 16px; border-radius: 2px; box-shadow: 0 3px 12px #0003; }
 
 /* ============================================================
    animations driven by engine events
@@ -669,24 +654,24 @@
 .zoom-overlay { background:#080e1ebd; backdrop-filter:blur(8px); }
 .zoom-wrap { --inspect-h:min(65vh,640px); width:min(1120px,82vw); height:calc(var(--inspect-h) + 78px); display:grid; grid-template-columns:calc(var(--inspect-h) * .64) minmax(0,1fr); grid-template-rows:58px minmax(0,1fr); gap:20px 42px; align-items:stretch; cursor:default; }
 .inspect-heading { grid-column:1/-1; display:flex; align-items:center; gap:24px; border-bottom:1px solid #c8b99688; padding:0 6px 12px; }
-.inspect-heading h1 { font-family:var(--serif); font-weight:500; font-size:clamp(24px,2.4vw,38px); color:#f5eedf; margin:0; flex:1; }
-.inspect-type { color:#d5cbb5; font-size:15px; letter-spacing:.12em; }
+.inspect-heading h1 { font-family:var(--serif); font-weight:500; font-size:clamp(1.5rem,2.4vw,2.375rem); color:#f5eedf; margin:0; flex:1; }
+.inspect-type { color:#d5cbb5; font-size:.9375rem; letter-spacing:.12em; }
 .inspect-close { width:40px; height:40px; background:transparent; border:1px solid #c8b99666; color:#eee6d5; font-size:26px; cursor:pointer; }
 .inspect-close:hover,.inspect-close:focus-visible { background:#c8b99622; outline:1px solid #e3d7b8; }
 .zoom-wrap > .card { --cw:calc(var(--inspect-h) * .64); --ch:var(--inspect-h); box-shadow:none; align-self:center; }
-.zoom-details { overflow:auto; min-height:0; background:#17213294; border:1px solid #a4adbb75; outline:1px solid #a4adbb28; outline-offset:-6px; padding:28px 32px; color:#ede8dc; scrollbar-color:#aea38d #172032; }
+.zoom-details { --inspect-body-size:1.125rem; font-family:var(--gothic-ui,var(--ui)); overflow:auto; min-height:0; background:#17213294; border:1px solid #a4adbb75; outline:1px solid #a4adbb28; outline-offset:-6px; padding:28px 32px; color:#ede8dc; scrollbar-color:#aea38d #172032; }
 .zoom-details > * + * { margin-top:24px; padding-top:20px; border-top:1px solid #b9c0cd36; }
-.zoom-details .card-rules { font-size:clamp(16px,1.15vw,19px); line-height:1.9; }
+.zoom-details .card-rules { font-size:var(--inspect-body-size); line-height:1.75; }
 .zoom-details .card-cast,.zoom-details .card-keys { position:static; display:flex; flex-wrap:wrap; gap:10px; color:#e2d3aa; background:none; border:0; border-radius:0; box-shadow:none; padding:0; margin:0 0 12px; font-size:inherit; }
 .zoom-details .card-eff-txt { display:block; font-size:inherit; }
 .zoom-details .fx-tag,.zoom-details .kw { background:none; border:0; padding:0; color:#e4d19c; font-size:inherit; }
-.zoom-details .card-dice .dr { display:grid; grid-template-columns:56px 1fr; gap:14px; padding:8px 0; border-bottom:1px solid #ffffff16; }
+.zoom-details .card-dice .dr { display:grid; grid-template-columns:56px 1fr; gap:14px; padding:12px 0; line-height:1.75; border-bottom:1px solid #ffffff16; }
 .zoom-details .card-dice .dr-roll { color:#e4d19c; background:none; }
 .zoom-details .zoom-tribe { max-width:none; background:none; border:0; border-top:1px solid #b9c0cd36; border-radius:0; padding:20px 0 0; box-shadow:none; }
-.zoom-details .zoom-tribe h3 { font-size:15px; font-weight:500; color:#dfd2b6; }
-.zoom-details .zoom-tribe .b,.zoom-details .zoom-psv .psv-desc { font-size:14px; line-height:1.8; }
-.zoom-details .zoom-note { position:static; font-size:14px; color:#d9c59b; }
-.inspect-state { color:#d6e8f4; font-size:15px; line-height:1.8; }
+.zoom-details .zoom-tribe h3 { font-family:var(--gothic-ui,var(--ui)); font-size:1rem; line-height:1.5; font-weight:700; letter-spacing:.02em; color:#dfd2b6; }
+.zoom-details .zoom-tribe .b,.zoom-details .zoom-psv .psv-desc { font-size:1rem; line-height:1.75; opacity:1; overflow-wrap:break-word; }
+.zoom-details .zoom-note { position:static; font-size:1rem; line-height:1.75; color:#e2d3aa; }
+.inspect-state { color:#d6e8f4; font-size:1rem; line-height:1.75; }
 
 .zoom-details .ztc-grid { padding:12px 9px 8px; max-height:none; overflow:visible; }
 /* A coin falls onto the same tabletop: contact, two smaller rebounds, settle. */
@@ -790,3 +775,84 @@
 @media(prefers-reduced-motion:reduce){.opening-heading,.ceremony-opening-player,.ceremony-opening-result,.ceremony-opening-player.is-first .opening-frame,.duel-outcome .outcome-copy{animation:none!important;}}
 .opening-portrait .avatar{width:100%!important;height:100%!important;border:0;box-shadow:none;}
 @media(max-width:600px){.duel-opening:not(.duel-opening-v1) .ceremony-canvas{top:13%;height:46%;}}
+
+/* Full effects remain readable at every length; definitions are secondary, never clipped. */
+.zoom-details .card-rules { overflow-wrap:anywhere; min-width:0; }
+.zoom-details .card-rule-notes { margin-top:24px; border-top:1px solid #b9c0cd36; padding-top:12px; font-size:1rem; line-height:1.75; }
+.zoom-details .card-rule-notes p { margin:8px 0; }
+.zoom-details .fx-tag { margin-inline-end:.45em; font-weight:600; }
+@media(max-width:850px) {
+  .zoom-overlay .zoom-wrap { width:calc(100vw - 28px); height:auto; max-height:calc(100dvh - 28px); grid-template-columns:minmax(0,1fr); grid-template-rows:auto auto auto; gap:18px; overflow-y:auto; }
+  .zoom-overlay .inspect-heading { min-width:0; gap:10px; flex-wrap:wrap; }
+  .zoom-overlay .inspect-heading h1 { min-width:0; font-size:22px; overflow-wrap:anywhere; }
+  .zoom-overlay .zoom-wrap > .card { --cw:min(160px,40vw); --ch:calc(var(--cw) * 1.5625); justify-self:center; }
+  .zoom-overlay .zoom-details { --inspect-body-size:1.0625rem; min-width:0; overflow:visible; padding:16px; font-size:1rem; }
+  .zoom-overlay .card-dice .dr { grid-template-columns:56px minmax(0,1fr); gap:10px; }
+}
+
+/* Authored rule sections keep requirements and independently triggered effects apart. */
+.zoom-details .card-effect-section + .card-effect-section{margin-top:20px;padding-top:16px;border-top:1px solid rgba(190,165,115,.18)}
+.zoom-details .card-effect-section .fx-tag{display:block;width:fit-content;margin:0 0 8px;padding:0;border:0;background:none;color:var(--gold-light,#d8c39a);font:700 1rem/1.5 var(--gothic-ui,var(--ui));letter-spacing:.02em}
+.zoom-details .card-effect-body{margin:0;font:inherit;line-height:1.75;white-space:normal;word-break:normal;overflow-wrap:break-word}
+.zoom-details .card-effect-body + .card-effect-body{margin-top:8px}
+.zoom-details .card-keys{display:flex;flex-wrap:wrap;gap:10px 16px;margin-bottom:20px}
+.zoom-details .card-key-label{display:inline-flex;align-items:center;gap:8px;font-size:1rem;font-weight:600}
+.zoom-details button.card-key-label{min-height:44px;max-width:100%;padding:4px 6px;border:0;border-radius:3px;background:transparent;color:inherit;font-family:inherit;line-height:1.4;text-align:start;cursor:pointer;box-shadow:none}
+.zoom-details button.card-key-label .passive-icon{cursor:inherit}
+.zoom-details button.card-key-label:hover,.zoom-details button.card-key-label:focus-visible{background:#e8c66a14;text-decoration:underline;text-underline-offset:3px}
+.zoom-details button.card-key-label:focus-visible{outline:2px solid #e4d19c;outline-offset:2px}
+.zoom-psv .psv-item{scroll-margin-block:16px}
+.zoom-psv .psv-item:focus{outline:2px solid #e4d19c;outline-offset:2px;background:#e8c66a14}
+.zoom-details .card-rule-notes summary{cursor:pointer;min-height:44px;align-content:center;line-height:1.5;color:#e2d3aa}
+.zoom-details .card-rule-notes p{line-height:1.75}
+.zoom-details .card-dice-head{margin-bottom:12px}
+@media(max-width:850px){.zoom-details .card-effect-section + .card-effect-section{margin-top:18px;padding-top:14px}}
+.zoom-details .card-effect-body{font-weight:400}
+.zoom-details .card-effect-body:lang(ko),.zoom-details .dr-fx:lang(ko){word-break:keep-all;overflow-wrap:anywhere}
+
+/* Cast review keeps allegiance and irreversible choices readable before payment. */
+.cast-review .picker-grid { padding: 8px; }
+.picker-owner { font-size: 12px; font-weight: 700; text-align: center; margin: 0 0 8px; }
+.cast-review-caution:not(:empty) { color: #ffd4b9; background: #7b281d66; border-left: 3px solid #f4a16c; padding: 9px 12px; border-radius: 4px; }
+.cast-review .modal-row { position: sticky; bottom: 0; padding: 12px 0 0; }
+
+/* Ability ownership, effect references and applied states have distinct labels. */
+.card-key-heading{font-size:.875rem;line-height:1.5;color:#d7cbb4;margin:10px 0 4px}
+.zoom-details .card-key-heading + .card-keys{margin-bottom:14px}
+.inspect-current-state h2{font-size:1rem;line-height:1.5;color:#dfd2b6;margin:0 0 12px}
+.inspect-current-state dl{display:grid;grid-template-columns:minmax(90px,1fr) minmax(0,2fr);gap:8px 16px;margin:0;font-size:1rem;line-height:1.75}
+.inspect-current-state dt{color:#dfd2b6}.inspect-current-state dd{margin:0;overflow-wrap:break-word;font-variant-numeric:tabular-nums}
+.card .ec-decay-state{background:#36293f;color:#f0d5e9;border:1px solid #be8eb2;font-size:calc(var(--cw) * .065);white-space:nowrap}
+.zoom-wrap{grid-template-rows:auto minmax(0,1fr)}
+.inspect-heading{min-width:0;flex-wrap:wrap;gap:8px 16px;position:relative;z-index:2}
+.inspect-heading h1{min-width:0;overflow-wrap:anywhere}
+.inspect-heading-copy{display:flex;align-items:center;gap:8px 16px;flex:1;min-width:0}
+.inspect-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.inspect-controls button{font-family:var(--gothic-ui,var(--ui))}
+.inspect-close{min-width:44px;min-height:44px;flex-shrink:0}
+.inspect-back,.inspect-return-rules{min-height:44px;padding:6px 10px;background:#192133;color:#eee6d5;border:1px solid #c8b99666;font:inherit;font-size:.875rem;line-height:1.5;cursor:pointer}
+.inspect-return-rules[hidden]{display:none}
+.inspect-back:focus-visible,.inspect-return-rules:focus-visible{outline:2px solid #e4d19c;outline-offset:2px}
+.passive-scope-label{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.passive-scope-label select{max-width:100%;min-height:44px;background:#172132;color:#eee6d5;border:1px solid #a4adbb75;padding:6px 10px;font:inherit}
+@media(max-width:850px){
+  /* Only controls stay pinned: long titles and enlarged type must not cover the rules. */
+  .zoom-overlay .inspect-heading{display:contents}
+  .zoom-overlay .inspect-heading-copy{grid-column:1;grid-row:2;display:flex;flex-wrap:wrap;padding:0 8px;gap:6px;min-width:0}
+  .zoom-overlay .inspect-heading h1{flex:1 1 100%;min-width:0;font-size:1.375rem;margin:0}
+  .zoom-overlay .inspect-type{font-size:.875rem;line-height:1.5;letter-spacing:.04em;overflow-wrap:anywhere}
+  .zoom-overlay .inspect-controls{grid-column:1;grid-row:1;position:sticky;top:0;z-index:3;display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:6px 8px;padding:8px;background:#101827;box-shadow:0 3px 8px #080e1e88}
+  .zoom-overlay .inspect-close{grid-column:2;grid-row:1;align-self:start}
+  .zoom-overlay .inspect-back,.zoom-overlay .inspect-return-rules{grid-column:1;grid-row:1;justify-self:start;font-size:.875rem;max-width:100%;overflow-wrap:anywhere}
+  .zoom-overlay .inspect-back ~ .inspect-return-rules{grid-row:2}
+  .inspect-current-state dl{grid-template-columns:minmax(0,1fr);gap:2px}
+  .inspect-current-state dd+dt{margin-top:8px}
+}
+
+/* Reading hierarchy also applies to definitions, tribe conditions and result tables. */
+.zoom-details .zoom-psv .psv-name { font-size:1rem; line-height:1.5; letter-spacing:.02em; color:#d9efff; margin-bottom:6px; }
+.zoom-details .zoom-psv .psv-item.hl { animation:none; box-shadow:none; }
+.zoom-details .zoom-tribe .note { font-size:1rem; line-height:1.75; color:#ffd4c7; }
+.zoom-details .ztc-head { font-family:var(--gothic-ui,var(--ui)); font-size:.875rem; line-height:1.5; letter-spacing:.02em; text-transform:none; color:#d7cbb4; }
+.zoom-details .dr-roll { font-size:1rem; line-height:1.75; font-variant-numeric:tabular-nums; }
+.zoom-details :is(.psv-desc,.card-rule-notes p,.inspect-current-state dd,.zoom-tribe .b):lang(ko) { word-break:keep-all; overflow-wrap:anywhere; }

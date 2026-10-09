@@ -1,0 +1,84 @@
+{
+  "closeVisible": true,
+  "detailsOverflow": false,
+  "headingHeight": 0,
+  "height": 844,
+  "items": [
+    {
+      "color": "rgb(215, 230, 250)",
+      "line": 29.75,
+      "opacity": "1",
+      "overflow": false,
+      "selector": ".card-effect-body",
+      "size": 17,
+      "text": "自分の場の全モンスターに「オーラ」を付与（持続）。"
+    },
+    {
+      "color": "rgb(216, 195, 154)",
+      "line": 24,
+      "opacity": "1",
+      "overflow": false,
+      "selector": ".fx-tag",
+      "size": 16,
+      "text": "発動時"
+    },
+    {
+      "color": "rgb(226, 211, 170)",
+      "line": 22.4,
+      "opacity": "1",
+      "overflow": false,
+      "selector": ".card-key-label",
+      "size": 16,
+      "text": "オーラ"
+    },
+    {
+      "color": "rgb(217, 239, 255)",
+      "line": 24,
+      "opacity": "1",
+      "overflow": false,
+      "selector": ".psv-name",
+      "size": 16,
+      "text": "オーラ"
+    },
+    {
+      "color": "rgb(225, 239, 255)",
+      "line": 28,
+      "opacity": "1",
+      "overflow": false,
+      "selector": ".psv-desc",
+      "size": 16,
+      "text": "このモンスターは相手の魔法・モンスター効果の選択対象にならない。攻撃の対象にはなり、対象を選ばない全体効果も受ける。"
+    },
+    {
+      "color": "rgb(215, 230, 250)",
+      "line": 28,
+      "opacity": "1",
+      "overflow": false,
+      "selector": ".card-rule-notes p",
+      "size": 16,
+      "text": "持続：変更を受けたモンスターが場を離れるまで続く。「場にいる間／場にある間」の補正は、条件や発生源がなくなると終了する。"
+    },
+    {
+      "color": "rgb(215, 203, 180)",
+      "line": 21,
+      "opacity": "1",
+      "overflow": false,
+      "selector": ".card-key-heading",
+      "size": 14,
+      "text": "効果中の用語"
+    },
+    {
+      "color": "rgb(238, 230, 213)",
+      "line": 21,
+      "opacity": "1",
+      "overflow": false,
+      "selector": ".inspect-return-rules",
+      "size": 14,
+      "text": "効果本文へ戻る"
+    }
+  ],
+  "lang": "ja",
+  "scale": 1,
+  "width": 390,
+  "wrapOverflow": false
+}

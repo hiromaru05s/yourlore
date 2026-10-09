@@ -1,0 +1,35 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "sourceSha": "cfa33bbf9f3a950a8f230303b71b362ef0404127",
+  "fixCommit": "7e3ad618c3cb1b11591120889bc4a80d224b2a04",
+  "versionId": "c337371c-6fbf-4aa1-9421-8ed2eac848df",
+  "deploymentId": "1abba441-4b97-413a-9b58-9f2da6cb0d11",
+  "deployedAt": "2026-10-07T23:38:30.554254Z",
+  "regression": {
+    "passed": 80,
+    "total": 80
+  },
+  "typecheck": "passed",
+  "build": "passed",
+  "assetParity": {
+    "matched": 63,
+    "total": 63
+  },
+  "engineSource": "cfa33bbf9f3a950a8f230303b71b362ef0404127",
+  "animationSource": "cfa33bbf9f3a950a8f230303b71b362ef0404127",
+  "notes": "Animation fixture replay is separate from authenticated staging gameplay.",
+  "authenticatedStaging": {
+    "twoUsers": true,
+    "actions": 140,
+    "turn": 30,
+    "reconnected": true,
+    "completedBy": "surrender at bounded test end",
+    "errors": 0
+  },
+  "cleanup": {
+    "database": "lore-db-staging",
+    "tablesChecked": 15,
+    "remaining": 0,
+    "credentialFilesRemoved": true
+  }
+}
