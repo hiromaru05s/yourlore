@@ -86,6 +86,7 @@
     "tests/combat-anchor.mjs",
     "tests/chosen-heroes-summon.mjs",
     "tests/golem-shell.mjs",
+    "tests/gambler-summon.mjs",
     "tests/mage-summon.mjs"
   ],
   "historical": {

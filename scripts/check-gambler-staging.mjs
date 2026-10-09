@@ -1,0 +1,7 @@
+/** Confirm exact bytes from the guarded gambler release; no account/gameplay claim. */
+import fs from 'node:fs/promises';import {createHash} from 'node:crypto';import {execFile} from 'node:child_process';import {promisify} from 'node:util';import assert from 'node:assert/strict';
+const run=promisify(execFile),origin='https://test.yourlore.xyz',dist='client/dist',out='docs/releases/2026-10-09-gambler-wheel';
+const files=['index.html',...(await fs.readdir(dist+'/assets')).filter(f=>/\.(js|css)$/.test(f)).map(f=>'assets/'+f)];const hash=b=>createHash('sha256').update(b).digest('hex'),pending=[...files],assets=[];
+assert.ok((await Promise.all(files.filter(f=>f.endsWith('.js')).map(f=>fs.readFile(dist+'/'+f,'utf8')))).some(s=>s.includes('gambler-summon')),'Selected gambler runtime must be bundled');
+await Promise.all(Array.from({length:5},async()=>{while(pending.length){const file=pending.shift(),local=await fs.readFile(dist+'/'+file),{stdout}=await run('curl',['--location','--fail','--silent','--show-error','--retry','2',origin+'/'+file],{encoding:'buffer',maxBuffer:20e6});assert.equal(hash(stdout),hash(local),file);assets.push({file,sha256:hash(local),bytes:local.length});}}));
+await fs.writeFile(out+'/staging-assets.json',JSON.stringify({origin,checkedAt:new Date().toISOString(),assets,boundary:'Exact deployed HTML/JS/CSS parity. Local GameView runtime verification is separate from authenticated online gameplay.'},null,2));console.log('PASS deployed assets:',assets.length);

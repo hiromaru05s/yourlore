@@ -1,4 +1,5 @@
 import {isMage} from './mageSummon/selection';
+import {isGambler} from './gamblerSummon/selection';
 import {isHexer} from './hexerSummon/selection';
 import {isGolem} from './golem/selection';
 import {playGolem} from './golem/runtime';
@@ -203,7 +204,7 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(heavy&&(isMage(face.dataset.cardId)||isHexer(face.dataset.cardId))){
+  if(heavy&&(isMage(face.dataset.cardId)||isHexer(face.dataset.cardId)||isGambler(face.dataset.cardId))){
     face.style.visibility='hidden';reveal.remove();
     await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}),10000);
     face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
@@ -281,7 +282,7 @@ async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise
  const id=card.id;
  if(isMage(id)){node.style.visibility='hidden';return;}
  // Selected hexers begin in their renderer, without a raw DOM reveal or transfer.
- if(isHexer(id)){node.style.visibility='hidden';return;}
+ if(isHexer(id)||isGambler(id)){node.style.visibility='hidden';return;}
  if(isGolem(id)){node.style.visibility='hidden';return;}
  // Fetch the optional renderer while the unchanged hand reveal is moving.
  const module=isMimic(id)&&!fxSkip?import('./mimic/runtime').catch(()=>null):null;
