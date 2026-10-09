@@ -3,7 +3,7 @@
 import fs from 'node:fs/promises';import assert from 'node:assert/strict';import {parseAst} from 'rollup/parseAst';import {build} from 'esbuild';import {pathToFileURL} from 'node:url';
 import {apiFixture} from './helpers/api-fixture.mjs';
 import {chromium} from '/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
-const evidence=process.env.MAGE_EVIDENCE||'docs/releases/2026-10-09-mage-summon',manifest=JSON.parse(await fs.readFile(evidence+'/built-assets.json')),origin='https://test.yourlore.xyz';let summon,cardEl;
+const evidence=process.env.MAGE_EVIDENCE||'docs/releases/2026-10-09-mage-summon',manifest=JSON.parse(await fs.readFile(evidence+'/built-assets.json')),origin=process.env.MAGE_ORIGIN||'https://test.yourlore.xyz';let summon,cardEl;
 for(const file of manifest.assets.filter(x=>x.file.endsWith('.js'))){
  const code=await fs.readFile(evidence+'/built/'+file.file,'utf8'),ast=parseAst(code);
  for(const node of ast.body.filter(x=>x.type==='FunctionDeclaration')){
@@ -28,7 +28,7 @@ try{
  for(const [i,id] of ['FIRE_MASTER','BLACK_ELSA','BLACK_ALICE'].entries()){
   const side=i%2?'opp':'me';
   await page.evaluate(async({summon,cardEl,card,side})=>{const render=(await import('/'+cardEl.file))[cardEl.name],play=(await import('/'+summon.file))[summon.name];const node=render(card,{field:true,fullArt:true});document.querySelector(side==='me'?'#meRow .zone-mon':'#oppRow .zone-mon').append(node);window.stageStatus={id:card.id,hidden:document.hidden,connected:node.isConnected};const observer=new MutationObserver(records=>{for(const r of records)for(const el of r.addedNodes)if(el instanceof HTMLCanvasElement&&el.matches('.mage-summon')){window.stageStatus.firstTime=el.dataset.time;window.stageStatus.visualTime=el.dataset.visualTime;observer.disconnect();}});observer.observe(document.body,{childList:true});const result=play(node,'summon');window.stageStatus.hiddenSynchronously=node.style.visibility==='hidden';void result.then(complete=>{window.stageStatus.complete=complete;});},{summon,cardEl,card:{...DB[id],uid:'mage-stage-'+id},side});
-  if(id==='VITAL2'||id==='VITAL3'){assert.equal(await page.locator('.mage-summon,.slate-summon').count(),0);results.push({id,animation:'none'});}else{
+  {
    await page.locator('.mage-summon').waitFor({state:'attached',timeout:30000});await page.clock.runFor(16);
    const wrap=await page.locator('.mage-summon').evaluate(n=>({...n.dataset}));assert.ok(Number(wrap.visualTime)>=360);assert.equal(wrap.cardId,id);assert.equal(wrap.variant,'1');assert.equal(await page.locator('.slate-summon').count(),0);await page.screenshot({path:evidence+'/'+id+'-deployed.png'});
    await page.clock.runFor(1750);await page.screenshot({path:evidence+'/'+id+'-landing.png'});await page.clock.runFor(3000);assert.equal(await page.locator('.mage-summon').count(),0);const state=await page.evaluate(()=>window.stageStatus);assert.equal(state.hiddenSynchronously,true);assert.equal(state.firstTime,'0');assert.equal(state.visualTime,'360');assert.equal(state.complete,true);results.push({id,side,wrap,state});
