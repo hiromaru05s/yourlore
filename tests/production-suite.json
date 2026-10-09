@@ -87,6 +87,7 @@
     "tests/chosen-heroes-summon.mjs",
     "tests/golem-shell.mjs",
     "tests/gambler-summon.mjs",
+    "tests/mercenary-summon.mjs",
     "tests/mage-summon.mjs"
   ],
   "historical": {
