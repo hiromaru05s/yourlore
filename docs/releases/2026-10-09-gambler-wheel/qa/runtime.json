@@ -1,0 +1,192 @@
+{
+  "results": [
+    {
+      "firstWheelIndependentOfCard": [
+        {
+          "variant": 1,
+          "firstSame": true,
+          "endDifferent": true
+        },
+        {
+          "variant": 2,
+          "firstSame": true,
+          "endDifferent": true
+        }
+      ]
+    },
+    {
+      "id": "GAMBLER",
+      "side": 0,
+      "path": "direct",
+      "initial": {
+        "first": {
+          "time": "0",
+          "painted": true
+        },
+        "variant": "1",
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GAMBLER",
+      "side": 0,
+      "path": "hand",
+      "initial": {
+        "first": {
+          "time": "0",
+          "painted": true
+        },
+        "variant": "1",
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GAMBLER",
+      "side": 0,
+      "path": "generated",
+      "initial": {
+        "first": {
+          "time": "0",
+          "painted": true
+        },
+        "variant": "1",
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GAMBLER",
+      "side": 1,
+      "path": "direct",
+      "initial": {
+        "first": {
+          "time": "0",
+          "painted": true
+        },
+        "variant": "1",
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GAMBLER",
+      "side": 1,
+      "path": "hand",
+      "initial": {
+        "first": {
+          "time": "0",
+          "painted": true
+        },
+        "variant": "1",
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "GAMBLER",
+      "side": 1,
+      "path": "generated",
+      "initial": {
+        "first": {
+          "time": "0",
+          "painted": true
+        },
+        "variant": "1",
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "LEGEND_GAMBLER",
+      "side": 0,
+      "path": "direct",
+      "initial": {
+        "first": {
+          "time": "0",
+          "painted": true
+        },
+        "variant": "2",
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "LEGEND_GAMBLER",
+      "side": 0,
+      "path": "hand",
+      "initial": {
+        "first": {
+          "time": "0",
+          "painted": true
+        },
+        "variant": "2",
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "LEGEND_GAMBLER",
+      "side": 0,
+      "path": "generated",
+      "initial": {
+        "first": {
+          "time": "0",
+          "painted": true
+        },
+        "variant": "2",
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "LEGEND_GAMBLER",
+      "side": 1,
+      "path": "direct",
+      "initial": {
+        "first": {
+          "time": "0",
+          "painted": true
+        },
+        "variant": "2",
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "LEGEND_GAMBLER",
+      "side": 1,
+      "path": "hand",
+      "initial": {
+        "first": {
+          "time": "0",
+          "painted": true
+        },
+        "variant": "2",
+        "rawGhosts": 0
+      }
+    },
+    {
+      "id": "LEGEND_GAMBLER",
+      "side": 1,
+      "path": "generated",
+      "initial": {
+        "first": {
+          "time": "0",
+          "painted": true
+        },
+        "variant": "2",
+        "rawGhosts": 0
+      }
+    },
+    {
+      "reason": "skip",
+      "restored": true
+    },
+    {
+      "reason": "cancel",
+      "restored": true
+    },
+    {
+      "reason": "resize",
+      "restored": true
+    },
+    {
+      "mobile": true,
+      "reduced": true
+    }
+  ],
+  "errors": [],
+  "warnings": []
+}
