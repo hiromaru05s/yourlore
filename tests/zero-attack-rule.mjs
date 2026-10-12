@@ -40,7 +40,7 @@ try {
   };
 
   test('v56 and every base-zero monster: direct and targeted declaration', () => {
-    assert.equal(BALANCE_VERSION, 'v56');
+    assert.equal(BALANCE_VERSION, 'v57');
     for (const c of Object.values(DB).filter(c => c.t === 'mon' && c.atk === 0)) {
       for (const target of [false, true]) {
         const g = fresh(); g.players[0].field = [mon(c.id)];

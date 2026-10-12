@@ -1,3 +1,15 @@
+import {isAssassin} from '../assassinSummon/selection';
+import {playAssassinSummon,cancelAssassinSummon,cancelAssassinSummons} from '../assassinSummon/runtime';
+import {isMage} from '../mageSummon/selection';
+import {playMageSummon,cancelMageSummon,cancelMageSummons} from '../mageSummon/runtime';
+import {isMercenary} from '../mercenarySummon/selection';
+import {playMercenarySummon,cancelMercenarySummon,cancelMercenarySummons} from '../mercenarySummon/runtime';
+import {isGambler} from '../gamblerSummon/selection';
+import {playGamblerSummon,cancelGamblerSummon,cancelGamblerSummons} from '../gamblerSummon/runtime';
+import {isHexer} from '../hexerSummon/selection';
+import {playHexerSummon,cancelHexerSummon,cancelHexerSummons} from '../hexerSummon/runtime';
+import {isChosenHero} from '../chosenSummon/selection';
+import {chosenPlacement,playChosenSummon,cancelChosenSummon,cancelChosenSummons} from '../chosenSummon/runtime';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
 import {boardMatrix,layoutRect,projectedPlacement} from '../boardProjection';
@@ -11,17 +23,27 @@ export const SUMMON_VARIANT=2;
 const jobs=new Map<HTMLElement,{anchor:HTMLElement;cancel:()=>void}>();
 type Options={anchor?:HTMLElement;signal?:AbortSignal;onImpact?:()=>void};
 export function summonPlacement(target:HTMLElement,w:number,h:number,ms=0,reduced=false,cardId=target.dataset.cardId){
+ if(isAssassin(cardId))return projectedPlacement(target,w,h);
+ if(isMage(cardId))return projectedPlacement(target,w,h);
+ if(isChosenHero(cardId))return chosenPlacement(target,w,h,ms,reduced);
+ if(isMercenary(cardId)||isGambler(cardId)||isHexer(cardId))return projectedPlacement(target,w,h);
  if(isVerdant(cardId))return projectedPlacement(target,w,h);
  const m=motion(SUMMON_VARIANT,ms,reduced),plane=target.closest<HTMLElement>('[data-board-plane]');
  if(!plane)return projectedPlacement(target,w,h).translate(0,-m.lift*w);
  const r=layoutRect(target);
  return boardMatrix(r.left,r.top,(Number(plane.dataset.boardPlane)||0)+m.lift*r.width).scale(r.width/w,r.height/h);
 }
-export function cancelSummon(source:HTMLElement){jobs.get(source)?.cancel();cancelVerdant(source);}
-export function cancelSummons(root?:HTMLElement){cancelVerdants(root);for(const [source,j] of [...jobs])if(!root||root.contains(source)||root.contains(j.anchor))j.cancel();}
+export function cancelSummon(source:HTMLElement){jobs.get(source)?.cancel();cancelAssassinSummon(source);cancelMageSummon(source);cancelVerdant(source);cancelChosenSummon(source);cancelHexerSummon(source);cancelGamblerSummon(source);cancelMercenarySummon(source);}
+export function cancelSummons(root?:HTMLElement){cancelAssassinSummons(root);cancelMageSummons(root);cancelMercenarySummons(root);cancelGamblerSummons(root);cancelVerdants(root);cancelChosenSummons(root);cancelHexerSummons(root);for(const [source,j] of [...jobs])if(!root||root.contains(source)||root.contains(j.anchor))j.cancel();}
 
 export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<boolean>{
  cancelSummon(source);
+ if(isAssassin(source.dataset.cardId))return playAssassinSummon(source,options);
+ if(isMage(source.dataset.cardId))return playMageSummon(source,options);
+ if(isMercenary(source.dataset.cardId))return playMercenarySummon(source,options);
+ if(isGambler(source.dataset.cardId))return playGamblerSummon(source,options);
+ if(isHexer(source.dataset.cardId))return playHexerSummon(source,options);
+ if(isChosenHero(source.dataset.cardId))return playChosenSummon(source,options);
  if(isVerdant(source.dataset.cardId))return playVerdant(source,source.dataset.cardId,options);
  const anchor=options.anchor??source;
  if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted)return Promise.resolve(false);
