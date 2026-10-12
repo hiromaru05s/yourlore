@@ -1,3 +1,5 @@
+import {isDungeon} from './dungeonSummon/selection';
+import {playDungeonSummon} from './dungeonSummon/runtime';
 import {prepareTaunt,cancelTaunts} from './taunt/runtime';
 export {warmTaunt} from './taunt/runtime';
 import {usesAssassinStrike} from './assassinAttack/model';
@@ -222,6 +224,11 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(heavy&&isDungeon(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playDungeonSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
   if(heavy&&isVampire(face.dataset.cardId)){
     face.style.visibility='hidden';reveal.remove();
     if(!fxSkip)await boardMotionScope(signal=>playVampireSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),7000);
@@ -318,6 +325,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
 /** Both hand plays and engine-generated summon events share this selected reveal. */
 async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise<void>{
  const id=card.id;
+ if(isDungeon(id)){node.style.visibility='hidden';return;}
  if(isVampire(id)){node.style.visibility='hidden';return;}
  if(isAssassin(id)){node.style.visibility='hidden';return;}
  if(isMage(id)){node.style.visibility='hidden';return;}
