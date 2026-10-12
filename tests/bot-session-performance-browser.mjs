@@ -1,0 +1,29 @@
+import fs from 'node:fs/promises';
+import {preview} from 'vite';
+import assert from 'node:assert/strict';
+import {apiFixture} from './helpers/api-fixture.mjs';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
+const width=Number(process.env.PERF_WIDTH||1280),turns=Number(process.env.PERF_TURNS||2);
+const label=process.argv[2]||'before',out='docs/performance/2026-10-12';await fs.mkdir(out,{recursive:true});
+const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5625';
+const server=process.env.LORE_TEST_ORIGIN?undefined:await preview({root:'client',configFile:'client/vite.config.ts',preview:{port:5625,host:'127.0.0.1',strictPort:true}});
+const browser=await chromium.launch({channel:'chrome',headless:true});const page=await browser.newPage({viewport:{width,height:width<700?844:900},deviceScaleFactor:2});page.setDefaultTimeout(120000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
+await apiFixture(page,r=>{const p=new URL(r.url).pathname;return p==='/api/auth/me'?{user:{id:'perf',display:'SEEKER',credits:0,avatar:'SEEKER_BLUE',wins:0,losses:0}}:p==='/api/geo'?{country:'JP'}:p==='/api/rank/me'?{rating:{season:'2026-10',mmr:1000,tier:'bronze',wins:0,losses:0}}:{ok:true,friends:[],incoming:[],outgoing:[],challenges:[],keys:[],rows:[]};});
+await page.addInitScript(()=>{performance.setResourceTimingBufferSize(10000);window.longTasks=[];new PerformanceObserver(l=>window.longTasks.push(...l.getEntries().map(e=>({start:e.startTime,duration:e.duration})))).observe({type:'longtask'});let seed=42;Math.random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};});
+const cdp=await page.context().newCDPSession(page);await cdp.send('Performance.enable');await cdp.send('Profiler.enable');
+try{
+ const start=Date.now();await page.goto(origin+'/?polish');await page.waitForSelector('.lounge-home');await page.waitForSelector('.screen-loader',{state:'detached'});const homeMs=Date.now()-start;console.log('HOME',homeMs);
+ await page.locator('#bot').click();await page.locator('#ranked').click();await page.locator('[data-diff=hell]').click();await cdp.send('Profiler.start');const begin=Date.now();await page.locator('#diffStart').click();await page.waitForSelector('[data-scene-ready=true]');const sceneMs=Date.now()-begin;console.log('SCENE',sceneMs);
+ await page.waitForSelector('.duel-loader,.duel-opening',{state:'detached'});await page.waitForSelector('#hand .card');await page.waitForFunction(()=>document.querySelector('[data-reading-turn=player]'));const readyMs=Date.now()-begin;console.log('READY',readyMs);
+ const {profile}=await cdp.send('Profiler.stop');await fs.writeFile(`${out}/${label}-startup.cpuprofile`,JSON.stringify(profile));
+ const top=profile.nodes.filter(n=>n.hitCount).sort((a,b)=>b.hitCount-a.hitCount).slice(0,18).map(n=>({fn:n.callFrame.functionName,url:n.callFrame.url,hits:n.hitCount}));
+ const startup=await page.evaluate(()=>({longTasks:window.longTasks,assets:performance.getEntriesByType('resource').map(r=>({url:r.name,bytes:r.encodedBodySize,transferred:r.transferSize,duration:r.duration})),scene:document.querySelector('[data-scene-ready=true]')?.dataset.scenePerf}));
+ await fs.writeFile(`${out}/${label}-startup.json`,JSON.stringify({homeMs,sceneMs,readyMs,top,...startup,errors},null,2));console.log('HOTSPOTS',top.slice(0,6));console.log('LARGEST',startup.assets.sort((a,b)=>b.bytes-a.bytes).slice(0,6));
+ await page.screenshot({path:`${out}/${label}-ready.png`});console.log('WORKERS',page.workers().map(w=>w.url()));
+ await cdp.send('Profiler.start');await page.evaluate(()=>{window.longTasks=[];window.frameTimes=[];window.collecting=true;let last=performance.now();const tick=now=>{if(!window.collecting)return;window.frameTimes.push(now-last);last=now;requestAnimationFrame(tick);};requestAnimationFrame(tick);});
+ // End turns using the actual controller, including native BOT thinking and VFX.
+ for(let turn=0;turn<turns;turn++){await page.waitForTimeout(700);await page.locator('#endBtn').click();await page.waitForFunction(()=>document.querySelector('[data-reading-turn=opponent]'));await page.waitForFunction(()=>document.querySelector('[data-reading-turn=player]'),{},{timeout:180000});console.log('TURN',turn+1);}
+ const sample=await page.evaluate(()=>{window.collecting=false;const a=window.frameTimes.sort((a,b)=>a-b);return {frames:a.length,p95:a[Math.floor(a.length*.95)],max:a.at(-1),over50:a.filter(x=>x>50).length,longTasks:window.longTasks};});
+ const turnProfile=(await cdp.send('Profiler.stop')).profile;await fs.writeFile(`${out}/${label}-turns.cpuprofile`,JSON.stringify(turnProfile));const hotspots=turnProfile.nodes.filter(n=>n.hitCount).sort((a,b)=>b.hitCount-a.hitCount).slice(0,25).map(n=>({fn:n.callFrame.functionName,url:n.callFrame.url,hits:n.hitCount}));await fs.writeFile(`${out}/${label}-turns.json`,JSON.stringify({sample,hotspots,errors},null,2));console.log('PLAY',{...sample,longTasks:sample.longTasks.length},'HOTSPOTS',hotspots.slice(0,10));
+ await page.locator('#giveupBtn').click();await page.locator('.modal .btn-danger').click();await page.locator('.outcome-result .btn-ghost').first().click();await page.waitForSelector('.lounge-home');await page.waitForTimeout(500);assert.equal(page.workers().length,0,'Match workers stop on return home');assert.deepEqual(errors,[]);
+}catch(error){await page.screenshot({path:`${out}/${label}-failure.png`});await fs.writeFile(`${out}/${label}-failure.json`,JSON.stringify({error:String(error),errors,body:(await page.locator('body').innerText()).slice(0,5000)}));throw error;}finally{await browser.close();if(server)await new Promise(r=>server.httpServer.close(r));}

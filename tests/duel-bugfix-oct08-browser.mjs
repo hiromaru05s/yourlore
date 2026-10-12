@@ -4,7 +4,7 @@ const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5188',out=process.e
 const browser=await chromium.launch({channel:'chrome',headless:true}),page=await browser.newPage({viewport:{width:1280,height:900},deviceScaleFactor:2,recordVideo:{dir:out,size:{width:1280,height:900}}});page.setDefaultTimeout(90000);const errors=[],checks=[];page.on('pageerror',e=>errors.push(e.message));
 try{
  await page.route('**/bugfix-fixture',r=>r.fulfill({contentType:'text/html',body:'<html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="app"></div></body></html>'}));
- let release;const hold=new Promise(r=>release=r);await page.route('**/art/biblion/modular/base-quest.png',async r=>{await hold;await r.continue();});
+ let release;const hold=new Promise(r=>release=r);await page.route('**/art/biblion/modular/base-quest-lossless.webp',async r=>{await hold;await r.continue();});
  await page.goto(origin+'/bugfix-fixture');
  await page.evaluate(async()=>{
   for(const css of ['reading-board','tokens','base','card','game-overlays','game','dice','screens','mobile','duel-opening','lounge','loungeGame','loungeStage','presentation','deckWorkspace','cardsWorkspace','menuApproved','menuWorkspace'])await import('/src/styles/'+css+'.css');

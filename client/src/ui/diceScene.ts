@@ -51,6 +51,7 @@ export async function mountDiceScene(host:HTMLElement,rolls:number[],casino:bool
   if(signal.aborted||typeof WebGL2RenderingContext==='undefined')return null;
   let renderer:T.WebGLRenderer;
   try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return null;}
+  renderer.debug.checkShaderErrors=import.meta.env?.DEV??true;
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));renderer.setClearColor(0,0);
   renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.92;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
@@ -104,7 +105,7 @@ export async function mountDiceScene(host:HTMLElement,rolls:number[],casino:bool
     camera.position.set(0,distance*Math.cos(.35),distance*Math.sin(.35));camera.lookAt(0,.35,0);camera.updateProjectionMatrix();
     // Compile/upload before the roll clock starts, so the first visible die
     // still enters from outside even on a cold GPU/material cache.
-    await Promise.race([renderer.compileAsync(scene,camera),finished,new Promise<void>(resolve=>{timeout=setTimeout(resolve,800);})]);
+    await Promise.race([renderer.compileAsync(scene,camera),finished]);
     clearTimeout(timeout);if(dead||signal.aborted)return null;
     const warm=new T.WebGLRenderTarget(32,32);renderer.setRenderTarget(warm);
     try{renderer.render(scene,camera);}finally{renderer.setRenderTarget(null);warm.dispose();}

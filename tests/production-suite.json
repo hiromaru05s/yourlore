@@ -57,6 +57,8 @@
     "tests/production-security.mjs",
     "tests/production-bc.mjs",
     "tests/match-bots.mjs",
+    "tests/bot-worker.mjs",
+    "tests/purchase-air-worker.mjs",
     "tests/duel-opening-server.mjs",
     "tests/dew-shield-server.mjs",
     "tests/deck-hand-editor.mjs",
