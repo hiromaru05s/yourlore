@@ -503,6 +503,16 @@ export async function attackStrike(uid:string,targetUid:string|null,defender:Vie
   await boardMotionScope(signal=>playMonster(source,'attack',{target,signal,exhaust,side:defender==='opp'?1:-1,onImpact:()=>{if(contactDamage>0)sfx(targetUid?'impact':'facehit');onImpact?.();}}));
   if(exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');source.style.filter='grayscale(1) brightness(.57)';}
 }
+/** A counter is presentation metadata, never another ordinary attack action. */
+export async function counterStrike(uid:string,targetUid:string,onImpact?:()=>void,contactDamage=1):Promise<void>{
+ const source=combatCard(uid),target=combatCard(targetUid);
+ if(!source||!target||fxSkip||document.hidden)return;
+ await boardMotionScope(async signal=>{
+  const {playCounter}=await import('./counter/runtime');
+  if(signal.aborted||fxSkip)return false;
+  return playCounter(source,target,{signal,onLaunch:()=>sfx('attack'),onImpact:()=>{if(contactDamage>0)sfx('impact');onImpact?.();}});
+ });
+}
 export async function monsterActivation(uid:string):Promise<void>{
  const n=byUid(uid);if(n&&!fxSkip)await boardMotionScope(signal=>playMonster(n,'trigger',{signal,side:n.closest('#oppRow')?-1:1}));
 }

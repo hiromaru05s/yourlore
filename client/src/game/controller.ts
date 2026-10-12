@@ -7,6 +7,7 @@ import {synergyTier} from '../ui/tribePresentation/selection';
 import {playTribeSynergy} from '../ui/tribeSynergy/runtime';
 import type {Playback} from '../ui/elemental/runtime';
 import {persistentShelfExits} from './shelfExits';
+import {counterPresentationEvents} from './counterPresentation';
 import {installHandDiscard} from '../ui/handDiscard';
 import {captureSupplyFaces,playSupplyRefresh,supplyWasRefreshed} from '../ui/marketRefresh';
 import {prepareStateArtwork} from '../ui/stateArtwork';
@@ -314,7 +315,7 @@ export abstract class BaseController implements BoardHandlers {
         (document.querySelector(`#hand .card[data-uid="${c.uid}"]`) as HTMLElement | null)?.classList.add("is-played");
       }
     }
-    const events = res.events;
+    const events = counterPresentationEvents(res.events);
     if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
     const eventSound = new EventSound();
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
@@ -413,6 +414,10 @@ export abstract class BaseController implements BoardHandlers {
           fieldCount[e.player] = Math.max(0, fieldCount[e.player] - 1);
           };
           if(elemental.size)elementalDeaths.push(destroy());else await destroy();
+          break;
+        }
+        case 'counter': {
+          await A.counterStrike(e.uid,e.targetUid,()=>eventSound.contact(e.targetUid,e.targetPlayer,e.contactDamage>0),e.contactDamage);
           break;
         }
         case "attack": {
