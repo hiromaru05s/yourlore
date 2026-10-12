@@ -39,9 +39,11 @@ import type {HandLayout} from './handGeometry';
 import {mountDuelOutcome,cancelDuelOutcome} from './duelOutcome';
 import {reserveMonster} from './fieldLayout';
 import {waitForDuel} from './duelReadiness';
-// =====================================================// LORE — animation helpers. Triggered by engine events; never
+// ============================================================
+// LORE — animation helpers. Triggered by engine events; never
 // touch game state, only the DOM.
-// =====================================================import type { CardInst, GutsSurvival } from "../shared/types";
+// ============================================================
+import type { CardInst, GutsSurvival } from "../shared/types";
 import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, enchantHasTurnCountdown } from "../shared/cards";
 import { cardEl, cardRulesEl, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
 import { t, getLang, cardName } from "../i18n";
@@ -832,10 +834,12 @@ export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; ma
   el.addEventListener("touchcancel", cancel);
 }
 
-// =====================================================// FX layer — sequential event playback helpers.
+// ============================================================
+// FX layer — sequential event playback helpers.
 // Center banners, summon ghosts, random-result popups, mana/HP
 // surges and the death sequence. All awaitable, DOM-only.
-// =====================================================import { t as tt } from "../i18n";
+// ============================================================
+import { t as tt } from "../i18n";
 
 /** Selected arcane turn announcement; keeps the controller event contract. */
 export function turnBanner(mine: boolean, turn?: number): void {
