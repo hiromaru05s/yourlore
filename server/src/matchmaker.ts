@@ -9,6 +9,7 @@
 // ============================================================
 import type { Env } from "./env";
 import type { QueueClientMsg, QueueServerMsg } from "../../client/src/shared/protocol";
+import { ensureMatchBots, MATCH_BOTS, MATCH_BOT_WAIT_MS, matchBotsEnabled } from './matchBots';
 
 interface Waiter { ws: WebSocket; id: string; name: string; avatar: string | null; sleeve: string | null; furniture:string|null; deck: string | null; ranked: boolean; mmr: number; since: number; phase?:'pairing'|'matched'; messages?:number[]; }
 
@@ -24,6 +25,8 @@ export class Matchmaker {
   private casual: Waiter | null = null;
   private ranked: Waiter[] = [];
   private sweep: ReturnType<typeof setInterval> | null = null;
+  private botCursor = 0;
+  private botsReady: Promise<void> | null = null;
 
   constructor(_state: DurableObjectState, env: Env) {
     this.env = env;
@@ -84,8 +87,11 @@ export class Matchmaker {
       this.casual = null;
       void this.pair(other, me);
     } else {
+      if (this.casual?.ws === me.ws) return;
+      me.since = Date.now();
       this.casual = me;
       this.send(me.ws, { type: "queued", position: 1 });
+      this.syncSweep();
     }
   }
 
@@ -140,12 +146,52 @@ export class Matchmaker {
         }
       }
     }
+    // Humans always get the first chance to pair, in both queues.
+    if (matchBotsEnabled(this.env)) {
+      if (this.casual?.ws.readyState !== WebSocket.OPEN) this.casual = null;
+      const waiters = [...this.ranked, ...(this.casual ? [this.casual] : [])];
+      for (const w of waiters) if (!w.phase && Date.now() - w.since >= MATCH_BOT_WAIT_MS) {
+        if (this.casual === w) this.casual = null;
+        this.ranked = this.ranked.filter(other => other !== w);
+        void this.pairBot(w);
+      }
+    }
     this.syncSweep();
   }
 
   private syncSweep(): void {
-    if (this.ranked.length > 0 && !this.sweep) this.sweep = setInterval(() => this.sweepRanked(), SWEEP_MS);
-    if (this.ranked.length === 0 && this.sweep) { clearInterval(this.sweep); this.sweep = null; }
+    const waiting = this.ranked.length > 0 || (matchBotsEnabled(this.env) && this.casual != null);
+    if (waiting && !this.sweep) this.sweep = setInterval(() => this.sweepRanked(), SWEEP_MS);
+    if (!waiting && this.sweep) { clearInterval(this.sweep); this.sweep = null; }
+  }
+
+  private async pairBot(human: Waiter): Promise<void> {
+    human.phase = 'pairing';
+    const bot = MATCH_BOTS[this.botCursor++ % MATCH_BOTS.length];
+    const roomId = crypto.randomUUID();
+    try {
+      this.botsReady ??= ensureMatchBots(this.env).catch(error => { this.botsReady = null; throw error; });
+      await this.botsReady;
+      if (human.ws.readyState !== WebSocket.OPEN) { human.phase = undefined; this.remove(human.ws); return; }
+      const setup = await this.env.GAME_ROOM.get(this.env.GAME_ROOM.idFromName(roomId)).fetch('https://do/setup', {
+        method: 'POST', body: JSON.stringify({
+          players: [{id:human.id,name:human.name,sleeve:human.sleeve,furniture:human.furniture,deck:human.deck},
+            {id:bot.id,name:bot.name,deck:bot.deck.cards.join(',')}],
+          seed: crypto.getRandomValues(new Uint32Array(1))[0], ranked: human.ranked, botId: bot.id,
+        }),
+      });
+      if (!setup.ok) throw new Error('Bot room setup failed');
+      human.phase = 'matched';
+      this.send(human.ws, {type:'matched',roomId,you:0,oppName:bot.name,oppAvatar:bot.avatar});
+    } catch {
+      human.phase = undefined;
+      console.error('matchmaker_bot_setup_failed');
+      if (human.ws.readyState === WebSocket.OPEN) {
+        try { this.send(human.ws, {type:'error',message:'BOTとの対戦を準備できませんでした。再度お試しください。'}); } catch { /* dropped */ }
+      }
+    } finally {
+      if (human.ws.readyState !== WebSocket.OPEN) { human.phase = undefined; this.remove(human.ws); }
+    }
   }
 
   /** Put a still-connected waiter back in the queue (used when a pairing aborts). */

@@ -1,0 +1,104 @@
+{
+  "checkedAt": "2026-10-07",
+  "allDependencies": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 4,
+    "critical": 0,
+    "total": 4
+  },
+  "productionDependencies": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "advisories": [
+    {
+      "name": "miniflare",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "sharp"
+      ],
+      "range": "<=0.0.0-fec45ed61 || >=4.20250508.3",
+      "fixAvailable": {
+        "name": "wrangler",
+        "version": "4.15.2",
+        "isSemVerMajor": true
+      }
+    },
+    {
+      "name": "sharp",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1241331,
+          "name": "sharp",
+          "dependency": "sharp",
+          "title": "sharp : Vulnerability in librsvg dependency CVE-2026-96889",
+          "url": "https://github.com/advisories/GHSA-wq5f-xc86-pv6w",
+          "severity": "high",
+          "cwe": [
+            "CWE-416",
+            "CWE-1395"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<0.35.5"
+        }
+      ],
+      "range": "<0.35.5",
+      "fixAvailable": {
+        "name": "wrangler",
+        "version": "4.15.2",
+        "isSemVerMajor": true
+      }
+    },
+    {
+      "name": "source-map-js",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1241209,
+          "name": "source-map-js",
+          "dependency": "source-map-js",
+          "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+          "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+          "severity": "high",
+          "cwe": [
+            "CWE-1284"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=1.0.0 <1.2.2"
+        }
+      ],
+      "range": "1.0.0 - 1.2.1",
+      "fixAvailable": true
+    },
+    {
+      "name": "wrangler",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "miniflare"
+      ],
+      "range": "<=0.0.0-7ae5dd357 || >=4.16.0",
+      "fixAvailable": {
+        "name": "wrangler",
+        "version": "4.15.2",
+        "isSemVerMajor": true
+      }
+    }
+  ]
+}

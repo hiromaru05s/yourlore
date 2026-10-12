@@ -1,0 +1,2 @@
+import {defineConfig} from 'vite';
+export default defineConfig({root:new URL('../../..',import.meta.url).pathname,server:{host:'127.0.0.1',port:5527,strictPort:true},build:{outDir:'/tmp/lore-status-extinction-preview-build',emptyOutDir:true,rollupOptions:{input:{research:new URL('./research.html',import.meta.url).pathname,main:new URL('../../../status-extinction-four.html',import.meta.url).pathname,board:new URL('../../../status-extinction-board.html',import.meta.url).pathname}}}});

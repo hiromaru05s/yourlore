@@ -42,12 +42,15 @@ export async function applyInviteAtSignup(env: Env, inviteeId: string, ref: stri
   if (!code) return;
   const inviter = await env.DB.prepare(`SELECT id FROM users WHERE invite_code = ?`).bind(code).first<{ id: string }>();
   if (!inviter || inviter.id === inviteeId) return;
-  const cnt = await env.DB.prepare(`SELECT COUNT(*) AS n FROM invite_rewards WHERE inviter_id = ?`).bind(inviter.id).first<{ n: number }>();
-  if ((cnt?.n ?? 0) >= INVITE_LIMIT) return;
+  // Eligibility and attribution commit together; concurrent signups cannot all
+  // consume the same last slot, or disagree with the user's existing inviter.
   await env.DB.batch([
-    env.DB.prepare(`UPDATE users SET invited_by = ? WHERE id = ? AND invited_by IS NULL`).bind(inviter.id, inviteeId),
-    env.DB.prepare(`INSERT OR IGNORE INTO invite_rewards (invitee_id, inviter_id, status, created_at) VALUES (?,?,'pending',?)`)
-      .bind(inviteeId, inviter.id, Date.now()),
+    env.DB.prepare(`INSERT OR IGNORE INTO invite_rewards (invitee_id, inviter_id, status, created_at)
+      SELECT ?1,?2,'pending',?3 WHERE
+      (SELECT COUNT(*) FROM invite_rewards WHERE inviter_id=?2) < ?4
+      AND EXISTS (SELECT 1 FROM users WHERE id=?1 AND invited_by IS NULL)`)
+      .bind(inviteeId, inviter.id, Date.now(), INVITE_LIMIT),
+    env.DB.prepare(`UPDATE users SET invited_by=? WHERE id=? AND changes()=1`).bind(inviter.id, inviteeId),
   ]);
 }
 

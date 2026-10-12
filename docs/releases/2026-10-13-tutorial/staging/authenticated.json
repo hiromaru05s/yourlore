@@ -1,0 +1,24 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-10-12T15:52:20.517Z",
+  "credits": 3000,
+  "completed": 12,
+  "concurrentGrants": [
+    250,
+    0
+  ],
+  "checks": [
+    "real password login with disposable preverified account",
+    "first-entry invitation and No confirmation",
+    "genuine drag-to-play and 250-Shard D1 payment",
+    "remaining 11 shared-reducer transcripts accepted by deployed server",
+    "concurrent grant once",
+    "incomplete claim rejected",
+    "reload restores all 12 claims and no repeat invitation",
+    "mobile rule notebook"
+  ],
+  "errors": [],
+  "source": "b376938fdb0301dc52d0ab07e7bd790b51f467e0",
+  "browserTransport": "Chrome headless with HTTP/2 and QUIC disabled after cold asset requests stalled; all resources and APIs remained live staging, without fixtures.",
+  "boundary": "Real UI operation verifies the first lesson. Remaining eleven verify actual server replay and payment, not eleven separate UI playthroughs. The disposable account was preverified; email delivery and OAuth consent were not exercised."
+}

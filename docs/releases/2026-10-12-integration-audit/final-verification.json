@@ -1,0 +1,440 @@
+{
+  "at": "2026-10-12T15:29:36.385607+00:00",
+  "sourceCommit": "b376938fdb0301dc52d0ab07e7bd790b51f467e0",
+  "staging": {
+    "id": "d2b90982-8f35-4d94-ac37-aa5c9c4adb13",
+    "source": "wrangler",
+    "strategy": "percentage",
+    "annotations": {
+      "workers/message": "b376938fdb0301dc52d0ab07e7bd790b51f467e0 guarded release",
+      "workers/triggered_by": "deployment"
+    },
+    "versions": [
+      {
+        "version_id": "133ec917-b351-47bf-b629-40dac9b80e30",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-10-12T15:26:57.380067Z"
+  },
+  "featureInclusions": {
+    "a0b8e3da": true,
+    "f5531ec3": true,
+    "0bcc1232": true,
+    "ffeae4a8": true,
+    "129d10b5": true,
+    "d3f09580": true,
+    "210ed780": true,
+    "69629530": true,
+    "80151d11": true,
+    "7dd27c04": true,
+    "403e859c": true,
+    "a29df125": true,
+    "3e767ac2": true,
+    "cba0755c": true,
+    "06b7f745": true,
+    "ac8434d2": true,
+    "32842929": true,
+    "616d906d": true,
+    "1189fad9": true,
+    "b0afb9a8": true,
+    "c588cb0f": true,
+    "a5d44229": true,
+    "76cdf534": true,
+    "dbe0aaab": true,
+    "7e713fb1": true,
+    "bf1a65f4": true,
+    "06571a82": true,
+    "7e02ac67": true,
+    "26dcabc5": true,
+    "774472d0": true,
+    "a223dc72": true,
+    "148403e9": true,
+    "cc5bd0c5": true,
+    "8ca110fb": true,
+    "fd89adea": true,
+    "2615f3c2": true,
+    "597bccc3": true,
+    "8bd17738": true,
+    "2008d254": true,
+    "dc20e84f": true,
+    "4a491b7a": true,
+    "206e1f9c": true,
+    "07a624f6": true,
+    "502caf6b": true,
+    "76f64729": true,
+    "fc061b34": true
+  },
+  "approvedFeatureGroups": [
+    {
+      "name": "アサシン5種",
+      "selection": "05 銀縁の潜行",
+      "commit": "a0b8e3da",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "商人3種",
+      "selection": "03 コイン／影秤の契約",
+      "commit": "f5531ec3",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "吸血鬼6種",
+      "selection": "01 吸血の歯列",
+      "commit": "0bcc1232",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "ゴーレム7種",
+      "selection": "01 開始から石殻",
+      "commit": "ffeae4a8",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "呪術師5種",
+      "selection": "04 開始フレームから専用材質",
+      "commit": "129d10b5",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "選ばれし4種",
+      "selection": "01 金鍛の顕現",
+      "commit": "d3f09580",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "傭兵3種",
+      "selection": "02 煤火の帰還",
+      "commit": "210ed780",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "炎術師・黒魔術師3種",
+      "selection": "01 炎・影",
+      "commit": "69629530",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "ギャンブラー2種",
+      "selection": "通常01／伝説02",
+      "commit": "80151d11",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "エルフ・世界樹5種",
+      "selection": "04 絡根の解放",
+      "commit": "7dd27c04",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "5種族の召喚・シナジー",
+      "selection": "選定済み種族別演出",
+      "commit": "403e859c",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "二刀流待機",
+      "selection": "04 双拍の踏み込み",
+      "commit": "a29df125",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "気合",
+      "selection": "04 琥珀の復圧",
+      "commit": "3e767ac2",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "反撃",
+      "selection": "02 700ms準備＋気合連携",
+      "commit": "cba0755c",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "回避",
+      "selection": "03 水鏡の偏位",
+      "commit": "06b7f745",
+      "inMain": true,
+      "inInitialStage": false
+    },
+    {
+      "name": "シールド・雫・烙印の消滅",
+      "selection": "シールド01／雫02／烙印02",
+      "commit": "ac8434d2",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "腐敗カウンター付与",
+      "selection": "01 菌糸の侵蝕",
+      "commit": "32842929",
+      "inMain": true,
+      "inInitialStage": false
+    },
+    {
+      "name": "アバター",
+      "selection": "通常静止・被弾時のみ枠と画像を同期",
+      "commit": "616d906d",
+      "inMain": true,
+      "inInitialStage": false
+    },
+    {
+      "name": "BOT・描画性能",
+      "selection": "UIスレッド負荷削減・低速読込再試行",
+      "commit": "1189fad9",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "リフト枚数",
+      "selection": "装飾撤去・数字だけ",
+      "commit": "b0afb9a8",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "カード説明",
+      "selection": "3言語・能力見出しの区別",
+      "commit": "c588cb0f",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "通常破壊",
+      "selection": "01 脈光の覚醒",
+      "commit": "a5d44229",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "虚無破壊",
+      "selection": "01 銀刻の黒曜",
+      "commit": "76cdf534",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "腐敗破壊",
+      "selection": "02 溶解のみ",
+      "commit": "dbe0aaab",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "リフト待機",
+      "selection": "03 影の薄衣",
+      "commit": "7e713fb1",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "盾・烙印付与",
+      "selection": "選定済み材質・発光",
+      "commit": "bf1a65f4",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "雫付与",
+      "selection": "T2 月縁の雫",
+      "commit": "06571a82",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "永続魔法",
+      "selection": "02 light-flight",
+      "commit": "7e02ac67",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "購入",
+      "selection": "03 交互の渦跡",
+      "commit": "26dcabc5",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "市場更新",
+      "selection": "カード反転リロール",
+      "commit": "774472d0",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "コイントス結果",
+      "selection": "05 Lumen Weave",
+      "commit": "a223dc72",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "クエスト",
+      "selection": "紫墨の血判",
+      "commit": "148403e9",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "ファイアー・剣鬼等",
+      "selection": "承認済み個別攻撃VFX",
+      "commit": "cc5bd0c5",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "選ばれし領域勝利",
+      "selection": "王冠＋選定音02",
+      "commit": "8ca110fb",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "魔法共通",
+      "selection": "再生速度の選定変更",
+      "commit": "fd89adea",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "複数対象バフ",
+      "selection": "全対象へのアニメーション",
+      "commit": "2615f3c2",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "家具・着せ替え",
+      "selection": "選定済みアニメセット",
+      "commit": "597bccc3",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "ガチャ既存版",
+      "selection": "象牙版フロントエンド",
+      "commit": "8bd17738",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "デッキ操作",
+      "selection": "拡大・明示的編集ボタン",
+      "commit": "2008d254",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "カード効果・対象選択",
+      "selection": "消費前の対象確認",
+      "commit": "dc20e84f",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "カードバランス",
+      "selection": "v57 9枚改修・剣鬼強制攻撃",
+      "commit": "4a491b7a",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "墓地名称",
+      "selection": "全言語統一",
+      "commit": "206e1f9c",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "共通召喚",
+      "selection": "03 岩層の着地",
+      "commit": "07a624f6",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "アサシン5種の攻撃",
+      "selection": "01 刹那の居合（他の暗襲は通常攻撃）",
+      "commit": "502caf6b",
+      "inMain": true,
+      "inInitialStage": false,
+      "approvedDuringAudit": true,
+      "threadId": "01a12f59-62f2-74d2-a31f-3174cce1bd42"
+    },
+    {
+      "name": "挑発の盾",
+      "selection": "03 黒金の王盾",
+      "commit": "76f64729",
+      "inMain": true,
+      "inInitialStage": false
+    },
+    {
+      "name": "チュートリアル・マナの精霊",
+      "selection": "12課程・合計3000シャード・初回案内・ルールノート",
+      "commit": "fc061b34",
+      "inMain": true,
+      "inInitialStage": false
+    }
+  ],
+  "productionTestFiles": 106,
+  "verification": {
+    "guardedRelease": true,
+    "htmlJsCssMatches": 63,
+    "htmlJsCssChecked": 63,
+    "avatarAssetsMatch": 3,
+    "avatarAssetsChecked": 3,
+    "sourceRuntimeMatchesIntegratedMain": true,
+    "authenticatedOnlineMatch": false,
+    "newVisualApproval": false
+  },
+  "summary": "採用済み45項目と、監査中に完成したチュートリアルの計46項目がステージング配信版に含まれています。公開記録も統合しました。",
+  "details": [
+    "公開日時：2026年10月13日00:26（UTC+09）。Workerバージョン 133ec917-b351-47bf-b629-40dac9b80e30 を100%配信。",
+    "公開ガードで型検査・回帰テスト106本・ビルド成功。公開に使った同一ビルドのHTML/JS/CSS 63ファイルと実配信のSHA-256が一致。アバター画像3ファイルも一致確認済み。",
+    "開始時の未配信3項目（回避03・腐敗カウンター01・アバター被弾表示）と、監査中に承認されたアサシン攻撃01・挑発03を反映済み。完成したチュートリアルも含めて最終版を照合。",
+    "18ブランチに残っていた公開証拠・確認用スクリプトを競合なく統合。公開後に加えた差分は記録・検証用スクリプトで、アプリのソースは配信版と一致。",
+    "元フォルダの未コミット作業を保持し、ローカルmain参照を早送り。整った最新版は専用監査worktree。"
+  ],
+  "ongoingWork": [
+    {
+      "name": "チュートリアル",
+      "state": "公開済み。担当チャットで実ログインと報酬の最終確認を継続。"
+    },
+    {
+      "name": "BOT難易度強化",
+      "state": "探索と対戦評価中。完成・公開済みには含めない。"
+    },
+    {
+      "name": "腐敗カウンター",
+      "state": "公開・配信照合済み。担当チャットで公開画面の最終確認を継続。"
+    }
+  ],
+  "localWorkingCopy": {
+    "path": "/Users/hiromaru05s/Desktop/LORE_TCG",
+    "preservedBranch": "codex/local-work-preserved-20261013",
+    "workingFilesRemainOnPreservedBranch": true,
+    "cleanIntegratedWorktree": "/Users/hiromaru05s/.codex/worktrees/release-audit-20261012/LORE_TCG"
+  },
+  "boundaries": [
+    "Commit inclusion and deployed byte parity do not re-approve every animation visually.",
+    "No new authenticated online match or physical phone verification was performed by this audit.",
+    "No production deployment.",
+    "Concurrent uncommitted work and unselected previews were preserved."
+  ],
+  "integratedEvidenceBranches": 18
+}

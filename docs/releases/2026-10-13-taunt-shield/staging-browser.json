@@ -1,0 +1,8 @@
+{
+  "url": "https://test.yourlore.xyz/",
+  "scripts": [
+    "https://test.yourlore.xyz/assets/main-CQx53XL8.js"
+  ],
+  "errors": [],
+  "scope": "Public login screen only; authenticated online match was not run."
+}

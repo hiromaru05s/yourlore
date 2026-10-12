@@ -1,0 +1,15 @@
+{
+  "environment": "Local headless Chrome; measurement includes browser/GPU readback; not mobile hardware",
+  "grid": {
+    "samples": 201,
+    "medianMs": 16.699999999999818,
+    "p95Ms": 16.700000000000273,
+    "over34ms": 1
+  },
+  "detail": {
+    "samples": 201,
+    "medianMs": 16.699999999999818,
+    "p95Ms": 16.799999999999272,
+    "over34ms": 1
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "started": 1791813644278,
+  "finished": 1791813654611,
+  "state": {
+    "variant": 0,
+    "ms": 716.6000000000022,
+    "before": 0,
+    "amount": 1,
+    "reduced": false,
+    "side": 1,
+    "multi": false,
+    "dark": false,
+    "card": "ELF",
+    "mode": "compare",
+    "ready": true,
+    "playing": true,
+    "boardReady": true,
+    "active": 4,
+    "counts": [
+      "0",
+      "0",
+      "0",
+      "0"
+    ],
+    "fallback": false
+  },
+  "errors": [],
+  "description": "Actual UI at normal speed, real native card and counter DOM, 10-second continuous playback capture. MP4 trims the last 10 s of the recording."
+}

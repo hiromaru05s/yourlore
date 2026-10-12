@@ -1,0 +1,190 @@
+{
+  "sample": {
+    "frames": 1353,
+    "p95": 16.799999999999272,
+    "max": 1966.5999999999985,
+    "over50": 14,
+    "longTasks": [
+      {
+        "start": 19277.400000000373,
+        "duration": 90
+      },
+      {
+        "start": 20281.799999999814,
+        "duration": 139
+      },
+      {
+        "start": 20598.299999999814,
+        "duration": 57
+      },
+      {
+        "start": 21712.60000000056,
+        "duration": 124
+      },
+      {
+        "start": 28552,
+        "duration": 94
+      },
+      {
+        "start": 28675,
+        "duration": 63
+      },
+      {
+        "start": 29391.200000000186,
+        "duration": 52
+      },
+      {
+        "start": 29485.900000000373,
+        "duration": 93
+      },
+      {
+        "start": 29622.700000000186,
+        "duration": 76
+      },
+      {
+        "start": 32112.700000000186,
+        "duration": 61
+      },
+      {
+        "start": 36354.5,
+        "duration": 89
+      },
+      {
+        "start": 36478.799999999814,
+        "duration": 181
+      },
+      {
+        "start": 38489.90000000037,
+        "duration": 1964
+      }
+    ]
+  },
+  "hotspots": [
+    {
+      "fn": "(idle)",
+      "url": "",
+      "hits": 10440
+    },
+    {
+      "fn": "getProgramParameter",
+      "url": "",
+      "hits": 1187
+    },
+    {
+      "fn": "(program)",
+      "url": "",
+      "hits": 610
+    },
+    {
+      "fn": "getProgramParameter",
+      "url": "",
+      "hits": 111
+    },
+    {
+      "fn": "getImageData",
+      "url": "",
+      "hits": 81
+    },
+    {
+      "fn": "getContext",
+      "url": "",
+      "hits": 54
+    },
+    {
+      "fn": "fillText",
+      "url": "",
+      "hits": 53
+    },
+    {
+      "fn": "ee",
+      "url": "http://127.0.0.1:5625/assets/scene-_cADZ2Gj.js",
+      "hits": 42
+    },
+    {
+      "fn": "getProgramParameter",
+      "url": "",
+      "hits": 42
+    },
+    {
+      "fn": "texSubImage2D",
+      "url": "",
+      "hits": 42
+    },
+    {
+      "fn": "",
+      "url": "http://127.0.0.1:5625/assets/RoomEnvironment-DASCOWwv.js",
+      "hits": 41
+    },
+    {
+      "fn": "Ve",
+      "url": "http://127.0.0.1:5625/assets/duelScene-4DchPewO.js",
+      "hits": 35
+    },
+    {
+      "fn": "get offsetWidth",
+      "url": "",
+      "hits": 33
+    },
+    {
+      "fn": "querySelectorAll",
+      "url": "",
+      "hits": 31
+    },
+    {
+      "fn": "ye",
+      "url": "http://127.0.0.1:5625/assets/duelScene-4DchPewO.js",
+      "hits": 31
+    },
+    {
+      "fn": "(garbage collector)",
+      "url": "",
+      "hits": 28
+    },
+    {
+      "fn": "ps",
+      "url": "http://127.0.0.1:5625/assets/RoomEnvironment-DASCOWwv.js",
+      "hits": 25
+    },
+    {
+      "fn": "setSize",
+      "url": "http://127.0.0.1:5625/assets/RoomEnvironment-DASCOWwv.js",
+      "hits": 25
+    },
+    {
+      "fn": "getProgramInfoLog",
+      "url": "",
+      "hits": 23
+    },
+    {
+      "fn": "getProgramParameter",
+      "url": "",
+      "hits": 22
+    },
+    {
+      "fn": "getImageData",
+      "url": "",
+      "hits": 21
+    },
+    {
+      "fn": "la",
+      "url": "http://127.0.0.1:5625/assets/modal-Bs8bkH2A.js",
+      "hits": 19
+    },
+    {
+      "fn": "getPropertyValue",
+      "url": "",
+      "hits": 18
+    },
+    {
+      "fn": "getProgramParameter",
+      "url": "",
+      "hits": 18
+    },
+    {
+      "fn": "M",
+      "url": "http://127.0.0.1:5625/assets/RoomEnvironment-DASCOWwv.js",
+      "hits": 14
+    }
+  ],
+  "errors": []
+}

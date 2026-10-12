@@ -1,0 +1,247 @@
+{
+  "before": false,
+  "checks": [
+    {
+      "width": 1280,
+      "side": 0,
+      "kind": "attack",
+      "mode": "duplicate",
+      "zero": false,
+      "expected": {
+        "x": 596.6560668945312,
+        "y": 315.5948791503906
+      },
+      "first": {
+        "kind": "attack",
+        "source": {
+          "x": 594.6426086425781,
+          "y": 591.8555297851562
+        },
+        "targets": [
+          {
+            "x": 596.6560668945312,
+            "y": 315.5948791503906
+          }
+        ]
+      }
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "kind": "FIRE_ARROW",
+      "mode": "duplicate",
+      "zero": false,
+      "expected": {
+        "x": 596.6560668945312,
+        "y": 315.5948791503906
+      },
+      "first": {
+        "kind": "arrow",
+        "source": {
+          "x": 594.6426086425781,
+          "y": 591.8555297851562
+        },
+        "targets": [
+          {
+            "x": 596.6560668945312,
+            "y": 315.5948791503906
+          },
+          {
+            "x": 640,
+            "y": 119.640625
+          },
+          {
+            "x": 596.6560668945312,
+            "y": 315.5948791503906
+          }
+        ]
+      }
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "kind": "attack",
+      "mode": "duplicate",
+      "zero": false,
+      "expected": {
+        "x": 594.6426086425781,
+        "y": 591.8555297851562
+      },
+      "first": {
+        "kind": "attack",
+        "source": {
+          "x": 596.6560668945312,
+          "y": 315.5948791503906
+        },
+        "targets": [
+          {
+            "x": 594.6426086425781,
+            "y": 591.8555297851562
+          }
+        ]
+      }
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "kind": "FIRE_ARROW",
+      "mode": "duplicate",
+      "zero": false,
+      "expected": {
+        "x": 594.6426086425781,
+        "y": 591.8555297851562
+      },
+      "first": {
+        "kind": "arrow",
+        "source": {
+          "x": 596.6560668945312,
+          "y": 315.5948791503906
+        },
+        "targets": [
+          {
+            "x": 594.6426086425781,
+            "y": 591.8555297851562
+          },
+          {
+            "x": 640.0078125,
+            "y": 780.34375
+          },
+          {
+            "x": 594.6426086425781,
+            "y": 591.8555297851562
+          }
+        ]
+      }
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "kind": "attack",
+      "mode": "duplicate",
+      "zero": false,
+      "expected": {
+        "x": 181.66509246826172,
+        "y": 380.3301086425781
+      },
+      "first": {
+        "kind": "attack",
+        "source": {
+          "x": 181.4710922241211,
+          "y": 464.40289306640625
+        },
+        "targets": [
+          {
+            "x": 181.66509246826172,
+            "y": 380.3301086425781
+          }
+        ]
+      }
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "kind": "FIRE_ARROW",
+      "mode": "duplicate",
+      "zero": false,
+      "expected": {
+        "x": 181.66509246826172,
+        "y": 380.3301086425781
+      },
+      "first": {
+        "kind": "arrow",
+        "source": {
+          "x": 181.4710922241211,
+          "y": 464.40289306640625
+        },
+        "targets": [
+          {
+            "x": 181.66509246826172,
+            "y": 380.3301086425781
+          },
+          {
+            "x": 195,
+            "y": 296.078125
+          },
+          {
+            "x": 181.66509246826172,
+            "y": 380.3301086425781
+          }
+        ]
+      }
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "kind": "attack",
+      "mode": "duplicate",
+      "zero": false,
+      "expected": {
+        "x": 181.4710922241211,
+        "y": 464.40289306640625
+      },
+      "first": {
+        "kind": "attack",
+        "source": {
+          "x": 181.66509246826172,
+          "y": 380.3301086425781
+        },
+        "targets": [
+          {
+            "x": 181.4710922241211,
+            "y": 464.40289306640625
+          }
+        ]
+      }
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "kind": "FIRE_ARROW",
+      "mode": "duplicate",
+      "zero": false,
+      "expected": {
+        "x": 181.4710922241211,
+        "y": 464.40289306640625
+      },
+      "first": {
+        "kind": "arrow",
+        "source": {
+          "x": 181.66509246826172,
+          "y": 380.3301086425781
+        },
+        "targets": [
+          {
+            "x": 181.4710922241211,
+            "y": 464.40289306640625
+          },
+          {
+            "x": 195,
+            "y": 547.90625
+          },
+          {
+            "x": 181.4710922241211,
+            "y": 464.40289306640625
+          }
+        ]
+      }
+    },
+    {
+      "kind": "attack",
+      "mode": "hidden",
+      "frames": 0
+    },
+    {
+      "kind": "FIRE_ARROW",
+      "mode": "hidden",
+      "frames": 214
+    },
+    {
+      "mode": "reduced"
+    },
+    {
+      "mode": "skip"
+    }
+  ],
+  "errors": [],
+  "boundary": "Controlled hidden duplicate / missing DOM-anchor reproduction using production renderers on the real cosmetic runtime board; not an authenticated match."
+}

@@ -1,0 +1,15 @@
+{
+  "checks": [
+    "desktop/mobile notebook and curriculum",
+    "WebGL spirit",
+    "two-stage skip confirmation",
+    "real drag to play",
+    "real attack target selection",
+    "reward dedupe",
+    "mobile drag and offer refresh",
+    "three languages",
+    "reduced motion",
+    "guide teardown"
+  ],
+  "errors": []
+}
