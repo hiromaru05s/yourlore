@@ -1,4 +1,4 @@
-import {execFileSync} from 'node:child_process';
+import {readFileSync} from 'node:fs';
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
@@ -10,9 +10,18 @@ const settle=async()=>{for(let i=0;i<5;i++)await new Promise(r=>setImmediate(r))
 try{
  const entry={contents:"export * from './client/src/shared/engine';export {DB} from './client/src/shared/cards';export * from './client/src/ui/taunt/timing';",resolveDir:process.cwd()};
  await build({stdin:entry,bundle:true,platform:'node',format:'esm',outfile:dir+'/rules.mjs'});
- const oldEngine=execFileSync('git',['show','HEAD:client/src/shared/engine.ts'],{encoding:'utf8',maxBuffer:8e6});
- // Remove presentation metadata from the current engine to compare all gameplay and RNG outputs.
- const baseline=oldEngine.includes('rollEvent.taunt')?oldEngine.replace(/\s*rollEvent\.taunt = [^;]+;/g,''):oldEngine;
+ // Legacy taunt resolution is an independent oracle; other rules use current code.
+ const currentEngine=readFileSync('client/src/shared/engine.ts','utf8');
+ const start=currentEngine.indexOf('    const tauntRollIndex = ctx.ev.length;'),end=currentEngine.indexOf('\n  }\n  if (treeStage',start);assert(start>0&&end>start);
+ const baseline=currentEngine.slice(0,start)+`    const tauntRollIndex = ctx.ev.length;
+    if (orig && !hasPassive(orig, "taunt") && taunts.length > 0 && diceChance(g, ctx, o, { id: taunts[0].id, player: side(g, o) }, 50)) {
+      const tnt = taunts[randInt(g, taunts.length)];
+      const rollEvent = ctx.ev[tauntRollIndex];
+      if (rollEvent?.type === "dice") rollEvent.source = { id: tnt.id, player: side(g, o) };
+      targetUid = tnt.uid;
+      if (attackEvent) attackEvent.targetUid = targetUid;
+      ctx.log(\`  └ <span class="dmg">도발!</span> \${cn(tnt)} 이(가) 대신 공격을 받는다\`, \`  └ <span class="dmg">挑発！</span> \${cn(tnt)} が代わりに攻撃を受ける\`);
+    }`+currentEngine.slice(end);
  await build({stdin:entry,bundle:true,platform:'node',format:'esm',outfile:dir+'/baseline.mjs',plugins:[{name:'baseline',setup(b){b.onLoad({filter:/shared\/engine\.ts$/},()=>({contents:baseline,loader:'ts'}));}}]});
  const {createGame,reduce,DB,tauntRollIndex,DURATION,SELECTED_SHIELD}=await import(dir+'/rules.mjs'),before=await import(dir+'/baseline.mjs');
  assert.equal(DURATION,1000);assert.equal(SELECTED_SHIELD,2);
