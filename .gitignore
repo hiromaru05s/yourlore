@@ -17,3 +17,5 @@ _render.cjs
 /docs/card-expansion/*/generated/
 
 /.bot-strength/
+
+/.bot-strength-v2/

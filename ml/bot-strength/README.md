@@ -9,7 +9,7 @@ Hell first obtains Hard's decision, retains it through both rounds, and changes
 that decision only when its deeper average is at least 0.02 higher. This prevents
 extra breadth from replacing a strong move with a marginal sampled advantage.
 Upper tiers have no intentional mistakes. Hard uses three ordinary legal decks
-selected by a separate deck study; Hell uses the anti-enchantment Counter engine. Neither tier receives extra HP, mana or cards.
+selected by a separate deck study; Hell uses three evolved decay/pressure decks. Neither tier receives extra HP, mana or cards.
 
 The evaluator blends a material estimate with a 27-feature logistic value model
 trained on 4,000 current-rule games. Observations infer unknown opponent cards
@@ -20,10 +20,11 @@ plays are limited to 12 per card ID per turn **only by BOT policy**.
 
 `BotThinker` runs decisions in a cancellable Web Worker. Navigation terminates
 work; stale decisions cannot apply. If the worker fails or exceeds 15 seconds,
-the controller uses a verified greedy fallback. Search uses an alias-preserving
+it retains the last completed recommendation (including Hard's result inside Hell).
+Only a search with no completed recommendation uses a verified greedy fallback. Search uses an alias-preserving
 plain-state clone; a 1,000-transition test compares it with native structuredClone.
 
-## Reproduce current comparisons
+## Original comparison commands (historical)
 
 ```sh
 node ml/bot-strength/build.mjs
@@ -37,7 +38,7 @@ ROSTER_A=hell node ml/bot-strength/evaluate.cjs new:hell old:hell 60 29000 hell-
 Each adjacent pair shares the game seed and swaps A's seat. With no ROSTER
 setting, deck assignment stays fixed while policies swap; this isolates decision
 quality. With ROSTER settings, each policy keeps its designated roster as seats
-swap; this measures the shipped matchup. `elite` is the three Hard decks and `hell` the selected Hell deck;
+swap; this measures the shipped matchup. `elite` is the three Hard decks and `hell` the three selected Hell decks;
 the other roster is the five original decks. Every result records module hashes,
 parameters, per-game rows, invalid decisions, complete pairs and a paired
 bootstrap interval. Invalid/unfinished games are not losses; their entire pairs
@@ -104,3 +105,38 @@ results and release status.
 Independent contiguous pair ranges can run as separate processes; merge their completed JSON results with `summarize.cjs output.json shard1.json ...`. It rejects overlapping pairs and mixed source hashes or parameters.
 
 The original logistic validation split used game index modulo 10, which puts its validation games in starting seat 0. Treat that accuracy as a diagnostic, not proof of strength; tier acceptance uses paired seats and independent seeds.
+
+## Second pass: current staging integration and counter decks
+
+The current follow-up is recorded in `docs/bot-strength/2026-10-13-v2/README.md`.
+Use its frozen `previous-integrated.cjs.gz` for the comparison policy: it includes
+current engine rules, unlike the original historical baseline. Expand it to
+`$BOT_LAB/previous.cjs`; set `BOT_BASELINE` to that absolute path.
+
+Reproduce discovery in order from the repository root:
+
+```sh
+export BOT_MODULE="$BOT_BASELINE"
+mkdir -p "$BOT_LAB/results"
+node ml/bot-strength/evolve-v2.cjs
+node ml/bot-strength/holdout-v2.cjs
+# Copy the recorded roster.json and counters.json into BOT_LAB.
+node ml/bot-strength/evolve-counter-v2.cjs
+node ml/bot-strength/holdout-counter-v2.cjs
+node ml/bot-strength/train-value-v2.cjs
+```
+
+Set `BOT_LAB` to an absolute scratch directory (default discovery directory:
+`.bot-strength-v2`). `ROSTER_A_FILE` / `ROSTER_B_FILE` select exact JSON deck arrays
+for `evaluate.cjs`, including the NPC decks actually used by LocalController.
+`TACTICS` and `VALUE_MODEL` are research-only overrides. The second value model
+was tested separately; generating it does not adopt its weights. Validation
+splits whole games in two-game blocks, covering both starting seats.
+
+
+For final acceptance, extract `release-candidate.cjs.gz` to a separate immutable
+`candidate.cjs`; the second-pass report identifies subsequent release safeguards
+and their conformance checks. Both modules and exact roster files are recorded in
+each result. Do not overwrite a bundle while an evaluation is running.
+The synchronous evaluator does not impose the browser's 15-second wall-clock
+limit; browser lifecycle and retained recommendations are validated separately.

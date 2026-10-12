@@ -6,6 +6,8 @@ import { hasPassive } from './cards';
 import { safeGreedy, greedyStep } from './bot';
 import { observationSample } from './botObservation';
 import { botActions, actionChangesState } from './botActions';
+import { forcedWin } from './botTactics';
+export const TACTICS = { proof: true, targets: true, horizon: 4 };
 
 export const SEARCH = {
   hard: { width: 8, samples: 2, turns: 2, finalists: 3, extraSamples: 2 },
@@ -43,11 +45,14 @@ export function positionValue(g: GameState, s: Side): number {
 }
 
 /** Compare complete own-turn / opponent-reply sequences under common random samples. */
-export function searchDecide(g: GameState, level: 'hard' | 'hell'): Action {
+export function searchDecide(g: GameState, level: 'hard' | 'hell', prove = true, onProgress?: (action: Action) => void): Action {
+  if (prove && TACTICS.proof) { const win = forcedWin(g, level === 'hell' ? 900 : 350); if (win) return win; }
   const side = actingSide(g), cfg = SEARCH[level];
   // Hell retains Hard's move as its expert baseline. More breadth alone can
   // overfit a lucky hidden-card sample and make an otherwise strong move worse.
-  const base = level === 'hell' ? searchDecide(g, 'hard') : safeGreedy(g);
+  const base = level === 'hell' ? searchDecide(g, 'hard', false, onProgress) : safeGreedy(g);
+  // A completed lower-cost policy remains available if the worker hits its deadline.
+  onProgress?.(base);
   const seenPlays = new Set<string>();
   const root = botActions(g).filter(a => {
     if (a.type !== 'play') return true;
@@ -99,7 +104,7 @@ export function searchDecide(g: GameState, level: 'hard' | 'hell'): Action {
     finalists.forEach(a => { a.sum = 0; a.n = 0; });
     for (let i = 0; i < cfg.extraSamples; i++) {
       const sample = observationSample(g, side, i + 101);
-      for (const arm of finalists) { arm.sum += rollout(sample, arm.a, side, 4); arm.n++; }
+      for (const arm of finalists) { arm.sum += rollout(sample, arm.a, side, TACTICS.horizon); arm.n++; }
     }
     finalists.sort((a, b) => b.sum / b.n - a.sum / a.n);
     if (level === 'hell' && baseline && finalists[0].sum / finalists[0].n < baseline.sum / baseline.n + 0.02) return base;
@@ -113,9 +118,31 @@ function rollout(sample: GameState, action: Action, side: Side, turns: number): 
   if (!actionChangesState(sample, st)) return -1;
   const endTurn = sample.turn + turns;
   for (let steps = 0; !st.over && st.turn < endTurn && steps < 120; steps++) {
-    const next = greedyStep(st).state;
+    const next = tacticalStep(st).state;
     if (!actionChangesState(st, next)) break;
     st = next;
   }
   return positionValue(st, side);
+}
+
+/** Rollout opponents choose valuable targets instead of always hitting the first
+ * permanent or the highest printed-cost card. Both seats use the same policy. */
+export function tacticalStep(g: GameState): {action: Action; state: GameState} {
+  const base = greedyStep(g);
+  if (!TACTICS.targets || !g.pending || g.pending.reason === 'gamblerGuess') return base;
+  const side = actingSide(g);
+  let best = base, value = positionValue(base.state, side) + 0.002;
+  const targets = new Set<string>();
+  for (const action of botActions(g)) {
+    if ((action.type === 'pick' || action.type === 'chooseTarget') && ['purge','recall','seek'].includes(g.pending.kind)) {
+      const card = [...g.players[g.cur].hand,...g.players[g.cur].deck,...g.players[g.cur].discard].find(c => c.uid === action.uid);
+      if (card) { const key = JSON.stringify({...card,uid:''}); if (targets.has(key)) continue; targets.add(key); }
+    }
+    if (JSON.stringify(action) === JSON.stringify(base.action)) continue;
+    const state = reduce(g, action).state;
+    if (!actionChangesState(g,state)) continue;
+    const score = positionValue(state,side);
+    if (score > value) { best = {action,state}; value = score; }
+  }
+  return best;
 }

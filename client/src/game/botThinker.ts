@@ -7,7 +7,7 @@ import type { Action, GameState } from '../shared/types';
 export class BotThinker {
   private worker: Worker | null = null;
   private serial = 0;
-  private pending: { id: number; resolve: (a: Action | null) => void; timer: ReturnType<typeof setTimeout> } | null = null;
+  private pending: { id: number; resolve: (a: Action | null) => void; timer: ReturnType<typeof setTimeout>; best?: Action } | null = null;
   private dead = false;
   private unavailable = false;
 
@@ -16,26 +16,29 @@ export class BotThinker {
   private start(): void {
     if (this.dead || this.unavailable || this.worker) return;
     try {
-      this.worker = new Worker(new URL('./bot.worker.ts', import.meta.url), { type: 'module' });
-      this.worker.onmessage = (event: MessageEvent<{ id: number; action?: Action; error?: string }>) => {
+      const worker = this.worker = new Worker(new URL('./bot.worker.ts', import.meta.url), { type: 'module' });
+      this.worker.onmessage = (event: MessageEvent<{ id: number; action?: Action; error?: string; progress?: boolean }>) => {
         const p = this.pending;
-        if (!p || event.data.id !== p.id) return;
+        if (this.worker !== worker || !p || event.data.id !== p.id) return;
+        if (event.data.progress) { if (event.data.action) p.best = event.data.action; return; }
         clearTimeout(p.timer); this.pending = null;
-        p.resolve(event.data.action ?? null);
+        p.resolve(event.data.action ?? p.best ?? null);
       };
-      this.worker.onerror = () => { this.unavailable = true; this.cancel(); };
+      this.worker.onerror = event => { event.preventDefault(); if (this.worker !== worker) return; this.unavailable = true; this.cancel(this.pending?.best); };
+      this.worker.onmessageerror = () => { if (this.worker !== worker) return; this.unavailable = true; this.cancel(this.pending?.best); };
     } catch { this.worker = null; this.unavailable = true; }
   }
 
   async decide(state: GameState, difficulty: BotDifficulty): Promise<Action | null> {
     if (this.dead) return null;
+    // Terminate superseded computation rather than queueing another expensive search.
+    if (this.pending) this.cancel();
     this.start();
     if (!this.worker) return legalBotAction(state, safeGreedy(observationSample(state, state.pending?.owner ?? state.cur, 0)));
     // Only the most recent request can apply an action.
-    if (this.pending) this.finish(null);
     const id = ++this.serial;
     return new Promise(resolve => {
-      const timer = setTimeout(() => { this.cancel(); }, 15000);
+      const timer = setTimeout(() => { this.cancel(this.pending?.best); }, 15000);
       this.pending = { id, resolve, timer };
       try { this.worker!.postMessage({ id, state, difficulty }); }
       catch { this.unavailable = true; this.cancel(); }
@@ -47,6 +50,6 @@ export class BotThinker {
     clearTimeout(this.pending.timer);
     this.pending.resolve(action); this.pending = null;
   }
-  private cancel(): void { this.worker?.terminate(); this.worker = null; this.finish(null); }
+  private cancel(best?: Action): void { this.worker?.terminate(); this.worker = null; this.finish(best ?? null); }
   destroy(): void { this.dead = true; this.cancel(); }
 }

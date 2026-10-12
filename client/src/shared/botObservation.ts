@@ -1,6 +1,6 @@
 import { cloneGameState } from './cloneGameState';
 import { DB, STARTERS, DECK_POOL, BUYABLE_POOL } from './cards';
-import { BOT_DECKS, BOT_ELITE_DECKS } from './botDecks';
+import { BOT_DECKS, BOT_ELITE_DECKS, BOT_HELL_DECKS } from './botDecks';
 import type { CardInst, GameState, Side } from './types';
 
 function hash(text: string): number {
@@ -12,7 +12,7 @@ const canonical = (a: CardInst, b: CardInst): number => a.id.localeCompare(b.id)
 const starterIds = new Set(['STARTER_MANA', ...DECK_POOL]);
 const hypotheses = [
   ['STARTER_MANA', ...Array<string>(6).fill('STARTER_TRASH'), 'STARTER_CHEST', 'STARTER_CHEST'],
-  ...[...BOT_DECKS, ...BOT_ELITE_DECKS].map(d => ['STARTER_MANA', ...d.cards]),
+  ...[...BOT_DECKS, ...BOT_ELITE_DECKS, ...BOT_HELL_DECKS].map(d => ['STARTER_MANA', ...d.cards]),
 ];
 const trapIds = BUYABLE_POOL.filter(id => DB[id].t === 'trap');
 
@@ -67,6 +67,17 @@ export function observationSample(g: GameState, side: Side, sample: number): Gam
   if (revealDeck) { op.deck.sort(canonical); shuffle(op.deck); op.hand = pool; }
   else if (revealHand) op.deck = pool;
   else { const n = op.hand.length; op.hand = pool.slice(0, n); op.deck = pool.slice(n); }
+  // Silvermoon Cannon exposes the distinct IDs in the enemy deck, not their
+  // multiplicities or order. Every offered choice must exist in the hypothesis.
+  if (st.pending?.reason === 'exileOppDeck' && (st.pending.owner ?? st.cur) === side) {
+    const ids = [...new Set((st.pending.data?.ids as string[] ?? []).filter(id => DB[id] || STARTERS[id]))];
+    if (ids.length && ids.length <= op.deck.length) {
+      const remaining = op.deck.filter(c => ids.includes(c.id));
+      op.deck = ids.map(id => { const i = remaining.findIndex(c => c.id === id); return i < 0 ? instance(id) : remaining.splice(i, 1)[0]; });
+      while (op.deck.length < g.players[1 - side].deck.length) op.deck.push(remaining.pop() ?? instance(ids[Math.floor(rnd() * ids.length)]));
+      shuffle(op.deck);
+    }
+  }
   if (st.cur === side) op.supply = op.supply.map((c, i) => c ? { ...instance(BUYABLE_POOL[Math.floor(rnd() * BUYABLE_POOL.length)]), uid: `hypothesis-supply-${side}-${i}` } : null);
   op.supplyHist = [];
   delete op.botTune;

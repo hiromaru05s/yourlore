@@ -72,7 +72,7 @@ try {
   });
   test('elite rosters are legal ordinary starter decks for both upper tiers',()=>{
     for(const difficulty of ['hard','hell'])for(const roll of [0,0.5,0.999,1,NaN]) {
-      const d=C.pickBotDeck(roll,difficulty);assert.deepEqual(C.sanitizeDeck(d.cards),d.cards);assert.equal(d.cards.length,8);assert(C.BOT_ELITE_DECKS.includes(d));if(difficulty==='hell')assert(C.BOT_HELL_DECKS.includes(d));
+      const d=C.pickBotDeck(roll,difficulty);assert.deepEqual(C.sanitizeDeck(d.cards),d.cards);assert.equal(d.cards.length,8);assert((difficulty==='hell'?C.BOT_HELL_DECKS:C.BOT_ELITE_DECKS).includes(d));
       const g=C.createGame({mode:'bot',seed:3,p0:{id:'a',name:'A',deck:d.cards},p1:{id:'b',name:'B'}}).state;
       const reference=C.createGame({mode:'bot',seed:3,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;assert.equal(g.players[0].hp,reference.players[0].hp);assert.equal(g.players[0].maxMana,reference.players[0].maxMana);
     }

@@ -8,15 +8,20 @@ import { searchDecide } from "./botSearch";
 import { observationSample } from "./botObservation";
 import { botActions, actionChangesState, withinBotTurnBudget } from "./botActions";
 import { DB, hasPassive } from "./cards";
+import { withoutMonsterPresentation } from './monsterEffects';
 
 export type BotDifficulty = "easy" | "normal" | "hard" | "hell";
 
 const BLUNDER: Record<BotDifficulty, number> = { easy: 0.45, normal: 0.18, hard: 0, hell: 0 };
 
-export function botDecide(g: GameState, diff: BotDifficulty = "hard"): Action {
+export function botDecide(g: GameState, diff: BotDifficulty = "hard", onProgress?: (action: Action) => void): Action {
+  return withoutMonsterPresentation(() => decideFromObservation(g, diff, onProgress));
+}
+
+function decideFromObservation(g: GameState, diff: BotDifficulty, onProgress?: (action: Action) => void): Action {
   // All policies, including tactical checks, see sampled hidden information.
   const view = observationSample(g, g.pending?.owner ?? g.cur, 0);
-  let best = diff === "hard" || diff === "hell" ? searchDecide(view, diff) : safeGreedy(view);
+  let best = diff === "hard" || diff === "hell" ? searchDecide(view, diff, true, onProgress ? a => onProgress(legalBotAction(g, a, view)) : undefined) : safeGreedy(view);
   if (BLUNDER[diff] > 0 && Math.random() < BLUNDER[diff]) {
     const alternatives = botActions(view).filter(a => JSON.stringify(a) !== JSON.stringify(best))
       .filter(a => actionChangesState(view, reduce(view, a).state));
@@ -96,7 +101,7 @@ function tuneFor(p: PlayerState): typeof TUNE {
 // turn (opponent still at max mana 4).
 function burnDmg(c: CardInst, o: PlayerState): number {
   if (c.id === "FLAME") return 2;
-  if (c.id === "AMBUSH") return o.maxMana === 4 ? 7 : 0;
+  if (c.id === "AMBUSH") return o.maxMana === 4 ? 8 : 0;
   return 0;
 }
 

@@ -49,9 +49,51 @@ export const BOT_ELITE_DECKS: BotDeck[] = [
   { name: "BOT · COUNTER", cards: ['RIFT', 'RIFT', 'TRIAL_AREA', 'COUNTERCALC', 'SELECTED_SHIELD', 'COUNTERCALC', 'STARTER_TRASH', 'STARTER_TRASH'], tune: {} },
   { name: "BOT · AGGRO", cards: ['AMBUSH', 'FLAME', 'FLAME', 'FLAME', 'GHOST', 'GHOST', 'TRUMPET', 'STARTER_CHEST'], tune: {} },
 ];
-// The upper-tier holdout favors the anti-enchantment engine over pure Rift or
-// fragile aggro. Hell prioritizes strength; purchases still vary with the market.
-export const BOT_HELL_DECKS: BotDeck[] = [BOT_ELITE_DECKS[1]];
+// Counter-gauntlet evolution; ordinary eight-card starters, never chosen from the human's private deck.
+export const BOT_HELL_DECKS: BotDeck[] = [
+  {
+    "name": "BOT · DECAY ASSAULT",
+    "cards": [
+      "RUST_SHROOM",
+      "GHOST",
+      "GHOST",
+      "AMBUSH",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "COUNTERCALC",
+      "RUST_SHROOM"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · DECAY RIFT",
+    "cards": [
+      "RUST_SHROOM",
+      "GHOST",
+      "GHOST",
+      "RIFT",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "COUNTERCALC",
+      "RUST_SHROOM"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · DECAY GUARD",
+    "cards": [
+      "RUST_SHROOM",
+      "GHOST",
+      "GHOST",
+      "CASTLE",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "COUNTERCALC",
+      "RUST_SHROOM"
+    ],
+    "tune": {}
+  }
+];
 export function pickBotDeck(rnd: number = Math.random(), difficulty: BotDifficulty = 'normal'): BotDeck {
   const roster = difficulty === 'hell' ? BOT_HELL_DECKS : difficulty === 'hard' ? BOT_ELITE_DECKS : BOT_DECKS;
   const roll = Number.isFinite(rnd) ? rnd : 0;

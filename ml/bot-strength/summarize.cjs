@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const [output, ...inputs] = process.argv.slice(2);
 if (!output || !inputs.length) throw new Error('Usage: summarize.cjs output.json shard1.json ...');
 const runs = inputs.map(file => JSON.parse(fs.readFileSync(file, 'utf8')));
-for (const run of runs) for (const key of ['A', 'B', 'rosterA', 'rosterB', 'modules', 'search', 'value']) assert.deepEqual(run[key], runs[0][key], `Mixed ${key}`);
+for (const run of runs) for (const key of ['A', 'B', 'rosterA', 'rosterB', 'modules', 'search', 'value', 'tactics', 'customA', 'customB', 'valueModel']) assert.deepEqual(run[key], runs[0][key], `Mixed ${key}`);
 const rows = runs.flatMap(r => r.rows).sort((a,b) => a.pair-b.pair || a.seat-b.seat);
 const seen = new Set(), pairs = new Map();
 for (const row of rows) {
@@ -23,7 +23,7 @@ const boot = [];
 for (let i=0;i<10000;i++) {let s=0;for(let j=0;j<scores.length;j++)s+=scores[Math.floor(rnd()*scores.length)];boot.push(s/scores.length);}
 boot.sort((a,b)=>a-b);
 const result = {A:runs[0].A,B:runs[0].B,rosterA:runs[0].rosterA,rosterB:runs[0].rosterB,
-  modules:runs[0].modules,search:runs[0].search,value:runs[0].value,
+  tactics:runs[0].tactics,customA:runs[0].customA,customB:runs[0].customB,valueModel:runs[0].valueModel,modules:runs[0].modules,search:runs[0].search,value:runs[0].value,
   games:rows.length,valid:valid.length,invalid:rows.length-valid.length,
   wins:valid.filter(r=>r.winner===r.seat).length,draws:valid.filter(r=>r.winner==null).length,
   completePairs:scores.length,pairedScore:scores.reduce((a,b)=>a+b,0)/scores.length,

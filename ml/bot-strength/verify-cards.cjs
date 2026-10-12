@@ -3,7 +3,7 @@ const path = require('node:path');
 const assert = require('node:assert/strict');
 const { createHash } = require('node:crypto');
 const root = path.resolve(process.env.BOT_LAB || '.bot-strength');
-const old = require(path.join(root, 'baseline.cjs'));
+const old = require(process.env.BOT_BASELINE || path.join(root, 'baseline.cjs'));
 const current = require(path.join(root, 'candidate.cjs'));
 const copyKeys = new Set(['name', 'nameJa', 'nameEn', 'text', 'textJa', 'textEn']);
 const snapshot = C => Object.fromEntries(Object.entries({ ...C.DB, ...C.STARTERS })

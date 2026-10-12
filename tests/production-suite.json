@@ -105,7 +105,11 @@
     "tests/evade-refraction.mjs",
     "tests/vampire-summon.mjs",
     "tests/vampire-geometry.mjs",
-    "tests/taunt-shield.mjs"
+    "tests/taunt-shield.mjs",
+    "tests/bot-strength.mjs",
+    "tests/bot-tactics.mjs",
+    "tests/bot-npcs.mjs",
+    "tests/bot-simulation.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
