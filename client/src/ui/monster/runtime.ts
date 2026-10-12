@@ -1,3 +1,5 @@
+import {isCasino} from '../casinoSummon/selection';
+import {playCasinoSummon,cancelCasinoSummons,cancelCasinoSummon} from '../casinoSummon/runtime';
 import {DualReadySurface} from './dualReady';
 import {AmberSurface,showGutsResult} from '../guts/surface';
 import {GUTS_DURATION} from '../guts/timing';
@@ -60,8 +62,8 @@ export function syncMonsterStates(root:HTMLElement){
  }
  if([...states.values()].some(s=>s.root===root))observeField(root);release();if(states.size)schedule();
 }
-export function clearMonsterStates(root:HTMLElement){for(const j of [...gutsJobs.values()])if(root.contains(j.source))j.finish(false);cancelGolems(root);cancelTribeSummons(root);cancelRiftDestruction(root);cancelManaDestruction(root);cancelSummons(root);for(const j of [...jobs.values()])if(root.contains(j.source))j.finish(false);for(const [n,s] of states)if(s.root===root)removeState(n);release();}
-export function setMonsterSkip(value:boolean){skipped=value;if(value){for(const j of [...gutsJobs.values()])j.finish(false);cancelGolems();cancelTribeSummons();cancelSummons();cancelRiftDestruction();cancelManaDestruction();}if(value)for(const j of [...jobs.values()])j.finish(false);}
+export function clearMonsterStates(root:HTMLElement){for(const j of [...gutsJobs.values()])if(root.contains(j.source))j.finish(false);cancelCasinoSummons(root);cancelGolems(root);cancelTribeSummons(root);cancelRiftDestruction(root);cancelManaDestruction(root);cancelSummons(root);for(const j of [...jobs.values()])if(root.contains(j.source))j.finish(false);for(const [n,s] of states)if(s.root===root)removeState(n);release();}
+export function setMonsterSkip(value:boolean){skipped=value;if(value){for(const j of [...gutsJobs.values()])j.finish(false);cancelCasinoSummons();cancelGolems();cancelTribeSummons();cancelSummons();cancelRiftDestruction();cancelManaDestruction();}if(value)for(const j of [...jobs.values()])j.finish(false);}
 function release(){
  for(const [root,layer] of fieldLayers)if(![...states.values()].some(s=>s.root===root)){layer.dispose();fieldLayers.delete(root);observers.get(root)?.disconnect();observers.delete(root);}
  if(!jobs.size&&!gutsJobs.size){layers?.dispose();layers=undefined;}
@@ -147,9 +149,10 @@ export function playGutsEndurance(source:HTMLElement,result:GutsSurvival,signal?
  });
 }
 export function playMonster(source:HTMLElement,kind:Kind,options:Options={}):Promise<boolean>{
- cancelGolem(source);cancelTribeSummon(source);cancelRiftDestruction(source);cancelSummon(source);jobs.get(source)?.finish(false);
+ cancelCasinoSummon(source);cancelGolem(source);cancelTribeSummon(source);cancelRiftDestruction(source);cancelSummon(source);jobs.get(source)?.finish(false);
  if(skipped||!source.isConnected||options.signal?.aborted)return Promise.resolve(false);
  if(kind==='destroy'&&options.variant==='B'&&options.destination){removeState(source);release();return playRiftDestruction(source,options.destination,options.signal);}
+ if(kind==='summon'&&isCasino(source.dataset.cardId))return playCasinoSummon(source,options);
  if(kind==='summon'&&isAssassin(source.dataset.cardId))return playSlateSummon(source,options);
  if(kind==='summon'&&isGolem(source.dataset.cardId))return playGolem(source,options);
  if(kind==='summon')return selectedTribeSummon(source.dataset.cardId)?playTribeSummon(source,options):playSlateSummon(source,options);
