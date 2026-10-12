@@ -22,4 +22,12 @@
 
 ## ステージング
 
-公開結果と配信照合は検証後にここへ記録する。
+[ステージング](https://test.yourlore.xyz/) へ `scripts/deploy-guard.mjs staging` で公開済み。
+
+- Source: `320405f30e5d51e129e32ee8007f42743593119b`
+- Worker version: `678e6ddf-d578-4563-8ca2-413cac82536a`（100%）
+- 公開固定スナップショット: client/server型検査、107/107回帰テスト、design guard、production buildが成功。
+- `staging-assets.json`: HTML・JS・CSSとDUNGEON画像の64ファイルがローカルビルドとSHA-256一致。
+- `staging-smoke.json`: HTTP 200、ログイン画面起動、page error／通信失敗／HTTP error 0。
+- 認証済みオンライン対戦は未実施。実盤面の召喚経路はローカルGameViewフィクスチャで検証。本番公開は行っていない。
+
