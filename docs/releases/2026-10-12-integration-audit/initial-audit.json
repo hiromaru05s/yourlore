@@ -1,0 +1,362 @@
+{
+  "at": "2026-10-12T14:59:41.962807+00:00",
+  "scope": "2026-10-07 through audit start; selected animation changes, current in-progress chats and Git branches",
+  "initialMain": "8d7cdbe02c056b84fe1c0bb86502a72907c6ede3",
+  "initialStaging": {
+    "id": "8d6796f5-8ee4-4a25-a577-5efad0166c20",
+    "source": "wrangler",
+    "strategy": "percentage",
+    "annotations": {
+      "workers/message": "403e3627a111216dc3fde8200b179ec1e7eeaf3f guarded release",
+      "workers/triggered_by": "deployment"
+    },
+    "versions": [
+      {
+        "version_id": "d46110a9-5d21-40f8-a82c-e37f753bd066",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-10-12T14:28:51.111073Z"
+  },
+  "approvedFeatureGroups": [
+    {
+      "name": "アサシン5種",
+      "selection": "05 銀縁の潜行",
+      "commit": "a0b8e3da",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "商人3種",
+      "selection": "03 コイン／影秤の契約",
+      "commit": "f5531ec3",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "吸血鬼6種",
+      "selection": "01 吸血の歯列",
+      "commit": "0bcc1232",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "ゴーレム7種",
+      "selection": "01 開始から石殻",
+      "commit": "ffeae4a8",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "呪術師5種",
+      "selection": "04 開始フレームから専用材質",
+      "commit": "129d10b5",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "選ばれし4種",
+      "selection": "01 金鍛の顕現",
+      "commit": "d3f09580",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "傭兵3種",
+      "selection": "02 煤火の帰還",
+      "commit": "210ed780",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "炎術師・黒魔術師3種",
+      "selection": "01 炎・影",
+      "commit": "69629530",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "ギャンブラー2種",
+      "selection": "通常01／伝説02",
+      "commit": "80151d11",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "エルフ・世界樹5種",
+      "selection": "04 絡根の解放",
+      "commit": "7dd27c04",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "5種族の召喚・シナジー",
+      "selection": "選定済み種族別演出",
+      "commit": "403e859c",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "二刀流待機",
+      "selection": "04 双拍の踏み込み",
+      "commit": "a29df125",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "気合",
+      "selection": "04 琥珀の復圧",
+      "commit": "3e767ac2",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "反撃",
+      "selection": "02 700ms準備＋気合連携",
+      "commit": "cba0755c",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "回避",
+      "selection": "03 屈折",
+      "commit": "06b7f745",
+      "inMain": true,
+      "inInitialStage": false
+    },
+    {
+      "name": "シールド・雫・烙印の消滅",
+      "selection": "選定済み3効果",
+      "commit": "ac8434d2",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "腐敗カウンター付与",
+      "selection": "01 菌糸の侵蝕",
+      "commit": "32842929",
+      "inMain": true,
+      "inInitialStage": false
+    },
+    {
+      "name": "アバター",
+      "selection": "通常静止・被弾時のみ枠と画像を同期",
+      "commit": "616d906d",
+      "inMain": true,
+      "inInitialStage": false
+    },
+    {
+      "name": "BOT・描画性能",
+      "selection": "UIスレッド負荷削減・低速読込再試行",
+      "commit": "1189fad9",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "リフト枚数",
+      "selection": "装飾撤去・数字だけ",
+      "commit": "b0afb9a8",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "カード説明",
+      "selection": "3言語・能力見出しの区別",
+      "commit": "c588cb0f",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "通常破壊",
+      "selection": "01 脈光の覚醒",
+      "commit": "a5d44229",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "虚無破壊",
+      "selection": "01 銀刻の黒曜",
+      "commit": "76cdf534",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "腐敗破壊",
+      "selection": "02 溶解のみ",
+      "commit": "dbe0aaab",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "リフト待機",
+      "selection": "03 影の薄衣",
+      "commit": "7e713fb1",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "盾・烙印付与",
+      "selection": "選定済み材質・発光",
+      "commit": "bf1a65f4",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "雫付与",
+      "selection": "T2 月縁の雫",
+      "commit": "06571a82",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "永続魔法",
+      "selection": "02 light-flight",
+      "commit": "7e02ac67",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "購入",
+      "selection": "03 交互の渦跡",
+      "commit": "26dcabc5",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "市場更新",
+      "selection": "カード反転リロール",
+      "commit": "774472d0",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "コイントス結果",
+      "selection": "05 Lumen Weave",
+      "commit": "a223dc72",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "クエスト",
+      "selection": "紫墨の血判",
+      "commit": "148403e9",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "ファイアー・剣鬼等",
+      "selection": "承認済み個別攻撃VFX",
+      "commit": "cc5bd0c5",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "選ばれし領域勝利",
+      "selection": "王冠＋選定音02",
+      "commit": "8ca110fb",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "魔法共通",
+      "selection": "再生速度の選定変更",
+      "commit": "fd89adea",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "複数対象バフ",
+      "selection": "全対象へのアニメーション",
+      "commit": "2615f3c2",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "家具・着せ替え",
+      "selection": "選定済みアニメセット",
+      "commit": "597bccc3",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "ガチャ既存版",
+      "selection": "象牙版フロントエンド",
+      "commit": "8bd17738",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "デッキ操作",
+      "selection": "拡大・明示的編集ボタン",
+      "commit": "2008d254",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "カード効果・対象選択",
+      "selection": "消費前の対象確認",
+      "commit": "dc20e84f",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "カードバランス",
+      "selection": "v57 9枚改修・剣鬼強制攻撃",
+      "commit": "4a491b7a",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "墓地名称",
+      "selection": "全言語統一",
+      "commit": "206e1f9c",
+      "inMain": true,
+      "inInitialStage": true
+    },
+    {
+      "name": "共通召喚",
+      "selection": "03 岩層の着地",
+      "commit": "07a624f6",
+      "inMain": true,
+      "inInitialStage": true
+    }
+  ],
+  "initialFindings": {
+    "featureGroupsInMain": 43,
+    "featureGroupsInStaging": 40,
+    "pendingStaging": [
+      "回避03",
+      "腐敗カウンター01",
+      "アバター被弾時のみ"
+    ],
+    "trackedChangesInSharedMain": 56,
+    "trackedChangesAlreadyIdenticalToRemote": 30,
+    "sharedMainPreserved": true
+  },
+  "unselectedOrUnderRevision": [
+    "暗襲・居合の比較案",
+    "挑発の盾4案",
+    "オーラ待機の改訂案",
+    "威厳4案",
+    "ガチャ最新3案",
+    "城4案",
+    "卵・孵化4案",
+    "ドラゴン融合4案",
+    "生きているダンジョン4案",
+    "盾の巨神4案",
+    "装備職人・サリィ4案",
+    "虚無空間4案",
+    "沈黙系4案",
+    "カジノ4案",
+    "毒・菌類4案",
+    "バランス追加調整案"
+  ],
+  "boundaries": [
+    "Commit ancestry establishes source inclusion, not visual approval of every current frame.",
+    "The approved styles are taken from the human selections in the corresponding chats and existing release records.",
+    "No production deployment requested or performed.",
+    "No new authenticated online match or physical phone certification performed.",
+    "Concurrent work and shared dirty checkout preserved; no blanket staging, stash, reset, cleanup or branch deletion.",
+    "Historical release evidence is dated evidence, not current live verification."
+  ]
+}
