@@ -3,20 +3,9 @@ import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.j
 import {finish,type Finish} from './material';
 import {DURATION,designs,ease,lift} from './catalog';
 const H=1.5625;
-type Surface={mesh:T.Mesh;rest:Float32Array;finish:Finish;cx:number;cy:number;seed:number};
+type Surface={mesh:T.Mesh;rest:Float32Array;finish:Finish;cx:number;cy:number;seed:number;rim?:{line:T.LineLoop;indices:number[]}};
 type Rig={scene:T.Scene;body:T.Group;surfaces:Surface[];table:T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>;shadow:T.Mesh;key:T.DirectionalLight;face:T.MeshBasicMaterial;wash:T.Mesh<T.BufferGeometry,T.MeshBasicMaterial>;glow:T.PointLight;strokes:T.Line[]};
 const noise=(n:number)=>{const a=Math.sin(n*127.1+9.7)*43758.5453;return a-Math.floor(a);};
-// Convex cells are cut from the same surface: the cracks never become detached decoration.
-function cells(){
- const seeds:number[][]=[];
- for(let y=0;y<6;y++)for(let x=0;x<4;x++)seeds.push([-.5+(x+.23+noise(y*4+x)*.54)/4,-H/2+(y+.24+noise(100+y*4+x)*.52)*H/6]);
- return seeds.map(([x,y],i)=>{
-  let poly=[[-.5,-H/2],[.5,-H/2],[.5,H/2],[-.5,H/2]];
-  seeds.forEach(([a,b],j)=>{if(i===j)return;const dx=a-x,dy=b-y,c=(a*a+b*b-x*x-y*y)/2,next:number[][]=[];
-   for(let k=0;k<poly.length;k++){const p=poly[k],q=poly[(k+1)%poly.length],dp=p[0]*dx+p[1]*dy-c,dq=q[0]*dx+q[1]*dy-c;if(dp<=0)next.push(p);if((dp<0)!==(dq<0)){const u=dp/(dp-dq);next.push([p[0]+(q[0]-p[0])*u,p[1]+(q[1]-p[1])*u]);}}poly=next;
-  });return{poly,x,y};
- });
-}
 export class TitanRenderer{
  readonly renderer:T.WebGLRenderer;
  private rigs:Rig[]=[];private geometries:T.BufferGeometry[]=[];private materials:T.Material[]=[];private textures:T.Texture[]=[];private texture?:T.CanvasTexture;private environment:T.WebGLRenderTarget;
@@ -31,8 +20,12 @@ export class TitanRenderer{
  private geo<G extends T.BufferGeometry>(g:G){this.geometries.push(g);return g;}
  private mat<M extends T.Material>(m:M){this.materials.push(m);return m;}
  private surface(r:Rig,g:T.BufferGeometry,kind:number,color:string,cx=0,cy=0,seed=0){
-  const f=finish(kind,color);this.mat(f.mat);this.mat(f.depth);const mesh=new T.Mesh(this.geo(g),f.mat);mesh.customDepthMaterial=f.depth;mesh.castShadow=kind!==2;mesh.receiveShadow=true;r.body.add(mesh);
+  const f=finish(kind,color);this.mat(f.mat);this.mat(f.depth);const mesh=new T.Mesh(this.geo(g),f.mat);mesh.customDepthMaterial=f.depth;mesh.castShadow=false;mesh.receiveShadow=true;r.body.add(mesh);
   const s:Surface={mesh,rest:new Float32Array(g.attributes.position.array),finish:f,cx,cy,seed};r.surfaces.push(s);return s;
+ }
+ private outline(r:Rig,s:Surface,indices:number[]){
+  const g=this.geo(new T.BufferGeometry());g.setAttribute('position',new T.BufferAttribute(new Float32Array(indices.length*3),3));
+  const line=new T.LineLoop(g,this.mat(new T.LineBasicMaterial({color:'#83c9dd',transparent:true,opacity:0,depthWrite:false})));r.body.add(line);s.rim={line,indices};
  }
  private make(v:number):Rig{
   const scene=new T.Scene();scene.environment=this.environment.texture;scene.environmentIntensity=.75;scene.add(new T.HemisphereLight('#d8ebff','#222c36',1.25));
@@ -48,21 +41,30 @@ export class TitanRenderer{
   const wash=new T.Mesh(this.geo(new T.PlaneGeometry(2.7,3.2)),this.mat(new T.MeshBasicMaterial({map:tex,transparent:true,opacity:0,depthWrite:false,blending:T.AdditiveBlending})));wash.position.z=-.01;scene.add(wash);
   const glow=new T.PointLight('#68cfff',0,2.5,2);glow.position.set(0,0,.32);scene.add(glow);
   const r:Rig={scene,body,surfaces:[],table,shadow,key,face,wash,glow,strokes:[]};
-  if(v===0){
-   cells().forEach(({poly,x,y},i)=>{
-    const shape=new T.Shape();poly.forEach((p,j)=>{const px=x+(p[0]-x)*.989,py=y+(p[1]-y)*.989;j?shape.lineTo(px,py):shape.moveTo(px,py);});shape.closePath();
-    const g=new T.ExtrudeGeometry(shape,{depth:.085,bevelEnabled:true,bevelSize:.009,bevelThickness:.013,bevelSegments:2,curveSegments:1,steps:1});
-    const pos=g.attributes.position,uv=g.attributes.uv;for(let j=0;j<pos.count;j++)uv.setXY(j,pos.getX(j)+.5,pos.getY(j)/H+.5);
-    this.surface(r,g,0,i%5===0?'#8a968d':'#969d90',x,y,i);
+  const grid=(width:number,nx:number,ny:number,x=0)=>{
+   const g=new T.PlaneGeometry(width,H,nx,ny);g.translate(x,0,0);const p=g.attributes.position,uv=g.attributes.uv;
+   for(let i=0;i<p.count;i++){const xx=p.getX(i),yy=p.getY(i);if(Math.abs(xx-x)<width*.49&&Math.abs(yy)<.77)p.setXY(i,xx+(noise(i)*2-1)*.012,yy+(noise(i+66)*2-1)*.019);uv.setXY(i,p.getX(i)+.5,p.getY(i)/H+.5);}
+   const out=g.toNonIndexed();g.dispose();return out;
+  };
+  if(v===0)this.surface(r,grid(.998,6,9),v,'#246c89');
+  if(v===1)for(const side of [-1,1]){
+   const s=this.surface(r,grid(.5,3,9,side*.25),v,'#246c89',side),p=s.mesh.geometry.attributes.position,unique=new Map<string,number>();
+   for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i);if(Math.abs(Math.abs(x-side*.25)-.25)<.0001||Math.abs(Math.abs(y)-H/2)<.0001)unique.set(x.toFixed(5)+':'+y.toFixed(5),i);}
+   const indices=[...unique.values()].sort((a,b)=>Math.atan2(p.getY(a),p.getX(a)-side*.25)-Math.atan2(p.getY(b),p.getX(b)-side*.25));this.outline(r,s,indices);
+  }
+  if(v===2){
+   const perimeter=[[-.5,-H/2],[0,-H/2],[.5,-H/2],[.5,0],[.5,H/2],[0,H/2],[-.5,H/2],[-.5,0]];
+   perimeter.forEach((p,k)=>{
+    const q=perimeter[(k+1)%8],pos:number[]=[],uv:number[]=[];const n=4;
+    const add=(u:number,w:number)=>{const x=p[0]*u+q[0]*w,y=p[1]*u+q[1]*w;pos.push(x,y,1-u-w);uv.push(x+.5,y/H+.5);};
+    for(let i=0;i<n;i++)for(let j=0;j<n-i;j++){add(i/n,j/n);add((i+1)/n,j/n);add(i/n,(j+1)/n);if(i+j<n-1){add((i+1)/n,j/n);add((i+1)/n,(j+1)/n);add(i/n,(j+1)/n);}}
+    const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(pos,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.computeVertexNormals();const surface=this.surface(r,g,v,'#246c89',(p[0]+q[0])/2,(p[1]+q[1])/2,k);
+    const points=[[0,0],p,q],a=g.attributes.position,indices=points.map(([x,y])=>{let best=0,dist=Infinity;for(let j=0;j<a.count;j++){const d=(a.getX(j)-x)**2+(a.getY(j)-y)**2;if(d<dist){dist=d;best=j;}}return best;});this.outline(r,surface,indices);
    });
-  }else if(v===2){
-   // A low-poly optical surface has deliberate large facets, unlike the flowing meshes.
-   const grid=new T.PlaneGeometry(.998,H,6,9),p=grid.attributes.position;
-   for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i);if(Math.abs(x)<.49&&Math.abs(y)<.77)p.setXY(i,x+(noise(i)*2-1)*.022,y+(noise(i+66)*2-1)*.028);}
-   const g=grid.toNonIndexed();grid.dispose();this.surface(r,g,2,'#246c89');
-   // Five engraved meridians follow the surface; they never orbit or float away.
-   for(let k=0;k<5;k++){const a=new Float32Array(49*3),g=this.geo(new T.BufferGeometry());g.setAttribute('position',new T.BufferAttribute(a,3));const line=new T.Line(g,this.mat(new T.LineBasicMaterial({color:k===2?'#f6dfaa':'#a9e9f4',transparent:true,opacity:.6})));r.body.add(line);r.strokes.push(line);}
-  }else this.surface(r,new T.PlaneGeometry(1,H,64,96),v,v===1?'#567f87':'#092b4c');
+  }
+  if(v===3)for(let k=0;k<7;k++)this.surface(r,grid(1/7,2,10,(k-3)/7),v,'#246c89',(k-3)/7,0,k);
+  // Meridians belong to the continuous monolith; the other three use their real cut edges.
+  if(v===0)for(let k=0;k<5;k++){const a=new Float32Array(49*3),g=this.geo(new T.BufferGeometry());g.setAttribute('position',new T.BufferAttribute(a,3));const line=new T.Line(g,this.mat(new T.LineBasicMaterial({color:k===2?'#f6dfaa':'#a9e9f4',transparent:true,opacity:.6})));r.body.add(line);r.strokes.push(line);}
   return r;
  }
  setFace(canvas:HTMLCanvasElement){this.texture?.dispose();this.texture=new T.CanvasTexture(canvas);this.texture.colorSpace=T.SRGBColorSpace;this.texture.anisotropy=Math.min(4,this.renderer.capabilities.getMaxAnisotropy());for(const r of this.rigs){r.face.map=this.texture;r.face.needsUpdate=true;}}
@@ -83,50 +85,43 @@ export class TitanRenderer{
   const swell=ease(40,720,t),impact=ease(hit-35,hit+16,t)*(1-ease(hit+40,hit+270,t)),power=swell*(1-ease(hit+180,2380,t));
   r.wash.material.opacity=impact*.55;r.wash.scale.setScalar(1+.25*ease(hit,hit+280,t));r.glow.intensity=power*.23+impact*.9;
   for(const s of r.surfaces){
-   const {mesh,rest,finish:f,cx,cy,seed}=s;mesh.visible=t<2700;mesh.position.set(0,0,0);mesh.rotation.set(0,0,0);f.time.value=t/1000;f.energy.value=power;
-   const a=mesh.geometry.attributes.position;
-   if(v===0){
-    const formed=ease(30,660,t),release=ease(1160+noise(seed)*110,1930+noise(seed)*140,t),sink=ease(1850,2460,t);
-    f.reveal.value=ease(1670,2570,t)*.73;
-    for(let i=0;i<a.count;i++){
-     const x=rest[i*3],y=rest[i*3+1],z=rest[i*3+2],bulge=Math.max(0,1-(x/.57)**2)*Math.max(0,1-(y/.91)**2);
-     const xx=this.shield(x,y,formed),yy=y*(1+.09*formed);
-     a.setXYZ(i,xx+cx*.26*release*(1-sink),yy+cy*.12*release*(1-sink),.019+(z+.13*formed*bulge+formed*.065*Math.pow(Math.max(0,1-Math.abs(x)*4),2))*(1-sink*.9)+release*(1-sink)*(.08+noise(seed)*.10));
+   const {mesh,rest,finish:f,cx,cy,seed}=s;mesh.visible=t<2730;f.time.value=t/1000;f.energy.value=power;const a=mesh.geometry.attributes.position;
+   const settle=ease(1510,2320,t);
+   f.reveal.value=v===0?ease(1730,2520,t)*1.02:v===1?ease(1640,2530,t)*1.04:v===2?ease(1730+(seed%4)*70,2520+(seed%4)*35,t)*1.04:ease(1640+seed*65,2450+seed*36,t)*1.04;
+   for(let i=0;i<a.count;i++){
+    const x=rest[i*3],y=rest[i*3+1];let xx=x,yy=y,zz=.025;
+    if(v===0){[xx,yy,zz]=this.crystal(x,y,t);}
+    if(v===1){
+     const side=cx,inner=1-Math.abs(x)*2,grow=ease(90+(side===1?160:0),790+(side===1?100:0),t)*(1-settle);
+     const meet=ease(480,1050,t)*(1-ease(1450,2080,t));
+     xx=x+side*(.085*(1-inner)-.17*inner)*grow;
+     yy=y*(1+.055*grow)+side*.15*inner*meet;
+     zz=.025+grow*(.04+inner*.45+Math.sin((y/H+.5)*Math.PI)*.10)+(side===1?.025:0)*grow;
+     // The upper shoulders and lower tips taper independently on each interlocking half.
+     xx+=(side*.25-x)*grow*.20*Math.pow(Math.abs(y)/(H/2),3);
     }
-   }else if(v===1){
-    // The leading edge rolls over the fluid sheet, then a diagonal current draws it back in.
-    const cast=ease(0,750,t),recede=ease(1280,2280,t),shape=cast*(1-recede);
-    f.reveal.value=ease(1570,2500,t)*1.02;
-    for(let i=0;i<a.count;i++){
-     const x=rest[i*3],y=rest[i*3+1],u=x+.5,w=y/H+.5;
-     const curl=ease(0,470,t)*(1-ease(480,880,t))+.6*ease(1350,1680,t)*(1-ease(1750,2200,t));
-     const dome=Math.max(0,1-(x/.56)**2)*Math.max(0,1-(y/.91)**2);
-     const xx=this.shield(x,y,shape)+curl*.11*Math.sin(w*4.8)*Math.sin(w*Math.PI);
-     const yy=y*(1+shape*.15)+curl*.045*Math.sin(u*4+w*3);
-     const zz=.027+shape*(.10+.29*dome)+curl*.24*Math.pow(w,2)*(Math.sin(w*7-t*.004)*.5+.5);
-     a.setXYZ(i,xx,yy,zz);
+    if(v===2){
+     const inner=rest[i*3+2],delay=(seed%4)*67,grow=ease(80+delay,670+delay,t),open=ease(470+delay,1110+delay,t),returning=ease(1480+delay,2260+delay,t),alive=1-returning;
+     xx=x+cx*.70*inner*open*alive;yy=y+cy*.70*inner*open*alive;
+     zz=.025+grow*alive*(.035+inner*(.69+.09*Math.sin(seed*Math.PI/4)));
+     // The boundary vertices remain at the card edge throughout the opening.
     }
-   }else if(v===2){
-    f.reveal.value=ease(1730,2520,t)*1.02;
-    for(let i=0;i<a.count;i++){const p=this.crystal(rest[i*3],rest[i*3+1],t);a.setXYZ(i,...p);}
-   }else{
-    // A biased travelling fold, fixed to the lower card edge, gives the cloth weight and drag.
-    const billow=ease(0,650,t)*(1-ease(1430,2350,t));f.reveal.value=ease(1640,2540,t)*.98;
-    for(let i=0;i<a.count;i++){
-     const x=rest[i*3],y=rest[i*3+1],u=x+.5,w=y/H+.5;
-     const anchor=Math.sin(Math.PI*w*.91),fold=Math.sin(w*7.4+u*3.8-t*.005),small=Math.sin(u*18+w*7-t*.003);
-     const xx=x*(1+billow*.24)+billow*.17*anchor*Math.sin(w*3.8-t*.002),yy=y+billow*.13*Math.sin(u*4+w*3);
-     const zz=.025+billow*(.22*anchor+.24*anchor*(fold*.5+.5)+.055*small*anchor);
-     a.setXYZ(i,xx,yy,zz);
+    if(v===3){
+     const w=y/H+.5,delay=seed*82+(1-w)*175,grow=ease(40+delay,580+delay,t),back=ease(1480+seed*65,2180+seed*65,t),amp=grow*(1-back);
+     const cross=Math.max(0,1-Math.abs((x-cx)*14)),long=Math.max(0,1-Math.abs(y/(H*.56)));
+     xx=this.shield(x,y,amp*.65);yy=y*(1+amp*(.04+.10*Math.sin(seed*1.2)))+amp*.025*Math.sin(seed);
+     zz=.025+amp*(.06+cross*long*(.29+.26*Math.sin((seed+1)*Math.PI/8)));
     }
+    a.setXYZ(i,xx,yy,zz);
    }
    a.needsUpdate=true;mesh.geometry.computeVertexNormals();mesh.geometry.computeBoundingSphere();
+   if(s.rim){const {line,indices}=s.rim,positions=line.geometry.attributes.position;line.visible=t<2500;for(let j=0;j<indices.length;j++){const i=indices[j];positions.setXYZ(j,a.getX(i),a.getY(i),a.getZ(i)+.0015);}positions.needsUpdate=true;line.geometry.computeBoundingSphere();(line.material as T.LineBasicMaterial).opacity=.52*ease(100,700,t)*(1-ease(1680,2430,t));}
   }
   r.strokes.forEach((line,k)=>{
    const a=line.geometry.attributes.position;const vis=ease(350+k*55,710+k*55,t)*(1-ease(1620+k*65,2150+k*65,t));line.visible=t<2380;(line.material as T.LineBasicMaterial).opacity=vis*(k===2?.85:.40);
    for(let i=0;i<a.count;i++){const y=-H/2+i/(a.count-1)*H,x=(k-2)*.202*(.86+.14*Math.sin(i/(a.count-1)*Math.PI)),p=this.crystal(x,y,t);a.setXYZ(i,p[0],p[1],p[2]+.006);}a.needsUpdate=true;line.geometry.computeBoundingSphere();
   });
-  if(t>=DURATION){r.body.position.z=0;r.surfaces.forEach(s=>s.mesh.visible=false);r.strokes.forEach(s=>s.visible=false);r.wash.material.opacity=0;r.glow.intensity=0;}
+  if(t>=DURATION){r.body.position.z=0;r.surfaces.forEach(s=>{s.mesh.visible=false;if(s.rim)s.rim.line.visible=false;});r.strokes.forEach(s=>s.visible=false);r.wash.material.opacity=0;r.glow.intensity=0;}
   return r;
  }
  draw(canvas:HTMLCanvasElement,v:number,t:number,reduced=false,dark=false){if(this.dead)return;const w=canvas.width,h=canvas.height;this.size(w,h);const r=this.update(v,t,reduced);r.table.visible=true;r.shadow.visible=false;r.table.material.color.set(dark?'#172431':'#e7e3dc');

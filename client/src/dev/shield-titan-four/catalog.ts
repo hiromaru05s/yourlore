@@ -1,9 +1,9 @@
 export const DURATION=3000;
 export const designs=[
- {name:'神殻の解封',en:'STONE / THE UNSEALING',note:'彫り込まれた巨盾の石殻。重い接地で亀裂が走り、割れた殻の内側から巨神が現れる。',hit:1120},
- {name:'蒼鋼の奔流',en:'METAL / THE UNDERTOW',note:'蒼い鋼が一枚の流体となる。大きく捻れた流れが盾面を鍛え、縁へ引き戻される。',hit:1280},
- {name:'晶壁の覚醒',en:'CRYSTAL / THE AWAKENING',note:'カード面から透明な結晶盾が隆起。稜線に光が走り、上端から順に面へ結び直される。',hit:1410},
- {name:'守誓の天幕',en:'CLOTH / THE OATH',note:'蒼い守護布が風を含んで大きくひるがえる。金糸の紋章を残し、対角線に沿って面へ織り戻る。',hit:1210},
+ {name:'蒼晶の巨盾',en:'MONOLITH',note:'③を継ぐ一枚の巨晶盾。中央の稜線から厚い透明面がせり上がり、上端から静かに解ける。',hit:1410},
+ {name:'双晶の契り',en:'TWIN LOCK',note:'左右の結晶面が斜めに重なり、中央で噛み合う。接地後は継ぎ目から両端へほどける。',hit:1220},
+ {name:'八稜の花冠',en:'CRYSTAL COROLLA',note:'カードの縁を根に、八つの結晶面が花冠のように開く。中心を見せたまま、対になる面から収まる。',hit:1320},
+ {name:'連晶の城塞',en:'PRISM CASCADE',note:'七本の稜柱が時間差で伸び、一枚の透明な城壁を結ぶ。光とともに順を追って面へ還る。',hit:1490},
 ] as const;
 export const clamp=(n:number)=>Math.max(0,Math.min(1,n));
 export function ease(a:number,b:number,t:number){const x=clamp((t-a)/(b-a));return x*x*(3-2*x);}

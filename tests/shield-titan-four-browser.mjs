@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';import fs from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
-const origin=process.env.TITAN_ORIGIN||'http://127.0.0.1:5494',qa=new URL('../docs/vfx-prototypes/2026-10-13-shield-titan-r2/qa/',import.meta.url).pathname;await fs.mkdir(qa,{recursive:true});
+const origin=process.env.TITAN_ORIGIN||'http://127.0.0.1:5494',qa=new URL('../docs/vfx-prototypes/2026-10-13-shield-titan-r3/qa/',import.meta.url).pathname;await fs.mkdir(qa,{recursive:true});
 const capture=process.env.TITAN_CAPTURE==='1';
 const b=await chromium.launch({channel:'chrome',headless:true});const ctx=await b.newContext({viewport:{width:1440,height:1120},deviceScaleFactor:1});const p=await ctx.newPage(),errors=[],failures=[],checks=[];
 p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error'&&!m.text().includes('404'))errors.push(m.text());});p.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))failures.push(r.status()+' '+r.url());});
@@ -8,6 +8,8 @@ const check=(name,value)=>{assert.ok(value,name);checks.push(name);};
 try{
  await p.goto(origin+'/shield-titan-four.html?qa');await p.waitForFunction(()=>window.titanLab?.ready,null,{timeout:90000});
  for(const t of [0,450,850,1250,1750,2300,3000]){await p.evaluate(t=>window.titanLab.seek(t),t);if(capture)await p.locator('#grid').screenshot({path:qa+`four-${t}.png`});}
+ await p.evaluate(()=>window.titanLab.seek(1050));check('four crystal silhouettes render distinctly',await p.evaluate(()=>new Set([...document.querySelectorAll('[data-v]')].map(c=>c.toDataURL())).size===4));
+ await p.evaluate(()=>window.titanLab.seek(3000));check('all variants restore the identical uncovered card',await p.evaluate(()=>new Set([...document.querySelectorAll('[data-v]')].map(c=>c.toDataURL())).size===1));
  const perf=await p.evaluate(()=>{const samples=[];for(let i=0;i<30;i++){const t=performance.now();window.titanLab.seek(500+i*45);samples.push(performance.now()-t);}return{samples,stats:window.titanLab.state.stats};});
  await p.evaluate(()=>{window.titanLab.seek(0);window.titanLab.play();});await p.waitForTimeout(7300);await p.evaluate(()=>window.titanLab.pause());check('normal playback advances',await p.evaluate(()=>window.titanLab.state.ms>0));
  await p.locator('#speed').selectOption('0.5');await p.evaluate(()=>{window.titanLab.seek(0);window.titanLab.play();});await p.waitForTimeout(6300);await p.evaluate(()=>window.titanLab.pause());
@@ -28,6 +30,7 @@ try{
  await p.emulateMedia({reducedMotion:'no-preference'});await p.setViewportSize({width:1440,height:1120});await p.evaluate(()=>window.titanLab.seek(850));
  const before=await p.evaluate(()=>window.titanLab.state.stats);await p.evaluate(()=>{for(let i=0;i<15;i++){window.titanLab.seek(3000);window.titanLab.seek(600+i*20);}});const after=await p.evaluate(()=>window.titanLab.state.stats);check('replays keep resources bounded',before.geometries===after.geometries&&before.textures===after.textures);
  await p.evaluate(()=>window.titanLab.dispose());check('disposal releases context',await p.evaluate(()=>window.titanLab.state.disposed&&window.titanLab.state.stats.contexts===0));
+ const ref=await ctx.newPage();ref.on('pageerror',e=>errors.push(e.message));await ref.goto(origin+'/shield-titan-four.html?reference');await ref.waitForFunction(()=>window.titanReference?.ready,null,{timeout:90000});await ref.evaluate(()=>window.titanReference.seek(850));check('original selected crystal reference is accessible',await ref.locator('h1').textContent()==='比較元③ — 晶壁の覚醒');if(capture)await ref.screenshot({path:qa+'reference-850.png'});await ref.close();
  check('no browser exceptions or shader errors',errors.length===0);check('no missing application assets',failures.length===0);
  console.log('lifecycle complete');await fs.writeFile(qa+'report.json',JSON.stringify({passed:checks.length,checks,errors,failures,performance:perf,resources:{before,after},scope:'Local comparison and real GameView fixture; not gameplay adoption or online match validation'},null,2));console.log(JSON.stringify({passed:checks.length,errors,failures,perf:perf.samples.reduce((a,b)=>a+b)/perf.samples.length}));
 }catch(e){await fs.writeFile(qa+'failure.json',JSON.stringify({error:e.message,checks,errors,failures},null,2));throw e;}finally{await Promise.race([b.close(),new Promise(r=>setTimeout(r,5000))]);}

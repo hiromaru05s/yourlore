@@ -1,0 +1,9 @@
+{
+  "sourceCommit": "2b5ea523120cb7f5fc978e0586ff3f3779276c74",
+  "selectedVariant": 2,
+  "preserved": {
+    "renderer.ts": "f0c8015b55621a6683d89a1e9d803851801c404509406c77c304d1eba3c9949e",
+    "material.ts": "91c7afcf0ccc6d9231e4ba1bca11df4248a1cff106f663fa8604b8e697e03273",
+    "catalog.ts": "f308c75ba2f20d90811db600591e0f2037445e4f6f20ba116e95132b770de710"
+  }
+}
