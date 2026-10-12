@@ -1,3 +1,4 @@
+import {dualReadyActive} from './monster/dualReady';
 import { questProgressText } from '../shared/cardPresentation';
 import { npcPortrait } from "../shared/botNpcs";
 import {prepareManaPurchase} from './manaPurchase';
@@ -502,6 +503,7 @@ export class GameView {
       const countLabel = getLang() === 'ja' ? 'カウント' : getLang() === 'en' ? 'Count' : '카운트';
       const casinoBadge = m.aura === "casino" ? { badge: `${countLabel} ${m.gcount || 0}/12` } : m.id === "CASTLE" ? { badge: `${countLabel} ${m.gcount || 0}` } : {};
       const card = cardEl(m, { field: true, owner: p, game: g, attacker: canAttack, targetable: targetableMon, exhausted: isMe && myTurn && m.exhausted, ...casinoBadge });
+      if (dualReadyActive(m, canAttack)) card.dataset.monsterDualReady = '04';
       if (pending?.reason === "attack" && isMe && myTurn && pending.data?.attackerUid === m.uid) card.onclick = () => this.h.onChooseTarget(null);
       else if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
