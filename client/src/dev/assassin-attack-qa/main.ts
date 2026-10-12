@@ -29,7 +29,7 @@ async function run(){
  }
  for(const mode of ['abort','skip','resize','detach','repeat','concurrent','fallback','monster-target']){
   status.textContent='lifecycle '+mode;const source=await fixture();const target=root.querySelector<HTMLElement>('#portraitOpp .avatar')!,abort=new AbortController();let hits=0;
-  if(mode==='fallback')source.querySelector('.card-art')?.setAttribute('src','/missing-assassin-test.png');
+  if(mode==='fallback')source.querySelector<HTMLElement>('.card-frame')!.style.backgroundImage='url("data:image/png;base64,AA==")';
   if(mode==='skip'){
    const p=attackStrike('attacker',null,'opp',()=>hits++,false);await until(()=>!!document.querySelector('.assassin-strike'));setFxSkip(true);await p;setFxSkip(false);
   }else if(mode==='concurrent'){
@@ -38,6 +38,7 @@ async function run(){
   }else{
    const destination=mode==='monster-target'?root.querySelector<HTMLElement>('[data-uid="front-1"]')!:target;
    const p=playAssassinStrike(source,destination,{signal:abort.signal,side:0,onImpact:()=>hits++});await until(()=>!!document.querySelector('.assassin-strike'));
+   if(mode==='fallback')assert(!!document.querySelector('.assassin-dom-fallback'),'fallback used');
    if(mode==='abort')abort.abort();if(mode==='resize')window.dispatchEvent(new Event('resize'));if(mode==='detach')source.remove();
    await p;
    if(mode==='repeat'){await playAssassinStrike(source,target,{signal:abort.signal,side:0,onImpact:()=>hits++});assert(hits===2,'repeat');}
