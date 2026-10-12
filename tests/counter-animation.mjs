@@ -20,6 +20,7 @@ try{
  for(const mode of ['cavalry','zero','no-passive','immune','guts','game-over']){
   const g=fresh(),a=mon(mode==='cavalry'?'CAVALRY':'M4',{atk:mode==='game-over'?999:2,def:100}),d=mon('INFKNIGHT',{atk:mode==='zero'?0:8,def:20});if(mode==='no-passive'){d.passives=[];d.passive=undefined;d.passivesG=[];}if(mode==='immune')a.immuneDamageTurn=g.turn;if(mode==='guts')Object.assign(a,{def:1,guts:1});g.players[0].field=[a];g.players[1].field=[d];const r=strike(g,a,d),c=r.events.filter(e=>e.type==='counter');
   if(['cavalry','zero','no-passive','game-over'].includes(mode))assert.equal(c.length,0,mode);else{assert.equal(c.length,1);assert.equal(c[0].contactDamage,0);assert.equal(r.state.players[0].field[0].dmg,0);}
+  if(mode==='guts'){const visual=E.counterPresentationEvents(r.events),index=visual.findIndex(e=>e.type==='counter');assert.equal(E.counterSurvival(visual,index)?.uid,a.uid);assert.equal(visual.filter(e=>e.type==='gutsSurvive').length,1);}
   checks.push({mode});
  }
  // Berserker can strike an ally: return damage must stay on that same side.

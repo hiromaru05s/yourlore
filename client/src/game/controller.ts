@@ -8,7 +8,7 @@ import {synergyTier} from '../ui/tribePresentation/selection';
 import {playTribeSynergy} from '../ui/tribeSynergy/runtime';
 import type {Playback} from '../ui/elemental/runtime';
 import {persistentShelfExits} from './shelfExits';
-import {counterPresentationEvents} from './counterPresentation';
+import {counterPresentationEvents,counterSurvival} from './counterPresentation';
 import {installHandDiscard} from '../ui/handDiscard';
 import {captureSupplyFaces,playSupplyRefresh,supplyWasRefreshed} from '../ui/marketRefresh';
 import {prepareStateArtwork} from '../ui/stateArtwork';
@@ -326,6 +326,7 @@ export abstract class BaseController implements BoardHandlers {
     const elementalDeaths:Promise<void>[]=[];
     const draws = [0, 0];
     const gutsHits=new Set<string>();
+    const counterGuts=new Set<GameEvent>();
     const diceDone = new Set<number>(); // dice events already animated (pre-rolled ahead of a result popup)
 
     for (let i = 0; i < events.length; i++) {
@@ -420,7 +421,12 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case 'counter': {
-          await A.counterStrike(e.uid,e.targetUid,()=>eventSound.contact(e.targetUid,e.targetPlayer,e.contactDamage>0),e.contactDamage);
+          const result=counterSurvival(events,i);let survival:Promise<void>|undefined;
+          await A.counterStrike(e.uid,e.targetUid,()=>{
+            if(e.contactDamage>0)eventSound.contact(e.targetUid,e.targetPlayer);
+            if(result&&!survival){counterGuts.add(result);gutsHits.add(result.uid);survival=A.gutsSurvive(result,sideOf(result.player));}
+          },e.contactDamage);
+          await survival;
           break;
         }
         case "attack": {
@@ -437,7 +443,7 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "gutsSurvive":
-          await A.gutsSurvive(e,sideOf(e.player));
+          if(!counterGuts.delete(e))await A.gutsSurvive(e,sideOf(e.player));
           break;
         case "monsterActivate": {
           // Several sources reacting to the same event should be visible together.

@@ -16,11 +16,21 @@ export function counterPresentationEvents(events:readonly GameEvent[]):GameEvent
    if(counter>=0){
     // Let the matching damage cue follow contact before either face exits.
     const strike=events[counter],next=events[counter+1];
-    if(strike.type==='counter'&&next?.type==='hit'&&next.uid===strike.targetUid)counter++;
+    if(strike.type==='counter'&&next?.type==='hit'&&next.uid===strike.targetUid){
+     counter++;
+     const survival=events[counter+1];
+     if(survival?.type==='gutsSurvive'&&survival.uid===strike.targetUid)counter++;
+    }
     const group=held.get(counter)??[];group.push(event);held.set(counter,group);continue;
    }
   }
   out.push(event,...(held.get(i)??[]));
  }
  return out;
+}
+
+/** Match the reducer's explicit survival result, never infer it from HP. */
+export function counterSurvival(events:readonly GameEvent[],index:number):Extract<GameEvent,{type:'gutsSurvive'}>|undefined{
+ const counter=events[index],hit=events[index+1],survival=events[index+2];
+ return counter?.type==='counter'&&hit?.type==='hit'&&hit.uid===counter.targetUid&&survival?.type==='gutsSurvive'&&survival.uid===counter.targetUid?survival:undefined;
 }
