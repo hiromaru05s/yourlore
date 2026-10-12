@@ -2,7 +2,7 @@ import {cosmetic} from '../../shared/cosmetics';
 import {setPreviewCardThickness,CARD_THICKNESS_SCALE,STOCK_THICKNESS,DRAW_THICKNESS_RATIO} from '../../ui/cardThickness';
 import {ACTIONS,replayAction,type StudioAction} from './actions';
 import '../../styles/tokens.css';import '../../styles/base.css';import '../../styles/card.css';import '../../styles/passives.css';import '../../styles/game-overlays.css';import '../../styles/game.css';import '../../styles/screens.css';import '../../styles/reading-board.css';import '../../styles/presentation.css';
-import {BaseController} from '../../game/controller';import {createGame} from '../../shared/engine';import {DB,SLEEVES,STARTERS} from '../../shared/cards';import {startBoardLayout} from '../../ui/layout';import {setLang} from '../../i18n';import {setMyAvatar,setOppAvatar} from '../../ui/boardView';import {registerCosmeticPreview} from '../../ui/cosmeticPreviewBridge';import {createAtelierMaterials,type Wearer} from './materials';import {THEMES,asset} from './themes';import type {CardInst,FieldMon,GameState} from '../../shared/types';
+import {BaseController} from '../../game/controller';import {createGame,reduce} from '../../shared/engine';import {DB,SLEEVES,STARTERS} from '../../shared/cards';import {startBoardLayout} from '../../ui/layout';import {setLang} from '../../i18n';import {setMyAvatar,setOppAvatar} from '../../ui/boardView';import {registerCosmeticPreview} from '../../ui/cosmeticPreviewBridge';import {createAtelierMaterials,type Wearer} from './materials';import {THEMES,asset} from './themes';import type {Action,CardInst,FieldMon,GameState} from '../../shared/types';
 export interface StudioState {set:string;side:Wearer;motion:boolean;count:number;dense:boolean;time?:number;}
 export async function mountBoard(){
  const params=new URLSearchParams(location.search);setPreviewCardThickness(params.get('thickness')==='3'?3:1);
@@ -16,7 +16,7 @@ export async function mountBoard(){
  if(params.get('auditQuality')==='native')Object.defineProperty(materials,'pixelRatio',{value:Math.min(devicePixelRatio||1,2)});
  const shopItem=cosmetic(params.get('shopItem')??'');
  const runtime=params.get('runtime')==='1';const unregister=runtime?()=>materials.dispose():registerCosmeticPreview(root,materials);
- class PreviewController extends BaseController{submit(){/* Sample match is read-only. */} show(g:GameState){this.state=g;this.view.render(g);}}
+ class PreviewController extends BaseController{submit(action:Action){if(params.get('tempo')==='1'){this.fastForward();this.applyResult(reduce(this.state,action));}} show(g:GameState){this.state=g;this.view.render(g);}}
  const ctl=new PreviewController(root,0,{onHome(){},onRematch(){}}),stop=startBoardLayout();
  const g=createGame({mode:'bot',seed:41,starting:0,p0:{id:'atelier-self',name:'自分'},p1:{id:'atelier-opponent',name:'相手'}}).state;
  g.turn=5;g.pending=null;g.market[0]={...DB.ELF,uid:'atelier-market-elf'};let uid=0;const card=(id:string):CardInst=>({...DB[id]??STARTERS[id],uid:'atelier-'+(++uid)});
@@ -51,6 +51,7 @@ export async function mountBoard(){
  const message=(e:MessageEvent)=>{if(e.origin!==location.origin||e.source!==parent||!['atelier-state','atelier-action','atelier-focus'].includes(e.data?.type))return;if(e.data.type==='atelier-focus'){focusZoom=e.data.zoom===2.6?2.6:1;window.dispatchEvent(new Event('lore:render-density'));return;}if(e.data.type==='atelier-action'){if(ACTIONS.includes(e.data.action))void replay(e.data.action);return;}if(busy)return;const n=e.data.state;if(!n||!['default',...THEMES.map(t=>t.id)].includes(n.set)||!['self','opponent','both'].includes(n.side)||![0,1,8,12,40].includes(n.count))return;void apply({set:n.set,side:n.side,motion:!!n.motion,count:n.count,dense:!!n.dense,time:typeof n.time==='number'?n.time:undefined});};
  window.addEventListener('message',message);
  Object.assign(window,{atelier:{apply,info:()=>materials.info(),state:()=>state,controller:ctl,replay,dimensions:()=>({scale:CARD_THICKNESS_SCALE,stock:STOCK_THICKNESS,draw:DRAW_THICKNESS_RATIO})}});
+ if(params.get('tempo')==='1'){const {mountCombatTempo}=await import('../combatTempo');mountCombatTempo(ctl);}
  parent.postMessage({type:'atelier-ready'},location.origin);
  window.addEventListener('pagehide',()=>{serial++;window.removeEventListener('message',message);unregister();stop();ctl.destroy();},{once:true});
 }

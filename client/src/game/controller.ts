@@ -1,3 +1,8 @@
+import {paintTurnUrgency} from '../ui/turnUrgency';
+import {contactPlayback} from './combatTempo';
+import {startCombatExit} from '../ui/combatExit';
+import {clearDamageFeedback} from '../ui/damageFeedback';
+import {combatCard} from '../ui/combatAnchor';
 import {hatchPairs} from '../ui/hatchSummon/selection';
 import { BotThinker } from './botThinker';
 import { observationSample } from '../shared/botObservation';
@@ -25,14 +30,14 @@ import { paintDuelClock } from '../ui/duelClock';
 // ============================================================
 // LORE — game controllers.
 // BaseController turns engine events into log + animation + render.
-// Events play back SEQUENTIALLY (summon → trap → destroy …) so the
-// player can follow chains without reading the log.
+// Discrete causes keep their order; impact consequences overlap with recovery.
+// Public graveyard flights survive later board commits and do not gate input.
 // LocalController reduces locally and drives the bot.
 // (OnlineController lives in ./online and reuses BaseController.)
 // ============================================================
 import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
-import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef } from "../shared/engine";
+import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef, curHp } from "../shared/engine";
 import { safeGreedy, legalBotAction, type BotDifficulty } from "../shared/bot";
 import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
@@ -79,6 +84,7 @@ export abstract class BaseController implements BoardHandlers {
   private winShown = false;
   private outcomePending = false;
   protected dead = false;
+  private combatExits=new AbortController();
   private queue: Promise<void> = Promise.resolve();
   private unsubLang: () => void;
   private fxGen = 0; // batches queued so far
@@ -320,6 +326,7 @@ export abstract class BaseController implements BoardHandlers {
       }
     }
     const events = counterPresentationEvents(res.events);
+    for(const event of events)if(event.type==='counter'||event.type==='destroy')A.warmCombat(event.uid);
     const hatches=hatchPairs(events),heldEggs=new Set<string>();
     if(events.some(e=>e.type==='dice'&&e.taunt))A.warmTaunt();
     if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
@@ -342,6 +349,31 @@ export abstract class BaseController implements BoardHandlers {
     const draws = [0, 0];
     const gutsHits=new Set<string>();
     const counterGuts=new Set<GameEvent>();
+    const motionFinishes:Promise<void>[]=[];
+    const counterFinishes=new Map<string,Promise<void>>();
+    const grantFinishes:Promise<void>[]=[];
+    const grantQueues=new Map<string,Promise<void>>();
+    const shownGrants=new Set<GameEvent>();
+    const summonActivations=new Set<GameEvent>();
+    const health=new Map(prev.players.flatMap(p=>p.field.map(m=>[m.uid,m.hatch!=null?(m.dur??0):curHp(p,m)] as const)));
+    const grant=(e:Extract<GameEvent,{type:'statusGrant'}>,source?:HTMLElement)=>{
+      if(shownGrants.has(e)||A.isFxSkipped())return;
+      shownGrants.add(e);
+      const key=`${e.player}:${e.resource}`,previous=grantQueues.get(key);
+      const play=()=>{if(this.dead||A.isFxSkipped())return Promise.resolve();return e.resource==='dew'?playDewGrant(sideOf(e.player),e.before,e.after,source):playStatusGrant(sideOf(e.player),e.resource,e.before,e.after,source);};
+      const finished=previous?previous.then(play):play();grantQueues.set(key,finished);grantFinishes.push(finished);
+    };
+    const summonGrants=(index:number,uid:string,source:HTMLElement)=>{
+      const activations:GameEvent[]=[];let granted=false;
+      for(let j=index+1;j<events.length;j++){
+        const next=events[j];
+        if(next.type==='log')continue;
+        if(next.type==='monsterActivate'&&next.uid===uid){activations.push(next);continue;}
+        if(next.type==='statusGrant'&&(!next.sourceUid||next.sourceUid===uid)){grant(next,source);granted=true;continue;}
+        break; // Never cross another cause or a player choice.
+      }
+      if(granted)activations.forEach(event=>summonActivations.add(event));
+    };
     const diceDone = new Set<number>(); // dice events already animated (pre-rolled ahead of a result popup)
     const playDiceAt=async(index:number)=>{
       const roll=events[index];if(roll?.type!=='dice'||diceDone.has(index)||A.isFxSkipped()||this.dead)return;
@@ -360,6 +392,7 @@ export abstract class BaseController implements BoardHandlers {
     for (let i = 0; i < events.length; i++) {
       if (this.dead) return;
       const e = events[i];
+      if(summonActivations.has(e))continue;
       // glanceable icon rail (topbar): key events → small icons
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
@@ -376,6 +409,7 @@ export abstract class BaseController implements BoardHandlers {
             const next = events[++i];
             if (next.type === 'statusExtinction') extinct.push(next);
           }
+          await Promise.all(extinct.map(event=>grantQueues.get(`${event.player}:${event.resource}`)));
           if (!A.isFxSkipped()) await Promise.all(extinct.map(event => playStatusExtinction(sideOf(event.player),event.resource,event.before,event.after)));
           break;
         }
@@ -398,8 +432,7 @@ export abstract class BaseController implements BoardHandlers {
         case 'statusGrant': {
           const source=e.sourceUid?(ghosts.get(e.sourceUid)?.el??document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.sourceUid)}"]`)??undefined):statusSource;
           if(!A.isFxSkipped()){
-            if(e.resource==='dew')await playDewGrant(sideOf(e.player),e.before,e.after,source);
-            else await playStatusGrant(sideOf(e.player),e.resource,e.before,e.after,source);
+            grant(e,source);
           }
           break;
         }
@@ -428,11 +461,10 @@ export abstract class BaseController implements BoardHandlers {
             releaseMonster(egg);fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);
           }
           if (shown) {
-            const g = await A.ghostSummon(shown, sideOf(e.player), fieldCount[e.player]);
+            const g = await A.ghostSummon(shown, sideOf(e.player), fieldCount[e.player],source=>summonGrants(i,e.uid,source));
             if (g) {ghosts.set(e.uid, { el: g, side: sideOf(e.player) });statusSource=g;}
           }
           fieldCount[e.player]++;
-          await wait(65);
           break;
         }
         case "tribeSynergy": {
@@ -464,7 +496,14 @@ export abstract class BaseController implements BoardHandlers {
           const gh = ghosts.get(e.uid);
           const shelved=res.state.players[e.player].discard.some(c=>c.uid===e.uid);
           const exiled=res.state.players[e.player].removed?.find(c=>c.uid===e.uid);
-          if(exiled){await (gh?A.ghostDie(gh.el,gh.side,true,false,e.cause==='decay'):A.destroyAnim(e.uid,sideOf(e.player),true,false,e.cause==='decay'));if(gh&&!gh.el.closest(".zone-mon"))gh.el.remove();ghosts.delete(e.uid);}
+          const live=gh?.el??combatCard(e.uid);
+          if(shelved&&!exiled&&e.cause!=='decay'&&live&&!A.isFxSkipped()){
+            // Keep a lethal counter's own face until its short return is complete.
+            const returning=counterFinishes.get(e.uid);if(returning)await returning;
+            if(!this.dead&&!A.isFxSkipped())void startCombatExit(live,sideOf(e.player),this.combatExits.signal).catch(error=>console.warn('[combat exit]',error));
+            ghosts.delete(e.uid);
+          }
+          else if(exiled){await (gh?A.ghostDie(gh.el,gh.side,true,false,e.cause==='decay'):A.destroyAnim(e.uid,sideOf(e.player),true,false,e.cause==='decay'));if(gh&&!gh.el.closest(".zone-mon"))gh.el.remove();ghosts.delete(e.uid);}
           else if (gh) { await A.ghostDie(gh.el, gh.side,false,shelved,e.cause==='decay'); ghosts.delete(e.uid); }
           else await A.destroyAnim(e.uid, sideOf(e.player),false,shelved,e.cause==='decay');
           releaseMonster(e.uid);
@@ -475,11 +514,12 @@ export abstract class BaseController implements BoardHandlers {
         }
         case 'counter': {
           const result=counterSurvival(events,i);let survival:Promise<void>|undefined;
-          await A.counterStrike(e.uid,e.targetUid,()=>{
+          const playback=contactPlayback(contact=>A.counterStrike(e.uid,e.targetUid,contact,e.contactDamage),()=>{
             if(e.contactDamage>0)eventSound.contact(e.targetUid,e.targetPlayer);
             if(result&&!survival){counterGuts.add(result);gutsHits.add(result.uid);survival=A.gutsSurvive(result,sideOf(result.player));}
-          },e.contactDamage);
-          await survival;
+          });
+          counterFinishes.set(e.uid,playback.finished);motionFinishes.push(playback.finished);
+          await playback.contact;if(survival)motionFinishes.push(survival);
           break;
         }
         case "attack": {
@@ -497,9 +537,9 @@ export abstract class BaseController implements BoardHandlers {
           const attacker=this.findCard(prev,e.uid)??this.findCard(res.state,e.uid),exhaust=res.state.players[e.player].field.find(m=>m.uid===e.uid)?.exhausted!==false;
           let survival:Promise<void>|undefined;
           const contact=()=>{eventSound.contact(e.targetUid,targetPlayer,e.contactDamage!==0);if(e.guts&&!survival)survival=A.gutsSurvive(e.guts,sideOf(e.guts.player));};
-          if(attacker?.id==='NGA4')await A.berserkStrike(e.uid,e.targetUid,e.player,this.you,targetPlayer,contact,exhaust,e.contactDamage);
-          else await A.attackStrike(e.uid,e.targetUid,defender,contact,exhaust,e.contactDamage);
-          await survival;
+          const playback=contactPlayback(impact=>attacker?.id==='NGA4'?A.berserkStrike(e.uid,e.targetUid,e.player,this.you,targetPlayer,impact,exhaust,e.contactDamage):A.attackStrike(e.uid,e.targetUid,defender,impact,exhaust,e.contactDamage),contact);
+          motionFinishes.push(playback.finished);await playback.contact;
+          if(survival)motionFinishes.push(survival);
           // The dedicated material already owns this target's recoil at contact.
           if(e.guts)gutsHits.add(e.guts.uid);
           break;
@@ -518,11 +558,10 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "hit": {
-          const next=events[i+1];
-          if(!gutsHits.delete(e.uid)&&!(next?.type==='gutsSurvive'&&next.uid===e.uid)){
-            A.monHit(e.uid);
-            if(!elemental.size)await wait(110);
-          }
+          const next=events[i+1],recoil=!gutsHits.delete(e.uid)&&!(next?.type==='gutsSurvive'&&next.uid===e.uid);
+          const before=health.get(e.uid),after=before===undefined||e.amount===undefined?undefined:Math.max(0,before-e.amount);
+          if(after!==undefined)health.set(e.uid,after);
+          A.monHit(e.uid,e.amount,after,recoil);
           break;
         }
         case "dice":
@@ -532,7 +571,6 @@ export abstract class BaseController implements BoardHandlers {
           hpNow[e.player] -= e.amount;
           A.hpFeedback(sideOf(e.player), "dmg", e.amount);
           A.hpBarSet(sideOf(e.player), hpNow[e.player]);
-          if(!elemental.size)await wait(140);
           break;
         }
         case "heal": {
@@ -629,6 +667,9 @@ export abstract class BaseController implements BoardHandlers {
       if(!A.isFxSkipped())sfx('death');
       await A.destroyAnim(card.uid,sideOf(player));
     }));
+
+    await Promise.all([...motionFinishes,...grantFinishes]);
+    if(this.dead)return;
 
     // Overflow picks emit logs only; animate the public zone delta before commit.
     for(const pl of [0,1] as Side[]){
@@ -1062,6 +1103,7 @@ export abstract class BaseController implements BoardHandlers {
   }
 
   private stopTimer(): void {
+    paintTurnUrgency(0,false);
     if (this.timerInt) { clearInterval(this.timerInt); this.timerInt = null; }
     this.timerKey = "";
     for (const id of ["clock-me", "clock-opp"]) {
@@ -1127,6 +1169,7 @@ export abstract class BaseController implements BoardHandlers {
   private clearQuickFaces():void {this.elementalFaces.splice(0).forEach(x=>x.node.remove());this.quickFaces.splice(0).forEach(x=>x.node.remove());}
 
   destroy(): void {
+    this.combatExits.abort();clearDamageFeedback();
     this.marketRefresh?.cancel();
     this.disposeHandDiscard?.();
     this.dead = true;

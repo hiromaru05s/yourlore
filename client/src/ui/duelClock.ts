@@ -1,9 +1,11 @@
+import {paintTurnUrgency} from './turnUrgency';
 import { t } from '../i18n';
 let snapshot: { left: number; total: number } | null = null;
 /** Shared by the controller and visual fixture. The clock never depends on WebGL. */
 export function paintDuelClock(el: HTMLElement, seconds: number, total: number, mine: boolean): void {
   const left = Math.max(0, Math.ceil(Number.isFinite(seconds) ? seconds : 0));
   snapshot = {left, total};
+  paintTurnUrgency(left,mine);
   document.querySelectorAll<HTMLElement>(".dialog-clock").forEach(node => updateMirror(node, left, total));
   el.className = `mp-clock show ${mine ? 'mine' : 'opp'}${left <= 5 ? ' warn' : ''}`;
   el.removeAttribute('aria-hidden');

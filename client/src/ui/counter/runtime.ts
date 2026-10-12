@@ -7,7 +7,7 @@ import {counterPose,runCounterTimeline,COUNTER_PREP_MS} from './model';
 import {CounterRenderer} from './renderer';
 
 const active=new Map<HTMLElement,{cancel:()=>void;visibility:string}>();
-type Options={signal:AbortSignal;onLaunch:()=>void;onImpact:()=>void};
+type Options={compact?:boolean;signal:AbortSignal;onLaunch:()=>void;onImpact:()=>void};
 
 /** Clone the live public face so buffs, health and passive badges stay intact. */
 function copyFace(source:HTMLElement){
@@ -46,16 +46,17 @@ export async function playCounter(source:HTMLElement,target:HTMLElement,options:
  document.addEventListener('scroll',cancel,true);window.addEventListener('pagehide',cancel);
  const motion=matchMedia('(prefers-reduced-motion: reduce)');motion.addEventListener('change',cancel);
  const timer=setTimeout(cancel,5000),copy=copyFace(source);
+ let captureCopy:HTMLElement|undefined;
  signal.addEventListener('abort',()=>copy.remove(),{once:true});
  let face:HTMLCanvasElement|undefined,renderer:CounterRenderer|undefined,rig:HTMLElement|undefined,fx:HTMLCanvasElement|undefined;
  try{
   // Cached art normally resolves immediately. A texture failure retains the DOM
   // face and the complete anticipation/strike clock instead of losing the card.
-  try{face=await capture(copy);}catch{/* DOM fallback below. */}
+  if(!options.compact)try{face=await capture(copy);}catch{/* DOM fallback below. */}
   if(signal.aborted||document.hidden||!source.isConnected||!target.isConnected)return false;
   const from=combatRect(source),to=combatRect(target);if(!from||!to)return false;
   const plan=attackPlan(from,to),base=projectedPlacement(source,180,281.25),reduced=motion.matches;
-  rig=document.createElement('div');rig.className='counter-rig';rig.dataset.counterVariant='02';rig.setAttribute('aria-hidden','true');
+  rig=document.createElement('div');rig.className='counter-rig';rig.dataset.counterVariant='02';rig.dataset.sourceUid=source.dataset.uid??'';rig.setAttribute('aria-hidden','true');
   rig.style.cssText='position:fixed;left:0;top:0;width:180px;height:281.25px;transform-origin:0 0;pointer-events:none;z-index:180';
   let card:CanvasRenderingContext2D|null=null;
   if(face){
@@ -72,16 +73,31 @@ export async function playCounter(source:HTMLElement,target:HTMLElement,options:
    const pose=counterPose(plan,ms,reduced);
    rig!.style.transform=new DOMMatrix().translate(pose.x-plan.origin.x,pose.y-plan.origin.y).multiply(base).translate(90,140.625).rotate(pose.turn).scale(pose.scale).translate(-90,-140.625).toString();
    rig!.dataset.counterMs=String(Math.round(ms));
+   const recoil=options.compact&&!reduced&&ms<COUNTER_PREP_MS?Math.sin(ms/COUNTER_PREP_MS*Math.PI*3)*(1-ms/COUNTER_PREP_MS)*5:0;
+   rig!.style.translate=`${recoil}px ${Math.abs(recoil)*.2}px`;
+   rig!.style.filter=recoil?`brightness(${1+Math.abs(recoil)*.04})`:'';
+   rig!.dataset.hitReaction=String(!!recoil);
    if(card&&face&&renderer){card.setTransform(2,0,0,2,0,0);card.clearRect(0,0,270,405);renderer.draw(card,face,reduced?ms/320*700:ms<COUNTER_PREP_MS?ms:0,reduced);}
    impact.setTransform(dpr,0,0,dpr,0,0);impact.clearRect(0,0,innerWidth,innerHeight);
    if(!reduced&&ms>=COUNTER_PREP_MS)drawAttackVisual(impact,from,to,(ms-COUNTER_PREP_MS+180)/1000);
   };
   paint(0);source.classList.remove('mhit');source.style.visibility='hidden';document.body.append(rig,fx);
-  return await runCounterTimeline({signal,reduced,isAlive:()=>source.isConnected&&target.isConnected&&!document.hidden,paint,onLaunch:options.onLaunch,onImpact:options.onImpact});
+  // Contact must never wait for image decoding. Start with the same live face,
+  // then replace only its material while the transform clock keeps running.
+  if(options.compact){
+   captureCopy=copyFace(source);const pendingCopy=captureCopy;
+   void capture(pendingCopy).then(texture=>{
+    if(signal.aborted||!rig?.isConnected){texture.width=texture.height=1;return;}
+    face=texture;const canvas=document.createElement('canvas');canvas.width=540;canvas.height=810;
+    canvas.style.cssText='position:absolute;left:-45px;top:-61.875px;width:270px;height:405px';
+    card=canvas.getContext('2d');renderer=new CounterRenderer();rig.append(canvas);copy.remove();
+   }).catch(()=>{}).finally(()=>pendingCopy.remove());
+  }
+  return await runCounterTimeline({signal,reduced,compact:options.compact,isAlive:()=>source.isConnected&&target.isConnected&&!document.hidden,paint,onLaunch:options.onLaunch,onImpact:options.onImpact});
  }finally{
   clearTimeout(timer);cancel();options.signal.removeEventListener('abort',cancel);
   window.removeEventListener('resize',cancel);document.removeEventListener('visibilitychange',cancel);document.removeEventListener('scroll',cancel,true);window.removeEventListener('pagehide',cancel);motion.removeEventListener('change',cancel);
-  copy.remove();rig?.remove();fx?.remove();renderer?.dispose();if(face)face.width=face.height=1;
+  copy.remove();captureCopy?.remove();rig?.remove();fx?.remove();renderer?.dispose();if(face)face.width=face.height=1;
   if(active.get(source)?.cancel===cancel){source.style.visibility=visibility;active.delete(source);}
  }
 }
