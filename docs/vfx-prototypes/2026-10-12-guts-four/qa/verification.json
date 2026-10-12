@@ -1,0 +1,84 @@
+{
+  "status": "browser checks passed before final resource-lifecycle refinement; final visual review incomplete",
+  "seekMs": [
+    0,
+    719,
+    720,
+    1070,
+    2000,
+    2800,
+    0
+  ],
+  "seekResults": {
+    "beforeContact": {
+      "hp": 9,
+      "guts": 2
+    },
+    "afterContact": {
+      "hp": 1,
+      "guts": 1
+    },
+    "rewind": {
+      "hp": 9,
+      "guts": 2
+    }
+  },
+  "boardCases": {
+    "variants": 4,
+    "sides": 2,
+    "initialGuts": 1,
+    "finalGuts": 0,
+    "finalHp": 1,
+    "surfacePerTarget": 1
+  },
+  "mobile": {
+    "viewport": [
+      390,
+      844
+    ],
+    "documentWidth": 390,
+    "scrollWidth": 390,
+    "concurrentTargets": 3,
+    "reducedMotion": {
+      "hp": 1,
+      "guts": 1,
+      "translate": "0px",
+      "rotate": "0deg"
+    }
+  },
+  "console": {
+    "applicationErrors": 0,
+    "existingWarning": "THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."
+  },
+  "playback": {
+    "status": "capture interrupted by browser connection loss",
+    "savedFrames": 11,
+    "videoComplete": false
+  },
+  "runtimeAdopted": false,
+  "stagingDeployed": false,
+  "productionDeployed": false,
+  "lifecycle": {
+    "status": "passed",
+    "cases": 24,
+    "finiteCanvasCalls": 953202,
+    "checks": [
+      "hidden to visible",
+      "repeat without double consumption",
+      "invalid trigger",
+      "reduced motion",
+      "end state",
+      "reset",
+      "dispose and exact restoration"
+    ]
+  },
+  "typecheck": {
+    "command": "node node_modules/typescript/bin/tsc --noEmit -p client/src/dev/guts-four/tsconfig.json",
+    "exitCode": 0
+  },
+  "build": {
+    "command": "node node_modules/vite/bin/vite.js build --config client/src/dev/guts-four/vite.config.mjs",
+    "exitCode": 0,
+    "note": "Build completed before the final zero-size source-coordinate and card-size recoil refinements; the final renderer was subsequently served and lifecycle/type checked."
+  }
+}

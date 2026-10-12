@@ -1,0 +1,40 @@
+{
+  "report": [
+    {
+      "side": 0,
+      "cue": {
+        "duration": 1.8,
+        "time": 6072.10000000149,
+        "fxTime": 2713,
+        "phase": "complete"
+      },
+      "cleanup": true
+    },
+    {
+      "side": 1,
+      "cue": {
+        "duration": 1.8,
+        "time": 15404,
+        "fxTime": 2703,
+        "phase": "complete"
+      },
+      "cleanup": true
+    },
+    {
+      "skip": "passed"
+    },
+    {
+      "reduced": {
+        "duration": 1.8,
+        "time": 26589.699999999255,
+        "fxTime": 0,
+        "phase": "reduced"
+      }
+    },
+    {
+      "mobile": "passed",
+      "destroy": "passed"
+    }
+  ],
+  "errors": []
+}

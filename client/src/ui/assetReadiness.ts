@@ -10,7 +10,7 @@ const canonical=(url:string)=>new URL(url,location.href).href;
 let menuReady=false;
 export const isMenuReady=()=>menuReady;
 export function decodeAsset(url:string):Promise<void>{
- url=canonical(url);let task=decoded.get(url);if(!task){const img=new Image();img.loading="eager";img.fetchPriority="high";img.src=url;task=withDeadline(img.decode()).then(()=>{loaded.add(url);}).catch(error=>{img.src="";decoded.delete(url);throw error;});decoded.set(url,task);}return task;
+ url=canonical(url);let task=decoded.get(url);if(!task){const img=new Image();img.loading="eager";img.fetchPriority="high";img.src=url;task=withDeadline(img.decode(),60000).then(()=>{loaded.add(url);}).catch(error=>{img.src="";decoded.delete(url);throw error;});decoded.set(url,task);}return task;
 }
 export function imageUrls(root:HTMLElement):string[]{
  const urls=new Set<string>();
@@ -23,6 +23,7 @@ export function imageUrls(root:HTMLElement):string[]{
 /** A failed network request keeps an explicit retry surface, never broken art. */
 export async function waitAssets(urls:string[],host:HTMLElement,onProgress?:(done:number,total:number)=>void,signal?:AbortSignal):Promise<void>{
  const unique=[...new Set(urls)],complete=new Set<string>();
+ let automaticRetries=2;
  onProgress?.(0,unique.length);
  while(host.isConnected&&!signal?.aborted){
   const remaining=unique.filter(url=>!complete.has(url));
@@ -31,11 +32,16 @@ export async function waitAssets(urls:string[],host:HTMLElement,onProgress?:(don
    if(error)throw error;
   }));
   if(result.every(r=>r.status==='fulfilled')||!host.isConnected||signal?.aborted)return;
+  // A slow shared decode keeps its request alive across 20s waiter windows.
+  // Retry transient failures twice before requiring a manual action.
+  if(automaticRetries>0){automaticRetries--;continue;}
   await new Promise<void>(resolve=>{
    const retry=document.createElement('button');retry.className='asset-retry';retry.textContent=getLang()==='ja'?'画像の読み込みを再試行':getLang()==='ko'?'이미지 다시 불러오기':'Retry loading artwork';host.append(retry);
    const observer=new MutationObserver(()=>{if(!host.isConnected)finish();});observer.observe(document.body,{subtree:true,childList:true});
-   const finish=()=>{observer.disconnect();retry.remove();resolve();};retry.onclick=finish;
+   const finish=()=>{observer.disconnect();signal?.removeEventListener('abort',finish);retry.remove();resolve();};retry.onclick=finish;
+   signal?.addEventListener('abort',finish,{once:true});if(signal?.aborted||!host.isConnected)finish();
   });
+  automaticRetries=2;
  }
 }
 export const hasUnloadedAssets=(urls:string[])=>urls.some(url=>!loaded.has(canonical(url)));
@@ -58,10 +64,22 @@ export function coverScreen(root:HTMLElement,preloadMenu=false,homeEntrance=fals
   release();document.dispatchEvent(new Event("lore:screen-ready"));return true;
  }};
 }
-/** Swap a page of cards only after every image has decoded. Old cards stay visible. */
+const reveals=new WeakMap<HTMLElement,AbortController>();
+export function cancelRevealCards(grid:HTMLElement):void {
+ reveals.get(grid)?.abort();reveals.delete(grid);grid.removeAttribute('aria-busy');
+}
+/** Swap only the latest requested page; obsolete failed loads release their retry UI. */
 export async function revealCards(grid:HTMLElement,nodes:Node[],current:()=>boolean):Promise<void>{
+ cancelRevealCards(grid);
+ const abort=new AbortController();reveals.set(grid,abort);
  const tray=document.createElement('div');tray.className='asset-tray';tray.append(...nodes);grid.append(tray);grid.setAttribute('aria-busy','true');
- await waitAssets(imageUrls(tray),grid);
- await Promise.all([...tray.querySelectorAll('img')].map(i=>withDeadline(i.decode()).catch(()=>{})));
- if(current()&&grid.isConnected){grid.replaceChildren(...Array.from(tray.childNodes));grid.removeAttribute('aria-busy');grid.scrollTop=0;}else tray.remove();
+ try {
+  await waitAssets(imageUrls(tray),grid,undefined,abort.signal);
+  if(abort.signal.aborted)return;
+  await Promise.all([...tray.querySelectorAll('img')].map(i=>withDeadline(i.decode(),20000,abort.signal).catch(()=>{})));
+  if(!abort.signal.aborted&&current()&&grid.isConnected){grid.replaceChildren(...Array.from(tray.childNodes));grid.scrollTop=0;}
+ } finally {
+  tray.remove();
+  if(reveals.get(grid)===abort){reveals.delete(grid);grid.removeAttribute('aria-busy');}
+ }
 }

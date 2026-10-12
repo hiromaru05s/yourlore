@@ -1,0 +1,13 @@
+▲ [WARNING] Import "setPlayOrigin" will always be undefined because there is no matching export in "mock:anim" [import-is-undefined]
+
+    client/src/game/controller.ts:151:63:
+      151 │ ... this.dead || this.state!==before){A.setPlayOrigin(null);return;}
+          ╵                                         ~~~~~~~~~~~~~
+
+▲ [WARNING] Import "gutsSurvive" will always be undefined because there is no matching export in "mock:anim" [import-is-undefined]
+
+    client/src/game/controller.ts:444:126:
+      444 │ ...uts&&!survival)survival=A.gutsSurvive(e.guts,sideOf(e.guts.pla...
+          ╵                              ~~~~~~~~~~~
+
+PASS: single quick reveal/exit, effects before exit for both players, generated vs hand origins, multi-step choices keep source until resolution

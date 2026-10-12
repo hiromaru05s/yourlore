@@ -1,0 +1,72 @@
+[
+  {
+    "selected": 0,
+    "ms": 3001.299999999907,
+    "ready": true,
+    "playing": false,
+    "loops": 0,
+    "view": "board",
+    "frames": 182,
+    "meanDrawMs": 0.8890109890201999,
+    "count": 8,
+    "variants": 5,
+    "disposed": false,
+    "webgl": true
+  },
+  {
+    "selected": 1,
+    "ms": 3016.5000000000005,
+    "ready": true,
+    "playing": false,
+    "loops": 0,
+    "view": "board",
+    "frames": 366,
+    "meanDrawMs": 0.6439890710336711,
+    "count": 8,
+    "variants": 5,
+    "disposed": false,
+    "webgl": true
+  },
+  {
+    "selected": 2,
+    "ms": 3001.7000000000935,
+    "ready": true,
+    "playing": false,
+    "loops": 0,
+    "view": "board",
+    "frames": 549,
+    "meanDrawMs": 0.558287795996955,
+    "count": 8,
+    "variants": 5,
+    "disposed": false,
+    "webgl": true
+  },
+  {
+    "selected": 3,
+    "ms": 3002.7000000000007,
+    "ready": true,
+    "playing": false,
+    "loops": 0,
+    "view": "board",
+    "frames": 732,
+    "meanDrawMs": 0.5293715847000897,
+    "count": 8,
+    "variants": 5,
+    "disposed": false,
+    "webgl": true
+  },
+  {
+    "selected": 4,
+    "ms": 3005.5000000001855,
+    "ready": true,
+    "playing": false,
+    "loops": 0,
+    "view": "board",
+    "frames": 915,
+    "meanDrawMs": 0.49715846994372664,
+    "count": 8,
+    "variants": 5,
+    "disposed": false,
+    "webgl": true
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "checks": [
+    "8 authored frame slots for each action",
+    "damage 9/10/11 boundary",
+    "neutral bridge before interrupt",
+    "terminal defeat rejects healing",
+    "reset and skipped terminal pose",
+    "independent sides",
+    "bounded duplicate event queue"
+  ],
+  "atlases": {
+    "blue": {
+      "width": 1024,
+      "height": 896,
+      "frames": 56,
+      "uniqueWithinRows": 49,
+      "neutralEndpoints": "pixel identical",
+      "footBaseline": "110 +/- 1",
+      "safeMargin": 8
+    },
+    "red": {
+      "width": 1024,
+      "height": 896,
+      "frames": 56,
+      "uniqueWithinRows": 50,
+      "neutralEndpoints": "pixel identical",
+      "footBaseline": "110 +/- 1",
+      "safeMargin": 8
+    }
+  }
+}

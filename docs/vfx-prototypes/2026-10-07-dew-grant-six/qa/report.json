@@ -1,0 +1,266 @@
+{
+  "cases": [
+    {
+      "id": "DF1",
+      "counts": [
+        0,
+        0,
+        0,
+        0,
+        3,
+        3,
+        3
+      ]
+    },
+    {
+      "id": "DF2",
+      "counts": [
+        0,
+        0,
+        0,
+        0,
+        3,
+        3,
+        3
+      ]
+    },
+    {
+      "id": "DF3",
+      "counts": [
+        0,
+        0,
+        0,
+        0,
+        3,
+        3,
+        3
+      ]
+    },
+    {
+      "id": "DA1",
+      "counts": [
+        5,
+        5,
+        5,
+        5,
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "id": "DA2",
+      "counts": [
+        5,
+        5,
+        5,
+        5,
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "id": "DA3",
+      "counts": [
+        5,
+        5,
+        5,
+        5,
+        8,
+        8,
+        8
+      ]
+    }
+  ],
+  "errors": [],
+  "resources": [],
+  "viewports": [
+    {
+      "width": 320,
+      "overflow": 0
+    },
+    {
+      "width": 390,
+      "overflow": 0
+    },
+    {
+      "width": 844,
+      "overflow": 0
+    },
+    {
+      "width": 1280,
+      "overflow": 0
+    }
+  ],
+  "board": [
+    {
+      "width": 390,
+      "id": "DF1",
+      "side": 0,
+      "hidden": 1
+    },
+    {
+      "width": 390,
+      "id": "DF2",
+      "side": 0,
+      "hidden": 1
+    },
+    {
+      "width": 390,
+      "id": "DF3",
+      "side": 0,
+      "hidden": 1
+    },
+    {
+      "width": 390,
+      "id": "DA1",
+      "side": 0,
+      "hidden": 1
+    },
+    {
+      "width": 390,
+      "id": "DA2",
+      "side": 0,
+      "hidden": 1
+    },
+    {
+      "width": 390,
+      "id": "DA3",
+      "side": 0,
+      "hidden": 1
+    },
+    {
+      "width": 390,
+      "id": "DF1",
+      "side": 1,
+      "hidden": 1
+    },
+    {
+      "width": 390,
+      "id": "DF2",
+      "side": 1,
+      "hidden": 1
+    },
+    {
+      "width": 390,
+      "id": "DF3",
+      "side": 1,
+      "hidden": 1
+    },
+    {
+      "width": 390,
+      "id": "DA1",
+      "side": 1,
+      "hidden": 1
+    },
+    {
+      "width": 390,
+      "id": "DA2",
+      "side": 1,
+      "hidden": 1
+    },
+    {
+      "width": 390,
+      "id": "DA3",
+      "side": 1,
+      "hidden": 1
+    },
+    {
+      "width": 1280,
+      "id": "DF1",
+      "side": 0,
+      "hidden": 1
+    },
+    {
+      "width": 1280,
+      "id": "DF2",
+      "side": 0,
+      "hidden": 1
+    },
+    {
+      "width": 1280,
+      "id": "DF3",
+      "side": 0,
+      "hidden": 1
+    },
+    {
+      "width": 1280,
+      "id": "DA1",
+      "side": 0,
+      "hidden": 1
+    },
+    {
+      "width": 1280,
+      "id": "DA2",
+      "side": 0,
+      "hidden": 1
+    },
+    {
+      "width": 1280,
+      "id": "DA3",
+      "side": 0,
+      "hidden": 1
+    },
+    {
+      "width": 1280,
+      "id": "DF1",
+      "side": 1,
+      "hidden": 1
+    },
+    {
+      "width": 1280,
+      "id": "DF2",
+      "side": 1,
+      "hidden": 1
+    },
+    {
+      "width": 1280,
+      "id": "DF3",
+      "side": 1,
+      "hidden": 1
+    },
+    {
+      "width": 1280,
+      "id": "DA1",
+      "side": 1,
+      "hidden": 1
+    },
+    {
+      "width": 1280,
+      "id": "DA2",
+      "side": 1,
+      "hidden": 1
+    },
+    {
+      "width": 1280,
+      "id": "DA3",
+      "side": 1,
+      "hidden": 1
+    }
+  ],
+  "live": {
+    "id": "DF1",
+    "progress": 0.3533199999999999,
+    "playing": true,
+    "boardReady": true,
+    "frames": 416,
+    "meanDrawMs": 2.590144241085419,
+    "studies": 6,
+    "count": 0
+  },
+  "disposed": {
+    "ready": true,
+    "disposed": true,
+    "active": false,
+    "id": "DF1",
+    "ms": 950.0000000000006,
+    "side": 1,
+    "multi": true,
+    "hidden": 0,
+    "dark": false,
+    "reduced": false,
+    "canvases": 0
+  },
+  "result": "pass"
+}

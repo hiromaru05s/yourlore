@@ -12,9 +12,12 @@ import { setLang } from '../i18n';
 import type { App } from '../router';
 if (import.meta.env.DEV) {
   setLang('ja');
-  let avatar = localStorage.getItem('lore_profile_lab_avatar') || 'SEEKER_BLUE';
+  let avatar = localStorage.getItem('lore_profile_lab_avatar') || 'SEEKER_HOODED';
+  let failSave = false;
+  Object.assign(window, {profileLab: {failNextSave: () => {failSave = true;}}});
   api.profile = async () => ({id:'fixture',self:true,display:'シーカー',avatar,badge:null,created_at:Date.now(),wins:3,losses:1,recent:[]});
   api.updateMe = async patch => {
+    if (failSave) {failSave = false; throw new Error('保存テスト');}
     avatar = patch.avatar || avatar; localStorage.setItem('lore_profile_lab_avatar',avatar);
     return {ok:true,display:'シーカー',avatar,badge:null,stats_public:true,sleeve:'default',furniture:'default'};
   };
