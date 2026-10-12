@@ -6,12 +6,12 @@ export const ease=(a:number,b:number,t:number)=>{const u=Math.max(0,Math.min(1,(
 export const title=(id:Id)=>DB[id].nameJa||DB[id].name;
 export const rank=(id:Id)=>id==='VAMP_BUTLER'?2:ids.indexOf(id)+1;
 export const designs=[
- {name:'紅い犬歯',en:'ENAMEL / HINGED CANINES',material:'厚い琺瑯の四牙 · 顎の回転',note:'根元の血から湾曲した犬歯が育ち、顎を一度閉じて沈む。'},
- {name:'血潮の咬合',en:'LIQUID / VISCOUS JAWS',material:'連続した血の膜 · 張力と滴り',note:'血溜まりが厚い膜と牙へ伸び、一噛みして液体へ戻る。'},
- {name:'傷口の顎',en:'WOUND / LIVING APERTURE',material:'カードに開く口 · 内側の紅牙',note:'表面の裂け目そのものが口となり、赤い牙を噛み合わせて閉じる。'},
- {name:'紅玉の鉗子',en:'GARNET / CRYSTAL LOCK',material:'立体結晶の群 · 左右の挟撃',note:'異形の紅玉が左右に組み上がり、交互に噛み込んで崩れる。'},
- {name:'血帯の蛇牙',en:'RIBBON / COILING FANGS',material:'厚い血の帯 · 巻き締める牙',note:'二本の血帯が尖った鉤へ連なり、一度だけ巻き締めて吸収される。'},
- {name:'漆翼の咬門',en:'LACQUER / HINGED RELIEF',material:'牙を彫った漆の板 · 閉じる蝶番',note:'カード端の赤い漆が牙のある二枚の翼へ育ち、一度噛んで伏せる。'},
+ {name:'吸血の歯列',en:'VAMPIRE / DENTAL ARCH',material:'長い犬歯と短い前歯 · 上下の咬合',note:'弓形の歯列が開き、長い犬歯を一度だけ噛み合わせる。'},
+ {name:'血滴の双牙',en:'BLOOD / GROWING CANINES',material:'液体から育つ太い双牙 · 噛んで溶ける',note:'血の根元から二本の長牙が固まり、小さな下牙へ噛み込む。'},
+ {name:'裂け目の牙',en:'WOUND / EMERGING TEETH',material:'傷口から突き出す歯 · 閉じる口',note:'暗い開口の内側から立体の牙が現れ、一噛みして傷を封じる。'},
+ {name:'鉤牙の挟撃',en:'HOOK / LATERAL BITE',material:'内側へ湾曲した太い牙 · 左右の挟撃',note:'丸い歯冠から伸びる鉤牙が、左右から深く噛み合う。'},
+ {name:'穿つ長牙',en:'PIERCE / TWO PUNCTURES',material:'奥行きへ起き上がる長牙 · 一度の穿刺',note:'二本の牙が起き上がり、鋭く伏せてカードへ噛み付く。'},
+ {name:'包み込む顎',en:'JAW / ENCLOSING BITE',material:'両側の歯列と四本の牙 · 包むように閉じる',note:'カードの両側から歯列が立ち上がり、四本の牙が一度噛む。'},
 ];
 export function physics(ms:number,reduced=false){const u=Math.max(0,Math.min(1,(ms-1350)/(CONTACT-1350)));const height=reduced||ms>=CONTACT?0:34*ease(0,420,ms)*(1-u*u);return {height,contact:CONTACT,underside:height};}
 export const phase=(ms:number)=>ms<420?'予兆':ms<970?'開口・溜め':ms<1400?'一噛み':ms<CONTACT?'降下':ms<2210?'接地・余韻':'収束';
