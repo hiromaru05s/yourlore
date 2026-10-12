@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-12",
+  "revision": "shield-four",
+  "scope": "Four shield models with approved 01 motion; local comparison only",
+  "referenceCommit": "14cadf72",
+  "durationMs": 1000,
+  "motionSamples": 1001,
+  "originalShieldGeometryUnchanged": true,
+  "typecheck": "PASS",
+  "build": "PASS; existing chunk-size warning",
+  "browserChecks": 20,
+  "browserErrors": [],
+  "browserReport": "qa/shield-four/browser-report.json",
+  "diceStartElapsedMs": [
+    1008.7000000029802,
+    1004.4000000022352
+  ],
+  "files": {
+    "client/src/dev/taunt-four/surface.ts": "62eddea69424c803d74ef163dcef14825eea2aa4a0fa14a16869a6d618429430",
+    "client/src/dev/taunt-four/qa.ts": "b0bcde6a2a3fffd4fd37d68b7b1566c9afc87c361b03cc94460ef07f0247b122",
+    "client/src/dev/taunt-four/main.ts": "c701fe3ff08b489894ae1d61ba58ef6d2762f8c3e2899d3a7876999311a3915f",
+    "client/src/dev/taunt-four/richVariants.ts": "6d8f87d42444ac80b117bfca65442d82ff89c118d556d983e7986a41ef8d8e34",
+    "client/src/dev/taunt-four/lionRelief.ts": "a4b4162b40b599c04a3f719259334cef72c971f90c49285f8d8eb5689f280a69",
+    "client/src/dev/taunt-four/shields.ts": "74f5b7f9089b3a5722875c782ebb713280a3dd72f84e5762c852487aaf17f68f",
+    "client/src/dev/taunt-four/renderer.ts": "cc65b9b56fa7c890ff115a8e9cfe330d2f076dc6d9b66ea5cd6552287fd971c0",
+    "client/src/dev/taunt-four/board.ts": "6d910c30452af7c916797ee2a33252aaeca9e6eb92bc58e8e575f88e83329500",
+    "client/src/dev/taunt-four/catalog.ts": "f7b106699c427cb9ea5f2d03702982eab2ce5be51c505ae8affb440b5a0d75d3",
+    "client/src/dev/taunt-four/style.css": "4606a2cdf54442502227cf7c3491fc90d97cba3264739ea72ddc5850d6fc71f6",
+    "client/taunt-four.html": "f4c6cc267e0abcb422cf2858428d58fd034f823ad81f914c993e2fc5666ee897",
+    "tests/taunt-four-browser.mjs": "ac917bec8e2e9a0ea4657620e059a938c903eb93f62b86b55ad1015e2f2e0319",
+    "tests/taunt-four-capture.mjs": "ca5ed3c3065feb8a0731bd9d6e7c1b0ca323e599b256946167f3c7bb908b6cda"
+  }
+}

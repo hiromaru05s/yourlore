@@ -1,0 +1,29 @@
+{
+  "grid": {
+    "mean": 16.594999999990687,
+    "p95": 16.799999999999955,
+    "over50": 0,
+    "frames": 160
+  },
+  "cycles": {
+    "before": {
+      "textures": 3,
+      "alphaMasks": 3,
+      "geometries": 98,
+      "programs": 6,
+      "contexts": 1
+    },
+    "after": {
+      "textures": 3,
+      "alphaMasks": 3,
+      "geometries": 98,
+      "programs": 6,
+      "contexts": 1
+    }
+  },
+  "video": {
+    "fps": 30,
+    "seconds": 11.4,
+    "method": "deterministic absolute-time frames; not a live-FPS claim"
+  }
+}

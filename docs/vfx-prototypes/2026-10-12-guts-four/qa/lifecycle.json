@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "cases": 24,
+  "finiteCanvasCalls": 953202,
+  "checks": [
+    "hidden to visible",
+    "repeat without double consumption",
+    "invalid trigger",
+    "reduced motion",
+    "end state",
+    "reset",
+    "dispose and exact restoration"
+  ]
+}

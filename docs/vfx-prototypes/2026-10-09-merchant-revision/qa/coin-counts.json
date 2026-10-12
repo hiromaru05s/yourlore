@@ -1,0 +1,50 @@
+[
+  {
+    "n": 2,
+    "v": 0,
+    "max": 2,
+    "finished": true
+  },
+  {
+    "n": 2,
+    "v": 1,
+    "max": 2,
+    "finished": true
+  },
+  {
+    "n": 2,
+    "v": 2,
+    "max": 2,
+    "finished": true
+  },
+  {
+    "n": 2,
+    "v": 3,
+    "max": 2,
+    "finished": true
+  },
+  {
+    "n": 6,
+    "v": 0,
+    "max": 6,
+    "finished": true
+  },
+  {
+    "n": 6,
+    "v": 1,
+    "max": 6,
+    "finished": true
+  },
+  {
+    "n": 6,
+    "v": 2,
+    "max": 6,
+    "finished": true
+  },
+  {
+    "n": 6,
+    "v": 3,
+    "max": 6,
+    "finished": true
+  }
+]

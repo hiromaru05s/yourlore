@@ -13,6 +13,13 @@ export class EdgeBloom{
  private composite=new T.ShaderMaterial({vertexShader,depthTest:false,depthWrite:false,transparent:true,premultipliedAlpha:true,uniforms:{image:{value:this.target.texture},glow:{value:this.vertical.texture}},fragmentShader:`uniform sampler2D image;uniform sampler2D glow;varying vec2 uv0;void main(){vec4 b=texture2D(image,uv0),g=texture2D(glow,uv0);gl_FragColor=vec4(b.rgb+g.rgb*.70,min(1.,b.a+g.a*.42));}`});
  private quad=new T.Mesh(new T.PlaneGeometry(2,2),this.blur);
  constructor(){this.scene.add(this.quad);}
+ async prepare(r:T.WebGLRenderer){
+  const previous=r.getRenderTarget();
+  try{
+   this.quad.material=this.blur;r.setRenderTarget(this.horizontal);await r.compileAsync(this.scene,this.camera);
+   this.quad.material=this.composite;r.setRenderTarget(null);await r.compileAsync(this.scene,this.camera);
+  }finally{this.quad.material=this.blur;r.setRenderTarget(previous);}
+ }
  begin(r:T.WebGLRenderer){
   const s=r.getDrawingBufferSize(new T.Vector2());
   if(this.target.width!==s.x||this.target.height!==s.y){this.target.setSize(s.x,s.y);this.horizontal.setSize(s.x,s.y);this.vertical.setSize(s.x,s.y);}

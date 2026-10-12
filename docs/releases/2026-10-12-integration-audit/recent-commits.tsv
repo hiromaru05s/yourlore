@@ -1,0 +1,343 @@
+5c1946cc630beb83eeb7a5d0afae583e2ac3f475	2026-10-13T00:28:52+09:00	Merge verified evasion staging release evidence
+5750d6bcd80be2302ad64cbb174ccbf13d9c5481	2026-10-13T00:27:53+09:00	Merge verified taunt staging release evidence
+e0b8cb966fe6324ca2bdb1aee69bddb84638fe0d	2026-10-13T00:25:55+09:00	Record taunt shield staging release and served asset parity
+b376938fdb0301dc52d0ab07e7bd790b51f467e0	2026-10-13T00:24:27+09:00	Merge remote-tracking branch 'gh/main' into codex/tutorial-mana-spirit
+4ca505d1cc614345a31623c227f081d0a0a4fd7f	2026-10-13T00:23:36+09:00	Merge remote-tracking branch 'gh/main' into codex/hooded-seeker-avatars
+2bfe4e078f1ae6d164bfa27b515bbba08ebe9857	2026-10-13T00:23:35+09:00	Record verified hooded Seeker staging deployment and profile checks
+741638a7052b8da4bb2de4872e3fa6ef71860a49	2026-10-13T00:23:27+09:00	Verify tutorial UI and keep notebook and live lounge readable
+991efe09f48f861dcebf3958f5ed4c357eb01acf	2026-10-13T00:21:15+09:00	Merge remote-tracking branch 'gh/main' into codex/tutorial-mana-spirit
+fc061b34548bd86b2ecaa5e23f7eaed077a29914	2026-10-13T00:21:14+09:00	Add playable Biblion tutorial with verified Shard rewards and mana spirit
+64c5fcbce0893e8d55cdf5b5a1bacc114293253f	2026-10-13T00:17:45+09:00	Verify selected evasion 03 in the deployed staging build
+647190befca5c99ee5d6ad334955c624180f6256	2026-10-13T00:16:58+09:00	Merge remote-tracking branch 'gh/main' into codex/assassin-iai
+e1cde5a529c491a635dccf86fceeaf25aa513648	2026-10-13T00:16:55+09:00	Record guarded assassin iai staging release and asset parity
+145a643ee292599735b8320c3941cefced26ff84	2026-10-13T00:14:04+09:00	Record taunt controller sequence and board verification
+b7f0a78e5b14d553831b9fe62d321d9ccf49c08a	2026-10-13T00:11:20+09:00	Merge remote-tracking branch 'gh/main' into codex/taunt-four
+76f64729d858c5e16ada5296e3f4b1768f7f59b5	2026-10-13T00:10:51+09:00	Adopt selected black gold taunt shield before combat dice
+3d31470446d514fcc97344e3c25ade5683b8f472	2026-10-13T00:03:56+09:00	Merge remote-tracking branch 'gh/main' into codex/assassin-iai
+088b8692016bdb7e54dbb996576c2bd7ac87a2ef	2026-10-13T00:03:50+09:00	Record assassin attack lifecycle checks at mobile width
+867a48f2a27ea5bd4cbd6202122444f9551b61cc	2026-10-13T00:02:38+09:00	Exercise native card fallback on failed capture
+04ced4e9e40309938b3d81437897bbb9f15a0be2	2026-10-13T00:01:07+09:00	Audit approved October animations and reconcile release evidence
+8d88ccadeb635ee15e11e08d01431440667cf24e	2026-10-12T23:59:38+09:00	Merge branches 'codex/gambler-summon-six', 'codex/golem-shell-staging' and 'codex/rift-obsidian-staging' into codex/release-audit-20261012
+e695a5762c58c145be56993cc5055dc15f28e80f	2026-10-12T23:59:26+09:00	Merge remote-tracking branch 'gh/main' into codex/assassin-iai
+502caf6bd86e8b5312606d5c92d1cd2107678749	2026-10-12T23:59:24+09:00	Apply selected iai attack 01 only to assassin family
+67f9b0b6da7b4610dc45d88639801750cde29d84	2026-10-12T23:56:44+09:00	Merge branches 'codex/counter-four', 'codex/status-extinction-four', 'codex/mage-summon-six-20261008', 'codex/rift-numerals-only', 'codex/card-reading-typography', 'codex/card-effect-ux', 'codex/card-wording-staging', 'codex/shop-preview-staging', 'codex/critical-engine-audit-20261007' and 'codex/tribe-approved-staging' into codex/release-audit-20261012
+99aa327b5ada4770f98b84f3ce27db56cd249ee4	2026-10-12T23:54:26+09:00	Attribute evasion asset parity to the captured release source
+15f31e917731a75eb7c9563985833e968192a0ba	2026-10-12T23:53:50+09:00	Record evasion checks after the final Seeker integration
+13b140dbd4d94490abea83f603ba13755045261b	2026-10-12T23:52:56+09:00	Merge remote-tracking branch 'gh/main' into codex/taunt-four
+c26fed668c76efeb4cc14531cf05564d3addbed2	2026-10-12T23:50:50+09:00	Merge remote-tracking branch 'gh/main' into codex/release-audit-20261012
+4f0463f3877e492de17ad46617954a3ce84963d1	2026-10-12T23:50:00+09:00	Record verified counter staging assets and browser-check boundary
+eca797ebac83c91abce314db7d81c9f635f0ce65	2026-10-12T23:47:45+09:00	Merge commit 'c07849ea'; commit 'e03f3d2e'; commit 'd4ba1912' into codex/release-audit-20261012
+162aa051ee4f2e32f4d4b55ab3613673f7ca0a10	2026-10-12T23:44:48+09:00	Record status extinction staging delivery and verification limits
+47c3e3195a0755f5d8bae04c5cc202fad603b61b	2026-10-12T23:42:31+09:00	Create four refined shield models using approved taunt motion
+ee3766b030c27f5cf79fd3b963c48e576f8b733c	2026-10-12T23:35:15+09:00	Record continuous playback of selected decay grant
+e03f3d2ea56b81b2d64d20cc15f21a452a1ede35	2026-10-12T23:34:58+09:00	Verify staging entry after artwork loading completes
+c07849ea2c5173bf5644dc4178662519954cd5b6	2026-10-12T23:33:27+09:00	Record dual-ready 04 staging verification and asset parity
+62959d6a15c2daa56bff9df79ab1efaa6ad5d97d	2026-10-12T23:32:51+09:00	Merge remote-tracking branch 'gh/main' into codex/decay-counter-four
+113a5d6cad9e0e0352f6c259b5271863d825d62e	2026-10-12T23:32:05+09:00	Record Guts 04 staging deployment and exact asset verification
+d4ba191204d962a6927e999bc8b536ab71aff5ec	2026-10-12T23:31:56+09:00	Record vampire 01 staging deployment and exact asset parity
+32842929ac4ba91c479962f34a533967c37d9ebf	2026-10-12T23:30:25+09:00	Adopt decay counter grant 01 on the native card surface
+616d906d208aad50e3c3b145e1e18ba9e9bdefa8	2026-10-12T23:30:09+09:00	Merge current evasion handling without interrupting Seeker impacts
+ad3add6638dc8a911f8d83b77076de8e7e188854	2026-10-12T23:21:18+09:00	Allow deployed profile verification with an isolated fixture account
+f0d96cd52dd242b5f8ca0fa335bd0cd059f2d23c	2026-10-12T23:18:02+09:00	Verify static Seeker portraits and synchronized frame impacts
+14cadf72d1e52f8ee79eebec8a1eaef172a9de2d	2026-10-12T23:15:50+09:00	Rebuild taunt alternatives and keep board preview fully visible
+a8fb58ec7d7dc3cd48aa6b8f4018c1a6ab2b1ea6	2026-10-12T23:13:13+09:00	Merge remote-tracking branch 'gh/main' into codex/evade-four
+f2e1a63117dfb1de71cb3f72b0f581073962e401	2026-10-12T23:13:03+09:00	Merge remote-tracking branch 'gh/main' into codex/hooded-seeker-avatars
+41070d1dae0be78562126a1b1a9a4dae916b5133	2026-10-12T23:13:02+09:00	Integrate latest gameplay and shake the Seeker frame only on damage
+8393ab683f16c3cfa4276b754de611a83378d541	2026-10-12T23:12:43+09:00	Record integrated evasion playback and exact staging verification
+403e3627a111216dc3fde8200b179ec1e7eeaf3f	2026-10-12T23:11:39+09:00	Merge remote-tracking branch 'gh/main' into codex/status-extinction-four
+51469ff3a46f78e486a8e23e1fdfbb8762d358f7	2026-10-12T23:11:39+09:00	Keep DOM animation test doubles compatible with Guts endurance
+b95c068fcbf0c0aa8afe36242839522b9e335487	2026-10-12T23:11:01+09:00	Merge remote-tracking branch 'gh/main' into codex/evade-four
+24ab60dab5b4d0a62f05834d7c6137aba8ffdfb1	2026-10-12T23:10:33+09:00	Merge remote-tracking branch 'gh/main' into codex/evade-four
+18955bae023720e2ffe6753b0687a167e9307fd0	2026-10-12T23:10:20+09:00	Merge remote-tracking branch 'gh/main' into codex/decay-counter-four
+d47fc333a61b26e31fadd9631b599137c1716e11	2026-10-12T23:10:17+09:00	Add exact staging asset verification for the counter release
+72db9bfddc4a5580427f0ed2f1055512b8be29e6	2026-10-12T23:10:08+09:00	Merge remote-tracking branch 'gh/main' into codex/counter-four
+3029b5adacfe11d209c33d803c21b0ad7d56bb7f	2026-10-12T23:09:37+09:00	Merge remote-tracking branch 'gh/main' into codex/vampire-summon-six
+afb93169b2e2460f810e73c4812cbafa47ad6fd1	2026-10-12T23:09:19+09:00	Keep DOM animation test doubles compatible with Guts runtime export
+d6f73cfd873dfeddd33900d3b4818b428df46965	2026-10-12T23:08:51+09:00	Merge remote-tracking branch 'gh/main' into codex/counter-four
+cba0755c67b0fa6646d37526718249b292fbcb0d	2026-10-12T23:08:49+09:00	Synchronize counter contact with Guts survival and verify integrated playback
+529153e2b6bb7cb0c04395632693c5edc4184c3c	2026-10-12T23:07:24+09:00	Merge remote-tracking branch 'gh/main' into codex/dual-ready-four
+06b7f745043b7b44b86f4090bb8887b2075904b1	2026-10-12T23:07:04+09:00	Apply selected refraction evasion before attack playback
+8ffa73f1b17a559af1954d1b34b7ee340a61e9ee	2026-10-12T23:07:02+09:00	Merge remote-tracking branch 'gh/main' into codex/dual-ready-four
+a29df12549ecc763a3c79a3628ebd363d1a80bf9	2026-10-12T23:06:36+09:00	Apply selected dual-wield ready 04 with attack-count transitions
+ff31ed9af5a3aa3bebef90e227447c9137dced88	2026-10-12T23:06:34+09:00	Restore animation imports after integration conflict resolution
+b9f6c136b81bdd56616276ac3eedec9b4860cf34	2026-10-12T23:05:33+09:00	Merge remote-tracking branch 'gh/main' into codex/counter-four
+27a77ae9fbdffa7b812355b0fef405a4efbe4dad	2026-10-12T23:04:42+09:00	Apply counterattack study 02 with a 700ms preparation and continuous strike
+524eb0d76977e1f9211c46adb74cd30557900a8e	2026-10-12T23:03:17+09:00	Rebuild decay counter studies as full native card transformations
+5741f93402780648e47decebce8d39df17839e35	2026-10-12T23:02:57+09:00	Merge remote-tracking branch 'gh/main' into codex/vampire-summon-six
+d1e451d78a0b641cbae0adbb1266d1a237815613	2026-10-12T23:02:17+09:00	Merge remote-tracking branch 'gh/main' into codex/guts-endurance-four
+3e767ac2f5e7ae7ad0e8c8beee7b78daab436428	2026-10-12T23:01:23+09:00	Apply Guts 04 amber endurance at authoritative survival contacts
+0205dddc0833552a30f3a56d2368f7589ae890a6	2026-10-12T23:00:51+09:00	Redraw the faceless Seeker as an illustrated upper-chest portrait
+ac8434d224b302c446d6b95b7da9491e96582a76	2026-10-12T23:00:02+09:00	Apply selected shield dew and brand extinction effects to gameplay
+50c4271bb4fee48d4d3b6d3610232384bc6bba6f	2026-10-12T22:58:52+09:00	Merge remote-tracking branch 'gh/main' into codex/dual-ready-four
+0bcc1232db8422c408e5b5c8e962cf17db62574e	2026-10-12T22:55:59+09:00	Adopt vampire dental arch summon for all six vampire cards
+d0b8bd94ffed24e47f3fa857a03d78c76d4eada1	2026-10-12T22:51:59+09:00	Add four distinct dual-wield ready animation studies
+71e115601a0f3fe6a72f73092483fb9f153da323	2026-10-12T22:50:21+09:00	Merge remote-tracking branch 'gh/main' into codex/counter-four
+f1269f5fc65753c5237737f855b613fd6178f536	2026-10-12T22:49:54+09:00	Use one faceless Seeker portrait with a single hit pose
+e00c7dd5aa02652d5b5ea3390a75bfd3b2f66ec9	2026-10-12T22:49:16+09:00	Merge remote-tracking branch 'gh/main' into codex/evade-four
+2c1a48b394e35d84048d273b850751835b71e160	2026-10-12T22:46:18+09:00	Merge remote-tracking branch 'gh/main' into codex/vampire-summon-six
+85c701f4a82aca8117936515d84da2981b7596c2	2026-10-12T22:44:09+09:00	Merge remote-tracking branch 'gh/main' into codex/guts-endurance-four
+bac0dc93624a9e1a09898a9fc78118d0b2b2a7bf	2026-10-12T22:43:36+09:00	Merge remote-tracking branch 'gh/main' into codex/status-extinction-four
+f7324c3f5a85b679abe44cd7bffe2707d6d76523	2026-10-12T19:11:36+09:00	Record BOT performance staging release and verification boundaries
+1189fad9ef61365a90c8ea60ee3059667878665d	2026-10-12T18:58:17+09:00	Recover slow artwork loads without blocking BOT entry on manual retry
+3a65652b55bf42a58865885b609c701d98e286bc	2026-10-12T18:55:06+09:00	Add four card-bound pre-roll taunt animation studies
+ba69b739033cd0401d7d677537e260bd1096ab10	2026-10-12T18:49:34+09:00	Add four 700ms evasion animation comparison previews
+8a07a95346d33883eb681e8c4926184ee22c33a3	2026-10-12T18:42:54+09:00	Merge remote-tracking branch 'gh/main' into codex/animation-performance
+2325e508ef3f966364436dca4e59ab396fb2516d	2026-10-12T18:42:45+09:00	Keep BOT thinking and effect preparation off the UI thread
+45786e020cacfd6331ad5948b129f7340a2b2a31	2026-10-12T18:38:31+09:00	Add four decay counter grant animation studies
+8e5359469ec63db7a4f140a5118c0ee3f983a37e	2026-10-12T18:33:44+09:00	Add four distinct 700ms counterattack anticipation studies
+b187566cbcd20389a87f8bed86d39f0cce1e471c	2026-10-12T18:29:30+09:00	Add four material studies for Guts endurance with comparison lab
+9ef7fe6d66cc40fe28444a43d8729abe2dc08c1f	2026-10-12T18:28:00+09:00	Add twelve material-led status extinction comparison studies
+5211a185582a045de3263ff8f63609f4605650da	2026-10-12T18:16:10+09:00	Replace anime avatars with hooded pixel seekers and profile previews
+be18a6c3d9c981123ec4aab4605c62da9eb84ab8	2026-10-12T18:01:33+09:00	Record merchant 03 staging deployment and asset parity
+25b0d0762e8caecb3b0cd8c8c1ca83620300b455	2026-10-12T17:53:12+09:00	Anchor vampire dental arch to top and bottom card frame edges
+40e4c676fc24b503867bdb2aac4db4edf8124fde	2026-10-12T17:46:57+09:00	Rebuild six vampire studies around recognizable fang anatomy
+f5531ec3d8115f6a262394da7a16e5369691e1f9	2026-10-12T17:46:04+09:00	Apply merchant 03 coins and dark market spell reveal
+b1ad923b4a63ae4365b3b19cef7a65470d6290ec	2026-10-12T17:33:18+09:00	Merge remote-tracking branch 'gh/main' into codex/merchant-summon-six
+df9cc041a1bd8f5d7eb33370e7a02a6e785a8a7b	2026-10-12T17:25:41+09:00	Align bite contacts with each structure and refresh preview evidence
+9c121e0c8ea6cfd3b5c1a6421d1c6a03e4be4ca0	2026-10-12T17:21:57+09:00	Rebuild vampire comparison as six independent 3D bite structures
+36e23470d9dd5f3c5f12fcaf82d0db790ea209e4	2026-10-12T17:11:38+09:00	Replace arranged coin paths with contact-driven bounce physics
+66073c2d350fbcac99560553a05d563bc89ca4c3	2026-10-12T17:08:52+09:00	Record assassin 05 staging release and exact asset parity
+a0b8e3da7f8b8bf9827a12a0aab435fffe1daf58	2026-10-12T16:59:46+09:00	Apply selected assassin silver veil summon to all five cards
+e2eabe872e1e8608fdf16bd00268ae9844e9006f	2026-10-12T16:54:27+09:00	Merge remote-tracking branch 'gh/main' into codex/assassin-summon-six
+c44819ce62eb3d0958ebe1999408e9f225803d09	2026-10-12T16:52:56+09:00	Fix scrolling in assassin comparison preview
+5b866a17e8ccb607337b03f49951044ffa9ed200	2026-10-09T18:39:18+09:00	Record mercenary 02 staging parity and playback verification
+6ae7b88696b70613505844ca05444a1ab9d53c0d	2026-10-09T18:39:04+09:00	Merge commit 'fcbb553550a27845f68eae145b400e40a15a654b' into codex/gambler-summon-six
+2b8c1f724d3ff935589e77a56de4195087e9ce9e	2026-10-09T18:39:04+09:00	docs(summon): verify gambler staging release and asset parity
+5414b558a4799c0efc091bdf2684a5e08d8cf707	2026-10-09T18:38:40+09:00	Record guarded mage 01 staging release and deployed first-frame proof
+fcbb553550a27845f68eae145b400e40a15a654b	2026-10-09T18:30:38+09:00	Merge remote-tracking branch 'gh/main' into codex/mage-summon-six-20261008
+210ed780452d1c0f24b9a8b1e1cd27716409dab9	2026-10-09T18:16:17+09:00	Apply mercenary summon 02 from its first visible frame
+ac5113dc5088b8815ed26b41ee37c1b1b6bb491b	2026-10-09T18:29:17+09:00	Merge remote-tracking branch 'gh/main' into codex/mage-summon-six-20261008
+d04f97314f77da85eb51b193561d0a762354c6a5	2026-10-09T18:28:39+09:00	Verify mage first-frame behavior after concurrent summon integration
+3a56630741426c9e33d6300f707d6a96088a36b0	2026-10-09T18:27:47+09:00	Record deployed Rift numeral verification
+c0b20136197fe67e2c9ce80512f80c875c3921dd	2026-10-09T18:26:40+09:00	Rebuild vampire studies as six red single-bite effects
+6e16d41cec37c17636323326da54302fac1b9890	2026-10-09T18:26:21+09:00	Merge remote-tracking branch 'gh/main' into codex/mage-summon-six-20261008
+61de07eb8beb67f81ebbd958ab00b61e3623a3ed	2026-10-09T18:26:05+09:00	Record ability heading staging verification
+77b3d278865a6f8ec57abb7c96a9134f9eefe6bc	2026-10-09T18:25:46+09:00	Merge remote-tracking branch 'gh/main' into codex/hexer-summon-six
+9727c5c23cc63ac146eb0daadbc50a062c42e44a	2026-10-09T18:25:45+09:00	Record hexer 04 staging deployment and exact asset parity
+614cf05bac8e154c2fca6dd5747b65c4a3dc7654	2026-10-09T18:25:31+09:00	Redesign assassin summons as continuous card surface transformations
+2c9382aa5df702a596df4d3bc28166cb54f78b99	2026-10-09T18:24:23+09:00	Record mage summon production-build verification
+6962953044bdf512e8300c861806f4e88ba4b8ba	2026-10-09T18:22:14+09:00	Adopt mage summon 01 with material present from the first frame
+d1fe413b42eaf68185d3e7c823e3394803e7ec64	2026-10-09T18:21:03+09:00	Rebuild merchant previews with physical coins and dark market spell options
+75d727688704f01fec4051906419d9f9fd85f67a	2026-10-09T18:20:10+09:00	docs(vfx): record gambler and legendary selections
+d15a93245ab97e0b789228c80d45314256acd933	2026-10-09T18:19:01+09:00	test(summon): add gambler staging asset parity check
+80151d11967d918d07306f3611fcadb844c0792a	2026-10-09T18:16:53+09:00	feat(summon): adopt gambler wheels with an animated first frame
+0d920111422bb318f5ac091d121d987fb5565bcc	2026-10-09T18:09:13+09:00	Merge remote-tracking branch 'gh/main' into codex/mage-summon-six-20261008
+ea51aba85e85d54fd8af5a48bbc1074f2f9e1a79	2026-10-09T18:08:12+09:00	Build six procedural 3D vampire bite summon studies
+0aad3b082accae83d0e26e4fca976e8c84dff838	2026-10-09T18:06:25+09:00	Merge remote-tracking branch 'gh/main' into codex/gambler-summon-six
+bc12ccbbbd0604d439bc49861382dfdd374319e9	2026-10-09T18:06:08+09:00	Rebuild six mage summon studies with physical materials and board contact
+52edb7e6a75c06a22c4a2fca717a8531dbb9c649	2026-10-09T18:05:29+09:00	Record verified golem shell staging release and isolate browser cases
+e8a5d08eb84379c3482aeb7bfb9ca037e92644c5	2026-10-09T18:02:32+09:00	Merge remote-tracking branch 'gh/main' into codex/card-reading-typography
+5865b66fda842d2471dd12a45c5784f22de20a06	2026-10-09T17:59:15+09:00	Merge remote-tracking branch 'gh/main' into codex/hexer-summon-six
+dde932996055083b6b110ba960308dde37765d47	2026-10-09T17:56:51+09:00	Document integrated and mobile summon verification
+8387133eeb585957b57a37a3c2cfa23ca062e1f8	2026-10-09T17:56:29+09:00	Record integrated hexer first-frame QA and add staging parity check
+c588cb0fd3143ea9580533fc6664957d3fad75c0	2026-10-09T17:52:52+09:00	Clarify owned granted and referenced card ability headings
+0adcdbf6a47c070b61ea225027a595ded1bccc8f	2026-10-09T17:52:25+09:00	fix(preview): allow vertical scrolling in gambler wheel lab
+476f80311dbda0d8008f1963b424174f8063a9e5	2026-10-09T17:51:47+09:00	Merge remote-tracking branch 'gh/main' into codex/hexer-summon-six
+129d10b584585d53b4c8a5aca7643d5ec0f5fea2	2026-10-09T17:51:30+09:00	Adopt hexer summon 04 and display its first frame without raw-card prelude
+4d75e301bcc6fe5396452b3f65488c62cf442f91	2026-10-09T17:49:04+09:00	feat(vfx): rebuild gambler wheel into five solid material studies
+011a0fa9a3e5e983c7f72b08cad7a2abfccf7dc0	2026-10-09T17:47:25+09:00	Merge remote-tracking branch 'gh/main' into codex/card-reading-typography
+b0afb9a81cee5322e176ab46ea732c2742329a67	2026-10-09T17:45:06+09:00	Show only rich numerals over the Rift
+6b41dea301495f6ceff69a4b541a9bcfdb063877	2026-10-09T17:43:13+09:00	Add deployed golem shell verification harness
+4f4296f145203bbf9e56b34a40e88aaec8e524b3	2026-10-09T17:42:26+09:00	Merge remote-tracking branch 'gh/main' into HEAD
+ffeae4a8b64f9521289ad85ecd5ed2d08efa36af	2026-10-09T17:42:25+09:00	Adopt golem shell 01 with stone visible from summon start
+8c786104acead8f4e6818f06f363e6f7d5b0333d	2026-10-09T17:41:43+09:00	Record card reading staging release and asset parity
+b4f27541f8d33d49fc0dbbd6c9da262337f06dbe	2026-10-09T17:40:18+09:00	Merge remote-tracking branch 'gh/main' into codex/hexer-summon-six
+e6b3602884a67edc4cfc293900258b37a4a1f03c	2026-10-09T17:35:51+09:00	Merge branch 'main' into codex/card-reading-typography
+9ae18c8ab83fe8b63a20927f4c350ffe35982b1a	2026-10-09T17:34:31+09:00	Rebuild vampire summon studies with six dedicated animated materials
+c2bc570f743d2e236a372f5ea0d903f41f957c02	2026-10-09T17:34:35+09:00	Rebuild hexer summon studies against applied VFX references
+933282a135e625c9ca03033c73ef3a3b20bbbe85	2026-10-09T17:33:10+09:00	Rebuild assassin summon studies with physical materials
+fb03c6893df17618c060d0ffa29af39f8be6868e	2026-10-09T17:31:08+09:00	Merge remote-tracking branch 'gh/main' into codex/chosen-heroes-six
+6e11b2eb2b1cc9933593f02bd7c7d41429630fd1	2026-10-09T17:31:00+09:00	Record chosen heroes direction 01 staging verification
+8d7cdbe02c056b84fe1c0bb86502a72907c6ede3	2026-10-09T17:30:56+09:00	Inset Rift record stacks and unify their numeral typography
+f8aaaa9f4d2d918e9b7e38c53b9a80c87099e29e	2026-10-09T17:28:24+09:00	Clarify browser reading verification scope
+3a06d722a2abe0da7c2e14efaa6194fc0ad41086	2026-10-09T17:26:06+09:00	Merge remote-tracking branch 'gh/main' into codex/card-reading-typography
+fadee317d0e760ffca57f15cb763713b7c7dfd8f	2026-10-09T17:25:43+09:00	Record final card reading browser verification
+fc1ec0c56d5cb0f2800232d94886271c7da1064e	2026-10-09T17:22:38+09:00	Merge remote-tracking branch 'gh/main' into codex/chosen-heroes-six
+d3f0958079dadc7e7ce2080ba831599fccd9bdcc	2026-10-09T17:22:27+09:00	Adopt chosen heroes summon direction 01 for all four classes
+55a1a380786507ef50ad80a285067ea7bd1ee8d3	2026-10-09T17:22:10+09:00	Merge remote-tracking branch 'gh/main' into codex/card-reading-typography
+cb12a3dca31f82f4a27e5c46a6bc69747d682f3e	2026-10-09T17:22:10+09:00	Improve card effect typography and enlarged reading navigation
+5d15d00378a761d7db547ad173dfc4124320a5f8	2026-10-09T17:19:33+09:00	Merge branch 'main' into codex/chosen-heroes-six
+2eb42166210880546f322cc6f51074a823c64fad	2026-10-09T17:16:54+09:00	Merge approved local Rift count revision for guarded staging
+4a491b7a5526d98d97d1c3fe2a1437176cec423c	2026-10-09T17:15:59+09:00	Apply v57 nine-card rework and mandatory Berserk attacks
+01482c8b82353ad699700850e01dbb403e672fa7	2026-10-09T17:14:28+09:00	Merge remote-tracking branch 'gh/main' into codex/chosen-heroes-six
+0cc5cda749fafdb20dddf0b7d94b75b5d93f232b	2026-10-09T17:11:46+09:00	Merge remote-tracking branch 'gh/main' into codex/assassin-summon-six
+4ac553dba2a7bb3d1a812a0d67698eab78a7c1fd	2026-10-08T12:51:37+09:00	Add six merchant material summon studies with three-card comparison and board QA
+e7e5e9bbd12ccc3f1779c7ec8850bdd6a4f513d4	2026-10-08T12:50:14+09:00	Add six gambler summon studies with paired and board previews
+517fe4ca57c537913c4c43e4c8070f9e540a494f	2026-10-08T12:49:26+09:00	Separate settling vampire materials from card face depth
+0518cb892c21dbb365c383c63aa83c74b64055f6	2026-10-08T12:49:14+09:00	Add six material summon studies for the four chosen heroes
+98b795fcc98a1fcafaecd312e236b19daa59b11c	2026-10-08T12:46:58+09:00	Add six material-specific vampire summon studies across six cards
+27ebc5bcd9b1f15d7126a365876044176b924c58	2026-10-08T12:43:10+09:00	Add six material-led hexer summon studies and comparison evidence
+e09696c8007aa33ae67520239f4f68990affb13d	2026-10-08T12:42:12+09:00	Add six mage summon material studies with board preview and QA
+36c543a78959704cdd9418b2d33cd6a093cfe89b	2026-10-08T12:35:01+09:00	Match Rift count cards to the layered-record reference
+8523640efd44dc3c70170934a340648218acfc99	2026-10-08T12:34:41+09:00	Add six assassin summon material studies and real-board comparison
+9b56640724689aefc752bf91c16563dd5d985a94	2026-10-08T12:30:40+09:00	Guide players with unavailable GPU rendering at startup
+d870fef5509a26061fee53f76a54f29712b2e391	2026-10-08T12:26:19+09:00	docs(cards): record effect UX staging verification
+c5d122bf1a9d70ede9174d8167e43365c9ab2bb3	2026-10-08T12:25:24+09:00	Record roots 04 staging parity and runtime verification
+e7a50ba24b460b31cc181c67e11089706fd4dec4	2026-10-08T12:21:43+09:00	Wait for hand transfer before freezing summon verification clock
+7dd27c0434b6c56a82460a6803698948eddeacb9	2026-10-08T12:20:08+09:00	Apply selected roots 04 summon to five verdant cards
+2bbc7443dba992618411a6905ad0584a552de7dd	2026-10-08T12:19:52+09:00	Merge remote-tracking branch 'gh/main' into codex/card-effect-ux
+c573e245dfc6b69e84f8529db63e1c4203179e3d	2026-10-08T12:19:09+09:00	docs(audio): record selected crown sound staging verification
+3065cfda370bbdf85805ff8d57f918af11a4e502	2026-10-08T12:18:18+09:00	Merge remote-tracking branch 'gh/main' into codex/card-effect-ux
+c4785ff00b87a5c8bcc3d4e7082073620d8bbbc4	2026-10-08T12:17:44+09:00	test(cards): record final multilingual inspection layouts
+e198b3d9f33d0d10be1fe0d1df8b6ee54c3e08f5	2026-10-08T12:16:11+09:00	docs(audio): normalize source license line endings
+b9e94bd345dc5a848b726083b135e0666458cb24	2026-10-08T12:16:06+09:00	Merge remote-tracking branch 'gh/main' into codex/card-effect-ux
+ce4023a2bf739cef3bc240931280c1dd9ddb74e6	2026-10-08T12:16:06+09:00	fix(cards): complete multilingual effect explanations and inspection UX
+e82083a960f7fb1f5b1ff0469d7fcbc182adb150	2026-10-08T12:15:59+09:00	Merge remote-tracking branch 'gh/main' into codex/chosen-crown-staging
+8ca110fb7b960815d088b8159f3564925bb32d31	2026-10-08T12:15:59+09:00	feat(audio): adopt chosen crown sound 02 heavy blade
+c1b611e652bfc5350e33a923218abfbcb264b72c	2026-10-08T12:15:33+09:00	docs(cosmetics): record selected living sets staging verification
+6ad78e6d3a6667fda38fa11b93ca8141c711dfdd	2026-10-08T12:11:47+09:00	test(ui): keep CSS assets out of Node DOM bundles
+68f2c25906b93cd9a3d6bf19b129980de2f63640	2026-10-08T12:10:06+09:00	Merge branch 'main' into codex/atelier-selected-cosmetics
+597bccc313c7a2d317410add2176d26c3816155d	2026-10-08T12:08:54+09:00	feat(cosmetics): adopt azure plume and pressed fern animated shop sets
+31ee7a406d778fd15291b86bdc5912a1244b871f	2026-10-08T12:05:38+09:00	Apply layered-record Rift count design selected by reference image
+f4b1ed5da01ac56c79a6709abb984de0f2718aa2	2026-10-08T12:00:02+09:00	docs(vfx): record chosen crown staging asset parity
+1eeb6e3d5ec2185f5abd96cde4315f4ff2051049	2026-10-08T11:57:13+09:00	fix(audio): register chosen crown cue in verified sound manifest
+cde45ed13c9917c1811c79fb4ec46f6d1671ab2c	2026-10-08T11:55:16+09:00	feat(vfx): adopt chosen crown victory with synchronized metallic cue
+8175ff4f36437f32e4c89e07116b7733b673edf4	2026-10-08T11:48:43+09:00	docs(shop): record ivory gacha staging verification
+8bd177387607bfaf6a346072d84842053523fb39	2026-10-08T11:45:23+09:00	feat(shop): adopt ivory gacha frontend as first shop category
+4d7a0f48214dcd94fd485e53e64f27e0c5019c61	2026-10-08T08:52:06+09:00	Merge remote-tracking branch 'gh/main' into codex/target-choice-ux
+487cada2a978c1d62cb16e4bb30ae2ed4d17961a	2026-10-08T08:52:06+09:00	Record target-choice staging playback and exact deployed asset parity
+3365c33ccec35769b9b4a29a36d75b8a5d5637e0	2026-10-08T08:45:25+09:00	Merge remote-tracking branch 'gh/main' into codex/full-audit-oct08
+0abda4342a56c2b85c578599b0586ddf5be5b1ab	2026-10-08T08:45:25+09:00	Record cross-system audit and authenticated staging verification
+0a6cef9c0335e9b1f3b43f3346a6e94be2872a93	2026-10-08T08:40:54+09:00	Record passive jump staging verification
+bd712159bf7e8916d40b808c440236efca7e3e78	2026-10-08T08:40:28+09:00	Merge remote-tracking branch 'gh/main' into codex/market-reroll-motion
+a375ceb7d94edacb6e06d346900c7ec67f9aea70	2026-10-08T08:40:24+09:00	Record deployed reroll alignment and asset verification
+3a32725b63550c560de142a49e31c03b6b15c418	2026-10-08T08:40:24+09:00	Merge remote-tracking branch 'gh/main' into codex/dew-grant-six
+1e8ced0e387424ad12d4c90df7362b6ac03d5db2	2026-10-08T08:40:23+09:00	Record T2 dew staging playback and exact asset parity
+12165ed113c032e88abc7097fae8a009387385d6	2026-10-08T08:40:21+09:00	Record shop preview staging delivery and browser verification
+6f5a4033af848a96af416f73c0db19d74c8908e9	2026-10-08T08:40:12+09:00	Record verified staging attack-origin regression and asset parity
+7fee301c2b65bc91524aef9411e6e6dd230d15a3	2026-10-08T08:37:45+09:00	Merge remote-tracking branch 'gh/main' into codex/target-choice-ux
+b0b061bf600e8efe6ae7db6178aa50862f8d29b5	2026-10-08T08:37:45+09:00	Exercise deployed Sword drag with a deterministic board fixture
+cfa33bbf9f3a950a8f230303b71b362ef0404127	2026-10-08T08:35:34+09:00	Merge remote-tracking branch 'gh/main' into codex/shop-preview-staging
+ee54e9920ed6afb1a1ec665902e70c5fa635e39a	2026-10-08T08:33:39+09:00	Merge remote-tracking branch 'gh/main' into codex/target-choice-ux
+5b5b9641add625fa930da8e6d8bb4d4873287296	2026-10-08T08:32:56+09:00	Merge remote-tracking branch 'gh/main' into codex/shop-preview-staging
+a002dc725207783558b437538f350aaba36213f3	2026-10-08T08:32:55+09:00	Show actual shop furniture and keep board previews in the shop
+aa400563a8203c0bf976c2b7ab00e40ea10cd094	2026-10-08T08:32:53+09:00	Merge remote-tracking branch 'gh/main' into codex/target-choice-ux
+76e29f18a705022fa12fb8afe9f8e5f026a8a8b4	2026-10-08T08:32:38+09:00	Merge remote-tracking branch 'gh/main' into codex/full-audit-oct08
+b6b87bb1432880c5e0e877c5447f45fbea029191	2026-10-08T08:32:38+09:00	Provide durable room identity in rank recovery regression fixture
+d50c19326f910f2b0d45b8db5c075fa71f86cce9	2026-10-08T08:32:24+09:00	Record attack origin regression playback and validation
+1343b4957ead28924032f8efc6b5e7313fe5f929	2026-10-08T08:31:45+09:00	Merge remote-tracking branch 'gh/main' into codex/target-choice-ux
+2f7f85cea47fac40a120153af3c206652e187c75	2026-10-08T08:30:28+09:00	Merge remote-tracking branch 'gh/main' into codex/attack-arrow-origin-fix
+1bf07e121e2dd8801739efde9a78ad39bdb399b2	2026-10-08T08:30:28+09:00	Match automatic removal eligibility to actual target ownership
+c09a19d28007117c3d2dd9adec56a466ec5d5f9e	2026-10-08T08:30:05+09:00	Prevent combat effects from targeting hidden card copies at the viewport origin
+7da239418cc23e7d0a6dc3da9b22d68c3ba18147	2026-10-08T08:29:17+09:00	Merge remote-tracking branch 'gh/main' into codex/full-audit-oct08
+7e3ad618c3cb1b11591120889bc4a80d224b2a04	2026-10-08T08:28:50+09:00	Fix cross-system concurrency, authentication, and screen lifecycle bugs
+5892ece4f88050cdcaafb2a1c453b6dab280fbed	2026-10-08T08:25:49+09:00	Add staging build asset verification for the target choice audit
+2f8cbd7bd57d02267c2348a8d73f5fac75875156	2026-10-08T08:24:34+09:00	Merge remote-tracking branch 'gh/main' into codex/target-choice-ux
+70871887d0c9cb7ca79bb7421b371074b073bf97	2026-10-08T08:23:13+09:00	Verify deployed target dialogs and separate fixture timing from timeout cases
+ceecb07398da1934460c6a45cd0e7b7c0ea51541	2026-10-08T08:10:36+09:00	Record built-game reroll geometry and interaction checks
+62aa9e6c4c2555218cc536e8c00849fb86ee0fbd	2026-10-08T08:10:22+09:00	Merge remote-tracking branch 'gh/main' into codex/target-choice-ux
+80a96461924634e7706660e1cebb72089ffa3806	2026-10-08T08:09:55+09:00	Cover deck removal preselection and verify target review UX
+23a2fac06340f4a984bbb35cf8adfcf52cc6e912	2026-10-08T08:09:36+09:00	Add deployed reroll asset verification
+f143d556ae3f25c3d8a04b178fba6c8247575837	2026-10-08T08:07:19+09:00	Merge remote-tracking branch 'gh/main' into codex/market-reroll-motion
+650e4adce8c0531aab5fdc49149c231bf2570b19	2026-10-08T08:06:29+09:00	Add deployed dew playback and asset verification checks
+b33fe1aa593b67583afe8b154a3226bf7a31b57f	2026-10-08T08:05:58+09:00	Merge remote-tracking branch 'gh/main' into codex/market-reroll-motion
+89d8f98256675f62e07978f3455a9724e84c03e2	2026-10-08T08:05:57+09:00	Keep reroll presentation layers out of supply card layout
+64d6c023655fc5365489e09ef2a81ad6b5446dc7	2026-10-08T08:04:15+09:00	Merge remote-tracking branch 'gh/main' into codex/dew-grant-six
+06571a82afae11622bfec0389987e1945bb7d108	2026-10-08T08:03:52+09:00	Integrate approved T2 dew grants across spells and triggered effects
+f981d4821b386f59e9ca5534d1e2211146141753	2026-10-08T08:03:24+09:00	Jump from passive names and icons to card explanations
+07fd6b9a493b5f8664e9b817399de815678f75ad	2026-10-08T08:03:20+09:00	Merge remote-tracking branch 'gh/main' into codex/target-choice-ux
+76d08e9439a78a34ffa7528f236ea972d85deafa	2026-10-08T08:03:00+09:00	Merge remote-tracking branch 'gh/main' into codex/market-reroll-motion
+dc20e84ffb59eaf7a82d453b26b65c0386b4c25d	2026-10-08T08:02:32+09:00	Review risky casts and targets before spending cards or mana
+180a6cda675359c312efaac804ddc78d9846b1cd	2026-10-08T08:01:39+09:00	Record duel bugfix staging and browser verification
+d4b9b28411ce8f80ba426b2b7d6aa22753326c44	2026-10-08T07:57:27+09:00	Fix duel placement, card rendering, attack targeting and both-field removal
+774472d017a0e1e24399f0bee163e78aa70aa295	2026-10-08T07:57:26+09:00	Add card turn-over animation for supply market refreshes
+2d0b7c4b879d7192a7613a9928f023f7f93ae866	2026-10-08T07:57:17+09:00	Merge remote-tracking branch 'gh/main' into codex/dew-grant-six
+d3248975fadc0bdc5de53cf9b5fc48072534af9f	2026-10-08T07:54:30+09:00	Add six subtle toon visibility studies for refractive dew
+8399b3629fa387479688c9c57726113c75e988b1	2026-10-08T07:48:50+09:00	Record final card wording staging verification
+a5c92be877a2a4ddca0cbe9f36a4ebf4060eda3d	2026-10-08T07:46:18+09:00	Clarify current field targets in effect wording
+95c6cd505bec9667090549d26abad0cc545a458a	2026-10-08T07:42:44+09:00	Merge remote-tracking branch 'gh/main' into codex/card-wording-staging
+28b948bc8bca2d263ede19e3a911bea21c77e86e	2026-10-08T07:42:44+09:00	Separate card effect rules and clarify conditional resolution in all languages
+920093020f86f55b6595a24bcf45c4da29af95a0	2026-10-08T07:21:53+09:00	Rebuild effect droplets as five refractive liquid studies
+2008d254ced506102cc95dc9050eed0d198863df	2026-10-08T07:19:44+09:00	Make deck card faces enlarge and use explicit edit buttons
+fd89adeaea7d137ec662f33936d1cfd5d0c9ccb4	2026-10-08T07:15:31+09:00	Speed up spell frame playback by 2.5x
+d06b2ecf61269d510f2867317f9a8ce3b700dc64	2026-10-08T07:10:54+09:00	Preserve latest golem and dice rules in clarified card text
+0a55d96dd0e7c341fc79101079d23ecaebe0bcb5	2026-10-07T11:16:12+09:00	Keep uncapped player HP check compatible with precise monster HP wording
+03f5838da82c3693bc66825f3ba60e2013575fe9	2026-10-07T11:12:26+09:00	Clarify every card effect across Japanese Korean and English
+6f391dd183cc5f9ca5e7d5039676b5a437d2f376	2026-10-07T11:36:03+09:00	Record deployed elf summon variants and asset verification
+dbddbccd6fdbc13ecbab688e25199425ddfd8b7e	2026-10-07T11:25:00+09:00	Merge remote-tracking branch 'gh/main' into codex/shield-brand-twenty
+312c65ba8d4505573487c5e43ccbef0bb5a221df	2026-10-07T11:24:59+09:00	Keep status material initialization scoped to grant playback
+1e98b40934f10f25db4d1d8a81c1e5910bdcd518	2026-10-07T11:24:06+09:00	Mock status grant renderer in controller playback unit tests
+d620dafd7fc8354ffe966367f4d24eb35c19fba1	2026-10-07T11:22:34+09:00	Merge remote-tracking branch 'gh/main' into codex/shield-brand-twenty
+43531e9045aae67c12402ef9067f40c2ef178a56	2026-10-07T11:22:33+09:00	Restore controller comment boundaries after integration
+32c21275a5650a47d17016758962d5c35ce98cac	2026-10-07T11:22:09+09:00	Merge remote-tracking branch 'gh/main' into codex/elf-summon-02-release
+c982f2d29f32e3c1c9339dda63c2293d19f6bb09	2026-10-07T11:22:09+09:00	Restore controller declarations swallowed by merged comment separators
+5133c03a5721af72ae03713f4672f146b35eccb9	2026-10-07T11:21:10+09:00	Preserve Enfeebling Ritual copy limit in final localized card text
+5095fa8b17761dda523f6556f33c99c1772e4e5d	2026-10-07T11:20:02+09:00	Record verified obsidian staging delivery and integrated browser checks
+e97c20c966c0c20b91700cc5a543eecbc5bdc637	2026-10-07T11:19:37+09:00	Record selected status grant motion and visual review
+e2ca082af24d2c5d5055f980b8c211987d4e2dac	2026-10-07T11:19:27+09:00	Add six material-based dew grant animation studies
+bf7de3738a668e24399e5170247ca312f450baf6	2026-10-07T11:17:42+09:00	Merge remote-tracking branch 'gh/main' into codex/shield-brand-twenty
+e3ec0cb535e4eabf12a64b62eb637c2d1762e44e	2026-10-07T11:16:09+09:00	Merge remote-tracking branch 'gh/main' into codex/shield-brand-twenty
+dee9fc6c1f80c92aed85ed37e5becd1434c77f5f	2026-10-07T11:14:46+09:00	Record critical gameplay audit and verified staging release
+b66ceae276e1bda1addadd3aa22841d979464fd5	2026-10-07T11:14:33+09:00	Merge remote-tracking branch 'gh/main' into codex/elf-summon-02-release
+ce59559a2c495d5d7c4f8cae6e15bab75ec0b82d	2026-10-07T11:14:21+09:00	Record selected tribe staging deployment and asset parity
+bf1a65f45d618dac3563538916eea73abe2101b6	2026-10-07T11:13:37+09:00	Adopt selected shield and brand grant effects with material glow
+beeb3bda80533e93cf6a6bd608fcbe13ba28c659	2026-10-07T11:09:50+09:00	Add deployed summon export verification harness
+9edeb6e6e912b3bf18bb101a975625b185a26433	2026-10-07T11:04:39+09:00	Record real-board verdant summon playback and lifecycle verification
+c85ed105680e9a50a6f02e426a8ba9e528085a02	2026-10-07T11:01:46+09:00	Merge remote-tracking branch 'gh/main' into codex/elf-summon-02-release
+f7cc892c40802f60583df8122ff6d034ebaae607	2026-10-07T11:01:06+09:00	Merge remote-tracking branch 'gh/main' into codex/npc-bot-roster
+23ee7de9591af70682608aa72af03c4f51c3438a	2026-10-07T11:00:30+09:00	Apply approved elf and World Tree summon 02 with board contact
+07b81d10adb8dd5618142a69f71fe2fe9d167e78	2026-10-07T10:59:56+09:00	Merge remote-tracking branch 'gh/main' into codex/shield-brand-twenty
+b75e5ac9ede98cd7eb37ae2092a3599ee771d145	2026-10-07T10:58:07+09:00	Merge remote-tracking branch 'gh/main' into codex/tribe-approved-staging
+c9062cb5ae6b22fc306969f9951e760af0472515	2026-10-07T10:57:34+09:00	Record all eighteen selected tribe runtime cases
+d01c485c8b6a1ff22967776f798492729a4adff6	2026-10-07T10:55:21+09:00	Redraw NPC portraits to match approved Seeker art
+b471b2c0ab8e6c3373994869fb8a52aa6b54c522	2026-10-07T10:54:59+09:00	Add twenty shield and brand grant animation studies
+7ab68728546b60323a660af6ac2e15a6e2eb36ae	2026-10-07T10:51:25+09:00	Bound recursive dice effects and enforce effect summon restrictions
+403e859c29aebb2b771e516fa1c6c4663a4996ae	2026-10-07T10:53:55+09:00	Adopt selected tribe summons and all synergy stages
+38d5a9eea7d16d50a520f533497b63b35111deb8	2026-10-07T10:53:00+09:00	Share Rift receiver state across simultaneous transfer routes
+5305e47657c96c672652569c51d2c84da36adadf	2026-10-07T10:49:24+09:00	Add deployed obsidian field exit verification
+6d1833f23b1954e6c86df4952688a89b85a5a290	2026-10-07T10:48:29+09:00	Merge remote-tracking branch 'gh/main' into codex/rift-obsidian-staging
+76cdf5348f5a6847945fec42849ddbe5fd15c236	2026-10-07T10:48:28+09:00	Apply approved obsidian Rift animation to field card destruction
+4793950fedaaa92787cc5211a8d277d28099db5c	2026-10-07T10:47:23+09:00	Merge remote-tracking branch 'gh/main' into codex/zero-attack-rule
+910c37b623cffd390cf3fba592d7df2c2279e5f9	2026-10-07T10:47:23+09:00	Balance zero-attack monsters and limit Enfeebling Ritual to two copies
+9fee333c1ec693bf93a6c9c8de630ae3b9148008	2026-10-07T10:47:20+09:00	Merge remote-tracking branch 'gh/main' into codex/tribe-approved-staging
+acb9865ff22e76d24d6aeb779bf1b66b4ef3809f	2026-10-07T10:40:52+09:00	Record shadow veil Rift staging verification
+28da75cc6ad7b07441019e9e8b9db9677f23c8d8	2026-10-07T10:40:35+09:00	Merge remote-tracking branch 'gh/main' into codex/zero-attack-rule
+a0ade5f481acbaac3e8cf42c231bf15ea6d8531e	2026-10-07T10:37:09+09:00	Record Rift idle parity and built board verification
+78191efa5f0cba3410105ef939d630b8f88e81eb	2026-10-07T10:37:09+09:00	Merge remote-tracking branch 'gh/main' into codex/rift-idle-shadow-staging
+206e1f9ce7bb4f93d593f555b9825c14539430d4	2026-10-07T10:33:29+09:00	Unify graveyard terminology across all game languages
+54766dbc429df58e2d039c2af0997c8af094f55c	2026-10-07T10:36:28+09:00	Fix Guardian Golem replenishing guts on lethal attacks
+4a5b30036b742cbe8951b8d7a003adb29b6ac80b	2026-10-07T10:34:02+09:00	Merge remote-tracking branch 'gh/main' into codex/rift-idle-shadow-staging
+dc805a6a6d90c201265347f52317d2056c1559f6	2026-10-07T10:34:00+09:00	Disallow attacks from monsters with zero current ATK
+1b0790d68cd16d29463e228a41208d99977cbeb4	2026-10-07T10:30:59+09:00	Remove unused variable from local cancellation QA
+7e713fb131febdcfeeda6121a24d18eff402b91b	2026-10-07T10:29:57+09:00	Adopt shadow veil Rift idle material
+08e0ea5303da7f1784d0acc31b453d673582c2d7	2026-10-07T10:27:28+09:00	Use a non-login password sentinel for test opponents
+13d9d05d47b0c03f1362fd1ae5f5a2d2fe35e93c	2026-10-07T10:25:20+09:00	Cover bot-owned defensive choices on human turns
+9791c67347bdf10dd8da2acbec77b761e75bbc16	2026-10-07T10:22:55+09:00	Add ten server-driven test opponents to staging matchmaking
+5dfb87fcb1612ffe55854ec629352166d71ba7d3	2026-10-07T10:27:13+09:00	Add NPC opponents with individual deck rotations
+de6e607200432cecf034cee857120fddeef9a008	2026-10-07T10:26:41+09:00	Record approved tribe staging delivery and runtime verification
+148403e9f3fae99c0cc948ced1813bdcecb44e7f	2026-10-07T10:24:33+09:00	Adopt approved amethyst quest pact with language-neutral glyphs
+4803fcf33685737e8c8bb21c1484a438fa8a8259	2026-10-07T10:12:46+09:00	Merge remote-tracking branch 'gh/main' into codex/tribe-approved-staging
+fdd5b90216d8f5667aafa950854c1d90fa2edd9f	2026-10-07T10:12:44+09:00	Adopt approved tribe highlight and Origin victory presentation
+ef217ea95ddbfb032de2451d4494adce9876fdea	2026-10-07T10:04:17+09:00	Replace Brand label with approved frame-side seal counter
+e70b8b560bed0d7f39d9368774c36cb938ab8d96	2026-10-07T09:51:45+09:00	Check deployed purchase frames from canvas initialization onward
+e1a539e3b72f3184595a6be1710400c5d1648d80	2026-10-07T09:48:05+09:00	Merge remote-tracking branch 'gh/main' into codex/purchase-air-staging
+1be449ac4ca7397ba6328a776969b818a38e52ab	2026-10-07T09:47:47+09:00	Cover purchase asset cancellation and separate integration evidence
+bd86ab27b6cf6c7715ab3dd9d29a00d2dabae3a6	2026-10-07T09:44:25+09:00	Merge remote-tracking branch 'gh/main' into codex/multi-target-buff
+ebe7e070ab0c72697a87e2d1ea52afc59271c35a	2026-10-07T09:44:01+09:00	Merge remote-tracking branch 'gh/main' into codex/purchase-air-staging
+3176c90796a28b27f024fbe0d5b0060def3b95b9	2026-10-07T09:43:59+09:00	Merge remote-tracking branch 'gh/main' into codex/elemental-seven
+26dcabc57a4e855b278b4e17bef7b5223a6ab452	2026-10-07T09:43:54+09:00	Apply selected alternating air wake to card purchases
+7d4b3fd6f9918d2682e20e8d34e60b31013dbc9e	2026-10-07T09:43:39+09:00	Merge remote-tracking branch 'gh/main' into codex/elemental-seven
+8871e65e6543856b49f9b36d05f7c80261a30cd5	2026-10-07T09:43:36+09:00	Merge remote-tracking branch 'gh/main' into codex/persistent-flight-staging
+8599a55132003ab1c3b9559e47ff3c3a1afdea75	2026-10-07T09:43:34+09:00	Verify flight runtime without duplicate spell frame on both viewport sizes
+8ff31078d0fb3616eedff472213ebe841aa6dcf2	2026-10-07T09:43:32+09:00	Keep elemental parity focused on gameplay events
+c720884483a5050444a9f50dd1c58f38d625e6f0	2026-10-07T09:41:59+09:00	Cover elemental spell source lifetime in playback regression fixtures
+00cc8dd8a4a95ae69dd4092efcbcdc0a174cf30d	2026-10-07T09:40:57+09:00	Merge remote-tracking branch 'gh/main' into codex/decay-dissolve-staging
+12bcd1f37bb794f1b75a4ff6b80b5158258d153e	2026-10-07T09:40:31+09:00	Merge remote-tracking branch 'gh/main' into codex/decay-dissolve-staging
+47e0f6f9284650b6c11b863878a85f78d84485ec	2026-10-07T09:40:29+09:00	Merge remote-tracking branch 'gh/main' into codex/multi-target-buff
+2117239bbf9edbb6ada3f146a9e38da7576a7964	2026-10-07T09:40:28+09:00	Fix monster effect activation conditions, source cues and ongoing states
+7e02ac67a7f714bf632a84aebb2b51a5cce9c5c8	2026-10-07T09:39:53+09:00	Apply selected light-flight animation to persistent spell plays
+dbe0aaabffb941814c945547eaf5a02bb5b89c78	2026-10-07T09:39:57+09:00	Apply approved dissolve-only animation to decay destruction
+cc5bd0c54e2459821e43ce33fe8dc5e21ccc39d4	2026-10-07T09:37:16+09:00	Adopt approved elemental VFX with faster berserk and pillar-only zone
+8a0282a6bdaa2798d50f1963449cb0767279574b	2026-10-07T09:25:04+09:00	Merge remote-tracking branch 'gh/main' into codex/elemental-seven
+d429608bd93f027db949725b794b2f9890bc8d5f	2026-10-07T09:15:45+09:00	feat(vfx): add seven elemental animation studies and review preview
+16ae5c108a678ff57e049b92eb0286ed53d4b6cf	2026-10-07T09:12:05+09:00	docs: audit monster activation conditions and timing
+a5d44229c66d5d952021be9d75ad596fe5c35a06	2026-10-07T08:59:30+09:00	Apply selected mana vein destruction to public Shelf exits
+805d627a1e41cebd8d66db647edf3915d176f99d	2026-10-07T05:26:11+09:00	Merge remote-tracking branch 'gh/main' into codex/multi-target-buff
+2615f3c2d31a423f7b88a57572e89e9a534d1ff0	2026-10-07T05:26:11+09:00	Fix animation playback for every multi-target buff recipient
+644fa2d7bb93e042c5639d77845889cc6e876229	2026-10-07T05:20:49+09:00	Remove defeated player portrait fracture from match endings
+7bb85c53a2efdb1902d49160f94e6e7228ecd670	2026-10-07T05:16:40+09:00	docs(vfx): record faster spell staging verification
+4eeabe2b4f1472dbab05f26e12e948d3a97ccb47	2026-10-07T05:13:19+09:00	perf(vfx): double spell frame and reveal playback speed
+f689b15d42cb574a92b69b3398045d0276f93178	2026-10-07T05:05:49+09:00	Record static avatar staging verification
+c211722d5fb2ba87e74f6a1dca79ecf0bbd3f4e1	2026-10-07T04:56:03+09:00	Merge remote-tracking branch 'gh/main' into codex/avatar-static
+5c40e702b311ab154d42063f065dca8cda840ab7	2026-10-07T04:55:58+09:00	Disable all avatar idle and action animations
+a223dc722369fad01028bf550d1baebd39e51e11	2026-10-07T04:55:25+09:00	Adopt approved Lumen Weave coin result presentation

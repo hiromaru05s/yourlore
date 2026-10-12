@@ -1,0 +1,25 @@
+{
+  "source": "e6b3602884a67edc4cfc293900258b37a4a1f03c",
+  "url": "https://test.yourlore.xyz",
+  "versionId": "46ef54d4-cf34-4a13-a636-8e3813e7b168",
+  "deploymentId": "417bd040-4d1a-4131-a834-13c8b0319533",
+  "createdOn": "2026-10-09T08:40:05.068026Z",
+  "suitePassed": 85,
+  "suiteTotal": 85,
+  "assetsMatched": 52,
+  "assetsTotal": 52,
+  "renderedCards": 360,
+  "languages": [
+    "ja",
+    "ko",
+    "en"
+  ],
+  "browserLayoutCases": 108,
+  "deployedVia": "npm run deploy:staging",
+  "parallelChangesIncluded": [
+    "4a491b7a",
+    "d3f09580",
+    "8d7cdbe0"
+  ],
+  "verifiedScope": "Local actual app and component browser UI; public staging bootstrap; deployment source and asset parity. Authenticated staging matches and physical mobile devices not exercised."
+}

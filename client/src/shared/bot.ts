@@ -1,13 +1,12 @@
 // Four difficulty levels share the same rules and legal-action safety.
 // Hard/hell use paired imperfect-information rollouts; easy/normal retain mistakes.
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
-import { effectChoices, purchaseAllowed, playBlockReason } from "./engine";
-import { ST_MAX, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, effMaxMana, freeBuyBlocked, glassBanActive, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
+import { effectChoices, purchaseAllowed, playBlockReason, monsterCanAttack } from "./engine";
+import { ST_MAX, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, effMaxMana, freeBuyBlocked, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
 import { avgPower, cardPower } from "./cardEval";
 import { searchDecide } from "./botSearch";
 import { observationSample } from "./botObservation";
 import { botActions, actionChangesState, withinBotTurnBudget } from "./botActions";
-import { monsterCanAttack } from "./engine";
 import { DB, hasPassive } from "./cards";
 
 export type BotDifficulty = "easy" | "normal" | "hard" | "hell";
@@ -119,6 +118,7 @@ export function greedyDecide(g: GameState, useLethal = true): Action {
     if (g.pending.reason === 'HIGH_ELF_HAND') return {type:'pick',uid:[...pool].filter(c=>c.uid!=='done' && !hasPassive(c,'relic')).sort((a,b)=>cardPower(b)-cardPower(a))[0]?.uid ?? 'done'};
     if (g.pending.reason === 'ARMORER_MODE') {const ally=g.players[owner];return {type:'pick',uid:ally.hp+(ally.shield ?? 0)<25||!pool.some(c=>c.uid==='buff')?'shield':'buff'};}
     if (g.pending.reason === 'FIRE_BALL') { const reversed = g.players.some(p => p.enchants.some(e => e.card.ench === 'blackReverse')); return { type: 'pick', uid: `player-${reversed ? owner : 1-owner}` }; }
+    if (g.pending.reason === 'SELECTED_SWORD') return {type:'pick',uid:[...g.players[owner].field].sort((a,b)=>cardPower(b)-cardPower(a))[0]?.uid??null};
     if (g.pending.reason === 'FIRE_ZONE') return { type: 'pick', uid: [...pool].sort((a,b) => cardPower(a)-cardPower(b))[0]?.uid ?? null };
     const best = [...pool].sort((a, b) => cardPower(b) - cardPower(a))[0] ?? effectChoices(g)[0];
     return { type: "pick", uid: best?.uid ?? null };
@@ -269,7 +269,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   const plan = facePlan(p, o, ready, spells, noAtk);
   if (plan.total >= o.hp) {
     if (plan.spellIdx !== null) return { type: "play", idx: plan.spellIdx };
-    if (plan.attackUid) return { type: "attack", uid: plan.attackUid };
+    if (plan.attackUid && p.field.some(m => m.uid === plan.attackUid && monsterCanAttack(g, p, m))) return { type: "attack", uid: plan.attackUid };
   }
 
   // 1.5) removal-lethal: if clearing the biggest blocker makes the swing lethal, do it now
@@ -514,9 +514,8 @@ function lethalActions(g: GameState): Action[] {
   // Set traps are hidden information. Unless the search first removes them, do
   // not prove a lethal line by peeking at what the trap actually is.
   if (!noAtk && o.traps.length === 0) {
-    const ban = glassBanActive(g);
     [...p.field]
-      .filter((m) => !m.exhausted && !(m.id === "ASSASSIN_SQUAD" && o.hp < 11) && (!ban || Math.abs(effAtk(p, m, g) - effDef(p, m)) < 4))
+      .filter((m) => monsterCanAttack(g, p, m))
       .sort((a, b) => effAtk(p, b, g) - effAtk(p, a, g))
       .forEach((m) => add({ type: "attack", uid: m.uid }));
   }

@@ -11,6 +11,13 @@ import type { Env } from "./env";
 import { createSession, sanitizeDisplay, sessionCookie } from "./auth";
 import { applyInviteAtSignup } from "./invite";
 
+/** URL parsing treats backslashes/control characters as redirect syntax too. */
+function returnPath(raw: string, origin: string): string {
+  if (!raw.startsWith('/') || /[\\\x00-\x20|]/.test(raw)) return '/';
+  try { const parsed = new URL(raw, origin); return parsed.origin === origin ? parsed.pathname + parsed.search + parsed.hash : '/'; }
+  catch { return '/'; }
+}
+
 const STATE_COOKIE = "lore_oauth_state";
 const CTX_COOKIE = "lore_oauth_ctx"; // "ref|source" carried through the OAuth round-trip
 
@@ -57,7 +64,7 @@ export async function handleGoogleOAuth(env: Env, req: Request, path: string): P
     const source = (url.searchParams.get("source") || "").slice(0, 120);
     // return path: same-origin only ("/..."), used e.g. to bounce back to /admin after login
     const rawRet = url.searchParams.get("return") || "";
-    const ret = /^\/[^/]/.test(rawRet) ? rawRet.slice(0, 64) : "";
+    const ret = returnPath(rawRet.slice(0, 256), url.origin);
     const headers = new Headers({ Location: auth.toString() });
     headers.append("Set-Cookie", `${STATE_COOKIE}=${state}; HttpOnly; Path=/; Max-Age=600; SameSite=Lax; Secure`);
     headers.append("Set-Cookie", `${CTX_COOKIE}=${encodeURIComponent(`${ref}|${source}|${ret}`)}; HttpOnly; Path=/; Max-Age=600; SameSite=Lax; Secure`);
@@ -71,9 +78,10 @@ export async function handleGoogleOAuth(env: Env, req: Request, path: string): P
     const cookies = req.headers.get("Cookie") || "";
     const cookieState = cookies.match(new RegExp(`${STATE_COOKIE}=([^;]+)`))?.[1];
     if (!code || !state || state !== cookieState) return htmlError("OAuth 상태 검증에 실패했습니다. 다시 시도해 주세요.");
-    const ctx = decodeURIComponent(cookies.match(new RegExp(`${CTX_COOKIE}=([^;]+)`))?.[1] || "");
+    let ctx = "";
+    try { ctx = decodeURIComponent(cookies.match(new RegExp(`${CTX_COOKIE}=([^;]+)`))?.[1] || ""); } catch { return htmlError("Invalid OAuth context"); }
     const retRaw = ctx.split("|")[2] || "";
-    const returnTo = /^\/[^/]/.test(retRaw) ? retRaw : "/";
+    const returnTo = returnPath(retRaw, url.origin);
 
     const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
       method: "POST",

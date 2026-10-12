@@ -2,7 +2,7 @@
   "name": "lore-tcg",
   "version": "0.1.0",
   "private": true,
-  "description": "LORE \u2014 deckbuild x TCG hybrid. Cloudflare-hosted (Pages + Workers + Durable Objects + D1).",
+  "description": "LORE — deckbuild x TCG hybrid. Cloudflare-hosted (Pages + Workers + Durable Objects + D1).",
   "workspaces": [
     "client",
     "server"
@@ -27,5 +27,8 @@
   },
   "engines": {
     "node": ">=22.12.0"
+  },
+  "overrides": {
+    "sharp": "0.35.5"
   }
 }

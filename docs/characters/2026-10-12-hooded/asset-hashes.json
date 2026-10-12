@@ -1,0 +1,18 @@
+{
+  "blue-portrait.webp": {
+    "bytes": 8448,
+    "sha256": "2ac3c7a036b32ab53dd439db7793043a352bd7b3a6624f4dcbccc0193cd2c00b"
+  },
+  "blue.webp": {
+    "bytes": 376206,
+    "sha256": "45a97fa1f05ffab0c66b9a6e5cdb8a3b3b86865c864138c1ec35cc5bd88ecd7a"
+  },
+  "red-portrait.webp": {
+    "bytes": 8184,
+    "sha256": "4b606c31cab25f6207ffd0bb57c3fbb67b8e758cd0f0af45dc60adc21f50bba5"
+  },
+  "red.webp": {
+    "bytes": 364412,
+    "sha256": "63dbf402c6a00fcb30a56c3f50ca76aa6aac6a932c9ba893cbe45b8597895866"
+  }
+}

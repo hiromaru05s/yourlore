@@ -46,10 +46,10 @@ export function plan(s:Scene,id:string,branch='success'):Beat[]{
   if(id==='BLOOD1')return finish(cost,draw(6));
   if(id==='BLOOD_JOY')return finish(cost,B('heal','source','hp','自分の体力を獲得',1600,1200),B('heal','source','enemyHp','相手の体力も獲得',1800,1200));
   if(id==='BLOOD_ANGER')return finish(cost,B('buffAtk','source','ally','味方モンスターの攻撃力増加',1600,1250),B('buffAtk','source','enemy','相手モンスターも攻撃力増加',1700,1250));
-  if(id==='BLOOD_SORROW')return finish(cost,B('shatter','shelf','rift','シェルフの最高コストをリフトへ',1500,1800));
+  if(id==='BLOOD_SORROW')return finish(cost,B('shatter','shelf','rift','墓地の最高コストをリフトへ',1500,1800));
   if(id==='BLOOD_PLEASURE'||id==='BLOOD_FEST')return finish(...(id==='BLOOD_PLEASURE'?[cost]:[B('echo','spell','source','血の魔法に連動',600,800)]),B('transfer','source','mana','自分の最大マナを増加',1650,1550));
   if(id==='TSO2')return finish(...(branch==='alternate'?[B('deny','source','source','他の場札が多く強化不成立',1800,1400)]:[B('buffAtk','source','source','孤立条件・攻撃力強化',1700,1100),B('buffHp','source','source','孤立条件・体力強化',2250,1100)]));
-  if(id==='TSO3')return finish(...(branch==='alternate'?[B('deny','shelf','source','シェルフにモンスター・ドローなし',1800,1200)]:[draw(6,1650)]));
+  if(id==='TSO3')return finish(...(branch==='alternate'?[B('deny','shelf','source','墓地にモンスター・ドローなし',1800,1200)]:[draw(6,1650)]));
   if(id==='TSO5')return branch==='alternate'?[deny]:finish(B('seal','source','source','孤独以外の味方がいない条件を示す',1800,1300));
   if(['TDE1','TDE2','TDE3'].includes(id))return finish(B('inscribe','source','mana',id==='TDE3'?'ダイスに応じて最大マナ減少':id==='TDE1'?'自分5ターンの最大マナ減少':'常時の最大マナ減少',1750,1450));
   if(id==='RUNE1')return finish(B('shatter','enemy','enemyShelf','コスト5以上の対象を破壊',850,2050));
@@ -64,10 +64,10 @@ export function plan(s:Scene,id:string,branch='success'):Beat[]{
  }
  let beats:Beat[]=[];
  switch(s.id){
- case'A002':{const family=scenes.find(x=>x.id.startsWith('S')&&x.cardIds.includes(id))||scenes.find(x=>x.id==='S29')!;return [...plan(family,id,branch).map(b=>({...b,at:b.at*.77,duration:b.duration*.77})),B('transfer','source','shelf','使ったカードをシェルフへ',2850,650)];}
+ case'A002':{const family=scenes.find(x=>x.id.startsWith('S')&&x.cardIds.includes(id))||scenes.find(x=>x.id==='S29')!;return [...plan(family,id,branch).map(b=>({...b,at:b.at*.77,duration:b.duration*.77})),B('transfer','source','shelf','使ったカードを墓地へ',2850,650)];}
  case'A003':beats=[B('transfer','source','spell','魔法ゾーンに定着',800,1250),B('inscribe','spell','spell','期間・常在の表示',2250,900)];break;
  case'A005':beats=[B('transfer','source','quest','クエストを公開配置',700,1300),B('progress','quest','quest','条件の記録を開始',2250,800)];break;
- case'A009':beats=[B('summon','shelf','ally','シェルフから蘇生・虚無を付与',700,1800,'M4')];break;
+ case'A009':beats=[B('summon','shelf','ally','墓地から蘇生・虚無を付与',700,1800,'M4')];break;
  case'A015':beats=[B('shatter','enemy',id==='DISARM3'?'enemyRift':'enemyShelf','場の魔法・クエストを除去',700,1900,undefined,id==='DISARM2'?2:1)];break;
  case'A021':beats=[B('shatter','source','shelf','発生源が退場',450,900),B(id==='FIRE_MASTER'?'transfer':'summon','shelf',id==='FIRE_MASTER'?'hand':'ally','破壊後の後続効果',1600,1250,id==='FIRE_MASTER'?'FIRE_BALL':'SOLDIER2')];break;
  case'A022':case'A163':return[deny];
@@ -89,7 +89,7 @@ export function plan(s:Scene,id:string,branch='success'):Beat[]{
  case'A083':beats=[seal('enemy','魔法使用を制限'),B('deny','enemy','source','使用条件外を止める',2250,800)];break;
  case'A084':beats=branch==='alternate'?[B('progress','source','source','ダイス1〜2・魔法は通る',700,700),B('transfer','enemy','hp','無効化不成立',1750,1000)]:[B('progress','source','source','ダイス3以上',650,700),B('shatter','enemy','enemyShelf','魔法を打ち消す',1550,1300)];break;
  case'A085':beats=[B('inscribe','source','enemyHp','次ターンのスキップを予約',750,1200),B('reset','enemyHp','enemyHp','対象ターンを飛ばす',2300,900)];break;
- case'A091':beats=[B('transfer','source','enemyShelf','呪いを相手シェルフに注入',750,2000,'CURSE',({BLACK_CURSE:5,BLACK_ELSA:7,BLACK_ALICE:2,HEXER1:3,HEXER2:4,HEXER3:5} as Record<string,number>)[id]||3)];break;
+ case'A091':beats=[B('transfer','source','enemyShelf','呪いを相手墓地に注入',750,2000,'CURSE',({BLACK_CURSE:5,BLACK_ELSA:7,BLACK_ALICE:2,HEXER1:3,HEXER2:4,HEXER3:5} as Record<string,number>)[id]||3)];break;
  case'A092':beats=[cost,B('transfer','source','shelf','使った呪いを戻す',1900,850)];break;
  case'A093':beats=[B('echo','enemyRift','source','リフトの呪いを参照',500,700,'CURSE'),B('transfer','source','enemyShelf','新しい呪いを生成',1550,1500,'CURSE')];break;
  case'A094':beats=[B('transfer',id.startsWith('EXILE')?'rift':'enemyShelf','source','参照する記録を集積',500,1000),hit(1750)];break;
@@ -102,15 +102,15 @@ export function plan(s:Scene,id:string,branch='success'):Beat[]{
  case'A114':beats=[B('summon','source','source','特級吸血鬼の顕現',300,1100),hit(1500),heal(2450)];break;
  case'A115':beats=[B('inscribe','source','source','攻撃3回の蓄積',450,900,undefined,3),summon('VAMP1')];break;
  case'A116':beats=branch==='alternate'?[cost,B('deny','source','ally','破壊防止・代価未払い、報酬なし',1550,1300)]:[cost,B('shatter','ally','shelf','吸血鬼を生贄にする',1300,900),B('heal','shelf','hp','支払い後に体力を得る',2450,900),B('transfer','shelf','mana','支払い後に最大マナを得る',2450,900)];break;
- case'A134':beats=[B('transfer','deck','hand','1枚ドロー',350,900),B('heal','source','hp','体力を回復',1300,750),B('transfer',branch==='alternate'?'enemyDeck':'source','shelf',branch==='alternate'?'リフト条件達成・相手カードを複製':'創造をシェルフに生成',2200,1200,branch==='alternate'?'M4':'CREATION')];break;
+ case'A134':beats=[B('transfer','deck','hand','1枚ドロー',350,900),B('heal','source','hp','体力を回復',1300,750),B('transfer',branch==='alternate'?'enemyDeck':'source','shelf',branch==='alternate'?'リフト条件達成・相手カードを複製':'創造を墓地に生成',2200,1200,branch==='alternate'?'M4':'CREATION')];break;
  case'A136':beats=[B('transfer','spell','enemy','最初の魔法が解決',450,1000),B('echo','source','spell','ルーンが再発動を刻む',1600,700),B('transfer','spell','enemy','マナなしで一度再発動',2450,900)];break;
  case'A139':beats=[B('transfer','deck','hand','デッキから手札へ',700,2000,'S10',id==='DISCOVERY_LARGE'?(branch==='alternate'?6:4):id==='DISCOVERY'?(branch==='alternate'?4:3):2)];break;
  case'A140':beats=[B('progress','deck','deck','デッキ内から選択',450,900),B('transfer','deck','hand','選んだカードを手札へ',1650,1300,'S10')];break;
- case'A141':beats=[B('transfer','shelf','hand','シェルフから回収',700,2000,'M4')];break;
+ case'A141':beats=[B('transfer','shelf','hand','墓地から回収',700,2000,'M4')];break;
  case'A142':beats=[B('transfer','hand','shelf','手札を全て捨てる',450,1000,undefined,3),B('transfer','deck','hand','新しい5枚を引く',1700,1650,'S10',5)];break;
  case'A143':beats=[B('transfer','source',id==='CULL_FARM'?'hand':id==='BLACK_CURSE'?'enemyShelf':'shelf','新しいカードを生成',700,2000,id==='BLACK_CURSE'?'CURSE':id==='CULL_FARM'?'STARTER_TRASH':'CREATION')];break;
  case'A158':beats=[B('echo','spell','source','永続魔法の発動元を示す',450,900),B(id==='EROSION'?'strike':'heal','source',id==='EROSION'?'enemyHp':'hp','対象効果へ接続',1750,1300)];break;
- case'A159':beats=[B('progress','spell','spell','残り期間が減る',400,750),B('shatter','spell','shelf','満了してシェルフへ',1350,900),B('transfer','spell',id==='E3'?'mana':'hand',id==='E3'?'翌ターンの最大マナ増加':id==='BREWING'?'蓄積分のワインを手札へ':'最大マナ減少・選んだ卵を手札へ',2400,1000,id==='BREWING'?'WINE':id==='ANCIENT_CIV'?'DRAGON_EGG':undefined)];break;
+ case'A159':beats=[B('progress','spell','spell','残り期間が減る',400,750),B('shatter','spell','shelf','満了して墓地へ',1350,900),B('transfer','spell',id==='E3'?'mana':'hand',id==='E3'?'翌ターンの最大マナ増加':id==='BREWING'?'蓄積分のワインを手札へ':'最大マナ減少・選んだ卵を手札へ',2400,1000,id==='BREWING'?'WINE':id==='ANCIENT_CIV'?'DRAGON_EGG':undefined)];break;
  case'A160':beats=[B('echo','source','source','ターン境界で発動',500,750),B(id==='GM5_3'?'strike':id==='WORLD_CARE'?'inscribe':'summon','source',id==='GM5_3'?'enemyHp':id==='WORLD_CARE'?'hp':'ally',id==='WORLD_CARE'?'雫1を獲得（保持表示へ接続）':'カード固有の後続効果',1550,1400,'SOLDIER2')];break;
  case'A161':beats=branch==='alternate'?[B('deny','source','source','使用回数上限に到達',650,1400)]:[B('complete','source','source','条件が成立・使用可能',650,1400)];break;
  case'A164':case'A167':case'A168':case'A169':beats=[B('echo','ally','source','異なる種族カードが接続',450,1100),B('echo','ally2','source','種族の段階成立',650,1000),seal(s.id==='A169'?'enemyMana':'enemy',s.id==='A164'?'相手の場上限2体':s.id==='A167'?'相手魔法2枚まで':s.id==='A168'?'相手魔法使用不可':'相手マナ消費3倍')];beats[2].at=2100;break;

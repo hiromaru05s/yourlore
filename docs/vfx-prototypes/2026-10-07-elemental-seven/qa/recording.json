@@ -1,0 +1,17 @@
+{
+  "fps": 30,
+  "resolution": [
+    1000,
+    650
+  ],
+  "method": "Deterministic seek frames at 30 fps, encoded to H.264. Not a real-time performance recording.",
+  "kinds": [
+    "cannon",
+    "lightning",
+    "berserk",
+    "arrow",
+    "meteor",
+    "ball",
+    "zone"
+  ]
+}
