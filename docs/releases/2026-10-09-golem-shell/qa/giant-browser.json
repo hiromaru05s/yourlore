@@ -1,0 +1,25 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "sha": "6b41dea301495f6ceff69a4b541a9bcfdb063877",
+  "summon": {
+    "file": "assets/modal-BAiq6O4g.js",
+    "name": "aY"
+  },
+  "cardEl": {
+    "file": "assets/modal-BAiq6O4g.js",
+    "name": "z"
+  },
+  "results": [
+    {
+      "id": "MANA_GIANT",
+      "side": "me",
+      "wrap": {
+        "cardId": "MANA_GIANT",
+        "variant": "1",
+        "time": "0"
+      }
+    }
+  ],
+  "errors": [],
+  "boundary": "Deployed production playMonster and cardEl on a real BOT board. Account/API and temporary field cards are fixtures; engine summon conditions are not bypassed in an authenticated match. Normal hand/generated routes were tested locally. No authenticated online match or account mutation."
+}
