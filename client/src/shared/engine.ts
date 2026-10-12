@@ -1682,7 +1682,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       if (!own.field.some((x) => x.uid === tm.uid) || tm.hatch != null) continue;
       const before = curHp(own, tm);
       if (12 >= before) {
-        if ((tm.guts || 0) > 0) { tm.guts = (tm.guts || 1) - 1; tm.dmg = effDef(own, tm) - 1; ctx.log(`  └ ⚡ ${cn(tm)} — 기합! 체력 1로 버팀`, `  └ ⚡ ${cn(tm)} — 気合！体力1で耐えた`); }
+        if ((tm.guts || 0) > 0) { endureWithGuts(g, ctx, own, tm); ctx.log(`  └ ⚡ ${cn(tm)} — 기합! 체력 1로 버팀`, `  └ ⚡ ${cn(tm)} — 気合！体力1で耐えた`); }
         else { ctx.log(`  └ ⚡ ${cn(tm)} 파괴`, `  └ ⚡ ${cn(tm)} 破壊`); ctx.destroyMonster(own, tm); }
       } else { tm.dmg = (tm.dmg || 0) + 12; ctx.log(`  └ ⚡ ${cn(tm)} 에 12 데미지 (체력 ${before - 12})`, `  └ ⚡ ${cn(tm)} に12ダメージ (体力${before - 12})`); }
     }
@@ -2145,8 +2145,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       if (volley >= before2) {
         const over2 = volley - before2;
         if ((att.guts || 0) > 0) {
-          att.guts = (att.guts || 1) - 1;
-          att.dmg = maxHp2 - 1;
+          endureWithGuts(g, ctx, p, att);
           ctx.log(`  └ 반격 합계 ${volley} → ${cn(att)} — <span class="good">기합!</span> 체력 1로 버팀`, `  └ 反撃合計 ${volley} → ${cn(att)} — <span class="good">気合！</span> 体力1で耐えた`);
         } else {
           ctx.log(`  └ 반격 합계 ${volley} → ${cn(att)} 파괴${over2 > 0 ? ` + <span class="dmg">${over2} 관통</span>` : ""}`, `  └ 反撃合計 ${volley} → ${cn(att)} 破壊${over2 > 0 ? ` + <span class="dmg">${over2} 貫通</span>` : ""}`);
@@ -2234,8 +2233,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
         const over = atk - before;
         // 기합(guts): 치명타를 토큰 1개로 버티고 체력 1로 생존 (관통은 그대로)
         if ((target.guts || 0) > 0) {
-          target.guts = (target.guts || 1) - 1;
-          target.dmg = maxHp - 1;
+          endureWithGuts(g, ctx, o, target, attackEvent);
           ctx.log(
             `<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → ${cn(target)} — <span class="good">기합!</span> 체력 1로 버팀 (남은 기합 ${target.guts})`,
             `<span class="t">${p.name}</span> ${cn(att)}(攻${atk}) → ${cn(target)} — <span class="good">気合！</span> 体力1で耐えた (残り気合 ${target.guts})`,
@@ -2340,7 +2338,8 @@ function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: Fiel
   const atk = effAtk(p, att, g);
   const counter = hasPassive(target, "counter") ? Math.ceil(effAtk(p, target, g) / 2) : 0;
   const contactDamage = target.immuneDamageTurn === g.turn ? 0 : target.hatch != null ? 1 : Math.max(0, Math.min(atk, curHp(p,target) - ((target.guts || 0) > 0 ? 1 : 0)));
-  ctx.ev.push({ type: "attack", player: side(g, p), uid: att.uid, targetUid: target.uid, targetPlayer: side(g, p), contactDamage });
+  const attackEvent: Extract<GameEvent,{type:"attack"}> = { type: "attack", player: side(g, p), uid: att.uid, targetUid: target.uid, targetPlayer: side(g, p), contactDamage };
+  ctx.ev.push(attackEvent);
   ctx.ev.push({ type: "hit", uid: target.uid, amount: contactDamage });
   if (target.immuneDamageTurn === g.turn) { /* damage prevention still allows counter */ } else if (target.hatch != null) {
     target.dur = (target.dur ?? 0) - 1;
@@ -2351,7 +2350,7 @@ function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: Fiel
     const before = Math.max(0, maxHp - (target.dmg || 0));
     if (atk <= 0) ctx.log(`<span class="t">${p.name}</span> ${cn(att)}(공0) → 아군 ${cn(target)} <span class="muted">통하지 않음</span>`, `<span class="t">${p.name}</span> ${cn(att)}(攻0) → 味方 ${cn(target)} <span class="muted">通らない</span>`);
     else if (atk >= before) {
-      if ((target.guts || 0) > 0) { target.guts = (target.guts || 1) - 1; target.dmg = maxHp - 1; ctx.log(`<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → 아군 ${cn(target)} — <span class="good">기합!</span> 체력 1로 버팀`, `<span class="t">${p.name}</span> ${cn(att)}(攻${atk}) → 味方 ${cn(target)} — <span class="good">気合！</span> 体力1で耐えた`); }
+      if ((target.guts || 0) > 0) { endureWithGuts(g, ctx, p, target, attackEvent); ctx.log(`<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → 아군 ${cn(target)} — <span class="good">기합!</span> 체력 1로 버팀`, `<span class="t">${p.name}</span> ${cn(att)}(攻${atk}) → 味方 ${cn(target)} — <span class="good">気合！</span> 体力1で耐えた`); }
       else { ctx.log(`<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → <span class="dmg">아군 ${cn(target)}(체력 ${before}) 파괴</span>`, `<span class="t">${p.name}</span> ${cn(att)}(攻${atk}) → <span class="dmg">味方 ${cn(target)}(体力${before}) 破壊</span>`); ctx.destroyMonster(p, target); }
       if (pierce && atk - before > 0 && !g.over) ctx.dealDamage(p, atk - before, "관통", "貫通");
     } else {
@@ -5587,6 +5586,15 @@ function spellDamageRecorded(g: GameState, amount: number): void {
   if (g.spellDamageTurn !== g.turn) { g.spellDamageTurn = g.turn; g.spellDamageAmount = 0; }
   g.spellDamageAmount = (g.spellDamageAmount ?? 0) + amount;
 }
+/** Emit only where survival actually consumes a counter. Costs and grants never enter here. */
+function endureWithGuts(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon, attack?: Extract<GameEvent,{type:'attack'}>): void {
+  const before = m.guts ?? 0;
+  m.guts = before - 1;
+  m.dmg = effDef(owner, m) - 1;
+  const result = {player: side(g, owner), uid: m.uid, before, after: m.guts};
+  if (attack && attack.targetUid === m.uid) attack.guts = result;
+  else ctx.ev.push({type:'gutsSurvive', ...result});
+}
 function monsterDamage(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon, amount: number, combat = false): boolean {
   if (!owner.field.includes(m) || amount <= 0 || m.immuneDamageTurn === g.turn) return false;
   if (spellDepth > 0 && g.players.some(p => p.enchants.some(e => e.card.ench === 'doubleUp'))) amount *= 2;
@@ -5594,7 +5602,7 @@ function monsterDamage(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon, 
   ctx.ev.push({ type: 'hit', uid: m.uid, amount: m.hatch != null ? 1 : Math.max(0, Math.min(amount, curHp(owner,m) - (combat && (m.guts ?? 0) > 0 ? 1 : 0))) });
   if (m.hatch != null) { m.dur = (m.dur ?? 0) - 1; if (m.dur <= 0) ctx.destroyMonster(owner, m); return !owner.field.includes(m); }
   const hp = curHp(owner, m);
-  if (amount >= hp && combat && (m.guts ?? 0) > 0) { m.guts!--; m.dmg = effDef(owner, m) - 1; }
+  if (amount >= hp && combat && (m.guts ?? 0) > 0) { endureWithGuts(g, ctx, owner, m); }
   else { m.dmg = (m.dmg ?? 0) + amount; if (m.dmg >= effDef(owner, m)) ctx.destroyMonster(owner, m); }
   return !owner.field.includes(m);
 }

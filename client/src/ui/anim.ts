@@ -25,7 +25,7 @@ import {flyPersistentIntoSlot} from './persistentFlight';
 import {playSpellFrame,cancelSpellFrames,warmSpellFrame,SPELL_FRAME_RATE} from './spellFrame/runtime';
 import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {isMimic,focusScale,type MimicId} from './mimic/selection';
-import {playMonster,setMonsterSkip} from './monster/runtime';
+import {playMonster,setMonsterSkip,playGutsEndurance} from './monster/runtime';
 import {summonPlacement} from './summon/runtime';
 import {isVerdant} from './verdant/selection';
 import {foldQuestIntoSlot,nativeQuestGhost,warmQuestPact} from './questFold';
@@ -40,7 +40,7 @@ import {waitForDuel} from './duelReadiness';
 // LORE — animation helpers. Triggered by engine events; never
 // touch game state, only the DOM.
 // ============================================================
-import type { CardInst } from "../shared/types";
+import type { CardInst, GutsSurvival } from "../shared/types";
 import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, enchantHasTurnCountdown } from "../shared/cards";
 import { cardEl, cardRulesEl, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
 import { t, getLang, cardName } from "../i18n";
@@ -502,6 +502,10 @@ export async function attackStrike(uid:string,targetUid:string|null,defender:Vie
   sfx('attack');
   await boardMotionScope(signal=>playMonster(source,'attack',{target,signal,exhaust,side:defender==='opp'?1:-1,onImpact:()=>{if(contactDamage>0)sfx(targetUid?'impact':'facehit');onImpact?.();}}));
   if(exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');source.style.filter='grayscale(1) brightness(.57)';}
+}
+/** Starts on the attack contact callback, or on an explicit non-strike survival event. */
+export async function gutsSurvive(result:GutsSurvival,side?:ViewSide):Promise<void>{
+ const card=combatCard(result.uid);if(card&&!fxSkip)await boardMotionScope(signal=>playGutsEndurance(card,result,signal,side==='opp'?-1:side==='me'?1:undefined));
 }
 export async function monsterActivation(uid:string):Promise<void>{
  const n=byUid(uid);if(n&&!fxSkip)await boardMotionScope(signal=>playMonster(n,'trigger',{signal,side:n.closest('#oppRow')?-1:1}));

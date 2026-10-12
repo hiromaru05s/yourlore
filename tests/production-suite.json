@@ -75,6 +75,7 @@
     "tests/tribe-synergy-rules.mjs",
     "tests/tribe-presentation.mjs",
     "tests/golem-guts.mjs",
+    "tests/guts-endurance.mjs",
     "tests/zero-attack-rule.mjs",
     "tests/zero-attack-balance.mjs",
     "tests/verdant-summon.mjs",

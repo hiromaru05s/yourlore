@@ -269,16 +269,6 @@ export abstract class BaseController implements BoardHandlers {
       if (!this.dead) this.view.setPlaying(false);
       if (res.state.over) this.outcomePending = false;
     }
-    // 기합(guts): 전투 파괴를 토큰으로 버틴 순간은 보드만 봐서는 모른다 — 배지로 명시
-    if (!this.dead) {
-      for (const pl of [0, 1] as const) {
-        const before = new Map(prev.players[pl].field.map((m) => [m.uid, m]));
-        for (const m of res.state.players[pl].field) {
-          const b = before.get(m.uid);
-          if (b && (b.guts ?? 0) > (m.guts ?? 0)) A.flashBadge(m.uid, `💢 ${t("fx.guts")}`, "good");
-        }
-      }
-    }
     if (this.dead) return;
     this.afterApply(res);
   }
@@ -332,6 +322,7 @@ export abstract class BaseController implements BoardHandlers {
     const elemental=new Map<string,Playback>();
     const elementalDeaths:Promise<void>[]=[];
     const draws = [0, 0];
+    const gutsHits=new Set<string>();
     const diceDone = new Set<number>(); // dice events already animated (pre-rolled ahead of a result popup)
 
     for (let i = 0; i < events.length; i++) {
@@ -416,15 +407,21 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "attack": {
-          // The shared attack timeline owns launch/contact cues and local target recoil.
-          const defender = sideOf((1 - e.player) as Side);
+          const targetPlayer=e.targetPlayer ?? ((e.targetUid&&prev.players[e.player].field.some(m=>m.uid===e.targetUid)?e.player:1-e.player) as Side);
+          const defender=sideOf(targetPlayer);
           const attacker=this.findCard(prev,e.uid)??this.findCard(res.state,e.uid),exhaust=res.state.players[e.player].field.find(m=>m.uid===e.uid)?.exhausted!==false;
-          if(attacker?.id==='NGA4'){
-            const targetPlayer=e.targetPlayer ?? ((e.targetUid&&prev.players[e.player].field.some(m=>m.uid===e.targetUid)?e.player:1-e.player) as Side);
-            await A.berserkStrike(e.uid,e.targetUid,e.player,this.you,targetPlayer,()=>eventSound.contact(e.targetUid,targetPlayer,e.contactDamage!==0),exhaust,e.contactDamage);
-          }else await A.attackStrike(e.uid,e.targetUid,defender,()=>eventSound.contact(e.targetUid,(1-e.player) as Side,e.contactDamage!==0),exhaust,e.contactDamage);
+          let survival:Promise<void>|undefined;
+          const contact=()=>{eventSound.contact(e.targetUid,targetPlayer,e.contactDamage!==0);if(e.guts&&!survival)survival=A.gutsSurvive(e.guts,sideOf(e.guts.player));};
+          if(attacker?.id==='NGA4')await A.berserkStrike(e.uid,e.targetUid,e.player,this.you,targetPlayer,contact,exhaust,e.contactDamage);
+          else await A.attackStrike(e.uid,e.targetUid,defender,contact,exhaust,e.contactDamage);
+          await survival;
+          // The dedicated material already owns this target's recoil at contact.
+          if(e.guts)gutsHits.add(e.guts.uid);
           break;
         }
+        case "gutsSurvive":
+          await A.gutsSurvive(e,sideOf(e.player));
+          break;
         case "monsterActivate": {
           // Several sources reacting to the same event should be visible together.
           const uids = new Set([e.uid]);
@@ -435,10 +432,14 @@ export abstract class BaseController implements BoardHandlers {
           await Promise.all([...uids].map(uid => A.monsterActivation(uid)));
           break;
         }
-        case "hit":
-          A.monHit(e.uid);
-          if(!elemental.size)await wait(110);
+        case "hit": {
+          const next=events[i+1];
+          if(!gutsHits.delete(e.uid)&&!(next?.type==='gutsSurvive'&&next.uid===e.uid)){
+            A.monHit(e.uid);
+            if(!elemental.size)await wait(110);
+          }
           break;
+        }
         case "dice":
           if (!diceDone.has(i)&&!A.isFxSkipped()) {
             diceDone.add(i);
