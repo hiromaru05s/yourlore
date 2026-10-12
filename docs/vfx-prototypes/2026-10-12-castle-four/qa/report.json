@@ -1,0 +1,127 @@
+{
+  "checks": [
+    {
+      "time": 0,
+      "distinct": 4
+    },
+    {
+      "time": 300,
+      "distinct": 4
+    },
+    {
+      "time": 700,
+      "distinct": 4
+    },
+    {
+      "time": 1100,
+      "distinct": 4
+    },
+    {
+      "time": 1500,
+      "distinct": 4
+    },
+    {
+      "time": 1950,
+      "distinct": 4
+    },
+    {
+      "time": 2300,
+      "distinct": 4
+    },
+    {
+      "time": 2600,
+      "distinct": 1
+    },
+    {
+      "reduced": true
+    },
+    {
+      "performance": {
+        "frames": 240,
+        "median": 16.69999999999891,
+        "p95": 16.700000000000728
+      }
+    },
+    {
+      "width": 390,
+      "scroll": true,
+      "overflow": false
+    },
+    {
+      "width": 818,
+      "scroll": true,
+      "overflow": false
+    },
+    {
+      "side": 0,
+      "v": 0,
+      "firstFrameOwned": true,
+      "restored": true
+    },
+    {
+      "side": 0,
+      "v": 1,
+      "firstFrameOwned": true,
+      "restored": true
+    },
+    {
+      "side": 0,
+      "v": 2,
+      "firstFrameOwned": true,
+      "restored": true
+    },
+    {
+      "side": 0,
+      "v": 3,
+      "firstFrameOwned": true,
+      "restored": true
+    },
+    {
+      "side": 1,
+      "v": 0,
+      "firstFrameOwned": true,
+      "restored": true
+    },
+    {
+      "side": 1,
+      "v": 1,
+      "firstFrameOwned": true,
+      "restored": true
+    },
+    {
+      "side": 1,
+      "v": 2,
+      "firstFrameOwned": true,
+      "restored": true
+    },
+    {
+      "side": 1,
+      "v": 3,
+      "firstFrameOwned": true,
+      "restored": true
+    },
+    {
+      "multi": 3,
+      "cancelRestored": true
+    },
+    {
+      "boardReduced": true
+    },
+    {
+      "repeat": 10,
+      "noResourceGrowth": true
+    },
+    {
+      "boardMobile": true
+    },
+    {
+      "dispose": true
+    }
+  ],
+  "errors": [],
+  "perf": {
+    "frames": 240,
+    "median": 16.69999999999891,
+    "p95": 16.700000000000728
+  }
+}
