@@ -116,7 +116,9 @@ export class BiteRig{
   this.group.scale.setScalar(id==='VAMP_BUTLER'?.95:.9+rank(id)*.02);
   this.studies.forEach((s,i)=>s.group.visible=i===v);const s=this.studies[v];s.group.position.z=0;s.update(p,ms);s.group.traverse(o=>{if(o instanceof T.Mesh)(o.material as T.Material).opacity=1-ease(.80,1,p.retract);});
   this.group.updateWorldMatrix(true,true);this.bounds.setFromObject(s.group);const lift=Math.max(0,h+3-this.bounds.min.z);s.group.position.z=lift/this.group.scale.z;this.group.updateWorldMatrix(true,true);this.bounds.setFromObject(s.group);this.lowerClearance=this.group.visible?this.bounds.min.z:0;
-  for(let i=0;i<4;i++){this.points[i].set((i%2?1:-1)*(v===3?7:37),(i<2?1:-1)*(v===3?34:7));this.gaps.setComponent(i,p.gap);}
+  this.count=v===4?1:4;
+  const contact=v===0?[27,2]:v===3?[7,34]:v===5?[3,42]:[37,7];
+  for(let i=0;i<4;i++){this.points[i].set(v===4?0:(i%2?1:-1)*contact[0],v===4?0:(i<2?1:-1)*contact[1]);this.gaps.setComponent(i,p.gap);}
  }
  dispose(){const gs=new Set<T.BufferGeometry>(),ms=new Set<T.Material>();this.group.traverse(o=>{if(o instanceof T.Mesh){gs.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:[o.material])ms.add(m);}});gs.forEach(g=>g.dispose());ms.forEach(m=>m.dispose());this.group.clear();}
 }

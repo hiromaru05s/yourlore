@@ -199,7 +199,7 @@
   },
   "performance": {
     "method": "synchronous CPU submission, detail 35 frames; not GPU/real-device FPS",
-    "median": 0.19999999995343387,
-    "p95": 0.30000000004656613
+    "median": 0.2999999998137355,
+    "p95": 0.6999999997206032
   }
 }

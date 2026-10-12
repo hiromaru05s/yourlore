@@ -193,13 +193,13 @@
   ],
   "errors": [],
   "viewport": {
-    "width": 1280,
-    "height": 1000,
-    "scrollWidth": 1265
+    "width": 860,
+    "height": 799,
+    "scrollWidth": 845
   },
   "performance": {
     "method": "synchronous CPU submission, detail 35 frames; not GPU/real-device FPS",
     "median": 0.20000000018626451,
-    "p95": 0.2999999998137355
+    "p95": 0.3000000002793968
   }
 }
