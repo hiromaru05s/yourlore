@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';import fs from 'node:fs/promises';
 import {apiFixture} from './helpers/api-fixture.mjs';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
-const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5194',out='docs/characters/2026-10-12-faceless-illustrated/qa';
+const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5194',out=process.env.LORE_TEST_OUT||'docs/characters/2026-10-12-faceless-illustrated/qa';
+await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true}),page=await browser.newPage({viewport:{width:1280,height:900}});
 const errors=[],requests=[],updates=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));
 const user={id:'hooded-menu-fixture',display:'シーカー',email:'fixture@example.test',avatar:'SEEKER_BLUE',wins:3,losses:1,credits:0,sleeve:'default',furniture:'default'};
@@ -15,7 +16,7 @@ await apiFixture(page,r=>{const path=new URL(r.url).pathname;
 try{
  await page.goto(origin);await page.waitForSelector('.lounge-home');await page.waitForSelector('.screen-loader',{state:'detached'});await page.screenshot({path:out+'/home-replaced.png'});
  assert((await page.locator('.lounge-atmosphere').evaluate(e=>getComputedStyle(e).backgroundImage)).includes('/art/lounge/v1/library.webp'));
- await page.evaluate(async()=>{const m=await import('/src/ui/seekerAnimation.ts');m.setSeekerSkip(true);});
+ if(!origin.startsWith('https:'))await page.evaluate(async()=>{const m=await import('/src/ui/seekerAnimation.ts');m.setSeekerSkip(true);});
  await page.locator('.lounge-user').click();await page.waitForSelector('#avaBtn');await page.locator('#avaBtn').click();await page.waitForSelector('.hooded-live canvas[data-ready=true]');
  const hit=await page.evaluate(async()=>{const c=document.querySelector('.hooded-live canvas');document.querySelector('button[data-action=hurt]').click();return c.dataset.action;});assert.equal(hit,'hurt');
  await page.locator('[data-seeker-id=SEEKER_HOODED]').click();await page.locator('[data-save]').click();await page.waitForSelector('.hooded-picker',{state:'detached'});assert.equal(updates.at(-1).avatar,'SEEKER_HOODED');
@@ -25,7 +26,7 @@ try{
  await page.setViewportSize({width:320,height:740});await page.waitForTimeout(250);await page.screenshot({path:out+'/profile-in-lounge-mobile.png'});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
  await page.keyboard.press('Escape');await page.waitForSelector('.hooded-picker',{state:'detached'});
  await page.locator('[data-home]').click();await page.waitForSelector('.lounge-home');
- const {seekerPlaybackCount}=await page.evaluate(async()=>{const m=await import('/src/ui/seekerAnimation.ts');return {seekerPlaybackCount:m.seekerPlaybackCount()};});assert.equal(seekerPlaybackCount,0);
- assert.deepEqual(errors,[]);const retired=requests.filter(r=>/seekers\/(menu-v1|v2)\/.+\.webp|biblion\/seeker-(blue|red)\.png|stage-v1\/stage\./.test(r));assert.deepEqual(retired,[]);
- await fs.writeFile(out+'/menu-tests.json',JSON.stringify({checks:['profile hit preview works after previous duel was skipped/destroyed','actual HOME uses figure-free library','actual profile sends avatar to social/me','saved choice updates lounge header and profile','actual lounge picker at 320px','Escape and navigation dispose preview','no retired art requests'],updates,errors,retired},null,2)+'\n');console.log('PASS actual menu and profile API flow (fixture account)');
+ if(!origin.startsWith('https:')){const {seekerPlaybackCount}=await page.evaluate(async()=>{const m=await import('/src/ui/seekerAnimation.ts');return {seekerPlaybackCount:m.seekerPlaybackCount()};});assert.equal(seekerPlaybackCount,0);}
+ assert.deepEqual(errors,[]);const retired=requests.filter(r=>/seekers\/(menu-v1|v2)\/.+\.webp|biblion\/seeker-(blue|red)(-lossless)?\.(png|webp)|stage-v1\/stage\./.test(r));assert.deepEqual(retired,[]);
+ await fs.writeFile(out+'/menu-tests.json',JSON.stringify({origin,fixtureAccount:true,checks:[origin.startsWith('https:')?'compiled profile hit preview works':'profile hit preview works after previous duel was skipped/destroyed','actual HOME uses figure-free library','actual profile sends avatar to social/me','saved choice updates lounge header and profile','actual lounge picker at 320px','Escape and navigation dispose preview','no retired art requests'],updates,errors,retired},null,2)+'\n');console.log('PASS actual menu and profile API flow (fixture account)');
 }finally{await browser.close();}
