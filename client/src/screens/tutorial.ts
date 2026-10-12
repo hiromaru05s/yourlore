@@ -301,7 +301,7 @@ export function mountTutorial(app:App):Screen {
     wrap.querySelectorAll<HTMLButtonElement>('[data-lesson]').forEach(b=>{b.disabled=false;b.onclick=()=>app.tutorialGame(Number(b.dataset.lesson));});
     for(const s of TUT_STEPS){const li=wrap.querySelector<HTMLElement>(`[data-key="${s.key}"]`)!;if(keys.includes(s.key)){li.classList.add('claimed');li.querySelector('.tut-step-r')!.innerHTML=`${homeIcon('check')} ${loungeText('受取済み','Received','수령 완료')}`;li.querySelector('.lesson-action')!.textContent=loungeText('もう一度 →','Replay →','다시 →');}}
   };
-  const load=async()=>{try{paint(guest?[]:(await api.tutorialStatus()).keys);}catch{if(disposed)return;const status=wrap.querySelector('.academy-earned')!;status.textContent=loungeText('進捗を読み込めませんでした。','Could not load progress.','진행 상황을 불러오지 못했어요.');const retry=document.createElement('button');retry.className='btn btn-ghost';retry.textContent=loungeText('再試行','Retry','재시도');retry.onclick=()=>{retry.remove();void load();};status.append(retry);}};
+  const load=async()=>{try{if(guest)paint([]);else{const status=await api.tutorialStatus();if(disposed)return;if(app.user){app.user.credits=status.credits;document.dispatchEvent(new Event('lore:user'));}paint(status.keys);}}catch{if(disposed)return;const status=wrap.querySelector('.academy-earned')!;status.textContent=loungeText('進捗を読み込めませんでした。','Could not load progress.','진행 상황을 불러오지 못했어요.');const retry=document.createElement('button');retry.className='btn btn-ghost';retry.textContent=loungeText('再試行','Retry','재시도');retry.onclick=()=>{retry.remove();void load();};status.append(retry);}};
   void load();const unsub=onLangChange(()=>app.tutorial());
   return {destroy(){disposed=true;unsub();spirit.destroy();closeNote?.();}};
 }

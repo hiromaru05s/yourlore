@@ -32,7 +32,7 @@ try {
  await p.goto('http://127.0.0.1:5298/academy-qa');await p.waitForSelector('.academy-lessons li');await p.waitForTimeout(600);
  await p.screenshot({path:out+'/academy-desktop.png',fullPage:true});
  assert.equal(await p.locator('.academy-spirit canvas').count(),1,'real WebGL character');
- await p.locator('#ruleNotebook').click();await p.screenshot({path:out+'/notebook-desktop.png'});await p.keyboard.press('Escape');assert.equal(await p.locator('dialog').count(),0);
+ await p.locator('#ruleNotebook').click();assert.equal(await p.locator('.rule-notebook b').first().evaluate(el=>getComputedStyle(el).color),'rgb(37, 59, 73)');await p.screenshot({path:out+'/notebook-desktop.png'});await p.keyboard.press('Escape');assert.equal(await p.locator('dialog').count(),0);
  await p.evaluate(()=>academyQA.welcome());await p.locator('[data-no]').click();assert((await p.locator('.welcome-copy').innerText()).includes('受け取れません'));await p.screenshot({path:out+'/skip-confirmation.png'});await p.locator('[data-back]').click();await p.locator('[data-yes]').click();await p.waitForSelector('.academy');
  await p.locator('#startInter').click();await settle();await p.screenshot({path:out+'/lesson-mana-desktop.png'});
  await drag('STARTER_MANA');await p.waitForSelector('[data-next]');assert.equal(await p.evaluate(()=>academyQA.credits),250);await p.screenshot({path:out+'/lesson-cleared.png'});
