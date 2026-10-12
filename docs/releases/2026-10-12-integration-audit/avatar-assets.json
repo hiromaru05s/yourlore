@@ -1,0 +1,37 @@
+{
+  "at": "2026-10-12T15:23:03.471471+00:00",
+  "origin": "https://test.yourlore.xyz",
+  "source": "647190befca5c99ee5d6ad334955c624180f6256",
+  "passed": 3,
+  "total": 3,
+  "results": [
+    {
+      "file": "art/seekers/faceless-v2/hit.webp",
+      "sha256": "13d0fddc71e0bc985581164efeb07458fa2b75ae2e721c62f244c28903925ef7",
+      "bytes": 42024,
+      "remoteSha256": "13d0fddc71e0bc985581164efeb07458fa2b75ae2e721c62f244c28903925ef7",
+      "matches": true,
+      "curlExit": 0,
+      "error": ""
+    },
+    {
+      "file": "art/seekers/faceless-v2/portrait.webp",
+      "sha256": "1c47aeca9c8d88436147f7195f4b56f67f51c8c17a8909a7bc59a65a8551eb78",
+      "bytes": 44960,
+      "remoteSha256": "1c47aeca9c8d88436147f7195f4b56f67f51c8c17a8909a7bc59a65a8551eb78",
+      "matches": true,
+      "curlExit": 0,
+      "error": ""
+    },
+    {
+      "file": "art/seekers/faceless-v2/poses.webp",
+      "sha256": "adac718d888988901e016081d8a0b35db8062b937f02e97a7f9519e6bf95dbad",
+      "bytes": 88734,
+      "remoteSha256": "adac718d888988901e016081d8a0b35db8062b937f02e97a7f9519e6bf95dbad",
+      "matches": true,
+      "curlExit": 0,
+      "error": ""
+    }
+  ],
+  "boundary": "Exact guarded snapshot HTML/JS/CSS byte parity only; authenticated gameplay and visual quality are separate evidence."
+}
