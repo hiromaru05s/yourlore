@@ -7,18 +7,18 @@ computing gzip size...
 ../docs/vfx-prototypes/2026-10-12-void-four/build/assets/preview-fNy3j-Am.css           4.29 kB │ gzip:   1.60 kB
 ../docs/vfx-prototypes/2026-10-12-void-four/build/assets/renderer-CDpg3JYh.css         22.08 kB │ gzip:   6.13 kB
 ../docs/vfx-prototypes/2026-10-12-void-four/build/assets/board-DCyTUHTx.css           216.67 kB │ gzip:  45.92 kB
-../docs/vfx-prototypes/2026-10-12-void-four/build/assets/void-four-Di16l7lw.js          2.17 kB │ gzip:   1.11 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/void-four-D2lSWyQr.js          2.17 kB │ gzip:   1.11 kB
 ../docs/vfx-prototypes/2026-10-12-void-four/build/assets/renderDensity-Wc154ldc.js      3.55 kB │ gzip:   1.83 kB
 ../docs/vfx-prototypes/2026-10-12-void-four/build/assets/qa-G5zFoJTy.js                 5.23 kB │ gzip:   2.55 kB
-../docs/vfx-prototypes/2026-10-12-void-four/build/assets/preview-D6Nv8xAT.js            7.01 kB │ gzip:   3.58 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/preview-DBj_wUo3.js            7.01 kB │ gzip:   3.58 kB
 ../docs/vfx-prototypes/2026-10-12-void-four/build/assets/ceremonyScene-DGe7P9Oq.js      8.93 kB │ gzip:   3.96 kB
-../docs/vfx-prototypes/2026-10-12-void-four/build/assets/paperDraw-DDwkXgQL.js         10.26 kB │ gzip:   4.64 kB
-../docs/vfx-prototypes/2026-10-12-void-four/build/assets/duelScene-BL_aYI2b.js        103.38 kB │ gzip:  36.19 kB
-../docs/vfx-prototypes/2026-10-12-void-four/build/assets/board-DvbZY-uD.js            190.91 kB │ gzip:  75.34 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/paperDraw-DN0qmykh.js         10.26 kB │ gzip:   4.64 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/duelScene-BxTsoTpa.js        103.38 kB │ gzip:  36.20 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/board-C2vK3XeW.js            191.64 kB │ gzip:  75.57 kB
 ../docs/vfx-prototypes/2026-10-12-void-four/build/assets/renderer-ClTXc7R7.js       1,000.20 kB │ gzip: 321.86 kB
 
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
 - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
-✓ built in 15.00s
+✓ built in 3.10s

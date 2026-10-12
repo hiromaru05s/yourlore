@@ -12,6 +12,7 @@ const mon=(id:string,uid:string)=>({...DB[id],uid,exhausted:false,summonedTurn:0
 function restore(){targets.forEach(n=>n.style.visibility='');hands.forEach(n=>n.style.visibility='');rigs.forEach(r=>{r.ground.el.style.visibility='hidden';r.card.el.style.visibility='hidden';});}
 function selected(){return targets.filter(n=>n.dataset.uid?.startsWith(`void-${side}-`)&&(multi||n.dataset.uid.endsWith('-1')));}
 function setup(){restore();const g=createGame({mode:'bot',seed:91,starting:0,p0:{id:'preview-self',name:'YOU'},p1:{id:'preview-opp',name:'OPPONENT'}}).state;g.turn=3;g.phase='main';g.pending=null;for(const [i,p]of g.players.entries()){p.openingDrawReady=false;p.mana=12;p.maxMana=12;p.hp=30;p.enchants=[];p.quests=[];p.traps=[];p.field=['M4',id,'TDE2'].map((c,j)=>mon(multi?id:c,`void-${i}-${j}`));p.hand=Array.from({length:3},(_,j)=>({...DB[id],uid:`void-hand-${i}-${j}`}));}view.render(g);view.setHandOpen(true);clearMonsterStates(root);targets=Array.from(root.querySelectorAll<HTMLElement>('.zone-mon .card'));hands=Array.from(root.querySelectorAll<HTMLElement>('.hand .card'));}
+function viewportCorrection(target:HTMLElement,base:DOMMatrix){const points=[[0,0],[180,0],[180,270],[0,270]].map(([x,y])=>{const p=base.transformPoint(new DOMPoint(x,y));return{x:p.x/p.w,y:p.y/p.w};});const left=Math.min(...points.map(p=>p.x)),right=Math.max(...points.map(p=>p.x)),top=Math.min(...points.map(p=>p.y)),bottom=Math.max(...points.map(p=>p.y));const actual=target.getBoundingClientRect();return new DOMMatrix().translate(actual.left,actual.top).scale(actual.width/(right-left),actual.height/(bottom-top)).translate(-left,-top);}
 function draw(){
  restore();if(!ready||disposed||document.hidden)return;root.style.filter=dark?'brightness(.66)':'';const chosen=selected();
  if(ms<=0){contact=0;lastMs=0;chosen.forEach(n=>n.style.visibility='hidden');return;}
@@ -20,9 +21,9 @@ function draw(){
  if(ms>=designs[v].duration||reduced)return;
  if(ms<lastMs)contact=0;if(lastMs<designs[v].hit&&ms>=designs[v].hit)contact++;lastMs=ms;
  for(const[n,target]of chosen.entries()){
-  target.style.visibility='hidden';const rig=rigs[n],index=multi?n:requestedHand,hand=sourceHands[index],r=layoutRect(target),m=motion(v,ms),base=projectedPlacement(target,180,270);
+  target.style.visibility='hidden';const rig=rigs[n],index=multi?n:requestedHand,hand=sourceHands[index],r=layoutRect(target),m=motion(v,ms),rawBase=projectedPlacement(target,180,270),correction=viewportCorrection(target,rawBase),base=correction.multiply(rawBase);
   const elevation=Number(target.closest<HTMLElement>('[data-board-plane]')?.dataset.boardPlane)||0;
-  const end=boardMatrix(r.left,r.top,elevation+m.lift*r.width).scale(r.width/180,r.height/270);
+  const end=correction.multiply(boardMatrix(r.left,r.top,elevation+m.lift*r.width).scale(r.width/180,r.height/270));
   const hr=hand?.getBoundingClientRect();const start=hr?new DOMMatrix().translate(hr.left,hr.top).scale(hr.width/180,hr.height/270):end;
   // Opponent card is already public in this fixture; no hidden hand is captured.
   const progress=side===1?1:m.transfer;const a=start.toFloat64Array(),b=end.toFloat64Array();const matrix=new DOMMatrix(Array.from(a,(x,i)=>x+(b[i]-x)*progress));
@@ -31,7 +32,7 @@ function draw(){
  }
 }
 window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent)return;const d=e.data;if(d?.kind==='void-suspend'){ms=0;restore();if(ready)selected().forEach(n=>n.style.visibility='hidden');return;}if(d?.kind!=='void-control')return;const next=CARDS.includes(d.id)?d.id:id;const remake=next!==id||!!d.multi!==multi;id=next;side=d.side===1?1:0;v=Math.min(3,Math.max(0,Number(d.v)||0));ms=Math.min(DURATION,Math.max(0,Number(d.ms)||0));reduced=!!d.reduced;multi=!!d.multi;dark=!!d.dark;if(remake)setup();draw();});
-window.addEventListener('resize',()=>requestAnimationFrame(draw));document.addEventListener('visibilitychange',()=>{if(document.hidden){restore();ms=0;}else draw();});
+window.addEventListener('resize',()=>requestAnimationFrame(draw));root.addEventListener('lore:board-projected',()=>{if(ready)requestAnimationFrame(draw);});document.addEventListener('visibilitychange',()=>{if(document.hidden){restore();ms=0;}else draw();});
 setup();const stop=startBoardLayout();window.addEventListener('pagehide',()=>{restore();disposed=true;rigs.forEach(r=>{r.card.el.remove();r.ground.el.remove();});renderer?.dispose();stop();view.destroy();},{once:true});
-(window as any).voidBoard={get state(){return{ready,id,side,v,ms,multi,requestedHand,hidden:targets.filter(n=>n.style.visibility==='hidden').length,rigs:rigs.filter(r=>r.card.el.style.visibility==='visible').length,contact,resources:renderer?.resources,matrices:rigs.filter(r=>r.card.el.style.visibility==='visible').map(r=>({card:r.card.el.style.transform,ground:r.ground.el.style.transform}))};},restore,draw};
+(window as any).voidBoard={get state(){return{ready,id,side,v,ms,multi,requestedHand,hidden:targets.filter(n=>n.style.visibility==='hidden').length,rigs:rigs.filter(r=>r.card.el.style.visibility==='visible').length,contact,resources:renderer?.resources,alignment:rigs.filter(r=>r.card.el.style.visibility==='visible').map((r,i)=>{const a=r.card.el.getBoundingClientRect(),b=selected()[i].getBoundingClientRect();return{x:a.x-b.x,y:a.y-b.y,width:a.width-b.width,height:a.height-b.height};}),matrices:rigs.filter(r=>r.card.el.style.visibility==='visible').map(r=>({card:r.card.el.style.transform,ground:r.ground.el.style.transform}))};},restore,draw};
 void(async()=>{await waitForDuel(root);for(const id of CARDS)faces.set(id,await surface(id));renderer=new Renderer(faces);ready=true;draw();parent.postMessage({kind:'void-ready'},location.origin);})().catch(e=>parent.postMessage({kind:'void-error',error:String(e)},location.origin));
