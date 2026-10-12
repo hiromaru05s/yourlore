@@ -42,7 +42,7 @@ export class DungeonRenderer {
    this.basePositions.push(new Float32Array(g.attributes.position.array));const m=new T.Mesh(g,cardMat);m.frustumCulled=false;this.skins.push(m);this.root.add(m);
   }
   for(const color of [0x98a8ab,0xa7acac,0x7c9299,0xaaa598,0x929c9c,0xaab2ad])this.stone.push(new T.MeshStandardMaterial({color,map:this.noise,bumpMap:this.noise,bumpScale:.06,emissive:0xffab56,emissiveMap:this.veins,emissiveIntensity:0,roughness:.84,metalness:.06,flatShading:true}));
-  const cavityMat=new T.MeshBasicMaterial({color:0x070d0e,side:T.DoubleSide});this.materials.push(cavityMat);this.cavity=new T.Mesh(new T.CircleGeometry(.92,32),cavityMat);this.cavity.position.z=-.72;this.cavity.scale.y=1.27;this.root.add(this.cavity);
+  const cavityMat=new T.MeshBasicMaterial({color:0x070d0e,side:T.DoubleSide,transparent:true});this.materials.push(cavityMat);this.cavity=new T.Mesh(new T.CircleGeometry(.77,32),cavityMat);this.cavity.position.z=-.72;this.cavity.scale.y=1.27;this.root.add(this.cavity);
   const coreMat=new T.MeshBasicMaterial({color:0xffb657,transparent:true});this.materials.push(coreMat);this.core=new T.Mesh(new T.CircleGeometry(.045,20),coreMat);this.root.add(this.core);
   this.glow=new T.PointLight(0xffad4c,1.5,4,1.5);this.glow.position.set(0,.1,.3);this.root.add(this.glow);
   const shadowMat=new T.MeshBasicMaterial({map:this.shadowTex,transparent:true,depthWrite:false});this.materials.push(shadowMat);this.shadow=new T.Mesh(new T.PlaneGeometry(2.8,3.8),shadowMat);this.shadow.position.z=-.07;this.scene.add(this.shadow);
@@ -72,7 +72,7 @@ export class DungeonRenderer {
  }
  update(v:number,ms:number,reduced=false){
   this.variant=v;const t=clamp(ms/DURATION);const a=reduced?0:pulse(.07,.28,.66,.84,t);const open=reduced?0:pulse(.14,.38,.52,.75,t);
-  this.stone.forEach(m=>m.emissiveIntensity=a*(.5+.3*Math.sin(t*21)));this.matter.visible=a>.0001;this.cavity.visible=a>.001&&v<2;this.core.visible=v===1&&a>.02;this.core.position.set(0,.05,-.38);this.core.scale.setScalar(.5+a*1.5);
+  this.stone.forEach(m=>m.emissiveIntensity=a*(.5+.3*Math.sin(t*21)));this.matter.visible=a>.0001;this.cavity.visible=a>.001&&v<2;(this.cavity.material as T.MeshBasicMaterial).opacity=a;this.cavity.position.z=v===1?-.72:-.23;this.core.visible=v===1&&a>.02;this.core.position.set(0,.05,-.38);this.core.scale.setScalar(.5+a*1.5);
   this.root.position.set(0,v===3?-.53*(1-ease(.24,.72,t)):0,.22*(1-ease(0,.2,t)));
   if(reduced)this.root.position.set(0,0,0);
   this.glow.intensity=a*(1.3+.35*Math.sin(t*22));this.shadow.scale.setScalar(1+a*.1);
