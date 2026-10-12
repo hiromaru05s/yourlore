@@ -74,6 +74,7 @@
     "tests/spell-frame.mjs",
     "tests/mana-destruction.mjs",
     "tests/decay-dissolve.mjs",
+    "tests/decay-counter-grant.mjs",
     "tests/elemental-adoption.mjs",
     "tests/persistent-flight.mjs",
     "tests/tribe-synergy-rules.mjs",

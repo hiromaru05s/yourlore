@@ -1061,7 +1061,9 @@ function applyFieldGlobals(g: GameState, m: FieldMon): void {
 
 /** 부패(decay) 카운터 부여 — 3개 쌓이면 파괴 + 주인에게 3 데미지. */
 function addDecay(g: GameState, ctx: Ctx, owner: PlayerState, tm: FieldMon, n: number): void {
-  tm.decayCnt = (tm.decayCnt || 0) + n;
+  const before = tm.decayCnt || 0;
+  tm.decayCnt = before + n;
+  if (tm.decayCnt > before) ctx.ev.push({ type: "decayCounterGrant", player: side(g, owner), uid: tm.uid, before, after: tm.decayCnt });
   ctx.log(`  └ ${cn(tm)} 카운터 ${tm.decayCnt}/3`, `  └ ${cn(tm)} カウンター ${tm.decayCnt}/3`);
   if (tm.decayCnt >= 3) {
     ctx.log(`  └ <span class="dmg">부패 붕괴!</span> ${cn(tm)} 파괴`, `  └ <span class="dmg">腐敗崩壊！</span> ${cn(tm)} 破壊`);

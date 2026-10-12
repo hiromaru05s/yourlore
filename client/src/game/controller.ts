@@ -362,6 +362,22 @@ export abstract class BaseController implements BoardHandlers {
           if (!A.isFxSkipped()) await Promise.all(extinct.map(event => playStatusExtinction(sideOf(event.player),event.resource,event.before,event.after)));
           break;
         }
+        case 'decayCounterGrant': {
+          const grants=[e],uids=new Set([e.uid]);
+          // Whole-field grants share a start, but never cross a destruction/reaction or a second grant on the same card.
+          let next=i+1;
+          while(next<events.length){
+            if(events[next].type==='log'){next++;continue;}
+            const event=events[next];
+            if(event.type!=='decayCounterGrant'||uids.has(event.uid))break;
+            grants.push(event);uids.add(event.uid);i=next++;
+          }
+          if(!A.isFxSkipped())await Promise.all(grants.map(event=>{
+            const target=ghosts.get(event.uid)?.el??this.openingRoot?.querySelector<HTMLElement>(`.zone-mon .card[data-uid="${CSS.escape(event.uid)}"]`);
+            return target?A.decayCounterGrant(target,event.before,event.after):undefined;
+          }));
+          break;
+        }
         case 'statusGrant': {
           const source=e.sourceUid?(ghosts.get(e.sourceUid)?.el??document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.sourceUid)}"]`)??undefined):statusSource;
           if(!A.isFxSkipped()){
@@ -386,8 +402,10 @@ export abstract class BaseController implements BoardHandlers {
           break;
         case "summon": {
           const card = this.findCard(res.state, e.uid) ?? this.defOf(e.id, e.uid);
-          if (card) {
-            const g = await A.ghostSummon(card, sideOf(e.player), fieldCount[e.player]);
+          const grant=events.slice(i+1).find(ev=>ev.type==='decayCounterGrant'&&ev.uid===e.uid);
+          const shown=card&&grant?.type==='decayCounterGrant'?{...card,decayCnt:grant.before}:card;
+          if (shown) {
+            const g = await A.ghostSummon(shown, sideOf(e.player), fieldCount[e.player]);
             if (g) {ghosts.set(e.uid, { el: g, side: sideOf(e.player) });statusSource=g;}
           }
           fieldCount[e.player]++;
@@ -501,7 +519,7 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "playSpell": {
           const nextSpell=events.findIndex((next,j)=>j>i&&next.type==='playSpell');
-          const grants=events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='statusGrant');
+          const grants=events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='statusGrant'||next.type==='decayCounterGrant');
           const def = DB[e.id] ?? STARTERS[e.id]; // 컬/어튠/보물상자 live in STARTERS
           if (def) {
             // Preserve the new public source UID so reactions during this batch can find its ghost.
