@@ -1,10 +1,10 @@
 export const CARDS=['NT_SEAL5','NT_SEAL3'] as const;
 export const DURATION=3000;
 export const designs=[
- {name:'天律の封圧',en:'THE SOVEREIGN SEAL',note:'浮き上がった大印が重く落ちる。刻印の下で魔力が押し潰され、沈黙だけが残る。',hit:1700},
- {name:'四柱の禁域',en:'THE FOUR WARDENS',note:'四隅の碑柱が起立し、秘文の壁を結ぶ。結界が閉じた瞬間、魔法の流れが止まる。',hit:1840},
- {name:'双環の禁錠',en:'THE ARCANE DEADLOCK',note:'逆転する二重の術式を三本の封鍵が貫く。回転も魔力も、重い噛み合わせで停止する。',hit:1650},
- {name:'黒碑の勅封',en:'THE OBSIDIAN EDICT',note:'カードの刻印から黒い碑文が編まれる。最後の一画が刻まれ、術式そのものを塗り封じる。',hit:1900},
+ {name:'紫紋の圧封',en:'VIOLET COMPRESSION',note:'上下の紫の魔法陣が重なり、立ち上るオーラをカード面へ押し封じる。',hit:1700},
+ {name:'六鎖の禁陣',en:'SIXFOLD BINDING',note:'魔法陣から六本の秘文帯が立ち上がり、紫の魔力を締めて動きを止める。',hit:1840},
+ {name:'双扉の閉呪',en:'THE CLOSING SIGIL',note:'左右に分かれた紫の術式が閉じる。中央の封鎖線が走り、魔力の通り道を断つ。',hit:1650},
+ {name:'紫淵の封刻',en:'THE ARRESTED VORTEX',note:'カード面の紫の渦が急停止し、魔力を吸い込んだ封印の刻印だけが残る。',hit:1900},
 ] as const;
 export const clamp=(n:number)=>Math.max(0,Math.min(1,n));
 export const ease=(a:number,b:number,t:number)=>{const k=clamp((t-a)/(b-a));return k*k*(3-2*k);};
