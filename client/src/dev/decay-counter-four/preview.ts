@@ -1,0 +1,47 @@
+import '../../styles/tokens.css';import '../../styles/base.css';import '../../styles/card.css';import '../../styles/game-overlays.css';import '../../styles/passives.css';import './style.css';
+import {cardEl} from '../../ui/cardView';import {DB} from '../../shared/cards';import {setLang} from '../../i18n';
+import {Material} from './material';import {Layer,paint} from './layer';import {studies,DURATION,defaults} from './catalog';import type {Settings} from './catalog';
+setLang('ja');
+const app=document.getElementById('app')!;
+app.innerHTML=`<main class="decay-lab"><header><div class="eyebrow">LORE / MOTION STUDIES <span>12 OCT 2026</span></div><h1>腐敗が、刻まれる。</h1><p class="intro">腐敗カウンター付与 — 4つの素材、4つの動き。</p></header>
+<div class="toolbar"><div class="view-switch"><button data-mode="compare" aria-pressed="true">4案を比較</button><button data-mode="focus" aria-pressed="false">1案を拡大</button><button data-mode="board" aria-pressed="false">実盤面</button></div><label class="theme"><input id="dark" type="checkbox">暗い背景</label></div>
+<section id="comparison" aria-label="4案のアニメーション比較">${studies.map((s,i)=>`<article data-variant="${i}" class="study"><button class="select-study" data-select="${i}" aria-label="${s.name}を選ぶ"><span class="index">0${i+1}</span><span class="material">${s.material}</span></button><div class="stage"></div><div class="caption"><small>${s.en}</small><h2>${s.name}</h2><p>${s.motion}</p></div></article>`).join('')}</section>
+<section id="board-section" hidden><div class="board-tools"><select id="variant" aria-label="盤面で見る案">${studies.map((s,i)=>`<option value="${i}">0${i+1} ${s.name}</option>`).join('')}</select><select id="side" aria-label="陣営"><option value="1">相手の場</option><option value="0">自分の場</option></select><label><input id="multi" type="checkbox">3体同時</label><span>対象カードをクリックでも再生</span></div><iframe id="board" title="LORE実盤面で腐敗付与を比較" src="/decay-counter-four.html?board"></iframe></section>
+<section class="transport"><div class="playback"><button id="play" class="primary">再生</button><button id="reset">最初に戻す</button><button id="cancel">中断</button><label><input id="loop" type="checkbox" checked>連続再生</label><label>速度 <select id="speed"><option value="1">1×</option><option value="0.5">0.5×</option><option value="0.25">0.25×</option></select></label><output id="time">0.00 / 1.60 s</output></div><input id="seek" aria-label="再生位置" type="range" min="0" max="1600" value="0" step="1"><div class="scenario"><label>付与 <select id="case"><option value="0,1">0 → 1</option><option value="1,1">1 → 2</option><option value="0,2">0 → 2（一度に2個）</option></select></label><label>カード <select id="card"><option value="ELF">エルフ</option><option value="M4">ブレード・ヘア</option><option value="TDE2">魔族の戦士</option></select></label><label><input id="reduced" type="checkbox">モーション低減</label><span id="phase">待機</span></div></section>
+<footer><span>選定用プレビュー / 付与演出</span><span>3個で発動する破壊演出は別の処理です。</span></footer><details class="research"><summary>設計とリサーチ</summary><p>カードそのものはその場に残し、表面で生じた腐敗が既存のカウンター表示へ収束します。白い盤面の実寸を基準に、名前・攻撃力・体力は演出より手前で表示しています。</p><p>①は枝の成長と収縮、②は濡れた膜の合流と排出、③は結晶の成長と亀裂への沈み込み、④は表皮の浮き・折れ・巻き戻り。主形状・材質・運動を別々に制作しています。</p><p>参照：<a href="https://news.blizzard.com/en-us/article/22552047/developer-insights-the-art-behind-the-science" target="_blank" rel="noreferrer">Hearthstone制作解説</a> / <a href="https://www.riotgames.com/en/artedu/visual-effects" target="_blank" rel="noreferrer">Riot VFX教材</a> / <a href="https://gdcvault.com/play/1023943/Visual-Effects-Bootcamp-Artistic-Principles" target="_blank" rel="noreferrer">GDC Artistic Principles of VFX</a> / LORE承認済み「銀紋の流墨」。</p><p>本画面は選定用です。通常対戦への接続、効果音、公開環境への反映は含みません。</p></details><p id="notice" role="status"></p></main>`;
+const q=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
+let material:Material|null=null;try{material=new Material();}catch(e){q('notice').textContent='描画環境により簡略表示です。カウンター更新のみ表示します。'+String(e);}
+let layers:Layer[]=[];let mode='compare',playing=false,raf=0,last=0,hold=0,ready=false,disposed=false,boardReady=false;
+const reducedMedia=matchMedia('(prefers-reduced-motion: reduce)');
+const state:Settings={...defaults,reduced:reducedMedia.matches};q<HTMLInputElement>('reduced').checked=state.reduced;
+function cards(){layers.forEach(l=>l.dispose());layers=[];document.querySelectorAll<HTMLElement>('.stage').forEach((stage,i)=>{stage.replaceChildren();const card={...DB[state.card],uid:`counter-study-${i}`,decayCnt:state.before};const el=cardEl(card,{field:true});el.classList.add('study-card');stage.append(el);layers.push(new Layer(el));});}
+function send(){if(boardReady)q<HTMLIFrameElement>('board').contentWindow?.postMessage({kind:'decay-counter-control',...state,active:mode==='board'},location.origin);}
+function draw(){
+ const visible=mode==='compare'?layers:mode==='focus'?[layers[state.variant]]:[];paint(visible,visible.map(l=>({...state,variant:layers.indexOf(l)})),material);
+ send();q<HTMLInputElement>('seek').value=String(Math.round(state.ms));q('time').textContent=`${(state.ms/1000).toFixed(2)} / 1.60 s`;
+ q('phase').textContent=state.ms===0?'待機':state.ms<180?'侵入':state.ms<650?'侵食':state.ms<1000?'収束':state.ms<1400?'カウンターへ定着':'完了';
+}
+function pause(){playing=false;cancelAnimationFrame(raf);q('play').textContent='再生';}
+function tick(now:number){if(!playing||disposed)return;const delta=now-last;last=now;if(state.ms>=DURATION){hold+=delta;if(!q<HTMLInputElement>('loop').checked){pause();return;}if(hold>=700){state.ms=0;hold=0;}}else state.ms=Math.min(DURATION,state.ms+delta*Number(q<HTMLSelectElement>('speed').value));draw();raf=requestAnimationFrame(tick);}
+function play(restart=false){if(!ready||disposed)return;if(restart||state.ms>=DURATION)state.ms=0;hold=0;playing=true;last=performance.now();cancelAnimationFrame(raf);q('play').textContent='一時停止';raf=requestAnimationFrame(tick);}
+function setMode(next:string){mode=next;app.dataset.mode=mode;q('comparison').hidden=mode==='board';q('board-section').hidden=mode!=='board';document.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));document.querySelectorAll<HTMLElement>('.study').forEach((el,i)=>el.hidden=mode==='focus'&&i!==state.variant);draw();}
+function configure(patch:Partial<Settings>){const oldCard=state.card;Object.assign(state,patch);if(oldCard!==state.card)cards();draw();}
+q('play').onclick=()=>playing?pause():play();q('reset').onclick=()=>{pause();state.ms=0;draw();};
+q('cancel').onclick=()=>{pause();state.ms=DURATION;draw();layers.forEach(l=>l.clear());};
+q<HTMLInputElement>('seek').oninput=e=>{pause();state.ms=Number((e.target as HTMLInputElement).value);draw();};
+document.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach(b=>b.onclick=()=>setMode(b.dataset.mode!));
+document.querySelectorAll<HTMLButtonElement>('[data-select]').forEach(b=>b.onclick=()=>{state.variant=Number(b.dataset.select);q<HTMLSelectElement>('variant').value=String(state.variant);setMode('focus');play(true);});
+q<HTMLSelectElement>('variant').onchange=e=>{configure({variant:Number((e.target as HTMLSelectElement).value)});play(true);};
+q<HTMLSelectElement>('side').onchange=e=>configure({side:Number((e.target as HTMLSelectElement).value)});
+q<HTMLInputElement>('multi').onchange=e=>configure({multi:(e.target as HTMLInputElement).checked});
+q<HTMLInputElement>('dark').onchange=e=>{state.dark=(e.target as HTMLInputElement).checked;app.classList.toggle('dark',state.dark);draw();};
+q<HTMLInputElement>('reduced').onchange=e=>{configure({reduced:(e.target as HTMLInputElement).checked});play(true);};
+q<HTMLSelectElement>('card').onchange=e=>{configure({card:(e.target as HTMLSelectElement).value});play(true);};
+q<HTMLSelectElement>('case').onchange=e=>{const [before,amount]=(e.target as HTMLSelectElement).value.split(',').map(Number);configure({before,amount});play(true);};
+window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==q<HTMLIFrameElement>('board').contentWindow)return;if(e.data?.kind==='decay-counter-ready'){boardReady=true;send();}if(e.data?.kind==='decay-counter-play')play(true);if(e.data?.kind==='decay-counter-error')q('notice').textContent=String(e.data.error);});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){pause();state.ms=DURATION;draw();layers.forEach(l=>l.clear());}});
+const mediaChange=()=>{configure({reduced:reducedMedia.matches});q<HTMLInputElement>('reduced').checked=state.reduced;};reducedMedia.addEventListener('change',mediaChange);
+window.addEventListener('pagehide',()=>{pause();disposed=true;layers.forEach(l=>l.dispose());material?.dispose();reducedMedia.removeEventListener('change',mediaChange);},{once:true});
+window.addEventListener('resize',()=>{if(ready)draw();});
+(window as any).decayCounterLab={get state(){return{...state,mode,ready,playing,boardReady,active:layers.filter(l=>l.canvas.dataset.active==='true').length,counts:layers.map(l=>l.card.dataset.decayCount),fallback:!material};},seek(ms:number){pause();state.ms=Math.max(0,Math.min(DURATION,ms));draw();},configure,mode:setMode,play:()=>play(true),pause,cancel:()=>q('cancel').click()};
+cards();setMode('compare');void document.fonts.ready.then(()=>{ready=true;draw();if(!state.reduced)play();});
