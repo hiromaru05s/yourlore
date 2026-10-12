@@ -1,0 +1,23 @@
+{
+  "sourceCommit": "8bd177387607bfaf6a346072d84842053523fb39",
+  "origin": "https://test.yourlore.xyz",
+  "selectedDesign": "02 白亜の展示室",
+  "worker": "lore-server-staging",
+  "deploymentId": "3867881c-1221-491c-a200-ae6164f26308",
+  "versionId": "463a2110-8bf4-49b2-9fc5-5391f7f6975b",
+  "deployedAt": "2026-10-08T02:46:51.309042Z",
+  "checks": {
+    "typecheck": "client and server passed",
+    "productionSuite": "80/80 passed",
+    "designGuard": "passed",
+    "publicAssetHashes": 52,
+    "browserViewports": [
+      1280,
+      390,
+      320,
+      844
+    ],
+    "gachaPurchaseRequests": 0
+  },
+  "boundary": "Frontend only. Draw, inventory and shard consumption remain unconnected. Browser verification uses actual deployed assets with profile/API fixtures, not an authenticated account."
+}

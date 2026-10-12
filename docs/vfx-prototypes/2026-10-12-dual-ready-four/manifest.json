@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-12",
+  "baseCommit": "8d7cdbe02c056b84fe1c0bb86502a72907c6ede3",
+  "variants": 4,
+  "functionalChecks": 45,
+  "errors": [],
+  "userApproved": false,
+  "runtimeIntegrated": false,
+  "deployed": false,
+  "viewportChecks": [
+    1280,
+    390,
+    320
+  ],
+  "sha256": {
+    "client/src/dev/dual-ready-four/effect.ts": "b56356cc463b243c9f5ec806fb43c143a49a9437361c866cd8f6e2316b7177b9",
+    "client/src/dev/dual-ready-four/qa.ts": "bcf7be8959c7c98fc3ac47c0932678b4b19b72eb46180fb767ff1976215bc7e2",
+    "client/src/dev/dual-ready-four/designs.ts": "412c84bceef3f7868b39ab9462987862d0a52691add65b749887f7d97e8490ef",
+    "client/src/dev/dual-ready-four/style.css": "b5b692eb0b4c301777e39869f3f92681cfb23a24d3c8297b8a2df3a93a3931cc",
+    "client/src/dev/dual-ready-four/board.ts": "b51210cd9a62a33c43d0d3a64d0fffc2cce4e3dd9848712e303a4dd63ea4ac57",
+    "client/src/dev/dual-ready-four/preview.ts": "7e31c578251b00b15d6ce3a4377fad159f76e0d7950b95508cf3ebb62a295380",
+    "client/dual-ready-four.html": "da94806fa3fa9aa47dd02e5a21cb177617ca136fcba56b8a61cc4aa3809ae478",
+    "client/dual-ready-board.html": "bd14097c279d638d55128575c9fad4c3052d5c19b5b1253e2ce781b7191c3897"
+  }
+}

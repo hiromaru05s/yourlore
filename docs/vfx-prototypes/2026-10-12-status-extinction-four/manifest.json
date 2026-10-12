@@ -1,0 +1,18 @@
+{
+  "base": "f5531ec3",
+  "scope": "local selection preview only",
+  "files": {
+    "client/src/dev/status-extinction-four/vite.config.mjs": "9603830445948aef2a4345b4f7b22c952e3222e0e324ffefca757375945af285",
+    "client/src/dev/status-extinction-four/main.ts": "51cd064a131f22a1806058dbf02422b6ba911175208ba4b9b741427bbe298a7f",
+    "client/src/dev/status-extinction-four/research.html": "d348067d7037364a1730c4a0458d032fb83458e6263400d0425ffc4ef5d52b0a",
+    "client/src/dev/status-extinction-four/style.css": "065e810369162a4f552e405befbfaa361af9f86c739a39f4595a0dab0c052d3a",
+    "client/src/dev/status-extinction-four/renderer.ts": "6bad0ecfc7b8ba921207a62dd860a6790010c7d07e50df1c513ff99de3264180",
+    "client/src/dev/status-extinction-four/board.ts": "beab480eb06481e4d24128eebebda4f830b3f9b0f89a6eed0bfeb9745e598a11",
+    "client/src/dev/status-extinction-four/catalog.ts": "1ba2017263d29fb06681dfd06220583c44f3956f2f403e88f66585dd5f23c536",
+    "client/status-extinction-four.html": "aba5da09c713210a4c8ca3e6ca70170bffb6b01f9059efc54259f79f8f636da4",
+    "client/status-extinction-board.html": "6130ea21bf99fe37cf24557496e489ffb58abbc2f450c8e843c144eec37d70b5",
+    "client/public/art/biblion/modular/shield-ui.webp": "72216a220af6a18ee62133b4baae236bfeb046c7236e3d49089f18bdeb6c2b7d",
+    "client/public/art/biblion/modular/dew-ui.webp": "a3153f1c85c711b30e69045e46ac08d3a37c24db4e21b8e85fd1dcd0e3e597aa",
+    "client/public/art/biblion/modular/brand-seal-ui.png": "d4745b3b2918c84b9cc6116e3e3db91d6acf5a2229988a8ea88571b88b6633b9"
+  }
+}

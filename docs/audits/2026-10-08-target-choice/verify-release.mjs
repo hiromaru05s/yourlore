@@ -1,0 +1,11 @@
+import fs from 'node:fs/promises';
+import crypto from 'node:crypto';
+import {execFile} from 'node:child_process';
+import {promisify} from 'node:util';
+const run=promisify(execFile),origin=process.env.LORE_TEST_ORIGIN||'https://test.yourlore.xyz';
+const root='client/dist',out='docs/audits/2026-10-08-target-choice/staging/assets.json';
+const paths=['index.html','cosmetic-studio.html',...(await fs.readdir(root+'/assets')).filter(p=>/\.(js|css)$/.test(p)).map(p=>'assets/'+p)];
+const sha=b=>crypto.createHash('sha256').update(b).digest('hex');const checks=[];let next=0;
+await Promise.all(Array.from({length:3},async()=>{for(;;){const i=next++;if(i>=paths.length)return;const path=paths[i],local=await fs.readFile(root+'/'+path);const {stdout}=await run('curl',['--location','--fail','--silent','--show-error','--retry','2',origin+'/'+path],{encoding:'buffer',maxBuffer:20*1024*1024});const expected=sha(local),actual=sha(stdout);checks.push({path,bytes:local.length,expected,actual,passed:expected===actual});}}));
+checks.sort((a,b)=>a.path.localeCompare(b.path));await fs.mkdir(out.slice(0,out.lastIndexOf('/')),{recursive:true});await fs.writeFile(out,JSON.stringify({origin,at:new Date().toISOString(),passed:checks.every(c=>c.passed),checks},null,2)+'\n');
+if(checks.some(c=>!c.passed))throw Error('Deployed asset mismatch: '+checks.filter(c=>!c.passed).map(c=>c.path).join(', '));console.log('PASS staging asset SHA-256 parity: '+checks.length+'/'+checks.length);

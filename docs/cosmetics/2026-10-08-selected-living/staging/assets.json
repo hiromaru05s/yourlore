@@ -1,0 +1,247 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "at": "2026-10-08T03:13:56.458Z",
+  "count": 48,
+  "assets": [
+    {
+      "path": "/assets/RoomEnvironment-CGH_oTfT.js",
+      "bytes": 2066,
+      "sha256": "7d4ccec1725d2317192bb5974e1d650fe34c46515288496eaa36bf083c5ada5c"
+    },
+    {
+      "path": "/assets/BufferGeometryUtils-Bff8SvXC.js",
+      "bytes": 4857,
+      "sha256": "338d331814c32b924e87db438e91c84b0ff79f074f62af2ce0d0414dfe13cf2a"
+    },
+    {
+      "path": "/assets/audit-Ch-vlPRj.js",
+      "bytes": 5451,
+      "sha256": "53fcc623e3b2b9ac71ac9b74dd522f3e77f45ae7853baa8ac8284d4d4e6a1930"
+    },
+    {
+      "path": "/assets/atelierThemes-DM29k3s-.js",
+      "bytes": 3739,
+      "sha256": "95d1fa7ec28362a982bf7d4430da039a377b73a37609306bf599ca8bc7810c97"
+    },
+    {
+      "path": "/index.html",
+      "bytes": 1528,
+      "sha256": "5d6767df4ca0267f636b785f1b3975357736d62c813c6c5cfba4c9c94349cefa"
+    },
+    {
+      "path": "/assets/board-UDApamK7.css",
+      "bytes": 2167,
+      "sha256": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22"
+    },
+    {
+      "path": "/assets/board-OZEuKOiq.js",
+      "bytes": 5618,
+      "sha256": "735a7d46e42c79d3f3f60f8f495460c26a940ca233e1588959628b1f3cc252af"
+    },
+    {
+      "path": "/assets/baseFurniture-3nJQgiz1.js",
+      "bytes": 3669,
+      "sha256": "81515cb058c53b7543ee683a56c49e5daf2dc20226e3b8a2d9de973646333eb2"
+    },
+    {
+      "path": "/cosmetic-studio.html",
+      "bytes": 534,
+      "sha256": "5089e2270baa4f093aa961172ba17eee636f2f277fd39bc6177dbf7f70f6b623"
+    },
+    {
+      "path": "/assets/catalogRender-DvGmS-ZT.js",
+      "bytes": 2376,
+      "sha256": "38d66c8ad74f783d3e040514c2acabd413a52d54133dbaee53f5b222c0b851b2"
+    },
+    {
+      "path": "/assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "bytes": 125,
+      "sha256": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700"
+    },
+    {
+      "path": "/assets/ceremonyScene-Bq1qL18u.js",
+      "bytes": 8934,
+      "sha256": "914b7d2511adf1ed03178d67e62461c05c7a85a288040b0db390dab51cbe01c3"
+    },
+    {
+      "path": "/assets/cosmeticStudio-DAwJiYG_.js",
+      "bytes": 10984,
+      "sha256": "b284b3110a95eea579fde13ec3755fc6b58bf0d711c2f2d54c257eccb3d017c8"
+    },
+    {
+      "path": "/assets/diceScene-dDJD6sj4.js",
+      "bytes": 8251,
+      "sha256": "404199128c4a4c72ee07618f4b9ebfaf3edb137ec00833a7605096a0b795e5cb"
+    },
+    {
+      "path": "/assets/duelScene-DW9tBzDM.js",
+      "bytes": 66495,
+      "sha256": "10300eeb7e079dbb9343ad9adc73767ef12ab1fd4e57449ad90ae2f4db267bf3"
+    },
+    {
+      "path": "/assets/family-matter-ibcIGq0h.js",
+      "bytes": 4338,
+      "sha256": "361be7cdfb25a7d2fdfb94ee4866c094e7a83697dcafbf42f5b4aab6a035f137"
+    },
+    {
+      "path": "/assets/game-Ps6w5JQl.js",
+      "bytes": 12069,
+      "sha256": "14424bf240c6b4259f08fe08dff211f8d25262dfa6587f155aa6fda555310c74"
+    },
+    {
+      "path": "/assets/inspection-DDQZqQB5.js",
+      "bytes": 25049,
+      "sha256": "7cb277fb38709324dfc6c103105800b57a365ac0ed310a4fc3d8a73ad0999645"
+    },
+    {
+      "path": "/assets/layout-C3eY51DA.css",
+      "bytes": 7867,
+      "sha256": "f217653022333feaa97266f973590ba24c3f7f25e2b8059f8eea00c3039ae067"
+    },
+    {
+      "path": "/assets/libraryAssets-Lo5w8CLo.js",
+      "bytes": 45092,
+      "sha256": "5da60f3f28cd05f9dd46c750fd3ad457228ad0ec4ad85f3f0ee9d9d94afbd4f3"
+    },
+    {
+      "path": "/assets/main-CSJFWGNH.css",
+      "bytes": 171334,
+      "sha256": "b81be8ddec94ba8496576880a3cae46649398416161d1cbf25e310416f5e0e4d"
+    },
+    {
+      "path": "/assets/handGeometry-Bz96hXgQ.js",
+      "bytes": 945,
+      "sha256": "aa57e7f2da29c273b4f2adfb686fe19dbae04ee09c5e9ce37b735341357b6d01"
+    },
+    {
+      "path": "/assets/layout-DbmYCbTT.js",
+      "bytes": 305961,
+      "sha256": "42da348fa28d0895d0b47e730712763b6963721d7f973982c6b5843e924d85f8"
+    },
+    {
+      "path": "/assets/main-Cb-neBa7.js",
+      "bytes": 146598,
+      "sha256": "1216e8d11b1e21337a65e4a8938b688a8b2e508273667c18f2d03f4c93e5c342"
+    },
+    {
+      "path": "/assets/materials-C-IHIJ7G.js",
+      "bytes": 9061,
+      "sha256": "09490956edd48cff3563b7ec475e30feb09b362da96b44f7a9fbedfd372e88b0"
+    },
+    {
+      "path": "/assets/master-tongues-BRUAzmu6.js",
+      "bytes": 4012,
+      "sha256": "bbc08811014a6eabca90543cc3d29df06d2fe6142b71a749b33158298ddb9efe"
+    },
+    {
+      "path": "/assets/modal-DhcN3-Kr.css",
+      "bytes": 234202,
+      "sha256": "65ee4b2cab3c77e113fe6fe245ff98b7584d4dea0eb82a8171ca0b925d9c9d15"
+    },
+    {
+      "path": "/assets/ornaments-COWxnJrv.js",
+      "bytes": 3924,
+      "sha256": "e9980f3c770dadab1eb9d1481b7e775c829add3c01ccd56d352f11e7f8075f24"
+    },
+    {
+      "path": "/assets/paperDraw-7HpzyDOG.js",
+      "bytes": 9714,
+      "sha256": "557ff1dd28f5932a6acfb6e21d446cc3bddccae920810f889d1ef813a13e585c"
+    },
+    {
+      "path": "/assets/modal-BkaYFBDI.js",
+      "bytes": 1205474,
+      "sha256": "12709aab4e87aeec180785266ecead5712192e7380f0fb4e139eec002ff42806"
+    },
+    {
+      "path": "/assets/pileModels-BFky8Rny.js",
+      "bytes": 2242,
+      "sha256": "ecc03a1fe706eef6eb2e9d1818a22f0b12dcab3363748bd8db8380fe4823172d"
+    },
+    {
+      "path": "/assets/persistentFlightRenderer-CMtzxi_0.js",
+      "bytes": 3497,
+      "sha256": "ff3a0df42530ba5effc6d293e11c9893f2b7f47ebc532666d247aff584d7f408"
+    },
+    {
+      "path": "/assets/renderDensity-eCqR3GeM.js",
+      "bytes": 545,
+      "sha256": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699"
+    },
+    {
+      "path": "/assets/renderer-DgA_RYpn.js",
+      "bytes": 9153,
+      "sha256": "560c05ac946938e3f587e71e8e2c0e8ce7c4f96587e604341ba6ad0fcf2189c8"
+    },
+    {
+      "path": "/assets/renderer-DvSKQ3uK.js",
+      "bytes": 11475,
+      "sha256": "88a70007bd112e31c2e1f2947f611c52a473e719a94089ce12de961d10144036"
+    },
+    {
+      "path": "/assets/renderer-ikIcFPrT.js",
+      "bytes": 20188,
+      "sha256": "c1547f213e164eb35d163670e8a8b173e0559e358d99673e450c6970848c3d5a"
+    },
+    {
+      "path": "/assets/riftScene-Bgak1Qn9.js",
+      "bytes": 27430,
+      "sha256": "560fba954a91195dbacac06df6cef4e0b2fad57790d3f99547b5dbf62463941a"
+    },
+    {
+      "path": "/assets/royal-matter-CFOxWjKp.js",
+      "bytes": 6324,
+      "sha256": "d5f5426fb6fefc4a750960d0aaf8b16c85a817479f883b447386316c330b7151"
+    },
+    {
+      "path": "/assets/runtime-4XBXhj-r.js",
+      "bytes": 10206,
+      "sha256": "1ade6835b7e32a4ed6f17075bbe373c6cdfbbc55b2f4d6db00aaf5ea775a1d25"
+    },
+    {
+      "path": "/assets/runtime-Ch9eydv_.css",
+      "bytes": 214,
+      "sha256": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c"
+    },
+    {
+      "path": "/assets/runtime-CUaS_fGw.js",
+      "bytes": 7085,
+      "sha256": "d5e2b815a24534a72abc99ce8aaae2b2480f8ed1004ccf2df90cc4a7e51f0c4a"
+    },
+    {
+      "path": "/assets/runtime-D0WAag1f.js",
+      "bytes": 19635,
+      "sha256": "44a48d8566f9f81f9bad6ade1767179d785120f8ed52c7c108767f1e7ed11fdd"
+    },
+    {
+      "path": "/assets/sleeve-Bn9UBi0H.js",
+      "bytes": 6640,
+      "sha256": "b017ac0549fd0cb4855a6af9f31db9d5295db2daefaabb5f1d2039403774c877"
+    },
+    {
+      "path": "/assets/studio-CmgKc6nL.css",
+      "bytes": 8771,
+      "sha256": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e"
+    },
+    {
+      "path": "/assets/scene-BXcIH6Lg.js",
+      "bytes": 6342,
+      "sha256": "48c086b41ac03af9dd89f90e118de92fbf04e7277ffeb3fa9877e37eef44e0a8"
+    },
+    {
+      "path": "/assets/three.module-Diy7Srxs.js",
+      "bytes": 618031,
+      "sha256": "3a2b54326ae47b3988617956b6d9ca104e71020e2442d883f7d868bb7068dfe3"
+    },
+    {
+      "path": "/cosmetics/living-v1/pressed-fern/art.png",
+      "bytes": 3734316,
+      "sha256": "20c7cdbfd716e49bcff76741afd7c9160b19f57703bdac562e12d88e688d888c"
+    },
+    {
+      "path": "/cosmetics/living-v1/azure-plume/art.png",
+      "bytes": 3198358,
+      "sha256": "83f48e73204ffc8415d04c0ea790ff8fc7c917473c93712f109fd6d51258b59e"
+    }
+  ]
+}

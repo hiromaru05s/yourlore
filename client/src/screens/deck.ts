@@ -109,8 +109,8 @@ export function mountDeck(app: App): Screen {
 
     countEl.textContent = `${deck().length + 1} / ${DECK_SIZE + 1}`;
     q('deckHint').textContent = pending
-      ? loungeText(`${cardName(inst(pending,''))}と入れ替えるカードを選択`, `Choose a card to replace with ${cardName(inst(pending,''))}`, `${cardName(inst(pending,''))}(으)로 교체할 카드를 선택`)
-      : loungeText('候補をタップで追加 · 手札をタップで外す','Tap a candidate to add · Tap a hand card to remove','후보를 눌러 추가 · 손패를 눌러 제거');
+      ? loungeText(`${cardName(inst(pending,''))}と入れ替えるカードの「⇄」を押す`, `Press ⇄ on a card to replace it with ${cardName(inst(pending,''))}`, `${cardName(inst(pending,''))}(으)로 교체할 카드의 ⇄ 누르기`)
+      : loungeText('＋で追加 · −で外す · カードをタップで拡大','＋ to add · − to remove · Tap a card to enlarge','＋로 추가 · −로 제거 · 카드를 눌러 확대');
     (q('deckUndo') as HTMLButtonElement).disabled = saving || (!undo && !pending);
     curEl.classList.toggle('is-replacing', !!pending);
     // ---- 현재 덱: 어튠(고정) + 8장 ----
@@ -121,12 +121,12 @@ export function mountDeck(app: App): Screen {
       const row=document.createElement('div');row.className='deck-entry'+(fixed?' is-fixed':'');
       row.style.setProperty('--hand-turn',`${(index-4)*2}deg`);row.style.setProperty('--hand-lift',`${Math.abs(index-4)*2}px`);
       row.style.setProperty('--hand-layer',String(index+1));row.append(card);
-      const activate=()=>{if(saving)return;if(fixed){zoomCard(c);return;}undo=[...deck()];if(pending){deck()[index-1]=pending;pending=null;}else deck().splice(index-1,1);render();};
+      const activate=()=>{if(saving)return;if(fixed)return;undo=[...deck()];if(pending){deck()[index-1]=pending;pending=null;}else deck().splice(index-1,1);render();};
       card.tabIndex=0;card.setAttribute('role','button');
-      card.setAttribute('aria-label',`${cardName(c)} · ${fixed?t('deck.fixed'):pending?loungeText('入れ替え','Replace','교체'):t('deck.remove')}`);
-      card.onclick=activate;card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();activate();}};
+      card.setAttribute('aria-label',`${cardName(c)} · ${loungeText('拡大表示','Enlarge card','카드 확대')}`);
+      card.onclick=()=>zoomCard(c);card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();zoomCard(c);}};
       if(fixed){const lock=document.createElement('span');lock.className='deck-attune-lock';lock.innerHTML=`<span class="deck-lock-glyph" aria-hidden="true"></span><span>${t('deck.fixed')}</span>`;row.append(lock);}
-      else {const detail=document.createElement('button');detail.className='deck-hand-detail';detail.textContent=loungeText('詳細','Details','상세');detail.setAttribute('aria-label',`${cardName(c)} · ${detail.textContent}`);detail.onclick=()=>zoomCard(c);row.append(detail);}
+      else {const action=document.createElement('button');action.className='deck-hand-action';action.textContent=pending?'⇄':'−';action.disabled=saving;action.setAttribute('aria-label',`${cardName(c)} · ${pending?loungeText('入れ替え','Replace','교체'):t('deck.remove')}`);action.onclick=activate;row.append(action);}
       curEl.append(row);
     };
     entry(attune,inst('STARTER_MANA','fx_mana'),0,true);
@@ -160,11 +160,12 @@ export function mountDeck(app: App): Screen {
       cnt.textContent = `${n}/${DECK_MAX_COPIES}`;
       el.appendChild(cnt);
       const choose=()=>{if(saving||full)return;if(deck().length<DECK_SIZE){undo=[...deck()];deck().push(id);pending=null;}else pending=pending===id?null:id;render();};
-      el.tabIndex=full?-1:0;el.setAttribute('role','button');el.setAttribute('aria-disabled',String(full));el.setAttribute('aria-label',`${cardName(c)} · ${loungeText('追加・入れ替え','Add or replace','추가 또는 교체')}`);
-      el.classList.toggle('is-candidate',pending===id);el.onclick=choose;el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();}};
-      const add=document.createElement('span');add.className='deck-card-action';add.textContent='+';add.setAttribute('aria-hidden','true');el.append(add);
-      const tile=document.createElement('div');tile.className='deck-pool-tile';tile.append(el);
-      const detail=document.createElement('button');detail.className='deck-pool-detail';detail.textContent=loungeText('詳細','Details','상세');detail.setAttribute('aria-label',`${cardName(c)} · ${detail.textContent}`);detail.onclick=()=>zoomCard(c);tile.append(detail);poolEl.append(tile);
+      el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label',`${cardName(c)} · ${loungeText('拡大表示','Enlarge card','카드 확대')}`);
+      el.classList.toggle('is-candidate',pending===id);el.onclick=()=>zoomCard(c);el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();zoomCard(c);}};
+      const add=document.createElement('button');add.className='deck-card-action';add.textContent='+';add.disabled=saving||full;
+      add.setAttribute('aria-label',`${cardName(c)} · ${loungeText('追加・入れ替え','Add or replace','추가 또는 교체')}`);add.setAttribute('aria-pressed',String(pending===id));add.onclick=choose;
+      const tile=document.createElement('div');tile.className='deck-pool-tile';
+      const face=document.createElement('div');face.className='deck-pool-face';face.append(el,add);tile.append(face);poolEl.append(tile);
     }
     if(!poolEl.children.length)poolEl.textContent=t('cards.empty');
     // ---- 마켓 알림이 픽커 ----

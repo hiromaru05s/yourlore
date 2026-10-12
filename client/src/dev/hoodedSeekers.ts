@@ -13,6 +13,7 @@ if(import.meta.env.DEV){
   <section id="profilePanel" hidden><div class="embed-intro"><p>プロフィールの「キャラクター」から設定できます。現在は1体です。</p><span>このプレビューの保存先は端末内です。</span></div><iframe title="プロフィール設定プレビュー" data-src="/profile-lab.html"></iframe></section>
   <footer>PAINTED PORTRAIT · ONE IMPACT POSE<span>LORE — BIBLION</span></footer>`;
   const canvas=seekerPortrait();app.querySelector('#portraitStage')!.append(canvas);
+  app.querySelector('.review-note')!.textContent='通常時は静止。被弾時だけ枠ごと揺れ、被弾の1コマを表示して通常の絵へ戻ります。';
   const observer=new MutationObserver(()=>{app.querySelector('#poseStatus')!.textContent=canvas.dataset.action==='hurt'?'被弾':'通常';});
   observer.observe(canvas,{attributes:true,attributeFilter:['data-action']});
   app.querySelector<HTMLButtonElement>('#hitPreview')!.onclick=()=>playSeeker(canvas,'hurt');

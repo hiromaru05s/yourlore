@@ -46,8 +46,8 @@ async function mount(){
     p.maxMana=8;p.mana=6;
   }view.render(state);};
   reset();const stop=startBoardLayout();
-  const panel=document.createElement('section');panel.className='return-lab';panel.setAttribute('aria-label','シェルフ帰還アニメーションの比較');
-  panel.innerHTML=`<header><div><span class="return-eyebrow">${portal?'LORE / BIBLION RETURN':connected?'LORE / MATERIAL CONTINUITY':rich?'LORE / TWIN GATE ATELIER':'LORE / MOTION STUDIES'}</span><h1>${portal?'消えて、デッキの左へ。5つの帰還':connected?'カードからつながる、5つの帰還':rich?'双環ゲート — 5つの深化':'シェルフ → デッキ'}</h1></div><span class="return-badge">LOCAL PREVIEW · 5 VARIATIONS</span></header>
+  const panel=document.createElement('section');panel.className='return-lab';panel.setAttribute('aria-label','墓地帰還アニメーションの比較');
+  panel.innerHTML=`<header><div><span class="return-eyebrow">${portal?'LORE / BIBLION RETURN':connected?'LORE / MATERIAL CONTINUITY':rich?'LORE / TWIN GATE ATELIER':'LORE / MOTION STUDIES'}</span><h1>${portal?'消えて、デッキの左へ。5つの帰還':connected?'カードからつながる、5つの帰還':rich?'双環ゲート — 5つの深化':'墓地 → デッキ'}</h1></div><span class="return-badge">LOCAL PREVIEW · 5 VARIATIONS</span></header>
     <nav class="return-studies" aria-label="演出パターン">${studies.map((s,i)=>`<button data-variant="${s.id}" style="--accent:${s.color}"><span>0${i+1} / ${s.en}</span><strong>${s.name}</strong></button>`).join('')}</nav>
     <p class="return-description"></p>
     <div class="return-controls"><button data-action="play" class="return-primary">▶ 再生</button><button data-action="pause">一時停止</button><button data-action="all">5案を連続再生</button><button data-action="original">${portal?'前回の1番と比較':connected?'前回の装飾案と比較':rich?'前回の2番と比較':'現行と比較'}</button>

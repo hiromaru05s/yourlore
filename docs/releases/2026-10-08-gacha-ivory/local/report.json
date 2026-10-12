@@ -1,0 +1,66 @@
+{
+  "origin": "http://127.0.0.1:5399",
+  "checkedAt": "2026-10-08T02:44:47.467Z",
+  "checks": [
+    {
+      "width": 1280,
+      "height": 900,
+      "variant": 2,
+      "overflow": 0,
+      "shardsUnchanged": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "variant": 2,
+      "overflow": 0,
+      "shardsUnchanged": true
+    },
+    {
+      "width": 320,
+      "height": 844,
+      "variant": 2,
+      "overflow": 0,
+      "shardsUnchanged": true
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "variant": 2,
+      "overflow": 0,
+      "shardsUnchanged": true
+    }
+  ],
+  "errors": [],
+  "apiCalls": [
+    {
+      "path": "/api/geo",
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/api/rank/me",
+      "method": "GET"
+    },
+    {
+      "path": "/api/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/api/presence",
+      "method": "POST"
+    },
+    {
+      "path": "/api/social/profile",
+      "method": "GET"
+    },
+    {
+      "path": "/api/presence",
+      "method": "POST"
+    }
+  ],
+  "boundary": "Actual application route and assets; API/profile fixture. No authenticated account, purchase, draw, or balance mutation."
+}

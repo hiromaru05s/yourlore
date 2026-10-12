@@ -1,3 +1,4 @@
+import { npcPortrait } from "../shared/botNpcs";
 import { homeIcon } from "./homeIcons";
 import { artUrl } from "./cardArt";
 import {seekerPoster, SEEKER_ID} from './seekerMotion';
@@ -16,7 +17,8 @@ export function avatarHtml(avatar: string | null | undefined, display: string, s
   if (!avatar || avatar === SEEKER_ID || avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE") {
     return `<span class="avatar avatar-seeker" style="--avs:${size}px"><img class="hooded-seeker" src="${seekerPoster()}" alt="${seekerName()}" width="512" height="512"></span>`;
   }
-  const img = avatar && /^[A-Za-z0-9_]+$/.test(avatar)
+  const portrait = npcPortrait(avatar);
+  const img = portrait ? `<img src="${portrait}" alt="" onerror="this.remove()">` : avatar && /^[A-Za-z0-9_]+$/.test(avatar)
     ? `<img src="${artUrl.sm(avatar)}" alt="" loading="lazy" onerror="this.remove()">`
     : "";
   return `<span class="avatar" style="--avs:${size}px">${img}<span class="avatar-fb">${initial}</span></span>`;

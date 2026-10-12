@@ -1,0 +1,34 @@
+{
+  "origin": "http://127.0.0.1:5378",
+  "checks": [
+    "Both selected sleeves/furniture animate independently; opponent remains unchanged",
+    "Independent opposing equipment, deck/grave counts 0/1/8/40 and repeated rebuilds",
+    "Reduced motion freezes the equipped surfaces and shape",
+    "320px and 390px board without horizontal overflow",
+    "Four shop claims, all four in-shop runtime previews, owned state after reload (API fixture)"
+  ],
+  "motion": [
+    {
+      "id": "azure-plume",
+      "kind": "sleeve",
+      "changed": 5740
+    },
+    {
+      "id": "azure-plume",
+      "kind": "furniture",
+      "changed": 1322
+    },
+    {
+      "id": "pressed-fern",
+      "kind": "sleeve",
+      "changed": 3491
+    },
+    {
+      "id": "pressed-fern",
+      "kind": "furniture",
+      "changed": 1032
+    }
+  ],
+  "errors": [],
+  "boundary": "Production renderer and real assets; fixture account and board state. Not an authenticated two-player match."
+}
