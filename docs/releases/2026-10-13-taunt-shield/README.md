@@ -16,3 +16,13 @@ Exact UID lookup supports duplicate cards and granted passives. The native card 
 - Deployment source/version and SHA-256 checks cover served assets. This is separate from authenticated online match verification; no authenticated online match claim is made here.
 
 Visual selection was provided by the user. Automated success does not independently establish visual approval. Production is outside this release.
+
+## Staging release — 2026-10-13 KST
+
+- Deployed source: `647190befca5c99ee5d6ad334955c624180f6256`.
+- Worker version: `f971c9aa-c06b-4166-86b0-65c1506ad939`, 100% staging traffic.
+- `deploy-guard.mjs staging`: clean committed snapshot, Wrangler 4.144.0, client/server typechecks, 105/105 production tests, design guard and production build passed.
+- The first validated source `145a643e` was superseded by a documentation-only merge during checks; the guard stopped before deploying. The latest source was validated again and deployed successfully.
+- 62 served HTML/JS/CSS files match the exact guarded build by SHA-256 (`staging-assets.json`). The immediate post-deploy request briefly returned 404 during propagation; the completed retry matched every file.
+- Public staging login screen loads `main-CQx53XL8.js`; browser errors: none. No authenticated online match was run.
+- Local BaseController sequence: 7/7 pass, including both sides, successes/failures, duplicate card IDs, granted taunt and chained evasion. Native cards remain visible; stop leaves zero taunt overlays/captures. Desktop and 390px viewport screenshots recorded.
