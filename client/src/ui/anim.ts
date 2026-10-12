@@ -1003,6 +1003,15 @@ export async function maxHpSurge(side: ViewSide, amount: number): Promise<void> 
   bar.classList.remove("fx-hp-bloom");
 }
 
+/** Selected 01 changes the native card surface, then commits its counter plaque. */
+export async function decayCounterGrant(node:HTMLElement,before:number,after:number):Promise<void>{
+  if(fxSkip)return;
+  await boardMotionScope(async signal=>{
+    const {playDecayCounter}=await import('./decayCounter/runtime');
+    return playDecayCounter(node,before,after,{signal});
+  },6000);
+}
+
 /** Small "-N" feedback on the mana pips when max mana DROPS. */
 export function manaDrop(side: ViewSide, amount: number): void {
   const bar = document.getElementById("hpbar-" + side)?.closest(".pcluster") as HTMLElement | null;
