@@ -23,4 +23,15 @@
 
 ## 公開
 
-最新のmainと稼働中Workerの祖先関係を確認し、既存の `scripts/deploy-guard.mjs staging` から全回帰テスト・型チェック・ビルドを経て公開する。公開SHA、Worker version、配信ファイル照合は公開後の記録に追記する。
+最新のmainと先行セッションの公開を取り込み、既存の `scripts/deploy-guard.mjs staging` で公開完了。他セッションの未コミット変更には触れていない。
+
+- 公開先: https://test.yourlore.xyz
+- 公開SHA: `2bbc7443dba992618411a6905ad0584a552de7dd`
+- Worker version: `59accba6-2b88-4024-982f-6792ceb7a58f`（100%）
+- 公開日時: 2026-10-08 03:21:48 UTC
+- ガード内の回帰テスト: **82/82成功**。型チェック・ビルドも成功。詳細は `guard-suite.json`。
+- 配信HTML・JavaScript・CSS: **46/46 SHA-256一致**。詳細は `staging-assets.json`。
+- 公開サイトのログイン画面起動をブラウザーで確認し、コンソールエラー0件。詳細は `staging-browser.json`。
+- 最終レイアウトは三言語×3画面幅の9条件すべてで、移動先の可視性・閉じる操作・フォーカス・本文への復帰・横はみ出しなしを確認。詳細は `final-layout.json`。
+
+公開状態は `release.json` と `staging-worker.json` に記録。ローカルUIの確認、配信ファイル一致、公開ログイン画面の起動を確認した範囲であり、認証済みステージング対戦の確認は含まない。
