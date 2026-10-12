@@ -1,6 +1,6 @@
 # 回避の一拍 — 700msの4案
 
-2026-10-12。ローカル選定用。`client/evade-four.html`、`client/src/dev/evade-four/`。共有チェックアウトの進行中の変更を避け、`codex/evade-four` の専用worktreeで制作した。
+2026-10-12。4案の比較記録。後続のユーザー指示で03「水鏡の偏位」を選定。本体への採用は[公開記録](../../releases/2026-10-12-evade-refraction/README.md)を参照。`client/evade-four.html`、`client/src/dev/evade-four/`。共有チェックアウトの進行中の変更を避け、`codex/evade-four` の専用worktreeで制作した。
 
 ```sh
 node node_modules/vite/bin/vite.js --config client/src/dev/evade-four/vite.config.mjs
@@ -40,7 +40,7 @@ node node_modules/vite/bin/vite.js --config client/src/dev/evade-four/vite.confi
 
 ## 回避と攻撃の接続条件
 
-現行`client/src/shared/engine.ts`の攻撃処理では、回避対象のダイスを振り、4以上なら攻撃回数を消費してreturnする。成功時に`attack`イベントを追加する経路は通らない。`client/src/game/controller.ts`は`dice`と`attack`を個別に再生する。
+現行`client/src/shared/engine.ts`の攻撃処理では、回避対象のダイスを振り、4以上なら攻撃回数を消費してreturnする。後続の本体接続調査で、`attack`イベントは判定前に宣言済みであると確認した。このため採用版では、対応する回避ダイスと700ms演出を先に再生し、成功なら宣言された攻撃の物理演出を省略する。`client/src/game/controller.ts`は`dice`と`attack`を個別に再生する。
 
 比較フィクスチャはその意味に合わせ、成功は700msの回避→攻撃無効。失敗は弱い予備動作→700msから既存`attackPlan`/`attackPose`/`drawAttackVisual`の通常攻撃を再生する。ダイス値は5/2の固定例であり、サーバーの判定ではない。実盤面の外観には`GameView`と`projectedPlacement`を利用。
 

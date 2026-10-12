@@ -1,3 +1,4 @@
+import {evasionRollIndex} from '../ui/evade/timing';
 import {isChosenVictory,playChosenVictory,warmChosenVictory} from '../ui/chosenVictory/runtime';
 import { playIntent, needsCastReview, targetOwner } from '../shared/playIntent';
 import {playDewGrant,warmDewGrant} from '../ui/dew/runtime';
@@ -333,6 +334,16 @@ export abstract class BaseController implements BoardHandlers {
     const elementalDeaths:Promise<void>[]=[];
     const draws = [0, 0];
     const diceDone = new Set<number>(); // dice events already animated (pre-rolled ahead of a result popup)
+    const playDiceAt=async(index:number)=>{
+      const roll=events[index];if(roll?.type!=='dice'||diceDone.has(index)||A.isFxSkipped()||this.dead)return;
+      diceDone.add(index);
+      const evade=roll.evasion?A.prepareEvasion(roll.evasion.targetUid,sideOf(roll.player),!!roll.success):undefined;
+      try{
+        await diceRollAnim(roll.rolls,{need:roll.need,success:roll.success,mine:roll.player===this.you,casino:roll.variant==='casino',source:roll.source,viewer:this.you});
+        if(!A.isFxSkipped()&&!this.dead)await evade?.play();
+      }finally{evade?.cancel();}
+    };
+
 
     for (let i = 0; i < events.length; i++) {
       if (this.dead) return;
@@ -416,6 +427,12 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "attack": {
+          const evadeIndex=evasionRollIndex(events,i);
+          if(evadeIndex>=0){
+            await playDiceAt(evadeIndex);
+            const roll=events[evadeIndex];
+            if(roll.type==='dice'&&roll.success)break;
+          }
           // The shared attack timeline owns launch/contact cues and local target recoil.
           const defender = sideOf((1 - e.player) as Side);
           const attacker=this.findCard(prev,e.uid)??this.findCard(res.state,e.uid),exhaust=res.state.players[e.player].field.find(m=>m.uid===e.uid)?.exhausted!==false;
@@ -440,10 +457,7 @@ export abstract class BaseController implements BoardHandlers {
           if(!elemental.size)await wait(110);
           break;
         case "dice":
-          if (!diceDone.has(i)&&!A.isFxSkipped()) {
-            diceDone.add(i);
-            await diceRollAnim(e.rolls, { need: e.need, success: e.success, mine: e.player === this.you, casino: e.variant === "casino", source: e.source, viewer: this.you });
-          }
+          await playDiceAt(i);
           break;
         case "damage": {
           hpNow[e.player] -= e.amount;
@@ -497,7 +511,7 @@ export abstract class BaseController implements BoardHandlers {
             for (let j = i + 1; j < events.length; j++) {
               const e2 = events[j];
               if (e2.type === "playSpell" || e2.type === "trapSet" || e2.type === "trapReveal" || e2.type === "buy" || e2.type === "turnHeader" || e2.type === "win") break;
-              if (e2.type === "dice" && !diceDone.has(j)&&!A.isFxSkipped()) {
+              if (e2.type === "dice" && !e2.evasion && !diceDone.has(j)&&!A.isFxSkipped()) {
                 diceDone.add(j);
                 await diceRollAnim(e2.rolls, { need: e2.need, success: e2.success, mine: e2.player === this.you, casino: e2.variant === "casino", source: e2.source, viewer: this.you });
               }

@@ -1,0 +1,52 @@
+[
+  {
+    "attacker": 0,
+    "success": true,
+    "granted": false,
+    "passed": true,
+    "evadeFrames": 36,
+    "lastEvadeMs": 691,
+    "firstAttack": null,
+    "lastEvadeAt": 5658
+  },
+  {
+    "attacker": 0,
+    "success": false,
+    "granted": false,
+    "passed": true,
+    "evadeFrames": 32,
+    "lastEvadeMs": 695,
+    "firstAttack": 5432.5,
+    "lastEvadeAt": 5382.599999997765
+  },
+  {
+    "attacker": 1,
+    "success": true,
+    "granted": false,
+    "passed": true,
+    "evadeFrames": 66,
+    "lastEvadeMs": 692,
+    "firstAttack": null,
+    "lastEvadeAt": 3610.89999999851
+  },
+  {
+    "attacker": 1,
+    "success": false,
+    "granted": false,
+    "passed": true,
+    "evadeFrames": 62,
+    "lastEvadeMs": 692,
+    "firstAttack": 3272.5,
+    "lastEvadeAt": 3240
+  },
+  {
+    "attacker": 0,
+    "success": true,
+    "granted": true,
+    "passed": true,
+    "evadeFrames": 73,
+    "lastEvadeMs": 693,
+    "firstAttack": null,
+    "lastEvadeAt": 2918.10000000149
+  }
+]

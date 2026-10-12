@@ -1507,9 +1507,16 @@ function trySnare(g: GameState, ctx: Ctx, victim: PlayerState): boolean {
 
 function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: string | null, treeStage = 0): void {
   // Presentation metadata comes from resolution, including traps, prevention and shields.
-  const attackEvent = [...ctx.ev].reverse().find((e): e is Extract<GameEvent,{type:'attack'}> => e.type === 'attack' && e.uid === att.uid);
+  let attackEvent = [...ctx.ev].reverse().find((e): e is Extract<GameEvent,{type:'attack'}> => e.type === 'attack' && e.uid === att.uid);
+  // A World Tree choice resumes in a new batch. Present the attack only after
+  // its choices resolve, so a later evasion can still precede physical contact.
+  if (!attackEvent && treeStage > 0) {
+    attackEvent = { type:'attack', player:g.cur, uid:att.uid, targetUid };
+    ctx.ev.push(attackEvent);
+  }
   if (attackEvent) attackEvent.contactDamage = 0;
   if (treeStage === 0 && (g.players[g.cur].dew ?? 0)>0 && g.players[g.cur].field.some(m=>m.id==='WORLD_TREE')) {
+    if (attackEvent) ctx.ev.splice(ctx.ev.indexOf(attackEvent),1);
     offerEffectChoice(g,ctx,g.players[g.cur],'WORLD_TREE_ATTACK','雫1で攻撃力+6（永続）しますか？',{attackerUid:att.uid,targetUid});
     return;
   }
@@ -1544,14 +1551,19 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     }
   }
   if (treeStage < 2 && targetUid !== null && o.field.some(m=>m.uid===targetUid) && (o.dew ?? 0)>0 && o.field.some(m=>m.id==='WORLD_TREE')) {
+    if (attackEvent) ctx.ev.splice(ctx.ev.indexOf(attackEvent),1);
     offerEffectChoice(g,ctx,o,'WORLD_TREE_DEFEND','雫1で被攻撃モンスターの体力+6（永続）しますか？',{attackerUid:att.uid,targetUid});
     return;
   }
-  // ---- 회피(evade): 공격받은 몬스터가 주사위 1~3이면 공격 무효 ----
+  // ---- 回避: a defender's 4+ roll cancels the attack ----
   if (targetUid !== null) {
     const tgt = o.field.find((m) => m.uid === targetUid);
     if (tgt && hasPassive(tgt, "evade")) {
+      const evadeRollIndex = ctx.ev.length;
       const { rolls: er } = diceRoll(g, ctx.ev, side(g, o), { id: tgt.id, player: side(g, o) }, 1, 4);
+      // Attribute the initial roll, not any Lucky Echo reaction appended by diceRoll.
+      const evadeRoll = ctx.ev[evadeRollIndex];
+      if (evadeRoll?.type === 'dice') evadeRoll.evasion = { targetUid: tgt.uid, attackerUid: att.uid };
       const r = er[0];
       if (r >= 4) {
         ctx.log(`  └ <span class="good">회피!</span> 🎲 ${r} — ${cn(tgt)} 이(가) 공격을 무효화`, `  └ <span class="good">回避！</span> 🎲 ${r} — ${cn(tgt)} が攻撃を無効化`);

@@ -1,3 +1,4 @@
+import {prepareEvade,cancelEvades} from './evade/runtime';
 import {isDarkMerchant} from './merchant/selection';
 import {playDarkMerchant,warmDarkMerchant,cancelDarkMerchants} from './merchant/runtime';
 import {isAssassin} from './assassinSummon/selection';
@@ -62,11 +63,14 @@ const EASE = "cubic-bezier(.4,0,.2,1)";
 // its end state and the player's new action plays fresh.
 let fxSkip = false;
 export const isFxSkipped=()=>fxSkip;
+export function prepareEvasion(uid:string,side:ViewSide,success:boolean){
+ return prepareEvade(fxSkip?null:combatCard(uid),{side,success});
+}
 const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on);
-  if(on){cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelEvades();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */

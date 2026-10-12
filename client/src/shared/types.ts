@@ -276,7 +276,7 @@ export type GameEvent =
   | { type: "draw"; player: Side; count: number }
   | { type: "reshuffle"; player: Side; count: number } // public count only; no card order
   | { type: "treasure"; player: Side; kind: string; text: string; textJa: string; isBot: boolean }
-  | { type: "dice"; source: DiceSource; player: Side; rolls: number[]; need?: number; success?: boolean; variant?: "casino" } // dice roll (need = min TOTAL for success; undefined = outcome-table roll · variant "casino" = 카지노 전용 연출)
+  | { type: "dice"; source: DiceSource; player: Side; rolls: number[]; need?: number; success?: boolean; variant?: "casino"; evasion?: { targetUid: string; attackerUid: string } } // evasion identifies the public defender, including granted passives and duplicates
   | { type: "playSpell"; player: Side; id: string; dest: "discard" | "field" | "vanish" } // spell/starter/enchant played from hand
   | { type: "trapSet"; player: Side } // a face-down trap was set (identity hidden)
   | { type: "trapReveal"; player: Side; id: string } // a trap fired → reveal then discard
