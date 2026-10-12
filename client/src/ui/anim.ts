@@ -1,3 +1,5 @@
+import {prepareTaunt,cancelTaunts} from './taunt/runtime';
+export {warmTaunt} from './taunt/runtime';
 import {prepareEvade,cancelEvades} from './evade/runtime';
 import {isVampire} from './vampireSummon/selection';
 import {playVampireSummon} from './vampireSummon/runtime';
@@ -70,11 +72,12 @@ export const isFxSkipped=()=>fxSkip;
 export function prepareEvasion(uid:string,side:ViewSide,success:boolean){
  return prepareEvade(fxSkip?null:combatCard(uid),{side,success});
 }
+export function prepareTauntActivation(uid:string){return prepareTaunt(fxSkip?null:combatCard(uid));}
 const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on); setSeekerSkip(on);
-  if(on){cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */

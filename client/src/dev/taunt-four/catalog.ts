@@ -1,4 +1,4 @@
-export const DURATION=1000;
+export {DURATION,clamp,ease,pulse,pose} from "../../ui/taunt/timing";
 export const designs=[
  {name:'蒼鋼の大盾',en:'AZURE STEEL',material:'蒼鋼 / 銀の稜線 / 金象嵌',description:'元の01を正統に磨いた大盾。厚い鋼の縁と、膨らみを持つ蒼い面。細い金象嵌と鋲で、重さを引き締める。',peak:460,color:'#8eadbd'},
  {name:'銀翼の大盾',en:'ARGENT WING',material:'白銀 / 翼状の浮彫 / 鎚目',description:'銀の翼を盾の面に彫り出す。幅のある立体の稜線と深い溝が、開閉に合わせて異なる光を返す。',peak:460,color:'#a4b6be'},
@@ -8,14 +8,3 @@ export const designs=[
 export const reference={name:'元の01・双翼の大盾',peak:460};
 export const boardDesigns=[...designs,reference];
 export const cards=['SHIELD_TITAN','CASTLE','ELF'] as const;
-export const clamp=(x:number)=>Math.max(0,Math.min(1,x));
-export function ease(a:number,b:number,t:number){const x=clamp((t-a)/(b-a));return x*x*(3-2*x);}
-export const pulse=(a:number,b:number,c:number,d:number,t:number)=>ease(a,b,t)*(1-ease(c,d,t));
-/** A deterministic clock: the pre-roll never contains or guesses the result. */
-export function pose(_variant:number,ms:number,reduced=false){
- const t=Math.max(0,Math.min(DURATION,ms)),active=ms>0&&ms<DURATION;
- const strength=active?pulse(0,150,830,1000,t):0;
- if(reduced)return {t,strength,lift:0,advance:0,scale:1,tilt:0};
- const lift=3*pulse(120,330,690,950,t);
- return {t,strength,lift,advance:0,scale:1,tilt:0};
-}
