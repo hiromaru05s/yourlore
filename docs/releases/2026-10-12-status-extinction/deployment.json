@@ -1,0 +1,25 @@
+{
+  "sourceSha": "403e3627a111216dc3fde8200b179ec1e7eeaf3f",
+  "featureSha": "ac8434d224b302c446d6b95b7da9491e96582a76",
+  "origin": "https://test.yourlore.xyz",
+  "deploymentId": "8d6796f5-8ee4-4a25-a577-5efad0166c20",
+  "versions": [
+    {
+      "version_id": "d46110a9-5d21-40f8-a82c-e37f753bd066",
+      "percentage": 100
+    }
+  ],
+  "message": "403e3627a111216dc3fde8200b179ec1e7eeaf3f guarded release",
+  "guardedTypecheck": true,
+  "guardedProductionSuites": "100/100",
+  "guardedBuild": true,
+  "deployedFilesVerified": 62,
+  "localBrowserGroups": 20,
+  "selected": [
+    "S1",
+    "D2",
+    "B2"
+  ],
+  "deployedBrowserPlaybackVerified": false,
+  "browserBoundary": "Local production-controller desktop/mobile fixtures passed. Public staging readiness did not complete because image/font requests remained pending in ordinary Chrome and an HTTP/1 diagnostic. No page exceptions or failed responses were recorded by the diagnostics. Authenticated online match was not exercised."
+}

@@ -1,0 +1,20 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "fixtureAccount": true,
+  "checks": [
+    "compiled profile hit preview works",
+    "actual HOME uses figure-free library",
+    "actual profile sends avatar to social/me",
+    "saved choice updates lounge header and profile",
+    "actual lounge picker at 320px",
+    "Escape and navigation dispose preview",
+    "no retired art requests"
+  ],
+  "updates": [
+    {
+      "avatar": "SEEKER_HOODED"
+    }
+  ],
+  "errors": [],
+  "retired": []
+}

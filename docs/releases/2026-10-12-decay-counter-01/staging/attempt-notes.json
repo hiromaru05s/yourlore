@@ -1,0 +1,13 @@
+{
+  "fullBoard": [
+    "90 s timeout while battle artwork was still loading",
+    "Next navigation waited for the full load event; changed to DOMContentLoaded",
+    "A concurrent guarded release replaced the original hashed asset paths during later checks"
+  ],
+  "nativeFixture": [
+    "Expanded module discovery through the actual deployed dependency graph",
+    "Waited for native artwork and the frame to decode, as the normal board preparation does",
+    "Both native fixtures then completed: 147833 visible material pixels, counter 1/3, no remaining canvas/capture nodes, zero browser errors"
+  ],
+  "finalScope": "Current deployed material on native-card fixtures; local full reducer/controller board covers threshold, both owners and cancellation."
+}

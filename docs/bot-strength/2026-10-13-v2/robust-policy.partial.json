@@ -1,0 +1,161 @@
+{
+  "status": "superseded_by_final_runtime_and_NPC_beliefs",
+  "excludedFromAcceptance": true,
+  "planned": 30,
+  "completed": 10,
+  "reason": "Final runtime includes the tested NPC roster in public-information hypotheses; use completed final-version acceptance, not partial pilot rates.",
+  "candidateSHA256": "22012934f83914c8a93ec622a33da02a4bdc4c2c43e5c0f6fc34490d04192786",
+  "baselineSHA256": "0eeb7ab6bdf7d81625658c3a715d037b24b2788ae4556bdff99ccf2cef07b9a5",
+  "rows": [
+    {
+      "pair": 37000,
+      "seat": 0,
+      "da": 0,
+      "db": 0,
+      "decks": [
+        "robust-1",
+        "robust-0"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 20,
+      "steps": 189,
+      "bad": null
+    },
+    {
+      "pair": 37000,
+      "seat": 1,
+      "da": 0,
+      "db": 0,
+      "decks": [
+        "robust-0",
+        "robust-1"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 16,
+      "steps": 131,
+      "bad": null
+    },
+    {
+      "pair": 37001,
+      "seat": 0,
+      "da": 1,
+      "db": 0,
+      "decks": [
+        "robust-2",
+        "robust-0"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 13,
+      "steps": 126,
+      "bad": null
+    },
+    {
+      "pair": 37001,
+      "seat": 1,
+      "da": 1,
+      "db": 0,
+      "decks": [
+        "robust-0",
+        "robust-2"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 19,
+      "steps": 162,
+      "bad": null
+    },
+    {
+      "pair": 37002,
+      "seat": 0,
+      "da": 2,
+      "db": 0,
+      "decks": [
+        "robust-0",
+        "robust-1"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 19,
+      "steps": 139,
+      "bad": null
+    },
+    {
+      "pair": 37002,
+      "seat": 1,
+      "da": 2,
+      "db": 0,
+      "decks": [
+        "robust-1",
+        "robust-0"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 15,
+      "steps": 122,
+      "bad": null
+    },
+    {
+      "pair": 37003,
+      "seat": 0,
+      "da": 3,
+      "db": 0,
+      "decks": [
+        "robust-1",
+        "robust-1"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 22,
+      "steps": 220,
+      "bad": null
+    },
+    {
+      "pair": 37003,
+      "seat": 1,
+      "da": 3,
+      "db": 0,
+      "decks": [
+        "robust-1",
+        "robust-1"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 20,
+      "steps": 180,
+      "bad": null
+    },
+    {
+      "pair": 37004,
+      "seat": 0,
+      "da": 4,
+      "db": 0,
+      "decks": [
+        "robust-2",
+        "robust-1"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 17,
+      "steps": 147,
+      "bad": null
+    },
+    {
+      "pair": 37004,
+      "seat": 1,
+      "da": 4,
+      "db": 0,
+      "decks": [
+        "robust-1",
+        "robust-2"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 19,
+      "steps": 190,
+      "bad": null
+    }
+  ]
+}

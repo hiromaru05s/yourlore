@@ -1,0 +1,33 @@
+{
+  "results": [
+    {
+      "side": 0,
+      "mode": "normal",
+      "created": 1,
+      "uid": "target-0",
+      "hp": "1"
+    },
+    {
+      "side": 1,
+      "mode": "normal",
+      "created": 1,
+      "uid": "target-1",
+      "hp": "1"
+    },
+    {
+      "side": 0,
+      "mode": "counter",
+      "created": 1,
+      "uid": "target-1",
+      "hp": "1"
+    },
+    {
+      "side": 1,
+      "mode": "counter",
+      "created": 1,
+      "uid": "target-0",
+      "hp": "1"
+    }
+  ],
+  "errors": []
+}

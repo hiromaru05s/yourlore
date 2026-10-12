@@ -1,0 +1,17 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "source": "fcbb553550a27845f68eae145b400e40a15a654b",
+  "implementation": "80151d11",
+  "deploymentId": "10d10c07-2613-4fda-8e4d-d1e186250863",
+  "versions": [
+    {
+      "version_id": "273ae794-3c0a-45a2-94ac-a5d23886bdad",
+      "percentage": 100
+    }
+  ],
+  "createdOn": "2026-10-09T09:36:13.705782Z",
+  "guarded": true,
+  "productionSuiteCount": 89,
+  "localRuntimeGroups": 17,
+  "authenticatedOnlineMatchVerified": false
+}

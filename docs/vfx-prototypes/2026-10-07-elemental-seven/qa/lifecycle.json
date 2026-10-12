@@ -1,0 +1,9 @@
+{
+  "errors": [],
+  "checks": [
+    "hidden document stops clock",
+    "GPU context loss uses explicit 2D fallback",
+    "dispose clears all local layers and stops animation",
+    "repeat disposal is safe"
+  ]
+}

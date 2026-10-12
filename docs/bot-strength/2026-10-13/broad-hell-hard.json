@@ -1,0 +1,1506 @@
+{
+  "A": "new:hell",
+  "B": "new:hard",
+  "rosterA": "hell",
+  "rosterB": "elite",
+  "modules": {
+    "candidate": "9a1198f48ff99652ccdd963e86161ddec570e5f3c08a64727ab385b807dd5c24",
+    "baseline": "39b0d7a0cbd436a738dbb8f1e88514ec0e0cfc4b780f9c6762dedb325fbc76f5"
+  },
+  "search": {
+    "hard": {
+      "width": 8,
+      "samples": 2,
+      "turns": 2,
+      "finalists": 3,
+      "extraSamples": 2
+    },
+    "hell": {
+      "width": 18,
+      "samples": 3,
+      "turns": 2,
+      "finalists": 6,
+      "extraSamples": 5
+    }
+  },
+  "value": {
+    "hp": 1,
+    "attack": 1.7,
+    "health": 0.65,
+    "mana": 3.5,
+    "deck": 0.65,
+    "hand": 0.8,
+    "enchant": 0.55,
+    "learned": 0.6
+  },
+  "games": 96,
+  "valid": 96,
+  "invalid": 0,
+  "wins": 59,
+  "draws": 0,
+  "completePairs": 48,
+  "pairedScore": 0.6145833333333334,
+  "pairedBootstrap95": [
+    0.5,
+    0.7291666666666666
+  ],
+  "ms": {
+    "p50ShardRange": [
+      163.3161249998957,
+      181.78483399981633
+    ],
+    "p95ShardRange": [
+      1086.8370420000283,
+      1377.5187910000095
+    ],
+    "max": 4206.333041999955
+  },
+  "sources": [
+    "accepted-hell-hard-1.json",
+    "accepted-hell-hard-2.json",
+    "accepted-hell-hard-3.json",
+    "accepted-hell-hard-4.json"
+  ],
+  "rows": [
+    {
+      "pair": 23004,
+      "seat": 0,
+      "da": 4,
+      "db": 0,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 60,
+      "steps": 453,
+      "bad": null
+    },
+    {
+      "pair": 23004,
+      "seat": 1,
+      "da": 4,
+      "db": 0,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 60,
+      "steps": 489,
+      "bad": null
+    },
+    {
+      "pair": 23005,
+      "seat": 0,
+      "da": 0,
+      "db": 1,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 25,
+      "steps": 136,
+      "bad": null
+    },
+    {
+      "pair": 23005,
+      "seat": 1,
+      "da": 0,
+      "db": 1,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 60,
+      "steps": 576,
+      "bad": null
+    },
+    {
+      "pair": 23006,
+      "seat": 0,
+      "da": 1,
+      "db": 1,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 39,
+      "steps": 222,
+      "bad": null
+    },
+    {
+      "pair": 23006,
+      "seat": 1,
+      "da": 1,
+      "db": 1,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 33,
+      "steps": 210,
+      "bad": null
+    },
+    {
+      "pair": 23007,
+      "seat": 0,
+      "da": 2,
+      "db": 1,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 18,
+      "steps": 101,
+      "bad": null
+    },
+    {
+      "pair": 23007,
+      "seat": 1,
+      "da": 2,
+      "db": 1,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 23,
+      "steps": 110,
+      "bad": null
+    },
+    {
+      "pair": 23008,
+      "seat": 0,
+      "da": 3,
+      "db": 1,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · AGGRO"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 13,
+      "steps": 61,
+      "bad": null
+    },
+    {
+      "pair": 23008,
+      "seat": 1,
+      "da": 3,
+      "db": 1,
+      "decks": [
+        "BOT · AGGRO",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 14,
+      "steps": 69,
+      "bad": null
+    },
+    {
+      "pair": 23009,
+      "seat": 0,
+      "da": 4,
+      "db": 1,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · AGGRO"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 15,
+      "steps": 82,
+      "bad": null
+    },
+    {
+      "pair": 23009,
+      "seat": 1,
+      "da": 4,
+      "db": 1,
+      "decks": [
+        "BOT · AGGRO",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 14,
+      "steps": 76,
+      "bad": null
+    },
+    {
+      "pair": 23010,
+      "seat": 0,
+      "da": 0,
+      "db": 2,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 60,
+      "steps": 413,
+      "bad": null
+    },
+    {
+      "pair": 23010,
+      "seat": 1,
+      "da": 0,
+      "db": 2,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 60,
+      "steps": 637,
+      "bad": null
+    },
+    {
+      "pair": 23011,
+      "seat": 0,
+      "da": 1,
+      "db": 2,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 35,
+      "steps": 204,
+      "bad": null
+    },
+    {
+      "pair": 23011,
+      "seat": 1,
+      "da": 1,
+      "db": 2,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 36,
+      "steps": 182,
+      "bad": null
+    },
+    {
+      "pair": 23012,
+      "seat": 0,
+      "da": 2,
+      "db": 2,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 32,
+      "steps": 201,
+      "bad": null
+    },
+    {
+      "pair": 23012,
+      "seat": 1,
+      "da": 2,
+      "db": 2,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 60,
+      "steps": 267,
+      "bad": null
+    },
+    {
+      "pair": 23013,
+      "seat": 0,
+      "da": 3,
+      "db": 2,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 60,
+      "steps": 648,
+      "bad": null
+    },
+    {
+      "pair": 23013,
+      "seat": 1,
+      "da": 3,
+      "db": 2,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 60,
+      "steps": 564,
+      "bad": null
+    },
+    {
+      "pair": 23014,
+      "seat": 0,
+      "da": 4,
+      "db": 2,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · AGGRO"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 9,
+      "steps": 43,
+      "bad": null
+    },
+    {
+      "pair": 23014,
+      "seat": 1,
+      "da": 4,
+      "db": 2,
+      "decks": [
+        "BOT · AGGRO",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 10,
+      "steps": 45,
+      "bad": null
+    },
+    {
+      "pair": 23015,
+      "seat": 0,
+      "da": 0,
+      "db": 3,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · AGGRO"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 13,
+      "steps": 78,
+      "bad": null
+    },
+    {
+      "pair": 23015,
+      "seat": 1,
+      "da": 0,
+      "db": 3,
+      "decks": [
+        "BOT · AGGRO",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 16,
+      "steps": 98,
+      "bad": null
+    },
+    {
+      "pair": 23016,
+      "seat": 0,
+      "da": 1,
+      "db": 3,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 60,
+      "steps": 543,
+      "bad": null
+    },
+    {
+      "pair": 23016,
+      "seat": 1,
+      "da": 1,
+      "db": 3,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 60,
+      "steps": 325,
+      "bad": null
+    },
+    {
+      "pair": 23017,
+      "seat": 0,
+      "da": 2,
+      "db": 3,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 60,
+      "steps": 406,
+      "bad": null
+    },
+    {
+      "pair": 23017,
+      "seat": 1,
+      "da": 2,
+      "db": 3,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 60,
+      "steps": 478,
+      "bad": null
+    },
+    {
+      "pair": 23018,
+      "seat": 0,
+      "da": 3,
+      "db": 3,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 32,
+      "steps": 213,
+      "bad": null
+    },
+    {
+      "pair": 23018,
+      "seat": 1,
+      "da": 3,
+      "db": 3,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 29,
+      "steps": 148,
+      "bad": null
+    },
+    {
+      "pair": 23019,
+      "seat": 0,
+      "da": 4,
+      "db": 3,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 38,
+      "steps": 195,
+      "bad": null
+    },
+    {
+      "pair": 23019,
+      "seat": 1,
+      "da": 4,
+      "db": 3,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 55,
+      "steps": 321,
+      "bad": null
+    },
+    {
+      "pair": 23020,
+      "seat": 0,
+      "da": 0,
+      "db": 4,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · AGGRO"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 15,
+      "steps": 87,
+      "bad": null
+    },
+    {
+      "pair": 23020,
+      "seat": 1,
+      "da": 0,
+      "db": 4,
+      "decks": [
+        "BOT · AGGRO",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 12,
+      "steps": 72,
+      "bad": null
+    },
+    {
+      "pair": 23021,
+      "seat": 0,
+      "da": 1,
+      "db": 4,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · AGGRO"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 17,
+      "steps": 111,
+      "bad": null
+    },
+    {
+      "pair": 23021,
+      "seat": 1,
+      "da": 1,
+      "db": 4,
+      "decks": [
+        "BOT · AGGRO",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 20,
+      "steps": 112,
+      "bad": null
+    },
+    {
+      "pair": 23022,
+      "seat": 0,
+      "da": 2,
+      "db": 4,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 60,
+      "steps": 606,
+      "bad": null
+    },
+    {
+      "pair": 23022,
+      "seat": 1,
+      "da": 2,
+      "db": 4,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 60,
+      "steps": 666,
+      "bad": null
+    },
+    {
+      "pair": 23023,
+      "seat": 0,
+      "da": 3,
+      "db": 4,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 39,
+      "steps": 296,
+      "bad": null
+    },
+    {
+      "pair": 23023,
+      "seat": 1,
+      "da": 3,
+      "db": 4,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 28,
+      "steps": 115,
+      "bad": null
+    },
+    {
+      "pair": 23024,
+      "seat": 0,
+      "da": 4,
+      "db": 4,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 51,
+      "steps": 542,
+      "bad": null
+    },
+    {
+      "pair": 23024,
+      "seat": 1,
+      "da": 4,
+      "db": 4,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 27,
+      "steps": 143,
+      "bad": null
+    },
+    {
+      "pair": 23025,
+      "seat": 0,
+      "da": 0,
+      "db": 0,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 19,
+      "steps": 99,
+      "bad": null
+    },
+    {
+      "pair": 23025,
+      "seat": 1,
+      "da": 0,
+      "db": 0,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 60,
+      "steps": 558,
+      "bad": null
+    },
+    {
+      "pair": 23026,
+      "seat": 0,
+      "da": 1,
+      "db": 0,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · AGGRO"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 15,
+      "steps": 83,
+      "bad": null
+    },
+    {
+      "pair": 23026,
+      "seat": 1,
+      "da": 1,
+      "db": 0,
+      "decks": [
+        "BOT · AGGRO",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 10,
+      "steps": 45,
+      "bad": null
+    },
+    {
+      "pair": 23027,
+      "seat": 0,
+      "da": 2,
+      "db": 0,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · AGGRO"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 21,
+      "steps": 99,
+      "bad": null
+    },
+    {
+      "pair": 23027,
+      "seat": 1,
+      "da": 2,
+      "db": 0,
+      "decks": [
+        "BOT · AGGRO",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 12,
+      "steps": 63,
+      "bad": null
+    },
+    {
+      "pair": 23028,
+      "seat": 0,
+      "da": 3,
+      "db": 0,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 60,
+      "steps": 543,
+      "bad": null
+    },
+    {
+      "pair": 23028,
+      "seat": 1,
+      "da": 3,
+      "db": 0,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 60,
+      "steps": 596,
+      "bad": null
+    },
+    {
+      "pair": 23029,
+      "seat": 0,
+      "da": 4,
+      "db": 0,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 25,
+      "steps": 158,
+      "bad": null
+    },
+    {
+      "pair": 23029,
+      "seat": 1,
+      "da": 4,
+      "db": 0,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 60,
+      "steps": 390,
+      "bad": null
+    },
+    {
+      "pair": 23030,
+      "seat": 0,
+      "da": 0,
+      "db": 1,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 22,
+      "steps": 110,
+      "bad": null
+    },
+    {
+      "pair": 23030,
+      "seat": 1,
+      "da": 0,
+      "db": 1,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 19,
+      "steps": 83,
+      "bad": null
+    },
+    {
+      "pair": 23031,
+      "seat": 0,
+      "da": 1,
+      "db": 1,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 30,
+      "steps": 209,
+      "bad": null
+    },
+    {
+      "pair": 23031,
+      "seat": 1,
+      "da": 1,
+      "db": 1,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 21,
+      "steps": 99,
+      "bad": null
+    },
+    {
+      "pair": 23032,
+      "seat": 0,
+      "da": 2,
+      "db": 1,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · AGGRO"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 35,
+      "steps": 192,
+      "bad": null
+    },
+    {
+      "pair": 23032,
+      "seat": 1,
+      "da": 2,
+      "db": 1,
+      "decks": [
+        "BOT · AGGRO",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 15,
+      "steps": 82,
+      "bad": null
+    },
+    {
+      "pair": 23033,
+      "seat": 0,
+      "da": 3,
+      "db": 1,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · AGGRO"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 17,
+      "steps": 95,
+      "bad": null
+    },
+    {
+      "pair": 23033,
+      "seat": 1,
+      "da": 3,
+      "db": 1,
+      "decks": [
+        "BOT · AGGRO",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 14,
+      "steps": 81,
+      "bad": null
+    },
+    {
+      "pair": 23034,
+      "seat": 0,
+      "da": 4,
+      "db": 1,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 60,
+      "steps": 568,
+      "bad": null
+    },
+    {
+      "pair": 23034,
+      "seat": 1,
+      "da": 4,
+      "db": 1,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 60,
+      "steps": 646,
+      "bad": null
+    },
+    {
+      "pair": 23035,
+      "seat": 0,
+      "da": 0,
+      "db": 2,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 37,
+      "steps": 225,
+      "bad": null
+    },
+    {
+      "pair": 23035,
+      "seat": 1,
+      "da": 0,
+      "db": 2,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 60,
+      "steps": 420,
+      "bad": null
+    },
+    {
+      "pair": 23036,
+      "seat": 0,
+      "da": 1,
+      "db": 2,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 37,
+      "steps": 305,
+      "bad": null
+    },
+    {
+      "pair": 23036,
+      "seat": 1,
+      "da": 1,
+      "db": 2,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 60,
+      "steps": 498,
+      "bad": null
+    },
+    {
+      "pair": 23037,
+      "seat": 0,
+      "da": 2,
+      "db": 2,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 60,
+      "steps": 494,
+      "bad": null
+    },
+    {
+      "pair": 23037,
+      "seat": 1,
+      "da": 2,
+      "db": 2,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 21,
+      "steps": 88,
+      "bad": null
+    },
+    {
+      "pair": 23038,
+      "seat": 0,
+      "da": 3,
+      "db": 2,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · AGGRO"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 17,
+      "steps": 82,
+      "bad": null
+    },
+    {
+      "pair": 23038,
+      "seat": 1,
+      "da": 3,
+      "db": 2,
+      "decks": [
+        "BOT · AGGRO",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 16,
+      "steps": 84,
+      "bad": null
+    },
+    {
+      "pair": 23039,
+      "seat": 0,
+      "da": 4,
+      "db": 2,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · AGGRO"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 27,
+      "steps": 147,
+      "bad": null
+    },
+    {
+      "pair": 23039,
+      "seat": 1,
+      "da": 4,
+      "db": 2,
+      "decks": [
+        "BOT · AGGRO",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 20,
+      "steps": 103,
+      "bad": null
+    },
+    {
+      "pair": 23040,
+      "seat": 0,
+      "da": 0,
+      "db": 3,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 60,
+      "steps": 622,
+      "bad": null
+    },
+    {
+      "pair": 23040,
+      "seat": 1,
+      "da": 0,
+      "db": 3,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 60,
+      "steps": 609,
+      "bad": null
+    },
+    {
+      "pair": 23041,
+      "seat": 0,
+      "da": 1,
+      "db": 3,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 19,
+      "steps": 101,
+      "bad": null
+    },
+    {
+      "pair": 23041,
+      "seat": 1,
+      "da": 1,
+      "db": 3,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 60,
+      "steps": 605,
+      "bad": null
+    },
+    {
+      "pair": 23042,
+      "seat": 0,
+      "da": 2,
+      "db": 3,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 34,
+      "steps": 246,
+      "bad": null
+    },
+    {
+      "pair": 23042,
+      "seat": 1,
+      "da": 2,
+      "db": 3,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 60,
+      "steps": 508,
+      "bad": null
+    },
+    {
+      "pair": 23043,
+      "seat": 0,
+      "da": 3,
+      "db": 3,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 45,
+      "steps": 368,
+      "bad": null
+    },
+    {
+      "pair": 23043,
+      "seat": 1,
+      "da": 3,
+      "db": 3,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 23,
+      "steps": 112,
+      "bad": null
+    },
+    {
+      "pair": 23044,
+      "seat": 0,
+      "da": 4,
+      "db": 3,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · AGGRO"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 31,
+      "steps": 195,
+      "bad": null
+    },
+    {
+      "pair": 23044,
+      "seat": 1,
+      "da": 4,
+      "db": 3,
+      "decks": [
+        "BOT · AGGRO",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 14,
+      "steps": 71,
+      "bad": null
+    },
+    {
+      "pair": 23045,
+      "seat": 0,
+      "da": 0,
+      "db": 4,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · AGGRO"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 11,
+      "steps": 55,
+      "bad": null
+    },
+    {
+      "pair": 23045,
+      "seat": 1,
+      "da": 0,
+      "db": 4,
+      "decks": [
+        "BOT · AGGRO",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 10,
+      "steps": 52,
+      "bad": null
+    },
+    {
+      "pair": 23046,
+      "seat": 0,
+      "da": 1,
+      "db": 4,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 60,
+      "steps": 630,
+      "bad": null
+    },
+    {
+      "pair": 23046,
+      "seat": 1,
+      "da": 1,
+      "db": 4,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 60,
+      "steps": 582,
+      "bad": null
+    },
+    {
+      "pair": 23047,
+      "seat": 0,
+      "da": 2,
+      "db": 4,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 29,
+      "steps": 192,
+      "bad": null
+    },
+    {
+      "pair": 23047,
+      "seat": 1,
+      "da": 2,
+      "db": 4,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 44,
+      "steps": 313,
+      "bad": null
+    },
+    {
+      "pair": 23048,
+      "seat": 0,
+      "da": 3,
+      "db": 4,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 60,
+      "steps": 488,
+      "bad": null
+    },
+    {
+      "pair": 23048,
+      "seat": 1,
+      "da": 3,
+      "db": 4,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 57,
+      "steps": 502,
+      "bad": null
+    },
+    {
+      "pair": 23049,
+      "seat": 0,
+      "da": 4,
+      "db": 4,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 46,
+      "steps": 363,
+      "bad": null
+    },
+    {
+      "pair": 23049,
+      "seat": 1,
+      "da": 4,
+      "db": 4,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 30,
+      "steps": 181,
+      "bad": null
+    },
+    {
+      "pair": 23050,
+      "seat": 0,
+      "da": 0,
+      "db": 0,
+      "decks": [
+        "BOT · RIFT",
+        "BOT · AGGRO"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 15,
+      "steps": 97,
+      "bad": null
+    },
+    {
+      "pair": 23050,
+      "seat": 1,
+      "da": 0,
+      "db": 0,
+      "decks": [
+        "BOT · AGGRO",
+        "BOT · RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 12,
+      "steps": 64,
+      "bad": null
+    },
+    {
+      "pair": 23051,
+      "seat": 0,
+      "da": 1,
+      "db": 0,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · AGGRO"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 15,
+      "steps": 73,
+      "bad": null
+    },
+    {
+      "pair": 23051,
+      "seat": 1,
+      "da": 1,
+      "db": 0,
+      "decks": [
+        "BOT · AGGRO",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 15,
+      "steps": 72,
+      "bad": null
+    }
+  ]
+}

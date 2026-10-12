@@ -13,8 +13,23 @@ export class Actor{
  private readonly badges:Map<string,{badge:HTMLElement;value:HTMLElement}>;
  private readonly styled=new WeakMap<HTMLElement,string>();
  readonly el:HTMLElement;readonly surface:HTMLCanvasElement;readonly pieces:HTMLElement[]=[];readonly polygons:Point[][]=[];stats?:Partial<Record<'atk'|'def',{from:number;to:number}>>;masks:Point[][]=[];matrix=new DOMMatrix();
- constructor(source:HTMLElement,readonly root:HTMLElement){
+ constructor(source:HTMLElement,readonly root:HTMLElement,private readonly density=1){
   this.el=source.cloneNode(true) as HTMLElement;this.el.removeAttribute('id');this.el.removeAttribute('data-uid');this.el.classList.remove('can-attack','ready','exhausted','summon-in','is-attacker','is-exhausted','is-targetable','monster-blocked');this.el.classList.add('duet-card');root.append(this.el);
+  // Rasterize filtered, projected faces at twice the CSS resolution. Normalize
+  // fitted inline text first so it scales with the face, including three-digit stats.
+  if(density>1){
+   const originals=[...source.querySelectorAll<HTMLElement>('*')];
+   [...this.el.querySelectorAll<HTMLElement>('*')].forEach((el,i)=>{
+    if(el.style.fontSize.endsWith('px')){
+     const parent=originals[i]?.parentElement;
+     if(parent)el.style.fontSize=`${parseFloat(el.style.fontSize)/parseFloat(getComputedStyle(parent).fontSize)}em`;
+    }
+   });
+   for(const img of this.el.querySelectorAll('img')){
+    // Clones must not reselect the 160px thumbnail at their small projected size.
+    if(img.src.includes('/art/cards-')){img.removeAttribute('srcset');img.removeAttribute('sizes');img.src=img.src.replace('/art/cards-xs/','/art/cards-sm/');}
+   }
+  }
   this.frame=this.el.querySelector('.card-frame');this.art=this.el.querySelector('.card-art');this.badges=new Map();
   for(const key of ['atk','def']){const badge=this.el.querySelector<HTMLElement>('.ad-'+key),value=badge?.querySelector<HTMLElement>('.seal-value');if(badge&&value)this.badges.set(key,{badge,value});}
   this.surface=document.createElement('canvas');this.surface.width=this.surface.height=1;this.surface.className='stat-surface';this.surface.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none';this.el.append(this.surface);
@@ -25,15 +40,15 @@ export class Actor{
   for(const img of this.el.querySelectorAll('img')){const done=()=>{img.classList.add('art-loaded');img.parentElement?.classList.add('art-done');};if(img.complete&&img.naturalWidth)done();else img.addEventListener('load',done,{once:true});}this.hide();
  }
  style(n:HTMLElement,r:Rect,x:number,y:number,angle:number,scale:number,z=0,rock=0){
-  const m=placement(r,x,y,angle,scale,z,rock),size=`${r.w}/${r.h}`;
-  if(this.styled.get(n)!==size){this.styled.set(n,size);n.style.cssText=`position:absolute!important;left:0!important;top:0!important;width:${r.w}px!important;height:${r.h}px!important;--cw:${r.w}px;--ch:${r.h}px;--field-card-size:${r.w}px;margin:0!important;transform:${m.toString()}!important;transform-origin:0 0!important;transition:none!important;animation:none!important;pointer-events:none!important;z-index:2;filter:none!important;box-shadow:none!important;`;}else{n.style.setProperty('transform',m.toString(),'important');n.style.setProperty('filter','none','important');}return m;
+  const m=placement(r,x,y,angle,scale,z,rock),raster=m.scale(1/this.density),size=`${r.w}/${r.h}`;
+  if(this.styled.get(n)!==size){this.styled.set(n,size);n.style.cssText=`position:absolute!important;left:0!important;top:0!important;width:${r.w*this.density}px!important;height:${r.h*this.density}px!important;--cw:${r.w*this.density}px;--ch:${r.h*this.density}px;--field-card-size:${r.w*this.density}px;margin:0!important;transform:${raster.toString()}!important;transform-origin:0 0!important;transition:none!important;animation:none!important;pointer-events:none!important;z-index:2;filter:none!important;box-shadow:none!important;`;}else{n.style.setProperty('transform',raster.toString(),'important');n.style.setProperty('filter','none','important');}return m;
  }
  paint(k:Kind,v:Variant,t:number,r:Rect,target:Rect,reduced:boolean,active=true,side=1,destination?:Rect){
   this.masks=[];this.pieces.forEach(n=>n.style.display='none');const p=pose(k,v,t,r,target,reduced,active,side);
   this.matrix=this.style(this.el,r,p.x,p.y,p.angle,p.scale,p.z,p.rock);this.el.style.display='block';
   this.el.style.setProperty('filter',`grayscale(${1-p.saturation}) brightness(${p.brightness})${p.edge&&!isDebuff(k)?` drop-shadow(0 0 ${r.w*.019*p.edge}px ${k==='aura'?'#6afbe0':isBuff(k)?'#67cfff':'#fff0bc'})`:''}`,'important');
   if(k==='aura'&&active)this.el.style.setProperty('filter',ongoingFilter(v,t,reduced),'important');
-  if(k==='ready'){const b=reduced?.5:.5-.5*Math.cos(t*4*Math.PI);this.el.style.setProperty('filter',`drop-shadow(0 2px 4px #0009) drop-shadow(0 0 ${4+5*b}px rgba(255,122,77,${.4+.6*b}))`,'important');}
+  if(k==='ready'){const b=reduced?.5:.5-.5*Math.cos(t*4*Math.PI);this.el.style.setProperty('filter',`drop-shadow(0 ${2*this.density}px ${4*this.density}px #0009) drop-shadow(0 0 ${(4+5*b)*this.density}px rgba(255,122,77,${.4+.6*b}))`,'important');}
   const frame=this.frame,art=this.art;
   if(frame){frame.style.filter=k==='trigger'?`url(#celestial-matte) brightness(${1+p.edge*.45})`:isBuff(k)?`url(#celestial-matte) brightness(${1+p.edge*.12}) drop-shadow(0 0 2px #56c8ff)`:'';frame.style.transform=isBuff(k)?`scale(${1+p.edge*.025})`:'';}
   if(art)art.style.filter=k==='trigger'?`brightness(${1-p.edge*.12}) contrast(${1+p.edge*.12})`:'';
@@ -66,7 +81,7 @@ export class Actor{
    const spread=sgn*r.w*.26*(.55+i%4*.22)*ease(0,.8,split),fall=r.h*split*split*.19,curve=Math.sin(flight*Math.PI)*r.w*(.20+(i%3)*.07);
    const x=mix(r.x+spread,dest.x,flight),y=mix(r.y+fall,dest.y,flight)-curve;
    const scale=mix(1,dest.w/r.w,flight)*(v==='B'?1-ease(.76,.99,t):1),angle=sgn*split*25*(.55+i%5*.19)*(1-flight);
-   let m=this.style(n,r,x,y,angle,scale);if(v==='A'&&flight>.7){const destM=placement(dest).scale(dest.w/r.w,dest.h/r.h),blend=ease(.7,1,flight),a=m.toFloat64Array(),b=destM.toFloat64Array();m=new DOMMatrix(Array.from(a,(value,j)=>mix(value,b[j],blend)));n.style.setProperty('transform',m.toString(),'important');}n.style.display=scale<.001?'none':'block';n.style.clipPath=`polygon(${this.polygons[i].map(([a,b])=>`${a*100}% ${b*100}%`).join(',')})`;
+   let m=this.style(n,r,x,y,angle,scale);if(v==='A'&&flight>.7){const destM=placement(dest).scale(dest.w/r.w,dest.h/r.h),blend=ease(.7,1,flight),a=m.toFloat64Array(),b=destM.toFloat64Array();m=new DOMMatrix(Array.from(a,(value,j)=>mix(value,b[j],blend)));n.style.setProperty('transform',m.scale(1/this.density).toString(),'important');}n.style.display=scale<.001?'none':'block';n.style.clipPath=`polygon(${this.polygons[i].map(([a,b])=>`${a*100}% ${b*100}%`).join(',')})`;
    (n.querySelector('.inkcoat') as HTMLElement).style.opacity=String(v==='B'?ease(.25,.62,t):0);
    if(v==='B')n.style.setProperty('filter',`brightness(${1-ease(.35,.79,t)*.55})`,'important');
    this.masks.push(corners(m,r.w,r.h,this.polygons[i]));

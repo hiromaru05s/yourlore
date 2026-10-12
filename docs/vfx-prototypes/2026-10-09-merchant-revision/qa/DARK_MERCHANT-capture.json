@@ -1,0 +1,12 @@
+{
+  "frames": 123,
+  "medianMs": 34.5,
+  "p95Ms": 173.09999999403954,
+  "audio": {
+    "enabled": true,
+    "unlocked": true,
+    "loaded": true,
+    "active": 0,
+    "error": ""
+  }
+}

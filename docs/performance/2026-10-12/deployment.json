@@ -1,0 +1,28 @@
+{
+  "source": "1189fad9ef61365a90c8ea60ee3059667878665d",
+  "optimization": "2325e508",
+  "origin": "https://test.yourlore.xyz",
+  "deploymentId": "d713c59e-bf63-47f8-ac6d-c64f8eb97a19",
+  "version": "e465bed4-3f4c-4d54-9b02-d7a13aa3d6ab",
+  "trafficPercent": 100,
+  "publishedAt": "2026-10-12T10:01:14.616307Z",
+  "productionTests": {
+    "passed": 94,
+    "total": 94
+  },
+  "typecheck": "client and server passed in guarded snapshot",
+  "build": "passed in guarded snapshot",
+  "exactAssetHashes": 62,
+  "localBot": {
+    "desktop": "2 HELL turns, surrender, HOME, no errors or workers left",
+    "mobile": "1 HELL turn at 390x844, surrender, HOME, no errors or workers left"
+  },
+  "stagingBrowser": {
+    "home": "recovered automatically, no manual retry, 70924 ms in the final-release run",
+    "bot": "not verified end-to-end: scene readiness exceeded the 120-second test deadline",
+    "pageErrors": [],
+    "imageDecodeErrors": [],
+    "longerAttempt": "stopped after persistently slow resource delivery; no passing gameplay claim"
+  },
+  "boundary": "API-fixture browser tests use the real local BOT controller and deployed static assets; not authenticated online match proof."
+}

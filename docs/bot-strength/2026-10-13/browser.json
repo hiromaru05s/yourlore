@@ -1,0 +1,67 @@
+{
+  "stats": [
+    {
+      "difficulty": "easy",
+      "ms": 95.30000000074506,
+      "action": {
+        "type": "play",
+        "idx": 0
+      },
+      "advanced": true,
+      "pure": true
+    },
+    {
+      "difficulty": "normal",
+      "ms": 88.10000000149012,
+      "action": {
+        "type": "play",
+        "idx": 0
+      },
+      "advanced": true,
+      "pure": true
+    },
+    {
+      "difficulty": "hard",
+      "ms": 132.69999999925494,
+      "action": {
+        "type": "play",
+        "idx": 0
+      },
+      "advanced": true,
+      "pure": true
+    },
+    {
+      "difficulty": "hell",
+      "ms": 205.5,
+      "action": {
+        "type": "play",
+        "idx": 0
+      },
+      "advanced": true,
+      "pure": true
+    }
+  ],
+  "stress": {
+    "ms": 883.6999999992549,
+    "ticks": 177,
+    "action": {
+      "type": "buySupply",
+      "i": 0
+    },
+    "advanced": true
+  },
+  "ticks": 404,
+  "budgetAdvanced": true,
+  "fallbackAdvanced": true,
+  "timeoutResult": null,
+  "timeoutTerminated": true,
+  "canceledResult": null,
+  "staleApplied": 0,
+  "disposedApplied": 0,
+  "activeApplied": 1,
+  "defense": {
+    "type": "pick",
+    "uid": "grow"
+  },
+  "errors": []
+}

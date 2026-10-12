@@ -1,0 +1,66 @@
+{
+  "database": "lore-db-staging",
+  "checkedAt": "2026-10-07T23:42:06.438Z",
+  "rows": [
+    {
+      "name": "sessions",
+      "remaining": 0
+    },
+    {
+      "name": "email_tokens",
+      "remaining": 0
+    },
+    {
+      "name": "user_days",
+      "remaining": 0
+    },
+    {
+      "name": "presence",
+      "remaining": 0
+    },
+    {
+      "name": "rewards",
+      "remaining": 0
+    },
+    {
+      "name": "coupon_claims",
+      "remaining": 0
+    },
+    {
+      "name": "ratings",
+      "remaining": 0
+    },
+    {
+      "name": "ranked_results",
+      "remaining": 0
+    },
+    {
+      "name": "matches",
+      "remaining": 0
+    },
+    {
+      "name": "friends",
+      "remaining": 0
+    },
+    {
+      "name": "challenges",
+      "remaining": 0
+    },
+    {
+      "name": "invite_rewards",
+      "remaining": 0
+    },
+    {
+      "name": "inquiries",
+      "remaining": 0
+    },
+    {
+      "name": "users",
+      "remaining": 0
+    },
+    {
+      "name": "coupons",
+      "remaining": 0
+    }
+  ]
+}

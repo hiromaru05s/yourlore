@@ -1,0 +1,381 @@
+{
+  "cases": 42,
+  "actionParity": true,
+  "scope": "Representative states only; not exhaustive policy equivalence. Release also rejects proof paths drawing from sampled own deck.",
+  "rows": [
+    {
+      "i": 0,
+      "tier": "hard",
+      "turn": 1,
+      "action": {
+        "type": "buySupply",
+        "i": 0
+      }
+    },
+    {
+      "i": 0,
+      "tier": "hell",
+      "turn": 1,
+      "action": {
+        "type": "buySupply",
+        "i": 0
+      }
+    },
+    {
+      "i": 1,
+      "tier": "hard",
+      "turn": 5,
+      "action": {
+        "type": "play",
+        "idx": 2
+      }
+    },
+    {
+      "i": 1,
+      "tier": "hell",
+      "turn": 5,
+      "action": {
+        "type": "play",
+        "idx": 2
+      }
+    },
+    {
+      "i": 2,
+      "tier": "hard",
+      "turn": 7,
+      "action": {
+        "type": "buyMarket",
+        "i": 0
+      }
+    },
+    {
+      "i": 2,
+      "tier": "hell",
+      "turn": 7,
+      "action": {
+        "type": "buyMarket",
+        "i": 0
+      }
+    },
+    {
+      "i": 3,
+      "tier": "hard",
+      "turn": 1,
+      "action": {
+        "type": "endTurn"
+      }
+    },
+    {
+      "i": 3,
+      "tier": "hell",
+      "turn": 1,
+      "action": {
+        "type": "endTurn"
+      }
+    },
+    {
+      "i": 4,
+      "tier": "hard",
+      "turn": 4,
+      "action": {
+        "type": "play",
+        "idx": 0
+      }
+    },
+    {
+      "i": 4,
+      "tier": "hell",
+      "turn": 4,
+      "action": {
+        "type": "play",
+        "idx": 0
+      }
+    },
+    {
+      "i": 5,
+      "tier": "hard",
+      "turn": 7,
+      "action": {
+        "type": "play",
+        "idx": 1
+      }
+    },
+    {
+      "i": 5,
+      "tier": "hell",
+      "turn": 7,
+      "action": {
+        "type": "play",
+        "idx": 1
+      }
+    },
+    {
+      "i": 6,
+      "tier": "hard",
+      "turn": 10,
+      "action": {
+        "type": "buySupply",
+        "i": 0
+      }
+    },
+    {
+      "i": 6,
+      "tier": "hell",
+      "turn": 10,
+      "action": {
+        "type": "buySupply",
+        "i": 0
+      }
+    },
+    {
+      "i": 7,
+      "tier": "hard",
+      "turn": 1,
+      "action": {
+        "type": "buyMarket",
+        "i": 3
+      }
+    },
+    {
+      "i": 7,
+      "tier": "hell",
+      "turn": 1,
+      "action": {
+        "type": "buyMarket",
+        "i": 3
+      }
+    },
+    {
+      "i": 8,
+      "tier": "hard",
+      "turn": 4,
+      "action": {
+        "type": "play",
+        "idx": 2
+      }
+    },
+    {
+      "i": 8,
+      "tier": "hell",
+      "turn": 4,
+      "action": {
+        "type": "play",
+        "idx": 2
+      }
+    },
+    {
+      "i": 9,
+      "tier": "hard",
+      "turn": 7,
+      "action": {
+        "type": "attack",
+        "uid": "u7"
+      }
+    },
+    {
+      "i": 9,
+      "tier": "hell",
+      "turn": 7,
+      "action": {
+        "type": "attack",
+        "uid": "u7"
+      }
+    },
+    {
+      "i": 10,
+      "tier": "hard",
+      "turn": 2,
+      "action": {
+        "type": "buyMarket",
+        "i": 5
+      }
+    },
+    {
+      "i": 10,
+      "tier": "hell",
+      "turn": 2,
+      "action": {
+        "type": "buyMarket",
+        "i": 5
+      }
+    },
+    {
+      "i": 11,
+      "tier": "hard",
+      "turn": 4,
+      "action": {
+        "type": "attack",
+        "uid": "u2"
+      }
+    },
+    {
+      "i": 11,
+      "tier": "hell",
+      "turn": 4,
+      "action": {
+        "type": "attack",
+        "uid": "u2"
+      }
+    },
+    {
+      "i": 12,
+      "tier": "hard",
+      "turn": 8,
+      "action": {
+        "type": "attack",
+        "uid": "u9"
+      }
+    },
+    {
+      "i": 12,
+      "tier": "hell",
+      "turn": 8,
+      "action": {
+        "type": "attack",
+        "uid": "u9"
+      }
+    },
+    {
+      "i": 13,
+      "tier": "hard",
+      "turn": 1,
+      "action": {
+        "type": "buyMarket",
+        "i": 4
+      }
+    },
+    {
+      "i": 13,
+      "tier": "hell",
+      "turn": 1,
+      "action": {
+        "type": "buyMarket",
+        "i": 4
+      }
+    },
+    {
+      "i": 14,
+      "tier": "hard",
+      "turn": 4,
+      "action": {
+        "type": "play",
+        "idx": 0
+      }
+    },
+    {
+      "i": 14,
+      "tier": "hell",
+      "turn": 4,
+      "action": {
+        "type": "play",
+        "idx": 0
+      }
+    },
+    {
+      "i": 15,
+      "tier": "hard",
+      "turn": 7,
+      "action": {
+        "type": "buyMarket",
+        "i": 3
+      }
+    },
+    {
+      "i": 15,
+      "tier": "hell",
+      "turn": 7,
+      "action": {
+        "type": "buyMarket",
+        "i": 3
+      }
+    },
+    {
+      "i": 16,
+      "tier": "hard",
+      "turn": 11,
+      "action": {
+        "type": "chooseTarget",
+        "uid": "u16"
+      }
+    },
+    {
+      "i": 16,
+      "tier": "hell",
+      "turn": 11,
+      "action": {
+        "type": "chooseTarget",
+        "uid": "u16"
+      }
+    },
+    {
+      "i": 17,
+      "tier": "hard",
+      "turn": 2,
+      "action": {
+        "type": "play",
+        "idx": 0
+      }
+    },
+    {
+      "i": 17,
+      "tier": "hell",
+      "turn": 2,
+      "action": {
+        "type": "play",
+        "idx": 0
+      }
+    },
+    {
+      "i": 18,
+      "tier": "hard",
+      "turn": 4,
+      "action": {
+        "type": "endTurn"
+      }
+    },
+    {
+      "i": 18,
+      "tier": "hell",
+      "turn": 4,
+      "action": {
+        "type": "endTurn"
+      }
+    },
+    {
+      "i": 19,
+      "tier": "hard",
+      "turn": 8,
+      "action": {
+        "type": "attack",
+        "uid": "u7"
+      }
+    },
+    {
+      "i": 19,
+      "tier": "hell",
+      "turn": 8,
+      "action": {
+        "type": "attack",
+        "uid": "u7"
+      }
+    },
+    {
+      "i": 20,
+      "tier": "hard",
+      "turn": 50,
+      "action": {
+        "type": "chooseTarget",
+        "uid": "u206"
+      }
+    },
+    {
+      "i": 20,
+      "tier": "hell",
+      "turn": 50,
+      "action": {
+        "type": "chooseTarget",
+        "uid": "u281"
+      }
+    }
+  ]
+}

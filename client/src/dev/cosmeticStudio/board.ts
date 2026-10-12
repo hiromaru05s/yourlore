@@ -1,3 +1,4 @@
+import {cosmetic} from '../../shared/cosmetics';
 import {setPreviewCardThickness,CARD_THICKNESS_SCALE,STOCK_THICKNESS,DRAW_THICKNESS_RATIO} from '../../ui/cardThickness';
 import {ACTIONS,replayAction,type StudioAction} from './actions';
 import '../../styles/tokens.css';import '../../styles/base.css';import '../../styles/card.css';import '../../styles/passives.css';import '../../styles/game-overlays.css';import '../../styles/game.css';import '../../styles/screens.css';import '../../styles/reading-board.css';import '../../styles/presentation.css';
@@ -8,11 +9,12 @@ export async function mountBoard(){
  document.body.innerHTML='<div id="app"></div>';const root=document.getElementById('app')!;
  const style=document.createElement('style');style.textContent='.help-callout,.battle-tools,.game-help-callout,.btn-surrender{display:none!important}';document.head.append(style);
  for(const t of THEMES)SLEEVES[t.id]={id:t.id,url:asset(t,'back.webp'),ja:t.name,en:t.en,ko:t.name,price:0};
- setLang('ja');setMyAvatar('SEEKER_BLUE');setOppAvatar('SEEKER_RED');
+ const lang=params.get('lang');setLang(lang==='en'||lang==='ko'?lang:'ja');setMyAvatar('SEEKER_BLUE');setOppAvatar('SEEKER_RED');
  const materials=createAtelierMaterials();let focusZoom=1;
  Object.defineProperty(materials,'pixelRatio',{configurable:true,get:()=>focusZoom>1?Math.min((devicePixelRatio||1)*focusZoom,Math.sqrt(12000000/(innerWidth*innerHeight))):undefined});
  if(params.get('auditQuality')==='current')Object.defineProperty(materials,'pixelRatio',{configurable:true,get:()=>Math.min(devicePixelRatio||1,1.5,Math.sqrt(2600000/(innerWidth*innerHeight)))});
  if(params.get('auditQuality')==='native')Object.defineProperty(materials,'pixelRatio',{value:Math.min(devicePixelRatio||1,2)});
+ const shopItem=cosmetic(params.get('shopItem')??'');
  const runtime=params.get('runtime')==='1';const unregister=runtime?()=>materials.dispose():registerCosmeticPreview(root,materials);
  class PreviewController extends BaseController{submit(){/* Sample match is read-only. */} show(g:GameState){this.state=g;this.view.render(g);}}
  const ctl=new PreviewController(root,0,{onHome(){},onRematch(){}}),stop=startBoardLayout();
@@ -27,6 +29,10 @@ export async function mountBoard(){
   state={...next,time:undefined};materials.setMotion(next.motion);if(next.time!==undefined)materials.seek(next.time);
   g.sleeves=[theme&&(next.side==='self'||next.side==='both')?theme.id:'default',theme&&(next.side==='opponent'||next.side==='both')?theme.id:'default'];
   g.furnitures=g.sleeves?.map(id=>id==='default'?'default':'furniture:'+id) as [string,string];
+  if(shopItem){
+   g.sleeves=[shopItem.kind==='sleeve'?shopItem.id:'default','default'];
+   g.furnitures=[shopItem.kind==='furniture'?shopItem.id:'default','default'];
+  }
   for(const [i,p]of g.players.entries()){
    p.hand=hands.map(card);p.deck=Array.from({length:next.count},()=>card('ELF'));p.discard=Array.from({length:next.count?Math.min(next.count,12):0},()=>card('HALF_ELF'));
    p.field=monsters.slice(i?1:0,(i?1:0)+(next.dense?7:2)).map(c=>({...card(c.id),atk:c.atk!,def:c.def!,dmg:0,exhausted:true,tempAtk:0,atkMod:0,defMod:0,summonedTurn:0}) as FieldMon);
@@ -34,7 +40,7 @@ export async function mountBoard(){
   ctl.show(g);root.dataset.atelierSet=next.set;root.dataset.atelierSide=next.side;
   parent.postMessage({type:'atelier-applied',state},location.origin);
  }
- state.set=params.get('set')??state.set;const side=params.get('side');if(side==='self'||side==='opponent'||side==='both')state.side=side;
+ state.set=shopItem?'default':params.get('set')??state.set;const side=params.get('side');if(side==='self'||side==='opponent'||side==='both')state.side=side;
  await apply(state);
  async function replay(kind:StudioAction){
   if(busy)return;busy=true;root.dataset.replay=kind;parent.postMessage({type:'atelier-replay',busy:true,kind},location.origin);

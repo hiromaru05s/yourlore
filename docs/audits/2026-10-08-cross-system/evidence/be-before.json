@@ -1,0 +1,54 @@
+{
+  "checks": [
+    {
+      "name": "concurrent invite attribution respects three-person cap and ledger ownership",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n8 !== 3\n"
+    },
+    {
+      "name": "current and legacy tutorial completion grant badge; incomplete lesson does not",
+      "passed": false,
+      "error": "current\n\nfalse !== true\n"
+    },
+    {
+      "name": "parallel room setup cannot reset an already provisioned game",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n200 !== 409\n"
+    },
+    {
+      "name": "timeout write failure never sends an uncommitted board",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n2 !== 0\n"
+    },
+    {
+      "name": "login returns equipped deck before home or BOT can start",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\nundefined !== 2\n"
+    },
+    {
+      "name": "concurrent password reset consumes the token once",
+      "passed": false,
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    200,\n+   200\n-   400\n  ]\n"
+    },
+    {
+      "name": "concurrent resend retains the one token actually issued",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n5 !== 1\n"
+    },
+    {
+      "name": "OAuth return rejects a backslash external redirect",
+      "passed": false,
+      "error": "The expression evaluated to a falsy value:\n\n  assert(!ret||new URL(ret,'https://test.yourlore.xyz').origin==='https://test.yourlore.xyz')\n"
+    },
+    {
+      "name": "rank recovery resolves public room name to stored durable identity",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 1018\n"
+    },
+    {
+      "name": "opposite simultaneous friend requests produce one relationship",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n2 !== 1\n"
+    }
+  ]
+}

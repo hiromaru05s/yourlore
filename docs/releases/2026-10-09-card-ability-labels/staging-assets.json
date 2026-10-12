@@ -1,0 +1,327 @@
+{
+  "at": "2026-10-09T09:25:15.108Z",
+  "base": "https://test.yourlore.xyz",
+  "source": "e8a5d08eb84379c3482aeb7bfb9ca037e92644c5",
+  "count": 53,
+  "matched": 53,
+  "results": [
+    {
+      "path": "assets/atelierThemes-DM29k3s-.js",
+      "localHash": "95d1fa7ec28362a982bf7d4430da039a377b73a37609306bf599ca8bc7810c97",
+      "remoteHash": "95d1fa7ec28362a982bf7d4430da039a377b73a37609306bf599ca8bc7810c97",
+      "match": true
+    },
+    {
+      "path": "assets/audit-Ch-vlPRj.js",
+      "localHash": "53fcc623e3b2b9ac71ac9b74dd522f3e77f45ae7853baa8ac8284d4d4e6a1930",
+      "remoteHash": "53fcc623e3b2b9ac71ac9b74dd522f3e77f45ae7853baa8ac8284d4d4e6a1930",
+      "match": true
+    },
+    {
+      "path": "assets/baseFurniture-7c7WWX5v.js",
+      "localHash": "b09c0f9fa770dc9cf15ed98f07f90dbf3b92f432e975cf5153d161bba0733078",
+      "remoteHash": "b09c0f9fa770dc9cf15ed98f07f90dbf3b92f432e975cf5153d161bba0733078",
+      "match": true
+    },
+    {
+      "path": "assets/board-BSPa_nyt.js",
+      "localHash": "ad7d10458ca004693d25f65a6a0a74a5bf1947c8e5837e0692375ec0fbceb969",
+      "remoteHash": "ad7d10458ca004693d25f65a6a0a74a5bf1947c8e5837e0692375ec0fbceb969",
+      "match": true
+    },
+    {
+      "path": "assets/board-UDApamK7.css",
+      "localHash": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22",
+      "remoteHash": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22",
+      "match": true
+    },
+    {
+      "path": "assets/BufferGeometryUtils-BtQ6Yiur.js",
+      "localHash": "a54670bac9f64322ec30b27ae8415a0059a22a1b3ad77e3b4ab57f123deeb334",
+      "remoteHash": "a54670bac9f64322ec30b27ae8415a0059a22a1b3ad77e3b4ab57f123deeb334",
+      "match": true
+    },
+    {
+      "path": "assets/catalogRender-4j2DwMYy.js",
+      "localHash": "6321dadcb4b050dc9a86fd9d2fa849ddd3cb1b811738cd5f18f505c84d480b05",
+      "remoteHash": "6321dadcb4b050dc9a86fd9d2fa849ddd3cb1b811738cd5f18f505c84d480b05",
+      "match": true
+    },
+    {
+      "path": "assets/ceremonyScene-J8f_JQUb.js",
+      "localHash": "531afd1d9d82af0b0467e239bfa15c4c35f15024738a7879b98cbbd8b3a9416a",
+      "remoteHash": "531afd1d9d82af0b0467e239bfa15c4c35f15024738a7879b98cbbd8b3a9416a",
+      "match": true
+    },
+    {
+      "path": "assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "localHash": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700",
+      "remoteHash": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700",
+      "match": true
+    },
+    {
+      "path": "assets/cosmeticStudio-C1ApmxCA.js",
+      "localHash": "68d2f0343fcbd6a0d14cfffb36b73be8af44aa2ea2aab54086bc1aff091085cb",
+      "remoteHash": "68d2f0343fcbd6a0d14cfffb36b73be8af44aa2ea2aab54086bc1aff091085cb",
+      "match": true
+    },
+    {
+      "path": "assets/diceScene-B8XVO3oi.js",
+      "localHash": "705d32a981631c69fa488103cbfec0e13d1437c025318d38bbacd89a47487cf6",
+      "remoteHash": "705d32a981631c69fa488103cbfec0e13d1437c025318d38bbacd89a47487cf6",
+      "match": true
+    },
+    {
+      "path": "assets/duelScene-Bt_Fh3fQ.js",
+      "localHash": "1c19a3731b0f8bb469adf8457468ebf8af0ea01a63865f80bdcb868faf51e4fc",
+      "remoteHash": "1c19a3731b0f8bb469adf8457468ebf8af0ea01a63865f80bdcb868faf51e4fc",
+      "match": true
+    },
+    {
+      "path": "assets/family-matter-mPliFT5g.js",
+      "localHash": "4e83d39c595068a7d5a256c604956922309ae87037c0aeba7a1d16879357a9f3",
+      "remoteHash": "4e83d39c595068a7d5a256c604956922309ae87037c0aeba7a1d16879357a9f3",
+      "match": true
+    },
+    {
+      "path": "assets/game-JczYewvF.js",
+      "localHash": "516016a212539f0c2d6c0e6b0160b7ff9f2860091b9f7a406535768f695b5b96",
+      "remoteHash": "516016a212539f0c2d6c0e6b0160b7ff9f2860091b9f7a406535768f695b5b96",
+      "match": true
+    },
+    {
+      "path": "assets/handGeometry-Bz96hXgQ.js",
+      "localHash": "aa57e7f2da29c273b4f2adfb686fe19dbae04ee09c5e9ce37b735341357b6d01",
+      "remoteHash": "aa57e7f2da29c273b4f2adfb686fe19dbae04ee09c5e9ce37b735341357b6d01",
+      "match": true
+    },
+    {
+      "path": "assets/inspection-Bb_5ehy6.js",
+      "localHash": "bd16edba941be818fdb92daa0d9c3f6ce071f96f250fee88112d0e09cb00ac46",
+      "remoteHash": "bd16edba941be818fdb92daa0d9c3f6ce071f96f250fee88112d0e09cb00ac46",
+      "match": true
+    },
+    {
+      "path": "assets/layout--7dkKh1-.js",
+      "localHash": "d82081755d93fb72fd203465f9bd81003c05a02ffc48afb3a61765c1eff40d0d",
+      "remoteHash": "d82081755d93fb72fd203465f9bd81003c05a02ffc48afb3a61765c1eff40d0d",
+      "match": true
+    },
+    {
+      "path": "assets/layout-BgPxMCBL.css",
+      "localHash": "3d4b246e8ca97437006e19ceb73a738c6eba31a0e97b9ba39ba84c8205281b74",
+      "remoteHash": "3d4b246e8ca97437006e19ceb73a738c6eba31a0e97b9ba39ba84c8205281b74",
+      "match": true
+    },
+    {
+      "path": "assets/libraryAssets-CTl0VxW4.js",
+      "localHash": "cd9a3fbb45fa79d6e70bd12cb15ec7764887477496ba0c1fb7af946fa42af6fd",
+      "remoteHash": "cd9a3fbb45fa79d6e70bd12cb15ec7764887477496ba0c1fb7af946fa42af6fd",
+      "match": true
+    },
+    {
+      "path": "assets/main-C_CXYAfk.js",
+      "localHash": "c9cf736bdd22265b02c0e26eb0d1b3db31eb79c685270d5728af0e6b4b801047",
+      "remoteHash": "c9cf736bdd22265b02c0e26eb0d1b3db31eb79c685270d5728af0e6b4b801047",
+      "match": true
+    },
+    {
+      "path": "assets/main-DsQxvfwJ.css",
+      "localHash": "62d18ccbdfdc7c188fba205e04387c73ba324a68ea7cbd9bd32d0510e18e7183",
+      "remoteHash": "62d18ccbdfdc7c188fba205e04387c73ba324a68ea7cbd9bd32d0510e18e7183",
+      "match": true
+    },
+    {
+      "path": "assets/master-tongues-D8OK7q_j.js",
+      "localHash": "8ee430fa95c538f15127bd90f93947b966eb6acbb5bbec3be28b23af35be933d",
+      "remoteHash": "8ee430fa95c538f15127bd90f93947b966eb6acbb5bbec3be28b23af35be933d",
+      "match": true
+    },
+    {
+      "path": "assets/materials-C2eC0b0T.js",
+      "localHash": "7b4b1cb94b2a9289692b7fc32fc7e483fa35fe1a40f37c96574f9faf88654360",
+      "remoteHash": "7b4b1cb94b2a9289692b7fc32fc7e483fa35fe1a40f37c96574f9faf88654360",
+      "match": true
+    },
+    {
+      "path": "assets/modal-BCG4ETYd.css",
+      "localHash": "042052ea5b4b9a5773778e8ee43c6eb87f4bce2a54708e351a5869963e29f6cd",
+      "remoteHash": "042052ea5b4b9a5773778e8ee43c6eb87f4bce2a54708e351a5869963e29f6cd",
+      "match": true
+    },
+    {
+      "path": "assets/modal-BvvOXdv0.js",
+      "localHash": "00a6dbeb9f377f254f2d4646e083fc396a13c31331ce9da15814c9da04f43373",
+      "remoteHash": "00a6dbeb9f377f254f2d4646e083fc396a13c31331ce9da15814c9da04f43373",
+      "match": true
+    },
+    {
+      "path": "assets/ornaments-Dzm-ki1u.js",
+      "localHash": "fa70bb6e894be6b8a27124e04957eb1ec3c7efd78afad3c4cd35a4f427f45da6",
+      "remoteHash": "fa70bb6e894be6b8a27124e04957eb1ec3c7efd78afad3c4cd35a4f427f45da6",
+      "match": true
+    },
+    {
+      "path": "assets/paperDraw-C-_CuT1c.js",
+      "localHash": "56c978f041b7cda9297a7a7d48b5262c30ec4ba10efd5614eb713a07a05048c3",
+      "remoteHash": "56c978f041b7cda9297a7a7d48b5262c30ec4ba10efd5614eb713a07a05048c3",
+      "match": true
+    },
+    {
+      "path": "assets/persistentFlightRenderer-DTWT9Vex.js",
+      "localHash": "75983fba04ee787833f9e1455c1a8386d7b52a149b4cedfc51885d67f3aa737c",
+      "remoteHash": "75983fba04ee787833f9e1455c1a8386d7b52a149b4cedfc51885d67f3aa737c",
+      "match": true
+    },
+    {
+      "path": "assets/pileModels-DVNeaOiz.js",
+      "localHash": "5e432d7b876fcfc262c0a1a783114d89b3d8f8a3f85e5c431ef4e82a237b88c1",
+      "remoteHash": "5e432d7b876fcfc262c0a1a783114d89b3d8f8a3f85e5c431ef4e82a237b88c1",
+      "match": true
+    },
+    {
+      "path": "assets/renderDensity-eCqR3GeM.js",
+      "localHash": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699",
+      "remoteHash": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699",
+      "match": true
+    },
+    {
+      "path": "assets/renderer-B4x-n7zx.js",
+      "localHash": "b1ff32d8b3071a9480e804560f44a4d9deeba2cf1bc97423f579344d1d6b2204",
+      "remoteHash": "b1ff32d8b3071a9480e804560f44a4d9deeba2cf1bc97423f579344d1d6b2204",
+      "match": true
+    },
+    {
+      "path": "assets/renderer-DDLqLQKC.js",
+      "localHash": "ab5b0f38e02ba8d60cbe70edbe0bdb41f59690b786c850728f98f6d253bb565a",
+      "remoteHash": "ab5b0f38e02ba8d60cbe70edbe0bdb41f59690b786c850728f98f6d253bb565a",
+      "match": true
+    },
+    {
+      "path": "assets/renderer-DE2cyo-o.js",
+      "localHash": "8028359e6a7e951692a391914b7f10b714d7f5efd2f869ecb73dc48a53a5ec49",
+      "remoteHash": "8028359e6a7e951692a391914b7f10b714d7f5efd2f869ecb73dc48a53a5ec49",
+      "match": true
+    },
+    {
+      "path": "assets/renderer-DPiTBoi7.js",
+      "localHash": "90f6306fdcc2c4bac4eb877f7c35a977059e3a2c0f13e1b9a6067321bdfab728",
+      "remoteHash": "90f6306fdcc2c4bac4eb877f7c35a977059e3a2c0f13e1b9a6067321bdfab728",
+      "match": true
+    },
+    {
+      "path": "assets/renderer-YaVdTfuf.js",
+      "localHash": "7cc8476e7e44ba9b15d04cf71ce0fb468787e6506d7ffeb5c8383588e99f6e53",
+      "remoteHash": "7cc8476e7e44ba9b15d04cf71ce0fb468787e6506d7ffeb5c8383588e99f6e53",
+      "match": true
+    },
+    {
+      "path": "assets/riftScene-B5WwztR7.js",
+      "localHash": "5f03e2cf25a6ed61d7b12477d0581f00a908d1c7ff551fae2bc1b0ab7650b9bc",
+      "remoteHash": "5f03e2cf25a6ed61d7b12477d0581f00a908d1c7ff551fae2bc1b0ab7650b9bc",
+      "match": true
+    },
+    {
+      "path": "assets/RoomEnvironment-C2hP0fu5.js",
+      "localHash": "db1d207f6ac975a1278e6b791fa36998ccbb132bb419edd85f4f5c74fd3e45b4",
+      "remoteHash": "db1d207f6ac975a1278e6b791fa36998ccbb132bb419edd85f4f5c74fd3e45b4",
+      "match": true
+    },
+    {
+      "path": "assets/royal-matter-BsczBS4m.js",
+      "localHash": "53b1190d32eda0be3f38606c7d64cb8072fe717cdb8a8a9dfe1aee74a29acff0",
+      "remoteHash": "53b1190d32eda0be3f38606c7d64cb8072fe717cdb8a8a9dfe1aee74a29acff0",
+      "match": true
+    },
+    {
+      "path": "assets/runtime-BeP-P8PJ.js",
+      "localHash": "4afc32acf95ef4139b1a8b660785efc6a60adf576686f7fd87969479f6ffc78f",
+      "remoteHash": "4afc32acf95ef4139b1a8b660785efc6a60adf576686f7fd87969479f6ffc78f",
+      "match": true
+    },
+    {
+      "path": "assets/runtime-Ch9eydv_.css",
+      "localHash": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c",
+      "remoteHash": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c",
+      "match": true
+    },
+    {
+      "path": "assets/runtime-D3Z_kr13.js",
+      "localHash": "3f72a84a03949cc86619caace19565b601a8c6bf2d157d3475c18106d8d2c0f7",
+      "remoteHash": "3f72a84a03949cc86619caace19565b601a8c6bf2d157d3475c18106d8d2c0f7",
+      "match": true
+    },
+    {
+      "path": "assets/runtime-DjHbLcYL.js",
+      "localHash": "235574339a206ad19899303706f6f53130f227cf3eebcf5442d601073fb3a5a4",
+      "remoteHash": "235574339a206ad19899303706f6f53130f227cf3eebcf5442d601073fb3a5a4",
+      "match": true
+    },
+    {
+      "path": "assets/scene-BKhpXwSC.js",
+      "localHash": "300b009ad96d7616ea79e243da164ee1ad5426bc53a6517877d9a47df34d7b39",
+      "remoteHash": "300b009ad96d7616ea79e243da164ee1ad5426bc53a6517877d9a47df34d7b39",
+      "match": true
+    },
+    {
+      "path": "assets/sleeve-C0h24m3Q.js",
+      "localHash": "fd8c0d292b94c57aa5f5b2c38cad3535e9467dcff70a51a9acd6b6eaa36422ab",
+      "remoteHash": "fd8c0d292b94c57aa5f5b2c38cad3535e9467dcff70a51a9acd6b6eaa36422ab",
+      "match": true
+    },
+    {
+      "path": "assets/studio-CmgKc6nL.css",
+      "localHash": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e",
+      "remoteHash": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e",
+      "match": true
+    },
+    {
+      "path": "assets/three.module-CIpIHqQB.js",
+      "localHash": "1982636588a5d466acd202de8621359484f646ae9df42f6125c6a089acc5a09d",
+      "remoteHash": "1982636588a5d466acd202de8621359484f646ae9df42f6125c6a089acc5a09d",
+      "match": true
+    },
+    {
+      "path": "cardtest.html",
+      "localHash": "16d2dc9c2574099c50887859f0786436b6ccddd5e64b14d881b1c7e87f416d93",
+      "remoteHash": "16d2dc9c2574099c50887859f0786436b6ccddd5e64b14d881b1c7e87f416d93",
+      "match": true
+    },
+    {
+      "path": "cosmetic-studio.html",
+      "localHash": "a946ac6dee32b4247382f98916a2d7f7dae5b1fa0ab3e81e09e0fc4da804cc48",
+      "remoteHash": "a946ac6dee32b4247382f98916a2d7f7dae5b1fa0ab3e81e09e0fc4da804cc48",
+      "match": true
+    },
+    {
+      "path": "fonts/rift-records/CormorantGaramond-Medium-numerals.ttf",
+      "localHash": "321f66ad4bf3eadefdb3a5d3ac91eb06c9d2db5f4f11a70f5643fb5b996042cb",
+      "remoteHash": "321f66ad4bf3eadefdb3a5d3ac91eb06c9d2db5f4f11a70f5643fb5b996042cb",
+      "match": true
+    },
+    {
+      "path": "index.html",
+      "localHash": "56b70a34cc1f68e26d7376a79f574abc64b554271f0ac8e0419eda7aeded1229",
+      "remoteHash": "56b70a34cc1f68e26d7376a79f574abc64b554271f0ac8e0419eda7aeded1229",
+      "match": true
+    },
+    {
+      "path": "models/reading-board/v1/fonts/DejaVuSerif.ttf",
+      "localHash": "42d1edeb7952f31b1f96d767ed7030b08a39e0c372b0071641518864e2bffb51",
+      "remoteHash": "42d1edeb7952f31b1f96d767ed7030b08a39e0c372b0071641518864e2bffb51",
+      "match": true
+    },
+    {
+      "path": "rift-concepts.html",
+      "localHash": "a18afdf4980837166ceb063df4021433f67ca8804b221f804e7d6ba46b865af9",
+      "remoteHash": "a18afdf4980837166ceb063df4021433f67ca8804b221f804e7d6ba46b865af9",
+      "match": true
+    },
+    {
+      "path": "rift-purple-concepts.html",
+      "localHash": "43aab52e2df986343cc96426738472a0dba1480492288175ec72bc8b4cb493d7",
+      "remoteHash": "43aab52e2df986343cc96426738472a0dba1480492288175ec72bc8b4cb493d7",
+      "match": true
+    }
+  ]
+}

@@ -97,7 +97,7 @@ html[data-nav-design="5"] .nav-cursor{z-index:3;border-top:2px solid #d6eaff;bor
 }
 @media(max-height:450px){html:not([data-nav-design="0"]) .lounge-shell{--dock:90px}html:not([data-nav-design="0"]) .lounge-rail{height:68px;bottom:10px}}
 .lounge-atmosphere{animation:none!important}
-.nav-strip .lounge-shell{background:linear-gradient(#06132750,#050d1bb0),url('/art/lounge/stage-v1/stage.webp') center 82%/cover!important}
+.nav-strip .lounge-shell{background:linear-gradient(#06132750,#050d1bb0),url('/art/lounge/v1/library.webp') center 82%/cover!important}
 .nav-strip .lounge-atmosphere,.nav-strip .lounge-content,.nav-strip .lounge-topbar{display:none}
 .nav-strip:not([data-nav-design="0"]) .lounge-rail{height:100px;bottom:18px}
 .nav-strip[data-nav-design="5"] .lounge-rail{height:124px}
