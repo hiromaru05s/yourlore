@@ -1,0 +1,22 @@
+[
+  {
+    "difficulty": "hard",
+    "turn": 5,
+    "changes": 11,
+    "ticks": 1304,
+    "botName": "ヴェラ",
+    "busy": false,
+    "over": false,
+    "errors": []
+  },
+  {
+    "difficulty": "hell",
+    "turn": 5,
+    "changes": 17,
+    "ticks": 1034,
+    "botName": "シオン",
+    "busy": false,
+    "over": false,
+    "errors": []
+  }
+]

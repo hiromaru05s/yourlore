@@ -1,0 +1,74 @@
+[
+  {
+    "outcome": "d-black",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 1280,
+        "height": 800,
+        "nb_frames": "112",
+        "side_data_list": [
+          {}
+        ]
+      }
+    ],
+    "format": {
+      "duration": "3.733333"
+    }
+  },
+  {
+    "outcome": "d-red",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 1280,
+        "height": 800,
+        "nb_frames": "112",
+        "side_data_list": [
+          {}
+        ]
+      }
+    ],
+    "format": {
+      "duration": "3.733333"
+    }
+  },
+  {
+    "outcome": "d-blue",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 1280,
+        "height": 800,
+        "nb_frames": "112",
+        "side_data_list": [
+          {}
+        ]
+      }
+    ],
+    "format": {
+      "duration": "3.733333"
+    }
+  },
+  {
+    "outcome": "divine",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 1280,
+        "height": 800,
+        "nb_frames": "112",
+        "side_data_list": [
+          {}
+        ]
+      }
+    ],
+    "format": {
+      "duration": "3.733333"
+    }
+  }
+]

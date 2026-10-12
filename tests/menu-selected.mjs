@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import ts from 'typescript';
+import {build} from 'esbuild';
 import {JSDOM} from 'jsdom';
 const dom=new JSDOM('<body><div id="app"></div></body>',{url:'http://localhost',pretendToBeVisual:true});
 Object.assign(globalThis,{window:dom.window,document:dom.window.document,HTMLElement:dom.window.HTMLElement,Event:dom.window.Event});
@@ -8,9 +9,8 @@ const base={t:key=>key,esc:s=>String(s).replaceAll('<','&lt;'),onLangChange:()=>
 async function load(name,deps){const source=(await fs.readFile(new URL(`../client/src/screens/${name}.ts`,import.meta.url),'utf8')).replace(/^import .*;\s*$/gm,'');const js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText;const exports={};new Function('exports',...Object.keys(deps),js)(exports,...Object.values(deps));return exports;}
 const root=document.querySelector('#app');const calls=[];
 const app={root,user:{id:'local-guest-user',decks:null},rankedLobby:()=>calls.push('ranked'),onlineLobby:()=>calls.push('online'),botGame:d=>calls.push(d),deck:()=>calls.push('deck'),leaderboard:()=>calls.push('rank'),home(){}};
-const npcSource=await fs.readFile(new URL('../client/src/shared/botNpcs.ts',import.meta.url),'utf8');
-const npcJs=ts.transpileModule(npcSource,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText;
-const npcs={};new Function('exports',npcJs)(npcs);
+const npcBundle=await build({entryPoints:['client/src/shared/botNpcs.ts'],bundle:true,platform:'node',format:'cjs',write:false});
+const npcModule={exports:{}};new Function('module','exports',npcBundle.outputFiles[0].text)(npcModule,npcModule.exports);const npcs=npcModule.exports;
 const {mountHome}=await load('home',{...base,...npcs,getLang:()=> 'ja',api:{rankMe:async()=>null},homeRankHtml:()=>'',sanitizeDecks:()=>({sel:0,list:[{name:'Deck',cards:[]}]}),artUrl:{sm:id=>id}});
 const home=mountHome(app);root.querySelector('#online').click();assert.deepEqual(calls,[],'Selecting a mode must not start matchmaking');root.querySelector('#ranked').click();assert.deepEqual(calls,['online']);root.querySelector('#bot').click();root.querySelector('#ranked').click();assert.equal(document.querySelectorAll('[data-diff]').length,4);document.querySelector('[data-diff="hard"]').click();assert.equal(calls.at(-1),'online','Difficulty selection must not start a duel');assert.equal(document.querySelector('[data-diff="hard"]').getAttribute('aria-pressed'),'true');assert.equal(document.querySelector('[data-diff=hard] .diff-name').textContent,'ヴェラ');assert(document.querySelector('#diffStart').textContent.includes('ヴェラ'));document.querySelector('#diffStart').click();assert.equal(calls.at(-1),'hard');root.querySelector('#rankedMode').click();root.querySelector('#ranked').click();assert.equal(calls.at(-1),'ranked');home.destroy();root.innerHTML='';
 const catalog=[{id:'a',kind:'sleeve',url:'/a',ja:'A',price:0},{id:'b',kind:'sleeve',url:'/cosmetics/atelier-v1/tidal/back.webp',ja:'B',price:0},{id:'f',kind:'furniture',url:'/f',ja:'F',price:0}];let resolveBuy,purchases=0,previewed=null,previewClosed=false;

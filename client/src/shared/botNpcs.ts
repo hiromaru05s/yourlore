@@ -1,4 +1,6 @@
 import type { BotDeck, BotDifficulty } from "./bot";
+import { BOT_ELITE_DECKS, BOT_HELL_DECKS } from "./botDecks";
+const trainedDeck = (deck: BotDeck): BotDeck => ({...deck,cards:[...deck.cards],tune:{minBuyEarly:6,minBuy:11,chestTurn:6,...deck.tune}});
 
 type NpcText = { ja: string; en: string; ko: string };
 export interface BotNpc {
@@ -41,22 +43,14 @@ export const BOT_NPCS: readonly BotNpc[] = [
   {
     id: "vera", difficulty: "hard", avatar: "NPC_VERA", portrait: "/art/npcs/v2/vera.webp",
     name: text("ヴェラ", "Vera", "베라"), title: text("果敢なシーカー", "Daring Seeker", "과감한 시커"),
-    style: text("速攻と盤面の圧力", "Fast attacks & board pressure", "속공과 필드 압박"),
-    decks: [
-      deck("vera-assault", ["AMBUSH", "FLAME", "FLAME", "FLAME", "GHOST", "GHOST", "TRUMPET", T], 5, 8, 4),
-      deck("vera-command", ["GHOST", "GHOST", "TRUMPET", "GUILD_HALL", "FLAME", C, T, T], 7, 10, 5),
-      deck("vera-ambush", ["AMBUSH", "GUILD_HALL", "GUILD_HALL", "GHOST", "FLAME", C, T, T], 6, 9, 4),
-    ],
+    style: text("盤面展開と回復エンジン", "Board development & recovery", "필드 전개와 회복"),
+    decks: [trainedDeck(BOT_ELITE_DECKS[2]), trainedDeck(BOT_ELITE_DECKS[0]), trainedDeck(BOT_ELITE_DECKS[1])],
   },
   {
     id: "sion", difficulty: "hell", avatar: "NPC_SION", portrait: "/art/npcs/v2/sion.webp",
     name: text("シオン", "Sion", "시온"), title: text("熟練のシーカー", "Master Seeker", "숙련된 시커"),
-    style: text("先読みと多彩な戦術", "Foresight & versatile tactics", "수 읽기와 다채로운 전술"),
-    decks: [
-      deck("sion-tempo", ["GHOST", "TRUMPET", "GUILD_HALL", "FLAME", "FLAME", C, T, T], 7, 10, 5),
-      deck("sion-engine", ["FORESIGHT", "GAMBLER", "GAMBLER", C, C, C, T, T], 8, 12, 6),
-      deck("sion-canopy", ["ELF_HAVEN", "HALF_ELF", "HALF_ELF", "FORESIGHT", C, C, T, T], 8, 11, 5),
-    ],
+    style: text("速攻・腐敗・妨害", "Pressure, decay & disruption", "속공・부패・방해"),
+    decks: [trainedDeck(BOT_HELL_DECKS[0]), trainedDeck(BOT_HELL_DECKS[1]), trainedDeck(BOT_HELL_DECKS[2])],
   },
 ];
 

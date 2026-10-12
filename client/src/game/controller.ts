@@ -1,3 +1,6 @@
+import {hatchPairs} from '../ui/hatchSummon/selection';
+import { BotThinker } from './botThinker';
+import { observationSample } from '../shared/botObservation';
 import {tauntRollIndex} from '../ui/taunt/timing';
 import {evasionRollIndex} from '../ui/evade/timing';
 import {playStatusExtinction,warmStatusExtinctions,disposeStatusExtinctions} from '../ui/statusExtinction/runtime';
@@ -30,8 +33,7 @@ import { paintDuelClock } from '../ui/duelClock';
 import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
 import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef } from "../shared/engine";
-import type { BotDifficulty } from "../shared/bot";
-import {BotPlanner} from "./botPlanner";
+import { safeGreedy, legalBotAction, type BotDifficulty } from "../shared/bot";
 import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog, logToText } from "../ui/log";
@@ -318,6 +320,7 @@ export abstract class BaseController implements BoardHandlers {
       }
     }
     const events = counterPresentationEvents(res.events);
+    const hatches=hatchPairs(events),heldEggs=new Set<string>();
     if(events.some(e=>e.type==='dice'&&e.taunt))A.warmTaunt();
     if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
     const eventSound = new EventSound();
@@ -361,7 +364,7 @@ export abstract class BaseController implements BoardHandlers {
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
-      const cue = eventSound.cue(e);
+      const cue = e.type==='destroy'&&[...hatches.values()].includes(e.uid)?undefined:eventSound.cue(e);
       if(cue&&!A.isFxSkipped())sfx(cue);
       if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
       if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
@@ -418,6 +421,12 @@ export abstract class BaseController implements BoardHandlers {
           const card = this.findCard(res.state, e.uid) ?? this.defOf(e.id, e.uid);
           const grant=events.slice(i+1).find(ev=>ev.type==='decayCounterGrant'&&ev.uid===e.uid);
           const shown=card&&grant?.type==='decayCounterGrant'?{...card,decayCnt:grant.before}:card;
+          const egg=hatches.get(e.uid);
+          if(egg&&heldEggs.delete(egg)){
+            const g=shown?await A.hatchSummon(egg,shown):null;
+            if(g){ghosts.delete(egg);ghosts.set(e.uid,{el:g,side:sideOf(e.player)});statusSource=g;break;}
+            releaseMonster(egg);fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);
+          }
           if (shown) {
             const g = await A.ghostSummon(shown, sideOf(e.player), fieldCount[e.player]);
             if (g) {ghosts.set(e.uid, { el: g, side: sideOf(e.player) });statusSource=g;}
@@ -450,6 +459,7 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "destroy": {
+          if([...hatches.values()].includes(e.uid)&&document.querySelector(`.zone-mon .card[data-uid="${CSS.escape(e.uid)}"]`)){heldEggs.add(e.uid);break;}
           const destroy=async()=>{
           const gh = ghosts.get(e.uid);
           const shelved=res.state.players[e.player].discard.some(c=>c.uid===e.uid);
@@ -1146,7 +1156,9 @@ const lastNpcDecks = new Map<string, number>();
 
 export class LocalController extends BaseController {
   private botTimer = 0;
-  private readonly planner = new BotPlanner();
+  private thinker = new BotThinker();
+  private botBusy = false;
+  private botDisposed = false;
   private difficulty: BotDifficulty;
 
   constructor(root: HTMLElement, exits: ControllerExits, playerName = "PLAYER 1", deck?: string[], difficulty: BotDifficulty = "hard") {
@@ -1166,7 +1178,7 @@ export class LocalController extends BaseController {
   }
 
   protected applyResult(res: ReduceResult, animate = true): void {
-    if(res.state.over){clearTimeout(this.botTimer);this.planner.dispose();}
+    if(res.state.over){clearTimeout(this.botTimer);this.thinker.destroy();}
     super.applyResult(res,animate);
   }
 
@@ -1180,7 +1192,7 @@ export class LocalController extends BaseController {
 
   protected maybeBot(): void {
     const g = this.state;
-    if (g.over) { this.planner.dispose(); return; }
+    if (g.over) { this.thinker.destroy(); return; }
     if (g.players[actingSide(g)].isBot) {
       clearTimeout(this.botTimer);
       // playback has already finished by the time afterApply runs — a short beat is enough
@@ -1192,19 +1204,28 @@ export class LocalController extends BaseController {
   private botTurnSteps = 0;
   private async botStep(): Promise<void> {
     const g = this.state;
-    if (this.dead || g.over || !g.players[actingSide(g)].isBot) return;
+    if (this.botDisposed || this.botBusy || g.over || !g.players[actingSide(g)].isBot) return;
     // 안전망: 봇이 한 턴에서 비정상적으로 많은 행동을 반복하면(거부 루프 등) 강제 턴 종료.
     // 정상 턴은 수십 액션 이내 — 200회는 버그가 아니면 도달 불가.
     if (g.turn !== this.botTurnNo) { this.botTurnNo = g.turn; this.botTurnSteps = 0; }
     if (++this.botTurnSteps > 200) {
       console.warn("[bot] loop guard — forcing endTurn on turn", g.turn);
-      this.applyResult(reduce(g, g.pending?.allowCancel ? ({ type: "pick", uid: null } as Action) : ({ type: "endTurn" } as Action)));
+      // Finish mandatory choices before ending the turn; endTurn is refused
+      // while a non-cancellable target is pending.
+      const action = g.pending
+        ? legalBotAction(g, { type: 'pick', uid: null })
+        : { type: 'endTurn' } as Action;
+      this.applyResult(reduce(g, action));
       return;
     }
-    const action = await this.planner.decide(g, this.difficulty);
-    if(!action||this.dead||this.state!==g||g.over)return;
-    this.applyResult(reduce(g, action));
+    this.botBusy = true;
+    try {
+      const action = await this.thinker.decide(g, this.difficulty);
+      if (this.botDisposed || this.state !== g || g.over) return;
+      this.applyResult(reduce(g, action ?? legalBotAction(g, safeGreedy(observationSample(g, actingSide(g), 0)))));
+    } finally { this.botBusy = false; }
+
   }
 
-  destroy(): void { clearTimeout(this.botTimer); this.planner.dispose(); super.destroy(); }
+  destroy(): void { this.botDisposed = true; clearTimeout(this.botTimer); this.thinker.destroy(); super.destroy(); }
 }
