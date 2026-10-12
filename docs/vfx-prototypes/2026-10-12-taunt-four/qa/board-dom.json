@@ -1,0 +1,354 @@
+{
+  "before": [
+    {
+      "uid": "taunt-1-0",
+      "inline": "",
+      "opacity": "1",
+      "visibility": "visible",
+      "ancestors": [
+        {
+          "class": "zone zone-mon",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "zone-row",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "prow",
+          "opacity": "1",
+          "visibility": "visible"
+        }
+      ],
+      "rect": {
+        "x": 512.85400390625,
+        "y": 257.42987060546875,
+        "w": 81.7276611328125,
+        "h": 116.33001708984375
+      }
+    },
+    {
+      "uid": "taunt-1-1",
+      "inline": null,
+      "opacity": "1",
+      "visibility": "visible",
+      "ancestors": [
+        {
+          "class": "zone zone-mon",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "zone-row",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "prow",
+          "opacity": "1",
+          "visibility": "visible"
+        }
+      ],
+      "rect": {
+        "x": 599.5682373046875,
+        "y": 257.42987060546875,
+        "w": 80.8355712890625,
+        "h": 116.33001708984375
+      }
+    },
+    {
+      "uid": "taunt-1-2",
+      "inline": "",
+      "opacity": "1",
+      "visibility": "visible",
+      "ancestors": [
+        {
+          "class": "zone zone-mon",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "zone-row",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "prow",
+          "opacity": "1",
+          "visibility": "visible"
+        }
+      ],
+      "rect": {
+        "x": 685.3854370117188,
+        "y": 257.42987060546875,
+        "w": 81.732666015625,
+        "h": 116.33001708984375
+      }
+    },
+    {
+      "uid": "taunt-0-0",
+      "inline": "touch-action: none;",
+      "opacity": "1",
+      "visibility": "visible",
+      "ancestors": [
+        {
+          "class": "zone zone-mon",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "zone-row",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "prow",
+          "opacity": "1",
+          "visibility": "visible"
+        }
+      ],
+      "rect": {
+        "x": 506.9186096191406,
+        "y": 528.1781616210938,
+        "w": 85.59402465820312,
+        "h": 127.354736328125
+      }
+    },
+    {
+      "uid": "taunt-0-1",
+      "inline": "touch-action: none;",
+      "opacity": "1",
+      "visibility": "visible",
+      "ancestors": [
+        {
+          "class": "zone zone-mon",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "zone-row",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "prow",
+          "opacity": "1",
+          "visibility": "visible"
+        }
+      ],
+      "rect": {
+        "x": 597.6898193359375,
+        "y": 528.1781616210938,
+        "w": 84.61749267578125,
+        "h": 127.354736328125
+      }
+    },
+    {
+      "uid": "taunt-0-2",
+      "inline": "touch-action: none;",
+      "opacity": "1",
+      "visibility": "visible",
+      "ancestors": [
+        {
+          "class": "zone zone-mon",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "zone-row",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "prow",
+          "opacity": "1",
+          "visibility": "visible"
+        }
+      ],
+      "rect": {
+        "x": 687.4788208007812,
+        "y": 528.1781616210938,
+        "w": 85.59967041015625,
+        "h": 127.354736328125
+      }
+    }
+  ],
+  "after": [
+    {
+      "uid": "taunt-1-0",
+      "inline": "will-change: transform; transform: translate3d(0px, 0px, 1.36432px) rotateX(0rad) scale(1);",
+      "opacity": "1",
+      "visibility": "visible",
+      "ancestors": [
+        {
+          "class": "zone zone-mon",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "zone-row",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "prow",
+          "opacity": "1",
+          "visibility": "visible"
+        }
+      ],
+      "rect": {
+        "x": 512.85400390625,
+        "y": 257.42987060546875,
+        "w": 81.7276611328125,
+        "h": 116.33001708984375
+      }
+    },
+    {
+      "uid": "taunt-1-1",
+      "inline": null,
+      "opacity": "1",
+      "visibility": "visible",
+      "ancestors": [
+        {
+          "class": "zone zone-mon",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "zone-row",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "prow",
+          "opacity": "1",
+          "visibility": "visible"
+        }
+      ],
+      "rect": {
+        "x": 599.5682373046875,
+        "y": 257.42987060546875,
+        "w": 80.8355712890625,
+        "h": 116.33001708984375
+      }
+    },
+    {
+      "uid": "taunt-1-2",
+      "inline": "",
+      "opacity": "1",
+      "visibility": "visible",
+      "ancestors": [
+        {
+          "class": "zone zone-mon",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "zone-row",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "prow",
+          "opacity": "1",
+          "visibility": "visible"
+        }
+      ],
+      "rect": {
+        "x": 685.3854370117188,
+        "y": 257.42987060546875,
+        "w": 81.732666015625,
+        "h": 116.33001708984375
+      }
+    },
+    {
+      "uid": "taunt-0-0",
+      "inline": "touch-action: none;",
+      "opacity": "1",
+      "visibility": "visible",
+      "ancestors": [
+        {
+          "class": "zone zone-mon",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "zone-row",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "prow",
+          "opacity": "1",
+          "visibility": "visible"
+        }
+      ],
+      "rect": {
+        "x": 506.9186096191406,
+        "y": 528.1781616210938,
+        "w": 85.59402465820312,
+        "h": 127.354736328125
+      }
+    },
+    {
+      "uid": "taunt-0-1",
+      "inline": "touch-action: none;",
+      "opacity": "1",
+      "visibility": "visible",
+      "ancestors": [
+        {
+          "class": "zone zone-mon",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "zone-row",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "prow",
+          "opacity": "1",
+          "visibility": "visible"
+        }
+      ],
+      "rect": {
+        "x": 597.6898193359375,
+        "y": 528.1781616210938,
+        "w": 84.61749267578125,
+        "h": 127.354736328125
+      }
+    },
+    {
+      "uid": "taunt-0-2",
+      "inline": "touch-action: none;",
+      "opacity": "1",
+      "visibility": "visible",
+      "ancestors": [
+        {
+          "class": "zone zone-mon",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "zone-row",
+          "opacity": "1",
+          "visibility": "visible"
+        },
+        {
+          "class": "prow",
+          "opacity": "1",
+          "visibility": "visible"
+        }
+      ],
+      "rect": {
+        "x": 687.4788208007812,
+        "y": 528.1781616210938,
+        "w": 85.59967041015625,
+        "h": 127.354736328125
+      }
+    }
+  ]
+}

@@ -1549,13 +1549,20 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     const orig = o.field.find((m) => m.uid === targetUid);
     const taunts = o.field.filter((m) => m.uid !== targetUid && m.hatch == null && hasPassive(m, "taunt"));
     const tauntRollIndex = ctx.ev.length;
-    if (orig && !hasPassive(orig, "taunt") && taunts.length > 0 && diceChance(g, ctx, o, { id: (taunts[0]).id, player: side(g, o) }, 50)) {
-      const tnt = taunts[randInt(g, taunts.length)];
+    if (orig && !hasPassive(orig, "taunt") && taunts.length > 0) {
+      const success = diceChance(g, ctx, o, { id: taunts[0].id, player: side(g, o) }, 50);
+      // Preserve the original RNG order. Attribute both outcomes to a public UID.
+      const tnt = success ? taunts[randInt(g, taunts.length)] : taunts[0];
       const rollEvent = ctx.ev[tauntRollIndex];
-      if (rollEvent?.type === "dice") rollEvent.source = { id: tnt.id, player: side(g, o) };
-      targetUid = tnt.uid;
-      if (attackEvent) attackEvent.targetUid = targetUid;
-      ctx.log(`  └ <span class="dmg">도발!</span> ${cn(tnt)} 이(가) 대신 공격을 받는다`, `  └ <span class="dmg">挑発！</span> ${cn(tnt)} が代わりに攻撃を受ける`);
+      if (rollEvent?.type === "dice") {
+        rollEvent.source = { id: tnt.id, player: side(g, o) };
+        rollEvent.taunt = { sourceUid: tnt.uid, attackerUid: att.uid };
+      }
+      if (success) {
+        targetUid = tnt.uid;
+        if (attackEvent) attackEvent.targetUid = targetUid;
+        ctx.log(`  └ <span class="dmg">도발!</span> ${cn(tnt)} 이(가) 대신 공격을 받는다`, `  └ <span class="dmg">挑発！</span> ${cn(tnt)} が代わりに攻撃を受ける`);
+      }
     }
   }
   if (treeStage < 2 && targetUid !== null && o.field.some(m=>m.uid===targetUid) && (o.dew ?? 0)>0 && o.field.some(m=>m.id==='WORLD_TREE')) {

@@ -14,3 +14,13 @@ User selected revision 2 / 01 (刹那の居合) and authorized staging on 2026-1
 - Browser harness: `/src/dev/assassin-attack-qa/index.html?qa`. DEV entry only, not included in normal build.
 
 Staging release verification is recorded separately after deployment. Browser fixture evidence is distinct from authenticated live-match verification.
+
+## Staging release
+
+- Deployed source: `3d31470446d514fcc97344e3c25ade5683b8f472`.
+- Worker: `lore-server-staging`, version `8b1e4c6c-4d60-4e33-877c-5a47b3d84992`.
+- URL: https://test.yourlore.xyz/
+- Guarded clean snapshot: npm ci, client/server typecheck, 104/104 production tests, design guard and production build passed.
+- 62/62 deployed HTML/JS/CSS files matched the preserved guarded build by SHA-256. Selected runtime is `assets/runtime-Buiu2A1o.js`. No QA harness in released JS.
+- Native GameView browser fixtures: 24 desktop + 24 mobile cases passed, including explicit failed-capture fallback. Public staging loaded through the login screen without browser console errors. Authenticated online attack playback was not exercised.
+- Production was not deployed.
