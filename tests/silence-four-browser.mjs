@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
-const out='docs/vfx-prototypes/2026-10-12-silence-four/qa';await fs.mkdir(out,{recursive:true});
+const out='docs/vfx-prototypes/2026-10-13-silence-seals-r2/qa';await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true});
 const context=await browser.newContext({viewport:{width:1320,height:1160},deviceScaleFactor:1});
 const page=await context.newPage();page.setDefaultTimeout(120000);const errors=[],failed=[],cases=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)failed.push({url:r.url(),status:r.status()});});

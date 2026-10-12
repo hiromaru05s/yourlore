@@ -1,102 +1,75 @@
 import * as T from 'three';
 import {RoundedBoxGeometry} from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
-import {DURATION,designs,ease,pulse,lift} from './catalog';
-type C=CanvasRenderingContext2D;
+import {DURATION,designs,ease,pulse,lift,clamp} from './catalog';
+import {inscription,tabletTexture,stoneRelief} from './inscription';
 export type Pass='all'|'ground'|'card';
-const vertex=`varying vec2 vUv;varying vec3 vNormal;uniform float bulge;void main(){vUv=uv;vec3 p=position;p.z+=bulge*cos(p.x*1.5707963)*cos(p.y*1.0471976);vNormal=normalize(normalMatrix*vec3(-bulge*sin(p.x*1.5708)*cos(p.y*1.0472),-bulge*cos(p.x*1.5708)*sin(p.y*1.0472),1.));gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`;
-const filmFragment=`varying vec2 vUv;varying vec3 vNormal;uniform float amount;uniform float clock;void main(){vec2 p=vUv-.5;float r=length(p*vec2(1.,1.45));float veins=pow(max(0.,sin(r*110.-clock*2.)),18.);float rim=pow(1.-abs(vNormal.z),2.);float edge=pow(max(abs(p.x),abs(p.y))*2.,18.);float seam=pow(max(0.,cos(atan(p.y,p.x)*8.)),42.)*smoothstep(.12,.45,r);float a=(.12+rim*.42+veins*.05+edge*.38+seam*.20)*amount;gl_FragColor=vec4(mix(vec3(.17,.26,.39),vec3(.78,.88,.96),rim+edge*.5+seam*.3),a);}`;
-function texture(){
- const canvas=document.createElement('canvas');canvas.width=canvas.height=512;const c=canvas.getContext('2d')!;
- c.fillStyle='#c8c2ad';c.fillRect(0,0,512,512);
- let seed=127;const rand=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
- for(let i=0;i<15000;i++){const a=rand()*.11;c.fillStyle=rand()>.48?`rgba(255,250,224,${a})`:`rgba(49,48,42,${a})`;c.fillRect(rand()*512,rand()*512,1+rand()*3,1+rand()*2);}
- for(let i=0;i<32;i++){let x=rand()*512,y=rand()*512;c.beginPath();c.moveTo(x,y);for(let j=0;j<6;j++){x+=rand()*35-10;y+=rand()*38;c.lineTo(x,y);}c.strokeStyle='rgba(51,52,48,.12)';c.lineWidth=.8+rand();c.stroke();}
- for(let i=0;i<9;i++){c.beginPath();for(let j=0;j<100;j++){const x=j/99*512,y=i*66+Math.sin(j*.075+i)*19+Math.sin(j*.24+i*2)*6;j?c.lineTo(x,y):c.moveTo(x,y);}c.strokeStyle='rgba(46,44,33,.13)';c.lineWidth=.8;c.stroke();}
- c.strokeStyle='rgba(255,248,221,.3)';c.lineWidth=2;c.strokeRect(11,11,490,490);
- const tex=new T.CanvasTexture(canvas);tex.colorSpace=T.SRGBColorSpace;tex.wrapS=tex.wrapT=T.RepeatWrapping;return tex;
-}
-function polygon(points:number[][],depth:number){const s=new T.Shape();points.forEach(([x,y],i)=>i?s.lineTo(x,y):s.moveTo(x,y));s.closePath();return new T.ExtrudeGeometry(s,{depth,bevelEnabled:true,bevelSegments:2,steps:1,bevelSize:.025,bevelThickness:.024,curveSegments:1});}
+const vertex=`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
+const inkFragment=`varying vec2 vUv;uniform sampler2D ink;uniform float reveal;uniform float opacity;uniform float heat;uniform float erase;void main(){vec2 p=vUv-.5;float r=length(p)*2.;vec4 s=texture2D(ink,vUv);float edge=1.-smoothstep(reveal-.08,reveal,r);float burn=1.-smoothstep(erase-.06,erase,r);vec3 col=s.rgb*(1.+heat*.62);float front=exp(-abs(r-reveal+.035)*65.)*heat;gl_FragColor=vec4(col+front*.65,s.a*edge*(1.-burn)*opacity);}`;
+function magicMaterial(tex:T.Texture){return new T.ShaderMaterial({vertexShader:vertex,fragmentShader:inkFragment,uniforms:{ink:{value:tex},reveal:{value:0},opacity:{value:1},heat:{value:0},erase:{value:-.2}},transparent:true,side:T.DoubleSide,depthWrite:false});}
+function tube(points:T.Vector3[],radius:number,material:T.Material){return new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(points),64,radius,5,false),material);}
+function ring(r:number,width:number,depth:number,mat:T.Material){const s=new T.Shape();s.absarc(0,0,r,0,Math.PI*2,false);const h=new T.Path();h.absarc(0,0,r-width,0,Math.PI*2,true);s.holes.push(h);return new T.Mesh(new T.ExtrudeGeometry(s,{depth,bevelEnabled:true,bevelSize:.015,bevelThickness:.012,bevelSegments:1,steps:1,curveSegments:64}),mat);}
 export class Renderer{
- readonly gpu:T.WebGLRenderer;readonly scene=new T.Scene();readonly root=new T.Group();readonly ground=new T.Group();readonly card=new T.Group();
- readonly camera=new T.OrthographicCamera(-3.2,3.2,3.2,-3.2,.1,40);
- private stoneTexture=texture();private textures=new Map<HTMLCanvasElement,T.CanvasTexture>();
- private stone=new T.MeshStandardMaterial({map:this.stoneTexture,color:0xe3ddc8,roughness:.8,metalness:.12});
- private gold=new T.MeshStandardMaterial({color:0xb7a06b,roughness:.3,metalness:.68});
- private navy=new T.MeshStandardMaterial({color:0x14263c,roughness:.5,metalness:.24});
- private glow=new T.MeshBasicMaterial({color:0xc5ddf2,transparent:true,opacity:0,depthWrite:false});
- private base:T.Mesh;private face:T.Mesh;private faceMat=new T.MeshBasicMaterial({transparent:true,side:T.DoubleSide});
- private seals=new T.Group();private gates:T.Group[]=[];private vault=new T.Group();private film:T.Mesh<T.PlaneGeometry,T.ShaderMaterial>;private ribs:T.Mesh[]=[];
- private strata=new T.Group();private bands:T.Group[]=[];private bandMats:T.MeshBasicMaterial[]=[];
- private star=new T.Group();private petals:T.Group[]=[];private inlay=new T.Group();private shine:T.Mesh[]=[];
- private imprint:T.Group;private contact:T.Mesh;private shadow:T.Mesh;private disposed=false;
+ readonly gpu:T.WebGLRenderer;readonly scene=new T.Scene();readonly root=new T.Group();readonly ground=new T.Group();readonly card=new T.Group();readonly camera=new T.OrthographicCamera(-3.2,3.2,3.2,-3.2,.1,40);
+ private textures=new Map<HTMLCanvasElement,T.CanvasTexture>();private ownTextures:T.Texture[]=[];private disposed=false;
+ private gold=new T.MeshStandardMaterial({color:0xa08a59,roughness:.39,metalness:.68});private edge=new T.MeshStandardMaterial({color:0xe2c686,roughness:.36,metalness:.64});private stone=new T.MeshStandardMaterial({color:0x253139,roughness:.84,metalness:.2});
+ private faceMat=new T.MeshBasicMaterial({side:T.DoubleSide});private face:T.Mesh;private sealMats:T.ShaderMaterial[]=[];private groundSeal:T.Mesh<T.PlaneGeometry,T.ShaderMaterial>;private faceSeal:T.Mesh<T.PlaneGeometry,T.ShaderMaterial>;
+ private stamp=new T.Group();private stampMat:T.ShaderMaterial;private columns=new T.Group();private pillars:T.Group[]=[];private walls:T.Mesh[]=[];private wallMat:T.ShaderMaterial;
+ private lock=new T.Group();private wheels:T.Group[]=[];private keys:T.Group[]=[];private edict=new T.Group();private tablets:T.Group[]=[];private edictGlyph:T.Mesh;private decree=new T.Group();
+ private magic=new T.Group();private streams:T.Mesh[]=[];private streamMat=new T.MeshBasicMaterial({color:0x779aba,transparent:true,opacity:.6,depthWrite:false});private coreMat=new T.MeshBasicMaterial({color:0xdaeff2,transparent:true,opacity:.7,depthWrite:false});
+ private dust:T.InstancedMesh;private shadow:T.Mesh;private rays:T.Mesh[]=[];private rayMat=new T.MeshBasicMaterial({color:0xc2a266,transparent:true,opacity:0,depthWrite:false});private dummy=new T.Object3D();
  constructor(){
-  this.gpu=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});this.gpu.setPixelRatio(1);this.gpu.setClearColor(0,0);this.gpu.outputColorSpace=T.SRGBColorSpace;
-  this.gpu.toneMapping=T.ACESFilmicToneMapping;this.gpu.toneMappingExposure=1.22;
-  this.scene.add(new T.HemisphereLight(0xd8e7fc,0x4b493a,2.2));const key=new T.DirectionalLight(0xffedcd,3.7);key.position.set(-3,4,7);this.scene.add(key);const rim=new T.DirectionalLight(0x94bce2,2);rim.position.set(3,-2,3);this.scene.add(rim);
-  this.scene.add(this.root);this.root.add(this.ground,this.card);this.card.add(this.seals,this.vault,this.strata,this.star,this.inlay);
-  const body=new RoundedBoxGeometry(2,3,.065,2,.045);this.base=new T.Mesh(body,this.navy);this.base.position.z=-.035;this.card.add(this.base);
-  this.face=new T.Mesh(new T.PlaneGeometry(2,3),this.faceMat);this.face.position.z=.006;this.card.add(this.face);
-  // The ornamental channels already lie on the face in frame zero. They gain relief, never teleport in.
-  for(let i=0;i<4;i++){const vertical=i<2;const mesh=new T.Mesh(new T.BoxGeometry(vertical?.014:1.84,vertical?2.82:.014,.012),this.glow);mesh.position.set(vertical?(i===0?-.925:.925):0,vertical?0:(i===2?-1.41:1.41),.025);this.inlay.add(mesh);}
-  for(let i=0;i<8;i++){const a=i*Math.PI/4;const m=new T.Mesh(polygon([[0,.06],[-.035,.16],[0,.47],[.035,.16]],.006),this.glow);m.rotation.z=a;m.position.z=.027;this.inlay.add(m);}
-  // Two authored, toothed stones; gold bevel, dark recessed rail, white stone heart.
-  for(let side=0;side<2;side++){
-   const g=new T.Group();g.position.x=side?1:-1;
-   const shape=[[0,-1.34],[.43,-1.34],[.63,-1.03],[.46,-.63],[.74,-.2],[.63,.1],[.43,.42],[.66,.78],[.4,1.34],[0,1.34]];
-   const trim=new T.Mesh(polygon(shape,.10),this.gold);g.add(trim);
-   const core=new T.Mesh(polygon(shape.map(([x,y])=>[x*.90,y*.96]),.11),this.stone);core.position.z=.026;g.add(core);
-   const line=new T.Mesh(new T.BoxGeometry(.042,2.39,.014),this.navy);line.position.set(.135,0,.157);g.add(line);
-   for(let j=0;j<5;j++){const bar=new T.Mesh(new T.BoxGeometry(.20,.018,.018),this.gold);bar.position.set(.29,(j-2)*.44,.163);g.add(bar);}
-   const light=new T.Mesh(new T.BoxGeometry(.025,2.25,.009),this.glow);light.position.set(.138,0,.17);g.add(light);
-   for(let j=0;j<3;j++){const mark=new T.Mesh(polygon([[0,.08],[.032,0],[0,-.08],[-.032,0]],.004),this.gold);mark.position.set(.32,(j-1)*.86,.174);g.add(mark);}
-   this.seals.add(g);this.gates.push(g);
-  }
-  const filmMat=new T.ShaderMaterial({vertexShader:vertex,fragmentShader:filmFragment,uniforms:{bulge:{value:0},amount:{value:0},clock:{value:0}},transparent:true,side:T.DoubleSide,depthWrite:false});
-  this.film=new T.Mesh(new T.PlaneGeometry(2,3,40,48),filmMat);this.film.position.z=.04;this.vault.add(this.film);
-  for(let i=0;i<5;i++){const geom=new T.BufferGeometry();geom.setAttribute('position',new T.BufferAttribute(new Float32Array(33*2*3),3));const indices:number[]=[];for(let j=0;j<32;j++)indices.push(j*2,j*2+1,j*2+2,j*2+1,j*2+3,j*2+2);geom.setIndex(indices);const rib=new T.Mesh(geom,i%2?this.gold:this.stone);this.ribs.push(rib);this.vault.add(rib);}
-  // Each stratum retains its exact crop of the source face. No whole-card duplicates.
-  for(let i=0;i<7;i++){const band=new T.Group(),h=3/7;
-   const trim=new T.Mesh(new RoundedBoxGeometry(2,h-.018,.12,2,.022),this.gold);trim.position.z=-.06;band.add(trim);
-   const slab=new T.Mesh(new T.BoxGeometry(1.975,h-.03,.09),this.stone);slab.position.z=-.015;band.add(slab);
-   const geom=new T.PlaneGeometry(2,h);const uv=geom.getAttribute('uv');for(let n=0;n<uv.count;n++)uv.setY(n,(uv.getY(n)+6-i)/7);
-   const mat=new T.MeshBasicMaterial({transparent:true,side:T.DoubleSide});const top=new T.Mesh(geom,mat);top.position.z=.04;band.add(top);this.bandMats.push(mat);
-   const seam=new T.Mesh(new T.BoxGeometry(1.91,.012,.008),this.glow);seam.position.set(0,-h*.5+.016,.054);band.add(seam);this.bands.push(band);this.strata.add(band);
-  }
-  // Eight separate, bevelled star blades. The dark centre stays legible between them.
-  for(let i=0;i<8;i++){const g=new T.Group();
-   const outline=[[.08,-.02],[.32,-.20],[.91,-.12],[1.11,.04],[.61,.22],[.34,.17]];
-   g.add(new T.Mesh(polygon(outline,.065),this.gold));const core=new T.Mesh(polygon(outline.map(([x,y])=>[x*.93,y*.74]),.063),this.stone);core.position.z=.025;g.add(core);
-   const cut=new T.Mesh(polygon([[.32,-.035],[.80,0],[.37,.058]],.004),this.navy);cut.position.z=.118;g.add(cut);
-   const glint=new T.Mesh(polygon([[.25,-.01],[.82,.0],[.31,.02]],.002),this.glow);glint.position.z=.125;g.add(glint);this.shine.push(glint);
-   this.star.add(g);this.petals.push(g);
-  }
-  const shadowCanvas=document.createElement('canvas');shadowCanvas.width=shadowCanvas.height=256;const c=shadowCanvas.getContext('2d')!;const grad=c.createRadialGradient(128,128,16,128,128,122);grad.addColorStop(0,'rgba(13,20,29,.48)');grad.addColorStop(.65,'rgba(13,20,29,.20)');grad.addColorStop(1,'rgba(13,20,29,0)');c.fillStyle=grad;c.fillRect(0,0,256,256);
-  const shadTex=new T.CanvasTexture(shadowCanvas);this.shadow=new T.Mesh(new T.PlaneGeometry(2.9,3.9),new T.MeshBasicMaterial({map:shadTex,transparent:true,depthWrite:false}));this.shadow.position.z=-.115;this.ground.add(this.shadow);
-  this.imprint=new T.Group();this.ground.add(this.imprint);
-  for(let i=0;i<4;i++){const v=i<2,m=new T.Mesh(new T.BoxGeometry(v?.014:2.08,v?3.04:.014,.002),new T.MeshBasicMaterial({color:0x937c48,transparent:true,opacity:0,depthWrite:false}));m.position.set(v?(i?1.045:-1.045):0,v?0:(i===2?-1.525:1.525),-.055);this.imprint.add(m);}
-  this.contact=new T.Mesh(new T.RingGeometry(.95,1.01,48),new T.MeshBasicMaterial({color:0xd1bc89,transparent:true,opacity:0,depthWrite:false,side:T.DoubleSide}));this.contact.scale.set(1.1,1.58,1);this.contact.position.z=-.07;this.ground.add(this.contact);
+  this.gpu=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});this.gpu.setPixelRatio(1);this.gpu.setClearColor(0,0);this.gpu.outputColorSpace=T.SRGBColorSpace;this.gpu.toneMapping=T.ACESFilmicToneMapping;this.gpu.toneMappingExposure=1.15;
+  this.scene.add(new T.HemisphereLight(0xd9e4ec,0x29221a,2));const key=new T.DirectionalLight(0xffe4b1,4);key.position.set(-3,2,7);this.scene.add(key);const rim=new T.DirectionalLight(0xa0bed6,2.6);rim.position.set(4,-2,4);this.scene.add(rim);
+  const relief=stoneRelief();this.stone.bumpMap=relief;this.stone.bumpScale=.024;this.gold.bumpMap=relief;this.gold.bumpScale=.009;this.scene.add(this.root);this.root.add(this.ground,this.card);const base=new T.Mesh(new RoundedBoxGeometry(2,3,.07,2,.035),this.stone);base.position.z=-.036;this.card.add(base);this.face=new T.Mesh(new T.PlaneGeometry(2,3),this.faceMat);this.face.position.z=.01;this.card.add(this.face);
+  for(let i=0;i<4;i++){const tex=inscription(i);this.ownTextures.push(tex);this.sealMats.push(magicMaterial(tex));}
+  this.groundSeal=new T.Mesh(new T.PlaneGeometry(4.55,4.55),this.sealMats[0]);this.groundSeal.position.z=-.07;this.ground.add(this.groundSeal);
+  this.faceSeal=new T.Mesh(new T.PlaneGeometry(1.92,2.87),magicMaterial(this.ownTextures[0]));this.faceSeal.position.z=.028;this.card.add(this.faceSeal);
+  this.ownTextures.push(relief);const solid=inscription(0,true);this.ownTextures.push(solid);this.stampMat=magicMaterial(solid);
+  const disk=new T.Mesh(new T.CylinderGeometry(1.34,1.34,.14,96),this.stone);disk.rotation.x=Math.PI/2;this.stamp.add(disk);const top=new T.Mesh(new T.PlaneGeometry(2.68,2.68),this.stampMat);top.position.z=.09;this.stamp.add(top);
+  for(const r of [1.35,1.27]){const m=ring(r,.025,.035,this.gold);m.position.z=.04;this.stamp.add(m);}
+  for(let i=0;i<12;i++){const g=new T.Mesh(new T.BoxGeometry(.075,.13,.11),this.edge),a=i*Math.PI/6;g.position.set(Math.cos(a)*1.33,Math.sin(a)*1.33,.04);g.rotation.z=a;this.stamp.add(g);}this.card.add(this.stamp);
+  const text=tabletTexture();this.ownTextures.push(text);const tabletMat=new T.MeshStandardMaterial({map:text,roughness:.72,metalness:.25,emissive:0xb29964,emissiveMap:text,emissiveIntensity:.3});
+  for(let i=0;i<4;i++){const p=new T.Group();const body=new T.Mesh(new RoundedBoxGeometry(.32,.38,1.28,2,.035),this.stone);body.position.z=.64;p.add(body);const foot=new T.Mesh(new RoundedBoxGeometry(.43,.49,.11,1,.025),this.gold);foot.position.z=.05;p.add(foot);for(const side of [-1,1]){const arris=new T.Mesh(new T.BoxGeometry(.012,.016,1.06),this.gold);arris.position.set(side*.14,-.199,.63);p.add(arris);}for(const z of [.1,1.16]){const band=new T.Mesh(new T.BoxGeometry(.32,.39,.06),this.gold);band.position.z=z;p.add(band);}const cap=new T.Mesh(new T.ConeGeometry(.21,.22,4),this.edge);cap.rotation.x=Math.PI/2;cap.rotation.y=Math.PI/4;cap.position.z=1.35;p.add(cap);const label=new T.Mesh(new T.PlaneGeometry(.22,1.0),tabletMat);label.rotation.x=Math.PI/2;label.position.set(0,-.201,.65);p.add(label);const front=new T.Mesh(new T.PlaneGeometry(.22,1.0),tabletMat);front.rotation.x=-Math.PI/2;front.position.set(0,.201,.65);p.add(front);this.columns.add(p);this.pillars.push(p);}
+  this.wallMat=new T.ShaderMaterial({vertexShader:vertex,fragmentShader:`varying vec2 vUv;uniform sampler2D ink;uniform float strength;uniform float lock;void main(){vec4 s=texture2D(ink,vec2(fract(vUv.x*4.),vUv.y));float rim=pow(abs(vUv.y-.5)*2.,18.);float grid=pow(max(0.,sin(vUv.x*60.)),28.);vec3 c=mix(vec3(.25,.40,.49),vec3(.72,.53,.24),lock);gl_FragColor=vec4(c+s.rgb*.3,strength*(.065+s.r*.4+rim*.5+grid*.1));}`,uniforms:{ink:{value:text},strength:{value:0},lock:{value:0}},transparent:true,depthWrite:false,side:T.DoubleSide});
+  for(let i=0;i<4;i++){const wall=new T.Mesh(new T.PlaneGeometry(i%2?2.92:2.4,1.14),this.wallMat);wall.rotation.x=Math.PI/2;if(i%2)wall.rotation.y=Math.PI/2;wall.position.set(i%2?(i===1?1.2:-1.2):0,i%2?0:(i===0?-1.46:1.46),.59);this.columns.add(wall);this.walls.push(wall);}this.card.add(this.columns);
+  for(let j=0;j<2;j++){const g=new T.Group(),r=1.8-j*.39;g.add(ring(r,.23,.095,this.stone));for(const rr of [r,r-.23]){const edge=ring(rr,.019,.026,this.gold);edge.position.z=.1;g.add(edge);}const mat=magicMaterial(this.ownTextures[2]);mat.uniforms.reveal.value=1.2;const rune=new T.Mesh(new T.RingGeometry(r-.21,r-.02,96),mat); // Crop glyph annulus with radial UVs below.
+   const uv=rune.geometry.getAttribute('uv');const pos=rune.geometry.getAttribute('position');for(let k=0;k<uv.count;k++){uv.setXY(k,pos.getX(k)/(r*2.12)+.5,pos.getY(k)/(r*2.12)+.5);}rune.position.z=.133;g.add(rune);
+   for(let i=0;i<18;i++){const a=i*Math.PI/9;const tooth=new T.Mesh(new T.BoxGeometry(.13,.12,.1),this.gold);tooth.position.set(Math.cos(a)*r,Math.sin(a)*r,.045);tooth.rotation.z=a;g.add(tooth);}this.lock.add(g);this.wheels.push(g);}
+  for(let i=0;i<3;i++){const k=new T.Group();const body=new T.Mesh(new RoundedBoxGeometry(.19,.85,.17,2,.026),this.stone);k.add(body);const band=new T.Mesh(new T.BoxGeometry(.09,.73,.018),this.edge);band.position.z=.097;k.add(band);const head=new T.Mesh(new T.BoxGeometry(.3,.18,.21),this.gold);head.position.y=.32;k.add(head);this.keys.push(k);this.lock.add(k);}this.card.add(this.lock);
+  for(let i=0;i<5;i++){const g=new T.Group();const slab=new T.Mesh(new RoundedBoxGeometry(.382,2.65,.085,2,.018),this.stone);g.add(slab);const label=new T.Mesh(new T.PlaneGeometry(.365,2.62),tabletMat);label.position.z=.048;g.add(label);const border=new T.Mesh(new T.BoxGeometry(.012,2.62,.01),this.gold);border.position.set(-.178,0,.055);g.add(border);this.tablets.push(g);this.edict.add(g);}
+  const sigil=new T.Mesh(new T.PlaneGeometry(1.7,1.7),magicMaterial(this.ownTextures[3]));sigil.position.z=.15;this.edictGlyph=sigil;this.edict.add(sigil);this.card.add(this.edict);
+  // The closing character is relief, with a readable final stroke at mobile scale.
+  const stroke=(width:number,height:number,x:number,y:number,angle=0)=>{const m=new T.Mesh(new T.BoxGeometry(width,height,.022),this.edge);m.position.set(x,y,.18);m.rotation.z=angle;this.decree.add(m);};
+  stroke(.033,.9,0,0);for(const yy of [-.23,0,.23])stroke(.66,.034,0,yy);stroke(.032,.45,-.14,.47,-.67);stroke(.032,.45,.14,.47,.67);const border=ring(.62,.012,.014,this.gold);border.position.z=.166;this.decree.add(border);this.edict.add(this.decree);
+  // Magic has a visible source on the card. Its paths contract and stop at the seal's lock frame.
+  for(let i=0;i<6;i++){const points:T.Vector3[]=[];for(let j=0;j<=42;j++){const u=j/42,a=i*Math.PI/3+u*2.7,r=.17+u*.92;points.push(new T.Vector3(Math.cos(a)*r,Math.sin(a)*r*1.2,.06+Math.sin(u*Math.PI)*(.35+i%2*.15)));}const m=tube(points,i%2?.014:.025,this.streamMat);this.streams.push(m);this.magic.add(m);if(i%2===0){const core=tube(points,.006,this.coreMat);this.magic.add(core);}}
+  this.card.add(this.magic);
+  const canvas=document.createElement('canvas');canvas.width=canvas.height=128;const c=canvas.getContext('2d')!;const shade=c.createRadialGradient(64,64,6,64,64,63);shade.addColorStop(0,'rgba(8,15,22,.65)');shade.addColorStop(.6,'rgba(8,15,22,.24)');shade.addColorStop(1,'rgba(8,15,22,0)');c.fillStyle=shade;c.fillRect(0,0,128,128);const sh=new T.CanvasTexture(canvas);this.ownTextures.push(sh);this.shadow=new T.Mesh(new T.PlaneGeometry(3.3,4.1),new T.MeshBasicMaterial({map:sh,transparent:true,depthWrite:false}));this.shadow.position.z=-.09;this.ground.add(this.shadow);
+  this.dust=new T.InstancedMesh(new T.BoxGeometry(.014,.022,.012),this.gold,28);this.card.add(this.dust);
+  for(let i=0;i<12;i++){const a=i*Math.PI/6;const ray=new T.Mesh(new T.PlaneGeometry(.015,.48),this.rayMat);ray.position.set(Math.cos(a)*1.93,Math.sin(a)*1.93,-.055);ray.rotation.z=a-Math.PI/2;this.rays.push(ray);this.ground.add(ray);}
  }
- private prepareFace(face:HTMLCanvasElement){let tex=this.textures.get(face);if(!tex){tex=new T.CanvasTexture(face);tex.colorSpace=T.SRGBColorSpace;tex.anisotropy=4;this.textures.set(face,tex);}this.faceMat.map=tex;this.bandMats.forEach(m=>m.map=tex);}
- draw(c:C,face:HTMLCanvasElement,v:number,ms:number,x:number,y:number,w:number,reduced=false,pass:Pass='all',studio=true,giant=true){
-  if(this.disposed)return;this.prepareFace(face);const t=reduced?DURATION:ms;const amp=giant?1:.76,hit=designs[v].hit;
-  const alive=t<DURATION&&!reduced,energy=pulse(-100,430,hit-180,hit+300,t);
-  this.glow.opacity=energy*.72;this.inlay.visible=alive;this.card.position.z=lift(v,t,reduced)*2;
-  this.root.rotation.set(0,0,studio?-.13:0);this.root.scale.set(1,1,1);
-  this.base.visible=true;this.face.visible=v!==2||!alive;this.seals.visible=alive&&v===0;this.vault.visible=alive&&v===1;this.strata.visible=alive&&v===2;this.star.visible=alive&&v===3;
-  this.faceMat.color.setRGB(1-energy*.1,1-energy*.07,1-energy*.025);
-  if(v===0){const grow=ease(0,520,t),lock=ease(860,1150,t),retire=ease(1330,1960,t);for(let i=0;i<2;i++){const s=i===0?1:-1,g=this.gates[i];g.position.set(-s*(.94-.13*lock+.07*retire),0,.024+(grow*(1-lock)*.15)*amp);g.rotation.set(0,-s*grow*(1-lock)*1.09,i?Math.PI:0);g.scale.set((.12+.88*grow)*(1-retire*.99),1,(.25+.75*grow)*(1-retire*.99));}}
-  if(v===1){const swell=pulse(0,810,1050,hit,t)*amp;this.film.material.uniforms.bulge.value=swell*1.45;this.film.material.uniforms.amount.value=(.45+.55*ease(0,400,t))*(1-ease(hit,hit+420,t));this.film.material.uniforms.clock.value=t/1000;for(let i=0;i<5;i++){const rib=this.ribs[i];const attr=rib.geometry.getAttribute('position');const xx=(i-2)*.43,thickness=(i===2?.045:.023)*(1-ease(hit,hit+450,t));for(let j=0;j<33;j++){const yy=-1.47+j/32*2.94,z=.035+swell*1.45*Math.cos(xx*Math.PI/2)*Math.cos(yy*Math.PI/3);attr.setXYZ(j*2,xx-thickness,yy,z);attr.setXYZ(j*2+1,xx+thickness,yy,z+.009);}attr.needsUpdate=true;rib.geometry.computeVertexNormals();}}
-  if(v===2){this.bands.forEach((b,i)=>{const rise=ease(0,480+i*47,t),settle=ease(1030+i*71,1350+i*78,t),a=rise*(1-settle);b.position.set(Math.sin(i*.85)*a*.20*amp,1.5-(i+.5)*3/7+(3-i)*a*.07,.008+a*(.48+(6-i)*.13)*amp);b.rotation.y=Math.sin(i*1.1)*a*.11;b.scale.z=.35+.65*a;});}
-  if(v===3){const grow=ease(0,620,t),close=ease(890,1390,t),retire=ease(1430,2050,t),a=grow*(1-close);this.star.rotation.z=a*.35;this.petals.forEach((p,i)=>{const theta=i*Math.PI/4;p.rotation.set(a*.12,Math.sin(i%2?-.75:.75)*a,theta+a*.57);p.position.set(Math.cos(theta)*a*.11,Math.sin(theta)*a*.11,.023+a*(.46+(i%2)*.1)*amp);p.scale.set((.13+.87*grow)*(1-retire*.998),(.22+.78*grow)*(1-retire*.998),(.2+.8*grow)*(1-retire*.998));});}
-  this.shadow.scale.setScalar(1+lift(v,t,reduced)*.17);(this.shadow.material as T.MeshBasicMaterial).opacity=.72+.2*(1-lift(v,t,reduced));
-  this.imprint.children.forEach(m=>( (m as T.Mesh).material as T.MeshBasicMaterial).opacity=pulse(hit,hit+55,hit+180,hit+600,t)*.7);
-  const age=Math.max(0,t-hit);this.contact.visible=alive&&t>=hit;(this.contact.material as T.MeshBasicMaterial).opacity=pulse(hit,hit+30,hit+70,hit+340,t)*.17;this.contact.scale.set((1.06+ease(0,400,age)*.13),(1.57+ease(0,400,age)*.13),1);
+ private configure(mat:T.ShaderMaterial,t:number,hit:number){mat.uniforms.reveal.value=.11+ease(0,670,t)*1.1;mat.uniforms.opacity.value=.9;mat.uniforms.heat.value=pulse(0,620,hit,hit+180,t)*.65;mat.uniforms.erase.value=-.2+ease(hit+440,2960,t)*1.5;}
+ draw(c:CanvasRenderingContext2D,face:HTMLCanvasElement,v:number,ms:number,x:number,y:number,w:number,reduced=false,pass:Pass='all',studio=true,giant=true){
+  if(this.disposed)return;let tex=this.textures.get(face);if(!tex){tex=new T.CanvasTexture(face);tex.colorSpace=T.SRGBColorSpace;tex.anisotropy=4;this.textures.set(face,tex);}this.faceMat.map=tex;
+  const t=reduced?DURATION:ms,hit=designs[v].hit,alive=t<DURATION,amp=giant?1:.79,rise=ease(60,850,t),press=ease(hit-240,hit,t),retire=ease(hit+330,2820,t),energy=pulse(-100,370,hit-75,hit+60,t);
+  this.card.position.z=lift(v,t,reduced)*2;this.root.rotation.z=studio?-.10:0;
+  this.faceMat.color.setRGB(1-energy*.19,1-energy*.17,1-energy*.1);
+  this.groundSeal.visible=alive;this.groundSeal.material=this.sealMats[v];this.configure(this.groundSeal.material,t,hit);this.groundSeal.scale.setScalar((.27+.73*ease(0,780,t))*(studio?1:.86));this.groundSeal.rotation.z=v===2?-.18*ease(0,hit-100,t):0;
+  this.faceSeal.visible=alive;this.faceSeal.material.uniforms.ink.value=this.ownTextures[v];this.configure(this.faceSeal.material,t,hit);this.faceSeal.material.uniforms.opacity.value=.6+press*.2;
+  this.stamp.visible=alive&&v===0;this.columns.visible=alive&&v===1;this.lock.visible=alive&&v===2;this.edict.visible=alive&&v===3;
+  if(v===0){const s=(.001+.999*rise)*(1-retire*.999);this.stamp.scale.set(s,s,Math.max(.015,(.03+.97*rise)*(1-retire)));this.stamp.position.z=.06+rise*(1-press)*1.05*amp;this.stamp.rotation.z=.16*(1-rise);this.configure(this.stampMat,t,hit);this.stampMat.uniforms.reveal.value=1.2;this.stampMat.uniforms.erase.value=-.2;this.stampMat.uniforms.opacity.value=1;}
+  if(v===1){this.pillars.forEach((p,i)=>{const grow=ease(i*85,690+i*85,t),sink=ease(hit+360+i*45,2730+i*45,t);p.position.set((i%2?1:-1)*(1.0+.2*grow),(i<2?-1:1)*(1.31+.15*grow),.025);p.scale.set((.01+.99*grow)*(1-sink*.999),(.01+.99*grow)*(1-sink*.999),Math.max(.002,grow*(1-sink)*amp));});this.wallMat.uniforms.strength.value=pulse(550,1100,hit+180,hit+650,t);this.wallMat.uniforms.lock.value=ease(hit-60,hit+30,t);this.walls.forEach((wall,i)=>{wall.scale.x=ease(500+i*90,1050+i*90,t);wall.scale.y=(1-retire*.96)*amp;wall.position.z=.05+.55*wall.scale.y;});}
+  if(v===2){this.wheels.forEach((wheel,i)=>{wheel.scale.setScalar((.001+.999*rise)*(1-retire*.999));wheel.scale.z=Math.max(.02,1-retire);wheel.position.z=.04+rise*(1-press)*(.21+i*.26)*amp;const travel=ease(60,hit-100,t);wheel.rotation.z=(i?1:-1)*(1-travel)*1.55;});this.keys.forEach((k,i)=>{const a=i*Math.PI*2/3+Math.PI/2,engage=ease(hit-340+i*45,hit-50+i*25,t),r=2.04-engage*.58;k.position.set(Math.cos(a)*r,Math.sin(a)*r,.08+rise*.32*(1-press));k.rotation.z=a-Math.PI/2;k.scale.setScalar((.001+.999*rise)*(1-retire*.999));});}
+  if(v===3){this.decree.scale.setScalar(ease(1330,hit,t)*(1-ease(hit+350,2660,t)));this.tablets.forEach((slab,i)=>{const grow=ease(120+i*130,780+i*130,t),draw=ease(hit+270+i*80,2560+i*85,t);slab.position.set((i-2)*.387,(i%2?1:-1)*(1-grow)*1.2,.045+Math.sin(grow*Math.PI)*.22*amp);slab.scale.set(.98,Math.max(.003,grow*(1-draw)),Math.max(.01,1-retire));});const m=(this.edictGlyph as T.Mesh<T.PlaneGeometry,T.ShaderMaterial>).material;this.configure(m,t-800,hit-800);m.uniforms.reveal.value=ease(950,hit,t)*1.2;m.uniforms.erase.value=-.2+ease(hit+160,2700,t)*1.5;}
+  // The flowing spell becomes a short, motionless remnant at contact; no celebratory outward burst.
+  this.magic.visible=alive;const flowingTime=Math.min(t,hit-70);this.magic.rotation.z=flowingTime*.00045;const squeeze=1-ease(hit-220,hit+35,t)*.92;this.magic.scale.set(squeeze,squeeze,1-ease(hit-200,hit,t)*.985);this.magic.position.z=v===0?Math.max(.03,this.stamp.position.z-.22):.03;this.streamMat.opacity=energy*.68;this.coreMat.opacity=energy*.8;
+  this.dust.visible=alive;for(let i=0;i<28;i++){const a=i*2.399,age=clamp((t-hit-i*2)/430),r=.95+age*.5;this.dummy.position.set(Math.cos(a)*r,Math.sin(a)*r*1.4,.03+Math.sin(age*Math.PI)*.09);this.dummy.scale.setScalar(t<hit?0:Math.sin(age*Math.PI)*(i%4===0?1.4:.7));this.dummy.updateMatrix();this.dust.setMatrixAt(i,this.dummy.matrix);}this.dust.instanceMatrix.needsUpdate=true;
+  this.rayMat.opacity=pulse(hit,hit+30,hit+85,hit+260,t)*.55;for(const ray of this.rays){ray.visible=alive;ray.scale.y=1-ease(hit+30,hit+280,t)*.98;}
+  (this.shadow.material as T.MeshBasicMaterial).opacity=.76;this.shadow.scale.setScalar(1+lift(v,t,reduced)*.1);
   this.card.visible=pass!=='ground';this.ground.visible=pass!=='card';
-  if(studio){this.camera.position.set(0,-7.5,6);this.camera.up.set(0,0,1);this.camera.lookAt(0,0,.3);}else{this.camera.position.set(0,0,10);this.camera.up.set(0,1,0);this.camera.lookAt(0,0,0);}
-  this.camera.updateProjectionMatrix();if(!studio){this.camera.projectionMatrix.elements[9]=.325/3.2;this.camera.projectionMatrix.elements[13]=10*.325/3.2;}
-  const sz=Math.max(256,Math.min(950,Math.round(w*3.2*Math.min(devicePixelRatio,1.5))));if(this.gpu.domElement.width!==sz)this.gpu.setSize(sz,sz,false);
-  this.gpu.render(this.scene,this.camera);c.drawImage(this.gpu.domElement,x-w*1.6,y-w*1.6,w*3.2,w*3.2);
+  if(studio){this.camera.position.set(0,-7.5,7.5);this.camera.up.set(0,0,1);this.camera.lookAt(0,0,.25);}else{this.camera.position.set(0,0,10);this.camera.up.set(0,1,0);this.camera.lookAt(0,0,0);}this.camera.updateProjectionMatrix();if(!studio){this.camera.projectionMatrix.elements[9]=.325/3.2;this.camera.projectionMatrix.elements[13]=10*.325/3.2;}
+  const sz=Math.max(256,Math.min(950,Math.round(w*3.2*Math.min(devicePixelRatio,1.5))));if(this.gpu.domElement.width!==sz)this.gpu.setSize(sz,sz,false);this.gpu.render(this.scene,this.camera);c.drawImage(this.gpu.domElement,x-w*1.6,y-w*1.6,w*3.2,w*3.2);
  }
- stats(){return {geometries:this.gpu.info.memory.geometries,textures:this.gpu.info.memory.textures,calls:this.gpu.info.render.calls};}
- dispose(){if(this.disposed)return;this.disposed=true;const gs=new Set<T.BufferGeometry>(),ms=new Set<T.Material>(),ts=new Set<T.Texture>([this.stoneTexture,...this.textures.values()]);this.scene.traverse(o=>{if(o instanceof T.Mesh){gs.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:[o.material]){ms.add(m);const mapped=m as T.MeshStandardMaterial;if(mapped.map)ts.add(mapped.map);}}});gs.forEach(g=>g.dispose());ms.forEach(m=>m.dispose());ts.forEach(t=>t.dispose());this.textures.clear();this.gpu.dispose();this.gpu.forceContextLoss();}
+ stats(){return{geometries:this.gpu.info.memory.geometries,textures:this.gpu.info.memory.textures,calls:this.gpu.info.render.calls};}
+ dispose(){if(this.disposed)return;this.disposed=true;const geometries=new Set<T.BufferGeometry>(),materials=new Set<T.Material>();this.scene.traverse(o=>{if(o instanceof T.Mesh){geometries.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:[o.material])materials.add(m);}});this.sealMats.forEach(m=>materials.add(m));geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());[...this.ownTextures,...this.textures.values()].forEach(t=>t.dispose());this.textures.clear();this.gpu.dispose();this.gpu.forceContextLoss();}
 }
