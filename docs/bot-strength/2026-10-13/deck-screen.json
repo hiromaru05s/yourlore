@@ -1,0 +1,5106 @@
+{
+  "games": 520,
+  "seconds": 37.566,
+  "builds": {
+    "DEFAULT": [
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "STARTER_CHEST"
+    ],
+    "AGGRO": [
+      "AMBUSH",
+      "FLAME",
+      "FLAME",
+      "FLAME",
+      "GHOST",
+      "GHOST",
+      "TRUMPET",
+      "STARTER_CHEST"
+    ],
+    "RAMP": [
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "FORESIGHT",
+      "STARTER_CHEST",
+      "STARTER_CHEST",
+      "STARTER_CHEST"
+    ],
+    "MIDRANGE": [
+      "GHOST",
+      "GHOST",
+      "TRUMPET",
+      "GUILD_HALL",
+      "FLAME",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "STARTER_CHEST"
+    ],
+    "GAMBLER": [
+      "GAMBLER",
+      "GAMBLER",
+      "GAMBLER",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "STARTER_CHEST"
+    ],
+    "ELF": [
+      "ELF_HAVEN",
+      "HALF_ELF",
+      "HALF_ELF",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "STARTER_CHEST"
+    ],
+    "CASTLE": [
+      "CASTLE",
+      "CASTLE",
+      "TRUMPET",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "ASSASSIN": [
+      "GUILD_HALL",
+      "GUILD_HALL",
+      "AMBUSH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "DECAY": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "ACID_RAIN",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "CULL": [
+      "CHOSEN_AREA",
+      "TRIAL_AREA",
+      "RIFT",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "EGG": [
+      "ANCIENT_CIV",
+      "INCUBATOR_S",
+      "INCUBATOR_S",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "MERCHANT": [
+      "GUILD_CO",
+      "SLUM",
+      "GRAPE",
+      "GRAPE",
+      "BREWING",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "DUNGEON": [
+      "DUNGEON_FLOOR",
+      "STARTER_CHEST",
+      "STARTER_CHEST",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "CASINO": [
+      "CASINO",
+      "FATE_WHEEL",
+      "GAMBLER",
+      "GAMBLER",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "RIFT": [
+      "RIFT",
+      "TRIAL_AREA",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "TRIBE": [
+      "TRIBE_PACT",
+      "TRIBE_PACT",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "DEW": [
+      "ELF_HAVEN",
+      "HALF_ELF",
+      "NOURISHING_RAIN",
+      "NOURISHING_RAIN",
+      "STARTER_CHEST",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "SHIELD": [
+      "SELECTED_SHIELD",
+      "SELECTED_SHIELD",
+      "RIFT",
+      "STARTER_CHEST",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "CULL_SWORD": [
+      "RIFT",
+      "TRIAL_AREA",
+      "SELECTED_SWORD",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "RAIN": [
+      "NOURISHING_RAIN",
+      "NOURISHING_RAIN",
+      "NOURISHING_RAIN",
+      "STARTER_CHEST",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "GRAPE": [
+      "BREWING",
+      "GRAPE",
+      "GRAPE",
+      "GRAPE",
+      "GRAPE",
+      "GUILD_CO",
+      "SLUM",
+      "STARTER_CHEST"
+    ],
+    "HYBRID": [
+      "BREWING",
+      "GRAPE",
+      "GRAPE",
+      "NOURISHING_RAIN",
+      "GAMBLER",
+      "STARTER_CHEST",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "ELF_ENGINE": [
+      "ELF_HAVEN",
+      "ELF_HAVEN",
+      "HALF_ELF",
+      "HALF_ELF",
+      "NOURISHING_RAIN",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "RIFT_ENGINE": [
+      "RIFT",
+      "RIFT",
+      "TRIAL_AREA",
+      "TRIAL_AREA",
+      "SELECTED_SHIELD",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "GAMBLER_TEMPO": [
+      "GAMBLER",
+      "GAMBLER",
+      "GAMBLER",
+      "GHOST",
+      "GHOST",
+      "NOURISHING_RAIN",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "ELF_GAMBLER": [
+      "ELF_HAVEN",
+      "ELF_HAVEN",
+      "GAMBLER",
+      "GAMBLER",
+      "HALF_ELF",
+      "NOURISHING_RAIN",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ]
+  },
+  "summary": {
+    "DEFAULT": {
+      "wins": 11,
+      "losses": 9,
+      "bad": 0,
+      "rate": 0.55
+    },
+    "AGGRO": {
+      "wins": 13,
+      "losses": 7,
+      "bad": 0,
+      "rate": 0.65
+    },
+    "RAMP": {
+      "wins": 8,
+      "losses": 12,
+      "bad": 0,
+      "rate": 0.4
+    },
+    "MIDRANGE": {
+      "wins": 10,
+      "losses": 10,
+      "bad": 0,
+      "rate": 0.5
+    },
+    "GAMBLER": {
+      "wins": 9,
+      "losses": 11,
+      "bad": 0,
+      "rate": 0.45
+    },
+    "ELF": {
+      "wins": 9,
+      "losses": 11,
+      "bad": 0,
+      "rate": 0.45
+    },
+    "CASTLE": {
+      "wins": 13,
+      "losses": 7,
+      "bad": 0,
+      "rate": 0.65
+    },
+    "ASSASSIN": {
+      "wins": 6,
+      "losses": 14,
+      "bad": 0,
+      "rate": 0.3
+    },
+    "DECAY": {
+      "wins": 14,
+      "losses": 6,
+      "bad": 0,
+      "rate": 0.7
+    },
+    "CULL": {
+      "wins": 17,
+      "losses": 3,
+      "bad": 0,
+      "rate": 0.85
+    },
+    "EGG": {
+      "wins": 9,
+      "losses": 11,
+      "bad": 0,
+      "rate": 0.45
+    },
+    "MERCHANT": {
+      "wins": 7,
+      "losses": 13,
+      "bad": 0,
+      "rate": 0.35
+    },
+    "DUNGEON": {
+      "wins": 11,
+      "losses": 9,
+      "bad": 0,
+      "rate": 0.55
+    },
+    "CASINO": {
+      "wins": 5,
+      "losses": 15,
+      "bad": 0,
+      "rate": 0.25
+    },
+    "RIFT": {
+      "wins": 15,
+      "losses": 5,
+      "bad": 0,
+      "rate": 0.75
+    },
+    "TRIBE": {
+      "wins": 10,
+      "losses": 10,
+      "bad": 0,
+      "rate": 0.5
+    },
+    "DEW": {
+      "wins": 9,
+      "losses": 11,
+      "bad": 0,
+      "rate": 0.45
+    },
+    "SHIELD": {
+      "wins": 10,
+      "losses": 10,
+      "bad": 0,
+      "rate": 0.5
+    },
+    "CULL_SWORD": {
+      "wins": 16,
+      "losses": 4,
+      "bad": 0,
+      "rate": 0.8
+    },
+    "RAIN": {
+      "wins": 11,
+      "losses": 9,
+      "bad": 0,
+      "rate": 0.55
+    },
+    "GRAPE": {
+      "wins": 6,
+      "losses": 14,
+      "bad": 0,
+      "rate": 0.3
+    },
+    "HYBRID": {
+      "wins": 7,
+      "losses": 13,
+      "bad": 0,
+      "rate": 0.35
+    },
+    "ELF_ENGINE": {
+      "wins": 9,
+      "losses": 11,
+      "bad": 0,
+      "rate": 0.45
+    },
+    "RIFT_ENGINE": {
+      "wins": 17,
+      "losses": 3,
+      "bad": 0,
+      "rate": 0.85
+    },
+    "GAMBLER_TEMPO": {
+      "wins": 6,
+      "losses": 14,
+      "bad": 0,
+      "rate": 0.3
+    },
+    "ELF_GAMBLER": {
+      "wins": 9,
+      "losses": 11,
+      "bad": 0,
+      "rate": 0.45
+    }
+  },
+  "rows": [
+    {
+      "name": "DEFAULT",
+      "r": 0,
+      "seat": 0,
+      "winner": 0,
+      "turns": 27,
+      "steps": 203,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 0,
+      "seat": 1,
+      "winner": 1,
+      "turns": 14,
+      "steps": 86,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 21,
+      "steps": 113,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 1,
+      "seat": 1,
+      "winner": 0,
+      "turns": 23,
+      "steps": 121,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 59,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 64,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 35,
+      "steps": 232,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 22,
+      "steps": 128,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 4,
+      "seat": 0,
+      "winner": 0,
+      "turns": 23,
+      "steps": 144,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 4,
+      "seat": 1,
+      "winner": 0,
+      "turns": 33,
+      "steps": 285,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 14,
+      "steps": 74,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 61,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 60,
+      "steps": 666,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 30,
+      "steps": 225,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 21,
+      "steps": 122,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 7,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 82,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 15,
+      "steps": 79,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 12,
+      "steps": 59,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 9,
+      "seat": 0,
+      "winner": 0,
+      "turns": 33,
+      "steps": 265,
+      "invalid": null
+    },
+    {
+      "name": "DEFAULT",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 17,
+      "steps": 100,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 8,
+      "steps": 52,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 0,
+      "seat": 1,
+      "winner": 1,
+      "turns": 8,
+      "steps": 52,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 11,
+      "steps": 61,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 10,
+      "steps": 49,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 77,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 2,
+      "seat": 1,
+      "winner": 1,
+      "turns": 12,
+      "steps": 79,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 69,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 18,
+      "steps": 95,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 4,
+      "seat": 0,
+      "winner": 0,
+      "turns": 11,
+      "steps": 57,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 4,
+      "seat": 1,
+      "winner": 1,
+      "turns": 12,
+      "steps": 65,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 55,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 5,
+      "seat": 1,
+      "winner": 1,
+      "turns": 10,
+      "steps": 55,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 22,
+      "steps": 140,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 12,
+      "steps": 69,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 9,
+      "steps": 53,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 7,
+      "seat": 1,
+      "winner": 1,
+      "turns": 10,
+      "steps": 63,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 8,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 57,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 8,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 62,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 9,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 76,
+      "invalid": null
+    },
+    {
+      "name": "AGGRO",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 74,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 14,
+      "steps": 83,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 0,
+      "seat": 1,
+      "winner": 1,
+      "turns": 18,
+      "steps": 116,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 1,
+      "seat": 0,
+      "winner": 1,
+      "turns": 52,
+      "steps": 341,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 52,
+      "steps": 341,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 57,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 60,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 39,
+      "steps": 264,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 34,
+      "steps": 207,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 4,
+      "seat": 0,
+      "winner": 0,
+      "turns": 23,
+      "steps": 150,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 4,
+      "seat": 1,
+      "winner": 0,
+      "turns": 27,
+      "steps": 205,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 63,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 69,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 60,
+      "steps": 650,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 60,
+      "steps": 650,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 7,
+      "seat": 0,
+      "winner": 1,
+      "turns": 14,
+      "steps": 77,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 7,
+      "seat": 1,
+      "winner": 0,
+      "turns": 17,
+      "steps": 127,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 60,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 16,
+      "steps": 77,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 9,
+      "seat": 0,
+      "winner": 1,
+      "turns": 18,
+      "steps": 97,
+      "invalid": null
+    },
+    {
+      "name": "RAMP",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 19,
+      "steps": 116,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 0,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 88,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 0,
+      "seat": 1,
+      "winner": 1,
+      "turns": 14,
+      "steps": 91,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 11,
+      "steps": 56,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 10,
+      "steps": 57,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 92,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 2,
+      "seat": 1,
+      "winner": 1,
+      "turns": 12,
+      "steps": 92,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 3,
+      "seat": 0,
+      "winner": 1,
+      "turns": 16,
+      "steps": 111,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 14,
+      "steps": 82,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 4,
+      "seat": 0,
+      "winner": 0,
+      "turns": 17,
+      "steps": 111,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 4,
+      "seat": 1,
+      "winner": 0,
+      "turns": 15,
+      "steps": 88,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 79,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 68,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 20,
+      "steps": 134,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 12,
+      "steps": 75,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 95,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 7,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 95,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 15,
+      "steps": 98,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 8,
+      "seat": 1,
+      "winner": 0,
+      "turns": 15,
+      "steps": 96,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 9,
+      "seat": 0,
+      "winner": 1,
+      "turns": 22,
+      "steps": 156,
+      "invalid": null
+    },
+    {
+      "name": "MIDRANGE",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 19,
+      "steps": 114,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 61,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 0,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 56,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 25,
+      "steps": 177,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 1,
+      "seat": 1,
+      "winner": 0,
+      "turns": 39,
+      "steps": 306,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 14,
+      "steps": 84,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 2,
+      "seat": 1,
+      "winner": 1,
+      "turns": 14,
+      "steps": 87,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 27,
+      "steps": 148,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 3,
+      "seat": 1,
+      "winner": 0,
+      "turns": 27,
+      "steps": 148,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 4,
+      "seat": 0,
+      "winner": 0,
+      "turns": 21,
+      "steps": 132,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 4,
+      "seat": 1,
+      "winner": 1,
+      "turns": 22,
+      "steps": 144,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 49,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 57,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 20,
+      "steps": 125,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 6,
+      "seat": 1,
+      "winner": 0,
+      "turns": 27,
+      "steps": 187,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 15,
+      "steps": 92,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 7,
+      "seat": 1,
+      "winner": 1,
+      "turns": 16,
+      "steps": 96,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 8,
+      "seat": 0,
+      "winner": 1,
+      "turns": 22,
+      "steps": 133,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 22,
+      "steps": 133,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 9,
+      "seat": 0,
+      "winner": 0,
+      "turns": 39,
+      "steps": 293,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 27,
+      "steps": 167,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 0,
+      "seat": 0,
+      "winner": 0,
+      "turns": 25,
+      "steps": 193,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 0,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 74,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 1,
+      "seat": 0,
+      "winner": 1,
+      "turns": 22,
+      "steps": 134,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 16,
+      "steps": 93,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 2,
+      "seat": 0,
+      "winner": 0,
+      "turns": 15,
+      "steps": 97,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 78,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 27,
+      "steps": 152,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 3,
+      "seat": 1,
+      "winner": 0,
+      "turns": 25,
+      "steps": 143,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 4,
+      "seat": 0,
+      "winner": 1,
+      "turns": 30,
+      "steps": 223,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 4,
+      "seat": 1,
+      "winner": 1,
+      "turns": 30,
+      "steps": 223,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 50,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 63,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 26,
+      "steps": 193,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 34,
+      "steps": 282,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 7,
+      "seat": 0,
+      "winner": 1,
+      "turns": 14,
+      "steps": 78,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 7,
+      "seat": 1,
+      "winner": 0,
+      "turns": 15,
+      "steps": 103,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 33,
+      "steps": 228,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 28,
+      "steps": 196,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 9,
+      "seat": 0,
+      "winner": 0,
+      "turns": 21,
+      "steps": 152,
+      "invalid": null
+    },
+    {
+      "name": "ELF",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 21,
+      "steps": 152,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 0,
+      "seat": 0,
+      "winner": 0,
+      "turns": 19,
+      "steps": 150,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 0,
+      "seat": 1,
+      "winner": 1,
+      "turns": 16,
+      "steps": 107,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 1,
+      "seat": 0,
+      "winner": 1,
+      "turns": 44,
+      "steps": 339,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 12,
+      "steps": 73,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 2,
+      "seat": 0,
+      "winner": 0,
+      "turns": 25,
+      "steps": 199,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 2,
+      "seat": 1,
+      "winner": 1,
+      "turns": 22,
+      "steps": 160,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 27,
+      "steps": 187,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 3,
+      "seat": 1,
+      "winner": 0,
+      "turns": 31,
+      "steps": 218,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 4,
+      "seat": 0,
+      "winner": 1,
+      "turns": 36,
+      "steps": 329,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 4,
+      "seat": 1,
+      "winner": 1,
+      "turns": 16,
+      "steps": 111,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 16,
+      "steps": 98,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 5,
+      "seat": 1,
+      "winner": 1,
+      "turns": 20,
+      "steps": 140,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 52,
+      "steps": 479,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 42,
+      "steps": 410,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 43,
+      "steps": 295,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 7,
+      "seat": 1,
+      "winner": 1,
+      "turns": 36,
+      "steps": 288,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 23,
+      "steps": 122,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 8,
+      "seat": 1,
+      "winner": 0,
+      "turns": 31,
+      "steps": 220,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 9,
+      "seat": 0,
+      "winner": 0,
+      "turns": 27,
+      "steps": 235,
+      "invalid": null
+    },
+    {
+      "name": "CASTLE",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 45,
+      "steps": 416,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 16,
+      "steps": 89,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 0,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 75,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 1,
+      "seat": 0,
+      "winner": 1,
+      "turns": 16,
+      "steps": 85,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 18,
+      "steps": 104,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 78,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 15,
+      "steps": 93,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 21,
+      "steps": 101,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 34,
+      "steps": 195,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 4,
+      "seat": 0,
+      "winner": 1,
+      "turns": 26,
+      "steps": 193,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 4,
+      "seat": 1,
+      "winner": 0,
+      "turns": 33,
+      "steps": 214,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 46,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 59,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 6,
+      "seat": 0,
+      "winner": 0,
+      "turns": 60,
+      "steps": 600,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 60,
+      "steps": 554,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 7,
+      "seat": 0,
+      "winner": 1,
+      "turns": 18,
+      "steps": 103,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 7,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 73,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 8,
+      "seat": 0,
+      "winner": 1,
+      "turns": 18,
+      "steps": 84,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 16,
+      "steps": 63,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 9,
+      "seat": 0,
+      "winner": 1,
+      "turns": 38,
+      "steps": 274,
+      "invalid": null
+    },
+    {
+      "name": "ASSASSIN",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 39,
+      "steps": 345,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 0,
+      "seat": 0,
+      "winner": 0,
+      "turns": 17,
+      "steps": 99,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 0,
+      "seat": 1,
+      "winner": 1,
+      "turns": 18,
+      "steps": 125,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 25,
+      "steps": 154,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 22,
+      "steps": 137,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 20,
+      "steps": 118,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 2,
+      "seat": 1,
+      "winner": 1,
+      "turns": 30,
+      "steps": 197,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 70,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 20,
+      "steps": 114,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 4,
+      "seat": 0,
+      "winner": 0,
+      "turns": 23,
+      "steps": 149,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 4,
+      "seat": 1,
+      "winner": 1,
+      "turns": 20,
+      "steps": 112,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 5,
+      "seat": 0,
+      "winner": 0,
+      "turns": 15,
+      "steps": 79,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 5,
+      "seat": 1,
+      "winner": 1,
+      "turns": 18,
+      "steps": 106,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 34,
+      "steps": 314,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 26,
+      "steps": 209,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 7,
+      "seat": 0,
+      "winner": 1,
+      "turns": 42,
+      "steps": 312,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 7,
+      "seat": 1,
+      "winner": 0,
+      "turns": 17,
+      "steps": 107,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 8,
+      "seat": 0,
+      "winner": 1,
+      "turns": 30,
+      "steps": 174,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 24,
+      "steps": 129,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 9,
+      "seat": 0,
+      "winner": 0,
+      "turns": 35,
+      "steps": 230,
+      "invalid": null
+    },
+    {
+      "name": "DECAY",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 43,
+      "steps": 367,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 55,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 0,
+      "seat": 1,
+      "winner": 1,
+      "turns": 14,
+      "steps": 77,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 27,
+      "steps": 145,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 22,
+      "steps": 117,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 2,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 84,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 62,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 21,
+      "steps": 118,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 30,
+      "steps": 198,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 4,
+      "seat": 0,
+      "winner": 0,
+      "turns": 23,
+      "steps": 144,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 4,
+      "seat": 1,
+      "winner": 1,
+      "turns": 18,
+      "steps": 101,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 5,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 66,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 5,
+      "seat": 1,
+      "winner": 1,
+      "turns": 10,
+      "steps": 49,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 6,
+      "seat": 0,
+      "winner": 0,
+      "turns": 35,
+      "steps": 261,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 26,
+      "steps": 177,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 68,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 7,
+      "seat": 1,
+      "winner": 1,
+      "turns": 14,
+      "steps": 85,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 27,
+      "steps": 155,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 32,
+      "steps": 203,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 9,
+      "seat": 0,
+      "winner": 0,
+      "turns": 27,
+      "steps": 168,
+      "invalid": null
+    },
+    {
+      "name": "CULL",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 41,
+      "steps": 273,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 16,
+      "steps": 83,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 0,
+      "seat": 1,
+      "winner": 0,
+      "turns": 19,
+      "steps": 109,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 27,
+      "steps": 123,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 22,
+      "steps": 125,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 54,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 56,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 21,
+      "steps": 101,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 26,
+      "steps": 137,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 4,
+      "seat": 0,
+      "winner": 0,
+      "turns": 23,
+      "steps": 121,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 4,
+      "seat": 1,
+      "winner": 0,
+      "turns": 29,
+      "steps": 217,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 54,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 57,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 36,
+      "steps": 279,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 24,
+      "steps": 134,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 23,
+      "steps": 114,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 7,
+      "seat": 1,
+      "winner": 0,
+      "turns": 19,
+      "steps": 131,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 52,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 14,
+      "steps": 58,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 9,
+      "seat": 0,
+      "winner": 1,
+      "turns": 36,
+      "steps": 253,
+      "invalid": null
+    },
+    {
+      "name": "EGG",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 23,
+      "steps": 138,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 16,
+      "steps": 85,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 0,
+      "seat": 1,
+      "winner": 0,
+      "turns": 15,
+      "steps": 79,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 23,
+      "steps": 115,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 16,
+      "steps": 73,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 53,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 54,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 21,
+      "steps": 111,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 22,
+      "steps": 126,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 4,
+      "seat": 0,
+      "winner": 1,
+      "turns": 34,
+      "steps": 219,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 4,
+      "seat": 1,
+      "winner": 0,
+      "turns": 23,
+      "steps": 137,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 53,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 50,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 34,
+      "steps": 266,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 26,
+      "steps": 176,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 7,
+      "seat": 0,
+      "winner": 1,
+      "turns": 14,
+      "steps": 79,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 7,
+      "seat": 1,
+      "winner": 1,
+      "turns": 18,
+      "steps": 104,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 15,
+      "steps": 61,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 8,
+      "seat": 1,
+      "winner": 0,
+      "turns": 29,
+      "steps": 153,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 9,
+      "seat": 0,
+      "winner": 1,
+      "turns": 52,
+      "steps": 386,
+      "invalid": null
+    },
+    {
+      "name": "MERCHANT",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 19,
+      "steps": 91,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 0,
+      "seat": 0,
+      "winner": 0,
+      "turns": 25,
+      "steps": 181,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 0,
+      "seat": 1,
+      "winner": 1,
+      "turns": 14,
+      "steps": 85,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 21,
+      "steps": 112,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 1,
+      "seat": 1,
+      "winner": 0,
+      "turns": 27,
+      "steps": 159,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 58,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 63,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 35,
+      "steps": 231,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 22,
+      "steps": 127,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 4,
+      "seat": 0,
+      "winner": 0,
+      "turns": 23,
+      "steps": 144,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 4,
+      "seat": 1,
+      "winner": 0,
+      "turns": 33,
+      "steps": 273,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 14,
+      "steps": 73,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 60,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 60,
+      "steps": 666,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 30,
+      "steps": 227,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 21,
+      "steps": 121,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 7,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 81,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 15,
+      "steps": 78,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 12,
+      "steps": 58,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 9,
+      "seat": 0,
+      "winner": 0,
+      "turns": 29,
+      "steps": 225,
+      "invalid": null
+    },
+    {
+      "name": "DUNGEON",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 17,
+      "steps": 99,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 59,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 0,
+      "seat": 1,
+      "winner": 0,
+      "turns": 15,
+      "steps": 91,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 19,
+      "steps": 114,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 1,
+      "seat": 1,
+      "winner": 0,
+      "turns": 21,
+      "steps": 121,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 68,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 15,
+      "steps": 92,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 14,
+      "steps": 45,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 13,
+      "steps": 43,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 4,
+      "seat": 0,
+      "winner": 0,
+      "turns": 21,
+      "steps": 128,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 4,
+      "seat": 1,
+      "winner": 1,
+      "turns": 14,
+      "steps": 52,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 49,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 63,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 16,
+      "steps": 78,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 6,
+      "seat": 1,
+      "winner": 0,
+      "turns": 44,
+      "steps": 394,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 7,
+      "seat": 0,
+      "winner": 1,
+      "turns": 16,
+      "steps": 92,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 7,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 68,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 8,
+      "seat": 0,
+      "winner": 1,
+      "turns": 26,
+      "steps": 141,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 8,
+      "seat": 1,
+      "winner": 0,
+      "turns": 19,
+      "steps": 90,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 9,
+      "seat": 0,
+      "winner": 1,
+      "turns": 24,
+      "steps": 136,
+      "invalid": null
+    },
+    {
+      "name": "CASINO",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 19,
+      "steps": 97,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 54,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 0,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 74,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 25,
+      "steps": 121,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 20,
+      "steps": 105,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 2,
+      "seat": 0,
+      "winner": 0,
+      "turns": 12,
+      "steps": 83,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 2,
+      "seat": 1,
+      "winner": 1,
+      "turns": 11,
+      "steps": 63,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 21,
+      "steps": 119,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 30,
+      "steps": 194,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 4,
+      "seat": 0,
+      "winner": 0,
+      "turns": 23,
+      "steps": 139,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 4,
+      "seat": 1,
+      "winner": 1,
+      "turns": 18,
+      "steps": 103,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 5,
+      "seat": 0,
+      "winner": 0,
+      "turns": 11,
+      "steps": 57,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 5,
+      "seat": 1,
+      "winner": 1,
+      "turns": 10,
+      "steps": 50,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 46,
+      "steps": 391,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 26,
+      "steps": 176,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 19,
+      "steps": 94,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 7,
+      "seat": 1,
+      "winner": 1,
+      "turns": 11,
+      "steps": 70,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 55,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 32,
+      "steps": 203,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 9,
+      "seat": 0,
+      "winner": 1,
+      "turns": 32,
+      "steps": 198,
+      "invalid": null
+    },
+    {
+      "name": "RIFT",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 39,
+      "steps": 263,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 18,
+      "steps": 109,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 0,
+      "seat": 1,
+      "winner": 1,
+      "turns": 20,
+      "steps": 118,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 21,
+      "steps": 89,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 18,
+      "steps": 91,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 2,
+      "seat": 0,
+      "winner": 0,
+      "turns": 15,
+      "steps": 90,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 57,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 29,
+      "steps": 144,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 40,
+      "steps": 256,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 4,
+      "seat": 0,
+      "winner": 1,
+      "turns": 30,
+      "steps": 185,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 4,
+      "seat": 1,
+      "winner": 0,
+      "turns": 23,
+      "steps": 132,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 46,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 59,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 42,
+      "steps": 355,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 36,
+      "steps": 252,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 29,
+      "steps": 147,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 7,
+      "seat": 1,
+      "winner": 0,
+      "turns": 17,
+      "steps": 112,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 54,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 14,
+      "steps": 60,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 9,
+      "seat": 0,
+      "winner": 1,
+      "turns": 36,
+      "steps": 251,
+      "invalid": null
+    },
+    {
+      "name": "TRIBE",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 59,
+      "steps": 623,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 16,
+      "steps": 85,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 0,
+      "seat": 1,
+      "winner": 0,
+      "turns": 15,
+      "steps": 87,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 1,
+      "seat": 0,
+      "winner": 1,
+      "turns": 20,
+      "steps": 104,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 24,
+      "steps": 138,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 78,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 77,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 25,
+      "steps": 143,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 3,
+      "seat": 1,
+      "winner": 0,
+      "turns": 60,
+      "steps": 408,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 4,
+      "seat": 0,
+      "winner": 1,
+      "turns": 30,
+      "steps": 198,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 4,
+      "seat": 1,
+      "winner": 0,
+      "turns": 39,
+      "steps": 328,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 48,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 67,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 60,
+      "steps": 579,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 60,
+      "steps": 664,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 29,
+      "steps": 184,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 7,
+      "seat": 1,
+      "winner": 1,
+      "turns": 14,
+      "steps": 93,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 17,
+      "steps": 80,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 40,
+      "steps": 241,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 9,
+      "seat": 0,
+      "winner": 0,
+      "turns": 19,
+      "steps": 135,
+      "invalid": null
+    },
+    {
+      "name": "DEW",
+      "r": 9,
+      "seat": 1,
+      "winner": 1,
+      "turns": 60,
+      "steps": 534,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 18,
+      "steps": 105,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 0,
+      "seat": 1,
+      "winner": 1,
+      "turns": 18,
+      "steps": 106,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 25,
+      "steps": 138,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 1,
+      "seat": 1,
+      "winner": 0,
+      "turns": 28,
+      "steps": 163,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 54,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 58,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 23,
+      "steps": 124,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 60,
+      "steps": 401,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 4,
+      "seat": 0,
+      "winner": 1,
+      "turns": 32,
+      "steps": 226,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 4,
+      "seat": 1,
+      "winner": 0,
+      "turns": 31,
+      "steps": 220,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 61,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 5,
+      "seat": 1,
+      "winner": 1,
+      "turns": 14,
+      "steps": 77,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 6,
+      "seat": 0,
+      "winner": 0,
+      "turns": 33,
+      "steps": 258,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 44,
+      "steps": 364,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 17,
+      "steps": 95,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 7,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 74,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 55,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 16,
+      "steps": 77,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 9,
+      "seat": 0,
+      "winner": 1,
+      "turns": 44,
+      "steps": 415,
+      "invalid": null
+    },
+    {
+      "name": "SHIELD",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 21,
+      "steps": 131,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 55,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 0,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 73,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 25,
+      "steps": 120,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 20,
+      "steps": 104,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 2,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 84,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 2,
+      "seat": 1,
+      "winner": 1,
+      "turns": 12,
+      "steps": 78,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 21,
+      "steps": 118,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 30,
+      "steps": 199,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 4,
+      "seat": 0,
+      "winner": 0,
+      "turns": 23,
+      "steps": 138,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 4,
+      "seat": 1,
+      "winner": 1,
+      "turns": 18,
+      "steps": 102,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 5,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 66,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 5,
+      "seat": 1,
+      "winner": 1,
+      "turns": 10,
+      "steps": 49,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 46,
+      "steps": 390,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 26,
+      "steps": 175,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 19,
+      "steps": 93,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 7,
+      "seat": 1,
+      "winner": 1,
+      "turns": 11,
+      "steps": 69,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 54,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 32,
+      "steps": 202,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 9,
+      "seat": 0,
+      "winner": 0,
+      "turns": 27,
+      "steps": 176,
+      "invalid": null
+    },
+    {
+      "name": "CULL_SWORD",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 41,
+      "steps": 333,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 20,
+      "steps": 128,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 0,
+      "seat": 1,
+      "winner": 1,
+      "turns": 14,
+      "steps": 84,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 1,
+      "seat": 0,
+      "winner": 1,
+      "turns": 18,
+      "steps": 82,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 1,
+      "seat": 1,
+      "winner": 0,
+      "turns": 23,
+      "steps": 120,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 56,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 58,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 23,
+      "steps": 117,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 20,
+      "steps": 109,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 4,
+      "seat": 0,
+      "winner": 0,
+      "turns": 23,
+      "steps": 133,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 4,
+      "seat": 1,
+      "winner": 1,
+      "turns": 36,
+      "steps": 287,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 5,
+      "seat": 0,
+      "winner": 0,
+      "turns": 15,
+      "steps": 76,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 58,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 60,
+      "steps": 591,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 6,
+      "seat": 1,
+      "winner": 0,
+      "turns": 37,
+      "steps": 306,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 27,
+      "steps": 149,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 7,
+      "seat": 1,
+      "winner": 1,
+      "turns": 14,
+      "steps": 90,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 15,
+      "steps": 77,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 12,
+      "steps": 57,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 9,
+      "seat": 0,
+      "winner": 0,
+      "turns": 33,
+      "steps": 266,
+      "invalid": null
+    },
+    {
+      "name": "RAIN",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 25,
+      "steps": 150,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 18,
+      "steps": 105,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 0,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 57,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 1,
+      "seat": 0,
+      "winner": 1,
+      "turns": 18,
+      "steps": 82,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 1,
+      "seat": 1,
+      "winner": 0,
+      "turns": 25,
+      "steps": 135,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 71,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 56,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 17,
+      "steps": 96,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 24,
+      "steps": 140,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 4,
+      "seat": 0,
+      "winner": 1,
+      "turns": 30,
+      "steps": 217,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 4,
+      "seat": 1,
+      "winner": 0,
+      "turns": 21,
+      "steps": 130,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 42,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 46,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 6,
+      "seat": 0,
+      "winner": 0,
+      "turns": 47,
+      "steps": 392,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 46,
+      "steps": 326,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 35,
+      "steps": 204,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 7,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 74,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 23,
+      "steps": 141,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 8,
+      "seat": 1,
+      "winner": 0,
+      "turns": 25,
+      "steps": 144,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 9,
+      "seat": 0,
+      "winner": 1,
+      "turns": 26,
+      "steps": 158,
+      "invalid": null
+    },
+    {
+      "name": "GRAPE",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 17,
+      "steps": 101,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 14,
+      "steps": 78,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 0,
+      "seat": 1,
+      "winner": 0,
+      "turns": 15,
+      "steps": 83,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 1,
+      "seat": 0,
+      "winner": 1,
+      "turns": 26,
+      "steps": 149,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 16,
+      "steps": 83,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 67,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 73,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 3,
+      "seat": 0,
+      "winner": 1,
+      "turns": 22,
+      "steps": 120,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 28,
+      "steps": 170,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 4,
+      "seat": 0,
+      "winner": 0,
+      "turns": 23,
+      "steps": 132,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 4,
+      "seat": 1,
+      "winner": 0,
+      "turns": 27,
+      "steps": 175,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 57,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 54,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 38,
+      "steps": 289,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 6,
+      "seat": 1,
+      "winner": 0,
+      "turns": 41,
+      "steps": 372,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 15,
+      "steps": 93,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 7,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 61,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 15,
+      "steps": 65,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 22,
+      "steps": 115,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 9,
+      "seat": 0,
+      "winner": 0,
+      "turns": 37,
+      "steps": 262,
+      "invalid": null
+    },
+    {
+      "name": "HYBRID",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 15,
+      "steps": 69,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 18,
+      "steps": 98,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 0,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 74,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 1,
+      "seat": 0,
+      "winner": 1,
+      "turns": 26,
+      "steps": 167,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 30,
+      "steps": 188,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 68,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 15,
+      "steps": 86,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 21,
+      "steps": 115,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 32,
+      "steps": 176,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 4,
+      "seat": 0,
+      "winner": 1,
+      "turns": 24,
+      "steps": 146,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 4,
+      "seat": 1,
+      "winner": 1,
+      "turns": 26,
+      "steps": 200,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 44,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 58,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 6,
+      "seat": 0,
+      "winner": 0,
+      "turns": 41,
+      "steps": 308,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 44,
+      "steps": 391,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 7,
+      "seat": 0,
+      "winner": 1,
+      "turns": 14,
+      "steps": 80,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 7,
+      "seat": 1,
+      "winner": 1,
+      "turns": 16,
+      "steps": 104,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 37,
+      "steps": 195,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 8,
+      "seat": 1,
+      "winner": 0,
+      "turns": 27,
+      "steps": 143,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 9,
+      "seat": 0,
+      "winner": 0,
+      "turns": 60,
+      "steps": 557,
+      "invalid": null
+    },
+    {
+      "name": "ELF_ENGINE",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 49,
+      "steps": 422,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 49,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 0,
+      "seat": 1,
+      "winner": 1,
+      "turns": 16,
+      "steps": 95,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 43,
+      "steps": 288,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 36,
+      "steps": 233,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 56,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 2,
+      "seat": 1,
+      "winner": 1,
+      "turns": 13,
+      "steps": 80,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 3,
+      "seat": 0,
+      "winner": 0,
+      "turns": 41,
+      "steps": 303,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 60,
+      "steps": 510,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 4,
+      "seat": 0,
+      "winner": 0,
+      "turns": 25,
+      "steps": 156,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 4,
+      "seat": 1,
+      "winner": 1,
+      "turns": 20,
+      "steps": 115,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 5,
+      "seat": 0,
+      "winner": 0,
+      "turns": 11,
+      "steps": 53,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 5,
+      "seat": 1,
+      "winner": 1,
+      "turns": 12,
+      "steps": 67,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 6,
+      "seat": 0,
+      "winner": 0,
+      "turns": 39,
+      "steps": 302,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 58,
+      "steps": 631,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 75,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 7,
+      "seat": 1,
+      "winner": 1,
+      "turns": 12,
+      "steps": 72,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 8,
+      "seat": 0,
+      "winner": 0,
+      "turns": 37,
+      "steps": 275,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 8,
+      "seat": 1,
+      "winner": 1,
+      "turns": 36,
+      "steps": 236,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 9,
+      "seat": 0,
+      "winner": 0,
+      "turns": 29,
+      "steps": 192,
+      "invalid": null
+    },
+    {
+      "name": "RIFT_ENGINE",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 60,
+      "steps": 502,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 46,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 0,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 73,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 15,
+      "steps": 88,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 16,
+      "steps": 88,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 69,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 84,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 3,
+      "seat": 0,
+      "winner": 1,
+      "turns": 18,
+      "steps": 83,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 3,
+      "seat": 1,
+      "winner": 0,
+      "turns": 15,
+      "steps": 63,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 4,
+      "seat": 0,
+      "winner": 0,
+      "turns": 15,
+      "steps": 82,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 4,
+      "seat": 1,
+      "winner": 1,
+      "turns": 20,
+      "steps": 117,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 49,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 59,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 6,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 55,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 6,
+      "seat": 1,
+      "winner": 0,
+      "turns": 25,
+      "steps": 172,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 13,
+      "steps": 83,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 7,
+      "seat": 1,
+      "winner": 1,
+      "turns": 14,
+      "steps": 84,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 8,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 55,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 8,
+      "seat": 1,
+      "winner": 0,
+      "turns": 15,
+      "steps": 69,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 9,
+      "seat": 0,
+      "winner": 1,
+      "turns": 34,
+      "steps": 267,
+      "invalid": null
+    },
+    {
+      "name": "GAMBLER_TEMPO",
+      "r": 9,
+      "seat": 1,
+      "winner": 0,
+      "turns": 21,
+      "steps": 121,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 0,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 41,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 0,
+      "seat": 1,
+      "winner": 0,
+      "turns": 11,
+      "steps": 53,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 1,
+      "seat": 0,
+      "winner": 0,
+      "turns": 19,
+      "steps": 113,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 1,
+      "seat": 1,
+      "winner": 1,
+      "turns": 26,
+      "steps": 152,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 2,
+      "seat": 0,
+      "winner": 1,
+      "turns": 12,
+      "steps": 66,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 2,
+      "seat": 1,
+      "winner": 0,
+      "turns": 15,
+      "steps": 90,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 3,
+      "seat": 0,
+      "winner": 1,
+      "turns": 32,
+      "steps": 140,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 3,
+      "seat": 1,
+      "winner": 1,
+      "turns": 26,
+      "steps": 138,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 4,
+      "seat": 0,
+      "winner": 1,
+      "turns": 24,
+      "steps": 142,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 4,
+      "seat": 1,
+      "winner": 0,
+      "turns": 19,
+      "steps": 105,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 5,
+      "seat": 0,
+      "winner": 1,
+      "turns": 10,
+      "steps": 40,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 5,
+      "seat": 1,
+      "winner": 0,
+      "turns": 13,
+      "steps": 58,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 6,
+      "seat": 0,
+      "winner": 0,
+      "turns": 33,
+      "steps": 226,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 6,
+      "seat": 1,
+      "winner": 1,
+      "turns": 20,
+      "steps": 151,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 7,
+      "seat": 0,
+      "winner": 0,
+      "turns": 17,
+      "steps": 92,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 7,
+      "seat": 1,
+      "winner": 1,
+      "turns": 20,
+      "steps": 120,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 8,
+      "seat": 0,
+      "winner": 1,
+      "turns": 16,
+      "steps": 69,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 8,
+      "seat": 1,
+      "winner": 0,
+      "turns": 19,
+      "steps": 82,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 9,
+      "seat": 0,
+      "winner": 0,
+      "turns": 35,
+      "steps": 295,
+      "invalid": null
+    },
+    {
+      "name": "ELF_GAMBLER",
+      "r": 9,
+      "seat": 1,
+      "winner": 1,
+      "turns": 40,
+      "steps": 311,
+      "invalid": null
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "difficulty": "hard",
+    "turn": 5,
+    "changes": 8,
+    "ticks": 2040,
+    "botName": "BOT · RIFT",
+    "busy": false,
+    "over": false,
+    "errors": []
+  },
+  {
+    "difficulty": "hell",
+    "turn": 5,
+    "changes": 8,
+    "ticks": 1549,
+    "botName": "BOT · COUNTER",
+    "busy": false,
+    "over": false,
+    "errors": []
+  }
+]

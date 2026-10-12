@@ -1,3 +1,4 @@
+import { cloneGameState } from './cloneGameState';
 // ============================================================
 // LORE — pure game engine. No DOM, no timers, no Math.random.
 // reduce(state, action) -> { state, events }  (input never mutated)
@@ -5067,9 +5068,9 @@ function resolveQuests(g: GameState, ctx: Ctx, automaticOnly = false): void {
 export function reduce(prev: GameState, action: Action): ReduceResult {
   if (!prev.over && prev.pending?.kind === "reroll" && (action.type === "pick" || action.type === "chooseTarget")) {
     const snap = prev._wheelSnap;
-    if (action.uid !== null && action.uid !== "re") return { state: structuredClone(prev), events: [] };
+    if (action.uid !== null && action.uid !== "re") return { state: cloneGameState(prev), events: [] };
     if (action.uid === "re" && snap?.state) {
-      const before = structuredClone(snap.state) as GameState;
+      const before = cloneGameState(snap.state as GameState);
       before._wheelSnap = null;
       before.rng = (before.rng + 0x9e3779b9) >>> 0;
       before.players[before.cur].wheelUsed = true;
@@ -5079,7 +5080,7 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
       result.events.unshift({type:"log",html:"운명의 수레바퀴! 결과를 되감고 다시 굴린다…",htmlJa:"運命の輪！結果を巻き戻して振り直す…"});
       return result;
     }
-    const state = structuredClone(prev);
+    const state = cloneGameState(prev);
     state._wheelSnap = null;
     state.pending = structuredClone(snap?.outcome?.pending ?? null);
     if (snap?.outcome) Object.assign(state, {over:snap.outcome.over,phase:snap.outcome.phase,winner:snap.outcome.winner});
@@ -5095,7 +5096,7 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
   if (!prev.over && eligible && (prev.pending?.owner ?? owner) === owner && result.state.cur === owner
       && !player.wheelUsed && player.enchants.some(e=>e.card.ench === "fateWheel") && die?.type === "dice") {
     const g = result.state;
-    const before = structuredClone(prev); before._wheelSnap = null;
+    const before = cloneGameState(prev); before._wheelSnap = null;
     g._wheelSnap = {state:before,action:structuredClone(action),outcome:{pending:g.pending,over:g.over,phase:g.phase,winner:g.winner}};
     const source = DB[die.source.id!] ?? STARTERS[die.source.id!];
     const name = source ? cn(source) : die.source.id!;
@@ -5201,7 +5202,7 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
 }
 
 function reduceCore(prev: GameState, action: Action): ReduceResult {
-  const g: GameState = structuredClone(prev);
+  const g: GameState = cloneGameState(prev);
   const ev: GameEvent[] = [];
   const ctx = makeCtx(g, ev);
   refreshDewPassives(g);

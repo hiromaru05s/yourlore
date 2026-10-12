@@ -1,3 +1,5 @@
+import { BotThinker } from './botThinker';
+import { observationSample } from '../shared/botObservation';
 import {installHandDiscard} from '../ui/handDiscard';
 import {prepareStateArtwork} from '../ui/stateArtwork';
 import {captureHandLayout,arrivingHandUids} from '../ui/handGeometry';
@@ -16,7 +18,7 @@ import { paintDuelClock } from '../ui/duelClock';
 import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
 import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef } from "../shared/engine";
-import { botDecide, pickBotDeck, type BotDifficulty } from "../shared/bot";
+import { safeGreedy, legalBotAction, pickBotDeck, type BotDifficulty } from "../shared/bot";
 import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog, logToText } from "../ui/log";
@@ -954,12 +956,15 @@ export abstract class BaseController implements BoardHandlers {
 // ============================================================
 export class LocalController extends BaseController {
   private botTimer = 0;
+  private thinker = new BotThinker();
+  private botBusy = false;
+  private botDisposed = false;
   private difficulty: BotDifficulty;
 
   constructor(root: HTMLElement, exits: ControllerExits, playerName = "PLAYER 1", deck?: string[], difficulty: BotDifficulty = "hard") {
     super(root, 0, exits);
     this.difficulty = difficulty;
-    const bot = pickBotDeck(); // roll a random archetype (deck + buy discipline) per game
+    const bot = pickBotDeck(Math.random(), difficulty); // difficulty-appropriate, ordinary legal starter deck
     const res = createGame({
       mode: "bot",
       p0: { id: "local", name: playerName, deck },
@@ -990,20 +995,30 @@ export class LocalController extends BaseController {
 
   private botTurnNo = -1;
   private botTurnSteps = 0;
-  private botStep(): void {
+  private async botStep(): Promise<void> {
     const g = this.state;
-    if (g.over || !g.players[actingSide(g)].isBot) return;
+    if (this.botDisposed || this.botBusy || g.over || !g.players[actingSide(g)].isBot) return;
     // 안전망: 봇이 한 턴에서 비정상적으로 많은 행동을 반복하면(거부 루프 등) 강제 턴 종료.
     // 정상 턴은 수십 액션 이내 — 200회는 버그가 아니면 도달 불가.
     if (g.turn !== this.botTurnNo) { this.botTurnNo = g.turn; this.botTurnSteps = 0; }
     if (++this.botTurnSteps > 200) {
       console.warn("[bot] loop guard — forcing endTurn on turn", g.turn);
-      this.applyResult(reduce(g, g.pending?.allowCancel ? ({ type: "pick", uid: null } as Action) : ({ type: "endTurn" } as Action)));
+      // Finish mandatory choices before ending the turn; endTurn is refused
+      // while a non-cancellable target is pending.
+      const action = g.pending
+        ? legalBotAction(g, { type: 'pick', uid: null })
+        : { type: 'endTurn' } as Action;
+      this.applyResult(reduce(g, action));
       return;
     }
-    const action = botDecide(g, this.difficulty);
-    this.applyResult(reduce(g, action));
+    this.botBusy = true;
+    try {
+      const action = await this.thinker.decide(g, this.difficulty);
+      if (this.botDisposed || this.state !== g || g.over) return;
+      this.applyResult(reduce(g, action ?? legalBotAction(g, safeGreedy(observationSample(g, actingSide(g), 0)))));
+    } finally { this.botBusy = false; }
+
   }
 
-  destroy(): void { clearTimeout(this.botTimer); super.destroy(); }
+  destroy(): void { this.botDisposed = true; clearTimeout(this.botTimer); this.thinker.destroy(); super.destroy(); }
 }
