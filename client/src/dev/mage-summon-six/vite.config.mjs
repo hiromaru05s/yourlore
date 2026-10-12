@@ -1,0 +1,2 @@
+import {defineConfig} from 'vite';
+export default defineConfig({root:new URL('../../../',import.meta.url).pathname,server:{host:'127.0.0.1',port:5463,strictPort:true,fs:{allow:[new URL('../../../../',import.meta.url).pathname,'/Users/hiromaru05s/Desktop/LORE_TCG']}},build:{outDir:new URL('../../../../docs/vfx-prototypes/2026-10-08-mage-summon-six/build',import.meta.url).pathname,emptyOutDir:true,rollupOptions:{input:new URL('../../../mage-summon-six.html',import.meta.url).pathname}}});

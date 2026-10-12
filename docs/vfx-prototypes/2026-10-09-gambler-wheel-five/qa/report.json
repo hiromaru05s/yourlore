@@ -1,0 +1,187 @@
+{
+  "checks": [
+    {
+      "variant": 1,
+      "card": "GAMBLER",
+      "side": 0,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 2,
+      "card": "GAMBLER",
+      "side": 0,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 3,
+      "card": "GAMBLER",
+      "side": 0,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 4,
+      "card": "GAMBLER",
+      "side": 0,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 5,
+      "card": "GAMBLER",
+      "side": 0,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 1,
+      "card": "GAMBLER",
+      "side": 1,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 2,
+      "card": "GAMBLER",
+      "side": 1,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 3,
+      "card": "GAMBLER",
+      "side": 1,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 4,
+      "card": "GAMBLER",
+      "side": 1,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 5,
+      "card": "GAMBLER",
+      "side": 1,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 1,
+      "card": "LEGEND_GAMBLER",
+      "side": 0,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 2,
+      "card": "LEGEND_GAMBLER",
+      "side": 0,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 3,
+      "card": "LEGEND_GAMBLER",
+      "side": 0,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 4,
+      "card": "LEGEND_GAMBLER",
+      "side": 0,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 5,
+      "card": "LEGEND_GAMBLER",
+      "side": 0,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 1,
+      "card": "LEGEND_GAMBLER",
+      "side": 1,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 2,
+      "card": "LEGEND_GAMBLER",
+      "side": 1,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 3,
+      "card": "LEGEND_GAMBLER",
+      "side": 1,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 4,
+      "card": "LEGEND_GAMBLER",
+      "side": 1,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    },
+    {
+      "variant": 5,
+      "card": "LEGEND_GAMBLER",
+      "side": 1,
+      "draw": true,
+      "completion": true,
+      "cancel": true
+    }
+  ],
+  "handClick": true,
+  "threeConcurrent": true,
+  "reduced": true,
+  "widths": [
+    1280,
+    390,
+    320
+  ],
+  "resourceStability": {
+    "before": {
+      "rigs": 10,
+      "geometries": 37,
+      "textures": 24,
+      "drawCalls": 7
+    },
+    "after": {
+      "rigs": 10,
+      "geometries": 37,
+      "textures": 24,
+      "drawCalls": 7
+    }
+  },
+  "errors": []
+}

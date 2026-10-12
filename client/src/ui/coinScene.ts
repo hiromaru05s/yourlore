@@ -35,6 +35,7 @@ export async function mountCoinScene(host:HTMLElement,heads:boolean):Promise<(()
   let maps:T.Texture[]=[];let timer=0,abandoned=false;
   try{maps=await Promise.race([Promise.all([...host.querySelectorAll<HTMLElement>('.ct-face')].map(async(e)=>{const map=await faceTexture(e);if(abandoned)map.dispose();return map;})),new Promise<never>((_,reject)=>{timer=setTimeout(()=>reject(new Error('coin texture timeout')),1500);})]);}catch{abandoned=true;maps.forEach(m=>m.dispose());renderer.dispose();return null;}finally{clearTimeout(timer);}
   if(!host.isConnected){maps.forEach(m=>m.dispose());renderer.dispose();return null;}
+  renderer.debug.checkShaderErrors=import.meta.env?.DEV??true;
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setClearColor(0,0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.85;
   host.classList.add('ct-model');const rect=host.getBoundingClientRect();renderer.setSize(rect.width,rect.height,false);renderer.domElement.className='coin-model-canvas';host.append(renderer.domElement);
   const scene=new T.Scene(),camera=new T.PerspectiveCamera(38,rect.width/rect.height,.1,50);camera.position.set(0,7.2,3.5);camera.lookAt(0,.65,0);

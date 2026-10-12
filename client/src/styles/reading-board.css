@@ -4,7 +4,7 @@
 :is(#app,.reading-board).reading-board .game::before,:is(#app,.reading-board).reading-board .game::after{display:none!important;}
 :is(#app,.reading-board).reading-board .stage{position:absolute;inset:0;display:block;padding:0;margin:0;transform:none;}
 :is(#app,.reading-board).reading-board .board-col,:is(#app,.reading-board).reading-board .pcluster,:is(#app,.reading-board).reading-board .pc-side,:is(#app,.reading-board).reading-board .prow,:is(#app,.reading-board).reading-board .field-block,:is(#app,.reading-board).reading-board .zones,:is(#app,.reading-board).reading-board .pile-col,:is(#app,.reading-board).reading-board .mid-row,:is(#app,.reading-board).reading-board .market,:is(#app,.reading-board).reading-board .hand-area,:is(#app,.reading-board).reading-board .portrait{display:contents!important;position:static!important;transform:none!important;filter:none!important;}
-:is(#app,.reading-board).reading-board .zone-row,:is(#app,.reading-board).reading-board .pile,:is(#app,.reading-board).reading-board .rift-button,:is(#app,.reading-board).reading-board .mid-aside,:is(#app,.reading-board).reading-board .market-counter,:is(#app,.reading-board).reading-board .portrait .pt-ring,:is(#app,.reading-board).reading-board .portrait .pt-vitals,:is(#app,.reading-board).reading-board .portrait .pt-mana,:is(#app,.reading-board).reading-board .portrait .pt-name,:is(#app,.reading-board).reading-board .portrait .pt-brand{position:absolute;right:auto;bottom:auto;margin:0;padding:0;box-sizing:border-box;}
+:is(#app,.reading-board).reading-board .zone-row,:is(#app,.reading-board).reading-board .pile,:is(#app,.reading-board).reading-board .rift-button,:is(#app,.reading-board).reading-board .mid-aside,:is(#app,.reading-board).reading-board .market-counter,:is(#app,.reading-board).reading-board .portrait .pt-ring,:is(#app,.reading-board).reading-board .portrait .pt-vitals,:is(#app,.reading-board).reading-board .portrait .pt-mana,:is(#app,.reading-board).reading-board .portrait .pt-name{position:absolute;right:auto;bottom:auto;margin:0;padding:0;box-sizing:border-box;}
 :is(#app,.reading-board).reading-board .zone-row{display:flex;align-items:center;justify-content:center;min-height:0;pointer-events:none;}
 :is(#app,.reading-board).reading-board .zone-row::before,:is(#app,.reading-board).reading-board .zone-row::after{display:none;}
 :is(#app,.reading-board).reading-board .zone{transform:none;filter:none;gap:calc(var(--board-meter)*.008);margin:0;align-items:center;}
@@ -22,8 +22,10 @@
 :is(#app,.reading-board).reading-board #supplyMarket{gap:calc(var(--board-meter)*.005);}
 :is(#app,.reading-board).reading-board .market-cards>.card,:is(#app,.reading-board).reading-board .market-cards>.slot{flex:0 0 var(--card-w);width:var(--card-w);height:var(--card-h);--cw:var(--card-w);--ch:var(--card-h);margin:0;}
 /* Saved older rooms can contain 4+8. Preserve every card without silently dropping stock. */
-:is(#app,.reading-board).reading-board #supplyMarket:has(>:nth-child(4)){gap:0;}
-:is(#app,.reading-board).reading-board #supplyMarket:has(>:nth-child(4))>:not(:first-child){margin-left:calc(var(--card-w)*-.24);}
+/* Presentation layers are not inventory: counting one as a fourth offer moves
+   the real cards and applies the legacy negative margin to the whole effect. */
+:is(#app,.reading-board).reading-board #supplyMarket:has(>:nth-child(4 of .card,.slot)){gap:0;}
+:is(#app,.reading-board).reading-board #supplyMarket:has(>:nth-child(4 of .card,.slot))>:is(.card,.slot):not(:first-child){margin-left:calc(var(--card-w)*-.24);}
 :is(#app,.reading-board).reading-board #fixedMarket:has(>:nth-child(8)){gap:0;}
 :is(#app,.reading-board).reading-board #fixedMarket:has(>:nth-child(8))>:not(:first-child){margin-left:calc(var(--card-w)*-.05);}
 :is(#app,.reading-board).reading-board .sub-head{position:absolute;display:block;right:auto;bottom:auto;transform:none;padding:0;z-index:5;}
@@ -69,7 +71,6 @@
 :is(#app,.reading-board).reading-board .portrait .mana-crystal{width:100%;height:100%;}
 :is(#app,.reading-board).reading-board .portrait .pt-name{font-size:clamp(8px,calc(var(--board-meter)*.010),13px);font-weight:400;line-height:1.2;color:#c8beaa;text-shadow:0 1px 2px #0a1524;background:none;border:0;box-shadow:none;max-width:none;text-align:center;white-space:nowrap;}
 :is(#app,.reading-board).reading-board .portrait .pt-name--vitals{position:fixed;}
-:is(#app,.reading-board).reading-board .portrait .pt-brand{font-size:calc(var(--board-meter)*.012);}
 :is(#app,.reading-board).reading-board .game:not(.hand-open) #hand{position:absolute;transform:none;z-index:35;max-height:none;}
 :is(#app,.reading-board).reading-board .game:not(.hand-open) #hand .card{transform:scale(.42) rotate(var(--hand-angle,0deg));transform-origin:50% 100%;left:calc(var(--hi)*var(--h-step-compact)*.42 - var(--card-w-hand)*.29);}
 :is(#app,.reading-board).reading-board #oppHand{position:absolute;transform:none;z-index:25;margin:0;padding:0;}
@@ -153,17 +154,23 @@
 :is(#app,.reading-board).reading-board[data-turnlight] .game #endBtn:focus-visible{outline:2px solid #fcde85;outline-offset:4px;}
 :is(#app,.reading-board).reading-board[data-turnlight] .mid-aside .tc-num{font-variant-numeric:tabular-nums;font-size:max(8px,calc(var(--board-meter)*.011));text-shadow:0 1px 2px #000;}
 :is(#app,.reading-board).reading-board[data-turnlight] .mp-clock.warn .tc-num{color:#ffd2a1;font-weight:700;}
-/* Frame-side counters: health upper-left, shield lower-left, Dew upper-right.
-   All three stay below the top of the frame and above its bottom edge. */
+/* Frame-side counters: health upper-left, shield lower-left, Dew upper-right, Brand lower-right.
+   Every badge follows the portrait rather than the projected tabletop. */
 .reading-board .portrait .pt-vitals{translate:none;}
 .pt-resources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:calc(var(--portrait-size,140px)*.01);width:86px;height:50px;pointer-events:auto;z-index:22;transform:translateY(-50%);}
 .reading-board .portrait .pt-resources{position:absolute;display:block;pointer-events:none;transform:none;}
 .pt-resources>span{position:relative;display:block;min-width:0;height:100%;padding:0;border:0;background-position:center;background-size:100% 100%;background-repeat:no-repeat;}
+.pt-resources:has(.pt-brand){grid-template-columns:repeat(3,minmax(0,1fr));width:129px;}
+.pt-resources .pt-brand{grid-column:3;background-image:url('/art/biblion/modular/brand-seal-ui.png');}
 .pt-resources .pt-shield{grid-column:1;top:calc(var(--portrait-size,140px)*.135);background-image:url('/art/biblion/modular/shield-ui.webp');}
 .pt-resources .pt-dew{grid-column:2;top:calc(var(--portrait-size,140px)*.055);left:10%;width:110%;background-image:url('/art/biblion/modular/dew-ui.webp');}
 .pt-resources b{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);font-family:LoreBoardSerif,Georgia,serif;font-size:calc(var(--portrait-size,140px)*var(--resource-number-scale,.14));font-weight:600;line-height:1;color:#fff8e7;text-shadow:0 1px 2px #000b;font-variant-numeric:tabular-nums;letter-spacing:-.05em;}
 .pt-resources .pt-dew b{top:53.5%;}
+.pt-resources .pt-brand b{top:50%;}
 
 .reading-board .portrait .pt-resources>span{position:absolute;height:36%;pointer-events:auto;}
 .reading-board .portrait .pt-resources .pt-shield{left:-8%;top:60%;width:30%;}
 .reading-board .portrait .pt-resources .pt-dew{left:76.5%;top:6%;width:33%;}
+
+/* Approved seal: optical width matches the shield, centers align along the lower frame. */
+.reading-board .portrait .pt-resources .pt-brand{left:77%;top:61%;width:32%;height:34%;}

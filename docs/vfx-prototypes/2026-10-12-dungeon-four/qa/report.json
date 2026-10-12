@@ -1,0 +1,218 @@
+{
+  "checks": [
+    {
+      "name": "variant 1 finite geometry at 0",
+      "pass": true
+    },
+    {
+      "name": "variant 1 finite geometry at 350",
+      "pass": true
+    },
+    {
+      "name": "variant 1 finite geometry at 800",
+      "pass": true
+    },
+    {
+      "name": "variant 1 finite geometry at 1500",
+      "pass": true
+    },
+    {
+      "name": "variant 1 finite geometry at 2350",
+      "pass": true
+    },
+    {
+      "name": "variant 1 finite geometry at 3000",
+      "pass": true
+    },
+    {
+      "name": "variant 2 finite geometry at 0",
+      "pass": true
+    },
+    {
+      "name": "variant 2 finite geometry at 350",
+      "pass": true
+    },
+    {
+      "name": "variant 2 finite geometry at 800",
+      "pass": true
+    },
+    {
+      "name": "variant 2 finite geometry at 1500",
+      "pass": true
+    },
+    {
+      "name": "variant 2 finite geometry at 2350",
+      "pass": true
+    },
+    {
+      "name": "variant 2 finite geometry at 3000",
+      "pass": true
+    },
+    {
+      "name": "variant 3 finite geometry at 0",
+      "pass": true
+    },
+    {
+      "name": "variant 3 finite geometry at 350",
+      "pass": true
+    },
+    {
+      "name": "variant 3 finite geometry at 800",
+      "pass": true
+    },
+    {
+      "name": "variant 3 finite geometry at 1500",
+      "pass": true
+    },
+    {
+      "name": "variant 3 finite geometry at 2350",
+      "pass": true
+    },
+    {
+      "name": "variant 3 finite geometry at 3000",
+      "pass": true
+    },
+    {
+      "name": "variant 4 finite geometry at 0",
+      "pass": true
+    },
+    {
+      "name": "variant 4 finite geometry at 350",
+      "pass": true
+    },
+    {
+      "name": "variant 4 finite geometry at 800",
+      "pass": true
+    },
+    {
+      "name": "variant 4 finite geometry at 1500",
+      "pass": true
+    },
+    {
+      "name": "variant 4 finite geometry at 2350",
+      "pass": true
+    },
+    {
+      "name": "variant 4 finite geometry at 3000",
+      "pass": true
+    },
+    {
+      "name": "normal speed completes",
+      "pass": true
+    },
+    {
+      "name": "loop returns to beginning",
+      "pass": true
+    },
+    {
+      "name": "reduced motion stops playback",
+      "pass": true
+    },
+    {
+      "name": "board 0/false/1",
+      "pass": true
+    },
+    {
+      "name": "board 0/false/2",
+      "pass": true
+    },
+    {
+      "name": "board 0/false/3",
+      "pass": true
+    },
+    {
+      "name": "board 0/false/4",
+      "pass": true
+    },
+    {
+      "name": "board 0/true/1",
+      "pass": true
+    },
+    {
+      "name": "board 0/true/2",
+      "pass": true
+    },
+    {
+      "name": "board 0/true/3",
+      "pass": true
+    },
+    {
+      "name": "board 0/true/4",
+      "pass": true
+    },
+    {
+      "name": "board 1/false/1",
+      "pass": true
+    },
+    {
+      "name": "board 1/false/2",
+      "pass": true
+    },
+    {
+      "name": "board 1/false/3",
+      "pass": true
+    },
+    {
+      "name": "board 1/false/4",
+      "pass": true
+    },
+    {
+      "name": "board 1/true/1",
+      "pass": true
+    },
+    {
+      "name": "board 1/true/2",
+      "pass": true
+    },
+    {
+      "name": "board 1/true/3",
+      "pass": true
+    },
+    {
+      "name": "board 1/true/4",
+      "pass": true
+    },
+    {
+      "name": "hand summon is running",
+      "pass": true
+    },
+    {
+      "name": "cancel restores cards and overlays",
+      "pass": true
+    },
+    {
+      "name": "hand summon completes cleanly",
+      "pass": true
+    },
+    {
+      "name": "resize restores cards",
+      "pass": true
+    },
+    {
+      "name": "mode exit removes board context",
+      "pass": true
+    },
+    {
+      "name": "no horizontal overflow 320",
+      "pass": true
+    },
+    {
+      "name": "no horizontal overflow 390",
+      "pass": true
+    },
+    {
+      "name": "no horizontal overflow 844",
+      "pass": true
+    },
+    {
+      "name": "no browser page errors",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "viewport": [
+    1360,
+    1000
+  ],
+  "status": "preview only"
+}

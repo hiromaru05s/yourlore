@@ -1,3 +1,7 @@
+import { TUT_STEPS } from '../../client/src/shared/tutorialSteps';
+import { replayLesson, TUTORIAL_ACTION_LIMIT } from '../../client/src/shared/tutorialLesson';
+import { isClientMessage } from './gameInput';
+import type { Action } from '../../client/src/shared/types';
 // ============================================================
 // LORE server — one-shot credit rewards (tutorial steps, …).
 // The client only ever sends a reward KEY; amounts live here
@@ -35,6 +39,46 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders(env) });
   const user = await getUser(env, req);
   if (!user) return json(env, { error: "로그인이 필요합니다." }, 401);
+
+  if (path === '/rewards/tutorial' && req.method === 'GET') {
+    const rows = await env.DB.prepare('SELECT key FROM rewards WHERE user_id = ?').bind(user.id).all<{key:string}>();
+    const keys = (rows.results ?? []).map(r=>r.key);
+    return json(env,{keys,credits:user.credits,offered:keys.some(k=>k.startsWith('tutorial:v2:'))});
+  }
+  if (path === '/rewards/tutorial/decision' && req.method === 'POST') {
+    const body = await req.json().catch(()=>null) as {decision?:unknown}|null;
+    if(body?.decision !== 'start' && body?.decision !== 'skip')return json(env,{error:'invalid decision'},400);
+    await env.DB.prepare('INSERT OR IGNORE INTO rewards (user_id,key,amount,created_at) VALUES (?,?,0,?)')
+      .bind(user.id,`tutorial:v2:intro:${body.decision}`,Date.now()).run();
+    return json(env,{ok:true});
+  }
+  if (path === '/rewards/tutorial/complete' && req.method === 'POST') {
+    // Bound transcript input before invoking the same deterministic reducer as the client.
+    const reader=req.body?.getReader(),decoder=new TextDecoder();
+    let raw='',bytes=0;
+    if(reader)try {
+      for(;;){const {done,value}=await reader.read();if(done)break;bytes+=value.byteLength;
+        if(bytes>24576){await reader.cancel();return json(env,{error:'tutorial transcript too large'},413);}
+        raw+=decoder.decode(value,{stream:true});
+      }
+      raw+=decoder.decode();
+    }finally{reader.releaseLock();}
+    let body: {lesson?:unknown;actions?:unknown};
+    try { body=JSON.parse(raw); } catch {return json(env,{error:'invalid transcript'},400);}
+    const lesson=TUT_STEPS.find(s=>s.id===body?.lesson);
+    const actions=body?.actions;
+    if(!lesson || !Array.isArray(actions) || actions.length>TUTORIAL_ACTION_LIMIT || !actions.every(action=>isClientMessage({type:'action',action})))return json(env,{error:'invalid transcript'},400);
+    let complete=false;
+    try {complete=replayLesson(lesson.id,actions as Action[]);} catch { /* Invalid replay is never a reward. */ }
+    if(!complete)return json(env,{error:'lesson not completed'},400);
+    const [ins]=await env.DB.batch([
+      env.DB.prepare('INSERT OR IGNORE INTO rewards (user_id,key,amount,created_at) VALUES (?,?,?,?)').bind(user.id,lesson.key,lesson.reward,Date.now()),
+      env.DB.prepare('UPDATE users SET credits = credits + ? WHERE id = ? AND changes() = 1').bind(lesson.reward,user.id),
+    ]);
+    const granted=(ins.meta?.changes??0)>0;
+    const row=await env.DB.prepare('SELECT credits FROM users WHERE id = ?').bind(user.id).first<{credits:number}>();
+    return json(env,{granted,amount:granted?lesson.reward:0,credits:row?.credits??0});
+  }
 
   // GET /rewards/claimed → keys already paid to this user (+ current balance)
   if (path === "/rewards/claimed" && req.method === "GET") {

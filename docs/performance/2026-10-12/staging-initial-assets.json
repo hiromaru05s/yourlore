@@ -1,0 +1,318 @@
+{
+  "source": "8a07a95346d33883eb681e8c4926184ee22c33a3",
+  "origin": "https://test.yourlore.xyz",
+  "verifiedAt": "2026-10-12T09:49:30.309Z",
+  "assets": [
+    {
+      "file": "assets/BufferGeometryUtils-jCDbdftl.js",
+      "bytes": 4861,
+      "sha256": "467efa643018142ce192c509b8a756f58d5592e0f846b8e6b960591e9e995b5d"
+    },
+    {
+      "file": "assets/atelierThemes-DM29k3s-.js",
+      "bytes": 3739,
+      "sha256": "95d1fa7ec28362a982bf7d4430da039a377b73a37609306bf599ca8bc7810c97"
+    },
+    {
+      "file": "index.html",
+      "bytes": 1531,
+      "sha256": "25e32573665c090924a0228ad35290a884efc0011de26581a91e16426dfeba6b"
+    },
+    {
+      "file": "assets/audit-Ch-vlPRj.js",
+      "bytes": 5451,
+      "sha256": "53fcc623e3b2b9ac71ac9b74dd522f3e77f45ae7853baa8ac8284d4d4e6a1930"
+    },
+    {
+      "file": "assets/baseFurniture-D3AGgZsg.js",
+      "bytes": 3672,
+      "sha256": "7ce7849dbc339122ed0413c85acc3baac1f9c6e2961039c4b4c5116d8619fc4c"
+    },
+    {
+      "file": "assets/board-BROD2NyT.js",
+      "bytes": 5626,
+      "sha256": "88c91bdfb2d05072245b5fc30627e01ce3c406aaf577666b38b0c6d89c0007bb"
+    },
+    {
+      "file": "assets/catalog-DX-YLZQt.js",
+      "bytes": 4782,
+      "sha256": "7a1932caf47234bb4bf5ef6d1c342dcf8e143620a9c7bc004fbf54729f720086"
+    },
+    {
+      "file": "assets/bot-Dp78hKAg.js",
+      "bytes": 170357,
+      "sha256": "2e2dec8d6f2d10095be318b38757fc3e739b424f837ddccdc2e7c7e967b0a39c"
+    },
+    {
+      "file": "assets/board-UDApamK7.css",
+      "bytes": 2167,
+      "sha256": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22"
+    },
+    {
+      "file": "assets/ceremonyScene-Bf-THyP0.js",
+      "bytes": 8965,
+      "sha256": "e0c4e7c0dcfca2a15825c9ad9659d74e3f84dbb80f913cf71e346b7de63d67de"
+    },
+    {
+      "file": "assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "bytes": 125,
+      "sha256": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700"
+    },
+    {
+      "file": "assets/coins-09VNUq_Y.js",
+      "bytes": 5192,
+      "sha256": "9c914c6be07230ebd4625f3f4a485b6121033344d5bf497ba511464689777df2"
+    },
+    {
+      "file": "assets/catalogRender-DzUJ7ru1.js",
+      "bytes": 2334,
+      "sha256": "0c501a76a24bb31076c950e427f496ea3cab169154466bb1de5109cbe997834e"
+    },
+    {
+      "file": "assets/cosmeticStudio-wO_ouCf6.js",
+      "bytes": 10947,
+      "sha256": "fc203ea912474cbbbc70a36c6387bfa6d65f2892eed11f779a3b164305477d43"
+    },
+    {
+      "file": "assets/diceScene-_ONq3-yX.js",
+      "bytes": 8201,
+      "sha256": "6cacdf29d88119db0edf4c08bca5c395223c3f85c861a954d7be86cc05db19e0"
+    },
+    {
+      "file": "assets/darkRenderer-Bd_r4fzY.js",
+      "bytes": 5859,
+      "sha256": "1cfff2863d4c92382128f0ed041b5db87627d5d76a2eeba3ccbe4b07c2bcb39f"
+    },
+    {
+      "file": "assets/family-matter-TJ1325B_.js",
+      "bytes": 4343,
+      "sha256": "945dec086e7402aeaeaeeef844a603db175c2dc1bf924f90f7daf88a7593b708"
+    },
+    {
+      "file": "assets/duelScene-DuqQeof7.js",
+      "bytes": 63807,
+      "sha256": "a080e8c5a4bbc59ec3b6c954d78188d162723440608e1516b5f101e810b526e0"
+    },
+    {
+      "file": "assets/game-CGx-TvCy.js",
+      "bytes": 12072,
+      "sha256": "09a83a5c8f24e118dfb0d257b9f0a3491ad5479268cedc76cd965db2172199e0"
+    },
+    {
+      "file": "assets/handGeometry-Bz96hXgQ.js",
+      "bytes": 945,
+      "sha256": "aa57e7f2da29c273b4f2adfb686fe19dbae04ee09c5e9ce37b735341357b6d01"
+    },
+    {
+      "file": "assets/layout-BJFMwN4f.js",
+      "bytes": 140792,
+      "sha256": "a1fc8a7334e75cb05db1c9363b7fb2a9a0b12d5666bbd55cbc79092036f3c06f"
+    },
+    {
+      "file": "assets/botPlanner.worker-CZIZo3gG.js",
+      "bytes": 945181,
+      "sha256": "8657d208eec85e2a8cfa3b456865a3511180fc4e37ca47ea250140cd1c1c6bb8"
+    },
+    {
+      "file": "assets/inspection-CTegeAVW.js",
+      "bytes": 25009,
+      "sha256": "7bd243770cdffce016c16989d4cd63d712e388f3a31bb353d5d3b24ff7908b84"
+    },
+    {
+      "file": "assets/layout-BgPxMCBL.css",
+      "bytes": 4022,
+      "sha256": "3d4b246e8ca97437006e19ceb73a738c6eba31a0e97b9ba39ba84c8205281b74"
+    },
+    {
+      "file": "assets/RoomEnvironment-DASCOWwv.js",
+      "bytes": 620460,
+      "sha256": "1f0baa2c8a033429fda74112c7e3bfac3a9db08b04c37d4b5d5555f337b5fbcd"
+    },
+    {
+      "file": "assets/libraryAssets-Cc8syLHU.js",
+      "bytes": 45097,
+      "sha256": "6f87fc3117aea1ae5948290573d24341c91d04e1f3bf99657f0e37b800689722"
+    },
+    {
+      "file": "assets/master-tongues-hDn8pvHZ.js",
+      "bytes": 4017,
+      "sha256": "96741b815f49146296a25244425e9966129d60cbaaf59ad05e423c58d6c669de"
+    },
+    {
+      "file": "assets/main-CdfXb8BZ.js",
+      "bytes": 153273,
+      "sha256": "74054f3e8437c8ad048d17ae27a312a304f5106fe633c1aa634190a9ff5628fa"
+    },
+    {
+      "file": "assets/materials-V56iRxhp.js",
+      "bytes": 9065,
+      "sha256": "ac9a8d85b22bd1e2a6561564cf7132264938436601f6bb15b3bcdd717f2c259c"
+    },
+    {
+      "file": "assets/main-DsQxvfwJ.css",
+      "bytes": 173024,
+      "sha256": "62d18ccbdfdc7c188fba205e04387c73ba324a68ea7cbd9bd32d0510e18e7183"
+    },
+    {
+      "file": "assets/ornaments-8NKtH1QX.js",
+      "bytes": 3928,
+      "sha256": "c92457477fe59a1008d7f4c755b78e7b985e49fbe42cec484d78ff2637924f28"
+    },
+    {
+      "file": "assets/paperDraw-BhDHXrgJ.js",
+      "bytes": 9714,
+      "sha256": "3219f82973fa4c3750445ddb6751efa798fc4c62d1c342821501e4ab574af85d"
+    },
+    {
+      "file": "assets/modal-p9MYGMGT.css",
+      "bytes": 237870,
+      "sha256": "863df3ce57aac49f0ceca534e7d92a12f8fed0a336c3e16b78f69ea214b1a7da"
+    },
+    {
+      "file": "assets/purchaseAir.worker-BK14oJEX.js",
+      "bytes": 1328,
+      "sha256": "f46b05531c87c4fb81cb1fbcbe8f685a977952e84fa4bea3c51b9deb52918164"
+    },
+    {
+      "file": "assets/persistentFlightRenderer-BoO0AnxW.js",
+      "bytes": 3501,
+      "sha256": "f249841714b9e77ad65bc010c030c69f48cad6367e3bc7cd00ef33bf1335d627"
+    },
+    {
+      "file": "assets/pileModels-DhAo1YzR.js",
+      "bytes": 2250,
+      "sha256": "c0485fdca1a2c92de1163f4fddf1295d5e2fe5bbc59dcf1e3cd0dc8b436eaf4e"
+    },
+    {
+      "file": "assets/renderDensity-eCqR3GeM.js",
+      "bytes": 545,
+      "sha256": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699"
+    },
+    {
+      "file": "assets/renderer-C_3Ad9FB.js",
+      "bytes": 17374,
+      "sha256": "1197023c0f9b88706f3ca6f6f559e90ea289186ffcf256a3c6a58194ab6fee7e"
+    },
+    {
+      "file": "assets/renderer-BJlwZyAG.js",
+      "bytes": 18369,
+      "sha256": "ee182d39b175c8218160e9fcfa05237e47c914d2d346c72bd44b8efed1dcc2fc"
+    },
+    {
+      "file": "assets/renderer-B81wD24l.js",
+      "bytes": 13254,
+      "sha256": "b80e2999268279dda76bb14bce728418a2b1456a0241c7c3851b2085c11aa98a"
+    },
+    {
+      "file": "assets/renderer-B3jDm603.js",
+      "bytes": 20157,
+      "sha256": "3741b02a277526fe30a7c2ffba24d80861fc79bfd831fcaffacf7a9e3050b1ad"
+    },
+    {
+      "file": "assets/renderer-D8qVIOrj.js",
+      "bytes": 16512,
+      "sha256": "82cc8bdc4e4677a27f920166f5690711f72d4f6b8aa674f36e0d0367a1b27a8e"
+    },
+    {
+      "file": "assets/renderer-CcXfaK6g.js",
+      "bytes": 9498,
+      "sha256": "52a1590a8b7b1e401e3eadb359821d046f3d422f0c1518ddb93b71da8fce5f7e"
+    },
+    {
+      "file": "assets/riftScene-opqiJdKz.js",
+      "bytes": 27434,
+      "sha256": "2bf0e311d9857520df9abc0335f39cfc9128ccb173276ab14e98e4990dd37bec"
+    },
+    {
+      "file": "assets/royal-matter-CmZmoXUg.js",
+      "bytes": 6329,
+      "sha256": "eb6ab0ce987b114a80308b1fb68505b02e650951d08c296970f6dec01af7f109"
+    },
+    {
+      "file": "assets/runtime-BomvJfnZ.js",
+      "bytes": 7088,
+      "sha256": "ba305a083e91ac178c32a9ae81f332a2819ebb4b88000ac881ba6e29af848012"
+    },
+    {
+      "file": "assets/runtime-C_E8lVkI.js",
+      "bytes": 19638,
+      "sha256": "6b276f953295e7bc38d97faac76d7bcad7c007cabba3358ef64ad2a9018363e9"
+    },
+    {
+      "file": "assets/renderer-DE_qEvF1.js",
+      "bytes": 11438,
+      "sha256": "66a3cf1699bfc265b9671ff4ebc4229f107e909268f8773b4a8347dfdc6389f9"
+    },
+    {
+      "file": "assets/runtime-Ch9eydv_.css",
+      "bytes": 214,
+      "sha256": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c"
+    },
+    {
+      "file": "assets/renderer-Dex5a7Op.js",
+      "bytes": 9156,
+      "sha256": "8aad19de66137e80a6fe1d1eeef94cf68429636ef3fe504d0b6cee9d9431f4a0"
+    },
+    {
+      "file": "assets/scene-_cADZ2Gj.js",
+      "bytes": 6776,
+      "sha256": "3e93af6e88d17c036320dcd449ad3eae4283b1a46e28d89da07834631f88d721"
+    },
+    {
+      "file": "assets/sound-C_Dsemyh.js",
+      "bytes": 656,
+      "sha256": "6f913bd6454b3b920725930f3eb53629a86b4db6d40a5296c8f45eb9606d758d"
+    },
+    {
+      "file": "assets/runtime-bEmGXCFc.js",
+      "bytes": 10209,
+      "sha256": "4a4be48e40f545fdec9a9de355794caae184a82bff91dd71c408d493de27431e"
+    },
+    {
+      "file": "assets/sleeve-CFOVayP7.js",
+      "bytes": 6645,
+      "sha256": "27f31188a0c59a67d32ec765ecde088582a04bde6fbe77f03af198433cab69e4"
+    },
+    {
+      "file": "assets/modal-Bs8bkH2A.js",
+      "bytes": 1275879,
+      "sha256": "0f3ef380e75a9aeb67d97c1c4d0853bf1c1f00ad6ec0b6d6cb83246cc0fa13e8"
+    },
+    {
+      "file": "assets/studio-CmgKc6nL.css",
+      "bytes": 8771,
+      "sha256": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e"
+    },
+    {
+      "file": "art/biblion/modular/base-spell-lossless.webp",
+      "bytes": 1401658,
+      "sha256": "682b84fb8d088acce4e4fa96dabd88d9f2d89566555736c073134f5a437c59ad"
+    },
+    {
+      "file": "art/biblion/modular/base-quest-lossless.webp",
+      "bytes": 1164828,
+      "sha256": "49fa210cb79427c94f5ff89efc9bdcf9f1eb4abe4ebbcb97c43461e7c0154a08"
+    },
+    {
+      "file": "art/biblion/modular/base-mon-lossless.webp",
+      "bytes": 1380206,
+      "sha256": "7fb553e28ca5a998db195c4e2db6a665489fa4e3d42d477e22061d70d933bd59"
+    },
+    {
+      "file": "art/biblion/modular/base-trap-lossless.webp",
+      "bytes": 1301090,
+      "sha256": "65d6ae00f8533c80e8d7d536aaad6f2bca9e9e3090b9147b29450b4905d15d56"
+    },
+    {
+      "file": "art/biblion/seeker-red-lossless.webp",
+      "bytes": 1826546,
+      "sha256": "747fd020b2bc4358ed260ad73e64d6fa8c84b5cc0dd93b9fea9e908bf32995ba"
+    },
+    {
+      "file": "art/biblion/seeker-blue-lossless.webp",
+      "bytes": 1795926,
+      "sha256": "30794ea28286664cba83f6bc38d9bf93c3813e62173bfff3100ca8e285a87d8e"
+    }
+  ],
+  "boundary": "Hashes are from the exact guarded release snapshot, including both workers and all six lossless images."
+}

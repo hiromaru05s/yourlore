@@ -1,0 +1,85 @@
+{
+  "checks": [
+    {
+      "variant": 0,
+      "side": 0,
+      "check": "frame anchored on one native card"
+    },
+    {
+      "variant": 0,
+      "side": 1,
+      "check": "frame anchored on one native card"
+    },
+    {
+      "variant": 1,
+      "side": 0,
+      "check": "frame anchored on one native card"
+    },
+    {
+      "variant": 1,
+      "side": 1,
+      "check": "frame anchored on one native card"
+    },
+    {
+      "variant": 2,
+      "side": 0,
+      "check": "frame anchored on one native card"
+    },
+    {
+      "variant": 2,
+      "side": 1,
+      "check": "frame anchored on one native card"
+    },
+    {
+      "variant": 3,
+      "side": 0,
+      "check": "frame anchored on one native card"
+    },
+    {
+      "variant": 3,
+      "side": 1,
+      "check": "frame anchored on one native card"
+    },
+    {
+      "result": 2,
+      "elapsed": 1010.7999999998137,
+      "check": "pre-roll completes before existing dice"
+    },
+    {
+      "result": 5,
+      "elapsed": 1014.3000000007451,
+      "check": "pre-roll completes before existing dice"
+    },
+    {
+      "check": "cancel settles promise and restores source, no dice"
+    },
+    {
+      "check": "granted taunt, opponent, two sources, reduced motion"
+    },
+    {
+      "check": "repeat stable GPU resources",
+      "before": {
+        "textures": 11,
+        "geometries": 112,
+        "calls": 138,
+        "triangles": 5988
+      },
+      "after": {
+        "textures": 11,
+        "geometries": 112,
+        "calls": 138,
+        "triangles": 5988
+      }
+    },
+    {
+      "check": "390px no horizontal overflow, scrollable"
+    },
+    {
+      "check": "320px no horizontal overflow"
+    },
+    {
+      "check": "landscape 844px no horizontal overflow"
+    }
+  ],
+  "errors": []
+}
