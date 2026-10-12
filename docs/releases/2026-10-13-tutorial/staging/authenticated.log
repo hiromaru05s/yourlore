@@ -1,0 +1,17 @@
+Opening staging
+Loaded staging
+Submitted login
+API /api/auth/login 200
+API /api/rewards/tutorial 200
+Welcome visible
+API /api/rewards/tutorial/decision 200
+API /api/rewards/tutorial 200
+Preparing actual board
+Request failed /music/yohaku-to-zankyo.mp3 net::ERR_ABORTED
+Request failed /art/cards/BLOOD_SHIELD.webp net::ERR_CONNECTION_RESET
+Board ready
+API /api/rewards/tutorial/complete 200
+First lesson paid
+API /api/rewards/tutorial 200
+API /api/rewards/tutorial 200
+{"origin":"https://test.yourlore.xyz","checkedAt":"2026-10-12T15:52:20.517Z","credits":3000,"completed":12,"concurrentGrants":[250,0],"checks":["real password login with disposable preverified account","first-entry invitation and No confirmation","genuine drag-to-play and 250-Shard D1 payment","remaining 11 shared-reducer transcripts accepted by deployed server","concurrent grant once","incomplete claim rejected","reload restores all 12 claims and no repeat invitation","mobile rule notebook"],"errors":[]}

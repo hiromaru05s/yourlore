@@ -41,4 +41,27 @@ The same spirit provides optional contextual help during BOT and online play. It
 - Full App/router browser check: first-login invitation, saved choice, actual lounge/navigation, scrolling to lesson 12 at 390px; fixture account. Screenshots use the actual app shell.
 - Visual inspection: desktop/mobile readable form, subdued material layering, attached-fin motion and non-obstructing lesson placement. Continuous capture is in `qa/video/`. This is implementation QA, not user visual approval.
 
-The guarded staging deployment and authenticated staging verification are recorded separately after release. Production is out of scope.
+## Staging release
+
+- URL: https://test.yourlore.xyz
+- Deployed committed source: `b376938fdb0301dc52d0ab07e7bd790b51f467e0`.
+- Worker version: `133ec917-b351-47bf-b629-40dac9b80e30`, 100% staging traffic.
+- `node scripts/deploy-guard.mjs staging` passed typechecks, all 106 production suites and the production build before uploading the isolated committed snapshot.
+- All 62 deployed HTML/JavaScript/CSS files match the exact guarded build by SHA-256; see `staging/assets.json` and `scripts/check-tutorial-staging.mjs`.
+- No production deployment. The original working directory's unrelated changes were preserved.
+
+## Authenticated staging checks
+
+`tests/tutorial-staging.mjs` passed on the deployed source with a disposable, preverified account. `staging/authenticated.json` records the exact boundary:
+
+- Real password login, first-entry invitation and the two-stage No confirmation.
+- Real mouse drag of Attune on the actual 3D board, followed by the 250-Shard payment.
+- All remaining eleven lesson transcripts accepted by the deployed server; total 3,000 Shards.
+- Two simultaneous requests grant `[250, 0]`; incomplete claims are rejected and replay grants zero.
+- Reload restores 12/12 completion and 3,000 balance without reopening the invitation; mobile notebook opens and closes.
+- No browser page errors. A separate remote D1 query confirmed 12 paid lesson records and 3,000 credits.
+- The disposable account, rewards, sessions, activity and presence were removed afterward; `staging/d1-cleanup.json` verifies no remaining user/reward/session/presence rows. Temporary credentials were deleted.
+
+Cold headless Chrome asset loading stalled with its default transport. The completed run used HTTP/1.1 (HTTP/2 and QUIC disabled), with actual loading-screen retry controls. All images/scripts/API requests remained live staging; no fixture responses or injected gameplay state were used. One transient card-image connection reset recovered. This does not establish a cold-load performance benchmark or broad network reliability. Email delivery and OAuth consent were not exercised. All twelve lessons have real-reducer coverage locally; live physical browser input covers the first lesson, while the other eleven have deployed-server replay/payment coverage.
+
+The final Worker-version check remained `133ec917-b351-47bf-b629-40dac9b80e30`. Follow-up commits contain verification scripts and evidence only; the deployed runtime source above is unchanged.
