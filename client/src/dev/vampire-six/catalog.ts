@@ -1,10 +1,8 @@
 import {DB} from '../../shared/cards';
+import {CONTACT} from '../../ui/vampireSummon/catalog';
 export const ids=['VAMP1','VAMP2','VAMP3','VAMP4','VAMP5','VAMP_BUTLER'] as const;
 export type Id=typeof ids[number];
-export const DURATION=2600,CONTACT=1800;
-// 280px card body; keep the 3.5px root tube inside the outer frame edge.
-export const DENTAL_ROOT_EDGE=280/2-3.5;
-export const ease=(a:number,b:number,t:number)=>{const u=Math.max(0,Math.min(1,(t-a)/(b-a)));return u*u*(3-2*u);};
+export {DURATION,CONTACT,DENTAL_ROOT_EDGE,ease,physics} from '../../ui/vampireSummon/catalog';
 export const title=(id:Id)=>DB[id].nameJa||DB[id].name;
 export const rank=(id:Id)=>id==='VAMP_BUTLER'?2:ids.indexOf(id)+1;
 export const designs=[
@@ -15,5 +13,4 @@ export const designs=[
  {name:'穿つ長牙',en:'PIERCE / TWO PUNCTURES',material:'奥行きへ起き上がる長牙 · 一度の穿刺',note:'二本の牙が起き上がり、鋭く伏せてカードへ噛み付く。'},
  {name:'包み込む顎',en:'JAW / ENCLOSING BITE',material:'両側の歯列と四本の牙 · 包むように閉じる',note:'カードの両側から歯列が立ち上がり、四本の牙が一度噛む。'},
 ];
-export function physics(ms:number,reduced=false){const u=Math.max(0,Math.min(1,(ms-1350)/(CONTACT-1350)));const height=reduced||ms>=CONTACT?0:34*ease(0,420,ms)*(1-u*u);return {height,contact:CONTACT,underside:height};}
 export const phase=(ms:number)=>ms<420?'予兆':ms<970?'開口・溜め':ms<1400?'一噛み':ms<CONTACT?'降下':ms<2210?'接地・余韻':'収束';

@@ -1,3 +1,5 @@
+import {isVampire} from './vampireSummon/selection';
+import {playVampireSummon} from './vampireSummon/runtime';
 import {isDarkMerchant} from './merchant/selection';
 import {playDarkMerchant,warmDarkMerchant,cancelDarkMerchants} from './merchant/runtime';
 import {isAssassin} from './assassinSummon/selection';
@@ -210,6 +212,11 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(heavy&&isVampire(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playVampireSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),7000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
   if(heavy&&isAssassin(face.dataset.cardId)){
     face.style.visibility='hidden';reveal.remove();
     if(!fxSkip)await boardMotionScope(signal=>playAssassinSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
@@ -301,6 +308,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
 /** Both hand plays and engine-generated summon events share this selected reveal. */
 async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise<void>{
  const id=card.id;
+ if(isVampire(id)){node.style.visibility='hidden';return;}
  if(isAssassin(id)){node.style.visibility='hidden';return;}
  if(isMage(id)){node.style.visibility='hidden';return;}
  // Selected hexers begin in their renderer, without a raw DOM reveal or transfer.

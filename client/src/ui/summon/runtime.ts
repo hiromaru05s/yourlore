@@ -1,3 +1,5 @@
+import {isVampire} from '../vampireSummon/selection';
+import {playVampireSummon,cancelVampireSummon,cancelVampireSummons} from '../vampireSummon/runtime';
 import {merchantCount,MERCHANT_VARIANT} from '../merchant/selection';
 import type {Coins} from '../merchant/coins';
 import type {ContactSound} from '../merchant/sound';
@@ -26,6 +28,7 @@ export const SUMMON_VARIANT=2;
 const jobs=new Map<HTMLElement,{anchor:HTMLElement;cancel:()=>void}>();
 type Options={anchor?:HTMLElement;signal?:AbortSignal;onImpact?:()=>void};
 export function summonPlacement(target:HTMLElement,w:number,h:number,ms=0,reduced=false,cardId=target.dataset.cardId){
+ if(isVampire(cardId))return projectedPlacement(target,w,h);
  if(isAssassin(cardId))return projectedPlacement(target,w,h);
  if(isMage(cardId))return projectedPlacement(target,w,h);
  if(isChosenHero(cardId))return chosenPlacement(target,w,h,ms,reduced);
@@ -36,11 +39,12 @@ export function summonPlacement(target:HTMLElement,w:number,h:number,ms=0,reduce
  const r=layoutRect(target);
  return boardMatrix(r.left,r.top,(Number(plane.dataset.boardPlane)||0)+m.lift*r.width).scale(r.width/w,r.height/h);
 }
-export function cancelSummon(source:HTMLElement){jobs.get(source)?.cancel();cancelAssassinSummon(source);cancelMageSummon(source);cancelVerdant(source);cancelChosenSummon(source);cancelHexerSummon(source);cancelGamblerSummon(source);cancelMercenarySummon(source);}
-export function cancelSummons(root?:HTMLElement){cancelAssassinSummons(root);cancelMageSummons(root);cancelMercenarySummons(root);cancelGamblerSummons(root);cancelVerdants(root);cancelChosenSummons(root);cancelHexerSummons(root);for(const [source,j] of [...jobs])if(!root||root.contains(source)||root.contains(j.anchor))j.cancel();}
+export function cancelSummon(source:HTMLElement){cancelVampireSummon(source);jobs.get(source)?.cancel();cancelAssassinSummon(source);cancelMageSummon(source);cancelVerdant(source);cancelChosenSummon(source);cancelHexerSummon(source);cancelGamblerSummon(source);cancelMercenarySummon(source);}
+export function cancelSummons(root?:HTMLElement){cancelVampireSummons(root);cancelAssassinSummons(root);cancelMageSummons(root);cancelMercenarySummons(root);cancelGamblerSummons(root);cancelVerdants(root);cancelChosenSummons(root);cancelHexerSummons(root);for(const [source,j] of [...jobs])if(!root||root.contains(source)||root.contains(j.anchor))j.cancel();}
 
 export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<boolean>{
  cancelSummon(source);
+ if(isVampire(source.dataset.cardId))return playVampireSummon(source,options);
  if(isAssassin(source.dataset.cardId))return playAssassinSummon(source,options);
  if(isMage(source.dataset.cardId))return playMageSummon(source,options);
  if(isMercenary(source.dataset.cardId))return playMercenarySummon(source,options);

@@ -93,7 +93,9 @@
     "tests/mercenary-summon.mjs",
     "tests/mage-summon.mjs",
     "tests/assassin-summon.mjs",
-    "tests/merchant-runtime.mjs"
+    "tests/merchant-runtime.mjs",
+    "tests/vampire-summon.mjs",
+    "tests/vampire-geometry.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
