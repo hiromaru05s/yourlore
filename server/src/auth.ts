@@ -155,7 +155,8 @@ export async function handleAuth(env: Env, req: Request, path: string): Promise<
     if (!row || !(await verifyPassword(password, row.password))) return json(env, { error: "이메일 또는 비밀번호가 올바르지 않습니다." }, 401);
     if (!row.verified && emailConfigured(env)) return json(env, { error: "이메일 인증이 필요합니다. 받은편지함을 확인하세요.", needVerify: true }, 403);
     const token = await createSession(env, row.id);
-    return json(env, { user: { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses, credits: row.credits } }, 200, { "Set-Cookie": sessionCookie(token) });
+    const user = await getUser(env, new Request(req.url, {headers: {Cookie: `${COOKIE}=${token}`}}));
+    return json(env, { user }, 200, { "Set-Cookie": sessionCookie(token) });
   }
 
   // 인증 링크 (메일에서 클릭) — 성공 시 홈으로 리디렉트
@@ -200,9 +201,17 @@ export async function handleAuth(env: Env, req: Request, path: string): Promise<
     if (password.length < 6) return json(env, { error: "비밀번호는 6자 이상이어야 합니다." }, 400);
     const userId = await readToken(env, body.token || "", "reset");
     if (!userId) return json(env, { error: "링크가 만료되었거나 잘못되었습니다." }, 400);
-    await env.DB.prepare(`UPDATE users SET password = ?, verified = 1 WHERE id = ?`).bind(await hashPassword(password), userId).run();
-    await deleteToken(env, body.token || "");
-    await env.DB.prepare(`DELETE FROM sessions WHERE user_id = ?`).bind(userId).run(); // 기존 세션 전부 무효화
+    const hash = await hashPassword(password);
+    // Recheck token validity inside the transaction after hashing (which yields).
+    // The password, token consumption and session invalidation are one commit.
+    const [updated] = await env.DB.batch([
+      env.DB.prepare(`UPDATE users SET password=?, verified=1 WHERE id=? AND EXISTS
+        (SELECT 1 FROM email_tokens WHERE token=? AND kind='reset' AND user_id=? AND expires_at>=?)`)
+        .bind(hash,userId,body.token,userId,Date.now()),
+      env.DB.prepare(`DELETE FROM email_tokens WHERE token=? AND kind='reset' AND user_id=? AND changes()=1`).bind(body.token,userId),
+      env.DB.prepare(`DELETE FROM sessions WHERE user_id=? AND changes()=1`).bind(userId),
+    ]);
+    if (!updated.meta.changes) return json(env, { error: "링크가 만료되었거나 잘못되었습니다." }, 400);
     return json(env, { ok: true });
   }
 

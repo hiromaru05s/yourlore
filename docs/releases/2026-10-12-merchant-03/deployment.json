@@ -1,0 +1,20 @@
+{
+  "sourceSha": "f5531ec3d8115f6a262394da7a16e5369691e1f9",
+  "origin": "https://test.yourlore.xyz",
+  "deploymentId": "61fd3b5f-3996-4133-abfb-5bba871583d6",
+  "versions": [
+    {
+      "version_id": "e0035194-53d8-49e8-bbab-4c2687541095",
+      "percentage": 100
+    }
+  ],
+  "createdOn": "2026-10-12T08:54:46.683732Z",
+  "message": "f5531ec3d8115f6a262394da7a16e5369691e1f9 guarded release",
+  "guardedTypecheck": true,
+  "guardedProductionSuites": "91/91",
+  "guardedBuild": true,
+  "deployedFilesVerified": 55,
+  "assetSource": "Preserved exact npm-ci guarded release build",
+  "browserBoundary": "Local GameView exercises production animation entry points; staging login loads without console errors. Authenticated online match not exercised.",
+  "lockedDependencyBrowserGroups": 21
+}

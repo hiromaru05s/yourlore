@@ -1,0 +1,73 @@
+{
+  "origin": "http://127.0.0.1:5464",
+  "sha": "6962953044bdf512e8300c861806f4e88ba4b8ba",
+  "summon": {
+    "file": "assets/modal-C6de4B99.js",
+    "name": "aY"
+  },
+  "cardEl": {
+    "file": "assets/modal-C6de4B99.js",
+    "name": "z"
+  },
+  "results": [
+    {
+      "id": "FIRE_MASTER",
+      "side": "me",
+      "wrap": {
+        "cardId": "FIRE_MASTER",
+        "variant": "1",
+        "time": "8",
+        "visualTime": "367.89272"
+      },
+      "state": {
+        "id": "FIRE_MASTER",
+        "hidden": false,
+        "connected": true,
+        "hiddenSynchronously": true,
+        "firstTime": "0",
+        "visualTime": "360",
+        "complete": true
+      }
+    },
+    {
+      "id": "BLACK_ELSA",
+      "side": "opp",
+      "wrap": {
+        "cardId": "BLACK_ELSA",
+        "variant": "1",
+        "time": "10",
+        "visualTime": "369.83265625"
+      },
+      "state": {
+        "id": "BLACK_ELSA",
+        "hidden": false,
+        "connected": true,
+        "hiddenSynchronously": true,
+        "firstTime": "0",
+        "visualTime": "360",
+        "complete": true
+      }
+    },
+    {
+      "id": "BLACK_ALICE",
+      "side": "me",
+      "wrap": {
+        "cardId": "BLACK_ALICE",
+        "variant": "1",
+        "time": "12",
+        "visualTime": "371.75943"
+      },
+      "state": {
+        "id": "BLACK_ALICE",
+        "hidden": false,
+        "connected": true,
+        "hiddenSynchronously": true,
+        "firstTime": "0",
+        "visualTime": "360",
+        "complete": true
+      }
+    }
+  ],
+  "errors": [],
+  "boundary": "Deployed production playMonster and cardEl on a real BOT board. Account/API and temporary field cards are fixtures; engine summon conditions are not bypassed in an authenticated match. Normal hand/generated routes were tested locally. No authenticated online match or account mutation."
+}

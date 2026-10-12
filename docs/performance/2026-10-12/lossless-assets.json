@@ -1,0 +1,56 @@
+[
+  {
+    "source": "/art/biblion/modular/base-mon.png",
+    "target": "/art/biblion/modular/base-mon-lossless.webp",
+    "width": 1024,
+    "height": 1536,
+    "before": 1817892,
+    "after": 1380206,
+    "visiblePixelDifferences": 0
+  },
+  {
+    "source": "/art/biblion/modular/base-spell.png",
+    "target": "/art/biblion/modular/base-spell-lossless.webp",
+    "width": 1024,
+    "height": 1536,
+    "before": 1830510,
+    "after": 1401658,
+    "visiblePixelDifferences": 0
+  },
+  {
+    "source": "/art/biblion/modular/base-quest.png",
+    "target": "/art/biblion/modular/base-quest-lossless.webp",
+    "width": 1024,
+    "height": 1536,
+    "before": 1550609,
+    "after": 1164828,
+    "visiblePixelDifferences": 0
+  },
+  {
+    "source": "/art/biblion/modular/base-trap.png",
+    "target": "/art/biblion/modular/base-trap-lossless.webp",
+    "width": 1024,
+    "height": 1536,
+    "before": 1713270,
+    "after": 1301090,
+    "visiblePixelDifferences": 0
+  },
+  {
+    "source": "/art/biblion/seeker-blue.png",
+    "target": "/art/biblion/seeker-blue-lossless.webp",
+    "width": 1774,
+    "height": 887,
+    "before": 2148692,
+    "after": 1795926,
+    "visiblePixelDifferences": 0
+  },
+  {
+    "source": "/art/biblion/seeker-red.png",
+    "target": "/art/biblion/seeker-red-lossless.webp",
+    "width": 1774,
+    "height": 887,
+    "before": 2247659,
+    "after": 1826546,
+    "visiblePixelDifferences": 0
+  }
+]

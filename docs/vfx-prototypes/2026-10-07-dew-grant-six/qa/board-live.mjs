@@ -1,0 +1,6 @@
+import {chromium} from '/tmp/lore-buff-browser-tools/node_modules/playwright/index.mjs';
+import fs from 'node:fs/promises';
+const dir=new URL('.',import.meta.url).pathname,browser=await chromium.launch({headless:true,channel:'chrome'}),result=[];
+try{const ctx=await browser.newContext({viewport:{width:1100,height:900},recordVideo:{dir:dir+'board-raw',size:{width:1100,height:900}}});const p=await ctx.newPage();await p.goto('http://127.0.0.1:55170/dew-grant-six.html?paused=1',{waitUntil:'domcontentloaded',timeout:90000});await p.waitForFunction(()=>window.dewGrant?.state.boardReady,null,{timeout:90000});await p.locator('#loop').uncheck();await p.evaluate(()=>window.dewGrant.configure({board:true}));
+for(const id of ['DF1','DF2','DF3','DA1','DA2','DA3']){await p.evaluate(id=>{window.dewGrant.select(id);window.dewGrant.seek(0)},id);await p.locator('#play').click();await p.waitForFunction(()=>window.dewGrant.state.progress>=1,null,{timeout:15000});if(await p.evaluate(()=>window.dewGrant.state.playing))await p.locator('#play').click();result.push(await p.evaluate(()=>window.dewGrant.state));}
+await ctx.close();await p.video().saveAs(dir+'board-live.webm');await fs.rm(dir+'board-raw',{recursive:true});await fs.writeFile(dir+'board-live.json',JSON.stringify(result,null,2));console.log('board continuous playback saved');}finally{await browser.close()}

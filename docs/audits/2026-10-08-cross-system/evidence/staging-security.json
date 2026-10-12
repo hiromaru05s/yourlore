@@ -1,0 +1,30 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-10-07T23:40:16.529Z",
+  "checks": [
+    "concurrent repeated reward claim pays exactly once on real D1",
+    "concurrent single-use coupon pays exactly one of two users on real D1",
+    "real persisted balances match exactly the two authorized fixture payouts",
+    "invalid reward key rejected; public nested setup blocked; anonymous queue denied"
+  ],
+  "claims": [
+    {
+      "status": 200,
+      "granted": false,
+      "amount": 0
+    },
+    {
+      "status": 200,
+      "granted": true,
+      "amount": 50
+    }
+  ],
+  "couponStatuses": [
+    200,
+    410
+  ],
+  "creditDeltas": [
+    57,
+    0
+  ]
+}
