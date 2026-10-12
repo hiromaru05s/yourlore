@@ -1,3 +1,5 @@
+import {isDarkMerchant} from './merchant/selection';
+import {playDarkMerchant,warmDarkMerchant,cancelDarkMerchants} from './merchant/runtime';
 import {isAssassin} from './assassinSummon/selection';
 import {playAssassinSummon} from './assassinSummon/runtime';
 import {isMage} from './mageSummon/selection';
@@ -64,7 +66,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on);
-  if(on){cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -260,9 +262,14 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   try {
     if(card.t==='quest'&&!fxSkip)void warmQuestPact().catch(()=>{});
     const persistent=dest==='field'&&!!card.ench;
-    if(card.t==='spell'&&!persistent&&!fxSkip)warmSpellFrame();
-    await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:1);
-    if(card.t==='spell'&&!persistent&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
+    const dark=isDarkMerchant(card.id)&&card.t==='spell';
+    if(dark&&!fxSkip)warmDarkMerchant();
+    else if(card.t==='spell'&&!persistent&&!fxSkip)warmSpellFrame();
+    const special=dark&&!fxSkip&&await boardMotionScope(signal=>playDarkMerchant(node,signal),10500);
+    if(!special){
+      await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:1);
+      if(card.t==='spell'&&!persistent&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
+    }
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
     if (to && dest === "field" && (card.ench || card.t === "quest")) {
       const zone=document.querySelector(side==='me'?'#meRow .zone-st':'#oppRow .zone-st');

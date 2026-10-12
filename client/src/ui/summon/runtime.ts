@@ -1,3 +1,6 @@
+import {merchantCount,MERCHANT_VARIANT} from '../merchant/selection';
+import type {Coins} from '../merchant/coins';
+import type {ContactSound} from '../merchant/sound';
 import {isAssassin} from '../assassinSummon/selection';
 import {playAssassinSummon,cancelAssassinSummon,cancelAssassinSummons} from '../assassinSummon/runtime';
 import {isMage} from '../mageSummon/selection';
@@ -45,14 +48,15 @@ export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<b
  if(isHexer(source.dataset.cardId))return playHexerSummon(source,options);
  if(isChosenHero(source.dataset.cardId))return playChosenSummon(source,options);
  if(isVerdant(source.dataset.cardId))return playVerdant(source,source.dataset.cardId,options);
- const anchor=options.anchor??source;
+ const anchor=options.anchor??source,coinsCount=merchantCount(source.dataset.cardId),total=coinsCount?3100:DURATION;
  if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted)return Promise.resolve(false);
  return new Promise(resolve=>{
   const visibility=source.style.visibility;
+  let coins:Coins|undefined,coinSound:ContactSound|undefined;
   let ended=false,frame=0,renderer:Renderer|undefined,host:HTMLElement|undefined,captureHost:HTMLElement|undefined;
   const finish=(complete=false)=>{
    if(ended)return;ended=true;clearTimeout(timeout);cancelAnimationFrame(frame);
-   options.signal?.removeEventListener('abort',abort);host?.remove();captureHost?.remove();renderer?.dispose();
+   options.signal?.removeEventListener('abort',abort);host?.remove();captureHost?.remove();renderer?.dispose();coins?.dispose();coinSound?.dispose();
    source.style.visibility=visibility;jobs.delete(source);resolve(complete);
   };
   const abort=()=>finish(false),timeout=setTimeout(abort,6000);
@@ -72,6 +76,7 @@ export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<b
    if(ended)return;
    if(!source.isConnected||!anchor.isConnected||options.signal?.aborted||!surface.face){finish();return;}
    const face=document.createElement('canvas');face.width=540;face.height=Math.round(540*surface.face.height/surface.face.width);face.getContext('2d')!.drawImage(surface.face,0,0,face.width,face.height);
+   if(coinsCount){const [visual,audio]=await Promise.all([import('../merchant/coins'),import('../merchant/sound')]);if(ended)return;coins=new visual.Coins();coinSound=new audio.ContactSound(coinsCount);}
    renderer=new Renderer();
    host=document.createElement('div');host.className='slate-summon';host.setAttribute('aria-hidden','true');
    host.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:136;isolation:isolate';
@@ -87,15 +92,15 @@ export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<b
    const tick=(now:number)=>{
     if(ended)return;
     if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
-    const ms=Math.min(DURATION,now-start);
-    host!.dataset.time=String(Math.round(ms));host!.dataset.variant='slate';
+    const ms=Math.max(0,Math.min(total,now-start));
+    host!.dataset.time=String(Math.round(ms));host!.dataset.variant=coinsCount?'merchant-03':'slate';if(coinsCount)host!.dataset.coinCount=String(coinsCount);coinSound?.advance(ms);
     if(!impacted&&ms>=790){impacted=true;options.onImpact?.();if(ended)return;}
     const paint=now-lastPaint>=1000/30;if(paint)lastPaint=now;
     for(const {el,c,pass} of planes){
      el.style.transform=pass==='ground'?ground:summonPlacement(anchor,180,270,ms).toString();
-     if(paint){c.clearRect(0,0,684,684);renderer!.draw(c,face,SUMMON_VARIANT,ms,342,342,180,false,pass,false);}
+     if(paint){c.clearRect(0,0,684,684);renderer!.draw(c,face,SUMMON_VARIANT,Math.min(DURATION,ms),342,342,180,false,pass,false);if(pass==='ground')coins?.draw(c,MERCHANT_VARIANT,coinsCount,ms,342,342,180,false);}
     }
-    if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);
+    if(ms===total){finish(true);return;}frame=requestAnimationFrame(tick);
    };tick(start);
   })().catch(error=>{if(!ended){console.warn('[summon] Native card fallback',error);options.onImpact?.();finish();}});
  });

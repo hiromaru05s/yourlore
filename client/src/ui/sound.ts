@@ -55,7 +55,7 @@ function fadeOut(voice:Voice){
 export function stopSounds(){epoch++;last.clear();for(const voice of [...active])fadeOut(voice);}
 export function getSfxVolume(){return volume;}
 export function setSfxVolume(v:number){if(!Number.isFinite(v))return;volume=Math.max(0,Math.min(1,v));try{localStorage.setItem('lore_sfx',String(volume));}catch{}if(master&&ctx)master.gain.setTargetAtTime(volume*volume,ctx.currentTime,.015);if(!volume)stopSounds();document.dispatchEvent(new Event('lore:volume-change'));}
-export interface SoundOptions {signal?:AbortSignal;}
+export interface SoundOptions {signal?:AbortSignal;gain?:number;rate?:number;pan?:number;}
 export function sfx(name:SfxName,options:SoundOptions={}):void{
  if(!unlocked||!ctx||!master||volume<=0||document.hidden||options.signal?.aborted)return;
  if(ctx.state==='suspended')void ctx.resume().catch(()=>{});
@@ -76,10 +76,11 @@ export function sfx(name:SfxName,options:SoundOptions={}):void{
   const siblings=[...active].filter(v=>v.family===p.family);
   if(siblings.length>=LIMIT[p.family])fadeOut(siblings[0]);
   if(active.size>=8){const oldest=[...active].sort((a,b)=>a.priority-b.priority)[0];if(oldest.priority>p.priority)return;fadeOut(oldest);}
-  const source=audio.createBufferSource(),gain=audio.createGain();source.buffer=buf;gain.gain.value=1;
-  source.connect(gain).connect(bus);
+  const source=audio.createBufferSource(),gain=audio.createGain();source.buffer=buf;gain.gain.value=Math.max(0,Math.min(1,options.gain??1));if(options.rate!==undefined)source.playbackRate.value=Math.max(.25,Math.min(4,options.rate));
+  const pan=options.pan===undefined?undefined:audio.createStereoPanner();
+  source.connect(gain);if(pan){pan.pan.value=Math.max(-1,Math.min(1,options.pan!));gain.connect(pan).connect(bus);}else gain.connect(bus);
   const abort=()=>fadeOut(voice);
-  const voice:Voice={name,source,gain,...p,finish:()=>{active.delete(voice);options.signal?.removeEventListener('abort',abort);source.disconnect();gain.disconnect();}};
+  const voice:Voice={name,source,gain,...p,finish:()=>{active.delete(voice);options.signal?.removeEventListener('abort',abort);source.disconnect();gain.disconnect();pan?.disconnect();}};
   source.onended=voice.finish;active.add(voice);options.signal?.addEventListener('abort',abort,{once:true});source.start();
  };
  const cached=ready.get(url);if(cached)play(cached);else void buffer(url).then(play).catch(()=>{});

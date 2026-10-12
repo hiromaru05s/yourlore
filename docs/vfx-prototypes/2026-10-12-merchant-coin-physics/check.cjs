@@ -2,7 +2,7 @@ const fs = require('node:fs'), os = require('node:os'), path = require('node:pat
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'merchant-physics-'));
 try {
   for (const name of ['catalog', 'physics']) {
-    const source = fs.readFileSync('client/src/dev/merchant-v2/' + name + '.ts', 'utf8');
+    const source = fs.readFileSync('client/src/ui/merchant/' + name + '.ts', 'utf8');
     let js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
     js = js.replace('require("three")', 'require(' + JSON.stringify(require.resolve('three')) + ')');
     fs.writeFileSync(path.join(tmp, name + '.js'), js);
