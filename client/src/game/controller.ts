@@ -1,3 +1,4 @@
+import {evasionRollIndex} from '../ui/evade/timing';
 import {playStatusExtinction,warmStatusExtinctions,disposeStatusExtinctions} from '../ui/statusExtinction/runtime';
 import {isChosenVictory,playChosenVictory,warmChosenVictory} from '../ui/chosenVictory/runtime';
 import { playIntent, needsCastReview, targetOwner } from '../shared/playIntent';
@@ -8,6 +9,7 @@ import {synergyTier} from '../ui/tribePresentation/selection';
 import {playTribeSynergy} from '../ui/tribeSynergy/runtime';
 import type {Playback} from '../ui/elemental/runtime';
 import {persistentShelfExits} from './shelfExits';
+import {counterPresentationEvents,counterSurvival} from './counterPresentation';
 import {installHandDiscard} from '../ui/handDiscard';
 import {captureSupplyFaces,playSupplyRefresh,supplyWasRefreshed} from '../ui/marketRefresh';
 import {prepareStateArtwork} from '../ui/stateArtwork';
@@ -305,7 +307,7 @@ export abstract class BaseController implements BoardHandlers {
         (document.querySelector(`#hand .card[data-uid="${c.uid}"]`) as HTMLElement | null)?.classList.add("is-played");
       }
     }
-    const events = res.events;
+    const events = counterPresentationEvents(res.events);
     if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
     const eventSound = new EventSound();
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
@@ -325,7 +327,18 @@ export abstract class BaseController implements BoardHandlers {
     const elementalDeaths:Promise<void>[]=[];
     const draws = [0, 0];
     const gutsHits=new Set<string>();
+    const counterGuts=new Set<GameEvent>();
     const diceDone = new Set<number>(); // dice events already animated (pre-rolled ahead of a result popup)
+    const playDiceAt=async(index:number)=>{
+      const roll=events[index];if(roll?.type!=='dice'||diceDone.has(index)||A.isFxSkipped()||this.dead)return;
+      diceDone.add(index);
+      const evade=roll.evasion?A.prepareEvasion(roll.evasion.targetUid,sideOf(roll.player),!!roll.success):undefined;
+      try{
+        await diceRollAnim(roll.rolls,{need:roll.need,success:roll.success,mine:roll.player===this.you,casino:roll.variant==='casino',source:roll.source,viewer:this.you});
+        if(!A.isFxSkipped()&&!this.dead)await evade?.play();
+      }finally{evade?.cancel();}
+    };
+
 
     for (let i = 0; i < events.length; i++) {
       if (this.dead) return;
@@ -436,7 +449,23 @@ export abstract class BaseController implements BoardHandlers {
           if(elemental.size)elementalDeaths.push(destroy());else await destroy();
           break;
         }
+        case 'counter': {
+          const result=counterSurvival(events,i);let survival:Promise<void>|undefined;
+          await A.counterStrike(e.uid,e.targetUid,()=>{
+            if(e.contactDamage>0)eventSound.contact(e.targetUid,e.targetPlayer);
+            if(result&&!survival){counterGuts.add(result);gutsHits.add(result.uid);survival=A.gutsSurvive(result,sideOf(result.player));}
+          },e.contactDamage);
+          await survival;
+          break;
+        }
         case "attack": {
+          const evadeIndex=evasionRollIndex(events,i);
+          if(evadeIndex>=0){
+            await playDiceAt(evadeIndex);
+            const roll=events[evadeIndex];
+            if(roll.type==='dice'&&roll.success)break;
+          }
+          // The shared attack timeline owns launch/contact cues and local target recoil.
           const targetPlayer=e.targetPlayer ?? ((e.targetUid&&prev.players[e.player].field.some(m=>m.uid===e.targetUid)?e.player:1-e.player) as Side);
           const defender=sideOf(targetPlayer);
           const attacker=this.findCard(prev,e.uid)??this.findCard(res.state,e.uid),exhaust=res.state.players[e.player].field.find(m=>m.uid===e.uid)?.exhausted!==false;
@@ -450,7 +479,7 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "gutsSurvive":
-          await A.gutsSurvive(e,sideOf(e.player));
+          if(!counterGuts.delete(e))await A.gutsSurvive(e,sideOf(e.player));
           break;
         case "monsterActivate": {
           // Several sources reacting to the same event should be visible together.
@@ -471,10 +500,7 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "dice":
-          if (!diceDone.has(i)&&!A.isFxSkipped()) {
-            diceDone.add(i);
-            await diceRollAnim(e.rolls, { need: e.need, success: e.success, mine: e.player === this.you, casino: e.variant === "casino", source: e.source, viewer: this.you });
-          }
+          await playDiceAt(i);
           break;
         case "damage": {
           hpNow[e.player] -= e.amount;
@@ -528,7 +554,7 @@ export abstract class BaseController implements BoardHandlers {
             for (let j = i + 1; j < events.length; j++) {
               const e2 = events[j];
               if (e2.type === "playSpell" || e2.type === "trapSet" || e2.type === "trapReveal" || e2.type === "buy" || e2.type === "turnHeader" || e2.type === "win") break;
-              if (e2.type === "dice" && !diceDone.has(j)&&!A.isFxSkipped()) {
+              if (e2.type === "dice" && !e2.evasion && !diceDone.has(j)&&!A.isFxSkipped()) {
                 diceDone.add(j);
                 await diceRollAnim(e2.rolls, { need: e2.need, success: e2.success, mine: e2.player === this.you, casino: e2.variant === "casino", source: e2.source, viewer: this.you });
               }

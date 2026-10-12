@@ -1,3 +1,4 @@
+import {prepareEvade,cancelEvades} from './evade/runtime';
 import {isVampire} from './vampireSummon/selection';
 import {playVampireSummon} from './vampireSummon/runtime';
 import {cancelStatusExtinctions} from './statusExtinction/runtime';
@@ -35,6 +36,7 @@ import {foldQuestIntoSlot,nativeQuestGhost,warmQuestPact} from './questFold';
 import {getManaFormation} from './manaFormationPreview';
 import {passiveIcon} from './passiveIcon';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
+import {damageAction, playSeekerSide, setSeekerSkip} from './seekerAnimation';
 import type {HandLayout} from './handGeometry';
 import {mountDuelOutcome,cancelDuelOutcome} from './duelOutcome';
 import {reserveMonster} from './fieldLayout';
@@ -65,11 +67,14 @@ const EASE = "cubic-bezier(.4,0,.2,1)";
 // its end state and the player's new action plays fresh.
 let fxSkip = false;
 export const isFxSkipped=()=>fxSkip;
+export function prepareEvasion(uid:string,side:ViewSide,success:boolean){
+ return prepareEvade(fxSkip?null:combatCard(uid),{side,success});
+}
 const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
-  fxSkip = on; setMonsterSkip(on);
-  if(on){cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  fxSkip = on; setMonsterSkip(on); setSeekerSkip(on);
+  if(on){cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -482,6 +487,8 @@ export function floatNum(anchor: Element | null, text: string, kind: "dmg" | "he
 }
 
 export function hpFeedback(side: ViewSide, kind: "dmg" | "heal", amount: number): void {
+  const action=kind==='dmg'?damageAction(amount):null;
+  if(action&&!fxSkip)playSeekerSide(side,action);
   const bar = document.getElementById("hpbar-" + side);
   const num = document.getElementById("hp-" + side);
   if (bar && kind==='dmg') { bar.classList.add("shake"); setTimeout(() => bar.classList.remove("shake"), 400); }
@@ -511,6 +518,16 @@ export async function attackStrike(uid:string,targetUid:string|null,defender:Vie
   sfx('attack');
   await boardMotionScope(signal=>playMonster(source,'attack',{target,signal,exhaust,side:defender==='opp'?1:-1,onImpact:()=>{if(contactDamage>0)sfx(targetUid?'impact':'facehit');onImpact?.();}}));
   if(exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');source.style.filter='grayscale(1) brightness(.57)';}
+}
+/** A counter is presentation metadata, never another ordinary attack action. */
+export async function counterStrike(uid:string,targetUid:string,onImpact?:()=>void,contactDamage=1):Promise<void>{
+ const source=combatCard(uid),target=combatCard(targetUid);
+ if(!source||!target||fxSkip||document.hidden)return;
+ await boardMotionScope(async signal=>{
+  const {playCounter}=await import('./counter/runtime');
+  if(signal.aborted||fxSkip)return false;
+  return playCounter(source,target,{signal,onLaunch:()=>sfx('attack'),onImpact:()=>{if(contactDamage>0)sfx('impact');onImpact?.();}});
+ });
 }
 /** Starts on the attack contact callback, or on an explicit non-strike survival event. */
 export async function gutsSurvive(result:GutsSurvival,side?:ViewSide):Promise<void>{

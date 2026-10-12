@@ -27,9 +27,9 @@
 .portrait--opp { --side:#d17478; }
 .pt-ring .avatar { width:100%; height:100%; border:0; display:block; overflow:hidden; border-radius:50%; }
 .avatar-seeker { overflow:hidden; position:relative; display:inline-block; }
-.seeker-sprite { position:absolute; inset:0; display:block; background-size:200% 100%; background-position:left center; }
-.seeker-red { background-image:url(/art/biblion/seeker-red-lossless.webp); }
-.seeker-blue { background-image:url(/art/biblion/seeker-blue-lossless.webp); }
+.seeker-sprite { position:absolute; inset:0; display:block; background-size:100% 100%; background-position:center; }
+.seeker-red { background-image:url(/art/seekers/faceless-v2/portrait.webp); }
+.seeker-blue { background-image:url(/art/seekers/faceless-v2/portrait.webp); }
 .pt-vitals { position:absolute; right:calc(100% + 10px); bottom:24%; width:clamp(88px,11vw,168px); display:grid; gap:6px; }
 .pt-hp { display:flex; gap:4px; align-items:baseline; justify-content:flex-end; text-shadow:0 2px 3px #071021; background:linear-gradient(90deg,transparent,#112035d9); border-radius:4px; padding:3px 7px; }
 .pt-hp b { font-size:clamp(20px,2.5vw,32px); font-family:Georgia,serif; font-weight:500; }
@@ -892,3 +892,8 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
  .game button.utility-control { width:44px;height:48px; }.utility-control>img { width:39px;height:39px; }.game .utility-control>span { font-size:8px; }
  .game .mute-fab.utility-control { left:60px; }.game .help-fab.utility-control { left:110px; }
 }
+
+/* Close-up painted portrait: the hood and concealed face fill the avatar window. */
+.avatar-seeker {background:#fff;}
+.avatar .hooded-seeker {position:static;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;image-rendering:auto;display:block;}
+.seeker-motion {display:block;width:100%;height:100%;object-fit:contain;image-rendering:auto;background:#fff;}

@@ -4,7 +4,7 @@ import { npcPortrait } from "../shared/botNpcs";
 import {prepareManaPurchase} from './manaPurchase';
 import {monsterCanAttack,monsterCanTarget} from '../shared/engine';
 import {furnitureUrl} from '../shared/cosmetics';
-import {seekerPortrait} from './seekerAnimation';
+import {seekerPortrait, disposeSeekers} from './seekerAnimation';
 import {HandConditionHighlights} from './handCondition';
 import {handFan} from './handFan';
 import {fieldPositions,settleField} from './fieldLayout';
@@ -293,6 +293,7 @@ export class GameView {
   /** Detach the window/document-level listeners this view installed. */
   destroy(): void {
     this.disposed = true;
+    disposeSeekers(this.root);
     this.cancelHandDrag?.();
     this.disposeScene?.();
     this.statRise.dispose();
@@ -962,13 +963,14 @@ export class GameView {
     const emax = effMaxMana(p);
     const hp = Math.max(0, p.hp);
     const shield = Math.max(0, p.shield ?? 0), dew = Math.max(0, p.dew ?? 0), brand = Math.max(0, p.brand ?? 0);
-    const oldPortrait=el.querySelector<HTMLCanvasElement>('.seeker-motion');
+    const oldRing=el.querySelector<HTMLElement>('.pt-ring');
+    const oldPortrait=oldRing?.querySelector<HTMLCanvasElement>('.seeker-motion');
     const oldMana=el.querySelector<HTMLElement>('.pt-mana');
     const previousMax=Number(oldMana?.dataset.maximum??emax),previousMana=Number(oldMana?.dataset.mana??p.mana);
     const crystals = Array.from({ length: Math.min(MAX_MANA, Math.max(0, emax)) }, (_, i) => `<i class="mana-crystal${i < p.mana ? " is-lit" : ""}" aria-hidden="true"></i>`).join("");
     const avatar = isMe ? MY_AVATAR : OPP_AVATAR;
     const npc = npcPortrait(avatar);
-    const seeker = avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE" ? avatar : isMe ? "SEEKER_BLUE" : "SEEKER_RED";
+    const seeker = "SEEKER_HOODED";
     el.innerHTML = `
       <span class="pt-vitals"><span class="pt-hp" title="HP ${hp}"><span class="pt-hp-ico">HP</span><b id="hp-${sd}">${hp}</b></span>
       </span>
@@ -980,9 +982,13 @@ export class GameView {
         ${brand > 0 ? `<span class="pt-brand" role="img" aria-label="${esc(t('game.brand'))} ${brand}" title="${esc(t('game.brandTip').replace('{n}', String(brand)))}" style="--resource-number-scale:${Math.min(.14,.32/String(brand).length)}"><b id="brand-${sd}" aria-hidden="true">${brand}</b></span>` : ""}
       </span>` : ""}
       <span class="pt-name">${esc(p.name)}</span>`;
-    if (!npc) {
-      const portrait=oldPortrait??seekerPortrait(seeker==='SEEKER_RED'?'red':'blue');
-      el.querySelector('.avatar')?.replaceChildren(portrait);
+    const ring = el.querySelector<HTMLElement>('.pt-ring')!;
+    // Keep the frame and canvas together so a counter rerender cannot interrupt a hit.
+    if (oldRing && oldRing.dataset.avatar === (avatar ?? '')) ring.replaceWith(oldRing);
+    else {
+      if (oldPortrait) disposeSeekers(oldRing!);
+      ring.dataset.avatar = avatar ?? '';
+      if (!npc) ring.querySelector('.avatar')?.replaceChildren(seekerPortrait({board:true}));
     }
   }
 

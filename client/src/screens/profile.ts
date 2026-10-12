@@ -1,3 +1,5 @@
+import {openSeekerPicker} from '../ui/seekerPicker';
+import {seekerName} from '../ui/seekerLabels';
 import {renderQuality,setRenderQuality} from '../ui/renderDensity';
 import { homeIcon } from "../ui/homeIcons";
 import { loungeText } from "../ui/loungeText";
@@ -13,7 +15,7 @@ import type { App, Screen } from "../router";
 import { api, type Profile } from "../net/api";
 import { t, onLangChange, getLang, setLang, type Lang } from "../i18n";
 import { tierChipHtml } from "../ui/tier";
-import { avatarHtml, avatarPresets } from "../ui/social";
+import { avatarHtml } from "../ui/social";
 import { getSfxVolume, setSfxVolume, sfx } from "../ui/sound";
 
 function esc(s: string): string { return s.replace(/[<>&"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" }[c]!)); }
@@ -33,6 +35,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   app.root.appendChild(wrap);
 
   let dead = false;
+  let closeCharacterPicker: (()=>void) | undefined;
   let cached: Profile | null = null;
   let tab: Tab = initialTab ?? "overview";
   let recFilter: RecFilter = "ranked";
@@ -255,6 +258,11 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         </div>
       </section>`;
 
+    const characterSection=document.createElement('section');
+    characterSection.className='tut-sec';
+    characterSection.innerHTML=`<h3>${loungeText('キャラクター','Character','캐릭터')}</h3><div class="set-row">${avatarHtml(p.avatar,p.display,64)}<span class="set-label">${seekerName(p.avatar??'SEEKER_BLUE')}</span><button type="button" class="btn btn-ghost" data-character-settings>${loungeText('変更する','Change','변경')}</button></div>`;
+    body().prepend(characterSection);
+    characterSection.querySelector<HTMLButtonElement>('button')!.onclick=()=>openAvatarPicker(p);
     const qualitySection=document.createElement('section');qualitySection.className='tut-sec';qualitySection.innerHTML=`<h3>${loungeText('描画品質','Graphics','그래픽')}</h3><div class="set-row"><label class="set-label" for="renderQuality">${loungeText('盤面の精細さ','Board detail','보드 선명도')}</label><select id="renderQuality"><option value="balanced">${loungeText('高精細（推奨）','Crisp (recommended)','고해상도 (권장)')}</option><option value="economy">${loungeText('軽量','Economy','경량')}</option></select></div><p class="set-desc">${loungeText('この端末に保存し、次の対戦から適用します。','Saved on this device. Applies to the next match.','이 기기에 저장되며 다음 대전부터 적용됩니다.')}</p>`;body().children[0].after(qualitySection);const quality=qualitySection.querySelector<HTMLSelectElement>('select')!;quality.value=renderQuality();quality.onchange=()=>setRenderQuality(quality.value);
     // volume
     const vol = body().querySelector("#vol") as HTMLInputElement;
@@ -301,38 +309,20 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
 
   // ---- avatar picker (shared) ----
   const openAvatarPicker = (p: Profile): void => {
-    const ov = document.createElement("div");
-    ov.className = "overlay";
-    const ids = avatarPresets();
-    ov.innerHTML = `
-      <div class="modal ava-modal">
-        <h2>${t("profile.avatar.pick")}</h2>
-        <div class="ava-grid seeker-picker">
-          ${ids.map((id) => `<button class="ava-opt ${p.avatar === id ? "sel" : ""}" data-id="${id}">${avatarHtml(id, "", 128)}<span>${id === "SEEKER_RED" ? "RED" : "BLUE"}</span></button>`).join("")}
-        </div>
-        <div class="modal-row"><button class="btn btn-ghost btn-block" id="avaClose">${t("common.cancel")}</button></div>
-      </div>`;
-    document.body.appendChild(ov);
-    ov.onclick = (e) => { if (e.target === ov) ov.remove(); };
-    (ov.querySelector("#avaClose") as HTMLElement).onclick = () => ov.remove();
-    ov.querySelectorAll(".ava-opt").forEach((b) => {
-      (b as HTMLElement).onclick = () => {
-        const id = (b as HTMLElement).dataset.id!;
-        void api.updateMe({ avatar: id }).then(() => {
-          if (app.user) app.user.avatar = id;
-          document.dispatchEvent(new Event("lore:user"));
-          sfx("pop");
-          ov.remove();
-          void load();
-        }).catch((e) => alert((e as Error).message));
-      };
+    closeCharacterPicker?.();
+    closeCharacterPicker = openSeekerPicker(p.avatar, async id => {
+      await api.updateMe({avatar:id});
+      if(app.user)app.user.avatar=id;
+      document.dispatchEvent(new Event('lore:user'));
+      sfx('pop');
+      if(!dead){await load();wrap.querySelector<HTMLButtonElement>(tab==='settings'?'[data-character-settings]':'#avaBtn')?.focus();}
     });
   };
 
   build();
   void load();
   const unsub = onLangChange(() => { build(); renderTab(); });
-  return { destroy: () => { dead = true; unsub(); } };
+  return { destroy: () => { dead = true; closeCharacterPicker?.(); unsub(); } };
 }
 
 /** Read-only profile popup (used from the friends list). */

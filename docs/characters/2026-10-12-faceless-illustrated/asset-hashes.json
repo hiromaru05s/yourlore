@@ -1,0 +1,14 @@
+{
+  "portrait.webp": {
+    "bytes": 44960,
+    "sha256": "1c47aeca9c8d88436147f7195f4b56f67f51c8c17a8909a7bc59a65a8551eb78"
+  },
+  "hit.webp": {
+    "bytes": 42024,
+    "sha256": "13d0fddc71e0bc985581164efeb07458fa2b75ae2e721c62f244c28903925ef7"
+  },
+  "poses.webp": {
+    "bytes": 88734,
+    "sha256": "adac718d888988901e016081d8a0b35db8062b937f02e97a7f9519e6bf95dbad"
+  }
+}

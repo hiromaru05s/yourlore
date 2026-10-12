@@ -267,6 +267,7 @@ export type GameEvent =
   | { type: "turnHeader"; turn: number; name: string; isBot: boolean; player?: Side } // player: whose turn (log tinting)
   | { type: "summon"; player: Side; uid: string; id?: string } // id: card id (drives the summon ghost when the monster dies in the same batch)
   | { type: "attack"; player: Side; uid: string; targetUid: string | null; targetPlayer?: Side; contactDamage?: number; guts?: GutsSurvival }
+  | { type: "counter"; player: Side; uid: string; targetUid: string; targetPlayer: Side; contactDamage: number }
   | { type: "elementalStart"; group:string; player:Side; id:string; uid:string; targets:Array<{player:Side;uid:string|null;amount:number}> }
   | { type: "elementalImpact"; group:string; index:number }
   | { type: "elementalEnd"; group:string }
@@ -280,7 +281,7 @@ export type GameEvent =
   | { type: "draw"; player: Side; count: number }
   | { type: "reshuffle"; player: Side; count: number } // public count only; no card order
   | { type: "treasure"; player: Side; kind: string; text: string; textJa: string; isBot: boolean }
-  | { type: "dice"; source: DiceSource; player: Side; rolls: number[]; need?: number; success?: boolean; variant?: "casino" } // dice roll (need = min TOTAL for success; undefined = outcome-table roll · variant "casino" = 카지노 전용 연출)
+  | { type: "dice"; source: DiceSource; player: Side; rolls: number[]; need?: number; success?: boolean; variant?: "casino"; evasion?: { targetUid: string; attackerUid: string } } // evasion identifies the public defender, including granted passives and duplicates
   | { type: "playSpell"; player: Side; id: string; dest: "discard" | "field" | "vanish" } // spell/starter/enchant played from hand
   | { type: "trapSet"; player: Side } // a face-down trap was set (identity hidden)
   | { type: "trapReveal"; player: Side; id: string } // a trap fired → reveal then discard
