@@ -2,6 +2,8 @@ import {DB} from '../../shared/cards';
 export const ids=['VAMP1','VAMP2','VAMP3','VAMP4','VAMP5','VAMP_BUTLER'] as const;
 export type Id=typeof ids[number];
 export const DURATION=2600,CONTACT=1800;
+// 280px card body; keep the 3.5px root tube inside the outer frame edge.
+export const DENTAL_ROOT_EDGE=280/2-3.5;
 export const ease=(a:number,b:number,t:number)=>{const u=Math.max(0,Math.min(1,(t-a)/(b-a)));return u*u*(3-2*u);};
 export const title=(id:Id)=>DB[id].nameJa||DB[id].name;
 export const rank=(id:Id)=>id==='VAMP_BUTLER'?2:ids.indexOf(id)+1;

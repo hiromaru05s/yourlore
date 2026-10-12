@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {ease,rank,type Id} from './catalog';
+import {ease,rank,DENTAL_ROOT_EDGE,type Id} from './catalog';
 
 export const bites=[
  {hit:1080,hold:1210,release:1590,snap:100},
@@ -65,8 +65,13 @@ class DentalArch extends Study{
    row.add(bloodRoot([new T.Vector3(-76,-14*sign,6),new T.Vector3(-42,4*sign,6),new T.Vector3(0,8*sign,6),new T.Vector3(42,4*sign,6),new T.Vector3(76,-14*sign,6)],3.5));
   }
  }
- update(p:Pose){const g=.025+.975*p.grow;this.upper.position.y=83+25*(1-p.close);this.lower.position.y=-48-30*(1-p.close);this.upper.rotation.x=-.10*(1-p.close);this.lower.rotation.x=.34*(1-p.close)*p.grow;
-  for(const row of [this.upper,this.lower])row.scale.set(g,1-p.retract*.23,g*(1-p.retract));}
+ update(p:Pose){const g=.025+.975*p.grow;this.upper.rotation.x=-.10*(1-p.close);this.lower.rotation.x=.34*(1-p.close)*p.grow;
+  for(const row of [this.upper,this.lower]){const sign=row===this.upper?1:-1;row.scale.set(g,1-p.retract*.23,g*(1-p.retract));
+   // Anchor the centre of the curved root to the actual frame, accounting for
+   // the hinge rotation. The one inward bite retains its existing end pose.
+   const openY=sign*DENTAL_ROOT_EDGE-sign*8*Math.cos(row.rotation.x)+6*g*Math.sin(row.rotation.x);
+   row.position.y=T.MathUtils.lerp(openY,sign===1?83:-48,p.close);
+  }}
 }
 // 02: actual separate teeth condense from four small roots. The curved solid
 // crowns become rigid before contact; the roots stretch back into liquid afterward.
@@ -122,7 +127,7 @@ export class BiteRig{
  private studies:Study[]=[new DentalArch(),new LiquidCanines(),new RecessedMouth(),new HookFangs(),new PiercingFangs(),new EnclosingJaw()];private bounds=new T.Box3();private tip=new T.Vector3();private anchors:T.Vector2[][]=[];
  constructor(){for(const [i,s] of this.studies.entries()){this.group.add(s.group);s.group.traverse(o=>{if(o instanceof T.Mesh)(o.material as T.Material).transparent=true;});s.update(bitePose(i,bites[i].hit+30),bites[i].hit+30);this.group.updateWorldMatrix(true,true);this.anchors.push(s.contacts.map(c=>{const t=c.mesh.localToWorld(c.tip.clone());return new T.Vector2(t.x,t.y);}));}}
  draw(id:Id,v:number,ms:number,h:number){const p=bitePose(v,ms),b=bites[v];this.group.visible=ms<b.release;this.group.position.set(0,0,h+4);this.pressure=p.pressure;this.wound=p.wound;
-  this.focus=(.70+.30*p.grow)*(1-ease(b.hold+50,b.release+150,ms));this.impact=ease(b.hit,b.hit+12,ms)*(1-ease(b.hit+24,b.hit+105,ms));this.group.scale.setScalar(id==='VAMP_BUTLER'?.95:.9+rank(id)*.02);
+  this.focus=(.70+.30*p.grow)*(1-ease(b.hold+50,b.release+150,ms));this.impact=ease(b.hit,b.hit+12,ms)*(1-ease(b.hit+24,b.hit+105,ms));this.group.scale.setScalar(v===0?1:id==='VAMP_BUTLER'?.95:.9+rank(id)*.02);
   this.studies.forEach((s,i)=>s.group.visible=i===v);const s=this.studies[v];s.group.position.z=0;s.update(p,ms);s.group.traverse(o=>{if(o instanceof T.Mesh)(o.material as T.Material).opacity=1-ease(.80,1,p.retract);});
   this.group.updateWorldMatrix(true,true);this.bounds.setFromObject(s.group);const lift=Math.max(0,h+3-this.bounds.min.z);s.group.position.z=lift/this.group.scale.z;this.group.updateWorldMatrix(true,true);this.bounds.setFromObject(s.group);this.lowerClearance=this.group.visible?this.bounds.min.z:0;
   this.count=Math.min(4,s.contacts.length);for(let i=0;i<4;i++){const c=s.contacts[Math.min(i,s.contacts.length-1)];this.tip.copy(c.tip);c.mesh.localToWorld(this.tip);if(ms>=b.hit)this.points[i].copy(this.anchors[v][Math.min(i,s.contacts.length-1)]).multiplyScalar(this.group.scale.x);else this.points[i].set(this.tip.x,this.tip.y);this.gaps.setComponent(i,p.gap);}
