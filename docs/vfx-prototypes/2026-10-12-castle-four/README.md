@@ -56,3 +56,4 @@ http://127.0.0.1:5474/castle-four.html
 - これはユーザーの品質承認、採用、認証済み対戦確認を意味しない。音声は未制作。
 - `qa/final-check.json`: 最終UIの一時停止・続きからの再開・中断復元を確認、例外0。postMessageによる制御完了を待ってから判定する。
 - 比較ページのViteビルド成功。約1MBの共有Three.jsを含むチャンクについてサイズ警告あり。今回は開発用比較ページの独立エントリーで、ゲーム本体の配信エントリーには追加していない。
+- `node node_modules/typescript/bin/tsc -p client/src/dev/castle-four/tsconfig.json --noEmit`: 成功（exit 0）。`git diff --check`成功、比較ページHTTP 200。
