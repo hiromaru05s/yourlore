@@ -1,9 +1,9 @@
 export const DURATION=1000;
 export const designs=[
  {name:'双翼の大盾',en:'TWIN AEGIS',material:'鋼 / 開く・噛み合う',description:'左右の枠から厚い鋼板が起き、中央で一枚の盾になる。構えを見せ、同じ枠へ折り戻る。',peak:460,color:'#8eadbd'},
- {name:'不退の踏み込み',en:'STAND YOUR GROUND',material:'カード / 引く・踏み込む',description:'カード自身が一度引き、相手へ短く踏み込む。面を保った接地と、前縁を走る圧で意思を伝える。',peak:430,color:'#bf9150'},
- {name:'戦旗の翻り',en:'THE CHALLENGER',material:'織布 / 巻き上がる・翻る',description:'上枠の帯が一枚の戦旗に持ち上がり、一度だけ大きく翻る。裾から巻き取り、カードに戻る。',peak:480,color:'#a74948'},
- {name:'城郭のせり上がり',en:'LIVING RAMPART',material:'石 / せり上がる・沈む',description:'枠の石目が段差となり、両側から胸壁へ育つ。重く構えた後、石段ごと枠に沈む。',peak:540,color:'#9a9382'},
+ {name:'銀刃の鬣',en:'QUICKSILVER MANE',material:'銀流 / 剥がれる・逆巻く',description:'左右の枠が厚い銀の流れとなってせり上がる。折り重なる刃の鬣を一度広げ、先端から枠へ戻る。',peak:460,color:'#91a8af'},
+ {name:'獅子の咆哮',en:'LIONHEART',material:'浮彫 / 浮き上がる・吼える',description:'下枠の金属が獅子の浮彫へせり上がる。顎と鬣が一度大きく開き、彫刻面ごとカードへ沈む。',peak:470,color:'#9e875e'},
+ {name:'黒曜の盾壁',en:'OBSIDIAN BASTION',material:'黒曜 / 起こす・せり出す',description:'上枠の黒曜が五枚の装甲へ連続して立ち上がる。層をずらした盾壁が前へせり出し、同じ枠へ折り戻る。',peak:480,color:'#786779'},
 ] as const;
 export const cards=['SHIELD_TITAN','CASTLE','ELF'] as const;
 export const clamp=(x:number)=>Math.max(0,Math.min(1,x));
@@ -14,6 +14,6 @@ export function pose(variant:number,ms:number,reduced=false){
  const t=Math.max(0,Math.min(DURATION,ms)),active=ms>0&&ms<DURATION;
  const strength=active?pulse(0,150,830,1000,t):0;
  if(reduced)return {t,strength,lift:0,advance:0,scale:1,tilt:0};
- const brace=pulse(20,150,170,300,t),step=pulse(175,310,590,950,t);
- return {t,strength,lift:variant===1?12*pulse(150,265,300,430,t):3*pulse(120,330,690,950,t),advance:variant===1?-9*brace+16*step:0,scale:1+(variant===1?.045:0)*step,tilt:variant===1?.025*brace:0};
+ const lift=variant===0?3*pulse(120,330,690,950,t):variant===1?5*pulse(100,350,670,965,t):variant===2?2*pulse(280,400,690,950,t):4*pulse(160,400,640,960,t);
+ return {t,strength,lift,advance:0,scale:1,tilt:0};
 }
