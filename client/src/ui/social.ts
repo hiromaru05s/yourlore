@@ -1,6 +1,7 @@
 import { homeIcon } from "./homeIcons";
 import { artUrl } from "./cardArt";
-import {seekerPoster, seekerColor} from './seekerMotion';
+import {seekerPoster, SEEKER_ID} from './seekerMotion';
+import {seekerName} from './seekerLabels';
 // ============================================================
 // LORE — social presentation helpers: preset avatars (card art)
 // and badge metadata. Badge OWNERSHIP is computed server-side;
@@ -12,9 +13,8 @@ import { getLang } from "../i18n";
 // ---- avatars: preset = a card id, art served from /art/cards/<id>.webp ----
 export function avatarHtml(avatar: string | null | undefined, display: string, size = 40): string {
   const initial = (display || "?").trim().charAt(0).toUpperCase().replace(/[&<>"\']/g, "?");
-  if (!avatar || avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE") {
-    const color = seekerColor(avatar);
-    return `<span class="avatar avatar-seeker" style="--avs:${size}px"><img class="hooded-seeker" src="${seekerPoster(color)}" alt="${color === "red" ? "Hooded woman" : "Hooded man"}" width="128" height="128"></span>`;
+  if (!avatar || avatar === SEEKER_ID || avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE") {
+    return `<span class="avatar avatar-seeker" style="--avs:${size}px"><img class="hooded-seeker" src="${seekerPoster()}" alt="${seekerName()}" width="512" height="512"></span>`;
   }
   const img = avatar && /^[A-Za-z0-9_]+$/.test(avatar)
     ? `<img src="${artUrl.sm(avatar)}" alt="" loading="lazy" onerror="this.remove()">`
@@ -22,9 +22,9 @@ export function avatarHtml(avatar: string | null | undefined, display: string, s
   return `<span class="avatar" style="--avs:${size}px">${img}<span class="avatar-fb">${initial}</span></span>`;
 }
 
-/** Stable account IDs preserve existing selections while replacing the artwork. */
+/** One selectable character; legacy red/blue accounts render the same neutral portrait. */
 export function avatarPresets(): string[] {
-  return ["SEEKER_RED", "SEEKER_BLUE"];
+  return [SEEKER_ID];
 }
 
 // ---- badges ----

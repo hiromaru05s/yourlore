@@ -12,7 +12,7 @@ import { setLang } from '../i18n';
 import type { App } from '../router';
 if (import.meta.env.DEV) {
   setLang('ja');
-  let avatar = localStorage.getItem('lore_profile_lab_avatar') || 'SEEKER_BLUE';
+  let avatar = localStorage.getItem('lore_profile_lab_avatar') || 'SEEKER_HOODED';
   api.profile = async () => ({id:'fixture',self:true,display:'シーカー',avatar,badge:null,created_at:Date.now(),wins:3,losses:1,recent:[]});
   api.updateMe = async patch => {
     avatar = patch.avatar || avatar; localStorage.setItem('lore_profile_lab_avatar',avatar);

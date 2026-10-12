@@ -8,6 +8,6 @@ export function menuAssetUrls():string[]{
   ...['home','deck','cards','trophy','friends','shop','book'].map(k=>`/art/lounge/icons/active-v1/${k}.webp`),
   '/art/lounge/icons/shard-simple-v1.png',
   '/art/brand/lore-logo-transparent.webp','/art/lounge/v1/library.webp','/art/lounge/stage-v1/sigil.webp','/art/lounge/v1/library.webp',
-  '/art/seekers/hooded-v1/blue-portrait.webp','/art/seekers/hooded-v1/red-portrait.webp',
+  '/art/seekers/faceless-v1/portrait.webp',
  ])];
 }

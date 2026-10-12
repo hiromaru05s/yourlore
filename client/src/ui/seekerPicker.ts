@@ -1,25 +1,24 @@
 import '../styles/seekerPicker.css';
-import {avatarHtml, avatarPresets} from './social';
-import {seekerPortrait, disposeSeeker, playSeeker, resetSeeker, SEEKER_ACTIONS, type SeekerAction} from './seekerAnimation';
-import {seekerColor} from './seekerMotion';
+import {avatarPresets} from './social';
+import {seekerPortrait, disposeSeeker, playSeeker, SEEKER_ACTIONS, type SeekerAction} from './seekerAnimation';
+import {SEEKER_ID} from './seekerMotion';
 import {seekerName, seekerActionLabel} from './seekerLabels';
 import {loungeText} from './loungeText';
 import {t} from '../i18n';
 /** A reversible preview; the account changes only when Save succeeds. */
-export function openSeekerPicker(current: string | null | undefined, save: (id: string) => Promise<void>): () => void {
+export function openSeekerPicker(_current: string | null | undefined, save: (id: string) => Promise<void>): () => void {
   const previous = document.activeElement as HTMLElement | null;
   const overlay = document.createElement('div'); overlay.className = 'overlay';
-  const ids = avatarPresets(); let selected = current === 'SEEKER_RED' ? current : 'SEEKER_BLUE';
-  let closed = false, saving = false, terminalPreview = false;
+  const ids = avatarPresets(); let selected = SEEKER_ID;
+  let closed = false, saving = false;
   overlay.innerHTML = `<div class="modal hooded-picker" role="dialog" aria-modal="true" aria-labelledby="seekerPickerTitle">
     <h2 id="seekerPickerTitle">${loungeText('キャラクター','Character','캐릭터')}</h2>
-    <div class="hooded-options">${ids.map(id=>`<button type="button" class="hooded-option" data-seeker-id="${id}" aria-pressed="${id===selected}">${avatarHtml(id,'',88)}<span>${seekerName(id)}</span></button>`).join('')}</div>
-    <div class="hooded-live" aria-label="${loungeText('アニメーションプレビュー','Animation preview','애니메이션 미리보기')}"></div>
+    <div class="hooded-options">${ids.map(id=>`<button type="button" class="hooded-option" data-seeker-id="${id}" aria-pressed="${id===selected}"><div class="hooded-live" aria-label="${loungeText('キャラクタープレビュー','Character preview','캐릭터 미리보기')}"></div><span>${seekerName(id)}</span></button>`).join('')}</div>
     <div class="hooded-actions">${SEEKER_ACTIONS.map(action=>`<button type="button" class="btn btn-ghost btn-mini" data-action="${action}">${seekerActionLabel(action)}</button>`).join('')}</div>
     <p class="hooded-save-status" role="status" aria-live="polite"></p>
     <div class="modal-row"><button type="button" class="btn btn-ghost" data-close>${t('common.cancel')}</button><button type="button" class="btn btn-gold" data-save>${loungeText('このキャラクターにする','Use this character','이 캐릭터 사용')}</button></div>
   </div>`;
-  let canvas = seekerPortrait(seekerColor(selected));
+  let canvas = seekerPortrait();
   overlay.querySelector('.hooded-live')!.append(canvas); document.body.append(overlay);
   const status=overlay.querySelector<HTMLElement>('[role="status"]')!;
   const close=()=>{if(closed)return;closed=true;disposeSeeker(canvas);overlay.remove();document.removeEventListener('keydown',keyboard);if(previous?.isConnected)previous.focus();};
@@ -38,12 +37,11 @@ export function openSeekerPicker(current: string | null | undefined, save: (id: 
   overlay.querySelectorAll<HTMLButtonElement>('[data-seeker-id]').forEach(button=>{button.onclick=()=>{
     if(saving)return;selected=button.dataset.seekerId!;
     overlay.querySelectorAll('[data-seeker-id]').forEach(b=>b.setAttribute('aria-pressed',String((b as HTMLElement).dataset.seekerId===selected)));
-    disposeSeeker(canvas);canvas=seekerPortrait(seekerColor(selected));overlay.querySelector('.hooded-live')!.replaceChildren(canvas);status.textContent='';terminalPreview=false;
+    disposeSeeker(canvas);canvas=seekerPortrait();overlay.querySelector('.hooded-live')!.replaceChildren(canvas);status.textContent='';
   };});
   overlay.querySelectorAll<HTMLButtonElement>('[data-action]').forEach(button=>{button.onclick=()=>{
     const action=button.dataset.action as SeekerAction;
-    if(terminalPreview)resetSeeker(canvas);
-    playSeeker(canvas,action);terminalPreview=action==='defeat'||action==='victory';
+    playSeeker(canvas,action);
   };});
   overlay.querySelector<HTMLButtonElement>('[data-save]')!.onclick=async()=>{
     if(saving)return;saving=true;const id=selected;

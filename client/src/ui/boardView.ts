@@ -1,6 +1,6 @@
 import {monsterCanAttack} from '../shared/engine';
 import {furnitureUrl} from '../shared/cosmetics';
-import {seekerPortrait, disposeSeeker, disposeSeekers} from './seekerAnimation';
+import {seekerPortrait, disposeSeekers} from './seekerAnimation';
 import {HandConditionHighlights} from './handCondition';
 import {handFan} from './handFan';
 import {fieldPositions,settleField} from './fieldLayout';
@@ -976,7 +976,7 @@ export class GameView {
     const previousMax=Number(oldMana?.dataset.maximum??emax),previousMana=Number(oldMana?.dataset.mana??p.mana);
     const crystals = Array.from({ length: Math.min(MAX_MANA, Math.max(0, emax)) }, (_, i) => `<i class="mana-crystal${i < p.mana ? " is-lit" : ""}" aria-hidden="true"></i>`).join("");
     const avatar = isMe ? MY_AVATAR : OPP_AVATAR;
-    const seeker = avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE" ? avatar : isMe ? "SEEKER_BLUE" : "SEEKER_RED";
+    const seeker = avatar || "SEEKER_HOODED";
     el.innerHTML = `
       <span class="pt-vitals"><span class="pt-hp" title="HP ${hp}"><span class="pt-hp-ico">HP</span><b id="hp-${sd}">${hp}</b></span>
       </span>
@@ -988,9 +988,7 @@ export class GameView {
         ${dew > 0 ? `<span class="pt-dew" role="img" aria-label="${t('game.dew')} ${p.dew ?? 0}" title="${esc(t('game.dewTip'))}" style="--resource-number-scale:${Math.min(.14,.32/String(p.dew ?? 0).length)}"><b id="dew-${sd}" aria-hidden="true">${dew}</b></span>` : ""}
       </span>` : ""}
       <span class="pt-name">${esc(p.name)}</span>`;
-    const color=seeker==='SEEKER_RED'?'red':'blue';
-    if(oldPortrait&&oldPortrait.dataset.seeker!==color)disposeSeeker(oldPortrait);
-    const portrait=oldPortrait?.dataset.seeker===color?oldPortrait:seekerPortrait(color,{board:true});
+    const portrait=oldPortrait ?? seekerPortrait({board:true});
     el.querySelector('.avatar')?.replaceChildren(portrait);
   }
 

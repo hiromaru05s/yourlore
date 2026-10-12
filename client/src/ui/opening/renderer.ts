@@ -14,7 +14,7 @@ const {initLight,lightImage,disposeLight}=createOpeningLight();
 let disposed=false;
 let portraits:HTMLImageElement[]=[];let gpu=true;const hot=document.createElement("canvas");hot.width=hot.height=640;const hg=hot.getContext("2d")!;
 async function loadAssets(){
- portraits=await Promise.all(['blue','red'].map(c=>new Promise<HTMLImageElement>((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src='/art/seekers/hooded-v1/'+c+'-portrait.webp';}))).catch(()=>[]);
+ portraits=await Promise.all([0,1].map(()=>new Promise<HTMLImageElement>((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src='/art/seekers/faceless-v1/portrait.webp';}))).catch(()=>[]);
  if(disposed)return false;
  try{initCoin();initLight();}catch{gpu=false;disposeCoin();disposeLight();}
  return gpu;
@@ -31,7 +31,7 @@ function draw(c:HTMLCanvasElement,time:number,o:Options){
  const poly=(points:number[][],color:string)=>{g.beginPath();points.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));g.closePath();g.fillStyle=color;g.fill();};
  const text=(s:string,x:number,y:number,size:number,color=ivory,font='Georgia',spacing=0)=>{g.fillStyle=color;g.textBaseline='middle';g.font=`${font==='sans-serif'?'500':'400'} ${size}px ${font}`;g.textAlign='center';if(!spacing){g.fillText(s,x,y);return;}const letters=[...s],widths=letters.map(c=>g.measureText(c).width),total=widths.reduce((a,b)=>a+b,0)+spacing*(letters.length-1);let pos=x-total/2;g.textAlign='left';letters.forEach((ch,i)=>{g.fillText(ch,pos,y);pos+=widths[i]+spacing;});};
  const coin=(x:number,y:number,r:number,rx:number,ry:number,rz:number,alpha=1,heat=0)=>{if(r<1||alpha<.001)return;const im=coinImage(rx,ry,rz,o.first);g.save();g.globalAlpha*=alpha;if(im){const sz=r*2.82;g.drawImage(im,x-sz/2,y-sz/2,sz,sz);if(heat>0){hg.clearRect(0,0,640,640);hg.globalCompositeOperation='source-over';hg.drawImage(im,0,0);hg.globalCompositeOperation='source-in';hg.fillStyle='#fff3cd';hg.fillRect(0,0,640,640);hg.globalCompositeOperation='source-over';g.save();g.globalAlpha*=heat;g.globalCompositeOperation='screen';g.shadowColor='#ffe3a2';g.shadowBlur=20*heat;g.drawImage(hot,x-sz/2,y-sz/2,sz,sz);g.restore();}}else{g.translate(x,y);g.rotate(rz);g.scale(Math.max(.06,Math.abs(Math.cos(ry))),1);g.fillStyle='#bca273';g.beginPath();g.arc(0,0,r,0,7);g.fill();g.strokeStyle=ivory;g.lineWidth=3;g.stroke();text(o.first?'I':'II',0,0,r*.75,'#18252b');}g.restore();};
- const portrait=(side:number,x:number,y:number,w:number,h:number,zoom=1)=>{const avatar=o.avatars?.[side];const im=portraits[avatar==='SEEKER_RED'?1:avatar==='SEEKER_BLUE'?0:side];if(!im)return;const size=Math.min(w,h)*zoom;g.imageSmoothingEnabled=false;g.drawImage(im,x-size/2,y-size/2,size,size);};
+ const portrait=(side:number,x:number,y:number,w:number,h:number,zoom=1)=>{const im=portraits[side];if(!im)return;const size=Math.min(w,h)*zoom;g.imageSmoothingEnabled=true;g.drawImage(im,x-size/2,y-size/2,size,size);};
  if(t>=v.duration)return;
  fill((1-boardReveal)*.99);
  if(o.reduced&&t<v.land){portrait(0,W*.26,H*.36,480,440);portrait(1,W*.74,H*.36,480,440);text('DUEL',cx,H*.73,70,gold,'Georgia',12);return;}
@@ -64,7 +64,7 @@ function draw(c:HTMLCanvasElement,time:number,o:Options){
    const bottom=g.createLinearGradient(0,yy+70,0,yy+(M?280:H*.42));bottom.addColorStop(0,'#03081300');bottom.addColorStop(1,'#030813bd');g.fillStyle=bottom;g.fillRect(0,yy,W,H);
    g.restore();
    g.save();g.translate(dx,dy);g.globalAlpha=(1-exit);paintSeam(g,edge,t);g.restore();
-   if(t<1.4){g.save();g.globalAlpha=out((t-.3)/.4)*(1-smooth((t-1.1)/.28));const ny=M?yy+202:H*.81;text(s?'OPPONENT':'YOU',xx,ny,14*U,s?red:blue,'sans-serif',4);text(o.names?.[s]??(getLang()==='ja'?(s?'紅のシーカー':'蒼のシーカー'):(s?'RED SEEKER':'BLUE SEEKER')),xx,ny+33*U,25*U,ivory,'"Yu Mincho",serif',2);g.restore();}
+   if(t<1.4){g.save();g.globalAlpha=out((t-.3)/.4)*(1-smooth((t-1.1)/.28));const ny=M?yy+202:H*.81;text(s?'OPPONENT':'YOU',xx,ny,14*U,s?red:blue,'sans-serif',4);text(o.names?.[s]??(getLang()==='ja'?'シーカー':getLang()==='ko'?'시커':'SEEKER'),xx,ny+33*U,25*U,ivory,'"Yu Mincho",serif',2);g.restore();}
   }
   g.restore();
  }

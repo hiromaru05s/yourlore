@@ -389,7 +389,7 @@ export function floatNum(anchor: Element | null, text: string, kind: "dmg" | "he
 }
 
 export function hpFeedback(side: ViewSide, kind: "dmg" | "heal", amount: number): void {
-  const action=kind==='heal'?(amount>0?'heal':null):damageAction(amount);
+  const action=kind==='dmg'?damageAction(amount):null;
   if(action&&!fxSkip)playSeekerSide(side,action);
   const bar = document.getElementById("hpbar-" + side);
   const num = document.getElementById("hp-" + side);
@@ -785,7 +785,6 @@ function gainLabel(anchor: DOMRect, text: string, cls: string): HTMLElement {
 /** One shared impact: readout, added crystals, refraction and sound land together. */
 export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
   if(amount<=0||fxSkip||document.hidden)return;
-  playSeekerSide(side,'mana');
   const el=document.querySelector<HTMLElement>(`#portrait${side==='me'?'Me':'Opp'} .pt-mana`);if(!el)return;
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){sfx('mana');return;}
   const start=performance.now(),fromMax=Number(el.dataset.previousMaximum??el.dataset.maximum),fromMana=Number(el.dataset.previousMana??el.dataset.mana);
