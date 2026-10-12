@@ -1,0 +1,1 @@
+{"extends":"../../../client/tsconfig.json","include":["../../../client/src/dev/dual-ready-four/**/*.ts"],"compilerOptions":{"noEmit":true,"types":["vite/client"]}}

@@ -1,0 +1,46 @@
+{
+  "checks": [
+    "one character stays completely static at rest",
+    "preview displays exactly one hit frame then the original",
+    "390px preview fits",
+    "both board sides use the same gender-neutral portrait",
+    "controller hurt reacts once",
+    "controller heavy reacts once",
+    "controller mana keeps portrait static",
+    "controller heal keeps portrait static",
+    "controller brand keeps portrait static",
+    "rerender preserves the hit and return timer",
+    "mobile board framing",
+    "reduced motion stays static",
+    "skip settles hit",
+    "victory and defeat keep the static portrait",
+    "destroy releases players and timers",
+    "single character saves canonical ID and reloads",
+    "cancel preserves saved choice",
+    "settings save failure can retry",
+    "320px picker and Escape"
+  ],
+  "histories": {
+    "hurt": [
+      "idle:0",
+      "hurt:1",
+      "idle:0"
+    ],
+    "heavy": [
+      "idle:0",
+      "hurt:1",
+      "idle:0"
+    ],
+    "mana": [
+      "idle:0"
+    ],
+    "heal": [
+      "idle:0"
+    ],
+    "brand": [
+      "idle:0"
+    ]
+  },
+  "errors": [],
+  "retiredAssetRequests": []
+}

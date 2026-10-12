@@ -1,0 +1,3 @@
+106/106 passed; historical/browser scopes are explicit in production-suite.json
+Current Version ID: 133ec917-b351-47bf-b629-40dac9b80e30
+Deployed committed snapshot b376938fdb0301dc52d0ab07e7bd790b51f467e0 staging

@@ -1,0 +1,22 @@
+{
+  "approvedCommit": "1780de5f",
+  "selected": "new 04 / roots / zero-based 3",
+  "files": [
+    {
+      "file": "studyRenderer.ts",
+      "sha256": "0b5bf08007e20c1fd8ff595fa30d61234c8007b3a6916f3cbf0a3a64930b704b"
+    },
+    {
+      "file": "organicStudies.ts",
+      "sha256": "142dbdf4815811e3d4c3f865edcd06da36cbdb964a2ebbf2926c2ac4350500be"
+    },
+    {
+      "file": "richCatalog.ts",
+      "sha256": "b0198abf81e5c19d4b814ac1c0e4f46b06087e4f07cf77151fcfdd60317466fb"
+    },
+    {
+      "file": "renderer.ts",
+      "sha256": "f18d17c37764605fe55d577c6f6464e93faa35cc47a9bafc124fdc4a49ec27b2"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "selection": "01 菌糸の侵蝕 (full-card revision)",
+  "implementationCommit": "32842929",
+  "origin": "https://test.yourlore.xyz",
+  "deployedSource": "b376938fdb0301dc52d0ab07e7bd790b51f467e0",
+  "deploymentId": "d2b90982-8f35-4d94-ac37-aa5c9c4adb13",
+  "workerVersion": "133ec917-b351-47bf-b629-40dac9b80e30",
+  "trafficPercent": 100,
+  "deployedAt": "2026-10-12T15:26:57.380067Z",
+  "guard": "scripts/deploy-guard.mjs staging; deployment completed by the concurrent integrated release, which contains the selected implementation",
+  "localBrowserGroups": 16,
+  "localBrowserErrors": [],
+  "selectedMaterialParity": {
+    "surfaceMax": 0,
+    "results": [
+      {
+        "phase": 0.1,
+        "max": 0,
+        "changed": 0
+      },
+      {
+        "phase": 0.25,
+        "max": 0,
+        "changed": 0
+      },
+      {
+        "phase": 0.45,
+        "max": 0,
+        "changed": 0
+      },
+      {
+        "phase": 0.65,
+        "max": 0,
+        "changed": 0
+      },
+      {
+        "phase": 0.8,
+        "max": 0,
+        "changed": 0
+      },
+      {
+        "phase": 0.93,
+        "max": 0,
+        "changed": 0
+      }
+    ]
+  },
+  "deployedAssetHashMatches": 63,
+  "stagedBrowser": {
+    "nativeModule": "passed",
+    "fixtures": 2,
+    "runtime": "assets/runtime-FSoyCjM5.js",
+    "sha256": "2d47f3a7c0f4250115e5ed0073afe6394dbf853a9ffe3f90c69c0842363c0dc0",
+    "matchesIntegratedAudit": true,
+    "errors": [],
+    "fullBotBoard": "not completed: initial artwork/load timing and another release during checks"
+  },
+  "boundary": "Local real reducer/controller board: 16 groups. Current deployed module: two native-card fixtures with staged styles/art. Full staged BOT-board and authenticated online match were not completed.",
+  "initialVerifiedDeployment": {
+    "deployedSource": "3d31470446d514fcc97344e3c25ade5683b8f472",
+    "deploymentId": "76d8d559-a785-4783-b514-5d0fb2100a42",
+    "workerVersion": "8b1e4c6c-4d60-4e33-877c-5a47b3d84992",
+    "deployedAt": "2026-10-12T15:14:46.927174Z",
+    "deployedAssetHashMatches": 62
+  },
+  "latestAssetParityReference": "../2026-10-12-integration-audit/asset-parity.json",
+  "runtimeSourceUnchangedSinceImplementation": true
+}

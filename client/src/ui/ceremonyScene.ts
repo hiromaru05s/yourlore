@@ -6,6 +6,7 @@ const ease=(v:number)=>1-(1-clamp(v))**3;
 export function mountCeremony(host:HTMLElement,kind:CeremonyKind){
  if(typeof WebGL2RenderingContext==='undefined')return ()=>{};
  let renderer:T.WebGLRenderer;try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return ()=>{};}
+ renderer.debug.checkShaderErrors=import.meta.env?.DEV??true;
  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.setClearColor(0,0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;
  renderer.domElement.className='ceremony-canvas';renderer.domElement.setAttribute('aria-hidden','true');host.prepend(renderer.domElement);host.classList.add('has-ceremony');
  const scene=new T.Scene(),camera=new T.PerspectiveCamera(35,1,.1,40);camera.position.set(0,4.2,7.5);camera.lookAt(0,.1,0);

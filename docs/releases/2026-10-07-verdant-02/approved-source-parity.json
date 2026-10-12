@@ -1,0 +1,36 @@
+{
+  "approvedCommit": "79b0d6cd",
+  "files": [
+    {
+      "file": "richRenderer.ts",
+      "sha256": "08316109bcd1171a8d2e4a31cd9b20d6d0ab3be58b3c30ac705e41d0a8babc33"
+    },
+    {
+      "file": "leafWrap.ts",
+      "sha256": "1614b4207a92f40ea3233025cc5fa390e52e5cf396495f1bc02682d082df5dcc"
+    },
+    {
+      "file": "richCatalog.ts",
+      "sha256": "b0198abf81e5c19d4b814ac1c0e4f46b06087e4f07cf77151fcfdd60317466fb"
+    },
+    {
+      "file": "renderer.ts",
+      "sha256": "f18d17c37764605fe55d577c6f6464e93faa35cc47a9bafc124fdc4a49ec27b2"
+    },
+    {
+      "file": "catalog.ts",
+      "sha256": "eb80aeb024a8cb9d3da1f578996b070f13ed28e47dc0ebf1e7d4e6aa089b12f6"
+    }
+  ],
+  "selection": {
+    "ELF": 2,
+    "DARK_ELF": 2,
+    "HIGH_ELF": 2,
+    "ELDER_ELF_KING": 2,
+    "WORLD_TREE": 2,
+    "HALF_ELF": 1,
+    "VITAL2": null,
+    "VITAL3": null
+  },
+  "dew": "No changes"
+}

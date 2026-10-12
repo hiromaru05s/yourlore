@@ -1,0 +1,117 @@
+[
+  {
+    "name": "approved 01 motion unchanged for all four designs and reference",
+    "sampledTimes": 1001
+  },
+  {
+    "name": "four rendered comparison surfaces"
+  },
+  {
+    "name": "modal and entire board fit viewport; first open holds peak",
+    "box": {
+      "top": 154.390625,
+      "bottom": 900
+    },
+    "viewport": 900
+  },
+  {
+    "name": "both sides: visible effect pixels and native source",
+    "variant": 0,
+    "side": 0,
+    "pixels": 4608
+  },
+  {
+    "name": "both sides: visible effect pixels and native source",
+    "variant": 0,
+    "side": 1,
+    "pixels": 4158
+  },
+  {
+    "name": "both sides: visible effect pixels and native source",
+    "variant": 1,
+    "side": 0,
+    "pixels": 4283
+  },
+  {
+    "name": "both sides: visible effect pixels and native source",
+    "variant": 1,
+    "side": 1,
+    "pixels": 3858
+  },
+  {
+    "name": "both sides: visible effect pixels and native source",
+    "variant": 2,
+    "side": 0,
+    "pixels": 4513
+  },
+  {
+    "name": "both sides: visible effect pixels and native source",
+    "variant": 2,
+    "side": 1,
+    "pixels": 4063
+  },
+  {
+    "name": "both sides: visible effect pixels and native source",
+    "variant": 3,
+    "side": 0,
+    "pixels": 4772
+  },
+  {
+    "name": "both sides: visible effect pixels and native source",
+    "variant": 3,
+    "side": 1,
+    "pixels": 4294
+  },
+  {
+    "name": "original 01 available on actual board"
+  },
+  {
+    "name": "pre-roll before dice and restores",
+    "result": 2,
+    "elapsed": 1008.7000000029802
+  },
+  {
+    "name": "pre-roll before dice and restores",
+    "result": 5,
+    "elapsed": 1004.4000000022352
+  },
+  {
+    "name": "all four cancel and settle without source hiding"
+  },
+  {
+    "name": "granted taunt plus reduced motion plus two sources"
+  },
+  {
+    "name": "repeat stable resources",
+    "before": {
+      "textures": 10,
+      "geometries": 94,
+      "calls": 34,
+      "triangles": 74036
+    },
+    "after": {
+      "textures": 10,
+      "geometries": 94,
+      "calls": 34,
+      "triangles": 74036
+    }
+  },
+  {
+    "name": "responsive board visible",
+    "width": 390,
+    "height": 844,
+    "boardHeight": 656
+  },
+  {
+    "name": "responsive board visible",
+    "width": 320,
+    "height": 720,
+    "boardHeight": 532
+  },
+  {
+    "name": "responsive board visible",
+    "width": 844,
+    "height": 390,
+    "boardHeight": 194.21875
+  }
+]

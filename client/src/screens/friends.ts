@@ -56,8 +56,10 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
   let pollTimer = 0;
   let knownChallenges = new Set<string>();
   let challengeModalOpen = false;
+  const modals=new Set<HTMLElement>();
+  let outgoingId:string|undefined;
 
-  const cleanup = (): void => { dead = true; clearTimeout(listTimer); clearTimeout(pollTimer); };
+  const cleanup = (): void => { dead = true; clearTimeout(listTimer); clearTimeout(pollTimer);modals.forEach(n=>n.remove());modals.clear();if(outgoingId){void api.challengeCancel(outgoingId);outgoingId=undefined;} };
 
   // ---- add friend ----
   const addFriend = (): void => {
@@ -73,6 +75,8 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
   };
   (wrap.querySelector("#frAdd") as HTMLElement).onclick = addFriend;
   (wrap.querySelector("#frq") as HTMLInputElement).onkeydown = (e) => { if (e.key === "Enter") addFriend(); };
+
+  const showError=(error:unknown):void=>{if(dead)return;msg.textContent=(error as Error).message;sfx("error");};
 
   // ---- render ----
   const row = (f: FriendEntry, actions: string): string => `
@@ -108,11 +112,11 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
         ${d.outgoing.map((f) => row(f, "")).join("")}
       </section>` : ""}
     `;
-    lists.querySelectorAll("[data-acc]").forEach((b) => (b as HTMLElement).onclick = () => { void api.friendRespond((b as HTMLElement).dataset.acc!, true).then(() => { sfx("pop"); void refresh(); }); });
-    lists.querySelectorAll("[data-dec]").forEach((b) => (b as HTMLElement).onclick = () => { void api.friendRespond((b as HTMLElement).dataset.dec!, false).then(() => void refresh()); });
+    lists.querySelectorAll("[data-acc]").forEach((b) => (b as HTMLElement).onclick = () => { void api.friendRespond((b as HTMLElement).dataset.acc!, true).then(() => { if(dead)return;sfx("pop"); void refresh(); }).catch(showError); });
+    lists.querySelectorAll("[data-dec]").forEach((b) => (b as HTMLElement).onclick = () => { void api.friendRespond((b as HTMLElement).dataset.dec!, false).then(() => void refresh()).catch(showError); });
     lists.querySelectorAll("[data-rm]").forEach((b) => (b as HTMLElement).onclick = async () => {
       const ok = await confirmDialog({ title: t("friends.remove"), body: t("friends.remove.confirm"), confirm: t("common.yes"), cancel: t("common.no"), danger: true });
-      if (ok) void api.friendRemove((b as HTMLElement).dataset.rm!).then(() => void refresh());
+      if (ok&&!dead) void api.friendRemove((b as HTMLElement).dataset.rm!).then(() => void refresh()).catch(showError);
     });
     lists.querySelectorAll("[data-pf]").forEach((b) => (b as HTMLElement).onclick = () => void showProfileModal((b as HTMLElement).dataset.pf!));
     lists.querySelectorAll("[data-ch]").forEach((b) => (b as HTMLElement).onclick = () => sendChallenge((b as HTMLElement).dataset.ch!, (b as HTMLElement).dataset.name!));
@@ -121,9 +125,9 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
   // ---- incoming challenge handling ----
   const maybeShowChallenge = (d: FriendsData): void => {
     const fresh = d.challenges.filter((c) => !knownChallenges.has(c.id));
-    d.challenges.forEach((c) => knownChallenges.add(c.id));
     if (!fresh.length || challengeModalOpen) return;
     const c = fresh[fresh.length - 1];
+    knownChallenges.add(c.id);
     challengeModalOpen = true;
     sfx("match");
     const ov = document.createElement("div");
@@ -137,14 +141,16 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
           <button class="btn btn-gold" id="chYes">${t("friends.accept")}</button>
         </div>
       </div>`;
-    document.body.appendChild(ov);
-    const close = (): void => { ov.remove(); challengeModalOpen = false; };
+    document.body.appendChild(ov);modals.add(ov);
+    const close = (): void => { ov.remove();modals.delete(ov); challengeModalOpen = false; };
     (ov.querySelector("#chNo") as HTMLElement).onclick = () => { void api.challengeRespond(c.id, false).catch(() => null); close(); };
     (ov.querySelector("#chYes") as HTMLElement).onclick = () => {
+      (ov.querySelector("#chYes") as HTMLButtonElement).disabled=true;
       void api.challengeRespond(c.id, true).then((r) => {
         close();
+        if(dead)return;
         if (r.roomId) { cleanup(); sfx("match"); app.onlineGame(r.roomId, (r.you ?? 1) as 0 | 1, r.oppName ?? "?"); }
-      }).catch(() => { close(); sfx("error"); void refresh(); });
+      }).catch(() => { close(); if(dead)return;knownChallenges.delete(c.id);sfx("error"); void refresh(); });
     };
   };
 
@@ -152,6 +158,7 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
   const sendChallenge = (uid: string, name: string): void => {
     api.challenge(uid).then(({ id }) => {
       if (dead) { void api.challengeCancel(id).catch(() => {}); return; }
+      outgoingId=id;
       sfx("pop");
       const ov = document.createElement("div");
       ov.className = "overlay";
@@ -161,12 +168,12 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
           <p class="fr-wait"><span class="spinner"></span> ${t("friends.challenge.waiting")}</p>
           <div class="modal-row"><button class="btn btn-ghost btn-block" id="chCancel">${t("common.cancel")}</button></div>
         </div>`;
-      document.body.appendChild(ov);
+      document.body.appendChild(ov);modals.add(ov);
       let stopped = false;
       const stop = (note?: string): void => {
         stopped = true;
         clearTimeout(pollTimer);
-        ov.remove();
+        ov.remove();modals.delete(ov);outgoingId=undefined;
         if (note) { msg.textContent = note; sfx("error"); }
       };
       (ov.querySelector("#chCancel") as HTMLElement).onclick = () => { void api.challengeCancel(id); stop(); };
@@ -175,12 +182,12 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
         api.challengePoll(id).then((r) => {
           if (stopped || dead) return;
           if (r.status === "accepted" && r.roomId) {
-            stopped = true; ov.remove(); cleanup(); sfx("match");
+            stopped = true;outgoingId=undefined; ov.remove(); cleanup(); sfx("match");
             app.onlineGame(r.roomId, (r.you ?? 0) as 0 | 1, r.oppName ?? name);
           } else if (r.status === "declined") stop(t("friends.challenge.declined"));
           else if (r.status === "expired" || r.status === "cancelled") stop(t("friends.challenge.expired"));
           else pollTimer = window.setTimeout(poll, POLL_CHALLENGE_MS);
-        }).catch(() => { pollTimer = window.setTimeout(poll, POLL_CHALLENGE_MS); });
+        }).catch(() => { if(!stopped&&!dead)pollTimer = window.setTimeout(poll, POLL_CHALLENGE_MS); });
       };
       pollTimer = window.setTimeout(poll, POLL_CHALLENGE_MS);
     }).catch((e) => { msg.textContent = (e as Error).message; sfx("error"); });

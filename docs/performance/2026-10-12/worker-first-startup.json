@@ -1,0 +1,1375 @@
+{
+  "homeMs": 8665,
+  "sceneMs": 20377,
+  "readyMs": 34361,
+  "top": [
+    {
+      "fn": "(idle)",
+      "url": "",
+      "hits": 1911
+    },
+    {
+      "fn": "(program)",
+      "url": "",
+      "hits": 348
+    },
+    {
+      "fn": "getProgramInfoLog",
+      "url": "",
+      "hits": 100
+    },
+    {
+      "fn": "getContext",
+      "url": "",
+      "hits": 63
+    },
+    {
+      "fn": "setSize",
+      "url": "http://127.0.0.1:5625/assets/RoomEnvironment-DASCOWwv.js",
+      "hits": 58
+    },
+    {
+      "fn": "createObjectURL",
+      "url": "",
+      "hits": 54
+    },
+    {
+      "fn": "getProgramInfoLog",
+      "url": "",
+      "hits": 42
+    },
+    {
+      "fn": "getPropertyValue",
+      "url": "",
+      "hits": 38
+    },
+    {
+      "fn": "getProgramInfoLog",
+      "url": "",
+      "hits": 37
+    },
+    {
+      "fn": "Blob",
+      "url": "",
+      "hits": 36
+    },
+    {
+      "fn": "getProgramInfoLog",
+      "url": "",
+      "hits": 33
+    },
+    {
+      "fn": "texSubImage2D",
+      "url": "",
+      "hits": 30
+    },
+    {
+      "fn": "(garbage collector)",
+      "url": "",
+      "hits": 27
+    },
+    {
+      "fn": "layoutHand",
+      "url": "http://127.0.0.1:5625/assets/layout-CSX_k4un.js",
+      "hits": 21
+    },
+    {
+      "fn": "getProgramInfoLog",
+      "url": "",
+      "hits": 17
+    },
+    {
+      "fn": "getShaderInfoLog",
+      "url": "",
+      "hits": 16
+    },
+    {
+      "fn": "getProgramInfoLog",
+      "url": "",
+      "hits": 15
+    },
+    {
+      "fn": "getProgramInfoLog",
+      "url": "",
+      "hits": 12
+    }
+  ],
+  "longTasks": [
+    {
+      "start": 2294.7000000001863,
+      "duration": 53
+    },
+    {
+      "start": 2816.7000000001863,
+      "duration": 63
+    },
+    {
+      "start": 3574.2000000001863,
+      "duration": 58
+    },
+    {
+      "start": 5561.9000000003725,
+      "duration": 60
+    },
+    {
+      "start": 9817.700000000186,
+      "duration": 1996
+    },
+    {
+      "start": 14826.299999999814,
+      "duration": 148
+    },
+    {
+      "start": 15888.700000000186,
+      "duration": 361
+    },
+    {
+      "start": 16258.799999999814,
+      "duration": 253
+    },
+    {
+      "start": 18120.5,
+      "duration": 600
+    },
+    {
+      "start": 18738.5,
+      "duration": 105
+    },
+    {
+      "start": 18863.700000000186,
+      "duration": 85
+    },
+    {
+      "start": 19127.900000000373,
+      "duration": 153
+    },
+    {
+      "start": 19431,
+      "duration": 388
+    },
+    {
+      "start": 19830.700000000186,
+      "duration": 286
+    },
+    {
+      "start": 21633.5,
+      "duration": 350
+    },
+    {
+      "start": 22431.900000000373,
+      "duration": 52
+    },
+    {
+      "start": 22517.200000000186,
+      "duration": 81
+    },
+    {
+      "start": 22827.900000000373,
+      "duration": 333
+    },
+    {
+      "start": 23298.400000000373,
+      "duration": 50
+    },
+    {
+      "start": 23428.10000000056,
+      "duration": 68
+    },
+    {
+      "start": 27127.60000000056,
+      "duration": 107
+    },
+    {
+      "start": 27299.799999999814,
+      "duration": 87
+    },
+    {
+      "start": 27411.900000000373,
+      "duration": 52
+    },
+    {
+      "start": 27860.60000000056,
+      "duration": 54
+    },
+    {
+      "start": 27931.200000000186,
+      "duration": 100
+    },
+    {
+      "start": 28160.900000000373,
+      "duration": 56
+    },
+    {
+      "start": 28627.900000000373,
+      "duration": 127
+    },
+    {
+      "start": 29877.60000000056,
+      "duration": 51
+    },
+    {
+      "start": 30211.200000000186,
+      "duration": 209
+    },
+    {
+      "start": 30479.299999999814,
+      "duration": 139
+    },
+    {
+      "start": 30660.900000000373,
+      "duration": 77
+    },
+    {
+      "start": 31827.400000000373,
+      "duration": 581
+    },
+    {
+      "start": 37048.90000000037,
+      "duration": 1649
+    },
+    {
+      "start": 38717.90000000037,
+      "duration": 234
+    },
+    {
+      "start": 42849.60000000056,
+      "duration": 126
+    },
+    {
+      "start": 43841.40000000037,
+      "duration": 68
+    },
+    {
+      "start": 43981.40000000037,
+      "duration": 55
+    },
+    {
+      "start": 44309.200000000186,
+      "duration": 208
+    },
+    {
+      "start": 44517.5,
+      "duration": 69
+    },
+    {
+      "start": 44615,
+      "duration": 105
+    },
+    {
+      "start": 44736.60000000056,
+      "duration": 50
+    },
+    {
+      "start": 45077,
+      "duration": 205
+    },
+    {
+      "start": 45687.799999999814,
+      "duration": 161
+    }
+  ],
+  "assets": [
+    {
+      "url": "http://127.0.0.1:5625/art/brand/lore-logo-transparent.webp",
+      "bytes": 32540,
+      "duration": 81.59999999962747
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/stage-v1/stage.webp",
+      "bytes": 310306,
+      "duration": 393.09999999962747
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/main-Cuhx4m3r.js",
+      "bytes": 55792,
+      "duration": 598.0999999996275
+    },
+    {
+      "url": "https://fonts.googleapis.com/css2?family=Alegreya:wght@500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;600;700;800&display=swap",
+      "bytes": 212590,
+      "duration": 683
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/atelierThemes-DM29k3s-.js",
+      "bytes": 2093,
+      "duration": 392.20000000018626
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/RoomEnvironment-DASCOWwv.js",
+      "bytes": 160898,
+      "duration": 961.1999999992549
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/modal-CKfGAd67.js",
+      "bytes": 393782,
+      "duration": 1489.199999999255
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/renderDensity-eCqR3GeM.js",
+      "bytes": 545,
+      "duration": 590.0999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/modal-BCG4ETYd.css",
+      "bytes": 51010,
+      "duration": 622.4000000003725
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/main-DsQxvfwJ.css",
+      "bytes": 34515,
+      "duration": 919.4000000003725
+    },
+    {
+      "url": "https://us.i.posthog.com/static/array.js",
+      "bytes": 0,
+      "duration": 1214.6000000005588
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/seekers/menu-v1/blue.webp",
+      "bytes": 46460,
+      "duration": 382.3999999994412
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/stage-v1/sigil.webp",
+      "bytes": 182326,
+      "duration": 440
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards-sm/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+      "bytes": 21540,
+      "duration": 377.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards-sm/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+      "bytes": 13166,
+      "duration": 377.80000000074506
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/arrow.png",
+      "bytes": 58142,
+      "duration": 377.8999999994412
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/shard-simple-v1.png",
+      "bytes": 8689,
+      "duration": 378
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/home.png",
+      "bytes": 80202,
+      "duration": 559.7000000001863
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/duel.png",
+      "bytes": 71322,
+      "duration": 419.69999999925494
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/bot.png",
+      "bytes": 104864,
+      "duration": 234.40000000037253
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/deck.png",
+      "bytes": 112185,
+      "duration": 238.70000000018626
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/cards.png",
+      "bytes": 98754,
+      "duration": 235.79999999981374
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/trophy.png",
+      "bytes": 102943,
+      "duration": 458.6000000005588
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/friends.png",
+      "bytes": 99511,
+      "duration": 474.59999999962747
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/shop.png",
+      "bytes": 112425,
+      "duration": 390.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/book.png",
+      "bytes": 88867,
+      "duration": 400.59999999962747
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/gift.png",
+      "bytes": 130644,
+      "duration": 404.1000000005588
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/mail.png",
+      "bytes": 112047,
+      "duration": 381.90000000037253
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/settings.png",
+      "bytes": 122797,
+      "duration": 437.40000000037253
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/shard.png",
+      "bytes": 61818,
+      "duration": 435.3999999994412
+    },
+    {
+      "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+      "bytes": 0,
+      "duration": 399.20000000018626
+    },
+    {
+      "url": "https://us.i.posthog.com/flags/?v=2",
+      "bytes": 0,
+      "duration": 640
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/profile.png",
+      "bytes": 84989,
+      "duration": 273.8999999994412
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/sleeve.png",
+      "bytes": 105579,
+      "duration": 301.8999999994412
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/menu.png",
+      "bytes": 69123,
+      "duration": 304
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/check.png",
+      "bytes": 49205,
+      "duration": 136
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/close.png",
+      "bytes": 87971,
+      "duration": 163.29999999981374
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/search.png",
+      "bytes": 76744,
+      "duration": 154.30000000074506
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/bell.png",
+      "bytes": 79670,
+      "duration": 136.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/sound.png",
+      "bytes": 73780,
+      "duration": 135.09999999962747
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/language.png",
+      "bytes": 85415,
+      "duration": 95.20000000018626
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/history.png",
+      "bytes": 86650,
+      "duration": 102.79999999981374
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/v2/edit.png",
+      "bytes": 53802,
+      "duration": 38.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/active-v1/home.webp",
+      "bytes": 28972,
+      "duration": 40.39999999944121
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/active-v1/deck.webp",
+      "bytes": 32044,
+      "duration": 111.70000000018626
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/active-v1/cards.webp",
+      "bytes": 32596,
+      "duration": 116.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/active-v1/trophy.webp",
+      "bytes": 36054,
+      "duration": 113.1000000005588
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/active-v1/friends.webp",
+      "bytes": 29746,
+      "duration": 106
+    },
+    {
+      "url": "https://us-assets.i.posthog.com/static/1.438.4/surveys.js",
+      "bytes": 0,
+      "duration": 67.59999999962747
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/active-v1/shop.webp",
+      "bytes": 29860,
+      "duration": 80.90000000037253
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/icons/active-v1/book.webp",
+      "bytes": 33070,
+      "duration": 80.20000000018626
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/lounge/v1/library.webp",
+      "bytes": 370834,
+      "duration": 255.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/seekers/menu-v1/red.webp",
+      "bytes": 53898,
+      "duration": 73.59999999962747
+    },
+    {
+      "url": "http://127.0.0.1:5625/favicon.ico",
+      "bytes": 0,
+      "duration": 136.79999999981374
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v3/click-1.mp3",
+      "bytes": 2339,
+      "duration": 82.90000000037253
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v3/click-2.mp3",
+      "bytes": 2548,
+      "duration": 81.20000000018626
+    },
+    {
+      "url": "http://127.0.0.1:5625/music/yohaku-to-zankyo.mp3",
+      "bytes": 0,
+      "duration": 6174.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v3/click-3.mp3",
+      "bytes": 2653,
+      "duration": 223.19999999925494
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v3/pop.mp3",
+      "bytes": 2129,
+      "duration": 222.3999999994412
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v3/error.mp3",
+      "bytes": 2312,
+      "duration": 31.399999999441206
+    },
+    {
+      "url": "http://127.0.0.1:5625/favicon.ico",
+      "bytes": 0,
+      "duration": 8.399999999441206
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/npcs/v2/lumi.webp",
+      "bytes": 234350,
+      "duration": 118.09999999962747
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/npcs/v2/vera.webp",
+      "bytes": 222032,
+      "duration": 144.20000000018626
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/npcs/v2/noel.webp",
+      "bytes": 223320,
+      "duration": 150.59999999962747
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/npcs/v2/sion.webp",
+      "bytes": 217870,
+      "duration": 154.09999999962747
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/game-B7TaQA4w.js",
+      "bytes": 4447,
+      "duration": 243.6000000005588
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/layout-CSX_k4un.js",
+      "bytes": 49076,
+      "duration": 324.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/handGeometry-Bz96hXgQ.js",
+      "bytes": 945,
+      "duration": 200
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/layout-BgPxMCBL.css",
+      "bytes": 1394,
+      "duration": 248.09999999962747
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/rankUp.mp3",
+      "bytes": 4028,
+      "duration": 73.79999999981374
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/rankDown.mp3",
+      "bytes": 3767,
+      "duration": 89
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/duelScene-BXeJyT6n.js",
+      "bytes": 24794,
+      "duration": 395.59999999962747
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/baseFurniture-D3AGgZsg.js",
+      "bytes": 1797,
+      "duration": 377.90000000037253
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/materials-V56iRxhp.js",
+      "bytes": 4126,
+      "duration": 416.29999999981374
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/sleeve-CFOVayP7.js",
+      "bytes": 3158,
+      "duration": 470.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "bytes": 125,
+      "duration": 393.70000000018626
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/libraryAssets-Cc8syLHU.js",
+      "bytes": 13711,
+      "duration": 574.4000000003725
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/BufferGeometryUtils-jCDbdftl.js",
+      "bytes": 1468,
+      "duration": 1056.3999999994412
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/pileModels-DhAo1YzR.js",
+      "bytes": 1081,
+      "duration": 1026.8999999994412
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/cursors/normal.svg",
+      "bytes": 295,
+      "duration": 947.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/cursors/loading.svg",
+      "bytes": 499,
+      "duration": 1050.2999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/cursors/hover.svg",
+      "bytes": 358,
+      "duration": 822
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/refined/button-idle.png",
+      "bytes": 1004990,
+      "duration": 1618.1000000005588
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/duel-controls/v1/surrender.png",
+      "bytes": 104041,
+      "duration": 1080.9000000003725
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/duel-controls/v1/help.png",
+      "bytes": 114712,
+      "duration": 1081.4000000003725
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/duel-controls/v1/sound.png",
+      "bytes": 96043,
+      "duration": 1070.3999999994412
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/duel-controls/v1/log.png",
+      "bytes": 97563,
+      "duration": 1082.0999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/vfx/purchase-air/crystal-72.png",
+      "bytes": 2854005,
+      "duration": 26048.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v7/play.mp3",
+      "bytes": 6302,
+      "duration": 1061.0999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/refined/portrait-opp.png",
+      "bytes": 692936,
+      "duration": 1954.1000000005588
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/mana/filled.svg",
+      "bytes": 770,
+      "duration": 1965.2999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/frames/sleeve_default.webp",
+      "bytes": 99362,
+      "duration": 2415.600000000559
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/refined/deck-5.png",
+      "bytes": 1409146,
+      "duration": 2928.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/refined/stat-cost.png",
+      "bytes": 1398002,
+      "duration": 2751.7999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/refined/shelf-case.png",
+      "bytes": 1654651,
+      "duration": 2733.2000000001863
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/release/rift-purple07-idle16.png",
+      "bytes": 586297,
+      "duration": 1558.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/base-mon-ui.webp",
+      "bytes": 300102,
+      "duration": 1926.5999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/cost-ui.webp",
+      "bytes": 50962,
+      "duration": 1949
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/attack-ui.webp",
+      "bytes": 57542,
+      "duration": 1057.2999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/health-ui.webp",
+      "bytes": 51204,
+      "duration": 1335.3999999994412
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/base-spell-ui.webp",
+      "bytes": 289600,
+      "duration": 1888.4000000003725
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/base-quest-ui.webp",
+      "bytes": 271106,
+      "duration": 2414.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/plaque-ui.webp",
+      "bytes": 13152,
+      "duration": 1314.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/cursors/blocked.svg",
+      "bytes": 435,
+      "duration": 1924.3999999994412
+    },
+    {
+      "url": "http://127.0.0.1:5625/fonts/rift-records/CormorantGaramond-Medium-numerals.ttf",
+      "bytes": 10132,
+      "duration": 507.69999999925494
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/seekers/v2/mask-opp.png",
+      "bytes": 10579,
+      "duration": 2422.9000000003725
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/seekers/v2/mask-self.png",
+      "bytes": 8299,
+      "duration": 2353.4000000003725
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/refined/portrait-self.png",
+      "bytes": 584472,
+      "duration": 2679.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/models/reading-board/v1/fonts/DejaVuSerif.ttf",
+      "bytes": 380132,
+      "duration": 963.7999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/duel-start.mp3",
+      "bytes": 6654,
+      "duration": 2412.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/coinToss.mp3",
+      "bytes": 2337,
+      "duration": 2580.2999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/renderer-DmOD7LyN.js",
+      "bytes": 9112,
+      "duration": 2643.2000000001863
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v8/summon.mp3",
+      "bytes": 6094,
+      "duration": 2646.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/seekers/v2/blue-idle.webp",
+      "bytes": 266080,
+      "duration": 12776.200000000186
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards-sm/EGG_HUNTER.webp?v=20260910-theme-identity-v3",
+      "bytes": 23964,
+      "duration": 2692.699999999255
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/passives/v2/counter.svg",
+      "bytes": 830,
+      "duration": 2664.5999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards-sm/TSO1.webp?v=20260910-theme-identity-v3",
+      "bytes": 28820,
+      "duration": 2693.7000000001863
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards-sm/DOUBLE_UP.webp?v=20260910-theme-identity-v3",
+      "bytes": 39694,
+      "duration": 2665.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards-sm/TGE3.webp?v=20260910-theme-identity-v3",
+      "bytes": 41282,
+      "duration": 2846.0999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards-sm/GM6_0.webp?v=20260910-theme-identity-v3",
+      "bytes": 32724,
+      "duration": 2846.2000000001863
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards-sm/NT_SEAL5.webp?v=20260910-theme-identity-v3",
+      "bytes": 27846,
+      "duration": 2662.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/passives/v2/ambush.svg",
+      "bytes": 846,
+      "duration": 2692.7999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards-sm/E2.webp?v=20260910-theme-identity-v3",
+      "bytes": 22994,
+      "duration": 2842.7999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards-sm/GEM_RAIN.webp?v=20260910-theme-identity-v3",
+      "bytes": 39760,
+      "duration": 2843
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards-sm/DARK_ELF.webp?v=20260910-theme-identity-v3",
+      "bytes": 31008,
+      "duration": 2845.7999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards-sm/Q_TOWN.webp?v=20260910-theme-identity-v3",
+      "bytes": 37638,
+      "duration": 2691.4000000003725
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards-sm/STARTER_CHEST.webp?v=20260910-theme-identity-v3",
+      "bytes": 22350,
+      "duration": 2693.2999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/seeker-blue.png",
+      "bytes": 2148692,
+      "duration": 21663
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/seeker-red.png",
+      "bytes": 2247659,
+      "duration": 21664
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/rankPromote.mp3",
+      "bytes": 8641,
+      "duration": 2873.199999999255
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+      "bytes": 93660,
+      "duration": 14305.700000000186
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards/STARTER_CHEST.webp?v=20260910-theme-identity-v3",
+      "bytes": 148034,
+      "duration": 16321.899999999441
+    },
+    {
+      "url": "http://127.0.0.1:5625/models/reading-board/v1/board.glb?revision=recessed-rim-v3-20260929",
+      "bytes": 3717872,
+      "duration": 5408.399999999441
+    },
+    {
+      "url": "http://127.0.0.1:5625/models/reading-board/v1/mana-tray.glb",
+      "bytes": 123440,
+      "duration": 1694.5999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/models/reading-board/v1/mana-counter.glb",
+      "bytes": 131788,
+      "duration": 1742.3999999994412
+    },
+    {
+      "url": "http://127.0.0.1:5625/models/reading-board/v1/mana-crystal-ready.glb",
+      "bytes": 41896,
+      "duration": 1696.2000000001863
+    },
+    {
+      "url": "http://127.0.0.1:5625/models/reading-board/v1/mana-crystal-spent.glb",
+      "bytes": 41892,
+      "duration": 1695.199999999255
+    },
+    {
+      "url": "http://127.0.0.1:5625/models/reading-board/v1/turn-button.glb",
+      "bytes": 347068,
+      "duration": 1878.199999999255
+    },
+    {
+      "url": "http://127.0.0.1:5625/models/reading-board/v1/timer-inserts.glb",
+      "bytes": 90936,
+      "duration": 1859.4000000003725
+    },
+    {
+      "url": "http://127.0.0.1:5625/models/reading-board/v1/reroll-button.glb",
+      "bytes": 454340,
+      "duration": 1888.8999999994412
+    },
+    {
+      "url": "http://127.0.0.1:5625/models/reading-board/v1/crystal-optics.json",
+      "bytes": 1167,
+      "duration": 1874.7999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/models/reading-board/v1/deck-place.glb",
+      "bytes": 1194232,
+      "duration": 2438.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/models/reading-board/v1/shelf.glb",
+      "bytes": 1871424,
+      "duration": 2615.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/models/reading-board/v1/market.glb",
+      "bytes": 1668300,
+      "duration": 2637.5999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/models/reading-board/v1/supply.glb",
+      "bytes": 1594152,
+      "duration": 2613.0999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/ceremonyScene-BHINAe7f.js",
+      "bytes": 3965,
+      "duration": 2038.9000000003725
+    },
+    {
+      "url": "http://127.0.0.1:5625/assets/paperDraw-Dd4ll3kX.js",
+      "bytes": 4459,
+      "duration": 2378.7000000001863
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/base-mon.png",
+      "bytes": 1817892,
+      "duration": 3945.7999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/field-mon-ui.webp",
+      "bytes": 212580,
+      "duration": 2568.600000000559
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/base-spell.png",
+      "bytes": 1830510,
+      "duration": 6539.4000000003725
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/field-spell-ui.webp",
+      "bytes": 222476,
+      "duration": 2908.699999999255
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/base-quest.png",
+      "bytes": 1550609,
+      "duration": 6539.5999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/frames/sleeve_default.webp",
+      "bytes": 99362,
+      "duration": 15313.299999999814
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/attack-1.mp3",
+      "bytes": 3903,
+      "duration": 2627.2999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/field-quest-ui.webp",
+      "bytes": 214834,
+      "duration": 2757
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/base-trap-ui.webp",
+      "bytes": 290194,
+      "duration": 3350.399999999441
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/base-trap.png",
+      "bytes": 1713270,
+      "duration": 10400.299999999814
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/coinLand.mp3",
+      "bytes": 2598,
+      "duration": 3555.7000000001863
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v4/draw-3.mp3",
+      "bytes": 4112,
+      "duration": 3279.7000000001863
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/attack-2.mp3",
+      "bytes": 3799,
+      "duration": 3736.0999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/field-trap-ui.webp",
+      "bytes": 231004,
+      "duration": 3214.600000000559
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/attack-3.mp3",
+      "bytes": 3851,
+      "duration": 2479.2000000001863
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/shield-ui.webp",
+      "bytes": 52092,
+      "duration": 3194.2999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/dew-ui.webp",
+      "bytes": 44040,
+      "duration": 2669.7000000001863
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/infinity-ui.webp",
+      "bytes": 23432,
+      "duration": 2452.399999999441
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/biblion/modular/brand-seal-ui.png",
+      "bytes": 1451394,
+      "duration": 9103.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/impact-1.mp3",
+      "bytes": 3693,
+      "duration": 1915
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/impact-2.mp3",
+      "bytes": 3771,
+      "duration": 1500.5999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/seekers/v2/mask-self.png",
+      "bytes": 8299,
+      "duration": 810.5999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/seekers/v2/mask-opp.png",
+      "bytes": 10579,
+      "duration": 609.7999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/passives/v2/dual.svg",
+      "bytes": 888,
+      "duration": 1022.7000000001863
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/passives/v2/aura.svg",
+      "bytes": 909,
+      "duration": 127
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/passives/v2/void.svg",
+      "bytes": 864,
+      "duration": 1609.9000000003725
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/passives/v2/guts.svg",
+      "bytes": 887,
+      "duration": 1642.2000000001863
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/passives/v2/decay.svg",
+      "bytes": 926,
+      "duration": 1614.8999999994412
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/passives/v2/majesty.svg",
+      "bytes": 861,
+      "duration": 1855
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/passives/v2/taunt.svg",
+      "bytes": 863,
+      "duration": 2612.399999999441
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/impact-3.mp3",
+      "bytes": 4242,
+      "duration": 2614.9000000003725
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/damage.mp3",
+      "bytes": 3719,
+      "duration": 2319.899999999441
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/passives/v2/evade.svg",
+      "bytes": 980,
+      "duration": 2527.7000000001863
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/passives/v2/relic.svg",
+      "bytes": 958,
+      "duration": 1628.800000000745
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/seekers/v2/red-idle.webp",
+      "bytes": 312986,
+      "duration": 2970.899999999441
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/coin-toss/coin-option-1-front.png",
+      "bytes": 151186,
+      "duration": 2674.4000000003725
+    },
+    {
+      "url": "http://127.0.0.1:5625/ui/coin-toss/coin-option-1-back.png",
+      "bytes": 150999,
+      "duration": 1879.699999999255
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/heal.mp3",
+      "bytes": 10629,
+      "duration": 2471.199999999255
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/death.mp3",
+      "bytes": 6198,
+      "duration": 2458.600000000559
+    },
+    {
+      "url": "http://127.0.0.1:5625/frames/sleeve_default.webp",
+      "bytes": 99362,
+      "duration": 1443.9000000003725
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/trapSet.mp3",
+      "bytes": 4191,
+      "duration": 3261.800000000745
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/trap.mp3",
+      "bytes": 4423,
+      "duration": 3280.399999999441
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards/EGG_HUNTER.webp?v=20260910-theme-identity-v3",
+      "bytes": 145900,
+      "duration": 2892.100000000559
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards/TSO1.webp?v=20260910-theme-identity-v3",
+      "bytes": 182836,
+      "duration": 902
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v4/buy.mp3",
+      "bytes": 13061,
+      "duration": 517.0999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/mana.mp3",
+      "bytes": 7289,
+      "duration": 788.3999999994412
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/turn.mp3",
+      "bytes": 3976,
+      "duration": 848.7999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards/DOUBLE_UP.webp?v=20260910-theme-identity-v3",
+      "bytes": 586150,
+      "duration": 2055.0999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards/TGE3.webp?v=20260910-theme-identity-v3",
+      "bytes": 245398,
+      "duration": 1686.7999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/win.mp3",
+      "bytes": 13375,
+      "duration": 941.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/lose.mp3",
+      "bytes": 8107,
+      "duration": 1273.6000000005588
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/drawGame.mp3",
+      "bytes": 8839,
+      "duration": 379.90000000037253
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards/GM6_0.webp?v=20260910-theme-identity-v3",
+      "bytes": 184916,
+      "duration": 1083.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v4/match.mp3",
+      "bytes": 25745,
+      "duration": 120.29999999981374
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v4/coin.mp3",
+      "bytes": 8232,
+      "duration": 1277.5999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards/NT_SEAL5.webp?v=20260910-theme-identity-v3",
+      "bytes": 171524,
+      "duration": 1584.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/facehit.mp3",
+      "bytes": 4213,
+      "duration": 1389.0999999996275
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards/E2.webp?v=20260910-theme-identity-v3",
+      "bytes": 126870,
+      "duration": 875.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/mimic.mp3",
+      "bytes": 5415,
+      "duration": 767.5
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/mana-pay.mp3",
+      "bytes": 3695,
+      "duration": 665.7999999998137
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards/Q_TOWN.webp?v=20260910-theme-identity-v3",
+      "bytes": 524700,
+      "duration": 4773.899999999441
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards/DARK_ELF.webp?v=20260910-theme-identity-v3",
+      "bytes": 177580,
+      "duration": 2413.399999999441
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/void.mp3",
+      "bytes": 6613,
+      "duration": 1978.4000000003725
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/shuffle.mp3",
+      "bytes": 10580,
+      "duration": 1835.199999999255
+    },
+    {
+      "url": "http://127.0.0.1:5625/music/clash-of-blades.mp3",
+      "bytes": 180393,
+      "duration": 2261.7000000001863
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/cards/GEM_RAIN.webp?v=20260910-theme-identity-v3",
+      "bytes": 237638,
+      "duration": 2275.600000000559
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/discard.mp3",
+      "bytes": 5417,
+      "duration": 1983.3999999994412
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/diceRoll.mp3",
+      "bytes": 5358,
+      "duration": 1982.8999999994412
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/lore-v5/diceLand.mp3",
+      "bytes": 2285,
+      "duration": 291.59999999962747
+    },
+    {
+      "url": "http://127.0.0.1:5625/sfx/chosen-v2/heavy-blade.mp3",
+      "bytes": 44397,
+      "duration": 289
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/seekers/v2/mask-opp.png",
+      "bytes": 10579,
+      "duration": 0
+    },
+    {
+      "url": "http://127.0.0.1:5625/frames/sleeve_default.webp",
+      "bytes": 99362,
+      "duration": 0
+    },
+    {
+      "url": "http://127.0.0.1:5625/art/seekers/v2/mask-self.png",
+      "bytes": 8299,
+      "duration": 0
+    }
+  ],
+  "scene": "{\"seconds\":5,\"ticks\":190,\"fullPasses\":4,\"portalPasses\":81,\"displayPasses\":140,\"flightPasses\":0,\"cpuMs\":365.4,\"calls\":32,\"triangles\":14196}",
+  "errors": []
+}

@@ -1,0 +1,5 @@
+import {defineConfig} from '../../../node_modules/vite/dist/node/index.js';
+import {fileURLToPath} from 'node:url';
+import {writeFile} from 'node:fs/promises';
+const client=fileURLToPath(new URL('../../../client/',import.meta.url));
+export default defineConfig({root:client,plugins:[{name:'dual-evidence',configureServer(server){server.middlewares.use('/__dual-evidence',async(req,res)=>{if(req.method!=='POST'||req.headers.origin!=='http://127.0.0.1:5478'){res.statusCode=403;res.end();return;}const name=req.url.slice(1);if(!['report.json','four-loops.webm','film.png'].includes(name)){res.statusCode=400;res.end();return;}const chunks=[];let size=0;for await(const c of req){size+=c.length;if(size>30e6){res.statusCode=413;res.end();return;}chunks.push(c);}await writeFile(new URL('./qa/'+name,import.meta.url),Buffer.concat(chunks));res.end('ok');});}}],server:{host:'127.0.0.1',port:5478,strictPort:true,fs:{allow:[fileURLToPath(new URL('../../../',import.meta.url))]}},build:{outDir:fileURLToPath(new URL('./dist',import.meta.url)),emptyOutDir:true,rollupOptions:{input:{preview:client+'dual-ready-four.html',board:client+'dual-ready-board.html'}}}});

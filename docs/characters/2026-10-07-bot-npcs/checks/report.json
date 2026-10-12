@@ -1,0 +1,90 @@
+{
+  "checks": [
+    {
+      "width": 1280,
+      "height": 900,
+      "pageOverflow": false,
+      "modalOverflow": false,
+      "names": [
+        "ルミ",
+        "ノエル",
+        "ヴェラ",
+        "シオン"
+      ],
+      "selected": "ヴェラ"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "pageOverflow": false,
+      "modalOverflow": false,
+      "names": [
+        "ルミ",
+        "ノエル",
+        "ヴェラ",
+        "シオン"
+      ],
+      "selected": "ヴェラ"
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "pageOverflow": false,
+      "modalOverflow": false,
+      "names": [
+        "ルミ",
+        "ノエル",
+        "ヴェラ",
+        "シオン"
+      ],
+      "selected": "ヴェラ"
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "pageOverflow": false,
+      "modalOverflow": false,
+      "names": [
+        "ルミ",
+        "ノエル",
+        "ヴェラ",
+        "シオン"
+      ],
+      "selected": "ヴェラ"
+    },
+    {
+      "rematch": "lumi",
+      "identityPreserved": true
+    },
+    {
+      "difficulty": "easy",
+      "id": "lumi",
+      "name": "ルミ",
+      "opening": true,
+      "board": true
+    },
+    {
+      "difficulty": "normal",
+      "id": "noel",
+      "name": "ノエル",
+      "opening": true,
+      "board": true
+    },
+    {
+      "difficulty": "hard",
+      "id": "vera",
+      "name": "ヴェラ",
+      "opening": true,
+      "board": true
+    },
+    {
+      "difficulty": "hell",
+      "id": "sion",
+      "name": "シオン",
+      "opening": true,
+      "board": true
+    }
+  ],
+  "errors": [],
+  "boundary": "Local guest UI and real local game; APIs stubbed unauthenticated. No staging deployment."
+}

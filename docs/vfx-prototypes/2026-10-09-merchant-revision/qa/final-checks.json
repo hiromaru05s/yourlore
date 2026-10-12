@@ -1,0 +1,35 @@
+{
+  "cancelled": {
+    "state": {
+      "ready": true,
+      "side": 0,
+      "card": "DARK_MERCHANT",
+      "variant": 0,
+      "ms": 0,
+      "multi": false,
+      "spellVisible": false,
+      "coinCount": 0,
+      "hidden": 0,
+      "rigs": 0,
+      "planes": []
+    },
+    "filter": ""
+  },
+  "ended": {
+    "filter": "",
+    "state": {
+      "ready": true,
+      "side": 0,
+      "card": "DARK_MERCHANT",
+      "variant": 0,
+      "ms": 6600,
+      "multi": false,
+      "spellVisible": false,
+      "coinCount": 0,
+      "hidden": 0,
+      "rigs": 0,
+      "planes": []
+    }
+  },
+  "errors": []
+}

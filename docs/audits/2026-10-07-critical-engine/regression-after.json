@@ -1,0 +1,68 @@
+{
+  "source": "7ab68728",
+  "criticalTriggerChains": {
+    "passed": 11,
+    "checks": [
+      {
+        "id": "C01",
+        "events": 118
+      },
+      {
+        "id": "C01-turn-boundary",
+        "events": 366
+      },
+      {
+        "id": "C02-hermit",
+        "lockUntil": 9,
+        "turn": 3,
+        "before": [
+          "TSO1"
+        ],
+        "after": [
+          "TSO1"
+        ]
+      },
+      {
+        "id": "C02-solitude",
+        "cap": 2,
+        "before": 2,
+        "after": [
+          "GOLEM1",
+          "GOLEM2"
+        ]
+      },
+      {
+        "id": "pact-normal"
+      },
+      {
+        "id": "blocked-evolution-keeps-allowance"
+      },
+      {
+        "id": "upkeep-token-cap"
+      },
+      {
+        "id": "blocked-resurrection-keeps-card"
+      },
+      {
+        "id": "fusion-materials",
+        "locked": false
+      },
+      {
+        "id": "fusion-materials",
+        "locked": true
+      },
+      {
+        "id": "blocked-fill-loop-terminates"
+      }
+    ]
+  },
+  "golemGutsCases": 12,
+  "zeroAttackRuleGroups": 11,
+  "typecheck": "passed",
+  "releaseGate": {
+    "source": "b75e5ac9ede98cd7eb37ae2092a3599ee771d145",
+    "productionSuites": 69,
+    "passed": 69,
+    "typecheck": "passed"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "checks": [
+    "7 effects: charge, flight, impact, recovery, clear end overlay",
+    "3 arrows, 8 meteors, 3 lightning hits including allied target, 4 simultaneous zone targets",
+    "heavy cannon damage, friendly berserk, player target, enhanced zone",
+    "pause, reset, one-shot completion",
+    "real GameView ready; all 7 effects on both sides",
+    "320 and 390 px: no horizontal overflow",
+    "reduced motion: no source or target movement",
+    "OS reduced motion startup stays paused"
+  ],
+  "errors": [],
+  "failed": [],
+  "timing": [
+    {
+      "mode": "studio",
+      "frames": 308,
+      "medianMs": 17,
+      "p95Ms": 17.700000047683716
+    }
+  ],
+  "scope": "Local presentation fixtures, no engine/runtime/staging adoption"
+}

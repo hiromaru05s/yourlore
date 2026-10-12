@@ -1,0 +1,127 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checks": [
+    {
+      "width": 1280,
+      "side": 0,
+      "kind": "attack",
+      "invalidReads": 0,
+      "liveReads": 3,
+      "elemental": false,
+      "physical": true,
+      "hp": [
+        80,
+        80
+      ],
+      "dmg": 3,
+      "remaining": 0
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "kind": "FIRE_ARROW",
+      "invalidReads": 0,
+      "liveReads": 2,
+      "elemental": true,
+      "physical": false,
+      "hp": [
+        79,
+        78
+      ],
+      "dmg": 1,
+      "remaining": 0
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "kind": "attack",
+      "invalidReads": 0,
+      "liveReads": 3,
+      "elemental": false,
+      "physical": true,
+      "hp": [
+        80,
+        80
+      ],
+      "dmg": 3,
+      "remaining": 0
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "kind": "FIRE_ARROW",
+      "invalidReads": 0,
+      "liveReads": 2,
+      "elemental": true,
+      "physical": false,
+      "hp": [
+        78,
+        79
+      ],
+      "dmg": 1,
+      "remaining": 0
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "kind": "attack",
+      "invalidReads": 0,
+      "liveReads": 3,
+      "elemental": false,
+      "physical": true,
+      "hp": [
+        80,
+        80
+      ],
+      "dmg": 3,
+      "remaining": 0
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "kind": "FIRE_ARROW",
+      "invalidReads": 0,
+      "liveReads": 2,
+      "elemental": true,
+      "physical": false,
+      "hp": [
+        79,
+        78
+      ],
+      "dmg": 1,
+      "remaining": 0
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "kind": "attack",
+      "invalidReads": 0,
+      "liveReads": 3,
+      "elemental": false,
+      "physical": true,
+      "hp": [
+        80,
+        80
+      ],
+      "dmg": 3,
+      "remaining": 0
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "kind": "FIRE_ARROW",
+      "invalidReads": 0,
+      "liveReads": 2,
+      "elemental": true,
+      "physical": false,
+      "hp": [
+        78,
+        79
+      ],
+      "dmg": 1,
+      "remaining": 0
+    }
+  ],
+  "errors": [],
+  "boundary": "Unmodified deployed bundles via the existing runtime studio controller, authoritative reducer fixtures and controlled hidden duplicate UIDs. No authenticated online match."
+}

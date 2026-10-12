@@ -1,0 +1,28 @@
+vite v5.4.21 building for production...
+
+(!) outDir /Users/hiromaru05s/.codex/worktrees/counter-four/LORE_TCG/docs/vfx-prototypes/2026-10-12-counter-four/build is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+transforming...
+✓ 167 modules transformed.
+rendering chunks...
+computing gzip size...
+../docs/vfx-prototypes/2026-10-12-counter-four/build/counter-four.html                   0.33 kB │ gzip:   0.29 kB
+../docs/vfx-prototypes/2026-10-12-counter-four/build/assets/preview-ObwmOdAs.css         3.71 kB │ gzip:   1.42 kB
+../docs/vfx-prototypes/2026-10-12-counter-four/build/assets/motion-CDpg3JYh.css         22.08 kB │ gzip:   6.13 kB
+../docs/vfx-prototypes/2026-10-12-counter-four/build/assets/board-DCyTUHTx.css         216.67 kB │ gzip:  45.92 kB
+../docs/vfx-prototypes/2026-10-12-counter-four/build/assets/counter-four-D58bXiVJ.js     2.17 kB │ gzip:   1.11 kB
+../docs/vfx-prototypes/2026-10-12-counter-four/build/assets/qa-Cnui-VVV.js               2.41 kB │ gzip:   1.38 kB
+../docs/vfx-prototypes/2026-10-12-counter-four/build/assets/renderDensity-BPPkUIEl.js    3.58 kB │ gzip:   1.85 kB
+../docs/vfx-prototypes/2026-10-12-counter-four/build/assets/preview-C38-h8QV.js          7.19 kB │ gzip:   4.01 kB
+../docs/vfx-prototypes/2026-10-12-counter-four/build/assets/ceremonyScene-DEKuIvm9.js    8.98 kB │ gzip:   4.00 kB
+../docs/vfx-prototypes/2026-10-12-counter-four/build/assets/paperDraw-DWref-8k.js       10.26 kB │ gzip:   4.65 kB
+../docs/vfx-prototypes/2026-10-12-counter-four/build/assets/duelScene-CjdTXyfG.js      103.37 kB │ gzip:  36.19 kB
+../docs/vfx-prototypes/2026-10-12-counter-four/build/assets/motion-MdLqizQX.js         394.73 kB │ gzip: 167.39 kB
+../docs/vfx-prototypes/2026-10-12-counter-four/build/assets/board-BiYBYxGH.js          793.90 kB │ gzip: 229.79 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1m 16s
