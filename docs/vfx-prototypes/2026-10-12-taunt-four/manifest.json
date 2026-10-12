@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-12",
+  "scope": "local comparison only; no runtime adoption or deployment",
+  "durationMs": 1000,
+  "typecheck": "PASS scoped preview and imports",
+  "build": "PASS two Vite entries",
+  "browserChecks": 16,
+  "browserErrors": [],
+  "diceStartElapsedMs": [
+    1010.8,
+    1014.3
+  ],
+  "files": {
+    "client/src/dev/taunt-four/surface.ts": "62eddea69424c803d74ef163dcef14825eea2aa4a0fa14a16869a6d618429430",
+    "client/src/dev/taunt-four/main.ts": "efc496f58a45ea629366cd6ccdc145228d1889ae445e4413636d5134b8fea0de",
+    "client/src/dev/taunt-four/style.css": "da751577f0ec5dfa4df57eb9edb6c1b301ca3778756fa520b562dc47b81d8471",
+    "client/src/dev/taunt-four/renderer.ts": "c98c1bfffacfb769f088e77719ebf48f878962c4bbf9e4a47700f4803c0ebd5b",
+    "client/src/dev/taunt-four/tsconfig.json": "31b92ffbf74e46a52f08407dddf01d3098b7670e6fb5a30e0415d645bfd51740",
+    "client/src/dev/taunt-four/board.ts": "9db1185e48c144d137d9f3e892a8f7ba34f7bb60278816f7d8c20741dd38ebe1",
+    "client/src/dev/taunt-four/catalog.ts": "374e77a3664780c26637bafe9a269d771080836326691009c787f0718f597e0a",
+    "client/taunt-four.html": "1a6a039c7f08a165cadadb642dfde9e0e12f1df2edf65c28a7bf9012ef39526d",
+    "client/taunt-four-board.html": "d4d11e6824ebd6c179f550df793c01bda2f6bdf3b73e156eaf4f887170c83eb8",
+    "scripts/build-taunt-four.mjs": "77f6513ff8cd12a28d3bb3b6101c0e6d24e8d4bf76d1c742c7680355186630d8",
+    "tests/taunt-four-browser.mjs": "e1cd80517bb04117b8913bd1470fa6240eb21e791d8e2ff59c017918891a831f",
+    "tests/taunt-four-capture.mjs": "80606fd60c1399332bb6ba8727cabb128b652b862a8c45aa3c9d16e03d98a566"
+  }
+}

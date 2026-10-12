@@ -1,0 +1,5 @@
+build/
+qa/frames/
+qa/video/
+qa/failure.png
+qa/canvas-*.png
