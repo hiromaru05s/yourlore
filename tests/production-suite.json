@@ -99,6 +99,7 @@
     "tests/mage-summon.mjs",
     "tests/assassin-summon.mjs",
     "tests/merchant-runtime.mjs",
+    "tests/evade-refraction.mjs",
     "tests/vampire-summon.mjs",
     "tests/vampire-geometry.mjs"
   ],
