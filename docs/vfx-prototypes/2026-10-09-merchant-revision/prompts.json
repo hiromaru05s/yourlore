@@ -1,0 +1,30 @@
+[
+  {
+    "id": "gate",
+    "prompt": "Use case: stylized-concept. Production VFX asset for premium dark fantasy card game LORE. One exquisitely realistic antique BLACK MARKET entrance, a tall narrow arched booth wrought in dark oxidized silver, twin heavy deep-black silk curtains OPEN at center, intricate aged brass trim, finely etched small crescent coins, two tiny warm amber lanterns at sides, worn black stone threshold and slight broad perspective depth. Empty transparent doorway center reserved for a card, NO character, NO card, NO letters, NO UI. Whole symmetrical doorway isolated on genuinely transparent background, all silhouette within image, 12% margin. Front view, sculpted physically believable materials, deep recessed shadows, thin silver specular edges and muted gold glints, no neon glow, no bloom, no cartoony outlines. Richness equal to a legendary ceremonial crown, convincing small material details. Asset fills a portrait central composition on a landscape 3:2 transparent canvas.",
+    "tool": "built-in image_gen",
+    "source": "exec-a45779bb-f2a6-4811-816d-c19798673191.png",
+    "path": "client/src/dev/merchant-v2/assets/gate.png"
+  },
+  {
+    "id": "coffer",
+    "prompt": "Use case: stylized-concept. Isolated premium dark fantasy game VFX object: an opulent low BLACK MARKET treasure coffer with open lid and an elegant fan of blackened silver coins spilling across its front lip. Tiny aged gold engravings, black leather, deep recessed panels, forged hinges, delicate lilac reflection inside but no glow cloud. Wide low silhouette lower third, EMPTY air above for card reveal. Perspective facing the viewer from slightly above, every coin physically thick, embossed and realistic, detailed reed edges, exquisite antique craftsmanship. No letters no people no card no UI no rays. Genuinely transparent background, full object with 12% margins, landscape 3:2 canvas, physically rendered game cinematic quality, restrained almost-black body with narrow silver and old-gold reflections.",
+    "tool": "built-in image_gen",
+    "source": "exec-70509391-571e-4359-9e30-8a1f2c5f46f4.png",
+    "path": "client/src/dev/merchant-v2/assets/coffer.png"
+  },
+  {
+    "id": "balance",
+    "prompt": "Use case: stylized-concept. Premium legendary black-market transaction emblem, one lavish antique hanging BALANCE SCALE of blackened silver and tarnished gold, dark obsidian central fulcrum, exquisitely filigreed asymmetric balance beam, fine realistic chains and two shallow engraved pans, LEFT pan holds 5 black coins, RIGHT pan empty. Substantial ceremonial weighted base. Narrow black silk ribbon tied on central column. Physically believable aged metal with fine scratches, dark recessed carving and sharp silver glints, dim amber accents. Isolated genuinely transparent background. No character no card no text no letters no numbers no UI no light rays. Wide elegant silhouette with empty central region reserved for an independently displayed card, front 3/4 view, full object and generous 12% margins, landscape 3:2 canvas, sophisticated photorealistic dark fantasy art, not a cartoon.",
+    "tool": "built-in image_gen",
+    "source": "exec-7a50e77c-b784-4071-b223-f392b399f6b8.png",
+    "path": "client/src/dev/merchant-v2/assets/balance.png"
+  },
+  {
+    "id": "bazaar",
+    "prompt": "Use case: stylized-concept. A premium dark fantasy BLACK MARKET night bazaar canopy, lavish narrow deep-black velvet canopy held by two dark silver carved poles with several thin bronze chains and two warm tiny hanging lanterns, scalloped thick cloth edges, layered folded fabric with subtle damask and intricate gold stitch, a low black stone merchant counter laden only at the far left and right with small realistic black coins and one shut leather purse. EMPTY CENTER vertical space for separate card reveal, no figure no card no letters no UI. Architectural 3/4 front view giving visible depth, rich black materials remain readable through narrow warm metallic edges and low purple bounced light. Exquisitely rendered realistic legendary-game cinematic prop. Whole silhouette completely inside canvas, genuinely transparent background, generous 12% margin, landscape3:2, no white glow no particles no dramatic rays.",
+    "tool": "built-in image_gen",
+    "source": "exec-c3d12095-a43f-4e22-802d-8bc37ca25f17.png",
+    "path": "client/src/dev/merchant-v2/assets/bazaar.png"
+  }
+]

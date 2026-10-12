@@ -7,7 +7,7 @@ export function renderDeckAppearance(host:HTMLElement,options:{deck:DeckPreset;n
  host.innerHTML=`<header class="deck-appearance-head"><div><h3>${esc(name)} · ${loungeText('外観','Appearance','외형')}</h3><p>${loungeText('このデッキのカード構成と一緒に保存されます。','Saved together with this deck’s cards.','이 덱의 카드 구성과 함께 저장됩니다.')}</p></div><button class="btn btn-ghost" data-cosmetic-shop>${loungeText('ショップ','Shop','상점')}</button></header><div class="deck-cosmetic-status" role="status">${error?loungeText('所持アイテムを読み込めませんでした。','Could not load owned items.','보유 아이템을 불러오지 못했습니다.'):!owned?loungeText('所持アイテムを確認中…','Loading owned items…','보유 아이템 확인 중…'):''}${error?` <button class="btn btn-mini" data-cosmetic-retry>${loungeText('再試行','Retry','재시도')}</button>`:''}</div><div class="deck-appearance-groups"></div>`;
  const groups=host.querySelector('.deck-appearance-groups')!;
  for(const kind of ['sleeve','furniture'] as const){
-  const title=kind==='sleeve'?loungeText('スリーブ','Sleeve','슬리브'):loungeText('デッキ置き場 ＆ シェルフ','Deck holder & shelf','덱 받침 & 선반');
+  const title=kind==='sleeve'?loungeText('スリーブ','Sleeve','슬리브'):loungeText('デッキ置き場 ＆ 墓地','Deck holder & graveyard','덱 받침 & 묘지');
   const list=kind==='sleeve'?SLEEVE_LIST:[{id:'default',ja:'デフォルト',en:'Default',ko:'기본',url:''},...FURNITURE_LIST];
   const section=document.createElement('section');section.className='deck-cosmetic-group';section.setAttribute('aria-label',title);
   section.innerHTML=`<h4>${title}</h4><div class="deck-cosmetic-grid">${list.map(item=>{
