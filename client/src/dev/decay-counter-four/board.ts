@@ -9,12 +9,13 @@ let material:Material|null=null;try{material=new Material();}catch{/* Reduced di
 let ready=false,disposed=false,active=false;let layers:Layer[]=[];const settings:Settings={...defaults};
 const mon=(id:string,uid:string)=>({...DB[id],uid,exhausted:false,summonedTurn:0,decayCnt:settings.before,dmg:0,tempAtk:0,atkMod:0,defMod:0});
 function setup(){
- layers.forEach(l=>l.dispose());layers=[];
+ ready=false;layers.forEach(l=>l.dispose());layers=[];
  const g=createGame({mode:'bot',seed:71,starting:0,p0:{id:'study-self',name:'YOU'},p1:{id:'study-opponent',name:'OPPONENT'}}).state;
  g.turn=3;g.phase='main';g.pending=null;
  for(const [i,p]of g.players.entries()){p.openingDrawReady=false;p.mana=6;p.maxMana=10;p.hp=30;p.enchants=[];p.quests=[];p.traps=[];p.field=['M4',settings.card,'TDE2'].map((id,j)=>mon(id,`decay-counter-${i}-${j}`));p.hand=[{...DB.POISON_MASTER,uid:`counter-source-${i}`}];}
  view.render(g);view.setHandOpen(false);clearMonsterStates(root);
  for(const card of root.querySelectorAll<HTMLElement>('.zone-mon .card'))layers.push(new Layer(card));
+ const current=layers;void Promise.all(current.map(l=>l.ready)).then(()=>{if(layers!==current||disposed)return;ready=true;draw();}).catch(e=>parent.postMessage({kind:'decay-counter-error',error:String(e)},location.origin));
 }
 function draw(){
  if(!ready||disposed)return;root.style.filter=settings.dark?'brightness(.65)':'';
@@ -32,4 +33,4 @@ window.addEventListener('resize',()=>requestAnimationFrame(draw));document.addEv
 setup();const stop=startBoardLayout();
 window.addEventListener('pagehide',()=>{disposed=true;layers.forEach(l=>l.dispose());material?.dispose();stop();view.destroy();},{once:true});
 (window as any).decayCounterBoard={get state(){return{ready,active,...settings,layers:layers.length,visible:layers.filter(l=>l.canvas.dataset.active==='true').length,hiddenCards:layers.filter(l=>l.card.style.visibility==='hidden').length,counts:layers.map(l=>({uid:l.card.dataset.uid,count:l.card.dataset.decayCount})),fallback:!material};},clear};
-void waitForDuel(root).then(()=>{ready=true;draw();parent.postMessage({kind:'decay-counter-ready'},location.origin);}).catch(e=>parent.postMessage({kind:'decay-counter-error',error:String(e)},location.origin));
+void Promise.all([waitForDuel(root),...layers.map(l=>l.ready)]).then(()=>{ready=true;draw();parent.postMessage({kind:'decay-counter-ready'},location.origin);}).catch(e=>parent.postMessage({kind:'decay-counter-error',error:String(e)},location.origin));
