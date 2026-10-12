@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';import fs from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
-const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5194',out='docs/characters/2026-10-12-faceless/qa';
+const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5194',out='docs/characters/2026-10-12-faceless-illustrated/qa';
 await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true}),context=await browser.newContext({viewport:{width:1280,height:900}}),page=await context.newPage();
 const checks=[],errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));
@@ -27,7 +27,7 @@ try{
  await page.evaluate(()=>hoodedBoard.trigger('victory',0));assert.equal(await page.locator('#portraitMe canvas').getAttribute('data-frame'),'0');assert.equal(await page.locator('#portraitOpp canvas').getAttribute('data-frame'),'0');checks.push('victory and defeat keep the static portrait');
  await page.evaluate(()=>hoodedBoard.destroy());assert.equal(await page.evaluate(()=>hoodedBoard.count()),0);checks.push('destroy releases players and timers');
  await page.setViewportSize({width:1280,height:900});await page.goto(origin+'/profile-lab.html');await page.waitForSelector('#avaBtn');await page.locator('#avaBtn').click();await page.waitForSelector('.hooded-live canvas[data-ready=true]');assert.equal(await page.locator('[data-seeker-id]').count(),1);assert.equal(await page.locator('[data-seeker-id]').getAttribute('data-seeker-id'),'SEEKER_HOODED');await page.screenshot({path:out+'/profile-picker.png'});
- await page.locator('[data-save]').click();await page.waitForSelector('.hooded-picker',{state:'detached'});await page.reload();await page.waitForSelector('#avaBtn');assert.equal(await page.evaluate(()=>localStorage.getItem('lore_profile_lab_avatar')),'SEEKER_HOODED');assert.match(await page.locator('#avaBtn .hooded-seeker').getAttribute('src'),/faceless-v1/);checks.push('single character saves canonical ID and reloads');
+ await page.locator('[data-save]').click();await page.waitForSelector('.hooded-picker',{state:'detached'});await page.reload();await page.waitForSelector('#avaBtn');assert.equal(await page.evaluate(()=>localStorage.getItem('lore_profile_lab_avatar')),'SEEKER_HOODED');assert.match(await page.locator('#avaBtn .hooded-seeker').getAttribute('src'),/faceless-v2/);checks.push('single character saves canonical ID and reloads');
  await page.locator('#avaBtn').click();await page.locator('[data-close]').click();assert.equal(await page.evaluate(()=>localStorage.getItem('lore_profile_lab_avatar')),'SEEKER_HOODED');checks.push('cancel preserves saved choice');
  await page.locator('[data-tab=settings]').click();await page.locator('[data-character-settings]').click();
  await page.evaluate(async()=>{const {api}=await import('/src/net/api.ts');window.realUpdate=api.updateMe;api.updateMe=async()=>{throw new Error('保存テスト');};});await page.locator('[data-save]').click();await page.waitForFunction(()=>document.querySelector('.hooded-save-status')?.textContent.includes('保存テスト'));assert(await page.locator('[data-save]').isEnabled());

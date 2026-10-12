@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';import fs from 'node:fs/promises';
 import {apiFixture} from './helpers/api-fixture.mjs';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
-const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5194',out='docs/characters/2026-10-12-faceless/qa';
+const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5194',out='docs/characters/2026-10-12-faceless-illustrated/qa';
 const browser=await chromium.launch({channel:'chrome',headless:true}),page=await browser.newPage({viewport:{width:1280,height:900}});
 const errors=[],requests=[],updates=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));
 const user={id:'hooded-menu-fixture',display:'シーカー',email:'fixture@example.test',avatar:'SEEKER_BLUE',wins:3,losses:1,credits:0,sleeve:'default',furniture:'default'};
@@ -19,8 +19,8 @@ try{
  await page.locator('.lounge-user').click();await page.waitForSelector('#avaBtn');await page.locator('#avaBtn').click();await page.waitForSelector('.hooded-live canvas[data-ready=true]');
  const hit=await page.evaluate(async()=>{const c=document.querySelector('.hooded-live canvas');document.querySelector('button[data-action=hurt]').click();return c.dataset.action;});assert.equal(hit,'hurt');
  await page.locator('[data-seeker-id=SEEKER_HOODED]').click();await page.locator('[data-save]').click();await page.waitForSelector('.hooded-picker',{state:'detached'});assert.equal(updates.at(-1).avatar,'SEEKER_HOODED');
- assert.match(await page.locator('.lounge-user .hooded-seeker').getAttribute('src'),/faceless-v1\/portrait/);
- await page.locator('.lounge-user').click();await page.waitForSelector('#avaBtn');assert.match(await page.locator('#avaBtn .hooded-seeker').getAttribute('src'),/faceless-v1\/portrait/);
+ assert.match(await page.locator('.lounge-user .hooded-seeker').getAttribute('src'),/faceless-v2\/portrait/);
+ await page.locator('.lounge-user').click();await page.waitForSelector('#avaBtn');assert.match(await page.locator('#avaBtn .hooded-seeker').getAttribute('src'),/faceless-v2\/portrait/);
  await page.locator('#avaBtn').click();await page.waitForTimeout(250);await page.screenshot({path:out+'/profile-in-lounge.png'});
  await page.setViewportSize({width:320,height:740});await page.waitForTimeout(250);await page.screenshot({path:out+'/profile-in-lounge-mobile.png'});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
  await page.keyboard.press('Escape');await page.waitForSelector('.hooded-picker',{state:'detached'});

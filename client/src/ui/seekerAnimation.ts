@@ -35,7 +35,7 @@ function detach(): void {
 }
 export function seekerPortrait(options: {board?:boolean} = {}): HTMLCanvasElement {
   const canvas = document.createElement('canvas'); canvas.width = canvas.height = SEEKER_SIZE;
-  canvas.className = 'seeker-motion'; canvas.dataset.animation = 'faceless-v1'; canvas.dataset.seeker = SEEKER_ID;
+  canvas.className = 'seeker-motion'; canvas.dataset.animation = 'faceless-v2'; canvas.dataset.seeker = SEEKER_ID;
   canvas.setAttribute('role', 'img'); canvas.setAttribute('aria-label', seekerName());
   const ctx = canvas.getContext('2d', {alpha: false}); if (ctx) { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, SEEKER_SIZE, SEEKER_SIZE); }
   if (!players.size) attach();

@@ -14,7 +14,7 @@ const {initLight,lightImage,disposeLight}=createOpeningLight();
 let disposed=false;
 let portraits:HTMLImageElement[]=[];let gpu=true;const hot=document.createElement("canvas");hot.width=hot.height=640;const hg=hot.getContext("2d")!;
 async function loadAssets(){
- portraits=await Promise.all([0,1].map(()=>new Promise<HTMLImageElement>((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src='/art/seekers/faceless-v1/portrait.webp';}))).catch(()=>[]);
+ portraits=await Promise.all([0,1].map(()=>new Promise<HTMLImageElement>((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src='/art/seekers/faceless-v2/portrait.webp';}))).catch(()=>[]);
  if(disposed)return false;
  try{initCoin();initLight();}catch{gpu=false;disposeCoin();disposeLight();}
  return gpu;

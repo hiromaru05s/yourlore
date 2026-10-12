@@ -13,7 +13,7 @@ m.request('hurt',100);assert.deepEqual(m.sample(100),{action:'hurt',frame:1});as
 m.request('hurt',500);m.request('hurt',700);assert.equal(m.sample(800).frame,1);assert.equal(m.sample(921).frame,0);
 m.request('hurt',1000);m.reset();assert.equal(m.sample(1001).frame,0);
 const a=new SeekerMotion(),b=new SeekerMotion();a.request('hurt',1);assert.equal(a.sample(100).frame,1);assert.equal(b.sample(100).frame,0);
-const meta=await sharp('client/public/art/seekers/faceless-v1/poses.webp').metadata();assert.equal(meta.width,1024);assert.equal(meta.height,512);
-const neutral=await sharp('client/public/art/seekers/faceless-v1/portrait.webp').raw().toBuffer();const hit=await sharp('client/public/art/seekers/faceless-v1/hit.webp').raw().toBuffer();assert(!neutral.equals(hit));
+const meta=await sharp('client/public/art/seekers/faceless-v2/poses.webp').metadata();assert.equal(meta.width,1024);assert.equal(meta.height,512);
+const neutral=await sharp('client/public/art/seekers/faceless-v2/portrait.webp').raw().toBuffer();const hit=await sharp('client/public/art/seekers/faceless-v2/hit.webp').raw().toBuffer();assert(!neutral.equals(hit));
 const checks=['idle remains a single static pose','one hit frame held for 220ms then neutral','all positive damage uses the same pose','zero damage has no pose change','repeated hits replace the timer rather than queue','reset and independent sides','two distinct same-size portrait assets'];
-await fs.writeFile('docs/characters/2026-10-12-faceless/qa/asset-motion-tests.json',JSON.stringify({checks,hitMs:SEEKER_HIT_MS},null,2)+'\n');console.log('PASS faceless seeker: '+checks.length+' checks');
+await fs.writeFile('docs/characters/2026-10-12-faceless-illustrated/qa/asset-motion-tests.json',JSON.stringify({checks,hitMs:SEEKER_HIT_MS},null,2)+'\n');console.log('PASS faceless seeker: '+checks.length+' checks');

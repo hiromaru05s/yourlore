@@ -3,7 +3,7 @@ export const SEEKER_ID = 'SEEKER_HOODED';
 export const SEEKER_ACTIONS = ['idle', 'hurt'] as const;
 export type SeekerAction = typeof SEEKER_ACTIONS[number];
 export const SEEKER_SIZE = 512;
-export const SEEKER_ROOT = '/art/seekers/faceless-v1';
+export const SEEKER_ROOT = '/art/seekers/faceless-v2';
 export const SEEKER_HIT_MS = 220;
 export const seekerPoster = () => `${SEEKER_ROOT}/portrait.webp`;
 export const seekerAtlas = () => `${SEEKER_ROOT}/poses.webp`;
