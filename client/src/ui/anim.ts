@@ -7,6 +7,7 @@ import {foldQuestIntoSlot,nativeQuestGhost} from './questFold';
 import {getManaFormation} from './manaFormationPreview';
 import {passiveIcon} from './passiveIcon';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
+import {damageAction, playSeekerSide, setSeekerSkip} from './seekerAnimation';
 import type {HandLayout} from './handGeometry';
 import {mountDuelOutcome,cancelDuelOutcome} from './duelOutcome';
 import {reserveMonster} from './fieldLayout';
@@ -39,7 +40,7 @@ export const isFxSkipped=()=>fxSkip;
 const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
-  fxSkip = on; setMonsterSkip(on);
+  fxSkip = on; setMonsterSkip(on); setSeekerSkip(on);
   if(on){cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
@@ -388,6 +389,8 @@ export function floatNum(anchor: Element | null, text: string, kind: "dmg" | "he
 }
 
 export function hpFeedback(side: ViewSide, kind: "dmg" | "heal", amount: number): void {
+  const action=kind==='heal'?(amount>0?'heal':null):damageAction(amount);
+  if(action&&!fxSkip)playSeekerSide(side,action);
   const bar = document.getElementById("hpbar-" + side);
   const num = document.getElementById("hp-" + side);
   if (bar && kind==='dmg') { bar.classList.add("shake"); setTimeout(() => bar.classList.remove("shake"), 400); }
@@ -782,6 +785,7 @@ function gainLabel(anchor: DOMRect, text: string, cls: string): HTMLElement {
 /** One shared impact: readout, added crystals, refraction and sound land together. */
 export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
   if(amount<=0||fxSkip||document.hidden)return;
+  playSeekerSide(side,'mana');
   const el=document.querySelector<HTMLElement>(`#portrait${side==='me'?'Me':'Opp'} .pt-mana`);if(!el)return;
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){sfx('mana');return;}
   const start=performance.now(),fromMax=Number(el.dataset.previousMaximum??el.dataset.maximum),fromMana=Number(el.dataset.previousMana??el.dataset.mana);

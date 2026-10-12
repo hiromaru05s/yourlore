@@ -1,6 +1,6 @@
 import {monsterCanAttack} from '../shared/engine';
 import {furnitureUrl} from '../shared/cosmetics';
-import {seekerPortrait} from './seekerAnimation';
+import {seekerPortrait, disposeSeeker, disposeSeekers} from './seekerAnimation';
 import {HandConditionHighlights} from './handCondition';
 import {handFan} from './handFan';
 import {fieldPositions,settleField} from './fieldLayout';
@@ -306,6 +306,7 @@ export class GameView {
   /** Detach the window/document-level listeners this view installed. */
   destroy(): void {
     this.disposed = true;
+    disposeSeekers(this.root);
     this.cancelHandDrag?.();
     this.disposeScene?.();
     this.statRise.dispose();
@@ -987,7 +988,9 @@ export class GameView {
         ${dew > 0 ? `<span class="pt-dew" role="img" aria-label="${t('game.dew')} ${p.dew ?? 0}" title="${esc(t('game.dewTip'))}" style="--resource-number-scale:${Math.min(.14,.32/String(p.dew ?? 0).length)}"><b id="dew-${sd}" aria-hidden="true">${dew}</b></span>` : ""}
       </span>` : ""}
       <span class="pt-name">${esc(p.name)}</span>`;
-    const portrait=oldPortrait??seekerPortrait(seeker==='SEEKER_RED'?'red':'blue');
+    const color=seeker==='SEEKER_RED'?'red':'blue';
+    if(oldPortrait&&oldPortrait.dataset.seeker!==color)disposeSeeker(oldPortrait);
+    const portrait=oldPortrait?.dataset.seeker===color?oldPortrait:seekerPortrait(color,{board:true});
     el.querySelector('.avatar')?.replaceChildren(portrait);
   }
 

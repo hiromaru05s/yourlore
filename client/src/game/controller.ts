@@ -22,6 +22,7 @@ import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog, logToText } from "../ui/log";
 import * as A from "../ui/anim";
 import { cardPicker, cardPickerMulti, confirmDialog, treasureModal, winModal, closeOverlay, closeTreasureNotices } from "../ui/modal";
+import {playSeekerSide, settleSeekerSide, seekerDuration} from '../ui/seekerAnimation';
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { sfx, stopSounds } from "../ui/sound";
@@ -212,6 +213,10 @@ export abstract class BaseController implements BoardHandlers {
     if (!animate) {
       this.clearQuickFaces();
       this.view.render(res.state);
+      if(res.state.over&&res.state.winner!==null){
+        settleSeekerSide(res.state.winner===this.you?'me':'opp','victory');
+        settleSeekerSide(res.state.winner===this.you?'opp':'me','defeat');
+      }
       this.afterApply(res);
       return;
     }
@@ -492,6 +497,11 @@ export abstract class BaseController implements BoardHandlers {
       draws[1-this.you]>0?captureHandLayout(document.getElementById('oppHand')):undefined];
     this.view.render(res.state);
     for(const gain of manaGains)effectFinishes.push(A.manaSurge(gain.side,gain.amount));
+    for(const pl of [0,1] as Side[]){
+      if((res.state.players[pl].brand??0)>(prev.players[pl].brand??0)&&!events.some(e=>e.type==='damage'&&e.player===pl&&e.amount>0)&&!A.isFxSkipped())playSeekerSide(sideOf(pl),'hurt');
+      // Ordinary resource gain also reacts; max-mana gain already has a shared cue.
+      if(res.state.players[pl].mana>prev.players[pl].mana&&!manaGains.some(g=>g.side===sideOf(pl))&&!A.isFxSkipped())playSeekerSide(sideOf(pl),'mana');
+    }
     // ghosts overlap the freshly-rendered real cards — drop them next frame
     requestAnimationFrame(() => {ghosts.forEach((g) => g.el.remove());spellGhosts.forEach(g=>g.remove());});
     await Promise.all(([0, 1] as Side[]).map(player => draws[player] > 0
@@ -508,6 +518,11 @@ export abstract class BaseController implements BoardHandlers {
     }
 
     await Promise.all(effectFinishes);
+    if(!this.dead&&res.state.over&&!prev.over&&res.state.winner!==null){
+      playSeekerSide(sideOf(res.state.winner),'victory');
+      playSeekerSide(sideOf((1-res.state.winner) as Side),'defeat');
+      if(!matchMedia('(prefers-reduced-motion: reduce)').matches)await A.fxWait(seekerDuration('defeat')+160);
+    }
   }
 
   /** Plain-text log lines describing the effect right after events[idx] (for result popups). */

@@ -9,7 +9,7 @@ const paths = [
   '<path d="M20 11Q12 6 5 9v22q8-3 15 1 7-4 15-1V9q-7-3-15 2v21M10 15l5 1M10 21l5 1M25 16l5-1M25 22l5-1"/>'
 ];
 const english=['SANCTUM','DECK','ARCHIVE','RANKING','FRIENDS','SHOP','GUIDE'];
-const artwork=['/art/lounge/stage-v1/stage.webp','/art/cards/STARTER_MANA.webp','/art/cards/HIGH_ELF.webp','/art/cards/ELDER_ELF_KING.webp','/art/cards/ELF.webp','/art/cards/GUILD_CHEST.webp','/art/cards/ELF_HAVEN.webp'];
+const artwork=['/art/lounge/v1/library.webp','/art/cards/STARTER_MANA.webp','/art/cards/HIGH_ELF.webp','/art/cards/ELDER_ELF_KING.webp','/art/cards/ELF.webp','/art/cards/GUILD_CHEST.webp','/art/cards/ELF_HAVEN.webp'];
 export function createNavStudy(root:HTMLElement, variant:string) {
   const nav=root.querySelector<HTMLElement>('.lounge-rail nav')!;
   const buttons=Array.from(nav.querySelectorAll<HTMLButtonElement>('[data-nav]'));

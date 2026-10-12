@@ -1,5 +1,6 @@
 import { homeIcon } from "./homeIcons";
 import { artUrl } from "./cardArt";
+import {seekerPoster, seekerColor} from './seekerMotion';
 // ============================================================
 // LORE — social presentation helpers: preset avatars (card art)
 // and badge metadata. Badge OWNERSHIP is computed server-side;
@@ -11,9 +12,9 @@ import { getLang } from "../i18n";
 // ---- avatars: preset = a card id, art served from /art/cards/<id>.webp ----
 export function avatarHtml(avatar: string | null | undefined, display: string, size = 40): string {
   const initial = (display || "?").trim().charAt(0).toUpperCase().replace(/[&<>"\']/g, "?");
-  if (avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE") {
-    const color = avatar === "SEEKER_RED" ? "red" : "blue";
-    return `<span class="avatar avatar-seeker" style="--avs:${size}px"><span class="seeker-sprite seeker-${color}" role="img" aria-label="${color === "red" ? "Red Seeker" : "Blue Seeker"}"></span></span>`;
+  if (!avatar || avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE") {
+    const color = seekerColor(avatar);
+    return `<span class="avatar avatar-seeker" style="--avs:${size}px"><img class="hooded-seeker" src="${seekerPoster(color)}" alt="${color === "red" ? "Hooded woman" : "Hooded man"}" width="128" height="128"></span>`;
   }
   const img = avatar && /^[A-Za-z0-9_]+$/.test(avatar)
     ? `<img src="${artUrl.sm(avatar)}" alt="" loading="lazy" onerror="this.remove()">`
@@ -21,7 +22,7 @@ export function avatarHtml(avatar: string | null | undefined, display: string, s
   return `<span class="avatar" style="--avs:${size}px">${img}<span class="avatar-fb">${initial}</span></span>`;
 }
 
-/** All monster cards double as avatar presets (they all have art). */
+/** Stable account IDs preserve existing selections while replacing the artwork. */
 export function avatarPresets(): string[] {
   return ["SEEKER_RED", "SEEKER_BLUE"];
 }

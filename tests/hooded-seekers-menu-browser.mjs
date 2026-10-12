@@ -1,0 +1,31 @@
+import assert from 'node:assert/strict';import fs from 'node:fs/promises';
+import {apiFixture} from './helpers/api-fixture.mjs';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
+const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5194',out='docs/characters/2026-10-12-hooded/qa';
+const browser=await chromium.launch({channel:'chrome',headless:true}),page=await browser.newPage({viewport:{width:1280,height:900}});
+const errors=[],requests=[],updates=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));
+const user={id:'hooded-menu-fixture',display:'シーカー',email:'fixture@example.test',avatar:'SEEKER_BLUE',wins:3,losses:1,credits:0,sleeve:'default',furniture:'default'};
+await apiFixture(page,r=>{const path=new URL(r.url).pathname;
+ if(path==='/api/auth/me')return {user};if(path==='/api/geo')return {country:'JP'};
+ if(path==='/api/rank/me')return {rating:{season:'2026-10',mmr:1000,tier:'bronze',wins:3,losses:1}};
+ if(path==='/api/social/profile')return {profile:{...user,self:true,created_at:Date.now(),recent:[],stats_public:true}};
+ if(path==='/api/social/me'){updates.push(r.body);Object.assign(user,r.body);return {ok:true,...user,stats_public:true};}
+ return {ok:true,keys:[],steps:[],rows:[],friends:[],incoming:[],outgoing:[]};
+});
+try{
+ await page.goto(origin);await page.waitForSelector('.lounge-home');await page.waitForSelector('.screen-loader',{state:'detached'});await page.screenshot({path:out+'/home-replaced.png'});
+ assert((await page.locator('.lounge-atmosphere').evaluate(e=>getComputedStyle(e).backgroundImage)).includes('/art/lounge/v1/library.webp'));
+ await page.evaluate(async()=>{const m=await import('/src/ui/seekerAnimation.ts');m.setSeekerSkip(true);});
+ await page.locator('.lounge-user').click();await page.waitForSelector('#avaBtn');await page.locator('#avaBtn').click();await page.waitForSelector('.hooded-live canvas[data-ready=true]');
+ await page.locator('button[data-action=mana]').click();await page.waitForFunction(()=>document.querySelector('.hooded-live canvas')?.dataset.action==='mana');
+ await page.locator('[data-seeker-id=SEEKER_RED]').click();await page.locator('[data-save]').click();await page.waitForSelector('.hooded-picker',{state:'detached'});assert.equal(updates.at(-1).avatar,'SEEKER_RED');
+ assert.match(await page.locator('.lounge-user .hooded-seeker').getAttribute('src'),/red-portrait/);
+ await page.locator('.lounge-user').click();await page.waitForSelector('#avaBtn');assert.match(await page.locator('#avaBtn .hooded-seeker').getAttribute('src'),/red-portrait/);
+ await page.locator('#avaBtn').click();await page.waitForTimeout(250);await page.screenshot({path:out+'/profile-in-lounge.png'});
+ await page.setViewportSize({width:320,height:740});await page.waitForTimeout(250);await page.screenshot({path:out+'/profile-in-lounge-mobile.png'});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ await page.keyboard.press('Escape');await page.waitForSelector('.hooded-picker',{state:'detached'});
+ await page.locator('[data-home]').click();await page.waitForSelector('.lounge-home');
+ const {seekerPlaybackCount}=await page.evaluate(async()=>{const m=await import('/src/ui/seekerAnimation.ts');return {seekerPlaybackCount:m.seekerPlaybackCount()};});assert.equal(seekerPlaybackCount,0);
+ assert.deepEqual(errors,[]);const retired=requests.filter(r=>/seekers\/(menu-v1|v2)\/.+\.webp|biblion\/seeker-(blue|red)\.png|stage-v1\/stage\./.test(r));assert.deepEqual(retired,[]);
+ await fs.writeFile(out+'/menu-tests.json',JSON.stringify({checks:['profile animation works after previous duel was skipped/destroyed','actual HOME uses figure-free library','actual profile sends avatar to social/me','saved choice updates lounge header and profile','actual lounge picker at 320px','Escape and navigation dispose preview','no retired art requests'],updates,errors,retired},null,2)+'\n');console.log('PASS actual menu and profile API flow (fixture account)');
+}finally{await browser.close();}
