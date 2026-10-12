@@ -10,9 +10,9 @@ The animation is lazy loaded; exit, skip, replay, reduced motion, resize and clo
 
 ## Validation
 
-- `node tests/gacha-azure-motion.mjs`: attached/continuous ribbon, early opening visibility, final concealment, cover/page ordering, centered arrival, and shortened timing.
-- Local browser integration: one draw reaches result, back returns focus to its button; frame QA checks 6.4/7.4/8.4/17.95 seconds.
+- `node tests/gacha-azure-motion.mjs`: attached/continuous ribbon, early opening visibility, final concealment, cover/page ordering, centered arrival, shortened timing, and partial asset failure cleanup.
+- Local browser integration: one/ten draws reach results; replay and skip work; closing during load and returning from results restore focus. Frame QA checks 6.4/7.4/8.4/17.95 seconds. The 390×844 iframe fixture confirms ten results and controls remain visible with the app styles.
 - `qa/ribbon-opening.png`: actual runtime renderer at 7.4 seconds, showing the ribbon below the opening front cover.
-- Dev-only fixtures: `/gacha-azure-qa.html` (actual shop component) and `/gacha-azure-frames.html` (deterministic frame controls). They are excluded from production build inputs.
+- Dev-only fixtures: `/gacha-azure-qa.html` (actual shop component) and `/gacha-azure-frames.html` (deterministic frame controls). `/gacha-azure-mobile-qa.html` provides a 390×844 iframe of the shop fixture. These fixtures are excluded from production build inputs.
 
 Deployment must pass `node scripts/deploy-guard.mjs staging` from the committed current `gh/main`. Local/browser validation is not a claim of authenticated staging playback or production release.

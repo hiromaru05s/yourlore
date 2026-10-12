@@ -18,3 +18,13 @@ assert.equal(DURATION,17.95);
 assert(Math.abs(storyTime(1.95)-3)<1e-8,'The loose 1.5–3 second interval remains shortened');
 for(const t of [0,1.5,1.7,1.95,6.4,10.35,DURATION])assert(Math.abs(playbackTime(storyTime(t))-t)<.0001);
 console.log('PASS Azure Wake: continuous attached ribbon, visible early opening, tucked final state, cover/page order, centered arrival, compressed timing');
+
+// A failure must wait for late loads and release all successful partial assets.
+const {createRequire}=await import('node:module');const require=createRequire(import.meta.url);const THREE=require('three');
+const batchModule={};new Function('require','exports',ts.transpileModule(fs.readFileSync('client/src/ui/gachaAzure/assetBatch.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(require,batchModule);
+const texture=new THREE.Texture(),map=new THREE.Texture(),geo=new THREE.BoxGeometry(),mat=new THREE.MeshBasicMaterial({map}),scene=new THREE.Group();scene.add(new THREE.Mesh(geo,mat));
+let disposed=0,settled=false,complete;for(const resource of [texture,map,geo,mat])resource.addEventListener('dispose',()=>disposed++);
+const failed=batchModule.assetBatch([Promise.reject(new Error('missing asset')),new Promise(resolve=>{complete=resolve}),Promise.resolve({scene})]).catch(error=>{assert.equal(error.message,'missing asset');settled=true});
+await Promise.resolve();assert.equal(settled,false);assert.equal(disposed,0);complete(texture);await failed;assert.equal(disposed,4);
+const intact=new THREE.Texture();let released=false;intact.addEventListener('dispose',()=>released=true);assert.deepEqual(await batchModule.assetBatch([Promise.resolve(intact),Promise.resolve(42)]),[intact,42]);assert.equal(released,false);
+console.log('PASS Azure asset ownership: drains late loads, cleans failed batch, retains successful batch');

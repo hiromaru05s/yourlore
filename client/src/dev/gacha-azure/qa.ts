@@ -1,2 +1,10 @@
+import '../../styles/tokens.css';
+import '../../styles/base.css';
+import '../../styles/lounge.css';
+import '../../styles/loungeHorizon.css';
+import '../../styles/loungeSelectedMenu.css';
+import '../../styles/menuApproved.css';
+import '../../styles/menuWorkspace.css';
+document.body.classList.add('lounge-active');
 import {mountShopGacha} from '../../ui/shopGacha';
 mountShopGacha(document.querySelector<HTMLElement>('#app')!,{credits:0});
