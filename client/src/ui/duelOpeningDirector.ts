@@ -20,7 +20,7 @@ const rendererModule=()=>modulePromise??=import('./opening/renderer').catch(erro
 export async function warmOpening():Promise<void>{
   void warmOpeningSound();
   await Promise.all([rendererModule().catch(()=>{}),...['blue','red'].map(async color=>{
-    const image=new Image();image.src=`/art/biblion/seeker-${color}.png`;if(typeof image.decode==='function')await image.decode().catch(()=>{});
+    const image=new Image();image.src=`/art/biblion/seeker-${color}-lossless.webp`;if(typeof image.decode==='function')await image.decode().catch(()=>{});
   })]);
 }
 

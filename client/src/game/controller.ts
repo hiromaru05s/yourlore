@@ -1,3 +1,4 @@
+import {playStatusExtinction,warmStatusExtinctions,disposeStatusExtinctions} from '../ui/statusExtinction/runtime';
 import {isChosenVictory,playChosenVictory,warmChosenVictory} from '../ui/chosenVictory/runtime';
 import { playIntent, needsCastReview, targetOwner } from '../shared/playIntent';
 import {playDewGrant,warmDewGrant} from '../ui/dew/runtime';
@@ -26,7 +27,8 @@ import { paintDuelClock } from '../ui/duelClock';
 import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
 import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef } from "../shared/engine";
-import { botDecide, type BotDifficulty } from "../shared/bot";
+import type { BotDifficulty } from "../shared/bot";
+import {BotPlanner} from "./botPlanner";
 import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog, logToText } from "../ui/log";
@@ -71,7 +73,7 @@ export abstract class BaseController implements BoardHandlers {
   private rankPresentation = new RankPresentation();
   private winShown = false;
   private outcomePending = false;
-  private dead = false;
+  protected dead = false;
   private queue: Promise<void> = Promise.resolve();
   private unsubLang: () => void;
   private fxGen = 0; // batches queued so far
@@ -268,16 +270,6 @@ export abstract class BaseController implements BoardHandlers {
       if (!this.dead) this.view.setPlaying(false);
       if (res.state.over) this.outcomePending = false;
     }
-    // 기합(guts): 전투 파괴를 토큰으로 버틴 순간은 보드만 봐서는 모른다 — 배지로 명시
-    if (!this.dead) {
-      for (const pl of [0, 1] as const) {
-        const before = new Map(prev.players[pl].field.map((m) => [m.uid, m]));
-        for (const m of res.state.players[pl].field) {
-          const b = before.get(m.uid);
-          if (b && (b.guts ?? 0) > (m.guts ?? 0)) A.flashBadge(m.uid, `💢 ${t("fx.guts")}`, "good");
-        }
-      }
-    }
     if (this.dead) return;
     this.afterApply(res);
   }
@@ -320,6 +312,7 @@ export abstract class BaseController implements BoardHandlers {
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
     const spellGhosts:HTMLElement[]=[];
     let statusSource:HTMLElement|undefined;
+    if(events.some(e=>e.type==='statusExtinction'))warmStatusExtinctions();
     const hasStatusGrants=events.some(e=>e.type==='statusGrant');
     if(events.some(e=>e.type==='statusGrant'&&e.resource!=='dew'))warmStatusGrants();
     if(events.some(e=>e.type==='statusGrant'&&e.resource==='dew'))warmDewGrant();
@@ -331,6 +324,7 @@ export abstract class BaseController implements BoardHandlers {
     const elemental=new Map<string,Playback>();
     const elementalDeaths:Promise<void>[]=[];
     const draws = [0, 0];
+    const gutsHits=new Set<string>();
     const diceDone = new Set<number>(); // dice events already animated (pre-rolled ahead of a result popup)
 
     for (let i = 0; i < events.length; i++) {
@@ -345,6 +339,16 @@ export abstract class BaseController implements BoardHandlers {
       if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
       if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
       switch (e.type) {
+        case 'statusExtinction': {
+          const extinct = [e];
+          // One spell may clear both players: share the visual start instead of serial waits.
+          while (events[i + 1]?.type === 'statusExtinction') {
+            const next = events[++i];
+            if (next.type === 'statusExtinction') extinct.push(next);
+          }
+          if (!A.isFxSkipped()) await Promise.all(extinct.map(event => playStatusExtinction(sideOf(event.player),event.resource,event.before,event.after)));
+          break;
+        }
         case 'statusGrant': {
           const source=e.sourceUid?(ghosts.get(e.sourceUid)?.el??document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.sourceUid)}"]`)??undefined):statusSource;
           if(!A.isFxSkipped()){
@@ -415,15 +419,21 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "attack": {
-          // The shared attack timeline owns launch/contact cues and local target recoil.
-          const defender = sideOf((1 - e.player) as Side);
+          const targetPlayer=e.targetPlayer ?? ((e.targetUid&&prev.players[e.player].field.some(m=>m.uid===e.targetUid)?e.player:1-e.player) as Side);
+          const defender=sideOf(targetPlayer);
           const attacker=this.findCard(prev,e.uid)??this.findCard(res.state,e.uid),exhaust=res.state.players[e.player].field.find(m=>m.uid===e.uid)?.exhausted!==false;
-          if(attacker?.id==='NGA4'){
-            const targetPlayer=e.targetPlayer ?? ((e.targetUid&&prev.players[e.player].field.some(m=>m.uid===e.targetUid)?e.player:1-e.player) as Side);
-            await A.berserkStrike(e.uid,e.targetUid,e.player,this.you,targetPlayer,()=>eventSound.contact(e.targetUid,targetPlayer,e.contactDamage!==0),exhaust,e.contactDamage);
-          }else await A.attackStrike(e.uid,e.targetUid,defender,()=>eventSound.contact(e.targetUid,(1-e.player) as Side,e.contactDamage!==0),exhaust,e.contactDamage);
+          let survival:Promise<void>|undefined;
+          const contact=()=>{eventSound.contact(e.targetUid,targetPlayer,e.contactDamage!==0);if(e.guts&&!survival)survival=A.gutsSurvive(e.guts,sideOf(e.guts.player));};
+          if(attacker?.id==='NGA4')await A.berserkStrike(e.uid,e.targetUid,e.player,this.you,targetPlayer,contact,exhaust,e.contactDamage);
+          else await A.attackStrike(e.uid,e.targetUid,defender,contact,exhaust,e.contactDamage);
+          await survival;
+          // The dedicated material already owns this target's recoil at contact.
+          if(e.guts)gutsHits.add(e.guts.uid);
           break;
         }
+        case "gutsSurvive":
+          await A.gutsSurvive(e,sideOf(e.player));
+          break;
         case "monsterActivate": {
           // Several sources reacting to the same event should be visible together.
           const uids = new Set([e.uid]);
@@ -434,10 +444,14 @@ export abstract class BaseController implements BoardHandlers {
           await Promise.all([...uids].map(uid => A.monsterActivation(uid)));
           break;
         }
-        case "hit":
-          A.monHit(e.uid);
-          if(!elemental.size)await wait(110);
+        case "hit": {
+          const next=events[i+1];
+          if(!gutsHits.delete(e.uid)&&!(next?.type==='gutsSurvive'&&next.uid===e.uid)){
+            A.monHit(e.uid);
+            if(!elemental.size)await wait(110);
+          }
           break;
+        }
         case "dice":
           if (!diceDone.has(i)&&!A.isFxSkipped()) {
             diceDone.add(i);
@@ -1045,6 +1059,7 @@ export abstract class BaseController implements BoardHandlers {
     this.marketRefresh?.cancel();
     this.disposeHandDiscard?.();
     this.dead = true;
+    disposeStatusExtinctions();
     this.rankPresentation.destroy();
     stopSounds();
     this.openingAbort.abort();this.releaseOpening();
@@ -1070,6 +1085,7 @@ const lastNpcDecks = new Map<string, number>();
 
 export class LocalController extends BaseController {
   private botTimer = 0;
+  private readonly planner = new BotPlanner();
   private difficulty: BotDifficulty;
 
   constructor(root: HTMLElement, exits: ControllerExits, playerName = "PLAYER 1", deck?: string[], difficulty: BotDifficulty = "hard") {
@@ -1088,6 +1104,11 @@ export class LocalController extends BaseController {
     this.applyResult(res, false);
   }
 
+  protected applyResult(res: ReduceResult, animate = true): void {
+    if(res.state.over){clearTimeout(this.botTimer);this.planner.dispose();}
+    super.applyResult(res,animate);
+  }
+
   protected submit(action: Action): void {
     if (this.state.over || action.type!=="surrender"&&this.openingLocked) return;
     // input is never locked during playback — so out-of-turn clicks (e.g. on a
@@ -1098,7 +1119,7 @@ export class LocalController extends BaseController {
 
   protected maybeBot(): void {
     const g = this.state;
-    if (g.over) return;
+    if (g.over) { this.planner.dispose(); return; }
     if (g.players[actingSide(g)].isBot) {
       clearTimeout(this.botTimer);
       // playback has already finished by the time afterApply runs — a short beat is enough
@@ -1108,9 +1129,9 @@ export class LocalController extends BaseController {
 
   private botTurnNo = -1;
   private botTurnSteps = 0;
-  private botStep(): void {
+  private async botStep(): Promise<void> {
     const g = this.state;
-    if (g.over || !g.players[actingSide(g)].isBot) return;
+    if (this.dead || g.over || !g.players[actingSide(g)].isBot) return;
     // 안전망: 봇이 한 턴에서 비정상적으로 많은 행동을 반복하면(거부 루프 등) 강제 턴 종료.
     // 정상 턴은 수십 액션 이내 — 200회는 버그가 아니면 도달 불가.
     if (g.turn !== this.botTurnNo) { this.botTurnNo = g.turn; this.botTurnSteps = 0; }
@@ -1119,9 +1140,10 @@ export class LocalController extends BaseController {
       this.applyResult(reduce(g, g.pending?.allowCancel ? ({ type: "pick", uid: null } as Action) : ({ type: "endTurn" } as Action)));
       return;
     }
-    const action = botDecide(g, this.difficulty);
+    const action = await this.planner.decide(g, this.difficulty);
+    if(!action||this.dead||this.state!==g||g.over)return;
     this.applyResult(reduce(g, action));
   }
 
-  destroy(): void { clearTimeout(this.botTimer); super.destroy(); }
+  destroy(): void { clearTimeout(this.botTimer); this.planner.dispose(); super.destroy(); }
 }

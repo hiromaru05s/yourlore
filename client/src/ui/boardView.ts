@@ -1,3 +1,4 @@
+import {dualReadyActive} from './monster/dualReady';
 import { questProgressText } from '../shared/cardPresentation';
 import { npcPortrait } from "../shared/botNpcs";
 import {prepareManaPurchase} from './manaPurchase';
@@ -104,11 +105,14 @@ export class GameView {
     this.statRise = createBoardStatRise(root);
     delete this.root.dataset.sceneReady;delete this.root.dataset.boardRendered;delete this.root.dataset.preloadedImages;
     this.root.dataset.tableState=typeof WebGL2RenderingContext!=='undefined'?'loading':'fallback';
+    // Select projected-board CSS before inserting nodes: otherwise the browser
+    // fetches legacy hidden furniture atlases during the first style pass.
+    if(typeof WebGL2RenderingContext!=='undefined')this.root.classList.add('reading-board');
     this.buildSkeleton();
     if(!matchMedia('(prefers-reduced-motion: reduce)').matches)void prepareManaPurchase();
     this.cleanups.push(installGameCursor(this.root));
     const mount=typeof WebGL2RenderingContext!=='undefined'
-      ? import('./duelScene').then(({mountDuelScene})=>{if(!this.disposed)this.disposeScene=mountDuelScene(this.root);}).catch(()=>{this.root.dataset.tableState='fallback';})
+      ? import('./duelScene').then(({mountDuelScene})=>{if(!this.disposed){this.disposeScene=mountDuelScene(this.root);if(this.root.dataset.tableState==='fallback')this.root.classList.remove('reading-board');}}).catch(()=>{this.root.dataset.tableState='fallback';this.root.classList.remove('reading-board');})
       : Promise.resolve();
     prepareDuel(this.root,mount);
   }
@@ -499,6 +503,7 @@ export class GameView {
       const countLabel = getLang() === 'ja' ? 'カウント' : getLang() === 'en' ? 'Count' : '카운트';
       const casinoBadge = m.aura === "casino" ? { badge: `${countLabel} ${m.gcount || 0}/12` } : m.id === "CASTLE" ? { badge: `${countLabel} ${m.gcount || 0}` } : {};
       const card = cardEl(m, { field: true, owner: p, game: g, attacker: canAttack, targetable: targetableMon, exhausted: isMe && myTurn && m.exhausted, ...casinoBadge });
+      if (dualReadyActive(m, canAttack)) card.dataset.monsterDualReady = '04';
       if (pending?.reason === "attack" && isMe && myTurn && pending.data?.attackerUid === m.uid) card.onclick = () => this.h.onChooseTarget(null);
       else if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);

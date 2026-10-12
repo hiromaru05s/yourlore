@@ -25,6 +25,8 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{cosmeticPreview.dispose();root.dataset.tableState='fallback';root.dataset.widgetsReady='fallback';return ()=>{};}
   let flightRenderer:T.WebGLRenderer;
   try{flightRenderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{cosmeticPreview.dispose();renderer.dispose();renderer.forceContextLoss();root.dataset.tableState='fallback';root.dataset.widgetsReady='fallback';return ()=>{};}
+  // Driver log queries synchronously wait on GPU compilation; keep them in dev.
+  renderer.debug.checkShaderErrors=flightRenderer.debug.checkShaderErrors=import.meta.env?.DEV??true;
   renderer.setPixelRatio(rasterRatio());renderer.setClearColor(0,0);renderer.autoClear=false;
   renderer.toneMapping=T.AgXToneMapping;renderer.toneMappingExposure=1;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
@@ -58,18 +60,20 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   function texture(url:string){let t=textures.get(url);if(!t){t=loader.load(url,()=>{dirty=true;});t.userData.url=url;t.colorSpace=T.SRGBColorSpace;t.anisotropy=8;textures.set(url,t);}return t;}
   function mesh(g:T.BufferGeometry,m:T.Material|T.Material[],parent:T.Object3D,x=0,y=0,z=0){const a=new T.Mesh(g,m);a.position.set(x,y,z);parent.add(a);return a;}
   function disposeObject(object:T.Object3D){const geos=new Set<T.BufferGeometry>(),mats=new Set<T.Material>();object.traverse(o=>{if(o instanceof T.Mesh){geos.add(o.geometry);(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>mats.add(m));}});geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());}
-  function removeItem(item:Item){item.disposeCosmetic?.();scene.remove(item.group);disposeObject(item.group);}
+  const retired:T.Object3D[]=[];
+  const releaseRetired=()=>{retired.splice(0).forEach(disposeObject);};
+  function removeItem(item:Item,defer=false){item.disposeCosmetic?.();scene.remove(item.group);if(defer)retired.push(item.group);else disposeObject(item.group);}
   function refresh(){
     const elements=[...root.querySelectorAll<HTMLElement>('.pile--deck,.pile--shelf,.market-counter,.market-sub--supply')];
     const ids=new Set(elements.map(el=>el.classList.contains('market-counter')?'market-base':el.classList.contains('market-sub--supply')?'supply-base':el.id));
-    for(const [id,item] of items)if(!ids.has(id)){removeItem(item);items.delete(id);}
+    for(const [id,item] of items)if(!ids.has(id)){removeItem(item,true);items.delete(id);}
     for(const el of elements){
       const supply=el.classList.contains('market-sub--supply'),market=el.classList.contains('market-counter'),id=market?'market-base':supply?'supply-base':el.id,shelf=el.classList.contains('pile--shelf');
       if((market&&!furniture.has('market'))||(supply&&!furniture.has('supply')))continue;
       const key=`${el.dataset.count}:${el.dataset.face}:${el.dataset.sleeve}:${el.dataset.material}:${furniture.revision}:${cosmeticPreview?.revision??0}`;
       el.dataset.furniture=furniture.has(supply?'supply':market?'market':shelf?'shelf':'deck')?'blender':'fallback';
       let item=items.get(id);if(item?.key===key){item.element=el;if(shelf){const print=el.querySelector<HTMLElement>('.pile-print .card');el.dataset.surfaceReady=String(!!print);el.dataset.surfaceCard=print?.dataset.cardId||'';}continue;}
-      if(item)removeItem(item);
+      if(item)removeItem(item,true);
       const group=new T.Group();scene.add(group);item={group,key,element:el,market,supply};items.set(id,item);
       if(market||supply)group.add(furniture.clone(supply?'supply':'market')!);
       else{
@@ -167,6 +171,10 @@ export function mountDuelScene(root:HTMLElement):()=>void {
       const marketItem=items.get('market-base');
       if(marketItem)widgets.setMarketMotion(Number(marketItem.group.userData.introHeight)||0,Number(marketItem.group.userData.introZ)||0,marketItem.group.visible);
       renderer.setRenderTarget(cachedBoard);renderer.setScissorTest(false);renderer.clear();renderer.render(scene,camera);
+      // Register replacement materials before releasing the previous ones. If
+      // the last user is disposed first, Three deletes shared GPU programs and
+      // recompiles them on every deck/shelf count update.
+      releaseRetired();
       if(root.querySelector('.pt-mana[data-gain-start]'))getManaFormation()?.postprocess(renderer,cachedBoard);
       fullPasses++;
     }else if(riftMotion){
@@ -216,7 +224,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   const lost=(event:Event)=>{event.preventDefault();dispose();};canvas.addEventListener('webglcontextlost',lost);flightCanvas.addEventListener('webglcontextlost',lost);
   function dispose(){
     if(dead)return;dead=true;disposeOpening();root.dataset.tableState='fallback';motion.dispose();cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:render-density',onDensity);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);flightCanvas.removeEventListener('webglcontextlost',lost);
-    items.forEach(removeItem);cosmeticPreview?.dispose();textures.forEach(t=>t.dispose());table.dispose();furniture.dispose();widgets.dispose();disposeFormationBloom();keyLight.shadow.dispose();disposeObject(dustScene);dustMap.dispose();environment.dispose();flightEnvironment.dispose();cachedBoard.dispose();presentQuad.geometry.dispose();presentMaterial.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove();flightRenderer.dispose();flightRenderer.forceContextLoss();flightCanvas.remove();
+    items.forEach(item=>removeItem(item));releaseRetired();cosmeticPreview?.dispose();textures.forEach(t=>t.dispose());table.dispose();furniture.dispose();widgets.dispose();disposeFormationBloom();keyLight.shadow.dispose();disposeObject(dustScene);dustMap.dispose();environment.dispose();flightEnvironment.dispose();cachedBoard.dispose();presentQuad.geometry.dispose();presentMaterial.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove();flightRenderer.dispose();flightRenderer.forceContextLoss();flightCanvas.remove();
     root.querySelectorAll<HTMLElement>('.pile').forEach(el=>{el.classList.remove('pile--3d-ready');delete el.dataset.furniture;el.querySelector('.pile-draw-anchor')?.remove();});clearBoardProjection(root);root.classList.remove('duel-webgl','market-model-ready','supply-model-ready');
   }
   frame=requestAnimationFrame(render);return dispose;

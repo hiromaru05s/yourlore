@@ -1,3 +1,6 @@
+import {isVampire} from './vampireSummon/selection';
+import {playVampireSummon} from './vampireSummon/runtime';
+import {cancelStatusExtinctions} from './statusExtinction/runtime';
 import {isDarkMerchant} from './merchant/selection';
 import {playDarkMerchant,warmDarkMerchant,cancelDarkMerchants} from './merchant/runtime';
 import {isAssassin} from './assassinSummon/selection';
@@ -25,7 +28,7 @@ import {flyPersistentIntoSlot} from './persistentFlight';
 import {playSpellFrame,cancelSpellFrames,warmSpellFrame,SPELL_FRAME_RATE} from './spellFrame/runtime';
 import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {isMimic,focusScale,type MimicId} from './mimic/selection';
-import {playMonster,setMonsterSkip} from './monster/runtime';
+import {playMonster,setMonsterSkip,playGutsEndurance} from './monster/runtime';
 import {summonPlacement} from './summon/runtime';
 import {isVerdant} from './verdant/selection';
 import {foldQuestIntoSlot,nativeQuestGhost,warmQuestPact} from './questFold';
@@ -40,7 +43,7 @@ import {waitForDuel} from './duelReadiness';
 // LORE — animation helpers. Triggered by engine events; never
 // touch game state, only the DOM.
 // ============================================================
-import type { CardInst } from "../shared/types";
+import type { CardInst, GutsSurvival } from "../shared/types";
 import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, enchantHasTurnCountdown } from "../shared/cards";
 import { cardEl, cardRulesEl, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
 import { t, getLang, cardName } from "../i18n";
@@ -66,7 +69,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on);
-  if(on){cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -210,6 +213,11 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(heavy&&isVampire(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playVampireSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),7000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
   if(heavy&&isAssassin(face.dataset.cardId)){
     face.style.visibility='hidden';reveal.remove();
     if(!fxSkip)await boardMotionScope(signal=>playAssassinSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
@@ -301,6 +309,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
 /** Both hand plays and engine-generated summon events share this selected reveal. */
 async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise<void>{
  const id=card.id;
+ if(isVampire(id)){node.style.visibility='hidden';return;}
  if(isAssassin(id)){node.style.visibility='hidden';return;}
  if(isMage(id)){node.style.visibility='hidden';return;}
  // Selected hexers begin in their renderer, without a raw DOM reveal or transfer.
@@ -502,6 +511,10 @@ export async function attackStrike(uid:string,targetUid:string|null,defender:Vie
   sfx('attack');
   await boardMotionScope(signal=>playMonster(source,'attack',{target,signal,exhaust,side:defender==='opp'?1:-1,onImpact:()=>{if(contactDamage>0)sfx(targetUid?'impact':'facehit');onImpact?.();}}));
   if(exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');source.style.filter='grayscale(1) brightness(.57)';}
+}
+/** Starts on the attack contact callback, or on an explicit non-strike survival event. */
+export async function gutsSurvive(result:GutsSurvival,side?:ViewSide):Promise<void>{
+ const card=combatCard(result.uid);if(card&&!fxSkip)await boardMotionScope(signal=>playGutsEndurance(card,result,signal,side==='opp'?-1:side==='me'?1:undefined));
 }
 export async function monsterActivation(uid:string):Promise<void>{
  const n=byUid(uid);if(n&&!fxSkip)await boardMotionScope(signal=>playMonster(n,'trigger',{signal,side:n.closest('#oppRow')?-1:1}));

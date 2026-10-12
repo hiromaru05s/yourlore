@@ -1,0 +1,32 @@
+[
+  {
+    "source": "/art/biblion/modular/base-mon.png",
+    "pixels": 1572864,
+    "rgbaDifferences": 0
+  },
+  {
+    "source": "/art/biblion/modular/base-spell.png",
+    "pixels": 1572864,
+    "rgbaDifferences": 0
+  },
+  {
+    "source": "/art/biblion/modular/base-quest.png",
+    "pixels": 1572864,
+    "rgbaDifferences": 0
+  },
+  {
+    "source": "/art/biblion/modular/base-trap.png",
+    "pixels": 1572864,
+    "rgbaDifferences": 0
+  },
+  {
+    "source": "/art/biblion/seeker-blue.png",
+    "pixels": 1573538,
+    "rgbaDifferences": 0
+  },
+  {
+    "source": "/art/biblion/seeker-red.png",
+    "pixels": 1573538,
+    "rgbaDifferences": 0
+  }
+]

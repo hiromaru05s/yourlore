@@ -28,8 +28,15 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
     loading.update(3,loungeText("盤面を組み立てています","Building the board","보드 준비 중"));
     while(!expired&&root.isConnected&&root.dataset.boardRendered!=="true")await new Promise<void>(r=>requestAnimationFrame(()=>r()));
     if(expired||!root.isConnected)return;
+    // Let the mounted renderer apply the projected-board classes first. Without
+    // this paint, the scan sees legacy fallback styles and loads their PNGs.
+    await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
+    if(!root.isConnected)return;
     const urls=new Set([...duelCardAssets,'/art/biblion/modular/brand-seal-ui.png','/art/seekers/v2/mask-self.png','/art/seekers/v2/mask-opp.png',...PASSIVE_KEYS.map(passiveIconUrl),...seekerAssets,...coinImages,...['base-mon','base-spell','base-quest','field-mon','field-spell','field-quest','cost','attack','health','shield','dew'].map(n=>`/art/biblion/modular/${n}-ui.webp`)]);
     for(const el of root.querySelectorAll<HTMLElement>('*')){
+      // Hidden legacy furniture and atlas backgrounds are not part of the scene.
+      // Reading their styles and explicitly decoding them fetched unused PNGs.
+      if(!el.getClientRects().length)continue;
       if(el.dataset.material)urls.add(el.dataset.material);
       if(el instanceof HTMLImageElement){if(el.currentSrc||el.src)urls.add(el.currentSrc||el.src);el.loading='eager';el.fetchPriority='high';}
       for(const pseudo of [null,'::before','::after']){const style=getComputedStyle(el,pseudo);if(pseudo&&(style.content==='none'||style.content==='normal'))continue;for(const match of style.backgroundImage.matchAll(/url\(["']?(.*?)["']?\)/g))urls.add(match[1]);}

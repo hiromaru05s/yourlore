@@ -1,0 +1,162 @@
+{
+  "sample": {
+    "frames": 604,
+    "p95": 16.700000000000728,
+    "max": 150,
+    "over50": 6,
+    "longTasks": [
+      {
+        "start": 17144.200000000186,
+        "duration": 68
+      },
+      {
+        "start": 17761.799999999814,
+        "duration": 64
+      },
+      {
+        "start": 18210.39999999944,
+        "duration": 123
+      },
+      {
+        "start": 18508.89999999944,
+        "duration": 61
+      },
+      {
+        "start": 19644.099999999627,
+        "duration": 131
+      },
+      {
+        "start": 21568.39999999944,
+        "duration": 57
+      }
+    ]
+  },
+  "hotspots": [
+    {
+      "fn": "(idle)",
+      "url": "",
+      "hits": 4424
+    },
+    {
+      "fn": "(program)",
+      "url": "",
+      "hits": 225
+    },
+    {
+      "fn": "getImageData",
+      "url": "",
+      "hits": 51
+    },
+    {
+      "fn": "getProgramParameter",
+      "url": "",
+      "hits": 42
+    },
+    {
+      "fn": "",
+      "url": "http://127.0.0.1:5625/assets/RoomEnvironment-DASCOWwv.js",
+      "hits": 36
+    },
+    {
+      "fn": "fillText",
+      "url": "",
+      "hits": 28
+    },
+    {
+      "fn": "ee",
+      "url": "http://127.0.0.1:5625/assets/scene-_cADZ2Gj.js",
+      "hits": 28
+    },
+    {
+      "fn": "putImageData",
+      "url": "",
+      "hits": 27
+    },
+    {
+      "fn": "(garbage collector)",
+      "url": "",
+      "hits": 17
+    },
+    {
+      "fn": "getImageData",
+      "url": "",
+      "hits": 16
+    },
+    {
+      "fn": "get offsetWidth",
+      "url": "",
+      "hits": 15
+    },
+    {
+      "fn": "Ve",
+      "url": "http://127.0.0.1:5625/assets/duelScene-DuqQeof7.js",
+      "hits": 13
+    },
+    {
+      "fn": "la",
+      "url": "http://127.0.0.1:5625/assets/modal-Bs8bkH2A.js",
+      "hits": 9
+    },
+    {
+      "fn": "getPropertyValue",
+      "url": "",
+      "hits": 9
+    },
+    {
+      "fn": "ye",
+      "url": "http://127.0.0.1:5625/assets/duelScene-DuqQeof7.js",
+      "hits": 8
+    },
+    {
+      "fn": "M",
+      "url": "http://127.0.0.1:5625/assets/RoomEnvironment-DASCOWwv.js",
+      "hits": 8
+    },
+    {
+      "fn": "draw",
+      "url": "http://127.0.0.1:5625/assets/riftScene-opqiJdKz.js",
+      "hits": 8
+    },
+    {
+      "fn": "texSubImage2D",
+      "url": "",
+      "hits": 7
+    },
+    {
+      "fn": "querySelectorAll",
+      "url": "",
+      "hits": 6
+    },
+    {
+      "fn": "M",
+      "url": "http://127.0.0.1:5625/assets/RoomEnvironment-DASCOWwv.js",
+      "hits": 6
+    },
+    {
+      "fn": "ps",
+      "url": "http://127.0.0.1:5625/assets/RoomEnvironment-DASCOWwv.js",
+      "hits": 6
+    },
+    {
+      "fn": "m",
+      "url": "http://127.0.0.1:5625/assets/RoomEnvironment-DASCOWwv.js",
+      "hits": 6
+    },
+    {
+      "fn": "renderBufferDirect",
+      "url": "http://127.0.0.1:5625/assets/RoomEnvironment-DASCOWwv.js",
+      "hits": 6
+    },
+    {
+      "fn": "getBoundingClientRect",
+      "url": "",
+      "hits": 6
+    },
+    {
+      "fn": "getPropertyValue",
+      "url": "",
+      "hits": 6
+    }
+  ],
+  "errors": []
+}

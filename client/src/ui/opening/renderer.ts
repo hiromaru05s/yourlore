@@ -16,7 +16,7 @@ let disposed=false;
 let portraits:HTMLImageElement[]=[];let gpu=true;const hot=document.createElement("canvas");hot.width=hot.height=640;const hg=hot.getContext("2d")!;
 const npcImages=new Map<string,HTMLImageElement>();
 async function loadAssets(avatars:readonly (string|null)[]=[]){
- portraits=await Promise.all(['blue','red'].map(c=>new Promise<HTMLImageElement>((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src='/art/biblion/seeker-'+c+'.png';}))).catch(()=>[]);
+ portraits=await Promise.all(['blue','red'].map(c=>new Promise<HTMLImageElement>((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src='/art/biblion/seeker-'+c+'-lossless.webp';}))).catch(()=>[]);
  if(disposed)return false;
  await Promise.all([...new Set(avatars)].map(async avatar=>{
   const url=npcPortrait(avatar);if(!url||!avatar)return;

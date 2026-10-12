@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-12",
+  "base": "8d7cdbe0",
+  "scope": "comparison preview only",
+  "variants": [
+    "金継の不屈",
+    "緋紐の縫命",
+    "鋼縁の踏留",
+    "琥珀の復圧"
+  ],
+  "sourceSha256": {
+    "client/guts-four.html": "d4e7a070ecc6e3e515cc425ce47e7a4874c95105df9770142b937e2a01072e74",
+    "client/src/dev/guts-four/vite.config.mjs": "9352fdae328624e094d7ac1c5641a2a3874b213462a927f980410bfb2d19c941",
+    "client/src/dev/guts-four/main.ts": "b15c35a69c24cdb01d0f6c3d096fb5f114e65fa29a8bad6e47b4b2b28eb80411",
+    "client/src/dev/guts-four/rig.ts": "3c1658c93f5c52a5b63f8eeb2718acd058d8f20b5b5a346ddd9b6ab7c008a987",
+    "client/src/dev/guts-four/paint.ts": "a3f0ddae2799056235fc3d72ecd1dbc5a533409214ed39e8b5cc999ea0f030c6",
+    "client/src/dev/guts-four/style.css": "da3a22b38c438d14ef8aca73054317413df75fc8742906a5a24807ca55173805",
+    "client/src/dev/guts-four/board.ts": "be6cc1e57bec61129f211adbb3c689ebf29125a37ebb0ce5c80d93c29e56f7f3",
+    "client/src/dev/guts-four/catalog.ts": "272f43cc22bef213be92cb5f0a296ff1d5d12e42477fbe8c1355dea6c1a6183e",
+    "client/src/dev/guts-four/tsconfig.json": "565db246613cf2b853e1044ddc9de358c8b646d6531af1c4bcc9745bad843b5f",
+    "tests/guts-four-lifecycle.mjs": "b563f0b0a8246fb527e161e61bbf11d3f6334c2bda2e54486fe0160a5c874d98"
+  }
+}
