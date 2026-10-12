@@ -3,6 +3,7 @@ import {HatchRenderer} from './renderer';
 import {designs,outcomes,DURATION,phase} from './catalog';
 import './style.css';
 import {runQA} from './qa';
+document.documentElement.classList.add('hatch-preview');
 const root=document.getElementById('app')!;document.title='LORE — 孵化召喚４案';
 let mode='grid',variant=0,outcome=0,ms=0,playing=false,ready=false,disposed=false,dark=false,side=0,multi=false,reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,speed=1,loop=true,raf=0,last=0,painted=0;
 let renderer:HatchRenderer;const faces=new Map<string,HTMLCanvasElement>();
