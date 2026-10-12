@@ -2,7 +2,7 @@
   "url": "https://test.yourlore.xyz/",
   "title": "LORE — 덱빌드 듀얼",
   "status": 200,
-  "bodyLength": 103,
+  "bodyLength": 78,
   "errors": [],
-  "scope": "Public unauthenticated page render; not authenticated online match"
+  "scope": "Public unauthenticated page after loader dismissal; not authenticated online match"
 }
