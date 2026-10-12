@@ -3,3 +3,8 @@
 #reference{margin:0 24px;display:grid;grid-template-columns:1fr 1fr;gap:20px}#reference h2{font-size:19px}#reference p{font-size:12px;line-height:1.8;color:#abb6bd}#reference video{width:100%;max-height:65vh;background:#080c10}#reference>p{grid-column:1/-1}@media(max-width:850px){#reference{grid-template-columns:1fr;margin:0 14px}}
 
 .reference-live{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:1px}.reference-live article{background:#eeece6;padding:12px}.reference-live h2{font-size:13px!important}.reference-live canvas{width:100%;aspect-ratio:.95;display:block}@media(max-width:850px){.reference-live{grid-template-columns:1fr 1fr}}
+/* Card capture imports the game's fixed viewport styles. Only the comparison
+   document should scroll; the embedded duel keeps its own viewport sizing. */
+html.assassin-preview{height:auto;min-height:100%;overflow-x:clip;overflow-y:auto}
+html.assassin-preview body{height:auto;min-height:100vh;overflow:visible}
+html.assassin-preview #app{height:auto;min-height:100vh}

@@ -6,6 +6,7 @@ import verdantVideo from '../../../../docs/releases/2026-10-08-verdant-04/qa/nor
 import dewVideo from '../../../../docs/releases/2026-10-08-dew-t2/qa/playback.webm?url';
 import {surface} from './surface';
 import './style.css';
+document.documentElement.classList.add('assassin-preview');
 const root=document.getElementById('app')!;
 let view:View='oblique';
 let mode='grid',variant=0,ms=0,speed=1,playing=false,loop=true,dark=false,side=0,multi=false,reduced=matchMedia('(prefers-reduced-motion:reduce)').matches,ready=false,raf=0,last=0,id='ASSASSIN4';
