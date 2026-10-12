@@ -19,6 +19,13 @@
 - 同時採用された反撃・気合・二刀流・状態消滅・吸血鬼召喚を統合後、回避・反撃・気合のテストとclient/server型検査を通過。実コントローラー5ケースも再実行して通過（`qa/controller-integrated.json`）。
 - 選定はユーザー承認済み。上記ブラウザー検証はローカルの実コントローラーフィクスチャで、認証済みオンライン対戦の証明ではない。
 
+## 統合版の再確認
+
+- `616d906d` は03の実装コミット `06b7f745` と検証済み統合版 `a8fb58ec` を含む。回避のコードは変更されず、シーカー表示を含む最終統合版でも実コントローラー5ケースを通過。`qa/controller-final-integrated.json`、`qa/browser-errors-final.json`（0件）に記録。
+- 最初のガード実行は既存 `deck-hand-editor` の120秒タイムアウトで配信前に中断。検査内容を変更せず単独再実行し、約30秒で通過した。後続の統合ガードで配信が完了し、配信ファイル照合も通過した。
+
 ## 配信
 
-`scripts/deploy-guard.mjs staging` で統合済みコミットから配信し、Workerの版と配信されたHTML/JS/CSSのSHA-256を記録する。本番へのデプロイは対象外。
+2026-10-13（JST/KST）、共有リリースの `scripts/deploy-guard.mjs staging` による `3d31470446d514fcc97344e3c25ade5683b8f472` の反映を確認。Worker `lore-server-staging` の版は `8b1e4c6c-4d60-4e33-877c-5a47b3d84992`、100%配信。
+
+ガードが実際に使った一時スナップショットからビルドを保存し、HTML/JS/CSS **62/62** のSHA-256一致を確認。`deployment.json` と `qa/staging-assets.json` に記録。本番は未反映。
