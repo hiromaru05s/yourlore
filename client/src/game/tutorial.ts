@@ -17,7 +17,7 @@
 //   9. 승리          (win)                           +200   ← bot HP lowered
 // ============================================================
 import type { Action, FieldMon, GameEvent, PlayerState } from "../shared/types";
-import { createGame, effAtk, reduce } from "../shared/engine";
+import { createGame, effAtk, monsterCanAttack, reduce } from "../shared/engine";
 import { DB, STARTERS } from "../shared/cards";
 import { BaseController, type ControllerExits } from "./controller";
 import { api } from "../net/api";
@@ -156,7 +156,7 @@ export class TutorialController extends BaseController {
     if (i === 8) {                                            // victory: one clean hit finishes it
       this.ensureAttacker();
       const bot = g.players[1];
-      const best = Math.max(1, ...me.field.map((m) => effAtk(me, m, g)));
+      const best = Math.max(1, ...me.field.filter(m => monsterCanAttack(g, me, m)).map((m) => effAtk(me, m, g)));
       bot.hp = Math.min(bot.hp, best); // ≤ the player's strongest hit
     }
     this.view.render(this.state);
@@ -170,7 +170,7 @@ export class TutorialController extends BaseController {
   /** Ensure the player has a monster on the field that can attack this turn. */
   private ensureAttacker(): void {
     const me = this.state.players[0];
-    if (!me.field.some((m) => !m.exhausted)) {
+    if (!me.field.some((m) => monsterCanAttack(this.state, me, m))) {
       const def = structuredClone(DB.M4);
       const m: FieldMon = { ...def, uid: `tut${++this.state.uidSeq}`, exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: this.state.turn };
       me.field.push(m);
@@ -234,10 +234,10 @@ export class TutorialController extends BaseController {
       case 2: return ["#refreshBtn"];
       case 3: return ["#hand"];
       case 4: return ["#hand"];
-      case 5: return ["#meRow .card"];
+      case 5: return ["#meRow .card.is-attacker"];
       case 6: return ["#hand"];
       case 7: return ["#hand"];
-      case 8: return ["#meRow .card"];
+      case 8: return ["#meRow .card.is-attacker"];
       default: return [];
     }
   }

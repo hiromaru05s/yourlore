@@ -1,0 +1,17 @@
+import {chromium} from '/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
+import fs from 'node:fs';
+const out='docs/sound-study/2026-10-08-chosen-seven';
+const browser=await chromium.launch({headless:true,channel:"chrome"});
+const page=await browser.newPage({viewport:{width:1440,height:1040}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
+await page.addInitScript(()=>{window.audioStarts=[];window.audioStops=[];const start=AudioBufferSourceNode.prototype.start,stop=AudioBufferSourceNode.prototype.stop;AudioBufferSourceNode.prototype.start=function(when,...args){window.audioStarts.push({when,now:this.context.currentTime,duration:this.buffer?.duration});return start.call(this,when,...args)};AudioBufferSourceNode.prototype.stop=function(when){window.audioStops.push(when);return stop.call(this,when)}});
+await page.goto('http://127.0.0.1:5420/chosen-sound-seven.html');await page.waitForFunction(()=>window.chosenSoundSeven?.ready);
+await page.locator('#sequence').click();await page.waitForFunction(()=>window.chosenSoundSeven.events.length===7&&!window.chosenSoundSeven.playing,{},{timeout:35000});
+const sequence=await page.evaluate(()=>({events:window.chosenSoundSeven.events,starts:window.audioStarts}));
+if(sequence.events.length!==7||sequence.starts.length!==7)throw Error('Missing seven playback');
+await page.screenshot({path:out+'/comparison-desktop.png'});
+await page.selectOption('#mode','full');await page.locator('.choice').nth(0).click();await page.waitForFunction(()=>window.chosenSoundSeven.playing);await page.waitForTimeout(2770);const flash=await page.evaluate(()=>window.chosenSoundSeven.time);await page.screenshot({path:out+'/flash-desktop.png'});await page.locator('#stop').click();
+await page.selectOption('#mode','sound');await page.locator('.choice').nth(2).click();await page.waitForFunction(()=>window.chosenSoundSeven.playing);const soundOnly=await page.evaluate(()=>window.audioStarts.at(-1));await page.locator('#stop').click();
+await page.selectOption('#mode','full');await page.locator('.choice').nth(3).click();await page.waitForFunction(()=>window.chosenSoundSeven.playing);await page.waitForTimeout(100);await page.locator('.choice').nth(4).click();await page.waitForTimeout(100);await page.locator('#stop').click();const cancelled=await page.evaluate(()=>({playing:window.chosenSoundSeven.playing,stops:window.audioStops.length}));
+await page.setViewportSize({width:390,height:844});await page.waitForTimeout(300);const mobile=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth,choices:document.querySelectorAll('.choice').length}));await page.screenshot({path:out+'/comparison-mobile.png',fullPage:true});
+if(mobile.scroll>mobile.width||mobile.choices!==7||errors.length||cancelled.playing||flash<2600||flash>3100)throw Error(JSON.stringify({mobile,errors,cancelled,flash}));
+fs.writeFileSync(out+'/browser-qa.json',JSON.stringify({sequence,flash,soundOnly,cancelled,mobile,errors},null,2));console.log(JSON.stringify({pass:true,variants:sequence.events.length,flash,soundOnly,cancelled,mobile,errors}));await browser.close();

@@ -1,0 +1,234 @@
+{
+  "errors": [],
+  "resources": [],
+  "variants": [
+    {
+      "id": 1,
+      "counts": [
+        5,
+        5,
+        5,
+        5,
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "id": 2,
+      "counts": [
+        5,
+        5,
+        5,
+        5,
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "id": 3,
+      "counts": [
+        5,
+        5,
+        5,
+        5,
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "id": 4,
+      "counts": [
+        5,
+        5,
+        5,
+        5,
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "id": 5,
+      "counts": [
+        5,
+        5,
+        5,
+        5,
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "id": 6,
+      "counts": [
+        5,
+        5,
+        5,
+        5,
+        8,
+        8,
+        8
+      ]
+    }
+  ],
+  "viewports": [
+    {
+      "width": 320,
+      "overflow": 0
+    },
+    {
+      "width": 390,
+      "overflow": 0
+    },
+    {
+      "width": 844,
+      "overflow": 0
+    },
+    {
+      "width": 1440,
+      "overflow": 0
+    }
+  ],
+  "board": [
+    {
+      "width": 390,
+      "side": 0,
+      "index": 0
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "index": 1
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "index": 2
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "index": 3
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "index": 4
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "index": 5
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "index": 0
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "index": 1
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "index": 2
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "index": 3
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "index": 4
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "index": 5
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "index": 0
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "index": 1
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "index": 2
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "index": 3
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "index": 4
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "index": 5
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "index": 0
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "index": 1
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "index": 2
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "index": 3
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "index": 4
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "index": 5
+    }
+  ],
+  "replay": {
+    "selected": 5,
+    "shape": 0,
+    "ms": 0,
+    "ready": true,
+    "playing": false,
+    "loops": 2,
+    "view": "material",
+    "frames": 581,
+    "meanDrawMs": 9.319965576573487,
+    "count": 5,
+    "variants": 6,
+    "disposed": false,
+    "webgl": true
+  },
+  "result": "pass"
+}
