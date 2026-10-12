@@ -4,6 +4,7 @@ import { CoinSound } from './sound';
 import { ids, names, normalDesigns, darkDesigns, duration, count } from './catalog';
 import type { Merchant } from './catalog';
 import './style.css';
+document.documentElement.classList.add('merchant-preview');
 const root = document.getElementById('app')!;
 const faces = new Map<Merchant, HTMLCanvasElement>();
 let card: Merchant = 'MERCH1', mode = 'grid', v = 0, ms = 0, speed = 1, playing = false, loop = false, ready = false, dark = false, reduced = matchMedia('(prefers-reduced-motion:reduce)').matches, side = 0, multi = false, raf = 0, last = 0;

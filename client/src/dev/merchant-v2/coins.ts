@@ -1,5 +1,6 @@
 import * as T from 'three';
-import { coinPose, ease, hash } from './catalog';
+import { hash } from './catalog';
+import { coinPoses } from './physics';
 import type { Pose } from './catalog';
 /** Real bevel, reeded edge, embossed faces and deterministic ballistic flight. */
 export class Coins {
@@ -162,7 +163,8 @@ export class Coins {
             if (!p)
                 continue;
             coin.position.set(p.x, -p.y, p.z);
-            coin.rotation.set(p.rx, p.ry, p.rz);
+            if (p.quaternion) coin.quaternion.fromArray(p.quaternion);
+            else coin.rotation.set(p.rx, p.ry, p.rz);
             coin.scale.setScalar(p.r);
             this.dissolve[i].value = p.dissolve;
             this.materials[i][0].color.set(black ? '#292737' : '#d8ac48');
@@ -175,7 +177,7 @@ export class Coins {
         this.gl.render(this.scene, this.camera);
         return this.canvas;
     }
-    draw(c: CanvasRenderingContext2D, v: number, n: number, ms: number, x: number, y: number, w: number, studio = true) { const poses = Array.from({ length: n }, (_, i) => coinPose(v, i, n, ms)); c.save(); c.translate(x, y); c.scale(w, w); if (studio)
+    draw(c: CanvasRenderingContext2D, v: number, n: number, ms: number, x: number, y: number, w: number, studio = true) { const poses = coinPoses(v, n, ms); c.save(); c.translate(x, y); c.scale(w, w); if (studio)
         c.transform(.970, -.14, .242, .563, 0, 0); for (const p of poses) {
         if (!p.visible)
             continue;
@@ -186,39 +188,7 @@ export class Coins {
         c.fill();
     } c.restore(); c.drawImage(this.render(studio ? poses : poses.map(p => ({ ...p, y: p.y - p.z * Math.tan(Math.PI / 10) })), false, studio, Math.min(768, w * 4)), x - w * 2, y - w * 2, w * 4, w * 4); }
     dark(c: CanvasRenderingContext2D, v: number, ms: number, x: number, y: number, w: number) {
-        const t = ms / 1000, n = [18, 24, 12, 26][v];
-        const poses: Pose[] = [];
-        for (let i = 0; i < n; i++) {
-            const delay = .9 + i * (v === 2 ? .16 : .075), a = t - delay, side = i % 2 ? -1 : 1;
-            let px = (hash(i + 30) - .5) * 2.5, py = -1.7 + a * .85, z = 1.2 - a * .3;
-            let rx = a * 5 + i, ry = a * 4, rz = a * 3;
-            if (v === 0) {
-                px = side * (.65 + hash(i) * .5);
-                py = -1.55 + a * 1.5;
-                z = .6;
-            }
-            if (v === 1) {
-                px = (hash(i) - .5) * 1.7 * (1 - Math.exp(-Math.max(0, a) * 4));
-                py = .5 + Math.max(0, a) * .28;
-                z = .05 + Math.max(0, 1.7 * a - 2.2 * a * a);
-            }
-            if (v === 2) {
-                px = side * (.87 + hash(i) * .09);
-                py = -1.4 + Math.min(1, a / .7) * 1.74;
-                z = .1 + Math.max(0, .1 * Math.sin(a * 7));
-                if (a > .7) {
-                    rx = .35;
-                    ry = .1;
-                    rz = i;
-                }
-            }
-            if (v === 3) {
-                px = (hash(i + 7) - .5) * 2.4;
-                py = -1.85 + 1.65 * a;
-                z = .35;
-            }
-            poses.push({ x: px, y: py, z: Math.max(.03, z), rx, ry, rz, r: .060 + hash(i + 20) * .023, visible: a > 0 && a < 2.4 && t < 5.95, dissolve: Math.max(ease(1.5, 2.4, a), ease(5.15, 5.95, t)), impact: (delay + (v === 1 ? .77 : v === 2 ? .7 : 1.6)) * 1000 });
-        }
+        const poses = coinPoses(v, [18, 24, 12, 26][v], ms, true);
         c.drawImage(this.render(poses, true, false, Math.min(900, w * 4)), x - w * 2, y - w * 2, w * 4, w * 4);
     }
     get resources() { return { contexts: 1, geometry: this.gl.info.memory.geometries, textures: this.gl.info.memory.textures, coins: this.coins.length }; }
