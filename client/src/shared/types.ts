@@ -1,8 +1,6 @@
-// ============================================================
-// LORE — shared game types (no DOM, no platform deps).
+// =====================================================// LORE — shared game types (no DOM, no platform deps).
 // Imported by both the client UI and the authoritative server.
-// ============================================================
-
+// =====================================================
 export type CardType = "mon" | "spell" | "quest" | "trap" | "starter";
 export type Side = 0 | 1;
 
@@ -260,6 +258,7 @@ export interface GutsSurvival { player: Side; uid: string; before: number; after
 
 export type GameEvent =
   | ({ type: "gutsSurvive" } & GutsSurvival)
+  | { type: "statusExtinction"; player: Side; resource: "shield" | "brand" | "dew"; before: number; after: 0 }
   | { type: "statusGrant"; player: Side; resource: "shield" | "brand" | "dew"; before: number; after: number; sourceUid?: string }
   | { type: "tribeSynergy"; player: Side; tribe: string; threshold: number; uids: string[] }
   | { type: "monsterActivate"; player: Side; uid: string }

@@ -81,6 +81,7 @@
     "tests/verdant-summon.mjs",
     "tests/critical-trigger-chains.mjs",
     "tests/status-grant.mjs",
+    "tests/status-extinction.mjs",
     "tests/target-choice-ux.mjs",
     "tests/target-choice-ui.mjs",
     "tests/target-choice-server.mjs",

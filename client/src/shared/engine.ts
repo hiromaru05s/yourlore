@@ -457,9 +457,15 @@ function gainShield(g: GameState, ctx: Ctx, p: PlayerState, amount: number, sour
   ctx.log(`${p.name}: 실드 +${amount} (${p.shield})`, `${p.name}: シールド+${amount} (${p.shield})`);
   for (const m of p.field) if (m.aura === 'shieldDew' && (m.val2 ?? 0) > 0) { monsterActivation(g, ctx.ev, p, m); gainDew(ctx, p, m.val2 ?? 0, m.uid); }
 }
+/** Public zero-crossing only: partial losses have no animation event. */
+function loseStatus(ctx: Ctx, p: PlayerState, resource: 'shield' | 'dew' | 'brand', amount = Infinity): void {
+  const before = p[resource] ?? 0;
+  p[resource] = Math.max(0, before - Math.min(before, amount));
+  if (before > 0 && p[resource] === 0) ctx.ev.push({type:'statusExtinction',player:ctx.side(p),resource,before,after:0});
+}
 function breakShield(ctx: Ctx, p: PlayerState, amount = Infinity): void {
   const lost = Math.min(p.shield ?? 0, amount);
-  p.shield = Math.max(0, (p.shield ?? 0) - lost);
+  loseStatus(ctx, p, 'shield', lost);
   if (lost) ctx.log(`${p.name}: 실드 -${lost}`, `${p.name}: シールド-${lost}`);
 }
 export function isWorldTreeCard(c: Pick<CardDef, 'name' | 'nameJa'>): boolean { return /세계수|世界樹/.test(c.name + (c.nameJa ?? '')); }
@@ -619,7 +625,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       refreshDewPassives(g);
       if (dead.id === 'ELDER_ELF_KING' && (owner.dew ?? 0) >= 15) {
         monsterActivation(g, ev, owner, dead);
-        owner.dew! -= 15;
+        loseStatus(ctx, owner, 'dew', 15);
         dealDamage(g.players[1 - side(g, owner)], 30, cn(dead), cn(dead), side(g, owner));
       }
       if (dead.id === 'FIRE_MASTER' && [...owner.deck, ...owner.discard].some(isFire)) monsterActivation(g, ev, owner, dead);
@@ -2438,7 +2444,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       break;
     }
     case 'darkElfDew':
-      p.dew = Math.max(0,(p.dew ?? 0)-4);
+      loseStatus(ctx, p, 'dew', 4);
       if ((o.shield ?? 0)>0) ctx.dealDamage(o,10,cn(m),cn(m),side(g,p));
       break;
     case 'elfDew':
@@ -2465,7 +2471,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       break;
     }
     case "unbrand": { // 제인사(v41): 자신의 낙인 카운터 1개 제거
-      if ((p.brand ?? 0) > 0) { p.brand = (p.brand ?? 0) - 1; ctx.log(`  └ 자신의 낙인 카운터 1개 제거 (남은 ${p.brand})`, `  └ 自分の烙印カウンター1個を取り除く (残り${p.brand})`); }
+      if ((p.brand ?? 0) > 0) { loseStatus(ctx, p, 'brand', 1); ctx.log(`  └ 자신의 낙인 카운터 1개 제거 (남은 ${p.brand})`, `  └ 自分の烙印カウンター1個を取り除く (残り${p.brand})`); }
       else ctx.log("  └ 자신에게 낙인 카운터가 없음", "  └ 自分に烙印カウンターがない");
       break;
     }
@@ -3128,7 +3134,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
   if (card.act === "expansion") { expansionSpell(g, ctx, card); return; }
   switch (card.act) {
     case 'dew': gainDew(ctx,p,v); break;
-    case 'desertification': o.dew=0; ctx.log('상대 이슬을 0으로', '相手の雫を0にする'); break;
+    case 'desertification': loseStatus(ctx, o, 'dew'); ctx.log('상대 이슬을 0으로', '相手の雫を0にする'); break;
     case 'cullShield': gainShield(g,ctx,p,cullExiled(p)); break;
     case 'golemShield': gainShield(g,ctx,p,v+v2*new Set(p.field.filter(isGolem).map(m=>m.id)).size); break;
     case 'armorBreak': { const branded=(o.shield ?? 0)>=10; breakShield(ctx,o,9); if(branded)gainBrand(g, ctx, o, 1); break; }
@@ -3476,7 +3482,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "UNBRAND": { // 제인(v37): 양측 낙인 카운터 전부 제거
       ctx.log(`${tag(p, card)} 낙인 카운터 전부 제거 (${p.name} ${p.brand || 0} / ${o.name} ${o.brand || 0})`, `${tag(p, card)} 烙印カウンターを全て除去 (${p.name} ${p.brand || 0} / ${o.name} ${o.brand || 0})`);
-      p.brand = 0; o.brand = 0;
+      loseStatus(ctx, p, 'brand'); loseStatus(ctx, o, 'brand');
       break;
     }
     case "AEM": { // 앤티크 인핸스 매직(v38): 필드의 골램 2체 공격력 +7(지속) — 선택
@@ -4596,7 +4602,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
     }
     if (a === "exilePick") {
-      if ((p.brand ?? 0) > 0) { ctx.log(`  └ 자신의 낙인 카운터 ${p.brand}개 제거`, `  └ 自分の烙印カウンター${p.brand}個を除去`); p.brand = 0; } // 정화의 손길(v34)
+      if ((p.brand ?? 0) > 0) { ctx.log(`  └ 자신의 낙인 카운터 ${p.brand}개 제거`, `  └ 自分の烙印カウンター${p.brand}個を除去`); loseStatus(ctx, p, 'brand'); } // 정화의 손길(v34)
       g.pending = { kind: "recall", hint: "게임에서 제외할 카드 선택", hintJa: "ゲームから除外するカードを選択", reason: "exilePick", allowCancel: true };
       ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
     }
@@ -5830,7 +5836,7 @@ function resolveDewShieldChoice(g: GameState, ctx: Ctx, uid: string | null): boo
       const target=q.reason==='WORLD_TREE_ATTACK'?attacker:p.field.find(m=>m.uid===targetUid);
       if(uid==='grow' && target && (p.dew ?? 0)>0 && p.field.some(m=>m.id==='WORLD_TREE')) {
         for (const tree of p.field) if (tree.id === 'WORLD_TREE') monsterActivation(g, ctx.ev, p, tree);
-        p.dew!--; if(q.reason==='WORLD_TREE_ATTACK')target.atkMod+=6;else target.defMod+=6;
+        loseStatus(ctx, p, 'dew', 1); if(q.reason==='WORLD_TREE_ATTACK')target.atkMod+=6;else target.defMod+=6;
       }
       const stage=q.reason==='WORLD_TREE_ATTACK'?1:2;
       if(q.data?.friendlyPlayer) resolveFriendlyPlayerAttack(g,ctx,attacker,stage);
