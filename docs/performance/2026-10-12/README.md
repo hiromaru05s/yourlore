@@ -77,3 +77,17 @@ is separate from authenticated online match proof.
   synchronous decision of 111.9 ms versus 2993 ms under earlier host contention;
   both runs verify identical decisions. This illustrates why the CPU occupancy
   removal and asset bytes, rather than the wall-time ratio, are the firm claims.
+
+## Slow-network correction found on staging
+
+The first deployed build passed all 93 tests and 62 exact asset hashes, but a
+real-network browser run stopped at HOME `43 / 47` images with a manual retry
+button. No JavaScript exception occurred. Four slow/transient image loads crossed
+the original 20-second decode deadline. This is a separate startup blocker from
+GPU/AI work, not a successful staging gameplay check.
+
+Shared image transfers now allow 60 seconds. A caller's 20-second readiness
+window does not cancel that transfer; it rejoins the same in-flight decode. Two
+automatic recovery rounds precede the explicit retry button, so genuine failures
+remain bounded and cancellable. `asset-readiness-retry.mjs` verifies transient
+recovery, bounded persistent failure, cancellation, and no restarted slow transfer.

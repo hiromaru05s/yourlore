@@ -58,6 +58,7 @@
     "tests/production-bc.mjs",
     "tests/match-bots.mjs",
     "tests/bot-worker.mjs",
+    "tests/asset-readiness-retry.mjs",
     "tests/purchase-air-worker.mjs",
     "tests/duel-opening-server.mjs",
     "tests/dew-shield-server.mjs",
