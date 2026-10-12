@@ -1,5 +1,6 @@
 import {isVampire} from './vampireSummon/selection';
 import {playVampireSummon} from './vampireSummon/runtime';
+import {cancelStatusExtinctions} from './statusExtinction/runtime';
 import {isDarkMerchant} from './merchant/selection';
 import {playDarkMerchant,warmDarkMerchant,cancelDarkMerchants} from './merchant/runtime';
 import {isAssassin} from './assassinSummon/selection';
@@ -27,7 +28,7 @@ import {flyPersistentIntoSlot} from './persistentFlight';
 import {playSpellFrame,cancelSpellFrames,warmSpellFrame,SPELL_FRAME_RATE} from './spellFrame/runtime';
 import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {isMimic,focusScale,type MimicId} from './mimic/selection';
-import {playMonster,setMonsterSkip} from './monster/runtime';
+import {playMonster,setMonsterSkip,playGutsEndurance} from './monster/runtime';
 import {summonPlacement} from './summon/runtime';
 import {isVerdant} from './verdant/selection';
 import {foldQuestIntoSlot,nativeQuestGhost,warmQuestPact} from './questFold';
@@ -38,11 +39,9 @@ import type {HandLayout} from './handGeometry';
 import {mountDuelOutcome,cancelDuelOutcome} from './duelOutcome';
 import {reserveMonster} from './fieldLayout';
 import {waitForDuel} from './duelReadiness';
-// ============================================================
-// LORE — animation helpers. Triggered by engine events; never
+// =====================================================// LORE — animation helpers. Triggered by engine events; never
 // touch game state, only the DOM.
-// ============================================================
-import type { CardInst } from "../shared/types";
+// =====================================================import type { CardInst, GutsSurvival } from "../shared/types";
 import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, enchantHasTurnCountdown } from "../shared/cards";
 import { cardEl, cardRulesEl, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
 import { t, getLang, cardName } from "../i18n";
@@ -68,7 +67,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on);
-  if(on){cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -511,6 +510,10 @@ export async function attackStrike(uid:string,targetUid:string|null,defender:Vie
   await boardMotionScope(signal=>playMonster(source,'attack',{target,signal,exhaust,side:defender==='opp'?1:-1,onImpact:()=>{if(contactDamage>0)sfx(targetUid?'impact':'facehit');onImpact?.();}}));
   if(exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');source.style.filter='grayscale(1) brightness(.57)';}
 }
+/** Starts on the attack contact callback, or on an explicit non-strike survival event. */
+export async function gutsSurvive(result:GutsSurvival,side?:ViewSide):Promise<void>{
+ const card=combatCard(result.uid);if(card&&!fxSkip)await boardMotionScope(signal=>playGutsEndurance(card,result,signal,side==='opp'?-1:side==='me'?1:undefined));
+}
 export async function monsterActivation(uid:string):Promise<void>{
  const n=byUid(uid);if(n&&!fxSkip)await boardMotionScope(signal=>playMonster(n,'trigger',{signal,side:n.closest('#oppRow')?-1:1}));
 }
@@ -819,12 +822,10 @@ export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; ma
   el.addEventListener("touchcancel", cancel);
 }
 
-// ============================================================
-// FX layer — sequential event playback helpers.
+// =====================================================// FX layer — sequential event playback helpers.
 // Center banners, summon ghosts, random-result popups, mana/HP
 // surges and the death sequence. All awaitable, DOM-only.
-// ============================================================
-import { t as tt } from "../i18n";
+// =====================================================import { t as tt } from "../i18n";
 
 /** Selected arcane turn announcement; keeps the controller event contract. */
 export function turnBanner(mine: boolean, turn?: number): void {
