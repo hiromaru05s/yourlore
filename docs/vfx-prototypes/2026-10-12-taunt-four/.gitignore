@@ -1,0 +1,9 @@
+build/
+qa/frames/
+qa/video/
+qa/failure.png
+qa/canvas-*.png
+
+qa/revision-2/frames/
+
+qa/shield-four/frames/

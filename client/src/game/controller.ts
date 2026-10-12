@@ -1,3 +1,4 @@
+import {tauntRollIndex} from '../ui/taunt/timing';
 import {evasionRollIndex} from '../ui/evade/timing';
 import {playStatusExtinction,warmStatusExtinctions,disposeStatusExtinctions} from '../ui/statusExtinction/runtime';
 import {isChosenVictory,playChosenVictory,warmChosenVictory} from '../ui/chosenVictory/runtime';
@@ -308,6 +309,7 @@ export abstract class BaseController implements BoardHandlers {
       }
     }
     const events = counterPresentationEvents(res.events);
+    if(events.some(e=>e.type==='dice'&&e.taunt))A.warmTaunt();
     if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
     const eventSound = new EventSound();
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
@@ -332,11 +334,14 @@ export abstract class BaseController implements BoardHandlers {
     const playDiceAt=async(index:number)=>{
       const roll=events[index];if(roll?.type!=='dice'||diceDone.has(index)||A.isFxSkipped()||this.dead)return;
       diceDone.add(index);
+      const taunt=roll.taunt?A.prepareTauntActivation(roll.taunt.sourceUid):undefined;
       const evade=roll.evasion?A.prepareEvasion(roll.evasion.targetUid,sideOf(roll.player),!!roll.success):undefined;
       try{
+        await taunt?.play();
+        if(A.isFxSkipped()||this.dead)return;
         await diceRollAnim(roll.rolls,{need:roll.need,success:roll.success,mine:roll.player===this.you,casino:roll.variant==='casino',source:roll.source,viewer:this.you});
         if(!A.isFxSkipped()&&!this.dead)await evade?.play();
-      }finally{evade?.cancel();}
+      }finally{taunt?.cancel();evade?.cancel();}
     };
 
 
@@ -459,6 +464,8 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "attack": {
+          const tauntIndex=tauntRollIndex(events,i);
+          if(tauntIndex>=0)await playDiceAt(tauntIndex);
           const evadeIndex=evasionRollIndex(events,i);
           if(evadeIndex>=0){
             await playDiceAt(evadeIndex);
@@ -554,7 +561,7 @@ export abstract class BaseController implements BoardHandlers {
             for (let j = i + 1; j < events.length; j++) {
               const e2 = events[j];
               if (e2.type === "playSpell" || e2.type === "trapSet" || e2.type === "trapReveal" || e2.type === "buy" || e2.type === "turnHeader" || e2.type === "win") break;
-              if (e2.type === "dice" && !e2.evasion && !diceDone.has(j)&&!A.isFxSkipped()) {
+              if (e2.type === "dice" && !e2.evasion && !e2.taunt && !diceDone.has(j)&&!A.isFxSkipped()) {
                 diceDone.add(j);
                 await diceRollAnim(e2.rolls, { need: e2.need, success: e2.success, mine: e2.player === this.you, casino: e2.variant === "casino", source: e2.source, viewer: this.you });
               }
