@@ -72,6 +72,7 @@
     "tests/opening-approved.mjs",
     "tests/mimic-approved.mjs",
     "tests/slate-summon.mjs",
+    "tests/dungeon-summon.mjs",
     "tests/spell-frame.mjs",
     "tests/mana-destruction.mjs",
     "tests/decay-dissolve.mjs",
