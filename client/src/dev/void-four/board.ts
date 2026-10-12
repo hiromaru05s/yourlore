@@ -1,0 +1,37 @@
+import '../../styles/tokens.css';import '../../styles/base.css';import '../../styles/card.css';import '../../styles/game-overlays.css';import '../../styles/game.css';import '../../styles/screens.css';import '../../styles/reading-board.css';import '../../styles/presentation.css';
+import {GameView,setMyAvatar,setOppAvatar} from '../../ui/boardView';import {startBoardLayout} from '../../ui/layout';import {waitForDuel} from '../../ui/duelReadiness';import {projectedPlacement,boardMatrix,layoutRect} from '../../ui/boardProjection';import {clearMonsterStates} from '../../ui/monster/runtime';import {createGame} from '../../shared/engine';import {DB} from '../../shared/cards';import {setLang} from '../../i18n';import {surface} from './surface';import {Renderer} from './renderer';import {CARDS,designs,motion,DURATION} from './catalog';
+setLang('ja');setMyAvatar('SEEKER_BLUE');setOppAvatar('SEEKER_RED');document.body.style.cssText='margin:0;overflow:hidden;background:#f2eee8';const css=document.createElement('style');css.textContent='.topbar,.help-callout,.help-fab,.mute-fab{display:none!important}.hand .card{cursor:pointer!important}';document.head.append(css);
+const root=document.getElementById('app')!,noop=()=>{};
+let requestedHand=1;const trigger=(uid?:string)=>{if(uid)requestedHand=Math.min(2,Math.max(0,Number(uid.slice(-1))||0));parent.postMessage({kind:'void-play'},location.origin);};
+root.addEventListener('click',e=>{const card=(e.target as HTMLElement).closest<HTMLElement>('.hand .card');if(!card)return;e.preventDefault();e.stopImmediatePropagation();trigger(card.dataset.uid);},true);
+const view=new GameView(root,0,{onPlay:trigger,onBlockedPlay:trigger,onAttack:noop,onBlockedAttack:noop,onReorder:noop,onChooseTarget:noop,onBuyMarket:noop,onBuySupply:noop,onRefresh:noop,onEndTurn:noop,onSurrender:noop});
+let ready=false,disposed=false,side=0,v=0,ms=0,reduced=false,multi=false,id:string=CARDS[0],renderer:Renderer|undefined,dark=false,contact=0,lastMs=0;
+let targets:HTMLElement[]=[],hands:HTMLElement[]=[];const faces=new Map<string,HTMLCanvasElement>();
+const rigs=Array.from({length:3},()=>{const make=(z:number)=>{const el=document.createElement('div');el.style.cssText=`position:fixed;left:0;top:0;width:180px;height:270px;transform-origin:0 0;pointer-events:none;z-index:${z};visibility:hidden`;const canvas=document.createElement('canvas');canvas.width=canvas.height=768;canvas.style.cssText='position:absolute;left:-342px;top:-297px;width:864px;height:864px';el.append(canvas);document.body.append(el);return{el,canvas};};return{ground:make(180),card:make(181)};});
+const mon=(id:string,uid:string)=>({...DB[id],uid,exhausted:false,summonedTurn:0,dmg:0,tempAtk:0,atkMod:0,defMod:0});
+function restore(){targets.forEach(n=>n.style.visibility='');hands.forEach(n=>n.style.visibility='');rigs.forEach(r=>{r.ground.el.style.visibility='hidden';r.card.el.style.visibility='hidden';});}
+function selected(){return targets.filter(n=>n.dataset.uid?.startsWith(`void-${side}-`)&&(multi||n.dataset.uid.endsWith('-1')));}
+function setup(){restore();const g=createGame({mode:'bot',seed:91,starting:0,p0:{id:'preview-self',name:'YOU'},p1:{id:'preview-opp',name:'OPPONENT'}}).state;g.turn=3;g.phase='main';g.pending=null;for(const [i,p]of g.players.entries()){p.openingDrawReady=false;p.mana=12;p.maxMana=12;p.hp=30;p.enchants=[];p.quests=[];p.traps=[];p.field=['M4',id,'TDE2'].map((c,j)=>mon(multi?id:c,`void-${i}-${j}`));p.hand=Array.from({length:3},(_,j)=>({...DB[id],uid:`void-hand-${i}-${j}`}));}view.render(g);view.setHandOpen(true);clearMonsterStates(root);targets=Array.from(root.querySelectorAll<HTMLElement>('.zone-mon .card'));hands=Array.from(root.querySelectorAll<HTMLElement>('.hand .card'));}
+function draw(){
+ restore();if(!ready||disposed||document.hidden)return;root.style.filter=dark?'brightness(.66)':'';const chosen=selected();
+ if(ms<=0){contact=0;lastMs=0;chosen.forEach(n=>n.style.visibility='hidden');return;}
+ const sourceHands=hands.filter(n=>n.dataset.uid?.startsWith('void-hand-0-'));
+ sourceHands.filter((_,i)=>side===0&&(multi||i===requestedHand)).forEach(n=>n.style.visibility='hidden');
+ if(ms>=designs[v].duration||reduced)return;
+ if(ms<lastMs)contact=0;if(lastMs<designs[v].hit&&ms>=designs[v].hit)contact++;lastMs=ms;
+ for(const[n,target]of chosen.entries()){
+  target.style.visibility='hidden';const rig=rigs[n],index=multi?n:requestedHand,hand=sourceHands[index],r=layoutRect(target),m=motion(v,ms),base=projectedPlacement(target,180,270);
+  const elevation=Number(target.closest<HTMLElement>('[data-board-plane]')?.dataset.boardPlane)||0;
+  const end=boardMatrix(r.left,r.top,elevation+m.lift*r.width).scale(r.width/180,r.height/270);
+  const hr=hand?.getBoundingClientRect();const start=hr?new DOMMatrix().translate(hr.left,hr.top).scale(hr.width/180,hr.height/270):end;
+  // Opponent card is already public in this fixture; no hidden hand is captured.
+  const progress=side===1?1:m.transfer;const a=start.toFloat64Array(),b=end.toFloat64Array();const matrix=new DOMMatrix(Array.from(a,(x,i)=>x+(b[i]-x)*progress));
+  rig.card.el.style.transform=matrix.toString();rig.ground.el.style.transform=base.toString();rig.card.el.style.visibility='visible';rig.ground.el.style.visibility=progress>.95?'visible':'hidden';
+  renderer!.render(rig.card.canvas,id,v,ms,{board:true,pass:'card'});renderer!.render(rig.ground.canvas,id,v,ms,{board:true,pass:'ground'});
+ }
+}
+window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent)return;const d=e.data;if(d?.kind==='void-suspend'){ms=0;restore();if(ready)selected().forEach(n=>n.style.visibility='hidden');return;}if(d?.kind!=='void-control')return;const next=CARDS.includes(d.id)?d.id:id;const remake=next!==id||!!d.multi!==multi;id=next;side=d.side===1?1:0;v=Math.min(3,Math.max(0,Number(d.v)||0));ms=Math.min(DURATION,Math.max(0,Number(d.ms)||0));reduced=!!d.reduced;multi=!!d.multi;dark=!!d.dark;if(remake)setup();draw();});
+window.addEventListener('resize',()=>requestAnimationFrame(draw));document.addEventListener('visibilitychange',()=>{if(document.hidden){restore();ms=0;}else draw();});
+setup();const stop=startBoardLayout();window.addEventListener('pagehide',()=>{restore();disposed=true;rigs.forEach(r=>{r.card.el.remove();r.ground.el.remove();});renderer?.dispose();stop();view.destroy();},{once:true});
+(window as any).voidBoard={get state(){return{ready,id,side,v,ms,multi,requestedHand,hidden:targets.filter(n=>n.style.visibility==='hidden').length,rigs:rigs.filter(r=>r.card.el.style.visibility==='visible').length,contact,resources:renderer?.resources,matrices:rigs.filter(r=>r.card.el.style.visibility==='visible').map(r=>({card:r.card.el.style.transform,ground:r.ground.el.style.transform}))};},restore,draw};
+void(async()=>{await waitForDuel(root);for(const id of CARDS)faces.set(id,await surface(id));renderer=new Renderer(faces);ready=true;draw();parent.postMessage({kind:'void-ready'},location.origin);})().catch(e=>parent.postMessage({kind:'void-error',error:String(e)},location.origin));
