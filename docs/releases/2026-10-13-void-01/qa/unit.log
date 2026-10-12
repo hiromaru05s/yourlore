@@ -1,0 +1,9 @@
+[void-summon] Native card fallback Error: draw failed
+    at VoidRenderer.render (file:///private/var/folders/tt/p79qbyt14t14jwlfh80_l0v40000gn/T/void-summon-iv5YAU/runtime.mjs:27:36)
+    at paint (file:///private/var/folders/tt/p79qbyt14t14jwlfh80_l0v40000gn/T/void-summon-iv5YAU/runtime.mjs:8792:24)
+    at tick (file:///private/var/folders/tt/p79qbyt14t14jwlfh80_l0v40000gn/T/void-summon-iv5YAU/runtime.mjs:8811:11)
+    at file:///Users/hiromaru05s/.codex/worktrees/void-summon-four/LORE_TCG/tests/void-summon.mjs:6:335
+    at Array.forEach (<anonymous>)
+    at advance (file:///Users/hiromaru05s/.codex/worktrees/void-summon-four/LORE_TCG/tests/void-summon.mjs:6:324)
+    at file:///Users/hiromaru05s/.codex/worktrees/void-summon-four/LORE_TCG/tests/void-summon.mjs:16:144
+PASS void 01: frame zero, contact once, shared GPU, cancellation, pending capture, replacement, reduced, fallback, cleanup
