@@ -57,7 +57,7 @@ try {
     if (expected.passive) expected.passive = expected.passive.filter(k => k !== 'trapmaster');
     if (expected.aura === 'trapImmune') delete expected.aura;
     if (id === 'TAR3') { delete expected.aura; expected.passive = []; }
-    if (id === 'GM6_8') delete expected.onSummon;
+    if (id === 'GM6_8') { delete expected.onSummon; expected.atk = 12; } // v57 approved ATK nerf
     if (id === 'CHOSEN_ROGUE') delete expected.attackFx;
     if (id === 'HIGH_ELF') { expected.summonReq='dew10'; expected.onSummon='highElfDew'; }
     const current = JSON.parse(JSON.stringify(DB[id]));

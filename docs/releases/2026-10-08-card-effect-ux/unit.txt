@@ -1,0 +1,1 @@
+PASS 1080 real card inspections: unique names, glossary parity, referenced and granted abilities, applied Decay, counters, search, type labels, return to effect, related history, Escape and focus restoration

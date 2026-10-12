@@ -1,0 +1,98 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "at": "2026-10-07T23:40:05.055Z",
+  "liveApi": true,
+  "checks": [
+    "two real password logins deliver complete deck data",
+    "seven menus plus profile/settings at desktop and 390px; no horizontal overflow or broken visible artwork",
+    "real authenticated HOME to BOT startup, decoded board, no retired callouts"
+  ],
+  "layouts": [
+    {
+      "name": "home",
+      "width": 1280,
+      "scroll": 1280,
+      "broken": []
+    },
+    {
+      "name": "deck",
+      "width": 1280,
+      "scroll": 1280,
+      "broken": []
+    },
+    {
+      "name": "cards",
+      "width": 1280,
+      "scroll": 1280,
+      "broken": []
+    },
+    {
+      "name": "leaderboard",
+      "width": 1280,
+      "scroll": 1280,
+      "broken": []
+    },
+    {
+      "name": "friends",
+      "width": 1280,
+      "scroll": 1280,
+      "broken": []
+    },
+    {
+      "name": "shop",
+      "width": 1280,
+      "scroll": 1280,
+      "broken": []
+    },
+    {
+      "name": "tutorial",
+      "width": 1280,
+      "scroll": 1280,
+      "broken": []
+    },
+    {
+      "name": "home",
+      "width": 390,
+      "scroll": 390,
+      "broken": []
+    },
+    {
+      "name": "deck",
+      "width": 390,
+      "scroll": 390,
+      "broken": []
+    },
+    {
+      "name": "cards",
+      "width": 390,
+      "scroll": 390,
+      "broken": []
+    },
+    {
+      "name": "leaderboard",
+      "width": 390,
+      "scroll": 390,
+      "broken": []
+    },
+    {
+      "name": "friends",
+      "width": 390,
+      "scroll": 390,
+      "broken": []
+    },
+    {
+      "name": "shop",
+      "width": 390,
+      "scroll": 390,
+      "broken": []
+    },
+    {
+      "name": "tutorial",
+      "width": 390,
+      "scroll": 390,
+      "broken": []
+    }
+  ],
+  "errors": [],
+  "failed": []
+}

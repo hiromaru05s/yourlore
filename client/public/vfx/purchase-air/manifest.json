@@ -1,0 +1,28 @@
+{
+  "selection": "03 / alternating wake",
+  "previewCommit": "99f5473f",
+  "crystalScale": 1.2,
+  "travelMs": 620,
+  "paymentMs": 940,
+  "atlas": {
+    "url": "/vfx/purchase-air/crystal-72.png",
+    "width": 3840,
+    "height": 1920,
+    "frameSize": 320,
+    "frames": 72,
+    "sha256": "d2850f823bb6460a15096b31ef1702f4f54612658fefd9dc27f4fd6ab739db07"
+  },
+  "airField": {
+    "width": 120,
+    "height": 76,
+    "frames": 24,
+    "sha256": "9d7e5b98f41cd58df9569449bde46f8b7d64b7a9aabf07bcec7541f054aa249c"
+  },
+  "sources": {
+    "client/src/dev/purchase-six/physical.ts": "615968f31961bcc355e91b1755548c1bb608c4c8c6fc35567ee241037c649754",
+    "client/src/dev/purchase-six/wind.ts": "e1c787bc7db679c2fc92aced09c1810e125e68c9193a0dce869d9d23ca42abe0",
+    "client/src/ui/readingCrystalOptics.ts": "6eea2df6e19c710ca7e9e62a48f6e4a4b4d2dd8730b0e5d58337a575f90390bb",
+    "client/public/models/reading-board/v1/mana-crystal-ready.glb": "c41fbfbb581a4252bdb7eab480f23900efce303950d41fdf4b840915809c7159",
+    "client/public/models/reading-board/v1/crystal-optics.json": "5cb8f587a931e6bc045c93a1c215c9adf656678cb3b2637194e3fd8c53fabeab"
+  }
+}

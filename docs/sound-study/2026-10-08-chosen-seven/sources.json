@@ -1,0 +1,31 @@
+{
+  "license": "CC0-1.0; original layering and processing",
+  "sources": {
+    "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/blade_01.ogg": "caf7a7cb9b25cda4bd487c1d12d18b74a34bb18c816fd67277cf3c8d7ef32a3a",
+    "docs/sound-redesign/2026-09-30/sources/swishes/swish-4.wav": "0060f4a7040edce4cc50d1daa10a9cb76764128a942e4688339e69cd1d5d784c",
+    "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_light_002.ogg": "25a96f90a9a1f88a531e824e126f0519504625e5635e65a72e4f31611428db29",
+    "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/blade_03.ogg": "2cd9e6926f4602a4350e703eeae4df520053e290f358ab692632d651ad368a7c",
+    "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_heavy_002.ogg": "b914c8f1eb7c0f34bb165d7c77f4be0351f6be0660c13c53e65424e262e2c093",
+    "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_medium_004.ogg": "03e10f800199c7166208e41c11cf4acfac6cc265467f02357da71972bc967295",
+    "docs/sound-redesign/2026-09-30/sources/swishes/swish-7.wav": "e6de737a34de16afed094d6170d7679149022f149e0a8356d2f029b0e8f4a4d7",
+    "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/blade_02.ogg": "c770afec8f62f14d3d082d5437c5cec28e2751d393df645ddd938eabc2588abd",
+    "docs/ui-rework/2026-09-27-audio/sources/interface-sounds/glass_001.ogg": "183eebee20eb0a532b0b85104d139cbf2673eb66d95c3cc733ac9ea98362e7e8",
+    "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_light_004.ogg": "9b1c35820fba507081261f19ab5f461f69a5e2627a7d91acdb73ca3cfc997979",
+    "docs/sound-redesign/2026-09-30/sources/swishes/swish-11.wav": "9e81d548d8215fbb36f7a41b5771d4b52c2fd02fbb9b5ff9a4c65118fd88ee4d",
+    "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_medium_000.ogg": "a96f879fec0864a8938e0c745b6996a6c5679c16a234ce31a01cc995e8401003",
+    "docs/sound-redesign/2026-09-30/sources/swishes/swish-3.wav": "55b100e2c67fa43dad8510e31e85bbd51a68d5ce84a6e0259e21e19030083e24",
+    "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_heavy_004.ogg": "6d65b463c0555dd5be16b8db6d2cbe23a94e07a4637779b8ad17d0db3e500a87",
+    "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/chain_02.ogg": "dd3b753e54fd4e6ed94c36231d1950fafd681ff4a93462cfa3980099a6454ecb",
+    "docs/sound-redesign/2026-09-30/sources/swishes/swish-13.wav": "698230ba3fe05a68c18d68cd6b3a07fb98e6c1198bb1a4238592ee9912c02c77",
+    "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_medium_003.ogg": "2a185e2e57211d02c1bdd33b872d6b6a2fe83e6c14f4e56f426a95e717acf08e",
+    "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_light_001.ogg": "fba69c467ddd85da7b1d82e259f936b876d9ba6a3d6f1b24bdd10468e46bfe08",
+    "docs/sound-redesign/2026-09-30/sources/swishes/swish-8.wav": "113a3709ad889ad2fcf38eaceaf4eb9d67ffe1e96713fed93a6f0aed08769980",
+    "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_light_000.ogg": "33b5e6e37c6e9d54e07bf5a89b12c76e879f40c1ea83cdd82714df1d6f9fec6d",
+    "docs/sound-redesign/2026-09-30/sources/swishes/swish-5.wav": "4db41f2d2f97caf94627be05ff2870217fecc86534cf30f2aab413b847a0d50a"
+  },
+  "referenceURLs": [
+    "https://opengameart.org/node/86018",
+    "https://kenney.nl/assets/impact-sounds",
+    "https://opengameart.org/content/swishes-sound-pack"
+  ]
+}

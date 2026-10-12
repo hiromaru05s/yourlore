@@ -1,0 +1,42 @@
+{
+  "generator": "built-in imagegen",
+  "referenceRoles": [
+    "Rejected v1 edit target",
+    "Approved red-reader style reference",
+    "Approved blue-reader style reference"
+  ],
+  "images": [
+    {
+      "id": "lumi",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a113e7-6a16-7302-8780-c20a4d3b8f03/exec-5f9ae285-0a12-40ce-afbd-1d9e6261c492.png",
+      "asset": "client/public/art/npcs/v2/lumi.webp",
+      "sha256": "2c3785e6a95f65a98726002000d9328fa4cafcf7010172ab302651778b4668af",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "noel",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a113e7-6a16-7302-8780-c20a4d3b8f03/exec-30219cff-d915-46a0-b260-63099784a5d8.png",
+      "asset": "client/public/art/npcs/v2/noel.webp",
+      "sha256": "2109e557215c453937d77ed228b42002e77c87b2a5ddc7b7ab9407610ed7969d",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "vera",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a113e7-6a16-7302-8780-c20a4d3b8f03/exec-b2857cba-ef45-4e42-a651-30a003a82acb.png",
+      "asset": "client/public/art/npcs/v2/vera.webp",
+      "sha256": "437e031ddbb9815fbdb54fd655bb16daac7fbf383075815c956a45f458713183",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "sion",
+      "source": "/Users/hiromaru05s/.codex/generated_images/01a113e7-6a16-7302-8780-c20a4d3b8f03/exec-ef28c187-7b7d-4d43-988d-b17dab139936.png",
+      "asset": "client/public/art/npcs/v2/sion.webp",
+      "sha256": "c35899bf1dcab3897b6bb9a0298ec79eb7b75e18bcee31315e75c949051ef889",
+      "width": 1254,
+      "height": 1254
+    }
+  ]
+}

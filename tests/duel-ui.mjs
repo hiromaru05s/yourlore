@@ -17,7 +17,7 @@ globalThis.matchMedia=()=>({matches:false,addEventListener(){},removeEventListen
 globalThis.ResizeObserver=class{observe(){} unobserve(){} disconnect(){}};
 const temp=await mkdtemp(path.join(tmpdir(),'lore-ui-'));
 const entry=`export { BaseController } from './client/src/game/controller'; export { cardEl, cardRulesEl } from './client/src/ui/cardView'; export { zoomCard, closeZoom, revealSpell, setFxSkip, animateDraw } from './client/src/ui/anim'; export { paintDuelClock } from './client/src/ui/duelClock'; export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { cardPickerMulti, closeOverlay } from './client/src/ui/modal'; export { deckBucket } from './client/src/ui/duelMaterials'; export { createGame, reduce, ST_MAX, FIELD_MAX } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
-await build({stdin:{contents:entry,resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:path.join(temp,'ui.mjs'),plugins:[{name:'dom-only-monster-renderer',setup(b){
+await build({stdin:{contents:entry,resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',loader:{'.css':'empty'},outfile:path.join(temp,'ui.mjs'),plugins:[{name:'dom-only-monster-renderer',setup(b){
  // JSDOM has no Canvas or DOMMatrix. Exercise the real renderer separately in
  // monster-adoption-browser.mjs; this suite checks game DOM and interaction.
  b.onResolve({filter:/monster\/runtime$/},()=>({path:'monster-runtime',namespace:'dom-test'}));
@@ -118,6 +118,12 @@ click(document.querySelector('#refreshBtn'));assert.equal(rerolls,1);
 v.setHandOpen(true);assert(document.querySelector('.game.hand-open'));v.setHandOpen(false);assert(!document.querySelector('.game.hand-open'));
 g.cur=1;v.render(g);assert(document.querySelector('#refreshBtn').disabled);assert(document.querySelector('#endBtn').disabled);
 g.cur=0;g.players[0].supply[1]=null;v.render(g);assert.equal(document.querySelectorAll('#supplyMarket > *').length,3);assert.equal(document.querySelectorAll('#supplyMarket > .is-bought').length,1);
+// Attack targeting is indicated on cards without blocking the end-turn control.
+assert.equal(document.querySelector('.help-callout'),null);
+g.pending={kind:'oppMon',reason:'attack',hint:'',hintJa:'',allowCancel:true,data:{attackerUid:g.players[0].field[0]?.uid}};
+v.render(g);assert.equal(document.querySelector('#targetHint').style.display,'none');assert.equal(document.querySelector('#endBtn').disabled,false);
+g.pending={kind:'myMon',reason:'buffTurn',hint:'',hintJa:'',allowCancel:false};v.render(g);assert.equal(document.querySelector('#endBtn').disabled,true);
+g.pending=null;v.render(g);
 assert.deepEqual(avatarPresets(),['SEEKER_RED','SEEKER_BLUE']);assert(avatarHtml('SEEKER_RED','A').includes('seeker-red'));
 for(const [w,h] of [[1920,1080],[1280,720],[1024,768],[390,844],[320,568],[844,390]]) {const m=solveBoard(w,h);assert(m.tile>=20&&m.mktH>=31);assert.equal(m.underPile,false);}
 // Complete type-specific UI faces and live numeric overlays survive rendering.
