@@ -1,0 +1,22 @@
+{
+  "base": "8d7cdbe02c056b84fe1c0bb86502a72907c6ede3",
+  "durationMs": 700,
+  "status": "selection preview only",
+  "runtimeAdoption": false,
+  "deployment": false,
+  "files": {
+    "client/counter-four.html": "2b8c2613552829e12fab31ca85fbf42c4ce007ae026eeb61ea1651c0bae65c04",
+    "client/src/dev/counter-four/surface.ts": "8ed2600a55c01d832fdb0e46ead74272ca58479ac52753dc11f007652cf35c8a",
+    "client/src/dev/counter-four/qa.ts": "fceba1fd47f09d862897b0ab2771175cb592ed56dad799e1868b83b6a16351d1",
+    "client/src/dev/counter-four/vite.config.mjs": "121805df376c5607621099a7d807e5bca0032c82a0d235ba33990a93a0896911",
+    "client/src/dev/counter-four/motion.ts": "e5228e45f7059f0bf10f0b816c9cf369e6d5af97c3e7d9d6b25c3d1e3c1021ec",
+    "client/src/dev/counter-four/check.mjs": "8be76eea7e253bea91d7c252d037fc6a90c408a629c922f63ddfb9854b61c402",
+    "client/src/dev/counter-four/style.css": "8f758e9045c1f5a21b19b72e1f9c4eda7febf7254bd0f5e0362c3daeef7c53c8",
+    "client/src/dev/counter-four/renderer.ts": "28e981d9fbcc56cfc117f4d0b21590c360251edd6f4a20c4b3aef0707b59ebbb",
+    "client/src/dev/counter-four/tsconfig.json": "8cc8273c5122329c993798d75442c0617647825a98032ebeddff030c98393ec8",
+    "client/src/dev/counter-four/check-final.mjs": "b0b1a40f3e5341d16025c112208fdccb00c0e30bc99d2b3249612a261489dc4e",
+    "client/src/dev/counter-four/board.ts": "f0c294fbe145b8b057d948cf07fc3943f300d6186950eebecfa2ad5983ce8f11",
+    "client/src/dev/counter-four/preview.ts": "631beff5708faaf05ddbfe5fae9e42463fa26fc58ed4cd85835d9980cbcd806c",
+    "client/src/dev/counter-four/catalog.ts": "460ba64b91138662ba8f01ed1fba4820bf6f527ec42e5e3a97d2962571a6fed7"
+  }
+}
