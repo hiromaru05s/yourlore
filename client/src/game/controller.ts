@@ -1,3 +1,4 @@
+import {playStatusExtinction,warmStatusExtinctions,disposeStatusExtinctions} from '../ui/statusExtinction/runtime';
 import {isChosenVictory,playChosenVictory,warmChosenVictory} from '../ui/chosenVictory/runtime';
 import { playIntent, needsCastReview, targetOwner } from '../shared/playIntent';
 import {playDewGrant,warmDewGrant} from '../ui/dew/runtime';
@@ -321,6 +322,7 @@ export abstract class BaseController implements BoardHandlers {
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
     const spellGhosts:HTMLElement[]=[];
     let statusSource:HTMLElement|undefined;
+    if(events.some(e=>e.type==='statusExtinction'))warmStatusExtinctions();
     const hasStatusGrants=events.some(e=>e.type==='statusGrant');
     if(events.some(e=>e.type==='statusGrant'&&e.resource!=='dew'))warmStatusGrants();
     if(events.some(e=>e.type==='statusGrant'&&e.resource==='dew'))warmDewGrant();
@@ -346,6 +348,16 @@ export abstract class BaseController implements BoardHandlers {
       if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
       if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
       switch (e.type) {
+        case 'statusExtinction': {
+          const extinct = [e];
+          // One spell may clear both players: share the visual start instead of serial waits.
+          while (events[i + 1]?.type === 'statusExtinction') {
+            const next = events[++i];
+            if (next.type === 'statusExtinction') extinct.push(next);
+          }
+          if (!A.isFxSkipped()) await Promise.all(extinct.map(event => playStatusExtinction(sideOf(event.player),event.resource,event.before,event.after)));
+          break;
+        }
         case 'statusGrant': {
           const source=e.sourceUid?(ghosts.get(e.sourceUid)?.el??document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.sourceUid)}"]`)??undefined):statusSource;
           if(!A.isFxSkipped()){
@@ -1046,6 +1058,7 @@ export abstract class BaseController implements BoardHandlers {
     this.marketRefresh?.cancel();
     this.disposeHandDiscard?.();
     this.dead = true;
+    disposeStatusExtinctions();
     this.rankPresentation.destroy();
     stopSounds();
     this.openingAbort.abort();this.releaseOpening();
