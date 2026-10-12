@@ -124,6 +124,15 @@ export abstract class BaseController implements BoardHandlers {
   // ---- the only mutation entry point (subclass decides how) ----
   protected abstract submit(action: Action): void;
   protected maybeBot(): void {}
+  protected get useTurnClock(): boolean { return true; }
+  /** Only public board state and the local player's hand count reach the companion. */
+  guideContext() {
+    const g = this.state;
+    if (!g) return { yourTurn:false, pending:false, mana:0, hand:0, enemyMonsters:0, over:false };
+    const p = g.players[this.you];
+    return { yourTurn:g.cur===this.you, pending:!!g.pending, mana:p.mana,
+      hand:p.hand.length, enemyMonsters:g.players[1-this.you].field.length, over:g.over };
+  }
 
   /** The player acted — fast-forward any still-playing batches so input never waits. */
   protected fastForward(): void {
@@ -883,6 +892,7 @@ export abstract class BaseController implements BoardHandlers {
   // ============================================================
   private syncTimer(): void {
     if (this.dead) return;
+    if (!this.useTurnClock) { this.stopTimer(); return; }
     const g = this.state;
     if (!g || g.over) { this.stopTimer(); return; }
     const key = `${g.turn}:${g.cur}`;

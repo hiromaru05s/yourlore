@@ -1,3 +1,5 @@
+import { loungeText } from './ui/loungeText';
+import { mountTutorialWelcome } from './screens/tutorialWelcome';
 import {coverScreen,isMenuReady,imageUrls,hasUnloadedAssets} from './ui/assetReadiness';
 import {showGraphicsNotice} from './ui/graphicsNotice';
 import { mountLounge, type LoungePage } from "./ui/lounge";
@@ -84,7 +86,7 @@ export class App {
       // crashed / closed mid-game? reconnect to the in-progress room instead of the home screen.
       const g = loadActiveGame();
       if (g) this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked);
-      else this.home();
+      else this.afterLogin();
     } else this.login();
   }
 
@@ -126,8 +128,22 @@ export class App {
 
   login(): void { this.swap(() => mountLogin(this), "login"); }
   home(): void { setPresence("menu"); this.swap(() => mountHome(this), "home"); }
+  afterLogin(): void {
+    this.home();
+    if(!this.user || this.user.id==='local-guest-user')return;
+    const id=this.user.id,revision=this.screenRevision;
+    void api.tutorialStatus().then(status=>{
+      if(this.user?.id===id && this.screenRevision===revision && !status.offered)
+        this.swap(()=>mountTutorialWelcome(this), 'tutorial');
+    }).catch(()=>{
+      if(this.user?.id!==id || this.screenRevision!==revision)return;
+      const retry=document.createElement('button');retry.className='onboarding-retry';
+      retry.textContent=loungeText('チュートリアル案内を読み込めませんでした。再試行','Could not load your tutorial invitation. Retry','튜토리얼 안내를 불러오지 못했어요. 다시 시도');
+      retry.onclick=()=>this.afterLogin();this.root.append(retry);
+    });
+  }
   tutorial(): void { setPresence("menu"); this.swap(() => mountTutorial(this), "tutorial"); }
-  tutorialGame(): void { setPresence("bot"); aCapture("game_start", { mode: "tutorial" }); this.swap(() => mountGame(this, { mode: "tutorial" })); }
+  tutorialGame(lesson = 0): void { setPresence("bot"); aCapture("game_start", { mode: "tutorial" }); this.swap(() => mountGame(this, { mode: "tutorial", lesson })); }
   cards(): void { setPresence("menu"); this.swap(() => mountCards(this), "cards"); }
   botGame(difficulty: BotDifficulty = "hard"): void { setPresence("bot"); aCapture("game_start", { mode: "bot", difficulty }); this.swap(() => mountGame(this, { mode: "bot", difficulty })); }
   // entering a lobby with a live game still stored → rejoin it instead of re-queuing

@@ -134,7 +134,7 @@ const D: Record<string, Entry> = {
   "tutorial.start": { ko: "BOT으로 바로 해보기", ja: "BOTで早速プレイ", en: "Try it vs the Bot" },
   // interactive tutorial (step-by-step, credit rewards)
   "tutorial.inter.title": { ko: "인터랙티브 튜토리얼", ja: "インタラクティブチュートリアル", en: "Interactive Tutorial" },
-  "tutorial.inter.desc": { ko: "실제 게임 화면에서 9단계로 배워요. 단계마다 크레딧을 드리고, <b>전부 수료하면 총 890💎</b>!", ja: "実際のゲーム画面で9ステップで学べます。ステップごとにクレジット、<b>全部クリアで合計890💎</b>！", en: "Learn in 9 hands-on steps on the real board. Earn credits each step — <b>890💎 total</b> for finishing!" },
+  "tutorial.inter.desc": { ko: "실제 필드에서 12개 실습으로 배워요. 각 과정 첫 완료 시 250샤드, 합계 3,000샤드!", ja: "実際の盤面で12の実習。各課程の初回クリアで250シャード、合計3,000シャード！", en: "12 hands-on lessons. Earn 250 Shards for each first clear, totaling 3,000 Shards!" },
   "tutorial.inter.start": { ko: "시작하기", ja: "はじめる", en: "Start" },
   "tutorial.inter.done": { ko: "획득 완료", ja: "獲得済み", en: "Claimed" },
   "tutorial.rules": { ko: "규칙 레퍼런스", ja: "ルールリファレンス", en: "Rule Reference" },
@@ -159,7 +159,7 @@ const D: Record<string, Entry> = {
   "tut.s9.title": { ko: "어튠 (마나 성장)", ja: "アチューン(マナ成長)", en: "Attune (Mana Growth)" },
   "tut.s9.body": { ko: "<b>어튠</b> 카드를 드렸어요. 마나는 저절로 늘지 않고 <b>어튠</b> 같은 카드로 <b>최대 마나를 영구히 +1</b> 해야 커집니다. 마나가 커질수록 강한 카드를 쓸 수 있어요. 어튠을 <b>사용</b>하세요!", ja: "<b>アチューン</b>カードを渡しました。マナは自然には増えず、<b>アチューン</b>のようなカードで<b>最大マナを永続+1</b>して伸ばします。マナが増えるほど強いカードを使えます。アチューンを<b>使用</b>！", en: "Here's an <b>Attune</b>. Mana doesn't grow on its own — cards like <b>Attune</b> raise your <b>max mana permanently (+1)</b>. More mana = stronger plays. <b>Use</b> the Attune!" },
   "tut.s10.title": { ko: "승리", ja: "勝利", en: "Victory" },
-  "tut.s10.body": { ko: "훌륭해요! 상대 체력이 <b>거의 없습니다</b>. 필드의 몬스터로 <b>직접 공격</b>해 마무리하고 튜토리얼을 <b>완주</b>하세요! (총 <b>890💎</b> 획득)", ja: "お見事！相手の体力は<b>ほぼ残っていません</b>。場のモンスターで<b>直接攻撃</b>してとどめを刺し、チュートリアルを<b>完走</b>しましょう！(合計<b>890💎</b>獲得)", en: "Great work! The opponent is <b>nearly finished</b>. <b>Attack directly</b> with your monster to end it and <b>complete</b> the tutorial! (Total <b>890💎</b>)" },
+  "tut.s10.body": { ko: "훌륭해요! 상대 체력이 <b>거의 없습니다</b>. 필드의 몬스터로 <b>직접 공격</b>해 마무리하고 튜토리얼을 <b>완주</b>하세요! (총 <b>3,000💎</b> 획득)", ja: "お見事！相手の体力は<b>ほぼ残っていません</b>。場のモンスターで<b>直接攻撃</b>してとどめを刺し、チュートリアルを<b>完走</b>しましょう！(合計<b>3,000💎</b>獲得)", en: "Great work! The opponent is <b>nearly finished</b>. <b>Attack directly</b> with your monster to end it and <b>complete</b> the tutorial! (Total <b>3,000💎</b>)" },
   "home.credits": { ko: "크레딧", ja: "クレジット", en: "Credits" },
   "home.record": { ko: "전적", ja: "戦績", en: "Record" },
   "home.win": { ko: "승", ja: "勝", en: "W" },

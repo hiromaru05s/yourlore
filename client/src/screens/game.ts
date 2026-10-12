@@ -1,3 +1,4 @@
+import { mountDuelSpiritGuide } from '../ui/duelSpiritGuide';
 import { botNpc } from "../shared/botNpcs";
 import { getLang } from "../i18n";
 import {deckStoreForUser} from '../shared/cards';
@@ -17,7 +18,7 @@ import { HOME_MUSIC_GAIN, startBackgroundMusic } from "../ui/backgroundMusic";
 
 export type GameOpts =
   | { mode: "bot"; difficulty?: BotDifficulty }
-  | { mode: "tutorial" }
+  | { mode: "tutorial"; lesson?: number }
   | { mode: "online"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null; ranked?: boolean };
 
 export function mountGame(app: App, opts: GameOpts): Screen {
@@ -56,21 +57,26 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     onBattleReady: () => startMusic(),
     onHome: () => (opts.mode === "tutorial" ? app.tutorial() : app.home()),
     // 랭크전 "다시하기"는 랭크 큐로 돌아가야 한다 (노말 큐로 새던 버그 수정)
-    onRematch: () => (opts.mode === "bot" ? app.botGame(opts.difficulty) : opts.mode === "tutorial" ? app.tutorialGame() : opts.ranked ? app.rankedLobby() : app.onlineLobby()),
+    onRematch: () => (opts.mode === "bot" ? app.botGame(opts.difficulty) : opts.mode === "tutorial" ? app.tutorialGame(opts.lesson) : opts.ranked ? app.rankedLobby() : app.onlineLobby()),
   };
 
+  const tutorialUserId = app.user?.id;
   const ctrl =
     opts.mode === "bot"
       ? new LocalController(root, exits, app.user?.display ?? "PLAYER 1", activeDeck.cards, opts.difficulty ?? "hard")
       : opts.mode === "tutorial"
         ? new TutorialController(root, exits, app.user?.display ?? "PLAYER", {
-            onCredits: (c) => { if (app.user) app.user.credits = c; },
+            lesson: opts.lesson,
+            guest: !app.user || app.user.id === 'local-guest-user',
+            onNext: lesson => app.tutorialGame(lesson),
+            onCredits: (c) => { if (app.user?.id === tutorialUserId && app.user) app.user.credits = c; },
           })
         : new OnlineController(root, opts.you, opts.roomId, exits, opts.ranked);
 
   // fit-to-viewport board sizing — started AFTER the controller built the board
   // skeleton, because the solver measures the real rows (see ui/layout.ts).
   const stopLayout = startBoardLayout();
+  const stopGuide = opts.mode === "tutorial" ? undefined : mountDuelSpiritGuide(root, () => ctrl.guideContext());
 
-  return { destroy: () => { stopMusic?.(); stopLayout(); ctrl.destroy(); } };
+  return { destroy: () => { stopMusic?.(); stopGuide?.(); stopLayout(); ctrl.destroy(); } };
 }
