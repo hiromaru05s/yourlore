@@ -13,15 +13,20 @@ export const manaTravelSpeed=(u:number)=>1.55*Math.pow(clamp(u),.55);
 type C=CanvasRenderingContext2D;
 let atlas:HTMLImageElement|null=null,air:PurchaseAirWake|null=null,loading:Promise<boolean>|null=null,generation=0;
 let cancelLoad:(()=>void)|null=null;
+let airAbort:AbortController|undefined;
 /** Shared lossless atlas is decoded during board preparation; no live WebGL work. */
 export function prepareManaPurchase():Promise<boolean>{
  if(atlas&&air)return Promise.resolve(true);
  if(loading)return loading;
  if(typeof Image==='undefined')return Promise.resolve(false);
- const token=generation;
+ const token=generation,abort=new AbortController();airAbort=abort;
  loading=new Promise<boolean>(resolve=>{
   const image=new Image();let settled=false;
-  const finish=(ok:boolean)=>{if(settled)return;settled=true;clearTimeout(timer);image.onload=image.onerror=null;if(token===generation){cancelLoad=null;if(ok){atlas=image;air=new PurchaseAirWake();}}resolve(ok&&token===generation);};
+  const finish=async(ok:boolean)=>{if(settled)return;settled=true;clearTimeout(timer);image.onload=image.onerror=null;
+   const prepared=ok?await PurchaseAirWake.prepare(abort.signal):undefined;
+   if(token===generation){cancelLoad=null;if(prepared){atlas=image;air=prepared;}}else prepared?.dispose();
+   resolve(!!prepared&&token===generation);
+  };
   const timer=setTimeout(()=>finish(false),4500);
   cancelLoad=()=>{finish(false);image.removeAttribute('src');};
   image.onload=()=>{if(image.naturalWidth!==3840||image.naturalHeight!==1920){finish(false);return;}void image.decode().then(()=>finish(true),()=>finish(false));};
@@ -29,7 +34,7 @@ export function prepareManaPurchase():Promise<boolean>{
  }).finally(()=>{if(token===generation)loading=null;});
  return loading;
 }
-export function disposeManaPurchase(){generation++;cancelLoad?.();cancelLoad=null;loading=null;atlas=null;air?.dispose();air=null;}
+export function disposeManaPurchase(){generation++;airAbort?.abort();airAbort=undefined;cancelLoad?.();cancelLoad=null;loading=null;atlas=null;air?.dispose();air=null;}
 export function manaPaymentPoint(from:ManaRect,to:ManaRect,q:number,lane=0){
  const t=clamp(q),x=from.left+from.width/2,y=from.top+from.height/2;
  const tx=to.left+to.width*.25,ty=to.top+to.height*.2;

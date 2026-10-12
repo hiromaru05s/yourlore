@@ -26,7 +26,8 @@ import { paintDuelClock } from '../ui/duelClock';
 import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
 import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef } from "../shared/engine";
-import { botDecide, type BotDifficulty } from "../shared/bot";
+import type { BotDifficulty } from "../shared/bot";
+import {BotPlanner} from "./botPlanner";
 import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog, logToText } from "../ui/log";
@@ -71,7 +72,7 @@ export abstract class BaseController implements BoardHandlers {
   private rankPresentation = new RankPresentation();
   private winShown = false;
   private outcomePending = false;
-  private dead = false;
+  protected dead = false;
   private queue: Promise<void> = Promise.resolve();
   private unsubLang: () => void;
   private fxGen = 0; // batches queued so far
@@ -1070,6 +1071,7 @@ const lastNpcDecks = new Map<string, number>();
 
 export class LocalController extends BaseController {
   private botTimer = 0;
+  private readonly planner = new BotPlanner();
   private difficulty: BotDifficulty;
 
   constructor(root: HTMLElement, exits: ControllerExits, playerName = "PLAYER 1", deck?: string[], difficulty: BotDifficulty = "hard") {
@@ -1088,6 +1090,11 @@ export class LocalController extends BaseController {
     this.applyResult(res, false);
   }
 
+  protected applyResult(res: ReduceResult, animate = true): void {
+    if(res.state.over){clearTimeout(this.botTimer);this.planner.dispose();}
+    super.applyResult(res,animate);
+  }
+
   protected submit(action: Action): void {
     if (this.state.over || action.type!=="surrender"&&this.openingLocked) return;
     // input is never locked during playback — so out-of-turn clicks (e.g. on a
@@ -1098,7 +1105,7 @@ export class LocalController extends BaseController {
 
   protected maybeBot(): void {
     const g = this.state;
-    if (g.over) return;
+    if (g.over) { this.planner.dispose(); return; }
     if (g.players[actingSide(g)].isBot) {
       clearTimeout(this.botTimer);
       // playback has already finished by the time afterApply runs — a short beat is enough
@@ -1108,9 +1115,9 @@ export class LocalController extends BaseController {
 
   private botTurnNo = -1;
   private botTurnSteps = 0;
-  private botStep(): void {
+  private async botStep(): Promise<void> {
     const g = this.state;
-    if (g.over || !g.players[actingSide(g)].isBot) return;
+    if (this.dead || g.over || !g.players[actingSide(g)].isBot) return;
     // 안전망: 봇이 한 턴에서 비정상적으로 많은 행동을 반복하면(거부 루프 등) 강제 턴 종료.
     // 정상 턴은 수십 액션 이내 — 200회는 버그가 아니면 도달 불가.
     if (g.turn !== this.botTurnNo) { this.botTurnNo = g.turn; this.botTurnSteps = 0; }
@@ -1119,9 +1126,10 @@ export class LocalController extends BaseController {
       this.applyResult(reduce(g, g.pending?.allowCancel ? ({ type: "pick", uid: null } as Action) : ({ type: "endTurn" } as Action)));
       return;
     }
-    const action = botDecide(g, this.difficulty);
+    const action = await this.planner.decide(g, this.difficulty);
+    if(!action||this.dead||this.state!==g||g.over)return;
     this.applyResult(reduce(g, action));
   }
 
-  destroy(): void { clearTimeout(this.botTimer); super.destroy(); }
+  destroy(): void { clearTimeout(this.botTimer); this.planner.dispose(); super.destroy(); }
 }

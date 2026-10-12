@@ -104,11 +104,14 @@ export class GameView {
     this.statRise = createBoardStatRise(root);
     delete this.root.dataset.sceneReady;delete this.root.dataset.boardRendered;delete this.root.dataset.preloadedImages;
     this.root.dataset.tableState=typeof WebGL2RenderingContext!=='undefined'?'loading':'fallback';
+    // Select projected-board CSS before inserting nodes: otherwise the browser
+    // fetches legacy hidden furniture atlases during the first style pass.
+    if(typeof WebGL2RenderingContext!=='undefined')this.root.classList.add('reading-board');
     this.buildSkeleton();
     if(!matchMedia('(prefers-reduced-motion: reduce)').matches)void prepareManaPurchase();
     this.cleanups.push(installGameCursor(this.root));
     const mount=typeof WebGL2RenderingContext!=='undefined'
-      ? import('./duelScene').then(({mountDuelScene})=>{if(!this.disposed)this.disposeScene=mountDuelScene(this.root);}).catch(()=>{this.root.dataset.tableState='fallback';})
+      ? import('./duelScene').then(({mountDuelScene})=>{if(!this.disposed){this.disposeScene=mountDuelScene(this.root);if(this.root.dataset.tableState==='fallback')this.root.classList.remove('reading-board');}}).catch(()=>{this.root.dataset.tableState='fallback';this.root.classList.remove('reading-board');})
       : Promise.resolve();
     prepareDuel(this.root,mount);
   }

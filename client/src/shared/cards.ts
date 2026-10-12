@@ -2510,7 +2510,7 @@ export function isChestCard(c: { id: string; star?: string }): boolean {
 }
 
 export function frameFor(t: CardType, full = false): string {
-  return `/art/biblion/modular/base-${t === "mon" ? "mon" : t === "trap" ? "trap" : t === "quest" ? "quest" : "spell"}${full ? ".png" : "-ui.webp"}`;
+  return `/art/biblion/modular/base-${t === "mon" ? "mon" : t === "trap" ? "trap" : t === "quest" ? "quest" : "spell"}${full ? "-lossless.webp" : "-ui.webp"}`;
 }
 /** Compact complete face, shared by field tiles and market thumbnails. */
 export function fieldFrameFor(t: CardType): string {
