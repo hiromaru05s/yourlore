@@ -1,0 +1,2 @@
+import {defineConfig} from 'vite';
+export default defineConfig({root:new URL('../../../',import.meta.url).pathname,server:{host:'127.0.0.1',port:5467,strictPort:true},build:{copyPublicDir:false,outDir:new URL('../../../../docs/vfx-prototypes/2026-10-12-poison-four/build',import.meta.url).pathname,emptyOutDir:true,rollupOptions:{input:new URL('../../../poison-four.html',import.meta.url).pathname}}});

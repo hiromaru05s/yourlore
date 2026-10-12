@@ -1,0 +1,264 @@
+{
+  "checks": [
+    {
+      "id": "POISON_MASTER",
+      "time": 0
+    },
+    {
+      "id": "POISON_MASTER",
+      "time": 360
+    },
+    {
+      "id": "POISON_MASTER",
+      "time": 680
+    },
+    {
+      "id": "POISON_MASTER",
+      "time": 1100
+    },
+    {
+      "id": "POISON_MASTER",
+      "time": 1510
+    },
+    {
+      "id": "POISON_MASTER",
+      "time": 1950
+    },
+    {
+      "id": "POISON_MASTER",
+      "time": 2350
+    },
+    {
+      "id": "POISON_MASTER",
+      "time": 2800
+    },
+    {
+      "id": "RUST_SLUG",
+      "time": 0
+    },
+    {
+      "id": "RUST_SLUG",
+      "time": 360
+    },
+    {
+      "id": "RUST_SLUG",
+      "time": 680
+    },
+    {
+      "id": "RUST_SLUG",
+      "time": 1100
+    },
+    {
+      "id": "RUST_SLUG",
+      "time": 1510
+    },
+    {
+      "id": "RUST_SLUG",
+      "time": 1950
+    },
+    {
+      "id": "RUST_SLUG",
+      "time": 2350
+    },
+    {
+      "id": "RUST_SLUG",
+      "time": 2800
+    },
+    {
+      "id": "RUST_SHROOM",
+      "time": 0
+    },
+    {
+      "id": "RUST_SHROOM",
+      "time": 360
+    },
+    {
+      "id": "RUST_SHROOM",
+      "time": 680
+    },
+    {
+      "id": "RUST_SHROOM",
+      "time": 1100
+    },
+    {
+      "id": "RUST_SHROOM",
+      "time": 1510
+    },
+    {
+      "id": "RUST_SHROOM",
+      "time": 1950
+    },
+    {
+      "id": "RUST_SHROOM",
+      "time": 2350
+    },
+    {
+      "id": "RUST_SHROOM",
+      "time": 2800
+    },
+    {
+      "board": true,
+      "id": "POISON_MASTER",
+      "v": 0,
+      "side": "0"
+    },
+    {
+      "board": true,
+      "id": "POISON_MASTER",
+      "v": 1,
+      "side": "0"
+    },
+    {
+      "board": true,
+      "id": "POISON_MASTER",
+      "v": 2,
+      "side": "0"
+    },
+    {
+      "board": true,
+      "id": "POISON_MASTER",
+      "v": 3,
+      "side": "0"
+    },
+    {
+      "board": true,
+      "id": "RUST_SLUG",
+      "v": 0,
+      "side": "0"
+    },
+    {
+      "board": true,
+      "id": "RUST_SLUG",
+      "v": 1,
+      "side": "0"
+    },
+    {
+      "board": true,
+      "id": "RUST_SLUG",
+      "v": 2,
+      "side": "0"
+    },
+    {
+      "board": true,
+      "id": "RUST_SLUG",
+      "v": 3,
+      "side": "0"
+    },
+    {
+      "board": true,
+      "id": "RUST_SHROOM",
+      "v": 0,
+      "side": "0"
+    },
+    {
+      "board": true,
+      "id": "RUST_SHROOM",
+      "v": 1,
+      "side": "0"
+    },
+    {
+      "board": true,
+      "id": "RUST_SHROOM",
+      "v": 2,
+      "side": "0"
+    },
+    {
+      "board": true,
+      "id": "RUST_SHROOM",
+      "v": 3,
+      "side": "0"
+    },
+    {
+      "board": true,
+      "id": "POISON_MASTER",
+      "v": 0,
+      "side": "1"
+    },
+    {
+      "board": true,
+      "id": "POISON_MASTER",
+      "v": 1,
+      "side": "1"
+    },
+    {
+      "board": true,
+      "id": "POISON_MASTER",
+      "v": 2,
+      "side": "1"
+    },
+    {
+      "board": true,
+      "id": "POISON_MASTER",
+      "v": 3,
+      "side": "1"
+    },
+    {
+      "board": true,
+      "id": "RUST_SLUG",
+      "v": 0,
+      "side": "1"
+    },
+    {
+      "board": true,
+      "id": "RUST_SLUG",
+      "v": 1,
+      "side": "1"
+    },
+    {
+      "board": true,
+      "id": "RUST_SLUG",
+      "v": 2,
+      "side": "1"
+    },
+    {
+      "board": true,
+      "id": "RUST_SLUG",
+      "v": 3,
+      "side": "1"
+    },
+    {
+      "board": true,
+      "id": "RUST_SHROOM",
+      "v": 0,
+      "side": "1"
+    },
+    {
+      "board": true,
+      "id": "RUST_SHROOM",
+      "v": 1,
+      "side": "1"
+    },
+    {
+      "board": true,
+      "id": "RUST_SHROOM",
+      "v": 2,
+      "side": "1"
+    },
+    {
+      "board": true,
+      "id": "RUST_SHROOM",
+      "v": 3,
+      "side": "1"
+    },
+    {
+      "handClick": true
+    },
+    {
+      "concurrentRestore": true
+    },
+    {
+      "reduced": true
+    },
+    {
+      "responsive": 320
+    },
+    {
+      "responsive": 390
+    },
+    {
+      "responsive": 844
+    }
+  ],
+  "errors": [],
+  "notes": "Local preview fixture; not authenticated gameplay. Timing measured separately."
+}
