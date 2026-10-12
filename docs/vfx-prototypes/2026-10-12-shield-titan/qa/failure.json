@@ -1,0 +1,13 @@
+{
+  "error": "side 0 variant 0 finish restores",
+  "checks": [
+    "normal playback advances",
+    "side 0 variant 0 owns initial face",
+    "side 0 variant 0 active 400",
+    "side 0 variant 0 active 850",
+    "side 0 variant 0 active 1450",
+    "side 0 variant 0 active 2400"
+  ],
+  "errors": [],
+  "failures": []
+}

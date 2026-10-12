@@ -1,0 +1,23 @@
+vite v5.4.21 building for production...
+transforming...
+✓ 166 modules transformed.
+rendering chunks...
+computing gzip size...
+dist-shield-titan-preview/shield-titan-four.html                    0.29 kB │ gzip:   0.27 kB
+dist-shield-titan-preview/assets/preview-D4hQdfgP.css               3.46 kB │ gzip:   1.36 kB
+dist-shield-titan-preview/assets/renderer-CDpg3JYh.css             22.08 kB │ gzip:   6.13 kB
+dist-shield-titan-preview/assets/board-DCyTUHTx.css               216.67 kB │ gzip:  45.92 kB
+dist-shield-titan-preview/assets/shield-titan-four-BxLIglk8.js      2.17 kB │ gzip:   1.11 kB
+dist-shield-titan-preview/assets/renderDensity-C-JaIeFS.js          3.55 kB │ gzip:   1.83 kB
+dist-shield-titan-preview/assets/preview-_nhT5fij.js                6.13 kB │ gzip:   3.26 kB
+dist-shield-titan-preview/assets/ceremonyScene-C0ZhuQw3.js          8.93 kB │ gzip:   3.96 kB
+dist-shield-titan-preview/assets/paperDraw-BFkQA1s3.js             10.27 kB │ gzip:   4.65 kB
+dist-shield-titan-preview/assets/duelScene-ehZ097DE.js            102.39 kB │ gzip:  35.91 kB
+dist-shield-titan-preview/assets/board-DIAmGUGF.js                189.39 kB │ gzip:  74.91 kB
+dist-shield-titan-preview/assets/renderer-DhWEUfyT.js           1,008.00 kB │ gzip: 323.91 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 8m 35s
