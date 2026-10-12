@@ -4,3 +4,5 @@
 html.fusion-review-page,body.fusion-review{height:auto!important;min-height:100%;overflow:auto!important}body.fusion-review #app{height:auto!important;min-height:100vh;overflow:visible!important}
 
 .study-actions{display:flex;gap:6px}.study-actions button{font-size:11px;padding:9px 11px}.grid .study:last-child{grid-column:1/-1;max-width:calc((100% - 24px)/2);width:100%;justify-self:center}@media(max-width:1000px){.grid{grid-template-columns:1fr}.grid .study:last-child{max-width:900px}.study{max-width:900px;width:100%;justify-self:center}}
+
+.study-actions{align-items:center;flex-wrap:wrap}.study-actions a{font-size:11px;white-space:nowrap}

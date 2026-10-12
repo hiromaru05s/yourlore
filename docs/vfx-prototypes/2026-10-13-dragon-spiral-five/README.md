@@ -43,3 +43,14 @@
 最終結果: 96項目合格、JS/シェーダーエラー0、HTTPエラー0。単独再生5案のフレーム間隔中央値16.7ms、p95 16.7〜16.8ms（`qa/single-performance.json`）。5案同時録画は中央値30.1ms、p95 82.5ms（`qa/report.json`）。同時録画時は他のローカル処理と競合するため、単独再生と分けて記録する。client typecheck、比較ビルド、design guard、diff checkも合格。ビルドにはThree.js/実盤面fixture由来の500kB超チャンク警告がある。
 
 再現: `node tests/dragon-spiral-five-browser.mjs`、`node tests/dragon-spiral-five-performance.mjs`。
+
+## 実盤面専用ページ
+
+追加要望「実盤面でみられるようにして」に対応して、http://127.0.0.1:5497/dragon-spiral-five.html?arena を追加。
+
+- 実GameViewと融合reducerを使う既存盤面を、画面全体の残り領域に表示する。
+- 演出5案、融合先2種、自分側/相手側/両側同時、速度、反復、低減モーションを専用ページ内で操作可能。
+- 手札のドラゴンをクリックして再生。中断・復元、時刻シークも可能。
+- `?arena&variant=2` のような0始まりの指定で各案へ直接遷移。比較ページ上部と各案からリンクする。
+- `?board` は親ページから操作される描画専用フレームとして保持。通常ゲーム経路への採用ではない。
+- 専用ページの検証スクリプト: `tests/dragon-spiral-board-review.mjs`。
