@@ -1,0 +1,28 @@
+import assert from 'node:assert/strict';import {build} from 'esbuild';import {JSDOM} from 'jsdom';import {mkdtemp,rm} from 'node:fs/promises';import {tmpdir} from 'node:os';import path from 'node:path';
+const dir=await mkdtemp(path.join(tmpdir(),'decay-counter-'));
+try{
+ await build({stdin:{contents:"export {createGame,reduce} from './client/src/shared/engine';export {DB} from './client/src/shared/cards';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/engine.mjs'});
+ const {createGame,reduce,DB}=await import(dir+'/engine.mjs');
+ const mon=(id,uid,extras={})=>({...DB[id],uid,exhausted:false,summonedTurn:0,dmg:0,tempAtk:0,atkMod:0,defMod:0,...extras});
+ const fresh=owner=>{const g=createGame({mode:'online',seed:42,starting:1-owner,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.cur=1-owner;g.turn=4;g.phase='main';g.pending=null;for(const p of g.players)Object.assign(p,{field:[],enchants:[],quests:[],traps:[],hand:[],deck:[],discard:[],removed:[],mana:20,maxMana:20,hp:30,maxHp:40});return g;};
+ for(const owner of [0,1])for(const before of [0,1,2])for(const amount of [1,2,3]){
+  const g=fresh(owner);g.players[owner].field=[mon('M4','target',{decayCnt:before})];g.pending={kind:'oppMon',hint:'',hintJa:'',reason:'decayMark',allowCancel:false,data:{val:amount}};
+  const r=reduce(g,{type:'pick',uid:'target'}),events=JSON.parse(JSON.stringify(r.events)),grants=events.filter(e=>e.type==='decayCounterGrant');
+  assert.deepEqual(grants,[{type:'decayCounterGrant',player:owner,uid:'target',before,after:before+amount}]);
+  const death=events.findIndex(e=>e.type==='destroy');assert.equal(death>=0,before+amount>=3);if(death>=0)assert(events.indexOf(grants[0])<death);else assert.equal(r.state.players[owner].field[0].decayCnt,before+amount);
+ }
+ {const g=fresh(1);g.players[1].field=[mon('VAMP1','target',{decayCnt:2})];g.players[1].enchants=[{card:{...DB.VAMP_WARD,uid:'ward'},turns:99}];g.pending={kind:'oppMon',hint:'',hintJa:'',reason:'decayMark',allowCancel:false,data:{val:1}};const r=reduce(g,{type:'pick',uid:'target'});assert.equal(r.events.filter(e=>e.type==='decayCounterGrant').length,1);assert(!r.events.some(e=>e.type==='destroy'));assert.equal(r.state.players[1].field[0].decayCnt,3);}
+ {const g=fresh(1);g.players[1].field=[mon('M4','target',{decayCnt:2})];const r=reduce(g,{type:'endTurn'});assert(!r.events.some(e=>e.type==='decayCounterGrant'),'old counters never retrigger on an unrelated state update');}
+ const dom=new JSDOM('<div id="root"><div id="card"><div class="card-name" style="z-index:4">名前</div><div class="card-status" style="z-index:5"><span class="kw">既存能力</span></div></div></div>',{pretendToBeVisual:true});for(const k of ['window','document','HTMLElement','Event'])globalThis[k]=dom.window[k];
+ globalThis.requestAnimationFrame=()=>1;globalThis.cancelAnimationFrame=()=>{};globalThis.__reduced=true;globalThis.__lang='ja';globalThis.matchMedia=()=>({matches:globalThis.__reduced});
+ await build({entryPoints:['client/src/ui/decayCounter/runtime.ts'],bundle:true,platform:'node',format:'esm',outfile:dir+'/runtime.mjs',plugins:[{name:'surface-double',setup(b){b.onResolve({filter:/^\.\/surface$/},()=>({path:'surface',namespace:'test'}));b.onResolve({filter:/\/i18n$/},()=>({path:'lang',namespace:'test'}));b.onLoad({filter:/.*/,namespace:'test'},a=>({contents:a.path==='lang'?'export const getLang=()=>globalThis.__lang;':'export const decayFace=async()=>{await new Promise(r=>setTimeout(r,20));throw Error("no texture")};'}));}}]});
+ const {playDecayCounter,cancelDecayCounters}=await import(dir+'/runtime.mjs'),node=document.getElementById('card'),badge=()=>node.querySelector('.ec-decay-state');
+ for(const [lang,label]of [['ja','腐敗'],['ko','부패'],['en','Decay']]){globalThis.__lang=lang;assert.equal(await playDecayCounter(node,0,1),true);assert.equal(badge().textContent,`${label} 1/3`);assert(badge().getAttribute('aria-label'));assert.equal(node.querySelector('.card-name').style.zIndex,'4');assert.equal(node.querySelector('.card-status').style.zIndex,'5');assert.equal(node.querySelector('.kw').textContent,'既存能力');}
+ const aborted=new AbortController();aborted.abort();assert.equal(await playDecayCounter(node,1,2,{signal:aborted.signal}),false);assert.equal(badge().textContent,'Decay 1/3');
+ globalThis.__reduced=false;const a=new AbortController(),pending=playDecayCounter(node,1,2,{signal:a.signal});a.abort();assert.equal(await pending,false);assert.equal(badge().textContent,'Decay 2/3');
+ const first=playDecayCounter(node,0,1),second=playDecayCounter(node,1,2);assert.equal(await first,false);cancelDecayCounters(document.getElementById('root'));assert.equal(await second,false);assert.equal(badge().textContent,'Decay 2/3');
+ assert.equal(await playDecayCounter(node,2,3),false,'missing texture settles without pretending the material played');assert.equal(badge().textContent,'Decay 3/3');
+ const hidden=playDecayCounter(node,3,4);document.dispatchEvent(new Event('visibilitychange'));assert.equal(await hidden,false);assert.equal(badge().textContent,'Decay 4/3');cancelDecayCounters();
+ assert.equal(document.querySelectorAll('.decay-counter-surface').length,0);assert.equal(document.querySelectorAll('.ec-decay-state').length,1);node.remove();assert.equal(await playDecayCounter(node,0,1),false);await new Promise(r=>setTimeout(r,30));assert.equal(document.querySelectorAll('canvas').length,0);dom.window.close();
+ console.log('PASS decay grant: 18 reducer paths, exact public events, ward, no retrigger, locales, reduced motion, pre-abort, capture cancellation, replacement, fallback and cleanup');
+}finally{await rm(dir,{recursive:true,force:true});}
