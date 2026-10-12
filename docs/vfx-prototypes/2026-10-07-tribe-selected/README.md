@@ -22,3 +22,12 @@ Verification:
 - Existing 28 engine synergy fixtures.
 - `/tribe-approved.html` runs 18 actual reducer/controller cases: both owners × five summons and four synergy/victory cases. This QA entry is not a production build entry point.
 - Required production regression suite, typecheck and build run through the guarded staging release. Staging delivered-file parity and local browser runtime evidence are separate from authenticated staging gameplay.
+
+## Staging release
+
+- Guarded deployment completed from `b75e5ac9ede98cd7eb37ae2092a3599ee771d145`, including concurrent main changes. A concurrent release runner deployed this exact integrated SHA; no duplicate deployment was needed.
+- Worker version: `b2740f6e-7add-4426-8f58-0f3d3c79ceb3` at `https://test.yourlore.xyz`.
+- Snapshot typecheck and build passed; production suite 69/69 passed.
+- Public HTML and built assets: 45/45 SHA-256 matches in `staging-parity.json`, compared against the actual deployment snapshot build.
+- Local controller/browser playback: 18/18 cases passed in `browser-runtime.json`; both owners, five summons and every synergy/victory tier.
+- This confirms deployment and file parity. Authenticated staging match playback was not verified in this task.

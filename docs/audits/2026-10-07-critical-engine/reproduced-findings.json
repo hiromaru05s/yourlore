@@ -1,0 +1,38 @@
+[
+  {
+    "id": "C01",
+    "seed": 2,
+    "cardsPerPlayer": 9,
+    "trigger": "GRAPE",
+    "error": "Maximum call stack size exceeded"
+  },
+  {
+    "id": "C01-turn-boundary",
+    "seed": 2,
+    "cardsPerPlayer": 10,
+    "trigger": "endTurn",
+    "error": "Maximum call stack size exceeded"
+  },
+  {
+    "id": "C02-hermit",
+    "lockUntil": 9,
+    "turn": 3,
+    "before": [
+      "TSO1"
+    ],
+    "after": [
+      "TSO1",
+      "VAMP1"
+    ]
+  },
+  {
+    "id": "C02-solitude",
+    "cap": 2,
+    "before": 2,
+    "after": [
+      "GOLEM1",
+      "GOLEM2",
+      "VAMP1"
+    ]
+  }
+]
