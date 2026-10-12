@@ -1,3 +1,11 @@
+import {isMage} from './mageSummon/selection';
+import {isMercenary} from './mercenarySummon/selection';
+import {playMercenarySummon} from './mercenarySummon/runtime';
+import {isGambler} from './gamblerSummon/selection';
+import {isHexer} from './hexerSummon/selection';
+import {isGolem} from './golem/selection';
+import {playGolem} from './golem/runtime';
+import {isChosenHero} from './chosenSummon/selection';
 import { cardTypeLabel, displayPassives, referencedPassives } from '../shared/cardPresentation';
 import { cardStateEl } from './cardState';
 import {cancelChosenVictory} from './chosenVictory/runtime';
@@ -198,6 +206,21 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(heavy&&isMercenary(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playMercenarySummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
+  if(heavy&&(isMage(face.dataset.cardId)||isHexer(face.dataset.cardId)||isGambler(face.dataset.cardId))){
+    face.style.visibility='hidden';reveal.remove();
+    await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}),10000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
+  if(heavy&&isGolem(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.style.visibility='hidden';
+    if(!fxSkip)await boardMotionScope(signal=>playGolem(face,{anchor:target,from,reveal,signal,onImpact:()=>sfx(landingSound)}),10000);
+    reveal.remove();face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
   if(heavy&&selectedTribeSummon(face.dataset.cardId)){
     face.style.visibility='hidden';
     await boardMotionScope(signal=>playTribeSummon(face,{anchor:target,from,reveal,signal,onImpact:()=>sfx(landingSound)}));
@@ -211,7 +234,7 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
     const fade=reveal.animate([{opacity:1},{opacity:0}],{duration:reduced?80:220,fill:'both'});
     await wait(reduced?80:300);transfer.cancel();fade.cancel();reveal.remove();
     face.style.transform=initial.toString();
-    await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}),isVerdant(face.dataset.cardId)?10000:5000);
+    await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}),(isVerdant(face.dataset.cardId)||isChosenHero(face.dataset.cardId))?10000:5000);
     face.style.transform=fieldPlacement(target,w,h).toString();return face;
   }
   const duration=reduced?120:620;
@@ -264,6 +287,10 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
 /** Both hand plays and engine-generated summon events share this selected reveal. */
 async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise<void>{
  const id=card.id;
+ if(isMage(id)){node.style.visibility='hidden';return;}
+ // Selected hexers begin in their renderer, without a raw DOM reveal or transfer.
+ if(isMercenary(id)||isHexer(id)||isGambler(id)){node.style.visibility='hidden';return;}
+ if(isGolem(id)){node.style.visibility='hidden';return;}
  // Fetch the optional renderer while the unchanged hand reveal is moving.
  const module=isMimic(id)&&!fxSkip?import('./mimic/runtime').catch(()=>null):null;
  await focusCard(node,side,isMimic(id)?id:undefined);
@@ -445,7 +472,7 @@ export function pileFlash(id: string): void {
 
 export function summonIn(uid: string): void {
   const n = byUid(uid);
-  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}),isVerdant(n.dataset.cardId)?10000:5000);
+  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}),(isMage(n.dataset.cardId)||isMercenary(n.dataset.cardId)||isVerdant(n.dataset.cardId)||isHexer(n.dataset.cardId)||isGolem(n.dataset.cardId))?10000:5000);
 }
 
 export function lunge(uid: string, dir: "up" | "down"): void {
@@ -615,6 +642,8 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
   ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
   ov.setAttribute('aria-label', cardName(c));
   const heading = document.createElement('header'); heading.className = 'inspect-heading';
+  const headingCopy = document.createElement('div'); headingCopy.className = 'inspect-heading-copy';
+  const controls = document.createElement('div'); controls.className = 'inspect-controls';
   const title = document.createElement('h1'); title.textContent = cardName(c);
   const type = document.createElement('span'); type.className = 'inspect-type';
   type.textContent = cardTypeLabel(c, getLang());
@@ -624,11 +653,12 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
   if (zoomHistory.length) {
     const back = document.createElement('button'); back.type='button'; back.className='inspect-back';
     back.textContent={ja:'← 元のカード',ko:'← 이전 카드',en:'← Previous card'}[getLang()];
-    back.onclick=e=>{e.stopPropagation();backToPreviousCard();}; heading.append(back);
+    back.onclick=e=>{e.stopPropagation();backToPreviousCard();}; controls.append(back);
   }
   const returnToRules = document.createElement('button'); returnToRules.type='button'; returnToRules.className='inspect-return-rules'; returnToRules.hidden=true;
   returnToRules.textContent={ja:'効果本文へ戻る',ko:'효과 본문으로',en:'Back to effect'}[getLang()];
-  heading.append(title, type, returnToRules, close); wrap.append(heading);
+  headingCopy.append(title, type); controls.append(returnToRules, close);
+  heading.append(headingCopy, controls); wrap.append(heading);
   heading.onclick=e=>e.stopPropagation();
   const details = document.createElement('section'); details.className = 'zoom-details'; details.tabIndex = 0;
   details.setAttribute('aria-label', getLang() === 'ja' ? 'カード効果と関連情報' : getLang() === 'en' ? 'Card rules and related information' : '카드 효과와 관련 정보');
@@ -644,7 +674,7 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
       e.stopPropagation(); returnToRules.hidden=true;
       scroll.forEach(({node,top})=>{node.scrollTop=top;}); from?.focus({preventScroll:true});
     };
-    item.style.scrollMarginTop = `${getComputedStyle(wrap).overflowY === 'auto' ? heading.offsetHeight + 16 : 16}px`;
+    item.style.scrollMarginTop = `${getComputedStyle(wrap).overflowY === 'auto' ? controls.offsetHeight + 16 : 16}px`;
     item.focus({ preventScroll: true });
     item.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
   }));

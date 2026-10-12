@@ -11,7 +11,7 @@ import { curHp, effAtk, effDef, playCost } from "../shared/engine";
 import { cardName, cardText, getLang, t } from "../i18n";
 import { parseDiceTable, effectSections } from "../shared/cardText";
 import { cardEffectNotes } from "../shared/cardEffectNotes";
-import { cardTypeLabel, quickSpellRule, displayPassives, referencedPassives, decayStateDescription } from '../shared/cardPresentation';
+import { cardTypeLabel, quickSpellRule, displayPassives, referencedPassives, passiveSearchKeys, decayStateDescription } from '../shared/cardPresentation';
 
 /** Shared resting/flight face: switching from a cast to its spell slot must not
  * replace the artwork or frame at touchdown. Interaction is bound by GameView. */
@@ -297,6 +297,7 @@ export function cardRulesEl(c: CardInst, onPassiveClick?: (key: string) => void)
   const hasCast = c.t !== "starter" && pc !== c.cost;
   const keyChips = displayPassives(c);
   const references = referencedPassives(c).filter(k => !keyChips.includes(k));
+  const grants = passiveSearchKeys(c, 'granted');
   if ((txt && txt !== "—") || hasCast || keyChips.length || references.length) {
     const effCls = "card-rules";
     const eff = el("div", effCls);
@@ -307,10 +308,18 @@ export function cardRulesEl(c: CardInst, onPassiveClick?: (key: string) => void)
       cast.title = t(c.t === "mon" ? "card.summon.tip" : "card.cast.tip");
       eff.appendChild(cast);
     }
-    for (const [group, keys] of [['owned', keyChips], ['references', references]] as const) {
+    for (const [group, keys] of [
+      ['owned', keyChips],
+      ['granted', references.filter(k => grants.includes(k))],
+      ['references', references.filter(k => !grants.includes(k))],
+    ] as const) {
       if (!keys.length) continue;
       const groupLabel = el('div', 'card-key-heading');
-      groupLabel.textContent = group === 'owned' ? {ja:'このカードの能力',ko:'이 카드의 능력',en:'This card’s abilities'}[getLang()] : {ja:'効果中の用語',ko:'효과에 나오는 용어',en:'Terms used in this effect'}[getLang()];
+      groupLabel.textContent = {
+        owned: {ja:'このカードが持つ能力',ko:'이 카드가 가진 능력',en:'Abilities this card has'},
+        granted: {ja:'この効果で付与する能力',ko:'이 효과로 부여하는 능력',en:'Abilities granted by this effect'},
+        references: {ja:'効果文に出てくる能力',ko:'효과 설명에 나오는 능력',en:'Abilities mentioned in the effect text'},
+      }[group][getLang()];
       eff.append(groupLabel);
       const row = el("div", "card-keys" + (txt && txt !== "—" ? "" : " card-keys--only"));
       for (const k of keys) {

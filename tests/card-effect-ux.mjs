@@ -50,6 +50,9 @@ try {
   assert(!E.passiveSearchKeys(E.DB.ND5,'owned').includes('aura'));assert(E.passiveSearchKeys(E.DB.ND5,'granted').includes('aura'));
   assert(E.passiveSearchKeys(E.DB.DARK_ELF,'mentioned').includes('evade'));
   assert(!E.displayPassives(E.DB.MAJESTY_RITE).includes('majesty'),'grant spell does not own monster ability');
+  assert.equal(E.cardRulesEl(card('ND5')).querySelector('[data-psv="aura"]').dataset.abilityGroup,'granted','Ancient Knowledge grants Aura; it does not own Aura');
+  assert.equal(E.cardRulesEl(card('DARK_ELF')).querySelector('[data-psv="evade"]').dataset.abilityGroup,'references','Dark Elf mentions Evade without granting it');
+  assert.equal(E.cardRulesEl(card('ASSASSIN4')).querySelector('[data-psv="aura"]').dataset.abilityGroup,'owned','Nightlord owns Aura');
   const quick=E.cardEl(card('QUICK_POISON'));assert.equal(quick.querySelector('.kw').title,E.quickSpellRule(lang));
   assert(!E.questProgressText(2,4,lang).includes('クエスト') || lang==='ja');
  }

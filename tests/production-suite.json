@@ -5,6 +5,7 @@
     "tests/audio-contact-rules.mjs",
     "tests/audio-v3.mjs",
     "tests/balance-v52.mjs",
+    "tests/balance-v57.mjs",
     "tests/card-wording.mjs",
     "tests/card-wording-render.mjs",
     "tests/card-effect-ux.mjs",
@@ -82,7 +83,12 @@
     "tests/dew-grant.mjs",
     "tests/duel-bugfix-oct08.mjs",
     "tests/cross-system-oct08.mjs",
-    "tests/combat-anchor.mjs"
+    "tests/combat-anchor.mjs",
+    "tests/chosen-heroes-summon.mjs",
+    "tests/golem-shell.mjs",
+    "tests/gambler-summon.mjs",
+    "tests/mercenary-summon.mjs",
+    "tests/mage-summon.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",

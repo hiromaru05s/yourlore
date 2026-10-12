@@ -1,4 +1,5 @@
 import { DEW_SHIELD_CARDS, DEW_SHIELD_STARTERS, applyDewShieldRework, localizeDewShieldCards } from './dewShieldCards';
+import { applyBalance57 } from './balance57';
 import {COSMETICS,equipmentId} from './cosmetics';
 import { EXPANSION_CARDS, COUNTER_IDS } from "./expansionCards";
 import { QUEST_QUICK_CARDS } from "./questQuickCards";
@@ -2344,6 +2345,7 @@ applyDewShieldRework(DB);
 localizeDewShieldCards(DB);
 DB.VAMP4.textEn = "【Passive】Blood Magic: summon Supreme Vampire once · gain HP equal to 50% of enemy damage dealt.";
 for (const lang of ['ko', 'ja', 'en'] as const) CHEST_ODDS[lang].rows = CHEST_ODDS[lang].rows.map(s => s.replace('+7', '+5'));
+applyBalance57(DB);
 applyKeywordText(PASSIVES);
 standardizeCardTexts([DB, STARTERS as unknown as Record<string, CardDef>]);
 
@@ -2452,7 +2454,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v56"; // Zero-ATK attack rule, Poison Master/World Tree ATK 1, Enfeebling Ritual cap 2
+export const BALANCE_VERSION = "v57"; // Approved nine-card rework, mandatory random Berserk attacks
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관
