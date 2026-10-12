@@ -30,4 +30,3 @@
 - `staging-assets.json`: HTML・JS・CSSとDUNGEON画像の64ファイルがローカルビルドとSHA-256一致。
 - `staging-smoke.json`: HTTP 200、ログイン画面起動、page error／通信失敗／HTTP error 0。
 - 認証済みオンライン対戦は未実施。実盤面の召喚経路はローカルGameViewフィクスチャで検証。本番公開は行っていない。
-
