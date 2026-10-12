@@ -23,8 +23,8 @@ try{
  const continuity=await page.evaluate(async()=>{
   const c=document.querySelector('#portraitMe canvas'),ring=c.closest('.pt-ring');
   hoodedBoard.play('me','hurt');const first=ring.getAnimations().find(a=>a.id==='seeker-impact');
-  await new Promise(r=>setTimeout(r,55));
-  const moving=getComputedStyle(ring).translate!=='0px'&&getComputedStyle(ring).translate!=='none';
+  let moving=false;const deadline=performance.now()+180;
+  while(performance.now()<deadline&&!moving){await new Promise(requestAnimationFrame);const x=getComputedStyle(ring).translate;moving=x!=='0px'&&x!=='none';}
   hoodedBoard.rerender();const retained=ring===document.querySelector('#portraitMe .pt-ring')&&c===document.querySelector('#portraitMe canvas')&&ring.getAnimations().includes(first);
   hoodedBoard.play('me','hurt');const second=ring.getAnimations().find(a=>a.id==='seeker-impact');
   return {moving,retained,one: ring.getAnimations().filter(a=>a.id==='seeker-impact').length===1,restarted:first!==second&&first.playState==='idle',hit:c.dataset.frame==='1',target:second.effect.target===ring};
@@ -41,8 +41,8 @@ try{
  await page.locator('[data-save]').click();await page.waitForSelector('.hooded-picker',{state:'detached'});await page.reload();await page.waitForSelector('#avaBtn');assert.equal(await page.evaluate(()=>localStorage.getItem('lore_profile_lab_avatar')),'SEEKER_HOODED');assert.match(await page.locator('#avaBtn .hooded-seeker').getAttribute('src'),/faceless-v2/);checks.push('single character saves canonical ID and reloads');
  await page.locator('#avaBtn').click();await page.locator('[data-close]').click();assert.equal(await page.evaluate(()=>localStorage.getItem('lore_profile_lab_avatar')),'SEEKER_HOODED');checks.push('cancel preserves saved choice');
  await page.locator('[data-tab=settings]').click();await page.locator('[data-character-settings]').click();
- await page.evaluate(async()=>{const {api}=await import('/src/net/api.ts');window.realUpdate=api.updateMe;api.updateMe=async()=>{throw new Error('保存テスト');};});await page.locator('[data-save]').click();await page.waitForFunction(()=>document.querySelector('.hooded-save-status')?.textContent.includes('保存テスト'));assert(await page.locator('[data-save]').isEnabled());
- await page.evaluate(async()=>{const {api}=await import('/src/net/api.ts');api.updateMe=window.realUpdate;});await page.locator('[data-save]').click();await page.waitForSelector('.hooded-picker',{state:'detached'});checks.push('settings save failure can retry');
+ await page.evaluate(()=>window.profileLab.failNextSave());await page.locator('[data-save]').click();await page.waitForFunction(()=>document.querySelector('.hooded-save-status')?.textContent.includes('保存テスト'));assert(await page.locator('[data-save]').isEnabled());
+ await page.locator('[data-save]').click();await page.waitForSelector('.hooded-picker',{state:'detached'});checks.push('settings save failure can retry');
  await page.setViewportSize({width:320,height:740});await page.locator('[data-character-settings]').click();await page.waitForSelector('.hooded-live canvas[data-ready=true]');await page.screenshot({path:out+'/profile-mobile.png',fullPage:true});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.keyboard.press('Escape');await page.waitForSelector('.hooded-picker',{state:'detached'});checks.push('320px picker and Escape');
  const retired=requests.filter(r=>/hooded-v1|seekers\/(menu-v1|v2)\/.+\.webp|biblion\/seeker-(blue|red)(-lossless)?\.(png|webp)/.test(r));assert.deepEqual(retired,[]);assert.deepEqual(errors,[]);
  await fs.writeFile(out+'/browser-tests.json',JSON.stringify({checks,histories,errors,retiredAssetRequests:retired},null,2)+'\n');console.log('PASS faceless browser: '+checks.length+' checks');

@@ -124,7 +124,7 @@ g.pending={kind:'oppMon',reason:'attack',hint:'',hintJa:'',allowCancel:true,data
 v.render(g);assert.equal(document.querySelector('#targetHint').style.display,'none');assert.equal(document.querySelector('#endBtn').disabled,false);
 g.pending={kind:'myMon',reason:'buffTurn',hint:'',hintJa:'',allowCancel:false};v.render(g);assert.equal(document.querySelector('#endBtn').disabled,true);
 g.pending=null;v.render(g);
-assert.deepEqual(avatarPresets(),['SEEKER_RED','SEEKER_BLUE']);assert(avatarHtml('SEEKER_RED','A').includes('seeker-red'));
+assert.deepEqual(avatarPresets(),['SEEKER_HOODED']);for(const id of ['SEEKER_RED','SEEKER_BLUE','SEEKER_HOODED'])assert(avatarHtml(id,'A').includes('/art/seekers/faceless-v2/portrait.webp'));
 for(const [w,h] of [[1920,1080],[1280,720],[1024,768],[390,844],[320,568],[844,390]]) {const m=solveBoard(w,h);assert(m.tile>=20&&m.mktH>=31);assert.equal(m.underPile,false);}
 // Complete type-specific UI faces and live numeric overlays survive rendering.
 for (const card of document.querySelectorAll('.card[data-card-type]')) {
@@ -227,11 +227,13 @@ const app={root:document.getElementById('app'),user:{avatar:savedAvatar},home:no
 const screen=mountProfile(app);
 await new Promise(r=>setTimeout(r,10));
 click(document.querySelector('#avaBtn'));
-assert.equal(document.querySelectorAll('.seeker-picker .ava-opt').length,2);
-click(document.querySelector('[data-id="SEEKER_RED"]'));
+assert.equal(document.querySelectorAll('.hooded-picker [data-seeker-id]').length,1);
+click(document.querySelector('[data-seeker-id="SEEKER_HOODED"]'));
+assert.equal(savedAvatar,'SEEKER_BLUE','preview does not save before confirmation');
+click(document.querySelector('[data-save]'));
 await new Promise(r=>setTimeout(r,10));
-assert.equal(savedAvatar,'SEEKER_RED');assert.equal(app.user.avatar,'SEEKER_RED');
-assert(document.querySelector('#avaBtn .seeker-red'),'profile re-renders persisted selection');
+assert.equal(savedAvatar,'SEEKER_HOODED');assert.equal(app.user.avatar,'SEEKER_HOODED');
+assert(document.querySelector('#avaBtn .hooded-seeker'),'profile re-renders persisted selection');
 screen.destroy?.();
 dom.window.close();await rm(temp,{recursive:true,force:true});
 console.log('PASS: zones, secret traps, market stock/index/confirmation, turn restrictions, 30 mana, HP, avatars, hand states, viewport sizes');

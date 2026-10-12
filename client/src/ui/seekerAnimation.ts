@@ -66,6 +66,7 @@ export function playSeeker(canvas: HTMLCanvasElement | null, action: SeekerActio
       {translate: '0px 0px', rotate: '0deg', offset: 1},
     ], {duration: SEEKER_HIT_MS, easing: 'ease-out'});
     player.impact.id = 'seeker-impact';
+    player.impact.startTime = document.timeline.currentTime;
     player.timer = window.setTimeout(() => {
       player.timer = 0;
       if (!canvas.isConnected) disposeSeeker(canvas); else resetSeeker(canvas);

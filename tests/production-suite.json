@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/hooded-seekers.mjs",
     "tests/chosen-victory.mjs",
     "tests/attack-vfx.mjs",
     "tests/counter-animation.mjs",
