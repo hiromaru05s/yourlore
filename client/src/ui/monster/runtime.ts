@@ -1,3 +1,4 @@
+import {isAssassin} from '../assassinSummon/selection';
 import {isGolem} from '../golem/selection';
 import {playGolem,cancelGolems,cancelGolem} from '../golem/runtime';
 import {combatRect} from '../combatAnchor';
@@ -117,6 +118,7 @@ export function playMonster(source:HTMLElement,kind:Kind,options:Options={}):Pro
  cancelGolem(source);cancelTribeSummon(source);cancelRiftDestruction(source);cancelSummon(source);jobs.get(source)?.finish(false);
  if(skipped||!source.isConnected||options.signal?.aborted)return Promise.resolve(false);
  if(kind==='destroy'&&options.variant==='B'&&options.destination){removeState(source);release();return playRiftDestruction(source,options.destination,options.signal);}
+ if(kind==='summon'&&isAssassin(source.dataset.cardId))return playSlateSummon(source,options);
  if(kind==='summon'&&isGolem(source.dataset.cardId))return playGolem(source,options);
  if(kind==='summon')return selectedTribeSummon(source.dataset.cardId)?playTribeSummon(source,options):playSlateSummon(source,options);
  if(kind==='destroy'&&options.variant==='A'&&options.mana!==false&&options.destination){removeState(source);release();return playManaDestruction(source,options.destination,options.signal);}

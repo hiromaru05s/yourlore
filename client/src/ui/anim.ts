@@ -1,3 +1,5 @@
+import {isAssassin} from './assassinSummon/selection';
+import {playAssassinSummon} from './assassinSummon/runtime';
 import {isMage} from './mageSummon/selection';
 import {isMercenary} from './mercenarySummon/selection';
 import {playMercenarySummon} from './mercenarySummon/runtime';
@@ -206,6 +208,11 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(heavy&&isAssassin(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playAssassinSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
   if(heavy&&isMercenary(face.dataset.cardId)){
     face.style.visibility='hidden';reveal.remove();
     if(!fxSkip)await boardMotionScope(signal=>playMercenarySummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
@@ -287,6 +294,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
 /** Both hand plays and engine-generated summon events share this selected reveal. */
 async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise<void>{
  const id=card.id;
+ if(isAssassin(id)){node.style.visibility='hidden';return;}
  if(isMage(id)){node.style.visibility='hidden';return;}
  // Selected hexers begin in their renderer, without a raw DOM reveal or transfer.
  if(isMercenary(id)||isHexer(id)||isGambler(id)){node.style.visibility='hidden';return;}
