@@ -987,7 +987,7 @@ function hatchEgg(g: GameState, ctx: Ctx, p: PlayerState, egg: FieldMon): void {
   applyFieldGlobals(g, m);
   p.field.splice(i, 0, m);
   ctx.log(`<span class="dmg">${cn(egg)} 부화!</span> ${cn(m)} 등장 (공${m.atk}/방${m.def})`, `<span class="dmg">${cn(egg)} 孵化!</span> ${cn(m)} 登場 (攻${m.atk}/防${m.def})`);
-  ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid, id: m.id });
+  ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid, id: m.id, hatchFrom: { uid: egg.uid, id: egg.id } });
   applyEnterAura(g, ctx, p, m);
   applySummonBuff(ctx, p, m);
   resolveOnSummon(g, ctx, m); // 부화 몬스터의 소환 효과 발동 (흑룡 선택 pending 포함 — 주인 턴이라 안전)

@@ -1,3 +1,4 @@
+import {hatchPairs} from '../ui/hatchSummon/selection';
 import {tauntRollIndex} from '../ui/taunt/timing';
 import {evasionRollIndex} from '../ui/evade/timing';
 import {playStatusExtinction,warmStatusExtinctions,disposeStatusExtinctions} from '../ui/statusExtinction/runtime';
@@ -318,6 +319,7 @@ export abstract class BaseController implements BoardHandlers {
       }
     }
     const events = counterPresentationEvents(res.events);
+    const hatches=hatchPairs(events),heldEggs=new Set<string>();
     if(events.some(e=>e.type==='dice'&&e.taunt))A.warmTaunt();
     if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
     const eventSound = new EventSound();
@@ -361,7 +363,7 @@ export abstract class BaseController implements BoardHandlers {
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
-      const cue = eventSound.cue(e);
+      const cue = e.type==='destroy'&&[...hatches.values()].includes(e.uid)?undefined:eventSound.cue(e);
       if(cue&&!A.isFxSkipped())sfx(cue);
       if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
       if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
@@ -418,6 +420,12 @@ export abstract class BaseController implements BoardHandlers {
           const card = this.findCard(res.state, e.uid) ?? this.defOf(e.id, e.uid);
           const grant=events.slice(i+1).find(ev=>ev.type==='decayCounterGrant'&&ev.uid===e.uid);
           const shown=card&&grant?.type==='decayCounterGrant'?{...card,decayCnt:grant.before}:card;
+          const egg=hatches.get(e.uid);
+          if(egg&&heldEggs.delete(egg)){
+            const g=shown?await A.hatchSummon(egg,shown):null;
+            if(g){ghosts.delete(egg);ghosts.set(e.uid,{el:g,side:sideOf(e.player)});statusSource=g;break;}
+            releaseMonster(egg);fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);
+          }
           if (shown) {
             const g = await A.ghostSummon(shown, sideOf(e.player), fieldCount[e.player]);
             if (g) {ghosts.set(e.uid, { el: g, side: sideOf(e.player) });statusSource=g;}
@@ -450,6 +458,7 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "destroy": {
+          if([...hatches.values()].includes(e.uid)&&document.querySelector(`.zone-mon .card[data-uid="${CSS.escape(e.uid)}"]`)){heldEggs.add(e.uid);break;}
           const destroy=async()=>{
           const gh = ghosts.get(e.uid);
           const shelved=res.state.players[e.player].discard.some(c=>c.uid===e.uid);

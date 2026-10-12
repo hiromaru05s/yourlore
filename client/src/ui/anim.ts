@@ -1,3 +1,4 @@
+import {playHatch} from './hatchSummon/runtime';
 import {isCasino} from './casinoSummon/selection';
 import {playCasinoSummon,cancelCasinoSummons} from './casinoSummon/runtime';
 import {isDungeon} from './dungeonSummon/selection';
@@ -922,6 +923,14 @@ function monZoneEl(side: ViewSide): HTMLElement | null {
  * field slot and STAYS there (the real board re-renders later). Returns the
  * ghost node so a same-batch destroy can kill it visibly.
  */
+export async function hatchSummon(sourceUid:string,card:CardInst):Promise<HTMLElement|null>{
+ const source=byUid(sourceUid);if(!source)return null;
+ const face=cardEl(card,{field:true});
+ if(!fxSkip)await boardMotionScope(signal=>playHatch(source,face,signal),6000);
+ if(!source.isConnected)return null;
+ source.replaceWith(face);return face;
+}
+
 export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: number): Promise<HTMLElement | null> {
   const from = fromRect(side, takeOrigin(side)); const zone=monZoneEl(side);
   if(!from||!zone)return null;
