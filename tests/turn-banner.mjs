@@ -8,7 +8,7 @@ const dom=new JSDOM('',{url:'http://localhost',pretendToBeVisual:true});
 for(const key of ['window','document','localStorage'])Object.defineProperty(globalThis,key,{value:dom.window[key],configurable:true});
 let hidden=false,reduced=false,id=0;
 Object.defineProperty(document,'hidden',{get:()=>hidden});
-globalThis.matchMedia=()=>({get matches(){return reduced;}});
+globalThis.matchMedia=()=>({get matches(){return reduced;},addEventListener(){},removeEventListener(){}});
 dom.window.devicePixelRatio=2;
 const frames=new Map(),timers=new Map();
 globalThis.requestAnimationFrame=cb=>{frames.set(++id,cb);return id;};
