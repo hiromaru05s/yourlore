@@ -19,3 +19,14 @@
 - ローカルの対戦fixture検証と配信アセットの一致は、認証済みオンライン対戦の証明ではない。
 
 検証結果: client/server typecheck、通常build、production suite 90/90が成功。ブラウザで30経路+スキップ/中断/リサイズ+3枚同時の計34グループが成功し、window error/unhandled rejectionは0。390pxでも横はみ出しなし、終了後の専用レイヤー0を確認。
+
+## ステージング公開
+
+- URL: https://test.yourlore.xyz/
+- 公開ソース: `a0b8e3da7f8b8bf9827a12a0aab435fffe1daf58`。
+- Worker version: `09c48d2f-3fc2-4d8c-ac83-293b160383bc`、100%。公開日時: 2026-10-12 17:07 KST。
+- `npm run deploy:staging` のクリーンなnpm-ciスナップショットで型チェック、production suite 90/90、buildを再実施して公開。
+- ガードが作成したビルドを保存して照合。HTML/JS/CSS 49ファイルのSHA-256がすべて一致。対象runtimeの `assassin-summon` が配信JSに含まれることも確認。
+- 公開ログイン画面が表示され、ブラウザのerror/warnは0。認証済みオンライン対戦は未検証。
+- `qa/playback-*.png` は実盤面の通常速度再生から採取した代表フレーム。`playback-times.json` に採取時刻を保持（全フレーム録画やFPS測定ではない）。
+- 本番は変更していない。
