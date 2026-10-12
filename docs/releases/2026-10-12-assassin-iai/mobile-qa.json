@@ -1,0 +1,142 @@
+{
+  "passed": true,
+  "cases": 24,
+  "rows": [
+    {
+      "owner": 0,
+      "id": "ASSASSIN1",
+      "hits": 1,
+      "selected": true
+    },
+    {
+      "owner": 0,
+      "id": "ASSASSIN2",
+      "hits": 1,
+      "selected": true
+    },
+    {
+      "owner": 0,
+      "id": "ASSASSIN3",
+      "hits": 1,
+      "selected": true
+    },
+    {
+      "owner": 0,
+      "id": "ASSASSIN4",
+      "hits": 1,
+      "selected": true
+    },
+    {
+      "owner": 0,
+      "id": "ASSASSIN_SQUAD",
+      "hits": 1,
+      "selected": true
+    },
+    {
+      "owner": 0,
+      "id": "GHOST",
+      "hits": 1,
+      "selected": false
+    },
+    {
+      "owner": 0,
+      "id": "GUILD_HALL",
+      "hits": 1,
+      "selected": false
+    },
+    {
+      "owner": 0,
+      "id": "SOLDIER2",
+      "hits": 1,
+      "selected": false
+    },
+    {
+      "owner": 1,
+      "id": "ASSASSIN1",
+      "hits": 1,
+      "selected": true
+    },
+    {
+      "owner": 1,
+      "id": "ASSASSIN2",
+      "hits": 1,
+      "selected": true
+    },
+    {
+      "owner": 1,
+      "id": "ASSASSIN3",
+      "hits": 1,
+      "selected": true
+    },
+    {
+      "owner": 1,
+      "id": "ASSASSIN4",
+      "hits": 1,
+      "selected": true
+    },
+    {
+      "owner": 1,
+      "id": "ASSASSIN_SQUAD",
+      "hits": 1,
+      "selected": true
+    },
+    {
+      "owner": 1,
+      "id": "GHOST",
+      "hits": 1,
+      "selected": false
+    },
+    {
+      "owner": 1,
+      "id": "GUILD_HALL",
+      "hits": 1,
+      "selected": false
+    },
+    {
+      "owner": 1,
+      "id": "SOLDIER2",
+      "hits": 1,
+      "selected": false
+    },
+    {
+      "mode": "abort",
+      "hits": 0,
+      "passed": true
+    },
+    {
+      "mode": "skip",
+      "hits": 0,
+      "passed": true
+    },
+    {
+      "mode": "resize",
+      "hits": 0,
+      "passed": true
+    },
+    {
+      "mode": "detach",
+      "hits": 0,
+      "passed": true
+    },
+    {
+      "mode": "repeat",
+      "hits": 2,
+      "passed": true
+    },
+    {
+      "mode": "concurrent",
+      "hits": 2,
+      "passed": true
+    },
+    {
+      "mode": "fallback",
+      "hits": 1,
+      "passed": true
+    },
+    {
+      "mode": "monster-target",
+      "hits": 1,
+      "passed": true
+    }
+  ]
+}
