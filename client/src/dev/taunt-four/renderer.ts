@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {RichVariants} from './richVariants';
+import {makeShields,moveShield,type ShieldRig} from './shields';
 import {pulse,pose,DURATION} from './catalog';
 type C=CanvasRenderingContext2D;
 const W=180,H=270;
@@ -9,7 +9,7 @@ const rect=(w:number,h:number,d=4)=>geom([[-w/2,-h/2],[w/2,-h/2],[w/2,h/2],[-w/2
 export class Renderer {
  readonly gpu=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});
  private environment:T.CubeTexture;private scene=new T.Scene();private camera=new T.OrthographicCamera();private root=new T.Group();private body=new T.Group();
- private variants=[new T.Group(),new T.Group(),new T.Group(),new T.Group()];
+ private variants=Array.from({length:5},()=>new T.Group());
  private currentFace:HTMLCanvasElement|undefined;private surfaces=new Map<HTMLCanvasElement,T.CanvasTexture>();private edges=new Map<HTMLCanvasElement,T.CanvasTexture>();private backing!:T.Mesh;private face:T.Mesh;private relief:T.Mesh;private ground:T.Mesh;
  private steel=new T.MeshStandardMaterial({color:0x667988,metalness:.55,roughness:.29});
  private silver=new T.MeshStandardMaterial({color:0xcbd5d6,metalness:.62,roughness:.24});
@@ -19,7 +19,7 @@ export class Renderer {
 
 
  private left=new T.Group();private right=new T.Group();private boss=new T.Group();
- private rich:RichVariants;readonly ready:Promise<void>;
+ private shields:ShieldRig[];readonly ready=Promise.resolve();
  private shadowMat=new T.ShadowMaterial({opacity:.28});private disposed=false;
  constructor(){
   this.gpu.setPixelRatio(1);this.gpu.setSize(720,580);this.gpu.outputColorSpace=T.SRGBColorSpace;this.gpu.toneMapping=T.ACESFilmicToneMapping;this.gpu.toneMappingExposure=1.05;
@@ -33,12 +33,12 @@ export class Renderer {
   const backing=this.backing=new T.Mesh(rect(155,241,1),new T.MeshStandardMaterial({color:0x534b3e,roughness:.8}));backing.position.z=-2;backing.castShadow=true;this.body.add(backing);
   this.face=new T.Mesh(new T.PlaneGeometry(W*1.24,H+W*.24),new T.MeshBasicMaterial({transparent:true,alphaTest:.02}));this.face.position.z=3;this.face.castShadow=true;this.face.receiveShadow=true;this.body.add(this.face);
   this.relief=new T.Mesh(new T.PlaneGeometry(W*1.24,H+W*.24),new T.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false,color:0xffe8b6,blending:T.AdditiveBlending}));this.relief.position.z=3.2;this.body.add(this.relief);
-  this.makeShield();this.rich=new RichVariants(this.variants);this.ready=this.rich.ready;
+  this.makeShield();this.shields=makeShields(this.variants.slice(0,4));this.shields.push({left:this.left,right:this.right,boss:this.boss});
 
  }
  private mesh(g:T.BufferGeometry,m:T.Material,parent:T.Object3D,x=0,y=0,z=0){const o=new T.Mesh(g,m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o;}
  private makeShield(){
-  const group=this.variants[0];group.add(this.left,this.right,this.boss);
+  const group=this.variants[4];group.add(this.left,this.right,this.boss);
   for(const [side,rig]of [[-1,this.left],[1,this.right]] as const){
    const curve=(x:number,y:number)=>13*(1-Math.min(1,Math.abs(x)/68)**1.4)*(1-.38*(y/85)**2);
    const bent=(points:number[][],depth:number)=>{const g=geom(points,depth),a=g.attributes.position;for(let i=0;i<a.count;i++)a.setZ(i,a.getZ(i)+curve(a.getX(i),a.getY(i)));a.needsUpdate=true;g.computeVertexNormals();return g;};
@@ -63,12 +63,7 @@ export class Renderer {
   const m=pose(v,ms,reduced),t=m.t;this.body.position.set(0,m.advance,m.lift);this.body.scale.setScalar(m.scale);this.body.rotation.set(m.tilt,0,0);
   this.variants.forEach((g,i)=>g.visible=i===v&&ms>0&&ms<DURATION&&!reduced);
   (this.relief.material as T.MeshBasicMaterial).opacity=reduced?.18*m.strength:.1*pulse(0,180,540,930,t);
-  const open=pulse(80,390,670,960,t),hold=pulse(20,180,800,1000,t);
-  if(v===0){
-   for(const [sign,rig]of [[-1,this.left],[1,this.right]] as const){rig.position.set(sign*78*(1-open),26+86*(1-open),4+open*40);rig.rotation.set(.05*open,sign*(1-open)*1.48,sign*.06*(1-open));rig.scale.setScalar(.08+.92*hold);}
-   this.boss.position.set(0,26,71);this.boss.scale.setScalar(pulse(280,420,650,870,t));
-  }
-  this.rich.update(v,t);
+  moveShield(this.shields[v],t);
 
  }
  render(ctx:C,face:HTMLCanvasElement,v:number,ms:number,width:number,height:number,reduced=false,dark=false){
@@ -87,5 +82,5 @@ export class Renderer {
   this.gpu.render(this.scene,this.camera);ctx.drawImage(this.gpu.domElement,0,0,width,height);
  }
  get stats(){return{textures:this.gpu.info.memory.textures,geometries:this.gpu.info.memory.geometries,calls:this.gpu.info.render.calls,triangles:this.gpu.info.render.triangles};}
- dispose(){if(this.disposed)return;this.disposed=true;const geoms=new Set<T.BufferGeometry>(),mats=new Set<T.Material>(),textures=new Set<T.Texture>();this.scene.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line){geoms.add(o.geometry);const mm=Array.isArray(o.material)?o.material:[o.material];mm.forEach(m=>{mats.add(m);if((m as T.MeshStandardMaterial).map)textures.add((m as T.MeshStandardMaterial).map!);});}});this.surfaces.forEach(t=>textures.add(t));this.edges.forEach(t=>textures.add(t));geoms.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());this.environment.dispose();this.gpu.dispose();this.gpu.forceContextLoss();this.surfaces.clear();this.edges.clear();}
+ dispose(){if(this.disposed)return;this.disposed=true;const geoms=new Set<T.BufferGeometry>(),mats=new Set<T.Material>(),textures=new Set<T.Texture>();this.scene.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line){geoms.add(o.geometry);const mm=Array.isArray(o.material)?o.material:[o.material];mm.forEach(m=>{mats.add(m);for(const value of Object.values(m))if(value instanceof T.Texture)textures.add(value);});}});this.surfaces.forEach(t=>textures.add(t));this.edges.forEach(t=>textures.add(t));geoms.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());this.environment.dispose();this.gpu.dispose();this.gpu.forceContextLoss();this.surfaces.clear();this.edges.clear();}
 }
