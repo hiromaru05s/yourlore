@@ -1,3 +1,4 @@
+import {VoidRenderer} from '../../ui/voidSummon/renderer';
 import * as T from 'three';
 import {designs,envelope,ramp,motion} from './catalog';
 import {portalFragment} from './portal';
@@ -17,12 +18,14 @@ void main(){vec4 c=texture2D(face,vUv);if(c.a<.025)discard;
 }`;
 export class Renderer {
  readonly gl:T.WebGLRenderer;
+ private selected=new VoidRenderer();private captured:Map<string,HTMLCanvasElement>;
  private scene=new T.Scene();private camera=new T.OrthographicCamera(-2.4,2.4,2.4,-2.4,.1,30);
  private textures=new Map<string,T.CanvasTexture>();private faceMaterial:T.ShaderMaterial;
  private card=new T.Group();private face:T.Mesh;private stock:T.Mesh;
  private aperture=new T.Group();private back:T.Mesh;private front:T.Mesh;
  private petals:T.Mesh[]=[];private shadow:T.Mesh;private contact:T.Mesh;private disposed=false;
  constructor(faces:Map<string,HTMLCanvasElement>){
+  this.captured=faces;for(const face of faces.values())this.selected.warmup(face);
   this.gl=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});this.gl.setPixelRatio(1);this.gl.setSize(512,512);this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;
   this.camera.position.z=10;this.camera.updateProjectionMatrix();this.camera.projectionMatrix.elements[9]=.6/2.4;this.camera.projectionMatrix.elements[8]=.07/2.4;this.camera.projectionMatrix.elements[13]=6/2.4;this.camera.projectionMatrix.elements[12]=.7/2.4;this.camera.projectionMatrixInverse.copy(this.camera.projectionMatrix).invert();
   for(const[id,canvas]of faces){const tex=new T.CanvasTexture(canvas);tex.colorSpace=T.SRGBColorSpace;tex.anisotropy=Math.min(4,this.gl.capabilities.getMaxAnisotropy());this.textures.set(id,tex);}
@@ -45,6 +48,7 @@ export class Renderer {
  }
  render(canvas:HTMLCanvasElement,id:string,v:number,ms:number,options:{reduced?:boolean;board?:boolean;pass?:'card'|'ground';size?:number}={}){
   if(this.disposed)return;
+  if(v===0){this.selected.render(canvas,this.captured.get(id)!,id,ms,options);return;}
   const reduced=!!options.reduced,t=reduced?4000:ms,jailer=id==='GM6_1',d=designs[v],state=motion(v,t,reduced);
   const start=[150,160,150,210][v],finish=[550,650,780,550][v]+(jailer?35:0),emerge=ramp(t,start,finish),land=ramp(t,[690,760,870,670][v],d.hit),after=1-land;
   const opening=ramp(t,35,[135,105,165,105][v]),close=ramp(t,[460,560,700,440][v],[860,880,1050,790][v]);
@@ -71,6 +75,6 @@ export class Renderer {
   const cardPass=options.pass!=='ground';this.card.visible=this.card.visible&&cardPass;this.aperture.visible=this.aperture.visible&&cardPass;this.petals.forEach(p=>p.visible=p.visible&&cardPass);this.shadow.visible=options.pass!=='card';this.contact.visible=options.pass!=='card';
   this.gl.render(this.scene,this.camera);const c=canvas.getContext('2d')!;c.clearRect(0,0,canvas.width,canvas.height);c.drawImage(this.gl.domElement,0,0,canvas.width,canvas.height);canvas.dataset.debug=JSON.stringify({calls:this.gl.info.render.calls,triangles:this.gl.info.render.triangles});
  }
- get resources(){return {...this.gl.info.memory};}
- dispose(){if(this.disposed)return;this.disposed=true;const gs=new Set<T.BufferGeometry>(),ms=new Set<T.Material>(),ts=new Set<T.Texture>();this.scene.traverse(o=>{if(o instanceof T.Mesh){gs.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:[o.material]){ms.add(m);const map=(m as T.MeshBasicMaterial).map;if(map)ts.add(map);}}});gs.forEach(g=>g.dispose());ms.forEach(m=>m.dispose());ts.forEach(t=>t.dispose());this.textures.forEach(t=>t.dispose());this.gl.dispose();this.gl.forceContextLoss();}
+ get resources(){return {...this.gl.info.memory,selected:this.selected.resources};}
+ dispose(){if(this.disposed)return;this.disposed=true;this.selected.dispose();const gs=new Set<T.BufferGeometry>(),ms=new Set<T.Material>(),ts=new Set<T.Texture>();this.scene.traverse(o=>{if(o instanceof T.Mesh){gs.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:[o.material]){ms.add(m);const map=(m as T.MeshBasicMaterial).map;if(map)ts.add(map);}}});gs.forEach(g=>g.dispose());ms.forEach(m=>m.dispose());ts.forEach(t=>t.dispose());this.textures.forEach(t=>t.dispose());this.gl.dispose();this.gl.forceContextLoss();}
 }
