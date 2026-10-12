@@ -1,0 +1,13 @@
+import {chromium} from '/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
+import {mkdir,writeFile} from 'node:fs/promises';
+import {execFileSync} from 'node:child_process';
+const out=new URL('./qa/',import.meta.url).pathname,temp='/tmp/lore-extinction-frames';await mkdir(temp,{recursive:true});
+const b=await chromium.launch({headless:true,channel:'chrome'});const p=await b.newPage({viewport:{width:1280,height:1050}});
+try{
+ await p.goto('http://127.0.0.1:5527/status-extinction-four.html');await p.waitForFunction(()=>window.extinctionQA?.state.ready,null,{timeout:90000});
+ await p.evaluate(async()=>{window.extinctionQA.dispose();const {Renderer,loadAssets}=await import('/src/dev/status-extinction-four/renderer.ts');const {studies}=await import('/src/dev/status-extinction-four/catalog.ts');const renderer=new Renderer(await loadAssets());await renderer.warm();const canvas=document.createElement('canvas');canvas.width=1280;canvas.height=1050;document.body.replaceChildren(canvas);const c=canvas.getContext('2d');window.renderSheet=(time)=>{c.fillStyle='#f4f1e9';c.fillRect(0,0,1280,1050);c.fillStyle='#243942';c.font='24px Georgia';c.fillText('LORE  /  EXTINCTION STUDIES',42,47);c.font='12px sans-serif';c.fillStyle='#778087';c.fillText('SHIELD / DEW / BRAND    ·    12 DIRECTIONS    ·    1×',42,75);c.textAlign='right';c.fillText((Math.max(0,time)/1000).toFixed(2)+' s',1238,47);c.textAlign='left';for(let i=0;i<12;i++){const s=studies[i],x=38+(i%4)*308,y=104+Math.floor(i/4)*300;c.fillStyle='#fcfaf5';c.fillRect(x,y,288,280);c.strokeStyle='#dedbd3';c.strokeRect(x+.5,y+.5,288,280);c.fillStyle='#9d7847';c.font='12px Georgia';c.fillText(s.id,x+17,y+23);renderer.draw(c,s,Math.max(0,time),x+144,y+126,142,142,8);c.fillStyle='#243942';c.font='16px sans-serif';c.fillText(s.name,x+17,y+238);c.fillStyle='#778087';c.font='10px sans-serif';c.fillText(s.en,x+17,y+258);}return canvas.toDataURL('image/png').split(',')[1];};});
+ for(let i=0;i<69;i++){const time=i/30*1000-250;const data=await p.evaluate(t=>window.renderSheet(t),time);await writeFile(`${temp}/${String(i).padStart(4,'0')}.png`,Buffer.from(data,'base64'));}
+ const still=await p.evaluate(()=>window.renderSheet(520));await writeFile(out+'twelve-directions.png',Buffer.from(still,'base64'));
+ execFileSync('/opt/homebrew/bin/ffmpeg',['-y','-framerate','30','-i',temp+'/%04d.png','-c:v','libx264','-crf','19','-pix_fmt','yuv420p','-movflags','+faststart',out+'twelve-directions.mp4'],{stdio:'ignore'});
+ console.log('Saved twelve-directions.mp4 (authored timeline at 30 fps) and twelve-directions.png');
+}finally{await b.close();}

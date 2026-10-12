@@ -1,8 +1,6 @@
-// ============================================================
-// LORE — shared game types (no DOM, no platform deps).
+// =====================================================// LORE — shared game types (no DOM, no platform deps).
 // Imported by both the client UI and the authoritative server.
-// ============================================================
-
+// =====================================================
 export type CardType = "mon" | "spell" | "quest" | "trap" | "starter";
 export type Side = 0 | 1;
 
@@ -255,7 +253,12 @@ export type Action =
 // --- Events: emitted by reduce(), consumed by the UI for animation/log ---
 export type DiceSource = { player: Side } & ({ id: string; status?: never } | { status: "brand" | "solitude"; id?: never });
 
+/** Public result of spending one counter to survive lethal damage. */
+export interface GutsSurvival { player: Side; uid: string; before: number; after: number }
+
 export type GameEvent =
+  | ({ type: "gutsSurvive" } & GutsSurvival)
+  | { type: "statusExtinction"; player: Side; resource: "shield" | "brand" | "dew"; before: number; after: 0 }
   | { type: "statusGrant"; player: Side; resource: "shield" | "brand" | "dew"; before: number; after: number; sourceUid?: string }
   | { type: "tribeSynergy"; player: Side; tribe: string; threshold: number; uids: string[] }
   | { type: "monsterActivate"; player: Side; uid: string }
@@ -263,7 +266,7 @@ export type GameEvent =
   | { type: "log"; html: string; htmlJa: string }
   | { type: "turnHeader"; turn: number; name: string; isBot: boolean; player?: Side } // player: whose turn (log tinting)
   | { type: "summon"; player: Side; uid: string; id?: string } // id: card id (drives the summon ghost when the monster dies in the same batch)
-  | { type: "attack"; player: Side; uid: string; targetUid: string | null; targetPlayer?: Side; contactDamage?: number }
+  | { type: "attack"; player: Side; uid: string; targetUid: string | null; targetPlayer?: Side; contactDamage?: number; guts?: GutsSurvival }
   | { type: "elementalStart"; group:string; player:Side; id:string; uid:string; targets:Array<{player:Side;uid:string|null;amount:number}> }
   | { type: "elementalImpact"; group:string; index:number }
   | { type: "elementalEnd"; group:string }

@@ -457,9 +457,15 @@ function gainShield(g: GameState, ctx: Ctx, p: PlayerState, amount: number, sour
   ctx.log(`${p.name}: 실드 +${amount} (${p.shield})`, `${p.name}: シールド+${amount} (${p.shield})`);
   for (const m of p.field) if (m.aura === 'shieldDew' && (m.val2 ?? 0) > 0) { monsterActivation(g, ctx.ev, p, m); gainDew(ctx, p, m.val2 ?? 0, m.uid); }
 }
+/** Public zero-crossing only: partial losses have no animation event. */
+function loseStatus(ctx: Ctx, p: PlayerState, resource: 'shield' | 'dew' | 'brand', amount = Infinity): void {
+  const before = p[resource] ?? 0;
+  p[resource] = Math.max(0, before - Math.min(before, amount));
+  if (before > 0 && p[resource] === 0) ctx.ev.push({type:'statusExtinction',player:ctx.side(p),resource,before,after:0});
+}
 function breakShield(ctx: Ctx, p: PlayerState, amount = Infinity): void {
   const lost = Math.min(p.shield ?? 0, amount);
-  p.shield = Math.max(0, (p.shield ?? 0) - lost);
+  loseStatus(ctx, p, 'shield', lost);
   if (lost) ctx.log(`${p.name}: 실드 -${lost}`, `${p.name}: シールド-${lost}`);
 }
 export function isWorldTreeCard(c: Pick<CardDef, 'name' | 'nameJa'>): boolean { return /세계수|世界樹/.test(c.name + (c.nameJa ?? '')); }
@@ -619,7 +625,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       refreshDewPassives(g);
       if (dead.id === 'ELDER_ELF_KING' && (owner.dew ?? 0) >= 15) {
         monsterActivation(g, ev, owner, dead);
-        owner.dew! -= 15;
+        loseStatus(ctx, owner, 'dew', 15);
         dealDamage(g.players[1 - side(g, owner)], 30, cn(dead), cn(dead), side(g, owner));
       }
       if (dead.id === 'FIRE_MASTER' && [...owner.deck, ...owner.discard].some(isFire)) monsterActivation(g, ev, owner, dead);
@@ -1694,7 +1700,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       if (!own.field.some((x) => x.uid === tm.uid) || tm.hatch != null) continue;
       const before = curHp(own, tm);
       if (12 >= before) {
-        if ((tm.guts || 0) > 0) { tm.guts = (tm.guts || 1) - 1; tm.dmg = effDef(own, tm) - 1; ctx.log(`  └ ⚡ ${cn(tm)} — 기합! 체력 1로 버팀`, `  └ ⚡ ${cn(tm)} — 気合！体力1で耐えた`); }
+        if ((tm.guts || 0) > 0) { endureWithGuts(g, ctx, own, tm); ctx.log(`  └ ⚡ ${cn(tm)} — 기합! 체력 1로 버팀`, `  └ ⚡ ${cn(tm)} — 気合！体力1で耐えた`); }
         else { ctx.log(`  └ ⚡ ${cn(tm)} 파괴`, `  └ ⚡ ${cn(tm)} 破壊`); ctx.destroyMonster(own, tm); }
       } else { tm.dmg = (tm.dmg || 0) + 12; ctx.log(`  └ ⚡ ${cn(tm)} 에 12 데미지 (체력 ${before - 12})`, `  └ ⚡ ${cn(tm)} に12ダメージ (体力${before - 12})`); }
     }
@@ -2157,8 +2163,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       if (volley >= before2) {
         const over2 = volley - before2;
         if ((att.guts || 0) > 0) {
-          att.guts = (att.guts || 1) - 1;
-          att.dmg = maxHp2 - 1;
+          endureWithGuts(g, ctx, p, att);
           ctx.log(`  └ 반격 합계 ${volley} → ${cn(att)} — <span class="good">기합!</span> 체력 1로 버팀`, `  └ 反撃合計 ${volley} → ${cn(att)} — <span class="good">気合！</span> 体力1で耐えた`);
         } else {
           ctx.log(`  └ 반격 합계 ${volley} → ${cn(att)} 파괴${over2 > 0 ? ` + <span class="dmg">${over2} 관통</span>` : ""}`, `  └ 反撃合計 ${volley} → ${cn(att)} 破壊${over2 > 0 ? ` + <span class="dmg">${over2} 貫通</span>` : ""}`);
@@ -2246,8 +2251,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
         const over = atk - before;
         // 기합(guts): 치명타를 토큰 1개로 버티고 체력 1로 생존 (관통은 그대로)
         if ((target.guts || 0) > 0) {
-          target.guts = (target.guts || 1) - 1;
-          target.dmg = maxHp - 1;
+          endureWithGuts(g, ctx, o, target, attackEvent);
           ctx.log(
             `<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → ${cn(target)} — <span class="good">기합!</span> 체력 1로 버팀 (남은 기합 ${target.guts})`,
             `<span class="t">${p.name}</span> ${cn(att)}(攻${atk}) → ${cn(target)} — <span class="good">気合！</span> 体力1で耐えた (残り気合 ${target.guts})`,
@@ -2352,7 +2356,8 @@ function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: Fiel
   const atk = effAtk(p, att, g);
   const counter = hasPassive(target, "counter") ? Math.ceil(effAtk(p, target, g) / 2) : 0;
   const contactDamage = target.immuneDamageTurn === g.turn ? 0 : target.hatch != null ? 1 : Math.max(0, Math.min(atk, curHp(p,target) - ((target.guts || 0) > 0 ? 1 : 0)));
-  ctx.ev.push({ type: "attack", player: side(g, p), uid: att.uid, targetUid: target.uid, targetPlayer: side(g, p), contactDamage });
+  const attackEvent: Extract<GameEvent,{type:"attack"}> = { type: "attack", player: side(g, p), uid: att.uid, targetUid: target.uid, targetPlayer: side(g, p), contactDamage };
+  ctx.ev.push(attackEvent);
   ctx.ev.push({ type: "hit", uid: target.uid, amount: contactDamage });
   if (target.immuneDamageTurn === g.turn) { /* damage prevention still allows counter */ } else if (target.hatch != null) {
     target.dur = (target.dur ?? 0) - 1;
@@ -2363,7 +2368,7 @@ function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: Fiel
     const before = Math.max(0, maxHp - (target.dmg || 0));
     if (atk <= 0) ctx.log(`<span class="t">${p.name}</span> ${cn(att)}(공0) → 아군 ${cn(target)} <span class="muted">통하지 않음</span>`, `<span class="t">${p.name}</span> ${cn(att)}(攻0) → 味方 ${cn(target)} <span class="muted">通らない</span>`);
     else if (atk >= before) {
-      if ((target.guts || 0) > 0) { target.guts = (target.guts || 1) - 1; target.dmg = maxHp - 1; ctx.log(`<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → 아군 ${cn(target)} — <span class="good">기합!</span> 체력 1로 버팀`, `<span class="t">${p.name}</span> ${cn(att)}(攻${atk}) → 味方 ${cn(target)} — <span class="good">気合！</span> 体力1で耐えた`); }
+      if ((target.guts || 0) > 0) { endureWithGuts(g, ctx, p, target, attackEvent); ctx.log(`<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → 아군 ${cn(target)} — <span class="good">기합!</span> 체력 1로 버팀`, `<span class="t">${p.name}</span> ${cn(att)}(攻${atk}) → 味方 ${cn(target)} — <span class="good">気合！</span> 体力1で耐えた`); }
       else { ctx.log(`<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → <span class="dmg">아군 ${cn(target)}(체력 ${before}) 파괴</span>`, `<span class="t">${p.name}</span> ${cn(att)}(攻${atk}) → <span class="dmg">味方 ${cn(target)}(体力${before}) 破壊</span>`); ctx.destroyMonster(p, target); }
       if (pierce && atk - before > 0 && !g.over) ctx.dealDamage(p, atk - before, "관통", "貫通");
     } else {
@@ -2451,7 +2456,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       break;
     }
     case 'darkElfDew':
-      p.dew = Math.max(0,(p.dew ?? 0)-4);
+      loseStatus(ctx, p, 'dew', 4);
       if ((o.shield ?? 0)>0) ctx.dealDamage(o,10,cn(m),cn(m),side(g,p));
       break;
     case 'elfDew':
@@ -2478,7 +2483,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       break;
     }
     case "unbrand": { // 제인사(v41): 자신의 낙인 카운터 1개 제거
-      if ((p.brand ?? 0) > 0) { p.brand = (p.brand ?? 0) - 1; ctx.log(`  └ 자신의 낙인 카운터 1개 제거 (남은 ${p.brand})`, `  └ 自分の烙印カウンター1個を取り除く (残り${p.brand})`); }
+      if ((p.brand ?? 0) > 0) { loseStatus(ctx, p, 'brand', 1); ctx.log(`  └ 자신의 낙인 카운터 1개 제거 (남은 ${p.brand})`, `  └ 自分の烙印カウンター1個を取り除く (残り${p.brand})`); }
       else ctx.log("  └ 자신에게 낙인 카운터가 없음", "  └ 自分に烙印カウンターがない");
       break;
     }
@@ -3141,7 +3146,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
   if (card.act === "expansion") { expansionSpell(g, ctx, card); return; }
   switch (card.act) {
     case 'dew': gainDew(ctx,p,v); break;
-    case 'desertification': o.dew=0; ctx.log('상대 이슬을 0으로', '相手の雫を0にする'); break;
+    case 'desertification': loseStatus(ctx, o, 'dew'); ctx.log('상대 이슬을 0으로', '相手の雫を0にする'); break;
     case 'cullShield': gainShield(g,ctx,p,cullExiled(p)); break;
     case 'golemShield': gainShield(g,ctx,p,v+v2*new Set(p.field.filter(isGolem).map(m=>m.id)).size); break;
     case 'armorBreak': { const branded=(o.shield ?? 0)>=10; breakShield(ctx,o,9); if(branded)gainBrand(g, ctx, o, 1); break; }
@@ -3489,7 +3494,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "UNBRAND": { // 제인(v37): 양측 낙인 카운터 전부 제거
       ctx.log(`${tag(p, card)} 낙인 카운터 전부 제거 (${p.name} ${p.brand || 0} / ${o.name} ${o.brand || 0})`, `${tag(p, card)} 烙印カウンターを全て除去 (${p.name} ${p.brand || 0} / ${o.name} ${o.brand || 0})`);
-      p.brand = 0; o.brand = 0;
+      loseStatus(ctx, p, 'brand'); loseStatus(ctx, o, 'brand');
       break;
     }
     case "AEM": { // 앤티크 인핸스 매직(v38): 필드의 골램 2체 공격력 +7(지속) — 선택
@@ -4609,7 +4614,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
     }
     if (a === "exilePick") {
-      if ((p.brand ?? 0) > 0) { ctx.log(`  └ 자신의 낙인 카운터 ${p.brand}개 제거`, `  └ 自分の烙印カウンター${p.brand}個を除去`); p.brand = 0; } // 정화의 손길(v34)
+      if ((p.brand ?? 0) > 0) { ctx.log(`  └ 자신의 낙인 카운터 ${p.brand}개 제거`, `  └ 自分の烙印カウンター${p.brand}個を除去`); loseStatus(ctx, p, 'brand'); } // 정화의 손길(v34)
       g.pending = { kind: "recall", hint: "게임에서 제외할 카드 선택", hintJa: "ゲームから除外するカードを選択", reason: "exilePick", allowCancel: true };
       ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
     }
@@ -5599,6 +5604,15 @@ function spellDamageRecorded(g: GameState, amount: number): void {
   if (g.spellDamageTurn !== g.turn) { g.spellDamageTurn = g.turn; g.spellDamageAmount = 0; }
   g.spellDamageAmount = (g.spellDamageAmount ?? 0) + amount;
 }
+/** Emit only where survival actually consumes a counter. Costs and grants never enter here. */
+function endureWithGuts(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon, attack?: Extract<GameEvent,{type:'attack'}>): void {
+  const before = m.guts ?? 0;
+  m.guts = before - 1;
+  m.dmg = effDef(owner, m) - 1;
+  const result = {player: side(g, owner), uid: m.uid, before, after: m.guts};
+  if (attack && attack.targetUid === m.uid) attack.guts = result;
+  else ctx.ev.push({type:'gutsSurvive', ...result});
+}
 function monsterDamage(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon, amount: number, combat = false): boolean {
   if (!owner.field.includes(m) || amount <= 0 || m.immuneDamageTurn === g.turn) return false;
   if (spellDepth > 0 && g.players.some(p => p.enchants.some(e => e.card.ench === 'doubleUp'))) amount *= 2;
@@ -5606,7 +5620,7 @@ function monsterDamage(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon, 
   ctx.ev.push({ type: 'hit', uid: m.uid, amount: m.hatch != null ? 1 : Math.max(0, Math.min(amount, curHp(owner,m) - (combat && (m.guts ?? 0) > 0 ? 1 : 0))) });
   if (m.hatch != null) { m.dur = (m.dur ?? 0) - 1; if (m.dur <= 0) ctx.destroyMonster(owner, m); return !owner.field.includes(m); }
   const hp = curHp(owner, m);
-  if (amount >= hp && combat && (m.guts ?? 0) > 0) { m.guts!--; m.dmg = effDef(owner, m) - 1; }
+  if (amount >= hp && combat && (m.guts ?? 0) > 0) { endureWithGuts(g, ctx, owner, m); }
   else { m.dmg = (m.dmg ?? 0) + amount; if (m.dmg >= effDef(owner, m)) ctx.destroyMonster(owner, m); }
   return !owner.field.includes(m);
 }
@@ -5834,7 +5848,7 @@ function resolveDewShieldChoice(g: GameState, ctx: Ctx, uid: string | null): boo
       const target=q.reason==='WORLD_TREE_ATTACK'?attacker:p.field.find(m=>m.uid===targetUid);
       if(uid==='grow' && target && (p.dew ?? 0)>0 && p.field.some(m=>m.id==='WORLD_TREE')) {
         for (const tree of p.field) if (tree.id === 'WORLD_TREE') monsterActivation(g, ctx.ev, p, tree);
-        p.dew!--; if(q.reason==='WORLD_TREE_ATTACK')target.atkMod+=6;else target.defMod+=6;
+        loseStatus(ctx, p, 'dew', 1); if(q.reason==='WORLD_TREE_ATTACK')target.atkMod+=6;else target.defMod+=6;
       }
       const stage=q.reason==='WORLD_TREE_ATTACK'?1:2;
       if(q.data?.friendlyPlayer) resolveFriendlyPlayerAttack(g,ctx,attacker,stage);

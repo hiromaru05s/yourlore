@@ -1,0 +1,14 @@
+{
+  "typecheck": "passed",
+  "previewBuild": "passed",
+  "browserErrors": [],
+  "desktopChecks": 117,
+  "mobileChecks": 117,
+  "manual": [
+    "actual hand click starts playback without zoom",
+    "white and dark comparison",
+    "normal and quarter-speed playback",
+    "390px real board"
+  ],
+  "scope": "local public GameView fixture; not authenticated or deployed"
+}

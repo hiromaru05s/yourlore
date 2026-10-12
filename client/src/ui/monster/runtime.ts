@@ -1,3 +1,6 @@
+import {AmberSurface,showGutsResult} from '../guts/surface';
+import {GUTS_DURATION} from '../guts/timing';
+import type {GutsSurvival} from '../../shared/types';
 import {isAssassin} from '../assassinSummon/selection';
 import {isGolem} from '../golem/selection';
 import {playGolem,cancelGolems,cancelGolem} from '../golem/runtime';
@@ -21,6 +24,7 @@ const observers=new Map<HTMLElement,MutationObserver>();
 const motion=matchMedia('(prefers-reduced-motion:reduce)');
 let frame=0, skipped=false;
 const jobs=new Map<HTMLElement,Job>();
+const gutsJobs=new Map<HTMLElement,{source:HTMLElement;actor:Actor;surface:AmberSurface;start:number;ms:number;r:Rect;finish:(complete:boolean)=>void}>();
 const states=new Map<HTMLElement,{actor:Actor;opacity:string;root:HTMLElement;layer:Layers;rect?:Rect;dirty:boolean}>();
 type Options={mana?:boolean;variant?:Variant;anchor?:HTMLElement;target?:HTMLElement;destination?:HTMLElement;side?:number;signal?:AbortSignal;onImpact?:()=>void;exhaust?:boolean;stats?:Actor['stats']};
 type Job={source:HTMLElement;actor:Actor;kind:Kind;variant:Variant;start:number;ms:number;r:Rect;target:Rect;destination?:Rect;options:Options;opacity:string;finish:(complete:boolean)=>void;impacted:boolean;hit?:{actor:Actor;node:HTMLElement;opacity:string}};
@@ -55,12 +59,12 @@ export function syncMonsterStates(root:HTMLElement){
  }
  if([...states.values()].some(s=>s.root===root))observeField(root);release();if(states.size)schedule();
 }
-export function clearMonsterStates(root:HTMLElement){cancelGolems(root);cancelTribeSummons(root);cancelRiftDestruction(root);cancelManaDestruction(root);cancelSummons(root);for(const j of [...jobs.values()])if(root.contains(j.source))j.finish(false);for(const [n,s] of states)if(s.root===root)removeState(n);release();}
-export function setMonsterSkip(value:boolean){skipped=value;if(value){cancelGolems();cancelTribeSummons();cancelSummons();cancelRiftDestruction();cancelManaDestruction();}if(value)for(const j of [...jobs.values()])j.finish(false);}
+export function clearMonsterStates(root:HTMLElement){for(const j of [...gutsJobs.values()])if(root.contains(j.source))j.finish(false);cancelGolems(root);cancelTribeSummons(root);cancelRiftDestruction(root);cancelManaDestruction(root);cancelSummons(root);for(const j of [...jobs.values()])if(root.contains(j.source))j.finish(false);for(const [n,s] of states)if(s.root===root)removeState(n);release();}
+export function setMonsterSkip(value:boolean){skipped=value;if(value){for(const j of [...gutsJobs.values()])j.finish(false);cancelGolems();cancelTribeSummons();cancelSummons();cancelRiftDestruction();cancelManaDestruction();}if(value)for(const j of [...jobs.values()])j.finish(false);}
 function release(){
  for(const [root,layer] of fieldLayers)if(![...states.values()].some(s=>s.root===root)){layer.dispose();fieldLayers.delete(root);observers.get(root)?.disconnect();observers.delete(root);}
- if(!jobs.size){layers?.dispose();layers=undefined;}
- if(!states.size&&!jobs.size){cancelAnimationFrame(frame);frame=0;}
+ if(!jobs.size&&!gutsJobs.size){layers?.dispose();layers=undefined;}
+ if(!states.size&&!jobs.size&&!gutsJobs.size){cancelAnimationFrame(frame);frame=0;}
 }
 function tick(now:number){
  frame=0;if(document.hidden)return;
@@ -68,7 +72,7 @@ function tick(now:number){
  // Measure all dirty sources before touching clone styles. Idle geometry stays cached
  // until board projection, resize, scrolling, rendering or source style changes.
  for(const [n,s] of states)if(n.isConnected&&(!s.rect||n.getAnimations().length)){s.rect=monsterRect(n);s.dirty=true;}
- const hidden=new Set<HTMLElement>(jobs.keys());for(const job of jobs.values())if(job.hit)hidden.add(job.hit.node);
+ const hidden=new Set<HTMLElement>([...jobs.keys(),...gutsJobs.keys()]);for(const job of jobs.values())if(job.hit)hidden.add(job.hit.node);
  const readyLayers=new Set<Layers>();for(const [n,s] of states)if(n.classList.contains('is-attacker')||s.dirty)readyLayers.add(s.layer);
  for(const layer of readyLayers)layer.begin(innerWidth,innerHeight);
  let animated=false;
@@ -100,7 +104,7 @@ function tick(now:number){
   const paintT=j.kind==='attack'&&o.exhaust===false?Math.min(t*j.ms,819)/2800:t;
   j.actor.paint(j.kind,j.variant,paintT,j.r,j.target,reduced(),true,o.side??1,j.destination);
   for(const pass of ['rear','front'] as const)drawEffect(pass==='rear'?active.back:active.foreground,j.kind,j.variant,paintT,j.r,j.target,{active:true,reduced:reduced(),side:o.side??1,destination:j.destination,pass});
-  if(j.kind==='attack'&&o.target?.matches('.card')&&!reduced()){
+  if(j.kind==='attack'&&o.target?.matches('.card')&&!reduced()&&!gutsJobs.has(o.target)){
    const at=paintT*2800/820,ct=270/820,hit=ease(ct,ct+.015,at)*(1-ease(ct+.05,ct+.22,at));
    if(hit>0){
     if(!j.hit){j.hit={actor:new Actor(o.target,active.cards),node:o.target,opacity:o.target.style.opacity};o.target.style.opacity='0';}
@@ -112,7 +116,33 @@ function tick(now:number){
   }
   if(t>=1)j.finish(true);
  }
- release();if(jobs.size||animated)schedule();
+ for(const j of [...gutsJobs.values()]){
+  if(!j.source.isConnected){j.finish(false);continue;}
+  const age=now-j.start;
+  if(age>=j.ms){j.finish(true);continue;}
+  j.surface.render(age,reduced(),j.r.w);j.actor.el.dataset.gutsTime=String(Math.round(age));
+ }
+ release();if(jobs.size||gutsJobs.size||animated)schedule();
+}
+/** The same foreground owner as attacks, so a contact clone cannot cover the membrane. */
+export function playGutsEndurance(source:HTMLElement,result:GutsSurvival,signal?:AbortSignal,direction=source.closest('#oppRow')?-1:1):Promise<boolean>{
+ if(skipped||document.hidden||!source.isConnected||signal?.aborted||!combatRect(source))return Promise.resolve(false);
+ gutsJobs.get(source)?.finish(false);
+ removeState(source);
+ const r=monsterRect(source),layer=ensure(),opacity=source.style.opacity;
+ const actor=new Actor(source,layer.cards);
+ actor.style(actor.el,r,r.x,r.y,0,1);actor.el.style.display='block';actor.el.dataset.gutsEndurance='04';
+ actor.el.dataset.gutsUid=result.uid;
+ const surface=new AmberSurface(actor.el,direction);
+ showGutsResult(actor.el,result);showGutsResult(source,result);source.style.opacity='0';
+ return new Promise(resolve=>{
+  let settled=false;
+  const abort=()=>finish(false);
+  const timer=setTimeout(abort,GUTS_DURATION+500);
+  const finish=(complete:boolean)=>{if(settled)return;settled=true;clearTimeout(timer);signal?.removeEventListener('abort',abort);surface.dispose();actor.dispose();source.style.opacity=opacity;gutsJobs.delete(source);resolve(complete);release();};
+  gutsJobs.set(source,{source,actor,surface,start:performance.now(),ms:reduced()?280:GUTS_DURATION,r,finish});
+  signal?.addEventListener('abort',abort,{once:true});surface.render(0,reduced(),r.w);schedule();
+ });
 }
 export function playMonster(source:HTMLElement,kind:Kind,options:Options={}):Promise<boolean>{
  cancelGolem(source);cancelTribeSummon(source);cancelRiftDestruction(source);cancelSummon(source);jobs.get(source)?.finish(false);
@@ -137,9 +167,9 @@ export function playMonster(source:HTMLElement,kind:Kind,options:Options={}):Pro
   jobs.set(source,j);options.signal?.addEventListener('abort',abort,{once:true});schedule();
  });
 }
-window.addEventListener('resize',()=>{for(const j of [...jobs.values()])j.finish(false);});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){for(const j of [...jobs.values()])j.finish(false);cancelAnimationFrame(frame);frame=0;}else invalidateGeometry();});
+window.addEventListener('resize',()=>{for(const j of [...gutsJobs.values()])j.finish(false);for(const j of [...jobs.values()])j.finish(false);});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){for(const j of [...gutsJobs.values()])j.finish(false);for(const j of [...jobs.values()])j.finish(false);cancelAnimationFrame(frame);frame=0;}else invalidateGeometry();});
 window.addEventListener('resize',invalidateGeometry);
 document.addEventListener('scroll',invalidateGeometry,true);
 document.addEventListener('lore:board-projected',invalidateGeometry);
-motion.addEventListener('change',invalidateGeometry);
+motion.addEventListener('change',()=>{for(const j of [...gutsJobs.values()])j.finish(false);invalidateGeometry();});

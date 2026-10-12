@@ -1,0 +1,112 @@
+{
+  "results": [
+    {
+      "normalSpeedComplete": true
+    },
+    {
+      "side": 0,
+      "count": 1,
+      "shot": {
+        "count": 1,
+        "uid": "target-0",
+        "time": "240",
+        "hp": "1",
+        "guts": "0",
+        "pixels": 172809,
+        "translate": "0px 1.30995px",
+        "rotate": "0.290483deg",
+        "contactClones": 0
+      }
+    },
+    {
+      "side": 0,
+      "count": 3,
+      "shot": {
+        "count": 1,
+        "uid": "target-0",
+        "time": "256",
+        "hp": "1",
+        "guts": "2",
+        "pixels": 172538,
+        "translate": "0px 1.20234px",
+        "rotate": "0.275961deg",
+        "contactClones": 0
+      }
+    },
+    {
+      "side": 1,
+      "count": 1,
+      "shot": {
+        "count": 1,
+        "uid": "target-1",
+        "time": "256",
+        "hp": "1",
+        "guts": "0",
+        "pixels": 172823,
+        "translate": "0px -1.1486px",
+        "rotate": "0.275961deg",
+        "contactClones": 0
+      }
+    },
+    {
+      "side": 1,
+      "count": 3,
+      "shot": {
+        "count": 1,
+        "uid": "target-1",
+        "time": "240",
+        "hp": "1",
+        "guts": "2",
+        "pixels": 173066,
+        "translate": "0px -1.2514px",
+        "rotate": "0.290483deg",
+        "contactClones": 0
+      }
+    },
+    {
+      "mode": "counter",
+      "shot": {
+        "count": 1,
+        "uid": "target-1",
+        "time": "194",
+        "hp": "1",
+        "guts": "1",
+        "pixels": 174345,
+        "translate": "0px -2.22971px",
+        "rotate": "0.327955deg",
+        "contactClones": 0
+      }
+    },
+    {
+      "mode": "immune",
+      "shot": {
+        "count": 0,
+        "guts": "0",
+        "pixels": 0,
+        "contactClones": 0
+      }
+    },
+    {
+      "reason": "skip",
+      "clean": true
+    },
+    {
+      "reason": "resize",
+      "clean": true
+    },
+    {
+      "reason": "hidden",
+      "clean": true
+    },
+    {
+      "mobile": true
+    },
+    {
+      "reducedConcurrent": true
+    },
+    {
+      "dispose": true
+    }
+  ],
+  "errors": []
+}
