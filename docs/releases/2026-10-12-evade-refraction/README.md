@@ -16,6 +16,7 @@
 - `tests/target-choice-ux.mjs`、`tests/audio-contact-rules.mjs`、client/server TypeScript、通常ビルド通過。
 - 開発用 `evade-four.html?runtime` で実際の `BaseController.playResult` と実レンダラーを使い、PC・390px各5ケース通過。回避対象1体、成功時の攻撃なし、失敗時は回避終了後に攻撃開始、残留なしをDOMフレームで確認。`qa/controller-*.json`に記録。
 - PC・スマホ幅で通常速度の連続再生を目視し、カード面の波・細い反射・復元が03と連続していることを確認。`qa/runtime-*.png`に記録。停止後の演出・非表示対象とも0。ブラウザーエラー0。
+- 同時採用された反撃・気合・二刀流・状態消滅・吸血鬼召喚を統合後、回避・反撃・気合のテストとclient/server型検査を通過。実コントローラー5ケースも再実行して通過（`qa/controller-integrated.json`）。
 - 選定はユーザー承認済み。上記ブラウザー検証はローカルの実コントローラーフィクスチャで、認証済みオンライン対戦の証明ではない。
 
 ## 配信
