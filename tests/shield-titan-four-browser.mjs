@@ -1,18 +1,18 @@
 import assert from 'node:assert/strict';import fs from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
-const origin=process.env.TITAN_ORIGIN||'http://127.0.0.1:5494',qa=new URL('../docs/vfx-prototypes/2026-10-12-shield-titan/qa/',import.meta.url).pathname;await fs.mkdir(qa,{recursive:true});
+const origin=process.env.TITAN_ORIGIN||'http://127.0.0.1:5494',qa=new URL('../docs/vfx-prototypes/2026-10-13-shield-titan-r2/qa/',import.meta.url).pathname;await fs.mkdir(qa,{recursive:true});
 const capture=process.env.TITAN_CAPTURE==='1';
 const b=await chromium.launch({channel:'chrome',headless:true});const ctx=await b.newContext({viewport:{width:1440,height:1120},deviceScaleFactor:1});const p=await ctx.newPage(),errors=[],failures=[],checks=[];
 p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error'&&!m.text().includes('404'))errors.push(m.text());});p.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))failures.push(r.status()+' '+r.url());});
 const check=(name,value)=>{assert.ok(value,name);checks.push(name);};
 try{
- await p.goto(origin+'/shield-titan-four.html?qa');await p.waitForFunction(()=>window.titanLab?.ready,{timeout:60000});
+ await p.goto(origin+'/shield-titan-four.html?qa');await p.waitForFunction(()=>window.titanLab?.ready,null,{timeout:90000});
  for(const t of [0,450,850,1250,1750,2300,3000]){await p.evaluate(t=>window.titanLab.seek(t),t);if(capture)await p.locator('#grid').screenshot({path:qa+`four-${t}.png`});}
  const perf=await p.evaluate(()=>{const samples=[];for(let i=0;i<30;i++){const t=performance.now();window.titanLab.seek(500+i*45);samples.push(performance.now()-t);}return{samples,stats:window.titanLab.state.stats};});
  await p.evaluate(()=>{window.titanLab.seek(0);window.titanLab.play();});await p.waitForTimeout(7300);await p.evaluate(()=>window.titanLab.pause());check('normal playback advances',await p.evaluate(()=>window.titanLab.state.ms>0));
  await p.locator('#speed').selectOption('0.5');await p.evaluate(()=>{window.titanLab.seek(0);window.titanLab.play();});await p.waitForTimeout(6300);await p.evaluate(()=>window.titanLab.pause());
  await p.locator('#theme').click();await p.evaluate(()=>window.titanLab.seek(1050));if(capture)await p.locator('#grid').screenshot({path:qa+'four-dark.png'});await p.locator('#theme').click();
- await p.evaluate(()=>window.titanLab.setMode('board'));const f=await(await p.waitForSelector('iframe')).contentFrame();await f.waitForFunction(()=>window.titanBoard?.state.ready,{timeout:60000});
+ await p.evaluate(()=>window.titanLab.setMode('board'));const f=await(await p.waitForSelector('iframe')).contentFrame();await f.waitForFunction(()=>window.titanBoard?.state.ready,null,{timeout:90000});
  for(const side of [0,1])for(const v of [0,1,2,3]){
   await p.evaluate(({side,v})=>{window.titanLab.setSide(side);window.titanLab.setMulti(false);window.titanLab.seek(0,v);},{side,v});await p.waitForTimeout(80);let s=await f.evaluate(()=>window.titanBoard.state);check(`side ${side} variant ${v} owns initial face`,s.fieldHidden===1);
   for(const t of [400,850,1450,2400]){await p.evaluate(t=>window.titanLab.seek(t),t);await p.waitForTimeout(35);s=await f.evaluate(()=>window.titanBoard.state);check(`side ${side} variant ${v} active ${t}`,s.fieldHidden===1);}

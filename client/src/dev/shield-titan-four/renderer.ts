@@ -1,133 +1,139 @@
 import * as T from 'three';
-import {mergeGeometries} from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import {alloy,type Cut} from './material';
+import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
+import {finish,type Finish} from './material';
 import {DURATION,designs,ease,lift} from './catalog';
 const H=1.5625;
-type Part={node:T.Group;home:T.Vector3;cuts:Cut[];index:number};
-type Rig={scene:T.Scene;body:T.Group;parts:Part[];table:T.Group;shadow:T.Mesh;key:T.DirectionalLight;face:T.MeshBasicMaterial;light:T.MeshBasicMaterial;contact:T.Mesh;pressure:T.Group;skin?:T.Mesh<T.PlaneGeometry>;base?:Float32Array;core?:T.Group;closed:T.Group};
-/** Four independently authored rigs; one shared WebGL context and one clock per frame. */
+type Surface={mesh:T.Mesh;rest:Float32Array;finish:Finish;cx:number;cy:number;seed:number};
+type Rig={scene:T.Scene;body:T.Group;surfaces:Surface[];table:T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>;shadow:T.Mesh;key:T.DirectionalLight;face:T.MeshBasicMaterial;wash:T.Mesh<T.BufferGeometry,T.MeshBasicMaterial>;glow:T.PointLight;strokes:T.Line[]};
+const noise=(n:number)=>{const a=Math.sin(n*127.1+9.7)*43758.5453;return a-Math.floor(a);};
+// Convex cells are cut from the same surface: the cracks never become detached decoration.
+function cells(){
+ const seeds:number[][]=[];
+ for(let y=0;y<6;y++)for(let x=0;x<4;x++)seeds.push([-.5+(x+.23+noise(y*4+x)*.54)/4,-H/2+(y+.24+noise(100+y*4+x)*.52)*H/6]);
+ return seeds.map(([x,y],i)=>{
+  let poly=[[-.5,-H/2],[.5,-H/2],[.5,H/2],[-.5,H/2]];
+  seeds.forEach(([a,b],j)=>{if(i===j)return;const dx=a-x,dy=b-y,c=(a*a+b*b-x*x-y*y)/2,next:number[][]=[];
+   for(let k=0;k<poly.length;k++){const p=poly[k],q=poly[(k+1)%poly.length],dp=p[0]*dx+p[1]*dy-c,dq=q[0]*dx+q[1]*dy-c;if(dp<=0)next.push(p);if((dp<0)!==(dq<0)){const u=dp/(dp-dq);next.push([p[0]+(q[0]-p[0])*u,p[1]+(q[1]-p[1])*u]);}}poly=next;
+  });return{poly,x,y};
+ });
+}
 export class TitanRenderer{
  readonly renderer:T.WebGLRenderer;
- private rigs:Rig[]=[];private geometries:T.BufferGeometry[]=[];private materials:T.Material[]=[];private texture?:T.CanvasTexture;
+ private rigs:Rig[]=[];private geometries:T.BufferGeometry[]=[];private materials:T.Material[]=[];private textures:T.Texture[]=[];private texture?:T.CanvasTexture;private environment:T.WebGLRenderTarget;
  private camera=new T.OrthographicCamera(-2,2,1.4,-1.4,.01,30);private boardCamera=new T.Camera();private dead=false;
  constructor(){
   this.renderer=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});
-  this.renderer.setPixelRatio(1);this.renderer.setClearColor(0,0);this.renderer.outputColorSpace=T.SRGBColorSpace;
-  this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.15;
+  this.renderer.setPixelRatio(1);this.renderer.setClearColor(0,0);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.08;
   this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;
+  const pmrem=new T.PMREMGenerator(this.renderer),room=new RoomEnvironment();this.environment=pmrem.fromScene(room,.045);room.dispose();pmrem.dispose();
   for(let v=0;v<4;v++)this.rigs.push(this.make(v));
  }
  private geo<G extends T.BufferGeometry>(g:G){this.geometries.push(g);return g;}
  private mat<M extends T.Material>(m:M){this.materials.push(m);return m;}
- private shape(points:number[][],depth=.035){const s=new T.Shape();points.forEach((p,i)=>i?s.lineTo(p[0],p[1]):s.moveTo(p[0],p[1]));s.closePath();return this.geo(new T.ExtrudeGeometry(s,{depth,bevelEnabled:true,bevelSize:.009,bevelThickness:.007,bevelSegments:2,steps:1,curveSegments:1}));}
- private metal(geometry:T.BufferGeometry,color:string,part:Part,kind=0){const a=alloy(color,kind);this.mat(a.mat);this.mat(a.depth);part.cuts.push(a.uniforms);const mesh=new T.Mesh(geometry,a.mat);mesh.customDepthMaterial=a.depth;mesh.castShadow=true;mesh.receiveShadow=true;part.node.add(mesh);return mesh;}
- private plate(points:number[][],part:Part,stone=true){
-  const base=this.metal(this.shape(points), '#98734a',part);
-  const cx=points.reduce((n,p)=>n+p[0],0)/points.length,cy=points.reduce((n,p)=>n+p[1],0)/points.length;
-  const inset=points.map(p=>[cx+(p[0]-cx)*.88,cy+(p[1]-cy)*.88]);
-  const fill=this.metal(this.shape(inset,.012),stone?'#d1c9b4':'#334a55',part,stone?1:0);fill.position.z=.043;
-  // Fine brass inlay, interrupted grooves and inset studs give the broad shield its scale.
-  for(let i=0;i<points.length;i++){
-   const p=points[i],q=points[(i+1)%points.length];const ax=cx+(p[0]-cx)*.96,ay=cy+(p[1]-cy)*.96,bx=cx+(q[0]-cx)*.96,by=cy+(q[1]-cy)*.96;
-   const bar=this.metal(this.geo(new T.BoxGeometry(Math.hypot(bx-ax,by-ay),.005,.004)),'#edd1a0',part);bar.position.set((ax+bx)/2,(ay+by)/2,.043);bar.rotation.z=Math.atan2(by-ay,bx-ax);
-   if(i%2===0){const stud=this.metal(this.geo(new T.SphereGeometry(.014,7,5)),'#b38a50',part);stud.scale.z=.45;stud.position.set(cx+(p[0]-cx)*.86,cy+(p[1]-cy)*.86,.065);}
-  }
-  return base;
- }
- private part(r:Rig,index:number,x=0,y=0,z=.018){const p:Part={node:new T.Group(),home:new T.Vector3(x,y,z),cuts:[],index};p.node.position.copy(p.home);r.body.add(p.node);r.parts.push(p);return p;}
- private gem(part:Part,x:number,y:number,size=.08){
-  const g=this.metal(this.geo(new T.OctahedronGeometry(size,0)),'#48afc5',part);g.position.set(x,y,.11);g.scale.set(.8,1,.5);(g.material as T.MeshStandardMaterial).emissive.set('#166b82');(g.material as T.MeshStandardMaterial).emissiveIntensity=.6;
-  const inner=this.metal(this.geo(new T.OctahedronGeometry(size*.49,0)),'#aee6eb',part);inner.position.set(x,y,.139);inner.scale.set(.7,1,.36);(inner.material as T.MeshStandardMaterial).emissive.set('#7cc5d3');(inner.material as T.MeshStandardMaterial).emissiveIntensity=.5;
+ private surface(r:Rig,g:T.BufferGeometry,kind:number,color:string,cx=0,cy=0,seed=0){
+  const f=finish(kind,color);this.mat(f.mat);this.mat(f.depth);const mesh=new T.Mesh(this.geo(g),f.mat);mesh.customDepthMaterial=f.depth;mesh.castShadow=kind!==2;mesh.receiveShadow=true;r.body.add(mesh);
+  const s:Surface={mesh,rest:new Float32Array(g.attributes.position.array),finish:f,cx,cy,seed};r.surfaces.push(s);return s;
  }
  private make(v:number):Rig{
-  const scene=new T.Scene();scene.add(new T.HemisphereLight('#fff7e4','#4e6671',2.25));
-  const key=new T.DirectionalLight('#fff0d2',3.1);key.position.set(-2.5,2,5);key.castShadow=true;key.shadow.mapSize.set(512,512);Object.assign(key.shadow.camera,{left:-1.7,right:1.7,top:2,bottom:-2,near:.1,far:12});key.shadow.bias=-.0003;key.shadow.normalBias=.007;scene.add(key);
-  const fill=new T.DirectionalLight('#b0deef',1.45);fill.position.set(2,-1,2.5);scene.add(fill);
-  const table=new T.Group();scene.add(table);
-  const slab=new T.Mesh(this.geo(new T.BoxGeometry(20,20,.06)),this.mat(new T.MeshStandardMaterial({color:'#e4dfd4',roughness:.93})));slab.position.z=-.04;slab.receiveShadow=true;table.add(slab);
-  const seams=new T.LineSegments(this.geo(new T.BufferGeometry().setFromPoints([new T.Vector3(-2.4,1.02,-.009),new T.Vector3(2.4,1.02,-.009),new T.Vector3(-1.3,-2,-.009),new T.Vector3(-1.3,2,-.009)])),this.mat(new T.LineBasicMaterial({color:'#9b9485',transparent:true,opacity:.2})));table.add(seams);
+  const scene=new T.Scene();scene.environment=this.environment.texture;scene.environmentIntensity=.75;scene.add(new T.HemisphereLight('#d8ebff','#222c36',1.25));
+  const key=new T.DirectionalLight('#fff0d4',2.2);key.position.set(-2,1,4);key.castShadow=true;key.shadow.mapSize.set(1024,1024);Object.assign(key.shadow.camera,{left:-2,right:2,top:2.5,bottom:-2.5,near:.1,far:12});key.shadow.bias=-.0002;key.shadow.normalBias=.004;scene.add(key);
+  const rim=new T.DirectionalLight('#5e9bbc',1.5);rim.position.set(2,1.8,1.3);scene.add(rim);
+  const table=new T.Mesh(this.geo(new T.PlaneGeometry(20,20)),this.mat(new T.MeshStandardMaterial({color:'#e7e3dc',roughness:.95})));table.position.z=-.025;table.receiveShadow=true;scene.add(table);
   const body=new T.Group();scene.add(body);
-  const thickness=new T.Mesh(this.geo(new T.BoxGeometry(.984,H-.008,.019)),this.mat(new T.MeshStandardMaterial({color:'#786248',roughness:.66})));thickness.castShadow=true;body.add(thickness);
-  const face=this.mat(new T.MeshBasicMaterial({transparent:true,toneMapped:false}));const card=new T.Mesh(this.geo(new T.PlaneGeometry(1,H)),face);card.position.z=.011;body.add(card);
-  const shadow=new T.Mesh(this.geo(new T.PlaneGeometry(3.5,3.7)),this.mat(new T.ShadowMaterial({opacity:.23,depthWrite:false})));shadow.position.z=-.007;shadow.receiveShadow=true;scene.add(shadow);
-  const catcher=new T.Mesh(this.geo(new T.PlaneGeometry(1,H)),this.mat(new T.ShadowMaterial({opacity:.25,depthWrite:false})));catcher.position.z=.012;catcher.receiveShadow=true;body.add(catcher);
-  const light=this.mat(new T.MeshBasicMaterial({color:'#68d5e8',transparent:true,opacity:0,depthWrite:false}));
-  const contact=new T.Mesh(this.geo(new T.PlaneGeometry(1.08,H+ .08)),light);contact.position.z=-.004;scene.add(contact);
-  const pressure=new T.Group();scene.add(pressure);
-  for(let i=0;i<8;i++){const s=i%2?1:-1,j=Math.floor(i/2),line=new T.Mesh(this.geo(new T.BoxGeometry(.12+j*.018,.007,.002)),this.mat(new T.MeshBasicMaterial({color:'#b9a688',transparent:true,opacity:0})));line.position.set(s*.6,(j-1.5)*.29,.001);line.rotation.z=s*(j-1.5)*.18;pressure.add(line);}
-  const closed=new T.Group();body.add(closed);
-  const r:Rig={scene,body,parts:[],table,shadow,key,face,light,contact,pressure,closed};
+  const thickness=new T.Mesh(this.geo(new T.BoxGeometry(.993,H-.006,.016)),this.mat(new T.MeshStandardMaterial({color:'#443e36',roughness:.67})));thickness.castShadow=true;body.add(thickness);
+  const face=this.mat(new T.MeshBasicMaterial({transparent:true,toneMapped:false}));const card=new T.Mesh(this.geo(new T.PlaneGeometry(1,H)),face);card.position.z=.010;body.add(card);
+  const shadow=new T.Mesh(this.geo(new T.PlaneGeometry(4,4)),this.mat(new T.ShadowMaterial({opacity:.26,depthWrite:false})));shadow.position.z=-.015;shadow.receiveShadow=true;scene.add(shadow);
+  const catcher=new T.Mesh(this.geo(new T.PlaneGeometry(1,H)),this.mat(new T.ShadowMaterial({opacity:.21,depthWrite:false})));catcher.position.z=.013;catcher.receiveShadow=true;body.add(catcher);
+  const cv=document.createElement('canvas');cv.width=cv.height=128;const ctx=cv.getContext('2d')!,grad=ctx.createRadialGradient(64,64,1,64,64,64);grad.addColorStop(0,'rgba(120,218,255,.62)');grad.addColorStop(.4,'rgba(65,168,218,.22)');grad.addColorStop(1,'rgba(25,120,175,0)');ctx.fillStyle=grad;ctx.fillRect(0,0,128,128);const tex=new T.CanvasTexture(cv);this.textures.push(tex);
+  const wash=new T.Mesh(this.geo(new T.PlaneGeometry(2.7,3.2)),this.mat(new T.MeshBasicMaterial({map:tex,transparent:true,opacity:0,depthWrite:false,blending:T.AdditiveBlending})));wash.position.z=-.01;scene.add(wash);
+  const glow=new T.PointLight('#68cfff',0,2.5,2);glow.position.set(0,0,.32);scene.add(glow);
+  const r:Rig={scene,body,surfaces:[],table,shadow,key,face,wash,glow,strokes:[]};
   if(v===0){
-   const p=this.part(r,0,0,0,.024);
-   this.plate([[-.49,-.65],[0,-.79],[.49,-.65],[.49,.65],[.37,.77],[-.37,.77],[-.49,.65]],p,false);
-   for(const y of [-.51,.50]){const band=this.metal(this.geo(new T.BoxGeometry(.91,.073,.040)),'#bba271',p);band.position.set(0,y,.08);}
-   const keel=this.metal(this.geo(new T.BoxGeometry(.048,1.24,.058)),'#c8aa72',p);keel.position.set(0,0,.082);
-   for(const side of [-1,1]){const emblem=this.metal(this.shape([[side*.04,.02],[side*.36,.21],[side*.36,.28],[side*.04,.09]],.015),'#e2c791',p);emblem.position.z=.078;}
-   this.gem(p,0,.02,.115);
-  }else if(v===1){
-   for(let i=0;i<7;i++){
-    const y=.66-i*.218,p=this.part(r,i,0,y,.025+i*.007);
-    this.plate([[-.49,-.095],[-.40,-.139],[.38,-.139],[.49,-.077],[.49,.105],[.37,.133],[-.49,.105]],p,true);
-    const ridge=this.metal(this.shape([[-.43,-.065],[0,-.12],[.43,-.065],[.40,-.025],[0,-.072],[-.40,-.025]],.008),'#a18c63',p);ridge.position.z=.072;
-    const groove=this.metal(this.geo(new T.BoxGeometry(.59,.008,.003)),'#52737b',p);groove.position.set(0,-.059,.066);
-    const cap=this.metal(this.geo(new T.BoxGeometry(.045,.19,.022)),'#a28050',p);cap.position.set(i%2?.34:-.34,0,.070);if(i===3)this.gem(p,0,0,.072);
-   }
+   cells().forEach(({poly,x,y},i)=>{
+    const shape=new T.Shape();poly.forEach((p,j)=>{const px=x+(p[0]-x)*.989,py=y+(p[1]-y)*.989;j?shape.lineTo(px,py):shape.moveTo(px,py);});shape.closePath();
+    const g=new T.ExtrudeGeometry(shape,{depth:.085,bevelEnabled:true,bevelSize:.009,bevelThickness:.013,bevelSegments:2,curveSegments:1,steps:1});
+    const pos=g.attributes.position,uv=g.attributes.uv;for(let j=0;j<pos.count;j++)uv.setXY(j,pos.getX(j)+.5,pos.getY(j)/H+.5);
+    this.surface(r,g,0,i%5===0?'#8a968d':'#969d90',x,y,i);
+   });
   }else if(v===2){
-   const p=this.part(r,0,0,0,.038);const g=this.geo(new T.PlaneGeometry(.985,H-.025,40,64));
-   const a=alloy('#aebbb3');this.mat(a.mat);this.mat(a.depth);p.cuts.push(a.uniforms);a.mat.side=T.DoubleSide;a.mat.metalness=.83;a.mat.roughness=.38;
-   const skin=new T.Mesh(g,a.mat);skin.customDepthMaterial=a.depth;skin.castShadow=true;skin.receiveShadow=true;p.node.add(skin);r.skin=skin;r.base=new Float32Array(g.attributes.position.array);
-   const core=this.part(r,1,0,0,.047);this.gem(core,0,0,.135);r.core=core.node;
-   for(let i=0;i<4;i++){const rib=this.part(r,i+2);const x=(i-1.5)*.244;const ridge=this.metal(this.geo(new T.BoxGeometry(.018,H-.035,.027)),'#b69660',rib);ridge.position.set(x,0,.036);}
-  }else{
-   for(const side of [-1,1]){
-    for(let j=0;j<3;j++){
-     const p=this.part(r,r.parts.length,side*.495,(j-1)*.512,.025);
-     const a=side===-1?0:-.495,b=side===-1?.495:0;
-     this.plate([[a,-.243],[b,-.243],[b,.243],[a,.243]],p,true);
-     const rail=this.metal(this.geo(new T.BoxGeometry(.065,.40,.026)),'#9d7b4d',p);rail.position.set((a+b)/2,0,.07);
-     for(const y of [-.19,.19]){const cap=this.metal(this.geo(new T.BoxGeometry(.46,.026,.05)),'#c6a575',p);cap.position.set((a+b)/2,y,.057);}
-     const buttress=this.metal(this.shape([[a+.07,-.17],[b-.07,-.17],[b-.07,.17],[a+.07,.17]],.055),'#c5b99e',p,1);buttress.position.z=.067;
-     if(j===1)this.gem(p,(a+b)/2,0,.090);
-    }
-   }
-  }
-  // Merge fixed inlays and studs per articulated plate. They share a transform and material.
-  for(const p of r.parts){
-   const buckets=new Map<string,T.Mesh[]>();
-   for(const o of [...p.node.children]){if(!(o instanceof T.Mesh)||o===r.skin)continue;
-    const m=o.material as T.MeshStandardMaterial;const key=[m.color.getHex(),m.roughness,m.metalness,m.emissive.getHex(),m.emissiveIntensity].join(':');
-    const items=buckets.get(key)||[];items.push(o);buckets.set(key,items);
-   }
-   for(const items of buckets.values()){if(items.length<2)continue;const chunks=items.map(m=>{m.updateMatrix();const g=m.geometry.index?m.geometry.toNonIndexed():m.geometry.clone();g.applyMatrix4(m.matrix);return g;});const merged=mergeGeometries(chunks);chunks.forEach(g=>g.dispose());if(!merged)continue;
-    const mesh=new T.Mesh(this.geo(merged),items[0].material);mesh.customDepthMaterial=items[0].customDepthMaterial;mesh.castShadow=true;mesh.receiveShadow=true;items.forEach(m=>p.node.remove(m));p.node.add(mesh);
-   }
-  }
+   // A low-poly optical surface has deliberate large facets, unlike the flowing meshes.
+   const grid=new T.PlaneGeometry(.998,H,6,9),p=grid.attributes.position;
+   for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i);if(Math.abs(x)<.49&&Math.abs(y)<.77)p.setXY(i,x+(noise(i)*2-1)*.022,y+(noise(i+66)*2-1)*.028);}
+   const g=grid.toNonIndexed();grid.dispose();this.surface(r,g,2,'#246c89');
+   // Five engraved meridians follow the surface; they never orbit or float away.
+   for(let k=0;k<5;k++){const a=new Float32Array(49*3),g=this.geo(new T.BufferGeometry());g.setAttribute('position',new T.BufferAttribute(a,3));const line=new T.Line(g,this.mat(new T.LineBasicMaterial({color:k===2?'#f6dfaa':'#a9e9f4',transparent:true,opacity:.6})));r.body.add(line);r.strokes.push(line);}
+  }else this.surface(r,new T.PlaneGeometry(1,H,64,96),v,v===1?'#567f87':'#092b4c');
   return r;
  }
  setFace(canvas:HTMLCanvasElement){this.texture?.dispose();this.texture=new T.CanvasTexture(canvas);this.texture.colorSpace=T.SRGBColorSpace;this.texture.anisotropy=Math.min(4,this.renderer.capabilities.getMaxAnisotropy());for(const r of this.rigs){r.face.map=this.texture;r.face.needsUpdate=true;}}
+ // The shield's shoulders and pointed foot are sculpted from the original rectangular face.
+ private shield(x:number,y:number,strength:number){
+  const Y=y/(H/2),lower=Math.max(0,-Y),upper=Math.max(0,(Y-.60)/.40);
+  const width=1-.70*Math.pow(lower,1.7)-.12*upper*upper;
+  return x*(1+(width*1.22-1)*strength);
+ }
+ private crystal(x:number,y:number,t:number):[number,number,number]{
+  const delay=(y/H+.5)*250, grow=ease(90+delay,720+delay,t),settle=ease(1390+(1-y/H)*90,2130+(1-y/H)*70,t),a=grow*(1-settle),xx=this.shield(x,y,a),yy=y*(1+.1*a);
+  const dome=Math.max(0,1-Math.abs(x/.55))*Math.max(0,1-Math.abs(y/.90));
+  return[xx,yy,.025+a*(.10+dome*.63)];
+ }
  private update(v:number,t:number,reduced:boolean){
-  const r=this.rigs[v];if(reduced)t=DURATION;const hit=designs[v].hit;r.body.position.z=lift(v,t);r.body.rotation.set(0,0,0);
-  const pulse=ease(80,430,t)*(1-ease(hit,hit+470,t));
-  for(const p of r.parts){const {node:n,index:i}=p;n.visible=t<DURATION;n.position.copy(p.home);n.rotation.set(0,0,0);n.scale.set(1,1,1);let cut=0;
-   if(v===0){const load=ease(80,660,t),strike=ease(900,1240,t),sink=ease(1300,2320,t);n.position.z+=.12*load*(1-strike);n.rotation.x=.10*load*(1-strike);n.scale.z=1-.84*sink;cut=ease(1370,2410,t)*.95;}
-
-   if(v===1){const compress=ease(260,630,t)*(1-ease(780,1080,t));const release=ease(730+i*78,1360+i*78,t),returning=ease(1500+i*55,2250+i*45,t);n.position.y=p.home.y*(1-compress*.16)+(i<3?1:-1)*.15*release*(1-returning);n.position.x=(i%2?1:-1)*.23*Math.sin(release*Math.PI);n.position.z+=Math.sin(release*Math.PI)*(.22+.02*i);n.rotation.x=(i<3?-1:1)*release*.46*(1-returning);cut=ease(1480+i*54,2260+i*42,t)*.93;n.scale.y=1-returning*.82;}
-   if(v===2){const open=ease(1190,2220,t);cut=i===0?open*.92:ease(1570,2290,t)*.94;if(i===1){n.position.z+=.40*ease(80,650,t)*(1-ease(1250,2240,t));n.scale.setScalar(1-.8*ease(1500,2230,t));n.rotation.z=.3*Math.sin(ease(0,2100,t)*Math.PI);}if(i>1){n.position.z+=.10*ease(150,580,t)*(1-open);n.scale.x=1-.92*open;}}
-   if(v===3){const s=i<3?-1:1,j=i%3,raise=ease(200+j*95,650+j*95,t),fold=ease(1310+j*90,2030+j*90,t);n.rotation.y=s*1.35*raise*(1-fold);n.position.x+=s*.045*raise*(1-fold);n.position.z+=.018*Math.sin(raise*Math.PI);cut=ease(1900+j*60,2590+j*40,t)*.97;n.scale.x=1-.88*fold;}
-   for(const c of p.cuts){c.open.value=cut;c.pulse.value=pulse;}
-   if(cut>.91)n.visible=false;
+  if(reduced)t=DURATION;const r=this.rigs[v],hit=designs[v].hit;
+  r.body.position.set(0,0,lift(v,t));r.body.rotation.set(0,0,0);
+  const swell=ease(40,720,t),impact=ease(hit-35,hit+16,t)*(1-ease(hit+40,hit+270,t)),power=swell*(1-ease(hit+180,2380,t));
+  r.wash.material.opacity=impact*.55;r.wash.scale.setScalar(1+.25*ease(hit,hit+280,t));r.glow.intensity=power*.23+impact*.9;
+  for(const s of r.surfaces){
+   const {mesh,rest,finish:f,cx,cy,seed}=s;mesh.visible=t<2700;mesh.position.set(0,0,0);mesh.rotation.set(0,0,0);f.time.value=t/1000;f.energy.value=power;
+   const a=mesh.geometry.attributes.position;
+   if(v===0){
+    const formed=ease(30,660,t),release=ease(1160+noise(seed)*110,1930+noise(seed)*140,t),sink=ease(1850,2460,t);
+    f.reveal.value=ease(1670,2570,t)*.73;
+    for(let i=0;i<a.count;i++){
+     const x=rest[i*3],y=rest[i*3+1],z=rest[i*3+2],bulge=Math.max(0,1-(x/.57)**2)*Math.max(0,1-(y/.91)**2);
+     const xx=this.shield(x,y,formed),yy=y*(1+.09*formed);
+     a.setXYZ(i,xx+cx*.26*release*(1-sink),yy+cy*.12*release*(1-sink),.019+(z+.13*formed*bulge+formed*.065*Math.pow(Math.max(0,1-Math.abs(x)*4),2))*(1-sink*.9)+release*(1-sink)*(.08+noise(seed)*.10));
+    }
+   }else if(v===1){
+    // The leading edge rolls over the fluid sheet, then a diagonal current draws it back in.
+    const cast=ease(0,750,t),recede=ease(1280,2280,t),shape=cast*(1-recede);
+    f.reveal.value=ease(1570,2500,t)*1.02;
+    for(let i=0;i<a.count;i++){
+     const x=rest[i*3],y=rest[i*3+1],u=x+.5,w=y/H+.5;
+     const curl=ease(0,470,t)*(1-ease(480,880,t))+.6*ease(1350,1680,t)*(1-ease(1750,2200,t));
+     const dome=Math.max(0,1-(x/.56)**2)*Math.max(0,1-(y/.91)**2);
+     const xx=this.shield(x,y,shape)+curl*.11*Math.sin(w*4.8)*Math.sin(w*Math.PI);
+     const yy=y*(1+shape*.15)+curl*.045*Math.sin(u*4+w*3);
+     const zz=.027+shape*(.10+.29*dome)+curl*.24*Math.pow(w,2)*(Math.sin(w*7-t*.004)*.5+.5);
+     a.setXYZ(i,xx,yy,zz);
+    }
+   }else if(v===2){
+    f.reveal.value=ease(1730,2520,t)*1.02;
+    for(let i=0;i<a.count;i++){const p=this.crystal(rest[i*3],rest[i*3+1],t);a.setXYZ(i,...p);}
+   }else{
+    // A biased travelling fold, fixed to the lower card edge, gives the cloth weight and drag.
+    const billow=ease(0,650,t)*(1-ease(1430,2350,t));f.reveal.value=ease(1640,2540,t)*.98;
+    for(let i=0;i<a.count;i++){
+     const x=rest[i*3],y=rest[i*3+1],u=x+.5,w=y/H+.5;
+     const anchor=Math.sin(Math.PI*w*.91),fold=Math.sin(w*7.4+u*3.8-t*.005),small=Math.sin(u*18+w*7-t*.003);
+     const xx=x*(1+billow*.24)+billow*.17*anchor*Math.sin(w*3.8-t*.002),yy=y+billow*.13*Math.sin(u*4+w*3);
+     const zz=.025+billow*(.22*anchor+.24*anchor*(fold*.5+.5)+.055*small*anchor);
+     a.setXYZ(i,xx,yy,zz);
+    }
+   }
+   a.needsUpdate=true;mesh.geometry.computeVertexNormals();mesh.geometry.computeBoundingSphere();
   }
-  if(r.skin&&r.base){const a=r.skin.geometry.attributes.position;const shape=ease(80,650,t)*(1-ease(1250,2240,t));for(let i=0;i<a.count;i++){const x=r.base[i*3],y=r.base[i*3+1],edge=Math.max(0,1-(x/.505)**4)*Math.max(0,1-(y/.79)**4);const wave=Math.sin(y*9-t*.005)*.026*edge*shape;const dome=Math.max(0,1-(x/.53)**2)*.40*shape;const taper=1-.46*shape*Math.pow(Math.max(0,-y/.8),1.7);a.setXYZ(i,x*taper,y,dome*edge+wave);}a.needsUpdate=true;r.skin.geometry.computeVertexNormals();}
-  const impact=ease(hit,hit+55,t)*(1-ease(hit+60,hit+320,t));r.light.opacity=impact*.23;
-  r.pressure.children.forEach((node,i)=>{const m=node as T.Mesh<T.BufferGeometry,T.MeshBasicMaterial>,u=ease(hit,hit+430,t),s=i%2?1:-1;m.position.x=s*(.57+u*.26);m.scale.x=.3+u*.8;m.material.opacity=impact*.33;});
-  if(t>=DURATION){r.body.position.z=0;r.parts.forEach(p=>p.node.visible=false);r.light.opacity=0;}
+  r.strokes.forEach((line,k)=>{
+   const a=line.geometry.attributes.position;const vis=ease(350+k*55,710+k*55,t)*(1-ease(1620+k*65,2150+k*65,t));line.visible=t<2380;(line.material as T.LineBasicMaterial).opacity=vis*(k===2?.85:.40);
+   for(let i=0;i<a.count;i++){const y=-H/2+i/(a.count-1)*H,x=(k-2)*.202*(.86+.14*Math.sin(i/(a.count-1)*Math.PI)),p=this.crystal(x,y,t);a.setXYZ(i,p[0],p[1],p[2]+.006);}a.needsUpdate=true;line.geometry.computeBoundingSphere();
+  });
+  if(t>=DURATION){r.body.position.z=0;r.surfaces.forEach(s=>s.mesh.visible=false);r.strokes.forEach(s=>s.visible=false);r.wash.material.opacity=0;r.glow.intensity=0;}
   return r;
  }
- draw(canvas:HTMLCanvasElement,v:number,t:number,reduced=false,dark=false){if(this.dead)return;const w=canvas.width,h=canvas.height;this.size(w,h);const r=this.update(v,t,reduced);r.table.visible=true;r.shadow.visible=false;(r.table.children[0] as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>).material.color.set(dark?'#202932':'#e4dfd4');
-  const aspect=w/h;this.camera.left=-1.02*aspect;this.camera.right=1.02*aspect;this.camera.top=1.02;this.camera.bottom=-1.02;this.camera.position.set(.16,-3.35,4.5);this.camera.up.set(0,0,1);this.camera.lookAt(0,0,.13);this.camera.updateProjectionMatrix();this.renderer.render(r.scene,this.camera);const c=canvas.getContext('2d')!;c.clearRect(0,0,w,h);c.drawImage(this.renderer.domElement,0,0);
+ draw(canvas:HTMLCanvasElement,v:number,t:number,reduced=false,dark=false){if(this.dead)return;const w=canvas.width,h=canvas.height;this.size(w,h);const r=this.update(v,t,reduced);r.table.visible=true;r.shadow.visible=false;r.table.material.color.set(dark?'#172431':'#e7e3dc');
+  const aspect=w/h;this.camera.left=-1.12*aspect;this.camera.right=1.12*aspect;this.camera.top=1.12;this.camera.bottom=-1.12;this.camera.position.set(.42,-3.0,4.9);this.camera.up.set(0,0,1);this.camera.lookAt(0,0,.13);this.camera.updateProjectionMatrix();this.renderer.render(r.scene,this.camera);const c=canvas.getContext('2d')!;c.clearRect(0,0,w,h);c.drawImage(this.renderer.domElement,0,0);
  }
  drawBoard(canvas:HTMLCanvasElement,v:number,t:number,matrix:DOMMatrix,reduced=false){if(this.dead)return;this.size(canvas.width,canvas.height);const ndc=new T.Matrix4().set(2/innerWidth,0,0,-1,0,-2/innerHeight,0,1,0,0,-.0001,0,0,0,0,1);this.boardCamera.projectionMatrix.copy(ndc.multiply(new T.Matrix4().fromArray(Array.from(matrix.toFloat64Array()))));this.boardCamera.projectionMatrixInverse.copy(this.boardCamera.projectionMatrix).invert();const r=this.update(v,t,reduced);r.table.visible=false;r.shadow.visible=true;this.renderer.render(r.scene,this.boardCamera);canvas.getContext('2d')!.drawImage(this.renderer.domElement,0,0);}
  private size(w:number,h:number){if(this.renderer.domElement.width!==w||this.renderer.domElement.height!==h)this.renderer.setSize(w,h,false);}
  get stats(){return{contexts:this.dead?0:1,geometries:this.renderer.info.memory.geometries,textures:this.renderer.info.memory.textures,drawCalls:this.renderer.info.render.calls};}
- dispose(){if(this.dead)return;this.dead=true;this.geometries.forEach(g=>g.dispose());this.materials.forEach(m=>m.dispose());this.texture?.dispose();this.rigs.forEach(r=>r.key.shadow.map?.dispose());this.renderer.dispose();this.renderer.forceContextLoss();}
+ dispose(){if(this.dead)return;this.dead=true;this.geometries.forEach(g=>g.dispose());this.materials.forEach(m=>m.dispose());this.textures.forEach(t=>t.dispose());this.texture?.dispose();this.environment.dispose();this.rigs.forEach(r=>r.key.shadow.map?.dispose());this.renderer.dispose();this.renderer.forceContextLoss();}
 }

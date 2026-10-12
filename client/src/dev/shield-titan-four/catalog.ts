@@ -1,10 +1,10 @@
 export const DURATION=3000;
 export const designs=[
- {name:'巨盾の圧印',en:'THE GREAT SEAL',note:'一枚の重い大盾。厚い盾面が力を溜めて接地し、押された紋様がカードへ刻み込まれる。',hit:1240},
- {name:'積層の鎧',en:'LAMELLAR WEIGHT',note:'七層の石鎧。噛み合った装甲が一度圧縮され、段差を刻みながら順番に収まる。',hit:1100},
- {name:'蒼核の鋳造',en:'CORE CASTING',note:'青い核が面を押し広げる。湾曲した鋳膜が盾となり、中心からカード面へ戻る。',hit:1440},
- {name:'城郭の起立',en:'LIVING BASTION',note:'カードの左右が城壁へ起き上がる。支柱が支え、重みを受けて縁へ格納される。',hit:1360},
+ {name:'神殻の解封',en:'STONE / THE UNSEALING',note:'彫り込まれた巨盾の石殻。重い接地で亀裂が走り、割れた殻の内側から巨神が現れる。',hit:1120},
+ {name:'蒼鋼の奔流',en:'METAL / THE UNDERTOW',note:'蒼い鋼が一枚の流体となる。大きく捻れた流れが盾面を鍛え、縁へ引き戻される。',hit:1280},
+ {name:'晶壁の覚醒',en:'CRYSTAL / THE AWAKENING',note:'カード面から透明な結晶盾が隆起。稜線に光が走り、上端から順に面へ結び直される。',hit:1410},
+ {name:'守誓の天幕',en:'CLOTH / THE OATH',note:'蒼い守護布が風を含んで大きくひるがえる。金糸の紋章を残し、対角線に沿って面へ織り戻る。',hit:1210},
 ] as const;
 export const clamp=(n:number)=>Math.max(0,Math.min(1,n));
 export function ease(a:number,b:number,t:number){const x=clamp((t-a)/(b-a));return x*x*(3-2*x);}
-export function lift(v:number,t:number){const hit=designs[v].hit;if(t>=hit+230)return 0;return .30*(1-ease(480,hit,t))+(t>=hit?.018*Math.sin(ease(hit,hit+230,t)*Math.PI):0);}
+export function lift(v:number,t:number){const hit=designs[v].hit;if(t>=hit+180)return 0;return .24*(1-ease(420,hit,t))+(t>=hit?.012*Math.sin(ease(hit,hit+180,t)*Math.PI):0);}
