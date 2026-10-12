@@ -1,0 +1,32 @@
+{
+  "verifiedAt": "2026-10-12T14:31:27.671994+00:00",
+  "origin": "https://test.yourlore.xyz",
+  "featureCommit": "3e767ac2",
+  "sourceCommit": "403e3627a111216dc3fde8200b179ec1e7eeaf3f",
+  "deploymentId": "8d6796f5-8ee4-4a25-a577-5efad0166c20",
+  "workerVersion": "d46110a9-5d21-40f8-a82c-e37f753bd066",
+  "trafficPercent": 100,
+  "deployedAt": "2026-10-12T14:28:51.111073Z",
+  "deploymentMethod": "scripts/deploy-guard.mjs staging; integrated release completed by the concurrent status-extinction task",
+  "validation": {
+    "guardedTypecheck": "passed",
+    "guardedProductionSuiteFiles": 100,
+    "guardedProductionSuite": "passed",
+    "build": "passed",
+    "assetHashesMatched": 58,
+    "gutsEngineCases": 19,
+    "initialLocalBrowserGroups": 13,
+    "finalIntegratedNormalAndCounterSides": 4,
+    "applicationErrorsInLocalQA": 0,
+    "stagingPublicPage": {
+      "http": 200,
+      "applicationErrors": 0,
+      "authenticated": false
+    }
+  },
+  "limits": [
+    "Local browser board fixture uses the real reducer and BaseController, not an authenticated online match.",
+    "390px browser viewport is not physical phone certification.",
+    "Original preview and local runtime QA pages are not production entry points."
+  ]
+}

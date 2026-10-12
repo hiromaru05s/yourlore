@@ -1,0 +1,27 @@
+{
+  "source": "6b41dea301495f6ceff69a4b541a9bcfdb063877",
+  "version": "007e1363-4702-499c-be57-af67f4bf4bd0",
+  "origin": "https://test.yourlore.xyz",
+  "verifiedAt": "2026-10-09T09:05:28.426579+00:00",
+  "productionTests": {
+    "passed": 86,
+    "total": 86
+  },
+  "assetParity": {
+    "matched": 46,
+    "total": 46
+  },
+  "deployedCards": 7,
+  "sequentialPassesFromRunnerOutput": [
+    "GOLEM1",
+    "GOLEM2",
+    "GOLEM3",
+    "M10",
+    "NGA3",
+    "NWL3"
+  ],
+  "independentRealtimePass": [
+    "MANA_GIANT"
+  ],
+  "authenticatedOnlineMatch": false
+}

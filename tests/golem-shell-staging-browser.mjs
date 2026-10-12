@@ -24,16 +24,16 @@ try{
  // Finish network decoding before advancing the deterministic clock; otherwise
  // simulated texture timeouts can outrun real staging downloads.
  await page.evaluate(async({cardEl,cards})=>{const render=(await import('/'+cardEl.file))[cardEl.name],host=document.createElement('div');host.className='game';host.style.cssText='position:fixed;left:-4000px;top:0';document.body.append(host);try{for(const card of cards)host.append(render(card,{field:true,fullArt:true}));await Promise.all([...host.querySelectorAll('img')].map(image=>image.decode()));await document.fonts.ready;}finally{host.remove();}},{cardEl,cards:['GOLEM1','GOLEM2','GOLEM3','M10','NGA3','NWL3','MANA_GIANT'].map(id=>({...DB[id],uid:'warm-'+id}))});
- const clockStart=Date.now();await page.clock.install({time:new Date(clockStart)});await page.clock.pauseAt(new Date(clockStart+1000));
- for(const [i,id] of ['GOLEM1','GOLEM2','GOLEM3','M10','NGA3','NWL3','MANA_GIANT'].entries()){
+ // Fresh board per selected card avoids the BOT turn clock removing fixture nodes.
+ for(const [i,id] of [process.env.GOLEM_STAGE_ID||'GOLEM3'].entries()){
   const side=i%2?'opp':'me';
   await page.evaluate(async({summon,cardEl,card,side})=>{const render=(await import('/'+cardEl.file))[cardEl.name],play=(await import('/'+summon.file))[summon.name];const node=render(card,{field:true,fullArt:true});document.querySelector(side==='me'?'#meRow .zone-mon':'#oppRow .zone-mon').append(node);window.stageStatus={id:card.id,hidden:document.hidden,connected:node.isConnected};void play(node,'summon').then(complete=>{window.stageStatus.complete=complete;});},{summon,cardEl,card:{...DB[id],uid:'golem-stage-'+id},side});
   if(id==='VITAL2'||id==='VITAL3'){assert.equal(await page.locator('.golem-summon,.slate-summon').count(),0);results.push({id,animation:'none'});}else{
-   await page.locator('.golem-summon').waitFor({state:'attached',timeout:30000});await page.clock.runFor(16);
+   await page.locator('.golem-summon').waitFor({state:'attached',timeout:30000});await page.waitForTimeout(16);
    const wrap=await page.locator('.golem-summon').evaluate(n=>({...n.dataset}));assert.equal(wrap.cardId,id);assert.equal(wrap.variant,'1');assert.equal(await page.locator('.slate-summon').count(),0);await page.screenshot({path:evidence+'/'+id+'-deployed.png'});
-   await page.clock.runFor(1750);if(id!=='HALF_ELF')await page.screenshot({path:evidence+'/'+id+'-landing.png'});await page.clock.runFor(3000);assert.equal(await page.locator('.golem-summon').count(),0);results.push({id,side,wrap});
+   await page.waitForTimeout(1750);if(id!=='HALF_ELF')await page.screenshot({path:evidence+'/'+id+'-landing.png'});await page.waitForTimeout(3000);assert.equal(await page.locator('.golem-summon').count(),0);results.push({id,side,wrap});
   }
   assert.equal(await page.locator('[data-uid="golem-stage-'+id+'"]').evaluate(n=>n.style.visibility),'');await page.evaluate(id=>document.querySelector('[data-uid="golem-stage-'+id+'"]').remove(),id);console.log('PASS deployed',id);
  }
- assert.deepEqual(errors,[]);await fs.writeFile(evidence+'/staging-browser.json',JSON.stringify({origin,sha:manifest.sha,summon,cardEl,results,errors,boundary:'Deployed production playMonster and cardEl on a real BOT board. Account/API and temporary field cards are fixtures; engine summon conditions are not bypassed in an authenticated match. Normal hand/generated routes were tested locally. No authenticated online match or account mutation.'},null,2));
-}catch(error){await page.screenshot({path:evidence+'/staging-failure.png'});await fs.writeFile(evidence+'/staging-failure.json',JSON.stringify({message:error.message,errors,warnings,state:await page.evaluate(()=>window.stageStatus)},null,2));throw error;}finally{await browser.close();}
+ assert.deepEqual(errors,[]);await fs.writeFile(evidence+'/staging-'+(process.env.GOLEM_STAGE_ID||'GOLEM3')+'.json',JSON.stringify({origin,sha:manifest.sha,summon,cardEl,results,errors,boundary:'Deployed production playMonster and cardEl on a real BOT board. Account/API and temporary field cards are fixtures; engine summon conditions are not bypassed in an authenticated match. Normal hand/generated routes were tested locally. No authenticated online match or account mutation.'},null,2));
+}catch(error){await page.screenshot({path:evidence+'/staging-failure.png'});await fs.writeFile(evidence+'/staging-failure.json',JSON.stringify({message:error.message,results,errors,warnings,state:await page.evaluate(()=>window.stageStatus)},null,2));throw error;}finally{await browser.close();}

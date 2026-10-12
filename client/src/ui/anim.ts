@@ -1,5 +1,6 @@
 import {prepareTaunt,cancelTaunts} from './taunt/runtime';
 export {warmTaunt} from './taunt/runtime';
+import {usesAssassinStrike} from './assassinAttack/model';
 import {prepareEvade,cancelEvades} from './evade/runtime';
 import {isVampire} from './vampireSummon/selection';
 import {playVampireSummon} from './vampireSummon/runtime';
@@ -519,7 +520,18 @@ export async function attackStrike(uid:string,targetUid:string|null,defender:Vie
   const source=combatCard(uid),target=targetUid?combatCard(targetUid):combatPortrait(defender);
   if(!source||!target||fxSkip)return;
   sfx('attack');
-  await boardMotionScope(signal=>playMonster(source,'attack',{target,signal,exhaust,side:defender==='opp'?1:-1,onImpact:()=>{if(contactDamage>0)sfx(targetUid?'impact':'facehit');onImpact?.();}}));
+  let impacted=false;
+  const impact=()=>{if(impacted)return;impacted=true;if(contactDamage>0)sfx(targetUid?'impact':'facehit');onImpact?.();};
+  await boardMotionScope(async signal=>{
+    if(usesAssassinStrike(source.dataset.cardId)){
+      try{
+        const {playAssassinStrike}=await import('./assassinAttack/runtime');
+        if(signal.aborted||fxSkip)return false;
+        return await playAssassinStrike(source,target,{signal,side:defender==='opp'?0:1,onImpact:impact});
+      }catch(error){if(import.meta.env.DEV)console.warn('Assassin attack presentation failed',error);if(signal.aborted||fxSkip||impacted)return false;}
+    }
+    return playMonster(source,'attack',{target,signal,exhaust,side:defender==='opp'?1:-1,onImpact:impact});
+  });
   if(exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');source.style.filter='grayscale(1) brightness(.57)';}
 }
 /** A counter is presentation metadata, never another ordinary attack action. */
