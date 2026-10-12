@@ -1,0 +1,20 @@
+vite v5.4.21 building for production...
+transforming...
+✓ 165 modules transformed.
+rendering chunks...
+computing gzip size...
+../docs/vfx-prototypes/2026-10-12-guts-four/build/guts-four.html                      0.36 kB │ gzip:   0.31 kB
+../docs/vfx-prototypes/2026-10-12-guts-four/build/assets/board-BB9KxTU_.css          17.62 kB │ gzip:   4.96 kB
+../docs/vfx-prototypes/2026-10-12-guts-four/build/assets/guts-four-f1VVcPbY.css     233.82 kB │ gzip:  49.91 kB
+../docs/vfx-prototypes/2026-10-12-guts-four/build/assets/renderDensity-e_zG4zKc.js    3.58 kB │ gzip:   1.85 kB
+../docs/vfx-prototypes/2026-10-12-guts-four/build/assets/ceremonyScene-BEksNOpl.js    8.95 kB │ gzip:   3.98 kB
+../docs/vfx-prototypes/2026-10-12-guts-four/build/assets/paperDraw-D-xjCyxZ.js       10.23 kB │ gzip:   4.63 kB
+../docs/vfx-prototypes/2026-10-12-guts-four/build/assets/duelScene-Ce99btvY.js      103.33 kB │ gzip:  36.17 kB
+../docs/vfx-prototypes/2026-10-12-guts-four/build/assets/guts-four-C3LXweN1.js      401.82 kB │ gzip: 170.21 kB
+../docs/vfx-prototypes/2026-10-12-guts-four/build/assets/board-BS4Mn_r7.js          800.18 kB │ gzip: 232.02 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 6m 48s

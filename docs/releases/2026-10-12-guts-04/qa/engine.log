@@ -1,0 +1,43 @@
+PASS contact side 0 count 1
+PASS contact side 0 count 2
+PASS contact side 0 count 3
+PASS contact side 1 count 1
+PASS contact side 1 count 2
+PASS contact side 1 count 3
+PASS no false survival: nonlethal
+PASS no false survival: zero
+PASS no false survival: immune
+PASS no false survival: no-counter
+PASS no false survival: egg
+PASS no false survival: giant-slayer
+PASS one HP survives even when HP loss is zero
+PASS counterattack emits one explicit survival for the attacker
+PASS friendly redirected contact consumes once
+PASS counterOrder legacy volley has explicit survival
+PASS lightning trap emits one result per actually spent counter
+PASS MIND_BURST cost never emits survival
+PASS gutsOnHit grant never emits survival
+{
+  "passed": 19,
+  "checks": [
+    "contact side 0 count 1",
+    "contact side 0 count 2",
+    "contact side 0 count 3",
+    "contact side 1 count 1",
+    "contact side 1 count 2",
+    "contact side 1 count 3",
+    "no false survival: nonlethal",
+    "no false survival: zero",
+    "no false survival: immune",
+    "no false survival: no-counter",
+    "no false survival: egg",
+    "no false survival: giant-slayer",
+    "one HP survives even when HP loss is zero",
+    "counterattack emits one explicit survival for the attacker",
+    "friendly redirected contact consumes once",
+    "counterOrder legacy volley has explicit survival",
+    "lightning trap emits one result per actually spent counter",
+    "MIND_BURST cost never emits survival",
+    "gutsOnHit grant never emits survival"
+  ]
+}
