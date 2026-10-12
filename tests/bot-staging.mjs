@@ -5,16 +5,16 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {build} from 'esbuild';
 const {chromium}=await import(process.env.LORE_PLAYWRIGHT_MODULE||'playwright');
-const origin='https://test.yourlore.xyz',out=process.env.BOT_QA_OUT;
+const origin='https://test.yourlore.xyz',out=process.env.BOT_QA_OUT,dist=process.env.BOT_DIST||'client/dist';
 assert(out,'Set BOT_QA_OUT');await fs.mkdir(out,{recursive:true});
 const dir=await fs.mkdtemp('/tmp/lore-bot-staging-');
 const browser=await chromium.launch({channel:'chrome',headless:true,args:['--disable-quic','--disable-http2']});
 try{
  await build({stdin:{contents:`export * from './client/src/shared/engine';export * from './client/src/shared/bot';export * from './client/src/shared/botNpcs';export * from './client/src/shared/botActions';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/core.mjs'});
  const C=await import(dir+'/core.mjs');
- const assets=(await fs.readdir('client/dist/assets')).filter(n=>/\.(js|css)$/.test(n));
+ const assets=(await fs.readdir(path.join(dist,'assets'))).filter(n=>/\.(js|css)$/.test(n));
  const digest=b=>createHash('sha256').update(b).digest('hex'),parity=[];
- for(const file of assets){const response=await fetch(origin+'/assets/'+file);assert(response.ok,file+' '+response.status);const remote=Buffer.from(await response.arrayBuffer()),local=await fs.readFile('client/dist/assets/'+file);assert.equal(digest(remote),digest(local),file);parity.push({file,sha256:digest(remote)});}
+ for(const file of assets){const response=await fetch(origin+'/assets/'+file);assert(response.ok,file+' '+response.status);const remote=Buffer.from(await response.arrayBuffer()),local=await fs.readFile(path.join(dist,'assets',file));assert.equal(digest(remote),digest(local),file);parity.push({file,sha256:digest(remote)});}
  const worker=assets.find(n=>/^bot\.worker-.*\.js$/.test(n));assert(worker,'Deployed dedicated thinker worker');
  const cases=[];
  for(const tier of ['hard','hell'])for(const [index,deck] of C.botNpc(tier).decks.entries()){
