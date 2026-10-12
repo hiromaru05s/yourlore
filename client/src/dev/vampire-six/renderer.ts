@@ -21,6 +21,10 @@ export class Renderer{
  // A local value pocket separates red teeth from detailed red card art.
  float pocket=exp(-pow(length(local/vec2(106.,132.)),4.));
  c*=1.-focus*pocket*.55;c*=1.-min(.35,shadow);
+ c=mix(c,c*vec3(.65,.30,.38)+vec3(.045,.0,.008),focus*.45);
+ float rootFlow=exp(-pow((abs(local.x)-37.-4.*sin(local.y*.05+variant))/2.2,2.));
+ float edgeFlow=exp(-pow((abs(local.y)-108.)/2.8,2.))*(1.-smoothstep(62.,79.,abs(local.x)));
+ c+=vec3(.18,.001,.014)*max(rootFlow*.34,edgeFlow)*focus;
  c=mix(c,vec3(.055,.001,.012),holes*.78);c+=vec3(.60,.015,.05)*rim*.30;
  float seam=exp(-local.y*local.y/6.)*(1.-smoothstep(52.,93.,abs(local.x)));
  c+=vec3(.90,.30,.36)*seam*impact;

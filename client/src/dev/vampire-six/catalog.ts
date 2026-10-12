@@ -6,12 +6,12 @@ export const ease=(a:number,b:number,t:number)=>{const u=Math.max(0,Math.min(1,(
 export const title=(id:Id)=>DB[id].nameJa||DB[id].name;
 export const rank=(id:Id)=>id==='VAMP_BUTLER'?2:ids.indexOf(id)+1;
 export const designs=[
- {name:'紅牙',en:'CRIMSON SNAP',material:'湾曲した四牙 / 速い一噛み',note:'上下に開いた紅い牙が、一拍の溜めから鋭く閉じる。'},
- {name:'鋸牙',en:'SERRATED BITE',material:'結晶の歯列 / 面で噛み込む',note:'長短の赤い牙が噛み合い、接線から薄く砕けて消える。'},
- {name:'斜咬',en:'OBLIQUE SNAP',material:'斜めの長牙 / 捻って噛む',note:'斜めに構えた長牙が、ひと振りで噛み合う。'},
- {name:'針牙',en:'NEEDLE BITE',material:'細い四牙 / 最短の一撃',note:'細い血紅の牙が絞られ、一瞬で閉じて痕へ収束する。'},
- {name:'血刃',en:'LIQUID BITE',material:'幅広い血の牙 / 柔から鋭へ',note:'濡れた血の曲面が張り、一度噛んで根元からほどける。'},
- {name:'王咬',en:'SOVEREIGN SNAP',material:'大きな紅い歯列 / 重い一噛み',note:'大きく開いた牙を一気に閉じ、短い静止で重さを残す。'},
+ {name:'紅い犬歯',en:'ENAMEL / HINGED CANINES',material:'厚い琺瑯の四牙 · 顎の回転',note:'根元の血から湾曲した犬歯が育ち、顎を一度閉じて沈む。'},
+ {name:'血潮の咬合',en:'LIQUID / VISCOUS JAWS',material:'連続した血の膜 · 張力と滴り',note:'血溜まりが厚い膜と牙へ伸び、一噛みして液体へ戻る。'},
+ {name:'傷口の顎',en:'WOUND / LIVING APERTURE',material:'カードに開く口 · 内側の紅牙',note:'表面の裂け目そのものが口となり、赤い牙を噛み合わせて閉じる。'},
+ {name:'紅玉の鉗子',en:'GARNET / CRYSTAL LOCK',material:'立体結晶の群 · 左右の挟撃',note:'異形の紅玉が左右に組み上がり、交互に噛み込んで崩れる。'},
+ {name:'血帯の蛇牙',en:'RIBBON / COILING FANGS',material:'厚い血の帯 · 巻き締める牙',note:'二本の血帯が尖った鉤へ連なり、一度だけ巻き締めて吸収される。'},
+ {name:'漆翼の咬門',en:'LACQUER / HINGED RELIEF',material:'牙を彫った漆の板 · 閉じる蝶番',note:'カード端の赤い漆が牙のある二枚の翼へ育ち、一度噛んで伏せる。'},
 ];
 export function physics(ms:number,reduced=false){const u=Math.max(0,Math.min(1,(ms-1350)/(CONTACT-1350)));const height=reduced||ms>=CONTACT?0:34*ease(0,420,ms)*(1-u*u);return {height,contact:CONTACT,underside:height};}
 export const phase=(ms:number)=>ms<420?'予兆':ms<970?'開口・溜め':ms<1400?'一噛み':ms<CONTACT?'降下':ms<2210?'接地・余韻':'収束';
