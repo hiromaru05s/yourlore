@@ -112,8 +112,11 @@ export async function handleRank(env: Env, req: Request, path: string, user: Ses
     if (!user) return json(env, { error: "unauthorized" }, 401);
     const matchId = new URL(req.url).searchParams.get("matchId");
     if (!matchId || matchId.length > 128) return json(env, { error: "invalid match" }, 400);
-    const row = await env.DB.prepare(`SELECT * FROM ranked_results WHERE match_id=? AND applied=1 AND (a_id=? OR b_id=?)`)
-      .bind(matchId,user.id,user.id).first<Settlement>();
+    // Queue/friendly URLs carry the public room name; settlement uses the DO's
+    // stable storage identity. Also accept the ledger ID received over the socket.
+    const durableId = env.GAME_ROOM.idFromName(matchId).toString();
+    const row = await env.DB.prepare(`SELECT * FROM ranked_results WHERE match_id IN (?,?) AND applied=1 AND (a_id=? OR b_id=?)`)
+      .bind(matchId,durableId,user.id,user.id).first<Settlement>();
     return json(env, { result: row ? outcomeOf(row)[user.id] : null });
   }
 

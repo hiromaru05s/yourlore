@@ -79,6 +79,7 @@ database_id = "a7dfa4cf-2d90-4a9e-a9e1-2e69dcc4ddea"
 
 [env.staging.vars]
 APP_ORIGIN = "*"
+MATCH_TEST_BOTS = "1"
 GOOGLE_CLIENT_ID = "955911680552-9i1tcrojam3v759dmampaga63d387gvt.apps.googleusercontent.com"
 ADMIN_EMAILS = "maruru836818@gmail.com,suhwoo3@gmail.com"
 

@@ -1,0 +1,29 @@
+{
+  "method": "WCAG relative luminance, computed CSS colors, alpha composited over opaque panel",
+  "background": [
+    37,
+    65,
+    95
+  ],
+  "focusedBackground": [
+    52.599999999999994,
+    75.64,
+    95.88000000000001
+  ],
+  "beforeName": [
+    79,
+    180,
+    255
+  ],
+  "afterName": [
+    217,
+    239,
+    255
+  ],
+  "beforeNormal": 4.652416892111935,
+  "beforeFocused": 3.9738204270922544,
+  "afterNormal": 8.870355062010121,
+  "afterFocused": 7.576534725583427,
+  "highlightAnimation": "none",
+  "highlightInsetShadow": "none"
+}

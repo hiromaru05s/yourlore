@@ -1,0 +1,46 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checks": [
+    {
+      "kind": "rain",
+      "before": 0,
+      "owner": 0,
+      "frames": 81,
+      "sources": [
+        "status-source"
+      ],
+      "count": "1"
+    },
+    {
+      "kind": "rain",
+      "before": 5,
+      "owner": 1,
+      "frames": 88,
+      "sources": [
+        "status-source"
+      ],
+      "count": "6"
+    },
+    {
+      "kind": "heart",
+      "before": 5,
+      "owner": 0,
+      "frames": 87,
+      "sources": [
+        "heart"
+      ],
+      "count": "7"
+    },
+    {
+      "case": "mobile"
+    },
+    {
+      "case": "reduced-motion"
+    },
+    {
+      "case": "destroy-during-playback"
+    }
+  ],
+  "errors": [],
+  "boundary": "Actual BaseController on GameView, driven by real reducer events. Not an authenticated two-player match."
+}

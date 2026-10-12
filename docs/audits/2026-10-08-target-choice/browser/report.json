@@ -1,0 +1,11 @@
+{
+  "origin": "http://127.0.0.1:5228",
+  "checks": [
+    "4 responsive viewports, no horizontal overflow",
+    "enemy-only sword selection, explicit warning and cancellation",
+    "one atomic committed cast and cross-side expiry",
+    "timeout invalidates open pre-cast review",
+    "no-target block and automatic own-victim preview"
+  ],
+  "errors": []
+}
