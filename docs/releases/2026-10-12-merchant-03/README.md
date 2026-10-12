@@ -9,7 +9,7 @@
 
 ## 確認
 
-型チェック、本番ビルド、production suite 91/91を通過。実ブラウザー21グループは全て0msから開始し、console errorは0件。390px幅の闇商人も構図を確認。`dark-runtime.mp4` / `royal-runtime.mp4` は実時間の連続スクリーンキャプチャ（音声なし）。
+型チェック、本番ビルド、production suite 91/91を通過。実ブラウザー21グループは全て0msから開始し、console errorは0件。公開ビルドと同じ npm ci 環境でも21グループを再実行し通過（`browser-locked-deps.json`）。390px幅の闇商人も構図を確認。`dark-runtime.mp4` / `royal-runtime.mp4` は実時間の連続スクリーンキャプチャ（音声なし）。
 
 - `tests/merchant-runtime.mjs`: 03固定、最初の描画、中央カードからの引き渡し、abort/resize/pagehide/非表示/切断、準備中キャンセル、再発動、低減モーションの標準経路へのフォールバック、描画失敗、音/GPU解放。
 - `docs/vfx-prototypes/2026-10-12-merchant-coin-physics/check.cjs`: 12ケース。回転正規化、接地、連続性、枚数、消失、決定性。
