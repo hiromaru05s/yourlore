@@ -1,0 +1,23 @@
+vite v5.4.21 building for production...
+transforming...
+✓ 170 modules transformed.
+rendering chunks...
+computing gzip size...
+../docs/vfx-prototypes/2026-10-13-dragon-spiral-five/build/dragon-spiral-five.html                    0.35 kB │ gzip:   0.28 kB
+../docs/vfx-prototypes/2026-10-13-dragon-spiral-five/build/assets/preview-T6qe5qiu.css                4.96 kB │ gzip:   2.00 kB
+../docs/vfx-prototypes/2026-10-13-dragon-spiral-five/build/assets/renderer-CDpg3JYh.css              22.08 kB │ gzip:   6.13 kB
+../docs/vfx-prototypes/2026-10-13-dragon-spiral-five/build/assets/board-DCyTUHTx.css                216.67 kB │ gzip:  45.92 kB
+../docs/vfx-prototypes/2026-10-13-dragon-spiral-five/build/assets/dragon-spiral-five-Bg2_AGIH.js      2.17 kB │ gzip:   1.11 kB
+../docs/vfx-prototypes/2026-10-13-dragon-spiral-five/build/assets/renderDensity-BOUt0hju.js           3.55 kB │ gzip:   1.83 kB
+../docs/vfx-prototypes/2026-10-13-dragon-spiral-five/build/assets/preview-DJVQ2AdP.js                 5.84 kB │ gzip:   3.22 kB
+../docs/vfx-prototypes/2026-10-13-dragon-spiral-five/build/assets/ceremonyScene-lPB6Nry3.js           8.93 kB │ gzip:   3.96 kB
+../docs/vfx-prototypes/2026-10-13-dragon-spiral-five/build/assets/paperDraw-BUXjuBaz.js              10.27 kB │ gzip:   4.65 kB
+../docs/vfx-prototypes/2026-10-13-dragon-spiral-five/build/assets/duelScene-CzV4YWmk.js             100.42 kB │ gzip:  35.19 kB
+../docs/vfx-prototypes/2026-10-13-dragon-spiral-five/build/assets/board-giQa3YMI.js                 191.68 kB │ gzip:  75.74 kB
+../docs/vfx-prototypes/2026-10-13-dragon-spiral-five/build/assets/renderer-BSgD1xfz.js            1,148.23 kB │ gzip: 368.16 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 15.65s
