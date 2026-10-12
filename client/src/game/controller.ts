@@ -1,4 +1,6 @@
 import {hatchPairs} from '../ui/hatchSummon/selection';
+import { BotThinker } from './botThinker';
+import { observationSample } from '../shared/botObservation';
 import {tauntRollIndex} from '../ui/taunt/timing';
 import {evasionRollIndex} from '../ui/evade/timing';
 import {playStatusExtinction,warmStatusExtinctions,disposeStatusExtinctions} from '../ui/statusExtinction/runtime';
@@ -20,19 +22,16 @@ import {playDuelOpening,warmOpening} from "../ui/duelOpeningDirector";
 import {waitForDuel} from "../ui/duelReadiness";
 import {releaseMonster} from '../ui/fieldLayout';
 import { paintDuelClock } from '../ui/duelClock';
-// ============================================================
-// LORE — game controllers.
+// =====================================================// LORE — game controllers.
 // BaseController turns engine events into log + animation + render.
 // Events play back SEQUENTIALLY (summon → trap → destroy …) so the
 // player can follow chains without reading the log.
 // LocalController reduces locally and drives the bot.
 // (OnlineController lives in ./online and reuses BaseController.)
-// ============================================================
-import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
+// =====================================================import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
 import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef } from "../shared/engine";
-import type { BotDifficulty } from "../shared/bot";
-import {BotPlanner} from "./botPlanner";
+import { safeGreedy, legalBotAction, type BotDifficulty } from "../shared/bot";
 import { DB, STARTERS, hasPassive } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog, logToText } from "../ui/log";
@@ -901,12 +900,10 @@ export abstract class BaseController implements BoardHandlers {
     this.maybeBot();
   }
 
-  // ============================================================
-  // turn timer — 50s/turn. Popups at 25s (1.5s) and a countdown from
+  // =====================================================  // turn timer — 50s/turn. Popups at 25s (1.5s) and a countdown from
   // 5s; the timer chip shakes at ≤5s; on 0 the active player's turn
   // auto-ends (online: only my own client submits, server validates).
-  // ============================================================
-  private syncTimer(): void {
+  // =====================================================  private syncTimer(): void {
     if (this.dead) return;
     if (!this.useTurnClock) { this.stopTimer(); return; }
     const g = this.state;
@@ -1148,14 +1145,14 @@ export abstract class BaseController implements BoardHandlers {
   }
 }
 
-// ============================================================
-// LocalController — single device, you vs bot
-// ============================================================
-const lastNpcDecks = new Map<string, number>();
+// =====================================================// LocalController — single device, you vs bot
+// =====================================================const lastNpcDecks = new Map<string, number>();
 
 export class LocalController extends BaseController {
   private botTimer = 0;
-  private readonly planner = new BotPlanner();
+  private thinker = new BotThinker();
+  private botBusy = false;
+  private botDisposed = false;
   private difficulty: BotDifficulty;
 
   constructor(root: HTMLElement, exits: ControllerExits, playerName = "PLAYER 1", deck?: string[], difficulty: BotDifficulty = "hard") {
@@ -1175,7 +1172,7 @@ export class LocalController extends BaseController {
   }
 
   protected applyResult(res: ReduceResult, animate = true): void {
-    if(res.state.over){clearTimeout(this.botTimer);this.planner.dispose();}
+    if(res.state.over){clearTimeout(this.botTimer);this.thinker.destroy();}
     super.applyResult(res,animate);
   }
 
@@ -1189,7 +1186,7 @@ export class LocalController extends BaseController {
 
   protected maybeBot(): void {
     const g = this.state;
-    if (g.over) { this.planner.dispose(); return; }
+    if (g.over) { this.thinker.destroy(); return; }
     if (g.players[actingSide(g)].isBot) {
       clearTimeout(this.botTimer);
       // playback has already finished by the time afterApply runs — a short beat is enough
@@ -1201,19 +1198,28 @@ export class LocalController extends BaseController {
   private botTurnSteps = 0;
   private async botStep(): Promise<void> {
     const g = this.state;
-    if (this.dead || g.over || !g.players[actingSide(g)].isBot) return;
+    if (this.botDisposed || this.botBusy || g.over || !g.players[actingSide(g)].isBot) return;
     // 안전망: 봇이 한 턴에서 비정상적으로 많은 행동을 반복하면(거부 루프 등) 강제 턴 종료.
     // 정상 턴은 수십 액션 이내 — 200회는 버그가 아니면 도달 불가.
     if (g.turn !== this.botTurnNo) { this.botTurnNo = g.turn; this.botTurnSteps = 0; }
     if (++this.botTurnSteps > 200) {
       console.warn("[bot] loop guard — forcing endTurn on turn", g.turn);
-      this.applyResult(reduce(g, g.pending?.allowCancel ? ({ type: "pick", uid: null } as Action) : ({ type: "endTurn" } as Action)));
+      // Finish mandatory choices before ending the turn; endTurn is refused
+      // while a non-cancellable target is pending.
+      const action = g.pending
+        ? legalBotAction(g, { type: 'pick', uid: null })
+        : { type: 'endTurn' } as Action;
+      this.applyResult(reduce(g, action));
       return;
     }
-    const action = await this.planner.decide(g, this.difficulty);
-    if(!action||this.dead||this.state!==g||g.over)return;
-    this.applyResult(reduce(g, action));
+    this.botBusy = true;
+    try {
+      const action = await this.thinker.decide(g, this.difficulty);
+      if (this.botDisposed || this.state !== g || g.over) return;
+      this.applyResult(reduce(g, action ?? legalBotAction(g, safeGreedy(observationSample(g, actingSide(g), 0)))));
+    } finally { this.botBusy = false; }
+
   }
 
-  destroy(): void { clearTimeout(this.botTimer); this.planner.dispose(); super.destroy(); }
+  destroy(): void { this.botDisposed = true; clearTimeout(this.botTimer); this.thinker.destroy(); super.destroy(); }
 }

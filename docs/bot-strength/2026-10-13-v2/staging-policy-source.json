@@ -1,0 +1,8 @@
+{
+  "source": "ec89a591",
+  "overrides": [
+    "client/src/shared/bot.ts",
+    "client/src/shared/botNpcs.ts"
+  ],
+  "engine": "Current reducer with equivalent clone optimization; no rules changed"
+}

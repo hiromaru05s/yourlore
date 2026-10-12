@@ -1,0 +1,67 @@
+{
+  "stats": [
+    {
+      "difficulty": "easy",
+      "ms": 88.60000000149012,
+      "action": {
+        "type": "buyMarket",
+        "i": 0
+      },
+      "advanced": true,
+      "pure": true
+    },
+    {
+      "difficulty": "normal",
+      "ms": 65.09999999403954,
+      "action": {
+        "type": "play",
+        "idx": 0
+      },
+      "advanced": true,
+      "pure": true
+    },
+    {
+      "difficulty": "hard",
+      "ms": 90.80000000447035,
+      "action": {
+        "type": "play",
+        "idx": 0
+      },
+      "advanced": true,
+      "pure": true
+    },
+    {
+      "difficulty": "hell",
+      "ms": 135,
+      "action": {
+        "type": "play",
+        "idx": 0
+      },
+      "advanced": true,
+      "pure": true
+    }
+  ],
+  "stress": {
+    "ms": 1925.5,
+    "ticks": 385,
+    "action": {
+      "type": "buySupply",
+      "i": 0
+    },
+    "advanced": true
+  },
+  "ticks": 538,
+  "budgetAdvanced": true,
+  "fallbackAdvanced": true,
+  "timeoutResult": null,
+  "timeoutTerminated": true,
+  "canceledResult": null,
+  "staleApplied": 0,
+  "disposedApplied": 0,
+  "activeApplied": 1,
+  "defense": {
+    "type": "pick",
+    "uid": "grow"
+  },
+  "errors": []
+}
