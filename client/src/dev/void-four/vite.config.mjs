@@ -1,5 +1,5 @@
 import {defineConfig} from 'vite';
 import fs from 'node:fs/promises';
-const qa=new URL('../../../../docs/vfx-prototypes/2026-10-12-void-four/qa/',import.meta.url).pathname;
+const qa=new URL('../../../../docs/vfx-prototypes/2026-10-12-void-four/qa-r2/',import.meta.url).pathname;
 const root=new URL('../../../',import.meta.url).pathname;
 export default defineConfig({root,plugins:[{name:'void-evidence',configureServer(server){server.middlewares.use('/__void-evidence/',async(req,res)=>{const name=(req.url||'').replace(/^\//,'');if(req.method!=='POST'||!/^([a-z0-9-]+)\.(webm|json|png)$/.test(name)){res.statusCode=400;res.end();return;}const chunks=[];let bytes=0;for await(const c of req){bytes+=c.length;if(bytes>40000000){res.statusCode=413;res.end();return;}chunks.push(c);}await fs.mkdir(qa,{recursive:true});await fs.writeFile(qa+name,Buffer.concat(chunks));res.end('saved');});}}],server:{host:'127.0.0.1',port:55217,strictPort:true,fs:{allow:[new URL('../../../../',import.meta.url).pathname]}},build:{copyPublicDir:false,outDir:new URL('../../../../docs/vfx-prototypes/2026-10-12-void-four/build',import.meta.url).pathname,emptyOutDir:true,rollupOptions:{input:root+'void-four.html'}}});

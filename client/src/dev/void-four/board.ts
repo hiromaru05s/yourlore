@@ -21,13 +21,12 @@ function draw(){
  if(ms>=designs[v].duration||reduced)return;
  if(ms<lastMs)contact=0;if(lastMs<designs[v].hit&&ms>=designs[v].hit)contact++;lastMs=ms;
  for(const[n,target]of chosen.entries()){
-  target.style.visibility='hidden';const rig=rigs[n],index=multi?n:requestedHand,hand=sourceHands[index],r=layoutRect(target),m=motion(v,ms),rawBase=projectedPlacement(target,180,270),correction=viewportCorrection(target,rawBase),base=correction.multiply(rawBase);
+  target.style.visibility='hidden';const rig=rigs[n],r=layoutRect(target),m=motion(v,ms),rawBase=projectedPlacement(target,180,270),correction=viewportCorrection(target,rawBase),base=correction.multiply(rawBase);
   const elevation=Number(target.closest<HTMLElement>('[data-board-plane]')?.dataset.boardPlane)||0;
   const end=correction.multiply(boardMatrix(r.left,r.top,elevation+m.lift*r.width).scale(r.width/180,r.height/270));
-  const hr=hand?.getBoundingClientRect();const start=hr?new DOMMatrix().translate(hr.left,hr.top).scale(hr.width/180,hr.height/270):end;
-  // Opponent card is already public in this fixture; no hidden hand is captured.
-  const progress=side===1?1:m.transfer;const a=start.toFloat64Array(),b=end.toFloat64Array();const matrix=new DOMMatrix(Array.from(a,(x,i)=>x+(b[i]-x)*progress));
-  rig.card.el.style.transform=matrix.toString();rig.ground.el.style.transform=base.toString();rig.card.el.style.visibility='visible';rig.ground.el.style.visibility=progress>.95?'visible':'hidden';
+  // The hand triggers the summon; the aperture is fixed above its destination.
+  // There is no flight from the hand or from the board's Rift zone.
+  rig.card.el.style.transform=end.toString();rig.ground.el.style.transform=base.toString();rig.card.el.style.visibility='visible';rig.ground.el.style.visibility='visible';
   renderer!.render(rig.card.canvas,id,v,ms,{board:true,pass:'card'});renderer!.render(rig.ground.canvas,id,v,ms,{board:true,pass:'ground'});
  }
 }

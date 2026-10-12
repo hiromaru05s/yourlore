@@ -1,14 +1,14 @@
 export const CARDS=['VOID_APOSTLE','GM6_1'] as const;
 export const names=['虚無空間の使徒','次元幽閉者'];
 export const designs=[
- {name:'裂界の開帳',en:'REND / MEMBRANE',duration:2500,hit:1850,note:'カードの中心が裂け、絵柄ごと薄い空間膜に反る。裂け目が縫い合わさって着地。',jailer:'裂け目を外側から押し締め、最後の光を封じる。'},
- {name:'四面の次元折り',en:'FOLD / FACET',duration:2600,hit:1940,note:'カードの四面が立体的に折れ、黒い稜線を持つ小さな次元塊に凝縮。面を押し開いて顕現。',jailer:'四面が順に噛み合い、整然と封を解いて着地。'},
- {name:'虚層の編み戻し',en:'SHEAR / LAMELLA',duration:2700,hit:2050,note:'絵柄が厚みのある薄層へ分かれ、位相をずらして流れる。下層から時間差で編み戻す。',jailer:'離れた薄層を一方向へ揃え、上から順にロックする。'},
- {name:'黒檻の顕現',en:'LOCK / ARCHITECTURE',duration:2800,hit:2110,note:'四辺から黒い檻がせり上がる。内圧で開いた格子が、カードの縁へ折り戻る。',jailer:'カードの四辺から檻を組み、天蓋を閉じて盤面へ沈める。'},
+ {name:'黒淵の噴出',en:'ABYSS / EJECTION',duration:1720,hit:1110,note:'何もない空中に黒い渦が瞬時に開く。奥からカードが一気に噴き出し、渦だけが背後へ潰れる。',jailer:'黒淵から重いカードが直進。飛び出した直後に入口を押し潰し、短く制動して着地。'},
+ {name:'斜裂の抜け駆け',en:'FISSURE / SIDE EXIT',duration:1840,hit:1220,note:'斜めに走る黒い裂け目。カードが片縁から横滑りで抜け出し、裂け目は後端を追って縫い閉じる。',jailer:'狭い斜裂からカードを引き抜く。切断面が後端を追い、鋭く閉じてから着地。'},
+ {name:'渦底からの反転',en:'VORTEX / ORBIT EXIT',duration:1990,hit:1370,note:'渦の奥からカードが回り込みながら現れる。黒紫の膜を振り切り、回転を止めて盤面へ降りる。',jailer:'逆回転する渦からカードが抜け、入口を巻き締める。回転を一段ずつ制動して着地。'},
+ {name:'黒膜の突破',en:'MEMBRANE / BREACH',duration:1770,hit:1160,note:'黒い穴の表面が一瞬ふくらみ、カードが押し破る。裂けた厚い膜は四方へ反り、穴へ引き戻される。',jailer:'黒膜を正面から押し開く。カード通過後、裂けた膜が四方から急速に閉じて封鎖する。'},
 ];
-export const DURATION=3200;
+export const DURATION=2800;
 export const clamp=(x:number)=>Math.max(0,Math.min(1,x));
 export const ease=(x:number)=>{x=clamp(x);return x*x*(3-2*x);};
 export const ramp=(t:number,a:number,b:number)=>ease((t-a)/(b-a));
 export const envelope=(t:number,a:number,b:number,c:number,d:number)=>ramp(t,a,b)*(1-ramp(t,c,d));
-export function motion(v:number,ms:number,reduced=false){const d=designs[v];return {transfer:reduced?1:ramp(ms,140,760),lift:reduced?0:.32*envelope(ms,0,240,1460,d.hit),contact:reduced?0:envelope(ms,d.hit,d.hit+55,d.hit+110,d.hit+390),activity:reduced?0:envelope(ms,180,550,1750,d.duration),done:ms>=d.duration};}
+export function motion(v:number,ms:number,reduced=false){const d=designs[v];return {transfer:1,lift:0,contact:reduced?0:envelope(ms,d.hit,d.hit+35,d.hit+85,d.hit+270),activity:reduced?0:envelope(ms,35,130,700,1100),done:ms>=d.duration};}
