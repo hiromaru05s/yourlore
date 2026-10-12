@@ -1,0 +1,197 @@
+{
+  "results": [
+    {
+      "normalSpeed": {
+        "frames": 113,
+        "pixels": 147830,
+        "maxPhase": 1
+      }
+    },
+    {
+      "parity": {
+        "surfaceMax": 0,
+        "results": [
+          {
+            "phase": 0.1,
+            "max": 0,
+            "changed": 0
+          },
+          {
+            "phase": 0.25,
+            "max": 0,
+            "changed": 0
+          },
+          {
+            "phase": 0.45,
+            "max": 0,
+            "changed": 0
+          },
+          {
+            "phase": 0.65,
+            "max": 0,
+            "changed": 0
+          },
+          {
+            "phase": 0.8,
+            "max": 0,
+            "changed": 0
+          },
+          {
+            "phase": 0.93,
+            "max": 0,
+            "changed": 0
+          }
+        ]
+      }
+    },
+    {
+      "side": 0,
+      "before": 0,
+      "mid": [
+        {
+          "uid": "target-0",
+          "phase": 0.335,
+          "pixels": 147830,
+          "badge": "腐敗 0/3"
+        }
+      ],
+      "contact": [
+        {
+          "uid": "target-0",
+          "phase": 0.876,
+          "pixels": 145374,
+          "badge": "腐敗 1/3"
+        }
+      ]
+    },
+    {
+      "side": 0,
+      "before": 1,
+      "mid": [
+        {
+          "uid": "target-0",
+          "phase": 0.335,
+          "pixels": 147830,
+          "badge": "腐敗 1/3"
+        }
+      ],
+      "contact": [
+        {
+          "uid": "target-0",
+          "phase": 0.884,
+          "pixels": 145374,
+          "badge": "腐敗 2/3"
+        }
+      ]
+    },
+    {
+      "side": 0,
+      "before": 2,
+      "mid": [
+        {
+          "uid": "target-0",
+          "phase": 0.335,
+          "pixels": 147830,
+          "badge": "腐敗 2/3"
+        }
+      ],
+      "contact": [
+        {
+          "uid": "target-0",
+          "phase": 0.884,
+          "pixels": 145374,
+          "badge": "腐敗 3/3"
+        }
+      ]
+    },
+    {
+      "side": 1,
+      "before": 0,
+      "mid": [
+        {
+          "uid": "target-1",
+          "phase": 0.328,
+          "pixels": 147830,
+          "badge": "腐敗 0/3"
+        }
+      ],
+      "contact": [
+        {
+          "uid": "target-1",
+          "phase": 0.876,
+          "pixels": 145374,
+          "badge": "腐敗 1/3"
+        }
+      ]
+    },
+    {
+      "side": 1,
+      "before": 1,
+      "mid": [
+        {
+          "uid": "target-1",
+          "phase": 0.328,
+          "pixels": 147830,
+          "badge": "腐敗 1/3"
+        }
+      ],
+      "contact": [
+        {
+          "uid": "target-1",
+          "phase": 0.876,
+          "pixels": 145374,
+          "badge": "腐敗 2/3"
+        }
+      ]
+    },
+    {
+      "side": 1,
+      "before": 2,
+      "mid": [
+        {
+          "uid": "target-1",
+          "phase": 0.328,
+          "pixels": 147830,
+          "badge": "腐敗 2/3"
+        }
+      ],
+      "contact": [
+        {
+          "uid": "target-1",
+          "phase": 0.876,
+          "pixels": 145374,
+          "badge": "腐敗 3/3"
+        }
+      ]
+    },
+    {
+      "ward": true
+    },
+    {
+      "reason": "skip",
+      "clean": true
+    },
+    {
+      "reason": "resize",
+      "clean": true
+    },
+    {
+      "reason": "hidden",
+      "clean": true
+    },
+    {
+      "mobile": true
+    },
+    {
+      "concurrent": true
+    },
+    {
+      "reduced": true
+    },
+    {
+      "dispose": true
+    }
+  ],
+  "errors": [],
+  "boundary": "Local actual reducer/controller board. Development setup; no authenticated online match."
+}

@@ -1,0 +1,19 @@
+PASS Sword either-side choice, exact amount and casting-turn expiry (0/0)
+PASS Sword either-side choice, exact amount and casting-turn expiry (0/1)
+PASS Sword either-side choice, exact amount and casting-turn expiry (0/4)
+PASS Sword either-side choice, exact amount and casting-turn expiry (1/0)
+PASS Sword either-side choice, exact amount and casting-turn expiry (1/1)
+PASS Sword either-side choice, exact amount and casting-turn expiry (1/4)
+PASS Sword empty board / enemy Aura / invalid target rejected before costs
+PASS Legacy Sword choice may be declined; timeout never buffs enemy; bot chooses ally
+PASS Preview is pure, hides traps, canonicalizes deck order, never exposes draw or RNG
+PASS Stale source / forged / duplicate selections cannot spend or trigger effects
+PASS Optional zero targets is an explicit cast; mandatory Sword is not
+PASS Automatic removals stay automatic and risky instead of promising selectable targets
+PASS FIRE_BALL lethal self-cost cannot be undone by the preselected enemy target
+PASS Invalid own-monster picks preserve the choice and S3 cannot target a tribe
+PASS Automatic removal eligibility uses each target owner and excludes enemy Aura
+PASS Auto-target preview matches actual victim, including own-side and ties
+PASS Rune echo keeps its second Sword choice instead of silently cancelling it
+PASS Zero shield and risky summon/chest/global effects are reviewed
+PASS 18 safety scenarios + 26 catalog target-plan parity cases

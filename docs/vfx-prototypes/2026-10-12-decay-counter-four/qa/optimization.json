@@ -1,0 +1,20 @@
+{
+  "before": {
+    "comparisonFrameMsP50": 50,
+    "comparisonFrameMsP95": 133.4,
+    "recordVideo": true
+  },
+  "after": {
+    "frames": 98,
+    "p50": 16.69999999999709,
+    "p95": 16.799999999995634,
+    "max": 16.80000000000291
+  },
+  "changes": [
+    "256x320 tiles in a shared atlas",
+    "submit all surfaces before canvas copy",
+    "polynomial noise hash",
+    "avoid unchanged badge text writes"
+  ],
+  "caveat": "Desktop browser observations under different capture load; not a controlled hardware benchmark."
+}

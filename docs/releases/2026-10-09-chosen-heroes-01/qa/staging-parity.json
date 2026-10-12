@@ -1,0 +1,308 @@
+{
+  "base": "https://test.yourlore.xyz/",
+  "at": "2026-10-09T08:30:14.242Z",
+  "total": 50,
+  "matched": 50,
+  "results": [
+    {
+      "path": "assets/atelierThemes-DM29k3s-.js",
+      "local": "95d1fa7ec28362a982bf7d4430da039a377b73a37609306bf599ca8bc7810c97",
+      "remote": "95d1fa7ec28362a982bf7d4430da039a377b73a37609306bf599ca8bc7810c97",
+      "equal": true
+    },
+    {
+      "path": "assets/audit-Ch-vlPRj.js",
+      "local": "53fcc623e3b2b9ac71ac9b74dd522f3e77f45ae7853baa8ac8284d4d4e6a1930",
+      "remote": "53fcc623e3b2b9ac71ac9b74dd522f3e77f45ae7853baa8ac8284d4d4e6a1930",
+      "equal": true
+    },
+    {
+      "path": "assets/baseFurniture-B6oYF5aH.js",
+      "local": "4b769531bfab99a2091e1b94545606ad75f9707c372ec2ec9f479126ca11dd0e",
+      "remote": "4b769531bfab99a2091e1b94545606ad75f9707c372ec2ec9f479126ca11dd0e",
+      "equal": true
+    },
+    {
+      "path": "assets/board-C3IsIZiO.js",
+      "local": "57a85a2aee96c723b010637d3c1793ced45d37dc7165af2ba100f6417e5353ae",
+      "remote": "57a85a2aee96c723b010637d3c1793ced45d37dc7165af2ba100f6417e5353ae",
+      "equal": true
+    },
+    {
+      "path": "assets/board-UDApamK7.css",
+      "local": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22",
+      "remote": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22",
+      "equal": true
+    },
+    {
+      "path": "assets/BufferGeometryUtils-Cg54sCb3.js",
+      "local": "8fb75763bb0fd432e830dc8e24154e0e88c616d3e30d567f18d4ddf8dbf8d81b",
+      "remote": "8fb75763bb0fd432e830dc8e24154e0e88c616d3e30d567f18d4ddf8dbf8d81b",
+      "equal": true
+    },
+    {
+      "path": "assets/catalogRender-Be3JsPVG.js",
+      "local": "be76bca1a71dd3d854a7b5ff1f511cd69aa0516964b46cc0c74727b85db51faf",
+      "remote": "be76bca1a71dd3d854a7b5ff1f511cd69aa0516964b46cc0c74727b85db51faf",
+      "equal": true
+    },
+    {
+      "path": "assets/ceremonyScene-Cb9z73j8.js",
+      "local": "86249809ff1f73c1d70b9cc445c9e9d736c87866248fbf8a94791f3780701f5a",
+      "remote": "86249809ff1f73c1d70b9cc445c9e9d736c87866248fbf8a94791f3780701f5a",
+      "equal": true
+    },
+    {
+      "path": "assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "local": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700",
+      "remote": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700",
+      "equal": true
+    },
+    {
+      "path": "assets/cosmeticStudio-DJb_KU-5.js",
+      "local": "0917d12f050508b8b1124f724eec2532f0b22ec7b589dfa8f355704ff2556574",
+      "remote": "0917d12f050508b8b1124f724eec2532f0b22ec7b589dfa8f355704ff2556574",
+      "equal": true
+    },
+    {
+      "path": "assets/diceScene-CJYywBq9.js",
+      "local": "51cdc2f09f27a318925c6b480a23f2554a908088bef41bd364dc8240c52d1f61",
+      "remote": "51cdc2f09f27a318925c6b480a23f2554a908088bef41bd364dc8240c52d1f61",
+      "equal": true
+    },
+    {
+      "path": "assets/duelScene-3969mGbh.js",
+      "local": "b238c8d44b74eca736a7ada79f9c877ec7e96da6ed82f6d660031952dd978b02",
+      "remote": "b238c8d44b74eca736a7ada79f9c877ec7e96da6ed82f6d660031952dd978b02",
+      "equal": true
+    },
+    {
+      "path": "assets/family-matter-BY2aUjGX.js",
+      "local": "fccfdc383f7d467d427170686ea6d49c0ddcee60ce515f2e9e8edfa0c5321fd9",
+      "remote": "fccfdc383f7d467d427170686ea6d49c0ddcee60ce515f2e9e8edfa0c5321fd9",
+      "equal": true
+    },
+    {
+      "path": "assets/game-ur-j9Qd6.js",
+      "local": "d9a4cb21c48f1a180f7532cbc0a34a890395071aa965187674c386a2a7d6da5f",
+      "remote": "d9a4cb21c48f1a180f7532cbc0a34a890395071aa965187674c386a2a7d6da5f",
+      "equal": true
+    },
+    {
+      "path": "assets/handGeometry-Bz96hXgQ.js",
+      "local": "aa57e7f2da29c273b4f2adfb686fe19dbae04ee09c5e9ce37b735341357b6d01",
+      "remote": "aa57e7f2da29c273b4f2adfb686fe19dbae04ee09c5e9ce37b735341357b6d01",
+      "equal": true
+    },
+    {
+      "path": "assets/inspection-COx7barB.js",
+      "local": "a679d524deb368516ef13583b2d0388669314aad5e69aee751c6b930e2c75c9d",
+      "remote": "a679d524deb368516ef13583b2d0388669314aad5e69aee751c6b930e2c75c9d",
+      "equal": true
+    },
+    {
+      "path": "assets/layout-B0CSlPty.css",
+      "local": "aa6986b44a31ecb534704433d9a174247562bb420e98af64c138c2f60801f437",
+      "remote": "aa6986b44a31ecb534704433d9a174247562bb420e98af64c138c2f60801f437",
+      "equal": true
+    },
+    {
+      "path": "assets/layout-BLnTS_xS.js",
+      "local": "4218ae37467a1e79b25c89a9fe80ee1d4510a404340a67b8874257ad2b120e8c",
+      "remote": "4218ae37467a1e79b25c89a9fe80ee1d4510a404340a67b8874257ad2b120e8c",
+      "equal": true
+    },
+    {
+      "path": "assets/libraryAssets-DXCLsJBd.js",
+      "local": "1c00bc608b1013df3afa1092d125608637c8776360667f49a0c0c537fa88be3c",
+      "remote": "1c00bc608b1013df3afa1092d125608637c8776360667f49a0c0c537fa88be3c",
+      "equal": true
+    },
+    {
+      "path": "assets/main-CVvtoByz.js",
+      "local": "b2cb2ecaf64a752edf4511a2c12601baf2f94fc5ac1384a4699e7d602d8b00c3",
+      "remote": "b2cb2ecaf64a752edf4511a2c12601baf2f94fc5ac1384a4699e7d602d8b00c3",
+      "equal": true
+    },
+    {
+      "path": "assets/main-DsQxvfwJ.css",
+      "local": "62d18ccbdfdc7c188fba205e04387c73ba324a68ea7cbd9bd32d0510e18e7183",
+      "remote": "62d18ccbdfdc7c188fba205e04387c73ba324a68ea7cbd9bd32d0510e18e7183",
+      "equal": true
+    },
+    {
+      "path": "assets/master-tongues-BKdYmDL_.js",
+      "local": "3b944ec947a9a7ae2ba74ba3ba4fb090b26c2cc852fd12be94f6b72dcde0cfbe",
+      "remote": "3b944ec947a9a7ae2ba74ba3ba4fb090b26c2cc852fd12be94f6b72dcde0cfbe",
+      "equal": true
+    },
+    {
+      "path": "assets/materials-H9ykVlyh.js",
+      "local": "bf34d134c5e06e15f1708991e9d79e00f395ef2aec9f6b2360c8c3358e93bb4f",
+      "remote": "bf34d134c5e06e15f1708991e9d79e00f395ef2aec9f6b2360c8c3358e93bb4f",
+      "equal": true
+    },
+    {
+      "path": "assets/modal-cM8EengU.css",
+      "local": "708a3c50bc8e0d4ec8aa8262e4c6acecbcdda371e68c72208c9d31b97f75cc07",
+      "remote": "708a3c50bc8e0d4ec8aa8262e4c6acecbcdda371e68c72208c9d31b97f75cc07",
+      "equal": true
+    },
+    {
+      "path": "assets/modal-DdupOa-4.js",
+      "local": "6ab6cef00e3b1e9a283fa083c9d1a5afd45e9ec87446d7df6052d1f32703911e",
+      "remote": "6ab6cef00e3b1e9a283fa083c9d1a5afd45e9ec87446d7df6052d1f32703911e",
+      "equal": true
+    },
+    {
+      "path": "assets/ornaments-WpOoTE8U.js",
+      "local": "af56209bdc28da7312062fcb4f0b8f8e1a1013e171094fe9c8ae263e33d1edfa",
+      "remote": "af56209bdc28da7312062fcb4f0b8f8e1a1013e171094fe9c8ae263e33d1edfa",
+      "equal": true
+    },
+    {
+      "path": "assets/paperDraw-BPTiIVhy.js",
+      "local": "3f60c269860b2f63803d02d6186ca9ef326c1ff29406f11411743df116d2c05e",
+      "remote": "3f60c269860b2f63803d02d6186ca9ef326c1ff29406f11411743df116d2c05e",
+      "equal": true
+    },
+    {
+      "path": "assets/persistentFlightRenderer-CFsisycF.js",
+      "local": "47061da5fd12b4e8230cb2f1ad26773faf9a9cf35ea880d5e16ebc1ae6ae364d",
+      "remote": "47061da5fd12b4e8230cb2f1ad26773faf9a9cf35ea880d5e16ebc1ae6ae364d",
+      "equal": true
+    },
+    {
+      "path": "assets/pileModels-6yK97s3U.js",
+      "local": "1644fbc1603b960b6ddc61731b052b2b0d763b84404f9f5d7c3424f09297f684",
+      "remote": "1644fbc1603b960b6ddc61731b052b2b0d763b84404f9f5d7c3424f09297f684",
+      "equal": true
+    },
+    {
+      "path": "assets/renderDensity-eCqR3GeM.js",
+      "local": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699",
+      "remote": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699",
+      "equal": true
+    },
+    {
+      "path": "assets/renderer-4IyhR_hR.js",
+      "local": "67395243ae586b84c5225aa6e3660ad193af2f90bbcb7604ac2810513c78e617",
+      "remote": "67395243ae586b84c5225aa6e3660ad193af2f90bbcb7604ac2810513c78e617",
+      "equal": true
+    },
+    {
+      "path": "assets/renderer-Bae-rig3.js",
+      "local": "dcf3af89f9dcc874c25527a3402ef9bf1666ab1d16df6ccbe03da31211e10a87",
+      "remote": "dcf3af89f9dcc874c25527a3402ef9bf1666ab1d16df6ccbe03da31211e10a87",
+      "equal": true
+    },
+    {
+      "path": "assets/renderer-DhOR4L3K.js",
+      "local": "6ea158a3840458e08bb04a4f37e419e3757f624cbd93488ec75d158f9b9f9f6a",
+      "remote": "6ea158a3840458e08bb04a4f37e419e3757f624cbd93488ec75d158f9b9f9f6a",
+      "equal": true
+    },
+    {
+      "path": "assets/renderer-zKZXAnZg.js",
+      "local": "cf7bb3f87735b085a195379b5542354625f627754316cb8ad2e347de15e85314",
+      "remote": "cf7bb3f87735b085a195379b5542354625f627754316cb8ad2e347de15e85314",
+      "equal": true
+    },
+    {
+      "path": "assets/riftScene-CYHQTKxi.js",
+      "local": "ece54c9ca7b11c0ca1494fbb466d609c189a4d5c8f03633a4f5c75618e132722",
+      "remote": "ece54c9ca7b11c0ca1494fbb466d609c189a4d5c8f03633a4f5c75618e132722",
+      "equal": true
+    },
+    {
+      "path": "assets/RoomEnvironment-DQjYlkCj.js",
+      "local": "d9e5a246f2b1be6c3a1c2262a3d85481a2701e87c95710fd23f898d87742dfa0",
+      "remote": "d9e5a246f2b1be6c3a1c2262a3d85481a2701e87c95710fd23f898d87742dfa0",
+      "equal": true
+    },
+    {
+      "path": "assets/royal-matter-DII37AA4.js",
+      "local": "16f060d4680c5a1e6aa162cdf8e7ec2ab7233fe6d2ac3e9e80c9d57528b2e599",
+      "remote": "16f060d4680c5a1e6aa162cdf8e7ec2ab7233fe6d2ac3e9e80c9d57528b2e599",
+      "equal": true
+    },
+    {
+      "path": "assets/runtime-BvWEHk2g.js",
+      "local": "bd4634c9ad0b5053e0b53e847ad5a3fe14a436c5f5311b2b9c043204a3cec26f",
+      "remote": "bd4634c9ad0b5053e0b53e847ad5a3fe14a436c5f5311b2b9c043204a3cec26f",
+      "equal": true
+    },
+    {
+      "path": "assets/runtime-Ch9eydv_.css",
+      "local": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c",
+      "remote": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c",
+      "equal": true
+    },
+    {
+      "path": "assets/runtime-CjWAjbWe.js",
+      "local": "e4ab04618d5f0d3ca9a1420ccec7ccd695c0d4f33b7c08a4cff0e57a952e0124",
+      "remote": "e4ab04618d5f0d3ca9a1420ccec7ccd695c0d4f33b7c08a4cff0e57a952e0124",
+      "equal": true
+    },
+    {
+      "path": "assets/runtime-D22NxwRJ.js",
+      "local": "715cf262681fd11d73ea5949b6c13b0204643f09f9bfa4c2d7bf147277008b50",
+      "remote": "715cf262681fd11d73ea5949b6c13b0204643f09f9bfa4c2d7bf147277008b50",
+      "equal": true
+    },
+    {
+      "path": "assets/scene-MqBUf886.js",
+      "local": "935c4ed64e2be6403d617fc9cba30209292ee7c9c3bd68955dabcc58a3cbe48a",
+      "remote": "935c4ed64e2be6403d617fc9cba30209292ee7c9c3bd68955dabcc58a3cbe48a",
+      "equal": true
+    },
+    {
+      "path": "assets/sleeve-C3GcJflU.js",
+      "local": "4376307bf227a565556cf0bd37c04718fe374f82b44eebdeb37e319e94beaab8",
+      "remote": "4376307bf227a565556cf0bd37c04718fe374f82b44eebdeb37e319e94beaab8",
+      "equal": true
+    },
+    {
+      "path": "assets/studio-CmgKc6nL.css",
+      "local": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e",
+      "remote": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e",
+      "equal": true
+    },
+    {
+      "path": "assets/three.module-Bl_h9a2c.js",
+      "local": "3af17ec8d5bdc618b4a70ddf02ad2bfab294d7a41c378653637811daf73fa72b",
+      "remote": "3af17ec8d5bdc618b4a70ddf02ad2bfab294d7a41c378653637811daf73fa72b",
+      "equal": true
+    },
+    {
+      "path": "index.html",
+      "local": "4a2122001a4c7685e0a940c836715dd8ef37bdc090b2f17594b80f2b0df92161",
+      "remote": "4a2122001a4c7685e0a940c836715dd8ef37bdc090b2f17594b80f2b0df92161",
+      "equal": true
+    },
+    {
+      "path": "vfx/chosen-heroes/archer.png",
+      "local": "e41c025ffc1c8abcbe693f6bbbd55fc9bd3adcdccbc30b611886a24c75158473",
+      "remote": "e41c025ffc1c8abcbe693f6bbbd55fc9bd3adcdccbc30b611886a24c75158473",
+      "equal": true
+    },
+    {
+      "path": "vfx/chosen-heroes/knight.png",
+      "local": "6586705fce6d9714639ed9ec22a293b377fae1370514e13b71dd00b24e0008ff",
+      "remote": "6586705fce6d9714639ed9ec22a293b377fae1370514e13b71dd00b24e0008ff",
+      "equal": true
+    },
+    {
+      "path": "vfx/chosen-heroes/mage.png",
+      "local": "564015ef909523d3cfb2894c12509b57d653663e271590ec1e4d65827a2c695e",
+      "remote": "564015ef909523d3cfb2894c12509b57d653663e271590ec1e4d65827a2c695e",
+      "equal": true
+    },
+    {
+      "path": "vfx/chosen-heroes/rogue.png",
+      "local": "612246b1f0fbaa46a852a55ada0fe2e920175b9acaf43f53c9ec5dc27ad494c5",
+      "remote": "612246b1f0fbaa46a852a55ada0fe2e920175b9acaf43f53c9ec5dc27ad494c5",
+      "equal": true
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+[
+  {
+    "name": "sion-tempo",
+    "cards": [
+      "GHOST",
+      "TRUMPET",
+      "GUILD_HALL",
+      "FLAME",
+      "FLAME",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "STARTER_CHEST"
+    ],
+    "tune": {
+      "minBuyEarly": 7,
+      "minBuy": 10,
+      "chestTurn": 5
+    }
+  },
+  {
+    "name": "sion-engine",
+    "cards": [
+      "FORESIGHT",
+      "GAMBLER",
+      "GAMBLER",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "STARTER_CHEST"
+    ],
+    "tune": {
+      "minBuyEarly": 8,
+      "minBuy": 12,
+      "chestTurn": 6
+    }
+  },
+  {
+    "name": "sion-canopy",
+    "cards": [
+      "ELF_HAVEN",
+      "HALF_ELF",
+      "HALF_ELF",
+      "FORESIGHT",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "STARTER_CHEST"
+    ],
+    "tune": {
+      "minBuyEarly": 8,
+      "minBuy": 11,
+      "chestTurn": 5
+    }
+  }
+]

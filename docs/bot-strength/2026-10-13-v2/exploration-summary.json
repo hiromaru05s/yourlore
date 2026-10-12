@@ -1,0 +1,216 @@
+[
+  {
+    "study": "evolution",
+    "games": 6144,
+    "invalid": 0,
+    "top": [
+      {
+        "cards": [
+          "GHOST",
+          "RUST_SHROOM",
+          "TRUMPET",
+          "GHOST",
+          "FLAME",
+          "COUNTERCALC",
+          "GHOST",
+          "RIFT"
+        ],
+        "wins": 10,
+        "valid": 12,
+        "rate": 0.8333333333333334
+      },
+      {
+        "cards": [
+          "GHOST",
+          "GHOST",
+          "COUNTERCALC",
+          "SELECTED_SWORD",
+          "GHOST",
+          "COUNTERCALC",
+          "STARTER_CHEST",
+          "STARTER_CHEST"
+        ],
+        "wins": 10,
+        "valid": 12,
+        "rate": 0.8333333333333334
+      },
+      {
+        "cards": [
+          "GHOST",
+          "GHOST",
+          "COUNTERCALC",
+          "STARTER_CHEST",
+          "GHOST",
+          "COUNTERCALC",
+          "STARTER_CHEST",
+          "SELECTED_SHIELD"
+        ],
+        "wins": 10,
+        "valid": 12,
+        "rate": 0.8333333333333334
+      }
+    ]
+  },
+  {
+    "study": "deck-holdout",
+    "games": 11658,
+    "invalid": 0,
+    "top": [
+      {
+        "c": 9,
+        "cards": [
+          "GHOST",
+          "RUST_SHROOM",
+          "FLAME",
+          "GHOST",
+          "FLAME",
+          "COUNTERCALC",
+          "GHOST",
+          "TRUMPET"
+        ],
+        "wins": 159,
+        "valid": 174,
+        "rate": 0.9137931034482759
+      },
+      {
+        "c": 0,
+        "cards": [
+          "GHOST",
+          "RUST_SHROOM",
+          "TRUMPET",
+          "GHOST",
+          "FLAME",
+          "COUNTERCALC",
+          "GHOST",
+          "RIFT"
+        ],
+        "wins": 149,
+        "valid": 174,
+        "rate": 0.8563218390804598
+      },
+      {
+        "c": 3,
+        "cards": [
+          "GHOST",
+          "RUST_SHROOM",
+          "TRUMPET",
+          "GHOST",
+          "FLAME",
+          "COUNTERCALC",
+          "GHOST",
+          "ANCIENT_CIV"
+        ],
+        "wins": 149,
+        "valid": 174,
+        "rate": 0.8563218390804598
+      }
+    ]
+  },
+  {
+    "study": "robust-evolution",
+    "games": 20480,
+    "invalid": 0,
+    "top": [
+      {
+        "cards": [
+          "RUST_SHROOM",
+          "GHOST",
+          "GHOST",
+          "AMBUSH",
+          "RUST_SHROOM",
+          "RUST_SHROOM",
+          "COUNTERCALC",
+          "RUST_SHROOM"
+        ],
+        "wins": 29,
+        "valid": 32,
+        "rate": 0.90625
+      },
+      {
+        "cards": [
+          "RUST_SHROOM",
+          "GHOST",
+          "GHOST",
+          "CASTLE",
+          "RUST_SHROOM",
+          "RUST_SHROOM",
+          "COUNTERCALC",
+          "RUST_SHROOM"
+        ],
+        "wins": 29,
+        "valid": 32,
+        "rate": 0.90625
+      },
+      {
+        "cards": [
+          "RUST_SHROOM",
+          "GHOST",
+          "GHOST",
+          "RIFT",
+          "RUST_SHROOM",
+          "RUST_SHROOM",
+          "COUNTERCALC",
+          "RUST_SHROOM"
+        ],
+        "wins": 28,
+        "valid": 32,
+        "rate": 0.875
+      }
+    ]
+  },
+  {
+    "study": "robust-holdout",
+    "games": 3672,
+    "invalid": 0,
+    "top": [
+      {
+        "c": 0,
+        "cards": [
+          "RUST_SHROOM",
+          "GHOST",
+          "GHOST",
+          "AMBUSH",
+          "RUST_SHROOM",
+          "RUST_SHROOM",
+          "COUNTERCALC",
+          "RUST_SHROOM"
+        ],
+        "wins": 185,
+        "valid": 204,
+        "rate": 0.9068627450980392
+      },
+      {
+        "c": 2,
+        "cards": [
+          "RUST_SHROOM",
+          "GHOST",
+          "GHOST",
+          "RIFT",
+          "RUST_SHROOM",
+          "RUST_SHROOM",
+          "COUNTERCALC",
+          "RUST_SHROOM"
+        ],
+        "wins": 183,
+        "valid": 204,
+        "rate": 0.8970588235294118
+      },
+      {
+        "c": 1,
+        "cards": [
+          "RUST_SHROOM",
+          "GHOST",
+          "GHOST",
+          "CASTLE",
+          "RUST_SHROOM",
+          "RUST_SHROOM",
+          "COUNTERCALC",
+          "RUST_SHROOM"
+        ],
+        "wins": 177,
+        "valid": 204,
+        "rate": 0.8676470588235294
+      }
+    ]
+  }
+]

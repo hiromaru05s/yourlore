@@ -1,0 +1,162 @@
+{
+  "checks": [
+    {
+      "name": "0/direct dedicated owner",
+      "passed": true
+    },
+    {
+      "name": "0/direct no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "0/direct visible pixels",
+      "passed": true
+    },
+    {
+      "name": "0/direct cleanup",
+      "passed": true
+    },
+    {
+      "name": "0 one contact",
+      "passed": true
+    },
+    {
+      "name": "0/hand dedicated owner",
+      "passed": true
+    },
+    {
+      "name": "0/hand no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "0/hand visible pixels",
+      "passed": true
+    },
+    {
+      "name": "0/hand cleanup",
+      "passed": true
+    },
+    {
+      "name": "0/generated dedicated owner",
+      "passed": true
+    },
+    {
+      "name": "0/generated no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "0/generated visible pixels",
+      "passed": true
+    },
+    {
+      "name": "0/generated cleanup",
+      "passed": true
+    },
+    {
+      "name": "1/direct dedicated owner",
+      "passed": true
+    },
+    {
+      "name": "1/direct no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "1/direct visible pixels",
+      "passed": true
+    },
+    {
+      "name": "1/direct cleanup",
+      "passed": true
+    },
+    {
+      "name": "1 one contact",
+      "passed": true
+    },
+    {
+      "name": "1/hand dedicated owner",
+      "passed": true
+    },
+    {
+      "name": "1/hand no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "1/hand visible pixels",
+      "passed": true
+    },
+    {
+      "name": "1/hand cleanup",
+      "passed": true
+    },
+    {
+      "name": "1/generated dedicated owner",
+      "passed": true
+    },
+    {
+      "name": "1/generated no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "1/generated visible pixels",
+      "passed": true
+    },
+    {
+      "name": "1/generated cleanup",
+      "passed": true
+    },
+    {
+      "name": "cancel cleanup",
+      "passed": true
+    },
+    {
+      "name": "skip cleanup",
+      "passed": true
+    },
+    {
+      "name": "resize cleanup",
+      "passed": true
+    },
+    {
+      "name": "detach cleanup",
+      "passed": true
+    },
+    {
+      "name": "abort cleanup",
+      "passed": true
+    },
+    {
+      "name": "replacement cleanup",
+      "passed": true
+    },
+    {
+      "name": "three simultaneous",
+      "passed": true
+    },
+    {
+      "name": "concurrency cleanup",
+      "passed": true
+    },
+    {
+      "name": "reduced motion restores",
+      "passed": true
+    },
+    {
+      "name": "mobile cleanup",
+      "passed": true
+    },
+    {
+      "name": "capture cancellation",
+      "passed": true
+    },
+    {
+      "name": "no WebGL native fallback",
+      "passed": true
+    },
+    {
+      "name": "no browser errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "authenticatedMatch": false
+}

@@ -1,0 +1,24 @@
+vite v5.4.21 building for production...
+transforming...
+✓ 167 modules transformed.
+rendering chunks...
+computing gzip size...
+../docs/vfx-prototypes/2026-10-12-void-four/build/void-four.html                      0.32 kB │ gzip:   0.28 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/preview-fNy3j-Am.css         4.29 kB │ gzip:   1.60 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/renderer-CDpg3JYh.css       22.08 kB │ gzip:   6.13 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/board-DCyTUHTx.css         216.67 kB │ gzip:  45.92 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/void-four-KC6vXzEO.js        2.17 kB │ gzip:   1.11 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/renderDensity-gpypxth_.js    3.55 kB │ gzip:   1.83 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/qa-DrQ65J-U.js               5.24 kB │ gzip:   2.56 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/preview-C5xeRHjd.js          7.05 kB │ gzip:   3.69 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/ceremonyScene-DgRRMC0P.js    8.93 kB │ gzip:   3.96 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/paperDraw-loGHdd1I.js       10.26 kB │ gzip:   4.64 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/duelScene-BgE7YShf.js      103.38 kB │ gzip:  36.19 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/board-BeE1psJe.js          191.37 kB │ gzip:  75.47 kB
+../docs/vfx-prototypes/2026-10-12-void-four/build/assets/renderer-CBCeApnp.js       999.22 kB │ gzip: 321.50 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1m 5s

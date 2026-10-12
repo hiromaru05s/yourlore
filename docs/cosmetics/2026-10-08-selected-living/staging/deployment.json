@@ -1,0 +1,18 @@
+{
+  "source": "6ad78e6d3a6667fda38fa11b93ca8141c711dfdd",
+  "worker": "lore-server-staging",
+  "version": "0f75930a-cc88-4ff7-8805-5985cfdbd24c",
+  "url": "https://test.yourlore.xyz",
+  "guard": "scripts/deploy-guard.mjs staging",
+  "regression": "81/81",
+  "typecheck": "passed",
+  "build": "passed",
+  "assetParity": 48,
+  "selected": [
+    "azure-plume",
+    "furniture:azure-plume",
+    "pressed-fern",
+    "furniture:pressed-fern"
+  ],
+  "browserBoundary": "Deployed assets and production renderer; account/API and game state fixtures. Not authenticated two-player verification."
+}

@@ -1,0 +1,23 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "frames": [
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-mon.png",
+      "status": 200
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-spell.png",
+      "status": 200
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-quest.png",
+      "status": 200
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-trap.png",
+      "status": 200
+    }
+  ],
+  "errors": [],
+  "boundary": "Deployed BOT board startup, actual network frames, no help/countdown overlays. Authentication/API responses are fixtures; no authenticated online match."
+}

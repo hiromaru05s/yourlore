@@ -1,0 +1,663 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "CHOSEN_ROGUE: four different rendered outputs",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE: variant 0 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE: variant 1 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE: variant 2 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE: variant 3 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE: all four settle on identical source",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER: four different rendered outputs",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER: variant 0 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER: variant 1 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER: variant 2 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER: variant 3 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER: all four settle on identical source",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF: four different rendered outputs",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF: variant 0 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF: variant 1 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF: variant 2 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF: variant 3 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF: all four settle on identical source",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER: four different rendered outputs",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER: variant 0 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER: variant 1 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER: variant 2 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER: variant 3 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER: all four settle on identical source",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK: four different rendered outputs",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK: variant 0 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK: variant 1 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK: variant 2 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK: variant 3 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK: all four settle on identical source",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4: four different rendered outputs",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4: variant 0 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4: variant 1 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4: variant 2 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4: variant 3 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4: all four settle on identical source",
+      "passed": true
+    },
+    {
+      "name": "HEXER4: four different rendered outputs",
+      "passed": true
+    },
+    {
+      "name": "HEXER4: variant 0 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "HEXER4: variant 1 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "HEXER4: variant 2 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "HEXER4: variant 3 opaque source exists",
+      "passed": true
+    },
+    {
+      "name": "HEXER4: all four settle on identical source",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE/0/0: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE/0/0: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE/0/1: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE/0/1: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE/0/2: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE/0/2: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE/0/3: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE/0/3: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE/1/0: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE/1/0: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE/1/1: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE/1/1: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE/1/2: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE/1/2: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE/1/3: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ROGUE/1/3: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER/0/0: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER/0/0: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER/0/1: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER/0/1: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER/0/2: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER/0/2: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER/0/3: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER/0/3: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER/1/0: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER/1/0: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER/1/1: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER/1/1: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER/1/2: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER/1/2: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER/1/3: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "CHOSEN_ARCHER/1/3: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF/0/0: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF/0/0: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF/0/1: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF/0/1: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF/0/2: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF/0/2: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF/0/3: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF/0/3: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF/1/0: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF/1/0: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF/1/1: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF/1/1: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF/1/2: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF/1/2: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF/1/3: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "HIGH_ELF/1/3: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER/0/0: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER/0/0: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER/0/1: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER/0/1: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER/0/2: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER/0/2: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER/0/3: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER/0/3: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER/1/0: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER/1/0: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER/1/1: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER/1/1: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER/1/2: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER/1/2: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER/1/3: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "DRAGON_RIDER/1/3: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK/0/0: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK/0/0: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK/0/1: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK/0/1: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK/0/2: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK/0/2: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK/0/3: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK/0/3: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK/1/0: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK/1/0: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK/1/1: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK/1/1: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK/1/2: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK/1/2: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK/1/3: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "ANTIQUE_DK/1/3: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4/0/0: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4/0/0: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4/0/1: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4/0/1: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4/0/2: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4/0/2: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4/0/3: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4/0/3: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4/1/0: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4/1/0: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4/1/1: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4/1/1: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4/1/2: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4/1/2: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4/1/3: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "ASSASSIN4/1/3: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "HEXER4/0/0: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "HEXER4/0/0: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "HEXER4/0/1: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "HEXER4/0/1: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "HEXER4/0/2: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "HEXER4/0/2: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "HEXER4/0/3: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "HEXER4/0/3: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "HEXER4/1/0: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "HEXER4/1/0: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "HEXER4/1/1: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "HEXER4/1/1: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "HEXER4/1/2: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "HEXER4/1/2: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "HEXER4/1/3: one actor, one hidden source, no attack",
+      "passed": true
+    },
+    {
+      "name": "HEXER4/1/3: source restored at 700ms",
+      "passed": true
+    },
+    {
+      "name": "Three simultaneous targets",
+      "passed": true
+    },
+    {
+      "name": "Cancel restores all targets",
+      "passed": true
+    },
+    {
+      "name": "Failed roll does not start attack before 700ms",
+      "passed": true
+    },
+    {
+      "name": "Failed roll starts attack at 700ms",
+      "passed": true
+    },
+    {
+      "name": "Failed roll reaches normal attack contact",
+      "passed": true
+    },
+    {
+      "name": "Stopping failed branch restores attack",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion retains target and never launches attack",
+      "passed": true
+    },
+    {
+      "name": "Leaving board unloads its scene",
+      "passed": true
+    },
+    {
+      "name": "Repetition does not allocate GPU resources",
+      "passed": true
+    }
+  ],
+  "resources": {
+    "textures": 7,
+    "geometries": 1,
+    "programs": 1
+  },
+  "scope": "Local GameView fixture; functional checks are not visual approval, live match proof, or staging."
+}

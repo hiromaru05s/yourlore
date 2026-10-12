@@ -1,0 +1,93 @@
+[
+  {
+    "side": "me",
+    "id": "E3",
+    "interrupt": "",
+    "seen": true,
+    "oldFrame": false,
+    "maxCanvases": 1,
+    "ms": 3726,
+    "ghost": true,
+    "canvases": 0,
+    "source": 0,
+    "hidden": 0
+  },
+  {
+    "side": "me",
+    "id": "WORLD_SEED",
+    "interrupt": "",
+    "seen": true,
+    "oldFrame": false,
+    "maxCanvases": 1,
+    "ms": 3332,
+    "ghost": true,
+    "canvases": 0,
+    "source": 0,
+    "hidden": 0
+  },
+  {
+    "side": "opp",
+    "id": "E3",
+    "interrupt": "",
+    "seen": true,
+    "oldFrame": false,
+    "maxCanvases": 1,
+    "ms": 3523,
+    "ghost": true,
+    "canvases": 0,
+    "source": 0,
+    "hidden": 0
+  },
+  {
+    "side": "opp",
+    "id": "WORLD_SEED",
+    "interrupt": "",
+    "seen": true,
+    "oldFrame": false,
+    "maxCanvases": 1,
+    "ms": 3469,
+    "ghost": true,
+    "canvases": 0,
+    "source": 0,
+    "hidden": 0
+  },
+  {
+    "side": "me",
+    "id": "E3",
+    "interrupt": "abort",
+    "seen": true,
+    "oldFrame": false,
+    "maxCanvases": 1,
+    "ms": 1405,
+    "ghost": true,
+    "canvases": 0,
+    "source": 0,
+    "hidden": 0
+  },
+  {
+    "side": "me",
+    "id": "E3",
+    "interrupt": "resize",
+    "seen": true,
+    "oldFrame": false,
+    "maxCanvases": 1,
+    "ms": 1657,
+    "ghost": true,
+    "canvases": 0,
+    "source": 0,
+    "hidden": 0
+  },
+  {
+    "side": "me",
+    "id": "E3",
+    "interrupt": "skip",
+    "seen": false,
+    "oldFrame": false,
+    "maxCanvases": 0,
+    "ms": 14,
+    "ghost": true,
+    "canvases": 0,
+    "source": 0,
+    "hidden": 0
+  }
+]

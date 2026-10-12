@@ -1,0 +1,443 @@
+{
+  "checks": [
+    {
+      "name": "VOID_APOSTLE/0/direct single owner",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": true,
+        "duplicate": false,
+        "raw": false,
+        "completed": true,
+        "clean": true,
+        "impacts": 1
+      }
+    },
+    {
+      "name": "VOID_APOSTLE/0/direct visible face",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/0/direct no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/0/direct cleanup",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/0/direct one contact",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/0/hand single owner",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": true,
+        "duplicate": false,
+        "raw": false,
+        "clean": true,
+        "impacts": 0
+      }
+    },
+    {
+      "name": "VOID_APOSTLE/0/hand visible face",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/0/hand no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/0/hand cleanup",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/0/generated single owner",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": true,
+        "duplicate": false,
+        "raw": false,
+        "completed": true,
+        "clean": true,
+        "impacts": 0
+      }
+    },
+    {
+      "name": "VOID_APOSTLE/0/generated visible face",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/0/generated no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/0/generated cleanup",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/1/direct single owner",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": true,
+        "duplicate": false,
+        "raw": false,
+        "completed": true,
+        "clean": true,
+        "impacts": 1
+      }
+    },
+    {
+      "name": "VOID_APOSTLE/1/direct visible face",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/1/direct no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/1/direct cleanup",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/1/direct one contact",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/1/hand single owner",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": true,
+        "duplicate": false,
+        "raw": false,
+        "clean": true,
+        "impacts": 0
+      }
+    },
+    {
+      "name": "VOID_APOSTLE/1/hand visible face",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/1/hand no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/1/hand cleanup",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/1/generated single owner",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": true,
+        "duplicate": false,
+        "raw": false,
+        "completed": true,
+        "clean": true,
+        "impacts": 0
+      }
+    },
+    {
+      "name": "VOID_APOSTLE/1/generated visible face",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/1/generated no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "VOID_APOSTLE/1/generated cleanup",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/0/direct single owner",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": true,
+        "duplicate": false,
+        "raw": false,
+        "completed": true,
+        "clean": true,
+        "impacts": 1
+      }
+    },
+    {
+      "name": "GM6_1/0/direct visible face",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/0/direct no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/0/direct cleanup",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/0/direct one contact",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/0/hand single owner",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": true,
+        "duplicate": false,
+        "raw": false,
+        "clean": true,
+        "impacts": 0
+      }
+    },
+    {
+      "name": "GM6_1/0/hand visible face",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/0/hand no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/0/hand cleanup",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/0/generated single owner",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": true,
+        "duplicate": false,
+        "raw": false,
+        "completed": true,
+        "clean": true,
+        "impacts": 0
+      }
+    },
+    {
+      "name": "GM6_1/0/generated visible face",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/0/generated no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/0/generated cleanup",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/1/direct single owner",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": true,
+        "duplicate": false,
+        "raw": false,
+        "completed": true,
+        "clean": true,
+        "impacts": 1
+      }
+    },
+    {
+      "name": "GM6_1/1/direct visible face",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/1/direct no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/1/direct cleanup",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/1/direct one contact",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/1/hand single owner",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": true,
+        "duplicate": false,
+        "raw": false,
+        "clean": true,
+        "impacts": 0
+      }
+    },
+    {
+      "name": "GM6_1/1/hand visible face",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/1/hand no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/1/hand cleanup",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/1/generated single owner",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": true,
+        "duplicate": false,
+        "raw": false,
+        "completed": true,
+        "clean": true,
+        "impacts": 0
+      }
+    },
+    {
+      "name": "GM6_1/1/generated visible face",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/1/generated no raw ghost",
+      "passed": true
+    },
+    {
+      "name": "GM6_1/1/generated cleanup",
+      "passed": true
+    },
+    {
+      "name": "cancel cleanup",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": false,
+        "duplicate": false,
+        "raw": false,
+        "completed": false,
+        "clean": true,
+        "impacts": 0
+      }
+    },
+    {
+      "name": "skip cleanup",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": false,
+        "duplicate": false,
+        "raw": false,
+        "clean": true,
+        "impacts": 0
+      }
+    },
+    {
+      "name": "resize cleanup",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": false,
+        "duplicate": false,
+        "raw": false,
+        "completed": false,
+        "clean": true,
+        "impacts": 0
+      }
+    },
+    {
+      "name": "detach cleanup",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": false,
+        "duplicate": false,
+        "raw": false,
+        "completed": false,
+        "clean": true,
+        "impacts": 0
+      }
+    },
+    {
+      "name": "abort cleanup",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": false,
+        "duplicate": false,
+        "raw": false,
+        "completed": [
+          false
+        ],
+        "clean": true,
+        "impacts": 0
+      }
+    },
+    {
+      "name": "replacement cleanup",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": false,
+        "duplicate": false,
+        "raw": false,
+        "completed": false,
+        "clean": true,
+        "impacts": 0
+      }
+    },
+    {
+      "name": "three simultaneous",
+      "passed": true,
+      "detail": {
+        "peak": 3,
+        "visible": true,
+        "duplicate": false,
+        "raw": false,
+        "completed": [
+          true,
+          true,
+          true
+        ],
+        "clean": true,
+        "impacts": 3
+      }
+    },
+    {
+      "name": "concurrency completion",
+      "passed": true
+    },
+    {
+      "name": "reduced native card",
+      "passed": true
+    },
+    {
+      "name": "mobile summon",
+      "passed": true,
+      "detail": {
+        "peak": 1,
+        "visible": true,
+        "duplicate": false,
+        "raw": false,
+        "clean": true,
+        "impacts": 0
+      }
+    },
+    {
+      "name": "no WebGL native fallback",
+      "passed": true
+    },
+    {
+      "name": "no page errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "authenticatedMatch": false
+}

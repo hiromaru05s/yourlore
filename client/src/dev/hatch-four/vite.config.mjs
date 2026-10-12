@@ -1,0 +1,5 @@
+import {defineConfig} from 'vite';
+import fs from 'node:fs/promises';
+const root=new URL('../../../',import.meta.url).pathname;
+const qa=new URL('../../../../docs/vfx-prototypes/2026-10-12-hatch-four/qa/',import.meta.url).pathname;
+export default defineConfig({root,cacheDir:root+'.vite-hatch',optimizeDeps:{entries:[root+'hatch-four.html']},server:{host:'127.0.0.1',port:5542,strictPort:true,fs:{allow:[new URL('../../../../',import.meta.url).pathname,'/Users/hiromaru05s/Desktop/LORE_TCG']}},build:{copyPublicDir:false,outDir:'../docs/vfx-prototypes/2026-10-12-hatch-four/build',emptyOutDir:true,rollupOptions:{input:root+'hatch-four.html'}},plugins:[{name:'evidence',configureServer(server){server.middlewares.use('/__hatch-evidence',async(req,res)=>{const name=(req.url||'').slice(1);if(req.method!=='POST'||!/^([a-z0-9-]+)\.(png|jpg|webm|json)$/.test(name)){res.statusCode=400;res.end();return;}const parts=[];let size=0;for await(const p of req){size+=p.length;if(size>40000000){res.statusCode=413;res.end();return;}parts.push(p);}await fs.mkdir(qa,{recursive:true});await fs.writeFile(qa+name,Buffer.concat(parts));res.end('saved');});}}]});

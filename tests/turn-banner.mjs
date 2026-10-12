@@ -8,7 +8,7 @@ const dom=new JSDOM('',{url:'http://localhost',pretendToBeVisual:true});
 for(const key of ['window','document','localStorage'])Object.defineProperty(globalThis,key,{value:dom.window[key],configurable:true});
 let hidden=false,reduced=false,id=0;
 Object.defineProperty(document,'hidden',{get:()=>hidden});
-globalThis.matchMedia=()=>({get matches(){return reduced;}});
+globalThis.matchMedia=()=>({get matches(){return reduced;},addEventListener(){},removeEventListener(){}});
 dom.window.devicePixelRatio=2;
 const frames=new Map(),timers=new Map();
 globalThis.requestAnimationFrame=cb=>{frames.set(++id,cb);return id;};
@@ -23,7 +23,7 @@ const context=new Proxy({globalAlpha:1,measureText:s=>({width:s.length*6}),creat
 dom.window.HTMLCanvasElement.prototype.getContext=()=>context;
 const temp=await mkdtemp(path.join(tmpdir(),'lore-turn-'));
 try{
- await build({stdin:{contents:"export * from './client/src/ui/turnBanner';export {setLang} from './client/src/i18n';export {turnBanner,setFxSkip} from './client/src/ui/anim';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:path.join(temp,'entry.mjs'),plugins:[{name:'dom-monster',setup(b){b.onResolve({filter:/monster\/runtime$/},()=>({path:'monster',namespace:'test'}));b.onLoad({filter:/.*/,namespace:'test'},()=>({contents:'export const syncMonsterStates=()=>{},clearMonsterStates=()=>{},setMonsterSkip=()=>{},monsterRect=()=>null,playMonster=async()=>false;',loader:'js'}));}}]});
+ await build({stdin:{contents:"export * from './client/src/ui/turnBanner';export {setLang} from './client/src/i18n';export {turnBanner,setFxSkip} from './client/src/ui/anim';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:path.join(temp,'entry.mjs'),plugins:[{name:'dom-monster',setup(b){b.onResolve({filter:/monster\/runtime$/},()=>({path:'monster',namespace:'test'}));b.onLoad({filter:/.*/,namespace:'test'},()=>({contents:'export const syncMonsterStates=()=>{},clearMonsterStates=()=>{},setMonsterSkip=()=>{},monsterRect=()=>null,playMonster=async()=>false,playGutsEndurance=async()=>false;',loader:'js'}));}}]});
  const {mountTurnBanner,cancelTurnBanner,setLang,turnBanner,setFxSkip}=await import(path.join(temp,'entry.mjs'));
  frames.clear();timers.clear();
  const count=()=>document.querySelectorAll('.fx-turn-sigil').length;

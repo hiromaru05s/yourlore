@@ -1,0 +1,113 @@
+[
+  {
+    "card": "ND5",
+    "lang": "ja",
+    "group": "granted",
+    "headings": [
+      {
+        "overflow": false,
+        "text": "この効果で付与する能力"
+      }
+    ],
+    "overflow": false,
+    "scale": 2,
+    "width": 320,
+    "focused": true
+  },
+  {
+    "card": "ND5",
+    "lang": "ko",
+    "group": "granted",
+    "headings": [
+      {
+        "overflow": false,
+        "text": "이 효과로 부여하는 능력"
+      }
+    ],
+    "overflow": false,
+    "scale": 2,
+    "width": 320,
+    "focused": true
+  },
+  {
+    "card": "ND5",
+    "lang": "en",
+    "group": "granted",
+    "headings": [
+      {
+        "overflow": false,
+        "text": "Abilities granted by this effect"
+      }
+    ],
+    "overflow": false,
+    "scale": 2,
+    "width": 320,
+    "focused": true
+  },
+  {
+    "card": "DARK_ELF",
+    "lang": "en",
+    "chips": [
+      {
+        "group": "owned",
+        "key": "ambush"
+      },
+      {
+        "group": "owned",
+        "key": "counter"
+      },
+      {
+        "group": "references",
+        "key": "aura"
+      },
+      {
+        "group": "references",
+        "key": "evade"
+      }
+    ],
+    "headings": [
+      {
+        "overflow": false,
+        "text": "Abilities this card has"
+      },
+      {
+        "overflow": false,
+        "text": "Abilities mentioned in the effect text"
+      }
+    ],
+    "overflow": false,
+    "scale": 2,
+    "width": 320
+  },
+  {
+    "card": "ASSASSIN4",
+    "lang": "en",
+    "chips": [
+      {
+        "group": "owned",
+        "key": "dual"
+      },
+      {
+        "group": "owned",
+        "key": "aura"
+      },
+      {
+        "group": "owned",
+        "key": "evade"
+      },
+      {
+        "group": "owned",
+        "key": "majesty"
+      }
+    ],
+    "headings": [
+      {
+        "overflow": false,
+        "text": "Abilities this card has"
+      }
+    ],
+    "overflow": false,
+    "scale": 2,
+    "width": 320
+  }
+]

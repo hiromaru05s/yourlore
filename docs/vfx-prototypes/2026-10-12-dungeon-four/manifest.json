@@ -1,0 +1,17 @@
+{
+  "status": "preview-only; unselected; not deployed",
+  "card": "DUNGEON",
+  "variants": 4,
+  "checksPassed": 52,
+  "sourceFiles": {
+    "client/dungeon-four.html": "d62b32dd70a02f19ecff4405b6fe46b184e5ac238339e41a8b15da7712a235ba",
+    "client/src/dev/dungeon-four/board.ts": "16fcd3cb1a4ca736e53fa2e1eac24b4bcd33c58db26fd80e61d8a37173a9a962",
+    "client/src/dev/dungeon-four/catalog.ts": "aca5d8e9a419e69de135b98605fc6a29ff1e33005e4e527e46c71a1a0bc1080b",
+    "client/src/dev/dungeon-four/entry.ts": "2a2bfea8f9902be1183040d0c23a636b4e17f0cd62a97a71da8fb64ceb8c1ab1",
+    "client/src/dev/dungeon-four/preview.ts": "2ecb140da1c39330d29af10ff03aa69c5a9ba0c4db45659ebf3fcd9e85ca4887",
+    "client/src/dev/dungeon-four/renderer.ts": "baa4bc5270b65b08d4e959e1667b85a0178f9ed4fb9395f07f13f140a96971be",
+    "client/src/dev/dungeon-four/style.css": "6e4645d73bb529f5ed4e69fa62e9f0850020dc738d95c013ba13319f7053f6c1",
+    "client/src/dev/dungeon-four/surface.ts": "1767de2fb42768a702d8f7ea54a461dff56ddc2c5e275e31d4ffce4b17a7f21d",
+    "client/src/dev/dungeon-four/vite.config.mjs": "217b4c7e3c5f26afc948a856f5a0de70a5e39e7edd7acf8f69f893a3825d7ae4"
+  }
+}

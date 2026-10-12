@@ -1,0 +1,19 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "source": "cfa33bbf9f3a950a8f230303b71b362ef0404127",
+  "featureCommit": "a002dc72",
+  "deploymentId": "1abba441-4b97-413a-9b58-9f2da6cb0d11",
+  "versions": [
+    {
+      "version_id": "c337371c-6fbf-4aa1-9421-8ed2eac848df",
+      "percentage": 100
+    }
+  ],
+  "createdOn": "2026-10-07T23:38:30.554254Z",
+  "message": "cfa33bbf9f3a950a8f230303b71b362ef0404127 guarded release",
+  "scope": "API-fixture shop browser QA with real deployed code and assets; authenticated purchases are not covered",
+  "assetHashes": {
+    "checked": 101,
+    "matched": 101
+  }
+}

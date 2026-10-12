@@ -1,0 +1,61 @@
+{
+  "integratedBase": "5ecd4112",
+  "upstreamRules": "c08d6d48",
+  "sources": {
+    "client/src/shared/botNpcs.ts": "eed00c94982877d82b7b976dae8a4d79efc86d9ba757ab8ecf15d775c3f88707",
+    "client/src/shared/botSearch.ts": "e3efee895044d9338db2578ce369357fe0837285ff6f0b11931fbb5bff4c2506",
+    "client/src/shared/botValueWeights.ts": "a67b30d9d77f91cca6ca7b9403b1fcfe175dd6d4d84e71f6b671665634fb993c",
+    "client/src/shared/bot.ts": "3c4c8212b112dea65a4e125b3ff83123d32e2d07338e7277b49a3f2af70acf1e",
+    "client/src/shared/botObservation.ts": "f6dc8fea7e0a0d6d33065889ef74aff2e5eecbc7a630b04a0ad9c1439d3baa4e",
+    "client/src/shared/botNetWeights.ts": "9a19af46ec745169f81e761c00739310711e3f23d5f8a1cccf47b91ebcd665c2",
+    "client/src/shared/botTactics.ts": "8f234f1ba3e0f8105d5e287989d0bca2783ac434729bd9d0fbaa18da028ccee9",
+    "client/src/shared/botValue.ts": "f499579bfa774bf417883a075f2932871ee8fbdaf441a61629e8c0394a08e22c",
+    "client/src/shared/botFeatures.ts": "62c8c32ae49906702fb9862a3a9b6595902a7f3541f11b5a55ba79807f90b6d8",
+    "client/src/shared/botNet.ts": "c0121a95b04d715d2064b97ed5f3309b363a72f34b97b4f70b06d3d5330a58a2",
+    "client/src/shared/botDecks.ts": "928c02b3bdd54e9e7bc8f15ca8114afd4446b83491faabd54c2b7a6d334fdba1",
+    "client/src/shared/botActions.ts": "c5b39cb07bd4f9c71df7fb5ea3229be5a1a2dbfa8e3e77f432368e0a6a5f03af",
+    "client/src/shared/cloneGameState.ts": "ab26916bf516aa7c367b2a01582f097f69cc18c5bd637b7a2ef56c52a84c5af6",
+    "client/src/shared/engine.ts": "e0c3de1bf27ce0fbbb091a9f8429ef3646ef288089aaac37d2088e9a77e55203",
+    "client/src/game/controller.ts": "fb44a88264d94c40fad3e867437d84d39c9cba512ea160321389dc7c5bcf18ec",
+    "client/src/game/botThinker.ts": "1bad59d0773010d59e6d501a1dd598ba8b9002bbb386a7f4a0d763d99e0acf1c",
+    "client/src/game/botPlanner.ts": "81a94b8e1df40df459956646a05b8734eeed6046793703f3eb44b201c54f5cb3",
+    "client/src/game/bot.worker.ts": "9b838aa3c6ab8c182dc5525a8974c0c8a8ad82c7f6353508b90794d6b3ee155a",
+    "client/src/game/botPlanner.worker.ts": "049ad6e03ceea53cadee0a9bebe173e6be7b1dbb1f1eca9fd58c4b5e3f7eb83f",
+    "client/src/shared/monsterEffects.ts": "9b87610ddd7479418f8e811da63835adefa062e37032dedd9c47daaefc70c039"
+  },
+  "bundles": {
+    "robust-pilot.cjs.gz": {
+      "sha256": "dc7ab011c022a17955e0e8d61ee49a7bf49ba3c407910c15c751083c7b4862c9",
+      "uncompressedSHA256": "22012934f83914c8a93ec622a33da02a4bdc4c2c43e5c0f6fc34490d04192786"
+    },
+    "tactics-pilot.cjs.gz": {
+      "sha256": "93f19c6eb9da8b2b89ccf71f096bf743eaca4f0e7c43a89d9117d7fa090a41b2",
+      "uncompressedSHA256": "703e81d852b011c928c319b653e268d9ed6b421d49bfd62cd0a6ea81c998ab43"
+    },
+    "release-candidate.cjs.gz": {
+      "sha256": "4cdbef563b7c425d0c4e9b7d427c57cab159160d01a3c546072dbd981f87c760",
+      "uncompressedSHA256": "c167516df7e951838722234d4234a5b585bace78eebdbb1c0453f7ff8679dfbf"
+    },
+    "model-pilot.cjs.gz": {
+      "sha256": "0a0d9fa34952ebb5a3486f4b97324e8f2e4726bb5076d7fd578c44b373a5f2a2",
+      "uncompressedSHA256": "0a9c7a2814c1b3f1ec938cce638dc03c82b3d918b6b316dc8bc73dfd2659d23b"
+    },
+    "previous-integrated.cjs.gz": {
+      "sha256": "32fc70b49f1373a6337a22348a8db9b0b5b2784984f490b32ffeee45c97f2dd3",
+      "uncompressedSHA256": "0eeb7ab6bdf7d81625658c3a715d037b24b2788ae4556bdff99ccf2cef07b9a5"
+    },
+    "release-optimized.cjs.gz": {
+      "sha256": "e5a44c541eb150ceb27854514b8424eb6eb0ae89349db7384d22d741a2eee83e",
+      "uncompressedSHA256": "1bbe703e0d9251ee7be9f7acfa1225df3369c55fc527bb45840a93d04f7d750b"
+    },
+    "release-refinements.cjs.gz": {
+      "sha256": "98965b474c8720357fca9ac31c1d3aa0c15fc426734e519f5ba391bc533b449f",
+      "uncompressedSHA256": "89d37da4d08327af30108c868a77d1a5ca3c18bde6f7d5e2deb87b4bcf21f87e"
+    },
+    "staging-baseline.cjs.gz": {
+      "sha256": "899175d36136d3de8750fdbc02048b5e0eaecee4ae70b108c3c968c1f2916572",
+      "uncompressedSHA256": "545b462f3b5f2a3b4e91f907430336ac193b7ccac63b760215b017b7e4ffbb23"
+    }
+  },
+  "releaseDifference": "Main acceptance frozen before presentation suppression and stricter sampled-own-draw proof guard; release adds anytime worker delivery. 1369 reducer transitions and 42 representative hard/hell decisions checked; not exhaustive policy equivalence. Additional final release matchups have separate module hashes."
+}
