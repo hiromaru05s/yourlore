@@ -2,6 +2,7 @@ import {surface} from './surface';
 import {Renderer} from './renderer';
 import {CARDS,DURATION,designs,phase} from './catalog';
 import './style.css';
+document.documentElement.classList.add('silence-preview');
 const root=document.getElementById('app')!;
 let renderer:Renderer;let mode='grid',variant=0,ms=0,playing=false,loop=true,speed=1,dark=false,reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,side=0,multi=false,ready=false,disposed=false,raf=0,last=0,painted=0;
 let id:string=CARDS[0];const faces=new Map<string,HTMLCanvasElement>();const timings:number[]=[];let boardReady=false;
