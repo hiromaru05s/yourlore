@@ -9,6 +9,7 @@ import {synergyTier} from '../ui/tribePresentation/selection';
 import {playTribeSynergy} from '../ui/tribeSynergy/runtime';
 import type {Playback} from '../ui/elemental/runtime';
 import {persistentShelfExits} from './shelfExits';
+import {counterPresentationEvents,counterSurvival} from './counterPresentation';
 import {installHandDiscard} from '../ui/handDiscard';
 import {captureSupplyFaces,playSupplyRefresh,supplyWasRefreshed} from '../ui/marketRefresh';
 import {prepareStateArtwork} from '../ui/stateArtwork';
@@ -306,7 +307,7 @@ export abstract class BaseController implements BoardHandlers {
         (document.querySelector(`#hand .card[data-uid="${c.uid}"]`) as HTMLElement | null)?.classList.add("is-played");
       }
     }
-    const events = res.events;
+    const events = counterPresentationEvents(res.events);
     if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
     const eventSound = new EventSound();
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
@@ -326,6 +327,7 @@ export abstract class BaseController implements BoardHandlers {
     const elementalDeaths:Promise<void>[]=[];
     const draws = [0, 0];
     const gutsHits=new Set<string>();
+    const counterGuts=new Set<GameEvent>();
     const diceDone = new Set<number>(); // dice events already animated (pre-rolled ahead of a result popup)
     const playDiceAt=async(index:number)=>{
       const roll=events[index];if(roll?.type!=='dice'||diceDone.has(index)||A.isFxSkipped()||this.dead)return;
@@ -429,6 +431,15 @@ export abstract class BaseController implements BoardHandlers {
           if(elemental.size)elementalDeaths.push(destroy());else await destroy();
           break;
         }
+        case 'counter': {
+          const result=counterSurvival(events,i);let survival:Promise<void>|undefined;
+          await A.counterStrike(e.uid,e.targetUid,()=>{
+            if(e.contactDamage>0)eventSound.contact(e.targetUid,e.targetPlayer);
+            if(result&&!survival){counterGuts.add(result);gutsHits.add(result.uid);survival=A.gutsSurvive(result,sideOf(result.player));}
+          },e.contactDamage);
+          await survival;
+          break;
+        }
         case "attack": {
           const evadeIndex=evasionRollIndex(events,i);
           if(evadeIndex>=0){
@@ -450,7 +461,7 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "gutsSurvive":
-          await A.gutsSurvive(e,sideOf(e.player));
+          if(!counterGuts.delete(e))await A.gutsSurvive(e,sideOf(e.player));
           break;
         case "monsterActivate": {
           // Several sources reacting to the same event should be visible together.

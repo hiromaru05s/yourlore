@@ -5628,7 +5628,12 @@ function counterHit(g: GameState, ctx: Ctx, owner: PlayerState, defender: FieldM
   if (g.over || amount <= 0 || !attackerOwner.field.includes(attacker)) return;
   if (attacker.id === 'CAVALRY') { monsterActivation(g, ctx.ev, attackerOwner, attacker); return; }
   ctx.log(`${cn(defender)} 반격 ${amount}`, `${cn(defender)} 反撃 ${amount}`);
+  const event:Extract<GameEvent,{type:'counter'}>={type:'counter',player:side(g,owner),uid:defender.uid,targetUid:attacker.uid,targetPlayer:side(g,attackerOwner),contactDamage:0};
+  ctx.ev.push(event);
+  const start=ctx.ev.length;
   const killed = monsterDamage(g, ctx, attackerOwner, attacker, amount, true);
+  const hit=ctx.ev.slice(start).find(e=>e.type==='hit'&&e.uid===attacker.uid);
+  if(hit?.type==='hit')event.contactDamage=hit.amount??0;
   if (killed && defender.aura === 'devourGrow' && owner.field.includes(defender)) { if (attacker.cost > 0) monsterActivation(g, ctx.ev, owner, defender); defender.atkMod += attacker.cost; defender.defMod += attacker.cost; }
 }
 /** Public presentation metadata records the targets already chosen by the reducer. */

@@ -1,0 +1,5 @@
+import {defineConfig} from 'vite';
+import fs from 'node:fs/promises';
+const root=new URL('../../../',import.meta.url).pathname;
+const qa=new URL('../../../../docs/vfx-prototypes/2026-10-12-counter-four/qa/',import.meta.url).pathname;
+export default defineConfig({root,server:{host:'127.0.0.1',port:5469,strictPort:true,fs:{allow:[root,new URL('../../../../',import.meta.url).pathname]}},build:{copyPublicDir:false,outDir:new URL('../../../../docs/vfx-prototypes/2026-10-12-counter-four/build/',import.meta.url).pathname,rollupOptions:{input:root+'counter-four.html'}},plugins:[{name:'counter-evidence',configureServer(server){server.middlewares.use('/__counter-evidence',async(req,res)=>{const name=(req.url||'').slice(1);if(req.method!=='POST'||!/^[-a-z0-9]+\.(json|png|webm)$/.test(name)){res.statusCode=400;res.end();return;}let size=0;const chunks=[];for await(const c of req){size+=c.length;if(size>30000000){res.statusCode=413;res.end();return;}chunks.push(c);}await fs.mkdir(qa,{recursive:true});await fs.writeFile(qa+name,Buffer.concat(chunks));res.end('saved');});}}]});

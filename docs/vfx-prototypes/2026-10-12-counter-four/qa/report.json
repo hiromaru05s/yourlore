@@ -1,0 +1,11 @@
+{
+  "checks": 372,
+  "failed": [],
+  "render": {
+    "frames": 461,
+    "meanDrawMs": 4.904555314505339,
+    "maxDrawMs": 81.80000000074506,
+    "note": "4-up CPU draw time, not GPU or device FPS"
+  },
+  "time": 1791797239506
+}

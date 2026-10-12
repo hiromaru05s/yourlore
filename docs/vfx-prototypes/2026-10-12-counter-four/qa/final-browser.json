@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "OS reduced motion prevents autoplay",
+    "card INFKNIGHT",
+    "card TDE2",
+    "card MIMIC",
+    "card CHOSEN_KNIGHT",
+    "fourth option reachable by scrolling",
+    "mobile opponent 3 simultaneous",
+    "mid-play cancel restores card surfaces"
+  ],
+  "errors": [],
+  "missing": []
+}
