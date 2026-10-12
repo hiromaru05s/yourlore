@@ -1,0 +1,33 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "entry": "/assets/main-C20GV22u.js",
+  "runtime": "assets/runtime-FSoyCjM5.js",
+  "sha256": "2d47f3a7c0f4250115e5ed0073afe6394dbf853a9ffe3f90c69c0842363c0dc0",
+  "at": "2026-10-12T15:43:16.607Z",
+  "results": [
+    {
+      "uid": "deployed-decay-0",
+      "frames": 162,
+      "maxPhase": 1,
+      "pixels": 147833,
+      "frame": "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-ui.webp\")",
+      "art": "https://test.yourlore.xyz/art/cards-sm/M4.webp?v=20260910-theme-identity-v3",
+      "complete": true,
+      "badge": "腐敗 1/3",
+      "visible": true
+    },
+    {
+      "uid": "deployed-decay-1",
+      "frames": 127,
+      "maxPhase": 0.992,
+      "pixels": 147833,
+      "frame": "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-ui.webp\")",
+      "art": "https://test.yourlore.xyz/art/cards-sm/M4.webp?v=20260910-theme-identity-v3",
+      "complete": true,
+      "badge": "腐敗 1/3",
+      "visible": true
+    }
+  ],
+  "errors": [],
+  "boundary": "Current deployed module on two native-card DOM fixtures with staged styles/art. Not a full BOT-board or authenticated online match."
+}
