@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {CARD_PADDING} from '../../ui/cardSurface';
 import {DURATION,designs,ease,pulse,lift} from './catalog';
 import {purpleSigil,runeRibbon} from './purpleSigils';
 export type Pass='all'|'ground'|'card';
@@ -21,10 +22,10 @@ export class Renderer{
  constructor(){
   this.gpu=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});this.gpu.setPixelRatio(1);this.gpu.setClearColor(0,0);this.gpu.outputColorSpace=T.SRGBColorSpace;
   this.scene.add(this.root);this.root.add(this.ground,this.card);this.sigils=Array.from({length:4},(_,i)=>purpleSigil(i));
-  this.faceMat=new T.ShaderMaterial({vertexShader:vertex,fragmentShader:`varying vec2 vUv;uniform sampler2D face;uniform float energy;void main(){vec4 s=texture2D(face,vUv);vec2 p=abs(vUv-.5)*2.;float edge=pow(max(p.x,p.y),5.);vec3 tint=mix(s.rgb,s.rgb*vec3(.72,.43,.93),energy*.52);tint+=vec3(.28,.015,.5)*edge*energy;gl_FragColor=vec4(tint,s.a);
+  this.faceMat=new T.ShaderMaterial({vertexShader:vertex,fragmentShader:`varying vec2 vUv;uniform sampler2D face;uniform float energy;uniform vec2 faceUvScale;void main(){vec4 s=texture2D(face,vUv);if(s.a<.001)discard;vec2 p=abs(vUv-.5)*2.*faceUvScale;float edge=pow(max(p.x,p.y),5.);vec3 tint=mix(s.rgb,s.rgb*vec3(.72,.43,.93),energy*.52);tint+=vec3(.28,.015,.5)*edge*energy;gl_FragColor=vec4(tint,s.a);
 #include <colorspace_fragment>
-}`,uniforms:{face:{value:null},energy:{value:0}},side:T.DoubleSide,transparent:true});
-  const face=new T.Mesh(new T.PlaneGeometry(2,3),this.faceMat);face.position.z=.015;this.card.add(face);
+}`,uniforms:{face:{value:null},energy:{value:0},faceUvScale:{value:new T.Vector2(1+2*CARD_PADDING,1+4*CARD_PADDING/3)}},side:T.DoubleSide,transparent:true});
+  const face=new T.Mesh(new T.PlaneGeometry(2+4*CARD_PADDING,3+4*CARD_PADDING),this.faceMat);face.position.z=.015;this.card.add(face);
   const makeSeal=(size:number,z:number,parent:T.Group)=>{const m=new T.Mesh(new T.PlaneGeometry(size,size),sealMaterial(this.sigils[0]));m.position.z=z;parent.add(m);return m;};
   this.baseSeal=makeSeal(4.35,-.06,this.ground);this.baseSeal.material.uniforms.innerCut.value=.69;this.surfaceSeal=makeSeal(1.92,.035,this.card);this.surfaceSeal.scale.y=1.45;
   this.lower=makeSeal(3.9,.08,this.card);this.lower.material.uniforms.innerCut.value=.69;this.upper=makeSeal(3.9,.08,this.card);this.orbit=makeSeal(3.65,.12,this.card);this.finalSeal=makeSeal(2.28,.05,this.card);

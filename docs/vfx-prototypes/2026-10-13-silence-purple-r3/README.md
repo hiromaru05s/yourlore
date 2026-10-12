@@ -38,3 +38,16 @@ NT_SEAL5 / NT_SEAL3 の比較用。3秒共通時計、4案比較・拡大・Game
 [4案の連続動画](qa/continuous-four.mp4) / [実盤面の連続動画](qa/board-continuous.mp4) / [検証レポート](qa/report.json)
 
 再現: `node tests/silence-four-browser.mjs`、`node tests/silence-four-record.mjs`、`node tests/silence-four-board-record.mjs`。
+
+
+## フレームの欠けのみ修正（2026-10-13）
+
+更新プレビュー: http://127.0.0.1:5496/silence-four.html?revision=3-framefix
+
+原因は `surface.ts` がキャプチャの12%余白を切り捨てていたこと。コスト飾りはカード左端から9%、攻撃・体力飾りは左右4%と下端2%はみ出すため、演出中だけ直線で切れていた。
+
+- キャプチャ全体を保持し、描画用の板を同じ余白分だけ拡張。カード本体の2×3寸法・位置・傾きは維持。
+- 紫の表面着色も元のカード座標に補正。透明余白は深度を書き込まず、背後の魔法陣を隠さない。
+- 4案の形状・動き・時間設計、魔法陣テクスチャ、オーラは変更なし。共通カード実装や通常対戦は変更なし。
+- `node tests/silence-four-frame.mjs`: 両カードでテクスチャ外周が透明かつ切り捨てられていた装飾画素が残ることを確認。4案×両カード×両陣営の16ケースで表示と終了復元を確認。390pxで縦スクロール可、横はみ出しなし、JS例外0。
+- 修正前後のカード画像、0/800/1800/3000msの比較画面、実盤面画像を目視確認。検証画像とレポートは `qa/frame-fix/`。

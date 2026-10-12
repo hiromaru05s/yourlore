@@ -1,0 +1,122 @@
+{
+  "surfaces": [
+    {
+      "id": "NT_SEAL5",
+      "width": 670,
+      "height": 940,
+      "border": 0,
+      "overhang": 4875
+    },
+    {
+      "id": "NT_SEAL3",
+      "width": 670,
+      "height": 940,
+      "border": 0,
+      "overhang": 4875
+    }
+  ],
+  "cases": [
+    {
+      "id": "NT_SEAL5",
+      "side": 0,
+      "v": 0,
+      "restored": true
+    },
+    {
+      "id": "NT_SEAL5",
+      "side": 0,
+      "v": 1,
+      "restored": true
+    },
+    {
+      "id": "NT_SEAL5",
+      "side": 0,
+      "v": 2,
+      "restored": true
+    },
+    {
+      "id": "NT_SEAL5",
+      "side": 0,
+      "v": 3,
+      "restored": true
+    },
+    {
+      "id": "NT_SEAL5",
+      "side": 1,
+      "v": 0,
+      "restored": true
+    },
+    {
+      "id": "NT_SEAL5",
+      "side": 1,
+      "v": 1,
+      "restored": true
+    },
+    {
+      "id": "NT_SEAL5",
+      "side": 1,
+      "v": 2,
+      "restored": true
+    },
+    {
+      "id": "NT_SEAL5",
+      "side": 1,
+      "v": 3,
+      "restored": true
+    },
+    {
+      "id": "NT_SEAL3",
+      "side": 0,
+      "v": 0,
+      "restored": true
+    },
+    {
+      "id": "NT_SEAL3",
+      "side": 0,
+      "v": 1,
+      "restored": true
+    },
+    {
+      "id": "NT_SEAL3",
+      "side": 0,
+      "v": 2,
+      "restored": true
+    },
+    {
+      "id": "NT_SEAL3",
+      "side": 0,
+      "v": 3,
+      "restored": true
+    },
+    {
+      "id": "NT_SEAL3",
+      "side": 1,
+      "v": 0,
+      "restored": true
+    },
+    {
+      "id": "NT_SEAL3",
+      "side": 1,
+      "v": 1,
+      "restored": true
+    },
+    {
+      "id": "NT_SEAL3",
+      "side": 1,
+      "v": 2,
+      "restored": true
+    },
+    {
+      "id": "NT_SEAL3",
+      "side": 1,
+      "v": 3,
+      "restored": true
+    }
+  ],
+  "scroll": {
+    "y": 1039,
+    "width": 390,
+    "scrollWidth": 390
+  },
+  "errors": []
+}

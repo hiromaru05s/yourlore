@@ -3,5 +3,9 @@ import {cardEl} from '../../ui/cardView';import {captureCardSurface,CARD_PADDING
 setLang('ja');
 export async function surface(id='ELF'){
  const el=cardEl({...DB[id],uid:'summon-study'},{field:true});el.style.cssText='position:fixed;left:-4000px;top:0;width:180px;height:270px;--cw:180px;--ch:270px;transform:none';document.body.append(el);const art=el.querySelector<HTMLImageElement>('.card-art img');if(art){art.removeAttribute('srcset');art.src=`/art/cards/${id}.webp`;}
- try{await document.fonts.ready;await Promise.all(Array.from(el.querySelectorAll('img')).map(i=>i.decode()));const s=await captureCardSurface(el,FRAME_BACK,true,false);if(!s.face)throw Error('Card capture failed');const out=document.createElement('canvas');out.width=540;out.height=810;const sourceWidth=s.face.width/(1+2*CARD_PADDING),pad=sourceWidth*CARD_PADDING;out.getContext('2d')!.drawImage(s.face,pad,pad,sourceWidth,s.face.height-pad*2,0,0,540,810);return out;}finally{el.remove();}
+ try{await document.fonts.ready;await Promise.all(Array.from(el.querySelectorAll('img')).map(i=>i.decode()));const s=await captureCardSurface(el,FRAME_BACK,true,false);if(!s.face)throw Error('Card capture failed');
+ // Numeric seals extend beyond the card rectangle. Keep the capture's transparent
+ // padding; the renderer expands only the carrier plane, not the card itself.
+ const out=document.createElement('canvas');out.width=Math.round(540*(1+2*CARD_PADDING));out.height=Math.round(810+1080*CARD_PADDING);
+ out.getContext('2d')!.drawImage(s.face,0,0,out.width,out.height);return out;}finally{el.remove();}
 }
