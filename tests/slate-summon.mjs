@@ -10,7 +10,7 @@ globalThis.cancelAnimationFrame=()=>{};
 let reduced=true;globalThis.matchMedia=()=>({matches:reduced});
 const dir=await mkdtemp(path.join(tmpdir(),'slate-test-'));
 try{
- await build({entryPoints:['client/src/ui/summon/runtime.ts'],bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'runtime.mjs'),plugins:[{name:'no-gpu',setup(b){b.onResolve({filter:/cardSurface$/},()=>({path:'capture',namespace:'test'}));b.onLoad({filter:/.*/,namespace:'test'},()=>({contents:'export const captureCardSurface=async()=>{await new Promise(r=>setTimeout(r,20));throw Error("unavailable texture")};'}));}}]});
+ await build({entryPoints:['client/src/ui/summon/runtime.ts'],bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'runtime.mjs'),plugins:[{name:'no-gpu',setup(b){b.onResolve({filter:/cardSurface$/},()=>({path:'capture',namespace:'test'}));b.onLoad({filter:/.*/,namespace:'test'},()=>({contents:'export const CARD_PADDING=.12;export const captureCardSurface=async()=>{await new Promise(r=>setTimeout(r,20));throw Error("unavailable texture")};'}));}}]});
  const {playSlateSummon,cancelSummons}=await import(path.join(dir,'runtime.mjs'));const n=document.getElementById('card');let impacts=0;
  assert.equal(await playSlateSummon(n,{onImpact:()=>impacts++}),true);assert.equal(impacts,1);assert.equal(document.querySelector('.slate-summon'),null);
  const abort=new AbortController();abort.abort();assert.equal(await playSlateSummon(n,{signal:abort.signal}),false);
