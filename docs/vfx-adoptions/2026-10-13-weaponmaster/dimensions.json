@@ -1,0 +1,18 @@
+{
+  "checks": [
+    {
+      "ms": 0,
+      "width": 180,
+      "height": 282,
+      "ok": true
+    },
+    {
+      "ms": 3600,
+      "width": 180,
+      "height": 282,
+      "ok": true
+    }
+  ],
+  "shaderErrors": [],
+  "padding": 0.12
+}
