@@ -7,6 +7,7 @@ import { safeGreedy, greedyStep } from './bot';
 import { observationSample } from './botObservation';
 import { botActions, actionChangesState } from './botActions';
 import { forcedWin } from './botTactics';
+import { strategicPowerEvaluator, lastingValue } from './botStrategy';
 export const TACTICS = { proof: true, targets: true, horizon: 4 };
 
 export const SEARCH = {
@@ -32,10 +33,12 @@ function strength(g: GameState, p: PlayerState): number {
   value += p.traps.length * 4;
   for (const q of p.quests ?? []) value += 2 + (q.progress / Math.max(1, q.card.quest?.target ?? 1)) * 6;
   const deck = [...p.deck, ...p.hand, ...p.discard];
-  const quality = (c: typeof deck[number]): number => Math.max(0, Math.min(55, cardPower(c))) / (1 + Math.max(0, playCost(c, p) - p.maxMana) * 0.7);
+  const power = strategicPowerEvaluator(g, p);
+  const quality = (c: typeof deck[number]): number => Math.max(0, Math.min(55, power(c))) / (1 + Math.max(0, playCost(c, p) - p.maxMana) * 0.7);
   value += deck.reduce((sum, c) => sum + quality(c), 0) / Math.max(5, deck.length) * 5 * VALUE.deck;
   value += p.hand.reduce((sum, c) => sum + quality(c), 0) * VALUE.hand * 0.15;
   value -= (p.bleed ?? 0) * 2;
+  value += lastingValue(g, p);
   return value;
 }
 export function positionValue(g: GameState, s: Side): number {
@@ -74,6 +77,7 @@ export function searchDecide(g: GameState, level: 'hard' | 'hell', prove = true,
       if (next.rng === firstSample.rng && next.players[side].hp >= firstSample.players[side].hp && next.players[1 - side].hp < firstSample.players[1 - side].hp) return a;
     }
   }
+  const power = strategicPowerEvaluator(g, g.players[g.cur]);
   const ranked = root.map(a => {
     const next = reduce(firstSample, a).state;
     const legal = actionChangesState(firstSample, next);
@@ -81,7 +85,7 @@ export function searchDecide(g: GameState, level: 'hard' | 'hell', prove = true,
     const p = g.players[g.cur];
     if (a.type === 'buyMarket' || a.type === 'buySupply') {
       const c = a.type === 'buyMarket' ? g.market[a.i] : p.supply[a.i];
-      if (c) prior += Math.max(-0.08, Math.min(0.08, (cardPower(c) - buyCost(p, c) - 10) / 300));
+      if (c) prior += Math.max(-0.08, Math.min(0.08, (power(c) - buyCost(p, c) - 10) / 300));
     }
     if (key(a) === baseKey) prior += 0.08;
     return { a, legal, prior, winsNow: !g.players[1 - side].traps.length && next.over && next.winner === side && next.rng === firstSample.rng, sum: 0, n: 0 };

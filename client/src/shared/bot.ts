@@ -9,6 +9,7 @@ import { observationSample } from "./botObservation";
 import { botActions, actionChangesState, withinBotTurnBudget } from "./botActions";
 import { DB, hasPassive } from "./cards";
 import { withoutMonsterPresentation } from './monsterEffects';
+import { strategicPowerEvaluator, recoveryEngine } from './botStrategy';
 
 export type BotDifficulty = "easy" | "normal" | "hard" | "hell";
 
@@ -272,7 +273,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   // 1) LETHAL: direct spells + attacks (with 관통 penetration) that kill THIS turn.
   //    Cast the guaranteed damage spells first, then swing.
   const plan = facePlan(p, o, ready, spells, noAtk);
-  if (plan.total >= o.hp) {
+  if (plan.total >= o.hp + (o.shield ?? 0)) {
     if (plan.spellIdx !== null) return { type: "play", idx: plan.spellIdx };
     if (plan.attackUid && p.field.some(m => m.uid === plan.attackUid && monsterCanAttack(g, p, m))) return { type: "attack", uid: plan.attackUid };
   }
@@ -282,7 +283,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   if (removal && removal.c.act === "destroyMon" && !noAtk && o.field.length > 0) {
     const big = [...o.field].sort((a, b) => (effAtk(o, b, g) + b.def!) - (effAtk(o, a, g) + a.def!))[0]; // autoTarget picks this one
     const after = facePlan(p, o, ready, spells.filter((x) => x.i !== removal.i), noAtk, big.uid);
-    if (after.total >= o.hp) return { type: "play", idx: removal.i };
+    if (after.total >= o.hp + (o.shield ?? 0)) return { type: "play", idx: removal.i };
   }
 
   // 2) break traps BEFORE summoning/attacking (pitfall kills summons, counters kill attackers)
@@ -291,6 +292,12 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
 
   // 3) removal on a blocker (clear the way before swinging)
   if (removal) return { type: "play", idx: removal.i };
+
+  // Remove sustained recovery / shield before spending mana on chip attackers.
+  const counter = spells.find(({c}) => (c.act === 'desertification' && (o.dew ?? 0) >= 2)
+    || (c.act === 'armorBreak' && (o.shield ?? 0) >= 3)
+    || (c.act === 'spearShield' && (o.shield ?? 0) > 0 && (o.shield ?? 0) < p.field.reduce((n,m) => n + Math.max(0,effAtk(p,m,g)),0)));
+  if (counter) return {type:'play',idx:counter.i};
 
   // 4) develop board — summon the strongest affordable monster
   if (monsters.length) return { type: "play", idx: monsters[0].i };
@@ -339,6 +346,8 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   // 8) utility spells (draw / ramp / disruption)
   const util = spells.find((x) => ["draw", "seek", "crash", "exile", "recall", "heal", "manaUp", "manaDown", "manaUpGain", "chestToMana"].includes(x.c.act || ""));
   if (util) return { type: "play", idx: util.i };
+  const sustain = spells.find(({c}) => c.act === 'dew' || c.act === 'golemShield' || c.act === 'cullShield');
+  if (sustain) return {type:'play',idx:sustain.i};
 
   // 8.5) 금단의 술식 / 복권 상자류 — castable() 가드 통과 시 저우선순위로 사용
   const forb = spells.find((x) => x.c.id === "FORBIDDEN" || x.c.id === "LUCKY_CHEST" || x.c.id === "GUILD_CHEST" || x.c.id === "GREED_PRICE" || x.c.id === "MARKET_CRISIS" || x.c.id === "GOLIATH_HUNT" || x.c.id === "MASSACRE");
@@ -363,9 +372,10 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   //     Early game also has a floor (11): cheap chaff bought on turns 1-4 is
   //     what clogs the deck at turn 15. Defense weighted 1.2 — walls soak
   //     penetration damage.
+  const power = strategicPowerEvaluator(g, p);
   const buyScore = (c: CardInst): number => {
     if (c.quest && [...p.hand, ...p.deck, ...p.discard, ...(p.quests ?? []).map(q => q.card)].some(x => x.id === c.id)) return -Infinity;
-    const score = cardPower(c) - buyCost(p, c) * TUNE.costW;
+    const score = power(c) - buyCost(p, c) * TUNE.costW;
     // Quick spells do not dilute the deck, so compare their immediate value without the deck-quality floor.
     return c.quick ? (score > 0 ? minBuy + score : -Infinity) : score;
   };
@@ -594,7 +604,7 @@ function autoTarget(g: GameState): Action {
       // 알은 부화 임박도(진행도)를 위협으로 환산 — 부화 직전 알은 최우선으로 깬다
       const threat = (tm: FieldMon): number =>
         tm.hatch != null ? Math.max(0, (tm.hatchTurns ?? 8) - tm.hatch) * 4 * (tm.id === "BEAST_EGG" ? 1.4 : 1)
-        : effAtk(o, tm, g) * 2 + effDef(o, tm);
+        : effAtk(o, tm, g) * 2 + effDef(o, tm) + recoveryEngine(tm) * 2;
       const legal = (tm: FieldMon): boolean => !(tm.aura === "eliteGuard" && (att?.cost ?? 0) <= 6); // 귀족 영주
       const killable = o.field
         .filter(legal)
@@ -610,7 +620,8 @@ function autoTarget(g: GameState): Action {
     }
     // destroy / debuff → hit the most valuable enemy monster (아우라 몬스터는 대상 불가 · 룬 파열 코스트 캡 준수)
     const mc0 = pending.data?.maxCost as number | undefined; // destroyMon/bounceLow 등 코스트 캡 공통
-    const t = [...o.field].filter((m) => !hasPassive(m, "aura") && (mc0 == null || m.cost <= mc0)).sort((a, b) => (effAtk(o, b, g) + b.def!) - (effAtk(o, a, g) + a.def!))[0];
+    const targetValue = (m: FieldMon): number => effAtk(o, m, g) + curHp(o, m) + recoveryEngine(m) * 2;
+    const t = [...o.field].filter((m) => !hasPassive(m, "aura") && (mc0 == null || m.cost <= mc0)).sort((a, b) => targetValue(b) - targetValue(a))[0];
     if (t) return { type: "chooseTarget", uid: t.uid };
     // anySide 파괴에서 적 대상이 없고 취소도 불가능하면(포식 등) 자기 최저가치 몬스터로 해소 (봇 무한 pending 방지)
     if ((pending.data?.anySide as boolean | undefined) && !pending.allowCancel) {

@@ -39,6 +39,11 @@ function actValue(c: CardDef): number {
     case "originQuest": return 2 * DRAW; case "beginnerMind": return 4 * DRAW - 2; case "voidAll": return 3; case "buyout": return MANA;
     case "penance": return MANA * 2; case "packInstinct": return 6; case "mindBurst": return 6; // v41b
     case "heal": return v * HEAL + v2 * DRAW;
+    case "dew": return v * HEAL * 6;
+    case "golemShield": return v * .8;
+    case "armorBreak": return 5;
+    case "spearShield": return 5;
+    case "desertification": return 3; // target-dependent value is in botStrategy
     case "siphon": return v + v2 * HEAL;
     case "destroyMon": return KILL;
     case "destroyTrap": return 4;
@@ -85,6 +90,8 @@ function summonValue(c: CardDef): number {
     case undefined: return 0;
     case "draw": return v * DRAW;
     case "heal": return v * HEAL;
+    case "shield": return v * .8 + (c.aura === 'shieldDew' ? n(c.val2) * HEAL * 6 : 0);
+    case "armorer": return Math.max(v * .8, n(c.val2) * 3);
     case "burn": case "smite": return v;
     case "selfBurn": return -v * 0.6;           // self-damage is a real cost
     case "defDown": case "atkDown": return v * 1.1;
@@ -154,6 +161,8 @@ function auraValue(c: CardDef): number {
     case "trapDiscount": return 2;
     case "rallyGuts": return 3;
     case "treeKeeper": return 4;
+    case "shieldDew": return n(c.val2) * HEAL * 6;
+    case "doubleShieldOther": return 8;
     case "sageDiscount": return 3;
     case "general": return 8;
     case "assassinHQ": return 6;
@@ -285,6 +294,9 @@ function enchValue(c: CardDef): number {
     case "trialArea": return -6 * HEAL + 4;        // 6 self-damage up front
     case "ancientCiv": return 3;
     case "elfHaven": return 4; // v25: +10 HP per World Tree offer buy
+    case "worldCare": return 12;
+    case "worldHeart": return 20;
+    case "doubleShield": return 7;
     case "colosseumRest": return 6; case "colosseum": return 8; case "lawless": return 4; case "rift": return 6; // v41
     case "freeReward": return 4; case "painGain": return 5; case "spaceLock": return 12; case "luckyEcho": return 5; case "richHabit": return 6; // v41b
     default: return 4;
