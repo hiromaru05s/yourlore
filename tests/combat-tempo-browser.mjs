@@ -51,7 +51,8 @@ try{
   assert.equal(r.remaining,0);assert.equal(r.overflow,false);checks.push({width,...r});console.log('PASS',width,kind,side,Math.round(r.ready));
  }
  await page.setViewportSize({width:1280,height:900});
- const urgency=await page.evaluate(async()=>{const paint=(s,mine)=>combatTempo.clock(s,mine);const levels=[];for(const seconds of [25,15,5,1]){paint(seconds,true);await new Promise(r=>setTimeout(r,150));levels.push({seconds,urgency:Number(document.getElementById('endBtn').dataset.urgency),shift:getComputedStyle(document.getElementById('endBtn')).getPropertyValue('--urgency-shift')});}paint(90,false);return{levels,reset:document.getElementById('endBtn').classList.contains('turn-urgent')};});
+ const urgency=await page.evaluate(async()=>{const paint=(s,mine)=>combatTempo.clock(s,mine);const levels=[];for(const seconds of [25,15,5,1]){paint(seconds,true);await new Promise(r=>setTimeout(r,150));levels.push({seconds,owner:document.querySelector('[data-reading-turn]')?.dataset.readingTurn,disabled:document.getElementById('endBtn').disabled,urgency:Number(document.getElementById('endBtn').dataset.urgency),shift:getComputedStyle(document.getElementById('endBtn')).getPropertyValue('--urgency-shift')});}paint(90,false);return{levels,reset:document.getElementById('endBtn').classList.contains('turn-urgent')};});
+ assert(urgency.levels.every(x=>x.owner==='player'&&!x.disabled),'warning preview owns the active player button');
  assert(urgency.levels.every((x,i,a)=>!i||x.urgency>a[i-1].urgency));assert.equal(urgency.reset,false);checks.push({urgency});
  await page.emulateMedia({reducedMotion:'reduce'});const reduced=await page.evaluate(()=>observeTempo('counter'));assert(reduced.frames.some(f=>f.numbers.length));assert.equal(reduced.remaining,0);checks.push({mode:'reduced',...reduced});await page.emulateMedia({reducedMotion:'no-preference'});
  for(const mode of ['skip','resize','destroy']){
