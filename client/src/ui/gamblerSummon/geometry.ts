@@ -1,9 +1,12 @@
 import * as T from 'three';
+import {CARD_PADDING} from '../cardSurface';
 import {clamp} from './catalog';
 export type Region={a0:number;a1:number;r0:number;r1:number;index:number};
 export type Form={morph:number;volume:number;spin:number;activity:number;time:number;style:number;legend:boolean};
 const TAU=Math.PI*2;
-function cardRadius(a:number){const x=Math.abs(Math.cos(a)),y=Math.abs(Math.sin(a))/1.5;return Math.pow(Math.pow(x,18)+Math.pow(y,18),-1/18)}
+// Captured faces include an equal padding measured in card-width units.
+const HALF_W=1+2*CARD_PADDING,HALF_H=1.5+2*CARD_PADDING;
+function cardRadius(a:number){const x=Math.abs(Math.cos(a))/HALF_W,y=Math.abs(Math.sin(a))/HALF_H;return Math.pow(Math.pow(x,18)+Math.pow(y,18),-1/18)}
 function roundedProfile(r:number){return .055*Math.exp(-Math.pow((r-.92)/.025,2))+.042*Math.exp(-Math.pow((r-.84)/.016,2))+.045*Math.exp(-Math.pow((r-.39)/.024,2))+.12*Math.exp(-Math.pow(r/.15,4))}
 export class SolidRegion {
  geometry:T.BufferGeometry;mesh:T.Mesh;coords:Array<[number,number,number,number]>=[];region:Region;angular:number;radial:number;
@@ -12,7 +15,7 @@ export class SolidRegion {
   const A=this.angular,R=this.radial,N=(A+1)*(R+1),indices:number[]=[],uv:number[]=[],wuv:number[]=[];
   for(let layer=0;layer<2;layer++)for(let j=0;j<=R;j++)for(let i=0;i<=A;i++){
    const a=region.a0+(region.a1-region.a0)*i/A,r=region.r0+(region.r1-region.r0)*j/R;
-   this.coords.push([a,r,layer,j/R]);const radius=cardRadius(a);uv.push(layer===0?(Math.cos(a)*radius*r+1)/2:.5+Math.cos(a)*r*.5,layer===0?(Math.sin(a)*radius*r+1.5)/3:.5+Math.sin(a)*r*.5);wuv.push(.5+Math.cos(a)*r*.5,.5+Math.sin(a)*r*.5);
+   this.coords.push([a,r,layer,j/R]);const radius=cardRadius(a);uv.push(layer===0?(Math.cos(a)*radius*r+HALF_W)/(2*HALF_W):.5+Math.cos(a)*r*.5,layer===0?(Math.sin(a)*radius*r+HALF_H)/(2*HALF_H):.5+Math.sin(a)*r*.5);wuv.push(.5+Math.cos(a)*r*.5,.5+Math.sin(a)*r*.5);
   }
   const top:number[]=[];for(let j=0;j<R;j++)for(let i=0;i<A;i++){const a=j*(A+1)+i,b=a+1,d=a+A+1,e=d+1;top.push(a,d,b,b,d,e)}
   indices.push(...top);const frontCount=indices.length;
