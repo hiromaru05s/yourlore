@@ -1,0 +1,2 @@
+import {defineConfig} from 'vite';
+export default defineConfig({root:new URL('../../../',import.meta.url).pathname,server:{host:'127.0.0.1',port:5497,strictPort:true},build:{copyPublicDir:false,outDir:new URL('../../../../docs/vfx-prototypes/2026-10-13-dragon-spiral-five/build',import.meta.url).pathname,emptyOutDir:true,rollupOptions:{input:new URL('../../../dragon-spiral-five.html',import.meta.url).pathname}}});

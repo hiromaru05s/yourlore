@@ -1,0 +1,230 @@
+{
+  "scope": "Local headless Chrome, one study playing at a time, other workstation tasks may compete. Not a production FPS guarantee.",
+  "results": [
+    {
+      "variant": 1,
+      "p50": 16.69999999999891,
+      "p95": 16.799999999999272,
+      "frames": 255,
+      "finished": true,
+      "renderer": {
+        "time": 4000,
+        "contextLost": false,
+        "disposed": false,
+        "geometries": 25,
+        "textures": 8,
+        "calls": 4,
+        "triangles": 8,
+        "contacts": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            132,
+            0
+          ],
+          [
+            0,
+            140,
+            0
+          ],
+          [
+            0,
+            146,
+            0
+          ],
+          [
+            0,
+            145,
+            0
+          ]
+        ],
+        "contexts": 1,
+        "activeRigs": 0
+      }
+    },
+    {
+      "variant": 2,
+      "p50": 16.69999999999891,
+      "p95": 16.799999999999272,
+      "frames": 264,
+      "finished": true,
+      "renderer": {
+        "time": 4000,
+        "contextLost": false,
+        "disposed": false,
+        "geometries": 44,
+        "textures": 8,
+        "calls": 4,
+        "triangles": 8,
+        "contacts": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            140,
+            0
+          ],
+          [
+            0,
+            146,
+            0
+          ],
+          [
+            0,
+            145,
+            0
+          ]
+        ],
+        "contexts": 1,
+        "activeRigs": 0
+      }
+    },
+    {
+      "variant": 3,
+      "p50": 16.700000000000728,
+      "p95": 16.799999999999272,
+      "frames": 262,
+      "finished": true,
+      "renderer": {
+        "time": 4000,
+        "contextLost": false,
+        "disposed": false,
+        "geometries": 69,
+        "textures": 8,
+        "calls": 4,
+        "triangles": 8,
+        "contacts": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            146,
+            0
+          ],
+          [
+            0,
+            145,
+            0
+          ]
+        ],
+        "contexts": 1,
+        "activeRigs": 0
+      }
+    },
+    {
+      "variant": 4,
+      "p50": 16.69999999999709,
+      "p95": 16.799999999999272,
+      "frames": 264,
+      "finished": true,
+      "renderer": {
+        "time": 4000,
+        "contextLost": false,
+        "disposed": false,
+        "geometries": 88,
+        "textures": 8,
+        "calls": 4,
+        "triangles": 8,
+        "contacts": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            145,
+            0
+          ]
+        ],
+        "contexts": 1,
+        "activeRigs": 0
+      }
+    },
+    {
+      "variant": 5,
+      "p50": 16.700000000000728,
+      "p95": 16.700000000000728,
+      "frames": 264,
+      "finished": true,
+      "renderer": {
+        "time": 4000,
+        "contextLost": false,
+        "disposed": false,
+        "geometries": 107,
+        "textures": 8,
+        "calls": 4,
+        "triangles": 8,
+        "contacts": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "contexts": 1,
+        "activeRigs": 0
+      }
+    }
+  ]
+}

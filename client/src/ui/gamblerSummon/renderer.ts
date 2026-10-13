@@ -22,8 +22,8 @@ export class Renderer {
   if(!this.faceIds.has(face))this.faceIds.set(face,++this.nextFaceId);const id=`${this.faceIds.get(face)}:${style}:${legend}`;const found=this.rigs.get(id);if(found)return found;
   const texture=new T.CanvasTexture(face);texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=8;
   const wheel=wheelTexture(style,legend),surface=surfaceMaterial(texture,wheel,legend);
-  const body=new T.MeshStandardMaterial({color:style===1?0xb0a085:style===4?0x34303e:legend?0xc5a260:0xa48551,metalness:style===1?.5:.83,roughness:style===2?.19:.3,envMapIntensity:1.05,side:T.DoubleSide});
-  const back=new T.MeshStandardMaterial({map:wheel,color:0x806d55,metalness:.68,roughness:.4,envMapIntensity:.6});
+  const body=new T.MeshStandardMaterial({color:style===1?0xb0a085:style===4?0x34303e:legend?0xc5a260:0xa48551,metalness:style===1?.5:.83,roughness:style===2?.19:.3,envMapIntensity:1.05,side:T.DoubleSide,transparent:true});
+  const back=new T.MeshStandardMaterial({map:wheel,color:0x806d55,metalness:.68,roughness:.4,envMapIntensity:.6,transparent:true});
   const root=new T.Group();const pieces=regions(style).map(region=>new SolidRegion(region,surface.material,body,back));pieces.forEach(p=>root.add(p.mesh));this.scene.add(root);
   const result={source:face,root,pieces,face:texture,wheel,surface,body,back};this.rigs.set(id,result);return result;
  }
@@ -31,6 +31,8 @@ export class Renderer {
   if(this.disposed)return;style=Math.max(0,Math.min(4,style));const rig=this.rig(face,style,legend);for(const r of this.rigs.values())r.root.visible=r===rig;
   const t=(FIRST_FRAME+clamp(ms/DURATION)*DURATION)/SOURCE_DURATION,f={...motion(style,t,reduced),legend};rig.pieces.forEach(p=>p.update(f));
   rig.surface.uniforms.material.value=reduced?0:1-ramp(t,.77,.98);
+  rig.body.opacity=rig.back.opacity=Math.min(1,f.morph*12);
+  (this.ground.material as T.ShadowMaterial).opacity=.29*f.morph;
   const formed=f.morph,anticipation=ramp(t,0,.1)*(1-ramp(t,.1,.26));
   rig.root.position.set(0,.025*formed,.018+formed*.29-anticipation*.01);
   rig.root.rotation.set(-.32*formed,.14*formed,0);

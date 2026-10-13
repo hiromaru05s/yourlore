@@ -9,13 +9,13 @@ export type TurnLightId=typeof TURN_LIGHTS[number]['id'];
 export function isTurnLight(s:unknown):s is TurnLightId{return TURN_LIGHTS.some(v=>v.id===s);}
 const declarations=`
 varying vec3 vTurnPosition;
-uniform float uTime,uActive,uEnemy,uRemaining,uHover,uVariant,uReduced;
+uniform float uTime,uActive,uEnemy,uRemaining,uHover,uVariant,uReduced,uUrgency;
 const float TURN_PI=3.14159265359;
 float line(float d,float w){return 1.-smoothstep(w,w+0.018,abs(d));}
 `;
 export function createTurnLights(turn:T.Group,segments:T.Mesh[],getVariant:()=>TurnLightId,displayScene?:T.Scene):TurnLightHandle{
  const originals=new Map<T.Mesh,T.Material|T.Material[]>(),owned:T.Material[]=[];
- const u={uTime:{value:0},uActive:{value:1},uEnemy:{value:0},uRemaining:{value:1},uHover:{value:0},uVariant:{value:0},uReduced:{value:0}};
+ const u={uTime:{value:0},uActive:{value:1},uEnemy:{value:0},uRemaining:{value:1},uHover:{value:0},uVariant:{value:0},uReduced:{value:0},uUrgency:{value:0}};
  function shader(material:T.MeshStandardMaterial,kind:'face'|'timer'){
   material.onBeforeCompile=s=>{
    Object.assign(s.uniforms,u);s.vertexShader='varying vec3 vTurnPosition;\n'+s.vertexShader;
@@ -44,7 +44,9 @@ export function createTurnLights(turn:T.Group,segments:T.Mesh[],getVariant:()=>T
       glow=.07+edge*(3.4+2.1*breath)+caustic*.8*(.25+.75*r)+facet*1.8;
       base+=vec3(.02,.13,.23)*(1.-r);
     }
-    float activity=uActive*(1.+.3*uHover);
+    float pulse=uReduced>.5?1.:.5+.5*sin(uTime*(6.+uUrgency*7.));
+    tint=mix(tint,vec3(1.,.14,.045),uUrgency*.8);
+    float activity=uActive*(1.+.3*uHover)*(1.+uUrgency*pulse*1.8);
     vec3 offBase=mix(vec3(.06,.075,.082),vec3(.13,.035,.05),uEnemy);
     diffuseColor.rgb=mix(offBase,base,uActive);
     totalEmissiveRadiance=tint*glow*activity;
@@ -90,22 +92,24 @@ export function createTurnLights(turn:T.Group,segments:T.Mesh[],getVariant:()=>T
  // This is a graded emission field, with no detached geometry or travelling particles.
  const capGlowMaterial=new T.ShaderMaterial({transparent:true,depthWrite:false,blending:T.NormalBlending,toneMapped:false,uniforms:u,
   vertexShader:'varying vec2 vP; void main(){vP=position.xy;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
-  fragmentShader:`precision highp float;varying vec2 vP;uniform float uActive,uVariant,uTime,uHover;
+  fragmentShader:`precision highp float;varying vec2 vP;uniform float uActive,uVariant,uTime,uHover,uUrgency,uReduced;
    void main(){
     float r=length(vP),a=atan(vP.y,vP.x),breath=.5+.5*sin(uTime*1.7);
     float width=.0045+breath*.0025;
     vec3 c=vec3(.14,.70,1.);float shape=1.;
     if(uVariant>.5&&uVariant<1.5){c=vec3(1.,.51,.095);shape=.65+.6*pow(.5+.5*cos(a-uTime*.5),5.);}
     if(uVariant>1.5){c=vec3(.08,.46,1.);shape=.7+.45*pow(.5+.5*cos(a*6.+uTime*.6),3.);}
+    float urgentPulse=uReduced>.5?1.:.5+.5*sin(uTime*(6.+uUrgency*7.));
+    c=mix(c,vec3(1.,.12,.035),uUrgency*.9);
     float edge=exp(-pow((r-.0418)/.0018,2.));
     float near=exp(-pow((r-.044)/width,2.))*smoothstep(.033,.040,r);
     float air=exp(-pow((r-.047)/.024,2.))*smoothstep(.039,.048,r);
     float fade=1.-smoothstep(.078,.095,r);
-    float power=(.8+.65*breath)*(1.+.4*uHover);
+    float power=(.8+.65*breath)*(1.+.4*uHover)*(1.+uUrgency*urgentPulse*1.5);
     vec3 light=(c*(near*1.5+air*.26)*shape+mix(c,vec3(1.),.65)*edge*.75)*power;
     float opacity=clamp(max(light.r,max(light.g,light.b))*.65,0.,.88);
     vec3 radiant=light/max(.0001,max(light.r,max(light.g,light.b)))*1.6;
-    gl_FragColor=vec4(radiant,opacity*fade*uActive);
+    gl_FragColor=vec4(radiant,opacity*fade*uActive*(1.-uUrgency*.55*(1.-urgentPulse)));
    }`});
  const capGlowGeometry=new T.PlaneGeometry(.2,.2),capGlow=new T.Mesh(capGlowGeometry,capGlowMaterial);
  capGlow.rotation.x=-Math.PI/2;capGlow.position.y=.0125;
@@ -130,17 +134,19 @@ export function createTurnLights(turn:T.Group,segments:T.Mesh[],getVariant:()=>T
    light.target=target;turn.parent!.add(light,target);displayLights.push(light);displayTargets.push(target);
   }
  }
+ const urgentColor=new T.Color(0xff3b18);
  let signature='',lastPaint=-Infinity;
  return {update(s:TurnLightState){
   const variant=TURN_LIGHTS.findIndex(v=>v.id===getVariant());
   u.uVariant.value=variant;u.uEnemy.value=Number(s.enemy);u.uRemaining.value=Math.max(0,Math.min(1,s.remaining));u.uReduced.value=Number(s.reduced);
+  u.uUrgency.value=s.urgency??0;
   u.uTime.value=s.reduced?0:s.now/1000;u.uHover.value=Number(s.hover||s.pressed);
   const target=Number(s.active);u.uActive.value=target;
   // The normal widget tick assigns its timer material before this preview hook.
   for(const mesh of segments)mesh.material=timerMaterial;
   if(face){face.color.set(0xffffff);face.emissive.set(0x000000);}
-  for(const m of rimMaterials){m.emissive.set(TURN_LIGHTS[variant].color);m.emissiveIntensity=s.active?2.2+(s.hover?.7:0):0;}
-  const key=[variant,s.active,s.enemy,s.remaining,s.hover,s.pressed,s.reduced].join(':');const changed=key!==signature;signature=key;
+  for(const m of rimMaterials){m.emissive.set(TURN_LIGHTS[variant].color).lerp(urgentColor,u.uUrgency.value*.8);m.emissiveIntensity=s.active?(2.2+(s.hover?.7:0))*(1+u.uUrgency.value*(s.reduced?1:.5+.5*Math.sin(s.now/1000*(6+u.uUrgency.value*7)))):0;}
+  const key=[variant,s.active,s.enemy,s.remaining,s.hover,s.pressed,s.reduced,s.urgency].join(':');const changed=key!==signature;signature=key;
   const paint=changed||(!s.reduced&&s.active&&s.now-lastPaint>=32);if(paint)lastPaint=s.now;return paint;
  },renderDisplay:displayScene?(renderer,camera)=>{
   const mask=camera.layers.mask,override=displayScene.overrideMaterial,scissorTest=renderer.getScissorTest(),shadows=renderer.shadowMap.enabled;

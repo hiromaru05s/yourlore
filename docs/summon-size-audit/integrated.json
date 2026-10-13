@@ -1,0 +1,548 @@
+{
+  "reports": [
+    {
+      "name": "共通召喚 / 商人のカード面",
+      "expected": [
+        180,
+        270
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 265,
+        "w": 180,
+        "h": 270
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "選ばれし英雄 0",
+      "expected": [
+        180,
+        270
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 265,
+        "w": 180,
+        "h": 270
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "選ばれし英雄 1",
+      "expected": [
+        180,
+        270
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 265,
+        "w": 180,
+        "h": 270
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "選ばれし英雄 2",
+      "expected": [
+        180,
+        270
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 265,
+        "w": 180,
+        "h": 270
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "選ばれし英雄 3",
+      "expected": [
+        180,
+        270
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 265,
+        "w": 180,
+        "h": 270
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "ギャンブラー",
+      "expected": [
+        260,
+        390
+      ],
+      "bounds": {
+        "x": 260,
+        "y": 100,
+        "w": 260,
+        "h": 390
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "伝説のギャンブラー",
+      "expected": [
+        260,
+        390
+      ],
+      "bounds": {
+        "x": 260,
+        "y": 100,
+        "w": 260,
+        "h": 390
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "アサシン",
+      "expected": [
+        180,
+        270
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 265,
+        "w": 180,
+        "h": 270
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "傭兵",
+      "expected": [
+        180,
+        270
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 265,
+        "w": 180,
+        "h": 270
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "呪術師",
+      "expected": [
+        180,
+        270
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 265,
+        "w": 180,
+        "h": 270
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "炎術師 / 黒魔術師 0",
+      "expected": [
+        180,
+        270
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 265,
+        "w": 180,
+        "h": 270
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "炎術師 / 黒魔術師 1",
+      "expected": [
+        180,
+        270
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 265,
+        "w": 180,
+        "h": 270
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "炎術師 / 黒魔術師 2",
+      "expected": [
+        180,
+        270
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 265,
+        "w": 180,
+        "h": 270
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "炎術師 / 黒魔術師 3",
+      "expected": [
+        180,
+        270
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 265,
+        "w": 180,
+        "h": 270
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "吸血鬼",
+      "expected": [
+        180,
+        280
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 260,
+        "w": 180,
+        "h": 280
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "エルフ / 世界樹",
+      "expected": [
+        180,
+        280
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 260,
+        "w": 180,
+        "h": 280
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "ハーフエルフ",
+      "expected": [
+        180,
+        280
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 260,
+        "w": 180,
+        "h": 280
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "種族 solitude",
+      "expected": [
+        180,
+        280
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 260,
+        "w": 180,
+        "h": 280
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "種族 predation",
+      "expected": [
+        180,
+        280
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 260,
+        "w": 180,
+        "h": 280
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "種族 noble",
+      "expected": [
+        180,
+        280
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 260,
+        "w": 180,
+        "h": 280
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "種族 demon",
+      "expected": [
+        180,
+        280
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 260,
+        "w": 180,
+        "h": 280
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "種族 origin",
+      "expected": [
+        180,
+        280
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 260,
+        "w": 180,
+        "h": 280
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "ダンジョン",
+      "expected": [
+        180,
+        270
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 265,
+        "w": 180,
+        "h": 270
+      },
+      "ratios": [
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "name": "ゴーレム",
+      "expected": [
+        180,
+        281.25
+      ],
+      "bounds": {
+        "x": 310,
+        "y": 259,
+        "w": 180,
+        "h": 282
+      },
+      "ratios": [
+        1,
+        1.0026666666666666
+      ],
+      "ok": true
+    },
+    {
+      "name": "MIMIC",
+      "expected": [
+        180,
+        280
+      ],
+      "faces": [
+        {
+          "w": 180,
+          "h": 280
+        },
+        {
+          "w": 180,
+          "h": 280
+        }
+      ],
+      "ok": true
+    },
+    {
+      "name": "MIMIC2",
+      "expected": [
+        180,
+        280
+      ],
+      "faces": [
+        {
+          "w": 180,
+          "h": 280
+        },
+        {
+          "w": 180,
+          "h": 280
+        }
+      ],
+      "ok": true
+    },
+    {
+      "name": "MIMIC_LORD",
+      "expected": [
+        180,
+        280
+      ],
+      "faces": [
+        {
+          "w": 180,
+          "h": 280
+        },
+        {
+          "w": 180,
+          "h": 280
+        }
+      ],
+      "ok": true
+    },
+    {
+      "name": "AWAKENED_MIMIC",
+      "expected": [
+        180,
+        280
+      ],
+      "faces": [
+        {
+          "w": 180,
+          "h": 280
+        },
+        {
+          "w": 180,
+          "h": 280
+        }
+      ],
+      "ok": true
+    },
+    {
+      "name": "MIMIC_KING",
+      "expected": [
+        180,
+        280
+      ],
+      "faces": [
+        {
+          "w": 180,
+          "h": 280
+        },
+        {
+          "w": 180,
+          "h": 280
+        }
+      ],
+      "ok": true
+    },
+    {
+      "name": "MIMIC_KING2",
+      "expected": [
+        180,
+        280
+      ],
+      "faces": [
+        {
+          "w": 180,
+          "h": 280
+        },
+        {
+          "w": 180,
+          "h": 280
+        }
+      ],
+      "ok": true
+    }
+  ],
+  "auditBaselineSource": "320405f30e5d51e129e32ee8007f42743593119b",
+  "integrationSource": "a0de26cff5d3ecfe6b2ef5af32f91ffb620223d9",
+  "fixCommit": "e6c33318",
+  "note": "Integrated source uses unchanged six renderer/runtime fixes; fixture baseline label refers to original staging audit."
+}

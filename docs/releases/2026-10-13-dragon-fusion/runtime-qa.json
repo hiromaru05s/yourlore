@@ -1,0 +1,34 @@
+{
+  "checks": [
+    "DRAGON_RIDER/0: single selected renderer",
+    "DRAGON_RIDER/0: material cards removed",
+    "DRAGON_RIDER/0: no graveyard flight",
+    "DRAGON_RIDER/0: cleanup",
+    "DRAGON_RIDER/0: one visible result",
+    "DRAGON_RIDER/1: single selected renderer",
+    "DRAGON_RIDER/1: material cards removed",
+    "DRAGON_RIDER/1: no graveyard flight",
+    "DRAGON_RIDER/1: cleanup",
+    "DRAGON_RIDER/1: one visible result",
+    "ANTIQUE_DK/0: single selected renderer",
+    "ANTIQUE_DK/0: material cards removed",
+    "ANTIQUE_DK/0: no graveyard flight",
+    "ANTIQUE_DK/0: cleanup",
+    "ANTIQUE_DK/0: one visible result",
+    "ANTIQUE_DK/1: single selected renderer",
+    "ANTIQUE_DK/1: material cards removed",
+    "ANTIQUE_DK/1: no graveyard flight",
+    "ANTIQUE_DK/1: cleanup",
+    "ANTIQUE_DK/1: one visible result",
+    "skip: settled without residue",
+    "resize: settled without residue",
+    "reduced: settled without residue",
+    "auto: settled without residue",
+    "no browser errors",
+    "no native fallback"
+  ],
+  "errors": [],
+  "warnings": [
+    "THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."
+  ]
+}

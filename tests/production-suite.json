@@ -1,11 +1,13 @@
 {
   "current": [
+    "tests/dragon-fusion.mjs",
     "tests/hatch-summon.mjs",
     "tests/hooded-seekers.mjs",
     "tests/chosen-victory.mjs",
     "tests/attack-vfx.mjs",
     "tests/assassin-attack.mjs",
     "tests/counter-animation.mjs",
+    "tests/combat-tempo.mjs",
     "tests/audio-contact-rules.mjs",
     "tests/audio-v3.mjs",
     "tests/balance-v52.mjs",
@@ -110,6 +112,7 @@
     "tests/vampire-geometry.mjs",
     "tests/taunt-shield.mjs",
     "tests/void-summon.mjs",
+    "tests/silence-summon.mjs",
     "tests/bot-strength.mjs",
     "tests/bot-tactics.mjs",
     "tests/bot-market-strategy.mjs",
