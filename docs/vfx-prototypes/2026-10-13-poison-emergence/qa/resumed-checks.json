@@ -1,0 +1,1034 @@
+[
+  {
+    "name": "opponent finished",
+    "cards": [
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  {
+    "name": "fixed own finished",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  {
+    "name": "fixed opponent before",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "visible"
+      }
+    ]
+  },
+  {
+    "name": "fixed opponent finished",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "visible"
+      }
+    ]
+  },
+  {
+    "name": "slug 自分側 0",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  {
+    "name": "slug 自分側 1",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  {
+    "name": "slug 自分側 2",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  {
+    "name": "slug 自分側 3",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  {
+    "name": "slug 相手側 0",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "visible"
+      }
+    ]
+  },
+  {
+    "name": "slug 相手側 1",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "visible"
+      }
+    ]
+  },
+  {
+    "name": "slug 相手側 2",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "visible"
+      }
+    ]
+  },
+  {
+    "name": "slug 相手側 3",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "visible"
+      }
+    ]
+  },
+  {
+    "name": "shroom 自分側 0",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  {
+    "name": "shroom 自分側 1",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  {
+    "name": "shroom 自分側 2",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  {
+    "name": "shroom 自分側 3",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  {
+    "name": "shroom 相手側 0",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "visible"
+      }
+    ]
+  },
+  {
+    "name": "shroom 相手側 1",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "visible"
+      }
+    ]
+  },
+  {
+    "name": "shroom 相手側 2",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "visible"
+      }
+    ]
+  },
+  {
+    "name": "shroom 相手側 3",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "visible"
+      }
+    ]
+  },
+  {
+    "name": "master 自分側 0",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  {
+    "name": "master 自分側 1",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  {
+    "name": "master 自分側 2",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  {
+    "name": "master 自分側 3",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  {
+    "name": "master 相手側 0",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "visible"
+      }
+    ]
+  },
+  {
+    "name": "master 相手側 1",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "visible"
+      }
+    ]
+  },
+  {
+    "name": "master 相手側 2",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "visible"
+      }
+    ]
+  },
+  {
+    "name": "master 相手側 3",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "visible"
+      }
+    ]
+  }
+]

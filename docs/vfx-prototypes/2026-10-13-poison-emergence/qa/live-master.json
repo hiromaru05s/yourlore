@@ -1,0 +1,115 @@
+{
+  "wraps": 2,
+  "frames": [
+    {
+      "file": "live-master-00.png",
+      "ms": 1297,
+      "wall": 1791850231087
+    },
+    {
+      "file": "live-master-01.png",
+      "ms": 1567,
+      "wall": 1791850231409
+    },
+    {
+      "file": "live-master-02.png",
+      "ms": 1787,
+      "wall": 1791850231679
+    },
+    {
+      "file": "live-master-03.png",
+      "ms": 2177,
+      "wall": 1791850232154
+    },
+    {
+      "file": "live-master-04.png",
+      "ms": 2547,
+      "wall": 1791850232294
+    },
+    {
+      "file": "live-master-05.png",
+      "ms": 2667,
+      "wall": 1791850232390
+    },
+    {
+      "file": "live-master-06.png",
+      "ms": 2767,
+      "wall": 1791850232546
+    },
+    {
+      "file": "live-master-07.png",
+      "ms": 200,
+      "wall": 1791850232762
+    },
+    {
+      "file": "live-master-08.png",
+      "ms": 350,
+      "wall": 1791850232922
+    },
+    {
+      "file": "live-master-09.png",
+      "ms": 490,
+      "wall": 1791850233029
+    },
+    {
+      "file": "live-master-10.png",
+      "ms": 590,
+      "wall": 1791850233131
+    },
+    {
+      "file": "live-master-11.png",
+      "ms": 690,
+      "wall": 1791850233247
+    },
+    {
+      "file": "live-master-12.png",
+      "ms": 820,
+      "wall": 1791850233354
+    },
+    {
+      "file": "live-master-13.png",
+      "ms": 910,
+      "wall": 1791850233438
+    },
+    {
+      "file": "live-master-14.png",
+      "ms": 1010,
+      "wall": 1791850233536
+    },
+    {
+      "file": "live-master-15.png",
+      "ms": 1099,
+      "wall": 1791850233652
+    },
+    {
+      "file": "live-master-16.png",
+      "ms": 1270,
+      "wall": 1791850233988
+    },
+    {
+      "file": "live-master-17.png",
+      "ms": 1560,
+      "wall": 1791850234160
+    },
+    {
+      "file": "live-master-18.png",
+      "ms": 1739,
+      "wall": 1791850234448
+    },
+    {
+      "file": "live-master-19.png",
+      "ms": 2240,
+      "wall": 1791850234925
+    },
+    {
+      "file": "live-master-20.png",
+      "ms": 2520,
+      "wall": 1791850235592
+    },
+    {
+      "file": "live-master-21.png",
+      "ms": 371,
+      "wall": 1791850235922
+    }
+  ]
+}

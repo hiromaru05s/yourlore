@@ -1,0 +1,65 @@
+{
+  "wraps": 2,
+  "frames": [
+    {
+      "file": "live-shroom-00.png",
+      "ms": 2089,
+      "wall": 1791850267304
+    },
+    {
+      "file": "live-shroom-01.png",
+      "ms": 2359,
+      "wall": 1791850268044
+    },
+    {
+      "file": "live-shroom-02.png",
+      "ms": 320,
+      "wall": 1791850268371
+    },
+    {
+      "file": "live-shroom-03.png",
+      "ms": 569,
+      "wall": 1791850268536
+    },
+    {
+      "file": "live-shroom-04.png",
+      "ms": 780,
+      "wall": 1791850268798
+    },
+    {
+      "file": "live-shroom-05.png",
+      "ms": 1050,
+      "wall": 1791850269131
+    },
+    {
+      "file": "live-shroom-06.png",
+      "ms": 1450,
+      "wall": 1791850269515
+    },
+    {
+      "file": "live-shroom-07.png",
+      "ms": 1740,
+      "wall": 1791850269671
+    },
+    {
+      "file": "live-shroom-08.png",
+      "ms": 1860,
+      "wall": 1791850269785
+    },
+    {
+      "file": "live-shroom-09.png",
+      "ms": 2050,
+      "wall": 1791850270270
+    },
+    {
+      "file": "live-shroom-10.png",
+      "ms": 2540,
+      "wall": 1791850270750
+    },
+    {
+      "file": "live-shroom-11.png",
+      "ms": 430,
+      "wall": 1791850271506
+    }
+  ]
+}
