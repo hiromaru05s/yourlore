@@ -366,7 +366,7 @@ export abstract class BaseController implements BoardHandlers {
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
-      const cue = (e.type==='destroy'&&([...hatches.values()].includes(e.uid)||fusionMaterials.has(e.uid)))||(e.type==='summon'&&fusions.has(e.uid))?undefined:eventSound.cue(e);
+      const cue = (e.type==='destroy'&&([...hatches.values()].includes(e.uid)||(e.cause==='fusion'&&fusionMaterials.has(e.uid))))||(e.type==='summon'&&fusions.has(e.uid))?undefined:eventSound.cue(e);
       if(cue&&!A.isFxSkipped())sfx(cue);
       if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
       if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
@@ -468,7 +468,7 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "destroy": {
-          if(fusionMaterials.has(e.uid)){fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);break;}
+          if(e.cause==='fusion'&&fusionMaterials.has(e.uid)){fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);break;}
           if([...hatches.values()].includes(e.uid)&&document.querySelector(`.zone-mon .card[data-uid="${CSS.escape(e.uid)}"]`)){heldEggs.add(e.uid);break;}
           const destroy=async()=>{
           const gh = ghosts.get(e.uid);
