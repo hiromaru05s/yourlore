@@ -1,5 +1,7 @@
 import {isShieldTitan} from './shieldTitanSummon/selection';
 import {playShieldTitanSummon} from './shieldTitanSummon/runtime';
+import {isSilenceSummon} from './silenceSummon/selection';
+import {playSilenceSummon} from './silenceSummon/runtime';
 import {playCounter} from './counter/runtime';
 import {warmCardSurface} from './cardSurface';
 import {damageNumber,portraitImpact} from './damageFeedback';
@@ -57,11 +59,9 @@ import type {HandLayout} from './handGeometry';
 import {mountDuelOutcome,cancelDuelOutcome} from './duelOutcome';
 import {reserveMonster} from './fieldLayout';
 import {waitForDuel} from './duelReadiness';
-// ============================================================
-// LORE — animation helpers. Triggered by engine events; never
+// =====================================================// LORE — animation helpers. Triggered by engine events; never
 // touch game state, only the DOM.
-// ============================================================
-import type { CardInst, GutsSurvival } from "../shared/types";
+// =====================================================import type { CardInst, GutsSurvival } from "../shared/types";
 import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, enchantHasTurnCountdown } from "../shared/cards";
 import { cardEl, cardRulesEl, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
 import { t, getLang, cardName } from "../i18n";
@@ -240,6 +240,11 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
     if(!fxSkip)await boardMotionScope(signal=>playShieldTitanSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
     face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
   }
+  if(heavy&&isSilenceSummon(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playSilenceSummon(face,{anchor:target,signal,onImpact:()=>sfx(landingSound)}),10000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
   if(heavy&&isVoidSummon(face.dataset.cardId)){
     face.style.visibility='hidden';reveal.remove();
     if(!fxSkip)await boardMotionScope(signal=>playVoidSummon(face,{anchor:target,signal,onImpact:()=>sfx(landingSound)}),10000);
@@ -352,6 +357,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
 async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise<void>{
  const id=card.id;
  if(isShieldTitan(id)){node.style.visibility='hidden';return;}
+ if(isSilenceSummon(id)){node.style.visibility='hidden';return;}
  if(isVoidSummon(id)){node.style.visibility='hidden';return;}
  if(isCasino(id)){node.style.visibility='hidden';return;}
  if(isDungeon(id)){node.style.visibility='hidden';return;}
@@ -544,7 +550,7 @@ export function pileFlash(id: string): void {
 
 export function summonIn(uid: string): void {
   const n = byUid(uid);
-  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}),(isShieldTitan(n.dataset.cardId)||isVoidSummon(n.dataset.cardId)||isMage(n.dataset.cardId)||isMercenary(n.dataset.cardId)||isVerdant(n.dataset.cardId)||isHexer(n.dataset.cardId)||isGolem(n.dataset.cardId))?10000:5000);
+  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}),(isShieldTitan(n.dataset.cardId)||isSilenceSummon(n.dataset.cardId)||isVoidSummon(n.dataset.cardId)||isMage(n.dataset.cardId)||isMercenary(n.dataset.cardId)||isVerdant(n.dataset.cardId)||isHexer(n.dataset.cardId)||isGolem(n.dataset.cardId))?10000:5000);
 }
 
 export function lunge(uid: string, dir: "up" | "down"): void {
@@ -896,12 +902,10 @@ export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; ma
   el.addEventListener("touchcancel", cancel);
 }
 
-// ============================================================
-// FX layer — sequential event playback helpers.
+// =====================================================// FX layer — sequential event playback helpers.
 // Center banners, summon ghosts, random-result popups, mana/HP
 // surges and the death sequence. All awaitable, DOM-only.
-// ============================================================
-import { t as tt } from "../i18n";
+// =====================================================import { t as tt } from "../i18n";
 
 /** Selected arcane turn announcement; keeps the controller event contract. */
 export function turnBanner(mine: boolean, turn?: number): void {

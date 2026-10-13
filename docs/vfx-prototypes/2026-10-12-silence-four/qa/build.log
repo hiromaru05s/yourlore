@@ -1,0 +1,23 @@
+vite v5.4.21 building for production...
+transforming...
+✓ 166 modules transformed.
+rendering chunks...
+computing gzip size...
+../docs/vfx-prototypes/2026-10-12-silence-four/build/silence-four.html                     0.32 kB │ gzip:   0.28 kB
+../docs/vfx-prototypes/2026-10-12-silence-four/build/assets/preview-Bh240Exj.css           4.17 kB │ gzip:   1.59 kB
+../docs/vfx-prototypes/2026-10-12-silence-four/build/assets/renderer-CDpg3JYh.css         22.08 kB │ gzip:   6.13 kB
+../docs/vfx-prototypes/2026-10-12-silence-four/build/assets/board-DCyTUHTx.css           216.67 kB │ gzip:  45.92 kB
+../docs/vfx-prototypes/2026-10-12-silence-four/build/assets/silence-four-87Jlo6Wj.js       2.17 kB │ gzip:   1.11 kB
+../docs/vfx-prototypes/2026-10-12-silence-four/build/assets/renderDensity-DAWgOrv-.js      3.55 kB │ gzip:   1.83 kB
+../docs/vfx-prototypes/2026-10-12-silence-four/build/assets/preview-DBOZXFHu.js            6.45 kB │ gzip:   3.30 kB
+../docs/vfx-prototypes/2026-10-12-silence-four/build/assets/ceremonyScene-CyqrRV2f.js      8.93 kB │ gzip:   3.96 kB
+../docs/vfx-prototypes/2026-10-12-silence-four/build/assets/paperDraw-C28dqJRQ.js         10.27 kB │ gzip:   4.65 kB
+../docs/vfx-prototypes/2026-10-12-silence-four/build/assets/duelScene-B_vcM1Sy.js        103.38 kB │ gzip:  36.20 kB
+../docs/vfx-prototypes/2026-10-12-silence-four/build/assets/board-DM1FTyvY.js            190.20 kB │ gzip:  75.20 kB
+../docs/vfx-prototypes/2026-10-12-silence-four/build/assets/renderer-DpCoIFBW.js       1,001.86 kB │ gzip: 322.11 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 3.99s
