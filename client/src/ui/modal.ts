@@ -33,13 +33,26 @@ function mount(node: HTMLElement): void {
   const title=node.querySelector('h2');if(title){title.id ||= 'lore-dialog-'+(++dialogSerial);node.setAttribute('aria-labelledby',title.id);}
   const focusables=()=>[...node.querySelectorAll<HTMLElement>('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex="0"]')].filter(el=>el.getClientRects().length>0);
   const focus=()=>{(focusables()[0]??node).focus();};
-  const keys=(event:KeyboardEvent)=>{if(event.key!=='Tab')return;const items=focusables(),at=items.indexOf(document.activeElement as HTMLElement);event.preventDefault();(items.length?items[(at+(event.shiftKey?-1:1)+items.length)%items.length]:node).focus();};
-  const keepFocus=(event:FocusEvent)=>{if(node.isConnected&&!node.contains(event.target as Node))focus();};
+  const keys=(event:KeyboardEvent)=>{if(event.key!=='Tab'||document.getElementById('zoomOverlay'))return;const items=focusables(),at=items.indexOf(document.activeElement as HTMLElement);event.preventDefault();(items.length?items[(at+(event.shiftKey?-1:1)+items.length)%items.length]:node).focus();};
+  const keepFocus=(event:FocusEvent)=>{if(node.isConnected&&!document.getElementById('zoomOverlay')&&!node.contains(event.target as Node))focus();};
   document.addEventListener('keydown',keys);document.addEventListener('focusin',keepFocus);
   releaseFocus=()=>{document.removeEventListener('keydown',keys);document.removeEventListener('focusin',keepFocus);};
+  // A single heading band keeps the clock beside the title, including when
+  // a long card list scrolls. Outcome composition remains independent.
+  let heading: HTMLElement = node;
+  if (title?.parentElement === node && !node.classList.contains("outcome-result")) {
+    heading = document.createElement("header");
+    heading.className = "popup-heading";
+    node.insertBefore(heading, title);
+    heading.append(title);
+  }
   const ov = document.createElement("div");
   ov.className = "overlay";
-  if (!node.classList.contains("outcome-result") && document.querySelector(".game .mp-clock.show")) { node.classList.add("duel-dialog"); attachDuelClock(node); }
+  if (!node.classList.contains("outcome-result") && document.querySelector(".game")) {
+    ov.classList.add("duel-overlay");
+    node.classList.add("duel-dialog");
+    if (document.querySelector(".game .mp-clock.show")) attachDuelClock(heading);
+  }
   ov.appendChild(node);
   getRoot().innerHTML = "";
   getRoot().appendChild(ov);

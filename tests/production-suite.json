@@ -112,6 +112,7 @@
     "tests/vampire-geometry.mjs",
     "tests/taunt-shield.mjs",
     "tests/void-summon.mjs",
+    "tests/silence-summon.mjs",
     "tests/bot-strength.mjs",
     "tests/bot-tactics.mjs",
     "tests/bot-npcs.mjs",
