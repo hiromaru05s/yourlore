@@ -119,6 +119,7 @@
     "tests/bot-npcs.mjs",
     "tests/bot-simulation.mjs",
     "tests/gacha-azure-motion.mjs",
+    "tests/weaponmaster-summon.mjs",
     "tests/shield-titan-summon.mjs"
   ],
   "historical": {

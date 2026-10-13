@@ -1,3 +1,5 @@
+import {isWeaponmaster} from './weaponmasterSummon/selection';
+import {playWeaponmasterSummon} from './weaponmasterSummon/runtime';
 import {isShieldTitan} from './shieldTitanSummon/selection';
 import {playShieldTitanSummon} from './shieldTitanSummon/runtime';
 import {isSilenceSummon} from './silenceSummon/selection';
@@ -272,6 +274,11 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
     if(!fxSkip)await boardMotionScope(signal=>playAssassinSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
     face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
   }
+  if(heavy&&isWeaponmaster(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playWeaponmasterSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
   if(heavy&&isMercenary(face.dataset.cardId)){
     face.style.visibility='hidden';reveal.remove();
     if(!fxSkip)await boardMotionScope(signal=>playMercenarySummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
@@ -365,6 +372,7 @@ async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise
  if(isDungeon(id)){node.style.visibility='hidden';return;}
  if(isVampire(id)){node.style.visibility='hidden';return;}
  if(isAssassin(id)){node.style.visibility='hidden';return;}
+ if(isWeaponmaster(id)){node.style.visibility='hidden';return;}
  if(isMage(id)){node.style.visibility='hidden';return;}
  // Selected hexers begin in their renderer, without a raw DOM reveal or transfer.
  if(isMercenary(id)||isHexer(id)||isGambler(id)){node.style.visibility='hidden';return;}
@@ -552,7 +560,7 @@ export function pileFlash(id: string): void {
 
 export function summonIn(uid: string): void {
   const n = byUid(uid);
-  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}),(isShieldTitan(n.dataset.cardId)||isSilenceSummon(n.dataset.cardId)||isVoidSummon(n.dataset.cardId)||isMage(n.dataset.cardId)||isMercenary(n.dataset.cardId)||isVerdant(n.dataset.cardId)||isHexer(n.dataset.cardId)||isGolem(n.dataset.cardId))?10000:5000);
+  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}),(isShieldTitan(n.dataset.cardId)||isSilenceSummon(n.dataset.cardId)||isVoidSummon(n.dataset.cardId)||isWeaponmaster(n.dataset.cardId)||isMage(n.dataset.cardId)||isMercenary(n.dataset.cardId)||isVerdant(n.dataset.cardId)||isHexer(n.dataset.cardId)||isGolem(n.dataset.cardId))?10000:5000);
 }
 
 export function lunge(uid: string, dir: "up" | "down"): void {
