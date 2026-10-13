@@ -1,5 +1,7 @@
 import {isWeaponmaster} from '../weaponmasterSummon/selection';
 import {playWeaponmasterSummon,cancelWeaponmasterSummon,cancelWeaponmasterSummons} from '../weaponmasterSummon/runtime';
+import {isShieldTitan} from '../shieldTitanSummon/selection';
+import {playShieldTitanSummon,cancelShieldTitanSummon,cancelShieldTitanSummons} from '../shieldTitanSummon/runtime';
 import {isDungeon} from '../dungeonSummon/selection';
 import {playDungeonSummon,cancelDungeonSummon,cancelDungeonSummons} from '../dungeonSummon/runtime';
 import {isVampire} from '../vampireSummon/selection';
@@ -33,6 +35,7 @@ const jobs=new Map<HTMLElement,{anchor:HTMLElement;cancel:()=>void}>();
 type Options={anchor?:HTMLElement;signal?:AbortSignal;onImpact?:()=>void};
 export function summonPlacement(target:HTMLElement,w:number,h:number,ms=0,reduced=false,cardId=target.dataset.cardId){
  if(isWeaponmaster(cardId))return projectedPlacement(target,w,h);
+ if(isShieldTitan(cardId))return projectedPlacement(target,w,h);
  if(isDungeon(cardId))return projectedPlacement(target,w,h);
  if(isVampire(cardId))return projectedPlacement(target,w,h);
  if(isAssassin(cardId))return projectedPlacement(target,w,h);
@@ -45,11 +48,12 @@ export function summonPlacement(target:HTMLElement,w:number,h:number,ms=0,reduce
  const r=layoutRect(target);
  return boardMatrix(r.left,r.top,(Number(plane.dataset.boardPlane)||0)+m.lift*r.width).scale(r.width/w,r.height/h);
 }
-export function cancelSummon(source:HTMLElement){cancelWeaponmasterSummon(source);cancelDungeonSummon(source);cancelVampireSummon(source);jobs.get(source)?.cancel();cancelAssassinSummon(source);cancelMageSummon(source);cancelVerdant(source);cancelChosenSummon(source);cancelHexerSummon(source);cancelGamblerSummon(source);cancelMercenarySummon(source);}
-export function cancelSummons(root?:HTMLElement){cancelWeaponmasterSummons(root);cancelDungeonSummons(root);cancelVampireSummons(root);cancelAssassinSummons(root);cancelMageSummons(root);cancelMercenarySummons(root);cancelGamblerSummons(root);cancelVerdants(root);cancelChosenSummons(root);cancelHexerSummons(root);for(const [source,j] of [...jobs])if(!root||root.contains(source)||root.contains(j.anchor))j.cancel();}
+export function cancelSummon(source:HTMLElement){cancelShieldTitanSummon(source);cancelWeaponmasterSummon(source);cancelDungeonSummon(source);cancelVampireSummon(source);jobs.get(source)?.cancel();cancelAssassinSummon(source);cancelMageSummon(source);cancelVerdant(source);cancelChosenSummon(source);cancelHexerSummon(source);cancelGamblerSummon(source);cancelMercenarySummon(source);}
+export function cancelSummons(root?:HTMLElement){cancelShieldTitanSummons(root);cancelWeaponmasterSummons(root);cancelDungeonSummons(root);cancelVampireSummons(root);cancelAssassinSummons(root);cancelMageSummons(root);cancelMercenarySummons(root);cancelGamblerSummons(root);cancelVerdants(root);cancelChosenSummons(root);cancelHexerSummons(root);for(const [source,j] of [...jobs])if(!root||root.contains(source)||root.contains(j.anchor))j.cancel();}
 
 export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<boolean>{
  cancelSummon(source);
+ if(isShieldTitan(source.dataset.cardId))return playShieldTitanSummon(source,options);
  if(isWeaponmaster(source.dataset.cardId))return playWeaponmasterSummon(source,options);
  if(isDungeon(source.dataset.cardId))return playDungeonSummon(source,options);
  if(isVampire(source.dataset.cardId))return playVampireSummon(source,options);

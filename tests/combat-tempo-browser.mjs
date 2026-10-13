@@ -14,7 +14,7 @@ try{
   const c=combatTempo.controller;await c.queue;await new Promise(r=>setTimeout(r,1700));
   const f=combatTempo.fixture(kind,side);c.show(f.prev);await new Promise(r=>setTimeout(r,300));
   const start=performance.now(),frames=[];let sampling=true;const tick=()=>{
-   const numbers=[...document.querySelectorAll('.combat-damage.in')].map(n=>({value:n.textContent,uid:n.dataset.damageUid,width:n.getBoundingClientRect().width,height:n.getBoundingClientRect().height,font:parseFloat(getComputedStyle(n).fontSize)}));
+   const numbers=[...document.querySelectorAll('.combat-damage.in')].filter(n=>Number(getComputedStyle(n).opacity)>0).map(n=>({value:n.textContent,uid:n.dataset.damageUid,width:n.getBoundingClientRect().width,height:n.getBoundingClientRect().height,font:parseFloat(getComputedStyle(n).fontSize),duration:getComputedStyle(n).animationDuration,family:getComputedStyle(n).fontFamily,weight:getComputedStyle(n).fontWeight}));
    const counter=document.querySelector('.counter-rig'),exit=document.querySelector('.mana-destruction');
    frames.push({t:Math.round(performance.now()-start),numbers,counter:counter?Number(counter.dataset.counterMs):null,exit:exit?.dataset.phase??null,exits:document.querySelectorAll('[data-combat-exit=true]').length,recoil:document.querySelectorAll('[data-hit-reaction=true]').length+[...document.querySelectorAll('.zone-mon .card')].filter(n=>n.getAnimations().some(a=>a.id==='monster-hit')).length,botShake:document.querySelector('#portraitOpp .pt-ring')?.getAnimations().some(a=>a.id==='portrait-impact'),playerShake:document.querySelector('#portraitMe .pt-ring')?.getAnimations().some(a=>a.id==='seeker-impact'),blocked:!!document.querySelector('.zone-mon [data-uid=tempo-attacker][data-monster-blocked]'),hp:document.querySelector('.zone-mon [data-uid=tempo-defender] .ad-def .seal-value')?.textContent,dew:!!document.querySelector('.dew-grant'),shield:!!document.querySelector('.status-grant'),summon:!!document.querySelector('.cast-reveal,.fx-card-flight,.fx-field-ghost'),playing:!!document.querySelector('.fx-playing')});
    if(sampling)requestAnimationFrame(tick);
@@ -37,7 +37,9 @@ try{
   if(kind!=='summon'){
    assert(first,'damage displayed');assert(first.blocked||kind==='multi'||kind==='mutual','exhausted at contact');
    const times=r.frames.filter(f=>f.numbers.some(n=>n.uid==='tempo-defender'||kind==='face'));
-   assert(times.at(-1).t-times[0].t>=330&&times.at(-1).t-times[0].t<650,'half-second number');
+   const samplingGap=Math.max(...r.frames.slice(1).map((f,i)=>f.t-r.frames[i].t));
+   assert(first.numbers.every(n=>n.duration==='0.8s'&&n.family.startsWith('LoreBoardSerif')&&n.weight==='600'),'800ms duration and portrait HP typography');
+   assert(times.at(-1).t-times[0].t>=800-samplingGap-50&&times.at(-1).t-times[0].t<800+samplingGap+50,'800ms visibility within sampled frame resolution');
    assert(first.numbers.every(n=>n.font>=n.height*.3),'frame-sized numerals');
   }
   if(kind==='counter'){
