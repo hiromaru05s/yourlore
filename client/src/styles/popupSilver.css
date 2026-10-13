@@ -1,0 +1,194 @@
+/* Selected 01 / 蒼銀のフレーム. Shared menu + duel dialogs.
+   Keep card inspection, cinematic rewards and the outcome screen independent.
+   Deliberate specificity replaces older lounge / board skins without changing
+   their content, handlers, selection rules or card face rendering. */
+:root body .overlay:has(> .modal:not(.outcome-result)) {
+  padding:16px;
+  background:#020b16a3;
+  backdrop-filter:blur(5px);
+}
+:root body .overlay.duel-overlay {
+  background:#020b1673;
+  backdrop-filter:blur(2px);
+}
+:root body .overlay > .modal:not(.outcome-result) {
+  --popup-silver:1;
+  --popup-x:36px;
+  --popup-y:30px;
+  --paper:#edf4f8;
+  --paper-dim:#bdcedb;
+  --paper-faint:#9db3c4;
+  --brass:#adc5d5;
+  --brass-hi:#c9dfea;
+  --good:#a3dfc8;
+  --vermil-hi:#ffb9b0;
+  --blue:#b5d8f0;
+  --line:#9db9ca45;
+  position:relative;
+  box-sizing:border-box;
+  width:min(610px,100%);
+  min-width:0;
+  max-width:calc(100vw - 32px);
+  max-height:calc(100dvh - 32px);
+  overflow:auto;
+  overscroll-behavior:contain;
+  padding:var(--popup-y) var(--popup-x);
+  border:1px solid #bad1e3a8;
+  border-radius:0;
+  outline:1px solid #a8c7dd30;
+  outline-offset:-5px;
+  background:linear-gradient(130deg,#182e43fa,#091727fc 65%);
+  box-shadow:0 24px 80px #0008,inset 0 -1px #d5ecf733;
+  color:var(--paper);
+  text-align:left;
+  scrollbar-color:#7995a9 #0c1a29;
+  animation:popupSilverEnter 220ms cubic-bezier(.2,.75,.25,1) both;
+}
+:root body .overlay > .modal:not(.outcome-result) > :is(h2,.support-dialog-heading) {
+  margin:calc(5px - var(--popup-y)) calc(5px - var(--popup-x)) 24px;
+  padding:22px calc(var(--popup-x) - 5px);
+  border:0;
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(100deg,#27496573,transparent);
+}
+:root body .overlay > .modal:not(.outcome-result) h2 {
+  font-family:var(--serif);
+  font-size:28px!important; /* Older modal templates have inline 14/16px titles. */
+  font-weight:400;
+  line-height:1.5;
+  letter-spacing:.06em;
+  text-align:left;
+  text-transform:none;
+  overflow-wrap:anywhere;
+  color:#eef4f7;
+  text-shadow:none;
+}
+:root body .overlay > .modal:not(.outcome-result) .support-dialog-heading h2 { margin:10px 0 0; }
+:root body .overlay > .modal:not(.outcome-result) .menu-eyebrow { color:#a8c1d1; font-size:10px; letter-spacing:.22em; }
+:root body .overlay > .modal:not(.outcome-result) p { color:var(--paper-dim); line-height:1.85; }
+:root body .overlay > .modal:not(.outcome-result) > p { font-size:14px; }
+:root body .overlay > .modal:not(.outcome-result) :is(.field-label,label[for]) {
+  display:block; margin:18px 0 10px; color:#c6d7e2; font-size:13px; line-height:1.6;
+}
+:root body .overlay > .modal:not(.outcome-result) :is(.input,select,textarea) {
+  box-sizing:border-box; min-width:0; max-width:100%; width:100%; min-height:46px;
+  padding:13px 15px; border:1px solid #a9c4d65c; border-radius:0;
+  background:#020d1980; color:#edf4f8; box-shadow:none; font-size:16px;
+}
+:root body .overlay > .modal:not(.outcome-result) input::placeholder,
+:root body .overlay > .modal:not(.outcome-result) textarea::placeholder { color:#91aabe; }
+:root body .overlay > .modal:not(.outcome-result) .modal-row {
+  display:flex; flex-wrap:wrap; justify-content:flex-end; gap:12px;
+  margin-top:26px; padding-top:0; text-align:right;
+}
+:root body .overlay > .modal:not(.outcome-result) .btn {
+  min-height:46px; padding:12px 24px; border:1px solid #9ab4c15e; border-radius:0;
+  background:transparent; background-image:none; color:#c5d7e3;
+  box-shadow:none; text-shadow:none; font-family:var(--ui); font-size:13px;
+  letter-spacing:.035em; text-transform:none; line-height:1.5;
+  transform:none; clip-path:none;
+}
+:root body .overlay > .modal:not(.outcome-result) :is(.btn-gold,.btn-primary) {
+  background:linear-gradient(115deg,#d7e7ed,#9fbccf);
+  border-color:#e4f1f7; color:#102333; box-shadow:inset 0 0 0 3px #142b4017;
+}
+:root body .overlay > .modal:not(.outcome-result) .btn-danger {
+  background:linear-gradient(115deg,#583342,#382532); border-color:#d39caa; color:#ffe7ed;
+}
+:root body .overlay > .modal:not(.outcome-result) .btn:hover:not(:disabled) {
+  filter:brightness(1.12); border-color:#e1f1f8; transform:none;
+}
+:root body .overlay > .modal:not(.outcome-result) .btn:active:not(:disabled) { filter:brightness(.92); }
+:root body .overlay > .modal:not(.outcome-result) .btn:disabled { opacity:.4; cursor:not-allowed; }
+:root body .overlay > .modal:not(.outcome-result) :is(button,input,textarea,select):focus-visible {
+  outline:2px solid #e2f5ff; outline-offset:3px;
+}
+/* Browsing and selecting need room for complete card faces, not a scaled form. */
+:root body .overlay > .modal:not(.outcome-result):has(> .picker-grid) {
+  width:min(920px,calc(100vw - 32px))!important;
+  max-width:920px!important;
+  max-height:calc(100dvh - 32px)!important;
+}
+:root body .overlay > .modal:not(.outcome-result) .picker-grid {
+  gap:18px!important; margin:18px 0!important;
+  padding:18px 14px!important; max-height:min(50dvh,470px)!important;
+  overflow:auto; overscroll-behavior:contain; align-items:flex-start;
+  scrollbar-color:#7995a9 #0c1a29;
+}
+:root body .overlay > .modal:not(.outcome-result) .picker-grid .card {
+  --cw:128px; --ch:calc(var(--cw) * 1.5625); flex:0 0 var(--cw);
+}
+:root body .overlay > .modal:not(.outcome-result) .picker-grid .card.is-picked {
+  outline:2px solid #d7effa; outline-offset:5px;
+}
+:root body .overlay > .modal:not(.outcome-result) .picker-grid .card.is-picked::after {
+  content:'✓'; position:absolute; inset:-8px -8px auto auto; width:25px; height:25px;
+  display:grid; place-items:center; border:1px solid #effaff; border-radius:0;
+  background:#c5dfea; color:#102333; font:16px/1 var(--ui); z-index:30;
+  box-shadow:0 3px 10px #0006; pointer-events:none;
+}
+:root body .overlay > .modal:not(.outcome-result) :is(.picker-count,.cast-review-selection) {
+  color:#d7e8f1; font-size:14px!important; opacity:1!important; text-align:right!important;
+}
+:root body .overlay > .modal:not(.outcome-result) .picker-owner { color:#c5dbe9; text-align:center; margin-bottom:10px; }
+:root body .overlay > .modal:not(.outcome-result) .cast-review-caution { color:#ffc1c1; }
+:root body .overlay > .modal:not(.outcome-result) .dv-tabs {
+  display:flex; flex-wrap:wrap; width:fit-content; gap:6px; padding:0; background:none; border:0; border-radius:0;
+}
+:root body .overlay > .modal:not(.outcome-result) .dv-tab {
+  border:0; border-bottom:1px solid #8eaabd55; border-radius:0; background:none;
+  color:#a5bac9; min-height:44px; padding:10px 18px;
+}
+:root body .overlay > .modal:not(.outcome-result) .dv-tab.is-active { background:#c1deed12; border-bottom-color:#d7edf7; color:#edf7ff; }
+:root body .overlay > .modal:not(.outcome-result) .dv-tab b { color:inherit; }
+:root body .overlay > .modal:not(.outcome-result) .dv-note { text-align:left; color:#a4bbcc; line-height:1.7; }
+:root body .overlay > .modal.duel-dialog:not(.outcome-result) > .modal-row {
+  position:sticky; bottom:calc(-1 * var(--popup-y)); z-index:35;
+  background:linear-gradient(#0a1929f5,#0a1929);
+  margin:20px calc(-1 * var(--popup-x)) calc(-1 * var(--popup-y));
+  padding:18px var(--popup-x) var(--popup-y); border-top:1px solid var(--line);
+}
+:root body .overlay > .modal:not(.outcome-result) .dialog-clock {
+  position:sticky; top:calc(5px - var(--popup-y)); z-index:40;
+  width:fit-content; min-width:90px; margin:0 0 20px auto;
+  padding:10px 16px; background:#0b1d2ff5; border:1px solid #bed6e266;
+  color:#e4f3fa; font-size:16px; box-shadow:0 3px 12px #0004;
+}
+:root body .overlay > .modal:not(.outcome-result) .dialog-clock + h2 { margin-top:0; }
+:root body .overlay > .modal:not(.outcome-result) .dialog-clock.warn { color:#ffc1ba; border-color:#e7a6a0; }
+:root body .overlay > .modal:not(.outcome-result) .dialog-clock::after { background:currentColor; }
+/* Preserve approved NPC composition and character picker geometry. */
+:root body .overlay > .modal.bot-challenge { width:min(1040px,100%); max-width:1040px; }
+:root body .overlay > .modal.bot-challenge .support-dialog-heading { position:relative; }
+:root body .overlay > .modal.bot-challenge .challenge-back { top:22px; right:28px; }
+:root body .overlay > .modal.bot-challenge h2 { padding-right:110px; }
+:root body .overlay > .modal.hooded-picker { --popup-x:24px; }
+:root body .overlay > .modal:not(.outcome-result) .invite-link-row .input { width:0; flex:1; }
+:root body .overlay > .modal:not(.outcome-result) .help-body { gap:18px; }
+:root body .overlay > .modal:not(.outcome-result) .help-body h3 { color:#d1e5ef; }
+@keyframes popupSilverEnter { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+@media(max-width:650px) {
+  :root body .overlay:has(> .modal:not(.outcome-result)) { padding:12px; }
+  :root body .overlay > .modal:not(.outcome-result) {
+    --popup-x:22px; --popup-y:24px;
+    max-width:calc(100vw - 24px); max-height:calc(100dvh - 24px);
+  }
+  :root body .overlay > .modal:not(.outcome-result) h2 { font-size:23px!important; }
+  :root body .overlay > .modal:not(.outcome-result) > :is(h2,.support-dialog-heading) { padding-block:18px; margin-bottom:20px; }
+  :root body .overlay > .modal:not(.outcome-result) .modal-row { gap:10px; }
+  :root body .overlay > .modal:not(.outcome-result) .modal-row .btn { flex:1 1 100px; padding:12px 14px; }
+  :root body .overlay > .modal:not(.outcome-result):has(> .picker-grid) { --popup-x:16px; width:calc(100vw - 24px)!important; max-height:calc(100dvh - 24px)!important; }
+  :root body .overlay > .modal:not(.outcome-result) .picker-grid { gap:18px!important; padding:16px 9px!important; max-height:46dvh!important; }
+  :root body .overlay > .modal:not(.outcome-result) .picker-grid .card { --cw:min(112px,27vw); }
+  :root body .overlay > .modal.bot-challenge .challenge-back { top:10px; right:10px; }
+  :root body .overlay > .modal.hooded-picker { --popup-x:14px; --popup-y:20px; }
+  :root body .overlay > .modal:not(.outcome-result) .pv-foot { flex-wrap:wrap; }
+}
+@media(max-height:500px) {
+  :root body .overlay > .modal:not(.outcome-result) { --popup-y:18px; }
+  :root body .overlay > .modal:not(.outcome-result) > :is(h2,.support-dialog-heading) { padding-block:14px; margin-bottom:16px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  :root body .overlay:has(> .modal:not(.outcome-result)),
+  :root body .overlay > .modal:not(.outcome-result) { animation:none; }
+}
