@@ -37,12 +37,21 @@ function mount(node: HTMLElement): void {
   const keepFocus=(event:FocusEvent)=>{if(node.isConnected&&!document.getElementById('zoomOverlay')&&!node.contains(event.target as Node))focus();};
   document.addEventListener('keydown',keys);document.addEventListener('focusin',keepFocus);
   releaseFocus=()=>{document.removeEventListener('keydown',keys);document.removeEventListener('focusin',keepFocus);};
+  // A single heading band keeps the clock beside the title, including when
+  // a long card list scrolls. Outcome composition remains independent.
+  let heading: HTMLElement = node;
+  if (title?.parentElement === node && !node.classList.contains("outcome-result")) {
+    heading = document.createElement("header");
+    heading.className = "popup-heading";
+    node.insertBefore(heading, title);
+    heading.append(title);
+  }
   const ov = document.createElement("div");
   ov.className = "overlay";
   if (!node.classList.contains("outcome-result") && document.querySelector(".game")) {
     ov.classList.add("duel-overlay");
     node.classList.add("duel-dialog");
-    if (document.querySelector(".game .mp-clock.show")) attachDuelClock(node);
+    if (document.querySelector(".game .mp-clock.show")) attachDuelClock(heading);
   }
   ov.appendChild(node);
   getRoot().innerHTML = "";

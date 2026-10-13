@@ -7,7 +7,7 @@
   background:#020b16a3;
   backdrop-filter:blur(5px);
 }
-:root body .overlay.duel-overlay {
+:root body .overlay.duel-overlay:has(> .modal:not(.outcome-result)) {
   background:#020b1673;
   backdrop-filter:blur(2px);
 }
@@ -44,7 +44,7 @@
   scrollbar-color:#7995a9 #0c1a29;
   animation:popupSilverEnter 220ms cubic-bezier(.2,.75,.25,1) both;
 }
-:root body .overlay > .modal:not(.outcome-result) > :is(h2,.support-dialog-heading) {
+:root body .overlay > .modal:not(.outcome-result) > :is(h2,.support-dialog-heading,.popup-heading) {
   margin:calc(5px - var(--popup-y)) calc(5px - var(--popup-x)) 24px;
   padding:22px calc(var(--popup-x) - 5px);
   border:0;
@@ -63,6 +63,12 @@
   color:#eef4f7;
   text-shadow:none;
 }
+:root body .overlay > .modal:not(.outcome-result) .popup-heading {
+  display:flex; align-items:center; gap:20px;
+  background:linear-gradient(100deg,#203c53,#0a1929);
+}
+:root body .overlay > .modal:not(.outcome-result) .popup-heading h2 { flex:1; min-width:0; margin:0; order:0; }
+:root body .overlay > .modal.duel-dialog:not(.outcome-result) .popup-heading { position:sticky; top:calc(5px - var(--popup-y)); z-index:40; }
 :root body .overlay > .modal:not(.outcome-result) .support-dialog-heading h2 { margin:10px 0 0; }
 :root body .overlay > .modal:not(.outcome-result) .menu-eyebrow { color:#a8c1d1; font-size:10px; letter-spacing:.22em; }
 :root body .overlay > .modal:not(.outcome-result) p { color:var(--paper-dim); line-height:1.85; }
@@ -149,12 +155,11 @@
   padding:18px var(--popup-x) var(--popup-y); border-top:1px solid var(--line);
 }
 :root body .overlay > .modal:not(.outcome-result) .dialog-clock {
-  position:sticky; top:calc(5px - var(--popup-y)); z-index:40;
-  width:fit-content; min-width:90px; margin:0 0 20px auto;
+  position:relative; top:auto; z-index:1; order:1; flex:none;
+  width:fit-content; min-width:90px; margin:0;
   padding:10px 16px; background:#0b1d2ff5; border:1px solid #bed6e266;
   color:#e4f3fa; font-size:16px; box-shadow:0 3px 12px #0004;
 }
-:root body .overlay > .modal:not(.outcome-result) .dialog-clock + h2 { margin-top:0; }
 :root body .overlay > .modal:not(.outcome-result) .dialog-clock.warn { color:#ffc1ba; border-color:#e7a6a0; }
 :root body .overlay > .modal:not(.outcome-result) .dialog-clock::after { background:currentColor; }
 /* Preserve approved NPC composition and character picker geometry. */
@@ -174,7 +179,7 @@
     max-width:calc(100vw - 24px); max-height:calc(100dvh - 24px);
   }
   :root body .overlay > .modal:not(.outcome-result) h2 { font-size:23px!important; }
-  :root body .overlay > .modal:not(.outcome-result) > :is(h2,.support-dialog-heading) { padding-block:18px; margin-bottom:20px; }
+  :root body .overlay > .modal:not(.outcome-result) > :is(h2,.support-dialog-heading,.popup-heading) { padding-block:18px; margin-bottom:20px; }
   :root body .overlay > .modal:not(.outcome-result) .modal-row { gap:10px; }
   :root body .overlay > .modal:not(.outcome-result) .modal-row .btn { flex:1 1 100px; padding:12px 14px; }
   :root body .overlay > .modal:not(.outcome-result):has(> .picker-grid) { --popup-x:16px; width:calc(100vw - 24px)!important; max-height:calc(100dvh - 24px)!important; }
@@ -182,11 +187,13 @@
   :root body .overlay > .modal:not(.outcome-result) .picker-grid .card { --cw:min(112px,27vw); }
   :root body .overlay > .modal.bot-challenge .challenge-back { top:10px; right:10px; }
   :root body .overlay > .modal.hooded-picker { --popup-x:14px; --popup-y:20px; }
+  :root body .overlay > .modal:not(.outcome-result) .popup-heading { gap:14px; }
+  :root body .overlay > .modal:not(.outcome-result) .dialog-clock { min-width:68px; padding:10px; font-size:13px; }
   :root body .overlay > .modal:not(.outcome-result) .pv-foot { flex-wrap:wrap; }
 }
 @media(max-height:500px) {
   :root body .overlay > .modal:not(.outcome-result) { --popup-y:18px; }
-  :root body .overlay > .modal:not(.outcome-result) > :is(h2,.support-dialog-heading) { padding-block:14px; margin-bottom:16px; }
+  :root body .overlay > .modal:not(.outcome-result) > :is(h2,.support-dialog-heading,.popup-heading) { padding-block:14px; margin-bottom:16px; }
 }
 @media(prefers-reduced-motion:reduce) {
   :root body .overlay:has(> .modal:not(.outcome-result)),

@@ -54,7 +54,7 @@ try{
  for(const [width,height]of [[1280,800],[390,844],[320,667],[844,390]]){
   await page.setViewportSize({width,height});
   await page.evaluate(()=>{qa.M.confirmDialog({title:'降参しますか？',body:'このデュエルは敗北として記録されます。',confirm:'降参する',cancel:'対戦を続ける',danger:true}).then(v=>qa.result=v);});
-  await inspect(`duel-confirm-${width}`,width===1280||width===390);assert(await page.locator('.duel-overlay').count());assert(await page.locator('.dialog-clock').count());
+  await inspect(`duel-confirm-${width}`,width===1280||width===390);assert(await page.locator('.duel-overlay').count());assert(await page.locator('.dialog-clock').count());assert.equal(await page.locator('.duel-overlay').evaluate(el=>getComputedStyle(el).backdropFilter),'blur(2px)');
   await page.evaluate(()=>qa.clock.paintDuelClock(document.querySelector('.mp-clock'),4,60,true));assert(await page.locator('.dialog-clock.warn').count());
   await page.keyboard.press('Escape');
   await page.evaluate(()=>qa.M.cardPickerMulti('手札に残すカードを2枚選んでください',qa.pool,2,v=>qa.result=v,{exact:true}));

@@ -12,8 +12,9 @@
 
 ## 検証記録
 
-- `tests/popup-silver-browser.mjs`: 実際のHOMEコンポーネントと盤面レンダラーを使うローカルfixture。PC・390px・320px・横向き、入力、キャンセル、カード複数選択、拡大内フォーカス、タイマー警告、デッキタブ、英韓の長文見出しを検証。
-- `tests/target-choice-ui.mjs`: 選択・確定・キャンセル・置換・三言語の既存機能回帰。
+- `tests/popup-silver-browser.mjs`: 20 / 20 PASS。実際のHOMEコンポーネントと盤面レンダラーを使うローカルfixture。PC・390px・320px・横向き、入力、キャンセル、カード複数選択、拡大内フォーカス、タイマー警告、デッキタブ、英韓の長文見出しを検証。画像と測定値は `local/` に保存。対戦用blur 2pxも実測。
+- `tests/target-choice-ui.mjs`: PASS。選択・確定・キャンセル・置換・三言語の既存機能回帰。
+- `tests/popup-silver-staging.mjs`: 配信CSSと公開frontend上のHOME・NPC選択・ローカルBOT対戦の説明／降参キャンセルを確認するスモーク。APIとアカウントはfixtureを使用。
 - 配布前の型検査・production suite・buildは `scripts/deploy-guard.mjs staging` に従う。
 
 ローカルfixtureとデプロイ後のfrontend確認は、実アカウント同士の認証済みオンライン対戦の証明ではない。ステージングの公開バージョンと配信確認は検証後に追記する。
