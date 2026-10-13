@@ -170,7 +170,9 @@
 
 .reading-board .portrait .pt-resources>span{position:absolute;height:36%;pointer-events:auto;}
 .reading-board .portrait .pt-resources .pt-shield{left:-8%;top:60%;width:30%;}
-.reading-board .portrait .pt-resources .pt-dew{left:76.5%;top:6%;width:33%;}
+.reading-board .portrait .pt-resources .pt-dew{left:73.5%;top:3.75%;width:33%;}
 
 /* Approved seal: optical width matches the shield, centers align along the lower frame. */
 .reading-board .portrait .pt-resources .pt-brand{left:77%;top:61%;width:32%;height:34%;}
+
+.reading-board .game #endBtn .end-turn-label{translate:var(--urgency-shift,0px) 0;}

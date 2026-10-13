@@ -47,6 +47,13 @@ async function matte(url: string): Promise<HTMLCanvasElement> {
   return pending;
 }
 
+/** Warm independent layers together before a contact-triggered material needs them. */
+export function warmCardSurface(node:HTMLElement):void{
+ for(const el of node.querySelectorAll('.card-frame,.seal-face')){const url=urlOf(el);if(url)void matte(url).catch(()=>{});}
+ const art=node.querySelector<HTMLImageElement>('.card-art img');if(art)void image(art.currentSrc||art.src).catch(()=>{});
+ if(node.querySelector('.card-status .ec,.card-status .kw,.badge'))void matte('/art/biblion/modular/plaque-ui.webp').catch(()=>{});
+}
+
 export interface CardSurface { face: HTMLCanvasElement | null; back: HTMLCanvasElement; }
 /** Identity-free sleeve surface shared by draw and library reshuffle meshes. */
 function paintSleeve(ctx:CanvasRenderingContext2D,img:HTMLImageElement,pad:number,w:number,h:number){

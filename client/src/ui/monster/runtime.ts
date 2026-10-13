@@ -33,9 +33,48 @@ let frame=0, skipped=false;
 const jobs=new Map<HTMLElement,Job>();
 const states=new Map<HTMLElement,{actor:Actor;opacity:string;root:HTMLElement;layer:Layers;rect?:Rect;dirty:boolean;dual?:DualReadySurface}>();
 const gutsJobs=new Map<HTMLElement,{source:HTMLElement;actor:Actor;surface:AmberSurface;start:number;ms:number;r:Rect;finish:(complete:boolean)=>void}>();
-type Options={mana?:boolean;variant?:Variant;anchor?:HTMLElement;target?:HTMLElement;destination?:HTMLElement;side?:number;signal?:AbortSignal;onImpact?:()=>void;exhaust?:boolean;stats?:Actor['stats']};
+type Options={tempo?:boolean;mana?:boolean;variant?:Variant;anchor?:HTMLElement;target?:HTMLElement;destination?:HTMLElement;side?:number;signal?:AbortSignal;onImpact?:()=>void;exhaust?:boolean;stats?:Actor['stats']};
 type Job={source:HTMLElement;actor:Actor;kind:Kind;variant:Variant;start:number;ms:number;r:Rect;target:Rect;destination?:Rect;options:Options;opacity:string;finish:(complete:boolean)=>void;impacted:boolean;hit?:{actor:Actor;node:HTMLElement;opacity:string}};
 const reduced=()=>motion.matches;
+const hits=new Map<HTMLElement,number>();
+export function hitMonster(source:HTMLElement){
+ const state=states.get(source);if(state||jobs.has(source)||gutsJobs.has(source))hits.set(source,performance.now());if(state)state.dirty=true;
+ if(!state&&!jobs.has(source)&&!gutsJobs.has(source)&&!reduced()){
+  source.getAnimations().filter(a=>a.id==='monster-hit').forEach(a=>a.cancel());
+  const a=source.animate([{translate:'0px 0px'},{translate:'-5px 2px',offset:.12},{translate:'4px -1px',offset:.34},{translate:'-2px 0px',offset:.6},{translate:'0px 0px'}],{duration:300,easing:'ease-out'});a.id='monster-hit';
+ }
+ schedule();
+}
+export function combatVisualRect(source:HTMLElement):DOMRect|null{
+ const counter=document.querySelector<HTMLElement>(`.counter-rig[data-source-uid="${CSS.escape(source.dataset.uid??'')}"]`);
+ const actor=counter??jobs.get(source)?.actor.el??gutsJobs.get(source)?.actor.el??states.get(source)?.actor.el;
+ return actor?.isConnected?actor.getBoundingClientRect():source.isConnected?source.getBoundingClientRect():null;
+}
+export function monsterHealth(source:HTMLElement,value:number){
+ for(const node of [source,states.get(source)?.actor.el,jobs.get(source)?.actor.el,gutsJobs.get(source)?.actor.el]){
+  const label=node?.querySelector('.ad-def .seal-value');if(label)label.textContent=String(Math.max(0,value));
+ }
+}
+function paintHit(source:HTMLElement,actor:Actor,now:number){
+ const start=hits.get(source);if(start===undefined)return;
+ const t=(now-start)/300;if(t>=1){hits.delete(source);const state=states.get(source);if(state)state.dirty=true;return;}
+ const q=reduced()?0:Math.sin(t*Math.PI*5)*(1-t)*5;
+ actor.el.style.setProperty('translate',`${q}px ${Math.abs(q)*.2}px`);
+ actor.el.style.setProperty('filter',actor.el.style.filter+` brightness(${1+.28*(1-t)})`,'important');
+ actor.el.dataset.hitReaction='true';
+}
+/** Freeze the currently visible pose before a destruction takes ownership. */
+export function detachMonsterFace(source:HTMLElement):HTMLElement{
+ const visible=jobs.get(source)?.actor.el??states.get(source)?.actor.el;
+ const copy=(visible??source).cloneNode(true) as HTMLElement;
+ if(!visible){const w=source.offsetWidth,h=source.offsetHeight,m=projectedPlacement(source,w,h);copy.style.cssText=`position:fixed!important;left:0!important;top:0!important;width:${w}px!important;height:${h}px!important;--cw:${w}px;--ch:${h}px;transform:${m.toString()}!important;transform-origin:0 0!important;margin:0!important`;}
+ copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));
+ copy.classList.remove('is-attacker','is-targetable','is-atk-target');
+ copy.style.setProperty('position','fixed','important');copy.style.setProperty('opacity','1','important');copy.style.setProperty('visibility','visible','important');copy.style.setProperty('display','block');copy.style.pointerEvents='none';copy.style.zIndex='136';
+ copy.dataset.combatExit='true';copy.setAttribute('aria-hidden','true');document.body.append(copy);
+ jobs.get(source)?.finish(false);removeState(source);hits.delete(source);source.style.visibility='hidden';release();return copy;
+}
+
 export function monsterRect(n:HTMLElement):Rect{const r=n.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2,w:r.width,h:r.height,matrix:projectedPlacement(n,r.width,r.height)};}
 function ensure(){if(!layers){layers=mountAnimationLayers(document.body,true);layers.root.setAttribute('aria-hidden','true');}return layers;}
 function ensureField(root:HTMLElement){
@@ -66,8 +105,8 @@ export function syncMonsterStates(root:HTMLElement){
  }
  if([...states.values()].some(s=>s.root===root))observeField(root);release();if(states.size)schedule();
 }
-export function clearMonsterStates(root:HTMLElement){for(const j of [...gutsJobs.values()])if(root.contains(j.source))j.finish(false);cancelSilenceSummons(root);cancelVoidSummons(root);cancelCasinoSummons(root);cancelGolems(root);cancelTribeSummons(root);cancelRiftDestruction(root);cancelManaDestruction(root);cancelSummons(root);for(const j of [...jobs.values()])if(root.contains(j.source))j.finish(false);for(const [n,s] of states)if(s.root===root)removeState(n);release();}
-export function setMonsterSkip(value:boolean){skipped=value;if(value){for(const j of [...gutsJobs.values()])j.finish(false);cancelSilenceSummons();cancelVoidSummons();cancelCasinoSummons();cancelGolems();cancelTribeSummons();cancelSummons();cancelRiftDestruction();cancelManaDestruction();}if(value)for(const j of [...jobs.values()])j.finish(false);}
+export function clearMonsterStates(root:HTMLElement){for(const node of hits.keys())if(root.contains(node)||!node.isConnected)hits.delete(node);for(const j of [...gutsJobs.values()])if(root.contains(j.source))j.finish(false);cancelSilenceSummons(root);cancelVoidSummons(root);cancelCasinoSummons(root);cancelGolems(root);cancelTribeSummons(root);cancelRiftDestruction(root);cancelManaDestruction(root);cancelSummons(root);for(const j of [...jobs.values()])if(root.contains(j.source))j.finish(false);for(const [n,s] of states)if(s.root===root)removeState(n);release();}
+export function setMonsterSkip(value:boolean){skipped=value;if(value){hits.clear();for(const j of [...gutsJobs.values()])j.finish(false);cancelSilenceSummons();cancelVoidSummons();cancelCasinoSummons();cancelGolems();cancelTribeSummons();cancelSummons();cancelRiftDestruction();cancelManaDestruction();}if(value)for(const j of [...jobs.values()])j.finish(false);}
 function release(){
  for(const [root,layer] of fieldLayers)if(![...states.values()].some(s=>s.root===root)){layer.dispose();fieldLayers.delete(root);observers.get(root)?.disconnect();observers.delete(root);}
  if(!jobs.size&&!gutsJobs.size){layers?.dispose();layers=undefined;}
@@ -75,6 +114,7 @@ function release(){
 }
 function tick(now:number){
  frame=0;if(document.hidden)return;
+ for(const [node,start] of hits)if(!node.isConnected||now-start>=300){hits.delete(node);const state=states.get(node);if(state)state.dirty=true;}
  const active=layers;active?.begin(innerWidth,innerHeight);
  // Measure all dirty sources before touching clone styles. Idle geometry stays cached
  // until board projection, resize, scrolling, rendering or source style changes.
@@ -87,7 +127,7 @@ function tick(now:number){
   if(!n.isConnected){removeState(n);continue;}
   if(hidden.has(n)||n.classList.contains('is-dragging')||n.style.visibility==='hidden'){s.actor.hide();s.dirty=true;continue;}
   const r=s.rect!,ready=n.classList.contains('is-attacker'),blocked=!!n.dataset.monsterBlocked,dual=ready&&n.dataset.monsterDualReady==='04';
-  const dynamic=n.getAnimations().length>0||!reduced()&&(ready||!!n.dataset.monsterAura);animated||=dynamic;
+  const dynamic=hits.has(n)||n.getAnimations().length>0||!reduced()&&(ready||!!n.dataset.monsterAura);animated||=dynamic;
   if(!s.dirty&&!dynamic){if(ready&&!dual)drawEffect(s.layer.foreground,'ready','C',0,r,r,{active:true,reduced:true,side:n.closest('#oppRow')?-1:1,pass:'front'});continue;}
   s.dirty=false;
   const side=n.closest('#oppRow')?-1:1;
@@ -100,6 +140,7 @@ function tick(now:number){
   }
   for(const cls of ['is-aiming','is-atk-target','is-targetable'])s.actor.el.classList.toggle(cls,n.classList.contains(cls));
   if(n.classList.contains('is-atk-target')||n.classList.contains('is-targetable'))s.actor.el.style.setProperty('filter',s.actor.el.style.filter+' drop-shadow(0 0 5px #ff7955)','important');
+  s.actor.el.style.removeProperty('translate');delete s.actor.el.dataset.hitReaction;paintHit(n,s.actor,now);
   if(ready&&!dual)drawEffect(s.layer.foreground,'ready','C',t,r,r,{active:true,reduced:reduced(),side,pass:'front'});
  }
  for(const j of [...jobs.values()]){
@@ -109,10 +150,10 @@ function tick(now:number){
   const impact=j.kind==='attack'?270:Infinity;
   if(!j.impacted&&(now-j.start>=impact||reduced())){j.impacted=true;o.onImpact?.();}
   // Multi-attack returns to its ready state without a false exhausted interval.
-  const paintT=j.kind==='attack'&&o.exhaust===false?Math.min(t*j.ms,819)/2800:t;
+  const paintT=j.kind==='attack'&&(o.tempo||o.exhaust===false)?Math.min(t*j.ms,819)/2800:t;
   j.actor.paint(j.kind,j.variant,paintT,j.r,j.target,reduced(),true,o.side??1,j.destination);
   for(const pass of ['rear','front'] as const)drawEffect(pass==='rear'?active.back:active.foreground,j.kind,j.variant,paintT,j.r,j.target,{active:true,reduced:reduced(),side:o.side??1,destination:j.destination,pass});
-  if(j.kind==='attack'&&o.target?.matches('.card')&&!reduced()&&!gutsJobs.has(o.target)){
+  if(j.kind==='attack'&&!o.tempo&&o.target?.matches('.card')&&!reduced()&&!gutsJobs.has(o.target)){
    const at=paintT*2800/820,ct=270/820,hit=ease(ct,ct+.015,at)*(1-ease(ct+.05,ct+.22,at));
    if(hit>0){
     if(!j.hit){j.hit={actor:new Actor(o.target,active.cards),node:o.target,opacity:o.target.style.opacity};o.target.style.opacity='0';}
@@ -122,6 +163,10 @@ function tick(now:number){
     a.el.style.setProperty('filter',`brightness(${1+hit*.15})`,'important');a.el.dataset.monsterKind='contact';
    }else if(j.hit){j.hit.actor.dispose();j.hit.node.style.opacity=j.hit.opacity;j.hit=undefined;}
   }
+  if(j.kind==='attack'&&o.tempo&&o.exhaust!==false&&j.impacted){
+   const q=ease(270,450,now-j.start);j.actor.el.style.setProperty('filter',`grayscale(${q}) brightness(${1-.43*q})`,'important');
+  }
+  j.actor.el.style.removeProperty('translate');delete j.actor.el.dataset.hitReaction;paintHit(j.source,j.actor,now);
   if(t>=1)j.finish(true);
  }
  for(const j of [...gutsJobs.values()]){
@@ -174,7 +219,7 @@ export function playMonster(source:HTMLElement,kind:Kind,options:Options={}):Pro
   let settled=false;const abort=()=>finish(false);
   const timer=setTimeout(abort,6000);
   const finish=(complete:boolean)=>{if(settled)return;settled=true;clearTimeout(timer);options.signal?.removeEventListener('abort',abort);actor.dispose();if(j.hit){j.hit.actor.dispose();j.hit.node.style.opacity=j.hit.opacity;}source.style.opacity=oldOpacity;jobs.delete(source);resolve(complete);release();};
-  const j:Job={source,actor,kind,variant,start:performance.now(),ms:reduced()?100:kind==='attack'&&options.exhaust===false?820:duration(kind,variant),r,target:options.target?monsterRect(options.target):r,destination:dest,options,opacity:oldOpacity,finish,impacted:false};
+  const j:Job={source,actor,kind,variant,start:performance.now(),ms:reduced()?100:kind==='attack'&&(options.tempo||options.exhaust===false)?820:duration(kind,variant),r,target:options.target?monsterRect(options.target):r,destination:dest,options,opacity:oldOpacity,finish,impacted:false};
   jobs.set(source,j);options.signal?.addEventListener('abort',abort,{once:true});schedule();
  });
 }

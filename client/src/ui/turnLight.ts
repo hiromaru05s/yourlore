@@ -9,13 +9,13 @@ export type TurnLightId=typeof TURN_LIGHTS[number]['id'];
 export function isTurnLight(s:unknown):s is TurnLightId{return TURN_LIGHTS.some(v=>v.id===s);}
 const declarations=`
 varying vec3 vTurnPosition;
-uniform float uTime,uActive,uEnemy,uRemaining,uHover,uVariant,uReduced;
+uniform float uTime,uActive,uEnemy,uRemaining,uHover,uVariant,uReduced,uUrgency;
 const float TURN_PI=3.14159265359;
 float line(float d,float w){return 1.-smoothstep(w,w+0.018,abs(d));}
 `;
 export function createTurnLights(turn:T.Group,segments:T.Mesh[],getVariant:()=>TurnLightId,displayScene?:T.Scene):TurnLightHandle{
  const originals=new Map<T.Mesh,T.Material|T.Material[]>(),owned:T.Material[]=[];
- const u={uTime:{value:0},uActive:{value:1},uEnemy:{value:0},uRemaining:{value:1},uHover:{value:0},uVariant:{value:0},uReduced:{value:0}};
+ const u={uTime:{value:0},uActive:{value:1},uEnemy:{value:0},uRemaining:{value:1},uHover:{value:0},uVariant:{value:0},uReduced:{value:0},uUrgency:{value:0}};
  function shader(material:T.MeshStandardMaterial,kind:'face'|'timer'){
   material.onBeforeCompile=s=>{
    Object.assign(s.uniforms,u);s.vertexShader='varying vec3 vTurnPosition;\n'+s.vertexShader;
@@ -44,7 +44,9 @@ export function createTurnLights(turn:T.Group,segments:T.Mesh[],getVariant:()=>T
       glow=.07+edge*(3.4+2.1*breath)+caustic*.8*(.25+.75*r)+facet*1.8;
       base+=vec3(.02,.13,.23)*(1.-r);
     }
-    float activity=uActive*(1.+.3*uHover);
+    float pulse=uReduced>.5?1.:.5+.5*sin(uTime*(6.+uUrgency*7.));
+    tint=mix(tint,vec3(1.,.14,.045),uUrgency*.8);
+    float activity=uActive*(1.+.3*uHover)*(1.+uUrgency*pulse*1.8);
     vec3 offBase=mix(vec3(.06,.075,.082),vec3(.13,.035,.05),uEnemy);
     diffuseColor.rgb=mix(offBase,base,uActive);
     totalEmissiveRadiance=tint*glow*activity;
@@ -134,13 +136,14 @@ export function createTurnLights(turn:T.Group,segments:T.Mesh[],getVariant:()=>T
  return {update(s:TurnLightState){
   const variant=TURN_LIGHTS.findIndex(v=>v.id===getVariant());
   u.uVariant.value=variant;u.uEnemy.value=Number(s.enemy);u.uRemaining.value=Math.max(0,Math.min(1,s.remaining));u.uReduced.value=Number(s.reduced);
+  u.uUrgency.value=s.urgency??0;
   u.uTime.value=s.reduced?0:s.now/1000;u.uHover.value=Number(s.hover||s.pressed);
   const target=Number(s.active);u.uActive.value=target;
   // The normal widget tick assigns its timer material before this preview hook.
   for(const mesh of segments)mesh.material=timerMaterial;
   if(face){face.color.set(0xffffff);face.emissive.set(0x000000);}
   for(const m of rimMaterials){m.emissive.set(TURN_LIGHTS[variant].color);m.emissiveIntensity=s.active?2.2+(s.hover?.7:0):0;}
-  const key=[variant,s.active,s.enemy,s.remaining,s.hover,s.pressed,s.reduced].join(':');const changed=key!==signature;signature=key;
+  const key=[variant,s.active,s.enemy,s.remaining,s.hover,s.pressed,s.reduced,s.urgency].join(':');const changed=key!==signature;signature=key;
   const paint=changed||(!s.reduced&&s.active&&s.now-lastPaint>=32);if(paint)lastPaint=s.now;return paint;
  },renderDisplay:displayScene?(renderer,camera)=>{
   const mask=camera.layers.mask,override=displayScene.overrideMaterial,scissorTest=renderer.getScissorTest(),shadows=renderer.shadowMap.enabled;
