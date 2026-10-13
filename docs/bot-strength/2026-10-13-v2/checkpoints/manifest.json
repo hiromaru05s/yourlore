@@ -1,0 +1,54 @@
+{
+  "status": "paused for coordinated shared release; incomplete cohorts are not final acceptance rates",
+  "records": [
+    {
+      "name": "staging-hell",
+      "planned": 60,
+      "completed": 35,
+      "checkpointSHA256": "6718e44f197013991367a175d7e3c92076f8e163cf067c70694effce155f8fe1",
+      "originalRowsSHA256": "90afbd22e412894dc2bb590da36f63f7bf94e5056ff6bb128e05ef3060fc6bc1"
+    },
+    {
+      "name": "final-hard-normal",
+      "planned": 60,
+      "completed": 57,
+      "checkpointSHA256": "b1c857a0e07f8101d351a2e1397275f44d22397b5f641874aef4398277239205",
+      "originalRowsSHA256": "2ad1996c4d5ff0ccc1bc4c88397dfcb9a729dbbec2577d85cc3a72b4ed491084"
+    },
+    {
+      "name": "final-hard",
+      "planned": 60,
+      "completed": 39,
+      "checkpointSHA256": "e937fa6f0200bf8bc6865dcab3800e55cbbbe0e7869ef6ab7e85dd659fb15c1b",
+      "originalRowsSHA256": "172845e6ff54de9f227b446e3ef9ad0ba223be354648839b40011230e2760f74"
+    },
+    {
+      "name": "release-previous",
+      "planned": 24,
+      "completed": 6,
+      "checkpointSHA256": "91688ddf43fc0f74400736f444adeadc7e73019c5c17da1e337c99806c40dae3",
+      "originalRowsSHA256": "f0fd872948ce51aae118e6008e0f91c6697114941ac0fcf9fe315a8ff3dd0732"
+    },
+    {
+      "name": "final-previous",
+      "planned": 60,
+      "completed": 7,
+      "checkpointSHA256": "b55b3da3285c707bf88517cd061129217a4cdd5b96df1cb782ec1a281f2e33bc",
+      "originalRowsSHA256": "900ff5ab6b7ebde9d4d322815a31f187c420b0a7aad36fbcbb49bf05e20fe826"
+    },
+    {
+      "name": "final-counters",
+      "planned": 60,
+      "completed": 8,
+      "checkpointSHA256": "f622348bca397023926d82f17f47d365ac1a8bec4d98d05cfa3c1b03d5bd1d29",
+      "originalRowsSHA256": "8887998140353e12c24fa04d28a07e1a6f7b1e3fc17063bb0a7e011a9050a02a"
+    },
+    {
+      "name": "final-policy",
+      "planned": 60,
+      "completed": 7,
+      "checkpointSHA256": "abf9ac204f0d58cf9749806149425c161aee07b1fbfc53f5b87eb15ffde320f0",
+      "originalRowsSHA256": "54fa0762b539861db1ebfd790158ea41ba91cdba4a6be8514581817a6560a827"
+    }
+  ]
+}

@@ -140,3 +140,11 @@ and their conformance checks. Both modules and exact roster files are recorded i
 each result. Do not overwrite a bundle while an evaluation is running.
 The synchronous evaluator does not impose the browser's 15-second wall-clock
 limit; browser lifecycle and retained recommendations are validated separately.
+
+`RESUME_FROM` accepts a checkpoint with `{config, rows}`. The immutable policy
+hashes, search/value parameters, exact rosters and original seed range must
+match. Always use a **new output name**. Completed rows are preserved in order;
+only an unfinished game restarts from its original seed. Resumed results report
+`resume.games` and the checkpoint SHA; their timing covers only the new process
+and must not be interpreted as a complete latency benchmark. Do not combine an
+original prefix and its resumed full result as independent games.

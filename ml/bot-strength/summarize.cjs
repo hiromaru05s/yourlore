@@ -28,7 +28,7 @@ const result = {A:runs[0].A,B:runs[0].B,rosterA:runs[0].rosterA,rosterB:runs[0].
   wins:valid.filter(r=>r.winner===r.seat).length,draws:valid.filter(r=>r.winner==null).length,
   completePairs:scores.length,pairedScore:scores.reduce((a,b)=>a+b,0)/scores.length,
   pairedBootstrap95:[boot[250],boot[9750]],
-  ms:{p50ShardRange:[Math.min(...runs.map(r=>r.ms.p50)),Math.max(...runs.map(r=>r.ms.p50))],
+  ms:runs.some(r=>r.resume)?null:{p50ShardRange:[Math.min(...runs.map(r=>r.ms.p50)),Math.max(...runs.map(r=>r.ms.p50))],
     p95ShardRange:[Math.min(...runs.map(r=>r.ms.p95)),Math.max(...runs.map(r=>r.ms.p95))],max:Math.max(...runs.map(r=>r.ms.max))},
   sources:inputs.map(f=>require('node:path').basename(f)),rows};
 fs.writeFileSync(output, JSON.stringify(result,null,2));
