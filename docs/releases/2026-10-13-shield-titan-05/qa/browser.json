@@ -1,0 +1,126 @@
+{
+  "origin": "http://127.0.0.1:5494",
+  "results": [
+    {
+      "approvedPreviewParity": [
+        {
+          "t": 0,
+          "identical": true
+        },
+        {
+          "t": 850,
+          "identical": true
+        },
+        {
+          "t": 1410,
+          "identical": true
+        },
+        {
+          "t": 2100,
+          "identical": true
+        },
+        {
+          "t": 3000,
+          "identical": true
+        }
+      ]
+    },
+    {
+      "side": 0,
+      "path": "direct",
+      "initial": {
+        "variant": "5",
+        "pixels": 13148,
+        "rawGhosts": 0,
+        "other": 0
+      },
+      "restored": true
+    },
+    {
+      "side": 0,
+      "path": "hand",
+      "initial": {
+        "variant": "5",
+        "pixels": 26847,
+        "rawGhosts": 0,
+        "other": 0
+      },
+      "restored": true
+    },
+    {
+      "side": 0,
+      "path": "generated",
+      "initial": {
+        "variant": "5",
+        "pixels": 34988,
+        "rawGhosts": 0,
+        "other": 0
+      },
+      "restored": true
+    },
+    {
+      "side": 1,
+      "path": "direct",
+      "initial": {
+        "variant": "5",
+        "pixels": 11722,
+        "rawGhosts": 0,
+        "other": 0
+      },
+      "restored": true
+    },
+    {
+      "side": 1,
+      "path": "hand",
+      "initial": {
+        "variant": "5",
+        "pixels": 55143,
+        "rawGhosts": 0,
+        "other": 0
+      },
+      "restored": true
+    },
+    {
+      "side": 1,
+      "path": "generated",
+      "initial": {
+        "variant": "5",
+        "pixels": 55143,
+        "rawGhosts": 0,
+        "other": 0
+      },
+      "restored": true
+    },
+    {
+      "side": 0,
+      "simultaneous": 3,
+      "impactOnce": true
+    },
+    {
+      "side": 1,
+      "simultaneous": 3,
+      "impactOnce": true
+    },
+    {
+      "why": "cancel",
+      "restored": true
+    },
+    {
+      "why": "skip",
+      "restored": true
+    },
+    {
+      "why": "resize",
+      "restored": true
+    },
+    {
+      "mobile": true
+    },
+    {
+      "reduced": true
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "scope": "Production routes on a deterministic GameView fixture; not an authenticated match"
+}

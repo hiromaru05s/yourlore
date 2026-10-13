@@ -1,0 +1,7 @@
+*.png
+*.jpg
+*.webm
+*.mp4
+frames/
+!five-850.png
+!board-0-4.png

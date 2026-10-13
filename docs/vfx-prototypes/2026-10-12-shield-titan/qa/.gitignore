@@ -1,0 +1,7 @@
+*.png
+*.jpg
+*.webm
+*.mp4
+recordings/
+!four-1250.png
+!mobile-board.png

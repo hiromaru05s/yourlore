@@ -12,7 +12,7 @@ export function damageNumber(anchor:HTMLElement|null,amount:number,follow?:()=>D
  node.style.cssText=`left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;font-size:${size}px`;
  document.body.append(node);
  let timer=0,frame=0;const stop=()=>{clearTimeout(timer);cancelAnimationFrame(frame);node.remove();live.delete(stop);};live.add(stop);
- const tick=()=>{const at=follow?.()??(anchor?.isConnected?anchor.getBoundingClientRect():null);if(at&&at.width>0){node.style.left=`${at.left+at.width/2-r.width/2}px`;node.style.top=`${at.top+at.height/2-r.height/2}px`;}frame=requestAnimationFrame(tick);};frame=requestAnimationFrame(()=>{node.classList.add('in');timer=window.setTimeout(stop,500);tick();});
+ const tick=()=>{const at=follow?.()??(anchor?.isConnected?anchor.getBoundingClientRect():null);if(at&&at.width>0){node.style.left=`${at.left+at.width/2-r.width/2}px`;node.style.top=`${at.top+at.height/2-r.height/2}px`;}frame=requestAnimationFrame(tick);};frame=requestAnimationFrame(()=>{node.classList.add('in');timer=window.setTimeout(stop,800);tick();});
 }
 /** The whole portrait frame reacts, whether it contains a seeker canvas or a BOT image. */
 export function portraitImpact(side:'me'|'opp'){
