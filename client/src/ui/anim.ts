@@ -958,6 +958,17 @@ export async function hatchSummon(sourceUid:string,card:CardInst):Promise<HTMLEl
  source.replaceWith(face);return face;
 }
 
+/** Selected fusion owns source removal and result appearance without a graveyard flight. */
+export async function dragonFusionSummon(card:CardInst,side:ViewSide,from:{dragon:{uid:string};mate:{uid:string}}):Promise<HTMLElement|null>{
+ const zone=monZoneEl(side);if(!zone)return null;
+ const face=cardEl(card,{field:true});
+ const source=(uid:string)=>zone.querySelector<HTMLElement>(`.card[data-uid="${CSS.escape(uid)}"]`)??undefined;
+ const dragon=source(from.dragon.uid),mate=source(from.mate.uid);
+ const {playDragonFusion}=await import('./dragonFusion/runtime');
+ await boardMotionScope(signal=>playDragonFusion(dragon,mate,face,zone,[from.dragon.uid,from.mate.uid],signal,fxSkip,()=>sfx('summon')),10000);
+ return face.isConnected?face:null;
+}
+
 export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: number,onReveal?:(node:HTMLElement)=>void): Promise<HTMLElement | null> {
   const from = fromRect(side, takeOrigin(side)); const zone=monZoneEl(side);
   if(!from||!zone)return null;
