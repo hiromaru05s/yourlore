@@ -1,0 +1,44 @@
+{
+  "revision": "material-emergence",
+  "method": "Codex browser UI and native accessibility controls",
+  "comparison": {
+    "cards": [
+      "POISON_MASTER",
+      "RUST_SLUG",
+      "RUST_SHROOM"
+    ],
+    "variantsPerCard": 4,
+    "sampleTimesMs": [
+      0,
+      640,
+      1100,
+      1400,
+      1700,
+      2400
+    ],
+    "screenshots": 18
+  },
+  "board": {
+    "beforeSummon": "target hidden and hand visible verified in DOM",
+    "peakConfirmed": [
+      "POISON_MASTER own variants 0-3",
+      "POISON_MASTER opponent variants 0-1"
+    ],
+    "peakTimeMs": 1350,
+    "screenshots": [
+      "board-before.png",
+      "board-master-自分側.png",
+      "board-master-相手側.png"
+    ]
+  },
+  "build": "passed; shared chunk size warning",
+  "typecheck": "passed before final board lifecycle edit; final lifecycle edit included in successful Vite build",
+  "console": "No errors observed through comparison review; pre-existing PCFSoftShadowMap deprecation warning from board",
+  "incomplete": [
+    "Normal-speed continuous replay of final revision",
+    "Full board coverage for all 12 variants and both sides",
+    "Final completion/reset/concurrency/reduced-motion UI checks",
+    "Responsive and runtime performance checks"
+  ],
+  "reason": "Browser calls timed out and then browser became unavailable. Concurrent staging coordinator requested no further heavy checks. No build/test process owned by this task remained running."
+}
