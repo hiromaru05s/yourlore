@@ -4,7 +4,7 @@ import {setOppAvatar} from '../ui/boardView';
 import {paintDuelClock} from '../ui/duelClock';
 import type {FieldMon,GameState,ReduceResult,Side} from '../shared/types';
 
-type Preview={show(g:GameState):void;applyResult(r:ReduceResult):void;queue:Promise<void>;fastForward():void;introShown:boolean;stopTimer():void};
+type Preview={state:GameState;show(g:GameState):void;applyResult(r:ReduceResult):void;queue:Promise<void>;fastForward():void;introShown:boolean;stopTimer():void};
 export function tempoFixture(kind:string,side:Side=0){
  const g=createGame({mode:'bot',seed:71,starting:side,p0:{id:'tempo-self',name:'YOU'},p1:{id:'tempo-bot',name:'BOT'}}).state;
  g.cur=side;g.turn=3;g.phase='main';g.pending=null;
@@ -32,7 +32,8 @@ export function mountCombatTempo(controller:unknown){
   finally{busy=false;panel.classList.remove('is-playing');panel.querySelectorAll('button').forEach(b=>b.disabled=false);}
  };
  for(const [kind,label,side] of [['counter','被弾＋即反撃',0],['lethal','破壊＋次の操作',0],['mutual','反撃で相打ち',0],['face','BOTへ12ダメージ',0],['face','自分への被弾',1],['multi','連続攻撃',0],['summon','召喚＋雫・シールド',0]] as const){const b=document.createElement('button');b.textContent=label;b.dataset.tempo=kind;b.dataset.side=String(side);b.onclick=()=>void run(kind,side);panel.querySelector('.tempo-buttons')!.append(b);}
- const slider=panel.querySelector('input')!;slider.oninput=()=>{c.stopTimer();const el=document.getElementById('clock-me');if(el)paintDuelClock(el,Number(slider.value),90,true);panel.querySelector('output')!.textContent=slider.value+'秒';};
+ const clock=(seconds:number,mine=true)=>{const side:Side=mine?0:1;if(c.state.cur!==side)c.show({...c.state,cur:side});c.stopTimer();const el=document.getElementById(mine?'clock-me':'clock-opp');if(el)paintDuelClock(el,seconds,90,mine);};
+ const slider=panel.querySelector('input')!;slider.oninput=()=>{clock(Number(slider.value));panel.querySelector('output')!.textContent=slider.value+'秒';};
  c.show(tempoFixture('counter').prev);
- Object.assign(window,{combatTempo:{run,fixture:tempoFixture,controller:c,clock:(seconds:number,mine=true)=>{c.stopTimer();const el=document.getElementById('clock-me');if(el)paintDuelClock(el,seconds,90,mine);}}});
+ Object.assign(window,{combatTempo:{run,fixture:tempoFixture,controller:c,clock}});
 }
