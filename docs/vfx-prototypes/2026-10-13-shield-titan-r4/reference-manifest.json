@@ -1,0 +1,21 @@
+{
+  "sourceCommit": "73684eee",
+  "selectedVariant": 0,
+  "files": [
+    {
+      "file": "client/src/dev/shield-titan-four/reference-r3/catalog.ts",
+      "sha256": "412a26076106a469e93164fc62b55da27aa5d338c9bd8235fb4eaaf3a113527e",
+      "matchesOriginal": true
+    },
+    {
+      "file": "client/src/dev/shield-titan-four/reference-r3/material.ts",
+      "sha256": "0aed91b77999a87e52815fd7ee486e4189728a428d6897ec201152c0c8cedd77",
+      "matchesOriginal": true
+    },
+    {
+      "file": "client/src/dev/shield-titan-four/reference-r3/renderer.ts",
+      "sha256": "857596505e97e7916931382aed34bbb2d9ec80e7ec23932af655171d41533937",
+      "matchesOriginal": true
+    }
+  ]
+}

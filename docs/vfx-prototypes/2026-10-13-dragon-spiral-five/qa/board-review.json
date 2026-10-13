@@ -1,0 +1,32 @@
+{
+  "checks": [
+    "deep link selects winged variant",
+    "DRAGON_RIDER variant 1 on real board",
+    "DRAGON_RIDER variant 1 restores sources",
+    "DRAGON_RIDER variant 2 on real board",
+    "DRAGON_RIDER variant 2 restores sources",
+    "DRAGON_RIDER variant 3 on real board",
+    "DRAGON_RIDER variant 3 restores sources",
+    "DRAGON_RIDER variant 4 on real board",
+    "DRAGON_RIDER variant 4 restores sources",
+    "DRAGON_RIDER variant 5 on real board",
+    "DRAGON_RIDER variant 5 restores sources",
+    "ANTIQUE_DK variant 1 on real board",
+    "ANTIQUE_DK variant 1 restores sources",
+    "ANTIQUE_DK variant 2 on real board",
+    "ANTIQUE_DK variant 2 restores sources",
+    "ANTIQUE_DK variant 3 on real board",
+    "ANTIQUE_DK variant 3 restores sources",
+    "ANTIQUE_DK variant 4 on real board",
+    "ANTIQUE_DK variant 4 restores sources",
+    "ANTIQUE_DK variant 5 on real board",
+    "ANTIQUE_DK variant 5 restores sources",
+    "concurrent side control",
+    "hand starts standalone timeline",
+    "normal playback reaches result",
+    "mobile controls fit",
+    "board keeps usable height",
+    "no javascript errors"
+  ],
+  "errors": []
+}

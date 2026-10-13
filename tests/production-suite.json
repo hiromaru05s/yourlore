@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/dragon-fusion.mjs",
     "tests/hatch-summon.mjs",
     "tests/hooded-seekers.mjs",
     "tests/chosen-victory.mjs",
@@ -111,11 +112,13 @@
     "tests/vampire-geometry.mjs",
     "tests/taunt-shield.mjs",
     "tests/void-summon.mjs",
+    "tests/silence-summon.mjs",
     "tests/bot-strength.mjs",
     "tests/bot-tactics.mjs",
     "tests/bot-npcs.mjs",
     "tests/bot-simulation.mjs",
-    "tests/gacha-azure-motion.mjs"
+    "tests/gacha-azure-motion.mjs",
+    "tests/shield-titan-summon.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",

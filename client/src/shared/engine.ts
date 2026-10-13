@@ -2982,10 +2982,14 @@ function doDragonFuse(g: GameState, ctx: Ctx, p: PlayerState, dragonUid: string,
     if (i < 0) continue;
     const gone = p.field.splice(i, 1)[0];
     if (gone.token || hasPassive(gone, "void")) rmz(p).push(resetInst(gone)); else p.discard.push(resetInst(gone));
-    ctx.ev.push({ type: "destroy", player: side(g, p), uid: gone.uid, id: gone.id });
+    ctx.ev.push({ type: "destroy", player: side(g, p), uid: gone.uid, id: gone.id, cause: "fusion" });
   }
   ctx.log(`  └ <span class="good">${cn(dragon)} + ${cn(mate)} → 묘지로 · ${cn(DB[outId])} 소환!</span>`, `  └ <span class="good">${cn(dragon)} + ${cn(mate)} → 墓地へ · ${cn(DB[outId])} 召喚！</span>`);
-  spawnToken(g, ctx, p, outId);
+  const first = ctx.ev.length;
+  if (spawnToken(g, ctx, p, outId)) {
+    const summon = ctx.ev.slice(first).find(e => e.type === 'summon' && e.player === side(g, p) && e.id === outId);
+    if (summon?.type === 'summon') summon.fusionFrom = { dragon: { uid: dragon.uid, id: dragon.id }, mate: { uid: mate.uid, id: mate.id } };
+  }
 }
 
 /** Spawn a stat-only token monster (no summon effect / pitfall trigger).
