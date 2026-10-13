@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "url": "https://test.yourlore.xyz/",
+  "source": "3d31470446d514fcc97344e3c25ade5683b8f472",
+  "visibleState": "login screen loaded",
+  "consoleErrors": [],
+  "boundary": "Public loading only; local native GameView covers attack playback. No authenticated online match."
+}

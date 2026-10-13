@@ -1,0 +1,214 @@
+{
+  "checks": [
+    "continuous idle -> mana -> idle for both avatars",
+    "390px studio has no horizontal overflow",
+    "all 112 frames contained within both actual frame masks",
+    "controller mana / side 0",
+    "controller heal / side 1",
+    "controller hurt / side 0",
+    "controller heavy / side 1",
+    "controller brand / side 0",
+    "board rerender preserves portrait and action",
+    "winner victory and loser defeat before result dialog",
+    "reduced motion keeps neutral or terminal pose",
+    "fast forward clears pending actions",
+    "destroy releases all portrait players",
+    "profile selects, previews, saves and reloads female",
+    "cancel does not change saved avatar",
+    "save failure stays open and can retry",
+    "profile settings saves male after retry",
+    "320px picker and Escape cleanup"
+  ],
+  "bounds": [
+    {
+      "side": "Me",
+      "w": 236,
+      "h": 176,
+      "clipped": 0,
+      "total": 182454
+    },
+    {
+      "side": "Opp",
+      "w": 176,
+      "h": 176,
+      "clipped": 0,
+      "total": 165798
+    }
+  ],
+  "idle": {
+    "blue": [
+      "idle:1",
+      "idle:0",
+      "idle:1",
+      "idle:2",
+      "idle:3",
+      "idle:4",
+      "idle:5",
+      "idle:6",
+      "idle:7",
+      "idle:0"
+    ],
+    "red": [
+      "idle:0",
+      "idle:1",
+      "idle:2",
+      "idle:3",
+      "idle:4",
+      "idle:5",
+      "idle:6",
+      "idle:7",
+      "idle:0"
+    ]
+  },
+  "mana": {
+    "blue": [
+      "mana:0",
+      "mana:1",
+      "mana:2",
+      "mana:3",
+      "mana:4",
+      "mana:5",
+      "mana:6",
+      "mana:7",
+      "idle:0",
+      "idle:1"
+    ],
+    "red": [
+      "idle:1",
+      "idle:0",
+      "mana:0",
+      "mana:1",
+      "mana:2",
+      "mana:3",
+      "mana:4",
+      "mana:5",
+      "mana:6",
+      "mana:7",
+      "idle:0",
+      "idle:1"
+    ]
+  },
+  "histories": {
+    "mana": {
+      "blue": [
+        "mana:0",
+        "mana:4",
+        "mana:5",
+        "mana:6",
+        "mana:7",
+        "idle:0",
+        "idle:1",
+        "idle:2",
+        "idle:3",
+        "idle:4",
+        "idle:5"
+      ],
+      "red": [
+        "idle:7",
+        "idle:1",
+        "idle:2",
+        "idle:3",
+        "idle:4",
+        "idle:5",
+        "idle:6",
+        "idle:7",
+        "idle:0"
+      ]
+    },
+    "heal": {
+      "blue": [
+        "idle:6",
+        "idle:7",
+        "idle:0",
+        "idle:1",
+        "idle:2",
+        "idle:3"
+      ],
+      "red": [
+        "idle:0",
+        "heal:1",
+        "heal:2",
+        "heal:3",
+        "heal:4",
+        "heal:5",
+        "heal:6",
+        "heal:7",
+        "idle:0"
+      ]
+    },
+    "hurt": {
+      "blue": [
+        "idle:2",
+        "idle:1",
+        "idle:0",
+        "hurt:1",
+        "hurt:2",
+        "hurt:3",
+        "hurt:4",
+        "hurt:5",
+        "hurt:6",
+        "hurt:7",
+        "idle:0",
+        "idle:1"
+      ],
+      "red": [
+        "idle:1",
+        "idle:2",
+        "idle:3",
+        "idle:4",
+        "idle:5",
+        "idle:6"
+      ]
+    },
+    "heavy": {
+      "blue": [
+        "idle:2",
+        "idle:3",
+        "idle:4",
+        "idle:5",
+        "idle:6",
+        "idle:7"
+      ],
+      "red": [
+        "heavy:0",
+        "heavy:1",
+        "heavy:2",
+        "heavy:3",
+        "heavy:4",
+        "heavy:5",
+        "heavy:6",
+        "heavy:7",
+        "idle:0",
+        "idle:1"
+      ]
+    },
+    "brand": {
+      "blue": [
+        "hurt:0",
+        "hurt:1",
+        "hurt:2",
+        "hurt:3",
+        "hurt:4",
+        "hurt:5",
+        "hurt:6",
+        "hurt:7",
+        "idle:0",
+        "idle:1"
+      ],
+      "red": [
+        "idle:2",
+        "idle:3",
+        "idle:4",
+        "idle:5",
+        "idle:6"
+      ]
+    }
+  },
+  "continuity": {
+    "same": true,
+    "before": "idle",
+    "after": "idle"
+  },
+  "errors": [],
+  "retiredAssetRequests": []
+}

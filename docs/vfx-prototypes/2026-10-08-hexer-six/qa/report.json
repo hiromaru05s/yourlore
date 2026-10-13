@@ -1,0 +1,205 @@
+{
+  "date": "2026-10-08",
+  "cards": 5,
+  "variants": 6,
+  "combinations": 30,
+  "checks": [
+    {
+      "id": "NHEX",
+      "v": 1,
+      "visibleFrames": 5
+    },
+    {
+      "id": "NHEX",
+      "v": 2,
+      "visibleFrames": 5
+    },
+    {
+      "id": "NHEX",
+      "v": 3,
+      "visibleFrames": 5
+    },
+    {
+      "id": "NHEX",
+      "v": 4,
+      "visibleFrames": 5
+    },
+    {
+      "id": "NHEX",
+      "v": 5,
+      "visibleFrames": 5
+    },
+    {
+      "id": "NHEX",
+      "v": 6,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER1",
+      "v": 1,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER1",
+      "v": 2,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER1",
+      "v": 3,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER1",
+      "v": 4,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER1",
+      "v": 5,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER1",
+      "v": 6,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER2",
+      "v": 1,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER2",
+      "v": 2,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER2",
+      "v": 3,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER2",
+      "v": 4,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER2",
+      "v": 5,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER2",
+      "v": 6,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER3",
+      "v": 1,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER3",
+      "v": 2,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER3",
+      "v": 3,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER3",
+      "v": 4,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER3",
+      "v": 5,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER3",
+      "v": 6,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER4",
+      "v": 1,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER4",
+      "v": 2,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER4",
+      "v": 3,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER4",
+      "v": 4,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER4",
+      "v": 5,
+      "visibleFrames": 5
+    },
+    {
+      "id": "HEXER4",
+      "v": 6,
+      "visibleFrames": 5
+    }
+  ],
+  "physics": [
+    {
+      "id": "NHEX",
+      "contact": 1976,
+      "contactHeight": 0,
+      "finalHeight": 0
+    },
+    {
+      "id": "HEXER1",
+      "contact": 2204,
+      "contactHeight": 0,
+      "finalHeight": 0
+    },
+    {
+      "id": "HEXER2",
+      "contact": 2394,
+      "contactHeight": 0,
+      "finalHeight": 0
+    },
+    {
+      "id": "HEXER3",
+      "contact": 2584,
+      "contactHeight": 0,
+      "finalHeight": 0
+    },
+    {
+      "id": "HEXER4",
+      "contact": 2812,
+      "contactHeight": 0,
+      "finalHeight": 0
+    }
+  ],
+  "normalPlayback": {
+    "frames": 217,
+    "frameIntervalMedian": 20,
+    "frameIntervalP95": 30.099999999998545,
+    "over50ms": 0
+  },
+  "renderer": {
+    "disposed": false,
+    "geometries": 64,
+    "textures": 14,
+    "faces": 5
+  },
+  "userApproved": false,
+  "stage": "local prototype",
+  "runtimeIntegrated": false
+}

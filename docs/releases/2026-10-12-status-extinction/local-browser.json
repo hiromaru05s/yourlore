@@ -1,0 +1,176 @@
+{
+  "origin": "http://127.0.0.1:5527",
+  "checks": [
+    {
+      "width": 1280,
+      "side": 0,
+      "id": "S1",
+      "starts": 1,
+      "frames": 52,
+      "lastMs": 910
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "id": "D2",
+      "starts": 1,
+      "frames": 34,
+      "lastMs": 857
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "id": "B2",
+      "starts": 1,
+      "frames": 52,
+      "lastMs": 1026
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "id": "S1",
+      "starts": 1,
+      "frames": 44,
+      "lastMs": 891
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "id": "D2",
+      "starts": 1,
+      "frames": 39,
+      "lastMs": 853
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "id": "B2",
+      "starts": 1,
+      "frames": 50,
+      "lastMs": 1028
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "id": "S1",
+      "starts": 1,
+      "frames": 31,
+      "lastMs": 600
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "id": "D2",
+      "starts": 1,
+      "frames": 35,
+      "lastMs": 576
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "id": "B2",
+      "starts": 1,
+      "frames": 26,
+      "lastMs": 415
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "id": "S1",
+      "starts": 1,
+      "frames": 48,
+      "lastMs": 916
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "id": "D2",
+      "starts": 1,
+      "frames": 43,
+      "lastMs": 869
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "id": "B2",
+      "starts": 1,
+      "frames": 46,
+      "lastMs": 827
+    },
+    {
+      "name": "decrement",
+      "starts": 0
+    },
+    {
+      "name": "zero-again",
+      "starts": 0
+    },
+    {
+      "name": "both",
+      "starts": 2
+    },
+    "reduced-motion",
+    "skip",
+    "resize",
+    {
+      "parity": {
+        "results": [
+          {
+            "id": "S1",
+            "f": 0,
+            "equal": true
+          },
+          {
+            "id": "S1",
+            "f": 0.35,
+            "equal": true
+          },
+          {
+            "id": "S1",
+            "f": 0.7,
+            "equal": true
+          },
+          {
+            "id": "D2",
+            "f": 0,
+            "equal": true
+          },
+          {
+            "id": "D2",
+            "f": 0.35,
+            "equal": true
+          },
+          {
+            "id": "D2",
+            "f": 0.7,
+            "equal": true
+          },
+          {
+            "id": "B2",
+            "f": 0,
+            "equal": true
+          },
+          {
+            "id": "B2",
+            "f": 0.35,
+            "equal": true
+          },
+          {
+            "id": "B2",
+            "f": 0.7,
+            "equal": true
+          }
+        ],
+        "info": {
+          "geometries": 3,
+          "textures": 12,
+          "rigs": 3,
+          "disposed": false
+        }
+      }
+    },
+    "destroy"
+  ],
+  "errors": [],
+  "boundary": "Actual BaseController and runtime GameView driven by reducer fixtures; not authenticated online-match evidence."
+}

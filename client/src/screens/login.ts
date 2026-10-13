@@ -139,13 +139,13 @@ export function mountLogin(app: App): Screen {
       if (mode === "login") {
         app.user = await api.login(email, password);
         aIdentify(app.user.id); aCapture("login", { method: "password" });
-        app.home();
+        app.afterLogin();
         return;
       }
       if (mode === "register") {
         const r = await api.register(email, password);
         aCapture("signup", { method: "password", needVerify: !r.user });
-        if (r.user) { app.user = r.user; aIdentify(r.user.id); app.home(); return; }
+        if (r.user) { app.user = r.user; aIdentify(r.user.id); app.afterLogin(); return; }
         mode = "verify";
         notice = { html: t("login.verify.sent"), ok: true };
         render();

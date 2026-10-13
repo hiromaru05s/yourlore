@@ -1,0 +1,32 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {JSDOM} from 'jsdom';
+import {mkdtemp,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+const dir=await mkdtemp(tmpdir()+'/lore-combat-anchor-');
+try{
+ await build({stdin:{contents:"export * from './client/src/ui/combatAnchor';export * from './client/src/ui/elemental/runtime';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/test.mjs',loader:{'.css':'empty'},plugins:[{name:'renderer-spies',setup(b){b.onResolve({filter:/^\.\/(effects|surface)$/},a=>a.importer.endsWith('/elemental/runtime.ts')?{path:a.path,namespace:'spy'}:undefined);b.onLoad({filter:/.*/,namespace:'spy'},a=>({contents:a.path==='./effects'?"export class Effects{render(...a){globalThis.draws.push(a)}dispose(){}}":"export class CardMaterial{constructor(el){this.el=el;}paint(){}dispose(){}}"}));}}]});
+ const dom=new JSDOM('<body><div id="copies"></div><div class="zone-mon"></div><div id="portraitOpp"><div class="avatar"></div><div class="pt-ring"></div></div></body>');
+ Object.assign(globalThis,{window:dom.window,document:dom.window.document,CSS:{escape:x=>x},innerWidth:1280,innerHeight:900,devicePixelRatio:1,matchMedia:()=>({matches:false}),draws:[]});
+ let clock=0;Object.defineProperty(globalThis,'performance',{value:{now:()=>clock},configurable:true});
+ const frames=new Map();let serial=0;globalThis.requestAnimationFrame=f=>{frames.set(++serial,f);return serial};globalThis.cancelAnimationFrame=i=>frames.delete(i);
+ dom.window.HTMLCanvasElement.prototype.getContext=()=>({setTransform(){},clearRect(){}});
+ const step=t=>{clock=t;const pending=[...frames.values()];frames.clear();pending.forEach(f=>f(t));};
+ const rect=(x,y,w=80,h=120)=>new dom.window.DOMRect(x,y,w,h);
+ const add=(parent,uid,r)=>{const n=document.createElement('div');n.className='card';n.dataset.uid=uid;n.getBoundingClientRect=()=>r;document.querySelector(parent).append(n);return n;};
+ const stale=add('#copies','target',rect(0,0,0,0)),target=add('.zone-mon','target',rect(600,200)),source=add('.zone-mon','source',rect(600,650));
+ const {combatRect,combatCard,combatPortrait,startElemental}=await import(dir+'/test.mjs');
+ assert.equal(combatCard('target'),target);assert.equal(combatRect(stale),null);
+ target.style.opacity='0';assert.equal(combatCard('target'),target,'renderer-owned transparent anchors remain valid');
+ const detached=add('.zone-mon','detached',rect(200,200));detached.remove();assert.equal(combatRect(detached),null);
+ const avatar=document.querySelector('.avatar'),ring=document.querySelector('.pt-ring');avatar.getBoundingClientRect=()=>rect(0,0,0,0);ring.getBoundingClientRect=()=>rect(550,25,180,180);assert.equal(combatPortrait('opp'),ring);
+ const event={type:'elementalStart',group:'test',id:'FIRE_ARROW',uid:'source',player:0,targets:[{player:1,uid:'missing',amount:1},{player:1,uid:'target',amount:1},{player:1,uid:null,amount:1}]};
+ const playback=startElemental(event,0);const impacts=[];for(let i=0;i<3;i++)playback.impact(i).then(()=>impacts.push(i));
+ step(1300);await Promise.resolve();assert.deepEqual(impacts,[]);
+ const draw=draws.at(-1),anchors=draw[4],hits=draw[5];assert.deepEqual(anchors.map(p=>[p.x,p.y]),[[640,260],[640,115]]);assert.deepEqual(hits.map(h=>[h.target,h.at]),[[0,1780],[1,2210]],'missing target must not shift the remaining flight times');
+ step(1350);await Promise.resolve();assert.deepEqual(impacts,[0]);step(1780);await Promise.resolve();assert.deepEqual(impacts,[0,1]);step(2210);await Promise.resolve();assert.deepEqual(impacts,[0,1,2]);step(3600);await playback.finished;assert.equal(frames.size,0);assert.equal(document.querySelector('.element-overlay'),null);
+ const cancel=startElemental(event,0);cancel.cancel();await Promise.all([cancel.finished,cancel.impact(0),cancel.impact(2)]);assert.equal(frames.size,0);
+ source.getBoundingClientRect=()=>rect(0,0,0,0);const invalid=startElemental(event,0);await invalid.finished;assert.equal(frames.size,0,'invalid origin creates no flight');
+ target.getBoundingClientRect=()=>rect(NaN,200);assert.equal(combatCard('target'),null);dom.window.close();
+ console.log('PASS: live field lookup, zero/detached/nonfinite rejection, portrait fallback, renderer opacity, sparse random-hit routing/timing and cancellation');
+}finally{await rm(dir,{recursive:true,force:true});}

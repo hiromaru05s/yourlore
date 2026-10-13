@@ -1,0 +1,110 @@
+[
+  {
+    "name": "four rendered comparison surfaces"
+  },
+  {
+    "name": "modal and entire board fit viewport; first open holds peak",
+    "box": {
+      "top": 154.390625,
+      "bottom": 900
+    },
+    "viewport": 900
+  },
+  {
+    "name": "both sides: visible effect pixels and native source",
+    "variant": 0,
+    "side": 0,
+    "pixels": 4474
+  },
+  {
+    "name": "both sides: visible effect pixels and native source",
+    "variant": 0,
+    "side": 1,
+    "pixels": 4043
+  },
+  {
+    "name": "both sides: visible effect pixels and native source",
+    "variant": 1,
+    "side": 0,
+    "pixels": 8393
+  },
+  {
+    "name": "both sides: visible effect pixels and native source",
+    "variant": 1,
+    "side": 1,
+    "pixels": 7374
+  },
+  {
+    "name": "both sides: visible effect pixels and native source",
+    "variant": 2,
+    "side": 0,
+    "pixels": 6286
+  },
+  {
+    "name": "both sides: visible effect pixels and native source",
+    "variant": 2,
+    "side": 1,
+    "pixels": 5315
+  },
+  {
+    "name": "both sides: visible effect pixels and native source",
+    "variant": 3,
+    "side": 0,
+    "pixels": 6182
+  },
+  {
+    "name": "both sides: visible effect pixels and native source",
+    "variant": 3,
+    "side": 1,
+    "pixels": 5446
+  },
+  {
+    "name": "pre-roll before dice and restores",
+    "result": 2,
+    "elapsed": 1006.3000000007451
+  },
+  {
+    "name": "pre-roll before dice and restores",
+    "result": 5,
+    "elapsed": 1018.8000000007451
+  },
+  {
+    "name": "all four cancel and settle without source hiding"
+  },
+  {
+    "name": "granted taunt plus reduced motion plus two sources"
+  },
+  {
+    "name": "repeat stable resources",
+    "before": {
+      "textures": 12,
+      "geometries": 74,
+      "calls": 64,
+      "triangles": 5588
+    },
+    "after": {
+      "textures": 12,
+      "geometries": 74,
+      "calls": 64,
+      "triangles": 5588
+    }
+  },
+  {
+    "name": "responsive board visible",
+    "width": 390,
+    "height": 844,
+    "boardHeight": 691
+  },
+  {
+    "name": "responsive board visible",
+    "width": 320,
+    "height": 720,
+    "boardHeight": 532
+  },
+  {
+    "name": "responsive board visible",
+    "width": 844,
+    "height": 390,
+    "boardHeight": 213.609375
+  }
+]

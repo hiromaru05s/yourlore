@@ -1,0 +1,23 @@
+vite v5.4.21 building for production...
+transforming...
+✓ 166 modules transformed.
+rendering chunks...
+computing gzip size...
+../docs/vfx-prototypes/2026-10-12-hatch-four/build/hatch-four.html                       0.30 kB │ gzip:   0.26 kB
+../docs/vfx-prototypes/2026-10-12-hatch-four/build/assets/preview-CrO-IlZ4.css           4.50 kB │ gzip:   1.70 kB
+../docs/vfx-prototypes/2026-10-12-hatch-four/build/assets/renderer-CDpg3JYh.css         22.08 kB │ gzip:   6.13 kB
+../docs/vfx-prototypes/2026-10-12-hatch-four/build/assets/board-DCyTUHTx.css           216.67 kB │ gzip:  45.92 kB
+../docs/vfx-prototypes/2026-10-12-hatch-four/build/assets/hatch-four-veGdEb26.js         2.17 kB │ gzip:   1.11 kB
+../docs/vfx-prototypes/2026-10-12-hatch-four/build/assets/renderDensity-BJMM_k_a.js      3.55 kB │ gzip:   1.83 kB
+../docs/vfx-prototypes/2026-10-12-hatch-four/build/assets/ceremonyScene-CxRqgiiV.js      8.93 kB │ gzip:   3.96 kB
+../docs/vfx-prototypes/2026-10-12-hatch-four/build/assets/paperDraw-anNAbIYY.js         10.26 kB │ gzip:   4.64 kB
+../docs/vfx-prototypes/2026-10-12-hatch-four/build/assets/preview-CE8iNDjs.js           11.84 kB │ gzip:   5.63 kB
+../docs/vfx-prototypes/2026-10-12-hatch-four/build/assets/duelScene-DMsE6EaE.js        103.38 kB │ gzip:  36.20 kB
+../docs/vfx-prototypes/2026-10-12-hatch-four/build/assets/board-D4651-Aa.js            189.76 kB │ gzip:  75.07 kB
+../docs/vfx-prototypes/2026-10-12-hatch-four/build/assets/renderer-T2IDgzB4.js       1,000.58 kB │ gzip: 321.95 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 3m 1s

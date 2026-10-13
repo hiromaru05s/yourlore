@@ -1,3 +1,6 @@
+import { mountDuelSpiritGuide } from '../ui/duelSpiritGuide';
+import { botNpc } from "../shared/botNpcs";
+import { getLang } from "../i18n";
 import {deckStoreForUser} from '../shared/cards';
 // ============================================================
 // LORE — game screen. Hosts a Local (vs bot) or Online controller.
@@ -15,14 +18,15 @@ import { HOME_MUSIC_GAIN, startBackgroundMusic } from "../ui/backgroundMusic";
 
 export type GameOpts =
   | { mode: "bot"; difficulty?: BotDifficulty }
-  | { mode: "tutorial" }
+  | { mode: "tutorial"; lesson?: number }
   | { mode: "online"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null; ranked?: boolean };
 
 export function mountGame(app: App, opts: GameOpts): Screen {
   const root = document.createElement("div");
   app.root.appendChild(root);
+  const npc = opts.mode === "bot" ? botNpc(opts.difficulty ?? "hard") : null;
   setMyAvatar(app.user?.avatar);  // my profile icon on the center-bottom portrait
-  setOppAvatar(opts.mode === "online" ? opts.oppAvatar ?? null : null); // opp portrait (bot → initial)
+  setOppAvatar(opts.mode === "online" ? opts.oppAvatar ?? null : npc?.avatar ?? null);
   const decks=deckStoreForUser(app.user),activeDeck=decks.list[decks.sel];
   setMySleeve(activeDeck.sleeve); setMyFurniture(activeDeck.furniture);  // apply my equipped card sleeve to my deck/set-trap backs
   // 마켓 알림이: 활성 덱 프리셋의 워치리스트를 인게임 마켓 하이라이트에 연결
@@ -33,7 +37,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     { avatar: ownSeeker, name: app.user?.display ?? "YOU" },
     opts.mode === "online"
       ? { avatar: opts.oppAvatar === "SEEKER_BLUE" ? "SEEKER_BLUE" : "SEEKER_RED", name: opts.oppName }
-      : { avatar: "SEEKER_RED", name: opts.mode === "tutorial" ? "TUTOR" : "BOT" },
+      : npc ? { avatar: npc.avatar, name: npc.name[getLang()] } : { avatar: "SEEKER_RED", name: "TUTOR" },
   );
 
   let stopMusic: (() => void) | undefined;
@@ -53,21 +57,26 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     onBattleReady: () => startMusic(),
     onHome: () => (opts.mode === "tutorial" ? app.tutorial() : app.home()),
     // 랭크전 "다시하기"는 랭크 큐로 돌아가야 한다 (노말 큐로 새던 버그 수정)
-    onRematch: () => (opts.mode === "bot" ? app.botGame(opts.difficulty) : opts.mode === "tutorial" ? app.tutorialGame() : opts.ranked ? app.rankedLobby() : app.onlineLobby()),
+    onRematch: () => (opts.mode === "bot" ? app.botGame(opts.difficulty) : opts.mode === "tutorial" ? app.tutorialGame(opts.lesson) : opts.ranked ? app.rankedLobby() : app.onlineLobby()),
   };
 
+  const tutorialUserId = app.user?.id;
   const ctrl =
     opts.mode === "bot"
       ? new LocalController(root, exits, app.user?.display ?? "PLAYER 1", activeDeck.cards, opts.difficulty ?? "hard")
       : opts.mode === "tutorial"
         ? new TutorialController(root, exits, app.user?.display ?? "PLAYER", {
-            onCredits: (c) => { if (app.user) app.user.credits = c; },
+            lesson: opts.lesson,
+            guest: !app.user || app.user.id === 'local-guest-user',
+            onNext: lesson => app.tutorialGame(lesson),
+            onCredits: (c) => { if (app.user?.id === tutorialUserId && app.user) { app.user.credits = c; document.dispatchEvent(new Event('lore:user')); } },
           })
         : new OnlineController(root, opts.you, opts.roomId, exits, opts.ranked);
 
   // fit-to-viewport board sizing — started AFTER the controller built the board
   // skeleton, because the solver measures the real rows (see ui/layout.ts).
   const stopLayout = startBoardLayout();
+  const stopGuide = opts.mode === "tutorial" ? undefined : mountDuelSpiritGuide(root, () => ctrl.guideContext());
 
-  return { destroy: () => { stopMusic?.(); stopLayout(); ctrl.destroy(); } };
+  return { destroy: () => { stopMusic?.(); stopGuide?.(); stopLayout(); ctrl.destroy(); } };
 }

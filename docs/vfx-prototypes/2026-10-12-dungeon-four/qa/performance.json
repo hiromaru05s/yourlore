@@ -1,0 +1,14 @@
+{
+  "medianMs": 0.4000000022351742,
+  "p95Ms": 0.8000000007450581,
+  "renderer": {
+    "frame": 729,
+    "calls": 5,
+    "triangles": 4610,
+    "points": 0,
+    "lines": 0
+  },
+  "geometryCount": 38,
+  "textureCount": 5,
+  "note": "Headless Chrome, GPU submission plus canvas copy; shared host. Not a mobile FPS guarantee."
+}

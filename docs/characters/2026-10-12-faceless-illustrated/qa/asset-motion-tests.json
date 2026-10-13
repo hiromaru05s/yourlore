@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "idle remains a single static pose",
+    "one hit frame held for 220ms then neutral",
+    "all positive damage uses the same pose",
+    "zero damage has no pose change",
+    "repeated hits replace the timer rather than queue",
+    "reset and independent sides",
+    "two distinct same-size portrait assets"
+  ],
+  "hitMs": 220
+}

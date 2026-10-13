@@ -1,0 +1,146 @@
+{
+  "status": "superseded_by_final_runtime_and_NPC_beliefs",
+  "excludedFromAcceptance": true,
+  "planned": 20,
+  "completed": 9,
+  "reason": "Final runtime includes the tested NPC roster in public-information hypotheses; use completed final-version acceptance, not partial pilot rates.",
+  "candidateSHA256": "703e81d852b011c928c319b653e268d9ed6b421d49bfd62cd0a6ea81c998ab43",
+  "baselineSHA256": "0eeb7ab6bdf7d81625658c3a715d037b24b2788ae4556bdff99ccf2cef07b9a5",
+  "rows": [
+    {
+      "pair": 31000,
+      "seat": 0,
+      "da": 0,
+      "db": 0,
+      "decks": [
+        "BOT \u00b7 COUNTER",
+        "BOT \u00b7 COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 53,
+      "steps": 435,
+      "bad": null
+    },
+    {
+      "pair": 31000,
+      "seat": 1,
+      "da": 0,
+      "db": 0,
+      "decks": [
+        "BOT \u00b7 COUNTER",
+        "BOT \u00b7 COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 40,
+      "steps": 283,
+      "bad": null
+    },
+    {
+      "pair": 31001,
+      "seat": 0,
+      "da": 1,
+      "db": 0,
+      "decks": [
+        "BOT \u00b7 COUNTER",
+        "BOT \u00b7 COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 29,
+      "steps": 168,
+      "bad": null
+    },
+    {
+      "pair": 31001,
+      "seat": 1,
+      "da": 1,
+      "db": 0,
+      "decks": [
+        "BOT \u00b7 COUNTER",
+        "BOT \u00b7 COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 60,
+      "steps": 463,
+      "bad": null
+    },
+    {
+      "pair": 31002,
+      "seat": 0,
+      "da": 2,
+      "db": 0,
+      "decks": [
+        "BOT \u00b7 COUNTER",
+        "BOT \u00b7 COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 35,
+      "steps": 208,
+      "bad": null
+    },
+    {
+      "pair": 31002,
+      "seat": 1,
+      "da": 2,
+      "db": 0,
+      "decks": [
+        "BOT \u00b7 COUNTER",
+        "BOT \u00b7 COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 50,
+      "steps": 411,
+      "bad": null
+    },
+    {
+      "pair": 31003,
+      "seat": 0,
+      "da": 3,
+      "db": 0,
+      "decks": [
+        "BOT \u00b7 COUNTER",
+        "BOT \u00b7 COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 33,
+      "steps": 220,
+      "bad": null
+    },
+    {
+      "pair": 31003,
+      "seat": 1,
+      "da": 3,
+      "db": 0,
+      "decks": [
+        "BOT \u00b7 COUNTER",
+        "BOT \u00b7 COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 53,
+      "steps": 425,
+      "bad": null
+    },
+    {
+      "pair": 31004,
+      "seat": 0,
+      "da": 4,
+      "db": 0,
+      "decks": [
+        "BOT \u00b7 COUNTER",
+        "BOT \u00b7 COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 60,
+      "steps": 469,
+      "bad": null
+    }
+  ]
+}

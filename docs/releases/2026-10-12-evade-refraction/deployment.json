@@ -1,0 +1,23 @@
+{
+  "environment": "staging",
+  "worker": "lore-server-staging",
+  "url": "https://test.yourlore.xyz",
+  "verifiedAt": "2026-10-12T15:17:09.157200+00:00",
+  "source": "3d31470446d514fcc97344e3c25ade5683b8f472",
+  "deploymentId": "76d8d559-a785-4783-b514-5d0fb2100a42",
+  "versions": [
+    {
+      "version_id": "8b1e4c6c-4d60-4e33-877c-5a47b3d84992",
+      "percentage": 100
+    }
+  ],
+  "guardedReleaseMessage": "3d31470446d514fcc97344e3c25ade5683b8f472 guarded release",
+  "assets": {
+    "verified": 62,
+    "mismatched": 0,
+    "algorithm": "SHA-256",
+    "report": "qa/staging-assets.json"
+  },
+  "validation": "Local real-controller desktop/mobile fixtures plus exact deployed build parity. Authenticated two-player evasion playback was not tested.",
+  "productionDeployed": false
+}

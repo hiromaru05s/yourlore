@@ -1,0 +1,353 @@
+[
+  {
+    "number": "01",
+    "title": "白銀の抜刀",
+    "description": "シャッ、キィン。輪郭の鋭い金属音と短い余韻。",
+    "character": "鋭い / 短い",
+    "file": "01.mp3",
+    "seconds": 1.35,
+    "peakDb": -5.32,
+    "energy200Db": -22.29,
+    "onsetMs": 0.96,
+    "centroidHz": 4923,
+    "sha256": "fc252493f809666417a2378c98990c1d175d5fe58c8be3d204f88edb980becce",
+    "layers": [
+      {
+        "source": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/blade_01.ogg",
+        "at": 0,
+        "gain": 0.95,
+        "lo": 550,
+        "hi": 9800
+      },
+      {
+        "source": "docs/sound-redesign/2026-09-30/sources/swishes/swish-4.wav",
+        "at": 0,
+        "gain": 0.2,
+        "rate": 1.25,
+        "lo": 1500,
+        "hi": 9000,
+        "d": 0.2
+      },
+      {
+        "source": "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_light_002.ogg",
+        "at": 0.018,
+        "gain": 0.42,
+        "rate": 1.1,
+        "lo": 900,
+        "hi": 7800,
+        "d": 0.65
+      }
+    ],
+    "room": 0.14,
+    "decay": 0.7
+  },
+  {
+    "number": "02",
+    "title": "重刃の確定",
+    "description": "ザシュン、ギィン。低い芯と厚い金属の響き。",
+    "character": "重い / 低め",
+    "file": "02.mp3",
+    "seconds": 1.8,
+    "peakDb": -5.28,
+    "energy200Db": -22.49,
+    "onsetMs": 1.48,
+    "centroidHz": 2736,
+    "sha256": "405c0d6a81ee7ffb41ebf4cc6f2c5af95b4790c791d1388e4edd84459835e330",
+    "layers": [
+      {
+        "source": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/blade_03.ogg",
+        "at": 0,
+        "gain": 0.8,
+        "rate": 0.66,
+        "lo": 230,
+        "hi": 6600,
+        "d": 0.65
+      },
+      {
+        "source": "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_heavy_002.ogg",
+        "at": 0.016,
+        "gain": 0.32,
+        "rate": 0.8,
+        "lo": 100,
+        "hi": 2100,
+        "d": 0.5
+      },
+      {
+        "source": "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_medium_004.ogg",
+        "at": 0.025,
+        "gain": 0.32,
+        "rate": 0.7,
+        "lo": 750,
+        "hi": 6200,
+        "d": 0.8
+      },
+      {
+        "source": "docs/sound-redesign/2026-09-30/sources/swishes/swish-7.wav",
+        "at": 0,
+        "gain": 0.2,
+        "rate": 0.72,
+        "lo": 180,
+        "hi": 4100,
+        "d": 0.32
+      }
+    ],
+    "room": 0.24,
+    "decay": 1.15
+  },
+  {
+    "number": "03",
+    "title": "銀晶の閃光",
+    "description": "シャリン。金属と結晶が重なる透明な響き。",
+    "character": "透明 / 明るい",
+    "file": "03.mp3",
+    "seconds": 1.55,
+    "peakDb": -7.16,
+    "energy200Db": -21.76,
+    "onsetMs": 0.88,
+    "centroidHz": 4118,
+    "sha256": "5fa2b4aeb59963b8c3099c0454afcb9abc963178d381f90070aa37d714066baa",
+    "layers": [
+      {
+        "source": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/blade_02.ogg",
+        "at": 0,
+        "gain": 0.68,
+        "rate": 1.12,
+        "lo": 950,
+        "hi": 8200,
+        "d": 0.35
+      },
+      {
+        "source": "docs/ui-rework/2026-09-27-audio/sources/interface-sounds/glass_001.ogg",
+        "at": 0.009,
+        "gain": 0.36,
+        "rate": 0.76,
+        "lo": 1000,
+        "hi": 7100,
+        "d": 0.48
+      },
+      {
+        "source": "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_light_004.ogg",
+        "at": 0.019,
+        "gain": 0.28,
+        "rate": 1.26,
+        "lo": 1300,
+        "hi": 9400,
+        "d": 0.5
+      },
+      {
+        "source": "docs/sound-redesign/2026-09-30/sources/swishes/swish-11.wav",
+        "at": 0,
+        "gain": 0.23,
+        "rate": 1.2,
+        "lo": 800,
+        "hi": 7800,
+        "d": 0.23
+      }
+    ],
+    "room": 0.3,
+    "decay": 1.0
+  },
+  {
+    "number": "04",
+    "title": "双刃の噛合",
+    "description": "シャキッ、キン。二つの刃が短い間隔で噛み合う。",
+    "character": "二段 / 歯切れ",
+    "file": "04.mp3",
+    "seconds": 1.45,
+    "peakDb": -6.45,
+    "energy200Db": -21.76,
+    "onsetMs": 1.06,
+    "centroidHz": 4163,
+    "sha256": "d1596d7fcad7d868f2dbf001a86405913612a8bf9e948436e13dedf9159337f6",
+    "layers": [
+      {
+        "source": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/blade_01.ogg",
+        "at": 0,
+        "gain": 0.7,
+        "rate": 0.9,
+        "lo": 450,
+        "hi": 8700,
+        "d": 0.36
+      },
+      {
+        "source": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/blade_02.ogg",
+        "at": 0.072,
+        "gain": 0.45,
+        "rate": 1.12,
+        "lo": 1000,
+        "hi": 7500,
+        "d": 0.32
+      },
+      {
+        "source": "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_medium_000.ogg",
+        "at": 0.016,
+        "gain": 0.3,
+        "rate": 0.9,
+        "lo": 400,
+        "hi": 7000,
+        "d": 0.55
+      },
+      {
+        "source": "docs/sound-redesign/2026-09-30/sources/swishes/swish-3.wav",
+        "at": 0,
+        "gain": 0.21,
+        "rate": 1.35,
+        "lo": 1200,
+        "hi": 7000,
+        "d": 0.18
+      }
+    ],
+    "room": 0.12,
+    "decay": 0.6
+  },
+  {
+    "number": "05",
+    "title": "黒冠の裁定",
+    "description": "ズシャッ、ギン。高音を抑えた暗い金属の決着。",
+    "character": "暗い / 密度",
+    "file": "05.mp3",
+    "seconds": 1.6,
+    "peakDb": -5.27,
+    "energy200Db": -22.79,
+    "onsetMs": 1.75,
+    "centroidHz": 2171,
+    "sha256": "a08b45444d3fed80eea7781c9e976cefbc48639397475baf5e877fc1ec6decda",
+    "layers": [
+      {
+        "source": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/blade_03.ogg",
+        "at": 0,
+        "gain": 0.74,
+        "rate": 0.52,
+        "lo": 200,
+        "hi": 4300,
+        "d": 0.72
+      },
+      {
+        "source": "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_heavy_004.ogg",
+        "at": 0.012,
+        "gain": 0.38,
+        "rate": 0.68,
+        "lo": 150,
+        "hi": 3600,
+        "d": 0.6
+      },
+      {
+        "source": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/chain_02.ogg",
+        "at": 0.03,
+        "gain": 0.12,
+        "rate": 0.68,
+        "lo": 1200,
+        "hi": 4800,
+        "d": 0.38
+      },
+      {
+        "source": "docs/sound-redesign/2026-09-30/sources/swishes/swish-13.wav",
+        "at": 0,
+        "gain": 0.26,
+        "rate": 0.7,
+        "lo": 200,
+        "hi": 4200,
+        "d": 0.32
+      }
+    ],
+    "room": 0.12,
+    "decay": 0.8
+  },
+  {
+    "number": "06",
+    "title": "天光の戴冠",
+    "description": "シャアーン。金属の一撃が広い空間に響く。",
+    "character": "広い / 長い余韻",
+    "file": "06.mp3",
+    "seconds": 2.05,
+    "peakDb": -7.66,
+    "energy200Db": -21.77,
+    "onsetMs": 1.15,
+    "centroidHz": 2377,
+    "sha256": "736ed5c8cf94be93a597c51da432cb77ac187f8e8132c57128d38338be1a10b3",
+    "layers": [
+      {
+        "source": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/blade_01.ogg",
+        "at": 0,
+        "gain": 0.62,
+        "rate": 0.85,
+        "lo": 650,
+        "hi": 8400,
+        "d": 0.42
+      },
+      {
+        "source": "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_medium_003.ogg",
+        "at": 0.015,
+        "gain": 0.44,
+        "rate": 0.78,
+        "lo": 350,
+        "hi": 6600,
+        "d": 0.66
+      },
+      {
+        "source": "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_light_001.ogg",
+        "at": 0.021,
+        "gain": 0.23,
+        "rate": 1.05,
+        "lo": 1500,
+        "hi": 8000,
+        "d": 0.58
+      },
+      {
+        "source": "docs/sound-redesign/2026-09-30/sources/swishes/swish-8.wav",
+        "at": 0,
+        "gain": 0.26,
+        "rate": 0.66,
+        "lo": 350,
+        "hi": 6500,
+        "d": 0.5
+      }
+    ],
+    "room": 0.52,
+    "decay": 1.65
+  },
+  {
+    "number": "07",
+    "title": "一閃の封印",
+    "description": "シャキン。鋭く締まってすぐ抜ける最短案。",
+    "character": "最短 / 乾いた",
+    "file": "07.mp3",
+    "seconds": 0.95,
+    "peakDb": -5.31,
+    "energy200Db": -22.2,
+    "onsetMs": 0.77,
+    "centroidHz": 6301,
+    "sha256": "6b18b2474147e505c172de550e6f79b77cb5d30a940bf415637d6ce920b25e9a",
+    "layers": [
+      {
+        "source": "docs/ui-rework/2026-09-27-audio-v4/sources/rubberduck/blade_02.ogg",
+        "at": 0,
+        "gain": 0.9,
+        "rate": 1.28,
+        "lo": 600,
+        "hi": 9400,
+        "d": 0.23
+      },
+      {
+        "source": "docs/sound-study/2026-10-08-chosen-seven/sources/impactMetal_light_000.ogg",
+        "at": 0.01,
+        "gain": 0.37,
+        "rate": 1.28,
+        "lo": 1600,
+        "hi": 8700,
+        "d": 0.22
+      },
+      {
+        "source": "docs/sound-redesign/2026-09-30/sources/swishes/swish-5.wav",
+        "at": 0,
+        "gain": 0.26,
+        "rate": 1.55,
+        "lo": 1100,
+        "hi": 7500,
+        "d": 0.16
+      }
+    ],
+    "room": 0.06,
+    "decay": 0.42
+  }
+]
