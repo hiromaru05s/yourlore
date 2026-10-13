@@ -1,3 +1,4 @@
+import {fusionPairs} from '../ui/dragonFusion/selection';
 import {hatchPairs} from '../ui/hatchSummon/selection';
 import { BotThinker } from './botThinker';
 import { observationSample } from '../shared/botObservation';
@@ -321,6 +322,7 @@ export abstract class BaseController implements BoardHandlers {
     }
     const events = counterPresentationEvents(res.events);
     const hatches=hatchPairs(events),heldEggs=new Set<string>();
+    const fusions=fusionPairs(events),fusionMaterials=new Set([...fusions.values()].flatMap(f=>[f.dragon.uid,f.mate.uid]));
     if(events.some(e=>e.type==='dice'&&e.taunt))A.warmTaunt();
     if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
     const eventSound = new EventSound();
@@ -364,7 +366,7 @@ export abstract class BaseController implements BoardHandlers {
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
-      const cue = e.type==='destroy'&&[...hatches.values()].includes(e.uid)?undefined:eventSound.cue(e);
+      const cue = (e.type==='destroy'&&([...hatches.values()].includes(e.uid)||fusionMaterials.has(e.uid)))||(e.type==='summon'&&fusions.has(e.uid))?undefined:eventSound.cue(e);
       if(cue&&!A.isFxSkipped())sfx(cue);
       if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
       if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
@@ -421,6 +423,13 @@ export abstract class BaseController implements BoardHandlers {
           const card = this.findCard(res.state, e.uid) ?? this.defOf(e.id, e.uid);
           const grant=events.slice(i+1).find(ev=>ev.type==='decayCounterGrant'&&ev.uid===e.uid);
           const shown=card&&grant?.type==='decayCounterGrant'?{...card,decayCnt:grant.before}:card;
+          const fusion=fusions.get(e.uid);
+          if(fusion&&shown){
+            const face=await A.dragonFusionSummon(shown,sideOf(e.player),fusion);
+            ghosts.delete(fusion.dragon.uid);ghosts.delete(fusion.mate.uid);
+            if(face){ghosts.set(e.uid,{el:face,side:sideOf(e.player)});statusSource=face;}
+            fieldCount[e.player]++;break;
+          }
           const egg=hatches.get(e.uid);
           if(egg&&heldEggs.delete(egg)){
             const g=shown?await A.hatchSummon(egg,shown):null;
@@ -459,6 +468,7 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "destroy": {
+          if(fusionMaterials.has(e.uid)){fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);break;}
           if([...hatches.values()].includes(e.uid)&&document.querySelector(`.zone-mon .card[data-uid="${CSS.escape(e.uid)}"]`)){heldEggs.add(e.uid);break;}
           const destroy=async()=>{
           const gh = ghosts.get(e.uid);
@@ -637,7 +647,7 @@ export abstract class BaseController implements BoardHandlers {
       const played=new Map<string,number>();
       for(const e of events)if(e.type==='playSpell'&&e.player===pl&&e.dest==='discard')played.set(e.id,(played.get(e.id)||0)+1);
       for(const c of res.state.players[pl].discard){
-        if(!inHand.has(c.uid)||previousDiscard.has(c.uid))continue;
+        if(!inHand.has(c.uid)||previousDiscard.has(c.uid)||fusionMaterials.has(c.uid))continue;
         const n=played.get(c.id)||0;if(n){played.set(c.id,n-1);continue;}
         // The picker already landed this exact card before submitting the pick.
         if(pl===this.you&&presentedHandDiscards.has(c.uid))continue;
