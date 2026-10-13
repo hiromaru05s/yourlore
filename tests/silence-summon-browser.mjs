@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';import fs from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
-const out='docs/vfx-prototypes/2026-10-13-silence-purple-r3/runtime';await fs.mkdir(out,{recursive:true});const browser=await chromium.launch({channel:'chrome',headless:true});const context=await browser.newContext({viewport:{width:1280,height:900},recordVideo:{dir:out,size:{width:1280,height:900}}});const page=await context.newPage();page.setDefaultTimeout(120000);const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='warning'&&m.text().includes('[silence-summon]'))errors.push(m.text());});
+const out='docs/vfx-prototypes/2026-10-13-silence-purple-r3/runtime';await fs.mkdir(out,{recursive:true});const browser=await chromium.launch({channel:'chrome',headless:true});const context=await browser.newContext({viewport:{width:1280,height:900},...(process.env.RECORD_VIDEO?{recordVideo:{dir:out,size:{width:1280,height:900}}}:{})});const page=await context.newPage();page.setDefaultTimeout(120000);const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='warning'&&m.text().includes('[silence-summon]'))errors.push(m.text());});
 try{
  await page.goto('http://127.0.0.1:5496/silence-four.html?board');await page.waitForFunction(()=>window.silenceBoard?.state.ready);
  const results=[];
