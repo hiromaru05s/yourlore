@@ -360,7 +360,7 @@ export abstract class BaseController implements BoardHandlers {
       shownGrants.add(e);
       const key=`${e.player}:${e.resource}`,previous=grantQueues.get(key);
       const play=()=>{if(this.dead||A.isFxSkipped())return Promise.resolve();return e.resource==='dew'?playDewGrant(sideOf(e.player),e.before,e.after,source):playStatusGrant(sideOf(e.player),e.resource,e.before,e.after,source);};
-      const finished=previous?previous.then(play):play();grantQueues.set(key,finished);grantFinishes.push(finished);
+      const finished=previous?previous.then(play):play();grantQueues.set(key,finished);grantFinishes.push(finished);void finished.catch(()=>{});
     };
     const summonGrants=(index:number,uid:string,source:HTMLElement)=>{
       const activations:GameEvent[]=[];let granted=false;
