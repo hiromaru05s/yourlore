@@ -43,6 +43,7 @@ function adjustmentEvaluator(g: GameState, p: PlayerState): (c: CardDef) => numb
   const counts = new Map<string, number>();
   for (const c of owned) counts.set(c.id, (counts.get(c.id) ?? 0) + 1);
   const activeRecovery = o.field.some(m => recoveryEngine(m) > 0);
+  const shieldDew = owned.reduce((n, x) => n + (x.aura === 'shieldDew' ? (x.val2 ?? 0) : 0), 0);
   return c => {
     const copies = counts.get(c.id) ?? 0;
     let bonus = 0;
@@ -70,6 +71,12 @@ function adjustmentEvaluator(g: GameState, p: PlayerState): (c: CardDef) => numb
     // Development must be able to contest the blocker, not merely survive longer.
     if (c.t === 'mon' && !c.directOnly && (c.atk ?? 0) >= 4 && !c.summonReq) bonus += threat * .65;
     if (recoveryEngine(c) > 0) bonus += Math.min(9, threat);
+    // Shield is also a renewable Dew source once a Priest is part of our
+    // engine. Without this, both the bot and its simulated opponent ignore
+    // cheap shield purchases even after acquiring the payoff monster.
+    const grantsShield = c.onSummon === 'shield' || c.onSummon === 'armorer'
+      || c.act === 'golemShield' || c.act === 'cullShield';
+    if (grantsShield) bonus += Math.min(24, shieldDew * 5);
     bonus /= 1 + copies * 2;
     if (c.id === 'FLAME' || c.id === 'AMBUSH' || (c.act === 'dmg' && (c.val ?? 0) <= 4)) bonus -= threat * .7;
     // Ghost gains ATK on healing, but each healing action also deals 2 self damage.
