@@ -3,7 +3,7 @@
 ## Behavior
 
 - The contact callback releases damage, exhaustion, and counter events while the attack recovery continues. Shared attacks retain the existing trajectory through 820 ms; counter anticipation is 100 ms, contact 260 ms, recovery 800 ms. Standalone approved counter previews retain their original timing.
-- Actual visible monster actors receive recoil and immediate HP text updates. Frame-sized red damage numerals last 500 ms from their first animation frame and follow a moving counter card. Both seeker and static NPC portrait frames react.
+- Actual visible monster actors receive recoil and immediate HP text updates. Frame-sized red damage numerals use the portrait HP font (LoreBoardSerif, weight 600), a fine ivory edge, and last 800 ms from their first animation frame and follow a moving counter card. Both seeker and static NPC portrait frames react.
 - A lethal ordinary hit freezes its visible face into a separately owned graveyard exit. Committing the new board and accepting the next action do not remove it. Scene disposal, resize, visibility loss, and its deadline still clean it up.
 - Summon-associated Dew and shield grants start with the summon reveal. Different resources overlap; repeated writes to the same resource retain order. Extinction waits for any earlier grant of that resource.
 - Final 25 seconds increase turn-button shake, flash speed and warm emission; opponent turns clear the warning. Reduced motion keeps readable numerals and a static warning.

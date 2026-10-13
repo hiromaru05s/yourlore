@@ -1,5 +1,5 @@
-.combat-damage{position:fixed;z-index:230;display:grid;place-items:center;pointer-events:none;user-select:none;color:#ea1730;font-family:Georgia,'Times New Roman',serif;font-weight:900;font-variant-numeric:lining-nums tabular-nums;line-height:1;letter-spacing:-.065em;-webkit-text-stroke:1.2px #fff3db;paint-order:stroke fill;text-shadow:0 2px 0 #4d0714,0 3px 4px #24000dbb;opacity:0;}
-.combat-damage.in{opacity:1;animation:combat-number .5s both;}
+.combat-damage{position:fixed;z-index:230;display:grid;place-items:center;pointer-events:none;user-select:none;color:#ea1730;font-family:LoreBoardSerif,Georgia,serif;font-weight:600;font-variant-numeric:lining-nums tabular-nums;line-height:1;letter-spacing:-.025em;-webkit-text-stroke:.65px #fff3db;paint-order:stroke fill;text-shadow:0 1px 2px #24000dbb;opacity:0;}
+.combat-damage.in{opacity:1;animation:combat-number .8s both;}
 @keyframes combat-number{0%{opacity:1;scale:1.26}15%{scale:.96}28%,74%{opacity:1;scale:1}100%{opacity:0;scale:1.02;translate:0 -5px}}
 @media(prefers-reduced-motion:reduce){.combat-damage.in{animation:none}}
 /* Fallback button retains the warning without the WebGL furniture. */

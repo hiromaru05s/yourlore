@@ -37,7 +37,7 @@ try{
   if(kind!=='summon'){
    assert(first,'damage displayed');assert(first.blocked||kind==='multi'||kind==='mutual','exhausted at contact');
    const times=r.frames.filter(f=>f.numbers.some(n=>n.uid==='tempo-defender'||kind==='face'));
-   assert(times.at(-1).t-times[0].t>=330&&times.at(-1).t-times[0].t<650,'half-second number');
+   assert(times.at(-1).t-times[0].t>=650&&times.at(-1).t-times[0].t<950,'800ms number');
    assert(first.numbers.every(n=>n.font>=n.height*.3),'frame-sized numerals');
   }
   if(kind==='counter'){
