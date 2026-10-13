@@ -31,7 +31,7 @@ $<HTMLInputElement>('#reduced').onchange=e=>{reduced=(e.target as HTMLInputEleme
 $<HTMLSelectElement>('#side').onchange=()=>draw();$('#concurrent').onclick=()=>{send('poison-concurrent');play();};
 document.querySelectorAll<HTMLButtonElement>('[data-variant]').forEach(el=>el.onclick=()=>{variant=Number(el.dataset.variant);labels();play();});
 window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==iframe.contentWindow)return;if(e.data.kind==='poison-board'){boardReady=!!e.data.ready;if(e.data.error)$('#error').textContent=e.data.error;draw();}if(e.data.kind==='poison-play')play();});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){pause();send('poison-suspend');}});window.addEventListener('pagehide',()=>{pause();send('poison-dispose');faces.clear();disposeRenderer();},{once:true});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){pause();send('poison-suspend');}else draw();});window.addEventListener('pagehide',()=>{pause();send('poison-dispose');faces.clear();disposeRenderer();},{once:true});
 motion.addEventListener('change',e=>{reduced=e.matches;$<HTMLInputElement>('#reduced').checked=reduced;draw();});
 (window as any).poisonPreview={get state(){return{id,variant,ms,running,reduced,mode,boardReady,renderer:rendererState()};},seek(t:number){pause();ms=Math.max(0,Math.min(DURATION,t));draw();},play,pause};
 void(async()=>{await readySprites;for(const card of IDS)faces.set(card,await surface(card,true));labels();document.body.classList.add('board-view','light');$<HTMLSelectElement>('#camera').hidden=true;iframe.src='/poison-four.html?board';draw();$('.loading').hidden=true;})().catch(e=>{$('.loading').hidden=true;$('#error').textContent=String(e);});

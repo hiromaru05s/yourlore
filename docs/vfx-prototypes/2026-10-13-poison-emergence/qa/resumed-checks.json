@@ -1030,5 +1030,153 @@
         "visibility": "visible"
       }
     ]
+  },
+  {
+    "name": "concurrent active",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  {
+    "name": "concurrent reset",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "visible"
+      }
+    ]
+  },
+  {
+    "name": "reduced concurrent active",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "hidden"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  {
+    "name": "reduced concurrent finished",
+    "cards": [
+      {
+        "uid": "poison-hand-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-1-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-0",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-1",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-target-0-2",
+        "visibility": "visible"
+      },
+      {
+        "uid": "poison-hand-0",
+        "visibility": "hidden"
+      }
+    ]
   }
 ]

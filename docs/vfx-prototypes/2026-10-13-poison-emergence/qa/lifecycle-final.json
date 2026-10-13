@@ -1,0 +1,21 @@
+{
+  "concurrent": [
+    {
+      "name": "6ポイズンマスター09",
+      "visibility": "hidden"
+    },
+    {
+      "name": "3ラストキャップ・スラッグ14",
+      "visibility": "hidden"
+    },
+    {
+      "name": "1ラストマッシュルーム11",
+      "visibility": "hidden"
+    }
+  ],
+  "reset": [
+    "hidden",
+    "hidden",
+    "hidden"
+  ]
+}
