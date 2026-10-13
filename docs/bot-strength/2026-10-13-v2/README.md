@@ -48,4 +48,13 @@
 
 ## ステージング
 
-機能・ブラウザ検証済みの固定版を先に配信し、長期対戦比較は継続する。最新mainを取り込み、コミットされたスナップショットを `scripts/deploy-guard.mjs staging` で反映する。反映後にソースSHA、Worker版、JS/CSSのSHA-256、配信されたBOT Workerの実行結果を記録する。
+2026-10-13、共有の `scripts/deploy-guard.mjs staging` により反映完了。
+- URL: https://test.yourlore.xyz/
+- source: `96ba0fc4e70beb4e6c974872e3204ea1e56d2023`
+- Worker version: `c46079ca-68a3-4578-a512-d4ff1e872173`（100%）
+- 同一スナップショットで client/server 型チェック、115/115回帰テスト、ビルド成功。
+- 実際のガード内ビルドから保存したJS/CSS 66ファイルを配信物とSHA-256照合し、全件一致。
+- 配信BOT Workerで難しい/ヘル各3構築・計12判断を実行。ローカル期待値と一致、全て合法に進行、ブラウザエラー0。
+
+`deployment.json`、`guarded-build-assets.json`、`staging-worker.json` に証跡を保存。統合で追加された孵化イベントの演出情報はゲーム状態を変更しない。配信系列と研究用方策を42局面でも照合し、行動一致を確認した（`deployment-conformance.json`）。
+長期対戦の最終集計は継続中。共有端末の負荷調整と配信優先でプロセスを一時停止したため、対戦結果ファイルのms/seconds欄には停止時間が含まれる。これらを製品の応答速度として解釈しない。ブラウザの応答性は別途測定している。
