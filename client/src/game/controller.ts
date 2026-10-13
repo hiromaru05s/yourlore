@@ -34,11 +34,11 @@ import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from 
 import { logToEn } from "../shared/logEn";
 import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef } from "../shared/engine";
 import { safeGreedy, legalBotAction, type BotDifficulty } from "../shared/bot";
-import { DB, STARTERS, hasPassive } from "../shared/cards";
+import { DB, STARTERS, hasPassive, isChestCard } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog, logToText } from "../ui/log";
 import * as A from "../ui/anim";
-import { reviewCast, cardPicker, cardPickerMulti, confirmDialog, treasureModal, winModal, closeOverlay, closeTreasureNotices } from "../ui/modal";
+import { reviewCast, cardPicker, cardPickerMulti, confirmDialog, winModal, closeOverlay } from "../ui/modal";
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { sfx, stopSounds } from "../ui/sound";
@@ -144,7 +144,6 @@ export abstract class BaseController implements BoardHandlers {
     stopSounds();
     A.setFxSkip(true);
     cancelDiceAnimations();
-    closeTreasureNotices();
   }
 
   // ---- BoardHandlers ----
@@ -585,7 +584,8 @@ export abstract class BaseController implements BoardHandlers {
                 await diceRollAnim(e2.rolls, { need: e2.need, success: e2.success, mine: e2.player === this.you, casino: e2.variant === "casino", source: e2.source, viewer: this.you });
               }
             }
-            const lines = this.effectLines(events, i);
+            // Chest outcomes are already conveyed by the dice, board changes, and battle log.
+            const lines = isChestCard(def) ? [] : this.effectLines(events, i);
             if (lines.length) {
               const mine = e.player === this.you;
               const title = (mine ? "" : `${t("fx.opp")} · `) + cardName({ uid: "fx", ...def });
@@ -613,12 +613,9 @@ export abstract class BaseController implements BoardHandlers {
         case "draw":
           draws[e.player] += e.count;
           break;
-        case "treasure": {
-          const mine = e.player === this.you && !e.isBot;
-          const text = getLang() === "ja" ? e.textJa : getLang() === "en" ? logToEn(e.text) : e.text;
-          treasureModal(e.kind, (mine ? "" : `${t("fx.opp")} · `) + text);
+        case "treasure":
+          // Reward effects have their own board events; no additional explanation popup.
           break;
-        }
         default:
           break; // log / turnHeader / win / needTarget — no board animation
       }
@@ -1137,7 +1134,6 @@ export abstract class BaseController implements BoardHandlers {
     this.clearQuickFaces();
     A.setFxSkip(true);
     cancelDiceAnimations();
-    closeTreasureNotices();
     document.querySelectorAll(".fx-turnbanner,.cointoss-ov,.fx-card-flight,.cast-veil").forEach(n => n.remove());
     this.stopTimer();
     this.view.destroy();
