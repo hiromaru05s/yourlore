@@ -59,7 +59,7 @@ try {
     if (id === 'TAR3') { delete expected.aura; expected.passive = []; }
     if (id === 'GM6_8') { delete expected.onSummon; expected.atk = 12; } // v57 approved ATK nerf
     if (id === 'CHOSEN_ROGUE') delete expected.attackFx;
-    if (id === 'HIGH_ELF') { expected.summonReq='dew10'; expected.onSummon='highElfDew'; }
+    if (id === 'HIGH_ELF') { expected.summonReq='dew10'; expected.onSummon='highElfDew'; expected.atk=20; expected.def=20; }
     const current = JSON.parse(JSON.stringify(DB[id]));
     // v50 adds Counter without restoring any retired trap abilities.
     if (current.passive?.includes("counter")) expected.passive = [...(expected.passive ?? []), "counter"];

@@ -7,6 +7,9 @@
 
 const R: [RegExp, string][] = [
   // ---- full/long phrases first (order matters) ----
+  [/패에 넣을 흡혈 계약 또는 흡혈의 극의 1장을 선택/g, 'Choose Vampiric Pact or Vampiric Secret Art to add to your hand'],
+  [/밤성의 선물:/g, 'Gift from the Night Castle:'],
+  [/1장을 패에 넣는다/g, 'add 1 card to your hand'],
   [/초기 덱 · (\d+)장 드로우 · 마나 (\d+)\./g, "Starting deck · drew $1 · mana $2."],
   [/(\d+)턴 경과 — 체력 판정으로 (.+?) 승리! \((\d+) vs (\d+)\)/g, "$1 turns elapsed — $2 wins on HP! ($3 vs $4)"],
   [/(\d+)턴 경과 — 체력 동률, 무승부!/g, "$1 turns elapsed — HP tied, it's a draw!"],

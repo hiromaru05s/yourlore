@@ -15,7 +15,7 @@ try {
   const play=(g,id)=>{g.players[g.cur].hand.push(card(id));return reduce(g,{type:'play',idx:g.players[g.cur].hand.length-1});};
   const test=(name,fn)=>{fn();cases++;console.log('PASS',name);};
   test('catalog, costs and reviewed text',()=>{
-    assert.equal(E.BALANCE_VERSION,'v57');
+    assert.equal(E.BALANCE_VERSION,'v58');
     for(const [id,atk,hp] of [['M11',4,3],['NGA3',3,1],['ELITE',3,3],['GM6_8',12,1],['NGA4',7,1]])assert.deepEqual([DB[id].atk,DB[id].def],[atk,hp]);
     assert.equal(playCost(card('ACID_RAIN')),4);assert.equal(DB.ACID_RAIN.cost,2);
     assert.equal(DB.NGA4.mult,2);assert.equal(DB.VITAL3.onSummon,undefined);

@@ -6,7 +6,7 @@
     "ko",
     "en"
   ],
-  "count": 360,
+  "count": 361,
   "engineSha256": "49144f7c55e808ee834c02139d264f7d17eecaa19cc8221056ea4a0ed72ea459",
   "cards": {
     "M1": {
@@ -4646,103 +4646,103 @@
     },
     "ELF": {
       "nameJa": "エルフ",
-      "status": "reworded",
+      "status": "v58-approved-rework",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "b2562b8fccdaecba39c93267f58b72533b90402364eb15d664258dc367f72fa7",
-      "textSha256": "f111df44804cb0d9e939bb23c3da30be9816972ad4657c639304b3ce1c34b6ed",
+      "definitionSha256": "7135316526f5836cfa8eb2c141cdb4e8182ac1f28dabc3aeaa0937f165b147dd",
+      "textSha256": "70f40689bf053c46c1682c3aca40ec0746f6a9fe91afce2fd901db2bc2b6b990",
       "hooks": {
         "onSummon": "elfDew",
         "summonReq": "dew4"
       },
       "before": {
-        "ja": "【召喚条件】自分の雫4以上 · 【召喚時】雫2を得て、相手の攻撃力9以上のモンスター1体を選んで破壊 · 【常時】自分の場の異なる「世界樹」系カード1種類につき、このモンスターの攻撃力+1・体力+1 · 両プレイヤーの回復量2倍",
-        "ko": "【소환 조건】자신 이슬 4 이상 · 【소환시】이슬 2 획득, 공격력 9 이상 상대 몬스터 1체 선택 파괴 · 【상시】아군 필드의 서로 다른 세계수 계열 1종당 이 몬스터의 공격력 +1, 체력 +1 · 양 플레이어 회복량 2배",
-        "en": "【Summon Requirement】Your 4+ Dew · 【On Summon】Gain 2 Dew; choose and destroy 1 enemy monster with ATK 9 or more · 【Passive】This monster gets +1 ATK and +1 HP per distinct World Tree card name on your field · Double both players’ healing"
-      },
-      "after": {
         "ja": "【召喚条件】自分の雫4以上。\n\n【召喚時】雫2を得て、相手の攻撃力9以上のモンスター1体を選んで破壊する。\n\n【場にいる間】自分の場の異なる「世界樹」系カード1種類につき、このモンスターの攻撃力+1・体力+1。両プレイヤーの回復量2倍。",
         "ko": "【소환 조건】자신의 이슬이 4 이상이다.\n\n【소환시】자신은 이슬 2를 얻는다. 상대의 필드에서 공격력 9 이상인 몬스터 1체를 선택해 파괴한다.\n\n【필드에 있는 동안】자신의 필드에 있는 세계수 계열 카드 1종류당 이 몬스터의 공격력 +1, 체력 +1. 양 플레이어의 회복량을 2배로 만든다.",
         "en": "【Summon Requirement】You have at least 4 Dew.\n\n【On Summon】Gain 2 Dew; choose and destroy 1 enemy monster with ATK 9 or more.\n\n【While on the Field】This monster gets +1 ATK and +1 HP per distinct World Tree card name on your field. Double both players’ healing."
-      }
+      },
+      "after": {
+        "ja": "【召喚条件】自分の雫4以上。\n\n【召喚時】自分の雫4を消費する。その後、相手の攻撃力9以上のモンスター1体を選んで破壊する。\n\n【場にいる間】自分の場の異なる「世界樹」系カード1種類につき、このモンスターの攻撃力+1・体力+1。両プレイヤーの回復量2倍。",
+        "ko": "【소환 조건】자신의 이슬이 4 이상이다.\n\n【소환시】자신의 이슬 4를 소비한다. 상대의 필드에서 공격력 9 이상인 몬스터 1체를 선택해 파괴한다.\n\n【필드에 있는 동안】자신의 필드에 있는 세계수 계열 카드 1종류당 이 몬스터의 공격력 +1, 체력 +1. 양 플레이어의 회복량을 2배로 만든다.",
+        "en": "【Summon Requirement】You have at least 4 Dew.\n\n【On Summon】Spend 4 Dew. Then choose and destroy 1 enemy monster with ATK 9 or more.\n\n【While on the Field】This monster gets +1 ATK and +1 HP per distinct World Tree card name on your field. Double both players’ healing."
+      },
+      "review": "2026-10-13: reviewed all languages against v58 reducer tests; retained Elf continuous effects; owner-only Gift countdown and chosen new-copy reward."
     },
     "DARK_ELF": {
       "nameJa": "ダークエルフ",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "a032bfd6031fdfa54b9659b9e1af60531dc9984b3dd2150e0d51524e7a0b7eba",
+      "status": "v58-approved-rework",
+      "changedLocales": [],
+      "definitionSha256": "41d7f0dfe36d18d837b17aced804738a6ad68aff77960b1cc8edefe0152b72cd",
       "textSha256": "5da4d5b646152e8c47718d3df372c647bed1d889089ce344c16aca343357100d",
       "hooks": {
         "onSummon": "darkElfDew",
         "summonReq": "darkElf"
       },
       "before": {
-        "ja": "【召喚条件】雫4以上で、自分の場に「ダークエルフ」以外の「エルフ」系モンスターがいない · 【召喚時】雫4消費 · 相手にシールドがあれば相手に10ダメージ · 【常時】自分の場に「傭兵」系がいれば回避、「魔族」がいればオーラを得る",
-        "ko": "【소환 조건】이슬 4 이상, 아군 필드에 다크 엘프 외 엘프 계열 없음 · 【소환시】이슬 4 소비 · 상대 실드가 있으면 상대에게 10 데미지 · 【상시】아군 용병이 있으면 회피, 마족이 있으면 아우라",
-        "en": "【Summon Requirement】4+ Dew and no allied Elves other than Dark Elves · 【On Summon】Spend 4 Dew · If the opponent has Shield, deal 10 damage to them · 【Passive】Gain Evade with an allied Mercenary, and Aura with allied Demonkin"
+        "ja": "【召喚条件】雫4以上で、自分の場に「ダークエルフ」以外の「エルフ」系モンスターがいない。\n\n【召喚時】雫4消費。相手にシールドがあれば相手に10ダメージを与える。\n\n【場にいる間】自分の場に「傭兵」系がいれば回避、「魔族」がいればオーラを得る。",
+        "ko": "【소환 조건】자신의 이슬이 4 이상이고, 자신의 필드에 다크 엘프 이외의 엘프 계열 몬스터가 없다.\n\n【소환시】자신의 이슬 4를 소비한다. 상대에게 실드가 있으면 상대에게 10 데미지를 준다.\n\n【필드에 있는 동안】자신의 필드에 용병 계열 몬스터가 있으면 이 몬스터는 회피를 얻는다. 마족 몬스터가 있으면 아우라를 얻는다.",
+        "en": "【Summon Requirement】You have at least 4 Dew and no allied Elves other than Dark Elves.\n\n【On Summon】Spend 4 Dew. If the opponent has Shield, deal 10 damage to them.\n\n【While on the Field】Gain Evade with an allied Mercenary, and Aura with allied Demonkin."
       },
       "after": {
         "ja": "【召喚条件】雫4以上で、自分の場に「ダークエルフ」以外の「エルフ」系モンスターがいない。\n\n【召喚時】雫4消費。相手にシールドがあれば相手に10ダメージを与える。\n\n【場にいる間】自分の場に「傭兵」系がいれば回避、「魔族」がいればオーラを得る。",
         "ko": "【소환 조건】자신의 이슬이 4 이상이고, 자신의 필드에 다크 엘프 이외의 엘프 계열 몬스터가 없다.\n\n【소환시】자신의 이슬 4를 소비한다. 상대에게 실드가 있으면 상대에게 10 데미지를 준다.\n\n【필드에 있는 동안】자신의 필드에 용병 계열 몬스터가 있으면 이 몬스터는 회피를 얻는다. 마족 몬스터가 있으면 아우라를 얻는다.",
         "en": "【Summon Requirement】You have at least 4 Dew and no allied Elves other than Dark Elves.\n\n【On Summon】Spend 4 Dew. If the opponent has Shield, deal 10 damage to them.\n\n【While on the Field】Gain Evade with an allied Mercenary, and Aura with allied Demonkin."
-      }
+      },
+      "review": "2026-10-13: reviewed all languages against v58 reducer tests; retained Elf continuous effects; owner-only Gift countdown and chosen new-copy reward."
     },
     "HIGH_ELF": {
       "nameJa": "ハイエルフ",
-      "status": "reworded",
+      "status": "v58-approved-rework",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "7296c8eab4feb729924007b4d8134b01bc8ee7f3f97fcbe169aa8b0c69350202",
-      "textSha256": "9969eef02fd253975fca6ea386899d03ce91806bf348a4646404e906a8baceea",
+      "definitionSha256": "9d5b8a9055e123b2dfdc64b2d2dd64c8ce94bb7aa17e24d8d0a072bfcf9fdfe1",
+      "textSha256": "857a85ff65ed0c62edb96faca380179bfa175007fc2d0ec871041088eff5d55b",
       "hooks": {
         "onSummon": "highElfDew",
         "summonReq": "dew10"
       },
       "before": {
-        "ja": "【召喚条件】自分の雫10以上 · 【召喚時】相手の手札を全て確認し、最大3枚ゲームから除外 · 相手のシールドを全て破壊し、自分の雫を2倍にする · 【常時】自分の場の異なる「世界樹」系カード1種類につき、このモンスターの攻撃力+2・体力+2 · 相手の回復量半分（端数切り捨て）",
-        "ko": "【소환 조건】자신 이슬 10 이상 · 【소환시】상대 패 전부 확인, 최대 3장 게임에서 제외 · 상대 실드 전부 파괴, 자신 이슬 2배 · 【상시】아군 필드의 서로 다른 세계수 계열 1종당 이 몬스터의 공격력 +2, 체력 +2 · 상대 회복량 절반(버림)",
-        "en": "【Summon Requirement】Your 10+ Dew · 【On Summon】Inspect the enemy hand and choose up to 3 cards and send them to the opponent's Rift · Destroy all enemy Shield; double your Dew · 【Passive】This monster gets +2 ATK and +2 HP per distinct World Tree card name on your field · Halve enemy healing, rounded down"
-      },
-      "after": {
         "ja": "【召喚条件】自分の雫が10以上ある。\n\n【召喚時】相手の手札を全て見て、カードを3枚まで選び、相手のリフトへ送る。その後、相手のシールドを全て破壊し、自分の雫を2倍にする。\n\n【場にいる間】自分の場の「世界樹」系カード1種類につき、このモンスターの攻撃力+2・体力+2。相手の回復量を半分にする（端数切り捨て）。",
         "ko": "【소환 조건】자신의 이슬이 10 이상이다.\n\n【소환시】상대의 패를 전부 보고 카드를 최대 3장 선택해 상대의 리프트로 보낸다. 그 후 상대의 실드를 전부 파괴하고 자신의 이슬을 2배로 만든다.\n\n【필드에 있는 동안】자신의 필드에 있는 세계수 계열 카드 1종류당 이 몬스터의 공격력 +2, 체력 +2. 상대의 회복량을 절반으로 만든다(버림).",
         "en": "【Summon Requirement】You have at least 10 Dew.\n\n【On Summon】Look at the opponent’s entire hand. Choose up to 3 cards in it and send them to the opponent’s Rift. Then destroy all of the opponent’s Shield and double your Dew.\n\n【While on the Field】This monster gets +2 ATK and +2 HP per distinct World Tree-family card name on your field. Halve the opponent’s healing, rounded down."
-      }
+      },
+      "after": {
+        "ja": "【召喚条件】自分の雫が10以上ある。\n\n【召喚時】自分の雫10を消費する。相手の手札を全て見て、カードを1枚まで選び、相手のリフトへ送る。その後、相手のシールドを全て破壊する。\n\n【場にいる間】自分の場の「世界樹」系カード1種類につき、このモンスターの攻撃力+2・体力+2。相手の回復量を半分にする（端数切り捨て）。",
+        "ko": "【소환 조건】자신의 이슬이 10 이상이다.\n\n【소환시】자신의 이슬 10을 소비한다. 상대의 패를 전부 보고 카드를 최대 1장 선택해 상대의 리프트로 보낸다. 그 후 상대의 실드를 전부 파괴한다.\n\n【필드에 있는 동안】자신의 필드에 있는 세계수 계열 카드 1종류당 이 몬스터의 공격력 +2, 체력 +2. 상대의 회복량을 절반으로 만든다(버림).",
+        "en": "【Summon Requirement】You have at least 10 Dew.\n\n【On Summon】Spend 10 Dew. Look at the opponent’s entire hand. Choose up to 1 cards in it and send them to the opponent’s Rift. Then destroy all of the opponent’s Shield.\n\n【While on the Field】This monster gets +2 ATK and +2 HP per distinct World Tree-family card name on your field. Halve the opponent’s healing, rounded down."
+      },
+      "review": "2026-10-13: reviewed all languages against v58 reducer tests; retained Elf continuous effects; owner-only Gift countdown and chosen new-copy reward."
     },
     "ELDER_ELF_KING": {
       "nameJa": "エルダーハイエルフキング",
-      "status": "reworded",
+      "status": "v58-approved-rework",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "1df045960b3b27242086ca5c2f7055011bff57ea75c1792de278f658fecd3dfc",
-      "textSha256": "b2316c74fba0312ac5f8626c2f9840f16a5e713d94cb3a8e5ace6d803b80526d",
+      "definitionSha256": "305d775635202b3205e00e427a1e6dbae7b799d0169e65dc49842b5e11e6ec12",
+      "textSha256": "b1b78c0ec825ac2df2a1caaaff3aa809354809ad45c7c3e90622845f72dc099b",
       "hooks": {
         "onSummon": "elderDew",
         "summonReq": "dew12"
       },
       "before": {
-        "ja": "【召喚条件】自分の雫12以上 · 【召喚時】相手の場のカードを全て破壊し、自分の雫を3倍にする · 【常時】自分の場の異なる「世界樹」系カード1種類につき、このモンスターの攻撃力+4・体力+4 · 相手がターン中にプレイできるカードは最大3枚 · 【破壊時】雫15を消費し、相手に30ダメージ（雫不足なら不発）",
-        "ko": "【소환 조건】자신 이슬 12 이상 · 【소환시】상대 필드 전부 파괴, 자신 이슬 3배 · 【상시】아군 필드의 서로 다른 세계수 계열 1종당 이 몬스터의 공격력 +4, 체력 +4 · 상대는 턴당 카드 최대 3장 사용 · 【파괴시】이슬 15 소비, 상대에게 30 데미지(부족시 불발)",
-        "en": "【Summon Requirement】Your 12+ Dew · 【On Summon】Destroy the enemy field; triple your Dew · 【Passive】This monster gets +4 ATK and +4 HP per distinct World Tree card name on your field · The opponent may play at most 3 cards per turn · 【On Destruction】Spend 15 Dew to deal 30 damage to the opponent; fails if insufficient"
-      },
-      "after": {
         "ja": "【召喚条件】自分の雫12以上。\n\n【召喚時】相手の場のモンスター・永続魔法・クエストを全て破壊し、自分の雫を3倍にする。\n\n【場にいる間】自分の場の異なる「世界樹」系カード1種類につき、このモンスターの攻撃力+4・体力+4。相手がターン中にプレイできるカードは最大3枚。\n\n【破壊時】自分の雫が15以上あれば、雫15を消費して相手に30ダメージを与える。",
         "ko": "【소환 조건】자신의 이슬이 12 이상이다.\n\n【소환시】상대의 필드의 몬스터·영구마법·퀘스트를 모두 파괴하고 자신의 이슬을 3배로 만든다.\n\n【필드에 있는 동안】아군 필드의 서로 다른 세계수 계열 1종당 이 몬스터의 공격력 +4, 체력 +4. 상대는 각 턴에 카드를 최대 3장 사용할 수 있다.\n\n【파괴시】자신의 이슬이 15 이상이면 이슬 15를 소비하고 상대에게 30 데미지를 준다.",
         "en": "【Summon Requirement】You have at least 12 Dew.\n\n【On Summon】Destroy all enemy monsters, persistent spells, and quests; triple your Dew.\n\n【While on the Field】This monster gets +4 ATK and +4 HP per distinct World Tree card name on your field. The opponent may play at most 3 cards per turn.\n\n【On Destruction】If you have at least 15 Dew, spend 15 Dew and deal 30 damage to the opponent."
-      }
+      },
+      "after": {
+        "ja": "【召喚条件】自分の雫12以上。\n\n【召喚時】自分の雫12を消費する。その後、相手の場の全モンスターを破壊する。\n\n【場にいる間】自分の場の異なる「世界樹」系カード1種類につき、このモンスターの攻撃力+4・体力+4。相手がターン中にプレイできるカードは最大3枚。\n\n【破壊時】自分の雫が15以上あれば、雫15を消費して相手に20ダメージを与える。",
+        "ko": "【소환 조건】자신의 이슬이 12 이상이다.\n\n【소환시】자신의 이슬 12를 소비한다. 그 후 상대 필드의 모든 몬스터를 파괴한다.\n\n【필드에 있는 동안】아군 필드의 서로 다른 세계수 계열 1종당 이 몬스터의 공격력 +4, 체력 +4. 상대는 각 턴에 카드를 최대 3장 사용할 수 있다.\n\n【파괴시】자신의 이슬이 15 이상이면 이슬 15를 소비하고 상대에게 20 데미지를 준다.",
+        "en": "【Summon Requirement】You have at least 12 Dew.\n\n【On Summon】Spend 12 Dew. Then destroy all enemy monsters.\n\n【While on the Field】This monster gets +4 ATK and +4 HP per distinct World Tree card name on your field. The opponent may play at most 3 cards per turn.\n\n【On Destruction】If you have at least 15 Dew, spend 15 Dew and deal 20 damage to the opponent."
+      },
+      "review": "2026-10-13: reviewed all languages against v58 reducer tests; retained Elf continuous effects; owner-only Gift countdown and chosen new-copy reward."
     },
     "WORLD_CARE": {
       "nameJa": "世界樹の慈しみ",
@@ -5463,28 +5463,30 @@
     },
     "WORLD_TREE": {
       "nameJa": "世界樹",
-      "status": "reworded",
+      "status": "v58-approved-rework",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "54364211d827eeada14ebfcc0f8934794286eefb742d53507efe724104568cee",
-      "textSha256": "dcab274bf382bf8aacf0b56a8ccec95794c4bb0ca9dac44174278c2288db9f33",
+      "definitionSha256": "e34caae564b5e076f2dd5d9aa401832e3b8edefbe114ffa65d9e046276958663",
+      "textSha256": "d3791dfe6e1315f837331526f1e687493ecad3924612f57183904e74bae36112",
       "hooks": {
+        "onSummon": "worldTreeDew",
         "turnFx": "worldTree",
         "summonReq": "dew8"
       },
       "before": {
-        "ja": "【召喚条件】自分の雫が8以上 · 【常時】自分の雫によるターン開始時の回復量を2倍にする · 自分のモンスターが攻撃する時、雫1を消費してそのモンスターの攻撃力+6（持続）にしてよい · 自分のモンスターが攻撃される時、雫1を消費してそのモンスターの体力+6（持続）にしてよい · 【自分ターン開始時】自分は雫3を得る",
-        "ko": "【소환 조건】자신 이슬 8 이상 · 【상시】자신의 이슬에 의한 턴 시작 회복량 2배 · 자신 몬스터가 공격할 때 이슬 1을 소비해 그 몬스터의 공격력 +6(지속)을 선택할 수 있다 · 자신 몬스터가 공격받을 때 이슬 1을 소비해 그 몬스터의 체력 +6(지속)을 선택할 수 있다 · 【자신 턴 시작시】자신 이슬 3 획득",
-        "en": "【Summon Requirement】You have at least 8 Dew · 【Passive】Double your turn-start healing from Dew · When your monster attacks, you may spend 1 Dew to give it +6 ATK (lasting) · When your monster is attacked, you may spend 1 Dew to give it +6 HP (lasting) · 【Your Turn Start】Gain 3 Dew"
-      },
-      "after": {
         "ja": "【召喚条件】自分の雫が8以上。\n\n【場にいる間】自分の雫によるターン開始時の回復量を2倍にする。\n\n【味方の攻撃時】自分のモンスターが攻撃する時、雫1を消費してそのモンスターの攻撃力+6（持続）にしてよい。\n\n【味方が攻撃される時】自分のモンスターが攻撃される時、雫1を消費してそのモンスターの体力+6（持続）にしてよい。\n\n【自分ターン開始時】自分は雫3を得る。",
         "ko": "【소환 조건】자신의 이슬이 8 이상이다.\n\n【필드에 있는 동안】자신의 이슬에 의한 턴 시작 회복량을 2배로 만든다.\n\n【아군 공격시】자신의 몬스터가 공격할 때, 이슬 1을 소비해 그 몬스터의 공격력 +6(지속)을 적용할 수 있다.\n\n【아군이 공격받을 때】자신의 몬스터가 공격받을 때, 이슬 1을 소비해 그 몬스터의 체력 +6(지속)을 적용할 수 있다.\n\n【자신 턴 시작시】자신은 이슬 3을 얻는다.",
         "en": "【Summon Requirement】You have at least 8 Dew.\n\n【While on the Field】Double your turn-start healing from Dew.\n\n【When an Ally Attacks】When your monster attacks, you may spend 1 Dew to give it +6 ATK (lasting).\n\n【When an Ally Is Attacked】When your monster is attacked, you may spend 1 Dew to give it +6 HP (lasting).\n\n【Your Turn Start】Gain 3 Dew."
-      }
+      },
+      "after": {
+        "ja": "【召喚条件】自分の雫が8以上。\n\n【召喚時】自分の雫8を消費する。\n\n【場にいる間】自分の雫によるターン開始時の回復量を2倍にする。この倍率は「世界樹」が複数あっても重複しない。\n\n【味方の攻撃時】自分のモンスターが攻撃する時、雫1を消費してそのモンスターの攻撃力+3（持続）にしてよい。\n\n【味方が攻撃される時】自分のモンスターが攻撃される時、雫1を消費してそのモンスターの体力+3（持続）にしてよい。\n\n【自分ターン開始時】自分は雫3を得る。",
+        "ko": "【소환 조건】자신의 이슬이 8 이상이다.\n\n【소환시】자신의 이슬 8을 소비한다.\n\n【필드에 있는 동안】자신의 이슬에 의한 턴 시작 회복량을 2배로 만든다. 세계수가 여러 체 있어도 이 배율은 중첩되지 않는다.\n\n【아군 공격시】자신의 몬스터가 공격할 때, 이슬 1을 소비해 그 몬스터의 공격력 +3(지속)을 적용할 수 있다.\n\n【아군이 공격받을 때】자신의 몬스터가 공격받을 때, 이슬 1을 소비해 그 몬스터의 체력 +3(지속)을 적용할 수 있다.\n\n【자신 턴 시작시】자신은 이슬 3을 얻는다.",
+        "en": "【Summon Requirement】You have at least 8 Dew.\n\n【On Summon】Spend 8 Dew.\n\n【While on the Field】Double your turn-start healing from Dew. This multiplier does not stack with additional World Trees.\n\n【When an Ally Attacks】When your monster attacks, you may spend 1 Dew to give it +3 ATK (lasting).\n\n【When an Ally Is Attacked】When your monster is attacked, you may spend 1 Dew to give it +3 HP (lasting).\n\n【Your Turn Start】Gain 3 Dew."
+      },
+      "review": "2026-10-13: reviewed all languages against v58 reducer tests; retained Elf continuous effects; owner-only Gift countdown and chosen new-copy reward."
     },
     "CURSE": {
       "nameJa": "呪い",
@@ -8536,6 +8538,27 @@
         "ko": "【사용시】자신의 최대 마나 +1.",
         "en": "【On Play】Your max mana +1."
       }
+    },
+    "NIGHT_CASTLE_GIFT": {
+      "nameJa": "夜城からの贈り物",
+      "status": "v58-approved-rework",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "2fea937b4a1b760de5b7aef78570f1f791fb954672bb2bbff552a2e974e9447d",
+      "textSha256": "84376952cc86c1486b684959c49c5a969e1f7718d0d0cb0bc143524b97e0a392",
+      "hooks": {
+        "ench": "nightCastleGift"
+      },
+      "before": null,
+      "after": {
+        "ja": "【自分ターン開始時】発動後、4回目の自分のターン開始時に「吸血契約」「吸血の極意」から1枚を選び、その新しいカードを自分の手札に加える。その後、この魔法を自分の墓地へ送る。発動したターンと相手のターンは数えない。",
+        "ko": "【자신 턴 시작시】발동 후 자신의 4번째 턴 시작에 흡혈 계약 또는 흡혈의 극의 중 1장을 선택해 새 카드를 자신의 패에 넣는다. 그 후 이 마법을 자신의 묘지로 보낸다. 발동한 턴과 상대 턴은 세지 않는다.",
+        "en": "【Your Turn Start】At your 4th turn start after casting this spell, choose Vampiric Pact or Vampiric Secret Art and add a new copy to your hand. Then send this spell to your graveyard. Do not count the turn it was cast or the opponent’s turns."
+      },
+      "review": "2026-10-13: reviewed all languages against v58 reducer tests; retained Elf continuous effects; owner-only Gift countdown and chosen new-copy reward."
     }
   },
   "keywords": {

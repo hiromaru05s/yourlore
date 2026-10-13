@@ -40,7 +40,7 @@ try {
   };
 
   test('v56 and every base-zero monster: direct and targeted declaration', () => {
-    assert.equal(BALANCE_VERSION, 'v57');
+    assert.equal(BALANCE_VERSION, 'v58');
     for (const c of Object.values(DB).filter(c => c.t === 'mon' && c.atk === 0)) {
       for (const target of [false, true]) {
         const g = fresh(); g.players[0].field = [mon(c.id)];
@@ -101,7 +101,7 @@ try {
     assert.equal(g.pending.reason, 'WORLD_TREE_ATTACK');
     g = reduce(g, { type: 'pick', uid: 'grow' }).state;
     assert.equal(g.players[0].dew, 2);
-    assert.equal(g.players[0].field[0].atkMod, 6);
+    assert.equal(g.players[0].field[0].atkMod, 3);
     assert.equal(g.players[0].field[0].attacksUsed, 1);
   });
   test('Chosen Knight cannot bootstrap Cull exile; Chosen Archer cannot execute at zero', () => {

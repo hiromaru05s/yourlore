@@ -120,6 +120,12 @@ export function greedyDecide(g: GameState, useLethal = true): Action {
   if (g.pending?.kind === "cardChoice") {
     const pool = effectChoices(g).filter(c => g.pending?.reason !== "QUICK_REBIRTH" || c.cost <= 7);
     const owner = g.pending.owner ?? g.cur;
+    if (g.pending.reason === 'NIGHT_CASTLE_GIFT') {
+      const ally=g.players[owner];
+      const vampire=ally.field.some(m=>/^VAMP[1-5]$/.test(m.id));
+      const protectedAlready=g.players.some(p=>p.enchants.some(e=>e.card.ench==='vampWard')) || ally.hand.some(c=>c.id==='VAMP_WARD');
+      return {type:'pick',uid:vampire && !protectedAlready ? 'VAMP_WARD' : 'VAMP_PACT'};
+    }
     if (g.pending.reason === 'WORLD_TREE_ATTACK' || g.pending.reason === 'WORLD_TREE_DEFEND') return {type:'pick',uid:(g.players[owner].dew ?? 0)>0?'grow':'pass'};
     if (g.pending.reason === 'HIGH_ELF_HAND') return {type:'pick',uid:[...pool].filter(c=>c.uid!=='done' && !hasPassive(c,'relic')).sort((a,b)=>cardPower(b)-cardPower(a))[0]?.uid ?? 'done'};
     if (g.pending.reason === 'ARMORER_MODE') {const ally=g.players[owner];return {type:'pick',uid:ally.hp+(ally.shield ?? 0)<25||!pool.some(c=>c.uid==='buff')?'shield':'buff'};}
@@ -335,6 +341,9 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   // 직접 데미지 마법 + 불꽃/기습 번 (castable가 자해 리스크를 게이트)
   const direct = spells.find((x) => x.c.act === "dmg" || x.c.act === "siphon" || burnDmg(x.c, o) > 0);
   if (direct) return { type: "play", idx: direct.i };
+  // The Night Castle reward must be usable after the bot chooses the Pact.
+  const vampirePact = spells.find(({c}) => c.id === 'VAMP_PACT');
+  if (vampirePact) return {type:'play',idx:vampirePact.i};
 
   // Expansion spells participate in normal bot play; conditions come from the shared engine.
   const expanded = spells.find(({c}) => c.act === 'expansion' && !c.ench && c.id !== 'BLACK_NOVA'

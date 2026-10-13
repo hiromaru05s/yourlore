@@ -1,0 +1,28 @@
+{
+  "id": "NIGHT_CASTLE_GIFT",
+  "generator": "built-in image_gen",
+  "prompt": "Use case: stylized-concept. Create one finished LORE TCG inner-art illustration for the new permanent spell 'Gift from the Night Castle' (夜城からの贈り物). Exact desired landscape canvas 1472x1344, aspect ratio 1.095:1. Inner artwork only, no card frame or typography. World art bible: each card is a record held in Biblion magic library; depict the record itself, a dark-fantasy Blood-region artifact. A single imposing blackened-oak dispatch casket with aged brass and restrained dark-silver fittings rests on a worn oak reading table. Its oxblood-red wax seal has just cracked; the slightly raised lid reveals an ivory folded vampire contract and a narrow red crystal talisman, lit from within by a restrained deep red magical glow. Four small seal studs on the lid subtly suggest a delayed pact, no numerals. The centerpiece fills 65% of the image and all key detail remains within central 80%. Background is subordinate: tall stone window, distant nocturnal Gothic castle and a dim red moon, one warm candle, deep atmospheric shadow. Premium hand-painted late-2000s dark-fantasy PC game concept art, confident visible brush texture, strong clear silhouette, dramatic chiaroscuro, grounded tactile oak/grain/wax/aged metal, cinematic detail legible at thumbnail size. Palette blackened oak, weathered black stone, aged brass, parchment ivory, candle amber, oxblood red with muted moonlight. A dignified, ominous gift rather than a treasure hoard. No people, faces, hands, humanoid silhouettes, floating particles, readable writing, letters, numbers, logos, watermarks, UI, modern objects, anime, glossy mobile game 3D, plastic or photographic rendering.",
+  "artDirection": "docs/card-art-direction.md",
+  "worldBible": "docs/world-bible.md",
+  "replacedExisting": false,
+  "assets": [
+    {
+      "path": "client/public/art/cards/NIGHT_CASTLE_GIFT.webp",
+      "width": 1472,
+      "height": 1344,
+      "sha256": "abda8c1413e35bf7da35f51fe7c436b043bf8b68ff42197ce545fb15f9ddaad4"
+    },
+    {
+      "path": "client/public/art/cards-sm/NIGHT_CASTLE_GIFT.webp",
+      "width": 384,
+      "height": 351,
+      "sha256": "ea5d437d1c3c85e2076bd253811e5f58790e46a91a55aab8d51648388591fe99"
+    },
+    {
+      "path": "client/public/art/cards-xs/NIGHT_CASTLE_GIFT.webp",
+      "width": 192,
+      "height": 175,
+      "sha256": "af196a1efe1d83864dc3f488b531961ab4bfdba63427c0c0e3d9cd193aca5f6d"
+    }
+  ]
+}

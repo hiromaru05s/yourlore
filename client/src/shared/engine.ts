@@ -627,7 +627,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       if (dead.id === 'ELDER_ELF_KING' && (owner.dew ?? 0) >= 15) {
         monsterActivation(g, ev, owner, dead);
         loseStatus(ctx, owner, 'dew', 15);
-        dealDamage(g.players[1 - side(g, owner)], 30, cn(dead), cn(dead), side(g, owner));
+        dealDamage(g.players[1 - side(g, owner)], 20, cn(dead), cn(dead), side(g, owner));
       }
       if (dead.id === 'FIRE_MASTER' && [...owner.deck, ...owner.discard].some(isFire)) monsterActivation(g, ev, owner, dead);
       if (dead.id === 'FIRE_MASTER') queueExpansionChoice(g, owner, 'FIRE_MASTER', '手札に加えるファイアー魔法を最大2枚選択', { left: 2 });
@@ -758,7 +758,7 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
     }
   }
   // Recover using the amount held at turn start, before this turn's new Dew.
-  const dewRecovery = (p.dew ?? 0) * 2 ** p.field.filter(m => m.id === 'WORLD_TREE').length;
+  const dewRecovery = (p.dew ?? 0) * (p.field.some(m => m.id === 'WORLD_TREE') ? 2 : 1);
   if (dewRecovery > 0) ctx.heal(p, dewRecovery);
   spellDepth++;
   try { tickEnchants(g, ctx, p); } finally { spellDepth--; }
@@ -1177,6 +1177,18 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
       const emitActivation=()=>{if(ctx.ev.length>activationStart)ctx.ev.splice(activationStart,0,{type:'enchantActivate',player:side(g,pl),uid:e.card.uid,id:e.card.id});};
       const ownerTurn = pl === cur;
       const everyTurn = e.card.ench === "noAttack";
+      // Count only subsequent owner turn starts. Keep the spell until its queued
+      // reward resolves, including when several copies mature at the same time.
+      if (e.card.ench === 'nightCastleGift') {
+        if (ownerTurn && !g.over && g.turn > (e.bornTurn ?? -1) && e.turns > 0) {
+          e.turns--;
+          if (e.turns === 0) {
+            enchantFx(g, ctx.ev, pl, e.card);
+            queueExpansionChoice(g, pl, 'NIGHT_CASTLE_GIFT', '手札に加える「吸血契約」または「吸血の極意」を1枚選択', { sourceUid: e.card.uid, sourceId: e.card.id });
+          }
+        }
+        return true;
+      }
       // 지옥: each owner turn, self 6 / opp 5
       if (e.card.ench === "inferno" && ownerTurn && !g.over) {
         ctx.log(`<span class="t">${cn(e.card)}</span> 지옥: 자신 5 / 상대 7`, `<span class="t">${cn(e.card)}</span> 地獄: 自分5 / 相手7`);
@@ -1526,7 +1538,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   if (attackEvent) attackEvent.contactDamage = 0;
   if (treeStage === 0 && (g.players[g.cur].dew ?? 0)>0 && g.players[g.cur].field.some(m=>m.id==='WORLD_TREE')) {
     if (attackEvent) ctx.ev.splice(ctx.ev.indexOf(attackEvent),1);
-    offerEffectChoice(g,ctx,g.players[g.cur],'WORLD_TREE_ATTACK','雫1で攻撃力+6（永続）しますか？',{attackerUid:att.uid,targetUid});
+    offerEffectChoice(g,ctx,g.players[g.cur],'WORLD_TREE_ATTACK','雫1で攻撃力+3（永続）しますか？',{attackerUid:att.uid,targetUid});
     return;
   }
   const p = g.players[g.cur];
@@ -1568,7 +1580,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   }
   if (treeStage < 2 && targetUid !== null && o.field.some(m=>m.uid===targetUid) && (o.dew ?? 0)>0 && o.field.some(m=>m.id==='WORLD_TREE')) {
     if (attackEvent) ctx.ev.splice(ctx.ev.indexOf(attackEvent),1);
-    offerEffectChoice(g,ctx,o,'WORLD_TREE_DEFEND','雫1で被攻撃モンスターの体力+6（永続）しますか？',{attackerUid:att.uid,targetUid});
+    offerEffectChoice(g,ctx,o,'WORLD_TREE_DEFEND','雫1で被攻撃モンスターの体力+3（永続）しますか？',{attackerUid:att.uid,targetUid});
     return;
   }
   // ---- 回避: a defender's 4+ roll cancels the attack ----
@@ -2394,7 +2406,7 @@ function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: Fiel
 function resolveFriendlyPlayerAttack(g: GameState, ctx: Ctx, att: FieldMon, treeStage = 0): void {
   const p = g.players[g.cur];
   if (treeStage === 0 && (p.dew ?? 0) > 0 && p.field.some(m => m.id === 'WORLD_TREE')) {
-    offerEffectChoice(g, ctx, p, 'WORLD_TREE_ATTACK', '雫1で攻撃力+6（永続）しますか？', { attackerUid: att.uid, targetUid: null, friendlyPlayer: true });
+    offerEffectChoice(g, ctx, p, 'WORLD_TREE_ATTACK', '雫1で攻撃力+3（永続）しますか？', { attackerUid: att.uid, targetUid: null, friendlyPlayer: true });
     return;
   }
   let amount = effAtk(p, att, g);
@@ -2470,19 +2482,20 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       if ((o.shield ?? 0)>0) ctx.dealDamage(o,10,cn(m),cn(m),side(g,p));
       break;
     case 'elfDew':
-      gainDew(ctx,p,2,m.uid);
+      loseStatus(ctx,p,'dew',4);
       if (o.field.some(foe=>effAtk(o,foe,g)>=9 && !hasPassive(foe,'aura'))) queueExpansionChoice(g,p,'ELF_DESTROY','破壊する攻撃力9以上の相手モンスター1体を選択');
       break;
     case 'highElfDew':
+      loseStatus(ctx,p,'dew',10);
       // The private hand is exposed only while this owner's choice is pending.
-      queueExpansionChoice(g,p,'HIGH_ELF_HAND','相手の手札を確認し、除外するカードを3枚まで選択（終了可）',{left:3,sourceUid:m.uid});
+      queueExpansionChoice(g,p,'HIGH_ELF_HAND','相手の手札を確認し、除外するカードを1枚まで選択（終了可）',{left:1,sourceUid:m.uid});
       break;
     case 'elderDew':
+      loseStatus(ctx,p,'dew',12);
       for (const foe of [...o.field]) { if(g.over) break; ctx.destroyMonster(o,foe); }
-      while (o.enchants.length) binEnch(g,ctx,o,o.enchants.shift()!.card);
-      for (const t of o.traps.splice(0)) o.discard.push(t.card);
-      for (const q of (o.quests ?? []).splice(0)) o.discard.push(q.card);
-      if (!g.over) gainDew(ctx,p,2*(p.dew ?? 0),m.uid);
+      break;
+    case 'worldTreeDew':
+      loseStatus(ctx,p,'dew',8);
       break;
     case "draw": { const n = ctx.drawN(p, v); ctx.log(`  └ 소환 효과: ${n}장 드로우`, `  └ 召喚効果: ${n}枚ドロー`); break; }
     case "burn": ctx.dealDamage(o, v, `${cn(m)} 소환`, `${cn(m)} 召喚`); break;
@@ -5160,6 +5173,7 @@ export function effectChoices(g: GameState): CardInst[] {
 }
 function offerEffectChoice(g: GameState, ctx: Ctx, p: PlayerState, reason: string, hintJa: string, data?: Record<string, unknown>): void {
   g.pending = { kind: "cardChoice", owner: side(g, p), reason, hint: hintJa, hintJa, allowCancel: reason === "SELECTED_SWORD", data };
+  if (reason === 'NIGHT_CASTLE_GIFT') g.pending.hint = '패에 넣을 흡혈 계약 또는 흡혈의 극의 1장을 선택';
   if (!effectChoices(g).length) { g.pending = null; ctx.log("対象がないため効果は不発", "対象がないため効果は不発"); return; }
   ctx.ev.push({ type: "needTarget", pending: g.pending });
 }
@@ -5818,6 +5832,7 @@ function dewShieldChoices(g: GameState): CardInst[] | null {
   const q=g.pending!; const p=g.players[actingSide(g)],o=g.players[1-actingSide(g)];
   const source=String(q.data?.sourceId ?? 'WORLD_TREE');
   switch(q.reason){
+    case 'NIGHT_CASTLE_GIFT': return ['VAMP_PACT','VAMP_WARD'].map(id=>({...DB[id],uid:id}));
     case 'ARMORER_MODE': return [dewOption(source,'shield',`シールド${q.data?.shield}を得る`,'실드 획득','Gain Shield'),
       ...(p.field.some(m=>m.uid!==q.data?.sourceUid)?[dewOption(source,'buff',`他の味方を+${q.data?.buff}/+${q.data?.buff}`,'다른 아군 강화','Buff another ally')]:[])];
     case 'ELF_DESTROY': return o.field.filter(m=>effAtk(o,m,g)>=9 && !hasPassive(m,'aura'));
@@ -5825,7 +5840,7 @@ function dewShieldChoices(g: GameState): CardInst[] | null {
     case 'SELECTED_SWORD': return [...p.field, ...o.field.filter(m => !hasPassive(m,'aura'))];
     case 'WORLD_TREE_ATTACK': case 'WORLD_TREE_DEFEND': return [
       dewOption('WORLD_TREE','pass','使用せず続ける','사용하지 않고 계속','Continue without spending'),
-      dewOption('WORLD_TREE','grow','雫1を消費して永続強化','이슬 1 소비, 영구 강화','Spend 1 Dew: permanent +6')];
+      dewOption('WORLD_TREE','grow','雫1を消費して永続強化','이슬 1 소비, 영구 강화','Spend 1 Dew: permanent +3')];
     case 'HIGH_ELF_HAND': return [dewOption('HIGH_ELF','done','確認を終える','확인 종료','Finish inspection'),...o.hand];
     default:return null;
   }
@@ -5839,6 +5854,14 @@ function resolveDewShieldChoice(g: GameState, ctx: Ctx, uid: string | null): boo
   if(q.reason==='HIGH_ELF_HAND' && uid!=='done' && hasPassive(chosen,'relic')) {ctx.log('신기는 제외할 수 없습니다','神器はゲームから除外できません');return true;}
   g.pending=null;
   switch(q.reason){
+    case 'NIGHT_CASTLE_GIFT': {
+      const i=p.enchants.findIndex(e=>e.card.uid===q.data?.sourceUid && e.card.ench==='nightCastleGift' && e.turns===0);
+      if(i<0)break;
+      p.hand.push(inst(g,chosen.id));
+      binEnch(g,ctx,p,p.enchants.splice(i,1)[0].card);
+      ctx.log(`밤성의 선물: ${cn(chosen)} 1장을 패에 넣는다`, `夜城からの贈り物: ${cn(chosen)}1枚を手札に加える`);
+      break;
+    }
     case 'ARMORER_MODE':
       if(uid==='shield')gainShield(g,ctx,p,Number(q.data?.shield),p.field.find(m=>m.uid===q.data?.sourceUid));
       else queueExpansionChoice(g,p,'ARMORER_TARGET','強化する自分の他のモンスターを選択',q.data);
@@ -5855,9 +5878,9 @@ function resolveDewShieldChoice(g: GameState, ctx: Ctx, uid: string | null): boo
     }
     case 'HIGH_ELF_HAND': {
       if(uid!=='done') {o.hand=o.hand.filter(c=>c.uid!==uid);rmz(o).push(chosen);}
-      const left=Number(q.data?.left ?? 3)-1;
+      const left=Number(q.data?.left ?? 1)-1;
       if(uid!=='done' && left>0 && o.hand.some(c=>!hasPassive(c,'relic')))queueExpansionChoice(g,p,'HIGH_ELF_HAND',`相手手札からあと${left}枚まで除外（終了可）`,{left,sourceUid:q.data?.sourceUid});
-      else {breakShield(ctx,o);gainDew(ctx,p,p.dew ?? 0,typeof q.data?.sourceUid==='string'?q.data.sourceUid:undefined);}
+      else {breakShield(ctx,o);}
       break;
     }
     case 'WORLD_TREE_ATTACK':case 'WORLD_TREE_DEFEND': {
@@ -5867,7 +5890,7 @@ function resolveDewShieldChoice(g: GameState, ctx: Ctx, uid: string | null): boo
       const target=q.reason==='WORLD_TREE_ATTACK'?attacker:p.field.find(m=>m.uid===targetUid);
       if(uid==='grow' && target && (p.dew ?? 0)>0 && p.field.some(m=>m.id==='WORLD_TREE')) {
         for (const tree of p.field) if (tree.id === 'WORLD_TREE') monsterActivation(g, ctx.ev, p, tree);
-        loseStatus(ctx, p, 'dew', 1); if(q.reason==='WORLD_TREE_ATTACK')target.atkMod+=6;else target.defMod+=6;
+        loseStatus(ctx, p, 'dew', 1); if(q.reason==='WORLD_TREE_ATTACK')target.atkMod+=3;else target.defMod+=3;
       }
       const stage=q.reason==='WORLD_TREE_ATTACK'?1:2;
       if(q.data?.friendlyPlayer) resolveFriendlyPlayerAttack(g,ctx,attacker,stage);

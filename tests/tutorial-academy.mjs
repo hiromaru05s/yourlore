@@ -7,7 +7,7 @@ const dir=await mkdtemp(tmpdir()+'/lore-academy-');
 try {
 await build({stdin:{resolveDir:process.cwd(),contents:`export * from './client/src/shared/tutorialLesson';export * from './client/src/shared/tutorialSteps';export {handleRewards} from './server/src/rewards';export {DB,BALANCE_VERSION} from './client/src/shared/cards';`},bundle:true,format:'esm',platform:'node',outfile:dir+'/test.mjs'});
 const {createLesson,advanceLesson,replayLesson,TUT_STEPS,TUTORIAL_TOTAL,handleRewards,BALANCE_VERSION}=await import(dir+'/test.mjs');
-assert.equal(TUTORIAL_TOTAL,3000);assert.equal(TUT_STEPS.length,12);assert.equal(new Set(TUT_STEPS.map(s=>s.key)).size,12);assert.equal(BALANCE_VERSION,'v57');
+assert.equal(TUTORIAL_TOTAL,3000);assert.equal(TUT_STEPS.length,12);assert.equal(new Set(TUT_STEPS.map(s=>s.key)).size,12);assert.equal(BALANCE_VERSION,'v58');
 const transcripts=new Map();
 for(const lesson of TUT_STEPS){
  const r=createLesson(lesson.id),me=()=>r.state.players[0];

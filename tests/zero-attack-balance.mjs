@@ -39,7 +39,7 @@ try {
   assert.equal(tree.pending.reason, 'WORLD_TREE_ATTACK');
   tree = reduce(tree, { type: 'pick', uid: 'grow' }).state;
   assert.equal(tree.players[0].dew, 1);
-  assert.equal(tree.players[1].hp, 93, 'World Tree attacks for 1 + 6');
+  assert.equal(tree.players[1].hp, 96, 'World Tree attacks for 1 + 3');
 
   // Exercise 2+0, 1+1 and 0+2 across both fields and both acting players.
   for (const owners of [[0, 0], [0, 1], [1, 1]]) for (const side of [0, 1]) {
