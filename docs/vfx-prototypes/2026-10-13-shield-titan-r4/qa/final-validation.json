@@ -1,0 +1,42 @@
+{
+  "checkedAt": "2026-10-13T00:12:39.246336+00:00",
+  "fullTypecheck": "passed",
+  "build": {
+    "result": "passed",
+    "warning": "Three.js shared chunk remains above 500 kB"
+  },
+  "browser": {
+    "passed": 76,
+    "errors": [],
+    "assetFailures": []
+  },
+  "mobile": {
+    "sideLabel": true,
+    "multiLabel": true,
+    "travelLabel": true,
+    "threeCards": true,
+    "restored": true,
+    "boardBottom": 770.984375,
+    "errors": []
+  },
+  "continuousRecording": {
+    "file": "continuous.webm",
+    "speeds": [
+      1,
+      0.5
+    ],
+    "errors": []
+  },
+  "deterministicFrames": 108,
+  "sourceSha256": {
+    "client/shield-titan-four.html": "1177ffe622f76cf8349c6204e4c87171b8364d5e35c5dc4b5df1617dd624a8b1",
+    "client/src/dev/shield-titan-four/renderer.ts": "ce654ff6952223ed1782b30a3ab01faa89103dc019ffff83a3eed1d20c29f0ed",
+    "client/src/dev/shield-titan-four/material.ts": "a59da23838d3046dc5dc5c285fe3bdfe8fb41c64186dc8468f2ec8b3f79bc6bc",
+    "client/src/dev/shield-titan-four/catalog.ts": "6cbce1e7f9607db675776f1128c2eb513fb0533b84908da01d45f40fd317fbaf",
+    "client/src/dev/shield-titan-four/preview.ts": "1536bbb2cfeb4a1ba2738a215eb7d29304030f9c08e00254ba9b4a01bbe98961",
+    "client/src/dev/shield-titan-four/reference-preview.ts": "ee2cabad8ad0953ee30e3a7f72a78ee5a6f154f4f1c62df3697ddf9836fd2f46",
+    "client/src/dev/shield-titan-four/board.ts": "8eef63b6b18f3c953db9a713c36c552805344d51783c4bf43fb1f69ecb9abae1",
+    "client/src/dev/shield-titan-four/style.css": "8bc397f00d1b8fa81bc888f760a0a9ef2e651189e820104a1fd61022aac4a05e"
+  },
+  "scope": "Local comparison page and real GameView fixture; no runtime adoption or deployment"
+}

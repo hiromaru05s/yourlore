@@ -1,9 +1,11 @@
 export const DURATION=3000;
+// Geometry, timing and pigment stay fixed; only optical density and shading change.
 export const designs=[
- {name:'蒼晶の巨盾',en:'MONOLITH',note:'③を継ぐ一枚の巨晶盾。中央の稜線から厚い透明面がせり上がり、上端から静かに解ける。',hit:1410},
- {name:'双晶の契り',en:'TWIN LOCK',note:'左右の結晶面が斜めに重なり、中央で噛み合う。接地後は継ぎ目から両端へほどける。',hit:1220},
- {name:'八稜の花冠',en:'CRYSTAL COROLLA',note:'カードの縁を根に、八つの結晶面が花冠のように開く。中心を見せたまま、対になる面から収まる。',hit:1320},
- {name:'連晶の城塞',en:'PRISM CASCADE',note:'七本の稜柱が時間差で伸び、一枚の透明な城壁を結ぶ。光とともに順を追って面へ還る。',hit:1490},
+ {name:'薄影の水晶',en:'SOFT SHADOW',note:'元の透け感を保ち、カードと盤面にやわらかい影を添える。最も控えめな調整。',hit:1410,alpha:.67,edge:0,facet:0,shadow:.30},
+ {name:'縁影の水晶',en:'DEFINED EDGE',note:'透明な中心を残し、外周と厚みのある稜線に深い蒼の陰影をつける。',hit:1410,alpha:.71,edge:.72,facet:.08,shadow:.34},
+ {name:'厚硝子の水晶',en:'DENSE GLASS',note:'面の透明度を下げる。明るい盤面でも、盾全体の量感がはっきり見える。',hit:1410,alpha:.91,edge:.12,facet:.06,shadow:.24},
+ {name:'稜影の水晶',en:'FACET SHADING',note:'光に背を向けた結晶面を深くし、三角形の稜面と中央の隆起を読みやすくする。',hit:1410,alpha:.74,edge:.12,facet:.85,shadow:.38},
+ {name:'均衡の水晶',en:'BALANCED GLASS',note:'透け感をほどよく残し、落ち影・外周・面の濃淡を組み合わせる。',hit:1410,alpha:.83,edge:.40,facet:.42,shadow:.44},
 ] as const;
 export const clamp=(n:number)=>Math.max(0,Math.min(1,n));
 export function ease(a:number,b:number,t:number){const x=clamp((t-a)/(b-a));return x*x*(3-2*x);}
