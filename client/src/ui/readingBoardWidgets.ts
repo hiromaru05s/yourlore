@@ -116,7 +116,8 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   const clock=root.querySelector<HTMLElement>('.mp-clock.show'),remaining=clock?Math.min(1,Number(clock.dataset.remaining)/Math.max(1,Number(clock.dataset.total))):1;
   const urgency=turnUrgency(clock?Number(clock.dataset.remaining):90,!enemy&&!end?.disabled);
   const jitter=reducedTurnLight.matches?0:Math.sin(now*.067)*Math.sin(now*.019)*urgency;
-  if(turnCap){const x=jitter*.0035;if(Math.abs(turnCap.position.x-x)>.00001){changed=true;shadowDirty=true;}turnCap.position.x=x;turnCap.rotation.z=jitter*.045;}
+  // The complete cap is already in the dynamic display layer; preserve the HDR cache.
+  if(turnCap){turnCap.position.x=jitter*.0035;turnCap.rotation.z=jitter*.045;}
   if(end)css(end,'--urgency-shift',`${jitter*3.5}px`);
   const litCount=Math.ceil(remaining*24);if(litCount!==clockSegments){clockSegments=litCount;if(turnLights?.renderDisplay)displayDirty=true;else changed=true;}
   segments.forEach((mesh,i)=>{mesh.material=i<litCount?lit:dark;});
