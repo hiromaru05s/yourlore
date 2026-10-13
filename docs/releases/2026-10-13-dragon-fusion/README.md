@@ -11,6 +11,8 @@
 
 ## 検証
 
+- `npm run typecheck`: client/serverとも合格。
+
 - `node tests/dragon-fusion.mjs`: 16 engine cases（双方、両結果、選択/自動、実体/トークン）および正常終了・中断・低減・省略・素材欠損・GPU失敗の後始末に合格。
 - `node tests/dragon-fusion-runtime-browser.mjs`: 26 checks、JS errors 0、専用描画のfallback 0。実BaseControllerとGameViewを使うローカルfixture。既存盤面rendererのPCFSoftShadowMap廃止警告1件。
 - 実盤面キャプチャ `runtime-slate-blue.png` で色とシルエットを確認。機能検証と見た目の品質判断を区別する。
