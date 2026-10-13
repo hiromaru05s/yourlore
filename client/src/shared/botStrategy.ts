@@ -48,7 +48,7 @@ function adjustmentEvaluator(g: GameState, p: PlayerState): (c: CardDef) => numb
     const copies = counts.get(c.id) ?? 0;
     let bonus = 0;
     if (c.act === 'destroyMon') {
-      const eligible = (m: CardDef): boolean => recoveryEngine(m) > 0 && !hasPassive(m, 'aura')
+      const eligible = (m: CardDef): boolean => m.t === 'mon' && recoveryEngine(m) > 0 && !hasPassive(m, 'aura')
         && (!c.cap || m.cost <= c.cap)
         && (c.id !== 'RUNE1' || m.cost >= 5)
         && (!['WALLBREAK1', 'WALLBREAK2'].includes(c.id) || (m.atk ?? 0) <= 2)

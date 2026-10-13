@@ -27,6 +27,9 @@ try {
  const g=fresh();g.players[1].field=[mon('PRIEST')];
  assert(C.strategicAdjustment(g,g.players[0],C.DB.S15)>C.strategicAdjustment(g,g.players[0],C.DB.SNIPE1));
  assert(C.strategicAdjustment(g,g.players[0],C.DB.S15)>C.strategicAdjustment(g,g.players[0],C.DB.RUNE1));
+ const enchant=fresh(['WORLD_HEART']);assert.equal(C.strategicAdjustment(enchant,enchant.players[0],C.DB.S15),0,'monster removal cannot answer a recovery enchantment');
+ const shieldEngine=fresh([]);const unsupported=C.strategicAdjustment(shieldEngine,shieldEngine.players[0],C.DB.IRON_WALL);
+ shieldEngine.players[0].field=[mon('PRIEST')];assert(C.strategicAdjustment(shieldEngine,shieldEngine.players[0],C.DB.IRON_WALL)>unsupported,'value repeatable shield purchases after acquiring Priest');
  // Target selection actually removes the zero-attack engine ahead of a body.
  const target=fresh([]);target.players[0].hand=[card('S15')];target.players[1].field=[{...mon('M2'),atk:3,def:4},mon('PRIEST')];
  const pending=C.reduce(target,{type:'play',idx:0}).state;
