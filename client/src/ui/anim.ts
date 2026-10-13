@@ -1,3 +1,5 @@
+import {isShieldTitan} from './shieldTitanSummon/selection';
+import {playShieldTitanSummon} from './shieldTitanSummon/runtime';
 import {playCounter} from './counter/runtime';
 import {warmCardSurface} from './cardSurface';
 import {damageNumber,portraitImpact} from './damageFeedback';
@@ -233,6 +235,11 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(heavy&&isShieldTitan(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playShieldTitanSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
   if(heavy&&isVoidSummon(face.dataset.cardId)){
     face.style.visibility='hidden';reveal.remove();
     if(!fxSkip)await boardMotionScope(signal=>playVoidSummon(face,{anchor:target,signal,onImpact:()=>sfx(landingSound)}),10000);
@@ -344,6 +351,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
 /** Both hand plays and engine-generated summon events share this selected reveal. */
 async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise<void>{
  const id=card.id;
+ if(isShieldTitan(id)){node.style.visibility='hidden';return;}
  if(isVoidSummon(id)){node.style.visibility='hidden';return;}
  if(isCasino(id)){node.style.visibility='hidden';return;}
  if(isDungeon(id)){node.style.visibility='hidden';return;}
@@ -536,7 +544,7 @@ export function pileFlash(id: string): void {
 
 export function summonIn(uid: string): void {
   const n = byUid(uid);
-  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}),(isVoidSummon(n.dataset.cardId)||isMage(n.dataset.cardId)||isMercenary(n.dataset.cardId)||isVerdant(n.dataset.cardId)||isHexer(n.dataset.cardId)||isGolem(n.dataset.cardId))?10000:5000);
+  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}),(isShieldTitan(n.dataset.cardId)||isVoidSummon(n.dataset.cardId)||isMage(n.dataset.cardId)||isMercenary(n.dataset.cardId)||isVerdant(n.dataset.cardId)||isHexer(n.dataset.cardId)||isGolem(n.dataset.cardId))?10000:5000);
 }
 
 export function lunge(uid: string, dir: "up" | "down"): void {
