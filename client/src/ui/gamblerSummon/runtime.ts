@@ -64,7 +64,7 @@ export function playGamblerSummon(source:HTMLElement,options:Options={}):Promise
    void captureCardSurface(copy,FRAME_BACK,true,false).then(surface=>{
     captureHost?.remove();captureHost=undefined;if(ended)return;
     if(!surface.face)throw Error('Public face unavailable');
-    face!.getContext('2d')!.drawImage(surface.face,0,0,540,810);lease!.renderer.refreshFace(face!);faceReady=true;
+    face!.height=Math.round(face!.width*surface.face.height/surface.face.width);face!.getContext('2d')!.drawImage(surface.face,0,0,face!.width,face!.height);lease!.renderer.refreshFace(face!);faceReady=true;
    }).catch(fallback);
   }catch(error){fallback(error);}
  });

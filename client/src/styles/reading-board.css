@@ -174,3 +174,5 @@
 
 /* Approved seal: optical width matches the shield, centers align along the lower frame. */
 .reading-board .portrait .pt-resources .pt-brand{left:77%;top:61%;width:32%;height:34%;}
+
+.reading-board .game #endBtn .end-turn-label{translate:var(--urgency-shift,0px) 0;}

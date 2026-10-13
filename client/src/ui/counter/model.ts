@@ -17,17 +17,18 @@ export function counterPose(plan:AttackPlan,ms:number,reduced=false){
 }
 
 /** One clock owns preparation, launch and contact, even after a slow frame. */
-export function runCounterTimeline(o:{signal:AbortSignal;isAlive:()=>boolean;paint:(ms:number)=>void;onLaunch:()=>void;onImpact:()=>void;reduced?:boolean}):Promise<boolean>{
+export function runCounterTimeline(o:{signal:AbortSignal;isAlive:()=>boolean;paint:(ms:number)=>void;onLaunch:()=>void;onImpact:()=>void;reduced?:boolean;compact?:boolean}):Promise<boolean>{
  return new Promise((resolve,reject)=>{
   let frame=0,launched=false,hit=false,done=false;
-  const start=performance.now(),launch=o.reduced?180:COUNTER_PREP_MS,contact=o.reduced?220:COUNTER_CONTACT_MS,duration=o.reduced?320:COUNTER_DURATION_MS;
+  const prep=o.compact?100:COUNTER_PREP_MS;
+  const start=performance.now(),launch=o.reduced?(o.compact?40:180):prep,contact=o.reduced?(o.compact?70:220):prep+ATTACK_CONTACT_MS-ATTACK_LAUNCH_MS,duration=o.reduced?(o.compact?160:320):prep+ATTACK_DURATION_MS-ATTACK_LAUNCH_MS;
   const cleanup=()=>{done=true;cancelAnimationFrame(frame);o.signal.removeEventListener('abort',abort);};
   const finish=(complete=false)=>{if(done)return;cleanup();resolve(complete);};
   const abort=()=>finish();
   const tick=(now:number)=>{
    try{
     if(o.signal.aborted||!o.isAlive()){finish();return;}
-    const ms=Math.max(0,Math.min(duration,now-start));o.paint(ms);
+    const ms=Math.max(0,Math.min(duration,now-start));o.paint(o.reduced?(o.compact?ms*2:ms):o.compact?(ms<prep?ms/prep*COUNTER_PREP_MS:ms-prep+COUNTER_PREP_MS):ms);
     if(!launched&&ms>=launch){launched=true;o.onLaunch();}
     if(!hit&&ms>=contact&&!o.signal.aborted){hit=true;o.onImpact();}
     if(o.signal.aborted||ms>=duration){finish(!o.signal.aborted);return;}

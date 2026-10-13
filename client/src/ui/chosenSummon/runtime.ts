@@ -46,7 +46,7 @@ export function playChosenSummon(source:HTMLElement,options:Options={}):Promise<
    copy.style.cssText='position:relative;width:180px;height:270px;--cw:180px;--ch:270px;transform:none;opacity:1;visibility:visible';captureHost.append(copy);document.body.append(captureHost);
    const surface=await captureCardSurface(copy,FRAME_BACK,true,false);captureHost?.remove();captureHost=undefined;if(ended)return;
    if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}if(!surface.face)throw Error('Public card surface unavailable');
-   face=document.createElement('canvas');face.width=540;face.height=810;face.getContext('2d')!.drawImage(surface.face,0,0,540,810);
+   face=document.createElement('canvas');face.width=540;face.height=Math.round(540*surface.face.height/surface.face.width);face.getContext('2d')!.drawImage(surface.face,0,0,face.width,face.height);
    host=document.createElement('div');host.className='chosen-hero-summon';host.dataset.cardId=source.dataset.cardId;host.dataset.variant='1';host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:136;isolation:isolate';
    const planes=(['ground','card'] as const).map(pass=>{const el=document.createElement('div');el.dataset.chosenPass=pass;el.style.cssText='position:absolute;left:0;top:0;width:180px;height:270px;transform-origin:0 0';const canvas=document.createElement('canvas');canvas.width=canvas.height=684;canvas.style.cssText='position:absolute;left:-252px;top:-207px;width:684px;height:684px';el.append(canvas);host!.append(el);return{el,c:canvas.getContext('2d')!,pass};});
    document.body.append(host);source.style.visibility='hidden';const start=performance.now();let lastPaint=-Infinity;
