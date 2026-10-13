@@ -1,0 +1,3 @@
+// Authored fictional glyphs: a fixed stroke alphabet, no random Unicode or living-script text.
+const strokes=[[[0,-1],[0,1],[-.6,.4],[.6,-.4]], [[-.6,-1],[.6,-1],[0,0],[0,1]], [[-.6,-.8],[.6,0],[-.6,.8],[-.6,-.8]], [[0,-1],[.6,0],[0,1],[-.6,0],[0,-1]], [[-.6,-1],[-.6,1],[.6,1],[.6,-.3],[-.6,-.3]], [[-.6,-.8],[0,-.3],[.6,-.8],[0,1],[-.6,-.8]], [[-.6,-1],[.6,1],[0,0],[-.6,1],[.6,-1]], [[0,1],[0,-1],[-.6,-.5],[.6,-.5]]];
+export function glyph(c:CanvasRenderingContext2D,n:number,x:number,y:number,size:number){c.save();c.translate(x,y);c.beginPath();strokes[n%strokes.length].forEach(([a,b],i)=>i?c.lineTo(a*size,b*size):c.moveTo(a*size,b*size));c.stroke();c.restore();}

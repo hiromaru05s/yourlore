@@ -1,0 +1,253 @@
+{
+  "cases": [
+    {
+      "kind": "four-canvas",
+      "id": "NT_SEAL5",
+      "t": 0
+    },
+    {
+      "kind": "four-canvas",
+      "id": "NT_SEAL5",
+      "t": 400
+    },
+    {
+      "kind": "four-canvas",
+      "id": "NT_SEAL5",
+      "t": 800
+    },
+    {
+      "kind": "four-canvas",
+      "id": "NT_SEAL5",
+      "t": 1200
+    },
+    {
+      "kind": "four-canvas",
+      "id": "NT_SEAL5",
+      "t": 1700
+    },
+    {
+      "kind": "four-canvas",
+      "id": "NT_SEAL5",
+      "t": 2200
+    },
+    {
+      "kind": "four-canvas",
+      "id": "NT_SEAL5",
+      "t": 3000
+    },
+    {
+      "kind": "four-canvas",
+      "id": "NT_SEAL3",
+      "t": 0
+    },
+    {
+      "kind": "four-canvas",
+      "id": "NT_SEAL3",
+      "t": 400
+    },
+    {
+      "kind": "four-canvas",
+      "id": "NT_SEAL3",
+      "t": 800
+    },
+    {
+      "kind": "four-canvas",
+      "id": "NT_SEAL3",
+      "t": 1200
+    },
+    {
+      "kind": "four-canvas",
+      "id": "NT_SEAL3",
+      "t": 1700
+    },
+    {
+      "kind": "four-canvas",
+      "id": "NT_SEAL3",
+      "t": 2200
+    },
+    {
+      "kind": "four-canvas",
+      "id": "NT_SEAL3",
+      "t": 3000
+    },
+    {
+      "kind": "board",
+      "id": "NT_SEAL5",
+      "side": 0,
+      "v": 0,
+      "contactOnce": true,
+      "restored": true,
+      "firstTime": 0
+    },
+    {
+      "kind": "board",
+      "id": "NT_SEAL5",
+      "side": 0,
+      "v": 1,
+      "contactOnce": true,
+      "restored": true,
+      "firstTime": 0
+    },
+    {
+      "kind": "board",
+      "id": "NT_SEAL5",
+      "side": 0,
+      "v": 2,
+      "contactOnce": true,
+      "restored": true,
+      "firstTime": 0
+    },
+    {
+      "kind": "board",
+      "id": "NT_SEAL5",
+      "side": 0,
+      "v": 3,
+      "contactOnce": true,
+      "restored": true,
+      "firstTime": 0
+    },
+    {
+      "kind": "board",
+      "id": "NT_SEAL5",
+      "side": 1,
+      "v": 0,
+      "contactOnce": true,
+      "restored": true,
+      "firstTime": 0
+    },
+    {
+      "kind": "board",
+      "id": "NT_SEAL5",
+      "side": 1,
+      "v": 1,
+      "contactOnce": true,
+      "restored": true,
+      "firstTime": 0
+    },
+    {
+      "kind": "board",
+      "id": "NT_SEAL5",
+      "side": 1,
+      "v": 2,
+      "contactOnce": true,
+      "restored": true,
+      "firstTime": 0
+    },
+    {
+      "kind": "board",
+      "id": "NT_SEAL5",
+      "side": 1,
+      "v": 3,
+      "contactOnce": true,
+      "restored": true,
+      "firstTime": 0
+    },
+    {
+      "kind": "board",
+      "id": "NT_SEAL3",
+      "side": 0,
+      "v": 0,
+      "contactOnce": true,
+      "restored": true,
+      "firstTime": 0
+    },
+    {
+      "kind": "board",
+      "id": "NT_SEAL3",
+      "side": 0,
+      "v": 1,
+      "contactOnce": true,
+      "restored": true,
+      "firstTime": 0
+    },
+    {
+      "kind": "board",
+      "id": "NT_SEAL3",
+      "side": 0,
+      "v": 2,
+      "contactOnce": true,
+      "restored": true,
+      "firstTime": 0
+    },
+    {
+      "kind": "board",
+      "id": "NT_SEAL3",
+      "side": 0,
+      "v": 3,
+      "contactOnce": true,
+      "restored": true,
+      "firstTime": 0
+    },
+    {
+      "kind": "board",
+      "id": "NT_SEAL3",
+      "side": 1,
+      "v": 0,
+      "contactOnce": true,
+      "restored": true,
+      "firstTime": 0
+    },
+    {
+      "kind": "board",
+      "id": "NT_SEAL3",
+      "side": 1,
+      "v": 1,
+      "contactOnce": true,
+      "restored": true,
+      "firstTime": 0
+    },
+    {
+      "kind": "board",
+      "id": "NT_SEAL3",
+      "side": 1,
+      "v": 2,
+      "contactOnce": true,
+      "restored": true,
+      "firstTime": 0
+    },
+    {
+      "kind": "board",
+      "id": "NT_SEAL3",
+      "side": 1,
+      "v": 3,
+      "contactOnce": true,
+      "restored": true,
+      "firstTime": 0
+    },
+    {
+      "kind": "concurrent-and-cancel",
+      "restored": true
+    },
+    {
+      "kind": "native-hand-drag",
+      "started": true
+    },
+    {
+      "kind": "resize-cancel",
+      "restored": true
+    }
+  ],
+  "layouts": [
+    {
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "width": 844,
+      "scroll": 844
+    }
+  ],
+  "errors": [],
+  "failed": [],
+  "frameIntervals": {
+    "count": 440,
+    "median": 16.699999999999818,
+    "p95": 16.700000000000728,
+    "over50": 0
+  },
+  "boundary": "Local preview and GameView fixture. No engine dispatch/online match/adoption/deployment claim. Wall-clock timings measured on a shared, busy host."
+}
