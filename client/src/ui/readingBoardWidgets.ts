@@ -1,3 +1,4 @@
+import {turnUrgency} from './turnUrgency';
 import {createTurnLights} from './turnLight';
 import {getTurnLightPreview,type TurnLightHandle} from './turnLightPreview';
 import {getManaFormation,manaSlotLayout,type FormationHandle} from './manaFormationPreview';
@@ -113,6 +114,10 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   const end=root.querySelector<HTMLButtonElement>('#endBtn'),refresh=root.querySelector<HTMLButtonElement>('#refreshBtn'),enemy=root.dataset.readingTurn!=='player';
   for(const m of rerollMaterials){color.copy(m.color);if(refresh?.disabled){const l=color.r*.2126+color.g*.7152+color.b*.0722;color.lerp(gray.setRGB(l,l,l),.8).multiplyScalar(.5);}else if(hover==='refreshBtn')color.multiplyScalar(1.12);m.material.color.lerp(color,1-Math.exp(-dt*18));}
   const clock=root.querySelector<HTMLElement>('.mp-clock.show'),remaining=clock?Math.min(1,Number(clock.dataset.remaining)/Math.max(1,Number(clock.dataset.total))):1;
+  const urgency=turnUrgency(clock?Number(clock.dataset.remaining):90,!enemy&&!end?.disabled);
+  const jitter=reducedTurnLight.matches?0:Math.sin(now*.067)*Math.sin(now*.019)*urgency;
+  if(turnCap){const x=jitter*.0035;if(Math.abs(turnCap.position.x-x)>.00001){changed=true;shadowDirty=true;}turnCap.position.x=x;turnCap.rotation.z=jitter*.045;}
+  if(end)css(end,'--urgency-shift',`${jitter*3.5}px`);
   const litCount=Math.ceil(remaining*24);if(litCount!==clockSegments){clockSegments=litCount;if(turnLights?.renderDisplay)displayDirty=true;else changed=true;}
   segments.forEach((mesh,i)=>{mesh.material=i<litCount?lit:dark;});
   const turnAge=now-turnTime;displayEnemy=enemy;
@@ -133,7 +138,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
    if(!preview)root.dataset.turnlight='porcelain';
   }
   if(turnLights){
-   const lightChanged=turnLights.update({now,active:!enemy&&!!end&&!end.disabled,enemy,remaining,hover:!!end?.matches(':hover')||document.activeElement===end,pressed:pressed==='endBtn',reduced:reducedTurnLight.matches});
+   const lightChanged=turnLights.update({now,urgency,active:!enemy&&!!end&&!end.disabled,enemy,remaining,hover:!!end?.matches(':hover')||document.activeElement===end,pressed:pressed==='endBtn',reduced:reducedTurnLight.matches});
    // Display-layer emission does not invalidate the static HDR furniture cache.
    if(turnLights.renderDisplay)displayDirty=lightChanged||displayDirty;else changed=lightChanged||changed;
   }

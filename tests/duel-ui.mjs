@@ -21,7 +21,7 @@ await build({stdin:{contents:entry,resolveDir:process.cwd()},bundle:true,format:
  // JSDOM has no Canvas or DOMMatrix. Exercise the real renderer separately in
  // monster-adoption-browser.mjs; this suite checks game DOM and interaction.
  b.onResolve({filter:/monster\/runtime$/},()=>({path:'monster-runtime',namespace:'dom-test'}));
- b.onLoad({filter:/.*/,namespace:'dom-test'},()=>({contents:'export const syncMonsterStates=()=>{},clearMonsterStates=()=>{},setMonsterSkip=()=>{},monsterRect=()=>null,playMonster=async()=>false,playGutsEndurance=async()=>false;',loader:'js'}));
+ b.onLoad({filter:/.*/,namespace:'dom-test'},()=>({contents:'export const hitMonster=()=>{},monsterHealth=()=>{},combatVisualRect=()=>null,detachMonsterFace=n=>n.cloneNode(true),syncMonsterStates=()=>{},clearMonsterStates=()=>{},setMonsterSkip=()=>{},monsterRect=()=>null,playMonster=async()=>false,playGutsEndurance=async()=>false;',loader:'js'}));
 }}]});
 const {cardEl,cardRulesEl,zoomCard,closeZoom,BaseController,animateDraw,cardPickerMulti,closeOverlay,deckBucket,reduce,ST_MAX,FIELD_MAX,revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
 setLang('ja');

@@ -29,7 +29,7 @@ export function wheelTexture(style:number,legend:boolean):T.CanvasTexture {
 }
 export function surfaceMaterial(card:T.Texture,wheel:T.Texture,legend:boolean){
  const uniforms={material:{value:0},wheel:{value:wheel}};
- const material=new T.MeshStandardMaterial({map:card,metalness:.54,roughness:.34,envMapIntensity:.65,side:T.FrontSide,color:0xffffff});
+ const material=new T.MeshStandardMaterial({map:card,metalness:.54,roughness:.34,envMapIntensity:.65,side:T.FrontSide,color:0xffffff,transparent:true,alphaTest:.01});
  material.onBeforeCompile=shader=>{
   shader.uniforms.uMaterial=uniforms.material;shader.uniforms.uWheel=uniforms.wheel;
   shader.vertexShader='attribute vec2 wheelUv; varying vec2 vWheelUv;\n'+shader.vertexShader;
@@ -42,7 +42,10 @@ export function surfaceMaterial(card:T.Texture,wheel:T.Texture,legend:boolean){
    float transition=smoothstep(0.02,0.22,uMaterial-(1.0-rad)*0.30+tooling);
    vec3 enamel=texture2D(uWheel,vWheelUv).rgb;
    diffuseColor.rgb=mix(diffuseColor.rgb,enamel,transition);
+   diffuseColor.a=mix(diffuseColor.a,1.0,transition);
   `);
+  // Return the captured card without metallic lighting or tone-mapping tint.
+  shader.fragmentShader=shader.fragmentShader.replace('#include <tonemapping_fragment>', '#include <tonemapping_fragment>\n gl_FragColor.rgb=mix(texture2D(map,vMapUv).rgb,gl_FragColor.rgb,smoothstep(0.0,0.12,uMaterial));');
  };
  material.customProgramCacheKey=()=>`gambler-solid-surface-${legend}`;
  return {material,uniforms};

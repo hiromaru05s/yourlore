@@ -1,3 +1,7 @@
+import {playCounter} from './counter/runtime';
+import {warmCardSurface} from './cardSurface';
+import {damageNumber,portraitImpact} from './damageFeedback';
+import {hitMonster,monsterHealth,combatVisualRect} from './monster/runtime';
 import {isVoidSummon} from './voidSummon/selection';
 import {playVoidSummon} from './voidSummon/runtime';
 import {playHatch} from './hatchSummon/runtime';
@@ -522,7 +526,7 @@ export function hpFeedback(side: ViewSide, kind: "dmg" | "heal", amount: number)
   const num = document.getElementById("hp-" + side);
   if (bar && kind==='dmg') { bar.classList.add("shake"); setTimeout(() => bar.classList.remove("shake"), 400); }
   if (num) { num.classList.add(kind === "dmg" ? "hp-hit" : "hp-heal"); setTimeout(() => num.classList.remove("hp-hit", "hp-heal"), 450); }
-  if(kind==='dmg')floatNum(bar || num, "-" + amount, kind);
+  if(kind==='dmg'&&!fxSkip){portraitImpact(side);damageNumber(document.querySelector<HTMLElement>(`#portrait${side==='me'?'Me':'Opp'} .pt-ring`)??combatPortrait(side),amount);}
 }
 
 export function pileFlash(id: string): void {
@@ -546,7 +550,7 @@ export async function attackStrike(uid:string,targetUid:string|null,defender:Vie
   if(!source||!target||fxSkip)return;
   sfx('attack');
   let impacted=false;
-  const impact=()=>{if(impacted)return;impacted=true;if(contactDamage>0)sfx(targetUid?'impact':'facehit');onImpact?.();};
+  const impact=()=>{if(impacted)return;impacted=true;if(exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');}if(contactDamage>0)sfx(targetUid?'impact':'facehit');onImpact?.();};
   await boardMotionScope(async signal=>{
     if(usesAssassinStrike(source.dataset.cardId)){
       try{
@@ -555,18 +559,20 @@ export async function attackStrike(uid:string,targetUid:string|null,defender:Vie
         return await playAssassinStrike(source,target,{signal,side:defender==='opp'?0:1,onImpact:impact});
       }catch(error){if(import.meta.env.DEV)console.warn('Assassin attack presentation failed',error);if(signal.aborted||fxSkip||impacted)return false;}
     }
-    return playMonster(source,'attack',{target,signal,exhaust,side:defender==='opp'?1:-1,onImpact:impact});
+    return playMonster(source,'attack',{target,signal,exhaust,tempo:true,side:defender==='opp'?1:-1,onImpact:impact});
   });
   if(exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');source.style.filter='grayscale(1) brightness(.57)';}
+}
+export function warmCombat(uid:string){
+ const source=combatCard(uid);if(source)warmCardSurface(source);
 }
 /** A counter is presentation metadata, never another ordinary attack action. */
 export async function counterStrike(uid:string,targetUid:string,onImpact?:()=>void,contactDamage=1):Promise<void>{
  const source=combatCard(uid),target=combatCard(targetUid);
  if(!source||!target||fxSkip||document.hidden)return;
  await boardMotionScope(async signal=>{
-  const {playCounter}=await import('./counter/runtime');
   if(signal.aborted||fxSkip)return false;
-  return playCounter(source,target,{signal,onLaunch:()=>sfx('attack'),onImpact:()=>{if(contactDamage>0)sfx('impact');onImpact?.();}});
+  return playCounter(source,target,{signal,compact:true,onLaunch:()=>sfx('attack'),onImpact:()=>{if(contactDamage>0)sfx('impact');onImpact?.();}});
  });
 }
 /** Starts on the attack contact callback, or on an explicit non-strike survival event. */
@@ -577,9 +583,10 @@ export async function monsterActivation(uid:string):Promise<void>{
  const n=byUid(uid);if(n&&!fxSkip)await boardMotionScope(signal=>playMonster(n,'trigger',{signal,side:n.closest('#oppRow')?-1:1}));
 }
 
-export function monHit(uid: string): void {
-  const n = byUid(uid);
-  if (n) { n.classList.add("mhit"); setTimeout(() => n.classList.remove("mhit"), 400); }
+export function monHit(uid:string,amount?:number,hp?:number,recoil=true):void{
+ const node=combatCard(uid);if(!node)return;
+ if(hp!==undefined)monsterHealth(node,hp);
+ if(!fxSkip){if(recoil)hitMonster(node);if(amount!==undefined)damageNumber(node,amount,()=>combatVisualRect(node));}
 }
 
 export function monDie(uid: string, discardId: string): void {
@@ -939,13 +946,14 @@ export async function hatchSummon(sourceUid:string,card:CardInst):Promise<HTMLEl
  source.replaceWith(face);return face;
 }
 
-export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: number): Promise<HTMLElement | null> {
+export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: number,onReveal?:(node:HTMLElement)=>void): Promise<HTMLElement | null> {
   const from = fromRect(side, takeOrigin(side)); const zone=monZoneEl(side);
   if(!from||!zone)return null;
   const target=reserveMonster(zone,card.uid);
   if (!target) return null;
   const node = floatAt(cardEl(card, { size: "hand", fullArt:true }), from);
   node.style.zIndex="135";
+  onReveal?.(node);
   try {
     await focusSummon(node, card, side);
     const face=await flyIntoSlot(node,target,cardEl(card,{field:true}),true,card.id==='MIMIC'?'mimic':'summon');

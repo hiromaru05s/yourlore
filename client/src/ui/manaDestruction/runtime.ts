@@ -8,7 +8,7 @@ import {draw} from './renderer';
 import {variants,type Quad} from './catalog';
 
 const active=new Map<HTMLElement,()=>void>();
-export function cancelManaDestruction(root?:HTMLElement){for(const [node,cancel]of [...active])if(!root||root.contains(node))cancel();}
+export function cancelManaDestruction(root?:HTMLElement){for(const [node,cancel]of [...active])if(root?root.contains(node):node.dataset.combatExit!=='true')cancel();}
 function project(node:HTMLElement):Quad{
  const w=node.offsetWidth,h=node.offsetHeight,mat=projectedPlacement(node,w,h),pad=w*CARD_PADDING;
  const mount=node.parentElement;
