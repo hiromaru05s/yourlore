@@ -1,0 +1,23 @@
+vite v5.4.21 building for production...
+transforming...
+✓ 167 modules transformed.
+rendering chunks...
+computing gzip size...
+../docs/vfx-prototypes/2026-10-12-dragon-fusion-four/build/dragon-fusion-four.html                    0.34 kB │ gzip:   0.27 kB
+../docs/vfx-prototypes/2026-10-12-dragon-fusion-four/build/assets/preview-DbRM8Mn4.css                4.61 kB │ gzip:   1.91 kB
+../docs/vfx-prototypes/2026-10-12-dragon-fusion-four/build/assets/renderer-CDpg3JYh.css              22.08 kB │ gzip:   6.13 kB
+../docs/vfx-prototypes/2026-10-12-dragon-fusion-four/build/assets/board-DCyTUHTx.css                216.67 kB │ gzip:  45.92 kB
+../docs/vfx-prototypes/2026-10-12-dragon-fusion-four/build/assets/dragon-fusion-four-BQ4FjwDK.js      2.17 kB │ gzip:   1.11 kB
+../docs/vfx-prototypes/2026-10-12-dragon-fusion-four/build/assets/renderDensity-DFPp-17k.js           3.55 kB │ gzip:   1.83 kB
+../docs/vfx-prototypes/2026-10-12-dragon-fusion-four/build/assets/preview-C4tK7S3k.js                 5.70 kB │ gzip:   3.16 kB
+../docs/vfx-prototypes/2026-10-12-dragon-fusion-four/build/assets/ceremonyScene-CyuQJazt.js           8.93 kB │ gzip:   3.96 kB
+../docs/vfx-prototypes/2026-10-12-dragon-fusion-four/build/assets/paperDraw-DeTDIbUT.js              10.27 kB │ gzip:   4.65 kB
+../docs/vfx-prototypes/2026-10-12-dragon-fusion-four/build/assets/duelScene-C_p7rGJ7.js             101.42 kB │ gzip:  35.48 kB
+../docs/vfx-prototypes/2026-10-12-dragon-fusion-four/build/assets/board-VIMjlKg1.js                 191.68 kB │ gzip:  75.74 kB
+../docs/vfx-prototypes/2026-10-12-dragon-fusion-four/build/assets/renderer-DDM2fT-G.js            1,134.46 kB │ gzip: 363.70 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1m 47s
