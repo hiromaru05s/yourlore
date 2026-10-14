@@ -1,3 +1,5 @@
+import {playReverse,warmReverse} from './reverse/runtime';
+export {warmReverse};
 import {playVoidShot,warmVoidShot,cancelVoidShots} from './voidShot/runtime';
 export {warmVoidShot};
 import {playMassacre,cancelMassacres} from './massacre/runtime';
@@ -1383,4 +1385,11 @@ export async function treasonChains(targets:{node:HTMLElement;voided:boolean}[],
    }));
   });
  },30000);
+}
+
+/** Selected reverse 02; the controller resumes result events at physical contact. */
+export async function reverseDamage(from:ViewSide,to:ViewSide,sources:string[],onContact:()=>void):Promise<void>{
+ let applied=false;const contact=()=>{if(!applied){applied=true;onContact();}};
+ try{if(!fxSkip&&!document.hidden)await boardMotionScope(signal=>playReverse(from,to,sources,contact,signal),5000);}
+ finally{contact();}
 }

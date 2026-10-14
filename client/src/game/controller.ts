@@ -343,6 +343,7 @@ export abstract class BaseController implements BoardHandlers {
     const fusions=fusionPairs(events),fusionMaterials=new Set([...fusions.values()].flatMap(f=>[f.dragon.uid,f.mate.uid]));
     if(events.some(e=>e.type==='dice'&&e.taunt))A.warmTaunt();
     if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
+    if(events.some(e=>e.type==='reverseDamage'))A.warmReverse();
     if(events.some(e=>e.type==='nova'))A.warmNova();
     if(events.some(e=>e.type==='treason'))A.warmTreason();
     if(events.some(e=>e.type==='voidShot'))A.warmVoidShot();
@@ -368,7 +369,7 @@ export abstract class BaseController implements BoardHandlers {
     // running counters for ghost slot placement + live HP readout
     const fieldCount: [number, number] = [prev.players[0].field.length, prev.players[1].field.length];
     const hpNow: [number, number] = [prev.players[0].hp, prev.players[1].hp];
-    const crystalContacts=new Set<GameEvent>();
+    const contactedDamage=new Set<GameEvent>();
     const elemental=new Map<string,Playback>();
     const elementalDeaths:Promise<void>[]=[];
     const draws = [0, 0];
@@ -419,7 +420,7 @@ export abstract class BaseController implements BoardHandlers {
     for (let i = 0; i < events.length; i++) {
       if (this.dead) return;
       const e = events[i];
-      if(summonActivations.has(e)||crystalContacts.has(e)||runeReplays.suppressed.has(i))continue;
+      if(summonActivations.has(e)||contactedDamage.has(e)||runeReplays.suppressed.has(i))continue;
       // glanceable icon rail (topbar): key events → small icons
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
@@ -660,10 +661,10 @@ export abstract class BaseController implements BoardHandlers {
           const heldIndex=this.elementalFaces.findIndex(x=>x.card.id==='EXILE_NUKE1'&&x.side===sideOf(e.player)&&x.node.isConnected);
           const held=heldIndex<0?undefined:this.elementalFaces.splice(heldIndex,1)[0].node;
           const nextShot=events.findIndex((next,j)=>j>i&&(next.type==='voidShot'||next.type==='playSpell'));
-          const damage=events.slice(i+1,nextShot<0?events.length:nextShot).find((event):event is Extract<GameEvent,{type:'damage'}>=>event.type==='damage'&&!!event.srcKo?.includes('data-card="EXILE_NUKE1"'));
+          const damage=events.slice(i+1,nextShot<0?events.length:nextShot).find((event):event is Extract<GameEvent,{type:'damage'}>=>event.type==='damage'&&!event.reversed&&!!event.srcKo?.includes('data-card="EXILE_NUKE1"'));
           const playback=contactPlayback(contact=>A.voidShotSpell(card,sideOf(e.player),e.count,contact,sideOf(e.target),held),()=>{
-            if(this.dead||!damage||crystalContacts.has(damage))return;
-            crystalContacts.add(damage);hpNow[damage.player]-=damage.amount;
+            if(this.dead||!damage||contactedDamage.has(damage))return;
+            contactedDamage.add(damage);hpNow[damage.player]-=damage.amount;
             if(damage.player===this.you)this.view.pushIcon('hitme');
             const cue=eventSound.cue(damage);if(cue&&!A.isFxSkipped())sfx(cue);
             A.hpFeedback(sideOf(damage.player),'dmg',damage.amount);A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
@@ -671,9 +672,21 @@ export abstract class BaseController implements BoardHandlers {
           voidShotFinish=playback.finished;motionFinishes.push(playback.finished);await playback.contact;
           break;
         }
+        case "reverseDamage": {
+          const damage=events.find((event):event is Extract<GameEvent,{type:'damage'}>=>event.type==='damage'&&event.reversed===true&&event.reverseId===e.id);
+          const playback=contactPlayback(contact=>A.reverseDamage(sideOf(e.from),sideOf(e.to),e.sourceUids,contact),()=>{
+            if(this.dead||!damage||contactedDamage.has(damage))return;
+            contactedDamage.add(damage);hpNow[damage.player]-=damage.amount;
+            if(damage.player===this.you)this.view.pushIcon('hitme');
+            const cue=eventSound.cue(damage);if(cue&&!A.isFxSkipped())sfx(cue);
+            A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+          });
+          motionFinishes.push(playback.finished);await playback.contact;
+          break;
+        }
         case "damage": {
           hpNow[e.player] -= e.amount;
-          A.hpFeedback(sideOf(e.player), "dmg", e.amount);
+          if(!e.reversed)A.hpFeedback(sideOf(e.player), "dmg", e.amount);
           A.hpBarSet(sideOf(e.player), hpNow[e.player]);
           break;
         }
@@ -718,14 +731,14 @@ export abstract class BaseController implements BoardHandlers {
             }else if(def.id==='EXILE_NUKE2'){
               // Consume only this spell's first actual damage event at shell contact.
               // Reflections use the engine's target; echo hits and unrelated reactions remain sequential.
-              const damage=events.slice(i+1,nextSpell<0?events.length:nextSpell).find((event):event is Extract<GameEvent,{type:'damage'}>=>event.type==='damage'&&!!event.srcKo?.includes('data-card="EXILE_NUKE2"'));
+              const damage=events.slice(i+1,nextSpell<0?events.length:nextSpell).find((event):event is Extract<GameEvent,{type:'damage'}>=>event.type==='damage'&&!event.reversed&&!!event.srcKo?.includes('data-card="EXILE_NUKE2"'));
               const records=prev.players[e.player].removed??[];
               const card=prev.players[e.player].hand.find(c=>c.id===e.id)??{uid:'void-crystal-source',...def};
               await A.revealSpell(card,sideOf(e.player),e.dest,undefined,false,{
                 count:e.riftCount??records.length,record:records.at(-1),target:damage?sideOf(damage.player):undefined,
                 onImpact:()=>{
-                  if(this.dead||!damage||crystalContacts.has(damage))return;
-                  crystalContacts.add(damage);hpNow[damage.player]-=damage.amount;
+                  if(this.dead||!damage||contactedDamage.has(damage))return;
+                  contactedDamage.add(damage);hpNow[damage.player]-=damage.amount;
                   if(damage.player===this.you)this.view.pushIcon('hitme');
                   const cue=eventSound.cue(damage);if(cue&&!A.isFxSkipped())sfx(cue);
                   A.hpFeedback(sideOf(damage.player),'dmg',damage.amount);A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);

@@ -283,7 +283,8 @@ export type GameEvent =
   | { type: "elementalImpact"; group:string; index:number }
   | { type: "elementalEnd"; group:string }
   | { type: "hit"; uid: string; amount?: number }
-  | { type: "damage"; player: Side; amount: number; srcKo?: string; srcJa?: string } // src: what dealt it (death-cause display)
+  | { type: "reverseDamage"; id: number; from: Side; to: Side; sourceUids: string[] }
+  | { type: "damage"; reversed?: true; reverseId?: number; player: Side; amount: number; srcKo?: string; srcJa?: string } // src: what dealt it (death-cause display)
   | { type: "heal"; player: Side; amount: number; bloodRiteSources?: string[] }
   | { type: "decayCounterGrant"; player: Side; uid: string; before: number; after: number }
   | { type: "destroy"; player: Side; uid: string; id?: string; cause?: "decay" | "fusion" | "massacre" }

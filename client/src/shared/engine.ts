@@ -565,7 +565,13 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       if (amp > 0) { for (const m of g.players[source].field) if (m.aura === "spellAmp") monsterActivation(g, ev, g.players[source], m); amt += amp; log(`  └ 적룡의 화염: 마법 데미지 +${amp}`, `  └ 赤竜の炎: 魔法ダメージ+${amp}`); }
     }
     if (spellDepth > 0 && g.players.some(pl => pl.enchants.some(e => e.card.ench === 'doubleUp'))) amt *= 2;
-    if (g.players.some(pl => pl.enchants.some(e => e.card.ench === 'blackReverse'))) target = g.players[1 - side(g, target)];
+    const reverseSources = g.players.flatMap(pl => pl.enchants.filter(e => e.card.ench === 'blackReverse').map(e => e.card.uid));
+    const reverseId = ev.length;
+    if (reverseSources.length) {
+      const from = side(g, target), to = (1 - from) as Side;
+      target = g.players[to];
+      ev.push({type:'reverseDamage',id:reverseId,from,to,sourceUids:reverseSources});
+    }
     if (spellDepth > 0 && target.enchants.some(e => e.card.ench === 'blackInfinity')) {
       const sourceUid = target.enchants.find(e => e.card.ench === 'blackInfinity')!.card.uid;
       const cards: CardInst[] = [];
@@ -617,7 +623,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       `  └ <span class="dmg">${amt} 데미지</span> → ${target.name} (체력 ${hp}) <span class="muted">[${srcKo}]</span>`,
       `  └ <span class="dmg">${amt} ダメージ</span> → ${target.name} (体力 ${hp}) <span class="muted">[${srcJa ?? srcKo}]</span>`,
     );
-    ev.push({ type: "damage", player: side(g, target), amount: amt, srcKo, srcJa: srcJa ?? srcKo });
+    ev.push({ type: "damage", player: side(g, target), amount: amt, srcKo, srcJa: srcJa ?? srcKo, ...(reverseSources.length ? {reversed:true as const,reverseId} : {}) });
     if (target.hp <= 0) handleDefeat(g, ctx, target, dealer);
   };
   const destroyMonster = (owner: PlayerState, m: FieldMon, cause?: "decay" | "massacre"): void => {
