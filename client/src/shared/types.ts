@@ -170,6 +170,7 @@ export interface PlayerState {
   defendHeal: number; // heal this much whenever this player is attacked
   manaGainNext: number; // max mana to gain at the start of this player's next turn
   skipNext: boolean; // legacy: if true, this player's next turn is skipped
+  skipTurnSources?: ("TIMEWARP" | "BLACK_NOVA" | null)[]; // FIFO provenance; old saves may omit it
   skipTurns?: number; // queued turn skips; stacks when 시공간 조작 succeeds more than once
   revealedCards?: RevealedCard[]; // cards permanently known to the opponent this game (physical-card UID + card id)
   collection?: string[]; // redacted view only: public card ids the opponent may inspect
@@ -259,6 +260,8 @@ export type DiceSource = { player: Side } & ({ id: string; status?: never } | { 
 export interface GutsSurvival { player: Side; uid: string; before: number; after: number }
 
 export type GameEvent =
+  | { type: "timewarp"; player: Side; sourceUid: string }
+  | { type: "turnSkipped"; player: Side; source?: "TIMEWARP" | "BLACK_NOVA"; remaining: number }
   | { type: "voidGrant"; player: Side; uids: string[] } // Newly granted by Dimension Rite; public field UIDs only.
   | { type: "creationBorn"; player: Side; id: string; uid: string; sourceUid?: string; copy: boolean } // New public instance; never includes hidden deck identities.
   | { type: "infinityStored"; player: Side; sourceUid: string; cardUids: string[] }
@@ -289,7 +292,7 @@ export type GameEvent =
   | { type: "treasure"; player: Side; kind: string; text: string; textJa: string; isBot: boolean }
   | { type: "dice"; source: DiceSource; player: Side; rolls: number[]; need?: number; success?: boolean; variant?: "casino"; evasion?: { targetUid: string; attackerUid: string }; taunt?: { sourceUid: string; attackerUid: string } } // evasion identifies the public defender, including granted passives and duplicates
   | { type: "nova"; player: Side; from: number; to: 1 } // Resolved HP cost and time theft, never spell damage.
-  | { type: "playSpell"; player: Side; id: string; dest: "discard" | "field" | "vanish" } // spell/starter/enchant played from hand
+  | { type: "playSpell"; player: Side; id: string; dest: "discard" | "field" | "vanish"; riftCount?: number } // spell/starter/enchant played from hand
   | { type: "trapSet"; player: Side } // a face-down trap was set (identity hidden)
   | { type: "trapReveal"; player: Side; id: string } // a trap fired → reveal then discard
   | { type: "win"; winner: Side }

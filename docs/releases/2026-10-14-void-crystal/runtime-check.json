@@ -1,0 +1,173 @@
+{
+  "report": [
+    {
+      "opts": {
+        "side": 0,
+        "count": 8
+      },
+      "result": {
+        "hp": [
+          "120",
+          "104"
+        ],
+        "expected": [
+          120,
+          104
+        ]
+      },
+      "clean": true,
+      "overflow": false
+    },
+    {
+      "opts": {
+        "side": 1,
+        "count": 8
+      },
+      "result": {
+        "hp": [
+          "104",
+          "120"
+        ],
+        "expected": [
+          104,
+          120
+        ]
+      },
+      "clean": true,
+      "overflow": false
+    },
+    {
+      "opts": {
+        "side": 0,
+        "count": 8,
+        "reverse": true
+      },
+      "result": {
+        "hp": [
+          "104",
+          "120"
+        ],
+        "expected": [
+          104,
+          120
+        ]
+      },
+      "clean": true,
+      "overflow": false
+    },
+    {
+      "opts": {
+        "side": 0,
+        "count": 8,
+        "echo": true
+      },
+      "result": {
+        "hp": [
+          "120",
+          "88"
+        ],
+        "expected": [
+          120,
+          88
+        ]
+      },
+      "clean": true,
+      "overflow": false
+    },
+    {
+      "opts": {
+        "side": 0,
+        "count": 0
+      },
+      "result": {
+        "hp": [
+          "120",
+          "120"
+        ],
+        "expected": [
+          120,
+          120
+        ]
+      },
+      "clean": true,
+      "overflow": false
+    },
+    {
+      "opts": {
+        "side": 0,
+        "count": 8,
+        "skip": 1000
+      },
+      "result": {
+        "hp": [
+          "120",
+          "104"
+        ],
+        "expected": [
+          120,
+          104
+        ]
+      },
+      "clean": true,
+      "overflow": false
+    },
+    {
+      "opts": {
+        "side": 1,
+        "count": 8,
+        "skip": 3600
+      },
+      "result": {
+        "hp": [
+          "104",
+          "120"
+        ],
+        "expected": [
+          104,
+          120
+        ]
+      },
+      "clean": true,
+      "overflow": false
+    },
+    {
+      "opts": {
+        "side": 0,
+        "count": 8,
+        "reduced": true
+      },
+      "result": {
+        "hp": [
+          "120",
+          "104"
+        ],
+        "expected": [
+          120,
+          104
+        ]
+      },
+      "clean": true,
+      "overflow": false
+    },
+    {
+      "opts": {
+        "side": 1,
+        "count": 24,
+        "mobile": true
+      },
+      "result": {
+        "hp": [
+          "72",
+          "120"
+        ],
+        "expected": [
+          72,
+          120
+        ]
+      },
+      "clean": true,
+      "overflow": false
+    }
+  ],
+  "errors": []
+}

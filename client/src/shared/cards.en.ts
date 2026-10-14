@@ -55,7 +55,7 @@ const NAMES: Record<string, string> = {
   GLASS_BAN: "Glass Arms Ban", SHATTER: "Shattering Tremor", SCARECROW: "Scarecrow Muster", LEVY: "Troop Levy",
   INQUISITION: "Inquisition", MIMIC_LORD: "Mimic Leader", AWAKENED_MIMIC: "Awakened Mimic", MIMIC_KING: "Mimic King", VITAL2: "Vitality Devotee", VITAL3: "Vitality Priest", VITAL4: "Full-Blooded Warrior",
   CULL_FLOOD: "Baptism of Culls", PAIN_HARVEST: "Pain Harvest", CULL_FARM: "Cull Farm", PURGE_ALL: "The Great Purge",
-  EXILE_NUKE1: "Void Barrage", EXILE_NUKE2: "Void Cataclysm", CULL_TITAN: "Avatar of Culls", GREED_PRICE: "Price of Greed", GOLIATH_HUNT: "Goliath Hunt", WORLD_GUARD: "Guardian of the World Tree", DOUBLE_EXEC: "Double Execution", MASSACRE: "Massacre", MIMIC_KING2: "Mimic King II", ORIGIN_MIMIC: "Origin Mimic", MARKET_CRISIS: "Economic Crisis", TOKEN00: "Scarecrow", SOLDIER2: "Soldier",
+  EXILE_NUKE1: "Void Barrage", EXILE_NUKE2: "Void Crystal Sorcery", CULL_TITAN: "Avatar of Culls", GREED_PRICE: "Price of Greed", GOLIATH_HUNT: "Goliath Hunt", WORLD_GUARD: "Guardian of the World Tree", DOUBLE_EXEC: "Double Execution", MASSACRE: "Massacre", MIMIC_KING2: "Mimic King II", ORIGIN_MIMIC: "Origin Mimic", MARKET_CRISIS: "Economic Crisis", TOKEN00: "Scarecrow", SOLDIER2: "Soldier",
   DRAGON_EGG: "Dragon Egg", BEAST_EGG: "Divine Beast Egg", D_BLACK: "Black Dragon", D_RED: "Red Dragon", D_BLUE: "Blue Dragon", DIVINE: "Divine Beast",
   GOLEM1: "Soldier Golem", GOLEM2: "Leader Golem", GOLEM3: "Golem King",
   DECAY_CRAFT: "Hidden Weapon Craft", RUST_SLUG: "Rustcap Slug", RUST_SHROOM: "Rust Mushroom", MAJESTY_RITE: "Rite of Engraving",
