@@ -1,0 +1,69 @@
+{
+  "checks": [
+    {
+      "width": 1280,
+      "player": 0,
+      "scenario": "normal",
+      "activeFrames": 38
+    },
+    {
+      "width": 1280,
+      "player": 1,
+      "scenario": "normal",
+      "activeFrames": 46
+    },
+    {
+      "width": 390,
+      "player": 0,
+      "scenario": "normal",
+      "activeFrames": 45
+    },
+    {
+      "width": 390,
+      "player": 1,
+      "scenario": "normal",
+      "activeFrames": 46
+    },
+    {
+      "width": 1280,
+      "player": 0,
+      "scenario": "full",
+      "activeFrames": 43
+    },
+    {
+      "scenario": "empty",
+      "noRepeatedGrant": true
+    },
+    {
+      "scenario": "eggs",
+      "noRepeatedGrant": true
+    },
+    {
+      "scenario": "existing",
+      "noRepeatedGrant": true
+    },
+    {
+      "mode": "skip",
+      "remaining": 0
+    },
+    {
+      "mode": "resize",
+      "remaining": 0
+    },
+    {
+      "mode": "hidden",
+      "remaining": 0
+    },
+    {
+      "mode": "reduced",
+      "remaining": 0
+    },
+    {
+      "concurrent": {
+        "maximum": 2,
+        "left": 0
+      }
+    }
+  ],
+  "errors": []
+}
