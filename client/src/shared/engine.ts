@@ -524,16 +524,20 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     }
     return drawn;
   };
-  const heal = (p: PlayerState, amt: number): void => {
+  const heal = (p: PlayerState, amt: number, bloodRiteSources?: string[]): void => {
     if (amt <= 0) return;
     const foe = g.players[1 - side(g, p)];
     const doubles = g.players.reduce((n, pl) => n + pl.field.filter(m => m.id === 'ELF').length, 0);
     const halves = foe.field.filter(m => m.id === 'HIGH_ELF').length;
     amt = Math.floor(amt * 2 ** (doubles - halves));
-    if (amt <= 0) return;
+    if (amt <= 0) {
+      // Conversion still activates even when recovery modifiers round it to zero.
+      if (bloodRiteSources?.length) ev.push({type:"heal",player:side(g,p),amount:0,bloodRiteSources});
+      return;
+    }
     p.hp += amt;
     advanceQuest(p,"healthGain",amt);
-    ev.push({ type: "heal", player: side(g, p), amount: amt });
+    ev.push({ type: "heal", player: side(g, p), amount: amt, ...(bloodRiteSources ? {bloodRiteSources} : {}) });
     // 유령 — v25: 상대가 체력을 회복할 때마다 필드의 모든 유령 공격력 +1 (지속)
     {
       const foe = g.players[1 - side(g, p)];
@@ -569,9 +573,9 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     }
     // 혈귀술(spellHeal): 양 플레이어는 마법 데미지를 받지 않고 그만큼 회복 (어느 쪽 필드에 있든)
     if (spellDepth > 0 && g.players.some((pl) => pl.enchants.some((e2) => e2.card.ench === "spellHeal"))) {
-      enchantKindFx(g,ev,"spellHeal");
+      const sources = g.players.flatMap(pl => pl.enchants.filter(e => e.card.ench === "spellHeal").map(e => e.card.uid));
       log(`  └ 혈귀술: ${amt} 데미지 → 회복으로 반전`, `  └ 血鬼術: ${amt} ダメージ → 回復に反転`);
-      heal(target, amt);
+      heal(target, amt, sources);
       return;
     }
     // 흡혈 술식(bloodShield): 자신이 시전한 "피의 마법"의 자해 데미지 무효

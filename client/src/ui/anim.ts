@@ -1,3 +1,4 @@
+import {playBloodRite} from './bloodRite/runtime';
 import {isWeaponmaster} from './weaponmasterSummon/selection';
 import {playWeaponmasterSummon} from './weaponmasterSummon/runtime';
 import {isShieldTitan} from './shieldTitanSummon/selection';
@@ -1213,3 +1214,11 @@ export async function openingBoard():Promise<void>{
 
 /** Pulse the exact public source, not every remaining spell on the board. */
 export function enchantActivation(uid:string):void{if(fxSkip)return;const source=document.querySelector<HTMLElement>(`.buff-icon[data-uid="${CSS.escape(uid)}"]`);if(source)playBiblionFx('enchant',source);}
+
+/** One clock owns the selected blood pulse, source cards and HP conversion. */
+export async function bloodRiteRecovery(side:ViewSide,sources:string[],onHeal:()=>void):Promise<void>{
+ let applied=false;
+ const apply=()=>{if(!applied){applied=true;onHeal();}};
+ try{if(!fxSkip&&!document.hidden)await boardMotionScope(signal=>playBloodRite(side,sources,apply,signal),2200);}
+ finally{apply();}
+}

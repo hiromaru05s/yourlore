@@ -273,7 +273,7 @@ export type GameEvent =
   | { type: "elementalEnd"; group:string }
   | { type: "hit"; uid: string; amount?: number }
   | { type: "damage"; player: Side; amount: number; srcKo?: string; srcJa?: string } // src: what dealt it (death-cause display)
-  | { type: "heal"; player: Side; amount: number }
+  | { type: "heal"; player: Side; amount: number; bloodRiteSources?: string[] }
   | { type: "decayCounterGrant"; player: Side; uid: string; before: number; after: number }
   | { type: "destroy"; player: Side; uid: string; id?: string; cause?: "decay" | "fusion" }
   | { type: "buy"; player: Side; from: "market" | "supply"; i: number; id: string }

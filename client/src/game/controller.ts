@@ -585,9 +585,15 @@ export abstract class BaseController implements BoardHandlers {
         case "heal": {
           const healed=Math.max(0,e.amount);
           hpNow[e.player] += healed;
-          if(healed>0)A.hpFeedback(sideOf(e.player), "heal", healed);
-          A.hpBarSet(sideOf(e.player), hpNow[e.player]);
-          await wait(130);
+          if(e.bloodRiteSources?.length){
+            await A.bloodRiteRecovery(sideOf(e.player),e.bloodRiteSources,()=>{
+              if(!this.dead)A.hpBarSet(sideOf(e.player),hpNow[e.player]);
+            });
+          }else{
+            if(healed>0)A.hpFeedback(sideOf(e.player), "heal", healed);
+            A.hpBarSet(sideOf(e.player), hpNow[e.player]);
+            await wait(130);
+          }
           break;
         }
         case "playSpell": {
