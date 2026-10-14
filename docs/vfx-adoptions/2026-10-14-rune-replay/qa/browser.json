@@ -1,0 +1,43 @@
+{
+  "checks": [
+    {
+      "side": 0,
+      "count": 1,
+      "width": 1280,
+      "reduced": false,
+      "frames": 321
+    },
+    {
+      "side": 1,
+      "count": 2,
+      "width": 1280,
+      "reduced": false,
+      "frames": 211
+    },
+    {
+      "side": 0,
+      "count": 1,
+      "width": 390,
+      "reduced": false,
+      "frames": 198
+    },
+    {
+      "side": 1,
+      "count": 1,
+      "width": 390,
+      "reduced": true,
+      "frames": 155
+    },
+    {
+      "side": 0,
+      "count": 0,
+      "width": 1280,
+      "reduced": false,
+      "frames": 101
+    },
+    {
+      "cancel": true
+    }
+  ],
+  "errors": []
+}
