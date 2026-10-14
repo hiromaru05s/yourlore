@@ -5721,8 +5721,8 @@ function elementalGroup(ctx:Ctx,p:Side,src:CardInst){
  return {
   hit(player:Side,uid:string|null,amount:number){const index=event.targets.length;event.targets.push({player,uid,amount});ctx.ev.push({type:'elementalImpact',group:event.group,index});starts.push(ctx.ev.length);},
   end(){
-   // Player damage may be reflected. Follow the resolved public recipient, not a second draw.
-   event.targets.forEach((target,i)=>{const result=ctx.ev.slice(starts[i],starts[i+1]??ctx.ev.length).find(e=>target.uid===null?e.type==='damage':e.type==='hit'&&e.uid===target.uid);if(result?.type==='damage'){target.player=result.player;target.amount=result.amount;}else if(result?.type==='hit')target.amount=result.amount??target.amount;});
+   // Reverse owns a second, explicit trip. The incoming elemental effect stays on its original target.
+   event.targets.forEach((target,i)=>{const result=ctx.ev.slice(starts[i],starts[i+1]??ctx.ev.length).find(e=>target.uid===null?e.type==='damage':e.type==='hit'&&e.uid===target.uid);if(result?.type==='damage'){if(!result.reversed)target.player=result.player;target.amount=result.amount;}else if(result?.type==='hit')target.amount=result.amount??target.amount;});
    ctx.ev.push({type:'elementalEnd',group:event.group});
   }
  };

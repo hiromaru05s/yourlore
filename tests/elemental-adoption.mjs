@@ -16,9 +16,15 @@ try{
  function fresh(seed,owner){const g=current.createGame({mode:'online',seed,starting:owner,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.cur=owner;g.turn=3;g.phase='main';g.pending=null;for(const p of g.players)Object.assign(p,{hand:[],field:[],deck:[],discard:[],removed:[],traps:[],enchants:[],quests:[],hp:50,maxHp:50,mana:30,maxMana:30,openingDrawReady:false});return g;}
  const clean=x=>JSON.parse(JSON.stringify(x,(k,v)=>k==='sourceUid'||k==='data'&&v&&Object.keys(v).every(k=>k==='sourceUid')?undefined:v));
  // Source activation conditions are covered by monster-effect-activation.mjs.
- // Compare gameplay events independently of presentation annotations.
- // Reverse routing/HP still match the baseline; its contact markers are checked in reverse-pitch.mjs.
- const gameplayEvents=events=>events.filter(e=>!e.type.startsWith('elemental')&&e.type!=='monsterActivate'&&e.type!=='reverseDamage').map(e=>{if(e.type!=='damage')return e;const {reversed,reverseId,...gameplay}=e;return gameplay;});
+ // Compare gameplay independently of presentation metadata; validate reversal links before stripping them.
+ const gameplayEvents=events=>{
+  for(const reverse of events.filter(e=>e.type==='reverseDamage')){
+   assert.equal(reverse.to,1-reverse.from);assert(reverse.sourceUids.length>0);
+   const damage=events.filter(e=>e.type==='damage'&&e.reverseId===reverse.id);assert(damage.length<=1);
+   for(const hit of damage){assert.equal(hit.player,reverse.to);assert.equal(hit.reversed,true);}
+  }
+  return events.filter(e=>!e.type.startsWith('elemental')&&e.type!=='monsterActivate'&&e.type!=='reverseDamage').map(e=>{if(e.type!=='damage')return e;const {reversed,reverseId,...gameplay}=e;return gameplay;});
+ };
  function compare(g,a){const old=baseline.reduce(g,a),now=current.reduce(g,a);assert.deepEqual(clean(now.state),clean(old.state));assert.deepEqual(clean(gameplayEvents(now.events)),clean(gameplayEvents(old.events)));for(const start of now.events.filter(e=>e.type==='elementalStart')){const impacts=now.events.filter(e=>e.type==='elementalImpact'&&e.group===start.group);assert.equal(impacts.length,start.targets.length);assert(now.events.some(e=>e.type==='elementalEnd'&&e.group===start.group));assert(!start.targets.some(t=>t.uid&&(!g.players.flatMap(p=>p.field).some(m=>m.uid===t.uid))));}cases++;return now;}
  for(const owner of [0,1])for(const seed of [1,7,17,58])for(const id of ['GUNNER','HEAVY_GUNNER','FIRE_ARROW','FIRE_METEOR','FIRE_BALL','FIRE_ZONE','NGA4']){
   const g=fresh(seed,owner);g.players[1-owner].field=[mon('ELF',1),mon('INFKNIGHT',30)];
@@ -32,7 +38,7 @@ try{
  }
  // Lethal truncation: no fabricated remaining projectiles after a game ends.
  for(const id of ['FIRE_ARROW','FIRE_METEOR']){const g=fresh(17,0);g.players[1].hp=1;g.players[0].hand=[card(id)];const res=compare(g,{type:'play',idx:0});assert.equal(res.events.find(e=>e.type==='elementalStart').targets.length,1);assert(res.state.over);}
- const reflected=fresh(17,0);reflected.players[0].hand=[card('FIRE_BALL')];reflected.players[1].enchants=[{card:card('BLACK_REVERSE'),turns:6,bornTurn:0}];const chosen=compare(reflected,{type:'play',idx:0});const reflectedHit=compare(chosen.state,{type:'pick',uid:'player-1'});assert.equal(reflectedHit.events.find(e=>e.type==='elementalStart').targets[0].player,0);
+ const reflected=fresh(17,0);reflected.players[0].hand=[card('FIRE_BALL')];reflected.players[1].enchants=[{card:card('BLACK_REVERSE'),turns:6,bornTurn:0}];const chosen=compare(reflected,{type:'play',idx:0});const reflectedHit=compare(chosen.state,{type:'pick',uid:'player-1'});assert.equal(reflectedHit.events.find(e=>e.type==='elementalStart').targets[0].player,1,'incoming elemental hits the original target');assert.equal(reflectedHit.events.find(e=>e.type==='reverseDamage').to,0);assert.equal(reflectedHit.events.find(e=>e.type==='damage').player,0);
  assert.equal(current.rate('berserk'),2);assert.equal(current.visualEntries.NGA4.duration/current.rate('berserk'),1500);assert(!current.visualEntries.T13);assert(!DB.T13);
  const effects=await readFile('client/src/ui/elemental/effects.ts','utf8');const zone=effects.slice(effects.indexOf('private zone('));assert(!zone.includes('mix(s,'));assert(zone.includes('this.fire.draw(c,1'));
  console.log(`PASS ${cases} reducer parity cases, authoritative targets, lethal truncation, 2x berserk and pillar-only zone`);
