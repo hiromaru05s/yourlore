@@ -288,7 +288,7 @@ export type GameEvent =
   | { type: "treasure"; player: Side; kind: string; text: string; textJa: string; isBot: boolean }
   | { type: "dice"; source: DiceSource; player: Side; rolls: number[]; need?: number; success?: boolean; variant?: "casino"; evasion?: { targetUid: string; attackerUid: string }; taunt?: { sourceUid: string; attackerUid: string } } // evasion identifies the public defender, including granted passives and duplicates
   | { type: "nova"; player: Side; from: number; to: 1 } // Resolved HP cost and time theft, never spell damage.
-  | { type: "playSpell"; player: Side; id: string; dest: "discard" | "field" | "vanish" } // spell/starter/enchant played from hand
+  | { type: "playSpell"; player: Side; id: string; dest: "discard" | "field" | "vanish"; riftCount?: number } // spell/starter/enchant played from hand
   | { type: "trapSet"; player: Side } // a face-down trap was set (identity hidden)
   | { type: "trapReveal"; player: Side; id: string } // a trap fired → reveal then discard
   | { type: "win"; winner: Side }

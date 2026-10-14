@@ -51,6 +51,7 @@ import {cancelTribeSynergy} from './tribeSynergy/runtime';
 import type {ElementalEvent,Playback} from './elemental/runtime';
 import {flyPersistentIntoSlot} from './persistentFlight';
 import {playCreation,warmCreation} from './creation/runtime';
+import type {VoidCrystalCast} from './voidCrystal/runtime';
 import {playSpellFrame,cancelSpellFrames,warmSpellFrame,SPELL_FRAME_RATE} from './spellFrame/runtime';
 import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {isMimic,focusScale,type MimicId} from './mimic/selection';
@@ -324,7 +325,7 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   if(!fxSkip)summonDust(face.getBoundingClientRect());
   return face;
 }
-export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish",slotIndex?:number,deferVanish=false): Promise<HTMLElement|null> {
+export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish",slotIndex?:number,deferVanish=false,crystal?:VoidCrystalCast): Promise<HTMLElement|null> {
   const from = fromRect(side, takeOrigin(side)); if (!from) return null;
   const node = floatAt(cardEl(card, {size:"hand"}), from);
   let held=false;
@@ -332,12 +333,14 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
     if(card.t==='quest'&&!fxSkip)void warmQuestPact().catch(()=>{});
     const persistent=dest==='field'&&!!card.ench;
     const dark=isDarkMerchant(card.id)&&card.t==='spell';
+    const crystalModule=crystal&&!fxSkip?import('./voidCrystal/runtime').catch(()=>null):null;
     if(dark&&!fxSkip)warmDarkMerchant();
-    else if(card.t==='spell'&&!persistent&&!fxSkip)warmSpellFrame();
+    else if(card.t==='spell'&&!persistent&&!crystal&&!fxSkip)warmSpellFrame();
     const special=dark&&!fxSkip&&await boardMotionScope(signal=>playDarkMerchant(node,signal),10500);
     if(!special){
       await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:1);
-      if(card.t==='spell'&&!persistent&&card.id!=='FORBIDDEN'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
+      if(crystal&&crystalModule&&!fxSkip)await boardMotionScope(async signal=>{const module=await crystalModule;if(!module||signal.aborted)return false;return module.playVoidCrystal(node,card,side,crystal,signal);},10500);
+      else if(card.t==='spell'&&!persistent&&card.id!=='FORBIDDEN'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
     }
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
     if (to && dest === "field" && (card.ench || card.t === "quest")) {

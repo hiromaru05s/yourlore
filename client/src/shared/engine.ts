@@ -4585,7 +4585,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       }
       return;
     }
-    ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "discard" }); // reveal animation
+    ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "discard", ...(card.id === "EXILE_NUKE2" ? {riftCount: rmz(p).length} : {}) }); // capture the public Rift before damage triggers add records
     const blood = isBloodMagic(card);
     // 룬 학문 - 상급(runeEcho, v34): 즉발 마법을 마나 없이 1번 더 발동 (선택형/펜딩 생성 마법은 제외)
     const echo = card.t === "spell" && runeEchoDepth === 0 && p.enchants.some((e) => e.card.ench === "runeEcho");

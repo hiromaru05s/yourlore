@@ -353,6 +353,7 @@ export abstract class BaseController implements BoardHandlers {
     // running counters for ghost slot placement + live HP readout
     const fieldCount: [number, number] = [prev.players[0].field.length, prev.players[1].field.length];
     const hpNow: [number, number] = [prev.players[0].hp, prev.players[1].hp];
+    const crystalContacts=new Set<GameEvent>();
     const elemental=new Map<string,Playback>();
     const elementalDeaths:Promise<void>[]=[];
     const draws = [0, 0];
@@ -402,7 +403,7 @@ export abstract class BaseController implements BoardHandlers {
     for (let i = 0; i < events.length; i++) {
       if (this.dead) return;
       const e = events[i];
-      if(summonActivations.has(e))continue;
+      if(summonActivations.has(e)||crystalContacts.has(e))continue;
       // glanceable icon rail (topbar): key events → small icons
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
@@ -647,6 +648,22 @@ export abstract class BaseController implements BoardHandlers {
             if(creation?.sourceUid){
               const face=await A.revealCreation({...def,uid:creation.sourceUid},sideOf(e.player));
               if(face)creationSources.set(creation.sourceUid,face);
+            }else if(def.id==='EXILE_NUKE2'){
+              // Consume only this spell's first actual damage event at shell contact.
+              // Reflections use the engine's target; echo hits and unrelated reactions remain sequential.
+              const damage=events.slice(i+1,nextSpell<0?events.length:nextSpell).find((event):event is Extract<GameEvent,{type:'damage'}>=>event.type==='damage'&&!!event.srcKo?.includes('data-card="EXILE_NUKE2"'));
+              const records=prev.players[e.player].removed??[];
+              const card=prev.players[e.player].hand.find(c=>c.id===e.id)??{uid:'void-crystal-source',...def};
+              await A.revealSpell(card,sideOf(e.player),e.dest,undefined,false,{
+                count:e.riftCount??records.length,record:records.at(-1),target:damage?sideOf(damage.player):undefined,
+                onImpact:()=>{
+                  if(this.dead||!damage||crystalContacts.has(damage))return;
+                  crystalContacts.add(damage);hpNow[damage.player]-=damage.amount;
+                  if(damage.player===this.you)this.view.pushIcon('hitme');
+                  const cue=eventSound.cue(damage);if(cue&&!A.isFxSkipped())sfx(cue);
+                  A.hpFeedback(sideOf(damage.player),'dmg',damage.amount);A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+                },
+              });
             }else if(def.id==='MASSACRE'){
               const deaths=events.slice(i+1,nextSpell<0?events.length:nextSpell).filter((event):event is Extract<GameEvent,{type:'destroy'}>=>event.type==='destroy'&&event.cause==='massacre');
               const nodes=deaths.map(event=>ghosts.get(event.uid)?.el??combatCard(event.uid));

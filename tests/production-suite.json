@@ -131,7 +131,8 @@
     "tests/massacre.mjs",
     "tests/infinity-cull.mjs",
     "tests/nova.mjs",
-    "tests/creation.mjs"
+    "tests/creation.mjs",
+    "tests/void-crystal-rules.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
