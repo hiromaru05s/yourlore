@@ -1,0 +1,27 @@
+{
+  "origin": "http://127.0.0.1:5493",
+  "checks": [
+    "Blocked damage grants five resources immediately, without generic or page animation",
+    {
+      "case": "turn-end",
+      "owner": 0,
+      "frames": 92,
+      "count": "5"
+    },
+    {
+      "case": "turn-end",
+      "owner": 1,
+      "frames": 212,
+      "count": "5"
+    },
+    "390px, twelve Cull, pixels and clean completion",
+    "Reduced motion retains final resources and cleans fallback",
+    "Clean cancellation: skip",
+    "Clean cancellation: resize",
+    "Clean cancellation: hidden",
+    "Removed source uses an Infinity face at the vacant enchantment slot",
+    "Controller destruction cancels active renderer"
+  ],
+  "errors": [],
+  "boundary": "Real reducer, BaseController and GameView. Not an authenticated online match."
+}

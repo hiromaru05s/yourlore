@@ -174,6 +174,8 @@ export interface PlayerState {
   revealedCards?: RevealedCard[]; // cards permanently known to the opponent this game (physical-card UID + card id)
   collection?: string[]; // redacted view only: public card ids the opponent may inspect
   openingDrawReady?: boolean; // second player already received the first three cards at match start
+  /** Public presentation only: already-created Cull, released visually at turn end. */
+  infinityPresentation?: { sourceUid: string; amount: number }[];
   removed?: CardInst[]; // cards permanently exiled from the game (public zone)
   botTune?: { minBuy?: number; minBuyEarly?: number; chestTurn?: number }; // per-archetype bot buy discipline (see bot.ts BOT_DECKS)
   refreshTokens?: number; // 렐릭 헌터(v36): 제시 마켓 무료 갱신 카운터 — 갱신 시 마나 대신 소모
@@ -257,6 +259,8 @@ export type DiceSource = { player: Side } & ({ id: string; status?: never } | { 
 export interface GutsSurvival { player: Side; uid: string; before: number; after: number }
 
 export type GameEvent =
+  | { type: "infinityStored"; player: Side; sourceUid: string; cardUids: string[] }
+  | { type: "infinityRelease"; player: Side; sourceUid: string; amount: number }
   | ({ type: "gutsSurvive" } & GutsSurvival)
   | { type: "statusExtinction"; player: Side; resource: "shield" | "brand" | "dew"; before: number; after: 0 }
   | { type: "statusGrant"; player: Side; resource: "shield" | "brand" | "dew"; before: number; after: number; sourceUid?: string }
