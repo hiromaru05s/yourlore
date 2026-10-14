@@ -1,0 +1,64 @@
+{
+  "passed": true,
+  "origin": "https://test.yourlore.xyz",
+  "fixtureScope": "Public fixture in the actual controller; not authenticated online play",
+  "checks": [
+    {
+      "width": 1280,
+      "side": 0,
+      "count": 5,
+      "mode": "normal",
+      "frames": 182
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "count": 3,
+      "mode": "normal",
+      "frames": 186
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "count": 5,
+      "mode": "normal",
+      "frames": 175
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "count": 1,
+      "mode": "normal",
+      "frames": 179
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "count": 3,
+      "mode": "reduced",
+      "frames": 70
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "count": 3,
+      "mode": "skip",
+      "frames": 35
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "count": 3,
+      "mode": "resize",
+      "frames": 29
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "count": 3,
+      "mode": "hidden",
+      "frames": 35
+    }
+  ],
+  "errors": []
+}
