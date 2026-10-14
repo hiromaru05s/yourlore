@@ -1,7 +1,8 @@
+import { buildMoonRabbit } from '../spirit-rabbit/rig';
 import * as T from 'three';
 export const designs=[
  {id:'round',name:'まるい雲',tag:'球体 / 小さなひれ',copy:'頭の尖りをなくし、ふっくら丸い輪郭に。小さなひれと丸い底で、手のひらに収まるような親しみやすさ。'},
- {id:'ears',name:'月うさぎ',tag:'縦長 / 二本の耳',copy:'細い卵形の体から、長さの違う二本の耳が伸びる形。足元を二つの丸みに分け、軽やかな小動物の印象に。'},
+ {id:'ears',name:'月うさぎ',tag:'縦長 / 二本の耳',copy:'滑らかな二本の耳が、待機・笑顔・眠気に合わせて動きます。笑うと手をパタパタ、眠ると耳もしょんぼり。'},
  {id:'manta',name:'白いエイ',tag:'横長 / 大きな翼',copy:'低い頭と幅広い翼、下へ伸びる細い尾。大きな曲線で横へ広がり、パタパタ飛ぶ姿が主役になる形。'},
  {id:'bell',name:'白いケープ',tag:'釣鐘 / 波打つ裾',copy:'小さな頭から裾へ広がるケープの形。三つの柔らかな裾と長い袖で、ふわりと漂う案内役の印象に。'},
  {id:'comet',name:'流れる彗星',tag:'非対称 / 長い尾',copy:'横へ流れる頭の先と、反対へ曲がる長い尾。左右非対称のS字で、マナが一続きに流れているような形。'},
@@ -10,13 +11,13 @@ export type DesignId=typeof designs[number]['id'];
 
 /** Only outer form changes; face, dew and motion are mounted by the shared renderer. */
 export function buildForm(id:DesignId,body:T.Group,pearl:T.Material,blue:T.Material){
+ if(id==='ears')return buildMoonRabbit(body,pearl);
  const add=(g:T.BufferGeometry,m:T.Material,x=0,y=0,z=0,parent:T.Object3D=body)=>{const o=new T.Mesh(g,m);o.position.set(x,y,z);parent.add(o);return o;};
  const revolve=(points:number[][],depth:number,deform?:(x:number,y:number,z:number)=>[number,number,number])=>{
   const profile=new T.SplineCurve(points.map(([x,y])=>new T.Vector2(x,y))).getPoints(100).map(p=>new T.Vector2(Math.max(0,p.x),p.y));
   const g=new T.LatheGeometry(profile,96);const p=g.getAttribute('position');
   for(let i=0;i<p.count;i++){let x=p.getX(i),y=p.getY(i),z=p.getZ(i)*depth;if(deform)[x,y,z]=deform(x,y,z);p.setXYZ(i,x,y,z);}g.computeVertexNormals();return add(g,pearl);
  };
- const orb=(x:number,y:number,z:number,sx:number,sy:number,sz:number)=>{const o=add(new T.SphereGeometry(1,56,40),pearl,x,y,z);o.scale.set(sx,sy,sz);return o;};
  const wing=(side:number,kind:string)=>{
   const group=new T.Group();body.add(group);group.position.set(side*(kind==='wide'?.43:kind==='cape'?.4:.48),kind==='cape'?.13:-.03,0);
   const s=new T.Shape();s.moveTo(0,.12);
@@ -30,12 +31,6 @@ export function buildForm(id:DesignId,body:T.Group,pearl:T.Material,blue:T.Mater
  };
  let kind='small';
  if(id==='round')revolve([[0,-.70],[.35,-.61],[.60,-.36],[.70,.02],[.64,.36],[.4,.64],[0,.77]],.70);
- if(id==='ears'){
-  revolve([[0,-.70],[.29,-.66],[.49,-.42],[.55,-.01],[.54,.36],[.38,.65],[0,.76]],.87);
-  const a=orb(-.24,.85,-.08,.14,.44,.13);a.rotation.z=-.21;
-  const b=orb(.26,.90,-.08,.13,.53,.12);b.rotation.z=.24;
-  orb(-.22,-.61,.0,.23,.18,.29);orb(.22,-.61,.0,.23,.18,.29);
- }
  if(id==='manta'){
   kind='wide';revolve([[0,-.68],[.21,-.55],[.48,-.32],[.63,.02],[.6,.35],[.37,.55],[0,.64]],.78);
   revolve([[0,-1.01],[.07,-.85],[.14,-.62],[.18,-.42],[0,-.35]],.75);

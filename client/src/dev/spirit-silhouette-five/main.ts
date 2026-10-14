@@ -5,7 +5,7 @@ import '../spirit-front-five/style.css';
 import './style.css';
 
 type Mode='auto'|'flutter'|'sleepy'|'still';
-let selected:DesignId='round',mode:Mode='auto',side=false,silhouette=false;
+let selected:DesignId='ears',mode:Mode='auto',side=false,silhouette=false;
 let hero:ReturnType<typeof mountManaSpirit>|undefined;
 const thumbnails:ReturnType<typeof mountManaSpirit>[]=[];
 const app=document.querySelector<HTMLElement>('#app')!;

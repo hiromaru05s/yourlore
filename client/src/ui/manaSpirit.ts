@@ -3,6 +3,9 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createSpiritMotion } from './manaSpiritMotion';
 import { buildDewFront } from './manaSpiritFront';
 
+export type SpiritPose = ReturnType<ReturnType<typeof createSpiritMotion>['tick']>;
+export type SpiritForm = {left:THREE.Group;right:THREE.Group;update?:(pose:SpiritPose,dt:number,time:number)=>void};
+
 /** Original mana spirit: the same teardrop, ink face and folded fins in every screen. */
 export function mountManaSpirit(host: HTMLElement, options: {
   home?: boolean;
@@ -11,9 +14,10 @@ export function mountManaSpirit(host: HTMLElement, options: {
   motion?: ReturnType<typeof createSpiritMotion>;
   still?: boolean;
   closeUp?: boolean;
-  form?: (body:THREE.Group, pearl:THREE.Material, blue:THREE.Material) => {left:THREE.Group;right:THREE.Group};
+  fps?: number;
+  form?: (body:THREE.Group, pearl:THREE.Material, blue:THREE.Material) => SpiritForm;
   silhouette?: boolean;
-  viewYaw?: number;
+  viewYaw?: number | (()=>number);
 } = {}): { celebrate():void; destroy():void } {
   host.classList.add('mana-spirit'); host.setAttribute('aria-hidden','true');
   const fallback=()=>{host.innerHTML='<svg viewBox="0 0 120 140"><defs><linearGradient id="spiritPearl" x2=".8" y2="1"><stop stop-color="#fffdf0"/><stop offset=".55" stop-color="#e4f0eb"/><stop offset="1" stop-color="#89aec1"/></linearGradient></defs><ellipse cx="60" cy="127" rx="26" ry="5" fill="#315569" opacity=".22"/><path d="M60 8C88 30 97 55 92 84L78 106 60 119 42 106 28 84C23 55 34 30 60 8" fill="url(#spiritPearl)" stroke="#98bdcf" stroke-width="1"/><path d="M33 60Q60 45 87 60L82 79Q60 90 38 79Z" fill="#20374e"/><ellipse cx="48" cy="68" rx="3" ry="6" fill="#9ee6f0"/><ellipse cx="72" cy="68" rx="3" ry="6" fill="#9ee6f0"/><path d="M60 89C57 95 51 101 52 106C53 115 67 115 68 106C69 101 63 95 60 89Z" fill="#9ce8ee" stroke="#c5dedf"/><ellipse cx="60" cy="107" rx="3" ry="4" fill="#ddfff2"/></svg>';};
@@ -68,7 +72,8 @@ export function mountManaSpirit(host: HTMLElement, options: {
     const fold=mesh(new THREE.SphereGeometry(1,40,24),blue,side*.235,-.18,-.047,group);fold.scale.set(.083,.24,.054);fold.rotation.z=side*.5;
     return group;
   };
-  const {left,right}=options.form?options.form(spirit,pearl,blue):{left:fin(-1),right:fin(1)};
+  const form:SpiritForm=options.form?options.form(spirit,pearl,blue):{left:fin(-1),right:fin(1)};
+  const {left,right}=form;
   const shadow=mesh(new THREE.CircleGeometry(.53,64),new THREE.MeshBasicMaterial({color:0x284157,transparent:true,opacity:.13,depthWrite:false}),0,-1.07,0,scene);shadow.rotation.x=-Math.PI/2;shadow.scale.y=.65;
   const silhouetteMaterial=options.silhouette?new THREE.MeshBasicMaterial({color:0x122534}):null;
   if(silhouetteMaterial){scene.overrideMaterial=silhouetteMaterial;shadow.visible=false;}
@@ -76,21 +81,22 @@ export function mountManaSpirit(host: HTMLElement, options: {
   const motion=options.motion??createSpiritMotion(!!options.home);
   const isStill=()=>!!options.still||reduced.matches;
   const rest=createSpiritMotion(false).tick(0);
-  let pose={...rest}, dead=false, visible=true, raf=0, last=0;
+  let pose={...rest}, dead=false, visible=true, raf=0, last=0, time=0;
   const render=(now:number)=>{
     raf=0;if(dead||!visible||document.hidden)return;
-    if(now-last>=1000/60||isStill()||!last){
-      const dt=last?Math.min((now-last)/1000,.1):0;last=now;
+    if(now-last>=1000/(options.fps??60)||isStill()||!last){
+      const dt=last?Math.min((now-last)/1000,.1):0;last=now;if(!isStill())time+=dt;
       const target=isStill()?rest:motion.tick(dt);
       // A short blend lets tapping wake a drowsy spirit without snapping its body or eyelids.
       const blend=isStill()?1:1-Math.exp(-dt*18);
       for(const k of ['x','y','yaw','roll','pitch','fin','finPitch','eye','smile','yawn'] as const)pose[k]+=(target[k]-pose[k])*blend;
       host.dataset.spiritMood=target.mood;
-      spirit.position.set(pose.x,pose.y,0);spirit.rotation.set(pose.pitch,pose.yaw+(options.viewYaw??0),pose.roll);
+      spirit.position.set(pose.x,pose.y,0);spirit.rotation.set(pose.pitch,pose.yaw+(typeof options.viewYaw==='function'?options.viewYaw():options.viewYaw??0),pose.roll);
       left.rotation.set(pose.finPitch,0,-pose.fin);right.rotation.set(-pose.finPitch,0,pose.fin);
       eyes.forEach(e=>{e.scale.y=1.7*Math.max(.045,pose.eye);e.visible=pose.smile<.97;});
       smiles.forEach(e=>e.scale.y=.65+.35*pose.smile);smileMat.opacity=pose.smile;yawnMat.opacity=pose.yawn;
       mouth.scale.x=.8+.2*pose.smile;shadow.scale.x=1-pose.y*.3;
+      form.update?.({...pose,mood:target.mood,elapsed:target.elapsed},isStill()?0:dt,time);
       renderer.render(scene,camera);
     }
     if(!isStill())raf=requestAnimationFrame(render);
@@ -107,7 +113,7 @@ export function mountManaSpirit(host: HTMLElement, options: {
     celebrate(){if(dead||isStill())return;motion.celebrate();start();},
     destroy(){
       dead=true;stop();resize.disconnect();intersection?.disconnect();document.removeEventListener('visibilitychange',onVisibility);reduced.removeEventListener('change',onReduced);
-      const geometries=new Set<THREE.BufferGeometry>(),materials=new Set<THREE.Material>();
+      const geometries=new Set<THREE.BufferGeometry>(),materials=new Set<THREE.Material>([pearl,blue]);
       scene.traverse(o=>{if(o instanceof THREE.Mesh){geometries.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:[o.material])materials.add(m);}});
       geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());silhouetteMaterial?.dispose();environment.dispose();renderer.dispose();renderer.forceContextLoss();host.replaceChildren();delete host.dataset.spiritMood;
     },
