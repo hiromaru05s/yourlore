@@ -5,9 +5,19 @@ import {mkdtemp,readFile,writeFile,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 const dir=await mkdtemp(tmpdir()+'/lore-academy-');
 try {
-await build({stdin:{resolveDir:process.cwd(),contents:`export * from './client/src/shared/tutorialLesson';export * from './client/src/shared/tutorialSteps';export {handleRewards} from './server/src/rewards';export {DB,BALANCE_VERSION} from './client/src/shared/cards';`},bundle:true,format:'esm',platform:'node',outfile:dir+'/test.mjs'});
-const {createLesson,advanceLesson,replayLesson,TUT_STEPS,TUTORIAL_TOTAL,handleRewards,BALANCE_VERSION}=await import(dir+'/test.mjs');
+await build({stdin:{resolveDir:process.cwd(),contents:`export * from './client/src/shared/tutorialLesson';export * from './client/src/shared/tutorialSteps';export * from './client/src/shared/tutorialGuide';export {handleRewards} from './server/src/rewards';export {DB,BALANCE_VERSION} from './client/src/shared/cards';`},bundle:true,format:'esm',platform:'node',outfile:dir+'/test.mjs'});
+const {createLesson,advanceLesson,replayLesson,TUT_STEPS,TUTORIAL_TOTAL,handleRewards,BALANCE_VERSION,tutorialCue,isTutorialActionAllowed,TUTORIAL_BASICS}=await import(dir+'/test.mjs');
 assert.equal(TUTORIAL_TOTAL,3000);assert.equal(TUT_STEPS.length,12);assert.equal(new Set(TUT_STEPS.map(s=>s.key)).size,12);assert.equal(BALANCE_VERSION,'v58');
+assert.equal(TUT_STEPS[0].id,'summon');
+assert.equal(TUT_STEPS[2].id,'mana');
+assert.equal(TUTORIAL_BASICS[0].kind,'goal');
+assert(TUTORIAL_BASICS.some(s=>s.kind==='turn')&&TUTORIAL_BASICS.some(s=>s.kind==='buy'));
+for(const lesson of TUT_STEPS)assert.equal(lesson.key,'tutorial:v2:'+lesson.id,'Existing reward identities stay stable');
+const firstLesson=createLesson('summon');
+assert.equal(tutorialCue(firstLesson,false).action,'play');
+assert(tutorialCue(firstLesson,false).instruction.ja.includes('手札を広げ'));
+assert(!isTutorialActionAllowed(firstLesson,{type:'buyMarket',i:0}),'Wrong purchase cannot spend the summon lesson’s mana');
+assert(!isTutorialActionAllowed(firstLesson,{type:'endTurn'}),'Early end cannot lose the guided setup');
 const transcripts=new Map();
 for(const lesson of TUT_STEPS){
  const r=createLesson(lesson.id),me=()=>r.state.players[0];
@@ -35,8 +45,12 @@ for(const lesson of TUT_STEPS){
  assert(replayLesson(lesson.id,r.actions),`${lesson.id} replay`);
  assert(!replayLesson(lesson.id,r.actions.slice(0,-1)),`${lesson.id} premature claim`);
  assert(!replayLesson(lesson.id,[...r.actions,{type:'surrender',player:1}]),'extra transcript rejected');
+ const guided=createLesson(lesson.id);
+ for(const action of r.actions){if(guided.state.cur===0)assert(isTutorialActionAllowed(guided,action),lesson.id+' guide rejected '+action.type);advanceLesson(guided,action);}
+ assert(guided.done,lesson.id+' guided route completes');
+ const cue=tutorialCue(createLesson(lesson.id));for(const lang of ['ja','en','ko'])assert(cue.instruction[lang]&&cue.reason[lang]);
  transcripts.set(lesson.id,r.actions);
- console.log('PASS actual v57 reducer + authoritative replay:',lesson.id,r.actions.length);
+ console.log('PASS actual '+BALANCE_VERSION+' reducer + authoritative replay:',lesson.id,r.actions.length);
 }
 if(process.env.TUTORIAL_TRANSCRIPTS)await writeFile(process.env.TUTORIAL_TRANSCRIPTS,JSON.stringify(Object.fromEntries(transcripts)));
 const sql=new DatabaseSync(':memory:');sql.exec(await readFile('server/schema.sql','utf8'));

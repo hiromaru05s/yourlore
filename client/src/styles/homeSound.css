@@ -1,0 +1,53 @@
+/* Quiet silver line and a faceted handle, subordinate to the Seeker and stage. */
+.selected-menu .lounge-seeker {
+  position:relative; order:0; margin-right:auto; min-width:0; max-width:calc(50% - 100px);
+}
+.selected-menu .lounge-seeker .lounge-user { max-width:100%; }
+.selected-menu.lounge-home .lounge-content { top:calc(var(--bar) + 24px); }
+.home-sound {
+  position:absolute; top:100%; left:0; display:flex; align-items:center; gap:8px;
+  width:196px; height:44px; color:#c6d9e4;
+  background:linear-gradient(90deg,#071421b3,#07142199 88%,#07142166);
+}
+.selected-menu .home-sound-toggle {
+  display:grid; place-items:center; flex:0 0 36px; width:36px; height:44px;
+  padding:8px; margin:0; border:0; border-radius:0; background:none; box-shadow:none;
+  color:inherit; cursor:pointer;
+}
+.home-sound-toggle svg { width:22px; height:22px; }
+.home-sound-slash,.is-muted .home-sound-waves { display:none; }
+.is-muted .home-sound-slash { display:block; }
+.home-sound-value { flex:0 0 30px; font:10px var(--sans,sans-serif); font-variant-numeric:tabular-nums; text-align:right; color:#b3c5d1; }
+.home-sound-range {
+  --volume:70%; appearance:none; -webkit-appearance:none; flex:1; min-width:0;
+  width:100%; height:44px; padding:0; margin:0; border:0; border-radius:0;
+  background:transparent; box-shadow:none; cursor:ew-resize; touch-action:pan-y;
+}
+.home-sound-range::-webkit-slider-runnable-track {
+  height:2px; background:linear-gradient(to right,#c8e5f2 var(--volume),#91aabe55 var(--volume));
+}
+.home-sound-range::-moz-range-track { height:2px; background:#91aabe55; }
+.home-sound-range::-moz-range-progress { height:2px; background:#c8e5f2; }
+.home-sound-range::-webkit-slider-thumb {
+  appearance:none; -webkit-appearance:none; width:10px; height:10px; margin-top:-4px;
+  border:1px solid #e2f1f7; border-radius:1px; background:#9fbccc; transform:rotate(45deg);
+  box-shadow:0 0 0 3px #07142180;
+}
+.home-sound-range::-moz-range-thumb {
+  width:8px; height:8px; border:1px solid #e2f1f7; border-radius:1px;
+  background:#9fbccc; transform:rotate(45deg); box-shadow:0 0 0 3px #07142180;
+}
+.selected-menu .home-sound-toggle:hover { background:#b5d4e414; color:#f0f8ff; }
+.home-sound-range:focus-visible,.selected-menu .home-sound-toggle:focus-visible { outline:1px solid #c8e5f2; outline-offset:2px; }
+.home-sound.is-muted { color:#99adbc; }
+@media(max-width:850px) {
+  .selected-menu .lounge-seeker { max-width:calc(50% - 65px); }
+  .home-sound { width:168px; gap:6px; }
+}
+@media(max-width:600px) {
+  .selected-menu .lounge-seeker { max-width:calc(50% - 50px); }
+  .home-sound { width:146px; }
+}
+@media(forced-colors:active) {
+  .home-sound-range { appearance:auto; }
+}

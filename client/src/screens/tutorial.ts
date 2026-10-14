@@ -1,3 +1,4 @@
+import { openTutorialBasics } from '../ui/tutorialBasics';
 import { mountManaSpirit } from '../ui/manaSpirit';
 import '../styles/tutorialAcademy.css';
 import '../styles/homeTutorial.css';
@@ -114,7 +115,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "<b>ターン終了</b>を押すと相手のターンになります。手札の残りは<b>そのまま持ち越し</b>、次のターンも使えます。",
     ] },
     { icon: "💎", h: "マナ", body: [
-      "すべての行動の資源です。毎ターン<b>最大マナ分</b>まで回復します(初期4)。",
+      "カードの購入や使用に使うエネルギーです。毎ターン<b>最大マナ分</b>まで回復します(初期4)。",
       "<b>アチューン</b>や一部のカードで最大マナを永続的に増やせます。購入・魔法・召喚すべてにマナを使います。",
     ] },
     { icon: "🃏", h: "カードの種類", body: [
@@ -124,7 +125,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "<b>スターター</b> — カル(廃棄でデッキ圧縮)、宝箱(開封)、アチューン(最大マナ+1)。",
     ] },
     { icon: "🛒", h: "マーケット & デッキ強化", body: [
-      "マーケットでカードを借りてデッキを強化します。買ったカードは<b>墓地</b>へ行き、デッキが尽きると混ざって戻ります。",
+      "マーケットでカードを購入してデッキを強化します。買ったカードは<b>墓地</b>へ行き、デッキが尽きると混ざって戻ります。",
       "<b>固定マーケット</b>: 毎ゲーム固定のランダム7枚(コスト1~6)。",
       "<b>提示</b>: 毎ターン新たに提示される3枚(コスト1~現在の最大マナ)。<b>1マナ</b>で更新できます。",
     ] },
@@ -135,7 +136,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "受けたダメージは<b>消えません</b> — 場のモンスターは盾の位置に<b>残り体力</b>が表示され、傷ついていると<b>赤い数字</b>になります。場を離れて戻ると体力はリセットされます。",
       "通常は反撃されませんが、<b>「反撃」を持つ相手は攻撃力の半分（切り上げ）で反撃</b>します。",
       "体力を下げる効果で<b>体力上限が蓄積ダメージ以下</b>になると、そのモンスターは破壊されます。",
-      "相手の場が空なら体力を<b>直接</b>攻撃します。",
+      "相手の場が空なら精神力を<b>直接</b>攻撃します。",
       "一度攻撃したモンスターはそのターン再攻撃できません(一部カードは2回攻撃可能)。",
     ] },
     { icon: "🧬", h: "種族シナジー", body: [
@@ -279,23 +280,25 @@ export function openRuleNotebook(): () => void {
 export function mountTutorial(app:App):Screen {
   const wrap=document.createElement('div');wrap.className='screen tut-screen academy';
   const lang=getLang();let disposed=false,closeNote:(()=>void)|undefined;
-  const lessonArt=['STARTER_MANA','M4','M1','S3','STARTER_CHEST','S1','STARTER_TRASH','STARTER_CHEST','E3','TSO2','S4','M4'];
+  const lessonArt:Record<string,string>={mana:'STARTER_MANA',summon:'M4',combat:'M1',spell:'S3',cycle:'M4',hand:'S4',market:'S1',rift:'STARTER_TRASH',chest:'STARTER_CHEST',enchant:'E3',tribe:'TSO2',duel:'M4'};
   const guest=!app.user || app.user.id==='local-guest-user';
   wrap.innerHTML=`<div class="topright-lang"></div><main class="academy-content">
     <button class="academy-notebook" id="ruleNotebook">${homeIcon('book')}<span>${loungeText('ゲームルールをノートで読む','Read the game rules','게임 규칙 노트 읽기')}</span><span aria-hidden="true">↗</span></button>
-    <header class="academy-hero"><div class="academy-spirit"></div><div><span class="menu-eyebrow">BIBLION / FIRST ATTUNEMENT</span><h1>${loungeText('チュートリアル','Tutorial','튜토리얼')}</h1><p>${loungeText('ゼノと、ひとつずつ。カードに触れて、デュエルを覚えよう。','One step at a time, with Zeno. Learn by playing real cards.','제노와 한 걸음씩. 직접 카드를 사용하며 듀얼을 배워 보세요.')}</p></div></header>
+    <header class="academy-hero"><div class="academy-spirit"></div><div><span class="menu-eyebrow">BIBLION / FIRST ATTUNEMENT</span><h1>${loungeText('チュートリアル','Tutorial','튜토리얼')}</h1><p>${loungeText('まずは勝ち方から。ゼノが、ひとつずつ案内するよ。','Start with how to win. Zeno will guide you one action at a time.','먼저 이기는 방법부터. 제노가 하나씩 안내할게요.')}</p></div></header>
     <section class="academy-progress" aria-label="${loungeText('実習の進捗','Lesson progress','실습 진행')}" ><div><span>${loungeText('全12課程の初回クリア報酬','First-clear rewards across 12 lessons','12개 과정 첫 완료 보상')}</span><strong>${homeIcon('shard')} 3,000 <small>${loungeText('シャード','Shards','샤드')}</small></strong></div><div class="academy-earned" role="status">${loungeText('進捗を読み込み中…','Loading progress…','진행 상황 불러오는 중…')}</div><progress max="12" value="0" aria-label="${loungeText('クリアした課程数','Completed lessons','완료한 과정 수')}"></progress><p>${loungeText('各課程250シャード・何度でも練習可能。続きはいつでもここから。','250 Shards per lesson. Replay any time and return here to continue.','과정마다 250샤드. 언제든 다시 연습하거나 이어서 할 수 있어요.')}</p></section>
-    <div class="academy-controls"><button id="startInter" class="btn btn-primary" disabled>${loungeText('最初の実習へ','Begin the lessons','첫 실습 시작')}</button><button id="back" class="btn btn-ghost">${t('tutorial.back')}</button></div>
+    <section class="academy-orientation"><div><strong>${loungeText('相手の精神力を0にしたら、勝ち！','Bring their Spirit to zero to win!','상대 정신력을 0으로 만들면 승리!')}</strong><p>${loungeText('ルールを知る → モンスターで攻撃 → カードを購入。最初は、勝ち方と画面の見方を一緒に確認するよ。','Learn the rules → attack with a monster → buy cards. We start with your goal and how to read the board.','규칙 배우기 → 몬스터로 공격 → 카드 구매. 먼저 목표와 화면 보는 법부터 함께 알아봐요.')}</p></div><button class="btn btn-ghost" id="basicRules">${loungeText('基本ルールを見る','See the basics','기본 규칙 보기')}</button></section>
+    <div class="academy-controls"><button id="startInter" class="btn btn-primary" disabled>${loungeText('遊び方から始める','Start with the basics','게임 방법부터 배우기')}</button><button id="back" class="btn btn-ghost">${t('tutorial.back')}</button></div>
     <div class="academy-map-heading"><h2>${loungeText('実習ステージ','Practice stages','실습 스테이지')}</h2><span class="academy-clear-count" aria-live="polite">— / 12</span></div>
     <ol class="tut-steps academy-lessons">${TUT_STEPS.map((s,i)=>`<li data-key="${s.key}" class="lesson-tile">
-      <div class="lesson-art" aria-hidden="true"><img src="${artUrl.sm(lessonArt[i])}" alt="" loading="lazy"><span class="tut-step-n">${String(i+1).padStart(2,'0')}</span><span class="lesson-clear-seal">${homeIcon('check')}</span></div>
-      <div class="lesson-copy"><span class="lesson-state">${loungeText('確認中','Loading','확인 중')}</span><h2 class="tut-step-t">${s.title[lang]}</h2><p>${s.learned[lang]}</p></div>
+      <div class="lesson-art" aria-hidden="true"><img src="${artUrl.sm(lessonArt[s.id])}" alt="" loading="lazy"><span class="tut-step-n">${String(i+1).padStart(2,'0')}</span><span class="lesson-clear-seal">${homeIcon('check')}</span></div>
+      <div class="lesson-copy"><span class="lesson-state">${loungeText('確認中','Loading','확인 중')}</span><span class="lesson-chapter">${i<6?loungeText('基本のバトル','Battle basics','기본 전투'):i<11?loungeText('できることを増やす','More ways to play','다양한 플레이'):loungeText('仕上げ','Final practice','마무리')}</span><h2 class="tut-step-t">${s.title[lang]}</h2><p>${s.body[lang]}</p></div>
       <button class="academy-lesson-start" data-lesson="${i}" disabled aria-label="${s.title[lang]}"><span class="tut-step-r">+250 ${homeIcon('shard')}</span><span class="lesson-action">${loungeText('実習へ','Play','실습')} →</span></button>
     </li>`).join('')}</ol>
-    <footer class="academy-footer"><p>${loungeText('ここで借りるカードとマナは練習用。通常のデュエルでは、自分のデッキとマーケットから戦い方を組み立てよう。','Cards and mana here are prepared for practice. In a real duel, build your strategy from your deck and the market.','이곳의 카드와 마나는 연습용이에요. 실제 듀얼에서는 자신의 덱과 마켓으로 전략을 세우세요.')}</p><button id="play" class="btn btn-ghost">${loungeText('BOT戦へ','Play a bot','BOT전')}</button></footer>
+    <footer class="academy-footer"><p>${loungeText('この練習には時間制限がないよ。失敗しても、何度でもやり直せるよ。','Cards and mana here are prepared for practice. In a real duel, build your strategy from your deck and the market.','이곳의 카드와 마나는 연습용이에요. 실제 듀얼에서는 자신의 덱과 마켓으로 전략을 세우세요.')}</p><button id="play" class="btn btn-ghost">${loungeText('BOT戦へ','Play a bot','BOT전')}</button></footer>
     </main>`;
   app.root.append(wrap);wrap.querySelector('.topright-lang')!.append(langSelectEl());
   const spirit=mountManaSpirit(wrap.querySelector('.academy-spirit')!);
+  wrap.querySelector('#basicRules')!.addEventListener('click',()=>{closeNote?.();closeNote=openTutorialBasics(()=>{},()=>{},true);});
   wrap.querySelector('#ruleNotebook')!.addEventListener('click',()=>{closeNote?.();closeNote=openRuleNotebook();});
   wrap.querySelector('#back')!.addEventListener('click',()=>app.home());wrap.querySelector('#play')!.addEventListener('click',()=>app.botGame());
   const paint=(keys:string[])=>{
@@ -306,7 +309,7 @@ export function mountTutorial(app:App):Screen {
     wrap.querySelector('.academy-earned')!.textContent=guest?loungeText('練習モード · 報酬の受取にはログインが必要です。','Practice mode · Sign in to receive rewards.','연습 모드 · 보상을 받으려면 로그인하세요.'):`${done} / 12 ${loungeText('クリア済み','completed','완료')} · ${done*250} / 3,000 ${loungeText('シャード受取済み','Shards received','샤드 수령')}`;
     const first=TUT_STEPS.findIndex(s=>!keys.includes(s.key));
     const start=wrap.querySelector<HTMLButtonElement>('#startInter')!;start.disabled=false;
-    start.textContent=first<0?loungeText('もう一度練習する','Practice again','다시 연습'):first>0?loungeText('続きの実習へ','Continue lessons','실습 이어서'):loungeText('最初の実習へ','Begin the lessons','첫 실습 시작');
+    start.textContent=first<0?loungeText('もう一度練習する','Practice again','다시 연습'):first>0?loungeText('続きの実習へ','Continue lessons','실습 이어서'):loungeText('遊び方から始める','Start with the basics','게임 방법부터 배우기');
     start.onclick=()=>app.tutorialGame(first<0?0:first);
     wrap.querySelectorAll<HTMLButtonElement>('[data-lesson]').forEach(b=>{b.disabled=false;b.onclick=()=>app.tutorialGame(Number(b.dataset.lesson));});
     TUT_STEPS.forEach((s,i)=>{

@@ -1,3 +1,4 @@
+@import "./spaceRiteStatus.css";
 /* Biblion duel: a shallow perspective table with one central market.
    Positions are independent of cosmetics; all card values remain live DOM. */
 .game { height:100dvh; position:relative; overflow:hidden; color:#f0e7d5; background:#152036 var(--battlefield-bg) center/100% 100% no-repeat; --metal:#b6a079; }
