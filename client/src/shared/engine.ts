@@ -14,7 +14,7 @@ import {monsterActivation, observeMonsterEffect} from './monsterEffects';
 // localizes the displayed name, so cn() is reused in both languages.
 // ============================================================
 import type {
-  DiceSource,
+  DiceSource, OriginRiteReaction,
   Action, CardDef, CardInst, Enchant, FieldMon, GameEvent, GameState, PlayerState, ReduceResult, Side, TrapSet, QuestEvent,
 } from "./types";
 import { ALL_IDS, BUYABLE_POOL, DB, STARTERS, TRIBES, DEFAULT_DECK_8, sanitizeDeck, hasPassive, PASSIVES , isChestCard, enchantHasTurnCountdown } from "./cards";
@@ -4157,13 +4157,42 @@ function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): vo
   if (m.tribe === "시초" && m.id !== "TGE3" && !g.over) {
     for (const e of p.enchants) {
       if (e.card.ench !== "originRite" || g.over) continue;
-      enchantFx(g,ctx.ev,p,e.card);
+      const reaction: OriginRiteReaction = {summonUid:m.uid,targetPlayer:side(g,o),outcome:'blocked'};
+      // The result is filled synchronously below; its presentation stays before death/response events.
+      ctx.ev.push({type:'enchantActivate',player:side(g,p),uid:e.card.uid,id:e.card.id,originRite:reaction});
+      const resolved=(card:CardInst)=>{
+        reaction.outcome='destroy';
+        if(reaction.target)reaction.target.destination=(o.removed??[]).some(x=>x.uid===card.uid)?'rift':'discard';
+      };
       const pool: Array<() => void> = [];
-      o.field.filter((x) => !hasPassive(x, "aura")).forEach((x) => pool.push(() => { ctx.log(`  └ ${cn(e.card)}: ${cn(x)} 파괴`, `  └ ${cn(e.card)}: ${cn(x)} 破壊`); ctx.destroyMonster(o, x); }));
-      o.traps.forEach((_t, i) => pool.push(() => { if (o.traps[i] && !trySnare(g, ctx, o)) { const tr = o.traps.splice(i, 1)[0]; if (tr.card.exileOnDestroy) rmz(o).push(tr.card); else o.discard.push(tr.card); ctx.log(`  └ ${cn(e.card)}: 세트 함정 파괴 (정체: ${cn(tr.card)})`, `  └ ${cn(e.card)}: セットトラップ破壊 (正体: ${cn(tr.card)})`); } }));
-      o.enchants.forEach((_e, i) => pool.push(() => { if (o.enchants[i]) { const ec = o.enchants[i].card; o.enchants.splice(i, 1); ctx.log(`  └ ${cn(e.card)}: 영구마법 ${cn(ec)} 파괴`, `  └ ${cn(e.card)}: 永続魔法 ${cn(ec)} 破壊`); binEnch(g, ctx, o, ec); } }));
-      if (pool.length) pool[randInt(g, pool.length)]();
-      else { gainBrand(g, ctx, o, 1); ctx.log(`  └ ${cn(e.card)}: 파괴할 카드 없음 → ${o.name} 에게 낙인 카운터 +1 (합계 ${o.brand})`, `  └ ${cn(e.card)}: 破壊するカードなし → ${o.name} に烙印カウンター+1 (計${o.brand})`); }
+      o.field.filter((x) => !hasPassive(x, "aura")).forEach((x) => pool.push(() => {
+        reaction.target={uid:x.uid,kind:'monster'};
+        ctx.log(`  └ ${cn(e.card)}: ${cn(x)} 파괴`, `  └ ${cn(e.card)}: ${cn(x)} 破壊`);
+        const eventStart=ctx.ev.length;ctx.destroyMonster(o,x);
+        if(ctx.ev.slice(eventStart).some(ev=>ev.type==='destroy'&&ev.uid===x.uid))resolved(x);
+      }));
+      o.traps.forEach((_t,i)=>pool.push(()=>{
+        const target=o.traps[i];if(!target)return;
+        reaction.target={uid:target.card.uid,kind:'trap'};
+        if(!trySnare(g,ctx,o)){
+          const tr=o.traps.splice(i,1)[0];
+          if(tr.card.exileOnDestroy)rmz(o).push(tr.card);else o.discard.push(tr.card);
+          resolved(tr.card);
+          ctx.log(`  └ ${cn(e.card)}: 세트 함정 파괴 (정체: ${cn(tr.card)})`, `  └ ${cn(e.card)}: セットトラップ破壊 (正体: ${cn(tr.card)})`);
+        }
+      }));
+      o.enchants.forEach((_e,i)=>pool.push(()=>{
+        if(!o.enchants[i])return;const ec=o.enchants[i].card;
+        reaction.target={uid:ec.uid,kind:'enchant'};o.enchants.splice(i,1);
+        ctx.log(`  └ ${cn(e.card)}: 영구마법 ${cn(ec)} 파괴`, `  └ ${cn(e.card)}: 永続魔法 ${cn(ec)} 破壊`);
+        binEnch(g,ctx,o,ec);resolved(ec);
+      }));
+      if(pool.length)pool[randInt(g,pool.length)]();
+      else {
+        reaction.outcome='brand';reaction.brandBefore=o.brand??0;
+        gainBrand(g,ctx,o,1);reaction.brandAfter=o.brand??0;
+        ctx.log(`  └ ${cn(e.card)}: 파괴할 카드 없음 → ${o.name} 에게 낙인 카운터 +1 (합계 ${o.brand})`, `  └ ${cn(e.card)}: 破壊するカードなし → ${o.name} に烙印カウンター+1 (計${o.brand})`);
+      }
     }
   }
 }

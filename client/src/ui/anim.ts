@@ -1,3 +1,5 @@
+import {playOriginRite,cancelOriginRites} from './originRite/runtime';
+import type {OriginRiteReaction} from '../shared/types';
 import {playSoulHarvest,cancelSoulHarvest,warmSoulHarvest} from './soulHarvest/runtime';
 import {createDungeonFloor,warmDungeonFloor} from './dungeonFloor/runtime';
 export {warmDungeonFloor};
@@ -110,7 +112,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on); setSeekerSkip(on);
-  if(on){cancelSoulHarvest();cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelOriginRites();cancelSoulHarvest();cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -1292,6 +1294,30 @@ export async function openingBoard():Promise<void>{
   if(root)await waitForDuel(root);
   if(fxSkip||typeof WebGL2RenderingContext==='undefined'||!root?.isConnected)return;
   await boardMotionScope(signal=>moveOnBoard({kind:'opening',signal}),7500);
+}
+
+/** One owner for the summon-to-rite signal, selected golden cut and brand contact. */
+export async function originRite(uid:string,reaction:OriginRiteReaction,side:ViewSide,summon?:HTMLElement):Promise<void>{
+ const find=(id:string)=>document.querySelector<HTMLElement>(`.buff-icon[data-uid="${CSS.escape(id)}"]`)??combatCard(id)??byUid(id);
+ const source=find(uid),from=summon??find(reaction.summonUid),portrait=document.getElementById(side==='me'?'portraitMe':'portraitOpp');
+ let badge=portrait?.querySelector<HTMLElement>('.pt-brand')??null;
+ if(reaction.outcome==='brand'&&!badge&&portrait){
+  let resources=portrait.querySelector<HTMLElement>('.pt-resources');
+  if(!resources){resources=document.createElement('span');resources.className='pt-resources';portrait.append(resources);const ring=portrait.querySelector<HTMLElement>('.pt-ring');if(ring&&portrait.closest('.reading-board'))for(const key of ['left','top','width','height'] as const)resources.style[key]=ring.style[key];}
+  badge=document.createElement('span');badge.className='pt-brand';badge.setAttribute('role','img');const number=document.createElement('b');number.id=`brand-${side}`;number.setAttribute('aria-hidden','true');badge.append(number);resources.append(badge);
+  // Reserve native counter geometry without showing the new mark before contact.
+  if(!reaction.brandBefore)badge.style.opacity='0';
+ }
+ const target=reaction.outcome==='brand'?badge:reaction.target?find(reaction.target.uid):null;
+ const grave=document.getElementById(reaction.target?.destination==='rift'?(side==='me'?'rift-me':'rift-opp'):discId(side));
+ let contacted=false;
+ const impact=()=>{if(contacted)return;contacted=true;
+  if(reaction.outcome==='brand'&&badge){const n=reaction.brandAfter??0;badge.style.opacity='';const b=badge.querySelector('b');if(b)b.textContent=String(n);badge.style.setProperty('--resource-number-scale',String(Math.min(.14,.32/String(n).length)));badge.setAttribute('aria-label',`${t('game.brand')} ${n}`);badge.title=t('game.brandTip').replace('{n}',String(n));}
+  if(reaction.outcome==='destroy'&&!fxSkip&&!document.hidden)sfx('death');
+ };
+ if(source&&from&&target&&grave&&!fxSkip)await boardMotionScope(signal=>playOriginRite({source,summon:from,target,grave,reaction,name:cardName({...DB.ORIGIN_RITE,uid}),onImpact:impact,signal}),6800);
+ impact();
+ if(reaction.outcome==='destroy'&&target)target.style.visibility='hidden';
 }
 
 /** Pulse the exact public source, not every remaining spell on the board. */

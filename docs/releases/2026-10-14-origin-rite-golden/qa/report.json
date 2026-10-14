@@ -1,0 +1,158 @@
+{
+  "checks": [
+    {
+      "side": 0,
+      "scenario": "monster",
+      "outcome": "destroy",
+      "variants": [
+        "golden-01"
+      ]
+    },
+    {
+      "side": 0,
+      "scenario": "spell",
+      "outcome": "destroy",
+      "variants": [
+        "golden-01"
+      ]
+    },
+    {
+      "side": 0,
+      "scenario": "trap",
+      "outcome": "destroy",
+      "variants": [
+        "golden-01"
+      ]
+    },
+    {
+      "side": 0,
+      "scenario": "brand",
+      "outcome": "brand",
+      "variants": [
+        "golden-01"
+      ]
+    },
+    {
+      "side": 0,
+      "scenario": "snare",
+      "outcome": "blocked",
+      "variants": [
+        "golden-01"
+      ]
+    },
+    {
+      "side": 0,
+      "scenario": "ward",
+      "outcome": "blocked",
+      "variants": [
+        "golden-01"
+      ]
+    },
+    {
+      "side": 0,
+      "scenario": "void",
+      "outcome": "destroy",
+      "variants": [
+        "golden-01"
+      ]
+    },
+    {
+      "side": 0,
+      "scenario": "exile",
+      "outcome": "destroy",
+      "variants": [
+        "golden-01"
+      ]
+    },
+    {
+      "side": 1,
+      "scenario": "monster",
+      "outcome": "destroy",
+      "variants": [
+        "golden-01"
+      ]
+    },
+    {
+      "side": 1,
+      "scenario": "spell",
+      "outcome": "destroy",
+      "variants": [
+        "golden-01"
+      ]
+    },
+    {
+      "side": 1,
+      "scenario": "trap",
+      "outcome": "destroy",
+      "variants": [
+        "golden-01"
+      ]
+    },
+    {
+      "side": 1,
+      "scenario": "brand",
+      "outcome": "brand",
+      "variants": [
+        "golden-01"
+      ]
+    },
+    {
+      "side": 1,
+      "scenario": "snare",
+      "outcome": "blocked",
+      "variants": [
+        "golden-01"
+      ]
+    },
+    {
+      "side": 1,
+      "scenario": "ward",
+      "outcome": "blocked",
+      "variants": [
+        "golden-01"
+      ]
+    },
+    {
+      "side": 1,
+      "scenario": "void",
+      "outcome": "destroy",
+      "variants": [
+        "golden-01"
+      ]
+    },
+    {
+      "side": 1,
+      "scenario": "exile",
+      "outcome": "destroy",
+      "variants": [
+        "golden-01"
+      ]
+    },
+    {
+      "mode": "mixed",
+      "variants": [
+        "golden-01",
+        "golden-01"
+      ],
+      "brand": 1,
+      "events": [
+        "destroy",
+        "brand"
+      ]
+    },
+    {
+      "mode": "guardian",
+      "variants": [],
+      "brand": 0,
+      "events": []
+    },
+    "Reduced motion updates native counter and cleans up",
+    "Landscape mobile actual controller",
+    "Mid-flight fast-forward commits result without overlay residue; graveyard copy is preserved",
+    "Controller destruction cancels owned renderer"
+  ],
+  "errors": [],
+  "bad": [],
+  "scope": "Real BaseController/reducer/renderer locally. Not authenticated online gameplay.",
+  "note": "Last two assertions rerun after narrowing the removed-card selector to the field, excluding its legitimate graveyard copy."
+}

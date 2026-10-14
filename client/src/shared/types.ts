@@ -259,6 +259,16 @@ export type DiceSource = { player: Side } & ({ id: string; status?: never } | { 
 /** Public result of spending one counter to survive lethal damage. */
 export interface GutsSurvival { player: Side; uid: string; before: number; after: number }
 
+/** Resolved origin-rite reaction. No hidden card identity is needed for presentation. */
+export interface OriginRiteReaction {
+  summonUid: string;
+  targetPlayer: Side;
+  outcome: 'destroy' | 'brand' | 'blocked';
+  target?: {uid: string; kind: 'monster' | 'trap' | 'enchant'; destination?: 'discard' | 'rift'};
+  brandBefore?: number;
+  brandAfter?: number;
+}
+
 export type GameEvent =
   | { type: "voidShot"; player: Side; count: number; target: Side } // Resolved public Rift count; damage remains a separate engine event.
   | { type: "treason"; player: Side; target: Side; sourceUid: string; targets: {uid:string;zone:"monster"|"enchant";destination:"discard"|"rift"}[] }
@@ -273,7 +283,7 @@ export type GameEvent =
   | { type: "statusGrant"; player: Side; resource: "shield" | "brand" | "dew"; before: number; after: number; sourceUid?: string }
   | { type: "tribeSynergy"; player: Side; tribe: string; threshold: number; uids: string[] }
   | { type: "monsterActivate"; player: Side; uid: string }
-  | { type: "enchantActivate"; player: Side; uid: string; id: string }
+  | { type: "enchantActivate"; player: Side; uid: string; id: string; originRite?: OriginRiteReaction }
   | { type: "log"; html: string; htmlJa: string }
   | { type: "turnHeader"; turn: number; name: string; isBot: boolean; player?: Side } // player: whose turn (log tinting)
   | { type: "summon"; player: Side; uid: string; id?: string; source?: string; ritual?: string; rebirth?: { card: CardInst }; hatchFrom?: { uid: string; id: string }; fusionFrom?: { dragon: { uid: string; id: string }; mate: { uid: string; id: string } } } // id: card id (drives the summon ghost when the monster dies in the same batch)

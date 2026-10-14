@@ -361,6 +361,7 @@ export abstract class BaseController implements BoardHandlers {
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
     const spellGhosts:HTMLElement[]=[];
     const treasonExits=new Set<string>();
+    const originRiteDeaths=new Set<string>();
     const massacreDeaths=new Set<string>(),massacreCosts=new Set<Side>();
     const creationSources=new Map<string,HTMLElement>();
     const creationEvents=events.filter((e):e is Extract<GameEvent,{type:'creationBorn'}>=>e.type==='creationBorn');
@@ -431,7 +432,7 @@ export abstract class BaseController implements BoardHandlers {
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
-      const cue = e.type==='destroy'&&(massacreDeaths.has(e.uid)||treasonExits.has(e.uid))?undefined:(e.type==='destroy'&&([...hatches.values()].includes(e.uid)||(e.cause==='fusion'&&fusionMaterials.has(e.uid))))||(e.type==='summon'&&(fusions.has(e.uid)||e.rebirth||floorSessions.has(e.uid)))?undefined:eventSound.cue(e);
+      const cue = e.type==='destroy'&&(originRiteDeaths.has(e.uid)||massacreDeaths.has(e.uid)||treasonExits.has(e.uid))?undefined:(e.type==='destroy'&&([...hatches.values()].includes(e.uid)||(e.cause==='fusion'&&fusionMaterials.has(e.uid))))||(e.type==='summon'&&(fusions.has(e.uid)||e.rebirth||floorSessions.has(e.uid)))?undefined:eventSound.cue(e);
       if(cue&&!A.isFxSkipped()&&!isSoulHarvestDamage(e))sfx(cue);
       if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
       if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
@@ -502,6 +503,18 @@ export abstract class BaseController implements BoardHandlers {
           await A.infinityCull(e.sourceUid, sideOf(e.player), e.amount);
           break;
         case "enchantActivate": {
+          if(e.originRite){
+            const reaction=e.originRite;
+            // Consume only this rite's immediately following grant; its selected light owns contact.
+            if(reaction.outcome==='brand'){
+              await grantQueues.get(`${reaction.targetPlayer}:brand`);
+              const next=events.slice(i+1).find(event=>event.type!=='log');
+              if(next?.type==='statusGrant'&&next.resource==='brand'&&next.player===reaction.targetPlayer&&next.before===reaction.brandBefore&&next.after===reaction.brandAfter)shownGrants.add(next);
+            }
+            await A.originRite(e.uid,reaction,sideOf(reaction.targetPlayer),ghosts.get(reaction.summonUid)?.el);
+            if(reaction.outcome==='destroy'&&reaction.target?.kind==='monster')originRiteDeaths.add(reaction.target.uid);
+            break;
+          }
           const replay=runeReplays.replays.get(i);
           if(replay){
             const original=events[replay.playIndex];
@@ -596,7 +609,7 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "destroy": {
-          if(treasonExits.has(e.uid)||massacreDeaths.has(e.uid)){ghosts.get(e.uid)?.el.remove();ghosts.delete(e.uid);releaseMonster(e.uid);fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);break;}
+          if(originRiteDeaths.has(e.uid)||treasonExits.has(e.uid)||massacreDeaths.has(e.uid)){ghosts.get(e.uid)?.el.remove();ghosts.delete(e.uid);releaseMonster(e.uid);fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);break;}
           if(e.cause==='fusion'&&fusionMaterials.has(e.uid)){fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);break;}
           if([...hatches.values()].includes(e.uid)&&document.querySelector(`.zone-mon .card[data-uid="${CSS.escape(e.uid)}"]`)){heldEggs.add(e.uid);break;}
           const destroy=async()=>{
