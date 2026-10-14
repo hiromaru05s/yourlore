@@ -331,6 +331,7 @@ export abstract class BaseController implements BoardHandlers {
     const fusions=fusionPairs(events),fusionMaterials=new Set([...fusions.values()].flatMap(f=>[f.dragon.uid,f.mate.uid]));
     if(events.some(e=>e.type==='dice'&&e.taunt))A.warmTaunt();
     if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
+    if(events.some(e=>e.type==='nova'))A.warmNova();
     const eventSound = new EventSound();
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
@@ -447,6 +448,9 @@ export abstract class BaseController implements BoardHandlers {
         }
         case 'elementalImpact': await elemental.get(e.group)?.impact(e.index);break;
         case 'elementalEnd': await elemental.get(e.group)?.finished;elemental.delete(e.group);await Promise.all(elementalDeaths.splice(0));break;
+        case 'infinityRelease':
+          await A.infinityCull(e.sourceUid, sideOf(e.player), e.amount);
+          break;
         case "enchantActivate":
           A.enchantActivation(e.uid);
           await wait(140);
@@ -585,13 +589,27 @@ export abstract class BaseController implements BoardHandlers {
         case "heal": {
           const healed=Math.max(0,e.amount);
           hpNow[e.player] += healed;
-          if(healed>0)A.hpFeedback(sideOf(e.player), "heal", healed);
-          A.hpBarSet(sideOf(e.player), hpNow[e.player]);
-          await wait(130);
+          if(e.bloodRiteSources?.length){
+            await A.bloodRiteRecovery(sideOf(e.player),e.bloodRiteSources,()=>{
+              if(!this.dead)A.hpBarSet(sideOf(e.player),hpNow[e.player]);
+            });
+          }else{
+            if(healed>0)A.hpFeedback(sideOf(e.player), "heal", healed);
+            A.hpBarSet(sideOf(e.player), hpNow[e.player]);
+            await wait(130);
+          }
+          break;
+        }
+        case "nova": {
+          const card=prev.players[e.player].hand.find(c=>c.id==='BLACK_NOVA')??{...DB.BLACK_NOVA,uid:'nova-source'};
+          await A.novaTimeTheft(card,sideOf(e.player),e.from,hp=>{if(!this.dead)A.hpBarSet(sideOf(e.player),hp);});
+          hpNow[e.player]=e.to;
           break;
         }
         case "playSpell": {
           const nextSpell=events.findIndex((next,j)=>j>i&&next.type==='playSpell');
+          // A resolved Nova owns both the source reveal and its exit; a nullified cast keeps the ordinary reveal.
+          if(e.id==='BLACK_NOVA'&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='nova'&&next.player===e.player))break;
           const grants=events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='statusGrant'||next.type==='decayCounterGrant');
           const def = DB[e.id] ?? STARTERS[e.id]; // 컬/어튠/보물상자 live in STARTERS
           if (def) {
@@ -699,6 +717,7 @@ export abstract class BaseController implements BoardHandlers {
     for(const e of events)if(e.type==='playSpell'&&e.dest==='vanish'){
       const ids=animatedIds[e.player];ids.set(e.id,(ids.get(e.id)||0)+1);
     }
+    const infinityStored = new Set(events.flatMap(e => e.type === 'infinityStored' ? e.cardUids : []));
     const destroyed=new Set(events.filter(e=>e.type==='destroy').map(e=>e.uid));
     for(const pl of [0,1] as Side[]){
       const before=prev.players[pl];
@@ -706,7 +725,7 @@ export abstract class BaseController implements BoardHandlers {
       const existed=new Set([...before.hand,...before.deck,...before.discard,...before.field,...before.enchants.map(e=>e.card),...before.traps.map(t=>t.card),...(before.quests??[]).map(q=>q.card),...before.exile.map(e=>e.card)].map(c=>c.uid));
       const generated:CardInst[]=[];
       for(const c of res.state.players[pl].removed??[]){
-        if(old.has(c.uid)||destroyed.has(c.uid))continue;
+        if(old.has(c.uid)||destroyed.has(c.uid)||infinityStored.has(c.uid))continue;
         const n=animatedIds[pl].get(c.id)||0;if(n){animatedIds[pl].set(c.id,n-1);continue;}
         if(!existed.has(c.uid)){generated.push(c);continue;}
         await A.exileCard(c,sideOf(pl),document.querySelector<HTMLElement>(`.card[data-uid="${c.uid}"],.card--back[data-uid="${c.uid}"],.buff-icon[data-uid="${c.uid}"]`));

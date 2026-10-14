@@ -1,3 +1,6 @@
+import {playNova,warmNova} from './nova/runtime';
+export {warmNova};
+import {playBloodRite} from './bloodRite/runtime';
 import {isWeaponmaster} from './weaponmasterSummon/selection';
 import {playWeaponmasterSummon} from './weaponmasterSummon/runtime';
 import {isShieldTitan} from './shieldTitanSummon/selection';
@@ -1213,3 +1216,33 @@ export async function openingBoard():Promise<void>{
 
 /** Pulse the exact public source, not every remaining spell on the board. */
 export function enchantActivation(uid:string):void{if(fxSkip)return;const source=document.querySelector<HTMLElement>(`.buff-icon[data-uid="${CSS.escape(uid)}"]`);if(source)playBiblionFx('enchant',source);}
+
+/** One clock owns the selected blood pulse, source cards and HP conversion. */
+export async function bloodRiteRecovery(side:ViewSide,sources:string[],onHeal:()=>void):Promise<void>{
+ let applied=false;
+ const apply=()=>{if(!applied){applied=true;onHeal();}};
+ try{if(!fxSkip&&!document.hidden)await boardMotionScope(signal=>playBloodRite(side,sources,apply,signal),2200);}
+ finally{apply();}
+}
+
+/** Adopted 05: the enchantment turns pages into Cull at the turn-end checkpoint. */
+export async function infinityCull(sourceUid:string,side:ViewSide,amount:number):Promise<void>{
+  if(fxSkip||amount<=0)return;
+  await boardMotionScope(async signal=>{
+    const {playInfinityCull}=await import('./infinityCull/runtime');
+    if(signal.aborted)return false;
+    await playInfinityCull(sourceUid,side,amount,signal);
+    return !signal.aborted;
+  },6500);
+}
+
+/** Selected Nova consumes the played card in its central orb, with no second frame/exit VFX. */
+export async function novaTimeTheft(card:CardInst,side:ViewSide,fromHp:number,onHp:(hp:number)=>void):Promise<void>{
+ let node:HTMLElement|null=null;
+ try{
+  if(fxSkip||document.hidden)return;
+  const from=fromRect(side,takeOrigin(side));if(!from)return;
+  node=floatAt(cardEl(card,{size:'hand'}),from);
+  await boardMotionScope(signal=>playNova(node!,side,fromHp,onHp,signal),10500);
+ }finally{node?.remove();onHp(1);}
+}

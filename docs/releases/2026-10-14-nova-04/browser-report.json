@@ -1,0 +1,15 @@
+{
+  "checks": [
+    "controller 1280 side 0: 04 once, HP timing, no enemy damage, skip, cleanup",
+    "controller 1280 side 1: 04 once, HP timing, no enemy damage, skip, cleanup",
+    "controller 390 side 0: 04 once, HP timing, no enemy damage, skip, cleanup",
+    "controller 390 side 1: 04 once, HP timing, no enemy damage, skip, cleanup",
+    "skip",
+    "resize",
+    "hidden",
+    "detach",
+    "reduced",
+    "fallback"
+  ],
+  "errors": []
+}

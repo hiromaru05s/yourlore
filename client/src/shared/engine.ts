@@ -524,16 +524,20 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     }
     return drawn;
   };
-  const heal = (p: PlayerState, amt: number): void => {
+  const heal = (p: PlayerState, amt: number, bloodRiteSources?: string[]): void => {
     if (amt <= 0) return;
     const foe = g.players[1 - side(g, p)];
     const doubles = g.players.reduce((n, pl) => n + pl.field.filter(m => m.id === 'ELF').length, 0);
     const halves = foe.field.filter(m => m.id === 'HIGH_ELF').length;
     amt = Math.floor(amt * 2 ** (doubles - halves));
-    if (amt <= 0) return;
+    if (amt <= 0) {
+      // Conversion still activates even when recovery modifiers round it to zero.
+      if (bloodRiteSources?.length) ev.push({type:"heal",player:side(g,p),amount:0,bloodRiteSources});
+      return;
+    }
     p.hp += amt;
     advanceQuest(p,"healthGain",amt);
-    ev.push({ type: "heal", player: side(g, p), amount: amt });
+    ev.push({ type: "heal", player: side(g, p), amount: amt, ...(bloodRiteSources ? {bloodRiteSources} : {}) });
     // 유령 — v25: 상대가 체력을 회복할 때마다 필드의 모든 유령 공격력 +1 (지속)
     {
       const foe = g.players[1 - side(g, p)];
@@ -563,15 +567,23 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     if (spellDepth > 0 && g.players.some(pl => pl.enchants.some(e => e.card.ench === 'doubleUp'))) amt *= 2;
     if (g.players.some(pl => pl.enchants.some(e => e.card.ench === 'blackReverse'))) target = g.players[1 - side(g, target)];
     if (spellDepth > 0 && target.enchants.some(e => e.card.ench === 'blackInfinity')) {
-      for (let i = 0; i < amt; i++) rmz(target).push(starter(g, 'STARTER_TRASH'));
+      const sourceUid = target.enchants.find(e => e.card.ench === 'blackInfinity')!.card.uid;
+      const cards: CardInst[] = [];
+      for (let i = 0; i < amt; i++) cards.push(starter(g, 'STARTER_TRASH'));
+      rmz(target).push(...cards); // Rules stay immediate; only the animation is deferred.
+      const queue = target.infinityPresentation ??= [];
+      const pending = queue.find(item => item.sourceUid === sourceUid);
+      if (pending) pending.amount += cards.length;
+      else queue.push({ sourceUid, amount: cards.length });
+      ctx.ev.push({ type: 'infinityStored', player: side(g, target), sourceUid, cardUids: cards.map(c => c.uid) });
       ctx.log(`인피니티: ${amt} 무효`, `インフィニティ: ${amt}ダメージ無効、カル${amt}枚をリフトへ`);
       return;
     }
     // 혈귀술(spellHeal): 양 플레이어는 마법 데미지를 받지 않고 그만큼 회복 (어느 쪽 필드에 있든)
     if (spellDepth > 0 && g.players.some((pl) => pl.enchants.some((e2) => e2.card.ench === "spellHeal"))) {
-      enchantKindFx(g,ev,"spellHeal");
+      const sources = g.players.flatMap(pl => pl.enchants.filter(e => e.card.ench === "spellHeal").map(e => e.card.uid));
       log(`  └ 혈귀술: ${amt} 데미지 → 회복으로 반전`, `  └ 血鬼術: ${amt} ダメージ → 回復に反転`);
-      heal(target, amt);
+      heal(target, amt, sources);
       return;
     }
     // 흡혈 술식(bloodShield): 자신이 시전한 "피의 마법"의 자해 데미지 무효
@@ -1457,6 +1469,14 @@ function endTurn(g: GameState, ctx: Ctx, force = false): void {
     if (g.players.reduce((n, pl) => n + (pl.quests?.length ?? 0), 0) === count) break;
   }
   if (g.over) return;
+  // Presentation checkpoint, after end effects/choices and before the next turn.
+  // Persisted public metadata survives reconnects; it never creates resources twice.
+  for (const player of [0, 1] as Side[]) {
+    const owner = g.players[player];
+    for (const item of owner.infinityPresentation ?? []) if (item.amount > 0)
+      ctx.ev.push({ type: 'infinityRelease', player, ...item });
+    delete owner.infinityPresentation;
+  }
   // 60-turn limit: before a new turn would begin, judge the game by remaining HP
   // (higher HP wins; an exact tie is a draw).
   if (g.turn >= MAX_TURNS && !g.over) {
@@ -5781,7 +5801,7 @@ function expansionSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case 'EMPTY_MIND': p.hand.push(inst(g, 'CREATION')); break;
     case 'CREATION': ctx.drawN(p, 1); ctx.heal(p, 1); p.discard.push(inst(g, 'CREATION')); if (rmz(p).filter(c => c.id === 'CREATION').length >= 10) queueExpansionChoice(g, p, card.id, '複製する相手のデッキのカードを選択'); break;
     case 'ROGUE_ART': if (p.field.some(isAssassinCard)) { for (const m of p.field) m.passivesG = [...new Set([...(m.passivesG ?? []), 'evade'])]; } else queueExpansionChoice(g, p, card.id, '回避を付与する自分のモンスターを選択'); break;
-    case 'BLACK_NOVA': p.hp = 1; o.skipTurns = (o.skipTurns ?? 0) + 1; break;
+    case 'BLACK_NOVA': ctx.ev.push({type:'nova',player:side(g,p),from:p.hp,to:1}); p.hp = 1; o.skipTurns = (o.skipTurns ?? 0) + 1; break;
     case 'BLACK_CURSE': addCurses(g, o, 5); break;
     case 'SOUL_HARVEST': ctx.dealDamage(o, deckComp(o).filter(c => c.id === 'CURSE').length * 4, cn(card), cn(card)); break;
     case 'ANESTHESIA': for (const m of p.field) m.immuneDamageTurn = g.turn; break;

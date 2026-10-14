@@ -174,6 +174,8 @@ export interface PlayerState {
   revealedCards?: RevealedCard[]; // cards permanently known to the opponent this game (physical-card UID + card id)
   collection?: string[]; // redacted view only: public card ids the opponent may inspect
   openingDrawReady?: boolean; // second player already received the first three cards at match start
+  /** Public presentation only: already-created Cull, released visually at turn end. */
+  infinityPresentation?: { sourceUid: string; amount: number }[];
   removed?: CardInst[]; // cards permanently exiled from the game (public zone)
   botTune?: { minBuy?: number; minBuyEarly?: number; chestTurn?: number }; // per-archetype bot buy discipline (see bot.ts BOT_DECKS)
   refreshTokens?: number; // 렐릭 헌터(v36): 제시 마켓 무료 갱신 카운터 — 갱신 시 마나 대신 소모
@@ -257,6 +259,8 @@ export type DiceSource = { player: Side } & ({ id: string; status?: never } | { 
 export interface GutsSurvival { player: Side; uid: string; before: number; after: number }
 
 export type GameEvent =
+  | { type: "infinityStored"; player: Side; sourceUid: string; cardUids: string[] }
+  | { type: "infinityRelease"; player: Side; sourceUid: string; amount: number }
   | ({ type: "gutsSurvive" } & GutsSurvival)
   | { type: "statusExtinction"; player: Side; resource: "shield" | "brand" | "dew"; before: number; after: 0 }
   | { type: "statusGrant"; player: Side; resource: "shield" | "brand" | "dew"; before: number; after: number; sourceUid?: string }
@@ -273,7 +277,7 @@ export type GameEvent =
   | { type: "elementalEnd"; group:string }
   | { type: "hit"; uid: string; amount?: number }
   | { type: "damage"; player: Side; amount: number; srcKo?: string; srcJa?: string } // src: what dealt it (death-cause display)
-  | { type: "heal"; player: Side; amount: number }
+  | { type: "heal"; player: Side; amount: number; bloodRiteSources?: string[] }
   | { type: "decayCounterGrant"; player: Side; uid: string; before: number; after: number }
   | { type: "destroy"; player: Side; uid: string; id?: string; cause?: "decay" | "fusion" }
   | { type: "buy"; player: Side; from: "market" | "supply"; i: number; id: string }
@@ -282,6 +286,7 @@ export type GameEvent =
   | { type: "reshuffle"; player: Side; count: number } // public count only; no card order
   | { type: "treasure"; player: Side; kind: string; text: string; textJa: string; isBot: boolean }
   | { type: "dice"; source: DiceSource; player: Side; rolls: number[]; need?: number; success?: boolean; variant?: "casino"; evasion?: { targetUid: string; attackerUid: string }; taunt?: { sourceUid: string; attackerUid: string } } // evasion identifies the public defender, including granted passives and duplicates
+  | { type: "nova"; player: Side; from: number; to: 1 } // Resolved HP cost and time theft, never spell damage.
   | { type: "playSpell"; player: Side; id: string; dest: "discard" | "field" | "vanish" } // spell/starter/enchant played from hand
   | { type: "trapSet"; player: Side } // a face-down trap was set (identity hidden)
   | { type: "trapReveal"; player: Side; id: string } // a trap fired → reveal then discard

@@ -125,7 +125,10 @@
     "tests/bot-simulation.mjs",
     "tests/gacha-azure-motion.mjs",
     "tests/weaponmaster-summon.mjs",
-    "tests/shield-titan-summon.mjs"
+    "tests/shield-titan-summon.mjs",
+    "tests/blood-rite.mjs",
+    "tests/infinity-cull.mjs",
+    "tests/nova.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",

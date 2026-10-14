@@ -1,0 +1,8 @@
+/** Verify the selected blood-rite runtime against the guarded committed build. */
+import fs from 'node:fs/promises';import {createHash} from 'node:crypto';import {execFile} from 'node:child_process';import {promisify} from 'node:util';import assert from 'node:assert/strict';
+const run=promisify(execFile),origin='https://test.yourlore.xyz',dist=process.env.BLOOD_RITE_DIST||'client/dist',out='docs/releases/2026-10-14-blood-rite-vein';
+const files=['index.html','art/cards/BLOOD_RITE.webp','art/biblion/modular/health-ui.webp',...(await fs.readdir(dist+'/assets')).filter(f=>/\.(js|css)$/.test(f)).map(f=>'assets/'+f)];
+const hash=b=>createHash('sha256').update(b).digest('hex'),pending=[...files],assets=[];
+assert.ok((await Promise.all(files.filter(f=>f.endsWith('.js')).map(f=>fs.readFile(dist+'/'+f,'utf8')))).some(s=>s.includes('blood-rite-vein-fx')),'Selected 02 must be in the actual runtime bundle');
+await Promise.all(Array.from({length:4},async()=>{while(pending.length){const file=pending.shift(),local=await fs.readFile(dist+'/'+file),{stdout}=await run('curl',['--location','--fail','--silent','--show-error','--retry','2',origin+'/'+file],{encoding:'buffer',maxBuffer:20e6});assert.equal(hash(stdout),hash(local),file);assets.push({file,sha256:hash(local),bytes:local.length});}}));
+await fs.writeFile(out+'/staging-assets.json',JSON.stringify({origin,checkedAt:new Date().toISOString(),assets,boundary:'Deployed HTML/JS/CSS and blood-rite artwork parity; local controller playback verified separately. Authenticated PvP is not claimed.'},null,2));console.log('PASS deployed assets:',assets.length);
