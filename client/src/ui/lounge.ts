@@ -9,6 +9,7 @@ import { homeIcon, type HomeIcon } from './homeIcons';
 import { avatarHtml } from './social';
 import { seekerLevel } from './seekerLevel';
 import { showInquiryModal, showInviteModal } from '../screens/home';
+import { mountHomeSound } from './homeSound';
 
 export type LoungePage = 'home'|'deck'|'cards'|'leaderboard'|'friends'|'shop'|'tutorial'|'profile'|'lobby'|'login';
 
@@ -29,8 +30,10 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     ['tutorial','book','home.nav.guide',()=>app.tutorial()],
   ];
   let stopNavMotion: (()=>void)|undefined;
+  let stopHomeSound: (()=>void)|undefined;
   const paint=()=>{
     stopNavMotion?.();
+    stopHomeSound?.();
     const user=app.user;
     shell.querySelectorAll(':scope > .lounge-rail, :scope > .lounge-topbar').forEach(n=>n.remove());
     if(page==='login') return;
@@ -39,6 +42,12 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     const top=document.createElement('header'); top.className='lounge-topbar';
     top.innerHTML=`<button class="lounge-brand" data-home aria-label="LORE HOME"><img src="/art/brand/lore-logo-transparent.webp" alt="LORE"></button><button class="lounge-menu" aria-controls="loungeUtilities" aria-expanded="${shell.classList.contains('is-menu-open')}" aria-label="${esc(t('home.navigation'))}"><span class="menu-stroke" aria-hidden="true"></span><span class="menu-stroke" aria-hidden="true"></span></button><span class="lounge-location">${page==='profile'?t('profile.title'):page==='lobby'?t('mode.ranked'):t(nav.find(n=>n[0]===page)?.[2]??'home.title')}</span><button class="lounge-user" data-profile>${avatarHtml(user?.avatar,user?.display??'P',38)}<span><b>${esc(user?.display??'PLAYER')}</b><small>${t('home.seekerLevel')} ${seekerLevel(user?.wins??0,user?.losses??0).level}</small></span></button><button class="lounge-balance" data-shop>${homeIcon('shard')}<span><small>${t('home.shards')}</small><b>${(user?.credits??0).toLocaleString()}</b></span></button>`;
     shell.prepend(rail,top);
+    if(page==='home'){
+      const profile=top.querySelector<HTMLButtonElement>('[data-profile]')!;
+      const seeker=document.createElement('div');seeker.className='lounge-seeker';
+      profile.replaceWith(seeker);seeker.append(profile);
+      stopHomeSound=mountHomeSound(seeker);
+    }
     stopNavMotion=mountLoungeNavMotion(rail.querySelector('nav')!,lastLoungePage.get(app));
     lastLoungePage.set(app,page);
     top.querySelector<HTMLButtonElement>('[data-home]')!.onclick=()=>app.home();
@@ -82,5 +91,5 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     }
   };
   document.addEventListener('keydown',keyboard);
-  return ()=>{lifecycle.abort();stopNavMotion?.();off();document.removeEventListener("lore:user",paint);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
+  return ()=>{lifecycle.abort();stopNavMotion?.();stopHomeSound?.();off();document.removeEventListener("lore:user",paint);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
 }

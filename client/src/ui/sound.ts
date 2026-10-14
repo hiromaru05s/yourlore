@@ -15,6 +15,9 @@ const policy=(name:SfxName):Policy=>{
 };
 const LIMIT:Record<Family,number>={ui:1,paper:3,combat:3,magic:2,ceremony:1};
 let volume=.7;try{const v=parseFloat(localStorage.getItem('lore_sfx')??'');if(Number.isFinite(v))volume=Math.max(0,Math.min(1,v));}catch{}
+let lastAudibleVolume=.7;
+try{const v=Number(localStorage.getItem('lore_sfx_last_audible'));if(Number.isFinite(v)&&v>0)lastAudibleVolume=Math.min(1,v);}catch{}
+if(volume>0)lastAudibleVolume=volume;
 let ctx:AudioContext|null=null,master:GainNode|null=null,installed=false,unlocked=false,epoch=0;
 const encoded=new Map<string,Promise<ArrayBuffer>>(),decoded=new Map<string,Promise<AudioBuffer>>(),ready=new Map<string,AudioBuffer>();
 const last=new Map<SfxName,number>(),cycle=new Map<SfxName,number>();
@@ -54,7 +57,8 @@ function fadeOut(voice:Voice){
 /** Invalidate pending decodes as well as playing voices. Nothing leaks into the next scene. */
 export function stopSounds(){epoch++;last.clear();for(const voice of [...active])fadeOut(voice);}
 export function getSfxVolume(){return volume;}
-export function setSfxVolume(v:number){if(!Number.isFinite(v))return;volume=Math.max(0,Math.min(1,v));try{localStorage.setItem('lore_sfx',String(volume));}catch{}if(master&&ctx)master.gain.setTargetAtTime(volume*volume,ctx.currentTime,.015);if(!volume)stopSounds();document.dispatchEvent(new Event('lore:volume-change'));}
+export function setSfxVolume(v:number){if(!Number.isFinite(v))return;volume=Math.max(0,Math.min(1,v));if(volume>0)lastAudibleVolume=volume;try{localStorage.setItem('lore_sfx',String(volume));localStorage.setItem('lore_sfx_last_audible',String(lastAudibleVolume));}catch{}if(master&&ctx)master.gain.setTargetAtTime(volume*volume,ctx.currentTime,.015);if(!volume)stopSounds();document.dispatchEvent(new Event('lore:volume-change'));}
+export function toggleSfxMuted(){setSfxVolume(volume>0?0:lastAudibleVolume);}
 export interface SoundOptions {signal?:AbortSignal;gain?:number;rate?:number;pan?:number;}
 export function sfx(name:SfxName,options:SoundOptions={}):void{
  if(!unlocked||!ctx||!master||volume<=0||document.hidden||options.signal?.aborted)return;
