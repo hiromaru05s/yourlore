@@ -1,3 +1,4 @@
+import {findOriginTrap} from './originRite/anchors';
 import {playOriginRite,cancelOriginRites} from './originRite/runtime';
 import type {OriginRiteReaction} from '../shared/types';
 import {playSoulHarvest,cancelSoulHarvest,warmSoulHarvest} from './soulHarvest/runtime';
@@ -1298,7 +1299,7 @@ export async function openingBoard():Promise<void>{
 
 /** One owner for the summon-to-rite signal, selected golden cut and brand contact. */
 export async function originRite(uid:string,reaction:OriginRiteReaction,side:ViewSide,summon?:HTMLElement):Promise<void>{
- const find=(id:string)=>document.querySelector<HTMLElement>(`.buff-icon[data-uid="${CSS.escape(id)}"]`)??combatCard(id)??byUid(id);
+ const find=(id:string)=>document.querySelector<HTMLElement>(`.buff-icon[data-uid="${CSS.escape(id)}"]`)??findOriginTrap(id)??combatCard(id)??byUid(id);
  const source=find(uid),from=summon??find(reaction.summonUid),portrait=document.getElementById(side==='me'?'portraitMe':'portraitOpp');
  let badge=portrait?.querySelector<HTMLElement>('.pt-brand')??null;
  if(reaction.outcome==='brand'&&!badge&&portrait){

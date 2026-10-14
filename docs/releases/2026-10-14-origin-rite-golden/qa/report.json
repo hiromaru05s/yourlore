@@ -148,11 +148,10 @@
     },
     "Reduced motion updates native counter and cleans up",
     "Landscape mobile actual controller",
-    "Mid-flight fast-forward commits result without overlay residue; graveyard copy is preserved",
+    "Mid-flight fast-forward commits result without overlay residue",
     "Controller destruction cancels owned renderer"
   ],
   "errors": [],
   "bad": [],
-  "scope": "Real BaseController/reducer/renderer locally. Not authenticated online gameplay.",
-  "note": "Last two assertions rerun after narrowing the removed-card selector to the field, excluding its legitimate graveyard copy."
+  "scope": "Real BaseController/reducer/renderer locally. Not authenticated online gameplay."
 }

@@ -1,3 +1,4 @@
+import {bindOriginTrap} from './originRite/anchors';
 import {paintSpaceRiteCard,spaceRiteReason,spaceRiteSourceText,syncSpaceRiteStatus} from './spaceRiteStatus';
 import {dualReadyActive} from './monster/dualReady';
 import { questProgressText } from '../shared/cardPresentation';
@@ -545,7 +546,7 @@ export class GameView {
       // Generic trap icon and unknown cost preserve hidden identity for both players.
       const tile = document.createElement("div");
       tile.className = "buff-icon buff-icon--trap";
-      tile.dataset.uid=t.card.uid; // Public instance anchor only; the hidden identity stays concealed.
+      bindOriginTrap(tile,t.card.uid);
       tile.innerHTML = `<span class="buff-frame" style="background-image:url(${fieldFrameFor('trap')})"></span><span class="buff-art" style="background-image:url(${refinedArt('trap-seal')})"></span><span class="buff-cost" aria-hidden="true"><span>?</span></span>`;
       tile.title = trapLabel;
       tile.setAttribute("aria-label", trapLabel);
