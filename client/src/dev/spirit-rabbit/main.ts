@@ -11,7 +11,7 @@ app.innerHTML=`<header><div><p class="eyebrow">LORE / MOON RABBIT</p><h1>月う�
 function timeline(mode:Mode):ReturnType<typeof createSpiritMotion>{
  const make=()=>{const m=createSpiritMotion(mode==='sleepy',()=>.9);if(mode==='flutter')m.celebrate();if(mode==='sleepy')m.tick(14);return m;};
  let m=make(),time=0,seenReplay=replay;
- return {celebrate(){m.celebrate();},tick(dt){if(seenReplay!==replay){seenReplay=replay;m=make();time=0;}const step=dt*(slow?.5:1);time+=step;if(mode!=='idle'&&time>SPIRIT_MOTION_DURATION[mode]+1.6){m=make();time=0;}return m.tick(step);}};
+ return {greet(){m.greet();},celebrate(){m.celebrate();},tick(dt){if(seenReplay!==replay){seenReplay=replay;m=make();time=0;}const step=dt*(slow?.5:1);time+=step;if(mode!=='idle'&&time>SPIRIT_MOTION_DURATION[mode]+1.6){m=make();time=0;}return m.tick(step);}};
 }
 function render(){
  handles.forEach(h=>h.destroy());handles=[];

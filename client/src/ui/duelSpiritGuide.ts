@@ -7,7 +7,7 @@ export function mountDuelSpiritGuide(root:HTMLElement,context:()=>{yourTurn:bool
   wrap.innerHTML='<button aria-expanded="false" aria-controls="duelSpiritPanel"></button><div id="duelSpiritPanel" class="duel-spirit-panel" hidden><div class="mana-spirit"></div><p class="spirit-hint" aria-live="polite"></p><button class="btn btn-ghost" data-notes></button></div>';
   root.append(wrap);const button=wrap.querySelector<HTMLButtonElement>('button')!,panel=wrap.querySelector<HTMLElement>('.duel-spirit-panel')!;
   let spirit:ReturnType<typeof mountManaSpirit>|undefined,closeNote:(()=>void)|undefined;
-  const paint=()=>{button.textContent=text('精霊の案内','Spirit guide','정령 안내');wrap.querySelector('[data-notes]')!.textContent=text('ルールノートを開く','Open rule notebook','규칙 노트 열기');if(panel.hidden)return;const c=context();
+  const paint=()=>{button.textContent=text('ゼノの案内','Zeno’s guide','제노의 안내');wrap.querySelector('[data-notes]')!.textContent=text('ルールノートを開く','Open rule notebook','규칙 노트 열기');if(panel.hidden)return;const c=context();
     wrap.querySelector('.spirit-hint')!.textContent=c.over?text('デュエルが終わったね。ログで最後のやり取りを振り返れるよ。','The duel has ended. Review the final exchanges in the log.','듀얼이 끝났어요. 로그에서 마지막 플레이를 돌아볼 수 있어요.'):
       c.pending?text('いまは対象を選ぶ番だよ。盤面の案内と光っている候補を確認してね。','Choose a target now. Follow the board prompt and highlighted candidates.','지금은 대상을 선택할 차례예요. 필드 안내와 빛나는 후보를 확인하세요.'):
       !c.yourTurn?text('相手のターンだよ。カードを拡大して効果を読んだり、ログを振り返ったりできる。','It is your opponent’s turn. You can inspect cards and review the log.','상대 턴이에요. 카드 상세와 로그를 살펴볼 수 있어요.'):
