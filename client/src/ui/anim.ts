@@ -1,3 +1,5 @@
+import {playNova,warmNova} from './nova/runtime';
+export {warmNova};
 import {playBloodRite} from './bloodRite/runtime';
 import {isWeaponmaster} from './weaponmasterSummon/selection';
 import {playWeaponmasterSummon} from './weaponmasterSummon/runtime';
@@ -1232,4 +1234,15 @@ export async function infinityCull(sourceUid:string,side:ViewSide,amount:number)
     await playInfinityCull(sourceUid,side,amount,signal);
     return !signal.aborted;
   },6500);
+}
+
+/** Selected Nova consumes the played card in its central orb, with no second frame/exit VFX. */
+export async function novaTimeTheft(card:CardInst,side:ViewSide,fromHp:number,onHp:(hp:number)=>void):Promise<void>{
+ let node:HTMLElement|null=null;
+ try{
+  if(fxSkip||document.hidden)return;
+  const from=fromRect(side,takeOrigin(side));if(!from)return;
+  node=floatAt(cardEl(card,{size:'hand'}),from);
+  await boardMotionScope(signal=>playNova(node!,side,fromHp,onHp,signal),10500);
+ }finally{node?.remove();onHp(1);}
 }
