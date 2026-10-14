@@ -11,6 +11,7 @@
 - client/server TypeScript: pass。
 - tests/soul-harvest.mjs: 実ダメージ、命中一回、低減、中断、復元、資源解放、シールド、反転、増幅、0枚、完全遮断。
 - tests/quick-playback.mjs: 両陣営 × 通常・シールド・反転・0枚。通常コントローラー経由で、カード提示一回、HP確定一回、ダメージ数値の二重表示なし。既存quick/Timewarp経路も通過。
-- 配信前に scripts/deploy-guard.mjs staging で最新gh/main・既配信版の祖先・全production suite・buildを確認する。
+- scripts/deploy-guard.mjs staging による最新gh/main・既配信版の祖先確認、全145テスト、typecheck、buildを通過し配信済み。
+- Worker version: 174e7279-16e1-4c79-b48b-6767f4f94153、トラフィック100%。ログイン画面の表示・コンソールエラー0を確認。
 
-ローカルの選定／実盤面記録と、公開ファイルの一致・認証済み実対戦の証拠は区別する。配信結果は deployment.json に記録する。
+ローカルの選定／実盤面記録と、公開ファイルの一致・認証済み実対戦の証拠は区別する。配信結果は deployment.json、全93ファイルのSHA-256一致は staging-parity.json に記録。

@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-14",
+  "environment": "staging",
+  "url": "https://test.yourlore.xyz",
+  "source": "c94a9f56c0a1a655e197540d2cfc73a724f6e4e4",
+  "deploymentId": "92eaaf40-b634-48c0-b244-90f627f8cda1",
+  "createdOn": "2026-10-14T12:54:26.2118Z",
+  "versions": [
+    {
+      "version_id": "174e7279-16e1-4c79-b48b-6767f4f94153",
+      "percentage": 100
+    }
+  ],
+  "guard": "scripts/deploy-guard.mjs staging",
+  "typecheck": "client/server passed",
+  "productionTests": {
+    "passed": 145,
+    "total": 145
+  },
+  "browser": {
+    "page": "login",
+    "consoleErrors": 0,
+    "authenticatedSoulHarvestMatch": false
+  },
+  "selection": "revision-4 variant 01 深弧の刈り抜き",
+  "assetParity": {
+    "matched": 93,
+    "total": 93,
+    "report": "staging-parity.json"
+  }
+}

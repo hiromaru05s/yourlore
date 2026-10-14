@@ -1,0 +1,403 @@
+From https://github.com/hiromaru05s/yourlore
+ * branch              main       -> FETCH_HEAD
+Preparing worktree (detached HEAD c94a9f56)
+Updating files:  15% (1567/10048)Updating files:  16% (1608/10048)Updating files:  17% (1709/10048)Updating files:  18% (1809/10048)Updating files:  19% (1910/10048)Updating files:  20% (2010/10048)Updating files:  21% (2111/10048)Updating files:  22% (2211/10048)Updating files:  23% (2312/10048)Updating files:  24% (2412/10048)Updating files:  25% (2512/10048)Updating files:  26% (2613/10048)Updating files:  27% (2713/10048)Updating files:  28% (2814/10048)Updating files:  29% (2914/10048)Updating files:  29% (2989/10048)Updating files:  30% (3015/10048)Updating files:  31% (3115/10048)Updating files:  32% (3216/10048)Updating files:  33% (3316/10048)Updating files:  34% (3417/10048)Updating files:  35% (3517/10048)Updating files:  36% (3618/10048)Updating files:  37% (3718/10048)Updating files:  38% (3819/10048)Updating files:  39% (3919/10048)Updating files:  40% (4020/10048)Updating files:  41% (4120/10048)Updating files:  42% (4221/10048)Updating files:  43% (4321/10048)Updating files:  43% (4419/10048)Updating files:  44% (4422/10048)Updating files:  45% (4522/10048)Updating files:  46% (4623/10048)Updating files:  47% (4723/10048)Updating files:  48% (4824/10048)Updating files:  48% (4913/10048)Updating files:  49% (4924/10048)Updating files:  50% (5024/10048)Updating files:  51% (5125/10048)Updating files:  52% (5225/10048)Updating files:  53% (5326/10048)Updating files:  54% (5426/10048)Updating files:  55% (5527/10048)Updating files:  55% (5617/10048)Updating files:  56% (5627/10048)Updating files:  57% (5728/10048)Updating files:  58% (5828/10048)Updating files:  59% (5929/10048)Updating files:  60% (6029/10048)Updating files:  61% (6130/10048)Updating files:  62% (6230/10048)Updating files:  62% (6257/10048)Updating files:  63% (6331/10048)Updating files:  64% (6431/10048)Updating files:  65% (6532/10048)Updating files:  66% (6632/10048)Updating files:  67% (6733/10048)Updating files:  68% (6833/10048)Updating files:  68% (6847/10048)Updating files:  69% (6934/10048)Updating files:  70% (7034/10048)Updating files:  71% (7135/10048)Updating files:  72% (7235/10048)Updating files:  73% (7336/10048)Updating files:  73% (7435/10048)Updating files:  74% (7436/10048)Updating files:  75% (7536/10048)Updating files:  76% (7637/10048)Updating files:  77% (7737/10048)Updating files:  78% (7838/10048)Updating files:  79% (7938/10048)Updating files:  80% (8039/10048)Updating files:  80% (8076/10048)Updating files:  81% (8139/10048)Updating files:  82% (8240/10048)Updating files:  83% (8340/10048)Updating files:  84% (8441/10048)Updating files:  85% (8541/10048)Updating files:  86% (8642/10048)Updating files:  86% (8661/10048)Updating files:  87% (8742/10048)Updating files:  88% (8843/10048)Updating files:  89% (8943/10048)Updating files:  90% (9044/10048)Updating files:  90% (9136/10048)Updating files:  91% (9144/10048)Updating files:  92% (9245/10048)Updating files:  93% (9345/10048)Updating files:  94% (9446/10048)Updating files:  95% (9546/10048)Updating files:  96% (9647/10048)Updating files:  97% (9747/10048)Updating files:  98% (9848/10048)Updating files:  99% (9948/10048)Updating files: 100% (10048/10048)Updating files: 100% (10048/10048), done.
+
+added 102 packages, and audited 105 packages in 5s
+
+found 0 vulnerabilities
+
+> lore-tcg@0.1.0 typecheck
+> npm --workspace client run typecheck && npm --workspace server run typecheck
+
+
+> lore-client@0.1.0 typecheck
+> tsc --noEmit
+
+
+> lore-server@0.1.0 typecheck
+> tsc --noEmit
+
+
+> lore-tcg@0.1.0 test:production
+> node scripts/test-production.mjs
+
+PASS tests/reverse-pitch.mjs
+PASS tests/rune-replay.mjs
+PASS tests/timewarp.mjs
+PASS tests/timewarp-lifecycle.mjs
+PASS tests/forbidden-ritual.mjs
+PASS tests/dragon-fusion.mjs
+PASS tests/hatch-summon.mjs
+PASS tests/hooded-seekers.mjs
+PASS tests/chosen-victory.mjs
+PASS tests/attack-vfx.mjs
+PASS tests/assassin-attack.mjs
+PASS tests/counter-animation.mjs
+PASS tests/combat-tempo.mjs
+PASS tests/audio-contact-rules.mjs
+PASS tests/audio-v3.mjs
+PASS tests/balance-v52.mjs
+PASS tests/balance-v57.mjs
+PASS tests/balance-v58.mjs
+PASS tests/balance-v58-server.mjs
+PASS tests/card-wording.mjs
+PASS tests/card-wording-render.mjs
+PASS tests/card-effect-ux.mjs
+PASS tests/biblion-vfx.mjs
+PASS tests/connected-return-motion.mjs
+PASS tests/dew-shield-v54.mjs
+PASS tests/dice-model.mjs
+PASS tests/dice-source.mjs
+PASS tests/duel-ui.mjs
+PASS tests/expansion-v50.mjs
+PASS tests/fate-wheel.mjs
+PASS tests/graphics-capability.mjs
+PASS tests/grounded-motion.mjs
+PASS tests/half-elf-v48.mjs
+PASS tests/hand-condition-rules.mjs
+PASS tests/health-cosmetics-v53.mjs
+PASS tests/home-entrance-parity.mjs
+PASS tests/library-furniture-model.mjs
+PASS tests/lounge-horizon.mjs
+PASS tests/lounge-rank.mjs
+PASS tests/lounge-settlement.mjs
+PASS tests/menu-records.mjs
+PASS tests/menu-selected.mjs
+PASS tests/mana-spirit-motion.mjs
+PASS tests/moon-rabbit-preview.mjs
+PASS tests/zeno-interaction.mjs
+PASS tests/monster-animation-rules.mjs
+PASS tests/dual-ready.mjs
+PASS tests/monster-effect-activation.mjs
+PASS tests/motion-v2.mjs
+PASS tests/opening-hands.mjs
+PASS tests/paper-card.mjs
+PASS tests/pile-stock.mjs
+PASS tests/portal-return-motion.mjs
+PASS tests/purchase-air.mjs
+PASS tests/purchase-vfx.mjs
+PASS tests/quest-quick.mjs
+PASS tests/quest-pact.mjs
+PASS tests/quick-playback.mjs
+PASS tests/rank-emblem.mjs
+PASS tests/rank-sound.mjs
+PASS tests/release-furniture-model.mjs
+PASS tests/rift-fold.mjs
+PASS tests/rift-transmute.mjs
+PASS tests/solid-draw.mjs
+PASS tests/stagecraft-models.mjs
+PASS tests/stat-rise.mjs
+PASS tests/multi-target-buff.mjs
+PASS tests/trap-related-rework.mjs
+PASS tests/trap-removal.mjs
+PASS tests/ceremony-audio-aim.mjs
+PASS tests/trap-removal-tutorial.mjs
+PASS tests/tutorial-academy.mjs
+PASS tests/production-security.mjs
+PASS tests/production-bc.mjs
+PASS tests/match-bots.mjs
+PASS tests/bot-worker.mjs
+PASS tests/asset-readiness-retry.mjs
+PASS tests/purchase-air-worker.mjs
+PASS tests/duel-opening-server.mjs
+PASS tests/dew-shield-server.mjs
+PASS tests/deck-hand-editor.mjs
+PASS tests/turn-banner.mjs
+PASS tests/opening-approved.mjs
+PASS tests/mimic-approved.mjs
+PASS tests/slate-summon.mjs
+PASS tests/dungeon-summon.mjs
+PASS tests/casino-summon.mjs
+PASS tests/spell-frame.mjs
+PASS tests/mana-destruction.mjs
+PASS tests/decay-dissolve.mjs
+PASS tests/decay-counter-grant.mjs
+PASS tests/elemental-adoption.mjs
+PASS tests/persistent-flight.mjs
+PASS tests/tribe-synergy-rules.mjs
+PASS tests/tribe-presentation.mjs
+PASS tests/golem-guts.mjs
+PASS tests/guts-endurance.mjs
+PASS tests/zero-attack-rule.mjs
+PASS tests/zero-attack-balance.mjs
+PASS tests/verdant-summon.mjs
+PASS tests/critical-trigger-chains.mjs
+PASS tests/status-grant.mjs
+PASS tests/status-extinction.mjs
+PASS tests/target-choice-ux.mjs
+PASS tests/target-choice-ui.mjs
+PASS tests/target-choice-server.mjs
+PASS tests/dew-grant.mjs
+PASS tests/duel-bugfix-oct08.mjs
+PASS tests/cross-system-oct08.mjs
+PASS tests/combat-anchor.mjs
+PASS tests/chosen-heroes-summon.mjs
+PASS tests/golem-shell.mjs
+PASS tests/gambler-summon.mjs
+PASS tests/mercenary-summon.mjs
+PASS tests/mage-summon.mjs
+PASS tests/assassin-summon.mjs
+PASS tests/merchant-runtime.mjs
+PASS tests/evade-refraction.mjs
+PASS tests/vampire-summon.mjs
+PASS tests/vampire-geometry.mjs
+PASS tests/taunt-shield.mjs
+PASS tests/void-summon.mjs
+PASS tests/silence-summon.mjs
+PASS tests/bot-strength.mjs
+PASS tests/bot-tactics.mjs
+PASS tests/bot-market-strategy.mjs
+PASS tests/bot-npcs.mjs
+PASS tests/bot-simulation.mjs
+PASS tests/gacha-azure-motion.mjs
+PASS tests/weaponmaster-summon.mjs
+PASS tests/shield-titan-summon.mjs
+PASS tests/blood-rite.mjs
+PASS tests/massacre.mjs
+PASS tests/treason.mjs
+PASS tests/infinity-cull.mjs
+PASS tests/nova.mjs
+PASS tests/void-shot.mjs
+PASS tests/creation.mjs
+PASS tests/void-crystal-rules.mjs
+PASS tests/dimension-void.mjs
+PASS tests/rebirth.mjs
+PASS tests/dungeon-floor.mjs
+PASS tests/trick-room.mjs
+PASS tests/curse.mjs
+PASS tests/soul-harvest.mjs
+145/145 passed; historical/browser scopes are explicit in production-suite.json
+
+> lore-tcg@0.1.0 build
+> node scripts/guard-design.mjs && npm --workspace client run build
+
+✓ guard-design: ok
+
+> lore-client@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 577 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/cosmetic-studio.html                             0.53 kB │ gzip:   0.40 kB
+dist/shield-titan-runtime.html                        0.77 kB │ gzip:   0.41 kB
+dist/assets/purchaseAir.worker-BK14oJEX.js            1.33 kB
+dist/index.html                                       1.61 kB │ gzip:   0.74 kB
+dist/assets/bot.worker-3BzPuTm6.js                  831.03 kB
+dist/assets/skull-apparition-jaxyBytm.png         1,783.19 kB
+dist/assets/avatar-blue-Dgu4sbnI.png              2,148.69 kB
+dist/assets/avatar-red-CyF_7AzU.png               2,247.66 kB
+dist/assets/cover-1-Ca1f6w1Z.png                  3,780.89 kB
+dist/assets/runtime-Ch9eydv_.css                      0.21 kB │ gzip:   0.14 kB
+dist/assets/controller-Cf3pfj3M.css                   1.64 kB │ gzip:   0.61 kB
+dist/assets/board-UDApamK7.css                        2.17 kB │ gzip:   0.89 kB
+dist/assets/layout-C0_Vdyf_.css                       2.46 kB │ gzip:   0.98 kB
+dist/assets/studio-CmgKc6nL.css                       8.77 kB │ gzip:   2.61 kB
+dist/assets/main-CCp8BfSE.css                       213.66 kB │ gzip:  42.69 kB
+dist/assets/modal-BOUZfXyq.css                      241.76 kB │ gzip:  51.98 kB
+dist/assets/cosmeticPreviewBridge-Dp0XOZ5G.js         0.13 kB │ gzip:   0.12 kB
+dist/assets/selection-BZuIRH5R.js                     0.44 kB │ gzip:   0.32 kB
+dist/assets/renderDensity-eCqR3GeM.js                 0.55 kB │ gzip:   0.28 kB
+dist/assets/sound-Bav1pbVa.js                         0.66 kB │ gzip:   0.42 kB
+dist/assets/handGeometry-Bz96hXgQ.js                  0.95 kB │ gzip:   0.53 kB
+dist/assets/assets-BNN_Bj4P.js                        1.08 kB │ gzip:   0.70 kB
+dist/assets/libraryAssets-DnZRM4G7.js                 1.39 kB │ gzip:   0.73 kB
+dist/assets/snapshot-HcI3jlCq.js                      1.63 kB │ gzip:   0.88 kB
+dist/assets/RoundedBoxGeometry-D_NyMKTL.js            1.73 kB │ gzip:   0.81 kB
+dist/assets/pileModels-D6wU7dLk.js                    2.25 kB │ gzip:   1.08 kB
+dist/assets/catalogRender-CSPQOgmQ.js                 2.36 kB │ gzip:   1.27 kB
+dist/assets/shieldTitanRuntime-BE5xmkn4.js            2.69 kB │ gzip:   1.59 kB
+dist/assets/persistentFlightRenderer-CO7gofN9.js      3.51 kB │ gzip:   1.77 kB
+dist/assets/baseFurniture-C7enbVTk.js                 3.67 kB │ gzip:   1.80 kB
+dist/assets/readingCrystalOptics-BfMFFheP.js          3.69 kB │ gzip:   1.36 kB
+dist/assets/atelierThemes-DM29k3s-.js                 3.74 kB │ gzip:   2.09 kB
+dist/assets/combatTempo-Bfeq5Ej1.js                   3.90 kB │ gzip:   2.17 kB
+dist/assets/ornaments-DnrNONHZ.js                     3.92 kB │ gzip:   1.98 kB
+dist/assets/master-tongues-CME_kKLO.js                4.02 kB │ gzip:   2.03 kB
+dist/assets/runtime-o2VOwWHY.js                       4.31 kB │ gzip:   2.04 kB
+dist/assets/family-matter-t5PQftFA.js                 4.34 kB │ gzip:   2.18 kB
+dist/assets/catalog-Bmd9fUZB.js                       4.79 kB │ gzip:   2.23 kB
+dist/assets/BufferGeometryUtils-BvZdZs75.js           4.86 kB │ gzip:   1.47 kB
+dist/assets/renderer-X4XMP3Ay.js                      5.11 kB │ gzip:   2.29 kB
+dist/assets/runtime-aQlEtFI8.js                       5.19 kB │ gzip:   2.54 kB
+dist/assets/coins-D-vsMssp.js                         5.20 kB │ gzip:   2.38 kB
+dist/assets/audit-Ch-vlPRj.js                         5.45 kB │ gzip:   2.88 kB
+dist/assets/darkRenderer-DrkualEi.js                  5.86 kB │ gzip:   2.75 kB
+dist/assets/board-kBPO1ANN.js                         6.32 kB │ gzip:   2.97 kB
+dist/assets/royal-matter-CFJ2twS-.js                  6.33 kB │ gzip:   2.99 kB
+dist/assets/renderer-BntOLICx.js                      6.35 kB │ gzip:   2.93 kB
+dist/assets/diceScene-rogl0jzg.js                     6.59 kB │ gzip:   3.24 kB
+dist/assets/sleeve-WJ9HL-sZ.js                        6.64 kB │ gzip:   3.16 kB
+dist/assets/scene-jTq-TjUc.js                         6.78 kB │ gzip:   2.85 kB
+dist/assets/runtime-BuUydrGv.js                       7.09 kB │ gzip:   3.22 kB
+dist/assets/runtime-C-magCg6.js                       7.53 kB │ gzip:   3.41 kB
+dist/assets/runtime-D7gqL5xs.js                       7.57 kB │ gzip:   3.38 kB
+dist/assets/scene-ESat0Cpz.js                         8.28 kB │ gzip:   3.42 kB
+dist/assets/visual-Dd0EYLfb.js                        8.30 kB │ gzip:   3.65 kB
+dist/assets/ceremonyScene-DYtT2gHU.js                 8.97 kB │ gzip:   3.99 kB
+dist/assets/materials-DJQZSHl9.js                     9.07 kB │ gzip:   4.13 kB
+dist/assets/renderer-Cz366rZf.js                      9.16 kB │ gzip:   4.38 kB
+dist/assets/renderer-B99zDbow.js                      9.51 kB │ gzip:   4.00 kB
+dist/assets/paperDraw-D_3zQbnw.js                     9.72 kB │ gzip:   4.46 kB
+dist/assets/runtime-2ubSgV43.js                      10.21 kB │ gzip:   4.41 kB
+dist/assets/renderer-p9VcyhSK.js                     10.36 kB │ gzip:   5.06 kB
+dist/assets/runtime-CRr59lJ_.js                      10.62 kB │ gzip:   4.43 kB
+dist/assets/renderer-BGRSVJOr.js                     10.84 kB │ gzip:   4.87 kB
+dist/assets/renderer-Cr11Pogn.js                     10.94 kB │ gzip:   4.59 kB
+dist/assets/cosmeticStudio-w2lrRArh.js               11.12 kB │ gzip:   4.57 kB
+dist/assets/renderer-DctilygI.js                     11.44 kB │ gzip:   4.68 kB
+dist/assets/renderer-Dgt6Hgq4.js                     12.25 kB │ gzip:   5.45 kB
+dist/assets/runtime-DuuzONlI.js                      12.26 kB │ gzip:   5.40 kB
+dist/assets/spacetime-nnSoTuj4.js                    12.29 kB │ gzip:   5.04 kB
+dist/assets/renderer-JnkHOaqp.js                     12.29 kB │ gzip:   4.86 kB
+dist/assets/renderer-RDAJAqJs.js                     12.37 kB │ gzip:   5.09 kB
+dist/assets/runtime-DxrN-yaQ.js                      12.45 kB │ gzip:   5.32 kB
+dist/assets/renderer-lauEBTm7.js                     13.26 kB │ gzip:   5.39 kB
+dist/assets/runtime-DBHhkXSU.js                      13.87 kB │ gzip:   6.27 kB
+dist/assets/renderer-BrSFlg-X.js                     14.15 kB │ gzip:   5.18 kB
+dist/assets/renderer-_9t-IcnT.js                     14.53 kB │ gzip:   6.20 kB
+dist/assets/scene-DFoZ5RWN.js                        15.53 kB │ gzip:   7.02 kB
+dist/assets/renderer-ruEHCi1_.js                     16.54 kB │ gzip:   6.75 kB
+dist/assets/renderer-cUHWSzXt.js                     17.38 kB │ gzip:   6.81 kB
+dist/assets/runtime-BzWW6sdy.js                      17.46 kB │ gzip:   7.21 kB
+dist/assets/renderer-DGdLaWci.js                     18.38 kB │ gzip:   7.71 kB
+dist/assets/analytics-BXS7sITt.js                    18.66 kB │ gzip:   8.02 kB
+dist/assets/visual-Ctyol9SA.js                       19.24 kB │ gzip:   7.79 kB
+dist/assets/runtime-onthU1D4.js                      19.64 kB │ gzip:   8.59 kB
+dist/assets/renderer-CTdO8V51.js                     20.20 kB │ gzip:   9.13 kB
+dist/assets/game-BqTfKI2J.js                         20.92 kB │ gzip:   8.52 kB
+dist/assets/inspection-bByY9Zx-.js                   25.05 kB │ gzip:   7.07 kB
+dist/assets/runtime-DMgZIoEU.js                      25.54 kB │ gzip:  10.99 kB
+dist/assets/riftScene-7AOZx5bu.js                    27.44 kB │ gzip:  11.33 kB
+dist/assets/stage-gInd6lNy.js                        30.04 kB │ gzip:  11.43 kB
+dist/assets/GLTFLoader-Dai1KJWj.js                   43.82 kB │ gzip:  13.22 kB
+dist/assets/duelScene-kCQXpFBn.js                    61.13 kB │ gzip:  23.99 kB
+dist/assets/scene-B_pkkgSN.js                        88.23 kB │ gzip:  30.72 kB
+dist/assets/layout-CRctbiKg.js                      101.51 kB │ gzip:  36.46 kB
+dist/assets/controller-V1TsN0n4.js                  113.50 kB │ gzip:  39.43 kB
+dist/assets/main-C79_L3lx.js                        212.96 kB │ gzip:  78.65 kB
+dist/assets/readingBoardLayout-Sd5k2udU.js          629.16 kB │ gzip: 163.39 kB
+dist/assets/modal-CTTvpYSn.js                     1,676.40 kB │ gzip: 543.08 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 15.66s
+From https://github.com/hiromaru05s/yourlore
+ * branch              main       -> FETCH_HEAD
+
+ ⛅️ wrangler 4.144.0
+────────────────────
+🌀 Building list of assets...
+✨ Read 2389 files from the assets directory /private/var/folders/tt/p79qbyt14t14jwlfh80_l0v40000gn/T/lore-release-NzpYYE/client/dist
+🌀 Starting asset upload...
+🌀 Found 80 new or modified static assets to upload. Proceeding with upload...
++ /cosmetic-studio.html
++ /assets/assets-BNN_Bj4P.js
++ /assets/snapshot-HcI3jlCq.js
++ /assets/catalogRender-CSPQOgmQ.js
++ /assets/baseFurniture-C7enbVTk.js
++ /assets/ornaments-DnrNONHZ.js
++ /assets/family-matter-t5PQftFA.js
++ /assets/renderer-X4XMP3Ay.js
++ /assets/darkRenderer-DrkualEi.js
++ /assets/renderer-BntOLICx.js
++ /assets/scene-jTq-TjUc.js
++ /assets/runtime-D7gqL5xs.js
++ /assets/ceremonyScene-DYtT2gHU.js
++ /assets/renderer-B99zDbow.js
++ /assets/renderer-p9VcyhSK.js
++ /assets/renderer-Cr11Pogn.js
++ /assets/renderer-Dgt6Hgq4.js
++ /assets/renderer-JnkHOaqp.js
++ /assets/renderer-lauEBTm7.js
++ /assets/renderer-_9t-IcnT.js
++ /assets/renderer-cUHWSzXt.js
++ /assets/analytics-BXS7sITt.js
++ /assets/renderer-CTdO8V51.js
++ /assets/runtime-DMgZIoEU.js
++ /assets/GLTFLoader-Dai1KJWj.js
++ /assets/layout-CRctbiKg.js
++ /assets/readingBoardLayout-Sd5k2udU.js
++ /assets/sound-Bav1pbVa.js
++ /assets/libraryAssets-DnZRM4G7.js
++ /assets/RoundedBoxGeometry-D_NyMKTL.js
++ /assets/shieldTitanRuntime-BE5xmkn4.js
++ /assets/readingCrystalOptics-BfMFFheP.js
++ /assets/master-tongues-CME_kKLO.js
++ /assets/catalog-Bmd9fUZB.js
++ /assets/runtime-aQlEtFI8.js
++ /assets/board-kBPO1ANN.js
++ /assets/diceScene-rogl0jzg.js
++ /assets/runtime-BuUydrGv.js
++ /assets/scene-ESat0Cpz.js
++ /assets/materials-DJQZSHl9.js
++ /assets/paperDraw-D_3zQbnw.js
++ /assets/runtime-CRr59lJ_.js
++ /assets/cosmeticStudio-w2lrRArh.js
++ /assets/runtime-DuuzONlI.js
++ /assets/renderer-RDAJAqJs.js
++ /assets/runtime-DBHhkXSU.js
++ /assets/scene-DFoZ5RWN.js
++ /assets/runtime-BzWW6sdy.js
++ /assets/visual-Ctyol9SA.js
++ /assets/game-BqTfKI2J.js
++ /assets/riftScene-7AOZx5bu.js
++ /assets/duelScene-kCQXpFBn.js
++ /assets/controller-V1TsN0n4.js
++ /assets/modal-CTTvpYSn.js
++ /shield-titan-runtime.html
++ /index.html
++ /assets/pileModels-D6wU7dLk.js
++ /assets/persistentFlightRenderer-CO7gofN9.js
++ /assets/combatTempo-Bfeq5Ej1.js
++ /assets/runtime-o2VOwWHY.js
++ /assets/BufferGeometryUtils-BvZdZs75.js
++ /assets/coins-D-vsMssp.js
++ /assets/royal-matter-CFJ2twS-.js
++ /assets/sleeve-WJ9HL-sZ.js
++ /assets/runtime-C-magCg6.js
++ /assets/visual-Dd0EYLfb.js
++ /assets/renderer-Cz366rZf.js
++ /assets/runtime-2ubSgV43.js
++ /assets/renderer-BGRSVJOr.js
++ /assets/renderer-DctilygI.js
++ /assets/spacetime-nnSoTuj4.js
++ /assets/runtime-DxrN-yaQ.js
++ /assets/renderer-BrSFlg-X.js
++ /assets/renderer-ruEHCi1_.js
++ /assets/renderer-DGdLaWci.js
++ /assets/runtime-onthU1D4.js
++ /assets/inspection-bByY9Zx-.js
++ /assets/stage-gInd6lNy.js
++ /assets/scene-B_pkkgSN.js
++ /assets/main-C79_L3lx.js
+Uploaded 26 of 80 assets
+Uploaded 53 of 80 assets
+Uploaded 80 of 80 assets
+✨ Success! Uploaded 80 files (2204 already uploaded) (2.10 sec)
+
+Total Upload: 1525.71 KiB / gzip: 316.17 KiB
+Worker Startup Time: 20 ms
+Your Worker has access to the following bindings:
+Binding                                                                    Resource                  
+env.MATCHMAKER (Matchmaker)                                                Durable Object            
+env.GAME_ROOM (GameRoom)                                                   Durable Object            
+env.DB (lore-db-staging)                                                   D1 Database               
+env.AUTH_RATE_LIMITER (30 requests/60s)                                    Rate Limit                
+env.INQUIRY_RATE_LIMITER (5 requests/60s)                                  Rate Limit                
+env.ASSETS                                                                 Assets                    
+env.APP_ORIGIN ("*")                                                       Environment Variable      
+env.MATCH_TEST_BOTS ("1")                                                  Environment Variable      
+env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")          Environment Variable      
+env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")              Environment Variable      
+
+Uploaded lore-server-staging (11.70 sec)
+Deployed lore-server-staging triggers (2.12 sec)
+  test.yourlore.xyz (custom domain)
+Current Version ID: 174e7279-16e1-4c79-b48b-6767f4f94153
+Deployed committed snapshot c94a9f56c0a1a655e197540d2cfc73a724f6e4e4 staging
