@@ -1364,3 +1364,23 @@ export async function runeReplay(card:CardInst,side:ViewSide,uids:string[],held?
   return source;
  }catch(error){if(!held)source.remove();throw error;}
 }
+
+// Selected TREASON 03. The native destroy runtime still owns every card's exit.
+let treasonModule:Promise<typeof import('./treason/runtime')>|undefined;
+const loadTreason=()=>treasonModule??=import('./treason/runtime');
+export function warmTreason(){void loadTreason().catch(()=>{treasonModule=undefined;});}
+export async function treasonChains(targets:{node:HTMLElement;voided:boolean}[],side:ViewSide):Promise<void>{
+ if(!targets.length||fxSkip||document.hidden)return;
+ await boardMotionScope(async signal=>{
+  const module=await loadTreason();if(signal.aborted)return false;
+  return module.playTreason(targets,signal,async()=>{
+   if(signal.aborted||fxSkip)return;
+   sfx('death');
+   await Promise.all(targets.map(async({node,voided})=>{
+    const pile=document.getElementById(voided?(side==='me'?'rift-me':'rift-opp'):discId(side));
+    if(pile)await playMonster(node,'destroy',{variant:voided?'B':'A',mana:!voided,destination:pile.querySelector<HTMLElement>('.pile-print .card')??pile,side:side==='me'?1:-1,signal});
+    if(!signal.aborted){node.style.visibility='hidden';if(!voided)pileFlash(discId(side));}
+   }));
+  });
+ },30000);
+}

@@ -1,0 +1,17 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checks": [
+    {
+      "width": 1280,
+      "player": 0,
+      "activeFrames": 90
+    },
+    {
+      "width": 390,
+      "player": 1,
+      "activeFrames": 87
+    }
+  ],
+  "errors": [],
+  "scope": "Deployed JavaScript in actual BaseController with injected public fixture; not an authenticated multiplayer match"
+}

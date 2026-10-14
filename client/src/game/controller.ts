@@ -344,6 +344,7 @@ export abstract class BaseController implements BoardHandlers {
     if(events.some(e=>e.type==='dice'&&e.taunt))A.warmTaunt();
     if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
     if(events.some(e=>e.type==='nova'))A.warmNova();
+    if(events.some(e=>e.type==='treason'))A.warmTreason();
     if(events.some(e=>e.type==='voidShot'))A.warmVoidShot();
     if(events.some(e=>e.type==='voidGrant'))A.warmVoidGrant();
     const runeReplays=runeReplayPlan(events);
@@ -352,6 +353,7 @@ export abstract class BaseController implements BoardHandlers {
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
     const spellGhosts:HTMLElement[]=[];
+    const treasonExits=new Set<string>();
     const massacreDeaths=new Set<string>(),massacreCosts=new Set<Side>();
     const creationSources=new Map<string,HTMLElement>();
     const creationEvents=events.filter((e):e is Extract<GameEvent,{type:'creationBorn'}>=>e.type==='creationBorn');
@@ -422,11 +424,20 @@ export abstract class BaseController implements BoardHandlers {
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
-      const cue = e.type==='destroy'&&massacreDeaths.has(e.uid)?undefined:(e.type==='destroy'&&([...hatches.values()].includes(e.uid)||(e.cause==='fusion'&&fusionMaterials.has(e.uid))))||(e.type==='summon'&&fusions.has(e.uid))?undefined:eventSound.cue(e);
+      const cue = e.type==='destroy'&&(massacreDeaths.has(e.uid)||treasonExits.has(e.uid))?undefined:(e.type==='destroy'&&([...hatches.values()].includes(e.uid)||(e.cause==='fusion'&&fusionMaterials.has(e.uid))))||(e.type==='summon'&&fusions.has(e.uid))?undefined:eventSound.cue(e);
       if(cue&&!A.isFxSkipped())sfx(cue);
       if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
       if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
       switch (e.type) {
+        case 'treason': {
+          const targets=e.targets.flatMap(target=>{
+            const node=ghosts.get(target.uid)?.el??document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(target.uid)}"]`);
+            return node?[{node,voided:target.destination==='rift'}]:[];
+          });
+          await A.treasonChains(targets,sideOf(e.target));
+          targets.forEach(({node})=>{if(node.dataset.uid)treasonExits.add(node.dataset.uid);});
+          break;
+        }
         case 'timewarp':
           if(!A.isFxSkipped())await this.timewarp.cast(e.player,{...DB.TIMEWARP,uid:e.sourceUid});
           break;
@@ -565,7 +576,7 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "destroy": {
-          if(massacreDeaths.has(e.uid)){ghosts.get(e.uid)?.el.remove();ghosts.delete(e.uid);releaseMonster(e.uid);fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);break;}
+          if(treasonExits.has(e.uid)||massacreDeaths.has(e.uid)){ghosts.get(e.uid)?.el.remove();ghosts.delete(e.uid);releaseMonster(e.uid);fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);break;}
           if(e.cause==='fusion'&&fusionMaterials.has(e.uid)){fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);break;}
           if([...hatches.values()].includes(e.uid)&&document.querySelector(`.zone-mon .card[data-uid="${CSS.escape(e.uid)}"]`)){heldEggs.add(e.uid);break;}
           const destroy=async()=>{
@@ -799,7 +810,7 @@ export abstract class BaseController implements BoardHandlers {
     }
 
     // Expiry and removal of public spells/quests often emit logs rather than destroy.
-    await Promise.all(persistentShelfExits(prev,res.state,events).map(async({player,card})=>{
+    await Promise.all(persistentShelfExits(prev,res.state,events).filter(({card})=>!treasonExits.has(card.uid)).map(async({player,card})=>{
       if(!A.isFxSkipped())sfx('death');
       await A.destroyAnim(card.uid,sideOf(player));
     }));
@@ -836,7 +847,7 @@ export abstract class BaseController implements BoardHandlers {
       const existed=new Set([...before.hand,...before.deck,...before.discard,...before.field,...before.enchants.map(e=>e.card),...before.traps.map(t=>t.card),...(before.quests??[]).map(q=>q.card),...before.exile.map(e=>e.card)].map(c=>c.uid));
       const generated:CardInst[]=[];
       for(const c of res.state.players[pl].removed??[]){
-        if(old.has(c.uid)||destroyed.has(c.uid)||infinityStored.has(c.uid)||creationExits.has(c.uid))continue;
+        if(old.has(c.uid)||treasonExits.has(c.uid)||destroyed.has(c.uid)||infinityStored.has(c.uid)||creationExits.has(c.uid))continue;
         const n=animatedIds[pl].get(c.id)||0;if(n){animatedIds[pl].set(c.id,n-1);continue;}
         if(!existed.has(c.uid)){generated.push(c);continue;}
         await A.exileCard(c,sideOf(pl),document.querySelector<HTMLElement>(`.card[data-uid="${c.uid}"],.card--back[data-uid="${c.uid}"],.buff-icon[data-uid="${c.uid}"]`));

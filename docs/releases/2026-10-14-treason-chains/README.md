@@ -1,0 +1,33 @@
+# 反逆罪 — 03 螺旋の捕縛
+
+ユーザー承認: `treason-final.html` の個別の螺旋拘束と、通常破壊へ切り替わる直前の停止修正を選定。2026-10-14にステージング公開を依頼。
+
+## 実装
+
+- `shared/engine.ts` は既存の破壊・罠処理・烙印のルールを維持し、解決した公開対象だけを `treason` イベントへ付記する。非公開罠のUID・内容は含めない。破壊耐性で残ったモンスターや、破壊に伴って新たに召喚されたモンスターも拘束対象に追加しない。
+- `BaseController` の共通イベント経路で処理するため、ローカルとオンラインの双方で利用する。反逆罪が処理したモンスター破壊・永続魔法の墓地移動・除外は後続の汎用処理で重複再生しない。
+- 選択済み03の金属リンク、カード面の前後の遮蔽、接触影、2020msの拘束と240msの解放を採用。比較案01/02は含めない。
+- `anim.ts` → `playMonster('destroy')` の既存ルートが破壊先を処理。通常墓地移動は `manaDestruction` の `vein-01`、除外対象は既存の除外演出。色、破片、発光面、1510msの通常破壊タイムラインは変更しない。
+- 通常破壊素材のキャプチャ／生成は拘束の時計を始める前に完了させる。準備データは同じDOM状態に一度だけ使い、キャンセルで破棄。描画時計は最初の表示フレームから開始する。
+- スキップ、準備中のキャンセル、画面サイズ変更、タブ非表示、reduced motion、WebGL不使用時に対応。準備失敗時は見える拘束を始める前に通常経路へ戻す。
+
+## 検証
+
+- `tests/treason.mjs`: 両陣営、城なし、除外、破壊耐性、破壊後の召喚、非公開罠の7ケース。production suiteに登録。
+- `tests/treason-browser.mjs`: 実BaseControllerとreducerによるPC/390px・両陣営、1回の03と5枚の準備済み通常破壊、烙印・クエスト維持・重複防止・各キャンセル・reduced motion・WebGL fallback。
+- リリースは `scripts/deploy-guard.mjs staging` による最新main・競合ロック・コミット済みスナップショット・型チェック・production suite・buildの検証を経由する。
+
+承認済みプレビューは `/Users/hiromaru05s/.codex/worktrees/treason-staging-preview/LORE_TCG` に保持。統合先は最新mainを起点にした別の管理ワークツリー。本番デプロイは対象外。ブラウザーによる固定局面のコントローラー検証と、認証済みオンライン対戦の実操作は別の証拠として扱う。
+
+公開前確認: 型チェック成功、7ルールケースと既存の永続魔法墓地移動検証成功。`qa/controller-report.json` の10項目（PC/390px×両陣営、準備中スキップ、スキップ、resize、hidden、reduced、WebGL fallback）すべて成功。通常再生では5枚すべてが準備済みの既存破壊を一度だけ実行し、残留レイヤー0、ブラウザーエラー0。コールド画像取得の短いタイムアウトには、拘束が見える前に一度だけ再試行する。
+
+## ステージング公開結果
+
+- 配信元コミット: `660d8d34f2de00d9cb92af04f51c2d5683efcf94`（実装 `0ece0814`、既存のDimension Rite公開記録を統合）。
+- Worker: `lore-server-staging`、Version `2a7901f5-b959-440d-9a2f-51791d256dd6`、traffic 100%。
+- `deploy-guard` の型チェック、production suite **139/139**、Vite build成功。
+- `staging/asset-parity.json`: 3 HTML + 86 JS/CSS = 89ファイルのSHA-256一致。HTMLの正規URLへの307を追従し、最後にindexとrootを再検証。
+- `staging/live-report.json`: 配信中のコントローラーを使う固定局面でPC/自分発動、390px/相手発動の両方を検証。03の拘束1回、準備済み通常破壊5枚、烙印1→4、クエスト維持、残留描画0、エラー0。拘束時と完了時の画像を保存。
+- `staging/build-manifest.json` はガードが作成したコミット済みスナップショットの実ビルドから採取。
+
+公開URL: https://test.yourlore.xyz 。本番未変更。配信版での固定局面再生確認であり、認証済みのオンライン対戦を人が進めてカードを引いた証拠ではない。

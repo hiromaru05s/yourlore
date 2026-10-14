@@ -261,6 +261,7 @@ export interface GutsSurvival { player: Side; uid: string; before: number; after
 
 export type GameEvent =
   | { type: "voidShot"; player: Side; count: number; target: Side } // Resolved public Rift count; damage remains a separate engine event.
+  | { type: "treason"; player: Side; target: Side; sourceUid: string; targets: {uid:string;zone:"monster"|"enchant";destination:"discard"|"rift"}[] }
   | { type: "timewarp"; player: Side; sourceUid: string }
   | { type: "turnSkipped"; player: Side; source?: "TIMEWARP" | "BLACK_NOVA"; remaining: number }
   | { type: "voidGrant"; player: Side; uids: string[] } // Newly granted by Dimension Rite; public field UIDs only.
