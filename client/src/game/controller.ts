@@ -630,7 +630,15 @@ export abstract class BaseController implements BoardHandlers {
         case 'voidShot': {
           if(voidShotFinish)await voidShotFinish;
           const card=prev.players[e.player].hand.find(c=>c.id==='EXILE_NUKE1')??{...DB.EXILE_NUKE1,uid:'void-shot-source'};
-          const playback=contactPlayback(contact=>A.voidShotSpell(card,sideOf(e.player),e.count,contact,sideOf(e.target)),()=>{});
+          const nextShot=events.findIndex((next,j)=>j>i&&(next.type==='voidShot'||next.type==='playSpell'));
+          const damage=events.slice(i+1,nextShot<0?events.length:nextShot).find((event):event is Extract<GameEvent,{type:'damage'}>=>event.type==='damage'&&!!event.srcKo?.includes('data-card="EXILE_NUKE1"'));
+          const playback=contactPlayback(contact=>A.voidShotSpell(card,sideOf(e.player),e.count,contact,sideOf(e.target)),()=>{
+            if(this.dead||!damage||crystalContacts.has(damage))return;
+            crystalContacts.add(damage);hpNow[damage.player]-=damage.amount;
+            if(damage.player===this.you)this.view.pushIcon('hitme');
+            const cue=eventSound.cue(damage);if(cue&&!A.isFxSkipped())sfx(cue);
+            A.hpFeedback(sideOf(damage.player),'dmg',damage.amount);A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+          });
           voidShotFinish=playback.finished;motionFinishes.push(playback.finished);await playback.contact;
           break;
         }
