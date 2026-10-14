@@ -18,3 +18,5 @@
 通常の `BaseController` / `GameView` / `reduce` を使う手動検証入口: `client/timewarp-runtime.html`（Vite dev専用。通常ビルド入力には含めない）。実際のEND TURNで追加演出前は相手表示、終了後は自分表示と操作復帰を確認する。
 
 ブラウザの実機確認・デプロイの証跡は別途記録。ユーザー承認済みの03を適用する作業であり、認証済みオンライン対戦の実施とは区別する。
+
+実ブラウザ確認: 1280×720と390×844。成功／失敗、相手側、再接続、実END TURN、途中早送り、対戦終了後のキャンバス0件。console error 0。`browser-validation.json` と `*-history.txt` は検証専用DOMの実測。画像上部の操作・状態欄は検証ページだけのもので、ゲームには追加しない。

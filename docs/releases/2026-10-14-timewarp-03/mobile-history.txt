@@ -1,0 +1,8 @@
+{"turn":27,"cur":0,"queued":[0,1],"sources":[[],["TIMEWARP"]],"phase":"none","canEnd":true,"reading":"player"}
+{"turn":27,"cur":0,"queued":[0,1],"sources":[[],["TIMEWARP"]],"phase":"dice","canEnd":true,"reading":"player"}
+{"turn":27,"cur":0,"queued":[0,1],"sources":[[],["TIMEWARP"]],"phase":"none","canEnd":true,"reading":"player"}
+{"turn":27,"cur":0,"queued":[0,1],"sources":[[],["TIMEWARP"]],"phase":"cast","canEnd":true,"reading":"player"}
+{"turn":27,"cur":0,"queued":[0,1],"sources":[[],["TIMEWARP"]],"phase":"hold","canEnd":true,"reading":"player"}
+{"turn":29,"cur":0,"queued":[0,0],"sources":[[],[]],"phase":"hold","canEnd":false,"reading":"opponent"}
+{"turn":29,"cur":0,"queued":[0,0],"sources":[[],[]],"phase":"release","canEnd":false,"reading":"opponent"}
+{"turn":29,"cur":0,"queued":[0,0],"sources":[[],[]],"phase":"none","canEnd":true,"reading":"player"}
