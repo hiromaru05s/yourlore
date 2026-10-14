@@ -139,7 +139,7 @@ for(const def of [mon,trap,spell]) {
  assert(basic.querySelector('.card-name'));assert(!field.querySelector('.card-name'));
  assert(!basic.querySelector('.card-eff'));assert(!field.querySelector('.card-eff'));
  zoomCard(inst);
- assert(document.querySelector('.zoom-wrap > .card .card-name'));
+ assert(document.querySelector('.zoom-card-stage > .card .card-name'));
  assert(document.querySelector('.zoom-details .card-rules'));
  assert.equal(document.querySelectorAll('.zoom-details').length,1);
  document.querySelector('.inspect-close').dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));

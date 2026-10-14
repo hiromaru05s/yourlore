@@ -795,7 +795,10 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
     item.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
   }));
   details.onclick = e => e.stopPropagation();
-  wrap.appendChild(cardEl(c, { fullArt: true, ...(hp ? { hpNow: hp.now, hpMax: hp.max } : {}) }));
+  // Reserve space for the cost/ATK/HP seals outside the card face.
+  const cardStage = document.createElement('div'); cardStage.className = 'zoom-card-stage';
+  cardStage.appendChild(cardEl(c, { fullArt: true, ...(hp ? { hpNow: hp.now, hpMax: hp.max } : {}) }));
+  wrap.appendChild(cardStage);
   // 패시브 키워드 패널: 카드가 가진 패시브(부여분 포함)의 이름+설명을 우측에 표시.
   // The rules header links each keyword's name and icon to its own explanation.
   const ownedKeys = displayPassives(c);
