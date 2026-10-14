@@ -25,3 +25,7 @@ http://127.0.0.1:5227/spirit-silhouette-five.html
 ## 公開範囲
 
 ステージングへ反映する見た目の変更は、選択済みの胸元01のみ。シルエット5案はローカルの選択用プレビュー。
+
+## ステージング試行の結果
+
+公開ソース候補 `997ac11de790be20694b872d8ee415363f6ca08b` をmain・作業ブランチへpush。deploy guardで専用snapshotと依存関係を準備したが、端末の並行処理負荷によりclient typecheckが10分以上実行中（約27秒のCPU時間）となったため、所有しているguardへSIGINTを送り中断した。ロックの強制削除や検証の省略はしていない。全回帰テスト・release build・wrangler deployには到達していない。胸元01は実装済み、ステージングは未反映。ローカルのclient/server typecheckとモーションテスト、比較用build、ブラウザーQAは成功済み。
