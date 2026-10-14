@@ -1,3 +1,4 @@
+import {forbiddenBatches} from '../ui/forbiddenRitual/selection';
 import {fusionPairs} from '../ui/dragonFusion/selection';
 import {paintTurnUrgency} from '../ui/turnUrgency';
 import {contactPlayback} from './combatTempo';
@@ -328,6 +329,8 @@ export abstract class BaseController implements BoardHandlers {
     const events = counterPresentationEvents(res.events);
     for(const event of events)if(event.type==='counter'||event.type==='destroy')A.warmCombat(event.uid);
     const hatches=hatchPairs(events),heldEggs=new Set<string>();
+    const rituals=forbiddenBatches(events),ritualFaces=new Set<string>();
+    if(rituals.size)A.warmForbiddenRitual();
     const fusions=fusionPairs(events),fusionMaterials=new Set([...fusions.values()].flatMap(f=>[f.dragon.uid,f.mate.uid]));
     if(events.some(e=>e.type==='dice'&&e.taunt))A.warmTaunt();
     if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
@@ -456,6 +459,23 @@ export abstract class BaseController implements BoardHandlers {
           await wait(140);
           break;
         case "summon": {
+          const ritual=rituals.get(e.uid);
+          if(ritual&&!A.isFxSkipped()){
+            const source=this.elementalFaces.find(x=>x.card.id==='FORBIDDEN'&&x.side===sideOf(e.player))?.node;
+            const cards=ritual.map(event=>{
+              const card=this.findCard(res.state,event.uid)??this.defOf(event.id,event.uid);
+              const grant=events.slice(i+1).find(ev=>ev.type==='decayCounterGrant'&&ev.uid===event.uid);
+              return card&&grant?.type==='decayCounterGrant'?{...card,decayCnt:grant.before}:card;
+            }).filter((card):card is CardInst=>!!card);
+            if(source&&cards.length){
+              const faces=await A.forbiddenSummon(source,cards,sideOf(e.player));
+              for(const face of faces){ghosts.set(face.dataset.uid!,{el:face,side:sideOf(e.player)});ritualFaces.add(face.dataset.uid!);}
+            }
+          }
+          if(ritualFaces.has(e.uid)){
+            const face=ghosts.get(e.uid)?.el;if(face){statusSource=face;summonGrants(i,e.uid,face);}
+            fieldCount[e.player]++;break;
+          }
           const card = this.findCard(res.state, e.uid) ?? this.defOf(e.id, e.uid);
           const grant=events.slice(i+1).find(ev=>ev.type==='decayCounterGrant'&&ev.uid===e.uid);
           const shown=card&&grant?.type==='decayCounterGrant'?{...card,decayCnt:grant.before}:card;
@@ -620,7 +640,7 @@ export abstract class BaseController implements BoardHandlers {
             if(def.id==='CHOSEN_AREA'&&isChosenVictory(events,e.player)){
               const face=await A.revealSpell({uid:'chosen-source',...def},sideOf(e.player),e.dest,undefined,true);
               try{if(!this.dead&&!A.isFxSkipped())await playChosenVictory(sideOf(e.player),face);}finally{face?.remove();}
-            }else if(['FIRE_ARROW','FIRE_METEOR','FIRE_BALL','FIRE_ZONE'].includes(def.id)){
+            }else if(['FIRE_ARROW','FIRE_METEOR','FIRE_BALL','FIRE_ZONE','FORBIDDEN'].includes(def.id)){
               const card=prev.players[e.player].hand.find(c=>c.id===e.id)??{...def,uid:`elemental-${e.id}`};
               const node=await A.revealSpell(card,sideOf(e.player),e.dest,undefined,true);
               if(node){if(this.dead)node.remove();else this.elementalFaces.push({card,side:sideOf(e.player),node});}
@@ -641,7 +661,7 @@ export abstract class BaseController implements BoardHandlers {
           }
           statusSource= this.elementalFaces.find(x=>x.card.id===e.id)?.node??this.quickFaces.find(x=>x.card.id===e.id)?.node??spellGhosts.at(-1)??statusSource;
           // random-roll cards: roll the 3D dice first, THEN show the outcome popup
-          if (def && RANDOM_CARDS.has(def.id) && !["FIRE_ARROW","FIRE_METEOR"].includes(def.id)) {
+          if (def && RANDOM_CARDS.has(def.id) && !["FIRE_ARROW","FIRE_METEOR","FORBIDDEN"].includes(def.id)) {
             for (let j = i + 1; j < events.length; j++) {
               const e2 = events[j];
               if (e2.type === "playSpell" || e2.type === "trapSet" || e2.type === "trapReveal" || e2.type === "buy" || e2.type === "turnHeader" || e2.type === "win") break;

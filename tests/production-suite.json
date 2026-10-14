@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/forbidden-ritual.mjs",
     "tests/dragon-fusion.mjs",
     "tests/hatch-summon.mjs",
     "tests/hooded-seekers.mjs",

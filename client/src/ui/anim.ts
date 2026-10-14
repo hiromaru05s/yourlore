@@ -335,7 +335,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
     const special=dark&&!fxSkip&&await boardMotionScope(signal=>playDarkMerchant(node,signal),10500);
     if(!special){
       await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:1);
-      if(card.t==='spell'&&!persistent&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
+      if(card.t==='spell'&&!persistent&&card.id!=='FORBIDDEN'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
     }
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
     if (to && dest === "field" && (card.ench || card.t === "quest")) {
@@ -355,7 +355,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
         if(!target.isConnected)return null;
         return nativeQuestGhost(target,face);
       }
-    } else if (dest === "discard") {if(deferVanish&&!fxSkip){await parkQuickSpell(node,side);held=true;return node;}await landOnShelf(node,side);}
+    } else if (dest === "discard") {if(deferVanish&&!fxSkip){if(card.id==='FORBIDDEN')await parkForbiddenSpell(node);else await parkQuickSpell(node,side);held=true;return node;}await landOnShelf(node,side);}
     else if(dest === "vanish") {
       if(deferVanish&&!fxSkip){await parkQuickSpell(node,side);held=true;return node;}
       await absorbIntoRift(node,side);
@@ -513,6 +513,13 @@ export async function berserkStrike(uid:string,targetUid:string|null,player:0|1,
 }
 
 /** Keep the revealed source readable at the board edge while its effect resolves. */
+async function parkForbiddenSpell(node:HTMLElement):Promise<void>{
+ const sample=document.querySelector<HTMLElement>('.zone-mon > .card')?.getBoundingClientRect();
+ const w=Math.max(32,Math.min(110,(sample?.width||innerWidth*.14)*1.15)),h=node.offsetHeight*w/node.offsetWidth;
+ node.style.transition=matchMedia('(prefers-reduced-motion:reduce)').matches?'none':`left .3s ${EASE},top .3s ${EASE},transform .3s ${EASE}`;
+ node.style.left=`${(innerWidth-w)/2}px`;node.style.top=`${innerHeight*.49-h/2}px`;node.style.transform=`scale(${w/node.offsetWidth})`;
+ await wait(310);
+}
 async function parkQuickSpell(node:HTMLElement,side:ViewSide):Promise<void>{
   const row=rowRect(side),w=Math.min(92,innerWidth*.18),scale=w/node.offsetWidth;
   const h=node.offsetHeight*scale;
@@ -985,6 +992,29 @@ export async function dragonFusionSummon(card:CardInst,side:ViewSide,from:{drago
  const {playDragonFusion}=await import('./dragonFusion/runtime');
  await boardMotionScope(signal=>playDragonFusion(dragon,mate,face,zone,[from.dragon.uid,from.mate.uid],signal,fxSkip,()=>sfx('summon')),10000);
  return face.isConnected?face:null;
+}
+
+let forbiddenRuntime:Promise<typeof import('./forbiddenRitual/runtime')>|undefined;
+const loadForbiddenRitual=()=>forbiddenRuntime??=(import('./forbiddenRitual/runtime').catch(error=>{forbiddenRuntime=undefined;throw error;}));
+export function warmForbiddenRitual():void{void loadForbiddenRitual().catch(()=>{});}
+/** The selected ritual owns all native destination faces; no individual summon fires again. */
+export async function forbiddenSummon(source:HTMLElement,cards:CardInst[],side:ViewSide):Promise<HTMLElement[]>{
+ const zone=monZoneEl(side);if(!zone)return [];
+ const faces:HTMLElement[]=[];
+ for(const card of cards){
+  const target=reserveMonster(zone,card.uid);if(!target)break;
+  const face=cardEl(card,{field:true});face.style.visibility='hidden';target.replaceWith(face);faces.push(face);
+ }
+ try{
+  if(!fxSkip&&faces.length){
+   const completed=await boardMotionScope(async signal=>{
+    const {playForbiddenRitual}=await loadForbiddenRitual();
+    return playForbiddenRitual(source,faces,side,signal);
+   },12000);
+   if(completed){source.remove();sfx('summon');}
+  }
+ }finally{faces.forEach(face=>face.style.removeProperty('visibility'));}
+ return faces;
 }
 
 export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: number,onReveal?:(node:HTMLElement)=>void): Promise<HTMLElement | null> {

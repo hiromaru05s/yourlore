@@ -1,0 +1,576 @@
+[
+  {
+    "scenario": {
+      "side": 0,
+      "roll": 6,
+      "count": 3,
+      "w": 1280
+    },
+    "observed": {
+      "ritual": true,
+      "dice": true,
+      "hpAtDice": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ],
+      "overlap": false
+    },
+    "final": "1",
+    "field": [
+      "initial-0",
+      "u32",
+      "u33",
+      "u34"
+    ],
+    "remaining": 0,
+    "events": [
+      {
+        "type": "damage",
+        "player": 0,
+        "amount": 27,
+        "srcKo": "<b class=\"log-card\" data-card=\"FORBIDDEN\">금단의 술식</b>",
+        "srcJa": "<b class=\"log-card\" data-card=\"FORBIDDEN\">금단의 술식</b>"
+      },
+      {
+        "type": "dice",
+        "source": {
+          "id": "FORBIDDEN",
+          "player": 0
+        },
+        "player": 0,
+        "rolls": [
+          6
+        ],
+        "need": 5,
+        "success": true
+      },
+      {
+        "type": "summon",
+        "player": 0,
+        "uid": "u32",
+        "id": "TDE2",
+        "ritual": "FORBIDDEN:0:5"
+      },
+      {
+        "type": "summon",
+        "player": 0,
+        "uid": "u33",
+        "id": "TDE3",
+        "ritual": "FORBIDDEN:0:5"
+      },
+      {
+        "type": "summon",
+        "player": 0,
+        "uid": "u34",
+        "id": "TDE4",
+        "ritual": "FORBIDDEN:0:5"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "scenario": {
+      "side": 1,
+      "roll": 5,
+      "count": 1,
+      "w": 390
+    },
+    "observed": {
+      "ritual": true,
+      "dice": true,
+      "hpAtDice": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ],
+      "overlap": false
+    },
+    "final": "1",
+    "field": [
+      "initial-0",
+      "initial-1",
+      "initial-2",
+      "u32"
+    ],
+    "remaining": 0,
+    "events": [
+      {
+        "type": "damage",
+        "player": 1,
+        "amount": 27,
+        "srcKo": "<b class=\"log-card\" data-card=\"FORBIDDEN\">금단의 술식</b>",
+        "srcJa": "<b class=\"log-card\" data-card=\"FORBIDDEN\">금단의 술식</b>"
+      },
+      {
+        "type": "dice",
+        "source": {
+          "id": "FORBIDDEN",
+          "player": 1
+        },
+        "player": 1,
+        "rolls": [
+          5
+        ],
+        "need": 5,
+        "success": true
+      },
+      {
+        "type": "summon",
+        "player": 1,
+        "uid": "u32",
+        "id": "TDE4",
+        "ritual": "FORBIDDEN:1:5"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "scenario": {
+      "side": 0,
+      "roll": 4,
+      "count": 3,
+      "w": 1280
+    },
+    "observed": {
+      "ritual": false,
+      "dice": true,
+      "hpAtDice": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ],
+      "overlap": false
+    },
+    "final": "1",
+    "field": [
+      "initial-0"
+    ],
+    "remaining": 0,
+    "events": [
+      {
+        "type": "damage",
+        "player": 0,
+        "amount": 27,
+        "srcKo": "<b class=\"log-card\" data-card=\"FORBIDDEN\">금단의 술식</b>",
+        "srcJa": "<b class=\"log-card\" data-card=\"FORBIDDEN\">금단의 술식</b>"
+      },
+      {
+        "type": "dice",
+        "source": {
+          "id": "FORBIDDEN",
+          "player": 0
+        },
+        "player": 0,
+        "rolls": [
+          4
+        ],
+        "need": 5,
+        "success": false
+      }
+    ],
+    "errors": []
+  },
+  {
+    "scenario": {
+      "side": 0,
+      "roll": 6,
+      "count": 3,
+      "w": 390,
+      "skip": true
+    },
+    "observed": {
+      "ritual": true,
+      "dice": true,
+      "hpAtDice": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ],
+      "overlap": false
+    },
+    "final": "1",
+    "field": [
+      "initial-0",
+      "u32",
+      "u33",
+      "u34"
+    ],
+    "remaining": 0,
+    "events": [
+      {
+        "type": "damage",
+        "player": 0,
+        "amount": 27,
+        "srcKo": "<b class=\"log-card\" data-card=\"FORBIDDEN\">금단의 술식</b>",
+        "srcJa": "<b class=\"log-card\" data-card=\"FORBIDDEN\">금단의 술식</b>"
+      },
+      {
+        "type": "dice",
+        "source": {
+          "id": "FORBIDDEN",
+          "player": 0
+        },
+        "player": 0,
+        "rolls": [
+          6
+        ],
+        "need": 5,
+        "success": true
+      },
+      {
+        "type": "summon",
+        "player": 0,
+        "uid": "u32",
+        "id": "TDE2",
+        "ritual": "FORBIDDEN:0:5"
+      },
+      {
+        "type": "summon",
+        "player": 0,
+        "uid": "u33",
+        "id": "TDE3",
+        "ritual": "FORBIDDEN:0:5"
+      },
+      {
+        "type": "summon",
+        "player": 0,
+        "uid": "u34",
+        "id": "TDE4",
+        "ritual": "FORBIDDEN:0:5"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "scenario": {
+      "side": 0,
+      "roll": 6,
+      "count": 3,
+      "w": 390,
+      "reduced": true
+    },
+    "observed": {
+      "ritual": false,
+      "dice": true,
+      "hpAtDice": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ],
+      "overlap": false
+    },
+    "final": "1",
+    "field": [
+      "initial-0",
+      "u32",
+      "u33",
+      "u34"
+    ],
+    "remaining": 0,
+    "events": [
+      {
+        "type": "damage",
+        "player": 0,
+        "amount": 27,
+        "srcKo": "<b class=\"log-card\" data-card=\"FORBIDDEN\">금단의 술식</b>",
+        "srcJa": "<b class=\"log-card\" data-card=\"FORBIDDEN\">금단의 술식</b>"
+      },
+      {
+        "type": "dice",
+        "source": {
+          "id": "FORBIDDEN",
+          "player": 0
+        },
+        "player": 0,
+        "rolls": [
+          6
+        ],
+        "need": 5,
+        "success": true
+      },
+      {
+        "type": "summon",
+        "player": 0,
+        "uid": "u32",
+        "id": "TDE2",
+        "ritual": "FORBIDDEN:0:5"
+      },
+      {
+        "type": "summon",
+        "player": 0,
+        "uid": "u33",
+        "id": "TDE3",
+        "ritual": "FORBIDDEN:0:5"
+      },
+      {
+        "type": "summon",
+        "player": 0,
+        "uid": "u34",
+        "id": "TDE4",
+        "ritual": "FORBIDDEN:0:5"
+      }
+    ],
+    "errors": []
+  }
+]
