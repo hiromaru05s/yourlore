@@ -1,19 +1,27 @@
-import assert from 'node:assert/strict';import fs from 'node:fs/promises';
+import assert from 'node:assert/strict';import fs from 'node:fs/promises';import {build} from 'esbuild';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5583',out=process.env.LORE_TEST_OUT||'/tmp/massacre-runtime-qa';await fs.mkdir(out,{recursive:true});
+// Build public before/after fixtures from the same source under test. Staging uses its
+// own bundled controller and renderer; no source-module URLs or API mutations are needed.
+const bundle=await build({stdin:{contents:"export * from './client/src/shared/engine';export {DB} from './client/src/shared/cards';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',write:false});
+const {createGame,reduce,DB}=await import(`data:text/javascript;base64,${Buffer.from(bundle.outputFiles[0].text).toString('base64')}`);
+const fixtures={};
+for(const side of [0,1])for(const count of [1,3,5]){
+ const g=createGame({mode:'bot',seed:71,starting:side,p0:{id:'self',name:'YOU'},p1:{id:'opponent',name:'OPPONENT'}}).state;g.turn=3;g.cur=side;g.phase='main';g.pending=null;g.opening=undefined;
+ for(const [i,p]of g.players.entries()){Object.assign(p,{field:[],enchants:[],traps:[],quests:[],hand:[],deck:[],discard:[],removed:[],hp:30,mana:10,maxMana:10,shield:0,dew:0,brand:0,openingDrawReady:false});p.field=Array.from({length:i===side?2:count},(_,j)=>({...DB[['ELF','M4','TDE2','VAMP2','SOLDIER2'][j]],uid:`victim-${i}-${j}`,exhausted:false,summonedTurn:0,dmg:0,tempAtk:0,atkMod:0,defMod:0}));p.hand=[{...DB.S10,uid:`other-${i}`}];}g.players[side].hand.unshift({...DB.MASSACRE,uid:'massacre-source'});fixtures[`${side}-${count}`]={g,res:reduce(g,{type:'play',idx:0})};
+}
 const browser=await chromium.launch({channel:'chrome',headless:true});const context=await browser.newContext({viewport:{width:1280,height:900}}),page=await context.newPage();page.setDefaultTimeout(90000);const errors=[],checks=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(['error','warning'].includes(m.type()))console.log(m.type(),m.text());});
 try{
  await page.goto(origin+'/cosmetic-studio.html?board=1&runtime=1&set=default&tempo=1');await page.waitForFunction(()=>window.combatTempo&&document.querySelector('[data-scene-ready=true]'));
- await page.evaluate(async()=>{
-  const {createGame,reduce}=await import('/src/shared/engine.ts'),{DB}=await import('/src/shared/cards.ts');const anim=await import('/src/ui/anim.ts');document.querySelector('.tempo-controls')?.remove();
-  window.massacreFixture=async(side=0,count=5)=>{const c=window.combatTempo.controller;c.fastForward();await c.queue;c.stopTimer();const g=createGame({mode:'bot',seed:71,starting:side,p0:{id:'self',name:'YOU'},p1:{id:'opponent',name:'OPPONENT'}}).state;g.turn=3;g.cur=side;g.phase='main';g.pending=null;g.opening=undefined;
-   for(const [i,p]of g.players.entries()){Object.assign(p,{field:[],enchants:[],traps:[],quests:[],hand:[],deck:[],discard:[],removed:[],hp:30,mana:10,maxMana:10,shield:0,dew:0,brand:0,openingDrawReady:false});p.field=Array.from({length:i===side?2:count},(_,j)=>({...DB[['ELF','M4','TDE2','VAMP2','SOLDIER2'][j]],uid:`victim-${i}-${j}`,exhausted:false,summonedTurn:0,dmg:0,tempAtk:0,atkMod:0,defMod:0}));p.hand=[{...DB.S10,uid:`other-${i}`}];}g.players[side].hand.unshift({...DB.MASSACRE,uid:'massacre-source'});
-   const res=reduce(g,{type:'play',idx:0});c.show(g);c.view.setHandOpen(false);await new Promise(r=>setTimeout(r,250));anim.setFxSkip(false);return{c,g,res};};
+ await page.evaluate(async fixtures=>{
+  document.querySelector('.tempo-controls')?.remove();
+  window.massacreFixture=async(side=0,count=5)=>{const c=window.combatTempo.controller;c.fastForward();await c.queue;c.stopTimer();
+   const {g,res}=structuredClone(fixtures[`${side}-${count}`]);c.show(g);c.view.setHandOpen(false);await new Promise(r=>setTimeout(r,250));return{c,g,res};};
   window.massacreRun=async(side,count,mode='normal')=>{const {c,res}=await massacreFixture(side,count);let running=true;const frames=[];window.massacreFrames=frames;const observe=()=>{const fx=document.querySelector('.massacre-torsion-fx');frames.push({ms:Number(fx?.dataset.time||0),fx:!!fx,max:document.querySelector(`#portrait${side===0?'Me':'Opp'} .pt-mana-max`)?.textContent,generic:document.querySelectorAll('.spell-frame-fx,.combat-exit').length,hidden:document.querySelectorAll('.zone-mon .card[style*="visibility: hidden"]').length});if(running)requestAnimationFrame(observe);};observe();c.applyResult(res);
    if(mode!=='normal'&&mode!=='reduced'){while(!document.querySelector('.massacre-torsion-fx'))await new Promise(r=>setTimeout(r,30));await new Promise(r=>setTimeout(r,550));if(mode==='skip')c.fastForward();if(mode==='resize')window.dispatchEvent(new Event('resize'));if(mode==='hidden'){Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));}}
    await c.queue;c.stopTimer();running=false;if(mode==='hidden')delete document.hidden;
    return{frames,enemy:c.state.players[1-side].field.length,allies:c.state.players[side].field.length,max:c.state.players[side].maxMana,remaining:document.querySelectorAll('.massacre-torsion-fx,.massacre-capture').length,hidden:document.querySelectorAll('.zone-mon .card[style*="visibility: hidden"]').length};};
- });
+ },fixtures);
  for(const [width,side,count,mode]of [[1280,0,5,'normal'],[1280,1,3,'normal'],[390,0,5,'normal'],[390,1,1,'normal'],[1280,0,3,'reduced'],[1280,0,3,'skip'],[1280,1,3,'resize'],[1280,0,3,'hidden']]){
   console.log('case',width,side,count,mode);await page.setViewportSize({width,height:width===390?844:900});await page.emulateMedia({reducedMotion:mode==='reduced'?'reduce':'no-preference'});
   await page.evaluate(args=>{window.massacrePlaying=massacreRun(...args)},[side,count,mode]);
@@ -22,5 +30,5 @@ try{
   const active=r.frames.filter(f=>f.fx);assert(active.length>1,'selected runtime must run');if(mode==='normal'){assert(active.some(f=>f.ms<500&&f.max==='/10'),'cost not premature');assert(active.some(f=>f.ms>600&&f.ms<1790&&f.max==='/9'),'cost before simultaneous death');assert(active.some(f=>f.ms>1750&&f.hidden===count));}
   await fs.writeFile(`${out}/${width}-${side}-${count}-${mode}.json`,JSON.stringify(r));checks.push({width,side,count,mode,frames:active.length});
  }
- assert.deepEqual(errors,[]);await fs.writeFile(out+'/report.json',JSON.stringify({passed:true,checks,errors},null,2));console.log('PASS',checks.length,'real controller cases');
+ assert.deepEqual(errors,[]);await fs.writeFile(out+'/report.json',JSON.stringify({passed:true,origin,fixtureScope:"Public fixture in the actual controller; not authenticated online play",checks,errors},null,2));console.log('PASS',checks.length,'real controller cases');
 }catch(error){await page.screenshot({path:out+'/failure.png'}).catch(()=>{});await fs.writeFile(out+'/failure.json',JSON.stringify({errors,result:await page.evaluate(()=>({frames:window.massacreFrames?.slice(-30),fx:document.querySelector('.massacre-torsion-fx')?.outerHTML})).catch(String)},null,2));throw error;}finally{await browser.close();}

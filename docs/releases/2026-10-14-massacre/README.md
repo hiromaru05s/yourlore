@@ -17,3 +17,5 @@
 ## 検証の区別
 
 選定元はローカル比較ページ `massacre-five.html?paused&revision=3` の③。通常速度とネイティブ盤面の承認済み造形・時間設計を移植。機能検証は `tests/massacre.mjs` と `tests/massacre-browser.mjs`（実Controller + reducerの固定公開盤面）。後者はログイン済み二者オンライン対戦の証拠ではない。ステージングのソース・配信アセット照合は別ファイルへ記録する。
+
+2026-10-14 local verification: 10 rules/ownership cases passed; actual-controller browser QA passed 8 cases (desktop and 390px, both sides, counts 1/3/5, reduced motion, fast-forward, resize, hidden). Client/server typecheck passed. After integrating the current shared Infinity presentation, the application build passed (existing large-chunk advisory remains). The browser harness can also exercise the built/staged client using public JSON fixtures, without importing development source modules.
