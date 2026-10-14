@@ -1326,3 +1326,26 @@ export async function grantVoid(uids:string[]):Promise<void>{
   return playVoidGrant(uids,signal);
  },2000);
 }
+
+/** Load the selected replay while the original public spell is being revealed. */
+export function warmRuneReplay():void {void import('./runeReplay/runtime').catch(()=>{});}
+export async function runeReplay(card:CardInst,side:ViewSide,uids:string[],held?:HTMLElement):Promise<HTMLElement|null>{
+ if(fxSkip||document.hidden)return held??null;
+ let node=held;
+ if(!node){
+  // Some dedicated spells own and consume their original face. Re-present the
+  // already-public identity at the normal resolved-spell anchor, never in the hand.
+  const row=rowRect(side),w=Math.min(92,innerWidth*.18),height=w*1.56;
+  node=floatAt(cardEl(card,{size:'hand'}),{left:innerWidth-w-12,top:Math.max(12,Math.min(innerHeight-height-12,(row?.top??innerHeight*.5)+12))});
+  node.style.width=`${w}px`;node.style.height=`${height}px`;node.style.setProperty('--cw',`${w}px`);node.style.setProperty('--ch',`${height}px`);
+ }
+ const source=node;
+ try{
+  await boardMotionScope(async signal=>{
+   const {playRuneReplay}=await import('./runeReplay/runtime');
+   if(signal.aborted||fxSkip)return false;
+   return playRuneReplay(source,uids,side,signal,()=>fxSkip||signal.aborted?Promise.resolve(false):playSpellFrame(source,signal));
+  },5000);
+  return source;
+ }catch(error){if(!held)source.remove();throw error;}
+}
