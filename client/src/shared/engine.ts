@@ -3881,6 +3881,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case "EXILE_NUKE1": case "EXILE_NUKE2": { // 공허 포격/대붕괴: 제외 수 x1/x2 뎀 (v11 너프)
       const mult2 = card.id === "EXILE_NUKE1" ? 1 : 2;
       const dmg2 = rmz(p).length * mult2;
+      if(card.id==='EXILE_NUKE1'&&dmg2>0)ctx.ev.push({type:'voidShot',player:side(g,p),count:rmz(p).length,target:g.players.some(pl=>pl.enchants.some(e=>e.card.ench==='blackReverse'))?side(g,p):side(g,o)});
       ctx.log(`${tag(p, card)} 제외된 카드 ${rmz(p).length}장 × ${mult2} = ${dmg2} 데미지`, `${tag(p, card)} 除外されたカード${rmz(p).length}枚 × ${mult2} = ${dmg2}ダメージ`);
       ctx.dealDamage(o, dmg2, cn(card), cn(card));
       break;

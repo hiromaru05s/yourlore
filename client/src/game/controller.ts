@@ -338,6 +338,7 @@ export abstract class BaseController implements BoardHandlers {
     if(events.some(e=>e.type==='dice'&&e.taunt))A.warmTaunt();
     if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
     if(events.some(e=>e.type==='nova'))A.warmNova();
+    if(events.some(e=>e.type==='voidShot'))A.warmVoidShot();
     if(events.some(e=>e.type==='voidGrant'))A.warmVoidGrant();
     const eventSound = new EventSound();
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
@@ -363,6 +364,7 @@ export abstract class BaseController implements BoardHandlers {
     const gutsHits=new Set<string>();
     const counterGuts=new Set<GameEvent>();
     const motionFinishes:Promise<void>[]=[];
+    let voidShotFinish:Promise<void>|undefined;
     const counterFinishes=new Map<string,Promise<void>>();
     const grantFinishes:Promise<void>[]=[];
     const grantQueues=new Map<string,Promise<void>>();
@@ -613,6 +615,13 @@ export abstract class BaseController implements BoardHandlers {
         case "dice":
           await playDiceAt(i);
           break;
+        case 'voidShot': {
+          if(voidShotFinish)await voidShotFinish;
+          const card=prev.players[e.player].hand.find(c=>c.id==='EXILE_NUKE1')??{...DB.EXILE_NUKE1,uid:'void-shot-source'};
+          const playback=contactPlayback(contact=>A.voidShotSpell(card,sideOf(e.player),e.count,contact,sideOf(e.target)),()=>{});
+          voidShotFinish=playback.finished;motionFinishes.push(playback.finished);await playback.contact;
+          break;
+        }
         case "damage": {
           hpNow[e.player] -= e.amount;
           A.hpFeedback(sideOf(e.player), "dmg", e.amount);
@@ -641,6 +650,7 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "playSpell": {
           const nextSpell=events.findIndex((next,j)=>j>i&&next.type==='playSpell');
+          if(e.id==='EXILE_NUKE1'&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='voidShot'&&next.player===e.player))break;
           // A resolved Nova owns both the source reveal and its exit; a nullified cast keeps the ordinary reveal.
           if(e.id==='BLACK_NOVA'&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='nova'&&next.player===e.player))break;
           const grants=events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='statusGrant'||next.type==='decayCounterGrant');

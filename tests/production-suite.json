@@ -131,6 +131,7 @@
     "tests/massacre.mjs",
     "tests/infinity-cull.mjs",
     "tests/nova.mjs",
+    "tests/void-shot.mjs",
     "tests/creation.mjs",
     "tests/dimension-void.mjs"
   ],

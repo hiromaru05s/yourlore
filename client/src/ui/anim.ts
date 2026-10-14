@@ -1,3 +1,5 @@
+import {playVoidShot,warmVoidShot,cancelVoidShots} from './voidShot/runtime';
+export {warmVoidShot};
 import {playMassacre,cancelMassacres} from './massacre/runtime';
 import {playNova,warmNova} from './nova/runtime';
 export {warmNova};
@@ -100,7 +102,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on); setSeekerSkip(on);
-  if(on){cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -1322,4 +1324,17 @@ export async function grantVoid(uids:string[]):Promise<void>{
   if(signal.aborted||fxSkip)return false;
   return playVoidGrant(uids,signal);
  },2000);
+}
+
+/** Crystal 03 owns the central reveal; no shared spell frame or deck thumbnail. */
+export async function voidShotSpell(card:CardInst,side:ViewSide,count:number,onImpact:()=>void,targetSide?:ViewSide):Promise<void>{
+ let node:HTMLElement|null=null,contacted=false;
+ const contact=()=>{if(!contacted){contacted=true;onImpact();}};
+ try{
+  if(fxSkip||document.hidden)return;
+  const from=fromRect(side,takeOrigin(side));if(!from)return;
+  node=floatAt(cardEl(card,{size:'hand'}),from);warmVoidShot();
+  await focusCard(node,side,undefined,SPELL_FRAME_RATE);
+  if(!fxSkip)await boardMotionScope(signal=>playVoidShot(node!,side,count,contact,signal,targetSide),6000);
+ }finally{node?.remove();contact();}
 }
