@@ -1,3 +1,4 @@
+import {TimewarpPresentation,warmTimewarp} from '../ui/timewarp/runtime';
 import {spaceRiteReason,spaceRiteSourceText} from '../ui/spaceRiteStatus';
 import {forbiddenBatches} from '../ui/forbiddenRitual/selection';
 import {fusionPairs} from '../ui/dragonFusion/selection';
@@ -75,6 +76,7 @@ import { RANDOM_CARDS } from "../shared/cards"; // 주사위·확률 카드 (결
 const wait = (ms: number): Promise<void> => A.fxWait(ms); // skippable: flushes when the player acts
 
 export abstract class BaseController implements BoardHandlers {
+  private timewarp:TimewarpPresentation;
   protected view: GameView;
   protected log: GameLog;
   protected state!: GameState;
@@ -125,6 +127,7 @@ export abstract class BaseController implements BoardHandlers {
     this.you = you;
     this.exits = exits;
     this.view = new GameView(root, you, this);
+    this.timewarp = new TimewarpPresentation(root,you);
     this.log = new GameLog(this.view.logEl);
     document.addEventListener("keydown", this.onKey);
     // re-render the board (labels + card names) when language changes
@@ -148,6 +151,7 @@ export abstract class BaseController implements BoardHandlers {
 
   /** The player acted — fast-forward any still-playing batches so input never waits. */
   protected fastForward(): void {
+    this.timewarp.cancel();
     this.marketRefresh?.cancel();
     this.skipGen = this.fxGen;
     stopSounds();
@@ -253,7 +257,7 @@ export abstract class BaseController implements BoardHandlers {
     if (animate && res.state.over && res.state.winner != null) this.outcomePending = true;
     if(res.state.opening)this.serverOffset=Date.now()-res.state.opening.serverNow;
     if(res.state.over||res.state.turn>1)this.openingAbort.abort();
-    this.view.syncTurn(res.state);
+    if(!animate||!res.events.some(e=>e.type==='turnSkipped'&&e.source==='TIMEWARP'))this.view.syncTurn(res.state);
     this.state = res.state; // logical state advances immediately (input guards etc.)
     if(this.castReviewState && this.castReviewState!==this.state && document.querySelector(".cast-review"))closeOverlay();
     const gen = ++this.fxGen;
@@ -330,6 +334,7 @@ export abstract class BaseController implements BoardHandlers {
       }
     }
     const events = counterPresentationEvents(res.events);
+    if(events.some(e=>e.type==='timewarp'||e.type==='turnSkipped'&&e.source==='TIMEWARP'))warmTimewarp();
     for(const event of events)if(event.type==='counter'||event.type==='destroy')A.warmCombat(event.uid);
     const hatches=hatchPairs(events),heldEggs=new Set<string>();
     const rituals=forbiddenBatches(events),ritualFaces=new Set<string>();
@@ -417,6 +422,12 @@ export abstract class BaseController implements BoardHandlers {
       if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
       if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
       switch (e.type) {
+        case 'timewarp':
+          if(!A.isFxSkipped())await this.timewarp.cast(e.player,{...DB.TIMEWARP,uid:e.sourceUid});
+          break;
+        case 'turnSkipped':
+          if(e.source==='TIMEWARP'&&!A.isFxSkipped())await this.timewarp.release(e.player);
+          break;
         case 'statusExtinction': {
           const extinct = [e];
           // One spell may clear both players: share the visual start instead of serial waits.
@@ -642,6 +653,8 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "playSpell": {
           const nextSpell=events.findIndex((next,j)=>j>i&&next.type==='playSpell');
+          // TIMEWARP uses the existing dice first; its typed success event owns the material reveal.
+          if(e.id==='TIMEWARP'&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='dice'&&next.source.id==='TIMEWARP'))break;
           // A resolved Nova owns both the source reveal and its exit; a nullified cast keeps the ordinary reveal.
           if(e.id==='BLACK_NOVA'&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='nova'&&next.player===e.player))break;
           const grants=events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='statusGrant'||next.type==='decayCounterGrant');
@@ -821,6 +834,7 @@ export abstract class BaseController implements BoardHandlers {
     const supplyFaces=!A.isFxSkipped()&&supplyWasRefreshed(prev,res.state)?captureSupplyFaces(this.view.root):undefined;
     // Stat animations belong to this batch too: automatic follow-ups must not
     // replace their source cards before all targets finish their shared motion.
+    if(events.some(e=>e.type==='turnSkipped'&&e.source==='TIMEWARP'))this.view.syncTurn(res.state);
     effectFinishes.push(this.view.render(res.state));
     // The existing draw and HP feedback run alongside birth, once each. Public new
     // UIDs come from the reducer, so a same-name original never becomes a second copy.
@@ -920,6 +934,7 @@ export abstract class BaseController implements BoardHandlers {
     if(!this.state.over)this.exits.onBattleReady?.();
     this.syncTimer();
     if (res.state !== this.state) return; // a newer batch is queued — let it drive follow-ups
+    this.timewarp.sync(this.state);
     this.disposeHandDiscard?.();this.disposeHandDiscard=undefined;
     const g = this.state;
     if(this.castReviewState && this.castReviewState!==g && document.querySelector('.cast-review'))closeOverlay();
@@ -1263,6 +1278,7 @@ export abstract class BaseController implements BoardHandlers {
   private clearQuickFaces():void {this.elementalFaces.splice(0).forEach(x=>x.node.remove());this.quickFaces.splice(0).forEach(x=>x.node.remove());}
 
   destroy(): void {
+    this.timewarp.destroy();
     this.combatExits.abort();clearDamageFeedback();
     this.marketRefresh?.cancel();
     this.disposeHandDiscard?.();
