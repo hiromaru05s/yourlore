@@ -12,6 +12,7 @@
 
 - `node tests/creation.mjs`: 両陣営、発動前8/9/10枚、ELF／CREATION複製、相異なるUID、元カード保持、ドロー・回復、非公開ID非送出、古い再選択の拒否。12ケース。
 - `tests/creation-browser.mjs`: 通常の `BaseController.applyResult` と表示キューを使用。PC1280／スマホ390 × 両陣営 × 生成／複製、スキップ・resize・非表示・低減モーション。モーダル選択だけをfixtureで代用。
+- `tests/creation-busy-browser.mjs`: 3体が並んだ盤面の両陣営・PC／スマホ4ケース。元カードと完成時の薄膜が最初のモンスターに重ならないことを確認。
 - 同時に両側へ複製を再生し、canvasが2個から0個へ片付くことを確認。
 - `qa/creation01.mp4`: 実際のコントローラーによる生成と複製の連続再生。見た目は機能検証とは別に確認。ユーザー選定01の曲面と表面ディテールを維持。
 
