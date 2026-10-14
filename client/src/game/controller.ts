@@ -283,7 +283,7 @@ export abstract class BaseController implements BoardHandlers {
     if (this.dead) return;
     this.disposeHandDiscard?.();this.disposeHandDiscard=undefined;
     // Hold the existing complete board until newly exposed card art is decoded.
-    if(prev!==res.state){this.view.setPlaying(true);try{await prepareStateArtwork(res.state,this.you,this.openingRoot);}finally{if(!this.dead)this.view.setPlaying(false);}}
+    if(prev!==res.state){const artwork=prepareStateArtwork(res.state,this.you,this.openingRoot);if(artwork){this.view.setPlaying(true);try{await artwork;}finally{if(!this.dead)this.view.setPlaying(false);}}}
     if(this.dead)return;
     // batches older than the player's latest action jump-cut; fresh ones play normally
     A.setFxSkip(gen <= this.skipGen);

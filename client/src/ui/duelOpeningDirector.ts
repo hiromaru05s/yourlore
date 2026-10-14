@@ -2,6 +2,7 @@ import {DUEL_OPENING_MS,OPENING_TOSS_MS,OPENING_REVEAL_MS,OPENING_EXIT_MS,OPENIN
 import {getLang} from '../i18n';
 import {openingAudio,warmOpeningSound} from './openingSound';
 import type {createOpeningRenderer} from './opening/renderer';
+import {warmImages} from './imageAssets';
 export interface OpeningProfile {name:string;avatar:string|null;}
 export interface OpeningOptions {
   root:HTMLElement;me:OpeningProfile;opp:OpeningProfile;firstIsMe:boolean;signal:AbortSignal;
@@ -19,9 +20,7 @@ let modulePromise:Promise<typeof import('./opening/renderer')>|undefined;
 const rendererModule=()=>modulePromise??=import('./opening/renderer').catch(error=>{modulePromise=undefined;throw error;});
 export async function warmOpening():Promise<void>{
   void warmOpeningSound();
-  await Promise.all([rendererModule().catch(()=>{}),...['blue','red'].map(async color=>{
-    const image=new Image();image.src=`/art/biblion/seeker-${color}-lossless.webp`;if(typeof image.decode==='function')await image.decode().catch(()=>{});
-  })]);
+  await Promise.all([rendererModule().catch(()=>{}),warmImages(['blue','red'].map(color=>`/art/biblion/seeker-${color}-lossless.webp`))]);
 }
 
 /** Approved Caustic → Lumen Weave. Turn banners remain owned by the controller. */

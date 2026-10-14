@@ -1,0 +1,16 @@
+{
+  "tilt": {
+    "events": 200,
+    "before": 0,
+    "after": 1,
+    "rotation": "6.93deg",
+    "cleared": true,
+    "finalReads": 1
+  },
+  "models": {
+    "before": 1,
+    "after": 1,
+    "independent": true
+  },
+  "errors": []
+}

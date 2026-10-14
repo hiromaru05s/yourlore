@@ -14,6 +14,7 @@ import { artUrl } from "../ui/cardArt";
 import { mountManaSpirit } from '../ui/manaSpirit';
 import '../styles/homeTutorial.css';
 import { homeIcon } from "../ui/homeIcons";
+import {scheduleGameWarmup,warmGame} from './lazyGame';
 
 
 export function mountHome(app: App): Screen {
@@ -63,15 +64,17 @@ export function mountHome(app: App): Screen {
     el.onclick=r?()=>app.leaderboard():loadRank;
   });
   loadRank();
+  const stopWarmup=scheduleGameWarmup(wrap,store.list[store.sel].cards);
   if(u && u.id!=='local-guest-user') void api.me().then(fresh=>{if(!disposed&&fresh?.id===u.id&&app.user?.id===u.id) { app.user=fresh; document.dispatchEvent(new Event("lore:user")); }}).catch(()=>{});
   const unsub=onLangChange(()=>app.home());
-  return {destroy:()=>{disposed=true;unsub();spirit.destroy();}};
+  return {destroy:()=>{disposed=true;stopWarmup();unsub();spirit.destroy();}};
 }
 
 /** Character cards select an NPC; the separate start action begins a duel. */
 function showBotNpcModal(app: App): void {
   if(document.querySelector('.bot-diff-ov'))return;
   const store=sanitizeDecks(app.user?.decks ?? null),activeDeck=store.list[store.sel];
+  void warmGame(activeDeck.cards);
   let selected:BotDifficulty='normal';
   const previousFocus=document.activeElement as HTMLElement|null;
   const ov = document.createElement("div");

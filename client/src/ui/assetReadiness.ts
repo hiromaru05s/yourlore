@@ -4,26 +4,29 @@ import {menuAssetUrls} from './menuAssets';
 import {loadingScreen} from './loadingScreen';
 import {loungeText} from './loungeText';
 import {getLang} from '../i18n';
-const decoded=new Map<string,Promise<void>>();
-const loaded=new Set<string>();
-const canonical=(url:string)=>new URL(url,location.href).href;
+import {decodeAsset as decodeImage} from './imageAssets';
+export {hasUnloadedAssets} from './imageAssets';
+export const decodeAsset=(url:string)=>decodeImage(url);
 let menuReady=false;
 export const isMenuReady=()=>menuReady;
-export function decodeAsset(url:string):Promise<void>{
- url=canonical(url);let task=decoded.get(url);if(!task){const img=new Image();img.loading="eager";img.fetchPriority="high";img.src=url;task=withDeadline(img.decode(),60000).then(()=>{loaded.add(url);}).catch(error=>{img.src="";decoded.delete(url);throw error;});decoded.set(url,task);}return task;
-}
 export function imageUrls(root:HTMLElement):string[]{
- const urls=new Set<string>();
+ const urls=new Set<string>(),hidden=new WeakSet<Element>();
  for(const el of [root,...root.querySelectorAll<HTMLElement>('*')]){
+  // display:none furniture belongs to the retired raster board. Do not make
+  // the live 3D board download it. visibility/opacity hide opening actors too,
+  // so those must still be prepared before the entrance begins.
+  if(el.parentElement&&hidden.has(el.parentElement)){hidden.add(el);continue;}
+  const base=getComputedStyle(el);
+  if(base.display==='none'){hidden.add(el);continue;}
   if(el instanceof HTMLImageElement){el.loading='eager';el.fetchPriority='high';if(el.currentSrc||el.src)urls.add(el.currentSrc||el.src);}
-  for(const pseudo of [null,'::before','::after']){const style=getComputedStyle(el,pseudo);if(pseudo&&(style.content==='none'||style.content==='normal'))continue;for(const m of style.backgroundImage.matchAll(/url\(["']?(.*?)["']?\)/g))urls.add(m[1]);}
+  for(const pseudo of [null,'::before','::after']){const style=pseudo?getComputedStyle(el,pseudo):base;if(style.display==='none'||pseudo&&(style.content==='none'||style.content==='normal'))continue;for(const m of style.backgroundImage.matchAll(/url\(["']?(.*?)["']?\)/g))urls.add(m[1]);}
  }
  return [...urls];
 }
 /** A failed network request keeps an explicit retry surface, never broken art. */
 export async function waitAssets(urls:string[],host:HTMLElement,onProgress?:(done:number,total:number)=>void,signal?:AbortSignal):Promise<void>{
- const unique=[...new Set(urls)],complete=new Set<string>();
- let automaticRetries=2;
+ const unique=[...new Set(urls.map(url=>new URL(url,location.href).href))],complete=new Set<string>();
+ let attempts=0;
  onProgress?.(0,unique.length);
  while(host.isConnected&&!signal?.aborted){
   const remaining=unique.filter(url=>!complete.has(url));
@@ -32,19 +35,14 @@ export async function waitAssets(urls:string[],host:HTMLElement,onProgress?:(don
    if(error)throw error;
   }));
   if(result.every(r=>r.status==='fulfilled')||!host.isConnected||signal?.aborted)return;
-  // A slow shared decode keeps its request alive across 20s waiter windows.
-  // Retry transient failures twice before requiring a manual action.
-  if(automaticRetries>0){automaticRetries--;continue;}
+  if(++attempts<3)continue;
   await new Promise<void>(resolve=>{
    const retry=document.createElement('button');retry.className='asset-retry';retry.textContent=getLang()==='ja'?'画像の読み込みを再試行':getLang()==='ko'?'이미지 다시 불러오기':'Retry loading artwork';host.append(retry);
    const observer=new MutationObserver(()=>{if(!host.isConnected)finish();});observer.observe(document.body,{subtree:true,childList:true});
-   const finish=()=>{observer.disconnect();signal?.removeEventListener('abort',finish);retry.remove();resolve();};retry.onclick=finish;
-   signal?.addEventListener('abort',finish,{once:true});if(signal?.aborted||!host.isConnected)finish();
+   const finish=()=>{observer.disconnect();signal?.removeEventListener('abort',finish);retry.remove();resolve();};retry.onclick=()=>{attempts=0;finish();};signal?.addEventListener('abort',finish,{once:true});if(signal?.aborted||!host.isConnected)finish();
   });
-  automaticRetries=2;
  }
 }
-export const hasUnloadedAssets=(urls:string[])=>urls.some(url=>!loaded.has(canonical(url)));
 export function coverScreen(root:HTMLElement,preloadMenu=false,homeEntrance=false,screenAssets=imageUrls(root)):{ready:()=>Promise<boolean>;cancel:()=>void}{
  const loading=loadingScreen('screen-loader',loungeText('書庫を開いています','Opening the library','서고를 여는 중')),cover=loading.element;
  document.body.append(cover);root.inert=true;root.setAttribute('aria-busy','true');const abort=new AbortController();

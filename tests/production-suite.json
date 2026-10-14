@@ -144,7 +144,10 @@
     "tests/dungeon-floor.mjs",
     "tests/trick-room.mjs",
     "tests/curse.mjs",
-    "tests/soul-harvest.mjs"
+    "tests/soul-harvest.mjs",
+    "tests/loading-cache.mjs",
+    "tests/loading-readiness.mjs",
+    "tests/pile-geometry-cache.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",

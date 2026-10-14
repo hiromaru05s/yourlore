@@ -1,0 +1,57 @@
+vite v5.4.21 building for production...
+transforming...
+✓ 268 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../../../tmp/lore-performance-20261014-release/dist/cosmetic-studio.html                        0.51 kB │ gzip:   0.40 kB
+../../../../../tmp/lore-performance-20261014-release/dist/index.html                                  1.52 kB │ gzip:   0.71 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/bot.worker-DIcU75_v.js             569.58 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/board-Cgp4d_-s.css                   2.17 kB │ gzip:   0.89 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/layout-Cgyi55zU.css                  2.38 kB │ gzip:   0.95 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/studio-nAeyAq6p.css                  8.78 kB │ gzip:   2.61 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/main-DXEbn22Z.css                  173.91 kB │ gzip:  34.79 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/modal-CLDyGz6I.css                 233.26 kB │ gzip:  50.05 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/cosmeticPreviewBridge-Dp0XOZ5G.js    0.13 kB │ gzip:   0.12 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/baseFurniture-Ct4OPGZx.js            0.27 kB │ gzip:   0.23 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/renderDensity-eCqR3GeM.js            0.55 kB │ gzip:   0.28 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/handGeometry-Bz96hXgQ.js             0.95 kB │ gzip:   0.53 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/readingAssetCache-B4gSYOZi.js        1.24 kB │ gzip:   0.73 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/catalogRender-4VHyWkhH.js            2.07 kB │ gzip:   1.18 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/RoomEnvironment-BgdyhTff.js          2.07 kB │ gzip:   0.89 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/pileModels-B9YO6-cm.js               2.37 kB │ gzip:   1.13 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/riftGeometry-CTqwEi4L.js             2.85 kB │ gzip:   1.23 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/voidSurface-C8y_5YeK.js              2.90 kB │ gzip:   1.49 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/sleeve-mtTfVpSe.js                   3.13 kB │ gzip:   1.65 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/atelierThemes-Bxl_dSKI.js            3.35 kB │ gzip:   2.04 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/ornaments-BY2UZx88.js                3.92 kB │ gzip:   1.98 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/master-tongues-t6GoMztS.js           4.01 kB │ gzip:   2.03 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/family-matter-0_oJMs0v.js            4.33 kB │ gzip:   2.18 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/audit-DKkw_cy7.js                    4.61 kB │ gzip:   2.88 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/BufferGeometryUtils-BgNDqiSh.js      4.85 kB │ gzip:   1.46 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/board-D6e3J9L2.js                    5.73 kB │ gzip:   2.75 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/royal-matter-DidXtB1T.js             6.32 kB │ gzip:   2.99 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/scene-BNt9KHDF.js                    6.34 kB │ gzip:   2.76 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/diceScene-ENtGaVKO.js                8.25 kB │ gzip:   3.86 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/duelReadiness-BaWdt8zN.js            8.66 kB │ gzip:   4.08 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/ceremonyScene-D7do7GUa.js            8.93 kB │ gzip:   3.96 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/materials-CzZ6Sc0L.js                9.07 kB │ gzip:   4.12 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/paperDraw-Ui4tyVA4.js                9.72 kB │ gzip:   4.46 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/cosmeticStudio-Bn02NG54.js           9.81 kB │ gzip:   4.56 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/runtime-D8zF4EqZ.js                 10.20 kB │ gzip:   4.40 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/game-DD4AIRuP.js                    12.03 kB │ gzip:   4.44 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/scene-B070ryYW.js                   15.52 kB │ gzip:   7.02 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/renderer-CtA-n1Tw.js                19.84 kB │ gzip:   9.01 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/inspection-B27-gbpZ.js              24.98 kB │ gzip:   7.08 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/riftScene-Brr0ZV74.js               28.77 kB │ gzip:  11.95 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/libraryAssets-BPajtdy5.js           45.29 kB │ gzip:  13.79 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/duelScene-BwdZBK4v.js               58.66 kB │ gzip:  23.01 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/main-Cwq8-VuJ.js                   138.44 kB │ gzip:  56.17 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/layout-B2n0MVAl.js                 149.70 kB │ gzip:  54.18 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/three.module-DRNj_CUN.js           618.13 kB │ gzip: 159.88 kB
+../../../../../tmp/lore-performance-20261014-release/dist/assets/modal-CXgQKFlT.js                  797.19 kB │ gzip: 314.69 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 20.23s
