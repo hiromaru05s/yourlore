@@ -19,3 +19,12 @@
 - 認証済みオンライン対人戦の実機確認と本番デプロイは今回の範囲外。
 
 元比較: `/Users/hiromaru05s/Desktop/LORE_TCG/docs/vfx-prototypes/2026-10-14-nova-central-five/`。実ランタイムは比較専用ページを参照しない。
+
+## ステージング確認済み
+
+- 採用実装: `d23d54847db614732893a49cc69a1ccfdc3ff5a1`。
+- 公開された統合ソース: `a7bc86896cefe0f5b1214098515a846ef86e3b2f`（上記ノヴァ実装を含む）。
+- `scripts/deploy-guard.mjs staging` の全体型検査、132/132テスト、design guard、ビルドが成功。
+- Worker: `713c6fda-4615-4681-935a-de28490406b1`、ステージングへの配信率100%。
+- `https://test.yourlore.xyz` のHTML・全JS/CSS・ノヴァ画像・体力UI画像の計82ファイルが、ガードのコミット済みビルドとSHA-256一致。
+- `deployment.json`、`guard-result.log`、`staging-assets.json` に証跡を保存。ブラウザー10項目はローカルの実Controller/GameViewによる検証で、認証済み対人戦の確認とは区別する。
