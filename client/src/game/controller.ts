@@ -348,6 +348,7 @@ export abstract class BaseController implements BoardHandlers {
     if(events.some(e=>e.type==='treason'))A.warmTreason();
     if(events.some(e=>e.type==='voidShot'))A.warmVoidShot();
     if(events.some(e=>e.type==='voidGrant'))A.warmVoidGrant();
+    if(events.some(e=>e.type==='summon'&&e.rebirth))A.warmRebirth();
     const runeReplays=runeReplayPlan(events);
     if(runeReplays.held.size)A.warmRuneReplay();
     const eventSound = new EventSound();
@@ -425,7 +426,7 @@ export abstract class BaseController implements BoardHandlers {
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
-      const cue = e.type==='destroy'&&(massacreDeaths.has(e.uid)||treasonExits.has(e.uid))?undefined:(e.type==='destroy'&&([...hatches.values()].includes(e.uid)||(e.cause==='fusion'&&fusionMaterials.has(e.uid))))||(e.type==='summon'&&fusions.has(e.uid))?undefined:eventSound.cue(e);
+      const cue = e.type==='destroy'&&(massacreDeaths.has(e.uid)||treasonExits.has(e.uid))?undefined:(e.type==='destroy'&&([...hatches.values()].includes(e.uid)||(e.cause==='fusion'&&fusionMaterials.has(e.uid))))||(e.type==='summon'&&(fusions.has(e.uid)||e.rebirth))?undefined:eventSound.cue(e);
       if(cue&&!A.isFxSkipped())sfx(cue);
       if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
       if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
@@ -530,9 +531,14 @@ export abstract class BaseController implements BoardHandlers {
             const face=ghosts.get(e.uid)?.el;if(face){statusSource=face;summonGrants(i,e.uid,face);}
             fieldCount[e.player]++;break;
           }
-          const card = this.findCard(res.state, e.uid) ?? this.defOf(e.id, e.uid);
+          const card = this.findCard(res.state, e.uid) ?? (e.rebirth?{...e.rebirth.card,passive:[...new Set([...(e.rebirth.card.passive??[]),'void'])]}:this.defOf(e.id, e.uid));
           const grant=events.slice(i+1).find(ev=>ev.type==='decayCounterGrant'&&ev.uid===e.uid);
           const shown=card&&grant?.type==='decayCounterGrant'?{...card,decayCnt:grant.before}:card;
+          if(e.rebirth&&shown){
+            const face=await A.rebirthSummon(e.rebirth.card,shown,sideOf(e.player),source=>summonGrants(i,e.uid,source));
+            if(face){ghosts.set(e.uid,{el:face,side:sideOf(e.player)});statusSource=face;}
+            fieldCount[e.player]++;break;
+          }
           const fusion=fusions.get(e.uid);
           if(fusion&&shown){
             const face=await A.dragonFusionSummon(shown,sideOf(e.player),fusion);
@@ -1017,7 +1023,10 @@ export abstract class BaseController implements BoardHandlers {
       }
       if (g.pending.kind === "cardChoice") {
         const pending=g.pending;
-        cardPicker(getLang()==='ja'?pending.hintJa:getLang()==='en'?logToEn(pending.hint):pending.hint, effectChoices(g), uid => {if(this.state===g)this.submit({ type: "pick", uid });}, !!pending.allowCancel, {confirm:true,label:uid=>this.choiceOwner(g,uid)});
+        const rebirth=pending.reason==='QUICK_REBIRTH',lang=getLang();
+        const title=rebirth?(lang==='ja'?'墓地からモンスターを選択':lang==='en'?'Choose a monster from your graveyard':'묘지에서 몬스터 선택'):(lang==='ja'?pending.hintJa:lang==='en'?logToEn(pending.hint):pending.hint);
+        const description=rebirth?(lang==='ja'?'購入コスト7以下なら、虚無を付与して召喚します。コスト8以上は効果がありません。':lang==='en'?'A monster costing 7 or less is summoned with Void. Cost 8 or more has no effect.':'구매 비용이 7 이하면 허무를 부여하여 소환합니다. 비용이 8 이상이면 효과가 없습니다.'):undefined;
+        cardPicker(title,effectChoices(g),uid=>{if(this.state===g)this.submit({type:'pick',uid});},!!pending.allowCancel,{confirm:true,description,label:rebirth?undefined:uid=>this.choiceOwner(g,uid)});
         return;
       }
       if (multiKind) {

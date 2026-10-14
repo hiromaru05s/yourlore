@@ -1,0 +1,4 @@
+Browser tab: 8, Title: "LORE — デッキビルド・デュエル", URL: "http://127.0.0.1:5584/rebirth-runtime.html".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 339
+The focused UI element is 112 button 通常経路QA, ID: qa

@@ -1,0 +1,1 @@
+PASS rebirth: 24 purchase/choice cases, both owners, original UID, cost boundaries, summon lock, invalid choice, exactly one arrival, no duplicate Void grant

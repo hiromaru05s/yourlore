@@ -1026,6 +1026,23 @@ export async function forbiddenSummon(source:HTMLElement,cards:CardInst[],side:V
  return faces;
 }
 
+let rebirthRuntime:Promise<typeof import('./rebirth/runtime')>|undefined;
+const loadRebirth=()=>rebirthRuntime??=(import('./rebirth/runtime').catch(error=>{rebirthRuntime=undefined;throw error;}));
+export function warmRebirth():void{void loadRebirth().catch(()=>{});}
+/** One owner from the selected grave face through landing and the shared Void coat. */
+export async function rebirthSummon(original:CardInst,card:CardInst,side:ViewSide,onReveal?:(node:HTMLElement)=>void):Promise<HTMLElement|null>{
+ const zone=monZoneEl(side);if(!zone)return null;
+ const slot=reserveMonster(zone,card.uid);if(!slot)return null;
+ const face=cardEl(card,{field:true});face.style.visibility='hidden';slot.replaceWith(face);
+ try{
+  if(!fxSkip)await boardMotionScope(async signal=>{
+   const {playRebirth}=await loadRebirth();if(signal.aborted)return false;
+   return playRebirth(original,face,side,signal,()=>{sfx('summon');onReveal?.(face);});
+  },6500);
+ }finally{face.style.removeProperty('visibility');}
+ return face.isConnected?face:null;
+}
+
 export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: number,onReveal?:(node:HTMLElement)=>void): Promise<HTMLElement | null> {
   const from = fromRect(side, takeOrigin(side)); const zone=monZoneEl(side);
   if(!from||!zone)return null;

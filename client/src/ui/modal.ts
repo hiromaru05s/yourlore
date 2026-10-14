@@ -195,10 +195,11 @@ export function showControlsHelp(): void {
 }
 
 /** Seek/Recall picker. Calls onPick with chosen uid (or null on cancel). */
-export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string | null) => void, allowCancel = true, opts: { confirm?: boolean; label?: (uid:string)=>string } = {}): void {
+export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string | null) => void, allowCancel = true, opts: { confirm?: boolean; label?: (uid:string)=>string; description?: string } = {}): void {
   const m = document.createElement("div");
   m.className = "modal picker-modal"; m.style.maxWidth = "720px";
   m.innerHTML = `<h2 style="font-size:14px">${title}</h2><div class="picker-grid" style="display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:16px 0;max-height:54vh;overflow:auto"></div><div class="modal-row"></div>`;
+  if(opts.description){const hint=document.createElement('p');hint.className='muted';hint.textContent=opts.description;m.querySelector('h2')!.after(hint);}
   const grid = m.querySelector(".picker-grid")!;
   let selected: string | null = null;
   const ok = document.createElement('button'); ok.className='btn btn-gold'; ok.textContent=t('picker.confirm'); ok.disabled=true;

@@ -5264,7 +5264,13 @@ function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
       const i = p.discard.findIndex(c => c.uid === card.uid);
       const revived = { ...resetInst(card), passive: [...new Set([...(card.passive ?? []), 'void'])] };
       p.discard.splice(i, 1); // remove before summon triggers can draw or inspect the grave
+      const start = ctx.ev.length;
       if (!effectSummon(g, ctx, p, card.id, revived)) p.discard.splice(i, 0, card);
+      else {
+        // Attribute only this graveyard individual, never a nested on-summon token.
+        const arrival = ctx.ev.slice(start).find(e => e.type === 'summon' && e.uid === card.uid);
+        if (arrival?.type === 'summon') arrival.rebirth = { card: { ...card } };
+      }
       break;
     }
     case "Q_TRIBE": effectSummon(g, ctx, p, card.id); break;
