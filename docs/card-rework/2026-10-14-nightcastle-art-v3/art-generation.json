@@ -1,0 +1,72 @@
+{
+  "id": "NIGHT_CASTLE_GIFT",
+  "revision": 3,
+  "date": "2026-10-14",
+  "generator": "built-in image_gen",
+  "prompt": "Use case: stylized-concept.\nDraw ONE new illustration for an existing LORE TCG card named Gift from the Night Castle. Interior artwork only. Near-square landscape canvas 1472 x 1344.\n\nThe supplied images are the actual style references from this game. STRONGLY MATCH THE DRAWING LANGUAGE, not merely the colors and fantasy subject matter. The previous two attempts were rejected because they looked like photographic/rendered gothic objects with tangled shiny metal, excessive texture, and a huge blank floating parchment. Do not reproduce those compositions or that rendering.\n\nReference priority:\n1. BLACKSMITH: PRIMARY art style for every object, architecture and magic. Copy its deliberate ink-like contour accents, broad painted shadow shapes, simplified faceted highlights, clean form separation and hand-painted anime fantasy background craft. Objects look illustrated, not physically rendered.\n2. SOLDIER2: PRIMARY style for controlled drawn edges, colored cel-like shadow planes, gentle painted detail, balanced light and shadow. Do not include a soldier or a person.\n3. STARTER_CHEST: PRIMARY guide for the simple legible geometric chest design, ivory flat panels, sparse trim, and clear focal-object scale. Do not copy the chest or its gold coins literally.\n4. VAMP1: SUPPORTING reference only for wine-red cloth, cool blue nighttime atmosphere and distant night-castle setting. Keep the same visibly DRAWN fantasy quality as its clothes and architecture, not microscopic reflective jewelry.\n\nNew subject and composition:\nA small, elegant gift case sent from a vampire's night castle rests on a stone window ledge. It occupies the central lower two thirds. The box is well-designed with smooth ivory panels, deep burgundy sides, broad simple dark-silver bands and a single distinctive ruby-red wax seal clasp; a wine-red cloth ribbon crosses the lid. Three-quarter view. Its lid is only slightly open. Inside, ONE neatly folded ivory contract and one small ruby talisman are visible in the shadowed red lining. A short red ribbon of magic gently lifts the loosened seal at the front: a clear magical gift being opened. NO huge floating blank scroll. NO elaborate lacework metal cage. All important forms stay within central 80 percent.\nBackground: a simple Gothic window arch, spacious blue-violet evening sky and a distant small night castle with several warm-lit windows. One restrained pale moon. Soft warm light catches the ivory box and cool moonlight outlines the stone. A single candle and a few understated leaves at the side, not piles of roses, vines, jewelry or goblets. The scene feels refined, mysterious, calm and magical, with generous midtone space, not a black-and-red horror scene.\n\nRendering is crucial: draw the entire scene as a polished 2D anime-influenced fantasy card illustration with fine visible selective contour lines, grouped readable color masses and painted/cel-like shadow facets. The stone, ivory, metal, cloth and parchment must all use the same designed illustration language seen in BLACKSMITH and SOLDIER2. Broad matte surfaces, sparse deliberate brush marks, a few shaped highlights. Lovely substantial background painting, not a flat icon. Do not simulate an expensive product photograph. NO photorealism, hyperrealism, physically based 3D rendering, ray-traced reflections, metallic microfiligree, porous paper, grainy stone, macro material textures, lens blur or bokeh. No flat vector clipart or childish/chibi cartoon either.\nNo people, hands, faces, figures, UI, card frame, text, writing, letters, numbers, logos or watermark. Opaque full scene. The artwork must plausibly sit next to BLACKSMITH and SOLDIER2 as part of the same illustrated deck.",
+  "sourceImage": "/Users/hiromaru05s/.codex/generated_images/01a11993-9d32-7aa0-b6d4-c6a169da48ab/exec-21aef85b-5f3f-49cc-9ba8-27ab9ce59e4a.png",
+  "supersedes": "docs/card-rework/2026-10-14-nightcastle-art/art-generation.json",
+  "rejectionReason": "User rejected revision 2 again as inconsistent with LORE. Matching vampire colors and ornate silver was insufficient; compare the broader illustrated card pool and make the rendering language itself consistent.",
+  "referencePriority": "BLACKSMITH and SOLDIER2 for drawn contours, grouped painted/cel-like shadows, object rendering; STARTER_CHEST for legible designed panels; VAMP1 only for night-castle atmosphere and wine-red accents.",
+  "references": [
+    {
+      "id": "BLACKSMITH",
+      "path": "client/public/art/cards/BLACKSMITH.webp",
+      "sha256": "31938ec47d8d86b5c465749fedf0cc4dcc83b504a88bf9bbf487f734f921affa"
+    },
+    {
+      "id": "SOLDIER2",
+      "path": "client/public/art/cards/SOLDIER2.webp",
+      "sha256": "293b4328505454cbfbc901f82661b59012bfb7d9e484ef9a3f5fa70516481b2b"
+    },
+    {
+      "id": "STARTER_CHEST",
+      "path": "client/public/art/cards/STARTER_CHEST.webp",
+      "sha256": "a415330c722cedb6b05c41a32cda7f21c2c17327925cb082a0174735cfa4d823"
+    },
+    {
+      "id": "VAMP1",
+      "path": "client/public/art/cards/VAMP1.webp",
+      "sha256": "22a829284d875c85678d45a66524b183ca9b41a1cd59297218d990a69f86c4a1"
+    }
+  ],
+  "otherInspectedCards": [
+    "VITAL2",
+    "GOLEM1",
+    "WORLD_CARE",
+    "STARTER_MANA",
+    "ARMOR_BREAK",
+    "VAMP2",
+    "VAMP_BUTLER",
+    "GUILD_CHEST",
+    "ND2",
+    "FREE_REWARD"
+  ],
+  "artDirectionCorrection": "docs/card-rework/2026-09-29-dew-shield/art-direction-v2.md",
+  "worldBible": "docs/world-bible.md",
+  "scope": "Artwork replacement and thumbnails only. No balance, mechanics or text changes.",
+  "visualApproval": "User requested this remake; no claim of user approval of the generated result.",
+  "assets": [
+    {
+      "path": "client/public/art/cards/NIGHT_CASTLE_GIFT.webp",
+      "width": 1472,
+      "height": 1344,
+      "bytes": 387514,
+      "sha256": "5b399c471569f98eed076d328c4ac71cb6c2f9dda7c03a09e0439cf877641669"
+    },
+    {
+      "path": "client/public/art/cards-sm/NIGHT_CASTLE_GIFT.webp",
+      "width": 384,
+      "height": 351,
+      "bytes": 23932,
+      "sha256": "5a2a1b722e784cf9fe624fc980cb86d71ae148fbcdd10ef1a8fc8e2babda4143"
+    },
+    {
+      "path": "client/public/art/cards-xs/NIGHT_CASTLE_GIFT.webp",
+      "width": 192,
+      "height": 175,
+      "bytes": 7036,
+      "sha256": "9112cd1291a88dbfd177766d608a11b8f521befa77c47370ba78987391bfb767"
+    }
+  ]
+}

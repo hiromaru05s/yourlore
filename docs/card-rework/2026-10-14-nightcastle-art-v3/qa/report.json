@@ -1,0 +1,32 @@
+{
+  "origin": "http://127.0.0.1:5268",
+  "checks": [
+    "master and both thumbnails decode",
+    "complete Gift card inspection ja 1280",
+    "complete Gift card inspection ja 390",
+    "complete Gift card inspection ko 1280",
+    "complete Gift card inspection ko 390",
+    "complete Gift card inspection en 1280",
+    "complete Gift card inspection en 390",
+    "real controller picker confirms VAMP_PACT",
+    "real controller picker confirms VAMP_WARD"
+  ],
+  "dimensions": [
+    [
+      "cards",
+      1472,
+      1344
+    ],
+    [
+      "cards-sm",
+      384,
+      351
+    ],
+    [
+      "cards-xs",
+      192,
+      175
+    ]
+  ],
+  "errors": []
+}
