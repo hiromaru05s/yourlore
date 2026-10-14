@@ -646,9 +646,11 @@ export abstract class BaseController implements BoardHandlers {
         case 'voidShot': {
           if(voidShotFinish)await voidShotFinish;
           const card=prev.players[e.player].hand.find(c=>c.id==='EXILE_NUKE1')??{...DB.EXILE_NUKE1,uid:'void-shot-source'};
+          const heldIndex=this.elementalFaces.findIndex(x=>x.card.id==='EXILE_NUKE1'&&x.side===sideOf(e.player)&&x.node.isConnected);
+          const held=heldIndex<0?undefined:this.elementalFaces.splice(heldIndex,1)[0].node;
           const nextShot=events.findIndex((next,j)=>j>i&&(next.type==='voidShot'||next.type==='playSpell'));
           const damage=events.slice(i+1,nextShot<0?events.length:nextShot).find((event):event is Extract<GameEvent,{type:'damage'}>=>event.type==='damage'&&!!event.srcKo?.includes('data-card="EXILE_NUKE1"'));
-          const playback=contactPlayback(contact=>A.voidShotSpell(card,sideOf(e.player),e.count,contact,sideOf(e.target)),()=>{
+          const playback=contactPlayback(contact=>A.voidShotSpell(card,sideOf(e.player),e.count,contact,sideOf(e.target),held),()=>{
             if(this.dead||!damage||crystalContacts.has(damage))return;
             crystalContacts.add(damage);hpNow[damage.player]-=damage.amount;
             if(damage.player===this.you)this.view.pushIcon('hitme');

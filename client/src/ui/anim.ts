@@ -1330,14 +1330,14 @@ export async function grantVoid(uids:string[]):Promise<void>{
 }
 
 /** Crystal 03 owns the central reveal; no shared spell frame or deck thumbnail. */
-export async function voidShotSpell(card:CardInst,side:ViewSide,count:number,onImpact:()=>void,targetSide?:ViewSide):Promise<void>{
- let node:HTMLElement|null=null,contacted=false;
+export async function voidShotSpell(card:CardInst,side:ViewSide,count:number,onImpact:()=>void,targetSide?:ViewSide,held?:HTMLElement):Promise<void>{
+ let node:HTMLElement|null=held??null,contacted=false;
  const contact=()=>{if(!contacted){contacted=true;onImpact();}};
  try{
   if(fxSkip||document.hidden)return;
-  const from=fromRect(side,takeOrigin(side));if(!from)return;
-  node=floatAt(cardEl(card,{size:'hand'}),from);warmVoidShot();
-  await focusCard(node,side,undefined,SPELL_FRAME_RATE);
+  if(!node){const from=fromRect(side,takeOrigin(side));if(!from)return;node=floatAt(cardEl(card,{size:'hand'}),from);}
+  warmVoidShot();
+  if(!held)await focusCard(node,side,undefined,SPELL_FRAME_RATE);
   if(!fxSkip)await boardMotionScope(signal=>playVoidShot(node!,side,count,contact,signal,targetSide),6000);
  }finally{node?.remove();contact();}
 }
