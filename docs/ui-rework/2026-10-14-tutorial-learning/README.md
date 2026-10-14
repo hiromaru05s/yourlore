@@ -18,4 +18,5 @@ User feedback: use カードの購入 instead of 借用; explain the whole game 
 - CUA: all five rule pages fit 390×844, no horizontal overflow; review closes back to lessons. Desktop and mobile screenshots attached.
 - Actual card stats checked in browser. Removed stale hardcoded attack/damage numbers from teaching copy.
 - Existing browser test files adapted to lesson IDs and the primer; those standalone Playwright scripts were not executed in this turn. Browser verification used CUA.
+- Full production suite initially passed 131/132. The existing trap-removal tutorial DOM fixture assumed lesson 0 was Attune and lacked native-dialog stubs. Updated it to select mana by ID and added primer/action-blocking, premature-pass button recovery and open-dialog teardown checks. The focused DOM suite now passes.
 - No claim of usability testing with children or authenticated staging gameplay.
