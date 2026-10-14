@@ -1,0 +1,91 @@
+{
+  "source": "league-selection.json.gz",
+  "hard": [
+    "DECAY_BLOOD",
+    "DECAY_SUPPRESSION",
+    "SUPPRESSION_COUNTER",
+    "BLOOD_COUNTER",
+    "DECAY_SWARM"
+  ],
+  "hell": [
+    "DECAY_BLOOD",
+    "DECAY_SUPPRESSION",
+    "BLOOD_RAIN",
+    "BLOOD_AMBUSH",
+    "SUPPRESSION_COUNTER",
+    "BLOOD_COUNTER",
+    "DECAY_SWARM"
+  ],
+  "decks": {
+    "DECAY_BLOOD": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "BLOOD_RITE",
+      "COUNTERCALC",
+      "RUST_SHROOM"
+    ],
+    "DECAY_SUPPRESSION": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "RUST_SHROOM"
+    ],
+    "BLOOD_RAIN": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "NOURISHING_RAIN",
+      "COUNTERCALC",
+      "RUST_SHROOM",
+      "BLOOD_RITE",
+      "COUNTERCALC",
+      "RUST_SHROOM"
+    ],
+    "BLOOD_AMBUSH": [
+      "RUST_SHROOM",
+      "BLOOD_RITE",
+      "AMBUSH",
+      "RUST_SHROOM",
+      "NOURISHING_RAIN",
+      "RUST_SHROOM",
+      "COUNTERCALC",
+      "RUST_SHROOM"
+    ],
+    "SUPPRESSION_COUNTER": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "COUNTERCALC"
+    ],
+    "BLOOD_COUNTER": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "BLOOD_RITE",
+      "COUNTERCALC",
+      "COUNTERCALC"
+    ],
+    "DECAY_SWARM": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "COUNTERCALC"
+    ]
+  }
+}

@@ -10,10 +10,10 @@ function hash(text: string): number {
 }
 const canonical = (a: CardInst, b: CardInst): number => a.id.localeCompare(b.id) || a.uid.localeCompare(b.uid);
 const starterIds = new Set(['STARTER_MANA', ...DECK_POOL]);
-const hypotheses = [
+const hypotheses = [...new Map([
   ['STARTER_MANA', ...Array<string>(6).fill('STARTER_TRASH'), 'STARTER_CHEST', 'STARTER_CHEST'],
   ...[...BOT_DECKS, ...BOT_ELITE_DECKS, ...BOT_HELL_DECKS].map(d => ['STARTER_MANA', ...d.cards]),
-];
+].map(deck => [[...deck].sort().join(','), deck])).values()];
 const trapIds = BUYABLE_POOL.filter(id => DB[id].t === 'trap');
 
 /** Build hypotheses from public reveal history, never from the real hidden inventory.

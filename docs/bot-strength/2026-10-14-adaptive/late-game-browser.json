@@ -1,0 +1,12 @@
+{
+  "turn": 55,
+  "ms": 779.9000000059605,
+  "ticks": 155,
+  "action": {
+    "type": "refresh"
+  },
+  "advanced": true,
+  "errors": [],
+  "phase": "evaluated-v58 before presentation-only main integration",
+  "bundleSHA256": "cba50eb82f3b1a27e76576a0f97f8ee0c01a12b3de792e8a27832ef073f8c081"
+}

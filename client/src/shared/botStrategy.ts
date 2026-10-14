@@ -1,4 +1,4 @@
-import type { CardDef, GameState, PlayerState } from './types';
+import type { Action, CardDef, GameState, PlayerState } from './types';
 import { cardPower } from './cardEval';
 import { DB, hasPassive } from './cards';
 
@@ -18,7 +18,7 @@ export function recoveryPerTurn(g: GameState, p: PlayerState): number {
   const o = g.players[p === g.players[0] ? 1 : 0];
   const multiplier = 2 ** (g.players.reduce((n, q) => n + q.field.filter(m => m.id === 'ELF').length, 0)
     - o.field.filter(m => m.id === 'HIGH_ELF').length);
-  return (p.dew ?? 0) * 2 ** p.field.filter(m => m.id === 'WORLD_TREE').length * multiplier;
+  return (p.dew ?? 0) * (p.field.some(m => m.id === 'WORLD_TREE') ? 2 : 1) * multiplier;
 }
 
 /** Read only the opponent's public zones/history and the shared market.
@@ -107,4 +107,19 @@ export function lastingValue(g: GameState, p: PlayerState): number {
   return Math.min(60, recovery * 4) + p.field.reduce((n, c) => n + recoveryEngine(c), 0)
     + p.enchants.reduce((n, e) => n + recoveryEngine(e.card), 0)
     - p.field.filter(m => m.id === 'GHOST').length * (recoveryPerTurn(g, o) > 0 ? 6 : 0);
+}
+
+/** Exclude a pure burn that only heals the foe from the heuristic search.
+ * The exact lethal proof runs before this filter. Keep public trigger gains,
+ * card generation, permanent thinning and known HP-threshold combos available.
+ */
+export function unproductiveOpponentHeal(g: GameState, action: Action, next: GameState): boolean {
+  if (action.type!=='play' || next.pending || next.over) return false;
+  const p=g.players[g.cur],o=g.players[1-g.cur],card=p.hand[action.idx];
+  if (!card || !['S13','FLAME','AMBUSH'].includes(card.id)) return false;
+  const a=next.players[g.cur],b=next.players[1-g.cur];
+  if (b.hp<=o.hp || a.hp>p.hp || a.maxMana>p.maxMana || (a.shield??0)>(p.shield??0) || (a.dew??0)>(p.dew??0)) return false;
+  if (a.hand.length>=p.hand.length || a.deck.length!==p.deck.length || (a.removed??[]).length>(p.removed??[]).length) return false;
+  if ([...p.hand,...p.field].some(c=>c.id==='ASSASSIN_SQUAD'||c.id==='GS9_0')) return false;
+  return JSON.stringify([a.field,a.enchants,a.quests])===JSON.stringify([p.field,p.enchants,p.quests]);
 }

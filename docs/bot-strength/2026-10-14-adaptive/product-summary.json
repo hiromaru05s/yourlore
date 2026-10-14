@@ -1,0 +1,243 @@
+{
+  "mode": "product",
+  "modules": {
+    "candidate": "cba50eb82f3b1a27e76576a0f97f8ee0c01a12b3de792e8a27832ef073f8c081",
+    "baseline": "26d1d4d310443e0c13b4edfda23683528507e635032f7218e3ce20c2d8c1bac9"
+  },
+  "opponentTier": "hard",
+  "games": 48,
+  "invalid": 0,
+  "overall": {
+    "pairs": 12,
+    "seedClusters": 7,
+    "before": 0.625,
+    "after": 0.6666666666666666,
+    "delta": 0.04166666666666663,
+    "pairedDelta95": [
+      -0.15,
+      0.22727272727272727
+    ],
+    "improved": 4,
+    "worsened": 3,
+    "tied": 5
+  },
+  "slices": {
+    "tier/hard": {
+      "pairs": 5,
+      "seedClusters": 5,
+      "before": 0.5,
+      "after": 0.5,
+      "delta": 0,
+      "pairedDelta95": [
+        -0.3,
+        0.3
+      ],
+      "improved": 1,
+      "worsened": 1,
+      "tied": 3
+    },
+    "tier/hell": {
+      "pairs": 7,
+      "seedClusters": 7,
+      "before": 0.7142857142857143,
+      "after": 0.7857142857142857,
+      "delta": 0.0714285714285714,
+      "pairedDelta95": [
+        -0.21428571428571427,
+        0.35714285714285715
+      ],
+      "improved": 3,
+      "worsened": 2,
+      "tied": 2
+    },
+    "market/natural": {
+      "pairs": 12,
+      "seedClusters": 7,
+      "before": 0.625,
+      "after": 0.6666666666666666,
+      "delta": 0.04166666666666663,
+      "pairedDelta95": [
+        -0.15384615384615385,
+        0.22727272727272727
+      ],
+      "improved": 4,
+      "worsened": 3,
+      "tied": 5
+    },
+    "name/DECAY_BLOOD": {
+      "pairs": 2,
+      "seedClusters": 1,
+      "before": 0.5,
+      "after": 0.75,
+      "delta": 0.25,
+      "pairedDelta95": null,
+      "improved": 1,
+      "worsened": 0,
+      "tied": 1
+    },
+    "name/DECAY_SUPPRESSION": {
+      "pairs": 2,
+      "seedClusters": 1,
+      "before": 0.75,
+      "after": 0.5,
+      "delta": -0.25,
+      "pairedDelta95": null,
+      "improved": 0,
+      "worsened": 1,
+      "tied": 1
+    },
+    "name/SUPPRESSION_COUNTER": {
+      "pairs": 2,
+      "seedClusters": 1,
+      "before": 0.25,
+      "after": 0.25,
+      "delta": 0,
+      "pairedDelta95": null,
+      "improved": 1,
+      "worsened": 1,
+      "tied": 0
+    },
+    "name/BLOOD_COUNTER": {
+      "pairs": 2,
+      "seedClusters": 1,
+      "before": 0.5,
+      "after": 0.75,
+      "delta": 0.25,
+      "pairedDelta95": null,
+      "improved": 1,
+      "worsened": 0,
+      "tied": 1
+    },
+    "name/DECAY_SWARM": {
+      "pairs": 2,
+      "seedClusters": 1,
+      "before": 1,
+      "after": 1,
+      "delta": 0,
+      "pairedDelta95": null,
+      "improved": 0,
+      "worsened": 0,
+      "tied": 2
+    },
+    "name/BLOOD_RAIN": {
+      "pairs": 1,
+      "seedClusters": 1,
+      "before": 0.5,
+      "after": 1,
+      "delta": 0.5,
+      "pairedDelta95": null,
+      "improved": 1,
+      "worsened": 0,
+      "tied": 0
+    },
+    "name/BLOOD_AMBUSH": {
+      "pairs": 1,
+      "seedClusters": 1,
+      "before": 1,
+      "after": 0.5,
+      "delta": -0.5,
+      "pairedDelta95": null,
+      "improved": 0,
+      "worsened": 1,
+      "tied": 0
+    }
+  },
+  "pairs": [
+    {
+      "name": "DECAY_BLOOD",
+      "tier": "hard",
+      "market": "natural",
+      "seed": 6710000,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "DECAY_SUPPRESSION",
+      "tier": "hard",
+      "market": "natural",
+      "seed": 6720000,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "SUPPRESSION_COUNTER",
+      "tier": "hard",
+      "market": "natural",
+      "seed": 6750000,
+      "before": 0.5,
+      "after": 0
+    },
+    {
+      "name": "BLOOD_COUNTER",
+      "tier": "hard",
+      "market": "natural",
+      "seed": 6760000,
+      "before": 0,
+      "after": 0.5
+    },
+    {
+      "name": "DECAY_SWARM",
+      "tier": "hard",
+      "market": "natural",
+      "seed": 6770000,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY_BLOOD",
+      "tier": "hell",
+      "market": "natural",
+      "seed": 6710000,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "DECAY_SUPPRESSION",
+      "tier": "hell",
+      "market": "natural",
+      "seed": 6720000,
+      "before": 1,
+      "after": 0.5
+    },
+    {
+      "name": "BLOOD_RAIN",
+      "tier": "hell",
+      "market": "natural",
+      "seed": 6730000,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "BLOOD_AMBUSH",
+      "tier": "hell",
+      "market": "natural",
+      "seed": 6740000,
+      "before": 1,
+      "after": 0.5
+    },
+    {
+      "name": "SUPPRESSION_COUNTER",
+      "tier": "hell",
+      "market": "natural",
+      "seed": 6750000,
+      "before": 0,
+      "after": 0.5
+    },
+    {
+      "name": "BLOOD_COUNTER",
+      "tier": "hell",
+      "market": "natural",
+      "seed": 6760000,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY_SWARM",
+      "tier": "hell",
+      "market": "natural",
+      "seed": 6770000,
+      "before": 1,
+      "after": 1
+    }
+  ]
+}

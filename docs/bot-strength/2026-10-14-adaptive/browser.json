@@ -1,0 +1,84 @@
+{
+  "anytimeResult": {
+    "type": "endTurn"
+  },
+  "anytimeTerminated": true,
+  "supersededResult": null,
+  "newResult": {
+    "type": "play",
+    "idx": 0
+  },
+  "stats": [
+    {
+      "difficulty": "easy",
+      "ms": 55.80000000447035,
+      "action": {
+        "type": "endTurn"
+      },
+      "advanced": true,
+      "pure": true
+    },
+    {
+      "difficulty": "normal",
+      "ms": 47,
+      "action": {
+        "type": "play",
+        "idx": 0
+      },
+      "advanced": true,
+      "pure": true
+    },
+    {
+      "difficulty": "hard",
+      "ms": 77,
+      "action": {
+        "type": "play",
+        "idx": 0
+      },
+      "advanced": true,
+      "pure": true
+    },
+    {
+      "difficulty": "hell",
+      "ms": 137,
+      "action": {
+        "type": "play",
+        "idx": 1
+      },
+      "advanced": true,
+      "pure": true
+    }
+  ],
+  "stress": {
+    "ms": 2287.6999999955297,
+    "ticks": 457,
+    "action": {
+      "type": "play",
+      "idx": 1
+    },
+    "advanced": true
+  },
+  "heavy": {
+    "ms": 1091.3999999985099,
+    "ticks": 219,
+    "action": {
+      "type": "chooseTarget",
+      "uid": "u281"
+    },
+    "advanced": true
+  },
+  "ticks": 822,
+  "budgetAdvanced": true,
+  "fallbackAdvanced": true,
+  "timeoutResult": null,
+  "timeoutTerminated": true,
+  "canceledResult": null,
+  "staleApplied": 0,
+  "disposedApplied": 0,
+  "activeApplied": 1,
+  "defense": {
+    "type": "pick",
+    "uid": "grow"
+  },
+  "errors": []
+}

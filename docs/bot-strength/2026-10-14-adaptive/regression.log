@@ -1,0 +1,108 @@
+
+bot-adaptive
+PASS Elf purchase changes with real Dew support, without changing the card
+PASS decay engine becomes a buy for a decay build
+PASS visible enchantments justify a first answer, not redundant answer flooding
+PASS an expensive strong deck can still buy its missing engine answer
+PASS expired Countercalculation does not count as a usable answer or attract another buy
+PASS acquired enchantment removal is actually played and resolves legally
+PASS actual Hard and Hell acquire the missing answer within their purchase turn
+PASS Soul Harvest needs a public curse plan
+PASS public build, hidden inventory and removed physical cards have separate roles
+PASS temporary exile remains a future public threat, permanent removal does not
+PASS last-copy denial uses public evidence and available stock
+PASS late slow buys lose value while immediate Quick cards keep their horizon
+PASS World Care projects one Dew per turn, not two
+PASS unmet special conditions and active Castle discount unusable bombs
+PASS attack-dependent buys lose value under global suppression and recover under Trick Room
+PASS Blood Rite prevents false burn lethal and harmful opponent healing
+PASS random Spark retains its disruption branches under Blood Rite
+PASS reflection plus Blood Rite can turn a burn spell into useful self-healing
+PASS reflected face attacks and lethal reflected overflow are avoided
+PASS public damage conversion changes purchase value and Fireball targeting
+PASS self-damage respects shields and spell amplification instead of a fixed HP cutoff
+PASS low-HP Catalyst remains usable when Blood Rite converts its self-damage
+PASS Void Apostle is not summoned when its actual self-damage would lose the game
+PASS Poison Master removes the large threat instead of wasting decay on the weakest body
+PASS suppression reserves mana before developing another small body
+PASS Rift is established before spending its mana on a small summon
+PASS offer refresh expectation ignores hidden RNG and respects affordability/blocking
+PASS multiple World Trees do not compound the current-rule recovery multiplier
+PASS 28 adaptive strategy suites
+
+bot-strength
+PASS chip attacks accumulate and are not skipped
+PASS mandatory target no-op is detected after reducer cloning
+PASS attack candidates obey current damaged-HP and high-cost restrictions
+PASS recall does not select the casting recall card
+PASS hidden order/location and actual RNG do not affect sampled observation
+PASS public inspection choices retain the revealed hand/deck membership
+PASS attack target search commits instead of entering an attack/cancel cycle
+PASS unknown card identities and private offered markets cannot influence hypotheses
+PASS an inferred Inquisition target cannot create a refused-action loop
+PASS unrevealed collection and trap identity/counter remain private
+PASS different samples produce different unknown outcomes
+PASS search is pure and takes a visible immediate lethal
+PASS defender-owned choices use defender perspective
+PASS free self-redraw telemetry loop is not counted as useful progress
+PASS hand reorder during free self-redraw is not strategic progress
+PASS elite rosters are legal ordinary starter decks for both upper tiers
+PASS profitable draw recycling still has a finite per-turn bot budget
+PASS native reducer parity across 1000 decisions and nested clone isolation
+PASS 18 bot strength suites
+
+bot-tactics
+PASS multi-action lethal, ready-target selection, dice/trap proof boundaries, public deck ID constraints
+
+bot-market-strategy
+PASS public market adaptation, hidden-information boundary, available stock, removal eligibility/target, hard/hell recovery counter and lethal priority, persistent Dew
+
+bot-simulation
+{"transitions":1370,"stateParity":true,"nonPresentationEventParity":true,"nestedAndExceptionRestoration":true}
+
+bot-npcs
+PASS: 4 NPCs, 18 legal decks (distinct within each roster), non-repeating selection, copied tuning, 36 opening simulations
+
+bot-worker
+{"cases":36,"heartbeats":186,"maxMainMs":151.108833,"maxWorkerMs":151.3677499999999,"cancellation":true,"supersession":true,"fallback":true}
+
+match-bots
+PASS ten distinct accounts, five deck types, idempotent seeding, no sessions
+PASS normal and ranked queues rotate all ten BOT profiles after waiting
+PASS production defaults off, human priority, cancellation and failed setup
+PASS internal setup rejects unknown and disabled bot identities
+PASS normal/ranked startup, first turn gate, durable bot moves, no hidden information leaks
+PASS all ten profiles complete multi-turn gameplay without rejected-action loops
+PASS BOT answers defender-owned choices during the human turn
+PASS ranked result uses real exactly-once receipt and survives restore
+PASS no-show void, human disconnect pauses BOT, reconnect resumes it
+PASS: 9 matchmaking BOT checks
+(node:32825) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+matchmaker_bot_setup_failed
+
+balance-v58
+PASS approved stats, retained keyword passives and starter eligibility
+PASS ELF spends Dew exactly on ordinary summon
+PASS HIGH_ELF spends Dew exactly on ordinary summon
+PASS ELDER_ELF_KING spends Dew exactly on ordinary summon
+PASS WORLD_TREE spends Dew exactly on ordinary summon
+PASS World Tree duplication no longer multiplies healing; Elf multipliers remain
+PASS all three distinct-World-Tree stat passives remain
+PASS Elder wipes monsters but preserves enchantments, quests and legacy traps
+PASS Elder death threshold 14
+PASS Elder death threshold 15
+PASS Elder death threshold 22
+PASS Gift owner 0, chosen VAMP_PACT, 4 subsequent own starts
+PASS Gift owner 0, chosen VAMP_WARD, 4 subsequent own starts
+PASS Gift owner 1, chosen VAMP_PACT, 4 subsequent own starts
+PASS Gift owner 1, chosen VAMP_WARD, 4 subsequent own starts
+PASS simultaneous Gift expiries retain both choices and distinct reward instances
+PASS destroying Gift before maturity prevents the reward
+PASS recast Gift starts a fresh four-turn countdown
+PASS BOT reward and subsequent card use false
+PASS BOT reward and subsequent card use true
+PASS 20 v58 scenario groups
+
+balance-v58-server
+PASS 8 authoritative Gift checks: owner authorization, persistence/reconnect, private reward, timeout for both seats

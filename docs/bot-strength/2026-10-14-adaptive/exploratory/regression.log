@@ -1,0 +1,69 @@
+PASS chip attacks accumulate and are not skipped
+PASS mandatory target no-op is detected after reducer cloning
+PASS attack candidates obey current damaged-HP and high-cost restrictions
+PASS recall does not select the casting recall card
+PASS hidden order/location and actual RNG do not affect sampled observation
+PASS public inspection choices retain the revealed hand/deck membership
+PASS attack target search commits instead of entering an attack/cancel cycle
+PASS unknown card identities and private offered markets cannot influence hypotheses
+PASS an inferred Inquisition target cannot create a refused-action loop
+PASS unrevealed collection and trap identity/counter remain private
+PASS different samples produce different unknown outcomes
+PASS search is pure and takes a visible immediate lethal
+PASS defender-owned choices use defender perspective
+PASS free self-redraw telemetry loop is not counted as useful progress
+PASS hand reorder during free self-redraw is not strategic progress
+PASS elite rosters are legal ordinary starter decks for both upper tiers
+PASS profitable draw recycling still has a finite per-turn bot budget
+PASS native reducer parity across 1000 decisions and nested clone isolation
+PASS 18 bot strength suites
+PASS multi-action lethal, ready-target selection, dice/trap proof boundaries, public deck ID constraints
+PASS public market adaptation, hidden-information boundary, available stock, removal eligibility/target, hard/hell recovery counter and lethal priority, persistent Dew
+PASS Elf purchase changes with real Dew support, without changing the card
+PASS decay engine becomes a buy for a decay build
+PASS visible enchantments justify a first answer, not redundant answer flooding
+PASS an expensive strong deck can still buy its missing engine answer
+PASS acquired enchantment removal is actually played and resolves legally
+PASS Soul Harvest needs a public curse plan
+PASS public build, hidden inventory and removed physical cards have separate roles
+PASS last-copy denial uses public evidence and available stock
+PASS late slow buys lose value while immediate Quick cards keep their horizon
+PASS unmet special conditions and active Castle discount unusable bombs
+PASS offer refresh expectation ignores hidden RNG and respects affordability/blocking
+PASS multiple World Trees do not compound the current-rule recovery multiplier
+PASS 12 adaptive strategy suites
+{"transitions":1370,"stateParity":true,"nonPresentationEventParity":true,"nestedAndExceptionRestoration":true}
+PASS: 4 NPCs, 18 legal decks (distinct within each roster), non-repeating selection, copied tuning, 36 opening simulations
+{"cases":36,"heartbeats":242,"maxMainMs":201.3472089999998,"maxWorkerMs":218.75250000000005,"cancellation":true,"supersession":true,"fallback":true}
+PASS ten distinct accounts, five deck types, idempotent seeding, no sessions
+PASS normal and ranked queues rotate all ten BOT profiles after waiting
+PASS production defaults off, human priority, cancellation and failed setup
+PASS internal setup rejects unknown and disabled bot identities
+PASS normal/ranked startup, first turn gate, durable bot moves, no hidden information leaks
+PASS all ten profiles complete multi-turn gameplay without rejected-action loops
+PASS BOT answers defender-owned choices during the human turn
+PASS ranked result uses real exactly-once receipt and survives restore
+PASS no-show void, human disconnect pauses BOT, reconnect resumes it
+PASS: 9 matchmaking BOT checks
+PASS approved stats, retained keyword passives and starter eligibility
+PASS ELF spends Dew exactly on ordinary summon
+PASS HIGH_ELF spends Dew exactly on ordinary summon
+PASS ELDER_ELF_KING spends Dew exactly on ordinary summon
+PASS WORLD_TREE spends Dew exactly on ordinary summon
+PASS World Tree duplication no longer multiplies healing; Elf multipliers remain
+PASS all three distinct-World-Tree stat passives remain
+PASS Elder wipes monsters but preserves enchantments, quests and legacy traps
+PASS Elder death threshold 14
+PASS Elder death threshold 15
+PASS Elder death threshold 22
+PASS Gift owner 0, chosen VAMP_PACT, 4 subsequent own starts
+PASS Gift owner 0, chosen VAMP_WARD, 4 subsequent own starts
+PASS Gift owner 1, chosen VAMP_PACT, 4 subsequent own starts
+PASS Gift owner 1, chosen VAMP_WARD, 4 subsequent own starts
+PASS simultaneous Gift expiries retain both choices and distinct reward instances
+PASS destroying Gift before maturity prevents the reward
+PASS recast Gift starts a fresh four-turn countdown
+PASS BOT reward and subsequent card use false
+PASS BOT reward and subsequent card use true
+PASS 20 v58 scenario groups
+PASS 8 authoritative Gift checks: owner authorization, persistence/reconnect, private reward, timeout for both seats

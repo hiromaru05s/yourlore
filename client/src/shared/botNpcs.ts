@@ -11,7 +11,7 @@ export interface BotNpc {
   name: NpcText;
   title: NpcText;
   style: NpcText;
-  decks: readonly [BotDeck, BotDeck, BotDeck];
+  decks: readonly BotDeck[];
 }
 const text = (ja: string, en: string, ko: string): NpcText => ({ ja, en, ko });
 const deck = (name: string, cards: string[], minBuyEarly: number, minBuy: number, chestTurn: number): BotDeck =>
@@ -44,13 +44,13 @@ export const BOT_NPCS: readonly BotNpc[] = [
     id: "vera", difficulty: "hard", avatar: "NPC_VERA", portrait: "/art/npcs/v2/vera.webp",
     name: text("ヴェラ", "Vera", "베라"), title: text("果敢なシーカー", "Daring Seeker", "과감한 시커"),
     style: text("盤面展開と回復エンジン", "Board development & recovery", "필드 전개와 회복"),
-    decks: [trainedDeck(BOT_ELITE_DECKS[2]), trainedDeck(BOT_ELITE_DECKS[0]), trainedDeck(BOT_ELITE_DECKS[1])],
+    decks: BOT_ELITE_DECKS.map(trainedDeck),
   },
   {
     id: "sion", difficulty: "hell", avatar: "NPC_SION", portrait: "/art/npcs/v2/sion.webp",
     name: text("シオン", "Sion", "시온"), title: text("熟練のシーカー", "Master Seeker", "숙련된 시커"),
     style: text("速攻・腐敗・妨害", "Pressure, decay & disruption", "속공・부패・방해"),
-    decks: [trainedDeck(BOT_HELL_DECKS[0]), trainedDeck(BOT_HELL_DECKS[1]), trainedDeck(BOT_HELL_DECKS[2])],
+    decks: BOT_HELL_DECKS.map(trainedDeck),
   },
 ];
 

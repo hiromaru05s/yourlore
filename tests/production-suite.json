@@ -126,6 +126,7 @@
     "tests/bot-strength.mjs",
     "tests/bot-tactics.mjs",
     "tests/bot-market-strategy.mjs",
+    "tests/bot-adaptive.mjs",
     "tests/bot-npcs.mjs",
     "tests/bot-simulation.mjs",
     "tests/gacha-azure-motion.mjs",

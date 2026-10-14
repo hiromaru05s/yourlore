@@ -1,0 +1,22 @@
+{
+  "robust-second.json": {
+    "sha256": "373e620cdf0f2d765f0299451acd5ac3ae9fcda9b556e0aa47bb3ca75b1b6300",
+    "bytes": 166114
+  },
+  "robust-second-games.jsonl": {
+    "sha256": "646061f4ebcd62ce2230132575f3fc60bdc87c43d2f1e6d125513911a50b0b21",
+    "bytes": 2189364
+  },
+  "pool-holdout18.json": {
+    "sha256": "7b36c46e255706686f9f8b329e528ee51ebc908036ab31505b3924f8a504553a",
+    "bytes": 874481
+  },
+  "second-search-policy.cjs": {
+    "sha256": "9b2b9efc1ea242d9a8c1b9dac364457c80c0f702cc62c3b570b611f99d1685ab",
+    "bytes": 1421619
+  },
+  "second-holdout-policy.cjs": {
+    "sha256": "5c709dc2abe8f6598cc8cc49487a61f1292ec9e629a727cf9dee7ca75b86be4d",
+    "bytes": 1421645
+  }
+}

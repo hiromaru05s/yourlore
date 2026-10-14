@@ -1,0 +1,2449 @@
+{
+  "modules": {
+    "candidate": "c646a6e0af702a0ce37aa1cd282791723d3c6a4087fa01432f3061e290c88352",
+    "baseline": "26d1d4d310443e0c13b4edfda23683528507e635032f7218e3ce20c2d8c1bac9"
+  },
+  "opponentTier": "greedy",
+  "games": 1120,
+  "invalid": 0,
+  "overall": {
+    "pairs": 280,
+    "seedClusters": 40,
+    "before": 0.7535714285714286,
+    "after": 0.7982142857142858,
+    "delta": 0.044642857142857206,
+    "pairedDelta95": [
+      0.025,
+      0.06428571428571428
+    ],
+    "improved": 26,
+    "worsened": 4,
+    "tied": 250
+  },
+  "slices": {
+    "tier/greedy": {
+      "pairs": 280,
+      "seedClusters": 40,
+      "before": 0.7535714285714286,
+      "after": 0.7982142857142858,
+      "delta": 0.044642857142857206,
+      "pairedDelta95": [
+        0.025,
+        0.06428571428571428
+      ],
+      "improved": 26,
+      "worsened": 4,
+      "tied": 250
+    },
+    "market/natural": {
+      "pairs": 56,
+      "seedClusters": 8,
+      "before": 0.7053571428571429,
+      "after": 0.7321428571428571,
+      "delta": 0.02678571428571419,
+      "pairedDelta95": [
+        -0.017857142857142856,
+        0.08035714285714286
+      ],
+      "improved": 4,
+      "worsened": 2,
+      "tied": 50
+    },
+    "market/recovery": {
+      "pairs": 56,
+      "seedClusters": 8,
+      "before": 0.7678571428571429,
+      "after": 0.7857142857142857,
+      "delta": 0.017857142857142794,
+      "pairedDelta95": [
+        0,
+        0.044642857142857144
+      ],
+      "improved": 2,
+      "worsened": 0,
+      "tied": 54
+    },
+    "market/control": {
+      "pairs": 56,
+      "seedClusters": 8,
+      "before": 0.7678571428571429,
+      "after": 0.8214285714285714,
+      "delta": 0.05357142857142849,
+      "pairedDelta95": [
+        0.008928571428571428,
+        0.09821428571428571
+      ],
+      "improved": 6,
+      "worsened": 1,
+      "tied": 49
+    },
+    "market/elf": {
+      "pairs": 56,
+      "seedClusters": 8,
+      "before": 0.7946428571428571,
+      "after": 0.8660714285714286,
+      "delta": 0.07142857142857151,
+      "pairedDelta95": [
+        0.03571428571428571,
+        0.10714285714285714
+      ],
+      "improved": 7,
+      "worsened": 0,
+      "tied": 49
+    },
+    "market/curse": {
+      "pairs": 56,
+      "seedClusters": 8,
+      "before": 0.7321428571428571,
+      "after": 0.7857142857142857,
+      "delta": 0.0535714285714286,
+      "pairedDelta95": [
+        0,
+        0.09821428571428571
+      ],
+      "improved": 7,
+      "worsened": 1,
+      "tied": 48
+    },
+    "name/DECAY": {
+      "pairs": 40,
+      "seedClusters": 40,
+      "before": 0.8875,
+      "after": 0.95,
+      "delta": 0.0625,
+      "pairedDelta95": [
+        0.0125,
+        0.1125
+      ],
+      "improved": 5,
+      "worsened": 0,
+      "tied": 35
+    },
+    "name/AGGRO": {
+      "pairs": 40,
+      "seedClusters": 40,
+      "before": 0.8625,
+      "after": 0.8625,
+      "delta": 0,
+      "pairedDelta95": [
+        0,
+        0
+      ],
+      "improved": 0,
+      "worsened": 0,
+      "tied": 40
+    },
+    "name/GAMBLER": {
+      "pairs": 40,
+      "seedClusters": 40,
+      "before": 0.6375,
+      "after": 0.8,
+      "delta": 0.1625000000000001,
+      "pairedDelta95": [
+        0.0625,
+        0.2625
+      ],
+      "improved": 13,
+      "worsened": 2,
+      "tied": 25
+    },
+    "name/RIFT": {
+      "pairs": 40,
+      "seedClusters": 40,
+      "before": 0.7,
+      "after": 0.7125,
+      "delta": 0.012500000000000067,
+      "pairedDelta95": [
+        0,
+        0.0375
+      ],
+      "improved": 1,
+      "worsened": 0,
+      "tied": 39
+    },
+    "name/ELF": {
+      "pairs": 40,
+      "seedClusters": 40,
+      "before": 0.725,
+      "after": 0.8,
+      "delta": 0.07500000000000007,
+      "pairedDelta95": [
+        0,
+        0.1625
+      ],
+      "improved": 7,
+      "worsened": 2,
+      "tied": 31
+    },
+    "name/CASTLE": {
+      "pairs": 40,
+      "seedClusters": 40,
+      "before": 0.8,
+      "after": 0.8,
+      "delta": 0,
+      "pairedDelta95": [
+        0,
+        0
+      ],
+      "improved": 0,
+      "worsened": 0,
+      "tied": 40
+    },
+    "name/VAMPIRE": {
+      "pairs": 40,
+      "seedClusters": 40,
+      "before": 0.6625,
+      "after": 0.6625,
+      "delta": 0,
+      "pairedDelta95": [
+        0,
+        0
+      ],
+      "improved": 0,
+      "worsened": 0,
+      "tied": 40
+    }
+  },
+  "pairs": [
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780000,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780100,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780200,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780300,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780400,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780500,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780600,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780700,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780001,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780101,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780201,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780301,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780401,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780501,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780601,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780701,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780002,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780102,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780202,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780302,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780402,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780502,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780602,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780702,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780003,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780103,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780203,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780303,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780403,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780503,
+      "before": 0,
+      "after": 0.5
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780603,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780703,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780004,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780104,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780204,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780304,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780404,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780504,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780604,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "DECAY",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780704,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780000,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780100,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780200,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780300,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780400,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780500,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780600,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780700,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780001,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780101,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780201,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780301,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780401,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780501,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780601,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780701,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780002,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780102,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780202,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780302,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780402,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780502,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780602,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780702,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780003,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780103,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780203,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780303,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780403,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780503,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780603,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780703,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780004,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780104,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780204,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780304,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780404,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780504,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780604,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "AGGRO",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780704,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780000,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780100,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780200,
+      "before": 1,
+      "after": 0.5
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780300,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780400,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780500,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780600,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780700,
+      "before": 0.5,
+      "after": 0
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780001,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780101,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780201,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780301,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780401,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780501,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780601,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780701,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780002,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780102,
+      "before": 0,
+      "after": 0.5
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780202,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780302,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780402,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780502,
+      "before": 0,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780602,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780702,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780003,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780103,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780203,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780303,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780403,
+      "before": 0,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780503,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780603,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780703,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780004,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780104,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780204,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780304,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780404,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780504,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780604,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "GAMBLER",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780704,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780000,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780100,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780200,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780300,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780400,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780500,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780600,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780700,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780001,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780101,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780201,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780301,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780401,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780501,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780601,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780701,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780002,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780102,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780202,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780302,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780402,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780502,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780602,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780702,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780003,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780103,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780203,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780303,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780403,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780503,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780603,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780703,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780004,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780104,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780204,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780304,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780404,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780504,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780604,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "RIFT",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780704,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780000,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780100,
+      "before": 0,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780200,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780300,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780400,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780500,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780600,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780700,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780001,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780101,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780201,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780301,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780401,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780501,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780601,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780701,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780002,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780102,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780202,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780302,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780402,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780502,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780602,
+      "before": 1,
+      "after": 0.5
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780702,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780003,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780103,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780203,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780303,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780403,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780503,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780603,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780703,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780004,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780104,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780204,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780304,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780404,
+      "before": 1,
+      "after": 0.5
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780504,
+      "before": 0.5,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780604,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "ELF",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780704,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780000,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780100,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780200,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780300,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780400,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780500,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780600,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780700,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780001,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780101,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780201,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780301,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780401,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780501,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780601,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780701,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780002,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780102,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780202,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780302,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780402,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780502,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780602,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780702,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780003,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780103,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780203,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780303,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780403,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780503,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780603,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780703,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780004,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780104,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780204,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780304,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780404,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780504,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780604,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "CASTLE",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780704,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780000,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780100,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780200,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780300,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780400,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780500,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780600,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "natural",
+      "seed": 2780700,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780001,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780101,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780201,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780301,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780401,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780501,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780601,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "recovery",
+      "seed": 2780701,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780002,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780102,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780202,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780302,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780402,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780502,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780602,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "control",
+      "seed": 2780702,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780003,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780103,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780203,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780303,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780403,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780503,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780603,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "elf",
+      "seed": 2780703,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780004,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780104,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780204,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780304,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780404,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780504,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780604,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "VAMPIRE",
+      "tier": "greedy",
+      "market": "curse",
+      "seed": 2780704,
+      "before": 1,
+      "after": 1
+    }
+  ]
+}

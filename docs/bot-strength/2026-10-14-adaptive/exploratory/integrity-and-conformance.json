@@ -1,0 +1,15 @@
+{
+  "cards": 358,
+  "balance": "v58",
+  "definitionsSHA256": "7d3ac71f7bad5c4d42a419da7d6297ea0d8438dd6c1932d07077ba2f3e8934a4",
+  "cardDefinitionsAndPoolsUnchanged": true,
+  "positions": 1200,
+  "purchases": 11990,
+  "searches": 40,
+  "matchingDefaultPolicy": true,
+  "modules": {
+    "baseline": "26d1d4d310443e0c13b4edfda23683528507e635032f7218e3ce20c2d8c1bac9",
+    "evaluated": "c646a6e0af702a0ce37aa1cd282791723d3c6a4087fa01432f3061e290c88352",
+    "final": "b587b86f4f92a33ac38ed351c934b452d31b5bb3166c82be663c697c1cd959e8"
+  }
+}

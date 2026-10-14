@@ -1,0 +1,44 @@
+{
+  "candidate-v58.cjs": {
+    "sha256": "5d7045d59760c1d0b76668a720e38555a3f227343a2e4d3947d533db6a2a61b4",
+    "bytes": 1427280
+  },
+  "baseline-v58.cjs": {
+    "sha256": "26d1d4d310443e0c13b4edfda23683528507e635032f7218e3ce20c2d8c1bac9",
+    "bytes": 1408745
+  },
+  "selection-policy.cjs": {
+    "sha256": "28f70e06163ebfde4102d729beafa91d68a8bb2cf1894498420d09cd8087aed9",
+    "bytes": 1426337
+  },
+  "league-selection.json": {
+    "sha256": "5e0c866b6ee6f338622519b92d77da93835969a0ff71ffb833514975f66f1655",
+    "bytes": 276926
+  },
+  "league-validation.json": {
+    "sha256": "01745418a57b421bcb2ef365cafd117604388a44698e527f875f31d2f6bdb48d",
+    "bytes": 276965
+  },
+  "paired.json": {
+    "sha256": "d612b62a5cbcc8a785347263202f149e085a9e696643319e76a757910900107e",
+    "bytes": 1194834
+  },
+  "roster-vs-old-hell.json": {
+    "sha256": "d0482c0ad2acbed381eee135669154200813f9bcb4b432c95dfdd6693c576f3f",
+    "bytes": 716272
+  },
+  "evaluated-v58.cjs": {
+    "sha256": "cba50eb82f3b1a27e76576a0f97f8ee0c01a12b3de792e8a27832ef073f8c081",
+    "bytes": 1426464
+  },
+  "product.json": {
+    "sha256": "bc9ab59fb8d1bd15390a2e491564cc9ad9060df3e38af28f159d10ad3b31b6fa",
+    "bytes": 62798
+  },
+  "late-game-state.json": {
+    "sha256": "8445712ce6dc17cc14c5d38d470ea89c74724b6d2b4c41ef9dc940543e13108b",
+    "bytes": 82307
+  },
+  "sourceBase": "7c999751523922f93f882ef8a17cf02f3d4161ce",
+  "evaluatedSourceBase": "a876e26f00e07f14ff0da5a66ec3873e7fb5275a"
+}

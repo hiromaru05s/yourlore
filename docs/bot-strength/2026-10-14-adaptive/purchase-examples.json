@@ -1,0 +1,101 @@
+[
+  {
+    "card": "ELF",
+    "condition": [
+      "no Dew support",
+      "4 Dew"
+    ],
+    "before": {
+      "base": 40.4,
+      "synergy": 0,
+      "matchup": 0,
+      "readiness": -35.552,
+      "redundancy": 0,
+      "delay": 0,
+      "denial": 0,
+      "cost": 4,
+      "value": 0.847999999999999,
+      "floor": 11.916666666666666,
+      "margin": -11.068666666666667
+    },
+    "after": {
+      "base": 40.4,
+      "synergy": 0,
+      "matchup": 0,
+      "readiness": 0,
+      "redundancy": 0,
+      "delay": 0,
+      "denial": 0,
+      "cost": 4,
+      "value": 36.4,
+      "floor": 11.916666666666666,
+      "margin": 24.483333333333334
+    }
+  },
+  {
+    "card": "DISARM1",
+    "condition": [
+      "no public enchantment",
+      "two public engines and no owned answer"
+    ],
+    "before": {
+      "base": 4,
+      "synergy": 0,
+      "matchup": 0,
+      "readiness": 0,
+      "redundancy": 0,
+      "delay": 0,
+      "denial": 0,
+      "cost": 2,
+      "value": 2,
+      "floor": 35.875,
+      "margin": -33.875
+    },
+    "after": {
+      "base": 4,
+      "synergy": 0,
+      "matchup": 18,
+      "readiness": 0,
+      "redundancy": 0,
+      "delay": 0,
+      "denial": 0,
+      "cost": 2,
+      "value": 20,
+      "floor": 12,
+      "margin": 8
+    }
+  },
+  {
+    "card": "POISON_MASTER",
+    "condition": [
+      "clear board",
+      "global suppression blocks attacks"
+    ],
+    "before": {
+      "base": 28.7,
+      "synergy": 0,
+      "matchup": 0,
+      "readiness": 0,
+      "redundancy": 0,
+      "delay": 0,
+      "denial": 0,
+      "cost": 6,
+      "value": 22.7,
+      "floor": 11,
+      "margin": 11.7
+    },
+    "after": {
+      "base": 28.7,
+      "synergy": 0,
+      "matchup": 0,
+      "readiness": -18.655,
+      "redundancy": 0,
+      "delay": 0,
+      "denial": 0,
+      "cost": 6,
+      "value": 4.044999999999998,
+      "floor": 11,
+      "margin": -6.955000000000002
+    }
+  }
+]
