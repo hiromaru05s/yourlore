@@ -3031,7 +3031,7 @@ function doDragonFuse(g: GameState, ctx: Ctx, p: PlayerState, dragonUid: string,
  *  is a conjured token: exiled on death (see destroyMonster).
  *  종족 시너지는 발동한다 — 시초의 노래/금단의 술식처럼 토큰 소환으로 동족을
  *  완성하는 카드가 시너지를 못 터뜨리던 버그 수정 (2026-07-09). */
-function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string, fromDeck = false): boolean {
+function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string, fromDeck = false, ritual?: string): boolean {
   if (!DB[id] || !effectSummonAllowed(g, p, DB[id])) return false;
 
   const m: FieldMon = { uid: newUID(g), ...structuredClone(DB[id]), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn, token: !fromDeck };
@@ -3042,7 +3042,7 @@ function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string, fromDeck
   if (m.id === 'SOLDIER2') townEvent(g, 'soldier');
   if (m.id === 'CASINO') townEvent(g, 'casino');
   if (m.tribe) advanceQuest(p, "tribeSummon");
-  ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid, id: m.id });
+  ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid, id: m.id, ...(ritual ? {ritual} : {}) });
   applyEnterAura(g, ctx, p, m);
   applySummonBuff(ctx, p, m);
   if (m.tribe && !g.over) checkTribe(g, ctx, p, m); // 동족 시너지는 소환 경로와 무관하게 판정
@@ -4008,7 +4008,8 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
           const tribe = tribes[randInt(g, tribes.length)];
           const have = new Set(p.field.filter((m) => m.tribe === tribe).map((m) => m.id));
           const toSummon = ALL_IDS.filter((id) => DB[id].tribe === tribe && !have.has(id) && DB[id].t === "mon");
-          toSummon.forEach((id) => spawnToken(g, ctx, p, id));
+          const ritual=`FORBIDDEN:${side(g,p)}:${ctx.ev.length}`;
+          toSummon.forEach((id) => spawnToken(g, ctx, p, id, false, ritual));
           ctx.log(`  └ 성공! [${tribeName(tribe, "ko")}] 나머지 ${toSummon.length}체 소환`, `  └ 成功! [${tribeName(tribe, "ja")}] 残り${toSummon.length}体を召喚`);
         } else ctx.log(`  └ 성공했지만 필드에 종족 몬스터가 없음`, `  └ 成功したが場に種族モンスターがいない`);
       } else ctx.log(`  └ 실패…`, `  └ 失敗…`);

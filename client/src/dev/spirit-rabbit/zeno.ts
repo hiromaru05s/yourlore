@@ -1,0 +1,10 @@
+import { mountManaSpirit } from '../../ui/manaSpirit';
+import './zeno.css';
+const app=document.querySelector<HTMLElement>('#app')!;
+app.innerHTML='<header><p>LORE</p><h1>Zeno <small>ゼノ · 제노</small></h1></header><button class="zeno" aria-label="ゼノに挨拶する"><span class="host"></span></button><p class="hint">タップでごきげんに。ドラッグすると、あなたの動きに合わせて。</p><a href="/?devLogin=1">HOMEで見る →</a>';
+let spirit:ReturnType<typeof mountManaSpirit>|undefined;
+const mount=()=>{spirit=mountManaSpirit(app.querySelector('.host')!,{home:true,interactive:app.querySelector<HTMLButtonElement>('.zeno')!});};
+const destroy=()=>{spirit?.destroy();spirit=undefined;};
+const restore=(e:PageTransitionEvent)=>{if(e.persisted)mount();};
+mount();window.addEventListener('pagehide',destroy);window.addEventListener('pageshow',restore);
+if(import.meta.hot)import.meta.hot.dispose(()=>{destroy();window.removeEventListener('pagehide',destroy);window.removeEventListener('pageshow',restore);});

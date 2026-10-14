@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/forbidden-ritual.mjs",
     "tests/dragon-fusion.mjs",
     "tests/hatch-summon.mjs",
     "tests/hooded-seekers.mjs",
@@ -38,6 +39,8 @@
     "tests/menu-records.mjs",
     "tests/menu-selected.mjs",
     "tests/mana-spirit-motion.mjs",
+    "tests/moon-rabbit-preview.mjs",
+    "tests/zeno-interaction.mjs",
     "tests/monster-animation-rules.mjs",
     "tests/dual-ready.mjs",
     "tests/monster-effect-activation.mjs",

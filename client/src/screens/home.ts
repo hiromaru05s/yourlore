@@ -22,8 +22,8 @@ export function mountHome(app: App): Screen {
   wrap.className = "screen lounge-home-screen";
   const store=sanitizeDecks(u?.decks ?? null);
   wrap.innerHTML = `
-    <section class="home-companion" aria-label="${esc(loungeText('マナの精霊','Mana spirit','마나 정령'))}">
-      <button class="home-spirit-touch" type="button" aria-label="${esc(loungeText('マナの精霊に挨拶する','Greet the mana spirit','마나 정령에게 인사하기'))}"><span class="home-spirit-host"></span></button>
+    <section class="home-companion" aria-label="${esc(loungeText('ゼノ','Zeno','제노'))}">
+      <button class="home-spirit-touch" type="button" aria-label="${esc(loungeText('ゼノに挨拶する','Greet Zeno','제노에게 인사하기'))}"><span class="home-spirit-host"></span></button>
     </section>
     <section class="lounge-home-main">
       <section class="lounge-play" aria-label="${esc(t("home.ranked.title"))}">
@@ -41,8 +41,7 @@ export function mountHome(app: App): Screen {
       </button>
     </section>`;
   app.root.appendChild(wrap);
-  const spirit=mountManaSpirit(wrap.querySelector('.home-spirit-host')!, {home:true});
-  wrap.querySelector<HTMLButtonElement>('.home-spirit-touch')!.onclick=()=>spirit.celebrate();
+  const spirit=mountManaSpirit(wrap.querySelector('.home-spirit-host')!, {home:true,interactive:wrap.querySelector<HTMLButtonElement>('.home-spirit-touch')!});
   const q=(id:string)=>wrap.querySelector<HTMLButtonElement>('#'+id)!;
   let mode: 'ranked'|'online'|'bot'='ranked';
   const selectMode=(next:typeof mode)=>{

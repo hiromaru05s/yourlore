@@ -5,7 +5,7 @@ import '../spirit-front-five/style.css';
 import './style.css';
 
 type Mode='auto'|'flutter'|'sleepy'|'still';
-let selected:DesignId='round',mode:Mode='auto',side=false,silhouette=false;
+let selected:DesignId='ears',mode:Mode='auto',side=false,silhouette=false;
 let hero:ReturnType<typeof mountManaSpirit>|undefined;
 const thumbnails:ReturnType<typeof mountManaSpirit>[]=[];
 const app=document.querySelector<HTMLElement>('#app')!;
@@ -23,7 +23,7 @@ function previewMotion():ReturnType<typeof createSpiritMotion>|undefined {
  const chosen=mode;
  const make=()=>{const m=createSpiritMotion(chosen==='sleepy',()=>.9);if(chosen==='sleepy')m.tick(14);else m.celebrate();return m;};
  let current=make(),elapsed=0;
- return {celebrate(){current.celebrate();},tick(dt){elapsed+=dt;if(elapsed>SPIRIT_MOTION_DURATION[chosen]+2.2){current=make();elapsed=0;}return current.tick(dt);}};
+ return {greet(){current.greet();},celebrate(){current.celebrate();},tick(dt){elapsed+=dt;if(elapsed>SPIRIT_MOTION_DURATION[chosen]+2.2){current=make();elapsed=0;}return current.tick(dt);}};
 }
 function renderHero(){
  hero?.destroy();

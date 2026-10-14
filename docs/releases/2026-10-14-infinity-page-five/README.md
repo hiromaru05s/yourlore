@@ -20,4 +20,14 @@ The renderer retains the approved source-to-Cull reveal, edge hinge, curved stoc
 - `tests/infinity-cull-browser.mjs`: actual reducer → BaseController → GameView → production renderer. Both sides, 390px/12 cards, source identity, reduced motion, skip/resize/hidden cancellation, removed-source fallback and controller teardown. Browser exceptions: zero. This is not an authenticated multiplayer match.
 - Evidence: `local/report.json`, `local/side-0.png`, `local/side-1.png`, `local/mobile.png`, `local/playback.webm`.
 
-Deployment evidence is recorded after the guarded release and staging checks.
+## Staging verification
+
+- URL: https://test.yourlore.xyz
+- Guarded source: `71994995b37f090d0686df77c7fe0eaa9c7d997a`.
+- Worker version: `4e5822f6-ad8a-49f3-837a-a6f3d8a64f5c`, 100% traffic, deployed 2026-10-14 05:42 UTC.
+- Clean snapshot: client/server typecheck, **126/126 production tests**, design guard and production build passed. `guard-result.log` and `deployment.json` preserve the result.
+- **84/84 served files** match SHA-256 of the exact guarded build plus six unchanged source/Cull art files (`staging-assets.json`).
+- The served controller/renderer passed both sides, immediate resources without an early animation, turn-end 05 with the exact source UID, 390px/12 Cull, reduced motion and destruction cleanup. Browser exceptions: **0**. See `staging/report.json`, screenshots and `staging/playback.webm`.
+- Visual review of the recorded sequence confirms the selected page reveal, staggered fold/flight and Rift arrival. Screenshots are supplemental: under host contention a screenshot may complete after its requested animation time.
+- The first browser attempt stalled during page loading under concurrent host load and was stopped. A fresh browser completed the same assertions without changing time limits.
+- Validation uses real reducer/controller/GameView fixtures on deployed assets; an authenticated multiplayer match was not performed.
