@@ -50,6 +50,7 @@ import {holdRiftTarget} from './riftActivity';
 import {cancelTribeSynergy} from './tribeSynergy/runtime';
 import type {ElementalEvent,Playback} from './elemental/runtime';
 import {flyPersistentIntoSlot} from './persistentFlight';
+import {playCreation,warmCreation} from './creation/runtime';
 import {playSpellFrame,cancelSpellFrames,warmSpellFrame,SPELL_FRAME_RATE} from './spellFrame/runtime';
 import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {isMimic,focusScale,type MimicId} from './mimic/selection';
@@ -1290,4 +1291,22 @@ export async function novaTimeTheft(card:CardInst,side:ViewSide,fromHp:number,on
   node=floatAt(cardEl(card,{size:'hand'}),from);
   await boardMotionScope(signal=>playNova(node!,side,fromHp,onHp,signal),10500);
  }finally{node?.remove();onHp(1);}
+}
+
+/** Creation 01 owns its face and final Rift exit; no shared spell-frame or second exile. */
+export async function revealCreation(card:CardInst,side:ViewSide):Promise<HTMLElement|null>{
+ if(fxSkip)return null;warmCreation();
+ const from=fromRect(side,takeOrigin(side));if(!from)return null;
+ const node=floatAt(cardEl(card,{size:'hand'}),from);let held=false;
+ try{await focusCard(node,side,undefined,SPELL_FRAME_RATE);
+  const slot=document.querySelector(side==='me'?'#meRow .zone-mon .slot':'#oppRow .zone-mon .slot')?.getBoundingClientRect();
+  const w=Math.max(26,Math.min(78,(slot?.width??86)*.9)),h=w*1.55;
+  node.style.transition=matchMedia('(prefers-reduced-motion:reduce)').matches?'none':`left .3s ${EASE},top .3s ${EASE},transform .3s ${EASE}`;
+  node.style.left=`${Math.max(8,(slot?.left??innerWidth*.4)-w*2.7)}px`;node.style.top=`${Math.max(8,Math.min(innerHeight-h-8,(slot?slot.top+slot.height/2:innerHeight*.5)-h/2))}px`;node.style.transform=`scale(${w/node.offsetWidth})`;
+  await wait(310);if(fxSkip)return null;held=true;return node;}
+ finally{if(!held)node.remove();}
+}
+export async function creationBirth(card:CardInst,side:ViewSide,source:HTMLElement|null,copy:boolean):Promise<void>{
+ try{if(!fxSkip)await boardMotionScope(signal=>playCreation(card,side,source,copy,signal),7000);}
+ finally{source?.remove();}
 }

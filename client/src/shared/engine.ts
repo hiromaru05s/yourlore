@@ -5800,7 +5800,13 @@ function expansionSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case 'DOMINION': ctx.drawN(p, 3); x.dominion = 3; o.maxMana = Math.max(MIN_MANA, o.maxMana - 1); addMaxMana(p, 1); break;
     case 'ADVANCE': for (const m of p.field) m.atkMod += ['SOLDIER2','INFKNIGHT','CAVALRY'].includes(m.id) ? 3 : 2; break;
     case 'EMPTY_MIND': p.hand.push(inst(g, 'CREATION')); break;
-    case 'CREATION': ctx.drawN(p, 1); ctx.heal(p, 1); p.discard.push(inst(g, 'CREATION')); if (rmz(p).filter(c => c.id === 'CREATION').length >= 10) queueExpansionChoice(g, p, card.id, '複製する相手のデッキのカードを選択'); break;
+    case 'CREATION': {
+      ctx.drawN(p, 1); ctx.heal(p, 1);
+      const born=inst(g, 'CREATION');p.discard.push(born);
+      ctx.ev.push({type:'creationBorn',player:side(g,p),id:born.id,uid:born.uid,sourceUid:card.uid,copy:false});
+      if (rmz(p).filter(c => c.id === 'CREATION').length >= 10) queueExpansionChoice(g, p, card.id, '複製する相手のデッキのカードを選択');
+      break;
+    }
     case 'ROGUE_ART': if (p.field.some(isAssassinCard)) { for (const m of p.field) m.passivesG = [...new Set([...(m.passivesG ?? []), 'evade'])]; } else queueExpansionChoice(g, p, card.id, '回避を付与する自分のモンスターを選択'); break;
     case 'BLACK_NOVA': ctx.ev.push({type:'nova',player:side(g,p),from:p.hp,to:1}); p.hp = 1; o.skipTurns = (o.skipTurns ?? 0) + 1; break;
     case 'BLACK_CURSE': addCurses(g, o, 5); break;
@@ -5836,7 +5842,11 @@ function expansionChoiceResolve(g: GameState, ctx: Ctx, q: NonNullable<GameState
   switch (q.reason) {
     case 'STABLE': ctx.destroyMonster(p, card as FieldMon); if (!p.field.some(m => m.uid === card.uid)) effectSummon(g, ctx, p, 'CAVALRY'); return true;
     case 'Q_CHEAT': o.deck.splice(o.deck.findIndex(c => c.uid === card.uid), 1); rmz(o).push(card); return true;
-    case 'CREATION': p.discard.push(inst(g, card.id)); return true;
+    case 'CREATION': {
+      const born=inst(g,card.id);p.discard.push(born);
+      ctx.ev.push({type:'creationBorn',player:side(g,p),id:born.id,uid:born.uid,copy:true});
+      return true;
+    }
     case 'ROGUE_ART': (card as FieldMon).passivesG = [...new Set([...((card as FieldMon).passivesG ?? []), 'evade'])]; return true;
     case 'FIRE_ZONE': p.hand.splice(p.hand.findIndex(c => c.uid === card.uid), 1); rmz(p).push(card); spellDepth++; try { areaDamage(g, ctx, p, Number(q.data?.damage ?? 5), false, { ...inst(g, 'FIRE_ZONE'), uid:String(q.data?.sourceUid??'zone') }); } finally { spellDepth--; } return true;
     case 'FIRE_MASTER': { for (const zone of [p.deck,p.discard]) { const i = zone.findIndex(c => c.uid === card.uid); if (i >= 0) { p.hand.push(zone.splice(i, 1)[0]); break; } } if (Number(q.data?.left ?? 2) > 1) queueExpansionChoice(g, p, q.reason, '手札に加える2枚目のファイアー魔法を選択', { left: 1 }); return true; }
