@@ -1,0 +1,54 @@
+{
+  "id": "NIGHT_CASTLE_GIFT",
+  "revision": 2,
+  "date": "2026-10-14",
+  "generator": "built-in image_gen",
+  "prompt": "Use case: stylized-concept.\nCreate a NEW finished interior illustration for LORE TCG's permanent spell \"Gift from the Night Castle\" (夜城からの贈り物), replacing a rejected mundane brown wooden chest illustration. Match the supplied current approved LORE vampire-family illustrations closely in visual language. Target canvas 1472 x 1344, slightly landscape nearly square. This is art only, not a card mockup.\nInput image 1 VAMP_PACT: STYLE and MATERIAL reference for sophisticated crimson-and-silver vampire ceremonial objects, white parchment, deep red wax, deliberate engraved metal silhouettes and painterly fantasy rendering.\nInput image 2 VAMP_WARD: STYLE and WORLD reference for sharply faceted red crystal, ornate dark enamel and silver filigree, red-moon Gothic castle across nighttime water.\nInput image 3 BLOOD_RITE: STYLE and COMPOSITION reference for lucid magical action and rich silver highlights, foreground artifact against an atmospheric subordinate castle.\nDo not copy any reference's entire composition, goblets, hand, person, or coffin.\nScene: on a pale moonlit stone balcony overlooking the same nocturnal Gothic castle and canal, a beautiful small aristocratic gift reliquary has just unsealed. The gift is dark wine-red enamel and velvet, elegantly swept silver filigree with a central deep ruby clasp, refined and precious, NOT timber furniture or a large treasure chest. Its slightly lifted lid frames a single ivory vampire contract unfolding upward out of the red lining, its blank parchment clearly readable as the main bright shape. A broken crimson wax seal floats immediately beside the contract, physically connected by a short curling ribbon of deep-red magic from inside the gift. A small faceted ruby protective talisman remains visible nestled inside, secondary to the contract. Make the magic visibly emerge from the opened gift, not a disconnected ring or cloud of particles. The scene expresses a promised vampire power finally being bestowed.\nComposition: bold oblique view of the opened gift in the lower middle, unfolded parchment rising into center, together fill about 65 percent. Strong clear joined silhouette and luminous ivory/crimson focal contrast. Keep all key forms within central 80 percent, breathing room for card crop. A few red roses and a candle on the stone, subordinate Gothic spires and muted red moon in the upper distance. Rich depth without clutter.\nStyle: premium richly illustrated fantasy card artwork matching the supplied cards; deliberate elegant contours, organized shaded color shapes, luminous silver edge accents, intricate but legible tracery. Preserve the lavish vampire aristocracy mood of the references. Deep crimson, ruby, silver, ivory and cool indigo moonlight; red magical light accents rather than a red haze over everything. No gritty black-brown oak aesthetic, no mundane photorealistic product shot, no visible wood grain, no sepia, no plastic mobile-game 3D, no flat cartoon, no chibi, no excessive tiny scattered props.\nConstraints: no humans, faces, hands, humanoid figures, coffin, gold treasure heap, UI, frame, typography, writing, letters, numbers, logos or watermark. The contract has no legible writing or symbols resembling type. Full-bleed painted scene with opaque background.",
+  "sourceImage": "/Users/hiromaru05s/.codex/generated_images/01a11993-9d32-7aa0-b6d4-c6a169da48ab/exec-ecdf88be-6138-4a0d-a50d-0994a561be90.png",
+  "supersedes": "docs/card-rework/2026-10-13-elf-nightcastle/art-generation.json",
+  "rejectionReason": "The first image overused outdated dark oak / gritty realistic art direction, instead of the existing vampire family visual language.",
+  "referencePriority": "Current approved VAMP_PACT, VAMP_WARD and BLOOD_RITE illustrations; 2026-09-29 art-direction-v2 rejection record; world-bible for setting only.",
+  "worldBible": "docs/world-bible.md",
+  "artDirectionCorrection": "docs/card-rework/2026-09-29-dew-shield/art-direction-v2.md",
+  "references": [
+    {
+      "id": "VAMP_PACT",
+      "path": "client/public/art/cards/VAMP_PACT.webp",
+      "sha256": "18dd37af41be1965531610a34f189e53fc87a7e9cdd4641ddf6b8d4ccbf5d7b7"
+    },
+    {
+      "id": "VAMP_WARD",
+      "path": "client/public/art/cards/VAMP_WARD.webp",
+      "sha256": "3ace630fb95b4032893d4f6584ccc43183adf3ac43b8dfbc38d93ed0b31d01ad"
+    },
+    {
+      "id": "BLOOD_RITE",
+      "path": "client/public/art/cards/BLOOD_RITE.webp",
+      "sha256": "3d2c851ce0b33cdfae42ce2dbdcfd128b23e53be65b994ed42f284c5a4abbb9e"
+    }
+  ],
+  "scope": "Replace only Night Castle Gift artwork and its two thumbnails; card mechanics and balance unchanged.",
+  "assets": [
+    {
+      "path": "client/public/art/cards/NIGHT_CASTLE_GIFT.webp",
+      "width": 1472,
+      "height": 1344,
+      "bytes": 467374,
+      "sha256": "0e60af35d25c6b40cd9b10a8005736300c0513b5e3be653d0f304b2001993845"
+    },
+    {
+      "path": "client/public/art/cards-sm/NIGHT_CASTLE_GIFT.webp",
+      "width": 384,
+      "height": 351,
+      "bytes": 33912,
+      "sha256": "a20483d07a3e2d5191399021adbee13e5d920d79933b30804aace8697536acfc"
+    },
+    {
+      "path": "client/public/art/cards-xs/NIGHT_CASTLE_GIFT.webp",
+      "width": 192,
+      "height": 175,
+      "bytes": 9504,
+      "sha256": "571db5aa1463023adbe5ad7ff7225d1cef93ac857ace2c9eb89d768b22d7f9ec"
+    }
+  ]
+}
