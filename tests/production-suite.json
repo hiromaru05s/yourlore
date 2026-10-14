@@ -37,6 +37,7 @@
     "tests/lounge-settlement.mjs",
     "tests/menu-records.mjs",
     "tests/menu-selected.mjs",
+    "tests/mana-spirit-motion.mjs",
     "tests/monster-animation-rules.mjs",
     "tests/dual-ready.mjs",
     "tests/monster-effect-activation.mjs",

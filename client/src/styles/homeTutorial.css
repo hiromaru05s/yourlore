@@ -3,20 +3,11 @@
 .lounge-shell.selected-menu.lounge-home .lounge-atmosphere::before{display:none}
 .selected-menu.lounge-home .lounge-content>.lounge-home-screen{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,395px);align-items:center;gap:5vw;padding:0 6vw 12px;min-height:100%;height:auto}
 .selected-menu .lounge-home-main{width:100%;max-width:none;margin:0;position:relative;z-index:1}
-.home-companion{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;align-self:stretch;padding:12px 0}
-.home-companion-caption{align-self:flex-start;text-shadow:0 2px 15px #03172f;text-align:left}
-.home-companion-caption>span{font:11px Georgia,serif;letter-spacing:.3em;color:#e5e0cb}
-.lounge-content .home-companion-caption h1{font-size:clamp(21px,2.3vw,32px);color:#f6f3e8;margin:10px 0 0;line-height:1.5;font-weight:500}
-.home-spirit-touch{display:block;width:100%;max-width:380px;height:clamp(215px,36vh,345px);border:0;background:none;padding:0;cursor:pointer;touch-action:manipulation}
-.home-spirit-host{display:block;width:100%;height:100%;filter:drop-shadow(0 10px 10px #09162730)}
+.home-companion{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;align-self:stretch;padding:12px 0}
+.home-spirit-touch{display:block;width:100%;max-width:450px;height:clamp(300px,54vh,450px);border:0;background:none;padding:0;cursor:pointer;touch-action:manipulation}
+.home-spirit-host{display:block;width:100%;height:100%;filter:drop-shadow(0 14px 12px #09162730)}
 .home-spirit-host canvas,.home-spirit-host svg{display:block;width:100%;height:100%}
 .home-spirit-touch:focus-visible{outline:2px solid #cee5ed;outline-offset:-12px;border-radius:50%}
-.home-spirit-speech{width:min(100%,400px);padding:17px 22px 13px;background:#0c2030ed;border-top:1px solid #d6e2e98c;border-bottom:1px solid #9db9c544;position:relative;box-shadow:0 10px 35px #05152426}
-.home-spirit-speech::before{content:'';position:absolute;left:50%;top:-7px;width:12px;height:12px;background:#0c2030;transform:rotate(45deg);border-left:1px solid #d6e2e98c;border-top:1px solid #d6e2e98c}
-.home-spirit-name{color:#e6cfa2;font-size:10px;letter-spacing:.12em}
-.home-spirit-speech p{font-size:13px;color:#e6edf0;line-height:1.8;margin:8px 0 10px;min-height:3.6em}
-.home-spirit-speech button{padding:8px 0;min-height:38px;width:100%;background:none;border:0;border-top:1px solid #a9c9d526;color:#c0dce7;text-align:left;font-size:11px;cursor:pointer}
-.home-spirit-speech button span{float:right}.home-spirit-speech button:hover{color:white}.home-spirit-speech button:focus-visible{outline:2px solid #cee5ed;outline-offset:3px}
 /* Keep the adopted horizon nav; reserve enough room for the longer label. */
 .lounge-shell.horizon-nav .lounge-rail nav{grid-template-columns:repeat(3,minmax(0,1fr)) 1.15fr repeat(2,minmax(0,1fr)) 1.4fr}
 /* Curriculum as a stage selection, with a clear primary action and persistent state. */
@@ -46,9 +37,7 @@
 @media(max-width:850px){
  .selected-menu.lounge-home .lounge-content>.lounge-home-screen{display:flex;flex-direction:column;gap:20px;padding:14px 22px 30px;height:auto}
  .selected-menu.lounge-home .lounge-atmosphere{background-position:35% center}
- .home-companion{display:grid;grid-template-columns:135px minmax(0,1fr);gap:0 8px;width:min(100%,520px);align-self:center;padding:0}
- .home-companion-caption{grid-column:1/-1;margin:0 0 6px}.lounge-content .home-companion-caption h1{font-size:21px;margin:5px 0}.home-companion-caption>span{font-size:9px}
- .home-spirit-touch{height:175px;width:145px;margin-left:-10px}.home-spirit-speech{padding:12px 14px;width:100%}.home-spirit-speech::before{left:-6px;top:40px;transform:rotate(-45deg)}.home-spirit-speech p{font-size:11px;margin:5px 0;min-height:0}.home-spirit-speech button{font-size:10px}.home-spirit-name{font-size:9px}
+
  .selected-menu .lounge-home-main{width:min(100%,360px);max-width:100%;gap:6px;margin:0 auto}.selected-menu .lounge-play-button{height:235px;width:235px}
  .lounge-tutorial .lounge-content>.academy{padding:5px 20px 24px}.academy .academy-progress{padding:15px;grid-template-columns:1fr}.academy .academy-progress strong{font-size:24px}.academy .academy-hero h1{font-size:25px}.academy .academy-hero .academy-spirit{width:88px;height:135px}
 }
@@ -56,16 +45,16 @@
  .lounge-tutorial .academy .academy-lessons{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.lounge-tutorial .academy .academy-content{padding:0 0 20px}.lounge-tutorial .lounge-content>.academy{padding:5px 14px 24px}
  .lesson-art{height:87px}.lesson-copy{padding:0 11px 11px}.lounge-tutorial .academy .tut-step-t{font-size:15px}.academy .academy-lessons p{font-size:10px}.lesson-state{font-size:9px;margin-bottom:7px}.academy .academy-lesson-start{margin:0 11px;align-items:flex-start;flex-direction:column;gap:7px;min-height:64px}.academy .lesson-action{align-self:flex-end}.academy .academy-hero p{font-size:11px}.academy .academy-hero h1{font-size:23px}.academy .academy-hero .menu-eyebrow{font-size:8px}.academy .academy-notebook{font-size:11px}
 }
-@media(max-width:360px){.home-companion{grid-template-columns:105px minmax(0,1fr)}.home-spirit-touch{width:120px;height:155px}.selected-menu.lounge-home .lounge-content>.lounge-home-screen{padding:10px 16px 22px}.home-spirit-speech{padding:10px}.academy .academy-hero h1{font-size:21px}.academy .academy-hero .academy-spirit{width:65px}.lounge-tutorial .academy .tut-step-t{font-size:14px}}
-@media(min-width:851px) and (max-height:740px){.home-spirit-touch{height:230px}.home-companion{padding:0}.home-spirit-speech{padding:12px 18px 8px}.home-companion-caption h1{font-size:24px}.selected-menu .lounge-play-button{width:245px;height:245px}}
+@media(max-width:360px){.selected-menu.lounge-home .lounge-content>.lounge-home-screen{padding:10px 16px 22px}.academy .academy-hero h1{font-size:21px}.academy .academy-hero .academy-spirit{width:65px}.lounge-tutorial .academy .tut-step-t{font-size:14px}}
+@media(min-width:851px) and (max-height:740px){.home-companion{padding:0}.selected-menu .lounge-play-button{width:245px;height:245px}}
 @media(prefers-reduced-motion:reduce){.lesson-art>img{transition:none}.lesson-tile:has(button:hover) .lesson-art>img{transform:none}}
 /* Override legacy menu geometry and state rules regardless of module load order. */
 .selected-menu.lounge-home .lounge-home-main{width:100%;max-width:none;padding:0;margin:0;display:flex;flex-direction:column}
 .lounge-shell.selected-menu.lounge-tutorial:has(.screen.academy){background-image:linear-gradient(#071522c7,#071522ed),url('/art/lounge/illustrated-v1/biblion.webp')}
 .lounge-tutorial .academy .academy-lessons .lesson-tile.claimed{opacity:1}
 .lounge-shell.horizon-nav.selected-menu .lounge-rail nav{grid-template-columns:repeat(3,minmax(0,1fr)) 1.15fr repeat(2,minmax(0,1fr)) 1.4fr}
-@media(max-width:850px){.selected-menu.lounge-home .lounge-home-main{width:min(100%,360px);margin:0 auto}.selected-menu.lounge-home .lounge-content>.lounge-home-screen{padding-top:4px}.home-companion{grid-template-columns:120px minmax(0,1fr)}.home-spirit-touch{height:142px;width:135px}.home-companion-caption{margin-bottom:0}.selected-menu.lounge-home .lounge-play-button{width:210px;height:210px}.selected-menu.lounge-home .lounge-active-deck{min-height:62px}.selected-menu.lounge-home .lounge-rank-info .rank-emblem{height:42px;width:36px}}
-@media(max-width:360px){.home-companion{grid-template-columns:95px minmax(0,1fr)}.home-spirit-touch{width:110px}}
+@media(max-width:850px){.selected-menu.lounge-home .lounge-home-main{width:min(100%,360px);margin:0 auto}.selected-menu.lounge-home .lounge-content>.lounge-home-screen{padding-top:4px}.selected-menu.lounge-home .lounge-play-button{width:210px;height:210px}.selected-menu.lounge-home .lounge-active-deck{min-height:62px}.selected-menu.lounge-home .lounge-rank-info .rank-emblem{height:42px;width:36px}}
+
 /* The stage choices should be visible on arrival, including on phones. */
 @media(min-width:851px){
  .lounge-tutorial .academy .academy-content{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.85fr);column-gap:28px}
@@ -82,4 +71,18 @@
 @media(min-width:851px){.lounge-tutorial .academy .academy-hero .academy-spirit{height:115px;width:100px}.lounge-tutorial .academy .lesson-art{height:86px}.lounge-tutorial .academy .academy-map-heading{margin-bottom:12px}}
 @media(max-width:600px){.lounge-shell.selected-menu.lounge-tutorial .academy .academy-lessons{gap:12px}}
 @media(max-width:850px){.lounge-shell.selected-menu.lounge-home .lounge-atmosphere{background-image:linear-gradient(180deg,#081b3026 0%,#081b3026 25%,#081b3066 42%,#061424cf 70%,#061424ee),url('/art/lounge/illustrated-v1/biblion.webp')}}
-.home-companion-caption{background:linear-gradient(90deg,#071a2ca6,transparent);padding:8px 14px}
+
+
+/* With no caption or speech panel, the companion itself owns the left stage. */
+@media(max-width:850px){
+ .lounge-shell.selected-menu.lounge-home .lounge-content>.lounge-home-screen{gap:4px;padding-top:0}
+ .home-companion{width:100%;align-self:center;padding:0;flex:none}
+ .home-spirit-touch{width:210px;max-width:100%;height:215px;margin:0}
+}
+@media(max-width:360px){.home-spirit-touch{width:170px;height:170px}}
+@media(min-width:851px) and (max-height:740px){.home-spirit-touch{height:350px}}
+@media(max-width:850px) and (max-height:500px){
+ .lounge-shell.selected-menu.lounge-home .lounge-content>.lounge-home-screen{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,1fr);gap:20px;align-items:center}
+ .home-companion{align-self:start;position:sticky;top:0}
+ .home-spirit-touch{width:225px;height:225px}
+}
