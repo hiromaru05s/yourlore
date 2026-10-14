@@ -691,6 +691,13 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
 // ============================================================
 // turn flow
 // ============================================================
+/** Preserve cause order without changing the existing skip count or legacy semantics. */
+function reserveTurnSkip(p: PlayerState, source: "TIMEWARP" | "BLACK_NOVA"): void {
+  const count = p.skipTurns ?? 0;
+  const sources = (p.skipTurnSources ?? []).slice(0, count);
+  while (sources.length < count) sources.push(null);
+  sources.push(source); p.skipTurnSources = sources; p.skipTurns = count + 1;
+}
 function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
   const p = g.players[g.cur];
   const shieldOwner = g.players[1 - g.cur];
@@ -699,6 +706,8 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
   if (!first && skips > 0) { // 시공간 조작: queued skips stack
     p.skipTurns = Math.max(0, skips - 1);
     p.skipNext = false;
+    const source = p.skipTurnSources?.shift() ?? undefined;
+    ctx.ev.push({type:"turnSkipped",player:g.cur,source,remaining:p.skipTurns});
     const left = p.skipTurns > 0 ? ` (${p.skipTurns}회 남음)` : "";
     const leftJa = p.skipTurns > 0 ? ` (残り${p.skipTurns}回)` : "";
     ctx.log(`<span class="dmg">${p.name} 턴 스킵!</span>${left}`, `<span class="dmg">${p.name} ターンスキップ!</span>${leftJa}`);
@@ -3508,7 +3517,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "TIMEWARP": { // 시공간 조작(v34): 🎲 4+면 다음 상대 턴 스킵
       const { rolls: twr } = diceRoll(g, ctx.ev, side(g, p), { id: card.id, player: side(g, p) }, 1, 4);
-      if (twr[0] >= 4) { o.skipTurns = (o.skipTurns ?? 0) + 1; o.skipNext = false; ctx.log(`${tag(p, card)} 🎲 ${twr[0]} <span class="good">성공!</span> 다음 상대 턴 스킵 예약 (${o.skipTurns}회)`, `${tag(p, card)} 🎲 ${twr[0]} <span class="good">成功!</span> 次の相手ターンスキップ予約 (${o.skipTurns}回)`); }
+      if (twr[0] >= 4) { reserveTurnSkip(o,"TIMEWARP"); o.skipNext = false; ctx.ev.push({type:"timewarp",player:side(g,p),sourceUid:card.uid}); ctx.log(`${tag(p, card)} 🎲 ${twr[0]} <span class="good">성공!</span> 다음 상대 턴 스킵 예약 (${o.skipTurns}회)`, `${tag(p, card)} 🎲 ${twr[0]} <span class="good">成功!</span> 次の相手ターンスキップ予約 (${o.skipTurns}回)`); }
       else ctx.log(`${tag(p, card)} 🎲 ${twr[0]} 실패…`, `${tag(p, card)} 🎲 ${twr[0]} 失敗…`);
       break;
     }
@@ -5808,7 +5817,7 @@ function expansionSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       break;
     }
     case 'ROGUE_ART': if (p.field.some(isAssassinCard)) { for (const m of p.field) m.passivesG = [...new Set([...(m.passivesG ?? []), 'evade'])]; } else queueExpansionChoice(g, p, card.id, '回避を付与する自分のモンスターを選択'); break;
-    case 'BLACK_NOVA': ctx.ev.push({type:'nova',player:side(g,p),from:p.hp,to:1}); p.hp = 1; o.skipTurns = (o.skipTurns ?? 0) + 1; break;
+    case 'BLACK_NOVA': ctx.ev.push({type:'nova',player:side(g,p),from:p.hp,to:1}); p.hp = 1; reserveTurnSkip(o,"BLACK_NOVA"); break;
     case 'BLACK_CURSE': addCurses(g, o, 5); break;
     case 'SOUL_HARVEST': ctx.dealDamage(o, deckComp(o).filter(c => c.id === 'CURSE').length * 4, cn(card), cn(card)); break;
     case 'ANESTHESIA': for (const m of p.field) m.immuneDamageTurn = g.turn; break;

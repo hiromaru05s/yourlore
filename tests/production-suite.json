@@ -1,5 +1,7 @@
 {
   "current": [
+    "tests/timewarp.mjs",
+    "tests/timewarp-lifecycle.mjs",
     "tests/forbidden-ritual.mjs",
     "tests/dragon-fusion.mjs",
     "tests/hatch-summon.mjs",
