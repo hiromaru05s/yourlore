@@ -75,8 +75,8 @@ export function buildMoonRabbit(body:T.Group,pearl:T.Material):SpiritForm{
  return {left,right,update(p,dt,time){
   const target=rabbitGesture(p,time),blend=dt===0?1:1-Math.exp(-dt*12);
   for(const key of Object.keys(state) as (keyof typeof state)[])state[key]+=(target[key]-state[key])*blend;
-  left.rotation.set(state.flutter*Math.sin(p.elapsed*18+.6)*.16,-state.affection*.52,-state.leftHand);
-  right.rotation.set(-state.flutter*Math.sin(p.elapsed*18+.76)*.16,state.affection*.52,state.rightHand);
+  left.rotation.set(state.flutter*Math.sin(p.elapsed*18+.6)*.16,state.affection*.72,-state.leftHand);
+  right.rotation.set(-state.flutter*Math.sin(p.elapsed*18+.76)*.16,-state.affection*.72,state.rightHand);
   leftEar(state.droop,state.earLeft,state.tipLeft,state.flutter);rightEar(state.droop,state.earRight,state.tipRight,state.flutter);
   shell.scale.y=1+Math.sin(time*1.8)*.008*(1-state.flutter*.7);
  }};

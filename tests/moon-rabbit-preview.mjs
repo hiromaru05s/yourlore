@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { build } from 'esbuild';
 import * as T from 'three';
-const bundle=await build({entryPoints:['client/src/dev/spirit-rabbit/rig.ts'],bundle:true,format:'esm',platform:'node',write:false});
+const bundle=await build({entryPoints:['client/src/ui/zenoRig.ts'],bundle:true,format:'esm',platform:'node',write:false});
 const {buildMoonRabbit,rabbitGesture}=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
 const base={mood:'idle',elapsed:0,x:0,y:0,yaw:0,roll:0,pitch:0,fin:0,finPitch:0,eye:1,smile:0,yawn:0};
 const idle=Array.from({length:120},(_,i)=>rabbitGesture(base,i/30).earLeft);
@@ -23,3 +23,8 @@ for(let i=0;i<360;i++){
 }
 const count=body.children.length;for(let i=0;i<300;i++)rig.update(base,1/60,i/60);assert.equal(body.children.length,count,'animation must reuse geometry');
 console.log('PASS idle sway, visible hand flaps, sleepy ear bend, attached roots, finite geometry and stable mesh count');
+
+rig.update({...base,mood:"happy",elapsed:1},0,1);
+for(const hand of [rig.left,rig.right])assert(hand.children[0].getWorldPosition(new T.Vector3()).z>.10,"Gentle greeting folds both palms forward toward the chest");
+assert(Math.abs(rabbitGesture({...base,mood:"happy",elapsed:1},1).leftHand)<.3,"Gentle greeting must not reuse the large laugh flaps");
+console.log("PASS gentle greeting has distinct forward hand movement");
