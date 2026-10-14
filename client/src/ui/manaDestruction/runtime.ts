@@ -7,8 +7,28 @@ import {makeSkin} from './illumination';
 import {draw} from './renderer';
 import {variants,type Quad} from './catalog';
 
+type Prepared={material:ReturnType<typeof makeMaterial>;returned:ReturnType<typeof makeMaterial>};
+const prepared=new Map<HTMLElement,{value:Prepared;clear:()=>void}>();
 const active=new Map<HTMLElement,()=>void>();
-export function cancelManaDestruction(root?:HTMLElement){for(const [node,cancel]of [...active])if(root?root.contains(node):node.dataset.combatExit!=='true')cancel();}
+/** Optional batch warmup. Call before a choreographed sequence, while its clock is stopped.
+ * The captured material belongs to this exact DOM state and is consumed once. */
+export async function prepareManaDestruction(source:HTMLElement,signal:AbortSignal):Promise<boolean>{
+ prepared.get(source)?.clear();
+ if(signal.aborted||!source.isConnected)return false;
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches)return true;
+ try{
+  const value=await prepare(source,signal);
+  if(!value||signal.aborted||!source.isConnected)return false;
+  const clear=()=>{if(prepared.get(source)?.value===value)prepared.delete(source);signal.removeEventListener('abort',clear);};
+  prepared.set(source,{value,clear});signal.addEventListener('abort',clear,{once:true});return true;
+ }catch{return false;}
+}
+async function prepare(source:HTMLElement,signal:AbortSignal):Promise<Prepared|null>{
+ const surfaces=await capture(source,signal);if(!surfaces||signal.aborted)return null;
+ const material=makeMaterial(surfaces.source),returned={...material,face:surfaces.return,skins:[makeSkin(surfaces.return,0,true)]};
+ return{material,returned};
+}
+export function cancelManaDestruction(root?:HTMLElement){for(const [node,item]of [...prepared])if(root?root.contains(node):node.dataset.combatExit!=='true')item.clear();for(const [node,cancel]of [...active])if(root?root.contains(node):node.dataset.combatExit!=='true')cancel();}
 function project(node:HTMLElement):Quad{
  const w=node.offsetWidth,h=node.offsetHeight,mat=projectedPlacement(node,w,h),pad=w*CARD_PADDING;
  const mount=node.parentElement;
@@ -52,29 +72,31 @@ export function playManaDestruction(source:HTMLElement,destination:HTMLElement,s
   const cancel=()=>finish(false),hidden=()=>{if(document.hidden)cancel();};
   const deadline=setTimeout(cancel,6000);
   active.set(source,cancel);signal?.addEventListener('abort',cancel,{once:true});document.addEventListener('visibilitychange',hidden);window.addEventListener('resize',cancel);window.addEventListener('pagehide',cancel);
-  void capture(source,load.signal).then(surfaces=>{
-   if(done||!surfaces){cancel();return;}
-   const material=makeMaterial(surfaces.source),returned={...material,face:surfaces.return,skins:[makeSkin(surfaces.return,0,true)]};
+  const cached=prepared.get(source);cached?.clear();
+  void (cached?Promise.resolve(cached.value):prepare(source,load.signal)).then(value=>{
+   if(done||!value){cancel();return;}
+   const {material,returned}=value;
    if(done||!source.isConnected||!destination.isConnected){cancel();return;}
-   const start=performance.now(),timing=variants[0],dpr=Math.min(devicePixelRatio,2);
+   let start:number|undefined;const timing=variants[0],dpr=Math.min(devicePixelRatio,2);
    canvas=document.createElement('canvas');canvas.className='mana-destruction';canvas.dataset.variant='vein-01';canvas.setAttribute('aria-hidden','true');
    canvas.style.cssText='position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:136';const points=[...project(source),...project(destination)],margin=source.getBoundingClientRect().width*.85;
    const left=Math.max(0,Math.min(...points.map(p=>p.x))-margin),top=Math.max(0,Math.min(...points.map(p=>p.y))-margin);
    const width=Math.min(innerWidth-left,Math.max(...points.map(p=>p.x))+margin-left),height=Math.min(innerHeight-top,Math.max(...points.map(p=>p.y))+margin-top);
-   canvas.style.left=left+'px';canvas.style.top=top+'px';canvas.style.width=width+'px';canvas.style.height=height+'px';canvas.width=Math.ceil(width*dpr);canvas.height=Math.ceil(height*dpr);canvas.dataset.prepareMs=String(Math.round(start-began));document.body.append(canvas);
+   canvas.style.left=left+'px';canvas.style.top=top+'px';canvas.style.width=width+'px';canvas.style.height=height+'px';canvas.width=Math.ceil(width*dpr);canvas.height=Math.ceil(height*dpr);canvas.dataset.prepareMs=String(Math.round(performance.now()-began));canvas.dataset.prepared=String(!!cached);document.body.append(canvas);
    const ctx=canvas.getContext('2d',{willReadFrequently:true})!;
    source.style.visibility='hidden';sourceHidden=true;
    const tick=(now:number)=>{
     if(done)return;if(!source.isConnected||!destination.isConnected||signal?.aborted||document.hidden){cancel();return;}
     try{
-    const ms=Math.min(timing.duration,now-start);
+    // Begin on the first display frame, after all batch canvases have been installed.
+    start??=now;const ms=Math.min(timing.duration,now-start);
     if(ms>=timing.arriveAt&&destination.matches('.card')&&!targetHidden){destination.style.visibility='hidden';targetHidden=true;}
     ctx.resetTransform();ctx.clearRect(0,0,canvas!.width,canvas!.height);ctx.setTransform(dpr,0,0,dpr,-left*dpr,-top*dpr);
     draw(ctx,ms>=timing.arriveAt?returned:material,0,ms,project(source),project(destination));
     canvas!.dataset.phase=ms<timing.breakAt?'charge':ms<timing.joinAt?'fracture':ms<timing.arriveAt?'flight':'reform';
     if(ms===timing.duration)finish(true);else raf=requestAnimationFrame(tick);
     }catch{cancel();}
-   };tick(start);
+   };raf=requestAnimationFrame(tick);
   }).catch(cancel);
  });
 }

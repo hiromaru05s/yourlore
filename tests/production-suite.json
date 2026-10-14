@@ -132,6 +132,7 @@
     "tests/shield-titan-summon.mjs",
     "tests/blood-rite.mjs",
     "tests/massacre.mjs",
+    "tests/treason.mjs",
     "tests/infinity-cull.mjs",
     "tests/nova.mjs",
     "tests/void-shot.mjs",

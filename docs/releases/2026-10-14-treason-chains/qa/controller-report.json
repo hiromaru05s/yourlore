@@ -1,0 +1,217 @@
+{
+  "checks": [
+    "controller 1280 side 0: 03 once, native x5 once, prepared, brand/quest/cleanup",
+    "controller 1280 side 1: 03 once, native x5 once, prepared, brand/quest/cleanup",
+    "controller 390 side 0: 03 once, native x5 once, prepared, brand/quest/cleanup",
+    "controller 390 side 1: 03 once, native x5 once, prepared, brand/quest/cleanup",
+    "prepare-skip",
+    "skip",
+    "resize",
+    "hidden",
+    "reduced",
+    "fallback"
+  ],
+  "runs": [
+    {
+      "width": 1280,
+      "side": 0,
+      "chain": 1,
+      "native": 5,
+      "prepared": [
+        "true",
+        "true",
+        "true",
+        "true",
+        "true"
+      ],
+      "finished": [
+        {
+          "complete": true,
+          "elapsed": 1530,
+          "prepareMs": 14,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1533,
+          "prepareMs": 15,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1533,
+          "prepareMs": 16,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1534,
+          "prepareMs": 17,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1536,
+          "prepareMs": 17,
+          "phase": "reform"
+        }
+      ],
+      "brand": 4,
+      "field": 0,
+      "enchants": 0,
+      "quests": 1,
+      "remaining": 0
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "chain": 1,
+      "native": 5,
+      "prepared": [
+        "true",
+        "true",
+        "true",
+        "true",
+        "true"
+      ],
+      "finished": [
+        {
+          "complete": true,
+          "elapsed": 1536,
+          "prepareMs": 12,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1540,
+          "prepareMs": 13,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1543,
+          "prepareMs": 15,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1545,
+          "prepareMs": 16,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1547,
+          "prepareMs": 16,
+          "phase": "reform"
+        }
+      ],
+      "brand": 4,
+      "field": 0,
+      "enchants": 0,
+      "quests": 1,
+      "remaining": 0
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "chain": 1,
+      "native": 5,
+      "prepared": [
+        "true",
+        "true",
+        "true",
+        "true",
+        "true"
+      ],
+      "finished": [
+        {
+          "complete": true,
+          "elapsed": 1532,
+          "prepareMs": 15,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1534,
+          "prepareMs": 16,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1535,
+          "prepareMs": 17,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1536,
+          "prepareMs": 17,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1536,
+          "prepareMs": 19,
+          "phase": "reform"
+        }
+      ],
+      "brand": 4,
+      "field": 0,
+      "enchants": 0,
+      "quests": 1,
+      "remaining": 0
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "chain": 1,
+      "native": 5,
+      "prepared": [
+        "true",
+        "true",
+        "true",
+        "true",
+        "true"
+      ],
+      "finished": [
+        {
+          "complete": true,
+          "elapsed": 1537,
+          "prepareMs": 12,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1539,
+          "prepareMs": 13,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1542,
+          "prepareMs": 14,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1544,
+          "prepareMs": 15,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1545,
+          "prepareMs": 16,
+          "phase": "reform"
+        }
+      ],
+      "brand": 4,
+      "field": 0,
+      "enchants": 0,
+      "quests": 1,
+      "remaining": 0
+    }
+  ],
+  "errors": []
+}

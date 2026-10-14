@@ -3542,10 +3542,15 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       break;
     }
     case "TREASON": { // 반역죄(v37): 상대 필드 전부 파괴 + 낙인 3
+      const at=ctx.ev.length,publicTargets=[...o.field.map(m=>({uid:m.uid,zone:'monster' as const})),...o.enchants.map(e=>({uid:e.card.uid,zone:'enchant' as const}))];
       for (const tm of [...o.field]) ctx.destroyMonster(o, tm);
       if (o.traps.length && trySnare(g, ctx, o)) { /* 덫 속의 덫 */ }
       else for (const t of o.traps.splice(0)) { if (t.card.exileOnDestroy) rmz(o).push(t.card); else o.discard.push(t.card); }
       for (const e of o.enchants.splice(0)) binEnch(g, ctx, o, e.card);
+      // Only resolved public exits belong to the chain batch; hidden traps and protected monsters do not.
+      const destroyed=new Set(ctx.ev.slice(at).flatMap(e=>e.type==='destroy'?[e.uid]:[]));
+      const targets=publicTargets.filter(t=>t.zone==='monster'?destroyed.has(t.uid):!o.enchants.some(e=>e.card.uid===t.uid)).map(t=>({...t,destination:(o.removed??[]).some(c=>c.uid===t.uid)?'rift' as const:'discard' as const}));
+      ctx.ev.splice(at,0,{type:'treason',player:side(g,p),target:side(g,o),sourceUid:card.uid,targets});
       gainBrand(g, ctx, o, 3);
       ctx.log(`${tag(p, card)} <span class="dmg">상대 필드의 모든 카드 파괴</span> + ${o.name} 에게 낙인 카운터 +3 (합계 ${o.brand})`, `${tag(p, card)} <span class="dmg">相手の場の全カードを破壊</span> + ${o.name} に烙印カウンター+3 (計${o.brand})`);
       break;
