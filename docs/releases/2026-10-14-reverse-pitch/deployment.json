@@ -1,0 +1,36 @@
+{
+  "environment": "staging",
+  "origin": "https://test.yourlore.xyz",
+  "verifiedAt": "2026-10-14T11:45:13.657611+00:00",
+  "sourceSha": "15ac2fb4ca4302f1b9059e65fe96bf6a2613f83b",
+  "featureCommits": [
+    "862a59f23dfee6b31f39528a9db79dda8b525656",
+    "ef82cdd9"
+  ],
+  "deploymentId": "51ceb673-85c0-4d06-b0ca-f90393d73a69",
+  "versions": [
+    {
+      "version_id": "3ac1fc47-b538-44b0-aa76-1913e742a096",
+      "percentage": 100
+    }
+  ],
+  "createdOn": "2026-10-14T11:42:37.700397Z",
+  "guard": "scripts/deploy-guard.mjs staging",
+  "guardCompleted": true,
+  "typecheck": "passed",
+  "productionSuite": {
+    "passed": 144,
+    "failed": 0
+  },
+  "assetParity": {
+    "matchedFiles": 94,
+    "source": "captured exact guarded build"
+  },
+  "localValidation": [
+    "23 engine cases",
+    "76 elemental rule-parity cases",
+    "actual controller browser lifecycle and interactions",
+    "selected renderer parity: 10 frames, zero pixel difference"
+  ],
+  "boundary": "Staging deployment and asset parity confirmed. Authenticated online PvP not exercised; production not deployed."
+}
