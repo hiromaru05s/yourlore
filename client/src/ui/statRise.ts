@@ -7,7 +7,7 @@ import type {Kind} from './monster/catalog';
 export function createBoardStatRise(root:HTMLElement){
  let previous=new Map<string,{id:string;owner:number;atk:number;def:number;hp:number}>(),disposed=false;
  return {
-  async update(state:GameState){
+  async update(state:GameState,handled:ReadonlySet<string>=new Set()){
    if(disposed)return;
    const next=new Map<string,{id:string;owner:number;atk:number;def:number;hp:number}>();
    const effects:Array<()=>Promise<void>>=[];
@@ -25,7 +25,7 @@ export function createBoardStatRise(root:HTMLElement){
     const unable=!state.over && (owner===state.cur ? !monsterCanAttack(state,p,m)
       : candidates.some(a=>!a.exhausted && a.hatch==null) && !candidates.some(a=>monsterCanTarget(state,active,a,m)));
     if(unable){n.dataset.monsterBlocked='true';n.classList.remove('is-attacker');}else delete n.dataset.monsterBlocked;
-    const old=previous.get(m.uid);if(!old||old.id!==m.id||old.owner!==owner||state.over)return;
+    const old=previous.get(m.uid);if(!old||old.id!==m.id||old.owner!==owner||state.over||handled.has(m.uid))return;
     const da=value.atk-old.atk,dh=value.def-old.def;if(!da&&!dh)return;
     if(choosingBuff){next.set(m.uid,old);return;}
     const stats={...(da?{atk:{from:old.atk,to:value.atk}}:{}),...(dh?{def:{from:value.hp-dh,to:value.hp}}:{})};

@@ -33,6 +33,7 @@ import { projectBoardDOM } from './boardProjection';
 import { installGameCursor } from './gameCursor';
 import { createAttackAim } from './attackAim';
 import { createBoardStatRise } from './statRise';
+import {TrickRoomPresentation} from './trickRoom/runtime';
 import {createRiftRecordWindow,recordVariant} from './riftRecordCount';
 
 // the local player's profile avatar (set by the game screen), shown on MY portrait
@@ -96,6 +97,7 @@ export class GameView {
   /** battlefield art for THIS match — rolled once at construction (see pickBattlefieldBg) */
   private disposed = false;
   private statRise: ReturnType<typeof createBoardStatRise>;
+  private trickRoom:TrickRoomPresentation;
   private disposeScene?: () => void;
   private readonly battlefieldBg = pickBattlefieldBg();
 
@@ -104,6 +106,7 @@ export class GameView {
     this.you = you;
     this.h = h;
     this.statRise = createBoardStatRise(root);
+    this.trickRoom = new TrickRoomPresentation(root);
     delete this.root.dataset.sceneReady;delete this.root.dataset.boardRendered;delete this.root.dataset.preloadedImages;
     this.root.dataset.tableState=typeof WebGL2RenderingContext!=='undefined'?'loading':'fallback';
     // Select projected-board CSS before inserting nodes: otherwise the browser
@@ -297,6 +300,7 @@ export class GameView {
     disposeSeekers(this.root);
     this.cancelHandDrag?.();
     this.disposeScene?.();
+    this.trickRoom.dispose();
     this.statRise.dispose();
     this.handConditions.dispose();
     clearBiblionFx(true);
@@ -354,6 +358,7 @@ export class GameView {
   }
 
   render(g: GameState): Promise<void> {
+    this.trickRoom.finish();
     const fieldBefore=fieldPositions(this.root);
     const readyPiles=new Set([...this.root.querySelectorAll('.pile--3d-ready')].map(el=>el.id));
     const oldCards=new Map([...this.root.querySelectorAll<HTMLElement>('.card[data-uid]')].map(el=>[el.dataset.uid,{width:el.offsetWidth,fonts:[...el.querySelectorAll<HTMLElement>('.seal-value')].map(e=>({text:e.textContent,font:e.style.fontSize}))}]));
@@ -451,7 +456,9 @@ export class GameView {
     projectBoardDOM(this.root);
     this.root.dataset.boardRendered="true";
     settleField(this.root,fieldBefore);
-    return this.statRise.update(g);
+    const trick=this.trickRoom.track(g);
+    const stats=this.statRise.update(g,new Set(trick.changes.map(c=>c.uid)));
+    return Promise.all([stats,this.trickRoom.present(trick)]).then(()=>{});
   }
 
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {

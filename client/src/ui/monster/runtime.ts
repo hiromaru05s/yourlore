@@ -97,12 +97,17 @@ function observeField(root:HTMLElement){
  for(const zone of root.querySelectorAll('.zone-mon'))observer.observe(zone,{childList:true,subtree:true,attributes:true,attributeFilter:['data-reserved-uid']});
 }
 function removeState(n:HTMLElement){const s=states.get(n);if(!s)return;s.actor.dispose();n.style.opacity=s.opacity;states.delete(n);}
+/** Live presentation owners for attached UI effects, including persistent field actors. */
+export function monsterPresentationNodes(source:HTMLElement):HTMLElement[]{
+ return [source,states.get(source)?.actor.el,jobs.get(source)?.actor.el,gutsJobs.get(source)?.actor.el].filter((n):n is HTMLElement=>!!n&&n.isConnected);
+}
 export function syncMonsterStates(root:HTMLElement){
  for(const [n,s] of states)if(s.root===root||!n.isConnected)removeState(n);
  if(!root.isConnected){release();return;}
  for(const n of root.querySelectorAll<HTMLElement>('.zone-mon .card[data-uid]')){
   if(!n.classList.contains('is-attacker')&&!n.dataset.monsterAura&&!n.dataset.monsterBlocked)continue;
-  const layer=ensureField(root),actor=new Actor(n,layer.cards,2);states.set(n,{actor,root,layer,opacity:n.style.opacity,dirty:true});n.style.opacity='0';
+  const layer=ensureField(root),actor=new Actor(n,layer.cards,2);states.set(n,{actor,root,layer,opacity:n.style.opacity,dirty:true});
+  // Keep the source visible until the replacement actor has painted its first pose.
  }
  if([...states.values()].some(s=>s.root===root))observeField(root);release();if(states.size)schedule();
 }
@@ -133,7 +138,7 @@ function tick(now:number){
   s.dirty=false;
   const side=n.closest('#oppRow')?-1:1;
   const k=ready?'ready':blocked?'blocked':'aura',v=ready?'C':blocked?'B':'C',t=ready?(now%2200)/2200:blocked?1:(now%4400)/4400;
-  s.actor.paint(k,v,t,r,r,reduced(),true,side);s.actor.el.dataset.monsterKind=k;s.actor.el.dataset.monsterVariant=dual?'dual-04':v;
+  s.actor.paint(k,v,t,r,r,reduced(),true,side);if(n.style.opacity!=='0')n.style.opacity='0';s.actor.el.dataset.monsterKind=k;s.actor.el.dataset.monsterVariant=dual?'dual-04':v;
   if(dual){s.dual??=new DualReadySurface(s.actor,2);s.dual.paint(r,now,reduced(),side);}else s.dual?.hide();
   if(n.dataset.monsterAura){
    if(!ready&&!blocked)s.actor.el.style.setProperty('filter',ongoingFilter('C',t,reduced()),'important');
