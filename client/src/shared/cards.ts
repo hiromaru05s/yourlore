@@ -813,7 +813,7 @@ const NEW_CARDS7: CardDef[] = [
     text: "자신의 덱·묘지에서 원하는 카드를 원하는 만큼 게임에서 제외한다", textJa: "自分のデッキ・墓地から好きなカードを好きなだけゲームから除外する" },
   { id: "EXILE_NUKE1", t: "spell", cost: 6, play: 10, name: "공허 사격", nameJa: "虚空射撃",
     text: "게임에서 제외된 자신의 카드 1장당 상대에게 2 데미지 (시전 10)", textJa: "ゲームから除外された自分のカード1枚につき相手に2ダメージ (発動10)" },
-  { id: "EXILE_NUKE2", t: "spell", cost: 8, play: 12, name: "공허 대붕괴", nameJa: "虚空大崩壊",
+  { id: "EXILE_NUKE2", t: "spell", cost: 8, play: 12, name: "공허의 수정 마술", nameJa: "虚空の水晶魔術",
     text: "게임에서 제외된 자신의 카드 1장당 상대에게 3 데미지 (시전 12)", textJa: "ゲームから除外された自分のカード1枚につき相手に3ダメージ (発動12)" },
   { id: "CULL_TITAN", t: "mon", cost: 9, atk: 1, def: 1, onSummon: "cullTitan", name: "컬의 화신", nameJa: "カルの化身",
     text: "소환시: 게임에서 제외된 자신의 '컬' 1장당 +1/+1", textJa: "召喚時: ゲームから除外された自分の「カル」1枚につき+1/+1" },

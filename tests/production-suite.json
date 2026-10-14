@@ -1,5 +1,7 @@
 {
   "current": [
+    "tests/timewarp.mjs",
+    "tests/timewarp-lifecycle.mjs",
     "tests/forbidden-ritual.mjs",
     "tests/dragon-fusion.mjs",
     "tests/hatch-summon.mjs",
@@ -133,6 +135,7 @@
     "tests/nova.mjs",
     "tests/void-shot.mjs",
     "tests/creation.mjs",
+    "tests/void-crystal-rules.mjs",
     "tests/dimension-void.mjs"
   ],
   "historical": {

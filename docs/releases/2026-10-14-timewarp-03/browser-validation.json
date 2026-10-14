@@ -1,0 +1,17 @@
+{
+  "environment": "local Vite / real BaseController + GameView + shared reducer",
+  "selection": "reverse-helix-03",
+  "checks": {
+    "existingDiceOnce": true,
+    "successCastHold": true,
+    "manualEndReleaseThenOwnTurn": true,
+    "failureNoHourglassNormalOpponentTurn": true,
+    "opponentCastAndRelease": true,
+    "rejoinHoldWithoutRecast": true,
+    "mobile390x844CastRelease": true,
+    "fastForwardPreservesReservation": true,
+    "destroyLeavesZeroCanvases": true
+  },
+  "consoleErrors": [],
+  "authenticatedOnlineGame": false
+}

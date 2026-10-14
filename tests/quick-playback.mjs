@@ -26,6 +26,7 @@ globalThis.CSS={escape:value=>String(value)}; // DOM double ignores selector con
 globalThis.document={querySelector:()=>null,querySelectorAll:()=>[],getElementById:()=>null};
 globalThis.requestAnimationFrame=fn=>{fn();return 1;};
 const mocks={
+ 'timewarpRuntime':'export class TimewarpPresentation {cast(){} release(){} sync(){} cancel(){} destroy(){}};export const warmTimewarp=()=>{};',
  'combatExit':'export const startCombatExit=async()=>{};',
  'damageFeedback':'export const clearDamageFeedback=()=>{};',
  'statusGrantRuntime':'export const playStatusGrant=(...args)=>globalThis.__fx("playStatusGrant",...args);export const warmStatusGrants=()=>{};',
@@ -44,7 +45,7 @@ const mocks={
  'i18n':'export const t=s=>s,getLang=()=>"ja",cardName=c=>c.id,onLangChange=()=>()=>{};'
 };
 try{
- await build({stdin:{contents:"export {BaseController} from './client/src/game/controller';export {createGame,reduce} from './client/src/shared/engine';export {DB} from './client/src/shared/cards';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'test.mjs'),plugins:[{name:'ui-double',setup(b){b.onResolve({filter:/.*/},a=>{const key=a.path.endsWith('/statusGrant/runtime')?'statusGrantRuntime':a.path.split('/').pop();return mocks[key]?{path:key,namespace:'mock'}:null;});b.onLoad({filter:/.*/,namespace:'mock'},a=>({contents:mocks[a.path],loader:'js'}));}}]});
+ await build({stdin:{contents:"export {BaseController} from './client/src/game/controller';export {createGame,reduce} from './client/src/shared/engine';export {DB} from './client/src/shared/cards';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'test.mjs'),plugins:[{name:'ui-double',setup(b){b.onResolve({filter:/.*/},a=>{const key=a.path.endsWith('/timewarp/runtime')?'timewarpRuntime':a.path.endsWith('/statusGrant/runtime')?'statusGrantRuntime':a.path.split('/').pop();return mocks[key]?{path:key,namespace:'mock'}:null;});b.onLoad({filter:/.*/,namespace:'mock'},a=>({contents:mocks[a.path],loader:'js'}));}}]});
  const {BaseController,createGame,reduce,DB}=await import(path.join(dir,'test.mjs'));
  const card=(id,uid=id)=>({...DB[id],uid});
  const mon=(id,uid=id)=>({...card(id,uid),tempAtk:0,atkMod:0,defMod:0,dmg:0,exhausted:false,summonedTurn:0});

@@ -1,0 +1,33 @@
+{
+  "report": [
+    {
+      "cancel": false,
+      "result": {
+        "hp": [
+          "120",
+          "104"
+        ],
+        "expected": [
+          120,
+          104
+        ]
+      },
+      "webglContextsReleased": 1
+    },
+    {
+      "cancel": true,
+      "result": {
+        "hp": [
+          "120",
+          "104"
+        ],
+        "expected": [
+          120,
+          104
+        ]
+      },
+      "webglContextsReleased": 1
+    }
+  ],
+  "errors": []
+}
