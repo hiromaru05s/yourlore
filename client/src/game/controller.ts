@@ -1,3 +1,4 @@
+import {spaceRiteReason,spaceRiteSourceText} from '../ui/spaceRiteStatus';
 import {forbiddenBatches} from '../ui/forbiddenRitual/selection';
 import {fusionPairs} from '../ui/dragonFusion/selection';
 import {paintTurnUrgency} from '../ui/turnUrgency';
@@ -181,8 +182,10 @@ export abstract class BaseController implements BoardHandlers {
     const g = this.state; if (!g || g.over) return;
     const me = g.players[this.you];
     const c = me.hand.find((x) => x.uid === uid);
+    const spaceReason=c?spaceRiteReason(g,this.you,c):null;
     const msg = g.cur !== this.you ? t("play.block.turn")
       : g.pending ? t("play.block.pending")
+      : spaceReason ? spaceReason+" "+spaceRiteSourceText(g,this.you)
       : (c && me.mana < playCost(c, me)) ? t("play.block.mana")
       : t("play.block.cond");
     this.cantPlayToast(msg);

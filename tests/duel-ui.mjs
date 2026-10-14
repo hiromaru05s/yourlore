@@ -23,7 +23,7 @@ await build({stdin:{contents:entry,resolveDir:process.cwd()},bundle:true,format:
  b.onResolve({filter:/monster\/runtime$/},()=>({path:'monster-runtime',namespace:'dom-test'}));
  b.onLoad({filter:/.*/,namespace:'dom-test'},()=>({contents:'export const hitMonster=()=>{},monsterHealth=()=>{},combatVisualRect=()=>null,detachMonsterFace=n=>n.cloneNode(true),syncMonsterStates=()=>{},clearMonsterStates=()=>{},setMonsterSkip=()=>{},monsterRect=()=>null,playMonster=async()=>false,playGutsEndurance=async()=>false;',loader:'js'}));
 }}]});
-const {cardEl,cardRulesEl,zoomCard,closeZoom,BaseController,animateDraw,cardPickerMulti,closeOverlay,deckBucket,reduce,ST_MAX,FIELD_MAX,revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
+const {STARTERS,cardEl,cardRulesEl,zoomCard,closeZoom,BaseController,animateDraw,cardPickerMulti,closeOverlay,deckBucket,reduce,ST_MAX,FIELD_MAX,revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
 setLang('ja');
 // Clock values and accessibility survive the absence of a GPU, reconnect totals and expiry.
 const clock=document.createElement('div');clock.setAttribute('aria-hidden','true');
@@ -195,6 +195,35 @@ qstate.players[0].hp=15;v.render(qstate);
 assert(document.querySelector('#fixedMarket .card[data-uid="quick-market"]').classList.contains('is-buyable'));
 const questFace=cardEl({...DB.Q_WINTER,uid:'quest-face'});
 assert(questFace.classList.contains('card--quest'));assert(questFace.querySelector('.card-frame').style.backgroundImage.includes('base-quest-ui.webp'));
+// Spatial Rite is public, persistent state: mark only affected cards and clear on removal.
+const spatial=createGame({mode:'bot',seed:19,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;
+spatial.turn=8;spatial.pending=null;spatial.cur=0;
+spatial.players[0].mana=30;spatial.players[0].field=[];
+spatial.players[0].hand=[{...DB.M1,uid:'sp-mon'},{...DB.VOID_RITE,uid:'sp-spell'},{...STARTERS.STARTER_MANA,uid:'sp-starter'},{...DB.Q_WINTER,uid:'sp-quest'}];
+spatial.players[1].enchants=[{card:{...DB.SPACE_RITE,uid:'sp-source-1'},turns:1},{card:{...DB.SPACE_RITE,uid:'sp-source-2'},turns:3}];
+for(const lang of ['ja','ko','en']) {
+ setLang(lang);v.render(spatial);v.setHandOpen(true);
+ assert.equal(document.querySelectorAll('#hand .space-rite-locked').length,3);
+ assert(!document.querySelector('#hand [data-uid="sp-quest"]').classList.contains('space-rite-locked'));
+ assert.equal(document.querySelectorAll('#oppHand .space-rite-locked').length,0);
+ assert(document.querySelector('.space-rite-status').textContent.includes('3'));
+ assert.equal(document.querySelector('.space-rite-status img').getAttribute('src'),'/art/cards/SPACE_RITE.webp');
+ document.querySelector('#hand [data-uid="sp-mon"]').click();
+ assert(document.querySelector('.inspect-state').textContent.includes({ja:'召喚',ko:'소환',en:'summoning'}[lang]));closeZoom();
+}
+setLang('ja');
+spatial.players[0].mana=0;v.render(spatial);
+assert(document.querySelector('#hand [data-uid="sp-spell"]').dataset.blockReason.includes('空間術式'),'persistent source stays readable even with insufficient mana');
+spatial.players[1].enchants.shift();v.render(spatial);
+assert.equal(document.querySelectorAll('#hand .space-rite-locked').length,3,'second source keeps the lock');
+spatial.pending={kind:'discard',player:0,count:1,reason:'handCap'};v.render(spatial);
+assert.equal(document.querySelectorAll('#hand .space-rite-locked').length,0,'discarding must remain selectable');
+spatial.pending=null;v.render(spatial);
+assert.equal(document.querySelectorAll('#hand .space-rite-locked').length,3);
+spatial.players[1].enchants=[];v.render(spatial);
+assert.equal(document.querySelectorAll('.space-rite-lock-badge,.space-rite-status,[data-space-rite-reason]').length,0,'all source UI clears even when mana still blocks play');
+spatial.players[0].mana=30;v.render(spatial);
+assert(document.querySelector('#hand [data-uid="sp-mon"]').classList.contains('is-playable'));
 v.destroy();
 document.getElementById('app').innerHTML='';
 // Regression through the real controller: first banner follows the coin; next turn announces once.
@@ -217,6 +246,12 @@ const banner=document.querySelector('.fx-turn-sigil');
 control.feed({state:structuredClone(next),events:[]});
 await new Promise(r=>setTimeout(r,20));
 assert.equal(document.querySelector('.fx-turn-sigil'),banner,'same-turn updates do not replay banner');
+// The real blocked-drag path names the source rather than a generic condition.
+spatial.cur=0;spatial.players[1].enchants=[{card:{...DB.SPACE_RITE,uid:'toast-source'},turns:2}];
+control.feed({state:spatial,events:[]});control.onBlockedPlay('sp-mon');
+assert(document.querySelector('.cant-toast').textContent.includes('空間術式'));
+assert(document.querySelector('.cant-toast').textContent.includes('召喚'));
+document.querySelector('.cant-toast').remove();
 control.destroy();assert(!document.querySelector('.fx-turn-sigil'));
 document.getElementById('app').innerHTML='';
 let savedAvatar='SEEKER_BLUE';
