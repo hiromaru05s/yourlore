@@ -22,7 +22,7 @@
 - 通常App/router起動のローカルゲストでもHOME→チュートリアル→ノート→HOMEを確認。認証済みサーバーとの接続を証明するものではない。
 - 画像：`qa/home-desktop.png`、`qa/home-390.png`、`qa/tutorial-desktop.png`、`qa/tutorial-stages.png`。
 - 通常速度の連続再生はブラウザ録画に保存。精霊の同じ3Dボディ・ひれ・目の連動、途中の画面切替、スマホ実寸を確認。機能テストの成功とユーザーによる見た目の承認は別。見た目の承認は未取得。
-- ローカル実装のみ。ステージング／本番への反映、push／main mergeは未実施。
+- 2026-10-14：最新mainを統合・pushし、ステージングへ反映済み。公開ソースは `3fb6039abeb914ab350fab3d6d418b0b224997d2`。詳細は [staging/README.md](staging/README.md)。本番は未反映。
 
 ## 背景画像の生成
 
