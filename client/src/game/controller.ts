@@ -1,3 +1,4 @@
+import {isSoulHarvestDamage,soulHarvestDamageIndex} from '../ui/soulHarvest/events';
 import {dungeonFloorSummons} from '../ui/dungeonFloor/events';
 import {runeReplayPlan} from '../ui/runeReplay/plan';
 import {TimewarpPresentation,warmTimewarp} from '../ui/timewarp/runtime';
@@ -431,7 +432,7 @@ export abstract class BaseController implements BoardHandlers {
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
       const cue = e.type==='destroy'&&(massacreDeaths.has(e.uid)||treasonExits.has(e.uid))?undefined:(e.type==='destroy'&&([...hatches.values()].includes(e.uid)||(e.cause==='fusion'&&fusionMaterials.has(e.uid))))||(e.type==='summon'&&(fusions.has(e.uid)||e.rebirth||floorSessions.has(e.uid)))?undefined:eventSound.cue(e);
-      if(cue&&!A.isFxSkipped())sfx(cue);
+      if(cue&&!A.isFxSkipped()&&!isSoulHarvestDamage(e))sfx(cue);
       if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
       if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
       switch (e.type) {
@@ -715,6 +716,10 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "damage": {
+          if(isSoulHarvestDamage(e)){
+            await A.soulHarvest(null,sideOf(e.player),e.amount,()=>{if(this.dead)return;hpNow[e.player]-=e.amount;A.hpBarSet(sideOf(e.player),hpNow[e.player]);});
+            break;
+          }
           hpNow[e.player] -= e.amount;
           if(!e.reversed)A.hpFeedback(sideOf(e.player), "dmg", e.amount);
           A.hpBarSet(sideOf(e.player), hpNow[e.player]);
@@ -764,6 +769,18 @@ export abstract class BaseController implements BoardHandlers {
             if(creation?.sourceUid){
               const face=await A.revealCreation({...def,uid:creation.sourceUid},sideOf(e.player));
               if(face)creationSources.set(creation.sourceUid,face);
+            }else if(def.id==='SOUL_HARVEST'){
+              const damageIndex=soulHarvestDamageIndex(events,i);
+              const damage=damageIndex>=0?events[damageIndex]:undefined;
+              const harvest=damage?.type==='damage'?async(node:HTMLElement)=>{
+                contactedDamage.add(damage);
+                await A.soulHarvest(node,sideOf(damage.player),damage.amount,()=>{
+                  if(this.dead)return;
+                  hpNow[damage.player]-=damage.amount;A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+                  if(damage.player===this.you)this.view.pushIcon('hitme');
+                });
+              }:undefined;
+              await A.revealSpell(placed??{uid:'soul-harvest-source',...def},sideOf(e.player),e.dest,undefined,false,undefined,harvest);
             }else if(def.id==='EXILE_NUKE2'){
               // Consume only this spell's first actual damage event at shell contact.
               // Reflections use the engine's target; echo hits and unrelated reactions remain sequential.

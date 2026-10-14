@@ -1,3 +1,4 @@
+import {playSoulHarvest,cancelSoulHarvest,warmSoulHarvest} from './soulHarvest/runtime';
 import {createDungeonFloor,warmDungeonFloor} from './dungeonFloor/runtime';
 export {warmDungeonFloor};
 import {playCurse,cancelCurse,warmCurse} from './curse/runtime';
@@ -109,7 +110,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on); setSeekerSkip(on);
-  if(on){cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelSoulHarvest();cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -333,7 +334,7 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   if(!fxSkip)summonDust(face.getBoundingClientRect());
   return face;
 }
-export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish",slotIndex?:number,deferVanish=false,crystal?:VoidCrystalCast): Promise<HTMLElement|null> {
+export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish",slotIndex?:number,deferVanish=false,crystal?:VoidCrystalCast,effect?:(node:HTMLElement)=>Promise<void>): Promise<HTMLElement|null> {
   const from = fromRect(side, takeOrigin(side)); if (!from) return null;
   const node = floatAt(cardEl(card, {size:"hand"}), from);
   let held=false;
@@ -342,12 +343,14 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
     const persistent=dest==='field'&&!!card.ench;
     const dark=isDarkMerchant(card.id)&&card.t==='spell';
     const crystalModule=crystal&&!fxSkip?import('./voidCrystal/runtime').catch(()=>null):null;
-    if(dark&&!fxSkip)warmDarkMerchant();
+    if(effect&&!fxSkip)warmSoulHarvest();
+    else if(dark&&!fxSkip)warmDarkMerchant();
     else if(card.t==='spell'&&!persistent&&!crystal&&!fxSkip)warmSpellFrame();
     const special=dark&&!fxSkip&&await boardMotionScope(signal=>playDarkMerchant(node,signal),10500);
     if(!special){
       await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:1);
-      if(crystal&&crystalModule&&!fxSkip)await boardMotionScope(async signal=>{const module=await crystalModule;if(!module||signal.aborted)return false;return module.playVoidCrystal(node,card,side,crystal,signal);},10500);
+      if(effect){await parkQuickSpell(node,side);await effect(node);}
+      else if(crystal&&crystalModule&&!fxSkip)await boardMotionScope(async signal=>{const module=await crystalModule;if(!module||signal.aborted)return false;return module.playVoidCrystal(node,card,side,crystal,signal);},10500);
       else if(card.t==='spell'&&!persistent&&card.id!=='FORBIDDEN'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
     }
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
@@ -564,6 +567,14 @@ export function floatNum(anchor: Element | null, text: string, kind: "dmg" | "he
   f.style.top = r.top + r.height / 2 - 16 + "px";
   document.body.appendChild(f);
   setTimeout(() => f.remove(), 1100);
+}
+
+/** Apply the authoritative damage exactly once, including interrupted/unavailable VFX. */
+export async function soulHarvest(source:HTMLElement|null,side:ViewSide,damage:number,onImpact:()=>void):Promise<void>{
+ let hit=false;const impact=()=>{if(hit)return;hit=true;onImpact();if(!fxSkip&&!document.hidden)sfx('damage');};
+ const target=document.querySelector<HTMLElement>(side==='me'?'#portraitMe .pt-ring':'#portraitOpp .pt-ring');
+ if(target&&!fxSkip)await boardMotionScope(signal=>playSoulHarvest({source,target,damage,onImpact:impact,signal}),6500);
+ if(!hit){impact();if(!fxSkip&&!document.hidden)hpFeedback(side,'dmg',damage);}
 }
 
 export function hpFeedback(side: ViewSide, kind: "dmg" | "heal", amount: number): void {
