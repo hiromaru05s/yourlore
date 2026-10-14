@@ -16,6 +16,9 @@ dom.window.Range.prototype.getBoundingClientRect = () => new dom.window.DOMRect(
 dom.window.Range.prototype.getClientRects = () => [];
 globalThis.getComputedStyle = el=>dom.window.getComputedStyle(el);
 dom.window.HTMLImageElement.prototype.decode=()=>Promise.resolve();
+// JSDOM has no native dialog implementation; browser focus/inert behavior is checked with CUA.
+dom.window.HTMLDialogElement.prototype.showModal=function(){this.setAttribute('open','');};
+dom.window.HTMLDialogElement.prototype.close=function(){this.removeAttribute('open');};
 // Canvas visuals are covered by the browser renderer suites.
 dom.window.HTMLCanvasElement.prototype.getContext=()=>null;
 globalThis.requestAnimationFrame = cb => setTimeout(() => cb(performance.now()), 0);
@@ -91,9 +94,19 @@ try {
     act(a){this.submit(a);}
     snapshot(){return this.state;}
   }
+  controller=new TestTutorial(root,{onHome:noop,onRematch:noop},'SEEKER',{lesson:0,guest:true});
+  assert(document.querySelector('.tutorial-basics[open]'));
+  controller.act({type:'play',idx:0});assert.equal(controller.snapshot().players[0].field.length,0,'Primer blocks card play');
+  for(let page=0;page<5;page++)document.querySelector('.tutorial-basics [data-next]').click();
+  assert.equal(document.querySelector('.tutorial-basics'),null);
+  controller.onEndTurn();assert.equal(controller.snapshot().cur,0);assert.equal(root.querySelector('#endBtn').textContent.replace(/\s+/g,' '),'END TURN','Rejected pass must not lock the turn button');
+  controller.act({type:'play',idx:0});assert.equal(controller.snapshot().players[0].field.length,1);
+  assert(root.querySelector('.tut-coach-body').textContent.includes('攻撃しよう'));
+  root.querySelector('[data-basics]').click();assert(document.querySelector('.tutorial-basics[open]'));
+  controller.destroy();controller=null;root.innerHTML='';assert.equal(document.querySelector('.tutorial-basics'),null,'Destroy removes open primer');
   let attempts=0,credits=0;
   api.completeTutorial=async()=>{attempts++;if(attempts===1)throw Error('offline');return{amount:250,credits:250,granted:true};};
-  controller=new TestTutorial(root,{onHome:noop,onRematch:noop},'SEEKER',{lesson:0,onCredits:n=>credits=n});
+  controller=new TestTutorial(root,{onHome:noop,onRematch:noop},'SEEKER',{lesson:TUT_STEPS.findIndex(s=>s.id==='mana'),onCredits:n=>credits=n});
   controller.act({type:'play',idx:0});await tick();assert(root.querySelector('[data-retry]'));assert.equal(credits,0);
   root.querySelector('[data-retry]').click();await tick();assert.equal(credits,250);assert(root.querySelector('[data-next]'));
   controller.act({type:'play',idx:0});await tick();assert.equal(attempts,2,'completed lesson does not pay twice');
