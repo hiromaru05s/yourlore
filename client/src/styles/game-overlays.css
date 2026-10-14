@@ -652,13 +652,14 @@
 
 /* PC card inspection: one art card, one readable translucent rules surface. */
 .zoom-overlay { background:#080e1ebd; backdrop-filter:blur(8px); }
-.zoom-wrap { --inspect-h:min(65vh,640px); width:min(1120px,82vw); height:calc(var(--inspect-h) + 78px); display:grid; grid-template-columns:calc(var(--inspect-h) * .64) minmax(0,1fr); grid-template-rows:58px minmax(0,1fr); gap:20px 42px; align-items:stretch; cursor:default; }
+.zoom-wrap { --inspect-h:min(60dvh,600px); --inspect-w:calc(var(--inspect-h) * .64); width:min(1120px,90vw); padding:20px; display:grid; grid-template-columns:calc(var(--inspect-w) * 1.18) minmax(0,1fr); grid-template-rows:58px calc(var(--inspect-h) * 1.04); gap:20px 28px; align-items:stretch; cursor:default; }
 .inspect-heading { grid-column:1/-1; display:flex; align-items:center; gap:24px; border-bottom:1px solid #c8b99688; padding:0 6px 12px; }
 .inspect-heading h1 { font-family:var(--serif); font-weight:500; font-size:clamp(1.5rem,2.4vw,2.375rem); color:#f5eedf; margin:0; flex:1; }
 .inspect-type { color:#d5cbb5; font-size:.9375rem; letter-spacing:.12em; }
 .inspect-close { width:40px; height:40px; background:transparent; border:1px solid #c8b99666; color:#eee6d5; font-size:26px; cursor:pointer; }
 .inspect-close:hover,.inspect-close:focus-visible { background:#c8b99622; outline:1px solid #e3d7b8; }
-.zoom-wrap > .card { --cw:calc(var(--inspect-h) * .64); --ch:var(--inspect-h); box-shadow:none; align-self:center; }
+.zoom-card-stage { display:grid; place-items:center; min-width:0; padding:calc(var(--inspect-h) * .01) calc(var(--inspect-w) * .06) calc(var(--inspect-h) * .03) calc(var(--inspect-w) * .12); }
+.zoom-overlay .zoom-card-stage > .card { --cw:var(--inspect-w); --ch:var(--inspect-h); box-shadow:none; }
 .zoom-details { --inspect-body-size:1.125rem; font-family:var(--gothic-ui,var(--ui)); overflow:auto; min-height:0; background:#17213294; border:1px solid #a4adbb75; outline:1px solid #a4adbb28; outline-offset:-6px; padding:28px 32px; color:#ede8dc; scrollbar-color:#aea38d #172032; }
 .zoom-details > * + * { margin-top:24px; padding-top:20px; border-top:1px solid #b9c0cd36; }
 .zoom-details .card-rules { font-size:var(--inspect-body-size); line-height:1.75; }
@@ -782,10 +783,10 @@
 .zoom-details .card-rule-notes p { margin:8px 0; }
 .zoom-details .fx-tag { margin-inline-end:.45em; font-weight:600; }
 @media(max-width:850px) {
-  .zoom-overlay .zoom-wrap { width:calc(100vw - 28px); height:auto; max-height:calc(100dvh - 28px); grid-template-columns:minmax(0,1fr); grid-template-rows:auto auto auto; gap:18px; overflow-y:auto; }
+  .zoom-overlay .zoom-wrap { --inspect-w:min(160px,40vw); --inspect-h:calc(var(--inspect-w) * 1.5625); width:calc(100vw - 28px); height:auto; max-height:calc(100dvh - 28px); padding:14px; grid-template-columns:minmax(0,1fr); grid-template-rows:auto auto auto; gap:18px; overflow-y:auto; }
   .zoom-overlay .inspect-heading { min-width:0; gap:10px; flex-wrap:wrap; }
   .zoom-overlay .inspect-heading h1 { min-width:0; font-size:22px; overflow-wrap:anywhere; }
-  .zoom-overlay .zoom-wrap > .card { --cw:min(160px,40vw); --ch:calc(var(--cw) * 1.5625); justify-self:center; }
+  .zoom-overlay .zoom-card-stage { justify-self:center; }
   .zoom-overlay .zoom-details { --inspect-body-size:1.0625rem; min-width:0; overflow:visible; padding:16px; font-size:1rem; }
   .zoom-overlay .card-dice .dr { grid-template-columns:56px minmax(0,1fr); gap:10px; }
 }
@@ -823,7 +824,7 @@
 .inspect-current-state dl{display:grid;grid-template-columns:minmax(90px,1fr) minmax(0,2fr);gap:8px 16px;margin:0;font-size:1rem;line-height:1.75}
 .inspect-current-state dt{color:#dfd2b6}.inspect-current-state dd{margin:0;overflow-wrap:break-word;font-variant-numeric:tabular-nums}
 .card .ec-decay-state{background:#36293f;color:#f0d5e9;border:1px solid #be8eb2;font-size:calc(var(--cw) * .065);white-space:nowrap}
-.zoom-wrap{grid-template-rows:auto minmax(0,1fr)}
+.zoom-wrap{grid-template-rows:auto calc(var(--inspect-h) * 1.04)}
 .inspect-heading{min-width:0;flex-wrap:wrap;gap:8px 16px;position:relative;z-index:2}
 .inspect-heading h1{min-width:0;overflow-wrap:anywhere}
 .inspect-heading-copy{display:flex;align-items:center;gap:8px 16px;flex:1;min-width:0}
