@@ -1,0 +1,58 @@
+[
+  {
+    "mode": "resize",
+    "passed": true,
+    "result": {
+      "hp": [
+        "120",
+        "104"
+      ],
+      "expected": [
+        120,
+        104
+      ]
+    }
+  },
+  {
+    "mode": "hidden",
+    "passed": true,
+    "result": {
+      "hp": [
+        "120",
+        "104"
+      ],
+      "expected": [
+        120,
+        104
+      ]
+    }
+  },
+  {
+    "mode": "dispose",
+    "passed": true,
+    "result": {
+      "hp": [
+        "120",
+        "120"
+      ],
+      "expected": [
+        120,
+        104
+      ]
+    }
+  },
+  {
+    "mode": "no-webgl",
+    "passed": true,
+    "result": {
+      "hp": [
+        "120",
+        "104"
+      ],
+      "expected": [
+        120,
+        104
+      ]
+    }
+  }
+]
