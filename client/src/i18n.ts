@@ -545,7 +545,7 @@ const D: Record<string, Entry> = {
   "arch.friends.fail": { ko: "친구 목록을 불러오지 못했습니다.", ja: "フレンドリストを読み込めませんでした。", en: "Couldn't load friends." },
   "arch.close": { ko: "닫기", ja: "閉じる", en: "Close" },
   // 대전 연출 (턴 리본 / 복귀 / 기합)
-  "home.nav.guide": { ko: "가이드", ja: "遊び方", en: "Guide" },
+  "home.nav.guide": { ko: "튜토리얼", ja: "チュートリアル", en: "Tutorial" },
   "home.nav.deck": { ko: "덱", ja: "デッキ", en: "Deck" },
   "home.nav.cards": { ko: "카드", ja: "カード", en: "Cards" },
   "home.nav.ranking": { ko: "랭킹", ja: "ランキング", en: "Rankings" },

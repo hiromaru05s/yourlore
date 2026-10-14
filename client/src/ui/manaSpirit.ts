@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 /** Small original, real 3D mana spirit: porcelain shell, ink face and azure core.
  * Geometry and motion are authored here; no external character assets. */
-export function mountManaSpirit(host: HTMLElement): { celebrate():void; destroy():void } {
+export function mountManaSpirit(host: HTMLElement, options: {home?: boolean} = {}): { celebrate():void; destroy():void } {
   host.classList.add('mana-spirit'); host.setAttribute('aria-hidden','true');
   const fallback=()=>{host.innerHTML='<svg viewBox="0 0 120 140"><ellipse cx="60" cy="127" rx="26" ry="5" fill="#315569" opacity=".22"/><path d="M60 8C88 30 97 55 92 84L78 106 60 119 42 106 28 84C23 55 34 30 60 8" fill="#e8f4ed" stroke="#98bdcf" stroke-width="2"/><path d="M33 60Q60 45 87 60L82 79Q60 90 38 79Z" fill="#20374e"/><ellipse cx="48" cy="68" rx="3" ry="6" fill="#9ee6f0"/><ellipse cx="72" cy="68" rx="3" ry="6" fill="#9ee6f0"/><path d="m60 94 7 7-7 8-7-8Z" fill="#57b9df" stroke="#caaf78"/></svg>';};
   if(typeof WebGL2RenderingContext==='undefined'){fallback();return {celebrate(){},destroy(){host.replaceChildren();}};}
@@ -38,10 +38,12 @@ export function mountManaSpirit(host: HTMLElement): { celebrate():void; destroy(
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   let dead=false, visible=true, raf=0, last=0, celebration=0;
   const render=(now:number)=>{raf=0;if(dead||!visible||document.hidden)return; if(now-last>32||reduced.matches){last=now;const t=reduced.matches?0:now/1000;
-    const cheer=Math.max(0,1-(now-celebration)/1100)*(celebration?1:0);
-    spirit.position.y=Math.sin(t*1.8)*.055+cheer*Math.sin(cheer*Math.PI)*.12;
-    spirit.rotation.y=Math.sin(t*.8)*.14;spirit.rotation.z=Math.sin(t*1.2)*.025;
+    const cheer=reduced.matches?0:Math.max(0,1-(now-celebration)/1100)*(celebration?1:0);
+    spirit.position.x=options.home?Math.sin(t*.55)*.10:0;
+    spirit.position.y=Math.sin(t*1.8)*(options.home ? .085 : .055)+cheer*Math.sin(cheer*Math.PI)*.12;
+    spirit.rotation.y=Math.sin(t*.8)*(options.home ? .25 : .14);spirit.rotation.z=Math.sin(t*1.2)*.025;
     left.rotation.z=-.04-Math.sin(t*1.8)*.045-cheer*.32;right.rotation.z=.04+Math.sin(t*1.8)*.045+cheer*.32;
+    if(options.home){right.rotation.z+=cheer*Math.sin((1-cheer)*Math.PI*6)*.22;core.rotation.y=Math.sin(t*.9)*.12;}
     const blink=!reduced.matches&&t%5.8>5.64?.16:1;eyes.forEach(e=>e.scale.y=1.7*blink);
     shadow.scale.x=1-Math.sin(t*1.8)*.025;renderer.render(scene,camera);
   } if(!reduced.matches)raf=requestAnimationFrame(render);};

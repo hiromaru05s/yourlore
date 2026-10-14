@@ -11,6 +11,8 @@ import { homeRankHtml } from "../ui/rankPresentation";
 import { loungeText } from "../ui/loungeText";
 import { sanitizeDecks } from "../shared/cards";
 import { artUrl } from "../ui/cardArt";
+import { mountManaSpirit } from '../ui/manaSpirit';
+import '../styles/homeTutorial.css';
 import { homeIcon } from "../ui/homeIcons";
 
 
@@ -20,6 +22,11 @@ export function mountHome(app: App): Screen {
   wrap.className = "screen lounge-home-screen";
   const store=sanitizeDecks(u?.decks ?? null);
   wrap.innerHTML = `
+    <section class="home-companion" aria-label="${esc(loungeText('マナの精霊','Mana spirit','마나 정령'))}">
+      <div class="home-companion-caption"><span>BIBLION</span><h1>${loungeText('次の一手を、ここから。','Your next move begins here.','다음 한 수, 여기에서.')}</h1></div>
+      <button class="home-spirit-touch" type="button" aria-label="${esc(loungeText('マナの精霊に挨拶する','Greet the mana spirit','마나 정령에게 인사하기'))}"><span class="home-spirit-host"></span></button>
+      <div class="home-spirit-speech"><span class="home-spirit-name">${loungeText('マナの精霊','Mana spirit','마나 정령')}</span><p id="spiritGreeting" aria-live="polite">${loungeText('おかえり、シーカー。今日はどんな記録に触れよう？','Welcome back, Seeker. Which records shall we explore today?','어서 와요, 시커. 오늘은 어떤 기록을 만나 볼까요?')}</p><button id="spiritTutorial">${loungeText('一緒にチュートリアルへ','Learn with me','함께 튜토리얼로')} <span aria-hidden="true">→</span></button></div>
+    </section>
     <section class="lounge-home-main">
       <section class="lounge-play" aria-label="${esc(t("home.ranked.title"))}">
         <div class="lounge-mode-tabs" role="group" aria-label="${esc(loungeText('対戦モード','Duel mode','대전 모드'))}">
@@ -36,6 +43,15 @@ export function mountHome(app: App): Screen {
       </button>
     </section>`;
   app.root.appendChild(wrap);
+  const spirit=mountManaSpirit(wrap.querySelector('.home-spirit-host')!, {home:true});
+  let greetings=0;
+  wrap.querySelector<HTMLButtonElement>('.home-spirit-touch')!.onclick=()=>{
+    spirit.celebrate();
+    wrap.querySelector('#spiritGreeting')!.textContent=(greetings++%2===0)
+      ?loungeText('準備はできてるよ。一緒に、次の一手を見つけよう！','Ready when you are. Let’s find your next move!','준비됐어요. 함께 다음 한 수를 찾아봐요!')
+      :loungeText('カードに触れれば、記録が動き出す。実習で試してみよう。','Touch a card and its record comes alive. Try it in a lesson.','카드에 닿으면 기록이 움직여요. 실습에서 해 봐요.');
+  };
+  wrap.querySelector<HTMLButtonElement>('#spiritTutorial')!.onclick=()=>app.tutorial();
   const q=(id:string)=>wrap.querySelector<HTMLButtonElement>('#'+id)!;
   let mode: 'ranked'|'online'|'bot'='ranked';
   const selectMode=(next:typeof mode)=>{
@@ -59,7 +75,7 @@ export function mountHome(app: App): Screen {
   loadRank();
   if(u && u.id!=='local-guest-user') void api.me().then(fresh=>{if(!disposed&&fresh?.id===u.id&&app.user?.id===u.id) { app.user=fresh; document.dispatchEvent(new Event("lore:user")); }}).catch(()=>{});
   const unsub=onLangChange(()=>app.home());
-  return {destroy:()=>{disposed=true;unsub();}};
+  return {destroy:()=>{disposed=true;unsub();spirit.destroy();}};
 }
 
 /** Character cards select an NPC; the separate start action begins a duel. */

@@ -1,5 +1,7 @@
 import { mountManaSpirit } from '../ui/manaSpirit';
 import '../styles/tutorialAcademy.css';
+import '../styles/homeTutorial.css';
+import { artUrl } from '../ui/cardArt';
 import { loungeText } from "../ui/loungeText";
 import { homeIcon } from "../ui/homeIcons";
 // ============================================================
@@ -277,13 +279,19 @@ export function openRuleNotebook(): () => void {
 export function mountTutorial(app:App):Screen {
   const wrap=document.createElement('div');wrap.className='screen tut-screen academy';
   const lang=getLang();let disposed=false,closeNote:(()=>void)|undefined;
+  const lessonArt=['STARTER_MANA','M4','M1','S3','STARTER_CHEST','S1','STARTER_TRASH','STARTER_CHEST','E3','TSO2','S4','M4'];
   const guest=!app.user || app.user.id==='local-guest-user';
   wrap.innerHTML=`<div class="topright-lang"></div><main class="academy-content">
     <button class="academy-notebook" id="ruleNotebook">${homeIcon('book')}<span>${loungeText('ゲームルールをノートで読む','Read the game rules','게임 규칙 노트 읽기')}</span><span aria-hidden="true">↗</span></button>
-    <header class="academy-hero"><div class="academy-spirit"></div><div><span class="menu-eyebrow">BIBLION / FIRST ATTUNEMENT</span><h1>${loungeText('はじめてのアチューン','Your first attunement','첫 어튠')}</h1><p>${loungeText('マナの精霊と、ひとつずつ。カードに触れて、デュエルを覚えよう。','One step at a time, with a mana spirit. Learn by playing real cards.','마나 정령과 한 걸음씩. 직접 카드를 사용하며 듀얼을 배워 보세요.')}</p></div></header>
-    <section class="academy-progress" aria-label="${loungeText('実習の進捗','Lesson progress','실습 진행')}" ><div><span>${loungeText('全12課程の初回クリア報酬','First-clear rewards across 12 lessons','12개 과정 첫 완료 보상')}</span><strong>${homeIcon('shard')} 3,000 <small>${loungeText('シャード','Shards','샤드')}</small></strong></div><div class="academy-earned" role="status">${loungeText('進捗を読み込み中…','Loading progress…','진행 상황 불러오는 중…')}</div><progress max="12" value="0"></progress><p>${loungeText('各課程250シャード・何度でも練習可能。続きはいつでもここから。','250 Shards per lesson. Replay any time and return here to continue.','과정마다 250샤드. 언제든 다시 연습하거나 이어서 할 수 있어요.')}</p></section>
+    <header class="academy-hero"><div class="academy-spirit"></div><div><span class="menu-eyebrow">BIBLION / FIRST ATTUNEMENT</span><h1>${loungeText('チュートリアル','Tutorial','튜토리얼')}</h1><p>${loungeText('マナの精霊と、ひとつずつ。カードに触れて、デュエルを覚えよう。','One step at a time, with a mana spirit. Learn by playing real cards.','마나 정령과 한 걸음씩. 직접 카드를 사용하며 듀얼을 배워 보세요.')}</p></div></header>
+    <section class="academy-progress" aria-label="${loungeText('実習の進捗','Lesson progress','실습 진행')}" ><div><span>${loungeText('全12課程の初回クリア報酬','First-clear rewards across 12 lessons','12개 과정 첫 완료 보상')}</span><strong>${homeIcon('shard')} 3,000 <small>${loungeText('シャード','Shards','샤드')}</small></strong></div><div class="academy-earned" role="status">${loungeText('進捗を読み込み中…','Loading progress…','진행 상황 불러오는 중…')}</div><progress max="12" value="0" aria-label="${loungeText('クリアした課程数','Completed lessons','완료한 과정 수')}"></progress><p>${loungeText('各課程250シャード・何度でも練習可能。続きはいつでもここから。','250 Shards per lesson. Replay any time and return here to continue.','과정마다 250샤드. 언제든 다시 연습하거나 이어서 할 수 있어요.')}</p></section>
     <div class="academy-controls"><button id="startInter" class="btn btn-primary" disabled>${loungeText('最初の実習へ','Begin the lessons','첫 실습 시작')}</button><button id="back" class="btn btn-ghost">${t('tutorial.back')}</button></div>
-    <ol class="tut-steps academy-lessons">${TUT_STEPS.map((s,i)=>`<li data-key="${s.key}"><span class="tut-step-n">${String(i+1).padStart(2,'0')}</span><div><h2 class="tut-step-t">${s.title[lang]}</h2><p>${s.learned[lang]}</p></div><button class="academy-lesson-start" data-lesson="${i}" disabled aria-label="${s.title[lang]}"><span class="tut-step-r">+250 ${homeIcon('shard')}</span><span class="lesson-action">${loungeText('実習へ','Play','실습')} →</span></button></li>`).join('')}</ol>
+    <div class="academy-map-heading"><h2>${loungeText('実習ステージ','Practice stages','실습 스테이지')}</h2><span class="academy-clear-count" aria-live="polite">— / 12</span></div>
+    <ol class="tut-steps academy-lessons">${TUT_STEPS.map((s,i)=>`<li data-key="${s.key}" class="lesson-tile">
+      <div class="lesson-art" aria-hidden="true"><img src="${artUrl.sm(lessonArt[i])}" alt="" loading="lazy"><span class="tut-step-n">${String(i+1).padStart(2,'0')}</span><span class="lesson-clear-seal">${homeIcon('check')}</span></div>
+      <div class="lesson-copy"><span class="lesson-state">${loungeText('確認中','Loading','확인 중')}</span><h2 class="tut-step-t">${s.title[lang]}</h2><p>${s.learned[lang]}</p></div>
+      <button class="academy-lesson-start" data-lesson="${i}" disabled aria-label="${s.title[lang]}"><span class="tut-step-r">+250 ${homeIcon('shard')}</span><span class="lesson-action">${loungeText('実習へ','Play','실습')} →</span></button>
+    </li>`).join('')}</ol>
     <footer class="academy-footer"><p>${loungeText('ここで借りるカードとマナは練習用。通常のデュエルでは、自分のデッキとマーケットから戦い方を組み立てよう。','Cards and mana here are prepared for practice. In a real duel, build your strategy from your deck and the market.','이곳의 카드와 마나는 연습용이에요. 실제 듀얼에서는 자신의 덱과 마켓으로 전략을 세우세요.')}</p><button id="play" class="btn btn-ghost">${loungeText('BOT戦へ','Play a bot','BOT전')}</button></footer>
     </main>`;
   app.root.append(wrap);wrap.querySelector('.topright-lang')!.append(langSelectEl());
@@ -293,13 +301,24 @@ export function mountTutorial(app:App):Screen {
   const paint=(keys:string[])=>{
     if(disposed)return;const done=TUT_STEPS.filter(s=>keys.includes(s.key)).length;
     wrap.querySelector('progress')!.value=done;
-    wrap.querySelector('.academy-earned')!.textContent=guest?loungeText('練習モード · 報酬の受取にはログインが必要です。','Practice mode · Sign in to receive rewards.','연습 모드 · 보상을 받으려면 로그인하세요.'):`${done} / 12 · ${done*250} / 3,000 ${loungeText('シャード受取済み','Shards received','샤드 수령')}`;
+    wrap.querySelector('.academy-clear-count')!.textContent=`${done} / 12 ${loungeText('クリア','CLEAR','완료')}`;
+    wrap.classList.toggle('all-cleared',done===TUT_STEPS.length);
+    wrap.querySelector('.academy-earned')!.textContent=guest?loungeText('練習モード · 報酬の受取にはログインが必要です。','Practice mode · Sign in to receive rewards.','연습 모드 · 보상을 받으려면 로그인하세요.'):`${done} / 12 ${loungeText('クリア済み','completed','완료')} · ${done*250} / 3,000 ${loungeText('シャード受取済み','Shards received','샤드 수령')}`;
     const first=TUT_STEPS.findIndex(s=>!keys.includes(s.key));
     const start=wrap.querySelector<HTMLButtonElement>('#startInter')!;start.disabled=false;
     start.textContent=first<0?loungeText('もう一度練習する','Practice again','다시 연습'):first>0?loungeText('続きの実習へ','Continue lessons','실습 이어서'):loungeText('最初の実習へ','Begin the lessons','첫 실습 시작');
     start.onclick=()=>app.tutorialGame(first<0?0:first);
     wrap.querySelectorAll<HTMLButtonElement>('[data-lesson]').forEach(b=>{b.disabled=false;b.onclick=()=>app.tutorialGame(Number(b.dataset.lesson));});
-    for(const s of TUT_STEPS){const li=wrap.querySelector<HTMLElement>(`[data-key="${s.key}"]`)!;if(keys.includes(s.key)){li.classList.add('claimed');li.querySelector('.tut-step-r')!.innerHTML=`${homeIcon('check')} ${loungeText('受取済み','Received','수령 완료')}`;li.querySelector('.lesson-action')!.textContent=loungeText('もう一度 →','Replay →','다시 →');}}
+    TUT_STEPS.forEach((s,i)=>{
+      const li=wrap.querySelector<HTMLElement>(`[data-key="${s.key}"]`)!;
+      const cleared=keys.includes(s.key),next=i===first;
+      li.classList.toggle('claimed',cleared);li.classList.toggle('is-next',next);
+      const state=cleared?loungeText('クリア済み','CLEARED','완료'):next?loungeText('次のステージ','UP NEXT','다음 스테이지'):loungeText('未クリア','NOT CLEARED','미완료');
+      li.querySelector('.lesson-state')!.textContent=state;
+      const button=li.querySelector<HTMLButtonElement>('[data-lesson]')!;
+      button.setAttribute('aria-label',`${s.title[lang]} · ${state} · ${cleared?loungeText('もう一度','Replay','다시'):loungeText('実習へ','Play','실습')}`);
+      if(cleared){li.querySelector('.tut-step-r')!.innerHTML=`${homeIcon('check')} ${loungeText('報酬受取済み','Reward received','보상 수령 완료')}`;li.querySelector('.lesson-action')!.textContent=loungeText('もう一度 →','Replay →','다시 →');}
+    });
   };
   const load=async()=>{try{if(guest)paint([]);else{const status=await api.tutorialStatus();if(disposed)return;if(app.user){app.user.credits=status.credits;document.dispatchEvent(new Event('lore:user'));}paint(status.keys);}}catch{if(disposed)return;const status=wrap.querySelector('.academy-earned')!;status.textContent=loungeText('進捗を読み込めませんでした。','Could not load progress.','진행 상황을 불러오지 못했어요.');const retry=document.createElement('button');retry.className='btn btn-ghost';retry.textContent=loungeText('再試行','Retry','재시도');retry.onclick=()=>{retry.remove();void load();};status.append(retry);}};
   void load();const unsub=onLangChange(()=>app.tutorial());
