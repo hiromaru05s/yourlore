@@ -1,0 +1,64 @@
+{
+  "passed": true,
+  "origin": "http://127.0.0.1:5584",
+  "fixtureScope": "Public fixture in the actual controller; not authenticated online play",
+  "checks": [
+    {
+      "width": 1280,
+      "side": 0,
+      "count": 5,
+      "mode": "normal",
+      "frames": 181
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "count": 3,
+      "mode": "normal",
+      "frames": 188
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "count": 5,
+      "mode": "normal",
+      "frames": 164
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "count": 1,
+      "mode": "normal",
+      "frames": 140
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "count": 3,
+      "mode": "reduced",
+      "frames": 69
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "count": 3,
+      "mode": "skip",
+      "frames": 33
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "count": 3,
+      "mode": "resize",
+      "frames": 33
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "count": 3,
+      "mode": "hidden",
+      "frames": 33
+    }
+  ],
+  "errors": []
+}
