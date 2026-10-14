@@ -342,6 +342,7 @@ export abstract class BaseController implements BoardHandlers {
     if(rituals.size)A.warmForbiddenRitual();
     const fusions=fusionPairs(events),fusionMaterials=new Set([...fusions.values()].flatMap(f=>[f.dragon.uid,f.mate.uid]));
     if(events.some(e=>e.type==='dice'&&e.taunt))A.warmTaunt();
+    if(events.some(e=>e.type==='curseGenerated'))A.warmCurse();
     if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
     if(events.some(e=>e.type==='reverseDamage'))A.warmReverse();
     if(events.some(e=>e.type==='nova'))A.warmNova();
@@ -500,6 +501,7 @@ export abstract class BaseController implements BoardHandlers {
           const replay=runeReplays.replays.get(i);
           if(replay){
             const original=events[replay.playIndex];
+            if(original.type==='playSpell'&&original.id==='BLACK_CURSE'){A.enchantActivation(e.uid);await wait(140);break;}
             if(original.type==='playSpell'){
               const card=prev.players[e.player].hand.find(c=>c.id===original.id)??this.defOf(original.id,`rune-replay-${replay.playIndex}`);
               if(card){
@@ -710,6 +712,11 @@ export abstract class BaseController implements BoardHandlers {
           }
           break;
         }
+        case "curseGenerated": {
+          const card=prev.players[e.player].hand.find(c=>c.uid===e.sourceUid)??{...DB.BLACK_CURSE,uid:e.sourceUid};
+          await A.curseSpell(card,sideOf(e.player),e.before);
+          break;
+        }
         case "nova": {
           const card=prev.players[e.player].hand.find(c=>c.id==='BLACK_NOVA')??{...DB.BLACK_NOVA,uid:'nova-source'};
           await A.novaTimeTheft(card,sideOf(e.player),e.from,hp=>{if(!this.dead)A.hpBarSet(sideOf(e.player),hp);});
@@ -718,6 +725,7 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "playSpell": {
           const nextSpell=events.findIndex((next,j)=>j>i&&next.type==='playSpell');
+          if(e.id==='BLACK_CURSE'&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='curseGenerated'&&next.player===e.player))break;
           if(e.id==='EXILE_NUKE1'&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='voidShot'&&next.player===e.player))break;
           // TIMEWARP uses the existing dice first; its typed success event owns the material reveal.
           if(e.id==='TIMEWARP'&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='dice'&&next.source.id==='TIMEWARP'))break;

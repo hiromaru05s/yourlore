@@ -5838,7 +5838,7 @@ function expansionSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case 'ROGUE_ART': if (p.field.some(isAssassinCard)) { for (const m of p.field) m.passivesG = [...new Set([...(m.passivesG ?? []), 'evade'])]; } else queueExpansionChoice(g, p, card.id, '回避を付与する自分のモンスターを選択'); break;
     case 'BLACK_NOVA': ctx.ev.push({type:'nova',player:side(g,p),from:p.hp,to:1}); p.hp = 1; reserveTurnSkip(o,"BLACK_NOVA"); break;
-    case 'BLACK_CURSE': addCurses(g, o, 5); break;
+    case 'BLACK_CURSE': { const before=o.discard.length;addCurses(g,o,5);ctx.ev.push({type:'curseGenerated',player:side(g,p),sourceUid:card.uid,before,after:o.discard.length});break; }
     case 'SOUL_HARVEST': ctx.dealDamage(o, deckComp(o).filter(c => c.id === 'CURSE').length * 4, cn(card), cn(card)); break;
     case 'ANESTHESIA': for (const m of p.field) m.immuneDamageTurn = g.turn; break;
     case 'EARTHQUAKE': areaDamage(g, ctx, p, 4, true, card); break;
