@@ -48,7 +48,7 @@ try {
     plugins:[{name:'dom-only-monster-renderer',setup(b){
       // This suite verifies tutorial rules/rewards/DOM. Canvas parity has real-browser coverage.
       b.onResolve({filter:/monster\/runtime$/},()=>({path:'monster-runtime',namespace:'dom-test'}));
-      b.onLoad({filter:/.*/,namespace:'dom-test'},()=>({contents:'export const hitMonster=()=>{},monsterHealth=()=>{},combatVisualRect=()=>null,detachMonsterFace=n=>n.cloneNode(true),syncMonsterStates=()=>{},clearMonsterStates=()=>{},setMonsterSkip=()=>{},monsterRect=()=>null,playMonster=async()=>false,playGutsEndurance=async()=>false;',loader:'js'}));
+      b.onLoad({filter:/.*/,namespace:'dom-test'},()=>({contents:'export const monsterPresentationNodes=n=>[n],hitMonster=()=>{},monsterHealth=()=>{},combatVisualRect=()=>null,detachMonsterFace=n=>n.cloneNode(true),syncMonsterStates=()=>{},clearMonsterStates=()=>{},setMonsterSkip=()=>{},monsterRect=()=>null,playMonster=async()=>false,playGutsEndurance=async()=>false;',loader:'js'}));
     }}],
   });
   const { TutorialController, TUT_STEPS, mountTutorial, mountCards, DB, STARTERS, buyCost, effAtk, api, setLang, t, closeOverlay, showControlsHelp, REWARDS, mountTutorialWelcome } = await import(path.join(temp, 'tutorial.mjs'));

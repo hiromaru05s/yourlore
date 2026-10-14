@@ -16,8 +16,9 @@ try{
  function fresh(seed,owner){const g=current.createGame({mode:'online',seed,starting:owner,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.cur=owner;g.turn=3;g.phase='main';g.pending=null;for(const p of g.players)Object.assign(p,{hand:[],field:[],deck:[],discard:[],removed:[],traps:[],enchants:[],quests:[],hp:50,maxHp:50,mana:30,maxMana:30,openingDrawReady:false});return g;}
  const clean=x=>JSON.parse(JSON.stringify(x,(k,v)=>k==='sourceUid'||k==='data'&&v&&Object.keys(v).every(k=>k==='sourceUid')?undefined:v));
  // Source activation conditions are covered by monster-effect-activation.mjs.
- // Compare gameplay events independently of both presentation annotations.
- const gameplayEvents=events=>events.filter(e=>!e.type.startsWith('elemental')&&e.type!=='monsterActivate');
+ // Compare gameplay events independently of presentation annotations.
+ // Reverse routing/HP still match the baseline; its contact markers are checked in reverse-pitch.mjs.
+ const gameplayEvents=events=>events.filter(e=>!e.type.startsWith('elemental')&&e.type!=='monsterActivate'&&e.type!=='reverseDamage').map(e=>{if(e.type!=='damage')return e;const {reversed,reverseId,...gameplay}=e;return gameplay;});
  function compare(g,a){const old=baseline.reduce(g,a),now=current.reduce(g,a);assert.deepEqual(clean(now.state),clean(old.state));assert.deepEqual(clean(gameplayEvents(now.events)),clean(gameplayEvents(old.events)));for(const start of now.events.filter(e=>e.type==='elementalStart')){const impacts=now.events.filter(e=>e.type==='elementalImpact'&&e.group===start.group);assert.equal(impacts.length,start.targets.length);assert(now.events.some(e=>e.type==='elementalEnd'&&e.group===start.group));assert(!start.targets.some(t=>t.uid&&(!g.players.flatMap(p=>p.field).some(m=>m.uid===t.uid))));}cases++;return now;}
  for(const owner of [0,1])for(const seed of [1,7,17,58])for(const id of ['GUNNER','HEAVY_GUNNER','FIRE_ARROW','FIRE_METEOR','FIRE_BALL','FIRE_ZONE','NGA4']){
   const g=fresh(seed,owner);g.players[1-owner].field=[mon('ELF',1),mon('INFKNIGHT',30)];
