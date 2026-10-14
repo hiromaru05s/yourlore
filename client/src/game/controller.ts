@@ -1,3 +1,4 @@
+import {runeReplayPlan} from '../ui/runeReplay/plan';
 import {TimewarpPresentation,warmTimewarp} from '../ui/timewarp/runtime';
 import {spaceRiteReason,spaceRiteSourceText} from '../ui/spaceRiteStatus';
 import {forbiddenBatches} from '../ui/forbiddenRitual/selection';
@@ -345,6 +346,8 @@ export abstract class BaseController implements BoardHandlers {
     if(events.some(e=>e.type==='nova'))A.warmNova();
     if(events.some(e=>e.type==='voidShot'))A.warmVoidShot();
     if(events.some(e=>e.type==='voidGrant'))A.warmVoidGrant();
+    const runeReplays=runeReplayPlan(events);
+    if(runeReplays.held.size)A.warmRuneReplay();
     const eventSound = new EventSound();
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
@@ -414,7 +417,7 @@ export abstract class BaseController implements BoardHandlers {
     for (let i = 0; i < events.length; i++) {
       if (this.dead) return;
       const e = events[i];
-      if(summonActivations.has(e)||crystalContacts.has(e))continue;
+      if(summonActivations.has(e)||crystalContacts.has(e)||runeReplays.suppressed.has(i))continue;
       // glanceable icon rail (topbar): key events → small icons
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
@@ -480,10 +483,23 @@ export abstract class BaseController implements BoardHandlers {
         case 'infinityRelease':
           await A.infinityCull(e.sourceUid, sideOf(e.player), e.amount);
           break;
-        case "enchantActivate":
-          A.enchantActivation(e.uid);
-          await wait(140);
+        case "enchantActivate": {
+          const replay=runeReplays.replays.get(i);
+          if(replay){
+            const original=events[replay.playIndex];
+            if(original.type==='playSpell'){
+              const card=prev.players[e.player].hand.find(c=>c.id===original.id)??this.defOf(original.id,`rune-replay-${replay.playIndex}`);
+              if(card){
+                const side=sideOf(e.player);
+                const held=[...this.elementalFaces,...this.quickFaces].reverse().find(x=>x.card.id===card.id&&x.side===side&&x.node.isConnected)?.node
+                  ??[...creationSources.values()].find(x=>x.dataset.cardId===card.id&&x.isConnected);
+                const node=await A.runeReplay(card,side,replay.sourceUids,held);
+                if(node&&!held){if(this.dead)node.remove();else if(original.dest==='vanish')this.quickFaces.push({card,side,node});else this.elementalFaces.push({card,side,node});}
+              }
+            }
+          }else{A.enchantActivation(e.uid);await wait(140);}
           break;
+        }
         case "summon": {
           const ritual=rituals.get(e.uid);
           if(ritual&&!A.isFxSkipped()){
@@ -723,7 +739,7 @@ export abstract class BaseController implements BoardHandlers {
                 const node=await A.revealSpell(card,sideOf(e.player),'vanish',undefined,true);
                 if(node){if(this.dead)node.remove();else this.quickFaces.push({card,side:sideOf(e.player),node});}
               }
-            }else if(e.dest==='discard'&&grants){
+            }else if(e.dest==='discard'&&(grants||runeReplays.held.has(i))){
               const face=await A.revealSpell({uid:'status-source',...def},sideOf(e.player),e.dest,undefined,true);
               if(face){if(this.dead)face.remove();else{statusSource=face;this.elementalFaces.push({card:{uid:'status-source',...def},side:sideOf(e.player),node:face});}}
             }else{
@@ -736,6 +752,7 @@ export abstract class BaseController implements BoardHandlers {
           if (def && RANDOM_CARDS.has(def.id) && !["FIRE_ARROW","FIRE_METEOR","FORBIDDEN"].includes(def.id)) {
             for (let j = i + 1; j < events.length; j++) {
               const e2 = events[j];
+              if (e2.type==='enchantActivate'&&DB[e2.id]?.ench==='runeEcho') break;
               if (e2.type === "playSpell" || e2.type === "trapSet" || e2.type === "trapReveal" || e2.type === "buy" || e2.type === "turnHeader" || e2.type === "win") break;
               if (e2.type === "dice" && !e2.evasion && !e2.taunt && !diceDone.has(j)&&!A.isFxSkipped()) {
                 diceDone.add(j);

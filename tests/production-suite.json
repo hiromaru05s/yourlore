@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/rune-replay.mjs",
     "tests/timewarp.mjs",
     "tests/timewarp-lifecycle.mjs",
     "tests/forbidden-ritual.mjs",
