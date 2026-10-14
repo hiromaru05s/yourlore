@@ -20,3 +20,12 @@ User feedback: use カードの購入 instead of 借用; explain the whole game 
 - Existing browser test files adapted to lesson IDs and the primer; those standalone Playwright scripts were not executed in this turn. Browser verification used CUA.
 - Full production suite initially passed 131/132. The existing trap-removal tutorial DOM fixture assumed lesson 0 was Attune and lacked native-dialog stubs. Updated it to select mana by ID and added primer/action-blocking, premature-pass button recovery and open-dialog teardown checks. The focused DOM suite now passes.
 - No claim of usability testing with children or authenticated staging gameplay.
+
+## Staging verified
+
+- The shared guarded release deployed source `65726a8ff34d5520839d3c8df0b1772f230a8a1e`, containing tutorial change `09ae4fc1` and regression-fixture fix `b3b9e3ae`.
+- Worker version `0d8d711e-2f07-4642-a5a5-388306b3470d`, 100% traffic.
+- Final integrated production suite: 138/138 passed. Expected hashes came from the same committed-snapshot release evidence; this task independently fetched and compared all 94 listed assets. `/` and `/api/auth/me` returned HTTP 200.
+- Earlier attempts were interrupted by concurrent main updates or existing test-fixture/host-load issues. The initial captured cf0b5e6f build was superseded, so its asset list was replaced with the actually deployed release before comparison.
+- CUA also completed the Attune lesson at 390×844 with the guide open: open hand, drag card, maximum mana 4→5, lesson clear.
+- Staging verification concerns source/Worker/assets/HTTP; authenticated staging tutorial play was not performed.
