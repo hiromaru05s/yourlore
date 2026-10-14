@@ -8,6 +8,10 @@ const trace=[];
 let pendingMana=null,pendingDecay=null;
 const node=()=>({dataset:{},isConnected:true,remove(){this.isConnected=false;trace.push('remove');},getBoundingClientRect(){return {left:20,top:20,width:60,height:90};},querySelector(){return null;},classList:{add(){},remove(){}}});
 globalThis.__fx=(name,...args)=>{
+ if(name==='resultPopup'){trace.push('result-popup');return;}
+ if(name==='diceRoll'){trace.push('dice:'+args[0].join(','));return;}
+ if(name==='timewarpCast'){trace.push('timewarp-cast:'+args[0]);return;}
+ if(name==='timewarpRelease'){trace.push('timewarp-release:'+args[0]);return;}
  if(name==='infinityCull'){trace.push('infinity:'+args.join(':'));return;}
  if(name==='decayCounterGrant'){trace.push('decay-grant:'+args[0].dataset.uid+':'+args[1]+'>'+args[2]);return pendingDecay;}
  if(name==='ghostDie'||name==='destroyAnim')trace.push(name+':decay='+String(args[4]));
@@ -26,7 +30,7 @@ globalThis.CSS={escape:value=>String(value)}; // DOM double ignores selector con
 globalThis.document={querySelector:()=>null,querySelectorAll:()=>[],getElementById:()=>null};
 globalThis.requestAnimationFrame=fn=>{fn();return 1;};
 const mocks={
- 'timewarpRuntime':'export class TimewarpPresentation {cast(){} release(){} sync(){} cancel(){} destroy(){}};export const warmTimewarp=()=>{};',
+ 'timewarpRuntime':'export const warmTimewarp=()=>{};export class TimewarpPresentation {cast(...a){return globalThis.__fx("timewarpCast",...a)}release(...a){return globalThis.__fx("timewarpRelease",...a)}sync(){}cancel(){}destroy(){}}',
  'combatExit':'export const startCombatExit=async()=>{};',
  'damageFeedback':'export const clearDamageFeedback=()=>{};',
  'statusGrantRuntime':'export const playStatusGrant=(...args)=>globalThis.__fx("playStatusGrant",...args);export const warmStatusGrants=()=>{};',
@@ -36,7 +40,7 @@ const mocks={
  'log':'export class GameLog{};export const logToText=s=>s;',
  'modal':'export const reviewCast=async()=>null;export const cardPicker=()=>{},cardPickerMulti=()=>{},confirmDialog=()=>{},treasureModal=()=>{},winModal=()=>{},closeOverlay=()=>{},closeTreasureNotices=()=>{};',
  'sound':'export const sfx=()=>{},stopSounds=()=>{},warmSounds=async()=>{};',
- 'dice':'export const diceRollAnim=()=>{},cancelDiceAnimations=()=>{};',
+ 'dice':'export const diceRollAnim=(...a)=>globalThis.__fx("diceRoll",...a),cancelDiceAnimations=()=>{};',
  'duelClock':'export const paintDuelClock=()=>{};',
  'social':'export const avatarHtml=()=>"";',
  'tier':'export const tierOf=()=>0,tierLabel=()=>"";',
@@ -50,7 +54,7 @@ try{
  const card=(id,uid=id)=>({...DB[id],uid});
  const mon=(id,uid=id)=>({...card(id,uid),tempAtk:0,atkMod:0,defMod:0,dmg:0,exhausted:false,summonedTurn:0});
  const fresh=()=>{const g=createGame({mode:'online',seed:42,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.cur=0;g.pending=null;for(const p of g.players)Object.assign(p,{field:[],enchants:[],quests:[],traps:[],hand:[],deck:[],discard:[],removed:[],exile:[],mana:20,maxMana:20,hp:30,maxHp:40});return g;};
- const controller=()=>Object.assign(Object.create(BaseController.prototype),{you:0,dead:false,quickFaces:[],elementalFaces:[],view:{pushIcon(){},render(){trace.push('render');}}});
+ const controller=()=>Object.assign(Object.create(BaseController.prototype),{you:0,dead:false,quickFaces:[],elementalFaces:[],timewarp:{cast:(...a)=>globalThis.__fx('timewarpCast',...a),release:(...a)=>globalThis.__fx('timewarpRelease',...a)},view:{pushIcon(){},syncTurn(){trace.push('turn-sync');},render(){trace.push('render');}}});
  const play=async(c,prev,res)=>{trace.length=0;await c.playEvents(prev,res);return [...trace];};
  {
   const g=fresh(),state=structuredClone(g);const cull=card('STARTER_TRASH','blocked-cull'),other=card('STARTER_TRASH','other-cull');state.players[1].removed=[cull,other];
@@ -101,5 +105,18 @@ try{
   for(let i=0;i<30;i++)await Promise.resolve();assert.deepEqual(trace.filter(x=>x.startsWith('decay-grant:')),['decay-grant:a:0>1','decay-grant:b:0>1']);
   release();await playing;pendingDecay=null;assert.deepEqual(trace.filter(x=>x.startsWith('decay-grant:')),['decay-grant:a:0>1','decay-grant:b:0>1','decay-grant:a:1>2']);
  }
- console.log('PASS: single quick reveal/exit, effects before exit for both players, generated vs hand origins, multi-step choices keep source until resolution');
+ // Typed Timewarp effects follow the existing die and only release on actual skip consumption.
+ for(const owner of [0,1])for(const success of [false,true]){
+  let g,res;
+  for(let seed=1;seed<100;seed++){g=fresh();g.turn=3;g.cur=owner;g.rng=seed;g.players[owner].hand=[card('TIMEWARP','timewarp-source')];res=reduce(g,{type:'play',idx:0});if(res.events.some(e=>e.type==='dice'&&e.source.id==='TIMEWARP'&&e.success===success))break;}
+  assert(res.events.some(e=>e.type==='dice'&&e.success===success));
+  const c=controller(),log=await play(c,g,res),casts=log.filter(x=>x.startsWith('timewarp-cast:'));
+  assert.equal(log.filter(x=>x.startsWith('dice:')).length,1);assert.equal(casts.length,success?1:0);
+  assert(!log.includes('reveal:TIMEWARP'));assert(!log.includes('result-popup'));assert(!log.some(x=>x.startsWith('timewarp-release:')));
+  if(success)assert(log.findIndex(x=>x.startsWith('dice:'))<log.indexOf('timewarp-cast:'+owner));
+  res.state.players[owner].hand=[];const ended=reduce(res.state,{type:'endTurn'}),endLog=await play(c,res.state,ended);
+  assert.equal(endLog.filter(x=>x.startsWith('timewarp-release:')).length,success?1:0);
+  if(success){assert(endLog.indexOf('timewarp-release:'+(1-owner))<endLog.indexOf('turn-sync'));assert(endLog.indexOf('turn-sync')<endLog.indexOf('render'));}
+ }
+ console.log('PASS: single quick reveal/exit, effects before exit for both players, generated vs hand origins, multi-step choices keep source until resolution; Timewarp die/cast/consumed-skip order');
 }finally{await rm(dir,{recursive:true,force:true});delete globalThis.__fx;delete globalThis.document;delete globalThis.requestAnimationFrame;}
