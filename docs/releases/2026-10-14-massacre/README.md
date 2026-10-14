@@ -1,5 +1,9 @@
 # 大虐殺 — 奪命の捻転
 
+**ステージング反映・検証済み。** [test.yourlore.xyz](https://test.yourlore.xyz) / source `a7bc86896cefe0f5b1214098515a846ef86e3b2f` / Worker `713c6fda-4615-4681-935a-de28490406b1`（100%）。共有の既存デプロイガードで132/132件を通過したスナップショットに本変更が含まれることを確認。コード・HTML・CSS・新アート3サイズは88/88ファイルでSHA-256一致。配信中の実Controllerを使う公開固定盤面でも8ケースを通過。ログイン済み二者対戦とは別の検証。
+
+[公開情報](deployment.json) · [配信照合](staging-assets.json) · [ステージング再生検証](staging/report.json) · [連続再生](qa/runtime.mp4) · [カードアート](art/MASSACRE.webp) · [生成プロンプト](art/prompt.txt)
+
 2026-10-14: ユーザーが第3稿の③を選定し、通常対戦・ステージング適用とカードアートの再生成を承認。
 
 ## 演出
