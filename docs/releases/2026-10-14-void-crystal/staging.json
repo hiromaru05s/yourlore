@@ -1,0 +1,29 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "source": "cf0b5e6f822f0bfe3c1d1444226faeb8d8f410fb",
+  "deploymentId": "90168b8c-63d2-4b41-8603-e72f19fa19ba",
+  "versions": [
+    {
+      "version_id": "38c2495a-063f-438d-bfa0-62a5ecad0402",
+      "percentage": 100
+    }
+  ],
+  "createdOn": "2026-10-14T08:17:31.524519Z",
+  "checkedAt": "2026-10-14T08:18:23.855Z",
+  "guard": "scripts/deploy-guard.mjs staging",
+  "validation": {
+    "typecheck": "passed",
+    "productionTests": {
+      "passed": 136,
+      "total": 136
+    },
+    "build": "passed",
+    "assetParity": {
+      "matched": 87,
+      "total": 87
+    },
+    "stagingBrowser": "Japanese login screen rendered",
+    "authenticatedGameplay": false
+  },
+  "scope": "Selected Void Crystal Sorcery runtime, title and three art sizes; staging only"
+}
