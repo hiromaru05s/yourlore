@@ -3046,7 +3046,7 @@ function doDragonFuse(g: GameState, ctx: Ctx, p: PlayerState, dragonUid: string,
  *  is a conjured token: exiled on death (see destroyMonster).
  *  종족 시너지는 발동한다 — 시초의 노래/금단의 술식처럼 토큰 소환으로 동족을
  *  완성하는 카드가 시너지를 못 터뜨리던 버그 수정 (2026-07-09). */
-function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string, fromDeck = false, ritual?: string): boolean {
+function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string, fromDeck = false, ritual?: string, source?: string): boolean {
   if (!DB[id] || !effectSummonAllowed(g, p, DB[id])) return false;
 
   const m: FieldMon = { uid: newUID(g), ...structuredClone(DB[id]), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn, token: !fromDeck };
@@ -3057,7 +3057,7 @@ function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string, fromDeck
   if (m.id === 'SOLDIER2') townEvent(g, 'soldier');
   if (m.id === 'CASINO') townEvent(g, 'casino');
   if (m.tribe) advanceQuest(p, "tribeSummon");
-  ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid, id: m.id, ...(ritual ? {ritual} : {}) });
+  ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid, id: m.id, ...(ritual ? {ritual} : {}), ...(source ? {source} : {}) });
   applyEnterAura(g, ctx, p, m);
   applySummonBuff(ctx, p, m);
   if (m.tribe && !g.over) checkTribe(g, ctx, p, m); // 동족 시너지는 소환 경로와 무관하게 판정
@@ -3731,7 +3731,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       if (p.maxMana > 3) { p.maxMana -= 1; ctx.log(`  └ 대가: 최대 마나 -1 (${p.maxMana})`, `  └ 代価: 最大マナ-1 (${p.maxMana})`); }
       const { rolls: df } = diceRoll(g, ctx.ev, side(g, p), { id: card.id, player: side(g, p) }, 1);
       let dn = 0;
-      for (let i = 0; i < df[0] && p.field.length < FIELD_MAX; i++) { spawnToken(g, ctx, p, "MIMIC"); dn++; }
+      for (let i = 0; i < df[0] && p.field.length < FIELD_MAX; i++) { spawnToken(g, ctx, p, "MIMIC", false, undefined, "DUNGEON_FLOOR"); dn++; }
       ctx.log(`${tag(p, card)} 🎲 ${df[0]} → 미믹 ${dn}마리 소환`, `${tag(p, card)} 🎲 ${df[0]} → ミミック${dn}体召喚`);
       break;
     }

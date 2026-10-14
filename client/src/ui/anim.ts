@@ -1,3 +1,5 @@
+import {createDungeonFloor,warmDungeonFloor} from './dungeonFloor/runtime';
+export {warmDungeonFloor};
 import {playCurse,cancelCurse,warmCurse} from './curse/runtime';
 export {warmCurse};
 import {playReverse,warmReverse} from './reverse/runtime';
@@ -1043,6 +1045,15 @@ export async function rebirthSummon(original:CardInst,card:CardInst,side:ViewSid
   },6500);
  }finally{face.style.removeProperty('visibility');}
  return face.isConnected?face:null;
+}
+
+/** Dice and all of its arrivals share one renderer and cancellation owner. */
+export function startDungeonFloor(cards:CardInst[],side:ViewSide){
+ const abort=new AbortController(),cancel=()=>abort.abort();fxWaiters.add(cancel);
+ if(fxSkip)abort.abort();
+ const session=createDungeonFloor(cards,side==='me',abort.signal);
+ void session.done.then(()=>fxWaiters.delete(cancel));
+ return session;
 }
 
 export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: number,onReveal?:(node:HTMLElement)=>void): Promise<HTMLElement | null> {

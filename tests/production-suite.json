@@ -141,6 +141,7 @@
     "tests/void-crystal-rules.mjs",
     "tests/dimension-void.mjs",
     "tests/rebirth.mjs",
+    "tests/dungeon-floor.mjs",
     "tests/trick-room.mjs",
     "tests/curse.mjs"
   ],

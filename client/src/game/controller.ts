@@ -1,3 +1,4 @@
+import {dungeonFloorSummons} from '../ui/dungeonFloor/events';
 import {runeReplayPlan} from '../ui/runeReplay/plan';
 import {TimewarpPresentation,warmTimewarp} from '../ui/timewarp/runtime';
 import {spaceRiteReason,spaceRiteSourceText} from '../ui/spaceRiteStatus';
@@ -337,6 +338,8 @@ export abstract class BaseController implements BoardHandlers {
     const events = counterPresentationEvents(res.events);
     if(events.some(e=>e.type==='timewarp'||e.type==='turnSkipped'&&e.source==='TIMEWARP'))warmTimewarp();
     for(const event of events)if(event.type==='counter'||event.type==='destroy')A.warmCombat(event.uid);
+    if(events.some(e=>e.type==='dice'&&e.source.id==='DUNGEON_FLOOR'))A.warmDungeonFloor();
+    const floorSessions=new Map<string,{playback:ReturnType<typeof A.startDungeonFloor>;last:boolean}>();
     const hatches=hatchPairs(events),heldEggs=new Set<string>();
     const rituals=forbiddenBatches(events),ritualFaces=new Set<string>();
     if(rituals.size)A.warmForbiddenRitual();
@@ -427,7 +430,7 @@ export abstract class BaseController implements BoardHandlers {
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
-      const cue = e.type==='destroy'&&(massacreDeaths.has(e.uid)||treasonExits.has(e.uid))?undefined:(e.type==='destroy'&&([...hatches.values()].includes(e.uid)||(e.cause==='fusion'&&fusionMaterials.has(e.uid))))||(e.type==='summon'&&(fusions.has(e.uid)||e.rebirth))?undefined:eventSound.cue(e);
+      const cue = e.type==='destroy'&&(massacreDeaths.has(e.uid)||treasonExits.has(e.uid))?undefined:(e.type==='destroy'&&([...hatches.values()].includes(e.uid)||(e.cause==='fusion'&&fusionMaterials.has(e.uid))))||(e.type==='summon'&&(fusions.has(e.uid)||e.rebirth||floorSessions.has(e.uid)))?undefined:eventSound.cue(e);
       if(cue&&!A.isFxSkipped())sfx(cue);
       if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
       if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
@@ -536,6 +539,13 @@ export abstract class BaseController implements BoardHandlers {
           const card = this.findCard(res.state, e.uid) ?? (e.rebirth?{...e.rebirth.card,passive:[...new Set([...(e.rebirth.card.passive??[]),'void'])]}:this.defOf(e.id, e.uid));
           const grant=events.slice(i+1).find(ev=>ev.type==='decayCounterGrant'&&ev.uid===e.uid);
           const shown=card&&grant?.type==='decayCounterGrant'?{...card,decayCnt:grant.before}:card;
+          const floor=floorSessions.get(e.uid);
+          if(floor){
+            const face=await floor.playback.land(e.uid);
+            if(face){ghosts.set(e.uid,{el:face,side:sideOf(e.player)});statusSource=face;summonGrants(i,e.uid,face);}
+            if(floor.last)await floor.playback.done;
+            fieldCount[e.player]++;break;
+          }
           if(e.rebirth&&shown){
             const face=await A.rebirthSummon(e.rebirth.card,shown,sideOf(e.player),source=>summonGrants(i,e.uid,source));
             if(face){ghosts.set(e.uid,{el:face,side:sideOf(e.player)});statusSource=face;}
@@ -660,9 +670,21 @@ export abstract class BaseController implements BoardHandlers {
           A.monHit(e.uid,e.amount,after,recoil);
           break;
         }
-        case "dice":
+        case "dice": {
           await playDiceAt(i);
+          const summons=dungeonFloorSummons(events,i);
+          const cards=summons.flatMap(event=>{
+            const card=this.findCard(res.state,event.uid)??this.defOf(event.id,event.uid);
+            const grant=events.slice(i+1).find(ev=>ev.type==='decayCounterGrant'&&ev.uid===event.uid);
+            return card?[grant?.type==='decayCounterGrant'?{...card,decayCnt:grant.before}:card]:[];
+          });
+          if(cards.length){
+            const playback=A.startDungeonFloor(cards,sideOf(e.player));
+            motionFinishes.push(playback.done);
+            cards.forEach((card,index)=>floorSessions.set(card.uid,{playback,last:index===cards.length-1}));
+          }
           break;
+        }
         case 'voidShot': {
           if(voidShotFinish)await voidShotFinish;
           const card=prev.players[e.player].hand.find(c=>c.id==='EXILE_NUKE1')??{...DB.EXILE_NUKE1,uid:'void-shot-source'};
@@ -941,7 +963,7 @@ export abstract class BaseController implements BoardHandlers {
     if(this.elementalFaces.length&&(!res.state.pending||res.state.over)){
       await Promise.all(this.elementalFaces.splice(0).map(x=>A.finishElementalSpell(x.node,x.side)));
     }
-    } finally { creationSources.forEach(node=>node.remove()); }
+    } finally { floorSessions.forEach(({playback})=>playback.cancel()); creationSources.forEach(node=>node.remove()); }
   }
 
   /** Plain-text log lines describing the effect right after events[idx] (for result popups). */
