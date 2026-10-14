@@ -567,7 +567,15 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     if (spellDepth > 0 && g.players.some(pl => pl.enchants.some(e => e.card.ench === 'doubleUp'))) amt *= 2;
     if (g.players.some(pl => pl.enchants.some(e => e.card.ench === 'blackReverse'))) target = g.players[1 - side(g, target)];
     if (spellDepth > 0 && target.enchants.some(e => e.card.ench === 'blackInfinity')) {
-      for (let i = 0; i < amt; i++) rmz(target).push(starter(g, 'STARTER_TRASH'));
+      const sourceUid = target.enchants.find(e => e.card.ench === 'blackInfinity')!.card.uid;
+      const cards: CardInst[] = [];
+      for (let i = 0; i < amt; i++) cards.push(starter(g, 'STARTER_TRASH'));
+      rmz(target).push(...cards); // Rules stay immediate; only the animation is deferred.
+      const queue = target.infinityPresentation ??= [];
+      const pending = queue.find(item => item.sourceUid === sourceUid);
+      if (pending) pending.amount += cards.length;
+      else queue.push({ sourceUid, amount: cards.length });
+      ctx.ev.push({ type: 'infinityStored', player: side(g, target), sourceUid, cardUids: cards.map(c => c.uid) });
       ctx.log(`인피니티: ${amt} 무효`, `インフィニティ: ${amt}ダメージ無効、カル${amt}枚をリフトへ`);
       return;
     }
@@ -1461,6 +1469,14 @@ function endTurn(g: GameState, ctx: Ctx, force = false): void {
     if (g.players.reduce((n, pl) => n + (pl.quests?.length ?? 0), 0) === count) break;
   }
   if (g.over) return;
+  // Presentation checkpoint, after end effects/choices and before the next turn.
+  // Persisted public metadata survives reconnects; it never creates resources twice.
+  for (const player of [0, 1] as Side[]) {
+    const owner = g.players[player];
+    for (const item of owner.infinityPresentation ?? []) if (item.amount > 0)
+      ctx.ev.push({ type: 'infinityRelease', player, ...item });
+    delete owner.infinityPresentation;
+  }
   // 60-turn limit: before a new turn would begin, judge the game by remaining HP
   // (higher HP wins; an exact tie is a draw).
   if (g.turn >= MAX_TURNS && !g.over) {

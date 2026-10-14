@@ -448,6 +448,9 @@ export abstract class BaseController implements BoardHandlers {
         }
         case 'elementalImpact': await elemental.get(e.group)?.impact(e.index);break;
         case 'elementalEnd': await elemental.get(e.group)?.finished;elemental.delete(e.group);await Promise.all(elementalDeaths.splice(0));break;
+        case 'infinityRelease':
+          await A.infinityCull(e.sourceUid, sideOf(e.player), e.amount);
+          break;
         case "enchantActivate":
           A.enchantActivation(e.uid);
           await wait(140);
@@ -714,6 +717,7 @@ export abstract class BaseController implements BoardHandlers {
     for(const e of events)if(e.type==='playSpell'&&e.dest==='vanish'){
       const ids=animatedIds[e.player];ids.set(e.id,(ids.get(e.id)||0)+1);
     }
+    const infinityStored = new Set(events.flatMap(e => e.type === 'infinityStored' ? e.cardUids : []));
     const destroyed=new Set(events.filter(e=>e.type==='destroy').map(e=>e.uid));
     for(const pl of [0,1] as Side[]){
       const before=prev.players[pl];
@@ -721,7 +725,7 @@ export abstract class BaseController implements BoardHandlers {
       const existed=new Set([...before.hand,...before.deck,...before.discard,...before.field,...before.enchants.map(e=>e.card),...before.traps.map(t=>t.card),...(before.quests??[]).map(q=>q.card),...before.exile.map(e=>e.card)].map(c=>c.uid));
       const generated:CardInst[]=[];
       for(const c of res.state.players[pl].removed??[]){
-        if(old.has(c.uid)||destroyed.has(c.uid))continue;
+        if(old.has(c.uid)||destroyed.has(c.uid)||infinityStored.has(c.uid))continue;
         const n=animatedIds[pl].get(c.id)||0;if(n){animatedIds[pl].set(c.id,n-1);continue;}
         if(!existed.has(c.uid)){generated.push(c);continue;}
         await A.exileCard(c,sideOf(pl),document.querySelector<HTMLElement>(`.card[data-uid="${c.uid}"],.card--back[data-uid="${c.uid}"],.buff-icon[data-uid="${c.uid}"]`));

@@ -1237,3 +1237,14 @@ export async function massacreSpell(card:CardInst,side:ViewSide,targets:HTMLElem
   if(maxLoss>0)manaDrop(side,maxLoss);if(!fxSkip&&!document.hidden)sfx('mana-pay');
  },onImpact:()=>{if(!fxSkip&&!document.hidden)sfx('impact');}}),22000);
 }
+
+/** Adopted 05: the enchantment turns pages into Cull at the turn-end checkpoint. */
+export async function infinityCull(sourceUid:string,side:ViewSide,amount:number):Promise<void>{
+  if(fxSkip||amount<=0)return;
+  await boardMotionScope(async signal=>{
+    const {playInfinityCull}=await import('./infinityCull/runtime');
+    if(signal.aborted)return false;
+    await playInfinityCull(sourceUid,side,amount,signal);
+    return !signal.aborted;
+  },6500);
+}
