@@ -494,7 +494,7 @@ interface Ctx {
   drawN(p: PlayerState, n: number, extra?: boolean): number;
   heal(p: PlayerState, amt: number): void;
   dealDamage(target: PlayerState, amt: number, srcKo: string, srcJa?: string, source?: Side): void;
-  destroyMonster(owner: PlayerState, m: FieldMon, cause?: "decay"): void;
+  destroyMonster(owner: PlayerState, m: FieldMon, cause?: "decay" | "massacre"): void;
 }
 function side(g: GameState, p: PlayerState): Side { return (g.players[0] === p ? 0 : 1) as Side; }
 function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
@@ -612,12 +612,12 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     ev.push({ type: "damage", player: side(g, target), amount: amt, srcKo, srcJa: srcJa ?? srcKo });
     if (target.hp <= 0) handleDefeat(g, ctx, target, dealer);
   };
-  const destroyMonster = (owner: PlayerState, m: FieldMon, cause?: "decay"): void => {
+  const destroyMonster = (owner: PlayerState, m: FieldMon, cause?: "decay" | "massacre"): void => {
     destroyMonsterCore(owner, m, cause);
     // 아우라(체력 공급원)가 사라지면 다른 몬스터의 누적 데미지가 체력을 넘을 수 있다
     if (!g.over && (m.aura === "wallDef" || m.aura === "originLord" || m.aura === "summonBuff")) recheckDeaths(g, ctx as Ctx);
   };
-  const destroyMonsterCore = (owner: PlayerState, m: FieldMon, cause?: "decay"): void => {
+  const destroyMonsterCore = (owner: PlayerState, m: FieldMon, cause?: "decay" | "massacre"): void => {
     // 흡혈의 극의(vampWard): 필드에 있는 한 양 필드의 '흡혈귀'는 파괴되지 않는다
     if (isVampFamily(m) && g.players.some((pl) => pl.enchants.some((e2) => e2.card.ench === "vampWard"))) {
       enchantKindFx(g,ev,"vampWard");
@@ -3767,7 +3767,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       p.maxMana = Math.max(1, p.maxMana - 1);
       ctx.log(`${tag(p, card)} 대가: 최대 마나 -1 (${p.maxMana})`, `${tag(p, card)} 代価: 最大マナ-1 (${p.maxMana})`);
       const mk2 = o.field.length;
-      for (const mm of [...o.field]) ctx.destroyMonster(o, mm);
+      for (const mm of [...o.field]) ctx.destroyMonster(o, mm, "massacre");
       ctx.log(`  └ 상대 몬스터 ${mk2}체 전멸`, `  └ 相手モンスター${mk2}体を全滅`);
       break;
     }

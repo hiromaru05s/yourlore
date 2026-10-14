@@ -1,3 +1,4 @@
+import {playMassacre,cancelMassacres} from './massacre/runtime';
 import {playBloodRite} from './bloodRite/runtime';
 import {isWeaponmaster} from './weaponmasterSummon/selection';
 import {playWeaponmasterSummon} from './weaponmasterSummon/runtime';
@@ -96,7 +97,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on); setSeekerSkip(on);
-  if(on){cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -1221,4 +1222,18 @@ export async function bloodRiteRecovery(side:ViewSide,sources:string[],onHeal:()
  const apply=()=>{if(!applied){applied=true;onHeal();}};
  try{if(!fxSkip&&!document.hidden)await boardMotionScope(signal=>playBloodRite(side,sources,apply,signal),2200);}
  finally{apply();}
+}
+
+/** The selected Massacre owns its reveal and destruction, so neither runs twice. */
+export async function massacreSpell(card:CardInst,side:ViewSide,targets:HTMLElement[],paidMana:number,maxLoss:number,exiled:Set<string>):Promise<boolean>{
+ const origin=fromRect(side,takeOrigin(side));if(!origin||fxSkip||document.hidden)return false;
+ const source=cardEl(card,{size:'hand'});
+ return boardMotionScope(signal=>playMassacre({source,targets,side,exiled,from:origin,signal,onCost:()=>{
+  const mana=document.querySelector<HTMLElement>(`#portrait${side==='me'?'Me':'Opp'} .pt-mana`);
+  if(mana){const max=Math.max(3,Number(mana.dataset.maximum)-maxLoss);mana.dataset.maximum=String(max);mana.dataset.mana=String(paidMana);
+   const value=mana.querySelector('.mana-readout b'),label=mana.querySelector('.pt-mana-max');if(value)value.textContent=String(paidMana);if(label)label.textContent=`/${max}`;
+   mana.setAttribute('aria-label',`${t('game.mana')} ${paidMana}/${max}`);
+   [...mana.querySelectorAll<HTMLElement>('.mana-crystal')].forEach((n,i)=>{n.classList.toggle('is-lit',i<paidMana);if(i>=max)n.style.visibility='hidden';});}
+  if(maxLoss>0)manaDrop(side,maxLoss);if(!fxSkip&&!document.hidden)sfx('mana-pay');
+ },onImpact:()=>{if(!fxSkip&&!document.hidden)sfx('impact');}}),22000);
 }

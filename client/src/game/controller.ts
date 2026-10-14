@@ -335,6 +335,7 @@ export abstract class BaseController implements BoardHandlers {
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
     const spellGhosts:HTMLElement[]=[];
+    const massacreDeaths=new Set<string>(),massacreCosts=new Set<Side>();
     let statusSource:HTMLElement|undefined;
     if(events.some(e=>e.type==='statusExtinction'))warmStatusExtinctions();
     const hasStatusGrants=events.some(e=>e.type==='statusGrant');
@@ -398,7 +399,7 @@ export abstract class BaseController implements BoardHandlers {
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
-      const cue = (e.type==='destroy'&&([...hatches.values()].includes(e.uid)||(e.cause==='fusion'&&fusionMaterials.has(e.uid))))||(e.type==='summon'&&fusions.has(e.uid))?undefined:eventSound.cue(e);
+      const cue = e.type==='destroy'&&massacreDeaths.has(e.uid)?undefined:(e.type==='destroy'&&([...hatches.values()].includes(e.uid)||(e.cause==='fusion'&&fusionMaterials.has(e.uid))))||(e.type==='summon'&&fusions.has(e.uid))?undefined:eventSound.cue(e);
       if(cue&&!A.isFxSkipped())sfx(cue);
       if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
       if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
@@ -499,6 +500,7 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "destroy": {
+          if(massacreDeaths.has(e.uid)){ghosts.get(e.uid)?.el.remove();ghosts.delete(e.uid);releaseMonster(e.uid);fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);break;}
           if(e.cause==='fusion'&&fusionMaterials.has(e.uid)){fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);break;}
           if([...hatches.values()].includes(e.uid)&&document.querySelector(`.zone-mon .card[data-uid="${CSS.escape(e.uid)}"]`)){heldEggs.add(e.uid);break;}
           const destroy=async()=>{
@@ -605,7 +607,14 @@ export abstract class BaseController implements BoardHandlers {
             const oldUids=new Set([...prev.players[e.player].enchants,...(prev.players[e.player].quests??[])].map(x=>x.card.uid));
             const shownUids=new Set(spellGhosts.map(x=>x.dataset.uid));
             const placed=e.dest==='field'?[...res.state.players[e.player].enchants,...(res.state.players[e.player].quests??[])].find(x=>x.card.id===e.id&&!oldUids.has(x.card.uid)&&!shownUids.has(x.card.uid))?.card:undefined;
-            if(def.id==='CHOSEN_AREA'&&isChosenVictory(events,e.player)){
+            if(def.id==='MASSACRE'){
+              const deaths=events.slice(i+1,nextSpell<0?events.length:nextSpell).filter((event):event is Extract<GameEvent,{type:'destroy'}>=>event.type==='destroy'&&event.cause==='massacre');
+              const nodes=deaths.map(event=>ghosts.get(event.uid)?.el??combatCard(event.uid));
+              const card=prev.players[e.player].hand.find(c=>c.id===e.id&&!res.state.players[e.player].hand.some(n=>n.uid===c.uid))??{uid:'massacre-source',...def};
+              const handled=nodes.every((n):n is HTMLElement=>!!n)&&await A.massacreSpell(card,sideOf(e.player),nodes as HTMLElement[],res.state.players[e.player].mana,Math.min(1,Math.max(0,prev.players[e.player].maxMana-3)),new Set((res.state.players[1-e.player].removed??[]).map(c=>c.uid)));
+              if(handled){deaths.forEach(event=>massacreDeaths.add(event.uid));massacreCosts.add(e.player);}
+              else await A.revealSpell(card,sideOf(e.player),e.dest);
+            }else if(def.id==='CHOSEN_AREA'&&isChosenVictory(events,e.player)){
               const face=await A.revealSpell({uid:'chosen-source',...def},sideOf(e.player),e.dest,undefined,true);
               try{if(!this.dead&&!A.isFxSkipped())await playChosenVictory(sideOf(e.player),face);}finally{face?.remove();}
             }else if(['FIRE_ARROW','FIRE_METEOR','FIRE_BALL','FIRE_ZONE'].includes(def.id)){
@@ -729,7 +738,7 @@ export abstract class BaseController implements BoardHandlers {
       if (this.dead) return;
       const dMana = res.state.players[pl].maxMana - prev.players[pl].maxMana;
       if (dMana > 0) manaGains.push({side:sideOf(pl),amount:dMana});
-      else if (dMana < 0) A.manaDrop(sideOf(pl), -dMana);
+      else if (dMana < 0&&!massacreCosts.has(pl)) A.manaDrop(sideOf(pl), -dMana);
     }
 
     if (this.dead) return;
