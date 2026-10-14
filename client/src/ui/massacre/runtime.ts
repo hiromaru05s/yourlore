@@ -54,7 +54,14 @@ async function face(node: HTMLElement, source: boolean, host: HTMLElement) {
         img.decode().catch(() => {}),
       ),
     );
-    const surface = await captureCardSurface(copy, FRAME_BACK, true, false);
+    if (!copy.isConnected) throw new Error("Massacre capture cancelled");
+    // A cold frame texture can exceed the shared 2.5 s image-cache budget.
+    // Retry once while preparation is still owned; never replace a valid cast on
+    // the first transient image timeout or resurrect a cancelled capture.
+    const surface = await captureCardSurface(copy, FRAME_BACK, true, false).catch(error => {
+      if (!copy.isConnected) throw error;
+      return captureCardSurface(copy, FRAME_BACK, true, false);
+    });
     if (!surface.face) throw Error("Massacre surface unavailable");
     const out = document.createElement("canvas"),
       pad = (surface.face.width * CARD_PADDING) / (1 + 2 * CARD_PADDING);
@@ -254,7 +261,7 @@ export function playMassacre(o: Options): Promise<boolean> {
       };
       tick(start);
     })().catch((error) => {
-      console.warn("[massacre] presentation fallback", error);
+      if (!done) console.warn("[massacre] presentation fallback", error);
       finish(false);
     });
   });

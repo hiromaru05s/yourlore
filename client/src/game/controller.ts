@@ -331,6 +331,7 @@ export abstract class BaseController implements BoardHandlers {
     const fusions=fusionPairs(events),fusionMaterials=new Set([...fusions.values()].flatMap(f=>[f.dragon.uid,f.mate.uid]));
     if(events.some(e=>e.type==='dice'&&e.taunt))A.warmTaunt();
     if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
+    if(events.some(e=>e.type==='nova'))A.warmNova();
     const eventSound = new EventSound();
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
@@ -601,8 +602,16 @@ export abstract class BaseController implements BoardHandlers {
           }
           break;
         }
+        case "nova": {
+          const card=prev.players[e.player].hand.find(c=>c.id==='BLACK_NOVA')??{...DB.BLACK_NOVA,uid:'nova-source'};
+          await A.novaTimeTheft(card,sideOf(e.player),e.from,hp=>{if(!this.dead)A.hpBarSet(sideOf(e.player),hp);});
+          hpNow[e.player]=e.to;
+          break;
+        }
         case "playSpell": {
           const nextSpell=events.findIndex((next,j)=>j>i&&next.type==='playSpell');
+          // A resolved Nova owns both the source reveal and its exit; a nullified cast keeps the ordinary reveal.
+          if(e.id==='BLACK_NOVA'&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='nova'&&next.player===e.player))break;
           const grants=events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='statusGrant'||next.type==='decayCounterGrant');
           const def = DB[e.id] ?? STARTERS[e.id]; // 컬/어튠/보물상자 live in STARTERS
           if (def) {
