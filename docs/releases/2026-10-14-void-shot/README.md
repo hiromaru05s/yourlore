@@ -14,7 +14,7 @@ SORTER, CHOSEN_AREA, NHEX, ELF and the white-library / fixed-duo concept art inf
 
 ## Validation
 
-- `node tests/void-shot.mjs`: both owners; Rift 0, 1, 8, 24 and 60; event ordering; unchanged damage and Rift contents; nullification; rune echo; EXILE_NUKE2 isolation; three-language name uniqueness.
+- `node tests/void-shot.mjs`: both owners; Rift 0, 1, 8, 24 and 60; event ordering; unchanged damage and Rift contents; nullification; reflected target; rune echo; EXILE_NUKE2 isolation; three-language name uniqueness.
 - `tests/void-shot-browser.mjs`: actual local engine → production controller → animation flow, desktop/mobile and both owners. One crystal 03 renderer, no fallback on normal runs, HP transition at contact, no remaining canvases/cards. Skip/resize/hidden/detached/reduced-motion/WebGL-failure paths pass. See [report](qa/report.json).
-- Visual review is separate from functional assertions. The chosen source geometry and material are preserved; the new card art is visibly painterly. QA captures and local video are evidence of the production controller fixture, not authenticated online gameplay.
+- Visual review is separate from functional assertions. The chosen source geometry and material are preserved; the new card art is visibly painterly. The `visual-*.png` images place the production renderer at fixed timestamps on the real board for shape review; they do not simulate damage. The frame logs and local video cover the controller flow. Neither is authenticated online gameplay.
 - Staging deployment and deployed bundle checks are recorded separately in the deployment evidence after publication. This request does not deploy production.
