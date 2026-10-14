@@ -1,0 +1,25 @@
+{
+  "unit": "passed: native hold, arrival times, cleanup, both sides, nullification, rune echo",
+  "clientTypecheck": "passed",
+  "previewBuild": "passed; existing large shared chunk warning",
+  "browser": {
+    "errors": [],
+    "nativeHoldSamples": [
+      650,
+      1000,
+      1200
+    ],
+    "nativeWidth": 122,
+    "nativeHeight": 183,
+    "filter": "none",
+    "fullArt": true,
+    "canvasDpr": 2,
+    "finalDeposited": 5
+  },
+  "normalAnimationFunction": {
+    "path": "anim.curseSpell",
+    "depositedFive": true,
+    "remainingFxNodes": 0
+  },
+  "scope": "Local engine and real board fixture; authenticated online match not tested"
+}

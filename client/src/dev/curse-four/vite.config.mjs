@@ -1,0 +1,2 @@
+import {defineConfig} from 'vite';
+export default defineConfig({cacheDir:new URL('../../../../.cache/curse-vite',import.meta.url).pathname,root:new URL('../../../',import.meta.url).pathname,server:{host:'127.0.0.1',port:5456,strictPort:true,watch:null},build:{target:'es2022',copyPublicDir:false,outDir:new URL('../../../../docs/vfx-prototypes/2026-10-14-curse-skull-four/build',import.meta.url).pathname,emptyOutDir:true,rollupOptions:{input:new URL('../../../curse-four.html',import.meta.url).pathname}}});

@@ -1,3 +1,5 @@
+import {playCurse,cancelCurse,warmCurse} from './curse/runtime';
+export {warmCurse};
 import {playReverse,warmReverse} from './reverse/runtime';
 export {warmReverse};
 import {playVoidShot,warmVoidShot,cancelVoidShots} from './voidShot/runtime';
@@ -105,7 +107,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on); setSeekerSkip(on);
-  if(on){cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -1409,4 +1411,13 @@ export async function reverseDamage(from:ViewSide,to:ViewSide,sources:string[],o
  let applied=false;const contact=()=>{if(!applied){applied=true;onContact();}};
  try{if(!fxSkip&&!document.hidden)await boardMotionScope(signal=>playReverse(from,to,sources,contact,signal),5000);}
  finally{contact();}
+}
+
+/** The selected Curse owns the native hand face, five arrivals and source exit. */
+export async function curseSpell(card:CardInst,side:ViewSide,targetBefore:number):Promise<void>{
+ if(fxSkip||document.hidden)return;
+ const from=fromRect(side,takeOrigin(side));if(!from)return;
+ const node=floatAt(cardEl(card,{size:'hand',fullArt:true}),from);
+ try{await boardMotionScope(signal=>playCurse(node,side,signal,from,targetBefore),13000);}
+ finally{node.remove();}
 }

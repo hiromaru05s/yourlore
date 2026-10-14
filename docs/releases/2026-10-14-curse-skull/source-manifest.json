@@ -1,0 +1,10 @@
+{
+  "client/src/ui/curse/assets/skull-apparition.png": "f2d14e063cfaf4e36924c3653d405699a29cbd28b976cc8b9b542945406492e1",
+  "client/src/ui/curse/assets.ts": "52c0c380747ef0b88a07900050aaf42a4a1a5f7dfd8b717be7835db26831e4d0",
+  "client/src/ui/curse/model.ts": "540eeb19cc5635d650c2d0861b813250a0b0020817ca5a30c984f88255a29f98",
+  "client/src/ui/curse/nativeCard.ts": "a63469d08e95181ef1e0e10f36dfc93c3c5b7c92b7d8f69d4105abc188bcca20",
+  "client/src/ui/curse/occult-material.ts": "e26c2cb50b3b4b0566e580680deba655c12ede55b2955fab2cceb0e06ab89c2b",
+  "client/src/ui/curse/renderer.ts": "a3a2c2b4e593c63f508e88bc52d1efeb662b3061a31075bfffa4a0e397d11de7",
+  "client/src/ui/curse/runtime.ts": "b5e817f1166d397418fb4baaaef80b7df03bb7a0fc491961b3c59db2e77d198b",
+  "client/src/ui/curse/skin.ts": "1a0a8e28dc7dc9d50ef68864ce0da5a9e617a32223278d1fb3047e517aabeb5f"
+}
